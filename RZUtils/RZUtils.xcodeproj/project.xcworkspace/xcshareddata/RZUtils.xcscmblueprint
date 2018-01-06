@@ -1,0 +1,25 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "0124ae26-af33-4aa1-8569-2acd2894f74d++505",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "0124ae26-af33-4aa1-8569-2acd2894f74d++505" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "0124ae26-af33-4aa1-8569-2acd2894f74d++505" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "618271FE-1E8A-4C82-A623-2673A1835304",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "0124ae26-af33-4aa1-8569-2acd2894f74d++505" : "xcode\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "RZUtils",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Tests\/RZUtils\/RZUtils.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/roznet.svn.cloudforge.com\/xcode",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0124ae26-af33-4aa1-8569-2acd2894f74d++505"
+    }
+  ]
+}
