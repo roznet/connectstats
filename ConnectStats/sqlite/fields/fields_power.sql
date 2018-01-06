@@ -1,0 +1,14 @@
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('BeginPowerTwentyMinutesDistance','cycling','BeginPowerTwentyMinutesDistance','kilometer');
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('BeginPowerTwentyMinutesTime','cycling','BeginPowerTwentyMinutesTime','second');
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('BeginPowerTwentyMinutesTimerTime','cycling','BeginPowerTwentyMinutesTimerTime','second');
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('EndPowerTwentyMinutesDistance','cycling','EndPowerTwentyMinutesDistance','kilometer');
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('EndPowerTwentyMinutesTime','cycling','EndPowerTwentyMinutesTime','second');
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('EndPowerTwentyMinutesTimerTime','cycling','EndPowerTwentyMinutesTimerTime','second');
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('MaxPowerTwentyMinutes','cycling','Max Avg Power (20 min)','watt');
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('SumIntensityFactor','cycling','Intensity Factor (IF)','if');
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('SumTotalWork','cycling','Work','kilojoule');
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('SumTrainingStressScore','cycling','Training Stress Score (TSS)','dimensionless');
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('ThresholdPower','cycling','threshold-:-power','watt');
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('WeightedMeanNormalizedPower','cycling','Normalized Power (NP)','watt');
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('WeightedMeanPower','cycling','Avg Power','watt');
+INSERT INTO gc_fields_power (field,activityType,fieldDisplayName,uom) VALUES('WeightedMeanRightBalance','cycling','Balance Right (%)','percent');

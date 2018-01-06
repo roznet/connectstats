@@ -1,0 +1,57 @@
+//ignore
+resource_state:	integer  indicates level of detail
+external_id:	string 
+provided at upload
+athlete:	object 
+start_date_local:	time string
+time_zone:	string
+location_state:	string
+location_country:	string
+achievement_count:	integer
+kudos_count:	integer
+comment_count:	integer
+athlete_count:	integer
+photo_count:	integer
+map:	object  detailed representation of the route
+trainer:	boolean
+commute:	boolean
+manual:	boolean
+private:	boolean
+flagged:	boolean
+workout_type:	integer  for runs only, 0 -> ‘default’, 1 -> ‘race’, 2 -> ‘long run’, 3 -> ‘intervals’
+gear_id:	string  corresponds to a bike or pair of shoes included in athlete details
+gear:	object 
+gear summary
+
+splits_metric:	Laps running activities only
+splits_standard:	array of standard split summaries  running activities only
+best_efforts:	array of best effort summaries  running activities only
+
+//activity type:
+ride,cycling
+run,running
+swim,swimming
+
+//meta
+id,activityId,integer
+name,activityName
+type,activityType
+description,activityDescription
+
+//fields
+@"distance":@[@"SumDistance",float,@"meters
+@"moving_time":@[ @"SumMovingDuration",integer,@"seconds"],
+@"elapsed_time":@[ @"SumDuration",integer,@"seconds"],
+@"total_elevation_gain":@[ @"GainElevation",float,@"meters"],
+@"start_date":@[ @"BeginTimeStamp",string,@"time"],
+@"start_latlng":@[ @"BeginLatitude"|BeginLongitude,@"vector"],
+@"end_latlng":@[ @"EndLatitude",EndLongitude,@"vector"],
+location_city,Location,string
+@"average_speed":@[ @"WeightedMeanSpeed",float,@"mps"],
+@"max_speed":@[ @"MaxSpeed",float,@"mps"],
+@"average_cadence":@[ @"WeightedMeanRunCadence"|WeightedMeanBikeCadence,@"float,rpm"],
+@"average_temp":@[ @"WeightedMeanAirTemperature",integer,@"degreecelcius"],
+@"average_watts":@[ @"WeightedMeanPower",float,@"kilojoules"],
+@"average_heartrate":@[ @"WeightedMeanHeartRate",integer,@"bpm"],
+@"max_heartrate":@[ @"MaxHeartRate",integer,@"bpm"],
+@"calories":@[ @"SumEnergy",float,@"kilocalories"],

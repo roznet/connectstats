@@ -1,0 +1,361 @@
+{"userProfile": {
+  "id": "3020883",
+  "gender": {
+    "key": "male",
+    "display": "Male",
+    "displaySingular": "Male"
+  },
+  "weight": {
+    "display": "75.0",
+    "value": "75.0",
+    "withUnit": "75.0 Kilograms",
+    "withUnitAbbr": "75.0 kg",
+    "uom": "kilogram",
+    "unitAbbr": "kg",
+    "lastModifiedDate": {
+      "display": "Wed, Mar 21, 2012",
+      "value": "1.332288E12",
+      "withUnit": "Wed, Mar 21, 2012 Dimensionless",
+      "withUnitAbbr": "Wed, Mar 21, 2012 Dimensionless",
+      "uom": "dimensionless",
+      "unitAbbr": "Dimensionless"
+    }
+  },
+  "height": {
+    "display": "182",
+    "value": "182.0",
+    "withUnit": "182 Centimeters",
+    "withUnitAbbr": "182 cm",
+    "uom": "centimeter",
+    "unitAbbr": "cm",
+    "lastModifiedDate": {
+      "display": "Wed, Mar 21, 2012",
+      "value": "1.332288E12",
+      "withUnit": "Wed, Mar 21, 2012 Dimensionless",
+      "withUnitAbbr": "Wed, Mar 21, 2012 Dimensionless",
+      "uom": "dimensionless",
+      "unitAbbr": "Dimensionless"
+    }
+  },
+  "activityClass": {
+    "display": "7",
+    "value": "7.0",
+    "withUnit": "7 Dimensionless",
+    "withUnitAbbr": "7 Dimensionless",
+    "uom": "dimensionless",
+    "unitAbbr": "Dimensionless",
+    "lastModifiedDate": {
+      "display": "Wed, Mar 21, 2012",
+      "value": "1.332288E12",
+      "withUnit": "Wed, Mar 21, 2012 Dimensionless",
+      "withUnitAbbr": "Wed, Mar 21, 2012 Dimensionless",
+      "uom": "dimensionless",
+      "unitAbbr": "Dimensionless"
+    }
+  },
+  "heartRateZones": {
+    "running": {
+      "restingHeartRate": {
+        "display": "62",
+        "value": "62.0",
+        "withUnit": "62 Beats per Minute",
+        "withUnitAbbr": "62 bpm",
+        "uom": "bpm",
+        "unitAbbr": "bpm"
+      },
+      "unit": {
+        "key": "bpm",
+        "display": "Beats per Minute",
+        "abbr": "bpm"
+      },
+      "zones": [
+        {
+          "number": "0",
+          "display": "Zone 0",
+          "floor": "62",
+          "ceiling": "133"
+        },
+        {
+          "number": "1",
+          "display": "Zone 1",
+          "floor": "133",
+          "ceiling": "147"
+        },
+        {
+          "number": "2",
+          "display": "Zone 2",
+          "floor": "147",
+          "ceiling": "162"
+        },
+        {
+          "number": "3",
+          "display": "Zone 3",
+          "floor": "162",
+          "ceiling": "176"
+        },
+        {
+          "number": "4",
+          "display": "Zone 4",
+          "floor": "176",
+          "ceiling": "190"
+        },
+        {
+          "number": "5",
+          "display": "Zone 5",
+          "floor": "190",
+          "ceiling": "205"
+        }
+      ]
+    },
+    "all": {
+      "restingHeartRate": {
+        "display": "62",
+        "value": "62.0",
+        "withUnit": "62 Beats per Minute",
+        "withUnitAbbr": "62 bpm",
+        "uom": "bpm",
+        "unitAbbr": "bpm"
+      },
+      "unit": {
+        "key": "bpm",
+        "display": "Beats per Minute",
+        "abbr": "bpm"
+      },
+      "zones": [
+        {
+          "number": "0",
+          "display": "Zone 0",
+          "floor": "62",
+          "ceiling": "133"
+        },
+        {
+          "number": "1",
+          "display": "Zone 1",
+          "floor": "133",
+          "ceiling": "147"
+        },
+        {
+          "number": "2",
+          "display": "Zone 2",
+          "floor": "147",
+          "ceiling": "162"
+        },
+        {
+          "number": "3",
+          "display": "Zone 3",
+          "floor": "162",
+          "ceiling": "176"
+        },
+        {
+          "number": "4",
+          "display": "Zone 4",
+          "floor": "176",
+          "ceiling": "190"
+        },
+        {
+          "number": "5",
+          "display": "Zone 5",
+          "floor": "190",
+          "ceiling": "205"
+        }
+      ]
+    },
+    "cycling": {
+      "restingHeartRate": {
+        "display": "62",
+        "value": "62.0",
+        "withUnit": "62 Beats per Minute",
+        "withUnitAbbr": "62 bpm",
+        "uom": "bpm",
+        "unitAbbr": "bpm"
+      },
+      "unit": {
+        "key": "bpm",
+        "display": "Beats per Minute",
+        "abbr": "bpm"
+      },
+      "zones": [
+        {
+          "number": "0",
+          "display": "Zone 0",
+          "floor": "62",
+          "ceiling": "133"
+        },
+        {
+          "number": "1",
+          "display": "Zone 1",
+          "floor": "133",
+          "ceiling": "147"
+        },
+        {
+          "number": "2",
+          "display": "Zone 2",
+          "floor": "147",
+          "ceiling": "162"
+        },
+        {
+          "number": "3",
+          "display": "Zone 3",
+          "floor": "162",
+          "ceiling": "176"
+        },
+        {
+          "number": "4",
+          "display": "Zone 4",
+          "floor": "176",
+          "ceiling": "190"
+        },
+        {
+          "number": "5",
+          "display": "Zone 5",
+          "floor": "190",
+          "ceiling": "205"
+        }
+      ]
+    }
+  },
+  "powerZones": {
+    "all": {
+      "ftp": {
+        "display": "400",
+        "value": "400.0",
+        "withUnit": "400 Watts",
+        "withUnitAbbr": "400 W",
+        "uom": "watt",
+        "unitAbbr": "W"
+      },
+      "unit": {
+        "key": "watt",
+        "display": "Watts",
+        "abbr": "W"
+      },
+      "zones": [
+        {
+          "number": "0",
+          "display": "Zone 0",
+          "floor": "0",
+          "ceiling": "100"
+        },
+        {
+          "number": "1",
+          "display": "Zone 1",
+          "floor": "100",
+          "ceiling": "220"
+        },
+        {
+          "number": "2",
+          "display": "Zone 2",
+          "floor": "220",
+          "ceiling": "300"
+        },
+        {
+          "number": "3",
+          "display": "Zone 3",
+          "floor": "300",
+          "ceiling": "360"
+        },
+        {
+          "number": "4",
+          "display": "Zone 4",
+          "floor": "360",
+          "ceiling": "420"
+        },
+        {
+          "number": "5",
+          "display": "Zone 5",
+          "floor": "420",
+          "ceiling": "480"
+        },
+        {
+          "number": "6",
+          "display": "Zone 6",
+          "floor": "480",
+          "ceiling": "600"
+        },
+        {
+          "number": "7",
+          "display": "Zone 7",
+          "floor": "600",
+          "ceiling": "800"
+        },
+        {
+          "number": "8",
+          "display": "Zone 8",
+          "floor": "800",
+          "ceiling": "2000"
+        }
+      ]
+    },
+    "cycling": {
+      "ftp": {
+        "display": "400",
+        "value": "400.0",
+        "withUnit": "400 Watts",
+        "withUnitAbbr": "400 W",
+        "uom": "watt",
+        "unitAbbr": "W"
+      },
+      "unit": {
+        "key": "watt",
+        "display": "Watts",
+        "abbr": "W"
+      },
+      "zones": [
+        {
+          "number": "0",
+          "display": "Zone 0",
+          "floor": "0",
+          "ceiling": "100"
+        },
+        {
+          "number": "1",
+          "display": "Zone 1",
+          "floor": "100",
+          "ceiling": "220"
+        },
+        {
+          "number": "2",
+          "display": "Zone 2",
+          "floor": "220",
+          "ceiling": "300"
+        },
+        {
+          "number": "3",
+          "display": "Zone 3",
+          "floor": "300",
+          "ceiling": "360"
+        },
+        {
+          "number": "4",
+          "display": "Zone 4",
+          "floor": "360",
+          "ceiling": "420"
+        },
+        {
+          "number": "5",
+          "display": "Zone 5",
+          "floor": "420",
+          "ceiling": "480"
+        },
+        {
+          "number": "6",
+          "display": "Zone 6",
+          "floor": "480",
+          "ceiling": "600"
+        },
+        {
+          "number": "7",
+          "display": "Zone 7",
+          "floor": "600",
+          "ceiling": "800"
+        },
+        {
+          "number": "8",
+          "display": "Zone 8",
+          "floor": "800",
+          "ceiling": "2000"
+        }
+      ]
+    }
+  }
+}}

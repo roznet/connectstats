@@ -1,0 +1,20 @@
+table {
+  border-spacing: 0.5rem;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", 
+  Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+td.empty { background: hsl(0,0,0); }
+td.cell { background: hsl(200,99%,50%); }
+td {
+  padding: 0.5rem;
+}
+th {
+  padding: 0.5rem;
+}
+th:nth-child(1) { background: hsl(150, 50%, 50%); }
+th:nth-child(2) { background: hsl(160, 60%, 50%); }
+th:nth-child(3) { background: hsl(170, 70%, 50%); }
+th:nth-child(4) { background: hsl(180, 80%, 50%); }
+th:nth-child(5) { background: hsl(190, 90%, 50%); }
+th:nth-child(6) { background: hsl(200, 99%, 50%); }
+

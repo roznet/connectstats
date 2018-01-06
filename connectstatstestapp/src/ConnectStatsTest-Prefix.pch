@@ -1,0 +1,15 @@
+//
+//  GarminConnectTest-Prefix.pch
+//  GarminConnect
+//
+//  Created by Brice Rosenzweig on 13/09/2015.
+//  Copyright © 2015 Brice Rosenzweig. All rights reserved.
+//
+
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <RZUtils/RZUtils.h>
+#import "RZUtilsTouch/RZUtilsTouch.h"
+#endif

@@ -1,0 +1,814 @@
+{"dictionary": [
+  {
+    "key": "all",
+    "display": "Cualquier tipo de actividad",
+    "type": {
+      "key": "all",
+      "display": "Cualquier tipo de actividad"
+    }
+  },
+  {
+    "key": "uncategorized",
+    "display": "Sin clasificar",
+    "parent": {
+      "key": "all",
+      "display": "Cualquier tipo de actividad"
+    },
+    "type": {
+      "key": "uncategorized",
+      "display": "Sin clasificar"
+    }
+  },
+  {
+    "key": "running",
+    "display": "Carrera",
+    "parent": {
+      "key": "all",
+      "display": "Cualquier tipo de actividad"
+    },
+    "type": {
+      "key": "running",
+      "display": "Carrera"
+    }
+  },
+  {
+    "key": "street_running",
+    "display": "Asfalto",
+    "parent": {
+      "key": "running",
+      "display": "Carrera"
+    },
+    "type": {
+      "key": "running",
+      "display": "Carrera"
+    }
+  },
+  {
+    "key": "track_running",
+    "display": "Carrera en pista",
+    "parent": {
+      "key": "running",
+      "display": "Carrera"
+    },
+    "type": {
+      "key": "running",
+      "display": "Carrera"
+    }
+  },
+  {
+    "key": "trail_running",
+    "display": "Trail running",
+    "parent": {
+      "key": "running",
+      "display": "Carrera"
+    },
+    "type": {
+      "key": "running",
+      "display": "Carrera"
+    }
+  },
+  {
+    "key": "treadmill_running",
+    "display": "Carrera en cinta",
+    "parent": {
+      "key": "running",
+      "display": "Carrera"
+    },
+    "type": {
+      "key": "running",
+      "display": "Carrera"
+    }
+  },
+  {
+    "key": "cycling",
+    "display": "Ciclismo",
+    "parent": {
+      "key": "all",
+      "display": "Cualquier tipo de actividad"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    }
+  },
+  {
+    "key": "cyclocross",
+    "display": "Cyclocross",
+    "parent": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    }
+  },
+  {
+    "key": "downhill_biking",
+    "display": "Descenso",
+    "parent": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    }
+  },
+  {
+    "key": "indoor_cycling",
+    "display": "Ciclismo indoor",
+    "parent": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    }
+  },
+  {
+    "key": "mountain_biking",
+    "display": "Ciclismo de montaña",
+    "parent": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    }
+  },
+  {
+    "key": "recumbent_cycling",
+    "display": "Bicicleta reclinada",
+    "parent": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    }
+  },
+  {
+    "key": "road_biking",
+    "display": "Ciclismo en ruta",
+    "parent": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    }
+  },
+  {
+    "key": "track_cycling",
+    "display": "Ciclismo en pista",
+    "parent": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    }
+  },
+  {
+    "key": "fitness_equipment",
+    "display": "Equipo de fitness",
+    "parent": {
+      "key": "all",
+      "display": "Cualquier tipo de actividad"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "Equipo de fitness"
+    }
+  },
+  {
+    "key": "elliptical",
+    "display": "Elíptico",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "Equipo de fitness"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "Equipo de fitness"
+    }
+  },
+  {
+    "key": "indoor_cardio",
+    "display": "Cardio",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "Equipo de fitness"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "Equipo de fitness"
+    }
+  },
+  {
+    "key": "indoor_rowing",
+    "display": "Remo indoor",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "Equipo de fitness"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "Equipo de fitness"
+    }
+  },
+  {
+    "key": "stair_climbing",
+    "display": "Ascenso de escaleras",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "Equipo de fitness"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "Equipo de fitness"
+    }
+  },
+  {
+    "key": "strength_training",
+    "display": "Entrenamiento de fuerza",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "Equipo de fitness"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "Equipo de fitness"
+    }
+  },
+  {
+    "key": "hiking",
+    "display": "Excursionismo",
+    "parent": {
+      "key": "all",
+      "display": "Cualquier tipo de actividad"
+    },
+    "type": {
+      "key": "hiking",
+      "display": "Excursionismo"
+    }
+  },
+  {
+    "key": "swimming",
+    "display": "Natación",
+    "parent": {
+      "key": "all",
+      "display": "Cualquier tipo de actividad"
+    },
+    "type": {
+      "key": "swimming",
+      "display": "Natación"
+    }
+  },
+  {
+    "key": "lap_swimming",
+    "display": "Natación libre",
+    "parent": {
+      "key": "swimming",
+      "display": "Natación"
+    },
+    "type": {
+      "key": "swimming",
+      "display": "Natación"
+    }
+  },
+  {
+    "key": "open_water_swimming",
+    "display": "Natación en aguas abiertas",
+    "parent": {
+      "key": "swimming",
+      "display": "Natación"
+    },
+    "type": {
+      "key": "swimming",
+      "display": "Natación"
+    }
+  },
+  {
+    "key": "walking",
+    "display": "Caminata",
+    "parent": {
+      "key": "all",
+      "display": "Cualquier tipo de actividad"
+    },
+    "type": {
+      "key": "walking",
+      "display": "Caminata"
+    }
+  },
+  {
+    "key": "casual_walking",
+    "display": "Caminar",
+    "parent": {
+      "key": "walking",
+      "display": "Caminata"
+    },
+    "type": {
+      "key": "walking",
+      "display": "Caminata"
+    }
+  },
+  {
+    "key": "speed_walking",
+    "display": "Marcha",
+    "parent": {
+      "key": "walking",
+      "display": "Caminata"
+    },
+    "type": {
+      "key": "walking",
+      "display": "Caminata"
+    }
+  },
+  {
+    "key": "transition",
+    "display": "Transición",
+    "parent": {
+      "key": "all",
+      "display": "Cualquier tipo de actividad"
+    },
+    "type": {
+      "key": "transition",
+      "display": "Transición"
+    }
+  },
+  {
+    "key": "swimToBikeTransition",
+    "display": "Transición natación-bicicleta",
+    "parent": {
+      "key": "transition",
+      "display": "Transición"
+    },
+    "type": {
+      "key": "transition",
+      "display": "Transición"
+    }
+  },
+  {
+    "key": "bikeToRunTransition",
+    "display": "Transición bicicleta-carrera",
+    "parent": {
+      "key": "transition",
+      "display": "Transición"
+    },
+    "type": {
+      "key": "transition",
+      "display": "Transición"
+    }
+  },
+  {
+    "key": "runToBikeTransition",
+    "display": "Transición carrera-bicicleta",
+    "parent": {
+      "key": "transition",
+      "display": "Transición"
+    },
+    "type": {
+      "key": "transition",
+      "display": "Transición"
+    }
+  },
+  {
+    "key": "motorcycling",
+    "display": "Motociclismo",
+    "parent": {
+      "key": "all",
+      "display": "Cualquier tipo de actividad"
+    },
+    "type": {
+      "key": "motorcycling",
+      "display": "Motociclismo"
+    }
+  },
+  {
+    "key": "steps",
+    "display": "Steps",
+    "parent": {
+      "key": "all",
+      "display": "Cualquier tipo de actividad"
+    },
+    "type": {
+      "key": "steps",
+      "display": "Steps"
+    }
+  },
+  {
+    "key": "other",
+    "display": "Otros",
+    "parent": {
+      "key": "all",
+      "display": "Cualquier tipo de actividad"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "backcountry_skiing_snowboarding",
+    "display": "Esquí de fondo/snowboard",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "boating",
+    "display": "Navegación",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "cross_country_skiing",
+    "display": "Esquí nórdico",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "driving_general",
+    "display": "Conducción",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "flying",
+    "display": "Vuelo",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "golf",
+    "display": "Golf",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "horseback_riding",
+    "display": "Equitación",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "inline_skating",
+    "display": "Patinaje en línea",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "mountaineering",
+    "display": "Montañismo",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "paddling",
+    "display": "Kayac marino",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "resort_skiing_snowboarding",
+    "display": "Esquí en estación/snowboard",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "rowing",
+    "display": "Remo",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "sailing",
+    "display": "Vela",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "skate_skiing",
+    "display": "Esquí-patinaje",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "skating",
+    "display": "Patinaje",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "snowmobiling",
+    "display": "Motonieve",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "snow_shoe",
+    "display": "Raqueta de nieve",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "stand_up_paddleboarding",
+    "display": "Paddle surf",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "whitewater_rafting_kayaking",
+    "display": "Rafting",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "wind_kite_surfing",
+    "display": "Windsurf",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "bmx",
+    "display": "BMX",
+    "parent": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    }
+  },
+  {
+    "key": "atv",
+    "display": "Todoterreno",
+    "parent": {
+      "key": "motorcycling",
+      "display": "Motociclismo"
+    },
+    "type": {
+      "key": "motorcycling",
+      "display": "Motociclismo"
+    }
+  },
+  {
+    "key": "hunting_fishing",
+    "display": "Caza/pesca",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "sky_diving",
+    "display": "Paracaidismo",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "motocross",
+    "display": "Motocross",
+    "parent": {
+      "key": "motorcycling",
+      "display": "Motociclismo"
+    },
+    "type": {
+      "key": "motorcycling",
+      "display": "Motociclismo"
+    }
+  },
+  {
+    "key": "rc_drone",
+    "display": "Control remoto/drones",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "surfing",
+    "display": "Surf",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "wakeboarding",
+    "display": "Esquí acuático",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "rock_climbing",
+    "display": "Escalada",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "hang_gliding",
+    "display": "Parapente",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "wingsuit_flying",
+    "display": "Vuelo con traje con alas",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "tennis",
+    "display": "TENNIS",
+    "parent": {
+      "key": "other",
+      "display": "Otros"
+    },
+    "type": {
+      "key": "other",
+      "display": "Otros"
+    }
+  },
+  {
+    "key": "gravel_cycling",
+    "display": "Ciclismo gravel/por zonas sin asfaltar",
+    "parent": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "Ciclismo"
+    }
+  }
+]}

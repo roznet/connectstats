@@ -1,0 +1,942 @@
+/* Created with Localizable Strings Merge, the swiss-army knife for iOS and OS X localization. */
+
+/* Activity Test */
+" %@ in %@ at %@" = " %1$@ in %2$@ at %3$@";
+
+/* Activity Text */
+" in %@" = " in %@";
+
+/* Service Status */
+"%@ Incomplete" = "%@ Incomplete";
+
+/* tennis */
+"%@ Precision" = "%@ Precision";
+
+/* Service Status */
+"%@ Setup" = "%@ Setup";
+
+/* Service Status */
+"%@ Success" = "%@ Success";
+
+/* Stats Cell */
+"%d items" = "%d items";
+
+/* Withings Status */
+"%d measures" = "%d measures";
+
+/* Calculated Field */
+"10sec Pace" = "10sec Pace"; /* NEW */
+
+/* Calculated Field */
+"10sec Speed" = "10sec Speed"; /* NEW */
+
+/* GCWebStatus */
+"Access denied" = "Access denied";
+
+/* Calendar tabbar
+   TabBar Title */
+"Activities" = "Activités";
+
+/* Activity Description */
+"Activity Description" = "Activity Description"; /* NEW */
+
+/* GCWebStatus */
+"Activity was deleted" = "Activity was deleted";
+
+/* Moving Elapsed */
+"Actual Time" = "Actual Time";
+
+/* Settings Filter */
+"Adjust For Lap Avg" = "Adjust For Lap Avg"; /* NEW */
+
+/* HR Zones */
+"Aerobic" = "Aerobic"; /* NEW */
+
+/* Activity Type Button
+   Button Calendar
+   MaturityButton
+   viewchoice */
+"All" = "All";
+
+/* HealthRequest Descriptions */
+"Analysing Sources" = "Analysing Sources";
+
+/* Source */
+"Analysing, please wait..." = "Analysing, please wait..."; /* NEW */
+
+/* Calendar Unit Description */
+"Annual" = "Annual";
+
+/* maptype */
+"Apple" = "Apple";
+
+/* Profile Delete */
+"Are you sure you want to delete all the activities in this profile?" = "Are you sure you want to delete all the activities in this profile?"; /* NEW */
+
+/* No comment provided by engineer. */
+"Are you sure you want to delete the whole profile?" = "Are you sure you want to delete the whole profile?"; /* NEW */
+
+/* Delete Activity */
+"Are you sure you want to delete this activity on garmin Connect. This can't be undone" = "Are you sure you want to delete this activity on garmin Connect. This can't be undone";
+
+/* Language Choice */
+"As Downloaded" = "As Downloaded"; /* NEW */
+
+/* Autolap Choice */
+"As Recorded" = "As Recorded";
+
+/* Calculated Field */
+"Ascent Speed" = "Ascent Speed"; /* NEW */
+
+/* Settings */
+"Auto Refresh" = "Auto Refresh"; /* NEW */
+
+/* Stats Cell */
+"Average of %@" = "Average of %@";
+
+/* Swim Stroke */
+"Backstroke" = "Backstroke";
+
+/* FitBit Old Date */
+"Before %@" = "Before %@";
+
+/* Best Rolling Curve */
+"Best %@" = "Best %@"; /* NEW */
+
+/* Autolap Choice */
+"Best Rolling %@" = "Best Rolling %@";
+
+/* Activity Text */
+"biked" = "biked";
+
+/* maptype */
+"Both" = "Both";
+
+/* Stats Cell */
+"Bottom 25%" = "Bottom 25%";
+
+/* Stats Cell */
+"Bottom 50%" = "Bottom 50%";
+
+/* Swim Stroke */
+"Breaststroke" = "Breaststroke";
+
+/* Bug Report */
+"Bug Report" = "Bug Report"; /* NEW */
+
+/* Settings */
+"Bug Report Include Activity" = "Bug Report Include Activity";
+
+/* Swim Stroke */
+"Butterfly" = "Butterfly";
+
+/* Calculating Graph Label */
+"Calculating..." = "Calculating...";
+
+/* Calendar tabbar title
+   Period Descriptions
+   ShortCut Key
+   TabBar Title */
+"Calendar" = "Calendrier";
+
+/* Alert
+   Bug Report
+   Cache Management
+   Delete Activity
+   More Actions
+   Profile Delete
+   Rename Activity
+   RenameProfile Button */
+"Cancel" = "Cancel";
+
+/* heatmap tennis */
+"Center" = "Center";
+
+/* More Actions */
+"Change Type" = "Change Type";
+
+/* Request Description */
+"Changing %@ to %@" = "Changing %1$@ to %2$@";
+
+/* Request Description */
+"Checking withings user list" = "Checking withings user list";
+
+/* Grid Cell Button */
+"Clear" = "Clear";
+
+/* Settings */
+"Compute Best Overall" = "Compute Best Overall"; /* NEW */
+
+/* Derived Request */
+"Computing Best Overall" = "Computing Best Overall"; /* NEW */
+
+/* Derived Request */
+"Computing Best Overall (%lu%%)" = "Computing Best Overall (%lu%%)"; /* NEW */
+
+/* TabBar Title */
+"Config" = "Config";
+
+/* Service status */
+"Connected Successfully" = "Connected Successfully";
+
+/* Request Description */
+"Connecting to withings" = "Connecting to withings";
+
+/* GCWebStatus */
+"Connection error" = "Connection error";
+
+/* Tennis */
+"Consistency" = "Consistency";
+
+/* Settings */
+"Continue on Error" = "Continue on Error";
+
+/* Profile */
+"Create" = "Create"; /* NEW */
+
+/* Healthkit Source */
+"Current Source" = "Current Source";
+
+/* Activity Type Button */
+"Day" = "Day"; /* NEW */
+
+/* TabBar Title */
+"Day Details" = "Day Details";
+
+/* Activity Type Button */
+"Days" = "Days"; /* NEW */
+
+/* SettingsView */
+"Debug Actions" = "Debug Actions"; /* NEW */
+
+/* Unit system name */
+"Default" = "Default";
+
+/* Alert
+   Cache Management
+   Delete Activity
+   Profile Delete */
+"Delete" = "Delete";
+
+/* Delete Activity */
+"Delete Activity" = "Delete Activity";
+
+/* Profile Delete */
+"Delete All Activities" = "Delete All Activities"; /* NEW */
+
+/* Cache Management */
+"Delete Files" = "Delete Files"; /* NEW */
+
+/* Profile Delete */
+"Delete Profile" = "Delete Profile"; /* NEW */
+
+/* Profile Delete */
+"Delete Some Activities" = "Delete Some Activities"; /* NEW */
+
+/* DeletedActivity */
+"Deleted Activity" = "Deleted Activity";
+
+/* Request Description */
+"Deleting %@" = "Deleting %@";
+
+/* Calculated Field */
+"Descent Speed" = "Descent Speed"; /* NEW */
+
+/* TabBar Title */
+"Details" = "Details";
+
+/* Login Method */
+"Direct" = "Direct";
+
+/* Web Connect */
+"Done" = "Done";
+
+/* tennis precision */
+"Down" = "Down";
+
+/* Ski Lap Label */
+"Downhill" = "Downhill";
+
+/* Other Service */
+"Download Activities" = "Download Activities";
+
+/* Request Description */
+"Downloading %@" = "Downloading %@";
+
+/* Request Description */
+"Downloading activity %@" = "Downloading activity %@";
+
+/* Request Description */
+"Downloading activity data" = "Downloading activity data";
+
+/* SportTracks Upload */
+"Downloading file for sporttracks" = "Downloading file for sporttracks";
+
+/* Strava Upload */
+"Downloading file for strava" = "Downloading file for strava";
+
+/* Request Description */
+"Downloading from withings" = "Downloading from withings";
+
+/* Request Description */
+"Downloading History... %@" = "Downloading History... %@";
+
+/* SportTracks Upload */
+"Downloading SportTracks History" = "Downloading SportTracks History";
+
+/* SportTracks Upload */
+"Downloading SportTracks Track" = "Downloading SportTracks Track";
+
+/* Strava Upload */
+"Downloading strava History" = "Downloading strava History";
+
+/* Strava Upload */
+"Downloading strava History %d" = "Downloading strava History %d";
+
+/* Strava Upload */
+"Downloading strava track" = "Downloading strava track";
+
+/* Request Description */
+"Downloading swim data" = "Downloading swim data";
+
+/* Request Description */
+"Downloading track points" = "Downloading track points";
+
+/* Request Status */
+"Downloading weather" = "Downloading weather";
+
+/* Swim Stroke */
+"Drill" = "Drill";
+
+/* Settings */
+"Dynamic" = "Dynamic"; /* NEW */
+
+/* HR Zones */
+"Easy" = "Easy"; /* NEW */
+
+/* power tennis */
+"Effect" = "Effect";
+
+/* Calculated Field */
+"Elevation Gain" = "Elevation Gain"; /* NEW */
+
+/* Calculated Field */
+"Elevation Gradient" = "Elevation Gradient"; /* NEW */
+
+/* Calculated Field */
+"Elevation Loss" = "Elevation Loss"; /* NEW */
+
+/* SharingView */
+"Email" = "Email"; /* NEW */
+
+/* Other Service */
+"Enable" = "Enable";
+
+/* Service status */
+"Enabled" = "Enabled";
+
+/* Map annotation */
+"End" = "Arrivée";
+
+/* Tennis */
+"Energy" = "Energy";
+
+/* Rename Activity
+   RenameProfile */
+"Enter new activity name" = "Enter new activity name";
+
+/* Profile */
+"Enter New Profile Name" = "Enter New Profile Name"; /* NEW */
+
+/* Calendar Unit Description
+   Profile */
+"Error" = "Error";
+
+/* Error */
+"Error updating" = "Error updating";
+
+/* Bug Report */
+"Exclude" = "Exclude"; /* NEW */
+
+/* Other Service */
+"Export as private" = "Export as private";
+
+/* Request Description */
+"extra" = "extra";
+
+/* SharingView */
+"Facebook" = "Facebook"; /* NEW */
+
+/* Lap Callout */
+"Fastest" = "Fastest";
+
+/* Autolap Choice */
+"Fastest km" = "Fastest km";
+
+/* Autolap Choice */
+"Fastest mile" = "Fastest mile";
+
+/* Performance */
+"Fatigue" = "Fatigue"; /* NEW */
+
+/* Settings Filter */
+"Filter Bad Accelerations" = "Filter Bad Accelerations"; /* NEW */
+
+/* Profile units
+   Settings Filter */
+"Filter bad values" = "Filter bad values";
+
+/* Profile Week Start */
+"First Day of Week" = "First Day of Week";
+
+/* Performance */
+"Fitness" = "Fitness"; /* NEW */
+
+/* Settings */
+"Font Style" = "Font Style"; /* NEW */
+
+/* Swim Stroke */
+"Freestyle" = "Freestyle";
+
+/* maptype */
+"Google" = "Google";
+
+/* SharingView */
+"GoogleEarth" = "GoogleEarth"; /* NEW */
+
+/* Settings */
+"Graphs in Tables" = "Graphs in Tables";
+
+/* SharingView */
+"Health App" = "Health App"; /* NEW */
+
+/* Settings */
+"Helvetica" = "Helvetica"; /* NEW */
+
+/* Graph Title */
+"Histogram %@" = "Histogram %@";
+
+/* Other Service */
+"Ignore Duplicate on Download" = "Ignore Duplicate on Download";
+
+/* Unit system name */
+"Imperial" = "Imperial";
+
+/* Bug Report */
+"Include" = "Include"; /* NEW */
+
+/* SharingView */
+"Include CSV file" = "Include CSV file"; /* NEW */
+
+/* SharingView */
+"Include GarminConnect Link" = "Include GarminConnect Link"; /* NEW */
+
+/* SharingView */
+"Include GoogleEarth Link" = "Include GoogleEarth Link"; /* NEW */
+
+/* SharingView */
+"Include Snapshot" = "Include Snapshot"; /* NEW */
+
+/* Lap Cell */
+"Int %d" = "Int %d";
+
+/* Lap Cell */
+"Int %d " = "Int %d ";
+
+/* GCWebStatus */
+"Internal Logic Error" = "Internal Logic Error";
+
+/* GCWebStatus */
+"Invalid name or password" = "Invalid name or password";
+
+/* Settings */
+"Language" = "Language"; /* NEW */
+
+/* Map annotation */
+"Lap" = "Intervalle";
+
+/* Lap Annotation Callout
+   Lap Cell */
+"Lap %d" = "Intervalle %d";
+
+/* Request Description */
+"laps" = "laps";
+
+/* Settings */
+"Laps Overlay in Graphs" = "Laps Overlay in Graphs";
+
+/* ShortCut Key */
+"Last Activity" = "Last Activity"; /* NEW */
+
+/* ShortCut Key */
+"Last Day" = "Last Day"; /* NEW */
+
+/* Other Service */
+"Last sync %@" = "Last sync %@";
+
+/* tennis precision */
+"Left" = "Left";
+
+/* Lap Cell */
+"Len %d" = "Len %d";
+
+/* Ski Lap Label */
+"Lift" = "Lift";
+
+/* ManualLogin
+   TabBar Title */
+"List" = "List";
+
+/* SettingsView */
+"Log" = "Log"; /* NEW */
+
+/* Other Service */
+"Logged in" = "Logged in";
+
+/* No comment provided by engineer. */
+"Login Name" = "Login Name";
+
+/* SportTracks download */
+"Login to SportTracks" = "Login to SportTracks";
+
+/* Strava Upload */
+"Login to strava" = "Login to strava";
+
+/* Profile map */
+"Map" = "Map";
+
+/* Settings */
+"Map Gradient in Tables" = "Map Gradient in Tables"; /* NEW */
+
+/* Settings */
+"Map skip points" = "Map skip points";
+
+/* Grid Cell Button */
+"Mark" = "Mark";
+
+/* Stats Cell */
+"Max %@" = "Max %@";
+
+/* Calculated Field */
+"Max Ascent Speed" = "Max Ascent Speed"; /* NEW */
+
+/* Calculated Field */
+"Max Descent Speed" = "Max Descent Speed"; /* NEW */
+
+/* power tennis */
+"Max Power" = "Max Power";
+
+/* HR Zones */
+"Maximum" = "Maximum"; /* NEW */
+
+/* Settings Filter */
+"Maximum cycling power" = "Maximum cycling power"; /* NEW */
+
+/* Unit system name */
+"Metric" = "Metric";
+
+/* Stats Cell */
+"Min %@" = "Min %@";
+
+/* Settings Filter */
+"Minimum running speed" = "Minimum running speed"; /* NEW */
+
+/* Reload Settings */
+"Missing %lu out of %lu activities" = "Missing %1$lu out of %2$lu activities";
+
+/* HealthView */
+"Missing..." = "Missing..."; /* NEW */
+
+/* Swim Stroke */
+"Mixed" = "Mixed";
+
+/* Calendar Unit Description
+   viewchoice */
+"Monthly" = "Monthly";
+
+/* Grid Cell Button */
+"More" = "More";
+
+/* More Actions */
+"More Actions" = "More Actions";
+
+/* Button Calendar */
+"MTD" = "MTD"; /* NEW */
+
+/* Service status */
+"Needs More Inputs" = "Needs More Inputs";
+
+/* Other Service */
+"Never logged in - Tap to start" = "Never logged in - Tap to start";
+
+/* Profile */
+"New Profile" = "New Profile"; /* NEW */
+
+/* Settings */
+"New track download api" = "New track download api";
+
+/* Bug Report */
+"No Diagnostic to report at this time" = "No Diagnostic to report at this time"; /* NEW */
+
+/* Calculated Field */
+"Non Zero Avg Power" = "Non Zero Avg Power"; /* NEW */
+
+/* Field List Choice
+   Field List description */
+"None" = "None"; /* NEW */
+
+/* Calculated Field */
+"Normalized Power" = "Normalized Power"; /* NEW */
+
+/* Stats Cell */
+"Not enough observations" = "Not enough observations";
+
+/* Source */
+"Not Set" = "Not Set";
+
+/* Other Service */
+"Not Supported by device" = "Not Supported by device";
+
+/* GCWebStatus */
+"Ok" = "Ok";
+
+/* ManualLogin */
+"One" = "One"; /* NEW */
+
+/* Strava Info */
+"Or pull down activity list to login and download" = "Or pull down activity list to login and download";
+
+/* Request Description */
+"Original" = "Original"; /* NEW */
+
+/* Activity Type Button */
+"Other" = "Other";
+
+/* Bug Report */
+"Parse Error Data" = "Parse Error Data"; /* NEW */
+
+/* Request Description */
+"Parsing %@" = "Parsing %@";
+
+/* Request Description */
+"Parsing activity data" = "Parsing activity data";
+
+/* GCWebStatus */
+"Parsing failed" = "Parsing failed";
+
+/* Request Description */
+"Parsing History... %@" = "Parsing History... %@";
+
+/* Request Description */
+"Parsing swim data" = "Parsing swim data";
+
+/* Request Description */
+"Parsing track points" = "Parsing track points";
+
+/* No comment provided by engineer. */
+"Password" = "Password";
+
+/* Summary Graph */
+"Pending..." = "Pending...";
+
+/* Graph Title */
+"Performance %@" = "Performance %@"; /* NEW */
+
+/* Profile Period */
+"Period for Stats" = "Period for Stats";
+
+/* Tennis */
+"Play Time" = "Play Time";
+
+/* Health View Controller
+   power tennis */
+"Power" = "Power";
+
+/* StatsOneView */
+"Preparing Graph" = "Preparing Graph"; /* NEW */
+
+/* Request Description */
+"Processing History..." = "Processing History...";
+
+/* Strava Info */
+"Pull down activity list to refresh activities" = "Pull down activity list to refresh activities";
+
+/* Activity Text */
+"ran" = "ran";
+
+/* ManualLogin
+   ShortCut Key */
+"Refresh" = "Refresh"; /* NEW */
+
+/* Settings */
+"Refresh on startup" = "Refresh on startup";
+
+/* Health View */
+"Refresh Training Zone" = "Refresh Training Zone"; /* NEW */
+
+/* RefreshControl */
+"Refreshing" = "Refreshing";
+
+/* Settings */
+"Reload Activities" = "Reload Activities";
+
+/* Reload Settings */
+"Reload All Activities" = "Reload All Activities";
+
+/* Reload Settings */
+"Reload Details for 50 activities" = "Reload Details for 50 activities";
+
+/* Reload Settings */
+"Reload Weather for 50 activities" = "Reload Weather for 50 activities";
+
+/* Profile
+   Rename Activity
+   RenameProfile Button */
+"Rename" = "Rename";
+
+/* More Actions
+   Rename Activity */
+"Rename Activity" = "Rename Activity";
+
+/* Profile
+   RenameProfile */
+"Rename Profile" = "Rename Profile";
+
+/* RenameProfile */
+"Renaming" = "Renaming";
+
+/* Request Description */
+"Renaming %@ to %@" = "Renaming %1$@ to %2$@";
+
+/* Error */
+"Repeated Failure to start" = "Repeated Failure to start"; /* NEW */
+
+/* tennis precision */
+"Right" = "Right";
+
+/* Period Descriptions */
+"Rolling" = "Rolling";
+
+/* Graph Title */
+"Rolling Best %@" = "Rolling Best %@";
+
+/* Lap Cell */
+"Run %d" = "Run %d"; /* NEW */
+
+/* HealthKit sync msg */
+"Saved on %@" = "Saved on %@";
+
+/* Request Description */
+"Saving activity data" = "Saving activity data";
+
+/* Request Description */
+"Saving History... %@" = "Saving History... %@";
+
+/* Request Description */
+"Saving swim data" = "Saving swim data";
+
+/* Request Description */
+"Saving track points" = "Saving track points";
+
+/* Activity Type Button
+   SearchBar */
+"Search" = "Search";
+
+/* No comment provided by engineer. */
+"Search Older Days" = "Search Older Days";
+
+/* Settings */
+"Send Bug Report or Feedback" = "Send Bug Report or Feedback";
+
+/* GCWebStatus */
+"Service Internal Error" = "Service Internal Error";
+
+/* Initial */
+"Setup your service, enter your user name and password to start downloading your activities" = "Setup your service, enter your user name and password to start downloading your activities";
+
+/* Tennis */
+"Shots" = "Shots";
+
+/* Settings */
+"Show Download Icon" = "Show Download Icon"; /* NEW */
+
+/* Other Service */
+"Signout" = "Signout";
+
+/* Autolap Choice */
+"Ski Laps" = "Ski Laps";
+
+/* Bug Report */
+"Some data that failed to parse was detected. These may include some of your activity data. Do you want to include them in the report?" = "Some data that failed to parse was detected. These may include some of your activity data. Do you want to include them in the report?"; /* NEW */
+
+/* Other Service */
+"Source" = "Source";
+
+/* Calendar tabbar */
+"Speed" = "Speed";
+
+/* Autolap Choice */
+"Split Half Distance" = "Split Half Distance";
+
+/* Autolap Choice */
+"Split Half Time" = "Split Half Time";
+
+/* Autolap Choice */
+"Split Quarter Distance" = "Split Quarter Distance";
+
+/* Autolap Choice */
+"Split Quarter Time" = "Split Quarter Time";
+
+/* SharingView */
+"SportTracks" = "SportTracks"; /* NEW */
+
+/* Map annotation */
+"Start" = "Depart";
+
+/* TabBar Title */
+"Stats" = "Stats";
+
+/* Stats Cell */
+"Std Dev" = "Std Dev";
+
+/* SharingView */
+"Strava" = "Strava"; /* NEW */
+
+/* Profile units */
+"Stride Units" = "Stride Units";
+
+/* Bug Report */
+"Submit" = "Submit"; /* NEW */
+
+/* No comment provided by engineer. */
+"Submitting a bug report will send some debug diagnostic. It does not contains any of your activity data and will help make this app better. Thank you!" = "Submitting a bug report will send some debug diagnostic. It does not contains any of your activity data and will help make this app better. Thank you!";
+
+/* No comment provided by engineer. */
+"Submitting a bug report will send some debug diagnostic. It will help make this app better. Thank you!" = "Submitting a bug report will send some debug diagnostic. It will help make this app better. Thank you!";
+
+/* viewchoice */
+"Summary" = "Summary";
+
+/* ShortCut Key */
+"Summary Statistics" = "Summary Statistics"; /* NEW */
+
+/* Activity Text */
+"swam" = "swam";
+
+/* GCWebStatus */
+"Switch to Garmin Connect Modern required" = "Switch to Garmin Connect Modern required";
+
+/* Strava sync msg */
+"Sync'd on %@" = "Sync'd on %@";
+
+/* Language Choice */
+"System" = "System"; /* NEW */
+
+/* Service Status */
+"Tap to setup" = "Tap to setup";
+
+/* Weather Cell */
+"Temperature %@" = "Temperature %@";
+
+/* GCWebStatus */
+"Temporarily Unavailable" = "Temporarily Unavailable";
+
+/* Activity Type */
+"Tennis" = "Tennis";
+
+/* Error */
+"The app seem to not have started multiple times. You can send a bug report, next attempt will try again" = "The app seem to not have started multiple times. You can send a bug report, next attempt will try again"; /* NEW */
+
+/* DeletedActivity */
+"This activity was deleted from garmin connect, do you want to delete in the app too?" = "This activity was deleted from garmin connect, do you want to delete in the app too?";
+
+/* Profile */
+"This profile name exists already" = "This profile name exists already"; /* NEW */
+
+/* Profile Delete */
+"This will only remove activity on the phone" = "This will only remove activity on the phone"; /* NEW */
+
+/* HR Zones */
+"Threshold" = "Threshold"; /* NEW */
+
+/* Moving Elapsed */
+"Time Moving" = "Time Moving";
+
+/* Stats Cell */
+"Top 25%" = "Top 25%";
+
+/* Stats Cell */
+"Top 50%" = "Top 50%";
+
+/* Request Description */
+"track points" = "track points";
+
+/* SharingView */
+"Twitter" = "Twitter"; /* NEW */
+
+/* Profile units */
+"Units" = "Units";
+
+/* Login Method
+   Period Descriptions */
+"Unknown" = "Unknown";
+
+/* tennis precision */
+"Up" = "Up";
+
+/* Request Description */
+"Updating Activity Types" = "Updating Activity Types";
+
+/* Request Description */
+"Updating User Info" = "Updating User Info";
+
+/* Other Service */
+"Upload Activities" = "Upload Activities";
+
+/* SportTracks Upload */
+"Uploading to sporttracks" = "Uploading to sporttracks";
+
+/* Strava Upload */
+"Uploading to strava" = "Uploading to strava";
+
+/* Other Service */
+"Use FitBit" = "Use FitBit";
+
+/* Other Service */
+"Use Health Data" = "Use Health Data";
+
+/* Map annotation */
+"User" = "Utilisateur";
+
+/* Calculated Field */
+"Vertical Speed" = "Vertical Speed"; /* NEW */
+
+/* Cell Status */
+"Waiting" = "Waiting";
+
+/* HR Zones */
+"Warm up" = "Warm up"; /* NEW */
+
+/* Login Method */
+"Web" = "Web";
+
+/* Calendar Unit Description
+   viewchoice */
+"Weekly" = "Weekly";
+
+/* Initial
+   Welcome */
+"Welcome" = "Welcome";
+
+/* Activity Type Button */
+"Workouts" = "Workouts"; /* NEW */
+
+/* Button Calendar */
+"WTD" = "WTD"; /* NEW */
+
+/* viewchoice */
+"Yearly" = "Yearly";
+
+/* Button Calendar */
+"YTD" = "YTD"; /* NEW */
+

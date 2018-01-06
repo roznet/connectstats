@@ -1,0 +1,21 @@
+//
+//  FitFileExplorer-Prefix.pch
+//  GarminConnect
+//
+//  Created by Brice Rosenzweig on 06/11/2016.
+//  Copyright © 2016 Brice Rosenzweig. All rights reserved.
+//
+
+#import <Availability.h>
+
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#ifdef __OBJC__
+
+#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
+#import "RZUtils/RZUtils.h"
+#import "RZUtilsUniversal/RZUtilsUniversal.h"
+#import "RZUtilsOSX/RZUtilsOSX.h"
+#endif

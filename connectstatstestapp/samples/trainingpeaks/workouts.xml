@@ -1,0 +1,1979 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfWorkout xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.trainingpeaks.com/TPWebServices/">
+  <Workout>
+    <WorkoutId>183404610</WorkoutId>
+    <WorkoutDay>2014-06-03T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>1138.030029296875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>404</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>2.9210000038146973</VelocityMaximum>
+    <VelocityAverage>2.8169999122619629</VelocityAverage>
+    <CadenceMaximum>86</CadenceMaximum>
+    <CadenceAverage>83</CadenceAverage>
+    <HeartRateMaximum>169</HeartRateMaximum>
+    <HeartRateMinimum>95</HeartRateMinimum>
+    <HeartRateAverage>153</HeartRateAverage>
+    <StartTime>2014-06-03T03:37:28</StartTime>
+    <ElevationGain xsi:nil="true" />
+    <ElevationLoss xsi:nil="true" />
+    <ElevationMinimum xsi:nil="true" />
+    <ElevationMaximum xsi:nil="true" />
+    <ElevationAverage xsi:nil="true" />
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404607</WorkoutId>
+    <WorkoutDay>2014-06-03T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>1118.800048828125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>419</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.8719997406005859</VelocityMaximum>
+    <VelocityAverage>2.6700000762939453</VelocityAverage>
+    <CadenceMaximum>83</CadenceMaximum>
+    <CadenceAverage>76</CadenceAverage>
+    <HeartRateMaximum>182</HeartRateMaximum>
+    <HeartRateMinimum>146</HeartRateMinimum>
+    <HeartRateAverage>171</HeartRateAverage>
+    <StartTime>2014-06-03T06:20:51</StartTime>
+    <ElevationGain>54</ElevationGain>
+    <ElevationLoss>31</ElevationLoss>
+    <ElevationMinimum>-3</ElevationMinimum>
+    <ElevationMaximum>52.5999755859375</ElevationMaximum>
+    <ElevationAverage>19.011695861816406</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404619</WorkoutId>
+    <WorkoutDay>2014-06-03T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>7029.60986328125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2063</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>7.940000057220459</VelocityMaximum>
+    <VelocityAverage>3.4079999923706055</VelocityAverage>
+    <CadenceMaximum>90</CadenceMaximum>
+    <CadenceAverage>85</CadenceAverage>
+    <HeartRateMaximum>194</HeartRateMaximum>
+    <HeartRateMinimum>104</HeartRateMinimum>
+    <HeartRateAverage>182</HeartRateAverage>
+    <StartTime>2014-06-03T05:45:44</StartTime>
+    <ElevationGain>258</ElevationGain>
+    <ElevationLoss>292</ElevationLoss>
+    <ElevationMinimum>-39.600006103515625</ElevationMinimum>
+    <ElevationMaximum>67.4000244140625</ElevationMaximum>
+    <ElevationAverage>19.762819290161133</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404603</WorkoutId>
+    <WorkoutDay>2014-06-04T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>1167.030029296875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>392</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>12.605999946594238</VelocityMaximum>
+    <VelocityAverage>2.9779999256134033</VelocityAverage>
+    <CadenceMaximum>85</CadenceMaximum>
+    <CadenceAverage>68</CadenceAverage>
+    <HeartRateMaximum>179</HeartRateMaximum>
+    <HeartRateMinimum>158</HeartRateMinimum>
+    <HeartRateAverage>170</HeartRateAverage>
+    <StartTime>2014-06-04T06:24:03</StartTime>
+    <ElevationGain>121</ElevationGain>
+    <ElevationLoss>20</ElevationLoss>
+    <ElevationMinimum>-5.600006103515625</ElevationMinimum>
+    <ElevationMaximum>115.88419342041016</ElevationMaximum>
+    <ElevationAverage>47.480567932128906</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404605</WorkoutId>
+    <WorkoutDay>2014-06-04T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>7089.77001953125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2102</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>8.3879995346069336</VelocityMaximum>
+    <VelocityAverage>3.372999906539917</VelocityAverage>
+    <CadenceMaximum>89</CadenceMaximum>
+    <CadenceAverage>86</CadenceAverage>
+    <HeartRateMaximum>188</HeartRateMaximum>
+    <HeartRateMinimum>104</HeartRateMinimum>
+    <HeartRateAverage>177</HeartRateAverage>
+    <StartTime>2014-06-04T05:48:37</StartTime>
+    <ElevationGain>316</ElevationGain>
+    <ElevationLoss>313</ElevationLoss>
+    <ElevationMinimum>-72.600006103515625</ElevationMinimum>
+    <ElevationMaximum>38.79998779296875</ElevationMaximum>
+    <ElevationAverage>-3.2565381526947021</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404609</WorkoutId>
+    <WorkoutDay>2014-06-04T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>1207.010009765625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>416</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>22.691999435424805</VelocityMaximum>
+    <VelocityAverage>2.9010000228881836</VelocityAverage>
+    <CadenceMaximum>88</CadenceMaximum>
+    <CadenceAverage>82</CadenceAverage>
+    <HeartRateMaximum>166</HeartRateMaximum>
+    <HeartRateMinimum>85</HeartRateMinimum>
+    <HeartRateAverage>152</HeartRateAverage>
+    <StartTime>2014-06-04T05:40:12</StartTime>
+    <ElevationGain>291</ElevationGain>
+    <ElevationLoss>328</ElevationLoss>
+    <ElevationMinimum>37.4000244140625</ElevationMinimum>
+    <ElevationMaximum>249</ElevationMaximum>
+    <ElevationAverage>108.69735717773437</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404606</WorkoutId>
+    <WorkoutDay>2014-06-05T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>1231.469970703125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>514</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>20.256999969482422</VelocityMaximum>
+    <VelocityAverage>2.3949999809265137</VelocityAverage>
+    <CadenceMaximum>83</CadenceMaximum>
+    <CadenceAverage>67</CadenceAverage>
+    <HeartRateMaximum>154</HeartRateMaximum>
+    <HeartRateMinimum>90</HeartRateMinimum>
+    <HeartRateAverage>138</HeartRateAverage>
+    <StartTime>2014-06-05T18:14:40</StartTime>
+    <ElevationGain>127</ElevationGain>
+    <ElevationLoss>356</ElevationLoss>
+    <ElevationMinimum>152.5999755859375</ElevationMinimum>
+    <ElevationMaximum>360.79998779296875</ElevationMaximum>
+    <ElevationAverage>212.82528686523437</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404617</WorkoutId>
+    <WorkoutDay>2014-06-05T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>1331.1600341796875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>496</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>17.728000640869141</VelocityMaximum>
+    <VelocityAverage>2.6819999217987061</VelocityAverage>
+    <CadenceMaximum>83</CadenceMaximum>
+    <CadenceAverage>69</CadenceAverage>
+    <HeartRateMaximum>177</HeartRateMaximum>
+    <HeartRateMinimum>153</HeartRateMinimum>
+    <HeartRateAverage>164</HeartRateAverage>
+    <StartTime>2014-06-05T19:01:29</StartTime>
+    <ElevationGain>36</ElevationGain>
+    <ElevationLoss>42</ElevationLoss>
+    <ElevationMinimum>-8.399993896484375</ElevationMinimum>
+    <ElevationMaximum>22.4000244140625</ElevationMaximum>
+    <ElevationAverage>9.0679435729980469</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404618</WorkoutId>
+    <WorkoutDay>2014-06-05T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>7110.81982421875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2225</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.9370002746582031</VelocityMaximum>
+    <VelocityAverage>3.1960000991821289</VelocityAverage>
+    <CadenceMaximum>86</CadenceMaximum>
+    <CadenceAverage>80</CadenceAverage>
+    <HeartRateMaximum>188</HeartRateMaximum>
+    <HeartRateMinimum>122</HeartRateMinimum>
+    <HeartRateAverage>174</HeartRateAverage>
+    <StartTime>2014-06-05T18:24:01</StartTime>
+    <ElevationGain>244</ElevationGain>
+    <ElevationLoss>307</ElevationLoss>
+    <ElevationMinimum>-56.20001220703125</ElevationMinimum>
+    <ElevationMaximum>83.79998779296875</ElevationMaximum>
+    <ElevationAverage>21.744314193725586</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404636</WorkoutId>
+    <WorkoutDay>2014-06-08T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>852.03997802734375</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>305</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>13.418000221252441</VelocityMaximum>
+    <VelocityAverage>2.7899999618530273</VelocityAverage>
+    <CadenceMaximum>83</CadenceMaximum>
+    <CadenceAverage>76</CadenceAverage>
+    <HeartRateMaximum>153</HeartRateMaximum>
+    <HeartRateMinimum>82</HeartRateMinimum>
+    <HeartRateAverage>143</HeartRateAverage>
+    <StartTime>2014-06-08T19:22:06</StartTime>
+    <ElevationGain>56</ElevationGain>
+    <ElevationLoss>92</ElevationLoss>
+    <ElevationMinimum>-70</ElevationMinimum>
+    <ElevationMaximum>27.4000244140625</ElevationMaximum>
+    <ElevationAverage>-23.371807098388672</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404637</WorkoutId>
+    <WorkoutDay>2014-06-08T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>6833.41015625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2289</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>53.8849983215332</VelocityMaximum>
+    <VelocityAverage>2.9849998950958252</VelocityAverage>
+    <CadenceMaximum>119</CadenceMaximum>
+    <CadenceAverage>80</CadenceAverage>
+    <HeartRateMaximum>171</HeartRateMaximum>
+    <HeartRateMinimum>108</HeartRateMinimum>
+    <HeartRateAverage>156</HeartRateAverage>
+    <StartTime>2014-06-08T19:28:07</StartTime>
+    <ElevationGain>247</ElevationGain>
+    <ElevationLoss>234</ElevationLoss>
+    <ElevationMinimum>-14.600006103515625</ElevationMinimum>
+    <ElevationMaximum>54.4000244140625</ElevationMaximum>
+    <ElevationAverage>12.371504783630371</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404641</WorkoutId>
+    <WorkoutDay>2014-06-09T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9891.6796875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1880</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.6120004653930664</VelocityMaximum>
+    <VelocityAverage>5.26200008392334</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>168</HeartRateMaximum>
+    <HeartRateMinimum>67</HeartRateMinimum>
+    <HeartRateAverage>125</HeartRateAverage>
+    <StartTime>2014-06-09T18:31:09</StartTime>
+    <ElevationGain>10</ElevationGain>
+    <ElevationLoss>23</ElevationLoss>
+    <ElevationMinimum>-13.79998779296875</ElevationMinimum>
+    <ElevationMaximum>1.20001220703125</ElevationMaximum>
+    <ElevationAverage>-10.264893531799316</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404640</WorkoutId>
+    <WorkoutDay>2014-06-09T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9968.1298828125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1980</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.5399999618530273</VelocityMaximum>
+    <VelocityAverage>5.0329999923706055</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>168</HeartRateMaximum>
+    <HeartRateMinimum>74</HeartRateMinimum>
+    <HeartRateAverage>128</HeartRateAverage>
+    <StartTime>2014-06-09T07:14:07</StartTime>
+    <ElevationGain>25</ElevationGain>
+    <ElevationLoss>8</ElevationLoss>
+    <ElevationMinimum>19.5999755859375</ElevationMinimum>
+    <ElevationMaximum>36.5999755859375</ElevationMaximum>
+    <ElevationAverage>23.577335357666016</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404611</WorkoutId>
+    <WorkoutDay>2014-06-10T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>8988.240234375</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2856</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.1350002288818359</VelocityMaximum>
+    <VelocityAverage>3.1470000743865967</VelocityAverage>
+    <CadenceMaximum>88</CadenceMaximum>
+    <CadenceAverage>83</CadenceAverage>
+    <HeartRateMaximum>184</HeartRateMaximum>
+    <HeartRateMinimum>74</HeartRateMinimum>
+    <HeartRateAverage>166</HeartRateAverage>
+    <StartTime>2014-06-10T07:08:27</StartTime>
+    <ElevationGain>359</ElevationGain>
+    <ElevationLoss>340</ElevationLoss>
+    <ElevationMinimum>-76.79998779296875</ElevationMinimum>
+    <ElevationMaximum>31.20001220703125</ElevationMaximum>
+    <ElevationAverage>-23.080230712890625</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404639</WorkoutId>
+    <WorkoutDay>2014-06-10T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>8929.349609375</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2939</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>65.528999328613281</VelocityMaximum>
+    <VelocityAverage>3.0380001068115234</VelocityAverage>
+    <CadenceMaximum>87</CadenceMaximum>
+    <CadenceAverage>82</CadenceAverage>
+    <HeartRateMaximum>185</HeartRateMaximum>
+    <HeartRateMinimum>90</HeartRateMinimum>
+    <HeartRateAverage>161</HeartRateAverage>
+    <StartTime>2014-06-10T18:59:12</StartTime>
+    <ElevationGain>130</ElevationGain>
+    <ElevationLoss>159</ElevationLoss>
+    <ElevationMinimum>-73.20001220703125</ElevationMinimum>
+    <ElevationMaximum>30.5999755859375</ElevationMaximum>
+    <ElevationAverage>-31.698030471801758</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404652</WorkoutId>
+    <WorkoutDay>2014-06-11T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9921.3603515625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2109</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.0299997329711914</VelocityMaximum>
+    <VelocityAverage>4.7049999237060547</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>152</HeartRateMaximum>
+    <HeartRateMinimum>88</HeartRateMinimum>
+    <HeartRateAverage>118</HeartRateAverage>
+    <StartTime>2014-06-11T07:16:38</StartTime>
+    <ElevationGain>17</ElevationGain>
+    <ElevationLoss>10</ElevationLoss>
+    <ElevationMinimum>-3.20001220703125</ElevationMinimum>
+    <ElevationMaximum>8</ElevationMaximum>
+    <ElevationAverage>-0.65929728746414185</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404650</WorkoutId>
+    <WorkoutDay>2014-06-12T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9862.0595703125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1908</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.42199993133545</VelocityMaximum>
+    <VelocityAverage>5.1680002212524414</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>144</HeartRateMaximum>
+    <HeartRateMinimum>77</HeartRateMinimum>
+    <HeartRateAverage>118</HeartRateAverage>
+    <StartTime>2014-06-12T07:18:45</StartTime>
+    <ElevationGain>20</ElevationGain>
+    <ElevationLoss>10</ElevationLoss>
+    <ElevationMinimum>-1.399993896484375</ElevationMinimum>
+    <ElevationMaximum>10.20001220703125</ElevationMaximum>
+    <ElevationAverage>0.85217416286468506</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404643</WorkoutId>
+    <WorkoutDay>2014-06-12T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>8617.1396484375</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>3046</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>65.528999328613281</VelocityMaximum>
+    <VelocityAverage>2.8289999961853027</VelocityAverage>
+    <CadenceMaximum>85</CadenceMaximum>
+    <CadenceAverage>79</CadenceAverage>
+    <HeartRateMaximum>173</HeartRateMaximum>
+    <HeartRateMinimum>87</HeartRateMinimum>
+    <HeartRateAverage>155</HeartRateAverage>
+    <StartTime>2014-06-12T18:47:13</StartTime>
+    <ElevationGain>303</ElevationGain>
+    <ElevationLoss>334</ElevationLoss>
+    <ElevationMinimum>-208.20001220703125</ElevationMinimum>
+    <ElevationMaximum>59.4000244140625</ElevationMaximum>
+    <ElevationAverage>-28.31047248840332</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404634</WorkoutId>
+    <WorkoutDay>2014-06-13T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9821.8798828125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2006</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.5299997329711914</VelocityMaximum>
+    <VelocityAverage>4.8959999084472656</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>156</HeartRateMaximum>
+    <HeartRateMinimum>71</HeartRateMinimum>
+    <HeartRateAverage>114</HeartRateAverage>
+    <StartTime>2014-06-13T17:45:02</StartTime>
+    <ElevationGain>13</ElevationGain>
+    <ElevationLoss>23</ElevationLoss>
+    <ElevationMinimum>-11.600006103515625</ElevationMinimum>
+    <ElevationMaximum>0.399993896484375</ElevationMaximum>
+    <ElevationAverage>-8.6722831726074219</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404635</WorkoutId>
+    <WorkoutDay>2014-06-13T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>5653.27978515625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1993</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>5.9720001220703125</VelocityMaximum>
+    <VelocityAverage>2.8369998931884766</VelocityAverage>
+    <CadenceMaximum>123</CadenceMaximum>
+    <CadenceAverage>82</CadenceAverage>
+    <HeartRateMaximum>171</HeartRateMaximum>
+    <HeartRateMinimum>80</HeartRateMinimum>
+    <HeartRateAverage>156</HeartRateAverage>
+    <StartTime>2014-06-13T07:06:20</StartTime>
+    <ElevationGain>208</ElevationGain>
+    <ElevationLoss>236</ElevationLoss>
+    <ElevationMinimum>-59</ElevationMinimum>
+    <ElevationMaximum>80.20001220703125</ElevationMaximum>
+    <ElevationAverage>11.95833683013916</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404646</WorkoutId>
+    <WorkoutDay>2014-06-15T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>10613.3203125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>3341</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>26.350000381469727</VelocityMaximum>
+    <VelocityAverage>3.1760001182556152</VelocityAverage>
+    <CadenceMaximum>103</CadenceMaximum>
+    <CadenceAverage>83</CadenceAverage>
+    <HeartRateMaximum>177</HeartRateMaximum>
+    <HeartRateMinimum>84</HeartRateMinimum>
+    <HeartRateAverage>158</HeartRateAverage>
+    <StartTime>2014-06-15T16:56:08</StartTime>
+    <ElevationGain>470</ElevationGain>
+    <ElevationLoss>444</ElevationLoss>
+    <ElevationMinimum>-53.20001220703125</ElevationMinimum>
+    <ElevationMaximum>55.20001220703125</ElevationMaximum>
+    <ElevationAverage>7.8266329765319824</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404649</WorkoutId>
+    <WorkoutDay>2014-06-16T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9950.259765625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1921</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>10.359999656677246</VelocityMaximum>
+    <VelocityAverage>5.1810002326965332</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>161</HeartRateMaximum>
+    <HeartRateMinimum>76</HeartRateMinimum>
+    <HeartRateAverage>127</HeartRateAverage>
+    <StartTime>2014-06-16T07:19:33</StartTime>
+    <ElevationGain>24</ElevationGain>
+    <ElevationLoss>13</ElevationLoss>
+    <ElevationMinimum>-1.20001220703125</ElevationMinimum>
+    <ElevationMaximum>11.600006103515625</ElevationMaximum>
+    <ElevationAverage>1.4575217962265015</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404625</WorkoutId>
+    <WorkoutDay>2014-06-16T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9885.1904296875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1967</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>11.076999664306641</VelocityMaximum>
+    <VelocityAverage>5.0269999504089355</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>173</HeartRateMaximum>
+    <HeartRateMinimum>58</HeartRateMinimum>
+    <HeartRateAverage>122</HeartRateAverage>
+    <StartTime>2014-06-16T18:25:40</StartTime>
+    <ElevationGain>13</ElevationGain>
+    <ElevationLoss>29</ElevationLoss>
+    <ElevationMinimum>-16.399993896484375</ElevationMinimum>
+    <ElevationMaximum>0</ElevationMaximum>
+    <ElevationAverage>-11.900102615356445</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404630</WorkoutId>
+    <WorkoutDay>2014-06-17T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>5623.72998046875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1919</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.4049997329711914</VelocityMaximum>
+    <VelocityAverage>2.9309999942779541</VelocityAverage>
+    <CadenceMaximum>88</CadenceMaximum>
+    <CadenceAverage>83</CadenceAverage>
+    <HeartRateMaximum>179</HeartRateMaximum>
+    <HeartRateMinimum>76</HeartRateMinimum>
+    <HeartRateAverage>165</HeartRateAverage>
+    <StartTime>2014-06-17T07:07:35</StartTime>
+    <ElevationGain>174</ElevationGain>
+    <ElevationLoss>225</ElevationLoss>
+    <ElevationMinimum>-73.20001220703125</ElevationMinimum>
+    <ElevationMaximum>5.79998779296875</ElevationMaximum>
+    <ElevationAverage>-40.251663208007813</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404627</WorkoutId>
+    <WorkoutDay>2014-06-17T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9024.0400390625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2997</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>26.097999572753906</VelocityMaximum>
+    <VelocityAverage>3.0109999179840088</VelocityAverage>
+    <CadenceMaximum>119</CadenceMaximum>
+    <CadenceAverage>82</CadenceAverage>
+    <HeartRateMaximum>180</HeartRateMaximum>
+    <HeartRateMinimum>62</HeartRateMinimum>
+    <HeartRateAverage>161</HeartRateAverage>
+    <StartTime>2014-06-17T18:35:02</StartTime>
+    <ElevationGain>269</ElevationGain>
+    <ElevationLoss>385</ElevationLoss>
+    <ElevationMinimum>-85.20001220703125</ElevationMinimum>
+    <ElevationMaximum>117.20001220703125</ElevationMaximum>
+    <ElevationAverage>-9.9323129653930664</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404622</WorkoutId>
+    <WorkoutDay>2014-06-18T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9848.759765625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2052</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>11.873000144958496</VelocityMaximum>
+    <VelocityAverage>4.7989997863769531</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>165</HeartRateMaximum>
+    <HeartRateMinimum>66</HeartRateMinimum>
+    <HeartRateAverage>120</HeartRateAverage>
+    <StartTime>2014-06-18T18:26:11</StartTime>
+    <ElevationGain>17</ElevationGain>
+    <ElevationLoss>31</ElevationLoss>
+    <ElevationMinimum>-14.600006103515625</ElevationMinimum>
+    <ElevationMaximum>0</ElevationMaximum>
+    <ElevationAverage>-11.900633811950684</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404647</WorkoutId>
+    <WorkoutDay>2014-06-18T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9964.8095703125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1999</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.2720003128051758</VelocityMaximum>
+    <VelocityAverage>4.9840002059936523</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>151</HeartRateMaximum>
+    <HeartRateMinimum>86</HeartRateMinimum>
+    <HeartRateAverage>129</HeartRateAverage>
+    <StartTime>2014-06-18T07:22:27</StartTime>
+    <ElevationGain>19</ElevationGain>
+    <ElevationLoss>6</ElevationLoss>
+    <ElevationMinimum>-0.20001220703125</ElevationMinimum>
+    <ElevationMaximum>13.79998779296875</ElevationMaximum>
+    <ElevationAverage>2.755049467086792</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404624</WorkoutId>
+    <WorkoutDay>2014-06-19T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9951.75</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1834</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>10.359999656677246</VelocityMaximum>
+    <VelocityAverage>5.4270000457763672</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>155</HeartRateMaximum>
+    <HeartRateMinimum>91</HeartRateMinimum>
+    <HeartRateAverage>127</HeartRateAverage>
+    <StartTime>2014-06-19T07:24:24</StartTime>
+    <ElevationGain>23</ElevationGain>
+    <ElevationLoss>11</ElevationLoss>
+    <ElevationMinimum>-2.79998779296875</ElevationMinimum>
+    <ElevationMaximum>12.5999755859375</ElevationMaximum>
+    <ElevationAverage>0.86908334493637085</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183324421</WorkoutId>
+    <WorkoutDay>2014-06-20T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>748.54998779296875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>287</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>7.6030001640319824</VelocityMaximum>
+    <VelocityAverage>2.6080000400543213</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>135</HeartRateMaximum>
+    <HeartRateMinimum>70</HeartRateMinimum>
+    <HeartRateAverage>95</HeartRateAverage>
+    <StartTime>2014-06-20T18:21:20</StartTime>
+    <ElevationGain>11</ElevationGain>
+    <ElevationLoss>8</ElevationLoss>
+    <ElevationMinimum>-8.600006103515625</ElevationMinimum>
+    <ElevationMaximum>39.79998779296875</ElevationMaximum>
+    <ElevationAverage>-4.3104543685913086</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404632</WorkoutId>
+    <WorkoutDay>2014-06-20T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>8937.9697265625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>3031</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>11.897000312805176</VelocityMaximum>
+    <VelocityAverage>2.9489998817443848</VelocityAverage>
+    <CadenceMaximum>87</CadenceMaximum>
+    <CadenceAverage>83</CadenceAverage>
+    <HeartRateMaximum>180</HeartRateMaximum>
+    <HeartRateMinimum>80</HeartRateMinimum>
+    <HeartRateAverage>163</HeartRateAverage>
+    <StartTime>2014-06-20T07:06:00</StartTime>
+    <ElevationGain>360</ElevationGain>
+    <ElevationLoss>358</ElevationLoss>
+    <ElevationMinimum>-59.20001220703125</ElevationMinimum>
+    <ElevationMaximum>73.27618408203125</ElevationMaximum>
+    <ElevationAverage>-0.24933242797851563</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404615</WorkoutId>
+    <WorkoutDay>2014-06-23T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>1196.6500244140625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>410</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>3.059999942779541</VelocityMaximum>
+    <VelocityAverage>2.9179999828338623</VelocityAverage>
+    <CadenceMaximum>87</CadenceMaximum>
+    <CadenceAverage>83</CadenceAverage>
+    <HeartRateMaximum>173</HeartRateMaximum>
+    <HeartRateMinimum>97</HeartRateMinimum>
+    <HeartRateAverage>154</HeartRateAverage>
+    <StartTime>2014-06-23T03:42:23</StartTime>
+    <ElevationGain xsi:nil="true" />
+    <ElevationLoss xsi:nil="true" />
+    <ElevationMinimum xsi:nil="true" />
+    <ElevationMaximum xsi:nil="true" />
+    <ElevationAverage xsi:nil="true" />
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404614</WorkoutId>
+    <WorkoutDay>2014-06-23T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>1051.25</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>389</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>7.8839998245239258</VelocityMaximum>
+    <VelocityAverage>2.7060000896453857</VelocityAverage>
+    <CadenceMaximum>86</CadenceMaximum>
+    <CadenceAverage>81</CadenceAverage>
+    <HeartRateMaximum>170</HeartRateMaximum>
+    <HeartRateMinimum>148</HeartRateMinimum>
+    <HeartRateAverage>159</HeartRateAverage>
+    <StartTime>2014-06-23T06:26:26</StartTime>
+    <ElevationGain>43</ElevationGain>
+    <ElevationLoss>84</ElevationLoss>
+    <ElevationMinimum>62</ElevationMinimum>
+    <ElevationMaximum>106.5999755859375</ElevationMaximum>
+    <ElevationAverage>81.456260681152344</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183404612</WorkoutId>
+    <WorkoutDay>2014-06-23T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>6746.35009765625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2128</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>6.8489999771118164</VelocityMaximum>
+    <VelocityAverage>3.1700000762939453</VelocityAverage>
+    <CadenceMaximum>89</CadenceMaximum>
+    <CadenceAverage>85</CadenceAverage>
+    <HeartRateMaximum>184</HeartRateMaximum>
+    <HeartRateMinimum>121</HeartRateMinimum>
+    <HeartRateAverage>172</HeartRateAverage>
+    <StartTime>2014-06-23T05:50:36</StartTime>
+    <ElevationGain>223</ElevationGain>
+    <ElevationLoss>153</ElevationLoss>
+    <ElevationMinimum>-25.399993896484375</ElevationMinimum>
+    <ElevationMaximum>242.20001220703125</ElevationMaximum>
+    <ElevationAverage>61.01959228515625</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183556120</WorkoutId>
+    <WorkoutDay>2014-06-30T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9790.3701171875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1862</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.99899959564209</VelocityMaximum>
+    <VelocityAverage>5.2579998970031738</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>154</HeartRateMaximum>
+    <HeartRateMinimum>71</HeartRateMinimum>
+    <HeartRateAverage>120</HeartRateAverage>
+    <StartTime>2014-06-30T19:10:53</StartTime>
+    <ElevationGain>8</ElevationGain>
+    <ElevationLoss>22</ElevationLoss>
+    <ElevationMinimum>-14.20001220703125</ElevationMinimum>
+    <ElevationMaximum>1.399993896484375</ElevationMaximum>
+    <ElevationAverage>-10.788399696350098</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183324428</WorkoutId>
+    <WorkoutDay>2014-06-30T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9882.9404296875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1874</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.1619997024536133</VelocityMaximum>
+    <VelocityAverage>5.27400016784668</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>166</HeartRateMaximum>
+    <HeartRateMinimum>84</HeartRateMinimum>
+    <HeartRateAverage>137</HeartRateAverage>
+    <StartTime>2014-06-30T07:24:31</StartTime>
+    <ElevationGain>20</ElevationGain>
+    <ElevationLoss>11</ElevationLoss>
+    <ElevationMinimum>-1.79998779296875</ElevationMinimum>
+    <ElevationMaximum>10</ElevationMaximum>
+    <ElevationAverage>0.69247990846633911</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183556059</WorkoutId>
+    <WorkoutDay>2014-07-01T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9074.7099609375</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2917</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>15.890000343322754</VelocityMaximum>
+    <VelocityAverage>3.1110000610351563</VelocityAverage>
+    <CadenceMaximum>121</CadenceMaximum>
+    <CadenceAverage>83</CadenceAverage>
+    <HeartRateMaximum>187</HeartRateMaximum>
+    <HeartRateMinimum>76</HeartRateMinimum>
+    <HeartRateAverage>169</HeartRateAverage>
+    <StartTime>2014-07-01T07:01:29</StartTime>
+    <ElevationGain>156</ElevationGain>
+    <ElevationLoss>188</ElevationLoss>
+    <ElevationMinimum>-18.600006103515625</ElevationMinimum>
+    <ElevationMaximum>68</ElevationMaximum>
+    <ElevationAverage>33.06524658203125</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183691492</WorkoutId>
+    <WorkoutDay>2014-07-02T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9848.6298828125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1947</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.78499984741211</VelocityMaximum>
+    <VelocityAverage>5.0580000877380371</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>168</HeartRateMaximum>
+    <HeartRateMinimum>48</HeartRateMinimum>
+    <HeartRateAverage>97</HeartRateAverage>
+    <StartTime>2014-07-02T18:10:25</StartTime>
+    <ElevationGain>8</ElevationGain>
+    <ElevationLoss>20</ElevationLoss>
+    <ElevationMinimum>-12</ElevationMinimum>
+    <ElevationMaximum>1.79998779296875</ElevationMaximum>
+    <ElevationAverage>-8.7532100677490234</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183557878</WorkoutId>
+    <WorkoutDay>2014-07-02T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9951.4501953125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2041</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.04800033569336</VelocityMaximum>
+    <VelocityAverage>4.875999927520752</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>153</HeartRateMaximum>
+    <HeartRateMinimum>93</HeartRateMinimum>
+    <HeartRateAverage>133</HeartRateAverage>
+    <StartTime>2014-07-02T07:19:28</StartTime>
+    <ElevationGain>19</ElevationGain>
+    <ElevationLoss>10</ElevationLoss>
+    <ElevationMinimum>-1.79998779296875</ElevationMinimum>
+    <ElevationMaximum>10.20001220703125</ElevationMaximum>
+    <ElevationAverage>0.78716361522674561</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183868194</WorkoutId>
+    <WorkoutDay>2014-07-03T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9858.9296875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2248</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.1920003890991211</VelocityMaximum>
+    <VelocityAverage>4.3860001564025879</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>163</HeartRateMaximum>
+    <HeartRateMinimum>74</HeartRateMinimum>
+    <HeartRateAverage>124</HeartRateAverage>
+    <StartTime>2014-07-03T18:18:09</StartTime>
+    <ElevationGain>19</ElevationGain>
+    <ElevationLoss>30</ElevationLoss>
+    <ElevationMinimum>79.79998779296875</ElevationMinimum>
+    <ElevationMaximum>92.79998779296875</ElevationMaximum>
+    <ElevationAverage>83.258720397949219</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183745843</WorkoutId>
+    <WorkoutDay>2014-07-03T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9905.740234375</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2219</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.08899974822998</VelocityMaximum>
+    <VelocityAverage>4.4629998207092285</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>168</HeartRateMaximum>
+    <HeartRateMinimum>69</HeartRateMinimum>
+    <HeartRateAverage>127</HeartRateAverage>
+    <StartTime>2014-07-03T07:21:55</StartTime>
+    <ElevationGain>19</ElevationGain>
+    <ElevationLoss>6</ElevationLoss>
+    <ElevationMinimum>-0.399993896484375</ElevationMinimum>
+    <ElevationMaximum>13</ElevationMaximum>
+    <ElevationAverage>2.9222617149353027</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183866868</WorkoutId>
+    <WorkoutDay>2014-07-04T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>705.54998779296875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>239</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>4.3390002250671387</VelocityMaximum>
+    <VelocityAverage>2.9560000896453857</VelocityAverage>
+    <CadenceMaximum>122</CadenceMaximum>
+    <CadenceAverage>81</CadenceAverage>
+    <HeartRateMaximum>170</HeartRateMaximum>
+    <HeartRateMinimum>93</HeartRateMinimum>
+    <HeartRateAverage>151</HeartRateAverage>
+    <StartTime>2014-07-04T11:00:35</StartTime>
+    <ElevationGain xsi:nil="true" />
+    <ElevationLoss xsi:nil="true" />
+    <ElevationMinimum xsi:nil="true" />
+    <ElevationMaximum xsi:nil="true" />
+    <ElevationAverage xsi:nil="true" />
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183866871</WorkoutId>
+    <WorkoutDay>2014-07-04T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>7885.009765625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2862</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>6.9790000915527344</VelocityMaximum>
+    <VelocityAverage>2.755000114440918</VelocityAverage>
+    <CadenceMaximum>123</CadenceMaximum>
+    <CadenceAverage>79</CadenceAverage>
+    <HeartRateMaximum>185</HeartRateMaximum>
+    <HeartRateMinimum>142</HeartRateMinimum>
+    <HeartRateAverage>169</HeartRateAverage>
+    <StartTime>2014-07-04T18:11:19</StartTime>
+    <ElevationGain>101</ElevationGain>
+    <ElevationLoss>369</ElevationLoss>
+    <ElevationMinimum>-234.39999389648437</ElevationMinimum>
+    <ElevationMaximum>72.5999755859375</ElevationMaximum>
+    <ElevationAverage>-24.576671600341797</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>183866866</WorkoutId>
+    <WorkoutDay>2014-07-04T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>8610.4697265625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>3146</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>6.755000114440918</VelocityMaximum>
+    <VelocityAverage>2.7369999885559082</VelocityAverage>
+    <CadenceMaximum>85</CadenceMaximum>
+    <CadenceAverage>81</CadenceAverage>
+    <HeartRateMaximum>185</HeartRateMaximum>
+    <HeartRateMinimum>73</HeartRateMinimum>
+    <HeartRateAverage>166</HeartRateAverage>
+    <StartTime>2014-07-04T07:06:45</StartTime>
+    <ElevationGain>204</ElevationGain>
+    <ElevationLoss>170</ElevationLoss>
+    <ElevationMinimum>-34.20001220703125</ElevationMinimum>
+    <ElevationMaximum>56.5999755859375</ElevationMaximum>
+    <ElevationAverage>3.3147449493408203</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>184244172</WorkoutId>
+    <WorkoutDay>2014-07-07T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9982.8798828125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1843</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>10.071000099182129</VelocityMaximum>
+    <VelocityAverage>5.4180002212524414</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>153</HeartRateMaximum>
+    <HeartRateMinimum>77</HeartRateMinimum>
+    <HeartRateAverage>126</HeartRateAverage>
+    <StartTime>2014-07-07T07:20:38</StartTime>
+    <ElevationGain>19</ElevationGain>
+    <ElevationLoss>10</ElevationLoss>
+    <ElevationMinimum>-2.20001220703125</ElevationMinimum>
+    <ElevationMaximum>10.20001220703125</ElevationMaximum>
+    <ElevationAverage>0.2646232545375824</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>184326698</WorkoutId>
+    <WorkoutDay>2014-07-07T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9791.419921875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1728</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>10.602999687194824</VelocityMaximum>
+    <VelocityAverage>5.6649999618530273</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>179</HeartRateMaximum>
+    <HeartRateMinimum>49</HeartRateMinimum>
+    <HeartRateAverage>126</HeartRateAverage>
+    <StartTime>2014-07-07T18:44:55</StartTime>
+    <ElevationGain>13</ElevationGain>
+    <ElevationLoss>29</ElevationLoss>
+    <ElevationMinimum>8.600006103515625</ElevationMinimum>
+    <ElevationMaximum>25</ElevationMaximum>
+    <ElevationAverage>11.978762626647949</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>184544254</WorkoutId>
+    <WorkoutDay>2014-07-08T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9000.1904296875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>3127</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>5.6729998588562012</VelocityMaximum>
+    <VelocityAverage>2.8789999485015869</VelocityAverage>
+    <CadenceMaximum>90</CadenceMaximum>
+    <CadenceAverage>80</CadenceAverage>
+    <HeartRateMaximum>176</HeartRateMaximum>
+    <HeartRateMinimum>78</HeartRateMinimum>
+    <HeartRateAverage>161</HeartRateAverage>
+    <StartTime>2014-07-08T18:52:49</StartTime>
+    <ElevationGain>196</ElevationGain>
+    <ElevationLoss>235</ElevationLoss>
+    <ElevationMinimum>-64.20001220703125</ElevationMinimum>
+    <ElevationMaximum>25.4000244140625</ElevationMaximum>
+    <ElevationAverage>-17.230422973632812</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>184544251</WorkoutId>
+    <WorkoutDay>2014-07-08T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>8880.0302734375</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2909</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>10.85200023651123</VelocityMaximum>
+    <VelocityAverage>3.0529999732971191</VelocityAverage>
+    <CadenceMaximum>88</CadenceMaximum>
+    <CadenceAverage>83</CadenceAverage>
+    <HeartRateMaximum>185</HeartRateMaximum>
+    <HeartRateMinimum>78</HeartRateMinimum>
+    <HeartRateAverage>168</HeartRateAverage>
+    <StartTime>2014-07-08T07:11:59</StartTime>
+    <ElevationGain>174</ElevationGain>
+    <ElevationLoss>219</ElevationLoss>
+    <ElevationMinimum>-94.20001220703125</ElevationMinimum>
+    <ElevationMaximum>9.79998779296875</ElevationMaximum>
+    <ElevationAverage>-49.9844856262207</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>184591633</WorkoutId>
+    <WorkoutDay>2014-07-09T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9918.9599609375</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1797</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>10.440999984741211</VelocityMaximum>
+    <VelocityAverage>5.5209999084472656</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>167</HeartRateMaximum>
+    <HeartRateMinimum>92</HeartRateMinimum>
+    <HeartRateAverage>128</HeartRateAverage>
+    <StartTime>2014-07-09T07:25:26</StartTime>
+    <ElevationGain>26</ElevationGain>
+    <ElevationLoss>17</ElevationLoss>
+    <ElevationMinimum>1.20001220703125</ElevationMinimum>
+    <ElevationMaximum>15</ElevationMaximum>
+    <ElevationAverage>4.1767387390136719</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>184641134</WorkoutId>
+    <WorkoutDay>2014-07-09T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9915.9697265625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2164</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>10.670000076293945</VelocityMaximum>
+    <VelocityAverage>4.5830001831054687</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>159</HeartRateMaximum>
+    <HeartRateMinimum>68</HeartRateMinimum>
+    <HeartRateAverage>113</HeartRateAverage>
+    <StartTime>2014-07-09T17:38:35</StartTime>
+    <ElevationGain>16</ElevationGain>
+    <ElevationLoss>30</ElevationLoss>
+    <ElevationMinimum>-14.600006103515625</ElevationMinimum>
+    <ElevationMaximum>0</ElevationMaximum>
+    <ElevationAverage>-10.880082130432129</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>184784706</WorkoutId>
+    <WorkoutDay>2014-07-10T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>1111.5899658203125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>359</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>3.937999963760376</VelocityMaximum>
+    <VelocityAverage>3.0980000495910645</VelocityAverage>
+    <CadenceMaximum>84</CadenceMaximum>
+    <CadenceAverage>81</CadenceAverage>
+    <HeartRateMaximum>176</HeartRateMaximum>
+    <HeartRateMinimum>102</HeartRateMinimum>
+    <HeartRateAverage>165</HeartRateAverage>
+    <StartTime>2014-07-10T19:52:16</StartTime>
+    <ElevationGain>23</ElevationGain>
+    <ElevationLoss>12</ElevationLoss>
+    <ElevationMinimum>3</ElevationMinimum>
+    <ElevationMaximum>20.4000244140625</ElevationMaximum>
+    <ElevationAverage>11.631845474243164</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>184722964</WorkoutId>
+    <WorkoutDay>2014-07-10T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9873.08984375</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2018</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.3970003128051758</VelocityMaximum>
+    <VelocityAverage>4.8920001983642578</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>150</HeartRateMaximum>
+    <HeartRateMinimum>58</HeartRateMinimum>
+    <HeartRateAverage>115</HeartRateAverage>
+    <StartTime>2014-07-10T07:16:32</StartTime>
+    <ElevationGain>21</ElevationGain>
+    <ElevationLoss>8</ElevationLoss>
+    <ElevationMinimum>0</ElevationMinimum>
+    <ElevationMaximum>13</ElevationMaximum>
+    <ElevationAverage>2.6884105205535889</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>184784705</WorkoutId>
+    <WorkoutDay>2014-07-10T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>5943.1201171875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2036</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>12.652000427246094</VelocityMaximum>
+    <VelocityAverage>2.9189999103546143</VelocityAverage>
+    <CadenceMaximum>85</CadenceMaximum>
+    <CadenceAverage>80</CadenceAverage>
+    <HeartRateMaximum>188</HeartRateMaximum>
+    <HeartRateMinimum>81</HeartRateMinimum>
+    <HeartRateAverage>164</HeartRateAverage>
+    <StartTime>2014-07-10T19:05:33</StartTime>
+    <ElevationGain>201</ElevationGain>
+    <ElevationLoss>256</ElevationLoss>
+    <ElevationMinimum>-48.399993896484375</ElevationMinimum>
+    <ElevationMaximum>50</ElevationMaximum>
+    <ElevationAverage>-14.725147247314453</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>184960589</WorkoutId>
+    <WorkoutDay>2014-07-11T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>1399</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>487</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>4.7399997711181641</VelocityMaximum>
+    <VelocityAverage>2.869999885559082</VelocityAverage>
+    <CadenceMaximum>85</CadenceMaximum>
+    <CadenceAverage>81</CadenceAverage>
+    <HeartRateMaximum>179</HeartRateMaximum>
+    <HeartRateMinimum>74</HeartRateMinimum>
+    <HeartRateAverage>149</HeartRateAverage>
+    <StartTime>2014-07-11T07:07:29</StartTime>
+    <ElevationGain>70</ElevationGain>
+    <ElevationLoss>54</ElevationLoss>
+    <ElevationMinimum>-24.600006103515625</ElevationMinimum>
+    <ElevationMaximum>37</ElevationMaximum>
+    <ElevationAverage>10.668994903564453</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>184890194</WorkoutId>
+    <WorkoutDay>2014-07-11T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9898</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1920</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.9980001449584961</VelocityMaximum>
+    <VelocityAverage>5.1560001373291016</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>159</HeartRateMaximum>
+    <HeartRateMinimum>66</HeartRateMinimum>
+    <HeartRateAverage>115</HeartRateAverage>
+    <StartTime>2014-07-11T18:17:22</StartTime>
+    <ElevationGain>15</ElevationGain>
+    <ElevationLoss>29</ElevationLoss>
+    <ElevationMinimum>-14.600006103515625</ElevationMinimum>
+    <ElevationMaximum>0</ElevationMaximum>
+    <ElevationAverage>-11.69588565826416</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>184960591</WorkoutId>
+    <WorkoutDay>2014-07-11T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>5456.919921875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1908</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>6.1119999885559082</VelocityMaximum>
+    <VelocityAverage>2.8599998950958252</VelocityAverage>
+    <CadenceMaximum>121</CadenceMaximum>
+    <CadenceAverage>80</CadenceAverage>
+    <HeartRateMaximum>178</HeartRateMaximum>
+    <HeartRateMinimum>94</HeartRateMinimum>
+    <HeartRateAverage>166</HeartRateAverage>
+    <StartTime>2014-07-11T07:24:39</StartTime>
+    <ElevationGain>157</ElevationGain>
+    <ElevationLoss>180</ElevationLoss>
+    <ElevationMinimum>-56.399993896484375</ElevationMinimum>
+    <ElevationMaximum>51.5999755859375</ElevationMaximum>
+    <ElevationAverage>-0.8458324670791626</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>185059308</WorkoutId>
+    <WorkoutDay>2014-07-13T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9549.2001953125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>3168</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>6.4380002021789551</VelocityMaximum>
+    <VelocityAverage>3.0139999389648437</VelocityAverage>
+    <CadenceMaximum>101</CadenceMaximum>
+    <CadenceAverage>83</CadenceAverage>
+    <HeartRateMaximum>210</HeartRateMaximum>
+    <HeartRateMinimum>85</HeartRateMinimum>
+    <HeartRateAverage>155</HeartRateAverage>
+    <StartTime>2014-07-13T07:13:00</StartTime>
+    <ElevationGain>299</ElevationGain>
+    <ElevationLoss>306</ElevationLoss>
+    <ElevationMinimum>-85.600006103515625</ElevationMinimum>
+    <ElevationMaximum>36.79998779296875</ElevationMaximum>
+    <ElevationAverage>-3.1333227157592773</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>185349236</WorkoutId>
+    <WorkoutDay>2014-07-14T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9825.990234375</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1921</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.1800003051757813</VelocityMaximum>
+    <VelocityAverage>5.1139998435974121</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>153</HeartRateMaximum>
+    <HeartRateMinimum>71</HeartRateMinimum>
+    <HeartRateAverage>126</HeartRateAverage>
+    <StartTime>2014-07-14T19:12:49</StartTime>
+    <ElevationGain>17</ElevationGain>
+    <ElevationLoss>32</ElevationLoss>
+    <ElevationMinimum>-0.600006103515625</ElevationMinimum>
+    <ElevationMaximum>15.20001220703125</ElevationMaximum>
+    <ElevationAverage>3.7460179328918457</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>185263495</WorkoutId>
+    <WorkoutDay>2014-07-14T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9919.6796875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1760</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>10.145999908447266</VelocityMaximum>
+    <VelocityAverage>5.6350002288818359</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>164</HeartRateMaximum>
+    <HeartRateMinimum>83</HeartRateMinimum>
+    <HeartRateAverage>130</HeartRateAverage>
+    <StartTime>2014-07-14T07:19:09</StartTime>
+    <ElevationGain>25</ElevationGain>
+    <ElevationLoss>13</ElevationLoss>
+    <ElevationMinimum>7</ElevationMinimum>
+    <ElevationMaximum>21.4000244140625</ElevationMaximum>
+    <ElevationAverage>10.019998550415039</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>185507845</WorkoutId>
+    <WorkoutDay>2014-07-15T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>8811.2001953125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>3033</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>7.0539999008178711</VelocityMaximum>
+    <VelocityAverage>2.9059998989105225</VelocityAverage>
+    <CadenceMaximum>120</CadenceMaximum>
+    <CadenceAverage>81</CadenceAverage>
+    <HeartRateMaximum>179</HeartRateMaximum>
+    <HeartRateMinimum>78</HeartRateMinimum>
+    <HeartRateAverage>165</HeartRateAverage>
+    <StartTime>2014-07-15T07:12:56</StartTime>
+    <ElevationGain>205</ElevationGain>
+    <ElevationLoss>236</ElevationLoss>
+    <ElevationMinimum>-37.20001220703125</ElevationMinimum>
+    <ElevationMaximum>25.79998779296875</ElevationMaximum>
+    <ElevationAverage>-3.1638967990875244</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>185507850</WorkoutId>
+    <WorkoutDay>2014-07-15T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>8892.2998046875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>3060</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>5.560999870300293</VelocityMaximum>
+    <VelocityAverage>2.9059998989105225</VelocityAverage>
+    <CadenceMaximum>85</CadenceMaximum>
+    <CadenceAverage>81</CadenceAverage>
+    <HeartRateMaximum>207</HeartRateMaximum>
+    <HeartRateMinimum>73</HeartRateMinimum>
+    <HeartRateAverage>164</HeartRateAverage>
+    <StartTime>2014-07-15T18:31:29</StartTime>
+    <ElevationGain>268</ElevationGain>
+    <ElevationLoss>305</ElevationLoss>
+    <ElevationMinimum>-100.79998779296875</ElevationMinimum>
+    <ElevationMaximum>12.20001220703125</ElevationMaximum>
+    <ElevationAverage>-31.9018611907959</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>185639432</WorkoutId>
+    <WorkoutDay>2014-07-16T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9853.5595703125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2197</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.0249996185302734</VelocityMaximum>
+    <VelocityAverage>4.4850001335144043</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>151</HeartRateMaximum>
+    <HeartRateMinimum>69</HeartRateMinimum>
+    <HeartRateAverage>115</HeartRateAverage>
+    <StartTime>2014-07-16T18:38:49</StartTime>
+    <ElevationGain>17</ElevationGain>
+    <ElevationLoss>27</ElevationLoss>
+    <ElevationMinimum>-12</ElevationMinimum>
+    <ElevationMaximum>0</ElevationMaximum>
+    <ElevationAverage>-8.9631767272949219</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>185579003</WorkoutId>
+    <WorkoutDay>2014-07-16T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>9936.2998046875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1788</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>10.616000175476074</VelocityMaximum>
+    <VelocityAverage>5.5590000152587891</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>179</HeartRateMaximum>
+    <HeartRateMinimum>88</HeartRateMinimum>
+    <HeartRateAverage>143</HeartRateAverage>
+    <StartTime>2014-07-16T07:18:15</StartTime>
+    <ElevationGain>20</ElevationGain>
+    <ElevationLoss>8</ElevationLoss>
+    <ElevationMinimum>-0.600006103515625</ElevationMinimum>
+    <ElevationMaximum>12.20001220703125</ElevationMaximum>
+    <ElevationAverage>1.622048020362854</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>185699856</WorkoutId>
+    <WorkoutDay>2014-07-17T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>10040.2197265625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1997</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>8.4630002975463867</VelocityMaximum>
+    <VelocityAverage>5.0279998779296875</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>143</HeartRateMaximum>
+    <HeartRateMinimum>85</HeartRateMinimum>
+    <HeartRateAverage>119</HeartRateAverage>
+    <StartTime>2014-07-17T09:35:00</StartTime>
+    <ElevationGain>19</ElevationGain>
+    <ElevationLoss>8</ElevationLoss>
+    <ElevationMinimum>-1.399993896484375</ElevationMinimum>
+    <ElevationMaximum>12.79998779296875</ElevationMaximum>
+    <ElevationAverage>2.1606907844543457</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>185748051</WorkoutId>
+    <WorkoutDay>2014-07-17T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>10005.7900390625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1870</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>10.220999717712402</VelocityMaximum>
+    <VelocityAverage>5.3520002365112305</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>162</HeartRateMaximum>
+    <HeartRateMinimum>75</HeartRateMinimum>
+    <HeartRateAverage>116</HeartRateAverage>
+    <StartTime>2014-07-17T18:09:38</StartTime>
+    <ElevationGain>15</ElevationGain>
+    <ElevationLoss>24</ElevationLoss>
+    <ElevationMinimum>-12</ElevationMinimum>
+    <ElevationMaximum>0.20001220703125</ElevationMaximum>
+    <ElevationAverage>-8.9142856597900391</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>185865766</WorkoutId>
+    <WorkoutDay>2014-07-18T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>10053.3701171875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2146</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.1049995422363281</VelocityMaximum>
+    <VelocityAverage>4.6840000152587891</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>151</HeartRateMaximum>
+    <HeartRateMinimum>66</HeartRateMinimum>
+    <HeartRateAverage>114</HeartRateAverage>
+    <StartTime>2014-07-18T18:07:48</StartTime>
+    <ElevationGain>17</ElevationGain>
+    <ElevationLoss>31</ElevationLoss>
+    <ElevationMinimum>10.20001220703125</ElevationMinimum>
+    <ElevationMaximum>24.5999755859375</ElevationMaximum>
+    <ElevationAverage>12.607032775878906</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>185820003</WorkoutId>
+    <WorkoutDay>2014-07-18T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>10167.5703125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2073</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>8.5200004577636719</VelocityMaximum>
+    <VelocityAverage>4.90500020980835</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>155</HeartRateMaximum>
+    <HeartRateMinimum>49</HeartRateMinimum>
+    <HeartRateAverage>124</HeartRateAverage>
+    <StartTime>2014-07-18T07:12:57</StartTime>
+    <ElevationGain>28</ElevationGain>
+    <ElevationLoss>17</ElevationLoss>
+    <ElevationMinimum>6.20001220703125</ElevationMinimum>
+    <ElevationMaximum>18.5999755859375</ElevationMaximum>
+    <ElevationAverage>9.0993728637695313</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>186066902</WorkoutId>
+    <WorkoutDay>2014-07-20T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>10435.75</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>3294</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>5.4860000610351563</VelocityMaximum>
+    <VelocityAverage>3.1679999828338623</VelocityAverage>
+    <CadenceMaximum>93</CadenceMaximum>
+    <CadenceAverage>83</CadenceAverage>
+    <HeartRateMaximum>185</HeartRateMaximum>
+    <HeartRateMinimum>84</HeartRateMinimum>
+    <HeartRateAverage>167</HeartRateAverage>
+    <StartTime>2014-07-20T11:53:00</StartTime>
+    <ElevationGain>545</ElevationGain>
+    <ElevationLoss>564</ElevationLoss>
+    <ElevationMinimum>-271.79998779296875</ElevationMinimum>
+    <ElevationMaximum>22.5999755859375</ElevationMaximum>
+    <ElevationAverage>-70.788650512695313</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>186340549</WorkoutId>
+    <WorkoutDay>2014-07-21T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>10088.6796875</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>2050</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>8.8920001983642578</VelocityMaximum>
+    <VelocityAverage>4.9219999313354492</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>147</HeartRateMaximum>
+    <HeartRateMinimum>77</HeartRateMinimum>
+    <HeartRateAverage>123</HeartRateAverage>
+    <StartTime>2014-07-21T07:08:38</StartTime>
+    <ElevationGain>25</ElevationGain>
+    <ElevationLoss>19</ElevationLoss>
+    <ElevationMinimum>1.600006103515625</ElevationMinimum>
+    <ElevationMaximum>12.79998779296875</ElevationMaximum>
+    <ElevationAverage>4.4756464958190918</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>186340556</WorkoutId>
+    <WorkoutDay>2014-07-21T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Bike</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>10023.2099609375</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1954</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>9.2569999694824219</VelocityMaximum>
+    <VelocityAverage>5.129000186920166</VelocityAverage>
+    <CadenceMaximum xsi:nil="true" />
+    <CadenceAverage xsi:nil="true" />
+    <HeartRateMaximum>152</HeartRateMaximum>
+    <HeartRateMinimum>78</HeartRateMinimum>
+    <HeartRateAverage>122</HeartRateAverage>
+    <StartTime>2014-07-21T18:20:19</StartTime>
+    <ElevationGain>8</ElevationGain>
+    <ElevationLoss>21</ElevationLoss>
+    <ElevationMinimum>-14.20001220703125</ElevationMinimum>
+    <ElevationMaximum>0</ElevationMaximum>
+    <ElevationAverage>-10.652813911437988</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>186565687</WorkoutId>
+    <WorkoutDay>2014-07-23T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>1148.5899658203125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>377</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>3.2939999103546143</VelocityMaximum>
+    <VelocityAverage>3.0429999828338623</VelocityAverage>
+    <CadenceMaximum>88</CadenceMaximum>
+    <CadenceAverage>83</CadenceAverage>
+    <HeartRateMaximum>178</HeartRateMaximum>
+    <HeartRateMinimum>105</HeartRateMinimum>
+    <HeartRateAverage>167</HeartRateAverage>
+    <StartTime>2014-07-23T04:06:12</StartTime>
+    <ElevationGain xsi:nil="true" />
+    <ElevationLoss xsi:nil="true" />
+    <ElevationMinimum xsi:nil="true" />
+    <ElevationMaximum xsi:nil="true" />
+    <ElevationAverage xsi:nil="true" />
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>186565686</WorkoutId>
+    <WorkoutDay>2014-07-23T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>1144.81005859375</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>446</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>8.6499996185302734</VelocityMaximum>
+    <VelocityAverage>2.5680000782012939</VelocityAverage>
+    <CadenceMaximum>83</CadenceMaximum>
+    <CadenceAverage>73</CadenceAverage>
+    <HeartRateMaximum>185</HeartRateMaximum>
+    <HeartRateMinimum>159</HeartRateMinimum>
+    <HeartRateAverage>176</HeartRateAverage>
+    <StartTime>2014-07-23T06:46:23</StartTime>
+    <ElevationGain>132</ElevationGain>
+    <ElevationLoss>9</ElevationLoss>
+    <ElevationMinimum>-5.79998779296875</ElevationMinimum>
+    <ElevationMaximum>128.5999755859375</ElevationMaximum>
+    <ElevationAverage>59.622371673583984</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>186565684</WorkoutId>
+    <WorkoutDay>2014-07-23T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>5252.740234375</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1775</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>5.625999927520752</VelocityMaximum>
+    <VelocityAverage>2.9590001106262207</VelocityAverage>
+    <CadenceMaximum>86</CadenceMaximum>
+    <CadenceAverage>82</CadenceAverage>
+    <HeartRateMaximum>194</HeartRateMaximum>
+    <HeartRateMinimum>137</HeartRateMinimum>
+    <HeartRateAverage>185</HeartRateAverage>
+    <StartTime>2014-07-23T06:15:29</StartTime>
+    <ElevationGain>128</ElevationGain>
+    <ElevationLoss>173</ElevationLoss>
+    <ElevationMinimum>-18.20001220703125</ElevationMinimum>
+    <ElevationMaximum>52</ElevationMaximum>
+    <ElevationAverage>15.293972969055176</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>186927021</WorkoutId>
+    <WorkoutDay>2014-07-26T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>768.219970703125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>506</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>1.7539999485015869</VelocityMaximum>
+    <VelocityAverage>1.5199999809265137</VelocityAverage>
+    <CadenceMaximum>62</CadenceMaximum>
+    <CadenceAverage>57</CadenceAverage>
+    <HeartRateMaximum>135</HeartRateMaximum>
+    <HeartRateMinimum>113</HeartRateMinimum>
+    <HeartRateAverage>125</HeartRateAverage>
+    <StartTime>2014-07-26T09:32:27</StartTime>
+    <ElevationGain>39</ElevationGain>
+    <ElevationLoss>30</ElevationLoss>
+    <ElevationMinimum>-47.399993896484375</ElevationMinimum>
+    <ElevationMaximum>-5.20001220703125</ElevationMaximum>
+    <ElevationAverage>-22.004356384277344</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>186927023</WorkoutId>
+    <WorkoutDay>2014-07-26T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>2625.340087890625</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1111</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>3.4619998931884766</VelocityMaximum>
+    <VelocityAverage>2.3640000820159912</VelocityAverage>
+    <CadenceMaximum>84</CadenceMaximum>
+    <CadenceAverage>70</CadenceAverage>
+    <HeartRateMaximum>165</HeartRateMaximum>
+    <HeartRateMinimum>118</HeartRateMinimum>
+    <HeartRateAverage>150</HeartRateAverage>
+    <StartTime>2014-07-26T09:41:07</StartTime>
+    <ElevationGain>39</ElevationGain>
+    <ElevationLoss>33</ElevationLoss>
+    <ElevationMinimum>-22.20001220703125</ElevationMinimum>
+    <ElevationMaximum>1.399993896484375</ElevationMaximum>
+    <ElevationAverage>-9.3806486129760742</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>186927020</WorkoutId>
+    <WorkoutDay>2014-07-26T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>4523.5</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1684</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>6.120999813079834</VelocityMaximum>
+    <VelocityAverage>2.6860001087188721</VelocityAverage>
+    <CadenceMaximum>85</CadenceMaximum>
+    <CadenceAverage>79</CadenceAverage>
+    <HeartRateMaximum>182</HeartRateMaximum>
+    <HeartRateMinimum>132</HeartRateMinimum>
+    <HeartRateAverage>165</HeartRateAverage>
+    <StartTime>2014-07-26T09:03:24</StartTime>
+    <ElevationGain>42</ElevationGain>
+    <ElevationLoss>72</ElevationLoss>
+    <ElevationMinimum>-9.399993896484375</ElevationMinimum>
+    <ElevationMaximum>27.4000244140625</ElevationMaximum>
+    <ElevationAverage>4.4742875099182129</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+  <Workout>
+    <WorkoutId>186927018</WorkoutId>
+    <WorkoutDay>2014-07-26T00:00:00</WorkoutDay>
+    <WorkoutTypeDescription>Run</WorkoutTypeDescription>
+    <PlannedDistanceInMeters xsi:nil="true" />
+    <DistanceInMeters>6045.35986328125</DistanceInMeters>
+    <PowerAverage xsi:nil="true" />
+    <PowerMaximum xsi:nil="true" />
+    <TimeTotalInSeconds>1973</TimeTotalInSeconds>
+    <PlannedTimeTotalInSeconds xsi:nil="true" />
+    <VelocityMaximum>4.4229998588562012</VelocityMaximum>
+    <VelocityAverage>3.0639998912811279</VelocityAverage>
+    <CadenceMaximum>87</CadenceMaximum>
+    <CadenceAverage>82</CadenceAverage>
+    <HeartRateMaximum>189</HeartRateMaximum>
+    <HeartRateMinimum>97</HeartRateMinimum>
+    <HeartRateAverage>170</HeartRateAverage>
+    <StartTime>2014-07-26T06:54:46</StartTime>
+    <ElevationGain>137</ElevationGain>
+    <ElevationLoss>133</ElevationLoss>
+    <ElevationMinimum>-9.600006103515625</ElevationMinimum>
+    <ElevationMaximum>51</ElevationMaximum>
+    <ElevationAverage>11.383200645446777</ElevationAverage>
+    <WorkoutCode>Custom</WorkoutCode>
+    <StartTimePlanned xsi:nil="true" />
+  </Workout>
+</ArrayOfWorkout>

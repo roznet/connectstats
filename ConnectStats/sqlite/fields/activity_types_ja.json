@@ -1,0 +1,814 @@
+{"dictionary": [
+  {
+    "key": "all",
+    "display": "すべてのアクティビティ",
+    "type": {
+      "key": "all",
+      "display": "すべてのアクティビティ"
+    }
+  },
+  {
+    "key": "uncategorized",
+    "display": "未分類",
+    "parent": {
+      "key": "all",
+      "display": "すべてのアクティビティ"
+    },
+    "type": {
+      "key": "uncategorized",
+      "display": "未分類"
+    }
+  },
+  {
+    "key": "running",
+    "display": "ランニング",
+    "parent": {
+      "key": "all",
+      "display": "すべてのアクティビティ"
+    },
+    "type": {
+      "key": "running",
+      "display": "ランニング"
+    }
+  },
+  {
+    "key": "street_running",
+    "display": "ストリートラン",
+    "parent": {
+      "key": "running",
+      "display": "ランニング"
+    },
+    "type": {
+      "key": "running",
+      "display": "ランニング"
+    }
+  },
+  {
+    "key": "track_running",
+    "display": "トラックランニング",
+    "parent": {
+      "key": "running",
+      "display": "ランニング"
+    },
+    "type": {
+      "key": "running",
+      "display": "ランニング"
+    }
+  },
+  {
+    "key": "trail_running",
+    "display": "トレイルランニング",
+    "parent": {
+      "key": "running",
+      "display": "ランニング"
+    },
+    "type": {
+      "key": "running",
+      "display": "ランニング"
+    }
+  },
+  {
+    "key": "treadmill_running",
+    "display": "トレッドミルランニング",
+    "parent": {
+      "key": "running",
+      "display": "ランニング"
+    },
+    "type": {
+      "key": "running",
+      "display": "ランニング"
+    }
+  },
+  {
+    "key": "cycling",
+    "display": "サイクリング",
+    "parent": {
+      "key": "all",
+      "display": "すべてのアクティビティ"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "サイクリング"
+    }
+  },
+  {
+    "key": "cyclocross",
+    "display": "シクロクロス",
+    "parent": {
+      "key": "cycling",
+      "display": "サイクリング"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "サイクリング"
+    }
+  },
+  {
+    "key": "downhill_biking",
+    "display": "ダウンヒルバイク",
+    "parent": {
+      "key": "cycling",
+      "display": "サイクリング"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "サイクリング"
+    }
+  },
+  {
+    "key": "indoor_cycling",
+    "display": "インドアサイクリング",
+    "parent": {
+      "key": "cycling",
+      "display": "サイクリング"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "サイクリング"
+    }
+  },
+  {
+    "key": "mountain_biking",
+    "display": "マウンテンバイク",
+    "parent": {
+      "key": "cycling",
+      "display": "サイクリング"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "サイクリング"
+    }
+  },
+  {
+    "key": "recumbent_cycling",
+    "display": "リカンベントサイクリング",
+    "parent": {
+      "key": "cycling",
+      "display": "サイクリング"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "サイクリング"
+    }
+  },
+  {
+    "key": "road_biking",
+    "display": "ロードサイクリング",
+    "parent": {
+      "key": "cycling",
+      "display": "サイクリング"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "サイクリング"
+    }
+  },
+  {
+    "key": "track_cycling",
+    "display": "トラックサイクリング",
+    "parent": {
+      "key": "cycling",
+      "display": "サイクリング"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "サイクリング"
+    }
+  },
+  {
+    "key": "fitness_equipment",
+    "display": "フィットネスデバイス",
+    "parent": {
+      "key": "all",
+      "display": "すべてのアクティビティ"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "フィットネスデバイス"
+    }
+  },
+  {
+    "key": "elliptical",
+    "display": "エリプティカル",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "フィットネスデバイス"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "フィットネスデバイス"
+    }
+  },
+  {
+    "key": "indoor_cardio",
+    "display": "有酸素",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "フィットネスデバイス"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "フィットネスデバイス"
+    }
+  },
+  {
+    "key": "indoor_rowing",
+    "display": "インドアローイング",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "フィットネスデバイス"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "フィットネスデバイス"
+    }
+  },
+  {
+    "key": "stair_climbing",
+    "display": "ステアクライム",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "フィットネスデバイス"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "フィットネスデバイス"
+    }
+  },
+  {
+    "key": "strength_training",
+    "display": "筋力トレーニング",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "フィットネスデバイス"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "フィットネスデバイス"
+    }
+  },
+  {
+    "key": "hiking",
+    "display": "ハイキング",
+    "parent": {
+      "key": "all",
+      "display": "すべてのアクティビティ"
+    },
+    "type": {
+      "key": "hiking",
+      "display": "ハイキング"
+    }
+  },
+  {
+    "key": "swimming",
+    "display": "スイミング",
+    "parent": {
+      "key": "all",
+      "display": "すべてのアクティビティ"
+    },
+    "type": {
+      "key": "swimming",
+      "display": "スイミング"
+    }
+  },
+  {
+    "key": "lap_swimming",
+    "display": "ラップスイミング",
+    "parent": {
+      "key": "swimming",
+      "display": "スイミング"
+    },
+    "type": {
+      "key": "swimming",
+      "display": "スイミング"
+    }
+  },
+  {
+    "key": "open_water_swimming",
+    "display": "オープンウォータースイミング",
+    "parent": {
+      "key": "swimming",
+      "display": "スイミング"
+    },
+    "type": {
+      "key": "swimming",
+      "display": "スイミング"
+    }
+  },
+  {
+    "key": "walking",
+    "display": "ウォーキング",
+    "parent": {
+      "key": "all",
+      "display": "すべてのアクティビティ"
+    },
+    "type": {
+      "key": "walking",
+      "display": "ウォーキング"
+    }
+  },
+  {
+    "key": "casual_walking",
+    "display": "カジュアルウォーキング",
+    "parent": {
+      "key": "walking",
+      "display": "ウォーキング"
+    },
+    "type": {
+      "key": "walking",
+      "display": "ウォーキング"
+    }
+  },
+  {
+    "key": "speed_walking",
+    "display": "スピードウォーキング",
+    "parent": {
+      "key": "walking",
+      "display": "ウォーキング"
+    },
+    "type": {
+      "key": "walking",
+      "display": "ウォーキング"
+    }
+  },
+  {
+    "key": "transition",
+    "display": "トランジション",
+    "parent": {
+      "key": "all",
+      "display": "すべてのアクティビティ"
+    },
+    "type": {
+      "key": "transition",
+      "display": "トランジション"
+    }
+  },
+  {
+    "key": "swimToBikeTransition",
+    "display": "スイムから自転車へ移行",
+    "parent": {
+      "key": "transition",
+      "display": "トランジション"
+    },
+    "type": {
+      "key": "transition",
+      "display": "トランジション"
+    }
+  },
+  {
+    "key": "bikeToRunTransition",
+    "display": "自転車からランへ移行",
+    "parent": {
+      "key": "transition",
+      "display": "トランジション"
+    },
+    "type": {
+      "key": "transition",
+      "display": "トランジション"
+    }
+  },
+  {
+    "key": "runToBikeTransition",
+    "display": "ランから自転車へ移行",
+    "parent": {
+      "key": "transition",
+      "display": "トランジション"
+    },
+    "type": {
+      "key": "transition",
+      "display": "トランジション"
+    }
+  },
+  {
+    "key": "motorcycling",
+    "display": "モーターサイクリング",
+    "parent": {
+      "key": "all",
+      "display": "すべてのアクティビティ"
+    },
+    "type": {
+      "key": "motorcycling",
+      "display": "モーターサイクリング"
+    }
+  },
+  {
+    "key": "steps",
+    "display": "ステップ",
+    "parent": {
+      "key": "all",
+      "display": "すべてのアクティビティ"
+    },
+    "type": {
+      "key": "steps",
+      "display": "ステップ"
+    }
+  },
+  {
+    "key": "other",
+    "display": "その他",
+    "parent": {
+      "key": "all",
+      "display": "すべてのアクティビティ"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "backcountry_skiing_snowboarding",
+    "display": "バックカントリー スキー/スノーボード",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "boating",
+    "display": "ボート",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "cross_country_skiing",
+    "display": "クロスカントリースキー",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "driving_general",
+    "display": "ドライビング",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "flying",
+    "display": "フライング",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "golf",
+    "display": "ゴルフ",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "horseback_riding",
+    "display": "乗馬",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "inline_skating",
+    "display": "インラインスケート",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "mountaineering",
+    "display": "登山",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "paddling",
+    "display": "パドリング",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "resort_skiing_snowboarding",
+    "display": "リゾート スキー/スノーボード",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "rowing",
+    "display": "ローイング",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "sailing",
+    "display": "セイリング",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "skate_skiing",
+    "display": "スケートスキー",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "skating",
+    "display": "スケート",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "snowmobiling",
+    "display": "スノーモービル",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "snow_shoe",
+    "display": "スノーシュー",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "stand_up_paddleboarding",
+    "display": "スタンドアップパドルサーフィン",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "whitewater_rafting_kayaking",
+    "display": "ホワイトウォーター カヤック/ラフティング",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "wind_kite_surfing",
+    "display": "ウインド/カイト サーフィン",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "bmx",
+    "display": "BMX",
+    "parent": {
+      "key": "cycling",
+      "display": "サイクリング"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "サイクリング"
+    }
+  },
+  {
+    "key": "atv",
+    "display": "ATV",
+    "parent": {
+      "key": "motorcycling",
+      "display": "モーターサイクリング"
+    },
+    "type": {
+      "key": "motorcycling",
+      "display": "モーターサイクリング"
+    }
+  },
+  {
+    "key": "hunting_fishing",
+    "display": "ハンティング／釣り",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "sky_diving",
+    "display": "スカイダイビング",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "motocross",
+    "display": "モトクロス",
+    "parent": {
+      "key": "motorcycling",
+      "display": "モーターサイクリング"
+    },
+    "type": {
+      "key": "motorcycling",
+      "display": "モーターサイクリング"
+    }
+  },
+  {
+    "key": "rc_drone",
+    "display": "RC／ドローン",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "surfing",
+    "display": "サーフィン",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "wakeboarding",
+    "display": "ウェイクボード",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "rock_climbing",
+    "display": "ロッククライミング",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "hang_gliding",
+    "display": "ハンググライディング",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "wingsuit_flying",
+    "display": "ウイングスーツフライング",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "tennis",
+    "display": "TENNIS",
+    "parent": {
+      "key": "other",
+      "display": "その他"
+    },
+    "type": {
+      "key": "other",
+      "display": "その他"
+    }
+  },
+  {
+    "key": "gravel_cycling",
+    "display": "グラベル／オフロードサイクリング",
+    "parent": {
+      "key": "cycling",
+      "display": "サイクリング"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "サイクリング"
+    }
+  }
+]}

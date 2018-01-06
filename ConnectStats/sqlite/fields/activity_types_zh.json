@@ -1,0 +1,814 @@
+ {"dictionary": [
+  {
+    "key": "all",
+    "display": "所有活动",
+    "type": {
+      "key": "all",
+      "display": "所有活动"
+    }
+  },
+  {
+    "key": "uncategorized",
+    "display": "未分类",
+    "parent": {
+      "key": "all",
+      "display": "所有活动"
+    },
+    "type": {
+      "key": "uncategorized",
+      "display": "未分类"
+    }
+  },
+  {
+    "key": "running",
+    "display": "跑步",
+    "parent": {
+      "key": "all",
+      "display": "所有活动"
+    },
+    "type": {
+      "key": "running",
+      "display": "跑步"
+    }
+  },
+  {
+    "key": "street_running",
+    "display": "街道路跑",
+    "parent": {
+      "key": "running",
+      "display": "跑步"
+    },
+    "type": {
+      "key": "running",
+      "display": "跑步"
+    }
+  },
+  {
+    "key": "track_running",
+    "display": "田径场跑",
+    "parent": {
+      "key": "running",
+      "display": "跑步"
+    },
+    "type": {
+      "key": "running",
+      "display": "跑步"
+    }
+  },
+  {
+    "key": "trail_running",
+    "display": "越野跑",
+    "parent": {
+      "key": "running",
+      "display": "跑步"
+    },
+    "type": {
+      "key": "running",
+      "display": "跑步"
+    }
+  },
+  {
+    "key": "treadmill_running",
+    "display": "跑步机",
+    "parent": {
+      "key": "running",
+      "display": "跑步"
+    },
+    "type": {
+      "key": "running",
+      "display": "跑步"
+    }
+  },
+  {
+    "key": "cycling",
+    "display": "骑车",
+    "parent": {
+      "key": "all",
+      "display": "所有活动"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "骑车"
+    }
+  },
+  {
+    "key": "cyclocross",
+    "display": "越野自行车",
+    "parent": {
+      "key": "cycling",
+      "display": "骑车"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "骑车"
+    }
+  },
+  {
+    "key": "downhill_biking",
+    "display": "下坡自行车",
+    "parent": {
+      "key": "cycling",
+      "display": "骑车"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "骑车"
+    }
+  },
+  {
+    "key": "indoor_cycling",
+    "display": "室内自行车",
+    "parent": {
+      "key": "cycling",
+      "display": "骑车"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "骑车"
+    }
+  },
+  {
+    "key": "mountain_biking",
+    "display": "越野自行车",
+    "parent": {
+      "key": "cycling",
+      "display": "骑车"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "骑车"
+    }
+  },
+  {
+    "key": "recumbent_cycling",
+    "display": "斜躺自行车",
+    "parent": {
+      "key": "cycling",
+      "display": "骑车"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "骑车"
+    }
+  },
+  {
+    "key": "road_biking",
+    "display": "公路自行车",
+    "parent": {
+      "key": "cycling",
+      "display": "骑车"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "骑车"
+    }
+  },
+  {
+    "key": "track_cycling",
+    "display": "场地自行车",
+    "parent": {
+      "key": "cycling",
+      "display": "骑车"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "骑车"
+    }
+  },
+  {
+    "key": "fitness_equipment",
+    "display": "健身设备",
+    "parent": {
+      "key": "all",
+      "display": "所有活动"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "健身设备"
+    }
+  },
+  {
+    "key": "elliptical",
+    "display": "椭圆机",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "健身设备"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "健身设备"
+    }
+  },
+  {
+    "key": "indoor_cardio",
+    "display": "有氧运动",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "健身设备"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "健身设备"
+    }
+  },
+  {
+    "key": "indoor_rowing",
+    "display": "室内划船",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "健身设备"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "健身设备"
+    }
+  },
+  {
+    "key": "stair_climbing",
+    "display": "登梯运动",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "健身设备"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "健身设备"
+    }
+  },
+  {
+    "key": "strength_training",
+    "display": "重量训练",
+    "parent": {
+      "key": "fitness_equipment",
+      "display": "健身设备"
+    },
+    "type": {
+      "key": "fitness_equipment",
+      "display": "健身设备"
+    }
+  },
+  {
+    "key": "hiking",
+    "display": "徒步旅行",
+    "parent": {
+      "key": "all",
+      "display": "所有活动"
+    },
+    "type": {
+      "key": "hiking",
+      "display": "徒步旅行"
+    }
+  },
+  {
+    "key": "swimming",
+    "display": "游泳",
+    "parent": {
+      "key": "all",
+      "display": "所有活动"
+    },
+    "type": {
+      "key": "swimming",
+      "display": "游泳"
+    }
+  },
+  {
+    "key": "lap_swimming",
+    "display": "泳道游泳",
+    "parent": {
+      "key": "swimming",
+      "display": "游泳"
+    },
+    "type": {
+      "key": "swimming",
+      "display": "游泳"
+    }
+  },
+  {
+    "key": "open_water_swimming",
+    "display": "公开水域游泳",
+    "parent": {
+      "key": "swimming",
+      "display": "游泳"
+    },
+    "type": {
+      "key": "swimming",
+      "display": "游泳"
+    }
+  },
+  {
+    "key": "walking",
+    "display": "步行",
+    "parent": {
+      "key": "all",
+      "display": "所有活动"
+    },
+    "type": {
+      "key": "walking",
+      "display": "步行"
+    }
+  },
+  {
+    "key": "casual_walking",
+    "display": "散步",
+    "parent": {
+      "key": "walking",
+      "display": "步行"
+    },
+    "type": {
+      "key": "walking",
+      "display": "步行"
+    }
+  },
+  {
+    "key": "speed_walking",
+    "display": "竞走",
+    "parent": {
+      "key": "walking",
+      "display": "步行"
+    },
+    "type": {
+      "key": "walking",
+      "display": "步行"
+    }
+  },
+  {
+    "key": "transition",
+    "display": "转换",
+    "parent": {
+      "key": "all",
+      "display": "所有活动"
+    },
+    "type": {
+      "key": "transition",
+      "display": "转换"
+    }
+  },
+  {
+    "key": "swimToBikeTransition",
+    "display": "游泳/自行车 两项铁人",
+    "parent": {
+      "key": "transition",
+      "display": "转换"
+    },
+    "type": {
+      "key": "transition",
+      "display": "转换"
+    }
+  },
+  {
+    "key": "bikeToRunTransition",
+    "display": "自行车/跑步 两项铁人",
+    "parent": {
+      "key": "transition",
+      "display": "转换"
+    },
+    "type": {
+      "key": "transition",
+      "display": "转换"
+    }
+  },
+  {
+    "key": "runToBikeTransition",
+    "display": "跑步/自行车 两项铁人",
+    "parent": {
+      "key": "transition",
+      "display": "转换"
+    },
+    "type": {
+      "key": "transition",
+      "display": "转换"
+    }
+  },
+  {
+    "key": "motorcycling",
+    "display": "骑摩托车",
+    "parent": {
+      "key": "all",
+      "display": "所有活动"
+    },
+    "type": {
+      "key": "motorcycling",
+      "display": "骑摩托车"
+    }
+  },
+  {
+    "key": "steps",
+    "display": "步数",
+    "parent": {
+      "key": "all",
+      "display": "所有活动"
+    },
+    "type": {
+      "key": "steps",
+      "display": "步数"
+    }
+  },
+  {
+    "key": "other",
+    "display": "其他",
+    "parent": {
+      "key": "all",
+      "display": "所有活动"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "backcountry_skiing_snowboarding",
+    "display": "野外滑雪／单板滑雪",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "boating",
+    "display": "划船",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "cross_country_skiing",
+    "display": "越野滑雪",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "driving_general",
+    "display": "驾驶",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "flying",
+    "display": "飞行",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "golf",
+    "display": "高尔夫",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "horseback_riding",
+    "display": "骑马",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "inline_skating",
+    "display": "直排轮",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "mountaineering",
+    "display": "登山",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "paddling",
+    "display": "皮划艇",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "resort_skiing_snowboarding",
+    "display": "滑雪场滑雪／单板滑雪",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "rowing",
+    "display": "划船",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "sailing",
+    "display": "帆船",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "skate_skiing",
+    "display": "冰鞋滑雪",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "skating",
+    "display": "滑冰",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "snowmobiling",
+    "display": "雪上摩托车",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "snow_shoe",
+    "display": "雪地健行",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "stand_up_paddleboarding",
+    "display": "立式单桨冲浪",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "whitewater_rafting_kayaking",
+    "display": "激流独木舟／漂流",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "wind_kite_surfing",
+    "display": "风帆／风筝冲浪",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "bmx",
+    "display": "自行车越野",
+    "parent": {
+      "key": "cycling",
+      "display": "骑车"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "骑车"
+    }
+  },
+  {
+    "key": "atv",
+    "display": "全地形汽车",
+    "parent": {
+      "key": "motorcycling",
+      "display": "骑摩托车"
+    },
+    "type": {
+      "key": "motorcycling",
+      "display": "骑摩托车"
+    }
+  },
+  {
+    "key": "hunting_fishing",
+    "display": "打猎/钓鱼",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "sky_diving",
+    "display": "跳伞",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "motocross",
+    "display": "摩托车越野",
+    "parent": {
+      "key": "motorcycling",
+      "display": "骑摩托车"
+    },
+    "type": {
+      "key": "motorcycling",
+      "display": "骑摩托车"
+    }
+  },
+  {
+    "key": "rc_drone",
+    "display": "遥控/无人机",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "surfing",
+    "display": "冲浪",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "wakeboarding",
+    "display": "滑水",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "rock_climbing",
+    "display": "攀岩",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "hang_gliding",
+    "display": "悬挂式滑翔",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "wingsuit_flying",
+    "display": "翼装飞行",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "tennis",
+    "display": "TENNIS",
+    "parent": {
+      "key": "other",
+      "display": "其他"
+    },
+    "type": {
+      "key": "other",
+      "display": "其他"
+    }
+  },
+  {
+    "key": "gravel_cycling",
+    "display": "越野骑行/土路骑行",
+    "parent": {
+      "key": "cycling",
+      "display": "骑车"
+    },
+    "type": {
+      "key": "cycling",
+      "display": "骑车"
+    }
+  }
+]}
