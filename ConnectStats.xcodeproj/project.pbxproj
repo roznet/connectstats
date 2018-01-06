@@ -2578,7 +2578,7 @@
 		423B46341CDFE31A00743D79 /* FITFitMessageFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FITFitMessageFields.m; path = src/FITFitMessageFields.m; sourceTree = "<group>"; };
 		423B46361CDFE41600743D79 /* FITFitFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FITFitFile.h; path = src/FITFitFile.h; sourceTree = "<group>"; };
 		423B46371CDFE41600743D79 /* FITFitFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FITFitFile.m; path = src/FITFitFile.m; sourceTree = "<group>"; };
-		423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RZUtils.xcodeproj; path = ../RZUtils/RZUtils.xcodeproj; sourceTree = "<group>"; };
+		423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RZUtils.xcodeproj; path = RZUtils/RZUtils.xcodeproj; sourceTree = "<group>"; };
 		423F541B1F6C716D004471E6 /* GCAppGlobal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCAppGlobal.h; sourceTree = "<group>"; };
 		423F541C1F6C716D004471E6 /* GCAppGlobal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCAppGlobal.m; sourceTree = "<group>"; };
 		423F9FC319ACDEA40057DB5A /* GCHistoryFieldDataSerieConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHistoryFieldDataSerieConfig.h; path = src/GCHistoryFieldDataSerieConfig.h; sourceTree = "<group>"; };
@@ -4147,7 +4147,7 @@
 		42EB51DD18B4F81500B85FAB /* GCMapRouteLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCMapRouteLogic.m; path = src/GCMapRouteLogic.m; sourceTree = "<group>"; };
 		42EB51DF18B6AEDA00B85FAB /* GCGarminLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCGarminLoginViewController.h; path = src/GCGarminLoginViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		42EB51E018B6AEDA00B85FAB /* GCGarminLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminLoginViewController.m; path = src/GCGarminLoginViewController.m; sourceTree = "<group>"; };
-		42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RZExternal.xcodeproj; path = ../RZExternal/RZExternal.xcodeproj; sourceTree = "<group>"; };
+		42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RZExternal.xcodeproj; path = RZExternal/RZExternal.xcodeproj; sourceTree = "<group>"; };
 		42ECA0231ED7614300D1EEF9 /* FITDataListDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITDataListDataSource.swift; path = src/FITDataListDataSource.swift; sourceTree = "<group>"; };
 		42EE4565176BCB81003338AF /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = ConnectStats/Media.xcassets; sourceTree = "<group>"; };
 		42EEAEBE169F67670058965A /* GCExportGoogleEarth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCExportGoogleEarth.h; path = src/GCExportGoogleEarth.h; sourceTree = "<group>"; };
