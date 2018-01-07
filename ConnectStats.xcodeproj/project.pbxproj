@@ -10669,7 +10669,7 @@
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = arm64;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -10715,7 +10715,7 @@
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = arm64;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -10985,7 +10985,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = arm64;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -11033,7 +11033,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = arm64;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -11226,6 +11226,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -11266,6 +11267,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "TennisStats/src/tennisstats-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
@@ -11372,6 +11374,7 @@
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -11410,6 +11413,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStatsTestApp/ConnectStatsTestApp-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_VERSION = 4.0;
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
