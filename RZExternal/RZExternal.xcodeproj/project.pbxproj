@@ -346,7 +346,7 @@
 		42B266C71FF8314500E891A1 /* OZZipException+Internals.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265591FF8314400E891A1 /* OZZipException+Internals.h */; };
 		42B266C81FF8314500E891A1 /* OZZipWriteStream+NSError.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655A1FF8314400E891A1 /* OZZipWriteStream+NSError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B266C91FF8314500E891A1 /* Objective-Zip+NSError.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655B1FF8314400E891A1 /* Objective-Zip+NSError.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266CA1FF8314500E891A1 /* OZFileInZipInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2655C1FF8314400E891A1 /* OZFileInZipInfo.m */; };
+		42B266CA1FF8314500E891A1 /* OZFileInZipInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2655C1FF8314400E891A1 /* OZFileInZipInfo.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		42B266CB1FF8314500E891A1 /* OZZipWriteStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655D1FF8314400E891A1 /* OZZipWriteStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B266CC1FF8314500E891A1 /* OZZipException.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655E1FF8314400E891A1 /* OZZipException.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B266CD1FF8314500E891A1 /* OZZipFile+Standard.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655F1FF8314400E891A1 /* OZZipFile+Standard.h */; settings = {ATTRIBUTES = (Public, ); }; };
