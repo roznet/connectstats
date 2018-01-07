@@ -1,22 +1,28 @@
-# XCode Environment Setup
+## Description
 
-To use Facebook Image test directory, in Xcode/Product/Edit Scheme: add in Arguments, Environment Variable:
+This project contains several related applications to analyse fitness data:
 
-```
-FB_REFERENCE_IMAGE_DIR $(SOURCE_ROOT)/connectstatstestapp/samples/ReferenceImages`
-```
+### ConnectStats
 
-For RZRegressionManager add
+ConnectStats is an application for iOS (iPhone or iPad) that allows display, statistics and graphs on sports activities recorded with a garmin device or strava. This application is quite mature and available on the [app store](https://itunes.apple.com/app/apple-store/id581697248?mt=8) and has a [home page](https://ro-z.net/blog/)
 
-```
-RZ_REFERENCE_OBJECT_DIR $(SOURCE_ROOT)/GarminConnectTests/samples/ReferenceObjects
-```
+### HealthStats
 
-# Cocoapods
+HealthStats is a variation of ConnectStats to display activities and data extracted from apple Health.
 
-update pods upon check out
+### FitFileExplorer
 
-```
-pod update
-```
+FitFileExplorer is a mac os utility to view Fit File content
+
+### TennisStats
+
+TennisStats is an iOS (iphone or ipad) application to record and analyse tennis matches.
+
+
+## To compile
+
+	1. setup pod with `pod install`
+	2. open ConnectStats.xcworkspace
+	
+
 
