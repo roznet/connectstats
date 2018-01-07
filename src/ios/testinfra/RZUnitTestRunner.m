@@ -1,10 +1,27 @@
+//  MIT Licence
 //
-//  RZTestRunner.m
-//  GarminConnect
+//  Created on 03/01/2016.
 //
-//  Created by Brice Rosenzweig on 03/01/2016.
-//  Copyright © 2016 Brice Rosenzweig. All rights reserved.
+//  Copyright (c) 2016 Brice Rosenzweig.
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//  
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//  
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+//  
 
 #import "RZUnitTestRunner.h"
 #import "RZUnitTestTask.h"
@@ -63,7 +80,7 @@ NSString * kRZUnitTestNewResults = @"kRZUnitTestNewResults";
             test.delegate = self;
             NSArray * defs = [test testDefinitions];
             for (NSDictionary * def in defs) {
-                
+
                 RZUnitTestTask * task = [RZUnitTestTask taskWith:test and:def];
                 [queue addObject:task];
             }
@@ -89,7 +106,7 @@ NSString * kRZUnitTestNewResults = @"kRZUnitTestNewResults";
 
         }
     }
-    
+
     if (firstWaiting && ! running) {
         firstWaiting.status = utTaskRunning;
         [firstWaiting.unitTest runOneTest:firstWaiting.def onThread:self.testThread];
