@@ -4,11 +4,11 @@ This project contains several related applications to analyse fitness data:
 
 ### ConnectStats
 
-ConnectStats is an application for iOS (iPhone or iPad) that allows display, statistics and graphs on sports activities recorded with a garmin device or strava. This application is quite mature and available on the [app store](https://itunes.apple.com/app/apple-store/id581697248?mt=8) and has a [home page](https://ro-z.net/blog/)
+ConnectStats is an application for iOS (iPhone or iPad) that allows display, statistics and graphs on sports activities recorded with a garmin device or strava. This application is quite mature and available on the [app store](https://itunes.apple.com/app/apple-store/id581697248?mt=8) and has a [home page](https://ro-z.net/blog/connectstats/)
 
 ### HealthStats
 
-HealthStats is a variation of ConnectStats to display activities and data extracted from apple Health.
+HealthStats is a variation of ConnectStats to display activities and data extracted from apple Health. Some information can be found [here](https://ro-z.net/blog/healthstats/)
 
 ### FitFileExplorer
 
@@ -24,5 +24,9 @@ TennisStats is an iOS (iphone or ipad) application to record and analyse tennis 
 	1. setup pod with `pod install`
 	2. open ConnectStats.xcworkspace
 	
+
+## Development
+
+This project contains tests both as XCTest unit tests and as a separate app `ConnectStatsTestApp`.
 
 
