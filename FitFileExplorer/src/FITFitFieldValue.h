@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
 NS_ASSUME_NONNULL_END
 
 #if __cplusplus
-#include <RZExternalCpp/RZExternalCpp.h>
+#include "RZExternalCpp/RZExternalCpp.h"
 
 @interface FITFitFieldValue (cplusplus)
 
