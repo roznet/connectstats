@@ -1,10 +1,27 @@
+//  MIT Licence
 //
-//  TestViewController.m
-//  MacroDialTest
+//  Created on 25/03/2009.
 //
-//  Created by brice on 25/03/2009.
-//  Copyright 2009 ro-z.net. All rights reserved.
+//  Copyright (c) None Brice Rosenzweig.
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//  
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//  
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+//  
 
 #import "RZTestViewController.h"
 #import "RZTestDetailsViewController.h"
@@ -48,18 +65,18 @@
 
 -(void)loadView{
 	[super loadView];
-	
-	
+
+
 	UIView *contentView				= [[UIView alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
 	[contentView setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
 	contentView.autoresizesSubviews = YES;
 	contentView.autoresizingMask	= (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 
-    
+
 	CGFloat leftX		= 10;
 	CGFloat tableWidth  = 320;
 	CGFloat tableHeight = 400;
-	
+
 	CGFloat currentY	= 0.0 ;
     self.navigationItem.rightBarButtonItems = @[
             RZReturnAutorelease([[UIBarButtonItem alloc] initWithTitle:self.runTestOnStartup? NSLocalizedString(@"Rerun",nil):NSLocalizedString(@"RunAll",nil)
@@ -88,7 +105,7 @@
     [_activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
     [contentView addSubview:_activityIndicator];
     RZRelease(_activityIndicator);
-    
+
 	[self setView:contentView];
     [self setMainView:contentView];
     RZRelease(contentView);
@@ -102,7 +119,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
+
     self.mainView.frame = [self view].frame;
     self.resultsTableView.frame = self.view.frame;
 }
@@ -115,19 +132,19 @@
 
 #pragma mark UITableTableDataSource Methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 	return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	return self.displayResults.count+1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+
     GCCellGrid * cell = [GCCellGrid gridCell:tableView];
     [cell setupForRows:2 andCols:2];
 
@@ -136,10 +153,10 @@
                                  NSForegroundColorAttributeName:[UIColor blueColor]};
     NSDictionary * attrError = @{NSFontAttributeName: [UIFont systemFontOfSize:16.],
                                  NSForegroundColorAttributeName:[UIColor redColor]};
-    
+
     NSDictionary * attrPreview = @{NSFontAttributeName: [UIFont systemFontOfSize:14.],
                                    NSForegroundColorAttributeName: [UIColor darkGrayColor]};
-    
+
 	// Set up the cell's text
 	NSInteger row = [indexPath row];
 
@@ -169,7 +186,7 @@
         [cell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:attrValue withFormat:@"%d/%d Succeeded", (int)success, (int)total] ;
 	}
     [cell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:attrPreview withFormat:@"Time taken: %.3f", timetaken];
-	
+
 	return cell;
 }
 
@@ -198,7 +215,7 @@
 -(void)cellWasChanged:(id<GCEntryFieldProtocol>)cell{
     [self.navigationController popViewControllerAnimated:YES];
     NSUInteger selected = [cell selected];
-    
+
     self.singleTestClass = selected < self.allTestClassNames.count ? self.allTestClassNames[selected] : nil;
 
     [self.runner run];
@@ -233,7 +250,7 @@
             [_activityIndicator stopAnimating];
         });
     }
-    
+
     [self displayCurrentResults];
 }
 

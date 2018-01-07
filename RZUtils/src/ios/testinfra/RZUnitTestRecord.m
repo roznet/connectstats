@@ -1,10 +1,27 @@
+//  MIT Licence
 //
-//  UnitTestRecord.m
-//  MacroDialTest
+//  Created on 04/03/2009.
 //
-//  Created by brice on 04/03/2009.
-//  Copyright 2009 ro-z.net. All rights reserved.
+//  Copyright (c) None Brice Rosenzweig.
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//  
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//  
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+//  
 
 #import "RZUnitTestRecord.h"
 #import "RZUtils/RZUtils.h"
@@ -48,7 +65,7 @@
 		failureDetails	= [[NSMutableArray alloc] init];
 		log				= [[NSMutableArray alloc] init];
 	}
-	
+
 	return( self );
 }
 
@@ -65,10 +82,10 @@
 
 -(void)recordResult:(bool)aRes tag:(NSString*)aTag{
 	total++;
-	if( aRes ) { 
-		success ++; 
-	} else { 
-		failure++; 
+	if( aRes ) {
+		success ++;
+	} else {
+		failure++;
 		[failureDetails addObject:[UnitTestRecordDetail detailFor:aTag path:nil line:0 function:nil]];
 	};
 }
@@ -92,21 +109,21 @@
 	[html appendFormat:@"<table><tr><td>Total</td><td>%d</td></tr><tr><td>Failure</td><td>%d</td></tr></table>",
 	 (int)total, (int)failure];
 	[html appendString:@"<p><table><tr><td colspan=2>Messages for Failures</td></tr>"];
-	
+
 	for (int i=0; i<[failureDetails count]; i++) {
         UnitTestRecordDetail * detail = failureDetails[i];
 		[html appendFormat:@"<tr><td>%d</td><td>%@</td></tr>", i+1, [detail.description stringByEscapingForHTML]];
 	}
-	
+
 	[html appendString:@"</table><p /><table><tr><td>Log</td></tr>"];
 	for( int i = 0 ; i < [log count]; i++ ){
 		NSString* l = [log objectAtIndex:i];
 		if( l )
 			[html appendFormat:@"<tr><td><pre>%@</pre></td></tr>", l];
 	}
-	
+
 	[html appendString:@"</table></body></html>"];
-	
+
 	return( html );
 }
 @end

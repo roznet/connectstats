@@ -1,10 +1,27 @@
+//  MIT Licence
 //
-//  UnitTest.m
-//  MacroDialTest
+//  Created on 19/02/2009.
 //
-//  Created by brice on 19/02/2009.
-//  Copyright 2009 ro-z.net. All rights reserved.
+//  Copyright (c) None Brice Rosenzweig.
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//  
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//  
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+//  
 
 // Definition of a test:
 //  selector: selector to be called
@@ -58,7 +75,7 @@
     NSString * selname = def[TK_SEL];
     NSString * desc    = def[TK_DESC];
     self.endSessionName = def[TK_SESS];
-    
+
     id arg = def[TK_ARG];
     if (selname) {
         SEL selector = NSSelectorFromString(selname);
@@ -109,7 +126,7 @@
         [[self recordObject] setTimeTaken:[_lastStartedTime timeIntervalSinceNow]*-1];
         if (_delegate){
             [_delegate finishedSession:aSession for:self];
-            
+
             if ( _endSessionName==nil || [aSession isEqualToString:_endSessionName]) {
                 [_delegate testFinished];
             }
@@ -146,9 +163,9 @@
     va_start(args, fmt);
     NSString * msg = RZReturnAutorelease([[NSString alloc] initWithFormat:fmt arguments:args]);
     va_end(args);
-    
+
     [self assessTestResult:msg result:success];
-    
+
 }
 -(void)assertTrue:(BOOL)success
              path:(const char *)path
@@ -169,7 +186,7 @@
 	[[self recordObject] recordResult:success tag:message];
 
 	if( !success ){
-#ifdef TARGET_IPHONE_SIMULATOR		
+#ifdef TARGET_IPHONE_SIMULATOR
 		NSLog(@"[FAILED] %@\n", message);
 #endif
 	}
@@ -208,7 +225,7 @@
 		rv += [[self sessionRecordForIdx:i] timeTaken];
 	}
 	return( rv );
-}	
+}
 
 -(NSUInteger)totalFailure{
 	NSUInteger n = [self sessionsCount];
@@ -217,7 +234,7 @@
 	for(i=0;i<n;i++){
 		rv += [[self sessionRecordForIdx:i] failure];
 	}
-	return( rv );	
+	return( rv );
 }
 
 
@@ -240,5 +257,5 @@
 	return( [[self sessionRecordForIdx:aIdx] failure] );
 }
 
-	
+
 @end
