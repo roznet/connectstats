@@ -117,7 +117,7 @@
 	<key>iPhone8,2</key>
 	<dict>
 		<key>version</key>
-		<real>8.2</real>
+		<real>8.199999999999999</real>
 		<key>name</key>
 		<string>iPhone 6s Plus</string>
 	</dict>
@@ -138,14 +138,14 @@
 	<key>iPhone9,2</key>
 	<dict>
 		<key>version</key>
-		<real>9.2</real>
+		<real>9.199999999999999</real>
 		<key>name</key>
 		<string>iPhone 7 Plus</string>
 	</dict>
 	<key>iPhone9,3</key>
 	<dict>
 		<key>version</key>
-		<real>9.3</real>
+		<real>9.300000000000001</real>
 		<key>name</key>
 		<string>iPhone 7</string>
 	</dict>
@@ -155,6 +155,48 @@
 		<real>9.4</real>
 		<key>name</key>
 		<string>iPhone 7 Plus</string>
+	</dict>
+	<key>iPhone10,1</key>
+	<dict>
+		<key>version</key>
+		<real>10.1</real>
+		<key>name</key>
+		<string>iPhone 8 China/Japan</string>
+	</dict>
+	<key>iPhone10,2</key>
+	<dict>
+		<key>version</key>
+		<real>10.2</real>
+		<key>name</key>
+		<string>iPhone 8 Plus China/Japan</string>
+	</dict>
+	<key>iPhone10,3</key>
+	<dict>
+		<key>version</key>
+		<real>10.3</real>
+		<key>name</key>
+		<string>iPhone X China/Japan</string>
+	</dict>
+	<key>iPhone10,4</key>
+	<dict>
+		<key>version</key>
+		<real>10.4</real>
+		<key>name</key>
+		<string>iPhone 8 Global</string>
+	</dict>
+	<key>iPhone10,5</key>
+	<dict>
+		<key>version</key>
+		<real>10.5</real>
+		<key>name</key>
+		<string>iPhone 8 Plus Global</string>
+	</dict>
+	<key>iPhone10,6</key>
+	<dict>
+		<key>version</key>
+		<real>10.6</real>
+		<key>name</key>
+		<string>iPhone X Global</string>
 	</dict>
 	<key>iPod1,1</key>
 	<dict>
@@ -421,6 +463,125 @@
 		<real>6.8</real>
 		<key>name</key>
 		<string>iPad Pro (Wi-Fi/Cellular)</string>
+	</dict>
+	<key>iPad6,11</key>
+	<dict>
+		<key>version</key>
+		<real>6.11</real>
+		<key>name</key>
+		<string>9.7-inch iPad (Wi-Fi)</string>
+	</dict>
+	<key>iPad6,12</key>
+	<dict>
+		<key>version</key>
+		<real>6.12</real>
+		<key>name</key>
+		<string>9.7-inch iPad (Wi-Fi + Cellular)</string>
+	</dict>
+	<key>iPad7,1</key>
+	<dict>
+		<key>version</key>
+		<real>7.1</real>
+		<key>name</key>
+		<string>iPad Pro 12.9-Inch (Wi-Fi Only - 2nd Gen)</string>
+	</dict>
+	<key>iPad7,2</key>
+	<dict>
+		<key>version</key>
+		<real>7.2</real>
+		<key>name</key>
+		<string>iPad Pro 12.9-Inch (Wi-Fi/Cell - 2nd Gen)</string>
+	</dict>
+	<key>iPad7,3</key>
+	<dict>
+		<key>version</key>
+		<real>7.3</real>
+		<key>name</key>
+		<string>iPad Pro 10.5-Inch (Wi-Fi Only)</string>
+	</dict>
+	<key>iPad7,4</key>
+	<dict>
+		<key>version</key>
+		<real>7.4</real>
+		<key>name</key>
+		<string>iPad Pro 10.5-Inch (Wi-Fi/Cellular)</string>
+	</dict>
+	<key>appleTV1,1</key>
+	<dict>
+		<key>version</key>
+		<real>1.1</real>
+		<key>name</key>
+		<string>Apple TV 1G</string>
+	</dict>
+	<key>appleTV2,1</key>
+	<dict>
+		<key>version</key>
+		<real>2.1</real>
+		<key>name</key>
+		<string>Apple TV 2G</string>
+	</dict>
+	<key>appleTV3,1</key>
+	<dict>
+		<key>version</key>
+		<real>3.1</real>
+		<key>name</key>
+		<string>Apple TV 2012</string>
+	</dict>
+	<key>appleTV3,2</key>
+	<dict>
+		<key>version</key>
+		<real>3.2</real>
+		<key>name</key>
+		<string>Apple TV 2013</string>
+	</dict>
+	<key>appleTV5,3</key>
+	<dict>
+		<key>version</key>
+		<string>5,3</string>
+		<key>name</key>
+		<string>Apple TV 4G</string>
+	</dict>
+	<key>Watch1,1</key>
+	<dict>
+		<key>version</key>
+		<real>1.1</real>
+		<key>name</key>
+		<string>Apple Watch (38 mm)</string>
+	</dict>
+	<key>Watch1,2</key>
+	<dict>
+		<key>version</key>
+		<real>1.2</real>
+		<key>name</key>
+		<string>Apple Watch (42 mm)</string>
+	</dict>
+	<key>Watch2,3</key>
+	<dict>
+		<key>version</key>
+		<real>2.3</real>
+		<key>name</key>
+		<string>Apple Watch Series 2 (38 mm)</string>
+	</dict>
+	<key>Watch2,4</key>
+	<dict>
+		<key>version</key>
+		<real>2.4</real>
+		<key>name</key>
+		<string>Apple Watch Series 2 (42 mm)</string>
+	</dict>
+	<key>Watch2,6</key>
+	<dict>
+		<key>version</key>
+		<real>2.6</real>
+		<key>name</key>
+		<string>Apple Watch Series 1 (38 mm)</string>
+	</dict>
+	<key>Watch2,7</key>
+	<dict>
+		<key>version</key>
+		<real>2.7</real>
+		<key>name</key>
+		<string>Apple Watch Series 1 (42 mm)</string>
 	</dict>
 	<key>i386</key>
 	<dict>

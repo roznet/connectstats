@@ -32,6 +32,16 @@ NSString* const iPhone7_2 = @"iPhone7,2";
 NSString* const iPhone8_1 = @"iPhone8,1";
 NSString* const iPhone8_2 = @"iPhone8,2";
 NSString* const iPhone8_4 = @"iPhone8,4";
+NSString* const iPhone9_1 = @"iPhone9,1";
+NSString* const iPhone9_2 = @"iPhone9,2";
+NSString* const iPhone9_3 = @"iPhone9,3";
+NSString* const iPhone9_4 = @"iPhone9,4";
+NSString* const iPhone10_1 = @"iPhone10,1";
+NSString* const iPhone10_2 = @"iPhone10,2";
+NSString* const iPhone10_3 = @"iPhone10,3";
+NSString* const iPhone10_4 = @"iPhone10,4";
+NSString* const iPhone10_5 = @"iPhone10,5";
+NSString* const iPhone10_6 = @"iPhone10,6";
 
 NSString* const iPod1_1 = @"iPod1,1";
 NSString* const iPod2_1 = @"iPod2,1";
@@ -72,6 +82,27 @@ NSString* const iPad6_3 = @"iPad6,3";
 NSString* const iPad6_4 = @"iPad6,4";
 NSString* const iPad6_7 = @"iPad6,7";
 NSString* const iPad6_8 = @"iPad6,8";
+NSString* const iPad6_11 = @"iPad6,11";
+NSString* const iPad6_12 = @"iPad6,12";
+
+NSString* const iPad7_1 = @"iPad7,1";
+NSString* const iPad7_2 = @"iPad7,2";
+NSString* const iPad7_3 = @"iPad7,3";
+NSString* const iPad7_4 = @"iPad7,4";
+
+NSString* const AppleTV1_1 = @"AppleTV1,1";
+NSString* const AppleTV2_1 = @"AppleTV2,1";
+NSString* const AppleTV3_1 = @"AppleTV3,1";
+NSString* const AppleTV3_2 = @"AppleTV3,2";
+NSString* const AppleTV5_3 = @"AppleTV5,3";
+
+NSString* const Watch1_1 = @"Watch1,1";
+NSString* const Watch1_2 = @"Watch1,2";
+NSString* const Watch2_3 = @"Watch2,3";
+NSString* const Watch2_4 = @"Watch2,4";
+NSString* const Watch2_6 = @"Watch2,6";
+NSString* const Watch2_7 = @"Watch2,7";
+
 
 NSString* const i386_Sim    = @"i386";
 NSString* const x86_64_Sim  = @"x86_64";
@@ -147,6 +178,17 @@ NSString* const x86_64_Sim  = @"x86_64";
   if ([hardware isEqualToString:iPhone8_1])    return IPHONE_6S;
   if ([hardware isEqualToString:iPhone8_2])    return IPHONE_6S_PLUS;
   if ([hardware isEqualToString:iPhone8_4])    return IPHONE_SE;
+  if ([hardware isEqualToString:iPhone9_1])    return IPHONE_7;
+  if ([hardware isEqualToString:iPhone9_3])    return IPHONE_7_GSM;
+  if ([hardware isEqualToString:iPhone9_2])    return IPHONE_7_PLUS;
+  if ([hardware isEqualToString:iPhone9_4])    return IPHONE_7_PLUS_GSM;
+  
+  if ([hardware isEqualToString:iPhone10_1])    return IPHONE_8_CN;
+  if ([hardware isEqualToString:iPhone10_2])    return IPHONE_8_PLUS_CN;
+  if ([hardware isEqualToString:iPhone10_3])    return IPHONE_X_CN;
+  if ([hardware isEqualToString:iPhone10_4])    return IPHONE_8;
+  if ([hardware isEqualToString:iPhone10_5])    return IPHONE_8_PLUS;
+  if ([hardware isEqualToString:iPhone10_6])    return IPHONE_X;
 
   if ([hardware isEqualToString:iPod1_1])      return IPOD_TOUCH_1G;
   if ([hardware isEqualToString:iPod2_1])      return IPOD_TOUCH_2G;
@@ -191,8 +233,29 @@ NSString* const x86_64_Sim  = @"x86_64";
   if ([hardware isEqualToString:iPad6_7])      return IPAD_PRO_WIFI;
   if ([hardware isEqualToString:iPad6_8])      return IPAD_PRO_WIFI_CELLULAR;
   
-  if ([hardware isEqualToString:i386_Sim])         return SIMULATOR;
-  if ([hardware isEqualToString:x86_64_Sim])       return SIMULATOR;
+  if ([hardware isEqualToString:iPad6_11])     return IPAD_5_WIFI;
+  if ([hardware isEqualToString:iPad6_12])     return IPAD_5_WIFI_CELLULAR;
+  
+  if ([hardware isEqualToString:iPad7_1])      return IPAD_PRO_2G_WIFI;
+  if ([hardware isEqualToString:iPad7_2])      return IPAD_PRO_2G_WIFI_CELLULAR;
+  if ([hardware isEqualToString:iPad7_3])      return IPAD_PRO_105_WIFI;
+  if ([hardware isEqualToString:iPad7_4])      return IPAD_PRO_105_WIFI_CELLULAR;
+  
+  if ([hardware isEqualToString:AppleTV1_1])   return APPLE_TV_1G;
+  if ([hardware isEqualToString:AppleTV2_1])   return APPLE_TV_2G;
+  if ([hardware isEqualToString:AppleTV3_1])   return APPLE_TV_3G;
+  if ([hardware isEqualToString:AppleTV3_2])   return APPLE_TV_3_2G;
+  if ([hardware isEqualToString:AppleTV5_3])   return APPLE_TV_4G;
+  
+  if ([hardware isEqualToString:Watch1_1])     return APPLE_WATCH_38;
+  if ([hardware isEqualToString:Watch1_2])     return APPLE_WATCH_42;
+  if ([hardware isEqualToString:Watch2_3])     return APPLE_WATCH_SERIES_2_38;
+  if ([hardware isEqualToString:Watch2_4])     return APPLE_WATCH_SERIES_2_42;
+  if ([hardware isEqualToString:Watch2_6])     return APPLE_WATCH_SERIES_1_38;
+  if ([hardware isEqualToString:Watch2_7])     return APPLE_WATCH_SERIES_1_42;
+  
+  if ([hardware isEqualToString:i386_Sim])     return SIMULATOR;
+  if ([hardware isEqualToString:x86_64_Sim])   return SIMULATOR;
   
   //log message that your device is not present in the list
   [self logMessage:hardware];
@@ -215,6 +278,21 @@ NSString* const x86_64_Sim  = @"x86_64";
   }
 }
 
++ (NSString*)hardwareSimpleDescription {
+  NSString *hardwareDescription = [DeviceUtil hardwareDescription];
+  if (hardwareDescription == nil) {
+    return nil;
+  }
+  NSError *error = nil;
+  // this expression matches all strings between round brackets (e.g (Wifi), (GSM)) except the pattern "[0-9]+ Gen"
+  NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\((?![0-9]+ Gen).*\\)" options:NSRegularExpressionCaseInsensitive error:&error];
+  NSString *hardwareSimpleDescription = [regex stringByReplacingMatchesInString:hardwareDescription options:0 range:NSMakeRange(0, [hardwareDescription length]) withTemplate:@""];
+  if (error) {
+    return nil;
+  } else {
+    return hardwareSimpleDescription;
+  }
+}
 
 + (float)hardwareNumber {
   NSString *hardware = [self hardwareString];
@@ -236,10 +314,10 @@ NSString* const x86_64_Sim  = @"x86_64";
     case IPHONE_2G:
     case IPHONE_3G:
       return CGSizeMake(1600, 1200);
-      break;
+
     case IPHONE_3GS:
       return CGSizeMake(2048, 1536);
-      break;
+
     case IPHONE_4:
     case IPHONE_4_CDMA:
     case IPAD_3_WIFI:
@@ -249,7 +327,7 @@ NSString* const x86_64_Sim  = @"x86_64";
     case IPAD_4:
     case IPAD_4_GSM_CDMA:
       return CGSizeMake(2592, 1936);
-      break;
+
     case IPHONE_4S:
     case IPHONE_5:
     case IPHONE_5_CDMA_GSM:
@@ -257,40 +335,45 @@ NSString* const x86_64_Sim  = @"x86_64";
     case IPHONE_5C_CDMA_GSM:
     case IPHONE_6:
     case IPHONE_6_PLUS:
+    case IPOD_TOUCH_6G:
     case IPAD_AIR_2_WIFI:
     case IPAD_AIR_2_WIFI_CELLULAR:
-      return CGSizeMake(3264, 2448);
-      break;
-      
     case IPHONE_6S:
     case IPHONE_6S_PLUS:
+      return CGSizeMake(3264, 2448);
+
+    case IPHONE_7:
+    case IPHONE_7_GSM:
+    case IPHONE_7_PLUS:
+    case IPHONE_7_PLUS_GSM:
+    case IPHONE_8:
+    case IPHONE_8_CN:
+    case IPHONE_8_PLUS:
+    case IPHONE_8_PLUS_CN:
+    case IPHONE_X:
+    case IPHONE_X_CN:
       return CGSizeMake(4032, 3024);
-      break;
-      
+
     case IPOD_TOUCH_4G:
       return CGSizeMake(960, 720);
-      break;
+
     case IPOD_TOUCH_5G:
       return CGSizeMake(2440, 1605);
-      break;
-      
+
     case IPAD_2_WIFI:
     case IPAD_2:
     case IPAD_2_CDMA:
       return CGSizeMake(872, 720);
-      break;
-      
+
     case IPAD_MINI_WIFI:
     case IPAD_MINI:
     case IPAD_MINI_WIFI_CDMA:
       return CGSizeMake(1820, 1304);
-      break;
-      
+
     case IPAD_PRO_97_WIFI:
     case IPAD_PRO_97_WIFI_CELLULAR:
       return CGSizeMake(4032, 3024);
-      break;
-      
+
     default:
       NSLog(@"We have no resolution for your device's camera listed in this category. Please, make photo with back camera of your device, get its resolution in pixels (via Preview Cmd+I for example) and add a comment to this repository (https://github.com/InderKumarRathore/DeviceUtil) on GitHub.com in format Device = Hpx x Wpx.");
       NSLog(@"Your device is: %@", [self hardwareDescription]);
