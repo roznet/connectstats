@@ -136,7 +136,11 @@
 -(NSDictionary*)testDefinitions{
     return nil;
 }
--(void)log:(NSString*)aStr{
+-(void)log:(NSString*)fmt, ...{
+    va_list args;
+    va_start(args, fmt);
+    NSString * aStr = RZReturnAutorelease([[NSString alloc] initWithFormat:fmt arguments:args]);
+    
 	if( aStr ){
 #ifdef TARGET_IPHONE_SIMULATOR
 		NSLog(@"%@", aStr);

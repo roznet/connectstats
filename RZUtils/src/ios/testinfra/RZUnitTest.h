@@ -60,7 +60,7 @@
               msg:(NSString *)fmt, ...;
 -(void)assessTestResult:(NSString*)message result:(bool)success;
 -(void)assessTrue:(BOOL)success msg:(NSString*)fmt, ...;
--(void)log:(NSString*)aStr;
+-(void)log:(NSString*)fmt, ...;
 
 -(RZUnitTestRecord*)recordObject;
 

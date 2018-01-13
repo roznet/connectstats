@@ -70,11 +70,9 @@
     [self startSession:@"GC Garmin Connect Alt"];
     GCWebUseSimulator(FALSE, nil);
 
-    [GCAppGlobal setupEmptyState:@"activities_gc_alt.db"];
+    [GCAppGlobal setupEmptyState:@"activities_gc_alt.db" withSettingsName:kPreservedSettingsName];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:YES];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:YES];
-    [[GCAppGlobal profile] setLoginName:@"briceguard-roznet@yahoo.com" forService:gcServiceGarmin];
-    [[GCAppGlobal profile] setPassword:@"" forService:gcServiceGarmin];
 
 
     [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
@@ -92,6 +90,9 @@
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
+    if( [theParent respondsToSelector:@selector(currentDescription)]){
+        [self log:@"%@: %@", theInfo.stringInfo, [theParent currentDescription]];
+    }
     RZ_ASSERT(![[theInfo stringInfo] isEqualToString:@"error"], @"Web request had no error");
     if ([[theInfo stringInfo] isEqualToString:@"end"] || [[theInfo stringInfo] isEqualToString:@"error"]) {
         [self testGarminConnectEnd];
