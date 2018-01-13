@@ -46,4 +46,5 @@
  This method needs to be implemented in derived class
  */
 -(NSArray*)allTestClassNames;
+-(NSArray<UIBarButtonItem*>*)additionalLeftNavigationButton;
 @end

@@ -49,28 +49,30 @@
 +(GCAppProfiles*)profilesFromSettings:(NSMutableDictionary*)dict{
     GCAppProfiles * rv = [[[GCAppProfiles alloc] init] autorelease];
     if (rv) {
-        //old format
-        rv.profiles = dict[CONFIG_PROFILES];
-        rv.currentProfile = [dict[CONFIG_CURRENT_PROFILE] intValue];
-
-        if (!rv.profiles) {
-            // Default profile
-
-            NSMutableDictionary * defaultDict = [NSMutableDictionary dictionaryWithDictionary:@{PROFILE_LOGIN_NAME:@"",
-                                                                                                //PROFILE_LOGIN_PWD:@"",
-                                                                                                PROFILE_NAME:@"Default",
-                                                                                                PROFILE_DBPATH:@"activities.db",
-                                                                                                PROFILE_FULL_DOWNLOAD_DONE:@(false)
-                                                                                                }];
-
-            rv.profiles = [NSMutableArray arrayWithArray:@[ defaultDict ] ];
-            rv.currentProfile = 0;
-        }
-        [rv updateToKeychain];
-
+        [rv loadFromSettings:dict];
     }
     return rv;
 }
+-(void)loadFromSettings:(NSMutableDictionary*)dict{
+    self.profiles = dict[CONFIG_PROFILES];
+    self.currentProfile = [dict[CONFIG_CURRENT_PROFILE] intValue];
+    
+    if (!self.profiles) {
+        // Default profile
+        
+        NSMutableDictionary * defaultDict = [NSMutableDictionary dictionaryWithDictionary:@{PROFILE_LOGIN_NAME:@"",
+                                                                                            PROFILE_NAME:@"Default",
+                                                                                            PROFILE_DBPATH:@"activities.db",
+                                                                                            PROFILE_FULL_DOWNLOAD_DONE:@(false)
+                                                                                            }];
+        
+        self.profiles = [NSMutableArray arrayWithArray:@[ defaultDict ] ];
+        self.currentProfile = 0;
+    }
+    [self updateToKeychain];
+
+}
+
 -(void)saveToSettings:(NSMutableDictionary*)dict{
     if (dict[OBSOLETE_CONFIG_LOGIN_NAME]) {
         [dict removeObjectForKey:OBSOLETE_CONFIG_LOGIN_NAME];

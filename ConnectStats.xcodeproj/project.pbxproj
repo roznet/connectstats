@@ -1927,6 +1927,8 @@
 		42C7D4281DAC293B0089806B /* GCLapSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7D4271DAC293B0089806B /* GCLapSwim.m */; };
 		42C7D4291DAC293B0089806B /* GCLapSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7D4271DAC293B0089806B /* GCLapSwim.m */; };
 		42C92FDF170FB73F0037602F /* GCActivityAutoLapChoices.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */; };
+		42CC45B5200A2288003EB805 /* GCTestServiceConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */; };
+		42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */; };
 		42CE39461CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CE39451CA680E900919292 /* GCDerivedGroupedSeries.m */; };
 		42CE39471CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CE39451CA680E900919292 /* GCDerivedGroupedSeries.m */; };
 		42CFBAB818D26DB400EA4C48 /* GCStravaReqBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CFBAB718D26DB400EA4C48 /* GCStravaReqBase.m */; };
@@ -4062,6 +4064,9 @@
 		42C7D4271DAC293B0089806B /* GCLapSwim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCLapSwim.m; path = src/GCLapSwim.m; sourceTree = "<group>"; };
 		42C92FDD170FB73F0037602F /* GCActivityAutoLapChoices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCActivityAutoLapChoices.h; path = src/GCActivityAutoLapChoices.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityAutoLapChoices.m; path = src/GCActivityAutoLapChoices.m; sourceTree = "<group>"; };
+		42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCTestServiceConfig.xib; path = connectstatstestapp/ui/GCTestServiceConfig.xib; sourceTree = SOURCE_ROOT; };
+		42CC45B6200A24C5003EB805 /* GCTestServiceConfigViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceConfigViewController.h; path = connectstatstestapp/src/GCTestServiceConfigViewController.h; sourceTree = SOURCE_ROOT; };
+		42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceConfigViewController.m; path = connectstatstestapp/src/GCTestServiceConfigViewController.m; sourceTree = SOURCE_ROOT; };
 		42CE39441CA680E900919292 /* GCDerivedGroupedSeries.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDerivedGroupedSeries.h; path = src/GCDerivedGroupedSeries.h; sourceTree = "<group>"; };
 		42CE39451CA680E900919292 /* GCDerivedGroupedSeries.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDerivedGroupedSeries.m; path = src/GCDerivedGroupedSeries.m; sourceTree = "<group>"; };
 		42CFBAB618D26DB400EA4C48 /* GCStravaReqBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaReqBase.h; path = src/GCStravaReqBase.h; sourceTree = "<group>"; };
@@ -6415,6 +6420,9 @@
 				42B5E2121BA5AF9A000FAE4E /* GCTestViewController.h */,
 				42295E021EC6F38C00F4F7EE /* GCTestServicesViewController.h */,
 				42295E031EC6F38C00F4F7EE /* GCTestServicesViewController.m */,
+				42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */,
+				42CC45B6200A24C5003EB805 /* GCTestServiceConfigViewController.h */,
+				42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */,
 			);
 			name = TestApp;
 			sourceTree = "<group>";
@@ -9257,6 +9265,7 @@
 				428BACF81CB149C50041468A /* activitylaps_1099599108.json in Resources */,
 				420119B21F51BB180093B2CD /* babolat_session_9457.json in Resources */,
 				42B5E4871BA5BA2D000FAE4E /* strava_list_4.json in Resources */,
+				42CC45B5200A2288003EB805 /* GCTestServiceConfig.xib in Resources */,
 				42B5E4D01BA5BA2D000FAE4E /* track_269152062.db in Resources */,
 				42B5E4E31BA5BA2D000FAE4E /* track_280850663.db in Resources */,
 				42B5E4B01BA5BA2D000FAE4E /* track_179061714.db in Resources */,
@@ -10275,6 +10284,7 @@
 				4287DC101BDB88FE00C54A51 /* GCStatsMultiFieldConfig.m in Sources */,
 				422B343E1CA7321200B345CD /* GCFieldCache.m in Sources */,
 				42B5E25D1BA5B216000FAE4E /* GCFitBitActivitiesParser.m in Sources */,
+				42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */,
 				42B5E25E1BA5B216000FAE4E /* GCFitBitReqBase.m in Sources */,
 				42B5E25F1BA5B216000FAE4E /* GCFitBitActivities.m in Sources */,
 				421208911C6E860700E0470D /* GCFieldsForCategory.m in Sources */,

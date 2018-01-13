@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GCTestServiceConfigViewController">
+            <connections>
+                <outlet property="garminPassword" destination="SK2-7r-3SB" id="7DQ-KU-VgQ"/>
+                <outlet property="garminUserName" destination="8b4-sw-OAm" id="IRK-Ms-fhx"/>
+                <outlet property="view" destination="iN0-l3-epB" id="Ye6-YZ-c8a"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Garmin User Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kWo-ro-MZp">
+                    <rect key="frame" x="114.5" y="70" width="146" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8b4-sw-OAm">
+                    <rect key="frame" x="10" y="101" width="355" height="30"/>
+                    <accessibility key="accessibilityConfiguration" identifier="1"/>
+                    <nil key="textColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES" textContentType="username"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="PZ0-jW-10G"/>
+                    </connections>
+                </textField>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SK2-7r-3SB">
+                    <rect key="frame" x="10" y="172" width="355" height="30"/>
+                    <accessibility key="accessibilityConfiguration" identifier="2"/>
+                    <nil key="textColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" textContentType="password"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="hf6-jR-aIx"/>
+                    </connections>
+                </textField>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Garmin Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cqK-QJ-gwO">
+                    <rect key="frame" x="120.5" y="141" width="134" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vg2-sl-Cpd">
+                    <rect key="frame" x="155" y="289" width="34" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" title="Save"/>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="kWo-ro-MZp" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="1U3-oU-voW"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="8b4-sw-OAm" secondAttribute="trailing" constant="10" id="BQQ-yp-zVu"/>
+                <constraint firstItem="8b4-sw-OAm" firstAttribute="top" secondItem="kWo-ro-MZp" secondAttribute="bottom" constant="10" id="Fad-Gj-fju"/>
+                <constraint firstItem="SK2-7r-3SB" firstAttribute="top" secondItem="cqK-QJ-gwO" secondAttribute="bottom" constant="10" id="IdH-7y-pBp"/>
+                <constraint firstItem="SK2-7r-3SB" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="Woe-6Y-8Hz"/>
+                <constraint firstItem="8b4-sw-OAm" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="b4c-sy-P5s"/>
+                <constraint firstItem="8b4-sw-OAm" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="fVJ-tl-bpw"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="SK2-7r-3SB" secondAttribute="trailing" constant="10" id="iZI-uI-lqe"/>
+                <constraint firstItem="SK2-7r-3SB" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="lpM-IG-fEh"/>
+                <constraint firstItem="cqK-QJ-gwO" firstAttribute="top" secondItem="8b4-sw-OAm" secondAttribute="bottom" constant="10" id="nmd-fW-xGA"/>
+                <constraint firstItem="cqK-QJ-gwO" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="sTr-BS-TyH"/>
+                <constraint firstItem="kWo-ro-MZp" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="50" id="y9A-lM-g8U"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="48.5" y="54.5"/>
+        </view>
+    </objects>
+</document>

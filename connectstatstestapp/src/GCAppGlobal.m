@@ -29,6 +29,7 @@
 static NSCalendar * _cacheCalendar = nil;
 static NSDictionary * _debugState = nil;
 NSString *const kNotifySettingsChange = @"kNotifySettingsChange";
+NSString * kPreservedSettingsName = @"test_services_settings.plist";
 
 static GCAppDelegate * _cacheApplicationDelegate = nil;
 
@@ -121,6 +122,9 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     return nil;
 }
 
++(void)setupEmptyState:(NSString*)name withSettingsName:(NSString*)settingName{
+    [[GCAppGlobal appDelegate] setupEmptyState:(NSString*)name withSettingsName:settingName];
+}
 +(void)setupEmptyState:(NSString*)name{
     [[GCAppGlobal appDelegate] setupEmptyState:(NSString*)name];
 

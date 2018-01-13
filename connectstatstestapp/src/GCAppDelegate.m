@@ -86,6 +86,7 @@
     _testUIGraphViewController = [[GCTestUIGraphViewController alloc] initWithStyle:UITableViewStylePlain];
     _testUICellViewController = [[GCTestUICellsViewController alloc] initWithStyle:UITableViewStyleGrouped];
     _testServicesViewController = [[GCTestServicesViewController alloc] init];
+    _testServicesViewController.runTestOnStartup = false;
 
     UITabBarController * tabbar = [[[UITabBarController alloc] initWithNibName:nil bundle:nil] autorelease];
 
@@ -172,7 +173,7 @@
 }
 
 
--(void)setupEmptyState:(NSString*)name{
+-(void)setupEmptyState:(NSString*)name withSettingsName:(NSString*)settingName{
     //@"activities.db"
     [RZFileOrganizer forceRebuildEditable:name];
     [RZFileOrganizer removeEditableFile:[RZFileOrganizer writeableFilePath:[self.profile currentDerivedDatabasePath]]];
@@ -183,7 +184,8 @@
     [GCHealthOrganizer ensureDbStructure:_db];
     [self setupFieldCache];
 
-	[self setSettings:[NSMutableDictionary dictionaryWithDictionary:[RZFileOrganizer loadDictionary:@"settings.plist"]]];
+	[self setSettings:[NSMutableDictionary dictionaryWithDictionary:[RZFileOrganizer loadDictionary:settingName]]];
+    [self setProfile:[GCAppProfiles profilesFromSettings:self.settings]];
     [self setOrganizer:[[[GCActivitiesOrganizer alloc] initWithDb:_db] autorelease]];
     [self setDerived:nil];// detach from web before we delete
     [self setWeb:[[[GCWebConnect alloc] init] autorelease]] ;
@@ -192,6 +194,9 @@
     [[self profile] serviceEnabled:gcServiceStrava set:false];
 }
 
+-(void)setupEmptyState:(NSString *)name{
+    [self setupEmptyState:name withSettingsName:@"settings.plist"];
+}
 -(void)setupEmptyStateWithDerived:(NSString*)name{
     [self setupEmptyState:name];
     [RZFileOrganizer removeEditableFile:[self.profile currentDerivedDatabasePath]];
@@ -247,7 +252,7 @@
     NSError * e;
     NSArray * files = [fileManager contentsOfDirectoryAtPath:documentsDirectory error:&e];
     for (NSString * file in files) {
-        if (![file hasPrefix:@"."] && ![file hasSuffix:@"laps_regr.plist"]) {
+        if (![file hasPrefix:@"."] && ![file hasSuffix:@"laps_regr.plist"] && ![file hasSuffix:kPreservedSettingsName]) {
             [fileManager removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:file] error:&e];
         }
     }

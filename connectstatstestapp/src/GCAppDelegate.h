@@ -51,6 +51,7 @@
 @property (nonatomic, retain) GCDerivedOrganizer * derived;
 @property (nonatomic, retain) GCActivityTypes * activityTypes;
 
+-(void)setupEmptyState:(NSString*)name withSettingsName:(NSString*)settingName;
 -(void)setupEmptyState:(NSString*)name;
 -(void)setupEmptyStateWithDerived:(NSString*)name;
 -(void)setupSampleState:(NSString*)name config:(NSDictionary*)config;

@@ -47,12 +47,9 @@
     [self startSession:@"GC Garmin Connect"];
     GCWebUseSimulator(FALSE, nil);
 
-    [GCAppGlobal setupEmptyState:@"activities_gc.db"];
+    [GCAppGlobal setupEmptyState:@"activities_gc.db" withSettingsName:kPreservedSettingsName];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:YES];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:NO];
-    [[GCAppGlobal profile] setLoginName:@"briceguard-roznet@yahoo.com" forService:gcServiceGarmin];
-    [[GCAppGlobal profile] setPassword:@"" forService:gcServiceGarmin];
-
 
     [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
     /*dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

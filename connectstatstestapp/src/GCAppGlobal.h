@@ -32,6 +32,8 @@
 #import "GCDerivedOrganizer.h"
 
 extern NSString *const kNotifySettingsChange;
+extern NSString * kPreservedSettingsName;
+
 @class GCAppDelegate;
 
 @interface GCAppGlobal : RZAppConfig
@@ -47,6 +49,7 @@ extern NSString *const kNotifySettingsChange;
 +(GCDerivedOrganizer*)derived;
 
 +(void)setupEmptyState:(NSString*)name;
++(void)setupEmptyState:(NSString*)name withSettingsName:(NSString*)settingName;
 +(void)setupEmptyStateWithDerived:(NSString*)name;
 +(void)setupSampleState:(NSString*)name config:(NSDictionary*)config;
 +(void)setupSampleState:(NSString*)name;
