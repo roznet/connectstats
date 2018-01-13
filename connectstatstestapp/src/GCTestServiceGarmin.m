@@ -95,7 +95,11 @@
     }
     RZ_ASSERT(![[theInfo stringInfo] isEqualToString:@"error"], @"Web request had no error");
     if ([[theInfo stringInfo] isEqualToString:@"end"] || [[theInfo stringInfo] isEqualToString:@"error"]) {
-        [self testGarminConnectEnd];
+        if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:YES]){
+            [self testGarminConnectModernEnd];
+        }else{
+            [self testGarminConnectEnd];
+        }
     }
 }
 @end

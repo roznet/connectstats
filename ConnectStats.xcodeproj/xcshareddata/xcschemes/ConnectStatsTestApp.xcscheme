@@ -66,12 +66,12 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "FB_REFERENCE_IMAGE_DIR"
-            value = "$(SOURCE_ROOT)/ConnectStatsTestApp/samples/ReferencesImages"
+            value = "$(SOURCE_ROOT)/connectstatstestapp/samples/ReferenceImages"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "RS_REFERENCE_OBJECT_DIR"
-            value = "$(SOURCE_ROOT)/GarminConnectTests/samples/ReferenceObjects"
+            value = "$(SOURCE_ROOT)/ConnectStatsTests/samples/ReferenceObjects"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
