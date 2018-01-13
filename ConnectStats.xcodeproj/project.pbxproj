@@ -1930,6 +1930,10 @@
 		42CC45B5200A2288003EB805 /* GCTestServiceConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */; };
 		42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */; };
 		42CC45BF200A57EE003EB805 /* GCTestServiceStrava.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45BE200A57EE003EB805 /* GCTestServiceStrava.m */; };
+		42CC45CB200A67C0003EB805 /* GCSettingsBugReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45CA200A67C0003EB805 /* GCSettingsBugReport.m */; };
+		42CC45CC200A67C0003EB805 /* GCSettingsBugReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45CA200A67C0003EB805 /* GCSettingsBugReport.m */; };
+		42CC45CD200A67C0003EB805 /* GCSettingsBugReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45CA200A67C0003EB805 /* GCSettingsBugReport.m */; };
+		42CC45D0200A6E91003EB805 /* GCTestServiceBugReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45CF200A6E91003EB805 /* GCTestServiceBugReport.m */; };
 		42CE39461CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CE39451CA680E900919292 /* GCDerivedGroupedSeries.m */; };
 		42CE39471CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CE39451CA680E900919292 /* GCDerivedGroupedSeries.m */; };
 		42CFBAB818D26DB400EA4C48 /* GCStravaReqBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CFBAB718D26DB400EA4C48 /* GCStravaReqBase.m */; };
@@ -4070,6 +4074,10 @@
 		42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceConfigViewController.m; path = connectstatstestapp/src/GCTestServiceConfigViewController.m; sourceTree = SOURCE_ROOT; };
 		42CC45BD200A57EE003EB805 /* GCTestServiceStrava.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceStrava.h; path = connectstatstestapp/src/GCTestServiceStrava.h; sourceTree = SOURCE_ROOT; };
 		42CC45BE200A57EE003EB805 /* GCTestServiceStrava.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceStrava.m; path = connectstatstestapp/src/GCTestServiceStrava.m; sourceTree = SOURCE_ROOT; };
+		42CC45C9200A67C0003EB805 /* GCSettingsBugReport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCSettingsBugReport.h; path = src/GCSettingsBugReport.h; sourceTree = "<group>"; };
+		42CC45CA200A67C0003EB805 /* GCSettingsBugReport.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCSettingsBugReport.m; path = src/GCSettingsBugReport.m; sourceTree = "<group>"; };
+		42CC45CE200A6E91003EB805 /* GCTestServiceBugReport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceBugReport.h; path = connectstatstestapp/src/GCTestServiceBugReport.h; sourceTree = SOURCE_ROOT; };
+		42CC45CF200A6E91003EB805 /* GCTestServiceBugReport.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceBugReport.m; path = connectstatstestapp/src/GCTestServiceBugReport.m; sourceTree = SOURCE_ROOT; };
 		42CE39441CA680E900919292 /* GCDerivedGroupedSeries.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDerivedGroupedSeries.h; path = src/GCDerivedGroupedSeries.h; sourceTree = "<group>"; };
 		42CE39451CA680E900919292 /* GCDerivedGroupedSeries.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDerivedGroupedSeries.m; path = src/GCDerivedGroupedSeries.m; sourceTree = "<group>"; };
 		42CFBAB618D26DB400EA4C48 /* GCStravaReqBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaReqBase.h; path = src/GCStravaReqBase.h; sourceTree = "<group>"; };
@@ -4387,6 +4395,8 @@
 				42AB681916E14CBC00C633BD /* GCSettingsManualLoginViewController.m */,
 				422637A31AFF6C5F005461E3 /* GCDebugActionsTableViewController.h */,
 				422637A41AFF6C5F005461E3 /* GCDebugActionsTableViewController.m */,
+				42CC45C9200A67C0003EB805 /* GCSettingsBugReport.h */,
+				42CC45CA200A67C0003EB805 /* GCSettingsBugReport.m */,
 			);
 			name = BugDebug;
 			sourceTree = "<group>";
@@ -4559,6 +4569,8 @@
 				42295E071EC6F4D900F4F7EE /* GCTestServiceGarmin.m */,
 				42CC45BD200A57EE003EB805 /* GCTestServiceStrava.h */,
 				42CC45BE200A57EE003EB805 /* GCTestServiceStrava.m */,
+				42CC45CE200A6E91003EB805 /* GCTestServiceBugReport.h */,
+				42CC45CF200A6E91003EB805 /* GCTestServiceBugReport.m */,
 			);
 			name = TestServices;
 			sourceTree = "<group>";
@@ -9596,6 +9608,7 @@
 				42BFC2671DCF51F100EAD40E /* GCUnitTrainingZone.m in Sources */,
 				422FAECE19A1DD6000D09773 /* GCBabolatPlayersRequest.m in Sources */,
 				422FAECF19A1DD6000D09773 /* GCSettingsReloadViewController.m in Sources */,
+				42CC45CD200A67C0003EB805 /* GCSettingsBugReport.m in Sources */,
 				422FAED119A1DD6000D09773 /* GCStravaActivityStreamsParser.m in Sources */,
 				42DCA7CD1AF420E20050AAA9 /* GCGarminRequestActivityList.m in Sources */,
 				42BFC24A1DCF4F1500EAD40E /* GCHealthStatsBridge.swift in Sources */,
@@ -9927,6 +9940,7 @@
 				42318E7D19AF1B63000CD26B /* GCFitBitReqBase.m in Sources */,
 				42091CFF1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m in Sources */,
 				42BC53671618EA1900576097 /* GCTrackStats.m in Sources */,
+				42CC45CB200A67C0003EB805 /* GCSettingsBugReport.m in Sources */,
 				42BC5391161E34C500576097 /* GCSettingsViewController.m in Sources */,
 				42A3AA3B1D43F51C004FBFD0 /* GCStravaSegmentEffortStream.m in Sources */,
 				42C3CF471DA15E6900C25709 /* GCAppGlobal.swift in Sources */,
@@ -10399,6 +10413,7 @@
 				42C7D4291DAC293B0089806B /* GCLapSwim.m in Sources */,
 				42B5E2B41BA5B216000FAE4E /* GCActivityTennis.m in Sources */,
 				427F935C1BEAA05800C177F9 /* GCTestUISamples.m in Sources */,
+				42CC45D0200A6E91003EB805 /* GCTestServiceBugReport.m in Sources */,
 				42B5E2B51BA5B216000FAE4E /* GCActivityTennisShotValues.m in Sources */,
 				42B5E2B61BA5B216000FAE4E /* GCActivityTennisHeatmap.m in Sources */,
 				42B5E2B71BA5B216000FAE4E /* GCActivity+Calculated.m in Sources */,
@@ -10440,6 +10455,7 @@
 				42B5E21A1BA5AF9A000FAE4E /* GCFitTest.m in Sources */,
 				42B5E2241BA5AF9A000FAE4E /* GCTestOrganizer.m in Sources */,
 				42B5E2231BA5AF9A000FAE4E /* GCTestIconsCell.m in Sources */,
+				42CC45CC200A67C0003EB805 /* GCSettingsBugReport.m in Sources */,
 				42B5E2191BA5AF9A000FAE4E /* GCAppGlobal.m in Sources */,
 				42B5E2171BA5AF9A000FAE4E /* GCTestCommunications.m in Sources */,
 				42B5E21F1BA5AF9A000FAE4E /* GCTestTracks.m in Sources */,

@@ -187,13 +187,14 @@
     [self setupFieldCache];
 
 	[self setSettings:[NSMutableDictionary dictionaryWithDictionary:[RZFileOrganizer loadDictionary:settingName]]];
-    [self setProfile:[GCAppProfiles profilesFromSettings:self.settings]];
     [self setOrganizer:[[[GCActivitiesOrganizer alloc] initWithDb:_db] autorelease]];
     [self setDerived:nil];// detach from web before we delete
     [self setWeb:[[[GCWebConnect alloc] init] autorelease]] ;
     self.web.worker = self.worker;
     [self setHealth:[[[GCHealthOrganizer alloc] initWithDb:_db andThread:self.worker] autorelease]];
+    [self setProfile:[GCAppProfiles profilesFromSettings:self.settings]];
     [[self profile] serviceEnabled:gcServiceStrava set:false];
+    [[self profile] configSet:PROFILE_DBPATH stringVal:name];
 }
 
 -(void)setupEmptyState:(NSString *)name{
@@ -234,6 +235,9 @@
     [self setWeb:[[[GCWebConnect alloc] init] autorelease]];
     self.web.worker = self.worker;
     [self setHealth:[[[GCHealthOrganizer alloc] initWithDb:_db andThread:self.worker] autorelease]];
+    [self setProfile:[GCAppProfiles profilesFromSettings:self.settings]];
+    [[self profile] serviceEnabled:gcServiceStrava set:false];
+    [[self profile] configSet:PROFILE_DBPATH stringVal:name];
 }
 
 -(void)reinitFromSampleState:(NSString*)name{

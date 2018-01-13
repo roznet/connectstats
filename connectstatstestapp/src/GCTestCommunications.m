@@ -121,7 +121,9 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     if (range.location != NSNotFound) {
         successString = [theString substringFromIndex:range.location];
     }
-
+    if( ! [expected isEqualToString:successString]){
+        [self log:@"Upload msg: %@", theString];
+    }
     RZ_ASSERT([expected isEqualToString:successString], @"Uploaded file success %@", [theString hasPrefix:@"error:"] ? theString : @"");
     [self testUploadEnd];
 }
