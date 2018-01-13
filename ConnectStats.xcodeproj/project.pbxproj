@@ -1929,6 +1929,7 @@
 		42C92FDF170FB73F0037602F /* GCActivityAutoLapChoices.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */; };
 		42CC45B5200A2288003EB805 /* GCTestServiceConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */; };
 		42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */; };
+		42CC45BF200A57EE003EB805 /* GCTestServiceStrava.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45BE200A57EE003EB805 /* GCTestServiceStrava.m */; };
 		42CE39461CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CE39451CA680E900919292 /* GCDerivedGroupedSeries.m */; };
 		42CE39471CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CE39451CA680E900919292 /* GCDerivedGroupedSeries.m */; };
 		42CFBAB818D26DB400EA4C48 /* GCStravaReqBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CFBAB718D26DB400EA4C48 /* GCStravaReqBase.m */; };
@@ -4067,6 +4068,8 @@
 		42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCTestServiceConfig.xib; path = connectstatstestapp/ui/GCTestServiceConfig.xib; sourceTree = SOURCE_ROOT; };
 		42CC45B6200A24C5003EB805 /* GCTestServiceConfigViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceConfigViewController.h; path = connectstatstestapp/src/GCTestServiceConfigViewController.h; sourceTree = SOURCE_ROOT; };
 		42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceConfigViewController.m; path = connectstatstestapp/src/GCTestServiceConfigViewController.m; sourceTree = SOURCE_ROOT; };
+		42CC45BD200A57EE003EB805 /* GCTestServiceStrava.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceStrava.h; path = connectstatstestapp/src/GCTestServiceStrava.h; sourceTree = SOURCE_ROOT; };
+		42CC45BE200A57EE003EB805 /* GCTestServiceStrava.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceStrava.m; path = connectstatstestapp/src/GCTestServiceStrava.m; sourceTree = SOURCE_ROOT; };
 		42CE39441CA680E900919292 /* GCDerivedGroupedSeries.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDerivedGroupedSeries.h; path = src/GCDerivedGroupedSeries.h; sourceTree = "<group>"; };
 		42CE39451CA680E900919292 /* GCDerivedGroupedSeries.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDerivedGroupedSeries.m; path = src/GCDerivedGroupedSeries.m; sourceTree = "<group>"; };
 		42CFBAB618D26DB400EA4C48 /* GCStravaReqBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaReqBase.h; path = src/GCStravaReqBase.h; sourceTree = "<group>"; };
@@ -4554,6 +4557,8 @@
 			children = (
 				42295E061EC6F4D900F4F7EE /* GCTestServiceGarmin.h */,
 				42295E071EC6F4D900F4F7EE /* GCTestServiceGarmin.m */,
+				42CC45BD200A57EE003EB805 /* GCTestServiceStrava.h */,
+				42CC45BE200A57EE003EB805 /* GCTestServiceStrava.m */,
 			);
 			name = TestServices;
 			sourceTree = "<group>";
@@ -10418,6 +10423,7 @@
 				42B5E2C51BA5B216000FAE4E /* GCLap.m in Sources */,
 				42B5E2C61BA5B216000FAE4E /* GCLapCompound.m in Sources */,
 				42B5E2C71BA5B216000FAE4E /* GCHistoryFieldDataSerie.m in Sources */,
+				42CC45BF200A57EE003EB805 /* GCTestServiceStrava.m in Sources */,
 				427F937E1BEDFF4300C177F9 /* GCStatsHistGraphConfig.m in Sources */,
 				42E4FB411D7AB2740061BB38 /* GCSegmentOrganizer.swift in Sources */,
 				422CC87C1E6ACA1700195414 /* FITFitMessage.mm in Sources */,

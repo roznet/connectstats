@@ -34,6 +34,7 @@
 #import "GCDerivedOrganizer.h"
 #import "GCTestServicesViewController.h"
 
+
 @interface GCAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (retain, nonatomic) GCTestViewController * testViewController;
@@ -61,5 +62,8 @@
 -(void)cleanWritableFiles;
 
 -(NSString*)simulatorUrl;
+
+-(UINavigationController*)currentNavigationController;
+
 
 @end

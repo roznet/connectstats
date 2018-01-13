@@ -160,7 +160,8 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 }
 
 +(UINavigationController*)currentNavigationController{
-    return nil;
+    GCAppDelegate *appDelegate = _sharedApplicationDelegate();
+    return [appDelegate currentNavigationController];
 }
 
 +(BOOL)healthStatsVersion{

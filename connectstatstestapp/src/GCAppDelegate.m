@@ -35,6 +35,7 @@
 @interface GCAppDelegate ()
 @property (nonatomic,retain) RZSRemoteURLFindValid * findValid;
 @property (nonatomic,retain) NSString * useSimulatorUrl;
+@property (nonatomic,retain) UITabBarController * tabBarController;
 @end
 
 @implementation GCAppDelegate
@@ -56,6 +57,7 @@
     [_derived release];
     [_health release];
     [_activityTypes release];
+    [_tabBarController release];
 
     [super dealloc];
 }
@@ -89,7 +91,7 @@
     _testServicesViewController.runTestOnStartup = false;
 
     UITabBarController * tabbar = [[[UITabBarController alloc] initWithNibName:nil bundle:nil] autorelease];
-
+    self.tabBarController = tabbar;
     UITabBarItem * testItem	= [[[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Test",nil)	image:[UIImage imageNamed:@"784-target"] tag:0] autorelease];
     UITabBarItem * graphItem	= [[[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Graphs",nil)     image:[UIImage imageNamed:@"858-line-chart"] tag:0] autorelease];
     UITabBarItem * cellItem	= [[[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Cells",nil)     image:[UIImage imageNamed:@"729-top-list"] tag:0] autorelease];
@@ -304,7 +306,8 @@
     }
     //[pool release];
 }
-
-
+-(UINavigationController*)currentNavigationController{
+    return self.tabBarController.viewControllers[self.tabBarController.selectedIndex ];
+}
 
 @end
