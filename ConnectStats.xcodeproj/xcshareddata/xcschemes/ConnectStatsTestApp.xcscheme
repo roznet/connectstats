@@ -29,6 +29,16 @@
       language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "42F97BEA200B7B97009905D2"
+               BuildableName = "ConnectStatsTestAppXCTests.xctest"
+               BlueprintName = "ConnectStatsTestAppXCTests"
+               ReferencedContainer = "container:ConnectStats.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

@@ -93,7 +93,6 @@
 		42280D411F5477C000724581 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42280D401F5477C000724581 /* CloudKit.framework */; };
 		42289D581C7B9B4D005A5D0E /* GCStatsHistGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42289D571C7B9B4D005A5D0E /* GCStatsHistGraphViewController.m */; };
 		42289D5B1C7B9CEE005A5D0E /* GCStatsHistGraphOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42289D5A1C7B9CEE005A5D0E /* GCStatsHistGraphOptionViewController.m */; };
-		42295DFA1EC6F2A400F4F7EE /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42295DF91EC6F2A400F4F7EE /* Icons.xcassets */; };
 		42295E041EC6F38C00F4F7EE /* GCTestServicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42295E031EC6F38C00F4F7EE /* GCTestServicesViewController.m */; };
 		42295E081EC6F4D900F4F7EE /* GCTestServiceGarmin.m in Sources */ = {isa = PBXBuildFile; fileRef = 42295E071EC6F4D900F4F7EE /* GCTestServiceGarmin.m */; };
 		422AC6A61C1CC9AA002DDA9C /* test_activity_day___healthkit__Default_20151106.db in Resources */ = {isa = PBXBuildFile; fileRef = 422AC6A21C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151106.db */; };
@@ -320,9 +319,7 @@
 		422FAFC619A1DD6000D09773 /* fields.db in Resources */ = {isa = PBXBuildFile; fileRef = 42959CCE18D5C58700C0B841 /* fields.db */; };
 		422FAFC719A1DD6000D09773 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 428FF71615F36888007A88FA /* InfoPlist.strings */; };
 		422FAFCD19A1DD6000D09773 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 427B20AD1621B5CF00D5C3C5 /* Localizable.strings */; };
-		422FAFCE19A1DD6000D09773 /* bugs.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 4231CB5F165AD20D0020FDB2 /* bugs.rtf */; };
 		422FAFD219A1DD6000D09773 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42EE4565176BCB81003338AF /* Media.xcassets */; };
-		422FAFE519A1DD6000D09773 /* FieldsNotes.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 4244BF401800390E000C1D8A /* FieldsNotes.rtf */; };
 		42305E971DCF81C60024700C /* GCAppDelegate+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 429889A31D90371700A22571 /* GCAppDelegate+Swift.m */; };
 		42306C1D1F5C5EA300FC7CCB /* cloud_session_20150708164712.db in Resources */ = {isa = PBXBuildFile; fileRef = 42306C151F5C5EA300FC7CCB /* cloud_session_20150708164712.db */; };
 		42306C1E1F5C5EA300FC7CCB /* session_201410122156.db in Resources */ = {isa = PBXBuildFile; fileRef = 42306C161F5C5EA300FC7CCB /* session_201410122156.db */; };
@@ -848,7 +845,7 @@
 		42B3AB7A1D27FF080072D4CA /* RZUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; };
 		42B467BA1DC6A56200279DC8 /* GCAppPasswordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424D08BF1DC5DA4E000B4620 /* GCAppPasswordManager.swift */; };
 		42B467BB1DC6A74200279DC8 /* GCAppProfiles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235DF9D1655B61A00DE316A /* GCAppProfiles.m */; };
-		42B5E1C81BA5AEC9000FAE4E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E1C71BA5AEC9000FAE4E /* Assets.xcassets */; };
+		42B5E1C81BA5AEC9000FAE4E /* ConnectStatsTestApp.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E1C71BA5AEC9000FAE4E /* ConnectStatsTestApp.xcassets */; };
 		42B5E1CB1BA5AEC9000FAE4E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E1C91BA5AEC9000FAE4E /* LaunchScreen.storyboard */; };
 		42B5E2161BA5AF9A000FAE4E /* GCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1F11BA5AF9A000FAE4E /* GCAppDelegate.m */; };
 		42B5E2171BA5AF9A000FAE4E /* GCTestCommunications.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1F31BA5AF9A000FAE4E /* GCTestCommunications.m */; };
@@ -995,14 +992,6 @@
 		42B5E30F1BA5B900000FAE4E /* GCViewConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A66BD0160D000D00DA29A5 /* GCViewConfig.m */; };
 		42B5E3111BA5B915000FAE4E /* GCTrackFieldChoices.m in Sources */ = {isa = PBXBuildFile; fileRef = 429E879617C4A10300B44A3A /* GCTrackFieldChoices.m */; };
 		42B5E3121BA5B915000FAE4E /* GCTrackFieldChoiceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 421F39AC1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m */; };
-		42B5E4511BA5BA2D000FAE4E /* 1099-list-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E32B1BA5BA2C000FAE4E /* 1099-list-1.png */; };
-		42B5E4521BA5BA2D000FAE4E /* 1099-list-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E32C1BA5BA2C000FAE4E /* 1099-list-1@2x.png */; };
-		42B5E4531BA5BA2D000FAE4E /* 729-top-list.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E32D1BA5BA2C000FAE4E /* 729-top-list.png */; };
-		42B5E4541BA5BA2D000FAE4E /* 729-top-list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E32E1BA5BA2C000FAE4E /* 729-top-list@2x.png */; };
-		42B5E4551BA5BA2D000FAE4E /* 784-target.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E32F1BA5BA2C000FAE4E /* 784-target.png */; };
-		42B5E4561BA5BA2D000FAE4E /* 784-target@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3301BA5BA2C000FAE4E /* 784-target@2x.png */; };
-		42B5E4571BA5BA2D000FAE4E /* 858-line-chart.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3311BA5BA2C000FAE4E /* 858-line-chart.png */; };
-		42B5E4581BA5BA2D000FAE4E /* 858-line-chart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3321BA5BA2C000FAE4E /* 858-line-chart@2x.png */; };
 		42B5E4591BA5BA2D000FAE4E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3331BA5BA2C000FAE4E /* LaunchScreen.xib */; };
 		42B5E4761BA5BA2D000FAE4E /* test_activity_running_828298988.db in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3521BA5BA2C000FAE4E /* test_activity_running_828298988.db */; };
 		42B5E4771BA5BA2D000FAE4E /* test_activity_running_830807000.db in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3531BA5BA2C000FAE4E /* test_activity_running_830807000.db */; };
@@ -2037,6 +2026,7 @@
 		42F914C4164DC0B900D0C950 /* GCCellGrid+Templates.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F914C3164DC0B900D0C950 /* GCCellGrid+Templates.m */; };
 		42F97BDB200B5344009905D2 /* RZExternal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; };
 		42F97BDC200B5344009905D2 /* RZExternal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42F97BEE200B7B97009905D2 /* ConnectStatsTestAppXCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F97BED200B7B97009905D2 /* ConnectStatsTestAppXCTests.m */; };
 		42FC17751E195DE300F55302 /* FITFitFieldsStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCEF821E181CF700F66AF1 /* FITFitFieldsStatistics.swift */; };
 		42FC177C1E195DE400F55302 /* FITFitFieldsStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCEF821E181CF700F66AF1 /* FITFitFieldsStatistics.swift */; };
 		42FC177D1E195DE800F55302 /* FITFitValueStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCEF841E181E3500F66AF1 /* FITFitValueStatistics.swift */; };
@@ -2322,6 +2312,13 @@
 			remoteGlobalIDString = 42B263CE1FF8309700E891A1;
 			remoteInfo = RZExternal;
 		};
+		42F97BF0200B7B97009905D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 428FF70015F36888007A88FA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 42B5E1B81BA5AEC9000FAE4E;
+			remoteInfo = ConnectStatsTestApp;
+		};
 		42FED0241656D60300364D21 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 428FF70015F36888007A88FA /* Project object */;
@@ -2507,7 +2504,6 @@
 		42289D571C7B9B4D005A5D0E /* GCStatsHistGraphViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStatsHistGraphViewController.m; path = src/GCStatsHistGraphViewController.m; sourceTree = "<group>"; };
 		42289D591C7B9CEE005A5D0E /* GCStatsHistGraphOptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStatsHistGraphOptionViewController.h; path = src/GCStatsHistGraphOptionViewController.h; sourceTree = "<group>"; };
 		42289D5A1C7B9CEE005A5D0E /* GCStatsHistGraphOptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStatsHistGraphOptionViewController.m; path = src/GCStatsHistGraphOptionViewController.m; sourceTree = "<group>"; };
-		42295DF91EC6F2A400F4F7EE /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
 		42295E021EC6F38C00F4F7EE /* GCTestServicesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestServicesViewController.h; path = src/GCTestServicesViewController.h; sourceTree = "<group>"; };
 		42295E031EC6F38C00F4F7EE /* GCTestServicesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestServicesViewController.m; path = src/GCTestServicesViewController.m; sourceTree = "<group>"; };
 		42295E061EC6F4D900F4F7EE /* GCTestServiceGarmin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestServiceGarmin.h; path = src/GCTestServiceGarmin.h; sourceTree = "<group>"; };
@@ -2558,7 +2554,6 @@
 		4231A2B71603BF9C00C02D79 /* GCActivityDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCActivityDetailViewController.m; path = src/GCActivityDetailViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4231CB5C165AB5E60020FDB2 /* GCSettingsProfilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsProfilesViewController.h; path = src/GCSettingsProfilesViewController.h; sourceTree = "<group>"; };
 		4231CB5D165AB5E60020FDB2 /* GCSettingsProfilesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSettingsProfilesViewController.m; path = src/GCSettingsProfilesViewController.m; sourceTree = "<group>"; };
-		4231CB5F165AD20D0020FDB2 /* bugs.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = bugs.rtf; sourceTree = "<group>"; };
 		423209341868D8F600C8F305 /* GCActivity+CachedTracks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = "GCActivity+CachedTracks.h"; path = "src/GCActivity+CachedTracks.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		423209351868D8F600C8F305 /* GCActivity+CachedTracks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCActivity+CachedTracks.m"; path = "src/GCActivity+CachedTracks.m"; sourceTree = "<group>"; };
 		423493FC160477F200A770D6 /* GCHistoryFieldDataSerie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHistoryFieldDataSerie.h; path = src/GCHistoryFieldDataSerie.h; sourceTree = "<group>"; };
@@ -2616,7 +2611,6 @@
 		4244676E184B756F009F807E /* GCActivityTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityTypes.m; path = src/GCActivityTypes.m; sourceTree = "<group>"; };
 		42446770184B82D7009F807E /* GCGarminListActivityTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminListActivityTypes.h; path = src/GCGarminListActivityTypes.h; sourceTree = "<group>"; };
 		42446771184B82D7009F807E /* GCGarminListActivityTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminListActivityTypes.m; path = src/GCGarminListActivityTypes.m; sourceTree = "<group>"; };
-		4244BF401800390E000C1D8A /* FieldsNotes.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = FieldsNotes.rtf; sourceTree = "<group>"; };
 		42453BA31DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCMapRouteLogicPointHolder.h; path = src/GCMapRouteLogicPointHolder.h; sourceTree = "<group>"; };
 		42453BA41DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCMapRouteLogicPointHolder.m; path = src/GCMapRouteLogicPointHolder.m; sourceTree = "<group>"; };
 		42453BA81DD8B5940073ACCA /* GCMapGradientPathOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCMapGradientPathOverlay.h; path = src/GCMapGradientPathOverlay.h; sourceTree = "<group>"; };
@@ -3132,7 +3126,7 @@
 		42B34A2C179C31D500688E9F /* GCViewActivityTypeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCViewActivityTypeButton.h; path = src/GCViewActivityTypeButton.h; sourceTree = "<group>"; };
 		42B34A2D179C31D500688E9F /* GCViewActivityTypeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCViewActivityTypeButton.m; path = src/GCViewActivityTypeButton.m; sourceTree = "<group>"; };
 		42B5E1B91BA5AEC9000FAE4E /* ConnectStatsTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ConnectStatsTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		42B5E1C71BA5AEC9000FAE4E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		42B5E1C71BA5AEC9000FAE4E /* ConnectStatsTestApp.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = ConnectStatsTestApp.xcassets; path = ../connectstatstestapp/ConnectStatsTestApp.xcassets; sourceTree = "<group>"; };
 		42B5E1CA1BA5AEC9000FAE4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		42B5E1CC1BA5AEC9000FAE4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42B5E1F11BA5AF9A000FAE4E /* GCAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCAppDelegate.m; path = src/GCAppDelegate.m; sourceTree = "<group>"; };
@@ -3174,15 +3168,7 @@
 		42B5E2CF1BA5B589000FAE4E /* ConnectStatsTestApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ConnectStatsTestApp.entitlements; sourceTree = "<group>"; };
 		42B5E2D11BA5B62E000FAE4E /* GCFitBitActivityTypesParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFitBitActivityTypesParser.h; path = src/GCFitBitActivityTypesParser.h; sourceTree = "<group>"; };
 		42B5E2D21BA5B62E000FAE4E /* GCFitBitActivityTypesParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFitBitActivityTypesParser.m; path = src/GCFitBitActivityTypesParser.m; sourceTree = "<group>"; };
-		42B5E32B1BA5BA2C000FAE4E /* 1099-list-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1099-list-1.png"; sourceTree = "<group>"; };
-		42B5E32C1BA5BA2C000FAE4E /* 1099-list-1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1099-list-1@2x.png"; sourceTree = "<group>"; };
-		42B5E32D1BA5BA2C000FAE4E /* 729-top-list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "729-top-list.png"; sourceTree = "<group>"; };
-		42B5E32E1BA5BA2C000FAE4E /* 729-top-list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "729-top-list@2x.png"; sourceTree = "<group>"; };
-		42B5E32F1BA5BA2C000FAE4E /* 784-target.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "784-target.png"; sourceTree = "<group>"; };
-		42B5E3301BA5BA2C000FAE4E /* 784-target@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "784-target@2x.png"; sourceTree = "<group>"; };
-		42B5E3311BA5BA2C000FAE4E /* 858-line-chart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "858-line-chart.png"; sourceTree = "<group>"; };
-		42B5E3321BA5BA2C000FAE4E /* 858-line-chart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "858-line-chart@2x.png"; sourceTree = "<group>"; };
-		42B5E3331BA5BA2C000FAE4E /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
+		42B5E3331BA5BA2C000FAE4E /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LaunchScreen.xib; path = ../connectstatstestapp/icons/LaunchScreen.xib; sourceTree = "<group>"; };
 		42B5E3521BA5BA2C000FAE4E /* test_activity_running_828298988.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_828298988.db; path = ../derived/test_activity_running_828298988.db; sourceTree = "<group>"; };
 		42B5E3531BA5BA2C000FAE4E /* test_activity_running_830807000.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_830807000.db; path = ../derived/test_activity_running_830807000.db; sourceTree = "<group>"; };
 		42B5E3541BA5BA2C000FAE4E /* test_activity_running_835175535.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_835175535.db; path = ../derived/test_activity_running_835175535.db; sourceTree = "<group>"; };
@@ -4097,7 +4083,6 @@
 		42D037C0168AF48300789E7D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		42D037C2168AF55900789E7D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		42D1D1FF1DEE66DB00F13D52 /* FITWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITWindowController.swift; path = src/FITWindowController.swift; sourceTree = "<group>"; };
-		42D1F1AD1629AC1600BCA068 /* todo.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = todo.rtf; sourceTree = "<group>"; };
 		42D8AEF71B1FB2CB00ADDD31 /* collected.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = collected.plist; sourceTree = "<group>"; };
 		42D8AEFA1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitSamplesToPointsParser.h; path = src/GCHealthKitSamplesToPointsParser.h; sourceTree = "<group>"; };
 		42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitSamplesToPointsParser.m; path = src/GCHealthKitSamplesToPointsParser.m; sourceTree = "<group>"; };
@@ -4201,6 +4186,9 @@
 		42F914AE164C538800D0C950 /* GCFormattedField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCFormattedField.m; path = src/GCFormattedField.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		42F914C2164DC0B900D0C950 /* GCCellGrid+Templates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCCellGrid+Templates.h"; path = "src/GCCellGrid+Templates.h"; sourceTree = "<group>"; };
 		42F914C3164DC0B900D0C950 /* GCCellGrid+Templates.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "GCCellGrid+Templates.m"; path = "src/GCCellGrid+Templates.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		42F97BEB200B7B97009905D2 /* ConnectStatsTestAppXCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnectStatsTestAppXCTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		42F97BED200B7B97009905D2 /* ConnectStatsTestAppXCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnectStatsTestAppXCTests.m; sourceTree = "<group>"; };
+		42F97BEF200B7B97009905D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42FC177F1E196E4B00F55302 /* GCTestActivityFitFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCTestActivityFitFile.swift; sourceTree = "<group>"; };
 		42FD55B71B90A39F0070B3B4 /* GCCellActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCCellActivity.h; path = src/GCCellActivity.h; sourceTree = "<group>"; };
 		42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCCellActivity.m; path = src/GCCellActivity.m; sourceTree = "<group>"; };
@@ -4384,6 +4372,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		42D8AF001B24CE8900ADDD31 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42F97BE8200B7B97009905D2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -5716,6 +5711,7 @@
 				42769BCD1DD2ABC9000390F1 /* FitFileExplorerTests.xctest */,
 				42AA8D611F547151009734D4 /* tennisstats.app */,
 				42AA8D781F547151009734D4 /* tennisstatsTests.xctest */,
+				42F97BEB200B7B97009905D2 /* ConnectStatsTestAppXCTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -5771,9 +5767,6 @@
 				42A99B221B780D5300994917 /* WatchSession */,
 				428FF73C15F37425007A88FA /* AppDelegate */,
 				428FF71415F36888007A88FA /* Supporting Files */,
-				42D1F1AD1629AC1600BCA068 /* todo.rtf */,
-				4231CB5F165AD20D0020FDB2 /* bugs.rtf */,
-				4244BF401800390E000C1D8A /* FieldsNotes.rtf */,
 			);
 			path = ConnectStats;
 			sourceTree = "<group>";
@@ -6398,7 +6391,6 @@
 		42B5E1BB1BA5AEC9000FAE4E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				42B5E1C71BA5AEC9000FAE4E /* Assets.xcassets */,
 				42B5E1C91BA5AEC9000FAE4E /* LaunchScreen.storyboard */,
 				42B5E2CF1BA5B589000FAE4E /* ConnectStatsTestApp.entitlements */,
 				42B5E2131BA5AF9A000FAE4E /* main.m */,
@@ -6458,18 +6450,10 @@
 		42B5E32A1BA5BA2C000FAE4E /* icons */ = {
 			isa = PBXGroup;
 			children = (
-				42295DF91EC6F2A400F4F7EE /* Icons.xcassets */,
-				42B5E32B1BA5BA2C000FAE4E /* 1099-list-1.png */,
-				42B5E32C1BA5BA2C000FAE4E /* 1099-list-1@2x.png */,
-				42B5E32D1BA5BA2C000FAE4E /* 729-top-list.png */,
-				42B5E32E1BA5BA2C000FAE4E /* 729-top-list@2x.png */,
-				42B5E32F1BA5BA2C000FAE4E /* 784-target.png */,
-				42B5E3301BA5BA2C000FAE4E /* 784-target@2x.png */,
-				42B5E3311BA5BA2C000FAE4E /* 858-line-chart.png */,
-				42B5E3321BA5BA2C000FAE4E /* 858-line-chart@2x.png */,
+				42B5E1C71BA5AEC9000FAE4E /* ConnectStatsTestApp.xcassets */,
 				42B5E3331BA5BA2C000FAE4E /* LaunchScreen.xib */,
 			);
-			path = icons;
+			name = icons;
 			sourceTree = "<group>";
 		};
 		42B5E3341BA5BA2C000FAE4E /* samples */ = {
@@ -7494,9 +7478,10 @@
 		42D8AF0E1B24CE9300ADDD31 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				42AA8D7B1F547151009734D4 /* TennisStatsTests */,
-				42B5E1BA1BA5AEC9000FAE4E /* ConnectStatsTestApp */,
 				428FF72B15F36888007A88FA /* ConnectStatsXCTests */,
+				42B5E1BA1BA5AEC9000FAE4E /* ConnectStatsTestApp */,
+				42F97BEC200B7B97009905D2 /* ConnectStatsTestAppXCTests */,
+				42AA8D7B1F547151009734D4 /* TennisStatsTests */,
 				42769BCE1DD2ABC9000390F1 /* FitFileExplorerTests */,
 				42D8AF041B24CE8900ADDD31 /* HealthStatsTests */,
 			);
@@ -7691,6 +7676,15 @@
 				42250225166A0D4D002CD429 /* GCFormattedFieldText.m */,
 			);
 			name = TextFormat;
+			sourceTree = "<group>";
+		};
+		42F97BEC200B7B97009905D2 /* ConnectStatsTestAppXCTests */ = {
+			isa = PBXGroup;
+			children = (
+				42F97BED200B7B97009905D2 /* ConnectStatsTestAppXCTests.m */,
+				42F97BEF200B7B97009905D2 /* Info.plist */,
+			);
+			path = ConnectStatsTestAppXCTests;
 			sourceTree = "<group>";
 		};
 		42FD55B61B90A37A0070B3B4 /* Specialized */ = {
@@ -7949,6 +7943,24 @@
 			productReference = 42D8AF031B24CE8900ADDD31 /* HealthStatsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		42F97BEA200B7B97009905D2 /* ConnectStatsTestAppXCTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42F97BF2200B7B97009905D2 /* Build configuration list for PBXNativeTarget "ConnectStatsTestAppXCTests" */;
+			buildPhases = (
+				42F97BE7200B7B97009905D2 /* Sources */,
+				42F97BE8200B7B97009905D2 /* Frameworks */,
+				42F97BE9200B7B97009905D2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				42F97BF1200B7B97009905D2 /* PBXTargetDependency */,
+			);
+			name = ConnectStatsTestAppXCTests;
+			productName = ConnectStatsTestAppXCTests;
+			productReference = 42F97BEB200B7B97009905D2 /* ConnectStatsTestAppXCTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -8046,6 +8058,11 @@
 						LastSwiftMigration = 0810;
 						TestTargetID = 422FAEA319A1DD6000D09773;
 					};
+					42F97BEA200B7B97009905D2 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 42B5E1B81BA5AEC9000FAE4E;
+					};
 				};
 			};
 			buildConfigurationList = 428FF70315F36888007A88FA /* Build configuration list for PBXProject "ConnectStats" */;
@@ -8103,6 +8120,7 @@
 				42769BCC1DD2ABC9000390F1 /* FitFileExplorerTests */,
 				42AA8D601F547151009734D4 /* tennisstats */,
 				42AA8D771F547151009734D4 /* tennisstatsTests */,
+				42F97BEA200B7B97009905D2 /* ConnectStatsTestAppXCTests */,
 			);
 		};
 /* End PBXProject section */
@@ -8231,7 +8249,6 @@
 				422FAFC719A1DD6000D09773 /* InfoPlist.strings in Resources */,
 				422FAFCD19A1DD6000D09773 /* Localizable.strings in Resources */,
 				422CCE7F1B7EA7A600A4DAEB /* Services.xcassets in Resources */,
-				422FAFCE19A1DD6000D09773 /* bugs.rtf in Resources */,
 				422CCE8E1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */,
 				422FAFD219A1DD6000D09773 /* Media.xcassets in Resources */,
 				4245DC821BE80D0400D5B68E /* Cells.xcassets in Resources */,
@@ -8240,7 +8257,6 @@
 				42F4E4DA1B56EDC00009F2BA /* HealthStatsLaunchScreen.xib in Resources */,
 				4211C53419AB043A000DEF87 /* version.plist in Resources */,
 				422CCE821B7EA81500A4DAEB /* Fields.xcassets in Resources */,
-				422FAFE519A1DD6000D09773 /* FieldsNotes.rtf in Resources */,
 				422CCE851B7EA8C100A4DAEB /* Weather.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9022,7 +9038,6 @@
 			files = (
 				427F93391BEA9A5900C177F9 /* activity_379125535.json in Resources */,
 				42B5E5571BA5BA2D000FAE4E /* track_364956048.db in Resources */,
-				42B5E4511BA5BA2D000FAE4E /* 1099-list-1.png in Resources */,
 				42B5E4FF1BA5BA2D000FAE4E /* track_289943601.db in Resources */,
 				428BAD011CB149C50041468A /* activityweather_1089803211.json in Resources */,
 				427F93581BEA9A5900C177F9 /* user.json in Resources */,
@@ -9040,7 +9055,6 @@
 				42B5E5531BA5BA2D000FAE4E /* track_356048305.db in Resources */,
 				427F93431BEA9A5900C177F9 /* activitylaps_400587208.json in Resources */,
 				42B5E4AD1BA5BA2D000FAE4E /* track_106460513.db in Resources */,
-				42B5E4581BA5BA2D000FAE4E /* 858-line-chart@2x.png in Resources */,
 				42B5E4881BA5BA2D000FAE4E /* strava_list_5.json in Resources */,
 				42B5E4771BA5BA2D000FAE4E /* test_activity_running_830807000.db in Resources */,
 				428BAD031CB149C50041468A /* activityweather_1108367966.json in Resources */,
@@ -9097,7 +9111,6 @@
 				42B5E4E61BA5BA2D000FAE4E /* track_281233360.db in Resources */,
 				42B5E4AE1BA5BA2D000FAE4E /* track_157229277.db in Resources */,
 				42B5E5311BA5BA2D000FAE4E /* track_328493174.db in Resources */,
-				42B5E4521BA5BA2D000FAE4E /* 1099-list-1@2x.png in Resources */,
 				42B5E4F71BA5BA2D000FAE4E /* track_287141938.db in Resources */,
 				42B5E53B1BA5BA2D000FAE4E /* track_334465968.db in Resources */,
 				427F93531BEA9A5900C177F9 /* stats_cycling_weekly.csv in Resources */,
@@ -9134,14 +9147,11 @@
 				42B5E4901BA5BA2D000FAE4E /* sporttracks_list_2.json in Resources */,
 				42B5E5521BA5BA2D000FAE4E /* track_356048291.db in Resources */,
 				422AC6A61C1CC9AA002DDA9C /* test_activity_day___healthkit__Default_20151106.db in Resources */,
-				42B5E4551BA5BA2D000FAE4E /* 784-target.png in Resources */,
 				42B5E54E1BA5BA2D000FAE4E /* track_354535237.db in Resources */,
 				42B5E4F11BA5BA2D000FAE4E /* track_283658644.db in Resources */,
 				427F93541BEA9A5900C177F9 /* stats_cycling_yearly.csv in Resources */,
-				42B5E4531BA5BA2D000FAE4E /* 729-top-list.png in Resources */,
 				42B5E4C91BA5BA2D000FAE4E /* track_265854403.db in Resources */,
 				42B5E4AC1BA5BA2D000FAE4E /* activities_testaccount.db in Resources */,
-				42295DFA1EC6F2A400F4F7EE /* Icons.xcassets in Resources */,
 				422AC6A71C1CC9AF002DDA9C /* test_activity_day___healthkit__Default_20151109.db in Resources */,
 				42B5E5451BA5BA2D000FAE4E /* track_342633612.db in Resources */,
 				42B5E5411BA5BA2D000FAE4E /* track_337857802.db in Resources */,
@@ -9167,12 +9177,11 @@
 				42B5E52B1BA5BA2D000FAE4E /* track_325023051.db in Resources */,
 				42B5E47E1BA5BA2D000FAE4E /* fitbit_weight.json in Resources */,
 				420119C01F51BE270093B2CD /* babolat2017_session_9457.json in Resources */,
-				42B5E4561BA5BA2D000FAE4E /* 784-target@2x.png in Resources */,
 				42B5E51C1BA5BA2D000FAE4E /* track_312525505.db in Resources */,
 				427F93571BEA9A5900C177F9 /* stats_running_yearly.csv in Resources */,
 				42B5E5461BA5BA2D000FAE4E /* track_344756558.db in Resources */,
 				42B5E4841BA5BA2D000FAE4E /* strava_list_1.json in Resources */,
-				42B5E1C81BA5AEC9000FAE4E /* Assets.xcassets in Resources */,
+				42B5E1C81BA5AEC9000FAE4E /* ConnectStatsTestApp.xcassets in Resources */,
 				42B5E4B41BA5BA2D000FAE4E /* track_199000267.db in Resources */,
 				42B5E5161BA5BA2D000FAE4E /* track_301156253.db in Resources */,
 				42B5E51E1BA5BA2D000FAE4E /* track_315189401.db in Resources */,
@@ -9215,7 +9224,6 @@
 				42B5E4EC1BA5BA2D000FAE4E /* track_282721916.db in Resources */,
 				42B5E4F21BA5BA2D000FAE4E /* track_286113803.db in Resources */,
 				42B5E5041BA5BA2D000FAE4E /* track_294946041.db in Resources */,
-				42B5E4571BA5BA2D000FAE4E /* 858-line-chart.png in Resources */,
 				42B5E4B91BA5BA2D000FAE4E /* track_203107435.db in Resources */,
 				427F93721BEC06B300C177F9 /* test_activity_running_837769405.db in Resources */,
 				42B5E4E81BA5BA2D000FAE4E /* track_281519039.db in Resources */,
@@ -9347,7 +9355,6 @@
 				42B5E55A1BA5BA2D000FAE4E /* track_64318899.db in Resources */,
 				42B5E4B21BA5BA2D000FAE4E /* track_180037165.db in Resources */,
 				42B5E5581BA5BA2D000FAE4E /* track_364956086.db in Resources */,
-				42B5E4541BA5BA2D000FAE4E /* 729-top-list@2x.png in Resources */,
 				427F93401BEA9A5900C177F9 /* activitydetails_255778175.json in Resources */,
 				42B5E56A1BA5BA2D000FAE4E /* activity_397686290.html in Resources */,
 				42B5E48B1BA5BA2D000FAE4E /* moves.json in Resources */,
@@ -9364,6 +9371,13 @@
 				42D8AF211B24D28E00ADDD31 /* health_workout_0.data in Resources */,
 				42E11EB71B36C74C00D90E66 /* health_daydetail_20150618.data in Resources */,
 				42E11EB81B36C74C00D90E66 /* health_daysummary_20150620.data in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42F97BE9200B7B97009905D2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10498,6 +10512,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		42F97BE7200B7B97009905D2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42F97BEE200B7B97009905D2 /* ConnectStatsTestAppXCTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -10615,6 +10637,11 @@
 			isa = PBXTargetDependency;
 			name = RZExternal;
 			targetProxy = 42F97BDD200B5344009905D2 /* PBXContainerItemProxy */;
+		};
+		42F97BF1200B7B97009905D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 42B5E1B81BA5AEC9000FAE4E /* ConnectStatsTestApp */;
+			targetProxy = 42F97BF0200B7B97009905D2 /* PBXContainerItemProxy */;
 		};
 		42FED0251656D60300364D21 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -11386,7 +11413,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 722F58FE2B9F9EF1C1D899FD /* Pods-ConnectStatsTestApp.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsTestAppIcon;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -11425,7 +11452,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EBDC45B331B669A42DAFAD9B /* Pods-ConnectStatsTestApp.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsTestAppIcon;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
@@ -11513,6 +11540,74 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HealthStats.app/HealthStats";
+			};
+			name = Release;
+		};
+		42F97BF3200B7B97009905D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = M7QSSF3624;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = ConnectStatsTestAppXCTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.ConnectStatsTestAppXCTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ConnectStatsTestApp.app/ConnectStatsTestApp";
+			};
+			name = Debug;
+		};
+		42F97BF4200B7B97009905D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = M7QSSF3624;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = ConnectStatsTestAppXCTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.ConnectStatsTestAppXCTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ConnectStatsTestApp.app/ConnectStatsTestApp";
 			};
 			name = Release;
 		};
@@ -11623,6 +11718,15 @@
 			buildConfigurations = (
 				42D8AF0C1B24CE8900ADDD31 /* Debug */,
 				42D8AF0D1B24CE8900ADDD31 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		42F97BF2200B7B97009905D2 /* Build configuration list for PBXNativeTarget "ConnectStatsTestAppXCTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42F97BF3200B7B97009905D2 /* Debug */,
+				42F97BF4200B7B97009905D2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

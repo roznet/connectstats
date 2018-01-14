@@ -25,12 +25,6 @@
     [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-    
-}
-
 -(void)testTableRemap{
     RZTableIndexRemap * remap = [RZTableIndexRemap tableIndexRemap];
     [remap addSection:4 withRows:@[ @(9), @(0) ]];
