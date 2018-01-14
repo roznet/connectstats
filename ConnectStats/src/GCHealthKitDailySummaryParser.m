@@ -29,7 +29,7 @@
 
 #ifdef GC_USE_HEALTHKIT
 #import <HealthKit/HealthKit.h>
-#import "RZUtilsHealthkit/RZUtilsHealthkit.h"
+#import <RZUtilsHealthkit/RZUtilsHealthkit.h>
 #endif
 
 #import "GCService.h"
