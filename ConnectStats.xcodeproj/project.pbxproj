@@ -2027,6 +2027,7 @@
 		42F97BDB200B5344009905D2 /* RZExternal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; };
 		42F97BDC200B5344009905D2 /* RZExternal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42F97BEE200B7B97009905D2 /* ConnectStatsTestAppXCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F97BED200B7B97009905D2 /* ConnectStatsTestAppXCTests.m */; };
+		42F97C00200B9DE6009905D2 /* RZUtilsHealthkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872C31EACA089000D4115 /* RZUtilsHealthkit.framework */; };
 		42FC17751E195DE300F55302 /* FITFitFieldsStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCEF821E181CF700F66AF1 /* FITFitFieldsStatistics.swift */; };
 		42FC177C1E195DE400F55302 /* FITFitFieldsStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCEF821E181CF700F66AF1 /* FITFitFieldsStatistics.swift */; };
 		42FC177D1E195DE800F55302 /* FITFitValueStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCEF841E181E3500F66AF1 /* FITFitValueStatistics.swift */; };
@@ -4357,6 +4358,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42F97C00200B9DE6009905D2 /* RZUtilsHealthkit.framework in Frameworks */,
 				428BE8832001409200E14A61 /* RZExternalCpp.framework in Frameworks */,
 				428BE88020013E0A00E14A61 /* RZUtilsTestInfra.framework in Frameworks */,
 				42EBC0321FFAE1000009B385 /* RZExternal.framework in Frameworks */,
