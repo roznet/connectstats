@@ -90,6 +90,18 @@
 	};
 }
 
+-(NSString*)description{
+    NSString * status = @"Pending";
+    if( self.total > 0){
+        if( self.total==self.success){
+            status = [NSString stringWithFormat:@"%lu Ok", (unsigned long)self.success];
+        }else{
+            status = [NSString stringWithFormat:@"%lu/%lu FAILED", (unsigned long)self.failure, (unsigned long)self.total];
+        }
+    }
+    return [NSString stringWithFormat:@"<%@: [%@ %@] %@>", NSStringFromClass([self class]), self.testClass, self.testDefinition[TK_SEL], status];
+}
+
 -(void)logString:(NSString*)aStr{
 	[log addObject:aStr];
 }

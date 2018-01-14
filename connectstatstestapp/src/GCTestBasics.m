@@ -112,7 +112,6 @@
         }
     }
     [self assessTestResult:@"Swim algo" result:swim == countswim];
-
 }
 
 #pragma mark - TracksLap

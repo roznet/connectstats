@@ -23,14 +23,17 @@
 //  SOFTWARE.
 //
 
-const NSString * kExpectationAllDone = @"RZUnitRunner All Done";
 
 #import <XCTest/XCTest.h>
 #import <RZUtilsTestInfra/RZUtilsTestInfra.h>
 #import "GCTestBasics.h"
 
+NSString * kExpectationAllDone = @"RZUnitRunner All Done";
+
 @interface ConnectStatsTestAppXCTests : XCTestCase<RZUnitTestSource,RZChildObject>
 @property (nonatomic,retain) RZUnitTestRunner * runner;
+@property (nonatomic,retain) XCTestExpectation * expectation;
+@property (nonatomic,retain) NSString * testClassToRun;
 @end
 
 @implementation ConnectStatsTestAppXCTests
@@ -46,34 +49,92 @@ const NSString * kExpectationAllDone = @"RZUnitRunner All Done";
 - (void)tearDown {
     [self.runner detach:self];
     self.runner = nil;
+    self.testClassToRun = nil;
+    self.expectation = nil;
     
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
-- (void)testExecuteRZRunner{
-    XCTestExpectation * exp = [self expectationWithDescription:kExpectationAllDone];
+-(void)rzRunnerExecute{
+    self.expectation = [self expectationWithDescription:kExpectationAllDone];
     
     [self.runner run];
     
-    [self waitForExpectations:@[ exp ] timeout:30];
+    [self waitForExpectations:@[ self.expectation ] timeout:60];
+    for (RZUnitTestRecord * record in self.runner.collectedResults) {
+        XCTAssertEqual(record.success, record.total, @"%@", record);
+        if( record.success != record.total){
+            for (UnitTestRecordDetail * detail in record.failureDetails) {
+                // To put the error detail on the report
+                XCTAssertTrue(false, @"%@", detail);
+            }
+        }
+    }
+}
+/*
+
+NSStringFromClass([GCTestCommunications class])
+*/
+
+-(void)testGCTestCommunications{
+    self.testClassToRun = @"GCTestCommunications";
+    [self rzRunnerExecute];
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+-(void)testGCFitTest{
+    self.testClassToRun = @"GCFitTest";
+    [self rzRunnerExecute];
+}
+
+-(void)testGCTestOrganizer{
+    self.testClassToRun = @"GCTestOrganizer";
+    [self rzRunnerExecute];
+}
+-(void)testGCTestUIUnitTest{
+    self.testClassToRun = @"GCTestUIUnitTest";
+    [self rzRunnerExecute];
+}
+
+-(void)testGCTestDerived{
+    self.testClassToRun = @"GCTestDerived";
+    [self rzRunnerExecute];
+}
+
+-(void)testGCTestParsing{
+    self.testClassToRun = @"GCTestParsing";
+    [self rzRunnerExecute];
+}
+
+-(void)testGCTestStats{
+    self.testClassToRun = @"GCTestStats";
+    [self rzRunnerExecute];
+}
+
+-(void)testGCTestTennis{
+    self.testClassToRun = @"GCTestTennis";
+    [self rzRunnerExecute];
+}
+
+
+- (void)testGCTestBasics{
+    self.testClassToRun = @"GCTestBasics";
+    [self rzRunnerExecute];
+}
+
+-(void)testGCTestTracks{
+    self.testClassToRun = @"GCTestParsing";
+    [self rzRunnerExecute];
 }
 
 -(NSArray*)testClassNames{
-    return @[ NSStringFromClass([GCTestBasics class])];
+    return @[ self.testClassToRun];
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
     if( [theInfo.stringInfo isEqualToString:kRZUnitTestAllDone] ){
-        XCTestExpectation * exp = [self expectationWithDescription:kExpectationAllDone];
-        [exp fulfill];
+        [self.expectation fulfill];
+        self.expectation = nil;
     }
 }
 @end

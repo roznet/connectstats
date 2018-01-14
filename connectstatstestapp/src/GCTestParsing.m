@@ -153,7 +153,7 @@
     [self assessTestResult:@"Strava Parsed 30 act" result:[parser.activities count]==30];
     GCStravaActivityStreamsParser * stream = [GCStravaActivityStreamsParser activityStreamsParser:[NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"strava_stream_122027318.json"]]];
     [self assessTestResult:@"Strava Parsed points" result:stream.points.count == 565];
-
+    
     NSArray * samples = @[ @[ @"140735593", @519, @4 ],
                            @[ @"141871826", @502, @4 ],
                            @[ @"140735927", @440, @6 ] ];
