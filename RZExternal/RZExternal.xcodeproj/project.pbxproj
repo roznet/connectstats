@@ -88,7 +88,7 @@
 		42A008F820012B4800019CB3 /* fit_factory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 42A0082220012B4800019CB3 /* fit_factory.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		42A008F920012B4800019CB3 /* fit_field.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42A0082320012B4800019CB3 /* fit_field.cpp */; };
 		42A008FA20012B4800019CB3 /* fit_field.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 42A0082420012B4800019CB3 /* fit_field.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		42A008FB20012B4800019CB3 /* fit_field_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42A0082520012B4800019CB3 /* fit_field_base.cpp */; };
+		42A008FB20012B4800019CB3 /* fit_field_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42A0082520012B4800019CB3 /* fit_field_base.cpp */; settings = {COMPILER_FLAGS = "-Xclang -analyzer-disable-all-checks"; }; };
 		42A008FC20012B4800019CB3 /* fit_field_base.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 42A0082620012B4800019CB3 /* fit_field_base.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		42A008FD20012B4800019CB3 /* fit_field_capabilities_mesg.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 42A0082720012B4800019CB3 /* fit_field_capabilities_mesg.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		42A008FE20012B4800019CB3 /* fit_field_capabilities_mesg_listener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 42A0082820012B4800019CB3 /* fit_field_capabilities_mesg_listener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -260,7 +260,7 @@
 		42B265931FF8314400E891A1 /* ECSlidingConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264171FF8314400E891A1 /* ECSlidingConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B265941FF8314400E891A1 /* ECSlidingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264181FF8314400E891A1 /* ECSlidingViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		42B265951FF8314400E891A1 /* ECSlidingSegue.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264191FF8314400E891A1 /* ECSlidingSegue.h */; };
-		42B265961FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2641A1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.m */; };
+		42B265961FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2641A1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		42B265971FF8314400E891A1 /* ECSlidingAnimationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2641B1FF8314400E891A1 /* ECSlidingAnimationController.h */; };
 		42B265981FF8314400E891A1 /* ECSlidingInteractiveTransition.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2641C1FF8314400E891A1 /* ECSlidingInteractiveTransition.h */; };
 		42B265991FF8314400E891A1 /* ECSlidingViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2641D1FF8314400E891A1 /* ECSlidingViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -285,7 +285,7 @@
 		42B265AC1FF8314400E891A1 /* OAuth1WithingsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264341FF8314400E891A1 /* OAuth1WithingsController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B265AD1FF8314400E891A1 /* OAuth1WithingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264351FF8314400E891A1 /* OAuth1WithingsController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		42B265AE1FF8314400E891A1 /* NSString+URLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264361FF8314400E891A1 /* NSString+URLEncoding.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		42B265AF1FF8314400E891A1 /* OAuth1Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264371FF8314400E891A1 /* OAuth1Controller.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		42B265AF1FF8314400E891A1 /* OAuth1Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264371FF8314400E891A1 /* OAuth1Controller.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -Xclang -analyzer-disable-all-checks"; }; };
 		42B265B01FF8314400E891A1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264391FF8314400E891A1 /* MBProgressHUD.m */; };
 		42B265B11FF8314400E891A1 /* MBProgressHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2643A1FF8314400E891A1 /* MBProgressHUD.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B2668D1FF8314400E891A1 /* UIImage+Diff.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265191FF8314400E891A1 /* UIImage+Diff.h */; };
@@ -303,9 +303,9 @@
 		42B2669B1FF8314500E891A1 /* GTMOAuth2Authentication.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265291FF8314400E891A1 /* GTMOAuth2Authentication.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B2669C1FF8314500E891A1 /* GTMOAuth2ViewTouch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42B2652A1FF8314400E891A1 /* GTMOAuth2ViewTouch.xib */; };
 		42B2669D1FF8314500E891A1 /* GTMOAuth2SignIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2652B1FF8314400E891A1 /* GTMOAuth2SignIn.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		42B2669E1FF8314500E891A1 /* GTMSessionFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2652C1FF8314400E891A1 /* GTMSessionFetcher.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		42B2669E1FF8314500E891A1 /* GTMSessionFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2652C1FF8314400E891A1 /* GTMSessionFetcher.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -Xclang -analyzer-disable-all-checks"; }; };
 		42B2669F1FF8314500E891A1 /* GTMOAuth2ViewControllerTouch.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2652D1FF8314400E891A1 /* GTMOAuth2ViewControllerTouch.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266A11FF8314500E891A1 /* GTMOAuth2Authentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2652F1FF8314400E891A1 /* GTMOAuth2Authentication.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		42B266A11FF8314500E891A1 /* GTMOAuth2Authentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2652F1FF8314400E891A1 /* GTMOAuth2Authentication.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Xclang -analyzer-disable-all-checks"; }; };
 		42B266A21FF8314500E891A1 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265321FF8314400E891A1 /* unzip.c */; };
 		42B266A31FF8314500E891A1 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265331FF8314400E891A1 /* zip.c */; };
 		42B266A41FF8314500E891A1 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265341FF8314400E891A1 /* ioapi.c */; };

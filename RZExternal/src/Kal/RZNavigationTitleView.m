@@ -14,6 +14,11 @@
 
 @implementation RZNavigationTitleView
 
+-(void)dealloc{
+    [_title release];
+    [_subtitle release];
+    [super dealloc];
+}
 
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

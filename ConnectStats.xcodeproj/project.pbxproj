@@ -711,13 +711,6 @@
 		42A95B1C16321320000B2082 /* GCLap.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A95B1B16321320000B2082 /* GCLap.m */; };
 		42A95B3A1632DB4B000B2082 /* GCMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A95B391632DB4B000B2082 /* GCMapAnnotation.m */; };
 		42A95B3D1632FC24000B2082 /* GCMapLegendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A95B3C1632FC24000B2082 /* GCMapLegendView.m */; };
-		42A99AFE1B780AF200994917 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42A99AFC1B780AF200994917 /* Interface.storyboard */; };
-		42A99B001B780AF200994917 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42A99AFF1B780AF200994917 /* Assets.xcassets */; };
-		42A99B071B780AF200994917 /* healthwatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 42A99B061B780AF200994917 /* healthwatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		42A99B0D1B780AF200994917 /* GCWSummaryInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A99B0C1B780AF200994917 /* GCWSummaryInterfaceController.m */; };
-		42A99B101B780AF200994917 /* GCWExtensionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A99B0F1B780AF200994917 /* GCWExtensionDelegate.m */; };
-		42A99B131B780AF200994917 /* GCWGlanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A99B121B780AF200994917 /* GCWGlanceController.m */; };
-		42A99B151B780AF200994917 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42A99B141B780AF200994917 /* Assets.xcassets */; };
 		42A99B251B780D9900994917 /* GCWatchSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A99B241B780D9900994917 /* GCWatchSessionManager.m */; };
 		42A99B261B780D9900994917 /* GCWatchSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A99B241B780D9900994917 /* GCWatchSessionManager.m */; };
 		42AA288C1637F56F0054F84A /* GCActivitySearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA288B1637F56F0054F84A /* GCActivitySearch.m */; };
@@ -1903,7 +1896,6 @@
 		42C072C21AE2FAE000E7E066 /* GCMapWindCompass.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C072C11AE2FAE000E7E066 /* GCMapWindCompass.m */; };
 		42C1080D1B7DE8B000092315 /* GCApplicationContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C1080C1B7DE8B000092315 /* GCApplicationContext.m */; };
 		42C1080E1B7DE8B000092315 /* GCApplicationContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C1080C1B7DE8B000092315 /* GCApplicationContext.m */; };
-		42C1080F1B7DE8B000092315 /* GCApplicationContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C1080C1B7DE8B000092315 /* GCApplicationContext.m */; };
 		42C3CF471DA15E6900C25709 /* GCAppGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C3CF461DA15E6900C25709 /* GCAppGlobal.swift */; };
 		42C3CF481DA15E6900C25709 /* GCAppGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C3CF461DA15E6900C25709 /* GCAppGlobal.swift */; };
 		42C4159A17B1A23800EBBAFB /* GCActivity+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C4159917B1A23800EBBAFB /* GCActivity+UI.m */; };
@@ -2173,20 +2165,6 @@
 			remoteGlobalIDString = 42382AA91EAC824900252217;
 			remoteInfo = RZUtilsHealthkit;
 		};
-		42A99B081B780AF200994917 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 428FF70015F36888007A88FA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 42A99B051B780AF200994917;
-			remoteInfo = "healthwatch Extension";
-		};
-		42A99B171B780AF200994917 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 428FF70015F36888007A88FA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 42A99AF91B780AF200994917;
-			remoteInfo = healthwatch;
-		};
 		42AA8D791F547151009734D4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 428FF70015F36888007A88FA /* Project object */;
@@ -2345,17 +2323,6 @@
 				424B562D1D3BDBBF00903A99 /* RZUtils.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		42A99B1F1B780AF200994917 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				42A99B071B780AF200994917 /* healthwatch Extension.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		42A99B211B780AF200994917 /* Embed Watch Content */ = {
@@ -2920,11 +2887,9 @@
 		42A95B391632DB4B000B2082 /* GCMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCMapAnnotation.m; path = src/GCMapAnnotation.m; sourceTree = "<group>"; };
 		42A95B3B1632FC23000B2082 /* GCMapLegendView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCMapLegendView.h; path = src/GCMapLegendView.h; sourceTree = "<group>"; };
 		42A95B3C1632FC24000B2082 /* GCMapLegendView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCMapLegendView.m; path = src/GCMapLegendView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		42A99AFA1B780AF200994917 /* healthwatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = healthwatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A99AFD1B780AF200994917 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		42A99AFF1B780AF200994917 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		42A99B011B780AF200994917 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		42A99B061B780AF200994917 /* healthwatch Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "healthwatch Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A99B0B1B780AF200994917 /* GCWSummaryInterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCWSummaryInterfaceController.h; sourceTree = "<group>"; };
 		42A99B0C1B780AF200994917 /* GCWSummaryInterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCWSummaryInterfaceController.m; sourceTree = "<group>"; };
 		42A99B0E1B780AF200994917 /* GCWExtensionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCWExtensionDelegate.h; sourceTree = "<group>"; };
@@ -4206,13 +4171,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		16E2300A8C7CB464EA0564CB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		422FAFA919A1DD6000D09773 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -4321,13 +4279,6 @@
 				428FF72715F36888007A88FA /* UIKit.framework in Frameworks */,
 				42B3AB7A1D27FF080072D4CA /* RZUtils.framework in Frameworks */,
 				428FF72815F36888007A88FA /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		42A99B031B780AF200994917 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5706,8 +5657,6 @@
 				428FF72415F36888007A88FA /* ConnectStatsXCTests.xctest */,
 				422FAFF119A1DD6000D09773 /* HealthStats.app */,
 				42D8AF031B24CE8900ADDD31 /* HealthStatsTests.xctest */,
-				42A99AFA1B780AF200994917 /* healthwatch.app */,
-				42A99B061B780AF200994917 /* healthwatch Extension.appex */,
 				42B5E1B91BA5AEC9000FAE4E /* ConnectStatsTestApp.app */,
 				4253B4561CD49F7E00437E6A /* FitFileExplorer.app */,
 				42769BCD1DD2ABC9000390F1 /* FitFileExplorerTests.xctest */,
@@ -7734,7 +7683,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				42A99B181B780AF200994917 /* PBXTargetDependency */,
 				42BFC23F1DCF4EA200EAD40E /* PBXTargetDependency */,
 				42BFC2431DCF4EA200EAD40E /* PBXTargetDependency */,
 				422F521E1DFB567200DD5551 /* PBXTargetDependency */,
@@ -7828,41 +7776,6 @@
 			productName = GarminConnectTests;
 			productReference = 428FF72415F36888007A88FA /* ConnectStatsXCTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		42A99AF91B780AF200994917 /* healthwatch */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 42A99B201B780AF200994917 /* Build configuration list for PBXNativeTarget "healthwatch" */;
-			buildPhases = (
-				42A99AF81B780AF200994917 /* Resources */,
-				42A99B1F1B780AF200994917 /* Embed App Extensions */,
-				16E2300A8C7CB464EA0564CB /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				42A99B091B780AF200994917 /* PBXTargetDependency */,
-			);
-			name = healthwatch;
-			productName = healthwatch;
-			productReference = 42A99AFA1B780AF200994917 /* healthwatch.app */;
-			productType = "com.apple.product-type.application.watchapp2";
-		};
-		42A99B051B780AF200994917 /* healthwatch Extension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 42A99B1E1B780AF200994917 /* Build configuration list for PBXNativeTarget "healthwatch Extension" */;
-			buildPhases = (
-				42A99B021B780AF200994917 /* Sources */,
-				42A99B031B780AF200994917 /* Frameworks */,
-				42A99B041B780AF200994917 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "healthwatch Extension";
-			productName = "healthwatch Extension";
-			productReference = 42A99B061B780AF200994917 /* healthwatch Extension.appex */;
-			productType = "com.apple.product-type.watchkit2-extension";
 		};
 		42AA8D601F547151009734D4 /* tennisstats */ = {
 			isa = PBXNativeTarget;
@@ -8016,14 +7929,6 @@
 					428FF72315F36888007A88FA = {
 						LastSwiftMigration = 0800;
 					};
-					42A99AF91B780AF200994917 = {
-						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = M7QSSF3624;
-					};
-					42A99B051B780AF200994917 = {
-						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = M7QSSF3624;
-					};
 					42AA8D601F547151009734D4 = {
 						CreatedOnToolsVersion = 9.0;
 						LastSwiftMigration = 0900;
@@ -8117,8 +8022,6 @@
 				4253B4551CD49F7E00437E6A /* FitFileExplorer */,
 				422FAEA319A1DD6000D09773 /* HealthStats */,
 				42D8AF021B24CE8900ADDD31 /* HealthStatsTests */,
-				42A99AF91B780AF200994917 /* healthwatch */,
-				42A99B051B780AF200994917 /* healthwatch Extension */,
 				42769BCC1DD2ABC9000390F1 /* FitFileExplorerTests */,
 				42AA8D601F547151009734D4 /* tennisstats */,
 				42AA8D771F547151009734D4 /* tennisstatsTests */,
@@ -8984,23 +8887,6 @@
 				42BB0D1C1AB4A9A0008D5A10 /* activityweather_534422614.json in Resources */,
 				42BB0C591AB4A99F008D5A10 /* activityweather_430968905.json in Resources */,
 				42BB0C8D1AB4A99F008D5A10 /* activityweather_459578690.json in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		42A99AF81B780AF200994917 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				42A99B001B780AF200994917 /* Assets.xcassets in Resources */,
-				42A99AFE1B780AF200994917 /* Interface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		42A99B041B780AF200994917 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				42A99B151B780AF200994917 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10177,17 +10063,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		42A99B021B780AF200994917 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				42C1080F1B7DE8B000092315 /* GCApplicationContext.m in Sources */,
-				42A99B101B780AF200994917 /* GCWExtensionDelegate.m in Sources */,
-				42A99B0D1B780AF200994917 /* GCWSummaryInterfaceController.m in Sources */,
-				42A99B131B780AF200994917 /* GCWGlanceController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		42AA8D5D1F547151009734D4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -10570,16 +10445,6 @@
 			name = RZUtilsHealthkit;
 			targetProxy = 42A3609F1EAF6392008EB4E3 /* PBXContainerItemProxy */;
 		};
-		42A99B091B780AF200994917 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 42A99B051B780AF200994917 /* healthwatch Extension */;
-			targetProxy = 42A99B081B780AF200994917 /* PBXContainerItemProxy */;
-		};
-		42A99B181B780AF200994917 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 42A99AF91B780AF200994917 /* healthwatch */;
-			targetProxy = 42A99B171B780AF200994917 /* PBXContainerItemProxy */;
-		};
 		42AA8D7A1F547151009734D4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 42AA8D601F547151009734D4 /* tennisstats */;
@@ -10714,7 +10579,6 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = HealthStatsAppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = HealthStats/HealthStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -10756,7 +10620,6 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = HealthStatsAppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = HealthStats/HealthStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -11147,118 +11010,6 @@
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUNDLE_LOADER)";
-			};
-			name = Release;
-		};
-		42A99B1A1B780AF200994917 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = HealthStatsAppIcon;
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				IBSC_MODULE = healthwatch_Extension;
-				INFOPLIST_FILE = healthwatch/Info.plist;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.healthstats.watchkitapp";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Debug;
-		};
-		42A99B1B1B780AF200994917 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = HealthStatsAppIcon;
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				IBSC_MODULE = healthwatch_Extension;
-				INFOPLIST_FILE = healthwatch/Info.plist;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.healthstats.watchkitapp";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Release;
-		};
-		42A99B1C1B780AF200994917 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "healthwatch Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.healthstats.watchkitapp.watchkitextension";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Debug;
-		};
-		42A99B1D1B780AF200994917 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "healthwatch Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.healthstats.watchkitapp.watchkitextension";
-				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
@@ -11666,24 +11417,6 @@
 			buildConfigurations = (
 				428FF73A15F36888007A88FA /* Debug */,
 				428FF73B15F36888007A88FA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		42A99B1E1B780AF200994917 /* Build configuration list for PBXNativeTarget "healthwatch Extension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				42A99B1C1B780AF200994917 /* Debug */,
-				42A99B1D1B780AF200994917 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		42A99B201B780AF200994917 /* Build configuration list for PBXNativeTarget "healthwatch" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				42A99B1A1B780AF200994917 /* Debug */,
-				42A99B1B1B780AF200994917 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
