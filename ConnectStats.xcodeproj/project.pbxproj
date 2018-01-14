@@ -2035,6 +2035,8 @@
 		42F4E5131DE08D55001AB244 /* GCMapRouteLogicPointHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 42453BA41DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m */; };
 		42F914AF164C538800D0C950 /* GCFormattedField.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F914AE164C538800D0C950 /* GCFormattedField.m */; };
 		42F914C4164DC0B900D0C950 /* GCCellGrid+Templates.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F914C3164DC0B900D0C950 /* GCCellGrid+Templates.m */; };
+		42F97BDB200B5344009905D2 /* RZExternal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; };
+		42F97BDC200B5344009905D2 /* RZExternal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42FC17751E195DE300F55302 /* FITFitFieldsStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCEF821E181CF700F66AF1 /* FITFitFieldsStatistics.swift */; };
 		42FC177C1E195DE400F55302 /* FITFitFieldsStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCEF821E181CF700F66AF1 /* FITFitFieldsStatistics.swift */; };
 		42FC177D1E195DE800F55302 /* FITFitValueStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCEF841E181E3500F66AF1 /* FITFitValueStatistics.swift */; };
@@ -2313,6 +2315,13 @@
 			remoteGlobalIDString = 42382A6B1EABA4AC00252217;
 			remoteInfo = RZUtilsUniversal;
 		};
+		42F97BDD200B5344009905D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 42B263CE1FF8309700E891A1;
+			remoteInfo = RZExternal;
+		};
 		42FED0241656D60300364D21 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 428FF70015F36888007A88FA /* Project object */;
@@ -2381,6 +2390,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				42F97BDC200B5344009905D2 /* RZExternal.framework in Embed Frameworks */,
 				42E45FF51F1B72F600CA1F39 /* RZUtilsSwift.framework in Embed Frameworks */,
 				426176242001432B008F87FA /* RZExternalCpp.framework in Embed Frameworks */,
 				422F521C1DFB567200DD5551 /* RZUtilsUniversal.framework in Embed Frameworks */,
@@ -4247,6 +4257,7 @@
 				422FAFBF19A1DD6000D09773 /* CoreLocation.framework in Frameworks */,
 				422FAFC119A1DD6000D09773 /* UIKit.framework in Frameworks */,
 				426176232001432B008F87FA /* RZExternalCpp.framework in Frameworks */,
+				42F97BDB200B5344009905D2 /* RZExternal.framework in Frameworks */,
 				422FAFC219A1DD6000D09773 /* Foundation.framework in Frameworks */,
 				42DE53C119CF69ED00009130 /* HealthKit.framework in Frameworks */,
 				422FAFC319A1DD6000D09773 /* CoreGraphics.framework in Frameworks */,
@@ -7734,6 +7745,7 @@
 				42A360A01EAF6392008EB4E3 /* PBXTargetDependency */,
 				42E45FF71F1B72F600CA1F39 /* PBXTargetDependency */,
 				426176262001432B008F87FA /* PBXTargetDependency */,
+				42F97BDE200B5344009905D2 /* PBXTargetDependency */,
 			);
 			name = HealthStats;
 			productName = GarminConnect;
@@ -10599,6 +10611,11 @@
 			name = RZUtilsUniversal;
 			targetProxy = 42F3FBFA1DD79D910042A9B1 /* PBXContainerItemProxy */;
 		};
+		42F97BDE200B5344009905D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZExternal;
+			targetProxy = 42F97BDD200B5344009905D2 /* PBXContainerItemProxy */;
+		};
 		42FED0251656D60300364D21 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 428FF70815F36888007A88FA /* ConnectStats */;
@@ -10685,10 +10702,7 @@
 				INFOPLIST_FILE = "HealthStats/HealthStats-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					../shared/Flurry,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",

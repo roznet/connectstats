@@ -74,7 +74,7 @@
 
     HKQuantityType *quantityType = self.currentQuantityType;
     if ([quantityType isKindOfClass:[HKWorkoutType class]]) {
-        if ([self isLastRequest]) {
+        if ( quantityType == nil || [self isLastRequest]) {
             [self performSelectorOnMainThread:@selector(checkSources) withObject:nil waitUntilDone:NO];
 
         }else{
@@ -82,56 +82,58 @@
             [self performSelectorOnMainThread:@selector(executeQuery) withObject:nil waitUntilDone:NO];
         }
     }else{
-        NSDateComponents *interval = [[[NSDateComponents alloc] init] autorelease];
-        interval.year = -1;
-        NSDate * date = [NSDate date];
-        NSDate * start = [date dateByAddingGregorianComponents:interval];
-
-        interval.year = 1;
-
-
-
-        NSString * descriptor = [quantityType.identifier hasPrefix:@"HKQuantityTypeIdentifier"] ?
-        [quantityType.identifier substringFromIndex:(@"HKQuantityTypeIdentifier").length] : quantityType.identifier;
-
-        //HKStatisticsOptionCumulativeSum//+HKStatisticsOptionDiscreteAverage//+HKStatisticsOptionDiscreteMin+HKStatisticsOptionDiscreteMax
-        NSUInteger option = [GCHealthKitRequest optionForIdentifier:quantityType.identifier];
-        HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:quantityType
-                                                                               quantitySamplePredicate:nil
-                                                                                               options:option|HKStatisticsOptionSeparateBySource
-                                                                                            anchorDate:date
-                                                                                    intervalComponents:interval];
-
-        query.initialResultsHandler = ^(HKStatisticsCollectionQuery *thequery, HKStatisticsCollection *results, NSError *error) {
-            if (error) {
-                RZLog(RZLogError, @"%@ Query Failed: %@", descriptor, error.localizedDescription);
-            }else{
-                // do 1 day query just to check the sources
-                [results enumerateStatisticsFromDate:start
-                                              toDate:date
-                                           withBlock:^(HKStatistics *result, BOOL *stop) {
-
-                                               NSArray * sources = result.sources;
-                                               for (HKSource * source in sources) {
-                                                   BOOL newOne = [[GCAppGlobal profile] registerSource:source.bundleIdentifier withName:source.name];
-                                                   if (newOne) {
-                                                       self.foundNewSource = true;
+        if( quantityType == nil || [self isLastRequest] ){
+            [self performSelectorOnMainThread:@selector(checkSources) withObject:nil waitUntilDone:NO];
+        }else{
+            NSDateComponents *interval = [[[NSDateComponents alloc] init] autorelease];
+            interval.year = -1;
+            NSDate * date = [NSDate date];
+            NSDate * start = [date dateByAddingGregorianComponents:interval];
+            
+            interval.year = 1;
+            
+            NSString * descriptor = [quantityType.identifier hasPrefix:@"HKQuantityTypeIdentifier"] ?
+            [quantityType.identifier substringFromIndex:(@"HKQuantityTypeIdentifier").length] : quantityType.identifier;
+            
+            //HKStatisticsOptionCumulativeSum//+HKStatisticsOptionDiscreteAverage//+HKStatisticsOptionDiscreteMin+HKStatisticsOptionDiscreteMax
+            NSUInteger option = [GCHealthKitRequest optionForIdentifier:quantityType.identifier];
+            HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:quantityType
+                                                                                   quantitySamplePredicate:nil
+                                                                                                   options:option |  HKStatisticsOptionSeparateBySource
+                                                                                                anchorDate:date
+                                                                                        intervalComponents:interval];
+            
+            query.initialResultsHandler = ^(HKStatisticsCollectionQuery *thequery, HKStatisticsCollection *results, NSError *error) {
+                if (error) {
+                    RZLog(RZLogError, @"%@ Query Failed: %@", descriptor, error.localizedDescription);
+                }else{
+                    // do 1 day query just to check the sources
+                    [results enumerateStatisticsFromDate:start
+                                                  toDate:date
+                                               withBlock:^(HKStatistics *result, BOOL *stop) {
+                                                   
+                                                   NSArray * sources = result.sources;
+                                                   for (HKSource * source in sources) {
+                                                       BOOL newOne = [[GCAppGlobal profile] registerSource:source.bundleIdentifier withName:source.name];
+                                                       if (newOne) {
+                                                           self.foundNewSource = true;
+                                                       }
+                                                       self.sources[source.bundleIdentifier] = source.name;
                                                    }
-                                                   self.sources[source.bundleIdentifier] = source.name;
-                                               }
-                                           }];
-            }
-            if ([self isLastRequest]) {
-                [self performSelectorOnMainThread:@selector(checkSources) withObject:nil waitUntilDone:NO];
-
-            }else{
-                [self nextQuantityType];
-                [self performSelectorOnMainThread:@selector(executeQuery) withObject:nil waitUntilDone:NO];
-            }
-        };
-
-        [self.healthStore executeQuery:query];
-        [query release];
+                                               }];
+                }
+                if ([self isLastRequest]) {
+                    [self performSelectorOnMainThread:@selector(checkSources) withObject:nil waitUntilDone:NO];
+                    
+                }else{
+                    [self nextQuantityType];
+                    [self performSelectorOnMainThread:@selector(executeQuery) withObject:nil waitUntilDone:NO];
+                }
+            };
+            
+            [self.healthStore executeQuery:query];
+            [query release];
+        }
     }
 }
 
