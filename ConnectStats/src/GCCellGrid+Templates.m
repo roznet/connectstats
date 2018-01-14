@@ -40,7 +40,7 @@
 #import "GCAppGlobal.h"
 #import "GCActivity+Fields.h"
 
-#define GC_WIDE_SIZE 376
+const CGFloat kGC_WIDE_SIZE = 420.0f;
 
 @implementation GCCellGrid (Templates)
 
@@ -293,7 +293,7 @@
         [keys addObject:@"activityType"];
     }
 
-    NSUInteger maxSize = width>GC_WIDE_SIZE ? 50 : 30;
+    NSUInteger maxSize = width>kGC_WIDE_SIZE ? 50 : 30;
 
     NSString * eventType = [activity metaValueForField:GC_META_EVENTTYPE].display;
     if (eventType && ![eventType isEqualToString:@"Uncategorized"]) {
@@ -633,7 +633,7 @@
                       andActivityType:(NSString*)activityType
                                 width:(CGFloat)width{
     BOOL wide =false;
-    if (width > GC_WIDE_SIZE) {
+    if (width > kGC_WIDE_SIZE) {
         wide = true;
         [self setupForRows:2 andCols:5];
     }else{
@@ -977,7 +977,7 @@
         return [self setupForSwimLap:idx andActivity:activity width:width];
     }
     BOOL wide =false;
-    if (width > GC_WIDE_SIZE) {
+    if (width > kGC_WIDE_SIZE) {
         wide = true;
         [self setupForRows:2 andCols:5];
     }else{
@@ -1077,7 +1077,7 @@
 
 -(void)setupForLap:(GCLap*)aLap key:(id)def andActivity:(GCActivity*)activity width:(CGFloat)width{
     BOOL wide =false;
-    if (width > GC_WIDE_SIZE) {
+    if (width > kGC_WIDE_SIZE) {
         wide = true;
     }
     if ([def isKindOfClass:[NSString class]]) {
@@ -1178,7 +1178,7 @@
 
 -(void)setupForSwimTrackpoint:(GCTrackPointSwim*)lap index:(NSUInteger)idx andActivity:(GCActivity*)activity width:(CGFloat)width{
     BOOL wide =false;
-    if (width > GC_WIDE_SIZE) {
+    if (width > kGC_WIDE_SIZE) {
         wide = true;
         [self setupForRows:2 andCols:5];
     }else{
