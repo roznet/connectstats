@@ -112,6 +112,8 @@
 	</dict>
 	<key>NSHealthShareUsageDescription</key>
 	<string>This app reads information to display statistics</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>This app only reads data but will not update data</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
