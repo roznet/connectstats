@@ -1969,6 +1969,24 @@
 		42EAA3AB1EDBA6150081B130 /* GCAppProfiles+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EAA3AA1EDBA6150081B130 /* GCAppProfiles+Swift.m */; };
 		42EAA3AC1EDBA6150081B130 /* GCAppProfiles+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EAA3AA1EDBA6150081B130 /* GCAppProfiles+Swift.m */; };
 		42EAA3AD1EDBA6150081B130 /* GCAppProfiles+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EAA3AA1EDBA6150081B130 /* GCAppProfiles+Swift.m */; };
+		42EAE3E6200BB2E30017D65C /* RZExternal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; };
+		42EAE3E7200BB2E30017D65C /* RZExternal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42EAE3EA200BB2E30017D65C /* RZExternalTestUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBC0311FFAE1000009B385 /* RZExternalTestUtils.framework */; };
+		42EAE3EB200BB2E30017D65C /* RZExternalTestUtils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBC0311FFAE1000009B385 /* RZExternalTestUtils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42EAE3EE200BB2E30017D65C /* RZExternalCpp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A0098620012B5B00019CB3 /* RZExternalCpp.framework */; };
+		42EAE3EF200BB2E30017D65C /* RZExternalCpp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42A0098620012B5B00019CB3 /* RZExternalCpp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42EAE3FA200BB2E30017D65C /* RZUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; };
+		42EAE3FB200BB2E30017D65C /* RZUtils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42EAE3FE200BB2E30017D65C /* RZUtilsSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; };
+		42EAE3FF200BB2E30017D65C /* RZUtilsSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42EAE402200BB2E30017D65C /* RZUtilsUniversal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F3FBF51DD79D910042A9B1 /* RZUtilsUniversal.framework */; };
+		42EAE403200BB2E30017D65C /* RZUtilsUniversal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42F3FBF51DD79D910042A9B1 /* RZUtilsUniversal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42EAE406200BB2E30017D65C /* RZUtilsHealthkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872C31EACA089000D4115 /* RZUtilsHealthkit.framework */; };
+		42EAE407200BB2E30017D65C /* RZUtilsHealthkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 425872C31EACA089000D4115 /* RZUtilsHealthkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42EAE40A200BB2E30017D65C /* RZUtilsTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; };
+		42EAE40B200BB2E30017D65C /* RZUtilsTouch.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42EAE40E200BB2E30017D65C /* RZUtilsTestInfra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428BE87F20013DF600E14A61 /* RZUtilsTestInfra.framework */; };
+		42EAE40F200BB2E30017D65C /* RZUtilsTestInfra.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 428BE87F20013DF600E14A61 /* RZUtilsTestInfra.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42EB515818A7E1E800B85FAB /* GCBabolatLoginRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515718A7E1E800B85FAB /* GCBabolatLoginRequest.m */; };
 		42EB515B18A7E70400B85FAB /* GCBabolatPlayersRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515A18A7E70400B85FAB /* GCBabolatPlayersRequest.m */; };
 		42EB515E18A7EC6500B85FAB /* GCBabolatSessionsListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515D18A7EC6500B85FAB /* GCBabolatSessionsListRequest.m */; };
@@ -2242,6 +2260,69 @@
 			remoteGlobalIDString = 42382A441EAB584600252217;
 			remoteInfo = RZUtilsSwift;
 		};
+		42EAE3E8200BB2E30017D65C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 42B263CE1FF8309700E891A1;
+			remoteInfo = RZExternal;
+		};
+		42EAE3EC200BB2E30017D65C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 42EBC01F1FFAC18A0009B385;
+			remoteInfo = RZExternalTestUtils;
+		};
+		42EAE3F0200BB2E30017D65C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 42A007BE20012ADC00019CB3;
+			remoteInfo = RZExternalCpp;
+		};
+		42EAE3FC200BB2E30017D65C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 423829261EAB534100252217;
+			remoteInfo = RZUtils;
+		};
+		42EAE400200BB2E30017D65C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 42382A441EAB584600252217;
+			remoteInfo = RZUtilsSwift;
+		};
+		42EAE404200BB2E30017D65C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 42382A6B1EABA4AC00252217;
+			remoteInfo = RZUtilsUniversal;
+		};
+		42EAE408200BB2E30017D65C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 42382AA91EAC824900252217;
+			remoteInfo = RZUtilsHealthkit;
+		};
+		42EAE40C200BB2E30017D65C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 42382ACF1EAC9BC700252217;
+			remoteInfo = RZUtilsTouch;
+		};
+		42EAE410200BB2E30017D65C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 428BE85320013D4200E14A61;
+			remoteInfo = RZUtilsTestInfra;
+		};
 		42EBBEDE1FFAB5400009B385 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */;
@@ -2362,6 +2443,25 @@
 				42A3609E1EAF6392008EB4E3 /* RZUtilsHealthkit.framework in Embed Frameworks */,
 				42BFC2411DCF4EA200EAD40E /* RZUtilsTouch.framework in Embed Frameworks */,
 				42BFC23D1DCF4EA200EAD40E /* RZUtils.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42EAE412200BB2E40017D65C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				42EAE3FF200BB2E30017D65C /* RZUtilsSwift.framework in Embed Frameworks */,
+				42EAE3E7200BB2E30017D65C /* RZExternal.framework in Embed Frameworks */,
+				42EAE40B200BB2E30017D65C /* RZUtilsTouch.framework in Embed Frameworks */,
+				42EAE403200BB2E30017D65C /* RZUtilsUniversal.framework in Embed Frameworks */,
+				42EAE3EF200BB2E30017D65C /* RZExternalCpp.framework in Embed Frameworks */,
+				42EAE3FB200BB2E30017D65C /* RZUtils.framework in Embed Frameworks */,
+				42EAE407200BB2E30017D65C /* RZUtilsHealthkit.framework in Embed Frameworks */,
+				42EAE40F200BB2E30017D65C /* RZUtilsTestInfra.framework in Embed Frameworks */,
+				42EAE3EB200BB2E30017D65C /* RZExternalTestUtils.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4309,13 +4409,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42EAE3E6200BB2E30017D65C /* RZExternal.framework in Frameworks */,
 				42F97C00200B9DE6009905D2 /* RZUtilsHealthkit.framework in Frameworks */,
+				42EAE40A200BB2E30017D65C /* RZUtilsTouch.framework in Frameworks */,
+				42EAE406200BB2E30017D65C /* RZUtilsHealthkit.framework in Frameworks */,
 				428BE8832001409200E14A61 /* RZExternalCpp.framework in Frameworks */,
 				428BE88020013E0A00E14A61 /* RZUtilsTestInfra.framework in Frameworks */,
+				42EAE3EE200BB2E30017D65C /* RZExternalCpp.framework in Frameworks */,
 				42EBC0321FFAE1000009B385 /* RZExternal.framework in Frameworks */,
+				42EAE3EA200BB2E30017D65C /* RZExternalTestUtils.framework in Frameworks */,
 				42EBC0331FFAE1000009B385 /* RZExternalTestUtils.framework in Frameworks */,
+				42EAE40E200BB2E30017D65C /* RZUtilsTestInfra.framework in Frameworks */,
+				42EAE402200BB2E30017D65C /* RZUtilsUniversal.framework in Frameworks */,
 				42793B321F405941005FAF02 /* RZUtilsSwift.framework in Frameworks */,
 				42F3FBFD1DD79DC60042A9B1 /* RZUtilsUniversal.framework in Frameworks */,
+				42EAE3FA200BB2E30017D65C /* RZUtils.framework in Frameworks */,
+				42EAE3FE200BB2E30017D65C /* RZUtilsSwift.framework in Frameworks */,
 				42BF1FED1D3AC240004445C2 /* RZUtilsTouch.framework in Frameworks */,
 				42B5E2FF1BA5B7BF000FAE4E /* libsqlite3.tbd in Frameworks */,
 				42B3AB791D27FD920072D4CA /* RZUtils.framework in Frameworks */,
@@ -7830,10 +7939,20 @@
 				42B5E1B71BA5AEC9000FAE4E /* Resources */,
 				931DFF9AACF7F87236D26217 /* [CP] Embed Pods Frameworks */,
 				1C6F2BC51762C30DC75D5A61 /* [CP] Copy Pods Resources */,
+				42EAE412200BB2E40017D65C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				42EAE3E9200BB2E30017D65C /* PBXTargetDependency */,
+				42EAE3ED200BB2E30017D65C /* PBXTargetDependency */,
+				42EAE3F1200BB2E30017D65C /* PBXTargetDependency */,
+				42EAE3FD200BB2E30017D65C /* PBXTargetDependency */,
+				42EAE401200BB2E30017D65C /* PBXTargetDependency */,
+				42EAE405200BB2E30017D65C /* PBXTargetDependency */,
+				42EAE409200BB2E30017D65C /* PBXTargetDependency */,
+				42EAE40D200BB2E30017D65C /* PBXTargetDependency */,
+				42EAE411200BB2E30017D65C /* PBXTargetDependency */,
 			);
 			name = ConnectStatsTestApp;
 			productName = ConnectStatsTestApp;
@@ -10490,6 +10609,51 @@
 			name = RZUtilsSwift;
 			targetProxy = 42E45FF61F1B72F600CA1F39 /* PBXContainerItemProxy */;
 		};
+		42EAE3E9200BB2E30017D65C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZExternal;
+			targetProxy = 42EAE3E8200BB2E30017D65C /* PBXContainerItemProxy */;
+		};
+		42EAE3ED200BB2E30017D65C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZExternalTestUtils;
+			targetProxy = 42EAE3EC200BB2E30017D65C /* PBXContainerItemProxy */;
+		};
+		42EAE3F1200BB2E30017D65C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZExternalCpp;
+			targetProxy = 42EAE3F0200BB2E30017D65C /* PBXContainerItemProxy */;
+		};
+		42EAE3FD200BB2E30017D65C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZUtils;
+			targetProxy = 42EAE3FC200BB2E30017D65C /* PBXContainerItemProxy */;
+		};
+		42EAE401200BB2E30017D65C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZUtilsSwift;
+			targetProxy = 42EAE400200BB2E30017D65C /* PBXContainerItemProxy */;
+		};
+		42EAE405200BB2E30017D65C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZUtilsUniversal;
+			targetProxy = 42EAE404200BB2E30017D65C /* PBXContainerItemProxy */;
+		};
+		42EAE409200BB2E30017D65C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZUtilsHealthkit;
+			targetProxy = 42EAE408200BB2E30017D65C /* PBXContainerItemProxy */;
+		};
+		42EAE40D200BB2E30017D65C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZUtilsTouch;
+			targetProxy = 42EAE40C200BB2E30017D65C /* PBXContainerItemProxy */;
+		};
+		42EAE411200BB2E30017D65C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZUtilsTestInfra;
+			targetProxy = 42EAE410200BB2E30017D65C /* PBXContainerItemProxy */;
+		};
 		42EBBEE31FFAB55E0009B385 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = RZExternal;
@@ -11166,6 +11330,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 722F58FE2B9F9EF1C1D899FD /* Pods-ConnectStatsTestApp.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsTestAppIcon;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -11205,6 +11370,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EBDC45B331B669A42DAFAD9B /* Pods-ConnectStatsTestApp.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsTestAppIcon;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
