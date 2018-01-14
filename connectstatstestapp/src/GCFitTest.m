@@ -45,7 +45,7 @@
     FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecode:fitData];
     [fitDecode parse];
 
-    GCActivity * fitAct = [[GCActivity alloc] initWithId:@"id" fitFile:fitDecode.fitFile];
+    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"id" fitFile:fitDecode.fitFile]);
     [self assessTestResult:@"Parsed records" result:[fitAct.trackpoints count]==4235];
 
 	[self endSession:@"GC FitTest"];

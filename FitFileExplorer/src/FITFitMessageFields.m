@@ -40,7 +40,7 @@
 #endif
 
 +(FITFitMessageFields * )fitMessageFields:(NSDictionary*)values atIndex:(NSUInteger)index{
-    FITFitMessageFields * rv = [[self alloc] init];
+    FITFitMessageFields * rv = RZReturnAutorelease([[self alloc] init]);
     if (rv) {
         rv.fields = values;
         rv.messageIndex = index;

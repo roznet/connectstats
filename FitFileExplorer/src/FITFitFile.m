@@ -48,7 +48,7 @@
 }
 #endif
 +(FITFitFile*)fitFile{
-    return [[self alloc] init];
+    return RZReturnAutorelease([[self alloc] init]);
 }
 -(void)addMessageFields:(FITFitMessageFields*)fields forMessageType:(NSString*)type{
     if (self.messages == nil) {

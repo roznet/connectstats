@@ -94,12 +94,13 @@ class Listener : public fit::MesgListener
 #if !__has_feature(objc_arc)
 -(void)dealloc{
     [_fitFile release];
+    [_data release];
     [super dealloc];
 }
 #endif
 
 +(FITFitFileDecode*)fitFileDecode:(NSData*)data{
-    FITFitFileDecode * rv = [[FITFitFileDecode alloc] init];
+    FITFitFileDecode * rv = RZReturnAutorelease([[FITFitFileDecode alloc] init]);
     if (rv) {
         rv.data = data;
     }
@@ -107,7 +108,7 @@ class Listener : public fit::MesgListener
 }
 
 +(FITFitFileDecode*)fitFileDecodeForFile:(NSString*)filepath{
-    FITFitFileDecode * rv = [[FITFitFileDecode alloc] init];
+    FITFitFileDecode * rv = RZReturnAutorelease([[FITFitFileDecode alloc] init]);
     if (rv) {
         rv.data = [NSData dataWithContentsOfFile:filepath];
     }

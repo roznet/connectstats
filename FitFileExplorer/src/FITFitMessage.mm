@@ -49,7 +49,7 @@
 }
 
 +(FITFitMessage*)messageWithType:(NSString*)type{
-    FITFitMessage * rv = [[FITFitMessage alloc] init];
+    FITFitMessage * rv = RZReturnAutorelease([[FITFitMessage alloc] init]);
     if (rv) {
         rv.messageType = type;
         rv.fields = [NSMutableArray array];

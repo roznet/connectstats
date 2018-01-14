@@ -296,7 +296,7 @@
 
     GCNumberWithUnit* dist_nu   = [dist_sum sumWithUnit:gcHistoryStatsAll];
     GCNumberWithUnit* dur_nu    = [dur_sum sumWithUnit:gcHistoryStatsAll];
-    GCNumberWithUnit* speed_nu  = nil;//[speed_sum averageWithUnit:gcHistoryStatsAll];
+    //GCNumberWithUnit* speed_nu  = nil;//[speed_sum averageWithUnit:gcHistoryStatsAll];
     GCNumberWithUnit* wspeed_nu = [speed_sum weightedAverageWithUnit:gcHistoryStatsAll];
 
     double meters = [dist_nu convertToUnitName:@"meter"].value;
@@ -307,8 +307,8 @@
 
     dist_nu   = [dist_sum sumWithUnit:gcHistoryStatsWeek];
     dur_nu    = [dur_sum sumWithUnit:gcHistoryStatsWeek];
-    speed_nu  = [speed_sum averageWithUnit:gcHistoryStatsWeek];
-    wspeed_nu = [speed_sum weightedAverageWithUnit:gcHistoryStatsWeek];
+    //speed_nu  = [speed_sum averageWithUnit:gcHistoryStatsWeek];
+    //wspeed_nu = [speed_sum weightedAverageWithUnit:gcHistoryStatsWeek];
 
     meters = [dist_nu convertToUnitName:@"meter"].value;
     seconds = [dur_nu convertToUnitName:@"second"].value;

@@ -58,7 +58,8 @@
     [_health release];
     [_activityTypes release];
     [_tabBarController release];
-
+    [_testServicesViewController release];
+    
     [super dealloc];
 }
 
@@ -271,7 +272,7 @@
                                    @"https://roznet.ro-z.me/connectstats/check.php",
                                    @"https://ro-z.net/connectstats/check.php"];
 
-    self.findValid = [[RZSRemoteURLFindValid alloc] initWithUrls:tries];
+    self.findValid = RZReturnAutorelease([[RZSRemoteURLFindValid alloc] initWithUrls:tries]);
     [self.findValid search:^(NSString*found){
         NSDictionary<NSString*,NSString*> * map = @{
                                                     @"https://localhost/connectstats/check.php" : @"https://localhost",

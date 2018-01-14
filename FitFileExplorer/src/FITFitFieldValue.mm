@@ -25,7 +25,7 @@
 @implementation FITFitFieldValue
 
 +(nullable FITFitFieldValue*)fieldValueFrom:(nullable fit::Field*)ff{
-    FITFitFieldValue * rv = [[FITFitFieldValue alloc] init];
+    FITFitFieldValue * rv = RZReturnAutorelease([[FITFitFieldValue alloc] init]);
     if( rv){
         rv.originalField = nil;
         rv.complementField = nil;
@@ -105,7 +105,7 @@
         case FIT_BASE_TYPE_STRING:
         {
             std::wstring val( field->GetSTRINGValue() );
-            self.stringValue = [[NSString alloc] initWithBytes:val.data() length:val.size() * sizeof(wchar_t) encoding:NSUTF32LittleEndianStringEncoding];
+            self.stringValue = RZReturnAutorelease([[NSString alloc] initWithBytes:val.data() length:val.size() * sizeof(wchar_t) encoding:NSUTF32LittleEndianStringEncoding]);
             break;
         }
         default:
@@ -160,7 +160,7 @@
     if( [self.fieldKey hasSuffix:@"_lat"]){
         NSString * prefix = [self.fieldKey substringToIndex:(self.fieldKey.length-4)];
         if( [other.fieldKey isEqualToString:[prefix stringByAppendingString:@"_long"]] ){
-            rv = [[FITFitFieldValue alloc] init];
+            rv = RZReturnAutorelease([[FITFitFieldValue alloc] init]);
             rv.originalField = self.originalField;
             rv.complementField = other.complementField;
 
@@ -171,7 +171,7 @@
             double latSemi  = self.numberWithUnit.value;
             double longSemi = other.numberWithUnit.value;
             
-            CLLocation * loc = [[CLLocation alloc] initWithLatitude:SEMICIRCLE_TO_DEGREE(latSemi) longitude:SEMICIRCLE_TO_DEGREE(longSemi)];
+            CLLocation * loc = RZReturnAutorelease([[CLLocation alloc] initWithLatitude:SEMICIRCLE_TO_DEGREE(latSemi) longitude:SEMICIRCLE_TO_DEGREE(longSemi)]);
             
             rv.locationValue = loc;
             rv.fieldKey = prefix;
