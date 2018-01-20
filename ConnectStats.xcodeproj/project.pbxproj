@@ -49,6 +49,7 @@
 		4211C53419AB043A000DEF87 /* version.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4211C53319AB043A000DEF87 /* version.plist */; };
 		421208901C6E860700E0470D /* GCFieldsForCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4212088F1C6E860700E0470D /* GCFieldsForCategory.m */; };
 		421208911C6E860700E0470D /* GCFieldsForCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4212088F1C6E860700E0470D /* GCFieldsForCategory.m */; };
+		4213AEB1201393CC0004B54B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4213AEB0201393CC0004B54B /* MapKit.framework */; };
 		421418431CF04FB800642F37 /* FITFitFieldValue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418421CF04FB800642F37 /* FITFitFieldValue.mm */; };
 		421418481CF054B300642F37 /* FITFitEnumMap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418471CF054B300642F37 /* FITFitEnumMap.mm */; };
 		421516BC19A47C450080CD4C /* GCHealthKitRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 421516BB19A47C450080CD4C /* GCHealthKitRequest.m */; };
@@ -2554,6 +2555,7 @@
 		4211C53319AB043A000DEF87 /* version.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = version.plist; path = HealthStats/version.plist; sourceTree = "<group>"; };
 		4212088E1C6E860700E0470D /* GCFieldsForCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldsForCategory.h; path = src/GCFieldsForCategory.h; sourceTree = "<group>"; };
 		4212088F1C6E860700E0470D /* GCFieldsForCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldsForCategory.m; path = src/GCFieldsForCategory.m; sourceTree = "<group>"; };
+		4213AEB0201393CC0004B54B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/MapKit.framework; sourceTree = DEVELOPER_DIR; };
 		421418411CF04FB800642F37 /* FITFitFieldValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FITFitFieldValue.h; path = src/FITFitFieldValue.h; sourceTree = "<group>"; };
 		421418421CF04FB800642F37 /* FITFitFieldValue.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FITFitFieldValue.mm; path = src/FITFitFieldValue.mm; sourceTree = "<group>"; };
 		421418461CF054B300642F37 /* FITFitEnumMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FITFitEnumMap.h; path = src/FITFitEnumMap.h; sourceTree = "<group>"; };
@@ -4355,6 +4357,7 @@
 			files = (
 				42A0099320012ECB00019CB3 /* RZExternalCpp.framework in Frameworks */,
 				420621F81D3AD48D0013A45E /* RZUtils.framework in Frameworks */,
+				4213AEB1201393CC0004B54B /* MapKit.framework in Frameworks */,
 				42F3FBFC1DD79DA90042A9B1 /* RZUtilsUniversal.framework in Frameworks */,
 				424670FF1DCE0410003DDF7F /* RZUtilsOSX.framework in Frameworks */,
 			);
@@ -5807,6 +5810,7 @@
 		428FF70C15F36888007A88FA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4213AEB0201393CC0004B54B /* MapKit.framework */,
 				42306C331F5C5FC400FC7CCB /* XCTest.framework */,
 				42280D401F5477C000724581 /* CloudKit.framework */,
 				42F1356E1B8BB2BE006D186A /* libsqlite3.tbd */,
@@ -8055,6 +8059,9 @@
 						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.Maps.Mac = {
+								enabled = 1;
+							};
 							com.apple.Sandbox = {
 								enabled = 1;
 							};
