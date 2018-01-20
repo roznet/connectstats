@@ -79,6 +79,10 @@
 		422549601EE73622004F4AE5 /* FITFitStatisticsWeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BF98371EE3175600F5E094 /* FITFitStatisticsWeight.swift */; };
 		422637A51AFF6C5F005461E3 /* GCDebugActionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422637A41AFF6C5F005461E3 /* GCDebugActionsTableViewController.m */; };
 		422657F8181D1C2E00373BDE /* GCWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 422657F7181D1C2E00373BDE /* GCWeather.m */; };
+		42265B8020137EE100AF79B2 /* RZExternalCpp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42A0098620012B5B00019CB3 /* RZExternalCpp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42265B8420137EE100AF79B2 /* RZUtils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42265B8820137EE100AF79B2 /* RZUtilsUniversal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42F3FBF51DD79D910042A9B1 /* RZUtilsUniversal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42265B8C20137EE100AF79B2 /* RZUtilsOSX.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C2C1D27F1C20068D9CE /* RZUtilsOSX.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4226B41A1F65D398009E1104 /* TSSessionListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4226B4191F65D398009E1104 /* TSSessionListTableViewController.swift */; };
 		4226B4261F65E154009E1104 /* GCWebConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF79C15FB412C007A88FA /* GCWebConnect.m */; };
 		4226B4291F65E2ED009E1104 /* GCWebRequestStandard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4226B4281F65E2ED009E1104 /* GCWebRequestStandard.m */; };
@@ -2041,6 +2045,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		42265B8120137EE100AF79B2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 42A007BE20012ADC00019CB3;
+			remoteInfo = RZExternalCpp;
+		};
+		42265B8520137EE100AF79B2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 423829261EAB534100252217;
+			remoteInfo = RZUtils;
+		};
+		42265B8920137EE100AF79B2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 42382A6B1EABA4AC00252217;
+			remoteInfo = RZUtilsUniversal;
+		};
+		42265B8D20137EE100AF79B2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 42382B691EAC9DBD00252217;
+			remoteInfo = RZUtilsOSX;
+		};
 		422F521D1DFB567200DD5551 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
@@ -2380,6 +2412,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		42265B8F20137EE100AF79B2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				42265B8420137EE100AF79B2 /* RZUtils.framework in Embed Frameworks */,
+				42265B8020137EE100AF79B2 /* RZExternalCpp.framework in Embed Frameworks */,
+				42265B8820137EE100AF79B2 /* RZUtilsUniversal.framework in Embed Frameworks */,
+				42265B8C20137EE100AF79B2 /* RZUtilsOSX.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		424B56341D3BDBBF00903A99 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -7794,10 +7840,15 @@
 				4253B4521CD49F7E00437E6A /* Sources */,
 				4253B4531CD49F7E00437E6A /* Frameworks */,
 				4253B4541CD49F7E00437E6A /* Resources */,
+				42265B8F20137EE100AF79B2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				42265B8220137EE100AF79B2 /* PBXTargetDependency */,
+				42265B8620137EE100AF79B2 /* PBXTargetDependency */,
+				42265B8A20137EE100AF79B2 /* PBXTargetDependency */,
+				42265B8E20137EE100AF79B2 /* PBXTargetDependency */,
 			);
 			name = FitFileExplorer;
 			productName = FitFileExplorer;
@@ -10501,6 +10552,26 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		42265B8220137EE100AF79B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZExternalCpp;
+			targetProxy = 42265B8120137EE100AF79B2 /* PBXContainerItemProxy */;
+		};
+		42265B8620137EE100AF79B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZUtils;
+			targetProxy = 42265B8520137EE100AF79B2 /* PBXContainerItemProxy */;
+		};
+		42265B8A20137EE100AF79B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZUtilsUniversal;
+			targetProxy = 42265B8920137EE100AF79B2 /* PBXContainerItemProxy */;
+		};
+		42265B8E20137EE100AF79B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZUtilsOSX;
+			targetProxy = 42265B8D20137EE100AF79B2 /* PBXContainerItemProxy */;
+		};
 		422F521E1DFB567200DD5551 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = RZUtilsUniversal;
@@ -10804,6 +10875,7 @@
 		4253B46A1CD49F7E00437E6A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = FitExplorerAppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LIBRARY = "libc++";
@@ -10835,6 +10907,7 @@
 		4253B46B1CD49F7E00437E6A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = FitExplorerAppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LIBRARY = "libc++";
@@ -10858,6 +10931,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "FitFileExplorer/FitFileExplorer-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
