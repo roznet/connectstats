@@ -834,7 +834,6 @@
 		42B0B97415FE8037008275FF /* GCGarminSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B0B97315FE8037008275FF /* GCGarminSearchJsonParser.m */; };
 		42B32BB718531D7700EB6FA2 /* GCGarminDeleteActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B32BB618531D7700EB6FA2 /* GCGarminDeleteActivity.m */; };
 		42B34A2E179C31D500688E9F /* GCViewActivityTypeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B34A2D179C31D500688E9F /* GCViewActivityTypeButton.m */; };
-		42B3AB791D27FD920072D4CA /* RZUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; };
 		42B3AB7A1D27FF080072D4CA /* RZUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; };
 		42B467BA1DC6A56200279DC8 /* GCAppPasswordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424D08BF1DC5DA4E000B4620 /* GCAppPasswordManager.swift */; };
 		42B467BB1DC6A74200279DC8 /* GCAppProfiles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235DF9D1655B61A00DE316A /* GCAppProfiles.m */; };
@@ -1782,7 +1781,6 @@
 		42BC539E161E3E2700576097 /* GCFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BC539D161E3E2600576097 /* GCFields.m */; };
 		42BC77E3198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BC77E2198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.m */; };
 		42BF1FEC1D3AC233004445C2 /* RZUtilsTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; };
-		42BF1FED1D3AC240004445C2 /* RZUtilsTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; };
 		42BF98381EE3175600F5E094 /* FITFitStatisticsWeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BF98371EE3175600F5E094 /* FITFitStatisticsWeight.swift */; };
 		42BFC2231DCDD9D900EAD40E /* FITOutlineDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BFC2181DCCCB9400EAD40E /* FITOutlineDataSource.swift */; };
 		42BFC2261DCDE6AE00EAD40E /* FITFieldsListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BFC2211DCDD88200EAD40E /* FITFieldsListDataSource.swift */; };
@@ -1973,19 +1971,15 @@
 		42EAE3E7200BB2E30017D65C /* RZExternal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42EAE3EA200BB2E30017D65C /* RZExternalTestUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBC0311FFAE1000009B385 /* RZExternalTestUtils.framework */; };
 		42EAE3EB200BB2E30017D65C /* RZExternalTestUtils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBC0311FFAE1000009B385 /* RZExternalTestUtils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		42EAE3EE200BB2E30017D65C /* RZExternalCpp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A0098620012B5B00019CB3 /* RZExternalCpp.framework */; };
 		42EAE3EF200BB2E30017D65C /* RZExternalCpp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42A0098620012B5B00019CB3 /* RZExternalCpp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42EAE3FA200BB2E30017D65C /* RZUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; };
 		42EAE3FB200BB2E30017D65C /* RZUtils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		42EAE3FE200BB2E30017D65C /* RZUtilsSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; };
 		42EAE3FF200BB2E30017D65C /* RZUtilsSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42EAE402200BB2E30017D65C /* RZUtilsUniversal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F3FBF51DD79D910042A9B1 /* RZUtilsUniversal.framework */; };
 		42EAE403200BB2E30017D65C /* RZUtilsUniversal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42F3FBF51DD79D910042A9B1 /* RZUtilsUniversal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		42EAE406200BB2E30017D65C /* RZUtilsHealthkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872C31EACA089000D4115 /* RZUtilsHealthkit.framework */; };
 		42EAE407200BB2E30017D65C /* RZUtilsHealthkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 425872C31EACA089000D4115 /* RZUtilsHealthkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42EAE40A200BB2E30017D65C /* RZUtilsTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; };
 		42EAE40B200BB2E30017D65C /* RZUtilsTouch.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		42EAE40E200BB2E30017D65C /* RZUtilsTestInfra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428BE87F20013DF600E14A61 /* RZUtilsTestInfra.framework */; };
 		42EAE40F200BB2E30017D65C /* RZUtilsTestInfra.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 428BE87F20013DF600E14A61 /* RZUtilsTestInfra.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42EB515818A7E1E800B85FAB /* GCBabolatLoginRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515718A7E1E800B85FAB /* GCBabolatLoginRequest.m */; };
 		42EB515B18A7E70400B85FAB /* GCBabolatPlayersRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515A18A7E70400B85FAB /* GCBabolatPlayersRequest.m */; };
@@ -2000,8 +1994,6 @@
 		42EB51E118B6AEDA00B85FAB /* GCGarminLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51E018B6AEDA00B85FAB /* GCGarminLoginViewController.m */; };
 		42EBBEE01FFAB55E0009B385 /* RZExternal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; };
 		42EBBEE11FFAB55E0009B385 /* RZExternal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		42EBC0321FFAE1000009B385 /* RZExternal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; };
-		42EBC0331FFAE1000009B385 /* RZExternalTestUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBC0311FFAE1000009B385 /* RZExternalTestUtils.framework */; };
 		42EC553A1BA421580091D9B3 /* ConnectStats.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 42934F041979AD960031532D /* ConnectStats.entitlements */; };
 		42ECA0241ED7614300D1EEF9 /* FITDataListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ECA0231ED7614300D1EEF9 /* FITDataListDataSource.swift */; };
 		42EEAEC0169F67670058965A /* GCExportGoogleEarth.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EEAEBF169F67670058965A /* GCExportGoogleEarth.m */; };
@@ -2024,7 +2016,6 @@
 		42F3FBF81DD79D910042A9B1 /* RZUtilsUniversal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F3FBF51DD79D910042A9B1 /* RZUtilsUniversal.framework */; };
 		42F3FBF91DD79D910042A9B1 /* RZUtilsUniversal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42F3FBF51DD79D910042A9B1 /* RZUtilsUniversal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42F3FBFC1DD79DA90042A9B1 /* RZUtilsUniversal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F3FBF51DD79D910042A9B1 /* RZUtilsUniversal.framework */; };
-		42F3FBFD1DD79DC60042A9B1 /* RZUtilsUniversal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F3FBF51DD79D910042A9B1 /* RZUtilsUniversal.framework */; };
 		42F3FBFF1DD7A4D30042A9B1 /* FITGraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F3FBFE1DD7A4D30042A9B1 /* FITGraphViewController.swift */; };
 		42F4E4DA1B56EDC00009F2BA /* HealthStatsLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42F4E4D91B56EDC00009F2BA /* HealthStatsLaunchScreen.xib */; };
 		42F4E5091DE08C26001AB244 /* FITMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F4E5081DE08C26001AB244 /* FITMapViewController.swift */; };
@@ -4412,22 +4403,13 @@
 				42EAE3E6200BB2E30017D65C /* RZExternal.framework in Frameworks */,
 				42F97C00200B9DE6009905D2 /* RZUtilsHealthkit.framework in Frameworks */,
 				42EAE40A200BB2E30017D65C /* RZUtilsTouch.framework in Frameworks */,
-				42EAE406200BB2E30017D65C /* RZUtilsHealthkit.framework in Frameworks */,
 				428BE8832001409200E14A61 /* RZExternalCpp.framework in Frameworks */,
 				428BE88020013E0A00E14A61 /* RZUtilsTestInfra.framework in Frameworks */,
-				42EAE3EE200BB2E30017D65C /* RZExternalCpp.framework in Frameworks */,
-				42EBC0321FFAE1000009B385 /* RZExternal.framework in Frameworks */,
 				42EAE3EA200BB2E30017D65C /* RZExternalTestUtils.framework in Frameworks */,
-				42EBC0331FFAE1000009B385 /* RZExternalTestUtils.framework in Frameworks */,
-				42EAE40E200BB2E30017D65C /* RZUtilsTestInfra.framework in Frameworks */,
 				42EAE402200BB2E30017D65C /* RZUtilsUniversal.framework in Frameworks */,
 				42793B321F405941005FAF02 /* RZUtilsSwift.framework in Frameworks */,
-				42F3FBFD1DD79DC60042A9B1 /* RZUtilsUniversal.framework in Frameworks */,
 				42EAE3FA200BB2E30017D65C /* RZUtils.framework in Frameworks */,
-				42EAE3FE200BB2E30017D65C /* RZUtilsSwift.framework in Frameworks */,
-				42BF1FED1D3AC240004445C2 /* RZUtilsTouch.framework in Frameworks */,
 				42B5E2FF1BA5B7BF000FAE4E /* libsqlite3.tbd in Frameworks */,
-				42B3AB791D27FD920072D4CA /* RZUtils.framework in Frameworks */,
 				42B5E2D01BA5B589000FAE4E /* HealthKit.framework in Frameworks */,
 				1EBEDF98910D13D2C7A115ED /* libPods-ConnectStatsTestApp.a in Frameworks */,
 			);
@@ -8003,7 +7985,7 @@
 			attributes = {
 				CLASSPREFIX = GC;
 				LastSwiftUpdateCheck = 0810;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Brice Rosenzweig";
 				TargetAttributes = {
 					422FAEA319A1DD6000D09773 = {
@@ -10822,7 +10804,7 @@
 		4253B46A1CD49F7E00437E6A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = FitExplorerAppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -10853,7 +10835,7 @@
 		4253B46B1CD49F7E00437E6A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = FitExplorerAppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
