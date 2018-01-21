@@ -88,10 +88,17 @@
                                                                 target:self
                                                                 action:@selector(runSingleTest:)])
                                                 ];
-	self.navigationItem.leftBarButtonItem = RZReturnAutorelease([[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Clear",nil)
-                                                                                                 style:UIBarButtonItemStylePlain
-                                                                                                target:self
-                                                                                                action:@selector(clearResults:)]);
+    NSMutableArray * leftItems = [NSMutableArray arrayWithObject:RZReturnAutorelease([[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Clear",nil)
+                                                                                                                      style:UIBarButtonItemStylePlain
+                                                                                                                     target:self
+                                                                                                                     action:@selector(clearResults:)])
+                                  ];
+    if( self.additionalLeftNavigationButton.count > 0 ){
+        [leftItems addObjectsFromArray:self.additionalLeftNavigationButton];
+    }
+    
+    self.navigationItem.leftBarButtonItems = leftItems;
+    
     leftX = 0.;
 	UITableView * table = [[UITableView alloc] initWithFrame:CGRectMake(leftX, currentY, tableWidth, tableHeight)];
 	[table setDelegate:self];
@@ -265,6 +272,10 @@
 }
 
 -(NSArray*)allTestClassNames{
+    return nil;
+}
+
+-(NSArray*)additionalLeftNavigationButton{
     return nil;
 }
 

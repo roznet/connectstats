@@ -56,8 +56,8 @@
 @property NSUInteger failure;
 @property NSUInteger total;
 @property NSTimeInterval timeTaken;
-@property (nonatomic,retain) NSMutableArray * failureDetails;
-@property (nonatomic,retain) NSMutableArray * log;
+@property (nonatomic,retain) NSMutableArray<UnitTestRecordDetail*> * failureDetails;
+@property (nonatomic,retain) NSMutableArray<NSString*> * log;
 @property (nonatomic,retain) NSDictionary * testDefinition;
 @property (nonatomic,retain) NSString *testClass;
 @property (nonatomic,retain) NSString *session;
