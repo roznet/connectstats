@@ -18,7 +18,6 @@ FOUNDATION_EXPORT const unsigned char RZExternalCppVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <RZExternalCpp/PublicHeader.h>
 
-
 #import "fit_mesg.hpp"
 #import "fit_mesg_broadcast_plugin.hpp"
 #import "fit_mesg_broadcaster.hpp"
@@ -112,3 +111,5 @@ FOUNDATION_EXPORT const unsigned char RZExternalCppVersionString[];
 #import "fit_workout_step_mesg_listener.hpp"
 #import "fit_zones_target_mesg.hpp"
 #import "fit_zones_target_mesg_listener.hpp"
+
+

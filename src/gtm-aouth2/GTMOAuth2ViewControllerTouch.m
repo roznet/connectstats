@@ -252,7 +252,8 @@ static GTMOAuth2Keychain* gGTMOAuth2DefaultKeychain = nil;
 
 + (NSBundle *)authNibBundle {
   // subclasses may override this to specify a custom nib bundle
-  return nil;
+    // BMR
+  return [NSBundle bundleForClass:[self class]];
 }
 
 #if !GTM_OAUTH2_SKIP_GOOGLE_SUPPORT
