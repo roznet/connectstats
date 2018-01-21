@@ -50,6 +50,7 @@
 		421208901C6E860700E0470D /* GCFieldsForCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4212088F1C6E860700E0470D /* GCFieldsForCategory.m */; };
 		421208911C6E860700E0470D /* GCFieldsForCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4212088F1C6E860700E0470D /* GCFieldsForCategory.m */; };
 		4213AEB1201393CC0004B54B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4213AEB0201393CC0004B54B /* MapKit.framework */; };
+		4213AEB3201494840004B54B /* activities_duplicate.db in Resources */ = {isa = PBXBuildFile; fileRef = 4213AEB2201494840004B54B /* activities_duplicate.db */; };
 		421418431CF04FB800642F37 /* FITFitFieldValue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418421CF04FB800642F37 /* FITFitFieldValue.mm */; };
 		421418481CF054B300642F37 /* FITFitEnumMap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418471CF054B300642F37 /* FITFitEnumMap.mm */; };
 		421516BC19A47C450080CD4C /* GCHealthKitRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 421516BB19A47C450080CD4C /* GCHealthKitRequest.m */; };
@@ -2556,6 +2557,7 @@
 		4212088E1C6E860700E0470D /* GCFieldsForCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldsForCategory.h; path = src/GCFieldsForCategory.h; sourceTree = "<group>"; };
 		4212088F1C6E860700E0470D /* GCFieldsForCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldsForCategory.m; path = src/GCFieldsForCategory.m; sourceTree = "<group>"; };
 		4213AEB0201393CC0004B54B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/MapKit.framework; sourceTree = DEVELOPER_DIR; };
+		4213AEB2201494840004B54B /* activities_duplicate.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = activities_duplicate.db; sourceTree = "<group>"; };
 		421418411CF04FB800642F37 /* FITFitFieldValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FITFitFieldValue.h; path = src/FITFitFieldValue.h; sourceTree = "<group>"; };
 		421418421CF04FB800642F37 /* FITFitFieldValue.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FITFitFieldValue.mm; path = src/FITFitFieldValue.mm; sourceTree = "<group>"; };
 		421418461CF054B300642F37 /* FITFitEnumMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FITFitEnumMap.h; path = src/FITFitEnumMap.h; sourceTree = "<group>"; };
@@ -6886,6 +6888,7 @@
 		42C0113C1AB437C10059B6CF /* samples */ = {
 			isa = PBXGroup;
 			children = (
+				4213AEB2201494840004B54B /* activities_duplicate.db */,
 				4282B6D81DC4B2270062C313 /* Activities */,
 				42C4B0641DBB39E7000A1612 /* zones */,
 				42AEFEB21DA057F500D7DA6D /* activity_modern_json */,
@@ -8717,6 +8720,7 @@
 				42BB0C711AB4A99F008D5A10 /* activityweather_437990380.json in Resources */,
 				42BB0CDA1AB4A99F008D5A10 /* activityweather_498904671.json in Resources */,
 				42BB0C7E1AB4A99F008D5A10 /* activityweather_447877200.json in Resources */,
+				4213AEB3201494840004B54B /* activities_duplicate.db in Resources */,
 				42BB0D311AB4A9A0008D5A10 /* activityweather_542983744.json in Resources */,
 				42BB0D6A1AB4A9A0008D5A10 /* activityweather_580884841.json in Resources */,
 				42BB0D9F1AB4A9A0008D5A10 /* activityweather_608649976.json in Resources */,

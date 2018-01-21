@@ -200,6 +200,13 @@ NSString * kBugNoCommonId = @"-1";
             [dbstream finishedWriting];
         }
         
+        NSString * settingsFile = [RZFileOrganizer writeableFilePathIfExists:@"settings.plist"];
+        if( settingsFile ){
+            OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:@"settings_debug.plist" compressionLevel:OZZipCompressionLevelBest];
+            NSData * data = [NSData dataWithContentsOfFile:settingsFile];
+            [dbstream writeData:data];
+            [dbstream finishedWriting];
+        }
     }
     
     [zipFile close];
