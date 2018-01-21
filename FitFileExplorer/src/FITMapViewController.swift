@@ -82,7 +82,7 @@ class FITMapViewController: NSViewController,MKMapViewDelegate {
                     self.mapView?.setVisibleMapRect(overlay.boundingMapRect, animated: true)
                     
                     if let fields = selectionContext.selectedMessageFields,
-                        let co = fields[locationField].locationValue{
+                        let co = fields[locationField]?.locationValue{
                         self.mapView!.removeAnnotations(self.mapView!.annotations)
                         self.mapView!.addAnnotation(GCMapAnnotation(coord: co.coordinate, title: "Current", andType: gcMapAnnotation.lap))
                         

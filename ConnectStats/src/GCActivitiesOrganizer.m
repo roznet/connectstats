@@ -539,7 +539,31 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             if( [last.activityId hasPrefix:@"__bab"]){
                 continue; // will deal with tennis later
             }
+            
+            BOOL activitiesAreDuplicate = false;
+            
+            //Last:   date                date+sumDuration
+            //        |--------------------|
+            //          |--------------------|
+            //One:      date                 Date+sumDuration
+            
+            if( last.sumDuration > 60.0){
+                NSTimeInterval overlap =
+                    MIN(last.date.timeIntervalSinceReferenceDate+last.sumDuration, one.date.timeIntervalSinceReferenceDate+one.sumDuration)-
+                MAX(last.date.timeIntervalSinceReferenceDate, one.date.timeIntervalSinceReferenceDate);
+                
+                double ratio = (double)overlap / one.sumDuration;
+                
+                if( overlap > 0.0 &&  ratio > 0.90 ){
+                    activitiesAreDuplicate = true;
+                }
+            }
+            
             if( [last.date isEqualToDate:one.date] && fabs(last.sumDistance-one.sumDistance)<1.e-7){
+                activitiesAreDuplicate = true;
+            }
+            
+            if( activitiesAreDuplicate){
                 BOOL preferLast = true;
                 if( [last.activityType isEqualToString:GC_TYPE_UNCATEGORIZED]){
                     preferLast = false;

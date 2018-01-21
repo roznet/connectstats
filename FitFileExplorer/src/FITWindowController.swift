@@ -8,11 +8,11 @@
 
 import Cocoa
 
-class FITWindowController: NSWindowController {
+class FITWindowController: NSWindowController, NSToolbarDelegate {
 
     static let kNotificationToolBarSettingsChanged = Notification.Name("kNotificationToolBarSettingsChanged")
-    let kToolBarItemSpeedUnitChoiceIdentifier = "SpeedUnitChoice"
-    let kToolBarItemFieldDisplayChoiceIdentifier = "FieldDisplayChoice"
+    let kToolBarItemSpeedUnitChoiceIdentifier = NSToolbarItem.Identifier( "SpeedUnitChoice" )
+    let kToolBarItemFieldDisplayChoiceIdentifier = NSToolbarItem.Identifier( "FieldDisplayChoice" )
     
     @IBOutlet weak var toolbar: NSToolbar!
     
@@ -130,7 +130,7 @@ class FITWindowController: NSWindowController {
         return toolbarItem
     }
 
-    func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: String, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
+    func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
         var toolbarItem: NSToolbarItem = NSToolbarItem()
         
         /* We create a new NSToolbarItem, and then go through the process of setting up its
@@ -138,28 +138,25 @@ class FITWindowController: NSWindowController {
          */
         if (itemIdentifier == kToolBarItemSpeedUnitChoiceIdentifier) {
             // 1) Font style toolbar item.
-            toolbarItem = customToolbarItem(itemForItemIdentifier: kToolBarItemSpeedUnitChoiceIdentifier, label: "Speed Unit", paletteLabel:"Speed Unit", toolTip: "Select your preferred speed unit", target: self, itemContent: self.speedUnitChoiceView, action: nil, menu: nil)!
+            toolbarItem = customToolbarItem(itemForItemIdentifier: kToolBarItemSpeedUnitChoiceIdentifier.rawValue, label: "Speed Unit", paletteLabel:"Speed Unit", toolTip: "Select your preferred speed unit", target: self, itemContent: self.speedUnitChoiceView, action: nil, menu: nil)!
         }else if(itemIdentifier == kToolBarItemFieldDisplayChoiceIdentifier){
-            toolbarItem = customToolbarItem(itemForItemIdentifier: kToolBarItemFieldDisplayChoiceIdentifier, label: "Field Choice", paletteLabel:"Field Choice", toolTip: "Select your preferred Field Display", target: self, itemContent: self.fieldDisplayChoiceView, action: nil, menu: nil)!
+            toolbarItem = customToolbarItem(itemForItemIdentifier: kToolBarItemFieldDisplayChoiceIdentifier.rawValue, label: "Field Choice", paletteLabel:"Field Choice", toolTip: "Select your preferred Field Display", target: self, itemContent: self.fieldDisplayChoiceView, action: nil, menu: nil)!
             
         }
-        
-        
         return toolbarItem
-
     }
-    
-    func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [String] {
+
+    func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
         return [ kToolBarItemSpeedUnitChoiceIdentifier, kToolBarItemFieldDisplayChoiceIdentifier ]
     }
-    func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [String] {
-        
+
+    func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
         return [ kToolBarItemSpeedUnitChoiceIdentifier,
                  kToolBarItemFieldDisplayChoiceIdentifier,
-                 NSToolbarItem.Identifier.space.rawValue,
-                 NSToolbarItem.Identifier.flexibleSpace.rawValue,
-                  ]
+                 NSToolbarItem.Identifier.space,
+                 NSToolbarItem.Identifier.flexibleSpace,
+        ]
     }
-
+    
 
 }

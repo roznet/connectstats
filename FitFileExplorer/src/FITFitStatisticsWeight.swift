@@ -29,17 +29,17 @@ struct FITFitStatisticsWeight {
         if let to = to, let from = from {
             self.count = 1
             
-            if let toAsLocation = to[withDistanceField].locationValue, let fromAsLocation = from[withDistanceField].locationValue {
+            if let toAsLocation = to[withDistanceField]?.locationValue, let fromAsLocation = from[withDistanceField]?.locationValue {
                 self.distance = toAsLocation.distance(from: fromAsLocation)
-            }else if let toAsNumber = to[withDistanceField].numberWithUnit,let fromAsNumber = to[withDistanceField].numberWithUnit {
+            }else if let toAsNumber = to[withDistanceField]?.numberWithUnit,let fromAsNumber = to[withDistanceField]?.numberWithUnit {
                 self.distance = toAsNumber.convert(to: GCUnit.meter()).value - fromAsNumber.convert(to: GCUnit.meter()).value
             }else{
                 self.distance = 0.0
             }
             
-            if let toAsDate = to[withTimeField].dateValue, let fromAsDate = from[withTimeField].dateValue {
+            if let toAsDate = to[withTimeField]?.dateValue, let fromAsDate = from[withTimeField]?.dateValue {
                 self.time = toAsDate.timeIntervalSince(fromAsDate)
-            }else if let toAsNumber = to[withTimeField].numberWithUnit, let fromAsNumber = to[withTimeField].numberWithUnit {
+            }else if let toAsNumber = to[withTimeField]?.numberWithUnit, let fromAsNumber = to[withTimeField]?.numberWithUnit {
                 self.time = toAsNumber.convert(to: GCUnit.second()).value - fromAsNumber.convert(to: GCUnit.second()).value
             }else{
                 self.time = 0.0

@@ -52,6 +52,19 @@
     [super tearDown];
 }
 
+#pragma mark - duplicate activities
+
+-(void)testSearchDuplicateActivities{
+    
+    NSString * fname = [RZFileOrganizer bundleFilePath:@"activities_duplicate.db" forClass:[self class]];
+    FMDatabase * db = [FMDatabase databaseWithPath:fname];
+    [db open];
+
+    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    NSLog(@"Act %@", @(organizer.activities.count)); // 128 @ 95%, 129 @ 99%
+    XCTAssertEqual(organizer.activities.count, 126, @"filtered duplicate properly");
+}
+
 #pragma mark - simulator db and tracks
 
 // Way to run some test on all activities
