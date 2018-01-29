@@ -48,7 +48,7 @@ typedef unsigned long TSScoreRulePacked;
 
 
 +(TSTennisScoreRule*)ruleForName:(NSString*)name;
-+(NSArray*)availableRuleNames;
++(NSArray<NSString*>*)availableRuleNames;
 
 +(TSTennisScoreRule*)defaultRule;
 +(TSTennisScoreRule*)shortSetRule;

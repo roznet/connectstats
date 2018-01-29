@@ -733,7 +733,6 @@
 		42AA8E131F5471AB009734D4 /* TSReportOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA8DB81F5471AB009734D4 /* TSReportOrganizer.m */; };
 		42AA8E141F5471AB009734D4 /* TSResultEditOneRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA8DBA1F5471AB009734D4 /* TSResultEditOneRow.m */; };
 		42AA8E151F5471AB009734D4 /* TSResultEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA8DBC1F5471AB009734D4 /* TSResultEditViewController.m */; };
-		42AA8E161F5471AB009734D4 /* TSScoreRuleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA8DBE1F5471AB009734D4 /* TSScoreRuleTableViewController.m */; };
 		42AA8E171F5471AB009734D4 /* TSSessionEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA8DC01F5471AB009734D4 /* TSSessionEditTableViewController.m */; };
 		42AA8E181F5471AB009734D4 /* TSSessionListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA8DC21F5471AB009734D4 /* TSSessionListViewController.m */; };
 		42AA8E191F5471AB009734D4 /* TSSessionReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA8DC41F5471AB009734D4 /* TSSessionReport.m */; };
@@ -1910,6 +1909,8 @@
 		42C82ABA201FC4CE00A23815 /* session_201411221859.db in Resources */ = {isa = PBXBuildFile; fileRef = 42C82A9C201FC4AA00A23815 /* session_201411221859.db */; };
 		42C82ABB201FC4CE00A23815 /* cloud_session_20150708164712.db in Resources */ = {isa = PBXBuildFile; fileRef = 42C82A9D201FC4AA00A23815 /* cloud_session_20150708164712.db */; };
 		42C82ABC201FC4CE00A23815 /* session_20150117100009.db in Resources */ = {isa = PBXBuildFile; fileRef = 42C82A9E201FC4AA00A23815 /* session_20150117100009.db */; };
+		42C82AC1201FCF0500A23815 /* TSScoreRuleEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C82ABF201FCF0500A23815 /* TSScoreRuleEditorViewController.swift */; };
+		42C82AC2201FCF0500A23815 /* TSScoreRuleEditorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42C82AC0201FCF0500A23815 /* TSScoreRuleEditorViewController.xib */; };
 		42C92FDF170FB73F0037602F /* GCActivityAutoLapChoices.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */; };
 		42CC45B5200A2288003EB805 /* GCTestServiceConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */; };
 		42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */; };
@@ -3089,8 +3090,6 @@
 		42AA8DBA1F5471AB009734D4 /* TSResultEditOneRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSResultEditOneRow.m; sourceTree = "<group>"; };
 		42AA8DBB1F5471AB009734D4 /* TSResultEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSResultEditViewController.h; sourceTree = "<group>"; };
 		42AA8DBC1F5471AB009734D4 /* TSResultEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSResultEditViewController.m; sourceTree = "<group>"; };
-		42AA8DBD1F5471AB009734D4 /* TSScoreRuleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSScoreRuleTableViewController.h; sourceTree = "<group>"; };
-		42AA8DBE1F5471AB009734D4 /* TSScoreRuleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSScoreRuleTableViewController.m; sourceTree = "<group>"; };
 		42AA8DBF1F5471AB009734D4 /* TSSessionEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSessionEditTableViewController.h; sourceTree = "<group>"; };
 		42AA8DC01F5471AB009734D4 /* TSSessionEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSessionEditTableViewController.m; sourceTree = "<group>"; };
 		42AA8DC11F5471AB009734D4 /* TSSessionListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSessionListViewController.h; sourceTree = "<group>"; };
@@ -4175,6 +4174,8 @@
 		42C82AA0201FC4AA00A23815 /* TSTestPlayers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSTestPlayers.m; sourceTree = "<group>"; };
 		42C82AA1201FC4AA00A23815 /* TSTennisSession+Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TSTennisSession+Test.h"; sourceTree = "<group>"; };
 		42C82AA2201FC4AA00A23815 /* TSTestSamples.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSTestSamples.h; sourceTree = "<group>"; };
+		42C82ABF201FCF0500A23815 /* TSScoreRuleEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TSScoreRuleEditorViewController.swift; sourceTree = "<group>"; };
+		42C82AC0201FCF0500A23815 /* TSScoreRuleEditorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TSScoreRuleEditorViewController.xib; sourceTree = "<group>"; };
 		42C92FDD170FB73F0037602F /* GCActivityAutoLapChoices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCActivityAutoLapChoices.h; path = src/GCActivityAutoLapChoices.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityAutoLapChoices.m; path = src/GCActivityAutoLapChoices.m; sourceTree = "<group>"; };
 		42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCTestServiceConfig.xib; path = connectstatstestapp/ui/GCTestServiceConfig.xib; sourceTree = SOURCE_ROOT; };
@@ -4663,7 +4664,6 @@
 			isa = PBXGroup;
 			children = (
 				4226B4191F65D398009E1104 /* TSSessionListTableViewController.swift */,
-				4226B4181F65D398009E1104 /* tennisstats-Bridging-Header.h */,
 			);
 			name = Lists;
 			sourceTree = "<group>";
@@ -4764,6 +4764,7 @@
 		42306BF01F5C588B00FC7CCB /* AppDelegate */ = {
 			isa = PBXGroup;
 			children = (
+				4226B4181F65D398009E1104 /* tennisstats-Bridging-Header.h */,
 				42AA8D941F5471AB009734D4 /* TSAppDelegate.h */,
 				42AA8D951F5471AB009734D4 /* TSAppDelegate.m */,
 				42AA8D961F5471AB009734D4 /* TSAppGlobal.h */,
@@ -5032,8 +5033,8 @@
 		42306C0E1F5C5CB100FC7CCB /* ScoreRuleEditor */ = {
 			isa = PBXGroup;
 			children = (
-				42AA8DBD1F5471AB009734D4 /* TSScoreRuleTableViewController.h */,
-				42AA8DBE1F5471AB009734D4 /* TSScoreRuleTableViewController.m */,
+				42C82ABF201FCF0500A23815 /* TSScoreRuleEditorViewController.swift */,
+				42C82AC0201FCF0500A23815 /* TSScoreRuleEditorViewController.xib */,
 			);
 			name = ScoreRuleEditor;
 			sourceTree = "<group>";
@@ -9070,6 +9071,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42AA8E461F5471DE009734D4 /* reportbody.html in Resources */,
+				42C82AC2201FCF0500A23815 /* TSScoreRuleEditorViewController.xib in Resources */,
 				42AA8E491F5471DE009734D4 /* StatsDescription.pdf in Resources */,
 				42AA8E4A1F5471DE009734D4 /* table.css in Resources */,
 				42AA8E481F5471DE009734D4 /* reportheader.html in Resources */,
@@ -10246,7 +10248,6 @@
 				423F54131F6C6FE3004471E6 /* GCService.m in Sources */,
 				42AA8E2B1F5471AB009734D4 /* TSTennisResultSet.m in Sources */,
 				42AA8E091F5471AB009734D4 /* TSPlayer+Cells.m in Sources */,
-				42AA8E161F5471AB009734D4 /* TSScoreRuleTableViewController.m in Sources */,
 				42AA8E0A1F5471AB009734D4 /* TSPlayer.m in Sources */,
 				42AA8E0E1F5471AB009734D4 /* TSPlotAnalysisTableViewController.m in Sources */,
 				42AA8E1D1F5471AB009734D4 /* TSTabBarViewController.m in Sources */,
@@ -10280,6 +10281,7 @@
 				42AA8E181F5471AB009734D4 /* TSSessionListViewController.m in Sources */,
 				42AA8E2A1F5471AB009734D4 /* TSTennisResult.m in Sources */,
 				42AA8E131F5471AB009734D4 /* TSReportOrganizer.m in Sources */,
+				42C82AC1201FCF0500A23815 /* TSScoreRuleEditorViewController.swift in Sources */,
 				42AA8E231F5471AB009734D4 /* TSTennisCourtViewController.m in Sources */,
 				42AA8E171F5471AB009734D4 /* TSSessionEditTableViewController.m in Sources */,
 				42AA8E2C1F5471AB009734D4 /* TSTennisScore.m in Sources */,
@@ -11296,7 +11298,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "TennisStats/src/tennisstats-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = arm64;
 			};
@@ -11337,7 +11339,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.tennisstats";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "TennisStats/src/tennisstats-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = arm64;
 			};
