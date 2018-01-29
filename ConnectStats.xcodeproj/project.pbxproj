@@ -327,19 +327,6 @@
 		422FAFCD19A1DD6000D09773 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 427B20AD1621B5CF00D5C3C5 /* Localizable.strings */; };
 		422FAFD219A1DD6000D09773 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42EE4565176BCB81003338AF /* Media.xcassets */; };
 		42305E971DCF81C60024700C /* GCAppDelegate+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 429889A31D90371700A22571 /* GCAppDelegate+Swift.m */; };
-		42306C1D1F5C5EA300FC7CCB /* cloud_session_20150708164712.db in Resources */ = {isa = PBXBuildFile; fileRef = 42306C151F5C5EA300FC7CCB /* cloud_session_20150708164712.db */; };
-		42306C1E1F5C5EA300FC7CCB /* session_201410122156.db in Resources */ = {isa = PBXBuildFile; fileRef = 42306C161F5C5EA300FC7CCB /* session_201410122156.db */; };
-		42306C1F1F5C5EA300FC7CCB /* session_201410180916.db in Resources */ = {isa = PBXBuildFile; fileRef = 42306C171F5C5EA300FC7CCB /* session_201410180916.db */; };
-		42306C201F5C5EA300FC7CCB /* session_201411011705.db in Resources */ = {isa = PBXBuildFile; fileRef = 42306C181F5C5EA300FC7CCB /* session_201411011705.db */; };
-		42306C211F5C5EA300FC7CCB /* session_201411221859.db in Resources */ = {isa = PBXBuildFile; fileRef = 42306C191F5C5EA300FC7CCB /* session_201411221859.db */; };
-		42306C221F5C5EA300FC7CCB /* session_20150117100009.db in Resources */ = {isa = PBXBuildFile; fileRef = 42306C1A1F5C5EA300FC7CCB /* session_20150117100009.db */; };
-		42306C231F5C5EA300FC7CCB /* session_20150117170928.db in Resources */ = {isa = PBXBuildFile; fileRef = 42306C1B1F5C5EA300FC7CCB /* session_20150117170928.db */; };
-		42306C241F5C5EA300FC7CCB /* session_test_large.db in Resources */ = {isa = PBXBuildFile; fileRef = 42306C1C1F5C5EA300FC7CCB /* session_test_large.db */; };
-		42306C2C1F5C5EC700FC7CCB /* TSTestDataPivot.m in Sources */ = {isa = PBXBuildFile; fileRef = 42306C251F5C5EC600FC7CCB /* TSTestDataPivot.m */; };
-		42306C2D1F5C5EC700FC7CCB /* TSTestPlayers.m in Sources */ = {isa = PBXBuildFile; fileRef = 42306C271F5C5EC700FC7CCB /* TSTestPlayers.m */; };
-		42306C2E1F5C5EC700FC7CCB /* TSTestTennisSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 42306C281F5C5EC700FC7CCB /* TSTestTennisSession.m */; };
-		42306C2F1F5C5EC700FC7CCB /* TSTestOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 42306C291F5C5EC700FC7CCB /* TSTestOrganizer.m */; };
-		42306C301F5C5EC700FC7CCB /* TSTennisSession+Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 42306C2B1F5C5EC700FC7CCB /* TSTennisSession+Test.m */; };
 		42306C311F5C5F7500FC7CCB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428FF70F15F36888007A88FA /* Foundation.framework */; };
 		42306C321F5C5F7D00FC7CCB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428FF70D15F36888007A88FA /* UIKit.framework */; };
 		42306C341F5C5FC400FC7CCB /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42306C331F5C5FC400FC7CCB /* XCTest.framework */; };
@@ -722,7 +709,6 @@
 		42AA288C1637F56F0054F84A /* GCActivitySearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA288B1637F56F0054F84A /* GCActivitySearch.m */; };
 		42AA288F1637F6AB0054F84A /* GCActivitySearchElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA288E1637F6AB0054F84A /* GCActivitySearchElement.m */; };
 		42AA8D731F547151009734D4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA8D721F547151009734D4 /* main.m */; };
-		42AA8D7D1F547151009734D4 /* tennisstatsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA8D7C1F547151009734D4 /* tennisstatsTests.m */; };
 		42AA8DFE1F5471AB009734D4 /* CKRecord+TennisSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA8D8E1F5471AB009734D4 /* CKRecord+TennisSession.m */; };
 		42AA8DFF1F5471AB009734D4 /* TSAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA8D901F5471AB009734D4 /* TSAnalysis.m */; };
 		42AA8E001F5471AB009734D4 /* TSAnalysisTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA8D921F5471AB009734D4 /* TSAnalysisTracker.m */; };
@@ -1911,6 +1897,19 @@
 		42C7D4251DAADBFB0089806B /* activityweather_1027746730.json in Resources */ = {isa = PBXBuildFile; fileRef = 42C7D4171DAAD7D80089806B /* activityweather_1027746730.json */; };
 		42C7D4281DAC293B0089806B /* GCLapSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7D4271DAC293B0089806B /* GCLapSwim.m */; };
 		42C7D4291DAC293B0089806B /* GCLapSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7D4271DAC293B0089806B /* GCLapSwim.m */; };
+		42C82AB0201FC4C600A23815 /* TSTennisSession+Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C82A93201FC4A900A23815 /* TSTennisSession+Test.m */; };
+		42C82AB1201FC4C600A23815 /* TSTestDataPivot.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C82A9F201FC4AA00A23815 /* TSTestDataPivot.m */; };
+		42C82AB2201FC4C600A23815 /* TSTestOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C82A94201FC4A900A23815 /* TSTestOrganizer.m */; };
+		42C82AB3201FC4C600A23815 /* TSTestPlayers.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C82AA0201FC4AA00A23815 /* TSTestPlayers.m */; };
+		42C82AB4201FC4C600A23815 /* TSTestTennisSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C82A95201FC4A900A23815 /* TSTestTennisSession.m */; };
+		42C82AB5201FC4CE00A23815 /* session_201411011705.db in Resources */ = {isa = PBXBuildFile; fileRef = 42C82A97201FC4AA00A23815 /* session_201411011705.db */; };
+		42C82AB6201FC4CE00A23815 /* session_test_large.db in Resources */ = {isa = PBXBuildFile; fileRef = 42C82A98201FC4AA00A23815 /* session_test_large.db */; };
+		42C82AB7201FC4CE00A23815 /* session_201410122156.db in Resources */ = {isa = PBXBuildFile; fileRef = 42C82A99201FC4AA00A23815 /* session_201410122156.db */; };
+		42C82AB8201FC4CE00A23815 /* session_201410180916.db in Resources */ = {isa = PBXBuildFile; fileRef = 42C82A9A201FC4AA00A23815 /* session_201410180916.db */; };
+		42C82AB9201FC4CE00A23815 /* session_20150117170928.db in Resources */ = {isa = PBXBuildFile; fileRef = 42C82A9B201FC4AA00A23815 /* session_20150117170928.db */; };
+		42C82ABA201FC4CE00A23815 /* session_201411221859.db in Resources */ = {isa = PBXBuildFile; fileRef = 42C82A9C201FC4AA00A23815 /* session_201411221859.db */; };
+		42C82ABB201FC4CE00A23815 /* cloud_session_20150708164712.db in Resources */ = {isa = PBXBuildFile; fileRef = 42C82A9D201FC4AA00A23815 /* cloud_session_20150708164712.db */; };
+		42C82ABC201FC4CE00A23815 /* session_20150117100009.db in Resources */ = {isa = PBXBuildFile; fileRef = 42C82A9E201FC4AA00A23815 /* session_20150117100009.db */; };
 		42C92FDF170FB73F0037602F /* GCActivityAutoLapChoices.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */; };
 		42CC45B5200A2288003EB805 /* GCTestServiceConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */; };
 		42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */; };
@@ -2270,6 +2269,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 42382ACF1EAC9BC700252217;
 			remoteInfo = RZUtilsTouch;
+		};
+		42C82A8B201FBEDD00A23815 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 42248C022014E16A006ADC90;
+			remoteInfo = RZExternalUniversal;
 		};
 		42D8AF091B24CE8900ADDD31 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2639,21 +2645,6 @@
 		422D900617A276F100C131DC /* GCStatsGraphOptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStatsGraphOptionViewController.m; path = src/GCStatsGraphOptionViewController.m; sourceTree = "<group>"; };
 		422FAFF119A1DD6000D09773 /* HealthStats.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthStats.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		422FAFF219A1DD6100D09773 /* HealthStats-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HealthStats-Info.plist"; sourceTree = SOURCE_ROOT; };
-		42306C151F5C5EA300FC7CCB /* cloud_session_20150708164712.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = cloud_session_20150708164712.db; sourceTree = "<group>"; };
-		42306C161F5C5EA300FC7CCB /* session_201410122156.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_201410122156.db; sourceTree = "<group>"; };
-		42306C171F5C5EA300FC7CCB /* session_201410180916.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_201410180916.db; sourceTree = "<group>"; };
-		42306C181F5C5EA300FC7CCB /* session_201411011705.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_201411011705.db; sourceTree = "<group>"; };
-		42306C191F5C5EA300FC7CCB /* session_201411221859.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_201411221859.db; sourceTree = "<group>"; };
-		42306C1A1F5C5EA300FC7CCB /* session_20150117100009.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_20150117100009.db; sourceTree = "<group>"; };
-		42306C1B1F5C5EA300FC7CCB /* session_20150117170928.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_20150117170928.db; sourceTree = "<group>"; };
-		42306C1C1F5C5EA300FC7CCB /* session_test_large.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_test_large.db; sourceTree = "<group>"; };
-		42306C251F5C5EC600FC7CCB /* TSTestDataPivot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSTestDataPivot.m; path = ../../tennisstats/tennisstatsTests/TSTestDataPivot.m; sourceTree = "<group>"; };
-		42306C261F5C5EC700FC7CCB /* TSTennisSession+Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TSTennisSession+Test.h"; path = "../../tennisstats/tennisstatsTests/TSTennisSession+Test.h"; sourceTree = "<group>"; };
-		42306C271F5C5EC700FC7CCB /* TSTestPlayers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSTestPlayers.m; path = ../../tennisstats/tennisstatsTests/TSTestPlayers.m; sourceTree = "<group>"; };
-		42306C281F5C5EC700FC7CCB /* TSTestTennisSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSTestTennisSession.m; path = ../../tennisstats/tennisstatsTests/TSTestTennisSession.m; sourceTree = "<group>"; };
-		42306C291F5C5EC700FC7CCB /* TSTestOrganizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSTestOrganizer.m; path = ../../tennisstats/tennisstatsTests/TSTestOrganizer.m; sourceTree = "<group>"; };
-		42306C2A1F5C5EC700FC7CCB /* TSTestSamples.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSTestSamples.h; path = ../../tennisstats/tennisstatsTests/TSTestSamples.h; sourceTree = "<group>"; };
-		42306C2B1F5C5EC700FC7CCB /* TSTennisSession+Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "TSTennisSession+Test.m"; path = "../../tennisstats/tennisstatsTests/TSTennisSession+Test.m"; sourceTree = "<group>"; };
 		42306C331F5C5FC400FC7CCB /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		42318E7B19AF1B63000CD26B /* GCFitBitReqBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFitBitReqBase.h; path = src/GCFitBitReqBase.h; sourceTree = "<group>"; };
 		42318E7C19AF1B63000CD26B /* GCFitBitReqBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFitBitReqBase.m; path = src/GCFitBitReqBase.m; sourceTree = "<group>"; };
@@ -3049,7 +3040,6 @@
 		42AA8D711F547151009734D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42AA8D721F547151009734D4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		42AA8D781F547151009734D4 /* tennisstatsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tennisstatsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		42AA8D7C1F547151009734D4 /* tennisstatsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = tennisstatsTests.m; sourceTree = "<group>"; };
 		42AA8D7E1F547151009734D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42AA8D8D1F5471AB009734D4 /* CKRecord+TennisSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKRecord+TennisSession.h"; sourceTree = "<group>"; };
 		42AA8D8E1F5471AB009734D4 /* CKRecord+TennisSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKRecord+TennisSession.m"; sourceTree = "<group>"; };
@@ -4170,6 +4160,21 @@
 		42C7D4171DAAD7D80089806B /* activityweather_1027746730.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activityweather_1027746730.json; sourceTree = "<group>"; };
 		42C7D4261DAC293B0089806B /* GCLapSwim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCLapSwim.h; path = src/GCLapSwim.h; sourceTree = "<group>"; };
 		42C7D4271DAC293B0089806B /* GCLapSwim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCLapSwim.m; path = src/GCLapSwim.m; sourceTree = "<group>"; };
+		42C82A93201FC4A900A23815 /* TSTennisSession+Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TSTennisSession+Test.m"; sourceTree = "<group>"; };
+		42C82A94201FC4A900A23815 /* TSTestOrganizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSTestOrganizer.m; sourceTree = "<group>"; };
+		42C82A95201FC4A900A23815 /* TSTestTennisSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSTestTennisSession.m; sourceTree = "<group>"; };
+		42C82A97201FC4AA00A23815 /* session_201411011705.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_201411011705.db; sourceTree = "<group>"; };
+		42C82A98201FC4AA00A23815 /* session_test_large.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_test_large.db; sourceTree = "<group>"; };
+		42C82A99201FC4AA00A23815 /* session_201410122156.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_201410122156.db; sourceTree = "<group>"; };
+		42C82A9A201FC4AA00A23815 /* session_201410180916.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_201410180916.db; sourceTree = "<group>"; };
+		42C82A9B201FC4AA00A23815 /* session_20150117170928.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_20150117170928.db; sourceTree = "<group>"; };
+		42C82A9C201FC4AA00A23815 /* session_201411221859.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_201411221859.db; sourceTree = "<group>"; };
+		42C82A9D201FC4AA00A23815 /* cloud_session_20150708164712.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = cloud_session_20150708164712.db; sourceTree = "<group>"; };
+		42C82A9E201FC4AA00A23815 /* session_20150117100009.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = session_20150117100009.db; sourceTree = "<group>"; };
+		42C82A9F201FC4AA00A23815 /* TSTestDataPivot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSTestDataPivot.m; sourceTree = "<group>"; };
+		42C82AA0201FC4AA00A23815 /* TSTestPlayers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSTestPlayers.m; sourceTree = "<group>"; };
+		42C82AA1201FC4AA00A23815 /* TSTennisSession+Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TSTennisSession+Test.h"; sourceTree = "<group>"; };
+		42C82AA2201FC4AA00A23815 /* TSTestSamples.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSTestSamples.h; sourceTree = "<group>"; };
 		42C92FDD170FB73F0037602F /* GCActivityAutoLapChoices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCActivityAutoLapChoices.h; path = src/GCActivityAutoLapChoices.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityAutoLapChoices.m; path = src/GCActivityAutoLapChoices.m; sourceTree = "<group>"; };
 		42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCTestServiceConfig.xib; path = connectstatstestapp/ui/GCTestServiceConfig.xib; sourceTree = SOURCE_ROOT; };
@@ -4866,9 +4871,9 @@
 				42AA8DE81F5471AB009734D4 /* TSTennisResultSet.h */,
 				42AA8DE91F5471AB009734D4 /* TSTennisResultSet.m */,
 				42AA8DEA1F5471AB009734D4 /* TSTennisScore.h */,
-				42AA8DEF1F5471AB009734D4 /* TSTennisScoreRule.m */,
 				42AA8DEB1F5471AB009734D4 /* TSTennisScore.m */,
 				42AA8DEE1F5471AB009734D4 /* TSTennisScoreRule.h */,
+				42AA8DEF1F5471AB009734D4 /* TSTennisScoreRule.m */,
 			);
 			name = Score;
 			sourceTree = "<group>";
@@ -5080,22 +5085,6 @@
 				42AA8D9B1F5471AB009734D4 /* TSCloudSessionListTableViewController.m */,
 			);
 			name = Cloud;
-			sourceTree = "<group>";
-		};
-		42306C141F5C5EA300FC7CCB /* samples */ = {
-			isa = PBXGroup;
-			children = (
-				42306C151F5C5EA300FC7CCB /* cloud_session_20150708164712.db */,
-				42306C161F5C5EA300FC7CCB /* session_201410122156.db */,
-				42306C171F5C5EA300FC7CCB /* session_201410180916.db */,
-				42306C181F5C5EA300FC7CCB /* session_201411011705.db */,
-				42306C191F5C5EA300FC7CCB /* session_201411221859.db */,
-				42306C1A1F5C5EA300FC7CCB /* session_20150117100009.db */,
-				42306C1B1F5C5EA300FC7CCB /* session_20150117170928.db */,
-				42306C1C1F5C5EA300FC7CCB /* session_test_large.db */,
-			);
-			name = samples;
-			path = ../../tennisstats/tennisstatsTests/samples;
 			sourceTree = "<group>";
 		};
 		42318E6E19AF19B3000CD26B /* FitBit */ = {
@@ -6305,15 +6294,14 @@
 		42AA8D7B1F547151009734D4 /* TennisStatsTests */ = {
 			isa = PBXGroup;
 			children = (
-				42306C261F5C5EC700FC7CCB /* TSTennisSession+Test.h */,
-				42306C2B1F5C5EC700FC7CCB /* TSTennisSession+Test.m */,
-				42306C251F5C5EC600FC7CCB /* TSTestDataPivot.m */,
-				42306C291F5C5EC700FC7CCB /* TSTestOrganizer.m */,
-				42306C271F5C5EC700FC7CCB /* TSTestPlayers.m */,
-				42306C2A1F5C5EC700FC7CCB /* TSTestSamples.h */,
-				42306C281F5C5EC700FC7CCB /* TSTestTennisSession.m */,
-				42306C141F5C5EA300FC7CCB /* samples */,
-				42AA8D7C1F547151009734D4 /* tennisstatsTests.m */,
+				42C82A96201FC4AA00A23815 /* samples */,
+				42C82AA1201FC4AA00A23815 /* TSTennisSession+Test.h */,
+				42C82A93201FC4A900A23815 /* TSTennisSession+Test.m */,
+				42C82A9F201FC4AA00A23815 /* TSTestDataPivot.m */,
+				42C82A94201FC4A900A23815 /* TSTestOrganizer.m */,
+				42C82AA0201FC4AA00A23815 /* TSTestPlayers.m */,
+				42C82AA2201FC4AA00A23815 /* TSTestSamples.h */,
+				42C82A95201FC4A900A23815 /* TSTestTennisSession.m */,
 				42AA8D7E1F547151009734D4 /* Info.plist */,
 			);
 			path = TennisStatsTests;
@@ -7526,6 +7514,21 @@
 			path = zones;
 			sourceTree = "<group>";
 		};
+		42C82A96201FC4AA00A23815 /* samples */ = {
+			isa = PBXGroup;
+			children = (
+				42C82A97201FC4AA00A23815 /* session_201411011705.db */,
+				42C82A98201FC4AA00A23815 /* session_test_large.db */,
+				42C82A99201FC4AA00A23815 /* session_201410122156.db */,
+				42C82A9A201FC4AA00A23815 /* session_201410180916.db */,
+				42C82A9B201FC4AA00A23815 /* session_20150117170928.db */,
+				42C82A9C201FC4AA00A23815 /* session_201411221859.db */,
+				42C82A9D201FC4AA00A23815 /* cloud_session_20150708164712.db */,
+				42C82A9E201FC4AA00A23815 /* session_20150117100009.db */,
+			);
+			path = samples;
+			sourceTree = "<group>";
+		};
 		42D8AEF31B1DC8C200ADDD31 /* FitnessRequests */ = {
 			isa = PBXGroup;
 			children = (
@@ -7707,6 +7710,7 @@
 				42EBBEDF1FFAB5400009B385 /* RZExternal.framework */,
 				42EBC0311FFAE1000009B385 /* RZExternalTestUtils.framework */,
 				42A0098620012B5B00019CB3 /* RZExternalCpp.framework */,
+				42C82A8C201FBEDD00A23815 /* RZExternalUniversal.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -8090,6 +8094,7 @@
 					};
 					428FF72315F36888007A88FA = {
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 					};
 					42AA8D601F547151009734D4 = {
 						CreatedOnToolsVersion = 9.0;
@@ -8275,6 +8280,13 @@
 			fileType = wrapper.cfbundle;
 			path = RZUtilsTouchTests.xctest;
 			remoteRef = 42BF1FEA1D3AC233004445C2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		42C82A8C201FBEDD00A23815 /* RZExternalUniversal.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RZExternalUniversal.framework;
+			remoteRef = 42C82A8B201FBEDD00A23815 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		42EBBEDF1FFAB5400009B385 /* RZExternal.framework */ = {
@@ -9072,14 +9084,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42306C211F5C5EA300FC7CCB /* session_201411221859.db in Resources */,
-				42306C1D1F5C5EA300FC7CCB /* cloud_session_20150708164712.db in Resources */,
-				42306C201F5C5EA300FC7CCB /* session_201411011705.db in Resources */,
-				42306C231F5C5EA300FC7CCB /* session_20150117170928.db in Resources */,
-				42306C1F1F5C5EA300FC7CCB /* session_201410180916.db in Resources */,
-				42306C1E1F5C5EA300FC7CCB /* session_201410122156.db in Resources */,
-				42306C241F5C5EA300FC7CCB /* session_test_large.db in Resources */,
-				42306C221F5C5EA300FC7CCB /* session_20150117100009.db in Resources */,
+				42C82ABA201FC4CE00A23815 /* session_201411221859.db in Resources */,
+				42C82AB6201FC4CE00A23815 /* session_test_large.db in Resources */,
+				42C82AB7201FC4CE00A23815 /* session_201410122156.db in Resources */,
+				42C82ABC201FC4CE00A23815 /* session_20150117100009.db in Resources */,
+				42C82AB5201FC4CE00A23815 /* session_201411011705.db in Resources */,
+				42C82AB9201FC4CE00A23815 /* session_20150117170928.db in Resources */,
+				42C82AB8201FC4CE00A23815 /* session_201410180916.db in Resources */,
+				42C82ABB201FC4CE00A23815 /* cloud_session_20150708164712.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10302,12 +10314,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42306C2E1F5C5EC700FC7CCB /* TSTestTennisSession.m in Sources */,
-				42AA8D7D1F547151009734D4 /* tennisstatsTests.m in Sources */,
-				42306C2F1F5C5EC700FC7CCB /* TSTestOrganizer.m in Sources */,
-				42306C2D1F5C5EC700FC7CCB /* TSTestPlayers.m in Sources */,
-				42306C301F5C5EC700FC7CCB /* TSTennisSession+Test.m in Sources */,
-				42306C2C1F5C5EC700FC7CCB /* TSTestDataPivot.m in Sources */,
+				42C82AB0201FC4C600A23815 /* TSTennisSession+Test.m in Sources */,
+				42C82AB3201FC4C600A23815 /* TSTestPlayers.m in Sources */,
+				42C82AB1201FC4C600A23815 /* TSTestDataPivot.m in Sources */,
+				42C82AB2201FC4C600A23815 /* TSTestOrganizer.m in Sources */,
+				42C82AB4201FC4C600A23815 /* TSTestTennisSession.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11209,6 +11220,9 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ConnectStats.app/ConnectStats";
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ConnectStats/ConnectStats-Prefix.pch";
@@ -11216,7 +11230,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.roznet.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = M7QSSF3624/;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStatsTests/ConnectStatsXCTests-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -11230,6 +11244,9 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ConnectStats.app/ConnectStats";
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ConnectStats/ConnectStats-Prefix.pch";
@@ -11237,6 +11254,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.roznet.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStatsTests/ConnectStatsXCTests-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_VERSION = 4.0;

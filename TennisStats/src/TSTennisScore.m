@@ -121,7 +121,11 @@
 }
 -(BOOL)checkPointsWonGame:(TSScore)points other:(TSScore)other{
     if ( TEST_FLAG(self.flag, TSTennisScoreRegularGame) ) {
-        return points >= 4 && points > other+1;
+        if( self.rule.gameEndWithSuddenDeath){
+            return points >= 4;
+        }else{
+            return points >= 4 && points > other+1;
+        }
     }else if(TEST_FLAG(self.flag, TSTennisScoreTieBreak)) {
         return points >= self.rule.tieBreakNumberOfPoints && points > other+1;
     }else if(TEST_FLAG(self.flag, TSTennisScoreMatchTieBreak)){
