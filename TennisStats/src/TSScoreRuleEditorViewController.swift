@@ -43,11 +43,34 @@ class TSScoreRuleEditorViewController: UIViewController,UITableViewDataSource,UI
         // Do any additional setup after loading the view.
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        updateToScore()
+        super.viewWillDisappear(animated)
+    }
+    
+    @IBAction func setAsDefault(_ sender: Any) {
+        self.updateToScore()
+        TSAppGlobal.setDefaultScoreRule(self.scoreRule)
+    }
+    
+    func updateToScore() {
+        scoreRule?.setsPerMatch = numberOfSets.selectedSegmentIndex == 1 ? 5 : 3
+        scoreRule?.gamesPerSet = gamesPerSet.selectedSegmentIndex == 1 ? 6 : 4
+        scoreRule?.decidingSetIsTieBreak = deciderIsTieBreak.selectedSegmentIndex == 0
+        scoreRule?.decidingSetHasNoTieBreak = deciderHasTieBreak.selectedSegmentIndex == 0
+        scoreRule?.gameEndWithSuddenDeath = gameHasAdvantage.selectedSegmentIndex == 0
+    }
+    
     func updateFromScore() {
         if let scoreRule = self.scoreRule {
             numberOfSets.selectedSegmentIndex = scoreRule.setsPerMatch == 5 ? 1 : 0
-            gamesPerSet.selectedSegmentIndex = scoreRule.gamesPerSet == 6 ? 6 : 4
-            deciderIsTieBreak.selectedSegmentIndex = scoreRule.decidingSetIsTieBreak ? 1 : 0
+            gamesPerSet.selectedSegmentIndex = scoreRule.gamesPerSet == 6 ? 1 : 0
+            deciderIsTieBreak.selectedSegmentIndex = scoreRule.decidingSetIsTieBreak ? 0 : 1
+            if( scoreRule.decidingSetIsTieBreak){
+                deciderHasTieBreak.isEnabled = false
+            }else{
+                deciderHasTieBreak.isEnabled = true
+            }
             deciderHasTieBreak.selectedSegmentIndex = scoreRule.decidingSetHasNoTieBreak ? 0 : 1
             gameHasAdvantage.selectedSegmentIndex = scoreRule.gameEndWithSuddenDeath ? 0 : 1
         }

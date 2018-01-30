@@ -107,11 +107,19 @@
                         <outlet property="delegate" destination="-1" id="6AZ-Vz-s4D"/>
                     </connections>
                 </tableView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0g4-Oy-xKV">
+                    <rect key="frame" x="252" y="305" width="98" height="30"/>
+                    <state key="normal" title="Set As Default"/>
+                    <connections>
+                        <action selector="setAsDefault:" destination="-1" eventType="touchUpInside" id="ucx-Nh-h7f"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="YDU-Lh-6Pn" firstAttribute="width" secondItem="fOP-if-tpB" secondAttribute="width" id="1Cy-bF-J1U"/>
                 <constraint firstItem="Ygp-y0-LeY" firstAttribute="top" secondItem="QCS-Ax-82P" secondAttribute="bottom" constant="29.5" id="1uG-Mn-vOQ"/>
+                <constraint firstItem="0g4-Oy-xKV" firstAttribute="trailing" secondItem="YDU-Lh-6Pn" secondAttribute="trailing" id="6VZ-2q-DZ8"/>
                 <constraint firstItem="4cE-Xn-MT5" firstAttribute="width" secondItem="NKz-im-OJR" secondAttribute="width" id="GAN-G1-NHK"/>
                 <constraint firstItem="rFU-Pq-Tx8" firstAttribute="top" secondItem="5JU-mC-uOE" secondAttribute="bottom" constant="29.5" id="Hhi-1h-cgB"/>
                 <constraint firstItem="4cE-Xn-MT5" firstAttribute="trailing" secondItem="NKz-im-OJR" secondAttribute="trailing" id="IkK-PQ-Rj7"/>
@@ -136,6 +144,7 @@
                 <constraint firstItem="YDU-Lh-6Pn" firstAttribute="baseline" secondItem="rFU-Pq-Tx8" secondAttribute="baseline" id="tcv-GR-PtP"/>
                 <constraint firstItem="QCS-Ax-82P" firstAttribute="leading" secondItem="MXv-e2-6Xs" secondAttribute="leading" id="twL-Oy-buX"/>
                 <constraint firstItem="5JU-mC-uOE" firstAttribute="leading" secondItem="Ygp-y0-LeY" secondAttribute="leading" id="uX0-cX-lnH"/>
+                <constraint firstItem="0g4-Oy-xKV" firstAttribute="top" secondItem="YDU-Lh-6Pn" secondAttribute="bottom" constant="30" id="zDO-LJ-iI2"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="33.5" y="53.5"/>
