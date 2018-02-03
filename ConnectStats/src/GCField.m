@@ -208,7 +208,8 @@ static void registerInCache(GCField*field){
                                @"SumStep":                         @(gcFieldFlagSumStep),
                                @"WeightedMeanGroundContactTime":   @(gcFieldFlagGroundContactTime),
                                @"WeightedMeanVerticalOscillation": @(gcFieldFlagVerticalOscillation),
-                               }
+                               },
+                 GC_TYPE_SKI_XC: @{@"WeightedMeanCadence": @(gcFieldFlagCadence)},
                  };
         RZRetain(dict);
     }
