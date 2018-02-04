@@ -64,6 +64,11 @@
 		421A51521C82FB4000671587 /* GCStatsHistGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42289D571C7B9B4D005A5D0E /* GCStatsHistGraphViewController.m */; };
 		421A51531C82FB5D00671587 /* GCStatsHistGraphOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42289D5A1C7B9CEE005A5D0E /* GCStatsHistGraphOptionViewController.m */; };
 		421A51541C82FB7100671587 /* GCCellEntryFieldChoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B89E7A1C8109C600F7142E /* GCCellEntryFieldChoiceViewController.m */; };
+		421A7659202754DC00D12B6C /* activitytrack_2477200414.json in Resources */ = {isa = PBXBuildFile; fileRef = 421A76482027534A00D12B6C /* activitytrack_2477200414.json */; };
+		421A765A202754DC00D12B6C /* activity_2477200414.fit in Resources */ = {isa = PBXBuildFile; fileRef = 421A76492027534A00D12B6C /* activity_2477200414.fit */; };
+		421A765B202754DC00D12B6C /* activitylaps_2477200414.json in Resources */ = {isa = PBXBuildFile; fileRef = 421A764A2027534A00D12B6C /* activitylaps_2477200414.json */; };
+		421A765C202754DC00D12B6C /* activityweather_2477200414.json in Resources */ = {isa = PBXBuildFile; fileRef = 421A764B2027534A00D12B6C /* activityweather_2477200414.json */; };
+		421A765E20275B4D00D12B6C /* activity_2477200414.json in Resources */ = {isa = PBXBuildFile; fileRef = 421A765D20275B4C00D12B6C /* activity_2477200414.json */; };
 		421F39A81B79EF8900CA7200 /* GCActivityThumbnails.m in Sources */ = {isa = PBXBuildFile; fileRef = 421F39A71B79EF8900CA7200 /* GCActivityThumbnails.m */; };
 		421F39A91B79EF8900CA7200 /* GCActivityThumbnails.m in Sources */ = {isa = PBXBuildFile; fileRef = 421F39A71B79EF8900CA7200 /* GCActivityThumbnails.m */; };
 		421F39AD1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 421F39AC1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m */; };
@@ -2580,6 +2585,12 @@
 		421A514B1C82FA6C00671587 /* GCActivity+Fields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCActivity+Fields.m"; path = "src/GCActivity+Fields.m"; sourceTree = "<group>"; };
 		421A514D1C82FA9400671587 /* GCCalendarDataDateMarkers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCCalendarDataDateMarkers.h; path = src/GCCalendarDataDateMarkers.h; sourceTree = "<group>"; };
 		421A514E1C82FA9400671587 /* GCCalendarDataDateMarkers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCCalendarDataDateMarkers.m; path = src/GCCalendarDataDateMarkers.m; sourceTree = "<group>"; };
+		421A76482027534A00D12B6C /* activitytrack_2477200414.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitytrack_2477200414.json; sourceTree = "<group>"; };
+		421A76492027534A00D12B6C /* activity_2477200414.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = activity_2477200414.fit; sourceTree = "<group>"; };
+		421A764A2027534A00D12B6C /* activitylaps_2477200414.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitylaps_2477200414.json; sourceTree = "<group>"; };
+		421A764B2027534A00D12B6C /* activityweather_2477200414.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activityweather_2477200414.json; sourceTree = "<group>"; };
+		421A764C2027534A00D12B6C /* track_2477200414.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = track_2477200414.db; sourceTree = "<group>"; };
+		421A765D20275B4C00D12B6C /* activity_2477200414.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_2477200414.json; sourceTree = "<group>"; };
 		421F39A61B79EF8900CA7200 /* GCActivityThumbnails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityThumbnails.h; path = src/GCActivityThumbnails.h; sourceTree = "<group>"; };
 		421F39A71B79EF8900CA7200 /* GCActivityThumbnails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityThumbnails.m; path = src/GCActivityThumbnails.m; sourceTree = "<group>"; };
 		421F39AB1B7A117300CA7200 /* GCTrackFieldChoiceHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTrackFieldChoiceHolder.h; path = src/GCTrackFieldChoiceHolder.h; sourceTree = "<group>"; };
@@ -4631,6 +4642,19 @@
 				421747F719C4FD4800C13C16 /* GCFitBitActivitiesParser.m */,
 			);
 			name = Parsers;
+			sourceTree = "<group>";
+		};
+		421A76472027534A00D12B6C /* activity_merge_fit */ = {
+			isa = PBXGroup;
+			children = (
+				421A765D20275B4C00D12B6C /* activity_2477200414.json */,
+				421A76482027534A00D12B6C /* activitytrack_2477200414.json */,
+				421A76492027534A00D12B6C /* activity_2477200414.fit */,
+				421A764A2027534A00D12B6C /* activitylaps_2477200414.json */,
+				421A764B2027534A00D12B6C /* activityweather_2477200414.json */,
+				421A764C2027534A00D12B6C /* track_2477200414.db */,
+			);
+			path = activity_merge_fit;
 			sourceTree = "<group>";
 		};
 		421F39AA1B79F12400CA7200 /* Apple Watch */ = {
@@ -6877,6 +6901,7 @@
 		42C0113C1AB437C10059B6CF /* samples */ = {
 			isa = PBXGroup;
 			children = (
+				421A76472027534A00D12B6C /* activity_merge_fit */,
 				4213AEB2201494840004B54B /* activities_duplicate.db */,
 				4282B6D81DC4B2270062C313 /* Activities */,
 				42C4B0641DBB39E7000A1612 /* zones */,
@@ -8389,10 +8414,12 @@
 				42BB0C7B1AB4A99F008D5A10 /* activityweather_444750744.json in Resources */,
 				42BB0C911AB4A99F008D5A10 /* activityweather_460826954.json in Resources */,
 				42BB0D2D1AB4A9A0008D5A10 /* activityweather_541581886.json in Resources */,
+				421A765E20275B4D00D12B6C /* activity_2477200414.json in Resources */,
 				42BB0C851AB4A99F008D5A10 /* activityweather_456386776.json in Resources */,
 				42BB0BF41AB4A99F008D5A10 /* activityweather_395288935.json in Resources */,
 				42BB0C681AB4A99F008D5A10 /* activityweather_435788622.json in Resources */,
 				42BB0CBE1AB4A99F008D5A10 /* activityweather_477785702.json in Resources */,
+				421A7659202754DC00D12B6C /* activitytrack_2477200414.json in Resources */,
 				42BB0D291AB4A9A0008D5A10 /* activityweather_539537018.json in Resources */,
 				427F93701BEC069F00C177F9 /* test_activity_swimming_439303647.db in Resources */,
 				42BB0DB91AB4A9A0008D5A10 /* activityweather_623325807.json in Resources */,
@@ -8464,6 +8491,7 @@
 				42BB0D531AB4A9A0008D5A10 /* activityweather_559085859.json in Resources */,
 				42C011A91AB4891B0059B6CF /* activityweather_684822800.json in Resources */,
 				42BB0C9D1AB4A99F008D5A10 /* activityweather_464998451.json in Resources */,
+				421A765C202754DC00D12B6C /* activityweather_2477200414.json in Resources */,
 				42C011B31AB4891B0059B6CF /* activityweather_694346737.json in Resources */,
 				42BB0BF61AB4A99F008D5A10 /* activityweather_395288954.json in Resources */,
 				42BB0D251AB4A9A0008D5A10 /* activityweather_538298535.json in Resources */,
@@ -8596,6 +8624,7 @@
 				42BB0C8B1AB4A99F008D5A10 /* activityweather_459301441.json in Resources */,
 				42C011C31AB4891B0059B6CF /* activityweather_711605604.json in Resources */,
 				42BB0DAA1AB4A9A0008D5A10 /* activityweather_614191246.json in Resources */,
+				421A765B202754DC00D12B6C /* activitylaps_2477200414.json in Resources */,
 				428BAD0E1CB14B650041468A /* activitylaps_1108367966.json in Resources */,
 				42BB0D9A1AB4A9A0008D5A10 /* activityweather_606713487.json in Resources */,
 				42BB0CD11AB4A99F008D5A10 /* activityweather_491796583.json in Resources */,
@@ -8819,6 +8848,7 @@
 				42C011B91AB4891B0059B6CF /* activityweather_711605443.json in Resources */,
 				42C0118D1AB4891B0059B6CF /* activityweather_661752475.json in Resources */,
 				42BB0DD61AB4A9A0008D5A10 /* activityweather_640378507.json in Resources */,
+				421A765A202754DC00D12B6C /* activity_2477200414.fit in Resources */,
 				42AEFEC91DA057F600D7DA6D /* 1378220136.is.strava.724716557 in Resources */,
 				42BB0DEE1AB4A9A0008D5A10 /* activityweather_652944216.json in Resources */,
 				42BB0D8A1AB4A9A0008D5A10 /* activityweather_598686780.json in Resources */,

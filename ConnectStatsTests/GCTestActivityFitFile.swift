@@ -20,11 +20,11 @@ class GCTestActivityFitFile: XCTestCase {
         super.tearDown()
     }
     
-    func testParseFit() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testParseFitAndMerge() {
         
-        let testActivityIds = [ "1083407258", "1378220136", "1382772474"]
+        // 10834...: ski activity merge cadence
+        // 24772...: run activity merge power
+        let testActivityIds = [  "2477200414", "1083407258"]
         for activityId in testActivityIds {
             
             let url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath("activity_\(activityId).fit", for: type(of: self)))

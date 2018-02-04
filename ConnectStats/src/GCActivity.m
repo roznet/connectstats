@@ -329,6 +329,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         default:
         {
             rv = [self numberWithUnitForField:field].unit;
+            if( ! rv ){
+                rv = [field unit];
+            }
         }
     }
     return  rv;

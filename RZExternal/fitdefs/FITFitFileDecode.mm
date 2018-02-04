@@ -51,10 +51,19 @@ class Listener : public fit::MesgListener
         for (FIT_UINT16 i = 0; i < (FIT_UINT16)mesg.GetNumFields(); i++)
         {
             fit::Field* field = mesg.GetFieldByIndex(i);
-            FITFitFieldValue * val = [FITFitFieldValue fieldValueFrom:field];
+            FITFitFieldValue * val = [FITFitFieldValue fieldValueFrom:*field];
             NSString * fieldname = val.fieldKey;
             values[fieldname] = val;
         }
+        std::vector<fit::DeveloperField> dev = mesg.GetDeveloperFields();
+        if( dev.size() > 0){
+            for( auto one = dev.begin(); one != dev.end(); ++one ){
+                FITFitFieldValue * val = [FITFitFieldValue fieldValueFromDeveloper:*one];
+                NSString * fieldname = val.fieldKey;
+                values[fieldname] = val;
+            }
+        }
+        
         // Collapsed locations:
         NSMutableDictionary * toRemove = [NSMutableDictionary dictionary];
         NSMutableDictionary * locations = [NSMutableDictionary dictionary];

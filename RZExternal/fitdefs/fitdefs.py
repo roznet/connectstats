@@ -156,7 +156,15 @@ fieldmap = { 'Altitude': 'Altitude',
              'TrainingStressScore': 'SumTrainingStressScore',
              'VerticalOscillation': 'WeightedMeanVerticalOscillation',
              'VerticalSpeed': 'VerticalSpeed',
-             'Zone': 'Zone'
+             'Zone': 'Zone',
+
+             "developer_Cadence" :     "WeightedMeanCadence",
+             "developer_Elevation" :     "developer_Elevation" ,
+             "developer_Form Power" : "WeightedMeanFormPower" ,
+             "developer_Ground Time" : "WeightedMeanGroundTime" ,
+             "developer_Leg Spring Stiffness" : "LegSpringStiffness" ,
+             "developer_Power" : "WeightedMeanPower" ,
+             "developer_Vertical Oscillation" :"WeightedMeanVerticalOscillation",
              }
 
 limitfield = {
@@ -238,6 +246,8 @@ def process_profile(fn):
 first_cap_re = re.compile('(.)([A-Z][a-z]+)')
 all_cap_re = re.compile('([a-z0-9])([A-Z])')
 def from_camel_case(name):
+    if name.startswith( 'developer_' ):
+        return name
     s1 = first_cap_re.sub(r'\1_\2', name)
     return all_cap_re.sub(r'\1_\2', s1).lower()
 

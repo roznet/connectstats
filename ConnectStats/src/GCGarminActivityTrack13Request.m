@@ -32,6 +32,7 @@
 #import "GCLapSwim.h"
 #import "GCActivity.h"
 #import "GCActivitiesOrganizer.h"
+#import "ConnectStats-Swift.h"
 @import RZExternal;
 
 @interface GCGarminActivityTrack13Request ()
@@ -125,12 +126,11 @@
     }else if(self.track13Stage == gcTrack13RequestLaps){
         return GCWebActivityURLSplits(self.activityId);
     }else if(self.track13Stage == gcTrack13RequestFit){
-#if TARGET_IPHONE_SIMULATOR
-        return GCWebActivityURLFitFile(self.activityId);
-#else
-
-        return nil;
-#endif
+        if( [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_DOWNLOAD defaultValue:TRUE]){
+            return GCWebActivityURLFitFile(self.activityId);
+        }else{
+            return nil;
+        }
     }else{
         return GCWebActivityURL(self.activityId);
     }
@@ -217,7 +217,7 @@
                 if (success) {
                     [RZFileOrganizer removeEditableFile:zn];
                 }
-
+                [self processMergeFitFile];
             }else{
                 RZLog(RZLogError, @"Failed to save %@. %@", fn, e.localizedDescription);
             }
@@ -248,6 +248,10 @@
     }else if(self.track13Stage==gcTrack13RequestTCX){
         dispatch_async([GCAppGlobal worker],^(){
             [self processParseTCX];
+        });
+    }else if(self.track13Stage==gcTrack13RequestFit){
+        dispatch_async([GCAppGlobal worker],^(){
+            [self processMergeFitFile];
         });
     }else{
         [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
@@ -325,6 +329,18 @@
                 self.status = GCWebStatusParsingFailed;
             }
         }
+    }
+    [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
+}
+
+-(void)processMergeFitFile{
+    if( [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_MERGE defaultValue:FALSE]){
+        NSString * fn = [GCGarminActivityTrack13Request stageFilename:gcTrack13RequestFit forActivityId:self.activityId];
+        
+        FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:[RZFileOrganizer writeableFilePath:fn]];
+        [fitDecode parse];
+        GCActivity * fitAct = [[GCActivity alloc] initWithId:self.activityId fitFile:fitDecode.fitFile];
+        self.trackpoints = fitAct.trackpoints;
     }
     [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
 }
