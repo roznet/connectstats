@@ -10,3 +10,12 @@
 #import "GCViewConfig.h"
 #import "GCStravaSegmentListStarred.h"
 #import "ConnectStats-Bridging-Header.h"
+#import "GCGarminActivityDetailJsonParser.h"
+#import "GCGarminRequestActivityReload.h"
+#import "GCGarminSearchJsonParser.h"
+#import "GCGarminActivityTrack13Request.h"
+#import "GCGarminSearchModernJsonParser.h"
+#import "GCGarminActivityLapsParser.h"
+#import "GCGarminRequestSearch.h"
+#import "GCGarminUserJsonParser.h"
+

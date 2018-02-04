@@ -56,6 +56,30 @@ public extension GCActivity {
             }
             self.saveTrackpoints(trackpoints, andLaps: [])
         }
+    }
 
+    @objc public func mergeTrackPoints(other : GCActivity){
+        if let to = self.trackpoints, let from = other.trackpoints {
+            var i = from.makeIterator()
+            if var merge = i.next() {
+                var tryMore = true
+                var count = 0
+
+                for point in to {
+                    
+                    while( tryMore && merge.time < point.time){
+                        if let more = i.next() {
+                            merge = more
+                        }else{
+                            tryMore = false
+                        }
+                    }
+                    if( merge.time == point.time){
+                        count+=1
+                    }
+                }
+                print("\(count)/\(to.count) \(from.count)")
+            }
+        }
     }
 }

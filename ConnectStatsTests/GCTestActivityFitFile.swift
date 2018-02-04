@@ -24,7 +24,7 @@ class GCTestActivityFitFile: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         
-        let testActivityIds = [ "1378220136", "1382772474"]
+        let testActivityIds = [ "1083407258", "1378220136", "1382772474"]
         for activityId in testActivityIds {
             
             let url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath("activity_\(activityId).fit", for: type(of: self)))
@@ -33,8 +33,13 @@ class GCTestActivityFitFile: XCTestCase {
                 let decode = FITFitFileDecode(fitData){
                 decode.parse()
                 let activity = GCActivity(withId: activityId, fitFile: decode.fitFile)
-                print( "\(activity)")
+                if let reload = GCGarminRequestActivityReload.test(forActivity: activityId, withFilesIn:RZFileOrganizer.bundleFilePath(nil, for: type(of: self)) ){
+                    print( "\(reload)")
+                    reload.mergeTrackPoints(other: activity)
+                }
+                
             }
+            
         }
         
         /*
