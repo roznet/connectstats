@@ -19,12 +19,13 @@
 
 @property (nonatomic,assign) fit::Field * originalField;
 @property (nonatomic,assign) fit::Field * complementField;
+@property (nonatomic,assign) fit::DeveloperField * developerField;
 
 @end
 
 @implementation FITFitFieldValue
 
-+(nullable FITFitFieldValue*)fieldValueFrom:(nullable fit::Field*)ff{
++(nullable FITFitFieldValue*)fieldValueFrom:(const fit::Field&)ff{
     FITFitFieldValue * rv = RZReturnAutorelease([[FITFitFieldValue alloc] init]);
     if( rv){
         rv.originalField = nil;
@@ -34,12 +35,25 @@
     return rv;
 }
 
++(nullable FITFitFieldValue*)fieldValueFromDeveloper:(const fit::DeveloperField&)ff{
+    FITFitFieldValue * rv = RZReturnAutorelease([[FITFitFieldValue alloc] init]);
+    if( rv){
+        rv.originalField = nil;
+        rv.complementField = nil;
+        [rv setFromDeveloperField:ff];
+    }
+    return rv;
+
+}
 -(void)dealloc{
     if( _originalField){
         delete _originalField;
     }
     if( _complementField){
         delete _complementField;
+    }
+    if( _developerField){
+        delete _developerField;
     }
 #if !__has_feature(objc_arc)
     [_stringValue release];
@@ -54,57 +68,115 @@
 
 #pragma mark - Setup 
 
--(void)setFromField:(fit::Field *)field{
+-(void)setFromField:(const fit::Field &)field{
     if( _originalField ){
         delete _originalField;
     }
-    _originalField = new fit::Field(*field);
+    if( _developerField ){
+        delete _developerField;
+    }
+    _originalField = new fit::Field(field);
+    _developerField = nil;
+    [self setFromFieldBase:field];
+}
+
+-(void)setFromDeveloperField:(const fit::DeveloperField &)field{
+    if( _developerField ){
+        delete _developerField;
+    }
+    if( _originalField){
+        delete _originalField;
+    }
+    _developerField = new fit::DeveloperField(field);
+    _originalField = nil;
+    
+    
+    
+    [self setFromFieldBase:field];
+}
+
+-(NSString*)fieldSource{
+    NSString * rv = @"";
+    if( _developerField ){
+        if( _developerField->GetDefinition().GetDeveloper().IsManufacturerIdValid()){
+            FIT_MANUFACTURER fact = _developerField->GetDefinition().GetDeveloper().GetManufacturerId();
+            rv =  [FITFitEnumMap defsFor:@"FIT_MANUFACTURER" andKey:@(fact)];
+        }else{
+            FIT_UINT8 n = _developerField->GetDefinition().GetDeveloper().GetNumDeveloperId();
+            if( n > 0){
+                NSMutableString * devid = [NSMutableString string];
+                for (FIT_UINT8 i=0; i<n; i++) {
+                    [devid appendFormat:@"%@", @(_developerField->GetDefinition().GetDeveloper().GetDeveloperId(i))];
+                }
+                rv = devid;
+            }
+        }
+    }
+    return rv;
+}
+
+-(NSString*)derivedFieldKey:(const fit::FieldBase&)field{
+    NSString * base = [NSString stringWithUTF8String:field.GetName().c_str()];
+    if( _developerField ){
+        NSString * prefix = @"developer";
+        if( _developerField->GetDefinition().GetDeveloper().IsManufacturerIdValid()){
+            FIT_MANUFACTURER fact = _developerField->GetDefinition().GetDeveloper().GetManufacturerId();
+            prefix =  [FITFitEnumMap defsFor:@"FIT_MANUFACTURER" andKey:@(fact)] ?: prefix;
+        }
+        base = [prefix stringByAppendingFormat:@"_%@", base];
+
+    }
+    return base;
+}
+
+-(void)setFromFieldBase:(const fit::FieldBase &)field{
     
     int j = 0;
-    self.fieldKey = [NSString stringWithUTF8String:field->GetName().c_str()];;
+    self.fieldKey = [self derivedFieldKey:field];
+    
     NSNumber * numberValue = nil;
     
-    switch (field->GetType())
+    switch (field.GetType())
     {
         case FIT_BASE_TYPE_ENUM:
-            numberValue = @( field->GetENUMValue(j) );
+            numberValue = @( field.GetENUMValue(j) );
             break;
         case FIT_BASE_TYPE_SINT8:
-            numberValue = @( field->GetSINT8Value(j) );
+            numberValue = @( field.GetSINT8Value(j) );
             break;
         case FIT_BASE_TYPE_UINT8:
-            numberValue = @( field->GetUINT8Value(j) );
+            numberValue = @( field.GetUINT8Value(j) );
             break;
         case FIT_BASE_TYPE_SINT16:
-            numberValue = @( field->GetSINT16Value(j) );
+            numberValue = @( field.GetSINT16Value(j) );
             break;
         case FIT_BASE_TYPE_UINT16:
-            numberValue = @( field->GetUINT16Value(j) );
+            numberValue = @( field.GetUINT16Value(j) );
             break;
         case FIT_BASE_TYPE_SINT32:
-            numberValue = @( field->GetSINT32Value(j) );
+            numberValue = @( field.GetSINT32Value(j) );
             break;
         case FIT_BASE_TYPE_UINT32:
-            numberValue = @( field->GetUINT32Value(j) );
+            numberValue = @( field.GetUINT32Value(j) );
             break;
         case FIT_BASE_TYPE_FLOAT32:
-            numberValue = @( field->GetFLOAT32Value(j) );
+            numberValue = @( field.GetFLOAT32Value(j) );
             break;
         case FIT_BASE_TYPE_FLOAT64:
-            numberValue = @( field->GetFLOAT64Value(j) );
+            numberValue = @( field.GetFLOAT64Value(j) );
             break;
         case FIT_BASE_TYPE_UINT8Z:
-            numberValue = @( field->GetUINT8ZValue(j) );
+            numberValue = @( field.GetUINT8ZValue(j) );
             break;
         case FIT_BASE_TYPE_UINT16Z:
-            numberValue = @( field->GetUINT16ZValue(j) );
+            numberValue = @( field.GetUINT16ZValue(j) );
             break;
         case FIT_BASE_TYPE_UINT32Z:
-            numberValue = @( field->GetUINT32ZValue(j) );
+            numberValue = @( field.GetUINT32ZValue(j) );
             break;
         case FIT_BASE_TYPE_STRING:
         {
-            std::wstring val( field->GetSTRINGValue() );
+            std::wstring val( field.GetSTRINGValue() );
             self.stringValue = RZReturnAutorelease([[NSString alloc] initWithBytes:val.data() length:val.size() * sizeof(wchar_t) encoding:NSUTF32LittleEndianStringEncoding]);
             break;
         }
@@ -113,8 +185,8 @@
     }
     
     
-    double scale = field->GetScale();
-    double offset = field->GetOffset();
+    double scale = field.GetScale();
+    double offset = field.GetOffset();
     
     if ( ( scale != 1. || offset != 0. ) && numberValue) {
         NSNumber * n = numberValue;
@@ -122,7 +194,7 @@
     }
     
     
-    NSString * unitStr = [NSString stringWithUTF8String:field->GetUnits().c_str()];
+    NSString * unitStr = [NSString stringWithUTF8String:field.GetUnits().c_str()];
     GCUnit * unit = [GCUnit unitForFitUnit:unitStr];
     
     if( [self.fieldKey isEqualToString:@"total_training_effect"]){
@@ -293,6 +365,7 @@
         return 4;
     }
 }
+
 
 
 @end

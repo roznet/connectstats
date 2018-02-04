@@ -55,3 +55,7 @@ FIT_GET_ENUM_FIELD( @"StrokeType", GetStrokeType, FIT_STROKE_TYPE_INVALID, FIT_S
 //SKIP FIT_GET_NUMUNIT_FIELD( @"VerticalRatio", GetVerticalRatio, FIT_FLOAT32_INVALID, @"percent" );
 //SKIP FIT_GET_NUMUNIT_FIELD( @"StanceTimeBalance", GetStanceTimeBalance, FIT_FLOAT32_INVALID, @"percent" );
 //SKIP FIT_GET_NUMUNIT_FIELD( @"StepLength", GetStepLength, FIT_FLOAT32_INVALID, @"millimeter" );
+//SKIP FIT_GET_NUMUNIT_FIELD( @"Depth", GetDepth, FIT_FLOAT32_INVALID, @"meter" );
+//SKIP FIT_GET_NUMUNIT_FIELD( @"NextStopDepth", GetNextStopDepth, FIT_FLOAT32_INVALID, @"meter" );
+//SKIP FIT_GET_NUMUNIT_FIELD( @"CnsLoad", GetCnsLoad, FIT_UINT8_INVALID, @"percent" );
+//SKIP FIT_GET_NUMUNIT_FIELD( @"N2Load", GetN2Load, FIT_UINT16_INVALID, @"percent" );

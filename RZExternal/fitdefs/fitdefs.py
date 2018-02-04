@@ -339,7 +339,7 @@ units = {}
 fields = {}
 enums = {}
 
-fitsdkpath = '../../../../shared/FitSDKRelease_20/'
+fitsdkpath = '../src/FitSDKRelease_20/'
 
 enums = process_profile( fitsdkpath + 'fit_profile.hpp')
 
@@ -352,8 +352,8 @@ process_mesg( fitsdkpath + 'fit_event_mesg.hpp', 'fit_event_mesg.m' )
 process_mesg( fitsdkpath + 'fit_lap_mesg.hpp', 'fit_lap_mesg.m' )
 process_mesg( fitsdkpath + 'fit_device_info_mesg.hpp', 'fit_device_info_mesg.m' )
 process_fields( 'fit_fields.m' )
-autogen_source( '../../../FitFileExplorer/src/', 'FITFitFileDecode.mm' )
-autogen_source( '../../../FitFileExplorer/src/', 'FITFitEnumMap.mm' )
+autogen_source( '../../FitFileExplorer/src/', 'FITFitFileDecode.mm' )
+autogen_source( '../../FitFileExplorer/src/', 'FITFitEnumMap.mm' )
 
 
 if units:

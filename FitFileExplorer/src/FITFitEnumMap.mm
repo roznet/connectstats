@@ -551,6 +551,13 @@
           @(FIT_SUB_SPORT_NAVIGATE):  @"navigate",
           @(FIT_SUB_SPORT_TRACK_ME):  @"track_me",
           @(FIT_SUB_SPORT_MAP):  @"map",
+          @(FIT_SUB_SPORT_SINGLE_GAS_DIVING):  @"single_gas_diving",
+          @(FIT_SUB_SPORT_MULTI_GAS_DIVING):  @"multi_gas_diving",
+          @(FIT_SUB_SPORT_GAUGE_DIVING):  @"gauge_diving",
+          @(FIT_SUB_SPORT_APNEA_DIVING):  @"apnea_diving",
+          @(FIT_SUB_SPORT_APNEA_HUNTING):  @"apnea_hunting",
+          @(FIT_SUB_SPORT_VIRTUAL_ACTIVITY):  @"virtual_activity",
+          @(FIT_SUB_SPORT_OBSTACLE):  @"obstacle",
           @(FIT_SUB_SPORT_ALL):  @"all",
         }, //FIT_SUB_SPORT
         @"FIT_SPORT_EVENT": @{
@@ -695,6 +702,13 @@
           @(FIT_FITNESS_EQUIPMENT_STATE_PAUSED):  @"paused",
           @(FIT_FITNESS_EQUIPMENT_STATE_UNKNOWN):  @"unknown",
         }, //FIT_FITNESS_EQUIPMENT_STATE
+        @"FIT_TONE": @{
+          @(FIT_TONE_INVALID):  @"invalid",
+          @(FIT_TONE_OFF):  @"off",
+          @(FIT_TONE_TONE):  @"tone",
+          @(FIT_TONE_VIBRATE):  @"vibrate",
+          @(FIT_TONE_TONE_AND_VIBRATE):  @"tone_and_vibrate",
+        }, //FIT_TONE
         @"FIT_AUTOSCROLL": @{
           @(FIT_AUTOSCROLL_INVALID):  @"invalid",
           @(FIT_AUTOSCROLL_NONE):  @"none",
@@ -750,6 +764,7 @@
           @(FIT_WKT_STEP_DURATION_POWER_LAP_GREATER_THAN):  @"power_lap_greater_than",
           @(FIT_WKT_STEP_DURATION_REPEAT_UNTIL_TRAINING_PEAKS_TSS):  @"repeat_until_training_peaks_tss",
           @(FIT_WKT_STEP_DURATION_REPETITION_TIME):  @"repetition_time",
+          @(FIT_WKT_STEP_DURATION_REPS):  @"reps",
         }, //FIT_WKT_STEP_DURATION
         @"FIT_WKT_STEP_TARGET": @{
           @(FIT_WKT_STEP_TARGET_INVALID):  @"invalid",
@@ -938,6 +953,13 @@
           @(FIT_MANUFACTURER_SALUTRON):  @"salutron",
           @(FIT_MANUFACTURER_TECHNOGYM):  @"technogym",
           @(FIT_MANUFACTURER_BRYTON_SENSORS):  @"bryton_sensors",
+          @(FIT_MANUFACTURER_LATITUDE_LIMITED):  @"latitude_limited",
+          @(FIT_MANUFACTURER_SOARING_TECHNOLOGY):  @"soaring_technology",
+          @(FIT_MANUFACTURER_IGPSPORT):  @"igpsport",
+          @(FIT_MANUFACTURER_THINKRIDER):  @"thinkrider",
+          @(FIT_MANUFACTURER_GOPHER_SPORT):  @"gopher_sport",
+          @(FIT_MANUFACTURER_WATERROWER):  @"waterrower",
+          @(FIT_MANUFACTURER_ORANGETHEORY):  @"orangetheory",
           @(FIT_MANUFACTURER_DEVELOPMENT):  @"development",
           @(FIT_MANUFACTURER_HEALTHANDLIFE):  @"healthandlife",
           @(FIT_MANUFACTURER_LEZYNE):  @"lezyne",
@@ -960,6 +982,17 @@
           @(FIT_MANUFACTURER_PODOON):  @"podoon",
           @(FIT_MANUFACTURER_LIFE_TIME_FITNESS):  @"life_time_fitness",
           @(FIT_MANUFACTURER_FALCO_E_MOTORS):  @"falco_e_motors",
+          @(FIT_MANUFACTURER_MINOURA):  @"minoura",
+          @(FIT_MANUFACTURER_CYCLIQ):  @"cycliq",
+          @(FIT_MANUFACTURER_LUXOTTICA):  @"luxottica",
+          @(FIT_MANUFACTURER_TRAINER_ROAD):  @"trainer_road",
+          @(FIT_MANUFACTURER_THE_SUFFERFEST):  @"the_sufferfest",
+          @(FIT_MANUFACTURER_FULLSPEEDAHEAD):  @"fullspeedahead",
+          @(FIT_MANUFACTURER_VIRTUALTRAINING):  @"virtualtraining",
+          @(FIT_MANUFACTURER_FEEDBACKSPORTS):  @"feedbacksports",
+          @(FIT_MANUFACTURER_OMATA):  @"omata",
+          @(FIT_MANUFACTURER_VDO):  @"vdo",
+          @(FIT_MANUFACTURER_MAGNETICDAYS):  @"magneticdays",
           @(FIT_MANUFACTURER_ACTIGRAPHCORP):  @"actigraphcorp",
         }, //FIT_MANUFACTURER
         @"FIT_GARMIN_PRODUCT": @{
@@ -1527,6 +1560,7 @@
           @(FIT_SENSOR_TYPE_ACCELEROMETER):  @"accelerometer",
           @(FIT_SENSOR_TYPE_GYROSCOPE):  @"gyroscope",
           @(FIT_SENSOR_TYPE_COMPASS):  @"compass",
+          @(FIT_SENSOR_TYPE_BAROMETER):  @"barometer",
         }, //FIT_SENSOR_TYPE
         @"FIT_BIKE_LIGHT_NETWORK_CONFIG_TYPE": @{
           @(FIT_BIKE_LIGHT_NETWORK_CONFIG_TYPE_INVALID):  @"invalid",
@@ -1671,6 +1705,7 @@
           @(FIT_EXD_QUALIFIERS_LAST_SPORT):  @"last_sport",
           @(FIT_EXD_QUALIFIERS_MOVING):  @"moving",
           @(FIT_EXD_QUALIFIERS_STOPPED):  @"stopped",
+          @(FIT_EXD_QUALIFIERS_ESTIMATED_TOTAL):  @"estimated_total",
           @(FIT_EXD_QUALIFIERS_ZONE_9):  @"zone_9",
           @(FIT_EXD_QUALIFIERS_ZONE_8):  @"zone_8",
           @(FIT_EXD_QUALIFIERS_ZONE_7):  @"zone_7",
@@ -1779,6 +1814,7 @@
           @(FIT_EXD_DESCRIPTORS_VMG):  @"vmg",
           @(FIT_EXD_DESCRIPTORS_AMBIENT_PRESSURE):  @"ambient_pressure",
           @(FIT_EXD_DESCRIPTORS_PRESSURE):  @"pressure",
+          @(FIT_EXD_DESCRIPTORS_VAM):  @"vam",
         }, //FIT_EXD_DESCRIPTORS
         @"FIT_TURN_TYPE": @{
           @(FIT_TURN_TYPE_INVALID):  @"invalid",
@@ -1821,6 +1857,33 @@
           @(FIT_TURN_TYPE_ICON_INV_IDX):  @"icon_inv_idx",
           @(FIT_TURN_TYPE_ICON_IDX_CNT):  @"icon_idx_cnt",
         }, //FIT_TURN_TYPE
+        @"FIT_WATER_TYPE": @{
+          @(FIT_WATER_TYPE_INVALID):  @"invalid",
+          @(FIT_WATER_TYPE_FRESH):  @"fresh",
+          @(FIT_WATER_TYPE_SALT):  @"salt",
+          @(FIT_WATER_TYPE_EN13319):  @"en13319",
+          @(FIT_WATER_TYPE_CUSTOM):  @"custom",
+        }, //FIT_WATER_TYPE
+        @"FIT_TISSUE_MODEL_TYPE": @{
+          @(FIT_TISSUE_MODEL_TYPE_INVALID):  @"invalid",
+          @(FIT_TISSUE_MODEL_TYPE_ZHL_16C):  @"zhl_16c",
+        }, //FIT_TISSUE_MODEL_TYPE
+        @"FIT_DIVE_GAS_STATUS": @{
+          @(FIT_DIVE_GAS_STATUS_INVALID):  @"invalid",
+          @(FIT_DIVE_GAS_STATUS_DISABLED):  @"disabled",
+          @(FIT_DIVE_GAS_STATUS_ENABLED):  @"enabled",
+          @(FIT_DIVE_GAS_STATUS_BACKUP_ONLY):  @"backup_only",
+        }, //FIT_DIVE_GAS_STATUS
+        @"FIT_DIVE_ALARM_TYPE": @{
+          @(FIT_DIVE_ALARM_TYPE_INVALID):  @"invalid",
+          @(FIT_DIVE_ALARM_TYPE_DEPTH):  @"depth",
+          @(FIT_DIVE_ALARM_TYPE_TIME):  @"time",
+        }, //FIT_DIVE_ALARM_TYPE
+        @"FIT_DIVE_BACKLIGHT_MODE": @{
+          @(FIT_DIVE_BACKLIGHT_MODE_INVALID):  @"invalid",
+          @(FIT_DIVE_BACKLIGHT_MODE_AT_DEPTH):  @"at_depth",
+          @(FIT_DIVE_BACKLIGHT_MODE_ALWAYS_ON):  @"always_on",
+        }, //FIT_DIVE_BACKLIGHT_MODE
                  /*End AutoGenerated*/
                  };
         remaps = @{

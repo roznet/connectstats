@@ -17,10 +17,7 @@
 #include <iostream>
 #include <strstream>
 #include <sstream>
-
-#include "fit_decode.hpp"
-#include "fit_mesg_broadcaster.hpp"
-#include "fit_record_mesg.hpp"
+#import "RZExternalCpp/RZExternalCpp.h"
 #include "FITFitEnumMap.h"
 
 // Include at the end to avoid redefine
@@ -97,12 +94,13 @@ class Listener : public fit::MesgListener
 #if !__has_feature(objc_arc)
 -(void)dealloc{
     [_fitFile release];
+    [_data release];
     [super dealloc];
 }
 #endif
 
 +(FITFitFileDecode*)fitFileDecode:(NSData*)data{
-    FITFitFileDecode * rv = [[FITFitFileDecode alloc] init];
+    FITFitFileDecode * rv = RZReturnAutorelease([[FITFitFileDecode alloc] init]);
     if (rv) {
         rv.data = data;
     }
@@ -110,7 +108,7 @@ class Listener : public fit::MesgListener
 }
 
 +(FITFitFileDecode*)fitFileDecodeForFile:(NSString*)filepath{
-    FITFitFileDecode * rv = [[FITFitFileDecode alloc] init];
+    FITFitFileDecode * rv = RZReturnAutorelease([[FITFitFileDecode alloc] init]);
     if (rv) {
         rv.data = [NSData dataWithContentsOfFile:filepath];
     }
