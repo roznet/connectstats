@@ -146,7 +146,8 @@ void buildStatic(){
     }
 }
 
-
+-(GCTrackPoint*)updateFrom:(GCTrackPoint*)other fromActivity:(GCActivity*)otheract inActivity:(GCActivity*)selfact{
+}
 
 #pragma mark - Parsing
 

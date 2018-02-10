@@ -61,7 +61,7 @@
         @"total_calories":@"SumEnergy",
         @"sub_sport":@"ActivityTypeDetail",
         @"avg_right_torque_effectiveness":@"WeightedMeanRightTorqueEffectiveness",
-        @"developer_Leg Spring Stiffness":@"LegSpringStiffness",
+        @"developer_Leg Spring Stiffness":@"WeightedMeanLegSpringStiffness",
         @"total_descent":@"LossElevation",
         @"normalized_power":@"WeightedMeanNormalizedPower",
         @"avg_speed":@"WeightedMeanSpeed",

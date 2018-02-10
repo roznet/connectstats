@@ -87,6 +87,8 @@
                                        for:(NSDictionary<NSString*,GCActivitySummaryValue*>*)sumValues
                                 inActivity:(GCActivity*)act;
 
+-(GCTrackPoint*)updateFrom:(GCTrackPoint*)other fromActivity:(GCActivity*)otheract inActivity:(GCActivity*)selfact;
+
 -(NSString*)fullDescription:(NSString*)atype;
 
 -(NSString*)displayLabel;

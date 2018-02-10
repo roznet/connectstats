@@ -13,8 +13,8 @@ public extension GCField {
     static let fitToFieldMap = ["cadence":"WeightedMeanCadence",
                                 "distance":"SumDistance",
                                 "speed":"WeightedMeanSpeed",
-                                "temperature":"WeightedTemperature",
-                                "heart_rate": "WeightedHeartRate",
+                                "temperature":"WeightedMeanTemperature",
+                                "heart_rate": "WeightedMeanHeartRate",
                       ]
 
     public static func field(fitKey:String, activityType:String) -> GCField? {

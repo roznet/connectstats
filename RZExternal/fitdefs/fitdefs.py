@@ -162,7 +162,7 @@ fieldmap = { 'Altitude': 'Altitude',
              "developer_Elevation" :     "developer_Elevation" ,
              "developer_Form Power" : "WeightedMeanFormPower" ,
              "developer_Ground Time" : "WeightedMeanGroundTime" ,
-             "developer_Leg Spring Stiffness" : "LegSpringStiffness" ,
+             "developer_Leg Spring Stiffness" : "WeightedMeanLegSpringStiffness" ,
              "developer_Power" : "WeightedMeanPower" ,
              "developer_Vertical Oscillation" :"WeightedMeanVerticalOscillation",
              }

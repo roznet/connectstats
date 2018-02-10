@@ -32,8 +32,9 @@
 #import "GCLapSwim.h"
 #import "GCActivity.h"
 #import "GCActivitiesOrganizer.h"
-#import "ConnectStats-Swift.h"
+@import RZUtils;
 @import RZExternal;
+#import "ConnectStats-Swift.h"
 
 @interface GCGarminActivityTrack13Request ()
 @property (nonatomic,retain) GCActivity * activity;
@@ -334,12 +335,18 @@
 }
 
 -(void)processMergeFitFile{
-    if( [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_MERGE defaultValue:FALSE]){
+    if( [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_MERGE defaultValue:TRUE]){
         NSString * fn = [GCGarminActivityTrack13Request stageFilename:gcTrack13RequestFit forActivityId:self.activityId];
         
         FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:[RZFileOrganizer writeableFilePath:fn]];
         [fitDecode parse];
         GCActivity * fitAct = [[GCActivity alloc] initWithId:self.activityId fitFile:fitDecode.fitFile];
+        
+        NSArray<GCField*>*origFields = self.activity.availableTrackFields;
+        NSArray<GCField*>*fitFields = self.activity.availableTrackFields;
+        NSLog(@"Orig %@", origFields);
+        NSLog(@"Fit  %@", fitFields);
+        
         self.trackpoints = fitAct.trackpoints;
     }
     [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];

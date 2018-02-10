@@ -47,6 +47,7 @@
 #import "GCActivity+Fields.h"
 #import "GCFormattedField.h"
 #import "GCHealthOrganizer.h"
+#import "ConnectStats-Swift.h"
 
 #define GCVIEW_DETAIL_TITLE_SECTION     0
 #define GCVIEW_DETAIL_LOAD_SECTION      1
