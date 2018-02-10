@@ -592,6 +592,15 @@
         }
     }
 
+    GCField * runningPower = [GCField fieldForFlag:gcFieldFlagPower andActivityType:GC_TYPE_RUNNING];
+    if(!zones[ [GCHealthZoneCalculator keyForField:runningPower andSource:gcHealthZoneSourceAuto]]){
+        NSDate *from=[[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-6m"]];
+        NSArray<NSNumber*>*pcts = @[ @(0.5), @(0.6), @(0.7), @(0.8), @(0.9), @(1.0) ];
+        GCHealthZoneCalculator * z = [self createCalculatorFromMaxField:runningPower since:from percentages:pcts];
+        if(z) {
+            [zones setValue:z forKey:[GCHealthZoneCalculator keyForField:runningPower andSource:gcHealthZoneSourceAuto]];
+        }
+    }
     GCField * cyclingPower = [GCField fieldForFlag:gcFieldFlagPower andActivityType:GC_TYPE_CYCLING];
     if(!zones[ [GCHealthZoneCalculator keyForField:cyclingPower andSource:gcHealthZoneSourceAuto]]){
         NSDate *from=[[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-6m"]];

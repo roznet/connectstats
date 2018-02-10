@@ -942,6 +942,158 @@
 
 }
 
+-(BOOL)updateTrackpointsFromActivity:(GCActivity*)other{
+    BOOL rv = false;
+    
+    if( ! self.trackpointsReadyNoLoad && other.trackpointsReadyNoLoad){
+        // Special case: other has trackpoint self doesnt, just use
+        self.trackpoints = other.trackpoints;
+        self.cachedExtraTracksIndexes = other.cachedExtraTracksIndexes;
+        rv = true;
+    }else if( self.trackpointsReadyNoLoad && other.trackpointsReadyNoLoad ){
+        // Only bother if both have trackpoint
+        NSArray<GCTrackPoint*> * trackpoints = self.trackpoints;
+        NSArray<GCTrackPoint*> * otherTrackpoints = other.trackpoints;
+        
+        if( trackpoints.count > 0 &&
+           otherTrackpoints.count > 0 &&
+           [trackpoints[0] isMemberOfClass:[GCTrackPoint class]] &&
+           [otherTrackpoints[0] isMemberOfClass:[GCTrackPoint class]]){
+            // Don't handle swim points
+            
+            NSMutableArray<GCField*>*fields = [NSMutableArray array];
+            NSArray<GCField*>*otherFields = other.availableTrackFields;
+            
+            for (GCField * otherField in otherFields) {
+                if( ! [self hasTrackForField:otherField]){
+                    [fields addObject:otherField];
+                    rv = true;
+                }
+            }
+            if( rv ){
+                NSUInteger otherIndex = 0;
+                
+                GCTrackPoint * last = otherTrackpoints[otherIndex];
+                
+                for (GCTrackPoint * one in trackpoints) {
+                    while( last && [last timeIntervalSince:one] < 0.0){
+                        otherIndex++;
+                        if (otherIndex < otherTrackpoints.count) {
+                            last = otherTrackpoints[otherIndex];
+                        }else{
+                            last = nil;
+                        }
+                    }
+                    if( last ){
+                        [one updateInActivity:self fromTrackpoint:last fromActivity:other forFields:fields];
+                        self.trackFlags |= one.trackFlags;
+                    }
+                }
+            }
+        }
+    }
+    return rv;
+}
+
+-(BOOL)updateSummaryDataFromActivity:(GCActivity*)other{
+    BOOL rv = false;
+    
+    if (self.metaData) {
+        NSMutableDictionary * newMetaData = nil;
+        for (NSString * field in self.metaData) {
+            GCActivityMetaValue * thisVal  = (self.metaData)[field];
+            GCActivityMetaValue * otherVal = (other.metaData)[field];
+            if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
+                if (!newMetaData) {
+                    newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
+                }
+                RZLog(RZLogInfo, @"%@ changed %@", self, field);
+                [newMetaData setValue:otherVal forKey:field];
+                FMDatabase * db = self.db;
+                [db beginTransaction];
+                [otherVal updateDb:db forActivityId:self.activityId];
+                [db commit];
+                rv = true;
+            }
+        }
+        if (newMetaData) {
+            self.metaData = newMetaData;
+        }
+    }
+    
+    if (self.summaryData) {
+        NSMutableDictionary * newSummaryData = nil;
+        for (NSString * field in self.summaryData) {
+            GCActivitySummaryValue * thisVal = self.summaryData[field];
+            GCActivitySummaryValue * otherVal = other.summaryData[field];
+            if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
+                if (!newSummaryData) {
+                    newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
+                }
+                RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.numberWithUnit, otherVal.numberWithUnit);
+                [newSummaryData setValue:otherVal forKey:field];
+                FMDatabase * db = self.db;
+                [db beginTransaction];
+                [otherVal updateDb:db forActivityId:self.activityId];
+                [db commit];
+                rv = true;
+            }
+        }
+        for (NSString * field in other.summaryData) {
+            if (self.summaryData[field]==nil) {
+                if (!newSummaryData) {
+                    newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
+                }
+                GCActivitySummaryValue * otherVal = other.summaryData[field];
+                
+                RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
+                [newSummaryData setValue:otherVal forKey:field];
+            }
+        }
+        if (newSummaryData) {
+            self.summaryData = newSummaryData;
+        }
+    }
+    
+    if (fabs(self.sumDistance - other.sumDistance) > 1.e-8) {
+        self.sumDistance = other.sumDistance;
+        rv = true;
+        
+        FMDatabase * db = self.db;
+        [db beginTransaction];
+        [db executeUpdate:@"UPDATE gc_activities SET sumDistance=? WHERE activityId = ?", @(self.sumDistance), self.activityId];
+        [db commit];
+        
+    }
+    if (fabs(self.sumDuration - other.sumDuration) > 1.e-8) {
+        self.sumDuration = other.sumDuration;
+        rv = true;
+        FMDatabase * db = self.db;
+        [db beginTransaction];
+        [db executeUpdate:@"UPDATE gc_activities SET sumDuration=? WHERE activityId = ?", @(self.sumDuration), self.activityId];
+        [db commit];
+        
+    }
+    if( other.speedDisplayUom && ( ![self.speedDisplayUom isEqualToString:other.speedDisplayUom]) ){
+        self.speedDisplayUom = other.speedDisplayUom;
+        rv = true;
+        FMDatabase * db = self.db;
+        [db beginTransaction];
+        [db executeUpdate:@"UPDATE gc_activities SET speedDisplayUom=? WHERE activityId = ?", self.speedDisplayUom, self.activityId];
+        [db commit];
+    }
+    if(fabs(self.weightedMeanSpeed-other.weightedMeanSpeed) > 1.e-8){
+        self.weightedMeanSpeed = other.weightedMeanSpeed;
+        rv = true;
+        FMDatabase * db = self.db;
+        [db beginTransaction];
+        [db executeUpdate:@"UPDATE gc_activities SET WeightedMeanSpeed=? WHERE activityId = ?", @(self.weightedMeanSpeed), self.activityId];
+        [db commit];
+    }
+
+    return rv;
+}
+
 -(BOOL)updateWithActivity:(GCActivity*)other{
 
     BOOL rv = false;
@@ -976,97 +1128,12 @@
         [db commit];
     }
 
-    if (self.metaData) {
-        NSMutableDictionary * newMetaData = nil;
-        for (NSString * field in self.metaData) {
-            GCActivityMetaValue * thisVal  = (self.metaData)[field];
-            GCActivityMetaValue * otherVal = (other.metaData)[field];
-            if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
-                if (!newMetaData) {
-                    newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
-                }
-                RZLog(RZLogInfo, @"%@ changed %@", self, field);
-                [newMetaData setValue:otherVal forKey:field];
-                FMDatabase * db = self.db;
-                [db beginTransaction];
-                [otherVal updateDb:db forActivityId:self.activityId];
-                [db commit];
-                rv = true;
-            }
-        }
-        if (newMetaData) {
-            self.metaData = newMetaData;
-        }
-    }
-
-    if (self.summaryData) {
-        NSMutableDictionary * newSummaryData = nil;
-        for (NSString * field in self.summaryData) {
-            GCActivitySummaryValue * thisVal = self.summaryData[field];
-            GCActivitySummaryValue * otherVal = other.summaryData[field];
-            if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
-                if (!newSummaryData) {
-                    newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
-                }
-                RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.numberWithUnit, otherVal.numberWithUnit);
-                [newSummaryData setValue:otherVal forKey:field];
-                FMDatabase * db = self.db;
-                [db beginTransaction];
-                [otherVal updateDb:db forActivityId:self.activityId];
-                [db commit];
-                rv = true;
-            }
-        }
-        for (NSString * field in other.summaryData) {
-            if (self.summaryData[field]==nil) {
-                if (!newSummaryData) {
-                    newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
-                }
-                GCActivitySummaryValue * otherVal = other.summaryData[field];
-
-                RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
-                [newSummaryData setValue:otherVal forKey:field];
-            }
-        }
-        if (newSummaryData) {
-            self.summaryData = newSummaryData;
-        }
-    }
-
-    if (fabs(self.sumDistance - other.sumDistance) > 1.e-8) {
-        self.sumDistance = other.sumDistance;
+    if( [self updateSummaryDataFromActivity:other] ){
         rv = true;
-
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET sumDistance=? WHERE activityId = ?", @(self.sumDistance), self.activityId];
-        [db commit];
-
     }
-    if (fabs(self.sumDuration - other.sumDuration) > 1.e-8) {
-        self.sumDuration = other.sumDuration;
+    
+    if( [self updateTrackpointsFromActivity:other] ){
         rv = true;
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET sumDuration=? WHERE activityId = ?", @(self.sumDuration), self.activityId];
-        [db commit];
-
-    }
-    if( other.speedDisplayUom && ( ![self.speedDisplayUom isEqualToString:other.speedDisplayUom]) ){
-        self.speedDisplayUom = other.speedDisplayUom;
-        rv = true;
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET speedDisplayUom=? WHERE activityId = ?", self.speedDisplayUom, self.activityId];
-        [db commit];
-    }
-    if(fabs(self.weightedMeanSpeed-other.weightedMeanSpeed) > 1.e-8){
-        self.weightedMeanSpeed = other.weightedMeanSpeed;
-        rv = true;
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET WeightedMeanSpeed=? WHERE activityId = ?", @(self.weightedMeanSpeed), self.activityId];
-        [db commit];
     }
     return rv;
 }
@@ -1135,6 +1202,9 @@
             newSum[field] = val;
     }
     [self addPaceIfNecessaryWithSummary:newSum];
+    
+    //TODO: add summary from extra points
+    
     return newSum;
 }
 

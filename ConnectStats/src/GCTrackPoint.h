@@ -87,7 +87,7 @@
                                        for:(NSDictionary<NSString*,GCActivitySummaryValue*>*)sumValues
                                 inActivity:(GCActivity*)act;
 
--(GCTrackPoint*)updateFrom:(GCTrackPoint*)other fromActivity:(GCActivity*)otheract inActivity:(GCActivity*)selfact;
+-(BOOL)updateInActivity:(GCActivity*)act fromTrackpoint:(GCTrackPoint*)other fromActivity:(GCActivity*)otheract forFields:(NSArray<GCField*>*)fields;
 
 -(NSString*)fullDescription:(NSString*)atype;
 
@@ -120,6 +120,7 @@
  Main Access for value
  */
 -(GCNumberWithUnit*)numberWithUnitForField:(GCField*)aF inActivity:(GCActivity*)act;
+-(void)setNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)field inActivity:(GCActivity*)act;
 
 -(GCNumberWithUnit*)numberWithUnitForExtra:(GCTrackPointExtraIndex*)idx;
 -(GCNumberWithUnit*)numberWithUnitForExtra:(NSString*)aF activityType:(NSString*)aType;

@@ -51,14 +51,23 @@ public extension GCActivity {
                     }
                     if let point = GCTrackPoint(coordinate2D: coord, at: timestamp, for: values, in: self) {
                         trackpoints.append(point)
+                        self.trackFlags |= point.trackFlags
                     }
                 }
             }
-            self.saveTrackpoints(trackpoints, andLaps: [])
+            // Don't save to db
+            self.trackpoints = trackpoints
+            
         }
     }
 
-    @objc public func mergeTrackPoints(other : GCActivity){
+    @objc public func mergeFrom(other : GCActivity){
+        let fields = self.availableTrackFields()
+        let otherFields = other.self.availableTrackFields()
+        
+        print("\(fields!)")
+        print("\(otherFields!)")
+        
         if let to = self.trackpoints, let from = other.trackpoints {
             var i = from.makeIterator()
             if var merge = i.next() {

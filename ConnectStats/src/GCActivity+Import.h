@@ -40,6 +40,8 @@
 
 -(void)updateWithGarminData:(NSDictionary*)data;
 -(BOOL)updateWithActivity:(GCActivity*)other;
+-(BOOL)updateSummaryDataFromActivity:(GCActivity*)other;
+-(BOOL)updateTrackpointsFromActivity:(GCActivity*)other;
 
 
 /**

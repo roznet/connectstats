@@ -146,48 +146,25 @@ void buildStatic(){
     }
 }
 
--(GCTrackPoint*)updateFrom:(GCTrackPoint*)other fromActivity:(GCActivity*)otheract inActivity:(GCActivity*)selfact{
-}
-
 #pragma mark - Parsing
 
--(void)updateWithSummaryData:(NSDictionary<NSString*,GCActivitySummaryValue*>*)summaryData inActivity:(GCActivity*)act{
-    static NSDictionary*defs = nil;
-    if( defs == nil){
-        defs = @{
-                 @(gcFieldFlagSumDistance) : [GCUnit unitForKey:STOREUNIT_DISTANCE],
-                 @(gcFieldFlagWeightedMeanSpeed) : [GCUnit unitForKey:STOREUNIT_SPEED],
-                 @(gcFieldFlagWeightedMeanHeartRate) : [GCUnit bpm],
-                 @(gcFieldFlagAltitudeMeters): [GCUnit unitForKey:STOREUNIT_ALTITUDE],
-                 @(gcFieldFlagCadence):[GCUnit rpm],
-                 @(gcFieldFlagPower):[GCUnit watt],
-                 @(gcFieldFlagGroundContactTime):[GCUnit ms],
-                 @(gcFieldFlagVerticalOscillation):[GCUnit centimeter],
-                 };
-        [defs retain];
+-(BOOL)updateInActivity:(GCActivity*)act fromTrackpoint:(GCTrackPoint*)other fromActivity:(GCActivity*)otheract forFields:(NSArray<GCField*>*)fields{
+    BOOL rv = false;
+    
+    for (GCField * field in fields) {
+        GCNumberWithUnit * nu = [other numberWithUnitForField:field inActivity:otheract];
+        [self setNumberWithUnit:nu forField:field inActivity:act];
     }
+    
+    return rv;
+}
+
+-(void)updateWithSummaryData:(NSDictionary<NSString*,GCActivitySummaryValue*>*)summaryData inActivity:(GCActivity*)act{
     NSString * activityType = act.activityType;
     for (NSString * key in summaryData) {
         GCField * field = [GCField fieldForKey:key andActivityType:activityType];
         GCNumberWithUnit * nu = summaryData[key].numberWithUnit;
-        GCUnit * unit = field.fieldFlag != gcFieldFlagNone?defs[ @(field.fieldFlag) ] : nil;
-        if( unit ){
-            [self setValue:[nu convertToUnit:unit].value forField:field.fieldFlag];
-        }else{
-            if( ![nu.unit.key isEqualToString:@"datetime"]){
-                static NSMutableDictionary * keepTrack = nil;
-                if( keepTrack == nil){
-                    keepTrack = [NSMutableDictionary dictionary];
-                    [keepTrack retain];
-                }
-                if (!keepTrack[key]) {
-
-                    RZLog(RZLogInfo, @"Track uses %@", field);
-                    keepTrack[key] = @(1);
-                }
-                [self setExtraValue:nu forFieldKey:key in:act];
-            }
-        }
+        [self setNumberWithUnit:nu forField:field inActivity:act];
     }
 }
 
@@ -603,6 +580,31 @@ void buildStatic(){
     }
     return rv;
 }
+-(void)setNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)field inActivity:(GCActivity*)act{
+    static NSDictionary*_defs = nil;
+    if( _defs == nil){
+        _defs = @{
+                  @(gcFieldFlagSumDistance) : [GCUnit unitForKey:STOREUNIT_DISTANCE],
+                  @(gcFieldFlagWeightedMeanSpeed) : [GCUnit unitForKey:STOREUNIT_SPEED],
+                  @(gcFieldFlagWeightedMeanHeartRate) : [GCUnit bpm],
+                  @(gcFieldFlagAltitudeMeters): [GCUnit unitForKey:STOREUNIT_ALTITUDE],
+                  @(gcFieldFlagCadence):[GCUnit rpm],
+                  @(gcFieldFlagPower):[GCUnit watt],
+                  @(gcFieldFlagGroundContactTime):[GCUnit ms],
+                  @(gcFieldFlagVerticalOscillation):[GCUnit centimeter],
+                  };
+        [_defs retain];
+    }
+    GCUnit * unit = field.fieldFlag != gcFieldFlagNone?_defs[ @(field.fieldFlag) ] : nil;
+    if( unit ){
+        [self setValue:[nu convertToUnit:unit].value forField:field.fieldFlag];
+    }else{
+        if( ![nu.unit.key isEqualToString:@"datetime"]){
+            [self setExtraValue:nu forFieldKey:field.key in:act];
+        }
+    }
+}
+
 -(GCNumberWithUnit*)numberWithUnitForExtra:(GCTrackPointExtraIndex*)idx{
     return [GCNumberWithUnit numberWithUnit:idx.unit andValue:[self extraValueForIndex:idx]];
 }

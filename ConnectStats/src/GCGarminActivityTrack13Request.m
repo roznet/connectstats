@@ -218,7 +218,7 @@
                 if (success) {
                     [RZFileOrganizer removeEditableFile:zn];
                 }
-                [self processMergeFitFile];
+                
             }else{
                 RZLog(RZLogError, @"Failed to save %@. %@", fn, e.localizedDescription);
             }
@@ -249,10 +249,6 @@
     }else if(self.track13Stage==gcTrack13RequestTCX){
         dispatch_async([GCAppGlobal worker],^(){
             [self processParseTCX];
-        });
-    }else if(self.track13Stage==gcTrack13RequestFit){
-        dispatch_async([GCAppGlobal worker],^(){
-            [self processMergeFitFile];
         });
     }else{
         [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
@@ -293,6 +289,7 @@
             }else{
                 [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpoints:self.trackpoints andLaps:self.laps];
             }
+            [self processMergeFitFile];
         }else{
             RZLog(RZLogError, @"laps or trackpoints missing");
             self.status = GCWebStatusParsingFailed;
@@ -342,14 +339,8 @@
         [fitDecode parse];
         GCActivity * fitAct = [[GCActivity alloc] initWithId:self.activityId fitFile:fitDecode.fitFile];
         
-        NSArray<GCField*>*origFields = self.activity.availableTrackFields;
-        NSArray<GCField*>*fitFields = self.activity.availableTrackFields;
-        NSLog(@"Orig %@", origFields);
-        NSLog(@"Fit  %@", fitFields);
-        
-        self.trackpoints = fitAct.trackpoints;
+        [self.activity updateTrackpointsFromActivity:fitAct];
     }
-    [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
 }
 
 -(id<GCWebRequest>)nextReq{
