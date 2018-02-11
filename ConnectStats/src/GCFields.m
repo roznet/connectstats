@@ -273,7 +273,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
 }
 
 +(NSArray*)relatedFields:(NSString*)field{
-    NSArray * prefixes = @[@"WeightedMean", @"WeightedMeanMoving", @"Max", @"Min"];
+    NSArray<NSString*> * prefixes = @[@"WeightedMean", @"WeightedMeanMoving", @"Max", @"Min"];
     static NSArray * _groups = nil;
     static NSArray * _exceptions = nil;
 

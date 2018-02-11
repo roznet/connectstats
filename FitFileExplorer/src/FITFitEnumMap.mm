@@ -9,10 +9,11 @@
 #import "FITFitEnumMap.h"
 #include "GCFieldsDefs.h"
 #import "RZExternalCpp/RZExternalCpp.h"
+#include "GCField.h"
 
 @implementation FITFitEnumMap
 
-+(NSString*)activityFieldFromFitField:(NSString*)fitfield forActivityType:(NSString *)activityType{
++(GCField*)activityFieldFromFitField:(NSString*)fitfield forActivityType:(NSString *)activityType{
     static NSDictionary * defs = nil;
     if( defs == nil){
         defs = @{
@@ -187,7 +188,7 @@
         }
     }
     
-    return rv;
+    return rv ? [GCField fieldForKey:rv andActivityType:activityType] : nil;
 }
 
 +(NSString*)defsFor:(NSString*)what andKey:(NSNumber*)key{

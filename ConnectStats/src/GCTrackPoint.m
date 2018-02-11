@@ -86,7 +86,7 @@ void buildStatic(){
 }
 +(GCTrackPoint*)trackPointWithCoordinate2D:(CLLocationCoordinate2D)coord
                                         at:(NSDate*)timestamp
-                                       for:(NSDictionary<NSString*,GCActivitySummaryValue*>*)sumValues
+                                       for:(NSDictionary<GCField*,GCActivitySummaryValue*>*)sumValues
                                 inActivity:(GCActivity*)act{
     GCTrackPoint * rv = [[[GCTrackPoint alloc] init] autorelease];
     if (rv) {
@@ -167,11 +167,10 @@ void buildStatic(){
     return rv;
 }
 
--(void)updateWithSummaryData:(NSDictionary<NSString*,GCActivitySummaryValue*>*)summaryData inActivity:(GCActivity*)act{
-    NSString * activityType = act.activityType;
-    for (NSString * key in summaryData) {
-        GCField * field = [GCField fieldForKey:key andActivityType:activityType];
-        GCNumberWithUnit * nu = summaryData[key].numberWithUnit;
+-(void)updateWithSummaryData:(NSDictionary<GCField*,GCActivitySummaryValue*>*)summaryData inActivity:(GCActivity*)act{
+    
+    for (GCField * field in summaryData) {
+        GCNumberWithUnit * nu = summaryData[field].numberWithUnit;
         [self setNumberWithUnit:nu forField:field inActivity:act];
     }
 }

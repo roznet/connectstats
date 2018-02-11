@@ -85,7 +85,7 @@
 +(GCTrackPoint*)trackPointWithCoordinate2D:(CLLocationCoordinate2D)coord;
 +(GCTrackPoint*)trackPointWithCoordinate2D:(CLLocationCoordinate2D)coord
                                         at:(NSDate*)timestamp
-                                       for:(NSDictionary<NSString*,GCActivitySummaryValue*>*)sumValues
+                                       for:(NSDictionary<GCField*,GCActivitySummaryValue*>*)sumValues
                                 inActivity:(GCActivity*)act;
 
 -(BOOL)updateInActivity:(GCActivity*)act fromTrackpoint:(GCTrackPoint*)other fromActivity:(GCActivity*)otheract forFields:(NSArray<GCField*>*)fields;

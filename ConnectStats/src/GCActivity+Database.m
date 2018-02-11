@@ -189,8 +189,6 @@
     }
 
     [self setSummaryDataFromKeyDict:val];
-    
-    self.summaryData = [NSDictionary dictionaryWithDictionary:val];
 
     NSMutableDictionary<NSString*,GCActivityMetaValue*>* mval = [NSMutableDictionary dictionaryWithCapacity:5];
     res = [db executeQuery:@"SELECT * FROM gc_activities_meta WHERE activityId = ?", self.activityId];

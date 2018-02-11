@@ -93,9 +93,8 @@
 
         NSMutableDictionary<GCField*,GCActivityCalculatedValue*> * newFields = [NSMutableDictionary dictionary];
 
-        for (NSString * fieldKey in totalActivityLap.calculated) {
-            GCField * field = [GCField fieldForKey:fieldKey andActivityType:act.activityType];
-            GCActivityCalculatedValue * calcVal = [GCActivityCalculatedValue calculatedValue:fieldKey value:totalActivityLap.calculated[field]];
+        for (GCField * field in totalActivityLap.calculated) {
+            GCActivityCalculatedValue * calcVal = [GCActivityCalculatedValue calculatedValue:field.key value:totalActivityLap.calculated[field]];
             newFields[field] = calcVal;
         }
         if(newFields.count>0){

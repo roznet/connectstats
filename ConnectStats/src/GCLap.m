@@ -477,13 +477,15 @@
     self.elapsed = newelapsed;
 }
 
--(void)augmentElapsed:(NSDate*)start{
+-(void)augmentElapsed:(NSDate*)start inActivity:(GCActivity*)act{
     if (self.extraStorage==nil) {
         self.extraStorage = [NSMutableDictionary dictionaryWithCapacity:5];
     }
-    self.extraStorage[@"TotalTimeSeconds"] = @(self.elapsed);
+    GCField * totalElapsed = [GCField fieldForKey:@"TotalTimeSeconds" andActivityType:act.activityType];
+    self.extraStorage[totalElapsed] = [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:self.elapsed];
     if (start) {
-        self.extraStorage[@"TotalTimeSinceStart"] = @([self.time timeIntervalSinceDate:start]);
+        GCField * timeStart = [GCField fieldForKey:@"TotalTimeSinceStart" andActivityType:act.activityType];
+        self.extraStorage[timeStart] = [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:[self.time timeIntervalSinceDate:start]];
     }
 }
 -(void)updateExtra:(NSDictionary<GCField*,GCNumberWithUnit*>*)extra inActivity:(GCActivity*)act{

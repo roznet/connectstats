@@ -165,7 +165,7 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
             }
             NSComparisonResult currCompareResult = match(candidateLap,diff,val,true );
             if (currCompareResult != NSOrderedDescending) {
-                [candidateLap augmentElapsed:nil];
+                [candidateLap augmentElapsed:nil inActivity:self];
                 [rv addObject:candidateLap];
                 candidateLap = [[[GCLap alloc] initWithTrackPoint:trackpointsCache[idx]] autorelease];
                 candidateLap.useMovingElapsed=useMovingElapse;
@@ -178,7 +178,7 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
         RZLog(RZLogWarning, @"gpsDistance=%.0f actDistance=%.0f diff=%0.f", gpsDistance,self.sumDistance, gpsDistance-self.sumDistance);
     }
     if (candidateLap) {
-        [candidateLap augmentElapsed:nil];
+        [candidateLap augmentElapsed:nil inActivity:self];
         [rv addObject:candidateLap];
     }
 
@@ -294,9 +294,9 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
         [foundNext release];
         return @[];
     }
-    [foundFirst augmentElapsed:nil];
-    [foundLap augmentElapsed:nil];
-    [foundNext augmentElapsed:nil];
+    [foundFirst augmentElapsed:nil inActivity:self];
+    [foundLap augmentElapsed:nil inActivity:self];
+    [foundNext augmentElapsed:nil inActivity:self];
 
     [foundFirst autorelease];
     [foundLap autorelease];

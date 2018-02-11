@@ -122,12 +122,21 @@
             break;
     }
 }
+-(void)updateSummaryFieldFromSummaryData{
+    for (GCField * field in self.summaryData) {
+        GCActivitySummaryValue * value = self.summaryData[field];
+        if (field.fieldFlag!= gcFieldFlagNone) {
+            GCNumberWithUnit * nu = value.numberWithUnit;
+            [self setSummaryField:field.fieldFlag with:nu];
+            self.flags |= field.fieldFlag;
+        }
+    }
+}
 
--(void)mergeSummaryData:(NSDictionary*)newDict{
-    NSMutableDictionary * merged = self.summaryData ? [NSMutableDictionary dictionaryWithDictionary:self.summaryData] : [NSMutableDictionary dictionaryWithCapacity:newDict.count];
+-(void)mergeSummaryData:(NSDictionary<GCField*,GCActivitySummaryValue*>*)newDict{
+    NSMutableDictionary<GCField*,GCActivitySummaryValue*> * merged = self.summaryData ? [NSMutableDictionary dictionaryWithDictionary:self.summaryData] : [NSMutableDictionary dictionaryWithCapacity:newDict.count];
 
-    for (NSString * field in newDict) {
-        //GCActivitySummaryValue * old = [merged objectForKey:field];
+    for (GCField * field in newDict) {
         GCActivitySummaryValue * new = newDict[field];
         merged[field] = new;
     }
@@ -135,7 +144,7 @@
     [self updateSummaryFieldFromSummaryData];
 }
 
--(void)parseData:(NSDictionary*)data into:(NSMutableDictionary*)newSummaryData usingDefs:(NSDictionary*)defs{
+-(void)parseData:(NSDictionary*)data into:(NSMutableDictionary<GCField*,GCActivitySummaryValue*>*)newSummaryData usingDefs:(NSDictionary*)defs{
     for (NSString * key in data) {
         id def = defs[key];
         NSString * fieldkey = nil;
@@ -175,16 +184,6 @@
     }
 }
 
--(void)updateSummaryFieldFromSummaryData{
-    for (GCField * field in self.summaryData) {
-        GCActivitySummaryValue * value = self.summaryData[field];
-        if (field.fieldFlag!= gcFieldFlagNone) {
-            GCNumberWithUnit * nu = value.numberWithUnit;
-            [self setSummaryField:field.fieldFlag with:nu];
-            self.flags |= field.fieldFlag;
-        }
-    }
-}
 
 -(GCActivitySummaryValue*)buildSummaryValue:(NSString*)fieldkey uom:(NSString*)uom fieldFlag:(gcFieldFlag)flag andValue:(double)val{
     NSString * display = [GCFields predefinedDisplayNameForField:fieldkey andActivityType:self.activityType];
@@ -639,7 +638,7 @@
     self.activityName = data[@"name"];
     self.location = @"";
 
-    NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionary];
+    NSMutableDictionary<GCField*,GCActivitySummaryValue*> * newSummaryData = [NSMutableDictionary dictionary];
     [self parseData:data into:newSummaryData usingDefs:defs];
 
     [self addPaceIfNecessaryWithSummary:newSummaryData];

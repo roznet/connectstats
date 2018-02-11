@@ -52,7 +52,7 @@
 
 -(void)difference:(GCTrackPoint*)from minus:(GCTrackPoint*)to;
 
--(void)augmentElapsed:(NSDate*)start;
+-(void)augmentElapsed:(NSDate*)start inActivity:(GCActivity*)act;
 
 -(void)updateExtra:(NSDictionary<GCField*,GCNumberWithUnit*>*)extra inActivity:(GCActivity*)act;
 @end

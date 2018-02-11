@@ -44,7 +44,7 @@
 
 #pragma mark - Grouped Fields
 
--(NSArray*)displayPrimaryFieldsOrdered{
+-(NSArray<NSString*>*)displayPrimaryFieldsOrdered{
     static NSDictionary * cache = nil;
     if (cache == nil) {
         cache = @{
@@ -181,21 +181,21 @@
 
 
 -(GCActivityOrganizedFields*)groupedFields{
-    NSArray * primary = [self displayPrimaryFieldsOrdered];
+    NSArray<NSString*> * primary = [self displayPrimaryFieldsOrdered];
 
-    NSMutableDictionary * found = [NSMutableDictionary dictionary];
-    NSMutableDictionary * allUsed = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString*,id> * found = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString*,id> * allUsed = [NSMutableDictionary dictionary];
 
     GCNumberWithUnit * nu = nil;
-    for (NSString * field in primary) {
-        NSArray * related = [GCFields relatedFields:field];
+    for (NSString * fieldKey in primary) {
+        NSArray * related = [GCFields relatedFields:fieldKey];
 
         NSMutableArray * existingRelated = [NSMutableArray array];
-        nu = [self numberWithUnitForFieldKey:field];
+        nu = [self numberWithUnitForFieldKey:fieldKey];
         if (nu) {
-            [existingRelated addObject:field];
-            found[field] = existingRelated;
-            allUsed[field] = @1;
+            [existingRelated addObject:fieldKey];
+            found[fieldKey] = existingRelated;
+            allUsed[fieldKey] = @1;
 
             for (NSString * subfield in related) {
                 nu = [self numberWithUnitForFieldKey:subfield];
@@ -208,8 +208,8 @@
     }
 
     NSMutableArray * groupedPrimary = [NSMutableArray array];
-    for (NSString * field in primary) {
-        NSArray * group = found[field];
+    for (NSString * fieldKey in primary) {
+        NSArray * group = found[fieldKey];
         if (group) {
             [groupedPrimary addObject:group];
         }
@@ -220,9 +220,9 @@
 
     NSMutableDictionary * others = [NSMutableDictionary dictionary];
 
-    for (NSString * field in self.summaryData) {
-        if (!allUsed[field]) {
-            others[field] = [GCFields relatedFields:field];
+    for (GCField * field in self.summaryData) {
+        if (!allUsed[field.key]) {
+            others[field.key] = [GCFields relatedFields:field.key];
         }
     }
 

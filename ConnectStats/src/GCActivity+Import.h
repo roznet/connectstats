@@ -67,7 +67,7 @@
 
  @param newDict Dictionary
  */
--(void)mergeSummaryData:(NSDictionary<NSString*,GCActivitySummaryValue*>*)newDict;
+-(void)mergeSummaryData:(NSDictionary<GCField*,GCActivitySummaryValue*>*)newDict;
 
 /**
  Helper to add Pace info to a mutable dictionary if speed is there

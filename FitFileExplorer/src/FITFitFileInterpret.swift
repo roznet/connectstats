@@ -29,11 +29,13 @@ class FITFitFileInterpret: NSObject {
     ///
     /// - Parameter fitMessageFields: fields to convert
     /// - Returns: dictionary
-    func summaryValues(fitMessageFields:FITFitMessageFields) -> [String:GCActivitySummaryValue] {
-        var rv :[String:GCActivitySummaryValue] = [:]
+    func summaryValues(fitMessageFields:FITFitMessageFields) -> [GCField:GCActivitySummaryValue] {
+        var rv :[GCField:GCActivitySummaryValue] = [:]
         for field in fitMessageFields {
-            if let key = field as? String, let v = self.summaryValue(fitField: fitMessageFields[key]){
-                rv[v.field] = v
+            if let key = field as? String,
+                let v = self.summaryValue(fitField: fitMessageFields[key]),
+                let f = fieldKey(fitField: key){
+                rv[ f ] = v
             }
         }
         
@@ -154,13 +156,13 @@ class FITFitFileInterpret: NSObject {
             if nu.unit == GCUnit.mps(){
                 nu = nu.convert(to: GCUnit.kph())
             }
-            rv = GCActivitySummaryValue(forField: activityField, value: nu)
+            rv = GCActivitySummaryValue(forField: activityField.key, value: nu)
         }
         
         return rv;
     }
     
-    func fieldKey(fitField:String) -> String?{
+    func fieldKey(fitField:String) -> GCField?{
         let found = FITFitEnumMap.activityField(fromFitField: fitField, forActivityType: self.activityType)
         
         return found
