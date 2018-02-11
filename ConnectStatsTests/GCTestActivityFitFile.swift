@@ -34,8 +34,8 @@ class GCTestActivityFitFile: XCTestCase {
                 decode.parse()
                 let activity = GCActivity(withId: activityId, fitFile: decode.fitFile)
                 if let reload = GCGarminRequestActivityReload.test(forActivity: activityId, withFilesIn:RZFileOrganizer.bundleFilePath(nil, for: type(of: self)) ){
-                    print( "\(reload)")
-                    reload.mergeTrackPoints(other: activity)
+                    reload.updateSummaryData(from: activity)
+                    reload.updateTrackpoints(from: activity)
                 }
                 
             }

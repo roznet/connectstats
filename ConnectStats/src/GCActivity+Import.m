@@ -206,31 +206,31 @@
     return sumVal;
 }
 
--(void)addPaceIfNecessaryWithSummary:(NSMutableDictionary*)newSummaryData{
-    GCActivitySummaryValue * speed = newSummaryData[@"WeightedMeanSpeed"];
+-(void)addPaceIfNecessaryWithSummary:(NSMutableDictionary<GCField*,GCActivitySummaryValue*>*)newSummaryData{
+    GCActivitySummaryValue * speed = newSummaryData[ [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:self.activityType]];
     if (speed && ([self.activityType isEqualToString:GC_TYPE_RUNNING] || [self.activityType isEqualToString:GC_TYPE_SWIMMING])) {
-        NSString * field = @"WeightedMeanPace";
-        NSString * uom = [GCFields predefinedUomForField:field andActivityType:self.activityType];
-        NSString * display = [GCFields predefinedDisplayNameForField:field andActivityType:self.activityType];
+        GCField * field = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:self.activityType];
+        NSString * uom = [GCFields predefinedUomForField:field.key andActivityType:field.activityType];
+        NSString * display = [GCFields predefinedDisplayNameForField:field.key andActivityType:field.activityType];
 
-        [GCFields registerField:field activityType:self.activityType displayName:display andUnitName:uom];
-        [GCFields registerField:field activityType:GC_TYPE_ALL       displayName:display andUnitName:uom];
+        [GCFields registerField:field.key activityType:self.activityType displayName:display andUnitName:uom];
+        [GCFields registerField:field.key activityType:GC_TYPE_ALL       displayName:display andUnitName:uom];
         GCNumberWithUnit * val = [[speed numberWithUnit] convertToUnitName:uom];
-        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field value:val];
+        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
         self.speedDisplayUom = uom;
     }else if(speed){ // otherwise it would set for swim or running when speed = nil
         self.speedDisplayUom = speed ? speed.numberWithUnit.unit.key : @"kph";
     }
-    GCActivitySummaryValue * movingSpeed = newSummaryData[@"WeightedMeanMovingSpeed"];
+    GCActivitySummaryValue * movingSpeed = newSummaryData[ [GCField fieldForKey:@"WeightedMeanMovingSpeed" andActivityType:self.activityType] ];
     if(movingSpeed && [self.activityType isEqualToString:GC_TYPE_RUNNING]){
-        NSString * field = @"WeightedMeanMovingPace";
-        NSString * uom = [GCFields predefinedUomForField:field andActivityType:self.activityType];
-        NSString * display = [GCFields predefinedDisplayNameForField:field andActivityType:self.activityType];
+        GCField * field = [GCField fieldForKey:@"WeightedMeanMovingSpeed" andActivityType:self.activityType];
+        NSString * uom = [GCFields predefinedUomForField:field.key andActivityType:self.activityType];
+        NSString * display = [GCFields predefinedDisplayNameForField:field.key andActivityType:self.activityType];
 
-        [GCFields registerField:field activityType:self.activityType displayName:display andUnitName:uom];
-        [GCFields registerField:field activityType:GC_TYPE_ALL       displayName:display andUnitName:uom];
+        [GCFields registerField:field.key activityType:self.activityType displayName:display andUnitName:uom];
+        [GCFields registerField:field.key activityType:GC_TYPE_ALL       displayName:display andUnitName:uom];
         GCNumberWithUnit * val = [[movingSpeed numberWithUnit] convertToUnitName:uom];
-        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field value:val];
+        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
     }
 
 }
@@ -1138,72 +1138,80 @@
     return rv;
 }
 
--(void)updateSummaryFromTrackpoints:(NSArray*)trackpoints missingOnly:(BOOL)missingOnly{
-
+-(void)updateSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints missingOnly:(BOOL)missingOnly{
+    NSDictionary<GCField*,GCActivitySummaryValue*> * fromPoints = [self buildSummaryFromTrackpoints:trackpoints];
+    
+    NSMutableDictionary<NSString*,GCActivitySummaryValue*>* newSum = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
+    
+    for (GCField * field in fromPoints) {
+        if( !missingOnly || newSum[field.key] == nil){
+            newSum[field.key] = fromPoints[field];
+        }
+    }
+    
+    self.summaryData = newSum;
 }
 
--(NSDictionary*)buildSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints{
-    static NSDictionary * defs = nil;
-    if (defs == nil) {
-        defs =  @{
-                  @"WeightedMeanSpeed":     @[ @(gcFieldFlagWeightedMeanSpeed),        @"kph"],
-                  @"MaxSpeed":              @[ @(gcFieldFlagWeightedMeanSpeed),        @"kph"],
-                  @"WeightedMeanPace":      @[ @(gcFieldFlagWeightedMeanSpeed),        @"minperkm"],
-                  @"MaxPace":               @[ @(gcFieldFlagWeightedMeanSpeed),        @"minperkm"],
-                  @"WeightedMeanHeartRate": @[ @(gcFieldFlagWeightedMeanHeartRate),    @"bpm"],
-                  @"MaxHeartRate":          @[ @(gcFieldFlagWeightedMeanHeartRate),    @"bpm"],
-                  @"MinHeartRate":          @[ @(gcFieldFlagWeightedMeanHeartRate),    @"bpm"],
-                  };
-        [defs retain];
-    }
+-(NSDictionary<GCField*,GCActivitySummaryValue*>*)buildSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints{
 
-    NSMutableDictionary * results = [NSMutableDictionary dictionary];
+    NSMutableDictionary<GCField*,GCNumberWithUnit*> * results = [NSMutableDictionary dictionary];
+    
+    NSArray<GCField*>*fields = self.availableTrackFields;
+    
     double totalElapsed = 0.0;
     GCTrackPoint * point = nil;
     for (GCTrackPoint * next in trackpoints) {
         if (point) {
             NSTimeInterval elapsed = [next timeIntervalSince:point];
             totalElapsed += elapsed;
-            for (NSString * field in defs) {
+            for (GCField * field in fields) {
 
-                NSArray * def = defs[field];
-                gcFieldFlag flag = [def[0] intValue];
-                GCNumberWithUnit * num = [point numberWithUnitForField:flag andActivityType:self.activityType];
+                GCNumberWithUnit * num = [point numberWithUnitForField:field inActivity:self];
 
                 GCNumberWithUnit * current = results[field];
 
                 if (!current) {
                     current = num;
                 }else{
-                    if ([field hasPrefix:@"Max"]) {
-                        current = [current maxNumberWithUnit:num];
-                    }else if ([field hasPrefix:@"WeightedMean"]){
-                        current.value *= (totalElapsed-elapsed)/totalElapsed;
-                        current = [current addNumberWithUnit:num weight:elapsed/totalElapsed];
-                    }else if ([field hasPrefix:@"Min"]){
-                        current = [current minNumberWithUnit:num];
-                    }
+                    current.value *= (totalElapsed-elapsed)/totalElapsed;
+                    current = [current addNumberWithUnit:num weight:elapsed/totalElapsed];
                 }
-                if (current) {
+                if( current ){
                     results[field] = current;
+                    if( field.isWeightedAverage){
+                        for (GCField * secondary in @[ field.correspondingMaxField, field.correspondingMinField ]) {
+                            GCNumberWithUnit * secondaryCurrent = results[secondary];
+                            if( ! secondaryCurrent ){
+                                secondaryCurrent = num;
+                            }else{
+                                if( secondary.isMax ){
+                                    secondaryCurrent = [secondaryCurrent maxNumberWithUnit:num];
+                                }else if ( secondary.isMin ){
+                                    secondaryCurrent = [secondaryCurrent nonZeroMinNumberWithUnit:num];
+                                }
+                            }
+                            if (secondaryCurrent) {
+                                results[secondary] = secondaryCurrent;
+                            }
+                        }
+                    }
                 }
             }
         }
         point = next;
     }
-    NSMutableDictionary * newSum = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
-    for (NSString *field in results) {
+    NSMutableDictionary * newSum = [NSMutableDictionary dictionary];
+    
+    for (NSString * fieldKey in self.summaryData) {
+        newSum[ [GCField fieldForKey:fieldKey andActivityType:self.activityType] ] = self.summaryData[fieldKey];
+    }
+    
+    for (GCField *field in results) {
         GCNumberWithUnit * num = results[field];
-        gcFieldFlag flag = gcFieldFlagNone;
-        if ([field hasPrefix:@"WeightedMean"]) {
-            flag = [defs[field][0] intValue];
-        }
-        GCActivitySummaryValue * val = [self buildSummaryValue:field uom:num.unit.key fieldFlag:flag andValue:num.value];
-            newSum[field] = val;
+        GCActivitySummaryValue * val = [self buildSummaryValue:field.key uom:num.unit.key fieldFlag:field.fieldFlag andValue:num.value];
+        newSum[field] = val;
     }
     [self addPaceIfNecessaryWithSummary:newSum];
-    
-    //TODO: add summary from extra points
     
     return newSum;
 }

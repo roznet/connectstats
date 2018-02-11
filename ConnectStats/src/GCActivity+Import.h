@@ -50,7 +50,15 @@
  @param trackpoints will process speed, heartrate fields
  @return dictionary suitable for summaryData
  */
--(NSDictionary<NSString*,GCActivitySummaryValue*>*)buildSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints;
+-(NSDictionary<GCField*,GCActivitySummaryValue*>*)buildSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints;
+
+/**
+ Will update summaryData with data calculated from trackpoints
+
+ @param trackpoints list of trackpoints, should be compatible with index of current activity
+ @param missingOnly if true will not change existing value in summarydata, else will replace all
+ */
+-(void)updateSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints missingOnly:(BOOL)missingOnly;
 
 /**
  Update contents of summary data with new dict. Any existing field in summaryData
@@ -67,7 +75,7 @@
 
  @param newSummaryData An summary mutable dictionary
  */
--(void)addPaceIfNecessaryWithSummary:(NSMutableDictionary*)newSummaryData;
+-(void)addPaceIfNecessaryWithSummary:(NSMutableDictionary<GCField*,GCActivitySummaryValue*>*)newSummaryData;
 
 -(NSMutableDictionary*)buildSummaryDataFromGarminModernData:(NSDictionary*)data;
 -(CLLocationCoordinate2D)buildCoordinateFromGarminModernData:(NSDictionary*)data;

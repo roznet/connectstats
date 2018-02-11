@@ -199,6 +199,25 @@
     return nil;
 }
 
+-(nullable GCNumberWithUnit*)nonZeroMinNumberWithUnit:(GCNumberWithUnit*)other{
+    if ([other.unit canConvertTo:self.unit]) {
+        GCNumberWithUnit * converted = [other convertToUnit:self.unit];
+        double rv = self.value;
+        BOOL selfIsZero = (fabs(self.value) < 1.0e-10);
+        BOOL otherIsZero = (fabs(converted.value) < 1.0e-10);
+        
+        if( selfIsZero ){
+            rv = other.value;
+        }else{
+            if( !otherIsZero ){
+                rv = MIN(other.value,self.value);
+            }
+        }
+        return [GCNumberWithUnit numberWithUnit:self.unit andValue:rv];
+    };
+    return nil;
+}
+
 #pragma mark - Comparison
 
 -(BOOL)isEqualToNumberWithUnit:(GCNumberWithUnit*)other{

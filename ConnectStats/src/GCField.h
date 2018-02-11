@@ -54,9 +54,11 @@
 -(BOOL)validForGraph;
 -(BOOL)isWeightedAverage;
 -(BOOL)isMax;
+-(BOOL)isMin;
 
 -(GCField*)correspondingMaxField;
 -(GCField*)correspondingWeightedMeanField;
+-(GCField*)correspondingMinField;
 
 -(NSString*)displayName;
 -(NSString*)displayNameAndUnits;

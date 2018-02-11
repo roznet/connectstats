@@ -57,7 +57,7 @@
                           @"WeightedMeanStrokes",
                           @"WeightedMeanSwolf",
                           @"WeightedMeanPower",
-                          @"WeightedMeanNormalizedPower",
+                          @"WeightedMeanFormPower",
                           @"SumIntensityFactor",
                           @"WeightedMeanRunCadence",
                           @"WeightedMeanSwimCadence",

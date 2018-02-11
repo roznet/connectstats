@@ -57,7 +57,7 @@ public extension GCActivity {
             }
             // Don't save to db
             self.trackpoints = trackpoints
-            
+            self.updateSummary(fromTrackpoints: trackpoints, missingOnly: true)
         }
     }
 

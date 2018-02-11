@@ -286,6 +286,9 @@ static void registerInCache(GCField*field){
 -(BOOL)isMax{
     return [self.key hasPrefix:@"Max"];
 }
+-(BOOL)isMin{
+    return [self.key hasPrefix:@"Min"];
+}
 
 -(GCField*)fieldBySwappingPrefix:(NSString*)oldPrefix for:(NSString*)newPrefix{
     if( [self.key hasPrefix:oldPrefix]){
@@ -299,6 +302,11 @@ static void registerInCache(GCField*field){
     GCField * rv = [self fieldBySwappingPrefix:@"WeightedMean" for:@"Max"];
     return rv;
 }
+-(GCField*)correspondingMinField{
+    GCField * rv = [self fieldBySwappingPrefix:@"WeightedMean" for:@"Min"];
+    return rv;
+}
+
 -(GCField*)correspondingWeightedMeanField{
     GCField * rv = [self fieldBySwappingPrefix:@"Max" for:@"WeightedMean"];
     return rv;

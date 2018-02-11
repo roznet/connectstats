@@ -61,6 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable GCNumberWithUnit*)addNumberWithUnit:(GCNumberWithUnit*)other weight:(double)weight;
 -(nullable GCNumberWithUnit*)maxNumberWithUnit:(GCNumberWithUnit*)other;
 -(nullable GCNumberWithUnit*)minNumberWithUnit:(GCNumberWithUnit*)other;
+-(nullable GCNumberWithUnit*)nonZeroMinNumberWithUnit:(GCNumberWithUnit*)other;
 
 -(NSComparisonResult)compare:(GCNumberWithUnit*)other;
 -(NSComparisonResult)compare:(GCNumberWithUnit*)other withTolerance:(double)eps;
