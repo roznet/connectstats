@@ -7,7 +7,7 @@
 // warranties of merchantability, non-infringement, or fitness for a particular
 // purpose, are specifically disclaimed.
 //
-// Copyright 2017 Dynastream Innovations Inc.
+// Copyright 2018 Dynastream Innovations Inc.
 ////////////////////////////////////////////////////////////////////////////////
 
 
