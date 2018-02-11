@@ -79,11 +79,11 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 @property (nonatomic,retain) NSString * activityId;
 
-@property (nonatomic,retain) NSDictionary<NSString*,GCActivitySummaryValue*> * summaryData;
+@property (nonatomic,retain) NSDictionary<GCField*,GCActivitySummaryValue*> * summaryData;
 @property (nonatomic,retain) NSDictionary<NSString*,GCActivityMetaValue*> * metaData;
-@property (nonatomic,retain) NSDictionary<NSString*,GCActivityCalculatedValue*> * calculatedFields;
+@property (nonatomic,retain) NSDictionary<GCField*,GCActivityCalculatedValue*> * calculatedFields;
 @property (nonatomic,retain) NSDictionary<NSString*,NSArray*> * calculatedLaps;
-@property (nonatomic,retain) NSDictionary<NSString*,GCTrackPointExtraIndex*> * cachedExtraTracksIndexes;
+@property (nonatomic,retain) NSDictionary<GCField*,GCTrackPointExtraIndex*> * cachedExtraTracksIndexes;
 /**
  NSString -> GCCalculactedCachedTrackInfo (to be calculated) or GCStatsDataSerieWithUnit
  */
@@ -306,7 +306,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 /**
  Returns all available summary fields as NSString Keys. Includes calculated fields.
  */
--(NSArray<NSString*>*)allFieldsKeys;
+-(NSArray<NSString*>*)allFieldsKeys DEPRECATED_MSG_ATTRIBUTE("use GCActivityType.");
 
 -(GCActivityMetaValue*)metaValueForField:(NSString*)field;
 
@@ -315,7 +315,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  Add a dictionary of metavalue entries
  */
 -(void)addEntriesToMetaData:(NSDictionary<NSString*,GCActivityMetaValue*> *)dict;
--(void)addEntriesToCalculatedFields:(NSDictionary<NSString*,GCActivityCalculatedValue*> *)dict;
+-(void)addEntriesToCalculatedFields:(NSDictionary<GCField*,GCActivityCalculatedValue*> *)dict;
 
 #pragma mark - Laps
 

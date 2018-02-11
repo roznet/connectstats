@@ -1022,20 +1022,20 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }else if (isSki){
         GCNumberWithUnit * elev = nil;
         if ([activity.activityTypeDetail isEqualToString:GC_TYPE_SKI_DOWN]) {
-            elev = [lap numberWithUnitForExtra:@"LossElevation" activityType:activity.activityType];
+            elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"LossElevation" andActivityType:activity.activityType]];
             if (elev == nil) {
-                elev = [lap numberWithUnitForExtra:@"LossCorrectedElevation" activityType:activity.activityType];
+                elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"LossCorrectedElevation" andActivityType:activity.activityType]];
             }
             if (elev == nil) {
-                elev = [lap numberWithUnitForExtra:@"LossUncorrectedElevation" activityType:activity.activityType];
+                elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"LossUncorrectedElevation" andActivityType:activity.activityType]];
             }
         }else {
-            elev = [lap numberWithUnitForExtra:@"GainElevation" activityType:activity.activityType];
+            elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"GainElevation" andActivityType:activity.activityType]];
             if (elev == nil) {
-                elev = [lap numberWithUnitForExtra:@"GainCorrectedElevation" activityType:activity.activityType];
+                elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"GainCorrectedElevation" andActivityType:activity.activityType]];
             }
             if (elev == nil) {
-                elev = [lap numberWithUnitForExtra:@"GainUncorrectedElevation" activityType:activity.activityType];
+                elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"GainUncorrectedElevation" andActivityType:activity.activityType]];
             }
         }
         if (elev) {

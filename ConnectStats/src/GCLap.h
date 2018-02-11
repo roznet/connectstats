@@ -28,10 +28,9 @@
 
 #define GC_BEARING_FIELD @"Bearing"
 
-@interface GCLap : GCTrackPoint{
-    NSMutableDictionary * extra;
-}
-@property (nonatomic,retain) NSMutableDictionary * extra;
+@interface GCLap : GCTrackPoint
+
+@property (nonatomic,readonly) NSDictionary<GCField*,GCNumberWithUnit*> * extra;
 @property (nonatomic,assign) BOOL useMovingElapsed;
 @property (nonatomic,assign) double movingElapsed;
 @property (nonatomic,retain) NSString*label;
@@ -54,4 +53,6 @@
 -(void)difference:(GCTrackPoint*)from minus:(GCTrackPoint*)to;
 
 -(void)augmentElapsed:(NSDate*)start;
+
+-(void)updateExtra:(NSDictionary<GCField*,GCNumberWithUnit*>*)extra inActivity:(GCActivity*)act;
 @end

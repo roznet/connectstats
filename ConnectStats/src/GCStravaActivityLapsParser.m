@@ -137,7 +137,8 @@
                     }
                 }
 
-                lap.extra = extra;
+                [lap updateExtra:extra inActivity:nil];
+                
                 [ar addObject:lap];
                 [lap release];
             }else{

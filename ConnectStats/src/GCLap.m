@@ -29,11 +29,14 @@
 #import "GCActivity+Import.h"
 #import "GCActivitySummaryValue.h"
 
+@interface GCLap ()
+@property (nonatomic,retain) NSMutableDictionary<GCField*,GCNumberWithUnit*>*extraStorage;
+@end
+
 @implementation GCLap
-@synthesize extra;
 
 -(void)dealloc{
-    [extra release];
+    [_extraStorage release];
     [_label release];
 
     [super dealloc];
@@ -58,7 +61,7 @@
         self.power = other.power;
         self.groundContactTime = other.groundContactTime;
         self.verticalOscillation = other.verticalOscillation;
-        self.extra = [NSMutableDictionary dictionaryWithDictionary:other.extra];
+        self.extraStorage = [NSMutableDictionary dictionaryWithDictionary:other.extra];
     }
     return self;
 }
@@ -88,10 +91,13 @@
                 self.fieldValues[i] = other.fieldValues[i];
             }
         }
-
-        [self setExtra:nil];
+        self.extraStorage = nil;
     }
     return self;
+}
+
+-(NSDictionary<GCField*,GCNumberWithUnit*>*)extra{
+    return self.extraStorage;
 }
 
 -(GCLap*)initWithDictionary:(NSDictionary*)data forActivity:(GCActivity *)act{
@@ -156,7 +162,7 @@
         self.trackFlags |= gcFieldFlagPower;
     }
 
-    self.extra = [NSMutableDictionary dictionaryWithCapacity:data.count];
+    self.extraStorage = [NSMutableDictionary dictionaryWithCapacity:data.count];
 
     for (NSString * field in data) {
         if (![field isEqualToString:@"DistanceMeters"] &&
@@ -179,13 +185,13 @@
                 NSString * s = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                 value = s.doubleValue;
             }
-            extra[usefield] = [GCNumberWithUnit numberWithUnit:unit andValue:value];
+            self.extraStorage[ [GCField fieldForKey:usefield andActivityType:atype]  ] = [GCNumberWithUnit numberWithUnit:unit andValue:value];
 
         }
     }
-    GCNumberWithUnit * dur = extra[@"TotalTimeSecond"];
+    GCNumberWithUnit * dur = self.extraStorage[ [GCField fieldForKey:@"TotalTimeSecond" andActivityType:atype] ];
     if (!dur) {
-        dur = extra[@"SumDuration"];
+        dur = self.extraStorage[ [GCField fieldForKey:@"SumDuration" andActivityType:atype] ];
     }
     if (dur) {
         self.elapsed = dur.value;
@@ -195,7 +201,7 @@
 -(void)parseModernDict:(NSDictionary*)data inActivity:(GCActivity*)act{
 
     NSMutableDictionary * summary = [act buildSummaryDataFromGarminModernData:data];
-    self.extra = [NSMutableDictionary dictionary];
+    self.extraStorage = [NSMutableDictionary dictionary];
     for (NSString * fieldKey in summary) {
         GCActivitySummaryValue * value = summary[fieldKey];
         GCNumberWithUnit * num = value.numberWithUnit;
@@ -206,11 +212,9 @@
                 [self setValue:[num convertToUnit:unit].value forField:field.fieldFlag];
             }
         }
-        self.extra[fieldKey] = num;
+        self.extraStorage[field] = num;
     }
     self.time  = [act buildStartDateFromGarminModernData:data];
-
-
 }
 
 -(void)parseDict:(NSDictionary*)data inActivity:(GCActivity*)act{
@@ -220,23 +224,24 @@
     NSString * s_time = dict[@"value"];
     double time70 = s_time.doubleValue;
     self.time = [NSDate dateWithTimeIntervalSince1970:time70/1e3];
-    self.extra = [NSMutableDictionary dictionaryWithCapacity:data.count];
+    self.extraStorage = [NSMutableDictionary dictionaryWithCapacity:data.count];
 
     BOOL reported= false;
-    for (NSString * field in data) {
-        dict = data[field];
+    for (NSString * fieldKey in data) {
+        GCField * field = [GCField fieldForKey:fieldKey andActivityType:act.activityType];
+        dict = data[fieldKey];
         if ([dict isKindOfClass:[NSDictionary class]]) {
             NSString * value   = dict[@"value"];
             NSString * uom     = dict[@"uom"];
             NSString * display = dict[@"fieldDisplayName"];
             if ([value rangeOfString:@"Infinity"].location==NSNotFound) {
-                gcFieldFlag trackfield = [GCFields trackFieldFromActivityField:field];
+                gcFieldFlag trackfield = [GCFields trackFieldFromActivityField:fieldKey];
                 if ([uom isEqualToString:@"kph"] && [dict[@"unitAbbr"] isEqualToString:@"min/km"]) {
                     uom = @"minperkm";
                 }else if( [uom isEqualToString:@"mph"] && [dict[@"unitAbbr"] isEqualToString:@"min/mi"]){
                     uom = @"minpermile";
                 }
-                [GCFields registerField:field activityType:atype displayName:display andUnitName:uom];
+                [GCFields registerField:fieldKey activityType:atype displayName:display andUnitName:uom];
                 double numval = [value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].doubleValue;
                 if (trackfield != gcFieldFlagNone) {
                     GCUnit * unit = [GCTrackPoint unitForField:trackfield andActivityType:atype];
@@ -245,8 +250,8 @@
                     }
                     [self setValue:numval forField:trackfield];
                 }else{
-                    if (![GCFields skipField:field]) {
-                        extra[field] = [GCNumberWithUnit numberWithUnitName:uom andValue:numval];
+                    if (![GCFields skipField:fieldKey]) {
+                        self.extraStorage[field] = [GCNumberWithUnit numberWithUnitName:uom andValue:numval];
                     }
                 }
             }
@@ -257,7 +262,7 @@
             reported = true;
         }
     }
-    GCNumberWithUnit * n = extra[@"SumDuration"];
+    GCNumberWithUnit * n = self.extraStorage[ [GCField fieldForKey:@"SumDuration" andActivityType:act.activityType] ];
     if (n) {
         self.elapsed = n.value;
     }
@@ -266,28 +271,27 @@
 #pragma mark -
 
 -(void)addExtraFromResultSet:(FMResultSet*)res andActivityType:(NSString*)aType;{
-    NSString * lapfield = [res stringForColumn:@"field"];
+    GCField * lapfield = [GCField fieldForKey:[res stringForColumn:@"field"] andActivityType:aType] ;
     NSNumber * value = @([res doubleForColumn:@"value"]);
     NSString * unit  = [res stringForColumn:@"uom"];
 
-    if (!self.extra) {
-        self.extra = [NSMutableDictionary dictionaryWithCapacity:10];
+    if (!self.extraStorage) {
+        self.extraStorage = [NSMutableDictionary dictionaryWithCapacity:10];
     }
     if (unit && unit.length) {
-        (self.extra)[lapfield] = [GCNumberWithUnit numberWithUnitName:unit andValue:value.doubleValue];
+        self.extraStorage[lapfield] = [GCNumberWithUnit numberWithUnitName:unit andValue:value.doubleValue];
     }else{
-        NSString * usefield = [GCFields fieldForLapField:lapfield andActivityType:aType];
-        GCUnit * useunit = [GCFields unitForLapField:lapfield activityType:aType];
-        if (useunit) {
-            (self.extra)[usefield] = [GCNumberWithUnit numberWithUnit:useunit andValue:value.doubleValue];
-        }else{
-            (self.extra)[lapfield] = value;
+        GCField * usefield = [GCField fieldForKey:[GCFields fieldForLapField:lapfield.key andActivityType:aType] andActivityType:aType];
+        GCUnit * useunit = [GCFields unitForLapField:lapfield.key activityType:aType];
+        if( ! useunit){
+            useunit = GCUnit.dimensionless;
         }
+        self.extraStorage[usefield] = [GCNumberWithUnit numberWithUnit:useunit andValue:value.doubleValue];
     }
     // Special case
-    if ([lapfield isEqualToString:@"TotalTimeSeconds"]) {
+    if ([lapfield.key isEqualToString:@"TotalTimeSeconds"]) {
         self.elapsed = value.doubleValue;
-    }else if ( [lapfield isEqualToString:@"SumDuration"]){
+    }else if ( [lapfield.key isEqualToString:@"SumDuration"]){
         self.elapsed = value.doubleValue;
     }
 
@@ -295,7 +299,7 @@
     while (next != gcFieldFlagNone) {
         GCField * field = [GCField fieldForFlag:next andActivityType:aType];
         GCUnit * uom = [field unit];
-        self.extra[field.key] = [[self numberWithUnitForField:next andActivityType:aType] convertToUnit:uom];
+        self.extraStorage[field] = [[self numberWithUnitForField:next andActivityType:aType] convertToUnit:uom];
         next = [GCFields nextTrackField:next in:self.trackFlags];
     }
 }
@@ -323,40 +327,20 @@
         RZLog( RZLogError, @"db error %@", [trackdb lastErrorMessage]);
     }
 
-    for (NSString * field in extra) {
-        id val = extra[field];
-        if ([val isKindOfClass:[NSNumber class]]) {
-            if(![trackdb executeUpdate:@"INSERT INTO gc_laps_info (lap,field,value) VALUES (?,?,?)", @(self.lapIndex),field,val]){
-                RZLog(RZLogError, @"%@",[trackdb lastError]);
-            }
-        }else{
-            GCNumberWithUnit * num = val;
-            if(![trackdb executeUpdate:@"INSERT INTO gc_laps_info (lap,field,value,uom) VALUES (?,?,?,?)",
-                 @(self.lapIndex),
-                 field,
-                 @(num.value),
-                 (num.unit).key]){
-                RZLog(RZLogError, @"%@",[trackdb lastError]);
-            }
+    for (GCField * field in self.extraStorage) {
+        GCNumberWithUnit * val = self.extraStorage[field];
+        GCNumberWithUnit * num = val;
+        if(![trackdb executeUpdate:@"INSERT INTO gc_laps_info (lap,field,value,uom) VALUES (?,?,?,?)",
+             @(self.lapIndex),
+             field,
+             @(num.value),
+             (num.unit).key]){
+            RZLog(RZLogError, @"%@",[trackdb lastError]);
         }
     }
 }
--(GCNumberWithUnit*)numberWithUnitForExtra:(NSString*)aF activityType:(NSString*)aType{
-    id valobj = extra[aF];
-    if ([valobj isKindOfClass:[GCNumberWithUnit class]]) {
-        return valobj;
-    }
-    NSNumber * val = valobj;
-    if (val) {
-        if ([aF isEqualToString:@"MaximumSpeed"]) {
-            GCUnit * unit = [GCFields unitForLapField:aF activityType:aType];
-            double conv=[unit convertDouble:val.doubleValue fromUnit:[GCUnit unitForKey:STOREUNIT_SPEED]];
-            return [GCNumberWithUnit numberWithUnit:[GCFields unitForLapField:aF activityType:aType] andValue:conv];
-        }else{
-            return [GCNumberWithUnit numberWithUnit:[GCFields unitForLapField:aF activityType:aType] andValue:val.doubleValue];
-        }
-    }
-    return [self numberWithUnitForCalculated:aF];
+-(GCNumberWithUnit*)numberWithUnitForExtraByField:(GCField *)aF{
+    return self.extraStorage[aF];
 }
 
 #define degreesToRadians(x) (M_PI * x / 180.0)
@@ -383,9 +367,10 @@
         }
 
         if (self.extra==nil) {
-            self.extra = [NSMutableDictionary dictionaryWithCapacity:5];
+            self.extraStorage = [NSMutableDictionary dictionaryWithCapacity:5];
         }
-        (self.extra)[GC_BEARING_FIELD] = [GCNumberWithUnit numberWithUnitName:@"dd" andValue:bearing];
+        //FIXME: not sure where BEARING Is used?
+        //self.extraStorage[ [GCField fieldForKey:GC_BEARING_FIELD andActivityType:nil] = [GCNumberWithUnit numberWithUnitName:@"dd" andValue:bearing];
 
     }else{
         self.distanceMeters = to.distanceMeters-from.distanceMeters;
@@ -413,7 +398,7 @@
     self.elapsed = newelapsed;
 
     if (self.extra==nil) {
-        self.extra = [NSMutableDictionary dictionaryWithCapacity:5];
+        self.extraStorage = [NSMutableDictionary dictionaryWithCapacity:5];
     }
 
 }
@@ -422,7 +407,7 @@
     NSTimeInterval dt = [to timeIntervalSince:from];
 
     if (self.extra==nil) {
-        self.extra = [NSMutableDictionary dictionaryWithCapacity:5];
+        self.extraStorage = [NSMutableDictionary dictionaryWithCapacity:5];
     }
 
     NSTimeInterval movingElapsed = self.movingElapsed;
@@ -466,8 +451,8 @@
 
 -(void)decumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to{
     NSTimeInterval dt = [to timeIntervalSince:from];
-    if (self.extra==nil) {
-        self.extra = [NSMutableDictionary dictionaryWithCapacity:5];
+    if (self.extraStorage==nil) {
+        self.extraStorage = [NSMutableDictionary dictionaryWithCapacity:5];
     }
 
     NSTimeInterval newelapsed = self.elapsed-dt;
@@ -493,13 +478,15 @@
 }
 
 -(void)augmentElapsed:(NSDate*)start{
-    if (self.extra==nil) {
-        self.extra = [NSMutableDictionary dictionaryWithCapacity:5];
+    if (self.extraStorage==nil) {
+        self.extraStorage = [NSMutableDictionary dictionaryWithCapacity:5];
     }
-    (self.extra)[@"TotalTimeSeconds"] = @(self.elapsed);
+    self.extraStorage[@"TotalTimeSeconds"] = @(self.elapsed);
     if (start) {
-        (self.extra)[@"TotalTimeSinceStart"] = @([self.time timeIntervalSinceDate:start]);
+        self.extraStorage[@"TotalTimeSinceStart"] = @([self.time timeIntervalSinceDate:start]);
     }
 }
-
+-(void)updateExtra:(NSDictionary<GCField*,GCNumberWithUnit*>*)extra inActivity:(GCActivity*)act{
+    self.extraStorage = [NSMutableDictionary dictionaryWithDictionary:extra];
+}
 @end

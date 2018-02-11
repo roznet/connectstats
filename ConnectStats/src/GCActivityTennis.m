@@ -79,7 +79,7 @@
 }
 
 -(double)shots{
-    GCActivitySummaryValue * sum = (self.summaryData)[@"shots"];
+    GCActivitySummaryValue * sum = (self.summaryData)[[GCField fieldForKey:@"shots" andActivityType:self.activityType]];
     return sum.numberWithUnit.value;
 }
 -(void)parseJson:(NSMutableDictionary*)aData{

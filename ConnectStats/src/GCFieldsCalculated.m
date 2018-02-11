@@ -41,7 +41,7 @@ static NSArray * _calculatedFields = nil;
 +(GCFieldInfo*)fieldInfoForCalculatedField:(GCField*)field{
     GCFieldInfo * rv = nil;
     if (field.isCalculatedField) {
-        NSString * fieldName = [GCFieldsCalculated displayFieldName:field.key];
+        NSString * fieldName = [GCFieldsCalculated displayFieldName:field];
         NSString * unitName  = [GCFieldsCalculated unitName:field];
 
         rv = [GCFieldInfo fieldInfoFor:field.key type:field.activityType displayName:fieldName andUnitName:unitName];
@@ -52,7 +52,7 @@ static NSArray * _calculatedFields = nil;
 +(NSString*)unitName:(GCField*)field{
     NSArray * all = [GCFieldsCalculated calculatedFields];
     for (GCFieldsCalculated * one in all) {
-        if ([field.key isEqualToString:[one field]]) {
+        if ([field.key isEqualToString:one.fieldKey]) {
             return [one unitName];
         }
     }
@@ -85,34 +85,34 @@ static NSArray * _calculatedFields = nil;
     }
     return nil;
 }
-+(NSString*)displayFieldName:(NSString*)field{
++(NSString*)displayFieldName:(GCField*)field{
     NSArray * all = [GCFieldsCalculated calculatedFields];
     for (GCFieldsCalculated * one in all) {
-        if ([field isEqualToString:[one field]]) {
+        if ([field.key isEqualToString:one.fieldKey]) {
             return [one displayName];
         }
     }
-    if ([field isEqualToString:CALC_ALTITUDE_GAIN]) {
+    if ([field.key isEqualToString:CALC_ALTITUDE_GAIN]) {
         return NSLocalizedString( @"Elevation Gain", @"Calculated Field");
-    }else if([field isEqualToString:CALC_ALTITUDE_LOSS]){
+    }else if([field.key isEqualToString:CALC_ALTITUDE_LOSS]){
         return NSLocalizedString( @"Elevation Loss", @"Calculated Field");
-    }else if([field isEqualToString:CALC_NORMALIZED_POWER]){
+    }else if([field.key isEqualToString:CALC_NORMALIZED_POWER]){
         return NSLocalizedString( @"Normalized Power", @"Calculated Field");
-    }else if([field isEqualToString:CALC_NONZERO_POWER]){
+    }else if([field.key isEqualToString:CALC_NONZERO_POWER]){
         return NSLocalizedString( @"Non Zero Avg Power", @"Calculated Field");
-    }else if ([field isEqualToString:CALC_VERTICAL_SPEED]){
+    }else if ([field.key isEqualToString:CALC_VERTICAL_SPEED]){
         return NSLocalizedString( @"Vertical Speed", @"Calculated Field");
-    }else if ([field isEqualToString:CALC_ELEVATION_GRADIENT]){
+    }else if ([field.key isEqualToString:CALC_ELEVATION_GRADIENT]){
         return NSLocalizedString( @"Elevation Gradient", @"Calculated Field");
-    }else if ([field isEqualToString:CALC_MAX_ASCENT_SPEED]){
+    }else if ([field.key isEqualToString:CALC_MAX_ASCENT_SPEED]){
         return NSLocalizedString( @"Max Ascent Speed", @"Calculated Field");
-    }else if ([field isEqualToString:CALC_MAX_DESCENT_SPEED]){
+    }else if ([field.key isEqualToString:CALC_MAX_DESCENT_SPEED]){
         return NSLocalizedString( @"Max Descent Speed", @"Calculated Field");
-    }else if ([field isEqualToString:CALC_ASCENT_SPEED]){
+    }else if ([field.key isEqualToString:CALC_ASCENT_SPEED]){
         return NSLocalizedString( @"Ascent Speed", @"Calculated Field");
-    }else if ([field isEqualToString:CALC_DESCENT_SPEED]){
+    }else if ([field.key isEqualToString:CALC_DESCENT_SPEED]){
         return NSLocalizedString( @"Descent Speed", @"Calculated Field");
-    }else if ([field isEqualToString:CALC_10SEC_SPEED]){
+    }else if ([field.key isEqualToString:CALC_10SEC_SPEED]){
         return NSLocalizedString(@"10sec Speed", @"Calculated Field");
     }
 
@@ -146,7 +146,7 @@ static NSArray * _calculatedFields = nil;
             if ([one validForActivity:act] && [one trackPointHasRequiredFields:point inActivity:act]) {
                 GCActivityCalculatedValue * val = [one evaluateForTrackPoint:point inActivity:act];
                 if (val) {
-                    [point addNumberWithUnitForCalculated:[val numberWithUnit] forField:one.field];
+                    [point addNumberWithUnitForCalculated:[val numberWithUnit] forField:[one fieldInActivity:act]];
                 }
             }
         }
@@ -163,13 +163,13 @@ static NSArray * _calculatedFields = nil;
 +(void)addCalculatedFields:(GCActivity*)act{
     NSArray * calcFields = [GCFieldsCalculated calculatedFields];
 
-    NSMutableDictionary * newFields = [NSMutableDictionary dictionary];
+    NSMutableDictionary<GCField*,GCActivityCalculatedValue*> * newFields = [NSMutableDictionary dictionary];
 
     for (GCFieldsCalculated * one in calcFields) {
         if ([one activityHasRequiredFields:act] && [one validForActivity:act]) {
             GCActivityCalculatedValue * val = [one evaluateForActivity:act];
             if (val) {
-                newFields[one.field] = val;
+                newFields[ [one fieldInActivity:act] ] = val;
             }
         }
     }
@@ -177,6 +177,35 @@ static NSArray * _calculatedFields = nil;
 }
 
 
+-(GCField*)fieldInActivity:(GCActivity*)act{
+    return [GCField fieldForKey:self.fieldKey andActivityType:act.activityType];
+}
+
+-(NSArray<GCField*>*)inputFieldsTrackPointForActivity:(GCActivity*)act{
+    NSArray * inputs = self.inputFieldsTrackPoint;
+    NSMutableArray<GCField*>*rv = [NSMutableArray arrayWithCapacity:inputs.count];
+    
+    for (id obj in inputs) {
+        if( [obj isKindOfClass:[NSString class]]) {
+            [rv addObject:[GCField fieldForKey:obj andActivityType:act.activityType]];
+        }else if ([obj isKindOfClass:[NSNumber class]]){
+            [rv addObject:[GCField fieldForFlag:[obj integerValue] andActivityType:act.activityType]];
+        }else{
+            RZLog(RZLogError, @"Invalid input for %@", self);
+            return nil; // BAD!
+        }
+    }
+    return rv;
+}
+-(NSArray<GCField*>*)inputFieldsForActivity:(GCActivity*)act{
+    NSArray * inputs = self.inputFields;
+    
+    NSMutableArray<GCField*>*rv = [NSMutableArray arrayWithCapacity:inputs.count];
+    for (NSString * key in inputs) {
+        [rv addObject:[GCField fieldForKey:key andActivityType:act.activityType]];
+    }
+    return rv;
+}
 
 #pragma mark - default implementation
 
@@ -186,11 +215,11 @@ static NSArray * _calculatedFields = nil;
 -(NSArray*)inputFieldsTrackPoint{
     return @[];
 }
--(NSString*)field{
+-(NSString*)fieldKey{
     return @"None";
 }
 -(NSString*)displayName{
-    return [self field];
+    return @"None";
 }
 -(BOOL)validForActivity:(GCActivity*)act{
     return false;
@@ -207,9 +236,9 @@ static NSArray * _calculatedFields = nil;
 #pragma mark - shared functions
 
 -(BOOL)activityHasRequiredFields:(GCActivity*)act{
-    NSArray * inputF = [self inputFields];
-    for (NSString * f in inputF) {
-        if (![act hasField:[GCField field:f forActivityType:act.activityType]]) {
+    NSArray<GCField*> * inputF = [self inputFieldsForActivity:act];
+    for (GCField * f in inputF) {
+        if (![act hasField:f]) {
             return false;
         }
     }
@@ -217,17 +246,13 @@ static NSArray * _calculatedFields = nil;
 }
 
 -(BOOL)trackPointHasRequiredFields:(GCTrackPoint*)trackPoint inActivity:(GCActivity*)act{
-    NSArray * inputF = [self inputFieldsTrackPoint];
-    for (id f in inputF) {
-        if ([f isKindOfClass:[NSString class]]){
-            if( [trackPoint numberWithUnitForExtra:f activityType:act.activityType] == nil){
-                return false;
-            }
-        }else if ([f isKindOfClass:[NSNumber class]]){
-            gcFieldFlag flag = (gcFieldFlag)[f integerValue];
-            if ((act.trackFlags & flag) == 0 ) {
-                return false;
-            }
+    NSArray<GCField*> * inputF = [self inputFieldsTrackPointForActivity:act];
+    if( inputF == nil){
+        return false;
+    }
+    for (GCField * f in inputF) {
+        if( ![act hasTrackForField:f]){
+            return false;
         }
     }
     return true;
@@ -236,17 +261,17 @@ static NSArray * _calculatedFields = nil;
     GCActivityCalculatedValue * rv = nil;
 
     if ([self validForActivity:act]) {
-        NSArray * inputF= [self inputFields];
+        NSArray<GCField*> * inputF= [self inputFieldsForActivity:act];
         NSMutableArray * inputs = [NSMutableArray arrayWithCapacity:inputF.count];
 
-        for (NSString * f in inputF) {
-            [inputs addObject:[act numberWithUnitForFieldKey:f]];
+        for (GCField * f in inputF) {
+            [inputs addObject:[act numberWithUnitForField:f]];
         }
         GCNumberWithUnit * val = [self evaluateWithInputs:inputs];
         if (val) {
             rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
             rv.numberWithUnit = val;
-            rv.field = [self field];
+            rv.field = [self fieldInActivity:act].key;
         }
     }
     return rv;
@@ -256,19 +281,12 @@ static NSArray * _calculatedFields = nil;
     GCActivityCalculatedValue * rv = nil;
 
     if ([self validForTrackPoint:trackPoint inActivity:act]){
-        NSArray * inputF= [self inputFieldsTrackPoint];
+        NSArray<GCField*> * inputF= [self inputFieldsTrackPointForActivity:act];
         NSMutableArray * inputs = [NSMutableArray arrayWithCapacity:inputF.count];
 
-        for (NSString * f in inputF) {
-            GCNumberWithUnit * arg = nil;
-
-            if ([f isKindOfClass:[NSString class]]){
-                arg = [trackPoint numberWithUnitForExtra:f activityType:act.activityType];
-            }else if ([f isKindOfClass:[NSNumber class]]){
-                gcFieldFlag flag = (gcFieldFlag)f.integerValue;
-                arg = [trackPoint numberWithUnitForField:flag andActivityType:act.activityType];
-            }
-
+        for (GCField * f in inputF) {
+            GCNumberWithUnit * arg = [trackPoint numberWithUnitForField:f inActivity:act];
+            
             if (arg) {
                 [inputs addObject:arg];
             }
@@ -276,13 +294,13 @@ static NSArray * _calculatedFields = nil;
         GCNumberWithUnit * val = [self evaluateWithInputs:inputs];
         rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
         rv.numberWithUnit = val;
-        rv.field = [self field];
+        rv.field = [self fieldKey];
     }
     return rv;
 
 }
 
--(BOOL)ensureInputs:(NSArray*)inputs{
+-(BOOL)ensureInputs:(NSArray<GCNumberWithUnit*>*)inputs{
     if (inputs.count!=[self inputFields].count) {
         RZLog(RZLogError, @"%@ expected %d inputs got %@", NSStringFromClass([self class]),(int)[[self inputFields] count ],inputs);
         return false;
@@ -310,20 +328,20 @@ static NSArray * _calculatedFields = nil;
 -(BOOL)validForActivity:(GCActivity*)act{
     return true;
 }
--(NSString*)field{
+-(NSString*)fieldKey{
     return CALC_METABOLIC_EFFICIENCY;
 }
 -(NSString*)displayName{
     return @"Efficiency";
 }
 
--(NSArray*)inputFields{
+-(NSArray<NSString*>*)inputFields{
     return @[@"SumDuration",@"WeightedMeanPower",@"SumEnergy"];
 }
 -(NSArray*)inputFieldsTrackPoint{
     return @[@(gcFieldFlagSumDuration), @(gcFieldFlagPower),@"SumEnergy"];
 }
--(GCNumberWithUnit*)evaluateWithInputs:(NSArray *)inputs{
+-(GCNumberWithUnit*)evaluateWithInputs:(NSArray<GCNumberWithUnit*> *)inputs{
     if (![self ensureInputs:inputs]) {
         return nil;
     }
@@ -353,7 +371,7 @@ static NSArray * _calculatedFields = nil;
 -(BOOL)validForActivity:(GCActivity*)act{
     return true;
 }
--(NSString*)field{
+-(NSString*)fieldKey{
     return CALC_ENERGY;
 }
 -(NSString*)displayName{
@@ -369,7 +387,7 @@ static NSArray * _calculatedFields = nil;
     return @[@(gcFieldFlagSumDuration), @(gcFieldFlagPower)];
 }
 
--(GCNumberWithUnit*)evaluateWithInputs:(NSArray *)inputs{
+-(GCNumberWithUnit*)evaluateWithInputs:(NSArray<GCNumberWithUnit*> *)inputs{
     if (![self ensureInputs:inputs]) {
         return nil;
     }
@@ -394,7 +412,7 @@ static NSArray * _calculatedFields = nil;
 -(BOOL)validForActivity:(GCActivity*)act{
     return act.activityType == nil || [act.activityType isEqualToString:GC_TYPE_RUNNING];
 }
--(NSString*)field{
+-(NSString*)fieldKey{
     return CALC_STRIDE_LENGTH;
 }
 -(NSString*)displayName{
@@ -408,7 +426,7 @@ static NSArray * _calculatedFields = nil;
     return @[@(gcFieldFlagWeightedMeanSpeed),@(gcFieldFlagCadence)];
 }
 
--(GCNumberWithUnit*)evaluateWithInputs:(NSArray *)inputs{
+-(GCNumberWithUnit*)evaluateWithInputs:(NSArray<GCNumberWithUnit*> *)inputs{
     if (![self ensureInputs:inputs]) {
         return nil;
     }
@@ -440,7 +458,7 @@ static NSArray * _calculatedFields = nil;
 -(BOOL)validForActivity:(GCActivity*)act{
     return act.activityType == nil || [act.activityType isEqualToString:GC_TYPE_CYCLING];;
 }
--(NSString*)field{
+-(NSString*)fieldKey{
     return CALC_DEVELOPMENT;
 }
 -(NSString*)displayName{
@@ -454,7 +472,7 @@ static NSArray * _calculatedFields = nil;
     return @[@(gcFieldFlagWeightedMeanSpeed),@(gcFieldFlagCadence)];
 }
 
--(GCNumberWithUnit*)evaluateWithInputs:(NSArray *)inputs{
+-(GCNumberWithUnit*)evaluateWithInputs:(NSArray<GCNumberWithUnit*> *)inputs{
     if (![self ensureInputs:inputs]) {
         return nil;
     }
@@ -484,7 +502,7 @@ static NSArray * _calculatedFields = nil;
 -(BOOL)validForActivity:(GCActivity*)act{
     return true;
 }
--(NSString*)field{
+-(NSString*)fieldKey{
     return CALC_ELEVATION_GRADIENT;
 }
 -(NSString*)displayName{
@@ -498,7 +516,7 @@ static NSArray * _calculatedFields = nil;
     return @[@(gcFieldFlagSumDistance),CALC_ALTITUDE_GAIN,CALC_ALTITUDE_LOSS];
 }
 
--(GCNumberWithUnit*)evaluateWithInputs:(NSArray *)inputs{
+-(GCNumberWithUnit*)evaluateWithInputs:(NSArray<GCNumberWithUnit*> *)inputs{
     if (![self ensureInputs:inputs]) {
         return nil;
     }

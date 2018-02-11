@@ -153,17 +153,22 @@
 
 #pragma mark - GCActivity
 
+-(GCField*)fldFor:(NSString*)key act:(GCActivity*)act{
+    return [GCField fieldForKey:key andActivityType:act.activityType];
+}
+
 -(void)testCalculatedFields{
     GCActivity * act = [[GCActivity alloc] init];
+    act.activityType = GC_TYPE_CYCLING;
     
     [act setSummaryData:@{
-     @"SumDuration" :               [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
-     @"WeightedMeanPower" :         [self sumVal:@"WeightedMeanPower"       val:3000    uom:@"watt" ],
-     @"WeightedMeanSpeed" :         [self sumVal:@"WeightedMeanSpeed"       val:10.8    uom:@"kph" ],
-     @"WeightedMeanRunCadence" :    [self sumVal:@"WeightedMeanRunCadence"  val:90      uom:@"spm" ]
-     }
+                          [self fldFor:@"SumDuration" act:act] :              [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
+                          [self fldFor:@"WeightedMeanPower" act:act]:         [self sumVal:@"WeightedMeanPower"       val:3000    uom:@"watt" ],
+                          [self fldFor:@"WeightedMeanSpeed" act:act]:         [self sumVal:@"WeightedMeanSpeed"       val:10.8    uom:@"kph" ],
+                          [self fldFor:@"WeightedMeanRunCadence" act:act]:    [self sumVal:@"WeightedMeanRunCadence"  val:90      uom:@"spm" ]
+                          }
      ];
-
+    
     GCFieldCalcKiloJoules * kj = [[GCFieldCalcKiloJoules alloc] init];
     GCFieldCalcStrideLength * sl = [[GCFieldCalcStrideLength alloc] init];
     GCActivityCalculatedValue * rv = nil;
@@ -187,11 +192,10 @@
     XCTAssertEqualWithAccuracy(v_sl.value, 2., 1.e-7, @"sl sample");
     
     [act setSummaryData:@{
-     @"SumDuration" :               [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
-     @"WeightedMeanPower" :         [self sumVal:@"WeightedMeanPower"       val:3000    uom:@"watt" ],
-
-     @"WeightedMeanRunCadence" :    [self sumVal:@"WeightedMeanRunCadence"  val:90      uom:@"spm" ]
-     }
+                          [self fldFor:@"SumDuration" act:act]:               [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
+                          [self fldFor:@"WeightedMeanPower"  act:act] :       [self sumVal:@"WeightedMeanPower"       val:3000    uom:@"watt" ],
+                          [self fldFor:@"WeightedMeanRunCadence" act:act]:    [self sumVal:@"WeightedMeanRunCadence"  val:90      uom:@"spm" ]
+                          }
      ];
     [act setCalculatedFields:nil];
     [GCFieldsCalculated addCalculatedFields:act];
@@ -738,7 +742,7 @@
         [act setFlags:gcFieldFlagSumDistance];
         [act setDistanceDisplayUom:[sample objectAtIndex:3]];
         [act setLocation:sample[6]];
-        [act setSummaryData:@{@"Speed":[self sumVal:@"Speed" val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
+        [act setSummaryData:@{[self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:@"WeightedMeanSpeed" val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
         [activities addObject:act];
     }
     [organizer setActivities:activities];
@@ -797,13 +801,13 @@
         [act setSumDistance:[[sample objectAtIndex:2] doubleValue]];
         [act setFlags:gcFieldFlagSumDistance];
         [act setDistanceDisplayUom:[sample objectAtIndex:3]];
-        [act setSummaryData:@{@"Speed":[self sumVal:@"Speed" val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
+        [act setSummaryData:@{[self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:@"WeightedMeanSpeed" val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
         [activities addObject:act];
     }
     [organizer setActivities:activities];
     
-    NSDictionary * rv = [organizer fieldsSeries:@[@"Speed",@(gcFieldFlagSumDistance)] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
-    GCStatsDataSerieWithUnit * speed = [rv objectForKey:@"Speed"];
+    NSDictionary * rv = [organizer fieldsSeries:@[@"WeightedMeanSpeed",@(gcFieldFlagSumDistance)] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
+    GCStatsDataSerieWithUnit * speed = [rv objectForKey:@"WeightedMeanSpeed"];
     GCStatsDataSerieWithUnit * dist  = [rv objectForKey:@(gcFieldFlagSumDistance)];
     
     GCUnit * km = [GCUnit unitForKey:@"kilometer"];
@@ -815,8 +819,8 @@
     for (NSUInteger idx=0; idx<[[organizer activities] count]; idx++) {
         GCActivity * act = [organizer activityForIndex:idx];
         [act setSummaryData:@{
-         @"SumDuration" :               [self sumVal:@"SumDuration"             val:(idx+1)       uom:@"second" ],
-         @"WeightedMeanPower" :         [self sumVal:@"WeightedMeanPower"       val:(idx+1)*1000    uom:@"watt" ],
+                              [self fldFor:@"SumDuration" act:act] :               [self sumVal:@"SumDuration"             val:(idx+1)       uom:@"second" ],
+                              [self fldFor:@"WeightedMeanPower" act:act] :         [self sumVal:@"WeightedMeanPower"       val:(idx+1)*1000    uom:@"watt" ],
          }
          ];
         act.sumDuration = idx+1;

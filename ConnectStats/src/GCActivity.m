@@ -152,7 +152,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         self.metaData = [self.metaData dictionaryByAddingEntriesFromDictionary:dict];
     }
 }
--(void)addEntriesToCalculatedFields:(NSDictionary<NSString*,GCActivityCalculatedValue*> *)dict{
+-(void)addEntriesToCalculatedFields:(NSDictionary<GCField*,GCActivityCalculatedValue*> *)dict{
     if (!self.calculatedFields) {
         self.calculatedFields = dict;
     }else{
@@ -208,9 +208,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         default:
         {
             [self loadSummaryData];
-            GCActivitySummaryValue * val = _summaryData[field.key];
+            GCActivitySummaryValue * val = _summaryData[field];
             if (!val) {
-                val = self.calculatedFields[field.key];
+                val = self.calculatedFields[field];
             }
             rv = val.numberWithUnit;
         }
@@ -224,12 +224,12 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     [self loadSummaryData];
 
     NSMutableArray<GCField*> * rv = [NSMutableArray array];
-    for (NSString * key in _summaryData.allKeys) {
-        [rv addObject:[GCField fieldForKey:key andActivityType:self.activityType]];
+    for (GCField * field in _summaryData.allKeys) {
+        [rv addObject:field];
     }
     if (self.calculatedFields) {
-        for (NSString * key in self.calculatedFields.allKeys) {
-            [rv addObject:[GCField fieldForKey:key andActivityType:self.activityType]];
+        for (GCField * field in self.calculatedFields.allKeys) {
+            [rv addObject:field];
         }
     }
     return [NSArray arrayWithArray:rv];
@@ -237,11 +237,16 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 -(NSArray<NSString*>*)allFieldsKeys{
     [self loadSummaryData];
-    NSArray * rv = _summaryData.allKeys;
+    NSArray<GCField*> * rv = _summaryData.allKeys;
     if (self.calculatedFields) {
         rv = [rv arrayByAddingObjectsFromArray:self.calculatedFields.allKeys];
     }
-    return rv;
+    NSMutableArray<NSString*>*final = [NSMutableArray arrayWithCapacity:rv.count];
+    
+    for (GCField * f in rv) {
+        [final addObject:f.key];
+    }
+    return final;
 }
 
 -(NSString*)displayName{
@@ -276,7 +281,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         default:
         {
             [self loadSummaryData];
-            rv = _summaryData[field.key] != nil || self.calculatedFields[field.key] != nil;
+            rv = _summaryData[field] != nil || self.calculatedFields[field] != nil;
         }
     }
     return rv;
@@ -299,7 +304,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         {
             rv = [self numberWithUnitForFieldKey:field.key].unit;
             if (!rv) {
-                GCTrackPointExtraIndex * extra = self.cachedExtraTracksIndexes[field.key];
+                GCTrackPointExtraIndex * extra = self.cachedExtraTracksIndexes[field];
                 if (extra) {
                     rv = extra.unit;
                 }
@@ -526,13 +531,13 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 -(void)loadTrackPointsExtraFromDb:(FMDatabase*)db{
     if ([db tableExists:@"gc_track_extra_idx"] && [db tableExists:@"gc_track_extra"]) {
-        NSMutableDictionary * extra = [NSMutableDictionary dictionary];
+        NSMutableDictionary<GCField*,GCTrackPointExtraIndex*> * extra = [NSMutableDictionary dictionary];
         FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_track_extra_idx" ];
         while( [res next]){
-            NSString * field = [res stringForColumn:@"field"];
+            GCField * field = [GCField fieldForKey:[res stringForColumn:@"field"] andActivityType:self.activityType];
             size_t idx =  [res intForColumn:@"idx"];
             GCUnit * unit = [GCUnit unitForKey:[res stringForColumn:@"uom"]];
-            extra[field] = [GCTrackPointExtraIndex extraIndex:idx key:field andUnit:unit];
+            extra[field] = [GCTrackPointExtraIndex extraIndex:idx field:field andUnit:unit];
         };
         self.cachedExtraTracksIndexes = extra;
         if (extra.count && self.trackpointsCache.count > 0) {
@@ -549,7 +554,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                 };
                 if ([point.time isEqualToDate:time]) {
                     for (GCTrackPointExtraIndex * e in extra.allValues) {
-                        [point setExtraValue:[res doubleForColumn:e.key] forIndex:e];
+                        [point setExtraValue:[res doubleForColumn:e.dataColumnName] forIndex:e];
                     }
                 }
             }
@@ -564,14 +569,16 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             return rv;
         }];
         NSMutableArray * createFields = [NSMutableArray arrayWithObject:@"Time Real"];
+        // list of field names
         NSMutableArray * insertFields = [NSMutableArray arrayWithObject:@"Time"];
+        // list Keys for named parameters use ":FieldKey" (which FieldKey being the datacolumnname)
         NSMutableArray * insertValues = [NSMutableArray arrayWithObject:@":Time"];
 
         for (GCTrackPointExtraIndex * one in extra  ) {
-            [createFields addObject:[NSString stringWithFormat:@"%@ Real", one.key]];
-            [insertFields addObject:one.key];
-            [insertValues addObject:[NSString stringWithFormat:@":%@", one.key]];
-            [db executeUpdate:@"INSERT INTO gc_track_extra_idx (field,idx,uom) VALUES (?,?,?)", one.key, @(one.idx), one.unit.key];
+            [createFields addObject:[NSString stringWithFormat:@"%@ Real", one.dataColumnName]];
+            [insertFields addObject:one.dataColumnName];
+            [insertValues addObject:[NSString stringWithFormat:@":%@", one.dataColumnName]];
+            [db executeUpdate:@"INSERT INTO gc_track_extra_idx (field,idx,uom) VALUES (?,?,?)", one.dataColumnName, @(one.idx), one.unit.key];
         }
 
         [db executeUpdate:@"DROP TABLE IF EXISTS gc_track_extra"];
@@ -586,7 +593,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             data[@"Time"] = one.time;
             if (one.fieldValues) {
                 for (GCTrackPointExtraIndex * e in extra) {
-                    data[e.key] = @(one.fieldValues[e.idx]);
+                    data[e.dataColumnName] = @(one.fieldValues[e.idx]);
                 }
                 [db executeUpdate:insertQuery withParameterDictionary:data];
             }
@@ -1199,7 +1206,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         if ([self hasCalculatedDerivedTrack:gcCalculatedCachedTrackDataSerie forField:field]) {
             rv = true;
         }else{
-            rv = (self.cachedExtraTracksIndexes[field.key] != nil);
+            rv = (self.cachedExtraTracksIndexes[field] != nil);
         }
     }
     return rv;
@@ -1444,7 +1451,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     NSTimeInterval gapTimeInterval = self.settings.gapTimeInterval;
 
     if (afield == gcFieldFlagNone) {
-        idx = self.cachedExtraTracksIndexes[field.key];
+        idx = self.cachedExtraTracksIndexes[field];
     }
     GCUnit * displayUnit = [self displayUnitForField:field];
     GCUnit * storeUnit   = [self storeUnitForField:field];

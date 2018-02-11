@@ -69,7 +69,8 @@
  @brief flags with the fields available as gcFieldFlag
  */
 @property (nonatomic,assign) NSUInteger trackFlags;
-@property (nonatomic,retain) NSMutableDictionary * calculated;
+@property (nonatomic,readonly) NSDictionary<GCField*,GCNumberWithUnit*>*calculated;
+
 
 /**
  @brief extra fields values. Either null or array of size kMaxExtraIndex
@@ -100,12 +101,14 @@
 -(NSTimeInterval)timeIntervalSince:(GCTrackPoint*)other;
 -(NSComparisonResult)compareTime:(GCTrackPoint*)other;
 
+// MOVE TO PRIVATE:
 -(BOOL)hasField:(gcFieldFlag)afield;
 -(double)valueForField:(gcFieldFlag)aField;
 -(void)setValue:(double)val forField:(gcFieldFlag)aField;
 -(double)extraValueForIndex:(GCTrackPointExtraIndex*)idx;
 -(void)setExtraValue:(double)val forIndex:(GCTrackPointExtraIndex*)idx;
--(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(NSString*)field in:(GCActivity*)act;
+-(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(GCActivity*)act;
+// END PRIVATE
 
 +(GCUnit*)unitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;
 -(GCNumberWithUnit*)numberWithUnitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;
@@ -122,11 +125,27 @@
 -(GCNumberWithUnit*)numberWithUnitForField:(GCField*)aF inActivity:(GCActivity*)act;
 -(void)setNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)field inActivity:(GCActivity*)act;
 
--(GCNumberWithUnit*)numberWithUnitForExtra:(GCTrackPointExtraIndex*)idx;
--(GCNumberWithUnit*)numberWithUnitForExtra:(NSString*)aF activityType:(NSString*)aType;
--(GCNumberWithUnit*)numberWithUnitForCalculated:(NSString*)aF;
--(void)addNumberWithUnitForCalculated:(GCNumberWithUnit*)aN forField:(NSString*)aF;
+/**
+ Access for extra stored as double*, localized by ExtraIndex
+ This is the typical way trackpoints store extra data
 
+ @param idx which field to look for
+ @return value for the index
+ */
+-(GCNumberWithUnit*)numberWithUnitForExtraByIndex:(GCTrackPointExtraIndex*)idx;
+/**
+ Access for extra data that would be stored as key off a GCField
+ This is commonly used by laps. The API is here for consistency, in the case of
+ a track point, will return nil
+
+ @param aF the field
+ @return value or nil if field does not exists
+ */
+-(GCNumberWithUnit*)numberWithUnitForExtraByField:(GCField*)aF;
+-(GCNumberWithUnit*)numberWithUnitForCalculated:(GCField*)aF;
+-(void)clearCalculatedForFields:(NSArray<GCField*>*)fields;
+
+-(void)addNumberWithUnitForCalculated:(GCNumberWithUnit*)aN forField:(GCField*)aF;
 -(void)updateWithNextPoint:(GCTrackPoint*)next;
 
 @end

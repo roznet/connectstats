@@ -670,8 +670,8 @@
     //manager.recordMode =true;
     
     
-    NSDictionary<NSString*,GCActivityCalculatedValue*>*calculated = act.calculatedFields;
-    NSDictionary<NSString*,GCActivityCalculatedValue*>*expected = [manager retrieveReferenceObject:calculated selector:_cmd identifier:@"ActivityCalculated" error:nil];
+    NSDictionary<GCField*,GCActivityCalculatedValue*>*calculated = act.calculatedFields;
+    NSDictionary<GCField*,GCActivityCalculatedValue*>*expected = [manager retrieveReferenceObject:calculated selector:_cmd identifier:@"ActivityCalculated" error:nil];
     
     XCTAssertEqualObjects(calculated, expected);
     

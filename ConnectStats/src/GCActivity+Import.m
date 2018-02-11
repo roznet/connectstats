@@ -176,9 +176,8 @@
 }
 
 -(void)updateSummaryFieldFromSummaryData{
-    for (NSString * fieldKey in self.summaryData) {
-        GCActivitySummaryValue * value = self.summaryData[fieldKey];
-        GCField * field = [GCField fieldForKey:fieldKey andActivityType:self.activityType];
+    for (GCField * field in self.summaryData) {
+        GCActivitySummaryValue * value = self.summaryData[field];
         if (field.fieldFlag!= gcFieldFlagNone) {
             GCNumberWithUnit * nu = value.numberWithUnit;
             [self setSummaryField:field.fieldFlag with:nu];
@@ -1022,8 +1021,8 @@
     }
     
     if (self.summaryData) {
-        NSMutableDictionary * newSummaryData = nil;
-        for (NSString * field in self.summaryData) {
+        NSMutableDictionary<GCField*,GCActivitySummaryValue*> * newSummaryData = nil;
+        for (GCField * field in self.summaryData) {
             GCActivitySummaryValue * thisVal = self.summaryData[field];
             GCActivitySummaryValue * otherVal = other.summaryData[field];
             if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
@@ -1031,7 +1030,8 @@
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                 }
                 RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.numberWithUnit, otherVal.numberWithUnit);
-                [newSummaryData setValue:otherVal forKey:field];
+                newSummaryData[field] = otherVal;
+                
                 FMDatabase * db = self.db;
                 [db beginTransaction];
                 [otherVal updateDb:db forActivityId:self.activityId];
@@ -1039,7 +1039,7 @@
                 rv = true;
             }
         }
-        for (NSString * field in other.summaryData) {
+        for (GCField * field in other.summaryData) {
             if (self.summaryData[field]==nil) {
                 if (!newSummaryData) {
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
@@ -1047,7 +1047,7 @@
                 GCActivitySummaryValue * otherVal = other.summaryData[field];
                 
                 RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
-                [newSummaryData setValue:otherVal forKey:field];
+                newSummaryData[field] = otherVal;
             }
         }
         if (newSummaryData) {
@@ -1141,11 +1141,11 @@
 -(void)updateSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints missingOnly:(BOOL)missingOnly{
     NSDictionary<GCField*,GCActivitySummaryValue*> * fromPoints = [self buildSummaryFromTrackpoints:trackpoints];
     
-    NSMutableDictionary<NSString*,GCActivitySummaryValue*>* newSum = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
+    NSMutableDictionary<GCField*,GCActivitySummaryValue*>* newSum = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
     
     for (GCField * field in fromPoints) {
-        if( !missingOnly || newSum[field.key] == nil){
-            newSum[field.key] = fromPoints[field];
+        if( !missingOnly || newSum[field] == nil){
+            newSum[field] = fromPoints[field];
         }
     }
     
@@ -1200,11 +1200,7 @@
         }
         point = next;
     }
-    NSMutableDictionary * newSum = [NSMutableDictionary dictionary];
-    
-    for (NSString * fieldKey in self.summaryData) {
-        newSum[ [GCField fieldForKey:fieldKey andActivityType:self.activityType] ] = self.summaryData[fieldKey];
-    }
+    NSMutableDictionary<GCField*,GCActivitySummaryValue*> * newSum = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
     
     for (GCField *field in results) {
         GCNumberWithUnit * num = results[field];
@@ -1261,7 +1257,7 @@
         return false;
     }
     if (self.summaryData) {
-        for (NSString * field in self.summaryData) {
+        for (GCField * field in self.summaryData) {
             GCActivitySummaryValue * thisVal = self.summaryData[field];
             GCActivitySummaryValue * otherVal = other.summaryData[field];
             if (otherVal && ! [otherVal isEqualToValue:thisVal]) {

@@ -213,7 +213,7 @@
     if (rv) {
         // First collect by indexing on Keys/NSStirng for speed
         // Then after cleanup by adding the type
-        NSMutableDictionary<NSString*,GCFieldDataHolder*> * fieldKeyData = [NSMutableDictionary dictionary];
+        NSMutableDictionary<GCField*,GCFieldDataHolder*> * fieldKeyData = [NSMutableDictionary dictionary];
 
         GCStatsDateBuckets * weekBucket = nil;
         GCStatsDateBuckets * monthBucket= nil;
@@ -221,15 +221,14 @@
         for (GCActivity * act in activities) {
             if (![act ignoreForStats:ignoreMode] && ( match == nil || match(act) ) ) {
                 activityTypes[act.activityType] = act.activityType;
-                NSArray * fields = [act allFieldsKeys];
-                for (NSString * fieldKey in fields) {
+                NSArray<GCField*> * fields = [act allFields];
+                for (GCField * field in fields) {
                     //
-                    GCField * field = [GCField fieldForKey:fieldKey andActivityType:GC_TYPE_ALL];
-                    GCFieldDataHolder * holder = fieldKeyData[fieldKey];
+                    GCFieldDataHolder * holder = fieldKeyData[field];
                     if (!holder) {
                         holder = [[[GCFieldDataHolder alloc] init] autorelease];
                         holder.field = field;
-                        fieldKeyData[fieldKey] = holder;
+                        fieldKeyData[field] = holder;
                     }
 
                     GCNumberWithUnit * nu = [act numberWithUnitForField:field];
@@ -262,13 +261,11 @@
             }
         }
 
-        NSString * activityType = activityTypes.count == 1 ? activityTypes.allKeys[0] : GC_TYPE_ALL;
         NSMutableDictionary<GCField*,GCFieldDataHolder*> * final = [NSMutableDictionary dictionaryWithCapacity:fieldKeyData.count];
-        for (NSString * fieldKey in fieldKeyData) {
-            GCField * typedField = [GCField fieldForKey:fieldKey andActivityType:activityType];
-            GCFieldDataHolder * holder = fieldKeyData[fieldKey];
-            holder.field = typedField;
-            final[typedField] = holder;
+        for (GCField * field in fieldKeyData) {
+            GCFieldDataHolder * holder = fieldKeyData[field];
+            holder.field = field;
+            final[field] = holder;
         }
         rv.fieldData = [NSDictionary dictionaryWithDictionary:final];
         rv.foundActivityTypes = activityTypes.allKeys;

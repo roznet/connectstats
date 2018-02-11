@@ -32,7 +32,11 @@
 //static NSArray * _dbColumnNames = nil;
 //static NSArray * _directKeys = nil;
 
+@interface GCTrackPoint ()
+@property (nonatomic,retain) NSMutableDictionary<GCField*,GCNumberWithUnit*> * calculatedStorage;
 
+
+@end
 
 void buildStatic(){
     //_dbColumnNames = @[<#objects, ...#>]
@@ -62,7 +66,7 @@ void buildStatic(){
 
 -(void)dealloc{
     [_time release];
-    [_calculated release];
+    [_calculatedStorage release];
     if (_fieldValues) {
         free(_fieldValues);
         _fieldValues = nil;
@@ -116,6 +120,10 @@ void buildStatic(){
         self.trackFlags = [res intForColumn:@"trackflags"];
     }
     return self;
+}
+
+-(NSDictionary<GCField*,GCNumberWithUnit*>*)calculated{
+    return self.calculatedStorage;
 }
 
 //NEWTRACKFIELD
@@ -264,7 +272,7 @@ void buildStatic(){
                 gcFieldFlag flag = (gcFieldFlag)[target integerValue];
                 [self setValue:val forField:flag];
             }else if([target isKindOfClass:[NSString class]]){
-                NSString * targetField = target;
+                GCField * targetField = [GCField fieldForKey:target andActivityType:act.activityType];
                 GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnitName:uom andValue:val];
                 [self setExtraValue:nu forFieldKey:targetField in:act];
             }
@@ -283,7 +291,7 @@ void buildStatic(){
     }
     return 0.;
 }
--(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(NSString*)field in:(GCActivity*)act{
+-(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(GCActivity*)act{
     GCTrackPointExtraIndex * index = act.cachedExtraTracksIndexes[field];
 
     if (index == nil) {
@@ -428,6 +436,18 @@ void buildStatic(){
 -(NSString*)displayLabel{
     return nil;
 }
+
+#pragma mark - Extra Values
+
+
+-(GCNumberWithUnit*)numberWithUnitForExtraByIndex:(GCTrackPointExtraIndex *)idx{
+    return [GCNumberWithUnit numberWithUnit:idx.unit andValue:[self extraValueForIndex:idx]];
+}
+-(GCNumberWithUnit*)numberWithUnitForExtraByField:(GCField *)aF{
+    return nil;
+}
+
+
 #pragma mark - Access/Set Values
 
 -(double)steps{
@@ -562,20 +582,20 @@ void buildStatic(){
         rv = [GCNumberWithUnit numberWithUnit:[GCTrackPoint unitForField:aF.fieldFlag andActivityType:aF.activityType]
                                      andValue:[self valueForField:aF.fieldFlag]];
     }else{
-        GCTrackPointExtraIndex * idx = act.cachedExtraTracksIndexes[aF.key];
+        GCTrackPointExtraIndex * idx = act.cachedExtraTracksIndexes[aF];
         if (idx) {
             rv = [GCNumberWithUnit numberWithUnit:idx.unit andValue:[self extraValueForIndex:idx]];
         }
 
-        if (!rv && self.calculated) {
-            rv = self.calculated[aF];
+        if (!rv && self.calculatedStorage) {
+            rv = self.calculatedStorage[aF];
             rv = [rv convertToGlobalSystem];
             if ([aF.key hasSuffix:@"Elevation"] && [rv.unit.key isEqualToString:@"yard"]) {
                 rv = [rv convertToUnitName:@"foot"];
             }
         }
         if (!rv) {
-            rv = [self numberWithUnitForExtra:aF.key activityType:aF.activityType];
+            rv = [self numberWithUnitForExtraByField:aF];
         }
     }
     return rv;
@@ -600,16 +620,9 @@ void buildStatic(){
         [self setValue:[nu convertToUnit:unit].value forField:field.fieldFlag];
     }else{
         if( ![nu.unit.key isEqualToString:@"datetime"]){
-            [self setExtraValue:nu forFieldKey:field.key in:act];
+            [self setExtraValue:nu forFieldKey:field in:act];
         }
     }
-}
-
--(GCNumberWithUnit*)numberWithUnitForExtra:(GCTrackPointExtraIndex*)idx{
-    return [GCNumberWithUnit numberWithUnit:idx.unit andValue:[self extraValueForIndex:idx]];
-}
--(GCNumberWithUnit*)numberWithUnitForExtra:(NSString*)aF activityType:(NSString*)aType{
-    return nil;
 }
 -(GCNumberWithUnit*)numberWithUnitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;{
     return [GCNumberWithUnit numberWithUnit:[GCTrackPoint unitForField:aField andActivityType:aType] andValue:[self valueForField:aField]];
@@ -658,25 +671,28 @@ void buildStatic(){
     return [self.time timeIntervalSinceDate:other.time];
 }
 
+-(void)clearCalculatedForFields:(NSArray<GCField *> *)fields{
+    for (GCField * field in fields) {
+        [self.calculatedStorage removeObjectForKey:field];
+    }
+}
 
-
-
--(GCNumberWithUnit*)numberWithUnitForCalculated:(NSString*)aF{
-    if (self.calculated) {
-        GCNumberWithUnit * rv = (self.calculated)[aF];
+-(GCNumberWithUnit*)numberWithUnitForCalculated:(GCField*)aF{
+    if (self.calculatedStorage) {
+        GCNumberWithUnit * rv = (self.calculatedStorage)[aF];
         rv = [rv convertToGlobalSystem];
-        if ([aF hasSuffix:@"Elevation"] && [rv.unit.key isEqualToString:@"yard"]) {
+        if ([aF.key hasSuffix:@"Elevation"] && [rv.unit.key isEqualToString:@"yard"]) {
             rv = [rv convertToUnitName:@"foot"];
         }
         return rv;
     }
     return nil;
 }
--(void)addNumberWithUnitForCalculated:(GCNumberWithUnit*)aN forField:(NSString*)aF{
-    if (self.calculated == nil) {
-        self.calculated = [NSMutableDictionary dictionaryWithCapacity:10];
+-(void)addNumberWithUnitForCalculated:(GCNumberWithUnit*)aN forField:(GCField*)aF{
+    if (self.calculatedStorage == nil) {
+        self.calculatedStorage = [NSMutableDictionary dictionaryWithCapacity:10];
     }
-    (self.calculated)[aF] = aN;
+    self.calculatedStorage[aF] = aN;
 }
 
 -(void)add:(GCTrackPoint*)other withAccrued:(double)accrued timeAxis:(BOOL)timeAxis{

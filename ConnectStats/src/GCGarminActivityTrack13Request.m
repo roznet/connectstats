@@ -337,9 +337,10 @@
         
         FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:[RZFileOrganizer writeableFilePath:fn]];
         [fitDecode parse];
-        GCActivity * fitAct = [[GCActivity alloc] initWithId:self.activityId fitFile:fitDecode.fitFile];
+        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activityId fitFile:fitDecode.fitFile]);
         
         [self.activity updateTrackpointsFromActivity:fitAct];
+        
     }
 }
 

@@ -38,6 +38,7 @@
 #import "GCActivityTennisShotValues.h"
 #import "GCActivityTennisCuePoint.h"
 #import "GCActivityTennisHeatmap.h"
+#import "GCActivity+Database.h"
 
 
 #define GC_SYNC_KEY(act,service) [[act activityId] stringByAppendingString:service]
@@ -1199,8 +1200,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     GCActivitySummaryValue * currentValue = nil;
     GCActivityMetaValue * metaValue = nil;
 
-    NSMutableDictionary * currentSummary = nil;
-    NSMutableDictionary * currentMeta = nil;
+    NSMutableDictionary<NSString*,GCActivitySummaryValue*> * currentSummary = nil;
+    NSMutableDictionary<NSString*,GCActivityMetaValue*> * currentMeta = nil;
 
     FMResultSet * res = [self.db executeQuery:query];
     while ([res next]) {
@@ -1210,7 +1211,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             data[currentId] = currentSummary;
         }
         currentValue = [GCActivitySummaryValue activitySummaryValueForResultSet:res];
-        currentSummary[[res stringForColumn:@"field"]] = currentValue;
+        currentSummary[ [res stringForColumn:@"field"] ] = currentValue;
     }
     query = @"SELECT * FROM gc_activities_meta ORDER BY activityId DESC";
     res = [self.db executeQuery:query];
@@ -1227,7 +1228,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     for (GCActivity * one in self.allActivities) {
         currentSummary = data[one.activityId];
         if (currentSummary) {
-            one.summaryData = currentSummary;
+            [one setSummaryDataFromKeyDict:currentSummary];
         }
         currentMeta = meta[one.activityId];
         if (currentMeta) {
