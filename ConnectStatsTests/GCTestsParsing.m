@@ -571,6 +571,11 @@
                                    @"SumElapsedDuration": @(0.02),
                                    @"SumDuration":@(0.02),
                                    @"MaxSpeed":@(0.0001),
+                                   @"WeightedMeanAirTemperature": @(0.1),
+                                   @"MinSpeed":@(0.5),
+                                   // somehow some non sensical values:
+                                   @"MinHeartRate":@(100),
+                                   @"MinAirTemperature":@(50),
                                    };
     
     NSDictionary * expectedMissing = @{
@@ -596,6 +601,7 @@
                                        @"WeightedMeanMovingPace": @"18:56 min/km",
                                        @"WeightedMeanMovingSpeed": @"3.2 km/h",
                                        @"WeightedMeanPace": @"20:14 min/km",
+                                       
                                        };
     
     // Ski Activity
@@ -613,30 +619,35 @@
     NSDictionary * sum_gc = act.summaryData;
     NSDictionary * sum_fit= fitAct.summaryData;
     
-    NSDictionary * expectedMissingFromGC = @{@"WeightedMeanCadence":@1, @"MaxCadence":@2};
+    NSDictionary * expectedMissingFromGC = @{@"WeightedMeanCadence":@1, @"MaxCadence":@2, @"WeightedMeanElevation":@3,@"MinCadence":@4,
+                                             @"MinElevation":@5,@"MaxElevation":@6,// elevation is all messed up (elevation correction)
+                                             };
     
-    for (NSString * key in sum_fit) {
-        if( expectedMissingFromGC[key] != nil){
+    for (GCField * field in sum_fit) {
+        if( expectedMissingFromGC[field.key] != nil){
             continue;// Somehow missing from gc
         }
-        GCActivitySummaryValue * v_gc = sum_gc[key];
-        GCActivitySummaryValue * v_fit= sum_fit[key];
+        GCActivitySummaryValue * v_gc = sum_gc[field];
+        GCActivitySummaryValue * v_fit= sum_fit[field];
         
-        XCTAssertNotNil(v_gc, @"Found field %@", key);
+        XCTAssertNotNil(v_gc, @"Found field %@", field);
         double eps =  1.e-7;
-        NSNumber * specialEps = epsForField[key];
+        NSNumber * specialEps = epsForField[field.key];
         if (specialEps) {
             eps = specialEps.doubleValue;
         }
         
+        if(  [v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] != NSOrderedSame ){
+            //SetBreakpoint
+        }
         XCTAssertTrue([v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] == NSOrderedSame,
-                      @"Key %@: %@ == %@ within %@", key, v_gc.numberWithUnit, v_fit.numberWithUnit, @(eps));
+                      @"Key %@: %@ == %@ within %@", field, v_gc.numberWithUnit, v_fit.numberWithUnit, @(eps));
     }
     
-    for (NSString * key in sum_gc) {
-        GCActivitySummaryValue * v_gc = sum_gc[key];
-        GCActivitySummaryValue * v_fit= sum_fit[key];
-        XCTAssertTrue(v_fit != nil || expectedMissing[key]!=nil, @"%@ %@ unexpectedly missing", key, v_gc);
+    for (GCField * field in sum_gc) {
+        GCActivitySummaryValue * v_gc = sum_gc[field];
+        GCActivitySummaryValue * v_fit= sum_fit[field];
+        XCTAssertTrue(v_fit != nil || expectedMissing[field.key]!=nil, @"%@ %@ unexpectedly missing", field, v_gc);
     }
 }
 

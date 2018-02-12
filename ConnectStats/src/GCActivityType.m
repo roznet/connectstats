@@ -222,7 +222,7 @@ static GCFieldCache * _fieldCache = nil;
 }
 
 #pragma mark - Convenience access
-+(nullable GCActivityType*)activityTypeForKey:(nonnull NSString*)key{
++(nonnull GCActivityType*)activityTypeForKey:(nonnull NSString*)key{
     return [[GCActivityType activityTypes] activityTypeForKey:key];
 }
 +(GCActivityType*)running{

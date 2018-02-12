@@ -35,7 +35,7 @@ FIT_GET_NUMUNIT_FIELD( @"WeightedMeanStrokeDistance", GetAvgStrokeDistance, FIT_
 FIT_GET_ENUM_FIELD( @"SwimStroke", GetSwimStroke, FIT_SWIM_STROKE_INVALID, FIT_SWIM_STROKE, @"FIT_SWIM_STROKE" );
 FIT_GET_ENUM_FIELD( @"ActivityTypeDetail", GetSubSport, FIT_SUB_SPORT_INVALID, FIT_SUB_SPORT, @"FIT_SUB_SPORT" );
 FIT_GET_NUMUNIT_FIELD( @"NumActiveLengths", GetNumActiveLengths, FIT_UINT16_INVALID, @"dimensionless" );
-FIT_GET_NUMUNIT_FIELD( @"AvgAltitude", GetAvgAltitude, FIT_FLOAT32_INVALID, @"meter" );
+FIT_GET_NUMUNIT_FIELD( @"WeightedMeanElevation", GetAvgAltitude, FIT_FLOAT32_INVALID, @"meter" );
 FIT_GET_NUMUNIT_FIELD( @"MaxElevation", GetMaxAltitude, FIT_FLOAT32_INVALID, @"meter" );
 FIT_GET_NUMUNIT_FIELD( @"GpsAccuracy", GetGpsAccuracy, FIT_UINT8_INVALID, @"meter" );
 FIT_GET_NUMUNIT_FIELD( @"AvgGrade", GetAvgGrade, FIT_FLOAT32_INVALID, @"percent" );
@@ -43,8 +43,8 @@ FIT_GET_NUMUNIT_FIELD( @"WeightedMeanPosGrade", GetAvgPosGrade, FIT_FLOAT32_INVA
 FIT_GET_NUMUNIT_FIELD( @"WeightedMeanNegGrade", GetAvgNegGrade, FIT_FLOAT32_INVALID, @"percent" );
 FIT_GET_NUMUNIT_FIELD( @"MaxPosGrade", GetMaxPosGrade, FIT_FLOAT32_INVALID, @"percent" );
 FIT_GET_NUMUNIT_FIELD( @"MaxNegGrade", GetMaxNegGrade, FIT_FLOAT32_INVALID, @"percent" );
-FIT_GET_NUMUNIT_FIELD( @"WeightedMeanTemperature", GetAvgTemperature, FIT_SINT8_INVALID, @"percent" );
-FIT_GET_NUMUNIT_FIELD( @"MaxTemperature", GetMaxTemperature, FIT_SINT8_INVALID, @"dimensionless" );
+FIT_GET_NUMUNIT_FIELD( @"WeightedMeanAirTemperature", GetAvgTemperature, FIT_SINT8_INVALID, @"percent" );
+FIT_GET_NUMUNIT_FIELD( @"MaxAirTemperature", GetMaxTemperature, FIT_SINT8_INVALID, @"dimensionless" );
 FIT_GET_NUMUNIT_FIELD( @"SumMovingDuration", GetTotalMovingTime, FIT_FLOAT32_INVALID, @"second" );
 FIT_GET_NUMUNIT_FIELD( @"WeightedMeanPosVerticalSpeed", GetAvgPosVerticalSpeed, FIT_FLOAT32_INVALID, @"mps" );
 FIT_GET_NUMUNIT_FIELD( @"WeightedMeanNegVerticalSpeed", GetAvgNegVerticalSpeed, FIT_FLOAT32_INVALID, @"mps" );

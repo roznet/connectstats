@@ -311,7 +311,9 @@ static void registerInCache(GCField*field){
     GCField * rv = [self fieldBySwappingPrefix:@"Max" for:@"WeightedMean"];
     return rv;
 }
-
+-(GCField*)correspondingFieldTypeAll{
+    return [GCField fieldForKey:self.key andActivityType:GC_TYPE_ALL];
+}
 -(BOOL)hasSuffix:(NSString*)suf{
     return [self.key hasSuffix:suf];
 }

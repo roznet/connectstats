@@ -230,7 +230,14 @@
                         holder.field = field;
                         fieldKeyData[field] = holder;
                     }
-
+                    GCField * fieldAll = [field correspondingFieldTypeAll];
+                    GCFieldDataHolder * holderAll = fieldKeyData[fieldAll];
+                    if(!holderAll){
+                        holderAll = RZReturnAutorelease([[GCFieldDataHolder alloc] init]);
+                        holderAll.field = fieldAll;
+                        fieldKeyData[fieldAll] = holderAll;
+                    }
+                    
                     GCNumberWithUnit * nu = [act numberWithUnitForField:field];
                     if (nu) {
                         // weight is either duration (everything) or dist (for pace = invlinear)
@@ -240,6 +247,7 @@
                             weight=1.;
                         }
                         [holder addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsAll];
+                        [holderAll addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsAll];
                         if (weekBucket==nil) {
                             weekBucket = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitWeekOfYear
                                                                   referenceDate:refOrNil
@@ -252,22 +260,18 @@
                         }
                         if ([weekBucket contains:act.date]) {
                             [holder addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsWeek];
+                            [holderAll addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsWeek];
                         }
                         if ([monthBucket contains:act.date]) {
                             [holder addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsMonth];
+                            [holderAll addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsMonth];
                         }
                     }
                 }
             }
         }
 
-        NSMutableDictionary<GCField*,GCFieldDataHolder*> * final = [NSMutableDictionary dictionaryWithCapacity:fieldKeyData.count];
-        for (GCField * field in fieldKeyData) {
-            GCFieldDataHolder * holder = fieldKeyData[field];
-            holder.field = field;
-            final[field] = holder;
-        }
-        rv.fieldData = [NSDictionary dictionaryWithDictionary:final];
+        rv.fieldData = [NSDictionary dictionaryWithDictionary:fieldKeyData];
         rv.foundActivityTypes = activityTypes.allKeys;
     }
     return rv;

@@ -1,7 +1,7 @@
 FIT_GET_NUMUNIT_FIELD( @"Timestamp", GetTimestamp, FIT_DATE_TIME_INVALID, @"second" );
 FIT_GET_NUMUNIT_FIELD( @"PositionLat", GetPositionLat, FIT_SINT32_INVALID, @"semicircle" );
 FIT_GET_NUMUNIT_FIELD( @"PositionLong", GetPositionLong, FIT_SINT32_INVALID, @"semicircle" );
-FIT_GET_NUMUNIT_FIELD( @"Altitude", GetAltitude, FIT_FLOAT32_INVALID, @"meter" );
+FIT_GET_NUMUNIT_FIELD( @"WeightedMeanElevation", GetAltitude, FIT_FLOAT32_INVALID, @"meter" );
 FIT_GET_NUMUNIT_FIELD( @"WeightedMeanHeartRate", GetHeartRate, FIT_UINT8_INVALID, @"bpm" );
 FIT_GET_NUMUNIT_FIELD( @"WeightedMeanCadence", GetCadence, FIT_UINT8_INVALID, @"rpm" );
 FIT_GET_NUMUNIT_FIELD( @"SumDistance", GetDistance, FIT_FLOAT32_INVALID, @"meter" );
@@ -12,7 +12,7 @@ FIT_GET_NUMUNIT_FIELD( @"WeightedMeanPower", GetPower, FIT_UINT16_INVALID, @"wat
 //SKIP FIT_GET_NUMUNIT_FIELD( @"Resistance", GetResistance, FIT_UINT8_INVALID, @"percent" );
 //SKIP FIT_GET_NUMUNIT_FIELD( @"TimeFromCourse", GetTimeFromCourse, FIT_FLOAT32_INVALID, @"second" );
 //SKIP FIT_GET_NUMUNIT_FIELD( @"CycleLength", GetCycleLength, FIT_FLOAT32_INVALID, @"meter" );
-FIT_GET_NUMUNIT_FIELD( @"WeightedMeanTemperature", GetTemperature, FIT_SINT8_INVALID, @"meter" );
+FIT_GET_NUMUNIT_FIELD( @"WeightedMeanAirTemperature", GetTemperature, FIT_SINT8_INVALID, @"meter" );
 //SKIP FIT_GET_NUMUNIT_FIELD( @"NumSpeed1s", GetNumSpeed1s, FIT_UINT8_INVALID, @"dimensionless" );
 //SKIP FIT_GET_NUMUNIT_FIELD( @"Cycles", GetCycles, FIT_UINT8_INVALID, @"dimensionless" );
 //SKIP FIT_GET_NUMUNIT_FIELD( @"CompressedAccumulatedPower", GetCompressedAccumulatedPower, FIT_UINT16_INVALID, @"watt" );

@@ -13,8 +13,10 @@ public extension GCActivity {
     @objc public convenience init(withId activityId:String, fitFile:FITFitFile){
         self.init(id: activityId)
         let interp  = FITFitFileInterpret(fitFile: fitFile)
-        self.activityType = interp.activityType
-        self.activityTypeDetail = self.activityType
+        
+        let type  = interp.activityType
+        self.activityType = type.topSubRoot().key
+        self.activityTypeDetail = type.key
         self.activityName = ""
         self.location = ""
         

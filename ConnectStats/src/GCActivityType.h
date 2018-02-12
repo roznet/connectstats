@@ -38,7 +38,7 @@
 
 +(nonnull GCActivityType*)activityType:(nonnull NSString*)key typeId:(NSUInteger)typeId andParent:(nullable GCActivityType*)parent;
 
-+(nullable GCActivityType*)activityTypeForKey:(nonnull NSString*)key;
++(nonnull GCActivityType*)activityTypeForKey:(nonnull NSString*)key;
 
 -(nonnull NSString*)displayName;
 -(BOOL)isRootType;

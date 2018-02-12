@@ -12,11 +12,11 @@ class FITFitFileInterpret: NSObject {
 
     private let fitFile:FITFitFile
     
-    public lazy var activityType : String = {
-        if let sport = self.fitFile["sport"]?[0]?["sport"].enumValue {
-            return sport
+    public lazy var activityType : GCActivityType = {
+        if let sport =  self.fitFile["sport"]?[0]?["sport"].enumValue  {
+            return GCActivityType(forKey: sport)
         }
-        return "all"
+        return GCActivityType.all()
     }()
     
     init(fitFile file:FITFitFile){
@@ -148,7 +148,7 @@ class FITFitFileInterpret: NSObject {
             var nu = nwu
             
             // do a couple of standard corrections
-            if activityType == GC_TYPE_RUNNING && nu.unit == GCUnit.rpm() {
+            if activityType.key == GC_TYPE_RUNNING && nu.unit == GCUnit.rpm() {
                 nu.unit = GCUnit.stepsPerMinute()
             }
             
@@ -163,7 +163,7 @@ class FITFitFileInterpret: NSObject {
     }
     
     func fieldKey(fitField:String) -> GCField?{
-        let found = FITFitEnumMap.activityField(fromFitField: fitField, forActivityType: self.activityType)
+        let found = FITFitEnumMap.activityField(fromFitField: fitField, forActivityType: self.activityType.topSubRoot().key)
         
         return found
     }

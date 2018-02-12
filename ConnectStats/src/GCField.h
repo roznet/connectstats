@@ -59,6 +59,7 @@
 -(GCField*)correspondingMaxField;
 -(GCField*)correspondingWeightedMeanField;
 -(GCField*)correspondingMinField;
+-(GCField*)correspondingFieldTypeAll;
 
 -(NSString*)displayName;
 -(NSString*)displayNameAndUnits;
