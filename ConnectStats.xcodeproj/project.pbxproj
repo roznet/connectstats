@@ -2017,6 +2017,8 @@
 		42F0A4F31B60620200901CFF /* GCDerivedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F0A4F21B60620200901CFF /* GCDerivedRequest.m */; };
 		42F0A4F41B60620200901CFF /* GCDerivedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F0A4F21B60620200901CFF /* GCDerivedRequest.m */; };
 		42F135701B8BB5D5006D186A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F1356E1B8BB2BE006D186A /* libsqlite3.tbd */; };
+		42F14C46203192AA007925C9 /* GCActivityType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4244676B184B7550009F807E /* GCActivityType.m */; };
+		42F14C4E203192AE007925C9 /* GCActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4244676E184B756F009F807E /* GCActivityTypes.m */; };
 		42F23B39183D7E6D004918BB /* GCSettingsLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F23B38183D7E6D004918BB /* GCSettingsLogViewController.m */; };
 		42F3FB331DD783550042A9B1 /* GCFieldsDefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F3FB321DD783550042A9B1 /* GCFieldsDefs.m */; };
 		42F3FB341DD783550042A9B1 /* GCFieldsDefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F3FB321DD783550042A9B1 /* GCFieldsDefs.m */; };
@@ -9956,6 +9958,7 @@
 				42BF98381EE3175600F5E094 /* FITFitStatisticsWeight.swift in Sources */,
 				42BFC2291DCE2C1700EAD40E /* FITSplitViewController.swift in Sources */,
 				4248ED9C1DCFFC6C00254216 /* GCFieldsCategory.m in Sources */,
+				42F14C46203192AA007925C9 /* GCActivityType.m in Sources */,
 				4248ED9A1DCFFB5200254216 /* GCFieldInfo.m in Sources */,
 				42F4E5131DE08D55001AB244 /* GCMapRouteLogicPointHolder.m in Sources */,
 				42F4E5101DE08D49001AB244 /* GCMapGradientPathOverlayView.m in Sources */,
@@ -9965,6 +9968,7 @@
 				42A672C81DECC4EA00BE8E26 /* FITSelectionContext.swift in Sources */,
 				4248ED971DCFF55D00254216 /* GCField.m in Sources */,
 				4248DC8A1ED1E6ED00470DEB /* FITDataViewController.swift in Sources */,
+				42F14C4E203192AE007925C9 /* GCActivityTypes.m in Sources */,
 				42769BC81DD2A81D000390F1 /* FITFitFileInterpret.swift in Sources */,
 				42BFC2231DCDD9D900EAD40E /* FITOutlineDataSource.swift in Sources */,
 				4248ED9D1DCFFD2400254216 /* GCFieldsForCategory.m in Sources */,

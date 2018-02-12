@@ -265,8 +265,7 @@ class FITSelectionContext {
                      NSAttributedStringKey.paragraphStyle: paragraphStyle]
         
         if self.prettyField {
-            if let fieldKey = self.interp.fieldKey(fitField: fieldName),
-                let field = GCField(forKey: fieldKey, andActivityType:  self.interp.activityType) {
+            if let field = self.interp.fieldKey(fitField: fieldName){
                 displayText = field.displayName()
             }else{
                 attr = [NSAttributedStringKey.font:NSFont.systemFont(ofSize: 12.0),

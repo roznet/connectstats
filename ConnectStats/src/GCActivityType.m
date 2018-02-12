@@ -26,7 +26,6 @@
 #import "GCActivityType.h"
 #import "GCField.h"
 #import "GCFieldCache.h"
-#import "GCAppGlobal.h"
 #import "GCActivityTypes.h"
 
 static GCFieldCache * _fieldCache = nil;
@@ -46,28 +45,24 @@ static GCFieldCache * _fieldCache = nil;
     static GCActivityTypes * types = nil;
     if( types == nil){
         types = [GCActivityTypes activityTypes];
-        [types retain];
+        RZRetain(types);
     }
     return types;
 }
 
 +(GCFieldCache*)fieldCache{
-    if(!_fieldCache){
-        _fieldCache = [GCFieldCache cacheWithDb:[GCAppGlobal db] andLanguage:nil];
-        [_fieldCache retain];
-    }
     return _fieldCache;
 }
 +(void)setFieldCache:(GCFieldCache*)cache{
     if (cache != _fieldCache) {
-        [_fieldCache release];
+        RZRelease(_fieldCache);
         _fieldCache = cache;
-        [cache retain];
+        RZRetain(cache);
     }
 }
 
 +(nonnull GCActivityType*)activityType:(nonnull NSString*)key typeId:(NSUInteger)typeId andParent:(nullable GCActivityType*)parent{
-    GCActivityType * rv = [[[GCActivityType alloc] init] autorelease];
+    GCActivityType * rv = RZReturnAutorelease([[GCActivityType alloc] init]);
     if (rv) {
         rv.key = key;
         rv.typeId = typeId;
@@ -78,12 +73,14 @@ static GCFieldCache * _fieldCache = nil;
 
 }
 
+#if !__has_feature(objc_arc)
 -(void)dealloc{
     [_key release];
     [_parentType release];
 
     [super dealloc];
 }
+#endif
 
 #pragma mark - NSCoding
 

@@ -39,19 +39,20 @@ static NSUInteger nonPredefinedTypeId = 10000;
 @implementation GCActivityTypes
 
 +(GCActivityTypes*)activityTypes{
-    GCActivityTypes * rv = [[[GCActivityTypes alloc] init] autorelease];
+    GCActivityTypes * rv = RZReturnAutorelease([[GCActivityTypes alloc] init]);
     if (rv) {
         [rv loadPredefined];
     }
     return rv;
 }
-
+#if !__has_feature(objc_arc)
 -(void)dealloc{
     [_typesByKey release];
     [_typesById release];
 
     [super dealloc];
 }
+#endif
 
 -(void)loadPredefined{
     FMDatabase * fdb = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"fields.db"]];
