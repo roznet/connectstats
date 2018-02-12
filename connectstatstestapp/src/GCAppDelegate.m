@@ -172,6 +172,7 @@
     cache.preferPredefined = preferPredefined;
     [GCField setFieldCache: cache];
     [GCFields setFieldCache:cache];
+    [GCActivityType setFieldCache:cache];
     self.activityTypes = [GCActivityTypes activityTypes];
 }
 
