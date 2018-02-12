@@ -18,14 +18,14 @@ public extension GCField {
                       ]
 
     public static func field(fitKey:String, activityType:String) -> GCField? {
-        let fieldKey = fitToFieldMap[fitKey]
+        var fieldKey = fitToFieldMap[fitKey]
         if fieldKey == nil{
             print("Missing \(fitKey)")
             return nil
         }
         // special case for running
         if fitKey == "speed" && activityType == "running" {
-            fieldKey = @"WeightedMeanPace"
+            fieldKey = "WeightedMeanPace"
         }
         return GCField(forKey: fieldKey, andActivityType: activityType)
     }

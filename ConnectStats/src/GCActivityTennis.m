@@ -211,7 +211,8 @@
             NSString * uom = predefined[key][0];
             GCNumberWithUnit * numu = [GCNumberWithUnit numberWithUnitName:uom andValue:dval];
             GCActivitySummaryValue * sumval = [GCActivitySummaryValue activitySummaryValueForField:key value:numu];
-            sumdata[key] = sumval;
+            GCField * field = [GCField fieldForKey:key andActivityType:self.activityType];
+            sumdata[field] = sumval;
 
         }else if( metaFields[key]){
             id val = json[key];
@@ -256,7 +257,7 @@
     }
     self.shotsData   = fields;
     self.heatmaps    = heatmaps;
-    [self setSummaryDataFromKeyDict:sumdata];
+    self.summaryData = sumdata;
     self.metaData    = metdata;
 
     [self registerTennisFields];
