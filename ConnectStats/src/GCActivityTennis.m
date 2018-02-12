@@ -80,7 +80,7 @@
 }
 
 -(double)shots{
-    GCActivitySummaryValue * sum = (self.summaryData)[[GCField fieldForKey:@"shots" andActivityType:self.activityType]];
+    GCActivitySummaryValue * sum = self.summaryData[[GCField fieldForKey:@"shots" andActivityType:self.activityType]];
     return sum.numberWithUnit.value;
 }
 -(void)parseJson:(NSMutableDictionary*)aData{
@@ -441,16 +441,20 @@
 
 #pragma mark -
 
--(NSArray*)allFields{
-    NSArray * rv = [super allFields];
-    rv = [rv arrayByAddingObjectsFromArray:(self.shotsData).allKeys];
+-(NSArray<GCField*>*)allFields{
+    NSMutableArray<GCField*> * rv = [NSMutableArray arrayWithArray:[super allFields]];
+    for (NSString * key in self.shotsData) {
+        [rv addObject:[GCField fieldForKey:key andActivityType:self.activityType]];
+    }
 
     NSMutableArray * hf = [NSMutableArray arrayWithCapacity:self.heatmaps.count];
     for (NSString * type in self.heatmaps) {
-        [hf  addObject:[GCActivityTennisHeatmap heatmapField:type location:gcHeatmapLocationCenter]];
+        GCField * field = [GCField fieldForKey:[GCActivityTennisHeatmap heatmapField:type location:gcHeatmapLocationCenter] andActivityType:self.activityType];
+        [hf  addObject:field];
     }
+    [rv addObjectsFromArray:hf];
 
-    return [rv arrayByAddingObjectsFromArray:hf];
+    return rv;
 }
 -(BOOL)hasField:(GCField*)field{
     return (self.shotsData)[field.key] || [super hasField:field];

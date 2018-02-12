@@ -32,7 +32,7 @@
 #import "GCFieldCache.h"
 #import "GCActivityTypes.h"
 #import "GCTestsHelper.h"
-#import "ConnectStats-Swift.h"
+//#import "ConnectStats-Swift.h"
 
 @interface GCTestsParsing : XCTestCase
 @property (nonatomic,retain) GCTestsHelper * helper;
