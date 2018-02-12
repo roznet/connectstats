@@ -35,6 +35,7 @@
 @interface GCTrackPoint ()
 @property (nonatomic,retain) NSMutableDictionary<GCField*,GCNumberWithUnit*> * calculatedStorage;
 
+-(BOOL)hasField:(gcFieldFlag)afield;
 
 @end
 

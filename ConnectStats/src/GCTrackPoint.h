@@ -102,7 +102,7 @@
 -(NSComparisonResult)compareTime:(GCTrackPoint*)other;
 
 // MOVE TO PRIVATE:
--(BOOL)hasField:(gcFieldFlag)afield;
+//-(BOOL)hasField:(gcFieldFlag)afield DEPRECATED_MSG_ATTRIBUTE("use allFields on activity");
 -(double)valueForField:(gcFieldFlag)aField;
 -(void)setValue:(double)val forField:(gcFieldFlag)aField;
 -(double)extraValueForIndex:(GCTrackPointExtraIndex*)idx;

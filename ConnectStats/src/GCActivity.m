@@ -1373,55 +1373,43 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return serieWithUnit.serie;
 }
 
--(NSArray*)trackSerieLapAdjustment:(GCField*)field{
-    gcFieldFlag fieldFlag = field.fieldFlag;
-    GCTrackPointExtraIndex * idx = nil;
+-(NSArray<GCNumberWithUnit*>*)trackSerieLapAdjustment:(GCField*)field{
 
-    if (fieldFlag == gcFieldFlagNone) {
-        //idx = self.cachedExtraTracksIndexes[field.key];
-        // Need to check if GCLap works with extra indexes
-        return nil;
-    }
+    NSMutableArray<GCNumberWithUnit*> * rv = nil;
 
-    NSMutableArray * rv = nil;
+    BOOL error = false;
+    GCUnit * storeUnit = [self storeUnitForField:field];
 
     NSUInteger lapCount = self.lapsCache.count;
     NSUInteger lapIdx = 0;
-    double currentLapSum = 0.;
+    GCNumberWithUnit * currentLapSum = [GCNumberWithUnit numberWithUnit:storeUnit andValue:0.0];
     double currentLapCount = 0.;
-
-    BOOL error = false;
-
+    
     if ([self.settings shouldAdjustToMatchLapAverageForField:field] && lapCount > 0) {
         rv = [NSMutableArray arrayWithCapacity:lapCount];
         // Init with zeros
         for (NSUInteger i=0;i<lapCount;i++) {
-            [rv addObject:@( 0.0 )]; // 0 -> no adjustment (additive adjustment)
+            [rv addObject:[GCNumberWithUnit numberWithUnit:storeUnit andValue:0.0]]; // 0 -> no adjustment (additive adjustment)
         }
 
         for (GCTrackPoint * point in self.trackpoints) {
-            BOOL hasValue = false;
-            double y_value = 0.;
 
-            if (idx) {
-                y_value = [point extraValueForIndex:idx];
-                hasValue = true;
-            }else if( [point hasField:fieldFlag]){
-                y_value = [point valueForField:fieldFlag];
-                hasValue = true;
-            }
+            GCNumberWithUnit * nu = [point numberWithUnitForField:field inActivity:self];
 
-            if (hasValue) {
+            if (nu) {
                 if (point.lapIndex == lapIdx) {
                     currentLapCount += 1.;
-                    currentLapSum   += y_value;
+                    [currentLapSum   addNumberWithUnit:nu weight:1.0];
                 }else{
                     GCLap * lap = self.laps[lapIdx];
-                    rv[lapIdx] = @( [lap valueForField:fieldFlag] - (currentLapSum/currentLapCount) );
+                    currentLapSum.value /= currentLapCount;
+                    // store the difference
+                    rv[lapIdx] = [[lap numberWithUnitForField:field inActivity:self] addNumberWithUnit:currentLapSum weight:-1.0];
 
                     if (point.lapIndex == lapIdx + 1 && lapIdx + 1 < self.laps.count) {
                         lapIdx ++;
-                        currentLapSum = 0.;
+                        // reset sum
+                        currentLapSum.value = 0.;
                         currentLapCount = 0.;
                     }else{
                         RZLog(RZLogError, @"Inconsistent laps.count=%lu, point.lapIndex=%lu, lapIdx=%lu",
@@ -1444,15 +1432,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 }
 
 -(GCStatsDataSerieWithUnit*)trackSerieForField:(GCField*)field timeAxis:(BOOL)timeAxis{
-    gcFieldFlag afield = field.fieldFlag;
-    GCTrackPointExtraIndex * idx = nil;
-
     BOOL treatGapAsNoValue = self.settings.treatGapAsNoValueInSeries;
     NSTimeInterval gapTimeInterval = self.settings.gapTimeInterval;
 
-    if (afield == gcFieldFlagNone) {
-        idx = self.cachedExtraTracksIndexes[field];
-    }
     GCUnit * displayUnit = [self displayUnitForField:field];
     GCUnit * storeUnit   = [self storeUnitForField:field];
 
@@ -1468,29 +1450,21 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         serieWithUnit.xUnit = [GCUnit unitForKey:@"timeofday"];
     }
 
-    NSArray * lapAdjustments = nil;
+    NSArray<GCNumberWithUnit*> * lapAdjustments = nil;
     if (self.settings.adjustSeriesToMatchLapAverage) {
         lapAdjustments = [self trackSerieLapAdjustment:field];
     }
 
     GCTrackPoint * lastPoint = nil;
     for (GCTrackPoint * point in self.trackpoints) {
-        BOOL hasValue = false;
-        double y_value = 0.;
 
-        if (idx) {
-            y_value = [point extraValueForIndex:idx];
-            hasValue = true;
-        }else if( [point hasField:field.fieldFlag]){
-            y_value = [point valueForField:field.fieldFlag];
-            hasValue = true;
-        }
-
-        if (hasValue) {
+        GCNumberWithUnit * nu = [point numberWithUnitForField:field inActivity:self];
+        
+        if (nu) {
 
             if (lapAdjustments && point.lapIndex < lapAdjustments.count) {
-                double adjustment = [lapAdjustments[ point.lapIndex] doubleValue];
-                y_value += adjustment;
+                GCNumberWithUnit * adjustment = lapAdjustments[ point.lapIndex];
+                [nu addNumberWithUnit:adjustment weight:1.0];
             }
 
             if (timeAxis) {
@@ -1507,12 +1481,12 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                     }
                     lastPoint = point;
 
-                    [serieWithUnit.serie addDataPointWithDate:point.time since:firstDate andValue:y_value];
+                    [serieWithUnit addNumberWithUnit:nu forDate:point.time since:firstDate];
                 }else{
-                    [serieWithUnit.serie addDataPointWithDate:point.time andValue:y_value];
+                    [serieWithUnit addNumberWithUnit:nu forDate:point.time];
                 }
             }else{
-                [serieWithUnit.serie addDataPointWithX:point.distanceMeters andY:y_value];
+                [serieWithUnit addNumberWithUnit:nu forX:point.distanceMeters];
             }
         }
     }
