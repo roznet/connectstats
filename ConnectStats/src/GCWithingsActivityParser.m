@@ -27,6 +27,7 @@
 #import "GCActivity.h"
 #import "GCActivitySummaryValue.h"
 #import "GCService.h"
+#import "GCActivity+Database.h"
 
 @implementation GCWithingsActivityParser
 
@@ -122,7 +123,7 @@
         activity.location = @"";
         activity.distanceDisplayUom = @"kilometer";
         activity.speedDisplayUom = @"kph";
-        activity.summaryData = summaryData;
+        [activity setSummaryDataFromKeyDict:summaryData];
         activity.metaData = metaData;
         activity.downloadMethod = gcDownloadMethodFitFile;
         if (activity.sumDistance > 0. || activity.sumDuration > 0.) {

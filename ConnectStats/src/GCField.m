@@ -312,6 +312,13 @@ static void registerInCache(GCField*field){
     return rv;
 }
 
+-(BOOL)hasSuffix:(NSString*)suf{
+    return [self.key hasSuffix:suf];
+}
+-(BOOL)hasPrefix:(NSString*)pref{
+    return [self.key hasPrefix:pref];
+}
+
 #pragma mark
 
 -(NSString*)displayName{

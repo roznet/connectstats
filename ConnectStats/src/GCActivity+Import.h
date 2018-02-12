@@ -60,6 +60,12 @@
  */
 -(void)updateSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints missingOnly:(BOOL)missingOnly;
 
+
+/**
+ Checks in summary data for fields that should be set back as fieldFlag
+ */
+-(void)updateSummaryFieldFromSummaryData;
+
 /**
  Update contents of summary data with new dict. Any existing field in summaryData
  will be replaced by the newDict value. Any summary field and flag will also

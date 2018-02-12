@@ -29,6 +29,8 @@
 #import "GCHistoryPerformanceAnalysis.h"
 #import "GCActivity+Fields.h"
 #import "GCTestsHelper.h"
+#import "GCActivity+Database.h"
+#import "GCActivity+Import.h"
 
 @interface GCTestsGeneral : XCTestCase
 @property (nonatomic,retain) GCTestsHelper * helper;
@@ -116,10 +118,10 @@
     [act setFlags:gcFieldFlagSumDistance+gcFieldFlagSumDuration+gcFieldFlagWeightedMeanHeartRate+gcFieldFlagWeightedMeanSpeed];
     [act setActivityType:GC_TYPE_RUNNING];
     
-    act.summaryData = @{     @"SumDuration" :           [self sumVal:@"SumDuration"             val:act.sumDuration             uom:@"second" ],
+    [act setSummaryDataFromKeyDict:@{     @"SumDuration" :           [self sumVal:@"SumDuration"             val:act.sumDuration             uom:@"second" ],
                              @"SumDistance" :           [self sumVal:@"SumDistance"             val:act.sumDistance             uom:@"meter" ],
                              @"WeightedMeanHeartRate":  [self sumVal:@"WeightedMeanHeartRate"   val:act.weightedMeanHeartRate   uom:@"bpm"  ],
-                             };
+                             }];
     
     [act setSpeedDisplayUom:@"kph"];
     [act setDistanceDisplayUom:@"km"];
@@ -138,10 +140,10 @@
     
     [act setSpeedDisplayUom:@"kph"];
     [act setDistanceDisplayUom:@"km"];
-    act.summaryData = @{     @"SumDuration" :           [self sumVal:@"SumDuration"             val:act.sumDuration             uom:@"second" ],
+    [act setSummaryDataFromKeyDict:@{     @"SumDuration" :           [self sumVal:@"SumDuration"             val:act.sumDuration             uom:@"second" ],
                              @"SumDistance" :           [self sumVal:@"SumDistance"             val:act.sumDistance             uom:@"meter" ],
                              @"WeightedMeanHeartRate":  [self sumVal:@"WeightedMeanHeartRate"   val:act.weightedMeanHeartRate   uom:@"bpm"  ],
-                             };
+                             }];
 
     [tmp addObject:act];
     [act release];
@@ -162,13 +164,13 @@
     act.activityType = GC_TYPE_CYCLING;
     
     [act setSummaryData:@{
-                          [self fldFor:@"SumDuration" act:act] :              [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
-                          [self fldFor:@"WeightedMeanPower" act:act]:         [self sumVal:@"WeightedMeanPower"       val:3000    uom:@"watt" ],
-                          [self fldFor:@"WeightedMeanSpeed" act:act]:         [self sumVal:@"WeightedMeanSpeed"       val:10.8    uom:@"kph" ],
-                          [self fldFor:@"WeightedMeanRunCadence" act:act]:    [self sumVal:@"WeightedMeanRunCadence"  val:90      uom:@"spm" ]
-                          }
+                           [self fldFor:@"SumDuration" act:act] :              [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
+                           [self fldFor:@"WeightedMeanPower" act:act]:         [self sumVal:@"WeightedMeanPower"       val:3000    uom:@"watt" ],
+                           [self fldFor:@"WeightedMeanSpeed" act:act]:         [self sumVal:@"WeightedMeanSpeed"       val:10.8    uom:@"kph" ],
+                           [self fldFor:@"WeightedMeanRunCadence" act:act]:    [self sumVal:@"WeightedMeanRunCadence"  val:90      uom:@"stepsPerMinute" ]
+                           }
      ];
-    
+    [act updateSummaryFieldFromSummaryData];
     GCFieldCalcKiloJoules * kj = [[GCFieldCalcKiloJoules alloc] init];
     GCFieldCalcStrideLength * sl = [[GCFieldCalcStrideLength alloc] init];
     GCActivityCalculatedValue * rv = nil;
@@ -176,6 +178,18 @@
     rv = [kj evaluateForActivity:act];
     XCTAssertEqualObjects(rv.uom, @"kilojoule", @"Right unit");
     XCTAssertEqualWithAccuracy(rv.value, 9., 1.e-7, @"sample is 9");
+
+    rv = [sl evaluateForActivity:act];
+    XCTAssertNil(rv, @"Computing Run Calc Field on cycle activity");
+    
+    act.activityType = GC_TYPE_RUNNING; // Stride only valid for running
+    [act setSummaryData:@{
+                          [self fldFor:@"SumDuration" act:act] :              [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
+                          [self fldFor:@"WeightedMeanSpeed" act:act]:         [self sumVal:@"WeightedMeanSpeed"       val:10.8    uom:@"kph" ],
+                          [self fldFor:@"WeightedMeanRunCadence" act:act]:    [self sumVal:@"WeightedMeanRunCadence"  val:90      uom:@"stepsPerMinute" ]
+                          }
+     ];
+    [act updateSummaryFieldFromSummaryData];
     
     rv = [sl evaluateForActivity:act];
     XCTAssertEqualObjects(rv.uom, @"stride", @"Right unit for stride length");
@@ -185,23 +199,12 @@
     //ToTest
     //XCTAssertTrue([act hasField:[sl field]], @"stride there");
     //XCTAssertTrue([act hasField:[kj field]], @"kj there");
-    GCNumberWithUnit * v_sl = [act numberWithUnitForFieldKey:[sl field]];
-    GCNumberWithUnit * v_kj = [act numberWithUnitForFieldKey:[kj field]];
+    GCNumberWithUnit * v_sl = [act numberWithUnitForFieldKey:[sl fieldKey]];
+    GCNumberWithUnit * v_kj = [act numberWithUnitForFieldKey:[kj fieldKey]];
     
-    XCTAssertEqualWithAccuracy(v_kj.value, 9., 1.e-7, @"kj sample");
+    XCTAssertNil(v_kj);// SHould not be there (no power)
     XCTAssertEqualWithAccuracy(v_sl.value, 2., 1.e-7, @"sl sample");
     
-    [act setSummaryData:@{
-                          [self fldFor:@"SumDuration" act:act]:               [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
-                          [self fldFor:@"WeightedMeanPower"  act:act] :       [self sumVal:@"WeightedMeanPower"       val:3000    uom:@"watt" ],
-                          [self fldFor:@"WeightedMeanRunCadence" act:act]:    [self sumVal:@"WeightedMeanRunCadence"  val:90      uom:@"spm" ]
-                          }
-     ];
-    [act setCalculatedFields:nil];
-    [GCFieldsCalculated addCalculatedFields:act];
-    //ToTest
-    //XCTAssertFalse([act hasField:[sl field]], @"stride there");
-    //XCTAssertTrue([act hasField:[kj field]], @"kj there");
     
     [kj release];
     [sl release];
@@ -598,10 +601,10 @@
         [act setFlags:gcFieldFlagSumDistance+gcFieldFlagSumDuration+gcFieldFlagWeightedMeanHeartRate+gcFieldFlagWeightedMeanSpeed];
         [act setActivityType:GC_TYPE_RUNNING];
         
-        act.summaryData = @{     @"SumDuration" :           [self sumVal:@"SumDuration"             val:act.sumDuration             uom:@"second" ],
+        [act setSummaryDataFromKeyDict: @{     @"SumDuration" :           [self sumVal:@"SumDuration"             val:act.sumDuration             uom:@"second" ],
                                  @"SumDistance" :           [self sumVal:@"SumDistance"             val:act.sumDistance             uom:@"meter" ],
                                  @"WeightedMeanHeartRate":  [self sumVal:@"WeightedMeanHeartRate"   val:act.weightedMeanHeartRate   uom:@"bpm"  ],
-                                 };
+                                 }];
         
         [act setSpeedDisplayUom:@"kph"];
         [act setDistanceDisplayUom:@"km"];

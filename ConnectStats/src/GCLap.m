@@ -202,10 +202,9 @@
 
     NSMutableDictionary * summary = [act buildSummaryDataFromGarminModernData:data];
     self.extraStorage = [NSMutableDictionary dictionary];
-    for (NSString * fieldKey in summary) {
-        GCActivitySummaryValue * value = summary[fieldKey];
+    for (GCField * field in summary) {
+        GCActivitySummaryValue * value = summary[field];
         GCNumberWithUnit * num = value.numberWithUnit;
-        GCField * field = [GCField fieldForKey:fieldKey andActivityType:act.activityId];
         if (field.fieldFlag != gcFieldFlagNone) {
             GCUnit * unit = [GCTrackPoint unitForField:field.fieldFlag andActivityType:act.activityType];
             if(unit){

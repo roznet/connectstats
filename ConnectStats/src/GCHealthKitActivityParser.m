@@ -32,6 +32,7 @@
 #import "GCHealthKitRequest.h"
 #import "GCActivity+Fields.h"
 #import "RZUtilsHealthkit/RZUtilsHealthkit.h"
+#import "GCActivity+Database.h"
 
 @interface GCHealthKitActivityParser ()
 @property (nonatomic,retain) NSDictionary * data;
@@ -138,13 +139,13 @@
             activity.location = @"";
             activity.speedDisplayUom = @"kph";
             activity.distanceDisplayUom = @"kilometer";
-            activity.summaryData = @{
+            [activity setSummaryDataFromKeyDict:@{
                                      @"SumDistance":[GCActivitySummaryValue activitySummaryValueForField:@"SumDistance" value:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDistance]],
                                      @"SumDuration":[GCActivitySummaryValue activitySummaryValueForField:@"SumDuration" value:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDuration]],
                                      @"SumStep":[GCActivitySummaryValue activitySummaryValueForField:@"SumStep" value:[GCNumberWithUnit numberWithUnitName:@"step" andValue:sumSteps]],
                                      @"SumFloorClimbed":[GCActivitySummaryValue activitySummaryValueForField:@"SumFloorClimbed" value:[GCNumberWithUnit numberWithUnitName:@"step" andValue:sumFloors]],
 
-                                     };
+                                     }];
             activity.metaData = [NSMutableDictionary dictionary];
             if (self.organizer) {
                 [self.organizer registerActivity:activity forActivityId:activity.activityId];

@@ -27,7 +27,7 @@
 #import "GCActivity.h"
 #import "GCActivitySummaryValue.h"
 #import "GCService.h"
-
+#import "GCActivity+Database.h"
 // Running Id: 90009
 // Biking  Id: 90001
 
@@ -164,7 +164,7 @@
     activity.activityName = @"";
     activity.location = @"";
     activity.speedDisplayUom = @"kph";
-    activity.summaryData = summaryData;
+    [activity setSummaryDataFromKeyDict:summaryData];
     activity.metaData = metaData;
     activity.downloadMethod = gcDownloadMethodFitFile;
     if (activity.sumDistance > 0. || activity.sumDuration > 0.) {

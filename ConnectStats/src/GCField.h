@@ -76,6 +76,9 @@
 -(BOOL)isHealthField;
 -(BOOL)isCalculatedField;
 
+-(BOOL)hasSuffix:(NSString*)suf;
+-(BOOL)hasPrefix:(NSString*)pref;
+
 @end
 
 NS_INLINE BOOL RZNilOrEqualToField(GCField* a, GCField* b) { return ( ( (a == nil) && (b == nil) ) || (b != nil && [a isEqualToField:b]) ); };

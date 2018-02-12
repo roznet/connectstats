@@ -34,6 +34,7 @@
 #import "GCService.h"
 #import "GCActivityTennisHeatmap.h"
 #import "GCActivity+Fields.h"
+#import "GCActivity+Database.h"
 
 @interface GCActivityTennis ()
 @property (nonatomic,retain) NSDictionary * shotsData;
@@ -111,8 +112,8 @@
     self.sumDuration = timeMinutes.doubleValue*60.;
 
 
-    self.summaryData = @{@"SumDuration":[GCActivitySummaryValue activitySummaryValueForDict:@{@"value":@(self.sumDuration),@"uom":@"second"} andField:@"SumDuration"],
-                         @"shots":[GCActivitySummaryValue activitySummaryValueForDict:@{@"value":shots,@"uom":@"shots"} andField:@"shots"]};
+    [self setSummaryDataFromKeyDict:@{@"SumDuration":[GCActivitySummaryValue activitySummaryValueForDict:@{@"value":@(self.sumDuration),@"uom":@"second"} andField:@"SumDuration"],
+                         @"shots":[GCActivitySummaryValue activitySummaryValueForDict:@{@"value":shots,@"uom":@"shots"} andField:@"shots"]}];
 
     self.flags  = gcFieldFlagSumDuration+gcFieldFlagTennisShots;
     self.speedDisplayUom = @"kph";
@@ -255,7 +256,7 @@
     }
     self.shotsData   = fields;
     self.heatmaps    = heatmaps;
-    self.summaryData = sumdata;
+    [self setSummaryDataFromKeyDict:sumdata];
     self.metaData    = metdata;
 
     [self registerTennisFields];

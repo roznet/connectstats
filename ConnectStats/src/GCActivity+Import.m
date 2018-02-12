@@ -178,8 +178,9 @@
             }
         }
         if (fieldkey && uom && val) {
+            GCField * field = [GCField fieldForKey:fieldkey andActivityType:self.activityType];
             GCActivitySummaryValue * sumVal = [self buildSummaryValue:fieldkey uom:uom fieldFlag:flag andValue:val.doubleValue];
-            newSummaryData[fieldkey] = sumVal;
+            newSummaryData[field] = sumVal;
         }
     }
 }
@@ -527,8 +528,7 @@
             summaryDataTmp[field] = [GCActivitySummaryValue activitySummaryValueForDict:info andField:(NSString*)field];
         }
     }
-    self.summaryData = [NSDictionary dictionaryWithDictionary:summaryDataTmp];
-
+    [self setSummaryDataFromKeyDict:summaryDataTmp];
 
     NSMutableDictionary * newMetaData = [NSMutableDictionary dictionary];
 

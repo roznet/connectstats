@@ -256,43 +256,43 @@
     return rv;
 }
 
--(void)compareActivitySummaryIn:(GCActivity*)one and:(GCActivity*)two tolerance:(NSDictionary*)tolerances message:(NSString*)msg{
-    NSDictionary * oneDict = one.summaryData;
-    NSDictionary * twoDict = two.summaryData;
+-(void)compareActivitySummaryIn:(GCActivity*)one and:(GCActivity*)two tolerance:(NSDictionary<NSString*,id>*)tolerances message:(NSString*)msg{
+    NSDictionary<GCField*,GCActivitySummaryValue*> * oneDict = one.summaryData;
+    NSDictionary<GCField*,GCActivitySummaryValue*> * twoDict = two.summaryData;
     
     NSMutableDictionary * missingFromTwo = [NSMutableDictionary dictionary];
     NSMutableDictionary * missingFromOne = [NSMutableDictionary dictionary];
     
-    for (NSString * key in oneDict) {
+    for (GCField * field in oneDict) {
         // Skip corrected/uncorrected elevation
-        if( [key hasSuffix:@"orrectedElevation"]){
+        if( [field hasSuffix:@"orrectedElevation"]){
             continue;
         }
         
-        GCActivitySummaryValue * oneValue = oneDict[key];
-        GCActivitySummaryValue * twoValue = twoDict[key];
+        GCActivitySummaryValue * oneValue = oneDict[field];
+        GCActivitySummaryValue * twoValue = twoDict[field];
         
         if (twoValue) {
-            NSNumber * tolerance = tolerances[key];
+            NSNumber * tolerance = tolerances[field.key];
             if ([tolerance isKindOfClass:[NSNumber class]]) {
                 // tolerance is % (0.01 -> 1%)
                 double useTolerance = oneValue.numberWithUnit.value * tolerance.doubleValue;
-                XCTAssertTrue([oneValue.numberWithUnit compare:twoValue.numberWithUnit withTolerance:useTolerance] == NSOrderedSame, @"%@: %@ %@<>%@ (within %@)", msg, key, oneValue.numberWithUnit, twoValue.numberWithUnit, tolerance);
+                XCTAssertTrue([oneValue.numberWithUnit compare:twoValue.numberWithUnit withTolerance:useTolerance] == NSOrderedSame, @"%@: %@ %@<>%@ (within %@)", msg, field, oneValue.numberWithUnit, twoValue.numberWithUnit, tolerance);
             }else if([tolerance isKindOfClass:[NSString class]]){
                 //SKIP
             }else{
-                XCTAssertEqualObjects(oneValue, twoValue, @"%@: %@", key, msg );
+                XCTAssertEqualObjects(oneValue, twoValue, @"%@: %@", field, msg );
             }
         }else{
-            if( ![tolerances[key] isKindOfClass:[NSString class]]){
-                missingFromTwo[key] = oneValue;
+            if( ![tolerances[field.key] isKindOfClass:[NSString class]]){
+                missingFromTwo[field] = oneValue;
             }
         }
     }
     
-    for (NSString * key in twoDict) {
-        if( !oneDict[key] && ![tolerances[key] isKindOfClass:[NSString class]]){
-            missingFromOne[key] = twoDict[key];
+    for (GCField * field in twoDict) {
+        if( !oneDict[field] && ![tolerances[field.key] isKindOfClass:[NSString class]]){
+            missingFromOne[field] = twoDict[field];
         }
     }
     if(missingFromOne.count > 0 || missingFromTwo.count > 0){
