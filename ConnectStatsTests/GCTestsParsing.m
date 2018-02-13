@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Brice Rosenzweig. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
+#import "GCTestCase.h"
 #import "GCTrackPoint.h"
 #import "GCActivity+Database.h"
 #import "GCActivity+Import.h"
@@ -31,35 +31,21 @@
 #import "GCService.h"
 #import "GCFieldCache.h"
 #import "GCActivityTypes.h"
-#import "GCTestsHelper.h"
 #import "ConnectStats-Swift.h"
 
-@interface GCTestsParsing : XCTestCase
-@property (nonatomic,retain) GCTestsHelper * helper;
+@interface GCTestsParsing : GCTestCase
 
 @end
 
 @implementation GCTestsParsing
 
--(void)dealloc{
-    [_helper release];
-    [super dealloc];
-}
 
 - (void)setUp {
     [super setUp];
     
-    if( self.helper == nil){
-        self.helper = [GCTestsHelper helper];
-    }else{
-        [self.helper setUp];
-    }
 }
 
 - (void)tearDown {
-    if( self.helper){
-        [self.helper tearDown];
-    }
     [super tearDown];
 }
 
@@ -176,9 +162,7 @@
 -(void)testParseActivityTypes{
     
     GCActivityTypes * types = [ GCActivityTypes activityTypes];
-    NSLog(@"%@", types.allTypes);
-    
-    NSLog(@"%@", [types activityTypeForStravaType:@"Ride"]);
+    XCTAssertEqualObjects([types activityTypeForKey:GC_TYPE_CYCLING], [types activityTypeForStravaType:@"Ride"]);
     
     GCFieldCache * cache = [GCFieldCache cacheWithDb:nil andLanguage:@"en"];
     
@@ -319,9 +303,6 @@
     fn = [NSString stringWithFormat:@"activitytrack_%@.json", activityId];
     data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn forClass:[self class]]];
     GCGarminActivityDetailJsonParser * trackparser = [[[GCGarminActivityDetailJsonParser alloc] initWithData:data] autorelease];
-    
-    NSLog(@"%@", lapsparser.laps);
-    NSLog(@"%@", @(trackparser.trackPoints.count));
     
     
 }
@@ -651,19 +632,62 @@
     }
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
-}
-
 -(void)testHealthCollected{
     /*
     NSMutableDictionary * dict = [NSKeyedUnarchiver unarchiveObjectWithFile:[RZFileOrganizer bundleFilePath:@"collected.plist" forClass:[self class]]];
     NSLog(@"%@", dict);
     NSLog(@"%d", (int)dict.count);
      */
+}
+
+-(void)testPerformanceParsingModern{
+    NSString * aId = @"1083407258";
+    
+    [self measureBlock:^{
+        
+        GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    }];
+    
+
+}
+
+-(void)disabletestPerformanceParsingFit{
+    NSString * aId = @"1083407258";
+    NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
+    
+    [self measureBlock:^{
+        FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
+        [fitDecode parse];
+        [[[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile] release];
+        
+    }];
+
+}
+
+-(void)testPerformanceOrganizerRegister{
+    NSData * searchLegacyInfo = [NSData  dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_search_modern.json"
+                                                                                       forClass:[self class]]];
+    GCService * service = [GCService service:gcServiceGarmin];
+    NSString * dbn = [RZFileOrganizer writeableFilePath:@"test_organizer_register_perf.db"];
+
+    [self measureBlock:^{
+        GCGarminSearchJsonParser * parser=[[GCGarminSearchJsonParser alloc] initWithData:searchLegacyInfo] ;
+        
+        [RZFileOrganizer removeEditableFile:@"test_organizer_register_perf.db"];
+        FMDatabase * db = [FMDatabase databaseWithPath:dbn];
+        [db open];
+        [GCActivitiesOrganizer ensureDbStructure:db];
+        
+        GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+        
+        GCActivitiesOrganizerListRegister * listregister =[GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:service isFirst:YES];
+        [listregister addToOrganizer:organizer];
+        
+        [organizer release];
+        [parser release];
+    }];
+
 }
 
 @end

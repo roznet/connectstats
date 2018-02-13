@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Brice Rosenzweig. All rights reserved.
 //  $Id$
 
-#import <XCTest/XCTest.h>
+#import "GCTestCase.h"
 #import "GCGarminActivityXMLParser.h"
 #import "GCGarminSearchJsonParser.h"
 #import "GCActivitiesOrganizer.h"
@@ -32,8 +32,7 @@
 #import "GCActivity+Database.h"
 #import "GCActivity+Import.h"
 
-@interface GCTestsGeneral : XCTestCase
-@property (nonatomic,retain) GCTestsHelper * helper;
+@interface GCTestsGeneral : GCTestCase
 @end
 
 #define EPS 1e-10
@@ -42,28 +41,16 @@
 
 
 @implementation GCTestsGeneral
--(void)dealloc{
-    [_helper release];
-    [super dealloc];
-}
 
 - (void)setUp
 {
     [super setUp];
     
-    if( !self.helper){
-        self.helper = [GCTestsHelper helper];
-    }else{
-        [self.helper setUp];
-    }
     // Set-up code here.
 }
 
 - (void)tearDown
 {
-    if( self.helper){
-        [self.helper tearDown];
-    }
 
     [super tearDown];
 }

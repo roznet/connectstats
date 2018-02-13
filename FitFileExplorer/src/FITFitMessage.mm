@@ -21,7 +21,13 @@
 @end
 
 @implementation FITFitMessage
-
+-(instancetype)init{
+    self = [super init];
+    if(self){
+        _originalMesg = nullptr;
+    }
+    return self;
+}
 -(void)dealloc{
     if (_originalMesg) {
         delete _originalMesg;
@@ -41,6 +47,9 @@
             (unsigned long)self.fields.count];
 }
 -(void)setFromMesg:(fit::Mesg *)mesg{
+    if( _originalMesg ){
+        delete _originalMesg;
+    }
     self.originalMesg = new fit::Mesg(*mesg);
 }
 

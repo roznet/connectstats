@@ -30,6 +30,7 @@
     if( rv){
         rv.originalField = nil;
         rv.complementField = nil;
+        rv.developerField = nil;
         [rv setFromField:ff];
     }
     return rv;
@@ -40,6 +41,7 @@
     if( rv){
         rv.originalField = nil;
         rv.complementField = nil;
+        rv.developerField = nil;
         [rv setFromDeveloperField:ff];
     }
     return rv;

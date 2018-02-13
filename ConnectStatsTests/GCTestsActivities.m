@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Brice Rosenzweig. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
+#import "GCTestCase.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCActivitiesCacheManagement.h"
 #import "GCActivity+Calculated.h"
@@ -22,31 +22,19 @@
 #import "GCActivity+CachedTracks.h"
 #import "GCTestsHelper.h"
 
-@interface GCTestsActivities : XCTestCase
-@property (nonatomic,retain) GCTestsHelper * helper;
+@interface GCTestsActivities : GCTestCase
 @end
 
 @implementation GCTestsActivities
 
--(void)dealloc{
-    [_helper release];
-    [super dealloc];
-}
-
 - (void)setUp
 {
-    if( self.helper == nil){
-        self.helper = [GCTestsHelper helper];
-    }else{
-        [self.helper setUp];
-    }
     
     [super setUp];
 }
 
 - (void)tearDown
 {
-    [self.helper tearDown];
     
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
@@ -61,8 +49,8 @@
     [db open];
 
     GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
-    NSLog(@"Act %@", @(organizer.activities.count)); // 128 @ 95%, 129 @ 99%
     XCTAssertEqual(organizer.activities.count, 126, @"filtered duplicate properly");
+    [organizer release];
 }
 
 #pragma mark - simulator db and tracks

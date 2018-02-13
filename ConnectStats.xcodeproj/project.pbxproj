@@ -1940,6 +1940,9 @@
 		42D8AF271B26002500ADDD31 /* GCHealthKitWorkoutParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8AF231B25FEC000ADDD31 /* GCHealthKitWorkoutParser.m */; };
 		42D8CB681613AEFB00C0521B /* GCCellMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8CB671613AEFB00C0521B /* GCCellMap.m */; };
 		42D8CB6B1616D20B00C0521B /* GCStatsOneFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8CB6A1616D20B00C0521B /* GCStatsOneFieldViewController.m */; };
+		42D90812203383DB000BBE07 /* GCTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D90811203383DB000BBE07 /* GCTestCase.m */; };
+		42D9081C20338582000BBE07 /* GCTestsPerformance.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9081B20338582000BBE07 /* GCTestsPerformance.m */; };
+		42D9081D2033874C000BBE07 /* activities_stats.db in Resources */ = {isa = PBXBuildFile; fileRef = 427F93081BEA9A5900C177F9 /* activities_stats.db */; };
 		42DC51551B2784B600B5C12F /* GCHealthKitDailySummaryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DC51541B2784B600B5C12F /* GCHealthKitDailySummaryParser.m */; };
 		42DC51581B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DC51571B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m */; };
 		42DC51591B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DC51571B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m */; };
@@ -4222,6 +4225,9 @@
 		42D8CB671613AEFB00C0521B /* GCCellMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCCellMap.m; path = src/GCCellMap.m; sourceTree = "<group>"; };
 		42D8CB691616D20B00C0521B /* GCStatsOneFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStatsOneFieldViewController.h; path = src/GCStatsOneFieldViewController.h; sourceTree = "<group>"; };
 		42D8CB6A1616D20B00C0521B /* GCStatsOneFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStatsOneFieldViewController.m; path = src/GCStatsOneFieldViewController.m; sourceTree = "<group>"; };
+		42D90811203383DB000BBE07 /* GCTestCase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCTestCase.m; sourceTree = "<group>"; };
+		42D9081A2033843B000BBE07 /* GCTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCTestCase.h; sourceTree = "<group>"; };
+		42D9081B20338582000BBE07 /* GCTestsPerformance.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCTestsPerformance.m; sourceTree = "<group>"; };
 		42DC51531B2784B600B5C12F /* GCHealthKitDailySummaryParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitDailySummaryParser.h; path = src/GCHealthKitDailySummaryParser.h; sourceTree = "<group>"; };
 		42DC51541B2784B600B5C12F /* GCHealthKitDailySummaryParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitDailySummaryParser.m; path = src/GCHealthKitDailySummaryParser.m; sourceTree = "<group>"; };
 		42DC51561B2784F200B5C12F /* GCHealthKitWorkoutsRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitWorkoutsRequest.h; path = src/GCHealthKitWorkoutsRequest.h; sourceTree = "<group>"; };
@@ -5917,6 +5923,9 @@
 				426F42441DB247FB00937DD8 /* GCTestsHelper.h */,
 				426F42451DB247FB00937DD8 /* GCTestsHelper.m */,
 				42FC177F1E196E4B00F55302 /* GCTestActivityFitFile.swift */,
+				42D90811203383DB000BBE07 /* GCTestCase.m */,
+				42D9081A2033843B000BBE07 /* GCTestCase.h */,
+				42D9081B20338582000BBE07 /* GCTestsPerformance.m */,
 			);
 			name = ConnectStatsXCTests;
 			path = ConnectStatsTests;
@@ -8526,6 +8535,7 @@
 				42BB0DA21AB4A9A0008D5A10 /* activityweather_609588236.json in Resources */,
 				42AEFED51DA057F600D7DA6D /* activityweather_1378220136.json in Resources */,
 				42BB0BEE1AB4A99F008D5A10 /* activityweather_394558840.json in Resources */,
+				42D9081D2033874C000BBE07 /* activities_stats.db in Resources */,
 				428BAD091CB14B650041468A /* activity_1108367966.json in Resources */,
 				42BB0CEA1AB4A99F008D5A10 /* activityweather_504813193.json in Resources */,
 				42AEFECC1DA057F600D7DA6D /* activities_list_modern.json in Resources */,
@@ -10255,6 +10265,7 @@
 			files = (
 				421844B71D75D268005B09BC /* GCTestsSegments.swift in Sources */,
 				425CF5A91813CEEC009279C0 /* GCTestsActivities.m in Sources */,
+				42D9081C20338582000BBE07 /* GCTestsPerformance.m in Sources */,
 				42A89C261D63B2D7007CF90D /* GCTestHealthZones.m in Sources */,
 				426F42461DB247FB00937DD8 /* GCTestsHelper.m in Sources */,
 				42FC17801E196E4B00F55302 /* GCTestActivityFitFile.swift in Sources */,
@@ -10266,6 +10277,7 @@
 				42C011401AB438050059B6CF /* GCTestsParsing.m in Sources */,
 				42096753189CF33500D32CA7 /* GCTestsDerived.m in Sources */,
 				42793B361F409787005FAF02 /* FITFitValueStatistics.swift in Sources */,
+				42D90812203383DB000BBE07 /* GCTestCase.m in Sources */,
 				4227C5AC1C0B1310003F0660 /* GCTestsGrid.m in Sources */,
 				428FF73315F36888007A88FA /* GCTestsGeneral.m in Sources */,
 				42B9555318186D0C00BC7AF9 /* GCTestsUtils.m in Sources */,
