@@ -29,6 +29,11 @@
 #import "GCTestCase.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCHistoryFieldSummaryStats.h"
+#import "GCTrackStats.h"
+#import "GCActivity+Database.h"
+#import "GCGarminActivityTrack13Request.h"
+#import "GCGarminRequestActivityReload.h"
+#import "ConnectStats-Swift.h"
 
 @interface GCTestsPerformance : GCTestCase
 
@@ -83,7 +88,48 @@
 
 }
 
--(void)testPerformanceParsing{
+-(void)testPerformanceTrackpoints{
+    FMDatabase * t1 = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"test_activity_running_837769405.db"
+                                                                          forClass:[self class]]];
+    [t1 open];
+    
+    //GCActivity * act = [GCActivity fullLoadFromDb:t1];
+    
+    NSString * aId = @"1083407258";
+    
+    GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+
+    NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
+    
+    FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
+    [fitDecode parse];
+    GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile];
+
+    //act = fitAct;
+    GCField * speedField = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType];
+    
+    [self measureBlock:^{
+        for (GCField * field in act.availableTrackFields) {
+            if( ![field isEqualToField:speedField]){
+                GCTrackStats * trackStats = [[GCTrackStats alloc] init];
+                trackStats.activity = act;
+                [trackStats setupForField:speedField xField:field andLField:nil];
+                [trackStats release];
+            }
+        }
+        
+        for (GCField * field in fitAct.availableTrackFields) {
+            if( ![field isEqualToField:speedField]){
+                GCTrackStats * trackStats = [[GCTrackStats alloc] init];
+                trackStats.activity = fitAct;
+                [trackStats setupForField:speedField xField:field andLField:nil];
+                [trackStats release];
+            }
+        }
+
+    }];
+    
 
 }
 
