@@ -34,6 +34,8 @@
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminRequestActivityReload.h"
 #import "ConnectStats-Swift.h"
+#import "GCService.h"
+#import "GCActivitiesOrganizerListRegister.h"
 
 @interface GCTestsPerformance : GCTestCase
 
@@ -131,6 +133,56 @@
     }];
     
 
+}
+
+-(void)testPerformanceParsingModern{
+    NSString * aId = @"1083407258";
+    
+    [self measureBlock:^{
+        
+        GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    }];
+    
+    
+}
+
+-(void)disabletestPerformanceParsingFit{
+    NSString * aId = @"1083407258";
+    NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
+    
+    [self measureBlock:^{
+        FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
+        [fitDecode parse];
+        [[[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile] release];
+        
+    }];
+    
+}
+
+-(void)testPerformanceOrganizerRegister{
+    NSData * searchLegacyInfo = [NSData  dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_search_modern.json"
+                                                                                       forClass:[self class]]];
+    GCService * service = [GCService service:gcServiceGarmin];
+    NSString * dbn = [RZFileOrganizer writeableFilePath:@"test_organizer_register_perf.db"];
+    
+    [self measureBlock:^{
+        GCGarminSearchJsonParser * parser=[[GCGarminSearchJsonParser alloc] initWithData:searchLegacyInfo] ;
+        
+        [RZFileOrganizer removeEditableFile:@"test_organizer_register_perf.db"];
+        FMDatabase * db = [FMDatabase databaseWithPath:dbn];
+        [db open];
+        [GCActivitiesOrganizer ensureDbStructure:db];
+        
+        GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+        
+        GCActivitiesOrganizerListRegister * listregister =[GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:service isFirst:YES];
+        [listregister addToOrganizer:organizer];
+        
+        [organizer release];
+        [parser release];
+    }];
+    
 }
 
 @end

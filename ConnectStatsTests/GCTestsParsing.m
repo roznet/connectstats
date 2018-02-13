@@ -288,6 +288,7 @@
 
 -(void)testParseLaps{
     
+    // Swimming activity
     NSString * activityId = @"1027746730";//@"1378220136";
     
     NSString * fn = [NSString stringWithFormat:@"activity_%@.json", activityId];
@@ -304,7 +305,9 @@
     data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn forClass:[self class]]];
     GCGarminActivityDetailJsonParser * trackparser = [[[GCGarminActivityDetailJsonParser alloc] initWithData:data] autorelease];
     
-    
+    XCTAssertGreaterThan(trackparser.trackPoints.count, 1);
+    XCTAssertGreaterThan(lapsparser.lapsSwim.count, 1);
+    XCTAssertGreaterThan(lapsparser.trackPointSwim.count, 1);
 }
 
 -(void)testParseAndCompare{
@@ -640,54 +643,5 @@
      */
 }
 
--(void)testPerformanceParsingModern{
-    NSString * aId = @"1083407258";
-    
-    [self measureBlock:^{
-        
-        GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-        [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-    }];
-    
-
-}
-
--(void)disabletestPerformanceParsingFit{
-    NSString * aId = @"1083407258";
-    NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
-    
-    [self measureBlock:^{
-        FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
-        [fitDecode parse];
-        [[[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile] release];
-        
-    }];
-
-}
-
--(void)testPerformanceOrganizerRegister{
-    NSData * searchLegacyInfo = [NSData  dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_search_modern.json"
-                                                                                       forClass:[self class]]];
-    GCService * service = [GCService service:gcServiceGarmin];
-    NSString * dbn = [RZFileOrganizer writeableFilePath:@"test_organizer_register_perf.db"];
-
-    [self measureBlock:^{
-        GCGarminSearchJsonParser * parser=[[GCGarminSearchJsonParser alloc] initWithData:searchLegacyInfo] ;
-        
-        [RZFileOrganizer removeEditableFile:@"test_organizer_register_perf.db"];
-        FMDatabase * db = [FMDatabase databaseWithPath:dbn];
-        [db open];
-        [GCActivitiesOrganizer ensureDbStructure:db];
-        
-        GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
-        
-        GCActivitiesOrganizerListRegister * listregister =[GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:service isFirst:YES];
-        [listregister addToOrganizer:organizer];
-        
-        [organizer release];
-        [parser release];
-    }];
-
-}
 
 @end
