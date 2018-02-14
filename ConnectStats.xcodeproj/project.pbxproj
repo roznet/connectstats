@@ -120,7 +120,7 @@
 		422CC8791E6ACA1700195414 /* FITFitFileDecode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4253B4891CDA953D00437E6A /* FITFitFileDecode.mm */; };
 		422CC87A1E6ACA1700195414 /* FITFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46371CDFE41600743D79 /* FITFitFile.m */; };
 		422CC87B1E6ACA1700195414 /* FITFitFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F3FB3E1DD7879B0042A9B1 /* FITFitFile.swift */; };
-		422CC87C1E6ACA1700195414 /* FITFitMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 423B46311CDFE2C400743D79 /* FITFitMessage.mm */; };
+		422CC87C1E6ACA1700195414 /* FITFitMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46311CDFE2C400743D79 /* FITFitMessage.m */; };
 		422CC87D1E6ACA1700195414 /* FITFitMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F3FB3C1DD7876F0042A9B1 /* FITFitMessage.swift */; };
 		422CC87E1E6ACA1700195414 /* FITFitMessageFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46341CDFE31A00743D79 /* FITFitMessageFields.m */; };
 		422CC87F1E6ACA1700195414 /* FITFitMessageFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42769BDE1DD71F58000390F1 /* FITFitMessageFields.swift */; };
@@ -148,7 +148,7 @@
 		422F52111DFB51F700DD5551 /* FITFitEnumMap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418471CF054B300642F37 /* FITFitEnumMap.mm */; };
 		422F52121DFB51F700DD5551 /* FITFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46371CDFE41600743D79 /* FITFitFile.m */; };
 		422F52131DFB51F700DD5551 /* FITFitFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F3FB3E1DD7879B0042A9B1 /* FITFitFile.swift */; };
-		422F52141DFB51F700DD5551 /* FITFitMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 423B46311CDFE2C400743D79 /* FITFitMessage.mm */; };
+		422F52141DFB51F700DD5551 /* FITFitMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46311CDFE2C400743D79 /* FITFitMessage.m */; };
 		422F52151DFB51F700DD5551 /* FITFitMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F3FB3C1DD7876F0042A9B1 /* FITFitMessage.swift */; };
 		422F52161DFB51F700DD5551 /* FITFitMessageFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46341CDFE31A00743D79 /* FITFitMessageFields.m */; };
 		422F52171DFB51F700DD5551 /* FITFitMessageFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42769BDE1DD71F58000390F1 /* FITFitMessageFields.swift */; };
@@ -357,7 +357,7 @@
 		4239CD6C1C4B93AE0059B83D /* GCCalendarDataMarkerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4239CD6A1C4B93AE0059B83D /* GCCalendarDataMarkerInfo.m */; };
 		4239E4CC19ABDA65000E67A2 /* GCStatsOneFieldConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 425257F919AB905300993F61 /* GCStatsOneFieldConfig.m */; };
 		423B462F1CDFE03400743D79 /* GCUnit+FIT.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B462E1CDFE03400743D79 /* GCUnit+FIT.m */; };
-		423B46321CDFE2C400743D79 /* FITFitMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 423B46311CDFE2C400743D79 /* FITFitMessage.mm */; };
+		423B46321CDFE2C400743D79 /* FITFitMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46311CDFE2C400743D79 /* FITFitMessage.m */; };
 		423B46351CDFE31A00743D79 /* FITFitMessageFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46341CDFE31A00743D79 /* FITFitMessageFields.m */; };
 		423B46381CDFE41600743D79 /* FITFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46371CDFE41600743D79 /* FITFitFile.m */; };
 		423F54131F6C6FE3004471E6 /* GCService.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959CD418D5ECC500C0B841 /* GCService.m */; };
@@ -468,7 +468,7 @@
 		426B0F0E1DA111AD0091A734 /* GCGarminSearchModernJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426B0F0C1DA111AD0091A734 /* GCGarminSearchModernJsonParser.m */; };
 		426B0F0F1DA119060091A734 /* FITFitFileDecode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4253B4891CDA953D00437E6A /* FITFitFileDecode.mm */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		426B0F101DA119060091A734 /* GCUnit+FIT.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B462E1CDFE03400743D79 /* GCUnit+FIT.m */; };
-		426B0F111DA119060091A734 /* FITFitMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 423B46311CDFE2C400743D79 /* FITFitMessage.mm */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		426B0F111DA119060091A734 /* FITFitMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46311CDFE2C400743D79 /* FITFitMessage.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		426B0F121DA119060091A734 /* FITFitMessageFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46341CDFE31A00743D79 /* FITFitMessageFields.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		426B0F131DA119060091A734 /* FITFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46371CDFE41600743D79 /* FITFitFile.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		426B0F141DA119060091A734 /* FITFitFieldValue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418421CF04FB800642F37 /* FITFitFieldValue.mm */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -2702,7 +2702,7 @@
 		423B462D1CDFE03400743D79 /* GCUnit+FIT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCUnit+FIT.h"; path = "src/GCUnit+FIT.h"; sourceTree = "<group>"; };
 		423B462E1CDFE03400743D79 /* GCUnit+FIT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCUnit+FIT.m"; path = "src/GCUnit+FIT.m"; sourceTree = "<group>"; };
 		423B46301CDFE2C400743D79 /* FITFitMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FITFitMessage.h; path = src/FITFitMessage.h; sourceTree = "<group>"; };
-		423B46311CDFE2C400743D79 /* FITFitMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FITFitMessage.mm; path = src/FITFitMessage.mm; sourceTree = "<group>"; };
+		423B46311CDFE2C400743D79 /* FITFitMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FITFitMessage.m; path = src/FITFitMessage.m; sourceTree = "<group>"; };
 		423B46331CDFE31A00743D79 /* FITFitMessageFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FITFitMessageFields.h; path = src/FITFitMessageFields.h; sourceTree = "<group>"; };
 		423B46341CDFE31A00743D79 /* FITFitMessageFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FITFitMessageFields.m; path = src/FITFitMessageFields.m; sourceTree = "<group>"; };
 		423B46361CDFE41600743D79 /* FITFitFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FITFitFile.h; path = src/FITFitFile.h; sourceTree = "<group>"; };
@@ -7677,7 +7677,7 @@
 				423B46371CDFE41600743D79 /* FITFitFile.m */,
 				42F3FB3E1DD7879B0042A9B1 /* FITFitFile.swift */,
 				423B46301CDFE2C400743D79 /* FITFitMessage.h */,
-				423B46311CDFE2C400743D79 /* FITFitMessage.mm */,
+				423B46311CDFE2C400743D79 /* FITFitMessage.m */,
 				42F3FB3C1DD7876F0042A9B1 /* FITFitMessage.swift */,
 				423B46331CDFE31A00743D79 /* FITFitMessageFields.h */,
 				423B46341CDFE31A00743D79 /* FITFitMessageFields.m */,
@@ -9703,7 +9703,7 @@
 				422FAEAA19A1DD6000D09773 /* GCActivityTennisShotValues.m in Sources */,
 				422F52161DFB51F700DD5551 /* FITFitMessageFields.m in Sources */,
 				42453BA71DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m in Sources */,
-				422F52141DFB51F700DD5551 /* FITFitMessage.mm in Sources */,
+				422F52141DFB51F700DD5551 /* FITFitMessage.m in Sources */,
 				422FAEAC19A1DD6000D09773 /* GCGarminLoginSSORequest.m in Sources */,
 				422FAEAD19A1DD6000D09773 /* GCGarminLoginWebRequest.m in Sources */,
 				422FAEB019A1DD6000D09773 /* GCDerivedOrganizer.m in Sources */,
@@ -9958,7 +9958,7 @@
 				42F3FB3D1DD7876F0042A9B1 /* FITFitMessage.swift in Sources */,
 				42F4E5091DE08C26001AB244 /* FITMapViewController.swift in Sources */,
 				42F3FB351DD783550042A9B1 /* GCFieldsDefs.m in Sources */,
-				423B46321CDFE2C400743D79 /* FITFitMessage.mm in Sources */,
+				423B46321CDFE2C400743D79 /* FITFitMessage.m in Sources */,
 				42BFC2301DCE2F7F00EAD40E /* FITOutlineViewController.swift in Sources */,
 				42F4E5121DE08D51001AB244 /* GCMapAnnotation.m in Sources */,
 				42DCEF851E181E3500F66AF1 /* FITFitValueStatistics.swift in Sources */,
@@ -10108,7 +10108,7 @@
 				422C70AE1642B677003779E0 /* GCHistoryAggregatedActivityStats.m in Sources */,
 				42200EC817EFA36A0078B45A /* GCWithingsRequestUserList.m in Sources */,
 				42EB51DA18AE2CF400B85FAB /* GCActivityTennisCuePoint.m in Sources */,
-				426B0F111DA119060091A734 /* FITFitMessage.mm in Sources */,
+				426B0F111DA119060091A734 /* FITFitMessage.m in Sources */,
 				421A514F1C82FA9400671587 /* GCCalendarDataDateMarkers.m in Sources */,
 				42EB516418A82BC900B85FAB /* GCActivityTennis.m in Sources */,
 				42C041C419A5D5F200FC20B3 /* GCHealthKitExportActivity.m in Sources */,
@@ -10566,7 +10566,7 @@
 				42CC45BF200A57EE003EB805 /* GCTestServiceStrava.m in Sources */,
 				427F937E1BEDFF4300C177F9 /* GCStatsHistGraphConfig.m in Sources */,
 				42E4FB411D7AB2740061BB38 /* GCSegmentOrganizer.swift in Sources */,
-				422CC87C1E6ACA1700195414 /* FITFitMessage.mm in Sources */,
+				422CC87C1E6ACA1700195414 /* FITFitMessage.m in Sources */,
 				42B5E2C81BA5B216000FAE4E /* GCHistoryFieldDataSerieConfig.m in Sources */,
 				42B5E2C91BA5B216000FAE4E /* GCHistoryFieldSummaryStats.m in Sources */,
 				42B5E2CA1BA5B216000FAE4E /* GCHistoryAggregatedActivityStats.m in Sources */,

@@ -111,7 +111,7 @@ FIT_GET_NUMUNIT_FIELD( @"EnhancedMaxAltitude", GetEnhancedMaxAltitude, FIT_FLOAT
 FIT_GET_NUMUNIT_FIELD( @"AvgLevMotorPower", GetAvgLevMotorPower, FIT_UINT16_INVALID, @"watt" );
 FIT_GET_NUMUNIT_FIELD( @"MaxLevMotorPower", GetMaxLevMotorPower, FIT_UINT16_INVALID, @"watt" );
 FIT_GET_NUMUNIT_FIELD( @"LevBatteryConsumption", GetLevBatteryConsumption, FIT_FLOAT32_INVALID, @"percent" );
-FIT_GET_NUMUNIT_FIELD( @"AvgVerticalRatio", GetAvgVerticalRatio, FIT_FLOAT32_INVALID, @"percent" );
+FIT_GET_NUMUNIT_FIELD( @"WeightedMeanVerticalRatio", GetAvgVerticalRatio, FIT_FLOAT32_INVALID, @"percent" );
 FIT_GET_NUMUNIT_FIELD( @"AvgStanceTimeBalance", GetAvgStanceTimeBalance, FIT_FLOAT32_INVALID, @"percent" );
 FIT_GET_NUMUNIT_FIELD( @"AvgStepLength", GetAvgStepLength, FIT_FLOAT32_INVALID, @"millimeter" );
 FIT_GET_NUMUNIT_FIELD( @"TotalAnaerobicTrainingEffect", GetTotalAnaerobicTrainingEffect, FIT_FLOAT32_INVALID, @"millimeter" );

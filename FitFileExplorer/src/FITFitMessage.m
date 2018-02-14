@@ -16,46 +16,30 @@
 @property (nonatomic,strong) NSString * messageType;
 @property (nonatomic,strong) NSMutableDictionary<NSString*,FITFitFieldValue*> * samples;
 
-@property (nonatomic,assign) fit::Mesg * originalMesg;
-
 @end
 
 @implementation FITFitMessage
 -(instancetype)init{
     self = [super init];
-    if(self){
-        _originalMesg = nullptr;
-    }
     return self;
 }
--(void)dealloc{
-    if (_originalMesg) {
-        delete _originalMesg;
-    }
 #if !__has_feature(objc_arc)
+-(void)dealloc{
     [_fields release];
     [_messageType release];
     [_samples release];
     
     [super dealloc];
-#endif
 }
+#endif
+
 -(NSString*)description{
     return [NSString stringWithFormat:@"<%@:%@[%lu keys, %lu values]>", NSStringFromClass([self class]),
             self.messageType,
             (unsigned long)self.samples.count,
             (unsigned long)self.fields.count];
 }
--(void)setFromMesg:(fit::Mesg *)mesg{
-    if( _originalMesg ){
-        delete _originalMesg;
-    }
-    self.originalMesg = new fit::Mesg(*mesg);
-}
 
--(fit::Mesg*)mesg{
-    return self.originalMesg;
-}
 
 +(FITFitMessage*)messageWithType:(NSString*)type{
     FITFitMessage * rv = RZReturnAutorelease([[FITFitMessage alloc] init]);
@@ -63,7 +47,6 @@
         rv.messageType = type;
         rv.fields = [NSMutableArray array];
         rv.samples = [NSMutableDictionary dictionary];
-        rv.originalMesg = nil;
     }
     return rv;
 }

@@ -605,6 +605,7 @@
     
     NSDictionary * expectedMissingFromGC = @{@"WeightedMeanCadence":@1, @"MaxCadence":@2, @"WeightedMeanElevation":@3,@"MinCadence":@4,
                                              @"MinElevation":@5,@"MaxElevation":@6,// elevation is all messed up (elevation correction)
+                                             @"total_cycles":@7,@"enhanced_max_speed":@8,@"avg_step_length":@9
                                              };
     
     for (GCField * field in sum_fit) {
@@ -621,7 +622,7 @@
             eps = specialEps.doubleValue;
         }
         
-        if(  [v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] != NSOrderedSame ){
+        if( v_gc == nil || [v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] != NSOrderedSame ){
             //SetBreakpoint
         }
         XCTAssertTrue([v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] == NSOrderedSame,

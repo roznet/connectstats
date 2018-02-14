@@ -142,20 +142,22 @@
         
         GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        XCTAssertGreaterThan(act.trackpoints.count, 1);
     }];
     
     
 }
 
--(void)disabletestPerformanceParsingFit{
+-(void)testPerformanceParsingFit{
     NSString * aId = @"1083407258";
     NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
     
     [self measureBlock:^{
         FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
         [fitDecode parse];
-        [[[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile] release];
-        
+        GCActivity * act = [[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile];
+        XCTAssertGreaterThan(act.trackpoints.count, 1);
+        [act release];
     }];
     
 }

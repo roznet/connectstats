@@ -7,19 +7,19 @@
 //
 
 #define FIT_USE_STDINT_H
-
 #import "FITFitFieldValue.h"
 #import "RZUtils/RZUtils.h"
 #import <RZExternalCpp/RZExternalCpp.h>
 #import "GCUnit+FIT.h"
 #import "FITFitEnumMap.h"
 #define SEMICIRCLE_TO_DEGREE(x) (double)x*(180./2147483648.)
+//#define GC_SAVE_FIELD
 
 @interface FITFitFieldValue ()
 
-@property (nonatomic,assign) fit::Field * originalField;
-@property (nonatomic,assign) fit::Field * complementField;
-@property (nonatomic,assign) fit::DeveloperField * developerField;
+@property (nonatomic,assign) FIT_MANUFACTURER manufacturer;
+@property (nonatomic,assign) BOOL isDeveloperField;
+@property (nonatomic,assign) FIT_UINT8 baseType;
 
 @end
 
@@ -28,9 +28,6 @@
 +(nullable FITFitFieldValue*)fieldValueFrom:(const fit::Field&)ff{
     FITFitFieldValue * rv = RZReturnAutorelease([[FITFitFieldValue alloc] init]);
     if( rv){
-        rv.originalField = nil;
-        rv.complementField = nil;
-        rv.developerField = nil;
         [rv setFromField:ff];
     }
     return rv;
@@ -39,25 +36,13 @@
 +(nullable FITFitFieldValue*)fieldValueFromDeveloper:(const fit::DeveloperField&)ff{
     FITFitFieldValue * rv = RZReturnAutorelease([[FITFitFieldValue alloc] init]);
     if( rv){
-        rv.originalField = nil;
-        rv.complementField = nil;
-        rv.developerField = nil;
         [rv setFromDeveloperField:ff];
     }
     return rv;
 
 }
--(void)dealloc{
-    if( _originalField){
-        delete _originalField;
-    }
-    if( _complementField){
-        delete _complementField;
-    }
-    if( _developerField){
-        delete _developerField;
-    }
 #if !__has_feature(objc_arc)
+-(void)dealloc{
     [_stringValue release];
     [_dateValue release];
     [_numberWithUnit release];
@@ -65,68 +50,29 @@
     [_locationValue release];
     [_fieldKey release];
     [super dealloc];
-#endif
 }
+#endif
 
 #pragma mark - Setup 
 
 -(void)setFromField:(const fit::Field &)field{
-    if( _originalField ){
-        delete _originalField;
-    }
-    if( _developerField ){
-        delete _developerField;
-    }
-    _originalField = new fit::Field(field);
-    _developerField = nil;
+    self.isDeveloperField = false;
     [self setFromFieldBase:field];
 }
 
--(void)setFromDeveloperField:(const fit::DeveloperField &)field{
-    if( _developerField ){
-        delete _developerField;
-    }
-    if( _originalField){
-        delete _originalField;
-    }
-    _developerField = new fit::DeveloperField(field);
-    _originalField = nil;
-    
-    
-    
-    [self setFromFieldBase:field];
+-(void)setFromDeveloperField:(const fit::DeveloperField &)developerField{
+    self.isDeveloperField = true;
+    self.manufacturer = developerField.GetDefinition().GetDeveloper().GetManufacturerId();
+    [self setFromFieldBase:developerField];
 }
-
--(NSString*)fieldSource{
-    NSString * rv = @"";
-    if( _developerField ){
-        if( _developerField->GetDefinition().GetDeveloper().IsManufacturerIdValid()){
-            FIT_MANUFACTURER fact = _developerField->GetDefinition().GetDeveloper().GetManufacturerId();
-            rv =  [FITFitEnumMap defsFor:@"FIT_MANUFACTURER" andKey:@(fact)];
-        }else{
-            FIT_UINT8 n = _developerField->GetDefinition().GetDeveloper().GetNumDeveloperId();
-            if( n > 0){
-                NSMutableString * devid = [NSMutableString string];
-                for (FIT_UINT8 i=0; i<n; i++) {
-                    [devid appendFormat:@"%@", @(_developerField->GetDefinition().GetDeveloper().GetDeveloperId(i))];
-                }
-                rv = devid;
-            }
-        }
-    }
-    return rv;
-}
-
 -(NSString*)derivedFieldKey:(const fit::FieldBase&)field{
     NSString * base = [NSString stringWithUTF8String:field.GetName().c_str()];
-    if( _developerField ){
+    if( self.isDeveloperField ){
         NSString * prefix = @"developer";
-        if( _developerField->GetDefinition().GetDeveloper().IsManufacturerIdValid()){
-            FIT_MANUFACTURER fact = _developerField->GetDefinition().GetDeveloper().GetManufacturerId();
-            prefix =  [FITFitEnumMap defsFor:@"FIT_MANUFACTURER" andKey:@(fact)] ?: prefix;
+        if( self.manufacturer != FIT_MANUFACTURER_INVALID){
+            prefix =  [FITFitEnumMap defsFor:@"FIT_MANUFACTURER" andKey:@(self.manufacturer)] ?: prefix;
         }
         base = [prefix stringByAppendingFormat:@"_%@", base];
-
     }
     return base;
 }
@@ -135,10 +81,10 @@
     
     int j = 0;
     self.fieldKey = [self derivedFieldKey:field];
-    
+    self.baseType = field.GetType();
     NSNumber * numberValue = nil;
     
-    switch (field.GetType())
+    switch (self.baseType)
     {
         case FIT_BASE_TYPE_ENUM:
             numberValue = @( field.GetENUMValue(j) );
@@ -195,7 +141,6 @@
         numberValue = @( n.doubleValue / scale - offset );
     }
     
-    
     NSString * unitStr = [NSString stringWithUTF8String:field.GetUnits().c_str()];
     GCUnit * unit = [GCUnit unitForFitUnit:unitStr];
     
@@ -235,12 +180,6 @@
         NSString * prefix = [self.fieldKey substringToIndex:(self.fieldKey.length-4)];
         if( [other.fieldKey isEqualToString:[prefix stringByAppendingString:@"_long"]] ){
             rv = RZReturnAutorelease([[FITFitFieldValue alloc] init]);
-            rv.originalField = self.originalField;
-            rv.complementField = other.complementField;
-
-            self.originalField = nil;
-            other.originalField = nil;
-            // take ownership of other field
             
             double latSemi  = self.numberWithUnit.value;
             double longSemi = other.numberWithUnit.value;
@@ -254,64 +193,52 @@
     return rv;
 }
 
-#pragma mark - Access
-
--(fit::Field*)field{
-    return self.originalField;
-}
--(fit::Field*)additionalField{
-    return self.complementField;
-}
-
 #pragma mark - display and description
 
 -(NSString*)typeDescription{
     NSString * rv = nil;
-    if( _originalField ){
-        FIT_UINT8 fitBaseType = _originalField->GetType();
-        switch (fitBaseType)
-        {
-            case FIT_BASE_TYPE_ENUM:
-                rv = @"FIT_BASE_TYPE_ENUM";
-                break;
-            case FIT_BASE_TYPE_SINT8:
-                rv = @"FIT_BASE_TYPE_SINT8";
-                break;
-            case FIT_BASE_TYPE_UINT8:
-                rv = @"FIT_BASE_TYPE_UINT8";
-                break;
-            case FIT_BASE_TYPE_SINT16:
-                rv = @"FIT_BASE_TYPE_SINT16";
-                break;
-            case FIT_BASE_TYPE_UINT16:
-                rv = @"FIT_BASE_TYPE_UINT16";
-                break;
-            case FIT_BASE_TYPE_SINT32:
-                rv = @"FIT_BASE_TYPE_SINT32";
-                break;
-            case FIT_BASE_TYPE_UINT32:
-                rv = @"FIT_BASE_TYPE_UINT32";
-                break;
-            case FIT_BASE_TYPE_FLOAT32:
-                rv = @"FIT_BASE_TYPE_FLOAT32";
-                break;
-            case FIT_BASE_TYPE_FLOAT64:
-                rv = @"FIT_BASE_TYPE_FLOAT64";
-                break;
-            case FIT_BASE_TYPE_UINT8Z:
-                rv = @"FIT_BASE_TYPE_UINT8Z";
-                break;
-            case FIT_BASE_TYPE_UINT16Z:
-                rv = @"FIT_BASE_TYPE_UINT16Z";
-                break;
-            case FIT_BASE_TYPE_UINT32Z:
-                rv = @"FIT_BASE_TYPE_UINT32Z";
-                break;
-            case FIT_BASE_TYPE_STRING:
-                rv = @"FIT_BASE_TYPE_STRING";
-            default:
-                break;
-        }
+    switch (self.baseType)
+    {
+        case FIT_BASE_TYPE_ENUM:
+            rv = @"FIT_BASE_TYPE_ENUM";
+            break;
+        case FIT_BASE_TYPE_SINT8:
+            rv = @"FIT_BASE_TYPE_SINT8";
+            break;
+        case FIT_BASE_TYPE_UINT8:
+            rv = @"FIT_BASE_TYPE_UINT8";
+            break;
+        case FIT_BASE_TYPE_SINT16:
+            rv = @"FIT_BASE_TYPE_SINT16";
+            break;
+        case FIT_BASE_TYPE_UINT16:
+            rv = @"FIT_BASE_TYPE_UINT16";
+            break;
+        case FIT_BASE_TYPE_SINT32:
+            rv = @"FIT_BASE_TYPE_SINT32";
+            break;
+        case FIT_BASE_TYPE_UINT32:
+            rv = @"FIT_BASE_TYPE_UINT32";
+            break;
+        case FIT_BASE_TYPE_FLOAT32:
+            rv = @"FIT_BASE_TYPE_FLOAT32";
+            break;
+        case FIT_BASE_TYPE_FLOAT64:
+            rv = @"FIT_BASE_TYPE_FLOAT64";
+            break;
+        case FIT_BASE_TYPE_UINT8Z:
+            rv = @"FIT_BASE_TYPE_UINT8Z";
+            break;
+        case FIT_BASE_TYPE_UINT16Z:
+            rv = @"FIT_BASE_TYPE_UINT16Z";
+            break;
+        case FIT_BASE_TYPE_UINT32Z:
+            rv = @"FIT_BASE_TYPE_UINT32Z";
+            break;
+        case FIT_BASE_TYPE_STRING:
+            rv = @"FIT_BASE_TYPE_STRING";
+        default:
+            break;
     }
     if (rv) {
         return rv;
@@ -331,7 +258,7 @@
     }else if (self.numberWithUnit){
         type = @"Number";
     }else if(self.locationValue){
-        type = @"Loation";
+        type = @"Location";
     }
     return [NSString stringWithFormat:@"<%@[%@]=%@>", NSStringFromClass([self class]), type, self.displayString];
 }

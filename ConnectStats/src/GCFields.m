@@ -772,6 +772,15 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     if (info) {
         return info.displayName;
     }
+    if( [afield rangeOfString:@"_"].location == NSNotFound){
+        NSString * rv = [afield fromCamelCaseToSeparatedByString:@" "];
+        if( [rv hasPrefix:@"WeightedMean"]){
+            rv = [rv stringByReplacingOccurrencesOfString:@"WeightedMean" withString:@"Avg"];
+        }
+                  return rv;
+    }else{
+        return [afield dashSeparatedToSpaceCapitalized];
+    }
     return nil;
 }
 +(NSString*)predefinedUomForField:(NSString*)afield andActivityType:(NSString*)atype{

@@ -54,11 +54,4 @@
 -(BOOL)containsDateKey:(NSString*)key;
 @end
 
-#if __cplusplus
-#import <RZExternalCpp/RZExternalCpp.h>
-@interface FITFitMessage (cplusplus)
--(void)setFromMesg:(fit::Mesg*)mesg;
--(fit::Mesg*)mesg;
-@end
 
-#endif
