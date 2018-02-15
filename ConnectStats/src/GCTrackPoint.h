@@ -70,17 +70,16 @@
  */
 @property (nonatomic,assign) NSUInteger trackFlags;
 @property (nonatomic,readonly) NSDictionary<GCField*,GCNumberWithUnit*>*calculated;
+@property (nonatomic,readonly) NSDictionary<GCField*,GCNumberWithUnit*>*extra;
+//@property (nonatomic,readonly) NSArray<GCField*>*availableFields;
 
-
-/**
- @brief extra fields values. Either null or array of size kMaxExtraIndex
- */
-@property (nonatomic,assign) double * fieldValues;
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithDictionary:(NSDictionary*)aDict forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
+-(GCTrackPoint*)initWithTrackPoint:(GCTrackPoint*)other NS_DESIGNATED_INITIALIZER;
 -(void)saveToDb:(FMDatabase*)trackdb;
+-(void)addExtraFromResultSet:(FMResultSet*)res andActivityType:(NSString*)aType;
 
 +(GCTrackPoint*)trackPointWithCoordinate2D:(CLLocationCoordinate2D)coord;
 +(GCTrackPoint*)trackPointWithCoordinate2D:(CLLocationCoordinate2D)coord
@@ -90,7 +89,7 @@
 
 -(BOOL)updateInActivity:(GCActivity*)act fromTrackpoint:(GCTrackPoint*)other fromActivity:(GCActivity*)otheract forFields:(NSArray<GCField*>*)fields;
 
--(NSString*)fullDescription:(NSString*)atype;
+-(NSString*)fullDescriptionInActivity:(GCActivity*)act;
 
 -(NSString*)displayLabel;
 
@@ -102,20 +101,23 @@
 -(NSComparisonResult)compareTime:(GCTrackPoint*)other;
 
 // MOVE TO PRIVATE:
-//-(BOOL)hasField:(gcFieldFlag)afield DEPRECATED_MSG_ATTRIBUTE("use allFields on activity");
 -(void)setValue:(double)val forField:(gcFieldFlag)aField;
 -(double)extraValueForIndex:(GCTrackPointExtraIndex*)idx;
--(void)setExtraValue:(double)val forIndex:(GCTrackPointExtraIndex*)idx;
+//-(void)setExtraValue:(double)val forIndex:(GCTrackPointExtraIndex*)idx;
 -(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(GCActivity*)act;
 // END PRIVATE
 
 +(GCUnit*)unitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;
 -(GCNumberWithUnit*)numberWithUnitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;
 
+-(void)updateWithExtra:(NSDictionary<GCField*,GCNumberWithUnit*>*)other;
+
 -(void)add:(GCTrackPoint*)other withAccrued:(double)accrued timeAxis:(BOOL)timeAxis;
 
 -(void)mergeWith:(GCTrackPoint*)other;
 -(BOOL)realisticForActivityType:(NSString*)aType;
+
+-(NSArray<GCField*>*)availableFieldsInActivity:(GCActivity*)act;
 
 // for derived classes
 /**

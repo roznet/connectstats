@@ -72,7 +72,7 @@
 -(NSString*)category;
 -(NSInteger)sortOrder;
 
--(NSArray*)relatedFields;
+-(NSArray<GCField*>*)relatedFields;
 
 -(BOOL)isHealthField;
 -(BOOL)isCalculatedField;

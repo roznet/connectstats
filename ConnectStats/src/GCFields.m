@@ -144,22 +144,6 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
 
 #pragma mark - Field Properties
 
-+(BOOL)fieldAverageIsweighted:(NSString*)field{
-    return [field hasPrefix:@"WeightedMean"];
-}
-+(BOOL)fieldCanAverage:(NSString*)field{
-    return true;
-}
-
-+(BOOL)fieldIsMax:(NSString*)field{
-    return [field hasPrefix:@"Max"];
-}
-+(BOOL)fieldCanSum:(NSString*)field{
-    if ([field isEqualToString:@"SumTrainingEffect"] || [field isEqualToString:@"SumIntensityFactor"]) {
-        return NO;
-    }
-    return [field hasPrefix:@"Sum"] || [field isEqualToString:@"GainElevation"] || [field isEqualToString:@"LossElevation"] || [field isEqualToString:@"shots"];
-}
 
 //NEWTRACKFIELD
 +(BOOL)trackFieldCanSum:(gcFieldFlag)field{
@@ -188,14 +172,6 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
 
     }
     return false;
-}
-
-//NEWTRACKFIELD
-+(BOOL)noisyField:(gcFieldFlag)aTrackField forActivityType:(NSString*)aType{
-    if ([aType isEqualToString:GC_TYPE_SWIMMING]) {
-        return false;
-    }
-    return aTrackField == gcFieldFlagCadence || aTrackField == gcFieldFlagWeightedMeanSpeed || aTrackField == gcFieldFlagPower || aTrackField == gcFieldFlagVerticalOscillation || aTrackField == gcFieldFlagGroundContactTime;
 }
 
 +(NSString*)calcOrFieldFor:(NSString*)field{
@@ -270,89 +246,6 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
             reported[field] = field;
         }
     }
-}
-
-+(NSArray*)relatedFields:(NSString*)field{
-    NSArray<NSString*> * prefixes = @[@"WeightedMean", @"WeightedMeanMoving", @"Max", @"Min"];
-    static NSArray * _groups = nil;
-    static NSArray * _exceptions = nil;
-
-    if (_groups==nil) {
-
-
-        _groups = @[
-                   @[@"SumDuration", @"SumElapsedDuration", @"SumMovingDuration" ],
-                   @[@"SumDistance", @"GainElevation",      @"LossElevation", @"MaxElevation"],
-                   @[@"SumEnergy",   @"SumTrainingEffect",  CALC_ENERGY,      CALC_METABOLIC_EFFICIENCY],
-
-                   @[@"SumIntensityFactor",          @"SumTrainingStressScore"],
-                   @[@"WeightedMeanNormalizedPower", CALC_NONZERO_POWER, @"WeightedMeanLeftBalance", @"WeightedMeanRightBalance"],
-                   @[@"WeightedMeanRunCadence",      @"MaxRunCadence",           CALC_STRIDE_LENGTH],
-                   @[@"WeightedMeanBikeCadence",     @"MaxBikeCadence",          CALC_DEVELOPMENT],
-                   @[CALC_NORMALIZED_POWER,          CALC_NONZERO_POWER],
-                   @[CALC_ALTITUDE_GAIN,             CALC_ALTITUDE_LOSS],
-                   @[@"WeightedMeanVerticalOscillation", @"WeightedMeanGroundContactTime"],
-                   @[@"DirectVO2Max", @"DirectLactateThresholdHeartRate"],
-                   @[@"WeightedMeanVerticalRatio",@"WeightedMeanGroundContactBalanceLeft"],
-                   @[CALC_ASCENT_SPEED, CALC_MAX_ASCENT_SPEED],
-                   @[CALC_DESCENT_SPEED, CALC_MAX_DESCENT_SPEED],
-                   @[CALC_VERTICAL_SPEED, CALC_ASCENT_SPEED, CALC_DESCENT_SPEED],
-
-                   ];
-        RZRetain(_groups);
-        NSMutableArray * found = [NSMutableArray arrayWithCapacity:5];
-        for (NSArray * one in _groups) {
-            for (NSString * str in one) {
-                for (NSString * prefix in prefixes) {
-                    if ([str hasPrefix:prefix]) {
-                        [found addObject:str];
-                    }
-                }
-            }
-        }
-        _exceptions = RZReturnRetain(found);
-    }
-
-    NSMutableArray * rv = nil;
-
-    NSString * suffix = nil;
-    // Exception without min/max
-    if (![_exceptions containsObject:field]) {
-        for (NSString * prefix in prefixes) {
-            if ([field hasPrefix:prefix]) {
-                suffix = [field substringFromIndex:prefix.length];
-                break;
-            }
-        }
-    }
-    if (suffix) {
-        rv = [NSMutableArray arrayWithCapacity:prefixes.count];
-        // special case
-        if ([suffix isEqualToString:@"Power"]) {
-            [rv addObject:@"MaxPowerTwentyMinutes"];
-        }
-        for (NSString * prefix in prefixes) {
-            NSString * newF=[prefix stringByAppendingString:suffix];
-            if (![newF isEqualToString:field]) {
-                [rv addObject:newF];
-            }
-        }
-    }else{
-        NSArray * groups = _groups;
-
-        for (NSArray * group in groups) {
-            if ([group containsObject:field]) {
-                rv = [NSMutableArray arrayWithCapacity:group.count];
-                for (NSString * f in group) {
-                    if (![f isEqualToString:field]) {
-                        [rv addObject:f];
-                    }
-                }
-                break;
-            }
-        }
-    }
-    return rv;
 }
 
 +(BOOL)skipField:(NSString*)field{
@@ -503,7 +396,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     return valid[c];
 }
 
-+(NSArray*)availableFieldsIn:(NSUInteger)flag forActivityType:(NSString*)atype{
++(NSArray<GCField*>*)availableFieldsIn:(NSUInteger)flag forActivityType:(NSString*)atype{
     NSArray * found = [GCFields availableTrackFieldsIn:flag];
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:found.count];
     for (NSNumber * one in found) {

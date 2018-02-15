@@ -266,12 +266,28 @@ static void registerInCache(GCField*field){
 }
 
 -(BOOL)isNoisy{
-    return [GCFields noisyField:self.fieldFlag forActivityType:self.activityType];
+    if ([self.activityType isEqualToString:GC_TYPE_SWIMMING]) {
+        return false;
+    }
+    gcFieldFlag aTrackField = self.fieldFlag;
+    
+    return aTrackField == gcFieldFlagCadence ||
+        aTrackField == gcFieldFlagWeightedMeanSpeed ||
+        aTrackField == gcFieldFlagPower ||
+        aTrackField == gcFieldFlagVerticalOscillation ||
+        aTrackField == gcFieldFlagGroundContactTime;
+
 }
 
 -(BOOL)canSum{
-    return [GCFields fieldCanSum:self.key];
+    NSString * field = self.key;
+    
+    if ([field isEqualToString:@"SumTrainingEffect"] || [field isEqualToString:@"SumIntensityFactor"]) {
+        return NO;
+    }
+    return [field hasPrefix:@"Sum"] || [field isEqualToString:@"GainElevation"] || [field isEqualToString:@"LossElevation"] || [field isEqualToString:@"shots"];
 }
+
 -(BOOL)validForGraph{
     if (self.fieldFlag == gcFieldFlagSumDistance || self.fieldFlag == gcFieldFlagSumDuration) {
         return false;
@@ -453,13 +469,84 @@ static void registerInCache(GCField*field){
     return rv;
 }
 
--(NSArray*)relatedFields{
-    NSArray * related = [GCFields relatedFields:self.key];
-    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:related.count];
-    for (NSString * key in related) {
-        [rv addObject:[GCField field:key forActivityType:self.activityType]];
+-(NSArray<GCField*>*)relatedFields{
+    NSArray<NSString*> * prefixes = @[@"WeightedMean", @"WeightedMeanMoving", @"Max", @"Min"];
+    static NSArray<NSArray<NSString*>*> * _groups = nil;
+    static NSArray<NSString*> * _exceptions = nil;
+    
+    if (_groups==nil) {
+        _groups = @[
+                    @[@"SumDuration", @"SumElapsedDuration", @"SumMovingDuration" ],
+                    @[@"SumDistance", @"GainElevation",      @"LossElevation", @"MaxElevation"],
+                    @[@"SumEnergy",   @"SumTrainingEffect",  CALC_ENERGY,      CALC_METABOLIC_EFFICIENCY],
+                    
+                    @[@"SumIntensityFactor",          @"SumTrainingStressScore"],
+                    @[@"WeightedMeanNormalizedPower", CALC_NONZERO_POWER, @"WeightedMeanLeftBalance", @"WeightedMeanRightBalance"],
+                    @[@"WeightedMeanRunCadence",      @"MaxRunCadence",           CALC_STRIDE_LENGTH],
+                    @[@"WeightedMeanBikeCadence",     @"MaxBikeCadence",          CALC_DEVELOPMENT],
+                    @[CALC_NORMALIZED_POWER,          CALC_NONZERO_POWER],
+                    @[CALC_ALTITUDE_GAIN,             CALC_ALTITUDE_LOSS],
+                    @[@"WeightedMeanVerticalOscillation", @"WeightedMeanGroundContactTime"],
+                    @[@"DirectVO2Max", @"DirectLactateThresholdHeartRate"],
+                    @[@"WeightedMeanVerticalRatio",@"WeightedMeanGroundContactBalanceLeft"],
+                    @[CALC_ASCENT_SPEED, CALC_MAX_ASCENT_SPEED],
+                    @[CALC_DESCENT_SPEED, CALC_MAX_DESCENT_SPEED],
+                    @[CALC_VERTICAL_SPEED, CALC_ASCENT_SPEED, CALC_DESCENT_SPEED],
+                    
+                    ];
+        RZRetain(_groups);
+        NSMutableArray * found = [NSMutableArray arrayWithCapacity:5];
+        for (NSArray * one in _groups) {
+            for (NSString * str in one) {
+                for (NSString * prefix in prefixes) {
+                    if ([str hasPrefix:prefix]) {
+                        [found addObject:str];
+                    }
+                }
+            }
+        }
+        _exceptions = RZReturnRetain(found);
+    }
+    
+    NSMutableArray<GCField*> * rv = nil;
+    
+    NSString * suffix = nil;
+    // Exception without min/max
+    if (![_exceptions containsObject:self.key]) {
+        for (NSString * prefix in prefixes) {
+            if ([self.key hasPrefix:prefix]) {
+                suffix = [self.key substringFromIndex:prefix.length];
+                break;
+            }
+        }
+    }
+    if (suffix) {
+        rv = [NSMutableArray arrayWithCapacity:prefixes.count];
+        // special case
+        if ([suffix isEqualToString:@"Power"]) {
+            [rv addObject:[GCField fieldForKey:@"MaxPowerTwentyMinutes" andActivityType:self.activityType ]];
+        }
+        for (NSString * prefix in prefixes) {
+            NSString * newF=[prefix stringByAppendingString:suffix];
+            if (![newF isEqualToString:self.key]) {
+                [rv addObject:[GCField fieldForKey:newF andActivityType:self.activityType]];
+            }
+        }
+    }else{
+        NSArray * groups = _groups;
+        
+        for (NSArray * group in groups) {
+            if ([group containsObject:self.key]) {
+                rv = [NSMutableArray arrayWithCapacity:group.count];
+                for (NSString * f in group) {
+                    if (![f isEqualToString:self.key]) {
+                        [rv addObject:[GCField fieldForKey:false andActivityType:self.activityType]];
+                    }
+                }
+                break;
+            }
+        }
     }
     return rv;
-
 }
 @end

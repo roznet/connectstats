@@ -396,9 +396,9 @@
     });
 }
 
--(void)stravaDownloadActivityTrackPoints:(NSString*)aId{
+-(void)stravaDownloadActivityTrackPoints:(GCActivity*)act{
     if ([GCAppGlobal currentNavigationController] && [[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
-        [self addRequest:[GCStravaActivityStreams stravaActivityStream:[GCAppGlobal currentNavigationController] for:aId]];
+        [self addRequest:[GCStravaActivityStreams stravaActivityStream:[GCAppGlobal currentNavigationController] for:act]];
     }
 }
 

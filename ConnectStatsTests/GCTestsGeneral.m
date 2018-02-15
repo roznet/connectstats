@@ -645,6 +645,8 @@
 
 -(void)testAccumulateTrack{
     
+    GCActivity * dummy = [[[GCActivity alloc] init] autorelease];
+    dummy.activityType = GC_TYPE_RUNNING;
     
     GCLap * lap = [[[GCLap alloc] init] autorelease];
     
@@ -661,7 +663,7 @@
     
     // 60 seconds of this
     for (NSUInteger i=0; i<60; i++) {
-        [lap accumulateFrom:from to:to];
+        [lap accumulateFrom:from to:to inActivity:dummy];
     }
     XCTAssertEqualWithAccuracy(lap.distanceMeters, 600., 1e-7, @"distance after 1min");
     XCTAssertEqualWithAccuracy(lap.speed, 10., 1e-7, @"speed after 1min");
@@ -670,7 +672,7 @@
     from.heartRateBpm = 140.;
     
     for (NSUInteger i=0; i<60; i++) {
-        [lap accumulateFrom:from to:to];
+        [lap accumulateFrom:from to:to  inActivity:dummy];
         XCTAssertTrue(lap.speed-10.> 0.001, @"Speed > 10");
     }
     XCTAssertEqualWithAccuracy(lap.distanceMeters, 1800., 1e-7, @"distance after 1min");

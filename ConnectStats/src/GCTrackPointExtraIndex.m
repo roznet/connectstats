@@ -26,8 +26,6 @@
 #import "GCTrackPointExtraIndex.h"
 #import "GCField.h"
 
-size_t kMaxExtraIndex = 16;
-
 @interface GCTrackPointExtraIndex ()
 
 @end
@@ -39,10 +37,8 @@ size_t kMaxExtraIndex = 16;
         return cache[field];
     }
     size_t nextidx = cache.count;
-    if (nextidx < kMaxExtraIndex) {
-        return [GCTrackPointExtraIndex extraIndex:nextidx field:field andUnit:unit];
-    }
-    return nil;
+    
+    return [GCTrackPointExtraIndex extraIndex:nextidx field:field andUnit:unit];
 }
 
 +(GCTrackPointExtraIndex*)extraIndex:(size_t)idx field:(GCField*)field andUnit:(GCUnit*)unit{

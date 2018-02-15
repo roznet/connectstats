@@ -33,23 +33,27 @@
 
 @interface GCStravaActivityStreams ()
 @property (nonatomic,assign) BOOL inError;
+@property (nonatomic,readonly) NSString * activityId;
 
 @end
 
 @implementation GCStravaActivityStreams
-+(GCStravaActivityStreams*)stravaActivityStream:(UINavigationController*)nav for:(NSString*)stravaId{
++(GCStravaActivityStreams*)stravaActivityStream:(UINavigationController*)nav for:(GCActivity*)act{
     GCStravaActivityStreams * rv = [[[GCStravaActivityStreams alloc] init] autorelease];
     if (rv) {
         rv.navigationController = nav;
-        rv.activityId = stravaId;
+        rv.activity = act;
     }
     return rv;
 }
 -(void)dealloc{
-    [_activityId release];
+    [_activity release];
     [_points release];
     [_laps release];
     [super dealloc];
+}
+-(NSString*)activityId{
+    return self.activity.activityId;
 }
 -(NSString*)url{
     if (self.navigationController) {
@@ -128,7 +132,7 @@
 
 -(void)parseLaps{
     self.laps = @[];
-    GCStravaActivityLapsParser * parser = [GCStravaActivityLapsParser activityLapsParser:[self.theString dataUsingEncoding:self.encoding] withPoints:self.points];
+    GCStravaActivityLapsParser * parser = [GCStravaActivityLapsParser activityLapsParser:[self.theString dataUsingEncoding:self.encoding] withPoints:self.points inActivity:self.activity];
     [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpoints:self.points andLaps:parser.laps];
     [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
 
@@ -139,7 +143,7 @@
         return nil;
     }
     if (self.navigationController || !self.laps) {
-        GCStravaActivityStreams * next = [GCStravaActivityStreams stravaActivityStream:nil for:self.activityId];
+        GCStravaActivityStreams * next = [GCStravaActivityStreams stravaActivityStream:nil for:self.activity];
         next.stravaAuth = self.stravaAuth;
         next.points = self.points;
         return next;

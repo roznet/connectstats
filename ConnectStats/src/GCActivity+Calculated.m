@@ -47,7 +47,7 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
         GCLap * lap = [[[GCLap alloc] init] autorelease];
 
         for (GCTrackPoint * point in self.trackpoints) {
-            [lap accumulateFrom:lastPoint to:point];
+            [lap accumulateFrom:lastPoint to:point inActivity:self];
             lastPoint = point;
             BOOL isLap = match(lap,nil,val,true);
             if (isLap) {
@@ -61,12 +61,12 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
 
 -(GCActivityMatchLapBlock)matchDistanceBlockEqual{
     return
-        ^(GCLap*l,GCLap*diff,double valueMeters,BOOL interp){
+        Block_copy(^(GCLap*l,GCLap*diff,double valueMeters,BOOL interp){
             //if (l.distanceMeters-valueMeters < diff.distanceMeters && l.distanceMeters > valueMeters) {
             if (fabs(l.distanceMeters-valueMeters) < diff.distanceMeters ) {
                 if (interp) {
                     double delta = (valueMeters-l.distanceMeters)/diff.distanceMeters;
-                    [l interpolate:delta within:diff];
+                    [l interpolate:delta within:diff inActivity:self];
                 }
 
                 return NSOrderedSame;
@@ -77,16 +77,16 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
             }
 
             return NSOrderedSame;
-        };
+        });
 }
 
 -(GCActivityMatchLapBlock)matchDistanceBlockGreater{
     return
-    ^(GCLap*l,GCLap*diff,double valueMeters,BOOL interp){
+    Block_copy(^(GCLap*l,GCLap*diff,double valueMeters,BOOL interp){
         if (l.distanceMeters-valueMeters < diff.distanceMeters && l.distanceMeters > valueMeters) {
             if (interp) {
                 double delta = (valueMeters-l.distanceMeters)/diff.distanceMeters;
-                [l interpolate:delta within:diff];
+                [l interpolate:delta within:diff inActivity:self];
             }
 
             return NSOrderedSame;
@@ -97,16 +97,16 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
         }
 
         return NSOrderedSame;
-    };
+    });
 }
 
 -(GCActivityMatchLapBlock)matchTimeBlock{
     return
-    ^(GCLap*l,GCLap*diff,double valueSeconds,BOOL interp){
+    Block_copy(^(GCLap*l,GCLap*diff,double valueSeconds,BOOL interp){
         if (fabs(l.elapsed-valueSeconds) < diff.elapsed) {
             if (interp) {
                 double delta = (valueSeconds-l.elapsed)/diff.elapsed;
-                [l interpolate:delta within:diff];
+                [l interpolate:delta within:diff inActivity:self];
             }
 
             return NSOrderedSame;
@@ -117,7 +117,7 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
         }
 
         return NSOrderedSame;
-    };
+    });
 }
 
 
@@ -154,8 +154,8 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
         if (idx > 0) {
             GCTrackPoint * prevPoint = trackpointsCache[idx-1];
             GCTrackPoint * currPoint = trackpointsCache[idx];
-            [diff difference:currPoint minus:prevPoint];
-            [candidateLap accumulateFrom:prevPoint to:currPoint];
+            [diff difference:currPoint minus:prevPoint inActivity:self];
+            [candidateLap accumulateFrom:prevPoint to:currPoint inActivity:self];
             countPoints++;
 
             if ([prevPoint validCoordinate] && [currPoint validCoordinate]) {
@@ -230,11 +230,11 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
 
         GCTrackPoint * prevPoint = trackpointsCache[idx-1];
         GCTrackPoint * currPoint = trackpointsCache[idx];
-        [diff difference:currPoint minus:prevPoint];
-        [candidateLap accumulateFrom:prevPoint to:currPoint];
-        [candidateFirst accumulateFrom:prevPoint to:currPoint];
+        [diff difference:currPoint minus:prevPoint inActivity:self];
+        [candidateLap accumulateFrom:prevPoint to:currPoint inActivity:self];
+        [candidateFirst accumulateFrom:prevPoint to:currPoint inActivity:self];
         if (foundNext) {
-            [foundNext accumulateFrom:prevPoint to:currPoint];
+            [foundNext accumulateFrom:prevPoint to:currPoint inActivity:self];
         }
         NSComparisonResult currCompareResult = match(candidateLap,diff,val,false );
         // if too big try to reduce from the left.
@@ -242,11 +242,11 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
             while ((currCompareResult = match(candidateLap,diff,val,false)) == NSOrderedAscending && leftIdx < idx) {
                 GCTrackPoint * leftPoint =trackpointsCache[leftIdx];
                 GCTrackPoint * leftNextPoint =trackpointsCache[leftIdx+1];
-                [candidateLap decumulateFrom:leftPoint to:leftNextPoint];
+                [candidateLap decumulateFrom:leftPoint to:leftNextPoint inActivity:self];
                 //NSLog(@"decumulate %@ resulting in %@ at %@", candidateLap, @(candidateLap.distanceMeters), @(candidateLap.speed));
                 leftIdx++;
 
-                [diff difference:leftNextPoint minus:leftPoint];
+                [diff difference:leftNextPoint minus:leftPoint inActivity:self];
             }
             if (leftIdx==idx) {
                 RZLog(RZLogError, @"rolling lap matching is too small?");
@@ -329,7 +329,7 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
         if (idx > 0) {
             GCTrackPoint * prevPoint = trackpointsCache[idx-1];
             GCTrackPoint * currPoint = trackpointsCache[idx];
-            [diff difference:currPoint minus:prevPoint];
+            [diff difference:currPoint minus:prevPoint inActivity:self];
 
             if (diff.altitude < 0){
                 nextLapType = gcSkiLapDownhill;
@@ -343,10 +343,10 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
                 if (nextLapType==candidateLapType) {
                     if (nextLap==nil) {
                         // same type, and currently accumulating lap
-                        [candidateLap accumulateFrom:prevPoint to:currPoint];
+                        [candidateLap accumulateFrom:prevPoint to:currPoint inActivity:self];
                     }else{
                         // same type but had temporarily switched, put back
-                        [candidateLap accumulateLap:nextLap];
+                        [candidateLap accumulateLap:nextLap  inActivity:self];
                         nextLap=nil;
                     }
                 }else{
@@ -355,7 +355,7 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
                         nextLap = [[[GCLap alloc] initWithTrackPoint:currPoint] autorelease];
                     }
 
-                    [nextLap accumulateFrom:prevPoint to:currPoint];
+                    [nextLap accumulateFrom:prevPoint to:currPoint  inActivity:self];
                     // switch of 1min or more: next lap
                     if (nextLap.elapsed > 60.) {
                         if (candidateLapType==gcSkiLapClimbing) {
@@ -374,7 +374,7 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
     }
     if (candidateLap.elapsed > 1) {
         if (nextLap) {
-            [candidateLap accumulateLap:nextLap];
+            [candidateLap accumulateLap:nextLap  inActivity:self];
         }
         if (candidateLap) {
             [rv addObject:candidateLap];
@@ -414,11 +414,11 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
 
             GCTrackPoint * from = trackpointsCache[(idx-1)];
             if (lastZoneIdx != zoneIdx) {
-                [lastZoneLap accumulateFrom:from to:to];
+                [lastZoneLap accumulateFrom:from to:to  inActivity:self];
                 //NSLog(@"LAP %f adds %f to [%d]=%f Bucket[%d]", from.heartRateBpm, [to timeIntervalSince:from], (int)lastZoneIdx, lastZoneLap.elapsed, (int)lastZoneIdx);
                 [lap startNewLap:to];
             }else{
-                [lap accumulateFrom:from to:to];
+                [lap accumulateFrom:from to:to  inActivity:self];
                 //NSLog(@"LAP %f adds %f to [%d]=%f Bucket[%d]=%f", from.heartRateBpm, [to timeIntervalSince:from], (int)zoneIdx, lap.elapsed, (int)zoneIdx, zone.ceiling);
 
             }
@@ -529,13 +529,13 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
                 BOOL inside = (lapStart_x < dist_to && lapStart_x >= dist_from);
 
                 if( (inside || lapStart_x <= dist_from) && lap.distanceMeters<dist){
-                    [lap accumulateFrom:from to:to];
+                    [lap accumulateFrom:from to:to  inActivity:self];
                     if (lap.distanceMeters > dist) { // if we went too far, remove extra
                         GCLap * diff = [[GCLap alloc] init];
-                        [diff difference:to minus:from];
+                        [diff difference:to minus:from  inActivity:self];
                         double delta = -(lap.distanceMeters - dist)/diff.distanceMeters;
                         //NSLog(@"lap secs=%.0f elapsed=%.0f lastelapsed=%.0f adjust %.0f", secs, lap.elapsed, diff.elapsed, delta*diff.elapsed);
-                        [lap interpolate:delta within:diff];
+                        [lap interpolate:delta within:diff  inActivity:self];
                         //NSLog(@"output elapsed %.0f", lap.elapsed);
                         [diff release];
                     }
@@ -611,13 +611,13 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
                 double elapsed_from = [from.time timeIntervalSinceDate:startTime];
 
                 if(lapStart_x <= elapsed_from && lap.elapsed<secs){
-                    [lap accumulateFrom:from to:to];
+                    [lap accumulateFrom:from to:to  inActivity:self];
                     if (lap.elapsed > secs) { // if we went too far, remove extra
                         GCLap * diff = [[GCLap alloc] init];
-                        [diff difference:to minus:from];
+                        [diff difference:to minus:from  inActivity:self];
                         double delta = -(lap.elapsed - secs)/diff.elapsed;
                         //NSLog(@"lap secs=%.0f elapsed=%.0f lastelapsed=%.0f adjust %.0f", secs, lap.elapsed, diff.elapsed, delta*diff.elapsed);
-                        [lap interpolate:delta within:diff];
+                        [lap interpolate:delta within:diff  inActivity:self];
                         //NSLog(@"output elapsed %.0f", lap.elapsed);
                         [diff release];
                     }

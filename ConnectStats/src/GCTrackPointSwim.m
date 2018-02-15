@@ -50,6 +50,10 @@
     return self;
 }
 
+-(GCTrackPointSwim*)initWithTrackPoint:(GCTrackPoint*)other{
+    self = [super initWithTrackPoint:other];
+    return self;
+}
 -(void)parseModernDict:(NSDictionary*)data forActivity:(GCActivity*)act{
     NSMutableDictionary * summary = [act buildSummaryDataFromGarminModernData:data];
 

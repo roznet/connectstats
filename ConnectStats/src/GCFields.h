@@ -27,6 +27,8 @@
 #import "GCFieldsCategory.h"
 #import "GCFieldsDefs.h"
 
+@class GCField;
+
 NS_INLINE BOOL GCActivityTypeIsDay(NSString*at){
     return [at isEqualToString:GC_TYPE_DAY];
 }
@@ -43,13 +45,6 @@ NS_INLINE BOOL GCActivityTypeIsSki(NSString*at, NSString*atdetail){
 +(GCFieldCache*)fieldCache;
 +(void)setFieldCache:(GCFieldCache*)cache;
 
-+(BOOL)fieldCanAverage:(NSString*)field;
-+(BOOL)fieldCanSum:(NSString*)field;
-+(BOOL)fieldIsMax:(NSString*)field;
-+(BOOL)fieldAverageIsweighted:(NSString*)field;
-
-+(NSArray*)relatedFields:(NSString*)field;
-+(NSString*)calcOrFieldFor:(NSString*)field;
 /**
  Will group the list of fields into appropriate categories
  The array will be sorted by category sort order and fields by field order within category
@@ -74,13 +69,12 @@ NS_INLINE BOOL GCActivityTypeIsSki(NSString*at, NSString*atdetail){
 
 +(gcFieldFlag)trackFieldFromActivityField:(NSString*)aActivityField;
 +(NSString*)activityFieldFromTrackField:(gcFieldFlag)aTrackField andActivityType:(NSString*)aAct;
-+(BOOL)noisyField:(gcFieldFlag)aTrackField forActivityType:(NSString*)aType;
-+(NSArray*)availableFieldsIn:(NSUInteger)flag forActivityType:(NSString*)atype;
-+(NSArray*)availableTrackFieldsIn:(NSUInteger)flag;
++(NSArray<GCField*>*)availableFieldsIn:(NSUInteger)flag forActivityType:(NSString*)atype;
++(NSArray<NSNumber*>*)availableTrackFieldsIn:(NSUInteger)flag;
 +(NSArray*)describeTrackFields:(gcFieldFlag)flag forActivityType:(NSString*)aType;
 +(gcFieldFlag)nextTrackField:(gcFieldFlag)which in:(NSUInteger)flag;
 +(NSString*)trackFieldDisplayName:(gcFieldFlag)which forActivityType:(NSString*)aAct;
-+(BOOL)trackFieldCanSum:(gcFieldFlag)field;
+//+(BOOL)trackFieldCanSum:(gcFieldFlag)field;
 
 +(NSString*)lapFieldForField:(NSString*)field;
 +(NSString*)fieldForLapField:(NSString*)field andActivityType:(NSString*)aType;

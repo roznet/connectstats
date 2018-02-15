@@ -554,7 +554,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                 };
                 if ([point.time isEqualToDate:time]) {
                     for (GCTrackPointExtraIndex * e in extra.allValues) {
-                        [point setExtraValue:[res doubleForColumn:e.dataColumnName] forIndex:e];
+                        [point setExtraValue:[GCNumberWithUnit numberWithUnit:e.unit andValue:[res doubleForColumn:e.dataColumnName]]
+                                 forFieldKey:e.field in:self];
                     }
                 }
             }
@@ -591,9 +592,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         for (GCTrackPoint * one in self.trackpointsCache) {
             [data removeAllObjects];
             data[@"Time"] = one.time;
-            if (one.fieldValues) {
+            if (one.extra) {
                 for (GCTrackPointExtraIndex * e in extra) {
-                    data[e.dataColumnName] = @(one.fieldValues[e.idx]);
+                    data[e.dataColumnName] = [[one numberWithUnitForField:e.field inActivity:self] convertToUnit:e.unit].number;
                 }
                 [db executeUpdate:insertQuery withParameterDictionary:data];
             }
@@ -953,7 +954,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                     [[GCAppGlobal web] garminDownloadActivityTrackPoints13:self];
                     break;
                 case gcDownloadMethodStrava:
-                    [[GCAppGlobal web] stravaDownloadActivityTrackPoints:self.activityId];
+                    [[GCAppGlobal web] stravaDownloadActivityTrackPoints:self];
                     break;
                 case gcDownloadMethodSportTracks:
                     [[GCAppGlobal web] sportTracksDownloadActivityTrackPoints:self.activityId withUri:[self metaValueForField:@"uri"].display];

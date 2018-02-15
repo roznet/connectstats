@@ -27,7 +27,6 @@
 
 @class GCField;
 
-extern size_t kMaxExtraIndex;
 
 @interface GCTrackPointExtraIndex : NSObject
 

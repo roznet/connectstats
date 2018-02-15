@@ -35,6 +35,7 @@
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 -(GCTrackPointSwim*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithDictionary:(NSDictionary*)aDict forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
+-(GCTrackPointSwim*)initWithTrackPoint:(GCTrackPoint*)other NS_DESIGNATED_INITIALIZER;
 
 -(void)updateValueFromResultSet:(FMResultSet*)res;
 
