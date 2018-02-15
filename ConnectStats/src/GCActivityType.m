@@ -215,7 +215,7 @@ static GCFieldCache * _fieldCache = nil;
     if(_fieldCache==nil){
         [GCActivityType fieldCache];
     }
-    return [_fieldCache infoForActivityType:self.key].displayName;
+    return [_fieldCache infoForActivityType:self.key].displayName?:self.key;
 }
 
 #pragma mark - Convenience access

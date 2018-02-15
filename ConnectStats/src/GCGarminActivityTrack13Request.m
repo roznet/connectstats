@@ -150,7 +150,7 @@
             fn =[NSString stringWithFormat:@"activity_%@.tcx", activityId];
             break;
         case gcTrack13RequestFit:
-            fn = [NSString stringWithFormat:@"activity_%@.fit", activityId];
+            fn = [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_DOWNLOAD defaultValue:TRUE] ? [NSString stringWithFormat:@"activity_%@.fit", activityId] : nil;
             break;
         case gcTrack13RequestEnd:
             fn = nil;
@@ -332,7 +332,7 @@
 }
 
 -(void)processMergeFitFile{
-    if( [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_MERGE defaultValue:TRUE]){
+    if( [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_DOWNLOAD defaultValue:TRUE] && [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_MERGE defaultValue:TRUE]){
         NSString * fn = [GCGarminActivityTrack13Request stageFilename:gcTrack13RequestFit forActivityId:self.activityId];
         
         FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:[RZFileOrganizer writeableFilePath:fn]];

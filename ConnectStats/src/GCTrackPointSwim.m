@@ -63,6 +63,7 @@
         gcFieldFlag trackField = [GCFields trackFieldFromSwimLapField:key];
         if (trackField != gcFieldFlagNone) {
             GCUnit * storeUnit = [GCTrackPoint unitForField:trackField andActivityType:act.activityType];
+            
             [self setValue:[value.numberWithUnit convertToUnit:storeUnit].value forField:trackField];
             /*if( !RZTestOption(self.trackFlags, trackField)){
                 [self setExtraValue:value.numberWithUnit forFieldKey:key in:act];

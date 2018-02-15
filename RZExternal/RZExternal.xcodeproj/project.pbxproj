@@ -152,7 +152,7 @@
 		42A0091F20012B4800019CB3 /* fit_mesg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42A0084920012B4800019CB3 /* fit_mesg.cpp */; };
 		42A0092020012B4800019CB3 /* fit_mesg.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 42A0084A20012B4800019CB3 /* fit_mesg.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		42A0092120012B4800019CB3 /* fit_mesg_broadcast_plugin.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 42A0084B20012B4800019CB3 /* fit_mesg_broadcast_plugin.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		42A0092220012B4800019CB3 /* fit_mesg_broadcaster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42A0084C20012B4800019CB3 /* fit_mesg_broadcaster.cpp */; };
+		42A0092220012B4800019CB3 /* fit_mesg_broadcaster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42A0084C20012B4800019CB3 /* fit_mesg_broadcaster.cpp */; settings = {COMPILER_FLAGS = "-Xclang -analyzer-disable-all-checks"; }; };
 		42A0092320012B4800019CB3 /* fit_mesg_broadcaster.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 42A0084D20012B4800019CB3 /* fit_mesg_broadcaster.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		42A0092420012B4800019CB3 /* fit_mesg_capabilities_mesg.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 42A0084E20012B4800019CB3 /* fit_mesg_capabilities_mesg.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		42A0092520012B4800019CB3 /* fit_mesg_capabilities_mesg_listener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 42A0084F20012B4800019CB3 /* fit_mesg_capabilities_mesg_listener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };

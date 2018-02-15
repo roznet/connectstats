@@ -205,13 +205,7 @@
     for (GCField * field in summary) {
         GCActivitySummaryValue * value = summary[field];
         GCNumberWithUnit * num = value.numberWithUnit;
-        if (field.fieldFlag != gcFieldFlagNone) {
-            GCUnit * unit = [GCTrackPoint unitForField:field.fieldFlag andActivityType:act.activityType];
-            if(unit){
-                [self setValue:[num convertToUnit:unit].value forField:field.fieldFlag];
-            }
-        }
-        self.extraStorage[field] = num;
+        [self setNumberWithUnit:num forField:field inActivity:act];
     }
     self.time  = [act buildStartDateFromGarminModernData:data];
 }

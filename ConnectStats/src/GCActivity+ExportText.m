@@ -94,16 +94,13 @@
     return rv;
 }
 -(NSString*)exportCsv{
-    NSArray * fields = [GCFields availableTrackFieldsIn:self.trackFlags];
+    NSArray<GCField*> * fields = [self availableTrackFields];
 
     NSMutableString * rv = [NSMutableString string];
     NSMutableArray * line = [NSMutableArray arrayWithArray:@[@"Time",@"Elapsed",@"Latitude",@"longitude",@"GPS Distance",@"Recorded Distance"]];
 
-    for (NSNumber * n in fields) {
-        gcFieldFlag type = (gcFieldFlag)n.integerValue;
-        NSString * key = [GCFields activityFieldFromTrackField:type andActivityType:self.activityType];
-        NSString * name = [GCFields fieldDisplayName:key activityType:self.activityType];
-        [line addObject:name];
+    for (GCField * field in fields) {
+        [line addObject:field.displayName];
     }
     [rv appendString:[line componentsJoinedByString:@","]];
     [rv appendString:@"\n"];
@@ -122,9 +119,8 @@
          @(prev ?  [point distanceMetersFrom:prev] : 0.),
          @(point.distanceMeters)
          ]];
-        for (NSNumber * n  in fields) {
-            gcFieldFlag type = (gcFieldFlag)n.integerValue;
-            [line addObject:@([point valueForField:type])];
+        for (GCField * field  in fields) {
+            [line addObject:[point numberWithUnitForField:field inActivity:self].number];
         }
         [rv appendString:[line componentsJoinedByString:@","]];
         [rv appendString:@"\n"];

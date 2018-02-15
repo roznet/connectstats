@@ -1173,14 +1173,15 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     NSDate * firstDate = nil;
 
     for (GCLap * lap in [self laps]) {
+        GCNumberWithUnit * nu = [lap numberWithUnitForField:field inActivity:self];
+
         if (timeAxis) {
             if (firstDate == nil) {
                 firstDate = lap.time;
             }
-
-            [serieWithUnit.serie addDataPointWithDate:lap.time since:firstDate andValue:[lap valueForField:field.fieldFlag]];
+            [serieWithUnit addNumberWithUnit:nu forDate:lap.time since:firstDate];
         }else{
-            [serieWithUnit.serie addDataPointWithX:lap.distanceMeters andY:[lap valueForField:field.fieldFlag]];
+            [serieWithUnit addNumberWithUnit:nu forX:lap.distanceMeters];
         }
     }
 

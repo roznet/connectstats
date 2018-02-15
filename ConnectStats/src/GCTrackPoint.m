@@ -36,6 +36,8 @@
 @property (nonatomic,retain) NSMutableDictionary<GCField*,GCNumberWithUnit*> * calculatedStorage;
 
 -(BOOL)hasField:(gcFieldFlag)afield;
+-(double)valueForField:(gcFieldFlag)aField;
+
 
 @end
 
@@ -292,6 +294,9 @@ void buildStatic(){
     return 0.;
 }
 -(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(GCActivity*)act{
+    if( act == nil){
+        return;// don't bother
+    }
     GCTrackPointExtraIndex * index = act.cachedExtraTracksIndexes[field];
 
     if (index == nil) {
