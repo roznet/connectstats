@@ -589,50 +589,55 @@
                                        };
     
     // Ski Activity
-    NSString * aId = @"1083407258";
     
-    GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-    [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-    
-    NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
-    
-    FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
-    [fitDecode parse];
-    GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile];
-    
-    NSDictionary * sum_gc = act.summaryData;
-    NSDictionary * sum_fit= fitAct.summaryData;
-    
-    NSDictionary * expectedMissingFromGC = @{@"WeightedMeanCadence":@1, @"MaxCadence":@2, @"WeightedMeanElevation":@3,@"MinCadence":@4,
-                                             @"MinElevation":@5,@"MaxElevation":@6,// elevation is all messed up (elevation correction)
-                                             @"total_cycles":@7,@"enhanced_max_speed":@8,@"avg_step_length":@9
-                                             };
-    
-    for (GCField * field in sum_fit) {
-        if( expectedMissingFromGC[field.key] != nil){
-            continue;// Somehow missing from gc
-        }
-        GCActivitySummaryValue * v_gc = sum_gc[field];
-        GCActivitySummaryValue * v_fit= sum_fit[field];
+    NSArray<NSString*>*aIds = @[ @"1083407258", // Ski Activity
+                                 @"2477200414", // Run with Power
+                                 ];
+                                 
+    for (NSString * aId in aIds) {
+        GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         
-        XCTAssertNotNil(v_gc, @"Found field %@", field);
-        double eps =  1.e-7;
-        NSNumber * specialEps = epsForField[field.key];
-        if (specialEps) {
-            eps = specialEps.doubleValue;
+        NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
+        
+        FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
+        [fitDecode parse];
+        GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile];
+        
+        NSDictionary * sum_gc = act.summaryData;
+        NSDictionary * sum_fit= fitAct.summaryData;
+        
+        NSDictionary * expectedMissingFromGC = @{@"WeightedMeanCadence":@1, @"MaxCadence":@2, @"WeightedMeanElevation":@3,@"MinCadence":@4,
+                                                 @"MinElevation":@5,@"MaxElevation":@6,// elevation is all messed up (elevation correction)
+                                                 @"total_cycles":@7,@"enhanced_max_speed":@8,@"avg_step_length":@9
+                                                 };
+        
+        for (GCField * field in sum_fit) {
+            if( expectedMissingFromGC[field.key] != nil){
+                continue;// Somehow missing from gc
+            }
+            GCActivitySummaryValue * v_gc = sum_gc[field];
+            GCActivitySummaryValue * v_fit= sum_fit[field];
+            
+            XCTAssertNotNil(v_gc, @"Found field %@", field);
+            double eps =  1.e-7;
+            NSNumber * specialEps = epsForField[field.key];
+            if (specialEps) {
+                eps = specialEps.doubleValue;
+            }
+            
+            if( v_gc == nil || [v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] != NSOrderedSame ){
+                //SetBreakpoint
+            }
+            XCTAssertTrue([v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] == NSOrderedSame,
+                          @"Key %@: %@ == %@ within %@", field, v_gc.numberWithUnit, v_fit.numberWithUnit, @(eps));
         }
         
-        if( v_gc == nil || [v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] != NSOrderedSame ){
-            //SetBreakpoint
+        for (GCField * field in sum_gc) {
+            GCActivitySummaryValue * v_gc = sum_gc[field];
+            GCActivitySummaryValue * v_fit= sum_fit[field];
+            XCTAssertTrue(v_fit != nil || expectedMissing[field.key]!=nil, @"%@ %@ unexpectedly missing", field, v_gc);
         }
-        XCTAssertTrue([v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] == NSOrderedSame,
-                      @"Key %@: %@ == %@ within %@", field, v_gc.numberWithUnit, v_fit.numberWithUnit, @(eps));
-    }
-    
-    for (GCField * field in sum_gc) {
-        GCActivitySummaryValue * v_gc = sum_gc[field];
-        GCActivitySummaryValue * v_fit= sum_fit[field];
-        XCTAssertTrue(v_fit != nil || expectedMissing[field.key]!=nil, @"%@ %@ unexpectedly missing", field, v_gc);
     }
 }
 
