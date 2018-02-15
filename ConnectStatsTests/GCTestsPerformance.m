@@ -36,6 +36,7 @@
 #import "ConnectStats-Swift.h"
 #import "GCService.h"
 #import "GCActivitiesOrganizerListRegister.h"
+#import "GCActivityAutoLapChoices.h"
 
 @interface GCTestsPerformance : GCTestCase
 
@@ -149,15 +150,17 @@
 }
 
 -(void)testPerformanceParsingFit{
-    NSString * aId = @"1083407258";
-    NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
+    NSArray<NSString*>*aIds = @[ @"1083407258"/*, @"2477200414"*/];
     
     [self measureBlock:^{
-        FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
-        [fitDecode parse];
-        GCActivity * act = [[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile];
-        XCTAssertGreaterThan(act.trackpoints.count, 1);
-        [act release];
+        for( NSString * aId in aIds ) {
+            NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
+            FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
+            [fitDecode parse];
+            GCActivity * act = [[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile];
+            XCTAssertGreaterThan(act.trackpoints.count, 1);
+            [act release];
+        }
     }];
     
 }
@@ -187,4 +190,19 @@
     
 }
 
+-(void)testPerformanceLapsCalculations{
+    NSString * aId = @"2477200414";
+    GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    XCTAssertGreaterThan(act.trackpoints.count, 1);
+    GCActivityAutoLapChoices * choices = [[[GCActivityAutoLapChoices alloc] initWithActivity:act] autorelease];
+    NSUInteger n = choices.choices.count;
+    
+    [self measureBlock:^{
+        for (NSUInteger i=0; i<n; i++) {
+            [choices changeSelectedTo:i];
+        }
+    }];
+
+}
 @end
