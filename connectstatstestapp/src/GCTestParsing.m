@@ -43,9 +43,6 @@
     return @[@{TK_SEL: NSStringFromSelector(@selector(sportTracksParsing)),
                TK_DESC:@"Test parsing of sporttracks",
                TK_SESS:@"GC Parsing SportTracks"},
-             @{TK_SEL:NSStringFromSelector(@selector(stravaParsing)),
-               TK_DESC:@"Test parsing of strava files",
-               TK_SESS: @"GC Parsing Strava"},
              @{TK_SEL:NSStringFromSelector(@selector(garminExtraFieldsTests)),
                TK_DESC:@"Test parsing of garmin track with extra fields",
                TK_SESS:@"GC Parsing Extra Fields"},
@@ -144,33 +141,6 @@
     [db close];
 #endif
     [self endSession:@"GC Parsing FitBit"];
-}
-
--(void)stravaParsing{
-	[self startSession:@"GC Parsing Strava"];
-
-    GCStravaActivityListParser * parser = [GCStravaActivityListParser activityListParser:[NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"strava_list_0.json"]]];
-    [self assessTestResult:@"Strava Parsed 30 act" result:[parser.activities count]==30];
-    GCStravaActivityStreamsParser * stream = [GCStravaActivityStreamsParser activityStreamsParser:[NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"strava_stream_122027318.json"]]];
-    [self assessTestResult:@"Strava Parsed points" result:stream.points.count == 565];
-    
-    NSArray * samples = @[ @[ @"140735593", @519, @4 ],
-                           @[ @"141871826", @502, @4 ],
-                           @[ @"140735927", @440, @6 ] ];
-
-    for (NSArray * sample in samples) {
-        NSString * streamf = [NSString stringWithFormat:@"strava_stream_%@.json", sample[0]];
-        NSString * lapf    = [NSString stringWithFormat:@"strava_laps_%@.json",sample[0]];
-        GCStravaActivityStreamsParser * streamp = [GCStravaActivityStreamsParser activityStreamsParser:[NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:streamf]]];
-        GCStravaActivityLapsParser * lapp = [GCStravaActivityLapsParser activityLapsParser:[NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:lapf]] withPoints:streamp.points];
-
-        [self assessTrue:(streamp.points.count==[sample[1] integerValue]) msg:@"n points %d=%d", [sample[1] integerValue], streamp.points.count];
-        [self assessTrue:(lapp.laps.count==[sample[2] integerValue]) msg:@"n laps %d=%d", [sample[2] integerValue], lapp.laps.count];
-
-    }
-
-	[self endSession:@"GC Parsing Strava"];
-
 }
 
 -(void)sportTracksParsing{
