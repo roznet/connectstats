@@ -132,6 +132,7 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 
 -(void)testCommunicationStart:(NSString*)sessionName userName:(NSString*)username{
     self.currentSession = sessionName;
+    
     [self startSession:self.currentSession];
     GCWebUseSimulator(TRUE, [GCAppGlobal simulatorUrl]);
     GCWebSetSimulatorState(@"");
@@ -140,10 +141,12 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     _completed = false;
     [GCAppGlobal setupEmptyState:@"activities.db"];
     [GCAppGlobal configSet:CONFIG_WIFI_DOWNLOAD_DETAILS boolVal:NO];
+    [GCAppGlobal configSet:CONFIG_GARMIN_FIT_DOWNLOAD boolVal:FALSE];
     [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:gcGarminLoginMethodLegacy];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:YES];
     [[GCAppGlobal profile] setLoginName:username forService:gcServiceGarmin];
     [[GCAppGlobal profile] setPassword:@"iamatesterfromapple" forService:gcServiceGarmin];
+    
 
     [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -156,6 +159,7 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 -(void)testCommunicationEnd{
     _completed = true;
     [[GCAppGlobal web] detach:self];
+    [GCAppGlobal configSet:CONFIG_GARMIN_FIT_DOWNLOAD boolVal:TRUE];
     [self endSession:self.currentSession];
 }
 

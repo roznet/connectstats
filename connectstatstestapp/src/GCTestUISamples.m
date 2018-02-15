@@ -602,8 +602,8 @@
 -(NSArray*)sampleMultiFieldsStats{
     NSMutableArray * rv = [NSMutableArray array];
 
-    GCStatsMultiFieldViewController * vc = [[GCStatsMultiFieldViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    GCStatsMultiFieldConfig * config = [[GCStatsMultiFieldConfig alloc] init];
+    GCStatsMultiFieldViewController * vc = RZReturnAutorelease([[GCStatsMultiFieldViewController alloc] initWithStyle:UITableViewStyleGrouped]);
+    GCStatsMultiFieldConfig * config = RZReturnAutorelease([[GCStatsMultiFieldConfig alloc] init]);
     config.activityType = GC_TYPE_RUNNING;
     config.viewChoice = gcViewChoiceAll;
     config.historyStats = gcHistoryStatsAll;
@@ -625,9 +625,6 @@
     [vc setupTestModeWithFieldListConfig:config];
     cell = [vc tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:GC_SECTION_DATA]];
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Stats Multi Last Month"]];
-
-    [config release];
-    [vc release];
 
     return rv;
 }

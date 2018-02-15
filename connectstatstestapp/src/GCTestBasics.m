@@ -257,13 +257,13 @@
     // extra flags don't exist in old format
     RZ_ASSERT(activity.trackFlags == activity13.trackFlags, @"%@ same fields %d==%d", aId, activity13.trackFlags,activity.trackFlags);
 
-    NSArray * fields = [GCFields availableTrackFieldsIn:activity.trackFlags];
+    NSArray<GCField*> * fields = activity.availableTrackFields;
     NSUInteger diffValue = 0;
     NSUInteger diffLapIndex = 0;
     NSUInteger diffTime = 0;
 
-    double lastBadVal = 0.;
-    double lastBadVal2 = 0.;
+    GCNumberWithUnit * lastBadVal = nil;
+    GCNumberWithUnit * lastBadVal2 = nil;
     NSString * lastBadValField = nil;
     NSUInteger lastBadValIdx = 0;
 
@@ -276,16 +276,15 @@
     for (NSUInteger i=0; i<MIN([activity.trackpoints count], [activity13.trackpoints count]); i++) {
         GCTrackPoint * p   = [activity.trackpoints objectAtIndex:i];
         GCTrackPoint * p13 = [activity13.trackpoints objectAtIndex:i];
-        for (NSNumber * field in fields) {
-            gcFieldFlag flag = (gcFieldFlag)[field intValue];
-            double v = [p valueForField:flag];
-            double v13 = [p13 valueForField:flag];
-            if (!(fabs(v-v13)<1e-8)) {
+        for (GCField * field in fields) {
+            GCNumberWithUnit * v = [p numberWithUnitForField:field inActivity:activity];
+            GCNumberWithUnit * v13 = [p13 numberWithUnitForField:field inActivity:activity13];
+            if (![v isEqualToNumberWithUnit:v13]) {
                 diffValue++;
                 if (diffValue==1) {
                     lastBadVal=v;
                     lastBadVal2=v13;
-                    lastBadValField =[GCFields trackFieldDisplayName:flag forActivityType:activity.activityType];
+                    lastBadValField =field.displayName;
                     lastBadValIdx = i;
                 }
             }
@@ -309,25 +308,24 @@
     for (NSUInteger i = 0; i<MIN([activity.laps count], [activity13.laps count]); i++) {
         GCLap * lap = [activity.laps objectAtIndex:i];
         GCLap * lap13=[activity13.laps objectAtIndex:i];
-        for (NSNumber * field in fields) {
-            gcFieldFlag flag = [field intValue];
-            BOOL common = (flag & activity.trackFlags) == flag;
+        for (GCField * field in fields) {
+            BOOL common = [activity13 hasTrackForField:field];
             if (!common) {
-                NSLog(@"not common: %@", [GCFields trackFieldDisplayName:flag forActivityType:activity.activityType]);
+                NSLog(@"not common: %@", field.displayName);
             }
-            if (flag==gcFieldFlagAltitudeMeters) {
+            if (field.fieldFlag==gcFieldFlagAltitudeMeters) {
                 // old format didn't have altitude in laps
                 continue;
             }
-            double v = [lap valueForField:flag];
-            double v13 = [lap13 valueForField:flag];
+            GCNumberWithUnit * v = [lap numberWithUnitForField:field inActivity:activity];
+            GCNumberWithUnit * v13 = [lap13 numberWithUnitForField:field inActivity:activity13];
 
-            if (!(fabs(v-v13)<1e-8)) {
+            if (![v isEqualToNumberWithUnit:v13]) {
                 diffValue++;
                 if (diffValue==1) {
                     lastBadVal=v;
                     lastBadVal2=v13;
-                    lastBadValField =[GCFields trackFieldDisplayName:flag forActivityType:activity.activityType];
+                    lastBadValField =field.displayName;
                     lastBadValIdx = i;
                 }
             }
