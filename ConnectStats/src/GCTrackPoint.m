@@ -65,6 +65,8 @@ void buildStatic(){
 -(GCTrackPoint*)initWithTrackPoint:(GCTrackPoint*)other{
     self = [super init];
     if (self) {
+        self.trackFlags = other.trackFlags;
+        self.lapIndex = other.lapIndex;
         self.time = other.time;
         self.latitudeDegrees = other.latitudeDegrees;
         self.longitudeDegrees = other.longitudeDegrees;
@@ -241,19 +243,6 @@ void buildStatic(){
     static NSMutableDictionary * missing = nil;
 
     if (defs == nil) {
-        /*defs = @[@"sumDistance",              STOREUNIT_DISTANCE, @(gcFieldFlagSumDistance),
-                 @"directHeartRate",          @"bpm",             @(gcFieldFlagWeightedMeanHeartRate),
-                 @"directSpeed",              STOREUNIT_SPEED,    @(gcFieldFlagWeightedMeanSpeed),
-                 @"directElevation",          STOREUNIT_ALTITUDE, @(gcFieldFlagAltitudeMeters),
-                 @"directBikeCadence",        @"rpm",             @(gcFieldFlagCadence),
-                 //@"directFractionalCadence",  @"spm",             @(gcFieldFlagCadence),
-                 @"directRunCadence",         @"spm",             @(gcFieldFlagCadence),
-                 @"directPower",              @"watt",            @(gcFieldFlagPower),
-                 @"directGroundContactTime",  @"ms",              @(gcFieldFlagGroundContactTime),
-                 @"directVerticalOscillation",@"centimeter",      @(gcFieldFlagVerticalOscillation),
-
-
-                 ];*/
 
         defs = @{@"sumDistance": @[              STOREUNIT_DISTANCE, @(gcFieldFlagSumDistance)],
                  @"directHeartRate": @[          @"bpm",             @(gcFieldFlagWeightedMeanHeartRate)],
@@ -643,8 +632,10 @@ void buildStatic(){
 -(GCNumberWithUnit*)numberWithUnitForField:(GCField*)aF inActivity:(GCActivity*)act{
     GCNumberWithUnit * rv = nil;
     if (aF.fieldFlag != gcFieldFlagNone) {
-        rv = [GCNumberWithUnit numberWithUnit:[GCTrackPoint unitForField:aF.fieldFlag andActivityType:aF.activityType?:GC_TYPE_ALL]
-                                     andValue:[self valueForField:aF.fieldFlag]];
+        if( (aF.fieldFlag & self.trackFlags) == aF.fieldFlag ){
+            rv = [GCNumberWithUnit numberWithUnit:[GCTrackPoint unitForField:aF.fieldFlag andActivityType:aF.activityType?:GC_TYPE_ALL]
+                                         andValue:[self valueForField:aF.fieldFlag]];
+        }
     }else{
         GCTrackPointExtraIndex * idx = act.cachedExtraTracksIndexes[aF];
         if (idx) {

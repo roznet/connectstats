@@ -168,6 +168,9 @@ static void registerInCache(GCField*field){
     if (field == nil) {
         return nil;
     }
+    if( ![field isKindOfClass:[NSString class]] ){
+        NSLog(@"Oops");
+    }
 
     GCField * rv =  _cache[field][activityType?:GC_TYPE_NULL];
     if (!rv) {
@@ -540,7 +543,7 @@ static void registerInCache(GCField*field){
                 rv = [NSMutableArray arrayWithCapacity:group.count];
                 for (NSString * f in group) {
                     if (![f isEqualToString:self.key]) {
-                        [rv addObject:[GCField fieldForKey:false andActivityType:self.activityType]];
+                        [rv addObject:[GCField fieldForKey:f andActivityType:self.activityType]];
                     }
                 }
                 break;

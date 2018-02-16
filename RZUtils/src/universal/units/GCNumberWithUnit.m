@@ -184,7 +184,13 @@
     };
     return nil;
 }
+-(nullable GCNumberWithUnit*)addNumberWithUnit:(GCNumberWithUnit*)other thisWeight:(double)w0 otherWeight:(double)w1{
+    if ([other.unit canConvertTo:self.unit]) {
+        return [GCNumberWithUnit numberWithUnit:self.unit andValue:(self.value * w0 + w1 *[other convertToUnit:self.unit].value)];
+    };
+    return nil;
 
+}
 -(GCNumberWithUnit*)maxNumberWithUnit:(GCNumberWithUnit*)other{
     if ([other.unit canConvertTo:self.unit]) {
         return [GCNumberWithUnit numberWithUnit:self.unit andValue:MAX(self.value, [[other convertToUnit:self.unit] value])];
