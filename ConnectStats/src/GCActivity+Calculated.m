@@ -174,9 +174,10 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
             }
         }
     }
+    /*
     if (fabs(gpsDistance-self.sumDistance)>10.) {
         RZLog(RZLogWarning, @"gpsDistance=%.0f actDistance=%.0f diff=%0.f", gpsDistance,self.sumDistance, gpsDistance-self.sumDistance);
-    }
+    }*/
     if (candidateLap) {
         [candidateLap augmentElapsed:nil inActivity:self];
         [rv addObject:candidateLap];

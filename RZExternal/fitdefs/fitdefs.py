@@ -175,7 +175,7 @@ fieldmap = { 'Altitude': 'WeightedMeanElevation',
              'enhanced_max_speed': 'enhanced_max_speed',
              'event_type': 'event_type',
              'start_position': 'start_position',
-             'avg_stance_time_balance': 'avg_stance_time_balance',
+             'avg_stance_time_balance': 'WeightedMeanStanceTimeBalance',
              }
 
 limitfield = {

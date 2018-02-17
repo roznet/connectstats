@@ -45,7 +45,7 @@ class Listener : public fit::MesgListener
     
     
     void OnMesg(fit::Mesg&mesg){
-        NSString * messageName = [NSString stringWithUTF8String:mesg.GetName().c_str()];
+        NSString * messageType = [NSString stringWithUTF8String:mesg.GetName().c_str()];
         NSMutableDictionary * values = [NSMutableDictionary dictionaryWithCapacity:mesg.GetNumFields()];
         
         for (FIT_UINT16 i = 0; i < (FIT_UINT16)mesg.GetNumFields(); i++)
@@ -90,7 +90,7 @@ class Listener : public fit::MesgListener
             values[fieldKey] = locations[fieldKey];
         }
         
-        [this->delegate recordMessage:messageName values:values];
+        [this->delegate recordMessage:messageType values:values];
     }
     
 

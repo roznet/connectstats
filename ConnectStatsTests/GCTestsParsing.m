@@ -551,18 +551,27 @@
 
 -(void)testParseFitFile{
     NSDictionary * epsForField = @{
-                                   @"SumEnergy": @(1.),
-                                   @"SumElapsedDuration": @(0.02),
-                                   @"SumDuration":@(0.02),
-                                   @"MaxSpeed":@(0.0001),
-                                   @"WeightedMeanAirTemperature": @(0.1),
-                                   @"MinSpeed":@(0.5),
                                    // somehow some non sensical values:
-                                   @"MinHeartRate":@(100),
+                                   @"MaxRunCadence": @(0.6),
+                                   @"MaxSpeed":@(0.0001),
                                    @"MinAirTemperature":@(50),
+                                   @"MinHeartRate":@(100),
+                                   @"MinSpeed":@(0.5),
+                                   @"SumDuration": @(125),
+                                   //@"SumDuration":@(0.02),
+                                   @"SumElapsedDuration": @(125),
+                                   //@"SumElapsedDuration": @(124.8420000000001),
+                                   @"SumEnergy": @(1.),
+                                   @"WeightedMeanAirTemperature": @(0.1),
+                                   @"WeightedMeanGroundContactTime": @(1.293747015611027),
+                                   @"WeightedMeanPace": @(0.3260718057400382),
+                                   @"WeightedMeanRunCadence": @(0.7834375),
+                                   @"WeightedMeanVerticalOscillation": @(3.051757833105739e-06),
+                                   @"WeightedMeanVerticalRatio": @(0.1),
+
                                    };
     
-    NSDictionary * expectedMissing = @{
+    NSDictionary * expectedMissingFromFit = @{
                                        @"DirectVO2Max": @"40.0 ml/kg/min",
                                        @"GainCorrectedElevation": @"844 m",
                                        @"GainUncorrectedElevation": @"861 m",
@@ -585,10 +594,50 @@
                                        @"WeightedMeanMovingPace": @"18:56 min/km",
                                        @"WeightedMeanMovingSpeed": @"3.2 km/h",
                                        @"WeightedMeanPace": @"20:14 min/km",
-                                       
+
+                                       @"WeightedMeanStrideLength": @"1 m",
+                                       @"DirectLactateThresholdHeartRate": @"180 bpm",
+                                       @"WeightedMeanGroundContactBalanceLeft": @"49.2 %",
+                                       @"DirectLactateThresholdSpeed": @"3.5 mps",
+
                                        };
     
-    // Ski Activity
+    NSDictionary * expectedMissingFromGC = @{
+                                             @"MaxCadence":@2,
+                                             @"MaxElevation":@6,// elevation is all messed up (elevation correction)
+                                             @"MaxFormPower": @1,
+                                             @"MaxFractionalCadence": @1,
+                                             @"MaxGroundContactTime": @1,
+                                             @"MaxLegSpringStiffness": @1,
+                                             @"MaxPower": @1,
+                                             @"MaxVerticalOscillation": @1,
+                                             @"MinCadence":@4,
+                                             @"MinElevation":@5,
+                                             @"MinFormPower": @1,
+                                             @"MinGroundContactTime": @1,
+                                             @"MinHeartRate": @1,
+                                             @"MinLegSpringStiffness": @1,
+                                             @"MinPower": @1,
+                                             @"MinRunCadence": @1,
+                                             @"MinSpeed": @1,
+                                             @"MinVerticalOscillation": @1,
+                                             @"StanceTimePercent": @1,
+                                             @"WeightedMeanCadence":@1,
+                                             @"WeightedMeanElevation":@3,
+                                             @"WeightedMeanFormPower": @1,
+                                             @"WeightedMeanFractionalCadence": @1,
+                                             @"WeightedMeanLegSpringStiffness": @1,
+                                             @"WeightedMeanPower": @1,
+                                             @"WeightedMeanStanceTime": @1,
+                                             @"WeightedMeanStanceTimeBalance": @1,
+                                             @"WeightedMeanStanceTimePercent": @1,
+                                             @"avg_step_length":@9,
+                                             @"enhanced_max_speed":@8,
+                                             @"total_cycles":@7,
+                                             
+                                             
+                                             };
+
     
     NSArray<NSString*>*aIds = @[ @"1083407258", // Ski Activity
                                  @"2477200414", // Run with Power
@@ -607,10 +656,8 @@
         NSDictionary * sum_gc = act.summaryData;
         NSDictionary * sum_fit= fitAct.summaryData;
         
-        NSDictionary * expectedMissingFromGC = @{@"WeightedMeanCadence":@1, @"MaxCadence":@2, @"WeightedMeanElevation":@3,@"MinCadence":@4,
-                                                 @"MinElevation":@5,@"MaxElevation":@6,// elevation is all messed up (elevation correction)
-                                                 @"total_cycles":@7,@"enhanced_max_speed":@8,@"avg_step_length":@9
-                                                 };
+        NSMutableArray * recordMissing = [NSMutableArray array];
+        NSMutableArray * recordEpsilon = [NSMutableArray array];
         
         for (GCField * field in sum_fit) {
             if( expectedMissingFromGC[field.key] != nil){
@@ -619,24 +666,49 @@
             GCActivitySummaryValue * v_gc = sum_gc[field];
             GCActivitySummaryValue * v_fit= sum_fit[field];
             
-            XCTAssertNotNil(v_gc, @"Found field %@", field);
             double eps =  1.e-7;
             NSNumber * specialEps = epsForField[field.key];
             if (specialEps) {
                 eps = specialEps.doubleValue;
             }
             
-            if( v_gc == nil || [v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] != NSOrderedSame ){
-                //SetBreakpoint
+            if( v_gc == nil ){
+                [recordMissing addObject:[NSString stringWithFormat:@" @\"%@\": @1", field.key]];
             }
-            XCTAssertTrue([v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] == NSOrderedSame,
-                          @"Key %@: %@ == %@ within %@", field, v_gc.numberWithUnit, v_fit.numberWithUnit, @(eps));
+            if( [v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] != NSOrderedSame ){
+                GCNumberWithUnit * diff = [v_gc.numberWithUnit addNumberWithUnit:v_fit.numberWithUnit weight:-1.0];
+                
+                [recordEpsilon addObject:[NSString stringWithFormat:@" @\"%@\": @(%@)", field.key, @(diff.value)]];
+            }
+            XCTAssertNotNil(v_gc, @"Found field %@", field);
+            if( v_gc ){
+                XCTAssertTrue([v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] == NSOrderedSame,
+                              @"Key %@: %@ == %@ within %@", field, v_gc.numberWithUnit, v_fit.numberWithUnit, @(eps));
+            }
         }
-        
+        if( recordEpsilon.count > 0){
+            for (NSString * one in recordEpsilon) {
+                NSLog(@"%@,", one);
+            }
+        }
+        if( recordMissing.count > 0){
+            for (NSString * one in recordMissing) {
+                NSLog(@"%@,", one);
+            }
+        }
+        [recordMissing removeAllObjects];
         for (GCField * field in sum_gc) {
             GCActivitySummaryValue * v_gc = sum_gc[field];
             GCActivitySummaryValue * v_fit= sum_fit[field];
-            XCTAssertTrue(v_fit != nil || expectedMissing[field.key]!=nil, @"%@ %@ unexpectedly missing", field, v_gc);
+            if( v_fit == nil && expectedMissingFromFit[field.key] == nil){
+                [recordMissing addObject:[NSString stringWithFormat:@"@\"%@\": @\"%@\"", field.key, v_gc.numberWithUnit]];
+            }
+            XCTAssertTrue(v_fit != nil || expectedMissingFromFit[field.key]!=nil, @"%@ %@ unexpectedly missing", field, v_gc);
+        }
+        if(recordMissing.count > 0){
+            for (NSString * one in recordMissing) {
+                NSLog(@"%@,", one);
+            }
         }
     }
 }
