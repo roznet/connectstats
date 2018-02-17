@@ -177,30 +177,34 @@ void buildStatic(){
     }
 }
 
--(void)addExtraFromResultSet:(FMResultSet*)res andActivityType:(NSString*)aType{
-    GCField * lapfield = [GCField fieldForKey:[res stringForColumn:@"field"] andActivityType:aType] ;
+-(void)addExtraFromResultSet:(FMResultSet*)res inActivity:(GCActivity*)act{
+    GCField * field = [GCField fieldForKey:[res stringForColumn:@"field"] andActivityType:act.activityType] ;
     NSNumber * value = @([res doubleForColumn:@"value"]);
     NSString * unit  = [res stringForColumn:@"uom"];
     
-    if (!self.extraStorage) {
-        self.extraStorage = [NSMutableDictionary dictionary];
+    // Special case
+    if ([field.key isEqualToString:@"TotalTimeSeconds"]) {
+        self.elapsed = value.doubleValue;
+    }else if ( [field.key isEqualToString:@"SumDuration"]){
+        self.elapsed = value.doubleValue;
     }
+
+    GCNumberWithUnit * nu = nil;
     if (unit && unit.length) {
-        self.extraStorage[lapfield] = [GCNumberWithUnit numberWithUnitName:unit andValue:value.doubleValue];
+        nu = [GCNumberWithUnit numberWithUnitName:unit andValue:value.doubleValue];
     }else{
-        GCField * usefield = [GCField fieldForKey:[GCFields fieldForLapField:lapfield.key andActivityType:aType] andActivityType:aType];
-        GCUnit * useunit = [GCFields unitForLapField:lapfield.key activityType:aType];
+        // Old version: Convert to new fields and get old unit
+        GCUnit * useunit = [GCFields unitForLapField:field.key activityType:act.activityType];
+        field = [GCField fieldForKey:[GCFields fieldForLapField:field.key andActivityType:act.activityType] andActivityType:act.activityType];
+        
         if( ! useunit){
             useunit = GCUnit.dimensionless;
         }
-        self.extraStorage[usefield] = [GCNumberWithUnit numberWithUnit:useunit andValue:value.doubleValue];
+        nu = [GCNumberWithUnit numberWithUnit:useunit andValue:value.doubleValue];
     }
-    // Special case
-    if ([lapfield.key isEqualToString:@"TotalTimeSeconds"]) {
-        self.elapsed = value.doubleValue;
-    }else if ( [lapfield.key isEqualToString:@"SumDuration"]){
-        self.elapsed = value.doubleValue;
-    }    
+    // activity  nil so it does not record the cached index
+    [self setNumberWithUnit:nu forField:field inActivity:nil];
+    
 }
 
 #pragma mark - Parsing
@@ -301,14 +305,12 @@ void buildStatic(){
             NSString * uom = def[0];
             id target = def[1];
             GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnitName:d[@"unit"] andValue:[d[@"value"] doubleValue]];
-            double val = [nu convertToUnit:[GCUnit unitForKey:uom]].value;
 
             if ([target isKindOfClass:[NSNumber class]]) {
                 gcFieldFlag flag = (gcFieldFlag)[target integerValue];
-                [self setValue:val forField:flag];
+                [self setValue:[nu convertToUnit:[GCUnit unitForKey:uom]] forField:flag];
             }else if([target isKindOfClass:[NSString class]]){
                 GCField * targetField = [GCField fieldForKey:target andActivityType:act.activityType];
-                GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnitName:uom andValue:val];
                 [self setExtraValue:nu forFieldKey:targetField in:act];
             }
         }else{
@@ -320,34 +322,6 @@ void buildStatic(){
     }
 }
 
--(double)extraValueForIndex:(GCTrackPointExtraIndex*)idx{
-    GCNumberWithUnit * num = self.extraStorage[idx.field];
-    if( num ){
-        return num.value;
-    }
-    return 0.;
-}
--(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(GCActivity*)act{
-    if( act == nil){
-        return;// don't bother
-    }
-    GCTrackPointExtraIndex * index = act.cachedExtraTracksIndexes[field];
-
-    if (index == nil) {
-        if (act.cachedExtraTracksIndexes ==nil) {
-            act.cachedExtraTracksIndexes = @{};
-        }
-        index = [GCTrackPointExtraIndex extraIndexForField:field withUnit:nu.unit in:act.cachedExtraTracksIndexes];
-        NSMutableDictionary * nextDict = [NSMutableDictionary dictionaryWithObject:index forKey:field];
-        [nextDict addEntriesFromDictionary:act.cachedExtraTracksIndexes];
-        act.cachedExtraTracksIndexes = nextDict;
-    }
-
-    if (!self.extraStorage) {
-        self.extraStorage = [NSMutableDictionary dictionary];
-    }
-    self.extraStorage[field] = nu;
-}
 
 -(void)parseDictionaryOld:(NSDictionary*)data{
     NSString * tmp = nil;
@@ -422,8 +396,8 @@ void buildStatic(){
                 double dt = [next.time timeIntervalSinceDate:self.time];
                 double dx = next.distanceMeters - self.distanceMeters;
                 if (dt != 0.0) {
-                    [self setValue:dx/dt forField:gcFieldFlagWeightedMeanSpeed];
-                    _trackFlags |= gcFieldFlagWeightedMeanSpeed;
+                    GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:GCUnit.mps andValue:dx/dt];
+                    [self setValue:nu forField:gcFieldFlagWeightedMeanSpeed];
                 }
             }
         }
@@ -482,7 +456,10 @@ void buildStatic(){
         self.extraStorage = [NSMutableDictionary dictionaryWithDictionary:other];
     }else{
         for (GCField * one in other) {
-            self.extraStorage[one] = other[one];
+            // Don't update fields that are coming from flag. 
+            if( one.fieldFlag != gcFieldFlagNone){
+                self.extraStorage[one] = other[one];
+            }
         }
     }
 }
@@ -547,7 +524,25 @@ void buildStatic(){
 }
 
 //NEWTRACKFIELD
--(void)setValue:(double)val forField:(gcFieldFlag)aField{
+-(void)setValue:(GCNumberWithUnit*)nu forField:(gcFieldFlag)aField{
+    static NSDictionary*_defs = nil;
+    if( _defs == nil){
+        _defs = @{
+                  @(gcFieldFlagSumDistance) : [GCUnit unitForKey:STOREUNIT_DISTANCE],
+                  @(gcFieldFlagWeightedMeanSpeed) : [GCUnit unitForKey:STOREUNIT_SPEED],
+                  @(gcFieldFlagWeightedMeanHeartRate) : [GCUnit bpm],
+                  @(gcFieldFlagAltitudeMeters): [GCUnit unitForKey:STOREUNIT_ALTITUDE],
+                  @(gcFieldFlagCadence):[GCUnit rpm],
+                  @(gcFieldFlagPower):[GCUnit watt],
+                  @(gcFieldFlagGroundContactTime):[GCUnit ms],
+                  @(gcFieldFlagVerticalOscillation):[GCUnit centimeter],
+                  };
+        [_defs retain];
+    }
+    GCUnit * unit = aField != gcFieldFlagNone?_defs[ @(aField) ] : nil;
+
+    double val = [nu convertToUnit:unit].value;
+    
     switch (aField) {
         case gcFieldFlagSumDuration:
             _trackFlags |= aField;
@@ -637,42 +632,23 @@ void buildStatic(){
                                          andValue:[self valueForField:aF.fieldFlag]];
         }
     }else{
-        GCTrackPointExtraIndex * idx = act.cachedExtraTracksIndexes[aF];
-        if (idx) {
-            rv = [GCNumberWithUnit numberWithUnit:idx.unit andValue:[self extraValueForIndex:idx]];
-        }
+        rv = self.extraStorage[aF];
 
         if (!rv && self.calculatedStorage) {
             rv = self.calculatedStorage[aF];
-            rv = [rv convertToGlobalSystem];
-            if ([aF.key hasSuffix:@"Elevation"] && [rv.unit.key isEqualToString:@"yard"]) {
-                rv = [rv convertToUnitName:@"foot"];
-            }
         }
-        if (!rv) {
-            rv = [self numberWithUnitForExtraByField:aF];
+    }
+    if( rv ){
+        rv = [rv convertToGlobalSystem];
+        if ([aF.key hasSuffix:@"Elevation"] && [rv.unit.key isEqualToString:@"yard"]) {
+            rv = [rv convertToUnitName:@"foot"];
         }
     }
     return rv;
 }
 -(void)setNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)field inActivity:(GCActivity*)act{
-    static NSDictionary*_defs = nil;
-    if( _defs == nil){
-        _defs = @{
-                  @(gcFieldFlagSumDistance) : [GCUnit unitForKey:STOREUNIT_DISTANCE],
-                  @(gcFieldFlagWeightedMeanSpeed) : [GCUnit unitForKey:STOREUNIT_SPEED],
-                  @(gcFieldFlagWeightedMeanHeartRate) : [GCUnit bpm],
-                  @(gcFieldFlagAltitudeMeters): [GCUnit unitForKey:STOREUNIT_ALTITUDE],
-                  @(gcFieldFlagCadence):[GCUnit rpm],
-                  @(gcFieldFlagPower):[GCUnit watt],
-                  @(gcFieldFlagGroundContactTime):[GCUnit ms],
-                  @(gcFieldFlagVerticalOscillation):[GCUnit centimeter],
-                  };
-        [_defs retain];
-    }
-    GCUnit * unit = field.fieldFlag != gcFieldFlagNone?_defs[ @(field.fieldFlag) ] : nil;
-    if( unit ){
-        [self setValue:[nu convertToUnit:unit].value forField:field.fieldFlag];
+    if( field.fieldFlag != gcFieldFlagNone ){
+        [self setValue:nu forField:field.fieldFlag];
     }else{
         if( ![nu.unit.key isEqualToString:@"datetime"]){
             [self setExtraValue:nu forFieldKey:field in:act];
@@ -681,6 +657,37 @@ void buildStatic(){
 }
 -(GCNumberWithUnit*)numberWithUnitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;{
     return [GCNumberWithUnit numberWithUnit:[GCTrackPoint unitForField:aField andActivityType:aType] andValue:[self valueForField:aField]];
+}
+
+-(double)extraValueForIndex:(GCTrackPointExtraIndex*)idx{
+    GCNumberWithUnit * num = self.extraStorage[idx.field];
+    if( num ){
+        return num.value;
+    }
+    return 0.;
+}
+-(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(GCActivity*)act{
+    if( field.fieldFlag != gcFieldFlagNone){
+        [self setValue:nu forField:field.fieldFlag];
+        return; // should not be saved twice.
+    }
+    if( act != nil){
+        GCTrackPointExtraIndex * index = act.cachedExtraTracksIndexes[field];
+        
+        if (index == nil) {
+            if (act.cachedExtraTracksIndexes ==nil) {
+                act.cachedExtraTracksIndexes = @{};
+            }
+            index = [GCTrackPointExtraIndex extraIndexForField:field withUnit:nu.unit in:act.cachedExtraTracksIndexes];
+            NSMutableDictionary * nextDict = [NSMutableDictionary dictionaryWithObject:index forKey:field];
+            [nextDict addEntriesFromDictionary:act.cachedExtraTracksIndexes];
+            act.cachedExtraTracksIndexes = nextDict;
+        }
+    }
+    if (!self.extraStorage) {
+        self.extraStorage = [NSMutableDictionary dictionary];
+    }
+    self.extraStorage[field] = nu;
 }
 
 #pragma mark - Locations

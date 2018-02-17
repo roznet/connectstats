@@ -23,26 +23,6 @@
 //  SOFTWARE.
 //  
 
-/*typedef NS_ENUM(NSUInteger, gcField) {
-    gcFieldSumDistance,
-    gcFieldSumDuration,
-    gcFieldWeightedMeanHeartRate,
-    gcFieldWeightedMeanSpeed,
-    gcFieldCadence,
-    gcFieldAltitudeMeters,
-    gcFieldPower,
-    gcFieldSumStrokes,
-    gcFieldSumSwolf,
-    gcFieldSumEfficiency,
-    gcFieldVerticalOscillation,
-    gcFieldGroundContactTime,
-    gcFieldTennisShots,
-    gcFieldTennisRegularity,
-    gcFieldTennisEnergy,
-    gcFieldTennisPower,
-    gcFieldSumStep,
-    gcFieldEnd
-};*/
 
 //NEWTRACKFIELD
 typedef NS_ENUM(NSUInteger, gcFieldFlag) {

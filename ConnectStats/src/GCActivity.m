@@ -496,7 +496,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         NSUInteger lapIdx = [res intForColumn:@"lap"];
         if( lapIdx < _lapsCache.count){
             GCTrackPointSwim * point = _lapsCache[lapIdx];
-            [point updateValueFromResultSet:res];
+            [point updateValueFromResultSet:res inActivity:self];
         }else{
             if( !reported){
                 RZLog(RZLogError, @"Inconsistent lap info with number of laps");
@@ -510,7 +510,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         NSUInteger lengthIdx = [res intForColumn:@"length"];
         if( lengthIdx < trackpointsCache.count){
             GCTrackPointSwim * point = trackpointsCache[lengthIdx];
-            [point updateValueFromResultSet:res];
+            [point updateValueFromResultSet:res inActivity:self];
         }else{
             if( !reported){
                 RZLog(RZLogError, @"Inconsistent length info with number of laps");
@@ -523,7 +523,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         if (time==nil || point.directSwimStroke!=gcSwimStrokeOther) {
             time = point.time;
         }
-        [point fixupDrillData:time];
+        [point fixupDrillData:time inActivity:self];
         time = [time dateByAddingTimeInterval:point.elapsed];
     }
     [GCFieldsCalculated addCalculatedFieldsToTrackPoints:self.lapsCache forActivity:self];
@@ -554,8 +554,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                 };
                 if ([point.time isEqualToDate:time]) {
                     for (GCTrackPointExtraIndex * e in extra.allValues) {
-                        [point setExtraValue:[GCNumberWithUnit numberWithUnit:e.unit andValue:[res doubleForColumn:e.dataColumnName]]
-                                 forFieldKey:e.field in:self];
+                        GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:e.unit andValue:[res doubleForColumn:e.dataColumnName]];
+                        [point setNumberWithUnit:nu forField:e.field inActivity:self];
                     }
                 }
             }
@@ -813,7 +813,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                 lap_idx = this_idx;
                 lap = tmplaps[lap_idx];
             }
-            [lap addExtraFromResultSet:res andActivityType:self.activityType];
+            [lap addExtraFromResultSet:res inActivity:self];
         }
     }
     self.lapsCache = tmplaps;
@@ -1043,7 +1043,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
     for (NSString * field in self.cachedExtraTracksIndexes) {
         GCField * one = [GCField field:field forActivityType:self.activityType];
-        unique[one] = @1;
+        if( one.validForGraph ){
+            unique[one] = @1;
+        }
     }
     return [unique.allKeys sortedArrayUsingSelector:@selector(compare:)];
 }

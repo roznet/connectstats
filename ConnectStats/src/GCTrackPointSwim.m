@@ -58,24 +58,13 @@
     NSMutableDictionary * summary = [act buildSummaryDataFromGarminModernData:data];
 
     NSMutableDictionary * values = [NSMutableDictionary dictionary];
-    for (NSString * key in summary) {
+    for (GCField * field in summary) {
         NSDate * date = [act buildStartDateFromGarminModernData:data];
         self.time = date;
-        GCActivitySummaryValue * value = summary[key];
-        values[key] = value.numberWithUnit;
+        GCActivitySummaryValue * value = summary[field];
+        values[field] = value.numberWithUnit;
 
-        gcFieldFlag trackField = [GCFields trackFieldFromSwimLapField:key];
-        if (trackField != gcFieldFlagNone) {
-            GCUnit * storeUnit = [GCTrackPoint unitForField:trackField andActivityType:act.activityType];
-            
-            [self setValue:[value.numberWithUnit convertToUnit:storeUnit].value forField:trackField];
-            /*if( !RZTestOption(self.trackFlags, trackField)){
-                [self setExtraValue:value.numberWithUnit forFieldKey:key in:act];
-            }*/
-            self.trackFlags |= trackField;
-        }else{
-            //[self setExtraValue:value.numberWithUnit forFieldKey:key in:act];
-        }
+        [self setNumberWithUnit:value.numberWithUnit forField:field inActivity:act];
     }
     self.values = values;
     NSString * style = data[@"swimStroke"];
@@ -152,7 +141,7 @@
 
 }
 
--(void)updateValueFromResultSet:(FMResultSet*)res{
+-(void)updateValueFromResultSet:(FMResultSet*)res inActivity:(GCActivity*)act{
     NSString * key = [res stringForColumn:@"field"];
     NSString * uom = [res stringForColumn:@"uom"];
     double val = [res doubleForColumn:@"value"];
@@ -161,16 +150,18 @@
     if ([key isEqualToString:@"SumDistance"]) {
         self.distanceMeters = val;
     }
-    self.values[key] = nb;
+    self.values[ [GCField fieldForKey:key andActivityType:act.activityType] ] = nb;
 }
 
--(void)fixupDrillData:(NSDate*)time{
-    GCNumberWithUnit * nb = (self.values)[@"WeightedMeanSpeed"];
+-(void)fixupDrillData:(NSDate*)time inActivity:(GCActivity*)act{
+    GCField * speedf = [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:act.activityType];
+    GCField * pacef  = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:act.activityType];
+    GCNumberWithUnit * nb = (self.values)[ speedf ];
     if (self.directSwimStroke==gcSwimStrokeOther ){
         // 30sec / 25m. 100/25
         GCNumberWithUnit * pace = [GCNumberWithUnit numberWithUnitName:@"min100m" andValue:self.elapsed/60. / self.distanceMeters*100.];
-        self.values[@"WeightedMeanPace"] = pace;
-        self.values[@"WeightedMeanSpeed"] = [pace convertToUnit:nb.unit];
+        self.values[pacef] = pace;
+        self.values[speedf] = [pace convertToUnit:nb.unit];
         self.time = time;
     }
 }
@@ -194,12 +185,12 @@
 }
 
 -(void)saveLengthToDb:(FMDatabase *)trackdb index:(NSUInteger)idx{
-    for (NSString * key in self.values) {
-        GCNumberWithUnit * nb = self.values[key];
+    for (GCField * field in self.values) {
+        GCNumberWithUnit * nb = self.values[field];
         if (![trackdb executeUpdate:@"INSERT INTO gc_length_info (lap,length,field,value,uom) VALUES (?,?,?,?,?)",
               @(self.lapIndex),
               @(idx),
-              key,
+              field.key,
               [nb number],
               (nb.unit).key]){
             RZLog( RZLogError, @"Failed sql %@",[trackdb lastErrorMessage]);
@@ -219,6 +210,7 @@
 -(BOOL)active{
     return self.distanceMeters > 0.;
 }
+/*
 -(double)valueForField:(gcFieldFlag)aField{
     GCNumberWithUnit * nb = self.values[[GCFields swimLapFieldFromTrackField:aField]];
     return nb.value;
@@ -236,9 +228,11 @@
     GCNumberWithUnit * nb = self.values[aF];
     return nb;
 }
+ 
 -(NSDictionary*)extra{
     return self.values;
 }
+
 -(GCNumberWithUnit*)numberWithUnitForField:(GCField*)aF inActivity:(GCActivity*)act{
     GCNumberWithUnit * rv = self.values[aF.key];
     if( !rv && aF.fieldFlag != gcFieldFlagNone){
@@ -249,6 +243,6 @@
         }
     }
     return rv;
-}
+}*/
 
 @end

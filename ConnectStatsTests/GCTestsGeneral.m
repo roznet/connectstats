@@ -204,7 +204,14 @@
 -(void)testCalculatedFieldsTrackPoints{
     GCActivity * act = [[GCActivity alloc] init];
     [act setActivityType:GC_TYPE_RUNNING];
-    NSDictionary * d = @{ @"Cadence": @90.0, @"TotalTimeSeconds": @"3.", @"AvgSpeed": @3., @"AvgWatts": @3000.0, @"Calories":@"9.",@"StartTime":@"0" };
+    NSDictionary * d = @{ @"averageRunCadence": @180.0,
+                          @"duration": @"3.",
+                          @"averageSpeed": @3.,
+                          @"averagePower": @3000.0,
+                          @"calories":@"9.",
+                          @"startTimeGMT":@"2016-03-13T12:46:19.0"
+                          
+                          };
     
     GCLap * trackpoint = [[GCLap alloc] initWithDictionary:d forActivity:act];
     
@@ -655,11 +662,15 @@
     
     NSDate * start = [NSDate date];
     
+    GCField * hr = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
+    GCField * dist = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING];
+    
     from.time = start;
     to.time = [start dateByAddingTimeInterval:1.];
-    from.heartRateBpm = 120.;
-    from.distanceMeters = 1.;
-    to.distanceMeters = 11.; // 10 m/s
+    [from setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.bpm andValue:120.] forField:hr inActivity:dummy];
+    [from setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:1.0] forField:dist inActivity:dummy];
+    [to setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:11.0] forField:dist inActivity:dummy];
+    // from 1m to 11m in 1sec = 10 m/s
     
     // 60 seconds of this
     for (NSUInteger i=0; i<60; i++) {
@@ -668,8 +679,9 @@
     XCTAssertEqualWithAccuracy(lap.distanceMeters, 600., 1e-7, @"distance after 1min");
     XCTAssertEqualWithAccuracy(lap.speed, 10., 1e-7, @"speed after 1min");
     XCTAssertEqualWithAccuracy(lap.heartRateBpm, 120., 1e-7, @"hr after 1min");
-    to.distanceMeters = 21.; // 20 m/s
-    from.heartRateBpm = 140.;
+    // Switch to 20 m/s @ 140bpm
+    [to setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:21.0] forField:dist inActivity:dummy];
+    [from setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.bpm andValue:140.0] forField:hr inActivity:dummy];
     
     for (NSUInteger i=0; i<60; i++) {
         [lap accumulateFrom:from to:to  inActivity:dummy];

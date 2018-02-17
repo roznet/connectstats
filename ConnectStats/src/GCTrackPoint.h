@@ -79,7 +79,7 @@
 -(GCTrackPoint*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithTrackPoint:(GCTrackPoint*)other NS_DESIGNATED_INITIALIZER;
 -(void)saveToDb:(FMDatabase*)trackdb;
--(void)addExtraFromResultSet:(FMResultSet*)res andActivityType:(NSString*)aType;
+-(void)addExtraFromResultSet:(FMResultSet*)res inActivity:(GCActivity*)act;
 
 +(GCTrackPoint*)trackPointWithCoordinate2D:(CLLocationCoordinate2D)coord;
 +(GCTrackPoint*)trackPointWithCoordinate2D:(CLLocationCoordinate2D)coord
@@ -101,7 +101,7 @@
 -(NSComparisonResult)compareTime:(GCTrackPoint*)other;
 
 // MOVE TO PRIVATE:
--(void)setValue:(double)val forField:(gcFieldFlag)aField;
+-(void)setValue:(GCNumberWithUnit*)nu forField:(gcFieldFlag)aField;
 -(double)extraValueForIndex:(GCTrackPointExtraIndex*)idx;
 //-(void)setExtraValue:(double)val forIndex:(GCTrackPointExtraIndex*)idx;
 -(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(GCActivity*)act;

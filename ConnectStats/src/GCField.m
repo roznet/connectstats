@@ -295,6 +295,9 @@ static void registerInCache(GCField*field){
     if (self.fieldFlag == gcFieldFlagSumDistance || self.fieldFlag == gcFieldFlagSumDuration) {
         return false;
     }
+    if( self.fieldFlag != gcFieldFlagNone){
+        return self.isWeightedAverage;
+    }
     return true;
 }
 

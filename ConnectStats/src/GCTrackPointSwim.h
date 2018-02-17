@@ -29,7 +29,7 @@
 @interface GCTrackPointSwim : GCTrackPoint
 
 @property (nonatomic,assign) gcSwimStrokeType directSwimStroke;
-@property (nonatomic,retain) NSMutableDictionary<NSString*,GCNumberWithUnit*> * values;
+@property (nonatomic,retain) NSMutableDictionary<GCField*,GCNumberWithUnit*> * values;
 @property (nonatomic,assign) NSUInteger lengthIdx;
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
@@ -37,12 +37,12 @@
 -(GCTrackPoint*)initWithDictionary:(NSDictionary*)aDict forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
 -(GCTrackPointSwim*)initWithTrackPoint:(GCTrackPoint*)other NS_DESIGNATED_INITIALIZER;
 
--(void)updateValueFromResultSet:(FMResultSet*)res;
+-(void)updateValueFromResultSet:(FMResultSet*)res inActivity:(GCActivity*)act;
 
--(NSDictionary*)extra;
+//-(NSDictionary*)extra;
 
 -(BOOL)active;
 
--(void)fixupDrillData:(NSDate*)time;
+-(void)fixupDrillData:(NSDate*)time inActivity:(GCActivity*)act;
 
 @end

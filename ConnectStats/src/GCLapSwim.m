@@ -50,10 +50,10 @@
 }
 
 -(void)saveLapToDb:(FMDatabase*)trackdb index:(NSUInteger)idx{
-    for (NSString * key in self.values) {
-        GCNumberWithUnit * nb = self.values[key];
+    for (GCField * field in self.values) {
+        GCNumberWithUnit * nb = self.values[field];
         [trackdb executeUpdate:@"INSERT INTO gc_pool_lap_info (lap,field,value,uom) VALUES (?,?,?,?)",
-         @(idx),key,nb.number,(nb.unit).key];
+         @(idx),field.key,nb.number,(nb.unit).key];
     }
     BOOL distanceGreaterThanZero = (self.distanceMeters>0.);
     [trackdb executeUpdate:@"INSERT INTO gc_pool_lap (lap,Time,SumDuration,DirectSwimStroke,Active) VALUES (?,?,?,?,?)",

@@ -88,7 +88,28 @@
         point.longitudeDegrees = _coordinate.longitude;
         point.latitudeDegrees = _coordinate.latitude;
     }else{
-        [point setValue:_value forField:_field];
+        GCUnit * unit = nil;
+        /*@[@"elevation",  @(gcFieldFlagAltitudeMeters)          ],
+        @[@"heartrate",  @(gcFieldFlagWeightedMeanHeartRate)   ],
+        @[@"distance",   @(gcFieldFlagSumDistance)             ],
+        @[@"cadence",    @(gcFieldFlagCadence)                 ]*/
+        switch (_field) {
+            case gcFieldFlagCadence:
+                unit = GCUnit.stepsPerMinute;
+                break;
+            case gcFieldFlagWeightedMeanHeartRate:
+                unit = GCUnit.bpm;
+                break;
+            case gcFieldFlagAltitudeMeters:
+            case gcFieldFlagSumDistance:
+                unit = GCUnit.meter;
+                break;
+            default:
+                break;
+        }
+        if(unit){
+            [point setValue:[GCNumberWithUnit numberWithUnit:unit andValue:_value] forField:_field];
+        }
     }
 }
 
