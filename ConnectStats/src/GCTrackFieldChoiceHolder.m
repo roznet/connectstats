@@ -35,6 +35,55 @@
 
 @implementation GCTrackFieldChoiceHolder
 
+#define kGCVersion @"version"
+#define kGCField   @"field"
+#define kGCX_Field  @"x_field"
+#define kGCMovingAvg @"movingaverage"
+#define kGCStatsStyle @"statsstyle"
+#define kGCZoneCalc @"zonecalculator"
+#define kGCTimeAxis @"timeaxis"
+#define kGCCompareAct @"compareactivity"
+
+#define kGCNoCompare @"__<NONE>__"
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder{
+    self = [super init];
+    if (self) {
+        self.field = [aDecoder decodeObjectForKey:kGCField];
+        self.x_field = [aDecoder decodeObjectForKey:kGCX_Field];
+        self.movingAverage = [aDecoder decodeInt64ForKey:kGCMovingAvg];
+        self.statsStyle = [aDecoder decodeInt64ForKey:kGCStatsStyle];
+        self.timeAxis = [aDecoder decodeBoolForKey:kGCTimeAxis];
+        bool hasZone = [aDecoder decodeBoolForKey:kGCZoneCalc];
+        NSString * compare = [aDecoder decodeObjectForKey:kGCCompareAct];
+        if( hasZone ){
+            [[GCAppGlobal health] zoneCalculatorForField:self.field];
+        }
+        if( ![compare isEqualToString:kGCNoCompare]){
+            self.compareActivity = [[GCAppGlobal organizer] activityForId:compare];
+        }
+    }
+    return self;
+}
+
+
+
+-(void)encodeWithCoder:(NSCoder *)aCoder{
+    // ZoneCalc -> bool, if yes get zone for field
+    // compareAct -> activityId, if yes, get from organizer
+    
+    [aCoder encodeInt:1 forKey:kGCVersion];
+    [aCoder encodeObject:self.field forKey:kGCField];
+    [aCoder encodeObject:self.x_field forKey:kGCX_Field];
+    [aCoder encodeInt64:self.movingAverage forKey:kGCMovingAvg];
+    [aCoder encodeInt64:self.statsStyle forKey:kGCStatsStyle];
+    [aCoder encodeBool:self.zoneCalculator!=nil forKey:kGCZoneCalc];
+    [aCoder encodeBool:self.timeAxis forKey:kGCTimeAxis];
+    [aCoder encodeObject:self.compareActivity.activityId ?: kGCNoCompare forKey:kGCCompareAct];
+}
+
+
+
 +(GCTrackFieldChoiceHolder*)trackFieldChoice:(GCField *)field xField:(GCField *)xField {
     GCTrackFieldChoiceHolder * rv = [[[GCTrackFieldChoiceHolder alloc] init] autorelease];
     if (rv) {
@@ -147,6 +196,26 @@
 
     [trackStats setupForField:self.field xField:self.x_field andLField:nil];
 
+}
+
+-(BOOL)isEqualToChoiceHolder:(GCTrackFieldChoiceHolder*)other{
+    BOOL rv = (RZNilOrEqualToField(self.field, other.field) &&
+            RZNilOrEqualToField(self.x_field, other.x_field) &&
+            self.statsStyle == other.statsStyle &&
+            self.timeAxis == other.timeAxis &&
+            self.movingAverage == other.movingAverage);
+    if( ! rv ){
+        
+    }
+    return rv;
+}
+
+-(BOOL)isEqual:(id)other{
+    if( [other isKindOfClass:[GCTrackFieldChoiceHolder class]]){
+        return [self isEqualToChoiceHolder:other];
+    }else{
+        return false;
+    }
 }
 
 @end

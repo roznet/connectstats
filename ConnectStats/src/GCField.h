@@ -55,7 +55,14 @@
 -(BOOL)isWeightedAverage;
 -(BOOL)isMax;
 -(BOOL)isMin;
+-(BOOL)isSpeedOrPace;
 
+/**
+ Corresponding Speed or Pace field. If not speed or pace return nil
+
+ @return complement field
+ */
+-(GCField*)correspondingPaceOrSpeedField;
 -(GCField*)correspondingMaxField;
 -(GCField*)correspondingWeightedMeanField;
 -(GCField*)correspondingMinField;

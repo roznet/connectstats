@@ -159,6 +159,11 @@
     [self updateWithExtra:extraStorage];
 }
 
+-(void)recordField:(GCField*)field withUnit:(GCUnit*)unit inActivity:(GCActivity*)act{
+    // Override track point record, as for lap we will have more fields
+    // and we don't want them to be recorded as trackfields
+}
+
 -(void)parseModernDict:(NSDictionary*)data inActivity:(GCActivity*)act{
 
     NSMutableDictionary * summary = [act buildSummaryDataFromGarminModernData:data];

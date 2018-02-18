@@ -320,6 +320,9 @@
     self.zones = nil;
 }
 
+-(void)clearAllZones{
+    self.zones = @{};
+}
 #pragma mark - Automatic Zones
 // 5:30 ->  4:30, 4:45, 5:00, 5:30, 6:00
 // 5:00 ->  4:00, 4:15, 4:30, 5:00, 5:30

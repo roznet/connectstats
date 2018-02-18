@@ -298,11 +298,14 @@ static void registerInCache(GCField*field){
     if( self.fieldFlag != gcFieldFlagNone){
         return self.isWeightedAverage;
     }
-    return true;
+    return !self.isMax && !self.isMin;
 }
 
 -(BOOL)isWeightedAverage{
     return [self.key hasPrefix:@"WeightedMean"];
+}
+-(BOOL)isSpeedOrPace{
+    return self.fieldFlag == gcFieldFlagWeightedMeanSpeed || [self.key isEqualToString:@"WeightedMeanSpeed"] || [self.key isEqualToString:@"WeightedMeanPace"];
 }
 
 -(BOOL)isMax{
@@ -319,7 +322,23 @@ static void registerInCache(GCField*field){
     }
     return nil;
 }
+-(GCField*)fieldBySwappingSuffix:(NSString*)oldSuffix for:(NSString*)newSuffix{
+    if( [self.key hasSuffix:oldSuffix]){
+        NSString * guess = [NSString stringWithFormat:@"%@%@", [self.key substringToIndex:(self.key.length-oldSuffix.length)], newSuffix];
+        return [GCField fieldForKey:guess andActivityType:self.activityType];
+    }
+    return nil;
+}
 
+-(GCField*)correspondingPaceOrSpeedField{
+    GCField * rv = nil;
+    if( [self.key hasSuffix:@"Speed"] ){
+        rv = [self fieldBySwappingSuffix:@"Speed" for:@"Pace"];
+    }else if([self.key hasSuffix:@"Pace"]){
+        rv = [self fieldBySwappingSuffix:@"Pace" for:@"Speed"];
+    }
+    return rv;
+}
 -(GCField*)correspondingMaxField{
     GCField * rv = [self fieldBySwappingPrefix:@"WeightedMean" for:@"Max"];
     return rv;

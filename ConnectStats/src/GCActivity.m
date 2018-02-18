@@ -1050,6 +1050,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
     for (NSString * field in self.cachedExtraTracksIndexes) {
         GCField * one = [GCField field:field forActivityType:self.activityType];
+        // if speed or pace, don't add twice, was already added above
+        if( one.isSpeedOrPace && (_trackFlags & gcFieldFlagWeightedMeanSpeed ) == gcFieldFlagWeightedMeanSpeed){
+            continue;
+        }
         if( one.validForGraph ){
             unique[one] = @1;
         }

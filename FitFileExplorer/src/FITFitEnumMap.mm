@@ -185,6 +185,10 @@
                 rv = @"MaxSwimCadence";
             }
         }
+        
+        if( [rv isEqualToString:@"WeightedMeanSpeed"] && [activityType isEqualToString:GC_TYPE_RUNNING]){
+            rv = @"WeightedMeanPace";
+        }
     }
     static NSMutableDictionary * missing = nil;
     if( missing == nil){

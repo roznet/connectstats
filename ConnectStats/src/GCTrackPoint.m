@@ -670,24 +670,31 @@ void buildStatic(){
     }
     return 0.;
 }
--(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(GCActivity*)act{
-    if( field.fieldFlag != gcFieldFlagNone){
-        [self setValue:nu forField:field.fieldFlag];
-        return; // should not be saved twice.
-    }
+
+-(void)recordField:(GCField*)field withUnit:(GCUnit*)unit inActivity:(GCActivity*)act{
     if( act != nil){
+
         GCTrackPointExtraIndex * index = act.cachedExtraTracksIndexes[field];
         
         if (index == nil) {
             if (act.cachedExtraTracksIndexes ==nil) {
                 act.cachedExtraTracksIndexes = @{};
             }
-            index = [GCTrackPointExtraIndex extraIndexForField:field withUnit:nu.unit in:act.cachedExtraTracksIndexes];
+            index = [GCTrackPointExtraIndex extraIndexForField:field withUnit:unit in:act.cachedExtraTracksIndexes];
             NSMutableDictionary * nextDict = [NSMutableDictionary dictionaryWithObject:index forKey:field];
             [nextDict addEntriesFromDictionary:act.cachedExtraTracksIndexes];
             act.cachedExtraTracksIndexes = nextDict;
         }
     }
+}
+-(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(GCActivity*)act{
+    if( field.fieldFlag != gcFieldFlagNone){
+        [self setValue:nu forField:field.fieldFlag];
+        return; // should not be saved twice.
+    }
+    // Can be overridden in derived class if no need to record (lap for instance)
+    [self recordField:field withUnit:nu.unit inActivity:act];
+    
     if (!self.extraStorage) {
         self.extraStorage = [NSMutableDictionary dictionary];
     }
