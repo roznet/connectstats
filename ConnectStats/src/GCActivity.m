@@ -669,7 +669,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
     NSUInteger countBadLaps = 0;
     GCTrackPoint * lastTrack = nil;
-    self.cachedExtraTracksIndexes = nil;
+    BOOL firstDone = false;
+    
     for (id data in aTrack) {
         GCTrackPoint * npoint = nil;
         GCTrackPoint * point = nil;
@@ -683,6 +684,11 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                 }
             }
         }else if ([data isKindOfClass:[NSDictionary class]]){
+            // If parsing from dict, reset extra indexes to rebuild
+            // with fields we get in dict
+            if(!firstDone){
+                self.cachedExtraTracksIndexes = nil;
+            }
             npoint = [[GCTrackPoint alloc] initWithDictionary:data forActivity:self];
             point = npoint;
         }
@@ -709,6 +715,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             self.trackFlags |= point.trackFlags;
         }
         [npoint release];
+        firstDone = true;
     }
 
     self.trackpointsCache = trackData;

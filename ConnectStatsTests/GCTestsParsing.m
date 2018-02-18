@@ -642,10 +642,38 @@
     NSArray<NSString*>*aIds = @[ @"1083407258", // Ski Activity
                                  @"2477200414", // Run with Power
                                  ];
-                                 
+
+    NSString * dbn_fit = @"test_activity_fit_merge.db";
+    NSString * dbn_nofit = @"test_activity_nofit_merge.db";
+    
+    [RZFileOrganizer removeEditableFile:dbn_fit];
+    [RZFileOrganizer removeEditableFile:dbn_nofit];
+    
+    FMDatabase * db_fit = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:dbn_fit]];
+    [db_fit open];
+    [GCActivitiesOrganizer ensureDbStructure:db_fit];
+    
+    FMDatabase * db_nofit = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:dbn_nofit]];
+    [db_nofit open];
+    [GCActivitiesOrganizer ensureDbStructure:db_nofit];
+    NSLog(@"%@", db_nofit);
+    
     for (NSString * aId in aIds) {
         GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        act.db = db_nofit;
+        act.trackdb = db_nofit;
+        [act saveToDb:db_nofit];
         [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+
+        GCActivity * actMerge = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        actMerge.db = db_fit;
+        actMerge.trackdb = db_fit;
+        [actMerge saveToDb:db_fit];
+        [GCGarminActivityTrack13Request testForActivity:actMerge withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:TRUE];
+        [actMerge saveToDb:db_fit];
+        
+        GCActivity * actMergeReload = [GCActivity activityWithId:aId andDb:db_fit];
+        [actMergeReload trackpoints]; // force load trackpoints
         
         NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
         
@@ -653,19 +681,39 @@
         [fitDecode parse];
         GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile];
         
+        // All trackfield fields merged
+        for (GCField * one in act.availableTrackFields) {
+            XCTAssertTrue([actMergeReload.availableTrackFields containsObject:one], @"%@ in merge reload %@", one, aId);
+            XCTAssertTrue([actMerge.availableTrackFields containsObject:one], @"%@ in merge %@", one, aId);
+        }
+        for (GCField * one in fitAct.availableTrackFields) {
+            XCTAssertTrue([actMergeReload.availableTrackFields containsObject:one], @"%@ in merge reload %@", one, aId);
+            XCTAssertTrue([actMerge.availableTrackFields containsObject:one], @"%@ in merge %@", one, aId);
+        }
+
         NSDictionary * sum_gc = act.summaryData;
         NSDictionary * sum_fit= fitAct.summaryData;
+        NSDictionary * sum_merge= actMerge.summaryData;
+        NSDictionary * sum_reload= actMergeReload.summaryData;
         
         NSMutableArray * recordMissing = [NSMutableArray array];
         NSMutableArray * recordEpsilon = [NSMutableArray array];
         
         for (GCField * field in sum_fit) {
+            GCActivitySummaryValue * v_fit= sum_fit[field];
+            GCActivitySummaryValue * v_merge=sum_merge[field];
+            GCActivitySummaryValue * v_reload=sum_reload[field];
+
+            // Everything in fit should be in merge and reload
+            XCTAssertNotNil(v_merge);
+            XCTAssertNotNil(v_reload);
+            
+            // SOme won't be in gc, then skip
             if( expectedMissingFromGC[field.key] != nil){
                 continue;// Somehow missing from gc
             }
             GCActivitySummaryValue * v_gc = sum_gc[field];
-            GCActivitySummaryValue * v_fit= sum_fit[field];
-            
+
             double eps =  1.e-7;
             NSNumber * specialEps = epsForField[field.key];
             if (specialEps) {
@@ -698,6 +746,10 @@
         }
         [recordMissing removeAllObjects];
         for (GCField * field in sum_gc) {
+            // everything should be in reload and merge
+            XCTAssertNotNil(sum_reload[field]);
+            XCTAssertNotNil(sum_merge[field]);
+            
             GCActivitySummaryValue * v_gc = sum_gc[field];
             GCActivitySummaryValue * v_fit= sum_fit[field];
             if( v_fit == nil && expectedMissingFromFit[field.key] == nil){

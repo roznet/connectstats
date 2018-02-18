@@ -50,5 +50,6 @@ typedef NS_ENUM(NSUInteger, gcTrack13RequestStage){
 +(GCGarminActivityTrack13Request*)nextRequest:(GCGarminActivityTrack13Request*)prev;
 
 +(GCActivity*)testForActivity:(GCActivity*)act withFilesIn:(NSString*)path;
++(GCActivity*)testForActivity:(GCActivity*)act withFilesIn:(NSString*)path mergeFit:(BOOL)mergeFit;
 
 @end

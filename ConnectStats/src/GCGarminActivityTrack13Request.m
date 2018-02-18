@@ -352,10 +352,14 @@
 }
 
 +(GCActivity*)testForActivity:(GCActivity*)act withFilesIn:(NSString*)path{
+    return [self testForActivity:act withFilesIn:path mergeFit:FALSE];
+}
++(GCActivity*)testForActivity:(GCActivity*)act withFilesIn:(NSString*)path mergeFit:(BOOL)mergeFit{
 
     NSString * fnTracks = [path stringByAppendingPathComponent:[self stageFilename:gcTrack13RequestTracks forActivityId:act.activityId]];
     NSString * fnLaps   = [path stringByAppendingPathComponent:[self stageFilename:gcTrack13RequestLaps forActivityId:act.activityId]];
-
+    NSString * fnFit = [path stringByAppendingPathComponent:[self stageFilename:gcTrack13RequestFit forActivityId:act.activityId]];
+    
     if (fnTracks && fnLaps) {
 
         NSData * trackdata = [NSData dataWithContentsOfFile:fnTracks];
@@ -369,6 +373,15 @@
                 [act saveTrackpointsSwim:(parserLaps.trackPointSwim ?: @[]) andLaps:(parserLaps.lapsSwim ?: @[]) ];
             }else{
                 [act saveTrackpoints:(parserTracks.trackPoints ?:@[]) andLaps:(parserLaps.laps ?:@[])];
+            }
+            
+            if( mergeFit && fnFit && [[NSFileManager defaultManager] fileExistsAtPath:fnFit] ){
+                FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fnFit];
+                [fitDecode parse];
+                GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:act.activityId fitFile:fitDecode.fitFile]);
+                [act updateSummaryDataFromActivity:fitAct];
+                [act updateTrackpointsFromActivity:fitAct];
+                [act saveTrackpoints:act.trackpoints andLaps:act.laps];
             }
             return act;
         }else{
