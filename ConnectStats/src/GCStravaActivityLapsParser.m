@@ -111,7 +111,7 @@
                             [GCField fieldForFlag:flag andActivityType:act.activityType];
 
                         GCNumberWithUnit * num = [GCNumberWithUnit numberWithUnitName:uom andValue:dval];
-                        [lap setExtraValue:num forFieldKey:field in:act];
+                        [lap setNumberWithUnit:num forField:field inActivity:nil];
                     }
                 }
 

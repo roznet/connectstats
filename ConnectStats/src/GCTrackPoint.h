@@ -71,8 +71,6 @@
 @property (nonatomic,assign) NSUInteger trackFlags;
 @property (nonatomic,readonly) NSDictionary<GCField*,GCNumberWithUnit*>*calculated;
 @property (nonatomic,readonly) NSDictionary<GCField*,GCNumberWithUnit*>*extra;
-//@property (nonatomic,readonly) NSArray<GCField*>*availableFields;
-
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithDictionary:(NSDictionary*)aDict forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
@@ -99,13 +97,6 @@
 -(CLLocationDistance)distanceMetersFrom:(GCTrackPoint*)other;
 -(NSTimeInterval)timeIntervalSince:(GCTrackPoint*)other;
 -(NSComparisonResult)compareTime:(GCTrackPoint*)other;
-
-// MOVE TO PRIVATE:
--(void)setValue:(GCNumberWithUnit*)nu forField:(gcFieldFlag)aField;
--(double)extraValueForIndex:(GCTrackPointExtraIndex*)idx;
-//-(void)setExtraValue:(double)val forIndex:(GCTrackPointExtraIndex*)idx;
--(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(GCActivity*)act;
-// END PRIVATE
 
 +(GCUnit*)unitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;
 -(GCNumberWithUnit*)numberWithUnitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;

@@ -38,6 +38,10 @@
 
 -(BOOL)hasField:(GCField*)afield;
 -(double)valueForField:(gcFieldFlag)aField;
+-(void)setValue:(GCNumberWithUnit*)nu forField:(gcFieldFlag)aField;
+-(double)extraValueForIndex:(GCTrackPointExtraIndex*)idx  ;
+-(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(GCActivity*)act;
+
 
 @end
 

@@ -202,7 +202,8 @@
                     if (![unit.key isEqualToString:uom]) {
                         numval = [unit convertDouble:numval fromUnit:[GCUnit unitForKey:uom]];
                     }
-                    [self setValue:[GCNumberWithUnit numberWithUnit:unit andValue:numval] forField:trackfield];
+                    [self setNumberWithUnit:[GCNumberWithUnit numberWithUnit:unit andValue:numval]
+                                   forField:[GCField fieldForFlag:trackfield andActivityType:act.activityType] inActivity:nil];
                 }else{
                     if (![GCFields skipField:fieldKey]) {
                         extraStorage[field] = [GCNumberWithUnit numberWithUnitName:uom andValue:numval];

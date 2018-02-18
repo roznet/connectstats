@@ -26,6 +26,7 @@
 #import "GCSportTracksActivityDetailParser.h"
 #import "GCFields.h"
 #import "GCTrackPoint.h"
+#import "GCActivity.h"
 #import <CoreLocation/CoreLocation.h>
 
 
@@ -35,17 +36,19 @@
 @property (nonatomic,assign) CLLocationCoordinate2D coordinate;
 @property (nonatomic,assign) double value;
 @property (nonatomic,retain) NSArray * data;
-@property (nonatomic,assign) gcFieldFlag field;
+@property (nonatomic,retain) GCField * field;
+@property (nonatomic,retain) GCActivity*activity;
 @end
 
 @implementation GCSportTracksDetailWalker
 
-+(GCSportTracksDetailWalker*)detailWalker:(NSArray*)adata for:(gcFieldFlag)flag{
++(GCSportTracksDetailWalker*)detailWalker:(NSArray*)adata for:(GCField*)flag inActivity:(GCActivity*)act{
     GCSportTracksDetailWalker * rv = [[[GCSportTracksDetailWalker alloc] init] autorelease];
     if (rv) {
         rv.data  = adata;
         rv.field = flag;
         rv.index = 0;
+        rv.activity = act;
         [rv readValue];
 
     }
@@ -53,6 +56,8 @@
 }
 
 -(void)dealloc{
+    [_activity release];
+    [_field release];
     [_data release];
     [super dealloc];
 }
@@ -84,7 +89,7 @@
 }
 
 -(void)update:(GCTrackPoint*)point{
-    if (_field == gcFieldFlagNone) {
+    if (_field.fieldFlag == gcFieldFlagNone) {
         point.longitudeDegrees = _coordinate.longitude;
         point.latitudeDegrees = _coordinate.latitude;
     }else{
@@ -93,7 +98,7 @@
         @[@"heartrate",  @(gcFieldFlagWeightedMeanHeartRate)   ],
         @[@"distance",   @(gcFieldFlagSumDistance)             ],
         @[@"cadence",    @(gcFieldFlagCadence)                 ]*/
-        switch (_field) {
+        switch (_field.fieldFlag) {
             case gcFieldFlagCadence:
                 unit = GCUnit.stepsPerMinute;
                 break;
@@ -108,7 +113,7 @@
                 break;
         }
         if(unit){
-            [point setValue:[GCNumberWithUnit numberWithUnit:unit andValue:_value] forField:_field];
+            [point setNumberWithUnit:[GCNumberWithUnit numberWithUnit:unit andValue:_value] forField:self.field inActivity:self.activity];
         }
     }
 }
@@ -121,9 +126,10 @@
 -(void)dealloc{
     [_points release];
     [_laps release];
+    [_activity release];
     [super dealloc];
 }
-+(GCSportTracksActivityDetailParser*)activityDetailParser:(NSDictionary*)input{
++(GCSportTracksActivityDetailParser*)activityDetailParser:(NSDictionary*)input  forActivity:(GCActivity*)act{
     GCSportTracksActivityDetailParser * rv = [[[GCSportTracksActivityDetailParser alloc] init] autorelease];
     if (rv) {
         [rv parse:input];
@@ -151,7 +157,9 @@
             if (data) {
                 maxpoints = MAX(maxpoints, data.count);
                 trackflags |= flag;
-                [walkers addObject:[GCSportTracksDetailWalker detailWalker:data for:flag]];
+                [walkers addObject:[GCSportTracksDetailWalker detailWalker:data
+                                                                       for:[GCField fieldForFlag:flag andActivityType:self.activity.activityType]
+                                                                inActivity:self.activity]];
             }
         }
         NSDate  * start = [NSDate dateForSportTracksTimeString:json[@"start_time"]];

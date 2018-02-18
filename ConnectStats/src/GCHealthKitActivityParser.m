@@ -105,7 +105,7 @@
                 point.trackFlags |= flag;
                 GCUnit * convert = [GCUnit unitForKey:flag==gcFieldFlagSumDistance?STOREUNIT_DISTANCE:@"dimensionless"];
                 GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:convert andQuantity:qs.quantity];
-                [point setValue:nu forField:flag];
+                [point setNumberWithUnit:nu forField:[GCField fieldForFlag:flag andActivityType:GC_TYPE_DAY] inActivity:nil];
             }
         }
         if (incompatibleElapsed) {

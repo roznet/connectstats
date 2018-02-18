@@ -24,11 +24,12 @@
 //  
 
 #import <Foundation/Foundation.h>
-
+@class GCActivity;
 @interface GCSportTracksActivityDetailParser : NSObject
 @property (nonatomic,retain) NSArray * points;
 @property (nonatomic,retain) NSArray * laps;
+@property (nonatomic,retain) GCActivity* activity;
 
-+(GCSportTracksActivityDetailParser*)activityDetailParser:(NSDictionary*)jsonInput;
++(GCSportTracksActivityDetailParser*)activityDetailParser:(NSDictionary*)jsonInput forActivity:(GCActivity*)act;
 
 @end
