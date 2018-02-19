@@ -254,10 +254,10 @@
             GCActivityType * fullType = [[GCAppGlobal activityTypes] activityTypeForKey:foundType];
             if (fullType) {
                 self.activityType = fullType.topSubRootType.key;
-                self.activityTypeDetail = fullType.key;
+                self.activityTypeDetail = [GCActivityType activityTypeForKey:fullType.key];
             }else{
                 self.activityType = foundType;
-                self.activityTypeDetail = self.activityType;
+                self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             }
         }
     }
@@ -435,11 +435,11 @@
                activityType:self.activityType
                 displayName:activityDisplay
                 andUnitName:@"dimensionless"];
-    self.activityTypeDetail = atypeDict[@"key"];
+    self.activityTypeDetail = [GCActivityType activityTypeForKey:atypeDict[@"key"]];
     NSString * detailDisplay = atypeDict[@"display"];
     if (detailDisplay && self.activityTypeDetail) {
-        [GCFields registerField:self.activityTypeDetail
-                   activityType:self.activityTypeDetail
+        [GCFields registerField:self.activityTypeDetail.key
+                   activityType:self.activityTypeDetail.key
                     displayName:detailDisplay
                     andUnitName:@"dimensionless"];
     }
@@ -631,7 +631,7 @@
         self.activityType = GC_TYPE_OTHER;
         RZLog(RZLogInfo, @"Unknown SportTracks type %@", data[@"type"]);
     }
-    self.activityTypeDetail = self.activityType;
+    self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
     //NSString * externalId = [GCService serviceIdFromSportTracksUri:uri];
 
     //GCService * service = [GCService service:gcServiceSportTracks];
@@ -672,40 +672,40 @@
     switch (workout.workoutActivityType) {
         case HKWorkoutActivityTypeRunning:
             self.activityType = GC_TYPE_RUNNING;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
         case HKWorkoutActivityTypeCycling:
             self.activityType = GC_TYPE_CYCLING;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
         case HKWorkoutActivityTypeSwimming:
             self.activityType = GC_TYPE_SWIMMING;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
         case HKWorkoutActivityTypeTennis:
             self.activityType = GC_TYPE_TENNIS;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
         case HKWorkoutActivityTypeHiking:
             self.activityType = GC_TYPE_HIKING;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
         case HKWorkoutActivityTypeWalking:
             self.activityType = GC_TYPE_WALKING;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
         case HKWorkoutActivityTypeElliptical:
             self.activityType = GC_TYPE_FITNESS;
-            self.activityTypeDetail = @"elliptical";
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:@"elliptical"];
             break;
         case HKWorkoutActivityTypeTraditionalStrengthTraining:
         case HKWorkoutActivityTypeFunctionalStrengthTraining:
             self.activityType = GC_TYPE_FITNESS;
-            self.activityTypeDetail = @"strengh_training";
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:@"strengh_training"];
             break;
         default:
             self.activityType = GC_TYPE_OTHER;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
     }
     self.date = workout.startDate;
@@ -783,7 +783,7 @@
             }
 
             if ([field isEqualToString:@"activityType"] && str) {
-                self.activityTypeDetail = str;
+                self.activityTypeDetail = [GCActivityType activityTypeForKey:str];
             }else if ([field isEqualToString:@"BeginTimestamp"] && da){
                 self.date = da;
             }else if (nu) {
@@ -889,12 +889,12 @@
                                    //Snowboard
                                    //Snowshoe
                                    };
-        self.activityTypeDetail = subtypes[data[@"type"]];
+        self.activityTypeDetail = [GCActivityType  activityTypeForKey:subtypes[data[@"type"]]];
         if (self.activityTypeDetail==nil) {
-            self.activityTypeDetail = GC_TYPE_OTHER;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_OTHER];
         }
     }
-    self.activityTypeDetail = self.activityType;
+    self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
     self.downloadMethod = gcDownloadMethodStrava;
     if (self.metaData==nil) {
         self.metaData = [NSMutableDictionary dictionary];
@@ -1108,7 +1108,7 @@
         [db commit];
     }
 
-    if (self.activityTypeDetail!=nil && ![other.activityTypeDetail isEqualToString:self.activityTypeDetail]) {
+    if (self.activityTypeDetail!=nil && ![other.activityTypeDetail isEqualToActivityType:self.activityTypeDetail]) {
         // Don't update db because activityTypeDetail comes from meta field which
         // Should be updated later, but still need to process here, or some icons
         // may not update properly until restart/reload from db otherwise
@@ -1137,18 +1137,29 @@
     return rv;
 }
 
--(void)updateSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints missingOnly:(BOOL)missingOnly{
+-(BOOL)updateSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints missingOnly:(BOOL)missingOnly{
+    BOOL rv = false;
     NSDictionary<GCField*,GCActivitySummaryValue*> * fromPoints = [self buildSummaryFromTrackpoints:trackpoints];
     
     NSMutableDictionary<GCField*,GCActivitySummaryValue*>* newSum = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
     
     for (GCField * field in fromPoints) {
-        if( !missingOnly || newSum[field] == nil){
+        if( newSum[field] == nil){
             newSum[field] = fromPoints[field];
+            rv = true;
+        }
+        else if( !missingOnly ){
+            GCActivitySummaryValue * newVal = fromPoints[field];
+            GCActivitySummaryValue * oldVal = newSum[field];
+            if( ![oldVal isEqualToValue:newVal]){
+                newSum[field] = newVal;
+                rv = true;
+            }
         }
     }
     
     self.summaryData = newSum;
+    return rv;
 }
 
 -(NSDictionary<GCField*,GCActivitySummaryValue*>*)buildSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints{

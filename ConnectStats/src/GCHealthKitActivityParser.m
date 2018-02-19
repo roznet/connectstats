@@ -133,7 +133,7 @@
 
             activity.activityId = key;
             activity.activityType = GC_TYPE_DAY;
-            activity.activityTypeDetail = GC_TYPE_DAY;
+            activity.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_DAY];
             activity.activityName = @"";
             activity.downloadMethod = gcDownloadMethodHealthKit;
             activity.location = @"";

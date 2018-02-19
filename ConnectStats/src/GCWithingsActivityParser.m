@@ -91,7 +91,7 @@
         GCActivity * activity = [[GCActivity alloc] init];
         activity.date = [NSDate dateForDashedDate:input[@"date"]];
         activity.activityType = GC_TYPE_DAY;
-        activity.activityTypeDetail = GC_TYPE_DAY;
+        activity.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_DAY];
 
         NSMutableDictionary * summaryData = [NSMutableDictionary dictionaryWithCapacity:10];
         NSMutableDictionary * metaData = [NSMutableDictionary dictionaryWithCapacity:10];

@@ -242,6 +242,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     }
     for (id field in fields) {
         if (!reported[field]) {
+            // To Fix add to fields_order.db and rerun build.py
             RZLog(RZLogInfo, @"Non Categorized field: %@ %@", field, aType?:@"");
             reported[field] = field;
         }

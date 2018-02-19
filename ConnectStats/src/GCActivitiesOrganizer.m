@@ -330,9 +330,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         GCActivityMetaValue * detailAType = dict[act.activityId];
         if (detailAType) {
             if (detailAType.key && ![detailAType.key isEqualToString:@""]) {
-                act.activityTypeDetail = detailAType.key;
+                act.activityTypeDetail = [GCActivityType activityTypeForKey:detailAType.key];
             }else{
-                act.activityTypeDetail = detailAType.display;
+                act.activityTypeDetail = [GCActivityType activityTypeForKey:detailAType.display];
             }
         }
         [self recordActivityType:act];

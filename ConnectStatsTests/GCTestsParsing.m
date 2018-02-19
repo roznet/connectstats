@@ -193,10 +193,8 @@
         if(parent){
             display = [cache infoForActivityType:typeName].displayName;
         }
-        
-        NSLog(@"%@ parent: %@ info: %@", typeName, parent, display);
+
     }
-    NSLog(@"DONE");
 }
 
 -(void)testParseSearch{
@@ -651,6 +649,11 @@
                                        @"DirectLactateThresholdHeartRate": @"180 bpm",
                                        @"WeightedMeanGroundContactBalanceLeft": @"49.2 %",
                                        @"DirectLactateThresholdSpeed": @"3.5 mps",
+                                       @"MinVerticalRatio": @"2",
+                                       @"MaxVerticalRatio": @"41",
+                                       @"MaxGroundContactBalanceLeft": @"54",
+                                       @"MinGroundContactBalanceLeft": @"24",
+
 
                                        };
     
@@ -710,6 +713,7 @@
     [db_nofit open];
     [GCActivitiesOrganizer ensureDbStructure:db_nofit];
     
+    [GCAppGlobal configSet:CONFIG_GARMIN_FIT_MERGE boolVal:FALSE];
     for (NSString * aId in aIds) {
         GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         act.db = db_nofit;

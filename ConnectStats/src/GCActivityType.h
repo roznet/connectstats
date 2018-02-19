@@ -80,4 +80,14 @@
 +(nonnull NSArray<GCActivityType*>*)allParentTypes;
 +(nonnull NSArray<GCActivityType*>*)allTypesForParent:(nonnull GCActivityType*)parentType;
 
+/**
+ Some activity like to display speed as pace
+ this indicate if display pace is valid for this type, otherwise
+ display speed only
+ 
+ @return true or false
+ */
+-(BOOL)isPaceValid;
+-(BOOL)isSki;
+
 @end

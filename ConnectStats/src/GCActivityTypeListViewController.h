@@ -33,7 +33,7 @@
 @end
 
 @interface GCActivityTypeListViewController : UITableViewController
-@property (nonatomic,retain) NSArray * types;
+@property (nonatomic,retain) NSArray<GCActivityType*> * types;
 @property (nonatomic,retain) GCActivity * activity;
 @property (nonatomic,assign) NSObject<GCActivityTypeListViewControllerDelegate> * refreshDelegate;
 @end

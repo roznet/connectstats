@@ -177,7 +177,7 @@
     }
     NSArray * rv = nil;
     if (self.activityTypeDetail) {
-        rv = cache[self.activityTypeDetail];
+        rv = cache[self.activityTypeDetail.key];
     }
     if (!rv) {
         rv = cache[self.activityType];

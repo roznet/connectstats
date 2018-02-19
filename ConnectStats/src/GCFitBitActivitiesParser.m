@@ -63,7 +63,7 @@
     GCActivity * activity = [[[GCActivity alloc] init] autorelease];
     activity.date = self.date;
     activity.activityType = GC_TYPE_DAY;
-    activity.activityTypeDetail = GC_TYPE_DAY;
+    activity.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_DAY];
 
     NSDictionary * goalMap = @{
                                @"activeMinutes": @[ @"GoalSumDuration", @"minute"],

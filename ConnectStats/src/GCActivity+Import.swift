@@ -16,7 +16,7 @@ public extension GCActivity {
         
         let type  = interp.activityType
         self.activityType = type.topSubRoot().key
-        self.activityTypeDetail = type.key
+        self.activityTypeDetail = type
         self.activityName = ""
         self.location = ""
         

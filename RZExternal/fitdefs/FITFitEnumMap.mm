@@ -53,7 +53,7 @@
         @"heart_rate":@"WeightedMeanHeartRate",
         @"total_distance":@"SumDistance",
         @"avg_temperature":@"WeightedMeanAirTemperature",
-        @"altitude":@"WeightedMeanElevation",
+        @"altitude":@"GainElevation",
         @"total_training_effect":@"SumTrainingEffect",
         @"avg_neg_grade":@"WeightedMeanNegGrade",
         @"total_elapsed_time":@"SumDuration",
@@ -184,6 +184,10 @@
             }else if ([activityType isEqualToString:GC_TYPE_SWIMMING]){
                 rv = @"MaxSwimCadence";
             }
+        }
+        
+        if( [rv isEqualToString:@"WeightedMeanSpeed"] && [activityType isEqualToString:GC_TYPE_RUNNING]){
+            rv = @"WeightedMeanPace";
         }
     }
     static NSMutableDictionary * missing = nil;

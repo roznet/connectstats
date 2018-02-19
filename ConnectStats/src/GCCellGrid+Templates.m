@@ -1090,8 +1090,9 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         NSString * aType = activity.activityType;
         GCField * field = [GCField fieldForKey:[GCFields fieldForLapField:key andActivityType:aType] andActivityType:aType];
         NSString * display = field.displayName;
+        GCUnit * displayUnit = [activity displayUnitForField:field];
 
-        GCNumberWithUnit * number = [aLap numberWithUnitForExtraByField:field];
+        GCNumberWithUnit * number = [[aLap numberWithUnitForField:field inActivity:activity] convertToUnit:displayUnit];;
         GCFormattedField * numberF = [GCFormattedField formattedField:nil activityType:nil forNumber:number forSize:16.];
 
         [self labelForRow:0 andCol:0].text = display ?: field.key;
@@ -1112,24 +1113,23 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         }
         NSString * aType = activity.activityType;
         GCNumberWithUnit * number1 = nil;
-        NSString * field1 = nil;
+        GCField * field1 = nil;
         NSString * display1 = nil;
 
         if ([second isKindOfClass:[NSString class]]) {
-            field1 = second;
-            number1 = [aLap numberWithUnitForExtraByField:[GCField fieldForKey:field1 andActivityType:aType]];
-            display1 = [GCFields fieldForLapField:field1 andActivityType:aType];
-            display1 = [GCFields fieldDisplayName:display1 activityType:aType];
+            field1 = [GCField fieldForKey:second andActivityType:aType];
+            number1 = [aLap numberWithUnitForField:field1 inActivity:activity];
+            display1 = field1.displayName;
         }else{
             gcFieldFlag fieldFlag = [group[1] intValue];
-            field1 = [GCFields activityFieldFromTrackField:fieldFlag andActivityType:aType];
-            number1 = [aLap numberWithUnitForField:fieldFlag andActivityType:aType];
+            field1 = [GCField fieldForFlag:fieldFlag andActivityType:aType];
+            number1 = [aLap numberWithUnitForField:field1.fieldFlag andActivityType:aType];
             if (fieldFlag == gcFieldFlagSumDistance) {
                 number1 = [number1 convertToUnitName:activity.distanceDisplayUom];
             }else if(fieldFlag == gcFieldFlagWeightedMeanSpeed){
                 number1 = [number1 convertToUnitName:activity.speedDisplayUom];
             }
-            display1 = [GCFields fieldDisplayName:field1 activityType:aType];
+            display1 = field1.displayName;
         }
         NSString * field2   = [GCFields fieldForLapField:key andActivityType:aType];
         NSString * display2 = [GCFields fieldDisplayName:field2 activityType:aType];
@@ -1148,7 +1148,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         NSAttributedString * under = [[[NSAttributedString alloc] initWithString:display2 ?: field2
                                                                       attributes:wide?[GCViewConfig attribute16]:[GCViewConfig attribute14Gray]] autorelease];
 
-        [self labelForRow:0 andCol:0].text = display1 ?: field1;
+        [self labelForRow:0 andCol:0].text = display1 ?: field1.key;
         [self labelForRow:0 andCol:1].attributedText = [numberF1 attributedString];
         if (wide) {
             [self configForRow:0 andCol:1].horizontalAlign = gcHorizontalAlignLeft;

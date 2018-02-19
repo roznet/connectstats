@@ -1,7 +1,7 @@
 FIT_GET_NUMUNIT_FIELD( @"Timestamp", GetTimestamp, FIT_DATE_TIME_INVALID, @"second" );
 FIT_GET_NUMUNIT_FIELD( @"PositionLat", GetPositionLat, FIT_SINT32_INVALID, @"semicircle" );
 FIT_GET_NUMUNIT_FIELD( @"PositionLong", GetPositionLong, FIT_SINT32_INVALID, @"semicircle" );
-FIT_GET_NUMUNIT_FIELD( @"WeightedMeanElevation", GetAltitude, FIT_FLOAT32_INVALID, @"meter" );
+FIT_GET_NUMUNIT_FIELD( @"GainElevation", GetAltitude, FIT_FLOAT32_INVALID, @"meter" );
 FIT_GET_NUMUNIT_FIELD( @"WeightedMeanHeartRate", GetHeartRate, FIT_UINT8_INVALID, @"bpm" );
 FIT_GET_NUMUNIT_FIELD( @"WeightedMeanCadence", GetCadence, FIT_UINT8_INVALID, @"rpm" );
 FIT_GET_NUMUNIT_FIELD( @"SumDistance", GetDistance, FIT_FLOAT32_INVALID, @"meter" );

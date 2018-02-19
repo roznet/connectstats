@@ -218,6 +218,20 @@ static GCFieldCache * _fieldCache = nil;
     return [_fieldCache infoForActivityType:self.key].displayName?:self.key;
 }
 
+#pragma mark - Properties
+
+-(BOOL)isPaceValid{
+    if( [self.key isEqualToString:GC_TYPE_RUNNING] || [self.key isEqualToString:GC_TYPE_SWIMMING])
+        return true;
+    
+    return self.parentType.isPaceValid;
+}
+
+-(BOOL)isSki{
+    return ([self.key isEqualToString:GC_TYPE_SKI_BACK] || [self.key isEqualToString:GC_TYPE_SKI_DOWN] || [self.key isEqualToString:GC_TYPE_SKI_XC]);
+}
+
+
 #pragma mark - Convenience access
 +(nonnull GCActivityType*)activityTypeForKey:(nonnull NSString*)key{
     return [[GCActivityType activityTypes] activityTypeForKey:key];
@@ -249,6 +263,5 @@ static GCFieldCache * _fieldCache = nil;
 +(nonnull NSArray<GCActivityType*>*)allTypesForParent:(nonnull GCActivityType*)parentType{
     return [[GCActivityType activityTypes] allTypesForParent:parentType];
 }
-
 
 @end

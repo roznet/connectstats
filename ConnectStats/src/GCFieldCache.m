@@ -234,6 +234,7 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
         }
     }
     if( show ){
+        // To Fix: add to one of the fields/*.db and rerun fields.py
         RZLog(RZLogWarning,@"Attempt to register invalid field %@ %@ %@ %@",field?:@"<NoField>",aType?:@"<NoType>",aName?:@"<NoName>",uom?:@"<NoUnit>");
     }
 }

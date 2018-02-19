@@ -57,8 +57,10 @@
 
  @param trackpoints list of trackpoints, should be compatible with index of current activity
  @param missingOnly if true will not change existing value in summarydata, else will replace all
+ 
+ @return true if something changed
  */
--(void)updateSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints missingOnly:(BOOL)missingOnly;
+-(BOOL)updateSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints missingOnly:(BOOL)missingOnly;
 
 
 /**

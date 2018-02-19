@@ -99,7 +99,7 @@
 -(NSComparisonResult)compareTime:(GCTrackPoint*)other;
 
 +(GCUnit*)unitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;
--(GCNumberWithUnit*)numberWithUnitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;
+-(GCNumberWithUnit*)numberWithUnitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;// DEPRECATED_MSG_ATTRIBUTE("use numberWitUnitForField.");
 
 -(void)updateWithExtra:(NSDictionary<GCField*,GCNumberWithUnit*>*)other;
 

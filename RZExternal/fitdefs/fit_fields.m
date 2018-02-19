@@ -33,7 +33,7 @@
 @"heart_rate":@"WeightedMeanHeartRate",
 @"total_distance":@"SumDistance",
 @"avg_temperature":@"WeightedMeanAirTemperature",
-@"altitude":@"WeightedMeanElevation",
+@"altitude":@"GainElevation",
 @"total_training_effect":@"SumTrainingEffect",
 @"avg_neg_grade":@"WeightedMeanNegGrade",
 @"total_elapsed_time":@"SumDuration",

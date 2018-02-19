@@ -742,6 +742,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
     [GCFieldsCalculated addCalculatedFieldsToTrackPoints:self.lapsCache forActivity:self];
 
+    if([self updateSummaryFromTrackpoints:self.trackpointsCache missingOnly:TRUE]){
+        [self saveToDb:self.db];
+    }
+    
     if ([[GCAppGlobal profile] configGetBool:CONFIG_ENABLE_DERIVED defaultValue:[GCAppGlobal connectStatsVersion]]) {
         dispatch_async([GCAppGlobal worker],^(){
             [[GCAppGlobal derived] processActivities:@[self]];
@@ -1655,6 +1659,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 }
 
 -(BOOL)isSkiActivity{
-    return GCActivityTypeIsSki(self.activityType,self.activityTypeDetail);
+    return self.activityTypeDetail.isSki;
 }
 @end

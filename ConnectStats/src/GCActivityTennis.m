@@ -99,9 +99,9 @@
     self.activityTypeDetail = aData[@"type"];
     self.activityName = aData[@"type"];
 
-    [GCFields registerField:self.activityTypeDetail
-               activityType:self.activityTypeDetail
-                displayName:self.activityTypeDetail
+    [GCFields registerField:self.activityTypeDetail.key
+               activityType:self.activityTypeDetail.key
+                displayName:self.activityTypeDetail.key
                 andUnitName:@"dimensionless"];
 
     self.date = [NSDate dateForBabolatTimeString:start_date];

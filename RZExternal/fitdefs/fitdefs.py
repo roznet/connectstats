@@ -31,7 +31,7 @@ umap = {'%': 'percent',
         'swim': 'dimensionless',
         'tss': 'dimensionless',
         'watts': 'watt'}
-fieldmap = { 'Altitude': 'WeightedMeanElevation',
+fieldmap = { 'Altitude': 'GainElevation',
              'AvgAltitude': 'WeightedMeanElevation',
              'AvgBallSpeed': 'AvgBallSpeed',
              'AvgCadence': 'WeightedMeanCadence',
@@ -180,7 +180,7 @@ fieldmap = { 'Altitude': 'WeightedMeanElevation',
 
 limitfield = {
     'fit_record_mesg.m': {
-        'Altitude': 'WeightedMeanElevation',
+        'Altitude': 'GainElevation',
         'AvgCadence': 'AvgCadence',
         'AvgCombinedPedalSmoothness': 'AvgCombinedPedalSmoothness',
         'AvgFractionalCadence': 'AvgFractionalCadence',

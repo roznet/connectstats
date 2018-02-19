@@ -32,6 +32,7 @@
 #import "GCWeather.h"
 #import "GCActivitySettings.h"
 #import "GCActivityTypes.h"
+#import "GCActivityType.h"
 
 @class GCLapSwim;
 @class GCTrackPointSwim;
@@ -39,6 +40,7 @@
 @class GCService;
 @class GCActivitySummaryValue;
 @class GCActivityCalculatedValue;
+
 
 typedef BOOL (^GCActivityMatchBlock)(GCActivity*act);
 
@@ -91,7 +93,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 
 @property (nonatomic,retain) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("use GCActivityType.");
-@property (nonatomic,retain) NSString * activityTypeDetail;// DEPRECATED_MSG_ATTRIBUTE("use detail of GCActivityType.");
+@property (nonatomic,retain) GCActivityType * activityTypeDetail;// DEPRECATED_MSG_ATTRIBUTE("use detail of GCActivityType.");
 @property (nonatomic,retain) NSString * activityName;
 
 @property (nonatomic,retain) NSString * location;
@@ -306,7 +308,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 /**
  Returns all available summary fields as NSString Keys. Includes calculated fields.
  */
--(NSArray<NSString*>*)allFieldsKeys DEPRECATED_MSG_ATTRIBUTE("use GCActivityType.");
+-(NSArray<NSString*>*)allFieldsKeys DEPRECATED_MSG_ATTRIBUTE("use allFields.");
 
 -(GCActivityMetaValue*)metaValueForField:(NSString*)field;
 

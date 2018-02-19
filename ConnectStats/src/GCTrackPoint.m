@@ -211,6 +211,14 @@ void buildStatic(){
     
 }
 
+-(void)addComplementFieldsInActivity:(GCActivity*)act{
+    
+    for (GCField * field in act.allFields) {
+        if( field.correspondingPaceOrSpeedField ){
+            
+        }
+    }
+}
 #pragma mark - Parsing
 
 -(BOOL)updateInActivity:(GCActivity*)act fromTrackpoint:(GCTrackPoint*)other fromActivity:(GCActivity*)otheract forFields:(NSArray<GCField*>*)fields{
@@ -252,63 +260,77 @@ void buildStatic(){
 
     if (defs == nil) {
 
-        defs = @{@"sumDistance": @[              STOREUNIT_DISTANCE, @(gcFieldFlagSumDistance)],
-                 @"directHeartRate": @[          @"bpm",             @(gcFieldFlagWeightedMeanHeartRate)],
-                 @"directSpeed": @[              STOREUNIT_SPEED,    @(gcFieldFlagWeightedMeanSpeed)],
-                 @"directElevation": @[          STOREUNIT_ALTITUDE, @(gcFieldFlagAltitudeMeters)],
-                 @"directBikeCadence": @[        @"rpm",             @(gcFieldFlagCadence)],
-                 //@"directFractionalCadence": @[  @"spm",             @(gcFieldFlagCadence)],
-                 @"directRunCadence": @[         @"spm",             @(gcFieldFlagCadence)],
-                 @"directPower": @[              @"watt",            @(gcFieldFlagPower)],
-                 @"directGroundContactTime": @[  @"ms",              @(gcFieldFlagGroundContactTime)],
-                 @"directVerticalOscillation": @[@"centimeter",      @(gcFieldFlagVerticalOscillation)],
+        defs = @{
+                 @"sumDistance"                        : @[ STOREUNIT_DISTANCE, @(gcFieldFlagSumDistance)],
+                 @"directHeartRate"                    : @[ @"bpm",             @(gcFieldFlagWeightedMeanHeartRate)],
+                 @"directSpeed"                        : @[ STOREUNIT_SPEED,    @(gcFieldFlagWeightedMeanSpeed)],
+                 @"directElevation"                    : @[ STOREUNIT_ALTITUDE, @(gcFieldFlagAltitudeMeters)],
+                 @"directBikeCadence"                  : @[ @"rpm",             @(gcFieldFlagCadence)],
+                 @"directRunCadence"                   : @[ @"spm",             @(gcFieldFlagCadence)],
+                 @"directPower"                        : @[ @"watt",            @(gcFieldFlagPower)],
+                 @"directGroundContactTime"            : @[ @"ms",              @(gcFieldFlagGroundContactTime)],
+                 @"directVerticalOscillation"          : @[ @"centimeter",      @(gcFieldFlagVerticalOscillation)],
+                 
+                 @"directAirTemperature"               : @[ @"celcius",         @"WeightedMeanAirTemperature"],
+                 @"directGroundContactBalanceLeft"     : @[ @"percent",         @"WeightedMeanGroundContactBalanceLeft"],
+                 @"directVerticalRatio"                : @[ @"percent",         @"WeightedMeanVerticalRatio"],
 
-                 @"directAirTemperature": @[@"celcius", @"WeightedMeanAirTemperature"],
-                 @"directGroundContactBalanceLeft": @[@"percent", @"WeightedMeanGroundContactBalanceLeft"],
-                 @"directVerticalRatio":@[@"percent",@"WeightedMeanVerticalRatio"],
+                 @"WeigthedMeanVerticalOscillation"    : @[ @"centimeter",      @(gcFieldFlagVerticalOscillation)],
+                 @"WeightedMeanGroundContactTime"      : @[ @"ms",              @(gcFieldFlagGroundContactTime)],
+                 @"WeightedMeanPower"                  : @[ @"watt",            @(gcFieldFlagPower)],
+                 @"WeightedMeanRunPower"               : @[ @"watt",            @(gcFieldFlagPower)],
+
+                 // This defs will use standard defs
+                 @"WeightedMeanFormPower"              : @"WeightedMeanFormPower",
+                 @"WeightedMeanLegSpringStiffness"     : @"WeightedMeanLegSpringStiffness",
+                 
+                 //@"directFractionalCadence"        : @[ @"spm",             @(gcFieldFlagCadence)],
                  };
 
+        /*
+         directRightTorqueEffectiveness in dimensionless
+         sumAccumulatedPower in watt
+         directLeftPedalSmoothness in dimensionless
+         directRightPedalSmoothness in dimensionless
+         directLeftTorqueEffectiveness in dimensionless
+
+         */
         missing = [NSMutableDictionary dictionaryWithDictionary:@{
-                                                                  @"sumMovingDuration":@1,
-                                                                  @"sumDuration":@1,
-                                                                  @"directLatitude":@1,
-                                                                  @"directLongitude":@1,
-                                                                  @"directTimestamp":@1,
-                                                                  @"sumElapsedDuration":@1,
-                                                                  @"directDoubleCadence":@1,
-                                                                  @"directStrideLength":@1,
+                                                                  @"GainElevation": @1,
+                                                                  @"directCorrectedElevation": @1,
+                                                                  @"directDoubleCadence": @1,
+                                                                  @"directFractionalCadence": @1,
+                                                                  @"directLatitude": @1,
+                                                                  @"directLongitude": @1,
+                                                                  @"directStrideLength": @1,
+                                                                  @"directTimestamp": @1,
+                                                                  @"directUncorrectedElevation": @1,
+                                                                  @"directVerticalSpeed": @1,
+                                                                  @"sumDuration": @1,
+                                                                  @"sumElapsedDuration": @1,
+                                                                  @"sumMovingDuration": @1,
+                                                                  
+                                                                  @"directRightTorqueEffectiveness": @1, // in dimensionless
+                                                                  @"sumAccumulatedPower": @1, // in watt
+                                                                  @"directLeftPedalSmoothness": @1, // in dimensionless
+                                                                  @"directRightPedalSmoothness": @1, // in dimensionless
+                                                                  @"directLeftTorqueEffectiveness": @1, // in dimensionless
+
                                                                   }];
 
         [missing retain];
         [defs retain];
     }
-
-    /*sumDuration,
-    directPower,
-    sumDistance,
-    sumMovingDuration,
-    directPowerZone,
-    directTimestamp,
-    directElevation,
-    directRightBalance,
-    directAirTemperature,
-    directHeartRatePercentMax,
-    directBikeCadence,
-    directHeartRate,
-    sumElapsedDuration,
-    directHeartRateZone,
-    directLatitude,
-    directPace,
-    directSpeed,
-    directLongitude*/
-
+    
     for (NSString * field in data) {
         d = data[field];
-        NSArray * def = defs[field];
-        if (def) {
-            NSString * uom = def[0];
-            id target = def[1];
-            GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnitName:d[@"unit"] andValue:[d[@"value"] doubleValue]];
+        GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnitName:d[@"unit"] andValue:[d[@"value"] doubleValue]];
+
+        id def = defs[field];
+        if (def && [def isKindOfClass:[NSArray class]]) {
+            NSArray * defarray = def;
+            NSString * uom = defarray[0];
+            id target = defarray[1];
 
             if ([target isKindOfClass:[NSNumber class]]) {
                 gcFieldFlag flag = (gcFieldFlag)[target integerValue];
@@ -317,6 +339,10 @@ void buildStatic(){
                 GCField * targetField = [GCField fieldForKey:target andActivityType:act.activityType];
                 [self setExtraValue:nu forFieldKey:targetField in:act];
             }
+        }else if( def && [def isKindOfClass:[NSString class]]){
+            GCField * targetField = [GCField fieldForKey:def andActivityType:act.activityType];
+            [self setExtraValue:nu forFieldKey:targetField in:act];
+
         }else{
             if (missing[field] == nil) {
                 RZLog(RZLogInfo, @"Ignored Track Field: %@ in %@", field, d[@"unit"]);

@@ -45,13 +45,13 @@
     return [super init];
 }
 
-//NEWTRACKFIELD
+
 -(GCLap*)initWithLap:(GCLap*)other{
     self = [super initWithTrackPoint:other];
     return self;
 }
 
-//NEWTRACKFIELD
+
 -(GCLap*)initWithTrackPoint:(GCTrackPoint*)other{
     self = [super initWithTrackPoint:other];
     if (self) {
