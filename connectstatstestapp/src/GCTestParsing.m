@@ -111,7 +111,7 @@
 
     GCActivity * act2 = [GCActivity activityWithId:aId andDb:db];
 
-    NSLog(@"%@", act2);
+    
     /*
     if (started) {
         GCStatsDataSerieWithUnit * serie = [act timeSerieForField:[GCField field:CALC_VERTICAL_SPEED forActivityType:act.activityType]];
