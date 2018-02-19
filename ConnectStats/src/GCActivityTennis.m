@@ -96,7 +96,7 @@
                 displayName:NSLocalizedString(@"Tennis", @"Activity Type")
                 andUnitName:@"dimensionless"];
 
-    self.activityTypeDetail = aData[@"type"];
+    self.activityTypeDetail = [GCActivityType activityTypeForKey:aData[@"type"]];
     self.activityName = aData[@"type"];
 
     [GCFields registerField:self.activityTypeDetail.key

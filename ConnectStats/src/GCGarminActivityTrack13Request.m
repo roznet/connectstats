@@ -302,7 +302,9 @@
     if (self.track13Stage + 1 < gcTrack13RequestEnd) {
         [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
     }else{
-        [self processSaving];
+        dispatch_async([GCAppGlobal worker],^(){
+            [self processSaving];
+        });
     }
 }
 

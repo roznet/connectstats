@@ -594,7 +594,12 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             data[@"Time"] = one.time;
             if (one.extra) {
                 for (GCTrackPointExtraIndex * e in extra) {
-                    data[e.dataColumnName] = [[one numberWithUnitForField:e.field inActivity:self] convertToUnit:e.unit].number;
+                    NSNumber * val = [[one numberWithUnitForField:e.field inActivity:self] convertToUnit:e.unit].number;
+                    if( val ){
+                        data[e.dataColumnName] = val;
+                    }else{
+                        data[e.dataColumnName] = [NSNull null];
+                    }
                 }
                 [db executeUpdate:insertQuery withParameterDictionary:data];
             }

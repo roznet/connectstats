@@ -380,7 +380,12 @@ static BOOL kDerivedEnabled = true;
                 [toProcess addObject:[GCDerivedQueueElement element:activity
                                                               field:gcFieldFlagWeightedMeanSpeed
                                                             andType:gcDerivedTypeBestRolling
+                                                       activityLast:NO]];
+                [toProcess addObject:[GCDerivedQueueElement element:activity
+                                                              field:gcFieldFlagPower
+                                                            andType:gcDerivedTypeBestRolling
                                                        activityLast:YES]];
+
             }else if ([activity.activityType isEqualToString:GC_TYPE_CYCLING]) {
                 [toProcess addObject:[GCDerivedQueueElement element:activity
                                                               field:gcFieldFlagWeightedMeanHeartRate
