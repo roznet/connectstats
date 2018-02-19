@@ -108,7 +108,13 @@
         filter.minValue = 0.01;
         filter.filterMinValue = true;
         filters[ field ] = filter;
-        
+
+        field = [GCField fieldForKey:@"WeightedMeanFormPower" andActivityType:act.activityType];
+        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+        filter.minValue = 0.01;
+        filter.filterMinValue = true;
+        filters[ field ] = filter;
+
         field = [GCField fieldForKey:@"WeightedMeanGroundContactBalanceLeft" andActivityType:act.activityType];
         filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
         filter.minValue = 0.01;
