@@ -214,6 +214,13 @@
                     unitstride = 10.;
                 }
 
+                // HACK serie that are missing zero, as otherwise the best of may not start consistently
+                // and doing max over multiple will have weird quirks at the beginning.
+                if( serie.serie.count > 0 && serie.serie.firstObject.x_data > 0 ){
+                    [serie.serie addDataPointWithX:0.0 andY:serie.serie.firstObject.y_data];
+                    [serie.serie sortByX];
+                }
+                
                 serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:gcStatsLast select:select];
                 rv[key] = serie;
             }else if(info.track == gcCalculatedCachedTrackDataSerie){

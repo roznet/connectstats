@@ -876,6 +876,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     switch (_downloadMethod) {
         case gcDownloadMethod13:
         case gcDownloadMethodModern:
+            [[GCAppGlobal derived] forceReprocessActivity:_activityId];
             [[GCAppGlobal web] garminDownloadActivitySummary:_activityId];
             break;
         case gcDownloadMethodSportTracks:

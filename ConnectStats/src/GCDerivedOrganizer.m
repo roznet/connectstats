@@ -295,6 +295,19 @@ static BOOL kDerivedEnabled = true;
     return rv;
 }
 
+-(void)forceReprocessActivity:(NSString*)aId{
+    if (!self.processedActivities) {
+        [self loadProcesseActivities];
+    }
+    if( self.processedActivities[aId]){
+        [self.processedActivities removeObjectForKey:aId];
+        if(! [self.deriveddb executeUpdate:@"DELETE FROM gc_derived_activity_processed WHERE activityId = ?", aId]){
+            RZLog(RZLogError, @"db error %@", [self.deriveddb lastErrorMessage]);
+        };
+
+    }
+
+}
 
 -(BOOL)activityAlreadyProcessed:(GCActivity*)activity{
 

@@ -95,6 +95,8 @@
         filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
         filter.maxValue = [GCAppGlobal configGetDouble:CONFIG_FILTER_POWER_ABOVE defaultValue:CONFIG_FILTER_DISABLED_POWER];
         filter.filterMaxValue = true;
+        filter.minValue = 0.01;
+        filter.filterMinValue = true;
         filters[ field] = filter;
 
         field = [GCField fieldForFlag:gcFieldFlagVerticalOscillation andActivityType:act.activityType];
