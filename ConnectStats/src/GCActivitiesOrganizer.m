@@ -1007,6 +1007,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             [_db executeUpdate:@"DELETE FROM gc_activities_values WHERE activityId=?", activityId];
             [_db executeUpdate:@"DELETE FROM gc_activities_meta WHERE activityId=?", activityId];
             [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",activityId]];
+            [[GCAppGlobal derived] forceReprocessActivity:activityId];
         }
         [_db commit];
         [self notify];

@@ -47,11 +47,15 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
 
 -(void)processActivities:(NSArray*)activities;
 -(void)processSome;
--(void)forceReprocessActivity:(NSString*)aId;
 
 -(NSArray<NSNumber*>*)availableFieldsForType:(NSString*)aType;
 -(NSArray<GCDerivedGroupedSeries*>*)groupedSeriesMatching:(GCDerivedDataSerieMatchBlock)match;
 
 +(void)ensureDbStructure:(FMDatabase*)db;
+
+// Debug utils
+-(void)forceReprocessActivity:(NSString*)aId;
+-(void)clearDataForActivityType:(NSString*)aType andFieldFlag:(gcFieldFlag)flag;
+
 
 @end
