@@ -59,6 +59,14 @@
                   @"watts": @"watt",
                   @"J":@"joule",
                   @"kg":@"kilogram",
+                  
+                  // Stryd
+                  @"Centimeters": @"centimeter",
+                  @"Meters": @"meter",
+                  @"Milliseconds": @"ms",
+                  @"RPM": @"rpm",
+                  @"Watts": @"watt",
+                  @"kN/m" : @"kN/m",
 
                   };
         RZRetain(unitMap);

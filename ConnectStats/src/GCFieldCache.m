@@ -214,13 +214,41 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
     self.predefinedCache = [NSDictionary dictionaryWithDictionary:rv];
 }
 
+-(void)logNullRegister:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom{
+    static NSMutableDictionary * _logCache = nil;
+    if( _logCache == nil){
+        _logCache = [NSMutableDictionary dictionary];
+        RZRetain(_logCache);
+    }
+    // To Fix: add to one of the fields/*.db and rerun fields.py
+    BOOL show = true;
+    if(field){
+        NSString * key = [field stringByAppendingString:aType?:@"<NoType>"];
+        if( _logCache[key]){
+            show = false;
+        }
+        if( [aType isEqualToString:@"all"]){
+            show = false;
+        }else{
+            _logCache[key] = @1;
+        }
+    }
+    if( show ){
+        // To Fix: add to one of the fields/*.db and rerun fields.py
+        RZLog(RZLogWarning,@"Attempt to register invalid field %@ %@ %@ %@",field?:@"<NoField>",aType?:@"<NoType>",aName?:@"<NoName>",uom?:@"<NoUnit>");
+    }
+}
+
+
 -(void)registerField:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom{
     if(!_cache){
         [self buildPredefinedCacheForLanguage:nil];
         [self buildCache];
     }
     if (!aType||!field) {
-        RZLog(RZLogWarning,@"Attempt to register NULL field %@ %@ %@ %@",field,aType,aName,uom);
+        // To Fix: add to one of the fields/*.db and rerun fields.py
+        [self logNullRegister:field activityType:aType displayName:aName andUnitName:uom];
+        
         return;
     }
     NSString * key = cacheKey(field, aType);
@@ -240,7 +268,8 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
         if(self.db){
             FMDatabase * db = self.db;
             if (!field||!aType||!useName||!useUom) {
-                RZLog(RZLogWarning,@"Attempt to register NULL field %@ %@ %@ %@",field,aType,useName,useUom);
+                // To Fix: add to one of the fields/*.db and rerun fields.py
+                [self logNullRegister:field activityType:aType displayName:aName andUnitName:uom];
                 return;
             }
             if (![db executeUpdate:@"INSERT INTO gc_fields (field,activityType,fieldDisplayName,uom) VALUES (?,?,?,?)",field,aType,useName,useUom]) {

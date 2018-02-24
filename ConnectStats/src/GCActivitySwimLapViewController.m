@@ -144,12 +144,12 @@
 
         NSArray<GCField*> * keys = [self fieldsForSection:indexPath.section];
 
-        [cell setupForLap:[activity lapNumber:lapIndex] key:[keys[indexPath.row] key] andActivity:activity width:tableView.frame.size.width];
+        [cell setupForLap:[self.activity lapNumber:self.lapIndex] key:[keys[indexPath.row] key] andActivity:self.activity width:tableView.frame.size.width];
     }else if(indexPath.section == GCVIEW_SECTION_LENGTHS){
         GCTrackPointSwim * point = [self lengths][indexPath.row];
         [cell setupForSwimTrackpoint:point index:indexPath.row andActivity:self.activity width:tableView.frame.size.width];
     }else{
-        [cell setupForLap:lapIndex andActivity:activity width:tableView.frame.size.width];
+        [cell setupForLap:self.lapIndex andActivity:self.activity width:tableView.frame.size.width];
     }
 
     return cell;

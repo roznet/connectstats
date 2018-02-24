@@ -46,7 +46,6 @@
 @end
 
 @implementation GCActivityLapViewController
-@synthesize lapIndex,activity,organizedFields;
 
 - (instancetype)initWithStyle:(UITableViewStyle)style
 {
@@ -57,8 +56,8 @@
     return self;
 }
 -(void)dealloc{
-    [organizedFields release];
-    [activity release];
+    [_organizedFields release];
+    [_activity release];
     [_choices release];
 
     [super dealloc];
@@ -78,20 +77,14 @@
 
                                                  [[[UIBarButtonItem alloc] initWithImage:[GCViewIcons navigationIconFor:gcIconNavBack] style:UIBarButtonItemStylePlain target:self action:@selector(previousLap:)] autorelease]];
     [self setOrganizedFields:nil];
-    [activity focusOnLapIndex:lapIndex];
+    [self.activity focusOnLapIndex:self.lapIndex];
 
 }
 
 -(NSArray<GCFieldsForCategory*>*)setupFields{
     if (self.organizedFields==nil) {
-        NSDictionary * extra =[activity lapNumber:lapIndex].extra;
-        NSDictionary * calc = [activity lapNumber:lapIndex].calculated;
-
-        NSArray * keys = [extra.allKeys sortedArrayUsingSelector:@selector(compare:)];
-        if (calc) {
-            keys = [[keys arrayByAddingObjectsFromArray:calc.allKeys] sortedArrayUsingSelector:@selector(compare:)];;
-        }
-        self.organizedFields = [GCFields categorizeAndOrderFields:keys forActivityType:self.activity.activityType];
+        NSArray<GCField*>*fields = [[self.activity lapNumber:self.lapIndex] availableFieldsInActivity:self.activity];
+        self.organizedFields = [GCFields categorizeAndOrderFields:fields forActivityType:self.activity.activityType];
     }
     return self.organizedFields;
 }
@@ -122,9 +115,9 @@
 
 
 -(void)nextLap:(id)cb{
-    if (lapIndex + 1 < [activity lapCount]) {
-        lapIndex++;
-        [activity focusOnLapIndex:lapIndex];
+    if (self.lapIndex + 1 < [self.activity lapCount]) {
+        self.lapIndex++;
+        [self.activity focusOnLapIndex:self.lapIndex];
         [self setOrganizedFields:nil];
         UITableView * tv = (UITableView*)self.view;
         [tv reloadData];
@@ -132,9 +125,9 @@
 }
 
 -(void)previousLap:(id)cb{
-    if (lapIndex > 0) {
-        lapIndex--;
-        [activity focusOnLapIndex:lapIndex];
+    if (self.lapIndex > 0) {
+        self.lapIndex--;
+        [self.activity focusOnLapIndex:self.lapIndex];
         [self setOrganizedFields:nil];
         UITableView * tv = (UITableView*)self.view;
         [tv reloadData];
@@ -190,7 +183,7 @@
     // Configure the cell...
     if (indexPath.section >= GCVIEW_SECTION_DETAILS) {
         NSArray<GCField*> * keys = [self fieldsForSection:indexPath.section];
-        [cell setupForLap:[activity lapNumber:lapIndex] key:[keys[indexPath.row] key] andActivity:activity width:tableView.frame.size.width];
+        [cell setupForLap:[self.activity lapNumber:self.lapIndex] key:[keys[indexPath.row] key] andActivity:self.activity width:tableView.frame.size.width];
     }else if(indexPath.section== GCVIEW_SECTION_MAP){
         GCCellMap *mcell = (GCCellMap*)[tableView dequeueReusableCellWithIdentifier:@"GCMap"];
         if (mcell == nil) {
@@ -205,9 +198,9 @@
             mcell.mapController.gradientField = nil;
         }
 
-        (mcell.mapController).activity = activity;
+        (mcell.mapController).activity = self.activity;
         (mcell.mapController).showLaps = gcLapDisplaySingle;
-        (mcell.mapController).lapIndex = lapIndex;
+        (mcell.mapController).lapIndex = self.lapIndex;
         [mcell.mapController notifyCallBack:nil info:nil];
         return mcell;
     }else if (indexPath.section == GCVIEW_SECTION_GRAPH){
@@ -215,11 +208,11 @@
         gcell.cellDelegate = self;
         GCTrackStats * s = [[GCTrackStats alloc] init];
         [self setupGraphFields];
-        s.activity = activity;
+        s.activity = self.activity;
         [s setHighlightLap:true];
         s.highlightLapIndex = self.lapIndex;
         if (!self.choices) {
-            self.choices = [GCTrackFieldChoices trackFieldChoicesWithActivity:activity];
+            self.choices = [GCTrackFieldChoices trackFieldChoicesWithActivity:self.activity];
         }
         [self.choices setupTrackStats:s];
         GCSimpleGraphCachedDataSource * ds = [GCSimpleGraphCachedDataSource trackFieldFrom:s];
@@ -228,7 +221,7 @@
         [s release];
         return gcell;
     }else{
-        [cell setupForLap:lapIndex andActivity:activity width:tableView.frame.size.width];
+        [cell setupForLap:self.lapIndex andActivity:self.activity width:tableView.frame.size.width];
     }
 
     return cell;
@@ -249,7 +242,7 @@
     // ...
     // Pass the selected object to the new view controller.
     detailViewController.gradientField =  [GCField  fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:self.activity.activityType];
-    detailViewController.activity = activity;
+    detailViewController.activity = self.activity;
     detailViewController.lapIndex = self.lapIndex;
     detailViewController.showLaps = gcLapDisplaySingle;
     detailViewController.mapType = (gcMapType)[GCAppGlobal configGetInt:CONFIG_USE_MAP defaultValue:gcMapBoth];

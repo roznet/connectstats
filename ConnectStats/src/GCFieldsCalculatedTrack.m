@@ -43,7 +43,7 @@
 
 }
 
--(void)setupLap:(GCLap*)lap{
+-(void)setupLap:(GCLap*)lap inActivity:(GCActivity *)acts{ 
 
 }
 
@@ -57,7 +57,7 @@
 
 +(void)addCalculatedFieldsToTrackPointsAndLaps:(GCActivity *)act{
     if( act.trackpoints && act.laps){
-        NSArray * fields = @[ [[[GCFieldsCalculatedTrackElevation alloc] init] autorelease] ];
+        NSArray<GCFieldsCalculatedTrack*> * fields = @[ [[[GCFieldsCalculatedTrackElevation alloc] init] autorelease] ];
 
         if ([act hasTrackField:gcFieldFlagPower]) {
             fields = [fields arrayByAddingObject:[[[GCFieldsCalculatedTrackNormalizedPower alloc] init] autorelease]];
@@ -66,13 +66,12 @@
 
         for (GCLap * lap in act.laps) {
             for (GCFieldsCalculatedTrack * field in fields) {
-                [field setupLap:lap];
+                [field setupLap:lap inActivity:act];
             }
         }
         for (GCFieldsCalculatedTrack * field in fields) {
-            [field setupLap:totalActivityLap];
+            [field setupLap:totalActivityLap inActivity:act];
         }
-
 
         BOOL started = false;
         for (GCTrackPoint * point in act.trackpoints) {
@@ -92,11 +91,11 @@
             }
         }
 
-        NSMutableDictionary * newFields = [NSMutableDictionary dictionary];
+        NSMutableDictionary<GCField*,GCActivityCalculatedValue*> * newFields = [NSMutableDictionary dictionary];
 
-        for (NSString * fieldKey in totalActivityLap.calculated) {
-            GCActivityCalculatedValue * calcVal = [GCActivityCalculatedValue calculatedValue:fieldKey value:totalActivityLap.calculated[fieldKey]];
-            newFields[fieldKey] = calcVal;
+        for (GCField * field in totalActivityLap.calculated) {
+            GCActivityCalculatedValue * calcVal = [GCActivityCalculatedValue calculatedValue:field.key value:totalActivityLap.calculated[field]];
+            newFields[field] = calcVal;
         }
         if(newFields.count>0){
             [act addEntriesToCalculatedFields:newFields];
@@ -108,9 +107,8 @@
 
 @implementation GCFieldsCalculatedTrackElevation
 
--(void)setupLap:(GCLap*)lap{
-    [lap.calculated removeObjectForKey:CALC_ALTITUDE_GAIN];
-    [lap.calculated removeObjectForKey:CALC_ALTITUDE_LOSS];
+-(void)setupLap:(GCLap*)lap inActivity:(GCActivity *)act{
+    [lap clearCalculatedForFields:@[ [GCField fieldForKey:CALC_ALTITUDE_GAIN andActivityType:act.activityType], [GCField fieldForKey:CALC_ALTITUDE_LOSS andActivityType:act.activityType] ]];
 }
 
 -(void)startWithPoint:(GCTrackPoint *)point{
@@ -118,16 +116,18 @@
 }
 
 -(void)newPoint:(GCTrackPoint*)point forLaps:(NSArray<GCLap*>*)laps inActivity:(GCActivity *)act{
+    GCField * calcGain = [GCField fieldForKey:CALC_ALTITUDE_GAIN andActivityType:act.activityType];
+    GCField * calcLoss = [GCField fieldForKey:CALC_ALTITUDE_LOSS andActivityType:act.activityType];
     for (GCLap * lap in laps) {
-        GCNumberWithUnit * altitudeGain = lap.calculated[CALC_ALTITUDE_GAIN];
-        GCNumberWithUnit * altitudeLoss = lap.calculated[CALC_ALTITUDE_LOSS];
+        GCNumberWithUnit * altitudeGain = lap.calculated[ calcGain ];
+        GCNumberWithUnit * altitudeLoss = lap.calculated[ calcLoss ];
         if (!altitudeGain) {
             altitudeGain = [GCNumberWithUnit numberWithUnitName:STOREUNIT_ALTITUDE andValue:0.];
-            [lap addNumberWithUnitForCalculated:altitudeGain forField:CALC_ALTITUDE_GAIN];
+            [lap addNumberWithUnitForCalculated:altitudeGain forField:calcGain ];
         }
         if (!altitudeLoss) {
             altitudeLoss = [GCNumberWithUnit numberWithUnitName:STOREUNIT_ALTITUDE andValue:0.];
-            [lap addNumberWithUnitForCalculated:altitudeLoss forField:CALC_ALTITUDE_LOSS];
+            [lap addNumberWithUnitForCalculated:altitudeLoss forField:calcLoss ];
         }
         // after added calculation are done inplace so no need to re-add number
         double altitudeDiff = point.altitude-self.altitude;
@@ -174,9 +174,8 @@
     [super dealloc];
 }
 
--(void)setupLap:(GCLap *)lap{
-    [lap.calculated removeObjectForKey:CALC_NORMALIZED_POWER];
-    [lap.calculated removeObjectForKey:CALC_NONZERO_POWER];
+-(void)setupLap:(GCLap *)lap inActivity:(GCActivity *)act{
+    [lap clearCalculatedForFields:@[ [GCField fieldForKey:CALC_NORMALIZED_POWER andActivityType:act.activityType], [GCField fieldForKey:CALC_NONZERO_POWER andActivityType:act.activityType]]];
 }
 
 -(void)startWithPoint:(GCTrackPoint *)point{
@@ -186,14 +185,18 @@
     // Note, it get reset and samples restart at each lap
     // Not great as technically should restart only for each individual lap, but probably close enough for
     // now
+    
+    GCField * normalizedPower = [GCField fieldForKey:CALC_NORMALIZED_POWER andActivityType:act.activityType];
+    GCField * nonzeroPower = [GCField fieldForKey:CALC_NONZERO_POWER andActivityType:act.activityType];
+    
     for (GCLap * lap in laps) {
-        GCNumberWithUnit * normalized = lap.calculated[CALC_NORMALIZED_POWER];
-        GCNumberWithUnit * nonzero    = lap.calculated[CALC_NONZERO_POWER];
+        GCNumberWithUnit * normalized = lap.calculated[normalizedPower];
+        GCNumberWithUnit * nonzero    = lap.calculated[nonzeroPower];
         if (!normalized) {
             nonzero    = [GCNumberWithUnit numberWithUnitName:@"watt" andValue:0.];
             normalized = [GCNumberWithUnit numberWithUnitName:@"watt" andValue:0.];
-            [lap addNumberWithUnitForCalculated:normalized  forField:CALC_NORMALIZED_POWER];
-            [lap addNumberWithUnitForCalculated:nonzero     forField:CALC_NONZERO_POWER];
+            [lap addNumberWithUnitForCalculated:normalized  forField:normalizedPower];
+            [lap addNumberWithUnitForCalculated:nonzero     forField:nonzeroPower];
             // start new lap
             free(_samples);
             _samples = calloc(sizeof(double), self.movingAverage);

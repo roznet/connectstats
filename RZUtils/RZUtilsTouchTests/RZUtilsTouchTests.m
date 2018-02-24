@@ -52,9 +52,6 @@
     
     GCSimpleGraphGeometry * geometry = [self geometryForXUnit:second unit:meter values:@[ @0., @0., @3420., @12. ] size:CGSizeMake(375., 200.) ];
     
-    
-    NSLog(@"%@ %@",geometry.dataSource.title,  geometry.xAxisKnobs);
-    
 }
 
 

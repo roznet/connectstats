@@ -56,7 +56,7 @@
 
 // Strava
 -(void)stravaUpload:(NSString*)aId navigationController:(UINavigationController*)nav extra:(NSDictionary*)extra;
--(void)stravaDownloadActivityTrackPoints:(NSString*)aId;
+-(void)stravaDownloadActivityTrackPoints:(GCActivity*)act;
 
 // Babolat
 -(void)babolatDownloadTennisActivityDetails:(NSString*)aId;

@@ -72,7 +72,7 @@
     navCourtReport.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Court" image:courtReportImage tag:0];
     navPlotAnalysis.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Plots" image:plotImage tag:0];
     navList.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Sessions" image:tableImage tag:0];
-    self.viewControllers = @[  navList, navSession,  self.courtViewController, navReport, navPlotAnalysis,  navCourtReport];
+    self.viewControllers = @[  navSession,  self.courtViewController, navReport, navPlotAnalysis,  navCourtReport, navList ];
     self.delegate =self;
 
 }

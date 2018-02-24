@@ -32,6 +32,7 @@
 #import "GCHealthKitRequest.h"
 #import "GCActivity+Fields.h"
 #import "RZUtilsHealthkit/RZUtilsHealthkit.h"
+#import "GCActivity+Database.h"
 
 @interface GCHealthKitActivityParser ()
 @property (nonatomic,retain) NSDictionary * data;
@@ -104,7 +105,7 @@
                 point.trackFlags |= flag;
                 GCUnit * convert = [GCUnit unitForKey:flag==gcFieldFlagSumDistance?STOREUNIT_DISTANCE:@"dimensionless"];
                 GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:convert andQuantity:qs.quantity];
-                [point setValue:nu.value forField:flag];
+                [point setNumberWithUnit:nu forField:[GCField fieldForFlag:flag andActivityType:GC_TYPE_DAY] inActivity:nil];
             }
         }
         if (incompatibleElapsed) {
@@ -132,19 +133,19 @@
 
             activity.activityId = key;
             activity.activityType = GC_TYPE_DAY;
-            activity.activityTypeDetail = GC_TYPE_DAY;
+            activity.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_DAY];
             activity.activityName = @"";
             activity.downloadMethod = gcDownloadMethodHealthKit;
             activity.location = @"";
             activity.speedDisplayUom = @"kph";
             activity.distanceDisplayUom = @"kilometer";
-            activity.summaryData = @{
+            [activity setSummaryDataFromKeyDict:@{
                                      @"SumDistance":[GCActivitySummaryValue activitySummaryValueForField:@"SumDistance" value:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDistance]],
                                      @"SumDuration":[GCActivitySummaryValue activitySummaryValueForField:@"SumDuration" value:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDuration]],
                                      @"SumStep":[GCActivitySummaryValue activitySummaryValueForField:@"SumStep" value:[GCNumberWithUnit numberWithUnitName:@"step" andValue:sumSteps]],
                                      @"SumFloorClimbed":[GCActivitySummaryValue activitySummaryValueForField:@"SumFloorClimbed" value:[GCNumberWithUnit numberWithUnitName:@"step" andValue:sumFloors]],
 
-                                     };
+                                     }];
             activity.metaData = [NSMutableDictionary dictionary];
             if (self.organizer) {
                 [self.organizer registerActivity:activity forActivityId:activity.activityId];

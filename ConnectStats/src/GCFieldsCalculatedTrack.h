@@ -33,7 +33,7 @@
 +(void)addCalculatedFieldsToTrackPointsAndLaps:(GCActivity *)act;
 
 -(void)setupActivity:(GCActivity*)act;
--(void)setupLap:(GCLap*)lap;
+-(void)setupLap:(GCLap*)lap inActivity:(GCActivity*)acts;
 -(void)startWithPoint:(GCTrackPoint *)point;
 -(void)newPoint:(GCTrackPoint*)point forLaps:(NSArray<GCLap*>*)lap inActivity:(GCActivity*)act;
 

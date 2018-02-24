@@ -24,6 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
+@class GCField;
 
 @interface FITFitEnumMap : NSObject
 
@@ -40,6 +41,6 @@
  activity Field or nil if not found. If activityType is not nil, will
  try to adapt to the activity type fields like cadence
  */
-+(NSString*)activityFieldFromFitField:(NSString*)fitfield forActivityType:(NSString*)activityType;
++(GCField*)activityFieldFromFitField:(NSString*)fitfield forActivityType:(NSString*)activityType;
 
 @end

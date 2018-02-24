@@ -317,4 +317,18 @@
         RZLog(RZLogInfo, @"INSERT INTO table_name (activityType,field,uom,fieldDisplayName) VALUES ('%@','%@','%@','%@')", one[1], one[0], one[2], one[3]);
     }
 }
+
+-(void)actionClearRunningPower{
+    NSArray<GCActivity*>* activities = [[GCAppGlobal organizer] activities];
+    NSMutableArray<GCActivity*>* withPower = [NSMutableArray array];
+    for (GCActivity * activity in activities) {
+        if( [activity.activityType isEqualToString:GC_TYPE_RUNNING] && [activity hasTrackForField:[GCField fieldForFlag:gcFieldFlagPower andActivityType:GC_TYPE_RUNNING]]){
+            [withPower addObject:activity];
+            [[GCAppGlobal derived] forceReprocessActivity:activity.activityId];
+        }
+    }
+    [[GCAppGlobal derived] clearDataForActivityType:GC_TYPE_RUNNING andFieldFlag:gcFieldFlagPower];
+    NSLog(@"%@", withPower);
+    //[[GCAppGlobal derived] processActivities:withPower];
+}
 @end

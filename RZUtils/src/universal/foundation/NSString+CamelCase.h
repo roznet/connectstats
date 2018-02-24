@@ -39,4 +39,5 @@
  otherwise return the string unchanged
  */
 -(NSString *)truncateIfLongerThan:(NSUInteger)nchar ellipsis:(NSString*)ellipsis;
+
 @end

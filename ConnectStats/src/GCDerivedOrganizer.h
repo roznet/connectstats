@@ -53,4 +53,9 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
 
 +(void)ensureDbStructure:(FMDatabase*)db;
 
+// Debug utils
+-(void)forceReprocessActivity:(NSString*)aId;
+-(void)clearDataForActivityType:(NSString*)aType andFieldFlag:(gcFieldFlag)flag;
+
+
 @end

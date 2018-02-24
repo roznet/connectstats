@@ -213,7 +213,7 @@
     if (rv) {
         // First collect by indexing on Keys/NSStirng for speed
         // Then after cleanup by adding the type
-        NSMutableDictionary<NSString*,GCFieldDataHolder*> * fieldKeyData = [NSMutableDictionary dictionary];
+        NSMutableDictionary<GCField*,GCFieldDataHolder*> * fieldKeyData = [NSMutableDictionary dictionary];
 
         GCStatsDateBuckets * weekBucket = nil;
         GCStatsDateBuckets * monthBucket= nil;
@@ -221,17 +221,23 @@
         for (GCActivity * act in activities) {
             if (![act ignoreForStats:ignoreMode] && ( match == nil || match(act) ) ) {
                 activityTypes[act.activityType] = act.activityType;
-                NSArray * fields = [act allFieldsKeys];
-                for (NSString * fieldKey in fields) {
+                NSArray<GCField*> * fields = [act allFields];
+                for (GCField * field in fields) {
                     //
-                    GCField * field = [GCField fieldForKey:fieldKey andActivityType:GC_TYPE_ALL];
-                    GCFieldDataHolder * holder = fieldKeyData[fieldKey];
+                    GCFieldDataHolder * holder = fieldKeyData[field];
                     if (!holder) {
                         holder = [[[GCFieldDataHolder alloc] init] autorelease];
                         holder.field = field;
-                        fieldKeyData[fieldKey] = holder;
+                        fieldKeyData[field] = holder;
                     }
-
+                    GCField * fieldAll = [field correspondingFieldTypeAll];
+                    GCFieldDataHolder * holderAll = fieldKeyData[fieldAll];
+                    if(!holderAll){
+                        holderAll = RZReturnAutorelease([[GCFieldDataHolder alloc] init]);
+                        holderAll.field = fieldAll;
+                        fieldKeyData[fieldAll] = holderAll;
+                    }
+                    
                     GCNumberWithUnit * nu = [act numberWithUnitForField:field];
                     if (nu) {
                         // weight is either duration (everything) or dist (for pace = invlinear)
@@ -241,6 +247,7 @@
                             weight=1.;
                         }
                         [holder addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsAll];
+                        [holderAll addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsAll];
                         if (weekBucket==nil) {
                             weekBucket = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitWeekOfYear
                                                                   referenceDate:refOrNil
@@ -253,24 +260,18 @@
                         }
                         if ([weekBucket contains:act.date]) {
                             [holder addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsWeek];
+                            [holderAll addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsWeek];
                         }
                         if ([monthBucket contains:act.date]) {
                             [holder addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsMonth];
+                            [holderAll addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsMonth];
                         }
                     }
                 }
             }
         }
 
-        NSString * activityType = activityTypes.count == 1 ? activityTypes.allKeys[0] : GC_TYPE_ALL;
-        NSMutableDictionary<GCField*,GCFieldDataHolder*> * final = [NSMutableDictionary dictionaryWithCapacity:fieldKeyData.count];
-        for (NSString * fieldKey in fieldKeyData) {
-            GCField * typedField = [GCField fieldForKey:fieldKey andActivityType:activityType];
-            GCFieldDataHolder * holder = fieldKeyData[fieldKey];
-            holder.field = typedField;
-            final[typedField] = holder;
-        }
-        rv.fieldData = [NSDictionary dictionaryWithDictionary:final];
+        rv.fieldData = [NSDictionary dictionaryWithDictionary:fieldKeyData];
         rv.foundActivityTypes = activityTypes.allKeys;
     }
     return rv;

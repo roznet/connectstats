@@ -207,6 +207,7 @@ void checkVersion(){
 
     // first use, update, etc workflow
 	[_window makeKeyAndVisible];
+    
     [Appirater appLaunched:YES];
 
     [self updateShortCutKeys];

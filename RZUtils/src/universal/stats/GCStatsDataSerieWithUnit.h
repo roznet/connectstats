@@ -53,6 +53,7 @@
 
 -(BOOL)isEqualToSerieWithUnit:(GCStatsDataSerieWithUnit*)other;
 
+-(void)addNumberWithUnit:(GCNumberWithUnit*)number forDate:(NSDate*)date since:(NSDate*)first;
 -(void)addNumberWithUnit:(GCNumberWithUnit*)number forDate:(NSDate*)date;
 -(void)addNumberWithUnit:(GCNumberWithUnit*)number forX:(double)x;
 

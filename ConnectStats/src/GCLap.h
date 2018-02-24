@@ -28,10 +28,8 @@
 
 #define GC_BEARING_FIELD @"Bearing"
 
-@interface GCLap : GCTrackPoint{
-    NSMutableDictionary * extra;
-}
-@property (nonatomic,retain) NSMutableDictionary * extra;
+@interface GCLap : GCTrackPoint
+
 @property (nonatomic,assign) BOOL useMovingElapsed;
 @property (nonatomic,assign) double movingElapsed;
 @property (nonatomic,retain) NSString*label;
@@ -42,16 +40,15 @@
 -(GCLap*)initWithLap:(GCLap*)other NS_DESIGNATED_INITIALIZER;
 -(GCLap*)initWithTrackPoint:(GCTrackPoint*)other NS_DESIGNATED_INITIALIZER;
 
--(void)addExtraFromResultSet:(FMResultSet*)res andActivityType:(NSString*)aType;
-
 -(void)saveToDb:(FMDatabase*)trackdb;
 
--(void)accumulateLap:(GCLap*)other;
--(void)accumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to;
--(void)decumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to;
--(void)interpolate:(double)delta within:(GCLap*)diff;
+-(void)accumulateLap:(GCLap*)other inActivity:(GCActivity*)act;
+-(void)accumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to inActivity:(GCActivity*)act;
+-(void)decumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to inActivity:(GCActivity*)act;
+-(void)interpolate:(double)delta within:(GCLap*)diff inActivity:(GCActivity*)act;
 
--(void)difference:(GCTrackPoint*)from minus:(GCTrackPoint*)to;
+-(void)difference:(GCTrackPoint*)from minus:(GCTrackPoint*)to inActivity:(GCActivity*)act;
 
--(void)augmentElapsed:(NSDate*)start;
+-(void)augmentElapsed:(NSDate*)start inActivity:(GCActivity*)act;
+
 @end

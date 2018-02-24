@@ -92,6 +92,9 @@
 #define CONFIG_FITBIT_TOKEN             @"config_fitbit_t"
 #define CONFIG_FITBIT_TOKENSECRET       @"config_fitbit_s"
 
+#define CONFIG_GARMIN_FIT_DOWNLOAD      @"config_garmin_fit_download"
+#define CONFIG_GARMIN_FIT_MERGE         @"config_garmin_fit_merge"
+
 #define CONFIG_WITHINGS_TOKEN             @"config_withings_t"
 #define CONFIG_WITHINGS_TOKENSECRET       @"config_withings_s"
 #define CONFIG_WITHINGS_USERID            @"config_withings_u"

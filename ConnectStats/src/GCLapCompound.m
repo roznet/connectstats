@@ -39,18 +39,18 @@
     return (self.laps).lastObject;
 }
 
--(void)accumulateLap:(GCLap*)other{
-    [super accumulateLap:other];
+-(void)accumulateLap:(GCLap*)other  inActivity:(GCActivity*)act{
+    [super accumulateLap:other inActivity:act];
     if (!self.laps) {
         self.laps = @[];
     }
     GCLap * last = (self.laps).lastObject;
     if (last) {
-        [last accumulateLap:other];
+        [last accumulateLap:other  inActivity:act];
     }
 }
--(void)accumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to{
-    [super accumulateFrom:from to:to];
+-(void)accumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to  inActivity:(GCActivity*)act{
+    [super accumulateFrom:from to:to  inActivity:act];
     if (!self.laps) {
         self.laps = @[];
     }
@@ -58,28 +58,28 @@
     if (!last) {
         last = [self startNewLap:from];
     }
-    [last accumulateFrom:from to:to];
+    [last accumulateFrom:from to:to  inActivity:act];
 
 }
--(void)decumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to{
-    [super decumulateFrom:from to:to];
+-(void)decumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to  inActivity:(GCActivity*)act{
+    [super decumulateFrom:from to:to  inActivity:act];
     if (!self.laps) {
         self.laps = @[];
     }
     GCLap * last = (self.laps).lastObject;
     if (last) {
-        [last decumulateFrom:from to:to];
+        [last decumulateFrom:from to:to  inActivity:act];
     }
 }
 
--(void)interpolate:(double)delta within:(GCLap*)diff{
-    [super interpolate:delta within:diff];
+-(void)interpolate:(double)delta within:(GCLap*)diff  inActivity:(GCActivity*)act{
+    [super interpolate:delta within:diff  inActivity:act];
     if (!self.laps) {
         self.laps = @[];
     }
     GCLap * last = (self.laps).lastObject;
     if (last) {
-        [last interpolate:delta within:diff];
+        [last interpolate:delta within:diff  inActivity:act];
     }
 }
 

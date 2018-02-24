@@ -27,6 +27,8 @@
 #import "GCActivityType.h"
 #import "GCField.h"
 
+static NSUInteger nonPredefinedTypeId = 10000;
+
 @interface GCActivityTypes ()
 
 @property (nonatomic,retain) NSDictionary<NSString*,GCActivityType*> * typesByKey;
@@ -37,19 +39,20 @@
 @implementation GCActivityTypes
 
 +(GCActivityTypes*)activityTypes{
-    GCActivityTypes * rv = [[[GCActivityTypes alloc] init] autorelease];
+    GCActivityTypes * rv = RZReturnAutorelease([[GCActivityTypes alloc] init]);
     if (rv) {
         [rv loadPredefined];
     }
     return rv;
 }
-
+#if !__has_feature(objc_arc)
 -(void)dealloc{
     [_typesByKey release];
     [_typesById release];
 
     [super dealloc];
 }
+#endif
 
 -(void)loadPredefined{
     FMDatabase * fdb = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"fields.db"]];
@@ -101,7 +104,7 @@
 
     // Now add non garmin types
 
-    NSUInteger nonPredefinedTypeId = 10000;
+    
     GCActivityType * nonworkout = [GCActivityType activityType:@"non_activity_all" typeId:nonPredefinedTypeId++ andParent:nil];
 
     GCActivityType * day = [GCActivityType activityType:GC_TYPE_DAY typeId:nonPredefinedTypeId andParent:nonworkout];
@@ -118,8 +121,18 @@
 
 #pragma mark - Access
 
+-(BOOL)isExistingActivityType:(NSString*)aType{
+    return self.typesByKey[aType] != nil;
+}
 -(GCActivityType*)activityTypeForKey:(NSString*)aType{
-    return self.typesByKey[aType];
+    GCActivityType * rv = self.typesByKey[aType];
+    if( rv == nil){
+        rv = [GCActivityType activityType:aType typeId:nonPredefinedTypeId++ andParent:GCActivityType.all];
+        NSMutableDictionary * byKeys = [NSMutableDictionary dictionaryWithDictionary:self.typesByKey];
+        byKeys[aType] = rv;
+        self.typesByKey = byKeys;
+    }
+    return rv;
 }
 -(GCActivityType*)activityTypeForGarminId:(NSUInteger)garminActivityId{
     return self.typesById[ @(garminActivityId)];

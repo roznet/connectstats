@@ -55,7 +55,7 @@
     rv.activityType = GC_TYPE_CYCLING;
     rv.activityId = @"100";
     rv.activityName = @"Untitled";
-    rv.activityTypeDetail = GC_TYPE_CYCLING;
+    rv.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_CYCLING];
     rv.trackFlags = gcFieldFlagWeightedMeanSpeed|gcFieldFlagWeightedMeanHeartRate;
     rv.flags = gcFieldFlagWeightedMeanHeartRate|gcFieldFlagWeightedMeanSpeed;
 

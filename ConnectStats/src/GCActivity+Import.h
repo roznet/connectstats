@@ -40,6 +40,8 @@
 
 -(void)updateWithGarminData:(NSDictionary*)data;
 -(BOOL)updateWithActivity:(GCActivity*)other;
+-(BOOL)updateSummaryDataFromActivity:(GCActivity*)other;
+-(BOOL)updateTrackpointsFromActivity:(GCActivity*)other;
 
 
 /**
@@ -48,7 +50,23 @@
  @param trackpoints will process speed, heartrate fields
  @return dictionary suitable for summaryData
  */
--(NSDictionary<NSString*,GCActivitySummaryValue*>*)buildSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints;
+-(NSDictionary<GCField*,GCActivitySummaryValue*>*)buildSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints;
+
+/**
+ Will update summaryData with data calculated from trackpoints
+
+ @param trackpoints list of trackpoints, should be compatible with index of current activity
+ @param missingOnly if true will not change existing value in summarydata, else will replace all
+ 
+ @return true if something changed
+ */
+-(BOOL)updateSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints missingOnly:(BOOL)missingOnly;
+
+
+/**
+ Checks in summary data for fields that should be set back as fieldFlag
+ */
+-(void)updateSummaryFieldFromSummaryData;
 
 /**
  Update contents of summary data with new dict. Any existing field in summaryData
@@ -57,7 +75,7 @@
 
  @param newDict Dictionary
  */
--(void)mergeSummaryData:(NSDictionary<NSString*,GCActivitySummaryValue*>*)newDict;
+-(void)mergeSummaryData:(NSDictionary<GCField*,GCActivitySummaryValue*>*)newDict;
 
 /**
  Helper to add Pace info to a mutable dictionary if speed is there
@@ -65,7 +83,7 @@
 
  @param newSummaryData An summary mutable dictionary
  */
--(void)addPaceIfNecessaryWithSummary:(NSMutableDictionary*)newSummaryData;
+-(void)addPaceIfNecessaryWithSummary:(NSMutableDictionary<GCField*,GCActivitySummaryValue*>*)newSummaryData;
 
 -(NSMutableDictionary*)buildSummaryDataFromGarminModernData:(NSDictionary*)data;
 -(CLLocationCoordinate2D)buildCoordinateFromGarminModernData:(NSDictionary*)data;

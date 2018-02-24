@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TSScoreRuleEditorViewController" customModule="tennisstats" customModuleProvider="target">
+            <connections>
+                <outlet property="deciderHasTieBreak" destination="fOP-if-tpB" id="xKa-Aq-Rk5"/>
+                <outlet property="deciderIsTieBreak" destination="wxJ-zz-zl6" id="5gA-31-loF"/>
+                <outlet property="gameHasAdvantage" destination="YDU-Lh-6Pn" id="nDy-c9-MYd"/>
+                <outlet property="gamesPerSet" destination="4cE-Xn-MT5" id="uJV-XH-jQw"/>
+                <outlet property="numberOfSets" destination="NKz-im-OJR" id="Jyw-gz-ERz"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of Sets" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MXv-e2-6Xs">
+                    <rect key="frame" x="25" y="50" width="120" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4cE-Xn-MT5">
+                    <rect key="frame" x="230" y="98" width="120" height="29"/>
+                    <segments>
+                        <segment title="4"/>
+                        <segment title="6"/>
+                    </segments>
+                </segmentedControl>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="wxJ-zz-zl6">
+                    <rect key="frame" x="201" y="147" width="149" height="29"/>
+                    <segments>
+                        <segment title="Tie-Break"/>
+                        <segment title="Games"/>
+                    </segments>
+                </segmentedControl>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Decider" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ygp-y0-LeY">
+                    <rect key="frame" x="25" y="150" width="60" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Decider has Tie-Break" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5JU-mC-uOE">
+                    <rect key="frame" x="25" y="200" width="170.5" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="fOP-if-tpB">
+                    <rect key="frame" x="230" y="197" width="120" height="29"/>
+                    <segments>
+                        <segment title="No"/>
+                        <segment title="Yes"/>
+                    </segments>
+                </segmentedControl>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="YDU-Lh-6Pn">
+                    <rect key="frame" x="230" y="247" width="120" height="29"/>
+                    <segments>
+                        <segment title="No"/>
+                        <segment title="Yes"/>
+                    </segments>
+                </segmentedControl>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Game has Advantage" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rFU-Pq-Tx8">
+                    <rect key="frame" x="25" y="250" width="163" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="NKz-im-OJR">
+                    <rect key="frame" x="230" y="47" width="120" height="29"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="120" id="bah-pz-Zr1"/>
+                    </constraints>
+                    <segments>
+                        <segment title="3"/>
+                        <segment title="5"/>
+                    </segments>
+                    <connections>
+                        <action selector="numberOfSetsChanged:" destination="-1" eventType="valueChanged" id="iGa-Em-a9c"/>
+                    </connections>
+                </segmentedControl>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Games per Set" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QCS-Ax-82P">
+                    <rect key="frame" x="25" y="100" width="114" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="rpK-4F-ZEc">
+                    <rect key="frame" x="0.0" y="426" width="375" height="241"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="241" id="B9z-uE-oUd"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="vfO-O1-btZ"/>
+                        <outlet property="delegate" destination="-1" id="6AZ-Vz-s4D"/>
+                    </connections>
+                </tableView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0g4-Oy-xKV">
+                    <rect key="frame" x="252" y="305" width="98" height="30"/>
+                    <state key="normal" title="Set As Default"/>
+                    <connections>
+                        <action selector="setAsDefault:" destination="-1" eventType="touchUpInside" id="ucx-Nh-h7f"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="YDU-Lh-6Pn" firstAttribute="width" secondItem="fOP-if-tpB" secondAttribute="width" id="1Cy-bF-J1U"/>
+                <constraint firstItem="Ygp-y0-LeY" firstAttribute="top" secondItem="QCS-Ax-82P" secondAttribute="bottom" constant="29.5" id="1uG-Mn-vOQ"/>
+                <constraint firstItem="0g4-Oy-xKV" firstAttribute="trailing" secondItem="YDU-Lh-6Pn" secondAttribute="trailing" id="6VZ-2q-DZ8"/>
+                <constraint firstItem="4cE-Xn-MT5" firstAttribute="width" secondItem="NKz-im-OJR" secondAttribute="width" id="GAN-G1-NHK"/>
+                <constraint firstItem="rFU-Pq-Tx8" firstAttribute="top" secondItem="5JU-mC-uOE" secondAttribute="bottom" constant="29.5" id="Hhi-1h-cgB"/>
+                <constraint firstItem="4cE-Xn-MT5" firstAttribute="trailing" secondItem="NKz-im-OJR" secondAttribute="trailing" id="IkK-PQ-Rj7"/>
+                <constraint firstItem="Ygp-y0-LeY" firstAttribute="leading" secondItem="QCS-Ax-82P" secondAttribute="leading" id="MFI-Xd-7U4"/>
+                <constraint firstItem="fOP-if-tpB" firstAttribute="baseline" secondItem="5JU-mC-uOE" secondAttribute="baseline" id="T1D-5v-VG4"/>
+                <constraint firstItem="rFU-Pq-Tx8" firstAttribute="leading" secondItem="5JU-mC-uOE" secondAttribute="leading" id="Va2-Zb-PAh"/>
+                <constraint firstItem="wxJ-zz-zl6" firstAttribute="trailing" secondItem="4cE-Xn-MT5" secondAttribute="trailing" id="ZQm-bw-pKo"/>
+                <constraint firstItem="wxJ-zz-zl6" firstAttribute="baseline" secondItem="Ygp-y0-LeY" secondAttribute="baseline" id="atu-re-QnK"/>
+                <constraint firstItem="fOP-if-tpB" firstAttribute="width" secondItem="4cE-Xn-MT5" secondAttribute="width" id="avQ-SJ-3i4"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="rpK-4F-ZEc" secondAttribute="trailing" id="bm8-nX-FAB"/>
+                <constraint firstItem="5JU-mC-uOE" firstAttribute="top" secondItem="Ygp-y0-LeY" secondAttribute="bottom" constant="29.5" id="cOF-sU-YxI"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="rpK-4F-ZEc" secondAttribute="bottom" id="cah-o9-Tum"/>
+                <constraint firstItem="4cE-Xn-MT5" firstAttribute="baseline" secondItem="QCS-Ax-82P" secondAttribute="baseline" id="g0q-rs-uDo"/>
+                <constraint firstItem="MXv-e2-6Xs" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="25" id="i24-hl-eNx"/>
+                <constraint firstItem="MXv-e2-6Xs" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="30" id="i46-cT-yKB"/>
+                <constraint firstItem="rpK-4F-ZEc" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="iyJ-fK-Ktg"/>
+                <constraint firstItem="NKz-im-OJR" firstAttribute="baseline" secondItem="MXv-e2-6Xs" secondAttribute="baseline" id="jnl-th-mVY"/>
+                <constraint firstItem="QCS-Ax-82P" firstAttribute="top" secondItem="MXv-e2-6Xs" secondAttribute="bottom" constant="29.5" id="lRL-qt-q4t"/>
+                <constraint firstItem="fOP-if-tpB" firstAttribute="trailing" secondItem="wxJ-zz-zl6" secondAttribute="trailing" id="nog-JI-d8c"/>
+                <constraint firstItem="YDU-Lh-6Pn" firstAttribute="trailing" secondItem="fOP-if-tpB" secondAttribute="trailing" id="pUd-og-RlE"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="NKz-im-OJR" secondAttribute="trailing" constant="25" id="r16-fg-iBa"/>
+                <constraint firstItem="YDU-Lh-6Pn" firstAttribute="baseline" secondItem="rFU-Pq-Tx8" secondAttribute="baseline" id="tcv-GR-PtP"/>
+                <constraint firstItem="QCS-Ax-82P" firstAttribute="leading" secondItem="MXv-e2-6Xs" secondAttribute="leading" id="twL-Oy-buX"/>
+                <constraint firstItem="5JU-mC-uOE" firstAttribute="leading" secondItem="Ygp-y0-LeY" secondAttribute="leading" id="uX0-cX-lnH"/>
+                <constraint firstItem="0g4-Oy-xKV" firstAttribute="top" secondItem="YDU-Lh-6Pn" secondAttribute="bottom" constant="30" id="zDO-LJ-iI2"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="33.5" y="53.5"/>
+        </view>
+    </objects>
+</document>

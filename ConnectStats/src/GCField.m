@@ -168,6 +168,9 @@ static void registerInCache(GCField*field){
     if (field == nil) {
         return nil;
     }
+    if( ![field isKindOfClass:[NSString class]] ){
+        NSLog(@"Oops");
+    }
 
     GCField * rv =  _cache[field][activityType?:GC_TYPE_NULL];
     if (!rv) {
@@ -208,7 +211,8 @@ static void registerInCache(GCField*field){
                                @"SumStep":                         @(gcFieldFlagSumStep),
                                @"WeightedMeanGroundContactTime":   @(gcFieldFlagGroundContactTime),
                                @"WeightedMeanVerticalOscillation": @(gcFieldFlagVerticalOscillation),
-                               }
+                               },
+                 GC_TYPE_SKI_XC: @{@"WeightedMeanCadence": @(gcFieldFlagCadence)},
                  };
         RZRetain(dict);
     }
@@ -265,25 +269,50 @@ static void registerInCache(GCField*field){
 }
 
 -(BOOL)isNoisy{
-    return [GCFields noisyField:self.fieldFlag forActivityType:self.activityType];
+    if ([self.activityType isEqualToString:GC_TYPE_SWIMMING]) {
+        return false;
+    }
+    gcFieldFlag aTrackField = self.fieldFlag;
+    
+    return aTrackField == gcFieldFlagCadence ||
+        aTrackField == gcFieldFlagWeightedMeanSpeed ||
+        aTrackField == gcFieldFlagPower ||
+        aTrackField == gcFieldFlagVerticalOscillation ||
+        aTrackField == gcFieldFlagGroundContactTime;
+
 }
 
 -(BOOL)canSum{
-    return [GCFields fieldCanSum:self.key];
+    NSString * field = self.key;
+    
+    if ([field isEqualToString:@"SumTrainingEffect"] || [field isEqualToString:@"SumIntensityFactor"]) {
+        return NO;
+    }
+    return [field hasPrefix:@"Sum"] || [field isEqualToString:@"GainElevation"] || [field isEqualToString:@"LossElevation"] || [field isEqualToString:@"shots"];
 }
+
 -(BOOL)validForGraph{
     if (self.fieldFlag == gcFieldFlagSumDistance || self.fieldFlag == gcFieldFlagSumDuration) {
         return false;
     }
-    return true;
+    if( self.fieldFlag != gcFieldFlagNone){
+        return self.isWeightedAverage;
+    }
+    return !self.isMax && !self.isMin;
 }
 
 -(BOOL)isWeightedAverage{
     return [self.key hasPrefix:@"WeightedMean"];
 }
+-(BOOL)isSpeedOrPace{
+    return self.fieldFlag == gcFieldFlagWeightedMeanSpeed || [self.key isEqualToString:@"WeightedMeanSpeed"] || [self.key isEqualToString:@"WeightedMeanPace"];
+}
 
 -(BOOL)isMax{
     return [self.key hasPrefix:@"Max"];
+}
+-(BOOL)isMin{
+    return [self.key hasPrefix:@"Min"];
 }
 
 -(GCField*)fieldBySwappingPrefix:(NSString*)oldPrefix for:(NSString*)newPrefix{
@@ -293,14 +322,44 @@ static void registerInCache(GCField*field){
     }
     return nil;
 }
+-(GCField*)fieldBySwappingSuffix:(NSString*)oldSuffix for:(NSString*)newSuffix{
+    if( [self.key hasSuffix:oldSuffix]){
+        NSString * guess = [NSString stringWithFormat:@"%@%@", [self.key substringToIndex:(self.key.length-oldSuffix.length)], newSuffix];
+        return [GCField fieldForKey:guess andActivityType:self.activityType];
+    }
+    return nil;
+}
 
+-(GCField*)correspondingPaceOrSpeedField{
+    GCField * rv = nil;
+    if( [self.key hasSuffix:@"Speed"] ){
+        rv = [self fieldBySwappingSuffix:@"Speed" for:@"Pace"];
+    }else if([self.key hasSuffix:@"Pace"]){
+        rv = [self fieldBySwappingSuffix:@"Pace" for:@"Speed"];
+    }
+    return rv;
+}
 -(GCField*)correspondingMaxField{
     GCField * rv = [self fieldBySwappingPrefix:@"WeightedMean" for:@"Max"];
     return rv;
 }
+-(GCField*)correspondingMinField{
+    GCField * rv = [self fieldBySwappingPrefix:@"WeightedMean" for:@"Min"];
+    return rv;
+}
+
 -(GCField*)correspondingWeightedMeanField{
     GCField * rv = [self fieldBySwappingPrefix:@"Max" for:@"WeightedMean"];
     return rv;
+}
+-(GCField*)correspondingFieldTypeAll{
+    return [GCField fieldForKey:self.key andActivityType:GC_TYPE_ALL];
+}
+-(BOOL)hasSuffix:(NSString*)suf{
+    return [self.key hasSuffix:suf];
+}
+-(BOOL)hasPrefix:(NSString*)pref{
+    return [self.key hasPrefix:pref];
 }
 
 #pragma mark
@@ -435,13 +494,84 @@ static void registerInCache(GCField*field){
     return rv;
 }
 
--(NSArray*)relatedFields{
-    NSArray * related = [GCFields relatedFields:self.key];
-    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:related.count];
-    for (NSString * key in related) {
-        [rv addObject:[GCField field:key forActivityType:self.activityType]];
+-(NSArray<GCField*>*)relatedFields{
+    NSArray<NSString*> * prefixes = @[@"WeightedMean", @"WeightedMeanMoving", @"Max", @"Min"];
+    static NSArray<NSArray<NSString*>*> * _groups = nil;
+    static NSArray<NSString*> * _exceptions = nil;
+    
+    if (_groups==nil) {
+        _groups = @[
+                    @[@"SumDuration", @"SumElapsedDuration", @"SumMovingDuration" ],
+                    @[@"SumDistance", @"GainElevation",      @"LossElevation", @"MaxElevation"],
+                    @[@"SumEnergy",   @"SumTrainingEffect",  CALC_ENERGY,      CALC_METABOLIC_EFFICIENCY],
+                    
+                    @[@"SumIntensityFactor",          @"SumTrainingStressScore"],
+                    @[@"WeightedMeanNormalizedPower", CALC_NONZERO_POWER, @"WeightedMeanLeftBalance", @"WeightedMeanRightBalance"],
+                    @[@"WeightedMeanRunCadence",      @"MaxRunCadence",           CALC_STRIDE_LENGTH],
+                    @[@"WeightedMeanBikeCadence",     @"MaxBikeCadence",          CALC_DEVELOPMENT],
+                    @[CALC_NORMALIZED_POWER,          CALC_NONZERO_POWER],
+                    @[CALC_ALTITUDE_GAIN,             CALC_ALTITUDE_LOSS],
+                    @[@"WeightedMeanVerticalOscillation", @"WeightedMeanGroundContactTime"],
+                    @[@"DirectVO2Max", @"DirectLactateThresholdHeartRate"],
+                    @[@"WeightedMeanVerticalRatio",@"WeightedMeanGroundContactBalanceLeft"],
+                    @[CALC_ASCENT_SPEED, CALC_MAX_ASCENT_SPEED],
+                    @[CALC_DESCENT_SPEED, CALC_MAX_DESCENT_SPEED],
+                    @[CALC_VERTICAL_SPEED, CALC_ASCENT_SPEED, CALC_DESCENT_SPEED],
+                    
+                    ];
+        RZRetain(_groups);
+        NSMutableArray * found = [NSMutableArray arrayWithCapacity:5];
+        for (NSArray * one in _groups) {
+            for (NSString * str in one) {
+                for (NSString * prefix in prefixes) {
+                    if ([str hasPrefix:prefix]) {
+                        [found addObject:str];
+                    }
+                }
+            }
+        }
+        _exceptions = RZReturnRetain(found);
+    }
+    
+    NSMutableArray<GCField*> * rv = nil;
+    
+    NSString * suffix = nil;
+    // Exception without min/max
+    if (![_exceptions containsObject:self.key]) {
+        for (NSString * prefix in prefixes) {
+            if ([self.key hasPrefix:prefix]) {
+                suffix = [self.key substringFromIndex:prefix.length];
+                break;
+            }
+        }
+    }
+    if (suffix) {
+        rv = [NSMutableArray arrayWithCapacity:prefixes.count];
+        // special case
+        if ([suffix isEqualToString:@"Power"]) {
+            [rv addObject:[GCField fieldForKey:@"MaxPowerTwentyMinutes" andActivityType:self.activityType ]];
+        }
+        for (NSString * prefix in prefixes) {
+            NSString * newF=[prefix stringByAppendingString:suffix];
+            if (![newF isEqualToString:self.key]) {
+                [rv addObject:[GCField fieldForKey:newF andActivityType:self.activityType]];
+            }
+        }
+    }else{
+        NSArray * groups = _groups;
+        
+        for (NSArray * group in groups) {
+            if ([group containsObject:self.key]) {
+                rv = [NSMutableArray arrayWithCapacity:group.count];
+                for (NSString * f in group) {
+                    if (![f isEqualToString:self.key]) {
+                        [rv addObject:[GCField fieldForKey:f andActivityType:self.activityType]];
+                    }
+                }
+                break;
+            }
+        }
     }
     return rv;
-
 }
 @end

@@ -76,6 +76,10 @@ NSString * kBugNoCommonId = @"-1";
                    CONFIG_QUICK_FILTER             ,
                    CONFIG_QUICK_FILTER_TYPE        ,
                    
+                   CONFIG_GARMIN_FIT_DOWNLOAD      ,
+                   CONFIG_GARMIN_FIT_MERGE         ,
+
+                   
                    ];
     for (NSString * key in keys) {
         id val = settings[key];

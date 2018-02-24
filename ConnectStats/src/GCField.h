@@ -54,9 +54,19 @@
 -(BOOL)validForGraph;
 -(BOOL)isWeightedAverage;
 -(BOOL)isMax;
+-(BOOL)isMin;
+-(BOOL)isSpeedOrPace;
 
+/**
+ Corresponding Speed or Pace field. If not speed or pace return nil
+
+ @return complement field
+ */
+-(GCField*)correspondingPaceOrSpeedField;
 -(GCField*)correspondingMaxField;
 -(GCField*)correspondingWeightedMeanField;
+-(GCField*)correspondingMinField;
+-(GCField*)correspondingFieldTypeAll;
 
 -(NSString*)displayName;
 -(NSString*)displayNameAndUnits;
@@ -69,10 +79,13 @@
 -(NSString*)category;
 -(NSInteger)sortOrder;
 
--(NSArray*)relatedFields;
+-(NSArray<GCField*>*)relatedFields;
 
 -(BOOL)isHealthField;
 -(BOOL)isCalculatedField;
+
+-(BOOL)hasSuffix:(NSString*)suf;
+-(BOOL)hasPrefix:(NSString*)pref;
 
 @end
 

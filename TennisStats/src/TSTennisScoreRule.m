@@ -78,24 +78,22 @@ NSDictionary*ruleMap(){
             self.decidingSetIsTieBreak == other.decidingSetIsTieBreak &&
             self.gamesPerSet == other.gamesPerSet &&
             self.setsPerMatch == other.setsPerMatch &&
+            self.gameEndWithSuddenDeath == other.gameEndWithSuddenDeath &&
             self.decidingSetTieBreakNumberOfPoints == other.decidingSetTieBreakNumberOfPoints
             );
 }
 
 -(TSScoreRulePacked)pack{
     TSScoreRulePacked rv = 0;
-    rv |= self.decidingSetHasNoTieBreak & 0x1;
-    rv = rv << 1;
-    rv |= self.decidingSetIsTieBreak & 0x1;
-    rv = rv << _pack_maskbits;
+    rv = (self.decidingSetHasNoTieBreak ) | (self.decidingSetIsTieBreak << 1) | ( self.gameEndWithSuddenDeath << 2);
+    rv <<= _pack_maskbits;
     rv |= self.tieBreakNumberOfPoints & _pack_mask;
-    rv = rv << _pack_maskbits;
+    rv <<= _pack_maskbits;
     rv |= self.gamesPerSet & _pack_mask;
-    rv = rv << _pack_maskbits;
+    rv <<= _pack_maskbits;
     rv |= self.setsPerMatch & _pack_mask;
-    rv = rv << _pack_maskbits;
+    rv <<= _pack_maskbits;
     rv |= self.decidingSetTieBreakNumberOfPoints & _pack_mask;
-    //NSLog(PRINTF_BINARY_PATTERN_INT32, PRINTF_BYTE_TO_BINARY_INT32(rv));
 
     return rv;
 }
@@ -109,9 +107,9 @@ NSDictionary*ruleMap(){
     unpack = unpack >> _pack_maskbits;
     self.tieBreakNumberOfPoints = unpack & _pack_mask;
     unpack = unpack >> _pack_maskbits;
-    self.decidingSetIsTieBreak = unpack & 0x1;
-    unpack = unpack >> 1;
-    self.decidingSetHasNoTieBreak = unpack & 0x1;
+    self.decidingSetHasNoTieBreak = (unpack & 1) == 1;
+    self.decidingSetIsTieBreak = (unpack & 0b10) == 0b10;
+    self.gameEndWithSuddenDeath = (unpack & 0b100) == 0b100;
     return self;
 }
 

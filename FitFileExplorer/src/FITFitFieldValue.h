@@ -69,8 +69,11 @@ NS_ASSUME_NONNULL_END
 
 @interface FITFitFieldValue (cplusplus)
 
-+(nullable FITFitFieldValue*)fieldValueFrom:(nullable fit::Field*)ff;
--(void)setFromField:(nullable fit::Field* )ff;
++(nullable FITFitFieldValue*)fieldValueFrom:(const fit::Field&)ff;
++(nullable FITFitFieldValue*)fieldValueFromDeveloper:(const fit::DeveloperField&)ff;
+-(void)setFromField:(const fit::Field& )ff;
+-(void)setFromDeveloperField:(const fit::DeveloperField& )ff;
+-(nullable fit::DeveloperField*)developerField;
 -(nullable fit::Field*)field;
 -(nullable fit::Field*)additionalField;
 

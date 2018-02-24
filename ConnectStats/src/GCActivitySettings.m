@@ -95,7 +95,39 @@
         filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
         filter.maxValue = [GCAppGlobal configGetDouble:CONFIG_FILTER_POWER_ABOVE defaultValue:CONFIG_FILTER_DISABLED_POWER];
         filter.filterMaxValue = true;
+        filter.minValue = 0.01;
+        filter.filterMinValue = true;
         filters[ field] = filter;
+
+        field = [GCField fieldForFlag:gcFieldFlagVerticalOscillation andActivityType:act.activityType];
+        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+        filter.minValue = 0.01;
+        filter.filterMinValue = true;
+        filters[ field ] = filter;
+
+        field = [GCField fieldForFlag:gcFieldFlagGroundContactTime andActivityType:act.activityType];
+        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+        filter.minValue = 0.01;
+        filter.filterMinValue = true;
+        filters[ field ] = filter;
+
+        field = [GCField fieldForKey:@"WeightedMeanFormPower" andActivityType:act.activityType];
+        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+        filter.minValue = 0.01;
+        filter.filterMinValue = true;
+        filters[ field ] = filter;
+
+        field = [GCField fieldForKey:@"WeightedMeanGroundContactBalanceLeft" andActivityType:act.activityType];
+        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+        filter.minValue = 0.01;
+        filter.filterMinValue = true;
+        filters[ field ] = filter;
+
+        field = [GCField fieldForKey:@"WeightedMeanVerticalRatio" andActivityType:act.activityType];
+        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+        filter.minValue = 0.01;
+        filter.filterMinValue = true;
+        filters[ field ] = filter;
 
     }
     self.serieFilters = [NSDictionary dictionaryWithDictionary:filters];

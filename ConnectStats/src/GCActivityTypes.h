@@ -38,6 +38,8 @@
  */
 -(GCActivityType*)activityTypeForKey:(NSString*)aType;
 
+-(BOOL)isExistingActivityType:(NSString*)aType;
+
 -(GCActivityType*)activityTypeForGarminId:(NSUInteger)garminActivityId;
 -(GCActivityType*)activityTypeForStravaType:(NSString*)stravaType;
 

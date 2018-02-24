@@ -320,6 +320,9 @@
     self.zones = nil;
 }
 
+-(void)clearAllZones{
+    self.zones = @{};
+}
 #pragma mark - Automatic Zones
 // 5:30 ->  4:30, 4:45, 5:00, 5:30, 6:00
 // 5:00 ->  4:00, 4:15, 4:30, 5:00, 5:30
@@ -592,6 +595,15 @@
         }
     }
 
+    GCField * runningPower = [GCField fieldForFlag:gcFieldFlagPower andActivityType:GC_TYPE_RUNNING];
+    if(!zones[ [GCHealthZoneCalculator keyForField:runningPower andSource:gcHealthZoneSourceAuto]]){
+        NSDate *from=[[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-6m"]];
+        NSArray<NSNumber*>*pcts = @[ @(0.5), @(0.6), @(0.7), @(0.8), @(0.9), @(1.0) ];
+        GCHealthZoneCalculator * z = [self createCalculatorFromMaxField:runningPower since:from percentages:pcts];
+        if(z) {
+            [zones setValue:z forKey:[GCHealthZoneCalculator keyForField:runningPower andSource:gcHealthZoneSourceAuto]];
+        }
+    }
     GCField * cyclingPower = [GCField fieldForFlag:gcFieldFlagPower andActivityType:GC_TYPE_CYCLING];
     if(!zones[ [GCHealthZoneCalculator keyForField:cyclingPower andSource:gcHealthZoneSourceAuto]]){
         NSDate *from=[[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-6m"]];

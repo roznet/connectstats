@@ -47,6 +47,7 @@
 #import "GCActivity+Fields.h"
 #import "GCFormattedField.h"
 #import "GCHealthOrganizer.h"
+#import "ConnectStats-Swift.h"
 
 #define GCVIEW_DETAIL_TITLE_SECTION     0
 #define GCVIEW_DETAIL_LOAD_SECTION      1
@@ -578,18 +579,18 @@
     GCField * field = nil;
 
     if([input isKindOfClass:[NSArray class]]){
-        NSArray * inputs = input;
+        NSArray<GCField*> * inputs = input;
         if (inputs.count>0) {
-            field = [GCField field:inputs[0] forActivityType:activity.activityType];
+            field = inputs[0];
             GCNumberWithUnit * mainN = [activity numberWithUnitForField:field];
             mainF = [GCFormattedField formattedField:field.key activityType:activity.activityType forNumber:mainN forSize:16.];
             [rv addObject:mainF.attributedString];
 
             for (NSUInteger i=1; i<inputs.count; i++) {
-                NSString * addField = inputs[i];
-                GCNumberWithUnit * addNumber = [activity numberWithUnitForFieldKey:addField];
+                GCField * addField = inputs[i];
+                GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
                 if (addNumber) {
-                    GCFormattedField* theOne = [GCFormattedField formattedField:addField activityType:activity.activityType forNumber:addNumber forSize:14.];
+                    GCFormattedField* theOne = [GCFormattedField formattedField:addField.key activityType:activity.activityType forNumber:addNumber forSize:14.];
                     theOne.valueColor = [UIColor darkGrayColor];
                     theOne.labelColor = [UIColor darkGrayColor];
                     if ([addNumber sameUnit:mainN]) {
@@ -602,7 +603,7 @@
     }else {
         field = [GCField field:input forActivityType:activity.activityType];
         if (field) {
-            NSArray * related = [field relatedFields];
+            NSArray<GCField*> * related = [field relatedFields];
 
             GCNumberWithUnit * mainN = [activity numberWithUnitForField:field];
             mainF = [GCFormattedField formattedField:field.key activityType:activity.activityType forNumber:mainN forSize:16.];
