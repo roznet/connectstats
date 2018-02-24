@@ -44,10 +44,11 @@ typedef unsigned long TSScoreRulePacked;
 @property (nonatomic,assign) BOOL decidingSetIsTieBreak;
 @property (nonatomic,assign) TSScore decidingSetTieBreakNumberOfPoints;
 @property (nonatomic,assign) BOOL decidingSetHasNoTieBreak;
+@property (nonatomic,assign) BOOL gameEndWithSuddenDeath;
 
 
 +(TSTennisScoreRule*)ruleForName:(NSString*)name;
-+(NSArray*)availableRuleNames;
++(NSArray<NSString*>*)availableRuleNames;
 
 +(TSTennisScoreRule*)defaultRule;
 +(TSTennisScoreRule*)shortSetRule;

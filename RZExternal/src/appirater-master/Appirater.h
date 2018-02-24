@@ -35,8 +35,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "AppiraterDelegate.h"
 #import <StoreKit/StoreKit.h>
+#import "AppiraterDelegate.h"
 
 extern NSString *const kAppiraterFirstUseDate;
 extern NSString *const kAppiraterUseCount;
@@ -54,7 +54,7 @@ extern NSString *const kAppiraterReminderRequestDate;
 /*!
  Your app's name.
  */
-#define APPIRATER_APP_NAME				APPIRATER_LOCALIZED_APP_NAME ? APPIRATER_LOCALIZED_APP_NAME : [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"]
+#define APPIRATER_APP_NAME				APPIRATER_LOCALIZED_APP_NAME ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"] ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"]
 
 /*!
  This is the message your users will see once they've passed the day+launches
@@ -87,7 +87,10 @@ extern NSString *const kAppiraterReminderRequestDate;
 
 @interface Appirater : NSObject <UIAlertViewDelegate, SKStoreProductViewControllerDelegate>
 
-@property(nonatomic, strong) UIAlertController *ratingAlert;
+/*!
+ UIAlertController for iOS 8 and later, otherwise UIAlertView
+ */
+@property(nonatomic, strong) id ratingAlert;
 @property(nonatomic) BOOL openInAppStore;
 #if __has_feature(objc_arc_weak)
 @property(nonatomic, weak) NSObject <AppiraterDelegate> *delegate;

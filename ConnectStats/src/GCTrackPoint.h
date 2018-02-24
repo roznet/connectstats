@@ -69,25 +69,25 @@
  @brief flags with the fields available as gcFieldFlag
  */
 @property (nonatomic,assign) NSUInteger trackFlags;
-@property (nonatomic,retain) NSMutableDictionary * calculated;
-
-/**
- @brief extra fields values. Either null or array of size kMaxExtraIndex
- */
-@property (nonatomic,assign) double * fieldValues;
+@property (nonatomic,readonly) NSDictionary<GCField*,GCNumberWithUnit*>*calculated;
+@property (nonatomic,readonly) NSDictionary<GCField*,GCNumberWithUnit*>*extra;
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithDictionary:(NSDictionary*)aDict forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
+-(GCTrackPoint*)initWithTrackPoint:(GCTrackPoint*)other NS_DESIGNATED_INITIALIZER;
 -(void)saveToDb:(FMDatabase*)trackdb;
+-(void)addExtraFromResultSet:(FMResultSet*)res inActivity:(GCActivity*)act;
 
 +(GCTrackPoint*)trackPointWithCoordinate2D:(CLLocationCoordinate2D)coord;
 +(GCTrackPoint*)trackPointWithCoordinate2D:(CLLocationCoordinate2D)coord
                                         at:(NSDate*)timestamp
-                                       for:(NSDictionary<NSString*,GCActivitySummaryValue*>*)sumValues
+                                       for:(NSDictionary<GCField*,GCActivitySummaryValue*>*)sumValues
                                 inActivity:(GCActivity*)act;
 
--(NSString*)fullDescription:(NSString*)atype;
+-(BOOL)updateInActivity:(GCActivity*)act fromTrackpoint:(GCTrackPoint*)other fromActivity:(GCActivity*)otheract forFields:(NSArray<GCField*>*)fields;
+
+-(NSString*)fullDescriptionInActivity:(GCActivity*)act;
 
 -(NSString*)displayLabel;
 
@@ -98,32 +98,46 @@
 -(NSTimeInterval)timeIntervalSince:(GCTrackPoint*)other;
 -(NSComparisonResult)compareTime:(GCTrackPoint*)other;
 
--(BOOL)hasField:(gcFieldFlag)afield;
--(double)valueForField:(gcFieldFlag)aField;
--(void)setValue:(double)val forField:(gcFieldFlag)aField;
--(double)extraValueForIndex:(GCTrackPointExtraIndex*)idx;
--(void)setExtraValue:(double)val forIndex:(GCTrackPointExtraIndex*)idx;
--(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(NSString*)field in:(GCActivity*)act;
-
 +(GCUnit*)unitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;
--(GCNumberWithUnit*)numberWithUnitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;
+-(GCNumberWithUnit*)numberWithUnitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;// DEPRECATED_MSG_ATTRIBUTE("use numberWitUnitForField.");
+
+-(void)updateWithExtra:(NSDictionary<GCField*,GCNumberWithUnit*>*)other;
 
 -(void)add:(GCTrackPoint*)other withAccrued:(double)accrued timeAxis:(BOOL)timeAxis;
 
 -(void)mergeWith:(GCTrackPoint*)other;
 -(BOOL)realisticForActivityType:(NSString*)aType;
 
+-(NSArray<GCField*>*)availableFieldsInActivity:(GCActivity*)act;
+
 // for derived classes
 /**
  Main Access for value
  */
 -(GCNumberWithUnit*)numberWithUnitForField:(GCField*)aF inActivity:(GCActivity*)act;
+-(void)setNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)field inActivity:(GCActivity*)act;
 
--(GCNumberWithUnit*)numberWithUnitForExtra:(GCTrackPointExtraIndex*)idx;
--(GCNumberWithUnit*)numberWithUnitForExtra:(NSString*)aF activityType:(NSString*)aType;
--(GCNumberWithUnit*)numberWithUnitForCalculated:(NSString*)aF;
--(void)addNumberWithUnitForCalculated:(GCNumberWithUnit*)aN forField:(NSString*)aF;
+/**
+ Access for extra stored as double*, localized by ExtraIndex
+ This is the typical way trackpoints store extra data
 
+ @param idx which field to look for
+ @return value for the index
+ */
+-(GCNumberWithUnit*)numberWithUnitForExtraByIndex:(GCTrackPointExtraIndex*)idx;
+/**
+ Access for extra data that would be stored as key off a GCField
+ This is commonly used by laps. The API is here for consistency, in the case of
+ a track point, will return nil
+
+ @param aF the field
+ @return value or nil if field does not exists
+ */
+-(GCNumberWithUnit*)numberWithUnitForExtraByField:(GCField*)aF;
+-(GCNumberWithUnit*)numberWithUnitForCalculated:(GCField*)aF;
+-(void)clearCalculatedForFields:(NSArray<GCField*>*)fields;
+
+-(void)addNumberWithUnitForCalculated:(GCNumberWithUnit*)aN forField:(GCField*)aF;
 -(void)updateWithNextPoint:(GCTrackPoint*)next;
 
 @end

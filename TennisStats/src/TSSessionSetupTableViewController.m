@@ -34,7 +34,7 @@
 #import "TSPlayerManager.h"
 #import "TSCloudSessionListTableViewController.h"
 #import "TSResultEditViewController.h"
-#import "TSScoreRuleTableViewController.h"
+#import "tennisstats-Swift.h"
 
 #define SECTION_CURRENT_SESSION 0
 #define SECTION_CHOOSE_SESSION  1
@@ -211,7 +211,8 @@
             vc.playerIdentifier = CURRENT_OPPONENT;
             [self.navigationController pushViewController:vc animated:YES];
         }else if (indexPath.row == CURRENT_RULE){
-            TSScoreRuleTableViewController * vc = [[TSScoreRuleTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            TSScoreRuleEditorViewController * vc = [[TSScoreRuleEditorViewController alloc] initWithNibName:@"TSScoreRuleEditorViewController" bundle:nil];
+            vc.scoreRule = [[[TSAppGlobal organizer] currentSession] scoreRule];
             [self.navigationController pushViewController:vc animated:YES];
 
         }else{

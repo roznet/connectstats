@@ -29,15 +29,11 @@
 
 @class GCFieldsForCategory;
 
-@interface GCActivityLapViewController : UITableViewController<GCCellSimpleGraphDelegate>{
-    GCActivity * activity;
-    NSUInteger lapIndex;
-    NSArray * organizedFields;
-}
+@interface GCActivityLapViewController : UITableViewController<GCCellSimpleGraphDelegate>
 @property (nonatomic,retain) GCActivity * activity;
 @property (nonatomic,assign) NSUInteger lapIndex;
 @property (nonatomic,retain) GCTrackFieldChoices * choices;
-@property (nonatomic,retain) NSArray * organizedFields;
+@property (nonatomic,retain) NSArray<GCFieldsForCategory*> * organizedFields;
 
 -(NSArray<GCFieldsForCategory*>*)setupFields;
 -(void)nextLap:(id)cb;

@@ -79,6 +79,7 @@
 -(BOOL)hasHealthData;
 -(BOOL)hasZoneData;
 
+-(void)clearAllZones;
 -(void)forceZoneRefresh;
 
 //-(void)defaultZoneCalculatorFromHistory;

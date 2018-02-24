@@ -79,15 +79,12 @@
     if (self.contestantWinner==tsContestantPlayer) {
 
         //DarkSeaGreen
-        gridCell.backgroundColor = [UIColor colorWithHexValue:0x8FBC8F andAlpha:1.0];
-        //gridCell.gradientLayer.colors = @[ (id)gridCell.backgroundColor.CGColor, (id)gridCell.backgroundColor.CGColor];
+        [gridCell setupBackgroundColors:@[  [UIColor colorWithHexValue:0x8FBC8F andAlpha:1.0] ] ];
     }else if(self.contestantWinner == tsContestantOpponent){
         //LightCoral
-        gridCell.backgroundColor = [UIColor colorWithHexValue:0xF08080 andAlpha:1.0];
-        //gridCell.gradientLayer.colors = @[ (id)gridCell.backgroundColor.CGColor, (id)gridCell.backgroundColor.CGColor];
+        [gridCell setupBackgroundColors:@[ [UIColor colorWithHexValue:0xF08080 andAlpha:1.0] ] ];
     }else{
-        //gridCell.gradientLayer.colors = @[ (id)[UIColor whiteColor].CGColor, (id)[UIColor whiteColor].CGColor];
-        //gridCell.backgroundColor = [UIColor whiteColor];
+        [gridCell setupBackgroundColors:@[ [UIColor whiteColor] ] ];
 
     }
 }

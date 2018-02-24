@@ -201,7 +201,7 @@
             }
         }
 
-        if ([act.activityTypeDetail rangeOfString:@"ski"].location != NSNotFound) {
+        if (act.activityTypeDetail.isSki) {
             [choices addObject:[GCActivityAutoLapChoiceHolder choiceHolderSki]];
         }
 

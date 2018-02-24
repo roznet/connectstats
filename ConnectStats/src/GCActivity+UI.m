@@ -31,7 +31,7 @@
 -(UIImage*)icon{
     UIImage * rv = nil;
     if (self.activityTypeDetail) {
-        rv = [GCViewIcons activityTypeColoredIconFor:self.activityTypeDetail];
+        rv = [GCViewIcons activityTypeColoredIconFor:self.activityTypeDetail.key];
     }
     if (!rv) {
         rv = [GCViewIcons activityTypeColoredIconFor:self.activityType];
@@ -66,8 +66,8 @@
             [cache retain];
         }
 
-        if (self.activityTypeDetail && cache[self.activityTypeDetail]) {
-            return self.activityTypeDetail;
+        if (self.activityTypeDetail && cache[self.activityTypeDetail.key]) {
+            return self.activityTypeDetail.key;
         }else if(self.activityType && cache[self.activityType]){
             return self.activityType;
         }

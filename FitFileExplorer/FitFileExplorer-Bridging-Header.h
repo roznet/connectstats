@@ -18,3 +18,5 @@
 #import "GCMapGRadientPathOverlayView.h"
 #import "GCMapRouteLogicPointHolder.h"
 #import "GCMapAnnotation.h"
+#import "GCActivityTypes.h"
+#import "GCActivityType.h"

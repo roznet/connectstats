@@ -89,10 +89,6 @@
         GCUnit * displayUnit = nil;
         GCUnit * pointUnit   = nil;
 
-        // Should always use serie to be in sync with any filtering,
-        // or adjustment of the numbers
-        BOOL isTrackField = false; //self.gradientField.fieldFlag != gcFieldFlagNone;
-
         GCStatsDataSerieWithUnit * valsWUnit =nil;
         if (self.compareActivity) {
             // Can only be time axis based.
@@ -196,15 +192,11 @@
 
                 double v = 0.;
 
-                if (isTrackField) {
-                    v = [displayUnit convertDouble:[aPoint valueForField:self.gradientField.fieldFlag] fromUnit:pointUnit];
-                }else{
-                    double x = aPoint.time.timeIntervalSinceReferenceDate - startTime;
-                    while (seriePoint.x_data < x && ++serieIndex < vals.count) {
-                        seriePoint = [vals dataPointAtIndex:serieIndex];
-                    }
-                    v = seriePoint.y_data;
+                double x = aPoint.time.timeIntervalSinceReferenceDate - startTime;
+                while (seriePoint.x_data < x && ++serieIndex < vals.count) {
+                    seriePoint = [vals dataPointAtIndex:serieIndex];
                 }
+                v = seriePoint.y_data;
 
                 if (samples && !isinf(v)) {
                     if (sample_n < movingAverage) {

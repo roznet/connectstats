@@ -1022,20 +1022,20 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }else if (isSki){
         GCNumberWithUnit * elev = nil;
         if ([activity.activityTypeDetail isEqualToString:GC_TYPE_SKI_DOWN]) {
-            elev = [lap numberWithUnitForExtra:@"LossElevation" activityType:activity.activityType];
+            elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"LossElevation" andActivityType:activity.activityType]];
             if (elev == nil) {
-                elev = [lap numberWithUnitForExtra:@"LossCorrectedElevation" activityType:activity.activityType];
+                elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"LossCorrectedElevation" andActivityType:activity.activityType]];
             }
             if (elev == nil) {
-                elev = [lap numberWithUnitForExtra:@"LossUncorrectedElevation" activityType:activity.activityType];
+                elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"LossUncorrectedElevation" andActivityType:activity.activityType]];
             }
         }else {
-            elev = [lap numberWithUnitForExtra:@"GainElevation" activityType:activity.activityType];
+            elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"GainElevation" andActivityType:activity.activityType]];
             if (elev == nil) {
-                elev = [lap numberWithUnitForExtra:@"GainCorrectedElevation" activityType:activity.activityType];
+                elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"GainCorrectedElevation" andActivityType:activity.activityType]];
             }
             if (elev == nil) {
-                elev = [lap numberWithUnitForExtra:@"GainUncorrectedElevation" activityType:activity.activityType];
+                elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"GainUncorrectedElevation" andActivityType:activity.activityType]];
             }
         }
         if (elev) {
@@ -1088,13 +1088,14 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
             [self setupForRows:1 andCols:2];
         }
         NSString * aType = activity.activityType;
-        NSString * field = [GCFields fieldForLapField:key andActivityType:aType];
-        NSString * display = [GCFields fieldDisplayName:field activityType:aType];
+        GCField * field = [GCField fieldForKey:[GCFields fieldForLapField:key andActivityType:aType] andActivityType:aType];
+        NSString * display = field.displayName;
+        GCUnit * displayUnit = [activity displayUnitForField:field];
 
-        GCNumberWithUnit * number = [aLap numberWithUnitForExtra:key activityType:aType];
+        GCNumberWithUnit * number = [[aLap numberWithUnitForField:field inActivity:activity] convertToUnit:displayUnit];;
         GCFormattedField * numberF = [GCFormattedField formattedField:nil activityType:nil forNumber:number forSize:16.];
 
-        [self labelForRow:0 andCol:0].text = display ?: field;
+        [self labelForRow:0 andCol:0].text = display ?: field.key;
         [self labelForRow:0 andCol:1].attributedText = [numberF attributedString];
         if (wide) {
             [self configForRow:0 andCol:1].horizontalAlign = gcHorizontalAlignLeft;
@@ -1112,31 +1113,31 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         }
         NSString * aType = activity.activityType;
         GCNumberWithUnit * number1 = nil;
-        NSString * field1 = nil;
+        GCField * field1 = nil;
         NSString * display1 = nil;
 
         if ([second isKindOfClass:[NSString class]]) {
-            field1 = second;
-            number1 = [aLap numberWithUnitForExtra:field1 activityType:aType];
-            display1 = [GCFields fieldForLapField:field1 andActivityType:aType];
-            display1 = [GCFields fieldDisplayName:display1 activityType:aType];
+            field1 = [GCField fieldForKey:second andActivityType:aType];
+            number1 = [aLap numberWithUnitForField:field1 inActivity:activity];
+            display1 = field1.displayName;
         }else{
             gcFieldFlag fieldFlag = [group[1] intValue];
-            field1 = [GCFields activityFieldFromTrackField:fieldFlag andActivityType:aType];
-            number1 = [aLap numberWithUnitForField:fieldFlag andActivityType:aType];
+            field1 = [GCField fieldForFlag:fieldFlag andActivityType:aType];
+            number1 = [aLap numberWithUnitForField:field1.fieldFlag andActivityType:aType];
             if (fieldFlag == gcFieldFlagSumDistance) {
                 number1 = [number1 convertToUnitName:activity.distanceDisplayUom];
             }else if(fieldFlag == gcFieldFlagWeightedMeanSpeed){
                 number1 = [number1 convertToUnitName:activity.speedDisplayUom];
             }
-            display1 = [GCFields fieldDisplayName:field1 activityType:aType];
+            display1 = field1.displayName;
         }
         NSString * field2   = [GCFields fieldForLapField:key andActivityType:aType];
         NSString * display2 = [GCFields fieldDisplayName:field2 activityType:aType];
 
         GCFormattedField * numberF1 = [GCFormattedField formattedField:nil activityType:nil forNumber:number1 forSize:16.];
 
-        GCNumberWithUnit * number2 = [aLap numberWithUnitForExtra:key activityType:aType];
+        GCNumberWithUnit * number2 = [aLap numberWithUnitForExtraByField:[GCField fieldForKey:key andActivityType:aType]];
+
         GCFormattedField * number2F = wide ?
             [GCFormattedField formattedField:nil activityType:nil forNumber:number2 forSize:16.]:
             [GCFormattedField formattedField:nil activityType:nil forNumber:number2 forSize:14.];
@@ -1147,7 +1148,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         NSAttributedString * under = [[[NSAttributedString alloc] initWithString:display2 ?: field2
                                                                       attributes:wide?[GCViewConfig attribute16]:[GCViewConfig attribute14Gray]] autorelease];
 
-        [self labelForRow:0 andCol:0].text = display1 ?: field1;
+        [self labelForRow:0 andCol:0].text = display1 ?: field1.key;
         [self labelForRow:0 andCol:1].attributedText = [numberF1 attributedString];
         if (wide) {
             [self configForRow:0 andCol:1].horizontalAlign = gcHorizontalAlignLeft;
@@ -1190,7 +1191,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     GCNumberWithUnit * speed= [[lap numberWithUnitForField:gcFieldFlagWeightedMeanSpeed andActivityType:activity.activityType] convertToUnitName:activity.speedDisplayUom];
     GCNumberWithUnit * dur  = [lap numberWithUnitForField:gcFieldFlagSumDuration andActivityType:activity.activityType];
     GCNumberWithUnit * cad  = [lap numberWithUnitForField:gcFieldFlagCadence andActivityType:activity.activityType];
-    GCNumberWithUnit * lgth = [lap numberWithUnitForExtra:@"SumNumLengths" activityType:GC_TYPE_SWIMMING];
+    GCNumberWithUnit * lgth = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"SumNumLengths" andActivityType:GC_TYPE_SWIMMING]];
 
     GCFormattedField * distF = [GCFormattedField formattedField:nil activityType:nil forNumber:dist  forSize:16.];
     GCFormattedField * speedF= [GCFormattedField formattedField:nil activityType:nil forNumber:speed forSize:14.];

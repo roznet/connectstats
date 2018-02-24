@@ -34,29 +34,42 @@
 
 @interface GCFieldsCalculated : NSObject
 
-+(NSArray*)calculatedFields;
++(NSArray<GCFieldsCalculated*>*)calculatedFields;
 +(void)addCalculatedFields:(GCActivity*)act;
 +(void)addCalculatedFieldsToTrackPoints:(NSArray*)trackpoints forActivity:(GCActivity*)act;
-+(BOOL)isCalculatedField:(NSString*)field;
 
-+(NSString*)displayFieldName:(NSString*)field;
++(BOOL)isCalculatedField:(NSString*)field DEPRECATED_MSG_ATTRIBUTE("use GCField.");
+
++(NSString*)displayFieldName:(GCField*)field;
 +(GCFieldInfo*)fieldInfoForCalculatedField:(GCField*)field;
 
 -(GCActivityCalculatedValue*)evaluateForActivity:(GCActivity*)act;
 -(GCActivityCalculatedValue*)evaluateForTrackPoint:(GCTrackPoint *)trackPoint inActivity:(GCActivity*)act;
--(BOOL)ensureInputs:(NSArray*)inputs;
 
-/// To implement in derived class
--(NSString*)field;
--(NSString*)displayName;
--(NSString*)unitName;
--(BOOL)validForActivity:(GCActivity*)act;
--(NSArray*)inputFields;
--(GCNumberWithUnit*)evaluateWithInputs:(NSArray*)inputs;
+/// Shared Implementation
+-(GCField*)fieldInActivity:(GCActivity*)act;
+-(NSArray<GCField*>*)inputFieldsTrackPointForActivity:(GCActivity*)act;
+-(NSArray<GCField*>*)inputFieldsForActivity:(GCActivity*)act;
+-(BOOL)ensureInputs:(NSArray<GCNumberWithUnit*>*)inputs;
 -(BOOL)activityHasRequiredFields:(GCActivity*)act;
 
+/// To implement in derived class
+-(NSString*)fieldKey;
+-(NSString*)displayName;
+-(NSString*)unitName;
+-(GCNumberWithUnit*)evaluateWithInputs:(NSArray<GCNumberWithUnit*>*)inputs;
+
+-(BOOL)validForActivity:(GCActivity*)act;
 -(BOOL)validForTrackPoint:(GCTrackPoint*)trackPoint inActivity:(GCActivity*)act;
+
+/**
+ Array of either NSNumber for fieldFlag or NSString for field Key
+
+ @return Array of inputs
+ */
 -(NSArray*)inputFieldsTrackPoint;
+
+-(NSArray<NSString*>*)inputFields;
 
 @end
 

@@ -122,12 +122,21 @@
             break;
     }
 }
+-(void)updateSummaryFieldFromSummaryData{
+    for (GCField * field in self.summaryData) {
+        GCActivitySummaryValue * value = self.summaryData[field];
+        if (field.fieldFlag!= gcFieldFlagNone) {
+            GCNumberWithUnit * nu = value.numberWithUnit;
+            [self setSummaryField:field.fieldFlag with:nu];
+            self.flags |= field.fieldFlag;
+        }
+    }
+}
 
--(void)mergeSummaryData:(NSDictionary*)newDict{
-    NSMutableDictionary * merged = self.summaryData ? [NSMutableDictionary dictionaryWithDictionary:self.summaryData] : [NSMutableDictionary dictionaryWithCapacity:newDict.count];
+-(void)mergeSummaryData:(NSDictionary<GCField*,GCActivitySummaryValue*>*)newDict{
+    NSMutableDictionary<GCField*,GCActivitySummaryValue*> * merged = self.summaryData ? [NSMutableDictionary dictionaryWithDictionary:self.summaryData] : [NSMutableDictionary dictionaryWithCapacity:newDict.count];
 
-    for (NSString * field in newDict) {
-        //GCActivitySummaryValue * old = [merged objectForKey:field];
+    for (GCField * field in newDict) {
         GCActivitySummaryValue * new = newDict[field];
         merged[field] = new;
     }
@@ -135,7 +144,7 @@
     [self updateSummaryFieldFromSummaryData];
 }
 
--(void)parseData:(NSDictionary*)data into:(NSMutableDictionary*)newSummaryData usingDefs:(NSDictionary*)defs{
+-(void)parseData:(NSDictionary*)data into:(NSMutableDictionary<GCField*,GCActivitySummaryValue*>*)newSummaryData usingDefs:(NSDictionary*)defs{
     for (NSString * key in data) {
         id def = defs[key];
         NSString * fieldkey = nil;
@@ -169,23 +178,13 @@
             }
         }
         if (fieldkey && uom && val) {
+            GCField * field = [GCField fieldForKey:fieldkey andActivityType:self.activityType];
             GCActivitySummaryValue * sumVal = [self buildSummaryValue:fieldkey uom:uom fieldFlag:flag andValue:val.doubleValue];
-            newSummaryData[fieldkey] = sumVal;
+            newSummaryData[field] = sumVal;
         }
     }
 }
 
--(void)updateSummaryFieldFromSummaryData{
-    for (NSString * fieldKey in self.summaryData) {
-        GCActivitySummaryValue * value = self.summaryData[fieldKey];
-        GCField * field = [GCField fieldForKey:fieldKey andActivityType:self.activityType];
-        if (field.fieldFlag!= gcFieldFlagNone) {
-            GCNumberWithUnit * nu = value.numberWithUnit;
-            [self setSummaryField:field.fieldFlag with:nu];
-            self.flags |= field.fieldFlag;
-        }
-    }
-}
 
 -(GCActivitySummaryValue*)buildSummaryValue:(NSString*)fieldkey uom:(NSString*)uom fieldFlag:(gcFieldFlag)flag andValue:(double)val{
     NSString * display = [GCFields predefinedDisplayNameForField:fieldkey andActivityType:self.activityType];
@@ -206,31 +205,31 @@
     return sumVal;
 }
 
--(void)addPaceIfNecessaryWithSummary:(NSMutableDictionary*)newSummaryData{
-    GCActivitySummaryValue * speed = newSummaryData[@"WeightedMeanSpeed"];
+-(void)addPaceIfNecessaryWithSummary:(NSMutableDictionary<GCField*,GCActivitySummaryValue*>*)newSummaryData{
+    GCActivitySummaryValue * speed = newSummaryData[ [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:self.activityType]];
     if (speed && ([self.activityType isEqualToString:GC_TYPE_RUNNING] || [self.activityType isEqualToString:GC_TYPE_SWIMMING])) {
-        NSString * field = @"WeightedMeanPace";
-        NSString * uom = [GCFields predefinedUomForField:field andActivityType:self.activityType];
-        NSString * display = [GCFields predefinedDisplayNameForField:field andActivityType:self.activityType];
+        GCField * field = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:self.activityType];
+        NSString * uom = [GCFields predefinedUomForField:field.key andActivityType:field.activityType];
+        NSString * display = [GCFields predefinedDisplayNameForField:field.key andActivityType:field.activityType];
 
-        [GCFields registerField:field activityType:self.activityType displayName:display andUnitName:uom];
-        [GCFields registerField:field activityType:GC_TYPE_ALL       displayName:display andUnitName:uom];
+        [GCFields registerField:field.key activityType:self.activityType displayName:display andUnitName:uom];
+        [GCFields registerField:field.key activityType:GC_TYPE_ALL       displayName:display andUnitName:uom];
         GCNumberWithUnit * val = [[speed numberWithUnit] convertToUnitName:uom];
-        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field value:val];
+        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
         self.speedDisplayUom = uom;
     }else if(speed){ // otherwise it would set for swim or running when speed = nil
         self.speedDisplayUom = speed ? speed.numberWithUnit.unit.key : @"kph";
     }
-    GCActivitySummaryValue * movingSpeed = newSummaryData[@"WeightedMeanMovingSpeed"];
+    GCActivitySummaryValue * movingSpeed = newSummaryData[ [GCField fieldForKey:@"WeightedMeanMovingSpeed" andActivityType:self.activityType] ];
     if(movingSpeed && [self.activityType isEqualToString:GC_TYPE_RUNNING]){
-        NSString * field = @"WeightedMeanMovingPace";
-        NSString * uom = [GCFields predefinedUomForField:field andActivityType:self.activityType];
-        NSString * display = [GCFields predefinedDisplayNameForField:field andActivityType:self.activityType];
+        GCField * field = [GCField fieldForKey:@"WeightedMeanMovingSpeed" andActivityType:self.activityType];
+        NSString * uom = [GCFields predefinedUomForField:field.key andActivityType:self.activityType];
+        NSString * display = [GCFields predefinedDisplayNameForField:field.key andActivityType:self.activityType];
 
-        [GCFields registerField:field activityType:self.activityType displayName:display andUnitName:uom];
-        [GCFields registerField:field activityType:GC_TYPE_ALL       displayName:display andUnitName:uom];
+        [GCFields registerField:field.key activityType:self.activityType displayName:display andUnitName:uom];
+        [GCFields registerField:field.key activityType:GC_TYPE_ALL       displayName:display andUnitName:uom];
         GCNumberWithUnit * val = [[movingSpeed numberWithUnit] convertToUnitName:uom];
-        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field value:val];
+        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
     }
 
 }
@@ -255,10 +254,10 @@
             GCActivityType * fullType = [[GCAppGlobal activityTypes] activityTypeForKey:foundType];
             if (fullType) {
                 self.activityType = fullType.topSubRootType.key;
-                self.activityTypeDetail = fullType.key;
+                self.activityTypeDetail = [GCActivityType activityTypeForKey:fullType.key];
             }else{
                 self.activityType = foundType;
-                self.activityTypeDetail = self.activityType;
+                self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             }
         }
     }
@@ -436,11 +435,11 @@
                activityType:self.activityType
                 displayName:activityDisplay
                 andUnitName:@"dimensionless"];
-    self.activityTypeDetail = atypeDict[@"key"];
+    self.activityTypeDetail = [GCActivityType activityTypeForKey:atypeDict[@"key"]];
     NSString * detailDisplay = atypeDict[@"display"];
     if (detailDisplay && self.activityTypeDetail) {
-        [GCFields registerField:self.activityTypeDetail
-                   activityType:self.activityTypeDetail
+        [GCFields registerField:self.activityTypeDetail.key
+                   activityType:self.activityTypeDetail.key
                     displayName:detailDisplay
                     andUnitName:@"dimensionless"];
     }
@@ -529,8 +528,7 @@
             summaryDataTmp[field] = [GCActivitySummaryValue activitySummaryValueForDict:info andField:(NSString*)field];
         }
     }
-    self.summaryData = [NSDictionary dictionaryWithDictionary:summaryDataTmp];
-
+    [self setSummaryDataFromKeyDict:summaryDataTmp];
 
     NSMutableDictionary * newMetaData = [NSMutableDictionary dictionary];
 
@@ -633,14 +631,14 @@
         self.activityType = GC_TYPE_OTHER;
         RZLog(RZLogInfo, @"Unknown SportTracks type %@", data[@"type"]);
     }
-    self.activityTypeDetail = self.activityType;
+    self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
     //NSString * externalId = [GCService serviceIdFromSportTracksUri:uri];
 
     //GCService * service = [GCService service:gcServiceSportTracks];
     self.activityName = data[@"name"];
     self.location = @"";
 
-    NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionary];
+    NSMutableDictionary<GCField*,GCActivitySummaryValue*> * newSummaryData = [NSMutableDictionary dictionary];
     [self parseData:data into:newSummaryData usingDefs:defs];
 
     [self addPaceIfNecessaryWithSummary:newSummaryData];
@@ -674,40 +672,40 @@
     switch (workout.workoutActivityType) {
         case HKWorkoutActivityTypeRunning:
             self.activityType = GC_TYPE_RUNNING;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
         case HKWorkoutActivityTypeCycling:
             self.activityType = GC_TYPE_CYCLING;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
         case HKWorkoutActivityTypeSwimming:
             self.activityType = GC_TYPE_SWIMMING;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
         case HKWorkoutActivityTypeTennis:
             self.activityType = GC_TYPE_TENNIS;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
         case HKWorkoutActivityTypeHiking:
             self.activityType = GC_TYPE_HIKING;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
         case HKWorkoutActivityTypeWalking:
             self.activityType = GC_TYPE_WALKING;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
         case HKWorkoutActivityTypeElliptical:
             self.activityType = GC_TYPE_FITNESS;
-            self.activityTypeDetail = @"elliptical";
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:@"elliptical"];
             break;
         case HKWorkoutActivityTypeTraditionalStrengthTraining:
         case HKWorkoutActivityTypeFunctionalStrengthTraining:
             self.activityType = GC_TYPE_FITNESS;
-            self.activityTypeDetail = @"strengh_training";
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:@"strengh_training"];
             break;
         default:
             self.activityType = GC_TYPE_OTHER;
-            self.activityTypeDetail = self.activityType;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
             break;
     }
     self.date = workout.startDate;
@@ -785,7 +783,7 @@
             }
 
             if ([field isEqualToString:@"activityType"] && str) {
-                self.activityTypeDetail = str;
+                self.activityTypeDetail = [GCActivityType activityTypeForKey:str];
             }else if ([field isEqualToString:@"BeginTimestamp"] && da){
                 self.date = da;
             }else if (nu) {
@@ -891,12 +889,12 @@
                                    //Snowboard
                                    //Snowshoe
                                    };
-        self.activityTypeDetail = subtypes[data[@"type"]];
+        self.activityTypeDetail = [GCActivityType  activityTypeForKey:subtypes[data[@"type"]]];
         if (self.activityTypeDetail==nil) {
-            self.activityTypeDetail = GC_TYPE_OTHER;
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_OTHER];
         }
     }
-    self.activityTypeDetail = self.activityType;
+    self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
     self.downloadMethod = gcDownloadMethodStrava;
     if (self.metaData==nil) {
         self.metaData = [NSMutableDictionary dictionary];
@@ -942,40 +940,62 @@
 
 }
 
--(BOOL)updateWithActivity:(GCActivity*)other{
-
+-(BOOL)updateTrackpointsFromActivity:(GCActivity*)other{
     BOOL rv = false;
-
-    NSString * aType = other.activityType;
-    if (![aType isEqualToString:self.activityType]) {
-        RZLog(RZLogInfo, @"change activity type %@ -> %@", self.activityType,aType);
+    
+    if( ! self.trackpointsReadyNoLoad && other.trackpointsReadyNoLoad){
+        // Special case: other has trackpoint self doesnt, just use
+        self.trackpoints = other.trackpoints;
+        self.cachedExtraTracksIndexes = other.cachedExtraTracksIndexes;
         rv = true;
-        self.activityType = aType;
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET activityType=? WHERE activityId = ?", self.activityType, self.activityId];
-        [db commit];
+    }else if( self.trackpointsReadyNoLoad && other.trackpointsReadyNoLoad ){
+        // Only bother if both have trackpoint
+        NSArray<GCTrackPoint*> * trackpoints = self.trackpoints;
+        NSArray<GCTrackPoint*> * otherTrackpoints = other.trackpoints;
+        
+        if( trackpoints.count > 0 &&
+           otherTrackpoints.count > 0 &&
+           [trackpoints[0] isMemberOfClass:[GCTrackPoint class]] &&
+           [otherTrackpoints[0] isMemberOfClass:[GCTrackPoint class]]){
+            // Don't handle swim points
+            
+            NSMutableArray<GCField*>*fields = [NSMutableArray array];
+            NSArray<GCField*>*otherFields = other.availableTrackFields;
+            
+            for (GCField * otherField in otherFields) {
+                if( ! [self hasTrackForField:otherField]){
+                    [fields addObject:otherField];
+                    rv = true;
+                }
+            }
+            if( rv ){
+                NSUInteger otherIndex = 0;
+                
+                GCTrackPoint * last = otherTrackpoints[otherIndex];
+                
+                for (GCTrackPoint * one in trackpoints) {
+                    while( last && [last timeIntervalSince:one] < 0.0){
+                        otherIndex++;
+                        if (otherIndex < otherTrackpoints.count) {
+                            last = otherTrackpoints[otherIndex];
+                        }else{
+                            last = nil;
+                        }
+                    }
+                    if( last ){
+                        [one updateInActivity:self fromTrackpoint:last fromActivity:other forFields:fields];
+                        self.trackFlags |= one.trackFlags;
+                    }
+                }
+            }
+        }
     }
+    return rv;
+}
 
-    if (self.activityTypeDetail!=nil && ![other.activityTypeDetail isEqualToString:self.activityTypeDetail]) {
-        // Don't update db because activityTypeDetail comes from meta field which
-        // Should be updated later, but still need to process here, or some icons
-        // may not update properly until restart/reload from db otherwise
-        self.activityTypeDetail = other.activityTypeDetail;
-        rv = true;
-    }
-
-    NSString * aName = other.activityName;
-    if (![aName isEqualToString:self.activityName]) {
-        RZLog(RZLogInfo, @"change activity name");
-        rv = true;
-        self.activityName = aName;
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET activityName=? WHERE activityId = ?", self.activityName, self.activityId];
-        [db commit];
-    }
-
+-(BOOL)updateSummaryDataFromActivity:(GCActivity*)other{
+    BOOL rv = false;
+    
     if (self.metaData) {
         NSMutableDictionary * newMetaData = nil;
         for (NSString * field in self.metaData) {
@@ -998,10 +1018,10 @@
             self.metaData = newMetaData;
         }
     }
-
+    
     if (self.summaryData) {
-        NSMutableDictionary * newSummaryData = nil;
-        for (NSString * field in self.summaryData) {
+        NSMutableDictionary<GCField*,GCActivitySummaryValue*> * newSummaryData = nil;
+        for (GCField * field in self.summaryData) {
             GCActivitySummaryValue * thisVal = self.summaryData[field];
             GCActivitySummaryValue * otherVal = other.summaryData[field];
             if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
@@ -1009,7 +1029,8 @@
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                 }
                 RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.numberWithUnit, otherVal.numberWithUnit);
-                [newSummaryData setValue:otherVal forKey:field];
+                newSummaryData[field] = otherVal;
+                
                 FMDatabase * db = self.db;
                 [db beginTransaction];
                 [otherVal updateDb:db forActivityId:self.activityId];
@@ -1017,31 +1038,31 @@
                 rv = true;
             }
         }
-        for (NSString * field in other.summaryData) {
+        for (GCField * field in other.summaryData) {
             if (self.summaryData[field]==nil) {
                 if (!newSummaryData) {
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                 }
                 GCActivitySummaryValue * otherVal = other.summaryData[field];
-
+                
                 RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
-                [newSummaryData setValue:otherVal forKey:field];
+                newSummaryData[field] = otherVal;
             }
         }
         if (newSummaryData) {
             self.summaryData = newSummaryData;
         }
     }
-
+    
     if (fabs(self.sumDistance - other.sumDistance) > 1.e-8) {
         self.sumDistance = other.sumDistance;
         rv = true;
-
+        
         FMDatabase * db = self.db;
         [db beginTransaction];
         [db executeUpdate:@"UPDATE gc_activities SET sumDistance=? WHERE activityId = ?", @(self.sumDistance), self.activityId];
         [db commit];
-
+        
     }
     if (fabs(self.sumDuration - other.sumDuration) > 1.e-8) {
         self.sumDuration = other.sumDuration;
@@ -1050,7 +1071,7 @@
         [db beginTransaction];
         [db executeUpdate:@"UPDATE gc_activities SET sumDuration=? WHERE activityId = ?", @(self.sumDuration), self.activityId];
         [db commit];
-
+        
     }
     if( other.speedDisplayUom && ( ![self.speedDisplayUom isEqualToString:other.speedDisplayUom]) ){
         self.speedDisplayUom = other.speedDisplayUom;
@@ -1068,73 +1089,137 @@
         [db executeUpdate:@"UPDATE gc_activities SET WeightedMeanSpeed=? WHERE activityId = ?", @(self.weightedMeanSpeed), self.activityId];
         [db commit];
     }
+
     return rv;
 }
 
--(void)updateSummaryFromTrackpoints:(NSArray*)trackpoints missingOnly:(BOOL)missingOnly{
+-(BOOL)updateWithActivity:(GCActivity*)other{
 
-}
+    BOOL rv = false;
 
--(NSDictionary*)buildSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints{
-    static NSDictionary * defs = nil;
-    if (defs == nil) {
-        defs =  @{
-                  @"WeightedMeanSpeed":     @[ @(gcFieldFlagWeightedMeanSpeed),        @"kph"],
-                  @"MaxSpeed":              @[ @(gcFieldFlagWeightedMeanSpeed),        @"kph"],
-                  @"WeightedMeanPace":      @[ @(gcFieldFlagWeightedMeanSpeed),        @"minperkm"],
-                  @"MaxPace":               @[ @(gcFieldFlagWeightedMeanSpeed),        @"minperkm"],
-                  @"WeightedMeanHeartRate": @[ @(gcFieldFlagWeightedMeanHeartRate),    @"bpm"],
-                  @"MaxHeartRate":          @[ @(gcFieldFlagWeightedMeanHeartRate),    @"bpm"],
-                  @"MinHeartRate":          @[ @(gcFieldFlagWeightedMeanHeartRate),    @"bpm"],
-                  };
-        [defs retain];
+    NSString * aType = other.activityType;
+    if (![aType isEqualToString:self.activityType]) {
+        RZLog(RZLogInfo, @"change activity type %@ -> %@", self.activityType,aType);
+        rv = true;
+        self.activityType = aType;
+        FMDatabase * db = self.db;
+        [db beginTransaction];
+        [db executeUpdate:@"UPDATE gc_activities SET activityType=? WHERE activityId = ?", self.activityType, self.activityId];
+        [db commit];
     }
 
-    NSMutableDictionary * results = [NSMutableDictionary dictionary];
+    if (self.activityTypeDetail!=nil && ![other.activityTypeDetail isEqualToActivityType:self.activityTypeDetail]) {
+        // Don't update db because activityTypeDetail comes from meta field which
+        // Should be updated later, but still need to process here, or some icons
+        // may not update properly until restart/reload from db otherwise
+        self.activityTypeDetail = other.activityTypeDetail;
+        rv = true;
+    }
+
+    NSString * aName = other.activityName;
+    if (![aName isEqualToString:self.activityName]) {
+        RZLog(RZLogInfo, @"change activity name");
+        rv = true;
+        self.activityName = aName;
+        FMDatabase * db = self.db;
+        [db beginTransaction];
+        [db executeUpdate:@"UPDATE gc_activities SET activityName=? WHERE activityId = ?", self.activityName, self.activityId];
+        [db commit];
+    }
+
+    if( [self updateSummaryDataFromActivity:other] ){
+        rv = true;
+    }
+    
+    if( [self updateTrackpointsFromActivity:other] ){
+        rv = true;
+    }
+    return rv;
+}
+
+-(BOOL)updateSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints missingOnly:(BOOL)missingOnly{
+    BOOL rv = false;
+    NSDictionary<GCField*,GCActivitySummaryValue*> * fromPoints = [self buildSummaryFromTrackpoints:trackpoints];
+    
+    NSMutableDictionary<GCField*,GCActivitySummaryValue*>* newSum = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
+    
+    for (GCField * field in fromPoints) {
+        if( newSum[field] == nil){
+            newSum[field] = fromPoints[field];
+            rv = true;
+        }
+        else if( !missingOnly ){
+            GCActivitySummaryValue * newVal = fromPoints[field];
+            GCActivitySummaryValue * oldVal = newSum[field];
+            if( ![oldVal isEqualToValue:newVal]){
+                newSum[field] = newVal;
+                rv = true;
+            }
+        }
+    }
+    
+    self.summaryData = newSum;
+    return rv;
+}
+
+-(NSDictionary<GCField*,GCActivitySummaryValue*>*)buildSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints{
+
+    NSMutableDictionary<GCField*,GCNumberWithUnit*> * results = [NSMutableDictionary dictionary];
+    
+    NSArray<GCField*>*fields = self.availableTrackFields;
+    
     double totalElapsed = 0.0;
     GCTrackPoint * point = nil;
     for (GCTrackPoint * next in trackpoints) {
         if (point) {
             NSTimeInterval elapsed = [next timeIntervalSince:point];
             totalElapsed += elapsed;
-            for (NSString * field in defs) {
+            for (GCField * field in fields) {
 
-                NSArray * def = defs[field];
-                gcFieldFlag flag = [def[0] intValue];
-                GCNumberWithUnit * num = [point numberWithUnitForField:flag andActivityType:self.activityType];
-
-                GCNumberWithUnit * current = results[field];
-
-                if (!current) {
-                    current = num;
-                }else{
-                    if ([field hasPrefix:@"Max"]) {
-                        current = [current maxNumberWithUnit:num];
-                    }else if ([field hasPrefix:@"WeightedMean"]){
+                GCNumberWithUnit * num = [point numberWithUnitForField:field inActivity:self];
+                if( num ){
+                    GCNumberWithUnit * current = results[field];
+                    
+                    if (!current) {
+                        current = num;
+                    }else{
                         current.value *= (totalElapsed-elapsed)/totalElapsed;
                         current = [current addNumberWithUnit:num weight:elapsed/totalElapsed];
-                    }else if ([field hasPrefix:@"Min"]){
-                        current = [current minNumberWithUnit:num];
                     }
-                }
-                if (current) {
-                    results[field] = current;
+                    if( current ){
+                        results[field] = current;
+                        if( field.isWeightedAverage){
+                            for (GCField * secondary in @[ field.correspondingMaxField, field.correspondingMinField ]) {
+                                GCNumberWithUnit * secondaryCurrent = results[secondary];
+                                if( ! secondaryCurrent ){
+                                    secondaryCurrent = num;
+                                }else{
+                                    if( secondary.isMax ){
+                                        secondaryCurrent = [secondaryCurrent maxNumberWithUnit:num];
+                                    }else if ( secondary.isMin ){
+                                        secondaryCurrent = [secondaryCurrent nonZeroMinNumberWithUnit:num];
+                                    }
+                                }
+                                if (secondaryCurrent) {
+                                    results[secondary] = secondaryCurrent;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
         point = next;
     }
-    NSMutableDictionary * newSum = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
-    for (NSString *field in results) {
+    NSMutableDictionary<GCField*,GCActivitySummaryValue*> * newSum = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
+    
+    for (GCField *field in results) {
         GCNumberWithUnit * num = results[field];
-        gcFieldFlag flag = gcFieldFlagNone;
-        if ([field hasPrefix:@"WeightedMean"]) {
-            flag = [defs[field][0] intValue];
-        }
-        GCActivitySummaryValue * val = [self buildSummaryValue:field uom:num.unit.key fieldFlag:flag andValue:num.value];
-            newSum[field] = val;
+        GCActivitySummaryValue * val = [self buildSummaryValue:field.key uom:num.unit.key fieldFlag:field.fieldFlag andValue:num.value];
+        newSum[field] = val;
     }
     [self addPaceIfNecessaryWithSummary:newSum];
+    
     return newSum;
 }
 
@@ -1183,7 +1268,7 @@
         return false;
     }
     if (self.summaryData) {
-        for (NSString * field in self.summaryData) {
+        for (GCField * field in self.summaryData) {
             GCActivitySummaryValue * thisVal = self.summaryData[field];
             GCActivitySummaryValue * otherVal = other.summaryData[field];
             if (otherVal && ! [otherVal isEqualToValue:thisVal]) {

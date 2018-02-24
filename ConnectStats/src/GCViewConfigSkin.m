@@ -227,7 +227,7 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
         GCActivity * activity = [aAct isKindOfClass:[GCActivity class]] ? (GCActivity*)aAct :  nil;
 
         if (activity) {
-            rv = activity.activityTypeDetail ? dict[activity.activityTypeDetail] : nil;
+            rv = activity.activityTypeDetail.key ? dict[activity.activityTypeDetail.key] : nil;
             if (!rv) {
                 rv = dict[ activity.activityType];
             }

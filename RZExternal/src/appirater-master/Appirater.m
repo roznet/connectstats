@@ -34,10 +34,10 @@
  * Copyright 2012 Arash Payan. All rights reserved.
  */
 
+#import <SystemConfiguration/SystemConfiguration.h>
+#import <CFNetwork/CFNetwork.h>
 #import "Appirater.h"
-#import <SystemConfiguration/SCNetworkReachability.h>
 #include <netinet/in.h>
-//#import "UIAlertController+RZHelper.h"
 
 #if ! __has_feature(objc_arc)
 #warning This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
@@ -61,11 +61,6 @@ static NSInteger _usesUntilPrompt = 20;
 static NSInteger _significantEventsUntilPrompt = -1;
 static double _timeBeforeReminding = 1;
 static BOOL _debug = NO;
-#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_5_0
-	static id<AppiraterDelegate> _delegate;
-#else
-	__weak static id<AppiraterDelegate> _delegate;
-#endif
 static BOOL _usesAnimation = TRUE;
 static UIStatusBarStyle _statusBarStyle;
 static BOOL _modalOpen = false;
@@ -77,20 +72,20 @@ static BOOL _alwaysUseMainBundle = NO;
 @property (nonatomic, copy) NSString *alertCancelTitle;
 @property (nonatomic, copy) NSString *alertRateTitle;
 @property (nonatomic, copy) NSString *alertRateLaterTitle;
+@property (nonatomic, strong) NSOperationQueue *eventQueue;
 - (BOOL)connectedToNetwork;
 + (Appirater*)sharedInstance;
 - (void)showPromptWithChecks:(BOOL)withChecks
       displayRateLaterButton:(BOOL)displayRateLaterButton;
 - (void)showRatingAlert:(BOOL)displayRateLaterButton;
 - (void)showRatingAlert;
+- (BOOL)ratingAlertIsAppropriate;
 - (BOOL)ratingConditionsHaveBeenMet;
 - (void)incrementUseCount;
 - (void)hideRatingAlert;
 @end
 
-@implementation Appirater 
-
-@synthesize ratingAlert;
+@implementation Appirater
 
 + (void) setAppId:(NSString *)appId {
     _appId = appId;
@@ -141,7 +136,7 @@ static BOOL _alwaysUseMainBundle = NO;
     _debug = debug;
 }
 + (void)setDelegate:(id<AppiraterDelegate>)delegate{
-	_delegate = delegate;
+	Appirater.sharedInstance.delegate = delegate;
 }
 + (void)setUsesAnimation:(BOOL)animation {
 	_usesAnimation = animation;
@@ -222,9 +217,14 @@ static BOOL _alwaysUseMainBundle = NO;
 }
 
 - (BOOL)connectedToNetwork {
-
+    // Create zero addy
+    struct sockaddr_in zeroAddress;
+    bzero(&zeroAddress, sizeof(zeroAddress));
+    zeroAddress.sin_len = sizeof(zeroAddress);
+    zeroAddress.sin_family = AF_INET;
+	
     // Recover reachability flags
-    SCNetworkReachabilityRef defaultRouteReachability = SCNetworkReachabilityCreateWithName( NULL, "www.apple.com" );
+    SCNetworkReachabilityRef defaultRouteReachability = SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr *)&zeroAddress);
     SCNetworkReachabilityFlags flags;
 	
     Boolean didRetrieveFlags = SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags);
@@ -240,9 +240,18 @@ static BOOL _alwaysUseMainBundle = NO;
     BOOL needsConnection = flags & kSCNetworkFlagsConnectionRequired;
 	BOOL nonWiFi = flags & kSCNetworkReachabilityFlagsTransientConnection;
 	
-    BOOL testConnection = true;
+	NSURL *testURL = [NSURL URLWithString:@"http://www.apple.com/"];
 	
-    return ((isReachable && !needsConnection) || nonWiFi) ? (testConnection ? YES : NO) : NO;
+    NSURLSessionConfiguration* sessionConfiguration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    sessionConfiguration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+    sessionConfiguration.timeoutIntervalForRequest = 20.0;
+
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfiguration];
+
+    NSURLSessionTask *task = [session dataTaskWithURL:testURL];
+    [task resume];
+    
+    return ((isReachable && !needsConnection) || nonWiFi) ? ( (task.state != NSURLSessionTaskStateSuspended) ? YES : NO ) : NO;
 }
 
 + (Appirater*)sharedInstance {
@@ -252,7 +261,8 @@ static BOOL _alwaysUseMainBundle = NO;
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             appirater = [[Appirater alloc] init];
-			appirater.delegate = _delegate;
+            appirater.eventQueue = [[NSOperationQueue alloc] init];
+            appirater.eventQueue.maxConcurrentOperationCount = 1;
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive) name:
                 UIApplicationWillResignActiveNotification object:nil];
         });
@@ -260,116 +270,67 @@ static BOOL _alwaysUseMainBundle = NO;
 	
 	return appirater;
 }
-/*
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    id <AppiraterDelegate> delegate = _delegate;
-    
-    switch (buttonIndex) {
-        case 0:
-        {
-            // they don't want to rate it
-            [userDefaults setBool:YES forKey:kAppiraterDeclinedToRate];
-            [userDefaults synchronize];
-            if(delegate && [delegate respondsToSelector:@selector(appiraterDidDeclineToRate:)]){
-                [delegate appiraterDidDeclineToRate:self];
-            }
-            break;
-        }
-        case 1:
-        {
-            // they want to rate it
-            [Appirater rateApp];
-            if(delegate&& [delegate respondsToSelector:@selector(appiraterDidOptToRate:)]){
-                [delegate appiraterDidOptToRate:self];
-            }
-            break;
-        }
-        case 2:
-            // remind them later
-            [userDefaults setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppiraterReminderRequestDate];
-            [userDefaults synchronize];
-            if(delegate && [delegate respondsToSelector:@selector(appiraterDidOptToRemindLater:)]){
-                [delegate appiraterDidOptToRemindLater:self];
-            }
-            break;
-        default:
-            break;
-    }
-}
-*/
+
 - (void)showRatingAlert:(BOOL)displayRateLaterButton {
+  id <AppiraterDelegate> delegate = _delegate;
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    id <AppiraterDelegate> delegate = _delegate;
-    
-    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:self.alertTitle
-                                                                       message:self.alertMessage
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alertView addAction:[UIAlertAction actionWithTitle:self.alertCancelTitle
-                                                  style:UIAlertActionStyleCancel
-                                                handler:^(UIAlertAction*action){
-                                                    [userDefaults setBool:YES forKey:kAppiraterDeclinedToRate];
-                                                    [userDefaults synchronize];
-                                                    if(delegate && [delegate respondsToSelector:@selector(appiraterDidDeclineToRate:)]){
-                                                        [delegate appiraterDidDeclineToRate:self];
-                                                    }
-
-                                                }]];
-    [alertView addAction:[UIAlertAction actionWithTitle:self.alertRateTitle
-                                                  style:UIAlertActionStyleDefault
-                                                handler:^(UIAlertAction*action){
-                                                    [Appirater rateApp];
-                                                    if(delegate&& [delegate respondsToSelector:@selector(appiraterDidOptToRate:)]){
-                                                        [delegate appiraterDidOptToRate:self];
-                                                    }
-
-                                                }]];
-    
-    if (displayRateLaterButton) {
-        [alertView addAction:[UIAlertAction actionWithTitle:self.alertRateLaterTitle
-                                                      style:UIAlertActionStyleDefault
-                                                    handler:^(UIAlertAction*action){
-                                                        [userDefaults setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppiraterReminderRequestDate];
-                                                        [userDefaults synchronize];
-                                                        if(delegate && [delegate respondsToSelector:@selector(appiraterDidOptToRemindLater:)]){
-                                                            [delegate appiraterDidOptToRemindLater:self];
-                                                        }
-                                                        
-                                                    }]];
-    }
-    
-    
-    self.ratingAlert = alertView;
-    [self presentAnimated:alertView];
-    
-    if (delegate && [delegate respondsToSelector:@selector(appiraterDidDisplayAlert:)]) {
-        [delegate appiraterDidDisplayAlert:self];
-    }
-}
--(void)presentAnimated:(UIAlertController*)alertView
-{
-    UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
-    if (rootVC != nil) {
-        [self presentFromController:rootVC alertView:alertView];
-    }
-}
-
--(void)presentFromController:(UIViewController *)viewController
-                   alertView:(UIAlertController*)alertView
-{
-    if ([viewController isKindOfClass:[UINavigationController class]]) {
-        UIViewController *visibleVC = ((UINavigationController *)viewController).visibleViewController;
-        [self presentFromController:visibleVC alertView:alertView];
-    } else if ([viewController isKindOfClass:[UITabBarController class]]) {
-        UIViewController *selectedVC = ((UITabBarController *)viewController).selectedViewController;
-        [self presentFromController:selectedVC alertView:alertView];
+  if(delegate && [delegate respondsToSelector:@selector(appiraterShouldDisplayAlert:)] && ![delegate appiraterShouldDisplayAlert:self]) {
+      return;
+  }
+  
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+    if (NSStringFromClass([SKStoreReviewController class]) != nil) {
+#pragma clang diagnostic pop
+        [Appirater rateApp];
     } else {
-        [viewController presentViewController:alertView animated:YES completion:^(){}];
+        // Otherwise show a custom Alert
+        NSMutableArray *buttons = [[NSMutableArray alloc] initWithObjects:self.alertRateTitle, nil];
+        if (displayRateLaterButton) {
+            [buttons addObject:self.alertRateLaterTitle];
+        }
+        if (NSStringFromClass([UIAlertController class]) != nil) {
+            [buttons addObject:self.alertCancelTitle];
+            
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:self.alertTitle message:self.alertMessage preferredStyle:UIAlertControllerStyleAlert];
+            for (NSInteger i = 0; i < buttons.count; i++) {
+                UIAlertActionStyle style = i == buttons.count - 1 ? UIAlertActionStyleCancel : UIAlertActionStyleDefault;
+                [alert addAction:[UIAlertAction actionWithTitle:buttons[i] style:style handler:^(UIAlertAction * _Nonnull action) {
+                    NSString *title = action.title;
+                    NSInteger buttonIndex = -1;
+                    if ([title isEqual:self.alertCancelTitle]) {
+                        buttonIndex = 0;
+                    } else if ([title isEqual:self.alertRateTitle]) {
+                        buttonIndex = 1;
+                    } else if ([title isEqual:self.alertRateLaterTitle]) {
+                        buttonIndex = 2;
+                    }
+                    
+                    [self alertViewDidDismissWithButtonIndex:buttonIndex];
+                }]];
+            }
+            [[Appirater getRootViewController] presentViewController:alert animated:YES completion:nil];
+            self.ratingAlert = alert;
+        } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:self.alertTitle
+                                                                message:self.alertMessage
+                                                               delegate:self
+                                                      cancelButtonTitle:self.alertCancelTitle
+                                                      otherButtonTitles:nil];
+            for (NSString *button in buttons) {
+                [alertView addButtonWithTitle:button];
+            }
+            self.ratingAlert = alertView;
+            [alertView show];
+#pragma clang diagnostic pop
+        }
     }
+
+  if (delegate && [delegate respondsToSelector:@selector(appiraterDidDisplayAlert:)]) {
+           [delegate appiraterDidDisplayAlert:self];
+  }
 }
 
 - (void)showRatingAlert
@@ -377,6 +338,37 @@ static BOOL _alwaysUseMainBundle = NO;
   [self showRatingAlert:true];
 }
 
+// is this an ok time to show the alert? (regardless of whether the rating conditions have been met)
+//
+// things checked here:
+// * connectivity with network
+// * whether user has rated before
+// * whether user has declined to rate
+// * whether rating alert is currently showing visibly
+// things NOT checked here:
+// * time since first launch
+// * number of uses of app
+// * number of significant events
+// * time since last reminder
+- (BOOL)ratingAlertIsAppropriate {
+    return ([self connectedToNetwork]
+            && ![self userHasDeclinedToRate]
+            && ![self isRatingAlertVisible]
+            && ![self userHasRatedCurrentVersion]);
+}
+
+// have the rating conditions been met/earned? (regardless of whether this would be a moment when it's appropriate to show a new rating alert)
+//
+// things checked here:
+// * time since first launch
+// * number of uses of app
+// * number of significant events
+// * time since last reminder
+// things NOT checked here:
+// * connectivity with network
+// * whether user has rated before
+// * whether user has declined to rate
+// * whether rating alert is currently showing visibly
 - (BOOL)ratingConditionsHaveBeenMet {
 	if (_debug)
 		return YES;
@@ -397,14 +389,6 @@ static BOOL _alwaysUseMainBundle = NO;
 	// check if the user has done enough significant events
 	NSInteger sigEventCount = [userDefaults integerForKey:kAppiraterSignificantEventCount];
 	if (sigEventCount < _significantEventsUntilPrompt)
-		return NO;
-	
-	// has the user previously declined to rate this version of the app?
-	if ([userDefaults boolForKey:kAppiraterDeclinedToRate])
-		return NO;
-	
-	// has the user already rated the app?
-	if ([self userHasRatedCurrentVersion])
 		return NO;
 	
 	// if the user wanted to be reminded later, has enough time passed?
@@ -454,12 +438,8 @@ static BOOL _alwaysUseMainBundle = NO;
 	{
 		// it's a new version of the app, so restart tracking
 		[userDefaults setObject:version forKey:kAppiraterCurrentVersion];
-        //BMR update to not restart at each version
-        if ([userDefaults boolForKey:kAppiraterRatedCurrentVersion] || [userDefaults boolForKey:kAppiraterDeclinedToRate]) {
-
-            [userDefaults setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppiraterFirstUseDate];
-            [userDefaults setInteger:1 forKey:kAppiraterUseCount];
-        }
+		[userDefaults setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppiraterFirstUseDate];
+		[userDefaults setInteger:1 forKey:kAppiraterUseCount];
 		[userDefaults setInteger:0 forKey:kAppiraterSignificantEventCount];
 		[userDefaults setBool:NO forKey:kAppiraterRatedCurrentVersion];
 		[userDefaults setBool:NO forKey:kAppiraterDeclinedToRate];
@@ -521,8 +501,8 @@ static BOOL _alwaysUseMainBundle = NO;
 	[self incrementUseCount];
 	
 	if (canPromptForRating &&
-		[self ratingConditionsHaveBeenMet] &&
-		[self connectedToNetwork])
+        [self ratingConditionsHaveBeenMet] &&
+        [self ratingAlertIsAppropriate])
 	{
         dispatch_async(dispatch_get_main_queue(),
                        ^{
@@ -534,9 +514,9 @@ static BOOL _alwaysUseMainBundle = NO;
 - (void)incrementSignificantEventAndRate:(BOOL)canPromptForRating {
 	[self incrementSignificantEventCount];
 	
-	if (canPromptForRating &&
-		[self ratingConditionsHaveBeenMet] &&
-		[self connectedToNetwork])
+    if (canPromptForRating &&
+        [self ratingConditionsHaveBeenMet] &&
+        [self ratingAlertIsAppropriate])
 	{
         dispatch_async(dispatch_get_main_queue(),
                        ^{
@@ -563,17 +543,40 @@ static BOOL _alwaysUseMainBundle = NO;
 + (void)appLaunched:(BOOL)canPromptForRating {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0),
                    ^{
-                       [[Appirater sharedInstance] incrementAndRate:canPromptForRating];
+                       Appirater *a = [Appirater sharedInstance];
+                       if (_debug) {
+                           dispatch_async(dispatch_get_main_queue(),
+                                          ^{
+                                              [a showRatingAlert];
+                                          });
+                       } else {
+                           [a incrementAndRate:canPromptForRating]; 
+                       }
                    });
 }
 
+- (BOOL)isRatingAlertVisible {
+    if (NSStringFromClass([UIAlertController class]) != nil) {
+        return ((UIAlertController *)self.ratingAlert).view.superview != nil;
+    } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        return ((UIAlertView *)self.ratingAlert).visible;
+#pragma clang diagnostic pop
+    }
+}
+
 - (void)hideRatingAlert {
-	/*if (self.ratingAlert.isBeingPresented) {
-		if (_debug)
+	if ([self isRatingAlertVisible]) {
+        if (_debug) {
 			NSLog(@"APPIRATER Hiding Alert");
-		[self.ratingAlert dismissWithClickedButtonIndex:-1 animated:NO];
-	}
-     */
+        }
+        if ([self.ratingAlert respondsToSelector:@selector(dismissWithClickedButtonIndex:animated:)]) {
+            [self.ratingAlert dismissWithClickedButtonIndex:-1 animated:NO];
+        } else {
+            [self.ratingAlert dismissViewControllerAnimated:NO completion:nil];
+        }
+	}	
 }
 
 + (void)appWillResignActive {
@@ -583,17 +586,17 @@ static BOOL _alwaysUseMainBundle = NO;
 }
 
 + (void)appEnteredForeground:(BOOL)canPromptForRating {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0),
-                   ^{
-                       [[Appirater sharedInstance] incrementAndRate:canPromptForRating];
-                   });
+    Appirater *a = [Appirater sharedInstance];
+    [a.eventQueue addOperationWithBlock:^{
+        [[Appirater sharedInstance] incrementAndRate:canPromptForRating];
+    }];
 }
 
 + (void)userDidSignificantEvent:(BOOL)canPromptForRating {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0),
-                   ^{
-                       [[Appirater sharedInstance] incrementSignificantEventAndRate:canPromptForRating];
-                   });
+    Appirater *a = [Appirater sharedInstance];
+    [a.eventQueue addOperationWithBlock:^{
+       [[Appirater sharedInstance] incrementSignificantEventAndRate:canPromptForRating];
+    }];
 }
 
 #pragma GCC diagnostic push
@@ -615,13 +618,7 @@ static BOOL _alwaysUseMainBundle = NO;
 
 - (void)showPromptWithChecks:(BOOL)withChecks
       displayRateLaterButton:(BOOL)displayRateLaterButton {
-  bool showPrompt = true;
-  if (withChecks) {
-    showPrompt = ([self connectedToNetwork]
-              && ![self userHasDeclinedToRate]
-              && ![self userHasRatedCurrentVersion]);
-  } 
-  if (showPrompt) {
+  if (withChecks == NO || [self ratingAlertIsAppropriate]) {
     [self showRatingAlert:displayRateLaterButton];
   }
 }
@@ -670,10 +667,19 @@ static BOOL _alwaysUseMainBundle = NO;
 }
 
 + (void)rateApp {
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:YES forKey:kAppiraterRatedCurrentVersion];
+    [userDefaults synchronize];
 	
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setBool:YES forKey:kAppiraterRatedCurrentVersion];
-	[userDefaults synchronize];
+    // Use the built SKStoreReviewController if available (available from iOS 10.3 upwards)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+    if (NSStringFromClass([SKStoreReviewController class]) != nil) {
+        [SKStoreReviewController requestReview];
+#pragma clang diagnostic pop
+        return;
+    }
 
 	//Use the in-app StoreKit view if available (iOS 6) and imported. This works in the simulator.
 	if (![Appirater sharedInstance].openInAppStore && NSStringFromClass([SKStoreProductViewController class]) != nil) {
@@ -689,13 +695,6 @@ static BOOL _alwaysUseMainBundle = NO;
 		}
 		[[self getRootViewController] presentViewController:storeViewController animated:_usesAnimation completion:^{
 			[self setModalOpen:YES];
-			//Temporarily use a black status bar to match the StoreKit view.
-            /*
-			[self setStatusBarStyle:[UIApplication sharedApplication].statusBarStyle];
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
-			[[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent animated:_usesAnimation];
-#endif
-             */
 		}];
 	
 	//Use the standard openUrl method if StoreKit is unavailable.
@@ -704,23 +703,70 @@ static BOOL _alwaysUseMainBundle = NO;
 		#if TARGET_IPHONE_SIMULATOR
 		NSLog(@"APPIRATER NOTE: iTunes App Store is not supported on the iOS simulator. Unable to open App Store page.");
 		#else
-		NSString *reviewURL = [templateReviewURL stringByReplacingOccurrencesOfString:@"APP_ID" withString:[NSString stringWithFormat:@"%@", _appId]];
+		NSString *reviewURL = [templateReviewURL stringByReplacingOccurrencesOfString:@"APP_ID" withString:_appId];
 
 		// iOS 7 needs a different templateReviewURL @see https://github.com/arashpayan/appirater/issues/131
-		if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0 && [[[UIDevice currentDevice] systemVersion] floatValue] < 7.1) {
-			reviewURL = [templateReviewURLiOS7 stringByReplacingOccurrencesOfString:@"APP_ID" withString:[NSString stringWithFormat:@"%@", _appId]];
+        // Fixes condition @see https://github.com/arashpayan/appirater/issues/205
+		if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0 && [[[UIDevice currentDevice] systemVersion] floatValue] < 8.0) {
+			reviewURL = [templateReviewURLiOS7 stringByReplacingOccurrencesOfString:@"APP_ID" withString:_appId];
 		}
         // iOS 8 needs a different templateReviewURL also @see https://github.com/arashpayan/appirater/issues/182
         else if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
         {
-            reviewURL = [templateReviewURLiOS8 stringByReplacingOccurrencesOfString:@"APP_ID" withString:[NSString stringWithFormat:@"%@", _appId]];
+            reviewURL = [templateReviewURLiOS8 stringByReplacingOccurrencesOfString:@"APP_ID" withString:_appId];
         }
 
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:reviewURL] options:@{} completionHandler:nil];
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:reviewURL]];
 		#endif
 	}
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    [self alertViewDidDismissWithButtonIndex:buttonIndex];
+}
+#pragma clang diagnostic pop
+
+- (void)alertViewDidDismissWithButtonIndex:(NSInteger)buttonIndex {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    id <AppiraterDelegate> delegate = _delegate;
+    
+    switch (buttonIndex) {
+        case 0:
+        {
+            // they don't want to rate it
+            [userDefaults setBool:YES forKey:kAppiraterDeclinedToRate];
+            [userDefaults synchronize];
+            if(delegate && [delegate respondsToSelector:@selector(appiraterDidDeclineToRate:)]){
+                [delegate appiraterDidDeclineToRate:self];
+            }
+            break;
+        }
+        case 1:
+        {
+            // they want to rate it
+            [Appirater rateApp];
+            if(delegate&& [delegate respondsToSelector:@selector(appiraterDidOptToRate:)]){
+                [delegate appiraterDidOptToRate:self];
+            }
+            break;
+        }
+        case 2:
+            // remind them later
+            [userDefaults setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppiraterReminderRequestDate];
+            [userDefaults synchronize];
+            if(delegate && [delegate respondsToSelector:@selector(appiraterDidOptToRemindLater:)]){
+                [delegate appiraterDidOptToRemindLater:self];
+            }
+            break;
+        default:
+            break;
+    }
+    
+    self.ratingAlert = nil;
+}
 
 //Delegate call from the StoreKit view.
 - (void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController {
@@ -730,7 +776,6 @@ static BOOL _alwaysUseMainBundle = NO;
 //Close the in-app rating (StoreKit) view and restore the previous status bar style.
 + (void)closeModal {
 	if (_modalOpen) {
-		//[[UIApplication sharedApplication]setStatusBarStyle:_statusBarStyle animated:_usesAnimation];
 		BOOL usedAnimation = _usesAnimation;
 		[self setModalOpen:NO];
 		

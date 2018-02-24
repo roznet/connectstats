@@ -25,8 +25,10 @@
 
 #import <Foundation/Foundation.h>
 
+@class GCActivity;
+
 @interface GCStravaActivityLapsParser : NSObject
 @property (nonatomic,retain) NSArray * laps;
-+(GCStravaActivityLapsParser*)activityLapsParser:(NSData*)input withPoints:(NSArray*)points;
++(GCStravaActivityLapsParser*)activityLapsParser:(NSData*)input withPoints:(NSArray*)points inActivity:(GCActivity*)act;
 
 @end

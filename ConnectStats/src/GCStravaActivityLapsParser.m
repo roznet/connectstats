@@ -26,12 +26,13 @@
 #import "GCStravaActivityLapsParser.h"
 #import "GCFields.h"
 #import "GCLap.h"
+#import "GCActivity.h"
 
 @implementation GCStravaActivityLapsParser
-+(GCStravaActivityLapsParser*)activityLapsParser:(NSData*)input withPoints:(NSArray*)points{
++(GCStravaActivityLapsParser*)activityLapsParser:(NSData*)input withPoints:(NSArray*)points inActivity:(GCActivity*)act{
     GCStravaActivityLapsParser * rv = [[[GCStravaActivityLapsParser alloc] init] autorelease];
     if (rv) {
-        [rv parse:input withPoints:(NSArray*)points];
+        [rv parse:input withPoints:(NSArray*)points inActivity:act];
     }
     return rv;
 
@@ -68,7 +69,7 @@
  "lap_index" : 1
  }
  */
--(void)parse:(NSData*)inputs withPoints:(NSArray*)points{
+-(void)parse:(NSData*)inputs withPoints:(NSArray*)points inActivity:(GCActivity*)act{
     BOOL saveBadJson = false;
     NSError * e = nil;
     NSArray *json = [NSJSONSerialization JSONObjectWithData:inputs options:NSJSONReadingMutableContainers error:&e];
@@ -98,7 +99,7 @@
                 NSDictionary * lapinfo = one;
 
                 GCLap * lap = [[GCLap alloc] init];
-                NSMutableDictionary * extra = [NSMutableDictionary dictionaryWithCapacity:lapinfo.count];
+                
                 for (NSString * key in defs) {
                     id value = lapinfo[key];
                     NSArray * subdefs = defs[key];
@@ -106,16 +107,11 @@
                         double dval = [value doubleValue];
                         gcFieldFlag flag = [subdefs[2] intValue];
                         NSString * uom = subdefs[1];
-                        NSString * sumfield = subdefs[0];
+                        GCField * field = (flag == gcFieldFlagNone) ? [GCField fieldForKey:subdefs[0] andActivityType:act.activityType] :
+                            [GCField fieldForFlag:flag andActivityType:act.activityType];
 
-                        if (flag != gcFieldFlagNone) {
-                            [lap setValue:dval forField:flag];
-                            lap.trackFlags |= flag;
-                        }
-                        if (![sumfield isEqualToString:@""]) {
-                            GCNumberWithUnit * num = [GCNumberWithUnit numberWithUnitName:uom andValue:dval];
-                            extra[sumfield] = num;
-                        }
+                        GCNumberWithUnit * num = [GCNumberWithUnit numberWithUnitName:uom andValue:dval];
+                        [lap setNumberWithUnit:num forField:field inActivity:nil];
                     }
                 }
 
@@ -136,8 +132,7 @@
                         lap.latitudeDegrees = point.latitudeDegrees;
                     }
                 }
-
-                lap.extra = extra;
+                
                 [ar addObject:lap];
                 [lap release];
             }else{

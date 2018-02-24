@@ -27,6 +27,7 @@
 #import "GCActivity.h"
 #import "GCActivitySummaryValue.h"
 #import "GCService.h"
+#import "GCActivity+Database.h"
 
 @implementation GCWithingsActivityParser
 
@@ -90,7 +91,7 @@
         GCActivity * activity = [[GCActivity alloc] init];
         activity.date = [NSDate dateForDashedDate:input[@"date"]];
         activity.activityType = GC_TYPE_DAY;
-        activity.activityTypeDetail = GC_TYPE_DAY;
+        activity.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_DAY];
 
         NSMutableDictionary * summaryData = [NSMutableDictionary dictionaryWithCapacity:10];
         NSMutableDictionary * metaData = [NSMutableDictionary dictionaryWithCapacity:10];
@@ -122,7 +123,7 @@
         activity.location = @"";
         activity.distanceDisplayUom = @"kilometer";
         activity.speedDisplayUom = @"kph";
-        activity.summaryData = summaryData;
+        [activity setSummaryDataFromKeyDict:summaryData];
         activity.metaData = metaData;
         activity.downloadMethod = gcDownloadMethodFitFile;
         if (activity.sumDistance > 0. || activity.sumDuration > 0.) {

@@ -43,6 +43,15 @@
 -(void)loadSummaryDataProcess;
 -(void)loadSummaryDataFrom:(FMDatabase*)db;
 
+
+/**
+ Convenience Function to set summary data from dictionary of keys instead of fields
+ Typically in the database we only store the key as string.
+
+ @param v dictionary as read from the db
+ */
+-(void)setSummaryDataFromKeyDict:(NSDictionary<NSString*,GCActivitySummaryValue*>*)v;
+
 -(void)fullSaveToDb:(FMDatabase*)db;
 +(GCActivity*)fullLoadFromDb:(FMDatabase*)db;
 +(GCActivity*)fullLoadFromDbPath:(NSString*)dbname;

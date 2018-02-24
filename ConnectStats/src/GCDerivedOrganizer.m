@@ -217,6 +217,17 @@ static BOOL kDerivedEnabled = true;
     return rv;
 }
 
+-(BOOL)debugCheckSerie:(GCStatsDataSerie*)serie{
+    for( NSUInteger i=0;i<MIN(serie.count,10);i++){
+        double x = [serie dataPointAtIndex:i].x_data;
+        if( lround(x) % 5 != 0  ){
+            return true;
+            break;
+        }
+    }
+    return false;
+}
+
 -(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type field:(gcFieldFlag)field period:(gcDerivedPeriod)period
                                forDate:(NSDate*)date andActivityType:(NSString*)activityType{
 
@@ -250,11 +261,35 @@ static BOOL kDerivedEnabled = true;
     return all.allKeys;
 }
 
+-(void)clearDataForActivityType:(NSString*)aType andFieldFlag:(gcFieldFlag)flag{
+    FMResultSet * res = [self.deriveddb executeQuery:@"SELECT * FROM gc_derived_series s, gc_derived_series_files f WHERE activityType = 'running' AND fieldFlag = 64 AND f.serieId = s.serieId"];
+    NSMutableArray * fileToDelete = [NSMutableArray array];
+    NSMutableArray * seriesToDelete = [NSMutableArray array];
+    while( [res next]){
+        [seriesToDelete addObject:@([res intForColumn:@"serieId"])];
+        [fileToDelete addObject:[res stringForColumn:@"filename"]];
+    }
+    for (NSString * filename in fileToDelete) {
+        [RZFileOrganizer removeEditableFile:filename];
+    }
+    for (NSNumber * serieId in seriesToDelete) {
+        if(![self.deriveddb executeUpdate:@"DELETE FROM gc_derived_series WHERE serieId = ?", serieId]){
+            RZLog(RZLogError, @"Failed to update %@", self.deriveddb.lastErrorMessage);
+        }
+        if(![self.deriveddb executeUpdate:@"DELETE FROM gc_derived_series_files WHERE serieId = ?", serieId]){
+            RZLog(RZLogError, @"Failed to update %@", self.deriveddb.lastErrorMessage);
+        }
+    }
+}
+
 -(void)loadSerieFromFile:(GCDerivedDataSerie*)serie{
     FMResultSet * res = [self.deriveddb executeQuery:@"SELECT filename FROM gc_derived_series_files WHERE serieId = ?", @([self serieId:serie])];
     if ([res next]) {
         NSString * fn = [res stringForColumn:@"filename"];
         [serie loadFromFile:[RZFileOrganizer writeableFilePath:fn]];
+        if([self debugCheckSerie:serie.serieWithUnit.serie]){
+            RZLog(RZLogError, @"bad serie load");
+        }
     }
 }
 
@@ -295,6 +330,19 @@ static BOOL kDerivedEnabled = true;
     return rv;
 }
 
+-(void)forceReprocessActivity:(NSString*)aId{
+    if (!self.processedActivities) {
+        [self loadProcesseActivities];
+    }
+    if( self.processedActivities[aId]){
+        [self.processedActivities removeObjectForKey:aId];
+        if(! [self.deriveddb executeUpdate:@"DELETE FROM gc_derived_activity_processed WHERE activityId = ?", aId]){
+            RZLog(RZLogError, @"db error %@", [self.deriveddb lastErrorMessage]);
+        };
+
+    }
+
+}
 
 -(BOOL)activityAlreadyProcessed:(GCActivity*)activity{
 
@@ -336,7 +384,9 @@ static BOOL kDerivedEnabled = true;
         GCStatsDataSerieWithUnit * serie =  [activity calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
                                                                     forField:[GCField fieldForFlag:element.field andActivityType:activity.activityType]
                                                                       thread:nil];
-
+        if( [self debugCheckSerie:serie.serie] ){
+            RZLog(RZLogError,@"Bad input serie");
+        }
         for (NSNumber * num in @[ @(gcDerivedPeriodAll),@(gcDerivedPeriodMonth),@(gcDerivedPeriodYear)]) {
             gcDerivedPeriod period = num.intValue;
             GCDerivedDataSerie * derivedserie = [self derivedDataSerie:element.derivedType
@@ -344,8 +394,14 @@ static BOOL kDerivedEnabled = true;
                                                                 period:period
                                                                forDate:activity.date
                                                        andActivityType:activity.activityType];
+            if([self debugCheckSerie:derivedserie.serieWithUnit.serie]){
+                RZLog(RZLogError,@"bad derived start");
+            }
             gcStatsOperand operand = [derivedserie.serieWithUnit.unit betterIsMin] ? gcStatsOperandMin : gcStatsOperandMax;
             [derivedserie operate:operand with:serie from:activity];
+            if( [self debugCheckSerie:derivedserie.serieWithUnit.serie]){
+                RZLog(RZLogError,@"bad out serie");
+            }
             NSString * fn = [NSString stringWithFormat:@"%@-%@.data", [[GCAppGlobal profile] currentDerivedFilePrefix],  derivedserie.key];
             if([derivedserie saveToFile:fn]){
                 [self recordModifiedSerie:derivedserie withActivity:activity intoFile:fn];
@@ -380,7 +436,12 @@ static BOOL kDerivedEnabled = true;
                 [toProcess addObject:[GCDerivedQueueElement element:activity
                                                               field:gcFieldFlagWeightedMeanSpeed
                                                             andType:gcDerivedTypeBestRolling
+                                                       activityLast:NO]];
+                [toProcess addObject:[GCDerivedQueueElement element:activity
+                                                              field:gcFieldFlagPower
+                                                            andType:gcDerivedTypeBestRolling
                                                        activityLast:YES]];
+
             }else if ([activity.activityType isEqualToString:GC_TYPE_CYCLING]) {
                 [toProcess addObject:[GCDerivedQueueElement element:activity
                                                               field:gcFieldFlagWeightedMeanHeartRate

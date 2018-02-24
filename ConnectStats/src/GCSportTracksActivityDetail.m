@@ -111,7 +111,7 @@
 
             GCActivity * act = [[GCActivity alloc] initWithId:activityId andSportTracksData:json];
 
-            GCSportTracksActivityDetailParser * parser = [GCSportTracksActivityDetailParser activityDetailParser:json];
+            GCSportTracksActivityDetailParser * parser = [GCSportTracksActivityDetailParser activityDetailParser:json forActivity:act];
 
             [[GCAppGlobal organizer] registerActivity:activityId withTrackpoints:parser.points andLaps:nil];
 

@@ -44,10 +44,10 @@
 
 #pragma mark - Grouped Fields
 
--(NSArray*)displayPrimaryFieldsOrdered{
-    static NSDictionary * cache = nil;
+-(NSArray<GCField*>*)displayPrimaryFieldsOrdered{
+    static NSDictionary<NSString*,NSArray<GCField*>*>* cache = nil;
     if (cache == nil) {
-        cache = @{
+        NSDictionary * baseDict = @{
                   GC_TYPE_RUNNING:@[
                           @"SumDistance",
                           @"SumDuration",
@@ -57,7 +57,7 @@
                           @"WeightedMeanStrokes",
                           @"WeightedMeanSwolf",
                           @"WeightedMeanPower",
-                          @"WeightedMeanNormalizedPower",
+                          @"WeightedMeanFormPower",
                           @"SumIntensityFactor",
                           @"WeightedMeanRunCadence",
                           @"WeightedMeanSwimCadence",
@@ -163,11 +163,21 @@
 
                           ]
                   };
+        NSMutableDictionary * mutCache = [NSMutableDictionary dictionary];
+        for (NSString * aType in baseDict) {
+            NSArray<NSString*> * fieldKeys = baseDict[aType];
+            NSMutableArray<GCField*> * fields = [NSMutableArray arrayWithCapacity:fieldKeys.count];
+            for (NSString * fieldKey in fieldKeys) {
+                [fields addObject:[GCField fieldForKey:fieldKey andActivityType:aType]];
+            }
+            mutCache[aType] = fields;
+        }
+        cache = [NSDictionary dictionaryWithDictionary:mutCache];
         [cache retain];
     }
     NSArray * rv = nil;
     if (self.activityTypeDetail) {
-        rv = cache[self.activityTypeDetail];
+        rv = cache[self.activityTypeDetail.key];
     }
     if (!rv) {
         rv = cache[self.activityType];
@@ -181,24 +191,24 @@
 
 
 -(GCActivityOrganizedFields*)groupedFields{
-    NSArray * primary = [self displayPrimaryFieldsOrdered];
+    NSArray<GCField*> * primary = [self displayPrimaryFieldsOrdered];
 
-    NSMutableDictionary * found = [NSMutableDictionary dictionary];
-    NSMutableDictionary * allUsed = [NSMutableDictionary dictionary];
+    NSMutableDictionary<GCField*,id> * found = [NSMutableDictionary dictionary];
+    NSMutableDictionary<GCField*,id> * allUsed = [NSMutableDictionary dictionary];
 
     GCNumberWithUnit * nu = nil;
-    for (NSString * field in primary) {
-        NSArray * related = [GCFields relatedFields:field];
+    for (GCField * field in primary) {
+        NSArray<GCField*> * related = field.relatedFields;
 
-        NSMutableArray * existingRelated = [NSMutableArray array];
-        nu = [self numberWithUnitForFieldKey:field];
+        NSMutableArray<GCField*> * existingRelated = [NSMutableArray array];
+        nu = [self numberWithUnitForField:field];
         if (nu) {
             [existingRelated addObject:field];
             found[field] = existingRelated;
             allUsed[field] = @1;
 
-            for (NSString * subfield in related) {
-                nu = [self numberWithUnitForFieldKey:subfield];
+            for (GCField * subfield in related) {
+                nu = [self numberWithUnitForField:subfield];
                 if (nu) {
                     [existingRelated addObject:subfield];
                     allUsed[subfield] = @1;
@@ -207,9 +217,9 @@
         }
     }
 
-    NSMutableArray * groupedPrimary = [NSMutableArray array];
-    for (NSString * field in primary) {
-        NSArray * group = found[field];
+    NSMutableArray<NSArray<GCField*>*> * groupedPrimary = [NSMutableArray array];
+    for (GCField * field in primary) {
+        NSArray<GCField*> * group = found[field];
         if (group) {
             [groupedPrimary addObject:group];
         }
@@ -218,18 +228,18 @@
     GCActivityOrganizedFields * rv = [[[GCActivityOrganizedFields alloc] init] autorelease];
     rv.groupedPrimaryFields = groupedPrimary;
 
-    NSMutableDictionary * others = [NSMutableDictionary dictionary];
+    NSMutableDictionary<GCField*,NSArray<GCField*>*> * others = [NSMutableDictionary dictionary];
 
-    for (NSString * field in self.summaryData) {
+    for (GCField * field in self.summaryData) {
         if (!allUsed[field]) {
-            others[field] = [GCFields relatedFields:field];
+            others[field] = field.relatedFields;
         }
     }
 
-    NSMutableArray * groupedOther = [NSMutableArray array];
-    NSArray * allOthers = [others allKeys];
+    NSMutableArray<NSArray<GCField*>*> * groupedOther = [NSMutableArray array];
+    NSArray<GCField*> * allOthers = [others allKeys];
 
-    static NSMutableDictionary * _reportedOthers = nil;
+    static NSMutableDictionary<NSString*,NSNumber*> * _reportedOthers = nil;
     if (_reportedOthers==nil) {
         _reportedOthers = [NSMutableDictionary dictionaryWithDictionary:@{
                                                                           @"WeightedMeanStrideLength":@1,
@@ -250,19 +260,19 @@
         [_reportedOthers retain];
     }
 
-    for (NSString * one in allOthers) {
-        if (_reportedOthers[one]==nil) {
-            _reportedOthers[one] = @1;
+    for (GCField * one in allOthers) {
+        if (_reportedOthers[one.key]==nil) {
+            _reportedOthers[one.key] = @1;
             // This means the fields that were not organized in displayPrimaryFieldsOrdered
             // or that was not a related field of one of the displayPrimaryFieldsOrdered fields.
             // What needs to be excluded can be added explicitely in the _reportedOthres dictionary cache
             // Or it needs to be added to displayPrimaryFieldsOrdered
             RZLog(RZLogInfo, @"Other Summary Field: %@ %@", one, self.activityType);
         }
-        NSArray * related = others[one];
+        NSArray<GCField*> * related = others[one];
         if (related.count > 0) {
             NSMutableArray * oneRelated = [NSMutableArray array];
-            for (NSString * done in related) {
+            for (GCField * done in related) {
                 if (others[done]) {
                     others[done] = @[];
                     [oneRelated addObject:done];

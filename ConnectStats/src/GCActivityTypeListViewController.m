@@ -106,10 +106,10 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString * newType = [(self.types)[indexPath.row] activityTypeDetail];
-    NSString * oldType = self.activity.activityTypeDetail?:self.activity.activityType;
+    GCActivityType * newType = self.types[indexPath.row];
+    GCActivityType * oldType = self.activity.activityTypeDetail;
     RZLog(RZLogInfo, @"%@ Changing activity type from %@ to %@",self.activity.activityId,oldType,newType);
-    [[GCAppGlobal web] garminUpdateActivity:self.activity.activityId withActivityType:newType];
+    [[GCAppGlobal web] garminUpdateActivity:self.activity.activityId withActivityType:newType.key];
     [self.refreshDelegate beginRefreshing];
     [self.navigationController popViewControllerAnimated:YES];
     [Flurry logEvent:EVENT_CHANGE_TYPE];

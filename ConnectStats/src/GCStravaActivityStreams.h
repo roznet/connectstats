@@ -25,12 +25,13 @@
 
 #import "GCStravaReqBase.h"
 
+@class GCActivity;
 
 @interface GCStravaActivityStreams : GCStravaReqBase
-@property (nonatomic,retain) NSString * activityId;
+@property (nonatomic,retain) GCActivity * activity;
 @property (nonatomic,retain) NSArray * points;
 @property (nonatomic,retain) NSArray * laps;
 
-+(GCStravaActivityStreams*)stravaActivityStream:(UINavigationController*)nav for:(NSString*)stravaId;
++(GCStravaActivityStreams*)stravaActivityStream:(UINavigationController*)nav for:(GCActivity*)act;
 
 @end

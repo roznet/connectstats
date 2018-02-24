@@ -214,6 +214,13 @@
                     unitstride = 10.;
                 }
 
+                // HACK serie that are missing zero, as otherwise the best of may not start consistently
+                // and doing max over multiple will have weird quirks at the beginning.
+                if( serie.serie.count > 0 && serie.serie.firstObject.x_data > 0 ){
+                    [serie.serie addDataPointWithX:0.0 andY:serie.serie.firstObject.y_data];
+                    [serie.serie sortByX];
+                }
+                
                 serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:gcStatsLast select:select];
                 rv[key] = serie;
             }else if(info.track == gcCalculatedCachedTrackDataSerie){
@@ -362,12 +369,17 @@
 
     NSDictionary * stats = [final.serie summaryStatistics];
     NSMutableDictionary * newFields = [NSMutableDictionary dictionary];
-    newFields[CALC_VERTICAL_SPEED] = [GCActivityCalculatedValue calculatedValue:CALC_VERTICAL_SPEED value:[stats[STATS_AVG] doubleValue] unit:final.unit];
-    newFields[CALC_ASCENT_SPEED] = [GCActivityCalculatedValue calculatedValue:CALC_ASCENT_SPEED value:[stats[STATS_AVGPOS] doubleValue] unit:final.unit];
-    newFields[CALC_DESCENT_SPEED] = [GCActivityCalculatedValue calculatedValue:CALC_DESCENT_SPEED value:[stats[STATS_AVGNEG] doubleValue] unit:final.unit];
-    newFields[CALC_MAX_ASCENT_SPEED] = [GCActivityCalculatedValue calculatedValue:CALC_MAX_ASCENT_SPEED value:[stats[STATS_MAX] doubleValue] unit:final.unit];
-    newFields[CALC_MAX_DESCENT_SPEED] = [GCActivityCalculatedValue calculatedValue:CALC_MAX_DESCENT_SPEED value:[stats[STATS_MIN] doubleValue] unit:final.unit];
+    NSDictionary * fields = @{
+                              CALC_VERTICAL_SPEED: [GCActivityCalculatedValue calculatedValue:CALC_VERTICAL_SPEED value:[stats[STATS_AVG] doubleValue] unit:final.unit],
+                              CALC_ASCENT_SPEED: [GCActivityCalculatedValue calculatedValue:CALC_ASCENT_SPEED value:[stats[STATS_AVGPOS] doubleValue] unit:final.unit],
+                              CALC_DESCENT_SPEED: [GCActivityCalculatedValue calculatedValue:CALC_DESCENT_SPEED value:[stats[STATS_AVGNEG] doubleValue] unit:final.unit],
+                              CALC_MAX_ASCENT_SPEED: [GCActivityCalculatedValue calculatedValue:CALC_MAX_ASCENT_SPEED value:[stats[STATS_MAX] doubleValue] unit:final.unit],
+                              CALC_MAX_DESCENT_SPEED: [GCActivityCalculatedValue calculatedValue:CALC_MAX_DESCENT_SPEED value:[stats[STATS_MIN] doubleValue] unit:final.unit],
+                              };
 
+    for (NSString * key in fields) {
+        newFields[ [GCField fieldForKey:key andActivityType:self.activityType] ] = fields[key];
+    }
     [self addEntriesToCalculatedFields:newFields];
 
     return @{CALC_VERTICAL_SPEED:final};

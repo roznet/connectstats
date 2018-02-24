@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Brice Rosenzweig. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
+#import "GCTestCase.h"
 #import "GCTrackPoint.h"
 #import "GCActivity+Database.h"
 #import "GCActivity+Import.h"
@@ -31,35 +31,23 @@
 #import "GCService.h"
 #import "GCFieldCache.h"
 #import "GCActivityTypes.h"
-#import "GCTestsHelper.h"
 #import "ConnectStats-Swift.h"
+#import "GCTrackFieldChoices.h"
+#import "GCTrackStats.h"
 
-@interface GCTestsParsing : XCTestCase
-@property (nonatomic,retain) GCTestsHelper * helper;
+@interface GCTestsParsing : GCTestCase
 
 @end
 
 @implementation GCTestsParsing
 
--(void)dealloc{
-    [_helper release];
-    [super dealloc];
-}
 
 - (void)setUp {
     [super setUp];
     
-    if( self.helper == nil){
-        self.helper = [GCTestsHelper helper];
-    }else{
-        [self.helper setUp];
-    }
 }
 
 - (void)tearDown {
-    if( self.helper){
-        [self.helper tearDown];
-    }
     [super tearDown];
 }
 
@@ -176,9 +164,7 @@
 -(void)testParseActivityTypes{
     
     GCActivityTypes * types = [ GCActivityTypes activityTypes];
-    NSLog(@"%@", types.allTypes);
-    
-    NSLog(@"%@", [types activityTypeForStravaType:@"Ride"]);
+    XCTAssertEqualObjects([types activityTypeForKey:GC_TYPE_CYCLING], [types activityTypeForStravaType:@"Ride"]);
     
     GCFieldCache * cache = [GCFieldCache cacheWithDb:nil andLanguage:@"en"];
     
@@ -207,10 +193,8 @@
         if(parent){
             display = [cache infoForActivityType:typeName].displayName;
         }
-        
-        NSLog(@"%@ parent: %@ info: %@", typeName, parent, display);
+
     }
-    NSLog(@"DONE");
 }
 
 -(void)testParseSearch{
@@ -256,43 +240,43 @@
     return rv;
 }
 
--(void)compareActivitySummaryIn:(GCActivity*)one and:(GCActivity*)two tolerance:(NSDictionary*)tolerances message:(NSString*)msg{
-    NSDictionary * oneDict = one.summaryData;
-    NSDictionary * twoDict = two.summaryData;
+-(void)compareActivitySummaryIn:(GCActivity*)one and:(GCActivity*)two tolerance:(NSDictionary<NSString*,id>*)tolerances message:(NSString*)msg{
+    NSDictionary<GCField*,GCActivitySummaryValue*> * oneDict = one.summaryData;
+    NSDictionary<GCField*,GCActivitySummaryValue*> * twoDict = two.summaryData;
     
     NSMutableDictionary * missingFromTwo = [NSMutableDictionary dictionary];
     NSMutableDictionary * missingFromOne = [NSMutableDictionary dictionary];
     
-    for (NSString * key in oneDict) {
+    for (GCField * field in oneDict) {
         // Skip corrected/uncorrected elevation
-        if( [key hasSuffix:@"orrectedElevation"]){
+        if( [field hasSuffix:@"orrectedElevation"]){
             continue;
         }
         
-        GCActivitySummaryValue * oneValue = oneDict[key];
-        GCActivitySummaryValue * twoValue = twoDict[key];
+        GCActivitySummaryValue * oneValue = oneDict[field];
+        GCActivitySummaryValue * twoValue = twoDict[field];
         
         if (twoValue) {
-            NSNumber * tolerance = tolerances[key];
+            NSNumber * tolerance = tolerances[field.key];
             if ([tolerance isKindOfClass:[NSNumber class]]) {
                 // tolerance is % (0.01 -> 1%)
                 double useTolerance = oneValue.numberWithUnit.value * tolerance.doubleValue;
-                XCTAssertTrue([oneValue.numberWithUnit compare:twoValue.numberWithUnit withTolerance:useTolerance] == NSOrderedSame, @"%@: %@ %@<>%@ (within %@)", msg, key, oneValue.numberWithUnit, twoValue.numberWithUnit, tolerance);
+                XCTAssertTrue([oneValue.numberWithUnit compare:twoValue.numberWithUnit withTolerance:useTolerance] == NSOrderedSame, @"%@: %@ %@<>%@ (within %@)", msg, field, oneValue.numberWithUnit, twoValue.numberWithUnit, tolerance);
             }else if([tolerance isKindOfClass:[NSString class]]){
                 //SKIP
             }else{
-                XCTAssertEqualObjects(oneValue, twoValue, @"%@: %@", key, msg );
+                XCTAssertEqualObjects(oneValue, twoValue, @"%@: %@", field, msg );
             }
         }else{
-            if( ![tolerances[key] isKindOfClass:[NSString class]]){
-                missingFromTwo[key] = oneValue;
+            if( ![tolerances[field.key] isKindOfClass:[NSString class]]){
+                missingFromTwo[field] = oneValue;
             }
         }
     }
     
-    for (NSString * key in twoDict) {
-        if( !oneDict[key] && ![tolerances[key] isKindOfClass:[NSString class]]){
-            missingFromOne[key] = twoDict[key];
+    for (GCField * field in twoDict) {
+        if( !oneDict[field] && ![tolerances[field.key] isKindOfClass:[NSString class]]){
+            missingFromOne[field] = twoDict[field];
         }
     }
     if(missingFromOne.count > 0 || missingFromTwo.count > 0){
@@ -302,28 +286,76 @@
     XCTAssertEqual(missingFromTwo.count, 0);
 }
 
--(void)testParseLaps{
+-(void)testParseLapsSwimming{
     
+    [[GCAppGlobal health] clearAllZones];
+    
+    // Swimming activity
     NSString * activityId = @"1027746730";//@"1378220136";
+    
+    NSString * dbfn = [NSString stringWithFormat:@"test_swimming_%@.db", activityId];
+    [RZFileOrganizer removeEditableFile:dbfn];
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:dbfn]];
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
     
     NSString * fn = [NSString stringWithFormat:@"activity_%@.json", activityId];
     NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn forClass:[self class]] options:0 error:nil];
     
     NSDictionary * json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     GCActivity * modernAct = [[[GCActivity alloc] initWithId:activityId andGarminData:json] autorelease];
+    modernAct.db = db;
+    modernAct.trackdb = db;
     
-    fn = [NSString stringWithFormat:@"activitylaps_%@.json", activityId];
-    data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn forClass:[self class]]];
-    GCGarminActivityLapsParser * lapsparser = [[[GCGarminActivityLapsParser alloc] initWithData:data forActivity:modernAct] autorelease];
-    
-    fn = [NSString stringWithFormat:@"activitytrack_%@.json", activityId];
-    data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn forClass:[self class]]];
-    GCGarminActivityDetailJsonParser * trackparser = [[[GCGarminActivityDetailJsonParser alloc] initWithData:data] autorelease];
-    
-    NSLog(@"%@", lapsparser.laps);
-    NSLog(@"%@", @(trackparser.trackPoints.count));
+    [GCGarminActivityTrack13Request testForActivity:modernAct withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:false];
+    [modernAct saveToDb:db];
     
     
+    XCTAssertGreaterThan(modernAct.trackpoints.count, 1);
+    [self compareStatsCheckSavedFor:modernAct identifier:@"modernAct" cmd:_cmd recordMode:NO];
+    
+}
+
+-(NSDictionary*)compareStatsDictFor:(GCActivity*)act{
+    GCTrackFieldChoices * choices = [GCTrackFieldChoices trackFieldChoicesWithActivity:act];
+    NSArray<GCField*>*fields = [act availableTrackFields];
+    
+    GCTrackStats * trackStats = [[GCTrackStats alloc] init];
+    trackStats.activity = act;
+    
+    // Make sure allKeys are the same and generated holders are the same
+    // then summary statistics for each field is the same.
+    NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithObject:fields forKey:@"allkeys"];
+    rv[@"holders"] = choices.choices;
+    for (NSArray<GCTrackFieldChoiceHolder *> * holders in choices.choices) {
+        XCTAssertGreaterThan(holders.count, 0);
+        if( holders.count > 0){
+            GCTrackFieldChoiceHolder*holder = holders[0];
+            [holder setupTrackStats:trackStats];
+            if( trackStats.nDataSeries > 0 && ! rv[trackStats.field]){
+                GCStatsDataSerie * serie = [trackStats dataSerie:0];
+                rv[trackStats.field] = serie.summaryStatistics;
+            }
+        }
+    }
+    return rv;
+}
+
+-(void)compareStatsAssertEqual:(NSDictionary*)rv and:(NSDictionary*)expected withMessage:(NSString*)msg{
+    XCTAssertEqualObjects(expected.allKeys, rv.allKeys,  @"Same Keys %@", msg);
+    for (NSObject<NSCopying>*key in expected) {
+        XCTAssertEqualObjects(expected[key], rv[key],  @"[%@] %@", key, msg);
+    }
+}
+
+-(void)compareStatsCheckSavedFor:(GCActivity*)act identifier:(NSString*)label cmd:(SEL)sel recordMode:(BOOL)record{
+    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
+    manager.recordMode = record;
+
+    NSDictionary * rv = [self compareStatsDictFor:act];
+    NSDictionary * expected = [manager retrieveReferenceObject:rv selector:sel identifier:label error:nil];
+    [self compareStatsAssertEqual:rv and:expected withMessage:[NSString stringWithFormat:@"%@ %@", NSStringFromSelector(sel), label]];
+
 }
 
 -(void)testParseAndCompare{
@@ -567,13 +599,29 @@
 
 -(void)testParseFitFile{
     NSDictionary * epsForField = @{
-                                   @"SumEnergy": @(1.),
-                                   @"SumElapsedDuration": @(0.02),
-                                   @"SumDuration":@(0.02),
+                                   // somehow some non sensical values:
+                                   @"MaxRunCadence": @(0.6),
                                    @"MaxSpeed":@(0.0001),
+                                   @"MaxPace":@(0.0001),
+                                   @"MinAirTemperature":@(50),
+                                   @"MinHeartRate":@(100),
+                                   @"MinSpeed":@(0.5),
+                                   @"MinPace":@(0.5),
+                                   @"SumDuration": @(125),
+                                   //@"SumDuration":@(0.02),
+                                   @"SumElapsedDuration": @(125),
+                                   //@"SumElapsedDuration": @(124.8420000000001),
+                                   @"SumEnergy": @(1.),
+                                   @"WeightedMeanAirTemperature": @(0.1),
+                                   @"WeightedMeanGroundContactTime": @(1.293747015611027),
+                                   @"WeightedMeanPace": @(0.3260718057400382),
+                                   @"WeightedMeanRunCadence": @(0.7834375),
+                                   @"WeightedMeanVerticalOscillation": @(3.051757833105739e-06),
+                                   @"WeightedMeanVerticalRatio": @(0.1),
+
                                    };
     
-    NSDictionary * expectedMissing = @{
+    NSDictionary * expectedMissingFromFit = @{
                                        @"DirectVO2Max": @"40.0 ml/kg/min",
                                        @"GainCorrectedElevation": @"844 m",
                                        @"GainUncorrectedElevation": @"861 m",
@@ -596,55 +644,196 @@
                                        @"WeightedMeanMovingPace": @"18:56 min/km",
                                        @"WeightedMeanMovingSpeed": @"3.2 km/h",
                                        @"WeightedMeanPace": @"20:14 min/km",
+
+                                       @"WeightedMeanStrideLength": @"1 m",
+                                       @"DirectLactateThresholdHeartRate": @"180 bpm",
+                                       @"WeightedMeanGroundContactBalanceLeft": @"49.2 %",
+                                       @"DirectLactateThresholdSpeed": @"3.5 mps",
+                                       @"MinVerticalRatio": @"2",
+                                       @"MaxVerticalRatio": @"41",
+                                       @"MaxGroundContactBalanceLeft": @"54",
+                                       @"MinGroundContactBalanceLeft": @"24",
+
+
                                        };
     
-    // Ski Activity
-    NSString * aId = @"1083407258";
-    
-    GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-    [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-    
-    NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
-    
-    FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
-    [fitDecode parse];
-    GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile];
-    
-    NSDictionary * sum_gc = act.summaryData;
-    NSDictionary * sum_fit= fitAct.summaryData;
-    
-    NSDictionary * expectedMissingFromGC = @{@"WeightedMeanCadence":@1, @"MaxCadence":@2};
-    
-    for (NSString * key in sum_fit) {
-        if( expectedMissingFromGC[key] != nil){
-            continue;// Somehow missing from gc
-        }
-        GCActivitySummaryValue * v_gc = sum_gc[key];
-        GCActivitySummaryValue * v_fit= sum_fit[key];
-        
-        XCTAssertNotNil(v_gc, @"Found field %@", key);
-        double eps =  1.e-7;
-        NSNumber * specialEps = epsForField[key];
-        if (specialEps) {
-            eps = specialEps.doubleValue;
-        }
-        
-        XCTAssertTrue([v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] == NSOrderedSame,
-                      @"Key %@: %@ == %@ within %@", key, v_gc.numberWithUnit, v_fit.numberWithUnit, @(eps));
-    }
-    
-    for (NSString * key in sum_gc) {
-        GCActivitySummaryValue * v_gc = sum_gc[key];
-        GCActivitySummaryValue * v_fit= sum_fit[key];
-        XCTAssertTrue(v_fit != nil || expectedMissing[key]!=nil, @"%@ %@ unexpectedly missing", key, v_gc);
-    }
-}
+    NSDictionary * expectedMissingFromGC = @{
+                                             @"MaxCadence":@2,
+                                             @"MaxElevation":@6,// elevation is all messed up (elevation correction)
+                                             @"MaxFormPower": @1,
+                                             @"MaxFractionalCadence": @1,
+                                             @"MaxGroundContactTime": @1,
+                                             @"MaxLegSpringStiffness": @1,
+                                             @"MaxPower": @1,
+                                             @"MaxVerticalOscillation": @1,
+                                             @"MinCadence":@4,
+                                             @"MinElevation":@5,
+                                             @"MinFormPower": @1,
+                                             @"MinGroundContactTime": @1,
+                                             @"MinHeartRate": @1,
+                                             @"MinLegSpringStiffness": @1,
+                                             @"MinPower": @1,
+                                             @"MinRunCadence": @1,
+                                             @"MinSpeed": @1,
+                                             @"MinPace" : @1,
+                                             @"MinVerticalOscillation": @1,
+                                             @"StanceTimePercent": @1,
+                                             @"WeightedMeanCadence":@1,
+                                             @"WeightedMeanElevation":@3,
+                                             @"WeightedMeanFormPower": @1,
+                                             @"WeightedMeanFractionalCadence": @1,
+                                             @"WeightedMeanLegSpringStiffness": @1,
+                                             @"WeightedMeanPower": @1,
+                                             @"WeightedMeanStanceTime": @1,
+                                             @"WeightedMeanStanceTimeBalance": @1,
+                                             @"WeightedMeanStanceTimePercent": @1,
+                                             @"avg_step_length":@9,
+                                             @"enhanced_max_speed":@8,
+                                             @"total_cycles":@7,
+                                             
+                                             
+                                             };
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+    
+    NSArray<NSString*>*aIds = @[ @"1083407258", // Ski Activity
+                                 @"2477200414", // Run with Power
+                                 ];
+
+    NSString * dbn_fit = @"test_activity_fit_merge.db";
+    NSString * dbn_nofit = @"test_activity_nofit_merge.db";
+    
+    [RZFileOrganizer removeEditableFile:dbn_fit];
+    [RZFileOrganizer removeEditableFile:dbn_nofit];
+    
+    FMDatabase * db_fit = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:dbn_fit]];
+    [db_fit open];
+    [GCActivitiesOrganizer ensureDbStructure:db_fit];
+    
+    FMDatabase * db_nofit = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:dbn_nofit]];
+    [db_nofit open];
+    [GCActivitiesOrganizer ensureDbStructure:db_nofit];
+    
+    [GCAppGlobal configSet:CONFIG_GARMIN_FIT_MERGE boolVal:FALSE];
+    for (NSString * aId in aIds) {
+        GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        act.db = db_nofit;
+        act.trackdb = db_nofit;
+        [act saveToDb:db_nofit];
+        [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+
+        GCActivity * actMerge = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        actMerge.db = db_fit;
+        actMerge.trackdb = db_fit;
+        [actMerge saveToDb:db_fit];
+        [GCGarminActivityTrack13Request testForActivity:actMerge withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:TRUE];
+        [actMerge saveToDb:db_fit];
+        
+        GCActivity * actMergeReload = [GCActivity activityWithId:aId andDb:db_fit];
+        [actMergeReload trackpoints]; // force load trackpoints
+        
+        NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
+        
+        FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
+        [fitDecode parse];
+        GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile];
+        
+        // All trackfield fields merged
+        for (GCField * one in act.availableTrackFields) {
+            XCTAssertTrue([actMergeReload.availableTrackFields containsObject:one], @"%@ in merge reload %@", one, aId);
+            XCTAssertTrue([actMerge.availableTrackFields containsObject:one], @"%@ in merge %@", one, aId);
+        }
+        for (GCField * one in fitAct.availableTrackFields) {
+            BOOL found = [actMergeReload.availableTrackFields containsObject:one];
+            if( ! found && one.correspondingPaceOrSpeedField){
+                found = [actMergeReload.availableTrackFields containsObject:one.correspondingPaceOrSpeedField];
+            }
+            XCTAssertTrue(found, @"%@ in merge reload %@", one, aId);
+            
+            found = [actMerge.availableTrackFields containsObject:one];
+            if( ! found && one.correspondingPaceOrSpeedField){
+                found = [actMerge.availableTrackFields containsObject:one.correspondingPaceOrSpeedField];
+            }
+            XCTAssertTrue(found, @"%@ in merge %@", one, aId);
+        }
+
+        NSDictionary * sum_gc = act.summaryData;
+        NSDictionary * sum_fit= fitAct.summaryData;
+        NSDictionary * sum_merge= actMerge.summaryData;
+        NSDictionary * sum_reload= actMergeReload.summaryData;
+        
+        NSMutableArray * recordMissing = [NSMutableArray array];
+        NSMutableArray * recordEpsilon = [NSMutableArray array];
+        
+        for (GCField * field in sum_fit) {
+            GCActivitySummaryValue * v_fit= sum_fit[field];
+            GCActivitySummaryValue * v_merge=sum_merge[field];
+            GCActivitySummaryValue * v_reload=sum_reload[field];
+
+            // Everything in fit should be in merge and reload
+            XCTAssertNotNil(v_merge);
+            XCTAssertNotNil(v_reload);
+            
+            // SOme won't be in gc, then skip
+            if( expectedMissingFromGC[field.key] != nil){
+                continue;// Somehow missing from gc
+            }
+            GCActivitySummaryValue * v_gc = sum_gc[field];
+            if( v_gc == nil && field.correspondingPaceOrSpeedField ){
+                v_gc = sum_gc[field.correspondingPaceOrSpeedField];
+            }
+            double eps =  1.e-7;
+            NSNumber * specialEps = epsForField[field.key];
+            if (specialEps) {
+                eps = specialEps.doubleValue;
+            }
+            
+            if( v_gc == nil ){
+                [recordMissing addObject:[NSString stringWithFormat:@" @\"%@\": @1", field.key]];
+            }
+            if( [v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] != NSOrderedSame ){
+                GCNumberWithUnit * diff = [v_gc.numberWithUnit addNumberWithUnit:v_fit.numberWithUnit weight:-1.0];
+                
+                [recordEpsilon addObject:[NSString stringWithFormat:@" @\"%@\": @(%@)", field.key, @(diff.value)]];
+            }
+            XCTAssertNotNil(v_gc, @"Found field %@", field);
+            if( v_gc ){
+                XCTAssertTrue([v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] == NSOrderedSame,
+                              @"Key %@: %@ == %@ within %@", field, v_gc.numberWithUnit, v_fit.numberWithUnit, @(eps));
+            }
+        }
+        if( recordEpsilon.count > 0){
+            for (NSString * one in recordEpsilon) {
+                NSLog(@"%@,", one);
+            }
+        }
+        if( recordMissing.count > 0){
+            for (NSString * one in recordMissing) {
+                NSLog(@"%@,", one);
+            }
+        }
+        [recordMissing removeAllObjects];
+        for (GCField * field in sum_gc) {
+            // everything should be in reload and merge
+            XCTAssertNotNil(sum_reload[field]);
+            XCTAssertNotNil(sum_merge[field]);
+            
+            GCActivitySummaryValue * v_gc = sum_gc[field];
+            GCActivitySummaryValue * v_fit= sum_fit[field];
+            if( v_fit == nil && field.correspondingPaceOrSpeedField){
+                v_fit = sum_fit[field.correspondingPaceOrSpeedField];
+            }
+
+            if( v_fit == nil && expectedMissingFromFit[field.key] == nil){
+                [recordMissing addObject:[NSString stringWithFormat:@"@\"%@\": @\"%@\"", field.key, v_gc.numberWithUnit]];
+            }
+            XCTAssertTrue(v_fit != nil || expectedMissingFromFit[field.key]!=nil, @"%@ %@ unexpectedly missing", field, v_gc);
+        }
+        if(recordMissing.count > 0){
+            for (NSString * one in recordMissing) {
+                NSLog(@"%@,", one);
+            }
+        }
+    }
 }
 
 -(void)testHealthCollected{
@@ -654,5 +843,6 @@
     NSLog(@"%d", (int)dict.count);
      */
 }
+
 
 @end

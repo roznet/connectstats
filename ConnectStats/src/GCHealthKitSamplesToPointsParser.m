@@ -144,12 +144,13 @@ double kGCTrackPointsMinimumSpeedMps = 0.3;
             }
             NSNumber * fieldNum = defs[ sample.quantityType.identifier];
             if (fieldNum) {
-                gcFieldFlag field = fieldNum.intValue;
-                GCUnit * unit = [GCTrackPoint unitForField:field andActivityType:self.activityType ];
+                gcFieldFlag fieldFlag = fieldNum.intValue;
+                GCField * field = [GCField fieldForFlag:fieldFlag andActivityType:self.activityType];
+                GCUnit * unit = [GCTrackPoint unitForField:fieldFlag andActivityType:self.activityType ];
                 GCNumberWithUnit * num = [GCNumberWithUnit numberWithUnit:unit andQuantity:sample.quantity];
-                [point setValue:num.value forField:field];
-                point.trackFlags |= field;
-                self.trackFlags |= field;
+                [point setNumberWithUnit:num forField:field inActivity:nil];
+                point.trackFlags |= fieldFlag;
+                self.trackFlags |= fieldFlag;
             }
         }
     }

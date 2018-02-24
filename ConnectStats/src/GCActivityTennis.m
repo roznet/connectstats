@@ -34,6 +34,7 @@
 #import "GCService.h"
 #import "GCActivityTennisHeatmap.h"
 #import "GCActivity+Fields.h"
+#import "GCActivity+Database.h"
 
 @interface GCActivityTennis ()
 @property (nonatomic,retain) NSDictionary * shotsData;
@@ -79,7 +80,7 @@
 }
 
 -(double)shots{
-    GCActivitySummaryValue * sum = (self.summaryData)[@"shots"];
+    GCActivitySummaryValue * sum = self.summaryData[[GCField fieldForKey:@"shots" andActivityType:self.activityType]];
     return sum.numberWithUnit.value;
 }
 -(void)parseJson:(NSMutableDictionary*)aData{
@@ -95,12 +96,12 @@
                 displayName:NSLocalizedString(@"Tennis", @"Activity Type")
                 andUnitName:@"dimensionless"];
 
-    self.activityTypeDetail = aData[@"type"];
+    self.activityTypeDetail = [GCActivityType activityTypeForKey:aData[@"type"]];
     self.activityName = aData[@"type"];
 
-    [GCFields registerField:self.activityTypeDetail
-               activityType:self.activityTypeDetail
-                displayName:self.activityTypeDetail
+    [GCFields registerField:self.activityTypeDetail.key
+               activityType:self.activityTypeDetail.key
+                displayName:self.activityTypeDetail.key
                 andUnitName:@"dimensionless"];
 
     self.date = [NSDate dateForBabolatTimeString:start_date];
@@ -111,8 +112,8 @@
     self.sumDuration = timeMinutes.doubleValue*60.;
 
 
-    self.summaryData = @{@"SumDuration":[GCActivitySummaryValue activitySummaryValueForDict:@{@"value":@(self.sumDuration),@"uom":@"second"} andField:@"SumDuration"],
-                         @"shots":[GCActivitySummaryValue activitySummaryValueForDict:@{@"value":shots,@"uom":@"shots"} andField:@"shots"]};
+    [self setSummaryDataFromKeyDict:@{@"SumDuration":[GCActivitySummaryValue activitySummaryValueForDict:@{@"value":@(self.sumDuration),@"uom":@"second"} andField:@"SumDuration"],
+                         @"shots":[GCActivitySummaryValue activitySummaryValueForDict:@{@"value":shots,@"uom":@"shots"} andField:@"shots"]}];
 
     self.flags  = gcFieldFlagSumDuration+gcFieldFlagTennisShots;
     self.speedDisplayUom = @"kph";
@@ -210,7 +211,8 @@
             NSString * uom = predefined[key][0];
             GCNumberWithUnit * numu = [GCNumberWithUnit numberWithUnitName:uom andValue:dval];
             GCActivitySummaryValue * sumval = [GCActivitySummaryValue activitySummaryValueForField:key value:numu];
-            sumdata[key] = sumval;
+            GCField * field = [GCField fieldForKey:key andActivityType:self.activityType];
+            sumdata[field] = sumval;
 
         }else if( metaFields[key]){
             id val = json[key];
@@ -439,16 +441,20 @@
 
 #pragma mark -
 
--(NSArray*)allFields{
-    NSArray * rv = [super allFields];
-    rv = [rv arrayByAddingObjectsFromArray:(self.shotsData).allKeys];
+-(NSArray<GCField*>*)allFields{
+    NSMutableArray<GCField*> * rv = [NSMutableArray arrayWithArray:[super allFields]];
+    for (NSString * key in self.shotsData) {
+        [rv addObject:[GCField fieldForKey:key andActivityType:self.activityType]];
+    }
 
     NSMutableArray * hf = [NSMutableArray arrayWithCapacity:self.heatmaps.count];
     for (NSString * type in self.heatmaps) {
-        [hf  addObject:[GCActivityTennisHeatmap heatmapField:type location:gcHeatmapLocationCenter]];
+        GCField * field = [GCField fieldForKey:[GCActivityTennisHeatmap heatmapField:type location:gcHeatmapLocationCenter] andActivityType:self.activityType];
+        [hf  addObject:field];
     }
+    [rv addObjectsFromArray:hf];
 
-    return [rv arrayByAddingObjectsFromArray:hf];
+    return rv;
 }
 -(BOOL)hasField:(GCField*)field{
     return (self.shotsData)[field.key] || [super hasField:field];

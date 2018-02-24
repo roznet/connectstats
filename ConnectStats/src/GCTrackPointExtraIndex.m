@@ -24,8 +24,7 @@
 //  
 
 #import "GCTrackPointExtraIndex.h"
-
-size_t kMaxExtraIndex = 16;
+#import "GCField.h"
 
 @interface GCTrackPointExtraIndex ()
 
@@ -33,35 +32,37 @@ size_t kMaxExtraIndex = 16;
 
 @implementation GCTrackPointExtraIndex
 
-+(GCTrackPointExtraIndex*)extraIndexForField:(NSString*)field withUnit:(GCUnit*)unit in:(NSDictionary*)cache{
++(GCTrackPointExtraIndex*)extraIndexForField:(GCField*)field withUnit:(GCUnit*)unit in:(NSDictionary*)cache{
     if (cache[field]) {
         return cache[field];
     }
     size_t nextidx = cache.count;
-    if (nextidx < kMaxExtraIndex) {
-        return [GCTrackPointExtraIndex extraIndex:nextidx key:field andUnit:unit];
-    }
-    return nil;
+    
+    return [GCTrackPointExtraIndex extraIndex:nextidx field:field andUnit:unit];
 }
 
-+(GCTrackPointExtraIndex*)extraIndex:(size_t)idx key:(NSString *)key andUnit:(GCUnit *)unit{
++(GCTrackPointExtraIndex*)extraIndex:(size_t)idx field:(GCField*)field andUnit:(GCUnit*)unit{
     GCTrackPointExtraIndex * rv = [[[GCTrackPointExtraIndex alloc] init] autorelease];
     if (rv) {
         rv.unit = unit;
         rv.idx = idx;
-        rv.key = key;
+        rv.field = field;
     }
     return rv;
 }
 
+-(NSString *)dataColumnName{
+    return self.field.key;
+}
+
 -(void)dealloc{
     [_unit release];
-    [_key release];
+    [_field release];
     [super dealloc];
 }
 
 -(NSString*)description{
-    return [NSString stringWithFormat:@"<%@: %@ [%lu] %@>",NSStringFromClass(self.class), _key, (unsigned long)_idx, _unit ];
+    return [NSString stringWithFormat:@"<%@: %@ [%lu] %@>",NSStringFromClass(self.class), _field, (unsigned long)_idx, _unit ];
 }
 
 @end

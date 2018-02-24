@@ -32,7 +32,9 @@
 #import "GCLapSwim.h"
 #import "GCActivity.h"
 #import "GCActivitiesOrganizer.h"
+@import RZUtils;
 @import RZExternal;
+#import "ConnectStats-Swift.h"
 
 @interface GCGarminActivityTrack13Request ()
 @property (nonatomic,retain) GCActivity * activity;
@@ -125,12 +127,11 @@
     }else if(self.track13Stage == gcTrack13RequestLaps){
         return GCWebActivityURLSplits(self.activityId);
     }else if(self.track13Stage == gcTrack13RequestFit){
-#if TARGET_IPHONE_SIMULATOR
-        return GCWebActivityURLFitFile(self.activityId);
-#else
-
-        return nil;
-#endif
+        if( [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_DOWNLOAD defaultValue:TRUE]){
+            return GCWebActivityURLFitFile(self.activityId);
+        }else{
+            return nil;
+        }
     }else{
         return GCWebActivityURL(self.activityId);
     }
@@ -149,7 +150,7 @@
             fn =[NSString stringWithFormat:@"activity_%@.tcx", activityId];
             break;
         case gcTrack13RequestFit:
-            fn = [NSString stringWithFormat:@"activity_%@.fit", activityId];
+            fn = [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_DOWNLOAD defaultValue:TRUE] ? [NSString stringWithFormat:@"activity_%@.fit", activityId] : nil;
             break;
         case gcTrack13RequestEnd:
             fn = nil;
@@ -217,7 +218,7 @@
                 if (success) {
                     [RZFileOrganizer removeEditableFile:zn];
                 }
-
+                
             }else{
                 RZLog(RZLogError, @"Failed to save %@. %@", fn, e.localizedDescription);
             }
@@ -288,6 +289,7 @@
             }else{
                 [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpoints:self.trackpoints andLaps:self.laps];
             }
+            [self processMergeFitFile];
         }else{
             RZLog(RZLogError, @"laps or trackpoints missing");
             self.status = GCWebStatusParsingFailed;
@@ -300,7 +302,9 @@
     if (self.track13Stage + 1 < gcTrack13RequestEnd) {
         [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
     }else{
-        [self processSaving];
+        dispatch_async([GCAppGlobal worker],^(){
+            [self processSaving];
+        });
     }
 }
 
@@ -329,6 +333,19 @@
     [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
 }
 
+-(void)processMergeFitFile{
+    if( [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_DOWNLOAD defaultValue:TRUE] && [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_MERGE defaultValue:FALSE]){
+        NSString * fn = [GCGarminActivityTrack13Request stageFilename:gcTrack13RequestFit forActivityId:self.activityId];
+        
+        FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:[RZFileOrganizer writeableFilePath:fn]];
+        [fitDecode parse];
+        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activityId fitFile:fitDecode.fitFile]);
+        
+        [self.activity updateTrackpointsFromActivity:fitAct];
+        
+    }
+}
+
 -(id<GCWebRequest>)nextReq{
     if (self.track13Stage+1<gcTrack13RequestEnd) {
         return [GCGarminActivityTrack13Request nextRequest:self];
@@ -337,10 +354,14 @@
 }
 
 +(GCActivity*)testForActivity:(GCActivity*)act withFilesIn:(NSString*)path{
+    return [self testForActivity:act withFilesIn:path mergeFit:FALSE];
+}
++(GCActivity*)testForActivity:(GCActivity*)act withFilesIn:(NSString*)path mergeFit:(BOOL)mergeFit{
 
     NSString * fnTracks = [path stringByAppendingPathComponent:[self stageFilename:gcTrack13RequestTracks forActivityId:act.activityId]];
     NSString * fnLaps   = [path stringByAppendingPathComponent:[self stageFilename:gcTrack13RequestLaps forActivityId:act.activityId]];
-
+    NSString * fnFit = [path stringByAppendingPathComponent:[self stageFilename:gcTrack13RequestFit forActivityId:act.activityId]];
+    
     if (fnTracks && fnLaps) {
 
         NSData * trackdata = [NSData dataWithContentsOfFile:fnTracks];
@@ -354,6 +375,15 @@
                 [act saveTrackpointsSwim:(parserLaps.trackPointSwim ?: @[]) andLaps:(parserLaps.lapsSwim ?: @[]) ];
             }else{
                 [act saveTrackpoints:(parserTracks.trackPoints ?:@[]) andLaps:(parserLaps.laps ?:@[])];
+            }
+            
+            if( mergeFit && fnFit && [[NSFileManager defaultManager] fileExistsAtPath:fnFit] ){
+                FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fnFit];
+                [fitDecode parse];
+                GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:act.activityId fitFile:fitDecode.fitFile]);
+                [act updateSummaryDataFromActivity:fitAct];
+                [act updateTrackpointsFromActivity:fitAct];
+                [act saveTrackpoints:act.trackpoints andLaps:act.laps];
             }
             return act;
         }else{

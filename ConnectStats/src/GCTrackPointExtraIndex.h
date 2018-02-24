@@ -25,14 +25,17 @@
 
 #import <Foundation/Foundation.h>
 
-extern size_t kMaxExtraIndex;
+@class GCField;
+
 
 @interface GCTrackPointExtraIndex : NSObject
 
 @property (nonatomic,assign) size_t idx;
 @property (nonatomic,retain) GCUnit * unit;
-@property (nonatomic,retain) NSString* key;
+@property (nonatomic,retain) GCField* field;
 
-+(GCTrackPointExtraIndex*)extraIndex:(size_t)idx key:(NSString*)key andUnit:(GCUnit*)unit;
-+(GCTrackPointExtraIndex*)extraIndexForField:(NSString*)field withUnit:(GCUnit*)unit in:(NSDictionary*)cache;
+@property (nonatomic,readonly) NSString * dataColumnName;
+
++(GCTrackPointExtraIndex*)extraIndex:(size_t)idx field:(GCField*)field andUnit:(GCUnit*)unit;
++(GCTrackPointExtraIndex*)extraIndexForField:(GCField*)field withUnit:(GCUnit*)unit in:(NSDictionary*)cache;
 @end

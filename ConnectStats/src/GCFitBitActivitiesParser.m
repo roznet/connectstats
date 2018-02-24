@@ -27,7 +27,7 @@
 #import "GCActivity.h"
 #import "GCActivitySummaryValue.h"
 #import "GCService.h"
-
+#import "GCActivity+Database.h"
 // Running Id: 90009
 // Biking  Id: 90001
 
@@ -63,7 +63,7 @@
     GCActivity * activity = [[[GCActivity alloc] init] autorelease];
     activity.date = self.date;
     activity.activityType = GC_TYPE_DAY;
-    activity.activityTypeDetail = GC_TYPE_DAY;
+    activity.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_DAY];
 
     NSDictionary * goalMap = @{
                                @"activeMinutes": @[ @"GoalSumDuration", @"minute"],
@@ -164,7 +164,7 @@
     activity.activityName = @"";
     activity.location = @"";
     activity.speedDisplayUom = @"kph";
-    activity.summaryData = summaryData;
+    [activity setSummaryDataFromKeyDict:summaryData];
     activity.metaData = metaData;
     activity.downloadMethod = gcDownloadMethodFitFile;
     if (activity.sumDistance > 0. || activity.sumDuration > 0.) {

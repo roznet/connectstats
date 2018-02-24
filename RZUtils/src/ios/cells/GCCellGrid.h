@@ -93,6 +93,7 @@ typedef void(^refreshGCCellGridFunc)(GCCellGrid*cell);
 @property (nonatomic,assign) CGFloat cellInsetSize;
 
 +(GCCellGrid*)gridCell:(UITableView*)tableView;
++(GCCellGrid*)cellGrid:(UITableView*)tableView;
 
 -(void)setupForRows:(NSUInteger)nRows andCols:(NSUInteger)nCols;
 -(void)setIconImage:(UIImage*)aImg;

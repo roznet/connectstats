@@ -33,8 +33,8 @@
  NSArray of NSArray containing field Keys as NSString for related fields
  This is populated by the logic in [GCActivity groupedFields]
  */
-@property (nonatomic,retain) NSArray * groupedPrimaryFields;
-@property (nonatomic,retain) NSArray * groupedOtherFields;
+@property (nonatomic,retain) NSArray<NSArray<GCField*>*> * groupedPrimaryFields;
+@property (nonatomic,retain) NSArray<NSArray<GCField*>*> * groupedOtherFields;
 
 @end
 

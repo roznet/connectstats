@@ -12,11 +12,11 @@ class FITFitFileInterpret: NSObject {
 
     private let fitFile:FITFitFile
     
-    public lazy var activityType : String = {
-        if let sport = self.fitFile["sport"]?[0]?["sport"].enumValue {
-            return sport
+    public lazy var activityType : GCActivityType = {
+        if let sport =  self.fitFile["sport"]?[0]?["sport"].enumValue  {
+            return GCActivityType(forKey: sport)
         }
-        return "all"
+        return GCActivityType.all()
     }()
     
     init(fitFile file:FITFitFile){
@@ -29,11 +29,13 @@ class FITFitFileInterpret: NSObject {
     ///
     /// - Parameter fitMessageFields: fields to convert
     /// - Returns: dictionary
-    func summaryValues(fitMessageFields:FITFitMessageFields) -> [String:GCActivitySummaryValue] {
-        var rv :[String:GCActivitySummaryValue] = [:]
+    func summaryValues(fitMessageFields:FITFitMessageFields) -> [GCField:GCActivitySummaryValue] {
+        var rv :[GCField:GCActivitySummaryValue] = [:]
         for field in fitMessageFields {
-            if let key = field as? String, let v = self.summaryValue(fitField: fitMessageFields[key]){
-                rv[v.field] = v
+            if let key = field as? String,
+                let v = self.summaryValue(fitField: fitMessageFields[key]),
+                let f = fieldKey(fitField: key){
+                rv[ f ] = v
             }
         }
         
@@ -146,7 +148,7 @@ class FITFitFileInterpret: NSObject {
             var nu = nwu
             
             // do a couple of standard corrections
-            if activityType == GC_TYPE_RUNNING && nu.unit == GCUnit.rpm() {
+            if activityType.key == GC_TYPE_RUNNING && nu.unit == GCUnit.rpm() {
                 nu.unit = GCUnit.stepsPerMinute()
             }
             
@@ -154,14 +156,14 @@ class FITFitFileInterpret: NSObject {
             if nu.unit == GCUnit.mps(){
                 nu = nu.convert(to: GCUnit.kph())
             }
-            rv = GCActivitySummaryValue(forField: activityField, value: nu)
+            rv = GCActivitySummaryValue(forField: activityField.key, value: nu)
         }
         
         return rv;
     }
     
-    func fieldKey(fitField:String) -> String?{
-        let found = FITFitEnumMap.activityField(fromFitField: fitField, forActivityType: self.activityType)
+    func fieldKey(fitField:String) -> GCField?{
+        let found = FITFitEnumMap.activityField(fromFitField: fitField, forActivityType: self.activityType.topSubRoot().key)
         
         return found
     }

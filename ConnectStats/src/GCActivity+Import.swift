@@ -13,8 +13,10 @@ public extension GCActivity {
     @objc public convenience init(withId activityId:String, fitFile:FITFitFile){
         self.init(id: activityId)
         let interp  = FITFitFileInterpret(fitFile: fitFile)
-        self.activityType = interp.activityType
-        self.activityTypeDetail = self.activityType
+        
+        let type  = interp.activityType
+        self.activityType = type.topSubRoot().key
+        self.activityTypeDetail = type
         self.activityName = ""
         self.location = ""
         
@@ -51,11 +53,44 @@ public extension GCActivity {
                     }
                     if let point = GCTrackPoint(coordinate2D: coord, at: timestamp, for: values, in: self) {
                         trackpoints.append(point)
+                        self.trackFlags |= point.trackFlags
                     }
                 }
             }
-            self.saveTrackpoints(trackpoints, andLaps: [])
+            // Don't save to db
+            self.trackpoints = trackpoints
+            self.updateSummary(fromTrackpoints: trackpoints, missingOnly: true)
         }
+    }
 
+    @objc public func mergeFrom(other : GCActivity){
+        let fields = self.availableTrackFields()
+        let otherFields = other.self.availableTrackFields()
+        
+        print("\(fields!)")
+        print("\(otherFields!)")
+        
+        if let to = self.trackpoints, let from = other.trackpoints {
+            var i = from.makeIterator()
+            if var merge = i.next() {
+                var tryMore = true
+                var count = 0
+
+                for point in to {
+                    
+                    while( tryMore && merge.time < point.time){
+                        if let more = i.next() {
+                            merge = more
+                        }else{
+                            tryMore = false
+                        }
+                    }
+                    if( merge.time == point.time){
+                        count+=1
+                    }
+                }
+                print("\(count)/\(to.count) \(from.count)")
+            }
+        }
     }
 }

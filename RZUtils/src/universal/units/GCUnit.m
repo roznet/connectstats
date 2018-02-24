@@ -219,6 +219,7 @@ void registerUnits(){
             registerSimple( @[ @"ml/kg/min", @"ml/kg/min", @"ml/kg/min"]);
             registerSimple( @[ @"volt", @"Volt", @""]);
             registerSimpl0( @[ @"watt", @"Watts", @"W"]);
+            registerSimple( @[ @"kN/m", @"kN/m", @"kN/m"]);
 
             registerSimpl0( @[ @"strokesPerMinute", @"strokes/min", @"strokes/min"]);
 

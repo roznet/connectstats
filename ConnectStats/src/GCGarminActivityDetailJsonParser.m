@@ -106,8 +106,48 @@
     return rv;
 }
 
+-(NSArray*)descriptorsWithDeveloperFields:(NSArray*)descriptors{
+    static NSDictionary * defs = nil;
+    if( defs == nil){
+        defs = @{
+                            @"660a581e-5301-460c-8f2f-034c8b6dc90f":@{
+                                    @0: @[ @"WeightedMeanPower", @"watt" ],
+                                    @2: @[ @"WeightedMeanRunPower", @"stepPerMinutes"],
+                                    @3: @[ @"WeightedMeanGroundContactTime", @"ms"],
+                                    @4: @[ @"WeigthedMeanVerticalOscillation", @"centimeter"],
+                                    @7: @[ @"GainElevation", @"meter"],
+                                    @8: @[ @"WeightedMeanFormPower", @"watt"],
+                                    @9: @[ @"WeightedMeanLegSpringStiffness", @"kN/m"],
+                                    }
+                            };
+        [defs retain];
+    }
+    
+    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:descriptors.count];
+        
+    for (NSDictionary * one in descriptors) {
+        NSDictionary * use = one;
+        if( one[@"appID"] && one[ @"developerFieldNumber"]){
+            NSMutableDictionary * fixed = [NSMutableDictionary dictionaryWithDictionary:one];
+            fixed[@"unit"] = @"dimensionless";
+            NSDictionary * appDefs = defs[ one[ @"appID" ]];
+            NSNumber * devNum = one[ @"developerFieldNumber" ];
+            NSArray * devFieldDef = appDefs[ devNum];
+            if(devFieldDef ){
+                fixed[@"key"] = devFieldDef[0];
+                fixed[@"unit"] = @{@"key":devFieldDef[1]};
+            }
+            
+            use = [NSDictionary dictionaryWithDictionary:fixed];
+        }
+        [rv addObject:use];
+    }
+    
+    return rv;
+}
+
 -(NSArray*)parseModernFormat:(NSDictionary*)data{
-    NSArray * descriptors = data[@"metricDescriptors"];
+    NSArray * descriptors = [self descriptorsWithDeveloperFields:data[@"metricDescriptors"]];
     NSArray * metrics = data[@"activityDetailMetrics"];
     NSMutableArray * rv = nil;
     BOOL errorReported = false;
@@ -128,7 +168,7 @@
                             double measure = [values[index] doubleValue];
                             NSString * key = defs[@"key"];
                             NSString * unitkey = nil;
-
+                            
                             NSDictionary * unitDict = defs[@"unit"];
                             if( [unitDict isKindOfClass:[NSDictionary class]]){
                                 unitkey = unitDict[@"key"];

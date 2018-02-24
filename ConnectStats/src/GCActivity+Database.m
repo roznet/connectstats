@@ -140,7 +140,7 @@
         RZLog(RZLogError, @"db update %@", [db lastErrorMessage]);
     }
 
-    for (NSString * field in self.summaryData) {
+    for (GCField * field in self.summaryData) {
         GCActivitySummaryValue * data = self.summaryData[field];
         [data saveToDb:db forActivityId:self.activityId];
     }
@@ -170,21 +170,32 @@
     [res close];
 }
 
+-(void)setSummaryDataFromKeyDict:(NSDictionary<NSString*,GCActivitySummaryValue*>*)v{
+    NSMutableDictionary<GCField*,GCActivitySummaryValue*>*newSum = [NSMutableDictionary dictionaryWithCapacity:v.count];
+    
+    NSString * activityType = self.activityType;
+    
+    for (NSString * key in v) {
+        newSum[ [GCField fieldForKey:key andActivityType:activityType]] = v[key];
+    }
+    self.summaryData = newSum;
+}
 
 -(void)loadSummaryDataFrom:(FMDatabase*)db{
     FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_activities_values WHERE activityId = ?",self.activityId];
-    NSMutableDictionary * val =[NSMutableDictionary dictionaryWithCapacity:20];
+    NSMutableDictionary<NSString*,GCActivitySummaryValue*> * val =[NSMutableDictionary dictionaryWithCapacity:20];
     while ([res next]) {
         val[[res stringForColumn:@"field"]] = [GCActivitySummaryValue activitySummaryValueForResultSet:res];
     }
-    self.summaryData = [NSDictionary dictionaryWithDictionary:val];
 
-    val = [NSMutableDictionary dictionaryWithCapacity:5];
+    [self setSummaryDataFromKeyDict:val];
+
+    NSMutableDictionary<NSString*,GCActivityMetaValue*>* mval = [NSMutableDictionary dictionaryWithCapacity:5];
     res = [db executeQuery:@"SELECT * FROM gc_activities_meta WHERE activityId = ?", self.activityId];
     while ([res next]) {
-        val[[res stringForColumn:@"field"]] = [GCActivityMetaValue activityValueForResultSet:res];
+        mval[[res stringForColumn:@"field"]] = [GCActivityMetaValue activityValueForResultSet:res];
     }
-    self.metaData = val;
+    self.metaData = mval;
 
     [GCFieldsCalculated addCalculatedFields:self];
 
