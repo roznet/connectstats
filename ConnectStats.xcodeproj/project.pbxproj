@@ -2963,6 +2963,7 @@
 		4290238A18EA070300CBF398 /* GCSportTracksActivityListParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSportTracksActivityListParser.m; path = src/GCSportTracksActivityListParser.m; sourceTree = "<group>"; };
 		4290238C18EA17F000CBF398 /* GCSportTracksActivityDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSportTracksActivityDetail.h; path = src/GCSportTracksActivityDetail.h; sourceTree = "<group>"; };
 		4290238D18EA17F000CBF398 /* GCSportTracksActivityDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSportTracksActivityDetail.m; path = src/GCSportTracksActivityDetail.m; sourceTree = "<group>"; };
+		42902C0C20431A560058FB28 /* HealthStats.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = HealthStats.entitlements; path = HealthStats/HealthStats.entitlements; sourceTree = "<group>"; };
 		4292B6CA1B1C66B400C7C05D /* GCHealthKitDayDetailRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitDayDetailRequest.h; path = src/GCHealthKitDayDetailRequest.h; sourceTree = "<group>"; };
 		4292B6CB1B1C66B400C7C05D /* GCHealthKitDayDetailRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitDayDetailRequest.m; path = src/GCHealthKitDayDetailRequest.m; sourceTree = "<group>"; };
 		42934F041979AD960031532D /* ConnectStats.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ConnectStats.entitlements; sourceTree = "<group>"; };
@@ -5800,6 +5801,7 @@
 		428FF6FE15F36888007A88FA = {
 			isa = PBXGroup;
 			children = (
+				42902C0C20431A560058FB28 /* HealthStats.entitlements */,
 				42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */,
 				423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */,
 				4245CD811B7DE351006B85B4 /* Common */,
@@ -10866,6 +10868,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = HealthStatsAppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HealthStats/HealthStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -10907,6 +10910,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = HealthStatsAppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HealthStats/HealthStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;

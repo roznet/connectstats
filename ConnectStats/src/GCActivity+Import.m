@@ -768,8 +768,8 @@
         self.distanceDisplayUom = [[GCUnit unitForKey:@"kilometer"] unitForGlobalSystem].key;
 
         NSMutableDictionary * sumData = [NSMutableDictionary dictionary];
-        for (NSString * field in data) {
-            id obj = data[field];
+        for (NSString * fieldkey in data) {
+            id obj = data[fieldkey];
             NSString * str = nil;
             GCNumberWithUnit * nu = nil;
             NSDate * da = nil;
@@ -782,20 +782,20 @@
                 da = obj;
             }
 
-            if ([field isEqualToString:@"activityType"] && str) {
+            if ([fieldkey isEqualToString:@"activityType"] && str) {
                 self.activityTypeDetail = [GCActivityType activityTypeForKey:str];
-            }else if ([field isEqualToString:@"BeginTimestamp"] && da){
+            }else if ([fieldkey isEqualToString:@"BeginTimestamp"] && da){
                 self.date = da;
             }else if (nu) {
-                gcFieldFlag flag = [GCFields trackFieldFromActivityField:field];
+                gcFieldFlag flag = [GCFields trackFieldFromActivityField:fieldkey];
                 if (flag != gcFieldFlagNone) {
                     [self setSummaryField:flag with:nu];
                 }
-                GCActivitySummaryValue * val = [self buildSummaryValue:field
+                GCActivitySummaryValue * val = [self buildSummaryValue:fieldkey
                                                                    uom:nu.unit.key
                                                              fieldFlag:flag
                                                               andValue:nu.value];
-                sumData[field] = val;
+                sumData[ [GCField fieldForKey:fieldkey andActivityType:self.activityType] ] = val;
             }
         }
         self.summaryData = sumData;
