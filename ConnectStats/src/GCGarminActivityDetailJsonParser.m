@@ -107,6 +107,10 @@
 }
 
 -(NSArray*)descriptorsWithDeveloperFields:(NSArray*)descriptors{
+    if( ![descriptors isKindOfClass:[NSArray class]] ){
+        return nil;
+    }
+    
     static NSDictionary * defs = nil;
     if( defs == nil){
         defs = @{
@@ -152,7 +156,7 @@
     NSMutableArray * rv = nil;
     BOOL errorReported = false;
     BOOL errorReportedDefs = false;
-    if ([metrics isKindOfClass:[NSArray class]]) {
+    if (descriptors && [metrics isKindOfClass:[NSArray class]]) {
         rv = [NSMutableArray arrayWithCapacity:metrics.count];
         for (NSDictionary * one in metrics) {
             NSArray * values = one[@"metrics"];

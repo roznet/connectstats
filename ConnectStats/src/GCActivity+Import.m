@@ -33,6 +33,7 @@
 #import "GCTrackPoint.h"
 #import "GCHealthKitSamplesToPointsParser.h"
 #import "GCActivityType.h"
+#import "GCActivityTypes.h"
 
 #ifdef GC_USE_HEALTHKIT
 #import <HealthKit/HealthKit.h>
@@ -877,19 +878,8 @@
     self.location = @"";
     if (self.activityType == nil) {
         self.activityType = GC_TYPE_OTHER;
-        NSDictionary * subtypes= @{
-                                   @"NordicSki":@"cross_country_skiing",
-                                   @"AlpineSki":@"resort_skiing_snowboarding",
-                                   @"BackcountrySki": @"backcountry_skiing_snowboarding",
-                                   //IceSkate
-                                   //InlineSkate
-                                   //Kitesurf
-                                   //RollerSki
-                                   //Windsurf
-                                   //Snowboard
-                                   //Snowshoe
-                                   };
-        self.activityTypeDetail = [GCActivityType  activityTypeForKey:subtypes[data[@"type"]]];
+        GCActivityType * atype = [[GCActivityTypes activityTypes] activityTypeForStravaType:data[@"type"]];
+        self.activityTypeDetail = atype;
         if (self.activityTypeDetail==nil) {
             self.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_OTHER];
         }
