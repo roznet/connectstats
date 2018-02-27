@@ -33,6 +33,7 @@
 #import "GCTrackPoint.h"
 #import "GCHealthKitSamplesToPointsParser.h"
 #import "GCActivityType.h"
+#import "GCActivityTypes.h"
 
 #ifdef GC_USE_HEALTHKIT
 #import <HealthKit/HealthKit.h>
@@ -768,8 +769,8 @@
         self.distanceDisplayUom = [[GCUnit unitForKey:@"kilometer"] unitForGlobalSystem].key;
 
         NSMutableDictionary * sumData = [NSMutableDictionary dictionary];
-        for (NSString * field in data) {
-            id obj = data[field];
+        for (NSString * fieldkey in data) {
+            id obj = data[fieldkey];
             NSString * str = nil;
             GCNumberWithUnit * nu = nil;
             NSDate * da = nil;
@@ -782,20 +783,20 @@
                 da = obj;
             }
 
-            if ([field isEqualToString:@"activityType"] && str) {
+            if ([fieldkey isEqualToString:@"activityType"] && str) {
                 self.activityTypeDetail = [GCActivityType activityTypeForKey:str];
-            }else if ([field isEqualToString:@"BeginTimestamp"] && da){
+            }else if ([fieldkey isEqualToString:@"BeginTimestamp"] && da){
                 self.date = da;
             }else if (nu) {
-                gcFieldFlag flag = [GCFields trackFieldFromActivityField:field];
+                gcFieldFlag flag = [GCFields trackFieldFromActivityField:fieldkey];
                 if (flag != gcFieldFlagNone) {
                     [self setSummaryField:flag with:nu];
                 }
-                GCActivitySummaryValue * val = [self buildSummaryValue:field
+                GCActivitySummaryValue * val = [self buildSummaryValue:fieldkey
                                                                    uom:nu.unit.key
                                                              fieldFlag:flag
                                                               andValue:nu.value];
-                sumData[field] = val;
+                sumData[ [GCField fieldForKey:fieldkey andActivityType:self.activityType] ] = val;
             }
         }
         self.summaryData = sumData;
@@ -877,19 +878,8 @@
     self.location = @"";
     if (self.activityType == nil) {
         self.activityType = GC_TYPE_OTHER;
-        NSDictionary * subtypes= @{
-                                   @"NordicSki":@"cross_country_skiing",
-                                   @"AlpineSki":@"resort_skiing_snowboarding",
-                                   @"BackcountrySki": @"backcountry_skiing_snowboarding",
-                                   //IceSkate
-                                   //InlineSkate
-                                   //Kitesurf
-                                   //RollerSki
-                                   //Windsurf
-                                   //Snowboard
-                                   //Snowshoe
-                                   };
-        self.activityTypeDetail = [GCActivityType  activityTypeForKey:subtypes[data[@"type"]]];
+        GCActivityType * atype = [[GCActivityTypes activityTypes] activityTypeForStravaType:data[@"type"]];
+        self.activityTypeDetail = atype;
         if (self.activityTypeDetail==nil) {
             self.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_OTHER];
         }

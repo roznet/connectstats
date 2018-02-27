@@ -141,23 +141,36 @@ static NSUInteger nonPredefinedTypeId = 10000;
     NSDictionary<NSString*,GCActivityType*> * cache = nil;
     if( cache == nil){
         NSDictionary * types = @{
-                                 @"Ride":   GC_TYPE_CYCLING,
-                                 @"Run":    GC_TYPE_RUNNING,
-                                 @"Swim":   GC_TYPE_SWIMMING,
-                                 @"Hike":   GC_TYPE_HIKING,
-                                 @"Walk":   GC_TYPE_WALKING,
-                                 @"Workout":GC_TYPE_FITNESS,
-                                 @"VirtualRide":GC_TYPE_CYCLING,
-                                 @"NordicSki":@"cross_country_skiing",
                                  @"AlpineSki":@"resort_skiing_snowboarding",
                                  @"BackcountrySki": @"backcountry_skiing_snowboarding",
-                                 //IceSkate
+                                 @"Canoeing" :@"boating",
+                                 @"Crossfit":@"fitness_equipment",
+                                 @"EBikeRide":GC_TYPE_CYCLING,
+                                 @"Elliptical":@"elliptical",
+                                 @"Hike":   GC_TYPE_HIKING,
+                                 @"IceSkate": @"skating",
                                  @"InlineSkate":@"inline_skating",
-                                 //Kitesurf
-                                 //RollerSki
-                                 //Windsurf
+                                 @"Kayaking":@"whitewater_rafting_kayaking",
+                                 @"Kitesurf":@"wind_kite_surfing",
+                                 @"NordicSki":@"cross_country_skiing",
+                                 @"Ride":   GC_TYPE_CYCLING,
+                                 @"RockClimbing":@"rock_climbing",
+                                 @"RollerSki":@"skate_skiing",
+                                 @"Rowing" :@"rowing",
+                                 @"Run":    GC_TYPE_RUNNING,
                                  @"Snowboard":@"resort_skiing_snowboarding",
                                  @"Snowshoe":@"snow_shoe",
+                                 @"StairStepper": @"stair_climbing",
+                                 @"StandUpPaddling":@"stand_up_paddleboarding",
+                                 @"Surfing":@"surfing",
+                                 @"Swim":   GC_TYPE_SWIMMING,
+                                 @"VirtualRide":GC_TYPE_CYCLING,
+                                 @"Walk":   GC_TYPE_WALKING,
+                                 @"WeightTraining":@"strength_training",
+                                 @"Windsurf":@"wind_kite_surfing",
+                                 @"Workout":GC_TYPE_FITNESS,
+                                 @"Yoga":@"other",
+
                                  };
         NSMutableDictionary * dict = [NSMutableDictionary dictionary];
         for (NSString * stravaType in types) {

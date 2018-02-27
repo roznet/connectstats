@@ -65,6 +65,7 @@
         GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:[GCHealthKitRequest unitForIdentifier:identifier]
                                                      andQuantity:quantity];
         NSString * field = [GCHealthKitRequest fieldForIdentifier:identifier prefix:prefix];
+        
         if (nu) {
             data[field] = nu;
         }else{
