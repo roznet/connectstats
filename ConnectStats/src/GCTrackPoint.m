@@ -566,58 +566,62 @@ void buildStatic(){
                   @(gcFieldFlagPower):[GCUnit watt],
                   @(gcFieldFlagGroundContactTime):[GCUnit ms],
                   @(gcFieldFlagVerticalOscillation):[GCUnit centimeter],
+                  @(gcFieldFlagSumDuration):GCUnit.second,
                   };
         [_defs retain];
     }
     GCUnit * unit = aField != gcFieldFlagNone?_defs[ @(aField) ] : nil;
+    double val = 0.0;
     if( unit ){
-        double val = [nu convertToUnit:unit].value;
-        
-        switch (aField) {
-            case gcFieldFlagSumDuration:
-                _trackFlags |= aField;
-                _elapsed=val;
-                break;
-            case gcFieldFlagSumDistance:
-                _trackFlags |= aField;
-                _distanceMeters = val;
-                break;
-            case gcFieldFlagWeightedMeanHeartRate:
-                _trackFlags |= aField;
-                _heartRateBpm = val;
-                break;
-            case gcFieldFlagWeightedMeanSpeed:
-                _trackFlags |= aField;
-                _speed = val;
-                break;
-            case gcFieldFlagCadence:
-                _trackFlags |= aField;
-                _cadence = val;
-                break;
-            case gcFieldFlagAltitudeMeters:
-                _trackFlags |= aField;
-                _altitude = val;
-                break;
-            case gcFieldFlagPower:
-                _trackFlags |= aField;
-                _power = val;
-                break;
-            case gcFieldFlagGroundContactTime:
-                _trackFlags |= aField;
-                self.groundContactTime = val;
-                break;
-            case gcFieldFlagVerticalOscillation:
-                _trackFlags |= aField;
-                self.verticalOscillation = val;
-                break;
-            case gcFieldFlagSumStep:
-                _trackFlags |= aField;
-                self.steps = val;
-                break;
-            default:
-                break;
-        }
+        val = [nu convertToUnit:unit].value;
+    }else{
+        val = nu.value;
     }
+    switch (aField) {
+        case gcFieldFlagSumDuration:
+            _trackFlags |= aField;
+            _elapsed=val;
+            break;
+        case gcFieldFlagSumDistance:
+            _trackFlags |= aField;
+            _distanceMeters = val;
+            break;
+        case gcFieldFlagWeightedMeanHeartRate:
+            _trackFlags |= aField;
+            _heartRateBpm = val;
+            break;
+        case gcFieldFlagWeightedMeanSpeed:
+            _trackFlags |= aField;
+            _speed = val;
+            break;
+        case gcFieldFlagCadence:
+            _trackFlags |= aField;
+            _cadence = val;
+            break;
+        case gcFieldFlagAltitudeMeters:
+            _trackFlags |= aField;
+            _altitude = val;
+            break;
+        case gcFieldFlagPower:
+            _trackFlags |= aField;
+            _power = val;
+            break;
+        case gcFieldFlagGroundContactTime:
+            _trackFlags |= aField;
+            self.groundContactTime = val;
+            break;
+        case gcFieldFlagVerticalOscillation:
+            _trackFlags |= aField;
+            self.verticalOscillation = val;
+            break;
+        case gcFieldFlagSumStep:
+            _trackFlags |= aField;
+            self.steps = val;
+            break;
+        default:
+            break;
+    }
+    
 }
 
 //NEWTRACKFIELD
