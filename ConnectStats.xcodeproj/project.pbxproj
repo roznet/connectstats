@@ -2640,8 +2640,8 @@
 		42295E031EC6F38C00F4F7EE /* GCTestServicesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestServicesViewController.m; path = src/GCTestServicesViewController.m; sourceTree = "<group>"; };
 		42295E061EC6F4D900F4F7EE /* GCTestServiceGarmin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestServiceGarmin.h; path = src/GCTestServiceGarmin.h; sourceTree = "<group>"; };
 		42295E071EC6F4D900F4F7EE /* GCTestServiceGarmin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceGarmin.m; path = src/GCTestServiceGarmin.m; sourceTree = "<group>"; };
-		422AC6A21C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151106.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "test_activity_day___healthkit__Default_20151106.db"; sourceTree = "<group>"; };
-		422AC6A31C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151109.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "test_activity_day___healthkit__Default_20151109.db"; sourceTree = "<group>"; };
+		422AC6A21C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151106.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activity_day___healthkit__Default_20151106.db; sourceTree = "<group>"; };
+		422AC6A31C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151109.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activity_day___healthkit__Default_20151109.db; sourceTree = "<group>"; };
 		422B343B1CA7321200B345CD /* GCFieldCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldCache.h; path = src/GCFieldCache.h; sourceTree = "<group>"; };
 		422B343C1CA7321200B345CD /* GCFieldCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldCache.m; path = src/GCFieldCache.m; sourceTree = "<group>"; };
 		422B343F1CA7322600B345CD /* GCFieldInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldInfo.h; path = src/GCFieldInfo.h; sourceTree = "<group>"; };
@@ -4244,7 +4244,7 @@
 		42DE53BC19CF438500009130 /* GCHealthKitActivityRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitActivityRequest.m; path = src/GCHealthKitActivityRequest.m; sourceTree = "<group>"; };
 		42DE53BF19CF696E00009130 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		42E06D481B5EF4DC001BDA02 /* test_activity_running_837769405.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_837769405.db; path = ConnectStatsTests/samples/test_activity_running_837769405.db; sourceTree = SOURCE_ROOT; };
-		42E06D4A1B5EFFC4001BDA02 /* test_activity_day___healthkit__20150622.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "test_activity_day___healthkit__20150622.db"; sourceTree = "<group>"; };
+		42E06D4A1B5EFFC4001BDA02 /* test_activity_day___healthkit__20150622.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activity_day___healthkit__20150622.db; sourceTree = "<group>"; };
 		42E11EB31B36C74C00D90E66 /* health_daydetail_20150612.data */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = health_daydetail_20150612.data; path = samples/applewatch/health_daydetail_20150612.data; sourceTree = "<group>"; };
 		42E11EB41B36C74C00D90E66 /* health_daydetail_20150618.data */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = health_daydetail_20150618.data; path = samples/applewatch/health_daydetail_20150618.data; sourceTree = "<group>"; };
 		42E11EB51B36C74C00D90E66 /* health_daysummary_20150620.data */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = health_daysummary_20150620.data; path = samples/applewatch/health_daysummary_20150620.data; sourceTree = "<group>"; };
@@ -9570,7 +9570,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -9684,7 +9684,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
