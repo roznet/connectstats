@@ -108,11 +108,9 @@
     FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"fullsave_1008868846.db"]];
     [db open];
     [act fullSaveToDb:db];
-
-    GCActivity * act2 = [GCActivity activityWithId:aId andDb:db];
-
     
     /*
+     GCActivity * act2 = [GCActivity activityWithId:aId andDb:db];
     if (started) {
         GCStatsDataSerieWithUnit * serie = [act timeSerieForField:[GCField field:CALC_VERTICAL_SPEED forActivityType:act.activityType]];
         RZ_ASSERT(serie.count==count, @"%@ found in %@", CALC_VERTICAL_SPEED, act );
