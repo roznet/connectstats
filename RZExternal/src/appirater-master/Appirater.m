@@ -716,7 +716,7 @@ static BOOL _alwaysUseMainBundle = NO;
             reviewURL = [templateReviewURLiOS8 stringByReplacingOccurrencesOfString:@"APP_ID" withString:_appId];
         }
 
-		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:reviewURL]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:reviewURL] options:@{} completionHandler:nil];
 		#endif
 	}
 }
