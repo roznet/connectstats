@@ -1300,6 +1300,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
                     GCField * field = nil;
                     if ([one isKindOfClass:[GCField class]]){
                         field = one;
+                        if( [field.activityType isEqualToString:GC_TYPE_ALL]){
+                            field = [field correspondingFieldForActivityType:act.activityType];
+                        }
                     }else if ([one isKindOfClass:[NSString class]]) {
                         field = [GCField fieldForKey:one andActivityType:act.activityType];
                     }else if ([one isKindOfClass:[NSNumber class]]){

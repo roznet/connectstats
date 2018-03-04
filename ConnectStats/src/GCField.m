@@ -355,6 +355,9 @@ static void registerInCache(GCField*field){
 -(GCField*)correspondingFieldTypeAll{
     return [GCField fieldForKey:self.key andActivityType:GC_TYPE_ALL];
 }
+-(GCField*)correspondingFieldForActivityType:(NSString*)activityType{
+    return [GCField fieldForKey:self.key andActivityType:activityType];
+}
 -(BOOL)hasSuffix:(NSString*)suf{
     return [self.key hasSuffix:suf];
 }
