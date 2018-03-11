@@ -1,0 +1,4 @@
+language: objective-c
+xcode_workspace: ConnectStats.xcworkspace
+xcode_scheme: ConnectStats
+osx_image: xcode9.2

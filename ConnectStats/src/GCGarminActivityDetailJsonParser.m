@@ -123,12 +123,16 @@
                                     @8: @[ @"WeightedMeanFormPower", @"watt"],
                                     @9: @[ @"WeightedMeanLegSpringStiffness", @"kN/m"],
                                     }
+                            //9ff75afa-d594-4311-89f7-f92ca02118ad[1] momentary energy expenditure
+                            //9ff75afa-d594-4311-89f7-f92ca02118ad[2] relative running economy
+                            
+                            //a26e5358-7526-4582-af7e-8606884d96bc[1] running power
                             };
         [defs retain];
     }
     
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:descriptors.count];
-        
+    
     for (NSDictionary * one in descriptors) {
         NSDictionary * use = one;
         if( one[@"appID"] && one[ @"developerFieldNumber"]){
@@ -140,9 +144,21 @@
             if(devFieldDef ){
                 fixed[@"key"] = devFieldDef[0];
                 fixed[@"unit"] = @{@"key":devFieldDef[1]};
+            }else{
+                static NSMutableDictionary * remember = nil;
+                if( ! remember ){
+                    remember = [NSMutableDictionary dictionary];
+                    [remember retain];
+                }
+                NSString * appKey = [NSString stringWithFormat:@"%@[%@]", one[@"appID"], one[@"developerFieldNumber"]];
+                if( ! remember[appKey]){
+                    RZLog(RZLogInfo, @"Unknown field[%lu] appid[devfield] %@", (unsigned long)rv.count, appKey);
+                    remember[appKey] = @1;
+                }
             }
             
             use = [NSDictionary dictionaryWithDictionary:fixed];
+            
         }
         [rv addObject:use];
     }
@@ -176,6 +192,8 @@
                             NSDictionary * unitDict = defs[@"unit"];
                             if( [unitDict isKindOfClass:[NSDictionary class]]){
                                 unitkey = unitDict[@"key"];
+                            }else if ([unitDict isKindOfClass:[NSString class]]){
+                                unitkey  = (NSString*)unitDict;
                             }else{
                                 if( ! errorReported ){
                                     RZLog(RZLogError, @"Received unknown unit type %@: %@", NSStringFromClass([unitDict class]), unitDict);
