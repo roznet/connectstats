@@ -342,7 +342,7 @@
         NSDate * date = [NSDate dateForDashedDate:one[0]];
         NSNumber * value = one[1];
         GCHistoryAggregatedDataHolder * holder = [stats dataForIndex:i++];
-        XCTAssertTrue([holder.date isSameCalendarDay:date calendar:[GCAppGlobal calculationCalendar]]);
+        XCTAssertTrue([holder.date isSameCalendarDay:date calendar:[GCAppGlobal calculationCalendar]], @"same date %@ / %@", holder.date, date);
         XCTAssertEqualWithAccuracy([holder valFor:gcAggregatedSumDistance and:gcAggregatedSum], value.doubleValue, 1.e-7);
     }
     
@@ -438,8 +438,8 @@
         [one_false setDate:[NSDate dateForRFC3339DateTimeString:falseStr]];
         [one_true setDate:[NSDate dateForRFC3339DateTimeString:trueStr]];
         
-        XCTAssertTrue([search match:one_true],   @"%@", searchStr);
-        XCTAssertFalse([search match:one_false], @"%@", searchStr);
+        XCTAssertTrue([search match:one_true],   @"%@ %@->%@", searchStr, trueStr, one_true.date);
+        XCTAssertFalse([search match:one_false], @"%@ %@->%@", searchStr, falseStr, one_false.date);
         
     }
     
