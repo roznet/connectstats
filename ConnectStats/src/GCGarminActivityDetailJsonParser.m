@@ -24,6 +24,7 @@
 //  
 
 #import "GCGarminActivityDetailJsonParser.h"
+#import "GCField+Convert.h"
 
 @implementation GCGarminActivityDetailJsonParser
 
@@ -122,7 +123,10 @@
                                     @7: @[ @"GainElevation", @"meter"],
                                     @8: @[ @"WeightedMeanFormPower", @"watt"],
                                     @9: @[ @"WeightedMeanLegSpringStiffness", @"kN/m"],
-                                    }
+                                    },
+                            @"a26e5358-7526-4582-af7e-8606884d96bc":@{
+                                    @1: @[@"WeightedMeanPower", @"watt"],
+                                    },
                             //9ff75afa-d594-4311-89f7-f92ca02118ad[1] momentary energy expenditure
                             //9ff75afa-d594-4311-89f7-f92ca02118ad[2] relative running economy
                             
@@ -137,28 +141,17 @@
         NSDictionary * use = one;
         if( one[@"appID"] && one[ @"developerFieldNumber"]){
             NSMutableDictionary * fixed = [NSMutableDictionary dictionaryWithDictionary:one];
-            fixed[@"unit"] = @"dimensionless";
-            NSDictionary * appDefs = defs[ one[ @"appID" ]];
-            NSNumber * devNum = one[ @"developerFieldNumber" ];
-            NSArray * devFieldDef = appDefs[ devNum];
-            if(devFieldDef ){
-                fixed[@"key"] = devFieldDef[0];
-                fixed[@"unit"] = @{@"key":devFieldDef[1]};
-            }else{
-                static NSMutableDictionary * remember = nil;
-                if( ! remember ){
-                    remember = [NSMutableDictionary dictionary];
-                    [remember retain];
-                }
-                NSString * appKey = [NSString stringWithFormat:@"%@[%@]", one[@"appID"], one[@"developerFieldNumber"]];
-                if( ! remember[appKey]){
-                    RZLog(RZLogInfo, @"Unknown field[%lu] appid[devfield] %@", (unsigned long)rv.count, appKey);
-                    remember[appKey] = @1;
-                }
+            fixed[@"unit"] = @{@"key":@"dimensionless"};
+            
+            NSString * appId = one[@"appID"];
+            NSNumber * devNum = one[ @"developerFieldNumber"];
+            NSString * fieldKey = [GCField fieldKeyForConnectIQAppID:appId andFieldNumber:devNum];
+            if( fieldKey ){
+                NSString * unitName = [GCField unitNameForConnectIQAppID:appId andFieldNumber:devNum];
+                fixed[@"key"] = fieldKey;
+                fixed[@"unit"] = @{@"key": unitName ?: @"dimensionless"};
             }
-            
-            use = [NSDictionary dictionaryWithDictionary:fixed];
-            
+            use = [NSDictionary dictionaryWithDictionary:fixed];            
         }
         [rv addObject:use];
     }

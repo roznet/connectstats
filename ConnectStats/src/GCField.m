@@ -349,7 +349,14 @@ static void registerInCache(GCField*field){
 }
 
 -(GCField*)correspondingWeightedMeanField{
-    GCField * rv = [self fieldBySwappingPrefix:@"Max" for:@"WeightedMean"];
+    GCField * rv = nil;
+    if( [self hasPrefix:@"Max"] ){
+        rv = [self fieldBySwappingPrefix:@"Max" for:@"WeightedMean"];
+    }else if ([self hasPrefix:@"Min"]){
+        rv = [self fieldBySwappingPrefix:@"Min" for:@"WeightedMean"];
+    }else if ([self hasPrefix:@"WeightedMean"]){
+        rv = self;
+    }
     return rv;
 }
 -(GCField*)correspondingFieldTypeAll{
