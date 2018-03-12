@@ -26,6 +26,7 @@
 
 
 #import "GCField+Convert.h"
+@import RZUtils;
 
 const NSUInteger kDefsConnectIQFieldKeyIndex = 0;
 const NSUInteger kDefsConnectIQUnitNameIndex = 1;
@@ -56,7 +57,7 @@ const NSUInteger kDefsConnectIQUnitNameIndex = 1;
                  
                  //a26e5358-7526-4582-af7e-8606884d96bc[1] running power
                  };
-        [defs retain];
+        RZRetain(defs);
     }
     NSArray * rv = defs[appId][num];
     
@@ -64,7 +65,7 @@ const NSUInteger kDefsConnectIQUnitNameIndex = 1;
         static NSMutableDictionary * remember = nil;
         if( ! remember ){
             remember = [NSMutableDictionary dictionary];
-            [remember retain];
+            RZRetain(remember);
         }
         NSString * appKey = [NSString stringWithFormat:@"%@[%@]", appId, num];
         if( ! remember[appKey]){
