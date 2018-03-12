@@ -2,19 +2,19 @@
 
 This project contains several related applications to analyse fitness data:
 
-### ConnectStats
+### ![Icon](https://github.com/roznet/connectstats/raw/master/ConnectStats/Media.xcassets/ConnectStatsNewAppIcon.appiconset/ConnectStatsNewAppIcon76.png) ConnectStats
 
-ConnectStats is an application for iOS (iPhone or iPad) that allows display, statistics and graphs on sports activities recorded with a garmin device or strava. This application is quite mature and available on the [app store](https://itunes.apple.com/app/apple-store/id581697248?mt=8) and has a [home page](https://ro-z.net/blog/connectstats/)
+[ConnectStats](https://itunes.apple.com/app/apple-store/id581697248?mt=8) is an application for iOS (iPhone or iPad) that allows display, statistics and graphs on sports activities recorded with a garmin device or strava. This application is quite mature and available on the [app store](https://itunes.apple.com/app/apple-store/id581697248?mt=8) and has a [home page](https://ro-z.net/blog/connectstats/)
 
-### HealthStats
+### ![Icon](https://github.com/roznet/connectstats/raw/master/ConnectStats/Media.xcassets/HealthStatsAppIcon.appiconset/Icon76.png) HealthStats
 
-HealthStats is a variation of ConnectStats to display activities and data extracted from apple Health. Some information can be found [here](https://ro-z.net/blog/healthstats/)
+[HealthStats](https://itunes.apple.com/us/app/healthstats/id912378669?ls=1&mt=8&ign-msr=https%3A%2F%2Fitunesconnect.apple.com%2FWebObjects%2FiTunesConnect.woa%2Fra%2Fng%2Fapp%2F912378669) is a variation of ConnectStats to display activities and data extracted from apple Health. Some information can be found [here](https://ro-z.net/blog/healthstats/)
 
-### FitFileExplorer
+### ![Icon](https://github.com/roznet/connectstats/raw/master/FitFileExplorer/Assets.xcassets/FitExplorerIcon76.imageset/FITFileExplorerIcons76.png)  FitFileExplorer
 
-FitFileExplorer is a mac os utility to view Fit File content
+[FitFileExplorer](https://itunes.apple.com/us/app/fit-file-explorer/id1244431640?ls=1&mt=12) is a [mac os utility](https://ro-z.net/blog/fitfileexplorer/) to view Fit File content
 
-### TennisStats
+### ![Icon](https://github.com/roznet/connectstats/raw/master/TennisStats/icons/Images.xcassets/AppIcon.appiconset/tennisstats_appIcons76.png) TennisStats
 
 TennisStats is an iOS (iphone or ipad) application to record and analyse tennis matches.
 
