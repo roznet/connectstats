@@ -1,4 +1,4 @@
-## Description
+## Description [![Build Status](https://travis-ci.org/roznet/connectstats.svg?branch=master)](https://travis-ci.org/roznet/connectstats)
 
 This project contains several related applications to analyse fitness data:
 
