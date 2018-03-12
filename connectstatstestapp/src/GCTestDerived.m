@@ -50,7 +50,7 @@
 
 -(void)testDerived{
     [self startSession:@"GC Derived"];
-    [GCAppGlobal setupEmptyStateWithDerived:@"activities.db"];
+    [GCAppGlobal setupEmptyStateWithDerived:@"activities_derived.db"];
     self.stage = 0;
     [[GCAppGlobal derived] attach:self];
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 0, @"Starts empty");
@@ -231,7 +231,7 @@
 -(void)finishedDerived{
     [[GCAppGlobal derived] detach:self];
     // Force re-init/cleanup of derived
-    [GCAppGlobal setupEmptyState:@"activities.db"];
+    [GCAppGlobal setupEmptyState:@"activities_derived.db"];
     [self endSession:@"GC Derived"];
 }
 

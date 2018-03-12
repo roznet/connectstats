@@ -461,6 +461,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     [self registerLaps:self.lapsCache forName:GC_LAPS_RECORDED];
 
     [trackdb commit];
+    [trackdb setShouldCacheStatements:NO];
     if (![db executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){
         RZLog(RZLogError, @"db error %@", [db lastErrorMessage]);
     }
@@ -630,6 +631,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if(![aDb commit]){
         RZLog(RZLogError, @"trackdb commit %@",[aDb lastErrorMessage]);
     }
+    [aDb setShouldCacheStatements:NO];
     [self notifyForString:kGCActivityNotifyTrackpointReady];
 
 }
