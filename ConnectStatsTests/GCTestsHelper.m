@@ -8,7 +8,7 @@
 
 #import "GCTestsHelper.h"
 #import "GCAppDelegate.h"
-
+#import "GCAppGlobal.h"
 
 @interface GCTestsHelper ()
 @property (nonatomic,retain) NSMutableDictionary * savedSettings;
@@ -44,6 +44,7 @@
         self.rememberTimeZone = [NSTimeZone defaultTimeZone];
     }
     [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithName:@"Europe/London"]];
+    [GCAppGlobal ensureCalculationCalendarTimeZone:[NSTimeZone defaultTimeZone]];
 }
 
 -(void)tearDown{
@@ -55,6 +56,7 @@
     }
     if(self.rememberTimeZone){
         [NSTimeZone setDefaultTimeZone:self.rememberTimeZone];
+        [GCAppGlobal ensureCalculationCalendarTimeZone:self.rememberTimeZone];
         self.rememberTimeZone = nil;
     }
 }

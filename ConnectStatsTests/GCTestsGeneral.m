@@ -285,7 +285,7 @@
         if (![[holder date] isSameCalendarDay:[[e_avg dataPointAtIndex:i] date] calendar:cal]) {
             NSLog(@"%d: %@!=%@",(int)i,[holder date], [[e_avg dataPointAtIndex:i] date]);
         }
-        XCTAssertTrue([[holder date] isSameCalendarDay:[[e_avg dataPointAtIndex:i] date] calendar:cal], @"same date avg");
+        XCTAssertTrue([[holder date] isSameCalendarDay:[[e_avg dataPointAtIndex:i] date] calendar:cal], @"same date avg %@ %@", [holder date], [[e_avg dataPointAtIndex:i] date] );
         gcAggregatedField f = gcAggregatedSumDistance;
         double x = 1.;
         XCTAssertEqualWithAccuracy([holder valFor:f and:gcAggregatedAvg], [[e_avg dataPointAtIndex:i] y_data]*x, 1e-6, @"Same Average");

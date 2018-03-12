@@ -79,6 +79,7 @@ extern NSString *const kNotifySettingsChange;
 +(UINavigationController*)currentNavigationController;
 
 +(NSCalendar*)calculationCalendar;
++(void)ensureCalculationCalendarTimeZone:(NSTimeZone*)tz;// Mostly used for testing
 +(NSDate*)referenceDate;
 
 +(BOOL)connectStatsVersion;
