@@ -7,6 +7,6 @@ before_install:
 jobs:
   include:
     - stage: build
-	  script: xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme ConnectStats build CODE_SIGNING_REQUIRED=NO
-	- stage: test
-	  script: xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme ConnectStats -destination 'platform=iOS Simulator,name=iPhone 6,OS=11.2' build test CODE_SIGNING_REQUIRED=NO
+        script: xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme ConnectStats build CODE_SIGNING_REQUIRED=NO
+    - stage: test
+        script: xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme ConnectStats -destination 'platform=iOS Simulator,name=iPhone 6,OS=11.2' build test CODE_SIGNING_REQUIRED=NO
