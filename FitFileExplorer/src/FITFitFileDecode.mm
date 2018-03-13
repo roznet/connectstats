@@ -141,7 +141,6 @@ class Listener : public fit::MesgListener
 
 -(void)parse{
     
-    RZPerformance * perf = [RZPerformance start];
     fit::Decode decode;
     fit::MesgBroadcaster mesgBroadcasterMain;
     Listener listener;
@@ -169,8 +168,6 @@ class Listener : public fit::MesgListener
         RZLog(RZLogError, @"Exception decoding file: %s", e.what());
         return;
     }
-    
-    RZLog( RZLogInfo, @"Decoded FIT file %@", perf);
 }
 
 -(void)recordMessage:(NSString *)messageType values:(NSDictionary *)dict{
