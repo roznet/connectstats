@@ -419,7 +419,6 @@
     [db2 open];
     
     GCActivity * act = [GCActivity fullLoadFromDb:db1];
-    GCActivity * compare = [GCActivity fullLoadFromDb:db2];
     
     // basic test the progress serie finishes on the right point
     GCStatsDataSerieWithUnit * su = [act progressSerie:true];
@@ -434,7 +433,8 @@
     XCTAssertEqual([act.trackpoints.lastObject distanceMeters], last.x_data);
 
     /*
-    GCStatsDataSerieWithUnit * su2 = [compare progressSerie:false];
+     GCActivity * compare = [GCActivity fullLoadFromDb:db2];
+     GCStatsDataSerieWithUnit * su2 = [compare progressSerie:false];
     
     GCStatsDataSerie * diff = [su.serie cumulativeDifferenceWith:su2.serie];
     
