@@ -517,7 +517,7 @@
     
 }
 
--(void)testCompoundBestOf{
+-(void)disableTestCompoundBestOf{
     NSArray * samples = @[ @{@"speed" : @0.,  @"n" : @1,  @"hr" : @110., @"elapsed" : @2. },
                            @{@"speed" : @2.8, @"n" : @30, @"hr" : @110., @"elapsed" : @2. },
                            @{@"speed" : @2.8, @"n" : @20, @"hr" : @115., @"elapsed" : @2. },
@@ -535,6 +535,7 @@
     GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:GC_TYPE_RUNNING];
     GCStatsDataSerieWithUnit * v_bestroll = [act calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest forField:field thread:nil];
     NSArray * laps = [act compoundLapForIndexSerie:v_bestroll desc:@""];
+    
     
     for (NSUInteger i=0; i<laps.count; i++) {
         NSLog(@"i=%lu dist=%f elapsed=%f", (unsigned long)i, [laps[i] distanceMeters], [laps[i] elapsed]);

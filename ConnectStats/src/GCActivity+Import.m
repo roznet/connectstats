@@ -193,6 +193,9 @@
     if (!displayuom) {
         displayuom     = [GCFields predefinedUomForField:fieldkey andActivityType:GC_TYPE_ALL];
     }
+    if( !displayuom && [GCUnit unitForKey:uom]){
+        displayuom = uom;
+    }
     if (!display) {
         display = [GCFields predefinedDisplayNameForField:fieldkey andActivityType:GC_TYPE_ALL];
     }

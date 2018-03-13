@@ -266,7 +266,8 @@ void buildStatic(){
                  @"directSpeed"                        : @[ STOREUNIT_SPEED,    @(gcFieldFlagWeightedMeanSpeed)],
                  @"directElevation"                    : @[ STOREUNIT_ALTITUDE, @(gcFieldFlagAltitudeMeters)],
                  @"directBikeCadence"                  : @[ @"rpm",             @(gcFieldFlagCadence)],
-                 @"directRunCadence"                   : @[ @"spm",             @(gcFieldFlagCadence)],
+                 @"directRunCadence"                   : @[ @"stepsPerMinute",  @(gcFieldFlagCadence)],
+                 @"directSwimCadence"                  : @[ @"strokesPerMinute",@(gcFieldFlagCadence)],
                  @"directPower"                        : @[ @"watt",            @(gcFieldFlagPower)],
                  @"directGroundContactTime"            : @[ @"ms",              @(gcFieldFlagGroundContactTime)],
                  @"directVerticalOscillation"          : @[ @"centimeter",      @(gcFieldFlagVerticalOscillation)],
@@ -316,6 +317,7 @@ void buildStatic(){
                                                                   @"directRightPedalSmoothness": @1, // in dimensionless
                                                                   @"directLeftTorqueEffectiveness": @1, // in dimensionless
 
+                                                                  @"directPerformanceCondition":@1, // in dimensionless
                                                                   }];
 
         [missing retain];
