@@ -73,9 +73,17 @@
     CGRect rect = CGRectMake(0., 0., 300., 80.);
     NSArray * cellRects = [grid cellRectsEvenIn:rect];
     [grid setupFrames:cellRects inViewRect:rect];
-    NSLog(@"%@", cellRects);
-    UILabel * label = [grid labelForRow:1 andColumn:1];
-    NSLog(@"%@", NSStringFromCGRect(label.frame));
+    for( NSUInteger i=0;i<cellRects.count;i++){
+        CGRect rect = [cellRects[i] CGRectValue];
+        XCTAssertEqual(rect.size.width, 300./3.);//100
+        XCTAssertEqual(rect.size.height, 80./2.);//100
+        XCTAssertEqual(rect.origin.x, i%3 * (300./3.));// 0,100,200
+        XCTAssertEqual(rect.origin.y, i/3 * (80./2.));// 0,40
+    }
+    
+    //UILabel * label = [grid labelForRow:1 andColumn:1];
+    
+    
 }
 
 @end
