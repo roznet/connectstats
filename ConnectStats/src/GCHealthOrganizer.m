@@ -249,7 +249,7 @@
             [zone saveToDb:self.db];
         }
     }
-    [self.db setShouldCacheStatements:NO];
+    //[self.db setShouldCacheStatements:NO];
 }
 
 -(void)registerZoneCalculators:(NSDictionary<NSString*,GCHealthZoneCalculator*>*)data{

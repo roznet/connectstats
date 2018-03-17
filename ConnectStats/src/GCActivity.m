@@ -461,7 +461,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     [self registerLaps:self.lapsCache forName:GC_LAPS_RECORDED];
 
     [trackdb commit];
-    [trackdb setShouldCacheStatements:NO];
+    //[trackdb setShouldCacheStatements:NO];
     if (![db executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){
         RZLog(RZLogError, @"db error %@", [db lastErrorMessage]);
     }
@@ -580,7 +580,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             [createFields addObject:[NSString stringWithFormat:@"%@ Real", one.dataColumnName]];
             [insertFields addObject:one.dataColumnName];
             [insertValues addObject:[NSString stringWithFormat:@":%@", one.dataColumnName]];
-            [db executeUpdate:@"INSERT INTO gc_track_extra_idx (field,idx,uom) VALUES (?,?,?)", one.dataColumnName, @(one.idx), one.unit.key];
+            if( ![db executeUpdate:@"INSERT INTO gc_track_extra_idx (field,idx,uom) VALUES (?,?,?)", one.dataColumnName, @(one.idx), one.unit.key]){
+                RZLog(RZLogError, @"db error %@", db.lastErrorMessage);
+            }
         }
 
         [db executeUpdate:@"DROP TABLE IF EXISTS gc_track_extra"];
@@ -602,7 +604,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                         data[e.dataColumnName] = [NSNull null];
                     }
                 }
-                [db executeUpdate:insertQuery withParameterDictionary:data];
+                if( ![db executeUpdate:insertQuery withParameterDictionary:data]){
+                    RZLog(RZLogError, @"db error %@", db.lastErrorMessage);
+                }
             }
         }
     }
@@ -631,7 +635,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if(![aDb commit]){
         RZLog(RZLogError, @"trackdb commit %@",[aDb lastErrorMessage]);
     }
-    [aDb setShouldCacheStatements:NO];
+    //[aDb setShouldCacheStatements:NO];
     [self notifyForString:kGCActivityNotifyTrackpointReady];
 
 }
