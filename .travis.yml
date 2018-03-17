@@ -7,4 +7,4 @@ before_install:
 script:
 #- xcodebuild -sdk macosx -workspace ConnectStats.xcworkspace -scheme FitFileExplorer build CODE_SIGNING_REQUIRED=NO
 #- Xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme HealthStats build CODE_SIGNING_REQUIRED=NO -quiet
-- xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme ConnectStats -destination 'platform=iOS Simulator,name=iPhone 6,OS=11.2' build test CODE_SIGNING_REQUIRED=NO
+- xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme ConnectStats -destination 'platform=iOS Simulator,name=iPhone 6,OS=11.2' build CODE_SIGNING_REQUIRED=NO
