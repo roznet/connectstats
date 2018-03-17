@@ -232,7 +232,7 @@
 #pragma mark -
 
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 -(void)saveToDb:(FMDatabase*)trackdb{
     if(![trackdb executeUpdate:@"INSERT INTO gc_laps (Time,LatitudeDegrees,LongitudeDegrees,DistanceMeters,HeartRateBpm,Speed,Cadence,Altitude,Power,VerticalOscillation,GroundContactTime,Lap,Elapsed,trackflags) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
          self.time,

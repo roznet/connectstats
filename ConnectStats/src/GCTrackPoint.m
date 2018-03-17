@@ -124,7 +124,7 @@ void buildStatic(){
 
 #pragma mark - Database
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 -(GCTrackPoint*)initWithResultSet:(FMResultSet*)res{
     self = [super init];
     if (self) {
@@ -153,7 +153,7 @@ void buildStatic(){
     return self.extraStorage;
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 -(void)saveToDb:(FMDatabase*)trackdb{
     if (!self.time) {
         RZLog(RZLogError, @"No time in track, can't save");
@@ -240,7 +240,7 @@ void buildStatic(){
     }
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD EDIT HERE
 -(void)parseDictionary:(NSDictionary*)data inActivity:(GCActivity*)act{
     NSString * tmp = nil;
     NSDictionary * d = data[@"directTimestamp"];
@@ -284,6 +284,8 @@ void buildStatic(){
                  // This defs will use standard defs
                  @"WeightedMeanFormPower"              : @"WeightedMeanFormPower",
                  @"WeightedMeanLegSpringStiffness"     : @"WeightedMeanLegSpringStiffness",
+                 @"WeightedMeanMomentaryEnergyExpenditure" :@"WeightedMeanMomentaryEnergyExpenditure",
+                 @"WeightedMeanRelativeRunningEconomy" : @"WeightedMeanRelativeRunningEconomy",
                  
                  //@"directFractionalCadence"        : @[ @"spm",             @(gcFieldFlagCadence)],
                  };
@@ -526,7 +528,7 @@ void buildStatic(){
     return rv;
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD  avoid gcFieldFlag if possible
 -(double)valueForField:(gcFieldFlag)aField{
     switch (aField) {
         case gcFieldFlagSumDuration:
@@ -555,7 +557,7 @@ void buildStatic(){
     return 0.;
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 -(void)setValue:(GCNumberWithUnit*)nu forField:(gcFieldFlag)aField{
     static NSDictionary*_defs = nil;
     if( _defs == nil){
@@ -626,7 +628,7 @@ void buildStatic(){
     
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 +(GCUnit*)unitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType{
     switch (aField) {
         case gcFieldFlagWeightedMeanSpeed:

@@ -367,7 +367,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 // tracks
 // select strftime( '%c', Time/60/60/24+2440587.5 ) as Timestamp, distanceMeter,Speed from gc_track limit 10
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 -(void)createTrackDb:(FMDatabase*)trackdb{
     [trackdb executeUpdate:@"DROP TABLE IF EXISTS gc_version_track"];
     [trackdb executeUpdate:@"DROP TABLE IF EXISTS gc_track"];

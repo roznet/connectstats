@@ -1,3 +1,19 @@
+## Add a new Field
+
+### Add default unit/Description
+
+1. search for `NEWTRACKFIELD`
+2. `-[GCTrackPoint parseDictionary:]`: add field if necessary
+3. add to `fields_en_manual.db`
+4. rerun `build.py`, this rebuilds the fields.db that the app will use 
+5. if new unit, add to `GCUnit.m`
+
+### Connect IQ Field
+
+1. Same steps as above
+2. Edit `GCField+Convert.m`
+
+
 ## Summary Graphs
 
 |                  |1 Field|2 Fields|Field 1 Requirement|Data Filter|Period|YTD  |

@@ -52,10 +52,10 @@ const NSUInteger kDefsConnectIQUnitNameIndex = 1;
                  @"a26e5358-7526-4582-af7e-8606884d96bc":@{
                          @1: @[@"WeightedMeanPower", @"watt"],
                          },
-                 //9ff75afa-d594-4311-89f7-f92ca02118ad[1] momentary energy expenditure
-                 //9ff75afa-d594-4311-89f7-f92ca02118ad[2] relative running economy
-                 
-                 //a26e5358-7526-4582-af7e-8606884d96bc[1] running power
+                 @"9ff75afa-d594-4311-89f7-f92ca02118ad": @{
+                         @1 : @[ @"WeightedMeanMomentaryEnergyExpenditure", @"dimensionless"],
+                         @2 : @[ @"WeightedMeanRelativeRunningEconomy", @"dimensionless" ],
+                         },
                  };
         RZRetain(defs);
     }

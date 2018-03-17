@@ -188,7 +188,7 @@ static void registerInCache(GCField*field){
     return rv;
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD EDIT HERE
 -(gcFieldFlag)derivedFieldFlag{
     gcFieldFlag rv = gcFieldFlagNone;
     static NSDictionary * dict = nil;
