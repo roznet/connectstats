@@ -850,6 +850,13 @@
         NSArray * expectedKeys = defs[aId];
         for (NSString * fieldKey in expectedKeys) {
             XCTAssertTrue([act.availableTrackFields containsObject:[GCField fieldForKey:fieldKey andActivityType:act.activityType]], @"got field %@ for %@", fieldKey, aId);
+            
+            if ([fieldKey isEqualToString:@"WeightedMeanPower"]){
+                // special case, check power was added to lap
+                for (GCLap * lap in act.laps) {
+                    XCTAssertTrue((lap.trackFlags & gcFieldFlagPower) == gcFieldFlagPower, @"power was added back");
+                }
+            }
         }
     }
 }
