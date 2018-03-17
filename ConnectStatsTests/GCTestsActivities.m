@@ -419,7 +419,6 @@
     [db2 open];
     
     GCActivity * act = [GCActivity fullLoadFromDb:db1];
-    GCActivity * compare = [GCActivity fullLoadFromDb:db2];
     
     // basic test the progress serie finishes on the right point
     GCStatsDataSerieWithUnit * su = [act progressSerie:true];
@@ -433,13 +432,16 @@
     XCTAssertEqual([(NSDate*)[act.trackpoints.lastObject time] timeIntervalSinceDate:(NSDate*)[act.trackpoints.firstObject time]], last.y_data);
     XCTAssertEqual([act.trackpoints.lastObject distanceMeters], last.x_data);
 
-    GCStatsDataSerieWithUnit * su2 = [compare progressSerie:false];
+    /*
+     GCActivity * compare = [GCActivity fullLoadFromDb:db2];
+     GCStatsDataSerieWithUnit * su2 = [compare progressSerie:false];
     
     GCStatsDataSerie * diff = [su.serie cumulativeDifferenceWith:su2.serie];
     
     
     
     NSLog(@"%@", diff);
+     */
     
 }
 
@@ -633,9 +635,11 @@
 
     
     GCStatsDataSerie * avg = [hr.serie movingAverageOrSumOf:dist.serie forUnit:60.*10. offset:0. average:NO];
-    NSLog(@"%lu %lu %lu", (unsigned long)trackStats.data.count, (unsigned long)hr.count, (unsigned long)avg.count);
+    XCTAssertEqual(hr.count, avg.count);
+    //NSLog(@"%lu %lu %lu", (unsigned long)trackStats.data.count, (unsigned long)hr.count, (unsigned long)avg.count);
     [GCStatsDataSerie reduceToCommonRange:avg and:hr.serie];
-    NSLog(@"%lu %lu %lu", (unsigned long)trackStats.data.count, (unsigned long)hr.serie.count, (unsigned long)avg.count);
+    XCTAssertEqual(hr.serie.count, avg.count);
+    
     
     
 }

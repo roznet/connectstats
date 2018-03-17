@@ -87,18 +87,13 @@
     if (points && points.count) {
 
         GCUnit * displayUnit = nil;
-        GCUnit * pointUnit   = nil;
-
         GCStatsDataSerieWithUnit * valsWUnit =nil;
         if (self.compareActivity) {
             // Can only be time axis based.
             valsWUnit = [self.activity cumulativeDifferenceSerieWith:self.compareActivity timeAxis:true];
-            displayUnit = valsWUnit.unit;
 
         }else{
             displayUnit = [[self.activity displayUnitForField:self.gradientField] unitForGlobalSystem];
-            pointUnit   = [GCTrackPoint unitForField:self.gradientField.fieldFlag
-                                              andActivityType:self.activity.activityType];
             valsWUnit = [self.activity timeSerieForField:self.gradientField];
             [valsWUnit convertToUnit:displayUnit];
         }

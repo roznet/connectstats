@@ -232,7 +232,7 @@
 #pragma mark -
 
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 -(void)saveToDb:(FMDatabase*)trackdb{
     if(![trackdb executeUpdate:@"INSERT INTO gc_laps (Time,LatitudeDegrees,LongitudeDegrees,DistanceMeters,HeartRateBpm,Speed,Cadence,Altitude,Power,VerticalOscillation,GroundContactTime,Lap,Elapsed,trackflags) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
          self.time,
@@ -274,25 +274,26 @@
     self.elapsed = [to.time timeIntervalSinceDate:from.time];
     if ([to validCoordinate] && [from validCoordinate]) {
         self.distanceMeters = [to distanceMetersFrom:from];
-
-        CLLocationCoordinate2D fromLoc = [from coordinate2D];
-        CLLocationCoordinate2D toLoc   = [to   coordinate2D];
-        float bearing = 0;
-        float fLat = degreesToRadians(fromLoc.latitude);
-        float fLng = degreesToRadians(fromLoc.longitude);
-        float tLat = degreesToRadians(toLoc.latitude);
-        float tLng = degreesToRadians(toLoc.longitude);
+        
+        //FIXME: not sure where BEARING Is used?
+        /*
+         CLLocationCoordinate2D fromLoc = [from coordinate2D];
+         CLLocationCoordinate2D toLoc   = [to   coordinate2D];
+         float fLat = degreesToRadians(fromLoc.latitude);
+         float fLng = degreesToRadians(fromLoc.longitude);
+         float tLat = degreesToRadians(toLoc.latitude);
+         float tLng = degreesToRadians(toLoc.longitude);
 
         float degree = radiandsToDegrees(atan2(sin(tLng-fLng)*cos(tLat), cos(fLat)*sin(tLat)-sin(fLat)*cos(tLat)*cos(tLng-fLng)));
+        float bearing = 0;
         if (degree >= 0) {
             bearing = degree;
         } else {
             bearing = 360+degree;
         }
 
-        //FIXME: not sure where BEARING Is used?
-        //self.extraStorage[ [GCField fieldForKey:GC_BEARING_FIELD andActivityType:nil] = [GCNumberWithUnit numberWithUnitName:@"dd" andValue:bearing];
-
+        self.extraStorage[ [GCField fieldForKey:GC_BEARING_FIELD andActivityType:nil] = [GCNumberWithUnit numberWithUnitName:@"dd" andValue:bearing];
+         */
     }else{
         self.distanceMeters = to.distanceMeters-from.distanceMeters;
     }

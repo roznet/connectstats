@@ -79,7 +79,7 @@
     id arg = def[TK_ARG];
     if (selname) {
         SEL selector = NSSelectorFromString(selname);
-        RZLog(RZLogInfo, @"Starting %@ @%@ %@", NSStringFromClass([self class]), selname, desc);
+        RZLog(RZLogInfo, @"**Starting %@ @%@ %@", NSStringFromClass([self class]), selname, desc);
         self.currentTest = def;
         if (thread) {
             dispatch_async(self.thread,^(){

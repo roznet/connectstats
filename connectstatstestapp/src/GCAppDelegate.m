@@ -80,6 +80,7 @@
     [self cleanWritableFiles];
 
     RZSimNeedle();
+    [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithName:@"Europe/London"]];
 
     [GCAppGlobal setApplicationDelegate:self];
 
@@ -179,6 +180,8 @@
 
 -(void)setupEmptyState:(NSString*)name withSettingsName:(NSString*)settingName{
     //@"activities.db"
+    self.db = nil;
+    
     [RZFileOrganizer forceRebuildEditable:name];
     [RZFileOrganizer removeEditableFile:[RZFileOrganizer writeableFilePath:[self.profile currentDerivedDatabasePath]]];
 

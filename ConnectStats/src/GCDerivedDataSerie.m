@@ -293,7 +293,7 @@ sqlite3_int64 kInvalidSerieId = 0;
                 RZLog(RZLogError, @"Error %@", [db lastErrorMessage]);
             }
         }
-        [db setShouldCacheStatements:NO];
+        //[db setShouldCacheStatements:NO];
     }
     [db commit];
     return self.serieId;

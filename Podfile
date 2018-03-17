@@ -1,5 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.1'
+platform :ios, '9.0'
 target 'ConnectStats' do
   pod 'GoogleMaps'
   pod 'Flurry-iOS-SDK/FlurrySDK'

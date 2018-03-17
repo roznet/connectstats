@@ -108,11 +108,9 @@
     FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"fullsave_1008868846.db"]];
     [db open];
     [act fullSaveToDb:db];
-
-    GCActivity * act2 = [GCActivity activityWithId:aId andDb:db];
-
     
     /*
+     GCActivity * act2 = [GCActivity activityWithId:aId andDb:db];
     if (started) {
         GCStatsDataSerieWithUnit * serie = [act timeSerieForField:[GCField field:CALC_VERTICAL_SPEED forActivityType:act.activityType]];
         RZ_ASSERT(serie.count==count, @"%@ found in %@", CALC_VERTICAL_SPEED, act );
@@ -150,7 +148,7 @@
     NSError * e = nil;
     NSData  * input = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"sporttracks_track_5556610.json"]];
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:input options:NSJSONReadingMutableContainers error:&e];
-    GCActivity * act = [[GCActivity alloc] initWithId:@"5556610" andSportTracksData:json];
+    GCActivity * act = [[[GCActivity alloc] initWithId:@"5556610" andSportTracksData:json] autorelease];
     GCSportTracksActivityDetailParser * detailParser = [GCSportTracksActivityDetailParser activityDetailParser:json forActivity:act];
     RZLog(RZLogInfo,@"Parsed points %d", (int)detailParser.points.count);
     [self endSession:@"GC Parsing SportTracks"];

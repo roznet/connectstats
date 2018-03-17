@@ -152,7 +152,7 @@
     if(![db commit]){
         RZLog(RZLogError, @"db commit %@", [db lastErrorMessage]);
     }
-    [db setShouldCacheStatements:NO];
+    //[db setShouldCacheStatements:NO];
 }
 
 
@@ -400,7 +400,7 @@
         }
     }
     [db commit];
-    [db setShouldCacheStatements:NO];
+    //[db setShouldCacheStatements:NO];
     [save release];
     if (updated>10) {
         RZLog(RZLogInfo, @"Updated %d records in %.1fsecs", (int)updated, [[NSDate date] timeIntervalSinceDate:start]);

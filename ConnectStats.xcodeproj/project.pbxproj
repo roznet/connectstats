@@ -143,6 +143,15 @@
 		422CCE8E1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 422CCE8A1B7EAB7200A4DAEB /* TabBar.xcassets */; };
 		422D900417A1AE2C00C131DC /* GCViewIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900317A1AE2C00C131DC /* GCViewIcons.m */; };
 		422D900717A276F100C131DC /* GCStatsGraphOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900617A276F100C131DC /* GCStatsGraphOptionViewController.m */; };
+		422F283820551AE100187478 /* activity_2545022458.json in Resources */ = {isa = PBXBuildFile; fileRef = 422F282C20551AE000187478 /* activity_2545022458.json */; };
+		422F283920551AE100187478 /* activitylaps_2545022458.json in Resources */ = {isa = PBXBuildFile; fileRef = 422F283420551AE000187478 /* activitylaps_2545022458.json */; };
+		422F283A20551AE100187478 /* activitytrack_2545022458.json in Resources */ = {isa = PBXBuildFile; fileRef = 422F283520551AE100187478 /* activitytrack_2545022458.json */; };
+		422F283B20551AE100187478 /* activity_2545022458.fit in Resources */ = {isa = PBXBuildFile; fileRef = 422F283620551AE100187478 /* activity_2545022458.fit */; };
+		422F283C20551AE100187478 /* activityweather_2545022458.json in Resources */ = {isa = PBXBuildFile; fileRef = 422F283720551AE100187478 /* activityweather_2545022458.json */; };
+		422F283F20557DD000187478 /* GCField+Convert.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F283E20557DD000187478 /* GCField+Convert.m */; };
+		422F284020557DD000187478 /* GCField+Convert.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F283E20557DD000187478 /* GCField+Convert.m */; };
+		422F284120557DD000187478 /* GCField+Convert.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F283E20557DD000187478 /* GCField+Convert.m */; };
+		422F284220557DD000187478 /* GCField+Convert.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F283E20557DD000187478 /* GCField+Convert.m */; };
 		422F52091DFB51E500DD5551 /* FITFitFileDecode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4253B4891CDA953D00437E6A /* FITFitFileDecode.mm */; };
 		422F52101DFB51E800DD5551 /* GCUnit+FIT.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B462E1CDFE03400743D79 /* GCUnit+FIT.m */; };
 		422F52111DFB51F700DD5551 /* FITFitEnumMap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418471CF054B300642F37 /* FITFitEnumMap.mm */; };
@@ -2660,6 +2669,13 @@
 		422D900317A1AE2C00C131DC /* GCViewIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCViewIcons.m; path = src/GCViewIcons.m; sourceTree = "<group>"; };
 		422D900517A276F100C131DC /* GCStatsGraphOptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStatsGraphOptionViewController.h; path = src/GCStatsGraphOptionViewController.h; sourceTree = "<group>"; };
 		422D900617A276F100C131DC /* GCStatsGraphOptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStatsGraphOptionViewController.m; path = src/GCStatsGraphOptionViewController.m; sourceTree = "<group>"; };
+		422F282C20551AE000187478 /* activity_2545022458.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_2545022458.json; sourceTree = "<group>"; };
+		422F283420551AE000187478 /* activitylaps_2545022458.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitylaps_2545022458.json; sourceTree = "<group>"; };
+		422F283520551AE100187478 /* activitytrack_2545022458.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitytrack_2545022458.json; sourceTree = "<group>"; };
+		422F283620551AE100187478 /* activity_2545022458.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = activity_2545022458.fit; sourceTree = "<group>"; };
+		422F283720551AE100187478 /* activityweather_2545022458.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activityweather_2545022458.json; sourceTree = "<group>"; };
+		422F283D20557DD000187478 /* GCField+Convert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GCField+Convert.h"; path = "src/GCField+Convert.h"; sourceTree = "<group>"; };
+		422F283E20557DD000187478 /* GCField+Convert.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "GCField+Convert.m"; path = "src/GCField+Convert.m"; sourceTree = "<group>"; };
 		422FAFF119A1DD6000D09773 /* HealthStats.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthStats.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		422FAFF219A1DD6100D09773 /* HealthStats-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HealthStats-Info.plist"; sourceTree = SOURCE_ROOT; };
 		42306C331F5C5FC400FC7CCB /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -5398,6 +5414,11 @@
 		4253B46D1CD4A53400437E6A /* fit_files */ = {
 			isa = PBXGroup;
 			children = (
+				422F283620551AE100187478 /* activity_2545022458.fit */,
+				422F282C20551AE000187478 /* activity_2545022458.json */,
+				422F283420551AE000187478 /* activitylaps_2545022458.json */,
+				422F283520551AE100187478 /* activitytrack_2545022458.json */,
+				422F283720551AE100187478 /* activityweather_2545022458.json */,
 				4253B46E1CD4A53400437E6A /* activity_1083407258.fit */,
 				4253B46F1CD4A53400437E6A /* activity_1083407258.json */,
 				4253B4701CD4A53400437E6A /* activitylaps_1083407258.json */,
@@ -6065,6 +6086,8 @@
 				427CDB211778F0E10050CFE4 /* GCFieldsCalculatedTrack.m */,
 				42018E9418F1877E0089AB7A /* GCFieldsCategory.h */,
 				42018E9518F1877E0089AB7A /* GCFieldsCategory.m */,
+				422F283D20557DD000187478 /* GCField+Convert.h */,
+				422F283E20557DD000187478 /* GCField+Convert.m */,
 			);
 			name = Fields;
 			sourceTree = "<group>";
@@ -8473,10 +8496,12 @@
 				42BB0D451AB4A9A0008D5A10 /* activityweather_553597228.json in Resources */,
 				42BB0D6D1AB4A9A0008D5A10 /* activityweather_582362589.json in Resources */,
 				42BB0DF71AB4A9A0008D5A10 /* activityweather_656529338.json in Resources */,
+				422F283C20551AE100187478 /* activityweather_2545022458.json in Resources */,
 				420A57EB1CB32C5900EA3B42 /* last_search_0.json in Resources */,
 				42C011B71AB4891B0059B6CF /* activityweather_711605422.json in Resources */,
 				42BB0D9D1AB4A9A0008D5A10 /* activityweather_608039694.json in Resources */,
 				42BB0CAE1AB4A99F008D5A10 /* activityweather_472881065.json in Resources */,
+				422F283820551AE100187478 /* activity_2545022458.json in Resources */,
 				42BB0DF91AB4A9A0008D5A10 /* activityweather_659319871.json in Resources */,
 				42BB0C771AB4A99F008D5A10 /* activityweather_443933250.json in Resources */,
 				42BB0DA61AB4A9A0008D5A10 /* activityweather_613001000.json in Resources */,
@@ -8697,6 +8722,7 @@
 				42BB0D6B1AB4A9A0008D5A10 /* activityweather_581308281.json in Resources */,
 				42BB0BFC1AB4A99F008D5A10 /* activityweather_398557492.json in Resources */,
 				42BB0D3D1AB4A9A0008D5A10 /* activityweather_549968044.json in Resources */,
+				422F283A20551AE100187478 /* activitytrack_2545022458.json in Resources */,
 				42BB0D521AB4A9A0008D5A10 /* activityweather_558714489.json in Resources */,
 				42C011C11AB4891B0059B6CF /* activityweather_711605578.json in Resources */,
 				42BB0DCF1AB4A9A0008D5A10 /* activityweather_635323452.json in Resources */,
@@ -8830,6 +8856,7 @@
 				42BB0D091AB4A9A0008D5A10 /* activityweather_522880730.json in Resources */,
 				42BB0C151AB4A99F008D5A10 /* activityweather_409144160.json in Resources */,
 				42BB0D111AB4A9A0008D5A10 /* activityweather_526838048.json in Resources */,
+				422F283B20551AE100187478 /* activity_2545022458.fit in Resources */,
 				42BB0C031AB4A99F008D5A10 /* activityweather_403102944.json in Resources */,
 				42BB0CDF1AB4A99F008D5A10 /* activityweather_500064739.json in Resources */,
 				42BB0CE51AB4A99F008D5A10 /* activityweather_503001771.json in Resources */,
@@ -9089,6 +9116,7 @@
 				42BB0CE81AB4A99F008D5A10 /* activityweather_504221934.json in Resources */,
 				42BB0C061AB4A99F008D5A10 /* activityweather_404232486.json in Resources */,
 				42BB0D591AB4A9A0008D5A10 /* activityweather_562773693.json in Resources */,
+				422F283920551AE100187478 /* activitylaps_2545022458.json in Resources */,
 				42BB0D731AB4A9A0008D5A10 /* activityweather_586416721.json in Resources */,
 				42BB0BF11AB4A99F008D5A10 /* activityweather_394558888.json in Resources */,
 				42C011991AB4891B0059B6CF /* activityweather_677757738.json in Resources */,
@@ -9570,7 +9598,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -9684,7 +9712,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -9740,6 +9768,7 @@
 				422FAEC919A1DD6000D09773 /* GCGarminSearchJsonParser.m in Sources */,
 				422FAECB19A1DD6000D09773 /* GCGarminLoginDirectRequest.m in Sources */,
 				42D8AF261B26001E00ADDD31 /* GCHealthKitWorkoutParser.m in Sources */,
+				422F284220557DD000187478 /* GCField+Convert.m in Sources */,
 				42BFC2671DCF51F100EAD40E /* GCUnitTrainingZone.m in Sources */,
 				422FAECE19A1DD6000D09773 /* GCBabolatPlayersRequest.m in Sources */,
 				422FAECF19A1DD6000D09773 /* GCSettingsReloadViewController.m in Sources */,
@@ -9972,6 +10001,7 @@
 				4248ED9C1DCFFC6C00254216 /* GCFieldsCategory.m in Sources */,
 				42F14C46203192AA007925C9 /* GCActivityType.m in Sources */,
 				4248ED9A1DCFFB5200254216 /* GCFieldInfo.m in Sources */,
+				422F284120557DD000187478 /* GCField+Convert.m in Sources */,
 				42F4E5131DE08D55001AB244 /* GCMapRouteLogicPointHolder.m in Sources */,
 				42F4E5101DE08D49001AB244 /* GCMapGradientPathOverlayView.m in Sources */,
 				42D1D2001DEE66DB00F13D52 /* FITWindowController.swift in Sources */,
@@ -10209,6 +10239,7 @@
 				42CE39461CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */,
 				4255765F16D8C8D10080F8CE /* GCActivityMetaValue.m in Sources */,
 				4255766316D8CA850080F8CE /* GCActivityCalculatedValue.m in Sources */,
+				422F283F20557DD000187478 /* GCField+Convert.m in Sources */,
 				42DC51551B2784B600B5C12F /* GCHealthKitDailySummaryParser.m in Sources */,
 				42EB516118A7EC8300B85FAB /* GCBabolatSessionRequest.m in Sources */,
 				42AB66CD16DACABA00C633BD /* GCMapGoogleViewController.m in Sources */,
@@ -10499,6 +10530,7 @@
 				42B5E2951BA5B216000FAE4E /* GCGarminActivityLapsParser.m in Sources */,
 				42B5E2961BA5B216000FAE4E /* GCGarminActivityWeatherParser.m in Sources */,
 				42B5E2971BA5B216000FAE4E /* GCGarminRequest.m in Sources */,
+				422F284020557DD000187478 /* GCField+Convert.m in Sources */,
 				42B5E2981BA5B216000FAE4E /* GCGarminActivityDetailRequest.m in Sources */,
 				42B5E2991BA5B216000FAE4E /* GCGarminRequestSearch.m in Sources */,
 				422CC8831E6ACA1700195414 /* FITFitValueStatistics.swift in Sources */,

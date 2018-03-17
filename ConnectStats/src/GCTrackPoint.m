@@ -124,7 +124,7 @@ void buildStatic(){
 
 #pragma mark - Database
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 -(GCTrackPoint*)initWithResultSet:(FMResultSet*)res{
     self = [super init];
     if (self) {
@@ -153,7 +153,7 @@ void buildStatic(){
     return self.extraStorage;
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 -(void)saveToDb:(FMDatabase*)trackdb{
     if (!self.time) {
         RZLog(RZLogError, @"No time in track, can't save");
@@ -240,7 +240,7 @@ void buildStatic(){
     }
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD EDIT HERE
 -(void)parseDictionary:(NSDictionary*)data inActivity:(GCActivity*)act{
     NSString * tmp = nil;
     NSDictionary * d = data[@"directTimestamp"];
@@ -266,7 +266,8 @@ void buildStatic(){
                  @"directSpeed"                        : @[ STOREUNIT_SPEED,    @(gcFieldFlagWeightedMeanSpeed)],
                  @"directElevation"                    : @[ STOREUNIT_ALTITUDE, @(gcFieldFlagAltitudeMeters)],
                  @"directBikeCadence"                  : @[ @"rpm",             @(gcFieldFlagCadence)],
-                 @"directRunCadence"                   : @[ @"spm",             @(gcFieldFlagCadence)],
+                 @"directRunCadence"                   : @[ @"stepsPerMinute",  @(gcFieldFlagCadence)],
+                 @"directSwimCadence"                  : @[ @"strokesPerMinute",@(gcFieldFlagCadence)],
                  @"directPower"                        : @[ @"watt",            @(gcFieldFlagPower)],
                  @"directGroundContactTime"            : @[ @"ms",              @(gcFieldFlagGroundContactTime)],
                  @"directVerticalOscillation"          : @[ @"centimeter",      @(gcFieldFlagVerticalOscillation)],
@@ -283,6 +284,8 @@ void buildStatic(){
                  // This defs will use standard defs
                  @"WeightedMeanFormPower"              : @"WeightedMeanFormPower",
                  @"WeightedMeanLegSpringStiffness"     : @"WeightedMeanLegSpringStiffness",
+                 @"WeightedMeanMomentaryEnergyExpenditure" :@"WeightedMeanMomentaryEnergyExpenditure",
+                 @"WeightedMeanRelativeRunningEconomy" : @"WeightedMeanRelativeRunningEconomy",
                  
                  //@"directFractionalCadence"        : @[ @"spm",             @(gcFieldFlagCadence)],
                  };
@@ -316,6 +319,7 @@ void buildStatic(){
                                                                   @"directRightPedalSmoothness": @1, // in dimensionless
                                                                   @"directLeftTorqueEffectiveness": @1, // in dimensionless
 
+                                                                  @"directPerformanceCondition":@1, // in dimensionless
                                                                   }];
 
         [missing retain];
@@ -524,7 +528,7 @@ void buildStatic(){
     return rv;
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD  avoid gcFieldFlag if possible
 -(double)valueForField:(gcFieldFlag)aField{
     switch (aField) {
         case gcFieldFlagSumDuration:
@@ -553,7 +557,7 @@ void buildStatic(){
     return 0.;
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 -(void)setValue:(GCNumberWithUnit*)nu forField:(gcFieldFlag)aField{
     static NSDictionary*_defs = nil;
     if( _defs == nil){
@@ -566,13 +570,17 @@ void buildStatic(){
                   @(gcFieldFlagPower):[GCUnit watt],
                   @(gcFieldFlagGroundContactTime):[GCUnit ms],
                   @(gcFieldFlagVerticalOscillation):[GCUnit centimeter],
+                  @(gcFieldFlagSumDuration):GCUnit.second,
                   };
         [_defs retain];
     }
     GCUnit * unit = aField != gcFieldFlagNone?_defs[ @(aField) ] : nil;
-
-    double val = [nu convertToUnit:unit].value;
-    
+    double val = 0.0;
+    if( unit ){
+        val = [nu convertToUnit:unit].value;
+    }else{
+        val = nu.value;
+    }
     switch (aField) {
         case gcFieldFlagSumDuration:
             _trackFlags |= aField;
@@ -617,10 +625,10 @@ void buildStatic(){
         default:
             break;
     }
-
+    
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 +(GCUnit*)unitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType{
     switch (aField) {
         case gcFieldFlagWeightedMeanSpeed:

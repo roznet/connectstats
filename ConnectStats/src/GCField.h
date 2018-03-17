@@ -67,6 +67,7 @@
 -(GCField*)correspondingWeightedMeanField;
 -(GCField*)correspondingMinField;
 -(GCField*)correspondingFieldTypeAll;
+-(GCField*)correspondingFieldForActivityType:(NSString*)activityType;
 
 -(NSString*)displayName;
 -(NSString*)displayNameAndUnits;

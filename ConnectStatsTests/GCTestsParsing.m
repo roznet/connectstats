@@ -71,6 +71,7 @@
     XCTAssertTrue( (trackFlags & gcFieldFlagWeightedMeanSpeed) == gcFieldFlagWeightedMeanSpeed);
 }
 
+
 -(void)testActivityParsingModern{
     // Add test for
     NSArray * activityIds = @[ @"1108367966", @"1108368135", @"1089803211", @"924421177"];;
@@ -831,6 +832,30 @@
         if(recordMissing.count > 0){
             for (NSString * one in recordMissing) {
                 NSLog(@"%@,", one);
+            }
+        }
+    }
+}
+-(void)testParseConnectIQFields{
+    
+    NSDictionary * defs = @{
+      @"2477200414": @[ @"WeightedMeanPower"],  // Stryd Fields
+      @"2545022458": @[ @"WeightedMeanPower"],  // Garmin power fields;
+      };
+    
+    for (NSString * aId in defs) {
+        GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+
+        NSArray * expectedKeys = defs[aId];
+        for (NSString * fieldKey in expectedKeys) {
+            XCTAssertTrue([act.availableTrackFields containsObject:[GCField fieldForKey:fieldKey andActivityType:act.activityType]], @"got field %@ for %@", fieldKey, aId);
+            
+            if ([fieldKey isEqualToString:@"WeightedMeanPower"]){
+                // special case, check power was added to lap
+                for (GCLap * lap in act.laps) {
+                    XCTAssertTrue((lap.trackFlags & gcFieldFlagPower) == gcFieldFlagPower, @"power was added back");
+                }
             }
         }
     }

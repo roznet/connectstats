@@ -49,7 +49,7 @@
              NSStringFromClass([GCTestOrganizer class]),
              NSStringFromClass([GCTestStats class]),
              NSStringFromClass([GCTestBasics class]),
-             NSStringFromClass([GCTestTennis class]),
+             //NSStringFromClass([GCTestTennis class]),
 
              NSStringFromClass([GCTestCommunications class])
              ];

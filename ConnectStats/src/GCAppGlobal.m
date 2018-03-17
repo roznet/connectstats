@@ -278,6 +278,12 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 
 #pragma mark - Dates
 
++(void)ensureCalculationCalendarTimeZone:(NSTimeZone*)tz{
+    if(! [_cacheCalendar.timeZone isEqualToTimeZone:tz]){
+        _cacheCalendar.timeZone = tz;
+    }
+}
+
 +(NSCalendar*)calculationCalendar{
     if (_cacheCalendar == nil) {
         _cacheCalendar = [[NSCalendar currentCalendar] retain];

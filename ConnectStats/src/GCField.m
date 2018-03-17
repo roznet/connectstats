@@ -188,7 +188,7 @@ static void registerInCache(GCField*field){
     return rv;
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD EDIT HERE
 -(gcFieldFlag)derivedFieldFlag{
     gcFieldFlag rv = gcFieldFlagNone;
     static NSDictionary * dict = nil;
@@ -349,11 +349,21 @@ static void registerInCache(GCField*field){
 }
 
 -(GCField*)correspondingWeightedMeanField{
-    GCField * rv = [self fieldBySwappingPrefix:@"Max" for:@"WeightedMean"];
+    GCField * rv = nil;
+    if( [self hasPrefix:@"Max"] ){
+        rv = [self fieldBySwappingPrefix:@"Max" for:@"WeightedMean"];
+    }else if ([self hasPrefix:@"Min"]){
+        rv = [self fieldBySwappingPrefix:@"Min" for:@"WeightedMean"];
+    }else if ([self hasPrefix:@"WeightedMean"]){
+        rv = self;
+    }
     return rv;
 }
 -(GCField*)correspondingFieldTypeAll{
     return [GCField fieldForKey:self.key andActivityType:GC_TYPE_ALL];
+}
+-(GCField*)correspondingFieldForActivityType:(NSString*)activityType{
+    return [GCField fieldForKey:self.key andActivityType:activityType];
 }
 -(BOOL)hasSuffix:(NSString*)suf{
     return [self.key hasSuffix:suf];

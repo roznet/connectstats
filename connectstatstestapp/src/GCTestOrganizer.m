@@ -101,7 +101,7 @@
 }
 
 -(void)resetStateWithMerge:(BOOL)merge{
-    [GCAppGlobal setupEmptyState:@"activities.db"];
+    [GCAppGlobal setupEmptyState:@"activities_org.db"];
 
     [GCAppGlobal configSet:CONFIG_MERGE_IMPORT_DUPLICATE boolVal:merge];
 

@@ -51,8 +51,8 @@
     if (self) {
         self.field = [aDecoder decodeObjectForKey:kGCField];
         self.x_field = [aDecoder decodeObjectForKey:kGCX_Field];
-        self.movingAverage = [aDecoder decodeInt64ForKey:kGCMovingAvg];
-        self.statsStyle = [aDecoder decodeInt64ForKey:kGCStatsStyle];
+        self.movingAverage = (NSUInteger)[aDecoder decodeInt64ForKey:kGCMovingAvg];
+        self.statsStyle = (NSUInteger)[aDecoder decodeInt64ForKey:kGCStatsStyle];
         self.timeAxis = [aDecoder decodeBoolForKey:kGCTimeAxis];
         bool hasZone = [aDecoder decodeBoolForKey:kGCZoneCalc];
         NSString * compare = [aDecoder decodeObjectForKey:kGCCompareAct];

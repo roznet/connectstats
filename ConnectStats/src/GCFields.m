@@ -145,7 +145,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
 #pragma mark - Field Properties
 
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD  avoid gcFieldFlag if possible
 +(BOOL)trackFieldCanSum:(gcFieldFlag)field{
     switch (field) {
         case gcFieldFlagAltitudeMeters:
@@ -280,7 +280,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
 #pragma mark - gcFieldFlag
 
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD  avoid gcFieldFlag if possible. this should not be required now as trackfield should be deduced from GCField
 +(gcFieldFlag)trackFieldFromActivityField:(NSString*)aActivityField{
     if (!_activityFromTrack) {
         _activityFromTrack = @{@"SumDistance":                     @(gcFieldFlagSumDistance),
@@ -310,7 +310,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     return [GCFields fieldDisplayName:[GCFields fieldForFlag:which andActivityType:aAct] activityType:aAct];
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD  avoid gcFieldFlag if possible. GCField should be used to deduce the field key
 +(NSString*)activityFieldFromTrackField:(gcFieldFlag)aTrackField andActivityType:(NSString*)aAct{
     switch (aTrackField) {
         case gcFieldFlagSumDistance:
@@ -371,7 +371,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     return [GCFields activityFieldFromTrackField:which andActivityType:activityType];
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD  avoid gcFieldFlag if possible
 #define FLAGS_COUNT 12
 +(gcFieldFlag)nextTrackField:(gcFieldFlag)which in:(NSUInteger)flag{
     gcFieldFlag valid[FLAGS_COUNT] = {
@@ -407,7 +407,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     return rv;
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 +(NSArray*)availableTrackFieldsIn:(NSUInteger)flag{
     gcFieldFlag valid[FLAGS_COUNT] = {
         gcFieldFlagNone,gcFieldFlagCadence,gcFieldFlagWeightedMeanHeartRate,
@@ -475,7 +475,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     return _cacheSwimLapField;
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 +(gcFieldFlag)trackFieldFromSwimLapField:(NSString*)f{
     static NSDictionary * dict = nil;
     if (dict==nil) {

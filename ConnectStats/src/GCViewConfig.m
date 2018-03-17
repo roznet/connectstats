@@ -226,7 +226,7 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 }
 
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD avoid gcFieldFlag if possible
 #define NFLAGS 9
 +(gcFieldFlag)nextTrackFieldForGraph:(gcFieldFlag)curr differentFrom:(gcFieldFlag)avoid valid:(gcFieldFlag)valid{
     gcFieldFlag all[NFLAGS] = {
@@ -290,7 +290,7 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 
 }
 
-//NEWTRACKFIELD
+//NEWTRACKFIELD EDIT HERE to ensure displayed in the right order
 +(NSArray<GCField*>*)validChoicesForGraphIn:(NSArray<GCField*>*)choices{
     NSDictionary * valid = @{@"WeightedMeanPace":               @1,
                              @"WeightedMeanHeartRate":          @2,

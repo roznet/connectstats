@@ -78,8 +78,9 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 +(NSCalendar*)calculationCalendar{
     if (_cacheCalendar == nil) {
         _cacheCalendar = [[NSCalendar currentCalendar] retain];
+        _cacheCalendar.timeZone = [NSTimeZone timeZoneWithName:@"Europe/London"];
     }
-    //[_cacheCalendar setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    //
     [_cacheCalendar setFirstWeekday:1];
 
     return _cacheCalendar;

@@ -59,7 +59,9 @@
     if( act.trackpoints && act.laps){
         NSArray<GCFieldsCalculatedTrack*> * fields = @[ [[[GCFieldsCalculatedTrackElevation alloc] init] autorelease] ];
 
+        BOOL lapMissingPower = false;
         if ([act hasTrackField:gcFieldFlagPower]) {
+            lapMissingPower = true;
             fields = [fields arrayByAddingObject:[[[GCFieldsCalculatedTrackNormalizedPower alloc] init] autorelease]];
         }
         GCLap * totalActivityLap = [[[GCLap alloc] init] autorelease];
@@ -74,6 +76,7 @@
         }
 
         BOOL started = false;
+        
         for (GCTrackPoint * point in act.trackpoints) {
             if (!started) {
                 started = true;
@@ -83,6 +86,9 @@
             }else{
                 if (point.lapIndex < act.laps.count) {
                     GCLap * lap = act.laps[point.lapIndex];
+                    if( lapMissingPower && (lap.trackFlags & gcFieldFlagPower) == gcFieldFlagPower){
+                        lapMissingPower = false;
+                    }
                     for (GCFieldsCalculatedTrack * field in fields) {
                         [field newPoint:point forLaps:@[lap,totalActivityLap] inActivity:act];
                     }
@@ -91,6 +97,18 @@
             }
         }
 
+        if( lapMissingPower ){
+            // lap does not have power, but track has:
+            // when power comes from connectIQ Fields, it does not appear in lap, so add it from the non zero power
+            GCField * from = [GCField fieldForKey:CALC_NONZERO_POWER andActivityType:act.activityType];
+            GCField * to = [GCField fieldForFlag:gcFieldFlagPower andActivityType:act.activityType];
+            for (GCLap * lap in act.laps) {
+                if( (lap.trackFlags & gcFieldFlagPower) != gcFieldFlagPower){
+                    GCNumberWithUnit * val = lap.calculated[from];
+                    [lap setNumberWithUnit:val forField:to inActivity:act];
+                }
+            }
+        }
         NSMutableDictionary<GCField*,GCActivityCalculatedValue*> * newFields = [NSMutableDictionary dictionary];
 
         for (GCField * field in totalActivityLap.calculated) {
