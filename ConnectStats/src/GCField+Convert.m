@@ -51,6 +51,8 @@ const NSUInteger kDefsConnectIQUnitNameIndex = 1;
                          },
                  @"a26e5358-7526-4582-af7e-8606884d96bc":@{
                          @1: @[@"WeightedMeanPower", @"watt"],
+                         @3: @[@"WeightedMeanPower", @"watt"], // appear with different number in summary
+
                          },
                  @"9ff75afa-d594-4311-89f7-f92ca02118ad": @{
                          @1 : @[ @"WeightedMeanMomentaryEnergyExpenditure", @"dimensionless"],

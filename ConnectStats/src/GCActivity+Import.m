@@ -34,6 +34,7 @@
 #import "GCHealthKitSamplesToPointsParser.h"
 #import "GCActivityType.h"
 #import "GCActivityTypes.h"
+#import "GCField+Convert.h"
 
 #ifdef GC_USE_HEALTHKIT
 #import <HealthKit/HealthKit.h>
@@ -284,8 +285,36 @@
     if( [foundMetaDTO isKindOfClass:[NSDictionary class]]){
         [self updateMetadataFromModernGarminJson:foundMetaDTO];
     }
+    
     if (self.metaData==nil) {
         self.metaData = [NSMutableDictionary dictionary];
+    }
+    NSArray * foundConnectIQ = data[@"connectIQMeasurements"];
+    if( [foundConnectIQ isKindOfClass:[NSArray class]]){
+        [self updateConnectIQData:foundConnectIQ];
+    }
+}
+
+-(void)updateConnectIQData:(NSArray*)array{
+    NSMutableDictionary<GCField*,GCActivitySummaryValue*> * data = [NSMutableDictionary dictionary];
+    for (NSDictionary * one in array) {
+        if( [one isKindOfClass:[NSDictionary class]]){
+            NSString * appId = one[@"appID"];
+            NSNumber * fieldNumber = one[@"developerFieldNumber"];
+            if( appId && fieldNumber){
+                NSString * fieldkey = [GCField fieldKeyForConnectIQAppID:appId andFieldNumber:fieldNumber];
+                NSString * unitname  = [GCField unitNameForConnectIQAppID:appId andFieldNumber:fieldNumber];
+                NSNumber * val = one[@"value"];
+                if( fieldkey && unitname){
+                    GCField * field = [GCField fieldForKey:fieldkey andActivityType:self.activityType];
+                    GCActivitySummaryValue * value = [GCActivitySummaryValue activitySummaryValueForField:fieldkey value:[GCNumberWithUnit numberWithUnitName:unitname andValue:val.doubleValue]];
+                    data[ field ] = value;
+                }
+            }
+        }
+    }
+    if( data.count > 0){
+        [self mergeSummaryData:data];
     }
 }
 
