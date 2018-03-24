@@ -26,7 +26,51 @@
 
 
 #import "GCGarminRequestModernActivityTypes.h"
+#import "GCAppGlobal.h"
 
 @implementation GCGarminRequestModernActivityTypes
+-(NSString*)url{
+    return @"https://connect.garmin.com/modern/proxy/activity-service/activity/activityTypes";
+}
+
+-(NSString*)description{
+    return NSLocalizedString(@"Updating Activity Types",@"Request Description");
+}
+-(void)process{
+#if TARGET_IPHONE_SIMULATOR
+    NSError * e = nil;
+    NSString * fn = [NSString stringWithFormat:@"activity_types_modern.json"];
+    [self.theString writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:true encoding:self.encoding error:&e];
+#endif
+    self.stage = gcRequestStageParsing;
+    [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+    dispatch_async([GCAppGlobal worker],^(){
+        [self processParse];
+    });
+}
+
+-(void)processParse{
+    if ([self checkNoErrors]) {
+        NSData *jsonData = [self.theString dataUsingEncoding:self.encoding];
+        NSError *e = nil;
+        
+        NSArray * json = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
+        
+        if (json==nil) {
+            NSString * fn = [NSString stringWithFormat:@"error_activity_types.json"];
+            [self.theString writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:true encoding:self.encoding error:&e];
+            self.status = GCWebStatusParsingFailed;
+            
+            RZLog(RZLogError, @"parsing failed %@", e);
+        }else{
+            self.stage = gcRequestStageSaving;
+            [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+            //[[GCAppGlobal organizer] registerActivityTypes:json];
+            
+            self.status = GCWebStatusOK;
+        }
+    }
+    [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
+}
 
 @end

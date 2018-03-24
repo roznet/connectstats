@@ -54,19 +54,26 @@
             NSMutableArray * acts = json[@"results"][@"activities"];
             self.activities = [NSMutableArray arrayWithCapacity:acts.count];
             self.childIds = [NSMutableArray array];
+            NSUInteger emptyActivities = 0;
             for (NSMutableDictionary * one in acts) {
                 NSDictionary* data = one[@"activity"];
                 NSString * activityId = [data[@"activityId"] stringValue];
-                GCActivity * act = [[GCActivity alloc] initWithId:activityId andGarminData:data];
-                [activities addObject:act];
-                NSArray * child = data[@"childIds"];
-                if (child && [child isKindOfClass:[NSArray class]] && child.count>0 )  {
-                    [self.childIds addObjectsFromArray:child];
-                    act.childIds = child;
+                if( data[@"activitySummary"] == nil){
+                    emptyActivities++;
+                }else{
+                    GCActivity * act = [[GCActivity alloc] initWithId:activityId andGarminData:data];
+                    [activities addObject:act];
+                    NSArray * child = data[@"childIds"];
+                    if (child && [child isKindOfClass:[NSArray class]] && child.count>0 )  {
+                        [self.childIds addObjectsFromArray:child];
+                        act.childIds = child;
+                    }
+                    [act release];
                 }
-                [act release];
             }
-
+            if( emptyActivities > 0){
+                RZLog(RZLogInfo, @"Found %lu/%lu empty activities", emptyActivities, emptyActivities + activities.count);
+            }
             currentPage = [json[@"results"][@"currentPage"] intValue];
             totalPages = [json[@"results"][@"totalPages"] intValue];
         }

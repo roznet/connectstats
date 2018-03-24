@@ -254,7 +254,7 @@
 
     NSDictionary * typeData = data[@"activityType"] ?: data[@"activityTypeDTO"];
     if([typeData isKindOfClass:[NSDictionary class]]){
-        NSString * foundType = typeData[@"typeKey"];
+        NSString * foundType = typeData[@"typeKey"] ?: typeData[@"key"]; // activityType->key, activityTypeDTO->typeKey
         if([foundType isKindOfClass:[NSString class]]){
             GCActivityType * fullType = [[GCAppGlobal activityTypes] activityTypeForKey:foundType];
             if (fullType) {
