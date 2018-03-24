@@ -44,7 +44,12 @@
     }
     return self;
 }
-
+-(void)dealloc{
+    [_modern release];
+    [_legacy release];
+    
+    [super dealloc];
+}
 -(NSString*)url{
     if( self.modern == nil){
         return @"https://connect.garmin.com/modern/proxy/activity-service/activity/activityTypes";

@@ -1988,6 +1988,8 @@
 		42E45FF41F1B72F600CA1F39 /* RZUtilsSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; };
 		42E45FF51F1B72F600CA1F39 /* RZUtilsSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42E4FB411D7AB2740061BB38 /* GCSegmentOrganizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421844AF1D75C3F5005B09BC /* GCSegmentOrganizer.swift */; };
+		42EA5BDE2066EB0200F4617B /* GCGarminRequestModernActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */; };
+		42EA5BE62066EB0700F4617B /* GCGarminRequestModernActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */; };
 		42EAA3AB1EDBA6150081B130 /* GCAppProfiles+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EAA3AA1EDBA6150081B130 /* GCAppProfiles+Swift.m */; };
 		42EAA3AC1EDBA6150081B130 /* GCAppProfiles+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EAA3AA1EDBA6150081B130 /* GCAppProfiles+Swift.m */; };
 		42EAA3AD1EDBA6150081B130 /* GCAppProfiles+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EAA3AA1EDBA6150081B130 /* GCAppProfiles+Swift.m */; };
@@ -9768,6 +9770,7 @@
 				422FAEC419A1DD6000D09773 /* GCActivityTennisHeatmap.m in Sources */,
 				422FAEC519A1DD6000D09773 /* GCTableHeaderFieldsCategory.m in Sources */,
 				422FAEC619A1DD6000D09773 /* GCActivitiesOrganizer.m in Sources */,
+				42EA5BE62066EB0700F4617B /* GCGarminRequestModernActivityTypes.m in Sources */,
 				422FAEC719A1DD6000D09773 /* GCActivity.m in Sources */,
 				422FAEC819A1DD6000D09773 /* GCGarminActivityXMLParser.m in Sources */,
 				422FAEC919A1DD6000D09773 /* GCGarminSearchJsonParser.m in Sources */,
@@ -10488,6 +10491,7 @@
 				42B5E26A1BA5B216000FAE4E /* GCHealthKitWorkoutParser.m in Sources */,
 				42B5E26C1BA5B216000FAE4E /* GCHealthKitDayDetailParser.m in Sources */,
 				42B5E26D1BA5B216000FAE4E /* GCHealthKitRequest.m in Sources */,
+				42EA5BDE2066EB0200F4617B /* GCGarminRequestModernActivityTypes.m in Sources */,
 				42B5E26E1BA5B216000FAE4E /* GCSportTracksActivityListParser.m in Sources */,
 				42B5E26F1BA5B216000FAE4E /* GCSportTracksActivityDetailParser.m in Sources */,
 				42B5E2701BA5B216000FAE4E /* GCSportTracksBase.m in Sources */,
