@@ -54,6 +54,7 @@
 		421418431CF04FB800642F37 /* FITFitFieldValue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418421CF04FB800642F37 /* FITFitFieldValue.mm */; };
 		421418481CF054B300642F37 /* FITFitEnumMap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418471CF054B300642F37 /* FITFitEnumMap.mm */; };
 		421516BC19A47C450080CD4C /* GCHealthKitRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 421516BB19A47C450080CD4C /* GCHealthKitRequest.m */; };
+		421736A42066A07F00ACADC1 /* GCGarminRequestModernActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */; };
 		421747F819C4FD4800C13C16 /* GCFitBitActivitiesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 421747F719C4FD4800C13C16 /* GCFitBitActivitiesParser.m */; };
 		421747F919C4FD4800C13C16 /* GCFitBitActivitiesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 421747F719C4FD4800C13C16 /* GCFitBitActivitiesParser.m */; };
 		421844B01D75C3F5005B09BC /* GCSegmentOrganizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421844AF1D75C3F5005B09BC /* GCSegmentOrganizer.swift */; };
@@ -2590,6 +2591,8 @@
 		421418471CF054B300642F37 /* FITFitEnumMap.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FITFitEnumMap.mm; path = src/FITFitEnumMap.mm; sourceTree = "<group>"; };
 		421516BA19A47C450080CD4C /* GCHealthKitRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitRequest.h; path = src/GCHealthKitRequest.h; sourceTree = "<group>"; };
 		421516BB19A47C450080CD4C /* GCHealthKitRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitRequest.m; path = src/GCHealthKitRequest.m; sourceTree = "<group>"; };
+		421736A22066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCGarminRequestModernActivityTypes.h; path = src/GCGarminRequestModernActivityTypes.h; sourceTree = "<group>"; };
+		421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequestModernActivityTypes.m; path = src/GCGarminRequestModernActivityTypes.m; sourceTree = "<group>"; };
 		421747F619C4FD4800C13C16 /* GCFitBitActivitiesParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFitBitActivitiesParser.h; path = src/GCFitBitActivitiesParser.h; sourceTree = "<group>"; };
 		421747F719C4FD4800C13C16 /* GCFitBitActivitiesParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFitBitActivitiesParser.m; path = src/GCFitBitActivitiesParser.m; sourceTree = "<group>"; };
 		421844AF1D75C3F5005B09BC /* GCSegmentOrganizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCSegmentOrganizer.swift; path = src/GCSegmentOrganizer.swift; sourceTree = "<group>"; };
@@ -5610,6 +5613,8 @@
 				42C011421AB43DFD0059B6CF /* GCGarminRequestActivityWeather.m */,
 				427DDCBD1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.h */,
 				427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */,
+				421736A22066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.h */,
+				421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */,
 			);
 			name = GarminRequests;
 			sourceTree = "<group>";
@@ -10260,6 +10265,7 @@
 				42C92FDF170FB73F0037602F /* GCActivityAutoLapChoices.m in Sources */,
 				42A3AA161D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m in Sources */,
 				4285F0E31719CB1800A1FAA8 /* GCSettingsFilterViewController.m in Sources */,
+				421736A42066A07F00ACADC1 /* GCGarminRequestModernActivityTypes.m in Sources */,
 				426B0F0D1DA111AD0091A734 /* GCGarminSearchModernJsonParser.m in Sources */,
 				4257339A1BC05A1A0080D75F /* GCActivityPreviewingViewController.m in Sources */,
 				427CDB221778F0E10050CFE4 /* GCFieldsCalculatedTrack.m in Sources */,
