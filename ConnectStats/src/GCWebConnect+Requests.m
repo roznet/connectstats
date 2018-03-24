@@ -177,8 +177,10 @@
     [self servicesLogin];
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
         if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] ){
+            [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
             [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:0 andMode:false] autorelease]];
         }else{
+            [self addRequest:[[[GCGarminListActivityTypes alloc] init] autorelease]];
             [self addRequest:[[[GCGarminSearch alloc] initWithStart:0 percent:0.0 andMode:false] autorelease]];
         }
         // get user/zones
@@ -187,14 +189,6 @@
     }
 
     [self nonGarminSearch];
-    [self addRequest:[[[GCGarminListActivityTypes alloc] init] autorelease]];
-    [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
-    /*
-     if (![[GCAppGlobal organizer].activityTypes hasTypes]) {
-        if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
-            [self addRequest:[[[GCGarminListActivityTypes alloc] init] autorelease]];
-        }
-    }*/
 }
 -(void)servicesSearchAllActivities{
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
