@@ -254,7 +254,7 @@
 
     NSDictionary * typeData = data[@"activityType"] ?: data[@"activityTypeDTO"];
     if([typeData isKindOfClass:[NSDictionary class]]){
-        NSString * foundType = typeData[@"typeKey"];
+        NSString * foundType = typeData[@"typeKey"] ?: typeData[@"key"]; // activityType->key, activityTypeDTO->typeKey
         if([foundType isKindOfClass:[NSString class]]){
             GCActivityType * fullType = [[GCAppGlobal activityTypes] activityTypeForKey:foundType];
             if (fullType) {
@@ -910,7 +910,7 @@
     self.location = @"";
     if (self.activityType == nil) {
         self.activityType = GC_TYPE_OTHER;
-        GCActivityType * atype = [[GCActivityTypes activityTypes] activityTypeForStravaType:data[@"type"]];
+        GCActivityType * atype = [[GCAppGlobal activityTypes] activityTypeForStravaType:data[@"type"]];
         self.activityTypeDetail = atype;
         if (self.activityTypeDetail==nil) {
             self.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_OTHER];

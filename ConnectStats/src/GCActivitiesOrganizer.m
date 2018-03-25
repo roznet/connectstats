@@ -1010,7 +1010,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             [[GCAppGlobal derived] forceReprocessActivity:activityId];
         }
         [_db commit];
-        [self notify];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self notify];
+        });
     }
 }
 

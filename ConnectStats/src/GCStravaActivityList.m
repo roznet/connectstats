@@ -35,8 +35,14 @@
     GCStravaActivityList * rv = [[[GCStravaActivityList alloc] init] autorelease];
     if (rv) {
         rv.navigationController = nav;
+        rv.lastFoundDate = [NSDate date];
     }
     return rv;
+}
+
+-(void)dealloc{
+    [_lastFoundDate release];
+    [super dealloc];
 }
 
 -(NSString*)url{
@@ -56,7 +62,7 @@
         return NSLocalizedString(@"Login to strava", @"Strava Upload");
     }else{
         if (self.page > 0) {
-            return [NSString stringWithFormat:NSLocalizedString(@"Downloading strava History %d", @"Strava Upload"), self.page+1];
+            return [NSString stringWithFormat:NSLocalizedString(@"Downloading History %@", @"Strava Upload"), [self.lastFoundDate?:[NSDate date] dateFormatFromToday]];
         }else{
             return NSLocalizedString(@"Downloading strava History", @"Strava Upload");
         }
@@ -88,6 +94,9 @@
         self.reachedExisting = false;
         NSUInteger newActivitiesCount = 0;
         for (GCActivity * act in parser.activities) {
+            if( act.date) {
+                self.lastFoundDate = act.date;
+            }
             if ([[GCAppGlobal organizer] activityForId:act.activityId]) {
                 self.reachedExisting = true;
             }else{
@@ -116,6 +125,7 @@
             GCStravaActivityList * next = [GCStravaActivityList stravaActivityList:nil];
             next.stravaAuth = self.stravaAuth;
             next.page = self.page + 1;
+            next.lastFoundDate = self.lastFoundDate;
             return next;
         }
     }

@@ -79,7 +79,7 @@
 #define CONFIG_BABOLAT_ENABLE           @"config_babolat_enable"
 #define CONFIG_GARMIN_ENABLE            @"config_garmin_enable"
 #define CONFIG_GARMIN_LOGIN_METHOD      @"config_garmin_login_method"
-#define CONFIG_GARMIN_USE_MODERN        @"config_garmin_use_modern"
+#define CONFIG_GARMIN_USE_MODERN        @"config_garmin_use_modern_v2"
 #define CONFIG_STRAVA_ENABLE            @"config_strava_enable"
 #define CONFIG_STRAVA_SEGMENTS            @"config_strava_segments"
 #define CONFIG_SHARING_STRAVA_AUTO      @"config_sharing_strava_auto"

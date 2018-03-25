@@ -1,8 +1,8 @@
-//  MIT Licence
+//  MIT License
 //
-//  Created on 13/03/2014.
+//  Created on 24/03/2018 for ConnectStats
 //
-//  Copyright (c) 2014 Brice Rosenzweig.
+//  Copyright (c) 2018 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
-//  
+//
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-//  
+//
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,16 +21,15 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
-//  
+//
 
-#import "GCStravaReqBase.h"
 
-@interface GCStravaActivityList : GCStravaReqBase
-@property (nonatomic,assign) NSUInteger page;
-@property (nonatomic,assign) NSUInteger parsedCount;
-@property (nonatomic,assign) BOOL reachedExisting;
-@property (nonatomic,retain) NSDate * lastFoundDate;
 
-+(GCStravaActivityList*)stravaActivityList:(UINavigationController*)nav;
+#import "GCGarminRequest.h"
+@class GCActivityTypes;
+
+@interface GCGarminRequestModernActivityTypes : GCGarminReqBase
+
++(GCGarminRequestModernActivityTypes*)testWithFilesIn:(NSString*)path forTypes:(GCActivityTypes*)types;
 
 @end

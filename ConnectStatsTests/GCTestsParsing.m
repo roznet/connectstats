@@ -34,6 +34,7 @@
 #import "ConnectStats-Swift.h"
 #import "GCTrackFieldChoices.h"
 #import "GCTrackStats.h"
+#import "GCGarminRequestModernActivityTypes.h"
 
 @interface GCTestsParsing : GCTestCase
 
@@ -164,38 +165,29 @@
 
 -(void)testParseActivityTypes{
     
-    GCActivityTypes * types = [ GCActivityTypes activityTypes];
+    GCActivityTypes * types = [GCActivityTypes activityTypes];
     XCTAssertEqualObjects([types activityTypeForKey:GC_TYPE_CYCLING], [types activityTypeForStravaType:@"Ride"]);
     
-    GCFieldCache * cache = [GCFieldCache cacheWithDb:nil andLanguage:@"en"];
+    // Build incomplete activity types, from old download file
     
-    NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"modern_activity_types.json" forClass:[self class]]];
-    NSArray * json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-
-    NSMutableDictionary * byName = [NSMutableDictionary dictionary];
-    NSMutableDictionary * byTypeId = [NSMutableDictionary dictionary];
+    types = [[[GCActivityTypes alloc] init] autorelease];
+    NSString * path = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
+    NSError * err = nil;
     
-    if([json isKindOfClass:[NSArray class]]){
-        
-        for (NSDictionary * one in json) {
-            byName[one[@"typeKey"]] = one;
-            byTypeId[one[@"typeId"]] = one;
-        }
-    }
+    NSData * jsonData = [NSData dataWithContentsOfFile:[path stringByAppendingPathComponent:@"modern_activity_types.json"]];
+    NSArray * modern = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
     
-    for (NSString * typeName in byName) {
-        NSString * parent = @"MISSING";
-        NSDictionary * sub = byName[typeName];
-        NSString * parentId = sub[@"parentTypeId"];
-        if( parentId){
-            parent = byTypeId[parentId][@"typeKey"];
-        }
-        NSString * display = @"missing";
-        if(parent){
-            display = [cache infoForActivityType:typeName].displayName;
-        }
-
-    }
+    // legacy is more recent, but it's fine, just use for display info
+    jsonData = [NSData dataWithContentsOfFile:[path stringByAppendingPathComponent:@"activity_types.json"]];
+    NSArray * legacy = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err][@"dictionary"];
+    
+    [types loadMissingFromGarmin:modern withDisplayInfoFrom:legacy];
+    NSUInteger n = types.allTypes.count;
+    
+    [GCGarminRequestModernActivityTypes testWithFilesIn:path forTypes:types];
+    
+    XCTAssertGreaterThan(types.allTypes.count, n, @"Got more types");
+    XCTAssertGreaterThanOrEqual(types.allTypes.count, modern.count); // registered all new types
 }
 
 -(void)testParseSearch{
@@ -859,14 +851,6 @@
             }
         }
     }
-}
-
--(void)testHealthCollected{
-    /*
-    NSMutableDictionary * dict = [NSKeyedUnarchiver unarchiveObjectWithFile:[RZFileOrganizer bundleFilePath:@"collected.plist" forClass:[self class]]];
-    NSLog(@"%@", dict);
-    NSLog(@"%d", (int)dict.count);
-     */
 }
 
 

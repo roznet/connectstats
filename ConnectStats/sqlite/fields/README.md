@@ -14,6 +14,12 @@
 2. Edit `GCField+Convert.m`
 
 
+## Update Activity Types
+
+1. copy new `activity_types.json` into `sqlite/fields/activity_types_en.json`
+2. Download modern activity TYpes from `https://connect.garmin.com/modern/proxy/activity-service/activity/activityTypes?_=1521579380211` (identify exact url with charles) and copy into `sqlite/fields/activity_types_modern.json`
+3. rebuild fields.db
+
 ## Summary Graphs
 
 |                  |1 Field|2 Fields|Field 1 Requirement|Data Filter|Period|YTD  |

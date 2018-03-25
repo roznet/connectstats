@@ -26,6 +26,7 @@
 #import <Foundation/Foundation.h>
 
 @class GCFieldCache;
+@class GCActivityTypes;
 
 @interface GCActivityType : NSObject<NSCopying,NSCoding>
 
@@ -89,5 +90,8 @@
  */
 -(BOOL)isPaceValid;
 -(BOOL)isSki;
+
++(nonnull GCActivityTypes*)activityTypes;
++(void)setActivityTypes:(nonnull GCActivityTypes*)a;
 
 @end
