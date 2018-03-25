@@ -51,12 +51,12 @@ static GCActivityTypes * _activityTypesCache = nil;
 
 +(void)setActivityTypes:(GCActivityTypes *)a{
     if( _activityTypesCache != nil){
-        [_activityTypesCache release];
+        RZRelease(_activityTypesCache release);
         _activityTypesCache = nil;
     }
     
     _activityTypesCache = a;
-    [_activityTypesCache retain];
+    RZRetain(_activityTypesCache retain);
 }
 
 +(GCFieldCache*)fieldCache{
