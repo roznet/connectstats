@@ -29,25 +29,34 @@
 #import "GCActivityTypes.h"
 
 static GCFieldCache * _fieldCache = nil;
+static GCActivityTypes * _activityTypesCache = nil;
 
 @interface GCActivityType ()
 @property (nonnull,retain,nonatomic) NSString * key;
 @property (nonatomic,assign) NSUInteger typeId;
 @property (nullable,retain,nonatomic) GCActivityType * parentType;
 
-+(GCActivityTypes*)activityTypes;
 
 @end
 
 @implementation GCActivityType
 
 +(GCActivityTypes*)activityTypes{
-    static GCActivityTypes * types = nil;
-    if( types == nil){
-        types = [GCActivityTypes activityTypes];
-        RZRetain(types);
+    if( _activityTypesCache == nil){
+        _activityTypesCache = [GCActivityTypes activityTypes];
+        RZRetain(_activityTypesCache);
     }
-    return types;
+    return _activityTypesCache;
+}
+
++(void)setActivityTypes:(GCActivityTypes *)a{
+    if( _activityTypesCache != nil){
+        [_activityTypesCache release];
+        _activityTypesCache = nil;
+    }
+    
+    _activityTypesCache = a;
+    [_activityTypesCache retain];
 }
 
 +(GCFieldCache*)fieldCache{

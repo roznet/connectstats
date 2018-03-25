@@ -163,6 +163,7 @@ void checkVersion(){
 
     [self setupFieldCache];
     self.activityTypes = [GCActivityTypes activityTypes];
+    [GCActivityType setActivityTypes:self.activityTypes];
 
     [GCUnit setGlobalSystem:[_settings[CONFIG_UNIT_SYSTEM] intValue]];
     [GCUnit setStrideStyle:[_settings[CONFIG_STRIDE_STYLE] intValue]];

@@ -910,7 +910,7 @@
     self.location = @"";
     if (self.activityType == nil) {
         self.activityType = GC_TYPE_OTHER;
-        GCActivityType * atype = [[GCActivityTypes activityTypes] activityTypeForStravaType:data[@"type"]];
+        GCActivityType * atype = [[GCAppGlobal activityTypes] activityTypeForStravaType:data[@"type"]];
         self.activityTypeDetail = atype;
         if (self.activityTypeDetail==nil) {
             self.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_OTHER];

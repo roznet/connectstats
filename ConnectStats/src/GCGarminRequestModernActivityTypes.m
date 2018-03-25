@@ -109,7 +109,7 @@
             self.stage = gcRequestStageSaving;
             [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
             
-            NSUInteger n = [[GCActivityTypes activityTypes] loadMissingFromGarmin:self.modern withDisplayInfoFrom:self.legacy];
+            NSUInteger n = [[GCAppGlobal activityTypes] loadMissingFromGarmin:self.modern withDisplayInfoFrom:self.legacy];
             if( n > 0){
                 RZLog(RZLogInfo, @"Found %lu new types", (long unsigned)n);
             }
@@ -129,7 +129,7 @@
     rv.modern = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
     
     jsonData = [NSData dataWithContentsOfFile:[path stringByAppendingPathComponent:rv.fileName]];
-    rv.legacy = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
+    rv.legacy = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err][@"dictionary"];
 
     [types loadMissingFromGarmin:rv.modern withDisplayInfoFrom:rv.legacy];
     

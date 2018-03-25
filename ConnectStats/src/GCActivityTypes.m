@@ -67,9 +67,9 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
     
     NSUInteger foundNew = 0;
     BOOL stillMissing = true;
-    NSUInteger safeGuard = 5;
+    NSUInteger safeGuard = 8;
     while( safeGuard > 0 && stillMissing){
-        stillMissing = true;
+        stillMissing = false;
         for (NSNumber * typeId in defsFromDb) {
             if( byTypeId[typeId] != nil){
                 continue;
@@ -188,12 +188,16 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
                 display = [GCField displayNameImpliedByFieldKey:key];
             };
             
-            missing[typeId] = @{
-                                kTypeId : typeId,
-                                kTypeKey : key,
-                                kTypeParent : parentTypeId,
-                                kTypeDisplay : display,
-                                };
+            if( ! self.typesById[typeId]){
+                missing[typeId] = @{
+                                    kTypeId : typeId,
+                                    kTypeKey : key,
+                                    kTypeParent : parentTypeId,
+                                    kTypeDisplay : display,
+                                    };
+            }else if (![self.typesById[typeId].key isEqualToString:key]){
+                RZLog(RZLogWarning, @"Inconsistent type: garmin=%@[%@] pre=%@[%@]", self.typesById[typeId], typeId, key, typeId);
+            }
         }
     }
     

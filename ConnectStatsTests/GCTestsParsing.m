@@ -168,8 +168,26 @@
     GCActivityTypes * types = [GCActivityTypes activityTypes];
     XCTAssertEqualObjects([types activityTypeForKey:GC_TYPE_CYCLING], [types activityTypeForStravaType:@"Ride"]);
     
-    GCGarminRequestModernActivityTypes * req = [GCGarminRequestModernActivityTypes testWithFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] forTypes:types];
+    // Build incomplete activity types, from old download file
     
+    types = [[[GCActivityTypes alloc] init] autorelease];
+    NSString * path = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
+    NSError * err = nil;
+    
+    NSData * jsonData = [NSData dataWithContentsOfFile:[path stringByAppendingPathComponent:@"modern_activity_types.json"]];
+    NSArray * modern = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
+    
+    // legacy is more recent, but it's fine, just use for display info
+    jsonData = [NSData dataWithContentsOfFile:[path stringByAppendingPathComponent:@"activity_types.json"]];
+    NSArray * legacy = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err][@"dictionary"];
+    
+    [types loadMissingFromGarmin:modern withDisplayInfoFrom:legacy];
+    NSUInteger n = types.allTypes.count;
+    
+    [GCGarminRequestModernActivityTypes testWithFilesIn:path forTypes:types];
+    
+    XCTAssertGreaterThan(types.allTypes.count, n, @"Got more types");
+    XCTAssertGreaterThanOrEqual(types.allTypes.count, modern.count); // registered all new types
 }
 
 -(void)testParseSearch{
