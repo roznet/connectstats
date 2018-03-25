@@ -26,8 +26,14 @@
 #import "GCActivityTypes.h"
 #import "GCActivityType.h"
 #import "GCField.h"
+#import "GCField+Convert.h"
 
 static NSUInteger nonPredefinedTypeId = 10000;
+
+static NSString * kTypeId = @"kTypeId";
+static NSString * kTypeKey = @"kTypeKey";
+static NSString * kTypeParent = @"kParentTypeId";
+static NSString * kTypeDisplay = @"kTypeDisplay";
 
 @interface GCActivityTypes ()
 
@@ -54,15 +60,53 @@ static NSUInteger nonPredefinedTypeId = 10000;
 }
 #endif
 
+-(NSUInteger)addMissingFrom:(NSDictionary<NSNumber*,NSDictionary*>*)defsFromDb{
+    // Populate parent Ids and by detail
+    NSMutableDictionary * byActivityType = [NSMutableDictionary dictionaryWithDictionary:self.typesByKey?:@{}];
+    NSMutableDictionary * byTypeId = [NSMutableDictionary dictionaryWithDictionary:self.typesById?:@{}];
+    
+    NSUInteger foundNew = 0;
+    BOOL stillMissing = true;
+    NSUInteger safeGuard = 5;
+    while( safeGuard > 0 && stillMissing){
+        stillMissing = true;
+        for (NSNumber * typeId in defsFromDb) {
+            if( byTypeId[typeId] != nil){
+                continue;
+            }
+            NSDictionary * defs = defsFromDb[typeId];
+            NSNumber * parentId = defs[kTypeParent];
+            GCActivityType * parentType = byTypeId[ parentId];
+            if (parentId.integerValue == 0 || parentType) {
+                NSString * key = defs[kTypeKey];
+                GCActivityType * type = [GCActivityType activityType:key typeId:typeId.integerValue andParent:parentType];
+                byTypeId[typeId] = type;
+                byActivityType[key] = type;
+                foundNew++;
+            }else{
+                stillMissing = true;
+            }
+        }
+        safeGuard--;
+    }
+    if( safeGuard == 0 && stillMissing){
+        RZLog(RZLogError, @"Failed to process all types after 5 iterations: parsed %lu < %lu", (unsigned long)byTypeId.count, (unsigned long)defsFromDb.count);
+    }
+    if( byTypeId.count != byActivityType.count){
+        RZLog(RZLogError, @"Inconsistency in types byKey %lu != byTypeId %lu", (unsigned long)byTypeId.count, (unsigned long)byActivityType.count);
+    }
+    
+    self.typesByKey = byActivityType;
+    self.typesById = byTypeId;
+    
+    return foundNew;
+}
+
 -(void)loadPredefined{
     FMDatabase * fdb = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"fields.db"]];
     [fdb open];
 
     NSMutableDictionary * defsFromDb = [NSMutableDictionary dictionary];
-
-    NSString * kTypeId = @"kTypeId";
-    NSString * kTypeKey = @"kTypeKey";
-    NSString * kTypeParent = @"kParentTypeId";
 
     FMResultSet * res = [fdb executeQuery:@"SELECT * FROM gc_activityType_modern"];
     while( [res next]){
@@ -76,48 +120,86 @@ static NSUInteger nonPredefinedTypeId = 10000;
 
     [fdb close];
 
-    // Populate parent Ids and by detail
-    NSMutableDictionary * byActivityType = [NSMutableDictionary dictionaryWithCapacity:defsFromDb.count];
-    NSMutableDictionary * byTypeId = [NSMutableDictionary dictionaryWithCapacity:defsFromDb.count];
+    NSUInteger n = [self addMissingFrom:defsFromDb];
+    if( n > 0){
+        RZLog(RZLogInfo, @"Registered %lu ActivityTypes", (long unsigned)n);
+    }
+    [self addNonGarminTypes];
+}
 
-    NSUInteger safeGuard = 5;
-    while( safeGuard > 0 && byTypeId.count < defsFromDb.count){
-        for (NSNumber * typeId in defsFromDb) {
-            NSDictionary * defs = defsFromDb[typeId];
-            NSNumber * parentId = defs[kTypeParent];
-            GCActivityType * parentType = byTypeId[ parentId];
-            if (parentId.integerValue == 0 || parentType) {
-                NSString * key = defs[kTypeKey];
-                GCActivityType * type = [GCActivityType activityType:key typeId:typeId.integerValue andParent:parentType];
-                byTypeId[typeId] = type;
-                byActivityType[key] = type;
+-(NSUInteger)loadMissingFromGarmin:(NSArray<NSDictionary*>*)modern withDisplayInfoFrom:(NSArray<NSDictionary*>*)legacy{
+    NSDictionary * defs = [self buildFromGarmin:modern withDisplay:legacy];
+    return [self addMissingFrom:defs];
+}
+
+-(void)addNonGarminTypes{
+    NSMutableDictionary<NSNumber*,NSDictionary*>* missing = [NSMutableDictionary dictionary];
+    
+    NSUInteger nonActivityAllId = 0;
+    if( self.typesByKey[@"non_activity_all"] == nil){
+        nonActivityAllId = nonPredefinedTypeId++;
+        NSUInteger typeId = nonActivityAllId;
+        missing[ @(typeId)] = @{
+                                kTypeId : @(typeId),
+                                kTypeKey : @"non_activity_all",
+                                kTypeParent : @(0),
+                                };
+    }else{
+        nonActivityAllId = self.typesByKey[@"non_activity_all"].typeId;
+    }
+    if( self.typesByKey[@"GC_TYPE_DAY"] == nil ){
+        NSUInteger typeId = nonPredefinedTypeId++;
+        missing[ @(typeId)] = @{
+                                kTypeId : @(typeId),
+                                kTypeKey : GC_TYPE_DAY,
+                                kTypeParent : @(nonActivityAllId),
+                                };
+    }
+
+    if( missing.count > 0){
+        [self addMissingFrom:missing];
+    }
+}
+
+-(NSDictionary<NSNumber*,NSDictionary*>*)buildFromGarmin:(NSArray<NSDictionary*>*)modern
+                                             withDisplay:(NSArray<NSDictionary*>*)legacy{
+    NSMutableDictionary * displayDict = [NSMutableDictionary dictionary];
+    if([legacy isKindOfClass:[NSArray class]]){
+        for (NSDictionary * one in legacy) {
+            NSString * key = one[@"key"];
+            NSString * display = one[@"display"];
+            
+            if( key && display){
+                displayDict[key] = display;
             }
         }
-        safeGuard--;
     }
-    if( safeGuard == 0 && byTypeId.count < defsFromDb.count){
-        RZLog(RZLogError, @"Failed to process all types after 5 iterations: parsed %lu < %lu", (unsigned long)byTypeId.count, (unsigned long)defsFromDb.count);
-    }
-    if( byTypeId.count != byActivityType.count){
-        RZLog(RZLogError, @"Inconsistency in types byKey %lu != byTypeId %lu", (unsigned long)byTypeId.count, (unsigned long)byActivityType.count);
-    }
-
-    // Now add non garmin types
-
     
-    GCActivityType * nonworkout = [GCActivityType activityType:@"non_activity_all" typeId:nonPredefinedTypeId++ andParent:nil];
-
-    GCActivityType * day = [GCActivityType activityType:GC_TYPE_DAY typeId:nonPredefinedTypeId andParent:nonworkout];
-
-    byActivityType[day.key] = day;
-    byActivityType[nonworkout.key] = nonworkout;
-
-    byTypeId[@(day.typeId)] = day;
-    byTypeId[@(nonworkout.typeId)] = nonworkout;
-
-    self.typesByKey = byActivityType;
-    self.typesById = byTypeId;
+    NSMutableDictionary<NSNumber*, NSDictionary*>*missing =[NSMutableDictionary dictionary];
+    
+    if([modern isKindOfClass:[NSArray class]]){
+        for (NSDictionary * one in modern) {
+            NSString * key = one[@"typeKey"];
+            NSNumber * typeId = one[@"typeId"];
+            NSNumber * parentTypeId = one[@"parentTypeId"];
+            
+            NSString * display = displayDict[key];
+            if( display == nil){
+                display = [GCField displayNameImpliedByFieldKey:key];
+            };
+            
+            missing[typeId] = @{
+                                kTypeId : typeId,
+                                kTypeKey : key,
+                                kTypeParent : parentTypeId,
+                                kTypeDisplay : display,
+                                };
+        }
+    }
+    
+    return missing;
 }
+
 
 #pragma mark - Access
 

@@ -107,6 +107,8 @@
 		42289D5B1C7B9CEE005A5D0E /* GCStatsHistGraphOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42289D5A1C7B9CEE005A5D0E /* GCStatsHistGraphOptionViewController.m */; };
 		42295E041EC6F38C00F4F7EE /* GCTestServicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42295E031EC6F38C00F4F7EE /* GCTestServicesViewController.m */; };
 		42295E081EC6F4D900F4F7EE /* GCTestServiceGarmin.m in Sources */ = {isa = PBXBuildFile; fileRef = 42295E071EC6F4D900F4F7EE /* GCTestServiceGarmin.m */; };
+		422965832066F05E009C86BB /* activity_types.json in Resources */ = {isa = PBXBuildFile; fileRef = 422965802066F056009C86BB /* activity_types.json */; };
+		422965842066F062009C86BB /* activity_types_modern.json in Resources */ = {isa = PBXBuildFile; fileRef = 422965782066F055009C86BB /* activity_types_modern.json */; };
 		422AC6A61C1CC9AA002DDA9C /* test_activity_day___healthkit__Default_20151106.db in Resources */ = {isa = PBXBuildFile; fileRef = 422AC6A21C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151106.db */; };
 		422AC6A71C1CC9AF002DDA9C /* test_activity_day___healthkit__Default_20151109.db in Resources */ = {isa = PBXBuildFile; fileRef = 422AC6A31C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151109.db */; };
 		422AC6A81C1CCA3E002DDA9C /* GCCellActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */; };
@@ -2654,6 +2656,8 @@
 		42295E031EC6F38C00F4F7EE /* GCTestServicesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestServicesViewController.m; path = src/GCTestServicesViewController.m; sourceTree = "<group>"; };
 		42295E061EC6F4D900F4F7EE /* GCTestServiceGarmin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestServiceGarmin.h; path = src/GCTestServiceGarmin.h; sourceTree = "<group>"; };
 		42295E071EC6F4D900F4F7EE /* GCTestServiceGarmin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceGarmin.m; path = src/GCTestServiceGarmin.m; sourceTree = "<group>"; };
+		422965782066F055009C86BB /* activity_types_modern.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_types_modern.json; sourceTree = "<group>"; };
+		422965802066F056009C86BB /* activity_types.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_types.json; sourceTree = "<group>"; };
 		422AC6A21C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151106.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "test_activity_day___healthkit__Default_20151106.db"; sourceTree = "<group>"; };
 		422AC6A31C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151109.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "test_activity_day___healthkit__Default_20151109.db"; sourceTree = "<group>"; };
 		422B343B1CA7321200B345CD /* GCFieldCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldCache.h; path = src/GCFieldCache.h; sourceTree = "<group>"; };
@@ -6493,6 +6497,8 @@
 		42AEFEB21DA057F500D7DA6D /* activity_modern_json */ = {
 			isa = PBXGroup;
 			children = (
+				422965782066F055009C86BB /* activity_types_modern.json */,
+				422965802066F056009C86BB /* activity_types.json */,
 				42C7D4141DAAD7D80089806B /* activity_1027746730.json */,
 				42C7D4151DAAD7D80089806B /* activitylaps_1027746730.json */,
 				42C7D4161DAAD7D80089806B /* activitytrack_1027746730.json */,
@@ -8915,6 +8921,7 @@
 				42BB0C201AB4A99F008D5A10 /* activityweather_410083263.json in Resources */,
 				42C011AF1AB4891B0059B6CF /* activityweather_693600701.json in Resources */,
 				42BB0BF31AB4A99F008D5A10 /* activityweather_394558920.json in Resources */,
+				422965832066F05E009C86BB /* activity_types.json in Resources */,
 				42BB0C0F1AB4A99F008D5A10 /* activityweather_407120197.json in Resources */,
 				42C011A41AB4891B0059B6CF /* activityweather_683733787.json in Resources */,
 				42C011AE1AB4891B0059B6CF /* activityweather_692676581.json in Resources */,
@@ -8959,6 +8966,7 @@
 				42BB0D1A1AB4A9A0008D5A10 /* activityweather_533778106.json in Resources */,
 				42BB0C281AB4A99F008D5A10 /* activityweather_412209442.json in Resources */,
 				42BB0D701AB4A9A0008D5A10 /* activityweather_583862498.json in Resources */,
+				422965842066F062009C86BB /* activity_types_modern.json in Resources */,
 				42BB0D931AB4A9A0008D5A10 /* activityweather_602673057.json in Resources */,
 				42BB0D3A1AB4A9A0008D5A10 /* activityweather_547704027.json in Resources */,
 				42BB0CCD1AB4A99F008D5A10 /* activityweather_488942205.json in Resources */,

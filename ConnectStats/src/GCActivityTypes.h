@@ -53,6 +53,13 @@
 -(NSArray<NSString*>*)allTypesKeys;
 -(NSArray<GCActivityType*>*)allTypesForParent:(GCActivityType*)parentType;
 
+/**
+ Add missing types from structures downloaded from garmin
 
+ @param modern information download from modern activity types json request
+ @param legacy information download from legacy activity types with display name
+ @return number of new types found
+ */
+-(NSUInteger)loadMissingFromGarmin:(NSArray<NSDictionary*>*)modern withDisplayInfoFrom:(NSArray<NSDictionary*>*)legacy;
 
 @end

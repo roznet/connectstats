@@ -29,7 +29,7 @@
 
 @interface GCGarminRequestModernActivityTypes ()
 @property (nonatomic,retain) NSArray<NSDictionary*>*modern;
-@property (nonatomic,retain) NSDictionary*legacy;
+@property (nonatomic,retain) NSArray<NSDictionary*>*legacy;
 
 
 @end
@@ -64,9 +64,9 @@
 
 -(NSString*)fileName{
     if( self.modern ){
-        return [NSString stringWithFormat:@"activity_types_modern.json"];
-    }else{
         return [NSString stringWithFormat:@"activity_types.json"];
+    }else{
+        return [NSString stringWithFormat:@"activity_types_modern.json"];
     }
 }
 
@@ -100,17 +100,39 @@
         NSError *e = nil;
 
         if( self.modern == nil){
-            self.modern = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
+            NSArray * jsonArray = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
+            self.modern = jsonArray ?: @[];
         }else{
-            self.legacy = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
+            NSDictionary * jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
+            
+            self.legacy = jsonDict[@"dictionary"] ?:@[];
             self.stage = gcRequestStageSaving;
             [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
-            //[[GCAppGlobal organizer] registerActivityTypes:json];
             
+            NSUInteger n = [[GCActivityTypes activityTypes] loadMissingFromGarmin:self.modern withDisplayInfoFrom:self.legacy];
+            if( n > 0){
+                RZLog(RZLogInfo, @"Found %lu new types", (long unsigned)n);
+            }
             self.status = GCWebStatusOK;
         }
     }
     [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
 }
 
+
++(GCGarminRequestModernActivityTypes*)testWithFilesIn:(NSString*)path forTypes:(GCActivityTypes*)types{
+    NSData * jsonData = nil;
+    NSError * err = nil;
+    GCGarminRequestModernActivityTypes * rv = [[[GCGarminRequestModernActivityTypes alloc] init] autorelease];
+    
+    jsonData = [NSData dataWithContentsOfFile:[path stringByAppendingPathComponent:rv.fileName]];
+    rv.modern = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
+    
+    jsonData = [NSData dataWithContentsOfFile:[path stringByAppendingPathComponent:rv.fileName]];
+    rv.legacy = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
+
+    [types loadMissingFromGarmin:rv.modern withDisplayInfoFrom:rv.legacy];
+    
+    return rv;
+}
 @end

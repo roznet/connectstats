@@ -85,4 +85,15 @@ const NSUInteger kDefsConnectIQUnitNameIndex = 1;
     return [GCField connectIQDefsForAppID:appId andFieldNumber:num][kDefsConnectIQUnitNameIndex];
 }
 
++(NSString*)displayNameImpliedByFieldKey:(NSString *)afield{
+    if( [afield rangeOfString:@"_"].location == NSNotFound){
+        NSString * rv = [afield fromCamelCaseToSeparatedByString:@" "];
+        if( [rv hasPrefix:@"WeightedMean"]){
+            rv = [rv stringByReplacingOccurrencesOfString:@"WeightedMean" withString:@"Avg"];
+        }
+        return rv;
+    }else{
+        return [afield dashSeparatedToSpaceCapitalized];
+    }
+}
 @end

@@ -26,7 +26,10 @@
 
 
 #import "GCGarminRequest.h"
+@class GCActivityTypes;
 
 @interface GCGarminRequestModernActivityTypes : GCGarminReqBase
+
++(GCGarminRequestModernActivityTypes*)testWithFilesIn:(NSString*)path forTypes:(GCActivityTypes*)types;
 
 @end

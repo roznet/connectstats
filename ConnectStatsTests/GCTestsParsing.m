@@ -34,6 +34,7 @@
 #import "ConnectStats-Swift.h"
 #import "GCTrackFieldChoices.h"
 #import "GCTrackStats.h"
+#import "GCGarminRequestModernActivityTypes.h"
 
 @interface GCTestsParsing : GCTestCase
 
@@ -164,38 +165,11 @@
 
 -(void)testParseActivityTypes{
     
-    GCActivityTypes * types = [ GCActivityTypes activityTypes];
+    GCActivityTypes * types = [GCActivityTypes activityTypes];
     XCTAssertEqualObjects([types activityTypeForKey:GC_TYPE_CYCLING], [types activityTypeForStravaType:@"Ride"]);
     
-    GCFieldCache * cache = [GCFieldCache cacheWithDb:nil andLanguage:@"en"];
+    GCGarminRequestModernActivityTypes * req = [GCGarminRequestModernActivityTypes testWithFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] forTypes:types];
     
-    NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"modern_activity_types.json" forClass:[self class]]];
-    NSArray * json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-
-    NSMutableDictionary * byName = [NSMutableDictionary dictionary];
-    NSMutableDictionary * byTypeId = [NSMutableDictionary dictionary];
-    
-    if([json isKindOfClass:[NSArray class]]){
-        
-        for (NSDictionary * one in json) {
-            byName[one[@"typeKey"]] = one;
-            byTypeId[one[@"typeId"]] = one;
-        }
-    }
-    
-    for (NSString * typeName in byName) {
-        NSString * parent = @"MISSING";
-        NSDictionary * sub = byName[typeName];
-        NSString * parentId = sub[@"parentTypeId"];
-        if( parentId){
-            parent = byTypeId[parentId][@"typeKey"];
-        }
-        NSString * display = @"missing";
-        if(parent){
-            display = [cache infoForActivityType:typeName].displayName;
-        }
-
-    }
 }
 
 -(void)testParseSearch{
@@ -859,14 +833,6 @@
             }
         }
     }
-}
-
--(void)testHealthCollected{
-    /*
-    NSMutableDictionary * dict = [NSKeyedUnarchiver unarchiveObjectWithFile:[RZFileOrganizer bundleFilePath:@"collected.plist" forClass:[self class]]];
-    NSLog(@"%@", dict);
-    NSLog(@"%d", (int)dict.count);
-     */
 }
 
 
