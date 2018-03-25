@@ -29,6 +29,7 @@
 @property (nonatomic,assign) NSUInteger page;
 @property (nonatomic,assign) NSUInteger parsedCount;
 @property (nonatomic,assign) BOOL reachedExisting;
+@property (nonatomic,retain) NSDate * lastFoundDate;
 
 +(GCStravaActivityList*)stravaActivityList:(UINavigationController*)nav;
 
