@@ -895,7 +895,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 -(BOOL)trackdbIsObsolete:(FMDatabase*)trackdb{
     BOOL rv = false;
-
+    
     // Rename gc_version to gc_version_track so we can merge track /activity db
     if ([trackdb tableExists:@"gc_version"] && ![trackdb tableExists:@"gc_version_track"]) {
         int version = [trackdb intForQuery:@"SELECT MAX(version) from gc_version"];
@@ -910,6 +910,12 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         RZEXECUTEUPDATE(trackdb, @"DROP TABLE gc_version");
     }
 
+    if( ![trackdb tableExists:@"gc_version_track"]){
+        RZEXECUTEUPDATE(trackdb, @"CREATE TABLE gc_version_track (version INTEGER)");
+        RZEXECUTEUPDATE(trackdb, @"INSERT INTO gc_version_track (version) VALUES (1)");
+        rv = true;
+    }
+    
     if([trackdb intForQuery:@"SELECT MAX(version) from gc_version_track"] < 1){
         rv = true;
     }
