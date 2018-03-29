@@ -394,6 +394,10 @@
 	self.profiles[_currentProfile][key] = @(aValue);
 }
 
+-(id)configHasKey:(NSString*)key{
+    return self.profiles[_currentProfile][key];
+}
+
 #pragma mark - Login Name and passwords
 
 -(NSString*)currentLoginNameForService:(gcService)service{

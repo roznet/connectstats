@@ -46,7 +46,7 @@ NSString * kBugNoCommonId = @"-1";
 
 -(void)configCheck{
     NSDictionary * settings = [GCAppGlobal settings];
-    NSArray*keys=@[
+    NSArray*keys=[@[
                    CONFIG_FILTER_BAD_VALUES        ,
                    CONFIG_FILTER_SPEED_BELOW       ,
                    CONFIG_FILTER_POWER_ABOVE       ,
@@ -80,11 +80,16 @@ NSString * kBugNoCommonId = @"-1";
                    CONFIG_GARMIN_FIT_MERGE         ,
 
                    
-                   ];
+                   ] sortedArrayUsingSelector:@selector(compare:)];
     for (NSString * key in keys) {
         id val = settings[key];
         if (val) {
-            RZLog(RZLogInfo, @"%@=%@",key,val);
+            RZLog(RZLogInfo, @"setting.%@=%@",key,val);
+        }else{
+            val = [[GCAppGlobal profile] configHasKey:key];
+            if( val ){
+                RZLog(RZLogInfo, @"profile.%@=%@",key,val);
+            }
         }
     }
     

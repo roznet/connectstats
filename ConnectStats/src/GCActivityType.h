@@ -37,7 +37,7 @@
 +(nullable GCFieldCache*)fieldCache;
 +(void)setFieldCache:(nonnull GCFieldCache*)cache;
 
-+(nonnull GCActivityType*)activityType:(nonnull NSString*)key typeId:(NSUInteger)typeId andParent:(nullable GCActivityType*)parent;
++(nullable GCActivityType*)activityType:(nonnull NSString*)key typeId:(NSUInteger)typeId andParent:(nullable GCActivityType*)parent;
 
 +(nonnull GCActivityType*)activityTypeForKey:(nonnull NSString*)key;
 

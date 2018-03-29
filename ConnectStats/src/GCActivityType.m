@@ -70,7 +70,7 @@ static GCActivityTypes * _activityTypesCache = nil;
     }
 }
 
-+(nonnull GCActivityType*)activityType:(nonnull NSString*)key typeId:(NSUInteger)typeId andParent:(nullable GCActivityType*)parent{
++(nullable GCActivityType*)activityType:(nonnull NSString*)key typeId:(NSUInteger)typeId andParent:(nullable GCActivityType*)parent{
     GCActivityType * rv = RZReturnAutorelease([[GCActivityType alloc] init]);
     if (rv) {
         rv.key = key;
