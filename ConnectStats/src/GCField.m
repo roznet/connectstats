@@ -168,9 +168,6 @@ static void registerInCache(GCField*field){
     if (field == nil) {
         return nil;
     }
-    if( ![field isKindOfClass:[NSString class]] ){
-        NSLog(@"Oops");
-    }
 
     GCField * rv =  _cache[field][activityType?:GC_TYPE_NULL];
     if (!rv) {
