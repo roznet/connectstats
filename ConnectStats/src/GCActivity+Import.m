@@ -178,6 +178,25 @@
                     }
                 }
             }
+#if TARGET_IPHONE_SIMULATOR
+            // If running in simulator display what fields are missing
+        }else{
+            static NSMutableDictionary * recordMissing = nil;
+            if( recordMissing == nil){
+                recordMissing = [NSMutableDictionary dictionary];
+                [recordMissing retain];
+            }
+            if( ! recordMissing[key] ){
+                NSNumber * sample = nil;
+                if( [data[key] isKindOfClass:[NSNumber class]]){
+                    sample = data[key];
+                    recordMissing[key] = @1;
+                }
+                if( sample != nil){
+                    RZLog(RZLogInfo, @"Modern Unknown Key: %@ sample: %@", key,  sample);
+                }
+            }
+#endif
         }
         if (fieldkey && uom && val) {
             GCField * field = [GCField fieldForKey:fieldkey andActivityType:self.activityType];
@@ -369,14 +388,17 @@
                  @"groundContactTime":   @[ @"WeightedMeanGroundContactTime", @"", @"ms"],
                  @"groundContactBalanceLeft":   @[ @"WeightedMeanGroundContactBalanceLeft", @"", @"percent"],
                  @"verticalRatio":           @[ @"WeightedMeanVerticalRatio", @"", @"percent"],//CHECK
-
+                 @"avgPower":               @[ @"WeightedMeanPower", @(gcFieldFlagPower), @"watt"],
                  @"strideLength":    @[ @"WeightedMeanStrideLength", @"", @"centimeter"],
+                 @"avgStrideLength": @[ @"WeightedMeanStrideLength", @"", @"centimeter"],
+                 @"averageStrideLength": @[ @"WeightedMeanStrideLength", @"", @"centimeter"],
                  @"verticalOscillation": @[@"WeightedMeanVerticalOscillation", @"", @"centimeter"],
 
                  @"averageRunCadence": @[ @"WeightedMeanRunCadence", @(gcFieldFlagCadence), @"doubleStepsPerMinute"],
                  @"maxRunCadence":   @[ @"MaxRunCadence", @"", @"doubleStepsPerMinute"],
 
                  @"trainingEffect": @[ @"SumTrainingEffect", @"", @"te"],
+                 @"aerobicTrainingEffect": @[ @"SumTrainingEffect", @"", @"te"],
                  @"lactateThresholdHeartRate": 	 @[ @"DirectLactateThresholdHeartRate", @"", @"bpm"],
                  @"lactateThresholdSpeed": 	@[ @"DirectLactateThresholdSpeed", @"", @"mps"],
 
@@ -388,7 +410,9 @@
                  @"maxPower":       @[ @"MaxPower",    @"",                    @"watt"],
                  @"minPower":       @[ @"MinPower",    @"",                    @"watt"],
                  @"maxPowerTwentyMinutes":       @[ @"MaxPowerTwentyMinutes",    @"",                    @"watt"],
+                 @"max20MinPower":              @[ @"MaxPowerTwentyMinutes",     @"",                    @"watt"],
                  @"normalizedPower":       @[ @"WeightedMeanNormalizedPower",    @"",                    @"watt"],
+                 @"normPower":              @[ @"WeightedMeanNormalizedPower",    @"",                    @"watt"],
                  @"functionalThresholdPower":    @[@"ThresholdPower", @"", @"watt"],
 
                  @"totalWork":          @[ @"SumTotalWork",         @"",                                    @"kilocalorie"],
@@ -407,6 +431,8 @@
                  @"averageSWOLF" : @[ @"WeightedMeanSwolf", @"", @"dimensionless"],
                  //@"averageStrokeDistance" : @[ @""],
 
+                 /* ALL */
+                 @"vO2MaxValue" : @[ @"DirectVO2Max", @"", @"ml/kg/min"],
                  };
         [defs retain];
     }
