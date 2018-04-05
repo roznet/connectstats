@@ -852,7 +852,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     self.useTrackDb = nil;
 
     _downloadRequested = false;
-
 }
 
 -(void)loadTrackPointsFromDb:(FMDatabase*)trackdb{
@@ -874,8 +873,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
 
     [GCFieldsCalculated addCalculatedFieldsToTrackPoints:self.lapsCache forActivity:self];
-
 }
+
 -(void)forceReloadTrackPoints{
     [self clearTrackdb];
     self.weather = nil;

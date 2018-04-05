@@ -47,6 +47,7 @@ enum uiTestSection {
 @interface GCTestUIGraphViewController ()
 @property (nonatomic,retain) FBSnapshotTestController * snapshotTestController;
 @property (nonatomic,retain) GCTestUISamples * samples;
+@property (nonatomic,retain) NSArray * dataSourcesCached;
 @end
 
 @implementation GCTestUIGraphViewController
@@ -56,13 +57,12 @@ enum uiTestSection {
     self = [super initWithStyle:style];
     if (self) {
         self.samples = [[[GCTestUISamples alloc] init] autorelease];
-        self.dataSources = [self.samples dataSourceSamples];
-
+        self.dataSourcesCached = @[];
     }
     return self;
 }
 -(void)dealloc{
-    [_dataSources release];
+    [_dataSourcesCached release];
     [_samples release];
     [_snapshotTestController release];
     [super dealloc];
@@ -71,7 +71,9 @@ enum uiTestSection {
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
 
 }
-
+-(NSArray*)dataSources{
+    return self.dataSourcesCached;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -84,13 +86,15 @@ enum uiTestSection {
 }
 
 -(void)buildSamples{
-    self.dataSources = [self.samples dataSourceSamples];
+    self.dataSourcesCached = [self.samples dataSourceSamples];
 }
 
 -(void)refresh{
     [self buildSamples];
 
-    [[self tableView] reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [[self tableView] reloadData];
+    });
 }
 - (void)didReceiveMemoryWarning
 {
