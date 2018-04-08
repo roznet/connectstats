@@ -360,7 +360,11 @@ static void registerInCache(GCField*field){
     return [GCField fieldForKey:self.key andActivityType:GC_TYPE_ALL];
 }
 -(GCField*)correspondingFieldForActivityType:(NSString*)activityType{
-    return [GCField fieldForKey:self.key andActivityType:activityType];
+    if( [self.activityType isEqualToString:activityType]){
+        return self;
+    }else{
+          return [GCField fieldForKey:self.key andActivityType:activityType];
+    }
 }
 -(BOOL)hasSuffix:(NSString*)suf{
     return [self.key hasSuffix:suf];
