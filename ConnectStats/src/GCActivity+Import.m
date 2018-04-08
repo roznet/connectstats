@@ -181,7 +181,7 @@
 #if TARGET_IPHONE_SIMULATOR
             // If running in simulator display what fields are missing
         }else{
-            NSDictionary * knownMissing = nil;
+            static NSDictionary * knownMissing = nil;
             if( knownMissing == nil){
                 knownMissing = @{
                                  @"activityId" : @1, // sample: 2477200414
