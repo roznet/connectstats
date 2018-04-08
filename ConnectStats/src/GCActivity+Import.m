@@ -181,6 +181,64 @@
 #if TARGET_IPHONE_SIMULATOR
             // If running in simulator display what fields are missing
         }else{
+            NSDictionary * knownMissing = nil;
+            if( knownMissing == nil){
+                knownMissing = @{
+                                 @"activityId" : @1, // sample: 2477200414
+                                 @"isMultiSportParent" : @1, // sample: 0
+                                 @"userProfileId" : @1, // sample: 3020883
+                                 @"endLongitude" : @1, // sample: -0.1953904610127211
+                                 @"startLongitude" : @1, // sample: -0.1958300918340683
+                                 @"endLatitude" : @1, // sample: 51.4716518484056
+                                 @"startLatitude" : @1, // sample: 51.47172099910676
+                                 @"maxVerticalSpeed" : @1, // sample: 0.6000003814697266
+
+                                 @"achievement_count" : @1, // sample: 0
+                                 @"anaerobicTrainingEffect" : @1, // sample: 1.600000023841858
+                                 @"athlete_count" : @1, // sample: 4
+                                 @"autoCalcCalories" : @1, // sample: 0
+                                 @"averageBikingCadenceInRevPerMinute" : @1, // sample: 68
+                                 @"averageRunningCadenceInStepsPerMinute" : @1, // sample: 80
+                                 @"averageStrokeDistance" : @1, // sample: 2.589999914169312
+                                 @"comment_count" : @1, // sample: 0
+                                 @"commute" : @1, // sample: 0
+                                 @"device_watts" : @1, // sample: 1
+                                 @"elev_high" : @1, // sample: -12.6
+                                 @"elev_low" : @1, // sample: -27.2
+                                 @"favorite" : @1, // sample: 0
+                                 @"flagged" : @1, // sample: 0
+                                 @"hasVideo" : @1, // sample: 0
+                                 @"has_heartrate" : @1, // sample: 1
+                                 @"has_kudoed" : @1, // sample: 0
+                                 @"id" : @1, // sample: 730019974
+                                 @"kudos_count" : @1, // sample: 0
+                                 @"lapIndex" : @1, // sample: 1
+                                 @"lengthIndex" : @1, // sample: 1
+                                 @"manual" : @1, // sample: 0
+                                 @"maxBikingCadenceInRevPerMinute" : @1, // sample: 91
+                                 @"maxRunningCadenceInStepsPerMinute" : @1, // sample: 120
+                                 @"max_watts" : @1, // sample: 474
+                                 @"numberOfActiveLengths" : @1, // sample: 120
+                                 @"ownerId" : @1, // sample: 3020883
+                                 @"parent" : @1, // sample: 0
+                                 @"photo_count" : @1, // sample: 0
+                                 @"poolLength" : @1, // sample: 33.33000183105469
+                                 @"pr" : @1, // sample: 0
+                                 @"private" : @1, // sample: 0
+                                 @"resource_state" : @1, // sample: 2
+                                 @"start_latitude" : @1, // sample: 51.52
+                                 @"start_longitude" : @1, // sample: -0.1
+                                 @"steps" : @1, // sample: 8342
+                                 @"suffer_score" : @1, // sample: 9
+                                 @"total_photo_count" : @1, // sample: 0
+                                 @"trainer" : @1, // sample: 0
+                                 @"upload_id" : @1, // sample: 804813097
+                                 @"userPro" : @1, // sample: 0
+                                 @"weighted_average_watts" : @1, // sample: 129
+                                 };
+                [knownMissing retain];
+            }
+            
             static NSMutableDictionary * recordMissing = nil;
             if( recordMissing == nil){
                 recordMissing = [NSMutableDictionary dictionary];
@@ -192,7 +250,7 @@
                     sample = data[key];
                     recordMissing[key] = @1;
                 }
-                if( sample != nil){
+                if( sample != nil && knownMissing[key] == nil){
                     RZLog(RZLogInfo, @"Modern Unknown Key: %@ sample: %@", key,  sample);
                 }
             }
@@ -887,56 +945,17 @@
 
                             };
 
-    NSDictionary * types = @{
-                             @"Ride":   GC_TYPE_CYCLING,
-                             @"Run":    GC_TYPE_RUNNING,
-                             @"Swim":   GC_TYPE_SWIMMING,
-                             @"Hike":   GC_TYPE_HIKING,
-                             @"Walk":   GC_TYPE_WALKING,
-                             @"Workout":GC_TYPE_FITNESS,
-                             @"VirtualRide":GC_TYPE_CYCLING
-
-                             //From Strava API
-                             //@"Ride",
-                             //@"Kitesurf",
-                             //@"Run",
-                             //@"NordicSki",
-                             //@"Swim",
-                             //@"RockClimbing",
-                             //@"Hike",
-                             //@"RollerSki",
-                             //@"Walk",
-                             //@"Rowing",
-                             //@"AlpineSki",
-                             //@"Snowboard",
-                             //@"BackcountrySki",
-                             //@"Snowshoe",
-                             //@"Canoeing",
-                             //@"StairStepper",
-                             //@"Crossfit",
-                             //@"StandUpPaddling",
-                             //@"EBikeRide",
-                             //@"Surfing",
-                             //@"Elliptical",
-                             //@"VirtualRide",
-                             //@"IceSkate",
-                             //@"WeightTraining",
-                             //@"InlineSkate",
-                             //@"Windsurf",
-                             //@"Kayaking",
-                             //@"Workout",
-                             //@"Yoga",
-
-                             };
     GCService * service = [GCService service:gcServiceStrava];
 
     self.activityId = [service activityIdFromServiceId:[data[@"id"] stringValue]];
-    self.activityType = types[data[@"type"]];
+    GCActivityType * atype = [[GCAppGlobal activityTypes] activityTypeForStravaType:data[@"type"]];
+    self.activityType = atype.topSubRootType.key;
+    self.activityTypeDetail = atype;
     self.activityName = data[@"name"];
     self.location = @"";
     if (self.activityType == nil) {
         self.activityType = GC_TYPE_OTHER;
-        GCActivityType * atype = [[GCAppGlobal activityTypes] activityTypeForStravaType:data[@"type"]];
+        
         self.activityTypeDetail = atype;
         if (self.activityTypeDetail==nil) {
             self.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_OTHER];
