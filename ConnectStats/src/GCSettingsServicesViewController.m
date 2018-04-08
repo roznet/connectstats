@@ -484,7 +484,7 @@
 
     }else if (indexPath.row == GC_GARMIN_MODERN_API) {
         switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.text = NSLocalizedString(@"Alternative API",@"Other Service");
+        switchcell.label.text = NSLocalizedString(@"Modern API",@"Other Service");
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_GARMIN_MODERN_API);
         switchcell.entryFieldDelegate = self;
