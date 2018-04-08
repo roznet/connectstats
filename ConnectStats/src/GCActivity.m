@@ -1493,6 +1493,11 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
     GCTrackPoint * lastPoint = nil;
     for (GCTrackPoint * point in self.trackpoints) {
+        // We should always take the first date of the first trackpoint as reference
+        // So time elapsed match even for series where the first few points don't have data
+        if (firstDate == nil) {
+            firstDate = point.time;
+        }
 
         GCNumberWithUnit * nu = [point numberWithUnitForField:field inActivity:self];
         
@@ -1504,9 +1509,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             }
 
             if (timeAxis) {
-                if (firstDate == nil) {
-                    firstDate = point.time;
-                }
 
                 if (useElapsed) {
                     if(lastPoint){
