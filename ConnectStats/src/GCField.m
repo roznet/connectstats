@@ -292,6 +292,10 @@ static void registerInCache(GCField*field){
     if (self.fieldFlag == gcFieldFlagSumDistance || self.fieldFlag == gcFieldFlagSumDuration) {
         return false;
     }
+    // special case
+    if( self.fieldFlag == gcFieldFlagAltitudeMeters){
+        return true;
+    }
     if( self.fieldFlag != gcFieldFlagNone){
         return self.isWeightedAverage;
     }
