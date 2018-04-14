@@ -72,7 +72,7 @@
                 }
             }
             if( emptyActivities > 0){
-                RZLog(RZLogInfo, @"Found %lu/%lu empty activities", emptyActivities, emptyActivities + activities.count);
+                RZLog(RZLogInfo, @"Found %lu/%lu empty activities", (unsigned long) emptyActivities, (unsigned long)emptyActivities + activities.count);
             }
             currentPage = [json[@"results"][@"currentPage"] intValue];
             totalPages = [json[@"results"][@"totalPages"] intValue];
