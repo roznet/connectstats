@@ -358,6 +358,7 @@
     if([foundSummaryDTO isKindOfClass:[NSDictionary class]]){
         [self parseGarminModernSummaryData:foundSummaryDTO];
     }
+    [self updateMetadataFromModernGarminJson:data];
     NSDictionary * foundMetaDTO = data[@"metadataDTO"];
     if( [foundMetaDTO isKindOfClass:[NSDictionary class]]){
         [self updateMetadataFromModernGarminJson:foundMetaDTO];
@@ -404,11 +405,45 @@
 
     NSMutableDictionary * extraMeta = self.metaData ? [NSMutableDictionary dictionaryWithDictionary:self.metaData] : [NSMutableDictionary dictionary];
 
-    for( NSString * key in @[ @"agentApplicationInstallationId", @"deviceApplicationInstallationId"]){
-        NSNumber * keyValue = meta[key];
+    static NSDictionary * _metaKeys = nil;
+    if( _metaKeys == nil){
+        _metaKeys = @{
+                      @"activityName" : @"activityName", // Sample: "City of Westminster Virtual Cycling",
+                      @"description" : GC_META_DESCRIPTION, //Sample: "zzzNote this is a note",
+                      //@"eventType" : @"eventType", //Sample: { "typeId" : 9, "typeKey" : "uncategorized", "sortOrder" : 10  },
+                      @"comments" : @"comments", //Sample: null,
+                      @"ownerDisplayName" : @"ownerDisplayName", //Sample: "BriceGarminFitTest",
+                      @"ownerFullName" : @"ownerFullName", //Sample: "Brice Rosenzweig",
+                      @"courseId" : @"courseId", //Sample: null,
+                      @"hasVideo" : @"hasVideo", //Sample: false,
+                      @"videoUrl" : @"videoUrl", //Sample: null,
+                      @"timeZoneId" : @"timeZoneId", //Sample: 120,
+                      @"workoutId" : @"workoutId", //Sample: null,
+                      @"deviceId" : @"deviceId", //Sample: 3825981698,
+                      @"locationName" : @"locationName", //Sample: "City of Westminster",
+                      @"favorite" : @"favorite", //Sample: false,
+                      @"pr" : @"pr", //Sample: false,
+                      @"elevationCorrected" : @"elevationCorrected", //Sample: false,
+                      @"purposeful" : @"purposeful", //Sample: false
+                      
+                      @"agentApplicationInstallationId" : @"agentApplicationInstallationId",
+                      @"deviceApplicationInstallationId" : @"deviceApplicationInstallationId",
+                      };
+        [_metaKeys retain];
+    }
+    
+    if( self.activityTypeDetail && extraMeta[GC_META_ACTIVITYTYPE] == nil){
+        extraMeta[GC_META_ACTIVITYTYPE] = [GCActivityMetaValue activityMetaValueForDisplay:self.activityTypeDetail.displayName andField:GC_META_ACTIVITYTYPE];
+    }
+    for( NSString * key in _metaKeys.allKeys){
+        NSString * mappedKey = _metaKeys[key];
+        id keyValue = meta[key];
         if( [keyValue isKindOfClass:[NSNumber class]]){
-            GCActivityMetaValue * metaVal = [GCActivityMetaValue activityMetaValueForDisplay:[keyValue stringValue] andField:key];
-            extraMeta[ key ] = metaVal;
+            GCActivityMetaValue * metaVal = [GCActivityMetaValue activityMetaValueForDisplay:[keyValue stringValue] andField:mappedKey];
+            extraMeta[ mappedKey ] = metaVal;
+        }else if ([keyValue isKindOfClass:[NSString class]]){
+            GCActivityMetaValue * metaVal = [GCActivityMetaValue activityMetaValueForDisplay:keyValue andField:mappedKey];
+            extraMeta[ mappedKey ] = metaVal;
         }
     }
     self.metaData = extraMeta;
@@ -1063,29 +1098,42 @@
 -(BOOL)updateSummaryDataFromActivity:(GCActivity*)other{
     BOOL rv = false;
     
-    if (self.metaData) {
-        NSMutableDictionary * newMetaData = nil;
+    if( self.metaData == nil && other.metaData != nil){
+        self.metaData = [NSDictionary dictionaryWithDictionary:other.metaData];
+        
+        FMDatabase * db = self.db;
+        [db beginTransaction];
         for (NSString * field in self.metaData) {
-            GCActivityMetaValue * thisVal  = (self.metaData)[field];
-            GCActivityMetaValue * otherVal = (other.metaData)[field];
-            if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
-                if (!newMetaData) {
-                    newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
+            GCActivityMetaValue * data = self.metaData[field];
+            [data saveToDb:db forActivityId:self.activityId];
+        }
+        [db commit];
+        rv = true;
+
+    }else{
+        if (self.metaData) {
+            NSMutableDictionary * newMetaData = nil;
+            for (NSString * field in self.metaData) {
+                GCActivityMetaValue * thisVal  = (self.metaData)[field];
+                GCActivityMetaValue * otherVal = (other.metaData)[field];
+                if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
+                    if (!newMetaData) {
+                        newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
+                    }
+                    RZLog(RZLogInfo, @"%@ changed %@", self, field);
+                    [newMetaData setValue:otherVal forKey:field];
+                    FMDatabase * db = self.db;
+                    [db beginTransaction];
+                    [otherVal updateDb:db forActivityId:self.activityId];
+                    [db commit];
+                    rv = true;
                 }
-                RZLog(RZLogInfo, @"%@ changed %@", self, field);
-                [newMetaData setValue:otherVal forKey:field];
-                FMDatabase * db = self.db;
-                [db beginTransaction];
-                [otherVal updateDb:db forActivityId:self.activityId];
-                [db commit];
-                rv = true;
+            }
+            if (newMetaData) {
+                self.metaData = newMetaData;
             }
         }
-        if (newMetaData) {
-            self.metaData = newMetaData;
-        }
     }
-    
     if (self.summaryData) {
         NSMutableDictionary<GCField*,GCActivitySummaryValue*> * newSummaryData = nil;
         for (GCField * field in self.summaryData) {
