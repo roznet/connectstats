@@ -84,5 +84,6 @@
 -(NSString*)configGetString:(NSString*)key defaultValue:(NSString*)aDefault;
 -(void)configSet:(NSString*)key stringVal:(NSString*)aValue;
 
+-(id)configHasKey:(NSString*)key;
 
 @end

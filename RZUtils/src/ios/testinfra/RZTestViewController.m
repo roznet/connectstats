@@ -254,7 +254,7 @@
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
     if (!self.runner.running) {
         dispatch_async(dispatch_get_main_queue(), ^(){
-            [_activityIndicator stopAnimating];
+            [self.activityIndicator stopAnimating];
         });
     }
 

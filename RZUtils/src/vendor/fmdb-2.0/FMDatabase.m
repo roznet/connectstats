@@ -45,11 +45,6 @@
     return self;
 }
 
-- (void)finalize {
-    [self close];
-    [super finalize];
-}
-
 - (void)dealloc {
     [self close];
     FMDBRelease(_openResultSets);
@@ -334,7 +329,6 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
 
 
 - (void)setCachedStatement:(FMStatement*)statement forQuery:(NSString*)query {
-    
     query = [query copy]; // in case we got handed in a mutable string...
     [statement setQuery:query];
     
@@ -344,8 +338,9 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
     }
     
     [statements addObject:statement];
-    
-    [_cachedStatements setObject:statements forKey:query];
+    if( query ){
+        [_cachedStatements setObject:statements forKey:query];
+    }
     
     FMDBRelease(query);
 }
@@ -1395,11 +1390,6 @@ void FMDBBlockSQLiteCallBackFunction(sqlite3_context *context, int argc, sqlite3
 @synthesize query=_query;
 @synthesize useCount=_useCount;
 @synthesize inUse=_inUse;
-
-- (void)finalize {
-    [self close];
-    [super finalize];
-}
 
 - (void)dealloc {
     [self close];

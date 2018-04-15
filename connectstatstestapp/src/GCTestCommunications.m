@@ -142,6 +142,7 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     [GCAppGlobal setupEmptyState:@"activities_comm.db"];
     [GCAppGlobal configSet:CONFIG_WIFI_DOWNLOAD_DETAILS boolVal:NO];
     [GCAppGlobal configSet:CONFIG_GARMIN_FIT_DOWNLOAD boolVal:FALSE];
+    [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:NO];
     [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:gcGarminLoginMethodLegacy];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:YES];
     [[GCAppGlobal profile] setLoginName:username forService:gcServiceGarmin];

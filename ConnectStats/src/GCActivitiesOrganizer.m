@@ -686,8 +686,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 -(GCActivity*)validCompareActivityFor:(GCActivity*)activity{
     GCActivity * compareActivity = [self compareActivity];
     if (compareActivity &&
-        ![compareActivity.activityId isEqualToString:activity.activityId] &&
-        [compareActivity.activityType isEqualToString:activity.activityType]) {
+        ![compareActivity.activityId isEqualToString:activity.activityId] /*&&
+        [compareActivity.activityType isEqualToString:activity.activityType]*/
+        ) {
         return compareActivity;
     }
     return nil;

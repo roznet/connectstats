@@ -37,14 +37,26 @@
 +(nullable GCFieldCache*)fieldCache;
 +(void)setFieldCache:(nonnull GCFieldCache*)cache;
 
-+(nonnull GCActivityType*)activityType:(nonnull NSString*)key typeId:(NSUInteger)typeId andParent:(nullable GCActivityType*)parent;
++(nullable GCActivityType*)activityType:(nonnull NSString*)key typeId:(NSUInteger)typeId andParent:(nullable GCActivityType*)parent;
 
 +(nonnull GCActivityType*)activityTypeForKey:(nonnull NSString*)key;
 
 -(nonnull NSString*)displayName;
 -(BOOL)isRootType;
 -(BOOL)isSameRootType:(nonnull GCActivityType*)other;
+/**
+ Root type like all or day, represent the main category of
+ a type
+
+ @return root type
+ */
 -(nonnull GCActivityType*)rootType;
+/**
+ This is the subroot type, for example running, cycling, etc. what we typically
+ define as activityType in activity. will be equal to self if already a subroot type
+
+ @return activity type
+ */
 -(nonnull GCActivityType*)topSubRootType;
 -(BOOL)isEqualToActivityType:(nonnull GCActivityType*)other;
 /**

@@ -83,6 +83,19 @@
         self.currentTest = def;
         if (thread) {
             dispatch_async(self.thread,^(){
+                @autoreleasepool {
+#if ! __has_feature(objc_arc)
+                    [self performSelector:selector withObject:arg];
+#else
+                    // needs below because ARC can't call performSelector it does not know.
+                    IMP imp = [self methodForSelector:selector];
+                    void (*func)(id, SEL,id) = (void*)imp;
+                    func(self, selector,arg);
+#endif
+                }
+            });
+        }else{
+            @autoreleasepool {
 #if ! __has_feature(objc_arc)
                 [self performSelector:selector withObject:arg];
 #else
@@ -91,16 +104,7 @@
                 void (*func)(id, SEL,id) = (void*)imp;
                 func(self, selector,arg);
 #endif
-            });
-        }else{
-#if ! __has_feature(objc_arc)
-            [self performSelector:selector withObject:arg];
-#else
-            // needs below because ARC can't call performSelector it does not know.
-            IMP imp = [self methodForSelector:selector];
-            void (*func)(id, SEL,id) = (void*)imp;
-            func(self, selector,arg);
-#endif
+            }
         }
     }
 }
@@ -123,12 +127,13 @@
 }
 -(void)endSession:(NSString*)aSession{
     dispatch_async(self.thread, ^(){
-        [[self recordObject] setTimeTaken:[_lastStartedTime timeIntervalSinceNow]*-1];
-        if (_delegate){
-            [_delegate finishedSession:aSession for:self];
+        [[self recordObject] setTimeTaken:[self.lastStartedTime timeIntervalSinceNow]*-1];
+        if (self.delegate){
+            RZLog(RZLogInfo, @"**Ending %@ %@", NSStringFromClass([self class]), aSession);
+            [self.delegate finishedSession:aSession for:self];
 
-            if ( _endSessionName==nil || [aSession isEqualToString:_endSessionName]) {
-                [_delegate testFinished];
+            if ( self.endSessionName==nil || [aSession isEqualToString:self.endSessionName]) {
+                [self.delegate testFinished];
             }
         }
     });
@@ -143,7 +148,7 @@
     
 	if( aStr ){
 #ifdef TARGET_IPHONE_SIMULATOR
-		NSLog(@"%@", aStr);
+        NSLog(@"##%@", aStr);
 #endif
 		[[self recordObject] logString:aStr];
 	};
@@ -182,7 +187,7 @@
     NSString * msg = RZReturnAutorelease([[NSString alloc] initWithFormat:fmt arguments:args]);
     va_end(args);
 
-    msg= [NSString stringWithFormat:@"%sL%d %@", function, line, msg];
+    msg= [NSString stringWithFormat:@">>%sL%d %@", function, line, msg];
     [self assessTestResult:msg result:success];
 }
 

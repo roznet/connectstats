@@ -116,9 +116,11 @@
 }
 
 -(void)buildCellDataSource{
-    GCTestUISamples * samples = [[GCTestUISamples alloc] init];
-    self.cellDataSource = [[samples gridCellSamples] arrayFlattened];
-    [samples release];
+    @autoreleasepool {
+        GCTestUISamples * samples = [[GCTestUISamples alloc] init];
+        self.cellDataSource = [[samples gridCellSamples] arrayFlattened];
+        [samples release];
+    };
 }
 
 -(void)checkGridCellSnapshot{

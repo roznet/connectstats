@@ -287,28 +287,26 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
     NSMutableArray * keys = [NSMutableArray arrayWithCapacity:2];
 
-    NSString * aTypeMeta = [activity metaValueForField:@"activityType"].display;
-
-    if (aTypeMeta) {
-        [keys addObject:@"activityType"];
+    if ([activity metaValueForField:GC_META_ACTIVITYTYPE]) {
+        [keys addObject:GC_META_ACTIVITYTYPE];
     }
 
     NSUInteger maxSize = width>kGC_WIDE_SIZE ? 50 : 30;
 
     NSString * eventType = [activity metaValueForField:GC_META_EVENTTYPE].display;
     if (eventType && ![eventType isEqualToString:@"Uncategorized"]) {
-        [keys addObject:@"eventType"];
+        [keys addObject:GC_META_EVENTTYPE];
     }
 
     NSString * activityDescription = [activity metaValueForField:GC_META_DESCRIPTION].display;
     if (keys.count < 3 && activityDescription && ![activityDescription isEqualToString:@""]) {
-        [keys addObject:@"activityDescription"];
+        [keys addObject:GC_META_DESCRIPTION];
     }
 
     if (keys.count < 3) {
         NSString * device = [activity metaValueForField:GC_META_DEVICE].display;
         if (device) {
-            [keys addObject:@"device"];
+            [keys addObject:GC_META_DEVICE];
         }
     }
 
@@ -318,14 +316,14 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     if (keys.count) {
         key = keys[0];
         val = [activity metaValueForField:key].display;
-        ft = [GCFormattedFieldText formattedFieldText:[GCFields metaFieldDisplayName:key] value:val forSize:14.];
+        ft = [GCFormattedFieldText formattedFieldText:nil value:val forSize:14.];
         [self labelForRow:0 andCol:0].attributedText = [ft attributedString];
     }
     [self configForRow:0 andCol:0].horizontalOverflow = YES;
     if (keys.count > 1) {
         key = keys[1];
         val = [activity metaValueForField:key].display;
-        ft = [GCFormattedFieldText formattedFieldText:[GCFields metaFieldDisplayName:key] value:val forSize:14.];
+        ft = [GCFormattedFieldText formattedFieldText:nil value:val forSize:14.];
         [self labelForRow:1 andCol:0].attributedText = [ft attributedString];
     }
     if (keys.count > 2) {

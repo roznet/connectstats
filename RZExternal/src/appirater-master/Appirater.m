@@ -721,13 +721,14 @@ static BOOL _alwaysUseMainBundle = NO;
 	}
 }
 
+/*
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     [self alertViewDidDismissWithButtonIndex:buttonIndex];
 }
 #pragma clang diagnostic pop
-
+*/
 - (void)alertViewDidDismissWithButtonIndex:(NSInteger)buttonIndex {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
