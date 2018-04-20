@@ -939,7 +939,8 @@
             }else if ([fieldkey isEqualToString:@"BeginTimestamp"] && da){
                 self.date = da;
             }else if (nu) {
-                gcFieldFlag flag = [GCFields trackFieldFromActivityField:fieldkey];
+                GCField * field = [GCField fieldForKey:fieldkey andActivityType:self.activityType];
+                gcFieldFlag flag = field.fieldFlag;
                 if (flag != gcFieldFlagNone) {
                     [self setSummaryField:flag with:nu];
                 }
@@ -947,7 +948,7 @@
                                                                    uom:nu.unit.key
                                                              fieldFlag:flag
                                                               andValue:nu.value];
-                sumData[ [GCField fieldForKey:fieldkey andActivityType:self.activityType] ] = val;
+                sumData[ field ] = val;
             }
         }
         self.summaryData = sumData;

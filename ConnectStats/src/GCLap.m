@@ -194,7 +194,7 @@
             NSString * uom     = dict[@"uom"];
             NSString * display = dict[@"fieldDisplayName"];
             if ([value rangeOfString:@"Infinity"].location==NSNotFound) {
-                gcFieldFlag trackfield = [GCFields trackFieldFromActivityField:fieldKey];
+                gcFieldFlag trackfield = field.fieldFlag;
                 if ([uom isEqualToString:@"kph"] && [dict[@"unitAbbr"] isEqualToString:@"min/km"]) {
                     uom = @"minperkm";
                 }else if( [uom isEqualToString:@"mph"] && [dict[@"unitAbbr"] isEqualToString:@"min/mi"]){
