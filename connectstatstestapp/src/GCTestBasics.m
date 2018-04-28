@@ -134,12 +134,10 @@
     size_t n = sizeof(flags)/sizeof(gcFieldFlag);
     for (size_t i=0; i<n; i++) {
         gcFieldFlag flag = flags[i];
-        if ((flag & act.trackFlags)==flag) {
-            NSString * field = [GCFields trackFieldDisplayName:flags[i] forActivityType:atype];
-            if (field == nil) {
-                [GCFields trackFieldDisplayName:flags[i] forActivityType:atype];
-            }
-            GCNumberWithUnit * nu = [lap numberWithUnitForField:flags[i] andActivityType:atype];
+        GCField * field = [GCField fieldForFlag:flag andActivityType:atype];
+        
+        if ([act hasTrackForField:field]) {
+            GCNumberWithUnit * nu = [lap numberWithUnitForField:field inActivity:act];
             [dict setObject:nu.savedDict?:@{} forKey:field?:@""];
         }
     }
