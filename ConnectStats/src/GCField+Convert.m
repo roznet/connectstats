@@ -58,7 +58,7 @@ const NSUInteger kDefsConnectIQUnitNameIndex = 1;
                          @1 : @[ @"WeightedMeanMomentaryEnergyExpenditure", @"dimensionless"],
                          @2 : @[ @"WeightedMeanRelativeRunningEconomy", @"dimensionless" ],
                          },
-                 @"741afa11-0250-48e2-86b5-14bd47e29391": @{
+                 @"741afa11-0250-48e2-86b5-14bd47e29391": @{ // Garmin RD Pod
                          @1 : @[ @"WeightedMeanPower", @"watt"],
                          @3 : @[ @"WeightedMeanPower", @"watt"],
                          
