@@ -201,7 +201,8 @@
         [self setDerived:nil];// detach from web before we delete
         [self setWeb:[[[GCWebConnect alloc] init] autorelease]] ;
         self.web.worker = self.worker;
-        [self setHealth:[[[GCHealthOrganizer alloc] initWithDb:_db andThread:self.worker] autorelease]];
+        [self setHealth:[[[GCHealthOrganizer alloc] initWithDb:_db andThread:nil] autorelease]];
+        self.health.worker = self.worker; // Don't set thread in init to ensure all db ops done in current thread
         [self setProfile:[GCAppProfiles profilesFromSettings:self.settings]];
         [[self profile] serviceEnabled:gcServiceStrava set:false];
         [[self profile] configSet:PROFILE_DBPATH stringVal:name];

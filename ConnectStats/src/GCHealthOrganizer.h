@@ -37,6 +37,7 @@
 @property (nonatomic,retain) NSDictionary * zones;
 @property (nonatomic,retain) FMDatabase * db;
 @property (nonatomic,retain) NSArray * sleepBlocks;
+@property (nonatomic,retain) dispatch_queue_t worker;
 @property (nonatomic,assign) gcHealthZoneSource preferredSource;
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;

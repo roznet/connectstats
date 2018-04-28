@@ -32,7 +32,7 @@
 #import "GCActivitiesOrganizer.h"
 
 @interface GCHealthOrganizer ()
-@property (nonatomic,retain) dispatch_queue_t worker;
+
 
 @end
 
