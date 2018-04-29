@@ -26,5 +26,13 @@
 #import "GCGarminRequest.h"
 
 @interface GCGarminRequestModernSearch : GCGarminReqBase
+
+/**
+ Search for new activities from garmin
+
+ @param aStart page to start from
+ @param aMode true is reload all, false stop when reached last
+ @return new request
+ */
 -(GCGarminRequestModernSearch*)initWithStart:(NSUInteger)aStart andMode:(BOOL)aMode;
 @end

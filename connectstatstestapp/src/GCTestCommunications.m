@@ -35,7 +35,8 @@
 
 typedef NS_ENUM(NSUInteger, gcTestInstance){
     gcTestInstanceCommunication,
-    gcTestInstanceNewStyleAccount
+    gcTestInstanceNewStyleAccount,
+    gcTestInstanceModernHistory
 };
 
 @interface GCTestCommunications ()
@@ -68,9 +69,14 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
                 @"description": @"test upload with roznet simulator",
                 @"session": @"GC Com Upload"
                 },
+              @{@"selector": NSStringFromSelector(@selector(testModernHistory)),
+                @"description": @"test modern API with roznet simulator",
+                @"session": @"GC Com Modern"
+                },
 
               ];
 }
+
 
 
 #pragma mark - Upload Test
@@ -213,6 +219,17 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
         [self testCommunicationEnd];
     }
 }
+
+#pragma mark - Modern History Communication test
+
+-(void)testModernHistory{
+    _testInstance = gcTestInstanceModernHistory;
+    
+    [self testCommunicationStart:@"GC Communication" userName:@"simulator"];
+    
+    [[GCAppGlobal web] servicesSearchActivitiesFrom:20 reloadAll:true];
+}
+
 
 #pragma mark - Original Communication test sequence
 

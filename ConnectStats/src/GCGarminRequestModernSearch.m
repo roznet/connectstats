@@ -36,7 +36,7 @@ const NSUInteger kActivityRequestCount = 20;
 
 @interface GCGarminRequestModernSearch ()
 
-@property (nonatomic,assign) BOOL reachedExisting;
+@property (nonatomic,assign) NSUInteger reachedExisting;
 @property (nonatomic,assign) BOOL reloadAll;
 @property (nonatomic,assign) NSUInteger start;
 @property (nonatomic,retain) NSArray<NSString*>*childIds;
@@ -200,7 +200,7 @@ const NSUInteger kActivityRequestCount = 20;
 
 -(void)processRegister{
     if (self.status == GCWebStatusOK) {
-        if ( (_reloadAll || !_reachedExisting) && self.parsedCount == kActivityRequestCount) {
+        if ( (_reloadAll || _reachedExisting < kActivityRequestCount) && self.parsedCount == kActivityRequestCount) {
             self.nextReq = [[[GCGarminRequestModernSearch alloc] initNextWith:self] autorelease];
         }
         if (self.nextReq == nil && self.childIds.count > 0) {

@@ -29,7 +29,7 @@
 
 @interface GCActivitiesOrganizerListRegister ()
 @property (nonatomic,retain) NSArray<GCActivity*>*activities;
-@property (nonatomic,assign) BOOL reachedExisting;
+@property (nonatomic,assign) NSUInteger reachedExisting;
 @property (nonatomic,retain) NSArray<NSString*>*childIds;
 @property (nonatomic,retain) GCService * service;
 @property (nonatomic,assign) BOOL isFirst;
@@ -78,23 +78,29 @@
     }
     self.childIds = childIds.count > 0 ? childIds.allKeys : nil;
 
-    _reachedExisting = FALSE;
+    _reachedExisting = 0;
     NSUInteger newActivitiesCount = 0;
     if (self.activities) {
         for (GCActivity * activity in _activities) {
             [existingInService addObject:activity.activityId];
             BOOL foundInOrganizer = [organizer activityForId:activity.activityId] != nil;
             if (foundInOrganizer) {
-                _reachedExisting = TRUE;
+                _reachedExisting++;
             }
             if (!foundInOrganizer) {
                 newActivitiesCount++;
             }
             [organizer registerActivity:activity forActivityId:activity.activityId];
         }
-        if (newActivitiesCount>0) {
-            RZLog(RZLogInfo, @"Found %d new activities for %@ (total %d)", (int)newActivitiesCount, self.service.displayName, (int)[organizer countOfActivities]);
-        }
+        RZLog(RZLogInfo, @"Found %lu new %lu existing out of %lu [%@-%@] for %@ (new total %d)",
+              (unsigned long)newActivitiesCount,
+              (unsigned long)self.reachedExisting,
+              (unsigned long)self.activities.count,
+              [self.activities.firstObject activityId],
+              [self.activities.lastObject activityId],
+              self.service.displayName,
+              (int)[organizer countOfActivities]);
+        
         // FIXME: check for deleted
         if (existingInService.count ) {
             NSArray * deleteCandidate = [organizer findActivitiesNotIn:existingInService isFirst:self.isFirst];
