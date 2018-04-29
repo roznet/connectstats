@@ -45,12 +45,14 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 @property (nonatomic,retain) RZRemoteDownload * remoteDownload;
 @property (nonatomic,retain) NSString * currentSession;
 @property (nonatomic,assign) gcTestInstance testInstance;
+@property (nonatomic,retain) NSMutableDictionary*cache;
 
 @end
 
 @implementation GCTestCommunications
 
 -(void)dealloc{
+    [_cache release];
     [_remoteDownload release];
     [_currentSession release];
     [super dealloc];
@@ -222,6 +224,8 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
                 case gcTestInstanceModernHistory:
                     if (_nCb == 1){
                         [self testModernHistoryInitialDone];
+                    }else if( _nCb == 2 ){
+                        [self testModernHistoryTrackLoaded];
                     }else{
                         [self testCommunicationEnd];
                     }
@@ -246,9 +250,37 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 -(void)testModernHistoryInitialDone{
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
     
+    self.cache = [NSMutableDictionary dictionary];
+    
+    for( NSUInteger i=0;i< 10; i++){
+        GCActivity * act = [[GCAppGlobal organizer] activityForIndex:i];
+        self.cache[act.activityId] = [NSDictionary dictionaryWithDictionary:act.summaryData];
+        // Force load of points
+        [act clearTrackdb];
+        RZ_ASSERT(act.trackpoints.count == 0, @"%@ start with 0 points", act);
+    }
+}
+
+-(void)testModernHistoryTrackLoaded{
+    for( NSUInteger i=0;i< 10; i++){
+        GCActivity * act = [[GCAppGlobal organizer] activityForIndex:i];
+        NSDictionary * prev = self.cache[act.activityId];
+        RZ_ASSERT(prev.count <= act.summaryData.count, @"Not less data");
+        for (GCField * field in prev) {
+            GCActivitySummaryValue * prevVal = prev[field];
+            GCActivitySummaryValue * newVal  = act.summaryData[field];
+            RZ_ASSERT(newVal != nil, @"%@ still has %@", act, field);
+            if( newVal ){
+                RZ_ASSERT([prevVal isEqualToValue:newVal], @"%@ == %@ for %@", prevVal, newVal, act);
+            }
+        }
+        // Force load of points
+        RZ_ASSERT(act.trackpoints.count > 0, @"%@ loaded %lu points", act, (unsigned long)act.trackpoints.count);
+    }
+
+    
     // Manually go to next stage, as no web communication here
     [self notifyCallBack:self info:[RZDependencyInfo rzDependencyInfoWithString:@"end"]];
-
 }
 
 #pragma mark - Original Communication test sequence
