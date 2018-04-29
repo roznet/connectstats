@@ -57,7 +57,12 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 }
 
 -(NSArray*)testDefinitions{
-    return @[ @{@"selector" : NSStringFromSelector(@selector(testNewStyleAccount)),
+    return @[ @{@"selector": NSStringFromSelector(@selector(testModernHistory)),
+                @"description": @"test modern API with roznet simulator",
+                @"session": @"GC Com Modern"
+                },
+              
+              @{@"selector" : NSStringFromSelector(@selector(testNewStyleAccount)),
                 @"description": @"Test New Style Account",
                 @"session": @"GC Com New Style"
                 },
@@ -69,11 +74,7 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
                 @"description": @"test upload with roznet simulator",
                 @"session": @"GC Com Upload"
                 },
-              @{@"selector": NSStringFromSelector(@selector(testModernHistory)),
-                @"description": @"test modern API with roznet simulator",
-                @"session": @"GC Com Modern"
-                },
-
+              
               ];
 }
 
@@ -145,16 +146,22 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 
     _nCb = 0;
     _completed = false;
-    [GCAppGlobal setupEmptyState:@"activities_comm.db"];
+    if( _testInstance == gcTestInstanceModernHistory){
+        [GCAppGlobal setupEmptyState:@"activities_comm_modern.db"];
+        [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:YES];
+        GCWebSetSimulatorDir(@"samples_fullmodern");
+    }else{
+        [GCAppGlobal setupEmptyState:@"activities_comm.db"];
+        [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:NO];
+        GCWebSetSimulatorDir(nil);
+    }
     [GCAppGlobal configSet:CONFIG_WIFI_DOWNLOAD_DETAILS boolVal:NO];
     [GCAppGlobal configSet:CONFIG_GARMIN_FIT_DOWNLOAD boolVal:FALSE];
-    [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:NO];
     [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:gcGarminLoginMethodLegacy];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:YES];
     [[GCAppGlobal profile] setLoginName:username forService:gcServiceGarmin];
     [[GCAppGlobal profile] setPassword:@"iamatesterfromapple" forService:gcServiceGarmin];
     
-
     [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self timeOutCheck];
@@ -211,6 +218,13 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
                     }else{
                         [self testCommunicationEnd];
                     }
+                    break;
+                case gcTestInstanceModernHistory:
+                    if (_nCb == 1){
+                        [self testModernHistoryInitialDone];
+                    }else{
+                        [self testCommunicationEnd];
+                    }
             }
 
         });
@@ -225,17 +239,24 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 -(void)testModernHistory{
     _testInstance = gcTestInstanceModernHistory;
     
-    [self testCommunicationStart:@"GC Communication" userName:@"simulator"];
+    [self testCommunicationStart:@"GC Com Modern" userName:@"simulator"];
     
-    [[GCAppGlobal web] servicesSearchActivitiesFrom:20 reloadAll:true];
+    [[GCAppGlobal web] servicesSearchRecentActivities];
 }
+-(void)testModernHistoryInitialDone{
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
+    
+    // Manually go to next stage, as no web communication here
+    [self notifyCallBack:self info:[RZDependencyInfo rzDependencyInfoWithString:@"end"]];
 
+}
 
 #pragma mark - Original Communication test sequence
 
 -(void)testOriginalAccount{
-    [self testCommunicationStart:@"GC Communication" userName:@"simulator"];
+    
     _testInstance = gcTestInstanceCommunication;
+    [self testCommunicationStart:@"GC Communication" userName:@"simulator"];
 
     [[GCAppGlobal web] servicesSearchActivitiesFrom:20 reloadAll:true];
 }
@@ -407,8 +428,8 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 #pragma mark - Test Account Test
 
 -(void)testNewStyleAccount{
-    [self testCommunicationStart:@"GC Com New Style" userName:@"testaccount"];
     _testInstance = gcTestInstanceNewStyleAccount;
+    [self testCommunicationStart:@"GC Com New Style" userName:@"testaccount"];
 
     [[GCAppGlobal web] servicesSearchActivitiesFrom:0 reloadAll:true];
 }
