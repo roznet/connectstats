@@ -1048,11 +1048,19 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 -(void)deleteActivityUpToIndex:(NSUInteger)idx{
-    RZLog(RZLogInfo, @"delete up to %d", (int)idx);
+    [self deleteActivityFromIndex:0 toIndex:idx+1]; // +1 to delete up and include idx
+}
 
-    NSMutableArray * toDelete = [NSMutableArray arrayWithCapacity:idx];
+-(void)deleteActivityFromIndex:(NSUInteger)idx{
+    [self deleteActivityFromIndex:idx toIndex:self.allActivities.count];
+}
+
+-(void)deleteActivityFromIndex:(NSUInteger)idxfrom toIndex:(NSUInteger)idxto{
+    RZLog(RZLogInfo, @"delete from %d to %d", (unsigned)idxfrom, (unsigned)idxto);
+
+    NSMutableArray * toDelete = [NSMutableArray arrayWithCapacity:(idxto-idxfrom)];
     [_db beginTransaction];
-    for (NSUInteger i=0; i<=idx; i++) {
+    for (NSUInteger i=0; i<idxfrom; i++) {
         if (i<_allActivities.count) {
             NSString * activityId = [_allActivities[i] activityId];
             [toDelete addObject:[_allActivities[i] activityId]];
@@ -1064,7 +1072,15 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
     [_db commit];
     _currentActivityIndex = 0;
-    self.allActivities = [_allActivities subarrayWithRange:NSMakeRange(idx, _allActivities.count-idx)];
+    if( idxfrom == 0){
+        self.allActivities = [self.allActivities subarrayWithRange:NSMakeRange(idxto, self.allActivities.count-idxto)];
+    }else if (idxto == self.allActivities.count){
+        self.allActivities = [self.allActivities subarrayWithRange:NSMakeRange(0, idxfrom)];
+    }else{
+        NSArray * start = [self.allActivities subarrayWithRange:NSMakeRange(0, idxfrom)];
+        NSArray * end   = [self.allActivities subarrayWithRange:NSMakeRange(idxto, self.allActivities.count-idxto)];
+        self.allActivities = [start arrayByAddingObjectsFromArray:end];
+    }
     [self notify];
 }
 

@@ -168,7 +168,11 @@
 -(void)servicesSearchActivitiesFrom:(NSUInteger)aStart reloadAll:(BOOL)rAll{
     [self servicesLogin];
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
-        [self addRequest:[[[GCGarminSearch alloc] initWithStart:aStart percent:0.0 andMode:rAll] autorelease]];
+        if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] ){
+            [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:rAll] autorelease]];
+        }else{
+            [self addRequest:[[[GCGarminSearch alloc] initWithStart:aStart percent:0.0 andMode:rAll] autorelease]];
+        }
     }
     [self nonGarminSearch];
 }
@@ -196,7 +200,11 @@
     }
 
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
-        [self addRequest:[[[GCGarminSearch alloc] initWithStart:0 percent:0.0 andMode:true] autorelease]];
+        if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] ){
+            [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:0 andMode:true] autorelease]];
+        }else{
+            [self addRequest:[[[GCGarminSearch alloc] initWithStart:0 percent:0.0 andMode:true] autorelease]];
+        }
     }
 }
 

@@ -59,8 +59,8 @@ const NSUInteger kActivityRequestCount = 20;
 -(GCGarminRequestModernSearch*)initWithStart:(NSUInteger)aStart andMode:(BOOL)aMode{
     self = [super init];
     if (self) {
-        _reloadAll = aMode;
-        _start  =aStart;
+        self.reloadAll = aMode;
+        self.start  =aStart;
         self.stage = gcRequestStageDownload;
         self.status = GCWebStatusOK;
         self.lastFoundDate = [NSDate date];

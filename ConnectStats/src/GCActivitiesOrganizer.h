@@ -142,6 +142,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 -(void)deleteActivitiesInTrash;
 -(void)deleteAllActivities;
 -(void)deleteActivityUpToIndex:(NSUInteger)idx;
+-(void)deleteActivityFromIndex:(NSUInteger)idx;
 -(void)deleteActivityAtIndex:(NSUInteger)idx;
 
 -(void)recordSynchronized:(GCActivity*)act forService:(NSString*)service;

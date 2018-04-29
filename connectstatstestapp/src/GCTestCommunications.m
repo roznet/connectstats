@@ -41,6 +41,7 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 
 @interface GCTestCommunications ()
 @property (nonatomic,assign) NSUInteger nCb;
+@property (nonatomic,assign) NSUInteger nReq;
 @property (nonatomic,assign) BOOL completed;
 @property (nonatomic,retain) RZRemoteDownload * remoteDownload;
 @property (nonatomic,retain) NSString * currentSession;
@@ -191,10 +192,12 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     if( [[theInfo stringInfo] isEqualToString:@"error"]){
         NSLog(@"oops");
     }
+    if( [[theInfo stringInfo] isEqualToString:NOTIFY_NEXT]){
+        self.nReq++;
+    }
     RZ_ASSERT(![[theInfo stringInfo] isEqualToString:@"error"], @"Web request had no error");
     if ([[theInfo stringInfo] isEqualToString:@"end"]) {
         _nCb++;
-        //NSLog(@"^cb %lu %@ tot=%lu", _nCb,[theInfo stringInfo],[[GCAppGlobal organizer] countOfActivities]);
         dispatch_async(self.thread,^(){
             switch (_testInstance) {
                 case gcTestInstanceCommunication:
@@ -226,6 +229,12 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
                         [self testModernHistoryInitialDone];
                     }else if( _nCb == 2 ){
                         [self testModernHistoryTrackLoaded];
+                    }else if( _nCb == 3 ){
+                        [self testModernHistoryReloadFirst10];
+                    }else if( _nCb == 4 ){
+                        [self testModernHistoryReloadNothing];
+                    }else if( _nCb == 5 ){
+                        [self testModernHistoryReloadAll];
                     }else{
                         [self testCommunicationEnd];
                     }
@@ -244,11 +253,12 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     _testInstance = gcTestInstanceModernHistory;
     
     [self testCommunicationStart:@"GC Com Modern" userName:@"simulator"];
-    
+    self.nReq = 0;
     [[GCAppGlobal web] servicesSearchRecentActivities];
 }
 -(void)testModernHistoryInitialDone{
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT(self.nReq == 160, @"Should have got 160 req");
     
     self.cache = [NSMutableDictionary dictionary];
     
@@ -262,6 +272,8 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 }
 
 -(void)testModernHistoryTrackLoaded{
+    RZ_ASSERT(self.nReq = 210, @"Load track point in 210 req");
+    
     for( NSUInteger i=0;i< 10; i++){
         GCActivity * act = [[GCAppGlobal organizer] activityForIndex:i];
         NSDictionary * prev = self.cache[act.activityId];
@@ -276,11 +288,40 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
         }
         // Force load of points
         RZ_ASSERT(act.trackpoints.count > 0, @"%@ loaded %lu points", act, (unsigned long)act.trackpoints.count);
+        [act clearTrackdb]; //prep for delete coming
     }
 
+    [[GCAppGlobal organizer] deleteActivityUpToIndex:10];
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985-11, @"deleted 10 activities %d", [[GCAppGlobal organizer] countOfActivities] );
     
-    // Manually go to next stage, as no web communication here
+    [[GCAppGlobal web] servicesSearchRecentActivities];
+}
+
+-(void)testModernHistoryReloadFirst10{
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT(self.nReq == 217, @"Reloaded only last few %d", (int)self.nReq);
+    
+    [[GCAppGlobal organizer] deleteActivityFromIndex:2000];
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2000, @"deleted tail activities");
+
+    [[GCAppGlobal web] servicesSearchRecentActivities];
+}
+
+-(void)testModernHistoryReloadNothing{
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2000 , @"Loading 2000 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT(self.nReq == 223, @"Reloaded only last few %d", (int)self.nReq);
+    
+    [[GCAppGlobal web] servicesSearchAllActivities];
+}
+
+-(void)testModernHistoryReloadAll{
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT(self.nReq == 376, @"Reloaded only last few %d", (int)self.nReq);
+    
+    
+    // End manually
     [self notifyCallBack:self info:[RZDependencyInfo rzDependencyInfoWithString:@"end"]];
+
 }
 
 #pragma mark - Original Communication test sequence
