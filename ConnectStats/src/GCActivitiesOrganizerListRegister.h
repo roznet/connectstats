@@ -31,7 +31,7 @@
 
 @interface GCActivitiesOrganizerListRegister : NSObject
 
-@property (nonatomic,readonly) BOOL reachedExisting;
+@property (nonatomic,readonly) NSUInteger reachedExisting;
 @property (nonatomic,readonly) NSArray<NSString*>*childIds;
 /**
  Create object to register list of activities

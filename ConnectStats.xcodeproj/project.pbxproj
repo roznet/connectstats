@@ -5605,8 +5605,6 @@
 				429D75341651B14E00232BED /* GCGarminRequest.m */,
 				4209E1981DA8E15700B80735 /* GCGarminRequestModernSearch.h */,
 				4209E1991DA8E15700B80735 /* GCGarminRequestModernSearch.m */,
-				425ACBBB17C1676D00EB23A3 /* GCGarminRequestUser.h */,
-				425ACBBC17C1676D00EB23A3 /* GCGarminRequestUser.m */,
 				427828DF1683C26700AB9C89 /* GCGarminRequestSearch.h */,
 				427828E01683C26700AB9C89 /* GCGarminRequestSearch.m */,
 				42200ED617F8270D0078B45A /* GCGarminActivityTrack13Request.h */,
@@ -5621,6 +5619,8 @@
 				427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */,
 				421736A22066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.h */,
 				421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */,
+				425ACBBB17C1676D00EB23A3 /* GCGarminRequestUser.h */,
+				425ACBBC17C1676D00EB23A3 /* GCGarminRequestUser.m */,
 			);
 			name = GarminRequests;
 			sourceTree = "<group>";

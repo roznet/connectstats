@@ -35,28 +35,37 @@
 
 typedef NS_ENUM(NSUInteger, gcTestInstance){
     gcTestInstanceCommunication,
-    gcTestInstanceNewStyleAccount
+    gcTestInstanceNewStyleAccount,
+    gcTestInstanceModernHistory
 };
 
 @interface GCTestCommunications ()
 @property (nonatomic,assign) NSUInteger nCb;
+@property (nonatomic,assign) NSUInteger nReq;
 @property (nonatomic,assign) BOOL completed;
 @property (nonatomic,retain) RZRemoteDownload * remoteDownload;
 @property (nonatomic,retain) NSString * currentSession;
 @property (nonatomic,assign) gcTestInstance testInstance;
+@property (nonatomic,retain) NSMutableDictionary*cache;
 
 @end
 
 @implementation GCTestCommunications
 
 -(void)dealloc{
+    [_cache release];
     [_remoteDownload release];
     [_currentSession release];
     [super dealloc];
 }
 
 -(NSArray*)testDefinitions{
-    return @[ @{@"selector" : NSStringFromSelector(@selector(testNewStyleAccount)),
+    return @[ @{@"selector": NSStringFromSelector(@selector(testModernHistory)),
+                @"description": @"test modern API with roznet simulator",
+                @"session": @"GC Com Modern"
+                },
+              
+              @{@"selector" : NSStringFromSelector(@selector(testNewStyleAccount)),
                 @"description": @"Test New Style Account",
                 @"session": @"GC Com New Style"
                 },
@@ -68,9 +77,10 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
                 @"description": @"test upload with roznet simulator",
                 @"session": @"GC Com Upload"
                 },
-
+              
               ];
 }
+
 
 
 #pragma mark - Upload Test
@@ -139,16 +149,22 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 
     _nCb = 0;
     _completed = false;
-    [GCAppGlobal setupEmptyState:@"activities_comm.db"];
+    if( _testInstance == gcTestInstanceModernHistory){
+        [GCAppGlobal setupEmptyState:@"activities_comm_modern.db"];
+        [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:YES];
+        GCWebSetSimulatorDir(@"samples_fullmodern");
+    }else{
+        [GCAppGlobal setupEmptyState:@"activities_comm.db"];
+        [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:NO];
+        GCWebSetSimulatorDir(nil);
+    }
     [GCAppGlobal configSet:CONFIG_WIFI_DOWNLOAD_DETAILS boolVal:NO];
     [GCAppGlobal configSet:CONFIG_GARMIN_FIT_DOWNLOAD boolVal:FALSE];
-    [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:NO];
     [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:gcGarminLoginMethodLegacy];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:YES];
     [[GCAppGlobal profile] setLoginName:username forService:gcServiceGarmin];
     [[GCAppGlobal profile] setPassword:@"iamatesterfromapple" forService:gcServiceGarmin];
     
-
     [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self timeOutCheck];
@@ -176,10 +192,12 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     if( [[theInfo stringInfo] isEqualToString:@"error"]){
         NSLog(@"oops");
     }
+    if( [[theInfo stringInfo] isEqualToString:NOTIFY_NEXT]){
+        self.nReq++;
+    }
     RZ_ASSERT(![[theInfo stringInfo] isEqualToString:@"error"], @"Web request had no error");
     if ([[theInfo stringInfo] isEqualToString:@"end"]) {
         _nCb++;
-        //NSLog(@"^cb %lu %@ tot=%lu", _nCb,[theInfo stringInfo],[[GCAppGlobal organizer] countOfActivities]);
         dispatch_async(self.thread,^(){
             switch (_testInstance) {
                 case gcTestInstanceCommunication:
@@ -205,6 +223,21 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
                     }else{
                         [self testCommunicationEnd];
                     }
+                    break;
+                case gcTestInstanceModernHistory:
+                    if (_nCb == 1){
+                        [self testModernHistoryInitialDone];
+                    }else if( _nCb == 2 ){
+                        [self testModernHistoryTrackLoaded];
+                    }else if( _nCb == 3 ){
+                        [self testModernHistoryReloadFirst10];
+                    }else if( _nCb == 4 ){
+                        [self testModernHistoryReloadNothing];
+                    }else if( _nCb == 5 ){
+                        [self testModernHistoryReloadAll];
+                    }else{
+                        [self testCommunicationEnd];
+                    }
             }
 
         });
@@ -214,11 +247,89 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     }
 }
 
+#pragma mark - Modern History Communication test
+
+-(void)testModernHistory{
+    _testInstance = gcTestInstanceModernHistory;
+    
+    [self testCommunicationStart:@"GC Com Modern" userName:@"simulator"];
+    self.nReq = 0;
+    [[GCAppGlobal web] servicesSearchRecentActivities];
+}
+-(void)testModernHistoryInitialDone{
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT(self.nReq == 160, @"Should have got 160 req");
+    
+    self.cache = [NSMutableDictionary dictionary];
+    
+    for( NSUInteger i=0;i< 10; i++){
+        GCActivity * act = [[GCAppGlobal organizer] activityForIndex:i];
+        self.cache[act.activityId] = [NSDictionary dictionaryWithDictionary:act.summaryData];
+        // Force load of points
+        [act clearTrackdb];
+        RZ_ASSERT(act.trackpoints.count == 0, @"%@ start with 0 points", act);
+    }
+}
+
+-(void)testModernHistoryTrackLoaded{
+    RZ_ASSERT(self.nReq = 210, @"Load track point in 210 req");
+    
+    for( NSUInteger i=0;i< 10; i++){
+        GCActivity * act = [[GCAppGlobal organizer] activityForIndex:i];
+        NSDictionary * prev = self.cache[act.activityId];
+        RZ_ASSERT(prev.count <= act.summaryData.count, @"Not less data");
+        for (GCField * field in prev) {
+            GCActivitySummaryValue * prevVal = prev[field];
+            GCActivitySummaryValue * newVal  = act.summaryData[field];
+            RZ_ASSERT(newVal != nil, @"%@ still has %@", act, field);
+            if( newVal ){
+                RZ_ASSERT([prevVal isEqualToValue:newVal], @"%@ == %@ for %@", prevVal, newVal, act);
+            }
+        }
+        // Force load of points
+        RZ_ASSERT(act.trackpoints.count > 0, @"%@ loaded %lu points", act, (unsigned long)act.trackpoints.count);
+        [act clearTrackdb]; //prep for delete coming
+    }
+
+    [[GCAppGlobal organizer] deleteActivityUpToIndex:10];
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985-11, @"deleted 10 activities %d", [[GCAppGlobal organizer] countOfActivities] );
+    
+    [[GCAppGlobal web] servicesSearchRecentActivities];
+}
+
+-(void)testModernHistoryReloadFirst10{
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT(self.nReq == 217, @"Reloaded only last few %d", (int)self.nReq);
+    
+    [[GCAppGlobal organizer] deleteActivityFromIndex:2000];
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2000, @"deleted tail activities");
+
+    [[GCAppGlobal web] servicesSearchRecentActivities];
+}
+
+-(void)testModernHistoryReloadNothing{
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2000 , @"Loading 2000 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT(self.nReq == 223, @"Reloaded only last few %d", (int)self.nReq);
+    
+    [[GCAppGlobal web] servicesSearchAllActivities];
+}
+
+-(void)testModernHistoryReloadAll{
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT(self.nReq == 376, @"Reloaded only last few %d", (int)self.nReq);
+    
+    
+    // End manually
+    [self notifyCallBack:self info:[RZDependencyInfo rzDependencyInfoWithString:@"end"]];
+
+}
+
 #pragma mark - Original Communication test sequence
 
 -(void)testOriginalAccount{
-    [self testCommunicationStart:@"GC Communication" userName:@"simulator"];
+    
     _testInstance = gcTestInstanceCommunication;
+    [self testCommunicationStart:@"GC Communication" userName:@"simulator"];
 
     [[GCAppGlobal web] servicesSearchActivitiesFrom:20 reloadAll:true];
 }
@@ -390,8 +501,8 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 #pragma mark - Test Account Test
 
 -(void)testNewStyleAccount{
-    [self testCommunicationStart:@"GC Com New Style" userName:@"testaccount"];
     _testInstance = gcTestInstanceNewStyleAccount;
+    [self testCommunicationStart:@"GC Com New Style" userName:@"testaccount"];
 
     [[GCAppGlobal web] servicesSearchActivitiesFrom:0 reloadAll:true];
 }
