@@ -1961,6 +1961,11 @@
 		42DC515A1B27879600B5C12F /* GCHealthKitDailySummaryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DC51541B2784B600B5C12F /* GCHealthKitDailySummaryParser.m */; };
 		42DC51611B278BE800B5C12F /* GCHealthKitDayDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DC51601B278BE800B5C12F /* GCHealthKitDayDetailParser.m */; };
 		42DC51621B278BE800B5C12F /* GCHealthKitDayDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DC51601B278BE800B5C12F /* GCHealthKitDayDetailParser.m */; };
+		42DC6557209DE2650075A5CE /* activityweather_2674807009.json in Resources */ = {isa = PBXBuildFile; fileRef = 42DC654B209DE2640075A5CE /* activityweather_2674807009.json */; };
+		42DC6558209DE2650075A5CE /* last_modern_search_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 42DC6553209DE2640075A5CE /* last_modern_search_0.json */; };
+		42DC6559209DE2650075A5CE /* activitytrack_2674807009.json in Resources */ = {isa = PBXBuildFile; fileRef = 42DC6554209DE2640075A5CE /* activitytrack_2674807009.json */; };
+		42DC655A209DE2650075A5CE /* activity_2674807009.json in Resources */ = {isa = PBXBuildFile; fileRef = 42DC6555209DE2640075A5CE /* activity_2674807009.json */; };
+		42DC655B209DE2650075A5CE /* activitylaps_2674807009.json in Resources */ = {isa = PBXBuildFile; fileRef = 42DC6556209DE2650075A5CE /* activitylaps_2674807009.json */; };
 		42DCA7CC1AF420E20050AAA9 /* GCGarminRequestActivityList.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DCA7CB1AF420E20050AAA9 /* GCGarminRequestActivityList.m */; };
 		42DCA7CD1AF420E20050AAA9 /* GCGarminRequestActivityList.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DCA7CB1AF420E20050AAA9 /* GCGarminRequestActivityList.m */; };
 		42DCEF831E181CF700F66AF1 /* FITFitFieldsStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCEF821E181CF700F66AF1 /* FITFitFieldsStatistics.swift */; };
@@ -4260,6 +4265,11 @@
 		42DC51571B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitWorkoutsRequest.m; path = src/GCHealthKitWorkoutsRequest.m; sourceTree = "<group>"; };
 		42DC515F1B278BE800B5C12F /* GCHealthKitDayDetailParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitDayDetailParser.h; path = src/GCHealthKitDayDetailParser.h; sourceTree = "<group>"; };
 		42DC51601B278BE800B5C12F /* GCHealthKitDayDetailParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitDayDetailParser.m; path = src/GCHealthKitDayDetailParser.m; sourceTree = "<group>"; };
+		42DC654B209DE2640075A5CE /* activityweather_2674807009.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activityweather_2674807009.json; sourceTree = "<group>"; };
+		42DC6553209DE2640075A5CE /* last_modern_search_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_modern_search_0.json; sourceTree = "<group>"; };
+		42DC6554209DE2640075A5CE /* activitytrack_2674807009.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitytrack_2674807009.json; sourceTree = "<group>"; };
+		42DC6555209DE2640075A5CE /* activity_2674807009.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_2674807009.json; sourceTree = "<group>"; };
+		42DC6556209DE2650075A5CE /* activitylaps_2674807009.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitylaps_2674807009.json; sourceTree = "<group>"; };
 		42DCA7CA1AF420E20050AAA9 /* GCGarminRequestActivityList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminRequestActivityList.h; path = src/GCGarminRequestActivityList.h; sourceTree = "<group>"; };
 		42DCA7CB1AF420E20050AAA9 /* GCGarminRequestActivityList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequestActivityList.m; path = src/GCGarminRequestActivityList.m; sourceTree = "<group>"; };
 		42DCEF821E181CF700F66AF1 /* FITFitFieldsStatistics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITFitFieldsStatistics.swift; path = src/FITFitFieldsStatistics.swift; sourceTree = "<group>"; };
@@ -5605,8 +5615,6 @@
 				429D75341651B14E00232BED /* GCGarminRequest.m */,
 				4209E1981DA8E15700B80735 /* GCGarminRequestModernSearch.h */,
 				4209E1991DA8E15700B80735 /* GCGarminRequestModernSearch.m */,
-				425ACBBB17C1676D00EB23A3 /* GCGarminRequestUser.h */,
-				425ACBBC17C1676D00EB23A3 /* GCGarminRequestUser.m */,
 				427828DF1683C26700AB9C89 /* GCGarminRequestSearch.h */,
 				427828E01683C26700AB9C89 /* GCGarminRequestSearch.m */,
 				42200ED617F8270D0078B45A /* GCGarminActivityTrack13Request.h */,
@@ -5621,6 +5629,8 @@
 				427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */,
 				421736A22066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.h */,
 				421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */,
+				425ACBBB17C1676D00EB23A3 /* GCGarminRequestUser.h */,
+				425ACBBC17C1676D00EB23A3 /* GCGarminRequestUser.m */,
 			);
 			name = GarminRequests;
 			sourceTree = "<group>";
@@ -6497,6 +6507,11 @@
 		42AEFEB21DA057F500D7DA6D /* activity_modern_json */ = {
 			isa = PBXGroup;
 			children = (
+				42DC6555209DE2640075A5CE /* activity_2674807009.json */,
+				42DC6556209DE2650075A5CE /* activitylaps_2674807009.json */,
+				42DC6554209DE2640075A5CE /* activitytrack_2674807009.json */,
+				42DC654B209DE2640075A5CE /* activityweather_2674807009.json */,
+				42DC6553209DE2640075A5CE /* last_modern_search_0.json */,
 				422965782066F055009C86BB /* activity_types_modern.json */,
 				422965802066F056009C86BB /* activity_types.json */,
 				42C7D4141DAAD7D80089806B /* activity_1027746730.json */,
@@ -8122,7 +8137,7 @@
 			attributes = {
 				CLASSPREFIX = GC;
 				LastSwiftUpdateCheck = 0810;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Brice Rosenzweig";
 				TargetAttributes = {
 					422FAEA319A1DD6000D09773 = {
@@ -8517,6 +8532,7 @@
 				422F283820551AE100187478 /* activity_2545022458.json in Resources */,
 				42BB0DF91AB4A9A0008D5A10 /* activityweather_659319871.json in Resources */,
 				42BB0C771AB4A99F008D5A10 /* activityweather_443933250.json in Resources */,
+				42DC6557209DE2650075A5CE /* activityweather_2674807009.json in Resources */,
 				42BB0DA61AB4A9A0008D5A10 /* activityweather_613001000.json in Resources */,
 				42BB0D991AB4A9A0008D5A10 /* activityweather_604564625.json in Resources */,
 				42BB0D391AB4A9A0008D5A10 /* activityweather_547704016.json in Resources */,
@@ -8525,6 +8541,7 @@
 				42BB0C5B1AB4A99F008D5A10 /* activityweather_431806271.json in Resources */,
 				42BB0C8A1AB4A99F008D5A10 /* activityweather_458997421.json in Resources */,
 				42BB0DF31AB4A9A0008D5A10 /* activityweather_654893174.json in Resources */,
+				42DC655B209DE2650075A5CE /* activitylaps_2674807009.json in Resources */,
 				42BB0C0A1AB4A99F008D5A10 /* activityweather_406286822.json in Resources */,
 				42BB0D2B1AB4A9A0008D5A10 /* activityweather_540272882.json in Resources */,
 				42C011A01AB4891B0059B6CF /* activityweather_681192328.json in Resources */,
@@ -8582,6 +8599,7 @@
 				42BB0D861AB4A9A0008D5A10 /* activityweather_597359413.json in Resources */,
 				42BB0CC41AB4A99F008D5A10 /* activityweather_484841804.json in Resources */,
 				428BAD181CB14B650041468A /* activityweather_1108367966.json in Resources */,
+				42DC6558209DE2650075A5CE /* last_modern_search_0.json in Resources */,
 				42BB0CF21AB4A99F008D5A10 /* activityweather_513566218.json in Resources */,
 				42BB0D4D1AB4A9A0008D5A10 /* activityweather_557565565.json in Resources */,
 				42BB0D161AB4A9A0008D5A10 /* activityweather_532826116.json in Resources */,
@@ -8648,6 +8666,7 @@
 				42BB0BF71AB4A99F008D5A10 /* activityweather_395288975.json in Resources */,
 				42BB0D791AB4A9A0008D5A10 /* activityweather_588836191.json in Resources */,
 				42BB0C231AB4A99F008D5A10 /* activityweather_411469707.json in Resources */,
+				42DC655A209DE2650075A5CE /* activity_2674807009.json in Resources */,
 				42BB0C241AB4A99F008D5A10 /* activityweather_411469720.json in Resources */,
 				42BB0D9E1AB4A9A0008D5A10 /* activityweather_608649959.json in Resources */,
 				42BB0CB01AB4A99F008D5A10 /* activityweather_472899320.json in Resources */,
@@ -8714,6 +8733,7 @@
 				42BB0D6F1AB4A9A0008D5A10 /* activityweather_583862488.json in Resources */,
 				42BB0CF51AB4A99F008D5A10 /* activityweather_513588436.json in Resources */,
 				42BB0CEC1AB4A99F008D5A10 /* activityweather_505444331.json in Resources */,
+				42DC6559209DE2650075A5CE /* activitytrack_2674807009.json in Resources */,
 				42BB0C751AB4A99F008D5A10 /* activityweather_441950372.json in Resources */,
 				42C011A61AB4891B0059B6CF /* activityweather_683733838.json in Resources */,
 				42C011B81AB4891B0059B6CF /* activityweather_711605435.json in Resources */,
@@ -10918,6 +10938,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = HealthStatsAppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = HealthStats/HealthStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -10960,6 +10981,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = HealthStatsAppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = HealthStats/HealthStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -11137,11 +11159,13 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
@@ -11187,11 +11211,13 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
@@ -11230,6 +11256,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsNewAppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -11276,6 +11303,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsNewAppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -11322,6 +11350,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ConnectStats.app/ConnectStats";
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
@@ -11346,6 +11375,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ConnectStats.app/ConnectStats";
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
@@ -11522,6 +11552,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CODE_SIGN_ENTITLEMENTS = ConnectStatsTestApp/ConnectStatsTestApp.entitlements;
@@ -11562,6 +11593,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CODE_SIGN_ENTITLEMENTS = ConnectStatsTestApp/ConnectStatsTestApp.entitlements;

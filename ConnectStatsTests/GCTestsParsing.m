@@ -35,6 +35,7 @@
 #import "GCTrackFieldChoices.h"
 #import "GCTrackStats.h"
 #import "GCGarminRequestModernActivityTypes.h"
+#import "GCGarminRequestModernSearch.h"
 
 @interface GCTestsParsing : GCTestCase
 
@@ -189,6 +190,51 @@
     XCTAssertGreaterThan(types.allTypes.count, n, @"Got more types");
     XCTAssertGreaterThanOrEqual(types.allTypes.count, modern.count); // registered all new types
 }
+
+-(void)testModernSearch{
+    NSString * dbfp = [RZFileOrganizer writeableFilePath:@"test_parsing_modern_search.db"];
+    [RZFileOrganizer removeEditableFile:@"test_parsingsearch.db"];
+    FMDatabase * db = [FMDatabase databaseWithPath:dbfp];
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    [GCHealthOrganizer ensureDbStructure:db];
+    GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
+    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
+    organizer.health = health;
+    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+
+    NSString * aId = @"2674807009";
+    
+    GCActivity * act = [organizer activityForId:aId];
+    
+    NSDictionary * expected = @{
+                                // Correct value, before had wrong scaling by 1000...
+                                // These fields have different unit in summary search and activity reload...
+                                @"MaxElevation":[GCNumberWithUnit numberWithUnitName:@"meter" andValue:36.200],
+                                @"MinElevation":[GCNumberWithUnit numberWithUnitName:@"meter" andValue:10.4],
+                                @"SumElapsedDuration":[GCNumberWithUnit numberWithUnitName:@"second" andValue:3179.8],
+                                };
+    
+    for (NSString * fieldKey in expected) {
+        GCNumberWithUnit * expNum = expected[fieldKey];
+        GCNumberWithUnit * actNum = [act numberWithUnitForField:[GCField fieldForKey:fieldKey andActivityType:act.activityType]];
+        XCTAssertTrue([expNum compare:actNum withTolerance:0.1] == NSOrderedSame);
+        
+    }
+    
+    GCActivity * actReload = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+
+    for (NSString * fieldKey in expected) {
+        GCNumberWithUnit * expNum = expected[fieldKey];
+        GCNumberWithUnit * actNum = [actReload numberWithUnitForField:[GCField fieldForKey:fieldKey andActivityType:act.activityType]];
+        
+        XCTAssertTrue([expNum compare:actNum withTolerance:0.1] == NSOrderedSame);
+        
+    }
+
+}
+
 
 -(void)testParseSearch{
     NSString * dbfp = [RZFileOrganizer writeableFilePath:@"test_parsingsearch.db"];

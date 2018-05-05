@@ -484,7 +484,7 @@ void checkVersion(){
 
 -(void)searchAllActivities{
     // Should have better logic for all services
-    if ([self.profiles configGetBool:PROFILE_FULL_DOWNLOAD_DONE defaultValue:false]) {
+    if ([self.profiles configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] == true || [self.profiles configGetBool:PROFILE_FULL_DOWNLOAD_DONE defaultValue:false]) {
         [self.web servicesSearchRecentActivities];
     }else{
         [self.web servicesSearchActivitiesFrom:[self.profiles configGetInt:PROFILE_LAST_PAGE defaultValue:0] reloadAll:true];

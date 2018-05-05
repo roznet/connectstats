@@ -182,24 +182,31 @@
     //@"activities.db"
     self.db = nil;
     
-    [RZFileOrganizer forceRebuildEditable:name];
-    [RZFileOrganizer removeEditableFile:[RZFileOrganizer writeableFilePath:[self.profile currentDerivedDatabasePath]]];
-
-	[self setDb:[FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:name]]];
-    [_db open];
-    [GCActivitiesOrganizer ensureDbStructure:_db];
-    [GCHealthOrganizer ensureDbStructure:_db];
-    [self setupFieldCache];
-
-	[self setSettings:[NSMutableDictionary dictionaryWithDictionary:[RZFileOrganizer loadDictionary:settingName]]];
-    [self setOrganizer:[[[GCActivitiesOrganizer alloc] initWithDb:_db] autorelease]];
-    [self setDerived:nil];// detach from web before we delete
-    [self setWeb:[[[GCWebConnect alloc] init] autorelease]] ;
-    self.web.worker = self.worker;
-    [self setHealth:[[[GCHealthOrganizer alloc] initWithDb:_db andThread:self.worker] autorelease]];
-    [self setProfile:[GCAppProfiles profilesFromSettings:self.settings]];
-    [[self profile] serviceEnabled:gcServiceStrava set:false];
-    [[self profile] configSet:PROFILE_DBPATH stringVal:name];
+    @autoreleasepool {
+        RZLog(RZLogInfo, @"<<< SETUP %@", name );
+        // autorelease pool to make sure nothing hangs in the wrong thread.
+        
+        
+        [RZFileOrganizer forceRebuildEditable:name];
+        [RZFileOrganizer removeEditableFile:[RZFileOrganizer writeableFilePath:[self.profile currentDerivedDatabasePath]]];
+        
+        [self setDb:[FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:name]]];
+        [_db open];
+        [GCActivitiesOrganizer ensureDbStructure:_db];
+        [GCHealthOrganizer ensureDbStructure:_db];
+        [self setupFieldCache];
+        
+        [self setSettings:[NSMutableDictionary dictionaryWithDictionary:[RZFileOrganizer loadDictionary:settingName]]];
+        [self setOrganizer:[[[GCActivitiesOrganizer alloc] initWithDb:_db] autorelease]];
+        [self setDerived:nil];// detach from web before we delete
+        [self setWeb:[[[GCWebConnect alloc] init] autorelease]] ;
+        self.web.worker = self.worker;
+        [self setHealth:[[[GCHealthOrganizer alloc] initWithDb:_db andThread:nil] autorelease]];
+        self.health.worker = self.worker; // Don't set thread in init to ensure all db ops done in current thread
+        [self setProfile:[GCAppProfiles profilesFromSettings:self.settings]];
+        [[self profile] serviceEnabled:gcServiceStrava set:false];
+        [[self profile] configSet:PROFILE_DBPATH stringVal:name];
+    }
 }
 
 -(void)setupEmptyState:(NSString *)name{
@@ -220,7 +227,7 @@
 -(void)setupSampleState:(NSString*)name config:(NSDictionary *)config{
     // Stop everything.
     self.organizer = nil;
-
+    RZLog(RZLogInfo, @"<<< SETUP %@", name );
     [RZFileOrganizer createEditableCopyOfFile:name];
 	[self setDb:[FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:name]]];
     [_db open];

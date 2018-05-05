@@ -80,8 +80,8 @@ class GCSegment: NSObject {
         let query = "INSERT OR REPLACE INTO gc_segments (segmentId,name,activityType,country,city,state,distanceMeters,startCoordinateLon,startCoordinateLat) VALUES (?,?,?,?,?,?,?,?,?)";
         let opStrValues : [String?] = [segmentId,name,activityType,country,city,state];
         let opNumValues : [Double?] = [distanceMeters,startCoordinate.longitude,startCoordinate.latitude];
-        var values :[Any] = opStrValues.flatMap{ $0}
-        for one in opNumValues.flatMap({ $0 }) {
+        var values :[Any] = opStrValues.compactMap{ $0}
+        for one in opNumValues.compactMap({ $0 }) {
             values.append(one);
         }
 

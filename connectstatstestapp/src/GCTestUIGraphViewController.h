@@ -27,5 +27,5 @@
 #import "GCHistoryFieldDataSerie.h"
 
 @interface GCTestUIGraphViewController : UITableViewController<RZChildObject>
-@property (nonatomic,retain) NSArray * dataSources;
+@property (nonatomic,readonly) NSArray * dataSources;
 @end

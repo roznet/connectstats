@@ -83,7 +83,11 @@
 }
 
 -(NSString*)description{
-    return [NSString stringWithFormat:@"<%@: %@=%@>", NSStringFromClass([self class]), _field,self.display ];
+    NSString * keyStr = @"";
+    if( self.key && ![self.key isEqualToString:@""]){
+        keyStr = [NSString stringWithFormat:@" key=%@", self.key];
+    }
+    return [NSString stringWithFormat:@"<%@: %@=%@%@>", NSStringFromClass([self class]), _field,self.display, keyStr ];
 }
 
 +(GCActivityMetaValue*)activityValueForResultSet:(FMResultSet*)res{

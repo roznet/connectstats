@@ -116,6 +116,7 @@ extern NSString * GC_TYPE_UNCATEGORIZED;
 extern NSString * GC_META_DEVICE;
 extern NSString * GC_META_EVENTTYPE;
 extern NSString * GC_META_DESCRIPTION;
+extern NSString * GC_META_ACTIVITYTYPE;
 
 extern NSString * STOREUNIT_SPEED;
 extern NSString * STOREUNIT_DISTANCE;

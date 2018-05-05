@@ -48,9 +48,6 @@
 #pragma mark - DataSource Samples
 
 -(NSArray*)dataSourceSamples{
-
-    [GCAppGlobal setupSampleState:@"sample_activities.db"];
-
     //[self loadDataSourceSamples];
 
     // use the NSStringFromSelector(@Selector()) idiom so
@@ -75,12 +72,15 @@
 
 
     NSMutableArray * rv = [NSMutableArray array];
+    @autoreleasepool {
+        [GCAppGlobal setupSampleState:@"sample_activities.db"];
 
-    for (NSString * selectorName in selectorNames) {
-
-        NSArray<GCTestUISampleDataSourceHolder*> * sources = [self dataSourceHolderFor:NSSelectorFromString(selectorName)];
-        for (GCTestUISampleDataSourceHolder * holder in sources) {
-            [rv addObject:holder];
+        for (NSString * selectorName in selectorNames) {
+            
+            NSArray<GCTestUISampleDataSourceHolder*> * sources = [self dataSourceHolderFor:NSSelectorFromString(selectorName)];
+            for (GCTestUISampleDataSourceHolder * holder in sources) {
+                [rv addObject:holder];
+            }
         }
     }
     return  rv;

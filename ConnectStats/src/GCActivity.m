@@ -852,7 +852,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     self.useTrackDb = nil;
 
     _downloadRequested = false;
-
 }
 
 -(void)loadTrackPointsFromDb:(FMDatabase*)trackdb{
@@ -874,8 +873,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
 
     [GCFieldsCalculated addCalculatedFieldsToTrackPoints:self.lapsCache forActivity:self];
-
 }
+
 -(void)forceReloadTrackPoints{
     [self clearTrackdb];
     self.weather = nil;
@@ -895,7 +894,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 -(BOOL)trackdbIsObsolete:(FMDatabase*)trackdb{
     BOOL rv = false;
-
+    
     // Rename gc_version to gc_version_track so we can merge track /activity db
     if ([trackdb tableExists:@"gc_version"] && ![trackdb tableExists:@"gc_version_track"]) {
         int version = [trackdb intForQuery:@"SELECT MAX(version) from gc_version"];
@@ -910,6 +909,12 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         RZEXECUTEUPDATE(trackdb, @"DROP TABLE gc_version");
     }
 
+    if( ![trackdb tableExists:@"gc_version_track"]){
+        RZEXECUTEUPDATE(trackdb, @"CREATE TABLE gc_version_track (version INTEGER)");
+        RZEXECUTEUPDATE(trackdb, @"INSERT INTO gc_version_track (version) VALUES (1)");
+        rv = true;
+    }
+    
     if([trackdb intForQuery:@"SELECT MAX(version) from gc_version_track"] < 1){
         rv = true;
     }
@@ -1488,6 +1493,11 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
     GCTrackPoint * lastPoint = nil;
     for (GCTrackPoint * point in self.trackpoints) {
+        // We should always take the first date of the first trackpoint as reference
+        // So time elapsed match even for series where the first few points don't have data
+        if (firstDate == nil) {
+            firstDate = point.time;
+        }
 
         GCNumberWithUnit * nu = [point numberWithUnitForField:field inActivity:self];
         
@@ -1499,9 +1509,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             }
 
             if (timeAxis) {
-                if (firstDate == nil) {
-                    firstDate = point.time;
-                }
 
                 if (useElapsed) {
                     if(lastPoint){

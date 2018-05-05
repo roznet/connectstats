@@ -178,6 +178,83 @@
                     }
                 }
             }
+#if TARGET_IPHONE_SIMULATOR
+            // If running in simulator display what fields are missing
+        }else{
+            static NSDictionary * knownMissing = nil;
+            if( knownMissing == nil){
+                knownMissing = @{
+                                 @"activityId" : @1, // sample: 2477200414
+                                 @"isMultiSportParent" : @1, // sample: 0
+                                 @"userProfileId" : @1, // sample: 3020883
+                                 @"endLongitude" : @1, // sample: -0.1953904610127211
+                                 @"startLongitude" : @1, // sample: -0.1958300918340683
+                                 @"endLatitude" : @1, // sample: 51.4716518484056
+                                 @"startLatitude" : @1, // sample: 51.47172099910676
+                                 @"maxVerticalSpeed" : @1, // sample: 0.6000003814697266
+
+                                 @"achievement_count" : @1, // sample: 0
+                                 @"anaerobicTrainingEffect" : @1, // sample: 1.600000023841858
+                                 @"athlete_count" : @1, // sample: 4
+                                 @"autoCalcCalories" : @1, // sample: 0
+                                 @"averageBikingCadenceInRevPerMinute" : @1, // sample: 68
+                                 @"averageRunningCadenceInStepsPerMinute" : @1, // sample: 80
+                                 @"averageStrokeDistance" : @1, // sample: 2.589999914169312
+                                 @"comment_count" : @1, // sample: 0
+                                 @"commute" : @1, // sample: 0
+                                 @"device_watts" : @1, // sample: 1
+                                 @"elev_high" : @1, // sample: -12.6
+                                 @"elev_low" : @1, // sample: -27.2
+                                 @"favorite" : @1, // sample: 0
+                                 @"flagged" : @1, // sample: 0
+                                 @"hasVideo" : @1, // sample: 0
+                                 @"has_heartrate" : @1, // sample: 1
+                                 @"has_kudoed" : @1, // sample: 0
+                                 @"id" : @1, // sample: 730019974
+                                 @"kudos_count" : @1, // sample: 0
+                                 @"lapIndex" : @1, // sample: 1
+                                 @"lengthIndex" : @1, // sample: 1
+                                 @"manual" : @1, // sample: 0
+                                 @"maxBikingCadenceInRevPerMinute" : @1, // sample: 91
+                                 @"maxRunningCadenceInStepsPerMinute" : @1, // sample: 120
+                                 @"max_watts" : @1, // sample: 474
+                                 @"numberOfActiveLengths" : @1, // sample: 120
+                                 @"ownerId" : @1, // sample: 3020883
+                                 @"parent" : @1, // sample: 0
+                                 @"photo_count" : @1, // sample: 0
+                                 @"poolLength" : @1, // sample: 33.33000183105469
+                                 @"pr" : @1, // sample: 0
+                                 @"private" : @1, // sample: 0
+                                 @"resource_state" : @1, // sample: 2
+                                 @"start_latitude" : @1, // sample: 51.52
+                                 @"start_longitude" : @1, // sample: -0.1
+                                 @"steps" : @1, // sample: 8342
+                                 @"suffer_score" : @1, // sample: 9
+                                 @"total_photo_count" : @1, // sample: 0
+                                 @"trainer" : @1, // sample: 0
+                                 @"upload_id" : @1, // sample: 804813097
+                                 @"userPro" : @1, // sample: 0
+                                 @"weighted_average_watts" : @1, // sample: 129
+                                 };
+                [knownMissing retain];
+            }
+            
+            static NSMutableDictionary * recordMissing = nil;
+            if( recordMissing == nil){
+                recordMissing = [NSMutableDictionary dictionary];
+                [recordMissing retain];
+            }
+            if( ! recordMissing[key] ){
+                NSNumber * sample = nil;
+                if( [data[key] isKindOfClass:[NSNumber class]]){
+                    sample = data[key];
+                    recordMissing[key] = @1;
+                }
+                if( sample != nil && knownMissing[key] == nil){
+                    RZLog(RZLogInfo, @"Modern Unknown Key: %@ sample: %@", key,  sample);
+                }
+            }
+#endif
         }
         if (fieldkey && uom && val) {
             GCField * field = [GCField fieldForKey:fieldkey andActivityType:self.activityType];
@@ -276,11 +353,12 @@
     self.location = @"";
     self.downloadMethod = gcDownloadMethodModern;
 
-    [self parseGarminModernSummaryData:data];
+    [self parseGarminModernSummaryData:data dtoUnits:false];
     NSDictionary * foundSummaryDTO = data[@"summaryDTO"];
     if([foundSummaryDTO isKindOfClass:[NSDictionary class]]){
-        [self parseGarminModernSummaryData:foundSummaryDTO];
+        [self parseGarminModernSummaryData:foundSummaryDTO dtoUnits:true];
     }
+    [self updateMetadataFromModernGarminJson:data];
     NSDictionary * foundMetaDTO = data[@"metadataDTO"];
     if( [foundMetaDTO isKindOfClass:[NSDictionary class]]){
         [self updateMetadataFromModernGarminJson:foundMetaDTO];
@@ -327,30 +405,89 @@
 
     NSMutableDictionary * extraMeta = self.metaData ? [NSMutableDictionary dictionaryWithDictionary:self.metaData] : [NSMutableDictionary dictionary];
 
-    for( NSString * key in @[ @"agentApplicationInstallationId", @"deviceApplicationInstallationId"]){
-        NSNumber * keyValue = meta[key];
+    static NSDictionary * _metaKeys = nil;
+    if( _metaKeys == nil){
+        _metaKeys = @{
+                      @"activityName" : @"activityName", // Sample: "City of Westminster Virtual Cycling",
+                      @"description" : GC_META_DESCRIPTION, //Sample: "zzzNote this is a note",
+                      //@"eventType" : @"eventType", //Sample: { "typeId" : 9, "typeKey" : "uncategorized", "sortOrder" : 10  },
+                      @"comments" : @"comments", //Sample: null,
+                      @"ownerDisplayName" : @"ownerDisplayName", //Sample: "BriceGarminFitTest",
+                      @"ownerFullName" : @"ownerFullName", //Sample: "Brice Rosenzweig",
+                      @"courseId" : @"courseId", //Sample: null,
+                      @"hasVideo" : @"hasVideo", //Sample: false,
+                      @"videoUrl" : @"videoUrl", //Sample: null,
+                      @"timeZoneId" : @"timeZoneId", //Sample: 120,
+                      @"workoutId" : @"workoutId", //Sample: null,
+                      @"deviceId" : @"deviceId", //Sample: 3825981698,
+                      @"locationName" : @"locationName", //Sample: "City of Westminster",
+                      @"favorite" : @"favorite", //Sample: false,
+                      @"pr" : @"pr", //Sample: false,
+                      @"elevationCorrected" : @"elevationCorrected", //Sample: false,
+                      @"purposeful" : @"purposeful", //Sample: false
+                      
+                      @"agentApplicationInstallationId" : @"agentApplicationInstallationId",
+                      @"deviceApplicationInstallationId" : @"deviceApplicationInstallationId",
+                      };
+        [_metaKeys retain];
+    }
+    
+    if( self.activityTypeDetail && extraMeta[GC_META_ACTIVITYTYPE] == nil){
+        GCActivityMetaValue * typeMeta = [GCActivityMetaValue activityMetaValueForDisplay:self.activityTypeDetail.displayName andField:GC_META_ACTIVITYTYPE];
+        typeMeta.key = self.activityTypeDetail.key;
+        extraMeta[GC_META_ACTIVITYTYPE] = typeMeta;
+    }
+    for( NSString * key in _metaKeys.allKeys){
+        NSString * mappedKey = _metaKeys[key];
+        id keyValue = meta[key];
         if( [keyValue isKindOfClass:[NSNumber class]]){
-            GCActivityMetaValue * metaVal = [GCActivityMetaValue activityMetaValueForDisplay:[keyValue stringValue] andField:key];
-            extraMeta[ key ] = metaVal;
+            GCActivityMetaValue * metaVal = [GCActivityMetaValue activityMetaValueForDisplay:[keyValue stringValue] andField:mappedKey];
+            extraMeta[ mappedKey ] = metaVal;
+        }else if ([keyValue isKindOfClass:[NSString class]]){
+            GCActivityMetaValue * metaVal = [GCActivityMetaValue activityMetaValueForDisplay:keyValue andField:mappedKey];
+            extraMeta[ mappedKey ] = metaVal;
         }
     }
     self.metaData = extraMeta;
 
 }
 
--(NSMutableDictionary*)buildSummaryDataFromGarminModernData:(NSDictionary*)data{
+
+/**
+ Build summary data using new format from garmin. Note some format have inconsistent units
+ the dictionary for search have a few units for elevation and elapsed duration that are smaller.
+
+ @param data dictionary coming from garmin
+ @param dtoUnits true if data cames from summaryDTO dictionary (as some units are different)
+ @return dictionary field -> summary data
+ */
+-(NSMutableDictionary*)buildSummaryDataFromGarminModernData:(NSDictionary*)data dtoUnits:(BOOL)dtoUnitsFlag{
     static NSDictionary * defs = nil;
+    static NSDictionary * defs_dto = nil;
     if( defs == nil){
-        defs = @{
+        NSDictionary * nonDto = @{
+                               @"maxElevation":        @[ @"MaxElevation",        @"",                                    @"centimeter"],
+                               @"minElevation":        @[ @"MinElevation",        @"",                                    @"centimeter"],
+                               @"elapsedDuration":     @[ @"SumElapsedDuration",   @"",                                    @"ms"],
+
+                               };
+        
+        NSDictionary * dto = @{
+                                  @"maxElevation":        @[ @"MaxElevation",        @"",                                    @"meter"],
+                                  @"minElevation":        @[ @"MinElevation",        @"",                                    @"meter"],
+                                  @"elapsedDuration":     @[ @"SumElapsedDuration",   @"",                                    @"second"],
+                                  
+                                  };
+
+        
+        NSDictionary * commondefs = @{
                  @"distance":            @[ @"SumDistance",          @(gcFieldFlagSumDistance),              @"meter"],
                  @"movingDuration":      @[ @"SumMovingDuration",    @"",                                    @"second"],
                  @"duration":            @[ @"SumDuration",          @(gcFieldFlagSumDuration),              @"second"],
-                 @"elapsedDuration":     @[ @"SumElapsedDuration",   @"",                                    @"second"],
 
                  @"elevationGain":       @[ @"GainElevation",        @(gcFieldFlagAltitudeMeters),           @"meter"],
                  @"elevationLoss":       @[ @"LossElevation",        @"",                                    @"meter"],
-                 @"maxElevation":        @[ @"MaxElevation",        @"",                                    @"meter"],
-                 @"minElevation":        @[ @"MinElevation",        @"",                                    @"meter"],
+                 
 
                  @"averageSpeed":        @[ @"WeightedMeanSpeed",    @(gcFieldFlagWeightedMeanSpeed),        @"mps"],
                  @"averageMovingSpeed":  @[ @"WeightedMeanMovingSpeed",    @"",        @"mps"],
@@ -369,14 +506,17 @@
                  @"groundContactTime":   @[ @"WeightedMeanGroundContactTime", @"", @"ms"],
                  @"groundContactBalanceLeft":   @[ @"WeightedMeanGroundContactBalanceLeft", @"", @"percent"],
                  @"verticalRatio":           @[ @"WeightedMeanVerticalRatio", @"", @"percent"],//CHECK
-
+                 @"avgPower":               @[ @"WeightedMeanPower", @(gcFieldFlagPower), @"watt"],
                  @"strideLength":    @[ @"WeightedMeanStrideLength", @"", @"centimeter"],
+                 @"avgStrideLength": @[ @"WeightedMeanStrideLength", @"", @"centimeter"],
+                 @"averageStrideLength": @[ @"WeightedMeanStrideLength", @"", @"centimeter"],
                  @"verticalOscillation": @[@"WeightedMeanVerticalOscillation", @"", @"centimeter"],
 
                  @"averageRunCadence": @[ @"WeightedMeanRunCadence", @(gcFieldFlagCadence), @"doubleStepsPerMinute"],
                  @"maxRunCadence":   @[ @"MaxRunCadence", @"", @"doubleStepsPerMinute"],
 
                  @"trainingEffect": @[ @"SumTrainingEffect", @"", @"te"],
+                 @"aerobicTrainingEffect": @[ @"SumTrainingEffect", @"", @"te"],
                  @"lactateThresholdHeartRate": 	 @[ @"DirectLactateThresholdHeartRate", @"", @"bpm"],
                  @"lactateThresholdSpeed": 	@[ @"DirectLactateThresholdSpeed", @"", @"mps"],
 
@@ -388,7 +528,9 @@
                  @"maxPower":       @[ @"MaxPower",    @"",                    @"watt"],
                  @"minPower":       @[ @"MinPower",    @"",                    @"watt"],
                  @"maxPowerTwentyMinutes":       @[ @"MaxPowerTwentyMinutes",    @"",                    @"watt"],
+                 @"max20MinPower":              @[ @"MaxPowerTwentyMinutes",     @"",                    @"watt"],
                  @"normalizedPower":       @[ @"WeightedMeanNormalizedPower",    @"",                    @"watt"],
+                 @"normPower":              @[ @"WeightedMeanNormalizedPower",    @"",                    @"watt"],
                  @"functionalThresholdPower":    @[@"ThresholdPower", @"", @"watt"],
 
                  @"totalWork":          @[ @"SumTotalWork",         @"",                                    @"kilocalorie"],
@@ -407,11 +549,27 @@
                  @"averageSWOLF" : @[ @"WeightedMeanSwolf", @"", @"dimensionless"],
                  //@"averageStrokeDistance" : @[ @""],
 
+                 /* ALL */
+                 @"vO2MaxValue" : @[ @"DirectVO2Max", @"", @"ml/kg/min"],
                  };
-        [defs retain];
+        
+        NSMutableDictionary * buildDefs = [NSMutableDictionary dictionaryWithDictionary:commondefs];
+        NSMutableDictionary * buildDefs_dto = [NSMutableDictionary dictionaryWithDictionary:commondefs];
+        for (NSString * key in nonDto) {
+            buildDefs[key] = nonDto[key];
+        }
+        for (NSString * key in dto) {
+            buildDefs_dto[key] = dto[key];
+        }
+        
+        defs = [NSDictionary dictionaryWithDictionary:buildDefs];
+        defs_dto = [NSDictionary dictionaryWithDictionary:buildDefs_dto];
+        
+        RZRetain(defs);
+        RZRetain(defs_dto);
     }
     NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionaryWithCapacity:data.count];
-    [self parseData:data into:newSummaryData usingDefs:defs];
+    [self parseData:data into:newSummaryData usingDefs:dtoUnitsFlag?defs_dto:defs];
     // few extra derived
     [self addPaceIfNecessaryWithSummary:newSummaryData];
 
@@ -441,10 +599,10 @@
     return rv;
 }
 
--(void)parseGarminModernSummaryData:(NSDictionary*)data{
+-(void)parseGarminModernSummaryData:(NSDictionary*)data dtoUnits:(BOOL)dtoFlag{
 
     if (self.activityType) {
-        NSMutableDictionary * newSummaryData = [self buildSummaryDataFromGarminModernData:data];
+        NSMutableDictionary * newSummaryData = [self buildSummaryDataFromGarminModernData:data dtoUnits:dtoFlag];
 
         self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:self.activityType];
         if (!self.distanceDisplayUom) {
@@ -820,7 +978,8 @@
             }else if ([fieldkey isEqualToString:@"BeginTimestamp"] && da){
                 self.date = da;
             }else if (nu) {
-                gcFieldFlag flag = [GCFields trackFieldFromActivityField:fieldkey];
+                GCField * field = [GCField fieldForKey:fieldkey andActivityType:self.activityType];
+                gcFieldFlag flag = field.fieldFlag;
                 if (flag != gcFieldFlagNone) {
                     [self setSummaryField:flag with:nu];
                 }
@@ -828,7 +987,7 @@
                                                                    uom:nu.unit.key
                                                              fieldFlag:flag
                                                               andValue:nu.value];
-                sumData[ [GCField fieldForKey:fieldkey andActivityType:self.activityType] ] = val;
+                sumData[ field ] = val;
             }
         }
         self.summaryData = sumData;
@@ -861,56 +1020,17 @@
 
                             };
 
-    NSDictionary * types = @{
-                             @"Ride":   GC_TYPE_CYCLING,
-                             @"Run":    GC_TYPE_RUNNING,
-                             @"Swim":   GC_TYPE_SWIMMING,
-                             @"Hike":   GC_TYPE_HIKING,
-                             @"Walk":   GC_TYPE_WALKING,
-                             @"Workout":GC_TYPE_FITNESS,
-                             @"VirtualRide":GC_TYPE_CYCLING
-
-                             //From Strava API
-                             //@"Ride",
-                             //@"Kitesurf",
-                             //@"Run",
-                             //@"NordicSki",
-                             //@"Swim",
-                             //@"RockClimbing",
-                             //@"Hike",
-                             //@"RollerSki",
-                             //@"Walk",
-                             //@"Rowing",
-                             //@"AlpineSki",
-                             //@"Snowboard",
-                             //@"BackcountrySki",
-                             //@"Snowshoe",
-                             //@"Canoeing",
-                             //@"StairStepper",
-                             //@"Crossfit",
-                             //@"StandUpPaddling",
-                             //@"EBikeRide",
-                             //@"Surfing",
-                             //@"Elliptical",
-                             //@"VirtualRide",
-                             //@"IceSkate",
-                             //@"WeightTraining",
-                             //@"InlineSkate",
-                             //@"Windsurf",
-                             //@"Kayaking",
-                             //@"Workout",
-                             //@"Yoga",
-
-                             };
     GCService * service = [GCService service:gcServiceStrava];
 
     self.activityId = [service activityIdFromServiceId:[data[@"id"] stringValue]];
-    self.activityType = types[data[@"type"]];
+    GCActivityType * atype = [[GCAppGlobal activityTypes] activityTypeForStravaType:data[@"type"]];
+    self.activityType = atype.topSubRootType.key;
+    self.activityTypeDetail = atype;
     self.activityName = data[@"name"];
     self.location = @"";
     if (self.activityType == nil) {
         self.activityType = GC_TYPE_OTHER;
-        GCActivityType * atype = [[GCAppGlobal activityTypes] activityTypeForStravaType:data[@"type"]];
+        
         self.activityTypeDetail = atype;
         if (self.activityTypeDetail==nil) {
             self.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_OTHER];
@@ -1018,35 +1138,49 @@
 -(BOOL)updateSummaryDataFromActivity:(GCActivity*)other{
     BOOL rv = false;
     
-    if (self.metaData) {
-        NSMutableDictionary * newMetaData = nil;
+    if( self.metaData == nil && other.metaData != nil){
+        self.metaData = [NSDictionary dictionaryWithDictionary:other.metaData];
+        
+        FMDatabase * db = self.db;
+        [db beginTransaction];
         for (NSString * field in self.metaData) {
-            GCActivityMetaValue * thisVal  = (self.metaData)[field];
-            GCActivityMetaValue * otherVal = (other.metaData)[field];
-            if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
-                if (!newMetaData) {
-                    newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
+            GCActivityMetaValue * data = self.metaData[field];
+            [data saveToDb:db forActivityId:self.activityId];
+        }
+        [db commit];
+        rv = true;
+
+    }else{
+        if (self.metaData) {
+            NSMutableDictionary * newMetaData = nil;
+            for (NSString * field in self.metaData) {
+                GCActivityMetaValue * thisVal  = (self.metaData)[field];
+                GCActivityMetaValue * otherVal = (other.metaData)[field];
+                if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
+                    if (!newMetaData) {
+                        newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
+                    }
+                    RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.display, otherVal.display);
+                    [newMetaData setValue:otherVal forKey:field];
+                    FMDatabase * db = self.db;
+                    [db beginTransaction];
+                    [otherVal updateDb:db forActivityId:self.activityId];
+                    [db commit];
+                    rv = true;
                 }
-                RZLog(RZLogInfo, @"%@ changed %@", self, field);
-                [newMetaData setValue:otherVal forKey:field];
-                FMDatabase * db = self.db;
-                [db beginTransaction];
-                [otherVal updateDb:db forActivityId:self.activityId];
-                [db commit];
-                rv = true;
+            }
+            if (newMetaData) {
+                self.metaData = newMetaData;
             }
         }
-        if (newMetaData) {
-            self.metaData = newMetaData;
-        }
     }
-    
     if (self.summaryData) {
         NSMutableDictionary<GCField*,GCActivitySummaryValue*> * newSummaryData = nil;
         for (GCField * field in self.summaryData) {
             GCActivitySummaryValue * thisVal = self.summaryData[field];
             GCActivitySummaryValue * otherVal = other.summaryData[field];
-            if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
+            // Only change if formatted value changes, to avoid issue with just low precision diffs
+            if (otherVal && (! [otherVal isEqualToValue:thisVal]) && (![otherVal.formattedValue isEqualToString:thisVal.formattedValue])) {
                 if (!newSummaryData) {
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                 }
@@ -1069,6 +1203,7 @@
                 
                 RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
                 newSummaryData[field] = otherVal;
+                rv = true;
             }
         }
         if (newSummaryData) {

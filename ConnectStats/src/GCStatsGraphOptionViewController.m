@@ -29,6 +29,7 @@
 #import "GCFormattedFieldText.h"
 #import "GCFields.h"
 #import "GCHistoryFieldDataSerie.h"
+#import "GCFieldsForCategory.h"
 
 #define GC_SECTION_MAIN 0
 #define GC_SECTION_END  1
@@ -129,14 +130,12 @@
     }else if (indexPath.row==GC_ROW_XFIELD){
         NSArray * fieldOrder = [self fieldOrder];
         NSMutableArray * nice = [NSMutableArray arrayWithCapacity:fieldOrder.count];
-        NSString * atype = (self.graphViewController).scatterStats.config.activityType;
         NSUInteger i = 0;
         NSUInteger selected = 0;
-        for (NSString * field in fieldOrder) {
-            NSString * display = [GCFields fieldDisplayName:field activityType:atype];
+        for (GCField * field in fieldOrder) {
+            NSString * display = field.displayName;
             [nice addObject:display];
-            //FIXME: test and change to GCField
-            if ([field isEqualToString:self.graphViewController.x_field.key]) {
+            if ([field isEqualToField:self.graphViewController.x_field]) {
                 selected = i;
             }
             i++;
@@ -151,15 +150,17 @@
     }
 }
 
--(NSArray*)fieldOrder{
-    // fieldOrder is array of array now
-
-    NSString * atype = (self.graphViewController).scatterStats.config.activityType;
+-(NSArray<GCField*>*)fieldOrder{
     NSMutableArray * rv = [NSMutableArray array];
-    for (NSString * field in [self.graphViewController.fieldOrder arrayFlattened]) {
-        NSString * display = [GCFields fieldDisplayName:field activityType:atype];
-        if (display) {
+    for (id obj in [self.graphViewController.fieldOrder arrayFlattened]) {
+        if( [obj isKindOfClass:[GCField class]]){
+            GCField * field = (GCField*)obj;
             [rv addObject:field];
+        }else if( [obj isKindOfClass:[GCFieldsForCategory class]]){
+            GCFieldsForCategory * fieldsForCategory = (GCFieldsForCategory*)obj;
+            for (GCField * field in fieldsForCategory.fields) {
+                [rv addObject:field];
+            }
         }
     }
     return rv;
@@ -171,10 +172,12 @@
         NSString * choice = (cell.choices)[cell.selected];
         [(self.graphViewController).maturityButton setCurrentFromDateChoice:choice];
     }else if (indexPath.row == GC_ROW_XFIELD){
-        NSString * xfield= (self.fieldOrder)[cell.selected];
-        //FIXME: Tests this
-        self.graphViewController.x_field = [GCField fieldForKey:xfield andActivityType:self.graphViewController.x_field.activityType];
-        [self.graphViewController configureGraph];
+        NSArray<GCField*>*fieldOrder = self.fieldOrder;
+        if( cell.selected < fieldOrder.count){
+            GCField * xfield= fieldOrder[cell.selected];
+            self.graphViewController.x_field = xfield;
+            [self.graphViewController configureGraph];
+        }
         [self.tableView reloadData];
     }
 }

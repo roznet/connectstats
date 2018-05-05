@@ -208,8 +208,8 @@
         NSArray * styles = (self.choices)[self.currentChoice];
         if (self.currentStyle < styles.count) {
             GCTrackFieldChoiceHolder * current = styles[self.currentStyle];
-            valid = [activity hasField:current.field];
-            if (current.x_field!=gcFieldFlagNone && ![activity hasField:current.x_field]) {
+            valid = [activity hasField:[current.field correspondingFieldForActivityType:activity.activityType]];
+            if (current.x_field!=gcFieldFlagNone && ![activity hasField:[current.x_field correspondingFieldForActivityType:activity.activityType]]) {
                 valid = false;
             }
         }

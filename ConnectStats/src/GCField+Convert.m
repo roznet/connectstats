@@ -40,7 +40,7 @@ const NSUInteger kDefsConnectIQUnitNameIndex = 1;
     static NSDictionary * defs = nil;
     if( defs == nil){
         defs = @{
-                 @"660a581e-5301-460c-8f2f-034c8b6dc90f":@{
+                 @"660a581e-5301-460c-8f2f-034c8b6dc90f":@{ //Stryd
                          @0: @[ @"WeightedMeanPower", @"watt" ],
                          @2: @[ @"WeightedMeanRunPower", @"stepPerMinutes"],
                          @3: @[ @"WeightedMeanGroundContactTime", @"ms"],
@@ -49,7 +49,7 @@ const NSUInteger kDefsConnectIQUnitNameIndex = 1;
                          @8: @[ @"WeightedMeanFormPower", @"watt"],
                          @9: @[ @"WeightedMeanLegSpringStiffness", @"kN/m"],
                          },
-                 @"a26e5358-7526-4582-af7e-8606884d96bc":@{
+                 @"a26e5358-7526-4582-af7e-8606884d96bc":@{ // Garmin Power
                          @1: @[@"WeightedMeanPower", @"watt"],
                          @3: @[@"WeightedMeanPower", @"watt"], // appear with different number in summary
 
@@ -58,6 +58,18 @@ const NSUInteger kDefsConnectIQUnitNameIndex = 1;
                          @1 : @[ @"WeightedMeanMomentaryEnergyExpenditure", @"dimensionless"],
                          @2 : @[ @"WeightedMeanRelativeRunningEconomy", @"dimensionless" ],
                          },
+                 @"741afa11-0250-48e2-86b5-14bd47e29391": @{ // Garmin RD Pod
+                         @1 : @[ @"WeightedMeanPower", @"watt"],
+                         @3 : @[ @"WeightedMeanPower", @"watt"],
+                         
+                         }
+                 /*
+                  741afa11-0250-48e2-86b5-14bd47e29391[3]
+                  741afa11-0250-48e2-86b5-14bd47e29391[18]
+                  741afa11-0250-48e2-86b5-14bd47e29391[4]
+                  41929d27-38aa-4253-af44-64bdc8ec16c8[18]
+
+                  */
                  };
         RZRetain(defs);
     }

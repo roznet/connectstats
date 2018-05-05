@@ -168,9 +168,6 @@ static void registerInCache(GCField*field){
     if (field == nil) {
         return nil;
     }
-    if( ![field isKindOfClass:[NSString class]] ){
-        NSLog(@"Oops");
-    }
 
     GCField * rv =  _cache[field][activityType?:GC_TYPE_NULL];
     if (!rv) {
@@ -295,6 +292,10 @@ static void registerInCache(GCField*field){
     if (self.fieldFlag == gcFieldFlagSumDistance || self.fieldFlag == gcFieldFlagSumDuration) {
         return false;
     }
+    // special case
+    if( self.fieldFlag == gcFieldFlagAltitudeMeters){
+        return true;
+    }
     if( self.fieldFlag != gcFieldFlagNone){
         return self.isWeightedAverage;
     }
@@ -363,7 +364,11 @@ static void registerInCache(GCField*field){
     return [GCField fieldForKey:self.key andActivityType:GC_TYPE_ALL];
 }
 -(GCField*)correspondingFieldForActivityType:(NSString*)activityType{
-    return [GCField fieldForKey:self.key andActivityType:activityType];
+    if( [self.activityType isEqualToString:activityType]){
+        return self;
+    }else{
+          return [GCField fieldForKey:self.key andActivityType:activityType];
+    }
 }
 -(BOOL)hasSuffix:(NSString*)suf{
     return [self.key hasSuffix:suf];
