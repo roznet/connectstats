@@ -28,6 +28,7 @@
 
 @implementation NSString (CamelCase)
 
+
 - (NSString *)fromCamelCaseToSeparatedByString:(NSString *)aSep {
 
     NSScanner *scanner = [NSScanner scannerWithString:self];

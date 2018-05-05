@@ -200,6 +200,22 @@
     [self convertToUnit:[self.unit unitForGlobalSystem] andXUnit:[self.xUnit unitForGlobalSystem]];
 }
 
+-(void)addNumberWithUnit:(GCNumberWithUnit*)number forDate:(NSDate*)date since:(NSDate*)first{
+    if(self.serie == nil){
+        self.serie = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
+    }
+    if (self.unit == nil) {
+        self.unit = number.unit;
+    }
+    [self convertToCommonUnitWith:number.unit];
+    
+    GCNumberWithUnit * toAdd = [number convertToUnit:self.unit];
+    double val = toAdd.value;
+    if (isnan(val)||isinf(val)) {
+        return;
+    }
+    [self.serie addDataPointWithDate:date since:first andValue:val];
+}
 -(void)addNumberWithUnit:(GCNumberWithUnit*)number forDate:(NSDate*)date{
     if(self.serie == nil){
         self.serie = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);

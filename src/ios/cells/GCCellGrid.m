@@ -54,6 +54,17 @@ NSString *const GCCellGridShouldHideMenu = @"GCCellGridShouldHideMenu";
 @implementation GCCellGrid
 @synthesize cellLayout,marginx,marginy,iconPosition;
 
++(GCCellGrid*)cellGrid:(UITableView*)tableView{
+    GCCellGrid*cell=(GCCellGrid*)[tableView dequeueReusableCellWithIdentifier:@"GCGrid"];
+    if (cell==nil) {
+        cell=RZReturnAutorelease([[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GCGrid"]);
+        cell.tableView = tableView;
+        cell.iconView = nil;
+        
+        
+    }
+    return cell;
+}
 +(GCCellGrid*)gridCell:(UITableView*)tableView{
     GCCellGrid*cell=(GCCellGrid*)[tableView dequeueReusableCellWithIdentifier:@"GCGrid"];
     if (cell==nil) {

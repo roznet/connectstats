@@ -96,12 +96,12 @@
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
     dispatch_async(dispatch_get_main_queue(), ^(){
-        _label.text = [self.parent parentCurrentDescription];
+        self.label.text = [self.parent parentCurrentDescription];
         CGRect rect = self.contentView.bounds;
 
-        CGSize labelSize    = [_label.text sizeWithAttributes:@{NSFontAttributeName:_label.font}];
+        CGSize labelSize    = [self.label.text sizeWithAttributes:@{NSFontAttributeName:self.label.font}];
         CGRect labelRect = CGRectMake(rect.size.width/2-labelSize.width/2, 45, labelSize.width, labelSize.height);
-        _label.frame = labelRect;
+        self.label.frame = labelRect;
 
         [self setNeedsDisplay];
     });

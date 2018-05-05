@@ -66,7 +66,7 @@
 
 -(NSArray*)allValuesInNaturalOrder{
     return [_values.allKeys sortedArrayUsingComparator:^(NSString * k1, NSString * k2){
-        return [_values[k1] compare:_values[k2]];
+        return [self.values[k1] compare:self.values[k2]];
     }];
 }
 -(NSComparisonResult)compare:(id)v1 to:(id)v2{

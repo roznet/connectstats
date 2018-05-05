@@ -307,11 +307,16 @@
     XCTAssertEqualObjects([km formatDouble:1000.], @"1,000 km");
     XCTAssertEqualObjects([step formatDouble:123300.], @"123k s");
 }
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
-}
 
+-(void)testMaxMin{
+    GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:0.0];
+    GCNumberWithUnit * min = [nu nonZeroMinNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:1.0]];
+    XCTAssertEqualWithAccuracy(min.value, 1.0, 1.e-10);
+    min = [min nonZeroMinNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:0.0]];
+    XCTAssertEqualWithAccuracy(min.value, 1.0, 1.e-10);
+    min = [min nonZeroMinNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:2.0]];
+    XCTAssertEqualWithAccuracy(min.value, 1.0, 1.e-10);
+    min = [min nonZeroMinNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:0.5]];
+    XCTAssertEqualWithAccuracy(min.value, 0.5, 1.e-10);
+}
 @end
