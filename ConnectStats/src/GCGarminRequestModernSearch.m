@@ -131,7 +131,7 @@ const NSUInteger kActivityRequestCount = 20;
 -(void)addActivitiesFromParser:(GCGarminSearchModernJsonParser*)parser
                    toOrganizer:(GCActivitiesOrganizer*)organizer{
     GCActivitiesOrganizerListRegister * listRegister = [GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:[GCService service:gcServiceGarmin] isFirst:(self.start==0)];
-    [listRegister addToOrganizer:[GCAppGlobal organizer]];
+    [listRegister addToOrganizer:organizer];
     self.reachedExisting = listRegister.reachedExisting;
     if (listRegister.childIds.count > 0) {
         self.childIds = self.childIds ? [self.childIds arrayByAddingObjectsFromArray:listRegister.childIds] : listRegister.childIds;

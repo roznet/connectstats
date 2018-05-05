@@ -353,10 +353,10 @@
     self.location = @"";
     self.downloadMethod = gcDownloadMethodModern;
 
-    [self parseGarminModernSummaryData:data];
+    [self parseGarminModernSummaryData:data dtoUnits:false];
     NSDictionary * foundSummaryDTO = data[@"summaryDTO"];
     if([foundSummaryDTO isKindOfClass:[NSDictionary class]]){
-        [self parseGarminModernSummaryData:foundSummaryDTO];
+        [self parseGarminModernSummaryData:foundSummaryDTO dtoUnits:true];
     }
     [self updateMetadataFromModernGarminJson:data];
     NSDictionary * foundMetaDTO = data[@"metadataDTO"];
@@ -450,19 +450,42 @@
 
 }
 
--(NSMutableDictionary*)buildSummaryDataFromGarminModernData:(NSDictionary*)data{
+
+/**
+ Build summary data using new format from garmin. Note some format have inconsistent units
+ the dictionary for search have a few units for elevation and elapsed duration that are smaller.
+
+ @param data dictionary coming from garmin
+ @param dtoUnits true if data cames from summaryDTO dictionary (as some units are different)
+ @return dictionary field -> summary data
+ */
+-(NSMutableDictionary*)buildSummaryDataFromGarminModernData:(NSDictionary*)data dtoUnits:(BOOL)dtoUnitsFlag{
     static NSDictionary * defs = nil;
+    static NSDictionary * defs_dto = nil;
     if( defs == nil){
-        defs = @{
+        NSDictionary * nonDto = @{
+                               @"maxElevation":        @[ @"MaxElevation",        @"",                                    @"centimeter"],
+                               @"minElevation":        @[ @"MinElevation",        @"",                                    @"centimeter"],
+                               @"elapsedDuration":     @[ @"SumElapsedDuration",   @"",                                    @"ms"],
+
+                               };
+        
+        NSDictionary * dto = @{
+                                  @"maxElevation":        @[ @"MaxElevation",        @"",                                    @"meter"],
+                                  @"minElevation":        @[ @"MinElevation",        @"",                                    @"meter"],
+                                  @"elapsedDuration":     @[ @"SumElapsedDuration",   @"",                                    @"second"],
+                                  
+                                  };
+
+        
+        NSDictionary * commondefs = @{
                  @"distance":            @[ @"SumDistance",          @(gcFieldFlagSumDistance),              @"meter"],
                  @"movingDuration":      @[ @"SumMovingDuration",    @"",                                    @"second"],
                  @"duration":            @[ @"SumDuration",          @(gcFieldFlagSumDuration),              @"second"],
-                 @"elapsedDuration":     @[ @"SumElapsedDuration",   @"",                                    @"second"],
 
                  @"elevationGain":       @[ @"GainElevation",        @(gcFieldFlagAltitudeMeters),           @"meter"],
                  @"elevationLoss":       @[ @"LossElevation",        @"",                                    @"meter"],
-                 @"maxElevation":        @[ @"MaxElevation",        @"",                                    @"meter"],
-                 @"minElevation":        @[ @"MinElevation",        @"",                                    @"meter"],
+                 
 
                  @"averageSpeed":        @[ @"WeightedMeanSpeed",    @(gcFieldFlagWeightedMeanSpeed),        @"mps"],
                  @"averageMovingSpeed":  @[ @"WeightedMeanMovingSpeed",    @"",        @"mps"],
@@ -527,10 +550,24 @@
                  /* ALL */
                  @"vO2MaxValue" : @[ @"DirectVO2Max", @"", @"ml/kg/min"],
                  };
-        [defs retain];
+        
+        NSMutableDictionary * buildDefs = [NSMutableDictionary dictionaryWithDictionary:commondefs];
+        NSMutableDictionary * buildDefs_dto = [NSMutableDictionary dictionaryWithDictionary:commondefs];
+        for (NSString * key in nonDto) {
+            buildDefs[key] = nonDto[key];
+        }
+        for (NSString * key in dto) {
+            buildDefs_dto[key] = dto[key];
+        }
+        
+        defs = [NSDictionary dictionaryWithDictionary:buildDefs];
+        defs_dto = [NSDictionary dictionaryWithDictionary:buildDefs_dto];
+        
+        RZRetain(defs);
+        RZRetain(defs_dto);
     }
     NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionaryWithCapacity:data.count];
-    [self parseData:data into:newSummaryData usingDefs:defs];
+    [self parseData:data into:newSummaryData usingDefs:dtoUnitsFlag?defs_dto:defs];
     // few extra derived
     [self addPaceIfNecessaryWithSummary:newSummaryData];
 
@@ -560,10 +597,10 @@
     return rv;
 }
 
--(void)parseGarminModernSummaryData:(NSDictionary*)data{
+-(void)parseGarminModernSummaryData:(NSDictionary*)data dtoUnits:(BOOL)dtoFlag{
 
     if (self.activityType) {
-        NSMutableDictionary * newSummaryData = [self buildSummaryDataFromGarminModernData:data];
+        NSMutableDictionary * newSummaryData = [self buildSummaryDataFromGarminModernData:data dtoUnits:dtoFlag];
 
         self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:self.activityType];
         if (!self.distanceDisplayUom) {

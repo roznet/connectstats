@@ -24,6 +24,7 @@
 //  
 
 #import "GCGarminRequest.h"
+@class GCActivitiesOrganizer;
 
 @interface GCGarminRequestModernSearch : GCGarminReqBase
 
@@ -35,4 +36,6 @@
  @return new request
  */
 -(GCGarminRequestModernSearch*)initWithStart:(NSUInteger)aStart andMode:(BOOL)aMode;
+
++(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path;
 @end

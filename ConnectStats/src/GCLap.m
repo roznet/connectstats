@@ -166,7 +166,7 @@
 
 -(void)parseModernDict:(NSDictionary*)data inActivity:(GCActivity*)act{
 
-    NSMutableDictionary * summary = [act buildSummaryDataFromGarminModernData:data];
+    NSMutableDictionary * summary = [act buildSummaryDataFromGarminModernData:data dtoUnits:true];
     
     for (GCField * field in summary) {
         GCActivitySummaryValue * value = summary[field];

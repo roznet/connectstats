@@ -85,7 +85,16 @@
  */
 -(void)addPaceIfNecessaryWithSummary:(NSMutableDictionary<GCField*,GCActivitySummaryValue*>*)newSummaryData;
 
--(NSMutableDictionary*)buildSummaryDataFromGarminModernData:(NSDictionary*)data;
+/**
+ Build summary data using new format from garmin. Note some format have inconsistent units
+ the dictionary for search have a few units for elevation and elapsed duration that are smaller.
+ laps, activity etc seem to use dto unit
+ 
+ @param data dictionary coming from garmin
+ @param dtoUnits true if data cames from summaryDTO dictionary (as some units are different)
+ @return dictionary field -> summary data
+ */
+-(NSMutableDictionary*)buildSummaryDataFromGarminModernData:(NSDictionary*)data dtoUnits:(BOOL)dtoUnitsFlag;
 -(CLLocationCoordinate2D)buildCoordinateFromGarminModernData:(NSDictionary*)data;
 -(NSDate*)buildStartDateFromGarminModernData:(NSDictionary*)data;
 
