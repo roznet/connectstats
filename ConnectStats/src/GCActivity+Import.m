@@ -433,7 +433,9 @@
     }
     
     if( self.activityTypeDetail && extraMeta[GC_META_ACTIVITYTYPE] == nil){
-        extraMeta[GC_META_ACTIVITYTYPE] = [GCActivityMetaValue activityMetaValueForDisplay:self.activityTypeDetail.displayName andField:GC_META_ACTIVITYTYPE];
+        GCActivityMetaValue * typeMeta = [GCActivityMetaValue activityMetaValueForDisplay:self.activityTypeDetail.displayName andField:GC_META_ACTIVITYTYPE];
+        typeMeta.key = self.activityTypeDetail.key;
+        extraMeta[GC_META_ACTIVITYTYPE] = typeMeta;
     }
     for( NSString * key in _metaKeys.allKeys){
         NSString * mappedKey = _metaKeys[key];
@@ -1158,7 +1160,7 @@
                     if (!newMetaData) {
                         newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
                     }
-                    RZLog(RZLogInfo, @"%@ changed %@", self, field);
+                    RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.display, otherVal.display);
                     [newMetaData setValue:otherVal forKey:field];
                     FMDatabase * db = self.db;
                     [db beginTransaction];
@@ -1177,7 +1179,8 @@
         for (GCField * field in self.summaryData) {
             GCActivitySummaryValue * thisVal = self.summaryData[field];
             GCActivitySummaryValue * otherVal = other.summaryData[field];
-            if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
+            // Only change if formatted value changes, to avoid issue with just low precision diffs
+            if (otherVal && (! [otherVal isEqualToValue:thisVal]) && (![otherVal.formattedValue isEqualToString:thisVal.formattedValue])) {
                 if (!newSummaryData) {
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                 }
@@ -1200,6 +1203,7 @@
                 
                 RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
                 newSummaryData[field] = otherVal;
+                rv = true;
             }
         }
         if (newSummaryData) {
