@@ -141,11 +141,8 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
                         let stats = self.relatedStatistics{
                         if relatedFields.count > 0 && item.numberWithUnit != nil{
                             if let stat = stats[relatedFields[0]]{
-                                if stat.count > 0 {
-                                    if let avg : GCNumberWithUnit = stat.sum?.numberWithUnitMultiplied(by: 1.0/Double(stat.count)){
-                                        cellView.textField?.stringValue = selectionContext.display(numberWithUnit: avg)
-                                        //print( "\(identifier) -> \(relatedFields[0]) = \(stat.count)" )
-                                    }
+                                if let avg : GCNumberWithUnit = stat.preferredStatisticsForField(fieldKey: identifier){
+                                    cellView.textField?.stringValue = selectionContext.display(numberWithUnit: avg)
                                 }
                             }
                         }else{
