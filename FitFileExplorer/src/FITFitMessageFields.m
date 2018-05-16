@@ -24,6 +24,7 @@
 //  
 
 #import "FITFitMessageFields.h"
+#import "FITFitFieldValue.h"
 
 @interface FITFitMessageFields ()
 
@@ -66,5 +67,18 @@
     return [_fields countByEnumeratingWithState:state objects:buffer count:len];
 }
 
-
+-(BOOL)hasDateForKey:(NSString*)key after:(NSDate*)after andStrictlyBefore:(NSDate*)before{
+    NSDate * ts = _fields[key].dateValue;
+    BOOL rv = false;
+    if( ts ){
+        rv = true;
+        if( after && [after compare:ts] == NSOrderedDescending){ // If equal or ascending -> Still true
+            rv = false;
+        }
+        if( before && [ts compare:before] != NSOrderedAscending ){ // Not including
+            rv = false;
+        }
+    }
+    return rv;
+}
 @end

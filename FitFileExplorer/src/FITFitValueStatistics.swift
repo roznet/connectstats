@@ -10,6 +10,9 @@ import Foundation
 
 class FITFitValueStatistics: NSObject {
 
+    var distanceMeters : Double = 0
+    var timeSeconds : Double = 0
+    
     var sum : GCNumberWithUnit? = nil
     var count : UInt = 0
     var max : GCNumberWithUnit? = nil
@@ -21,6 +24,8 @@ class FITFitValueStatistics: NSObject {
     func add(fieldValue: FITFitFieldValue, weight : FITFitStatisticsWeight){
         if let nu = fieldValue.numberWithUnit {
             self.count += 1
+            self.timeSeconds += weight.time
+            self.distanceMeters += weight.distance
             if sum == nil {
                 self.sum = nu
             }else{

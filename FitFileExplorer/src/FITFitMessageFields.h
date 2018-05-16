@@ -29,11 +29,12 @@
 
 @interface FITFitMessageFields : NSObject<NSFastEnumeration>
 
-+(FITFitMessageFields * )fitMessageFields:(NSDictionary<NSString*,FITFitFieldValue*>*)values atIndex:(NSUInteger)index;
++(nullable FITFitMessageFields * )fitMessageFields:(nonnull NSDictionary<NSString*,FITFitFieldValue*>*)values atIndex:(NSUInteger)index;
 
--(NSArray<NSString*>*)allFieldNames;
+-(nonnull NSArray<NSString*>*)allFieldNames;
 
--(FITFitFieldValue*)valueForFieldKey:(NSString*)key;
--(FITFitFieldValue*)objectForKeyedSubscript:(NSString*)key;
+-(nullable FITFitFieldValue*)valueForFieldKey:(nonnull NSString*)key;
+-(nullable FITFitFieldValue*)objectForKeyedSubscript:(nonnull NSString*)key;
+-(BOOL)hasDateForKey:(nonnull NSString*)key after:(nullable NSDate*)after andStrictlyBefore:(nullable NSDate*)before;
 
 @end

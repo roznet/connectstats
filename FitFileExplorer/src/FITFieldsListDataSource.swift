@@ -100,11 +100,11 @@ class FITFieldsListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
             var chosenMessage : FITFitMessageFields?
             
             if message.count() == 1 {
-                if let fields = self.message[0].allFieldNames() {
-                    if self.selectedRow != -1 && self.selectedRow < fields.count {
-                        chosenField = fields[self.selectedRow];
-                    }
+                let fields = self.message[0].allFieldNames()
+                if self.selectedRow != -1 && self.selectedRow < fields.count {
+                    chosenField = fields[self.selectedRow];
                 }
+                
             }else{
                 if self.selectedRow != -1 && self.selectedRow < Int(self.message.count()) {
                     chosenMessage = self.message[ UInt(self.selectedRow) ]

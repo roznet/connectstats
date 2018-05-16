@@ -86,13 +86,20 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
         
         // record could be session to get value or record to do stats
         let messageDefaultMap = [ "record": "record", "lap":"record", "session":"record" ]
+        
         if let subMessage = messageDefaultMap[messageType] {
             self.relatedMessage = self.fitFile[subMessage];
             var interval :(from:Date,to:Date)?
-            if let ts = context.selectedMessageFields?["timestamp"]?.dateValue,
-                let start = context.selectedMessageFields?["start_time"]?.dateValue{
-                interval = (from:start,to:ts);
+            if let ts = context.selectedMessageFields?["timestamp"]?.dateValue{
+
+                let mf = interp.messageFieldForTimestamp(message: "lap", timestamp: ts)
+                
+                if let start = mf?["start_time"]?.dateValue,
+                    let end = mf?["timestamp"]?.dateValue{
+                    interval = (from:start,to:end);
+                }
             }
+            print("Stats for \(interval) on \(subMessage)")
             self.relatedStatistics = interp.statsForMessage(message: subMessage, interval: interval)
             if let possibleFields = self.relatedMessage?.allAvailableFieldKeys(){
                 self.relatedFields = interp.mapFields(from: self.displayFields, to: possibleFields)
@@ -135,8 +142,7 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
                         if relatedFields.count > 0 && item.numberWithUnit != nil{
                             if let stat = stats[relatedFields[0]]{
                                 if stat.count > 0 {
-                                    if let avg : GCNumberWithUnit = stat.sum{
-                                        avg.value/=Double(stat.count);
+                                    if let avg : GCNumberWithUnit = stat.sum?.numberWithUnitMultiplied(by: 1.0/Double(stat.count)){
                                         cellView.textField?.stringValue = selectionContext.display(numberWithUnit: avg)
                                         //print( "\(identifier) -> \(relatedFields[0]) = \(stat.count)" )
                                     }
