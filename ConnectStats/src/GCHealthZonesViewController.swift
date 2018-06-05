@@ -45,10 +45,12 @@ class GCHealthZonesViewController: UIViewController, RZMultiSliderControlDelegat
     }
 
     @objc func saveButton(){
-        let dict = [ self.healthZoneCalc.key : self.healthZoneCalc ]
-        GCAppGlobal.health().registerZoneCalculators(dict);
-        GCAppGlobal.saveSettings(); // force refresh/notify setting change
-        _ = self.navigationController?.popViewController(animated: true);
+        if let key = self.healthZoneCalc.key {
+            let dict = [ key : self.healthZoneCalc ]
+            GCAppGlobal.health().registerZoneCalculators(dict);
+            GCAppGlobal.saveSettings(); // force refresh/notify setting change
+            _ = self.navigationController?.popViewController(animated: true);
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

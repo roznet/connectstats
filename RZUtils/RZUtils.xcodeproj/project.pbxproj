@@ -1689,6 +1689,7 @@
 					42382B691EAC9DBD00252217 = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = M7QSSF3624;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					42382B711EAC9DBD00252217 = {
@@ -2509,7 +2510,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = macosx;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
@@ -2532,7 +2533,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = macosx;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = x86_64;
 			};
 			name = Release;

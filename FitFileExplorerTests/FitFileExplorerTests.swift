@@ -127,9 +127,10 @@ class FitFileExplorerTests: XCTestCase {
             XCTAssertEqual(context.dependentField, "avg_speed")
             
             // change index
-            if let val = context.selectedMessageFields?[context.selectedYField].numberWithUnit{
+            if let selectedYField = context.selectedYField,
+                let val = context.selectedMessageFields![selectedYField].numberWithUnit{
                 context.selectedMessageIndex = 10
-                if let newval = context.selectedMessageFields?[context.selectedYField].numberWithUnit{
+                if let newval = context.selectedMessageFields![selectedYField].numberWithUnit{
                     XCTAssertNotEqual(newval, val)
                 }
             }

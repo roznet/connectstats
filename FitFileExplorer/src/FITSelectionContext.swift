@@ -267,18 +267,19 @@ class FITSelectionContext {
     func displayField( fieldName : String ) -> NSAttributedString {
         var displayText = fieldName
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineBreakMode = NSParagraphStyle.LineBreakMode.byTruncatingMiddle
-        var attr = [ NSAttributedStringKey.font:NSFont.systemFont(ofSize: 12.0),
-                     NSAttributedStringKey.foregroundColor:NSColor.black,
-                     NSAttributedStringKey.paragraphStyle: paragraphStyle]
+        
+        paragraphStyle.lineBreakMode = NSLineBreakMode.byTruncatingMiddle
+        var attr = [ NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
+                     NSAttributedString.Key.foregroundColor:NSColor.black,
+                     NSAttributedString.Key.paragraphStyle: paragraphStyle]
         
         if self.prettyField {
             if let field = self.interp.fieldKey(fitField: fieldName){
                 displayText = field.displayName()
             }else{
-                attr = [NSAttributedStringKey.font:NSFont.systemFont(ofSize: 12.0),
-                        NSAttributedStringKey.foregroundColor:NSColor.lightGray,
-                        NSAttributedStringKey.paragraphStyle:paragraphStyle]
+                attr = [NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
+                        NSAttributedString.Key.foregroundColor:NSColor.lightGray,
+                        NSAttributedString.Key.paragraphStyle:paragraphStyle]
             }
         }
         return NSAttributedString(attr, with: displayText)
