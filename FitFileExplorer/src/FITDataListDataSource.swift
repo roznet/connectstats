@@ -50,6 +50,7 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
     
     var selectionContext : FITSelectionContext?
     var message:FITFitMessage
+    var statsMessageType:String?
     
     var displayFields:[String]
     var relatedMessage:FITFitMessage?
@@ -83,29 +84,36 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
             // lap/record stype: display all the field for the line
             self.displayFields = self.message.allSortedFieldKeys()
         }
-        
         // record could be session to get value or record to do stats
         let messageDefaultMap = [ "record": "record", "lap":"record", "session":"record" ]
         
-        if let subMessage = messageDefaultMap[messageType] {
-            self.relatedMessage = self.fitFile[subMessage];
+        self.statsMessageType = messageDefaultMap[messageType]
+    }
+    
+    func updateStatistics(){
+        if let context = self.selectionContext,
+            let statsMessageType = context.dependentMessage,
+            let statsFor = context.statsFor{
+            let interp = FITFitFileInterpret(fitFile: self.fitFile);
+
+            self.relatedMessage = self.fitFile[statsMessageType];
             var interval :(from:Date,to:Date)?
             if let ts = context.selectedMessageFields?["timestamp"]?.dateValue{
-
-                let mf = interp.messageFieldForTimestamp(message: "lap", timestamp: ts)
+                
+                let mf = interp.messageFieldForTimestamp(message: statsFor, timestamp: ts)
                 
                 if let start = mf?["start_time"]?.dateValue,
                     let end = mf?["timestamp"]?.dateValue{
                     interval = (from:start,to:end);
                 }
             }
-            print("Stats for \(interval) on \(subMessage)")
-            self.relatedStatistics = interp.statsForMessage(message: subMessage, interval: interval)
+            self.relatedStatistics = interp.statsForMessage(message: statsMessageType, interval: interval)
             if let possibleFields = self.relatedMessage?.allAvailableFieldKeys(){
                 self.relatedFields = interp.mapFields(from: self.displayFields, to: possibleFields)
             }
         }
     }
+
     
     func requiredTableColumnsIdentifiers() -> [String] {
         return [ "Field", "Value"]

@@ -33,7 +33,6 @@
 #import "GCActivitySummaryValue.h"
 #import "GCActivityMetaValue.h"
 #import "GCActivityCalculatedValue.h"
-#import "GCExportGoogleEarth.h"
 #import "GCFieldsCalculated.h"
 #import "GCWeather.h"
 #import "GCLapCompound.h"

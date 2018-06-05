@@ -27,8 +27,6 @@
 #import "GCAppGlobal.h"
 #import "GCWebUrl.h"
 #import "GCAppGlobal.h"
-#import "GCGarminActivityXMLParser.h"
-#import "GCGarminSearchJsonParser.h"
 #import "Flurry.h"
 #import "GCGarminLoginSSORequest.h"
 #import "GCGarminLoginWebRequest.h"

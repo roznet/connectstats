@@ -45,10 +45,12 @@ class FITDataViewController: NSViewController {
     }
     
     func update(with source:FITDataListDataSource){
+        self.fitDataSource = source
+        source.updateStatistics()
         self.tableView.dataSource = source
         self.tableView.delegate = source
         self.tableView.reloadData()
-        self.fitDataSource = source
+        
     }
     
     @IBAction func updateStatsFor(_ sender: NSPopUpButton) {
@@ -64,6 +66,7 @@ class FITDataViewController: NSViewController {
             let value = sender.selectedItem?.title,
             let dataSource = self.fitDataSource{
             dataSource.selectionContext?.dependentMessage = value
+            dataSource.updateStatistics()
             self.tableView.reloadData()
         }
     }

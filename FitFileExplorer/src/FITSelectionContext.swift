@@ -44,7 +44,6 @@ class FITSelectionContext {
                 }
             }
         }
-    
     }
     lazy var interp : FITFitFileInterpret = FITFitFileInterpret(fitFile: self.fitFile)
 
@@ -60,6 +59,15 @@ class FITSelectionContext {
 
     var preferredDependendMessage : [String] = ["record", "lap", "session"]
     var dependentMessage : String?
+    
+    var statsFor : String? {
+        get {
+            return dependentMessage
+        }
+        set {
+            dependentMessage = newValue
+        }
+    }
     
     //MARK: - Computed Properties
     
