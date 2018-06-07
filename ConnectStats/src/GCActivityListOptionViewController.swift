@@ -16,7 +16,7 @@ class GCActivityListOptionViewController: UITableViewController {
     
     var indexMap : RZTableIndexRemap
     
-    override init(style: UITableViewStyle) {
+    override init(style: UITableView.Style) {
         indexMap = RZTableIndexRemap()
         
         indexMap.addSection(0, withRows: [0])

@@ -40,7 +40,7 @@ class GCHealthZonesViewController: UIViewController, RZMultiSliderControlDelegat
         self.multiSlider.multiDelegate = self
         self.view.addSubview(multiSlider)
         // Do any additional setup after loading the view.
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(GCHealthZonesViewController.saveButton));
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.save, target: self, action: #selector(GCHealthZonesViewController.saveButton));
 
     }
 
