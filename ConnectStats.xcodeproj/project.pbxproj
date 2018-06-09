@@ -8211,7 +8211,7 @@
 					42B5E1B81BA5AEC9000FAE4E = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = M7QSSF3624;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 1000;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
 								enabled = 1;
@@ -11580,7 +11580,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "connectstatstestapp/ConnectStatsTestApp-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = arm64;
 			};
 			name = Debug;
@@ -11621,7 +11621,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "connectstatstestapp/ConnectStatsTestApp-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = arm64;
 			};
 			name = Release;
