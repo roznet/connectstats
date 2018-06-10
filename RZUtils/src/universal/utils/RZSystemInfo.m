@@ -46,7 +46,12 @@
         BOOL has9 = false;
         BOOL has10 = false;
         BOOL has11 = false;
+        BOOL has12 = false;
 
+#ifdef __IPHONE_12_0
+        has12 = true;
+#endif
+        
 #ifdef __IPHONE_11_0
         has11 = true;
 #endif
@@ -63,7 +68,9 @@
 #ifdef __IPHONE_7_0
         has7=true;
 #endif
-        if(has11){
+        if( has12 ){
+            version = 10;
+        }else if(has11){
             version = 9;
         }else if (has10){
             version = 8;

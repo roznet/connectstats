@@ -32,7 +32,7 @@
 
 
 CGContextRef UIGraphicsGetCurrentContext(){
-    return (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+    return (CGContextRef)[[NSGraphicsContext currentContext] CGContext];
 }
 
 NSString * NSStringFromCGPoint(CGPoint point){
