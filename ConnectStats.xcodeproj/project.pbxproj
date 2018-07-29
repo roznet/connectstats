@@ -2634,7 +2634,7 @@
 		42200EDA17F831B30078B45A /* GCGarminActivityLapsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminActivityLapsParser.m; path = src/GCGarminActivityLapsParser.m; sourceTree = "<group>"; };
 		4225018716641D2B002CD429 /* GCSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSplitViewController.h; path = src/GCSplitViewController.h; sourceTree = "<group>"; };
 		4225018816641D2B002CD429 /* GCSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSplitViewController.m; path = src/GCSplitViewController.m; sourceTree = "<group>"; };
-		422501A21666C3B3002CD429 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		422501A21666C3B3002CD429 /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		422501A31666C3B4002CD429 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		422501A41666C3B5002CD429 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		42250224166A0D4D002CD429 /* GCFormattedFieldText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFormattedFieldText.h; path = src/GCFormattedFieldText.h; sourceTree = "<group>"; };
@@ -2873,7 +2873,7 @@
 		427828F71684CDF900AB9C89 /* GCViewSwimStrokeColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCViewSwimStrokeColors.m; path = src/GCViewSwimStrokeColors.m; sourceTree = "<group>"; };
 		427828F91684E61300AB9C89 /* GCActivitySwimLapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivitySwimLapViewController.h; path = src/GCActivitySwimLapViewController.h; sourceTree = "<group>"; };
 		427828FA1684E61400AB9C89 /* GCActivitySwimLapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivitySwimLapViewController.m; path = src/GCActivitySwimLapViewController.m; sourceTree = "<group>"; };
-		427B20AC1621B5CF00D5C3C5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		427B20AC1621B5CF00D5C3C5 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		427C65BF1D4677FB00F5DF70 /* GCSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCSegment.swift; path = src/GCSegment.swift; sourceTree = "<group>"; };
 		427C65C11D469E4E00F5DF70 /* GCStravaSegmentListParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCStravaSegmentListParser.swift; path = src/GCStravaSegmentListParser.swift; sourceTree = "<group>"; };
 		427C65C41D46A4BB00F5DF70 /* strava_athlete.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_athlete.json; sourceTree = "<group>"; };
@@ -8142,7 +8142,7 @@
 				TargetAttributes = {
 					422FAEA319A1DD6000D09773 = {
 						DevelopmentTeam = M7QSSF3624;
-						LastSwiftMigration = 0810;
+						LastSwiftMigration = 1000;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
 								enabled = 1;
@@ -10968,9 +10968,8 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStats/ConnectStats-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
-				VALID_ARCHS = arm64;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -11012,9 +11011,8 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStats/ConnectStats-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
-				VALID_ARCHS = arm64;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -11292,7 +11290,6 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 armv7s armv7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -11341,7 +11338,6 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 armv7s armv7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -11431,7 +11427,6 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -11472,7 +11467,6 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "TennisStats/src/tennisstats-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
@@ -11581,7 +11575,6 @@
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
-				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -11622,7 +11615,6 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "connectstatstestapp/ConnectStatsTestApp-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_VERSION = 4.2;
-				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};

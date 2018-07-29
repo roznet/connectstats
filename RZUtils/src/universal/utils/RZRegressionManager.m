@@ -75,7 +75,9 @@
         if (didCreateDir) {
             //archivedDataWithRootObject:requiringSecureCoding:error
             BOOL success = false;
-            *error = nil;
+            if( error){
+                *error = nil;
+            }
             
             if( object ){
                 if (@available(iOS 12.0, *)) {
