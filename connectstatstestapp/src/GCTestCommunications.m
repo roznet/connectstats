@@ -258,7 +258,7 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 }
 -(void)testModernHistoryInitialDone{
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
-    RZ_ASSERT(self.nReq == 160, @"Should have got 160 req");
+    RZ_ASSERT(self.nReq == 159, @"Should have got 159 req %d", (int)self.nReq);
     
     self.cache = [NSMutableDictionary dictionary];
     
@@ -272,7 +272,7 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 }
 
 -(void)testModernHistoryTrackLoaded{
-    RZ_ASSERT(self.nReq = 210, @"Load track point in 210 req");
+    RZ_ASSERT(self.nReq == 209, @"Load track point in 209 req %d", (int)self.nReq);
     
     for( NSUInteger i=0;i< 10; i++){
         GCActivity * act = [[GCAppGlobal organizer] activityForIndex:i];
@@ -299,7 +299,7 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 
 -(void)testModernHistoryReloadFirst10{
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
-    RZ_ASSERT(self.nReq == 217, @"Reloaded only last few %d", (int)self.nReq);
+    RZ_ASSERT(self.nReq == 215, @"Reloaded only last few %d", (int)self.nReq);
     
     [[GCAppGlobal organizer] deleteActivityFromIndex:2000];
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2000, @"deleted tail activities");
@@ -309,14 +309,14 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 
 -(void)testModernHistoryReloadNothing{
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2000 , @"Loading 2000 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
-    RZ_ASSERT(self.nReq == 223, @"Reloaded only last few %d", (int)self.nReq);
+    RZ_ASSERT(self.nReq == 220, @"Reloaded only last few %d", (int)self.nReq);
     
     [[GCAppGlobal web] servicesSearchAllActivities];
 }
 
 -(void)testModernHistoryReloadAll{
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
-    RZ_ASSERT(self.nReq == 376, @"Reloaded only last few %d", (int)self.nReq);
+    RZ_ASSERT(self.nReq == 373, @"Reloaded only last few %d", (int)self.nReq);
     
     
     // End manually
