@@ -36,7 +36,6 @@
 #import "GCGarminRequestActivityReload.h"
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminRenameActivity.h"
-#import "GCGarminRequestUser.h"
 #import "GCGarminActivityWeatherHtml.h"
 #import "GCGarminListActivityTypes.h"
 #import "GCGarminRequestModernActivityTypes.h"
@@ -188,7 +187,6 @@
             [self addRequest:[[[GCGarminSearch alloc] initWithStart:0 percent:0.0 andMode:false] autorelease]];
         }
         // get user/zones
-        [self addRequest:[[[GCGarminRequestUser alloc] init] autorelease]];
         [self addRequest:[[[GCGarminRequestHeartRateZones alloc] init] autorelease]];
     }
 

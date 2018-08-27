@@ -309,7 +309,6 @@
 		422FAF9D19A1DD6000D09773 /* GCStatsGraphOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900617A276F100C131DC /* GCStatsGraphOptionViewController.m */; };
 		422FAF9F19A1DD6000D09773 /* GCActivity+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C4159917B1A23800EBBAFB /* GCActivity+UI.m */; };
 		422FAFA119A1DD6000D09773 /* GCHealthZone.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBB917C163EE00EB23A3 /* GCHealthZone.m */; };
-		422FAFA219A1DD6000D09773 /* GCGarminRequestUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBBC17C1676D00EB23A3 /* GCGarminRequestUser.m */; };
 		422FAFA419A1DD6000D09773 /* GCActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4244676E184B756F009F807E /* GCActivityTypes.m */; };
 		422FAFA519A1DD6000D09773 /* GCGarminUserJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBBF17C1687F00EB23A3 /* GCGarminUserJsonParser.m */; };
 		422FAFA619A1DD6000D09773 /* GCHealthZoneCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = 424F9DB917C35BDD001C73B1 /* GCHealthZoneCalculator.m */; };
@@ -456,7 +455,6 @@
 		425872CB1EACA0D6000D4115 /* RZUtilsSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		425A736E1D3ACE4E003E5338 /* RZUtilsTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; };
 		425ACBBA17C163EE00EB23A3 /* GCHealthZone.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBB917C163EE00EB23A3 /* GCHealthZone.m */; };
-		425ACBBD17C1676D00EB23A3 /* GCGarminRequestUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBBC17C1676D00EB23A3 /* GCGarminRequestUser.m */; };
 		425ACBC017C1687F00EB23A3 /* GCGarminUserJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBBF17C1687F00EB23A3 /* GCGarminUserJsonParser.m */; };
 		425AD6D71CCBAA4200A02822 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F932F1BEA9A5900C177F9 /* user.json */; };
 		425CF5A91813CEEC009279C0 /* GCTestsActivities.m in Sources */ = {isa = PBXBuildFile; fileRef = 425CF5A81813CEEC009279C0 /* GCTestsActivities.m */; };
@@ -937,7 +935,6 @@
 		42B5E29C1BA5B216000FAE4E /* GCGarminRequestActivityList.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DCA7CB1AF420E20050AAA9 /* GCGarminRequestActivityList.m */; };
 		42B5E29E1BA5B216000FAE4E /* GCGarminRequestActivityReload.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E186CF16A620E800D4513B /* GCGarminRequestActivityReload.m */; };
 		42B5E29F1BA5B216000FAE4E /* GCGarminRenameActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 425570F216B347EA00690403 /* GCGarminRenameActivity.m */; };
-		42B5E2A01BA5B216000FAE4E /* GCGarminRequestUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBBC17C1676D00EB23A3 /* GCGarminRequestUser.m */; };
 		42B5E2A11BA5B216000FAE4E /* GCGarminChangeActivityType.m in Sources */ = {isa = PBXBuildFile; fileRef = 42446767184B7152009F807E /* GCGarminChangeActivityType.m */; };
 		42B5E2A21BA5B216000FAE4E /* GCGarminListActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 42446771184B82D7009F807E /* GCGarminListActivityTypes.m */; };
 		42B5E2A31BA5B216000FAE4E /* GCGarminDeleteActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B32BB618531D7700EB6FA2 /* GCGarminDeleteActivity.m */; };
@@ -2814,8 +2811,6 @@
 		425733991BC05A1A0080D75F /* GCActivityPreviewingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityPreviewingViewController.m; path = src/GCActivityPreviewingViewController.m; sourceTree = "<group>"; };
 		425ACBB817C163EE00EB23A3 /* GCHealthZone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthZone.h; path = src/GCHealthZone.h; sourceTree = "<group>"; };
 		425ACBB917C163EE00EB23A3 /* GCHealthZone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthZone.m; path = src/GCHealthZone.m; sourceTree = "<group>"; };
-		425ACBBB17C1676D00EB23A3 /* GCGarminRequestUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminRequestUser.h; path = src/GCGarminRequestUser.h; sourceTree = "<group>"; };
-		425ACBBC17C1676D00EB23A3 /* GCGarminRequestUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequestUser.m; path = src/GCGarminRequestUser.m; sourceTree = "<group>"; };
 		425ACBBE17C1687E00EB23A3 /* GCGarminUserJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminUserJsonParser.h; path = src/GCGarminUserJsonParser.h; sourceTree = "<group>"; };
 		425ACBBF17C1687F00EB23A3 /* GCGarminUserJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminUserJsonParser.m; path = src/GCGarminUserJsonParser.m; sourceTree = "<group>"; };
 		425CF5A81813CEEC009279C0 /* GCTestsActivities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestsActivities.m; sourceTree = "<group>"; };
@@ -5629,8 +5624,6 @@
 				427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */,
 				421736A22066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.h */,
 				421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */,
-				425ACBBB17C1676D00EB23A3 /* GCGarminRequestUser.h */,
-				425ACBBC17C1676D00EB23A3 /* GCGarminRequestUser.m */,
 			);
 			name = GarminRequests;
 			sourceTree = "<group>";
@@ -10000,7 +9993,6 @@
 				42A22DF219E726A9004407B8 /* GCWithingsSleepParser.m in Sources */,
 				42BFC2641DCF51AC00EAD40E /* GCSegmentOrganizer.swift in Sources */,
 				422FAFA119A1DD6000D09773 /* GCHealthZone.m in Sources */,
-				422FAFA219A1DD6000D09773 /* GCGarminRequestUser.m in Sources */,
 				422FAFA419A1DD6000D09773 /* GCActivityTypes.m in Sources */,
 				423F9FC619AD1D170057DB5A /* GCHistoryFieldDataSerieConfig.m in Sources */,
 				422FAFA519A1DD6000D09773 /* GCGarminUserJsonParser.m in Sources */,
@@ -10320,7 +10312,6 @@
 				42DE53BD19CF438500009130 /* GCHealthKitActivityRequest.m in Sources */,
 				42C4159A17B1A23800EBBAFB /* GCActivity+UI.m in Sources */,
 				425ACBBA17C163EE00EB23A3 /* GCHealthZone.m in Sources */,
-				425ACBBD17C1676D00EB23A3 /* GCGarminRequestUser.m in Sources */,
 				4244676F184B756F009F807E /* GCActivityTypes.m in Sources */,
 				423F9FC519ACDEA40057DB5A /* GCHistoryFieldDataSerieConfig.m in Sources */,
 				425ACBC017C1687F00EB23A3 /* GCGarminUserJsonParser.m in Sources */,
@@ -10579,7 +10570,6 @@
 				42B5E29C1BA5B216000FAE4E /* GCGarminRequestActivityList.m in Sources */,
 				42B5E29E1BA5B216000FAE4E /* GCGarminRequestActivityReload.m in Sources */,
 				42B5E29F1BA5B216000FAE4E /* GCGarminRenameActivity.m in Sources */,
-				42B5E2A01BA5B216000FAE4E /* GCGarminRequestUser.m in Sources */,
 				42B5E2A11BA5B216000FAE4E /* GCGarminChangeActivityType.m in Sources */,
 				42B5E2A21BA5B216000FAE4E /* GCGarminListActivityTypes.m in Sources */,
 				429D89AA1FF6D95C001CE97A /* GCAthlete.swift in Sources */,
