@@ -200,7 +200,7 @@ const NSUInteger kActivityRequestCount = 20;
 
 -(void)processRegister{
     if (self.status == GCWebStatusOK) {
-        if ( (_reloadAll || _reachedExisting < kActivityRequestCount) && self.parsedCount == kActivityRequestCount) {
+        if ( (_reloadAll || _reachedExisting < kActivityRequestCount) && self.parsedCount > 0) {
             self.nextReq = [[[GCGarminRequestModernSearch alloc] initNextWith:self] autorelease];
         }
         if (self.nextReq == nil && self.childIds.count > 0) {
