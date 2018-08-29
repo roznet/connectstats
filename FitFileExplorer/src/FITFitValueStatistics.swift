@@ -10,6 +10,9 @@ import Foundation
 
 class FITFitValueStatistics: NSObject {
 
+    var distanceMeters : Double = 0
+    var timeSeconds : Double = 0
+    
     var sum : GCNumberWithUnit? = nil
     var count : UInt = 0
     var max : GCNumberWithUnit? = nil
@@ -18,9 +21,29 @@ class FITFitValueStatistics: NSObject {
     var nonZeroSum :GCNumberWithUnit? = nil
     var nonZeroCount : UInt = 0
     
+    func preferredStatisticsForField(fieldKey : String) -> GCNumberWithUnit? {
+        var rv : GCNumberWithUnit? = nil
+        if( fieldKey.hasPrefix("total")){
+            rv = self.sum
+            if( fieldKey.hasSuffix("distance")){
+                rv = GCNumberWithUnit(GCUnit.meter(), andValue: self.distanceMeters)
+            }
+            if( fieldKey.hasSuffix("time")){
+                rv = GCNumberWithUnit(GCUnit.second(), andValue: self.timeSeconds)
+            }
+        }else if( fieldKey.hasPrefix("max")){
+            rv = self.max
+        }else if( self.sum != nil){
+            rv = self.sum?.numberWithUnitMultiplied(by: 1.0/Double(self.count))
+        }
+        return rv
+    }
+    
     func add(fieldValue: FITFitFieldValue, weight : FITFitStatisticsWeight){
         if let nu = fieldValue.numberWithUnit {
             self.count += 1
+            self.timeSeconds += weight.time
+            self.distanceMeters += weight.distance
             if sum == nil {
                 self.sum = nu
             }else{

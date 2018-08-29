@@ -166,7 +166,7 @@ static void buildCache(){
     sub = dict[@"weatherTypeDTO"];
     if ([sub isKindOfClass:[NSDictionary class]]) {
         innumber = sub[@"weatherTypePk"];
-        self.weatherType = innumber ? innumber.integerValue : 0;
+        self.weatherType = [innumber respondsToSelector:@selector(integerValue)] ? innumber.integerValue : 0;
         instring = sub[@"desc"];
         if (instring && [instring isKindOfClass:[NSString class]]) {
             self.weatherTypeDesc = instring;

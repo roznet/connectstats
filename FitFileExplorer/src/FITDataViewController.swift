@@ -37,15 +37,39 @@ class FITDataViewController: NSViewController {
     @IBOutlet weak var statsUsing: NSPopUpButton!
     @IBOutlet weak var statsFor: NSPopUpButton!
     
+    var fitDataSource:FITDataListDataSource?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
     }
     
     func update(with source:FITDataListDataSource){
+        self.fitDataSource = source
+        source.updateStatistics()
         self.tableView.dataSource = source
         self.tableView.delegate = source
         self.tableView.reloadData()
+        
     }
+    
+    @IBAction func updateStatsFor(_ sender: NSPopUpButton) {
+        if
+            let value = sender.selectedItem?.title,
+            let dataSource = self.fitDataSource{
+            //dataSource.selectionContext?.dependentField = value
+            self.tableView.reloadData()
+        }
+    }
+    @IBAction func updateStatsUsing(_ sender: NSPopUpButton) {
+        if
+            let value = sender.selectedItem?.title,
+            let dataSource = self.fitDataSource{
+            dataSource.selectionContext?.dependentMessage = value
+            dataSource.updateStatistics()
+            self.tableView.reloadData()
+        }
+    }
+    
     
 }

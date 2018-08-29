@@ -29,8 +29,8 @@ class FITFitFieldsStatistics: NSObject {
         }
 
         for item in messageFields {
-            if let key = item as? String {
-                let value :FITFitFieldValue = messageFields[key]
+            if let key = item as? String,
+                let value :FITFitFieldValue = messageFields[key]{
                 
                 if let stat = stats[value.fieldKey]{
                     stat.add(fieldValue: value, weight: weight)

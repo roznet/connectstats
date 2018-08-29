@@ -131,6 +131,7 @@
     return RZReturnAutorelease([[GCNumberWithUnit alloc] initWithUnit:[GCUnit unitForKey:aUnit] andValue:aVal]);
 }
 
+
 #pragma mark - Conversions
 
 -(GCNumberWithUnit*)convertToUnit:(GCUnit*)aUnit{
@@ -178,6 +179,9 @@
 
 #pragma mark - Operations
 
+-(nullable GCNumberWithUnit*)numberWithUnitMultipliedBy:(double)multiplier{
+    return [GCNumberWithUnit numberWithUnit:self.unit andValue:self.value * multiplier];
+}
 -(GCNumberWithUnit*)addNumberWithUnit:(GCNumberWithUnit*)other weight:(double)weight{
     if ([other.unit canConvertTo:self.unit]) {
         return [GCNumberWithUnit numberWithUnit:self.unit andValue:(self.value + weight*[other convertToUnit:self.unit].value)];

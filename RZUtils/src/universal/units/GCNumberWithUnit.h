@@ -58,6 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSNumber*)number;
 -(BOOL)isValidValue;
 -(GCUnitSumWeightBy)sumWeightBy;
+-(nullable GCNumberWithUnit*)numberWithUnitMultipliedBy:(double)multiplier;
 -(nullable GCNumberWithUnit*)addNumberWithUnit:(GCNumberWithUnit*)other weight:(double)weight;
 -(nullable GCNumberWithUnit*)addNumberWithUnit:(GCNumberWithUnit*)other thisWeight:(double)w0 otherWeight:(double)w1;
 -(nullable GCNumberWithUnit*)maxNumberWithUnit:(GCNumberWithUnit*)other;
