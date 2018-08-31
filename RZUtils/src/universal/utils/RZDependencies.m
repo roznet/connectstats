@@ -258,6 +258,21 @@
         }
     }
 }
+
+-(void)notifyForString:(NSString *)aString safeTries:(NSUInteger)maxTries{
+    NSUInteger tries = maxTries;
+    while( tries > 0 ){
+        @try {
+            [self notifyForString:aString];
+            break;
+        }
+        @catch( NSException * exception ){
+            RZLog( RZLogWarning, @"NOTIFY @catch %lu for %@[%@] %@", (unsigned long) (maxTries-tries), self, aString, exception);
+            tries--;
+        }
+    }
+}
+
 -(NSString*)parentCurrentDescription{
     return @"";
 }

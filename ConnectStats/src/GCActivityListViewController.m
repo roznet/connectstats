@@ -350,7 +350,9 @@ const CGFloat kCellDaySpacing = 2.f;
 #pragma mark - Refreshing
 
 -(void)searchActivities{
-    [GCAppGlobal searchAllActivities];
+    dispatch_async([GCAppGlobal worker], ^(){
+        [GCAppGlobal searchAllActivities];
+    });
 }
 
 -(void)beginRefreshing{
