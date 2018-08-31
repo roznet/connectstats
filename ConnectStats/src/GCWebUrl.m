@@ -94,6 +94,7 @@ void GCWebUseSimulator( BOOL abool, NSString * url){
     if( url == nil){
 #if TARGET_IPHONE_SIMULATOR
         simulatorURL = @"https://localhost";
+        simulatorURL = @"https://www.ro-z.net";
 #else
         simulatorURL = @"https://www.ro-z.net";
 #endif
