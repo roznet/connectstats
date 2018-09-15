@@ -33,9 +33,9 @@
 @implementation GCTestServiceGarmin
 
 -(NSArray*)testDefinitions{
-    return @[ @{TK_SEL:NSStringFromSelector(@selector(testGarminConnect)),
+    return @[ /*@{TK_SEL:NSStringFromSelector(@selector(testGarminConnect)),
                 TK_DESC:@"Try to login and download one list of activity",
-                TK_SESS:@"GC Garmin Connect"},
+                TK_SESS:@"GC Garmin Connect"}, Garmin Disabled old API */
               @{TK_SEL:NSStringFromSelector(@selector(testGarminConnectModern)),
                 TK_DESC:@"Try to login and download one list of activity modern",
                 TK_SESS:@"GC Garmin Connect Alt"},
