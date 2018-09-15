@@ -33,7 +33,7 @@ class FITGraphViewController: NSViewController {
     }
     
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
-        if segue.identifier?.rawValue == "embedGraphContext"{
+        if segue.identifier == "embedGraphContext"{
             if let scv = segue.destinationController as? FITSelectionContextViewController{
                 self.selectionContextViewController = scv
                 self.selectionContextViewController?.graphViewController = self

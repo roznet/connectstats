@@ -87,6 +87,7 @@
                                                                         encoding:NSUTF8StringEncoding
                                                                            error:nil];
 
+    //REBASE
     //snapshotTestController.recordMode = true;
     NSString *envReferenceImageDirectory = [NSProcessInfo processInfo].environment[@"FB_REFERENCE_IMAGE_DIR"];
 
@@ -134,6 +135,7 @@
                                                                       atomically:YES
                                                                         encoding:NSUTF8StringEncoding
                                                                            error:nil];
+    //REBASE
     //snapshotTestController.recordMode = true;
     NSString *envReferenceImageDirectory = [NSProcessInfo processInfo].environment[@"FB_REFERENCE_IMAGE_DIR"];
 

@@ -396,7 +396,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 
             }
         }
-        [self notifyForString:NOTIFY_NEXT];
+        [self notifyForString:NOTIFY_NEXT safeTries:5];
     }else{
         if (_requests.count == 0) {
             RZLog(RZLogInfo, @"end data=%@", [GCUnit formatBytes:[RZRemoteDownload totalDataUsage]]);

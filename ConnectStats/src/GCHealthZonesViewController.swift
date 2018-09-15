@@ -40,15 +40,17 @@ class GCHealthZonesViewController: UIViewController, RZMultiSliderControlDelegat
         self.multiSlider.multiDelegate = self
         self.view.addSubview(multiSlider)
         // Do any additional setup after loading the view.
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.save, target: self, action: #selector(GCHealthZonesViewController.saveButton));
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.save, target: self, action: #selector(GCHealthZonesViewController.saveButton));
 
     }
 
     @objc func saveButton(){
-        let dict = [ self.healthZoneCalc.key : self.healthZoneCalc ]
-        GCAppGlobal.health().registerZoneCalculators(dict);
-        GCAppGlobal.saveSettings(); // force refresh/notify setting change
-        _ = self.navigationController?.popViewController(animated: true);
+        if let key = self.healthZoneCalc.key {
+            let dict = [ key : self.healthZoneCalc ]
+            GCAppGlobal.health().registerZoneCalculators(dict);
+            GCAppGlobal.saveSettings(); // force refresh/notify setting change
+            _ = self.navigationController?.popViewController(animated: true);
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

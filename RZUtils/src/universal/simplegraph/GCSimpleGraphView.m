@@ -34,7 +34,7 @@
 #import <CoreGraphics/CoreGraphics.h>
 #import "NSBezierPath+QuartzHelper.h"
 #import <AppKit/AppKit.h>
-#define UIGRAPHICCURRENTCONTEXT() [[NSGraphicsContext currentContext] graphicsPort]
+#define UIGRAPHICCURRENTCONTEXT() [[NSGraphicsContext currentContext] CGContext]
 #endif
 @interface GCSimpleGraphView ()
 

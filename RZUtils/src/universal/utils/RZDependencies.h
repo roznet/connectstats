@@ -63,6 +63,13 @@
  */
 -(void)notifyForString:(NSString*)aString;
 /**
+    Will attempt notifyForString up to maxTries within a @try block
+    This is cheap but potentially useful to guard about multi threaded attach resulting into a mutation of
+    the dependency list
+*/
+-(void)notifyForString:(NSString *)aString safeTries:(NSUInteger)maxTries;
+
+/**
  For Debugging purpose mostly
  */
 -(NSString*)describeDependencies;

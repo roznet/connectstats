@@ -89,7 +89,7 @@
         for (GCField * field in fields) {
             NSString * ident = [NSString stringWithFormat:@"%@_%@", aId, field.key];
             GCStatsDataSerieWithUnit * expected = [act timeSerieForField:field];
-            GCStatsDataSerieWithUnit * retrieved = [manager retrieveReferenceObject:expected selector:_cmd identifier:ident error:nil];
+            GCStatsDataSerieWithUnit * retrieved = [manager retrieveReferenceObject:expected forClass:[GCStatsDataSerieWithUnit class] selector:_cmd identifier:ident error:nil];
             XCTAssertNotEqual(expected.count, 0, @"%@[%@] has points",aId,field.key);
             XCTAssertEqualObjects(expected, retrieved, @"%@[%@]: %@<>%@", aId, field.key, expected, retrieved);
         }
@@ -256,7 +256,7 @@
     RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
     //manager.recordMode = true;
 
-    NSDictionary * expected = [manager retrieveReferenceObject:rv selector:_cmd identifier:@"timeSeries" error:nil ];
+    NSDictionary * expected = [manager retrieveReferenceObject:rv forClass:[NSDictionary class] selector:_cmd identifier:@"timeSeries" error:nil ];
     XCTAssertEqual(expected.count, rv.count);
     for (id key in expected) {
         GCStatsDataSerieWithUnit * exp_serie = expected[key];
@@ -392,7 +392,7 @@
     manager.recordMode = record;
 
     NSDictionary * rv = [self compareStatsDictFor:act];
-    NSDictionary * expected = [manager retrieveReferenceObject:rv selector:sel identifier:label error:nil];
+    NSDictionary * expected = [manager retrieveReferenceObject:rv forClass:[NSDictionary class] selector:sel identifier:label error:nil];
     [self compareStatsAssertEqual:rv and:expected withMessage:[NSString stringWithFormat:@"%@ %@", NSStringFromSelector(sel), label]];
 
 }

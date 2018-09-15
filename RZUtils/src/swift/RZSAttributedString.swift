@@ -9,12 +9,12 @@
 import Foundation
 
 extension NSAttributedString {
-    static public func convertObjcAttributesDict( attributes: [String:Any]?) -> [NSAttributedStringKey:Any]? {
-        var rv : [NSAttributedStringKey:Any]?
+    static public func convertObjcAttributesDict( attributes: [String:Any]?) -> [NSAttributedString.Key:Any]? {
+        var rv : [NSAttributedString.Key:Any]?
         
         if let attributes = attributes {
             rv = Dictionary(uniqueKeysWithValues:
-                attributes.lazy.map { (NSAttributedStringKey($0.key), $0.value) }
+                attributes.lazy.map { (NSAttributedString.Key($0.key), $0.value) }
             )
         }
         return rv
