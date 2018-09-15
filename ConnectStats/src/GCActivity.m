@@ -671,7 +671,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         [nlap release];
     }
     self.lapsCache = newlapsCache;
-
+    nLaps = self.lapsCache.count;
+    
     lapIdx = 0;
     GCLap * nextLap = lapIdx + 1 < nLaps ? _lapsCache[lapIdx+1] : nil;
     BOOL first = true;

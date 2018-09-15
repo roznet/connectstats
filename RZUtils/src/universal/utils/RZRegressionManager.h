@@ -56,12 +56,14 @@
     will be saved (and returned). selector and an identifier will be used to differentiate
     the name of the object saved. One can use _cmd as selector to use the current selector.
  @param object an object that can be saved via keyed encoder. Only used in record mode
+ @param cls the class of the object
  @param sel Selector that will be used to differientiate the file names
  @param ident NSString used in the file name
  @param error if nil error is not reported. Will point to an NSError if error occurs
  @return nil if error or the regression object saved. In record mode, object will be returned
  */
 -(id)retrieveReferenceObject:(NSObject<NSCoding>*)object
+                    forClass:(Class)cls
             selector:(SEL)sel
           identifier:(NSString*)ident
                error:(NSError**)error;

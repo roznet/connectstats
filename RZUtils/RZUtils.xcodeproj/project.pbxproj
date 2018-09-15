@@ -1649,6 +1649,7 @@
 					42382A441EAB584600252217 = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = M7QSSF3624;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					42382A4C1EAB584600252217 = {
@@ -1689,6 +1690,7 @@
 					42382B691EAC9DBD00252217 = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = M7QSSF3624;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					42382B711EAC9DBD00252217 = {
@@ -2198,7 +2200,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Debug;
 		};
@@ -2221,7 +2222,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Release;
 		};
@@ -2263,8 +2263,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				SWIFT_VERSION = 4.0;
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -2284,8 +2283,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				SWIFT_VERSION = 4.0;
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -2329,7 +2327,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Debug;
 		};
@@ -2349,7 +2346,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Release;
 		};
@@ -2509,8 +2505,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = macosx;
-				SWIFT_VERSION = 4.0;
-				VALID_ARCHS = x86_64;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -2532,8 +2527,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = macosx;
-				SWIFT_VERSION = 4.0;
-				VALID_ARCHS = x86_64;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

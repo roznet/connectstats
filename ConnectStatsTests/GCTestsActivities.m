@@ -264,7 +264,7 @@
     //manager.recordMode =true;
     
     NSArray<GCFieldsForCategory*> * rv = [GCFields categorizeAndOrderFields:tests forActivityType:nil];
-    NSArray<GCFieldsForCategory*> * expected = [manager retrieveReferenceObject:rv selector:_cmd identifier:@"List1" error:nil];
+    NSArray<GCFieldsForCategory*> * expected = [manager retrieveReferenceObject:rv forClass:[NSArray class] selector:_cmd identifier:@"List1" error:nil];
     
     XCTAssertEqual(expected.count, rv.count);
     
@@ -333,7 +333,7 @@
                ];
     
     rv = [GCFields categorizeAndOrderFields:tests forActivityType:nil];
-    expected = [manager retrieveReferenceObject:rv selector:_cmd identifier:@"List2" error:nil];
+    expected = [manager retrieveReferenceObject:rv forClass:[NSArray class] selector:_cmd identifier:@"List2" error:nil];
     
     XCTAssertEqualObjects(expected, rv);
 
@@ -663,7 +663,7 @@
     
     
     NSDictionary<GCField*,GCActivityCalculatedValue*>*calculated = act.calculatedFields;
-    NSDictionary<GCField*,GCActivityCalculatedValue*>*expected = [manager retrieveReferenceObject:calculated selector:_cmd identifier:@"ActivityCalculated" error:nil];
+    NSDictionary<GCField*,GCActivityCalculatedValue*>*expected = [manager retrieveReferenceObject:calculated  forClass:[NSDictionary class] selector:_cmd identifier:@"ActivityCalculated" error:nil];
     
     XCTAssertEqualObjects(calculated, expected);
     

@@ -55,9 +55,10 @@
 }
 
 -(id)retrieveReferenceObject:(NSObject<NSCoding>*)object
-                                     selector:(SEL)sel
-                                   identifier:(NSString*)ident
-                                        error:(NSError**)error{
+                    forClass:(Class)cls
+                    selector:(SEL)sel
+                  identifier:(NSString*)ident
+                       error:(NSError**)error{
 
     id rv = nil;
 
@@ -72,10 +73,24 @@
                                                      attributes:nil
                                                           error:&creationError];
         if (didCreateDir) {
-            if(object && [NSKeyedArchiver archiveRootObject:object toFile:filepath]){
-                rv = object;
-            }else{
-                if (error) {
+            //archivedDataWithRootObject:requiringSecureCoding:error
+            BOOL success = false;
+            if( error){
+                *error = nil;
+            }
+            
+            if( object ){
+                if (@available(iOS 12.0, *)) {
+                    success = [[NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:error] writeToFile:filepath atomically:YES];
+                } else {
+                    success = [NSKeyedArchiver archiveRootObject:object toFile:filepath];
+                }
+                if( success ){
+                    rv = object;
+                }
+            }
+            if( success ){
+                if (error && !*error) {
                     *error = [NSError errorWithDomain:@"RZRegressionManager" code:ENOENT userInfo:nil];
                 }
             }
@@ -89,7 +104,31 @@
 
     }else{
         if( [fileManager fileExistsAtPath:filepath] ){
-            rv = [NSKeyedUnarchiver unarchiveObjectWithFile:filepath];
+            if( @available(iOS 12.0, *)){
+                NSData * data = [NSData dataWithContentsOfFile:filepath];
+                rv = [NSKeyedUnarchiver unarchivedObjectOfClass:cls fromData:data error:error];
+                
+                if( rv == nil && [cls isEqual:[NSDictionary class]]){
+                    rv = [NSKeyedUnarchiver unarchivedObjectOfClass:NSClassFromString(@"__NSDictionaryI") fromData:data error:error];
+                }
+                if( rv == nil && [cls isEqual:[NSDictionary class]]){
+                    rv = [NSKeyedUnarchiver unarchivedObjectOfClass:NSClassFromString(@"__NSDictionaryM") fromData:data error:error];
+                }
+                if( rv == nil && [cls isEqual:[NSArray class]]){
+                    rv = [NSKeyedUnarchiver unarchivedObjectOfClass:NSClassFromString(@"__NSArrayM") fromData:data error:error];
+                }
+                if( ! rv ){
+                    rv = [NSKeyedUnarchiver unarchiveObjectWithFile:filepath];
+                    if( ![[rv class] isEqual:cls]){
+                        NSLog(@"Diff class %@ %@", NSStringFromClass([rv class]), NSStringFromClass(cls));
+                    }
+                }else{
+                    NSLog(@"Got one!");
+                }
+            }else{
+                rv = [NSKeyedUnarchiver unarchiveObjectWithFile:filepath];
+            }
+
         }else{
             if (error) {
                 *error = [NSError errorWithDomain:@"RZRegressionManager" code:ENOENT userInfo:nil];

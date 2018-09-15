@@ -277,7 +277,7 @@ void checkVersion(){
 
 #pragma mark - User Activities
 
--(BOOL)application:(nonnull UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(nonnull void (^)(NSArray * __nullable))restorationHandler{
+-(BOOL)application:(nonnull UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * __nullable))restorationHandler{
     BOOL rv = false;
 
     if( [userActivity.activityType isEqualToString:kNSUserActivityTypeViewOne]){
