@@ -1,5 +1,5 @@
 PODS:
-  - Flurry-iOS-SDK/FlurrySDK (9.0.0)
+  - Flurry-iOS-SDK/FlurrySDK (9.1.0)
   - GoogleMaps (2.7.0):
     - GoogleMaps/Maps (= 2.7.0)
   - GoogleMaps/Base (2.7.0)
@@ -11,7 +11,7 @@ DEPENDENCIES:
   - GoogleMaps
 
 SPEC CHECKSUMS:
-  Flurry-iOS-SDK: 58e48e417fee667154e4d240040b270b3734d28a
+  Flurry-iOS-SDK: 5f321ecc8282cf10b051b64bfdc4657f6b280118
   GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
 
 PODFILE CHECKSUM: 0b669fcd787ae27308d7511bdbfa1d116f3d4098
