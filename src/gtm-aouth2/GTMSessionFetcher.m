@@ -360,7 +360,7 @@ static GTMSessionFetcherTestBlock gGlobalTestBlock;
 
   // A utility block for creating error objects when we fail to start the fetch.
   NSError *(^beginFailureError)(NSInteger) = ^(NSInteger code){
-    NSString *urlString = [[_request URL] absoluteString];
+      NSString *urlString = [[self->_request URL] absoluteString];
     NSDictionary *userInfo = @{
       NSURLErrorFailingURLStringErrorKey : (urlString ? urlString : @"(missing URL)")
     };
@@ -569,7 +569,7 @@ static GTMSessionFetcherTestBlock gGlobalTestBlock;
         dispatch_time_t checkForFeedbackDelay =
             dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kDelayInSeconds * NSEC_PER_SEC));
         dispatch_after(checkForFeedbackDelay, dispatch_get_main_queue(), ^{
-          if (!_sessionTask && !_request) {
+            if (!self->_sessionTask && !self->_request) {
             // If our task and/or request haven't been restored, then we assume task feedback lost.
             [self removePersistedBackgroundSessionFromDefaults];
             NSError *sessionError =
@@ -756,10 +756,10 @@ static GTMSessionFetcherTestBlock gGlobalTestBlock;
                                               expirationHandler:^{
       // Background task expiration callback - this block is always invoked by
       // UIApplication on the main thread.
-      if (_backgroundTaskIdentifer != UIBackgroundTaskInvalid) {
-        [[UIApplication sharedApplication] endBackgroundTask:_backgroundTaskIdentifer];
+      if (self->_backgroundTaskIdentifer != UIBackgroundTaskInvalid) {
+        [[UIApplication sharedApplication] endBackgroundTask:self->_backgroundTaskIdentifer];
 
-        _backgroundTaskIdentifer = UIBackgroundTaskInvalid;
+        self->_backgroundTaskIdentifer = UIBackgroundTaskInvalid;
       }
     }];
   }
@@ -834,14 +834,14 @@ NSData *GTMDataFromInputStream(NSInputStream *inputStream, NSError **outError) {
       // Callback from test block.
       if (response == nil && responseData == nil && error == nil) {
         // Assume the fetcher should execute rather than be tested.
-        _testBlock = nil;
-        _isUsingTestBlock = NO;
-        [_sessionTask resume];
+        self->_testBlock = nil;
+        self->_isUsingTestBlock = NO;
+        [self->_sessionTask resume];
         return;
       }
 
-      if (_bodyStreamProvider) {
-        _bodyStreamProvider(^(NSInputStream *bodyStream){
+      if (self->_bodyStreamProvider) {
+        self->_bodyStreamProvider(^(NSInputStream *bodyStream){
           // Read from the input stream into an NSData buffer.  We'll drain the stream
           // explicitly on a background queue.
           [self invokeOnCallbackQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)
@@ -862,16 +862,16 @@ NSData *GTMDataFromInputStream(NSInputStream *inputStream, NSError **outError) {
         });
       } else {
         // No input stream; use the supplied data or file URL.
-        if (_bodyFileURL) {
+        if (self->_bodyFileURL) {
           NSError *readError;
-          _bodyData = [NSData dataWithContentsOfURL:_bodyFileURL
+          self->_bodyData = [NSData dataWithContentsOfURL:self->_bodyFileURL
                                             options:NSDataReadingMappedIfSafe
                                               error:&readError];
           error = readError;
         }
 
         // No body URL or stream provider.
-        [self simulateDataCallbacksForTestBlockWithBodyData:_bodyData
+        [self simulateDataCallbacksForTestBlockWithBodyData:self->_bodyData
                                                    response:response
                                                responseData:responseData
                                                       error:error];
@@ -906,7 +906,7 @@ NSData *GTMDataFromInputStream(NSInputStream *inputStream, NSError **outError) {
   if (_willRedirectBlock) {
     [self invokeOnCallbackQueueAfterUserStopped:YES
                                           block:^{
-        _willRedirectBlock((NSHTTPURLResponse *)response, _request,
+        self->_willRedirectBlock((NSHTTPURLResponse *)response, self->_request,
                            ^(NSURLRequest *redirectRequest) {
             // For simulation, we'll assume the app will just continue.
         });
@@ -914,35 +914,35 @@ NSData *GTMDataFromInputStream(NSInputStream *inputStream, NSError **outError) {
   }
 
   // Simulate receipt of an initial response.
-  if (_didReceiveResponseBlock) {
+  if (self->_didReceiveResponseBlock) {
     [self invokeOnCallbackQueueAfterUserStopped:YES
                                           block:^{
-        _didReceiveResponseBlock(response, ^(NSURLSessionResponseDisposition desiredDisposition) {
+        self->_didReceiveResponseBlock(response, ^(NSURLSessionResponseDisposition desiredDisposition) {
             // For simulation, we'll assume the disposition is to continue.
         });
     }];
   }
 
   // Simulate reporting send progress.
-  if (_sendProgressBlock) {
+  if (self->_sendProgressBlock) {
     [self simulateByteTransferReportWithDataLength:(int64_t)[bodyData length]
                                              block:^(int64_t bytesSent,
                                                      int64_t totalBytesSent,
                                                      int64_t totalBytesExpectedToSend) {
         // This is invoked on the callback queue unless stopped.
-        _sendProgressBlock(bytesSent, totalBytesSent, totalBytesExpectedToSend);
+        self->_sendProgressBlock(bytesSent, totalBytesSent, totalBytesExpectedToSend);
     }];
   }
 
-  if (_destinationFileURL) {
+  if (self->_destinationFileURL) {
     // Simulate download to file progress.
-    if (_downloadProgressBlock) {
+    if (self->_downloadProgressBlock) {
       [self simulateByteTransferReportWithDataLength:(int64_t)[responseData length]
                                                block:^(int64_t bytesDownloaded,
                                                        int64_t totalBytesDownloaded,
                                                        int64_t totalBytesExpectedToDownload) {
         // This is invoked on the callback queue unless stopped.
-        _downloadProgressBlock(bytesDownloaded, totalBytesDownloaded, totalBytesExpectedToDownload);
+        self->_downloadProgressBlock(bytesDownloaded, totalBytesDownloaded, totalBytesExpectedToDownload);
       }];
     }
 
@@ -956,10 +956,10 @@ NSData *GTMDataFromInputStream(NSInputStream *inputStream, NSError **outError) {
     }
   } else {
     // Simulate download to NSData progress.
-    if (_accumulateDataBlock) {
+    if (self->_accumulateDataBlock) {
       if (responseData) {
         [self invokeOnCallbackQueueUnlessStopped:^{
-          _accumulateDataBlock(responseData);
+          self->_accumulateDataBlock(responseData);
         }];
       }
     } else {
@@ -972,7 +972,7 @@ NSData *GTMDataFromInputStream(NSInputStream *inputStream, NSError **outError) {
                                                        int64_t totalBytesReceived,
                                                        int64_t totalBytesExpectedToReceive) {
         // This is invoked on the callback queue unless stopped.
-         _receivedProgressBlock(bytesReceived, totalBytesReceived);
+         self->_receivedProgressBlock(bytesReceived, totalBytesReceived);
        }];
     }
 
@@ -983,7 +983,7 @@ NSData *GTMDataFromInputStream(NSInputStream *inputStream, NSError **outError) {
                                                    data:responseData];
       [self invokeOnCallbackQueueAfterUserStopped:YES
                                             block:^{
-          _willCacheURLResponseBlock(cachedResponse, ^(NSCachedURLResponse *responseToCache){
+          self->_willCacheURLResponseBlock(cachedResponse, ^(NSCachedURLResponse *responseToCache){
               // The app may provide an alternative response, or nil to defeat caching.
           });
       }];
@@ -1310,10 +1310,10 @@ NSData *GTMDataFromInputStream(NSInputStream *inputStream, NSError **outError) {
   // and that we access _backgroundTaskIdentifer on the main thread, as happens when the
   // task has expired.
   dispatch_group_notify(_callbackGroup, dispatch_get_main_queue(), ^{
-    if (_backgroundTaskIdentifer != UIBackgroundTaskInvalid) {
-      [[UIApplication sharedApplication] endBackgroundTask:_backgroundTaskIdentifer];
+    if (self->_backgroundTaskIdentifer != UIBackgroundTaskInvalid) {
+      [[UIApplication sharedApplication] endBackgroundTask:self->_backgroundTaskIdentifer];
 
-      _backgroundTaskIdentifer = UIBackgroundTaskInvalid;
+      self->_backgroundTaskIdentifer = UIBackgroundTaskInvalid;
     }
   });
 }
@@ -1485,7 +1485,7 @@ NSData *GTMDataFromInputStream(NSInputStream *inputStream, NSError **outError) {
                          afterUserStopped:YES
                                     block:^{
                   resumeBlock(resumeData);
-                  dispatch_group_leave(_callbackGroup);
+                  dispatch_group_leave(self->_callbackGroup);
               }];
           }];
         }
@@ -1702,14 +1702,14 @@ didReceiveResponse:(NSURLResponse *)response
       // it can be called multiple times, for example in the case of a
       // redirect, so each time we reset the data.
       @synchronized(self) {
-        BOOL hadPreviousData = _downloadedLength > 0;
+        BOOL hadPreviousData = self->_downloadedLength > 0;
 
-        [_downloadedData setLength:0];
-        _downloadedLength = 0;
+        [self->_downloadedData setLength:0];
+        self->_downloadedLength = 0;
 
         if (hadPreviousData && (dispositionValue != NSURLSessionResponseCancel)) {
           // Tell the accumulate block to discard prior data.
-          GTMSessionFetcherAccumulateDataBlock accumulateBlock = _accumulateDataBlock;
+          GTMSessionFetcherAccumulateDataBlock accumulateBlock = self->_accumulateDataBlock;
           if (accumulateBlock) {
             [self invokeOnCallbackQueueUnlessStopped:^{
                 accumulateBlock(nil);
@@ -1778,7 +1778,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
               NSURLCredential *trustCredential = [NSURLCredential credentialForTrust:trustRef];
               handler(NSURLSessionAuthChallengeUseCredential, trustCredential);
             } else {
-              GTMSESSION_LOG_DEBUG(@"Cancelling authentication challenge for %@", [_request URL]);
+              GTMSESSION_LOG_DEBUG(@"Cancelling authentication challenge for %@", [self->_request URL]);
               handler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
             }
           };
@@ -1819,7 +1819,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
               }
               if (trustError != errSecSuccess) {
                 GTMSESSION_LOG_DEBUG(@"Error %d evaluating trust for %@",
-                                     (int)trustError, _request);
+                                     (int)trustError, self->_request);
                 shouldAllow = NO;
               } else {
                 // Having a trust level "unspecified" by the user is the usual result, described at
@@ -1830,7 +1830,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
                 } else {
                   shouldAllow = NO;
                   GTMSESSION_LOG_DEBUG(@"Challenge SecTrustResultType %u for %@, properties: %@",
-                                       trustEval, _request.URL.host,
+                                       trustEval, self->_request.URL.host,
                                        CFBridgingRelease(SecTrustCopyProperties(serverTrust)));
                 }
               }
@@ -1891,7 +1891,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
         if (!afterStopped) {
           @synchronized(self) {
             // Avoid a race between stopFetching and the callback.
-            if (_userStoppedFetching) return;
+            if (self->_userStoppedFetching) return;
           }
         }
         block();
@@ -1958,7 +1958,7 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
   [self invokeOnCallbackQueueUnlessStopped:^{
       GTMSessionFetcherSendProgressBlock progressBlock;
       @synchronized(self) {
-        progressBlock = _sendProgressBlock;
+        progressBlock = self->_sendProgressBlock;
       }
       if (progressBlock) {
         progressBlock(bytesSent, totalBytesSent, totalBytesExpectedToSend);
@@ -2007,10 +2007,10 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
         [self invokeOnCallbackQueueUnlessStopped:^{
             GTMSessionFetcherReceivedProgressBlock progressBlock;
             @synchronized(self) {
-              progressBlock = _receivedProgressBlock;
+              progressBlock = self->_receivedProgressBlock;
             }
             if (progressBlock) {
-              progressBlock((int64_t)bufferLength, _downloadedLength);
+              progressBlock((int64_t)bufferLength, self->_downloadedLength);
             }
         }];
       }
@@ -2062,7 +2062,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
   [self invokeOnCallbackQueueUnlessStopped:^{
       GTMSessionFetcherDownloadProgressBlock progressBlock;
       @synchronized(self) {
-        progressBlock = _downloadProgressBlock;
+        progressBlock = self->_downloadProgressBlock;
       }
       if (progressBlock) {
         progressBlock(bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
