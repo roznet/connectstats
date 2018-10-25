@@ -1899,6 +1899,7 @@
 		42C072C21AE2FAE000E7E066 /* GCMapWindCompass.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C072C11AE2FAE000E7E066 /* GCMapWindCompass.m */; };
 		42C1080D1B7DE8B000092315 /* GCApplicationContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C1080C1B7DE8B000092315 /* GCApplicationContext.m */; };
 		42C1080E1B7DE8B000092315 /* GCApplicationContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C1080C1B7DE8B000092315 /* GCApplicationContext.m */; };
+		42C3797E217CD9D900B33090 /* GCTestServiceWithings.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C3797D217CD9D900B33090 /* GCTestServiceWithings.m */; };
 		42C3CF471DA15E6900C25709 /* GCAppGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C3CF461DA15E6900C25709 /* GCAppGlobal.swift */; };
 		42C3CF481DA15E6900C25709 /* GCAppGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C3CF461DA15E6900C25709 /* GCAppGlobal.swift */; };
 		42C4159A17B1A23800EBBAFB /* GCActivity+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C4159917B1A23800EBBAFB /* GCActivity+UI.m */; };
@@ -4190,6 +4191,8 @@
 		42C072C11AE2FAE000E7E066 /* GCMapWindCompass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCMapWindCompass.m; path = src/GCMapWindCompass.m; sourceTree = "<group>"; };
 		42C1080B1B7DE8B000092315 /* GCApplicationContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCApplicationContext.h; path = ConnectStats/src/GCApplicationContext.h; sourceTree = "<group>"; };
 		42C1080C1B7DE8B000092315 /* GCApplicationContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCApplicationContext.m; path = ConnectStats/src/GCApplicationContext.m; sourceTree = "<group>"; };
+		42C3797C217CD9D900B33090 /* GCTestServiceWithings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceWithings.h; path = connectstatstestapp/src/GCTestServiceWithings.h; sourceTree = SOURCE_ROOT; };
+		42C3797D217CD9D900B33090 /* GCTestServiceWithings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceWithings.m; path = connectstatstestapp/src/GCTestServiceWithings.m; sourceTree = SOURCE_ROOT; };
 		42C3CF461DA15E6900C25709 /* GCAppGlobal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCAppGlobal.swift; path = src/GCAppGlobal.swift; sourceTree = "<group>"; };
 		42C4159817B1A23800EBBAFB /* GCActivity+UI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCActivity+UI.h"; path = "src/GCActivity+UI.h"; sourceTree = "<group>"; };
 		42C4159917B1A23800EBBAFB /* GCActivity+UI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCActivity+UI.m"; path = "src/GCActivity+UI.m"; sourceTree = "<group>"; };
@@ -4740,6 +4743,8 @@
 				42CC45BE200A57EE003EB805 /* GCTestServiceStrava.m */,
 				42CC45CE200A6E91003EB805 /* GCTestServiceBugReport.h */,
 				42CC45CF200A6E91003EB805 /* GCTestServiceBugReport.m */,
+				42C3797C217CD9D900B33090 /* GCTestServiceWithings.h */,
+				42C3797D217CD9D900B33090 /* GCTestServiceWithings.m */,
 			);
 			name = TestServices;
 			sourceTree = "<group>";
@@ -10442,6 +10447,7 @@
 				42B5E5801BA5ECB1000FAE4E /* GCCellGrid+Templates.m in Sources */,
 				42B5E57C1BA5BB5B000FAE4E /* GCSimpleGraphCachedDataSource+Templates.m in Sources */,
 				427F937F1BEDFF4D00C177F9 /* GCStatsGraphOptionViewController.m in Sources */,
+				42C3797E217CD9D900B33090 /* GCTestServiceWithings.m in Sources */,
 				427F93641BEAA5D100C177F9 /* GCTestUIUnitTest.m in Sources */,
 				422CC87D1E6ACA1700195414 /* FITFitMessage.swift in Sources */,
 				427F937C1BEDFF3E00C177F9 /* GCStatsMultiFieldGraphViewController.m in Sources */,

@@ -33,37 +33,11 @@
 @implementation GCTestServiceGarmin
 
 -(NSArray*)testDefinitions{
-    return @[ /*@{TK_SEL:NSStringFromSelector(@selector(testGarminConnect)),
-                TK_DESC:@"Try to login and download one list of activity",
-                TK_SESS:@"GC Garmin Connect"}, Garmin Disabled old API */
-              @{TK_SEL:NSStringFromSelector(@selector(testGarminConnectModern)),
+    return @[ @{TK_SEL:NSStringFromSelector(@selector(testGarminConnectModern)),
                 TK_DESC:@"Try to login and download one list of activity modern",
                 TK_SESS:@"GC Garmin Connect Alt"},
 
               ];
-}
-
--(void)testGarminConnect{
-    [self startSession:@"GC Garmin Connect"];
-    GCWebUseSimulator(FALSE, nil);
-
-    [GCAppGlobal setupEmptyState:@"activities_gc.db" withSettingsName:kPreservedSettingsName];
-    [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:YES];
-    [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:NO];
-
-    [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
-    /*dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self timeOutCheck];
-    });*/
-    [[GCAppGlobal web] attach:self];
-    [[GCAppGlobal web] servicesSearchRecentActivities];
-
-}
-
--(void)testGarminConnectEnd{
-    [[GCAppGlobal web] detach:self];
-
-    [self endSession:@"GC Garmin Connect"];
 }
 
 -(void)testGarminConnectModern{
@@ -95,11 +69,7 @@
     }
     RZ_ASSERT(![[theInfo stringInfo] isEqualToString:@"error"], @"Web request had no error");
     if ([[theInfo stringInfo] isEqualToString:@"end"] || [[theInfo stringInfo] isEqualToString:@"error"]) {
-        if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:YES]){
-            [self testGarminConnectModernEnd];
-        }else{
-            [self testGarminConnectEnd];
-        }
+        [self testGarminConnectModernEnd];
     }
 }
 @end

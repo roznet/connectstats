@@ -58,6 +58,7 @@
     if (self.navigationController) {
         return nil;
     }else{
+        /*
         NSString * path = [NSString stringWithFormat:@"v2/sleep"];
 
         NSString * f_s= [NSString stringWithFormat:@"%.0f",(self.fromDate).timeIntervalSince1970];
@@ -68,8 +69,8 @@
                                      @"enddate":t_s,
                                      @"userid":self.userId
                                      };
-
-        return [self preparedUrlRequest:path params:parameters];
+         */
+        return nil;//[self preparedUrlRequest:path params:parameters];
     }
 }
 

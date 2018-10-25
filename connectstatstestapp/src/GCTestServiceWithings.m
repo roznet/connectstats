@@ -1,6 +1,6 @@
 //  MIT License
 //
-//  Created on 13/01/2018 for ConnectStatsTestApp
+//  Created on 21/10/2018 for ConnectStatsTestApp
 //
 //  Copyright (c) 2018 Brice Rosenzweig
 //
@@ -25,42 +25,45 @@
 
 
 
-#import "GCTestServiceStrava.h"
-#import "GCAppGlobal.h"
+#import "GCTestServiceWithings.h"
 #import "GCWebConnect+Requests.h"
 #import "GCWebUrl.h"
+#import "GCAppGlobal.h"
 
-@implementation GCTestServiceStrava
+@implementation GCTestServiceWithings
 
 -(NSArray*)testDefinitions{
-    return @[ @{TK_SEL:NSStringFromSelector(@selector(testStrava)),
-                TK_DESC:@"Try to login and download one list of activity",
-                TK_SESS:@"GC Strava"},
+    return @[ @{TK_SEL:NSStringFromSelector(@selector(testWithings)),
+                TK_DESC:@"Try to login and download Weights from withings",
+                TK_SESS:@"GC Withings"},
               
               ];
 }
 
--(void)testStrava{
-    [self startSession:@"GC Strava"];
+-(void)testWithings{
+    [self startSession:@"GC Withings"];
     GCWebUseSimulator(FALSE, nil);
     
-    [GCAppGlobal setupEmptyState:@"activities_strava.db" withSettingsName:kPreservedSettingsName];
-    [[GCAppGlobal profile] configSet:CONFIG_STRAVA_ENABLE boolVal:YES];
+    [GCAppGlobal setupEmptyState:@"activities_withings.db" withSettingsName:kPreservedSettingsName];
+    [[GCAppGlobal profile] configSet:CONFIG_WITHINGS_AUTO boolVal:YES];
     
-    [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
-    /*dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-     [self timeOutCheck];
-     });*/
+    GCField * weight = [GCHealthMeasure healthFieldFromMeasureType:gcMeasureWeight];
+    GCStatsDataSerieWithUnit * values = [[GCAppGlobal health] dataSerieWithUnitForHealthField:weight];
+    
+    [self assessTestResult:@"Start with 0" result:values.count == 0 ];
     [[GCAppGlobal web] attach:self];
     [[GCAppGlobal web] servicesSearchRecentActivities];
-    
 }
 
--(void)testStravaEnd{
-    [self assessTestResult:@"End with more than 0" result:[[GCAppGlobal organizer] countOfActivities] > 0 ];
+-(void)testWithingsEnd{
     [[GCAppGlobal web] detach:self];
     
-    [self endSession:@"GC Strava"];
+    GCField * weight = [GCHealthMeasure healthFieldFromMeasureType:gcMeasureWeight];
+    GCStatsDataSerieWithUnit * values = [[GCAppGlobal health] dataSerieWithUnitForHealthField:weight];
+    
+    [self assessTestResult:@"Ends with more than 0" result:values.count > 0 ];
+
+    [self endSession:@"GC Withings"];
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
@@ -69,7 +72,7 @@
     }
     RZ_ASSERT(![[theInfo stringInfo] isEqualToString:@"error"], @"Web request had no error");
     if ([[theInfo stringInfo] isEqualToString:@"end"] || [[theInfo stringInfo] isEqualToString:@"error"]) {
-        [self testStravaEnd];
+        [self testWithingsEnd];
     }
 }
 
