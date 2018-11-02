@@ -82,17 +82,19 @@
     //manager.recordMode = true;
     
     for (NSString * aId in activityIds) {
-        GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-        [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-        
-        NSArray<GCField*>*fields = [act availableTrackFields];
-        for (GCField * field in fields) {
-            NSString * ident = [NSString stringWithFormat:@"%@_%@", aId, field.key];
-            GCStatsDataSerieWithUnit * expected = [act timeSerieForField:field];
-            GCStatsDataSerieWithUnit * retrieved = [manager retrieveReferenceObject:expected forClass:[GCStatsDataSerieWithUnit class] selector:_cmd identifier:ident error:nil];
-            XCTAssertNotEqual(expected.count, 0, @"%@[%@] has points",aId,field.key);
-            XCTAssertEqualObjects(expected, retrieved, @"%@[%@]: %@<>%@", aId, field.key, expected, retrieved);
-        }
+        dispatch_sync([GCAppGlobal worker], ^(){
+            GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+            [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+            
+            NSArray<GCField*>*fields = [act availableTrackFields];
+            for (GCField * field in fields) {
+                NSString * ident = [NSString stringWithFormat:@"%@_%@", aId, field.key];
+                GCStatsDataSerieWithUnit * expected = [act timeSerieForField:field];
+                GCStatsDataSerieWithUnit * retrieved = [manager retrieveReferenceObject:expected forClass:[GCStatsDataSerieWithUnit class] selector:_cmd identifier:ident error:nil];
+                XCTAssertNotEqual(expected.count, 0, @"%@[%@] has points",aId,field.key);
+                XCTAssertEqualObjects(expected, retrieved, @"%@[%@]: %@<>%@", aId, field.key, expected, retrieved);
+            }
+        });
     }
     
     //NSLog(@"act %@", act);
