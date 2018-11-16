@@ -21,3 +21,5 @@
 #import "GCActivityTypes.h"
 #import "GCActivityType.h"
 #import "FITGarminDownloadManager.h"
+
+#import "GCWebConnect.h"

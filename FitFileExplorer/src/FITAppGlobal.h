@@ -29,6 +29,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class GCWebConnect;
+
 extern NSString * kFITSettingsKeyLoginName;
 extern NSString * kFITSettingsKeyPassword;
 
@@ -38,6 +40,10 @@ extern NSString * kFITSettingsKeyPassword;
 
 +(NSString *)currentLoginName;
 +(NSString *)currentPassword;
+
++(GCWebConnect*)web;
++(dispatch_queue_t)worker;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -26,6 +26,7 @@
 
 
 #import "FITGarminRequestActivityList.h"
+#import "GCWebUrl.h"
 
 
 const NSUInteger kActivityRequestCount = 20;
@@ -34,10 +35,95 @@ const NSUInteger kActivityRequestCount = 20;
 @interface FITGarminRequestActivityList ()
 
 @property (nonatomic,assign) NSUInteger reachedExisting;
-
+@property (nonatomic,assign) BOOL reloadAll;
+@property (nonatomic,assign) NSUInteger start;
+@property (nonatomic,retain) NSDate * lastFoundDate;
+@property (nonatomic,assign) NSUInteger parsedCount;
 
 @end
 
 @implementation FITGarminRequestActivityList
+
+-(FITGarminRequestActivityList*)initWithStart:(NSUInteger)aStart andMode:(BOOL)aMode{
+    self = [super init];
+    if (self) {
+        self.reloadAll = aMode;
+        self.start  =aStart;
+        self.stage = gcRequestStageDownload;
+        self.status = GCWebStatusOK;
+        self.lastFoundDate = [NSDate date];
+    }
+    return self;
+}
+
+-(FITGarminRequestActivityList*)initNextWith:(FITGarminRequestActivityList*)current{
+    self = [super init];
+    if (self) {
+        self.start = current.start + kActivityRequestCount;
+        self.reloadAll = current.reloadAll;
+        self.lastFoundDate = current.lastFoundDate;
+        self.stage = gcRequestStageDownload;
+        self.status = GCWebStatusOK;
+    }
+    return self;
+}
+
+-(NSString*)url{
+    return GCWebModernSearchURL(self.start, kActivityRequestCount);
+}
+
+-(NSString*)description{
+    
+    switch (self.stage) {
+        case gcRequestStageDownload:
+            return [NSString stringWithFormat:NSLocalizedString(@"Downloading History... %@",@"Request Description"),[self.lastFoundDate dateFormatFromToday]];
+            break;
+        case gcRequestStageParsing:
+            return [NSString stringWithFormat:NSLocalizedString( @"Parsing History... ", @"Request Description"),[self.lastFoundDate dateFormatFromToday]];
+            break;
+        case gcRequestStageSaving:
+            return [NSString stringWithFormat:NSLocalizedString( @"Saving History... %@", @"Request Description"),[self.lastFoundDate dateFormatFromToday]];
+            break;
+    }
+    return NSLocalizedString( @"Processing History...", @"Request Description" );
+}
+
+
+-(NSString*)searchFileNameForPage:(int)page{
+    return  [NSString stringWithFormat:@"last_modern_search_%d.json", page];
+}
+
+-(void)process{
+    NSError * e;
+    NSString * fname = [self searchFileNameForPage:(int)_start];
+    if(![self.theString writeToFile:[RZFileOrganizer writeableFilePath:fname] atomically:true encoding:kRequestDebugFileEncoding error:&e]){
+        RZLog(RZLogError, @"Failed to save %@. %@", fname, e.localizedDescription);
+    }
+    self.stage = gcRequestStageParsing;
+    [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+    [self processParse];
+}
+
+-(void)processParse{
+    if ([self checkNoErrors]) {
+        self.status = GCWebStatusOK;
+        [self.delegate loginSuccess:gcWebServiceGarmin];
+        NSData * data = [self.theString dataUsingEncoding:self.encoding];
+        NSError * err = nil;
+        NSDictionary * list = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&err];
+        NSLog(@"List %@", @(list.count));
+    }
+    
+    [self performSelectorOnMainThread:@selector(processRegister) withObject:nil waitUntilDone:NO];
+}
+
+-(void)processRegister{
+    if (self.status == GCWebStatusOK) {
+        if ( (_reloadAll || _reachedExisting < kActivityRequestCount) && self.parsedCount > 0) {
+            self.nextReq = [[FITGarminRequestActivityList alloc] initNextWith:self];
+        }
+    }
+    [self processDone];
+}
 
 @end

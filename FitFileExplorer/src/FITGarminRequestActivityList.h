@@ -26,10 +26,10 @@
 
 
 #import <Foundation/Foundation.h>
-
+#import "GCGarminRequest.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FITGarminRequestActivityList : NSObject
+@interface FITGarminRequestActivityList : GCGarminReqBase
 
 @end
 

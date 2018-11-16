@@ -41,7 +41,7 @@ NS_INLINE NSMutableDictionary * _sharedSettings(void){
 }
 
 
-/*
+
 static FITAppDelegate * _cacheApplicationDelegate = nil;
 
 NS_INLINE FITAppDelegate * _sharedApplicationDelegate(void){
@@ -50,7 +50,7 @@ NS_INLINE FITAppDelegate * _sharedApplicationDelegate(void){
     }
     return _cacheApplicationDelegate;
 }
-*/
+
 
 @implementation FITAppGlobal
 
@@ -64,5 +64,11 @@ NS_INLINE FITAppDelegate * _sharedApplicationDelegate(void){
 +(NSString*)currentLoginName{
     return [FITAppGlobal configGetString:kFITSettingsKeyLoginName defaultValue:@""];
 }
++(GCWebConnect*)web{
+    return _sharedApplicationDelegate().web;
+}
 
++(dispatch_queue_t)worker{
+    return _sharedApplicationDelegate().worker;
+}
 @end

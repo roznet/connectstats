@@ -11,6 +11,9 @@ import Cocoa
 
 class FITAppDelegate : NSObject, NSApplicationDelegate {
     
+    @objc let web = GCWebConnect()
+    @objc let worker = DispatchQueue(label: "net.ro-z.worker")
+    
     func applicationDidFinishLaunching(_ notification: Notification) {
         let cache = GCFieldCache(db: nil, andLanguage: nil)
         GCField.setFieldCache(cache)
