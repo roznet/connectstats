@@ -20,3 +20,4 @@
 #import "GCMapAnnotation.h"
 #import "GCActivityTypes.h"
 #import "GCActivityType.h"
+#import "FITGarminDownloadManager.h"

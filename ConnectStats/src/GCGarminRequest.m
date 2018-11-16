@@ -24,14 +24,13 @@
 //  
 
 #import "GCGarminRequest.h"
-#import "GCAppGlobal.h"
 #import "GCWebUrl.h"
-#import "GCAppGlobal.h"
-#import "Flurry.h"
 #import "GCGarminLoginSSORequest.h"
-#import "GCGarminLoginWebRequest.h"
-
-
+#if TARGET_OS_IPHONE
+#import "GCAppGlobal.h"
+#else
+#import "FITAppGlobal.h"
+#endif
 
 @implementation GCGarminReqBase
 
@@ -61,17 +60,16 @@
 }
 -(id<GCWebRequest>)remediationReq{
     if (self.status==GCWebStatusAccessDenied) {
-        gcGarminLoginMethod method = (gcGarminLoginMethod)[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
-        if (method == gcGarminLoginMethodDirect){
-            self.status = GCWebStatusOK;
-            self.stage = gcRequestStageDownload;
-            return [GCGarminLoginSSORequest requestWithUser:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
-                                                                       andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]];
-        }else if(method == gcGarminLoginMethodWebview){//gcGarminLoginMethodWebview
-            self.status = GCWebStatusOK;
-            self.stage = gcRequestStageDownload;
-            return [GCGarminLoginWebRequest request];
-        }
+        self.status = GCWebStatusOK;
+        self.stage = gcRequestStageDownload;
+#if TARGET_OS_IPHONE
+        return [GCGarminLoginSSORequest requestWithUser:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
+                                                 andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]];
+#else
+        return [GCGarminLoginSSORequest requestWithUser:[FITAppGlobal currentLoginName]
+                                                 andPwd:[FITAppGlobal currentPassword]];
+
+#endif
     }
     return nil;
 }

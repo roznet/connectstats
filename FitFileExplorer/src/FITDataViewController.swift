@@ -55,8 +55,8 @@ class FITDataViewController: NSViewController {
     
     @IBAction func updateStatsFor(_ sender: NSPopUpButton) {
         if
-            let value = sender.selectedItem?.title,
-            let dataSource = self.fitDataSource{
+            let _ = sender.selectedItem?.title,
+            let _ = self.fitDataSource{
             //dataSource.selectionContext?.dependentField = value
             self.tableView.reloadData()
         }

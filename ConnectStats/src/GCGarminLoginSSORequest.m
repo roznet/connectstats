@@ -46,7 +46,7 @@ NSString * kGarminFullUrl = @"https://sso.garmin.com/sso/login?service=https%3A%
 
 @implementation GCGarminLoginSSORequest
 +(GCGarminLoginSSORequest*)requestWithUser:(NSString*)name andPwd:(NSString*)pwd{
-    GCGarminLoginSSORequest * rv = [[[GCGarminLoginSSORequest alloc] init] autorelease];
+    GCGarminLoginSSORequest * rv = RZReturnAutorelease([[GCGarminLoginSSORequest alloc] init]);
     if (rv) {
         rv.uname = name;
         rv.pwd = pwd;
@@ -65,7 +65,7 @@ NSString * kGarminFullUrl = @"https://sso.garmin.com/sso/login?service=https%3A%
             return @"Garmin Connect Success";
     }
 }
-
+#if !__has_feature(objc_arc)
 -(void)dealloc{
     [_uname release];
     [_pwd release];
@@ -73,7 +73,7 @@ NSString * kGarminFullUrl = @"https://sso.garmin.com/sso/login?service=https%3A%
 
     [super dealloc];
 }
-
+#endif
 -(NSDictionary*)dictForGetRequest{
     switch (self.ssoStage) {
         case gcSSOGetServiceTicket:
