@@ -426,6 +426,10 @@
 		424F9DBA17C35BDD001C73B1 /* GCHealthZoneCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = 424F9DB917C35BDD001C73B1 /* GCHealthZoneCalculator.m */; };
 		424F9DBF17C39ED5001C73B1 /* GCHealthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424F9DBE17C39ED5001C73B1 /* GCHealthViewController.m */; };
 		4250038C18B8D8970030AA8A /* GCGarminLoginWebRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4250038B18B8D8970030AA8A /* GCGarminLoginWebRequest.m */; };
+		4251B5B7219F743400E15F9F /* RZExternalUniversal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C82A8C201FBEDD00A23815 /* RZExternalUniversal.framework */; };
+		4251B5B8219F743400E15F9F /* RZExternalUniversal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42C82A8C201FBEDD00A23815 /* RZExternalUniversal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4251B5C1219F7D2600E15F9F /* RZExternalUniversal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C82A8C201FBEDD00A23815 /* RZExternalUniversal.framework */; };
+		4251B5C2219F7D2600E15F9F /* RZExternalUniversal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42C82A8C201FBEDD00A23815 /* RZExternalUniversal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42523AB11D6B289300F6D6C6 /* test_activity_running_828298988.db in Resources */ = {isa = PBXBuildFile; fileRef = 42523AAF1D6B289300F6D6C6 /* test_activity_running_828298988.db */; };
 		42523AB31D6B289300F6D6C6 /* test_activity_running_1266384539.db in Resources */ = {isa = PBXBuildFile; fileRef = 42523AB01D6B289300F6D6C6 /* test_activity_running_1266384539.db */; };
 		42523AB41D6B289300F6D6C6 /* test_activity_running_1266384539.db in Resources */ = {isa = PBXBuildFile; fileRef = 42523AB01D6B289300F6D6C6 /* test_activity_running_1266384539.db */; };
@@ -2162,6 +2166,20 @@
 			remoteGlobalIDString = 42382ACF1EAC9BC700252217;
 			remoteInfo = RZUtilsTouch;
 		};
+		4251B5B9219F743400E15F9F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 42248C012014E16A006ADC90;
+			remoteInfo = RZExternalUniversal;
+		};
+		4251B5C3219F7D2600E15F9F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 42248C012014E16A006ADC90;
+			remoteInfo = RZExternalUniversal;
+		};
 		425872BE1EACA089000D4115 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
@@ -2468,6 +2486,7 @@
 				42265B8420137EE100AF79B2 /* RZUtils.framework in Embed Frameworks */,
 				42265B8020137EE100AF79B2 /* RZExternalCpp.framework in Embed Frameworks */,
 				42265B8820137EE100AF79B2 /* RZUtilsUniversal.framework in Embed Frameworks */,
+				4251B5B8219F743400E15F9F /* RZExternalUniversal.framework in Embed Frameworks */,
 				42265B8C20137EE100AF79B2 /* RZUtilsOSX.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -2480,6 +2499,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				425872CB1EACA0D6000D4115 /* RZUtilsSwift.framework in Embed Frameworks */,
+				4251B5C2219F7D2600E15F9F /* RZExternalUniversal.framework in Embed Frameworks */,
 				42EBBEE11FFAB55E0009B385 /* RZExternal.framework in Embed Frameworks */,
 				42F3FBF91DD79D910042A9B1 /* RZUtilsUniversal.framework in Embed Frameworks */,
 				425872C71EACA0A4000D4115 /* RZUtilsHealthkit.framework in Embed Frameworks */,
@@ -4443,6 +4463,7 @@
 				4213AEB1201393CC0004B54B /* MapKit.framework in Frameworks */,
 				42F3FBFC1DD79DA90042A9B1 /* RZUtilsUniversal.framework in Frameworks */,
 				424670FF1DCE0410003DDF7F /* RZUtilsOSX.framework in Frameworks */,
+				4251B5B7219F743400E15F9F /* RZExternalUniversal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4488,6 +4509,7 @@
 				42A0098E20012B9C00019CB3 /* RZExternalCpp.framework in Frameworks */,
 				42DE53C019CF696E00009130 /* HealthKit.framework in Frameworks */,
 				428FF71215F36888007A88FA /* CoreGraphics.framework in Frameworks */,
+				4251B5C1219F7D2600E15F9F /* RZExternalUniversal.framework in Frameworks */,
 				E15C908392B57B53CFD19123 /* libPods-ConnectStats.a in Frameworks */,
 				42EBBEE01FFAB55E0009B385 /* RZExternal.framework in Frameworks */,
 			);
@@ -7997,6 +8019,7 @@
 				42265B8620137EE100AF79B2 /* PBXTargetDependency */,
 				42265B8A20137EE100AF79B2 /* PBXTargetDependency */,
 				42265B8E20137EE100AF79B2 /* PBXTargetDependency */,
+				4251B5BA219F743400E15F9F /* PBXTargetDependency */,
 			);
 			name = FitFileExplorer;
 			productName = FitFileExplorer;
@@ -8043,6 +8066,7 @@
 				425872CD1EACA0D6000D4115 /* PBXTargetDependency */,
 				42EBBEE31FFAB55E0009B385 /* PBXTargetDependency */,
 				42A0099120012B9D00019CB3 /* PBXTargetDependency */,
+				4251B5C4219F7D2600E15F9F /* PBXTargetDependency */,
 			);
 			name = ConnectStats;
 			productName = GarminConnect;
@@ -10786,6 +10810,16 @@
 			name = RZUtilsTouch;
 			targetProxy = 424B56321D3BDBBF00903A99 /* PBXContainerItemProxy */;
 		};
+		4251B5BA219F743400E15F9F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZExternalUniversal;
+			targetProxy = 4251B5B9219F743400E15F9F /* PBXContainerItemProxy */;
+		};
+		4251B5C4219F7D2600E15F9F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZExternalUniversal;
+			targetProxy = 4251B5C3219F7D2600E15F9F /* PBXContainerItemProxy */;
+		};
 		425872C91EACA0A5000D4115 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = RZUtilsHealthkit;
@@ -11094,7 +11128,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = FitFileExplorer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -11128,7 +11162,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = FitFileExplorer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -11331,7 +11365,7 @@
 				GCC_WARN_PEDANTIC = NO;
 				GCC_WARN_SHADOW = NO;
 				INFOPLIST_FILE = "ConnectStats/ConnectStats-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
@@ -11379,7 +11413,7 @@
 				GCC_WARN_PEDANTIC = NO;
 				GCC_WARN_SHADOW = NO;
 				INFOPLIST_FILE = "ConnectStats/ConnectStats-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;

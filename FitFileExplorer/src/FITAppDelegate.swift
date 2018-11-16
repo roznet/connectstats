@@ -12,6 +12,7 @@ import Cocoa
 class FITAppDelegate : NSObject, NSApplicationDelegate {
     
     @objc let web = GCWebConnect()
+    @objc let downloadManager = FITGarminDownloadManager()
     @objc let worker = DispatchQueue(label: "net.ro-z.worker")
     
     func applicationDidFinishLaunching(_ notification: Notification) {

@@ -26,6 +26,11 @@
 
 
 #import "FITGarminDownloadManager.h"
+#import "FITAppGlobal.h"
+#import "GCWebConnect.h"
+#import "GCGarminLoginSSORequest.h"
+#import "FITGarminRequestActivityList.h"
+
 @interface FITGarminDownloadManager ()
 
 @property (nonatomic,strong) NSArray<NSDictionary*>*list;
@@ -35,10 +40,25 @@
 @implementation FITGarminDownloadManager
 +(FITGarminDownloadManager*)manager{
     FITGarminDownloadManager * rv = [[FITGarminDownloadManager alloc] init];
+    [[FITAppGlobal web] attach:rv];
     return rv;
 }
 
+-(void)dealloc{
+    [[FITAppGlobal web] detach:self];
+    
+}
 
+-(void)startDownload{
+    
+    [[FITAppGlobal web] addRequest:[GCGarminLoginSSORequest requestWithUser:[FITAppGlobal currentLoginName] andPwd:[FITAppGlobal currentPassword]]];
+    [[FITAppGlobal web] addRequest:[[FITGarminRequestActivityList alloc] initWithStart:0 andMode:false]];
+    
+}
+
+-(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
+    
+}
 -(void)loadRawFiles{
     NSArray * files = [RZFileOrganizer writeableFilesMatching:^(NSString*n){
         

@@ -23,3 +23,4 @@
 #import "FITGarminDownloadManager.h"
 
 #import "GCWebConnect.h"
+#import "FITAppGlobal.h"

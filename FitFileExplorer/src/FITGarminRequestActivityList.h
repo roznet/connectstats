@@ -30,7 +30,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FITGarminRequestActivityList : GCGarminReqBase
-
+-(FITGarminRequestActivityList*)initWithStart:(NSUInteger)aStart andMode:(BOOL)aMode;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -26,13 +26,15 @@
 
 
 #import <Foundation/Foundation.h>
+@import RZUtils;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FITGarminDownloadManager : NSObject
+@interface FITGarminDownloadManager : NSObject<RZChildObject>
 
 +(FITGarminDownloadManager*)manager;
 -(void)loadRawFiles;
+-(void)startDownload;
 @end
 
 NS_ASSUME_NONNULL_END

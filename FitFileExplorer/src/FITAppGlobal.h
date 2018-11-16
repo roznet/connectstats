@@ -30,6 +30,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class GCWebConnect;
+@class FITGarminDownloadManager;
 
 extern NSString * kFITSettingsKeyLoginName;
 extern NSString * kFITSettingsKeyPassword;
@@ -43,6 +44,7 @@ extern NSString * kFITSettingsKeyPassword;
 
 +(GCWebConnect*)web;
 +(dispatch_queue_t)worker;
++(FITGarminDownloadManager*)downloadManager;
 
 @end
 

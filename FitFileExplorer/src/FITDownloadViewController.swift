@@ -28,16 +28,45 @@
 import Cocoa
 import RZUtils
 import RZUtilsOSX
+import RZExternalUniversal
 
 class FITDownloadViewController: NSViewController {
     @IBOutlet weak var userName: NSTextField!
     @IBOutlet weak var password: NSSecureTextField!
     
     @IBOutlet weak var activityTable: NSTableView!
-    
+
     @IBAction func refresh(_ sender: Any) {
-        let manager = FITGarminDownloadManager()
-        manager.loadRawFiles()
+        FITAppGlobal.downloadManager().startDownload()
+    }
+
+    override func viewWillAppear() {
+        let keychain = KeychainWrapper(serviceName: "net.ro-z.connectstats")
+        
+        if let saved_username = keychain.string(forKey: "username"){
+            userName.stringValue = saved_username
+            FITAppGlobal.configSet(kFITSettingsKeyLoginName, stringVal: saved_username)
+        }
+        if let saved_password = keychain.string(forKey: "pwssword") {
+            password.stringValue = saved_password
+            FITAppGlobal.configSet(kFITSettingsKeyPassword, stringVal: saved_password)
+        }
     }
     
+    @IBAction func editUserName(_ sender: Any) {
+        let entered_username = userName.stringValue
+        let keychain = KeychainWrapper(serviceName: "net.ro-z.connectstats")
+        
+        keychain.set(entered_username, forKey: "username")
+        FITAppGlobal.configSet(kFITSettingsKeyLoginName, stringVal: entered_username)
+    }
+    
+    @IBAction func editPassword(_ sender: Any) {
+        let entered_password = userName.stringValue
+        let keychain = KeychainWrapper(serviceName: "net.ro-z.connectstats")
+        
+        keychain.set(entered_password, forKey: "password")
+        FITAppGlobal.configSet(kFITSettingsKeyPassword, stringVal: entered_password)
+
+    }
 }

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import RZExternal
+import RZExternalUniversal
 
 class GCAppPasswordManager : NSObject {
 

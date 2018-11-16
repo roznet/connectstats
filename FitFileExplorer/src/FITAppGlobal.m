@@ -71,4 +71,8 @@ NS_INLINE FITAppDelegate * _sharedApplicationDelegate(void){
 +(dispatch_queue_t)worker{
     return _sharedApplicationDelegate().worker;
 }
+
++(FITGarminDownloadManager*)downloadManager{
+    return _sharedApplicationDelegate().downloadManager;
+}
 @end
