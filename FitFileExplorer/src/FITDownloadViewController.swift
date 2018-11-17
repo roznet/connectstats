@@ -47,7 +47,7 @@ class FITDownloadViewController: NSViewController {
             userName.stringValue = saved_username
             FITAppGlobal.configSet(kFITSettingsKeyLoginName, stringVal: saved_username)
         }
-        if let saved_password = keychain.string(forKey: "pwssword") {
+        if let saved_password = keychain.string(forKey: "password") {
             password.stringValue = saved_password
             FITAppGlobal.configSet(kFITSettingsKeyPassword, stringVal: saved_password)
         }
@@ -62,7 +62,7 @@ class FITDownloadViewController: NSViewController {
     }
     
     @IBAction func editPassword(_ sender: Any) {
-        let entered_password = userName.stringValue
+        let entered_password = password.stringValue
         let keychain = KeychainWrapper(serviceName: "net.ro-z.connectstats")
         
         keychain.set(entered_password, forKey: "password")

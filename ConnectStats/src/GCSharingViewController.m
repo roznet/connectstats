@@ -462,7 +462,6 @@
         [[GCAppGlobal web] attach:self];
         [[GCAppGlobal web] sportTracksUpload:activity.activityId navigationController:self.navigationController];
     }
-
 }
 #pragma mark - Strava
 
