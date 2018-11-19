@@ -1,6 +1,6 @@
 //  MIT License
 //
-//  Created on 12/11/2018 for FitFileExplorer
+//  Created on 18/11/2018 for FitFileExplorer
 //
 //  Copyright (c) 2018 Brice Rosenzweig
 //
@@ -25,28 +25,20 @@
 
 
 
-#import <RZUtils/RZUtils.h>
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
+@class FITGarminActivityWrapper;
 
-@class GCWebConnect;
-@class FITGarminDownloadManager;
-@class GCActivityTypes;
+@interface FITGarminActivityListWrapper : NSObject
 
-extern NSString * kFITSettingsKeyLoginName;
-extern NSString * kFITSettingsKeyPassword;
+@property (nonatomic,readonly) NSUInteger count;
 
-@interface FITAppGlobal : RZAppConfig
+-(FITGarminActivityWrapper*)objectAtIndex:(NSUInteger)index;
 
-+(NSMutableDictionary*)settings;
+-(void)addJson:(NSArray<NSDictionary*>*)jsonList;
 
-+(NSString *)currentLoginName;
-+(NSString *)currentPassword;
-
-+(GCWebConnect*)web;
-+(dispatch_queue_t)worker;
-+(FITGarminDownloadManager*)downloadManager;
-+(GCActivityTypes*)activityTypes;
+-(void)merge:(FITGarminActivityListWrapper*)other;
 
 @end
 

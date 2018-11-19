@@ -128,9 +128,9 @@ class FitFileExplorerTests: XCTestCase {
             
             // change index
             if let selectedYField = context.selectedYField,
-                let val = context.selectedMessageFields![selectedYField].numberWithUnit{
+                let val = context.selectedMessageFields![selectedYField]?.numberWithUnit{
                 context.selectedMessageIndex = 10
-                if let newval = context.selectedMessageFields![selectedYField].numberWithUnit{
+                if let newval = context.selectedMessageFields![selectedYField]?.numberWithUnit{
                     XCTAssertNotEqual(newval, val)
                 }
             }

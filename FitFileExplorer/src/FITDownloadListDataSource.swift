@@ -1,6 +1,6 @@
 //  MIT License
 //
-//  Created on 12/11/2018 for FitFileExplorer
+//  Created on 18/11/2018 for FitFileExplorer
 //
 //  Copyright (c) 2018 Brice Rosenzweig
 //
@@ -25,29 +25,26 @@
 
 
 
-#import <RZUtils/RZUtils.h>
+import Cocoa
 
-NS_ASSUME_NONNULL_BEGIN
+class FITDownloadListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource {
 
-@class GCWebConnect;
-@class FITGarminDownloadManager;
-@class GCActivityTypes;
+    func list() -> FITGarminActivityListWrapper {
+        return FITAppGlobal.downloadManager().list
+    }
+    
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        return Int(self.list().count)
+    }
+    
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        let cellView =  tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DataCellView"), owner: self)
+        let to_display = self.list().object(at: UInt(row))
+        if let cellView = cellView as? NSTableCellView, let _ = tableColumn?.identifier.rawValue {
+            cellView.textField?.stringValue = to_display.activityId
+            //cellView.textField?.attributedStringValue = fieldDisplay
+        }
+        return cellView
+    }
 
-extern NSString * kFITSettingsKeyLoginName;
-extern NSString * kFITSettingsKeyPassword;
-
-@interface FITAppGlobal : RZAppConfig
-
-+(NSMutableDictionary*)settings;
-
-+(NSString *)currentLoginName;
-+(NSString *)currentPassword;
-
-+(GCWebConnect*)web;
-+(dispatch_queue_t)worker;
-+(FITGarminDownloadManager*)downloadManager;
-+(GCActivityTypes*)activityTypes;
-
-@end
-
-NS_ASSUME_NONNULL_END
+}

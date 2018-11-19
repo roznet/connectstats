@@ -30,14 +30,17 @@
 #import "GCWebConnect.h"
 #import "GCGarminLoginSSORequest.h"
 #import "FITGarminRequestActivityList.h"
+#import "FITGarminActivityListWrapper.h"
 
 @interface FITGarminDownloadManager ()
 
-@property (nonatomic,strong) NSArray<NSDictionary*>*list;
+@property (nonatomic,strong) FITGarminActivityListWrapper*list;
+@property (nonatomic,assign) BOOL loginSuccessful;
 
 @end
 
 @implementation FITGarminDownloadManager
+
 +(FITGarminDownloadManager*)manager{
     FITGarminDownloadManager * rv = [[FITGarminDownloadManager alloc] init];
     [[FITAppGlobal web] attach:rv];
@@ -50,34 +53,55 @@
 }
 
 -(void)startDownload{
+    [self loadRawFiles];
     
-    [[FITAppGlobal web] addRequest:[GCGarminLoginSSORequest requestWithUser:[FITAppGlobal currentLoginName] andPwd:[FITAppGlobal currentPassword]]];
-    [[FITAppGlobal web] addRequest:[[FITGarminRequestActivityList alloc] initWithStart:0 andMode:false]];
-    
+    if (/* DISABLES CODE */ (false)) {
+        [[FITAppGlobal web] attach:self];
+        if( ! self.loginSuccessful ){
+            [[FITAppGlobal web] addRequest:[GCGarminLoginSSORequest requestWithUser:[FITAppGlobal currentLoginName] andPwd:[FITAppGlobal currentPassword]]];
+        }
+        [[FITAppGlobal web] addRequest:[[FITGarminRequestActivityList alloc] initWithStart:0 andMode:false]];
+    }
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
-    
+    if( [theInfo.stringInfo isEqualToString:NOTIFY_NEXT]){
+        
+    }else if( [theInfo.stringInfo isEqualToString:NOTIFY_END]){
+        
+    }else if( [theInfo.stringInfo isEqualToString:NOTIFY_ERROR]){
+        
+    }
 }
+
+-(void)processActivityList:(NSDictionary*)json{
+    if( json ){
+        NSArray * list = json[@"activityList"];
+        if( [list isKindOfClass:[NSArray class]] ){
+            
+        }
+    }
+}
+
 -(void)loadRawFiles{
     NSArray * files = [RZFileOrganizer writeableFilesMatching:^(NSString*n){
-        
         return [n hasPrefix:@"last_modern_search"];
     }];
     
     
-    NSMutableArray * ar = [NSMutableArray array];
+    FITGarminActivityListWrapper * list = [[FITGarminActivityListWrapper alloc] init];
+    
     for (NSString * fn in files) {
         NSData * jsonData = [NSData dataWithContentsOfFile:[RZFileOrganizer
                                                             writeableFilePath:fn]];
         NSDictionary * json = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
         if( json ){
-            NSArray * list = json[@"activityList"];
-            if( list ){
-                [ar addObjectsFromArray:list];
+            NSArray * alist = json[@"activityList"];
+            if( alist ){
+                [list addJson:alist];
             }
         }
     }
-    self.list = ar;
+    self.list = list;
 }
 @end

@@ -75,4 +75,7 @@ NS_INLINE FITAppDelegate * _sharedApplicationDelegate(void){
 +(FITGarminDownloadManager*)downloadManager{
     return _sharedApplicationDelegate().downloadManager;
 }
++(GCActivityTypes*)activityTypes{
+    return _sharedApplicationDelegate().activityTypes;
+}
 @end

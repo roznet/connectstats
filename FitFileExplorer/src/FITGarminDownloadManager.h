@@ -30,7 +30,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class FITGarminActivityListWrapper;
+
 @interface FITGarminDownloadManager : NSObject<RZChildObject>
+
+@property (nonatomic,readonly) FITGarminActivityListWrapper * list;
 
 +(FITGarminDownloadManager*)manager;
 -(void)loadRawFiles;

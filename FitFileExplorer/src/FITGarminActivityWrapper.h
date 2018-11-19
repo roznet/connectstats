@@ -30,9 +30,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FITGarminActivityWrapper : NSObject
+@property (nonatomic,readonly) NSString * activityId;
 
 +(FITGarminActivityWrapper*)wrapperFor:(NSDictionary*)json;
-
+-(void)updateWith:(FITGarminActivityWrapper*)other;
 @end
 
 NS_ASSUME_NONNULL_END

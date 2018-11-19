@@ -26,15 +26,38 @@
 
 
 #import "FITGarminActivityWrapper.h"
+#import "GCGarminActivityInterpret.h"
+#import "FITAppGlobal.h"
+#import "GCActivityTypes.h"
 
 @interface FITGarminActivityWrapper ()
 @property (nonatomic,retain) NSDictionary * json;
+@property (nonatomic,retain) GCGarminActivityInterpret * interpert;
 @end
 
 @implementation FITGarminActivityWrapper
 
 +(FITGarminActivityWrapper*)wrapperFor:(NSDictionary*)json{
-    FITGarminActivityWrapper*rv = nil;
+    FITGarminActivityWrapper*rv = [[FITGarminActivityWrapper alloc] init];
+    
+    NSMutableDictionary * pruned = [NSMutableDictionary dictionary];
+    for (NSString * key in json) {
+        id val = json[key];
+        if( ![val isKindOfClass:[NSNull class]]){
+            pruned[key] = val;
+        }
+    }
+    rv.json = pruned;
+    rv.interpert = [GCGarminActivityInterpret interpret:rv.json usingDTOUnit:false withTypes:[FITAppGlobal activityTypes]];
+    //NSLog(@"Added %@: %lu/%lu", rv.activityId, (unsigned long)pruned.count, (unsigned long)json.count);
+    
     return rv;
+}
+
+-(NSString*)activityId{
+    return [self.json[@"activityId"] stringValue] ?: @"";
+}
+-(void)updateWith:(FITGarminActivityWrapper*)other{
+    self.json = other.json;
 }
 @end
