@@ -31,6 +31,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class FITGarminActivityListWrapper;
+extern NSNotificationName kGarminDownloadChangeNotification;
 
 @interface FITGarminDownloadManager : NSObject<RZChildObject>
 

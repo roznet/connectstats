@@ -32,6 +32,8 @@
 #import "FITGarminRequestActivityList.h"
 #import "FITGarminActivityListWrapper.h"
 
+NSNotificationName kGarminDownloadChangeNotification = @"kGarminDownloadChangeNotification";
+
 @interface FITGarminDownloadManager ()
 
 @property (nonatomic,strong) FITGarminActivityListWrapper*list;
@@ -103,5 +105,6 @@
         }
     }
     self.list = list;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kGarminDownloadChangeNotification object:self];
 }
 @end

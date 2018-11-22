@@ -36,11 +36,25 @@ class FITDownloadViewController: NSViewController {
     
     @IBOutlet weak var activityTable: NSTableView!
 
+    var dataSource = FITDownloadListDataSource()
+    
     @IBAction func refresh(_ sender: Any) {
+        activityTable.dataSource = self.dataSource
+        activityTable.delegate = self.dataSource
         FITAppGlobal.downloadManager().startDownload()
     }
 
+    @objc func downloadChanged(notification : Notification){
+        self.activityTable.reloadData()
+    }
+    
     override func viewWillAppear() {
+        super.viewWillAppear()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(downloadChanged(notification:)),
+                                               name: NSNotification.Name.garminDownloadChange,
+                                               object: nil)
+        
         let keychain = KeychainWrapper(serviceName: "net.ro-z.connectstats")
         
         if let saved_username = keychain.string(forKey: "username"){
@@ -53,6 +67,10 @@ class FITDownloadViewController: NSViewController {
         }
     }
     
+    override func viewWillDisappear() {
+        super.viewWillDisappear()
+        NotificationCenter.default.removeObserver(self)
+    }
     @IBAction func editUserName(_ sender: Any) {
         let entered_username = userName.stringValue
         let keychain = KeychainWrapper(serviceName: "net.ro-z.connectstats")

@@ -33,6 +33,7 @@
 @interface FITGarminActivityWrapper ()
 @property (nonatomic,retain) NSDictionary * json;
 @property (nonatomic,retain) GCGarminActivityInterpret * interpert;
+@property (nonatomic,retain) NSDictionary<GCField*,GCActivitySummaryValue*> * cacheSummary;
 @end
 
 @implementation FITGarminActivityWrapper
@@ -60,4 +61,28 @@
 -(void)updateWith:(FITGarminActivityWrapper*)other{
     self.json = other.json;
 }
+
+-(NSArray<GCField*>*)allKeys{
+    if( ! self.cacheSummary){
+        self.cacheSummary = self.interpert.buildSummaryDataFromGarminModernData;
+    }
+    return self.cacheSummary.allKeys;
+}
+-(nullable GCActivitySummaryValue*)valueForField:(GCField *)field{
+    if( ! self.cacheSummary){
+        self.cacheSummary = self.interpert.buildSummaryDataFromGarminModernData;
+    }
+    return self.cacheSummary[field];
+}
+
+-(nullable GCActivitySummaryValue*)valueForFieldKey:(NSString *)fieldKey{
+    GCActivitySummaryValue activitySummaryValueForField:<#(NSString *)#> value:<#(GCNumberWithUnit *)#>
+    
+    if( ! self.cacheSummary){
+        self.cacheSummary = self.interpert.buildSummaryDataFromGarminModernData;
+    }
+    GCField * field = [GCField fieldForKey:fieldKey andActivityType:self.interpert.activityTypeAsString];
+    return  (field == nil ? nil : self.cacheSummary[field]);
+}
+
 @end

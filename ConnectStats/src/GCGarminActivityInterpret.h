@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GCGarminActivityInterpret : NSObject
 
 @property (nonatomic, readonly) GCActivityType * activityType;
+@property (nonatomic,readonly) NSString * activityTypeAsString;
 @property (nonatomic, readonly) NSString * activityId;
 
 +(GCGarminActivityInterpret*)interpret:(NSDictionary*)data usingDTOUnit:(BOOL)dtoUnits withTypes:(GCActivityTypes*)activityTypes;

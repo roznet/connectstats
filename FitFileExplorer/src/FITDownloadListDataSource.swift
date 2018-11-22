@@ -38,11 +38,18 @@ class FITDownloadListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSou
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let cellView =  tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DataCellView"), owner: self)
+        let cellView =  tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DownloadCellView"), owner: self)
         let to_display = self.list().object(at: UInt(row))
-        if let cellView = cellView as? NSTableCellView, let _ = tableColumn?.identifier.rawValue {
-            cellView.textField?.stringValue = to_display.activityId
-            //cellView.textField?.attributedStringValue = fieldDisplay
+        if let cellView = cellView as? NSTableCellView, let column = tableColumn?.identifier.rawValue {
+            cellView.textField?.stringValue = ""
+            if column == "activityId" {
+                cellView.textField?.stringValue = to_display.activityId
+                //cellView.textField?.attributedStringValue = fieldDisplay
+            }else{
+                if let value = to_display.value(forFieldKey: column) {
+                    cellView.textField?.stringValue =  value.formattedValue()
+                }
+            }
         }
         return cellView
     }

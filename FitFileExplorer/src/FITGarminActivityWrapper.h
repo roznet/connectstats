@@ -26,6 +26,8 @@
 
 
 #import <Foundation/Foundation.h>
+#import "GCField.h"
+#import "GCActivitySummaryValue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,6 +36,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(FITGarminActivityWrapper*)wrapperFor:(NSDictionary*)json;
 -(void)updateWith:(FITGarminActivityWrapper*)other;
+-(NSArray<GCField*>*)allKeys;
+-(nullable GCActivitySummaryValue*)valueForField:(GCField *)field;
+-(nullable GCActivitySummaryValue *)valueForFieldKey:(NSString *)key;
+
+
 @end
 
 NS_ASSUME_NONNULL_END
