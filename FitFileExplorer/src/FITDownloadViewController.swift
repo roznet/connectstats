@@ -45,7 +45,22 @@ class FITDownloadViewController: NSViewController {
     }
 
     @objc func downloadChanged(notification : Notification){
+        rebuildColumns()
         self.activityTable.reloadData()
+    }
+        
+    @IBAction func exportList(_ sender: Any) {
+    }
+        
+    @IBAction func downloadFITFile(_ sender: Any) {
+        let row = self.activityTable.selectedRow
+        if (row > -1) {
+            let act = dataSource.list().object(at: UInt(row)).activityId
+            
+            print("Download \(row) \(act)")
+        }else{
+            print("No selection, nothing to download")
+        }
     }
     
     override func viewWillAppear() {
@@ -86,5 +101,66 @@ class FITDownloadViewController: NSViewController {
         keychain.set(entered_password, forKey: "password")
         FITAppGlobal.configSet(kFITSettingsKeyPassword, stringVal: entered_password)
 
+    }
+    
+    func rebuildColumns(){
+        let samples = FITAppGlobal.downloadManager().samples()
+        
+        let columns : [NSTableColumn] = self.activityTable.tableColumns
+        
+        var existing: [NSUserInterfaceItemIdentifier:NSTableColumn] = [:]
+        
+        for col in columns {
+            existing[col.identifier] = col
+        }
+        
+        let required = dataSource.requiredTableColumnsIdentifiers()
+        
+        var valuekeys : [String] = Array(samples.keys)
+        
+        func sortKey(l:String,r:String) -> Bool {
+            if let fl = GCField(forKey: l, andActivityType: GC_TYPE_ALL)?.sortOrder(),
+                let fr = GCField(forKey: r, andActivityType: GC_TYPE_ALL)?.sortOrder() {
+                return fl < fr;
+            }else{
+                return l < r;
+            }
+        }
+        let orderedkeys = valuekeys.sorted(by: sortKey )
+        
+        let newcols = required + orderedkeys
+        
+        if newcols.count < columns.count{
+            var toremove :[NSTableColumn] = []
+            for item in required.count..<columns.count {
+                toremove.append(columns[item])
+            }
+            for item in toremove {
+                self.activityTable.removeTableColumn(item)
+            }
+        }
+        
+        var idx : Int = 0
+        for identifier in newcols {
+            var title = identifier
+            if !required.contains(title){
+                if let nice = GCField(forKey: identifier, andActivityType: GC_TYPE_ALL){
+                    title = nice.displayName()
+                }
+            }
+
+            if idx < columns.count {
+                let col = columns[idx];
+                
+                
+                col.title = title
+                col.identifier = NSUserInterfaceItemIdentifier(identifier)
+            }else{
+                let col = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(identifier))
+                col.title = title
+                self.activityTable.addTableColumn(col)
+            }
+            idx += 1
+        }
     }
 }

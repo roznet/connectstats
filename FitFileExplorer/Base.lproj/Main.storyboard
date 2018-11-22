@@ -1439,6 +1439,9 @@
                                                     </prototypeCellViews>
                                                 </tableColumn>
                                             </tableColumns>
+                                            <connections>
+                                                <outlet property="menu" destination="Le1-x8-u84" id="m9J-1F-PdL"/>
+                                            </connections>
                                         </tableView>
                                     </subviews>
                                 </clipView>
@@ -1477,6 +1480,25 @@
                     </connections>
                 </viewController>
                 <customObject id="h4n-hR-gLe" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <menu id="Le1-x8-u84">
+                    <items>
+                        <menuItem title="Download FIT File" id="0Dp-08-oy9">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="downloadFITFile:" target="1qV-F5-QB0" id="IBQ-wZ-5XT"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem title="Export List" id="YWd-D3-68K">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="exportList:" target="1qV-F5-QB0" id="aeh-9Y-VeW"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem title="Export All FIT files" id="htr-pu-ubZ">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                        </menuItem>
+                    </items>
+                </menu>
             </objects>
             <point key="canvasLocation" x="856" y="137"/>
         </scene>

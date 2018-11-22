@@ -45,6 +45,12 @@
     return self.list.count;
 }
 
+-(void)reorder{
+    [self.list sortUsingComparator:^(FITGarminActivityWrapper * left, FITGarminActivityWrapper * right){
+        return [right.time compare:left.time];
+    }];
+}
+
 -(void)merge:(FITGarminActivityListWrapper*)other{
     if( self.list == nil){
         self.list = [NSMutableArray array];
@@ -59,6 +65,8 @@
             [self.list addObject:one];
         }
     }
+    
+    [self reorder];
 }
 -(void)add:(FITGarminActivityWrapper*)one{
     if( self.list == nil){
@@ -85,5 +93,10 @@
             }
         }
     }
+    [self reorder];
 }
+-(NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(__unsafe_unretained id [])buffer count:(NSUInteger)len{
+    return [self.list countByEnumeratingWithState:state objects:buffer count:len];
+}
+
 @end

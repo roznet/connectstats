@@ -40,6 +40,10 @@ extern NSNotificationName kGarminDownloadChangeNotification;
 +(FITGarminDownloadManager*)manager;
 -(void)loadRawFiles;
 -(void)startDownload;
+
+-(NSArray<NSString*>*)allFields;
+-(NSDictionary<NSString*,GCNumberWithUnit*>*)samples;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -1,6 +1,6 @@
 //  MIT License
 //
-//  Created on 13/11/2018 for FitFileExplorer
+//  Created on 22/11/2018 for FitFileExplorer
 //
 //  Copyright (c) 2018 Brice Rosenzweig
 //
@@ -25,26 +25,8 @@
 
 
 
-#import <Foundation/Foundation.h>
-@import RZUtils;
+import UIKit
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface FITGarminActivityWrapper : NSObject
-
-@property (nonatomic,readonly) NSString * activityId;
-@property (nonatomic,readonly) NSString * activityType;
-@property (nonatomic,readonly) NSDate * time;
-@property (nonatomic,readonly) BOOL downloaded;
-@property (nonatomic,readonly) NSDictionary<NSString*,GCNumberWithUnit*> * summary;
-
-+(FITGarminActivityWrapper*)wrapperFor:(NSDictionary*)json;
--(void)updateWith:(FITGarminActivityWrapper*)other;
-
--(NSArray<NSString*>*)allKeys;
--(nullable GCNumberWithUnit *)valueForFieldKey:(NSString *)key;
-
-
-@end
-
-NS_ASSUME_NONNULL_END
+class FITGarminDownloadManager: NSObject {
+    
+}

@@ -26,6 +26,7 @@
 
 
 import Cocoa
+import RZUtils
 
 class FITDownloadListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource {
 
@@ -37,6 +38,10 @@ class FITDownloadListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSou
         return Int(self.list().count)
     }
     
+    func requiredTableColumnsIdentifiers() -> [String]{
+        return [ "activityId", "activityType", "time", "downloaded" ]
+    }
+    
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cellView =  tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DownloadCellView"), owner: self)
         let to_display = self.list().object(at: UInt(row))
@@ -44,10 +49,15 @@ class FITDownloadListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSou
             cellView.textField?.stringValue = ""
             if column == "activityId" {
                 cellView.textField?.stringValue = to_display.activityId
-                //cellView.textField?.attributedStringValue = fieldDisplay
+            }else if( column == "activityType" ){
+                cellView.textField?.stringValue = to_display.activityType
+            }else if( column == "time" ){
+                cellView.textField?.stringValue = to_display.time.description
+            }else if( column == "downloaded" ){
+                cellView.textField?.stringValue = ""
             }else{
                 if let value = to_display.value(forFieldKey: column) {
-                    cellView.textField?.stringValue =  value.formattedValue()
+                    cellView.textField?.stringValue =  value.formatDouble()
                 }
             }
         }

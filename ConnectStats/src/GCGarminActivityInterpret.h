@@ -41,6 +41,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSMutableDictionary*)buildSummaryDataFromGarminModernData;
 -(CLLocationCoordinate2D)buildCoordinateFromGarminModernData;
+-(NSDate*)dateFor:(NSString*)field;
+-(NSDate*)startDate;
 
 @end
 

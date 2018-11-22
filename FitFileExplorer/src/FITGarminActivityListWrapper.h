@@ -30,7 +30,7 @@
 NS_ASSUME_NONNULL_BEGIN
 @class FITGarminActivityWrapper;
 
-@interface FITGarminActivityListWrapper : NSObject
+@interface FITGarminActivityListWrapper : NSObject<NSFastEnumeration>
 
 @property (nonatomic,readonly) NSUInteger count;
 

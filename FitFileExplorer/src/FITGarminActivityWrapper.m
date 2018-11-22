@@ -33,7 +33,9 @@
 @interface FITGarminActivityWrapper ()
 @property (nonatomic,retain) NSDictionary * json;
 @property (nonatomic,retain) GCGarminActivityInterpret * interpert;
-@property (nonatomic,retain) NSDictionary<GCField*,GCActivitySummaryValue*> * cacheSummary;
+@property (nonatomic,retain) NSDictionary<NSString*,GCNumberWithUnit*> * cacheSummary;
+@property (nonatomic,retain) NSDate * time;
+
 @end
 
 @implementation FITGarminActivityWrapper
@@ -50,7 +52,7 @@
     }
     rv.json = pruned;
     rv.interpert = [GCGarminActivityInterpret interpret:rv.json usingDTOUnit:false withTypes:[FITAppGlobal activityTypes]];
-    //NSLog(@"Added %@: %lu/%lu", rv.activityId, (unsigned long)pruned.count, (unsigned long)json.count);
+    rv.time = rv.interpert.startDate;
     
     return rv;
 }
@@ -58,31 +60,32 @@
 -(NSString*)activityId{
     return [self.json[@"activityId"] stringValue] ?: @"";
 }
+
+-(NSString*)activityType{
+    return self.interpert.activityTypeAsString;
+}
+
+-(BOOL)downloaded{
+    return false;
+}
+
 -(void)updateWith:(FITGarminActivityWrapper*)other{
     self.json = other.json;
 }
 
--(NSArray<GCField*>*)allKeys{
+-(NSDictionary*)summary{
     if( ! self.cacheSummary){
         self.cacheSummary = self.interpert.buildSummaryDataFromGarminModernData;
     }
-    return self.cacheSummary.allKeys;
-}
--(nullable GCActivitySummaryValue*)valueForField:(GCField *)field{
-    if( ! self.cacheSummary){
-        self.cacheSummary = self.interpert.buildSummaryDataFromGarminModernData;
-    }
-    return self.cacheSummary[field];
+    return self.cacheSummary;
 }
 
--(nullable GCActivitySummaryValue*)valueForFieldKey:(NSString *)fieldKey{
-    GCActivitySummaryValue activitySummaryValueForField:<#(NSString *)#> value:<#(GCNumberWithUnit *)#>
-    
-    if( ! self.cacheSummary){
-        self.cacheSummary = self.interpert.buildSummaryDataFromGarminModernData;
-    }
-    GCField * field = [GCField fieldForKey:fieldKey andActivityType:self.interpert.activityTypeAsString];
-    return  (field == nil ? nil : self.cacheSummary[field]);
+-(NSArray<NSString*>*)allKeys{
+    return self.summary.allKeys;
+}
+
+-(GCNumberWithUnit*)valueForFieldKey:(NSString *)key{
+    return self.summary[key];
 }
 
 @end

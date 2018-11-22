@@ -31,6 +31,7 @@
 #import "GCGarminLoginSSORequest.h"
 #import "FITGarminRequestActivityList.h"
 #import "FITGarminActivityListWrapper.h"
+#import "FITGarminActivityWrapper.h"
 
 NSNotificationName kGarminDownloadChangeNotification = @"kGarminDownloadChangeNotification";
 
@@ -106,5 +107,21 @@ NSNotificationName kGarminDownloadChangeNotification = @"kGarminDownloadChangeNo
     }
     self.list = list;
     [[NSNotificationCenter defaultCenter] postNotificationName:kGarminDownloadChangeNotification object:self];
+    NSArray<NSString*>*fields = [self allFields];
+
+    
+    NSLog(@"%@", @( fields.count));
+}
+
+-(NSDictionary<NSString*,GCNumberWithUnit*>*)samples{
+    NSMutableDictionary * fields = [NSMutableDictionary dictionary];
+    for (FITGarminActivityWrapper * one in self.list) {
+        [fields addEntriesFromDictionary:one.summary];
+    }
+    return fields;
+}
+
+-(NSArray<NSString*>*)allFields{
+    return self.samples.allKeys;
 }
 @end
