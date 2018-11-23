@@ -27,14 +27,14 @@
 
 #import "FITGarminRequestActivityList.h"
 #import "GCWebUrl.h"
-
+#import "FITAppGlobal.h"
+#import "FitFileExplorer-Swift.h"
 
 const NSUInteger kActivityRequestCount = 20;
 
 
 @interface FITGarminRequestActivityList ()
 
-@property (nonatomic,assign) NSUInteger reachedExisting;
 @property (nonatomic,assign) BOOL reloadAll;
 @property (nonatomic,assign) NSUInteger start;
 @property (nonatomic,retain) NSDate * lastFoundDate;
@@ -108,10 +108,9 @@ const NSUInteger kActivityRequestCount = 20;
     if ([self checkNoErrors]) {
         self.status = GCWebStatusOK;
         [self.delegate loginSuccess:gcWebServiceGarmin];
-        NSData * data = [self.theString dataUsingEncoding:self.encoding];
-        NSError * err = nil;
-        NSDictionary * list = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&err];
-        NSLog(@"List %@", @(list.count));
+        
+        self.parsedCount = [[FITAppGlobal downloadManager] loadOneFileWithFilePath:[RZFileOrganizer writeableFilePath:[self searchFileNameForPage:(int)_start]]];
+        
     }
     
     [self performSelectorOnMainThread:@selector(processRegister) withObject:nil waitUntilDone:NO];
@@ -119,7 +118,7 @@ const NSUInteger kActivityRequestCount = 20;
 
 -(void)processRegister{
     if (self.status == GCWebStatusOK) {
-        if ( (_reloadAll || _reachedExisting < kActivityRequestCount) && self.parsedCount > 0) {
+        if ( (_reloadAll || self.parsedCount == kActivityRequestCount) && self.parsedCount > 0) {
             self.nextReq = [[FITGarminRequestActivityList alloc] initNextWith:self];
         }
     }

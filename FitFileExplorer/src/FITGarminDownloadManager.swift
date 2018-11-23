@@ -25,8 +25,93 @@
 
 
 
-import UIKit
+import Cocoa
 
-class FITGarminDownloadManager: NSObject {
+class FITGarminDownloadManager: NSObject,RZChildObject {
+    struct Notifications {
+        static let garminDownloadChange = Notification.Name("garminDownloadChange")
+    }
+    
+    let list : FITGarminActivityListWrapper
+    var loginSuccessful : Bool
+    
+    override init() {
+        loginSuccessful = false
+        list = FITGarminActivityListWrapper()
+        super.init()
+        FITAppGlobal.web().attach(self)
+        //self.loadRawFiles()
+    }
+    deinit {
+        FITAppGlobal.web().detach(self)
+    }
+    
+    func notifyCallBack(_ theParent: Any!, info theInfo: RZDependencyInfo!) {
+        
+        if theInfo.stringInfo == NOTIFY_END {
+            NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.garminDownloadChange, object: self)
+        }else if theInfo.stringInfo == NOTIFY_NEXT {
+            NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.garminDownloadChange, object: self)
+        }else if theInfo.stringInfo == NOTIFY_ERROR {
+            
+        }
+    }
+    
+    func startDownload(){
+        FITAppGlobal.web().attach(self)
+        
+        if( self.loginSuccessful != true ){
+            let login = FITAppGlobal.currentLoginName()
+            let passd = FITAppGlobal.currentPassword()
+            
+            FITAppGlobal.web().addRequest(GCGarminLoginSSORequest(user: login, andPwd: passd))
+        }
+        FITAppGlobal.web().addRequest(FITGarminRequestActivityList(start: 0, andMode: false))
+    }
+    
+    @objc func loadOneFile(filePath : String) -> UInt {
+        var rv :UInt = 0
+        
+        do {
+            let jsonData = try Data(contentsOf: URL(fileURLWithPath: filePath))
+            
+            let json = try JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.allowFragments)
+            
+            if let jsonDict = json as? [String:Any],
+                let alist = jsonDict["activityList"] as? [[AnyHashable:Any]]{
+                rv = self.list.addJson(alist)
+            }
+        }catch{
+        }
+        return rv
+    }
+    
+    func loadRawFiles() {
+        let files = RZFileOrganizer.writeableFiles { (s) -> Bool in
+            s.hasPrefix("last_modern_search")
+        }
+        
+        for fn in files {
+            _ = self.loadOneFile(filePath: RZFileOrganizer.writeableFilePath(fn))
+        }
+        
+        NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.garminDownloadChange, object: self)
+    }
+    
+    func samples() -> [String:GCNumberWithUnit] {
+        var fields : [String:GCNumberWithUnit] = [:]
+        for one in self.list {
+            if let one = one as? FITGarminActivityWrapper {
+                one.summary.forEach { ( k,v) in fields[k] = v }
+            }
+        }
+        return fields
+    }
+    
+    func allFields() -> [String] {
+        return Array(self.samples().keys)
+    }
     
 }
+
+

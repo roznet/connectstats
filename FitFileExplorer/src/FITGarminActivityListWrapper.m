@@ -68,7 +68,16 @@
     
     [self reorder];
 }
--(void)add:(FITGarminActivityWrapper*)one{
+
+/**
+ Add one activity to the list
+
+ @param one activity
+ @return true if new activity, false otherwise
+ */
+-(BOOL)add:(FITGarminActivityWrapper*)one{
+    BOOL rv = false;
+    
     if( self.list == nil){
         self.list = [NSMutableArray array];
         self.map  = [NSMutableDictionary dictionary];
@@ -80,20 +89,24 @@
     }else{
         [self.list addObject:one];
         self.map[one.activityId] = one;
+        rv = true;
     }
+    return rv;
 }
 
--(void)addJson:(NSArray<NSDictionary*>*)jsonList{
+-(NSUInteger)addJson:(NSArray<NSDictionary*>*)jsonList{
+    NSUInteger rv = 0;
     if( [jsonList isKindOfClass:[NSArray class]]){
         
         for (NSDictionary * dict in jsonList) {
             if( [dict isKindOfClass:[NSDictionary class]]){
                 FITGarminActivityWrapper * one = [FITGarminActivityWrapper wrapperFor:dict];
-                [self add:one];
+                rv += [self add:one] ? 1 : 0;
             }
         }
     }
     [self reorder];
+    return rv;
 }
 -(NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(__unsafe_unretained id [])buffer count:(NSUInteger)len{
     return [self.list countByEnumeratingWithState:state objects:buffer count:len];

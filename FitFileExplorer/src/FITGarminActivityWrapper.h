@@ -37,6 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,readonly) NSDate * time;
 @property (nonatomic,readonly) BOOL downloaded;
 @property (nonatomic,readonly) NSDictionary<NSString*,GCNumberWithUnit*> * summary;
+@property (nonatomic,readonly) NSDictionary*json;
 
 +(FITGarminActivityWrapper*)wrapperFor:(NSDictionary*)json;
 -(void)updateWith:(FITGarminActivityWrapper*)other;

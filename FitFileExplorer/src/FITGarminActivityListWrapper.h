@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(FITGarminActivityWrapper*)objectAtIndex:(NSUInteger)index;
 
--(void)addJson:(NSArray<NSDictionary*>*)jsonList;
+-(NSUInteger)addJson:(NSArray<NSDictionary*>*)jsonList;
 
 -(void)merge:(FITGarminActivityListWrapper*)other;
 

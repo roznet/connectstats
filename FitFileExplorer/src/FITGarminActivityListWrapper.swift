@@ -1,6 +1,6 @@
 //  MIT License
 //
-//  Created on 12/11/2018 for FitFileExplorer
+//  Created on 22/11/2018 for FitFileExplorer
 //
 //  Copyright (c) 2018 Brice Rosenzweig
 //
@@ -25,25 +25,10 @@
 
 
 
-#import <Foundation/Foundation.h>
-@import RZUtils;
+import Foundation
 
-NS_ASSUME_NONNULL_BEGIN
-
-@class FITGarminActivityListWrapper;
-extern NSNotificationName kGarminDownloadChangeNotification;
-
-@interface FITGarminDownloadManager : NSObject<RZChildObject>
-
-@property (nonatomic,readonly) FITGarminActivityListWrapper * list;
-
-+(FITGarminDownloadManager*)manager;
--(void)loadRawFiles;
--(void)startDownload;
-
--(NSArray<NSString*>*)allFields;
--(NSDictionary<NSString*,GCNumberWithUnit*>*)samples;
-
-@end
-
-NS_ASSUME_NONNULL_END
+extension FITGarminActivityListWrapper : Sequence {
+    public func makeIterator() -> NSFastEnumerationIterator {
+        return NSFastEnumerationIterator(self)
+    }
+}

@@ -20,9 +20,10 @@
 #import "GCMapAnnotation.h"
 #import "GCActivityTypes.h"
 #import "GCActivityType.h"
-#import "FITGarminDownloadManager.h"
 #import "FITGarminActivityListWrapper.h"
 #import "FITGarminActivityWrapper.h"
+#import "GCGarminLoginSSORequest.h"
+#import "FITGarminRequestActivityList.h"
 
 #import "GCWebConnect.h"
 #import "FITAppGlobal.h"

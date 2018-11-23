@@ -67,7 +67,7 @@ class FITDownloadViewController: NSViewController {
         super.viewWillAppear()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(downloadChanged(notification:)),
-                                               name: NSNotification.Name.garminDownloadChange,
+                                               name: FITGarminDownloadManager.Notifications.garminDownloadChange,
                                                object: nil)
         
         let keychain = KeychainWrapper(serviceName: "net.ro-z.connectstats")
