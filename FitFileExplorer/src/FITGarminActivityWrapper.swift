@@ -1,6 +1,6 @@
 //  MIT License
 //
-//  Created on 18/11/2018 for FitFileExplorer
+//  Created on 26/11/2018 for FitFileExplorer
 //
 //  Copyright (c) 2018 Brice Rosenzweig
 //
@@ -25,23 +25,8 @@
 
 
 
-#import <Foundation/Foundation.h>
+import Cocoa
 
-NS_ASSUME_NONNULL_BEGIN
-@class FITGarminActivityWrapper;
-
-@interface FITGarminActivityListWrapper : NSObject<NSFastEnumeration>
-
-
-@property (nonatomic,readonly) NSArray<FITGarminActivityWrapper*>*list;
-@property (nonatomic,readonly) NSUInteger count;
-
--(FITGarminActivityWrapper*)objectAtIndexedSubscript:(NSUInteger)index;
-
--(NSUInteger)addJson:(NSArray<NSDictionary*>*)jsonList;
-
--(void)merge:(FITGarminActivityListWrapper*)other;
-
-@end
-
-NS_ASSUME_NONNULL_END
+extension FITGarminActivityWrapper {
+    
+}

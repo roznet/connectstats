@@ -72,7 +72,7 @@
  @param dtoUnits true if data cames from summaryDTO dictionary (as some units are different)
  @return dictionary field -> summary data
  */
--(NSMutableDictionary*)buildSummaryDataFromGarminModernData{
+-(NSDictionary<NSString*,GCNumberWithUnit*>*)buildSummaryDataFromGarminModernData{
     NSDictionary * data = self.data;
     BOOL dtoUnitsFlag = self.dtoUnits;
     

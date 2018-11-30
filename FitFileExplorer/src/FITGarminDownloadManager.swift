@@ -94,7 +94,11 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
         for fn in files {
             _ = self.loadOneFile(filePath: RZFileOrganizer.writeableFilePath(fn))
         }
-        
+        //_ = self.list.buildColumnView()
+        if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("row.db")){
+            db.open()
+            self.list.saveRowView(db: db)
+        }
         NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.garminDownloadChange, object: self)
     }
     

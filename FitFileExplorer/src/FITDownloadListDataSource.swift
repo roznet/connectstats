@@ -44,7 +44,7 @@ class FITDownloadListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSou
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cellView =  tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DownloadCellView"), owner: self)
-        let to_display = self.list().object(at: UInt(row))
+        let to_display = self.list()[UInt(row)]
         if let cellView = cellView as? NSTableCellView, let column = tableColumn?.identifier.rawValue {
             cellView.textField?.stringValue = ""
             if column == "activityId" {
@@ -56,7 +56,7 @@ class FITDownloadListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSou
             }else if( column == "downloaded" ){
                 cellView.textField?.stringValue = ""
             }else{
-                if let value = to_display.value(forFieldKey: column) {
+                if let value = to_display[column] {
                     cellView.textField?.stringValue =  value.formatDouble()
                 }
             }

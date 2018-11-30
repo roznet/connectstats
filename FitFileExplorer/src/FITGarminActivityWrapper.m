@@ -84,7 +84,7 @@
     return self.summary.allKeys;
 }
 
--(GCNumberWithUnit*)valueForFieldKey:(NSString *)key{
+-(GCNumberWithUnit*)objectForKeyedSubscript:(NSString *)key{
     return self.summary[key];
 }
 

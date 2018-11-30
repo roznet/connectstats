@@ -1,6 +1,6 @@
 //  MIT License
 //
-//  Created on 18/11/2018 for FitFileExplorer
+//  Created on 26/11/2018 for FitFileExplorer
 //
 //  Copyright (c) 2018 Brice Rosenzweig
 //
@@ -25,23 +25,30 @@
 
 
 
-#import <Foundation/Foundation.h>
+import Cocoa
 
-NS_ASSUME_NONNULL_BEGIN
-@class FITGarminActivityWrapper;
+class FITTimeSerieColumn: NSObject {
 
-@interface FITGarminActivityListWrapper : NSObject<NSFastEnumeration>
-
-
-@property (nonatomic,readonly) NSArray<FITGarminActivityWrapper*>*list;
-@property (nonatomic,readonly) NSUInteger count;
-
--(FITGarminActivityWrapper*)objectAtIndexedSubscript:(NSUInteger)index;
-
--(NSUInteger)addJson:(NSArray<NSDictionary*>*)jsonList;
-
--(void)merge:(FITGarminActivityListWrapper*)other;
-
-@end
-
-NS_ASSUME_NONNULL_END
+    var unit : GCUnit = GCUnit.dimensionless()
+    var data : [Double] = []
+    var dates : [Date] = []
+    
+    func add(number : GCNumberWithUnit, forDate : Date){
+        let converted = number
+        if self.unit != converted.unit{
+            if( self.data.count == 0){
+                self.unit = converted.unit
+            }else{
+                converted.convert(to: self.unit)
+            }
+        }
+        
+        if dates.count == 0 || dates.last! < forDate {
+            data.append(converted.value)
+            dates.append(forDate)
+        }else if( dates.first! > forDate){
+            data.insert(converted.value, at: 0)
+            dates.insert(forDate, at: 0)
+        }
+    }
+}

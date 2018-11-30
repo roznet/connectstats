@@ -80,7 +80,7 @@
             }
             
             if( object ){
-                if (@available(iOS 12.0, *)) {
+                if (@available(iOS 12.0, macOS 10.14, *)) {
                     success = [[NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:error] writeToFile:filepath atomically:YES];
                 } else {
                     success = [NSKeyedArchiver archiveRootObject:object toFile:filepath];

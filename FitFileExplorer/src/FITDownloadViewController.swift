@@ -49,13 +49,20 @@ class FITDownloadViewController: NSViewController {
         self.activityTable.reloadData()
     }
         
+    @IBAction func downloadSamples(_ sender: Any) {
+        activityTable.dataSource = self.dataSource
+        activityTable.delegate = self.dataSource
+        FITAppGlobal.downloadManager().loadRawFiles()
+
+    }
+    
     @IBAction func exportList(_ sender: Any) {
     }
         
     @IBAction func downloadFITFile(_ sender: Any) {
         let row = self.activityTable.selectedRow
         if (row > -1) {
-            let act = dataSource.list().object(at: UInt(row)).activityId
+            let act = dataSource.list()[UInt(row)].activityId
             
             print("Download \(row) \(act)")
         }else{

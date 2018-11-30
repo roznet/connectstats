@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)updateWith:(FITGarminActivityWrapper*)other;
 
 -(NSArray<NSString*>*)allKeys;
--(nullable GCNumberWithUnit *)valueForFieldKey:(NSString *)key;
+-(nullable GCNumberWithUnit *)objectForKeyedSubscript:(NSString *)key;
 
 
 @end

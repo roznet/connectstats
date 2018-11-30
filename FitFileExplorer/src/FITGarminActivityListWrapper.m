@@ -30,30 +30,32 @@
 
 @interface FITGarminActivityListWrapper ()
 
-@property (nonatomic,retain) NSMutableArray<FITGarminActivityWrapper*>*list;
+@property (nonatomic,retain) NSMutableArray<FITGarminActivityWrapper*>*mlist;
 @property (nonatomic,retain) NSMutableDictionary<NSString*,FITGarminActivityWrapper*>*map;
 
 @end
 
 @implementation FITGarminActivityListWrapper
 
--(FITGarminActivityWrapper*)objectAtIndex:(NSUInteger)index{
+-(FITGarminActivityWrapper*)objectAtIndexedSubscript:(NSUInteger)index{
     return self.list[index];
 }
 
 -(NSUInteger)count{
     return self.list.count;
 }
-
+-(NSArray<FITGarminActivityWrapper*>*)list{
+    return self.mlist;
+}
 -(void)reorder{
-    [self.list sortUsingComparator:^(FITGarminActivityWrapper * left, FITGarminActivityWrapper * right){
+    [self.mlist sortUsingComparator:^(FITGarminActivityWrapper * left, FITGarminActivityWrapper * right){
         return [right.time compare:left.time];
     }];
 }
 
 -(void)merge:(FITGarminActivityListWrapper*)other{
-    if( self.list == nil){
-        self.list = [NSMutableArray array];
+    if( self.mlist == nil){
+        self.mlist = [NSMutableArray array];
         self.map  = [NSMutableDictionary dictionary];
     }
 
@@ -62,7 +64,7 @@
         if( found ){
             [found updateWith:one];
         }else{
-            [self.list addObject:one];
+            [self.mlist addObject:one];
         }
     }
     
@@ -78,8 +80,8 @@
 -(BOOL)add:(FITGarminActivityWrapper*)one{
     BOOL rv = false;
     
-    if( self.list == nil){
-        self.list = [NSMutableArray array];
+    if( self.mlist == nil){
+        self.mlist = [NSMutableArray array];
         self.map  = [NSMutableDictionary dictionary];
     }
 
@@ -87,7 +89,7 @@
     if( found ){
         [found updateWith:one];
     }else{
-        [self.list addObject:one];
+        [self.mlist addObject:one];
         self.map[one.activityId] = one;
         rv = true;
     }
@@ -109,7 +111,7 @@
     return rv;
 }
 -(NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(__unsafe_unretained id [])buffer count:(NSUInteger)len{
-    return [self.list countByEnumeratingWithState:state objects:buffer count:len];
+    return [self.mlist countByEnumeratingWithState:state objects:buffer count:len];
 }
 
 @end

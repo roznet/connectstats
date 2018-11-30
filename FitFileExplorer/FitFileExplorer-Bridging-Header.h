@@ -24,6 +24,7 @@
 #import "FITGarminActivityWrapper.h"
 #import "GCGarminLoginSSORequest.h"
 #import "FITGarminRequestActivityList.h"
+#import "GCGarminActivityInterpret.h"
 
 #import "GCWebConnect.h"
 #import "FITAppGlobal.h"

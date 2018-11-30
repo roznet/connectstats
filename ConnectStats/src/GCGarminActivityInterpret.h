@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(GCGarminActivityInterpret*)interpret:(NSDictionary*)data usingDTOUnit:(BOOL)dtoUnits withTypes:(GCActivityTypes*)activityTypes;
 
--(NSMutableDictionary*)buildSummaryDataFromGarminModernData;
+-(NSDictionary<NSString*,GCNumberWithUnit*>*)buildSummaryDataFromGarminModernData;
 -(CLLocationCoordinate2D)buildCoordinateFromGarminModernData;
 -(NSDate*)dateFor:(NSString*)field;
 -(NSDate*)startDate;
