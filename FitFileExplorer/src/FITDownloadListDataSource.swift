@@ -54,7 +54,7 @@ class FITDownloadListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSou
             }else if( column == "time" ){
                 cellView.textField?.stringValue = to_display.time.description
             }else if( column == "downloaded" ){
-                cellView.textField?.stringValue = ""
+                cellView.textField?.stringValue = to_display.downloaded ? "yes" : ""
             }else{
                 if let value = to_display[column] {
                     cellView.textField?.stringValue =  value.formatDouble()
