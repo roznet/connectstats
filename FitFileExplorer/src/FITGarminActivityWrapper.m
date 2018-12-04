@@ -66,7 +66,11 @@
 }
 
 -(BOOL)downloaded{
-    return [RZFileOrganizer writeableFilePathIfExists: [NSString stringWithFormat:@"%@.fit", self.activityId]] != nil;
+    return self.fitFilePath != nil;
+}
+
+-(NSString*)fitFilePath{
+    return [RZFileOrganizer writeableFilePathIfExists: [NSString stringWithFormat:@"%@.fit", self.activityId]];
 }
 
 -(void)updateWith:(FITGarminActivityWrapper*)other{

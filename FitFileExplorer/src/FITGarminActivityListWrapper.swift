@@ -28,6 +28,7 @@
 import Foundation
 
 extension FITGarminActivityListWrapper : Sequence {
+    
     public func makeIterator() -> NSFastEnumerationIterator {
         return NSFastEnumerationIterator(self)
     }

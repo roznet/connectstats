@@ -36,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,readonly) NSString * activityType;
 @property (nonatomic,readonly) NSDate * time;
 @property (nonatomic,readonly) BOOL downloaded;
+@property (nonatomic,readonly,nullable) NSString * fitFilePath;
 @property (nonatomic,readonly) NSDictionary<NSString*,GCNumberWithUnit*> * summary;
 @property (nonatomic,readonly) NSDictionary*json;
 

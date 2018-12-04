@@ -42,6 +42,39 @@ class FITFitFileInterpret: NSObject {
         return rv
     }
     
+    typealias DataSerieColumns = (times:[Date], values:[GCField:[GCNumberWithUnit]], gps:[CLLocationCoordinate2D])
+    
+    func columnDataSeries(message: String) -> DataSerieColumns {
+        var units : [GCField:GCUnit] = [:]
+        var values : [GCField:[GCNumberWithUnit]] = [:]
+        var times : [Date] = []
+        var gps : [CLLocationCoordinate2D] = []
+        
+        if let messages : FITFitMessage = self.fitFile[message] {
+            for msg in messages {
+                if let messagefields = msg as? FITFitMessageFields {
+                    let summary = self.summaryValues(fitMessageFields: messagefields)
+                    for field in summary {
+                        var unit = units[field.key]
+                        if unit == nil{
+                            unit = field.value.numberWithUnit.unit
+                            units[field.key] = unit
+                        }
+                        var doubles = rv[field.key]
+                        if doubles == nil {
+                            doubles = []
+                            rv[field.key] = doubles
+                        }
+                        rv[field.key]?.append(field.value.numberWithUnit.convert(to: unit!))
+                    }
+                    
+                    times.append(messagefields)
+                }
+            }
+        }
+        return rv
+    }
+    
     /// Extract a data serie for a message and a field
     ///
     /// - Parameters:

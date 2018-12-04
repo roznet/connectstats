@@ -57,6 +57,23 @@ class FITDownloadViewController: NSViewController {
     }
     
     @IBAction func exportList(_ sender: Any) {
+        for one  in self.dataSource.list() {
+            if let activity = one as? FITGarminActivityWrapper {
+                if activity.activityId == "3137094437"{
+                    print("Found")
+                }
+                
+                if let path = activity.fitFilePath,
+                    let decode = FITFitFileDecode(forFile: path){
+                    decode.parse()
+                    if  let fitFile = decode.fitFile {
+                        let interpret = FITFitFileInterpret(fitFile: fitFile)
+                        let cols = interpret.columnDataSeries(message: "record")
+                        print( "\(activity.activityId): \(cols.count)" )
+                    }
+                }
+            }
+        }
     }
         
     @IBAction func downloadFITFile(_ sender: Any) {
