@@ -69,7 +69,7 @@ class FITDownloadViewController: NSViewController {
                     if  let fitFile = decode.fitFile {
                         let interpret = FITFitFileInterpret(fitFile: fitFile)
                         let cols = interpret.columnDataSeries(message: "record")
-                        print( "\(activity.activityId): \(cols.count)" )
+                        print( "\(activity.activityId): \(cols.gps.count) \(cols.times.count), \(cols.values.count)" )
                     }
                 }
             }

@@ -53,26 +53,33 @@ class FITFitFileInterpret: NSObject {
         if let messages : FITFitMessage = self.fitFile[message] {
             for msg in messages {
                 if let messagefields = msg as? FITFitMessageFields {
-                    let summary = self.summaryValues(fitMessageFields: messagefields)
-                    for field in summary {
-                        var unit = units[field.key]
-                        if unit == nil{
-                            unit = field.value.numberWithUnit.unit
-                            units[field.key] = unit
+                    if let time  = messagefields["timestamp"]?.dateValue {
+                        times.append(time)
+                        
+                        if let coord = messagefields["position"]?.locationValue {
+                            gps.append(coord.coordinate)
                         }
-                        var doubles = rv[field.key]
-                        if doubles == nil {
-                            doubles = []
-                            rv[field.key] = doubles
+                        
+                        let summary = self.summaryValues(fitMessageFields: messagefields)
+                        for field in summary {
+                            var unit = units[field.key]
+                            if unit == nil{
+                                unit = field.value.numberWithUnit.unit
+                                units[field.key] = unit
+                            }
+                            var doubles = values[field.key]
+                            if doubles == nil {
+                                doubles = []
+                                values[field.key] = doubles
+                            }
+                            values[field.key]?.append(field.value.numberWithUnit.convert(to: unit!))
                         }
-                        rv[field.key]?.append(field.value.numberWithUnit.convert(to: unit!))
                     }
-                    
-                    times.append(messagefields)
                 }
             }
         }
-        return rv
+        
+        return (times:times,values:values,gps:gps)
     }
     
     /// Extract a data serie for a message and a field
