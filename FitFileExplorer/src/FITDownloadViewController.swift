@@ -37,10 +37,10 @@ extension Date {
 }
 extension GCField {
     func columnName() -> String {
-        return self.key + "_" + self.activityType
+        return self.key + ":" + self.activityType
     }
     func fileName(activityId : String) -> String {
-        return activityId + "_" + self.columnName()
+        return activityId + "_" + self.key + "_" + self.activityType
     }
 }
 
@@ -86,33 +86,34 @@ class FITDownloadViewController: NSViewController {
                         let cols = interpret.columnDataSeries(message: "record")
                         
                         for (key,values) in cols.values {
+                            var dcols =  [ ["activityId","time",key.columnName(),"uom"].joined(separator: ",") ]
+                            
+                            for val in values {
+                                let row = [activity.activityId,val.time.formatAsRFC3339(),"\(val.value.value)",val.value.unit.key]
+                                dcols.append(row.joined(separator: ","))
+                            }
+                            
                             if( units[ key.columnName() ] == nil){
-                                if let first = values.first {
+                                if let first = values.first?.value {
                                     units[key.columnName()] = first.unit
                                 }
                             }
-                        }
-                        
-                        for (offset,time) in cols.times.enumerated() {
-                            for( key,values ) in cols.values {
-                                var val = values[offset]
-                                if let unit = units[key.columnName()] {
-                                    val = val.convert(to: unit)
-                                }
-                                if( columns[key] == nil ){
-                                    columns[key] = [ ["time","activityId", key.columnName(), "uom"].joined(separator: ",") ]
-                                }
-                                
-                                columns[key]?.append( [time.formatAsRFC3339(), activity.activityId, val.formatDoubleNoUnits(), val.unit.key].joined(separator: ","))
-                            }
-                        }
-                        for (key,value) in columns {
                             let fn = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(key.fileName(activityId: activity.activityId) + ".csv"))
                             do {
-                                try value.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
+                                try dcols.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
                             }catch { }
-                            
                         }
+                        
+                        
+                        let fn = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath("position_" + activity.activityId + "_" + activity.activityType + ".csv"))
+                        do {
+                            let grows = cols.gps.map { tup in
+                                [ activity.activityId, tup.time.formatAsRFC3339(), "\(tup.location.latitude)", "\(tup.location.longitude)"].joined( separator: "," )
+                            }
+                            try grows.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
+                        }catch { }
+                        
+                        
                     }
                 }
             }

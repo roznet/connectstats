@@ -42,13 +42,15 @@ class FITFitFileInterpret: NSObject {
         return rv
     }
     
-    typealias DataSerieColumns = (times:[Date], values:[GCField:[GCNumberWithUnit]], gps:[CLLocationCoordinate2D])
+    typealias NumberPoint = (time:Date, value:GCNumberWithUnit)
+    typealias GPSPoint = (time:Date, location:CLLocationCoordinate2D)
+    typealias DataSerieColumns = (values:[GCField:[NumberPoint]], gps:[GPSPoint])
     
     func columnDataSeries(message: String) -> DataSerieColumns {
         var units : [GCField:GCUnit] = [:]
-        var values : [GCField:[GCNumberWithUnit]] = [:]
+        var values : [GCField:[NumberPoint]] = [:]
         var times : [Date] = []
-        var gps : [CLLocationCoordinate2D] = []
+        var gps : [GPSPoint] = []
         
         if let messages : FITFitMessage = self.fitFile[message] {
             for msg in messages {
@@ -57,7 +59,7 @@ class FITFitFileInterpret: NSObject {
                         times.append(time)
                         
                         if let coord = messagefields["position"]?.locationValue {
-                            gps.append(coord.coordinate)
+                            gps.append( (time: time, location:coord.coordinate) )
                         }
                         
                         let summary = self.summaryValues(fitMessageFields: messagefields)
@@ -72,14 +74,15 @@ class FITFitFileInterpret: NSObject {
                                 doubles = []
                                 values[field.key] = doubles
                             }
-                            values[field.key]?.append(field.value.numberWithUnit.convert(to: unit!))
+                            let converted = field.value.numberWithUnit.convert(to: unit!)
+                            values[field.key]?.append( (time:time, value:converted))
                         }
                     }
                 }
             }
         }
         
-        return (times:times,values:values,gps:gps)
+        return (values:values,gps:gps)
     }
     
     /// Extract a data serie for a message and a field
