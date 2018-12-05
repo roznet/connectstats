@@ -40,6 +40,7 @@ const NSUInteger kActivityRequestCount = 20;
 @property (nonatomic,retain) NSDate * lastFoundDate;
 @property (nonatomic,assign) NSUInteger parsedCount;
 
+
 @end
 
 @implementation FITGarminRequestActivityList

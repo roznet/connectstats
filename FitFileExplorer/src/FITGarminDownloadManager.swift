@@ -46,6 +46,21 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
         FITAppGlobal.web().detach(self)
     }
     
+    
+    func clear(){
+        self.list.clear()
+    }
+    func loadFromFile() {
+        if( FITAppGlobal.currentLoginName().count > 0 ){
+            list.load(fromJson: RZFileOrganizer.writeableFilePath(FITAppGlobal.currentLoginName()+".json"))
+        }
+    }
+    func saveToFile(){
+        if( FITAppGlobal.currentLoginName().count > 0){
+            self.list.save(asJson: RZFileOrganizer.writeableFilePath(FITAppGlobal.currentLoginName()+".json"))
+        }
+    }
+    
     func notifyCallBack(_ theParent: Any!, info theInfo: RZDependencyInfo!) {
         
         if theInfo.stringInfo == NOTIFY_END {
@@ -95,10 +110,12 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
             _ = self.loadOneFile(filePath: RZFileOrganizer.writeableFilePath(fn))
         }
         //_ = self.list.buildColumnView()
+        /*
         if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("row.db")){
             db.open()
             self.list.saveRowView(db: db)
         }
+        */
         NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.garminDownloadChange, object: self)
     }
     

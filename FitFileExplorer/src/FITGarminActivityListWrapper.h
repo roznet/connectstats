@@ -42,6 +42,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)merge:(FITGarminActivityListWrapper*)other;
 
+-(void)saveAsJson:(NSString*)filename;
+-(void)loadFromJson:(NSString*)filename;
+-(void)clear;
 @end
 
 NS_ASSUME_NONNULL_END

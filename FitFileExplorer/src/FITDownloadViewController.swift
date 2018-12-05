@@ -150,6 +150,12 @@ class FITDownloadViewController: NSViewController {
             password.stringValue = saved_password
             FITAppGlobal.configSet(kFITSettingsKeyPassword, stringVal: saved_password)
         }
+        FITAppGlobal.downloadManager().loadFromFile()
+        activityTable.dataSource = self.dataSource
+        activityTable.delegate = self.dataSource
+        rebuildColumns()
+        self.activityTable.reloadData()
+
     }
     
     override func viewWillDisappear() {

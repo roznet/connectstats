@@ -32,6 +32,7 @@
 
 @property (nonatomic,retain) NSMutableArray<FITGarminActivityWrapper*>*mlist;
 @property (nonatomic,retain) NSMutableDictionary<NSString*,FITGarminActivityWrapper*>*map;
+@property (nonatomic,retain) NSString * lastFileName;
 
 @end
 
@@ -112,6 +113,39 @@
 }
 -(NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(__unsafe_unretained id [])buffer count:(NSUInteger)len{
     return [self.mlist countByEnumeratingWithState:state objects:buffer count:len];
+}
+
+-(void)saveAsJson:(NSString*)filename{
+    NSMutableArray<NSDictionary*>*obj = [NSMutableArray arrayWithCapacity:self.list.count];
+    for (FITGarminActivityWrapper * one in self.list) {
+        [obj addObject:one.json];
+    }
+    NSData * data = [NSJSONSerialization dataWithJSONObject:obj options:NSJSONWritingSortedKeys error:nil];
+    [data writeToFile:filename atomically:YES];
+    self.lastFileName = filename;
+}
+-(void)loadFromJson:(NSString*)filename{
+    if( [self.lastFileName isEqualToString:filename] ){
+        // check timestamp/
+    }else{
+        if( self.mlist){
+            [self.mlist removeAllObjects];
+            
+            [self.map removeAllObjects];
+        }
+
+        NSData * data = [NSData dataWithContentsOfFile:filename];
+        NSArray<NSDictionary*>*read = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        if( [read isKindOfClass:[NSArray class]]){
+            [self addJson:read];
+        }
+        self.lastFileName = filename;
+    }
+}
+    
+
+-(void)clear{
+    [self.mlist removeAllObjects];
 }
 
 @end
