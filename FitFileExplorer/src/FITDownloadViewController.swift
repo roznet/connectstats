@@ -30,12 +30,17 @@ import RZUtils
 import RZUtilsOSX
 import RZExternalUniversal
 
+extension Date {
+    func formatAsRFC3339() -> String {
+        return (self as NSDate).formatAsRFC3339()
+    }
+}
 extension GCField {
     func columnName() -> String {
-        return self.key + ":" + self.activityType
+        return self.key + "_" + self.activityType
     }
-    func tableName() -> String {
-        return "table_" + self.columnName()
+    func fileName(activityId : String) -> String {
+        return activityId + "_" + self.columnName()
     }
 }
 
@@ -66,62 +71,54 @@ class FITDownloadViewController: NSViewController {
     }
     
     @IBAction func exportList(_ sender: Any) {
-        if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("columns")){
-            db.open()
-            if( !db.tableExists("units")){
-                db.executeUpdate("CREATE TABLE units (column TEXT PRIMARY KEY, unit TEXT)", withParameterDictionary: [:])
-            }
-            var units : [String:GCUnit] = [:]
-            
-            if let res = db.executeQuery("SELECT * FROM units", withArgumentsIn:[]){
-                while( res.next() ){
-                    units[ res.string(forColumn: "column")] = GCUnit(forKey: res.string(forColumn: "unit"))
-                }
-            }
-            for one  in self.dataSource.list() {
-                if let activity = one as? FITGarminActivityWrapper {
-                    
-                    if let path = activity.fitFilePath,
-                        let decode = FITFitFileDecode(forFile: path){
-                        decode.parse()
-                        if  let fitFile = decode.fitFile {
-                            let interpret = FITFitFileInterpret(fitFile: fitFile)
-                            let cols = interpret.columnDataSeries(message: "record")
+        
+        var units : [String:GCUnit] = [:]
+        
+        for one  in self.dataSource.list() {
+            if let activity = one as? FITGarminActivityWrapper {
+                var columns : [GCField:[String]] = [:]
+                
+                if let path = activity.fitFilePath,
+                    let decode = FITFitFileDecode(forFile: path){
+                    decode.parse()
+                    if  let fitFile = decode.fitFile {
+                        let interpret = FITFitFileInterpret(fitFile: fitFile)
+                        let cols = interpret.columnDataSeries(message: "record")
+                        
+                        for (key,values) in cols.values {
+                            if( units[ key.columnName() ] == nil){
+                                if let first = values.first {
+                                    units[key.columnName()] = first.unit
+                                }
+                            }
+                        }
+                        
+                        for (offset,time) in cols.times.enumerated() {
+                            for( key,values ) in cols.values {
+                                var val = values[offset]
+                                if let unit = units[key.columnName()] {
+                                    val = val.convert(to: unit)
+                                }
+                                if( columns[key] == nil ){
+                                    columns[key] = [ ["time","activityId", key.columnName(), "uom"].joined(separator: ",") ]
+                                }
+                                
+                                columns[key]?.append( [time.formatAsRFC3339(), activity.activityId, val.formatDoubleNoUnits(), val.unit.key].joined(separator: ","))
+                            }
+                        }
+                        for (key,value) in columns {
+                            let fn = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(key.fileName(activityId: activity.activityId) + ".csv"))
+                            do {
+                                try value.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
+                            }catch { }
                             
-                            for (key,values) in cols.values {
-                                if( !db.tableExists(key.tableName()) ){
-                                    db.executeUpdate("CREATE TABLE '\(key.tableName())' (time REAL,activityId TEXT,'\(key.columnName())' TEXT,uom TEXT)", withParameterDictionary: [:])
-                                }else{
-                                    db.executeUpdate("DELETE FROM '\(key.tableName())' WHERE activityId = ?", withArgumentsIn: [ activity.activityId])
-                                }
-                                if( units[ key.columnName() ] == nil){
-                                    if let first = values.first {
-                                        db.executeUpdate("INSERT INTO units (column,unit) VALUES (?,?)", withArgumentsIn: [key.columnName(),first.unit.key])
-                                        units[key.columnName()] = first.unit
-                                    }
-                                }
-                            }
-                            if( !db.tableExists("table_position") ){
-                                db.executeUpdate("CREATE TABLE 'table_position' (time REAL,activityId TEXT,'position' TEXT,uom TEXT)", withParameterDictionary: [:])
-                            }else{
-                                db.executeUpdate("DELETE FROM 'table_position' WHERE activityId = ?", withArgumentsIn: [ activity.activityId])
-                            }
-                            
-                            for (offset,time) in cols.times.enumerated() {
-                                for( key,values) in cols.values {
-                                    var val = values[offset]
-                                    if let unit = units[key.columnName()] {
-                                        val = val.convert(to: unit)
-                                    }
-                                    db.executeUpdate("INSERT INTO '\(key.tableName())' (time,activityId,'\(key.columnName())',uom) VALUES (?,?,?,?)", withArgumentsIn: [time,activity.activityId,val.value,val.unit.key])
-                                }
-                            }
                         }
                     }
                 }
             }
         }
     }
+
 
         
     @IBAction func downloadFITFile(_ sender: Any) {
