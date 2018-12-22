@@ -767,6 +767,10 @@
 		42A89C1F1D627444007CF90D /* GCUnitTrainingZone.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A89C1E1D627444007CF90D /* GCUnitTrainingZone.m */; };
 		42A89C201D627444007CF90D /* GCUnitTrainingZone.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A89C1E1D627444007CF90D /* GCUnitTrainingZone.m */; };
 		42A89C261D63B2D7007CF90D /* GCTestHealthZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A89C251D63B2D7007CF90D /* GCTestHealthZones.m */; };
+		42A9595521CEADA200E2BC4D /* RZFitField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A9595421CEADA200E2BC4D /* RZFitField.swift */; };
+		42A9595621CEADA200E2BC4D /* RZFitField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A9595421CEADA200E2BC4D /* RZFitField.swift */; };
+		42A9595721CEADA200E2BC4D /* RZFitField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A9595421CEADA200E2BC4D /* RZFitField.swift */; };
+		42A9595821CEADA200E2BC4D /* RZFitField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A9595421CEADA200E2BC4D /* RZFitField.swift */; };
 		42A95B1C16321320000B2082 /* GCLap.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A95B1B16321320000B2082 /* GCLap.m */; };
 		42A95B3A1632DB4B000B2082 /* GCMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A95B391632DB4B000B2082 /* GCMapAnnotation.m */; };
 		42A95B3D1632FC24000B2082 /* GCMapLegendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A95B3C1632FC24000B2082 /* GCMapLegendView.m */; };
@@ -3157,6 +3161,7 @@
 		42A89C1D1D627444007CF90D /* GCUnitTrainingZone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCUnitTrainingZone.h; path = src/GCUnitTrainingZone.h; sourceTree = "<group>"; };
 		42A89C1E1D627444007CF90D /* GCUnitTrainingZone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCUnitTrainingZone.m; path = src/GCUnitTrainingZone.m; sourceTree = "<group>"; };
 		42A89C251D63B2D7007CF90D /* GCTestHealthZones.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestHealthZones.m; sourceTree = "<group>"; };
+		42A9595421CEADA200E2BC4D /* RZFitField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZFitField.swift; sourceTree = "<group>"; };
 		42A95B1A16321320000B2082 /* GCLap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCLap.h; path = src/GCLap.h; sourceTree = "<group>"; };
 		42A95B1B16321320000B2082 /* GCLap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCLap.m; path = src/GCLap.m; sourceTree = "<group>"; };
 		42A95B381632DB4B000B2082 /* GCMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCMapAnnotation.h; path = src/GCMapAnnotation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -4825,6 +4830,7 @@
 				4217845221CE9F7E006FE90A /* RZFitFile.swift */,
 				4217845321CE9F7E006FE90A /* RZFitMessage.swift */,
 				4217845421CE9F7E006FE90A /* rzfit_convert_auto.swift */,
+				42A9595421CEADA200E2BC4D /* RZFitField.swift */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -10071,6 +10077,7 @@
 				422FAF2119A1DD6000D09773 /* GCMapRouteLogic.m in Sources */,
 				42FC177C1E195DE400F55302 /* FITFitFieldsStatistics.swift in Sources */,
 				42A22DDD19E1A798004407B8 /* GCWithingsReqBase.m in Sources */,
+				42A9595821CEADA200E2BC4D /* RZFitField.swift in Sources */,
 				422FAF2219A1DD6000D09773 /* GCActivityTrackGraphViewController.m in Sources */,
 				422F52111DFB51F700DD5551 /* FITFitEnumMap.mm in Sources */,
 				422FAF2319A1DD6000D09773 /* GCStravaReqBase.m in Sources */,
@@ -10256,6 +10263,7 @@
 				4217846B21CE9FAD006FE90A /* fit_convert.c in Sources */,
 				42A672C81DECC4EA00BE8E26 /* FITSelectionContext.swift in Sources */,
 				4248ED971DCFF55D00254216 /* GCField.m in Sources */,
+				42A9595721CEADA200E2BC4D /* RZFitField.swift in Sources */,
 				4248DC8A1ED1E6ED00470DEB /* FITDataViewController.swift in Sources */,
 				42F14C4E203192AE007925C9 /* GCActivityTypes.m in Sources */,
 				42769BC81DD2A81D000390F1 /* FITFitFileInterpret.swift in Sources */,
@@ -10497,6 +10505,7 @@
 				4255765F16D8C8D10080F8CE /* GCActivityMetaValue.m in Sources */,
 				4217847721CEA236006FE90A /* RZFitMessage.swift in Sources */,
 				4255766316D8CA850080F8CE /* GCActivityCalculatedValue.m in Sources */,
+				42A9595521CEADA200E2BC4D /* RZFitField.swift in Sources */,
 				422F283F20557DD000187478 /* GCField+Convert.m in Sources */,
 				4217847321CEA236006FE90A /* fit_ram.c in Sources */,
 				42DC51551B2784B600B5C12F /* GCHealthKitDailySummaryParser.m in Sources */,
@@ -10833,6 +10842,7 @@
 				427F937B1BEDFF1A00C177F9 /* GCViewActivityTypeButton.m in Sources */,
 				42B5E2AF1BA5B216000FAE4E /* GCExportGoogleEarth.m in Sources */,
 				42B5E2B01BA5B216000FAE4E /* GCExportText.m in Sources */,
+				42A9595621CEADA200E2BC4D /* RZFitField.swift in Sources */,
 				42B5E2B11BA5B216000FAE4E /* GCActivity+ExportText.m in Sources */,
 				427F93771BEDFA6F00C177F9 /* GCStatsMultiFieldViewController.m in Sources */,
 				42B5E2B21BA5B216000FAE4E /* GCExportStrava.m in Sources */,
@@ -11335,10 +11345,11 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = M7QSSF3624;
+				DEVELOPMENT_TEAM = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = FitFileExplorerTests/Info.plist;
@@ -11347,6 +11358,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorerTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -11367,11 +11379,12 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = M7QSSF3624;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -11381,6 +11394,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorerTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FitFileExplorer.app/Contents/MacOS/FitFileExplorer";

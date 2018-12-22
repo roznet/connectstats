@@ -163,15 +163,7 @@ func rzfit_dive_gas_status_string(input : FIT_ENUM) -> String?
     default: return nil
   }
 }
-func rzfit_file_flags_string(input : FIT_UINT8Z) -> String? 
-{
-  switch  input {
-    case FIT_FILE_FLAGS_READ: return "read";
-    case FIT_FILE_FLAGS_WRITE: return "write";
-    case FIT_FILE_FLAGS_ERASE: return "erase";
-    default: return nil
-  }
-}
+
 func rzfit_activity_subtype_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -208,13 +200,7 @@ func rzfit_run_exercise_name_string(input : FIT_UINT16) -> String?
     default: return nil
   }
 }
-func rzfit_date_time_string(input : FIT_UINT32) -> String? 
-{
-  switch  input {
-    case FIT_DATE_TIME_MIN: return "min";
-    default: return nil
-  }
-}
+
 func rzfit_tone_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -320,13 +306,7 @@ func rzfit_activity_level_string(input : FIT_ENUM) -> String?
     default: return nil
   }
 }
-func rzfit_local_date_time_string(input : FIT_UINT32) -> String? 
-{
-  switch  input {
-    case FIT_LOCAL_DATE_TIME_MIN: return "min";
-    default: return nil
-  }
-}
+
 func rzfit_bike_light_beam_angle_mode_string(input : FIT_UINT8) -> String? 
 {
   switch  input {
@@ -363,12 +343,7 @@ func rzfit_turn_type_string(input : FIT_ENUM) -> String?
     default: return nil
   }
 }
-func rzfit_camera_orientation_type_string(input : FIT_ENUM) -> String? 
-{
-  switch  input {
-    default: return nil
-  }
-}
+
 func rzfit_digital_watchface_layout_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -418,20 +393,8 @@ func rzfit_row_exercise_name_string(input : FIT_UINT16) -> String?
     default: return nil
   }
 }
-func rzfit_tissue_model_type_string(input : FIT_ENUM) -> String? 
-{
-  switch  input {
-    default: return nil
-  }
-}
-func rzfit_left_right_balance_string(input : FIT_UINT8) -> String? 
-{
-  switch  input {
-    case FIT_LEFT_RIGHT_BALANCE_MASK: return "mask";
-    case FIT_LEFT_RIGHT_BALANCE_RIGHT: return "right";
-    default: return nil
-  }
-}
+
+
 func rzfit_source_type_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -690,19 +653,7 @@ func rzfit_time_zone_string(input : FIT_ENUM) -> String?
     default: return nil
   }
 }
-func rzfit_auto_activity_detect_string(input : FIT_UINT32) -> String? 
-{
-  switch  input {
-    case FIT_AUTO_ACTIVITY_DETECT_NONE: return "none";
-    case FIT_AUTO_ACTIVITY_DETECT_RUNNING: return "running";
-    case FIT_AUTO_ACTIVITY_DETECT_CYCLING: return "cycling";
-    case FIT_AUTO_ACTIVITY_DETECT_SWIMMING: return "swimming";
-    case FIT_AUTO_ACTIVITY_DETECT_WALKING: return "walking";
-    case FIT_AUTO_ACTIVITY_DETECT_ELLIPTICAL: return "elliptical";
-    case FIT_AUTO_ACTIVITY_DETECT_SEDENTARY: return "sedentary";
-    default: return nil
-  }
-}
+
 func rzfit_bench_press_exercise_name_string(input : FIT_UINT16) -> String? 
 {
   switch  input {
@@ -744,12 +695,7 @@ func rzfit_segment_selection_type_string(input : FIT_ENUM) -> String?
     default: return nil
   }
 }
-func rzfit_localtime_into_day_string(input : FIT_UINT32) -> String? 
-{
-  switch  input {
-    default: return nil
-  }
-}
+
 func rzfit_segment_leaderboard_type_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -806,97 +752,13 @@ func rzfit_fit_base_unit_string(input : FIT_UINT16) -> String?
     default: return nil
   }
 }
-func rzfit_sport_bits_4_string(input : FIT_UINT8Z) -> String? 
-{
-  switch  input {
-    case FIT_SPORT_BITS_4_SAILING: return "sailing";
-    case FIT_SPORT_BITS_4_ICE_SKATING: return "ice_skating";
-    case FIT_SPORT_BITS_4_SKY_DIVING: return "sky_diving";
-    case FIT_SPORT_BITS_4_SNOWSHOEING: return "snowshoeing";
-    case FIT_SPORT_BITS_4_SNOWMOBILING: return "snowmobiling";
-    case FIT_SPORT_BITS_4_STAND_UP_PADDLEBOARDING: return "stand_up_paddleboarding";
-    case FIT_SPORT_BITS_4_SURFING: return "surfing";
-    case FIT_SPORT_BITS_4_WAKEBOARDING: return "wakeboarding";
-    default: return nil
-  }
-}
-func rzfit_sport_bits_5_string(input : FIT_UINT8Z) -> String? 
-{
-  switch  input {
-    case FIT_SPORT_BITS_5_WATER_SKIING: return "water_skiing";
-    case FIT_SPORT_BITS_5_KAYAKING: return "kayaking";
-    case FIT_SPORT_BITS_5_RAFTING: return "rafting";
-    case FIT_SPORT_BITS_5_WINDSURFING: return "windsurfing";
-    case FIT_SPORT_BITS_5_KITESURFING: return "kitesurfing";
-    case FIT_SPORT_BITS_5_TACTICAL: return "tactical";
-    case FIT_SPORT_BITS_5_JUMPMASTER: return "jumpmaster";
-    case FIT_SPORT_BITS_5_BOXING: return "boxing";
-    default: return nil
-  }
-}
-func rzfit_sport_bits_6_string(input : FIT_UINT8Z) -> String? 
-{
-  switch  input {
-    case FIT_SPORT_BITS_6_FLOOR_CLIMBING: return "floor_climbing";
-    default: return nil
-  }
-}
-func rzfit_sport_bits_0_string(input : FIT_UINT8Z) -> String? 
-{
-  switch  input {
-    case FIT_SPORT_BITS_0_GENERIC: return "generic";
-    case FIT_SPORT_BITS_0_RUNNING: return "running";
-    case FIT_SPORT_BITS_0_CYCLING: return "cycling";
-    case FIT_SPORT_BITS_0_TRANSITION: return "transition";
-    case FIT_SPORT_BITS_0_FITNESS_EQUIPMENT: return "fitness_equipment";
-    case FIT_SPORT_BITS_0_SWIMMING: return "swimming";
-    case FIT_SPORT_BITS_0_BASKETBALL: return "basketball";
-    case FIT_SPORT_BITS_0_SOCCER: return "soccer";
-    default: return nil
-  }
-}
-func rzfit_sport_bits_1_string(input : FIT_UINT8Z) -> String? 
-{
-  switch  input {
-    case FIT_SPORT_BITS_1_TENNIS: return "tennis";
-    case FIT_SPORT_BITS_1_AMERICAN_FOOTBALL: return "american_football";
-    case FIT_SPORT_BITS_1_TRAINING: return "training";
-    case FIT_SPORT_BITS_1_WALKING: return "walking";
-    case FIT_SPORT_BITS_1_CROSS_COUNTRY_SKIING: return "cross_country_skiing";
-    case FIT_SPORT_BITS_1_ALPINE_SKIING: return "alpine_skiing";
-    case FIT_SPORT_BITS_1_SNOWBOARDING: return "snowboarding";
-    case FIT_SPORT_BITS_1_ROWING: return "rowing";
-    default: return nil
-  }
-}
-func rzfit_sport_bits_2_string(input : FIT_UINT8Z) -> String? 
-{
-  switch  input {
-    case FIT_SPORT_BITS_2_MOUNTAINEERING: return "mountaineering";
-    case FIT_SPORT_BITS_2_HIKING: return "hiking";
-    case FIT_SPORT_BITS_2_MULTISPORT: return "multisport";
-    case FIT_SPORT_BITS_2_PADDLING: return "paddling";
-    case FIT_SPORT_BITS_2_FLYING: return "flying";
-    case FIT_SPORT_BITS_2_E_BIKING: return "e_biking";
-    case FIT_SPORT_BITS_2_MOTORCYCLING: return "motorcycling";
-    case FIT_SPORT_BITS_2_BOATING: return "boating";
-    default: return nil
-  }
-}
-func rzfit_sport_bits_3_string(input : FIT_UINT8Z) -> String? 
-{
-  switch  input {
-    case FIT_SPORT_BITS_3_DRIVING: return "driving";
-    case FIT_SPORT_BITS_3_GOLF: return "golf";
-    case FIT_SPORT_BITS_3_HANG_GLIDING: return "hang_gliding";
-    case FIT_SPORT_BITS_3_HORSEBACK_RIDING: return "horseback_riding";
-    case FIT_SPORT_BITS_3_HUNTING: return "hunting";
-    case FIT_SPORT_BITS_3_FISHING: return "fishing";
-    case FIT_SPORT_BITS_3_INLINE_SKATING: return "inline_skating";
-    case FIT_SPORT_BITS_3_ROCK_CLIMBING: return "rock_climbing";
-    default: return nil
-  }
-}
+
+
+
+
+
+
+
 func rzfit_lap_trigger_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -1733,12 +1595,7 @@ func rzfit_language_string(input : FIT_ENUM) -> String?
     default: return nil
   }
 }
-func rzfit_local_device_type_string(input : FIT_UINT8) -> String? 
-{
-  switch  input {
-    default: return nil
-  }
-}
+
 func rzfit_backlight_timeout_string(input : FIT_UINT8) -> String? 
 {
   switch  input {
@@ -1867,44 +1724,7 @@ func rzfit_intensity_string(input : FIT_ENUM) -> String?
     default: return nil
   }
 }
-func rzfit_connectivity_capabilities_string(input : FIT_UINT32Z) -> String? 
-{
-  switch  input {
-    case FIT_CONNECTIVITY_CAPABILITIES_BLUETOOTH: return "bluetooth";
-    case FIT_CONNECTIVITY_CAPABILITIES_BLUETOOTH_LE: return "bluetooth_le";
-    case FIT_CONNECTIVITY_CAPABILITIES_ANT: return "ant";
-    case FIT_CONNECTIVITY_CAPABILITIES_ACTIVITY_UPLOAD: return "activity_upload";
-    case FIT_CONNECTIVITY_CAPABILITIES_COURSE_DOWNLOAD: return "course_download";
-    case FIT_CONNECTIVITY_CAPABILITIES_WORKOUT_DOWNLOAD: return "workout_download";
-    case FIT_CONNECTIVITY_CAPABILITIES_LIVE_TRACK: return "live_track";
-    case FIT_CONNECTIVITY_CAPABILITIES_WEATHER_CONDITIONS: return "weather_conditions";
-    case FIT_CONNECTIVITY_CAPABILITIES_WEATHER_ALERTS: return "weather_alerts";
-    case FIT_CONNECTIVITY_CAPABILITIES_GPS_EPHEMERIS_DOWNLOAD: return "gps_ephemeris_download";
-    case FIT_CONNECTIVITY_CAPABILITIES_EXPLICIT_ARCHIVE: return "explicit_archive";
-    case FIT_CONNECTIVITY_CAPABILITIES_SETUP_INCOMPLETE: return "setup_incomplete";
-    case FIT_CONNECTIVITY_CAPABILITIES_CONTINUE_SYNC_AFTER_SOFTWARE_UPDATE: return "continue_sync_after_software_update";
-    case FIT_CONNECTIVITY_CAPABILITIES_CONNECT_IQ_APP_DOWNLOAD: return "connect_iq_app_download";
-    case FIT_CONNECTIVITY_CAPABILITIES_GOLF_COURSE_DOWNLOAD: return "golf_course_download";
-    case FIT_CONNECTIVITY_CAPABILITIES_DEVICE_INITIATES_SYNC: return "device_initiates_sync";
-    case FIT_CONNECTIVITY_CAPABILITIES_CONNECT_IQ_WATCH_APP_DOWNLOAD: return "connect_iq_watch_app_download";
-    case FIT_CONNECTIVITY_CAPABILITIES_CONNECT_IQ_WIDGET_DOWNLOAD: return "connect_iq_widget_download";
-    case FIT_CONNECTIVITY_CAPABILITIES_CONNECT_IQ_WATCH_FACE_DOWNLOAD: return "connect_iq_watch_face_download";
-    case FIT_CONNECTIVITY_CAPABILITIES_CONNECT_IQ_DATA_FIELD_DOWNLOAD: return "connect_iq_data_field_download";
-    case FIT_CONNECTIVITY_CAPABILITIES_CONNECT_IQ_APP_MANAGMENT: return "connect_iq_app_managment";
-    case FIT_CONNECTIVITY_CAPABILITIES_SWING_SENSOR: return "swing_sensor";
-    case FIT_CONNECTIVITY_CAPABILITIES_SWING_SENSOR_REMOTE: return "swing_sensor_remote";
-    case FIT_CONNECTIVITY_CAPABILITIES_INCIDENT_DETECTION: return "incident_detection";
-    case FIT_CONNECTIVITY_CAPABILITIES_AUDIO_PROMPTS: return "audio_prompts";
-    case FIT_CONNECTIVITY_CAPABILITIES_WIFI_VERIFICATION: return "wifi_verification";
-    case FIT_CONNECTIVITY_CAPABILITIES_TRUE_UP: return "true_up";
-    case FIT_CONNECTIVITY_CAPABILITIES_FIND_MY_WATCH: return "find_my_watch";
-    case FIT_CONNECTIVITY_CAPABILITIES_REMOTE_MANUAL_SYNC: return "remote_manual_sync";
-    case FIT_CONNECTIVITY_CAPABILITIES_LIVE_TRACK_AUTO_START: return "live_track_auto_start";
-    case FIT_CONNECTIVITY_CAPABILITIES_LIVE_TRACK_MESSAGING: return "live_track_messaging";
-    case FIT_CONNECTIVITY_CAPABILITIES_INSTANT_INPUT: return "instant_input";
-    default: return nil
-  }
-}
+
 func rzfit_segment_delete_status_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -2237,15 +2057,7 @@ func rzfit_body_location_string(input : FIT_ENUM) -> String?
     default: return nil
   }
 }
-func rzfit_message_index_string(input : FIT_UINT16) -> String? 
-{
-  switch  input {
-    case FIT_MESSAGE_INDEX_SELECTED: return "selected";
-    case FIT_MESSAGE_INDEX_RESERVED: return "reserved";
-    case FIT_MESSAGE_INDEX_MASK: return "mask";
-    default: return nil
-  }
-}
+
 func rzfit_weather_status_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -2286,9 +2098,7 @@ func rzfit_weather_report_string(input : FIT_ENUM) -> String?
 func rzfit_activity_class_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
-    case FIT_ACTIVITY_CLASS_LEVEL: return "level";
     case FIT_ACTIVITY_CLASS_LEVEL_MAX: return "level_max";
-    case FIT_ACTIVITY_CLASS_ATHLETE: return "athlete";
     default: return nil
   }
 }
@@ -2383,26 +2193,7 @@ func rzfit_weather_severe_type_string(input : FIT_ENUM) -> String?
     default: return nil
   }
 }
-func rzfit_workout_capabilities_string(input : FIT_UINT32Z) -> String? 
-{
-  switch  input {
-    case FIT_WORKOUT_CAPABILITIES_INTERVAL: return "interval";
-    case FIT_WORKOUT_CAPABILITIES_CUSTOM: return "custom";
-    case FIT_WORKOUT_CAPABILITIES_FITNESS_EQUIPMENT: return "fitness_equipment";
-    case FIT_WORKOUT_CAPABILITIES_FIRSTBEAT: return "firstbeat";
-    case FIT_WORKOUT_CAPABILITIES_NEW_LEAF: return "new_leaf";
-    case FIT_WORKOUT_CAPABILITIES_TCX: return "tcx";
-    case FIT_WORKOUT_CAPABILITIES_SPEED: return "speed";
-    case FIT_WORKOUT_CAPABILITIES_HEART_RATE: return "heart_rate";
-    case FIT_WORKOUT_CAPABILITIES_DISTANCE: return "distance";
-    case FIT_WORKOUT_CAPABILITIES_CADENCE: return "cadence";
-    case FIT_WORKOUT_CAPABILITIES_POWER: return "power";
-    case FIT_WORKOUT_CAPABILITIES_GRADE: return "grade";
-    case FIT_WORKOUT_CAPABILITIES_RESISTANCE: return "resistance";
-    case FIT_WORKOUT_CAPABILITIES_PROTECTED: return "protected";
-    default: return nil
-  }
-}
+
 func rzfit_manufacturer_string(input : FIT_UINT16) -> String? 
 {
   switch  input {
@@ -2587,13 +2378,7 @@ func rzfit_total_body_exercise_name_string(input : FIT_UINT16) -> String?
     default: return nil
   }
 }
-func rzfit_weight_string(input : FIT_UINT16) -> String? 
-{
-  switch  input {
-    case FIT_WEIGHT_CALCULATING: return "calculating";
-    default: return nil
-  }
-}
+
 func rzfit_leg_raise_exercise_name_string(input : FIT_UINT16) -> String? 
 {
   switch  input {
@@ -2703,20 +2488,7 @@ func rzfit_flye_exercise_name_string(input : FIT_UINT16) -> String?
     default: return nil
   }
 }
-func rzfit_supported_exd_screen_layouts_string(input : FIT_UINT32Z) -> String? 
-{
-  switch  input {
-    case FIT_SUPPORTED_EXD_SCREEN_LAYOUTS_FULL_SCREEN: return "full_screen";
-    case FIT_SUPPORTED_EXD_SCREEN_LAYOUTS_HALF_VERTICAL: return "half_vertical";
-    case FIT_SUPPORTED_EXD_SCREEN_LAYOUTS_HALF_HORIZONTAL: return "half_horizontal";
-    case FIT_SUPPORTED_EXD_SCREEN_LAYOUTS_HALF_VERTICAL_RIGHT_SPLIT: return "half_vertical_right_split";
-    case FIT_SUPPORTED_EXD_SCREEN_LAYOUTS_HALF_HORIZONTAL_BOTTOM_SPLIT: return "half_horizontal_bottom_split";
-    case FIT_SUPPORTED_EXD_SCREEN_LAYOUTS_FULL_QUARTER_SPLIT: return "full_quarter_split";
-    case FIT_SUPPORTED_EXD_SCREEN_LAYOUTS_HALF_VERTICAL_LEFT_SPLIT: return "half_vertical_left_split";
-    case FIT_SUPPORTED_EXD_SCREEN_LAYOUTS_HALF_HORIZONTAL_TOP_SPLIT: return "half_horizontal_top_split";
-    default: return nil
-  }
-}
+
 func rzfit_event_type_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -2780,25 +2552,7 @@ func rzfit_triceps_extension_exercise_name_string(input : FIT_UINT16) -> String?
     default: return nil
   }
 }
-func rzfit_attitude_validity_string(input : FIT_UINT16) -> String? 
-{
-  switch  input {
-    case FIT_ATTITUDE_VALIDITY_TRACK_ANGLE_HEADING_VALID: return "track_angle_heading_valid";
-    case FIT_ATTITUDE_VALIDITY_PITCH_VALID: return "pitch_valid";
-    case FIT_ATTITUDE_VALIDITY_ROLL_VALID: return "roll_valid";
-    case FIT_ATTITUDE_VALIDITY_LATERAL_BODY_ACCEL_VALID: return "lateral_body_accel_valid";
-    case FIT_ATTITUDE_VALIDITY_NORMAL_BODY_ACCEL_VALID: return "normal_body_accel_valid";
-    case FIT_ATTITUDE_VALIDITY_TURN_RATE_VALID: return "turn_rate_valid";
-    case FIT_ATTITUDE_VALIDITY_HW_FAIL: return "hw_fail";
-    case FIT_ATTITUDE_VALIDITY_MAG_INVALID: return "mag_invalid";
-    case FIT_ATTITUDE_VALIDITY_NO_GPS: return "no_gps";
-    case FIT_ATTITUDE_VALIDITY_GPS_INVALID: return "gps_invalid";
-    case FIT_ATTITUDE_VALIDITY_SOLUTION_COASTING: return "solution_coasting";
-    case FIT_ATTITUDE_VALIDITY_TRUE_TRACK_ANGLE: return "true_track_angle";
-    case FIT_ATTITUDE_VALIDITY_MAGNETIC_HEADING: return "magnetic_heading";
-    default: return nil
-  }
-}
+
 func rzfit_timer_trigger_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -2831,23 +2585,7 @@ func rzfit_shrug_exercise_name_string(input : FIT_UINT16) -> String?
     default: return nil
   }
 }
-func rzfit_course_capabilities_string(input : FIT_UINT32Z) -> String? 
-{
-  switch  input {
-    case FIT_COURSE_CAPABILITIES_PROCESSED: return "processed";
-    case FIT_COURSE_CAPABILITIES_VALID: return "valid";
-    case FIT_COURSE_CAPABILITIES_TIME: return "time";
-    case FIT_COURSE_CAPABILITIES_DISTANCE: return "distance";
-    case FIT_COURSE_CAPABILITIES_POSITION: return "position";
-    case FIT_COURSE_CAPABILITIES_HEART_RATE: return "heart_rate";
-    case FIT_COURSE_CAPABILITIES_POWER: return "power";
-    case FIT_COURSE_CAPABILITIES_CADENCE: return "cadence";
-    case FIT_COURSE_CAPABILITIES_TRAINING: return "training";
-    case FIT_COURSE_CAPABILITIES_NAVIGATION: return "navigation";
-    case FIT_COURSE_CAPABILITIES_BIKEWAY: return "bikeway";
-    default: return nil
-  }
-}
+
 func rzfit_squat_exercise_name_string(input : FIT_UINT16) -> String? 
 {
   switch  input {
@@ -2946,12 +2684,7 @@ func rzfit_squat_exercise_name_string(input : FIT_UINT16) -> String?
     default: return nil
   }
 }
-func rzfit_time_into_day_string(input : FIT_UINT32) -> String? 
-{
-  switch  input {
-    default: return nil
-  }
-}
+
 func rzfit_mesg_num_string(input : FIT_UINT16) -> String? 
 {
   switch  input {
@@ -3041,8 +2774,6 @@ func rzfit_mesg_num_string(input : FIT_UINT16) -> String?
     case FIT_MESG_NUM_DIVE_ALARM: return "dive_alarm";
     case FIT_MESG_NUM_EXERCISE_TITLE: return "exercise_title";
     case FIT_MESG_NUM_DIVE_SUMMARY: return "dive_summary";
-    case FIT_MESG_NUM_MFG_RANGE_MIN: return "mfg_range_min";
-    case FIT_MESG_NUM_MFG_RANGE_MAX: return "mfg_range_max";
     default: return nil
   }
 }
@@ -3658,79 +3389,14 @@ func rzfit_file_string(input : FIT_ENUM) -> String?
     case FIT_FILE_SEGMENT: return "segment";
     case FIT_FILE_SEGMENT_LIST: return "segment_list";
     case FIT_FILE_EXD_CONFIGURATION: return "exd_configuration";
-    case FIT_FILE_MFG_RANGE_MIN: return "mfg_range_min";
-    case FIT_FILE_MFG_RANGE_MAX: return "mfg_range_max";
     default: return nil
   }
 }
-func rzfit_language_bits_4_string(input : FIT_UINT8Z) -> String? 
-{
-  switch  input {
-    case FIT_LANGUAGE_BITS_4_BRAZILIAN_PORTUGUESE: return "brazilian_portuguese";
-    case FIT_LANGUAGE_BITS_4_INDONESIAN: return "indonesian";
-    case FIT_LANGUAGE_BITS_4_MALAYSIAN: return "malaysian";
-    case FIT_LANGUAGE_BITS_4_VIETNAMESE: return "vietnamese";
-    case FIT_LANGUAGE_BITS_4_BURMESE: return "burmese";
-    case FIT_LANGUAGE_BITS_4_MONGOLIAN: return "mongolian";
-    default: return nil
-  }
-}
-func rzfit_language_bits_3_string(input : FIT_UINT8Z) -> String? 
-{
-  switch  input {
-    case FIT_LANGUAGE_BITS_3_BULGARIAN: return "bulgarian";
-    case FIT_LANGUAGE_BITS_3_ROMANIAN: return "romanian";
-    case FIT_LANGUAGE_BITS_3_CHINESE: return "chinese";
-    case FIT_LANGUAGE_BITS_3_JAPANESE: return "japanese";
-    case FIT_LANGUAGE_BITS_3_KOREAN: return "korean";
-    case FIT_LANGUAGE_BITS_3_TAIWANESE: return "taiwanese";
-    case FIT_LANGUAGE_BITS_3_THAI: return "thai";
-    case FIT_LANGUAGE_BITS_3_HEBREW: return "hebrew";
-    default: return nil
-  }
-}
-func rzfit_language_bits_2_string(input : FIT_UINT8Z) -> String? 
-{
-  switch  input {
-    case FIT_LANGUAGE_BITS_2_SLOVENIAN: return "slovenian";
-    case FIT_LANGUAGE_BITS_2_SWEDISH: return "swedish";
-    case FIT_LANGUAGE_BITS_2_RUSSIAN: return "russian";
-    case FIT_LANGUAGE_BITS_2_TURKISH: return "turkish";
-    case FIT_LANGUAGE_BITS_2_LATVIAN: return "latvian";
-    case FIT_LANGUAGE_BITS_2_UKRAINIAN: return "ukrainian";
-    case FIT_LANGUAGE_BITS_2_ARABIC: return "arabic";
-    case FIT_LANGUAGE_BITS_2_FARSI: return "farsi";
-    default: return nil
-  }
-}
-func rzfit_language_bits_1_string(input : FIT_UINT8Z) -> String? 
-{
-  switch  input {
-    case FIT_LANGUAGE_BITS_1_DUTCH: return "dutch";
-    case FIT_LANGUAGE_BITS_1_FINNISH: return "finnish";
-    case FIT_LANGUAGE_BITS_1_GREEK: return "greek";
-    case FIT_LANGUAGE_BITS_1_HUNGARIAN: return "hungarian";
-    case FIT_LANGUAGE_BITS_1_NORWEGIAN: return "norwegian";
-    case FIT_LANGUAGE_BITS_1_POLISH: return "polish";
-    case FIT_LANGUAGE_BITS_1_PORTUGUESE: return "portuguese";
-    case FIT_LANGUAGE_BITS_1_SLOVAKIAN: return "slovakian";
-    default: return nil
-  }
-}
-func rzfit_language_bits_0_string(input : FIT_UINT8Z) -> String? 
-{
-  switch  input {
-    case FIT_LANGUAGE_BITS_0_ENGLISH: return "english";
-    case FIT_LANGUAGE_BITS_0_FRENCH: return "french";
-    case FIT_LANGUAGE_BITS_0_ITALIAN: return "italian";
-    case FIT_LANGUAGE_BITS_0_GERMAN: return "german";
-    case FIT_LANGUAGE_BITS_0_SPANISH: return "spanish";
-    case FIT_LANGUAGE_BITS_0_CROATIAN: return "croatian";
-    case FIT_LANGUAGE_BITS_0_CZECH: return "czech";
-    case FIT_LANGUAGE_BITS_0_DANISH: return "danish";
-    default: return nil
-  }
-}
+
+
+
+
+
 func rzfit_display_position_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -3795,26 +3461,8 @@ func rzfit_checksum_string(input : FIT_UINT8) -> String?
     default: return nil
   }
 }
-func rzfit_user_local_id_string(input : FIT_UINT16) -> String? 
-{
-  switch  input {
-    case FIT_USER_LOCAL_ID_LOCAL_MIN: return "local_min";
-    case FIT_USER_LOCAL_ID_LOCAL_MAX: return "local_max";
-    case FIT_USER_LOCAL_ID_STATIONARY_MIN: return "stationary_min";
-    case FIT_USER_LOCAL_ID_STATIONARY_MAX: return "stationary_max";
-    case FIT_USER_LOCAL_ID_PORTABLE_MIN: return "portable_min";
-    case FIT_USER_LOCAL_ID_PORTABLE_MAX: return "portable_max";
-    default: return nil
-  }
-}
-func rzfit_left_right_balance_100_string(input : FIT_UINT16) -> String? 
-{
-  switch  input {
-    case FIT_LEFT_RIGHT_BALANCE_100_MASK: return "mask";
-    case FIT_LEFT_RIGHT_BALANCE_100_RIGHT: return "right";
-    default: return nil
-  }
-}
+
+
 func rzfit_video_title_mesg_def_value_dict( ptr : UnsafePointer<FIT_VIDEO_TITLE_MESG_DEF>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_VIDEO_TITLE_MESG_DEF = ptr.pointee
@@ -3938,9 +3586,13 @@ func rzfit_exd_data_field_configuration_mesg_value_dict( ptr : UnsafePointer<FIT
 }
 func rzfit_exd_data_field_configuration_mesg_enum_dict( ptr : UnsafePointer<FIT_EXD_DATA_FIELD_CONFIGURATION_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_EXD_DATA_FIELD_CONFIGURATION_MESG = ptr.pointee
+  var x : FIT_EXD_DATA_FIELD_CONFIGURATION_MESG = ptr.pointee
   if( x.display_type != FIT_EXD_DISPLAY_TYPE_INVALID ) {
     rv[ "display_type" ] = rzfit_exd_display_type_string(input: x.display_type)
+  }
+  rv[ "title" ] = withUnsafeBytes(of: &x.title) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   return rv
 }
@@ -4062,6 +3714,10 @@ func rzfit_bike_profile_mesg_value_dict( ptr : UnsafePointer<FIT_BIKE_PROFILE_ME
     let val : Double = (Double(x.odometer))/Double(100)
     rv[ "odometer" ] = val
   }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.bike_spd_ant_id != FIT_UINT16Z_INVALID  {
     let val : Double = Double(x.bike_spd_ant_id)
     rv[ "bike_spd_ant_id" ] = val
@@ -4166,9 +3822,10 @@ func rzfit_bike_profile_mesg_value_dict( ptr : UnsafePointer<FIT_BIKE_PROFILE_ME
 }
 func rzfit_bike_profile_mesg_enum_dict( ptr : UnsafePointer<FIT_BIKE_PROFILE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_BIKE_PROFILE_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_BIKE_PROFILE_MESG = ptr.pointee
+  rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.sport != FIT_SPORT_INVALID ) {
     rv[ "sport" ] = rzfit_sport_string(input: x.sport)
@@ -4185,6 +3842,10 @@ func rzfit_segment_file_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_FILE_ME
     let val : Double = Double(x.user_profile_primary_key)
     rv[ "user_profile_primary_key" ] = val
   }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.enabled != FIT_BOOL_INVALID  {
     let val : Double = Double(x.enabled)
     rv[ "enabled" ] = val
@@ -4193,9 +3854,10 @@ func rzfit_segment_file_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_FILE_ME
 }
 func rzfit_segment_file_mesg_enum_dict( ptr : UnsafePointer<FIT_SEGMENT_FILE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_SEGMENT_FILE_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_SEGMENT_FILE_MESG = ptr.pointee
+  rv[ "file_uuid" ] = withUnsafeBytes(of: &x.file_uuid) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   return rv
 }
@@ -4302,6 +3964,10 @@ func rzfit_file_id_mesg_value_dict( ptr : UnsafePointer<FIT_FILE_ID_MESG>) -> [S
     let val : Double = Double(x.serial_number)
     rv[ "serial_number" ] = val
   }
+  if x.time_created != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.time_created)
+    rv[ "time_created" ] = val
+  }
   if x.product != FIT_UINT16_INVALID  {
     let val : Double = Double(x.product)
     rv[ "product" ] = val
@@ -4314,9 +3980,10 @@ func rzfit_file_id_mesg_value_dict( ptr : UnsafePointer<FIT_FILE_ID_MESG>) -> [S
 }
 func rzfit_file_id_mesg_enum_dict( ptr : UnsafePointer<FIT_FILE_ID_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_FILE_ID_MESG = ptr.pointee
-  if( x.time_created != FIT_DATE_TIME_INVALID ) {
-    rv[ "time_created" ] = rzfit_date_time_string(input: x.time_created)
+  var x : FIT_FILE_ID_MESG = ptr.pointee
+  rv[ "product_name" ] = withUnsafeBytes(of: &x.product_name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.manufacturer != FIT_MANUFACTURER_INVALID ) {
     rv[ "manufacturer" ] = rzfit_manufacturer_string(input: x.manufacturer)
@@ -4331,7 +3998,11 @@ func rzfit_sport_mesg_value_dict( ptr : UnsafePointer<FIT_SPORT_MESG>) -> [Strin
 }
 func rzfit_sport_mesg_enum_dict( ptr : UnsafePointer<FIT_SPORT_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_SPORT_MESG = ptr.pointee
+  var x : FIT_SPORT_MESG = ptr.pointee
+  rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
+  }
   if( x.sport != FIT_SPORT_INVALID ) {
     rv[ "sport" ] = rzfit_sport_string(input: x.sport)
   }
@@ -4410,6 +4081,10 @@ func rzfit_schedule_mesg_def_enum_dict( ptr : UnsafePointer<FIT_SCHEDULE_MESG_DE
 func rzfit_video_title_mesg_value_dict( ptr : UnsafePointer<FIT_VIDEO_TITLE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_VIDEO_TITLE_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.message_count != FIT_UINT16_INVALID  {
     let val : Double = Double(x.message_count)
     rv[ "message_count" ] = val
@@ -4418,9 +4093,10 @@ func rzfit_video_title_mesg_value_dict( ptr : UnsafePointer<FIT_VIDEO_TITLE_MESG
 }
 func rzfit_video_title_mesg_enum_dict( ptr : UnsafePointer<FIT_VIDEO_TITLE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_VIDEO_TITLE_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_VIDEO_TITLE_MESG = ptr.pointee
+  rv[ "text" ] = withUnsafeBytes(of: &x.text) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   return rv
 }
@@ -4493,6 +4169,14 @@ func rzfit_field_capabilities_mesg_def_enum_dict( ptr : UnsafePointer<FIT_FIELD_
 func rzfit_length_mesg_value_dict( ptr : UnsafePointer<FIT_LENGTH_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_LENGTH_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
+  if x.start_time != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.start_time)
+    rv[ "start_time" ] = val
+  }
   if x.total_elapsed_time != FIT_UINT32_INVALID  {
     let val : Double = (Double(x.total_elapsed_time))/Double(1000)
     rv[ "total_elapsed_time" ] = val
@@ -4500,6 +4184,10 @@ func rzfit_length_mesg_value_dict( ptr : UnsafePointer<FIT_LENGTH_MESG>) -> [Str
   if x.total_timer_time != FIT_UINT32_INVALID  {
     let val : Double = (Double(x.total_timer_time))/Double(1000)
     rv[ "total_timer_time" ] = val
+  }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
   }
   if x.total_strokes != FIT_UINT16_INVALID  {
     let val : Double = Double(x.total_strokes)
@@ -4534,15 +4222,6 @@ func rzfit_length_mesg_value_dict( ptr : UnsafePointer<FIT_LENGTH_MESG>) -> [Str
 func rzfit_length_mesg_enum_dict( ptr : UnsafePointer<FIT_LENGTH_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_LENGTH_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.start_time != FIT_DATE_TIME_INVALID ) {
-    rv[ "start_time" ] = rzfit_date_time_string(input: x.start_time)
-  }
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
   if( x.event != FIT_EVENT_INVALID ) {
     rv[ "event" ] = rzfit_event_string(input: x.event)
   }
@@ -4610,6 +4289,10 @@ func rzfit_monitoring_mesg_def_enum_dict( ptr : UnsafePointer<FIT_MONITORING_MES
 func rzfit_device_info_mesg_value_dict( ptr : UnsafePointer<FIT_DEVICE_INFO_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_DEVICE_INFO_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.serial_number != FIT_UINT32Z_INVALID  {
     let val : Double = Double(x.serial_number)
     rv[ "serial_number" ] = val
@@ -4650,9 +4333,10 @@ func rzfit_device_info_mesg_value_dict( ptr : UnsafePointer<FIT_DEVICE_INFO_MESG
 }
 func rzfit_device_info_mesg_enum_dict( ptr : UnsafePointer<FIT_DEVICE_INFO_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_DEVICE_INFO_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
+  var x : FIT_DEVICE_INFO_MESG = ptr.pointee
+  rv[ "product_name" ] = withUnsafeBytes(of: &x.product_name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.manufacturer != FIT_MANUFACTURER_INVALID ) {
     rv[ "manufacturer" ] = rzfit_manufacturer_string(input: x.manufacturer)
@@ -4665,6 +4349,10 @@ func rzfit_device_info_mesg_enum_dict( ptr : UnsafePointer<FIT_DEVICE_INFO_MESG>
   }
   if( x.sensor_position != FIT_BODY_LOCATION_INVALID ) {
     rv[ "sensor_position" ] = rzfit_body_location_string(input: x.sensor_position)
+  }
+  rv[ "descriptor" ] = withUnsafeBytes(of: &x.descriptor) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.ant_network != FIT_ANT_NETWORK_INVALID ) {
     rv[ "ant_network" ] = rzfit_ant_network_string(input: x.ant_network)
@@ -4731,23 +4419,29 @@ func rzfit_file_capabilities_mesg_value_dict( ptr : UnsafePointer<FIT_FILE_CAPAB
     let val : Double = Double(x.max_size)
     rv[ "max_size" ] = val
   }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.max_count != FIT_UINT16_INVALID  {
     let val : Double = Double(x.max_count)
     rv[ "max_count" ] = val
+  }
+  if x.flags != FIT_FILE_FLAGS_INVALID  {
+    let val : Double = Double(x.flags)
+    rv[ "flags" ] = val
   }
   return rv
 }
 func rzfit_file_capabilities_mesg_enum_dict( ptr : UnsafePointer<FIT_FILE_CAPABILITIES_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_FILE_CAPABILITIES_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_FILE_CAPABILITIES_MESG = ptr.pointee
+  rv[ "directory" ] = withUnsafeBytes(of: &x.directory) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.type != FIT_FILE_INVALID ) {
     rv[ "type" ] = rzfit_file_string(input: x.type)
-  }
-  if( x.flags != FIT_FILE_FLAGS_INVALID ) {
-    rv[ "flags" ] = rzfit_file_flags_string(input: x.flags)
   }
   return rv
 }
@@ -4766,13 +4460,18 @@ func rzfit_segment_leaderboard_entry_mesg_value_dict( ptr : UnsafePointer<FIT_SE
     let val : Double = (Double(x.segment_time))/Double(1000)
     rv[ "segment_time" ] = val
   }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   return rv
 }
 func rzfit_segment_leaderboard_entry_mesg_enum_dict( ptr : UnsafePointer<FIT_SEGMENT_LEADERBOARD_ENTRY_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_SEGMENT_LEADERBOARD_ENTRY_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_SEGMENT_LEADERBOARD_ENTRY_MESG = ptr.pointee
+  rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.type != FIT_SEGMENT_LEADERBOARD_TYPE_INVALID ) {
     rv[ "type" ] = rzfit_segment_leaderboard_type_string(input: x.type)
@@ -4802,7 +4501,15 @@ func rzfit_segment_id_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_ID_MESG>)
 }
 func rzfit_segment_id_mesg_enum_dict( ptr : UnsafePointer<FIT_SEGMENT_ID_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_SEGMENT_ID_MESG = ptr.pointee
+  var x : FIT_SEGMENT_ID_MESG = ptr.pointee
+  rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
+  }
+  rv[ "uuid" ] = withUnsafeBytes(of: &x.uuid) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
+  }
   if( x.sport != FIT_SPORT_INVALID ) {
     rv[ "sport" ] = rzfit_sport_string(input: x.sport)
   }
@@ -4817,6 +4524,10 @@ func rzfit_segment_id_mesg_enum_dict( ptr : UnsafePointer<FIT_SEGMENT_ID_MESG>) 
 func rzfit_video_description_mesg_value_dict( ptr : UnsafePointer<FIT_VIDEO_DESCRIPTION_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_VIDEO_DESCRIPTION_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.message_count != FIT_UINT16_INVALID  {
     let val : Double = Double(x.message_count)
     rv[ "message_count" ] = val
@@ -4825,15 +4536,20 @@ func rzfit_video_description_mesg_value_dict( ptr : UnsafePointer<FIT_VIDEO_DESC
 }
 func rzfit_video_description_mesg_enum_dict( ptr : UnsafePointer<FIT_VIDEO_DESCRIPTION_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_VIDEO_DESCRIPTION_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_VIDEO_DESCRIPTION_MESG = ptr.pointee
+  rv[ "text" ] = withUnsafeBytes(of: &x.text) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   return rv
 }
 func rzfit_field_capabilities_mesg_value_dict( ptr : UnsafePointer<FIT_FIELD_CAPABILITIES_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_FIELD_CAPABILITIES_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.count != FIT_UINT16_INVALID  {
     let val : Double = Double(x.count)
     rv[ "count" ] = val
@@ -4847,9 +4563,6 @@ func rzfit_field_capabilities_mesg_value_dict( ptr : UnsafePointer<FIT_FIELD_CAP
 func rzfit_field_capabilities_mesg_enum_dict( ptr : UnsafePointer<FIT_FIELD_CAPABILITIES_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_FIELD_CAPABILITIES_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
   if( x.mesg_num != FIT_MESG_NUM_INVALID ) {
     rv[ "mesg_num" ] = rzfit_mesg_num_string(input: x.mesg_num)
   }
@@ -4867,6 +4580,10 @@ func rzfit_device_file_enum_dict( ptr : UnsafePointer<FIT_DEVICE_FILE>) -> [Stri
 func rzfit_course_point_mesg_value_dict( ptr : UnsafePointer<FIT_COURSE_POINT_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_COURSE_POINT_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.position_lat != FIT_SINT32_INVALID  {
     let val : Double = Double(x.position_lat)
     rv[ "position_lat" ] = val
@@ -4879,6 +4596,10 @@ func rzfit_course_point_mesg_value_dict( ptr : UnsafePointer<FIT_COURSE_POINT_ME
     let val : Double = (Double(x.distance))/Double(100)
     rv[ "distance" ] = val
   }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.favorite != FIT_BOOL_INVALID  {
     let val : Double = Double(x.favorite)
     rv[ "favorite" ] = val
@@ -4887,12 +4608,10 @@ func rzfit_course_point_mesg_value_dict( ptr : UnsafePointer<FIT_COURSE_POINT_ME
 }
 func rzfit_course_point_mesg_enum_dict( ptr : UnsafePointer<FIT_COURSE_POINT_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_COURSE_POINT_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_COURSE_POINT_MESG = ptr.pointee
+  rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.type != FIT_COURSE_POINT_INVALID ) {
     rv[ "type" ] = rzfit_course_point_string(input: x.type)
@@ -4977,6 +4696,10 @@ func rzfit_record_mesg_def_enum_dict( ptr : UnsafePointer<FIT_RECORD_MESG_DEF>) 
 func rzfit_hr_mesg_value_dict( ptr : UnsafePointer<FIT_HR_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_HR_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.fractional_timestamp != FIT_UINT16_INVALID  {
     let val : Double = (Double(x.fractional_timestamp))/Double(32768)
     rv[ "fractional_timestamp" ] = val
@@ -4988,12 +4711,7 @@ func rzfit_hr_mesg_value_dict( ptr : UnsafePointer<FIT_HR_MESG>) -> [String:Doub
   return rv
 }
 func rzfit_hr_mesg_enum_dict( ptr : UnsafePointer<FIT_HR_MESG>) -> [String:String] {
-  var rv : [String:String] = [:]
-  let x : FIT_HR_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  return rv
+  return [:]
 }
 func rzfit_video_description_mesg_def_value_dict( ptr : UnsafePointer<FIT_VIDEO_DESCRIPTION_MESG_DEF>) -> [String:Double] {
   var rv : [String:Double] = [:]
@@ -5021,22 +4739,32 @@ func rzfit_video_description_mesg_def_enum_dict( ptr : UnsafePointer<FIT_VIDEO_D
   return rv
 }
 func rzfit_monitoring_info_mesg_value_dict( ptr : UnsafePointer<FIT_MONITORING_INFO_MESG>) -> [String:Double] {
-  return [:]
-}
-func rzfit_monitoring_info_mesg_enum_dict( ptr : UnsafePointer<FIT_MONITORING_INFO_MESG>) -> [String:String] {
-  var rv : [String:String] = [:]
+  var rv : [String:Double] = [:]
   let x : FIT_MONITORING_INFO_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
   }
-  if( x.local_timestamp != FIT_LOCAL_DATE_TIME_INVALID ) {
-    rv[ "local_timestamp" ] = rzfit_local_date_time_string(input: x.local_timestamp)
+  if x.local_timestamp != FIT_LOCAL_DATE_TIME_INVALID  {
+    let val : Double = Double(x.local_timestamp)
+    rv[ "local_timestamp" ] = val
   }
   return rv
+}
+func rzfit_monitoring_info_mesg_enum_dict( ptr : UnsafePointer<FIT_MONITORING_INFO_MESG>) -> [String:String] {
+  return [:]
 }
 func rzfit_goal_mesg_value_dict( ptr : UnsafePointer<FIT_GOAL_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_GOAL_MESG = ptr.pointee
+  if x.start_date != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.start_date)
+    rv[ "start_date" ] = val
+  }
+  if x.end_date != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.end_date)
+    rv[ "end_date" ] = val
+  }
   if x.value != FIT_UINT32_INVALID  {
     let val : Double = Double(x.value)
     rv[ "value" ] = val
@@ -5044,6 +4772,10 @@ func rzfit_goal_mesg_value_dict( ptr : UnsafePointer<FIT_GOAL_MESG>) -> [String:
   if x.target_value != FIT_UINT32_INVALID  {
     let val : Double = Double(x.target_value)
     rv[ "target_value" ] = val
+  }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
   }
   if x.recurrence_value != FIT_UINT16_INVALID  {
     let val : Double = Double(x.recurrence_value)
@@ -5062,15 +4794,6 @@ func rzfit_goal_mesg_value_dict( ptr : UnsafePointer<FIT_GOAL_MESG>) -> [String:
 func rzfit_goal_mesg_enum_dict( ptr : UnsafePointer<FIT_GOAL_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_GOAL_MESG = ptr.pointee
-  if( x.start_date != FIT_DATE_TIME_INVALID ) {
-    rv[ "start_date" ] = rzfit_date_time_string(input: x.start_date)
-  }
-  if( x.end_date != FIT_DATE_TIME_INVALID ) {
-    rv[ "end_date" ] = rzfit_date_time_string(input: x.end_date)
-  }
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
   if( x.sport != FIT_SPORT_INVALID ) {
     rv[ "sport" ] = rzfit_sport_string(input: x.sport)
   }
@@ -5141,6 +4864,14 @@ func rzfit_blood_pressure_mesg_def_enum_dict( ptr : UnsafePointer<FIT_BLOOD_PRES
 func rzfit_weather_conditions_mesg_value_dict( ptr : UnsafePointer<FIT_WEATHER_CONDITIONS_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_WEATHER_CONDITIONS_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
+  if x.observed_at_time != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.observed_at_time)
+    rv[ "observed_at_time" ] = val
+  }
   if x.observed_location_lat != FIT_SINT32_INVALID  {
     let val : Double = Double(x.observed_location_lat)
     rv[ "observed_location_lat" ] = val
@@ -5185,12 +4916,10 @@ func rzfit_weather_conditions_mesg_value_dict( ptr : UnsafePointer<FIT_WEATHER_C
 }
 func rzfit_weather_conditions_mesg_enum_dict( ptr : UnsafePointer<FIT_WEATHER_CONDITIONS_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_WEATHER_CONDITIONS_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.observed_at_time != FIT_DATE_TIME_INVALID ) {
-    rv[ "observed_at_time" ] = rzfit_date_time_string(input: x.observed_at_time)
+  var x : FIT_WEATHER_CONDITIONS_MESG = ptr.pointee
+  rv[ "location" ] = withUnsafeBytes(of: &x.location) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.weather_report != FIT_WEATHER_REPORT_INVALID ) {
     rv[ "weather_report" ] = rzfit_weather_report_string(input: x.weather_report)
@@ -5329,22 +5058,28 @@ func rzfit_ant_rx_mesg_def_enum_dict( ptr : UnsafePointer<FIT_ANT_RX_MESG_DEF>) 
   return rv
 }
 func rzfit_capabilities_mesg_value_dict( ptr : UnsafePointer<FIT_CAPABILITIES_MESG>) -> [String:Double] {
-  return [:]
-}
-func rzfit_capabilities_mesg_enum_dict( ptr : UnsafePointer<FIT_CAPABILITIES_MESG>) -> [String:String] {
-  var rv : [String:String] = [:]
+  var rv : [String:Double] = [:]
   let x : FIT_CAPABILITIES_MESG = ptr.pointee
-  if( x.workouts_supported != FIT_WORKOUT_CAPABILITIES_INVALID ) {
-    rv[ "workouts_supported" ] = rzfit_workout_capabilities_string(input: x.workouts_supported)
+  if x.workouts_supported != FIT_WORKOUT_CAPABILITIES_INVALID  {
+    let val : Double = Double(x.workouts_supported)
+    rv[ "workouts_supported" ] = val
   }
-  if( x.connectivity_supported != FIT_CONNECTIVITY_CAPABILITIES_INVALID ) {
-    rv[ "connectivity_supported" ] = rzfit_connectivity_capabilities_string(input: x.connectivity_supported)
+  if x.connectivity_supported != FIT_CONNECTIVITY_CAPABILITIES_INVALID  {
+    let val : Double = Double(x.connectivity_supported)
+    rv[ "connectivity_supported" ] = val
   }
   return rv
+}
+func rzfit_capabilities_mesg_enum_dict( ptr : UnsafePointer<FIT_CAPABILITIES_MESG>) -> [String:String] {
+  return [:]
 }
 func rzfit_software_mesg_value_dict( ptr : UnsafePointer<FIT_SOFTWARE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_SOFTWARE_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.version != FIT_UINT16_INVALID  {
     let val : Double = Double(x.version)
     rv[ "version" ] = val
@@ -5353,9 +5088,10 @@ func rzfit_software_mesg_value_dict( ptr : UnsafePointer<FIT_SOFTWARE_MESG>) -> 
 }
 func rzfit_software_mesg_enum_dict( ptr : UnsafePointer<FIT_SOFTWARE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_SOFTWARE_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_SOFTWARE_MESG = ptr.pointee
+  rv[ "part_number" ] = withUnsafeBytes(of: &x.part_number) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   return rv
 }
@@ -5468,6 +5204,10 @@ func rzfit_length_mesg_def_enum_dict( ptr : UnsafePointer<FIT_LENGTH_MESG_DEF>) 
 func rzfit_ant_rx_mesg_value_dict( ptr : UnsafePointer<FIT_ANT_RX_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_ANT_RX_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.fractional_timestamp != FIT_UINT16_INVALID  {
     let val : Double = (Double(x.fractional_timestamp))/Double(32768)
     rv[ "fractional_timestamp" ] = val
@@ -5483,12 +5223,7 @@ func rzfit_ant_rx_mesg_value_dict( ptr : UnsafePointer<FIT_ANT_RX_MESG>) -> [Str
   return rv
 }
 func rzfit_ant_rx_mesg_enum_dict( ptr : UnsafePointer<FIT_ANT_RX_MESG>) -> [String:String] {
-  var rv : [String:String] = [:]
-  let x : FIT_ANT_RX_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  return rv
+  return [:]
 }
 func rzfit_mesg_convert_value_dict( ptr : UnsafePointer<FIT_MESG_CONVERT>) -> [String:Double] {
   var rv : [String:Double] = [:]
@@ -5522,6 +5257,10 @@ func rzfit_device_settings_mesg_value_dict( ptr : UnsafePointer<FIT_DEVICE_SETTI
     let val : Double = Double(x.utc_offset)
     rv[ "utc_offset" ] = val
   }
+  if x.clock_time != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.clock_time)
+    rv[ "clock_time" ] = val
+  }
   if x.autosync_min_steps != FIT_UINT16_INVALID  {
     let val : Double = Double(x.autosync_min_steps)
     rv[ "autosync_min_steps" ] = val
@@ -5547,9 +5286,6 @@ func rzfit_device_settings_mesg_value_dict( ptr : UnsafePointer<FIT_DEVICE_SETTI
 func rzfit_device_settings_mesg_enum_dict( ptr : UnsafePointer<FIT_DEVICE_SETTINGS_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_DEVICE_SETTINGS_MESG = ptr.pointee
-  if( x.clock_time != FIT_DATE_TIME_INVALID ) {
-    rv[ "clock_time" ] = rzfit_date_time_string(input: x.clock_time)
-  }
   if( x.backlight_mode != FIT_BACKLIGHT_MODE_INVALID ) {
     rv[ "backlight_mode" ] = rzfit_backlight_mode_string(input: x.backlight_mode)
   }
@@ -5567,6 +5303,10 @@ func rzfit_device_settings_mesg_enum_dict( ptr : UnsafePointer<FIT_DEVICE_SETTIN
 func rzfit_totals_mesg_value_dict( ptr : UnsafePointer<FIT_TOTALS_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_TOTALS_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.timer_time != FIT_UINT32_INVALID  {
     let val : Double = Double(x.timer_time)
     rv[ "timer_time" ] = val
@@ -5587,6 +5327,10 @@ func rzfit_totals_mesg_value_dict( ptr : UnsafePointer<FIT_TOTALS_MESG>) -> [Str
     let val : Double = Double(x.active_time)
     rv[ "active_time" ] = val
   }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.sessions != FIT_UINT16_INVALID  {
     let val : Double = Double(x.sessions)
     rv[ "sessions" ] = val
@@ -5596,12 +5340,6 @@ func rzfit_totals_mesg_value_dict( ptr : UnsafePointer<FIT_TOTALS_MESG>) -> [Str
 func rzfit_totals_mesg_enum_dict( ptr : UnsafePointer<FIT_TOTALS_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_TOTALS_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
   if( x.sport != FIT_SPORT_INVALID ) {
     rv[ "sport" ] = rzfit_sport_string(input: x.sport)
   }
@@ -5610,6 +5348,10 @@ func rzfit_totals_mesg_enum_dict( ptr : UnsafePointer<FIT_TOTALS_MESG>) -> [Stri
 func rzfit_cadence_zone_mesg_value_dict( ptr : UnsafePointer<FIT_CADENCE_ZONE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_CADENCE_ZONE_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.high_value != FIT_UINT8_INVALID  {
     let val : Double = Double(x.high_value)
     rv[ "high_value" ] = val
@@ -5618,20 +5360,28 @@ func rzfit_cadence_zone_mesg_value_dict( ptr : UnsafePointer<FIT_CADENCE_ZONE_ME
 }
 func rzfit_cadence_zone_mesg_enum_dict( ptr : UnsafePointer<FIT_CADENCE_ZONE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_CADENCE_ZONE_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_CADENCE_ZONE_MESG = ptr.pointee
+  rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   return rv
 }
 func rzfit_course_mesg_value_dict( ptr : UnsafePointer<FIT_COURSE_MESG>) -> [String:Double] {
-  return [:]
+  var rv : [String:Double] = [:]
+  let x : FIT_COURSE_MESG = ptr.pointee
+  if x.capabilities != FIT_COURSE_CAPABILITIES_INVALID  {
+    let val : Double = Double(x.capabilities)
+    rv[ "capabilities" ] = val
+  }
+  return rv
 }
 func rzfit_course_mesg_enum_dict( ptr : UnsafePointer<FIT_COURSE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_COURSE_MESG = ptr.pointee
-  if( x.capabilities != FIT_COURSE_CAPABILITIES_INVALID ) {
-    rv[ "capabilities" ] = rzfit_course_capabilities_string(input: x.capabilities)
+  var x : FIT_COURSE_MESG = ptr.pointee
+  rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.sport != FIT_SPORT_INVALID ) {
     rv[ "sport" ] = rzfit_sport_string(input: x.sport)
@@ -5694,6 +5444,14 @@ func rzfit_user_profile_mesg_def_enum_dict( ptr : UnsafePointer<FIT_USER_PROFILE
 func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_LAP_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
+  if x.start_time != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.start_time)
+    rv[ "start_time" ] = val
+  }
   if x.start_position_lat != FIT_SINT32_INVALID  {
     let val : Double = Double(x.start_position_lat)
     rv[ "start_position_lat" ] = val
@@ -5754,6 +5512,10 @@ func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Do
     let val : Double = (Double(x.enhanced_max_altitude)-Double(500))/Double(5)
     rv[ "enhanced_max_altitude" ] = val
   }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.total_calories != FIT_UINT16_INVALID  {
     let val : Double = Double(x.total_calories)
     rv[ "total_calories" ] = val
@@ -5793,6 +5555,10 @@ func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Do
   if x.normalized_power != FIT_UINT16_INVALID  {
     let val : Double = Double(x.normalized_power)
     rv[ "normalized_power" ] = val
+  }
+  if x.left_right_balance != FIT_LEFT_RIGHT_BALANCE_100_INVALID  {
+    let val : Double = Double(x.left_right_balance)
+    rv[ "left_right_balance" ] = val
   }
   if x.first_length_index != FIT_UINT16_INVALID  {
     let val : Double = Double(x.first_length_index)
@@ -5857,6 +5623,10 @@ func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Do
   if x.min_altitude != FIT_UINT16_INVALID  {
     let val : Double = (Double(x.min_altitude)-Double(500))/Double(5)
     rv[ "min_altitude" ] = val
+  }
+  if x.wkt_step_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.wkt_step_index)
+    rv[ "wkt_step_index" ] = val
   }
   if x.opponent_score != FIT_UINT16_INVALID  {
     let val : Double = Double(x.opponent_score)
@@ -5935,21 +5705,6 @@ func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Do
 func rzfit_lap_mesg_enum_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_LAP_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.start_time != FIT_DATE_TIME_INVALID ) {
-    rv[ "start_time" ] = rzfit_date_time_string(input: x.start_time)
-  }
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
-  if( x.left_right_balance != FIT_LEFT_RIGHT_BALANCE_100_INVALID ) {
-    rv[ "left_right_balance" ] = rzfit_left_right_balance_100_string(input: x.left_right_balance)
-  }
-  if( x.wkt_step_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "wkt_step_index" ] = rzfit_message_index_string(input: x.wkt_step_index)
-  }
   if( x.event != FIT_EVENT_INVALID ) {
     rv[ "event" ] = rzfit_event_string(input: x.event)
   }
@@ -6001,6 +5756,14 @@ func rzfit_hrv_mesg_def_enum_dict( ptr : UnsafePointer<FIT_HRV_MESG_DEF>) -> [St
 func rzfit_weight_scale_mesg_value_dict( ptr : UnsafePointer<FIT_WEIGHT_SCALE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_WEIGHT_SCALE_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
+  if x.weight != FIT_WEIGHT_INVALID  {
+    let val : Double = (Double(x.weight))/Double(100)
+    rv[ "weight" ] = val
+  }
   if x.percent_fat != FIT_UINT16_INVALID  {
     let val : Double = (Double(x.percent_fat))/Double(100)
     rv[ "percent_fat" ] = val
@@ -6029,6 +5792,10 @@ func rzfit_weight_scale_mesg_value_dict( ptr : UnsafePointer<FIT_WEIGHT_SCALE_ME
     let val : Double = (Double(x.active_met))/Double(4)
     rv[ "active_met" ] = val
   }
+  if x.user_profile_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.user_profile_index)
+    rv[ "user_profile_index" ] = val
+  }
   if x.physique_rating != FIT_UINT8_INVALID  {
     let val : Double = Double(x.physique_rating)
     rv[ "physique_rating" ] = val
@@ -6044,22 +5811,15 @@ func rzfit_weight_scale_mesg_value_dict( ptr : UnsafePointer<FIT_WEIGHT_SCALE_ME
   return rv
 }
 func rzfit_weight_scale_mesg_enum_dict( ptr : UnsafePointer<FIT_WEIGHT_SCALE_MESG>) -> [String:String] {
-  var rv : [String:String] = [:]
-  let x : FIT_WEIGHT_SCALE_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.weight != FIT_WEIGHT_INVALID ) {
-    rv[ "weight" ] = rzfit_weight_string(input: x.weight)
-  }
-  if( x.user_profile_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "user_profile_index" ] = rzfit_message_index_string(input: x.user_profile_index)
-  }
-  return rv
+  return [:]
 }
 func rzfit_exercise_title_mesg_value_dict( ptr : UnsafePointer<FIT_EXERCISE_TITLE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_EXERCISE_TITLE_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.exercise_name != FIT_UINT16_INVALID  {
     let val : Double = Double(x.exercise_name)
     rv[ "exercise_name" ] = val
@@ -6068,9 +5828,10 @@ func rzfit_exercise_title_mesg_value_dict( ptr : UnsafePointer<FIT_EXERCISE_TITL
 }
 func rzfit_exercise_title_mesg_enum_dict( ptr : UnsafePointer<FIT_EXERCISE_TITLE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_EXERCISE_TITLE_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_EXERCISE_TITLE_MESG = ptr.pointee
+  rv[ "wkt_step_name" ] = withUnsafeBytes(of: &x.wkt_step_name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.exercise_category != FIT_EXERCISE_CATEGORY_INVALID ) {
     rv[ "exercise_category" ] = rzfit_exercise_category_string(input: x.exercise_category)
@@ -6155,6 +5916,10 @@ func rzfit_hr_mesg_def_enum_dict( ptr : UnsafePointer<FIT_HR_MESG_DEF>) -> [Stri
 func rzfit_workout_session_mesg_value_dict( ptr : UnsafePointer<FIT_WORKOUT_SESSION_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_WORKOUT_SESSION_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.num_valid_steps != FIT_UINT16_INVALID  {
     let val : Double = Double(x.num_valid_steps)
     rv[ "num_valid_steps" ] = val
@@ -6172,9 +5937,6 @@ func rzfit_workout_session_mesg_value_dict( ptr : UnsafePointer<FIT_WORKOUT_SESS
 func rzfit_workout_session_mesg_enum_dict( ptr : UnsafePointer<FIT_WORKOUT_SESSION_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_WORKOUT_SESSION_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
   if( x.sport != FIT_SPORT_INVALID ) {
     rv[ "sport" ] = rzfit_sport_string(input: x.sport)
   }
@@ -6214,6 +5976,10 @@ func rzfit_dive_settings_mesg_def_enum_dict( ptr : UnsafePointer<FIT_DIVE_SETTIN
 func rzfit_monitoring_mesg_value_dict( ptr : UnsafePointer<FIT_MONITORING_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_MONITORING_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.distance != FIT_UINT32_INVALID  {
     let val : Double = (Double(x.distance))/Double(100)
     rv[ "distance" ] = val
@@ -6225,6 +5991,10 @@ func rzfit_monitoring_mesg_value_dict( ptr : UnsafePointer<FIT_MONITORING_MESG>)
   if x.active_time != FIT_UINT32_INVALID  {
     let val : Double = (Double(x.active_time))/Double(1000)
     rv[ "active_time" ] = val
+  }
+  if x.local_timestamp != FIT_LOCAL_DATE_TIME_INVALID  {
+    let val : Double = Double(x.local_timestamp)
+    rv[ "local_timestamp" ] = val
   }
   if x.calories != FIT_UINT16_INVALID  {
     let val : Double = Double(x.calories)
@@ -6247,12 +6017,6 @@ func rzfit_monitoring_mesg_value_dict( ptr : UnsafePointer<FIT_MONITORING_MESG>)
 func rzfit_monitoring_mesg_enum_dict( ptr : UnsafePointer<FIT_MONITORING_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_MONITORING_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.local_timestamp != FIT_LOCAL_DATE_TIME_INVALID ) {
-    rv[ "local_timestamp" ] = rzfit_local_date_time_string(input: x.local_timestamp)
-  }
   if( x.device_index != FIT_DEVICE_INDEX_INVALID ) {
     rv[ "device_index" ] = rzfit_device_index_string(input: x.device_index)
   }
@@ -6267,9 +6031,17 @@ func rzfit_monitoring_mesg_enum_dict( ptr : UnsafePointer<FIT_MONITORING_MESG>) 
 func rzfit_user_profile_mesg_value_dict( ptr : UnsafePointer<FIT_USER_PROFILE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_USER_PROFILE_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.weight != FIT_UINT16_INVALID  {
     let val : Double = (Double(x.weight))/Double(10)
     rv[ "weight" ] = val
+  }
+  if x.local_id != FIT_USER_LOCAL_ID_INVALID  {
+    let val : Double = Double(x.local_id)
+    rv[ "local_id" ] = val
   }
   if x.user_running_step_length != FIT_UINT16_INVALID  {
     let val : Double = (Double(x.user_running_step_length))/Double(1000)
@@ -6307,12 +6079,10 @@ func rzfit_user_profile_mesg_value_dict( ptr : UnsafePointer<FIT_USER_PROFILE_ME
 }
 func rzfit_user_profile_mesg_enum_dict( ptr : UnsafePointer<FIT_USER_PROFILE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_USER_PROFILE_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
-  if( x.local_id != FIT_USER_LOCAL_ID_INVALID ) {
-    rv[ "local_id" ] = rzfit_user_local_id_string(input: x.local_id)
+  var x : FIT_USER_PROFILE_MESG = ptr.pointee
+  rv[ "friendly_name" ] = withUnsafeBytes(of: &x.friendly_name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.gender != FIT_GENDER_INVALID ) {
     rv[ "gender" ] = rzfit_gender_string(input: x.gender)
@@ -6355,6 +6125,10 @@ func rzfit_user_profile_mesg_enum_dict( ptr : UnsafePointer<FIT_USER_PROFILE_MES
 func rzfit_record_mesg_value_dict( ptr : UnsafePointer<FIT_RECORD_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_RECORD_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.position_lat != FIT_SINT32_INVALID  {
     let val : Double = Double(x.position_lat)
     rv[ "position_lat" ] = val
@@ -6483,6 +6257,10 @@ func rzfit_record_mesg_value_dict( ptr : UnsafePointer<FIT_RECORD_MESG>) -> [Str
     let val : Double = Double(x.cycles)
     rv[ "cycles" ] = val
   }
+  if x.left_right_balance != FIT_LEFT_RIGHT_BALANCE_INVALID  {
+    let val : Double = Double(x.left_right_balance)
+    rv[ "left_right_balance" ] = val
+  }
   if x.gps_accuracy != FIT_UINT8_INVALID  {
     let val : Double = Double(x.gps_accuracy)
     rv[ "gps_accuracy" ] = val
@@ -6524,12 +6302,6 @@ func rzfit_record_mesg_value_dict( ptr : UnsafePointer<FIT_RECORD_MESG>) -> [Str
 func rzfit_record_mesg_enum_dict( ptr : UnsafePointer<FIT_RECORD_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_RECORD_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.left_right_balance != FIT_LEFT_RIGHT_BALANCE_INVALID ) {
-    rv[ "left_right_balance" ] = rzfit_left_right_balance_string(input: x.left_right_balance)
-  }
   if( x.activity_type != FIT_ACTIVITY_TYPE_INVALID ) {
     rv[ "activity_type" ] = rzfit_activity_type_string(input: x.activity_type)
   }
@@ -6595,7 +6367,13 @@ func rzfit_connectivity_mesg_value_dict( ptr : UnsafePointer<FIT_CONNECTIVITY_ME
   return rv
 }
 func rzfit_connectivity_mesg_enum_dict( ptr : UnsafePointer<FIT_CONNECTIVITY_MESG>) -> [String:String] {
-  return [:]
+  var rv : [String:String] = [:]
+  var x : FIT_CONNECTIVITY_MESG = ptr.pointee
+  rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
+  }
+  return rv
 }
 func rzfit_field_description_mesg_value_dict( ptr : UnsafePointer<FIT_FIELD_DESCRIPTION_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
@@ -6624,7 +6402,15 @@ func rzfit_field_description_mesg_value_dict( ptr : UnsafePointer<FIT_FIELD_DESC
 }
 func rzfit_field_description_mesg_enum_dict( ptr : UnsafePointer<FIT_FIELD_DESCRIPTION_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_FIELD_DESCRIPTION_MESG = ptr.pointee
+  var x : FIT_FIELD_DESCRIPTION_MESG = ptr.pointee
+  rv[ "field_name" ] = withUnsafeBytes(of: &x.field_name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
+  }
+  rv[ "units" ] = withUnsafeBytes(of: &x.units) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
+  }
   if( x.fit_base_unit_id != FIT_FIT_BASE_UNIT_INVALID ) {
     rv[ "fit_base_unit_id" ] = rzfit_fit_base_unit_string(input: x.fit_base_unit_id)
   }
@@ -6639,6 +6425,10 @@ func rzfit_field_description_mesg_enum_dict( ptr : UnsafePointer<FIT_FIELD_DESCR
 func rzfit_ant_tx_mesg_value_dict( ptr : UnsafePointer<FIT_ANT_TX_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_ANT_TX_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.fractional_timestamp != FIT_UINT16_INVALID  {
     let val : Double = (Double(x.fractional_timestamp))/Double(32768)
     rv[ "fractional_timestamp" ] = val
@@ -6654,12 +6444,7 @@ func rzfit_ant_tx_mesg_value_dict( ptr : UnsafePointer<FIT_ANT_TX_MESG>) -> [Str
   return rv
 }
 func rzfit_ant_tx_mesg_enum_dict( ptr : UnsafePointer<FIT_ANT_TX_MESG>) -> [String:String] {
-  var rv : [String:String] = [:]
-  let x : FIT_ANT_TX_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  return rv
+  return [:]
 }
 func rzfit_segment_id_mesg_def_value_dict( ptr : UnsafePointer<FIT_SEGMENT_ID_MESG_DEF>) -> [String:Double] {
   var rv : [String:Double] = [:]
@@ -6714,6 +6499,10 @@ func rzfit_segment_leaderboard_entry_mesg_def_enum_dict( ptr : UnsafePointer<FIT
 func rzfit_nmea_sentence_mesg_value_dict( ptr : UnsafePointer<FIT_NMEA_SENTENCE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_NMEA_SENTENCE_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.timestamp_ms != FIT_UINT16_INVALID  {
     let val : Double = Double(x.timestamp_ms)
     rv[ "timestamp_ms" ] = val
@@ -6722,9 +6511,10 @@ func rzfit_nmea_sentence_mesg_value_dict( ptr : UnsafePointer<FIT_NMEA_SENTENCE_
 }
 func rzfit_nmea_sentence_mesg_enum_dict( ptr : UnsafePointer<FIT_NMEA_SENTENCE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_NMEA_SENTENCE_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
+  var x : FIT_NMEA_SENTENCE_MESG = ptr.pointee
+  rv[ "sentence" ] = withUnsafeBytes(of: &x.sentence) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   return rv
 }
@@ -6747,13 +6537,18 @@ func rzfit_workout_step_mesg_value_dict( ptr : UnsafePointer<FIT_WORKOUT_STEP_ME
     let val : Double = Double(x.custom_target_value_high)
     rv[ "custom_target_value_high" ] = val
   }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   return rv
 }
 func rzfit_workout_step_mesg_enum_dict( ptr : UnsafePointer<FIT_WORKOUT_STEP_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_WORKOUT_STEP_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_WORKOUT_STEP_MESG = ptr.pointee
+  rv[ "wkt_step_name" ] = withUnsafeBytes(of: &x.wkt_step_name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.exercise_category != FIT_EXERCISE_CATEGORY_INVALID ) {
     rv[ "exercise_category" ] = rzfit_exercise_category_string(input: x.exercise_category)
@@ -6767,6 +6562,10 @@ func rzfit_workout_step_mesg_enum_dict( ptr : UnsafePointer<FIT_WORKOUT_STEP_MES
   if( x.intensity != FIT_INTENSITY_INVALID ) {
     rv[ "intensity" ] = rzfit_intensity_string(input: x.intensity)
   }
+  rv[ "notes" ] = withUnsafeBytes(of: &x.notes) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
+  }
   if( x.equipment != FIT_WORKOUT_EQUIPMENT_INVALID ) {
     rv[ "equipment" ] = rzfit_workout_equipment_string(input: x.equipment)
   }
@@ -6775,6 +6574,14 @@ func rzfit_workout_step_mesg_enum_dict( ptr : UnsafePointer<FIT_WORKOUT_STEP_MES
 func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_SESSION_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
+  if x.start_time != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.start_time)
+    rv[ "start_time" ] = val
+  }
   if x.start_position_lat != FIT_SINT32_INVALID  {
     let val : Double = Double(x.start_position_lat)
     rv[ "start_position_lat" ] = val
@@ -6851,6 +6658,10 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     let val : Double = (Double(x.enhanced_max_altitude)-Double(500))/Double(5)
     rv[ "enhanced_max_altitude" ] = val
   }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.total_calories != FIT_UINT16_INVALID  {
     let val : Double = Double(x.total_calories)
     rv[ "total_calories" ] = val
@@ -6902,6 +6713,10 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
   if x.intensity_factor != FIT_UINT16_INVALID  {
     let val : Double = (Double(x.intensity_factor))/Double(1000)
     rv[ "intensity_factor" ] = val
+  }
+  if x.left_right_balance != FIT_LEFT_RIGHT_BALANCE_100_INVALID  {
+    let val : Double = Double(x.left_right_balance)
+    rv[ "left_right_balance" ] = val
   }
   if x.avg_stroke_distance != FIT_UINT16_INVALID  {
     let val : Double = (Double(x.avg_stroke_distance))/Double(100)
@@ -7067,19 +6882,7 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
 }
 func rzfit_session_mesg_enum_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_SESSION_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.start_time != FIT_DATE_TIME_INVALID ) {
-    rv[ "start_time" ] = rzfit_date_time_string(input: x.start_time)
-  }
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
-  if( x.left_right_balance != FIT_LEFT_RIGHT_BALANCE_100_INVALID ) {
-    rv[ "left_right_balance" ] = rzfit_left_right_balance_100_string(input: x.left_right_balance)
-  }
+  var x : FIT_SESSION_MESG = ptr.pointee
   if( x.event != FIT_EVENT_INVALID ) {
     rv[ "event" ] = rzfit_event_string(input: x.event)
   }
@@ -7101,11 +6904,19 @@ func rzfit_session_mesg_enum_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [St
   if( x.pool_length_unit != FIT_DISPLAY_MEASURE_INVALID ) {
     rv[ "pool_length_unit" ] = rzfit_display_measure_string(input: x.pool_length_unit)
   }
+  rv[ "opponent_name" ] = withUnsafeBytes(of: &x.opponent_name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
+  }
   return rv
 }
 func rzfit_workout_mesg_value_dict( ptr : UnsafePointer<FIT_WORKOUT_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_WORKOUT_MESG = ptr.pointee
+  if x.capabilities != FIT_WORKOUT_CAPABILITIES_INVALID  {
+    let val : Double = Double(x.capabilities)
+    rv[ "capabilities" ] = val
+  }
   if x.num_valid_steps != FIT_UINT16_INVALID  {
     let val : Double = Double(x.num_valid_steps)
     rv[ "num_valid_steps" ] = val
@@ -7118,9 +6929,10 @@ func rzfit_workout_mesg_value_dict( ptr : UnsafePointer<FIT_WORKOUT_MESG>) -> [S
 }
 func rzfit_workout_mesg_enum_dict( ptr : UnsafePointer<FIT_WORKOUT_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_WORKOUT_MESG = ptr.pointee
-  if( x.capabilities != FIT_WORKOUT_CAPABILITIES_INVALID ) {
-    rv[ "capabilities" ] = rzfit_workout_capabilities_string(input: x.capabilities)
+  var x : FIT_WORKOUT_MESG = ptr.pointee
+  rv[ "wkt_name" ] = withUnsafeBytes(of: &x.wkt_name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.sport != FIT_SPORT_INVALID ) {
     rv[ "sport" ] = rzfit_sport_string(input: x.sport)
@@ -7136,6 +6948,10 @@ func rzfit_workout_mesg_enum_dict( ptr : UnsafePointer<FIT_WORKOUT_MESG>) -> [St
 func rzfit_hr_zone_mesg_value_dict( ptr : UnsafePointer<FIT_HR_ZONE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_HR_ZONE_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.high_bpm != FIT_UINT8_INVALID  {
     let val : Double = Double(x.high_bpm)
     rv[ "high_bpm" ] = val
@@ -7144,9 +6960,10 @@ func rzfit_hr_zone_mesg_value_dict( ptr : UnsafePointer<FIT_HR_ZONE_MESG>) -> [S
 }
 func rzfit_hr_zone_mesg_enum_dict( ptr : UnsafePointer<FIT_HR_ZONE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_HR_ZONE_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_HR_ZONE_MESG = ptr.pointee
+  rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   return rv
 }
@@ -7228,6 +7045,10 @@ func rzfit_slave_device_mesg_def_enum_dict( ptr : UnsafePointer<FIT_SLAVE_DEVICE
 func rzfit_blood_pressure_mesg_value_dict( ptr : UnsafePointer<FIT_BLOOD_PRESSURE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_BLOOD_PRESSURE_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.systolic_pressure != FIT_UINT16_INVALID  {
     let val : Double = Double(x.systolic_pressure)
     rv[ "systolic_pressure" ] = val
@@ -7252,6 +7073,10 @@ func rzfit_blood_pressure_mesg_value_dict( ptr : UnsafePointer<FIT_BLOOD_PRESSUR
     let val : Double = Double(x.map_evening_values)
     rv[ "map_evening_values" ] = val
   }
+  if x.user_profile_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.user_profile_index)
+    rv[ "user_profile_index" ] = val
+  }
   if x.heart_rate != FIT_UINT8_INVALID  {
     let val : Double = Double(x.heart_rate)
     rv[ "heart_rate" ] = val
@@ -7261,12 +7086,6 @@ func rzfit_blood_pressure_mesg_value_dict( ptr : UnsafePointer<FIT_BLOOD_PRESSUR
 func rzfit_blood_pressure_mesg_enum_dict( ptr : UnsafePointer<FIT_BLOOD_PRESSURE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_BLOOD_PRESSURE_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.user_profile_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "user_profile_index" ] = rzfit_message_index_string(input: x.user_profile_index)
-  }
   if( x.heart_rate_type != FIT_HR_TYPE_INVALID ) {
     rv[ "heart_rate_type" ] = rzfit_hr_type_string(input: x.heart_rate_type)
   }
@@ -7278,6 +7097,10 @@ func rzfit_blood_pressure_mesg_enum_dict( ptr : UnsafePointer<FIT_BLOOD_PRESSURE
 func rzfit_met_zone_mesg_value_dict( ptr : UnsafePointer<FIT_MET_ZONE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_MET_ZONE_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.calories != FIT_UINT16_INVALID  {
     let val : Double = Double(x.calories)
     rv[ "calories" ] = val
@@ -7293,12 +7116,7 @@ func rzfit_met_zone_mesg_value_dict( ptr : UnsafePointer<FIT_MET_ZONE_MESG>) -> 
   return rv
 }
 func rzfit_met_zone_mesg_enum_dict( ptr : UnsafePointer<FIT_MET_ZONE_MESG>) -> [String:String] {
-  var rv : [String:String] = [:]
-  let x : FIT_MET_ZONE_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
-  return rv
+  return [:]
 }
 func rzfit_segment_file_mesg_def_value_dict( ptr : UnsafePointer<FIT_SEGMENT_FILE_MESG_DEF>) -> [String:Double] {
   var rv : [String:Double] = [:]
@@ -7328,6 +7146,10 @@ func rzfit_segment_file_mesg_def_enum_dict( ptr : UnsafePointer<FIT_SEGMENT_FILE
 func rzfit_aviation_attitude_mesg_value_dict( ptr : UnsafePointer<FIT_AVIATION_ATTITUDE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_AVIATION_ATTITUDE_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.timestamp_ms != FIT_UINT16_INVALID  {
     let val : Double = Double(x.timestamp_ms)
     rv[ "timestamp_ms" ] = val
@@ -7335,16 +7157,15 @@ func rzfit_aviation_attitude_mesg_value_dict( ptr : UnsafePointer<FIT_AVIATION_A
   return rv
 }
 func rzfit_aviation_attitude_mesg_enum_dict( ptr : UnsafePointer<FIT_AVIATION_ATTITUDE_MESG>) -> [String:String] {
-  var rv : [String:String] = [:]
-  let x : FIT_AVIATION_ATTITUDE_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  return rv
+  return [:]
 }
 func rzfit_hrm_profile_mesg_value_dict( ptr : UnsafePointer<FIT_HRM_PROFILE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_HRM_PROFILE_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.hrm_ant_id != FIT_UINT16Z_INVALID  {
     let val : Double = Double(x.hrm_ant_id)
     rv[ "hrm_ant_id" ] = val
@@ -7364,12 +7185,7 @@ func rzfit_hrm_profile_mesg_value_dict( ptr : UnsafePointer<FIT_HRM_PROFILE_MESG
   return rv
 }
 func rzfit_hrm_profile_mesg_enum_dict( ptr : UnsafePointer<FIT_HRM_PROFILE_MESG>) -> [String:String] {
-  var rv : [String:String] = [:]
-  let x : FIT_HRM_PROFILE_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
-  return rv
+  return [:]
 }
 func rzfit_bike_profile_mesg_def_value_dict( ptr : UnsafePointer<FIT_BIKE_PROFILE_MESG_DEF>) -> [String:Double] {
   var rv : [String:Double] = [:]
@@ -7515,6 +7331,10 @@ func rzfit_segment_point_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_POINT_
     let val : Double = (Double(x.distance))/Double(100)
     rv[ "distance" ] = val
   }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.altitude != FIT_UINT16_INVALID  {
     let val : Double = (Double(x.altitude)-Double(500))/Double(5)
     rv[ "altitude" ] = val
@@ -7522,12 +7342,7 @@ func rzfit_segment_point_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_POINT_
   return rv
 }
 func rzfit_segment_point_mesg_enum_dict( ptr : UnsafePointer<FIT_SEGMENT_POINT_MESG>) -> [String:String] {
-  var rv : [String:String] = [:]
-  let x : FIT_SEGMENT_POINT_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
-  return rv
+  return [:]
 }
 func rzfit_exd_screen_configuration_mesg_value_dict( ptr : UnsafePointer<FIT_EXD_SCREEN_CONFIGURATION_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
@@ -7585,9 +7400,17 @@ func rzfit_field_convert_enum_dict( ptr : UnsafePointer<FIT_FIELD_CONVERT>) -> [
 func rzfit_activity_mesg_value_dict( ptr : UnsafePointer<FIT_ACTIVITY_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_ACTIVITY_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.total_timer_time != FIT_UINT32_INVALID  {
     let val : Double = (Double(x.total_timer_time))/Double(1000)
     rv[ "total_timer_time" ] = val
+  }
+  if x.local_timestamp != FIT_LOCAL_DATE_TIME_INVALID  {
+    let val : Double = Double(x.local_timestamp)
+    rv[ "local_timestamp" ] = val
   }
   if x.num_sessions != FIT_UINT16_INVALID  {
     let val : Double = Double(x.num_sessions)
@@ -7602,12 +7425,6 @@ func rzfit_activity_mesg_value_dict( ptr : UnsafePointer<FIT_ACTIVITY_MESG>) -> 
 func rzfit_activity_mesg_enum_dict( ptr : UnsafePointer<FIT_ACTIVITY_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_ACTIVITY_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.local_timestamp != FIT_LOCAL_DATE_TIME_INVALID ) {
-    rv[ "local_timestamp" ] = rzfit_local_date_time_string(input: x.local_timestamp)
-  }
   if( x.type != FIT_ACTIVITY_INVALID ) {
     rv[ "type" ] = rzfit_activity_string(input: x.type)
   }
@@ -7729,7 +7546,13 @@ func rzfit_dive_settings_mesg_value_dict( ptr : UnsafePointer<FIT_DIVE_SETTINGS_
   return rv
 }
 func rzfit_dive_settings_mesg_enum_dict( ptr : UnsafePointer<FIT_DIVE_SETTINGS_MESG>) -> [String:String] {
-  return [:]
+  var rv : [String:String] = [:]
+  var x : FIT_DIVE_SETTINGS_MESG = ptr.pointee
+  rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
+  }
+  return rv
 }
 func rzfit_workout_mesg_def_value_dict( ptr : UnsafePointer<FIT_WORKOUT_MESG_DEF>) -> [String:Double] {
   var rv : [String:Double] = [:]
@@ -7759,9 +7582,17 @@ func rzfit_workout_mesg_def_enum_dict( ptr : UnsafePointer<FIT_WORKOUT_MESG_DEF>
 func rzfit_training_file_mesg_value_dict( ptr : UnsafePointer<FIT_TRAINING_FILE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_TRAINING_FILE_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.serial_number != FIT_UINT32Z_INVALID  {
     let val : Double = Double(x.serial_number)
     rv[ "serial_number" ] = val
+  }
+  if x.time_created != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.time_created)
+    rv[ "time_created" ] = val
   }
   if x.product != FIT_UINT16_INVALID  {
     let val : Double = Double(x.product)
@@ -7772,12 +7603,6 @@ func rzfit_training_file_mesg_value_dict( ptr : UnsafePointer<FIT_TRAINING_FILE_
 func rzfit_training_file_mesg_enum_dict( ptr : UnsafePointer<FIT_TRAINING_FILE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_TRAINING_FILE_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.time_created != FIT_DATE_TIME_INVALID ) {
-    rv[ "time_created" ] = rzfit_date_time_string(input: x.time_created)
-  }
   if( x.manufacturer != FIT_MANUFACTURER_INVALID ) {
     rv[ "manufacturer" ] = rzfit_manufacturer_string(input: x.manufacturer)
   }
@@ -7818,6 +7643,10 @@ func rzfit_sdm_profile_mesg_value_dict( ptr : UnsafePointer<FIT_SDM_PROFILE_MESG
     let val : Double = (Double(x.odometer))/Double(100)
     rv[ "odometer" ] = val
   }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.sdm_ant_id != FIT_UINT16Z_INVALID  {
     let val : Double = Double(x.sdm_ant_id)
     rv[ "sdm_ant_id" ] = val
@@ -7845,16 +7674,15 @@ func rzfit_sdm_profile_mesg_value_dict( ptr : UnsafePointer<FIT_SDM_PROFILE_MESG
   return rv
 }
 func rzfit_sdm_profile_mesg_enum_dict( ptr : UnsafePointer<FIT_SDM_PROFILE_MESG>) -> [String:String] {
-  var rv : [String:String] = [:]
-  let x : FIT_SDM_PROFILE_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
-  return rv
+  return [:]
 }
 func rzfit_event_mesg_value_dict( ptr : UnsafePointer<FIT_EVENT_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_EVENT_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
   if x.data != FIT_UINT32_INVALID  {
     let val : Double = Double(x.data)
     rv[ "data" ] = val
@@ -7896,9 +7724,6 @@ func rzfit_event_mesg_value_dict( ptr : UnsafePointer<FIT_EVENT_MESG>) -> [Strin
 func rzfit_event_mesg_enum_dict( ptr : UnsafePointer<FIT_EVENT_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_EVENT_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
   if( x.event != FIT_EVENT_INVALID ) {
     rv[ "event" ] = rzfit_event_string(input: x.event)
   }
@@ -7933,19 +7758,28 @@ func rzfit_segment_lap_mesg_def_enum_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_M
   return rv
 }
 func rzfit_weather_alert_mesg_value_dict( ptr : UnsafePointer<FIT_WEATHER_ALERT_MESG>) -> [String:Double] {
-  return [:]
+  var rv : [String:Double] = [:]
+  let x : FIT_WEATHER_ALERT_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
+  if x.issue_time != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.issue_time)
+    rv[ "issue_time" ] = val
+  }
+  if x.expire_time != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.expire_time)
+    rv[ "expire_time" ] = val
+  }
+  return rv
 }
 func rzfit_weather_alert_mesg_enum_dict( ptr : UnsafePointer<FIT_WEATHER_ALERT_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_WEATHER_ALERT_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.issue_time != FIT_DATE_TIME_INVALID ) {
-    rv[ "issue_time" ] = rzfit_date_time_string(input: x.issue_time)
-  }
-  if( x.expire_time != FIT_DATE_TIME_INVALID ) {
-    rv[ "expire_time" ] = rzfit_date_time_string(input: x.expire_time)
+  var x : FIT_WEATHER_ALERT_MESG = ptr.pointee
+  rv[ "report_id" ] = withUnsafeBytes(of: &x.report_id) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.severity != FIT_WEATHER_SEVERITY_INVALID ) {
     rv[ "severity" ] = rzfit_weather_severity_string(input: x.severity)
@@ -7987,6 +7821,14 @@ func rzfit_schedule_mesg_value_dict( ptr : UnsafePointer<FIT_SCHEDULE_MESG>) -> 
     let val : Double = Double(x.serial_number)
     rv[ "serial_number" ] = val
   }
+  if x.time_created != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.time_created)
+    rv[ "time_created" ] = val
+  }
+  if x.scheduled_time != FIT_LOCAL_DATE_TIME_INVALID  {
+    let val : Double = Double(x.scheduled_time)
+    rv[ "scheduled_time" ] = val
+  }
   if x.product != FIT_UINT16_INVALID  {
     let val : Double = Double(x.product)
     rv[ "product" ] = val
@@ -8000,12 +7842,6 @@ func rzfit_schedule_mesg_value_dict( ptr : UnsafePointer<FIT_SCHEDULE_MESG>) -> 
 func rzfit_schedule_mesg_enum_dict( ptr : UnsafePointer<FIT_SCHEDULE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_SCHEDULE_MESG = ptr.pointee
-  if( x.time_created != FIT_DATE_TIME_INVALID ) {
-    rv[ "time_created" ] = rzfit_date_time_string(input: x.time_created)
-  }
-  if( x.scheduled_time != FIT_LOCAL_DATE_TIME_INVALID ) {
-    rv[ "scheduled_time" ] = rzfit_local_date_time_string(input: x.scheduled_time)
-  }
   if( x.manufacturer != FIT_MANUFACTURER_INVALID ) {
     rv[ "manufacturer" ] = rzfit_manufacturer_string(input: x.manufacturer)
   }
@@ -8167,6 +8003,10 @@ func rzfit_ant_tx_mesg_def_enum_dict( ptr : UnsafePointer<FIT_ANT_TX_MESG_DEF>) 
 func rzfit_speed_zone_mesg_value_dict( ptr : UnsafePointer<FIT_SPEED_ZONE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_SPEED_ZONE_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.high_value != FIT_UINT16_INVALID  {
     let val : Double = (Double(x.high_value))/Double(1000)
     rv[ "high_value" ] = val
@@ -8175,15 +8015,24 @@ func rzfit_speed_zone_mesg_value_dict( ptr : UnsafePointer<FIT_SPEED_ZONE_MESG>)
 }
 func rzfit_speed_zone_mesg_enum_dict( ptr : UnsafePointer<FIT_SPEED_ZONE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_SPEED_ZONE_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_SPEED_ZONE_MESG = ptr.pointee
+  rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   return rv
 }
 func rzfit_segment_lap_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_SEGMENT_LAP_MESG = ptr.pointee
+  if x.timestamp != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.timestamp)
+    rv[ "timestamp" ] = val
+  }
+  if x.start_time != FIT_DATE_TIME_INVALID  {
+    let val : Double = Double(x.start_time)
+    rv[ "start_time" ] = val
+  }
   if x.start_position_lat != FIT_SINT32_INVALID  {
     let val : Double = Double(x.start_position_lat)
     rv[ "start_position_lat" ] = val
@@ -8244,6 +8093,10 @@ func rzfit_segment_lap_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_MESG
     let val : Double = (Double(x.active_time))/Double(1000)
     rv[ "active_time" ] = val
   }
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.total_calories != FIT_UINT16_INVALID  {
     let val : Double = Double(x.total_calories)
     rv[ "total_calories" ] = val
@@ -8279,6 +8132,10 @@ func rzfit_segment_lap_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_MESG
   if x.normalized_power != FIT_UINT16_INVALID  {
     let val : Double = Double(x.normalized_power)
     rv[ "normalized_power" ] = val
+  }
+  if x.left_right_balance != FIT_LEFT_RIGHT_BALANCE_100_INVALID  {
+    let val : Double = Double(x.left_right_balance)
+    rv[ "left_right_balance" ] = val
   }
   if x.avg_altitude != FIT_UINT16_INVALID  {
     let val : Double = (Double(x.avg_altitude)-Double(500))/Double(5)
@@ -8331,6 +8188,10 @@ func rzfit_segment_lap_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_MESG
   if x.min_altitude != FIT_UINT16_INVALID  {
     let val : Double = (Double(x.min_altitude)-Double(500))/Double(5)
     rv[ "min_altitude" ] = val
+  }
+  if x.wkt_step_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.wkt_step_index)
+    rv[ "wkt_step_index" ] = val
   }
   if x.front_gear_shift_count != FIT_UINT16_INVALID  {
     let val : Double = Double(x.front_gear_shift_count)
@@ -8412,21 +8273,10 @@ func rzfit_segment_lap_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_MESG
 }
 func rzfit_segment_lap_mesg_enum_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_SEGMENT_LAP_MESG = ptr.pointee
-  if( x.timestamp != FIT_DATE_TIME_INVALID ) {
-    rv[ "timestamp" ] = rzfit_date_time_string(input: x.timestamp)
-  }
-  if( x.start_time != FIT_DATE_TIME_INVALID ) {
-    rv[ "start_time" ] = rzfit_date_time_string(input: x.start_time)
-  }
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
-  if( x.left_right_balance != FIT_LEFT_RIGHT_BALANCE_100_INVALID ) {
-    rv[ "left_right_balance" ] = rzfit_left_right_balance_100_string(input: x.left_right_balance)
-  }
-  if( x.wkt_step_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "wkt_step_index" ] = rzfit_message_index_string(input: x.wkt_step_index)
+  var x : FIT_SEGMENT_LAP_MESG = ptr.pointee
+  rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   if( x.event != FIT_EVENT_INVALID ) {
     rv[ "event" ] = rzfit_event_string(input: x.event)
@@ -8446,11 +8296,19 @@ func rzfit_segment_lap_mesg_enum_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_MESG>
   if( x.status != FIT_SEGMENT_LAP_STATUS_INVALID ) {
     rv[ "status" ] = rzfit_segment_lap_status_string(input: x.status)
   }
+  rv[ "uuid" ] = withUnsafeBytes(of: &x.uuid) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
+  }
   return rv
 }
 func rzfit_power_zone_mesg_value_dict( ptr : UnsafePointer<FIT_POWER_ZONE_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_POWER_ZONE_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.high_value != FIT_UINT16_INVALID  {
     let val : Double = Double(x.high_value)
     rv[ "high_value" ] = val
@@ -8459,9 +8317,10 @@ func rzfit_power_zone_mesg_value_dict( ptr : UnsafePointer<FIT_POWER_ZONE_MESG>)
 }
 func rzfit_power_zone_mesg_enum_dict( ptr : UnsafePointer<FIT_POWER_ZONE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_POWER_ZONE_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
+  var x : FIT_POWER_ZONE_MESG = ptr.pointee
+  rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
+    let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
+    return String(cString: ptr)
   }
   return rv
 }
@@ -8493,6 +8352,10 @@ func rzfit_aviation_attitude_mesg_def_enum_dict( ptr : UnsafePointer<FIT_AVIATIO
 func rzfit_mesg_capabilities_mesg_value_dict( ptr : UnsafePointer<FIT_MESG_CAPABILITIES_MESG>) -> [String:Double] {
   var rv : [String:Double] = [:]
   let x : FIT_MESG_CAPABILITIES_MESG = ptr.pointee
+  if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
+    let val : Double = Double(x.message_index)
+    rv[ "message_index" ] = val
+  }
   if x.count != FIT_UINT16_INVALID  {
     let val : Double = Double(x.count)
     rv[ "count" ] = val
@@ -8502,9 +8365,6 @@ func rzfit_mesg_capabilities_mesg_value_dict( ptr : UnsafePointer<FIT_MESG_CAPAB
 func rzfit_mesg_capabilities_mesg_enum_dict( ptr : UnsafePointer<FIT_MESG_CAPABILITIES_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
   let x : FIT_MESG_CAPABILITIES_MESG = ptr.pointee
-  if( x.message_index != FIT_MESSAGE_INDEX_INVALID ) {
-    rv[ "message_index" ] = rzfit_message_index_string(input: x.message_index)
-  }
   if( x.mesg_num != FIT_MESG_NUM_INVALID ) {
     rv[ "mesg_num" ] = rzfit_mesg_num_string(input: x.mesg_num)
   }

@@ -9,6 +9,7 @@
 import XCTest
 @testable import FitFileExplorer
 
+
 class FitFileExplorerTests: XCTestCase {
     
     override func setUp() {
@@ -19,6 +20,37 @@ class FitFileExplorerTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
+    }
+    
+    func testFastFitFile() {
+        let filenames = [ "activity_1378220136.fit", "activity_1382772474.fit" ]
+        
+        for filename in filenames {
+            let decode = FITFitFileDecode(forFile:RZFileOrganizer.bundleFilePath(filename, for: type(of:self)))
+            decode?.parse()
+            
+            
+            if let fit = decode?.fitFile,
+                let fastfit = RZFitFile(file: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(filename, for: type(of:self)))) {
+                
+                print("\(fit.allMessageTypes())")
+                print("\(fastfit.allMessageTypes())")
+                
+                for type in [ ("record",FIT_MESG_NUM_RECORD), ("device_info",FIT_MESG_NUM_DEVICE_INFO) ] {
+                
+                    let records = fit[type.0]
+                    let recordsFast = fastfit.messages(forMessage: type.1)
+                    print( "\(type.0)")
+                    if let first = records?[0] {
+                        let firstfast = recordsFast[0]
+                        
+                        print("\(first)")
+                        let interp = firstfast.interpretFields()
+                        print("\(interp)")
+                    }
+                }
+            }
+        }
     }
     
     func testInterp() {

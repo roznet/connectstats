@@ -61,11 +61,34 @@ class StructElem :
             return [ prefix + 'case "{}": return "{}"'.format( self.member,self.unit ) ]
         else:
             return None
+
+    def is_enum(self,context):
+        if self.is_array():
+            return False
         
+        rv = False
+        if self.ctype in context.types and not self.array:
+            type = context.types[self.ctype]
+            rv = type.is_enum()
+
+        return rv
+
+    def is_value(self,context):
+        if self.is_array():
+            return False
+        
+        return not self.is_enum(context)
+
+    def is_array(self):
+        return len(self.array) > 0
+
+    def is_string(self):
+        return self.is_array() and self.ctype == 'FIT_STRING'
+    
     def swift_convert_value_statement(self,context,prefix=''):
         lines = []
         defs = { 'member': self.member, 'invalid': self.ctype + '_INVALID', 'multiplier':self.multiplier, 'offset':self.offset }
-        if self.ctype not in context.types and not self.array:
+        if self.is_value(context):
             formula = 'Double(x.{member})'.format( **defs )
             if self.offset and float(self.offset) != 0.0:
                 formula += '-Double({offset})'.format(**defs)
@@ -82,7 +105,7 @@ class StructElem :
     def swift_convert_enum_statement(self,context,prefix=''):
         lines = []
         defs = { 'member': self.member, 'invalid': self.ctype + '_INVALID', 'multiplier':self.multiplier, 'offset':self.offset }
-        if self.ctype in context.types and not self.array:
+        if self.is_enum(context):
             type = context.types[self.ctype]
             defs['function'] = type.swift_switch_function_name()
             lines = [ prefix + 'if( x.{member} != {invalid} ) {{'.format( **defs ),
@@ -90,6 +113,15 @@ class StructElem :
                       prefix + '}'
             ]
 
+        if self.is_string():
+            lines = [ prefix + 'rv[ "{member}" ] = withUnsafeBytes(of: &x.{member}) {{ (rawPtr) -> String in'.format(**defs),
+                      prefix + '  let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)',
+                      prefix + '  return String(cString: ptr)',
+                      prefix + '}'
+            ]
+
+
+            
         return lines
 
                                                       
@@ -104,6 +136,10 @@ class TypeDefElem :
         self.num = groups[2]
         self.type_name = type_name
 
+
+    def is_mask(self):
+        return self.num.startswith('0x')
+    
     def swift_case_statement(self,prefix ='' ):
         return '{}case {}: return "{}";'.format(prefix, self.key, self.desc)
 
@@ -156,6 +192,7 @@ class Struct :
         rv = [ 'func {}( ptr : UnsafePointer<{}>) -> [String:Double] {{'.format( self.swift_value_dict_function_name(), self.struct_name ),
                ]
         elems = []
+        
         for elem in self.elements:
             elems += elem.swift_convert_value_statement(context, '  ')
 
@@ -173,11 +210,14 @@ class Struct :
         
         rv += [ 'func {}( ptr : UnsafePointer<{}>) -> [String:String] {{'.format(self.swift_enum_dict_function_name(), self.struct_name ) ]
         elems = []
+        hasString = False
         for elem in self.elements:
+            if elem.is_string():
+                hasString = True
             elems += elem.swift_convert_enum_statement(context, '  ')
         if elems:
             rv += [ '  var rv : [String:String] = [:]',
-                '  let x : {} = ptr.pointee'.format(self.struct_name)
+                '  {} x : {} = ptr.pointee'.format('var' if hasString else 'let', self.struct_name)
                ]
             rv += elems
             rv += [ '  return rv',
@@ -209,24 +249,31 @@ class TypeDef :
         self.type_name = self.fit_type_name[4:] # remove FIT_ prefix
         self.elements = []
 
-        self.p_define = re.compile( '#define ({}_([A-Z_]+)) +..{}.([0-9]+)'.format( self.fit_type_name, self.fit_type_name ))
+        self.p_define = re.compile( '#define ({}_([A-Z_]+)) +..{}.([0-9xA-F]+)'.format( self.fit_type_name, self.fit_type_name ))
         self.p_count = re.compile( '#define {}_COUNT'.format( self.fit_type_name ))
 
-
+    def is_enum(self):
+        return len(self.elements) > 0 
+        
     def add_element(self,groups):
-        self.elements += [ TypeDefElem(self.type_name,groups) ]
+        elem = TypeDefElem(self.type_name,groups)
+        if not elem.is_mask():
+            self.elements += [ elem ]
 
     def swift_switch_function_name(self):
         return 'rz{}_string'.format( self.fit_type_name.lower() )
         
     def swift_switch_function(self):
-        rv = [ 'func {}(input : {}) -> String? '.format( self.swift_switch_function_name(), self.ctype ),
-               '{',
-               '  switch  input {' ]
-        rv += [x.swift_case_statement( '    ') for x in self.elements]
-        rv += ['    default: return nil',
-               '  }',
-               '}']
+        if self.elements:
+            rv = [ 'func {}(input : {}) -> String? '.format( self.swift_switch_function_name(), self.ctype ),
+                   '{',
+                   '  switch  input {' ]
+            rv += [x.swift_case_statement( '    ') for x in self.elements]
+            rv += ['    default: return nil',
+                   '  }',
+                   '}']
+        else:
+            rv = []
         return '\n'.join(rv)
 
     def name(self):
@@ -275,7 +322,7 @@ class Convert :
                 of.write( structdef.swift_dict_function(self.context) )
                 of.write( '\n' )
 
-        if True:
+        if True and 'FIT_MESG_NUM' in self.context.types:
             mesgs = self.context.types['FIT_MESG_NUM']
             of.write( mesgs.swift_mesg_switch(self.context) )
             of.write( '\n' )
@@ -290,6 +337,7 @@ class Convert :
         print( 'Parsing {}'.format( self.args.inputfile ) )
         
         p_typedef = re.compile( 'typedef (FIT_[0-9A-Z_]+) ([0-9A-Z_]+)' )
+        #p_typedef = re.compile( 'typedef (FIT_ENUM) ([0-9A-Z_]+)' )
         p_typedef_enum = re.compile( 'typedef enum' )
         p_typedef_struct = re.compile( 'typedef struct' )
         p_typedef_end = re.compile( '^} ([A-Z0-9_]+);' )
