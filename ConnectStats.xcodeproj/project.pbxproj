@@ -59,6 +59,38 @@
 		421736A42066A07F00ACADC1 /* GCGarminRequestModernActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */; };
 		421747F819C4FD4800C13C16 /* GCFitBitActivitiesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 421747F719C4FD4800C13C16 /* GCFitBitActivitiesParser.m */; };
 		421747F919C4FD4800C13C16 /* GCFitBitActivitiesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 421747F719C4FD4800C13C16 /* GCFitBitActivitiesParser.m */; };
+		4217846621CE9FA2006FE90A /* fit_crc.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844321CE9F7E006FE90A /* fit_crc.c */; };
+		4217846921CE9FAD006FE90A /* fit_example.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844621CE9F7E006FE90A /* fit_example.c */; };
+		4217846A21CE9FAD006FE90A /* fit_ram.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844721CE9F7E006FE90A /* fit_ram.c */; };
+		4217846B21CE9FAD006FE90A /* fit_convert.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844A21CE9F7E006FE90A /* fit_convert.c */; };
+		4217846C21CE9FAD006FE90A /* fit.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844E21CE9F7E006FE90A /* fit.c */; };
+		4217846D21CE9FBA006FE90A /* RZFitFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217845221CE9F7E006FE90A /* RZFitFile.swift */; };
+		4217846E21CE9FBA006FE90A /* RZFitMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217845321CE9F7E006FE90A /* RZFitMessage.swift */; };
+		4217846F21CE9FBA006FE90A /* rzfit_convert_auto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217845421CE9F7E006FE90A /* rzfit_convert_auto.swift */; };
+		4217847121CEA236006FE90A /* fit_crc.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844321CE9F7E006FE90A /* fit_crc.c */; };
+		4217847221CEA236006FE90A /* fit_example.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844621CE9F7E006FE90A /* fit_example.c */; };
+		4217847321CEA236006FE90A /* fit_ram.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844721CE9F7E006FE90A /* fit_ram.c */; };
+		4217847421CEA236006FE90A /* fit_convert.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844A21CE9F7E006FE90A /* fit_convert.c */; };
+		4217847521CEA236006FE90A /* fit.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844E21CE9F7E006FE90A /* fit.c */; };
+		4217847621CEA236006FE90A /* RZFitFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217845221CE9F7E006FE90A /* RZFitFile.swift */; };
+		4217847721CEA236006FE90A /* RZFitMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217845321CE9F7E006FE90A /* RZFitMessage.swift */; };
+		4217847821CEA236006FE90A /* rzfit_convert_auto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217845421CE9F7E006FE90A /* rzfit_convert_auto.swift */; };
+		4217847921CEA237006FE90A /* fit_crc.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844321CE9F7E006FE90A /* fit_crc.c */; };
+		4217847A21CEA237006FE90A /* fit_example.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844621CE9F7E006FE90A /* fit_example.c */; };
+		4217847B21CEA237006FE90A /* fit_ram.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844721CE9F7E006FE90A /* fit_ram.c */; };
+		4217847C21CEA237006FE90A /* fit_convert.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844A21CE9F7E006FE90A /* fit_convert.c */; };
+		4217847D21CEA237006FE90A /* fit.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844E21CE9F7E006FE90A /* fit.c */; };
+		4217847E21CEA237006FE90A /* RZFitFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217845221CE9F7E006FE90A /* RZFitFile.swift */; };
+		4217847F21CEA237006FE90A /* RZFitMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217845321CE9F7E006FE90A /* RZFitMessage.swift */; };
+		4217848021CEA237006FE90A /* rzfit_convert_auto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217845421CE9F7E006FE90A /* rzfit_convert_auto.swift */; };
+		4217848121CEA23B006FE90A /* fit_crc.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844321CE9F7E006FE90A /* fit_crc.c */; };
+		4217848221CEA23B006FE90A /* fit_example.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844621CE9F7E006FE90A /* fit_example.c */; };
+		4217848321CEA23B006FE90A /* fit_ram.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844721CE9F7E006FE90A /* fit_ram.c */; };
+		4217848421CEA23B006FE90A /* fit_convert.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844A21CE9F7E006FE90A /* fit_convert.c */; };
+		4217848521CEA23B006FE90A /* fit.c in Sources */ = {isa = PBXBuildFile; fileRef = 4217844E21CE9F7E006FE90A /* fit.c */; };
+		4217848621CEA23B006FE90A /* RZFitFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217845221CE9F7E006FE90A /* RZFitFile.swift */; };
+		4217848721CEA23B006FE90A /* RZFitMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217845321CE9F7E006FE90A /* RZFitMessage.swift */; };
+		4217848821CEA23B006FE90A /* rzfit_convert_auto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217845421CE9F7E006FE90A /* rzfit_convert_auto.swift */; };
 		4217F53F21ACA12500C848A3 /* FITTimeSerieColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217F53E21ACA12500C848A3 /* FITTimeSerieColumn.swift */; };
 		421844B01D75C3F5005B09BC /* GCSegmentOrganizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421844AF1D75C3F5005B09BC /* GCSegmentOrganizer.swift */; };
 		421844B71D75D268005B09BC /* GCTestsSegments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421844B61D75D268005B09BC /* GCTestsSegments.swift */; };
@@ -2639,6 +2671,23 @@
 		421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequestModernActivityTypes.m; path = src/GCGarminRequestModernActivityTypes.m; sourceTree = "<group>"; };
 		421747F619C4FD4800C13C16 /* GCFitBitActivitiesParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFitBitActivitiesParser.h; path = src/GCFitBitActivitiesParser.h; sourceTree = "<group>"; };
 		421747F719C4FD4800C13C16 /* GCFitBitActivitiesParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFitBitActivitiesParser.m; path = src/GCFitBitActivitiesParser.m; sourceTree = "<group>"; };
+		4217844021CE9F7E006FE90A /* RZFitFile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RZFitFile-Bridging-Header.h"; sourceTree = "<group>"; };
+		4217844221CE9F7E006FE90A /* fit_convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fit_convert.h; sourceTree = "<group>"; };
+		4217844321CE9F7E006FE90A /* fit_crc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fit_crc.c; sourceTree = "<group>"; };
+		4217844521CE9F7E006FE90A /* fit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fit.h; sourceTree = "<group>"; };
+		4217844621CE9F7E006FE90A /* fit_example.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fit_example.c; sourceTree = "<group>"; };
+		4217844721CE9F7E006FE90A /* fit_ram.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fit_ram.c; sourceTree = "<group>"; };
+		4217844821CE9F7E006FE90A /* fit_include.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fit_include.h; sourceTree = "<group>"; };
+		4217844921CE9F7E006FE90A /* fit_crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fit_crc.h; sourceTree = "<group>"; };
+		4217844A21CE9F7E006FE90A /* fit_convert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fit_convert.c; sourceTree = "<group>"; };
+		4217844B21CE9F7E006FE90A /* fit_product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fit_product.h; sourceTree = "<group>"; };
+		4217844C21CE9F7E006FE90A /* fit_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fit_config.h; sourceTree = "<group>"; };
+		4217844D21CE9F7E006FE90A /* fit_ram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fit_ram.h; sourceTree = "<group>"; };
+		4217844E21CE9F7E006FE90A /* fit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fit.c; sourceTree = "<group>"; };
+		4217844F21CE9F7E006FE90A /* fit_example.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fit_example.h; sourceTree = "<group>"; };
+		4217845221CE9F7E006FE90A /* RZFitFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RZFitFile.swift; sourceTree = "<group>"; };
+		4217845321CE9F7E006FE90A /* RZFitMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RZFitMessage.swift; sourceTree = "<group>"; };
+		4217845421CE9F7E006FE90A /* rzfit_convert_auto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = rzfit_convert_auto.swift; sourceTree = "<group>"; };
 		4217F53621AC9B7A00C848A3 /* FITGarminActivityWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITGarminActivityWrapper.swift; path = src/FITGarminActivityWrapper.swift; sourceTree = "<group>"; };
 		4217F53E21ACA12500C848A3 /* FITTimeSerieColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITTimeSerieColumn.swift; path = src/FITTimeSerieColumn.swift; sourceTree = "<group>"; };
 		421844AF1D75C3F5005B09BC /* GCSegmentOrganizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCSegmentOrganizer.swift; path = src/GCSegmentOrganizer.swift; sourceTree = "<group>"; };
@@ -4739,6 +4788,54 @@
 			name = Parsers;
 			sourceTree = "<group>";
 		};
+		4217843E21CE9F7E006FE90A /* RZFitFile */ = {
+			isa = PBXGroup;
+			children = (
+				4217844021CE9F7E006FE90A /* RZFitFile-Bridging-Header.h */,
+				4217844121CE9F7E006FE90A /* sdk */,
+				4217845121CE9F7E006FE90A /* src */,
+			);
+			name = RZFitFile;
+			path = "fit-sdk-swift/RZFitFile";
+			sourceTree = "<group>";
+		};
+		4217844121CE9F7E006FE90A /* sdk */ = {
+			isa = PBXGroup;
+			children = (
+				4217844221CE9F7E006FE90A /* fit_convert.h */,
+				4217844321CE9F7E006FE90A /* fit_crc.c */,
+				4217844521CE9F7E006FE90A /* fit.h */,
+				4217844621CE9F7E006FE90A /* fit_example.c */,
+				4217844721CE9F7E006FE90A /* fit_ram.c */,
+				4217844821CE9F7E006FE90A /* fit_include.h */,
+				4217844921CE9F7E006FE90A /* fit_crc.h */,
+				4217844A21CE9F7E006FE90A /* fit_convert.c */,
+				4217844B21CE9F7E006FE90A /* fit_product.h */,
+				4217844C21CE9F7E006FE90A /* fit_config.h */,
+				4217844D21CE9F7E006FE90A /* fit_ram.h */,
+				4217844E21CE9F7E006FE90A /* fit.c */,
+				4217844F21CE9F7E006FE90A /* fit_example.h */,
+			);
+			path = sdk;
+			sourceTree = "<group>";
+		};
+		4217845121CE9F7E006FE90A /* src */ = {
+			isa = PBXGroup;
+			children = (
+				4217845221CE9F7E006FE90A /* RZFitFile.swift */,
+				4217845321CE9F7E006FE90A /* RZFitMessage.swift */,
+				4217845421CE9F7E006FE90A /* rzfit_convert_auto.swift */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		4217847021CEA1F1006FE90A /* FastFileStructure */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = FastFileStructure;
+			sourceTree = "<group>";
+		};
 		4217F54021ACA13C00C848A3 /* DataViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -5337,6 +5434,7 @@
 		4245CD811B7DE351006B85B4 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				4253B4871CDA94A300437E6A /* FitFile */,
 				4245CD821B7DE37F006B85B4 /* AppContext */,
 			);
 			name = Common;
@@ -5470,7 +5568,6 @@
 			children = (
 				4217F54021ACA13C00C848A3 /* DataViews */,
 				428DD4BE219AC989006DF5B5 /* Garmin */,
-				4253B4871CDA94A300437E6A /* FitFile */,
 				42EAC6131CE3DA5E00C7631D /* DataSources */,
 				42A672CF1DECCE7C00BE8E26 /* UserInterface */,
 				4253B4861CDA949200437E6A /* Application */,
@@ -5531,6 +5628,7 @@
 		4253B4871CDA94A300437E6A /* FitFile */ = {
 			isa = PBXGroup;
 			children = (
+				4217847021CEA1F1006FE90A /* FastFileStructure */,
 				42DCEF811E181C1F00F66AF1 /* FileUtilities */,
 				42DCEF7A1E181C0200F66AF1 /* FileStructure */,
 				42769BC71DD2A81D000390F1 /* FITFitFileInterpret.swift */,
@@ -5539,6 +5637,7 @@
 				42BF98371EE3175600F5E094 /* FITFitStatisticsWeight.swift */,
 			);
 			name = FitFile;
+			path = FitFileExplorer;
 			sourceTree = "<group>";
 		};
 		4255766016D8C8D80080F8CE /* Values */ = {
@@ -5924,6 +6023,7 @@
 		428FF6FE15F36888007A88FA = {
 			isa = PBXGroup;
 			children = (
+				4217843E21CE9F7E006FE90A /* RZFitFile */,
 				42902C0C20431A560058FB28 /* HealthStats.entitlements */,
 				42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */,
 				423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */,
@@ -9859,6 +9959,7 @@
 				422FAEAD19A1DD6000D09773 /* GCGarminLoginWebRequest.m in Sources */,
 				422FAEB019A1DD6000D09773 /* GCDerivedOrganizer.m in Sources */,
 				422FAEB219A1DD6000D09773 /* GCWebConnect+Requests.m in Sources */,
+				4217848721CEA23B006FE90A /* RZFitMessage.swift in Sources */,
 				421747F919C4FD4800C13C16 /* GCFitBitActivitiesParser.m in Sources */,
 				422FAEB519A1DD6000D09773 /* main.m in Sources */,
 				422FAEB619A1DD6000D09773 /* GCAppDelegate.m in Sources */,
@@ -9963,6 +10064,7 @@
 				422FAF1B19A1DD6000D09773 /* GCGarminRequest.m in Sources */,
 				422FAF1C19A1DD6000D09773 /* GCSettingsCacheManagementViewController.m in Sources */,
 				422FAF1D19A1DD6000D09773 /* GCFieldsCategory.m in Sources */,
+				4217848221CEA23B006FE90A /* fit_example.c in Sources */,
 				422F52131DFB51F700DD5551 /* FITFitFile.swift in Sources */,
 				422FAF1E19A1DD6000D09773 /* GCStravaActivityList.m in Sources */,
 				422FAF2019A1DD6000D09773 /* GCActivityLapViewController.m in Sources */,
@@ -9985,10 +10087,12 @@
 				42BFC25B1DCF514B00EAD40E /* GCGarminHeartRateZoneParser.m in Sources */,
 				422FAF3019A1DD6000D09773 /* GCGarminDeleteActivity.m in Sources */,
 				422FAF3319A1DD6000D09773 /* GCTrackPointSwim.m in Sources */,
+				4217848821CEA23B006FE90A /* rzfit_convert_auto.swift in Sources */,
 				422FAF3419A1DD6000D09773 /* GCGarminRequestSearch.m in Sources */,
 				42453BAC1DD8B5940073ACCA /* GCMapGradientPathOverlay.m in Sources */,
 				422FAF3519A1DD6000D09773 /* GCGarminActivityRequest.m in Sources */,
 				42684EF11B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m in Sources */,
+				4217848521CEA23B006FE90A /* fit.c in Sources */,
 				422FAF3719A1DD6000D09773 /* GCMapAppleViewController.m in Sources */,
 				422FAF3819A1DD6000D09773 /* GCViewSwimStrokeColors.m in Sources */,
 				422FAF3919A1DD6000D09773 /* GCActivity+Import.m in Sources */,
@@ -10005,6 +10109,7 @@
 				422F52121DFB51F700DD5551 /* FITFitFile.m in Sources */,
 				422FAF4019A1DD6000D09773 /* GCActivitySummaryValue.m in Sources */,
 				422FAF4119A1DD6000D09773 /* GCExportGoogleEarth.m in Sources */,
+				4217848321CEA23B006FE90A /* fit_ram.c in Sources */,
 				422FAF4319A1DD6000D09773 /* GCGarminListActivityTypes.m in Sources */,
 				422F52151DFB51F700DD5551 /* FITFitMessage.swift in Sources */,
 				422FAF4419A1DD6000D09773 /* GCSharingViewController.m in Sources */,
@@ -10038,6 +10143,7 @@
 				422FAF7119A1DD6000D09773 /* GCSettingsBugReportViewController.m in Sources */,
 				42A22DE119E1AAFD004407B8 /* GCWithingsBodyMeasures.m in Sources */,
 				422FAF7219A1DD6000D09773 /* GCGarminActivityTrack13Request.m in Sources */,
+				4217848421CEA23B006FE90A /* fit_convert.c in Sources */,
 				422FAF7319A1DD6000D09773 /* GCGarminRenameActivity.m in Sources */,
 				42684EF51B2DB4BC001A90D2 /* GCSettingsSourceTableViewController.m in Sources */,
 				422FAF7619A1DD6000D09773 /* GCStatsOneFieldGraphViewController.m in Sources */,
@@ -10076,6 +10182,7 @@
 				42BFC25D1DCF516800EAD40E /* GCStravaAthlete.m in Sources */,
 				422FAF9A19A1DD6000D09773 /* GCBabolatSessionsListRequest.m in Sources */,
 				42A22E0119E8895D004407B8 /* GCHealthSleepBlock.m in Sources */,
+				4217848121CEA23B006FE90A /* fit_crc.c in Sources */,
 				42A22DEA19E5E9FA004407B8 /* GCWithingsActivityMeasures.m in Sources */,
 				422FAF9C19A1DD6000D09773 /* GCViewIcons.m in Sources */,
 				422FAF9D19A1DD6000D09773 /* GCStatsGraphOptionViewController.m in Sources */,
@@ -10083,6 +10190,7 @@
 				422FAF9F19A1DD6000D09773 /* GCActivity+UI.m in Sources */,
 				4226B42B1F65E2ED009E1104 /* GCWebRequestStandard.m in Sources */,
 				42A22DF219E726A9004407B8 /* GCWithingsSleepParser.m in Sources */,
+				4217848621CEA23B006FE90A /* RZFitFile.swift in Sources */,
 				42BFC2641DCF51AC00EAD40E /* GCSegmentOrganizer.swift in Sources */,
 				422FAFA119A1DD6000D09773 /* GCHealthZone.m in Sources */,
 				422FAFA419A1DD6000D09773 /* GCActivityTypes.m in Sources */,
@@ -10110,15 +10218,19 @@
 				423B462F1CDFE03400743D79 /* GCUnit+FIT.m in Sources */,
 				423B46381CDFE41600743D79 /* FITFitFile.m in Sources */,
 				42BFC2321DCE2FBC00EAD40E /* FITDetailTableViewController.swift in Sources */,
+				4217846E21CE9FBA006FE90A /* RZFitMessage.swift in Sources */,
 				42F3FB3D1DD7876F0042A9B1 /* FITFitMessage.swift in Sources */,
 				42F4E5091DE08C26001AB244 /* FITMapViewController.swift in Sources */,
 				4273DB7321A1B80B00C09D68 /* FITDownloadListDataSource.swift in Sources */,
 				42F3FB351DD783550042A9B1 /* GCFieldsDefs.m in Sources */,
 				429DD651219E3E13004FD716 /* GCWebRequestStandard.m in Sources */,
+				4217846D21CE9FBA006FE90A /* RZFitFile.swift in Sources */,
+				4217846921CE9FAD006FE90A /* fit_example.c in Sources */,
 				423B46321CDFE2C400743D79 /* FITFitMessage.m in Sources */,
 				428DD4BA219A3BA2006DF5B5 /* GCGarminActivityInterpret.m in Sources */,
 				4202AE2E21A8A20800D8D696 /* FITGarminDownloadManager.swift in Sources */,
 				42BFC2301DCE2F7F00EAD40E /* FITOutlineViewController.swift in Sources */,
+				4217846C21CE9FAD006FE90A /* fit.c in Sources */,
 				42F4E5121DE08D51001AB244 /* GCMapAnnotation.m in Sources */,
 				42DCEF851E181E3500F66AF1 /* FITFitValueStatistics.swift in Sources */,
 				423953A81CE71ED4009A3AC3 /* FITOutlineCellView.m in Sources */,
@@ -10130,6 +10242,7 @@
 				42F14C46203192AA007925C9 /* GCActivityType.m in Sources */,
 				4217F53F21ACA12500C848A3 /* FITTimeSerieColumn.swift in Sources */,
 				4248ED9A1DCFFB5200254216 /* GCFieldInfo.m in Sources */,
+				4217846621CE9FA2006FE90A /* fit_crc.c in Sources */,
 				422F284120557DD000187478 /* GCField+Convert.m in Sources */,
 				429DD64F219E39FC004FD716 /* GCGarminLoginSSORequest.m in Sources */,
 				42A600C321A16ED800160FE9 /* FITGarminActivityListWrapper.m in Sources */,
@@ -10140,6 +10253,7 @@
 				423B46351CDFE31A00743D79 /* FITFitMessageFields.m in Sources */,
 				428DD4A1219A1D0A006DF5B5 /* GCWebConnect.m in Sources */,
 				4248ED981DCFF56A00254216 /* GCHealthMeasure.m in Sources */,
+				4217846B21CE9FAD006FE90A /* fit_convert.c in Sources */,
 				42A672C81DECC4EA00BE8E26 /* FITSelectionContext.swift in Sources */,
 				4248ED971DCFF55D00254216 /* GCField.m in Sources */,
 				4248DC8A1ED1E6ED00470DEB /* FITDataViewController.swift in Sources */,
@@ -10151,6 +10265,7 @@
 				4248ED911DCFF55900254216 /* GCFields.m in Sources */,
 				42F4E5111DE08D4C001AB244 /* GCMapGradientPathOverlay.m in Sources */,
 				42AE24621DF2E556002B48D9 /* FITSelectionContextViewController.swift in Sources */,
+				4217846A21CE9FAD006FE90A /* fit_ram.c in Sources */,
 				42BFC2261DCDE6AE00EAD40E /* FITFieldsListDataSource.swift in Sources */,
 				42F3FBFF1DD7A4D30042A9B1 /* FITGraphViewController.swift in Sources */,
 				4253B4831CDA857B00437E6A /* FITViewController.m in Sources */,
@@ -10160,6 +10275,7 @@
 				4248ED9B1DCFFB5600254216 /* GCFieldCache.m in Sources */,
 				4253B4821CDA857B00437E6A /* FITDocument.m in Sources */,
 				42F3FB3F1DD7879B0042A9B1 /* FITFitFile.swift in Sources */,
+				4217846F21CE9FBA006FE90A /* rzfit_convert_auto.swift in Sources */,
 				4202AE2C21A766BD00D8D696 /* FITGarminActivityListWrapper.swift in Sources */,
 				42DCEF831E181CF700F66AF1 /* FITFitFieldsStatistics.swift in Sources */,
 			);
@@ -10203,6 +10319,7 @@
 				42446768184B7152009F807E /* GCGarminChangeActivityType.m in Sources */,
 				42D8AF271B26002500ADDD31 /* GCHealthKitWorkoutParser.m in Sources */,
 				42959E3B18DDA6F500C0B841 /* GCSportTracksBase.m in Sources */,
+				4217847821CEA236006FE90A /* rzfit_convert_auto.swift in Sources */,
 				42EB515818A7E1E800B85FAB /* GCBabolatLoginRequest.m in Sources */,
 				423786871927C53900F575A0 /* GCActivityTennisHeatmap.m in Sources */,
 				42018EA018F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m in Sources */,
@@ -10231,8 +10348,10 @@
 				4234943D16091ACA00A770D6 /* GCTrackPoint.m in Sources */,
 				42A66BD1160D000D00DA29A5 /* GCViewConfig.m in Sources */,
 				4226B4291F65E2ED009E1104 /* GCWebRequestStandard.m in Sources */,
+				4217847121CEA236006FE90A /* fit_crc.c in Sources */,
 				42D8CB681613AEFB00C0521B /* GCCellMap.m in Sources */,
 				429D89A81FF6D89E001CE97A /* GCAthlete.swift in Sources */,
+				4217847421CEA236006FE90A /* fit_convert.c in Sources */,
 				42B89E7B1C8109C600F7142E /* GCCellEntryFieldChoiceViewController.m in Sources */,
 				42959CD518D5ECC500C0B841 /* GCService.m in Sources */,
 				42D8CB6B1616D20B00C0521B /* GCStatsOneFieldViewController.m in Sources */,
@@ -10268,6 +10387,7 @@
 				42A95B1C16321320000B2082 /* GCLap.m in Sources */,
 				42A95B3A1632DB4B000B2082 /* GCMapAnnotation.m in Sources */,
 				42A95B3D1632FC24000B2082 /* GCMapLegendView.m in Sources */,
+				4217847621CEA236006FE90A /* RZFitFile.swift in Sources */,
 				42AA288C1637F56F0054F84A /* GCActivitySearch.m in Sources */,
 				42684EF01B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m in Sources */,
 				4244675F1849E2D8009F807E /* GCLapCompound.m in Sources */,
@@ -10372,10 +10492,13 @@
 				424B7F4816CFBE30000B38AD /* GCSettingsHelpViewController.m in Sources */,
 				426CC4711BAEB9920033978C /* GCAppActions.m in Sources */,
 				42804DEB16D5215D009E4EEF /* GCActivity+Calculated.m in Sources */,
+				4217847221CEA236006FE90A /* fit_example.c in Sources */,
 				42CE39461CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */,
 				4255765F16D8C8D10080F8CE /* GCActivityMetaValue.m in Sources */,
+				4217847721CEA236006FE90A /* RZFitMessage.swift in Sources */,
 				4255766316D8CA850080F8CE /* GCActivityCalculatedValue.m in Sources */,
 				422F283F20557DD000187478 /* GCField+Convert.m in Sources */,
+				4217847321CEA236006FE90A /* fit_ram.c in Sources */,
 				42DC51551B2784B600B5C12F /* GCHealthKitDailySummaryParser.m in Sources */,
 				42EB516118A7EC8300B85FAB /* GCBabolatSessionRequest.m in Sources */,
 				42AB66CD16DACABA00C633BD /* GCMapGoogleViewController.m in Sources */,
@@ -10415,6 +10538,7 @@
 				426B0F121DA119060091A734 /* FITFitMessageFields.m in Sources */,
 				422637A51AFF6C5F005461E3 /* GCDebugActionsTableViewController.m in Sources */,
 				422D900417A1AE2C00C131DC /* GCViewIcons.m in Sources */,
+				4217847521CEA236006FE90A /* fit.c in Sources */,
 				422D900717A276F100C131DC /* GCStatsGraphOptionViewController.m in Sources */,
 				42DE53BD19CF438500009130 /* GCHealthKitActivityRequest.m in Sources */,
 				42C4159A17B1A23800EBBAFB /* GCActivity+UI.m in Sources */,
@@ -10559,6 +10683,7 @@
 				421A51531C82FB5D00671587 /* GCStatsHistGraphOptionViewController.m in Sources */,
 				42EEEB581D582ECD00F1E6DB /* GCStravaSegmentListParser.swift in Sources */,
 				42295E081EC6F4D900F4F7EE /* GCTestServiceGarmin.m in Sources */,
+				4217847A21CEA237006FE90A /* fit_example.c in Sources */,
 				427DDCC01DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */,
 				42453BA61DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m in Sources */,
 				42C3CF481DA15E6900C25709 /* GCAppGlobal.swift in Sources */,
@@ -10572,6 +10697,7 @@
 				42EEEB561D582E9E00F1E6DB /* GCSegment.swift in Sources */,
 				42295E041EC6F38C00F4F7EE /* GCTestServicesViewController.m in Sources */,
 				427F935F1BEAA09E00C177F9 /* GCTestUISampleDataSourceHolder.m in Sources */,
+				4217848021CEA237006FE90A /* rzfit_convert_auto.swift in Sources */,
 				42B5E3011BA5B8BD000FAE4E /* GCHealthKitDailySummaryParser.m in Sources */,
 				42A3AA3F1D44EBB5004FBFD0 /* GCStravaSegmentEffortStream.m in Sources */,
 				424208901BCAF71500F3DB12 /* GCActivity+UI.m in Sources */,
@@ -10585,6 +10711,7 @@
 				42B5E2D31BA5B62E000FAE4E /* GCFitBitActivityTypesParser.m in Sources */,
 				426B0F0E1DA111AD0091A734 /* GCGarminSearchModernJsonParser.m in Sources */,
 				42A3AA3D1D44EBB5004FBFD0 /* GCStravaAthlete.m in Sources */,
+				4217847921CEA237006FE90A /* fit_crc.c in Sources */,
 				42B5E2541BA5B216000FAE4E /* GCDerivedOrganizer.m in Sources */,
 				42B5E2551BA5B216000FAE4E /* GCDerivedDataSerie.m in Sources */,
 				42B5E2561BA5B216000FAE4E /* GCHealthZoneCalculator.m in Sources */,
@@ -10617,9 +10744,11 @@
 				426CC4731BAEB9920033978C /* GCAppActions.m in Sources */,
 				42B5E2691BA5B216000FAE4E /* GCHealthKitSamplesToPointsParser.m in Sources */,
 				42B5E26A1BA5B216000FAE4E /* GCHealthKitWorkoutParser.m in Sources */,
+				4217847F21CEA237006FE90A /* RZFitMessage.swift in Sources */,
 				42B5E26C1BA5B216000FAE4E /* GCHealthKitDayDetailParser.m in Sources */,
 				42B5E26D1BA5B216000FAE4E /* GCHealthKitRequest.m in Sources */,
 				42EA5BDE2066EB0200F4617B /* GCGarminRequestModernActivityTypes.m in Sources */,
+				4217847E21CEA237006FE90A /* RZFitFile.swift in Sources */,
 				42B5E26E1BA5B216000FAE4E /* GCSportTracksActivityListParser.m in Sources */,
 				42B5E26F1BA5B216000FAE4E /* GCSportTracksActivityDetailParser.m in Sources */,
 				42B5E2701BA5B216000FAE4E /* GCSportTracksBase.m in Sources */,
@@ -10661,6 +10790,7 @@
 				42B5E2901BA5B216000FAE4E /* GCGarminSearchJsonParser.m in Sources */,
 				424C8AA21D8D9F8100D8A50E /* GCStravaAthleteParser.swift in Sources */,
 				427F93791BEDFF0400C177F9 /* GCStatsOneFieldViewController.m in Sources */,
+				4217847B21CEA237006FE90A /* fit_ram.c in Sources */,
 				4209E1921DA44EC800B80735 /* GCActivitiesOrganizerListRegister.m in Sources */,
 				42B5E2921BA5B216000FAE4E /* GCGarminActivityDetailJsonParser.m in Sources */,
 				42B5E2931BA5B216000FAE4E /* GCGarminActivitySummaryParser.m in Sources */,
@@ -10689,6 +10819,7 @@
 				427F937A1BEDFF1A00C177F9 /* GCViewMaturityButton.m in Sources */,
 				42B5E2A61BA5B216000FAE4E /* GCWebConnect.m in Sources */,
 				422CC8771E6ACA1700195414 /* FITFitEnumMap.mm in Sources */,
+				4217847D21CEA237006FE90A /* fit.c in Sources */,
 				42B5E2A71BA5B216000FAE4E /* GCWebConnect+Requests.m in Sources */,
 				42B5E2A81BA5B216000FAE4E /* GCWebUrl.m in Sources */,
 				427208631DE7A35300924C90 /* GCActivity+Import.swift in Sources */,
@@ -10757,6 +10888,7 @@
 				42B5E21F1BA5AF9A000FAE4E /* GCTestTracks.m in Sources */,
 				422B34421CA7322600B345CD /* GCFieldInfo.m in Sources */,
 				421A51541C82FB7100671587 /* GCCellEntryFieldChoiceViewController.m in Sources */,
+				4217847C21CEA237006FE90A /* fit_convert.c in Sources */,
 				42B5E21D1BA5AF9A000FAE4E /* GCTestDerived.m in Sources */,
 				42B5E2271BA5AF9A000FAE4E /* main.m in Sources */,
 				42B5E21C1BA5AF9A000FAE4E /* GCTestBasics.m in Sources */,

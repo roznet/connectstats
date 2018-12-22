@@ -28,3 +28,5 @@
 
 #import "GCWebConnect.h"
 #import "FITAppGlobal.h"
+
+#import "RZFitFile-Bridging-Header.h"
