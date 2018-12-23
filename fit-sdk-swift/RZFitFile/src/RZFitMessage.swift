@@ -50,6 +50,20 @@ class RZFitMessage {
             }
             else if let unit = rzfit_unit_for_field(field: key) {
                 rv[ key ]  = RZFitField(withValue: val, andUnit: unit)
+            }else if( key == "product" ){
+                let product_int : FIT_UINT16 = FIT_UINT16(val)
+                if let mapped = rzfit_garmin_product_string(input: product_int ) {
+                    rv[ key ] = RZFitField(withName:  mapped)
+                }else{
+                    rv[ key ] = RZFitField(withName: "\(product_int)")
+                }
+            }else if( key == "device_type" ){
+                let device_type_int = FIT_UINT8(val)
+                if let mapped = rzfit_antplus_device_type_string(input: device_type_int) {
+                    rv[key] = RZFitField(withName: mapped)
+                }else{
+                    rv[key] = RZFitField(withName: "\(device_type_int)")
+                }
             }else{
                 rv[ key ] = RZFitField(withValue: val )
             }
