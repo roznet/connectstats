@@ -33,26 +33,47 @@ class FitFileExplorerTests: XCTestCase {
             if let fit = decode?.fitFile,
                 let fastfit = RZFitFile(file: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(filename, for: type(of:self)))) {
                 
-                print("\(fit.allMessageTypes())")
-                print("\(fastfit.allMessageTypes())")
+                let fittypes = fit.allMessageTypes()
+                let fasttypes = fastfit.allMessageTypes()
+                XCTAssertNotNil(fasttypes)
+                XCTAssertNotNil(fittypes)
+                if let fittypes = fittypes {
+                    for mesgtype in fastfit.allMessageTypes(){
+                        XCTAssertTrue(fittypes.contains(mesgtype))
+                    }
+                    for mesgtype in fittypes {
+                        if( mesgtype != "unknown"){
+                            XCTAssertTrue(fasttypes.contains(mesgtype))
+                        }
+                    }
+                }
                 
-                for type in [ ("record",FIT_MESG_NUM_RECORD), ("device_info",FIT_MESG_NUM_DEVICE_INFO) ] {
+                for type in fastfit.messagesNum {
                 
-                    let records = fit[type.0]
-                    let recordsFast = fastfit.messages(forMessage: type.1)
-                    print( "\(type.0)")
-                    if let first = records?[0] {
-                        let firstfast = recordsFast[0]
-                        
-                        print("\(first)")
-                        let interp = firstfast.interpretFields()
-                        print("\(interp)")
+                    if let typeStr = rzfit_mesg_num_string(input: type){
+                        let fastmessages = fastfit.messages(forMessage: type)
+                        if let fitmessages = fit.message(forType: typeStr){
+                            XCTAssertEqual(Int(fitmessages.count()), fastmessages.count)
+                            var diffs : Int = 0
+                            for (offset,fields) in fastmessages.enumerated(){
+                                if let fitfields = fitmessages.field(for: UInt(offset)) {
+                                    let fastfields = fields.interpretFields()
+                                    
+                                    if( Int(fitfields.allFieldNames().count) != fastfields.count){
+                                        //print("diff")
+                                        diffs+=1
+                                    }
+                                }
+                            }
+                            if( diffs > 0){
+                                print( "\(typeStr):\(diffs)")
+                            }
+                        }
                     }
                 }
             }
         }
     }
-    
     func testInterp() {
         //"activity_1378220136.fit"
         //"activity_1382772474.fit"
