@@ -249,7 +249,7 @@ class TypeDef :
         self.type_name = self.fit_type_name[4:] # remove FIT_ prefix
         self.elements = []
 
-        self.p_define = re.compile( '#define ({}_([A-Z_]+)) +..{}.([0-9xA-F]+)'.format( self.fit_type_name, self.fit_type_name ))
+        self.p_define = re.compile( '#define ({}_([A-Z0-9_]+)) +..{}.([0-9xA-F]+)'.format( self.fit_type_name, self.fit_type_name ))
         self.p_count = re.compile( '#define {}_COUNT'.format( self.fit_type_name ))
 
     def is_enum(self):
@@ -342,7 +342,7 @@ class Convert :
         p_typedef_struct = re.compile( 'typedef struct' )
         p_typedef_end = re.compile( '^} ([A-Z0-9_]+);' )
         p_typedef_def = re.compile( ' +([A-Z0-9_]+)[, ]' )
-        p_elem = re.compile( ' +(FIT_[A-Z0-Z_]+) ([a-z_0-9]+)(|\\[[A-Z0-9_]+\\]);( // [0-9]+ * [^+]+ \\+ [0-9]+)?' )
+        p_elem = re.compile( ' +(FIT_[A-Z0-9_]+) ([a-z_0-9]+)(|\\[[A-Z0-9_]+\\]);( // [0-9]+ * [^+]+ \\+ [0-9]+)?' )
         
         in_typedef = None
         in_typedef_enum = None
