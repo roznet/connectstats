@@ -22,6 +22,29 @@ class RZFitMessage {
         
     }
     
+    convenience init(mesg_num : FIT_MESG_NUM, withFitFields:[String:RZFitField]) {
+        var ivalues : [String:Double] = [:]
+        var ienums  : [String:String] = [:]
+        
+        for (key,field) in withFitFields {
+            if let coord = field.coordinate{
+                ivalues[ key + "_lat" ] = coord.latitude
+                ivalues[ key + "_long" ] = coord.longitude
+            }else if let d = field.value {
+                ivalues[ key ] = d
+            }else if let e = field.name {
+                ienums[ key ] = e
+            }else if let du = field.valueUnit {
+                ivalues[ key ] = du.value
+            }else if let da = field.time {
+                // Fit file are in seconds since UTC 00:00 Dec 31 1989 = -347241600
+                ivalues[ key ] = da.timeIntervalSinceReferenceDate+347241600
+            }
+        }
+        self.init(mesg_num: mesg_num, mesg_values: ivalues, mesg_enums: ienums)
+    }
+    
+    
     func name() -> String?{
         return rzfit_mesg_num_string(input: num)
     }

@@ -143,7 +143,11 @@ class TypeDefElem :
     def swift_case_statement(self,prefix ='' ):
         return '{}case {}: return "{}";'.format(prefix, self.key, self.desc)
 
-
+    def swift_case_string_to_mesg_statement(self,context,prefix=''):
+        rv = None
+        rv = [ prefix + 'case "{}": rv = {};'.format( self.desc, self.key )]
+        return rv
+               
     def swift_case_mesg_statement(self,context,prefix = '' ):
         #FIT_MESG_NUM_EXD_DATA_FIELD_CONFIGURATION
         structname = self.key.replace('MESG_NUM_','') + '_MESG'
@@ -279,6 +283,27 @@ class TypeDef :
     def name(self):
         return self.fit_type_name
 
+    def swift_string_to_mesg(self,context):
+        rv = ['func rzfit_string_to_mesg(mesg : String) -> FIT_MESG_NUM? {',
+              '  var rv : FIT_MESG_NUM? = nil',
+              '  switch mesg {'
+              ]
+        for x in self.elements:
+            one = x.swift_case_string_to_mesg_statement(context,'  ')
+            if one:
+                rv += one
+
+        rv += ['  default:',
+               '    rv = nil',
+               '  }',
+               '  return rv',
+               '}',
+
+               ]
+
+        return '\n'.join(rv)
+
+    
     def swift_mesg_switch(self,context):
         rv = [
             'func rzfit_build_mesg(num : FIT_MESG_NUM, uptr : UnsafePointer<UInt8>) -> RZFitMessage?{',
@@ -299,7 +324,7 @@ class TypeDef :
             '}'
             ]
 
-        return '\n'.join(rv)
+        return '\n'.join(rv) 
         
     
 class Convert :
@@ -325,6 +350,8 @@ class Convert :
         if True and 'FIT_MESG_NUM' in self.context.types:
             mesgs = self.context.types['FIT_MESG_NUM']
             of.write( mesgs.swift_mesg_switch(self.context) )
+            of.write( '\n' )
+            of.write(  mesgs.swift_string_to_mesg(self.context ) )
             of.write( '\n' )
 
         if True:
