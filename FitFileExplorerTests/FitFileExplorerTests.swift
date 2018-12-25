@@ -49,17 +49,18 @@ class FitFileExplorerTests: XCTestCase {
                 }
                 
                 for type in fastfit.messagesNum {
-                
                     if let typeStr = rzfit_mesg_num_string(input: type){
                         let fastmessages = fastfit.messages(forMessage: type)
                         if let fitmessages = fit.message(forType: typeStr){
                             XCTAssertEqual(Int(fitmessages.count()), fastmessages.count)
                             var diffs : Int = 0
                             for (offset,fields) in fastmessages.enumerated(){
-                                if let fitfields = fitmessages.field(for: UInt(offset)) {
+                                if let rawfitfields = fitmessages.field(for: UInt(offset)),
+                                    let fitfields = RZFitMessage(type: typeStr, with: rawfitfields){
                                     let fastfields = fields.interpretFields()
+                                    let origfields = fitfields.interpretFields()
                                     
-                                    if( Int(fitfields.allFieldNames().count) != fastfields.count){
+                                    if( origfields.count != fastfields.count){
                                         //print("diff")
                                         diffs+=1
                                     }
@@ -112,7 +113,7 @@ class FitFileExplorerTests: XCTestCase {
                     print( "====\(res)")
                     print( "====\(res2)")
                     
-                    interpret.statsForMessage(message: "record", interval: nil)
+                    _ = interpret.statsForMessage(message: "record", interval: nil)
                 }
             }
         }else{

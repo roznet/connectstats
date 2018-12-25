@@ -8995,6 +8995,100 @@ func rzfit_build_mesg(num : FIT_MESG_NUM, uptr : UnsafePointer<UInt8>) -> RZFitM
     }
     return rv
 }
+func rzfit_string_to_mesg(mesg : String) -> FIT_MESG_NUM? {
+  var rv : FIT_MESG_NUM? = nil
+  switch mesg {
+  case "file_id": rv = FIT_MESG_NUM_FILE_ID;
+  case "capabilities": rv = FIT_MESG_NUM_CAPABILITIES;
+  case "device_settings": rv = FIT_MESG_NUM_DEVICE_SETTINGS;
+  case "user_profile": rv = FIT_MESG_NUM_USER_PROFILE;
+  case "hrm_profile": rv = FIT_MESG_NUM_HRM_PROFILE;
+  case "sdm_profile": rv = FIT_MESG_NUM_SDM_PROFILE;
+  case "bike_profile": rv = FIT_MESG_NUM_BIKE_PROFILE;
+  case "zones_target": rv = FIT_MESG_NUM_ZONES_TARGET;
+  case "hr_zone": rv = FIT_MESG_NUM_HR_ZONE;
+  case "power_zone": rv = FIT_MESG_NUM_POWER_ZONE;
+  case "met_zone": rv = FIT_MESG_NUM_MET_ZONE;
+  case "sport": rv = FIT_MESG_NUM_SPORT;
+  case "goal": rv = FIT_MESG_NUM_GOAL;
+  case "session": rv = FIT_MESG_NUM_SESSION;
+  case "lap": rv = FIT_MESG_NUM_LAP;
+  case "record": rv = FIT_MESG_NUM_RECORD;
+  case "event": rv = FIT_MESG_NUM_EVENT;
+  case "device_info": rv = FIT_MESG_NUM_DEVICE_INFO;
+  case "workout": rv = FIT_MESG_NUM_WORKOUT;
+  case "workout_step": rv = FIT_MESG_NUM_WORKOUT_STEP;
+  case "schedule": rv = FIT_MESG_NUM_SCHEDULE;
+  case "weight_scale": rv = FIT_MESG_NUM_WEIGHT_SCALE;
+  case "course": rv = FIT_MESG_NUM_COURSE;
+  case "course_point": rv = FIT_MESG_NUM_COURSE_POINT;
+  case "totals": rv = FIT_MESG_NUM_TOTALS;
+  case "activity": rv = FIT_MESG_NUM_ACTIVITY;
+  case "software": rv = FIT_MESG_NUM_SOFTWARE;
+  case "file_capabilities": rv = FIT_MESG_NUM_FILE_CAPABILITIES;
+  case "mesg_capabilities": rv = FIT_MESG_NUM_MESG_CAPABILITIES;
+  case "field_capabilities": rv = FIT_MESG_NUM_FIELD_CAPABILITIES;
+  case "file_creator": rv = FIT_MESG_NUM_FILE_CREATOR;
+  case "blood_pressure": rv = FIT_MESG_NUM_BLOOD_PRESSURE;
+  case "speed_zone": rv = FIT_MESG_NUM_SPEED_ZONE;
+  case "monitoring": rv = FIT_MESG_NUM_MONITORING;
+  case "training_file": rv = FIT_MESG_NUM_TRAINING_FILE;
+  case "hrv": rv = FIT_MESG_NUM_HRV;
+  case "ant_rx": rv = FIT_MESG_NUM_ANT_RX;
+  case "ant_tx": rv = FIT_MESG_NUM_ANT_TX;
+  case "ant_channel_id": rv = FIT_MESG_NUM_ANT_CHANNEL_ID;
+  case "length": rv = FIT_MESG_NUM_LENGTH;
+  case "monitoring_info": rv = FIT_MESG_NUM_MONITORING_INFO;
+  case "pad": rv = FIT_MESG_NUM_PAD;
+  case "slave_device": rv = FIT_MESG_NUM_SLAVE_DEVICE;
+  case "connectivity": rv = FIT_MESG_NUM_CONNECTIVITY;
+  case "weather_conditions": rv = FIT_MESG_NUM_WEATHER_CONDITIONS;
+  case "weather_alert": rv = FIT_MESG_NUM_WEATHER_ALERT;
+  case "cadence_zone": rv = FIT_MESG_NUM_CADENCE_ZONE;
+  case "hr": rv = FIT_MESG_NUM_HR;
+  case "segment_lap": rv = FIT_MESG_NUM_SEGMENT_LAP;
+  case "memo_glob": rv = FIT_MESG_NUM_MEMO_GLOB;
+  case "segment_id": rv = FIT_MESG_NUM_SEGMENT_ID;
+  case "segment_leaderboard_entry": rv = FIT_MESG_NUM_SEGMENT_LEADERBOARD_ENTRY;
+  case "segment_point": rv = FIT_MESG_NUM_SEGMENT_POINT;
+  case "segment_file": rv = FIT_MESG_NUM_SEGMENT_FILE;
+  case "workout_session": rv = FIT_MESG_NUM_WORKOUT_SESSION;
+  case "watchface_settings": rv = FIT_MESG_NUM_WATCHFACE_SETTINGS;
+  case "gps_metadata": rv = FIT_MESG_NUM_GPS_METADATA;
+  case "camera_event": rv = FIT_MESG_NUM_CAMERA_EVENT;
+  case "timestamp_correlation": rv = FIT_MESG_NUM_TIMESTAMP_CORRELATION;
+  case "gyroscope_data": rv = FIT_MESG_NUM_GYROSCOPE_DATA;
+  case "accelerometer_data": rv = FIT_MESG_NUM_ACCELEROMETER_DATA;
+  case "three_d_sensor_calibration": rv = FIT_MESG_NUM_THREE_D_SENSOR_CALIBRATION;
+  case "video_frame": rv = FIT_MESG_NUM_VIDEO_FRAME;
+  case "obdii_data": rv = FIT_MESG_NUM_OBDII_DATA;
+  case "nmea_sentence": rv = FIT_MESG_NUM_NMEA_SENTENCE;
+  case "aviation_attitude": rv = FIT_MESG_NUM_AVIATION_ATTITUDE;
+  case "video": rv = FIT_MESG_NUM_VIDEO;
+  case "video_title": rv = FIT_MESG_NUM_VIDEO_TITLE;
+  case "video_description": rv = FIT_MESG_NUM_VIDEO_DESCRIPTION;
+  case "video_clip": rv = FIT_MESG_NUM_VIDEO_CLIP;
+  case "ohr_settings": rv = FIT_MESG_NUM_OHR_SETTINGS;
+  case "exd_screen_configuration": rv = FIT_MESG_NUM_EXD_SCREEN_CONFIGURATION;
+  case "exd_data_field_configuration": rv = FIT_MESG_NUM_EXD_DATA_FIELD_CONFIGURATION;
+  case "exd_data_concept_configuration": rv = FIT_MESG_NUM_EXD_DATA_CONCEPT_CONFIGURATION;
+  case "field_description": rv = FIT_MESG_NUM_FIELD_DESCRIPTION;
+  case "developer_data_id": rv = FIT_MESG_NUM_DEVELOPER_DATA_ID;
+  case "magnetometer_data": rv = FIT_MESG_NUM_MAGNETOMETER_DATA;
+  case "barometer_data": rv = FIT_MESG_NUM_BAROMETER_DATA;
+  case "one_d_sensor_calibration": rv = FIT_MESG_NUM_ONE_D_SENSOR_CALIBRATION;
+  case "set": rv = FIT_MESG_NUM_SET;
+  case "stress_level": rv = FIT_MESG_NUM_STRESS_LEVEL;
+  case "dive_settings": rv = FIT_MESG_NUM_DIVE_SETTINGS;
+  case "dive_gas": rv = FIT_MESG_NUM_DIVE_GAS;
+  case "dive_alarm": rv = FIT_MESG_NUM_DIVE_ALARM;
+  case "exercise_title": rv = FIT_MESG_NUM_EXERCISE_TITLE;
+  case "dive_summary": rv = FIT_MESG_NUM_DIVE_SUMMARY;
+  default:
+    rv = nil
+  }
+  return rv
+}
 func rzfit_unit_for_field( field : String ) -> String? {
   switch field {
   case "systolic_pressure": return "mmHg"

@@ -30,3 +30,5 @@
 #import "FITAppGlobal.h"
 
 #import "RZFitFile-Bridging-Header.h"
+#import "GCUnit+FIT.h"
+#import "FITFitEnumMap.h"

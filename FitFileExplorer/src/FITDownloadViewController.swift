@@ -76,7 +76,7 @@ class FITDownloadViewController: NSViewController {
         
         for one  in self.dataSource.list() {
             if let activity = one as? FITGarminActivityWrapper {
-                var columns : [GCField:[String]] = [:]
+                //var columns : [GCField:[String]] = [:]
                 
                 if let path = activity.fitFilePath,
                     let decode = FITFitFileDecode(forFile: path){

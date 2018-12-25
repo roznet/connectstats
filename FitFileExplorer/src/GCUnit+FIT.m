@@ -77,6 +77,10 @@
     if (useKey) {
         rv = [GCUnit unitForKey:useKey];
     }
+    if( rv == nil ){
+        // see if valid unit already
+        rv = [GCUnit unitForKey:fitUnit];
+    }
     return rv;
 }
 @end
