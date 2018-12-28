@@ -80,11 +80,7 @@
             }
             
             if( object ){
-                if (@available(iOS 12.0, macOS 10.14, *)) {
-                    success = [[NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:error] writeToFile:filepath atomically:YES];
-                } else {
-                    success = [NSKeyedArchiver archiveRootObject:object toFile:filepath];
-                }
+                success = [[NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:error] writeToFile:filepath atomically:YES];
                 if( success ){
                     rv = object;
                 }
@@ -117,16 +113,6 @@
                 if( rv == nil && [cls isEqual:[NSArray class]]){
                     rv = [NSKeyedUnarchiver unarchivedObjectOfClass:NSClassFromString(@"__NSArrayM") fromData:data error:error];
                 }
-                if( ! rv ){
-                    rv = [NSKeyedUnarchiver unarchiveObjectWithFile:filepath];
-                    if( ![[rv class] isEqual:cls]){
-                        NSLog(@"Diff class %@ %@", NSStringFromClass([rv class]), NSStringFromClass(cls));
-                    }
-                }else{
-                    NSLog(@"Got one!");
-                }
-            }else{
-                rv = [NSKeyedUnarchiver unarchiveObjectWithFile:filepath];
             }
 
         }else{

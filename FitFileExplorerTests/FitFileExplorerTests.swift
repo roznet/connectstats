@@ -35,8 +35,10 @@ class FitFileExplorerTests: XCTestCase {
                 let origfit = RZFitFile(fitFile: fit)
                 let fittypes = fit.allMessageTypes()
                 let fasttypes = fastfit.allMessageTypes()
+                let rebuild = RZFitFile(fitFile: fit)
                 XCTAssertNotNil(fasttypes)
                 XCTAssertNotNil(fittypes)
+                XCTAssertNotNil(rebuild)
                 
                 XCTAssertGreaterThan(origfit.messages.count, 0)
                 
