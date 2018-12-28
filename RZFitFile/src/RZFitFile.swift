@@ -13,6 +13,15 @@ class RZFitFile {
     var messages : [RZFitMessage]
     var messagesNum : Set<FIT_MESG_NUM>
     
+    init(  messages input: [RZFitMessage] ){
+        var bldmsgnum : Set<FIT_MESG_NUM> = []
+        for one in input {
+            bldmsgnum.insert(one.num)
+        }
+        messages = input
+        messagesNum = bldmsgnum
+    }
+    
     init( data : Data){
         var state : FIT_CONVERT_STATE = FIT_CONVERT_STATE()
         var convert_return : FIT_CONVERT_RETURN = FIT_CONVERT_CONTINUE
