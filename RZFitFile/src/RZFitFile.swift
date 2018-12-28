@@ -10,16 +10,27 @@ import Foundation
 
 class RZFitFile {
 
-    var messages : [RZFitMessage]
-    var messagesNum : Set<FIT_MESG_NUM>
+    typealias RZFitMessageType = FIT_MESG_NUM
+    
+    public private(set) var messages : [RZFitMessage]
+    public private(set) var messageTypes : Set<RZFitMessageType>
+    public private(set) var messagesByType : [RZFitMessageType:[RZFitMessage]]
     
     init(  messages input: [RZFitMessage] ){
-        var bldmsgnum : Set<FIT_MESG_NUM> = []
+        var bldmsgnum : Set<RZFitMessageType> = []
+        var bldmsgbytype : [RZFitMessageType:[RZFitMessage]] = [:]
         for one in input {
             bldmsgnum.insert(one.num)
+            if var prev = bldmsgbytype[one.num] {
+                prev.append(one)
+                bldmsgbytype[one.num] = prev
+            }else{
+                bldmsgbytype[one.num] = [ one ]
+            }
         }
         messages = input
-        messagesNum = bldmsgnum
+        messageTypes = bldmsgnum
+        messagesByType = bldmsgbytype
     }
     
     init( data : Data){
@@ -29,7 +40,9 @@ class RZFitFile {
         FitConvert_Init(&state, FIT_TRUE)
         
         var bldmsg :[RZFitMessage] = []
-        var bldmsgnum : Set<FIT_MESG_NUM> = []
+        var bldmsgnum : Set<RZFitMessageType> = []
+        var bldmsgbytype : [RZFitMessageType:[RZFitMessage]] = [:]
+        
         while convert_return == FIT_CONVERT_CONTINUE {
             data.withUnsafeBytes({ (ptr: UnsafePointer<UInt8>) in
                 repeat {
@@ -43,6 +56,12 @@ class RZFitFile {
                             if let fmesg = rzfit_build_mesg(num: mesg, uptr: uptr)
                             {
                                 bldmsg.append(fmesg)
+                                if var prev = bldmsgbytype[fmesg.num] {
+                                    prev.append(fmesg)
+                                    bldmsgbytype[fmesg.num] = prev
+                                }else{
+                                    bldmsgbytype[fmesg.num] = [ fmesg ]
+                                }
                             }
                         }
                     default:
@@ -52,7 +71,8 @@ class RZFitFile {
             } )
         }
         messages = bldmsg
-        messagesNum = bldmsgnum
+        messageTypes = bldmsgnum
+        messagesByType = bldmsgbytype
     }
 
     convenience init?( file :URL){
@@ -63,10 +83,23 @@ class RZFitFile {
         }
     }
  
-    func messages(forMessage:FIT_MESG_NUM) -> [RZFitMessage] {
+    func countByMessageType() -> [RZFitMessageType:UInt] {
+        var rv : [RZFitMessageType:UInt] = [:]
+        
+        for one in messages {
+            if let prev = rv[one.num] {
+                rv[one.num] = prev + 1
+            }else{
+                rv[one.num] = 1
+            }
+        }
+        return rv
+    }
+    
+    func messages(forMessageType:RZFitMessageType) -> [RZFitMessage] {
         var rv : [RZFitMessage] = []
         for one in messages {
-            if one.num == forMessage {
+            if one.num == forMessageType {
                 rv.append(one)
             }
         }
@@ -75,7 +108,7 @@ class RZFitFile {
     
     func allMessageTypes() -> [String] {
         var rv : [String] = []
-        for one in messagesNum {
+        for one in messageTypes {
             if let oneStr = rzfit_mesg_num_string(input: one) {
                 rv.append(oneStr)
             }
