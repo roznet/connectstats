@@ -40,11 +40,12 @@
 }
 #endif
 
-+(FITFitMessageFields * )fitMessageFields:(NSDictionary*)values atIndex:(NSUInteger)index{
++(FITFitMessageFields * )fitMessageFields:(NSDictionary*)values atIndex:(NSUInteger)index forType:(NSString*)type{
     FITFitMessageFields * rv = RZReturnAutorelease([[self alloc] init]);
     if (rv) {
         rv.fields = values;
         rv.messageIndex = index;
+        rv.messageType = type;
     }
     return rv;
 }

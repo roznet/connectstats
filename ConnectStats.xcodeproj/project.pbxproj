@@ -406,6 +406,10 @@
 		423B46321CDFE2C400743D79 /* FITFitMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46311CDFE2C400743D79 /* FITFitMessage.m */; };
 		423B46351CDFE31A00743D79 /* FITFitMessageFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46341CDFE31A00743D79 /* FITFitMessageFields.m */; };
 		423B46381CDFE41600743D79 /* FITFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46371CDFE41600743D79 /* FITFitFile.m */; };
+		423EF01721D2A044005C2605 /* RZFitFileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */; };
+		423EF01821D2A044005C2605 /* RZFitFileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */; };
+		423EF01921D2A044005C2605 /* RZFitFileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */; };
+		423EF01A21D2A044005C2605 /* RZFitFileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */; };
 		423F54131F6C6FE3004471E6 /* GCService.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959CD418D5ECC500C0B841 /* GCService.m */; };
 		423F541D1F6C716D004471E6 /* GCAppGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 423F541C1F6C716D004471E6 /* GCAppGlobal.m */; };
 		423F9FBF19ACCBD60057DB5A /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42EE4565176BCB81003338AF /* Media.xcassets */; };
@@ -2836,6 +2840,7 @@
 		423B46361CDFE41600743D79 /* FITFitFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FITFitFile.h; path = src/FITFitFile.h; sourceTree = "<group>"; };
 		423B46371CDFE41600743D79 /* FITFitFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FITFitFile.m; path = src/FITFitFile.m; sourceTree = "<group>"; };
 		423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RZUtils.xcodeproj; path = RZUtils/RZUtils.xcodeproj; sourceTree = "<group>"; };
+		423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RZFitFileExtensions.swift; path = src/RZFitFileExtensions.swift; sourceTree = "<group>"; };
 		423F541B1F6C716D004471E6 /* GCAppGlobal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCAppGlobal.h; sourceTree = "<group>"; };
 		423F541C1F6C716D004471E6 /* GCAppGlobal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCAppGlobal.m; sourceTree = "<group>"; };
 		423F9FC319ACDEA40057DB5A /* GCHistoryFieldDataSerieConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHistoryFieldDataSerieConfig.h; path = src/GCHistoryFieldDataSerieConfig.h; sourceTree = "<group>"; };
@@ -4850,6 +4855,7 @@
 			children = (
 				42C0589621D04B0900109D54 /* RZFitFieldExtensions.swift */,
 				42C0589B21D0525200109D54 /* RZFitMessageExtensions.swift */,
+				423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */,
 			);
 			name = RZFitFileExtensions;
 			sourceTree = "<group>";
@@ -10002,6 +10008,7 @@
 				422FAEC319A1DD6000D09773 /* GCBabolatLoginRequest.m in Sources */,
 				422FAEC419A1DD6000D09773 /* GCActivityTennisHeatmap.m in Sources */,
 				422FAEC519A1DD6000D09773 /* GCTableHeaderFieldsCategory.m in Sources */,
+				423EF01A21D2A044005C2605 /* RZFitFileExtensions.swift in Sources */,
 				422FAEC619A1DD6000D09773 /* GCActivitiesOrganizer.m in Sources */,
 				42EA5BE62066EB0700F4617B /* GCGarminRequestModernActivityTypes.m in Sources */,
 				422FAEC719A1DD6000D09773 /* GCActivity.m in Sources */,
@@ -10240,6 +10247,7 @@
 				42C0589921D04B0900109D54 /* RZFitFieldExtensions.swift in Sources */,
 				42C0589E21D0525200109D54 /* RZFitMessageExtensions.swift in Sources */,
 				423B46381CDFE41600743D79 /* FITFitFile.m in Sources */,
+				423EF01921D2A044005C2605 /* RZFitFileExtensions.swift in Sources */,
 				42BFC2321DCE2FBC00EAD40E /* FITDetailTableViewController.swift in Sources */,
 				4217846E21CE9FBA006FE90A /* RZFitMessage.swift in Sources */,
 				42F3FB3D1DD7876F0042A9B1 /* FITFitMessage.swift in Sources */,
@@ -10522,6 +10530,7 @@
 				4217847721CEA236006FE90A /* RZFitMessage.swift in Sources */,
 				4255766316D8CA850080F8CE /* GCActivityCalculatedValue.m in Sources */,
 				42A9595521CEADA200E2BC4D /* RZFitField.swift in Sources */,
+				423EF01721D2A044005C2605 /* RZFitFileExtensions.swift in Sources */,
 				422F283F20557DD000187478 /* GCField+Convert.m in Sources */,
 				4217847321CEA236006FE90A /* fit_ram.c in Sources */,
 				42DC51551B2784B600B5C12F /* GCHealthKitDailySummaryParser.m in Sources */,
@@ -10779,6 +10788,7 @@
 				42B5E26E1BA5B216000FAE4E /* GCSportTracksActivityListParser.m in Sources */,
 				42B5E26F1BA5B216000FAE4E /* GCSportTracksActivityDetailParser.m in Sources */,
 				42B5E2701BA5B216000FAE4E /* GCSportTracksBase.m in Sources */,
+				423EF01821D2A044005C2605 /* RZFitFileExtensions.swift in Sources */,
 				42B5E2711BA5B216000FAE4E /* GCSportTracksActivityList.m in Sources */,
 				42B5E2721BA5B216000FAE4E /* GCSportTracksActivityDetail.m in Sources */,
 				42B5E2731BA5B216000FAE4E /* GCSportTracksActivityUpload.m in Sources */,
@@ -11839,7 +11849,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ConnectStatsTestApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.connectstatstestapp";
@@ -11880,7 +11890,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ConnectStatsTestApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.connectstatstestapp";

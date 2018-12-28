@@ -1,8 +1,8 @@
-//  MIT Licence
+//  MIT License
 //
-//  Created on 08/05/2016.
+//  Created on 25/12/2018 for ConnectStats
 //
-//  Copyright (c) 2016 Brice Rosenzweig.
+//  Copyright (c) 2018 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
-//  
+//
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-//  
+//
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,23 +21,23 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
-//  
-
-#import <Foundation/Foundation.h>
-
-@class FITFitFieldValue;
-
-@interface FITFitMessageFields : NSObject<NSFastEnumeration>
-
-@property (nonnull,nonatomic,strong) NSString * messageType;
+//
 
 
-+(nullable FITFitMessageFields * )fitMessageFields:(nonnull NSDictionary<NSString*,FITFitFieldValue*>*)values atIndex:(NSUInteger)index forType:(nonnull NSString*)type;
 
--(nonnull NSArray<NSString*>*)allFieldNames;
+import Foundation
 
--(nullable FITFitFieldValue*)valueForFieldKey:(nonnull NSString*)key;
--(nullable FITFitFieldValue*)objectForKeyedSubscript:(nonnull NSString*)key;
--(BOOL)hasDateForKey:(nonnull NSString*)key after:(nullable NSDate*)after andStrictlyBefore:(nullable NSDate*)before;
-
-@end
+extension RZFitFile {
+    
+    convenience init(fitFile file: FITFitFile){
+        var messages :[RZFitMessage] = []
+        
+        for one in file.allMessageFields() {
+            if let field = RZFitMessage(with: one) {
+                messages.append(field)
+            }
+        }
+        
+        self.init(messages: messages)
+    }
+}

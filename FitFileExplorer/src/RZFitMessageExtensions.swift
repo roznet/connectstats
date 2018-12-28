@@ -29,8 +29,8 @@ import Foundation
 
 extension RZFitMessage {
     
-    convenience init?(type: String, with: FITFitMessageFields) {
-        if let msg : FIT_MESG_NUM = rzfit_string_to_mesg(mesg: type) {
+    convenience init?(with: FITFitMessageFields) {
+        if let msg : FIT_MESG_NUM = rzfit_string_to_mesg(mesg: with.messageType) {
             var fields : [String:RZFitField] = [:]
             
             for one in with.allFieldNames() {

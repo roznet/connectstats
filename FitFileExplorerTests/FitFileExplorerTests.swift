@@ -32,11 +32,14 @@ class FitFileExplorerTests: XCTestCase {
             
             if let fit = decode?.fitFile,
                 let fastfit = RZFitFile(file: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(filename, for: type(of:self)))) {
-                
+                let origfit = RZFitFile(fitFile: fit)
                 let fittypes = fit.allMessageTypes()
                 let fasttypes = fastfit.allMessageTypes()
                 XCTAssertNotNil(fasttypes)
                 XCTAssertNotNil(fittypes)
+                
+                XCTAssertGreaterThan(origfit.messages.count, 0)
+                
                 if let fittypes = fittypes {
                     for mesgtype in fastfit.allMessageTypes(){
                         XCTAssertTrue(fittypes.contains(mesgtype))
@@ -56,12 +59,11 @@ class FitFileExplorerTests: XCTestCase {
                             var diffs : Int = 0
                             for (offset,fields) in fastmessages.enumerated(){
                                 if let rawfitfields = fitmessages.field(for: UInt(offset)),
-                                    let fitfields = RZFitMessage(type: typeStr, with: rawfitfields){
+                                    let fitfields = RZFitMessage( with: rawfitfields){
                                     let fastfields = fields.interpretFields()
                                     let origfields = fitfields.interpretFields()
                                     
                                     if( origfields.count != fastfields.count){
-                                        //print("diff")
                                         diffs+=1
                                     }
                                 }
