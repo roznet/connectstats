@@ -53,9 +53,9 @@ class FitFileExplorerTests: XCTestCase {
                     }
                 }
                 
-                for type in fastfit.messagesNum {
+                for type in fastfit.messageTypes {
                     if let typeStr = rzfit_mesg_num_string(input: type){
-                        let fastmessages = fastfit.messages(forMessage: type)
+                        let fastmessages = fastfit.messages(forMessageType: type)
                         if let fitmessages = fit.message(forType: typeStr){
                             XCTAssertEqual(Int(fitmessages.count()), fastmessages.count)
                             var diffs : Int = 0
