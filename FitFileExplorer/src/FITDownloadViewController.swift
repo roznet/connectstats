@@ -70,8 +70,7 @@ class FITDownloadViewController: NSViewController {
 
     }
     
-    @IBAction func exportList(_ sender: Any) {
-        
+    func exportByFile() {
         var units : [String:GCUnit] = [:]
         
         for one  in self.dataSource.list() {
@@ -111,11 +110,73 @@ class FITDownloadViewController: NSViewController {
                         }
                         try grows.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
                     }catch { }
-                    
-                    
                 }
             }
         }
+    }
+    
+    func exportSingleCsv() {
+        var units : [String:GCUnit] = [:]
+        
+        for one  in self.dataSource.list() {
+            if let activity = one as? FITGarminActivityWrapper {
+                let val = activity.summary
+                for (key,nu) in val {
+                    units[key] = nu.unit
+                }
+            }
+        }
+
+        
+        let cols = ["activityId", "activityType"] + Array(units.keys)
+
+        
+        var csv : String = ""
+        var line : [String] = []
+        for col in cols {
+            if let unit = units[col] {
+                line.append("\(col)_\(unit)")
+            }else{
+                line.append(col)
+            }
+        }
+        csv += line.joined(separator: ",")
+        csv += "\n"
+        
+        for one  in self.dataSource.list() {
+            if let activity = one as? FITGarminActivityWrapper {
+                line = []
+                let val = activity.summary
+                for key in cols {
+                    if key == "activityId" {
+                        line.append(activity.activityId)
+                    }else if key == "activityType" {
+                        line.append(activity.activityType)
+                    }else if let nu = val[key], let u = units[key] {
+                        let dval = nu.convert(to: u).value
+                        line.append("\(dval)")
+                    }else{
+                        line.append("")
+                    }
+                }
+                
+                csv += line.joined( separator: ",")
+                csv += "\n"
+            }
+        }
+        
+        let fn = RZFileOrganizer.writeableFilePath("list.csv")
+
+        do {
+        try csv.write(toFile: fn, atomically: true, encoding: String.Encoding.utf8)
+        }catch {
+            print("Failed to write \(fn)")
+        }
+
+    }
+    
+    @IBAction func exportList(_ sender: Any) {
+        self.exportSingleCsv()
     }
     
 
