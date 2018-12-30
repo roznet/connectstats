@@ -49,12 +49,12 @@ class FITGraphViewController: NSViewController {
         }
         let interp = selectionContext.interp
         if let field = selectionContext.selectedYField {
-            if selectionContext.selectedMessageType == FIT_MESG_NUM_RECORD {
+            if selectionContext.messageType == FIT_MESG_NUM_RECORD {
                 let equivalent = interp.mapFields(from: [field], to: selectionContext.fitFile.fieldKeys(messageType: FIT_MESG_NUM_LAP))
                 print("Equivalent \(field)=\(equivalent)")
             }
             let ds = GCSimpleGraphCachedDataSource()
-            if let serie = interp.statsDataSerie(messageType: selectionContext.selectedMessageType, fieldX: selectionContext.selectedXField, fieldY: field) {
+            if let serie = interp.statsDataSerie(messageType: selectionContext.messageType, fieldX: selectionContext.selectedXField, fieldY: field) {
                 // Don't graph if less than 2 points, not meaningful
                 if serie.count() > 2 {
                     var useSerie = serie.serie
@@ -68,7 +68,7 @@ class FITGraphViewController: NSViewController {
                     var type :gcGraphType =  gcGraphType.graphLine
                     if( !serie.isStrictlyIncreasingByX() ){
                         type = gcGraphType.scatterPlot
-                    }else if( selectionContext.selectedMessageType == FIT_MESG_NUM_LAP && selectionContext.selectedXField == "start_time"){
+                    }else if( selectionContext.messageType == FIT_MESG_NUM_LAP && selectionContext.selectedXField == "start_time"){
                         type = gcGraphType.graphStep
                     }
                     let dh = GCSimpleGraphDataHolder(useSerie, type: type, color: NSColor.blue, andUnit: serie.unit)
@@ -76,7 +76,7 @@ class FITGraphViewController: NSViewController {
                     
                     if( type == gcGraphType.scatterPlot){
                         // instead of timestamp should be line field
-                        if let gradientSerie = interp.statsDataSerie(messageType: selectionContext.selectedMessageType, fieldX: "timestamp", fieldY: field) {
+                        if let gradientSerie = interp.statsDataSerie(messageType: selectionContext.messageType, fieldX: "timestamp", fieldY: field) {
                             dh?.gradientDataSerie = gradientSerie.serie
                             if let gradientFunction = GCStatsScaledFunction(serie: gradientSerie.serie){
                                 gradientFunction.scale_x = true
@@ -88,7 +88,7 @@ class FITGraphViewController: NSViewController {
                         dh?.color = NSColor(deviceRed: 0.0, green: 0.0, blue: 0.9, alpha: 0.5)
                     }
                     
-                    if let idx = self.selectionContext?.selectedMessageIndex,
+                    if let idx = self.selectionContext?.messageIndex,
                         let useSerie = useSerie {
                         let cnt = useSerie.count()
                         if idx < cnt {
@@ -98,14 +98,14 @@ class FITGraphViewController: NSViewController {
                     }
                     
                     dh?.fillColorForSerie = NSColor(deviceRed: 0.0, green: 0.0, blue: 0.8, alpha: 0.2)
-                    ds.title = "\(selectionContext.selectedMessageType): \(field)"
+                    ds.title = "\(selectionContext.messageType): \(field)"
                     ds.add(dh)
 
                     
                     
                     if( type == gcGraphType.graphLine){
                         if let selectedY2 = selectionContext.selectedY2Field, selectionContext.enableY2 {
-                            if let serie2 = interp.statsDataSerie(messageType: selectionContext.selectedMessageType, fieldX: selectionContext.selectedXField, fieldY: selectedY2) {
+                            if let serie2 = interp.statsDataSerie(messageType: selectionContext.messageType, fieldX: selectionContext.selectedXField, fieldY: selectedY2) {
                                 var useSerie2 = serie2.serie
                                 if let selectionContext = self.selectionContext {
                                     if serie2.unit.canConvert(to: selectionContext.speedUnit){

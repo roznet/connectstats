@@ -25,7 +25,12 @@ class FITFieldsListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     
     var messages:[RZFitMessage]
     
-    var messageType :RZFitMessageType
+    var messageType :RZFitMessageType{
+        didSet {
+            self.messages = self.fitFile.messages(forMessageType: self.messageType)
+            self.samples = self.fitFile.sampleValues(messageType: self.messageType)
+        }
+    }
     
     var samples : [RZFitFieldKey:RZFitFieldValue]
     

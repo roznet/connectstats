@@ -62,7 +62,7 @@ class FITMapViewController: NSViewController,MKMapViewDelegate {
             
             if  let locationField = selectionContext.selectedLocationField{
                 let interp = selectionContext.interp
-                let messageType = selectionContext.selectedMessageType
+                let messageType = selectionContext.messageType
                 if let coords = interp.coordinatePoints(messageType: messageType, field: locationField){
                     self.mapView!.removeOverlays(self.mapView!.overlays)
                     
@@ -81,7 +81,7 @@ class FITMapViewController: NSViewController,MKMapViewDelegate {
                     
                     self.mapView?.setVisibleMapRect(overlay.boundingMapRect, animated: true)
                     
-                    if let message = selectionContext.selectedMessage,
+                    if let message = selectionContext.message,
                         let co = message.coordinate(field: locationField){
                         self.mapView!.removeAnnotations(self.mapView!.annotations)
                         self.mapView!.addAnnotation(GCMapAnnotation(coord: co, title: "Current", andType: gcMapAnnotation.lap))

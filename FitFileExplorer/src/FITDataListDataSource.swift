@@ -47,7 +47,7 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
     let selectedRow : Int
     var selectedField : RZFitFieldKey?
     
-    var messageType:RZFitMessageType
+    var messageType:RZFitMessageType 
     var messages:[RZFitMessage]
     
     var displayFields:[RZFitFieldKey]
@@ -105,7 +105,7 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
 
             //self.relatedMessage = self.fitFile[statsMessageType];
             var interval : (from:Date,to:Date)?
-            if let ts = context.selectedMessage?.time(field: "timestamp"){
+            if let ts = context.message?.time(field: "timestamp"){
                 
                 let mf = interp.messageForTimestamp(messageType: statsFor, timestamp: ts)
 

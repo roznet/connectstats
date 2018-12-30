@@ -116,7 +116,7 @@ class FITSplitViewController: NSSplitViewController {
                 self.fieldsListDataSource?.messageType = messageType
             }
             if changed {
-                self.selectionContext?.selectedMessageType = messageType
+                self.selectionContext?.messageType = messageType
                 if let ds = self.fieldsListDataSource {
                     self.detailTableViewController()?.updateWith(dataSource: ds)
                 }
