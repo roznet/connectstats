@@ -41,36 +41,41 @@ import RZUtilsOSX
  */
 class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource {
 
-    let fitFile : FITFitFile
-    
-    let selectedRow : Int
-    
-    var selectedField : String?
-    var selectedMessageField : FITFitMessageFields?
-    
+    let fitFile : RZFitFile
     var selectionContext : FITSelectionContext?
-    var message:FITFitMessage
-    var statsMessageType:String?
+
+    let selectedRow : Int
+    var selectedField : RZFitFieldKey?
     
-    var displayFields:[String]
-    var relatedMessage:FITFitMessage?
-    var relatedFields:[String:[String]]?
+    var messageType:RZFitMessageType
+    var messages:[RZFitMessage]
     
-    var relatedStatistics:[String:FITFitValueStatistics]?
+    var displayFields:[RZFitFieldKey]
     
-    init(file: FITFitFile, messageType : String, selectedRow : Int, context : FITSelectionContext) {
+    var statsMessageType:RZFitMessageType?
+    var statsFields:[RZFitFieldKey:[RZFitFieldKey]]?
+    var statistics:[RZFitFieldKey:FITFitValueStatistics]?
+    
+    var message : RZFitMessage {
+        return self.messages[self.selectedRow]
+    }
+    
+    
+    init(file: RZFitFile, messageType : RZFitMessageType, selectedRow : Int, context : FITSelectionContext) {
         self.fitFile = file
-        self.message = self.fitFile[messageType];
+        self.messages = self.fitFile.messages(forMessageType: messageType)
         self.selectionContext = context
-        self.selectedRow = selectedRow;
+        self.selectedRow = selectedRow
+        self.messageType = messageType
         
         // Session style, where only one row.
         // Just select all fields that are related to selected field (max, avg, etc)
         let interp = FITFitFileInterpret(fitFile: file);
+        let samplesKeys = Array(self.fitFile.sampleValues(messageType: messageType).keys)
+        if( context.messages.count == 1){
+            if let field = context.selectedYField {
+                let mapped = interp.mapFields(from: [field], to:  samplesKeys)
         
-        if( context.message.count() == 1){
-            if let field:String = context.selectedYField {
-                let mapped:[String:[String]] = interp.mapFields(from: [field], to: self.message.allNumberKeys())
                 if let found = mapped[field] {
                     self.displayFields = found
                 }else{
@@ -82,10 +87,12 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
             
         }else{
             // lap/record stype: display all the field for the line
-            self.displayFields = self.message.allSortedFieldKeys()
+            self.displayFields = samplesKeys
         }
         // record could be session to get value or record to do stats
-        let messageDefaultMap = [ "record": "record", "lap":"record", "session":"record" ]
+        let messageDefaultMap : [RZFitMessageType:RZFitMessageType] = [FIT_MESG_NUM_RECORD  :FIT_MESG_NUM_RECORD,
+                                                                       FIT_MESG_NUM_LAP     :FIT_MESG_NUM_RECORD,
+                                                                       FIT_MESG_NUM_SESSION :FIT_MESG_NUM_RECORD ]
         
         self.statsMessageType = messageDefaultMap[messageType]
     }
@@ -96,21 +103,20 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
             let statsFor = context.statsFor{
             let interp = FITFitFileInterpret(fitFile: self.fitFile);
 
-            self.relatedMessage = self.fitFile[statsMessageType];
-            var interval :(from:Date,to:Date)?
-            if let ts = context.selectedMessageFields?["timestamp"]?.dateValue{
+            //self.relatedMessage = self.fitFile[statsMessageType];
+            var interval : (from:Date,to:Date)?
+            if let ts = context.selectedMessage?.time(field: "timestamp"){
                 
-                let mf = interp.messageFieldForTimestamp(message: statsFor, timestamp: ts)
-                
-                if let start = mf?["start_time"]?.dateValue,
-                    let end = mf?["timestamp"]?.dateValue{
+                let mf = interp.messageForTimestamp(messageType: statsFor, timestamp: ts)
+
+                if let start = mf?.time(field: "start_time"),
+                    let end = mf?.time(field: "timestamp"){
                     interval = (from:start,to:end);
                 }
             }
-            self.relatedStatistics = interp.statsForMessage(message: statsMessageType, interval: interval)
-            if let possibleFields = self.relatedMessage?.allAvailableFieldKeys(){
-                self.relatedFields = interp.mapFields(from: self.displayFields, to: possibleFields)
-            }
+            self.statistics = interp.statsForMessage(messageType: statsMessageType, interval: interval)
+            let possibleFields = Array(self.fitFile.sampleValues(messageType: statsFor).keys)
+            self.statsFields = interp.mapFields(from: self.displayFields, to: possibleFields)
         }
     }
 
@@ -134,19 +140,19 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
                         cellView.textField?.attributedStringValue = fieldDisplay
                     }
                 }else if(tableColumn?.identifier.rawValue == "Value"){
-                    let idx = UInt(self.selectedRow) < self.message.count() ? self.selectedRow : 0
-                    if let field = self.message.field(for: UInt(idx)),
-                        let item = field[identifier],
+                    let idx = self.selectedRow < self.messages.count ? self.selectedRow : 0
+                    let message = self.messages[idx]
+                    if let item = message.interpretedField(key: identifier),
                         let selectionContext = self.selectionContext{
                         cellView.textField?.stringValue = selectionContext.display(fieldValue: item)
                     }
                 }else{
-                    let idx = UInt(self.selectedRow) < self.message.count() ? self.selectedRow : 0
-                    if let field = self.message.field(for: UInt(idx)),
-                        let item = field[identifier],
+                    let idx = self.selectedRow < self.messages.count ? self.selectedRow : 0
+                    let message = self.messages[idx]
+                    if let item = message.interpretedField(key: identifier),
                         let selectionContext = self.selectionContext,
-                        let relatedFields = self.relatedFields?[identifier],
-                        let stats = self.relatedStatistics{
+                        let relatedFields = self.statsFields?[identifier],
+                        let stats = self.statistics{
                         if relatedFields.count > 0 && item.numberWithUnit != nil{
                             if let stat = stats[relatedFields[0]]{
                                 if let avg : GCNumberWithUnit = stat.preferredStatisticsForField(fieldKey: identifier){

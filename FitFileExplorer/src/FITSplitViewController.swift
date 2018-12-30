@@ -18,7 +18,7 @@ class FITSplitViewController: NSSplitViewController {
     
     var fieldsListDataSource : FITFieldsListDataSource?
     
-    var fitFile : FITFitFile? {
+    var fitFile : RZFitFile? {
         get {
             if let doc = self.representedObject as? FITDocument {
                 return doc.fitFile
@@ -82,12 +82,12 @@ class FITSplitViewController: NSSplitViewController {
      */
     @objc func detailSelectionChanged(notification : Notification){
         if let fitFile = self.fitFile,
-            let messageType = self.outlineDataSource?.selectedMessageType ?? fitFile.allMessageTypes().first {
+            let messageType = self.outlineDataSource?.selectedMessageType ?? fitFile.messageTypes.first {
             if let mef = self.fieldsListDataSource?.selectedField,
                 let idx = self.fieldsListDataSource?.selectedRow,
                 let selectionContext = self.selectionContext{
                 if idx >= 0 {
-                    selectionContext.selectMessageField(field: mef, atIndex:UInt(idx))
+                    selectionContext.selectMessageField(field: mef, atIndex:idx)
                     self.graphViewController()?.updateWith(selectionContext: selectionContext)
                     self.mapViewController()?.updateWith(selectionContext: selectionContext)
                     self.dataListDataSource = FITDataListDataSource(file: fitFile, messageType: messageType, selectedRow: idx, context: selectionContext)
@@ -101,7 +101,7 @@ class FITSplitViewController: NSSplitViewController {
      */
     @objc func outlineDataSourceSelectionChanged(notification : Notification){
         if let fitFile = self.fitFile,
-            let messageType = self.outlineDataSource?.selectedMessageType ?? fitFile.allMessageTypes().first {
+            let messageType = self.outlineDataSource?.selectedMessageType ?? fitFile.messageTypes.first {
             var changed :Bool = false
             if self.fieldsListDataSource == nil {
                 self.fieldsListDataSource = FITFieldsListDataSource(file: fitFile, messageType: messageType, context: self.selectionContext!)
@@ -116,7 +116,7 @@ class FITSplitViewController: NSSplitViewController {
                 self.fieldsListDataSource?.messageType = messageType
             }
             if changed {
-                self.selectionContext?.selectedMessage = messageType
+                self.selectionContext?.selectedMessageType = messageType
                 if let ds = self.fieldsListDataSource {
                     self.detailTableViewController()?.updateWith(dataSource: ds)
                 }

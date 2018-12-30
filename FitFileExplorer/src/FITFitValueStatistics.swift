@@ -39,7 +39,7 @@ class FITFitValueStatistics: NSObject {
         return rv
     }
     
-    func add(fieldValue: FITFitFieldValue, weight : FITFitStatisticsWeight){
+    func add(fieldValue: RZFitFieldValue, weight : FITFitStatisticsWeight){
         if let nu = fieldValue.numberWithUnit {
             self.count += 1
             self.timeSeconds += weight.time

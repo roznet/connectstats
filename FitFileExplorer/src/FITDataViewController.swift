@@ -65,7 +65,7 @@ class FITDataViewController: NSViewController {
         if
             let value = sender.selectedItem?.title,
             let dataSource = self.fitDataSource{
-            dataSource.selectionContext?.dependentMessage = value
+            dataSource.selectionContext?.dependentMessage = RZFitFile.messageType(forDescription: value)
             dataSource.updateStatistics()
             self.tableView.reloadData()
         }

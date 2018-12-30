@@ -78,47 +78,46 @@ class FITDownloadViewController: NSViewController {
             if let activity = one as? FITGarminActivityWrapper {
                 //var columns : [GCField:[String]] = [:]
                 
-                if let path = activity.fitFilePath,
-                    let decode = FITFitFileDecode(forFile: path){
-                    decode.parse()
-                    if  let fitFile = decode.fitFile {
-                        let interpret = FITFitFileInterpret(fitFile: fitFile)
-                        let cols = interpret.columnDataSeries(message: "record")
+                if let path =  activity.fitFilePath,
+                    
+                    let fitFile = RZFitFile(file: URL(fileURLWithPath:path)) {
+                    let interpret = FITFitFileInterpret(fitFile: fitFile)
+                    let cols = interpret.columnDataSeries(messageType: FIT_MESG_NUM_RECORD)
+                    
+                    for (key,values) in cols.values {
+                        var dcols =  [ ["activityId","time",key,"uom"].joined(separator: ",") ]
                         
-                        for (key,values) in cols.values {
-                            var dcols =  [ ["activityId","time",key.columnName(),"uom"].joined(separator: ",") ]
-                            
-                            for val in values {
-                                let row = [activity.activityId,val.time.formatAsRFC3339(),"\(val.value.value)",val.value.unit.key]
-                                dcols.append(row.joined(separator: ","))
-                            }
-                            
-                            if( units[ key.columnName() ] == nil){
-                                if let first = values.first?.value {
-                                    units[key.columnName()] = first.unit
-                                }
-                            }
-                            let fn = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(key.fileName(activityId: activity.activityId) + ".csv"))
-                            do {
-                                try dcols.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
-                            }catch { }
+                        for val in values {
+                            let row = [activity.activityId,val.time.formatAsRFC3339(),"\(val.value.value)",val.value.unit.key]
+                            dcols.append(row.joined(separator: ","))
                         }
                         
-                        
-                        let fn = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath("position_" + activity.activityId + "_" + activity.activityType + ".csv"))
-                        do {
-                            let grows = cols.gps.map { tup in
-                                [ activity.activityId, tup.time.formatAsRFC3339(), "\(tup.location.latitude)", "\(tup.location.longitude)"].joined( separator: "," )
+                        if( units[ key ] == nil){
+                            if let first = values.first?.value {
+                                units[key] = first.unit
                             }
-                            try grows.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
+                        }
+                        let fn = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath("\(key)_\(activity.activityId).csv"))
+                        do {
+                            try dcols.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
                         }catch { }
-                        
-                        
                     }
+                    
+                    
+                    let fn = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath("position_" + activity.activityId + "_" + activity.activityType + ".csv"))
+                    do {
+                        let grows = cols.gps.map { tup in
+                            [ activity.activityId, tup.time.formatAsRFC3339(), "\(tup.location.latitude)", "\(tup.location.longitude)"].joined( separator: "," )
+                        }
+                        try grows.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
+                    }catch { }
+                    
+                    
                 }
             }
         }
     }
+    
 
 
         

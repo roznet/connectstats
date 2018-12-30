@@ -28,7 +28,7 @@
 import Foundation
 import RZUtils
 
-extension RZFitField {
+extension RZFitFieldValue {
     
     var numberWithUnit : GCNumberWithUnit? {
         get {
@@ -43,7 +43,23 @@ extension RZFitField {
             return rv
         }
     }
-    
+
+    func displayString() -> String {
+        if let coordinate = coordinate {
+            return "(\(coordinate.latitude),\(coordinate.longitude))"
+        }else if let nu = self.numberWithUnit {
+            return nu.formatDouble()
+        }else if let name = name {
+            return name
+        }else if let time = time {
+            return "\(time)"
+        }else if let value = value {
+            return "\(value)"
+        }else{
+            return "RZFitField(Error)"
+        }
+    }
+
     convenience init?(fieldValue : FITFitFieldValue) {
         if let val = fieldValue.numberWithUnit {
             self.init(withValue: val.value, andUnit: val.unit.key)
@@ -59,4 +75,5 @@ extension RZFitField {
             return nil
         }
     }
+    
 }

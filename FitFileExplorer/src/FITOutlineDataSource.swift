@@ -12,16 +12,17 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
     
     static let kFITNotificationOutlineSelectionChanged = Notification.Name( "kFITNotificationOutlineSelectionChanged" )
     
-    let fitFile: FITFitFile
-    var selectedMessageType : String?
+    let fitFile: RZFitFile
+    var selectedMessageType : RZFitMessageType?
     
-    init(fitFile:FITFitFile) {
+    init(fitFile:RZFitFile) {
         self.fitFile = fitFile
+        self.selectedMessageType = nil
         super.init()
     }
     
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
-        return self.fitFile.allMessageTypes().count
+        return self.fitFile.messageTypes.count
     }
     
     func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
@@ -29,19 +30,25 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
     }
     
     func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
-        if let types = self.fitFile.allMessageTypes(), index < types.count {
+        let types = Array(self.fitFile.messageTypes)
+        
+        if index < types.count {
             return types[index]
         }
-        return ""
+        return FIT_MESG_NUM_INVALID
     }
     
     func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
         let cellView = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DataCell"), owner: self)
         if let cellView = cellView as? FITOutlineCellView {
-            if let text = item as? String {
+            cellView.textField?.stringValue = ""
+            cellView.detailTextField.stringValue = ""
+            
+            if let type = item as? RZFitMessageType,
+                let text = self.fitFile.messageTypeDescription(messageType: type){
+                
                 cellView.textField?.stringValue = text
-                let count = self.fitFile.message(forType: text).count()
-                if count > 0{
+                if let count = self.fitFile.messagesByType[type]?.count {
                     cellView.detailTextField.stringValue = "(\(count) items)"
                 }else{
                     cellView.detailTextField.stringValue = ""
@@ -56,7 +63,9 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
     func outlineViewSelectionDidChange(_ notification: Notification) {
         if let obj = notification.object as? NSOutlineView {
             let selected = obj.selectedRow;
-            if let types = self.fitFile.allMessageTypes() {
+            let types = Array(self.fitFile.messageTypes)
+            
+            if selected < types.count {
                 self.selectedMessageType = types[selected];
                 NotificationCenter.default.post(name: FITOutlineDataSource.kFITNotificationOutlineSelectionChanged, object: self)
             }

@@ -30,7 +30,7 @@ import CoreLocation
 
 typealias RZFitDoubleUnit = (value:Double,unit:String)
 
-class RZFitField {
+class RZFitFieldValue {
     let coordinate : CLLocationCoordinate2D?
     let valueUnit : RZFitDoubleUnit?
     let time : Date?
@@ -79,7 +79,7 @@ class RZFitField {
     }
 }
 
-extension RZFitField : CustomStringConvertible {
+extension RZFitFieldValue : CustomStringConvertible {
     var description: String {
         if let coordinate = coordinate {
             return "RZFitField(withLatitude: \(coordinate.latitude), andLongitude: \(coordinate.longitude))"

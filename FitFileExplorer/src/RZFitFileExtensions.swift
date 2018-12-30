@@ -40,4 +40,31 @@ extension RZFitFile {
         
         self.init(messages: messages)
     }
+    
+    func preferredMessageType() -> RZFitMessageType {
+        let preferred = [ FIT_MESG_NUM_SESSION, FIT_MESG_NUM_RECORD, FIT_MESG_NUM_FILE_ID]
+        for one in preferred {
+            if self.messageTypes.contains(one) {
+                return one
+            }
+        }
+        return FIT_MESG_NUM_FILE_ID
+    }
+    
+    func fieldKeys( messageType: RZFitMessageType ) -> [RZFitFieldKey] {
+        return Array(self.sampleValues(messageType: messageType).keys)
+    }
+    
+    func sampleValues( messageType: RZFitMessageType) -> [RZFitFieldKey:RZFitFieldValue] {
+        var rv : [RZFitFieldKey:RZFitFieldValue] = [:]
+        let forMessages = self.messages(forMessageType: messageType)
+        for one in forMessages {
+            for (key,val) in one.interpretedFields() {
+                if rv[key] == nil {
+                    rv[key] = val
+                }
+            }
+        }
+        return rv
+    }
 }

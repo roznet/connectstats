@@ -31,11 +31,11 @@ extension RZFitMessage {
     
     convenience init?(with: FITFitMessageFields) {
         if let msg : FIT_MESG_NUM = rzfit_string_to_mesg(mesg: with.messageType) {
-            var fields : [String:RZFitField] = [:]
+            var fields : [String:RZFitFieldValue] = [:]
             
             for one in with.allFieldNames() {
                 if let fvalue :FITFitFieldValue = with[one] {
-                    let rzfield = RZFitField(fieldValue: fvalue)
+                    let rzfield = RZFitFieldValue(fieldValue: fvalue)
                     fields[one] = rzfield
                 }
             }
@@ -43,5 +43,121 @@ extension RZFitMessage {
         }else{
             return nil
         }
+    }
+    
+    
+    func preferredOrderFieldKeys() -> [RZFitFieldKey] {
+        var rv : [RZFitFieldKey] = []
+        
+        rv.append(contentsOf: self.fieldKeysWithTime())
+        rv.append(contentsOf: self.fieldKeysWithCoordinate())
+        rv.append(contentsOf: self.fieldKeysWithName())
+        rv.append(contentsOf: self.fieldKeysWithNumberWithUnit())
+        
+        return rv
+        
+    }
+    
+    func fieldKeysWithCoordinate() -> [RZFitFieldKey] {
+        var rv : [RZFitFieldKey] = []
+        let interp = self.interpretedFields()
+        for (key,val) in interp {
+            if val.coordinate != nil {
+                rv.append(key)
+            }
+        }
+        return rv
+    }
+    
+    func fieldKeysWithNumberWithUnit() -> [RZFitFieldKey] {
+        var rv : [RZFitFieldKey] = []
+        let interp = self.interpretedFields()
+        for (key,val) in interp {
+            if val.numberWithUnit != nil {
+                rv.append(key)
+            }
+        }
+        return rv
+    }
+    
+    func fieldKeysWithTime() -> [RZFitFieldKey] {
+        var rv : [RZFitFieldKey] = []
+        let interp = self.interpretedFields()
+        for (key,val) in interp {
+            if val.time != nil {
+                rv.append(key)
+            }
+        }
+        return rv
+    }
+
+    func fieldKeysWithName() -> [RZFitFieldKey] {
+        var rv : [RZFitFieldKey] = []
+        let interp = self.interpretedFields()
+        for (key,val) in interp {
+            if val.name != nil {
+                rv.append(key)
+            }
+        }
+        return rv
+    }
+
+    func numberWithUnit(field: RZFitFieldKey) -> GCNumberWithUnit? {
+        let interp = self.interpretedFields()
+        if let val = interp[field]?.numberWithUnit {
+            return val
+        }
+        return nil
+    }
+    
+    func name(field:RZFitFieldKey) -> String? {
+        let interp = self.interpretedFields()
+        if let val = interp[field]?.name {
+            return val
+        }
+        return nil
+    }
+    
+    func coordinate(field : RZFitFieldKey? = nil) -> CLLocationCoordinate2D? {
+        let interp = self.interpretedFields()
+        var attempts = ["position"]
+        
+        if let ifield = field {
+            attempts = [ifield]
+        }
+        for one in attempts {
+            if let val = interp[one]?.coordinate {
+                return val
+            }
+        }
+        
+        return nil
+    }
+    
+    
+    func time(field : RZFitFieldKey? = nil) -> Date? {
+        let interp = self.interpretedFields()
+
+        var attempts = ["timestamp", "start_time", "local_timestamp"]
+        if let ifield = field {
+            attempts = [ifield]
+        }
+        for one in  attempts{
+            if let val = interp[one]?.time {
+                return val
+            }
+        }
+        return nil
+    }
+    
+    func has(dateField:RZFitFieldKey, after:Date, before:Date) -> Bool {
+        let interp = self.interpretedFields()
+        
+        if let val = interp[dateField]?.time {
+            if val >= after && val < before{
+                return true
+            }
+        }
+        return false
     }
 }

@@ -17,7 +17,7 @@ class FITMapViewController: NSViewController,MKMapViewDelegate {
     
     var gradientPath : GCMapGradientPathOverlay?
     
-    var fitFile : FITFitFile? {
+    var fitFile : RZFitFile? {
         return self.selectionContext?.fitFile
     }
 
@@ -62,8 +62,8 @@ class FITMapViewController: NSViewController,MKMapViewDelegate {
             
             if  let locationField = selectionContext.selectedLocationField{
                 let interp = selectionContext.interp
-                let message = selectionContext.selectedMessage
-                if let coords = interp.coordinatePoints(message: message, field: locationField){
+                let messageType = selectionContext.selectedMessageType
+                if let coords = interp.coordinatePoints(messageType: messageType, field: locationField){
                     self.mapView!.removeOverlays(self.mapView!.overlays)
                     
                     var holders : [GCMapRouteLogicPointHolder] = []
@@ -81,10 +81,10 @@ class FITMapViewController: NSViewController,MKMapViewDelegate {
                     
                     self.mapView?.setVisibleMapRect(overlay.boundingMapRect, animated: true)
                     
-                    if let fields = selectionContext.selectedMessageFields,
-                        let co = fields[locationField]?.locationValue{
+                    if let message = selectionContext.selectedMessage,
+                        let co = message.coordinate(field: locationField){
                         self.mapView!.removeAnnotations(self.mapView!.annotations)
-                        self.mapView!.addAnnotation(GCMapAnnotation(coord: co.coordinate, title: "Current", andType: gcMapAnnotation.lap))
+                        self.mapView!.addAnnotation(GCMapAnnotation(coord: co, title: "Current", andType: gcMapAnnotation.lap))
                         
                     }
                 }

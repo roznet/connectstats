@@ -8,9 +8,10 @@
 
 import Foundation
 
-class RZFitFile {
+typealias RZFitMessageType = FIT_MESG_NUM
+typealias RZFitFieldKey = String
 
-    typealias RZFitMessageType = FIT_MESG_NUM
+class RZFitFile {
     
     public private(set) var messages : [RZFitMessage]
     public private(set) var messageTypes : Set<RZFitMessageType>
@@ -20,12 +21,12 @@ class RZFitFile {
         var bldmsgnum : Set<RZFitMessageType> = []
         var bldmsgbytype : [RZFitMessageType:[RZFitMessage]] = [:]
         for one in input {
-            bldmsgnum.insert(one.num)
-            if var prev = bldmsgbytype[one.num] {
+            bldmsgnum.insert(one.messageType)
+            if var prev = bldmsgbytype[one.messageType] {
                 prev.append(one)
-                bldmsgbytype[one.num] = prev
+                bldmsgbytype[one.messageType] = prev
             }else{
-                bldmsgbytype[one.num] = [ one ]
+                bldmsgbytype[one.messageType] = [ one ]
             }
         }
         messages = input
@@ -56,11 +57,11 @@ class RZFitFile {
                             if let fmesg = rzfit_build_mesg(num: mesg, uptr: uptr)
                             {
                                 bldmsg.append(fmesg)
-                                if var prev = bldmsgbytype[fmesg.num] {
+                                if var prev = bldmsgbytype[fmesg.messageType] {
                                     prev.append(fmesg)
-                                    bldmsgbytype[fmesg.num] = prev
+                                    bldmsgbytype[fmesg.messageType] = prev
                                 }else{
-                                    bldmsgbytype[fmesg.num] = [ fmesg ]
+                                    bldmsgbytype[fmesg.messageType] = [ fmesg ]
                                 }
                             }
                         }
@@ -87,10 +88,10 @@ class RZFitFile {
         var rv : [RZFitMessageType:UInt] = [:]
         
         for one in messages {
-            if let prev = rv[one.num] {
-                rv[one.num] = prev + 1
+            if let prev = rv[one.messageType] {
+                rv[one.messageType] = prev + 1
             }else{
-                rv[one.num] = 1
+                rv[one.messageType] = 1
             }
         }
         return rv
@@ -99,14 +100,18 @@ class RZFitFile {
     func messages(forMessageType:RZFitMessageType) -> [RZFitMessage] {
         var rv : [RZFitMessage] = []
         for one in messages {
-            if one.num == forMessageType {
+            if one.messageType == forMessageType {
                 rv.append(one)
             }
         }
         return rv
     }
     
-    func allMessageTypes() -> [String] {
+    func messageTypeDescription( messageType:RZFitMessageType) -> String? {
+        return rzfit_mesg_num_string(input: messageType)
+    }
+    
+    func messageTypesDescriptions() -> [String] {
         var rv : [String] = []
         for one in messageTypes {
             if let oneStr = rzfit_mesg_num_string(input: one) {
@@ -114,6 +119,18 @@ class RZFitFile {
             }
         }
         return rv
+    }
+    
+    static func messageType( forDescription : String) -> RZFitMessageType? {
+        return rzfit_string_to_mesg(mesg: forDescription)
+    }
+    
+    func hasMessageType( messageType:RZFitMessageType) -> Bool{
+        if let _ = self.messagesByType[messageType] {
+            return true
+        }else{
+            return false
+        }
     }
     
 }

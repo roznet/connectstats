@@ -9,7 +9,6 @@
 #import "FITFitEnumMap.h"
 
 #import "FITOutlineCellView.h"
-#import "FITDocument.h"
 #import "GCFieldCache.h"
 #import "GCField.h"
 #import "GCActivitySummaryValue.h"
