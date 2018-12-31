@@ -12,12 +12,19 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
     
     static let kFITNotificationOutlineSelectionChanged = Notification.Name( "kFITNotificationOutlineSelectionChanged" )
     
-    let fitFile: RZFitFile
-    var selectedMessageType : RZFitMessageType?
+    let selectionContext : FITSelectionContext
     
-    init(fitFile:RZFitFile) {
-        self.fitFile = fitFile
-        self.selectedMessageType = nil
+    var fitFile: RZFitFile {
+        return self.selectionContext.fitFile
+    }
+    
+    
+    var selectedMessageType : RZFitMessageType {
+        return self.selectionContext.messageType
+    }
+    
+    init(selectionContext : FITSelectionContext) {
+        self.selectionContext = selectionContext
         super.init()
     }
     
@@ -66,8 +73,10 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
             let types = Array(self.fitFile.messageTypes)
             
             if selected < types.count {
-                self.selectedMessageType = types[selected];
-                NotificationCenter.default.post(name: FITOutlineDataSource.kFITNotificationOutlineSelectionChanged, object: self)
+                if( types[selected] != self.selectionContext.messageType){
+                    self.selectionContext.messageType = types[selected];
+                    NotificationCenter.default.post(name: FITOutlineDataSource.kFITNotificationOutlineSelectionChanged, object: self)
+                }
             }
         }
         

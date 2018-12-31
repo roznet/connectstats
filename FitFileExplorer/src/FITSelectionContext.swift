@@ -45,7 +45,7 @@ class FITSelectionContext {
         didSet{
             // If new message does not exist, do nothing
             // else update with some defaults
-            if fitFile.hasMessageType(messageType: messageType) {
+            if !fitFile.hasMessageType(messageType: messageType) {
                 self.messageType = oldValue;
             }else{
                 if(messageType != oldValue){
@@ -286,16 +286,21 @@ class FITSelectionContext {
         let paragraphStyle = NSMutableParagraphStyle()
         
         paragraphStyle.lineBreakMode = NSLineBreakMode.byTruncatingMiddle
+        
+        let disabledLabelColor = NSColor(named: "DisabledLabel") ?? NSColor.lightGray
+        let highlightLabelColor = NSColor(named: "HighlightedLabel") ?? NSColor.black
+        
         var attr = [ NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
-                     NSAttributedString.Key.foregroundColor:NSColor.black,
+                     NSAttributedString.Key.foregroundColor:highlightLabelColor,
                      NSAttributedString.Key.paragraphStyle: paragraphStyle]
         
         if self.prettyField {
             if let field = self.interp.fieldKey(fitField: fieldName){
                 displayText = field.displayName()
             }else{
+                
                 attr = [NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
-                        NSAttributedString.Key.foregroundColor:NSColor.lightGray,
+                        NSAttributedString.Key.foregroundColor:disabledLabelColor,
                         NSAttributedString.Key.paragraphStyle:paragraphStyle]
             }
         }

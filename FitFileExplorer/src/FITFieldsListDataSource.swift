@@ -12,34 +12,36 @@ import RZUtilsOSX
 class FITFieldsListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource,RZTableViewDelegate {
 
     static let kFITNotificationDetailSelectionChanged = Notification.Name( "kFITNotificationDetailSelectionChanged" )
-
     
-    let fitFile : RZFitFile
+    let selectionContext : FITSelectionContext
+    
+    var fitFile : RZFitFile {
+        return self.selectionContext.fitFile
+    }
     
     var selectedColumn : Int = -1
     var selectedRow : Int = -1
     
     var selectedField : RZFitFieldKey?
-
-    var selectionContext : FITSelectionContext?
-    
-    var messages:[RZFitMessage]
+    var messages:[RZFitMessage] {
+        return self.selectionContext.messages
+    }
     
     var messageType :RZFitMessageType{
-        didSet {
-            self.messages = self.fitFile.messages(forMessageType: self.messageType)
+        get {
+            return self.selectionContext.messageType
+        }
+        set {
+            self.selectionContext.messageType = newValue
             self.samples = self.fitFile.sampleValues(messageType: self.messageType)
         }
     }
     
     var samples : [RZFitFieldKey:RZFitFieldValue]
     
-    init(file: RZFitFile, messageType : RZFitMessageType, context : FITSelectionContext) {
-        self.fitFile = file
-        self.messages = self.fitFile.messages(forMessageType: messageType)
-        self.samples = file.sampleValues(messageType: messageType)
-        self.messageType = messageType
+    init(context : FITSelectionContext) {
         self.selectionContext = context
+        self.samples = context.fitFile.sampleValues(messageType: context.messageType)
     }
     
     
@@ -72,24 +74,23 @@ class FITFieldsListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
                     if( row < first.interpretedFieldKeys().count){
                         let identifier = first.interpretedFieldKeys()[row]
                         if tableColumn?.identifier == NSUserInterfaceItemIdentifier("Field") {
-                            if let fieldDisplay = self.selectionContext?.displayField(fieldName: identifier){
-                                cellView.textField?.attributedStringValue = fieldDisplay
-                            }
+                            let fieldDisplay = self.selectionContext.displayField(fieldName: identifier)
+                            cellView.textField?.attributedStringValue = fieldDisplay
+                            
                         }else{
-                            if let item = first.interpretedField(key: identifier),
-                                let selectionContext = self.selectionContext{
-                                cellView.textField?.stringValue = selectionContext.display(fieldValue: item)
+                            if let item = first.interpretedField(key: identifier){
+                                cellView.textField?.stringValue = self.selectionContext.display(fieldValue: item)
                             }
                         }
                     }
                 }
             }else{
-                
-                let message = self.messages[row]
-                if let identifier = tableColumn?.identifier,
-                    let item = message.interpretedField(key:identifier.rawValue),
-                    let selectionContext = self.selectionContext{
-                    cellView.textField?.stringValue = selectionContext.display(fieldValue: item)
+                if row < self.messages.count {
+                    let message = self.messages[row]
+                    if let identifier = tableColumn?.identifier,
+                        let item = message.interpretedField(key:identifier.rawValue){
+                        cellView.textField?.stringValue = selectionContext.display(fieldValue: item)
+                    }
                 }
             }
         }

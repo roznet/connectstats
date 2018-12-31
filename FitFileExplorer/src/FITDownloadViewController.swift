@@ -129,7 +129,6 @@ class FITDownloadViewController: NSViewController {
 
         
         let cols = ["activityId", "activityType"] + Array(units.keys)
-
         
         var csv : String = ""
         var line : [String] = []
