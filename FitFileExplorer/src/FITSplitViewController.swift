@@ -13,7 +13,7 @@ class FITSplitViewController: NSSplitViewController {
 
     var selectionContext : FITSelectionContext?
     var dataListDataSource : FITDataListDataSource?
-    var fieldsListDataSource : FITFieldsListDataSource?
+    var fieldsListDataSource : FITDetailListDataSource?
     var outlineDataSource : FITOutlineDataSource? {
         didSet {
             self.outlineViewController()?.outlineDataSource = self.outlineDataSource
@@ -101,10 +101,10 @@ class FITSplitViewController: NSSplitViewController {
      */
     @objc func outlineDataSourceSelectionChanged(notification : Notification){
         if self.fieldsListDataSource == nil {
-            self.fieldsListDataSource = FITFieldsListDataSource(context: self.selectionContext!)
+            self.fieldsListDataSource = FITDetailListDataSource(context: self.selectionContext!)
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(detailSelectionChanged(notification:)),
-                                                   name: FITFieldsListDataSource.kFITNotificationDetailSelectionChanged,
+                                                   name: FITDetailListDataSource.kFITNotificationDetailSelectionChanged,
                                                    object: self.fieldsListDataSource)
             
             

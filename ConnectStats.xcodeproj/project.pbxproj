@@ -406,6 +406,7 @@
 		423B46321CDFE2C400743D79 /* FITFitMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46311CDFE2C400743D79 /* FITFitMessage.m */; };
 		423B46351CDFE31A00743D79 /* FITFitMessageFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46341CDFE31A00743D79 /* FITFitMessageFields.m */; };
 		423B46381CDFE41600743D79 /* FITFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46371CDFE41600743D79 /* FITFitFile.m */; };
+		423E8F6321DBE06900FB795B /* FITDetailListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423E8F5C21DBE06800FB795B /* FITDetailListDataSource.swift */; };
 		423EF01721D2A044005C2605 /* RZFitFileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */; };
 		423EF01821D2A044005C2605 /* RZFitFileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */; };
 		423EF01921D2A044005C2605 /* RZFitFileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */; };
@@ -1846,7 +1847,6 @@
 		42BF1FEC1D3AC233004445C2 /* RZUtilsTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; };
 		42BF98381EE3175600F5E094 /* FITFitStatisticsWeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BF98371EE3175600F5E094 /* FITFitStatisticsWeight.swift */; };
 		42BFC2231DCDD9D900EAD40E /* FITOutlineDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BFC2181DCCCB9400EAD40E /* FITOutlineDataSource.swift */; };
-		42BFC2261DCDE6AE00EAD40E /* FITFieldsListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BFC2211DCDD88200EAD40E /* FITFieldsListDataSource.swift */; };
 		42BFC2291DCE2C1700EAD40E /* FITSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BFC2281DCE2C1700EAD40E /* FITSplitViewController.swift */; };
 		42BFC2301DCE2F7F00EAD40E /* FITOutlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BFC22F1DCE2F7F00EAD40E /* FITOutlineViewController.swift */; };
 		42BFC2321DCE2FBC00EAD40E /* FITDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BFC2311DCE2FBC00EAD40E /* FITDetailTableViewController.swift */; };
@@ -2840,6 +2840,7 @@
 		423B46361CDFE41600743D79 /* FITFitFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FITFitFile.h; path = src/FITFitFile.h; sourceTree = "<group>"; };
 		423B46371CDFE41600743D79 /* FITFitFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FITFitFile.m; path = src/FITFitFile.m; sourceTree = "<group>"; };
 		423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RZUtils.xcodeproj; path = RZUtils/RZUtils.xcodeproj; sourceTree = "<group>"; };
+		423E8F5C21DBE06800FB795B /* FITDetailListDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITDetailListDataSource.swift; path = src/FITDetailListDataSource.swift; sourceTree = "<group>"; };
 		423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RZFitFileExtensions.swift; path = src/RZFitFileExtensions.swift; sourceTree = "<group>"; };
 		423F541B1F6C716D004471E6 /* GCAppGlobal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCAppGlobal.h; sourceTree = "<group>"; };
 		423F541C1F6C716D004471E6 /* GCAppGlobal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCAppGlobal.m; sourceTree = "<group>"; };
@@ -4224,7 +4225,6 @@
 		42BC77E2198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHistoryPerformanceAnalysis.m; path = src/GCHistoryPerformanceAnalysis.m; sourceTree = "<group>"; };
 		42BF98371EE3175600F5E094 /* FITFitStatisticsWeight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITFitStatisticsWeight.swift; path = src/FITFitStatisticsWeight.swift; sourceTree = "<group>"; };
 		42BFC2181DCCCB9400EAD40E /* FITOutlineDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITOutlineDataSource.swift; path = src/FITOutlineDataSource.swift; sourceTree = "<group>"; };
-		42BFC2211DCDD88200EAD40E /* FITFieldsListDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITFieldsListDataSource.swift; path = src/FITFieldsListDataSource.swift; sourceTree = "<group>"; };
 		42BFC2281DCE2C1700EAD40E /* FITSplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITSplitViewController.swift; path = src/FITSplitViewController.swift; sourceTree = "<group>"; };
 		42BFC22F1DCE2F7F00EAD40E /* FITOutlineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITOutlineViewController.swift; path = src/FITOutlineViewController.swift; sourceTree = "<group>"; };
 		42BFC2311DCE2FBC00EAD40E /* FITDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITDetailTableViewController.swift; path = src/FITDetailTableViewController.swift; sourceTree = "<group>"; };
@@ -7960,9 +7960,9 @@
 		42EAC6131CE3DA5E00C7631D /* DataSources */ = {
 			isa = PBXGroup;
 			children = (
+				423E8F5C21DBE06800FB795B /* FITDetailListDataSource.swift */,
 				42A672C71DECC4EA00BE8E26 /* FITSelectionContext.swift */,
 				42BFC2181DCCCB9400EAD40E /* FITOutlineDataSource.swift */,
-				42BFC2211DCDD88200EAD40E /* FITFieldsListDataSource.swift */,
 				42ECA0231ED7614300D1EEF9 /* FITDataListDataSource.swift */,
 				4273DB7221A1B80B00C09D68 /* FITDownloadListDataSource.swift */,
 			);
@@ -10274,6 +10274,7 @@
 				4217846621CE9FA2006FE90A /* fit_crc.c in Sources */,
 				422F284120557DD000187478 /* GCField+Convert.m in Sources */,
 				429DD64F219E39FC004FD716 /* GCGarminLoginSSORequest.m in Sources */,
+				423E8F6321DBE06900FB795B /* FITDetailListDataSource.swift in Sources */,
 				42A600C321A16ED800160FE9 /* FITGarminActivityListWrapper.m in Sources */,
 				42F4E5131DE08D55001AB244 /* GCMapRouteLogicPointHolder.m in Sources */,
 				42F4E5101DE08D49001AB244 /* GCMapGradientPathOverlayView.m in Sources */,
@@ -10297,7 +10298,6 @@
 				42F4E5111DE08D4C001AB244 /* GCMapGradientPathOverlay.m in Sources */,
 				42AE24621DF2E556002B48D9 /* FITSelectionContextViewController.swift in Sources */,
 				4217846A21CE9FAD006FE90A /* fit_ram.c in Sources */,
-				42BFC2261DCDE6AE00EAD40E /* FITFieldsListDataSource.swift in Sources */,
 				42F3FBFF1DD7A4D30042A9B1 /* FITGraphViewController.swift in Sources */,
 				4253B4831CDA857B00437E6A /* FITViewController.m in Sources */,
 				429DD652219E3E36004FD716 /* GCWebUrl.m in Sources */,

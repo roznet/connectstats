@@ -20,9 +20,12 @@ class FITDetailTableViewController: NSViewController {
         
     }
     
-    func updateWith(dataSource : FITFieldsListDataSource){
+    func updateWith(dataSource : FITDetailListDataSource){
         let columns : [NSTableColumn] = self.detailTableView.tableColumns
         
+        //self.detailTableView.dataSource = nil
+        self.detailTableView.delegate = nil
+
         var existing: [NSUserInterfaceItemIdentifier:NSTableColumn] = [:]
         
         for col in columns {
@@ -55,13 +58,10 @@ class FITDetailTableViewController: NSViewController {
             }
             idx += 1
         }
-        if( dataSource !== self.detailTableView.dataSource){
-            self.detailTableView.dataSource = dataSource
-            self.detailTableView.delegate = dataSource
-            self.detailTableView.rzTableViewDelegate = dataSource
-        }
+        
+        self.detailTableView.dataSource = dataSource
+        self.detailTableView.delegate = dataSource
+        self.detailTableView.rzTableViewDelegate = dataSource
         self.detailTableView.reloadData()
-        
-        
     }
 }
