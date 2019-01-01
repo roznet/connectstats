@@ -9,7 +9,7 @@
 import Cocoa
 import RZUtilsOSX
 
-class FITFieldsListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource,RZTableViewDelegate {
+class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource,RZTableViewDelegate {
 
     static let kFITNotificationDetailSelectionChanged = Notification.Name( "kFITNotificationDetailSelectionChanged" )
     
@@ -26,6 +26,8 @@ class FITFieldsListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     var messages:[RZFitMessage] {
         return self.selectionContext.messages
     }
+    
+    var setupMode : Bool = false
     
     var messageType :RZFitMessageType{
         get {
@@ -54,6 +56,10 @@ class FITFieldsListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     }
     
     func numberOfRows(in tableView: NSTableView) -> Int {
+        
+        if self.setupMode {
+            return 0
+        }
         if( self.messages.count == 1){
             if let first = self.messages.first {
                 return first.interpretedFieldKeys().count
@@ -121,7 +127,7 @@ class FITFieldsListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
             
             self.selectedField = chosenField
             
-            NotificationCenter.default.post(name: FITFieldsListDataSource.kFITNotificationDetailSelectionChanged, object: self)
+            NotificationCenter.default.post(name: FITDetailListDataSource.kFITNotificationDetailSelectionChanged, object: self)
         }
 
     }
