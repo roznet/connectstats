@@ -34,7 +34,7 @@ class FitFileExplorerTests: XCTestCase {
                 let fastfit = RZFitFile(file: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(filename, for: type(of:self)))) {
                 let origfit = RZFitFile(fitFile: fit)
                 let fittypes = fit.allMessageTypes()
-                let fasttypes = fastfit.allMessageTypes()
+                let fasttypes = fastfit.messageTypes
                 let rebuild = RZFitFile(fitFile: fit)
                 XCTAssertNotNil(fasttypes)
                 XCTAssertNotNil(fittypes)
@@ -43,12 +43,15 @@ class FitFileExplorerTests: XCTestCase {
                 XCTAssertGreaterThan(origfit.messages.count, 0)
                 
                 if let fittypes = fittypes {
-                    for mesgtype in fastfit.allMessageTypes(){
-                        XCTAssertTrue(fittypes.contains(mesgtype))
+                    for mesgtype in fastfit.messageTypes{
+                        let strmesgtype = fastfit.messageTypeDescription(messageType: mesgtype) ?? "ERROR"
+                        XCTAssertTrue(fittypes.contains(strmesgtype))
                     }
                     for mesgtype in fittypes {
+                        
                         if( mesgtype != "unknown"){
-                            XCTAssertTrue(fasttypes.contains(mesgtype))
+                            let fasttype = RZFitFile.messageType(forDescription: mesgtype) ?? FIT_MESG_NUM_INVALID
+                            XCTAssertTrue(fasttypes.contains(fasttype))
                         }
                     }
                 }
@@ -62,8 +65,8 @@ class FitFileExplorerTests: XCTestCase {
                             for (offset,fields) in fastmessages.enumerated(){
                                 if let rawfitfields = fitmessages.field(for: UInt(offset)),
                                     let fitfields = RZFitMessage( with: rawfitfields){
-                                    let fastfields = fields.interpretFields()
-                                    let origfields = fitfields.interpretFields()
+                                    let fastfields = fields.interpretedFields()
+                                    let origfields = fitfields.interpretedFields()
                                     
                                     if( origfields.count != fastfields.count){
                                         diffs+=1
@@ -79,6 +82,7 @@ class FitFileExplorerTests: XCTestCase {
             }
         }
     }
+    /*
     func testInterp() {
         //"activity_1378220136.fit"
         //"activity_1382772474.fit"
@@ -89,30 +93,28 @@ class FitFileExplorerTests: XCTestCase {
             let filenames = [ "activity_1378220136.fit", "activity_1382772474.fit" ]
             
             for filename in filenames {
-                let decode = FITFitFileDecode(forFile:RZFileOrganizer.bundleFilePath(filename, for: type(of:self)))
-                decode?.parse()
-                
-                if let fit = decode?.fitFile {
+                let fit = RZFitFile(file: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(filename, for: type(of:self))))
+                if let fit = fit {
                     let interpret = FITFitFileInterpret(fitFile: fit)
                     
-                    if let message = fit["session"]{
-                        let sumValues = interpret.summaryValues(fitMessageFields: message[0])
-                        //let retrieved = manager.retrieveReferenceObject(sumValues, selector: #selector(FitFileExplorerTests.testInterp), identifier: filename)
-                        for (field,val) in sumValues {
-                            print( " \"\(field)\":\"\(val)\"")
-                        }
+                    let messages = fit.messages(forMessageType: FIT_MESG_NUM_SESSION)
+                    let sumValues = interpret.summaryValues(fitMessage: messages[0])
+                    //let retrieved = manager.retrieveReferenceObject(sumValues, selector: #selector(FitFileExplorerTests.testInterp), identifier: filename)
+                    for (field,val) in sumValues {
+                        print( " \"\(field)\":\"\(val)\"")
                     }
-                    if let laps = interpret.statsDataSerie(message: "lap", fieldX: "timestamp", fieldY: "avg_speed") {
+                    
+                    if let laps = interpret.statsDataSerie(messageType: FIT_MESG_NUM_LAP, fieldX: "timestamp", fieldY: "avg_speed") {
                         print( "\(laps)")
                     }
-                    if let records = interpret.statsDataSerie(message: "record", fieldX: "timestamp", fieldY: "speed") {
+                    if let records = interpret.statsDataSerie(messageType: FIT_MESG_NUM_RECORD, fieldX: "timestamp", fieldY: "speed") {
                         print( "\(records)")
                     }
                     
-                    if let records = interpret.statsDataSerie(message: "record", fieldX: "heart_rate", fieldY: "speed") {
+                    if let records = interpret.statsDataSerie(messageType: FIT_MESG_NUM_RECORD, fieldX: "heart_rate", fieldY: "speed") {
                         print( "\(records)")
                     }
-                    let res = interpret.mapFields(from: fit["record"].allAvailableFieldKeys(), to: fit["lap"].allAvailableFieldKeys())
+                    let res = interpret.mapFields(from: fit., to: fit["lap"].allAvailableFieldKeys())
                     let res2 = interpret.mapFields(from: fit["lap"].allAvailableFieldKeys(), to: fit["record"].allAvailableFieldKeys())
                     print( "====\(res)")
                     print( "====\(res2)")
@@ -124,15 +126,16 @@ class FitFileExplorerTests: XCTestCase {
             XCTAssert(false, "Failed to access regression manager")
         }
     }
+ */
     
+    /*
     func testMapFields(){
         let filenames = [ "activity_1378220136.fit", "activity_1382772474.fit" ]
         
         for filename in filenames {
-            let decode = FITFitFileDecode(forFile:RZFileOrganizer.bundleFilePath(filename, for: type(of:self)))
-            decode?.parse()
+            let fit = RZFitFile(file: URL(fileURLWithPath:  RZFileOrganizer.bundleFilePath(filename, for: type(of:self))))
             
-            if let fit = decode?.fitFile {
+            if let fit = fit {
                 let interpret = FITFitFileInterpret(fitFile: fit)
                 
                 if let messageSession = fit["session"], let messageLap = fit["lap"], let messageRecord = fit["record"]{
@@ -159,8 +162,9 @@ class FitFileExplorerTests: XCTestCase {
                 }
             }
         }
-    }
+    }*/
     
+    /*
     func testSelectionContext(){
         let filename = "activity_1378220136.fit"//, "activity_1382772474.fit" ]
         
@@ -207,6 +211,21 @@ class FitFileExplorerTests: XCTestCase {
             XCTAssertEqual(context.dependentField, "heart_rate")
             
         }
+    }
+    */
+    
+    func testSamples() {
+        let filename = "DeveloperData.fit"
+        let filepath = RZFileOrganizer.bundleFilePath(filename, for: type(of:self))
+        
+        
+        let decode = FITFitFileDecode(forFile:filepath)
+        decode?.parse()
+        if let cppfit = decode?.fitFile,
+            let fastfit = RZFitFile(file: URL(fileURLWithPath:  filepath)) {
+            print( "\(cppfit) \(fastfit)")
+        }
+
     }
     
     func testPerformanceExample() {

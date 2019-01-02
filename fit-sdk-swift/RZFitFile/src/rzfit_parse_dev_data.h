@@ -1,8 +1,8 @@
 //  MIT License
 //
-//  Created on 25/12/2018 for ConnectStats
+//  Created on 02/01/2019 for ConnectStats
 //
-//  Copyright (c) 2018 Brice Rosenzweig
+//  Copyright (c) 2019 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -23,40 +23,19 @@
 //  SOFTWARE.
 //
 
+@import Foundation;
+
+#include "fit_convert.h"
+
+@interface RZFitDevDataParser : NSObject
+
++(nonnull RZFitDevDataParser*)devDataParser:(nonnull FIT_CONVERT_STATE  *) state;
 
 
-import Foundation
+-(void)initState:(nonnull FIT_CONVERT_STATE *)state;
+-(void)recordDeveloperField:(nonnull const FIT_UINT8 *)mesg;
 
-extension RZFitFile {
-    
-    convenience init(fitFile file: FITFitFile){
-        var messages :[RZFitMessage] = []
-        
-        for one in file.allMessageFields() {
-            if let field = RZFitMessage(with: one) {
-                messages.append(field)
-            }
-        }
-        
-        self.init(messages: messages)
-    }
-    
-    func preferredMessageType() -> RZFitMessageType {
-        let preferred = [ FIT_MESG_NUM_SESSION, FIT_MESG_NUM_RECORD, FIT_MESG_NUM_FILE_ID]
-        for one in preferred {
-            if self.messageTypes.contains(one) {
-                return one
-            }
-        }
-        return FIT_MESG_NUM_FILE_ID
-    }
-    
-    func orderedMessageTypes() -> [RZFitMessageType] {
-        return Array(self.messageTypes)
-    }
-    
-    func orderedFieldKeys(messageType: RZFitMessageType) -> [RZFitFieldKey] {
-        return Array(self.fieldKeys(messageType:messageType))
-    }
-    
-}
+-(nullable NSDictionary<NSString*,NSNumber*>*)parseData;
+
+
+@end

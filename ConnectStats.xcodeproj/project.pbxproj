@@ -151,6 +151,9 @@
 		422B343E1CA7321200B345CD /* GCFieldCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 422B343C1CA7321200B345CD /* GCFieldCache.m */; };
 		422B34411CA7322600B345CD /* GCFieldInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 422B34401CA7322600B345CD /* GCFieldInfo.m */; };
 		422B34421CA7322600B345CD /* GCFieldInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 422B34401CA7322600B345CD /* GCFieldInfo.m */; };
+		422BFD2A21DCF74400291D71 /* rzfit_parse_dev_data.m in Sources */ = {isa = PBXBuildFile; fileRef = 422BFD2921DCF74400291D71 /* rzfit_parse_dev_data.m */; };
+		422BFD2B21DCF74400291D71 /* rzfit_parse_dev_data.m in Sources */ = {isa = PBXBuildFile; fileRef = 422BFD2921DCF74400291D71 /* rzfit_parse_dev_data.m */; };
+		422BFD2C21DCF74400291D71 /* rzfit_parse_dev_data.m in Sources */ = {isa = PBXBuildFile; fileRef = 422BFD2921DCF74400291D71 /* rzfit_parse_dev_data.m */; };
 		422C70AE1642B677003779E0 /* GCHistoryAggregatedActivityStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 422C70AD1642B677003779E0 /* GCHistoryAggregatedActivityStats.m */; };
 		422CC8761E6ACA1700195414 /* GCUnit+FIT.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B462E1CDFE03400743D79 /* GCUnit+FIT.m */; };
 		422CC8771E6ACA1700195414 /* FITFitEnumMap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418471CF054B300642F37 /* FITFitEnumMap.mm */; };
@@ -407,6 +410,26 @@
 		423B46351CDFE31A00743D79 /* FITFitMessageFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46341CDFE31A00743D79 /* FITFitMessageFields.m */; };
 		423B46381CDFE41600743D79 /* FITFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B46371CDFE41600743D79 /* FITFitFile.m */; };
 		423E8F6321DBE06900FB795B /* FITDetailListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423E8F5C21DBE06800FB795B /* FITDetailListDataSource.swift */; };
+		423E8F8321DCE5F300FB795B /* WeightScaleMultiUser.fit in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F6F21DCE5F300FB795B /* WeightScaleMultiUser.fit */; };
+		423E8F8421DCE5F300FB795B /* DeveloperData.csv in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7021DCE5F300FB795B /* DeveloperData.csv */; };
+		423E8F8521DCE5F300FB795B /* MonitoringFile.csv in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7121DCE5F300FB795B /* MonitoringFile.csv */; };
+		423E8F8621DCE5F300FB795B /* WorkoutCustomTargetValues.csv in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7221DCE5F300FB795B /* WorkoutCustomTargetValues.csv */; };
+		423E8F8721DCE5F300FB795B /* WeightScaleSingleUser.csv in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7321DCE5F300FB795B /* WeightScaleSingleUser.csv */; };
+		423E8F8821DCE5F300FB795B /* WorkoutRepeatSteps.fit in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7421DCE5F300FB795B /* WorkoutRepeatSteps.fit */; };
+		423E8F8921DCE5F300FB795B /* Settings.fit in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7521DCE5F300FB795B /* Settings.fit */; };
+		423E8F8A21DCE5F300FB795B /* Activity.csv in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7621DCE5F300FB795B /* Activity.csv */; };
+		423E8F8B21DCE5F300FB795B /* WorkoutRepeatGreaterThanStep.fit in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7721DCE5F300FB795B /* WorkoutRepeatGreaterThanStep.fit */; };
+		423E8F8C21DCE5F300FB795B /* WorkoutIndividualSteps.csv in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7821DCE5F300FB795B /* WorkoutIndividualSteps.csv */; };
+		423E8F8D21DCE5F300FB795B /* WeightScaleMultiUser.csv in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7921DCE5F300FB795B /* WeightScaleMultiUser.csv */; };
+		423E8F8E21DCE5F300FB795B /* DeveloperData.fit in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7A21DCE5F300FB795B /* DeveloperData.fit */; };
+		423E8F8F21DCE5F300FB795B /* MonitoringFile.fit in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7B21DCE5F300FB795B /* MonitoringFile.fit */; };
+		423E8F9021DCE5F300FB795B /* WorkoutCustomTargetValues.fit in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7C21DCE5F300FB795B /* WorkoutCustomTargetValues.fit */; };
+		423E8F9121DCE5F300FB795B /* WeightScaleSingleUser.fit in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7D21DCE5F300FB795B /* WeightScaleSingleUser.fit */; };
+		423E8F9221DCE5F300FB795B /* Activity.fit in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7E21DCE5F300FB795B /* Activity.fit */; };
+		423E8F9321DCE5F300FB795B /* WorkoutIndividualSteps.fit in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F7F21DCE5F300FB795B /* WorkoutIndividualSteps.fit */; };
+		423E8F9421DCE5F300FB795B /* WorkoutRepeatGreaterThanStep.csv in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F8021DCE5F300FB795B /* WorkoutRepeatGreaterThanStep.csv */; };
+		423E8F9521DCE5F300FB795B /* WorkoutRepeatSteps.csv in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F8121DCE5F300FB795B /* WorkoutRepeatSteps.csv */; };
+		423E8F9621DCE5F300FB795B /* Settings.csv in Resources */ = {isa = PBXBuildFile; fileRef = 423E8F8221DCE5F300FB795B /* Settings.csv */; };
 		423EF01721D2A044005C2605 /* RZFitFileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */; };
 		423EF01821D2A044005C2605 /* RZFitFileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */; };
 		423EF01921D2A044005C2605 /* RZFitFileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */; };
@@ -2772,6 +2795,8 @@
 		422B343F1CA7322600B345CD /* GCFieldInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldInfo.h; path = src/GCFieldInfo.h; sourceTree = "<group>"; };
 		422B34401CA7322600B345CD /* GCFieldInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldInfo.m; path = src/GCFieldInfo.m; sourceTree = "<group>"; };
 		422B34431CA7345200B345CD /* GCFieldsDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCFieldsDefs.h; path = src/GCFieldsDefs.h; sourceTree = "<group>"; };
+		422BFD2921DCF74400291D71 /* rzfit_parse_dev_data.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rzfit_parse_dev_data.m; sourceTree = "<group>"; };
+		422BFD3321DCF75800291D71 /* rzfit_parse_dev_data.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rzfit_parse_dev_data.h; sourceTree = "<group>"; };
 		422C70AC1642B2ED003779E0 /* GCHistoryAggregatedActivityStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCHistoryAggregatedActivityStats.h; path = src/GCHistoryAggregatedActivityStats.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		422C70AD1642B677003779E0 /* GCHistoryAggregatedActivityStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHistoryAggregatedActivityStats.m; path = src/GCHistoryAggregatedActivityStats.m; sourceTree = "<group>"; };
 		422CCE7B1B7E9B6300A4DAEB /* Cells.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Cells.xcassets; path = ConnectStats/icons/Cells.xcassets; sourceTree = "<group>"; };
@@ -2841,6 +2866,26 @@
 		423B46371CDFE41600743D79 /* FITFitFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FITFitFile.m; path = src/FITFitFile.m; sourceTree = "<group>"; };
 		423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RZUtils.xcodeproj; path = RZUtils/RZUtils.xcodeproj; sourceTree = "<group>"; };
 		423E8F5C21DBE06800FB795B /* FITDetailListDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITDetailListDataSource.swift; path = src/FITDetailListDataSource.swift; sourceTree = "<group>"; };
+		423E8F6F21DCE5F300FB795B /* WeightScaleMultiUser.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = WeightScaleMultiUser.fit; sourceTree = "<group>"; };
+		423E8F7021DCE5F300FB795B /* DeveloperData.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DeveloperData.csv; sourceTree = "<group>"; };
+		423E8F7121DCE5F300FB795B /* MonitoringFile.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MonitoringFile.csv; sourceTree = "<group>"; };
+		423E8F7221DCE5F300FB795B /* WorkoutCustomTargetValues.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WorkoutCustomTargetValues.csv; sourceTree = "<group>"; };
+		423E8F7321DCE5F300FB795B /* WeightScaleSingleUser.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WeightScaleSingleUser.csv; sourceTree = "<group>"; };
+		423E8F7421DCE5F300FB795B /* WorkoutRepeatSteps.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = WorkoutRepeatSteps.fit; sourceTree = "<group>"; };
+		423E8F7521DCE5F300FB795B /* Settings.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = Settings.fit; sourceTree = "<group>"; };
+		423E8F7621DCE5F300FB795B /* Activity.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Activity.csv; sourceTree = "<group>"; };
+		423E8F7721DCE5F300FB795B /* WorkoutRepeatGreaterThanStep.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = WorkoutRepeatGreaterThanStep.fit; sourceTree = "<group>"; };
+		423E8F7821DCE5F300FB795B /* WorkoutIndividualSteps.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WorkoutIndividualSteps.csv; sourceTree = "<group>"; };
+		423E8F7921DCE5F300FB795B /* WeightScaleMultiUser.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WeightScaleMultiUser.csv; sourceTree = "<group>"; };
+		423E8F7A21DCE5F300FB795B /* DeveloperData.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = DeveloperData.fit; sourceTree = "<group>"; };
+		423E8F7B21DCE5F300FB795B /* MonitoringFile.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = MonitoringFile.fit; sourceTree = "<group>"; };
+		423E8F7C21DCE5F300FB795B /* WorkoutCustomTargetValues.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = WorkoutCustomTargetValues.fit; sourceTree = "<group>"; };
+		423E8F7D21DCE5F300FB795B /* WeightScaleSingleUser.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = WeightScaleSingleUser.fit; sourceTree = "<group>"; };
+		423E8F7E21DCE5F300FB795B /* Activity.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = Activity.fit; sourceTree = "<group>"; };
+		423E8F7F21DCE5F300FB795B /* WorkoutIndividualSteps.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = WorkoutIndividualSteps.fit; sourceTree = "<group>"; };
+		423E8F8021DCE5F300FB795B /* WorkoutRepeatGreaterThanStep.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WorkoutRepeatGreaterThanStep.csv; sourceTree = "<group>"; };
+		423E8F8121DCE5F300FB795B /* WorkoutRepeatSteps.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WorkoutRepeatSteps.csv; sourceTree = "<group>"; };
+		423E8F8221DCE5F300FB795B /* Settings.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Settings.csv; sourceTree = "<group>"; };
 		423EF01621D2A044005C2605 /* RZFitFileExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RZFitFileExtensions.swift; path = src/RZFitFileExtensions.swift; sourceTree = "<group>"; };
 		423F541B1F6C716D004471E6 /* GCAppGlobal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCAppGlobal.h; sourceTree = "<group>"; };
 		423F541C1F6C716D004471E6 /* GCAppGlobal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCAppGlobal.m; sourceTree = "<group>"; };
@@ -4845,6 +4890,8 @@
 				4217845321CE9F7E006FE90A /* RZFitMessage.swift */,
 				42A9595421CEADA200E2BC4D /* RZFitFieldValue.swift */,
 				4217845421CE9F7E006FE90A /* rzfit_convert_auto.swift */,
+				422BFD2921DCF74400291D71 /* rzfit_parse_dev_data.m */,
+				422BFD3321DCF75800291D71 /* rzfit_parse_dev_data.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -5432,6 +5479,33 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		423E8F6E21DCE5F300FB795B /* examples */ = {
+			isa = PBXGroup;
+			children = (
+				423E8F6F21DCE5F300FB795B /* WeightScaleMultiUser.fit */,
+				423E8F7021DCE5F300FB795B /* DeveloperData.csv */,
+				423E8F7121DCE5F300FB795B /* MonitoringFile.csv */,
+				423E8F7221DCE5F300FB795B /* WorkoutCustomTargetValues.csv */,
+				423E8F7321DCE5F300FB795B /* WeightScaleSingleUser.csv */,
+				423E8F7421DCE5F300FB795B /* WorkoutRepeatSteps.fit */,
+				423E8F7521DCE5F300FB795B /* Settings.fit */,
+				423E8F7621DCE5F300FB795B /* Activity.csv */,
+				423E8F7721DCE5F300FB795B /* WorkoutRepeatGreaterThanStep.fit */,
+				423E8F7821DCE5F300FB795B /* WorkoutIndividualSteps.csv */,
+				423E8F7921DCE5F300FB795B /* WeightScaleMultiUser.csv */,
+				423E8F7A21DCE5F300FB795B /* DeveloperData.fit */,
+				423E8F7B21DCE5F300FB795B /* MonitoringFile.fit */,
+				423E8F7C21DCE5F300FB795B /* WorkoutCustomTargetValues.fit */,
+				423E8F7D21DCE5F300FB795B /* WeightScaleSingleUser.fit */,
+				423E8F7E21DCE5F300FB795B /* Activity.fit */,
+				423E8F7F21DCE5F300FB795B /* WorkoutIndividualSteps.fit */,
+				423E8F8021DCE5F300FB795B /* WorkoutRepeatGreaterThanStep.csv */,
+				423E8F8121DCE5F300FB795B /* WorkoutRepeatSteps.csv */,
+				423E8F8221DCE5F300FB795B /* Settings.csv */,
+			);
+			path = examples;
+			sourceTree = "<group>";
+		};
 		424340FA1B7415C7001E22BB /* SpotLightSearch */ = {
 			isa = PBXGroup;
 			children = (
@@ -5790,6 +5864,7 @@
 		42769BCE1DD2ABC9000390F1 /* FitFileExplorerTests */ = {
 			isa = PBXGroup;
 			children = (
+				423E8F6E21DCE5F300FB795B /* examples */,
 				42769BCF1DD2ABC9000390F1 /* FitFileExplorerTests.swift */,
 				42769BD11DD2ABC9000390F1 /* Info.plist */,
 			);
@@ -8652,8 +8727,28 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				423E8F8E21DCE5F300FB795B /* DeveloperData.fit in Resources */,
+				423E8F9521DCE5F300FB795B /* WorkoutRepeatSteps.csv in Resources */,
+				423E8F8921DCE5F300FB795B /* Settings.fit in Resources */,
+				423E8F9421DCE5F300FB795B /* WorkoutRepeatGreaterThanStep.csv in Resources */,
+				423E8F8A21DCE5F300FB795B /* Activity.csv in Resources */,
+				423E8F8D21DCE5F300FB795B /* WeightScaleMultiUser.csv in Resources */,
+				423E8F9221DCE5F300FB795B /* Activity.fit in Resources */,
 				42769BD91DD2ACA4000390F1 /* activity_1378220136.fit in Resources */,
+				423E8F9321DCE5F300FB795B /* WorkoutIndividualSteps.fit in Resources */,
+				423E8F8521DCE5F300FB795B /* MonitoringFile.csv in Resources */,
+				423E8F8F21DCE5F300FB795B /* MonitoringFile.fit in Resources */,
+				423E8F8821DCE5F300FB795B /* WorkoutRepeatSteps.fit in Resources */,
+				423E8F8721DCE5F300FB795B /* WeightScaleSingleUser.csv in Resources */,
+				423E8F8B21DCE5F300FB795B /* WorkoutRepeatGreaterThanStep.fit in Resources */,
+				423E8F8C21DCE5F300FB795B /* WorkoutIndividualSteps.csv in Resources */,
+				423E8F9021DCE5F300FB795B /* WorkoutCustomTargetValues.fit in Resources */,
+				423E8F8321DCE5F300FB795B /* WeightScaleMultiUser.fit in Resources */,
 				42769BDA1DD2ACA4000390F1 /* activity_1382772474.fit in Resources */,
+				423E8F8621DCE5F300FB795B /* WorkoutCustomTargetValues.csv in Resources */,
+				423E8F9621DCE5F300FB795B /* Settings.csv in Resources */,
+				423E8F9121DCE5F300FB795B /* WeightScaleSingleUser.fit in Resources */,
+				423E8F8421DCE5F300FB795B /* DeveloperData.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10243,6 +10338,7 @@
 				428DD4BD219AC976006DF5B5 /* FITGarminActivityWrapper.m in Sources */,
 				423B462F1CDFE03400743D79 /* GCUnit+FIT.m in Sources */,
 				42C0589921D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */,
+				422BFD2C21DCF74400291D71 /* rzfit_parse_dev_data.m in Sources */,
 				42C0589E21D0525200109D54 /* RZFitMessageExtensions.swift in Sources */,
 				423B46381CDFE41600743D79 /* FITFitFile.m in Sources */,
 				423EF01921D2A044005C2605 /* RZFitFileExtensions.swift in Sources */,
@@ -10569,6 +10665,7 @@
 				42EB515E18A7EC6500B85FAB /* GCBabolatSessionsListRequest.m in Sources */,
 				42C0589721D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */,
 				424340FD1B741652001E22BB /* GCActivity+CSSearch.m in Sources */,
+				422BFD2A21DCF74400291D71 /* rzfit_parse_dev_data.m in Sources */,
 				426B0F121DA119060091A734 /* FITFitMessageFields.m in Sources */,
 				422637A51AFF6C5F005461E3 /* GCDebugActionsTableViewController.m in Sources */,
 				422D900417A1AE2C00C131DC /* GCViewIcons.m in Sources */,
@@ -10910,6 +11007,7 @@
 				42B5E2C81BA5B216000FAE4E /* GCHistoryFieldDataSerieConfig.m in Sources */,
 				42B5E2C91BA5B216000FAE4E /* GCHistoryFieldSummaryStats.m in Sources */,
 				42B5E2CA1BA5B216000FAE4E /* GCHistoryAggregatedActivityStats.m in Sources */,
+				422BFD2B21DCF74400291D71 /* rzfit_parse_dev_data.m in Sources */,
 				42B5E2CB1BA5B216000FAE4E /* GCHistoryPerformanceAnalysis.m in Sources */,
 				42B5E2CC1BA5B216000FAE4E /* GCTrackStats.m in Sources */,
 				42B5E2CD1BA5B216000FAE4E /* GCTrackPoint.m in Sources */,
