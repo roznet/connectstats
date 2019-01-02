@@ -14,6 +14,7 @@ class RZFitMessage {
     let messageType : RZFitMessageType
     private let values : [RZFitFieldKey:Double]
     private let enums : [RZFitFieldKey:String]
+    private var devfields : [RZFitFieldKey:Double]?
     
     var messageTypeDescription : String?{
         return rzfit_mesg_num_string(input: messageType)
@@ -26,6 +27,7 @@ class RZFitMessage {
         values = mesg_values
         enums = mesg_enums
         cacheInterpretation = [:]
+        devfields = nil
         
     }
     
@@ -49,6 +51,11 @@ class RZFitMessage {
             }
         }
         self.init(mesg_num: mesg_num, mesg_values: ivalues, mesg_enums: ienums)
+    }
+    
+    func addDevFieldValues(fields:[RZFitFieldKey:Double]) {
+        self.devfields = fields
+        
     }
     
     func interpretedFieldKeys() -> [RZFitFieldKey] {
@@ -115,6 +122,11 @@ class RZFitMessage {
         
         for (key,val) in enums {
             rv[ key ] = RZFitFieldValue(withName: val )
+        }
+        if let dev = self.devfields {
+            for (key,val) in dev {
+                rv[ "developer_" + key ] = RZFitFieldValue(withValue: val)
+            }
         }
         self.cacheInterpretation = rv
         return self.cacheInterpretation

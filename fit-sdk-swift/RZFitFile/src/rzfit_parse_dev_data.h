@@ -36,6 +36,7 @@
 -(void)recordDeveloperField:(nonnull const FIT_UINT8 *)mesg;
 
 -(nullable NSDictionary<NSString*,NSNumber*>*)parseData;
+-(nullable NSDictionary<NSString*,NSString*>*)units;
 
 
 @end
