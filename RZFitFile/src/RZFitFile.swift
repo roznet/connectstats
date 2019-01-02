@@ -38,7 +38,10 @@ class RZFitFile {
         var state : FIT_CONVERT_STATE = FIT_CONVERT_STATE()
         var convert_return : FIT_CONVERT_RETURN = FIT_CONVERT_CONTINUE
         
+        let dev_parser = RZFitDevDataParser(&state)
+        
         FitConvert_Init(&state, FIT_TRUE)
+        dev_parser.initState(&state)
         
         var bldmsg :[RZFitMessage] = []
         var bldmsgnum : Set<RZFitMessageType> = []
@@ -54,8 +57,14 @@ class RZFitFile {
                         let mesg = FitConvert_GetMessageNumber(&state)
                         bldmsgnum.insert(mesg)
                         if let uptr : UnsafePointer<UInt8> = FitConvert_GetMessageData(&state) {
+                            if( mesg == FIT_MESG_NUM_FIELD_DESCRIPTION){
+                                dev_parser.recordDeveloperField(uptr)
+                            }
                             if let fmesg = rzfit_build_mesg(num: mesg, uptr: uptr)
                             {
+                                if let dev = dev_parser.parseData(){
+                                    print("found dev \(dev)")
+                                }
                                 bldmsg.append(fmesg)
                                 if var prev = bldmsgbytype[fmesg.messageType] {
                                     prev.append(fmesg)
@@ -84,27 +93,21 @@ class RZFitFile {
         }
     }
  
-    func countByMessageType() -> [RZFitMessageType:UInt] {
-        var rv : [RZFitMessageType:UInt] = [:]
+    func countByMessageType() -> [RZFitMessageType:Int] {
+        var rv : [RZFitMessageType:Int] = [:]
         
-        for one in messages {
-            if let prev = rv[one.messageType] {
-                rv[one.messageType] = prev + 1
-            }else{
-                rv[one.messageType] = 1
-            }
+        for (key,val) in messagesByType {
+            rv[key] = val.count
         }
         return rv
     }
     
     func messages(forMessageType:RZFitMessageType) -> [RZFitMessage] {
-        var rv : [RZFitMessage] = []
-        for one in messages {
-            if one.messageType == forMessageType {
-                rv.append(one)
-            }
+        if let found = self.messagesByType[forMessageType] {
+            return found
         }
-        return rv
+        
+        return []
     }
     
     func messageTypeDescription( messageType:RZFitMessageType) -> String? {
@@ -132,5 +135,23 @@ class RZFitFile {
             return false
         }
     }
+    
+    func fieldKeys( messageType: RZFitMessageType ) -> [RZFitFieldKey] {
+        return Array(self.sampleValues(messageType: messageType).keys)
+    }
+    
+    func sampleValues( messageType: RZFitMessageType) -> [RZFitFieldKey:RZFitFieldValue] {
+        var rv : [RZFitFieldKey:RZFitFieldValue] = [:]
+        let forMessages = self.messages(forMessageType: messageType)
+        for one in forMessages {
+            for (key,val) in one.interpretedFields() {
+                if rv[key] == nil {
+                    rv[key] = val
+                }
+            }
+        }
+        return rv
+    }
+
     
 }

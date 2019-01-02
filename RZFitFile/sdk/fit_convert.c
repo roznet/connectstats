@@ -44,7 +44,9 @@
 {
    state->mesg_offset = 0;
    state->data_offset = 0;
-
+    state->dev_data_buffer = NULL;
+    state->dev_data_buffer_size = 0;
+    
 #if defined(FIT_CONVERT_CHECK_CRC)
    state->crc = 0;
 #endif
@@ -395,6 +397,7 @@
                if (state->dev_data_sizes[state->mesg_index] > 0)
                {
                   // There is dev data to read
+                   state->dev_data_buffer_index = 0;
                   state->decode_state = FIT_CONVERT_DECODE_DEV_FIELD_DATA;
                }
                else
@@ -518,6 +521,9 @@
             break;
 
          case FIT_CONVERT_DECODE_DEV_FIELD_DATA:
+              if( state->dev_data_buffer_index < state->dev_data_buffer_size){
+                  state->dev_data_buffer[state->dev_data_buffer_index++] = datum;
+              }
             state->field_offset++;
             if (state->field_offset >= state->dev_data_sizes[state->mesg_index])
             {

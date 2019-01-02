@@ -12,6 +12,6 @@
 #include "fit_config.h"
 #include "fit_example.h"
 #include "fit_convert.h"
-
+#include "rzfit_parse_dev_data.h"
 
 #endif /* fittest_Bridging_Header_h */

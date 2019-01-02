@@ -88,6 +88,9 @@ typedef struct
    #if defined(FIT_CONVERT_TIME_RECORD)
       FIT_UINT8 last_time_offset;
    #endif
+    FIT_UINT8 * dev_data_buffer;
+    FIT_UINT16 dev_data_buffer_size;
+    FIT_UINT16 dev_data_buffer_index;
 } FIT_CONVERT_STATE;
 
 
