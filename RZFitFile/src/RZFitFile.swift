@@ -16,6 +16,7 @@ class RZFitFile {
     public private(set) var messages : [RZFitMessage]
     public private(set) var messageTypes : Set<RZFitMessageType>
     public private(set) var messagesByType : [RZFitMessageType:[RZFitMessage]]
+    public private(set) var devDataParser : RZFitDevDataParser?
     
     init(  messages input: [RZFitMessage] ){
         var bldmsgnum : Set<RZFitMessageType> = []
@@ -32,6 +33,7 @@ class RZFitFile {
         messages = input
         messageTypes = bldmsgnum
         messagesByType = bldmsgbytype
+        devDataParser = nil
     }
     
     init( data : Data){
@@ -62,8 +64,8 @@ class RZFitFile {
                             }
                             if let fmesg = rzfit_build_mesg(num: mesg, uptr: uptr)
                             {
-                                if let dev = dev_parser.parseData(){
-                                    print("found dev \(dev)")
+                                if let dev = dev_parser.parseData() as? [RZFitFieldKey:Double]{
+                                    fmesg.addDevFieldValues(fields: dev)
                                 }
                                 bldmsg.append(fmesg)
                                 if var prev = bldmsgbytype[fmesg.messageType] {
@@ -83,6 +85,7 @@ class RZFitFile {
         messages = bldmsg
         messageTypes = bldmsgnum
         messagesByType = bldmsgbytype
+        devDataParser = dev_parser
     }
 
     convenience init?( file :URL){

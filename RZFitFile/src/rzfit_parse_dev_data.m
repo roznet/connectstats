@@ -36,6 +36,7 @@ const FIT_UINT16 kMaxDevFields = 64;
 @property (nonatomic,assign) FIT_FIELD_DESCRIPTION_MESG * dev_field_description;
 @property (nonatomic,assign) NSUInteger dev_field_description_index;
 @property (nonatomic,assign) NSUInteger dev_field_description_size;
+@property (nonatomic,retain) NSMutableDictionary<NSString*,NSString*> * cacheUnits;
 
 @end
 
@@ -49,6 +50,7 @@ const FIT_UINT16 kMaxDevFields = 64;
     rv.dev_field_description_size = kMaxDevFields;
     rv.dev_field_description = malloc(sizeof(FIT_FIELD_DESCRIPTION_MESG)*rv.dev_field_description_size);
     rv.dev_field_description_index = 0;
+    rv.cacheUnits = [NSMutableDictionary dictionary];
     return rv;
 }
 
@@ -62,6 +64,11 @@ const FIT_UINT16 kMaxDevFields = 64;
     if( self.dev_field_description_index < self.dev_field_description_size){
         memcpy(self.dev_field_description+self.dev_field_description_index, mesg, sizeof(FIT_FIELD_DESCRIPTION_MESG));
         self.dev_field_description_index++;
+        NSString * key = [NSString stringWithCString:mesg->field_name encoding:NSUTF8StringEncoding];
+        NSString * unit = [NSString stringWithCString:mesg->units encoding:NSUTF8StringEncoding];
+        if( unit.length > 0){
+            self.cacheUnits[key] = unit;
+        }
     }
 }
 
@@ -91,14 +98,16 @@ const FIT_UINT16 kMaxDevFields = 64;
                 case FIT_FIT_BASE_TYPE_ENUM:
                 {
                     FIT_ENUM * raw = (FIT_ENUM*)(self.dev_data_buffer+index);
-                    val = [NSNumber numberWithInt:*raw];
+                    if( *raw != FIT_ENUM_INVALID)
+                        val = [NSNumber numberWithInt:*raw];
                     index += sizeof(FIT_ENUM);
                     break;
                 }
                 case FIT_FIT_BASE_TYPE_SINT8:
                 {
                     FIT_SINT8 * raw = (FIT_SINT8*)(self.dev_data_buffer+index);
-                    val = [NSNumber numberWithInt:*raw];
+                    if( *raw != FIT_SINT8_INVALID)
+                        val = [NSNumber numberWithInt:*raw];
                     index += sizeof(FIT_SINT8);
                     break;
                 }
@@ -107,7 +116,8 @@ const FIT_UINT16 kMaxDevFields = 64;
                 case FIT_FIT_BASE_TYPE_UINT8:
                 {
                     FIT_UINT8 * raw = (FIT_UINT8*)(self.dev_data_buffer+index);
-                    val = [NSNumber numberWithInt:*raw];
+                    if( *raw != FIT_UINT8_INVALID)
+                        val = [NSNumber numberWithInt:*raw];
                     index += sizeof(FIT_UINT8);
                     break;
                 }
@@ -115,7 +125,8 @@ const FIT_UINT16 kMaxDevFields = 64;
                 case FIT_FIT_BASE_TYPE_SINT16:
                 {
                     FIT_SINT16 * raw = (FIT_SINT16*)(self.dev_data_buffer+index);
-                    val = [NSNumber numberWithInt:*raw];
+                    if( *raw != FIT_SINT16_INVALID)
+                        val = [NSNumber numberWithInt:*raw];
                     index += sizeof(FIT_SINT16);
                     break;
                 }
@@ -123,14 +134,16 @@ const FIT_UINT16 kMaxDevFields = 64;
                 case FIT_FIT_BASE_TYPE_UINT16:
                 {
                     FIT_UINT16 * raw = (FIT_UINT16*)(self.dev_data_buffer+index);
-                    val = [NSNumber numberWithInt:*raw];
+                    if( *raw != FIT_UINT16_INVALID)
+                        val = [NSNumber numberWithInt:*raw];
                     index += sizeof(FIT_UINT16);
                     break;
                 }
                 case FIT_FIT_BASE_TYPE_SINT32:
                 {
                     FIT_SINT32 * raw = (FIT_SINT32*)(self.dev_data_buffer+index);
-                    val = [NSNumber numberWithInt:*raw];
+                    if( *raw != FIT_SINT32_INVALID)
+                        val = [NSNumber numberWithInt:*raw];
                     index += sizeof(FIT_SINT32);
                     break;
                 }
@@ -138,7 +151,8 @@ const FIT_UINT16 kMaxDevFields = 64;
                 case FIT_FIT_BASE_TYPE_UINT32:
                 {
                     FIT_UINT32 * raw = (FIT_UINT32*)(self.dev_data_buffer+index);
-                    val = [NSNumber numberWithInt:*raw];
+                    if( *raw != FIT_UINT32_INVALID)
+                        val = [NSNumber numberWithInt:*raw];
                     index += sizeof(FIT_UINT32);
                     break;
                 }
@@ -147,7 +161,8 @@ const FIT_UINT16 kMaxDevFields = 64;
                 case FIT_FIT_BASE_TYPE_FLOAT32:
                 {
                     FIT_FLOAT32 * raw = (FIT_FLOAT32*)(self.dev_data_buffer+index);
-                    val = [NSNumber numberWithFloat:*raw];
+                    if( *raw != FIT_FLOAT32_INVALID)
+                        val = [NSNumber numberWithFloat:*raw];
                     index += sizeof(FIT_FLOAT32);
                     break;
                 }
@@ -155,7 +170,8 @@ const FIT_UINT16 kMaxDevFields = 64;
                 case FIT_FIT_BASE_TYPE_FLOAT64:
                 {
                     FIT_FLOAT64 * raw = (FIT_FLOAT64*)(self.dev_data_buffer+index);
-                    val = [NSNumber numberWithDouble:*raw];
+                    if( *raw != FIT_FLOAT64_INVALID)
+                        val = [NSNumber numberWithDouble:*raw];
                     index += sizeof(FIT_FLOAT64);
                     break;
                 }
@@ -163,7 +179,8 @@ const FIT_UINT16 kMaxDevFields = 64;
                 case FIT_FIT_BASE_TYPE_SINT64:
                 {
                     FIT_SINT64 * raw = (FIT_SINT64*)(self.dev_data_buffer+index);
-                    val = [NSNumber numberWithLong:*raw];
+                    if( *raw != FIT_SINT64_INVALID)
+                        val = [NSNumber numberWithLong:*raw];
                     index += sizeof(FIT_SINT64);
                     break;
                 }
@@ -172,7 +189,8 @@ const FIT_UINT16 kMaxDevFields = 64;
                 case FIT_FIT_BASE_TYPE_UINT64:
                 {
                     FIT_UINT64 * raw = (FIT_UINT64*)(self.dev_data_buffer+index);
-                    val = [NSNumber numberWithLong:*raw];
+                    if( *raw != FIT_UINT64_INVALID)
+                        val = [NSNumber numberWithLong:*raw];
                     index += sizeof(FIT_UINT64);
                     break;
                 }
@@ -188,6 +206,13 @@ const FIT_UINT16 kMaxDevFields = 64;
         }
     }
     return rv;
+}
+
+-(NSDictionary<NSString*,NSString*>*)units{
+    if( self.dev_field_description_index == 0)
+        return nil;
+    
+    return self.cacheUnits;
 }
 @end
 
