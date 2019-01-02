@@ -12,8 +12,8 @@ class FITSelectionContext {
     
     
     static let kFITNotificationConfigurationChanged = Notification.Name( "kFITNotificationConfigurationChanged" )
-    static let kFITNotificationMessageChanged       = Notification.Name( "kFITNotificationMessageChanged" )
-    static let kFITNotificationFieldChanged         = Notification.Name( "kFITNotificationFieldChanged" )
+    //static let kFITNotificationMessageChanged       = Notification.Name( "kFITNotificationMessageChanged" )
+    //static let kFITNotificationFieldChanged         = Notification.Name( "kFITNotificationFieldChanged" )
 
     // MARK: - FitFile
     
@@ -48,16 +48,17 @@ class FITSelectionContext {
             if !fitFile.hasMessageType(messageType: messageType) {
                 self.messageType = oldValue;
             }else{
+                
                 if(messageType != oldValue){
+                    self.messages = self.fitFile.messages(forMessageType: self.messageType)
                     self.updateWithDefaultForCurrentMessageType()
+                    self.notify()
                 }
             }
         }
     }
     
-    var messages :[RZFitMessage] {
-        return self.fitFile.messages(forMessageType: self.messageType)
-    }
+    var messages :[RZFitMessage]
 
     var message :RZFitMessage? {
         let useIdx = self.messageIndex < self.messages.count ? self.messageIndex : 0
@@ -177,6 +178,7 @@ class FITSelectionContext {
     init(fitFile:RZFitFile){
         self.fitFile = fitFile;
         self.messageType = self.fitFile.preferredMessageType()
+        self.messages = self.fitFile.messages(forMessageType: self.messageType)
         updateDependent()
     }
     
@@ -193,6 +195,7 @@ class FITSelectionContext {
         //self.dependentField = other.dependentField
         self.dependentMessage = other.dependentMessage
         self.preferredDependendMessage = other.preferredDependendMessage
+        self.messages = other.messages
         
     }
     
@@ -206,7 +209,7 @@ class FITSelectionContext {
     // MARK: - change selection
     
     func notify(){
-        NotificationCenter.default.post(name: FITSelectionContext.kFITNotificationConfigurationChanged, object: nil)
+        NotificationCenter.default.post(name: FITSelectionContext.kFITNotificationConfigurationChanged, object: self)
     }
 
     /// Update selection for index and record if number or location field selected

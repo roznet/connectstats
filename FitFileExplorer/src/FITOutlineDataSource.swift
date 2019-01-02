@@ -27,6 +27,9 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
         self.selectionContext = selectionContext
         super.init()
     }
+    deinit {
+        
+    }
     
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
         return self.fitFile.messageTypes.count

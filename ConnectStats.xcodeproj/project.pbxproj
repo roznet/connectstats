@@ -7960,9 +7960,9 @@
 		42EAC6131CE3DA5E00C7631D /* DataSources */ = {
 			isa = PBXGroup;
 			children = (
-				423E8F5C21DBE06800FB795B /* FITDetailListDataSource.swift */,
 				42A672C71DECC4EA00BE8E26 /* FITSelectionContext.swift */,
 				42BFC2181DCCCB9400EAD40E /* FITOutlineDataSource.swift */,
+				423E8F5C21DBE06800FB795B /* FITDetailListDataSource.swift */,
 				42ECA0231ED7614300D1EEF9 /* FITDataListDataSource.swift */,
 				4273DB7221A1B80B00C09D68 /* FITDownloadListDataSource.swift */,
 			);

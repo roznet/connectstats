@@ -33,10 +33,6 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
         get {
             return self.selectionContext.messageType
         }
-        set {
-            self.selectionContext.messageType = newValue
-            self.samples = self.fitFile.sampleValues(messageType: self.messageType)
-        }
     }
     
     var samples : [RZFitFieldKey:RZFitFieldValue]
@@ -44,8 +40,20 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     init(context : FITSelectionContext) {
         self.selectionContext = context
         self.samples = context.fitFile.sampleValues(messageType: context.messageType)
+        super.init()
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(selectionContextChanged(notification:)),
+                                              name: FITSelectionContext.kFITNotificationConfigurationChanged,
+                                              object: self.selectionContext)
     }
-    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc func selectionContextChanged(notification: Notification) {
+        self.samples = self.fitFile.sampleValues(messageType: self.messageType)
+    }
     
     func requiredTableColumnsIdentifiers() -> [String] {
         if( messages.count == 1){

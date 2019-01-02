@@ -24,7 +24,7 @@ class FITDetailTableViewController: NSViewController {
         let columns : [NSTableColumn] = self.detailTableView.tableColumns
         
         //self.detailTableView.dataSource = nil
-        self.detailTableView.delegate = nil
+        //self.detailTableView.delegate = nil
 
         var existing: [NSUserInterfaceItemIdentifier:NSTableColumn] = [:]
         
