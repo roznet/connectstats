@@ -113,3 +113,12 @@ typedef struct
    FIT_UINT8Z rear_gear[FIT_BIKE_PROFILE_MESG_REAR_GEAR_COUNT]; // Number of teeth on each gear 0 is innermost
    FIT_BOOL shimano_di2_enabled; //
 } FIT_BIKE_PROFILE_MESG;
+
+#define FIT_HRV_MESG_SIZE                                                       2
+#define FIT_HRV_MESG_DEF_SIZE                                                   8
+#define FIT_HRV_MESG_TIME_COUNT                                                 1
+
+typedef struct
+{
+   FIT_UINT16 time[FIT_HRV_MESG_TIME_COUNT]; // 1000 * s + 0, Time between beats
+} FIT_HRV_MESG;
