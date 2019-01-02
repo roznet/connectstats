@@ -138,7 +138,7 @@ func rzfit_bike_profile_mesg_value_dict( ptr : UnsafePointer<FIT_BIKE_PROFILE_ME
 }
 func rzfit_bike_profile_mesg_enum_dict( ptr : UnsafePointer<FIT_BIKE_PROFILE_MESG>) -> [String:String] {
   var rv : [String:String] = [:]
-  let x : FIT_BIKE_PROFILE_MESG = ptr.pointee
+  var x : FIT_BIKE_PROFILE_MESG = ptr.pointee
   rv[ "name" ] = withUnsafeBytes(of: &x.name) { (rawPtr) -> String in
     let ptr = rawPtr.baseAddress!.assumingMemoryBound(to: CChar.self)
     return String(cString: ptr)
@@ -344,6 +344,18 @@ func rzfit_record_mesg_enum_dict( ptr : UnsafePointer<FIT_RECORD_MESG>) -> [Stri
   }
   return rv
 }
+func rzfit_hrv_mesg_value_dict( ptr : UnsafePointer<FIT_HRV_MESG>) -> [String:Double] {
+  var rv : [String:Double] = [:]
+  let x : FIT_HRV_MESG = ptr.pointee
+  if x.time[0] != FIT_UINT16_INVALID  {
+    let val : Double = (Double(x.time[0]))/Double(1000)
+    rv[ "time" ] = val
+  }
+  return rv
+}
+func rzfit_hrv_mesg_enum_dict( ptr : UnsafePointer<FIT_HRV_MESG>) -> [String:String] {
+  return [:]
+}
 func rzfit_unit_for_field( field : String ) -> String? {
   switch field {
   case "ball_speed": return "m/s"
@@ -389,6 +401,7 @@ func rzfit_unit_for_field( field : String ) -> String? {
   case "heart_rate": return "bpm"
   case "gps_accuracy": return "m"
   case "cadence": return "rpm"
+  case "time": return "s"
   case "cycles": return "cycles"
   case "enhanced_altitude": return "m"
   case "distance": return "m"

@@ -9,6 +9,7 @@ class Context:
         self.enums = {}
         self.units = {}
         self.types = {}
+        self.counts = {}
 
 
     def add_units(self,other):
@@ -75,6 +76,8 @@ class StructElem :
 
     def is_value(self,context):
         if self.is_array():
+            if self.array in context.counts and context.counts[self.array] == 1:
+                return True
             return False
         
         return not self.is_enum(context)
@@ -87,7 +90,11 @@ class StructElem :
     
     def swift_convert_value_statement(self,context,prefix=''):
         lines = []
-        defs = { 'member': self.member, 'invalid': self.ctype + '_INVALID', 'multiplier':self.multiplier, 'offset':self.offset }
+
+        member = self.member
+        #if self.array in context.counts and context.counts[self.array] == 1:
+        #    member = '{}[0]'.format(self.member)
+        defs = { 'member': member, 'name': self.member, 'invalid': self.ctype + '_INVALID', 'multiplier':self.multiplier, 'offset':self.offset }
         if self.is_value(context):
             formula = 'Double(x.{member})'.format( **defs )
             if self.offset and float(self.offset) != 0.0:
@@ -96,7 +103,7 @@ class StructElem :
                 formula = '({})/Double({multiplier})'.format(formula, **defs)
             lines = [ prefix + 'if x.{member} != {invalid}  {{'.format( **defs ),
                       prefix + '  let val : Double = {}'.format( formula ),
-                      prefix + '  rv[ "{member}" ] = val'.format(**defs),
+                      prefix + '  rv[ "{name}" ] = val'.format(**defs),
                       prefix + '}'
                       ]
             
@@ -369,6 +376,7 @@ class Convert :
         p_typedef_struct = re.compile( 'typedef struct' )
         p_typedef_end = re.compile( '^} ([A-Z0-9_]+);' )
         p_typedef_def = re.compile( ' +([A-Z0-9_]+)[, ]' )
+        p_define_count = re.compile( '#define (FIT_[A-Za-z0-9_]+_COUNT) +([0-9]+)' )
         p_elem = re.compile( ' +(FIT_[A-Z0-9_]+) ([a-z_0-9]+)(|\\[[A-Z0-9_]+\\]);( // [0-9]+ * [^+]+ \\+ [0-9]+)?' )
         
         in_typedef = None
@@ -392,6 +400,11 @@ class Convert :
                 if m:
                     in_typedef_struct = Struct(m.groups())
 
+            if line.startswith( '#define' ):
+                m = p_define_count.match( line )
+                if m:
+                    self.context.counts[m.group(1)] = int(m.group(2))
+                    
             if in_typedef_enum:
                 m = p_typedef_def.match( line )
                 if m:
