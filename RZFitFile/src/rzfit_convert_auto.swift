@@ -122,6 +122,15 @@ func rzfit_date_mode_string(input : FIT_ENUM) -> String?
     default: return nil
   }
 }
+func rzfit_field_capabilities_field_num_string(input : FIT_UINT8) -> String? 
+{
+  switch  input {
+    case FIT_FIELD_CAPABILITIES_FIELD_NUM_MESSAGE_INDEX: return "message_index";
+    case FIT_FIELD_CAPABILITIES_FIELD_NUM_MESG_NUM: return "mesg_num";
+    case FIT_FIELD_CAPABILITIES_FIELD_NUM_COUNT: return "count";
+    default: return nil
+  }
+}
 func rzfit_wkt_step_target_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -452,6 +461,14 @@ func rzfit_source_type_string(input : FIT_ENUM) -> String?
     case FIT_SOURCE_TYPE_BLUETOOTH_LOW_ENERGY: return "bluetooth_low_energy";
     case FIT_SOURCE_TYPE_WIFI: return "wifi";
     case FIT_SOURCE_TYPE_LOCAL: return "local";
+    default: return nil
+  }
+}
+func rzfit_favero_product_string(input : FIT_UINT16) -> String? 
+{
+  switch  input {
+    case FIT_FAVERO_PRODUCT_ASSIOMA_UNO: return "assioma_uno";
+    case FIT_FAVERO_PRODUCT_ASSIOMA_DUO: return "assioma_duo";
     default: return nil
   }
 }
@@ -1774,6 +1791,15 @@ func rzfit_course_point_string(input : FIT_ENUM) -> String?
     default: return nil
   }
 }
+func rzfit_mesg_capabilities_field_num_string(input : FIT_UINT8) -> String? 
+{
+  switch  input {
+    case FIT_MESG_CAPABILITIES_FIELD_NUM_MESSAGE_INDEX: return "message_index";
+    case FIT_MESG_CAPABILITIES_FIELD_NUM_MESG_NUM: return "mesg_num";
+    case FIT_MESG_CAPABILITIES_FIELD_NUM_COUNT: return "count";
+    default: return nil
+  }
+}
 func rzfit_swim_stroke_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -2433,6 +2459,7 @@ func rzfit_manufacturer_string(input : FIT_UINT16) -> String?
     case FIT_MANUFACTURER_COROS: return "coros";
     case FIT_MANUFACTURER_VIRTUGO: return "virtugo";
     case FIT_MANUFACTURER_VELOSENSE: return "velosense";
+    case FIT_MANUFACTURER_CYCLIGENTINC: return "cycligentinc";
     case FIT_MANUFACTURER_ACTIGRAPHCORP: return "actigraphcorp";
     default: return nil
   }
@@ -9545,6 +9572,7 @@ func rzfit_field_num_for_record(field : FIT_UINT16) -> String? {
     case 30: return "left_right_balance"
     case 42: return "activity_type"
     case 43: return "left_torque_effectiveness"
+    case 62: return "device_index"
     case 253: return "timestamp"
     case 48: return "time128"
     case 49: return "stroke_type"
@@ -9606,6 +9634,7 @@ func rzfit_field_num_for_lap(field : FIT_UINT16) -> String? {
     case 110: return "enhanced_avg_speed"
     case 113: return "enhanced_min_altitude"
     case 112: return "enhanced_avg_altitude"
+    case 82: return "total_fractional_cycles"
     case 253: return "timestamp"
     case 80: return "avg_fractional_cadence"
     case 34: return "left_right_balance"
@@ -9681,6 +9710,7 @@ func rzfit_field_num_for_lap(field : FIT_UINT16) -> String? {
 }
 func rzfit_field_num_for_session(field : FIT_UINT16) -> String? {
   switch field {
+    case 137: return "total_anaerobic_training_effect"
     case 139: return "avg_vam"
     case 24: return "total_training_effect"
     case 25: return "first_lap_index"
