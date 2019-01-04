@@ -81,20 +81,20 @@ class FITSplitViewController: NSSplitViewController {
      Notification call back from detail table
      */
     @objc func detailSelectionChanged(notification : Notification){
-        if let fitFile = self.fitFile,
-            let messageType = self.outlineDataSource?.selectedMessageType ?? fitFile.messageTypes.first {
-            if let mef = self.fieldsListDataSource?.selectedField,
-                let idx = self.fieldsListDataSource?.selectedRow,
-                let selectionContext = self.selectionContext{
-                if idx >= 0 {
-                    selectionContext.selectMessageField(field: mef, atIndex:idx)
-                    self.graphViewController()?.updateWith(selectionContext: selectionContext)
-                    self.mapViewController()?.updateWith(selectionContext: selectionContext)
-                    self.dataListDataSource = FITDataListDataSource(file: fitFile, messageType: messageType, selectedRow: idx, context: selectionContext)
-                    self.dataViewController()?.update(with: self.dataListDataSource!)
-                }
+        if //let fitFile = self.fitFile,
+            //let messageType = self.outlineDataSource?.selectedMessageType ?? fitFile.messageTypes.first {
+            let mef = self.fieldsListDataSource?.selectedField,
+            let idx = self.fieldsListDataSource?.selectedRow,
+            let selectionContext = self.selectionContext{
+            if idx >= 0 {
+                selectionContext.selectMessageField(field: mef, atIndex:idx)
+                self.graphViewController()?.updateWith(selectionContext: selectionContext)
+                self.mapViewController()?.updateWith(selectionContext: selectionContext)
+                self.dataListDataSource = FITDataListDataSource(selectedRow: idx, context: selectionContext)
+                self.dataViewController()?.update(with: self.dataListDataSource!)
             }
         }
+        
     }
     /**
      Notification call back from the outline table

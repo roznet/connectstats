@@ -41,14 +41,12 @@ import RZUtilsOSX
  */
 class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource {
 
-    let fitFile : RZFitFile
-    var selectionContext : FITSelectionContext?
+    
+    let selectionContext : FITSelectionContext
 
     let selectedRow : Int
-    var selectedField : RZFitFieldKey?
     
-    var messageType:RZFitMessageType 
-    var messages:[RZFitMessage]
+    var selectedField : RZFitFieldKey?
     
     var displayFields:[RZFitFieldKey]
     
@@ -56,22 +54,31 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
     var statsFields:[RZFitFieldKey:[RZFitFieldKey]]?
     var statistics:[RZFitFieldKey:FITFitValueStatistics]?
     
+    var fitFile : RZFitFile {
+        return self.selectionContext.fitFile
+    }
+    var messages:[RZFitMessage] {
+        return self.selectionContext.messages
+    }
+    var messageType :RZFitMessageType{
+        get {
+            return self.selectionContext.messageType
+        }
+    }
     var message : RZFitMessage {
-        return self.messages[self.selectedRow]
+        return self.selectionContext.messages[self.selectedRow]
     }
     
     
-    init(file: RZFitFile, messageType : RZFitMessageType, selectedRow : Int, context : FITSelectionContext) {
-        self.fitFile = file
-        self.messages = self.fitFile.messages(forMessageType: messageType)
+    init( selectedRow : Int, context : FITSelectionContext) {
         self.selectionContext = context
         self.selectedRow = selectedRow
-        self.messageType = messageType
         
         // Session style, where only one row.
         // Just select all fields that are related to selected field (max, avg, etc)
-        let interp = FITFitFileInterpret(fitFile: file);
-        let samplesKeys = Array(self.fitFile.sampleValues(messageType: messageType).keys)
+        let interp = context.interp
+        let samplesKeys = context.fitFile.orderedFieldKeys(messageType: context.messageType)
+        
         if( context.messages.count == 1){
             if let field = context.selectedYField {
                 let mapped = interp.mapFields(from: [field], to:  samplesKeys)
@@ -84,7 +91,6 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
             }else{
                 self.displayFields = [];
             }
-            
         }else{
             // lap/record stype: display all the field for the line
             self.displayFields = samplesKeys
@@ -94,16 +100,30 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
                                                                        FIT_MESG_NUM_LAP     :FIT_MESG_NUM_RECORD,
                                                                        FIT_MESG_NUM_SESSION :FIT_MESG_NUM_RECORD ]
         
-        self.statsMessageType = messageDefaultMap[messageType]
+        self.statsMessageType = messageDefaultMap[context.messageType]
+        
+        super.init()
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(selectionContextChanged(notification:)),
+                                               name: FITSelectionContext.kFITNotificationConfigurationChanged,
+                                               object: self.selectionContext)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func selectionContextChanged(notification: Notification){
+        self.updateStatistics()
     }
     
     func updateStatistics(){
-        if let context = self.selectionContext,
-            let statsMessageType = context.dependentMessage,
+        let context = self.selectionContext
+        if let statsUsing = context.statsUsing,
             let statsFor = context.statsFor{
-            let interp = FITFitFileInterpret(fitFile: self.fitFile);
+            let interp = context.interp
 
-            //self.relatedMessage = self.fitFile[statsMessageType];
             var interval : (from:Date,to:Date)?
             if let ts = context.message?.time(field: "timestamp"){
                 
@@ -114,9 +134,12 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
                     interval = (from:start,to:end);
                 }
             }
-            self.statistics = interp.statsForMessage(messageType: statsMessageType, interval: interval)
-            let possibleFields = Array(self.fitFile.sampleValues(messageType: statsFor).keys)
-            self.statsFields = interp.mapFields(from: self.displayFields, to: possibleFields)
+            self.statistics = interp.statsForMessage(messageType: statsUsing, interval: interval)
+            if let stats = self.statistics {
+                let possibleFields = Array(stats.keys)
+                self.statsFields = interp.mapFields(from: self.displayFields, to: possibleFields)
+            }
+            
         }
     }
 
@@ -135,32 +158,38 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
             cellView.textField?.stringValue = ""
             if( row < self.displayFields.count){
                 let identifier = self.displayFields[row]
-                if tableColumn?.identifier.rawValue == "Field" {
-                    if let fieldDisplay = self.selectionContext?.displayField(fieldName: identifier){
-                        cellView.textField?.attributedStringValue = fieldDisplay
-                    }
-                }else if(tableColumn?.identifier.rawValue == "Value"){
+                if tableColumn?.identifier.rawValue == "field" {
+                    let fieldDisplay = self.selectionContext.displayField(fieldName: identifier)
+                    cellView.textField?.attributedStringValue = fieldDisplay
+                    
+                }else if(tableColumn?.identifier.rawValue == "value"){
                     let idx = self.selectedRow < self.messages.count ? self.selectedRow : 0
                     let message = self.messages[idx]
-                    if let item = message.interpretedField(key: identifier),
-                        let selectionContext = self.selectionContext{
+                    if let item = message.interpretedField(key: identifier){
                         cellView.textField?.stringValue = selectionContext.display(fieldValue: item)
                     }
                 }else{
                     let idx = self.selectedRow < self.messages.count ? self.selectedRow : 0
                     let message = self.messages[idx]
-                    if let item = message.interpretedField(key: identifier),
-                        let selectionContext = self.selectionContext,
+                    
+                    if
+                        let colidentifier = tableColumn?.identifier.rawValue,
+                        
+                        let item = message.interpretedField(key: identifier),
                         let relatedFields = self.statsFields?[identifier],
                         let stats = self.statistics{
+                        
+                        let stattype = FITFitValueStatistics.StatsType(rawValue: colidentifier) ?? FITFitValueStatistics.StatsType.avg
+                        
                         if relatedFields.count > 0 && item.numberWithUnit != nil{
-                            if let stat = stats[relatedFields[0]]{
-                                if let avg : GCNumberWithUnit = stat.preferredStatisticsForField(fieldKey: identifier){
-                                    cellView.textField?.stringValue = selectionContext.display(numberWithUnit: avg)
+                            if let stat = stats[ relatedFields[0]]{
+                                let preferred = stat.preferredStatisticsForField(fieldKey: identifier)
+                                if preferred.contains(stattype) {
+                                    if let val : GCNumberWithUnit = stat.value(stats: stattype, field: identifier){
+                                        cellView.textField?.stringValue = selectionContext.display(numberWithUnit: val)
+                                    }
                                 }
                             }
-                        }else{
-                            cellView.textField?.stringValue = ""
                         }
                     }
                 }

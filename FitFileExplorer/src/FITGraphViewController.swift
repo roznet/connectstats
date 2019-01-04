@@ -98,10 +98,8 @@ class FITGraphViewController: NSViewController {
                     }
                     
                     dh?.fillColorForSerie = NSColor(deviceRed: 0.0, green: 0.0, blue: 0.8, alpha: 0.2)
-                    ds.title = "\(selectionContext.messageType): \(field)"
+                    ds.title = "\(selectionContext.messageTypeDescription): \(field)"
                     ds.add(dh)
-
-                    
                     
                     if( type == gcGraphType.graphLine){
                         if let selectedY2 = selectionContext.selectedY2Field, selectionContext.enableY2 {

@@ -15,20 +15,17 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     
     let selectionContext : FITSelectionContext
     
+    var selectedColumn : Int = -1
+    var selectedRow : Int = -1
+    var selectedField : RZFitFieldKey?
+    var setupMode : Bool = false
+    
     var fitFile : RZFitFile {
         return self.selectionContext.fitFile
     }
-    
-    var selectedColumn : Int = -1
-    var selectedRow : Int = -1
-    
-    var selectedField : RZFitFieldKey?
     var messages:[RZFitMessage] {
         return self.selectionContext.messages
     }
-    
-    var setupMode : Bool = false
-    
     var messageType :RZFitMessageType{
         get {
             return self.selectionContext.messageType

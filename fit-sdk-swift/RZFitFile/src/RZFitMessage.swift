@@ -96,7 +96,7 @@ class RZFitMessage {
                 // handled by _lat
                 continue
             }
-            else if( key == "timestamp" || key == "start_time" || key == "local_timestamp"){
+            else if( key == "timestamp" || key == "start_time" || key == "local_timestamp" || key == "time_created"){
                 // Fit file are in seconds since UTC 00:00 Dec 31 1989 = -347241600
                 let date = Date(timeIntervalSinceReferenceDate: -347241600+val)
                 rv[key] = RZFitFieldValue(withTime: date )
@@ -137,10 +137,14 @@ class RZFitMessage {
         if let dev = self.devfields,
             let units = self.devunits{
             for (key,val) in dev {
+                var useKey = key
+                if rv[key] != nil {
+                    useKey = "developer_"+key
+                }
                 if let unit = units[key] {
-                    rv[ "developer_" + key ] = RZFitFieldValue(withValue: val, andUnit: unit, developer: true)
+                    rv[ useKey ] = RZFitFieldValue(withValue: val, andUnit: unit, developer: true)
                 }else{
-                    rv[ "developer_" + key ] = RZFitFieldValue(withValue: val, developer: true)
+                    rv[ useKey ] = RZFitFieldValue(withValue: val, developer: true)
                 }
             }
         }

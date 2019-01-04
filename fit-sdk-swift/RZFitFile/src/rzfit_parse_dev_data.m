@@ -83,6 +83,14 @@ const FIT_UINT16 kMaxDevFields = 64;
         }
         
         if( unit.length > 0){
+            if( mesg->native_mesg_num != FIT_MESG_NUM_INVALID && mesg->native_field_num != FIT_FIELD_NUM_INVALID){
+                NSString * native = objc_rzfit_field_num_to_field(mesg->native_mesg_num,mesg->native_field_num);
+                if( native ){
+                    // record both so later we can find it as native as well
+                    self.cacheUnits[native] = unit;
+                }
+            }
+
             self.cacheUnits[key] = unit;
         }
     }

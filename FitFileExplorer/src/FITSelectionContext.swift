@@ -83,21 +83,14 @@ class FITSelectionContext {
     
     // MARK: - Dependent/Stats messages
     
-    var preferredDependendMessage : [RZFitMessageType] = [FIT_MESG_NUM_RECORD, FIT_MESG_NUM_LAP, FIT_MESG_NUM_SESSION]
-    var dependentMessage : RZFitMessageType?
+    var preferredDependendMessageType : [RZFitMessageType] = [FIT_MESG_NUM_RECORD, FIT_MESG_NUM_LAP, FIT_MESG_NUM_SESSION]
+    var statsUsing : RZFitMessageType?
+    var statsFor : RZFitMessageType?
     
-    var statsFor : RZFitMessageType? {
-        get {
-            return dependentMessage
-        }
-        set {
-            dependentMessage = newValue
-        }
-    }
-    
+    /*
     var dependentField :RZFitFieldKey? {
         var rv : RZFitFieldKey? = nil
-        if let dmessagetype = self.dependentMessage,
+        if let dmessagetype = self.dependentMessageType,
             let fy = self.selectedYField{
             let dmessage = self.fitFile.messages(forMessageType: dmessagetype)
             // check first if yfield exist in dependent
@@ -112,7 +105,7 @@ class FITSelectionContext {
             }
         }
         return rv
-    }
+    }*/
     
 
     //MARK: - Field Selections
@@ -179,6 +172,7 @@ class FITSelectionContext {
         self.fitFile = fitFile;
         self.messageType = self.fitFile.preferredMessageType()
         self.messages = self.fitFile.messages(forMessageType: self.messageType)
+        self.statsFor = self.messageType
         updateDependent()
     }
     
@@ -192,9 +186,9 @@ class FITSelectionContext {
         self.selectedXField = other.selectedXField
         self.selectedLocationFields = other.selectedLocationFields
         self.selectedNumberFields = other.selectedNumberFields
-        //self.dependentField = other.dependentField
-        self.dependentMessage = other.dependentMessage
-        self.preferredDependendMessage = other.preferredDependendMessage
+        self.statsUsing = other.statsUsing
+        self.statsFor = other.statsFor
+        self.preferredDependendMessageType = other.preferredDependendMessageType
         self.messages = other.messages
         
     }
@@ -231,16 +225,20 @@ class FITSelectionContext {
     }
     
     private func updateDependent(){
-        for one in self.preferredDependendMessage {
-            if one != self.messageType && self.fitFile.messages(forMessageType: one).count != 0{
-                self.dependentMessage = one
+        for one in self.preferredDependendMessageType {
+            if one != self.statsFor && self.fitFile.messages(forMessageType: one).count != 0{
+                self.statsUsing = one
                 break
             }
         }
     }
     
     /// Setup fields if new message selected
-    private func updateWithDefaultForCurrentMessageType(){        
+    private func updateWithDefaultForCurrentMessageType(){
+        if self.messageType == FIT_MESG_NUM_LAP || self.messageType == FIT_MESG_NUM_SESSION {
+            self.statsFor = self.messageType
+        }
+        
         messageIndex = 0
         selectedNumberFields = []
         if let first = self.message?.fieldKeysWithNumberWithUnit().first{

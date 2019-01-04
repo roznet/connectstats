@@ -269,13 +269,12 @@ class FITFitFileInterpret: NSObject {
                     break
                 }
                 
-                /*FIXME
-                 if let start = mf["start_time"]?.dateValue{
-                 if( start <= timestamp && timestamp <= ts){
-                 rv = mf;
-                 break;
-                 }
-                 }*/
+                if let start = msg.time(field: "start_time") {
+                    if( start <= timestamp && timestamp <= ts){
+                        rv = msg
+                        break;
+                    }
+                }
             }
         }
         

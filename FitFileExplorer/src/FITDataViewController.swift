@@ -44,28 +44,71 @@ class FITDataViewController: NSViewController {
         // Do view setup here.
     }
     
+    override func viewWillAppear() {
+        
+        if let ds = self.fitDataSource {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(selectionContextChanged(notification:)),
+                                                   name: FITSelectionContext.kFITNotificationConfigurationChanged,
+                                                   object: ds.selectionContext)
+
+        }
+        self.updatePopup()
+        super.viewWillAppear()
+    }
+    override func viewWillDisappear() {
+        super.viewWillDisappear()
+        NotificationCenter.default.removeObserver(self)
+    }
     func update(with source:FITDataListDataSource){
+        NotificationCenter.default.removeObserver(self)
         self.fitDataSource = source
         source.updateStatistics()
         self.tableView.dataSource = source
         self.tableView.delegate = source
         self.tableView.reloadData()
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(selectionContextChanged(notification:)),
+                                               name: FITSelectionContext.kFITNotificationConfigurationChanged,
+                                               object: source.selectionContext)
+        self.updatePopup()
     }
+    
+    func updatePopup() {
+        if let ds = self.fitDataSource{
+            if let mt = ds.selectionContext.statsUsing,
+                let title = ds.selectionContext.fitFile.messageTypeDescription(messageType: mt){
+                self.statsUsing.selectItem(withTitle: title)
+            }
+            if let mt = ds.selectionContext.statsFor,
+                let title = ds.selectionContext.fitFile.messageTypeDescription(messageType: mt){
+                self.statsFor.selectItem(withTitle: title)
+            }
+        }
+    }
+    
+    @objc func selectionContextChanged(notification: Notification){
+        self.updatePopup()
+    }
+
     
     @IBAction func updateStatsFor(_ sender: NSPopUpButton) {
         if
-            let _ = sender.selectedItem?.title,
-            let _ = self.fitDataSource{
-            //dataSource.selectionContext?.dependentField = value
+            let value = sender.selectedItem?.title,
+            let mesgnum = RZFitFile.messageType(forDescription: value),
+            let ds = self.fitDataSource{
+            ds.selectionContext.statsFor = mesgnum
+            ds.updateStatistics()
             self.tableView.reloadData()
         }
     }
     @IBAction func updateStatsUsing(_ sender: NSPopUpButton) {
         if
             let value = sender.selectedItem?.title,
+            let mesgnum = RZFitFile.messageType(forDescription: value),
             let dataSource = self.fitDataSource{
-            dataSource.selectionContext?.dependentMessage = RZFitFile.messageType(forDescription: value)
+            dataSource.selectionContext.statsUsing = mesgnum
             dataSource.updateStatistics()
             self.tableView.reloadData()
         }
