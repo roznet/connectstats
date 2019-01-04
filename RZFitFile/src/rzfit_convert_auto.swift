@@ -9500,3 +9500,284 @@ func rzfit_unit_for_field( field : String ) -> String? {
   default: return nil
   }
 }
+func rzfit_known_units( ) -> [String] {
+  return [
+  "mmHg",
+  "m/s",
+  "bpm",
+  "years",
+  "counts",
+  "rpm",
+  "if",
+  "%",
+  "strokes/lap",
+  "lengths",
+  "percent",
+  "hr",
+  "degrees",
+  "kcal/day",
+  "tss",
+  "C",
+  "ms",
+  "semicircles",
+  "radians/second",
+  "strokes",
+  "m/s^2",
+  "J",
+  "bytes",
+  "V",
+  "strokes/min",
+  "watts",
+  "kg",
+  "mm",
+  "m",
+  "swim_stroke",
+  "s",
+  "steps",
+  "g/dL",
+  "cycles",
+  "minutes",
+  "kcal",
+  ]
+}
+func rzfit_field_num_for_record(field : FIT_UINT16) -> String? {
+  switch field {
+    case 30: return "left_right_balance"
+    case 42: return "activity_type"
+    case 43: return "left_torque_effectiveness"
+    case 253: return "timestamp"
+    case 48: return "time128"
+    case 49: return "stroke_type"
+    case 46: return "right_pedal_smoothness"
+    case 47: return "combined_pedal_smoothness"
+    case 44: return "right_torque_effectiveness"
+    case 45: return "left_pedal_smoothness"
+    case 28: return "compressed_accumulated_power"
+    case 29: return "accumulated_power"
+    case 40: return "stance_time_percent"
+    case 41: return "stance_time"
+    case 1: return "position_long"
+    case 0: return "position_lat"
+    case 3: return "heart_rate"
+    case 2: return "altitude"
+    case 5: return "distance"
+    case 4: return "cadence"
+    case 7: return "power"
+    case 6: return "speed"
+    case 9: return "grade"
+    case 8: return "compressed_speed_distance"
+    case 18: return "cycles"
+    case 13: return "temperature"
+    case 73: return "enhanced_speed"
+    case 78: return "enhanced_altitude"
+    case 11: return "time_from_course"
+    case 10: return "resistance"
+    case 39: return "vertical_oscillation"
+    case 12: return "cycle_length"
+    case 59: return "saturated_hemoglobin_percent_max"
+    case 58: return "saturated_hemoglobin_percent_min"
+    case 17: return "speed_1s"
+    case 55: return "total_hemoglobin_conc_min"
+    case 19: return "total_cycles"
+    case 54: return "total_hemoglobin_conc"
+    case 57: return "saturated_hemoglobin_percent"
+    case 56: return "total_hemoglobin_conc_max"
+    case 51: return "ball_speed"
+    case 50: return "zone"
+    case 53: return "fractional_cadence"
+    case 52: return "cadence256"
+    case 33: return "calories"
+    case 32: return "vertical_speed"
+    case 31: return "gps_accuracy"
+  default: return nil
+  }
+}
+func rzfit_field_num_for_lap(field : FIT_UINT16) -> String? {
+  switch field {
+    case 63: return "min_heart_rate"
+    case 54: return "avg_neg_vertical_speed"
+    case 51: return "max_temperature"
+    case 50: return "avg_temperature"
+    case 60: return "time_in_power_zone"
+    case 114: return "enhanced_max_altitude"
+    case 62: return "min_altitude"
+    case 89: return "max_saturated_hemoglobin_percent"
+    case 111: return "enhanced_max_speed"
+    case 110: return "enhanced_avg_speed"
+    case 113: return "enhanced_min_altitude"
+    case 112: return "enhanced_avg_altitude"
+    case 253: return "timestamp"
+    case 80: return "avg_fractional_cadence"
+    case 34: return "left_right_balance"
+    case 86: return "max_total_hemoglobin_conc"
+    case 53: return "avg_pos_vertical_speed"
+    case 254: return "message_index"
+    case 85: return "min_total_hemoglobin_conc"
+    case 24: return "lap_trigger"
+    case 25: return "sport"
+    case 23: return "intensity"
+    case 81: return "max_fractional_cadence"
+    case 20: return "max_power"
+    case 21: return "total_ascent"
+    case 22: return "total_descent"
+    case 49: return "max_neg_grade"
+    case 46: return "avg_pos_grade"
+    case 47: return "avg_neg_grade"
+    case 44: return "gps_accuracy"
+    case 45: return "avg_grade"
+    case 42: return "avg_altitude"
+    case 43: return "max_altitude"
+    case 40: return "num_active_lengths"
+    case 41: return "total_work"
+    case 1: return "event_type"
+    case 0: return "event"
+    case 3: return "start_position_lat"
+    case 2: return "start_time"
+    case 5: return "end_position_lat"
+    case 4: return "start_position_long"
+    case 7: return "total_elapsed_time"
+    case 6: return "end_position_long"
+    case 9: return "total_distance"
+    case 8: return "total_timer_time"
+    case 78: return "avg_stance_time_percent"
+    case 18: return "max_cadence"
+    case 87: return "avg_saturated_hemoglobin_percent"
+    case 39: return "sub_sport"
+    case 83: return "player_score"
+    case 84: return "avg_total_hemoglobin_conc"
+    case 26: return "event_group"
+    case 77: return "avg_vertical_oscillation"
+    case 76: return "zone_count"
+    case 75: return "stroke_count"
+    case 74: return "opponent_score"
+    case 17: return "avg_cadence"
+    case 71: return "wkt_step_index"
+    case 15: return "avg_heart_rate"
+    case 38: return "swim_stroke"
+    case 79: return "avg_stance_time"
+    case 14: return "max_speed"
+    case 11: return "total_calories"
+    case 10: return "total_cycles"
+    case 13: return "avg_speed"
+    case 12: return "total_fat_calories"
+    case 59: return "time_in_cadence_zone"
+    case 58: return "time_in_speed_zone"
+    case 121: return "avg_vam"
+    case 55: return "max_pos_vertical_speed"
+    case 19: return "avg_power"
+    case 32: return "num_lengths"
+    case 57: return "time_in_hr_zone"
+    case 56: return "max_neg_vertical_speed"
+    case 37: return "avg_stroke_distance"
+    case 88: return "min_saturated_hemoglobin_percent"
+    case 35: return "first_length_index"
+    case 52: return "total_moving_time"
+    case 33: return "normalized_power"
+    case 16: return "max_heart_rate"
+    case 48: return "max_pos_grade"
+    case 61: return "repetition_num"
+  default: return nil
+  }
+}
+func rzfit_field_num_for_session(field : FIT_UINT16) -> String? {
+  switch field {
+    case 139: return "avg_vam"
+    case 24: return "total_training_effect"
+    case 25: return "first_lap_index"
+    case 26: return "num_laps"
+    case 27: return "event_group"
+    case 20: return "avg_power"
+    case 21: return "max_power"
+    case 22: return "total_ascent"
+    case 23: return "total_descent"
+    case 28: return "trigger"
+    case 29: return "nec_lat"
+    case 0: return "event"
+    case 4: return "start_position_long"
+    case 8: return "total_timer_time"
+    case 124: return "enhanced_avg_speed"
+    case 125: return "enhanced_max_speed"
+    case 126: return "enhanced_avg_altitude"
+    case 127: return "enhanced_min_altitude"
+    case 128: return "enhanced_max_altitude"
+    case 59: return "total_moving_time"
+    case 58: return "max_temperature"
+    case 55: return "max_pos_grade"
+    case 54: return "avg_neg_grade"
+    case 57: return "avg_temperature"
+    case 56: return "max_neg_grade"
+    case 51: return "gps_accuracy"
+    case 50: return "max_altitude"
+    case 53: return "avg_pos_grade"
+    case 52: return "avg_grade"
+    case 88: return "avg_ball_speed"
+    case 89: return "avg_vertical_oscillation"
+    case 111: return "sport_index"
+    case 69: return "avg_lap_time"
+    case 82: return "player_score"
+    case 83: return "opponent_score"
+    case 86: return "zone_count"
+    case 87: return "max_ball_speed"
+    case 84: return "opponent_name"
+    case 85: return "stroke_count"
+    case 3: return "start_position_lat"
+    case 7: return "total_elapsed_time"
+    case 32: return "swc_long"
+    case 31: return "swc_lat"
+    case 30: return "nec_long"
+    case 37: return "left_right_balance"
+    case 36: return "intensity_factor"
+    case 35: return "training_stress_score"
+    case 34: return "normalized_power"
+    case 60: return "avg_pos_vertical_speed"
+    case 61: return "avg_neg_vertical_speed"
+    case 62: return "max_pos_vertical_speed"
+    case 63: return "max_neg_vertical_speed"
+    case 64: return "min_heart_rate"
+    case 65: return "time_in_hr_zone"
+    case 66: return "time_in_speed_zone"
+    case 67: return "time_in_cadence_zone"
+    case 68: return "time_in_power_zone"
+    case 253: return "timestamp"
+    case 254: return "message_index"
+    case 2: return "start_time"
+    case 6: return "sub_sport"
+    case 91: return "avg_stance_time"
+    case 90: return "avg_stance_time_percent"
+    case 93: return "max_fractional_cadence"
+    case 92: return "avg_fractional_cadence"
+    case 94: return "total_fractional_cycles"
+    case 11: return "total_calories"
+    case 10: return "total_cycles"
+    case 13: return "total_fat_calories"
+    case 15: return "max_speed"
+    case 14: return "avg_speed"
+    case 17: return "max_heart_rate"
+    case 16: return "avg_heart_rate"
+    case 19: return "max_cadence"
+    case 18: return "avg_cadence"
+    case 48: return "total_work"
+    case 49: return "avg_altitude"
+    case 46: return "pool_length_unit"
+    case 47: return "num_active_lengths"
+    case 44: return "pool_length"
+    case 45: return "threshold_power"
+    case 42: return "avg_stroke_distance"
+    case 43: return "swim_stroke"
+    case 41: return "avg_stroke_count"
+    case 1: return "event_type"
+    case 5: return "sport"
+    case 9: return "total_distance"
+    case 71: return "min_altitude"
+    case 70: return "best_lap_index"
+  default: return nil
+  }
+}
+func rzfit_field_num_to_field(messageType : FIT_MESG_NUM, fieldNum : FIT_UINT16 ) -> String? {
+  switch messageType {
+    case FIT_MESG_NUM_RECORD: return rzfit_field_num_for_record(field: fieldNum)
+    case FIT_MESG_NUM_LAP: return rzfit_field_num_for_lap(field: fieldNum)
+    case FIT_MESG_NUM_SESSION: return rzfit_field_num_for_session(field: fieldNum)
+    default: return nil
+   }
+}

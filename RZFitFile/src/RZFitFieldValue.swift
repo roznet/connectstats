@@ -36,6 +36,7 @@ class RZFitFieldValue {
     let time : Date?
     let name : String?
     let value : Double?
+    let developer : Bool
     
     init(latitude: Double, longitude: Double) {
         coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
@@ -43,23 +44,25 @@ class RZFitFieldValue {
         valueUnit = nil
         time = nil
         name = nil
+        developer = false
     }
     
-    init(withValue : Double, andUnit : String) {
+    init(withValue : Double, andUnit : String, developer dev: Bool = false) {
         coordinate = nil
         valueUnit = (value: withValue, unit:andUnit)
         value = nil
         time = nil
         name = nil
+        developer = dev
     }
     
-    init(withValue : Double ){
+    init(withValue : Double, developer dev: Bool = false ){
         coordinate = nil
         valueUnit = nil
         value = withValue
         time = nil
         name = nil
-
+        developer = dev
     }
     
     init(withName : String){
@@ -68,6 +71,7 @@ class RZFitFieldValue {
         value = nil
         time = nil
         name = withName
+        developer = false
     }
     
     init(withTime: Date ){
@@ -76,6 +80,7 @@ class RZFitFieldValue {
         valueUnit = nil
         time = withTime
         name = nil
+        developer = false
     }
 }
 
