@@ -7,6 +7,7 @@ NSString * objc_rzfit_field_num_for_record(FIT_UINT16 field) {
     case 30: return @"left_right_balance";
     case 42: return @"activity_type";
     case 43: return @"left_torque_effectiveness";
+    case 62: return @"device_index";
     case 253: return @"timestamp";
     case 48: return @"time128";
     case 49: return @"stroke_type";
@@ -68,6 +69,7 @@ NSString * objc_rzfit_field_num_for_lap(FIT_UINT16 field) {
     case 110: return @"enhanced_avg_speed";
     case 113: return @"enhanced_min_altitude";
     case 112: return @"enhanced_avg_altitude";
+    case 82: return @"total_fractional_cycles";
     case 253: return @"timestamp";
     case 80: return @"avg_fractional_cadence";
     case 34: return @"left_right_balance";
@@ -143,6 +145,7 @@ NSString * objc_rzfit_field_num_for_lap(FIT_UINT16 field) {
 }
 NSString * objc_rzfit_field_num_for_session(FIT_UINT16 field) {
   switch (field) {
+    case 137: return @"total_anaerobic_training_effect";
     case 139: return @"avg_vam";
     case 24: return @"total_training_effect";
     case 25: return @"first_lap_index";

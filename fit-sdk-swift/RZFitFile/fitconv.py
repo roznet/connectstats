@@ -49,7 +49,6 @@ class Context:
         return []
 
     def objc_field_num_func_decl(self):
-
         rv = [ 'extern NSString * objc_rzfit_field_num_to_field( FIT_MESG_NUM messageType, FIT_UINT16 field );',
 
                ]
@@ -532,6 +531,7 @@ class Convert :
         p_typedef_def = re.compile( ' +([A-Z0-9_]+)[, ]' )
         p_define_count = re.compile( '#define (FIT_[A-Za-z0-9_]+_COUNT) +([0-9]+)' )
         p_field_num = re.compile( ' +(FIT_([A-Z0-9_]+)_FIELD_NUM_([A-Za-z0-9_]+)) = ([0-9]+),' )
+        p_def_field_num = re.compile( '#define (FIT_([A-Z0-9_]+)_FIELD_NUM_([A-Za-z0-9_]+)) \(\(FIT_[A-Z0-9_]+_FIELD_NUM\)([0-9]+)')
         p_elem = re.compile( ' +(FIT_[A-Z0-9_]+) ([a-z_0-9]+)(|\\[[A-Z0-9_]+\\]);( // [0-9]+ * [^+]+ \\+ [0-9]+)?' )
         
         in_typedef = None
@@ -559,6 +559,10 @@ class Convert :
                 m = p_define_count.match( line )
                 if m:
                     self.context.counts[m.group(1)] = int(m.group(2))
+
+                m = p_def_field_num.match( line )
+                if m:
+                    self.context.add_field_num( m.groups() )
 
             if line.startswith( '   FIT_' ):
 

@@ -49,10 +49,11 @@ class FITGraphViewController: NSViewController {
         }
         let interp = selectionContext.interp
         if let field = selectionContext.selectedYField {
+            /*
             if selectionContext.messageType == FIT_MESG_NUM_RECORD {
                 let equivalent = interp.mapFields(from: [field], to: selectionContext.fitFile.fieldKeys(messageType: FIT_MESG_NUM_LAP))
                 print("Equivalent \(field)=\(equivalent)")
-            }
+            }*/
             let ds = GCSimpleGraphCachedDataSource()
             if let serie = interp.statsDataSerie(messageType: selectionContext.messageType, fieldX: selectionContext.selectedXField, fieldY: field) {
                 // Don't graph if less than 2 points, not meaningful
