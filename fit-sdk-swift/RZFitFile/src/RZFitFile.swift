@@ -40,12 +40,12 @@ class RZFitFile {
         var state : FIT_CONVERT_STATE = FIT_CONVERT_STATE()
         var convert_return : FIT_CONVERT_RETURN = FIT_CONVERT_CONTINUE
         
-        let dev_parser = RZFitDevDataParser(&state)
+        let dev_parser = RZFitDevDataParser(&state, knownUnits: rzfit_known_units())
         
         FitConvert_Init(&state, FIT_TRUE)
         dev_parser.initState(&state)
         
-        var bldmsg :[RZFitMessage] = []
+        var bldmsg : [RZFitMessage] = []
         var bldmsgnum : Set<RZFitMessageType> = []
         var bldmsgbytype : [RZFitMessageType:[RZFitMessage]] = [:]
         
@@ -64,8 +64,11 @@ class RZFitFile {
                             }
                             if let fmesg = rzfit_build_mesg(num: mesg, uptr: uptr)
                             {
-                                if let dev = dev_parser.parseData() as? [RZFitFieldKey:Double]{
-                                    fmesg.addDevFieldValues(fields: dev)
+                                if let dev = dev_parser.parseData() as? [RZFitFieldKey:Double],
+                                    let devunits = dev_parser.units(),
+                                    let devnative = dev_parser.nativeFields() as? [RZFitFieldKey:Int]{
+                                    
+                                    fmesg.addDevFieldValues(fields: dev, units: devunits, native: devnative)
                                 }
                                 bldmsg.append(fmesg)
                                 if var prev = bldmsgbytype[fmesg.messageType] {

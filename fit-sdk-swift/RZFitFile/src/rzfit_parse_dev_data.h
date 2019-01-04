@@ -29,13 +29,14 @@
 
 @interface RZFitDevDataParser : NSObject
 
-+(nonnull RZFitDevDataParser*)devDataParser:(nonnull FIT_CONVERT_STATE  *) state;
++(nonnull RZFitDevDataParser*)devDataParser:(nonnull FIT_CONVERT_STATE  *) state knownUnits:(nonnull NSArray<NSString*>*)known;
 
 
 -(void)initState:(nonnull FIT_CONVERT_STATE *)state;
 -(void)recordDeveloperField:(nonnull const FIT_UINT8 *)mesg;
 
 -(nullable NSDictionary<NSString*,NSNumber*>*)parseData;
+-(nullable NSDictionary<NSString*,NSNumber*>*)nativeFields;
 -(nullable NSDictionary<NSString*,NSString*>*)units;
 
 

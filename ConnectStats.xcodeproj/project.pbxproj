@@ -154,6 +154,10 @@
 		422BFD2A21DCF74400291D71 /* rzfit_parse_dev_data.m in Sources */ = {isa = PBXBuildFile; fileRef = 422BFD2921DCF74400291D71 /* rzfit_parse_dev_data.m */; };
 		422BFD2B21DCF74400291D71 /* rzfit_parse_dev_data.m in Sources */ = {isa = PBXBuildFile; fileRef = 422BFD2921DCF74400291D71 /* rzfit_parse_dev_data.m */; };
 		422BFD2C21DCF74400291D71 /* rzfit_parse_dev_data.m in Sources */ = {isa = PBXBuildFile; fileRef = 422BFD2921DCF74400291D71 /* rzfit_parse_dev_data.m */; };
+		422BFD3F21DF54B400291D71 /* rzfit_convert_auto.m in Sources */ = {isa = PBXBuildFile; fileRef = 422BFD3821DF54B400291D71 /* rzfit_convert_auto.m */; };
+		422BFD4021DF54B400291D71 /* rzfit_convert_auto.m in Sources */ = {isa = PBXBuildFile; fileRef = 422BFD3821DF54B400291D71 /* rzfit_convert_auto.m */; };
+		422BFD4121DF54B400291D71 /* rzfit_convert_auto.m in Sources */ = {isa = PBXBuildFile; fileRef = 422BFD3821DF54B400291D71 /* rzfit_convert_auto.m */; };
+		422BFD4221DF54B400291D71 /* rzfit_convert_auto.m in Sources */ = {isa = PBXBuildFile; fileRef = 422BFD3821DF54B400291D71 /* rzfit_convert_auto.m */; };
 		422C70AE1642B677003779E0 /* GCHistoryAggregatedActivityStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 422C70AD1642B677003779E0 /* GCHistoryAggregatedActivityStats.m */; };
 		422CC8761E6ACA1700195414 /* GCUnit+FIT.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B462E1CDFE03400743D79 /* GCUnit+FIT.m */; };
 		422CC8771E6ACA1700195414 /* FITFitEnumMap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418471CF054B300642F37 /* FITFitEnumMap.mm */; };
@@ -2797,6 +2801,8 @@
 		422B34431CA7345200B345CD /* GCFieldsDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCFieldsDefs.h; path = src/GCFieldsDefs.h; sourceTree = "<group>"; };
 		422BFD2921DCF74400291D71 /* rzfit_parse_dev_data.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rzfit_parse_dev_data.m; sourceTree = "<group>"; };
 		422BFD3321DCF75800291D71 /* rzfit_parse_dev_data.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rzfit_parse_dev_data.h; sourceTree = "<group>"; };
+		422BFD3821DF54B400291D71 /* rzfit_convert_auto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = rzfit_convert_auto.m; sourceTree = "<group>"; };
+		422BFD4321DF583600291D71 /* rzfit_convert_auto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rzfit_convert_auto.h; sourceTree = "<group>"; };
 		422C70AC1642B2ED003779E0 /* GCHistoryAggregatedActivityStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCHistoryAggregatedActivityStats.h; path = src/GCHistoryAggregatedActivityStats.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		422C70AD1642B677003779E0 /* GCHistoryAggregatedActivityStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHistoryAggregatedActivityStats.m; path = src/GCHistoryAggregatedActivityStats.m; sourceTree = "<group>"; };
 		422CCE7B1B7E9B6300A4DAEB /* Cells.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Cells.xcassets; path = ConnectStats/icons/Cells.xcassets; sourceTree = "<group>"; };
@@ -4886,6 +4892,8 @@
 		4217845121CE9F7E006FE90A /* src */ = {
 			isa = PBXGroup;
 			children = (
+				422BFD4321DF583600291D71 /* rzfit_convert_auto.h */,
+				422BFD3821DF54B400291D71 /* rzfit_convert_auto.m */,
 				4217845221CE9F7E006FE90A /* RZFitFile.swift */,
 				4217845321CE9F7E006FE90A /* RZFitMessage.swift */,
 				42A9595421CEADA200E2BC4D /* RZFitFieldValue.swift */,
@@ -10143,6 +10151,7 @@
 				422FAEF219A1DD6000D09773 /* GCTrackStats.m in Sources */,
 				422FAEF319A1DD6000D09773 /* GCSettingsViewController.m in Sources */,
 				42DC51621B278BE800B5C12F /* GCHealthKitDayDetailParser.m in Sources */,
+				422BFD4221DF54B400291D71 /* rzfit_convert_auto.m in Sources */,
 				422FAEF419A1DD6000D09773 /* GCStatsMultiFieldViewController.m in Sources */,
 				42B9E6AB19C423D400CA6358 /* GCFitBitReqBase.m in Sources */,
 				422FAEF519A1DD6000D09773 /* GCDerivedDataSerie.m in Sources */,
@@ -10375,6 +10384,7 @@
 				42F4E5131DE08D55001AB244 /* GCMapRouteLogicPointHolder.m in Sources */,
 				42F4E5101DE08D49001AB244 /* GCMapGradientPathOverlayView.m in Sources */,
 				429DD647219E3960004FD716 /* FITGarminRequestActivityList.m in Sources */,
+				422BFD4121DF54B400291D71 /* rzfit_convert_auto.m in Sources */,
 				42D1D2001DEE66DB00F13D52 /* FITWindowController.swift in Sources */,
 				423B46351CDFE31A00743D79 /* FITFitMessageFields.m in Sources */,
 				428DD4A1219A1D0A006DF5B5 /* GCWebConnect.m in Sources */,
@@ -10579,6 +10589,7 @@
 				42EEAEE316A35EDC0058965A /* GCExportText.m in Sources */,
 				42EEAEE916A3679C0058965A /* GCActivity+ExportText.m in Sources */,
 				42A6E3411D55110C0081608D /* GCStravaTrainingZones.m in Sources */,
+				422BFD3F21DF54B400291D71 /* rzfit_convert_auto.m in Sources */,
 				421F39A81B79EF8900CA7200 /* GCActivityThumbnails.m in Sources */,
 				4201D4CD19D8BC4800059879 /* GCFitBitWeight.m in Sources */,
 				421208901C6E860700E0470D /* GCFieldsForCategory.m in Sources */,
@@ -10958,6 +10969,7 @@
 				427208631DE7A35300924C90 /* GCActivity+Import.swift in Sources */,
 				42B5E2A91BA5B216000FAE4E /* GCService.m in Sources */,
 				42B5E2AA1BA5B216000FAE4E /* GCWeather.m in Sources */,
+				422BFD4021DF54B400291D71 /* rzfit_convert_auto.m in Sources */,
 				42C0589D21D0525200109D54 /* RZFitMessageExtensions.swift in Sources */,
 				42B5E2AB1BA5B216000FAE4E /* GCFields.m in Sources */,
 				42B5E2AC1BA5B216000FAE4E /* GCFieldsCalculated.m in Sources */,

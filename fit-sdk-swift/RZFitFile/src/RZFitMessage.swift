@@ -15,6 +15,7 @@ class RZFitMessage {
     private let values : [RZFitFieldKey:Double]
     private let enums : [RZFitFieldKey:String]
     private var devfields : [RZFitFieldKey:Double]?
+    private var devunits : [RZFitFieldKey:String]?
     
     var messageTypeDescription : String?{
         return rzfit_mesg_num_string(input: messageType)
@@ -28,6 +29,7 @@ class RZFitMessage {
         enums = mesg_enums
         cacheInterpretation = [:]
         devfields = nil
+        devunits = nil
         
     }
     
@@ -53,9 +55,9 @@ class RZFitMessage {
         self.init(mesg_num: mesg_num, mesg_values: ivalues, mesg_enums: ienums)
     }
     
-    func addDevFieldValues(fields:[RZFitFieldKey:Double]) {
+    func addDevFieldValues(fields:[RZFitFieldKey:Double],units:[RZFitFieldKey:String],native:[RZFitFieldKey:Int]) {
         self.devfields = fields
-        
+        self.devunits = units
     }
     
     func interpretedFieldKeys() -> [RZFitFieldKey] {
@@ -115,6 +117,15 @@ class RZFitMessage {
                 }else{
                     rv[key] = RZFitFieldValue(withName: "\(device_type_int)")
                 }
+                
+            }else if( self.messageType == FIT_MESG_NUM_FIELD_DESCRIPTION && key == "native_field_num" ){
+                if let mesgnumstr = enums["native_mesg_num"],
+                    let mesgnum = rzfit_string_to_mesg(mesg: mesgnumstr),
+                    let native = rzfit_field_num_to_field(messageType: mesgnum, fieldNum: FIT_UINT16(val)) {
+                    rv[key] = RZFitFieldValue(withName: native)
+                }else{
+                    rv[key] = RZFitFieldValue(withValue: val)
+                }
             }else{
                 rv[key] = RZFitFieldValue(withValue: val )
             }
@@ -123,9 +134,14 @@ class RZFitMessage {
         for (key,val) in enums {
             rv[ key ] = RZFitFieldValue(withName: val )
         }
-        if let dev = self.devfields {
+        if let dev = self.devfields,
+            let units = self.devunits{
             for (key,val) in dev {
-                rv[ "developer_" + key ] = RZFitFieldValue(withValue: val)
+                if let unit = units[key] {
+                    rv[ "developer_" + key ] = RZFitFieldValue(withValue: val, andUnit: unit, developer: true)
+                }else{
+                    rv[ "developer_" + key ] = RZFitFieldValue(withValue: val, developer: true)
+                }
             }
         }
         self.cacheInterpretation = rv

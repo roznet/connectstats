@@ -3,6 +3,8 @@
 import re
 import argparse
 
+import os
+
 class Context:
     def __init__(self):
         self.structs = {}
@@ -10,12 +12,109 @@ class Context:
         self.units = {}
         self.types = {}
         self.counts = {}
-
+        self.fieldnum = {}
 
     def add_units(self,other):
         for m,u in other.iteritems():
             self.units[m] = u
 
+
+    def add_field_num(self,groups):
+        mesg = 'FIT_MESG_NUM_{}'.format(groups[1])
+        if mesg not in self.fieldnum:
+            self.fieldnum[mesg] = {}
+        self.fieldnum[mesg][groups[3]] = groups[2].lower()
+
+
+    def swift_field_num_for_mesg_func_name( self,mesg ):
+        # remove FIT_MESG_NUM_
+
+        nice_mesg = mesg[13:].lower()
+        return 'rzfit_field_num_for_{}'.format(nice_mesg)
+
+    def objc_field_num_for_mesg_func(self,mesg):
+        if mesg in self.fieldnum:
+            rv = [ 'NSString * objc_{}(FIT_UINT16 field) {{'.format( self.swift_field_num_for_mesg_func_name(mesg) ),
+                   '  switch (field) {',
+                   ]
+            
+            for (key,val) in self.fieldnum[mesg].iteritems():
+                rv += [ '    case {}: return @"{}";'.format( key,val ) ]
+
+            rv += [ '  default: return nil;',
+                    '  }',
+                    '}'
+                    ]
+            return rv
+        return []
+
+    def objc_field_num_func_decl(self):
+
+        rv = [ 'extern NSString * objc_rzfit_field_num_to_field( FIT_MESG_NUM messageType, FIT_UINT16 field );',
+
+               ]
+        return rv
+
+    def objc_field_num_func(self):
+        mesgs = ['FIT_MESG_NUM_RECORD','FIT_MESG_NUM_LAP','FIT_MESG_NUM_SESSION']
+
+        rv = []
+        for mesg in mesgs:
+            one = self.objc_field_num_for_mesg_func(mesg)
+            rv += one
+
+        rv += [ 'NSString * objc_rzfit_field_num_to_field( FIT_MESG_NUM messageType, FIT_UINT16 field ) {',
+               '  switch (messageType) {',
+               ]
+
+        for mesg in mesgs:
+            rv += [ '    case {}: return objc_{}(field);'.format( mesg,self.swift_field_num_for_mesg_func_name(mesg) ) ]
+            
+        rv += ['    default: return nil;',
+               '   }',
+               '}'
+
+               ]
+        return rv
+    
+    def swift_field_num_for_mesg_func(self,mesg):
+        if mesg in self.fieldnum:
+            rv = [ 'func {}(field : FIT_UINT16) -> String? {{'.format( self.swift_field_num_for_mesg_func_name(mesg) ),
+                   '  switch field {',
+                   ]
+            
+            for (key,val) in self.fieldnum[mesg].iteritems():
+                rv += [ '    case {}: return "{}"'.format( key,val ) ]
+
+            rv += [ '  default: return nil',
+                    '  }',
+                    '}'
+                    ]
+            return rv
+        return []
+
+    def swift_field_num_func(self):
+        mesgs = ['FIT_MESG_NUM_RECORD','FIT_MESG_NUM_LAP','FIT_MESG_NUM_SESSION']
+
+        rv = []
+        for mesg in mesgs:
+            one = self.swift_field_num_for_mesg_func(mesg)
+            rv += one
+
+        rv += [ 'func rzfit_field_num_to_field(messageType : FIT_MESG_NUM, fieldNum : FIT_UINT16 ) -> String? {',
+               '  switch messageType {',
+               ]
+
+        for mesg in mesgs:
+            rv += [ '    case {}: return {}(field: fieldNum)'.format( mesg,self.swift_field_num_for_mesg_func_name(mesg) ) ]
+            
+        rv += ['    default: return nil',
+               '   }',
+               '}'
+
+               ]
+        return rv
+        
     def swift_unit_function(self,context):
         rv = [ 'func rzfit_unit_for_field( field : String ) -> String? {',
                '  switch field {',
@@ -27,6 +126,22 @@ class Context:
                 '  }',
                 '}' ]
         return rv
+
+    def swift_unit_array_function(self,context):
+        unitlist = {}
+        for m,u in self.units.iteritems():
+            unitlist[u] = 1
+        
+        rv = [ 'func rzfit_known_units( ) -> [String] {',
+               '  return [',
+               ]
+        for unit,ignore in unitlist.iteritems():
+            rv +=[ '  "{}",'.format( unit ) ]
+
+        rv += [ '  ]',
+                '}' ]
+        return rv
+
 
 class StructElem :
     def __init__(self,groups):
@@ -228,7 +343,7 @@ class Struct :
             elems += elem.swift_convert_enum_statement(context, '  ')
         if elems:
             rv += [ '  var rv : [String:String] = [:]',
-                '  {} x : {} = ptr.pointee'.format('var' if hasString else 'let', self.struct_name)
+                    '  {} x : {} = ptr.pointee'.format('var' if hasString else 'let', self.struct_name)
                ]
             rv += elems
             rv += [ '  return rv',
@@ -342,8 +457,31 @@ class Convert :
 
     def generate_output_file(self):
         of = open( self.args.outputfile, 'w')
+        objcf = self.args.outputfile.replace(".swift",".m")
+        objch = self.args.outputfile.replace(".swift",".h")
+        hf = os.path.basename( objch )
+        oof = open( objcf, 'w')
+        ooh = open( objch, 'w')
+        
         print( 'Wrote {}'.format( args.outputfile ) )
+        print( 'Wrote {}'.format( objcf ) )
+        print( 'Wrote {}'.format( objch ) )
+        
         of.write( '// This file is auto generated, Do not edit\n' )
+        oof.write( '\n'.join( [
+            '// This file is auto generated, Do not edit\n',
+            '#include "{}"'.format( hf ),
+            '\n'
+        ] ) )
+        ooh.write( '\n'.join( [
+            '// This file is auto generated, Do not edit\n',
+            '@import Foundation;',
+            '#include "fit_config.h"',
+            '#include "fit_example.h"',
+            '#include "fit_convert.h"',
+            '\n'
+        ] ))
+
         if True:
             for typename,typedef in self.context.types.iteritems():
                 of.write( typedef.swift_switch_function() )
@@ -365,7 +503,23 @@ class Convert :
             of.write( '\n'.join( self.context.swift_unit_function(self.context) ) )
             of.write( '\n' )
 
-        
+
+        if True:
+            of.write( '\n'.join( self.context.swift_unit_array_function(self.context) ) )
+            of.write( '\n')
+
+            of.write( '\n'.join( self.context.swift_field_num_func() ) )
+            of.write( '\n')
+
+        if True:
+            oof.write( '\n'.join( self.context.objc_field_num_func() ) )
+            oof.write( '\n')
+
+            ooh.write( '\n'.join( self.context.objc_field_num_func_decl() ) )
+            ooh.write( '\n' )
+            
+
+            
     def parse_input_file(self):
         fp = open( self.args.inputfile, 'r')
         print( 'Parsing {}'.format( self.args.inputfile ) )
@@ -377,6 +531,7 @@ class Convert :
         p_typedef_end = re.compile( '^} ([A-Z0-9_]+);' )
         p_typedef_def = re.compile( ' +([A-Z0-9_]+)[, ]' )
         p_define_count = re.compile( '#define (FIT_[A-Za-z0-9_]+_COUNT) +([0-9]+)' )
+        p_field_num = re.compile( ' +(FIT_([A-Z0-9_]+)_FIELD_NUM_([A-Za-z0-9_]+)) = ([0-9]+),' )
         p_elem = re.compile( ' +(FIT_[A-Z0-9_]+) ([a-z_0-9]+)(|\\[[A-Z0-9_]+\\]);( // [0-9]+ * [^+]+ \\+ [0-9]+)?' )
         
         in_typedef = None
@@ -404,7 +559,14 @@ class Convert :
                 m = p_define_count.match( line )
                 if m:
                     self.context.counts[m.group(1)] = int(m.group(2))
-                    
+
+            if line.startswith( '   FIT_' ):
+
+                m = p_field_num.match( line )
+
+                if m:
+                    self.context.add_field_num(m.groups())
+                                  
             if in_typedef_enum:
                 m = p_typedef_def.match( line )
                 if m:
@@ -438,6 +600,7 @@ class Convert :
                 if m:
                     self.context.types[in_typedef.name()] = in_typedef
                     in_typedef = None
+
 
 
     def run(self):

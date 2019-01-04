@@ -25,6 +25,8 @@
 
 
 #include "rzfit_parse_dev_data.h"
+
+#include "rzfit_convert_auto.h"
 #include "fit_example.h"
 
 const FIT_UINT16 kMaxDevFields = 64;
@@ -38,11 +40,13 @@ const FIT_UINT16 kMaxDevFields = 64;
 @property (nonatomic,assign) NSUInteger dev_field_description_size;
 @property (nonatomic,retain) NSMutableDictionary<NSString*,NSString*> * cacheUnits;
 
+@property (nonatomic,retain) NSArray<NSString*>*knownUnits;
+
 @end
 
 @implementation RZFitDevDataParser
 
-+(RZFitDevDataParser*)devDataParser:(FIT_CONVERT_STATE *)state{
++(RZFitDevDataParser*)devDataParser:(FIT_CONVERT_STATE *)state knownUnits:(NSArray<NSString*>*)known{
     RZFitDevDataParser * rv = [[RZFitDevDataParser alloc] init];
     rv.state = state;
     rv.dev_data_buffer_size = 256;
@@ -50,6 +54,7 @@ const FIT_UINT16 kMaxDevFields = 64;
     rv.dev_field_description_size = kMaxDevFields;
     rv.dev_field_description = malloc(sizeof(FIT_FIELD_DESCRIPTION_MESG)*rv.dev_field_description_size);
     rv.dev_field_description_index = 0;
+    rv.knownUnits = known;
     rv.cacheUnits = [NSMutableDictionary dictionary];
     return rv;
 }
@@ -57,6 +62,9 @@ const FIT_UINT16 kMaxDevFields = 64;
 -(void)dealloc{
     free(self.dev_data_buffer);
     free(self.dev_field_description);
+    
+    RZRelease(_knownUnits);
+    RZSuperDealloc;
 }
 
 -(void)recordDeveloperField:(const FIT_UINT8*)mesgR{
@@ -66,6 +74,14 @@ const FIT_UINT16 kMaxDevFields = 64;
         self.dev_field_description_index++;
         NSString * key = [NSString stringWithCString:mesg->field_name encoding:NSUTF8StringEncoding];
         NSString * unit = [NSString stringWithCString:mesg->units encoding:NSUTF8StringEncoding];
+        
+        // if match existing, use that for consistency
+        for (NSString * one in self.knownUnits) {
+            if( [[unit lowercaseString] isEqualToString:[one lowercaseString]] ){
+                unit = one;
+            }
+        }
+        
         if( unit.length > 0){
             self.cacheUnits[key] = unit;
         }
@@ -93,6 +109,12 @@ const FIT_UINT16 kMaxDevFields = 64;
            && index < self.state->dev_data_buffer_index ){
             
             NSString * name = [NSString stringWithCString:desc->field_name encoding:NSUTF8StringEncoding];
+            if( desc->native_mesg_num != FIT_MESG_NUM_INVALID && desc->native_field_num != FIT_FIELD_NUM_INVALID){
+                NSString * native = objc_rzfit_field_num_to_field(desc->native_mesg_num,desc->native_field_num);
+                if( native ){
+                    name = native;
+                }
+            }
             NSNumber * val = nil;
             switch( desc->fit_base_type_id ){
                 case FIT_FIT_BASE_TYPE_ENUM:
@@ -207,7 +229,23 @@ const FIT_UINT16 kMaxDevFields = 64;
     }
     return rv;
 }
+-(nullable NSDictionary<NSString*,NSNumber*>*)nativeFields{
+    if( self.state->dev_data_buffer_index == 0){
+        return nil;
+    }
 
+    NSMutableDictionary * rv = [NSMutableDictionary dictionary];
+    
+    for (NSUInteger field_index = 0; field_index < self.dev_field_description_index; ++field_index) {
+        FIT_FIELD_DESCRIPTION_MESG * desc = self.dev_field_description+field_index;
+        if( desc->native_field_num != FIT_FIELD_NUM_INVALID){
+            NSString * name = [NSString stringWithCString:desc->field_name encoding:NSUTF8StringEncoding];
+
+            rv[ name ] = @(desc->native_field_num);
+        }
+    }
+    return rv;
+}
 -(NSDictionary<NSString*,NSString*>*)units{
     if( self.dev_field_description_index == 0)
         return nil;
