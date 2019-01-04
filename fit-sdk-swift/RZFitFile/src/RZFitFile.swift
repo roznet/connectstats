@@ -11,18 +11,24 @@ import Foundation
 typealias RZFitMessageType = FIT_MESG_NUM
 typealias RZFitFieldKey = String
 
+
 class RZFitFile {
+    typealias Sample = (count:Int,one:RZFitFieldValue)
     
     public private(set) var messages : [RZFitMessage]
-    public private(set) var messageTypes : Set<RZFitMessageType>
+    public private(set) var messageTypes : [RZFitMessageType]
     public private(set) var messagesByType : [RZFitMessageType:[RZFitMessage]]
     public private(set) var devDataParser : RZFitDevDataParser?
     
     init(  messages input: [RZFitMessage] ){
         var bldmsgnum : Set<RZFitMessageType> = []
+        var bldmsgnumorder :[RZFitMessageType] = []
         var bldmsgbytype : [RZFitMessageType:[RZFitMessage]] = [:]
         for one in input {
-            bldmsgnum.insert(one.messageType)
+            if !bldmsgnum.contains(one.messageType){
+                bldmsgnum.insert(one.messageType)
+                bldmsgnumorder.append(one.messageType)
+            }
             if var prev = bldmsgbytype[one.messageType] {
                 prev.append(one)
                 bldmsgbytype[one.messageType] = prev
@@ -31,7 +37,7 @@ class RZFitFile {
             }
         }
         messages = input
-        messageTypes = bldmsgnum
+        messageTypes = bldmsgnumorder
         messagesByType = bldmsgbytype
         devDataParser = nil
     }
@@ -48,6 +54,7 @@ class RZFitFile {
         var bldmsg : [RZFitMessage] = []
         var bldmsgnum : Set<RZFitMessageType> = []
         var bldmsgbytype : [RZFitMessageType:[RZFitMessage]] = [:]
+        var bldmsgnumorder : [RZFitMessageType] = []
         
         while convert_return == FIT_CONVERT_CONTINUE {
             data.withUnsafeBytes({ (ptr: UnsafePointer<UInt8>) in
@@ -57,7 +64,10 @@ class RZFitFile {
                     switch convert_return {
                     case FIT_CONVERT_MESSAGE_AVAILABLE:
                         let mesg = FitConvert_GetMessageNumber(&state)
-                        bldmsgnum.insert(mesg)
+                        if !bldmsgnum.contains(mesg){
+                            bldmsgnum.insert(mesg)
+                            bldmsgnumorder.append(mesg)
+                        }
                         if let uptr : UnsafePointer<UInt8> = FitConvert_GetMessageData(&state) {
                             if( mesg == FIT_MESG_NUM_FIELD_DESCRIPTION){
                                 dev_parser.recordDeveloperField(uptr)
@@ -86,7 +96,7 @@ class RZFitFile {
             } )
         }
         messages = bldmsg
-        messageTypes = bldmsgnum
+        messageTypes = bldmsgnumorder
         messagesByType = bldmsgbytype
         devDataParser = dev_parser
     }
@@ -146,13 +156,16 @@ class RZFitFile {
         return Array(self.sampleValues(messageType: messageType).keys)
     }
     
-    func sampleValues( messageType: RZFitMessageType) -> [RZFitFieldKey:RZFitFieldValue] {
-        var rv : [RZFitFieldKey:RZFitFieldValue] = [:]
+    func sampleValues( messageType: RZFitMessageType) -> [RZFitFieldKey:Sample] {
+        var rv : [RZFitFieldKey:Sample] = [:]
         let forMessages = self.messages(forMessageType: messageType)
         for one in forMessages {
             for (key,val) in one.interpretedFields() {
+                
                 if rv[key] == nil {
-                    rv[key] = val
+                    rv[key] = (count:1,one:val)
+                }else{
+                    rv[key]?.count += 1
                 }
             }
         }

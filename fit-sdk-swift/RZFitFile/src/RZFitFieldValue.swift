@@ -30,7 +30,13 @@ import CoreLocation
 
 typealias RZFitDoubleUnit = (value:Double,unit:String)
 
+
 class RZFitFieldValue {
+    enum ValueType {
+        case coordinate, time, value, valueUnit, name, invalid
+    }
+
+    let type : ValueType
     let coordinate : CLLocationCoordinate2D?
     let valueUnit : RZFitDoubleUnit?
     let time : Date?
@@ -45,6 +51,7 @@ class RZFitFieldValue {
         time = nil
         name = nil
         developer = false
+        type = ValueType.coordinate
     }
     
     init(withValue : Double, andUnit : String, developer dev: Bool = false) {
@@ -54,6 +61,7 @@ class RZFitFieldValue {
         time = nil
         name = nil
         developer = dev
+        type = ValueType.valueUnit
     }
     
     init(withValue : Double, developer dev: Bool = false ){
@@ -63,6 +71,7 @@ class RZFitFieldValue {
         time = nil
         name = nil
         developer = dev
+        type = ValueType.value
     }
     
     init(withName : String){
@@ -72,6 +81,7 @@ class RZFitFieldValue {
         time = nil
         name = withName
         developer = false
+        type = ValueType.name
     }
     
     init(withTime: Date ){
@@ -81,8 +91,12 @@ class RZFitFieldValue {
         time = withTime
         name = nil
         developer = false
+        type = ValueType.time
     }
+    
 }
+
+
 
 extension RZFitFieldValue : CustomStringConvertible {
     var description: String {

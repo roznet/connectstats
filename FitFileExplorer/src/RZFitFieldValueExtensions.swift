@@ -59,7 +59,7 @@ extension RZFitFieldValue {
             return "RZFitField(Error)"
         }
     }
-
+    
     convenience init?(fieldValue : FITFitFieldValue) {
         if let val = fieldValue.numberWithUnit {
             self.init(withValue: val.value, andUnit: val.unit.key)

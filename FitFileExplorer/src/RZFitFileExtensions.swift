@@ -52,11 +52,59 @@ extension RZFitFile {
     }
     
     func orderedMessageTypes() -> [RZFitMessageType] {
-        return Array(self.messageTypes)
+        return self.messageTypes
+        /*
+        let count = self.countByMessageType()
+        let fields = Array( self.messageTypes)
+        
+        return fields.sorted {
+            if let l = count[$0], let r = count[$1] {
+                return l < r
+            }
+            return false
+        }*/
     }
     
     func orderedFieldKeys(messageType: RZFitMessageType) -> [RZFitFieldKey] {
-        return Array(self.fieldKeys(messageType:messageType))
+        
+        let all = Array(self.fieldKeys(messageType:messageType))
+        let samples = self.sampleValues(messageType: messageType)
+        
+        let typeOrder = [  RZFitFieldValue.ValueType.time,
+                           RZFitFieldValue.ValueType.coordinate,
+                           RZFitFieldValue.ValueType.name,
+                           RZFitFieldValue.ValueType.valueUnit,
+                           RZFitFieldValue.ValueType.value,
+                           RZFitFieldValue.ValueType.invalid
+            ]
+        
+        var byType : [RZFitFieldValue.ValueType:[RZFitFieldKey]] = [:]
+        for type in typeOrder{
+            byType[type] = []
+        }
+        
+        for key in all {
+            if let val = samples[key] {
+                byType[val.one.type]?.append(key)
+            }else{
+                byType[RZFitFieldValue.ValueType.invalid]?.append(key)
+            }
+        }
+        
+        var rv : [RZFitFieldKey] = []
+        for type in typeOrder {
+            if let keys = byType[type] {
+                let orderedKeys = keys.sorted {
+                    if let l = samples[$0], let r = samples[$1] {
+                        return r.count < l.count
+                    }
+                    return false
+                }
+                rv.append(contentsOf: orderedKeys)
+            }
+        }
+        
+        return rv
     }
     
 }

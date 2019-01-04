@@ -13,6 +13,7 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
     static let kFITNotificationOutlineSelectionChanged = Notification.Name( "kFITNotificationOutlineSelectionChanged" )
     
     let selectionContext : FITSelectionContext
+    let orderedMessageTypes : [FIT_MESG_NUM]
     
     var fitFile: RZFitFile {
         return self.selectionContext.fitFile
@@ -25,6 +26,9 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
     
     init(selectionContext : FITSelectionContext) {
         self.selectionContext = selectionContext
+        
+        self.orderedMessageTypes = selectionContext.fitFile.orderedMessageTypes()
+        
         super.init()
     }
     deinit {
@@ -32,7 +36,7 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
     }
     
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
-        return self.fitFile.messageTypes.count
+        return self.orderedMessageTypes.count
     }
     
     func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
@@ -40,7 +44,7 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
     }
     
     func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
-        let types = Array(self.fitFile.messageTypes)
+        let types = self.orderedMessageTypes
         
         if index < types.count {
             return types[index]
@@ -73,7 +77,7 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
     func outlineViewSelectionDidChange(_ notification: Notification) {
         if let obj = notification.object as? NSOutlineView {
             let selected = obj.selectedRow;
-            let types = Array(self.fitFile.messageTypes)
+            let types = self.orderedMessageTypes
             
             if selected < types.count {
                 if( types[selected] != self.selectionContext.messageType){

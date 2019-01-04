@@ -35,11 +35,11 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
         }
     }
     
-    var samples : [RZFitFieldKey:RZFitFieldValue]
+    var orderedKeys : [RZFitFieldKey]
     
     init(context : FITSelectionContext) {
         self.selectionContext = context
-        self.samples = context.fitFile.sampleValues(messageType: context.messageType)
+        self.orderedKeys = context.fitFile.orderedFieldKeys(messageType: context.messageType)
         super.init()
         
         NotificationCenter.default.addObserver(self,
@@ -52,14 +52,14 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     }
 
     @objc func selectionContextChanged(notification: Notification) {
-        self.samples = self.fitFile.sampleValues(messageType: self.messageType)
+        self.orderedKeys = self.selectionContext.fitFile.orderedFieldKeys(messageType: self.selectionContext.messageType)
     }
     
     func requiredTableColumnsIdentifiers() -> [String] {
         if( messages.count == 1){
             return [ "Field", "Value"]
         }else{
-            return Array(self.samples.keys);
+            return self.orderedKeys
         }
     }
     
