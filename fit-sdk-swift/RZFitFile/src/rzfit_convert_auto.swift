@@ -7218,7 +7218,7 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "max_cadence" ] = val
   }
   if x.total_training_effect != FIT_UINT8_INVALID  {
-    let val : Double = Double(x.total_training_effect)
+    let val : Double = (Double(x.total_training_effect))/Double(10)
     rv[ "total_training_effect" ] = val
   }
   if x.event_group != FIT_UINT8_INVALID  {
@@ -7262,7 +7262,7 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "sport_index" ] = val
   }
   if x.total_anaerobic_training_effect != FIT_UINT8_INVALID  {
-    let val : Double = Double(x.total_anaerobic_training_effect)
+    let val : Double = (Double(x.total_anaerobic_training_effect))/Double(10)
     rv[ "total_anaerobic_training_effect" ] = val
   }
   return rv

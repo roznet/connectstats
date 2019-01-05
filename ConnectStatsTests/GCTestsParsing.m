@@ -655,7 +655,7 @@
                                    //@"SumElapsedDuration": @(124.8420000000001),
                                    @"SumEnergy": @(1.),
                                    @"WeightedMeanAirTemperature": @(0.1),
-                                   @"WeightedMeanGroundContactTime": @(1.293747015611027),
+                                   @"WeightedMeanGroundContactTime": @(5.0),
                                    @"WeightedMeanPace": @(0.3260718057400382),
                                    @"WeightedMeanRunCadence": @(0.7834375),
                                    @"WeightedMeanVerticalOscillation": @(3.051757833105739e-06),
@@ -664,6 +664,7 @@
                                    };
     
     NSDictionary * expectedMissingFromFit = @{
+                                              @"WeightedMeanVerticalRatio": @"8.84 %",
                                        @"DirectVO2Max": @"40.0 ml/kg/min",
                                        @"GainCorrectedElevation": @"844 m",
                                        @"GainUncorrectedElevation": @"861 m",
@@ -732,7 +733,9 @@
                                              @"avg_step_length":@9,
                                              @"enhanced_max_speed":@8,
                                              @"total_cycles":@7,
-                                             
+                                             @"message_index":@9,
+                                             @"NumLaps":@9,
+                                             @"FirstLapIndex": @1,
                                              
                                              };
 
@@ -775,9 +778,7 @@
         
         NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
         
-        FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
-        [fitDecode parse];
-        GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile];
+        GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFilePath:fn];
         
         // All trackfield fields merged
         for (GCField * one in act.availableTrackFields) {

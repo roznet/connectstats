@@ -15,42 +15,349 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#if !defined(FIT_GOAL_MESG_HPP)
-#define FIT_GOAL_MESG_HPP
+#if !defined(FIT_SET_MESG_HPP)
+#define FIT_SET_MESG_HPP
 
 #include "fit_mesg.hpp"
 
 namespace fit
 {
 
-class GoalMesg : public Mesg
+class SetMesg : public Mesg
 {
 public:
     class FieldDefNum final
     {
     public:
-       static const FIT_UINT8 MessageIndex = 254;
-       static const FIT_UINT8 Sport = 0;
-       static const FIT_UINT8 SubSport = 1;
-       static const FIT_UINT8 StartDate = 2;
-       static const FIT_UINT8 EndDate = 3;
-       static const FIT_UINT8 Type = 4;
-       static const FIT_UINT8 Value = 5;
-       static const FIT_UINT8 Repeat = 6;
-       static const FIT_UINT8 TargetValue = 7;
-       static const FIT_UINT8 Recurrence = 8;
-       static const FIT_UINT8 RecurrenceValue = 9;
-       static const FIT_UINT8 Enabled = 10;
-       static const FIT_UINT8 Source = 11;
+       static const FIT_UINT8 Timestamp = 254;
+       static const FIT_UINT8 Duration = 0;
+       static const FIT_UINT8 Repetitions = 3;
+       static const FIT_UINT8 Weight = 4;
+       static const FIT_UINT8 SetType = 5;
+       static const FIT_UINT8 StartTime = 6;
+       static const FIT_UINT8 Category = 7;
+       static const FIT_UINT8 CategorySubtype = 8;
+       static const FIT_UINT8 WeightDisplayUnit = 9;
+       static const FIT_UINT8 MessageIndex = 10;
+       static const FIT_UINT8 WktStepIndex = 11;
        static const FIT_UINT8 Invalid = FIT_FIELD_NUM_INVALID;
     };
 
-    GoalMesg(void) : Mesg(Profile::MESG_GOAL)
+    SetMesg(void) : Mesg(Profile::MESG_SET)
     {
     }
 
-    GoalMesg(const Mesg &mesg) : Mesg(mesg)
+    SetMesg(const Mesg &mesg) : Mesg(mesg)
     {
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Checks the validity of timestamp field
+    // Returns FIT_TRUE if field is valid
+    ///////////////////////////////////////////////////////////////////////
+    FIT_BOOL IsTimestampValid() const
+    {
+        const Field* field = GetField(254);
+        if( FIT_NULL == field )
+        {
+            return FIT_FALSE;
+        }
+
+        return field->IsValueValid();
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Returns timestamp field
+    // Comment: Timestamp of the set
+    ///////////////////////////////////////////////////////////////////////
+    FIT_DATE_TIME GetTimestamp(void) const
+    {
+        return GetFieldUINT32Value(254, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Set timestamp field
+    // Comment: Timestamp of the set
+    ///////////////////////////////////////////////////////////////////////
+    void SetTimestamp(FIT_DATE_TIME timestamp)
+    {
+        SetFieldUINT32Value(254, timestamp, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Checks the validity of duration field
+    // Returns FIT_TRUE if field is valid
+    ///////////////////////////////////////////////////////////////////////
+    FIT_BOOL IsDurationValid() const
+    {
+        const Field* field = GetField(0);
+        if( FIT_NULL == field )
+        {
+            return FIT_FALSE;
+        }
+
+        return field->IsValueValid();
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Returns duration field
+    // Units: s
+    ///////////////////////////////////////////////////////////////////////
+    FIT_FLOAT32 GetDuration(void) const
+    {
+        return GetFieldFLOAT32Value(0, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Set duration field
+    // Units: s
+    ///////////////////////////////////////////////////////////////////////
+    void SetDuration(FIT_FLOAT32 duration)
+    {
+        SetFieldFLOAT32Value(0, duration, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Checks the validity of repetitions field
+    // Returns FIT_TRUE if field is valid
+    ///////////////////////////////////////////////////////////////////////
+    FIT_BOOL IsRepetitionsValid() const
+    {
+        const Field* field = GetField(3);
+        if( FIT_NULL == field )
+        {
+            return FIT_FALSE;
+        }
+
+        return field->IsValueValid();
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Returns repetitions field
+    // Comment: # of repitions of the movement
+    ///////////////////////////////////////////////////////////////////////
+    FIT_UINT16 GetRepetitions(void) const
+    {
+        return GetFieldUINT16Value(3, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Set repetitions field
+    // Comment: # of repitions of the movement
+    ///////////////////////////////////////////////////////////////////////
+    void SetRepetitions(FIT_UINT16 repetitions)
+    {
+        SetFieldUINT16Value(3, repetitions, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Checks the validity of weight field
+    // Returns FIT_TRUE if field is valid
+    ///////////////////////////////////////////////////////////////////////
+    FIT_BOOL IsWeightValid() const
+    {
+        const Field* field = GetField(4);
+        if( FIT_NULL == field )
+        {
+            return FIT_FALSE;
+        }
+
+        return field->IsValueValid();
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Returns weight field
+    // Units: kg
+    // Comment: Amount of weight applied for the set
+    ///////////////////////////////////////////////////////////////////////
+    FIT_FLOAT32 GetWeight(void) const
+    {
+        return GetFieldFLOAT32Value(4, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Set weight field
+    // Units: kg
+    // Comment: Amount of weight applied for the set
+    ///////////////////////////////////////////////////////////////////////
+    void SetWeight(FIT_FLOAT32 weight)
+    {
+        SetFieldFLOAT32Value(4, weight, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Checks the validity of set_type field
+    // Returns FIT_TRUE if field is valid
+    ///////////////////////////////////////////////////////////////////////
+    FIT_BOOL IsSetTypeValid() const
+    {
+        const Field* field = GetField(5);
+        if( FIT_NULL == field )
+        {
+            return FIT_FALSE;
+        }
+
+        return field->IsValueValid();
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Returns set_type field
+    ///////////////////////////////////////////////////////////////////////
+    FIT_SET_TYPE GetSetType(void) const
+    {
+        return GetFieldUINT8Value(5, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Set set_type field
+    ///////////////////////////////////////////////////////////////////////
+    void SetSetType(FIT_SET_TYPE setType)
+    {
+        SetFieldUINT8Value(5, setType, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Checks the validity of start_time field
+    // Returns FIT_TRUE if field is valid
+    ///////////////////////////////////////////////////////////////////////
+    FIT_BOOL IsStartTimeValid() const
+    {
+        const Field* field = GetField(6);
+        if( FIT_NULL == field )
+        {
+            return FIT_FALSE;
+        }
+
+        return field->IsValueValid();
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Returns start_time field
+    // Comment: Start time of the set
+    ///////////////////////////////////////////////////////////////////////
+    FIT_DATE_TIME GetStartTime(void) const
+    {
+        return GetFieldUINT32Value(6, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Set start_time field
+    // Comment: Start time of the set
+    ///////////////////////////////////////////////////////////////////////
+    void SetStartTime(FIT_DATE_TIME startTime)
+    {
+        SetFieldUINT32Value(6, startTime, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Returns number of category
+    ///////////////////////////////////////////////////////////////////////
+    FIT_UINT8 GetNumCategory(void) const
+    {
+        return GetFieldNumValues(7, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Checks the validity of category field
+    // Returns FIT_TRUE if field is valid
+    ///////////////////////////////////////////////////////////////////////
+    FIT_BOOL IsCategoryValid(FIT_UINT8 index) const
+    {
+        const Field* field = GetField(7);
+        if( FIT_NULL == field )
+        {
+            return FIT_FALSE;
+        }
+
+        return field->IsValueValid(index);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Returns category field
+    ///////////////////////////////////////////////////////////////////////
+    FIT_EXERCISE_CATEGORY GetCategory(FIT_UINT8 index) const
+    {
+        return GetFieldUINT16Value(7, index, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Set category field
+    ///////////////////////////////////////////////////////////////////////
+    void SetCategory(FIT_UINT8 index, FIT_EXERCISE_CATEGORY category)
+    {
+        SetFieldUINT16Value(7, category, index, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Returns number of category_subtype
+    ///////////////////////////////////////////////////////////////////////
+    FIT_UINT8 GetNumCategorySubtype(void) const
+    {
+        return GetFieldNumValues(8, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Checks the validity of category_subtype field
+    // Returns FIT_TRUE if field is valid
+    ///////////////////////////////////////////////////////////////////////
+    FIT_BOOL IsCategorySubtypeValid(FIT_UINT8 index) const
+    {
+        const Field* field = GetField(8);
+        if( FIT_NULL == field )
+        {
+            return FIT_FALSE;
+        }
+
+        return field->IsValueValid(index);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Returns category_subtype field
+    // Comment: Based on the associated category, see [category]_exercise_names
+    ///////////////////////////////////////////////////////////////////////
+    FIT_UINT16 GetCategorySubtype(FIT_UINT8 index) const
+    {
+        return GetFieldUINT16Value(8, index, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Set category_subtype field
+    // Comment: Based on the associated category, see [category]_exercise_names
+    ///////////////////////////////////////////////////////////////////////
+    void SetCategorySubtype(FIT_UINT8 index, FIT_UINT16 categorySubtype)
+    {
+        SetFieldUINT16Value(8, categorySubtype, index, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Checks the validity of weight_display_unit field
+    // Returns FIT_TRUE if field is valid
+    ///////////////////////////////////////////////////////////////////////
+    FIT_BOOL IsWeightDisplayUnitValid() const
+    {
+        const Field* field = GetField(9);
+        if( FIT_NULL == field )
+        {
+            return FIT_FALSE;
+        }
+
+        return field->IsValueValid();
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Returns weight_display_unit field
+    ///////////////////////////////////////////////////////////////////////
+    FIT_FIT_BASE_UNIT GetWeightDisplayUnit(void) const
+    {
+        return GetFieldUINT16Value(9, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Set weight_display_unit field
+    ///////////////////////////////////////////////////////////////////////
+    void SetWeightDisplayUnit(FIT_FIT_BASE_UNIT weightDisplayUnit)
+    {
+        SetFieldUINT16Value(9, weightDisplayUnit, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -59,7 +366,7 @@ public:
     ///////////////////////////////////////////////////////////////////////
     FIT_BOOL IsMessageIndexValid() const
     {
-        const Field* field = GetField(254);
+        const Field* field = GetField(10);
         if( FIT_NULL == field )
         {
             return FIT_FALSE;
@@ -73,7 +380,7 @@ public:
     ///////////////////////////////////////////////////////////////////////
     FIT_MESSAGE_INDEX GetMessageIndex(void) const
     {
-        return GetFieldUINT16Value(254, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+        return GetFieldUINT16Value(10, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
     }
 
     ///////////////////////////////////////////////////////////////////////
@@ -81,355 +388,14 @@ public:
     ///////////////////////////////////////////////////////////////////////
     void SetMessageIndex(FIT_MESSAGE_INDEX messageIndex)
     {
-        SetFieldUINT16Value(254, messageIndex, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+        SetFieldUINT16Value(10, messageIndex, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
     }
 
     ///////////////////////////////////////////////////////////////////////
-    // Checks the validity of sport field
+    // Checks the validity of wkt_step_index field
     // Returns FIT_TRUE if field is valid
     ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL IsSportValid() const
-    {
-        const Field* field = GetField(0);
-        if( FIT_NULL == field )
-        {
-            return FIT_FALSE;
-        }
-
-        return field->IsValueValid();
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Returns sport field
-    ///////////////////////////////////////////////////////////////////////
-    FIT_SPORT GetSport(void) const
-    {
-        return GetFieldENUMValue(0, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Set sport field
-    ///////////////////////////////////////////////////////////////////////
-    void SetSport(FIT_SPORT sport)
-    {
-        SetFieldENUMValue(0, sport, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Checks the validity of sub_sport field
-    // Returns FIT_TRUE if field is valid
-    ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL IsSubSportValid() const
-    {
-        const Field* field = GetField(1);
-        if( FIT_NULL == field )
-        {
-            return FIT_FALSE;
-        }
-
-        return field->IsValueValid();
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Returns sub_sport field
-    ///////////////////////////////////////////////////////////////////////
-    FIT_SUB_SPORT GetSubSport(void) const
-    {
-        return GetFieldENUMValue(1, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Set sub_sport field
-    ///////////////////////////////////////////////////////////////////////
-    void SetSubSport(FIT_SUB_SPORT subSport)
-    {
-        SetFieldENUMValue(1, subSport, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Checks the validity of start_date field
-    // Returns FIT_TRUE if field is valid
-    ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL IsStartDateValid() const
-    {
-        const Field* field = GetField(2);
-        if( FIT_NULL == field )
-        {
-            return FIT_FALSE;
-        }
-
-        return field->IsValueValid();
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Returns start_date field
-    ///////////////////////////////////////////////////////////////////////
-    FIT_DATE_TIME GetStartDate(void) const
-    {
-        return GetFieldUINT32Value(2, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Set start_date field
-    ///////////////////////////////////////////////////////////////////////
-    void SetStartDate(FIT_DATE_TIME startDate)
-    {
-        SetFieldUINT32Value(2, startDate, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Checks the validity of end_date field
-    // Returns FIT_TRUE if field is valid
-    ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL IsEndDateValid() const
-    {
-        const Field* field = GetField(3);
-        if( FIT_NULL == field )
-        {
-            return FIT_FALSE;
-        }
-
-        return field->IsValueValid();
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Returns end_date field
-    ///////////////////////////////////////////////////////////////////////
-    FIT_DATE_TIME GetEndDate(void) const
-    {
-        return GetFieldUINT32Value(3, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Set end_date field
-    ///////////////////////////////////////////////////////////////////////
-    void SetEndDate(FIT_DATE_TIME endDate)
-    {
-        SetFieldUINT32Value(3, endDate, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Checks the validity of type field
-    // Returns FIT_TRUE if field is valid
-    ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL IsTypeValid() const
-    {
-        const Field* field = GetField(4);
-        if( FIT_NULL == field )
-        {
-            return FIT_FALSE;
-        }
-
-        return field->IsValueValid();
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Returns type field
-    ///////////////////////////////////////////////////////////////////////
-    FIT_GOAL GetType(void) const
-    {
-        return GetFieldENUMValue(4, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Set type field
-    ///////////////////////////////////////////////////////////////////////
-    void SetType(FIT_GOAL type)
-    {
-        SetFieldENUMValue(4, type, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Checks the validity of value field
-    // Returns FIT_TRUE if field is valid
-    ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL IsValueValid() const
-    {
-        const Field* field = GetField(5);
-        if( FIT_NULL == field )
-        {
-            return FIT_FALSE;
-        }
-
-        return field->IsValueValid();
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Returns value field
-    ///////////////////////////////////////////////////////////////////////
-    FIT_UINT32 GetValue(void) const
-    {
-        return GetFieldUINT32Value(5, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Set value field
-    ///////////////////////////////////////////////////////////////////////
-    void SetValue(FIT_UINT32 value)
-    {
-        SetFieldUINT32Value(5, value, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Checks the validity of repeat field
-    // Returns FIT_TRUE if field is valid
-    ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL IsRepeatValid() const
-    {
-        const Field* field = GetField(6);
-        if( FIT_NULL == field )
-        {
-            return FIT_FALSE;
-        }
-
-        return field->IsValueValid();
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Returns repeat field
-    ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL GetRepeat(void) const
-    {
-        return GetFieldENUMValue(6, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Set repeat field
-    ///////////////////////////////////////////////////////////////////////
-    void SetRepeat(FIT_BOOL repeat)
-    {
-        SetFieldENUMValue(6, repeat, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Checks the validity of target_value field
-    // Returns FIT_TRUE if field is valid
-    ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL IsTargetValueValid() const
-    {
-        const Field* field = GetField(7);
-        if( FIT_NULL == field )
-        {
-            return FIT_FALSE;
-        }
-
-        return field->IsValueValid();
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Returns target_value field
-    ///////////////////////////////////////////////////////////////////////
-    FIT_UINT32 GetTargetValue(void) const
-    {
-        return GetFieldUINT32Value(7, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Set target_value field
-    ///////////////////////////////////////////////////////////////////////
-    void SetTargetValue(FIT_UINT32 targetValue)
-    {
-        SetFieldUINT32Value(7, targetValue, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Checks the validity of recurrence field
-    // Returns FIT_TRUE if field is valid
-    ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL IsRecurrenceValid() const
-    {
-        const Field* field = GetField(8);
-        if( FIT_NULL == field )
-        {
-            return FIT_FALSE;
-        }
-
-        return field->IsValueValid();
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Returns recurrence field
-    ///////////////////////////////////////////////////////////////////////
-    FIT_GOAL_RECURRENCE GetRecurrence(void) const
-    {
-        return GetFieldENUMValue(8, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Set recurrence field
-    ///////////////////////////////////////////////////////////////////////
-    void SetRecurrence(FIT_GOAL_RECURRENCE recurrence)
-    {
-        SetFieldENUMValue(8, recurrence, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Checks the validity of recurrence_value field
-    // Returns FIT_TRUE if field is valid
-    ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL IsRecurrenceValueValid() const
-    {
-        const Field* field = GetField(9);
-        if( FIT_NULL == field )
-        {
-            return FIT_FALSE;
-        }
-
-        return field->IsValueValid();
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Returns recurrence_value field
-    ///////////////////////////////////////////////////////////////////////
-    FIT_UINT16 GetRecurrenceValue(void) const
-    {
-        return GetFieldUINT16Value(9, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Set recurrence_value field
-    ///////////////////////////////////////////////////////////////////////
-    void SetRecurrenceValue(FIT_UINT16 recurrenceValue)
-    {
-        SetFieldUINT16Value(9, recurrenceValue, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Checks the validity of enabled field
-    // Returns FIT_TRUE if field is valid
-    ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL IsEnabledValid() const
-    {
-        const Field* field = GetField(10);
-        if( FIT_NULL == field )
-        {
-            return FIT_FALSE;
-        }
-
-        return field->IsValueValid();
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Returns enabled field
-    ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL GetEnabled(void) const
-    {
-        return GetFieldENUMValue(10, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Set enabled field
-    ///////////////////////////////////////////////////////////////////////
-    void SetEnabled(FIT_BOOL enabled)
-    {
-        SetFieldENUMValue(10, enabled, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
-    }
-
-    ///////////////////////////////////////////////////////////////////////
-    // Checks the validity of source field
-    // Returns FIT_TRUE if field is valid
-    ///////////////////////////////////////////////////////////////////////
-    FIT_BOOL IsSourceValid() const
+    FIT_BOOL IsWktStepIndexValid() const
     {
         const Field* field = GetField(11);
         if( FIT_NULL == field )
@@ -441,23 +407,23 @@ public:
     }
 
     ///////////////////////////////////////////////////////////////////////
-    // Returns source field
+    // Returns wkt_step_index field
     ///////////////////////////////////////////////////////////////////////
-    FIT_GOAL_SOURCE GetSource(void) const
+    FIT_MESSAGE_INDEX GetWktStepIndex(void) const
     {
-        return GetFieldENUMValue(11, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+        return GetFieldUINT16Value(11, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
     }
 
     ///////////////////////////////////////////////////////////////////////
-    // Set source field
+    // Set wkt_step_index field
     ///////////////////////////////////////////////////////////////////////
-    void SetSource(FIT_GOAL_SOURCE source)
+    void SetWktStepIndex(FIT_MESSAGE_INDEX wktStepIndex)
     {
-        SetFieldENUMValue(11, source, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
+        SetFieldUINT16Value(11, wktStepIndex, 0, FIT_SUBFIELD_INDEX_MAIN_FIELD);
     }
 
 };
 
 } // namespace fit
 
-#endif // !defined(FIT_GOAL_MESG_HPP)
+#endif // !defined(FIT_SET_MESG_HPP)

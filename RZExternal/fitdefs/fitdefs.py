@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
 # Update to latest sdk:
-# Update: (cd ~/Dowloads/FitSDKRelease_20/cpp/; cp *.hpp *.cpp ~/Development/xcode/shared/FitSDKRelease_20)
+# Update: (cd ~/Dowloads/FitSDKRelease_20/cpp/; cp *.hpp *.cpp ~/PATH/TO/RZExternal/src/FitSDKRelease_20)
 # run fitdefs.py and then cp the files as instructed in Install:
 #
 
@@ -167,6 +167,11 @@ fieldmap = { 'Altitude': 'GainElevation',
              "developer_Leg Spring Stiffness" : "WeightedMeanLegSpringStiffness" ,
              "developer_Power" : "WeightedMeanPower" ,
              "developer_Vertical Oscillation" :"WeightedMeanVerticalOscillation",
+
+             "developer_cadence" :     "WeightedMeanCadence",
+             "developer_stance_time" : "WeightedMeanGroundContactTime" ,
+             "developer_power" : "WeightedMeanPower" ,
+             "developer_vertical_oscillation" :"WeightedMeanVerticalOscillation",
 
              'swc': 'swc',
              'total_cycles': 'total_cycles',

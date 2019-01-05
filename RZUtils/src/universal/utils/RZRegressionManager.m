@@ -101,9 +101,13 @@
     }else{
         if( [fileManager fileExistsAtPath:filepath] ){
             if( @available(iOS 12.0, *)){
-                NSData * data = [NSData dataWithContentsOfFile:filepath];
-                rv = [NSKeyedUnarchiver unarchivedObjectOfClass:cls fromData:data error:error];
                 
+                NSData * data = [NSData dataWithContentsOfFile:filepath];
+                rv = [NSKeyedUnarchiver unarchiveTopLevelObjectWithData:data error:error];
+                
+                if( rv == nil ){
+                    rv = [NSKeyedUnarchiver unarchivedObjectOfClass:cls fromData:data error:error];
+                }
                 if( rv == nil && [cls isEqual:[NSDictionary class]]){
                     rv = [NSKeyedUnarchiver unarchivedObjectOfClass:NSClassFromString(@"__NSDictionaryI") fromData:data error:error];
                 }

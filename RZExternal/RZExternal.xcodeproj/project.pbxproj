@@ -36,6 +36,8 @@
 		4264485D20272C6B00CF7A04 /* fit_stress_level_mesg.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4264485920272C6A00CF7A04 /* fit_stress_level_mesg.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		4264485E20272C6B00CF7A04 /* fit_one_d_sensor_calibration_mesg_listener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4264485A20272C6A00CF7A04 /* fit_one_d_sensor_calibration_mesg_listener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		4264485F20272C6B00CF7A04 /* fit_one_d_sensor_calibration_mesg.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4264485B20272C6A00CF7A04 /* fit_one_d_sensor_calibration_mesg.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		428F8A0221E0AFDA00CDE891 /* fit_set_mesg_listener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 428F8A0021E0AFDA00CDE891 /* fit_set_mesg_listener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		428F8A0321E0AFDA00CDE891 /* fit_set_mesg.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 428F8A0121E0AFDA00CDE891 /* fit_set_mesg.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		42A007CF20012ADC00019CB3 /* RZExternalCpp.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A007C120012ADC00019CB3 /* RZExternalCpp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42A008AD20012B4800019CB3 /* fit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42A007D720012B4800019CB3 /* fit.cpp */; };
 		42A008AE20012B4800019CB3 /* fit.h in Headers */ = {isa = PBXBuildFile; fileRef = 42A007D820012B4800019CB3 /* fit.h */; };
@@ -431,6 +433,8 @@
 		4264485920272C6A00CF7A04 /* fit_stress_level_mesg.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fit_stress_level_mesg.hpp; sourceTree = "<group>"; };
 		4264485A20272C6A00CF7A04 /* fit_one_d_sensor_calibration_mesg_listener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fit_one_d_sensor_calibration_mesg_listener.hpp; sourceTree = "<group>"; };
 		4264485B20272C6A00CF7A04 /* fit_one_d_sensor_calibration_mesg.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fit_one_d_sensor_calibration_mesg.hpp; sourceTree = "<group>"; };
+		428F8A0021E0AFDA00CDE891 /* fit_set_mesg_listener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fit_set_mesg_listener.hpp; sourceTree = "<group>"; };
+		428F8A0121E0AFDA00CDE891 /* fit_set_mesg.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fit_set_mesg.hpp; sourceTree = "<group>"; };
 		42A007BF20012ADC00019CB3 /* RZExternalCpp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RZExternalCpp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A007C120012ADC00019CB3 /* RZExternalCpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RZExternalCpp.h; sourceTree = "<group>"; };
 		42A007C220012ADC00019CB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -894,6 +898,8 @@
 		42A007D620012B4800019CB3 /* FitSDKRelease_20 */ = {
 			isa = PBXGroup;
 			children = (
+				428F8A0021E0AFDA00CDE891 /* fit_set_mesg_listener.hpp */,
+				428F8A0121E0AFDA00CDE891 /* fit_set_mesg.hpp */,
 				4264485A20272C6A00CF7A04 /* fit_one_d_sensor_calibration_mesg_listener.hpp */,
 				4264485B20272C6A00CF7A04 /* fit_one_d_sensor_calibration_mesg.hpp */,
 				4264485820272C6A00CF7A04 /* fit_stress_level_mesg_listener.hpp */,
@@ -1570,6 +1576,7 @@
 				42A0091E20012B4800019CB3 /* fit_memo_glob_mesg_listener.hpp in Headers */,
 				42A0090020012B4800019CB3 /* fit_field_definition.hpp in Headers */,
 				42A008F020012B4800019CB3 /* fit_event_mesg_listener.hpp in Headers */,
+				428F8A0321E0AFDA00CDE891 /* fit_set_mesg.hpp in Headers */,
 				42A0097820012B4800019CB3 /* fit_weather_conditions_mesg_listener.hpp in Headers */,
 				42A0093B20012B4800019CB3 /* fit_pad_mesg_listener.hpp in Headers */,
 				4264484C20272BAA00CF7A04 /* fit_dive_alarm_mesg.hpp in Headers */,
@@ -1678,6 +1685,7 @@
 				42A0090C20012B4800019CB3 /* fit_gps_metadata_mesg_listener.hpp in Headers */,
 				42A008F820012B4800019CB3 /* fit_factory.hpp in Headers */,
 				42A008D220012B4800019CB3 /* fit_config.h in Headers */,
+				428F8A0221E0AFDA00CDE891 /* fit_set_mesg_listener.hpp in Headers */,
 				42A008B720012B4800019CB3 /* fit_activity_mesg_listener.hpp in Headers */,
 				42A008FC20012B4800019CB3 /* fit_field_base.hpp in Headers */,
 				42A0093A20012B4800019CB3 /* fit_pad_mesg.hpp in Headers */,

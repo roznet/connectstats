@@ -5,6 +5,11 @@ import argparse
 
 import os
 
+multiplier_offset_fix = {
+    "total_training_effect" : (10, 0 ),
+    "total_anaerobic_training_effect" : (10, 0),
+}
+
 class Context:
     def __init__(self):
         self.structs = {}
@@ -158,6 +163,14 @@ class StructElem :
                 self.unit = m.group(2)
                 self.multiplier = m.group(1)
                 self.offset = m.group(3)
+
+        if self.member in multiplier_offset_fix:
+            fix = multiplier_offset_fix[self.member]
+            if str(fix[0]) != str(self.multiplier):
+                print( 'Fixing {} with mult={} offset={}'.format( self.member, fix[0],  fix[1]) )
+            self.multiplier = fix[0]
+            self.offset = fix[1]
+
 
     def formula(self):
         if self.unit:

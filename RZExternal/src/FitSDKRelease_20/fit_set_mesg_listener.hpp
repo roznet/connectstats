@@ -15,21 +15,21 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#if !defined(FIT_VIDEO_FRAME_MESG_LISTENER_HPP)
-#define FIT_VIDEO_FRAME_MESG_LISTENER_HPP
+#if !defined(FIT_SET_MESG_LISTENER_HPP)
+#define FIT_SET_MESG_LISTENER_HPP
 
-#include "fit_video_frame_mesg.hpp"
+#include "fit_set_mesg.hpp"
 
 namespace fit
 {
 
-class VideoFrameMesgListener
+class SetMesgListener
 {
 public:
-    virtual ~VideoFrameMesgListener() {}
-    virtual void OnMesg(VideoFrameMesg& mesg) = 0;
+    virtual ~SetMesgListener() {}
+    virtual void OnMesg(SetMesg& mesg) = 0;
 };
 
 } // namespace fit
 
-#endif // !defined(FIT_VIDEO_FRAME_MESG_LISTENER_HPP)
+#endif // !defined(FIT_SET_MESG_LISTENER_HPP)
