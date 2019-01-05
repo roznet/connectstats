@@ -62,10 +62,10 @@ extension GCActivity {
                     self.trackFlags |= point.trackFlags
                 }
             }
-            // Don't save to db
-            self.trackpoints = trackpoints
-            self.updateSummary(fromTrackpoints: trackpoints, missingOnly: true)
         }
+        // Don't save to db
+        self.trackpoints = trackpoints
+        self.updateSummary(fromTrackpoints: trackpoints, missingOnly: true)
     }
 
      func mergeFrom(other : GCActivity){

@@ -33,10 +33,12 @@
 #import "GCActivity+Database.h"
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminRequestActivityReload.h"
-#import "ConnectStats-Swift.h"
 #import "GCService.h"
 #import "GCActivitiesOrganizerListRegister.h"
 #import "GCActivityAutoLapChoices.h"
+#import "ConnectStats-Swift.h"
+#import "GCGarminSearchJsonParser.h"
+
 
 @interface GCTestsPerformance : GCTestCase
 
@@ -105,9 +107,7 @@
 
     NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
     
-    FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
-    [fitDecode parse];
-    GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile];
+    GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFilePath:fn];
 
     //act = fitAct;
     GCField * speedField = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType];
@@ -155,9 +155,7 @@
     [self measureBlock:^{
         for( NSString * aId in aIds ) {
             NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
-            FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
-            [fitDecode parse];
-            GCActivity * act = [[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile];
+            GCActivity * act = [[GCActivity alloc] initWithId:aId fitFilePath:fn];
             XCTAssertGreaterThan(act.trackpoints.count, 1);
             [act release];
         }

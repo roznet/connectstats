@@ -11,6 +11,7 @@
 #import "GCActivity+Database.h"
 #import "GCActivity+Import.h"
 #import "GCWeather.h"
+#import "GCAppGlobal.h"
 #import "GCGarminActivityDetailJsonParser.h"
 #import "GCGarminRequestActivityReload.h"
 #import "GCGarminSearchJsonParser.h"

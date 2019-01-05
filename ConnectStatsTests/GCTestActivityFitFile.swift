@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import ConnectStats
 
 class GCTestActivityFitFile: XCTestCase {
     
@@ -29,10 +30,10 @@ class GCTestActivityFitFile: XCTestCase {
             
             let url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath("activity_\(activityId).fit", for: type(of: self)))
 
-            if let fitData = try? Data(contentsOf: url),
-                let decode = FITFitFileDecode(fitData){
-                decode.parse()
-                let activity = GCActivity(withId: activityId, fitFile: decode.fitFile)
+            if 
+                let fitFile = RZFitFile(file: url){
+                
+                let activity = GCActivity(withId: activityId, fitFile: fitFile)
                 if let reload = GCGarminRequestActivityReload.test(forActivity: activityId, withFilesIn:RZFileOrganizer.bundleFilePath(nil, for: type(of: self)) ){
                     reload.updateSummaryData(from: activity)
                     reload.updateTrackpoints(from: activity)
