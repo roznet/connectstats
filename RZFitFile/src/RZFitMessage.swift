@@ -137,7 +137,7 @@ class RZFitMessage {
         if let dev = self.devfields,
             let units = self.devunits{
             for (key,val) in dev {
-                var useKey = key
+                var useKey = "developer_"+key
                 if rv[key] != nil {
                     useKey = "developer_"+key
                 }
