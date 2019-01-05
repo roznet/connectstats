@@ -79,7 +79,17 @@ extension RZFitMessage {
         }
         return rv
     }
-    
+    func fieldKeysWithValue() -> [RZFitFieldKey] {
+        var rv : [RZFitFieldKey] = []
+        let interp = self.interpretedFields()
+        for (key,val) in interp {
+            if val.value != nil {
+                rv.append(key)
+            }
+        }
+        return rv
+    }
+
     func fieldKeysWithTime() -> [RZFitFieldKey] {
         var rv : [RZFitFieldKey] = []
         let interp = self.interpretedFields()
@@ -109,6 +119,7 @@ extension RZFitMessage {
         }
         return nil
     }
+    
     
     func name(field:RZFitFieldKey) -> String? {
         let interp = self.interpretedFields()

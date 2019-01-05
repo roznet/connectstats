@@ -525,6 +525,17 @@ void registerUnits(){
     return aKey ? _unitsRegistry[aKey] : nil;
 }
 
++(nonnull GCUnit*)unitForAny:(nonnull NSString*)aKey{
+    if (!_unitsRegistry) {
+        registerUnits();
+    }
+    GCUnit * exist = _unitsRegistry[aKey];
+    if( ! exist ){
+        registerSimple( @[ aKey, aKey, aKey]);
+        exist = _unitsRegistry[aKey];
+    }
+    return exist;
+}
 -(BOOL)matchString:(NSString*)aStr{
     return [_abbr isEqualToString:aStr] || [_key isEqualToString:aStr] || [_display isEqualToString:aStr];
 }

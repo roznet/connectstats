@@ -36,6 +36,8 @@ extension RZFitFieldValue {
             if let numunit = self.valueUnit {
                 if let unit = GCUnit(forFitUnit: numunit.unit) {
                     rv = GCNumberWithUnit(unit: unit, andValue: numunit.value)
+                }else{
+                    rv = GCNumberWithUnit(unit: GCUnit(forAny: numunit.unit), andValue: numunit.value)
                 }
             }else if let num = self.value {
                 rv = GCNumberWithUnit(unit: GCUnit.dimensionless(), andValue: num)

@@ -447,6 +447,9 @@
 		423F9FC619AD1D170057DB5A /* GCHistoryFieldDataSerieConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 423F9FC419ACDEA40057DB5A /* GCHistoryFieldDataSerieConfig.m */; };
 		423F9FC919AD2ACA0057DB5A /* GCStatsHistGraphConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 423F9FC819AD2ACA0057DB5A /* GCStatsHistGraphConfig.m */; };
 		423F9FCA19AD2ACA0057DB5A /* GCStatsHistGraphConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 423F9FC819AD2ACA0057DB5A /* GCStatsHistGraphConfig.m */; };
+		424053B721E0F20800375795 /* activity_2944936628.fit in Resources */ = {isa = PBXBuildFile; fileRef = 424053AE21E0F1FE00375795 /* activity_2944936628.fit */; };
+		424053B821E0F36F00375795 /* activity_2477200414.fit in Resources */ = {isa = PBXBuildFile; fileRef = 421A76492027534A00D12B6C /* activity_2477200414.fit */; };
+		424053B921E0F55800375795 /* activity_2545022458.fit in Resources */ = {isa = PBXBuildFile; fileRef = 422F283620551AE100187478 /* activity_2545022458.fit */; };
 		424208901BCAF71500F3DB12 /* GCActivity+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C4159917B1A23800EBBAFB /* GCActivity+UI.m */; };
 		424208911BCAF9D800F3DB12 /* Activities.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 422CCE891B7EAB7200A4DAEB /* Activities.xcassets */; };
 		424208971BCC49E200F3DB12 /* GCActivityPreviewingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425733991BC05A1A0080D75F /* GCActivityPreviewingViewController.m */; };
@@ -2904,6 +2907,7 @@
 		423F9FC419ACDEA40057DB5A /* GCHistoryFieldDataSerieConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHistoryFieldDataSerieConfig.m; path = src/GCHistoryFieldDataSerieConfig.m; sourceTree = "<group>"; };
 		423F9FC719AD2ACA0057DB5A /* GCStatsHistGraphConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStatsHistGraphConfig.h; path = src/GCStatsHistGraphConfig.h; sourceTree = "<group>"; };
 		423F9FC819AD2ACA0057DB5A /* GCStatsHistGraphConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStatsHistGraphConfig.m; path = src/GCStatsHistGraphConfig.m; sourceTree = "<group>"; };
+		424053AE21E0F1FE00375795 /* activity_2944936628.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = activity_2944936628.fit; sourceTree = "<group>"; };
 		424340FB1B741652001E22BB /* GCActivity+CSSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCActivity+CSSearch.h"; path = "src/GCActivity+CSSearch.h"; sourceTree = "<group>"; };
 		424340FC1B741652001E22BB /* GCActivity+CSSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCActivity+CSSearch.m"; path = "src/GCActivity+CSSearch.m"; sourceTree = "<group>"; };
 		4244675A1847F86F009F807E /* GCStravaActivityTransfer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaActivityTransfer.h; path = src/GCStravaActivityTransfer.h; sourceTree = "<group>"; };
@@ -5704,6 +5708,7 @@
 		4253B46D1CD4A53400437E6A /* fit_files */ = {
 			isa = PBXGroup;
 			children = (
+				424053AE21E0F1FE00375795 /* activity_2944936628.fit */,
 				422F283620551AE100187478 /* activity_2545022458.fit */,
 				422F282C20551AE000187478 /* activity_2545022458.json */,
 				422F283420551AE000187478 /* activitylaps_2545022458.json */,
@@ -8756,10 +8761,13 @@
 				423E8F8821DCE5F300FB795B /* WorkoutRepeatSteps.fit in Resources */,
 				423E8F8721DCE5F300FB795B /* WeightScaleSingleUser.csv in Resources */,
 				423E8F8B21DCE5F300FB795B /* WorkoutRepeatGreaterThanStep.fit in Resources */,
+				424053B921E0F55800375795 /* activity_2545022458.fit in Resources */,
 				423E8F8C21DCE5F300FB795B /* WorkoutIndividualSteps.csv in Resources */,
 				423E8F9021DCE5F300FB795B /* WorkoutCustomTargetValues.fit in Resources */,
 				423E8F8321DCE5F300FB795B /* WeightScaleMultiUser.fit in Resources */,
+				424053B721E0F20800375795 /* activity_2944936628.fit in Resources */,
 				42769BDA1DD2ACA4000390F1 /* activity_1382772474.fit in Resources */,
+				424053B821E0F36F00375795 /* activity_2477200414.fit in Resources */,
 				423E8F8621DCE5F300FB795B /* WorkoutCustomTargetValues.csv in Resources */,
 				423E8F9621DCE5F300FB795B /* Settings.csv in Resources */,
 				423E8F9121DCE5F300FB795B /* WeightScaleSingleUser.fit in Resources */,

@@ -75,6 +75,7 @@ NS_ASSUME_NONNULL_BEGIN;
 
 +(nullable GCUnit*)unitForKey:(NSString*)aKey;
 +(nullable GCUnit*)unitMatchingString:(NSString*)aStr;
++(nonnull GCUnit*)unitForAny:(nonnull NSString*)any;
 
 /**
  strideStyle can be SameFoot(2x) or BetweenFoot(1x)

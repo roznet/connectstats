@@ -96,8 +96,6 @@ class RZFitFieldValue {
     
 }
 
-
-
 extension RZFitFieldValue : CustomStringConvertible {
     var description: String {
         if let coordinate = coordinate {

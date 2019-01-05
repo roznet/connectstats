@@ -82,6 +82,7 @@ class FitFileExplorerTests: XCTestCase {
             }
         }
     }
+    
     /*
     func testInterp() {
         //"activity_1378220136.fit"
@@ -214,24 +215,70 @@ class FitFileExplorerTests: XCTestCase {
     }
     */
     
-    func testSamples() {
+    func testExamples() {
         let filename = "DeveloperData.fit"
         let filepath = RZFileOrganizer.bundleFilePath(filename, for: type(of:self))
         
         
         let decode = FITFitFileDecode(forFile:filepath)
         decode?.parse()
+        var done : Bool = false
         if let cppfit = decode?.fitFile,
-            let fastfit = RZFitFile(file: URL(fileURLWithPath:  filepath)) {
-            print( "\(cppfit) \(fastfit)")
+            let cpprecords = cppfit["record"],
+            let fastfit = RZFitFile(file: URL(fileURLWithPath:  filepath))
+        {
+            let fastrecords = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
+            XCTAssertEqual(fastrecords.count, Int(cpprecords.count()))
+            if let fastfirst = fastrecords.first,
+                let cppfirst = cpprecords[0]{
+                let fastkeys = fastfirst.preferredOrderFieldKeys()
+                for one in cppfirst.allFieldNames(){
+                    if (one != "enhanced_speed") { // dont understand why enhanced_speed not showing up
+                        XCTAssertTrue( fastkeys.contains(one), "Missing \(one)" )
+                    }
+                }
+                done = true
+            }
         }
-
+        XCTAssertTrue(done)
     }
     
     func testPerformanceExample() {
         // This is an example of a performance test case.
+        
+        //let filenames = [ "activity_1378220136.fit", "activity_1382772474.fit", "activity_2477200414.fit", "activity_2944936628.fit" ]
+        let filenames = [ "activity_1378220136.fit",
+                          "activity_1382772474.fit",
+                          "activity_2477200414.fit",
+                          //"activity_2944936628.fit",
+                          "activity_2545022458.fit"
+        ]
+        let datas = filenames.map {
+            try? Data(contentsOf: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath($0, for: type(of:self))))
+        }
+        
         self.measure {
-            // Put the code you want to measure the time of here.
+            for data in datas{
+                if let data = data {
+                    let fastfit = RZFitFile(data: data)
+                    let records = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
+                    XCTAssertGreaterThan(records.count, 0)
+                }else{
+                    XCTAssertTrue(false)
+                }
+            }
+            
+            if let one = datas.first, let data = one {
+                let fastfit = RZFitFile(data: data)
+                let records = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
+                let interp = records.map {
+                    $0.interpretedFields()
+                }
+                XCTAssertGreaterThan(interp.count, 0)
+            }else{
+                XCTAssertTrue(false)
+            }
+
         }
     }
     
