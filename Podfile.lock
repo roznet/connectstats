@@ -9,18 +9,23 @@ PODS:
 
 DEPENDENCIES:
   - Flurry-iOS-SDK/FlurrySDK
-  - GenericJSON (from `~/Development/public/generic-json-swift`)
+  - GenericJSON (from `https://github.com/roznet/generic-json-swift.git`)
   - GoogleMaps
 
 EXTERNAL SOURCES:
   GenericJSON:
-    :path: ~/Development/public/generic-json-swift
+    :git: https://github.com/roznet/generic-json-swift.git
+
+CHECKOUT OPTIONS:
+  GenericJSON:
+    :commit: 99e62189ab9758a77fb03e88b5dbb43332d1ab53
+    :git: https://github.com/roznet/generic-json-swift.git
 
 SPEC CHECKSUMS:
   Flurry-iOS-SDK: 2ea1973a6c9c6b3675765d73ea290b281f8cb084
-  GenericJSON: 2d654e6d578c2e3a6d2ed58f0b37bb5d0f8f9fae
+  GenericJSON: ed952352821dae43f2e7d928512f3529424f576a
   GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
 
-PODFILE CHECKSUM: d6f594623dab018ffb836ea0eef74d51ed2228d4
+PODFILE CHECKSUM: bd0b3d6f14cbe2f00fa0ae25aee174db0e0e13ab
 
 COCOAPODS: 1.4.0

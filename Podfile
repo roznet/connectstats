@@ -17,5 +17,5 @@ end
 target 'FitFileExplorer' do
   use_frameworks!
   platform :osx, '10.14'
-  pod 'GenericJSON', :path => '~/Development/public/generic-json-swift'
+  pod 'GenericJSON', :git => 'https://github.com/roznet/generic-json-swift.git'
 end
