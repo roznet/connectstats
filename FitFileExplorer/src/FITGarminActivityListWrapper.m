@@ -135,11 +135,13 @@
         }
 
         NSData * data = [NSData dataWithContentsOfFile:filename];
-        NSArray<NSDictionary*>*read = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        if( [read isKindOfClass:[NSArray class]]){
-            [self addJson:read];
+        if( data ){
+            NSArray<NSDictionary*>*read = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            if( [read isKindOfClass:[NSArray class]]){
+                [self addJson:read];
+            }
+            self.lastFileName = filename;
         }
-        self.lastFileName = filename;
     }
 }
     

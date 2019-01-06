@@ -1,8 +1,8 @@
 //  MIT License
 //
-//  Created on 12/11/2018 for FitFileExplorer
+//  Created on 06/01/2019 for FitFileExplorer
 //
-//  Copyright (c) 2018 Brice Rosenzweig
+//  Copyright (c) 2019 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,29 +25,30 @@
 
 
 
-#import <RZUtils/RZUtils.h>
+import Foundation
+import GenericJSON
 
-NS_ASSUME_NONNULL_BEGIN
+typealias ActivityId = String
 
-@class GCWebConnect;
-@class FITGarminDownloadManager;
-@class GCActivityTypes;
-
-extern NSString * kFITSettingsKeyLoginName;
-extern NSString * kFITSettingsKeyPassword;
-
-@interface FITAppGlobal : RZAppConfig
-
-+(NSMutableDictionary*)settings;
-
-+(NSString *)currentLoginName;
-+(NSString *)currentPassword;
-
-+(GCWebConnect*)web;
-+(dispatch_queue_t)worker;
-+(FITGarminDownloadManager*)downloadManager;
-+(GCActivityTypes*)activityTypes;
-
-@end
-
-NS_ASSUME_NONNULL_END
+class Activity {
+    let activityId : ActivityId
+    //let activityType : GCActivityType
+    let time : Date
+    
+    private var fitFilePath : URL? = nil
+    //private var interpret : GCGarminActivityInterpret
+    
+    private(set) var summary : [GCField:ActivityValue]
+    private(set) var json : JSON
+    
+    init(json:JSON) {
+        self.json = json
+        self.summary = [:]
+        self.activityId = json["activityId"]?.stringValue ?? ""
+        //self.interpret = GCGarminActivityInterpret(json, usingDTOUnit: false, with: FITAppGlobal.shared.activityTypes)
+        self.time = Date()
+        
+        
+    }
+    
+}

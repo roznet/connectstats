@@ -22,12 +22,11 @@
 #import "FITGarminActivityListWrapper.h"
 #import "FITGarminActivityWrapper.h"
 #import "GCGarminLoginSSORequest.h"
-#import "FITGarminRequestActivityList.h"
 #import "GCGarminActivityInterpret.h"
 
 #import "GCWebConnect.h"
-#import "FITAppGlobal.h"
 
 #import "RZFitFile-Bridging-Header.h"
 #import "GCUnit+FIT.h"
 #import "FITFitEnumMap.h"
+#import "GCWebUrl.h"

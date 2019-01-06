@@ -29,6 +29,7 @@ import Cocoa
 import RZUtils
 import RZUtilsOSX
 import RZExternalUniversal
+import GenericJSON
 
 extension Date {
     func formatAsRFC3339() -> String {
@@ -45,6 +46,9 @@ extension GCField {
 }
 
 class FITDownloadViewController: NSViewController {
+    
+    let keychain = KeychainWrapper(serviceName: "net.ro-z.FitFileExplorer")
+    
     @IBOutlet weak var userName: NSTextField!
     @IBOutlet weak var password: NSSecureTextField!
     
@@ -59,8 +63,10 @@ class FITDownloadViewController: NSViewController {
     }
 
     @objc func downloadChanged(notification : Notification){
-        rebuildColumns()
-        self.activityTable.reloadData()
+        DispatchQueue.main.async {
+            self.rebuildColumns()
+            self.activityTable.reloadData()
+        }
     }
         
     @IBAction func downloadSamples(_ sender: Any) {
@@ -199,15 +205,22 @@ class FITDownloadViewController: NSViewController {
                                                name: FITGarminDownloadManager.Notifications.garminDownloadChange,
                                                object: nil)
         
-        let keychain = KeychainWrapper(serviceName: "net.ro-z.connectstats")
         
-        if let saved_username = keychain.string(forKey: "username"){
+        print( "\(keychain.allKeys())")
+        if let saved_username = keychain.string(forKey: FITAppGlobal.ConfigParameters.loginName.rawValue){
             userName.stringValue = saved_username
-            FITAppGlobal.configSet(kFITSettingsKeyLoginName, stringVal: saved_username)
+            if let update = try? JSON( [FITAppGlobal.ConfigParameters.loginName:saved_username]) {
+                FITAppGlobal.shared.updateSettings(json: update)
+            }
+            
+            //FITAppGlobal.configSet(kFITSettingsKeyLoginName, stringVal: saved_username)
         }
-        if let saved_password = keychain.string(forKey: "password") {
+        if let saved_password = keychain.string(forKey: FITAppGlobal.ConfigParameters.password.rawValue) {
             password.stringValue = saved_password
-            FITAppGlobal.configSet(kFITSettingsKeyPassword, stringVal: saved_password)
+            if let update = try? JSON( [FITAppGlobal.ConfigParameters.password:saved_password]) {
+                FITAppGlobal.shared.updateSettings(json: update)
+            }
+            //FITAppGlobal.configSet(kFITSettingsKeyPassword, stringVal: saved_password)
         }
         FITAppGlobal.downloadManager().loadFromFile()
         activityTable.dataSource = self.dataSource
@@ -223,18 +236,18 @@ class FITDownloadViewController: NSViewController {
     }
     @IBAction func editUserName(_ sender: Any) {
         let entered_username = userName.stringValue
-        let keychain = KeychainWrapper(serviceName: "net.ro-z.connectstats")
+
+        keychain.set(entered_username, forKey: FITAppGlobal.ConfigParameters.loginName.rawValue)
         
-        keychain.set(entered_username, forKey: "username")
-        FITAppGlobal.configSet(kFITSettingsKeyLoginName, stringVal: entered_username)
+        
+        FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.loginName.rawValue, stringVal: entered_username)
     }
     
     @IBAction func editPassword(_ sender: Any) {
         let entered_password = password.stringValue
-        let keychain = KeychainWrapper(serviceName: "net.ro-z.connectstats")
-        
-        keychain.set(entered_password, forKey: "password")
-        FITAppGlobal.configSet(kFITSettingsKeyPassword, stringVal: entered_password)
+        print( "\(keychain.allKeys())")
+        keychain.set(entered_password, forKey: FITAppGlobal.ConfigParameters.password.rawValue)
+        FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.password.rawValue, stringVal: entered_password)
 
     }
     

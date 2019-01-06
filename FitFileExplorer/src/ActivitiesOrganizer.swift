@@ -1,8 +1,8 @@
 //  MIT License
 //
-//  Created on 15/11/2018 for FitFileExplorer
+//  Created on 06/01/2019 for FitFileExplorer
 //
-//  Copyright (c) 2018 Brice Rosenzweig
+//  Copyright (c) 2019 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,15 @@
 
 
 
-#import <Foundation/Foundation.h>
-#import "GCGarminRequest.h"
-NS_ASSUME_NONNULL_BEGIN
+import Foundation
 
-@interface FITGarminRequestActivityList : GCGarminReqBase
--(FITGarminRequestActivityList*)initWithStart:(NSUInteger)aStart andMode:(BOOL)aMode;
-@end
-
-NS_ASSUME_NONNULL_END
+class ActivitiesOrganizer {
+    
+    private(set) var activityList : [Activity]
+    
+    init() {
+        activityList = []
+    }
+    
+    
+}

@@ -27,7 +27,6 @@
 
 #import "FITGarminActivityWrapper.h"
 #import "GCGarminActivityInterpret.h"
-#import "FITAppGlobal.h"
 #import "GCActivityTypes.h"
 
 @interface FITGarminActivityWrapper ()
@@ -51,7 +50,7 @@
         }
     }
     rv.json = pruned;
-    rv.interpert = [GCGarminActivityInterpret interpret:rv.json usingDTOUnit:false withTypes:[FITAppGlobal activityTypes]];
+    rv.interpert = [GCGarminActivityInterpret interpret:rv.json usingDTOUnit:false withTypes:[GCActivityType activityTypes]];
     rv.time = rv.interpert.startDate;
     
     return rv;

@@ -11,15 +11,9 @@ import Cocoa
 
 class FITAppDelegate : NSObject, NSApplicationDelegate {
     
-    @objc let web = GCWebConnect()
-    @objc let downloadManager = FITGarminDownloadManager()
-    @objc let worker = DispatchQueue(label: "net.ro-z.worker")
-    @objc let activityTypes = GCActivityType.activityTypes()
-    
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let cache = GCFieldCache(db: nil, andLanguage: nil)
-        GCField.setFieldCache(cache)
-        GCFields.setFieldCache(cache)
+        // Force init of the shared global state
+        _ = FITAppGlobal.shared
     }
     
     func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool {

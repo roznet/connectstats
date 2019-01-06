@@ -39,11 +39,11 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
         loginSuccessful = false
         list = FITGarminActivityListWrapper()
         super.init()
-        FITAppGlobal.web().attach(self)
+        
         //self.loadRawFiles()
     }
     deinit {
-        FITAppGlobal.web().detach(self)
+        FITAppGlobal.shared.web.detach(self)
     }
     
     
@@ -81,7 +81,7 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
             
             FITAppGlobal.web().addRequest(GCGarminLoginSSORequest(user: login, andPwd: passd))
         }
-        FITAppGlobal.web().addRequest(FITGarminRequestActivityList(start: 0, andMode: false))
+        FITAppGlobal.web().addRequest(GarminRequestActivityList(start: 0))
     }
     
     @objc func loadOneFile(filePath : String) -> UInt {

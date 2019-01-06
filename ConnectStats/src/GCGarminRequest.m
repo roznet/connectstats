@@ -29,7 +29,7 @@
 #if TARGET_OS_IPHONE
 #import "GCAppGlobal.h"
 #else
-#import "FITAppGlobal.h"
+
 #endif
 
 @implementation GCGarminReqBase
@@ -66,8 +66,9 @@
         return [GCGarminLoginSSORequest requestWithUser:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
                                                  andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]];
 #else
-        return [GCGarminLoginSSORequest requestWithUser:[FITAppGlobal currentLoginName]
-                                                 andPwd:[FITAppGlobal currentPassword]];
+        //FIXME:
+        return nil;//[GCGarminLoginSSORequest requestWithUser:[FITAppGlobal currentLoginName]
+        //                                         andPwd:[FITAppGlobal currentPassword]];
 
 #endif
     }

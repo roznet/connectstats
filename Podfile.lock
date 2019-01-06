@@ -1,5 +1,6 @@
 PODS:
   - Flurry-iOS-SDK/FlurrySDK (9.2.3)
+  - GenericJSON (1.1.0)
   - GoogleMaps (2.7.0):
     - GoogleMaps/Maps (= 2.7.0)
   - GoogleMaps/Base (2.7.0)
@@ -8,12 +9,18 @@ PODS:
 
 DEPENDENCIES:
   - Flurry-iOS-SDK/FlurrySDK
+  - GenericJSON (from `~/Development/public/generic-json-swift`)
   - GoogleMaps
+
+EXTERNAL SOURCES:
+  GenericJSON:
+    :path: ~/Development/public/generic-json-swift
 
 SPEC CHECKSUMS:
   Flurry-iOS-SDK: 2ea1973a6c9c6b3675765d73ea290b281f8cb084
+  GenericJSON: 2d654e6d578c2e3a6d2ed58f0b37bb5d0f8f9fae
   GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
 
-PODFILE CHECKSUM: 0b669fcd787ae27308d7511bdbfa1d116f3d4098
+PODFILE CHECKSUM: d6f594623dab018ffb836ea0eef74d51ed2228d4
 
 COCOAPODS: 1.4.0
