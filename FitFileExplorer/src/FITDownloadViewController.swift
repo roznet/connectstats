@@ -236,19 +236,15 @@ class FITDownloadViewController: NSViewController {
     }
     @IBAction func editUserName(_ sender: Any) {
         let entered_username = userName.stringValue
-
         keychain.set(entered_username, forKey: FITAppGlobal.ConfigParameters.loginName.rawValue)
-        
-        
         FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.loginName.rawValue, stringVal: entered_username)
     }
     
     @IBAction func editPassword(_ sender: Any) {
         let entered_password = password.stringValue
-        print( "\(keychain.allKeys())")
         keychain.set(entered_password, forKey: FITAppGlobal.ConfigParameters.password.rawValue)
+        print( "\(keychain.allKeys())")
         FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.password.rawValue, stringVal: entered_password)
-
     }
     
     func rebuildColumns(){

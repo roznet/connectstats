@@ -26,13 +26,66 @@
 
 
 import Foundation
+import GenericJSON
 
 class ActivitiesOrganizer {
+    
+    private var activityMap :[ActivityId:Activity]
     
     private(set) var activityList : [Activity]
     
     init() {
         activityList = []
+        activityMap  = [:]
+    }
+    
+    init?(json:JSON){
+        if let acts = json["activityList"]?.arrayValue {
+            var list : [Activity] = []
+            var map  : [ActivityId:Activity] = [:]
+            for one in acts {
+                if let info = one.objectValue,
+                    let act = Activity(json: info) {
+                    list.append(act)
+                    map[act.activityId] = act
+                }
+            }
+            self.activityMap = map
+            self.activityList = list
+        }else{
+            return nil
+        }
+    }
+    
+    func saveToJson() throws -> JSON {
+        let list : JSON = try JSON(activityList.map {
+            try $0.json()
+        })
+        return try JSON( ["activityList":list])
+    }
+    
+    func registerActivities(activities:[Activity]) -> Int {
+        var rv : Int = 0
+        
+        for activity in activities {
+            if let found = activityMap[activity.activityId] {
+                if( found.update(with: activity) ){
+                    rv += 1
+                }
+            }else{
+                activityList.append(activity)
+                activityMap[activity.activityId] = activity
+                rv += 1
+            }
+        }
+        
+        return rv
+    }
+    
+    private func reorder() {
+        activityList.sort {
+            $1.time < $0.time
+        }
     }
     
     

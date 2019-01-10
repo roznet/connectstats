@@ -32,23 +32,64 @@ typealias ActivityId = String
 
 class Activity {
     let activityId : ActivityId
-    //let activityType : GCActivityType
+    let activityType : GCActivityType
     let time : Date
     
+    private(set) var numbers : [String:GCNumberWithUnit]
+    private(set) var labels  : [String:String]
+    private(set) var dates   : [String:Date]
+    private(set) var coordinates : [String:CLLocationCoordinate2D]
+
     private var fitFilePath : URL? = nil
-    //private var interpret : GCGarminActivityInterpret
+
+    private var originalJson : [String:JSON]
     
-    private(set) var summary : [GCField:ActivityValue]
-    private(set) var json : JSON
-    
-    init(json:JSON) {
-        self.json = json
-        self.summary = [:]
-        self.activityId = json["activityId"]?.stringValue ?? ""
-        //self.interpret = GCGarminActivityInterpret(json, usingDTOUnit: false, with: FITAppGlobal.shared.activityTypes)
-        self.time = Date()
-        
-        
+    init?(json:[String:JSON]) {
+        if let aId = json["activityId"]?.floatValue {
+            self.activityId = "\(aId)"
+            self.originalJson = json
+            if let interp = GarminDataInterpreter(json: json) {
+                self.numbers = interp.numbers()
+                self.labels  = interp.labels()
+                self.dates   = interp.dates()
+                self.coordinates = interp.coordinates()
+                self.activityType = interp.activityType()
+                
+                self.time = self.dates["startDateGMT"] ?? Date()
+            }
+            else{
+                return nil
+            }
+        }else{
+            return nil
+        }
     }
     
+    func update(with:Activity) -> Bool {
+        var rv = false
+        
+        // can't update if different activityId
+        if self.activityId == with.activityId {
+            if( self.numbers != with.numbers){
+                rv = true
+                self.numbers = with.numbers
+            }
+            if self.labels != with.labels {
+                rv = true
+                self.labels = with.labels
+            }
+            if self.dates != with.dates {
+                rv = true
+                self.dates = with.dates
+            }
+            // CLCoordinate not Equatable, copy but don't report
+            self.coordinates = with.coordinates
+        }
+        return rv
+    }
+    
+    func json() throws -> JSON {
+        return try JSON(self.originalJson)
+    }
+
 }

@@ -31,7 +31,7 @@ import RZUtils
 class FITDownloadListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource {
 
     func list() -> FITGarminActivityListWrapper {
-        return FITAppGlobal.downloadManager().list
+        return FITGarminActivityListWrapper()
     }
     
     func numberOfRows(in tableView: NSTableView) -> Int {

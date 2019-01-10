@@ -26,18 +26,18 @@
 
 
 import Cocoa
+import GenericJSON
 
 class FITGarminDownloadManager: NSObject,RZChildObject {
     struct Notifications {
         static let garminDownloadChange = Notification.Name("garminDownloadChange")
     }
     
-    let list : FITGarminActivityListWrapper
     var loginSuccessful : Bool
     
     override init() {
         loginSuccessful = false
-        list = FITGarminActivityListWrapper()
+        
         super.init()
         
         //self.loadRawFiles()
@@ -48,16 +48,20 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
     
     
     func clear(){
-        self.list.clear()
+        
     }
     func loadFromFile() {
-        if( FITAppGlobal.currentLoginName().count > 0 ){
+        /*if( FITAppGlobal.currentLoginName().count > 0 ){
             list.load(fromJson: RZFileOrganizer.writeableFilePath(FITAppGlobal.currentLoginName()+".json"))
-        }
+        }*/
     }
     func saveToFile(){
         if( FITAppGlobal.currentLoginName().count > 0){
-            self.list.save(asJson: RZFileOrganizer.writeableFilePath(FITAppGlobal.currentLoginName()+".json"))
+            if let json = try? FITAppGlobal.shared.organizer.saveToJson() {
+                let fp = RZFileOrganizer.writeableFilePath(FITAppGlobal.currentLoginName()+".json")
+                //FIXME: save to file
+            }
+            
         }
     }
     
@@ -84,20 +88,26 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
         FITAppGlobal.web().addRequest(GarminRequestActivityList(start: 0))
     }
     
-    @objc func loadOneFile(filePath : String) -> UInt {
-        var rv :UInt = 0
+    @objc func loadOneFile(filePath : String) -> Int {
+        var rv :Int = 0
         
-        do {
-            let jsonData = try Data(contentsOf: URL(fileURLWithPath: filePath))
+        if let jsonData = try? Data(contentsOf: URL(fileURLWithPath: filePath)),
+            let json = try? JSONDecoder().decode(JSON.self, from: jsonData),
+            let alist = json["activityList"]?.arrayValue {
+            rv = alist.count
             
-            let json = try JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.allowFragments)
-            
-            if let jsonDict = json as? [String:Any],
-                let alist = jsonDict["activityList"] as? [[AnyHashable:Any]]{
-                rv = self.list.addJson(alist)
+            var activities : [Activity] = []
+            for one in alist {
+                if let info = one.objectValue, let act = Activity(json: info) {
+                    activities.append(act)
+                }
             }
-        }catch{
+            
         }
+        
+        
+        
+        
         return rv
     }
     
@@ -118,17 +128,18 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
         */
         NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.garminDownloadChange, object: self)
     }
-    
+
     func samples() -> [String:GCNumberWithUnit] {
         var fields : [String:GCNumberWithUnit] = [:]
+        /*
         for one in self.list {
             if let one = one as? FITGarminActivityWrapper {
                 one.summary.forEach { ( k,v) in fields[k] = v }
             }
-        }
+        }*/
         return fields
     }
-    
+ 
     func allFields() -> [String] {
         return Array(self.samples().keys)
     }

@@ -42,6 +42,7 @@ class FITAppGlobal {
     let worker : DispatchQueue
     let activityTypes : GCActivityTypes
     let downloadManager : FITGarminDownloadManager
+    let organizer : ActivitiesOrganizer
     
     private init() {
         settings = [:]
@@ -57,6 +58,7 @@ class FITAppGlobal {
         activityTypes = GCActivityType.activityTypes()
         downloadManager = FITGarminDownloadManager()
         
+        organizer = ActivitiesOrganizer()
         let cache = GCFieldCache(db: nil, andLanguage: nil)
         GCField.setFieldCache(cache)
         GCFields.setFieldCache(cache)

@@ -33,7 +33,7 @@ class GarminRequestActivityList: GarminRequest {
     
     let currentIndex : UInt
     var lastFoundDate : Date
-    var parseCount : UInt = 0
+    var parseCount : Int = 0
     
     init(start : UInt) {
         currentIndex = start
