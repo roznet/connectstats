@@ -79,44 +79,41 @@ class FITDownloadViewController: NSViewController {
     func exportByFile() {
         var units : [String:GCUnit] = [:]
         
-        for one  in self.dataSource.list() {
-            if let activity = one as? FITGarminActivityWrapper {
-                //var columns : [GCField:[String]] = [:]
+        for activity  in self.dataSource.list() {
+            
+            if let path =  activity.fitFilePath,
                 
-                if let path =  activity.fitFilePath,
+                let fitFile = RZFitFile(file: path) {
+                let interpret = FITFitFileInterpret(fitFile: fitFile)
+                let cols = interpret.columnDataSeries(messageType: FIT_MESG_NUM_RECORD)
+                
+                for (key,values) in cols.values {
+                    var dcols =  [ ["activityId","time",key,"uom"].joined(separator: ",") ]
                     
-                    let fitFile = RZFitFile(file: URL(fileURLWithPath:path)) {
-                    let interpret = FITFitFileInterpret(fitFile: fitFile)
-                    let cols = interpret.columnDataSeries(messageType: FIT_MESG_NUM_RECORD)
-                    
-                    for (key,values) in cols.values {
-                        var dcols =  [ ["activityId","time",key,"uom"].joined(separator: ",") ]
-                        
-                        for val in values {
-                            let row = [activity.activityId,val.time.formatAsRFC3339(),"\(val.value.value)",val.value.unit.key]
-                            dcols.append(row.joined(separator: ","))
-                        }
-                        
-                        if( units[ key ] == nil){
-                            if let first = values.first?.value {
-                                units[key] = first.unit
-                            }
-                        }
-                        let fn = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath("\(key)_\(activity.activityId).csv"))
-                        do {
-                            try dcols.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
-                        }catch { }
+                    for val in values {
+                        let row = [activity.activityId,val.time.formatAsRFC3339(),"\(val.value.value)",val.value.unit.key]
+                        dcols.append(row.joined(separator: ","))
                     }
                     
-                    
-                    let fn = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath("position_" + activity.activityId + "_" + activity.activityType + ".csv"))
-                    do {
-                        let grows = cols.gps.map { tup in
-                            [ activity.activityId, tup.time.formatAsRFC3339(), "\(tup.location.latitude)", "\(tup.location.longitude)"].joined( separator: "," )
+                    if( units[ key ] == nil){
+                        if let first = values.first?.value {
+                            units[key] = first.unit
                         }
-                        try grows.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
+                    }
+                    let fn = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath("\(key)_\(activity.activityId).csv"))
+                    do {
+                        try dcols.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
                     }catch { }
                 }
+                
+                
+                let fn = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath("position_" + activity.activityId + "_" + activity.activityTypeAsString + ".csv"))
+                do {
+                    let grows = cols.gps.map { tup in
+                        [ activity.activityId, tup.time.formatAsRFC3339(), "\(tup.location.latitude)", "\(tup.location.longitude)"].joined( separator: "," )
+                    }
+                    try grows.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
+                }catch { }
             }
         }
     }
@@ -124,13 +121,13 @@ class FITDownloadViewController: NSViewController {
     func exportSingleCsv() {
         var units : [String:GCUnit] = [:]
         
-        for one  in self.dataSource.list() {
-            if let activity = one as? FITGarminActivityWrapper {
-                let val = activity.summary
+        for activity  in self.dataSource.list() {
+            
+                let val = activity.numbers
                 for (key,nu) in val {
                     units[key] = nu.unit
                 }
-            }
+            
         }
 
         
@@ -148,26 +145,26 @@ class FITDownloadViewController: NSViewController {
         csv += line.joined(separator: ",")
         csv += "\n"
         
-        for one  in self.dataSource.list() {
-            if let activity = one as? FITGarminActivityWrapper {
-                line = []
-                let val = activity.summary
-                for key in cols {
-                    if key == "activityId" {
-                        line.append(activity.activityId)
-                    }else if key == "activityType" {
-                        line.append(activity.activityType)
-                    }else if let nu = val[key], let u = units[key] {
-                        let dval = nu.convert(to: u).value
-                        line.append("\(dval)")
-                    }else{
-                        line.append("")
-                    }
+        for activity  in self.dataSource.list() {
+            
+            line = []
+            let val = activity.numbers
+            for key in cols {
+                if key == "activityId" {
+                    line.append(activity.activityId)
+                }else if key == "activityType" {
+                    line.append(activity.activityTypeAsString)
+                }else if let nu = val[key], let u = units[key] {
+                    let dval = nu.convert(to: u).value
+                    line.append("\(dval)")
+                }else{
+                    line.append("")
                 }
-                
-                csv += line.joined( separator: ",")
-                csv += "\n"
             }
+            
+            csv += line.joined( separator: ",")
+            csv += "\n"
+            
         }
         
         let fn = RZFileOrganizer.writeableFilePath("list.csv")
@@ -190,7 +187,7 @@ class FITDownloadViewController: NSViewController {
     @IBAction func downloadFITFile(_ sender: Any) {
         let row = self.activityTable.selectedRow
         if (row > -1) {
-            let act = dataSource.list()[UInt(row)].activityId
+            let act = dataSource.list()[row].activityId
             
             print("Download \(row) \(act)")
         }else{

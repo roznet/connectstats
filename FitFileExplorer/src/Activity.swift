@@ -34,13 +34,18 @@ class Activity {
     let activityId : ActivityId
     let activityType : GCActivityType
     let time : Date
-    
+    var activityTypeAsString : String {
+        return self.activityType.topSubRoot().key
+    }
     private(set) var numbers : [String:GCNumberWithUnit]
     private(set) var labels  : [String:String]
     private(set) var dates   : [String:Date]
     private(set) var coordinates : [String:CLLocationCoordinate2D]
 
-    private var fitFilePath : URL? = nil
+    var fitFilePath : URL? = nil
+    var downloaded : Bool {
+        return fitFilePath != nil
+    }
 
     private var originalJson : [String:JSON]
     

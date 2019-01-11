@@ -29,7 +29,6 @@
 		42018EA018F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42018E9F18F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m */; };
 		4201D4CD19D8BC4800059879 /* GCFitBitWeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4201D4CC19D8BC4800059879 /* GCFitBitWeight.m */; };
 		4201D4CE19D8BC4800059879 /* GCFitBitWeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4201D4CC19D8BC4800059879 /* GCFitBitWeight.m */; };
-		4202AE2C21A766BD00D8D696 /* FITGarminActivityListWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4202AE2B21A766BD00D8D696 /* FITGarminActivityListWrapper.swift */; };
 		4202AE2E21A8A20800D8D696 /* FITGarminDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4202AE2121A72D9600D8D696 /* FITGarminDownloadManager.swift */; };
 		420621F81D3AD48D0013A45E /* RZUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; };
 		42091CFF1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42091CFE1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m */; };
@@ -718,7 +717,6 @@
 		428DD4A1219A1D0A006DF5B5 /* GCWebConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF79C15FB412C007A88FA /* GCWebConnect.m */; };
 		428DD4B4219A3056006DF5B5 /* FITDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428DD4B3219A3056006DF5B5 /* FITDownloadViewController.swift */; };
 		428DD4BA219A3BA2006DF5B5 /* GCGarminActivityInterpret.m in Sources */ = {isa = PBXBuildFile; fileRef = 428DD4B9219A3BA2006DF5B5 /* GCGarminActivityInterpret.m */; };
-		428DD4BD219AC976006DF5B5 /* FITGarminActivityWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 428DD4BC219AC976006DF5B5 /* FITGarminActivityWrapper.m */; };
 		428EBF5B186A2A2C0057021D /* GCDerivedOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 428EBF5A186A2A2C0057021D /* GCDerivedOrganizer.m */; };
 		428FF70E15F36888007A88FA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428FF70D15F36888007A88FA /* UIKit.framework */; };
 		428FF71015F36888007A88FA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428FF70F15F36888007A88FA /* Foundation.framework */; };
@@ -742,7 +740,6 @@
 		429190A821E2423500E0B114 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429190A721E2423500E0B114 /* Activity.swift */; };
 		429190AA21E2431600E0B114 /* ActivityValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429190A921E2431600E0B114 /* ActivityValue.swift */; };
 		429190AC21E24DDD00E0B114 /* GarminRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429190AB21E24DDD00E0B114 /* GarminRequest.swift */; };
-		429190AD21E24E1100E0B114 /* FITGarminActivityWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217F53621AC9B7A00C848A3 /* FITGarminActivityWrapper.swift */; };
 		4292B6CC1B1C66B400C7C05D /* GCHealthKitDayDetailRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4292B6CB1B1C66B400C7C05D /* GCHealthKitDayDetailRequest.m */; };
 		4292B6CD1B1C66B400C7C05D /* GCHealthKitDayDetailRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4292B6CB1B1C66B400C7C05D /* GCHealthKitDayDetailRequest.m */; };
 		42959CCD18D4920900C0B841 /* GCStravaActivityListParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959CCC18D4920900C0B841 /* GCStravaActivityListParser.m */; };
@@ -797,7 +794,6 @@
 		42A3AA3D1D44EBB5004FBFD0 /* GCStravaAthlete.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA301D43EE85004FBFD0 /* GCStravaAthlete.m */; };
 		42A3AA3E1D44EBB5004FBFD0 /* GCStravaSegmentEfforts.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA371D43F01A004FBFD0 /* GCStravaSegmentEfforts.m */; };
 		42A3AA3F1D44EBB5004FBFD0 /* GCStravaSegmentEffortStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA3A1D43F51C004FBFD0 /* GCStravaSegmentEffortStream.m */; };
-		42A600C321A16ED800160FE9 /* FITGarminActivityListWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A600C221A16ED800160FE9 /* FITGarminActivityListWrapper.m */; };
 		42A66BD1160D000D00DA29A5 /* GCViewConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A66BD0160D000D00DA29A5 /* GCViewConfig.m */; };
 		42A66BDB160D0A0800DA29A5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A66BDA160D0A0800DA29A5 /* QuartzCore.framework */; };
 		42A672C81DECC4EA00BE8E26 /* FITSelectionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A672C71DECC4EA00BE8E26 /* FITSelectionContext.swift */; };
@@ -10447,11 +10443,9 @@
 				421418431CF04FB800642F37 /* FITFitFieldValue.mm in Sources */,
 				42769BDF1DD71F58000390F1 /* FITFitMessageFields.swift in Sources */,
 				42247AC921E2683C005148F9 /* GarminDataInterpreter.swift in Sources */,
-				429190AD21E24E1100E0B114 /* FITGarminActivityWrapper.swift in Sources */,
 				421418481CF054B300642F37 /* FITFitEnumMap.mm in Sources */,
 				428DD4B4219A3056006DF5B5 /* FITDownloadViewController.swift in Sources */,
 				429DD650219E3CE2004FD716 /* GCGarminRequest.m in Sources */,
-				428DD4BD219AC976006DF5B5 /* FITGarminActivityWrapper.m in Sources */,
 				423B462F1CDFE03400743D79 /* GCUnit+FIT.m in Sources */,
 				429190AA21E2431600E0B114 /* ActivityValue.swift in Sources */,
 				42C0589921D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */,
@@ -10489,7 +10483,6 @@
 				422F284120557DD000187478 /* GCField+Convert.m in Sources */,
 				429DD64F219E39FC004FD716 /* GCGarminLoginSSORequest.m in Sources */,
 				423E8F6321DBE06900FB795B /* FITDetailListDataSource.swift in Sources */,
-				42A600C321A16ED800160FE9 /* FITGarminActivityListWrapper.m in Sources */,
 				42F4E5131DE08D55001AB244 /* GCMapRouteLogicPointHolder.m in Sources */,
 				429190A621E2422100E0B114 /* ActivitiesOrganizer.swift in Sources */,
 				42F4E5101DE08D49001AB244 /* GCMapGradientPathOverlayView.m in Sources */,
@@ -10523,7 +10516,6 @@
 				4248ED9B1DCFFB5600254216 /* GCFieldCache.m in Sources */,
 				42F3FB3F1DD7879B0042A9B1 /* FITFitFile.swift in Sources */,
 				4217846F21CE9FBA006FE90A /* rzfit_convert_auto.swift in Sources */,
-				4202AE2C21A766BD00D8D696 /* FITGarminActivityListWrapper.swift in Sources */,
 				42DCEF831E181CF700F66AF1 /* FITFitFieldsStatistics.swift in Sources */,
 				424F1A7B21E20477009DD368 /* FITAppGlobal.swift in Sources */,
 			);

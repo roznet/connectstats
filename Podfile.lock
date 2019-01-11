@@ -18,7 +18,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   GenericJSON:
-    :commit: 99e62189ab9758a77fb03e88b5dbb43332d1ab53
+    :commit: 7f8830fd4a80e21e468443b1ea574d9fef235038
     :git: https://github.com/roznet/generic-json-swift.git
 
 SPEC CHECKSUMS:

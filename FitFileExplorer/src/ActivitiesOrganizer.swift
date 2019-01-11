@@ -40,6 +40,15 @@ class ActivitiesOrganizer {
     }
     
     init?(json:JSON){
+        activityList = []
+        activityMap  = [:]
+        if( !self.loadFromJson(json: json) ){
+            return nil
+        }
+    }
+    
+    func loadFromJson(json:JSON) -> Bool{
+        var rv = false
         if let acts = json["activityList"]?.arrayValue {
             var list : [Activity] = []
             var map  : [ActivityId:Activity] = [:]
@@ -52,11 +61,10 @@ class ActivitiesOrganizer {
             }
             self.activityMap = map
             self.activityList = list
-        }else{
-            return nil
+            rv = true
         }
+        return rv
     }
-    
     func saveToJson() throws -> JSON {
         let list : JSON = try JSON(activityList.map {
             try $0.json()

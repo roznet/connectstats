@@ -51,15 +51,19 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
         
     }
     func loadFromFile() {
-        /*if( FITAppGlobal.currentLoginName().count > 0 ){
-            list.load(fromJson: RZFileOrganizer.writeableFilePath(FITAppGlobal.currentLoginName()+".json"))
-        }*/
+        
+        let fp = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(FITAppGlobal.currentLoginName()+".json"))
+        if let jsonData = try? Data(contentsOf: fp),
+            let json = try? JSONDecoder().decode(JSON.self, from: jsonData){
+            _ = FITAppGlobal.shared.organizer.loadFromJson(json: json)
+        }
     }
     func saveToFile(){
         if( FITAppGlobal.currentLoginName().count > 0){
-            if let json = try? FITAppGlobal.shared.organizer.saveToJson() {
-                let fp = RZFileOrganizer.writeableFilePath(FITAppGlobal.currentLoginName()+".json")
-                //FIXME: save to file
+            if let json = try? FITAppGlobal.shared.organizer.saveToJson(),
+                let data = try? JSONEncoder().encode(json){
+                let fp = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(FITAppGlobal.currentLoginName()+".json"))
+                try? data.write(to: fp)
             }
             
         }
