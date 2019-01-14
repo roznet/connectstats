@@ -162,6 +162,7 @@
 		422BFD4221DF54B400291D71 /* rzfit_convert_auto.m in Sources */ = {isa = PBXBuildFile; fileRef = 422BFD3821DF54B400291D71 /* rzfit_convert_auto.m */; };
 		422BFD4421E00D1900291D71 /* RZExternalUniversal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C82A8C201FBEDD00A23815 /* RZExternalUniversal.framework */; };
 		422BFD4521E00D1900291D71 /* RZExternalUniversal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42C82A8C201FBEDD00A23815 /* RZExternalUniversal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		422BFD5A21E94EC400291D71 /* last_modern_search_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 42DC6553209DE2640075A5CE /* last_modern_search_0.json */; };
 		422C70AE1642B677003779E0 /* GCHistoryAggregatedActivityStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 422C70AD1642B677003779E0 /* GCHistoryAggregatedActivityStats.m */; };
 		422CC8761E6ACA1700195414 /* GCUnit+FIT.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B462E1CDFE03400743D79 /* GCUnit+FIT.m */; };
 		422CC8771E6ACA1700195414 /* FITFitEnumMap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418471CF054B300642F37 /* FITFitEnumMap.mm */; };
@@ -8761,6 +8762,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4248ED9E1DCFFF6900254216 /* fields.db in Resources */,
+				422BFD5A21E94EC400291D71 /* last_modern_search_0.json in Resources */,
 				4253B4651CD49F7E00437E6A /* Assets.xcassets in Resources */,
 				4253B4681CD49F7E00437E6A /* Main.storyboard in Resources */,
 			);

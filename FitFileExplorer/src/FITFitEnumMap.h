@@ -35,12 +35,12 @@
  @param key Value in the enum
  @return NSString description for mapping key, or key as a string if not found
  */
-+(NSString*)defsFor:(NSString*)what andKey:(NSNumber*)key;
++(nonnull NSString*)defsFor:(nonnull NSString*)what andKey:(nonnull NSNumber*)key;
 
 /**
  activity Field or nil if not found. If activityType is not nil, will
  try to adapt to the activity type fields like cadence
  */
-+(GCField*)activityFieldFromFitField:(NSString*)fitfield forActivityType:(NSString*)activityType;
++(nullable GCField*)activityFieldFromFitField:(nonnull NSString*)fitfield forActivityType:(nullable NSString*)activityType;
 
 @end

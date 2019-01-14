@@ -135,12 +135,11 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
 
     func samples() -> [String:GCNumberWithUnit] {
         var fields : [String:GCNumberWithUnit] = [:]
-        /*
-        for one in self.list {
-            if let one = one as? FITGarminActivityWrapper {
-                one.summary.forEach { ( k,v) in fields[k] = v }
-            }
-        }*/
+        let list = FITAppGlobal.shared.organizer.activityList
+        
+        for one in list {
+            one.numbers.forEach { ( k,v) in fields[k] = v }
+        }
         return fields
     }
  

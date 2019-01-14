@@ -58,8 +58,16 @@ class FITFitValueStatistics: NSObject {
         }else if( fieldKey.hasPrefix("max") || fieldKey.hasPrefix("avg") || fieldKey.hasPrefix("min")){
             return [StatsType.avg,StatsType.count,StatsType.max,StatsType.min]
         }else{
-            return [StatsType.count]
+            if let field = FITFitEnumMap.activityField(fromFitField: fieldKey, forActivityType: nil){
+                if field.isWeightedAverage() || field.isMax() || field.isMin() || field.validForGraph(){
+                    return [StatsType.avg,StatsType.count,StatsType.max,StatsType.min]
+                }else if field.canSum() {
+                    return [StatsType.total,StatsType.count]
+                }
+            }
         }
+        // fall back
+        return [StatsType.count]
     }
     
     func add(fieldValue: RZFitFieldValue, weight : FITFitStatisticsWeight){
