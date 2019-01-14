@@ -29,6 +29,7 @@ import Foundation
 import GenericJSON
 
 class ActivitiesOrganizer {
+    typealias ParseResult = (total:Int, updated:Int)
     
     private var activityMap :[ActivityId:Activity]
     
@@ -42,37 +43,93 @@ class ActivitiesOrganizer {
     init?(json:JSON){
         activityList = []
         activityMap  = [:]
-        if( !self.loadFromJson(json: json) ){
+        let result = self.load(json: json)
+        if( result.total == 0 ){
             return nil
         }
     }
     
-    func loadFromJson(json:JSON) -> Bool{
-        var rv = false
+    convenience init?(url: URL){
+        if let jsonData = try? Data(contentsOf: url),
+            let json = try? JSONDecoder().decode(JSON.self, from: jsonData){
+            self.init(json: json)
+        }else{
+            return nil
+        }
+    }
+    
+    func load(url: URL) -> ParseResult {
+        if let jsonData = try? Data(contentsOf: url),
+            let json = try? JSONDecoder().decode(JSON.self, from: jsonData){
+            return self.load(json: json)
+        }
+        return (0,0)
+    }
+    func load(json:JSON) -> ParseResult {
+        var rv : ParseResult = (0,0)
         if let acts = json["activityList"]?.arrayValue {
-            var list : [Activity] = []
-            var map  : [ActivityId:Activity] = [:]
+            var list : [Activity] = self.activityList
+            var map  : [ActivityId:Activity] = self.activityMap
             for one in acts {
+                
                 if let info = one.objectValue,
                     let act = Activity(json: info) {
-                    list.append(act)
-                    map[act.activityId] = act
+                    rv.total += 1
+                    
+                    if let existing = map[act.activityId] {
+                        if( existing.update(with:act) ){
+                            rv.updated += 1
+                        }
+                    }else{
+                        list.append(act)
+                        map[act.activityId] = act
+                        rv.updated += 1
+                    }
                 }
             }
-            self.activityMap = map
-            self.activityList = list
-            rv = true
+            if( rv.updated > 0 ){
+                self.activityMap = map
+                self.activityList = list.sorted {
+                    $1.time < $0.time
+                }
+            }
         }
         return rv
     }
-    func saveToJson() throws -> JSON {
+    func save(url : URL) throws {
+        if let json = try? self.json(),
+            let data = try? JSONEncoder().encode(json) {
+            try data.write(to: url)
+        }
+    }
+    func json() throws -> JSON {
         let list : JSON = try JSON(activityList.map {
             try $0.json()
         })
         return try JSON( ["activityList":list])
     }
     
-    func registerActivities(activities:[Activity]) -> Int {
+    func remove(activityIds:[ActivityId]) -> Int {
+        let filtered = self.activityList.filter{
+            !activityIds.contains($0.activityId)
+        }
+        let rv = self.activityList.count - filtered.count
+        if( rv != 0){
+            self.activityList = filtered
+            for aid in activityIds {
+                self.activityMap.removeValue(forKey: aid)
+            }
+        }
+        return rv
+    }
+    func remove(activities:[Activity]) -> Int {
+        let ids = activities.map {
+            $0.activityId
+        }
+        return self.remove(activityIds:ids)
+    }
+    
+    func add(activities:[Activity]) -> Int {
         var rv : Int = 0
         
         for activity in activities {

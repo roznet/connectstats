@@ -30,7 +30,7 @@ import GenericJSON
 import RZUtils
 
 class GarminDataInterpreter {
-    private let json : [String:JSON]
+    let json : [String:JSON]
     private var unkown : [String:JSON] = [:]
     
     let dateRegexp : NSRegularExpression

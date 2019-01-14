@@ -50,16 +50,16 @@ class Activity {
     private var originalJson : [String:JSON]
     
     init?(json:[String:JSON]) {
-        if let aId = json["activityId"]?.floatValue {
+        if let aId = json["activityId"]?.intValue {
             self.activityId = "\(aId)"
-            self.originalJson = json
+            
             if let interp = GarminDataInterpreter(json: json) {
                 self.numbers = interp.numbers()
                 self.labels  = interp.labels()
                 self.dates   = interp.dates()
                 self.coordinates = interp.coordinates()
                 self.activityType = interp.activityType()
-                
+                self.originalJson = interp.json
                 self.time = self.dates["startDateGMT"] ?? Date()
             }
             else{

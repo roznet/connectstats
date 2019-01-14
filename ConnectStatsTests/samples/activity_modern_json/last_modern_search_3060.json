@@ -1,0 +1,22 @@
+{
+  "activityList" : [],
+  "filter" : {
+    "userProfileId" : 45902887,
+    "groupProfileId" : null,
+    "includedPrivacyList" : null,
+    "excludeUntitled" : false,
+    "favoritesOnly" : null,
+    "subscribeeIds" : null,
+    "subscribersOnly" : false,
+    "excludeChildren" : true,
+    "excludeParent" : null,
+    "activityTypeIdList" : null,
+    "startTimeGMT" : null,
+    "endTimeGMT" : null
+  },
+  "pagination" : {
+    "start" : 320,
+    "limit" : 20
+  },
+  "requestorRelationship" : "SELF"
+}
