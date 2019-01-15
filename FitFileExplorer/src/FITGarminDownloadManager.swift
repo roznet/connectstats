@@ -116,30 +116,29 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
     }
     
     func loadRawFiles() {
-        let files = RZFileOrganizer.writeableFiles { (s) -> Bool in
-            s.hasPrefix("last_modern_search")
+        FITAppGlobal.worker().async {
+            let files = RZFileOrganizer.writeableFiles { (s) -> Bool in
+                s.hasPrefix("last_modern_search")
+            }
+            var count = 0
+            
+            for fn in files {
+                _ = FITAppGlobal.shared.organizer.load(url: URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(fn)))
+                count+=1
+                if( count == 5){
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.garminDownloadChange, object: self)
+                    }
+                }
+            }
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.garminDownloadChange, object: self)
+            }
         }
-        
-        for fn in files {
-            _ = self.loadOneFile(filePath: RZFileOrganizer.writeableFilePath(fn))
-        }
-        //_ = self.list.buildColumnView()
-        /*
-        if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("row.db")){
-            db.open()
-            self.list.saveRowView(db: db)
-        }
-        */
-        NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.garminDownloadChange, object: self)
     }
 
     func samples() -> [String:GCNumberWithUnit] {
-        var fields : [String:GCNumberWithUnit] = [:]
-        let list = FITAppGlobal.shared.organizer.activityList
-        
-        for one in list {
-            one.numbers.forEach { ( k,v) in fields[k] = v }
-        }
+        let fields  = FITAppGlobal.shared.organizer.sample().numbers
         return fields
     }
  

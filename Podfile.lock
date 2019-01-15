@@ -18,7 +18,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   GenericJSON:
-    :commit: 7f8830fd4a80e21e468443b1ea574d9fef235038
+    :commit: 2ba2e2e0a586aa89b15b32986f801ad29a6fb68e
     :git: https://github.com/roznet/generic-json-swift.git
 
 SPEC CHECKSUMS:
@@ -26,6 +26,6 @@ SPEC CHECKSUMS:
   GenericJSON: ed952352821dae43f2e7d928512f3529424f576a
   GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
 
-PODFILE CHECKSUM: bd0b3d6f14cbe2f00fa0ae25aee174db0e0e13ab
+PODFILE CHECKSUM: 48ef5b2d180b4b09cdbd8bdeb6d8edfe2b9c4af5
 
 COCOAPODS: 1.4.0

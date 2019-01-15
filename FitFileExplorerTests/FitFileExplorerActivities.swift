@@ -67,6 +67,33 @@ class FitFileExplorerActivities: XCTestCase {
         }
     }
 
+    func testLoadSaveBig() {
+        let organizer = ActivitiesOrganizer()
+
+        if let big = RZFileOrganizer.writeableFilePathIfExists("big.json") {
+            print( "Load single" )
+            _ = organizer.load(url: URL(fileURLWithPath: big))
+        }else{
+            print( "Load many" )
+            let files = RZFileOrganizer.writeableFiles(matching: { (s) -> Bool in s.hasPrefix("last_modern_search") } )
+            
+            
+            
+            for fn in files {
+                let url = URL( fileURLWithPath: RZFileOrganizer.writeableFilePath(fn) )
+                _ = organizer.load(url: url)
+            }
+            do {
+                try organizer.save(url: URL( fileURLWithPath: RZFileOrganizer.writeableFilePath("big.json")))
+            }catch{
+                print("error")
+            }
+        }
+        
+        let sample = organizer.sample()
+        print( "\(sample.numbers.keys)")
+    }
+    
     func testLoadManyJson() {
         
         let files = RZFileOrganizer.bundleFiles(matching: { (s) -> Bool in s.hasPrefix("last_modern_search") }, for: type(of:self))

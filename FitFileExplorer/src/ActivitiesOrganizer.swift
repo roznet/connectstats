@@ -153,5 +153,12 @@ class ActivitiesOrganizer {
         }
     }
     
+    func sample() -> Activity {
+        let rv = Activity()
+        for act in self.activityList {
+            rv.merge(with: act)
+        }
+        return rv
+    }
     
 }

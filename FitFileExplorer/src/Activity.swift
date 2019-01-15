@@ -49,6 +49,17 @@ class Activity {
 
     private var originalJson : [String:JSON]
     
+    init() {
+        self.activityId = "__sample__"
+        self.activityType = GCActivityType.all()
+        self.numbers = [:]
+        self.labels = [:]
+        self.dates = [:]
+        self.coordinates = [:]
+        self.time = Date()
+        self.originalJson = [:]
+    }
+    
     init?(json:[String:JSON]) {
         if let aId = json["activityId"]?.intValue {
             self.activityId = "\(aId)"
@@ -96,5 +107,13 @@ class Activity {
     func json() throws -> JSON {
         return try JSON(self.originalJson)
     }
-
+    
+    func merge(with:Activity) {
+        self.fitFilePath = nil
+        self.numbers.merge(with.numbers) { (_,new) in new }
+        self.labels.merge(with.labels) { (_,new) in new }
+        self.dates.merge(with.dates) { (_,new) in new }
+        self.coordinates.merge(with.coordinates) { (_,new) in new }
+        self.originalJson = [:]
+    }
 }
