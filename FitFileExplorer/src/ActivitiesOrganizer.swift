@@ -161,4 +161,12 @@ class ActivitiesOrganizer {
         return rv
     }
     
+    func lastDate() -> Date {
+        if let latest = self.activityList.last {
+            return latest.time
+        }else{
+            return Date()
+        }
+    }
+    
 }

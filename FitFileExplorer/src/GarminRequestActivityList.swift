@@ -84,7 +84,8 @@ class GarminRequestActivityList: GarminRequest {
             self.status = GCWebStatus.OK
             self.delegate.loginSuccess(gcWebService.garmin)
             self.parseCount = FITAppGlobal.downloadManager().loadOneFile(filePath: path)
-            if self.parseCount == GarminRequestActivityList.kActivityRequestCount {
+            if self.parseCount > 0 {
+                self.lastFoundDate = FITAppGlobal.shared.organizer.lastDate()
                 self.nextReq = GarminRequestActivityList(nextFrom: self)
             }
         }

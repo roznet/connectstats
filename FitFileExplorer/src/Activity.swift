@@ -71,7 +71,13 @@ class Activity {
                 self.coordinates = interp.coordinates()
                 self.activityType = interp.activityType()
                 self.originalJson = interp.json
-                self.time = self.dates["startDateGMT"] ?? Date()
+                if let found =  self.dates["startTimeGMT"] {
+                    self.time = found
+                }else if let found = self.dates["startDateGMT"] {
+                    self.time = found
+                }else{
+                    self.time = Date()
+                }
             }
             else{
                 return nil

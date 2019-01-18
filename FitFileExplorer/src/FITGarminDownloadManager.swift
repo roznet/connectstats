@@ -93,26 +93,10 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
     }
     
     @objc func loadOneFile(filePath : String) -> Int {
-        var rv :Int = 0
         
-        if let jsonData = try? Data(contentsOf: URL(fileURLWithPath: filePath)),
-            let json = try? JSONDecoder().decode(JSON.self, from: jsonData),
-            let alist = json["activityList"]?.arrayValue {
-            rv = alist.count
-            
-            var activities : [Activity] = []
-            for one in alist {
-                if let info = one.objectValue, let act = Activity(json: info) {
-                    activities.append(act)
-                }
-            }
-            
-        }
+        let res = FITAppGlobal.shared.organizer.load(url: URL(fileURLWithPath: filePath))
         
-        
-        
-        
-        return rv
+        return res.updated
     }
     
     func loadRawFiles() {

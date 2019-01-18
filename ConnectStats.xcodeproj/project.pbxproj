@@ -907,6 +907,7 @@
 		42AB681D16E2913300C633BD /* GCActivityTrackGraphOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB681C16E2913300C633BD /* GCActivityTrackGraphOptionsViewController.m */; };
 		42ACFE9518C0931F00BF27A5 /* GCGarminLoginDirectRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ACFE9418C0931F00BF27A5 /* GCGarminLoginDirectRequest.m */; };
 		42ACFE9818C099AB00BF27A5 /* GCGarminLoginSSORequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ACFE9718C099AB00BF27A5 /* GCGarminLoginSSORequest.m */; };
+		42ADFAF621F2834F007BC683 /* GarminRequestFitFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ADFAF521F2834F007BC683 /* GarminRequestFitFile.swift */; };
 		42AE24621DF2E556002B48D9 /* FITSelectionContextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AE24611DF2E556002B48D9 /* FITSelectionContextViewController.swift */; };
 		42AEFEC81DA057F600D7DA6D /* 1378220136.is.run in Resources */ = {isa = PBXBuildFile; fileRef = 42AEFEB31DA057F500D7DA6D /* 1378220136.is.run */; };
 		42AEFEC91DA057F600D7DA6D /* 1378220136.is.strava.724716557 in Resources */ = {isa = PBXBuildFile; fileRef = 42AEFEB41DA057F500D7DA6D /* 1378220136.is.strava.724716557 */; };
@@ -3422,6 +3423,7 @@
 		42ACFE9418C0931F00BF27A5 /* GCGarminLoginDirectRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminLoginDirectRequest.m; path = src/GCGarminLoginDirectRequest.m; sourceTree = "<group>"; };
 		42ACFE9618C099AB00BF27A5 /* GCGarminLoginSSORequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminLoginSSORequest.h; path = src/GCGarminLoginSSORequest.h; sourceTree = "<group>"; };
 		42ACFE9718C099AB00BF27A5 /* GCGarminLoginSSORequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCGarminLoginSSORequest.m; path = src/GCGarminLoginSSORequest.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		42ADFAF521F2834F007BC683 /* GarminRequestFitFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GarminRequestFitFile.swift; path = src/GarminRequestFitFile.swift; sourceTree = "<group>"; };
 		42AE24611DF2E556002B48D9 /* FITSelectionContextViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITSelectionContextViewController.swift; path = src/FITSelectionContextViewController.swift; sourceTree = "<group>"; };
 		42AEFEB31DA057F500D7DA6D /* 1378220136.is.run */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 1378220136.is.run; sourceTree = "<group>"; };
 		42AEFEB41DA057F500D7DA6D /* 1378220136.is.strava.724716557 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 1378220136.is.strava.724716557; sourceTree = "<group>"; };
@@ -6125,6 +6127,7 @@
 				4202AE2121A72D9600D8D696 /* FITGarminDownloadManager.swift */,
 				424053BA21E12B8E00375795 /* GarminRequestActivityList.swift */,
 				429190AB21E24DDD00E0B114 /* GarminRequest.swift */,
+				42ADFAF521F2834F007BC683 /* GarminRequestFitFile.swift */,
 			);
 			name = Garmin;
 			sourceTree = "<group>";
@@ -10461,6 +10464,7 @@
 				423EF01921D2A044005C2605 /* RZFitFileExtensions.swift in Sources */,
 				42BFC2321DCE2FBC00EAD40E /* FITDetailTableViewController.swift in Sources */,
 				4217846E21CE9FBA006FE90A /* RZFitMessage.swift in Sources */,
+				42ADFAF621F2834F007BC683 /* GarminRequestFitFile.swift in Sources */,
 				42F3FB3D1DD7876F0042A9B1 /* FITFitMessage.swift in Sources */,
 				42F4E5091DE08C26001AB244 /* FITMapViewController.swift in Sources */,
 				4273DB7321A1B80B00C09D68 /* FITDownloadListDataSource.swift in Sources */,

@@ -42,6 +42,15 @@ class FITDownloadListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSou
         return [ "activityId", "activityType", "time", "downloaded" ]
     }
     
+    func statusString() -> String {
+        let count = self.list().count
+        if count > 0 {
+            return "\(count) activities"
+        }else{
+            return "Empty"
+        }
+    }
+    
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cellView =  tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DownloadCellView"), owner: self)
         let to_display = self.list()[row]

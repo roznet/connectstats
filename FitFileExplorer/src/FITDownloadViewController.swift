@@ -53,7 +53,9 @@ class FITDownloadViewController: NSViewController {
     @IBOutlet weak var password: NSSecureTextField!
     
     @IBOutlet weak var activityTable: NSTableView!
-
+    @IBOutlet weak var rightStatus: NSTextField!
+    @IBOutlet weak var leftStatus: NSTextField!
+    
     var dataSource = FITDownloadListDataSource()
     
     @IBAction func refresh(_ sender: Any) {
@@ -66,6 +68,7 @@ class FITDownloadViewController: NSViewController {
         DispatchQueue.main.async {
             self.rebuildColumns()
             self.activityTable.reloadData()
+            self.updateStatus()
         }
     }
         
@@ -190,6 +193,9 @@ class FITDownloadViewController: NSViewController {
             let act = dataSource.list()[row].activityId
             
             print("Download \(row) \(act)")
+            
+            let req = GarminRequestFitFile(activityId: act)
+            FITAppGlobal.web().addRequest(req)
         }else{
             print("No selection, nothing to download")
         }
@@ -206,7 +212,7 @@ class FITDownloadViewController: NSViewController {
         print( "\(keychain.allKeys())")
         if let saved_username = keychain.string(forKey: FITAppGlobal.ConfigParameters.loginName.rawValue){
             userName.stringValue = saved_username
-            if let update = try? JSON( [FITAppGlobal.ConfigParameters.loginName:saved_username]) {
+            if let update = try? JSON( [FITAppGlobal.ConfigParameters.loginName.rawValue:saved_username]) {
                 FITAppGlobal.shared.updateSettings(json: update)
             }
             
@@ -214,7 +220,7 @@ class FITDownloadViewController: NSViewController {
         }
         if let saved_password = keychain.string(forKey: FITAppGlobal.ConfigParameters.password.rawValue) {
             password.stringValue = saved_password
-            if let update = try? JSON( [FITAppGlobal.ConfigParameters.password:saved_password]) {
+            if let update = try? JSON( [FITAppGlobal.ConfigParameters.password.rawValue:saved_password]) {
                 FITAppGlobal.shared.updateSettings(json: update)
             }
             //FITAppGlobal.configSet(kFITSettingsKeyPassword, stringVal: saved_password)
@@ -224,7 +230,18 @@ class FITDownloadViewController: NSViewController {
         activityTable.delegate = self.dataSource
         rebuildColumns()
         self.activityTable.reloadData()
-
+        self.updateStatus()
+    }
+    
+    func updateStatus() {
+        let text = self.dataSource.statusString()
+        self.leftStatus.stringValue = "\(text)"
+        if let activity = FITAppGlobal.shared.web.currentDescription() {
+            self.rightStatus.stringValue = activity
+        }else{
+            self.rightStatus.stringValue = "Ready"
+        }
+        
     }
     
     override func viewWillDisappear() {
