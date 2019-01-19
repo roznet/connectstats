@@ -26,8 +26,13 @@
 
 
 import Cocoa
+import RZExternalUniversal
 
 class GarminRequestFitFile: GarminRequest {
+    
+    struct Notifications {
+        static let downloaded = Notification.Name("GarminRequestFitFile.downloaded")
+    }
     
     let activityId : String
     
@@ -47,20 +52,68 @@ class GarminRequestFitFile: GarminRequest {
         return "Downloading Fit File... \(self.activityId)"
     }
     
-    func fitFileName() -> String {
+    func fitZipFileName() -> String {
         return "\(self.activityId).fit.zip"
     }
-    
+
+    func fitFileName() -> String {
+        return "\(self.activityId).fit"
+    }
+
     @objc override func process(_ theData: Data, andDelegate delegate: GCWebRequestDelegate) {
-        let path = RZFileOrganizer.writeableFilePath(self.fitFileName())
+        let path = RZFileOrganizer.writeableFilePath(self.fitZipFileName())
         do {
             try theData.write(to: URL(fileURLWithPath: path), options: Data.WritingOptions.atomicWrite)
+            if( try self.unzip() ){
+                NotificationCenter.default.post(name: GarminRequestFitFile.Notifications.downloaded, object: self.activityId)
+            }
+            
+        }catch let error as NSError{
+            print( "\(error)")
         }catch{
             
         }
         
-        self.processDone()
-
+        delegate.processDone(self)
     }
 
+    func unzip() throws -> Bool {
+        var success = false
+        
+        let zipPath = RZFileOrganizer.writeableFilePath(self.fitZipFileName())
+        let zipFile = try OZZipFile(fileName: zipPath, mode: OZZipFileMode.unzip)
+        
+        let files = zipFile.listFileInZipInfos()
+        
+        var foundFitFile : OZFileInZipInfo? = nil
+        
+        for info in files {
+            if let info = info as? OZFileInZipInfo,
+                info.name.hasSuffix(".fit"){
+                foundFitFile = info
+            }
+        }
+        
+        if let foundFitFile = foundFitFile,
+            zipFile.locateFile(inZip: foundFitFile.name) {
+            let rstream = zipFile.readCurrentFileInZip()
+            //var data = Data(capacity: Int(foundFitFile.length))
+            let data = NSMutableData(length: Int(foundFitFile.length))
+            if let data = data,
+                rstream.readData(withBuffer: data) != 0 {
+                let fitPath = RZFileOrganizer.writeableFilePath(self.fitFileName())
+                if( data.write(to: URL(fileURLWithPath: fitPath), atomically: true) ){
+                    success = true
+                }
+            }
+        }
+        zipFile.close()
+        
+        if success {
+            RZFileOrganizer.removeEditableFile(self.fitZipFileName())
+        }
+        
+        return success
+    }
+    
 }

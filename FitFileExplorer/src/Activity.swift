@@ -42,7 +42,12 @@ class Activity {
     private(set) var dates   : [String:Date]
     private(set) var coordinates : [String:CLLocationCoordinate2D]
 
-    var fitFilePath : URL? = nil
+    var fitFilePath : URL? {
+        if let fp = RZFileOrganizer.writeableFilePathIfExists("\(self.activityId).fit"){
+            return URL(fileURLWithPath: fp)
+        }
+        return nil
+    }
     var downloaded : Bool {
         return fitFilePath != nil
     }
@@ -115,7 +120,6 @@ class Activity {
     }
     
     func merge(with:Activity) {
-        self.fitFilePath = nil
         self.numbers.merge(with.numbers) { (_,new) in new }
         self.labels.merge(with.labels) { (_,new) in new }
         self.dates.merge(with.dates) { (_,new) in new }

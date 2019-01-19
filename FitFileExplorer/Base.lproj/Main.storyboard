@@ -1640,22 +1640,28 @@
                 <customObject id="h4n-hR-gLe" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <menu id="Le1-x8-u84">
                     <items>
+                        <menuItem title="Open Fit File" id="sZP-ZR-lYP">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="openFitFile:" target="1qV-F5-QB0" id="pud-Kf-kcS"/>
+                            </connections>
+                        </menuItem>
                         <menuItem title="Download FIT File" id="0Dp-08-oy9">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="downloadFITFile:" target="1qV-F5-QB0" id="IBQ-wZ-5XT"/>
                             </connections>
                         </menuItem>
-                        <menuItem title="Export List" id="YWd-D3-68K">
-                            <modifierMask key="keyEquivalentModifierMask"/>
-                            <connections>
-                                <action selector="exportList:" target="1qV-F5-QB0" id="aeh-9Y-VeW"/>
-                            </connections>
-                        </menuItem>
                         <menuItem title="Download Samples" id="EzF-bU-HzX">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="downloadSamples:" target="1qV-F5-QB0" id="S3L-1N-TZn"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem title="Export List" id="YWd-D3-68K">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="exportList:" target="1qV-F5-QB0" id="aeh-9Y-VeW"/>
                             </connections>
                         </menuItem>
                         <menuItem title="Export All FIT files" id="htr-pu-ubZ">

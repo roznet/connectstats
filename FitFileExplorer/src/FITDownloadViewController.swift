@@ -58,10 +58,55 @@ class FITDownloadViewController: NSViewController {
     
     var dataSource = FITDownloadListDataSource()
     
+    // MARK: -
+    
     @IBAction func refresh(_ sender: Any) {
         activityTable.dataSource = self.dataSource
         activityTable.delegate = self.dataSource
-        FITAppGlobal.downloadManager().startDownload()
+        FITAppGlobal.downloadManager().startDownloadList()
+    }
+
+    @IBAction func downloadSamples(_ sender: Any) {
+        activityTable.dataSource = self.dataSource
+        activityTable.delegate = self.dataSource
+        FITAppGlobal.downloadManager().loadRawFiles()
+
+    }
+    
+    @IBAction func openFitFile(_ sender: Any) {
+        let row = self.activityTable.selectedRow
+        if (row > -1) {
+            let act = dataSource.list()[row]
+            if act.downloaded, let url = act.fitFilePath {
+                
+                NSDocumentController.shared.openDocument(withContentsOf: url, display: true, completionHandler: {(doc,bool,err) in })
+
+            }else{
+            
+                NotificationCenter.default.addObserver(self, selector: #selector(notificationNewFitFile(notification:)),
+                                                       name: GarminRequestFitFile.Notifications.downloaded, object: nil)
+                
+                FITAppGlobal.downloadManager().startDownloadFitFile(activityId: act.activityId)
+            }
+        }else{
+            print("No selection, nothing to download")
+        }
+
+    }
+    @IBAction func downloadFITFile(_ sender: Any) {
+        let row = self.activityTable.selectedRow
+        if (row > -1) {
+            let act = dataSource.list()[row].activityId
+            
+            print("Download \(row) \(act)")
+            NotificationCenter.default.addObserver(self, selector: #selector(notificationNewFitFile(notification:)),
+                                                   name: GarminRequestFitFile.Notifications.downloaded, object: nil)
+
+            FITAppGlobal.downloadManager().startDownloadFitFile(activityId: act)
+            
+        }else{
+            print("No selection, nothing to download")
+        }
     }
 
     @objc func downloadChanged(notification : Notification){
@@ -71,13 +116,17 @@ class FITDownloadViewController: NSViewController {
             self.updateStatus()
         }
     }
-        
-    @IBAction func downloadSamples(_ sender: Any) {
-        activityTable.dataSource = self.dataSource
-        activityTable.delegate = self.dataSource
-        FITAppGlobal.downloadManager().loadRawFiles()
-
+    
+    @objc func notificationNewFitFile(notification:Notification){
+        if let activityId = notification.object as? String {
+            print( "Success Downloaded \(activityId)")
+            if let fp = RZFileOrganizer.writeableFilePathIfExists("\(activityId).fit") {
+                NSDocumentController.shared.openDocument(withContentsOf: URL(fileURLWithPath: fp), display: true, completionHandler: {(doc,bool,err) in })
+            }
+        }
     }
+
+    // MARK: -
     
     func exportByFile() {
         var units : [String:GCUnit] = [:]
@@ -185,22 +234,8 @@ class FITDownloadViewController: NSViewController {
     }
     
 
-
+    // MARK: -
         
-    @IBAction func downloadFITFile(_ sender: Any) {
-        let row = self.activityTable.selectedRow
-        if (row > -1) {
-            let act = dataSource.list()[row].activityId
-            
-            print("Download \(row) \(act)")
-            
-            let req = GarminRequestFitFile(activityId: act)
-            FITAppGlobal.web().addRequest(req)
-        }else{
-            print("No selection, nothing to download")
-        }
-    }
-    
     override func viewWillAppear() {
         super.viewWillAppear()
         NotificationCenter.default.addObserver(self,

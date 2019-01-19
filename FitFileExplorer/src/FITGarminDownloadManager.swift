@@ -44,6 +44,7 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
     }
     deinit {
         FITAppGlobal.shared.web.detach(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     
@@ -79,8 +80,9 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
             
         }
     }
+
     
-    func startDownload(){
+    func garminInit() {
         FITAppGlobal.web().attach(self)
         
         if( self.loginSuccessful != true ){
@@ -89,11 +91,19 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
             
             FITAppGlobal.web().addRequest(GCGarminLoginSSORequest(user: login, andPwd: passd))
         }
+    }
+    
+    func startDownloadList(){
+        garminInit()
         FITAppGlobal.web().addRequest(GarminRequestActivityList(start: 0))
     }
     
-    @objc func loadOneFile(filePath : String) -> Int {
-        
+    func startDownloadFitFile(activityId : String ){
+        garminInit()
+        FITAppGlobal.web().addRequest(GarminRequestFitFile(activityId: activityId))
+    }
+    
+    func loadOneFile(filePath : String) -> Int {
         let res = FITAppGlobal.shared.organizer.load(url: URL(fileURLWithPath: filePath))
         
         return res.updated
