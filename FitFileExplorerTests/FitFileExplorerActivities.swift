@@ -132,6 +132,54 @@ class FitFileExplorerActivities: XCTestCase {
         XCTAssertEqual(addedback.total, 20)
     }
     
+    func testDatabase() {
+        
+        let garmin_sample = "last_modern_search_0.json"
+        let garmin_sample_url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(garmin_sample, for: type(of:self)))
+        RZFileOrganizer.removeEditableFile("test_activities.db")
+        if let organizer = ActivitiesOrganizer(url: garmin_sample_url) {
+            let sample = organizer.sample()
+            
+            if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("test_activities.db")) {
+                db.open()
+                sample.ensureTables(db: db)
+
+                for one in organizer.activityList {
+                    one.insert(db: db, conform: sample.numbers)
+                }
+                
+                var units : [String:GCUnit] = [:]
+                var list : [Activity] = []
+                
+                if let res = db.executeQuery("SELECT * FROM fields", withArgumentsIn: []) {
+                    while res.next() {
+                        units[ res.string(forColumn: "name") ] = GCUnit( forKey: res.string(forColumn: "unit") )
+                    }
+                }
+                
+                if let res = db.executeQuery("SELECT * FROM activities", withArgumentsIn: []) {
+                    while res.next() {
+                        if let act = Activity(res: res, units: units){
+                            
+                            list.append(act)
+                        }
+                    }
+                }
+                print("Reload \(list.count)")
+                if let reload_first = list.first{
+                    let actId = reload_first.activityId
+                    
+                    let first = list.filter {
+                        $0.activityId == actId
+                    }
+                    if let orig_first = first.first {
+                       print("\(orig_first), \(reload_first)")
+                    }
+                }
+            }
+        }
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

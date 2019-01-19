@@ -230,7 +230,19 @@ class FITDownloadViewController: NSViewController {
     }
     
     @IBAction func exportList(_ sender: Any) {
-        self.exportSingleCsv()
+        //self.exportSingleCsv()
+        
+        let sample = FITAppGlobal.shared.organizer.sample()
+        
+        if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("activities.db")) {
+            db.open()
+            sample.ensureTables(db: db)
+            
+            if let first = FITAppGlobal.shared.organizer.activityList.first {
+                first.insert(db: db, conform: sample.numbers)
+            }
+        }
+            
     }
     
 
