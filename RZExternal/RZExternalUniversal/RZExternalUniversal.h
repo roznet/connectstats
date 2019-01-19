@@ -22,3 +22,6 @@ FOUNDATION_EXPORT const unsigned char RZExternalUniversalVersionString[];
 #import "RZShapeFile.h"
 #import "RZShapeFileMapView.h"
 
+#import "Objective-Zip.h"
+#import "Objective-Zip+NSError.h"
+

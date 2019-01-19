@@ -34,6 +34,7 @@
 #import "GCActivitiesOrganizer.h"
 @import RZUtils;
 @import RZExternal;
+@import RZExternalUniversal;
 #import "ConnectStats-Swift.h"
 
 @interface GCGarminActivityTrack13Request ()

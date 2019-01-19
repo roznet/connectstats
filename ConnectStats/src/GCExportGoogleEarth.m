@@ -28,6 +28,7 @@
 #import "GCActivity+ExportText.h"
 #import "GCField.h"
 @import RZExternal;
+@import RZExternalUniversal;
 
 @implementation GCExportGoogleEarth
 @synthesize activity;

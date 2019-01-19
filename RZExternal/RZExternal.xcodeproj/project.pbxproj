@@ -253,6 +253,63 @@
 		42A0098020012B4800019CB3 /* fit_workout_step_mesg_listener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 42A008AA20012B4800019CB3 /* fit_workout_step_mesg_listener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		42A0098120012B4800019CB3 /* fit_zones_target_mesg.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 42A008AB20012B4800019CB3 /* fit_zones_target_mesg.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		42A0098220012B4800019CB3 /* fit_zones_target_mesg_listener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 42A008AC20012B4800019CB3 /* fit_zones_target_mesg_listener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFAFD21F31B74007BC683 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265321FF8314400E891A1 /* unzip.c */; };
+		42ADFAFE21F31B74007BC683 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265331FF8314400E891A1 /* zip.c */; };
+		42ADFAFF21F31B74007BC683 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265341FF8314400E891A1 /* ioapi.c */; };
+		42ADFB0021F31B7B007BC683 /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265351FF8314400E891A1 /* crypt.h */; };
+		42ADFB0121F31B7B007BC683 /* zip.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265361FF8314400E891A1 /* zip.h */; };
+		42ADFB0221F31B7B007BC683 /* unzip.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265371FF8314400E891A1 /* unzip.h */; };
+		42ADFB0321F31B7B007BC683 /* ioapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265381FF8314400E891A1 /* ioapi.h */; };
+		42ADFB0421F31BBF007BC683 /* zutil.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2653A1FF8314400E891A1 /* zutil.h */; };
+		42ADFB0521F31BBF007BC683 /* inftrees.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2653B1FF8314400E891A1 /* inftrees.h */; };
+		42ADFB0621F31BBF007BC683 /* inffixed.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2653F1FF8314400E891A1 /* inffixed.h */; };
+		42ADFB0721F31BBF007BC683 /* trees.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265411FF8314400E891A1 /* trees.h */; };
+		42ADFB0821F31BBF007BC683 /* inffast.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265421FF8314400E891A1 /* inffast.h */; };
+		42ADFB0921F31BBF007BC683 /* deflate.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265461FF8314400E891A1 /* deflate.h */; };
+		42ADFB0A21F31BBF007BC683 /* crc32.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265501FF8314400E891A1 /* crc32.h */; };
+		42ADFB0B21F31BBF007BC683 /* inflate.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2654A1FF8314400E891A1 /* inflate.h */; };
+		42ADFB0C21F31BBF007BC683 /* zconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265531FF8314400E891A1 /* zconf.h */; };
+		42ADFB0D21F31BBF007BC683 /* gzguts.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265471FF8314400E891A1 /* gzguts.h */; };
+		42ADFB0E21F31BBF007BC683 /* zlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265481FF8314400E891A1 /* zlib.h */; };
+		42ADFB0F21F31BC9007BC683 /* inflate.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2653C1FF8314400E891A1 /* inflate.c */; };
+		42ADFB1021F31BC9007BC683 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2653D1FF8314400E891A1 /* compress.c */; };
+		42ADFB1121F31BC9007BC683 /* deflate.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2653E1FF8314400E891A1 /* deflate.c */; };
+		42ADFB1221F31BC9007BC683 /* gzread.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265401FF8314400E891A1 /* gzread.c */; };
+		42ADFB1321F31BC9007BC683 /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265431FF8314400E891A1 /* crc32.c */; };
+		42ADFB1421F31BC9007BC683 /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265441FF8314400E891A1 /* infback.c */; };
+		42ADFB1521F31BC9007BC683 /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265451FF8314400E891A1 /* zutil.c */; };
+		42ADFB1621F31BC9007BC683 /* gzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265491FF8314400E891A1 /* gzlib.c */; };
+		42ADFB1721F31BC9007BC683 /* inftrees.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2654B1FF8314400E891A1 /* inftrees.c */; };
+		42ADFB1821F31BC9007BC683 /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2654C1FF8314400E891A1 /* uncompr.c */; };
+		42ADFB1921F31BC9007BC683 /* gzwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2654D1FF8314400E891A1 /* gzwrite.c */; };
+		42ADFB1A21F31BC9007BC683 /* trees.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2654E1FF8314400E891A1 /* trees.c */; };
+		42ADFB1B21F31BC9007BC683 /* gzclose.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2654F1FF8314400E891A1 /* gzclose.c */; };
+		42ADFB1C21F31BC9007BC683 /* inffast.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265511FF8314400E891A1 /* inffast.c */; };
+		42ADFB1D21F31BC9007BC683 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265521FF8314400E891A1 /* adler32.c */; };
+		42ADFB1E21F31BDA007BC683 /* OZZipReadStream+NSError.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265551FF8314400E891A1 /* OZZipReadStream+NSError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB1F21F31BEA007BC683 /* OZZipWriteStream+Internals.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265571FF8314400E891A1 /* OZZipWriteStream+Internals.h */; };
+		42ADFB2021F31BEA007BC683 /* OZZipException+Internals.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265591FF8314400E891A1 /* OZZipException+Internals.h */; };
+		42ADFB2121F31BF1007BC683 /* OZZipWriteStream+NSError.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655A1FF8314400E891A1 /* OZZipWriteStream+NSError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB2221F31BFA007BC683 /* OZZipFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B265561FF8314400E891A1 /* OZZipFile.m */; };
+		42ADFB2321F31C01007BC683 /* Objective-Zip.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265581FF8314400E891A1 /* Objective-Zip.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB2421F31C0C007BC683 /* Objective-Zip+NSError.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655B1FF8314400E891A1 /* Objective-Zip+NSError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB2521F31C13007BC683 /* OZFileInZipInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2655C1FF8314400E891A1 /* OZFileInZipInfo.m */; };
+		42ADFB2621F31C18007BC683 /* OZZipWriteStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655D1FF8314400E891A1 /* OZZipWriteStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB2721F31C1F007BC683 /* OZZipException.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655E1FF8314400E891A1 /* OZZipException.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB2821F31C27007BC683 /* OZZipFile+Standard.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655F1FF8314400E891A1 /* OZZipFile+Standard.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB2921F31C2E007BC683 /* OZZipReadStream+Standard.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265601FF8314400E891A1 /* OZZipReadStream+Standard.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB2A21F31C36007BC683 /* OZZipReadStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B265611FF8314400E891A1 /* OZZipReadStream.m */; };
+		42ADFB2B21F31C3A007BC683 /* OZFileInZipInfo+Internals.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265621FF8314400E891A1 /* OZFileInZipInfo+Internals.h */; };
+		42ADFB2C21F31C3F007BC683 /* OZZipFileMode.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265631FF8314400E891A1 /* OZZipFileMode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB2D21F31C45007BC683 /* OZZipReadStream+Internals.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265641FF8314400E891A1 /* OZZipReadStream+Internals.h */; };
+		42ADFB2E21F31C49007BC683 /* OZZipFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265651FF8314400E891A1 /* OZZipFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB2F21F31C51007BC683 /* OZZipWriteStream+Standard.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265661FF8314400E891A1 /* OZZipWriteStream+Standard.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB3021F31C58007BC683 /* OZFileInZipInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265671FF8314400E891A1 /* OZFileInZipInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB3121F31C5F007BC683 /* OZZipCompressionLevel.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265681FF8314400E891A1 /* OZZipCompressionLevel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB3221F31C65007BC683 /* OZZipFile+NSError.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265691FF8314400E891A1 /* OZZipFile+NSError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB3321F31C6B007BC683 /* OZZipReadStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2656A1FF8314400E891A1 /* OZZipReadStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42ADFB3421F31C71007BC683 /* OZZipException.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2656B1FF8314400E891A1 /* OZZipException.m */; };
+		42ADFB3521F31C76007BC683 /* OZZipWriteStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2656C1FF8314400E891A1 /* OZZipWriteStream.m */; };
 		42B263D41FF8309700E891A1 /* RZExternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263D21FF8309700E891A1 /* RZExternal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B265711FF8314400E891A1 /* KalMonthView.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263DC1FF8314400E891A1 /* KalMonthView.h */; };
 		42B265721FF8314400E891A1 /* KalGridView.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263DD1FF8314400E891A1 /* KalGridView.h */; };
@@ -333,63 +390,6 @@
 		42B2669E1FF8314500E891A1 /* GTMSessionFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2652C1FF8314400E891A1 /* GTMSessionFetcher.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -Xclang -analyzer-disable-all-checks"; }; };
 		42B2669F1FF8314500E891A1 /* GTMOAuth2ViewControllerTouch.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2652D1FF8314400E891A1 /* GTMOAuth2ViewControllerTouch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B266A11FF8314500E891A1 /* GTMOAuth2Authentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2652F1FF8314400E891A1 /* GTMOAuth2Authentication.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -Xclang -analyzer-disable-all-checks"; }; };
-		42B266A21FF8314500E891A1 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265321FF8314400E891A1 /* unzip.c */; };
-		42B266A31FF8314500E891A1 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265331FF8314400E891A1 /* zip.c */; };
-		42B266A41FF8314500E891A1 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265341FF8314400E891A1 /* ioapi.c */; };
-		42B266A51FF8314500E891A1 /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265351FF8314400E891A1 /* crypt.h */; };
-		42B266A61FF8314500E891A1 /* zip.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265361FF8314400E891A1 /* zip.h */; };
-		42B266A71FF8314500E891A1 /* unzip.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265371FF8314400E891A1 /* unzip.h */; };
-		42B266A81FF8314500E891A1 /* ioapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265381FF8314400E891A1 /* ioapi.h */; };
-		42B266A91FF8314500E891A1 /* zutil.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2653A1FF8314400E891A1 /* zutil.h */; };
-		42B266AA1FF8314500E891A1 /* inftrees.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2653B1FF8314400E891A1 /* inftrees.h */; };
-		42B266AB1FF8314500E891A1 /* inflate.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2653C1FF8314400E891A1 /* inflate.c */; };
-		42B266AC1FF8314500E891A1 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2653D1FF8314400E891A1 /* compress.c */; };
-		42B266AD1FF8314500E891A1 /* deflate.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2653E1FF8314400E891A1 /* deflate.c */; };
-		42B266AE1FF8314500E891A1 /* inffixed.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2653F1FF8314400E891A1 /* inffixed.h */; };
-		42B266AF1FF8314500E891A1 /* gzread.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265401FF8314400E891A1 /* gzread.c */; };
-		42B266B01FF8314500E891A1 /* trees.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265411FF8314400E891A1 /* trees.h */; };
-		42B266B11FF8314500E891A1 /* inffast.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265421FF8314400E891A1 /* inffast.h */; };
-		42B266B21FF8314500E891A1 /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265431FF8314400E891A1 /* crc32.c */; };
-		42B266B31FF8314500E891A1 /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265441FF8314400E891A1 /* infback.c */; };
-		42B266B41FF8314500E891A1 /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265451FF8314400E891A1 /* zutil.c */; };
-		42B266B51FF8314500E891A1 /* deflate.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265461FF8314400E891A1 /* deflate.h */; };
-		42B266B61FF8314500E891A1 /* gzguts.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265471FF8314400E891A1 /* gzguts.h */; };
-		42B266B71FF8314500E891A1 /* zlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265481FF8314400E891A1 /* zlib.h */; };
-		42B266B81FF8314500E891A1 /* gzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265491FF8314400E891A1 /* gzlib.c */; };
-		42B266B91FF8314500E891A1 /* inflate.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2654A1FF8314400E891A1 /* inflate.h */; };
-		42B266BA1FF8314500E891A1 /* inftrees.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2654B1FF8314400E891A1 /* inftrees.c */; };
-		42B266BB1FF8314500E891A1 /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2654C1FF8314400E891A1 /* uncompr.c */; };
-		42B266BC1FF8314500E891A1 /* gzwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2654D1FF8314400E891A1 /* gzwrite.c */; };
-		42B266BD1FF8314500E891A1 /* trees.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2654E1FF8314400E891A1 /* trees.c */; };
-		42B266BE1FF8314500E891A1 /* gzclose.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2654F1FF8314400E891A1 /* gzclose.c */; };
-		42B266BF1FF8314500E891A1 /* crc32.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265501FF8314400E891A1 /* crc32.h */; };
-		42B266C01FF8314500E891A1 /* inffast.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265511FF8314400E891A1 /* inffast.c */; };
-		42B266C11FF8314500E891A1 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B265521FF8314400E891A1 /* adler32.c */; };
-		42B266C21FF8314500E891A1 /* zconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265531FF8314400E891A1 /* zconf.h */; };
-		42B266C31FF8314500E891A1 /* OZZipReadStream+NSError.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265551FF8314400E891A1 /* OZZipReadStream+NSError.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266C41FF8314500E891A1 /* OZZipFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B265561FF8314400E891A1 /* OZZipFile.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		42B266C51FF8314500E891A1 /* OZZipWriteStream+Internals.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265571FF8314400E891A1 /* OZZipWriteStream+Internals.h */; };
-		42B266C61FF8314500E891A1 /* Objective-Zip.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265581FF8314400E891A1 /* Objective-Zip.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266C71FF8314500E891A1 /* OZZipException+Internals.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265591FF8314400E891A1 /* OZZipException+Internals.h */; };
-		42B266C81FF8314500E891A1 /* OZZipWriteStream+NSError.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655A1FF8314400E891A1 /* OZZipWriteStream+NSError.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266C91FF8314500E891A1 /* Objective-Zip+NSError.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655B1FF8314400E891A1 /* Objective-Zip+NSError.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266CA1FF8314500E891A1 /* OZFileInZipInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2655C1FF8314400E891A1 /* OZFileInZipInfo.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		42B266CB1FF8314500E891A1 /* OZZipWriteStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655D1FF8314400E891A1 /* OZZipWriteStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266CC1FF8314500E891A1 /* OZZipException.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655E1FF8314400E891A1 /* OZZipException.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266CD1FF8314500E891A1 /* OZZipFile+Standard.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2655F1FF8314400E891A1 /* OZZipFile+Standard.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266CE1FF8314500E891A1 /* OZZipReadStream+Standard.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265601FF8314400E891A1 /* OZZipReadStream+Standard.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266CF1FF8314500E891A1 /* OZZipReadStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B265611FF8314400E891A1 /* OZZipReadStream.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		42B266D01FF8314500E891A1 /* OZFileInZipInfo+Internals.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265621FF8314400E891A1 /* OZFileInZipInfo+Internals.h */; };
-		42B266D11FF8314500E891A1 /* OZZipFileMode.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265631FF8314400E891A1 /* OZZipFileMode.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266D21FF8314500E891A1 /* OZZipReadStream+Internals.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265641FF8314400E891A1 /* OZZipReadStream+Internals.h */; };
-		42B266D31FF8314500E891A1 /* OZZipFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265651FF8314400E891A1 /* OZZipFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266D41FF8314500E891A1 /* OZZipWriteStream+Standard.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265661FF8314400E891A1 /* OZZipWriteStream+Standard.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266D51FF8314500E891A1 /* OZFileInZipInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265671FF8314400E891A1 /* OZFileInZipInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266D61FF8314500E891A1 /* OZZipCompressionLevel.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265681FF8314400E891A1 /* OZZipCompressionLevel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266D71FF8314500E891A1 /* OZZipFile+NSError.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B265691FF8314400E891A1 /* OZZipFile+NSError.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266D81FF8314500E891A1 /* OZZipReadStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2656A1FF8314400E891A1 /* OZZipReadStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B266D91FF8314500E891A1 /* OZZipException.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2656B1FF8314400E891A1 /* OZZipException.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		42B266DA1FF8314500E891A1 /* OZZipWriteStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2656C1FF8314400E891A1 /* OZZipWriteStream.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		42B266DB1FF8314500E891A1 /* DeviceUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2656E1FF8314400E891A1 /* DeviceUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B266DC1FF8314500E891A1 /* DeviceUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2656F1FF8314400E891A1 /* DeviceUtil.m */; };
 		42B266DD1FF8314500E891A1 /* DeviceList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42B265701FF8314400E891A1 /* DeviceList.plist */; };
@@ -1398,30 +1398,30 @@
 			children = (
 				42B2653A1FF8314400E891A1 /* zutil.h */,
 				42B2653B1FF8314400E891A1 /* inftrees.h */,
+				42B2653F1FF8314400E891A1 /* inffixed.h */,
+				42B265411FF8314400E891A1 /* trees.h */,
+				42B265421FF8314400E891A1 /* inffast.h */,
+				42B265461FF8314400E891A1 /* deflate.h */,
+				42B265501FF8314400E891A1 /* crc32.h */,
+				42B2654A1FF8314400E891A1 /* inflate.h */,
+				42B265531FF8314400E891A1 /* zconf.h */,
+				42B265471FF8314400E891A1 /* gzguts.h */,
+				42B265481FF8314400E891A1 /* zlib.h */,
 				42B2653C1FF8314400E891A1 /* inflate.c */,
 				42B2653D1FF8314400E891A1 /* compress.c */,
 				42B2653E1FF8314400E891A1 /* deflate.c */,
-				42B2653F1FF8314400E891A1 /* inffixed.h */,
 				42B265401FF8314400E891A1 /* gzread.c */,
-				42B265411FF8314400E891A1 /* trees.h */,
-				42B265421FF8314400E891A1 /* inffast.h */,
 				42B265431FF8314400E891A1 /* crc32.c */,
 				42B265441FF8314400E891A1 /* infback.c */,
 				42B265451FF8314400E891A1 /* zutil.c */,
-				42B265461FF8314400E891A1 /* deflate.h */,
-				42B265471FF8314400E891A1 /* gzguts.h */,
-				42B265481FF8314400E891A1 /* zlib.h */,
 				42B265491FF8314400E891A1 /* gzlib.c */,
-				42B2654A1FF8314400E891A1 /* inflate.h */,
 				42B2654B1FF8314400E891A1 /* inftrees.c */,
 				42B2654C1FF8314400E891A1 /* uncompr.c */,
 				42B2654D1FF8314400E891A1 /* gzwrite.c */,
 				42B2654E1FF8314400E891A1 /* trees.c */,
 				42B2654F1FF8314400E891A1 /* gzclose.c */,
-				42B265501FF8314400E891A1 /* crc32.h */,
 				42B265511FF8314400E891A1 /* inffast.c */,
 				42B265521FF8314400E891A1 /* adler32.c */,
-				42B265531FF8314400E891A1 /* zconf.h */,
 			);
 			path = ZLib;
 			sourceTree = "<group>";
@@ -1484,10 +1484,44 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42ADFB2321F31C01007BC683 /* Objective-Zip.h in Headers */,
+				42ADFB3321F31C6B007BC683 /* OZZipReadStream.h in Headers */,
+				42ADFB3221F31C65007BC683 /* OZZipFile+NSError.h in Headers */,
+				42ADFB0721F31BBF007BC683 /* trees.h in Headers */,
+				42ADFB0521F31BBF007BC683 /* inftrees.h in Headers */,
+				42ADFB0B21F31BBF007BC683 /* inflate.h in Headers */,
+				42ADFB2921F31C2E007BC683 /* OZZipReadStream+Standard.h in Headers */,
+				42ADFB0121F31B7B007BC683 /* zip.h in Headers */,
+				42ADFB1F21F31BEA007BC683 /* OZZipWriteStream+Internals.h in Headers */,
+				42ADFB2E21F31C49007BC683 /* OZZipFile.h in Headers */,
+				42ADFB0C21F31BBF007BC683 /* zconf.h in Headers */,
+				42ADFB2021F31BEA007BC683 /* OZZipException+Internals.h in Headers */,
+				42ADFB2721F31C1F007BC683 /* OZZipException.h in Headers */,
+				42ADFB0E21F31BBF007BC683 /* zlib.h in Headers */,
+				42ADFB0A21F31BBF007BC683 /* crc32.h in Headers */,
 				42248C0F2014E1B5006ADC90 /* RZShapeFileMapView.h in Headers */,
+				42ADFB2121F31BF1007BC683 /* OZZipWriteStream+NSError.h in Headers */,
+				42ADFB0221F31B7B007BC683 /* unzip.h in Headers */,
+				42ADFB2821F31C27007BC683 /* OZZipFile+Standard.h in Headers */,
+				42ADFB2D21F31C45007BC683 /* OZZipReadStream+Internals.h in Headers */,
 				42248C0E2014E1B5006ADC90 /* RZShapeFile.h in Headers */,
+				42ADFB3021F31C58007BC683 /* OZFileInZipInfo.h in Headers */,
 				42248C0A2014E1A8006ADC90 /* shapefil.h in Headers */,
+				42ADFB2621F31C18007BC683 /* OZZipWriteStream.h in Headers */,
+				42ADFB2421F31C0C007BC683 /* Objective-Zip+NSError.h in Headers */,
+				42ADFB0821F31BBF007BC683 /* inffast.h in Headers */,
+				42ADFB0621F31BBF007BC683 /* inffixed.h in Headers */,
+				42ADFB1E21F31BDA007BC683 /* OZZipReadStream+NSError.h in Headers */,
+				42ADFB2B21F31C3A007BC683 /* OZFileInZipInfo+Internals.h in Headers */,
+				42ADFB3121F31C5F007BC683 /* OZZipCompressionLevel.h in Headers */,
 				42248C062014E16A006ADC90 /* RZExternalUniversal.h in Headers */,
+				42ADFB0421F31BBF007BC683 /* zutil.h in Headers */,
+				42ADFB2F21F31C51007BC683 /* OZZipWriteStream+Standard.h in Headers */,
+				42ADFB0021F31B7B007BC683 /* crypt.h in Headers */,
+				42ADFB0921F31BBF007BC683 /* deflate.h in Headers */,
+				42ADFB2C21F31C3F007BC683 /* OZZipFileMode.h in Headers */,
+				42ADFB0D21F31BBF007BC683 /* gzguts.h in Headers */,
+				42ADFB0321F31B7B007BC683 /* ioapi.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1712,80 +1746,46 @@
 			buildActionMask = 2147483647;
 			files = (
 				42B265761FF8314400E891A1 /* KalDate.h in Headers */,
-				42B266C51FF8314500E891A1 /* OZZipWriteStream+Internals.h in Headers */,
 				42B2657F1FF8314400E891A1 /* UIViewAdditions.h in Headers */,
 				42B265991FF8314400E891A1 /* ECSlidingViewController.h in Headers */,
 				42B265951FF8314400E891A1 /* ECSlidingSegue.h in Headers */,
 				42B266921FF8314500E891A1 /* UIImage+Snapshot.h in Headers */,
-				42B266D01FF8314500E891A1 /* OZFileInZipInfo+Internals.h in Headers */,
 				42B265B11FF8314400E891A1 /* MBProgressHUD.h in Headers */,
 				42B265721FF8314400E891A1 /* KalGridView.h in Headers */,
-				42B266D21FF8314500E891A1 /* OZZipReadStream+Internals.h in Headers */,
 				42B265801FF8314400E891A1 /* KalLogic.h in Headers */,
-				42B266D71FF8314500E891A1 /* OZZipFile+NSError.h in Headers */,
 				42B263D41FF8309700E891A1 /* RZExternal.h in Headers */,
-				42B266B91FF8314500E891A1 /* inflate.h in Headers */,
-				42B266C71FF8314500E891A1 /* OZZipException+Internals.h in Headers */,
 				42B265A21FF8314400E891A1 /* CHCSVParser.h in Headers */,
-				42B266B11FF8314500E891A1 /* inffast.h in Headers */,
-				42B266B51FF8314500E891A1 /* deflate.h in Headers */,
-				42B266A61FF8314500E891A1 /* zip.h in Headers */,
-				42B266CC1FF8314500E891A1 /* OZZipException.h in Headers */,
 				42B2669B1FF8314500E891A1 /* GTMOAuth2Authentication.h in Headers */,
-				42B266B01FF8314500E891A1 /* trees.h in Headers */,
 				42B266951FF8314500E891A1 /* SwiftKeychainWrapper.h in Headers */,
-				42B266AE1FF8314500E891A1 /* inffixed.h in Headers */,
-				42B266D41FF8314500E891A1 /* OZZipWriteStream+Standard.h in Headers */,
-				42B266BF1FF8314500E891A1 /* crc32.h in Headers */,
-				42B266A51FF8314500E891A1 /* crypt.h in Headers */,
-				42B266A91FF8314500E891A1 /* zutil.h in Headers */,
 				42B265A71FF8314400E891A1 /* Base64Transcoder.h in Headers */,
 				42B265771FF8314400E891A1 /* Kal.h in Headers */,
 				42B265981FF8314400E891A1 /* ECSlidingInteractiveTransition.h in Headers */,
 				42B2668D1FF8314400E891A1 /* UIImage+Diff.h in Headers */,
 				42B265891FF8314400E891A1 /* KalViewController.h in Headers */,
-				42B266A81FF8314500E891A1 /* ioapi.h in Headers */,
 				42B266911FF8314500E891A1 /* UIImage+Compare.h in Headers */,
 				42B265791FF8314400E891A1 /* NSDateAdditions.h in Headers */,
 				42B2659B1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.h in Headers */,
 				42B265AB1FF8314400E891A1 /* sha1.h in Headers */,
 				42B265A01FF8314400E891A1 /* GTMDefines.h in Headers */,
 				42B2657C1FF8314400E891A1 /* KalPrivate.h in Headers */,
-				42B266AA1FF8314500E891A1 /* inftrees.h in Headers */,
-				42B266C91FF8314500E891A1 /* Objective-Zip+NSError.h in Headers */,
 				42B265911FF8314400E891A1 /* Appirater.h in Headers */,
-				42B266B61FF8314500E891A1 /* gzguts.h in Headers */,
-				42B266CD1FF8314500E891A1 /* OZZipFile+Standard.h in Headers */,
 				42B265921FF8314400E891A1 /* UIViewController+ECSlidingViewController.h in Headers */,
-				42B266CB1FF8314500E891A1 /* OZZipWriteStream.h in Headers */,
 				42B265AC1FF8314400E891A1 /* OAuth1WithingsController.h in Headers */,
-				42B266D61FF8314500E891A1 /* OZZipCompressionLevel.h in Headers */,
 				42B2658A1FF8314400E891A1 /* SmudgyWindow.h in Headers */,
 				422626031FFA7C68000DBD32 /* RZNavigationTitleView.h in Headers */,
 				42B2659F1FF8314400E891A1 /* GTMNSString+HTML.h in Headers */,
-				42B266C61FF8314500E891A1 /* Objective-Zip.h in Headers */,
-				42B266D11FF8314500E891A1 /* OZZipFileMode.h in Headers */,
-				42B266A71FF8314500E891A1 /* unzip.h in Headers */,
 				42B265811FF8314400E891A1 /* KalDataSource.h in Headers */,
 				42B265A41FF8314400E891A1 /* OAuth1Controller.h in Headers */,
 				42B2657D1FF8314400E891A1 /* KalTileView.h in Headers */,
 				42B265731FF8314400E891A1 /* KalView.h in Headers */,
 				42B265711FF8314400E891A1 /* KalMonthView.h in Headers */,
-				42B266D31FF8314500E891A1 /* OZZipFile.h in Headers */,
 				42B265A91FF8314400E891A1 /* hmac.h in Headers */,
-				42B266B71FF8314500E891A1 /* zlib.h in Headers */,
-				42B266D81FF8314500E891A1 /* OZZipReadStream.h in Headers */,
 				42B2658F1FF8314400E891A1 /* AppiraterDelegate.h in Headers */,
-				42B266CE1FF8314500E891A1 /* OZZipReadStream+Standard.h in Headers */,
 				42B265A51FF8314400E891A1 /* NSString+URLEncoding.h in Headers */,
 				42B266DB1FF8314500E891A1 /* DeviceUtil.h in Headers */,
-				42B266C81FF8314500E891A1 /* OZZipWriteStream+NSError.h in Headers */,
-				42B266C31FF8314500E891A1 /* OZZipReadStream+NSError.h in Headers */,
-				42B266D51FF8314500E891A1 /* OZFileInZipInfo.h in Headers */,
 				42B265971FF8314400E891A1 /* ECSlidingAnimationController.h in Headers */,
 				42B2669F1FF8314500E891A1 /* GTMOAuth2ViewControllerTouch.h in Headers */,
 				42B266971FF8314500E891A1 /* GTMOAuth2SignIn.h in Headers */,
-				42B266C21FF8314500E891A1 /* zconf.h in Headers */,
 				42B265931FF8314400E891A1 /* ECSlidingConstants.h in Headers */,
 				42B266991FF8314500E891A1 /* GTMSessionFetcher.h in Headers */,
 			);
@@ -1988,12 +1988,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42ADFB1621F31BC9007BC683 /* gzlib.c in Sources */,
 				42248C0C2014E1AD006ADC90 /* dbfopen.c in Sources */,
+				42ADFB1821F31BC9007BC683 /* uncompr.c in Sources */,
+				42ADFB2521F31C13007BC683 /* OZFileInZipInfo.m in Sources */,
 				42248C112014E1BC006ADC90 /* RZShapeFileMapView.m in Sources */,
 				42248C102014E1BC006ADC90 /* RZShapeFile.m in Sources */,
+				42ADFB3421F31C71007BC683 /* OZZipException.m in Sources */,
+				42ADFB1C21F31BC9007BC683 /* inffast.c in Sources */,
+				42ADFB1321F31BC9007BC683 /* crc32.c in Sources */,
+				42ADFB1721F31BC9007BC683 /* inftrees.c in Sources */,
+				42ADFAFE21F31B74007BC683 /* zip.c in Sources */,
+				42ADFAFF21F31B74007BC683 /* ioapi.c in Sources */,
+				42ADFB1921F31BC9007BC683 /* gzwrite.c in Sources */,
+				42ADFB2A21F31C36007BC683 /* OZZipReadStream.m in Sources */,
+				42ADFB1121F31BC9007BC683 /* deflate.c in Sources */,
+				42ADFB2221F31BFA007BC683 /* OZZipFile.m in Sources */,
+				42ADFB1A21F31BC9007BC683 /* trees.c in Sources */,
 				4251B5B4219F73BA00E15F9F /* KeychainWrapper.swift in Sources */,
+				42ADFB1D21F31BC9007BC683 /* adler32.c in Sources */,
+				42ADFB1421F31BC9007BC683 /* infback.c in Sources */,
+				42ADFB0F21F31BC9007BC683 /* inflate.c in Sources */,
+				42ADFB1221F31BC9007BC683 /* gzread.c in Sources */,
+				42ADFB1021F31BC9007BC683 /* compress.c in Sources */,
 				42248C0D2014E1AD006ADC90 /* shpopen.c in Sources */,
+				42ADFB1B21F31BC9007BC683 /* gzclose.c in Sources */,
+				42ADFB1521F31BC9007BC683 /* zutil.c in Sources */,
 				4251B5B5219F73BA00E15F9F /* KeychainItemAccessibility.swift in Sources */,
+				42ADFAFD21F31B74007BC683 /* unzip.c in Sources */,
+				42ADFB3521F31C76007BC683 /* OZZipWriteStream.m in Sources */,
 				42248C0B2014E1AD006ADC90 /* safileio.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2036,62 +2059,39 @@
 				42B265831FF8314400E891A1 /* KalGridView.m in Sources */,
 				42B265851FF8314400E891A1 /* NSDateAdditions.m in Sources */,
 				42B2668E1FF8314500E891A1 /* UIImage+Snapshot.m in Sources */,
-				42B266AC1FF8314500E891A1 /* compress.c in Sources */,
 				42B2659E1FF8314400E891A1 /* ECSlidingInteractiveTransition.m in Sources */,
 				42B2669D1FF8314500E891A1 /* GTMOAuth2SignIn.m in Sources */,
 				42B265871FF8314400E891A1 /* UIViewAdditions.m in Sources */,
-				42B266DA1FF8314500E891A1 /* OZZipWriteStream.m in Sources */,
 				42B266DC1FF8314500E891A1 /* DeviceUtil.m in Sources */,
 				42B2658B1FF8314400E891A1 /* SmudgyWindow.m in Sources */,
 				42B266901FF8314500E891A1 /* UIImage+Diff.m in Sources */,
 				42B265941FF8314400E891A1 /* ECSlidingViewController.m in Sources */,
-				42B266C01FF8314500E891A1 /* inffast.c in Sources */,
 				42B265A81FF8314400E891A1 /* sha1.c in Sources */,
 				42B2669E1FF8314500E891A1 /* GTMSessionFetcher.m in Sources */,
 				42B2669A1FF8314500E891A1 /* GTMOAuth2ViewControllerTouch.m in Sources */,
 				42B265961FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.m in Sources */,
-				42B266B21FF8314500E891A1 /* crc32.c in Sources */,
 				42B2659C1FF8314400E891A1 /* ECSlidingSegue.m in Sources */,
-				42B266C41FF8314500E891A1 /* OZZipFile.m in Sources */,
 				42B265A31FF8314400E891A1 /* CHCSVParser.m in Sources */,
 				422626011FFA7C5F000DBD32 /* RZNavigationTitleView.m in Sources */,
-				42B266CF1FF8314500E891A1 /* OZZipReadStream.m in Sources */,
 				42B265AE1FF8314400E891A1 /* NSString+URLEncoding.m in Sources */,
 				42B265AF1FF8314400E891A1 /* OAuth1Controller.m in Sources */,
 				42B265861FF8314400E891A1 /* KalDate.m in Sources */,
 				42B265B01FF8314400E891A1 /* MBProgressHUD.m in Sources */,
-				42B266BE1FF8314500E891A1 /* gzclose.c in Sources */,
-				42B266B81FF8314500E891A1 /* gzlib.c in Sources */,
 				42B2659A1FF8314400E891A1 /* UIViewController+ECSlidingViewController.m in Sources */,
-				42B266A31FF8314500E891A1 /* zip.c in Sources */,
 				42B265A11FF8314400E891A1 /* GTMNSString+HTML.m in Sources */,
 				42B265741FF8314400E891A1 /* KalDataSource.m in Sources */,
 				42B265AA1FF8314400E891A1 /* Base64Transcoder.c in Sources */,
-				42B266BA1FF8314500E891A1 /* inftrees.c in Sources */,
-				42B266BD1FF8314500E891A1 /* trees.c in Sources */,
-				42B266CA1FF8314500E891A1 /* OZFileInZipInfo.m in Sources */,
 				42B2658D1FF8314400E891A1 /* Appirater.m in Sources */,
-				42B266B31FF8314500E891A1 /* infback.c in Sources */,
 				42B265AD1FF8314400E891A1 /* OAuth1WithingsController.m in Sources */,
 				42B266A11FF8314500E891A1 /* GTMOAuth2Authentication.m in Sources */,
-				42B266A41FF8314500E891A1 /* ioapi.c in Sources */,
-				42B266AF1FF8314500E891A1 /* gzread.c in Sources */,
 				42B265841FF8314400E891A1 /* KalMonthView.m in Sources */,
-				42B266BB1FF8314500E891A1 /* uncompr.c in Sources */,
 				42B265A61FF8314400E891A1 /* hmac.c in Sources */,
 				42B2659D1FF8314400E891A1 /* ECSlidingAnimationController.m in Sources */,
 				42B2668F1FF8314500E891A1 /* UIImage+Compare.m in Sources */,
-				42B266A21FF8314500E891A1 /* unzip.c in Sources */,
-				42B266BC1FF8314500E891A1 /* gzwrite.c in Sources */,
-				42B266B41FF8314500E891A1 /* zutil.c in Sources */,
 				42B2657B1FF8314400E891A1 /* KalViewController.m in Sources */,
-				42B266AB1FF8314500E891A1 /* inflate.c in Sources */,
 				42B265751FF8314400E891A1 /* KalLogic.m in Sources */,
 				42B265821FF8314400E891A1 /* KalView.m in Sources */,
-				42B266AD1FF8314500E891A1 /* deflate.c in Sources */,
 				42B265881FF8314400E891A1 /* KalTileView.m in Sources */,
-				42B266D91FF8314500E891A1 /* OZZipException.m in Sources */,
-				42B266C11FF8314500E891A1 /* adler32.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
