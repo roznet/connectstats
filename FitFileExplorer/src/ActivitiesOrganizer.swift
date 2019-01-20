@@ -39,6 +39,7 @@ class ActivitiesOrganizer {
         @discardableResult
         mutating func add(activity:Activity, db : FMDatabase? = nil) -> Bool {
             var rv = false
+            
             if let existing = activityMap[activity.activityId] {
                 if let db = db {
                     activity.remove(from: db)
@@ -59,7 +60,7 @@ class ActivitiesOrganizer {
                     }
                 }
                 if let db = db {
-                    activity.ensureTables(db: db)
+                    sample.ensureTables(db: db)
                     activity.insert(db: db, units: self.units)
                 }
             }
@@ -92,8 +93,14 @@ class ActivitiesOrganizer {
 
         mutating func loadUnits(from db:FMDatabase) {
             var units : [String:GCUnit] = [:]
-            if let res = db.executeQuery("SELECT * FROM fields", withArgumentsIn: []){
-                units[ res.string(forColumn: "name")] = GCUnit(forKey: res.string(forColumn: "unit"))
+            if let res = db.executeQuery("SELECT * FROM units", withArgumentsIn: []){
+                while res.next() {
+                    if let name = res.string(forColumn: "name"),
+                        let unitname = res.string(forColumn: "unit") {
+                        let unit = GCUnit(forKey: unitname)
+                        units[ name ] = unit
+                    }
+                }
             }
             self.units = units
         }
@@ -152,6 +159,8 @@ class ActivitiesOrganizer {
         
     }
     
+    // MARK: - Database
+    
     func load(db: FMDatabase) {
         var total = 0
         if let res = db.executeQuery("SELECT COUNT(*) FROM activities", withArgumentsIn: []),
@@ -160,11 +169,13 @@ class ActivitiesOrganizer {
         }
         
         if( total > 0){
+            
             if let res = db.executeQuery("SELECT * FROM activities", withArgumentsIn: []){
                 var newRep = Repr()
+                newRep.loadUnits(from: db)
                 
                 while res.next() {
-                    if let act = Activity(res: res, units: self.repr.units) {
+                    if let act = Activity(res: res, units: newRep.units) {
                         newRep.add(activity: act)
                     }
                 }
@@ -185,6 +196,8 @@ class ActivitiesOrganizer {
             one.insert(db: db, units: self.repr.units)
         }
     }
+
+    // MARK: - Json
     
     func load(url: URL) -> ParseResult {
         if let jsonData = try? Data(contentsOf: url),
@@ -201,7 +214,7 @@ class ActivitiesOrganizer {
                 if let info = one.objectValue,
                     let act = Activity(json: info) {
                     rv.total += 1
-                    if newRepr.add(activity: act) {
+                    if newRepr.add(activity: act, db: self.db) {
                         rv.updated += 1
                     }
                 }
@@ -226,6 +239,8 @@ class ActivitiesOrganizer {
         return try JSON( ["activityList":list])
     }
     
+    // MARK: - add/remove
+    
     func remove(activityIds:[ActivityId]) -> Int {
         return self.repr.remove(activityIds: activityIds, db: self.db)
     }
@@ -249,6 +264,23 @@ class ActivitiesOrganizer {
     }
     
     
+    // MARK: - Access
+    
+    func activity(activityId:ActivityId) -> Activity? {
+        return self.repr.activityMap[activityId]
+    }
+    
+    func activity(at : Int) -> Activity? {
+        if at < repr.activityList.count {
+            return repr.activityList[at]
+        }else{
+            return nil
+        }
+    }
+    
+    var count : Int {
+        return repr.activityList.count
+    }
     
     func lastestDate() -> Date {
         if let latest = self.activityList.first {

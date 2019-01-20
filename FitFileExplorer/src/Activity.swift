@@ -194,7 +194,7 @@ extension Activity {
     }
     
     func fieldTableName() -> String {
-        return "fields"
+        return "units"
     }
     
     func executeQuery( db : FMDatabase, query:String, params:[AnyHashable:Any]) -> FMResultSet? {
@@ -273,6 +273,7 @@ extension Activity {
     func remove(from db : FMDatabase){
         db.executeUpdate("DELETE * FROM \(self.activityTableName) WHERE activityId = ?", withArgumentsIn: [ self.activityId ])
     }
+    
     func insert(db : FMDatabase, units : [String:GCUnit]) {
         var params : [AnyHashable:Any] = [:]
         var columNames : [String] = ["activityId", "activityType", "time"]

@@ -67,31 +67,44 @@ class FitFileExplorerActivities: XCTestCase {
         }
     }
 
-    func testLoadSaveBig() {
+    func testParseAndSaveBig() {
         let organizer = ActivitiesOrganizer()
-
-        if let big = RZFileOrganizer.writeableFilePathIfExists("big.json") {
-            print( "Load single" )
-            _ = organizer.load(url: URL(fileURLWithPath: big))
-        }else{
-            print( "Load many" )
+        var reachedEnd = false
+        RZFileOrganizer.removeEditableFile("test_save_big.db")
+        if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("test_save_big.db")){
+            db.open()
+            organizer.db = db
+            
             let files = RZFileOrganizer.writeableFiles(matching: { (s) -> Bool in s.hasPrefix("last_modern_search") } )
             
-            
+            var count = 0
+            var samplecount = 0
+            var samplechange = 0
             
             for fn in files {
                 let url = URL( fileURLWithPath: RZFileOrganizer.writeableFilePath(fn) )
                 _ = organizer.load(url: url)
+                count += 1
+                if samplecount != 0 && organizer.sample().numbers.count != samplecount {
+                    samplechange += 1
+                }
+                samplecount = organizer.sample().numbers.count
             }
-            do {
-                try organizer.save(url: URL( fileURLWithPath: RZFileOrganizer.writeableFilePath("big.json")))
-            }catch{
-                print("error")
+            print( "loaded \(count) files, samplecount: \(samplecount), samplechange: \(samplechange) ")
+            
+            reachedEnd = true
+        }
+        XCTAssertTrue(reachedEnd)
+    }
+    
+    func testLoadBig() {
+        if let fp = RZFileOrganizer.writeableFilePathIfExists("test_save_big.db") {
+            if let db = FMDatabase(path: fp){
+                db.open()
+                let organizer = ActivitiesOrganizer(db: db)
+                XCTAssertTrue(organizer.count > 1000)
             }
         }
-        
-        let sample = organizer.sample()
-        print( "\(sample.numbers.keys)")
     }
     
     func testLoadManyJson() {
@@ -132,52 +145,58 @@ class FitFileExplorerActivities: XCTestCase {
         XCTAssertEqual(addedback.total, 20)
     }
     
+    func intForQuery(db : FMDatabase, query : String) -> Int {
+        let res = db.executeQuery(query, withArgumentsIn: [])
+        if let res = res, res.next() {
+            return Int(res.int(forColumnIndex: 0))
+        }
+        return 0
+    }
+    
     func testDatabase() {
-        
-        let garmin_sample = "last_modern_search_0.json"
+        var reachedEnd = false
+        let garmin_sample = "last_modern_search_20.json"
         let garmin_sample_url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(garmin_sample, for: type(of:self)))
         RZFileOrganizer.removeEditableFile("test_activities.db")
         if let organizer = ActivitiesOrganizer(url: garmin_sample_url) {
-            let sample = organizer.sample()
             
             if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("test_activities.db")) {
                 db.open()
 
+                XCTAssertEqual(self.intForQuery(db: db, query: "SELECT COUNT(*) FROM activities"), 0)
+
+                organizer.save(to: db)
+                organizer.db = db
                 
-                for one in organizer.activityList {
-                    one.insert(db: db, conform: sample.numbers)
-                }
+                XCTAssertEqual(self.intForQuery(db: db, query: "SELECT COUNT(*) FROM activities"), organizer.activityList.count)
+
+                let reloaded = ActivitiesOrganizer(db: db)
+                XCTAssertEqual(reloaded.activityList.count, organizer.activityList.count)
                 
-                var units : [String:GCUnit] = [:]
-                var list : [Activity] = []
-                
-                if let res = db.executeQuery("SELECT * FROM fields", withArgumentsIn: []) {
-                    while res.next() {
-                        units[ res.string(forColumn: "name") ] = GCUnit( forKey: res.string(forColumn: "unit") )
+                var count = 0
+                for activity in organizer.activityList {
+                    if let reloaded_activity = reloaded.activity(activityId: activity.activityId) {
+                        count+=1
+                        XCTAssertEqual(activity.time, reloaded_activity.time)
+                        XCTAssertEqual(activity.numbers.count, reloaded_activity.numbers.count)
                     }
                 }
+                XCTAssertEqual(count, organizer.count)
                 
-                if let res = db.executeQuery("SELECT * FROM activities", withArgumentsIn: []) {
-                    while res.next() {
-                        if let act = Activity(res: res, units: units){
-                            
-                            list.append(act)
-                        }
-                    }
-                }
-                print("Reload \(list.count)")
-                if let reload_first = list.first{
-                    let actId = reload_first.activityId
-                    
-                    let first = list.filter {
-                        $0.activityId == actId
-                    }
-                    if let orig_first = first.first {
-                       print("\(orig_first), \(reload_first)")
-                    }
-                }
+                let garmin_sample_next = "last_modern_search_0.json"
+                let garmin_sample_next_url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(garmin_sample_next, for: type(of:self)))
+                
+                let startcount = organizer.count
+                let samplecount = organizer.sample().numbers.count
+                let res = organizer.load(url: garmin_sample_next_url)
+                XCTAssertEqual(organizer.count, startcount+res.updated)
+
+                let newsamplecount = organizer.sample().numbers.count
+                reachedEnd = true
             }
         }
+        
+        XCTAssertTrue(reachedEnd)
     }
     
     func testPerformanceExample() {
