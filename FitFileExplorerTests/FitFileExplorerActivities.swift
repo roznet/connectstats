@@ -142,8 +142,8 @@ class FitFileExplorerActivities: XCTestCase {
             
             if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("test_activities.db")) {
                 db.open()
-                sample.ensureTables(db: db)
 
+                
                 for one in organizer.activityList {
                     one.insert(db: db, conform: sample.numbers)
                 }

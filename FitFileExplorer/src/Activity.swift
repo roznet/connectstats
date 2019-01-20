@@ -270,7 +270,10 @@ extension Activity {
         }
     }
     
-    func insert(db : FMDatabase, conform : [String:GCNumberWithUnit]) {
+    func remove(from db : FMDatabase){
+        db.executeUpdate("DELETE * FROM \(self.activityTableName) WHERE activityId = ?", withArgumentsIn: [ self.activityId ])
+    }
+    func insert(db : FMDatabase, units : [String:GCUnit]) {
         var params : [AnyHashable:Any] = [:]
         var columNames : [String] = ["activityId", "activityType", "time"]
         
@@ -279,8 +282,8 @@ extension Activity {
         params["time"] = self.time
         
         for (key,val) in self.numbers {
-            if let sample = conform[key] {
-                let converted = val.convert(to: sample.unit)
+            if let unit = units[key] {
+                let converted = val.convert(to: unit)
                 params[key] = NSNumber(value: converted.value)
                 columNames.append(key)
             }

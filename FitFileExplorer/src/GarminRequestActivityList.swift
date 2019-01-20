@@ -85,7 +85,7 @@ class GarminRequestActivityList: GarminRequest {
             self.delegate.loginSuccess(gcWebService.garmin)
             self.parseCount = FITAppGlobal.downloadManager().loadOneFile(filePath: path)
             if self.parseCount > 0 {
-                self.lastFoundDate = FITAppGlobal.shared.organizer.lastDate()
+                self.lastFoundDate = FITAppGlobal.shared.organizer.earliestDate()
                 self.nextReq = GarminRequestActivityList(nextFrom: self)
             }
         }

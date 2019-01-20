@@ -29,20 +29,107 @@ import Foundation
 import GenericJSON
 
 class ActivitiesOrganizer {
+    
+    struct Repr {
+        var activityList : [Activity] = []
+        var activityMap :[ActivityId:Activity] = [:]
+        var sample : Activity = Activity()
+        var units  : [String:GCUnit] = [:]
+        
+        @discardableResult
+        mutating func add(activity:Activity, db : FMDatabase? = nil) -> Bool {
+            var rv = false
+            if let existing = activityMap[activity.activityId] {
+                if let db = db {
+                    activity.remove(from: db)
+                }
+                rv = existing.update(with: activity)
+            }else{
+                rv = true
+                self.activityList.append(activity)
+                self.activityMap[activity.activityId] = activity
+            }
+            
+            if rv {
+                sample.merge(with: activity)
+                // update unit that don't exist
+                for (key,val) in sample.numbers {
+                    if self.units[key] == nil {
+                        self.units[key] = val.unit
+                    }
+                }
+                if let db = db {
+                    activity.ensureTables(db: db)
+                    activity.insert(db: db, units: self.units)
+                }
+            }
+            return rv
+        }
+        
+        mutating func remove(activityIds:[ActivityId], db : FMDatabase? = nil) -> Int {
+            let filtered = self.activityList.filter{
+                !activityIds.contains($0.activityId)
+            }
+            let rv = self.activityList.count - filtered.count
+            if( rv != 0){
+                self.activityList = filtered
+                for aid in activityIds {
+                    if let act = self.activityMap.removeValue(forKey: aid),
+                        let db = db {
+                        act.remove(from: db)
+                    }
+                }
+            }
+            return rv
+
+        }
+        
+        mutating func reorder() {
+            activityList.sort {
+                $1.time < $0.time
+            }
+        }
+
+        mutating func loadUnits(from db:FMDatabase) {
+            var units : [String:GCUnit] = [:]
+            if let res = db.executeQuery("SELECT * FROM fields", withArgumentsIn: []){
+                units[ res.string(forColumn: "name")] = GCUnit(forKey: res.string(forColumn: "unit"))
+            }
+            self.units = units
+        }
+        
+        @discardableResult
+        mutating func rebuildSample() -> Activity {
+            let rv = Activity()
+            for act in self.activityList {
+                rv.merge(with: act)
+            }
+            self.sample = rv
+            return rv
+        }
+    }
+    
+    // MARK: -
+    
     typealias ParseResult = (total:Int, updated:Int)
     
-    private var activityMap :[ActivityId:Activity]
+    private var repr : Repr
     
-    private(set) var activityList : [Activity]
+    var activityList : [Activity] {
+        return repr.activityList
+    }
+    
+    var db : FMDatabase? = nil
+    
+    var worker : DispatchQueue? = nil
     
     init() {
-        activityList = []
-        activityMap  = [:]
+        self.repr = Repr()
     }
     
     init?(json:JSON){
-        activityList = []
-        activityMap  = [:]
+        self.repr = Repr()
+
         let result = self.load(json: json)
         if( result.total == 0 ){
             return nil
@@ -58,6 +145,47 @@ class ActivitiesOrganizer {
         }
     }
     
+    convenience init(db : FMDatabase) {
+        self.init()
+        self.db = db
+        self.load(db: db)
+        
+    }
+    
+    func load(db: FMDatabase) {
+        var total = 0
+        if let res = db.executeQuery("SELECT COUNT(*) FROM activities", withArgumentsIn: []),
+            res.next(){
+            total = Int(res.int(forColumn: "COUNT(*)"))
+        }
+        
+        if( total > 0){
+            if let res = db.executeQuery("SELECT * FROM activities", withArgumentsIn: []){
+                var newRep = Repr()
+                
+                while res.next() {
+                    if let act = Activity(res: res, units: self.repr.units) {
+                        newRep.add(activity: act)
+                    }
+                }
+                
+                res.close()
+                res.setParentDB(nil)
+                
+                self.repr = newRep
+            }
+        }
+    }
+    
+    func save(to db:FMDatabase) {
+        
+        self.repr.sample.ensureTables(db: db)
+            
+        for one in self.activityList {
+            one.insert(db: db, units: self.repr.units)
+        }
+    }
+    
     func load(url: URL) -> ParseResult {
         if let jsonData = try? Data(contentsOf: url),
             let json = try? JSONDecoder().decode(JSON.self, from: jsonData){
@@ -68,30 +196,19 @@ class ActivitiesOrganizer {
     func load(json:JSON) -> ParseResult {
         var rv : ParseResult = (0,0)
         if let acts = json["activityList"]?.arrayValue {
-            var list : [Activity] = self.activityList
-            var map  : [ActivityId:Activity] = self.activityMap
+            var newRepr = self.repr
             for one in acts {
-                
                 if let info = one.objectValue,
                     let act = Activity(json: info) {
                     rv.total += 1
-                    
-                    if let existing = map[act.activityId] {
-                        if( existing.update(with:act) ){
-                            rv.updated += 1
-                        }
-                    }else{
-                        list.append(act)
-                        map[act.activityId] = act
+                    if newRepr.add(activity: act) {
                         rv.updated += 1
                     }
                 }
             }
             if( rv.updated > 0 ){
-                self.activityMap = map
-                self.activityList = list.sorted {
-                    $1.time < $0.time
-                }
+                self.repr = newRepr
+                self.repr.reorder()
             }
         }
         return rv
@@ -110,17 +227,7 @@ class ActivitiesOrganizer {
     }
     
     func remove(activityIds:[ActivityId]) -> Int {
-        let filtered = self.activityList.filter{
-            !activityIds.contains($0.activityId)
-        }
-        let rv = self.activityList.count - filtered.count
-        if( rv != 0){
-            self.activityList = filtered
-            for aid in activityIds {
-                self.activityMap.removeValue(forKey: aid)
-            }
-        }
-        return rv
+        return self.repr.remove(activityIds: activityIds, db: self.db)
     }
     func remove(activities:[Activity]) -> Int {
         let ids = activities.map {
@@ -133,13 +240,7 @@ class ActivitiesOrganizer {
         var rv : Int = 0
         
         for activity in activities {
-            if let found = activityMap[activity.activityId] {
-                if( found.update(with: activity) ){
-                    rv += 1
-                }
-            }else{
-                activityList.append(activity)
-                activityMap[activity.activityId] = activity
+            if self.repr.add(activity: activity) {
                 rv += 1
             }
         }
@@ -147,26 +248,26 @@ class ActivitiesOrganizer {
         return rv
     }
     
-    private func reorder() {
-        activityList.sort {
-            $1.time < $0.time
-        }
-    }
     
-    func sample() -> Activity {
-        let rv = Activity()
-        for act in self.activityList {
-            rv.merge(with: act)
-        }
-        return rv
-    }
     
-    func lastDate() -> Date {
-        if let latest = self.activityList.last {
+    func lastestDate() -> Date {
+        if let latest = self.activityList.first {
             return latest.time
         }else{
             return Date()
         }
     }
+
+    func earliestDate() -> Date {
+        if let earliest = self.activityList.last {
+            return earliest.time
+        }else{
+            return Date()
+        }
+    }
     
+    func sample() -> Activity {
+        return self.repr.sample
+    }
+
 }

@@ -156,7 +156,9 @@ NSString * kBugNoCommonId = @"-1";
     
     NSString * bugpath = [RZFileOrganizer writeableFilePath:kBugFilename];
     
-    OZZipFile * zipFile= [[OZZipFile alloc] initWithFileName:bugpath mode:OZZipFileModeCreate];
+    NSError * err = nil;
+    
+    OZZipFile * zipFile= [[OZZipFile alloc] initWithFileName:bugpath mode:OZZipFileModeCreate error:&err];
     
     OZZipWriteStream *stream= [zipFile writeFileInZipWithName:@"bugreport.log" compressionLevel:OZZipCompressionLevelBest];
     [stream writeData:[log dataUsingEncoding:NSUTF8StringEncoding]];

@@ -43,7 +43,6 @@ class GarminRequestFitFile: GarminRequest {
         super.init()
     }
     
-    
     @objc override func url() -> String {
         return GCWebActivityURLFitFile(self.activityId)
     }
