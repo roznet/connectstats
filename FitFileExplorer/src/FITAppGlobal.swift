@@ -32,7 +32,7 @@ class FITAppGlobal {
     
     enum ConfigParameters : String {
         case loginName = "loginName"
-        case password = "password"
+        case password = "loginPassword"
     }
     
     static let shared = FITAppGlobal()

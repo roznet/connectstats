@@ -28,8 +28,8 @@
 import Cocoa
 import RZUtils
 import RZUtilsOSX
-import RZExternalUniversal
 import GenericJSON
+import KeychainSwift
 
 extension Date {
     func formatAsRFC3339() -> String {
@@ -47,7 +47,7 @@ extension GCField {
 
 class FITDownloadViewController: NSViewController {
     
-    let keychain = KeychainWrapper(serviceName: "net.ro-z.FitFileExplorer")
+    let keychain = KeychainSwift()
     
     @IBOutlet weak var userName: NSTextField!
     @IBOutlet weak var password: NSSecureTextField!
@@ -60,9 +60,34 @@ class FITDownloadViewController: NSViewController {
     
     // MARK: -
     
+    func databaseFileName() -> String {
+        if let saved_username = keychain.get(FITAppGlobal.ConfigParameters.loginName.rawValue){
+        
+            var invalidCharacters = CharacterSet(charactersIn: ":/")
+           
+            invalidCharacters.formUnion(CharacterSet.newlines)
+            invalidCharacters.formUnion(CharacterSet.illegalCharacters)
+            invalidCharacters.formUnion(CharacterSet.controlCharacters)
+            
+            let filename = saved_username.components(separatedBy: invalidCharacters).joined(separator: "")
+            
+            return "activities_\(filename).db"
+        }else{
+            return "activities_default.db"
+        }
+    }
+    
     @IBAction func refresh(_ sender: Any) {
         activityTable.dataSource = self.dataSource
         activityTable.delegate = self.dataSource
+        
+        let dbpath = RZFileOrganizer.writeableFilePath(self.databaseFileName())
+        
+        if let db = FMDatabase(path: dbpath) {
+            db.open()
+            FITAppGlobal.shared.organizer.load(db: db)
+        }
+        
         FITAppGlobal.downloadManager().startDownloadList()
     }
 
@@ -251,21 +276,24 @@ class FITDownloadViewController: NSViewController {
                                                object: nil)
         
         
-        print( "\(keychain.allKeys())")
-        if let saved_username = keychain.string(forKey: FITAppGlobal.ConfigParameters.loginName.rawValue){
+        if let saved_username = keychain.get(FITAppGlobal.ConfigParameters.loginName.rawValue){
             userName.stringValue = saved_username
             if let update = try? JSON( [FITAppGlobal.ConfigParameters.loginName.rawValue:saved_username]) {
                 FITAppGlobal.shared.updateSettings(json: update)
             }
-            
-            //FITAppGlobal.configSet(kFITSettingsKeyLoginName, stringVal: saved_username)
         }
-        if let saved_password = keychain.string(forKey: FITAppGlobal.ConfigParameters.password.rawValue) {
+        if let dbpath = RZFileOrganizer.writeableFilePathIfExists(self.databaseFileName()) {
+            if let db = FMDatabase(path: dbpath ) {
+                db.open()
+                FITAppGlobal.shared.organizer.load(db: db)
+            }
+        }
+        
+        if let saved_password = keychain.get(FITAppGlobal.ConfigParameters.password.rawValue) {
             password.stringValue = saved_password
             if let update = try? JSON( [FITAppGlobal.ConfigParameters.password.rawValue:saved_password]) {
                 FITAppGlobal.shared.updateSettings(json: update)
             }
-            //FITAppGlobal.configSet(kFITSettingsKeyPassword, stringVal: saved_password)
         }
         FITAppGlobal.downloadManager().loadFromFile()
         activityTable.dataSource = self.dataSource

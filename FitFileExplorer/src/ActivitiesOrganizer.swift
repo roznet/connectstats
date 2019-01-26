@@ -168,10 +168,15 @@ class ActivitiesOrganizer {
             total = Int(res.int(forColumn: "COUNT(*)"))
         }
         
+        if db.databasePath() == self.db?.databasePath() && total == self.repr.activityList.count {
+            return
+        }
+        self.db = db
+        var newRep = Repr()
+
         if( total > 0){
             
             if let res = db.executeQuery("SELECT * FROM activities", withArgumentsIn: []){
-                var newRep = Repr()
                 newRep.loadUnits(from: db)
                 
                 while res.next() {
@@ -183,9 +188,9 @@ class ActivitiesOrganizer {
                 res.close()
                 res.setParentDB(nil)
                 
-                self.repr = newRep
             }
         }
+        self.repr = newRep
     }
     
     func save(to db:FMDatabase) {

@@ -53,21 +53,25 @@ class FITDownloadListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSou
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cellView =  tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DownloadCellView"), owner: self)
-        let to_display = self.list()[row]
         if let cellView = cellView as? NSTableCellView, let column = tableColumn?.identifier.rawValue {
-            cellView.textField?.stringValue = ""
-            if column == "activityId" {
-                cellView.textField?.stringValue = to_display.activityId
-            }else if( column == "activityType" ){
-                cellView.textField?.stringValue = to_display.activityTypeAsString
-            }else if( column == "time" ){
-                cellView.textField?.stringValue = to_display.time.description
-            }else if( column == "downloaded" ){
-                cellView.textField?.stringValue = to_display.downloaded ? "yes" : ""
-            }else{
-                if let value = to_display.numbers[column] {
-                    cellView.textField?.stringValue =  value.formatDouble()
+            if row < self.list().count {
+                let to_display = self.list()[row]
+                cellView.textField?.stringValue = ""
+                if column == "activityId" {
+                    cellView.textField?.stringValue = to_display.activityId
+                }else if( column == "activityType" ){
+                    cellView.textField?.stringValue = to_display.activityTypeAsString
+                }else if( column == "time" ){
+                    cellView.textField?.stringValue = to_display.time.description
+                }else if( column == "downloaded" ){
+                    cellView.textField?.stringValue = to_display.downloaded ? "yes" : ""
+                }else{
+                    if let value = to_display.numbers[column] {
+                        cellView.textField?.stringValue =  value.formatDouble()
+                    }
                 }
+            }else{
+                cellView.textField?.stringValue = ""
             }
         }
         return cellView
