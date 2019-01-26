@@ -192,6 +192,8 @@ class FitFileExplorerActivities: XCTestCase {
                 XCTAssertEqual(organizer.count, startcount+res.updated)
 
                 let newsamplecount = organizer.sample().numbers.count
+                XCTAssertEqual(newsamplecount, samplecount)
+                
                 reachedEnd = true
             }
         }
