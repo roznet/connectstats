@@ -107,9 +107,6 @@ class Activity {
             
             for (key,obj) in all {
                 if let key = key as? String {
-                    if key == "start_lat" {
-                        print("YO")
-                    }
                     if key != "activityId" && key != "activityType" && key != "time" {
                         if let num = obj as? NSNumber {
                             if key.hasSuffix("_lat") {
