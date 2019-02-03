@@ -79,7 +79,25 @@ class FitFileExplorerTests: XCTestCase {
                         }
                     }
                 }
+                let records = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
+                if  records.count > 0 {
+                    let csv = fastfit.csv(messageType: FIT_MESG_NUM_RECORD)
+                    XCTAssertEqual(csv.count, records.count+1)
+                    
+                    var size : Int? = nil
+                    var counter : Int = 0
+                    for line in csv {
+                        let elements = line.split(separator: ",", maxSplits: Int.max, omittingEmptySubsequences: false)
+                        if size == nil {
+                            size = elements.count
+                        }else{
+                            XCTAssertEqual(size, elements.count, "line \(counter)")
+                        }
+                        counter+=1                    }
+                }
             }
+            
+            
         }
     }
     

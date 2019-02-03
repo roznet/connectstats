@@ -65,23 +65,21 @@ extension RZFitFile {
         }*/
     }
     
-    func orderedFieldKeys(messageType: RZFitMessageType) -> [RZFitFieldKey] {
-        
-        let all = Array(self.fieldKeys(messageType:messageType))
-        let samples = self.sampleValues(messageType: messageType)
-        
+    private func orderKeysFromSample(samples : [RZFitFieldKey:Sample]) -> [RZFitFieldKey] {
         let typeOrder = [  RZFitFieldValue.ValueType.time,
                            RZFitFieldValue.ValueType.coordinate,
                            RZFitFieldValue.ValueType.name,
                            RZFitFieldValue.ValueType.valueUnit,
                            RZFitFieldValue.ValueType.value,
                            RZFitFieldValue.ValueType.invalid
-            ]
+        ]
         
         var byType : [RZFitFieldValue.ValueType:[RZFitFieldKey]] = [:]
         for type in typeOrder{
             byType[type] = []
         }
+        
+        let all = Array(samples.keys)
         
         for key in all {
             if let val = samples[key] {
@@ -105,6 +103,52 @@ extension RZFitFile {
         }
         
         return rv
+        
     }
     
+    func orderedFieldKeys(messageType: RZFitMessageType) -> [RZFitFieldKey] {
+        let samples = self.sampleValues(messageType: messageType)
+        return self.orderKeysFromSample(samples: samples)
+    }
+    
+    func csv(messageType:RZFitMessageType) -> [String] {
+        let sample = self.sampleValues(messageType: messageType)
+        let cols = self.orderKeysFromSample(samples: sample)
+        
+        var csv : [String] = []
+        var line : [String] = []
+        for col in cols {
+            if let sample = sample[col]?.one {
+                line.append(contentsOf: sample.csvColumns(col: col))
+            }
+        }
+        csv.append(line.joined(separator: ","))
+        
+        var size : Int? = nil
+        for message in self.messages(forMessageType: messageType) {
+            line = []
+            let vals = message.interpretedFields()
+            for col in cols {
+                if let val = vals[col] {
+                    line.append(contentsOf: val.csvValues(ref: sample[col]?.one))
+                }else{
+                    if let sampleCols = sample[col]?.one {
+                        let emptyVals : [String] = sampleCols.csvColumns(col: col).map { _ in "" }
+                        line.append(contentsOf: emptyVals)
+                    }else{
+                        line.append(col)
+                    }
+                }
+            }
+            if size == nil {
+                size = line.count
+            }else{
+                if size != line.count {
+                    print("Inconsistent csv line size for msg:\(messageType) \(line.count) != \(size ?? 0)")
+                }
+            }
+            csv.append(line.joined(separator: ","))
+        }
+        return csv
+    }
 }

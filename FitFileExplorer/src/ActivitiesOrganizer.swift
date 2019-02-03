@@ -343,7 +343,7 @@ class ActivitiesOrganizer {
                 size = line.count
             }else{
                 if size != line.count {
-                    print("oops")
+                    print("Inconsistent csv line size for organizer \(line.count) != \(size ?? 0)")
                 }
             }
             
