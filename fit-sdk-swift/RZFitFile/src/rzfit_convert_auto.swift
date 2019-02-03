@@ -2418,6 +2418,7 @@ func rzfit_manufacturer_string(input : FIT_UINT16) -> String?
     case FIT_MANUFACTURER_POLAR_ELECTRO: return "polar_electro";
     case FIT_MANUFACTURER_SEESENSE: return "seesense";
     case FIT_MANUFACTURER_NCI_TECHNOLOGY: return "nci_technology";
+    case FIT_MANUFACTURER_IQSQUARE: return "iqsquare";
     case FIT_MANUFACTURER_DEVELOPMENT: return "development";
     case FIT_MANUFACTURER_HEALTHANDLIFE: return "healthandlife";
     case FIT_MANUFACTURER_LEZYNE: return "lezyne";
