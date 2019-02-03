@@ -182,6 +182,32 @@ class Activity {
         self.originalJson = [:]
     }
     
+    func allValues() -> [RZFitFieldKey:RZFitFieldValue] {
+        var rv : [RZFitFieldKey:RZFitFieldValue] = [:]
+        
+        rv["activityId"] = RZFitFieldValue(withName: self.activityId)
+        rv["activityType"] = RZFitFieldValue(withName: self.activityTypeAsString)
+        rv["time"] = RZFitFieldValue(withTime: self.time)
+        
+        _ = self.labels.map { rv[$0.key] = RZFitFieldValue(withName: $0.value)}
+        _ = self.numbers.map { rv[$0.key] = RZFitFieldValue(withValue: $0.value.value, andUnit: $0.value.unit.key)}
+        _ = self.coordinates.map { rv[$0.key] = RZFitFieldValue(latitude: $0.value.latitude, longitude: $0.value.longitude) }
+        _ = self.dates.map { rv[$0.key] = RZFitFieldValue(withTime: $0.value )}
+        
+        return rv
+    }
+    
+    func allKeysOrdered() -> [RZFitFieldKey] {
+        var rv : [RZFitFieldKey] = ["activityId", "activityType", "time"]
+        
+        _ = self.dates.map { rv.append( $0.key ) }
+        _ = self.labels.map { rv.append( $0.key ) }
+        _ = self.coordinates.map { rv.append( $0.key ) }
+        _ = self.numbers.map { rv.append( $0.key ) }
+
+        return rv
+    }
+    
 }
 
 extension Activity {

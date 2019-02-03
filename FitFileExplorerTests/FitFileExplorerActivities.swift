@@ -64,6 +64,22 @@ class FitFileExplorerActivities: XCTestCase {
             
             let reloaded = ActivitiesOrganizer(url: outfile_url)
             XCTAssertEqual(reloaded?.activityList.count, organizer.activityList.count)
+            
+            let csv = organizer.csv()
+            XCTAssertEqual(csv.count, organizer.activityList.count + 1)
+            
+            var size :Int? = nil
+            var counter = 0
+            for line in csv {
+                
+                let elements = line.split(separator: ",", maxSplits: Int.max, omittingEmptySubsequences: false)
+                if size == nil {
+                    size = elements.count
+                }else{
+                    XCTAssertEqual(size, elements.count, "line \(counter)")
+                }
+                counter+=1
+            }
         }
     }
 

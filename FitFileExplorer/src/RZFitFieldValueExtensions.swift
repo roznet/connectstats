@@ -62,6 +62,48 @@ extension RZFitFieldValue {
         }
     }
     
+    func csvColumns( col : RZFitFieldKey ) -> [RZFitFieldKey] {
+        // size needs to be consistent with number of cols in csvValues
+        var line : [RZFitFieldKey] = []
+        
+        if let nu = numberWithUnit {
+            line.append("\(col)_\(nu.unit.key)")
+        }else if coordinate != nil {
+            line.append("\(col)_lat")
+            line.append("\(col)_lon")
+        }else{
+            line.append(col)
+        }
+
+        return line
+    }
+    
+    func csvValues( ref : RZFitFieldValue? = nil) -> [String] {
+        // size needs to be consistent with number of cols in csvColumns
+        var rv : [String] = []
+        
+        if let co = coordinate {
+            rv.append("\(co.latitude)")
+            rv.append("\(co.longitude)")
+        }else if let nu = self.numberWithUnit {
+            if let refnu = ref?.numberWithUnit {
+                let conv = nu.convert(to: refnu.unit)
+                rv.append( "\(conv.value)" )
+            }
+        }else if let name = name {
+            rv.append( "\"\(name)\"" )
+        }else if let time = time {
+            // Unix TimeStamp, so can be imported in pandas w pd.to_datetime(df.index, unit='s')
+            rv.append( "\(time.timeIntervalSince1970)" )
+        }else if let value = value {
+            rv.append( "\(value)" )
+        }else{
+            // null string in csv
+            rv.append("")
+        }
+        return rv
+    }
+    
     convenience init?(fieldValue : FITFitFieldValue) {
         if let val = fieldValue.numberWithUnit {
             self.init(withValue: val.value, andUnit: val.unit.key)

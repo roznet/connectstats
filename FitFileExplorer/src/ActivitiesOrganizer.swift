@@ -307,4 +307,49 @@ class ActivitiesOrganizer {
         return self.repr.sample
     }
 
+    func csv() -> [String] {
+        let sample = self.sample()
+        
+        let cols = sample.allKeysOrdered()
+        let sampleValues = sample.allValues()
+        
+        var csv : [String] = []
+        var line : [String] = []
+        for col in cols {
+            if let sample = sampleValues[col] {
+                line.append(contentsOf: sample.csvColumns(col: col) )
+            }
+        }
+        csv.append( line.joined(separator: ",") )
+        
+        var size : Int? = nil
+        for activity in self.activityList {
+            line = []
+            let vals = activity.allValues()
+            
+            for col in cols {
+                if let val = vals[col] {
+                    line.append(contentsOf: val.csvValues(ref: sampleValues[col]))
+                }else{
+                    if let sampleCols = sampleValues[col] {
+                        let emptyVals : [String] = sampleCols.csvColumns(col: col).map { _ in "" }
+                        line.append(contentsOf: emptyVals)
+                    }else{
+                        line.append(col)
+                    }
+                }
+            }
+            if size == nil {
+                size = line.count
+            }else{
+                if size != line.count {
+                    print("oops")
+                }
+            }
+            
+            csv.append( line.joined( separator: ",") )
+        }
+        return csv
+    }
+    
 }

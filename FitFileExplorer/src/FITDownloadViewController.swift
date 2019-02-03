@@ -196,58 +196,16 @@ class FITDownloadViewController: NSViewController {
     }
     
     func exportSingleCsv() {
-        var units : [String:GCUnit] = [:]
-        
-        for activity  in self.dataSource.list() {
-            
-                let val = activity.numbers
-                for (key,nu) in val {
-                    units[key] = nu.unit
-                }
-            
-        }
 
-        
-        let cols = ["activityId", "activityType"] + Array(units.keys)
-        
-        var csv : String = ""
-        var line : [String] = []
-        for col in cols {
-            if let unit = units[col] {
-                line.append("\(col)_\(unit)")
-            }else{
-                line.append(col)
-            }
-        }
-        csv += line.joined(separator: ",")
-        csv += "\n"
-        
-        for activity  in self.dataSource.list() {
-            
-            line = []
-            let val = activity.numbers
-            for key in cols {
-                if key == "activityId" {
-                    line.append(activity.activityId)
-                }else if key == "activityType" {
-                    line.append(activity.activityTypeAsString)
-                }else if let nu = val[key], let u = units[key] {
-                    let dval = nu.convert(to: u).value
-                    line.append("\(dval)")
-                }else{
-                    line.append("")
-                }
-            }
-            
-            csv += line.joined( separator: ",")
-            csv += "\n"
-            
-        }
+        let organizer = FITAppGlobal.shared.organizer
+        let csv = organizer.csv()
+
+        let content = csv.joined(separator: "\n")
         
         let fn = RZFileOrganizer.writeableFilePath("list.csv")
 
         do {
-        try csv.write(toFile: fn, atomically: true, encoding: String.Encoding.utf8)
+        try content.write(toFile: fn, atomically: true, encoding: String.Encoding.utf8)
         }catch {
             print("Failed to write \(fn)")
         }
@@ -255,14 +213,9 @@ class FITDownloadViewController: NSViewController {
     }
     
     @IBAction func exportList(_ sender: Any) {
-        //self.exportSingleCsv()
+        self.exportSingleCsv()
         
-        if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("activities.db")) {
-            db.open()
-            
-            FITAppGlobal.shared.organizer.save(to: db)
-        }
-            
+        
     }
     
 
