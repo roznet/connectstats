@@ -26,6 +26,8 @@
 
 
 import XCTest
+import RZUtilsSwift
+
 @testable import FitFileExplorer
 
 class FitFileExplorerActivities: XCTestCase {
@@ -44,7 +46,7 @@ class FitFileExplorerActivities: XCTestCase {
         
         let garmin_sample = "last_modern_search_0.json"
         let garmin_sample_url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(garmin_sample, for: type(of:self)))
-        
+        RZSLog.info("Started shown")
         if let organizer = ActivitiesOrganizer(url: garmin_sample_url) {
             
             XCTAssertEqual(organizer.activityList.count, 20)
@@ -91,22 +93,40 @@ class FitFileExplorerActivities: XCTestCase {
             db.open()
             organizer.db = db
             
-            let files = RZFileOrganizer.writeableFiles(matching: { (s) -> Bool in s.hasPrefix("last_modern_search") } )
+            let rawfiles = RZFileOrganizer.writeableFiles(matching: { (s) -> Bool in s.hasPrefix("last_modern_search") } )
+
+            
+            let files = rawfiles.sorted {
+                if let l = Int($0.replacingOccurrences(of: "last_modern_search_", with: "").replacingOccurrences(of: ".json", with: "")),
+                    let r = Int($1.replacingOccurrences(of: "last_modern_search_", with: "").replacingOccurrences(of: ".json", with: "")) {
+                    return l < r
+                }else{
+                    return false
+                }
+            }
             
             var count = 0
             var samplecount = 0
             var samplechange = 0
+            var empty = 0
             
             for fn in files {
                 let url = URL( fileURLWithPath: RZFileOrganizer.writeableFilePath(fn) )
-                _ = organizer.load(url: url)
+                let res = organizer.load(url: url)
+                if fn == "last_modern_search_1060.json" {
+                    print("yo")
+                }
+                if res.updated == 0 {
+                    empty+=1
+                }
+                
                 count += 1
                 if samplecount != 0 && organizer.sample().numbers.count != samplecount {
                     samplechange += 1
                 }
                 samplecount = organizer.sample().numbers.count
             }
-            print( "loaded \(count) files, samplecount: \(samplecount), samplechange: \(samplechange) ")
+            RZSLog.info("loaded \(count) files, samplecount: \(samplecount), samplechange: \(samplechange) empty: \(empty)")
             
             reachedEnd = true
         }

@@ -6,7 +6,13 @@
 //  Copyright © 2017 Brice Rosenzweig. All rights reserved.
 //
 
+#import <TargetConditionals.h>
+
+#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#else
+#import <Cocoa/Cocoa.h>
+#endif
 
 //! Project version number for RZUtilsSwift.
 FOUNDATION_EXPORT double RZUtilsSwiftVersionNumber;

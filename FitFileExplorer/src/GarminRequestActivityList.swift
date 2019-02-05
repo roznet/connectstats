@@ -88,6 +88,8 @@ class GarminRequestActivityList: GarminRequest {
                 self.lastFoundDate = FITAppGlobal.shared.organizer.earliestDate()
                 self.nextReq = GarminRequestActivityList(nextFrom: self)
             }
+        }else{
+            print( "error")
         }
         
         self.processDone()
