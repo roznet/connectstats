@@ -52,7 +52,7 @@ class FITGraphViewController: NSViewController {
             /*
             if selectionContext.messageType == FIT_MESG_NUM_RECORD {
                 let equivalent = interp.mapFields(from: [field], to: selectionContext.fitFile.fieldKeys(messageType: FIT_MESG_NUM_LAP))
-                print("Equivalent \(field)=\(equivalent)")
+                RZSLog.info("Equivalent \(field)=\(equivalent)")
             }*/
             let ds = GCSimpleGraphCachedDataSource()
             if let serie = interp.statsDataSerie(messageType: selectionContext.messageType, fieldX: selectionContext.selectedXField, fieldY: field) {

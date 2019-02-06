@@ -26,6 +26,7 @@
 
 
 import Cocoa
+import RZUtilsSwift
 
 class GarminRequestActivityList: GarminRequest {
 
@@ -89,7 +90,7 @@ class GarminRequestActivityList: GarminRequest {
                 self.nextReq = GarminRequestActivityList(nextFrom: self)
             }
         }else{
-            print( "error")
+            RZSLog.error( "error in request \(self.status)")
         }
         
         self.processDone()

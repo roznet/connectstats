@@ -27,6 +27,7 @@
 
 import Foundation
 import GenericJSON
+import RZUtilsSwift
 
 typealias ActivityId = String
 
@@ -129,11 +130,11 @@ class Activity {
                         }else if let _ = obj as? NSNull {
                             //skip null
                         }else{
-                            print( "unexpected obj \(key)=\(obj)" )
+                            RZSLog.warning( "unexpected obj \(key)=\(obj)" )
                         }
                     }
                 }else{
-                    print( "unexpected key \(key)=\(obj)" )
+                    RZSLog.warning( "unexpected key \(key)=\(obj)" )
                 }
             }
             
@@ -224,7 +225,7 @@ extension Activity {
         let res = db.executeQuery(query, withParameterDictionary: params)
         if( res == nil){
             let msg = db.lastErrorMessage() ?? "Error without message"
-            print("Query Failed with error \(msg), Query \(query)")
+            RZSLog.error("Query Failed with error \(msg), Query \(query)")
         }
         return res
     }
@@ -234,7 +235,7 @@ extension Activity {
         let rv = db.executeUpdate(query, withParameterDictionary: params)
         if( !rv ){
             let msg = db.lastErrorMessage() ?? "Error without message"
-            print("Update Failed with error \(msg), Statement \(query)")
+            RZSLog.error("Update Failed with error \(msg), Statement \(query)")
         }
         return rv
     }

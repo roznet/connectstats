@@ -26,6 +26,7 @@
 
 
 import Foundation
+import RZUtilsSwift
 
 extension RZFitFile {
     
@@ -144,7 +145,7 @@ extension RZFitFile {
                 size = line.count
             }else{
                 if size != line.count {
-                    print("Inconsistent csv line size for msg:\(messageType) \(line.count) != \(size ?? 0)")
+                    RZSLog.warning("Inconsistent csv line size for msg:\(messageType) \(line.count) != \(size ?? 0)")
                 }
             }
             csv.append(line.joined(separator: ","))

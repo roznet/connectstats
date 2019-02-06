@@ -30,6 +30,7 @@ import RZUtils
 import RZUtilsOSX
 import GenericJSON
 import KeychainSwift
+import RZUtilsSwift
 
 extension Date {
     func formatAsRFC3339() -> String {
@@ -114,7 +115,7 @@ class FITDownloadViewController: NSViewController {
                 FITAppGlobal.downloadManager().startDownloadFitFile(activityId: act.activityId)
             }
         }else{
-            print("No selection, nothing to download")
+            RZSLog.info("No selection, nothing to download")
         }
 
     }
@@ -123,14 +124,14 @@ class FITDownloadViewController: NSViewController {
         if (row > -1) {
             let act = dataSource.list()[row].activityId
             
-            print("Download \(row) \(act)")
+            RZSLog.info("Download \(row) \(act)")
             NotificationCenter.default.addObserver(self, selector: #selector(notificationNewFitFile(notification:)),
                                                    name: GarminRequestFitFile.Notifications.downloaded, object: nil)
 
             FITAppGlobal.downloadManager().startDownloadFitFile(activityId: act)
             
         }else{
-            print("No selection, nothing to download")
+            RZSLog.info("No selection, nothing to download")
         }
     }
 
@@ -144,7 +145,7 @@ class FITDownloadViewController: NSViewController {
     
     @objc func notificationNewFitFile(notification:Notification){
         if let activityId = notification.object as? String {
-            print( "Success Downloaded \(activityId)")
+            RZSLog.info( "Success Downloaded \(activityId)")
             if let fp = RZFileOrganizer.writeableFilePathIfExists("\(activityId).fit") {
                 NSDocumentController.shared.openDocument(withContentsOf: URL(fileURLWithPath: fp), display: true, completionHandler: {(doc,bool,err) in })
             }
@@ -207,7 +208,7 @@ class FITDownloadViewController: NSViewController {
         do {
         try content.write(toFile: fn, atomically: true, encoding: String.Encoding.utf8)
         }catch {
-            print("Failed to write \(fn)")
+            RZSLog.error("Failed to write \(fn)")
         }
 
     }
@@ -274,7 +275,7 @@ class FITDownloadViewController: NSViewController {
     @IBAction func editUserName(_ sender: Any) {
         let entered_username = userName.stringValue
         if( !keychain.set(entered_username, forKey: FITAppGlobal.ConfigParameters.loginName.rawValue) ){
-            print( "failed to save username" )
+            RZSLog.error( "failed to save username" )
         }
         FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.loginName.rawValue, stringVal: entered_username)
     }
@@ -282,7 +283,7 @@ class FITDownloadViewController: NSViewController {
     @IBAction func editPassword(_ sender: Any) {
         let entered_password = password.stringValue
         if !keychain.set(entered_password, forKey: FITAppGlobal.ConfigParameters.password.rawValue){
-            print("failed to save password")
+            RZSLog.error("failed to save password")
         }
         
         FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.password.rawValue, stringVal: entered_password)

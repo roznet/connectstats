@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RZUtilsSwift
 
 public extension GCField {
     
@@ -20,7 +21,7 @@ public extension GCField {
     public static func field(fitKey:String, activityType:String) -> GCField? {
         var fieldKey = fitToFieldMap[fitKey]
         if fieldKey == nil{
-            print("Missing \(fitKey)")
+            RZSLog.warning("Missing \(fitKey)")
             return nil
         }
         // special case for running

@@ -27,6 +27,7 @@
 
 import Cocoa
 import RZExternalUniversal
+import RZUtilsSwift
 
 class GarminRequestFitFile: GarminRequest {
     
@@ -68,7 +69,7 @@ class GarminRequestFitFile: GarminRequest {
             }
             
         }catch let error as NSError{
-            print( "\(error)")
+            RZSLog.error( "\(error)")
         }catch{
             
         }

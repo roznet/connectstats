@@ -27,6 +27,7 @@
 
 import Foundation
 import GenericJSON
+import RZUtilsSwift
 
 class ActivitiesOrganizer {
     
@@ -343,7 +344,7 @@ class ActivitiesOrganizer {
                 size = line.count
             }else{
                 if size != line.count {
-                    print("Inconsistent csv line size for organizer \(line.count) != \(size ?? 0)")
+                    RZSLog.warning("Inconsistent csv line size for organizer \(line.count) != \(size ?? 0)")
                 }
             }
             

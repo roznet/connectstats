@@ -72,9 +72,6 @@ extension GCActivity {
         let fields = self.availableTrackFields()
         let otherFields = other.self.availableTrackFields()
         
-        print("\(fields!)")
-        print("\(otherFields!)")
-        
         if let to = self.trackpoints, let from = other.trackpoints {
             var i = from.makeIterator()
             if var merge = i.next() {
@@ -94,7 +91,7 @@ extension GCActivity {
                         count+=1
                     }
                 }
-                print("\(count)/\(to.count) \(from.count)")
+                //RZSLog.info("\(count)/\(to.count) \(from.count)")
             }
         }
     }

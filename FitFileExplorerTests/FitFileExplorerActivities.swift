@@ -61,7 +61,7 @@ class FitFileExplorerActivities: XCTestCase {
             do {
                 try organizer.save(url: outfile_url)
             }catch{
-                print("\(error)")
+                RZSLog.error("\(error)")
             }
             
             let reloaded = ActivitiesOrganizer(url: outfile_url)
