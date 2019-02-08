@@ -8,10 +8,38 @@
 
 import Cocoa
 import RZUtilsOSX
+import RZUtilsSwift
 
 class FITDetailTableViewController: NSViewController {
 
     @IBOutlet weak var detailTableView: RZTableView!
+    
+    @IBAction func exportCSV(_ sender: Any) {
+        if let dataSource = self.detailTableView.dataSource as? FITDetailListDataSource {
+            let savePanel = NSSavePanel()
+
+            savePanel.message = "Choose the location to save the csv file"
+            savePanel.allowedFileTypes = [ "csv" ]
+            let fitFile = dataSource.fitFile
+            if let message = fitFile.messageTypeDescription(messageType: dataSource.messageType){
+                var candidate = "newfile_\(message)"
+                if let sourceURL = fitFile.sourceURL {
+                    candidate = sourceURL.lastPathComponent.replacingOccurrences(of: ".fit", with: "_\(message)")
+                }
+                savePanel.nameFieldStringValue = candidate
+                if savePanel.runModal() == NSApplication.ModalResponse.OK, let url = savePanel.url {
+                    let csv = fitFile.csv(messageType: dataSource.messageType)
+                    do {
+                        try csv.joined(separator: "\n").write(to: url, atomically: true, encoding: String.Encoding.utf8)
+                        
+                    }catch{
+                        RZSLog.error( "Failed to save \(url)")
+                    }
+                }
+                
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

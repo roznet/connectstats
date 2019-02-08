@@ -741,7 +741,7 @@
                             </textFieldCell>
                         </textField>
                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Dn3-sm-6V1">
-                            <rect key="frame" x="127" y="11" width="77" height="25"/>
+                            <rect key="frame" x="110" y="11" width="94" height="25"/>
                             <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="sVF-7S-3v0" id="jVg-Tt-is8">
                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
@@ -762,7 +762,7 @@
                         <constraint firstItem="Dn3-sm-6V1" firstAttribute="baseline" secondItem="k5E-XD-hrA" secondAttribute="baseline" id="MVT-Y2-zhz"/>
                         <constraint firstItem="k5E-XD-hrA" firstAttribute="top" secondItem="D07-2H-kmb" secondAttribute="top" constant="17" id="b0H-b6-Mbd"/>
                         <constraint firstItem="k5E-XD-hrA" firstAttribute="leading" secondItem="D07-2H-kmb" secondAttribute="leading" constant="20" id="hXk-i6-xta"/>
-                        <constraint firstItem="Dn3-sm-6V1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="k5E-XD-hrA" secondAttribute="trailing" constant="20" id="jgu-Hn-zQz"/>
+                        <constraint firstItem="Dn3-sm-6V1" firstAttribute="leading" secondItem="k5E-XD-hrA" secondAttribute="trailing" constant="15" id="jgu-Hn-zQz"/>
                         <constraint firstAttribute="trailing" secondItem="Dn3-sm-6V1" secondAttribute="trailing" constant="37" id="zey-F0-FrE"/>
                     </constraints>
                 </customView>
@@ -855,6 +855,9 @@
                                                     </prototypeCellViews>
                                                 </tableColumn>
                                             </tableColumns>
+                                            <connections>
+                                                <outlet property="menu" destination="jMV-4P-lr7" id="BBw-D1-vaw"/>
+                                            </connections>
                                         </tableView>
                                     </subviews>
                                 </clipView>
@@ -884,8 +887,18 @@
                     </connections>
                 </viewController>
                 <customObject id="J14-Ke-UNd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <menu id="jMV-4P-lr7">
+                    <items>
+                        <menuItem title="Export csv" id="xYb-R6-E8W">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="exportCSV:" target="tk9-Pf-5if" id="GK1-wx-FX5"/>
+                            </connections>
+                        </menuItem>
+                    </items>
+                </menu>
             </objects>
-            <point key="canvasLocation" x="1125" y="1062"/>
+            <point key="canvasLocation" x="1239" y="1108"/>
         </scene>
         <!--Tab View Controller-->
         <scene sceneID="Fuv-5s-ZOr">

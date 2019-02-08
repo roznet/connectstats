@@ -31,6 +31,10 @@ import RZUtilsSwift
 
 class ActivitiesOrganizer {
     
+    struct Notifications {
+        static let activitiesOrganizerChange = Notification.Name("activitiesOrganizerChange")
+    }
+
     struct Repr {
         var activityList : [Activity] = []
         var activityMap :[ActivityId:Activity] = [:]
@@ -42,10 +46,13 @@ class ActivitiesOrganizer {
             var rv = false
             
             if let existing = activityMap[activity.activityId] {
-                if let db = db {
-                    activity.remove(from: db)
-                }
                 rv = existing.update(with: activity)
+                // only delete if existing is different, as it will then be reinserted later
+                if( rv ){
+                    if let db = db {
+                        activity.remove(from: db)
+                    }
+                }
             }else{
                 rv = true
                 self.activityList.append(activity)
@@ -172,26 +179,33 @@ class ActivitiesOrganizer {
         if db.databasePath() == self.db?.databasePath() && total == self.repr.activityList.count {
             return
         }
+
         self.db = db
         var newRep = Repr()
 
         if( total > 0){
             
-            if let res = db.executeQuery("SELECT * FROM activities", withArgumentsIn: []){
+            if let res = db.executeQuery("SELECT * FROM activities", withArgumentsIn: []) {
                 newRep.loadUnits(from: db)
-                
+                var counter = 0
                 while res.next() {
                     if let act = Activity(res: res, units: newRep.units) {
                         newRep.add(activity: act)
                     }
+                    
+                    if (total > 100) && (counter == 100) {
+                        self.repr = newRep
+                        NotificationCenter.default.post(name: Notifications.activitiesOrganizerChange, object:self)
+                    }
+                    counter+=1
                 }
                 
                 res.close()
                 res.setParentDB(nil)
-                
             }
         }
         self.repr = newRep
+        NotificationCenter.default.post(name: Notifications.activitiesOrganizerChange, object:self)
     }
     
     func save(to db:FMDatabase) {

@@ -295,7 +295,7 @@ extension Activity {
     }
     
     func remove(from db : FMDatabase){
-        db.executeUpdate("DELETE * FROM \(self.activityTableName) WHERE activityId = ?", withArgumentsIn: [ self.activityId ])
+        db.executeUpdate("DELETE FROM \(self.activityTableName()) WHERE activityId = ?", withArgumentsIn: [ self.activityId ])
     }
     
     func insert(db : FMDatabase, units : [String:GCUnit]) {

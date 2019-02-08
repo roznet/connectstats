@@ -113,7 +113,7 @@ class FitFileExplorerActivities: XCTestCase {
             for fn in files {
                 let url = URL( fileURLWithPath: RZFileOrganizer.writeableFilePath(fn) )
                 let res = organizer.load(url: url)
-                if fn == "last_modern_search_1060.json" {
+                if fn == "last_modern_search_1040.json" {
                     print("yo")
                 }
                 if res.updated == 0 {
