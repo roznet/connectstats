@@ -19,6 +19,7 @@ class RZFitFile {
     public private(set) var messageTypes : [RZFitMessageType]
     public private(set) var messagesByType : [RZFitMessageType:[RZFitMessage]]
     public private(set) var devDataParser : RZFitDevDataParser?
+    public private(set) var sourceURL : URL? = nil
     
     init(  messages input: [RZFitMessage] ){
         var bldmsgnum : Set<RZFitMessageType> = []
@@ -101,9 +102,17 @@ class RZFitFile {
         devDataParser = dev_parser
     }
 
+    // file URL is for record only
+    convenience init(data :Data, fileURL: URL){
+        self.init(data: data)
+        self.sourceURL = fileURL
+    }
+    
     convenience init?( file :URL){
         if let data = try? Data(contentsOf: file) {
             self.init(data: data)
+            self.sourceURL = file
+            
         }else{
             return nil
         }
