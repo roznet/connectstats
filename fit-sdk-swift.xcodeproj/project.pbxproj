@@ -66,6 +66,13 @@
 			remoteGlobalIDString = 422C59302211E43C004AC730;
 			remoteInfo = RZFitFile;
 		};
+		4249684F2218845800776D68 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42584E0621CBF46800B7E021 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4249682222187F7E00776D68;
+			remoteInfo = fitmacos;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -373,6 +380,7 @@
 			);
 			dependencies = (
 				422C593C2211E43C004AC730 /* PBXTargetDependency */,
+				424968502218845800776D68 /* PBXTargetDependency */,
 			);
 			name = RZFitFileTests;
 			productName = RZFitFileTests;
@@ -474,11 +482,11 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				42584E5A21CBF57900B7E021 /* fitparse */,
 				422C59302211E43C004AC730 /* RZFitFile */,
 				422C59382211E43C004AC730 /* RZFitFileTests */,
 				422C59622211EC48004AC730 /* fitios */,
 				4249682222187F7E00776D68 /* fitmacos */,
+				42584E5A21CBF57900B7E021 /* fitparse */,
 			);
 		};
 /* End PBXProject section */
@@ -598,6 +606,11 @@
 			isa = PBXTargetDependency;
 			target = 422C59302211E43C004AC730 /* RZFitFile */;
 			targetProxy = 4249683522187F8E00776D68 /* PBXContainerItemProxy */;
+		};
+		424968502218845800776D68 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4249682222187F7E00776D68 /* fitmacos */;
+			targetProxy = 4249684F2218845800776D68 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
