@@ -31,7 +31,7 @@ import CoreLocation
 typealias RZFitDoubleUnit = (value:Double,unit:String)
 
 
-class RZFitFieldValue {
+public class RZFitFieldValue {
     enum ValueType {
         case coordinate, time, value, valueUnit, name, invalid
     }
@@ -97,7 +97,7 @@ class RZFitFieldValue {
 }
 
 extension RZFitFieldValue : CustomStringConvertible {
-    var description: String {
+    public var description: String {
         if let coordinate = coordinate {
             return "RZFitField(withLatitude: \(coordinate.latitude), andLongitude: \(coordinate.longitude))"
         }else if let valueUnit = valueUnit {

@@ -1,4 +1,5 @@
 // This file is auto generated, Do not edit
+import RZFitFilePrivate
 func rzfit_dive_alarm_type_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
