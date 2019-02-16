@@ -1,4 +1,4 @@
-module RZFitFilePrivate {
+module RZFitFileTypes {
 	   header "../RZFitFile-Bridging-Header.h"
 	   export *
 }

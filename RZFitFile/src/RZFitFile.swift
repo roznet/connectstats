@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RZFitFilePrivate
+import RZFitFileTypes
 
 public typealias RZFitMessageType = FIT_MESG_NUM
 public typealias RZFitFieldKey = String

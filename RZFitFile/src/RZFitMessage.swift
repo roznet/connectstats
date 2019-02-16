@@ -7,7 +7,8 @@
 //
 
 import Foundation
-import RZFitFilePrivate
+
+import RZFitFileTypes
 
 public class RZFitMessage {
     
