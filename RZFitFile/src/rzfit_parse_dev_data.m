@@ -63,8 +63,11 @@ const FIT_UINT16 kMaxDevFields = 64;
     free(self.dev_data_buffer);
     free(self.dev_field_description);
     
-    RZRelease(_knownUnits);
-    RZSuperDealloc;
+    
+#if ! __has_feature(objc_arc)
+    [_knownUnits release];
+    [super dealloc];
+#endif
 }
 
 -(void)recordDeveloperField:(const FIT_UINT8*)mesgR{
