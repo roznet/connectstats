@@ -2792,7 +2792,7 @@ func rzfit_squat_exercise_name_string(input : FIT_UINT16) -> String?
   }
 }
 
-func rzfit_mesg_num_string(input : FIT_UINT16) -> String? 
+public func rzfit_mesg_num_string(input : FIT_UINT16) -> String? 
 {
   switch  input {
     case FIT_MESG_NUM_FILE_ID: return "file_id";
