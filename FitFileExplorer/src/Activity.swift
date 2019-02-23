@@ -28,6 +28,7 @@
 import Foundation
 import GenericJSON
 import RZUtilsSwift
+import RZFitFile
 
 typealias ActivityId = String
 

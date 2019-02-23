@@ -8,6 +8,7 @@
 
 import Cocoa
 import RZUtilsOSX
+import RZFitFile
 
 class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource,RZTableViewDelegate {
 

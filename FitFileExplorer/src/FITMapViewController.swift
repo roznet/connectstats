@@ -8,6 +8,7 @@
 
 import Cocoa
 import MapKit
+import RZFitFile
 
 class FITMapViewController: NSViewController,MKMapViewDelegate {
 

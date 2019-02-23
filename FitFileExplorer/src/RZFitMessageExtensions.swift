@@ -26,6 +26,8 @@
 
 
 import Foundation
+import RZFitFile
+import RZFitFileTypes
 
 extension RZFitMessage {
     

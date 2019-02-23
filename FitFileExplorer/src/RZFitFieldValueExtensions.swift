@@ -27,6 +27,8 @@
 
 import Foundation
 import RZUtils
+import RZFitFile
+import RZFitFileTypes
 
 extension RZFitFieldValue {
     

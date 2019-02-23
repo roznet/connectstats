@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RZFitFile
 
 let file = URL(fileURLWithPath: CommandLine.arguments[1])
 

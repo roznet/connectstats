@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import RZFitFile
+import RZFitFileTypes
 
 class FITFitFileInterpret: NSObject {
 

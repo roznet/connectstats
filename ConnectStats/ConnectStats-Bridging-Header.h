@@ -24,5 +24,5 @@
 #import "FITFitFieldValue.h"
 #import "FITFitEnumMap.h"
 
-#import "RZFitFile-Bridging-Header.h"
+//#import "RZFitFile-Bridging-Header.h"
 #import "GCUnit+FIT.h"

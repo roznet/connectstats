@@ -7,6 +7,8 @@
 //
 
 import Cocoa
+import RZFitFile
+import RZFitFileTypes
 
 class FITGraphViewController: NSViewController {
 

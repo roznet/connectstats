@@ -1,4 +1,5 @@
 // This file is auto generated, Do not edit
+import RZFitFileTypes
 func rzfit_dive_alarm_type_string(input : FIT_ENUM) -> String? 
 {
   switch  input {
@@ -2791,7 +2792,7 @@ func rzfit_squat_exercise_name_string(input : FIT_UINT16) -> String?
   }
 }
 
-func rzfit_mesg_num_string(input : FIT_UINT16) -> String? 
+public func rzfit_mesg_num_string(input : FIT_UINT16) -> String? 
 {
   switch  input {
     case FIT_MESG_NUM_FILE_ID: return "file_id";
@@ -9241,7 +9242,7 @@ func rzfit_build_mesg(num : FIT_MESG_NUM, uptr : UnsafePointer<UInt8>) -> RZFitM
     }
     return rv
 }
-func rzfit_string_to_mesg(mesg : String) -> FIT_MESG_NUM? {
+public func rzfit_string_to_mesg(mesg : String) -> FIT_MESG_NUM? {
   var rv : FIT_MESG_NUM? = nil
   switch mesg {
   case "file_id": rv = FIT_MESG_NUM_FILE_ID;

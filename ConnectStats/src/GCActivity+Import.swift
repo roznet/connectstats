@@ -8,6 +8,8 @@
 
 import Foundation
 import CoreLocation
+import RZFitFile
+import RZFitFileTypes
 
 extension GCActivity {
     

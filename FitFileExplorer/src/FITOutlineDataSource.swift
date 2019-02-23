@@ -7,6 +7,8 @@
 //
 
 import Cocoa
+import RZFitFile
+import RZFitFileTypes
 
 class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelegate {
     

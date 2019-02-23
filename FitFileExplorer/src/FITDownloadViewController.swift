@@ -31,6 +31,8 @@ import RZUtilsOSX
 import GenericJSON
 import KeychainSwift
 import RZUtilsSwift
+import RZFitFile
+import RZFitFileTypes
 
 extension Date {
     func formatAsRFC3339() -> String {

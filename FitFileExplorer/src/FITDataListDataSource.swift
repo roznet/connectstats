@@ -8,6 +8,8 @@
 
 import Cocoa
 import RZUtilsOSX
+import RZFitFile
+import RZFitFileTypes
 
 /*
  - Select Record or Lap or Session Field

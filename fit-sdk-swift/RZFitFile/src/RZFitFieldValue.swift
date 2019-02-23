@@ -28,23 +28,23 @@
 import Foundation
 import CoreLocation
 
-typealias RZFitDoubleUnit = (value:Double,unit:String)
+public typealias RZFitDoubleUnit = (value:Double,unit:String)
 
 
-class RZFitFieldValue {
-    enum ValueType {
+public class RZFitFieldValue {
+    public enum ValueType {
         case coordinate, time, value, valueUnit, name, invalid
     }
 
-    let type : ValueType
-    let coordinate : CLLocationCoordinate2D?
-    let valueUnit : RZFitDoubleUnit?
-    let time : Date?
-    let name : String?
-    let value : Double?
-    let developer : Bool
+    public let type : ValueType
+    public let coordinate : CLLocationCoordinate2D?
+    public let valueUnit : RZFitDoubleUnit?
+    public let time : Date?
+    public let name : String?
+    public let value : Double?
+    public let developer : Bool
     
-    init(latitude: Double, longitude: Double) {
+    public init(latitude: Double, longitude: Double) {
         coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         value = nil
         valueUnit = nil
@@ -54,7 +54,7 @@ class RZFitFieldValue {
         type = ValueType.coordinate
     }
     
-    init(withValue : Double, andUnit : String, developer dev: Bool = false) {
+    public init(withValue : Double, andUnit : String, developer dev: Bool = false) {
         coordinate = nil
         valueUnit = (value: withValue, unit:andUnit)
         value = nil
@@ -64,7 +64,7 @@ class RZFitFieldValue {
         type = ValueType.valueUnit
     }
     
-    init(withValue : Double, developer dev: Bool = false ){
+    public init(withValue : Double, developer dev: Bool = false ){
         coordinate = nil
         valueUnit = nil
         value = withValue
@@ -74,7 +74,7 @@ class RZFitFieldValue {
         type = ValueType.value
     }
     
-    init(withName : String){
+    public init(withName : String){
         coordinate = nil
         valueUnit = nil
         value = nil
@@ -84,7 +84,7 @@ class RZFitFieldValue {
         type = ValueType.name
     }
     
-    init(withTime: Date ){
+    public init(withTime: Date ){
         coordinate = nil
         value = nil
         valueUnit = nil
@@ -97,7 +97,7 @@ class RZFitFieldValue {
 }
 
 extension RZFitFieldValue : CustomStringConvertible {
-    var description: String {
+    public var description: String {
         if let coordinate = coordinate {
             return "RZFitField(withLatitude: \(coordinate.latitude), andLongitude: \(coordinate.longitude))"
         }else if let valueUnit = valueUnit {
