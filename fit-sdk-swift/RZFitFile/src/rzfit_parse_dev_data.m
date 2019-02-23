@@ -233,7 +233,7 @@ const FIT_UINT16 kMaxDevFields = 64;
                     continue;
                 }
             }
-            if( val ){
+            if( val != nil ){
                 rv[name] = val;
             }
         }
