@@ -8,7 +8,8 @@
 
 import XCTest
 @testable import FitFileExplorer
-
+import RZFitFile
+import RZFitFileTypes
 
 class FitFileExplorerTests: XCTestCase {
     

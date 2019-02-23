@@ -3121,7 +3121,12 @@
 		4282B6D11DC4B2220062C313 /* test_activity_cycling_1404395287.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activity_cycling_1404395287.db; sourceTree = "<group>"; };
 		4285F0E11719CB1800A1FAA8 /* GCSettingsFilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsFilterViewController.h; path = src/GCSettingsFilterViewController.h; sourceTree = "<group>"; };
 		4285F0E21719CB1800A1FAA8 /* GCSettingsFilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCSettingsFilterViewController.m; path = src/GCSettingsFilterViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		4287C2F02221A8840055F584 /* ConnectStats.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ConnectStats.xcconfig; sourceTree = "<group>"; };
+		4287C2FB2221B8D90055F584 /* ConnectStats.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ConnectStats.debug.xcconfig; sourceTree = "<group>"; };
+		4287C2FC2221B9590055F584 /* ConnectStats.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ConnectStats.release.xcconfig; sourceTree = "<group>"; };
+		4287C3002221BA3B0055F584 /* FitFileExplorer.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = FitFileExplorer.release.xcconfig; sourceTree = "<group>"; };
+		4287C30B2221BA3B0055F584 /* FitFileExplorer.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = FitFileExplorer.debug.xcconfig; sourceTree = "<group>"; };
+		4287C30C2221BC390055F584 /* ConnectStatsTestApp.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = ConnectStatsTestApp.debug.xcconfig; path = connectstatstestapp/ConnectStatsTestApp.debug.xcconfig; sourceTree = SOURCE_ROOT; };
+		4287C30D2221BC3A0055F584 /* ConnectStatsTestApp.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = ConnectStatsTestApp.release.xcconfig; path = connectstatstestapp/ConnectStatsTestApp.release.xcconfig; sourceTree = SOURCE_ROOT; };
 		428BACDD1CB149C50041468A /* activity_1089803211.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_1089803211.json; sourceTree = "<group>"; };
 		428BACDE1CB149C50041468A /* activity_1099599108.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_1099599108.json; sourceTree = "<group>"; };
 		428BACDF1CB149C50041468A /* activity_1108367966.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_1108367966.json; sourceTree = "<group>"; };
@@ -5688,6 +5693,8 @@
 		4253B45B1CD49F7E00437E6A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4287C30B2221BA3B0055F584 /* FitFileExplorer.debug.xcconfig */,
+				4287C3002221BA3B0055F584 /* FitFileExplorer.release.xcconfig */,
 				4253B47A1CDA81EA00437E6A /* FitFileExplorer.entitlements */,
 				4253B4691CD49F7E00437E6A /* Info.plist */,
 				4262ADD01DCC8F0300F089AA /* OldObjC */,
@@ -6220,6 +6227,8 @@
 		428FF71415F36888007A88FA /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4287C2FC2221B9590055F584 /* ConnectStats.release.xcconfig */,
+				4287C2FB2221B8D90055F584 /* ConnectStats.debug.xcconfig */,
 				4211C53219AB03A9000DEF87 /* HealthStats */,
 				4256070F169A1115008E9DC3 /* ConnectStats */,
 				42959CCE18D5C58700C0B841 /* fields.db */,
@@ -6227,7 +6236,6 @@
 				428FF78D15FB40D0007A88FA /* main.m */,
 				428FF71615F36888007A88FA /* InfoPlist.strings */,
 				428FF71B15F36888007A88FA /* ConnectStats-Prefix.pch */,
-				4287C2F02221A8840055F584 /* ConnectStats.xcconfig */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -6865,6 +6873,8 @@
 		42B5E1BB1BA5AEC9000FAE4E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4287C30C2221BC390055F584 /* ConnectStatsTestApp.debug.xcconfig */,
+				4287C30D2221BC3A0055F584 /* ConnectStatsTestApp.release.xcconfig */,
 				42B5E1C91BA5AEC9000FAE4E /* LaunchScreen.storyboard */,
 				42B5E2CF1BA5B589000FAE4E /* ConnectStatsTestApp.entitlements */,
 				42B5E2131BA5AF9A000FAE4E /* main.m */,
@@ -11510,7 +11520,7 @@
 		};
 		4253B46A1CD49F7E00437E6A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 97DCBA7AF2BA9F9B933FCC48 /* Pods-FitFileExplorer.debug.xcconfig */;
+			baseConfigurationReference = 4287C30B2221BA3B0055F584 /* FitFileExplorer.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = FitExplorerAppIcon;
@@ -11543,7 +11553,7 @@
 		};
 		4253B46B1CD49F7E00437E6A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A01B1CDDA1437D95D99453C1 /* Pods-FitFileExplorer.release.xcconfig */;
+			baseConfigurationReference = 4287C3002221BA3B0055F584 /* FitFileExplorer.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = FitExplorerAppIcon;
@@ -11747,7 +11757,7 @@
 		};
 		428FF73715F36888007A88FA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8F8BF4F20C572A0B439BAE9F /* Pods-ConnectStats.debug.xcconfig */;
+			baseConfigurationReference = 4287C2FB2221B8D90055F584 /* ConnectStats.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsNewAppIcon;
@@ -11793,7 +11803,7 @@
 		};
 		428FF73815F36888007A88FA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7511076C6F489225E4DB97A3 /* Pods-ConnectStats.release.xcconfig */;
+			baseConfigurationReference = 4287C2FC2221B9590055F584 /* ConnectStats.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsNewAppIcon;
@@ -12039,7 +12049,7 @@
 		};
 		42B5E1E31BA5AEC9000FAE4E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 722F58FE2B9F9EF1C1D899FD /* Pods-ConnectStatsTestApp.debug.xcconfig */;
+			baseConfigurationReference = 4287C30C2221BC390055F584 /* ConnectStatsTestApp.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsTestAppIcon;
@@ -12079,7 +12089,7 @@
 		};
 		42B5E1E41BA5AEC9000FAE4E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EBDC45B331B669A42DAFAD9B /* Pods-ConnectStatsTestApp.release.xcconfig */;
+			baseConfigurationReference = 4287C30C2221BC390055F584 /* ConnectStatsTestApp.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsTestAppIcon;

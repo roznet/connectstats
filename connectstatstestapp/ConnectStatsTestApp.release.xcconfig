@@ -1,0 +1,3 @@
+#include "../Pods/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp.release.xcconfig"
+SWIFT_INCLUDE_PATHS="$(SRCROOT)/fit-sdk-swift/RZFitFile/sdk" "$(SRCROOT)/fit-sdk-swift/RZFitFile/src"
+

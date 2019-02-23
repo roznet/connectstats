@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import ConnectStats
+import RZFitFile
 
 class GCTestActivityFitFile: XCTestCase {
     
