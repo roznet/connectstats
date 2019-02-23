@@ -26,6 +26,7 @@
 
 
 import Cocoa
+import RZFitFile
 
 class FITDocument: NSDocument {
 

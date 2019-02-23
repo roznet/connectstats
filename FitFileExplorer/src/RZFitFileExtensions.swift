@@ -27,6 +27,8 @@
 
 import Foundation
 import RZUtilsSwift
+import RZFitFile
+import RZFitFileTypes
 
 extension RZFitFile {
     

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RZFitFile
 
 extension CLLocation {
     convenience init?(withCoordinate:CLLocationCoordinate2D?){

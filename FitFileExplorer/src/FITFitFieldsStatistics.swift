@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RZFitFile
 
 class FITFitFieldsStatistics: NSObject {
     

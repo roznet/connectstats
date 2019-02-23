@@ -418,7 +418,7 @@ class TypeDef :
         return self.fit_type_name
 
     def swift_string_to_mesg(self,context):
-        rv = ['func rzfit_string_to_mesg(mesg : String) -> FIT_MESG_NUM? {',
+        rv = ['public func rzfit_string_to_mesg(mesg : String) -> FIT_MESG_NUM? {',
               '  var rv : FIT_MESG_NUM? = nil',
               '  switch mesg {'
               ]
@@ -479,7 +479,10 @@ class Convert :
         print( 'Wrote {}'.format( objcf ) )
         print( 'Wrote {}'.format( objch ) )
         
-        of.write( '// This file is auto generated, Do not edit\n' )
+        of.write( '\n'.join( [
+            '// This file is auto generated, Do not edit',
+            'import RZFitFileTypes'
+            ] ) )
         oof.write( '\n'.join( [
             '// This file is auto generated, Do not edit\n',
             '#include "{}"'.format( hf ),

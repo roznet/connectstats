@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import RZFitFile
 
 class FITDataViewController: NSViewController {
 

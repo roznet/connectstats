@@ -1,0 +1,5 @@
+# This file is currently not in use as ConnectStats uses xconfig files from Pods
+# But this line needs to be added to any xcconfig from Pods that need to use RZFitFile
+
+SWIFT_INCLUDE_PATHS="$(SRCROOT)/fit-sdk-swift/RZFitFile/sdk" "$(SRCROOT)/fit-sdk-swift/RZFitFile/src"
+

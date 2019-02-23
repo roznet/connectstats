@@ -8,22 +8,23 @@
 
 import Foundation
 
+import RZFitFileTypes
 
-class RZFitMessage {
+public class RZFitMessage {
     
-    let messageType : RZFitMessageType
+    public let messageType : RZFitMessageType
     private let values : [RZFitFieldKey:Double]
     private let enums : [RZFitFieldKey:String]
     private var devfields : [RZFitFieldKey:Double]?
     private var devunits : [RZFitFieldKey:String]?
     
-    var messageTypeDescription : String?{
+    public var messageTypeDescription : String?{
         return rzfit_mesg_num_string(input: messageType)
     }
 
     private var cacheInterpretation : [RZFitFieldKey:RZFitFieldValue]
     
-    init(mesg_num  : FIT_MESG_NUM, mesg_values : [RZFitFieldKey:Double], mesg_enums : [RZFitFieldKey:String]) {
+    public init(mesg_num  : FIT_MESG_NUM, mesg_values : [RZFitFieldKey:Double], mesg_enums : [RZFitFieldKey:String]) {
         messageType = mesg_num
         values = mesg_values
         enums = mesg_enums
@@ -33,7 +34,7 @@ class RZFitMessage {
         
     }
     
-    convenience init(mesg_num : FIT_MESG_NUM, withFitFields:[RZFitFieldKey:RZFitFieldValue]) {
+    public convenience init(mesg_num : FIT_MESG_NUM, withFitFields:[RZFitFieldKey:RZFitFieldValue]) {
         var ivalues : [RZFitFieldKey:Double] = [:]
         var ienums  : [RZFitFieldKey:String] = [:]
         
@@ -60,7 +61,7 @@ class RZFitMessage {
         self.devunits = units
     }
     
-    func interpretedFieldKeys() -> [RZFitFieldKey] {
+    public func interpretedFieldKeys() -> [RZFitFieldKey] {
         let interp = self.interpretedFields()
         var rv : [RZFitFieldKey] = []
         
@@ -70,13 +71,13 @@ class RZFitMessage {
         return rv
     }
     
-    func interpretedField(key:RZFitFieldKey) -> RZFitFieldValue? {
+    public func interpretedField(key:RZFitFieldKey) -> RZFitFieldValue? {
         var interp = self.interpretedFields()
         
         return interp[key]
     }
     
-    func interpretedFields() -> [RZFitFieldKey:RZFitFieldValue] {
+    public func interpretedFields() -> [RZFitFieldKey:RZFitFieldValue] {
         if self.cacheInterpretation.count > 0 {
             return self.cacheInterpretation
         }
@@ -152,7 +153,7 @@ class RZFitMessage {
         return self.cacheInterpretation
     }
     
-    func description() -> String {
+    public func description() -> String {
         var rv = [ "FitMessage(" ]
         if let name = self.messageTypeDescription {
             rv.append(name)
@@ -165,7 +166,7 @@ class RZFitMessage {
         return rv.joined(separator: "")
     }
     
-    func units() -> [RZFitFieldKey:String] {
+    public func units() -> [RZFitFieldKey:String] {
         var rv : [String:String] = [:]
         
         for field in values.keys {
