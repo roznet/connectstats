@@ -32,7 +32,7 @@ import RZUtilsSwift
 class ActivitiesOrganizer {
     
     struct Notifications {
-        static let activitiesOrganizerChange = Notification.Name("activitiesOrganizerChange")
+        static let listChange = Notification.Name("activitiesOrganizerListChange")
     }
 
     struct Repr {
@@ -195,7 +195,7 @@ class ActivitiesOrganizer {
                     
                     if (total > 100) && (counter == 100) {
                         self.repr = newRep
-                        NotificationCenter.default.post(name: Notifications.activitiesOrganizerChange, object:self)
+                        NotificationCenter.default.post(name: Notifications.listChange, object:self)
                     }
                     counter+=1
                 }
@@ -205,7 +205,7 @@ class ActivitiesOrganizer {
             }
         }
         self.repr = newRep
-        NotificationCenter.default.post(name: Notifications.activitiesOrganizerChange, object:self)
+        NotificationCenter.default.post(name: Notifications.listChange, object:self)
     }
     
     func save(to db:FMDatabase) {
@@ -242,6 +242,7 @@ class ActivitiesOrganizer {
             if( rv.updated > 0 ){
                 self.repr = newRepr
                 self.repr.reorder()
+                NotificationCenter.default.post(name: Notifications.listChange, object:self)
             }
         }
         return rv
@@ -262,7 +263,13 @@ class ActivitiesOrganizer {
     // MARK: - add/remove
     
     func remove(activityIds:[ActivityId]) -> Int {
-        return self.repr.remove(activityIds: activityIds, db: self.db)
+        let rv = self.repr.remove(activityIds: activityIds, db: self.db)
+        
+        if( rv > 0){
+            NotificationCenter.default.post(name: Notifications.listChange, object:self)
+        }
+        return rv
+        
     }
     func remove(activities:[Activity]) -> Int {
         let ids = activities.map {
@@ -280,6 +287,10 @@ class ActivitiesOrganizer {
             }
         }
         
+        if( rv > 0){
+            NotificationCenter.default.post(name: Notifications.listChange, object:self)
+        }
+
         return rv
     }
     

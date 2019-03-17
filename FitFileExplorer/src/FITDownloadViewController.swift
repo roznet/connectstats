@@ -121,6 +121,9 @@ class FITDownloadViewController: NSViewController {
         }
 
     }
+    @IBAction func exportAllFitFiles(_ sender: Any) {
+        
+    }
     @IBAction func downloadFITFile(_ sender: Any) {
         let row = self.activityTable.selectedRow
         if (row > -1) {
@@ -137,7 +140,17 @@ class FITDownloadViewController: NSViewController {
         }
     }
 
-    @objc func downloadChanged(notification : Notification){
+    @objc func downloadFinished(notification : Notification){
+        DispatchQueue.main.async {
+            self.rebuildColumns()
+            self.activityTable.reloadData()
+            self.updateStatus()
+        }
+    }
+    
+    
+    
+    @objc func organizerListChanged(notification : Notification){
         DispatchQueue.main.async {
             self.rebuildColumns()
             self.activityTable.reloadData()
@@ -227,21 +240,19 @@ class FITDownloadViewController: NSViewController {
     override func viewWillAppear() {
         super.viewWillAppear()
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(downloadChanged(notification:)),
-                                               name: FITGarminDownloadManager.Notifications.garminDownloadChange,
+                                               selector: #selector(downloadFinished(notification:)),
+                                               name: FITGarminDownloadManager.Notifications.end,
                                                object: nil)
-        
-        
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(organizerListChanged(notification:)),
+                                               name: ActivitiesOrganizer.Notifications.listChange,
+                                               object: nil)
+
         if let saved_username = keychain.get(FITAppGlobal.ConfigParameters.loginName.rawValue){
             userName.stringValue = saved_username
             if let update = try? JSON( [FITAppGlobal.ConfigParameters.loginName.rawValue:saved_username]) {
                 FITAppGlobal.shared.updateSettings(json: update)
-            }
-        }
-        if let dbpath = RZFileOrganizer.writeableFilePathIfExists(self.databaseFileName()) {
-            if let db = FMDatabase(path: dbpath ) {
-                db.open()
-                FITAppGlobal.shared.organizer.load(db: db)
             }
         }
         
@@ -251,12 +262,24 @@ class FITDownloadViewController: NSViewController {
                 FITAppGlobal.shared.updateSettings(json: update)
             }
         }
-        FITAppGlobal.downloadManager().loadFromFile()
+        
+
+        //FITAppGlobal.downloadManager().loadFromFile()
         activityTable.dataSource = self.dataSource
         activityTable.delegate = self.dataSource
         rebuildColumns()
         self.activityTable.reloadData()
         self.updateStatus()
+        
+        if let dbpath = RZFileOrganizer.writeableFilePathIfExists(self.databaseFileName()) {
+            FITAppGlobal.shared.worker.async {
+                if let db = FMDatabase(path: dbpath ) {
+                    db.open()
+                    FITAppGlobal.shared.organizer.load(db: db)
+                }
+            }
+        }
+
     }
     
     func updateStatus() {

@@ -1728,6 +1728,9 @@
                         </menuItem>
                         <menuItem title="Export All FIT files" id="htr-pu-ubZ">
                             <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="exportAllFitFiles:" target="1qV-F5-QB0" id="fGL-li-MWP"/>
+                            </connections>
                         </menuItem>
                     </items>
                 </menu>

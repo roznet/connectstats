@@ -30,7 +30,9 @@ import GenericJSON
 
 class FITGarminDownloadManager: NSObject,RZChildObject {
     struct Notifications {
-        static let garminDownloadChange = Notification.Name("garminDownloadChange")
+        static let end = Notification.Name("garminDownloadEnd")
+        static let error = Notification.Name("garminDownloadError")
+        static let update = Notification.Name("garminDownloadUpdate")
     }
     
     var loginSuccessful : Bool
@@ -66,18 +68,18 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
                 let fp = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(FITAppGlobal.currentLoginName()+".json"))
                 try? data.write(to: fp)
             }
-            
         }
     }
     
     func notifyCallBack(_ theParent: Any!, info theInfo: RZDependencyInfo!) {
         
         if theInfo.stringInfo == NOTIFY_END {
-            NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.garminDownloadChange, object: self)
+            NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.end, object: self)
         }else if theInfo.stringInfo == NOTIFY_NEXT {
-            NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.garminDownloadChange, object: self)
+            NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.update, object: self)
         }else if theInfo.stringInfo == NOTIFY_ERROR {
-            
+            NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.error, object: self)
+            NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.end, object: self)
         }
     }
 
@@ -119,15 +121,8 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
             for fn in files {
                 _ = FITAppGlobal.shared.organizer.load(url: URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(fn)))
                 count+=1
-                if( count == 5){
-                    DispatchQueue.main.async {
-                        NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.garminDownloadChange, object: self)
-                    }
-                }
             }
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.garminDownloadChange, object: self)
-            }
+            NotificationCenter.default.post(name: FITGarminDownloadManager.Notifications.end, object: self)
         }
     }
 
