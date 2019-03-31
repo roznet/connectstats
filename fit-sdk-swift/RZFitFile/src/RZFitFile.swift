@@ -59,43 +59,44 @@ public class RZFitFile {
         var bldmsgnumorder : [RZFitMessageType] = []
         
         while convert_return == FIT_CONVERT_CONTINUE {
-            data.withUnsafeBytes({ (ptr: UnsafePointer<UInt8>) in
-                
-                repeat {
-                    convert_return = FitConvert_Read(&state, ptr, FIT_UINT32(data.count))
-                    
-                    switch convert_return {
-                    case FIT_CONVERT_MESSAGE_AVAILABLE:
-                        let mesg = FitConvert_GetMessageNumber(&state)
-                        if !bldmsgnum.contains(mesg){
-                            bldmsgnum.insert(mesg)
-                            bldmsgnumorder.append(mesg)
-                        }
-                        if let uptr : UnsafePointer<UInt8> = FitConvert_GetMessageData(&state) {
-                            if( mesg == FIT_MESG_NUM_FIELD_DESCRIPTION){
-                                dev_parser.recordDeveloperField(uptr)
+            data.withUnsafeBytes({ (ptrBuffer: UnsafeRawBufferPointer) in
+                if let ptr = ptrBuffer.baseAddress {
+                    repeat {
+                        convert_return = FitConvert_Read(&state, ptr, FIT_UINT32(data.count))
+                        
+                        switch convert_return {
+                        case FIT_CONVERT_MESSAGE_AVAILABLE:
+                            let mesg = FitConvert_GetMessageNumber(&state)
+                            if !bldmsgnum.contains(mesg){
+                                bldmsgnum.insert(mesg)
+                                bldmsgnumorder.append(mesg)
                             }
-                            if let fmesg = rzfit_build_mesg(num: mesg, uptr: uptr)
-                            {
-                                if let dev = dev_parser.parseData() as? [RZFitFieldKey:Double],
-                                    let devunits = dev_parser.units(),
-                                    let devnative = dev_parser.nativeFields() as? [RZFitFieldKey:Int]{
-                                    
-                                    fmesg.addDevFieldValues(fields: dev, units: devunits, native: devnative)
+                            if let uptr : UnsafePointer<UInt8> = FitConvert_GetMessageData(&state) {
+                                if( mesg == FIT_MESG_NUM_FIELD_DESCRIPTION){
+                                    dev_parser.recordDeveloperField(uptr)
                                 }
-                                bldmsg.append(fmesg)
-                                if var prev = bldmsgbytype[fmesg.messageType] {
-                                    prev.append(fmesg)
-                                    bldmsgbytype[fmesg.messageType] = prev
-                                }else{
-                                    bldmsgbytype[fmesg.messageType] = [ fmesg ]
+                                if let fmesg = rzfit_build_mesg(num: mesg, uptr: uptr)
+                                {
+                                    if let dev = dev_parser.parseData() as? [RZFitFieldKey:Double],
+                                        let devunits = dev_parser.units(),
+                                        let devnative = dev_parser.nativeFields() as? [RZFitFieldKey:Int]{
+                                        
+                                        fmesg.addDevFieldValues(fields: dev, units: devunits, native: devnative)
+                                    }
+                                    bldmsg.append(fmesg)
+                                    if var prev = bldmsgbytype[fmesg.messageType] {
+                                        prev.append(fmesg)
+                                        bldmsgbytype[fmesg.messageType] = prev
+                                    }else{
+                                        bldmsgbytype[fmesg.messageType] = [ fmesg ]
+                                    }
                                 }
                             }
+                        default:
+                            break
                         }
-                    default:
-                        break
-                    }
-                } while convert_return == FIT_CONVERT_MESSAGE_AVAILABLE
+                    } while convert_return == FIT_CONVERT_MESSAGE_AVAILABLE
+                }
             } )
         }
         messages = bldmsg
