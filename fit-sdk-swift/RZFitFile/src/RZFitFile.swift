@@ -60,6 +60,7 @@ public class RZFitFile {
         
         while convert_return == FIT_CONVERT_CONTINUE {
             data.withUnsafeBytes({ (ptr: UnsafePointer<UInt8>) in
+                
                 repeat {
                     convert_return = FitConvert_Read(&state, ptr, FIT_UINT32(data.count))
                     

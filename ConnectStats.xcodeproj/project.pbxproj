@@ -8479,7 +8479,7 @@
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = M7QSSF3624;
 						DevelopmentTeamName = "Brice Rosenzweig";
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Maps.Mac = {
@@ -8493,13 +8493,13 @@
 					42769BCC1DD2ABC9000390F1 = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = M7QSSF3624;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 4253B4551CD49F7E00437E6A;
 					};
 					428FF70815F36888007A88FA = {
 						DevelopmentTeam = M7QSSF3624;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
 								enabled = 1;
@@ -8510,7 +8510,7 @@
 						};
 					};
 					428FF72315F36888007A88FA = {
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					42AA8D601F547151009734D4 = {
@@ -8558,7 +8558,7 @@
 			};
 			buildConfigurationList = 428FF70315F36888007A88FA /* Build configuration list for PBXProject "ConnectStats" */;
 			compatibilityVersion = "Xcode 8.0";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -11547,7 +11547,7 @@
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "FitFileExplorer/FitFileExplorer-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -11582,7 +11582,7 @@
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "FitFileExplorer/FitFileExplorer-Bridging-Header.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -11615,7 +11615,7 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FitFileExplorer.app/Contents/MacOS/FitFileExplorer";
 			};
 			name = Debug;
@@ -11649,7 +11649,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FitFileExplorer.app/Contents/MacOS/FitFileExplorer";
 			};
 			name = Release;
@@ -11795,7 +11795,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStats/ConnectStats-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -11843,7 +11843,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStats/ConnectStats-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -11870,7 +11870,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStatsTests/ConnectStatsXCTests-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Debug;
@@ -11895,7 +11895,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStatsTests/ConnectStatsXCTests-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Release;

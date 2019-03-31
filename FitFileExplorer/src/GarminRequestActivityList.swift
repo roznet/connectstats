@@ -62,6 +62,8 @@ class GarminRequestActivityList: GarminRequest {
             return "Parsing History... \(self.lastFoundDate)"
         case gcRequestStage.saving:
             return "Saving History... \(self.lastFoundDate)"
+        @unknown default:
+            return "Downloading..."
         }
     }
     
