@@ -18,7 +18,7 @@ public extension GCField {
                                 "heart_rate": "WeightedMeanHeartRate",
                       ]
 
-    public static func field(fitKey:String, activityType:String) -> GCField? {
+    static func field(fitKey:String, activityType:String) -> GCField? {
         var fieldKey = fitToFieldMap[fitKey]
         if fieldKey == nil{
             RZSLog.warning("Missing \(fitKey)")

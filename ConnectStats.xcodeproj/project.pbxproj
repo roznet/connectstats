@@ -1844,6 +1844,8 @@
 		42BC539B161E37AE00576097 /* GCHistoryFieldSummaryStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BC539A161E37AE00576097 /* GCHistoryFieldSummaryStats.m */; };
 		42BC539E161E3E2700576097 /* GCFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BC539D161E3E2600576097 /* GCFields.m */; };
 		42BC77E3198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BC77E2198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.m */; };
+		42BF1D3422510E63000DF572 /* RZFitFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; };
+		42BF1D3522510E63000DF572 /* RZFitFile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42BF1FEC1D3AC233004445C2 /* RZUtilsTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; };
 		42BF98381EE3175600F5E094 /* FITFitStatisticsWeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BF98371EE3175600F5E094 /* FITFitStatisticsWeight.swift */; };
 		42BFC2231DCDD9D900EAD40E /* FITOutlineDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BFC2181DCCCB9400EAD40E /* FITOutlineDataSource.swift */; };
@@ -2415,6 +2417,13 @@
 			remoteGlobalIDString = 42382ACF1EAC9BC700252217;
 			remoteInfo = RZUtilsTouch;
 		};
+		42BF1D3622510E63000DF572 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 422C59302211E43C004AC730;
+			remoteInfo = RZFitFile;
+		};
 		42BF1FE81D3AC233004445C2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
@@ -2681,6 +2690,7 @@
 				42EAE40B200BB2E30017D65C /* RZUtilsTouch.framework in Embed Frameworks */,
 				422BFD4521E00D1900291D71 /* RZExternalUniversal.framework in Embed Frameworks */,
 				42EAE403200BB2E30017D65C /* RZUtilsUniversal.framework in Embed Frameworks */,
+				42BF1D3522510E63000DF572 /* RZFitFile.framework in Embed Frameworks */,
 				42EAE3EF200BB2E30017D65C /* RZExternalCpp.framework in Embed Frameworks */,
 				42EAE3FB200BB2E30017D65C /* RZUtils.framework in Embed Frameworks */,
 				42EAE407200BB2E30017D65C /* RZUtilsHealthkit.framework in Embed Frameworks */,
@@ -4731,6 +4741,7 @@
 				42EAE402200BB2E30017D65C /* RZUtilsUniversal.framework in Frameworks */,
 				42793B321F405941005FAF02 /* RZUtilsSwift.framework in Frameworks */,
 				42EAE3FA200BB2E30017D65C /* RZUtils.framework in Frameworks */,
+				42BF1D3422510E63000DF572 /* RZFitFile.framework in Frameworks */,
 				42B5E2FF1BA5B7BF000FAE4E /* libsqlite3.tbd in Frameworks */,
 				42B5E2D01BA5B589000FAE4E /* HealthKit.framework in Frameworks */,
 				1EBEDF98910D13D2C7A115ED /* libPods-ConnectStatsTestApp.a in Frameworks */,
@@ -8413,6 +8424,7 @@
 				42EAE40D200BB2E30017D65C /* PBXTargetDependency */,
 				42EAE411200BB2E30017D65C /* PBXTargetDependency */,
 				422BFD4721E00D1900291D71 /* PBXTargetDependency */,
+				42BF1D3722510E63000DF572 /* PBXTargetDependency */,
 			);
 			name = ConnectStatsTestApp;
 			productName = ConnectStatsTestApp;
@@ -8537,7 +8549,7 @@
 					42B5E1B81BA5AEC9000FAE4E = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = M7QSSF3624;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
 								enabled = 1;
@@ -11286,6 +11298,11 @@
 			name = RZUtilsTouch;
 			targetProxy = 42AA8E6A1F5474BF009734D4 /* PBXContainerItemProxy */;
 		};
+		42BF1D3722510E63000DF572 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZFitFile;
+			targetProxy = 42BF1D3622510E63000DF572 /* PBXContainerItemProxy */;
+		};
 		42BFC23F1DCF4EA200EAD40E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = RZUtils;
@@ -12083,7 +12100,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "connectstatstestapp/ConnectStatsTestApp-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -12123,7 +12140,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "connectstatstestapp/ConnectStatsTestApp-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
