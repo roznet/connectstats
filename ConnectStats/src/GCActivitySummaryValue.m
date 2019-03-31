@@ -40,12 +40,15 @@
 
 @implementation GCActivitySummaryValue
 
++(BOOL)supportsSecureCoding{
+    return YES;
+}
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
-        self.field = [aDecoder decodeObjectForKey:kGCField];
-        self.uom = [aDecoder decodeObjectForKey:kGCUom];
+        self.field = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCField];
+        self.uom = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCUom];
         self.value = [aDecoder decodeDoubleForKey:kGCValue];
     }
     return self;

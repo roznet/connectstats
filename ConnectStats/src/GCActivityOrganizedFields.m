@@ -32,11 +32,15 @@
 
 @implementation GCActivityOrganizedFields
 
++(BOOL)supportsSecureCoding{
+    return YES;
+}
+
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
-        self.groupedOtherFields = [aDecoder decodeObjectForKey:kGCOtherFields];
-        self.groupedPrimaryFields = [aDecoder decodeObjectForKey:kGCPrimaryFields];
+        self.groupedOtherFields = [aDecoder decodeObjectOfClass:[NSArray class] forKey:kGCOtherFields];
+        self.groupedPrimaryFields = [aDecoder decodeObjectOfClass:[NSArray class] forKey:kGCPrimaryFields];
     }
     return self;
 }

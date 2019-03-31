@@ -43,11 +43,14 @@ static  NSString * kGCVersion = @"kWorkoutParserVersion";
 
 @implementation GCHealthKitWorkoutParser
 
++(BOOL)supportsSecureCoding{
+    return YES;
+}
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
-        self.workoutSamples = [aDecoder decodeObjectForKey:kGCSamples];
-        self.results = [aDecoder decodeObjectForKey:kGCResults];
+        self.workoutSamples = [aDecoder decodeObjectOfClass:[NSDictionary class] forKey:kGCSamples];
+        self.results = [aDecoder decodeObjectOfClass:[NSArray class] forKey:kGCResults];
     }
     return self;
 }

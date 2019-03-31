@@ -45,7 +45,7 @@ typedef NS_ENUM(NSUInteger, gcDerivedType) {
 
 extern sqlite3_int64 kInvalidSerieId;
 
-@interface GCDerivedDataSerie : NSObject<NSCoding>
+@interface GCDerivedDataSerie : NSObject<NSSecureCoding>
 @property (nonatomic,assign) gcDerivedType derivedType;
 @property (nonatomic,retain) NSString * activityType;
 @property (nonatomic,assign) gcFieldFlag fieldFlag;

@@ -71,8 +71,8 @@ extension GCActivity {
     }
 
      func mergeFrom(other : GCActivity){
-        let fields = self.availableTrackFields()
-        let otherFields = other.self.availableTrackFields()
+        //let fields = self.availableTrackFields()
+        //let otherFields = other.self.availableTrackFields()
         
         if let to = self.trackpoints, let from = other.trackpoints {
             var i = from.makeIterator()

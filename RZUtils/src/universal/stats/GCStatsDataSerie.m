@@ -91,10 +91,14 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 @implementation GCStatsDataSerie
 @synthesize dataPoints;
 
++(BOOL)supportsSecureCoding{
+    return YES;
+}
+
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [self init];
     if (self) {
-        self.dataPoints = [aDecoder decodeObjectForKey:GC_CODER_DATA_POINTS];
+        self.dataPoints = [aDecoder decodeObjectOfClasses:[NSSet setWithObjects:[NSMutableArray class], [GCStatsDataPoint class], nil] forKey:GC_CODER_DATA_POINTS];
     }
     return self;
 }

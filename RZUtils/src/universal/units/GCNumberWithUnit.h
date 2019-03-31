@@ -29,7 +29,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GCNumberWithUnit : NSObject<NSCoding>
+@interface GCNumberWithUnit : NSObject<NSSecureCoding>
 
 @property (nonatomic,assign) double value;
 @property (nonatomic,retain) GCUnit * unit;

@@ -54,8 +54,8 @@
     return rv;
 }
 
--(id)retrieveReferenceObject:(NSObject<NSCoding>*)object
-                    forClass:(Class)cls
+-(id)retrieveReferenceObject:(NSObject<NSSecureCoding>*)object
+                    forClasses:(NSSet<Class>*)cls
                     selector:(SEL)sel
                   identifier:(NSString*)ident
                        error:(NSError**)error{
@@ -80,7 +80,7 @@
             }
             
             if( object ){
-                success = [[NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:error] writeToFile:filepath atomically:YES];
+                success = [[NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:YES error:error] writeToFile:filepath atomically:YES];
                 if( success ){
                     rv = object;
                 }
@@ -104,20 +104,7 @@
                 
                 NSData * data = [NSData dataWithContentsOfFile:filepath];
                 
-                rv = [NSKeyedUnarchiver unarchiveTopLevelObjectWithData:data error:error];
-                
-                if( rv == nil ){
-                    rv = [NSKeyedUnarchiver unarchivedObjectOfClass:cls fromData:data error:error];
-                }
-                if( rv == nil && [cls isEqual:[NSDictionary class]]){
-                    rv = [NSKeyedUnarchiver unarchivedObjectOfClass:NSClassFromString(@"__NSDictionaryI") fromData:data error:error];
-                }
-                if( rv == nil && [cls isEqual:[NSDictionary class]]){
-                    rv = [NSKeyedUnarchiver unarchivedObjectOfClass:NSClassFromString(@"__NSDictionaryM") fromData:data error:error];
-                }
-                if( rv == nil && [cls isEqual:[NSArray class]]){
-                    rv = [NSKeyedUnarchiver unarchivedObjectOfClass:NSClassFromString(@"__NSArrayM") fromData:data error:error];
-                }
+                rv = [NSKeyedUnarchiver unarchivedObjectOfClasses:cls fromData:data error:error];
             }
 
         }else{

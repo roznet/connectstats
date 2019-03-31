@@ -38,13 +38,15 @@
 @end
 
 @implementation GCActivityMetaValue
-
++(BOOL)supportsSecureCoding{
+    return YES;
+}
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
-        self.field = [aDecoder decodeObjectForKey:kGCField];
-        self.display = [aDecoder decodeObjectForKey:kGCDisplay];
-        self.key = [aDecoder decodeObjectForKey:kGCKey];
+        self.field = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCField];
+        self.display = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCDisplay];
+        self.key = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCKey];
     }
     return self;
 }
