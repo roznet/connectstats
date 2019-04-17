@@ -26,14 +26,16 @@
 #import "GCGarminLoginSSORequest.h"
 
 typedef NS_ENUM(NSUInteger, gcSSOStages) {
-    gcSSOGetServiceTicket,
-    gcSSOLoginWithServiceTicket,
-    gcSSOSecondLogin,
+    gcSSOGetSigninFormCRSFToken,     // first get the signin page and extract the csrf token
+    gcSSOGetServiceTicket,  // then do the login and extract the service ticket
+    gcSSOLoginWithServiceTicket, // finaly login with the service ticket
+    gcSSOSecondLogin, // make sure it works
 
     gcSSOAllDone,
 };
 
-NSString * kGarminFullUrl = @"https://sso.garmin.com/sso/login?service=https%3A%2F%2Fconnect.garmin.com%2Fmodern%2F&webhost=olaxpw-conctmodern006.garmin.com&source=https%3A%2F%2Fconnect.garmin.com%2Fen-US%2Fsignin&redirectAfterAccountLoginUrl=https%3A%2F%2Fconnect.garmin.com%2Fmodern%2F&redirectAfterAccountCreationUrl=https%3A%2F%2Fconnect.garmin.com%2Fmodern%2F&gauthHost=https%3A%2F%2Fsso.garmin.com%2Fsso&locale=en_US&id=gauth-widget&cssUrl=https%3A%2F%2Fstatic.garmincdn.com%2Fcom.garmin.connect%2Fui%2Fcss%2Fgauth-custom-v1.2-min.css&privacyStatementUrl=%2F%2Fconnect.garmin.com%2Fen-US%2Fprivacy%2F&clientId=GarminConnect&rememberMeShown=true&rememberMeChecked=false&createAccountShown=true&openCreateAccount=false&usernameShown=false&displayNameShown=false&consumeServiceTicket=false&initialFocus=true&embedWidget=false&generateExtraServiceTicket=false&globalOptInShown=false&globalOptInChecked=false&mobile=false&connectLegalTerms=true";
+NSString * kGarminFullUrl =
+@"https://sso.garmin.com/sso/signin?service=https%3A%2F%2Fconnect.garmin.com%2Fmodern%2F&webhost=https%3A%2F%2Fconnect.garmin.com&source=https%3A%2F%2Fconnect.garmin.com%2Fen-US%2Fsignin&redirectAfterAccountLoginUrl=https%3A%2F%2Fconnect.garmin.com%2Fmodern%2F&redirectAfterAccountCreationUrl=https%3A%2F%2Fconnect.garmin.com%2Fmodern%2F&gauthHost=https%3A%2F%2Fsso.garmin.com%2Fsso&locale=en_GB&id=gauth-widget&cssUrl=https%3A%2F%2Fstatic.garmincdn.com%2Fcom.garmin.connect%2Fui%2Fcss%2Fgauth-custom-v1.2-min.css&privacyStatementUrl=%2F%2Fconnect.garmin.com%2Fen-US%2Fprivacy%2F&clientId=GarminConnect&rememberMeShown=true&rememberMeChecked=false&createAccountShown=true&openCreateAccount=false&displayNameShown=false&consumeServiceTicket=false&initialFocus=true&embedWidget=false&generateExtraServiceTicket=true&generateTwoExtraServiceTickets=false&generateNoServiceTicket=false&globalOptInShown=true&globalOptInChecked=false&mobile=false&connectLegalTerms=true&locationPromptShown=true&showPassword=true";
 
 
 @interface GCGarminLoginSSORequest ()
@@ -41,6 +43,7 @@ NSString * kGarminFullUrl = @"https://sso.garmin.com/sso/login?service=https%3A%
 @property (nonatomic,retain) NSString * pwd;
 @property (nonatomic,assign) gcSSOStages ssoStage;
 @property (nonatomic,retain) NSString * serviceTicket;
+@property (nonatomic,retain) NSString * csrfToken;
 
 @end
 
@@ -57,6 +60,8 @@ NSString * kGarminFullUrl = @"https://sso.garmin.com/sso/login?service=https%3A%
 -(NSString*)description{
     switch (self.ssoStage) {
         case gcSSOGetServiceTicket:
+            
+        case gcSSOGetSigninFormCRSFToken:
             return @"Garmin Connect Authorize";
         case gcSSOLoginWithServiceTicket:
         case gcSSOSecondLogin:
@@ -69,6 +74,7 @@ NSString * kGarminFullUrl = @"https://sso.garmin.com/sso/login?service=https%3A%
 -(void)dealloc{
     [_uname release];
     [_pwd release];
+    [_csrfToken release];
     [_serviceTicket release];
 
     [super dealloc];
@@ -89,6 +95,7 @@ NSString * kGarminFullUrl = @"https://sso.garmin.com/sso/login?service=https%3A%
                 return @{@"ticket": self.serviceTicket};
             }
         case gcSSOSecondLogin:
+        case gcSSOGetSigninFormCRSFToken:
         case gcSSOAllDone:
             break;
     }
@@ -99,9 +106,18 @@ NSString * kGarminFullUrl = @"https://sso.garmin.com/sso/login?service=https%3A%
         return @{
           @"username": self.uname,
           @"password": self.pwd,
-          @"_eventId": @"submit",
-          @"embed": @"true",
+          @"embed": @"false",          
+          @"_csrf":self.csrfToken?:@"",
           };
+    }
+    return nil;
+}
+-(RemoteDownloadPrepareUrl)prepareUrlFunc{
+    if( self.ssoStage == gcSSOGetServiceTicket){
+        return ^(NSMutableURLRequest*req){
+            [req setValue:@"https://sso.garmin.com" forHTTPHeaderField:@"origin"];
+            [req setValue:kGarminFullUrl forHTTPHeaderField:@"referer"];
+        };
     }
     return nil;
 }
@@ -122,6 +138,8 @@ NSString * kGarminFullUrl = @"https://sso.garmin.com/sso/login?service=https%3A%
             return RZWebEncodeURLwGet(@"https://connect.garmin.com/modern/", [self dictForGetRequest]);
         case gcSSOSecondLogin:
             return @"https://connect.garmin.com/legacy/session";
+        case gcSSOGetSigninFormCRSFToken:
+            return kGarminFullUrl;
         default:
             return @"https://connect.garmin.com";
     }
@@ -134,15 +152,26 @@ NSString * kGarminFullUrl = @"https://sso.garmin.com/sso/login?service=https%3A%
 -(BOOL)priorityRequest{
     return true;
 }
-
 -(void)process{
 #if TARGET_IPHONE_SIMULATOR
     NSString * fn = [NSString stringWithFormat:@"garmin_sso_stage_%d.html", (int)self.ssoStage];
     NSError * e = nil;
     [self.theString writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:true encoding:self.encoding error:&e];
 #endif
+    if (self.ssoStage == gcSSOGetSigninFormCRSFToken){
+        NSString * prefix = @"type=\"hidden\" name=\"_csrf\" value=\"";
+        
+        NSRange range = [self.theString rangeOfString:prefix];
+        if (range.location != NSNotFound) {
+            NSString * valuestr = [self.theString substringFromIndex:range.location+range.length];
+            range = [valuestr rangeOfString:@"\""];
+            if (range.location != NSNotFound) {
+                valuestr = [valuestr substringToIndex:range.location];
+                self.csrfToken = valuestr;
+            }
+        }
 
-    if (self.ssoStage == gcSSOGetServiceTicket){
+    }else if (self.ssoStage == gcSSOGetServiceTicket){
 
         NSString * prefix = @"https://connect.garmin.com/modern/?ticket=";
 
@@ -201,6 +230,7 @@ NSString * kGarminFullUrl = @"https://sso.garmin.com/sso/login?service=https%3A%
     if (nextStage < gcSSOAllDone) {
         rv = [GCGarminLoginSSORequest requestWithUser:self.uname andPwd:self.pwd];
         rv.serviceTicket = self.serviceTicket;
+        rv.csrfToken = self.csrfToken;
         rv.ssoStage = nextStage;
     }
     return rv;
