@@ -29,7 +29,6 @@ typedef NS_ENUM(NSUInteger, gcSSOStages) {
     gcSSOGetSigninFormCRSFToken,     // first get the signin page and extract the csrf token
     gcSSOGetServiceTicket,  // then do the login and extract the service ticket
     gcSSOLoginWithServiceTicket, // finaly login with the service ticket
-    gcSSOSecondLogin, // make sure it works
 
     gcSSOAllDone,
 };
@@ -64,8 +63,6 @@ NSString * kGarminFullUrl =
         case gcSSOGetSigninFormCRSFToken:
             return @"Garmin Connect Authorize";
         case gcSSOLoginWithServiceTicket:
-        case gcSSOSecondLogin:
-            return @"Garmin Connect Login";
         case gcSSOAllDone:
             return @"Garmin Connect Success";
     }
@@ -94,7 +91,6 @@ NSString * kGarminFullUrl =
             if (self.serviceTicket) {
                 return @{@"ticket": self.serviceTicket};
             }
-        case gcSSOSecondLogin:
         case gcSSOGetSigninFormCRSFToken:
         case gcSSOAllDone:
             break;
@@ -113,6 +109,7 @@ NSString * kGarminFullUrl =
     return nil;
 }
 -(RemoteDownloadPrepareUrl)prepareUrlFunc{
+    // to get the service ticket it needs to have these headers, other reuqest are fine
     if( self.ssoStage == gcSSOGetServiceTicket){
         return ^(NSMutableURLRequest*req){
             [req setValue:@"https://sso.garmin.com" forHTTPHeaderField:@"origin"];
@@ -134,13 +131,11 @@ NSString * kGarminFullUrl =
     switch (self.ssoStage) {
         case gcSSOGetServiceTicket:
             return kGarminFullUrl;
-        case gcSSOLoginWithServiceTicket:
-            return RZWebEncodeURLwGet(@"https://connect.garmin.com/modern/", [self dictForGetRequest]);
-        case gcSSOSecondLogin:
-            return @"https://connect.garmin.com/legacy/session";
         case gcSSOGetSigninFormCRSFToken:
             return kGarminFullUrl;
-        default:
+        case gcSSOLoginWithServiceTicket:
+            return RZWebEncodeURLwGet(@"https://connect.garmin.com/modern/", [self dictForGetRequest]);
+        case gcSSOAllDone:
             return @"https://connect.garmin.com";
     }
 }
@@ -152,6 +147,27 @@ NSString * kGarminFullUrl =
 -(BOOL)priorityRequest{
     return true;
 }
+
+-(nullable NSString*)extractQuotedFrom:(NSString*)prefix{
+    NSMutableArray<NSString*> * tries =[NSMutableArray arrayWithObject:prefix];
+    
+    [tries addObject:[prefix stringByReplacingOccurrencesOfString:@"/" withString:@"\\/"]];
+    
+    NSString * rv = nil;
+    for( NSString * try in tries){
+        NSRange range = [self.theString rangeOfString:try];
+        if (range.location != NSNotFound) {
+            NSString * valuestr = [self.theString substringFromIndex:range.location+range.length];
+            range = [valuestr rangeOfString:@"\""];
+            if (range.location != NSNotFound) {
+                valuestr = [valuestr substringToIndex:range.location];
+                rv = valuestr;
+            }
+        }
+    }
+    return rv;
+}
+
 -(void)process{
 #if TARGET_IPHONE_SIMULATOR
     NSString * fn = [NSString stringWithFormat:@"garmin_sso_stage_%d.html", (int)self.ssoStage];
@@ -160,37 +176,11 @@ NSString * kGarminFullUrl =
 #endif
     if (self.ssoStage == gcSSOGetSigninFormCRSFToken){
         NSString * prefix = @"type=\"hidden\" name=\"_csrf\" value=\"";
-        
-        NSRange range = [self.theString rangeOfString:prefix];
-        if (range.location != NSNotFound) {
-            NSString * valuestr = [self.theString substringFromIndex:range.location+range.length];
-            range = [valuestr rangeOfString:@"\""];
-            if (range.location != NSNotFound) {
-                valuestr = [valuestr substringToIndex:range.location];
-                self.csrfToken = valuestr;
-            }
-        }
+        self.csrfToken = [self extractQuotedFrom:prefix];
 
     }else if (self.ssoStage == gcSSOGetServiceTicket){
-
         NSString * prefix = @"https://connect.garmin.com/modern/?ticket=";
-
-        NSMutableArray<NSString*> * tries =[NSMutableArray arrayWithObject:prefix];
-
-        [tries addObject:[prefix stringByReplacingOccurrencesOfString:@"/" withString:@"\\/"]];
-
-        self.serviceTicket = nil;
-        for( NSString * try in tries){
-            NSRange range = [self.theString rangeOfString:try];
-            if (range.location != NSNotFound) {
-                NSString * valuestr = [self.theString substringFromIndex:range.location+range.length];
-                range = [valuestr rangeOfString:@"\""];
-                if (range.location != NSNotFound) {
-                    valuestr = [valuestr substringToIndex:range.location];
-                    self.serviceTicket = valuestr;
-                }
-            }
-        }
+        self.serviceTicket = [self extractQuotedFrom:prefix];
         if (!self.serviceTicket) {
             NSRange range = [self.theString rangeOfString:@"RENEW_PASSWORD_STATE"];
             NSRange range2 = [self.theString rangeOfString:@"'status':'SUCCESS'"];
