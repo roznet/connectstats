@@ -26,7 +26,7 @@
 #import <Foundation/Foundation.h>
 #import "GCField.h"
 
-@interface GCFieldsForCategory : NSObject<NSCoding>
+@interface GCFieldsForCategory : NSObject<NSSecureCoding>
 
 @property (nonatomic,retain) NSString * category;
 @property (nonatomic,retain) NSArray<GCField*> * fields;

@@ -1,19 +1,34 @@
 PODS:
-  - Flurry-iOS-SDK/FlurrySDK (9.0.0)
-  - GoogleMaps (2.7.0):
-    - GoogleMaps/Maps (= 2.7.0)
-  - GoogleMaps/Base (2.7.0)
-  - GoogleMaps/Maps (2.7.0):
+  - Flurry-iOS-SDK/FlurrySDK (9.3.1)
+  - GenericJSON (1.1.0)
+  - GoogleMaps (3.0.3):
+    - GoogleMaps/Maps (= 3.0.3)
+  - GoogleMaps/Base (3.0.3)
+  - GoogleMaps/Maps (3.0.3):
     - GoogleMaps/Base
+  - KeychainSwift (13.0.0)
 
 DEPENDENCIES:
   - Flurry-iOS-SDK/FlurrySDK
+  - GenericJSON (from `https://github.com/roznet/generic-json-swift.git`)
   - GoogleMaps
+  - KeychainSwift
+
+EXTERNAL SOURCES:
+  GenericJSON:
+    :git: https://github.com/roznet/generic-json-swift.git
+
+CHECKOUT OPTIONS:
+  GenericJSON:
+    :commit: f9ad1d746d65dcb13468cb1ccfcb0a895e2968b0
+    :git: https://github.com/roznet/generic-json-swift.git
 
 SPEC CHECKSUMS:
-  Flurry-iOS-SDK: 58e48e417fee667154e4d240040b270b3734d28a
-  GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
+  Flurry-iOS-SDK: 5d782d740c5e95389c327d38245b3db4bb471fd7
+  GenericJSON: ed952352821dae43f2e7d928512f3529424f576a
+  GoogleMaps: fd5c9fa58871781b9fb94d4936f19c69fe60ce32
+  KeychainSwift: 23d6c16cbc33f20fafa30c3d783241b4b87d998c
 
-PODFILE CHECKSUM: 0b669fcd787ae27308d7511bdbfa1d116f3d4098
+PODFILE CHECKSUM: a3a7c4d488f05292f325322caca9983ee723090a
 
 COCOAPODS: 1.4.0

@@ -76,8 +76,10 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
         RZLog(RZLogError, @"Failed to initiate oauth2 %@", error.localizedDescription);
     }
     if (didAuth && auth.canAuthorize) {
-        [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:YES];
-        [self processDone];
+        [auth authorizeRequest:nil completionHandler:^(NSError*error){
+            [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:YES];
+            [self processDone];
+        }];
     }else{
         // Specify the appropriate scope string, if any, according to the service's API documentation
         auth.scope = @"view_private,write";

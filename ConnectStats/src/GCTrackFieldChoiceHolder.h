@@ -29,7 +29,7 @@
 #import "GCTrackStats.h"
 #import "GCField.h"
 
-@interface GCTrackFieldChoiceHolder : NSObject
+@interface GCTrackFieldChoiceHolder : NSObject<NSSecureCoding>
 @property (nonatomic,retain) GCField * field;
 @property (nonatomic,retain) GCField * x_field;
 @property (nonatomic,assign) NSUInteger movingAverage;

@@ -28,6 +28,7 @@
 #import "GCActivity+ExportText.h"
 #import "GCField.h"
 @import RZExternal;
+@import RZExternalUniversal;
 
 @implementation GCExportGoogleEarth
 @synthesize activity;
@@ -51,8 +52,9 @@
 
     NSString * kml = [self exportTrackKML];
     NSString * kmzpath = [RZFileOrganizer writeableFilePath:kmzfn];
-
-    OZZipFile * zipFile= [[OZZipFile alloc] initWithFileName:kmzpath mode:OZZipFileModeCreate];
+    NSError * err = nil;
+    
+    OZZipFile * zipFile= [[OZZipFile alloc] initWithFileName:kmzpath mode:OZZipFileModeCreate error:&err];
 
     OZZipWriteStream *stream= [zipFile writeFileInZipWithName:@"track.kml" compressionLevel:OZZipCompressionLevelBest];
     [stream writeData:[kml dataUsingEncoding:NSUTF8StringEncoding]];

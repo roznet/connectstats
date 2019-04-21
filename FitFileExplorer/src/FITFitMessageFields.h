@@ -29,7 +29,10 @@
 
 @interface FITFitMessageFields : NSObject<NSFastEnumeration>
 
-+(nullable FITFitMessageFields * )fitMessageFields:(nonnull NSDictionary<NSString*,FITFitFieldValue*>*)values atIndex:(NSUInteger)index;
+@property (nonnull,nonatomic,strong) NSString * messageType;
+
+
++(nullable FITFitMessageFields * )fitMessageFields:(nonnull NSDictionary<NSString*,FITFitFieldValue*>*)values atIndex:(NSUInteger)index forType:(nonnull NSString*)type;
 
 -(nonnull NSArray<NSString*>*)allFieldNames;
 

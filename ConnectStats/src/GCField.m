@@ -88,12 +88,14 @@ static void registerInCache(GCField*field){
         RZRetain(cache);
     }
 }
-
++(BOOL)supportsSecureCoding{
+    return YES;
+}
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
-        self.key = [aDecoder decodeObjectForKey:kGCFieldKey];
-        self.activityType = [aDecoder decodeObjectForKey:kGCActivityType];
+        self.key = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCFieldKey];
+        self.activityType = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCActivityType];
         self.fieldFlag = (gcFieldFlag)[aDecoder decodeInt64ForKey:kGCFieldFlag];
     }
     return self;

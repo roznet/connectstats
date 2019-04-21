@@ -11,6 +11,7 @@
 #import "GCActivity+Database.h"
 #import "GCActivity+Import.h"
 #import "GCWeather.h"
+#import "GCAppGlobal.h"
 #import "GCGarminActivityDetailJsonParser.h"
 #import "GCGarminRequestActivityReload.h"
 #import "GCGarminSearchJsonParser.h"
@@ -79,20 +80,29 @@
     NSArray * activityIds = @[ @"1108367966", @"1108368135", @"1089803211", @"924421177"];;
     
     RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
+    manager.recordMode = [GCTestCase recordModeGlobal];
     //manager.recordMode = true;
     
+    NSSet<Class>*classes =[NSSet setWithObjects:[GCStatsDataSerieWithUnit class], nil];
+    
+    
     for (NSString * aId in activityIds) {
-        GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-        [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-        
-        NSArray<GCField*>*fields = [act availableTrackFields];
-        for (GCField * field in fields) {
-            NSString * ident = [NSString stringWithFormat:@"%@_%@", aId, field.key];
-            GCStatsDataSerieWithUnit * expected = [act timeSerieForField:field];
-            GCStatsDataSerieWithUnit * retrieved = [manager retrieveReferenceObject:expected forClass:[GCStatsDataSerieWithUnit class] selector:_cmd identifier:ident error:nil];
-            XCTAssertNotEqual(expected.count, 0, @"%@[%@] has points",aId,field.key);
-            XCTAssertEqualObjects(expected, retrieved, @"%@[%@]: %@<>%@", aId, field.key, expected, retrieved);
-        }
+        dispatch_sync([GCAppGlobal worker], ^(){
+            GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+            [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+            
+            NSArray<GCField*>*fields = [act availableTrackFields];
+            
+            for (GCField * field in fields) {
+                NSError * error = nil;
+                
+                NSString * ident = [NSString stringWithFormat:@"%@_%@", aId, field.key];
+                GCStatsDataSerieWithUnit * expected = [act timeSerieForField:field];
+                GCStatsDataSerieWithUnit * retrieved = [manager retrieveReferenceObject:expected forClasses:classes selector:_cmd identifier:ident error:&error];
+                XCTAssertNotEqual(expected.count, 0, @"%@[%@] has points",aId,field.key);
+                XCTAssertEqualObjects(expected, retrieved, @"%@[%@]: %@<>%@", aId, field.key, expected, retrieved);
+            }
+        });
     }
     
     //NSLog(@"act %@", act);
@@ -254,9 +264,13 @@
     NSDictionary * rv = [organizer fieldsSeries:@[ @"WeightedMeanHeartRate", @"WeightedMeanPace", hf] matching:nil useFiltered:NO ignoreMode:gcIgnoreModeActivityFocus];
     
     RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
+    manager.recordMode = [GCTestCase recordModeGlobal];
     //manager.recordMode = true;
-
-    NSDictionary * expected = [manager retrieveReferenceObject:rv forClass:[NSDictionary class] selector:_cmd identifier:@"timeSeries" error:nil ];
+    
+    NSError * error = nil;
+    NSSet<Class>*classes = [NSSet setWithObjects:[NSDictionary class], [GCField class], [GCStatsDataSerieWithUnit class], nil];
+    
+    NSDictionary * expected = [manager retrieveReferenceObject:rv forClasses:classes selector:_cmd identifier:@"timeSeries" error:&error];
     XCTAssertEqual(expected.count, rv.count);
     for (id key in expected) {
         GCStatsDataSerieWithUnit * exp_serie = expected[key];
@@ -351,7 +365,7 @@
     
     
     XCTAssertGreaterThan(modernAct.trackpoints.count, 1);
-    [self compareStatsCheckSavedFor:modernAct identifier:@"modernAct" cmd:_cmd recordMode:NO];
+    [self compareStatsCheckSavedFor:modernAct identifier:@"modernAct" cmd:_cmd recordMode:[GCTestCase recordModeGlobal]];
     
 }
 
@@ -391,8 +405,10 @@
     RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
     manager.recordMode = record;
 
+    NSSet<Class>*classes = [NSSet setWithObjects:[NSDictionary class], [GCField class], [GCTrackFieldChoiceHolder class], [NSArray class], nil];
+    NSError * error = nil;
     NSDictionary * rv = [self compareStatsDictFor:act];
-    NSDictionary * expected = [manager retrieveReferenceObject:rv forClass:[NSDictionary class] selector:sel identifier:label error:nil];
+    NSDictionary * expected = [manager retrieveReferenceObject:rv forClasses:classes selector:sel identifier:label error:&error];
     [self compareStatsAssertEqual:rv and:expected withMessage:[NSString stringWithFormat:@"%@ %@", NSStringFromSelector(sel), label]];
 
 }
@@ -652,7 +668,7 @@
                                    //@"SumElapsedDuration": @(124.8420000000001),
                                    @"SumEnergy": @(1.),
                                    @"WeightedMeanAirTemperature": @(0.1),
-                                   @"WeightedMeanGroundContactTime": @(1.293747015611027),
+                                   @"WeightedMeanGroundContactTime": @(5.0),
                                    @"WeightedMeanPace": @(0.3260718057400382),
                                    @"WeightedMeanRunCadence": @(0.7834375),
                                    @"WeightedMeanVerticalOscillation": @(3.051757833105739e-06),
@@ -661,6 +677,7 @@
                                    };
     
     NSDictionary * expectedMissingFromFit = @{
+                                              @"WeightedMeanVerticalRatio": @"8.84 %",
                                        @"DirectVO2Max": @"40.0 ml/kg/min",
                                        @"GainCorrectedElevation": @"844 m",
                                        @"GainUncorrectedElevation": @"861 m",
@@ -729,7 +746,9 @@
                                              @"avg_step_length":@9,
                                              @"enhanced_max_speed":@8,
                                              @"total_cycles":@7,
-                                             
+                                             @"message_index":@9,
+                                             @"NumLaps":@9,
+                                             @"FirstLapIndex": @1,
                                              
                                              };
 
@@ -772,9 +791,7 @@
         
         NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
         
-        FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fn];
-        [fitDecode parse];
-        GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFile:fitDecode.fitFile];
+        GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFilePath:fn];
         
         // All trackfield fields merged
         for (GCField * one in act.availableTrackFields) {

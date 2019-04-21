@@ -7,6 +7,17 @@
 //
 
 import Foundation
+import RZFitFile
+
+extension CLLocation {
+    convenience init?(withCoordinate:CLLocationCoordinate2D?){
+        if let coord = withCoordinate {
+            self.init(latitude: coord.latitude, longitude: coord.longitude)
+        }else{
+            return nil
+        }
+    }
+}
 
 struct FITFitStatisticsWeight {
     let count : UInt
@@ -25,21 +36,25 @@ struct FITFitStatisticsWeight {
         self.time = time
     }
     
-    init(from:FITFitMessageFields?, to:FITFitMessageFields?, withTimeField:String,withDistanceField:String) {
+    init(from:RZFitMessage?, to:RZFitMessage?, withTimeField:String, withDistanceField:String) {
         if let to = to, let from = from {
             self.count = 1
             
-            if let toAsLocation = to[withDistanceField]?.locationValue, let fromAsLocation = from[withDistanceField]?.locationValue {
+            if let toAsLocation = CLLocation(withCoordinate: to.coordinate(field: withDistanceField)),
+                let fromAsLocation = CLLocation(withCoordinate: from.coordinate(field: withDistanceField)) {
+                
                 self.distance = toAsLocation.distance(from: fromAsLocation)
-            }else if let toAsNumber = to[withDistanceField]?.numberWithUnit,let fromAsNumber = to[withDistanceField]?.numberWithUnit {
+                
+            }else if let toAsNumber = to.numberWithUnit(field: withDistanceField),
+                let fromAsNumber = from.numberWithUnit(field: withDistanceField) {
                 self.distance = toAsNumber.convert(to: GCUnit.meter()).value - fromAsNumber.convert(to: GCUnit.meter()).value
             }else{
                 self.distance = 0.0
             }
             
-            if let toAsDate = to[withTimeField]?.dateValue, let fromAsDate = from[withTimeField]?.dateValue {
+            if let toAsDate = to.time(field: withTimeField), let fromAsDate = from.time(field: withTimeField) {
                 self.time = toAsDate.timeIntervalSince(fromAsDate)
-            }else if let toAsNumber = to[withTimeField]?.numberWithUnit, let fromAsNumber = to[withTimeField]?.numberWithUnit {
+            }else if let toAsNumber = to.numberWithUnit(field: withTimeField), let fromAsNumber = from.numberWithUnit(field: withTimeField) {
                 self.time = toAsNumber.convert(to: GCUnit.second()).value - fromAsNumber.convert(to: GCUnit.second()).value
             }else{
                 self.time = 0.0

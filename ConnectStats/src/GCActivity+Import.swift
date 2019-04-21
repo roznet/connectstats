@@ -8,9 +8,20 @@
 
 import Foundation
 import CoreLocation
+import RZFitFile
+import RZFitFileTypes
 
-public extension GCActivity {
-    @objc public convenience init(withId activityId:String, fitFile:FITFitFile){
+extension GCActivity {
+    
+    @objc convenience init?(withId activityId:String, fitFilePath:String){
+        if let fit = RZFitFile(file: URL(fileURLWithPath: fitFilePath)) {
+            self.init(withId: activityId, fitFile: fit)
+        }else{
+            return nil
+        }
+    }
+    
+    convenience init(withId activityId:String, fitFile:RZFitFile){
         self.init(id: activityId)
         let interp  = FITFitFileInterpret(fitFile: fitFile)
         
@@ -20,10 +31,10 @@ public extension GCActivity {
         self.activityName = ""
         self.location = ""
         
-        if let message = fitFile["session"]{
-            if message.count() > 0{
-                let firstmessage = message[0]!
-                var sumValues = interp.summaryValues(fitMessageFields: firstmessage)
+        var messages = fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION)
+        if messages.count > 0{
+            if let firstmessage = messages.first {
+                var sumValues = interp.summaryValues(fitMessage: firstmessage)
                 let toremove = sumValues.filter {
                     $1.uom == "datetime"
                 }
@@ -32,43 +43,36 @@ public extension GCActivity {
                 }
                 self.mergeSummaryData(sumValues)
                 
-                if let start = firstmessage["StartTime"]?.dateValue{
+                if let start = firstmessage.time(field: "StartTime"){
                     self.date = start
                 }
             }
         }
         
-        if let message = fitFile["record"]{
-            var trackpoints : [GCTrackPoint] = []
-            for item in message{
-                if let field = item as? FITFitMessageFields,
-                    let timestamp = field["timestamp"]?.dateValue{
-                    let values = interp.summaryValues(fitMessageFields: field)
-                    var coord = CLLocationCoordinate2DMake(0, 0)
-                    
-                    if let position :FITFitFieldValue = field["position"],
-                        let location = position.locationValue {
-                        coord = location.coordinate
-                    
-                    }
-                    if let point = GCTrackPoint(coordinate2D: coord, at: timestamp, for: values, in: self) {
-                        trackpoints.append(point)
-                        self.trackFlags |= point.trackFlags
-                    }
+        messages = fitFile.messages(forMessageType: FIT_MESG_NUM_RECORD)
+        var trackpoints : [GCTrackPoint] = []
+        for item in messages{
+            if  let timestamp = item.time(field: "timestamp") {
+                let values = interp.summaryValues(fitMessage: item)
+                var coord = CLLocationCoordinate2DMake(0, 0)
+                
+                if let icoord = item.coordinate(field: "position") {
+                    coord = icoord
+                }
+                if let point = GCTrackPoint(coordinate2D: coord, at: timestamp, for: values, in: self) {
+                    trackpoints.append(point)
+                    self.trackFlags |= point.trackFlags
                 }
             }
-            // Don't save to db
-            self.trackpoints = trackpoints
-            self.updateSummary(fromTrackpoints: trackpoints, missingOnly: true)
         }
+        // Don't save to db
+        self.trackpoints = trackpoints
+        self.updateSummary(fromTrackpoints: trackpoints, missingOnly: true)
     }
 
-    @objc public func mergeFrom(other : GCActivity){
-        let fields = self.availableTrackFields()
-        let otherFields = other.self.availableTrackFields()
-        
-        print("\(fields!)")
-        print("\(otherFields!)")
+     func mergeFrom(other : GCActivity){
+        //let fields = self.availableTrackFields()
+        //let otherFields = other.self.availableTrackFields()
         
         if let to = self.trackpoints, let from = other.trackpoints {
             var i = from.makeIterator()
@@ -89,7 +93,7 @@ public extension GCActivity {
                         count+=1
                     }
                 }
-                print("\(count)/\(to.count) \(from.count)")
+                //RZSLog.info("\(count)/\(to.count) \(from.count)")
             }
         }
     }

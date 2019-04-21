@@ -46,16 +46,20 @@
 
 #define kGCNoCompare @"__<NONE>__"
 
++(BOOL)supportsSecureCoding{
+    return YES;
+}
+
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
-        self.field = [aDecoder decodeObjectForKey:kGCField];
-        self.x_field = [aDecoder decodeObjectForKey:kGCX_Field];
+        self.field = [aDecoder decodeObjectOfClass:[GCField class] forKey:kGCField];
+        self.x_field = [aDecoder decodeObjectOfClass:[GCField class] forKey:kGCX_Field];
         self.movingAverage = (NSUInteger)[aDecoder decodeInt64ForKey:kGCMovingAvg];
         self.statsStyle = (NSUInteger)[aDecoder decodeInt64ForKey:kGCStatsStyle];
         self.timeAxis = [aDecoder decodeBoolForKey:kGCTimeAxis];
         bool hasZone = [aDecoder decodeBoolForKey:kGCZoneCalc];
-        NSString * compare = [aDecoder decodeObjectForKey:kGCCompareAct];
+        NSString * compare = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCCompareAct];
         if( hasZone ){
             [[GCAppGlobal health] zoneCalculatorForField:self.field];
         }

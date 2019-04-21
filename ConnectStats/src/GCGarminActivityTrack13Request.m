@@ -34,6 +34,7 @@
 #import "GCActivitiesOrganizer.h"
 @import RZUtils;
 @import RZExternal;
+@import RZExternalUniversal;
 #import "ConnectStats-Swift.h"
 
 @interface GCGarminActivityTrack13Request ()
@@ -337,9 +338,7 @@
     if( [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_DOWNLOAD defaultValue:TRUE] && [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_MERGE defaultValue:FALSE]){
         NSString * fn = [GCGarminActivityTrack13Request stageFilename:gcTrack13RequestFit forActivityId:self.activityId];
         
-        FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:[RZFileOrganizer writeableFilePath:fn]];
-        [fitDecode parse];
-        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activityId fitFile:fitDecode.fitFile]);
+        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activityId fitFilePath:[RZFileOrganizer writeableFilePath:fn]]);
         
         [self.activity updateTrackpointsFromActivity:fitAct];
         
@@ -378,9 +377,8 @@
             }
             
             if( mergeFit && fnFit && [[NSFileManager defaultManager] fileExistsAtPath:fnFit] ){
-                FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fnFit];
-                [fitDecode parse];
-                GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:act.activityId fitFile:fitDecode.fitFile]);
+                GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:act.activityId fitFilePath:fnFit]);
+                
                 [act updateSummaryDataFromActivity:fitAct];
                 [act updateTrackpointsFromActivity:fitAct];
                 [act saveTrackpoints:act.trackpoints andLaps:act.laps];

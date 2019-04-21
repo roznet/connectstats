@@ -42,7 +42,8 @@
     FITFitFileDecode * decode = [FITFitFileDecode fitFileDecode:fitData];
     [decode parse];
 
-    GCActivity * fitAct = [[GCActivity alloc] initWithId:[self.urlToOpen.path lastPathComponent] fitFile:decode.fitFile];
+    
+    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:[self.urlToOpen.path lastPathComponent] fitFilePath:self.urlToOpen.path]);
     [self.organizer registerTemporaryActivity:fitAct forActivityId:fitAct.activityId];
     [self performSelectorOnMainThread:@selector(handleFitFileDone:) withObject:fitAct.activityId waitUntilDone:NO];
     RZRelease(fitAct);

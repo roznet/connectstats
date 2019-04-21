@@ -53,11 +53,86 @@ void RZHErrFunc(const char * message){
 }
 @end
 
+@interface RZShapeFilePolygons : NSObject
+@property (nonatomic,assign) CLLocationCoordinate2D * coordinates;
+@property (nonatomic,assign) size_t capacity;
+@property (nonatomic,assign) int index;
+
++(RZShapeFilePolygons*)polygonsFor:(SHPObject*)shapeObject index:(int)idx part:(int)p;
+-(BOOL)containsPoint:(CLLocationCoordinate2D)coord;
+
+@end
+
+@implementation RZShapeFilePolygons
+
++(RZShapeFilePolygons*)polygonsFor:(SHPObject*)shapeObject index:(int)idx part:(int)p{
+    RZShapeFilePolygons * rv = nil;
+    
+    if (shapeObject->nSHPType==SHPT_POLYGON) {
+        rv = [[RZShapeFilePolygons alloc] init];
+        rv.index = idx;
+        int from = p < shapeObject->nParts ? shapeObject->panPartStart[p] : 0;
+        int to = p+1 < shapeObject->nParts ? shapeObject->panPartStart[p+1]: shapeObject->nVertices;
+        
+        rv.capacity = (to-from);
+        
+        rv.coordinates = malloc(sizeof(CLLocationCoordinate2D)*rv.capacity);
+        
+        CLLocationCoordinate2D * one = rv.coordinates;
+        for (int i =from; i<to; i++) {
+            (*one).longitude = shapeObject->padfX[i];
+            (*one).latitude = shapeObject->padfY[i];
+            one++;
+        }
+    }else if (shapeObject->nSHPType==SHPT_POINT && p == 0) {
+        rv = [[RZShapeFilePolygons alloc] init];
+        rv.index = idx;
+        rv.capacity = 1;
+        
+        rv.coordinates = malloc(sizeof(CLLocationCoordinate2D)*rv.capacity);
+        CLLocationCoordinate2D * one = rv.coordinates;
+        (*one).longitude = shapeObject->padfX[0];
+        (*one).latitude = shapeObject->padfY[0];
+    }
+    return rv;
+}
+
+-(BOOL)containsPoint:(CLLocationCoordinate2D)coord{
+    if( self.capacity < 2){
+        return false;
+    }
+    
+    BOOL found = FALSE;
+    unsigned long i = 0;
+    unsigned long j = 0;
+    CLLocationDegrees lat = coord.latitude;
+    CLLocationDegrees lng = coord.longitude;
+    CLLocationCoordinate2D * p = _coordinates;
+    
+    for(i = 0, j = _capacity - 1; i < _capacity; j = i++){
+        
+        if( ( (p[i].latitude > lat) != (p[j].latitude > lat)) &&
+           (lng < ( p[j].longitude - p[i].longitude ) * (lat-p[j].latitude)/(p[j].latitude-p[i].latitude) + p[i].longitude)){
+            found = !found;
+        }
+    }
+    
+    return found;
+}
+
+-(void)dealloc{
+    if( _coordinates){
+        free(_coordinates);
+    }
+}
+
+@end
 
 @interface RZShapeFile ()
 @property (nonatomic,retain) NSString * base;
-@property (nonatomic,retain) NSArray * values;
+@property (nonatomic,retain) NSArray<NSDictionary*>* values;
 @property (nonatomic,retain) NSString * lastErrorMessage;
+@property (nonatomic,retain) NSArray<NSArray<RZShapeFilePolygons*>*>*polygons;
 @end
 
 @implementation RZShapeFile
@@ -141,7 +216,7 @@ void RZHErrFunc(const char * message){
     }
     self.values = vals;
 }
--(NSArray*)allShapes{
+-(NSArray<NSDictionary*>*)allShapes{
     return self.values;
 }
 
@@ -191,6 +266,64 @@ void RZHErrFunc(const char * message){
         i++;
     }
     return rv;
+}
+
+-(NSIndexSet*)indexSetForShapeContaining:(CLLocationCoordinate2D)coord{
+    NSMutableIndexSet * rv = [NSMutableIndexSet indexSet];
+    [self loadPolygons];
+    for (int i =0; i<self.polygons.count; i++) {
+        NSArray<RZShapeFilePolygons*> * polys = self.polygons[i];
+        for (RZShapeFilePolygons*one in polys) {
+            if( [one containsPoint:coord] ){
+                [rv addIndex:i];
+            }
+        }
+    }
+    return rv;
+};
+
+-(void)loadPolygons{
+    if( self.polygons ){
+        return;
+    }
+    
+    NSString * shf = [self.base stringByAppendingPathExtension:@"shp"];
+    
+    self.lastErrorMessage = nil;
+    
+    SHPHandle hSHP = SHPOpen( [shf cStringUsingEncoding:NSUTF8StringEncoding], "rb" );
+    
+    if (!hSHP) {
+        return ;
+    }
+    int pnEntities;
+    int pnShapeType;
+    
+    SHPGetInfo( hSHP, &pnEntities, &pnShapeType, NULL, NULL );
+
+    NSMutableArray * polys = [NSMutableArray
+                              array];
+    
+    for(int i=0;i<pnEntities;i++){
+        SHPObject *shapeObject = SHPReadObject(  hSHP, i );
+        if (shapeObject->nParts==0) {
+            RZShapeFilePolygons * shapePoly = [RZShapeFilePolygons polygonsFor:shapeObject
+                                                                         index:i part:0];
+            [polys addObject:@[shapePoly] ];
+        }else{
+            NSMutableArray * list = [NSMutableArray array];
+        
+            for (int p=0; p<shapeObject->nParts; p++) {
+                RZShapeFilePolygons * shapePoly = [RZShapeFilePolygons polygonsFor:shapeObject
+                                                                             index:i part:p];
+                [list addObject:shapePoly];
+            }
+            [polys addObject:list];
+        }
+
+        SHPDestroyObject(shapeObject);
+    }
+    self.polygons = polys;
 }
 
 -(NSArray*)polygonsForIndexSet:(NSIndexSet*)idxset{

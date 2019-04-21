@@ -32,6 +32,6 @@
  @param NSString * fitUnit can be length == 0 if not a unit
  @return GCUnit or nil if not a known fitUnit or if not a unit (length = 0 )
  */
-+(GCUnit*)unitForFitUnit:(NSString*)fitUnit;
++(nullable GCUnit*)unitForFitUnit:(nonnull NSString*)fitUnit;
 
 @end

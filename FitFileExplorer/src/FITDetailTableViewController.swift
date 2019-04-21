@@ -8,10 +8,38 @@
 
 import Cocoa
 import RZUtilsOSX
+import RZUtilsSwift
 
 class FITDetailTableViewController: NSViewController {
 
     @IBOutlet weak var detailTableView: RZTableView!
+    
+    @IBAction func exportCSV(_ sender: Any) {
+        if let dataSource = self.detailTableView.dataSource as? FITDetailListDataSource {
+            let savePanel = NSSavePanel()
+
+            savePanel.message = "Choose the location to save the csv file"
+            savePanel.allowedFileTypes = [ "csv" ]
+            let fitFile = dataSource.fitFile
+            if let message = fitFile.messageTypeDescription(messageType: dataSource.messageType){
+                var candidate = "newfile_\(message)"
+                if let sourceURL = fitFile.sourceURL {
+                    candidate = sourceURL.lastPathComponent.replacingOccurrences(of: ".fit", with: "_\(message)")
+                }
+                savePanel.nameFieldStringValue = candidate
+                if savePanel.runModal() == NSApplication.ModalResponse.OK, let url = savePanel.url {
+                    let csv = fitFile.csv(messageType: dataSource.messageType)
+                    do {
+                        try csv.joined(separator: "\n").write(to: url, atomically: true, encoding: String.Encoding.utf8)
+                        
+                    }catch{
+                        RZSLog.error( "Failed to save \(url)")
+                    }
+                }
+                
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,9 +48,12 @@ class FITDetailTableViewController: NSViewController {
         
     }
     
-    func updateWith(dataSource : FITFieldsListDataSource){
+    func updateWith(dataSource : FITDetailListDataSource){
         let columns : [NSTableColumn] = self.detailTableView.tableColumns
         
+        //self.detailTableView.dataSource = nil
+        //self.detailTableView.delegate = nil
+
         var existing: [NSUserInterfaceItemIdentifier:NSTableColumn] = [:]
         
         for col in columns {
@@ -55,13 +86,10 @@ class FITDetailTableViewController: NSViewController {
             }
             idx += 1
         }
-        if( dataSource !== self.detailTableView.dataSource){
-            self.detailTableView.dataSource = dataSource
-            self.detailTableView.delegate = dataSource
-            self.detailTableView.rzTableViewDelegate = dataSource
-        }
+        
+        self.detailTableView.dataSource = dataSource
+        self.detailTableView.delegate = dataSource
+        self.detailTableView.rzTableViewDelegate = dataSource
         self.detailTableView.reloadData()
-        
-        
     }
 }

@@ -31,11 +31,14 @@
 
 @implementation GCFieldsForCategory
 
++(BOOL)supportsSecureCoding{
+    return YES;
+}
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
-        self.fields = [aDecoder decodeObjectForKey:kGCFields];
-        self.category = [aDecoder decodeObjectForKey:kGCCategory];
+        self.fields = [aDecoder decodeObjectOfClasses:[NSSet setWithObjects:[NSArray class], [GCField class], nil] forKey:kGCFields];
+        self.category = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCCategory];
     }
     return self;
 }

@@ -30,7 +30,9 @@
 #define GC_CODER_Y_DATA     @"y_data"
 
 @implementation GCStatsDataPoint
-
++(BOOL)supportsSecureCoding{
+    return YES;
+}
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {

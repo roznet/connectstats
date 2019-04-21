@@ -52,16 +52,21 @@ sqlite3_int64 kInvalidSerieId = 0;
     self.filePath = [RZFileOrganizer writeableFilePathIfExists:fn];
 }
 
++(BOOL)supportsSecureCoding{
+    return YES;
+}
+
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
         self.derivedPeriod  = [aDecoder decodeIntForKey:kGCDerivedPeriod];
         self.derivedType    = [aDecoder decodeIntForKey:kGCDerivedType];
         self.fieldFlag          = [aDecoder decodeIntForKey:kGCField];
-        self.activityType   = [aDecoder decodeObjectForKey:kGCActivityType];
-        self.serieWithUnit  = [aDecoder decodeObjectForKey:kGCSerie];
-        self.bucketEnd      = [aDecoder decodeObjectForKey:kGCBucketEnd];
-        self.bucketStart    = [aDecoder decodeObjectForKey:kGCBucketStart];
+        
+        self.activityType   = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCActivityType];
+        self.serieWithUnit  = [aDecoder decodeObjectOfClass:[GCStatsDataSerieWithUnit class] forKey:kGCSerie];
+        self.bucketEnd      = [aDecoder decodeObjectOfClass:[NSDate class] forKey:kGCBucketEnd];
+        self.bucketStart    = [aDecoder decodeObjectOfClass:[NSDate class] forKey:kGCBucketStart];
     }
     return self;
 }

@@ -99,14 +99,18 @@ static GCActivityTypes * _activityTypesCache = nil;
 #define kGCActivityTypeParentObject @"activityTypeParentObject"
 #define kGCActivityTypeParentId @"activityTypeParentId"
 
++(BOOL)supportsSecureCoding{
+    return YES;
+}
+
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
-        self.key = [aDecoder decodeObjectForKey:kGCActivityTypeKey];
+        self.key = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCActivityTypeKey];
         self.typeId = [aDecoder decodeIntegerForKey:kGCActivityTypeId];
         NSUInteger parentId = [aDecoder decodeIntegerForKey:kGCActivityTypeParentId];
         if( parentId != 0){
-            self.parentType = [aDecoder decodeObjectForKey:kGCActivityTypeParentObject];
+            self.parentType = [aDecoder decodeObjectOfClass:[GCActivityType class] forKey:kGCActivityTypeParentObject];
         }else{
             self.parentType = nil;
         }

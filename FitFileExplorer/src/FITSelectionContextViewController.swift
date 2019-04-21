@@ -54,7 +54,6 @@ class FITSelectionContextViewController: NSViewController {
         if let identifier = sender.identifier?.rawValue,
             let value = sender.selectedItem?.title,
             let selectionContext = self.selectionContext{
-            print("Update \(identifier) -> \(value)")
             if identifier == "popup_x_field" {
                 selectionContext.selectedXField = value
             }else if identifier == "popup_y_field" {

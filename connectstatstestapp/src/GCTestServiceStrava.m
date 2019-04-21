@@ -44,7 +44,7 @@
     [self startSession:@"GC Strava"];
     GCWebUseSimulator(FALSE, nil);
     
-    [GCAppGlobal setupEmptyState:@"activities_gc.db" withSettingsName:kPreservedSettingsName];
+    [GCAppGlobal setupEmptyState:@"activities_strava.db" withSettingsName:kPreservedSettingsName];
     [[GCAppGlobal profile] configSet:CONFIG_STRAVA_ENABLE boolVal:YES];
     
     [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];

@@ -7,18 +7,21 @@
 //
 
 import Cocoa
+import RZFitFile
 
 class FITSplitViewController: NSSplitViewController {
 
+
+    var selectionContext : FITSelectionContext?
+    var dataListDataSource : FITDataListDataSource?
+    var fieldsListDataSource : FITDetailListDataSource?
     var outlineDataSource : FITOutlineDataSource? {
         didSet {
             self.outlineViewController()?.outlineDataSource = self.outlineDataSource
         }
     }
-    
-    var fieldsListDataSource : FITFieldsListDataSource?
-    
-    var fitFile : FITFitFile? {
+
+    var fitFile : RZFitFile? {
         get {
             if let doc = self.representedObject as? FITDocument {
                 return doc.fitFile
@@ -31,15 +34,13 @@ class FITSplitViewController: NSSplitViewController {
             self.representedObject = newValue
         }
     }
-    var dataListDataSource : FITDataListDataSource?
-    
-    var selectionContext : FITSelectionContext?
     
     override var representedObject: Any? {
         didSet {
             if let file = self.fitFile {
-                self.outlineDataSource = FITOutlineDataSource(fitFile: file)
-                self.selectionContext = FITSelectionContext(fitFile: file)
+                let context = FITSelectionContext(fitFile: file)
+                self.selectionContext = context
+                self.outlineDataSource = FITOutlineDataSource(selectionContext: context)
             }
         }
     }
@@ -81,46 +82,36 @@ class FITSplitViewController: NSSplitViewController {
      Notification call back from detail table
      */
     @objc func detailSelectionChanged(notification : Notification){
-        if let fitFile = self.fitFile,
-            let messageType = self.outlineDataSource?.selectedMessageType ?? fitFile.allMessageTypes().first {
-            if let mef = self.fieldsListDataSource?.selectedField,
-                let idx = self.fieldsListDataSource?.selectedRow,
-                let selectionContext = self.selectionContext{
-                if idx >= 0 {
-                    selectionContext.selectMessageField(field: mef, atIndex:UInt(idx))
-                    self.graphViewController()?.updateWith(selectionContext: selectionContext)
-                    self.mapViewController()?.updateWith(selectionContext: selectionContext)
-                    self.dataListDataSource = FITDataListDataSource(file: fitFile, messageType: messageType, selectedRow: idx, context: selectionContext)
-                    self.dataViewController()?.update(with: self.dataListDataSource!)
-                }
+        if //let fitFile = self.fitFile,
+            //let messageType = self.outlineDataSource?.selectedMessageType ?? fitFile.messageTypes.first {
+            let mef = self.fieldsListDataSource?.selectedField,
+            let idx = self.fieldsListDataSource?.selectedRow,
+            let selectionContext = self.selectionContext{
+            if idx >= 0 {
+                selectionContext.selectMessageField(field: mef, atIndex:idx)
+                self.graphViewController()?.updateWith(selectionContext: selectionContext)
+                self.mapViewController()?.updateWith(selectionContext: selectionContext)
+                self.dataListDataSource = FITDataListDataSource(selectedRow: idx, context: selectionContext)
+                self.dataViewController()?.update(with: self.dataListDataSource!)
             }
         }
+        
     }
     /**
      Notification call back from the outline table
      */
     @objc func outlineDataSourceSelectionChanged(notification : Notification){
-        if let fitFile = self.fitFile,
-            let messageType = self.outlineDataSource?.selectedMessageType ?? fitFile.allMessageTypes().first {
-            var changed :Bool = false
-            if self.fieldsListDataSource == nil {
-                self.fieldsListDataSource = FITFieldsListDataSource(file: fitFile, messageType: messageType, context: self.selectionContext!)
-                NotificationCenter.default.addObserver(self,
-                                                       selector: #selector(detailSelectionChanged(notification:)),
-                                                       name: FITFieldsListDataSource.kFITNotificationDetailSelectionChanged,
-                                                       object: self.fieldsListDataSource)
-                
-                changed = true
-            }else if( self.fieldsListDataSource?.messageType != messageType){
-                changed = true;
-                self.fieldsListDataSource?.messageType = messageType
-            }
-            if changed {
-                self.selectionContext?.selectedMessage = messageType
-                if let ds = self.fieldsListDataSource {
-                    self.detailTableViewController()?.updateWith(dataSource: ds)
-                }
-            }
+        if self.fieldsListDataSource == nil {
+            self.fieldsListDataSource = FITDetailListDataSource(context: self.selectionContext!)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(detailSelectionChanged(notification:)),
+                                                   name: FITDetailListDataSource.kFITNotificationDetailSelectionChanged,
+                                                   object: self.fieldsListDataSource)
+            
+            
+        }
+        if let ds = self.fieldsListDataSource {
+            self.detailTableViewController()?.updateWith(dataSource: ds)
         }
     }
     

@@ -45,14 +45,10 @@
 #define GC_SECTION_INCLUDE 2
 #define GC_SECTION_END     3
 
-#define GC_SHARING_FACEBOOK         0
-#define GC_SHARING_TWITTER          1
-#define GC_SHARING_GOOGLE_EARTH     2
-#define GC_SHARING_EMAIL            3
-#define GC_SHARING_STRAVA           4
-#define GC_SHARING_SPORTTRACKS      5
-#define GC_SHARING_HEALTHKIT        6
-#define GC_SHARING_END              7
+#define GC_SHARING_SHARE            0
+#define GC_SHARING_GOOGLE_EARTH     1
+#define GC_SHARING_EMAIL            2
+#define GC_SHARING_END              6
 
 #define GC_SHARING_OPT_INCLUDE_GE_LINK  0
 #define GC_SHARING_OPT_INCLUDE_GC_LINK  1
@@ -89,15 +85,9 @@
         self.remap = [RZTableIndexRemap tableIndexRemap];
         if ([GCAppGlobal connectStatsVersion]) {
             [self.remap addSection:GC_SECTION_SHARING withRows:@[
-                                                                 @( GC_SHARING_FACEBOOK ),
-                                                                 @( GC_SHARING_TWITTER  ),
+                                                                 @( GC_SHARING_SHARE ),
                                                                  @( GC_SHARING_GOOGLE_EARTH ),
                                                                  @( GC_SHARING_EMAIL),
-                                                                 @( GC_SHARING_STRAVA),
-                                                                 @( GC_SHARING_SPORTTRACKS),
-#if TARGET_IPHONE_SIMULATOR
-                                                                 @( GC_SHARING_HEALTHKIT)
-#endif
                                                                  ]];
 
             [self.remap addSection:GC_SECTION_WAIT withRowsFunc:^(){
@@ -116,8 +106,7 @@
                                                                  ]];
         }else{
             [self.remap addSection:GC_SECTION_SHARING withRows:@[
-                                                                 @( GC_SHARING_FACEBOOK ),
-                                                                 @( GC_SHARING_TWITTER  ),
+                                                                 @( GC_SHARING_SHARE ),
                                                                  @( GC_SHARING_EMAIL),
                                                                  ]];
 
@@ -205,13 +194,9 @@
             cell.iconPosition = gcIconPositionLeft;
         }
     }else if(indexPath.section == GC_SECTION_SHARING){
-        if (indexPath.row == GC_SHARING_FACEBOOK) {
-            [cell labelForRow:0 andCol:0].text = NSLocalizedString( @"Facebook", @"SharingView");
-            [cell setIconImage:[UIImage imageNamed:@"facebook"]];
-            cell.iconPosition = gcIconPositionLeft;
-        }else if(indexPath.row == GC_SHARING_TWITTER){
-            [cell labelForRow:0 andCol:0].text = NSLocalizedString( @"Twitter", @"SharingView");
-            [cell setIconImage:[UIImage imageNamed:@"twitter"]];
+        if (indexPath.row == GC_SHARING_SHARE) {
+            [cell labelForRow:0 andCol:0].text = NSLocalizedString( @"Share", @"SharingView");
+            [cell setIconImage:[UIImage imageNamed:@"702-share"]];
             cell.iconPosition = gcIconPositionLeft;
         }else if(indexPath.row == GC_SHARING_GOOGLE_EARTH){
             [cell labelForRow:0 andCol:0].text = NSLocalizedString( @"GoogleEarth", @"SharingView");
@@ -221,43 +206,7 @@
             [cell labelForRow:0 andCol:0].text = NSLocalizedString( @"Email", @"SharingView");
             [cell setIconImage:[UIImage imageNamed:@"email"]];
             cell.iconPosition = gcIconPositionLeft;
-        }else if(indexPath.row == GC_SHARING_STRAVA){
-            [cell setupForRows:2 andCols:1];
-            [cell labelForRow:0 andCol:0].text = NSLocalizedString( @"Strava", @"SharingView");
-            NSDate * last = [GCStravaActivityTransfer lastSync:[[GCAppGlobal organizer] currentActivity].activityId];
-            [cell setIconImage:[UIImage imageNamed:@"strava"]];
-            if (last) {
-                NSString * msg = [NSString stringWithFormat:NSLocalizedString(@"Sync'd on %@", @"Strava sync msg"), last];
-                [cell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:msg attribute:@selector(attribute14Gray)];
-            }
-            cell.iconPosition = gcIconPositionLeft;
-
-
-        }else if(indexPath.row == GC_SHARING_SPORTTRACKS){
-            [cell setupForRows:2 andCols:1];
-            [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"SportTracks", @"SharingView");
-            NSDate * last = [[GCService service:gcServiceSportTracks] lastSync:[[GCAppGlobal organizer] currentActivity].activityId];
-            [cell setIconImage:[UIImage imageNamed:@"sporttracks"]];
-            if (last) {
-                NSString * msg = [NSString stringWithFormat:NSLocalizedString(@"Sync'd on %@", @"Strava sync msg"), last];
-                [cell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:msg attribute:@selector(attribute14Gray)];
-            }
-            cell.iconPosition = gcIconPositionLeft;
-        }else if(indexPath.row == GC_SHARING_HEALTHKIT){
-            [cell setupForRows:2 andCols:1];
-            NSDate * last = [[GCService service:gcServiceHealthKit ] lastSync:[[GCAppGlobal organizer] currentActivity].activityId];
-            [cell setIconImage:[UIImage imageNamed:@"HealthHeart"]];
-            if (last) {
-                NSString * msg = [NSString stringWithFormat:NSLocalizedString(@"Saved on %@", @"HealthKit sync msg"), last];
-                [cell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:msg attribute:@selector(attribute14Gray)];
-            }else{
-                [cell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:@"Tap to save" attribute:@selector(attribute14Gray)];
-            }
-            cell.iconPosition = gcIconPositionLeft;
-
-            [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Health App", @"SharingView");
         }
-
     }else{
         GCCellActivityIndicator * indic = [GCCellActivityIndicator activityIndicatorCell:tableView parent:[GCAppGlobal web]];
         if ([[GCAppGlobal web] isProcessing]) {
@@ -315,18 +264,10 @@
     }else{
         if (indexPath.row == GC_SHARING_GOOGLE_EARTH) {
             [self startGoogleEarth];
-        }else if(indexPath.row == GC_SHARING_TWITTER){
-            [self startTweet];
-        }else if(indexPath.row == GC_SHARING_FACEBOOK){
-            [self startFacebook];
+        }else if(indexPath.row == GC_SHARING_SHARE){
+            [self startSharing];
         }else if(indexPath.row == GC_SHARING_EMAIL){
             [self presentEmail];
-        }else if(indexPath.row == GC_SHARING_STRAVA){
-            [self uploadToStrava];
-        }else if(indexPath.row == GC_SHARING_SPORTTRACKS){
-            [self uploadToSportTracks];
-        }else if(indexPath.row == GC_SHARING_HEALTHKIT){
-            [self uploadToHealthKit];
         }
     }
 }
@@ -406,79 +347,34 @@
 }
 
 -(void)presentForServiceType:(NSString*)serviceType{
-    SLComposeViewController * o = [SLComposeViewController composeViewControllerForServiceType:serviceType];
-    SLComposeViewControllerCompletionHandler completionHandler =
-    ^(SLComposeViewControllerResult result){
-        // it's fine if it does not exists
-        [RZFileOrganizer removeEditableFile:[self googleFilename]];
-        if (result == SLComposeViewControllerResultDone) {
-            [self publishEventSharing:serviceType];
-        }
-        [o dismissViewControllerAnimated:YES completion:nil];
-    };
-
-    o.completionHandler = completionHandler;
-    [o setInitialText:[activity exportPost]];
+    
+    NSMutableArray * toShare = [NSMutableArray arrayWithObject:[activity exportPost]];
+    
     NSURL * url = [self urlString];
     if (url) {
-        [o addURL:url];
+        [toShare addObject:url];
+        
     }
     UIImage * image = [self exportImage];
     if (image) {
-        [o addImage:image];
+        [toShare addObject:image];
     }
 
-    [self hideHud];
-    if (o) {
-        [[self slidingViewController] presentViewController:o  animated:YES completion:nil];
-    }
+    
+    UIActivityViewController * controller = [[UIActivityViewController alloc] initWithActivityItems:toShare applicationActivities:nil];
+    controller.popoverPresentationController.sourceView = self.view;
+    [self presentViewController:controller animated:true completion:nil];
 }
 
-#pragma mark - Twitter
 
--(void)startTweet{
-    [self dismiss];
-    [self startForSelector:@selector(presentTweet)];
+#pragma mark - Sharing
+
+-(void)startSharing{
+    [self startForSelector:@selector(presentSharing)];
 }
 
--(void)presentTweet{
-    [self presentForServiceType:SLServiceTypeTwitter];
-}
-
-#pragma mark - Facebook
-
--(void)startFacebook{
-    [self startForSelector:@selector(presentFacebook)];
-}
-
--(void)presentFacebook{
-    [self presentForServiceType:SLServiceTypeFacebook];
-}
-
-#pragma mark - sporttracks
-
--(void)uploadToSportTracks{
-    if ([activity.activityType isEqualToString:GC_TYPE_CYCLING]||[activity.activityType isEqualToString:GC_TYPE_RUNNING]) {
-        [[GCAppGlobal web] attach:self];
-        [[GCAppGlobal web] sportTracksUpload:activity.activityId navigationController:self.navigationController];
-    }
-
-}
-#pragma mark - Strava
-
--(void)uploadToStrava{
-    if ([activity.activityType isEqualToString:GC_TYPE_CYCLING]||[activity.activityType isEqualToString:GC_TYPE_RUNNING]) {
-        [[GCAppGlobal web] attach:self];
-        [[GCAppGlobal web] stravaUpload:activity.activityId navigationController:self.navigationController extra:@{@"name":activity.activityName}];
-    }
-
-}
-
-#pragma mark - Health Kit
-
--(void)uploadToHealthKit{
-    [[GCAppGlobal web] attach:self];
-    [[GCAppGlobal web] healthStoreExportActivity:activity];
+-(void)presentSharing{
+    [self presentForServiceType:@"sharing"];
 }
 
 #pragma mark - Email

@@ -25,7 +25,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface GCActivityMetaValue : NSObject<NSCoding>
+@interface GCActivityMetaValue : NSObject<NSSecureCoding>
 
 @property (nonatomic,retain) NSString * field;
 @property (nonatomic,retain) NSString * display;

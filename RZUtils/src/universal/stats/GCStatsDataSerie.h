@@ -93,7 +93,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2);
 
 @end
 
-@interface GCStatsDataSerie : NSObject<NSCoding,NSFastEnumeration>
+@interface GCStatsDataSerie : NSObject<NSSecureCoding,NSFastEnumeration>
 
 
 // --- Constructions

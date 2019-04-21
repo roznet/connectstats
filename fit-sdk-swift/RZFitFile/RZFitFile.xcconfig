@@ -1,0 +1,11 @@
+//
+//  RZFitFile.xcconfig
+//  RZFitFile
+//
+//  Created by Brice Rosenzweig on 11/02/2019.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+SWIFT_INCLUDE_PATHS=$(SRCROOT)/RZFitFile/RZFitFilePrivate

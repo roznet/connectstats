@@ -116,6 +116,24 @@
     return rv;
 }
 
+-(void)actionDumpCountriesCoord{
+    NSArray * activities = [[GCAppGlobal organizer] activities];
+    
+    [RZFileOrganizer removeEditableFile:@"countries.db"];
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"countries.db"]];
+    [db open];
+    RZEXECUTEUPDATE(db, @"CREATE TABLE countries (location TEXT, latitude REAL, longitude REAL)")
+    for (GCActivity * activity in activities) {
+        if( activity.location && activity.beginCoordinate.longitude != 0 && activity.beginCoordinate.latitude){
+            RZEXECUTEUPDATE(db, @"INSERT INTO countries (location,latitude,longitude) VALUES (?,?,?)",
+                            activity.location, @(activity.beginCoordinate.latitude),@(activity.beginCoordinate.longitude));
+        }
+    }
+    [db close];
+    NSLog(@"Saved %@", [RZFileOrganizer writeableFilePath:@"countries.db"]);
+
+}
+
 -(void)actionUpdateWeather{
     NSArray * activities = [[GCAppGlobal organizer] activities];
     NSUInteger i = 0;

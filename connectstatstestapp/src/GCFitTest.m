@@ -41,11 +41,8 @@
 
 
     NSString * fn = @"bike.fit";
-    NSData * fitData = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn]];
-    FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecode:fitData];
-    [fitDecode parse];
 
-    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"id" fitFile:fitDecode.fitFile]);
+    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"id" fitFilePath:[RZFileOrganizer bundleFilePath:fn]]);
     [self assessTestResult:@"Parsed records" result:[fitAct.trackpoints count]==4235];
 
 	[self endSession:@"GC FitTest"];

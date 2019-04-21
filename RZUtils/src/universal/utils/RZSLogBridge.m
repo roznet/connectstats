@@ -32,7 +32,7 @@
            path:(NSString*)path
            line:(NSInteger)line
         message:(NSString*)msg{
-#if TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR || DEBUG
     NSLog(@"^[%@]: %@", funcName,  msg);
 #endif
     RZlogLevels level = RZLogError;
@@ -48,7 +48,7 @@
           path:(NSString*)path
           line:(NSInteger)line
        message:(NSString*)msg{
-#if TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR || DEBUG
     NSLog(@"^[%@]: %@", funcName,  msg);
 #endif
     RZlogLevels level = RZLogInfo;
@@ -64,7 +64,7 @@
              path:(NSString*)path
              line:(NSInteger)line
           message:(NSString*)msg{
-#if TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR || DEBUG
     NSLog(@"^[%@]: %@", funcName,  msg);
 #endif
     RZlogLevels level = RZLogWarning;
@@ -83,7 +83,7 @@
             path:(NSString*)path
             line:(NSInteger)line
          message:(NSString*)msg{
-#if TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR || DEBUG
     NSLog(@"^[%@]: %@", funcName,  msg);
 #endif
     [LCLLogFile logWithIdentifier:RZLog_components[level]

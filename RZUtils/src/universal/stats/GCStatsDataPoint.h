@@ -25,7 +25,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface GCStatsDataPoint : NSObject<NSCoding>
+@interface GCStatsDataPoint : NSObject<NSSecureCoding>
 @property (nonatomic,assign) double x_data;
 @property (nonatomic,assign) double y_data;
 @property (nonatomic,readonly) BOOL hasValue;

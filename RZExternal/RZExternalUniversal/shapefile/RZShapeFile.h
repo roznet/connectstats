@@ -24,6 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
+@import CoreLocation;
 
 typedef BOOL(^shapeMatchingFunc)(NSDictionary*obj);
 
@@ -31,8 +32,9 @@ typedef BOOL(^shapeMatchingFunc)(NSDictionary*obj);
 
 +(RZShapeFile*)shapeFileWithBase:(NSString*)base;
 -(NSIndexSet*)indexSetForShapeMatching:(shapeMatchingFunc)match;
+-(NSIndexSet*)indexSetForShapeContaining:(CLLocationCoordinate2D)coord;
 -(NSArray*)polygonsForIndexSet:(NSIndexSet*)idxset;
--(NSArray*)allShapes;
+-(NSArray<NSDictionary*>*)allShapes;
 
 -(NSString*)fileBaseName;
 
