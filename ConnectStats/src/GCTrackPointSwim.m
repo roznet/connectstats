@@ -149,6 +149,8 @@
     GCNumberWithUnit * nb = [GCNumberWithUnit numberWithUnit:[GCUnit unitForKey:uom] andValue:val];
     if ([key isEqualToString:@"SumDistance"]) {
         self.distanceMeters = val;
+    }else if ([key isEqualToString:@"WeightedMeanSpeed"] || [key isEqualToString:@"WeightedMeanPace"]){
+        self.speed = [[GCNumberWithUnit numberWithUnitName:uom andValue:val] convertToUnitName:@"mps"].value;
     }
     self.values[ [GCField fieldForKey:key andActivityType:act.activityType] ] = nb;
 }
@@ -206,9 +208,22 @@
         RZLog( RZLogError, @"Failed sql %@",[trackdb lastErrorMessage]);
     };
 }
-
+-(NSArray<GCField*>*)availableFieldsInActivity:(GCActivity*)act{
+    NSMutableArray<GCField*>*rv = [NSMutableArray arrayWithArray:[super availableFieldsInActivity:act]];
+    if( self.values ){
+        [rv addObjectsFromArray:self.values.allKeys];
+    }
+    return rv;
+}
 -(BOOL)active{
     return self.distanceMeters > 0.;
+}
+-(GCNumberWithUnit*)numberWithUnitForField:(GCField*)aF inActivity:(GCActivity*)act{
+    GCNumberWithUnit * rv = [super numberWithUnitForField:aF inActivity:act];
+    if( rv == nil){
+        rv = self.values[aF];
+    }
+    return rv;
 }
 /*
 -(double)valueForField:(gcFieldFlag)aField{
