@@ -367,6 +367,12 @@
     XCTAssertGreaterThan(modernAct.trackpoints.count, 1);
     [self compareStatsCheckSavedFor:modernAct identifier:@"modernAct" cmd:_cmd recordMode:[GCTestCase recordModeGlobal]];
     
+    GCActivity * reloaded = [GCActivity activityWithId:activityId andDb:db];
+    [reloaded trackpoints];
+    NSDictionary * first = [self compareStatsDictFor:modernAct];
+    NSDictionary * second= [self compareStatsDictFor:reloaded];
+    
+    [self compareStatsAssertEqual:first and:second withMessage:@"Reloaded swim activity"];
 }
 
 -(NSDictionary*)compareStatsDictFor:(GCActivity*)act{
