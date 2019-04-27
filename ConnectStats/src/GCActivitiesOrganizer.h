@@ -41,7 +41,8 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 @interface GCActivitiesOrganizer : RZParentObject<GCWebReverseGeocodeDelegate,RZChildObject>
 
 @property (nonatomic,retain) FMDatabase * db;
-@property (nonatomic,retain) NSArray * activitiesTrash;
+/// set this with an array of activityId to delete and call deleteActivitiesInTrash
+@property (nonatomic,retain) NSArray<NSString*> * activitiesTrash;
 
 @property (nonatomic,assign) BOOL hasCompareActivity;
 @property (nonatomic,assign) NSUInteger currentActivityIndex;

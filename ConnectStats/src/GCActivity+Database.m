@@ -130,11 +130,12 @@
                         self.speedDisplayUom,
                         self.distanceDisplayUom,
                         @(self.garminSwimAlgorithm),
-                        @(self.downloadMethod)
+                        @(self.downloadMethod),
+                        @(self.trackFlags)
                         ];
 
     [db setShouldCacheStatements:YES];
-    NSString * sql = @"INSERT INTO gc_activities (activityId,activityType,BeginTimestamp,SumDistance,SumDuration,WeightedMeanHeartRate,activityName, BeginLongitude,BeginLatitude,WeightedMeanSpeed,Location,Flags,SpeedDisplayUom,DistanceDisplayUom,garminSwimAlgorithm,downloadMethod) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    NSString * sql = @"INSERT INTO gc_activities (activityId,activityType,BeginTimestamp,SumDistance,SumDuration,WeightedMeanHeartRate,activityName, BeginLongitude,BeginLatitude,WeightedMeanSpeed,Location,Flags,SpeedDisplayUom,DistanceDisplayUom,garminSwimAlgorithm,downloadMethod,trackFlags) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     [db executeUpdate:sql withArgumentsInArray:dbrow];
     if ([db hadError]) {
         RZLog(RZLogError, @"db update %@", [db lastErrorMessage]);
