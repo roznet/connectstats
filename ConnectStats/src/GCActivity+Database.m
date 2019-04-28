@@ -39,6 +39,7 @@
         [rv setTrackdb:db];
         [rv loadFromDb:db];
         [rv loadSummaryDataFrom:db];
+        rv.settings = [GCActivitySettings defaultsFor:rv];
     }
     return rv;
 }

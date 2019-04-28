@@ -719,6 +719,7 @@
 		4238295E1EAB552000252217 /* universal */ = {
 			isa = PBXGroup;
 			children = (
+				427C81742275A86E004D8681 /* SmartCompare */,
 				423DF25D1EAE3E2100160E5D /* systeminfo */,
 				4238295F1EAB552000252217 /* datatable */,
 				4238296A1EAB552000252217 /* foundation */,
@@ -1123,6 +1124,13 @@
 				4238299D1EAB552000252217 /* GCXMLReader.m */,
 			);
 			name = XML;
+			sourceTree = "<group>";
+		};
+		427C81742275A86E004D8681 /* SmartCompare */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = SmartCompare;
 			sourceTree = "<group>";
 		};
 		428BE85520013D4200E14A61 /* RZUtilsTestInfra */ = {

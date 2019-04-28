@@ -429,7 +429,15 @@
 }
 
 -(void)testParseSaveAndReload{
-    NSArray<NSString*>*testActivityIds = @[ @"1027746730" ];
+    
+    BOOL saveDerived = [[GCAppGlobal profile] configGetBool:CONFIG_ENABLE_DERIVED defaultValue:[GCAppGlobal connectStatsVersion]];
+    
+    [[GCAppGlobal profile] configSet:CONFIG_ENABLE_DERIVED boolVal:false];
+    NSArray<NSString*>*testActivityIds = @[
+                                           @"1027746730", // Swim activity
+                                           @"1378220136", // Running
+                                           @"1382772474"  // Cycling
+                                           ];
     
     for (NSString * activityId in testActivityIds) {
         
@@ -450,9 +458,9 @@
         [GCGarminActivityTrack13Request testForActivity:parsedAct withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:false];
         [parsedAct saveToDb:db];
         
-        
         XCTAssertGreaterThan(parsedAct.trackpoints.count, 1);
         bool recordMode = [GCTestCase recordModeGlobal];
+
         NSString * identifier = [NSString stringWithFormat:@"parse_reload_%@", activityId];
         [self compareStatsCheckSavedFor:parsedAct identifier:identifier cmd:_cmd recordMode:recordMode];
         
@@ -461,6 +469,12 @@
         NSDictionary * parsedDict = [self compareStatsDictFor:parsedAct];
         NSDictionary * reloadedDict = [self compareStatsDictFor:reloadedAct];
         
+        // Check basics first
+        XCTAssertEqual(parsedAct.trackpoints.count, reloadedAct.trackpoints.count);
+
+        // Check basics first
+        XCTAssertEqual(parsedAct.laps.count, reloadedAct.laps.count);
+
         [self compareStatsAssertEqual:parsedDict and:reloadedDict withMessage:[NSString stringWithFormat:@"Check Reloaded activity %@", activityId]];
         
         XCTAssertEqual(reloadedAct.laps.count, parsedAct.laps.count, @"Lap count %@", activityId);
@@ -495,6 +509,7 @@
             }
         }
     }
+    [[GCAppGlobal profile] configSet:CONFIG_ENABLE_DERIVED boolVal:saveDerived];
 }
 
 -(NSDictionary*)compareStatsDictFor:(GCActivity*)act{
@@ -523,12 +538,13 @@
 }
 
 -(void)compareStatsAssertEqual:(NSDictionary*)rv and:(NSDictionary*)expected withMessage:(NSString*)msg{
-    XCTAssertEqualObjects(expected.allKeys, rv.allKeys,  @"Same Keys %@", msg);
+    XCTAssertEqual(expected.allKeys.count, rv.allKeys.count,  @"Same Keys %@", msg);
+    
     for (NSObject<NSCopying>*key in expected) {
         NSObject * expectedVal = expected[key];
         NSObject * rvVal = rv[key];
+        XCTAssertNotNil(rvVal, @"got same key %@", key);
         
-        //XCTAssertEqualObjects(expected[key], rv[key],  @"[%@] %@", key, msg);
         if( [expectedVal isKindOfClass:[NSDictionary class]] && [rvVal isKindOfClass:[NSDictionary class]]){
             NSDictionary * expectedValDict = (NSDictionary*)expectedVal;
             NSDictionary * rvValDict = (NSDictionary*)rvVal;
@@ -538,8 +554,13 @@
             if( smartDiff == nil &&  ![expectedVal isEqual:rvVal]){
                 RZLog(RZLogInfo, @"attention");
             }
+        }else{
+            XCTAssertTrue([expectedVal respondsToSelector:@selector(isEqual:)]);
+            
+            if( [expectedVal respondsToSelector:@selector(isEqual:)]){
+                XCTAssertTrue([expectedVal isEqual:rvVal]);
+            }
         }
-
     }
 }
 
