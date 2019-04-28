@@ -36,6 +36,7 @@
 #if !__has_feature(objc_arc)
 -(void)dealloc{
     [_fields release];
+    [_messageType release];
     [super dealloc];
 }
 #endif
