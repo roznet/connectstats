@@ -430,6 +430,8 @@
 
 -(void)testParseSaveAndReload{
     
+    [[GCAppGlobal health] clearAllZones];
+    
     BOOL saveDerived = [[GCAppGlobal profile] configGetBool:CONFIG_ENABLE_DERIVED defaultValue:[GCAppGlobal connectStatsVersion]];
     
     [[GCAppGlobal profile] configSet:CONFIG_ENABLE_DERIVED boolVal:false];
@@ -460,7 +462,7 @@
         
         XCTAssertGreaterThan(parsedAct.trackpoints.count, 1);
         bool recordMode = [GCTestCase recordModeGlobal];
-
+        
         NSString * identifier = [NSString stringWithFormat:@"parse_reload_%@", activityId];
         [self compareStatsCheckSavedFor:parsedAct identifier:identifier cmd:_cmd recordMode:recordMode];
         
