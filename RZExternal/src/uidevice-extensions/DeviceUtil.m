@@ -4,7 +4,7 @@
 //  Created by Inder Kumar Rathore on 19/01/13.
 //  Copyright (c) 2013 Rathore. All rights reserved.
 //
-//  Hardware string can be found @http://www.everymac.com
+//  Hardware string can be found @https://www.everymac.com
 //
 
 #import "DeviceUtil.h"
@@ -42,6 +42,10 @@ NSString* const iPhone10_3 = @"iPhone10,3";
 NSString* const iPhone10_4 = @"iPhone10,4";
 NSString* const iPhone10_5 = @"iPhone10,5";
 NSString* const iPhone10_6 = @"iPhone10,6";
+NSString* const iPhone11_2 = @"iPhone11,2";
+NSString* const iPhone11_4 = @"iPhone11,4";
+NSString* const iPhone11_6 = @"iPhone11,6";
+NSString* const iPhone11_8 = @"iPhone11,8";
 
 NSString* const iPod1_1 = @"iPod1,1";
 NSString* const iPod2_1 = @"iPod2,1";
@@ -89,6 +93,16 @@ NSString* const iPad7_1 = @"iPad7,1";
 NSString* const iPad7_2 = @"iPad7,2";
 NSString* const iPad7_3 = @"iPad7,3";
 NSString* const iPad7_4 = @"iPad7,4";
+NSString* const iPad7_5 = @"iPad7,5";
+NSString* const iPad7_6 = @"iPad7,6";
+NSString* const iPad8_1 = @"iPad8,1";
+NSString* const iPad8_2 = @"iPad8,2";
+NSString* const iPad8_3 = @"iPad8,3";
+NSString* const iPad8_4 = @"iPad8,4";
+NSString* const iPad8_5 = @"iPad8,5";
+NSString* const iPad8_6 = @"iPad8,6";
+NSString* const iPad8_7 = @"iPad8,7";
+NSString* const iPad8_8 = @"iPad8,8";
 
 NSString* const AppleTV1_1 = @"AppleTV1,1";
 NSString* const AppleTV2_1 = @"AppleTV2,1";
@@ -96,20 +110,56 @@ NSString* const AppleTV3_1 = @"AppleTV3,1";
 NSString* const AppleTV3_2 = @"AppleTV3,2";
 NSString* const AppleTV5_3 = @"AppleTV5,3";
 
+
 NSString* const Watch1_1 = @"Watch1,1";
 NSString* const Watch1_2 = @"Watch1,2";
 NSString* const Watch2_3 = @"Watch2,3";
 NSString* const Watch2_4 = @"Watch2,4";
 NSString* const Watch2_6 = @"Watch2,6";
 NSString* const Watch2_7 = @"Watch2,7";
+NSString* const Watch3_1 = @"Watch3,1";
+NSString* const Watch3_2 = @"Watch3,2";
+NSString* const Watch3_3 = @"Watch3,3";
+NSString* const Watch3_4 = @"Watch3,4";
+NSString* const Watch4_1 = @"Watch4,1";
+NSString* const Watch4_2 = @"Watch4,2";
+NSString* const Watch4_3 = @"Watch4,3";
+NSString* const Watch4_4 = @"Watch4,4";
 
 
 NSString* const i386_Sim    = @"i386";
 NSString* const x86_64_Sim  = @"x86_64";
 
 
-@implementation DeviceUtil
-+ (NSString*)hardwareString {
+@implementation DeviceUtil {
+  NSDictionary *deviceList;
+}
+
+- (instancetype)init
+{
+  self = [super init];
+  if (self) {
+    // get the bundle of the DeviceUtil if it's main bundle then it returns main bundle
+    // if it's DeviceUtil.framework then it returns the DeviceUtil.framework bundle
+    NSBundle *deviceUtilTopBundle = [NSBundle bundleForClass:[self class]];
+    NSURL *url = [deviceUtilTopBundle URLForResource:@"DeviceUtil" withExtension:@"bundle"];
+    NSBundle *deviceUtilBundle;
+    if (url != nil) {
+      // DeviceUtil bundle is present
+      deviceUtilBundle = [NSBundle bundleWithURL:url];
+    }
+    else {
+      // pick the main bundle
+      deviceUtilBundle = deviceUtilTopBundle;
+    }
+    NSString *path = [deviceUtilBundle pathForResource:@"DeviceList" ofType:@"plist"];
+    deviceList = [NSDictionary dictionaryWithContentsOfFile:path];
+    NSAssert(deviceList != nil, @"DevicePlist not found in the bundle.");
+  }
+  return self;
+}
+
+- (NSString*)hardwareString {
   int name[] = {CTL_HW,HW_MACHINE};
   size_t size = 100;
   sysctl(name, 2, NULL, &size, NULL, 0); // getting size of answer
@@ -118,6 +168,14 @@ NSString* const x86_64_Sim  = @"x86_64";
   sysctl(name, 2, hw_machine, &size, NULL, 0);
   NSString *hardware = [NSString stringWithUTF8String:hw_machine];
   free(hw_machine);
+  
+  // Check if the hardware is simulator
+  if ([hardware isEqualToString:i386_Sim] || [hardware isEqualToString:x86_64_Sim]) {
+    NSString *deviceID = [[[NSProcessInfo processInfo] environment] objectForKey:@"SIMULATOR_MODEL_IDENTIFIER"];
+    if (deviceID != nil) {
+      hardware = deviceID;
+    }
+  }
   return hardware;
 }
 
@@ -135,27 +193,27 @@ NSString* const x86_64_Sim  = @"x86_64";
  */
 
 
-+ (NSDictionary *)getDeviceList {
-  // get the bundle of the DeviceUtil if it's main bundle then it returns main bundle
-  // if it's DeviceUtil.framework then it returns the DeviceUtil.framework bundle
-  NSBundle *deviceUtilTopBundle = [NSBundle bundleForClass:[self class]];
-  NSURL *url = [deviceUtilTopBundle URLForResource:@"DeviceUtil" withExtension:@"bundle"];
-  NSBundle *deviceUtilBundle;
-  if (url != nil) {
-    // DeviceUtil bundle is present
-    deviceUtilBundle = [NSBundle bundleWithURL:url];
-  }
-  else {
-    // pick the main buncle
-    deviceUtilBundle = deviceUtilTopBundle;
-  }
-  NSString *path = [deviceUtilBundle pathForResource:@"DeviceList" ofType:@"plist"];
-  NSDictionary *deviceList = [NSDictionary dictionaryWithContentsOfFile:path];
-  NSAssert(deviceList != nil, @"DevicePlist not found in the bundle.");
-  return deviceList;
+
+/// This method returns the Platform enum depending upon hardware string
+///
+///
+/// - returns: `Platform` type of the device
+///
+- (Platform)platform {
+  
+  NSString *hardware = [self hardwareString];
+  
+  if ([hardware hasPrefix:@"iPhone"])     return iPhone;
+  if ([hardware hasPrefix:@"iPod"])       return iPodTouch;
+  if ([hardware hasPrefix:@"iPad"])       return iPad;
+  if ([hardware hasPrefix:@"Watch"])      return AppleWatch;
+  if ([hardware hasPrefix:@"AppleTV"])    return AppleTV;
+  
+  return Unknown;
 }
 
-+ (Hardware)hardware {
+
+- (Hardware)hardware {
   NSString *hardware = [self hardwareString];
   if ([hardware isEqualToString:iPhone1_1])    return IPHONE_2G;
   if ([hardware isEqualToString:iPhone1_2])    return IPHONE_3G;
@@ -189,6 +247,11 @@ NSString* const x86_64_Sim  = @"x86_64";
   if ([hardware isEqualToString:iPhone10_4])    return IPHONE_8;
   if ([hardware isEqualToString:iPhone10_5])    return IPHONE_8_PLUS;
   if ([hardware isEqualToString:iPhone10_6])    return IPHONE_X;
+
+  if ([hardware isEqualToString:iPhone11_2])    return IPHONE_XS;
+  if ([hardware isEqualToString:iPhone11_4])    return IPHONE_XS_MAX;
+  if ([hardware isEqualToString:iPhone11_6])    return IPHONE_XS_MAX_CN;
+  if ([hardware isEqualToString:iPhone11_8])    return IPHONE_XR;
 
   if ([hardware isEqualToString:iPod1_1])      return IPOD_TOUCH_1G;
   if ([hardware isEqualToString:iPod2_1])      return IPOD_TOUCH_2G;
@@ -240,6 +303,19 @@ NSString* const x86_64_Sim  = @"x86_64";
   if ([hardware isEqualToString:iPad7_2])      return IPAD_PRO_2G_WIFI_CELLULAR;
   if ([hardware isEqualToString:iPad7_3])      return IPAD_PRO_105_WIFI;
   if ([hardware isEqualToString:iPad7_4])      return IPAD_PRO_105_WIFI_CELLULAR;
+	
+  if ([hardware isEqualToString:iPad7_5])      return IPAD_6_WIFI;
+  if ([hardware isEqualToString:iPad7_6])      return IPAD_6_WIFI_CELLULAR;
+  
+  if ([hardware isEqualToString:iPad8_1])      return IPAD_PRO_11_WIFI;
+  if ([hardware isEqualToString:iPad8_2])      return IPAD_PRO_11_1TB_WIFI;
+  if ([hardware isEqualToString:iPad8_3])      return IPAD_PRO_11_WIFI_CELLULAR;
+  if ([hardware isEqualToString:iPad8_4])      return IPAD_PRO_11_1TB_WIFI_CELLULAR;
+  
+  if ([hardware isEqualToString:iPad8_5])      return IPAD_PRO_3G_WIFI;
+  if ([hardware isEqualToString:iPad8_6])      return IPAD_PRO_3G_1TB_WIFI;
+  if ([hardware isEqualToString:iPad8_7])      return IPAD_PRO_3G_WIFI_CELLULAR;
+  if ([hardware isEqualToString:iPad8_8])      return IPAD_PRO_3G_1TB_WIFI_CELLULAR;
   
   if ([hardware isEqualToString:AppleTV1_1])   return APPLE_TV_1G;
   if ([hardware isEqualToString:AppleTV2_1])   return APPLE_TV_2G;
@@ -253,6 +329,14 @@ NSString* const x86_64_Sim  = @"x86_64";
   if ([hardware isEqualToString:Watch2_4])     return APPLE_WATCH_SERIES_2_42;
   if ([hardware isEqualToString:Watch2_6])     return APPLE_WATCH_SERIES_1_38;
   if ([hardware isEqualToString:Watch2_7])     return APPLE_WATCH_SERIES_1_42;
+  if ([hardware isEqualToString:Watch3_1])     return APPLE_WATCH_SERIES_3_38_CELLULAR;
+  if ([hardware isEqualToString:Watch3_2])     return APPLE_WATCH_SERIES_3_42_CELLULAR;
+  if ([hardware isEqualToString:Watch3_3])     return APPLE_WATCH_SERIES_3_38;
+  if ([hardware isEqualToString:Watch3_4])     return APPLE_WATCH_SERIES_3_42;
+  if ([hardware isEqualToString:Watch4_1])     return APPLE_WATCH_SERIES_4_40;
+  if ([hardware isEqualToString:Watch4_2])     return APPLE_WATCH_SERIES_4_44;
+  if ([hardware isEqualToString:Watch4_3])     return APPLE_WATCH_SERIES_4_40_CELLULAR;
+  if ([hardware isEqualToString:Watch4_4])     return APPLE_WATCH_SERIES_4_44_CELLULAR;
   
   if ([hardware isEqualToString:i386_Sim])     return SIMULATOR;
   if ([hardware isEqualToString:x86_64_Sim])   return SIMULATOR;
@@ -263,9 +347,8 @@ NSString* const x86_64_Sim  = @"x86_64";
   return NOT_AVAILABLE;
 }
 
-+ (NSString*)hardwareDescription {
+- (NSString*)hardwareDescription {
   NSString *hardware = [self hardwareString];
-  NSDictionary *deviceList = [self getDeviceList];
   NSString *hardwareDescription = [[deviceList objectForKey:hardware] objectForKey:@"name"];
   if (hardwareDescription) {
     return hardwareDescription;
@@ -278,8 +361,8 @@ NSString* const x86_64_Sim  = @"x86_64";
   }
 }
 
-+ (NSString*)hardwareSimpleDescription {
-  NSString *hardwareDescription = [DeviceUtil hardwareDescription];
+- (NSString*)hardwareSimpleDescription {
+  NSString *hardwareDescription = [self hardwareDescription];
   if (hardwareDescription == nil) {
     return nil;
   }
@@ -294,9 +377,8 @@ NSString* const x86_64_Sim  = @"x86_64";
   }
 }
 
-+ (float)hardwareNumber {
+- (float)hardwareNumber {
   NSString *hardware = [self hardwareString];
-  NSDictionary *deviceList = [self getDeviceList];
   float version = [[[deviceList objectForKey:hardware] objectForKey:@"version"] floatValue];
   if (version != 0.0f) {
     return version;
@@ -309,7 +391,7 @@ NSString* const x86_64_Sim  = @"x86_64";
   }
 }
 
-+ (CGSize)backCameraStillImageResolutionInPixels {
+- (CGSize)backCameraStillImageResolutionInPixels {
   switch ([self hardware]) {
     case IPHONE_2G:
     case IPHONE_3G:
@@ -382,7 +464,7 @@ NSString* const x86_64_Sim  = @"x86_64";
   return CGSizeZero;
 }
 
-+ (void)logMessage:(NSString *)hardware {
+- (void)logMessage:(NSString *)hardware {
   NSLog(@"This is a device which is not listed in this category. Please visit https://github.com/InderKumarRathore/DeviceUtil and add a comment there.");
   NSLog(@"Your device hardware string is: %@", hardware);
 }

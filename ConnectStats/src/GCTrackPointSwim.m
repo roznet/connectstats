@@ -33,11 +33,6 @@
     return [super init];
 }
 
--(void)dealloc{
-    [_values release];
-    [super dealloc];
-}
-
 -(GCTrackPoint*)initWithDictionary:(NSDictionary*)data forActivity:(GCActivity *)act{
     self = [super init];
     if (self) {
@@ -54,19 +49,20 @@
     self = [super initWithTrackPoint:other];
     return self;
 }
+
+#pragma mark - Parsing
+
 -(void)parseModernDict:(NSDictionary*)data forActivity:(GCActivity*)act{
     NSMutableDictionary * summary = [act buildSummaryDataFromGarminModernData:data dtoUnits:true];
 
-    NSMutableDictionary * values = [NSMutableDictionary dictionary];
-    for (GCField * field in summary) {
-        NSDate * date = [act buildStartDateFromGarminModernData:data];
-        self.time = date;
-        GCActivitySummaryValue * value = summary[field];
-        values[field] = value.numberWithUnit;
+    NSDate * date = [act buildStartDateFromGarminModernData:data];
+    self.time = date;
 
+    for (GCField * field in summary) {
+        GCActivitySummaryValue * value = summary[field];
         [self setNumberWithUnit:value.numberWithUnit forField:field inActivity:act];
     }
-    self.values = values;
+    
     NSString * style = data[@"swimStroke"];
     if ([style isKindOfClass:[NSString class]]) {
         static NSDictionary * strokeMap = nil;
@@ -119,6 +115,7 @@
             NSString * s_uom = tmp[@"uom"];
             GCNumberWithUnit * nb = [GCNumberWithUnit numberWithUnitName:s_uom andValue:s_val.doubleValue];
             found[key] = nb;
+            
             gcFieldFlag trackField = [GCFields trackFieldFromSwimLapField:key];
             if ([key isEqualToString:@"SumDuration"]) {
                 self.elapsed = nb.value;
@@ -131,9 +128,10 @@
             if (trackField != gcFieldFlagNone){
                 self.trackFlags |= trackField;
             }
+            [self setNumberWithUnit:nb forField:[GCField fieldForKey:key andActivityType:act.activityType] inActivity:act];
         }
     }
-    self.values = found;
+    
     NSDictionary * tmp = data[@"DirectSwimStroke"];
     if (tmp) {
         self.directSwimStroke = [tmp[@"value"] intValue];
@@ -141,27 +139,33 @@
 
 }
 
+#pragma mark - Database
+
 -(void)updateValueFromResultSet:(FMResultSet*)res inActivity:(GCActivity*)act{
     NSString * key = [res stringForColumn:@"field"];
     NSString * uom = [res stringForColumn:@"uom"];
     double val = [res doubleForColumn:@"value"];
 
+    GCField * field = [GCField fieldForKey:key andActivityType:act.activityType];
     GCNumberWithUnit * nb = [GCNumberWithUnit numberWithUnit:[GCUnit unitForKey:uom] andValue:val];
+    
     if ([key isEqualToString:@"SumDistance"]) {
         self.distanceMeters = val;
+    }else if ([key isEqualToString:@"WeightedMeanSpeed"] || [key isEqualToString:@"WeightedMeanPace"]){
+        self.speed = [[GCNumberWithUnit numberWithUnitName:uom andValue:val] convertToUnitName:@"mps"].value;
     }
-    self.values[ [GCField fieldForKey:key andActivityType:act.activityType] ] = nb;
+    [self setNumberWithUnit:nb forField:field inActivity:act];
 }
 
 -(void)fixupDrillData:(NSDate*)time inActivity:(GCActivity*)act{
     GCField * speedf = [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:act.activityType];
     GCField * pacef  = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:act.activityType];
-    GCNumberWithUnit * nb = (self.values)[ speedf ];
+    GCNumberWithUnit * nb =  [self numberWithUnitForField:speedf inActivity:act];
     if (self.directSwimStroke==gcSwimStrokeOther ){
         // 30sec / 25m. 100/25
         GCNumberWithUnit * pace = [GCNumberWithUnit numberWithUnitName:@"min100m" andValue:self.elapsed/60. / self.distanceMeters*100.];
-        self.values[pacef] = pace;
-        self.values[speedf] = [pace convertToUnit:nb.unit];
+        [self setNumberWithUnit:pace forField:pacef inActivity:act];
+        [self setNumberWithUnit:[pace convertToUnit:nb.unit] forField:speedf inActivity:act];
         self.time = time;
     }
 }
@@ -174,7 +178,6 @@
         self.time = [res dateForColumn:@"Time"];
         self.elapsed = [res doubleForColumn:@"SumDuration"];
         self.directSwimStroke = [res intForColumn:@"DirectSwimStroke"];
-        self.values = [NSMutableDictionary dictionaryWithCapacity:10];
         self.lengthIdx = [res intForColumn:@"length"];
     }
     return self;
@@ -184,10 +187,24 @@
     [self saveLengthToDb:trackdb index:self.lengthIdx];
 }
 
+-(BOOL)useLengthTable{
+    return true;
+}
+
 -(void)saveLengthToDb:(FMDatabase *)trackdb index:(NSUInteger)idx{
-    for (GCField * field in self.values) {
-        GCNumberWithUnit * nb = self.values[field];
-        if (![trackdb executeUpdate:@"INSERT INTO gc_length_info (lap,length,field,value,uom) VALUES (?,?,?,?,?)",
+    // Prepare to share the code with lap
+    NSString * tableMidFix = @"length";
+    
+    NSString * sqlInfo = [NSString stringWithFormat:@"INSERT INTO gc_%@_info (lap,length,field,value,uom) VALUES (?,?,?,?,?)",
+                          tableMidFix
+                          ];
+    
+    NSString * sql = [NSString stringWithFormat:@"INSERT INTO gc_%@ (length,Time,SumDuration,lap,DirectSwimStroke) VALUES (?,?,?,?,?)",
+                      tableMidFix];
+    
+    for (GCField * field in self.extra) {
+        GCNumberWithUnit * nb = self.extra[field];
+        if (![trackdb executeUpdate:sqlInfo,
               @(self.lapIndex),
               @(idx),
               field.key,
@@ -196,7 +213,42 @@
             RZLog( RZLogError, @"Failed sql %@",[trackdb lastErrorMessage]);
         }
     }
-    if (![trackdb executeUpdate:@"INSERT INTO gc_length (length,Time,SumDuration,lap,DirectSwimStroke) VALUES (?,?,?,?,?)",
+    
+    NSArray<GCField*>*native = [GCFields availableFieldsIn:self.trackFlags forActivityType:GC_TYPE_SWIMMING];
+    for (GCField * field in native) {
+        if( field.fieldFlag != gcFieldFlagNone && self.extra[field] == nil){
+            GCNumberWithUnit * nb = [self numberWithUnitForField:field.fieldFlag andActivityType:GC_TYPE_SWIMMING];
+            if( nb ){
+                // VERY SCARY... need to reorg, here nil activity works because gcFieldFlag != None
+                // This is to account for cases like HR where on import it get saved into the class member double values
+                // as opposed to extra.
+                // We need to revamp the whole saving mecanism to be more consistent whether field
+                // come from member double or extra dictionary. This is bad design and difference between swim points
+                // and regular gps points.
+                if (![trackdb executeUpdate:sqlInfo,
+                      @(self.lapIndex),
+                      @(idx),
+                      field.key,
+                      [nb number],
+                      (nb.unit).key]){
+                    RZLog( RZLogError, @"Failed sql %@",[trackdb lastErrorMessage]);
+                }
+            }
+        }
+    }
+    
+    if( self.distanceMeters > 0){
+        // special case as distance otherwise not covered for swim
+        if (![trackdb executeUpdate:sqlInfo,
+              @(self.lapIndex),
+              @(idx),
+              @"SumDistance",
+              @(self.distanceMeters),
+              @"meter"]){
+            RZLog( RZLogError, @"Failed sql %@",[trackdb lastErrorMessage]);
+        }
+    }
+    if (![trackdb executeUpdate:sql,
           @(idx),
           self.time,
           @(self.elapsed),
@@ -207,42 +259,10 @@
     };
 }
 
+#pragma mark - Access Set Value
+
 -(BOOL)active{
     return self.distanceMeters > 0.;
 }
-/*
--(double)valueForField:(gcFieldFlag)aField{
-    GCNumberWithUnit * nb = self.values[[GCFields swimLapFieldFromTrackField:aField]];
-    return nb.value;
-}
--(GCUnit*)unitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType{
-    GCNumberWithUnit * nb = self.values[[GCFields swimLapFieldFromTrackField:aField]];
-    return nb.unit;
-
-}
--(GCNumberWithUnit*)numberWithUnitForField:(gcFieldFlag)aField andActivityType:(NSString *)aType{
-    GCNumberWithUnit * nb = self.values[[GCFields swimLapFieldFromTrackField:aField]];
-    return nb;
-}
--(GCNumberWithUnit*)numberWithUnitForExtra:(NSString*)aF activityType:(NSString*)aType{
-    GCNumberWithUnit * nb = self.values[aF];
-    return nb;
-}
- 
--(NSDictionary*)extra{
-    return self.values;
-}
-
--(GCNumberWithUnit*)numberWithUnitForField:(GCField*)aF inActivity:(GCActivity*)act{
-    GCNumberWithUnit * rv = self.values[aF.key];
-    if( !rv && aF.fieldFlag != gcFieldFlagNone){
-        NSString * swimField = [GCFields swimLapFieldFromTrackField:aF.fieldFlag];
-        rv = self.values[swimField];
-        if(!rv){
-            rv = [super numberWithUnitForField:aF inActivity:act];
-        }
-    }
-    return rv;
-}*/
 
 @end

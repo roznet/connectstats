@@ -361,7 +361,7 @@
     }
 
     
-    UIActivityViewController * controller = [[UIActivityViewController alloc] initWithActivityItems:toShare applicationActivities:nil];
+    UIActivityViewController * controller = RZReturnAutorelease([[UIActivityViewController alloc] initWithActivityItems:toShare applicationActivities:nil]);
     controller.popoverPresentationController.sourceView = self.view;
     [self presentViewController:controller animated:true completion:nil];
 }

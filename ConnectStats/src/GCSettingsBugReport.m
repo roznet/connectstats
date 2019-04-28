@@ -140,12 +140,12 @@ NSString * kBugNoCommonId = @"-1";
     }
     
     NSString * applicationName = [GCAppGlobal connectStatsVersion] ? @"ConnectStats" : @"HealthStats";
-    
+    DeviceUtil * deviceUtil = RZReturnAutorelease([[DeviceUtil alloc] init]);
     NSDictionary * pData =@{
                             @"systemName": [UIDevice currentDevice].systemName,
                             @"applicationName": applicationName,
                             @"systemVersion": [UIDevice currentDevice].systemVersion,
-                            @"platformString": [DeviceUtil hardwareDescription],
+                            @"platformString": [deviceUtil hardwareDescription] ?: [deviceUtil hardwareString],
                             @"version": [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"],
                             @"commonid": [GCAppGlobal configGetString:CONFIG_BUG_COMMON_ID defaultValue:kBugNoCommonId],
                             };

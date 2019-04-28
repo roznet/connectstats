@@ -334,7 +334,7 @@
 		42B265871FF8314400E891A1 /* UIViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B263F21FF8314400E891A1 /* UIViewAdditions.m */; };
 		42B265881FF8314400E891A1 /* KalTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B263F31FF8314400E891A1 /* KalTileView.m */; };
 		42B265891FF8314400E891A1 /* KalViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263F41FF8314400E891A1 /* KalViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B2658A1FF8314400E891A1 /* SmudgyWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263F61FF8314400E891A1 /* SmudgyWindow.h */; };
+		42B2658A1FF8314400E891A1 /* SmudgyWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263F61FF8314400E891A1 /* SmudgyWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B2658B1FF8314400E891A1 /* SmudgyWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B263F71FF8314400E891A1 /* SmudgyWindow.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		42B2658C1FF8314400E891A1 /* AppiraterLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 42B263F91FF8314400E891A1 /* AppiraterLocalizable.strings */; };
 		42B2658D1FF8314400E891A1 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264041FF8314400E891A1 /* Appirater.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };

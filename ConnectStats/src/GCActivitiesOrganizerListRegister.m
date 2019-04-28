@@ -80,6 +80,7 @@
 
     _reachedExisting = 0;
     NSUInteger newActivitiesCount = 0;
+    NSUInteger actuallyAdded = 0;
     if (self.activities) {
         for (GCActivity * activity in _activities) {
             [existingInService addObject:activity.activityId];
@@ -90,16 +91,20 @@
             if (!foundInOrganizer) {
                 newActivitiesCount++;
             }
-            [organizer registerActivity:activity forActivityId:activity.activityId];
+            if( [organizer registerActivity:activity forActivityId:activity.activityId] ){
+                actuallyAdded += 1;
+            }
         }
-        RZLog(RZLogInfo, @"Found %lu new %lu existing out of %lu [%@-%@] for %@ (new total %d)",
-              (unsigned long)newActivitiesCount,
-              (unsigned long)self.reachedExisting,
-              (unsigned long)self.activities.count,
+        RZLog(RZLogInfo, @"Parsed %@ [%@-%@]=%lu new=%lu added=%lu existing=%lu newtotal=%lu",
+              self.service.displayName,
               [self.activities.firstObject activityId],
               [self.activities.lastObject activityId],
-              self.service.displayName,
-              (int)[organizer countOfActivities]);
+              (unsigned long)self.activities.count,
+              (unsigned long)newActivitiesCount,
+              (unsigned long)actuallyAdded,
+              (unsigned long)self.reachedExisting,
+              (unsigned long)[organizer countOfActivities]
+              );
         
         // FIXME: check for deleted
         if (existingInService.count ) {

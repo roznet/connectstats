@@ -29,7 +29,6 @@
 @interface GCTrackPointSwim : GCTrackPoint
 
 @property (nonatomic,assign) gcSwimStrokeType directSwimStroke;
-@property (nonatomic,retain) NSMutableDictionary<GCField*,GCNumberWithUnit*> * values;
 @property (nonatomic,assign) NSUInteger lengthIdx;
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
@@ -43,6 +42,7 @@
 
 -(BOOL)active;
 
+// Private but used for derived class
 -(void)fixupDrillData:(NSDate*)time inActivity:(GCActivity*)act;
-
+-(void)saveLengthToDb:(FMDatabase *)trackdb index:(NSUInteger)idx;
 @end

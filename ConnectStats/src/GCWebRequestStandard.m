@@ -43,7 +43,7 @@ NSStringEncoding kRequestDebugFileEncoding = NSUTF8StringEncoding;
 #endif
 
 -(NSString*)description{
-    return nil;
+    return @"";
 }
 -(NSString*)url{
     return nil;

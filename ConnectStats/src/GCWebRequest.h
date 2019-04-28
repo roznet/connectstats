@@ -79,7 +79,7 @@ typedef NS_ENUM(NSUInteger, gcWebService) {
 -(nullable NSDictionary*)deleteData;
 -(nullable NSData*)fileData;
 -(nullable NSString*)fileName;
--(void)process:(nonnull NSString*)theString encoding:(NSStringEncoding)encoding andDelegate:(nonnull id<GCWebRequestDelegate>) delegate;
+-(void)process:(nullable NSString*)theString encoding:(NSStringEncoding)encoding andDelegate:(nonnull id<GCWebRequestDelegate>) delegate;
 -(nullable id<GCWebRequest>)nextReq;
 -(gcWebService)service;
 

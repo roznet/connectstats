@@ -37,6 +37,67 @@
 #import "GCTrackStats.h"
 #import "GCGarminRequestModernActivityTypes.h"
 #import "GCGarminRequestModernSearch.h"
+#import "GCLap.h"
+#import "GCLapSwim.h"
+
+@interface NSDictionary (SmartDiff)
+
+-(NSDictionary*)smartCompareDict:(NSDictionary*)other;
+
+@end
+
+@implementation NSDictionary (SmartDiff)
+
+-(NSDictionary*)smartCompareDict:(NSDictionary*)other{
+    NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithCapacity:self.count];
+    for (NSObject<NSCopying>*key in self) {
+        NSObject * selfVal = self[key];
+        NSObject * otherVal = other[key];
+        if( otherVal == nil){
+            rv[key] = @{@"self":selfVal};
+        }else{
+            if( [selfVal isKindOfClass:[NSDictionary class]] && [otherVal isKindOfClass:[NSDictionary class]]){
+                NSDictionary * selfValDict = (NSDictionary*)selfVal;
+                NSDictionary * otherValDict = (NSDictionary*)otherVal;
+                NSDictionary * subSmartDict = [selfValDict smartCompareDict:otherValDict];
+                if( subSmartDict ){
+                    rv[key] = subSmartDict;
+                }
+            }else if( [selfVal isKindOfClass:[NSNumber class]] && [otherVal isKindOfClass:[NSNumber class]]){
+                NSNumber * selfValNum = (NSNumber*)selfVal;
+                NSNumber * otherValNum = (NSNumber*)otherVal;
+                
+                if( strcmp( selfValNum.objCType, @encode(double)) == 0) {
+                    double selfDouble = selfValNum.doubleValue;
+                    double otherDouble = otherValNum.doubleValue;
+                    if( fabs(selfDouble-otherDouble) > 1.0e-10 ){
+                        rv[key] = @{ @"self":selfValNum, @"other":otherValNum };
+                    }
+                }else{
+                    if( ![selfValNum isEqualToNumber:otherValNum] ){
+                        rv[key] = @{ @"self": selfValNum, @"other": otherValNum };
+                    }
+                }
+            }else{
+                if ([selfVal respondsToSelector:@selector(isEqual:)]){
+                    if( ![selfVal isEqual:otherVal]) {
+                        rv[key] = @{ @"self": selfVal, @"other": selfVal };
+                    }
+                }else{
+                    rv[key] = @{ @"unknownSelf": selfVal, @"unknownOther": selfVal };
+                }
+            }
+        }
+    }
+    if( rv.count ){
+        return rv;
+    }else{
+        return nil;
+    }
+}
+
+@end
+
 
 @interface GCTestsParsing : GCTestCase
 
@@ -363,10 +424,94 @@
     [GCGarminActivityTrack13Request testForActivity:modernAct withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:false];
     [modernAct saveToDb:db];
     
-    
     XCTAssertGreaterThan(modernAct.trackpoints.count, 1);
     [self compareStatsCheckSavedFor:modernAct identifier:@"modernAct" cmd:_cmd recordMode:[GCTestCase recordModeGlobal]];
+}
+
+-(void)testParseSaveAndReload{
     
+    [[GCAppGlobal health] clearAllZones];
+    
+    BOOL saveDerived = [[GCAppGlobal profile] configGetBool:CONFIG_ENABLE_DERIVED defaultValue:[GCAppGlobal connectStatsVersion]];
+    
+    [[GCAppGlobal profile] configSet:CONFIG_ENABLE_DERIVED boolVal:false];
+    NSArray<NSString*>*testActivityIds = @[
+                                           @"1027746730", // Swim activity
+                                           @"1378220136", // Running
+                                           @"1382772474"  // Cycling
+                                           ];
+    
+    for (NSString * activityId in testActivityIds) {
+        
+        NSString * dbfn = [NSString stringWithFormat:@"test_parse_reload_%@.db", activityId];
+        [RZFileOrganizer removeEditableFile:dbfn];
+        FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:dbfn]];
+        [db open];
+        [GCActivitiesOrganizer ensureDbStructure:db];
+        
+        NSString * fn = [NSString stringWithFormat:@"activity_%@.json", activityId];
+        NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn forClass:[self class]] options:0 error:nil];
+        
+        NSDictionary * json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        GCActivity * parsedAct = [[[GCActivity alloc] initWithId:activityId andGarminData:json] autorelease];
+        parsedAct.db = db;
+        parsedAct.trackdb = db;
+        
+        [GCGarminActivityTrack13Request testForActivity:parsedAct withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:false];
+        [parsedAct saveToDb:db];
+        
+        XCTAssertGreaterThan(parsedAct.trackpoints.count, 1);
+        bool recordMode = [GCTestCase recordModeGlobal];
+        
+        NSString * identifier = [NSString stringWithFormat:@"parse_reload_%@", activityId];
+        [self compareStatsCheckSavedFor:parsedAct identifier:identifier cmd:_cmd recordMode:recordMode];
+        
+        GCActivity * reloadedAct = [GCActivity activityWithId:activityId andDb:db];
+        [reloadedAct trackpoints];
+        NSDictionary * parsedDict = [self compareStatsDictFor:parsedAct];
+        NSDictionary * reloadedDict = [self compareStatsDictFor:reloadedAct];
+        
+        // Check basics first
+        XCTAssertEqual(parsedAct.trackpoints.count, reloadedAct.trackpoints.count);
+
+        // Check basics first
+        XCTAssertEqual(parsedAct.laps.count, reloadedAct.laps.count);
+
+        [self compareStatsAssertEqual:parsedDict and:reloadedDict withMessage:[NSString stringWithFormat:@"Check Reloaded activity %@", activityId]];
+        
+        XCTAssertEqual(reloadedAct.laps.count, parsedAct.laps.count, @"Lap count %@", activityId);
+
+        for (NSUInteger idx=0; idx<MIN(parsedAct.laps.count,reloadedAct.laps.count); idx++) {
+
+            if ([parsedAct.laps[idx] isKindOfClass:[GCLapSwim class]]) {
+                GCLapSwim * parsedLap = (GCLapSwim*)parsedAct.laps[idx];
+                GCLapSwim * reloadedLap = (GCLapSwim*)reloadedAct.laps[idx];
+                
+                XCTAssertEqualObjects(parsedLap.label, reloadedLap.label, @"Label %@/%@", parsedAct.activityId, @(parsedLap.lapIndex));
+            }else{ // GCLap
+                
+            }
+            
+            if( [parsedAct.laps[idx] isKindOfClass:[GCTrackPoint class]]){
+                GCTrackPoint * parsedPoint = (GCTrackPoint*)parsedAct.laps[idx];
+                GCTrackPoint * reloadedPoint = (GCTrackPoint*)reloadedAct.laps[idx];
+                
+                // Check first or it will crash anyway...
+                XCTAssertTrue([reloadedPoint isKindOfClass:[GCTrackPoint class]]);
+                
+                NSDictionary * diff = [parsedPoint.extra smartCompareDict:reloadedPoint.extra];
+                XCTAssertNil(diff);
+                
+                NSArray<GCField*>*parsedFields = [parsedPoint availableFieldsInActivity:parsedAct];
+                NSArray<GCField*>*reloadedFields = [reloadedPoint availableFieldsInActivity:reloadedAct];
+                
+                XCTAssertEqual(parsedFields.count, reloadedFields.count);
+                
+                XCTAssertEqualWithAccuracy(parsedPoint.distanceMeters, reloadedPoint.distanceMeters, 1.E-7);
+            }
+        }
+    }
+    [[GCAppGlobal profile] configSet:CONFIG_ENABLE_DERIVED boolVal:saveDerived];
 }
 
 -(NSDictionary*)compareStatsDictFor:(GCActivity*)act{
@@ -395,9 +540,29 @@
 }
 
 -(void)compareStatsAssertEqual:(NSDictionary*)rv and:(NSDictionary*)expected withMessage:(NSString*)msg{
-    XCTAssertEqualObjects(expected.allKeys, rv.allKeys,  @"Same Keys %@", msg);
+    XCTAssertEqual(expected.allKeys.count, rv.allKeys.count,  @"Same Keys %@", msg);
+    
     for (NSObject<NSCopying>*key in expected) {
-        XCTAssertEqualObjects(expected[key], rv[key],  @"[%@] %@", key, msg);
+        NSObject * expectedVal = expected[key];
+        NSObject * rvVal = rv[key];
+        XCTAssertNotNil(rvVal, @"got same key %@", key);
+        
+        if( [expectedVal isKindOfClass:[NSDictionary class]] && [rvVal isKindOfClass:[NSDictionary class]]){
+            NSDictionary * expectedValDict = (NSDictionary*)expectedVal;
+            NSDictionary * rvValDict = (NSDictionary*)rvVal;
+            
+            NSDictionary * smartDiff = [expectedValDict smartCompareDict:rvValDict];
+            XCTAssertNil(smartDiff, @"[%@] %@", key, msg);
+            if( smartDiff == nil &&  ![expectedVal isEqual:rvVal]){
+                RZLog(RZLogInfo, @"attention");
+            }
+        }else{
+            XCTAssertTrue([expectedVal respondsToSelector:@selector(isEqual:)]);
+            
+            if( [expectedVal respondsToSelector:@selector(isEqual:)]){
+                XCTAssertTrue([expectedVal isEqual:rvVal]);
+            }
+        }
     }
 }
 
@@ -411,6 +576,42 @@
     NSDictionary * expected = [manager retrieveReferenceObject:rv forClasses:classes selector:sel identifier:label error:&error];
     [self compareStatsAssertEqual:rv and:expected withMessage:[NSString stringWithFormat:@"%@ %@", NSStringFromSelector(sel), label]];
 
+}
+
+-(void)testParseReloadAndCompare{
+    NSData * searchModernInfo = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"activities_list_modern.json"
+                                                                                      forClass:[self class]]];
+    NSData * searchStravaInfo =[NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"strava_list_0.json"
+                                                                                     forClass:[self class]]];
+    
+    GCGarminSearchModernJsonParser * modernParser = [[[GCGarminSearchModernJsonParser alloc] initWithData:searchModernInfo] autorelease];
+    GCStravaActivityListParser * stravaListParser = [GCStravaActivityListParser activityListParser:searchStravaInfo];
+
+    NSString * dbn = [RZFileOrganizer writeableFilePath:@"test_organizer_parse_reload.db"];
+    [RZFileOrganizer removeEditableFile:@"test_organizer_parse_reload.db"];
+    FMDatabase * db = [FMDatabase databaseWithPath:dbn];
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    
+    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    GCService * serviceGarmin = [GCService service:gcServiceGarmin];
+    
+    GCActivitiesOrganizerListRegister * listregisterGarmin =[GCActivitiesOrganizerListRegister listRegisterFor:modernParser.activities from:serviceGarmin isFirst:YES];
+    [listregisterGarmin addToOrganizer:organizer];
+
+    GCService * serviceStrava = [GCService service:gcServiceStrava];
+    GCActivitiesOrganizerListRegister * listregisterStrava =[GCActivitiesOrganizerListRegister listRegisterFor:stravaListParser.activities from:serviceStrava isFirst:YES];
+    [listregisterStrava addToOrganizer:organizer];
+    
+    GCActivitiesOrganizer * reload = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    
+    XCTAssertEqual(organizer.activities.count, reload.activities.count, @"reloaded same number of activities");
+    
+    for (GCActivity * original in organizer.activities) {
+        GCActivity * reloaded = [reload activityForId:original.activityId];
+        XCTAssertNotNil(reloaded);
+        XCTAssertTrue([reloaded isEqualToActivity:original], @"reloaded activity match %@", reloaded.activityId);
+    }
 }
 
 -(void)testParseAndCompare{

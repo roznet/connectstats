@@ -373,6 +373,8 @@
 		4235448516C4826600AB3E09 /* GCExportStrava.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235448416C4826600AB3E09 /* GCExportStrava.m */; };
 		4235DF9B16558F3C00DE316A /* GCSettingsCacheManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235DF9A16558F3C00DE316A /* GCSettingsCacheManagementViewController.m */; };
 		4235DF9E1655B61A00DE316A /* GCAppProfiles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235DF9D1655B61A00DE316A /* GCAppProfiles.m */; };
+		4236872D2275F7A3001210AA /* RZFitFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; };
+		4236872E2275F7A3001210AA /* RZFitFile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		423786871927C53900F575A0 /* GCActivityTennisHeatmap.m in Sources */ = {isa = PBXBuildFile; fileRef = 423786861927C53900F575A0 /* GCActivityTennisHeatmap.m */; };
 		4237869E1972D582006CBD4D /* GCStatsMultiFieldConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */; };
 		423953A81CE71ED4009A3AC3 /* FITOutlineCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 423953A71CE71ED4009A3AC3 /* FITOutlineCellView.m */; };
@@ -2193,6 +2195,13 @@
 			remoteGlobalIDString = 42382A6B1EABA4AC00252217;
 			remoteInfo = RZUtilsUniversal;
 		};
+		4236872F2275F7A3001210AA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 422C59302211E43C004AC730;
+			remoteInfo = RZFitFile;
+		};
 		423D5C271D27F1C20068D9CE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
@@ -2674,6 +2683,7 @@
 				422F521C1DFB567200DD5551 /* RZUtilsUniversal.framework in Embed Frameworks */,
 				42A3609E1EAF6392008EB4E3 /* RZUtilsHealthkit.framework in Embed Frameworks */,
 				42BFC2411DCF4EA200EAD40E /* RZUtilsTouch.framework in Embed Frameworks */,
+				4236872E2275F7A3001210AA /* RZFitFile.framework in Embed Frameworks */,
 				42BFC23D1DCF4EA200EAD40E /* RZUtils.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -4607,6 +4617,7 @@
 				422FAFB619A1DD6000D09773 /* CoreData.framework in Frameworks */,
 				422FAFB719A1DD6000D09773 /* SystemConfiguration.framework in Frameworks */,
 				42BFC23C1DCF4EA200EAD40E /* RZUtils.framework in Frameworks */,
+				4236872D2275F7A3001210AA /* RZFitFile.framework in Frameworks */,
 				42A3609D1EAF6392008EB4E3 /* RZUtilsHealthkit.framework in Frameworks */,
 				42BFC2401DCF4EA200EAD40E /* RZUtilsTouch.framework in Frameworks */,
 				422FAFB819A1DD6000D09773 /* Security.framework in Frameworks */,
@@ -8256,6 +8267,7 @@
 				42E45FF71F1B72F600CA1F39 /* PBXTargetDependency */,
 				426176262001432B008F87FA /* PBXTargetDependency */,
 				42F97BDE200B5344009905D2 /* PBXTargetDependency */,
+				423687302275F7A3001210AA /* PBXTargetDependency */,
 			);
 			name = HealthStats;
 			productName = GarminConnect;
@@ -11213,6 +11225,11 @@
 			name = RZUtilsUniversal;
 			targetProxy = 422F521D1DFB567200DD5551 /* PBXContainerItemProxy */;
 		};
+		423687302275F7A3001210AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RZFitFile;
+			targetProxy = 4236872F2275F7A3001210AA /* PBXContainerItemProxy */;
+		};
 		42496872221889E300776D68 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = RZFitFile;
@@ -11473,7 +11490,7 @@
 					"GC_USE_HEALTHKIT=1",
 				);
 				INFOPLIST_FILE = "HealthStats/HealthStats-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
@@ -11484,6 +11501,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.healthstats";
 				PRODUCT_NAME = HealthStats;
 				PROVISIONING_PROFILE = "";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/fit-sdk-swift/RZFitFile/src $(SRCROOT)/fit-sdk-swift/RZFitFile/sdk";
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStats/ConnectStats-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_VERSION = 4.2;
@@ -11516,7 +11534,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "HealthStats/HealthStats-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
@@ -11527,6 +11545,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.healthstats";
 				PRODUCT_NAME = HealthStats;
 				PROVISIONING_PROFILE = "";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/fit-sdk-swift/RZFitFile/src $(SRCROOT)/fit-sdk-swift/RZFitFile/sdk";
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStats/ConnectStats-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_VERSION = 4.2;
