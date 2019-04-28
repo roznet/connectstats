@@ -458,7 +458,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     self.trackpointsCache = aSwim;
     self.lapsCache = laps;
     [self registerLaps:self.lapsCache forName:GC_LAPS_RECORDED];
-
+    [self saveTrackpointsExtraToDb:trackdb];
+    
     [trackdb commit];
     //[trackdb setShouldCacheStatements:NO];
     if (![db executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){

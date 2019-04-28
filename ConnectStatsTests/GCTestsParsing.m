@@ -37,6 +37,67 @@
 #import "GCTrackStats.h"
 #import "GCGarminRequestModernActivityTypes.h"
 #import "GCGarminRequestModernSearch.h"
+#import "GCLap.h"
+#import "GCLapSwim.h"
+
+@interface NSDictionary (SmartDiff)
+
+-(NSDictionary*)smartCompareDict:(NSDictionary*)other;
+
+@end
+
+@implementation NSDictionary (SmartDiff)
+
+-(NSDictionary*)smartCompareDict:(NSDictionary*)other{
+    NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithCapacity:self.count];
+    for (NSObject<NSCopying>*key in self) {
+        NSObject * selfVal = self[key];
+        NSObject * otherVal = other[key];
+        if( otherVal == nil){
+            rv[key] = @{@"self":selfVal};
+        }else{
+            if( [selfVal isKindOfClass:[NSDictionary class]] && [otherVal isKindOfClass:[NSDictionary class]]){
+                NSDictionary * selfValDict = (NSDictionary*)selfVal;
+                NSDictionary * otherValDict = (NSDictionary*)otherVal;
+                NSDictionary * subSmartDict = [selfValDict smartCompareDict:otherValDict];
+                if( subSmartDict ){
+                    rv[key] = subSmartDict;
+                }
+            }else if( [selfVal isKindOfClass:[NSNumber class]] && [otherVal isKindOfClass:[NSNumber class]]){
+                NSNumber * selfValNum = (NSNumber*)selfVal;
+                NSNumber * otherValNum = (NSNumber*)otherVal;
+                
+                if( strcmp( selfValNum.objCType, @encode(double)) == 0) {
+                    double selfDouble = selfValNum.doubleValue;
+                    double otherDouble = otherValNum.doubleValue;
+                    if( fabs(selfDouble-otherDouble) > 1.0e-10 ){
+                        rv[key] = @{ @"self":selfValNum, @"other":otherValNum };
+                    }
+                }else{
+                    if( ![selfValNum isEqualToNumber:otherValNum] ){
+                        rv[key] = @{ @"self": selfValNum, @"other": otherValNum };
+                    }
+                }
+            }else{
+                if ([selfVal respondsToSelector:@selector(isEqual:)]){
+                    if( ![selfVal isEqual:otherVal]) {
+                        rv[key] = @{ @"self": selfVal, @"other": selfVal };
+                    }
+                }else{
+                    rv[key] = @{ @"unknownSelf": selfVal, @"unknownOther": selfVal };
+                }
+            }
+        }
+    }
+    if( rv.count ){
+        return rv;
+    }else{
+        return nil;
+    }
+}
+
+@end
+
 
 @interface GCTestsParsing : GCTestCase
 
@@ -401,6 +462,38 @@
         NSDictionary * reloadedDict = [self compareStatsDictFor:reloadedAct];
         
         [self compareStatsAssertEqual:parsedDict and:reloadedDict withMessage:[NSString stringWithFormat:@"Check Reloaded activity %@", activityId]];
+        
+        XCTAssertEqual(reloadedAct.laps.count, parsedAct.laps.count, @"Lap count %@", activityId);
+
+        for (NSUInteger idx=0; idx<MIN(parsedAct.laps.count,reloadedAct.laps.count); idx++) {
+
+            if ([parsedAct.laps[idx] isKindOfClass:[GCLapSwim class]]) {
+                GCLapSwim * parsedLap = (GCLapSwim*)parsedAct.laps[idx];
+                GCLapSwim * reloadedLap = (GCLapSwim*)reloadedAct.laps[idx];
+                
+                XCTAssertEqualObjects(parsedLap.label, reloadedLap.label, @"Label %@/%@", parsedAct.activityId, @(parsedLap.lapIndex));
+            }else{ // GCLap
+                
+            }
+            
+            if( [parsedAct.laps[idx] isKindOfClass:[GCTrackPoint class]]){
+                GCTrackPoint * parsedPoint = (GCTrackPoint*)parsedAct.laps[idx];
+                GCTrackPoint * reloadedPoint = (GCTrackPoint*)reloadedAct.laps[idx];
+                
+                // Check first or it will crash anyway...
+                XCTAssertTrue([reloadedPoint isKindOfClass:[GCTrackPoint class]]);
+                
+                NSDictionary * diff = [parsedPoint.extra smartCompareDict:reloadedPoint.extra];
+                XCTAssertNil(diff);
+                
+                NSArray<GCField*>*parsedFields = [parsedPoint availableFieldsInActivity:parsedAct];
+                NSArray<GCField*>*reloadedFields = [reloadedPoint availableFieldsInActivity:reloadedAct];
+                
+                XCTAssertEqual(parsedFields.count, reloadedFields.count);
+                
+                XCTAssertEqualWithAccuracy(parsedPoint.distanceMeters, reloadedPoint.distanceMeters, 1.E-7);
+            }
+        }
     }
 }
 
@@ -432,7 +525,21 @@
 -(void)compareStatsAssertEqual:(NSDictionary*)rv and:(NSDictionary*)expected withMessage:(NSString*)msg{
     XCTAssertEqualObjects(expected.allKeys, rv.allKeys,  @"Same Keys %@", msg);
     for (NSObject<NSCopying>*key in expected) {
-        XCTAssertEqualObjects(expected[key], rv[key],  @"[%@] %@", key, msg);
+        NSObject * expectedVal = expected[key];
+        NSObject * rvVal = rv[key];
+        
+        //XCTAssertEqualObjects(expected[key], rv[key],  @"[%@] %@", key, msg);
+        if( [expectedVal isKindOfClass:[NSDictionary class]] && [rvVal isKindOfClass:[NSDictionary class]]){
+            NSDictionary * expectedValDict = (NSDictionary*)expectedVal;
+            NSDictionary * rvValDict = (NSDictionary*)rvVal;
+            
+            NSDictionary * smartDiff = [expectedValDict smartCompareDict:rvValDict];
+            XCTAssertNil(smartDiff, @"[%@] %@", key, msg);
+            if( smartDiff == nil &&  ![expectedVal isEqual:rvVal]){
+                RZLog(RZLogInfo, @"attention");
+            }
+        }
+
     }
 }
 

@@ -34,24 +34,85 @@
         self.time = [res dateForColumn:@"Time"];
         self.elapsed = [res doubleForColumn:@"SumDuration"];
         self.directSwimStroke = [res intForColumn:@"DirectSwimStroke"];
-        self.values = [NSMutableDictionary dictionaryWithCapacity:10];
-
     }
     return self;
 }
 
--(void)dealloc{
-    [_label release];
-    [super dealloc];
+-(void)saveToDb:(FMDatabase *)trackdb{
+    [self saveLengthToDb:trackdb index:self.lapIndex];
 }
 
--(void)saveToDb:(FMDatabase *)trackdb{
-    [self saveLapToDb:trackdb index:self.lapIndex];
+-(void)saveLengthToDb:(FMDatabase *)trackdb index:(NSUInteger)idx{
+    // Prepare to share the code with lap
+    // Currently still can't share because of the difference of indexing with lap and index fields
+    
+    NSString * tableMidFix = @"pool_lap";
+    
+    NSString * sqlInfo = [NSString stringWithFormat:@"INSERT INTO gc_%@_info (lap,field,value,uom) VALUES (?,?,?,?)",
+                          tableMidFix
+                          ];
+    
+    NSString * sql = [NSString stringWithFormat:@"INSERT INTO gc_%@ (lap,Time,SumDuration,lap,DirectSwimStroke) VALUES (?,?,?,?,?)",
+                      tableMidFix];
+    
+    for (GCField * field in self.extra) {
+        GCNumberWithUnit * nb = self.extra[field];
+        if (![trackdb executeUpdate:sqlInfo,
+              @(idx),
+              field.key,
+              [nb number],
+              (nb.unit).key]){
+            RZLog( RZLogError, @"Failed sql %@",[trackdb lastErrorMessage]);
+        }
+    }
+    
+    NSArray<GCField*>*native = [GCFields availableFieldsIn:self.trackFlags forActivityType:GC_TYPE_SWIMMING];
+    for (GCField * field in native) {
+        if( field.fieldFlag != gcFieldFlagNone && self.extra[field] == nil){
+            GCNumberWithUnit * nb = [self numberWithUnitForField:field.fieldFlag andActivityType:GC_TYPE_SWIMMING];
+            if( nb ){
+                // VERY SCARY... need to reorg, here nil activity works because gcFieldFlag != None
+                // This is to account for cases like HR where on import it get saved into the class member double values
+                // as opposed to extra.
+                // We need to revamp the whole saving mecanism to be more consistent whether field
+                // come from member double or extra dictionary. This is bad design and difference between swim points
+                // and regular gps points.
+                if (![trackdb executeUpdate:sqlInfo,
+                      @(idx),
+                      field.key,
+                      [nb number],
+                      (nb.unit).key]){
+                    RZLog( RZLogError, @"Failed sql %@",[trackdb lastErrorMessage]);
+                }
+            }
+        }
+    }
+    if( self.distanceMeters > 0){
+        // special case as distance otherwise not covered for swim
+        if (![trackdb executeUpdate:sqlInfo,
+              @(idx),
+              @"SumDistance",
+              @(self.distanceMeters),
+              @"meter"]){
+            RZLog( RZLogError, @"Failed sql %@",[trackdb lastErrorMessage]);
+        }
+    }
+
+    if (![trackdb executeUpdate:sql,
+          @(idx),
+          self.time,
+          @(self.elapsed),
+          @(self.lapIndex),
+          @(self.directSwimStroke)
+          ]){
+        RZLog( RZLogError, @"Failed sql %@",[trackdb lastErrorMessage]);
+    };
 }
+
 
 -(void)saveLapToDb:(FMDatabase*)trackdb index:(NSUInteger)idx{
-    for (GCField * field in self.values) {
-        GCNumberWithUnit * nb = self.values[field];
+    for (GCField * field in self.extra) {
+        GCNumberWithUnit * nb = self.extra[field];
         [trackdb executeUpdate:@"INSERT INTO gc_pool_lap_info (lap,field,value,uom) VALUES (?,?,?,?)",
          @(idx),field.key,nb.number,(nb.unit).key];
     }
