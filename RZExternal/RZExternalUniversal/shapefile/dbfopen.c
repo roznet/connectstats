@@ -1967,14 +1967,15 @@ DBFReorderFields( DBFHandle psDBF, int* panMap )
             psDBF->sHooks.FRead( pszRecord, psDBF->nRecordLength, 1, psDBF->fp );
 
             pszRecordNew[0] = pszRecord[0];
-
+            
+#ifndef __clang_analyzer__
             for(i=0; i < psDBF->nFields; i++)
             {
                 memcpy(pszRecordNew + panFieldOffsetNew[i],
                        pszRecord + psDBF->panFieldOffset[panMap[i]],
                        psDBF->panFieldSize[panMap[i]]);
             }
-
+#endif
             /* write record */
             psDBF->sHooks.FSeek( psDBF->fp, nRecordOffset, 0 );
             psDBF->sHooks.FWrite( pszRecordNew, psDBF->nRecordLength, 1, psDBF->fp );

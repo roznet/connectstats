@@ -38,6 +38,11 @@
     return self;
 }
 
+-(void)dealloc{
+    [_label release];
+    [super dealloc];
+}
+
 -(void)saveToDb:(FMDatabase *)trackdb{
     [self saveLengthToDb:trackdb index:self.lapIndex];
 }

@@ -108,7 +108,7 @@
         }
         return rv;
     }
-    return nil;
+    return [[MKOverlayRenderer alloc] init];
 }
 
 @end
