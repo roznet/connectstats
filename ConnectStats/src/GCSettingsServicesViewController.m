@@ -140,7 +140,6 @@
         BOOL connectStatsVersion = [GCAppGlobal connectStatsVersion];
         BOOL healthStatsVersion  = [GCAppGlobal healthStatsVersion];
 
-        if (connectStatsVersion) {
             gcGarminLoginMethod method = (gcGarminLoginMethod)[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
             if (method != gcGarminLoginMethodDirect) {
                 [self.remap addSection:GC_SECTIONS_GARMIN withRows:@[
@@ -191,38 +190,10 @@
                                                                       @( GC_SPORTTRACKS_SERVICE_NAME ),
                                                                       @( GC_SPORTTRACKS_ENABLE       )
                                                                       ]];
-        }
 
 #ifdef GC_USE_HEALTHKIT
         if (healthStatsVersion) {
             self.showHealthKit   = true;
-
-            [self.remap addSection:GC_SECTIONS_HEALTHKIT withRows:@[
-                                                                    @( GC_HEALTHKIT_NAME       ),
-                                                                    @( GC_HEALTHKIT_ENABLE     ),
-                                                                    @( GC_HEALTHKIT_WORKOUT    ),
-                                                                    @( GC_HEALTHKIT_SOURCE     )]];
-            [self.remap addSection:GC_SECTIONS_FITBIT withRows:@[
-                                                                 @( GC_FITBIT_NAME          ),
-                                                                 @( GC_FITBIT_SEARCH_OLDER  ),
-                                                                 @( GC_FITBIT_ENABLE        ) ]];
-            if ([[GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:@""] isEqualToString:CONFIG_ENABLE_DEBUG_ON]) {
-                [self.remap addSection:GC_SECTIONS_GARMIN withRows:@[
-                                                                     @( GC_GARMIN_SERVICE_NAME  ),
-                                                                     @( GC_GARMIN_ENABLE        ),
-                                                                     @( GC_GARMIN_USERNAME      ),
-                                                                     @( GC_GARMIN_PASSWORD      ),
-                                                                     @( GC_GARMIN_METHOD        ),
-                                                                     //@( GC_GARMIN_MANUAL_LOGIN  )
-                                                                     ]];
-                [self.remap addSection:GC_SECTIONS_STRAVA withRows:@[
-                                                                     @( GC_STRAVA_NAME      ),
-                                                                     @( GC_STRAVA_ENABLE    ),
-                                                                     @( GC_STRAVA_AUTO      ),
-                                                                     @( GC_STRAVA_LOGOUT    ) ]];
-
-            }
-
         }
 
 #endif

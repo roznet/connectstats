@@ -11,9 +11,6 @@ end
 target 'ConnectStatsTestApp' do
   pod 'Flurry-iOS-SDK/FlurrySDK'
 end
-target 'tennisstats' do
-  pod 'Flurry-iOS-SDK/FlurrySDK'
-end
 target 'FitFileExplorer' do
   use_frameworks!
   platform :osx, '10.14'

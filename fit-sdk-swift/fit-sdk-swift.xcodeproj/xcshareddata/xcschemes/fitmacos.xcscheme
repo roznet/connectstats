@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "42AA8D601F547151009734D4"
-               BuildableName = "tennisstats.app"
-               BlueprintName = "tennisstats"
-               ReferencedContainer = "container:ConnectStats.xcodeproj">
+               BlueprintIdentifier = "4249682222187F7E00776D68"
+               BuildableName = "fitmacos.app"
+               BlueprintName = "fitmacos"
+               ReferencedContainer = "container:fit-sdk-swift.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,20 +32,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "42AA8D771F547151009734D4"
-               BuildableName = "tennisstatsTests.xctest"
-               BlueprintName = "tennisstatsTests"
-               ReferencedContainer = "container:ConnectStats.xcodeproj">
+               BlueprintIdentifier = "422C59382211E43C004AC730"
+               BuildableName = "RZFitFileTests.xctest"
+               BlueprintName = "RZFitFileTests"
+               ReferencedContainer = "container:fit-sdk-swift.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "42AA8D601F547151009734D4"
-            BuildableName = "tennisstats.app"
-            BlueprintName = "tennisstats"
-            ReferencedContainer = "container:ConnectStats.xcodeproj">
+            BlueprintIdentifier = "4249682222187F7E00776D68"
+            BuildableName = "fitmacos.app"
+            BlueprintName = "fitmacos"
+            ReferencedContainer = "container:fit-sdk-swift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -65,10 +65,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "42AA8D601F547151009734D4"
-            BuildableName = "tennisstats.app"
-            BlueprintName = "tennisstats"
-            ReferencedContainer = "container:ConnectStats.xcodeproj">
+            BlueprintIdentifier = "4249682222187F7E00776D68"
+            BuildableName = "fitmacos.app"
+            BlueprintName = "fitmacos"
+            ReferencedContainer = "container:fit-sdk-swift.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -84,10 +84,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "42AA8D601F547151009734D4"
-            BuildableName = "tennisstats.app"
-            BlueprintName = "tennisstats"
-            ReferencedContainer = "container:ConnectStats.xcodeproj">
+            BlueprintIdentifier = "4249682222187F7E00776D68"
+            BuildableName = "fitmacos.app"
+            BlueprintName = "fitmacos"
+            ReferencedContainer = "container:fit-sdk-swift.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
