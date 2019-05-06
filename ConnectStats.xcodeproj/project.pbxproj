@@ -3139,17 +3139,6 @@
 		42A95B391632DB4B000B2082 /* GCMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCMapAnnotation.m; path = src/GCMapAnnotation.m; sourceTree = "<group>"; };
 		42A95B3B1632FC23000B2082 /* GCMapLegendView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCMapLegendView.h; path = src/GCMapLegendView.h; sourceTree = "<group>"; };
 		42A95B3C1632FC24000B2082 /* GCMapLegendView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCMapLegendView.m; path = src/GCMapLegendView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		42A99AFD1B780AF200994917 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
-		42A99AFF1B780AF200994917 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		42A99B011B780AF200994917 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		42A99B0B1B780AF200994917 /* GCWSummaryInterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCWSummaryInterfaceController.h; sourceTree = "<group>"; };
-		42A99B0C1B780AF200994917 /* GCWSummaryInterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCWSummaryInterfaceController.m; sourceTree = "<group>"; };
-		42A99B0E1B780AF200994917 /* GCWExtensionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCWExtensionDelegate.h; sourceTree = "<group>"; };
-		42A99B0F1B780AF200994917 /* GCWExtensionDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCWExtensionDelegate.m; sourceTree = "<group>"; };
-		42A99B111B780AF200994917 /* GCWGlanceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCWGlanceController.h; sourceTree = "<group>"; };
-		42A99B121B780AF200994917 /* GCWGlanceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCWGlanceController.m; sourceTree = "<group>"; };
-		42A99B141B780AF200994917 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		42A99B161B780AF200994917 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42A99B231B780D9900994917 /* GCWatchSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWatchSessionManager.h; path = src/GCWatchSessionManager.h; sourceTree = "<group>"; };
 		42A99B241B780D9900994917 /* GCWatchSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWatchSessionManager.m; path = src/GCWatchSessionManager.m; sourceTree = "<group>"; };
 		42AA288A1637F56F0054F84A /* GCActivitySearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivitySearch.h; path = src/GCActivitySearch.h; sourceTree = "<group>"; };
@@ -4643,15 +4632,6 @@
 			path = activity_merge_fit;
 			sourceTree = "<group>";
 		};
-		421F39AA1B79F12400CA7200 /* Apple Watch */ = {
-			isa = PBXGroup;
-			children = (
-				42A99AFB1B780AF200994917 /* healthwatch */,
-				42A99B0A1B780AF200994917 /* healthwatch Extension */,
-			);
-			name = "Apple Watch";
-			sourceTree = "<group>";
-		};
 		4225018616641D02002CD429 /* iPhone */ = {
 			isa = PBXGroup;
 			children = (
@@ -5519,7 +5499,6 @@
 				4245CD811B7DE351006B85B4 /* Common */,
 				428FF71315F36888007A88FA /* ConnectStats */,
 				4253B4571CD49F7E00437E6A /* FitFileExplorer */,
-				421F39AA1B79F12400CA7200 /* Apple Watch */,
 				42D8AF0E1B24CE9300ADDD31 /* Tests */,
 				428FF70C15F36888007A88FA /* Frameworks */,
 				428FF70A15F36888007A88FA /* Products */,
@@ -5998,31 +5977,6 @@
 				42453BA41DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m */,
 			);
 			name = Maps;
-			sourceTree = "<group>";
-		};
-		42A99AFB1B780AF200994917 /* healthwatch */ = {
-			isa = PBXGroup;
-			children = (
-				42A99AFC1B780AF200994917 /* Interface.storyboard */,
-				42A99AFF1B780AF200994917 /* Assets.xcassets */,
-				42A99B011B780AF200994917 /* Info.plist */,
-			);
-			path = healthwatch;
-			sourceTree = "<group>";
-		};
-		42A99B0A1B780AF200994917 /* healthwatch Extension */ = {
-			isa = PBXGroup;
-			children = (
-				42A99B0B1B780AF200994917 /* GCWSummaryInterfaceController.h */,
-				42A99B0C1B780AF200994917 /* GCWSummaryInterfaceController.m */,
-				42A99B0E1B780AF200994917 /* GCWExtensionDelegate.h */,
-				42A99B0F1B780AF200994917 /* GCWExtensionDelegate.m */,
-				42A99B111B780AF200994917 /* GCWGlanceController.h */,
-				42A99B121B780AF200994917 /* GCWGlanceController.m */,
-				42A99B141B780AF200994917 /* Assets.xcassets */,
-				42A99B161B780AF200994917 /* Info.plist */,
-			);
-			path = "healthwatch Extension";
 			sourceTree = "<group>";
 		};
 		42A99B221B780D5300994917 /* WatchSession */ = {
@@ -7723,7 +7677,7 @@
 				TargetAttributes = {
 					422FAEA319A1DD6000D09773 = {
 						DevelopmentTeam = M7QSSF3624;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
 								enabled = 1;
@@ -10473,14 +10427,6 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		42A99AFC1B780AF200994917 /* Interface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				42A99AFD1B780AF200994917 /* Base */,
-			);
-			name = Interface.storyboard;
-			sourceTree = "<group>";
-		};
 		42B5E1C91BA5AEC9000FAE4E /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -10529,7 +10475,7 @@
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/fit-sdk-swift/RZFitFile/src $(SRCROOT)/fit-sdk-swift/RZFitFile/sdk";
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStats/ConnectStats-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -10573,7 +10519,7 @@
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/fit-sdk-swift/RZFitFile/src $(SRCROOT)/fit-sdk-swift/RZFitFile/sdk";
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStats/ConnectStats-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -11054,6 +11000,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = M7QSSF3624;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -11084,6 +11031,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
