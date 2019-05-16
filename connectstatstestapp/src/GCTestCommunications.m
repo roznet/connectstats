@@ -26,7 +26,6 @@
 #import "GCTestCommunications.h"
 #import "GCAppGlobal.h"
 #import "GCWebUrl.h"
-#import "GCGarminActivityXMLParser.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "GCWebConnect+Requests.h"
 #import "GCActivity+Database.h"

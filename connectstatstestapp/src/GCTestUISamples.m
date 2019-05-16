@@ -25,7 +25,6 @@
 
 #import "GCTestUISamples.h"
 #import "GCAppGlobal.h"
-#import "GCGarminActivityXMLParser.h"
 #import "GCSimpleGraphCachedDataSource+Templates.h"
 #import "GCHistoryFieldDataSerie.h"
 #import "GCHistoryFieldDataSerie+Test.h"

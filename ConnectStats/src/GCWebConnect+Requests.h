@@ -46,12 +46,8 @@
 
 // Garmin
 -(void)garminDownloadActivityTrackPoints13:(GCActivity*)act;
--(void)garminDownloadActivityDetailTrackPoints:(NSString*)aId DEPRECATED_MSG_ATTRIBUTE("disable");
 -(void)garminDownloadActivitySummary:(NSString*)aId;
 -(void)garminDownloadWeather:(GCActivity*)activity;
--(void)garminDeleteActivity:(NSString*)aId DEPRECATED_MSG_ATTRIBUTE("disable");
--(void)garminRenameActivity:(NSString*)aId withName:(NSString*)name DEPRECATED_MSG_ATTRIBUTE("disable");
--(void)garminUpdateActivity:(NSString*)aId withActivityType:(NSString*)type DEPRECATED_MSG_ATTRIBUTE("disable");
 
 // Strava
 -(void)stravaDownloadActivityTrackPoints:(GCActivity*)act;

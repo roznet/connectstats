@@ -37,7 +37,6 @@
 #import "GCHealthViewController.h"
 #import "GCSettingsReloadViewController.h"
 #import "GCSettingsLogViewController.h"
-#import "GCGarminLoginViewController.h"
 #import "GCService.h"
 #import "GCDebugActionsTableViewController.h"
 

@@ -30,17 +30,10 @@
 #import "GCAppGlobal.h"
 #import "GCActivityTennis.h"
 
-#import "GCGarminActivityDetailRequest.h"
 #import "GCGarminRequestSearch.h"
 #import "GCGarminRequestActivityReload.h"
 #import "GCGarminActivityTrack13Request.h"
-#import "GCGarminRenameActivity.h"
-#import "GCGarminActivityWeatherHtml.h"
-#import "GCGarminListActivityTypes.h"
 #import "GCGarminRequestModernActivityTypes.h"
-#import "GCGarminDeleteActivity.h"
-#import "GCGarminChangeActivityType.h"
-#import "GCGarminLoginWebRequest.h"
 #import "GCGarminLoginDirectRequest.h"
 #import "GCGarminLoginSSORequest.h"
 #import "GCGarminRequestActivityWeather.h"
@@ -176,13 +169,8 @@
 -(void)servicesSearchRecentActivities{
     [self servicesLogin];
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
-        if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] ){
-            [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
-            [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:0 andMode:false] autorelease]];
-        }else{
-            [self addRequest:[[[GCGarminListActivityTypes alloc] init] autorelease]];
-            [self addRequest:[[[GCGarminSearch alloc] initWithStart:0 percent:0.0 andMode:false] autorelease]];
-        }
+        [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
+        [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:0 andMode:false] autorelease]];
         // get user/zones
         [self addRequest:[[[GCGarminRequestHeartRateZones alloc] init] autorelease]];
     }
@@ -264,31 +252,10 @@
     [self addRequest:[GCGarminRequestActivityWeather requestWithActivity:activity]];
 }
 
--(void)garminDownloadActivityDetailTrackPoints:(NSString*)aId{
-    // different format for detail
-    if(  [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
-        [self addRequest:[GCGarminActivityDetailRequest requestWithId:(NSString *)aId]];
-    }
-}
-
 -(void)garminDownloadActivitySummary:(NSString*)aId{
     if(  [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
         [self addRequest:[[[GCGarminRequestActivityReload alloc] initWithId:aId] autorelease]];
     }
-}
-
-#pragma mark - edit activities
-
--(void)garminRenameActivity:(NSString*)aId withName:(NSString*)name{
-    [self addRequest:[[[GCGarminRenameActivity alloc] initWithId:aId andName:name] autorelease]];
-}
-
--(void)garminUpdateActivity:(NSString*)aId withActivityType:(NSString*)type{
-    [self addRequest:[GCGarminChangeActivityType garminChangeActivityType:type forActivityId:aId]];
-}
-
--(void)garminDeleteActivity:(NSString*)aId{
-    [self addRequest:[GCGarminDeleteActivity garminDeleteActivity:aId]];
 }
 
 
@@ -330,12 +297,6 @@
             [self resetStatus];
             [self.requests addObject:[GCGarminLoginSSORequest requestWithUser:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
                                                                        andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]]];
-        }else{//gcGarminLoginMethodWebview
-            [self clearCookies];
-            [self.requests removeAllObjects];
-            [self resetStatus];
-            [self.requests addObject:[GCGarminLoginWebRequest request]];
-            self.status = GCWebStatusOK;
         }
     }
 }
