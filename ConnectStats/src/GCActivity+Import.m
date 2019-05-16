@@ -741,18 +741,12 @@
     }
 
 
-    self.downloadMethod = gcDownloadMethodDefault;
-    if ([GCAppGlobal configGetBool:CONFIG_USE_NEW_TRACK_API defaultValue:true]) {
-        self.downloadMethod = gcDownloadMethod13;
-    }
+    self.downloadMethod = gcDownloadMethod13;
     for (NSString * field in @[@"device",@"activityType",@"eventType"]) {
         NSDictionary * info = aData[field];
         if (info) {
             GCActivityMetaValue * val = [GCActivityMetaValue activityValueForDict:info andField:field];
             newMetaData[field] = val;
-            if ([field isEqualToString:@"device"] && [val.display isEqualToString:@"Garmin Fenix"]) {
-                self.downloadMethod = gcDownloadMethodDetails;
-            }
         }
     }
     for (NSString * field in @[@"garminSwimAlgorithm",@"ispr",@"favorite"]) {

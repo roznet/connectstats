@@ -970,9 +970,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             [[GCAppGlobal web] attach:self];
             switch (_downloadMethod) {
                 case gcDownloadMethodDetails:
-                    [[GCAppGlobal web] garminDownloadActivityDetailTrackPoints:_activityId];
-                    break;
-                // Modern download summary and trackpoints
+                    // disabled/obsolete
                 case gcDownloadMethodSwim:
                 case gcDownloadMethodModern:
                     [[GCAppGlobal web] garminDownloadActivitySummary:_activityId];

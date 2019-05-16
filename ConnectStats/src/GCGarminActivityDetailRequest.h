@@ -23,8 +23,13 @@
 //  SOFTWARE.
 //  
 
-#import "GCGarminActivityRequest.h"
+#import "GCGarminRequest.h"
 
-@interface GCGarminActivityDetailRequest : GCGarminActivityRequest
+@interface GCGarminActivityDetailRequest : GCGarminReqBase
+
+@property (nonatomic,retain) NSString * activityId;
+
++(GCGarminActivityDetailRequest*)requestWithId:(NSString*)aId DEPRECATED_MSG_ATTRIBUTE("disable");
+
 
 @end

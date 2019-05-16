@@ -29,7 +29,7 @@
 @synthesize currentElement,currentValue,trackPoints,currentPoint,currentLap,laps;
 
 -(instancetype)init{
-    return [self initWithString:nil andEncoding:NSUTF8StringEncoding];
+    return [self init];
 }
 
 -(GCGarminActivityXMLParser*)initWithString:(NSString*)aString andEncoding:(NSStringEncoding)encoding{

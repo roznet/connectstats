@@ -25,6 +25,8 @@
 
 #import "GCStravaReqBase.h"
 #import "GCAppGlobal.h"
+#import "GCService.h"
+
 @import RZExternal;
 
 @implementation GCStravaReqBase
@@ -116,6 +118,10 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
 
 -(gcWebService)service{
     return gcWebServiceStrava;
+}
+
++(NSDate*)lastSync:(NSString*)aId{
+    return [[GCService service:gcServiceStrava] lastSync:aId];
 }
 
 @end

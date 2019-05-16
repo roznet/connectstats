@@ -26,7 +26,6 @@
 #import "GCSettingsServicesViewController.h"
 #import "GCCellGrid+Templates.h"
 #import "GCAppGlobal.h"
-#import "GCStravaActivityTransfer.h"
 #import "GCWebConnect+Requests.h"
 #import "GCService.h"
 #import "GCSportTracksBase.h"
@@ -37,6 +36,7 @@
 #import "GCSettingsSourceTableViewController.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCHealthOrganizer.h"
+#import "GCStravaReqBase.h"
 
 #define GC_SECTIONS_GARMIN      0
 #define GC_SECTIONS_STRAVA      1
@@ -567,7 +567,7 @@
     }else if (indexPath.row == GC_STRAVA_LOGOUT){
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:1];
-        NSDate * last = [GCStravaActivityTransfer lastSync:nil];
+        NSDate * last = [GCStravaReqBase lastSync:nil];
         if (last) {
             // Message for upload
             [gridcell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Signout", @"Other Service") attribute:@selector(attributeBold16)];
@@ -1112,9 +1112,9 @@
             [self.navigationController pushViewController:lc animated:YES];
         }
     }else if (indexPath.section==GC_SECTIONS_STRAVA&&indexPath.row==GC_STRAVA_LOGOUT){
-        NSDate * last = [GCStravaActivityTransfer lastSync:nil];
+        NSDate * last = [GCStravaReqBase lastSync:nil];
         if (last) {
-            [GCStravaActivityTransfer signout];
+            [GCStravaReqBase signout];
         }else{
             [GCAppGlobal searchAllActivities];
         }

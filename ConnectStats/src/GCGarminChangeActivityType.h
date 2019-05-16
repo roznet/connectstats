@@ -30,6 +30,6 @@
 @property (nonatomic,retain) NSString * activityId;
 @property (nonatomic,retain) NSString * activityType;
 
-+(GCGarminChangeActivityType*)garminChangeActivityType:(NSString*)aType forActivityId:(NSString*)aId;
++(GCGarminChangeActivityType*)garminChangeActivityType:(NSString*)aType forActivityId:(NSString*)aId DEPRECATED_MSG_ATTRIBUTE("disable");
 
 @end

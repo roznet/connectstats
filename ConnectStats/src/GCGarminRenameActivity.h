@@ -34,6 +34,6 @@
 @property (nonatomic,retain) NSString * activityName;
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
--(GCGarminRenameActivity*)initWithId:(NSString*)aId andName:(NSString*)aName NS_DESIGNATED_INITIALIZER;
+-(GCGarminRenameActivity*)initWithId:(NSString*)aId andName:(NSString*)aName NS_DESIGNATED_INITIALIZER DEPRECATED_MSG_ATTRIBUTE("disable");
 
 @end

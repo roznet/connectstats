@@ -44,7 +44,7 @@
 @property (nonatomic,retain) NSString * currentElement;
 @property (nonatomic,assign) BOOL success;
 
--(GCGarminActivityXMLParser*)initWithString:(NSString*)aString andEncoding:(NSStringEncoding)encoding NS_DESIGNATED_INITIALIZER;
+-(GCGarminActivityXMLParser*)initWithString:(NSString*)aString andEncoding:(NSStringEncoding)encoding NS_DESIGNATED_INITIALIZER DEPRECATED_MSG_ATTRIBUTE("don't use");
 
 -(BOOL)success;
 @end

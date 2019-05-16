@@ -66,7 +66,6 @@
     // Need to turn off duplicate check as it will compare to count from db select
     [GCAppGlobal setupSampleState:@"sample_activities_v1.db" config:@{CONFIG_FULL_DUPLICATE_CHECK:@(false)}];
     [self testSwimAlgo:@"sample_activities_v1.db"];
-    [self testFenix:@"sample_activities_v1.db"];
 
     [GCAppGlobal setupSampleState:@"sample_activities.db" config:@{CONFIG_FULL_DUPLICATE_CHECK:@(false)}];
     [self testSwimAlgo:@"sample_activities.db"];
@@ -74,25 +73,6 @@
     [self endSession:@"GC Basics"];
 
 }
-
--(void)testFenix:(NSString*)sampleName{
-    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:sampleName]];
-    [db open];
-    int count = [db intForQuery:@"SELECT count(*) from gc_activities"];
-    int countfenix = [db intForQuery:@"SELECT count(*) from gc_activities_meta where field='device' and display='Garmin Fenix'"];
-    [db close];
-
-    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities]==count, @"loaded activities %d==%d", (int)[[GCAppGlobal organizer] countOfActivities], count);
-
-    NSUInteger details = 0;
-    for (GCActivity * act in [[GCAppGlobal organizer] activities]) {
-        if ([act downloadMethod] == gcDownloadMethodDetails) {
-            details += 1;
-        }
-    }
-    [self assessTestResult:@"Fenix" result:details == countfenix];
-}
-
 
 -(void)testSwimAlgo:(NSString*)sampleName{
     FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:sampleName]];

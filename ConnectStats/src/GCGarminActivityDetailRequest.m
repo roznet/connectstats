@@ -31,6 +31,34 @@
 
 @implementation GCGarminActivityDetailRequest
 
++(GCGarminActivityDetailRequest*)requestWithId:(NSString*)aId{
+    GCGarminActivityDetailRequest * rv = RZReturnAutorelease([[GCGarminActivityDetailRequest alloc] init]);
+    rv.activityId = aId;
+    rv.stage = gcRequestStageDownload;
+    rv.status = GCWebStatusOK;
+    return rv;
+    
+}
+
+-(void)dealloc{
+    [_activityId release];
+    [super dealloc];
+}
+
+-(NSString*)description{
+    switch (self.stage) {
+        case gcRequestStageDownload:
+            return NSLocalizedString(@"Downloading track points", @"Request Description");
+            break;
+        case gcRequestStageParsing:
+            return NSLocalizedString( @"Parsing track points", @"Request Description");
+            break;
+        case gcRequestStageSaving:
+            return NSLocalizedString( @"Saving track points", @"Request Description");
+            break;
+    }
+}
+
 -(NSString*)url{
     return GCWebActivityURLDetail(self.activityId);
 }

@@ -31,7 +31,6 @@
 #import "GCActivityTennis.h"
 
 #import "GCGarminActivityDetailRequest.h"
-#import "GCGarminActivityRequest.h"
 #import "GCGarminRequestSearch.h"
 #import "GCGarminRequestActivityReload.h"
 #import "GCGarminActivityTrack13Request.h"
@@ -50,7 +49,6 @@
 
 #import "GCSportTracksActivityList.h"
 #import "GCSportTracksActivityDetail.h"
-#import "GCSportTracksActivityUpload.h"
 
 #import "GCFitBitActivities.h"
 #import "GCFitBitWeight.h"
@@ -68,7 +66,6 @@
 #import "GCHealthKitExportActivity.h"
 #import "GCHealthKitSourcesRequest.h"
 
-#import "GCStravaActivityTransfer.h"
 #import "GCStravaActivityList.h"
 #import "GCStravaActivityStreams.h"
 #import "GCStravaSegmentListStarred.h"
@@ -270,13 +267,7 @@
 -(void)garminDownloadActivityDetailTrackPoints:(NSString*)aId{
     // different format for detail
     if(  [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
-        [self addRequest:[[[GCGarminActivityDetailRequest alloc] initWithId:aId]autorelease]];
-    }
-}
-
--(void)garminDownloadActivityTrackPoints:(NSString*)aId{
-    if(  [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
-        [self addRequest:[[[GCGarminActivityRequest alloc] initWithId:aId]autorelease]];
+        [self addRequest:[GCGarminActivityDetailRequest requestWithId:(NSString *)aId]];
     }
 }
 
@@ -385,33 +376,10 @@
 
 #pragma mark - strava
 
--(void)stravaUpload:(NSString*)aId navigationController:(UINavigationController*)nav extra:(NSDictionary *)extra{
-    NSMutableDictionary * inputs = [NSMutableDictionary dictionaryWithDictionary:@{@"id":aId}];
-    if (nav) {
-        inputs[@"nav"]=nav;
-    }
-    if (extra) {
-        inputs[@"extra"]=extra;
-    }
-    dispatch_async([GCAppGlobal worker],^(){
-        [self stravaCreateRequest:inputs];
-    });
-}
-
 -(void)stravaDownloadActivityTrackPoints:(GCActivity*)act{
     if ([GCAppGlobal currentNavigationController] && [[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
         [self addRequest:[GCStravaActivityStreams stravaActivityStream:[GCAppGlobal currentNavigationController] for:act]];
     }
-}
-
--(void)stravaCreateRequest:(NSDictionary*)inputs{
-    GCStravaActivityTransfer * req = [GCStravaActivityTransfer garminTransferStrava:inputs[@"id"] andController:inputs[@"nav"] extra:inputs[@"extra"]];
-    if (req) {
-        [self performSelectorOnMainThread:@selector(stravaAddReq:) withObject:req waitUntilDone:NO];
-    }
-}
--(void)stravaAddReq:(GCStravaActivityTransfer*)req{
-    [self addRequest:req];
 }
 
 #pragma mark - sporttracks
@@ -419,12 +387,6 @@
 -(void)sportTracksDownloadActivityTrackPoints:(NSString*)aId withUri:(NSString*)uri{
     if ([GCAppGlobal currentNavigationController]) {
         [self addRequest:[GCSportTracksActivityDetail activityDetail:[GCAppGlobal currentNavigationController] forActivityId:aId andUri:uri]];
-    }
-
-}
--(void)sportTracksUpload:(NSString*)aId navigationController:(UINavigationController*)nav{
-    if ([GCAppGlobal currentNavigationController]) {
-        [self addRequest:[GCSportTracksActivityUpload garminTransferSportTracks:aId andController:nav]];
     }
 
 }

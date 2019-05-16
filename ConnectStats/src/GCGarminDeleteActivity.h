@@ -28,6 +28,6 @@
 @interface GCGarminDeleteActivity : GCGarminReqBase
 @property (nonatomic,retain) NSString * activityId;
 
-+(GCGarminDeleteActivity*)garminDeleteActivity:(NSString*)aId;
++(GCGarminDeleteActivity*)garminDeleteActivity:(NSString*)aId DEPRECATED_MSG_ATTRIBUTE("disable");
 
 @end
