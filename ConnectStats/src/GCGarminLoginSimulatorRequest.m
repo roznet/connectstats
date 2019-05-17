@@ -23,13 +23,13 @@
 //  SOFTWARE.
 //  
 
-#import "GCGarminLoginDirectRequest.h"
+#import "GCGarminLoginSimulatorRequest.h"
 #import "GCWebUrl.h"
 #import "GCAppGlobal.h"
 
-@implementation GCGarminLoginDirectRequest
+@implementation GCGarminLoginSimulatorRequest
 
--(GCGarminLoginDirectRequest*)init{
+-(GCGarminLoginSimulatorRequest*)init{
     self = [super init];
     if(self){
         [self setPwd:nil];
@@ -38,7 +38,7 @@
     return self;
 }
 
--(GCGarminLoginDirectRequest*)initWithName:(NSString*)aname andPwd:(NSString*)apwd{
+-(GCGarminLoginSimulatorRequest*)initWithName:(NSString*)aname andPwd:(NSString*)apwd{
     self = [super init];
     if(self){
         self.pwd = apwd;
@@ -65,21 +65,8 @@
     }
 }
 
--(NSDictionary*)postData{
-    NSDictionary * post= nil;
-    if (_uname&&_pwd) {
-        post =@{@"login:loginUsernameField": _uname,
-         @"login:password": _pwd,
-         @"login:rememberMe": @"on",
-         @"login": @"login",
-         @"login:signInButton": @"Sign In",
-         @"javax.faces.ViewState": @"j_id1"};
-    }
-    return post;
-}
-
 -(NSString*)url{
-    return GCWebSigninURL(self.uname, self.pwd);
+    return GCWebSimulatorSigninURL(self.uname, self.pwd);
 }
 
 -(void)process{

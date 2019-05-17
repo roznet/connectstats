@@ -125,28 +125,18 @@ BOOL GCWebSimulatorIsInUse(){
 
 #pragma mark - Garmin
 
-NSString * GCWebSigninURL( NSString * uname, NSString * pwd){
-    if (useSimulator) {
-        if (uname) {
-            NSString * diroption = simulatorDir ? [NSString stringWithFormat:@"&dir=%@", simulatorDir] : @"";
-            NSString * url = [NSString stringWithFormat:@"%@/garminsimul/signin.php?username=%@&password=%@%@",
-                              simulatorURL,
-                              RZWebEncodeURL(uname),
-                              RZWebEncodeURL(pwd),
-                              diroption
-            ];
-            return url;
-        }else{
-            return [NSString stringWithFormat:@"%@/garminsimul/signin.php", simulatorURL];
-        }
+NSString * GCWebSimulatorSigninURL( NSString * uname, NSString * pwd){
+    if (uname) {
+        NSString * diroption = simulatorDir ? [NSString stringWithFormat:@"&dir=%@", simulatorDir] : @"";
+        NSString * url = [NSString stringWithFormat:@"%@/garminsimul/signin.php?username=%@&password=%@%@",
+                          simulatorURL,
+                          RZWebEncodeURL(uname),
+                          RZWebEncodeURL(pwd),
+                          diroption
+                          ];
+        return url;
     }else{
-        if (uname&&pwd) {
-            return @"https://sso.garmin.com/sso/login?service=http%3A%2F%2Fconnect.garmin.com%2Fpost-auth%2Flogin&webhost=olaxpw-connect03.garmin.com&source=http%3A%2F%2Fconnect.garmin.com%2Fen-US%2Fsignin&redirectAfterAccountLoginUrl=http%3A%2F%2Fconnect.garmin.com%2Fpost-auth%2Flogin&redirectAfterAccountCreationUrl=http%3A%2F%2Fconnect.garmin.com%2Fpost-auth%2Flogin&gauthHost=https%3A%2F%2Fsso.garmin.com%2Fsso&locale=en&id=gauth-widget&cssUrl=https%3A%2F%2Fstatic.garmincdn.com%2Fcom.garmin.connect%2Fui%2Fsrc-css%2Fgauth-custom.css&clientId=GarminConnect&rememberMeShown=true&rememberMeChecked=true&createAccountShown=true&openCreateAccount=false&usernameShown=true&displayNameShown=false&consumeServiceTicket=false&initialFocus=true&embedWidget=false";
-            //return @"https://sso.garmin.com/sso/login";
-            //return @"https://connect.garmin.com/signin";
-        }else{
-            return @"https://connect.garmin.com/signin";
-        }
+        return [NSString stringWithFormat:@"%@/garminsimul/signin.php", simulatorURL];
     }
 }
 
@@ -175,14 +165,6 @@ NSString * GCWebModernSearchURL( NSUInteger start, NSUInteger requestCount ){
         return [NSString stringWithFormat:@"https://connect.garmin.com/modern/proxy/activitylist-service/activities?start=%d&limit=%d", (int)start,(int)requestCount];
     }
 
-}
-
-NSString * GCWebActivityURL( NSString * activityID){
-    if (useSimulator) {
-        return [NSString stringWithFormat:@"%@/garminsimul/tcx.php?id=%@&state=%@", simulatorURL, activityID,simulatorState?:@""];
-    }else{
-        return [NSString stringWithFormat:@"https://connect.garmin.com/proxy/activity-service-1.2/tcx/activity/%@?full=true",activityID];
-    }
 }
 
 NSString * GCWebActivityURLDetail( NSString * activityID){

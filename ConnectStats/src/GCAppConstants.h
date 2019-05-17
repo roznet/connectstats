@@ -141,7 +141,7 @@ typedef NS_ENUM(NSUInteger, gcPeriodType) {
 typedef NS_ENUM(NSUInteger, gcGarminLoginMethod) {
     gcGarminLoginMethodDirect,
     gcGarminLoginMethodWebview,
-    gcGarminLoginMethodLegacy,
+    gcGarminLoginMethodSimulator,
     GCGarminLoginMethodEnd
 };
 

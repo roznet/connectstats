@@ -25,13 +25,13 @@
 
 #import "GCGarminRequest.h"
 
-@interface GCGarminLoginDirectRequest : GCGarminReqBase
+@interface GCGarminLoginSimulatorRequest : GCGarminReqBase
 
 @property (retain,nonatomic) NSString* uname;
 @property (retain,nonatomic) NSString* pwd;
 
--(GCGarminLoginDirectRequest*)init NS_DESIGNATED_INITIALIZER;
--(GCGarminLoginDirectRequest*)initWithName:(NSString*)aname andPwd:(NSString*)apwd NS_DESIGNATED_INITIALIZER;
+-(GCGarminLoginSimulatorRequest*)init NS_DESIGNATED_INITIALIZER;
+-(GCGarminLoginSimulatorRequest*)initWithName:(NSString*)aname andPwd:(NSString*)apwd NS_DESIGNATED_INITIALIZER;
 -(NSString*)url;
 -(void)process;
 

@@ -34,7 +34,7 @@
 #import "GCGarminRequestActivityReload.h"
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminRequestModernActivityTypes.h"
-#import "GCGarminLoginDirectRequest.h"
+#import "GCGarminLoginSimulatorRequest.h"
 #import "GCGarminLoginSSORequest.h"
 #import "GCGarminRequestActivityWeather.h"
 #import "GCGarminRequestModernSearch.h"
@@ -273,13 +273,13 @@
         bool simulatorAccount = [self isGarminSimulatorAccount:username andPassword:password];
 
         if( simulatorAccount ){
-            method = gcGarminLoginMethodLegacy;
+            method = gcGarminLoginMethodSimulator;
             RZLog(RZLogInfo, @"Test Username Detected <%@> entering simulator mode", username);
         }
-        if (method == gcGarminLoginMethodLegacy) {
+        if (method == gcGarminLoginMethodSimulator) {
             [self clearCookies];
-            GCGarminLoginDirectRequest * first  = [[[GCGarminLoginDirectRequest alloc] init] autorelease];
-            GCGarminLoginDirectRequest * second = [[[GCGarminLoginDirectRequest alloc] initWithName:username andPwd:password] autorelease];
+            GCGarminLoginSimulatorRequest * first  = [[[GCGarminLoginSimulatorRequest alloc] init] autorelease];
+            GCGarminLoginSimulatorRequest * second = [[[GCGarminLoginSimulatorRequest alloc] initWithName:username andPwd:password] autorelease];
             if ( simulatorAccount ) {
                 GCWebUseSimulator(true, [GCAppGlobal simulatorUrl]);
             }else{
@@ -317,8 +317,8 @@
         for (NSHTTPCookie *each in cookieStorage.cookies) {
             [cookieStorage deleteCookie:each];
         }
-        GCGarminLoginDirectRequest * first  = [[[GCGarminLoginDirectRequest alloc] init] autorelease];
-        GCGarminLoginDirectRequest * second = [[[GCGarminLoginDirectRequest alloc] initWithName:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
+        GCGarminLoginSimulatorRequest * first  = [[[GCGarminLoginSimulatorRequest alloc] init] autorelease];
+        GCGarminLoginSimulatorRequest * second = [[[GCGarminLoginSimulatorRequest alloc] initWithName:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
                                                                                          andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]] autorelease];
 
         bool simulatorAccount = [self isGarminSimulatorAccount:second.uname andPassword:second.pwd];
