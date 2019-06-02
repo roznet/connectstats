@@ -77,6 +77,7 @@
 #define CONFIG_WITHINGS_USER            @"config_withings_user"
 #define CONFIG_WITHINGS_AUTO            @"config_withings_auto"
 #define CONFIG_BABOLAT_ENABLE           @"config_babolat_enable"
+#define CONFIG_CONNECTSTATS_ENABLE      @"config_connectstats_enable"
 #define CONFIG_GARMIN_ENABLE            @"config_garmin_enable"
 #define CONFIG_GARMIN_LOGIN_METHOD      @"config_garmin_login_method"
 #define CONFIG_GARMIN_USE_MODERN        @"config_garmin_use_modern_v2"
@@ -153,6 +154,7 @@ typedef NS_ENUM(NSUInteger, gcService) {
     gcServiceSportTracks,
     gcServiceHealthKit,
     gcServiceFitBit,
+    gcServiceConnectStats,
     gcServiceEnd
 };
 

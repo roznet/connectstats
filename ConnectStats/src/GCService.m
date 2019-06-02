@@ -33,6 +33,7 @@
 #define GC_SERVICE_SPORTTRACKS  @"__sporttracks__"
 #define GC_SERVICE_HEALTHKIT    @"__healthkit__"
 #define GC_SERVICE_FITBIT       @"__fitbit__"
+#define GC_SERVICE_CONNECTSTATS @"__connectstats__"
 
 
 @interface GCPrivateServiceSyncCache : NSObject
@@ -73,6 +74,8 @@
             return @"healthkit";
         case gcServiceFitBit:
             return @"FitBit";
+        case gcServiceConnectStats:
+            return @"ConnectStats";
         case gcServiceEnd:
             return @"END";
     }
@@ -214,6 +217,9 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
             case gcServiceFitBit:
                 rv.prefix = GC_SERVICE_FITBIT;
                 break;
+            case gcServiceConnectStats:
+                rv.prefix = GC_SERVICE_CONNECTSTATS;
+                break;
             case gcServiceEnd:
                 rv.prefix = @"__INVALID__";
         }
@@ -288,6 +294,8 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
             return @"HealthKit";
         case gcServiceFitBit:
             return @"FitBit";
+        case gcServiceConnectStats:
+            return @"ConnectStats";
         case gcServiceEnd:
             return @"End";
     }

@@ -110,6 +110,10 @@
 }
 
 -(void)nonGarminSearch{
+    if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
+        
+    }
+    
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
         [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController]]];
     }
