@@ -31,6 +31,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface GCConnectStatsRequestSearch : GCConnectStatsRequest
+
 /**
  Search for new activities from garmin
  
@@ -38,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param aMode true is reload all, false stop when reached last
  @return new request
  */
-//-(GCConnectStatsRequestSearch*)initWithStart:(NSUInteger)aStart andMode:(BOOL)aMode;
++(GCConnectStatsRequestSearch*)requestWithStart:(NSUInteger)aStart andMode:(BOOL)aMode;
 
 //+(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path;
 

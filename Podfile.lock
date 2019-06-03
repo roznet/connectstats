@@ -14,6 +14,12 @@ DEPENDENCIES:
   - GoogleMaps
   - KeychainSwift
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Flurry-iOS-SDK
+    - GoogleMaps
+    - KeychainSwift
+
 EXTERNAL SOURCES:
   GenericJSON:
     :git: https://github.com/roznet/generic-json-swift.git
@@ -31,4 +37,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 2ceafe434a6ff602724c71c351ee030530a1a3ec
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.7.0

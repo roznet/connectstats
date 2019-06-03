@@ -60,7 +60,7 @@
 -(void)tesConnectStatsServiceEnd{
     [[GCAppGlobal web] detach:self];
     
-    [self endSession:@"GC Garmin Connect Alt"];
+    [self endSession:@"GC ConnectStats Service"];
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{

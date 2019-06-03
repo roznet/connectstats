@@ -94,7 +94,7 @@ void GCWebUseSimulator( BOOL abool, NSString * url){
     if( url == nil){
 #if TARGET_IPHONE_SIMULATOR
         simulatorURL = @"https://localhost";
-        simulatorURL = @"https://www.ro-z.net";
+        //simulatorURL = @"https://www.ro-z.net";
 #else
         simulatorURL = @"https://www.ro-z.net";
 #endif
@@ -121,6 +121,23 @@ void GCWebSetSimulatorError( BOOL abool){
 }
 BOOL GCWebSimulatorIsInUse(){
     return useSimulator;
+}
+
+#pragma mark - ConnectStats
+
+NSString * GCWebConnectStatsSearch( NSUInteger start ){
+    NSUInteger requestCount = 20;
+    
+    if (useSimulator) {
+        if (simulatorError) {
+            return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
+        }else{
+            return [NSString stringWithFormat:@"%@/api/connectstats/activities.php?start=%lu", simulatorURL, (unsigned long)start];
+        }
+    }else{
+        //
+        return [NSString stringWithFormat:@"https://ro-z.net/api/connectstats/activities.php?start=%d&limit=%d", (int)start,(int)requestCount];
+    }
 }
 
 #pragma mark - Garmin

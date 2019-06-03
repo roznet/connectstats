@@ -40,6 +40,8 @@
 #import "GCGarminRequestModernSearch.h"
 #import "GCGarminRequestHeartRateZones.h"
 
+#import "GCConnectStatsRequestSearch.h"
+
 #import "GCSportTracksActivityList.h"
 #import "GCSportTracksActivityDetail.h"
 
@@ -111,7 +113,7 @@
 
 -(void)nonGarminSearch{
     if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
-        
+        [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 andMode:true]];
     }
     
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {

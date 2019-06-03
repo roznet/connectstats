@@ -26,11 +26,66 @@
 
 
 #import "GCConnectStatsRequestSearch.h"
+#import "GCWebUrl.h"
+#import "GCAppGlobal.h"
+
+@interface GCConnectStatsRequestSearch ()
+
+@property (nonatomic,assign) NSUInteger reachedExisting;
+@property (nonatomic,assign) BOOL reloadAll;
+@property (nonatomic,assign) NSUInteger start;
+
+@property (nonatomic,retain) NSDate * lastFoundDate;
+
+@end
 
 @implementation GCConnectStatsRequestSearch
-/*
--(GCConnectStatsRequestSearch*)initWithStart:(NSUInteger)aStart andMode:(BOOL)aMode{
-    
+
++(GCConnectStatsRequestSearch*)requestWithStart:(NSUInteger)aStart andMode:(BOOL)aMode{
+    GCConnectStatsRequestSearch * rv = RZReturnAutorelease([[GCConnectStatsRequestSearch alloc] init]);
+    if( rv ){
+        rv.start = aStart;
+        rv.reloadAll = aMode;
+        rv.stage = gcRequestStageDownload;
+        rv.status = GCWebStatusOK;
+        rv.lastFoundDate = [NSDate date];
+    }
+    return rv;
 }
-*/
+
+-(void)dealloc{
+    [_lastFoundDate release];
+    [super dealloc];
+}
+
+-(NSString*)url{
+    return GCWebConnectStatsSearch( self.start );
+}
+
+-(NSString*)searchFileNameForPage:(int)page{
+    return  [NSString stringWithFormat:@"last_connectstats_search_%d.json", page];
+}
+
+-(void)process{
+#if TARGET_IPHONE_SIMULATOR
+    NSError * e;
+    NSString * fname = [self searchFileNameForPage:(int)_start];
+    if(![self.theString writeToFile:[RZFileOrganizer writeableFilePath:fname] atomically:true encoding:kRequestDebugFileEncoding error:&e]){
+        RZLog(RZLogError, @"Failed to save %@. %@", fname, e.localizedDescription);
+    }
+#endif
+    self.stage = gcRequestStageParsing;
+    [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+    dispatch_async([GCAppGlobal worker],^(){
+        [self processParse];
+    });
+}
+
+-(void)processParse{
+    if ([self checkNoErrors]) {
+    }
+    
+    [self processDone];
+}
+
 @end
