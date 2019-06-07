@@ -72,7 +72,7 @@ public class RZFitMessage {
     }
     
     public func interpretedField(key:RZFitFieldKey) -> RZFitFieldValue? {
-        var interp = self.interpretedFields()
+        let interp = self.interpretedFields()
         
         return interp[key]
     }

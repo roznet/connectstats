@@ -173,7 +173,7 @@
 									 &zi,
 									 NULL, 0, NULL, 0, NULL,
 									 (compressionLevel != OZZipCompressionLevelNone) ? Z_DEFLATED : 0,
-									 compressionLevel, 0,
+									 (int)compressionLevel, 0,
 									 -MAX_WBITS, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY,
                                      NULL, 0,
                                      (_legacy32BitMode ? 0 : 1));
@@ -208,7 +208,7 @@
 									 &zi,
 									 NULL, 0, NULL, 0, NULL,
 									 (compressionLevel != OZZipCompressionLevelNone) ? Z_DEFLATED : 0,
-									 compressionLevel, 0,
+									 (int)compressionLevel, 0,
 									 -MAX_WBITS, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY,
 									 NULL, 0,
                                      (_legacy32BitMode ? 0 : 1));
@@ -243,7 +243,7 @@
 									 &zi,
 									 NULL, 0, NULL, 0, NULL,
 									 (compressionLevel != OZZipCompressionLevelNone) ? Z_DEFLATED : 0,
-									 compressionLevel, 0,
+									 (int)compressionLevel, 0,
 									 -MAX_WBITS, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY,
 									 [password cStringUsingEncoding:NSUTF8StringEncoding], crc32,
                                      (_legacy32BitMode ? 0 : 1));
