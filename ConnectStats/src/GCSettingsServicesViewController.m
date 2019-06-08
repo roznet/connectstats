@@ -38,15 +38,16 @@
 #import "GCHealthOrganizer.h"
 #import "GCStravaReqBase.h"
 
-#define GC_SECTIONS_GARMIN      0
-#define GC_SECTIONS_STRAVA      1
-#define GC_SECTIONS_HEALTHKIT   2
-#define GC_SECTIONS_SPORTTRACKS 3
-#define GC_SECTIONS_FITBIT      4
-#define GC_SECTIONS_WITHINGS    5
-#define GC_SECTIONS_BABOLAT     6
-#define GC_SECTIONS_OPTIONS     7
-#define GC_SECTIONS_END         8
+#define GC_SECTIONS_GARMIN          0
+#define GC_SECTIONS_STRAVA          1
+#define GC_SECTIONS_HEALTHKIT       2
+#define GC_SECTIONS_SPORTTRACKS     3
+#define GC_SECTIONS_FITBIT          4
+#define GC_SECTIONS_WITHINGS        5
+#define GC_SECTIONS_BABOLAT         6
+#define GC_SECTIONS_OPTIONS         7
+#define GC_SECTIONS_CONNECTSTATS    8
+#define GC_SECTIONS_END             9
 
 #define GC_SPORTTRACKS_SERVICE_NAME 0
 #define GC_SPORTTRACKS_ENABLE       1
@@ -60,6 +61,10 @@
 #define GC_GARMIN_MANUAL_LOGIN  5
 #define GC_GARMIN_MODERN_API    6
 #define GC_GARMIN_END           7
+
+#define GC_CONNECTSTATS_NAME    0
+#define GC_CONNECTSTATS_ENABLE  1
+#define GC_CONNECTSTATS_END     2
 
 #define GC_STRAVA_NAME      0
 #define GC_STRAVA_ENABLE    1
@@ -115,6 +120,7 @@
 @property (nonatomic,assign) BOOL showWithings;
 @property (nonatomic,assign) BOOL showHealthKit;
 @property (nonatomic,assign) BOOL showFitbit;
+@property (nonatomic,assign) BOOL showConnectStats;
 
 @end
 
@@ -133,6 +139,7 @@
         self.showWithings    = false;
         self.showHealthKit   = false;
         self.showFitbit      = false;
+        self.showConnectStats = false;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kNotifySettingsChange object:nil];
 
 
@@ -141,6 +148,12 @@
         BOOL healthStatsVersion  = [GCAppGlobal healthStatsVersion];
 
             gcGarminLoginMethod method = (gcGarminLoginMethod)[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
+        
+            [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
+                                                                       @( GC_CONNECTSTATS_NAME ),
+                                                                       @( GC_CONNECTSTATS_ENABLE )
+                                                                       ]];
+        
             if (method != gcGarminLoginMethodDirect) {
                 [self.remap addSection:GC_SECTIONS_GARMIN withRows:@[
                                                                      @( GC_GARMIN_SERVICE_NAME  ),
@@ -280,6 +293,8 @@
         return self.showHealthKit ? nrows : 1;
     }else if (section == GC_SECTIONS_OPTIONS){
         return nrows;
+    }else if (section == GC_SECTIONS_CONNECTSTATS){
+        return self.showConnectStats ? nrows : 1;
     }else if (section == GC_SECTIONS_FITBIT){
         return self.showFitbit ? nrows : 1;
     }
@@ -507,6 +522,40 @@
         [gridcell labelForRow:1 andCol:0].attributedText = details;
         rv = gridcell;
 
+    }
+    return rv;
+}
+
+-(UITableViewCell*)connectStatsTableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath{
+    UITableViewCell * rv = nil;
+    //GCCellEntryText * textcell = nil;
+    GCCellGrid * gridcell = nil;
+    GCCellEntrySwitch * switchcell = nil;
+    //GCCellActivityIndicator * activitycell = nil;
+
+    gcService service = gcServiceConnectStats;
+    
+    if (indexPath.row ==GC_CONNECTSTATS_NAME) {
+        gridcell =[self gridCell:tableView];
+        [gridcell setupForRows:2 andCols:1];
+        NSAttributedString * title = nil;
+        NSAttributedString * status = [[[NSAttributedString alloc] initWithString:[self statusForService:service]
+                                                                       attributes:[GCViewConfig attribute14Gray]] autorelease];
+        
+        title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Garmin via ConnectStats",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
+        [gridcell setIconImage:[UIImage imageNamed:@"garmin"]];
+        [gridcell labelForRow:0 andCol:0].attributedText = title;
+        [gridcell labelForRow:1 andCol:0].attributedText = status;
+        gridcell.iconPosition = gcIconPositionRight;
+        [GCViewConfig setupGradientForDetails:gridcell];
+        rv = gridcell;
+    }else if (indexPath.row == GC_CONNECTSTATS_ENABLE){
+        switchcell = [GCCellEntrySwitch switchCell:tableView];
+        switchcell.label.text = NSLocalizedString(@"Download Activities",@"Other Service");
+        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false];
+        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_CONNECTSTATS_ENABLE);
+        switchcell.entryFieldDelegate = self;
+        rv=switchcell;
     }
     return rv;
 }
@@ -838,6 +887,8 @@
         return [self healthKitTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_FITBIT){
         return [self fitbitTableView:tableView cellForRowAtIndexPath:indexPath];
+    }else if (indexPath.section == GC_SECTIONS_CONNECTSTATS){
+        return [self connectStatsTableView:tableView cellForRowAtIndexPath:indexPath];
     }
 
     return [GCCellGrid gridCell:tableView];
@@ -930,6 +981,14 @@
                 RZLog(RZLogInfo, @"Garmin: Modern");
             }else{
                 RZLog(RZLogInfo, @"Garmin: Legacy");
+            }
+            [GCAppGlobal saveSettings];
+            break;
+        case GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS, GC_CONNECTSTATS_ENABLE):
+            if( [[GCAppGlobal profile] configToggleBool:CONFIG_CONNECTSTATS_ENABLE]){
+                RZLog(RZLogInfo, @"ConnectStats: Enabled");
+            }else{
+                RZLog(RZLogInfo, @"ConnectStats: Disabled");
             }
             [GCAppGlobal saveSettings];
             break;
@@ -1070,6 +1129,8 @@
             self.showHealthKit = ! self.showHealthKit;
         }else if (indexPath.section==GC_SECTIONS_FITBIT){
             self.showFitbit = ! self.showFitbit;
+        }else if (indexPath.section==GC_SECTIONS_CONNECTSTATS){
+            self.showConnectStats = ! self.showConnectStats;
         }
         [tableView reloadData];
     }

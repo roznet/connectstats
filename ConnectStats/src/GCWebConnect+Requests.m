@@ -113,6 +113,10 @@
 
 -(void)nonGarminSearch{
     if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
+#if TARGET_IPHONE_SIMULATOR
+        // SWITCH TO PROD LATER
+        GCWebUseConnectStatsDevServer(true,nil);
+#endif
         [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:true andNavigationController:[GCAppGlobal currentNavigationController]]];
     }
     

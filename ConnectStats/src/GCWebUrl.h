@@ -28,6 +28,7 @@
 void GCWebUseSimulator( BOOL abool, NSString * url);
 void GCWebSetSimulatorError( BOOL abool);
 void GCWebSetSimulatorState( NSString * state);
+void GCWebUseConnectStatsDevServer(BOOL abool, NSString * url);
 /**
  This will only take effect after the next signin to the simulator
  */

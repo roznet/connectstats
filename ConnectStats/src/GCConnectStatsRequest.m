@@ -78,23 +78,55 @@
 
 }
 
+-(NSURLSession*)sharedSession{
+    static NSURLSession * _shared = nil;
+    if(_shared == nil){
+        _shared = [NSURLSession sessionWithConfiguration:[[NSURLSession sharedSession] configuration] delegate:self delegateQueue:nil];
+    }
+    return _shared;
+}
+
+-(void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler{
+    bool isTesting = false;
+    
+#if TARGET_IPHONE_SIMULATOR
+    if( [challenge.protectionSpace.host isEqualToString:@"localhost"] ||
+       [challenge.protectionSpace.host isEqualToString:@"roznet.ro-z.me"] ){
+        isTesting = true;
+    }
+#endif
+    if( isTesting ){
+        completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
+    }else{
+        completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
+    }
+}
+
+
 -(BOOL)isSignedIn{
-    return self.oauthToken != nil && self.oauthTokenSecret != nil;
+    BOOL rv = self.oauthToken != nil && self.oauthTokenSecret != nil && self.userId != 0 && self.tokenId != 0;
+    if( rv && ! self.oauth1Controller){
+        [self buildOAuthController];
+    }
+    return rv;
 }
 
 -(void)signIn{
     if (self.oauthToken) {
-        [self processDone];
+        if( self.userId == 0 || self.tokenId == 0){
+            [self signInConnectStatsStep];
+        }else{
+            [self processDone];
+        }
     }else{
         [self signInGarminStep];
     }
-    
 }
 
 -(void)signInConnectStatsStep{
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:GCWebConnectStatsRegisterUser(self.oauthToken, self.oauthTokenSecret)]];
     
-    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:
+    [[[self sharedSession] dataTaskWithRequest:request completionHandler:
       ^(NSData * _Nullable data,
         NSURLResponse * _Nullable response,
         NSError * _Nullable error) {
@@ -133,6 +165,19 @@
     
 }
 
+-(void)buildOAuthController{
+    if( self.oauth1Controller == nil){
+        NSError * error = nil;
+        NSData * credentials = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"credentials.json"] options:0 error:&error];
+        if( ! credentials ){
+            RZLog(RZLogError,@"Failed to read credentials.json %@", error);
+        }
+        NSDictionary * params = [OAuth1Controller serviceParametersFromJson:credentials forServiceName:@"garmin"];
+        
+        self.oauth1Controller = [[[OAuth1Controller alloc] initWithServiceParameters:params] autorelease];
+    }
+}
+
 -(void)signInGarminStep{
     UIViewController * webCont = [[UIViewController alloc] initWithNibName:nil bundle:nil];
     UIWebView * webView = [[UIWebView alloc] initWithFrame:self.navigationController.view.frame];
@@ -142,14 +187,7 @@
     [self.navigationController pushViewController:webCont animated:YES];
     [webCont release];
     [webView release];
-    NSError * error = nil;
-    NSData * credentials = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"credentials.json"] options:0 error:&error];
-    if( ! credentials ){
-        RZLog(RZLogError,@"Failed to read credentials.json %@", error);
-    }
-    NSDictionary * params = [OAuth1Controller serviceParametersFromJson:credentials forServiceName:@"garmin"];
-    
-    self.oauth1Controller = [[[OAuth1Controller alloc] initWithServiceParameters:params] autorelease];
+    [self buildOAuthController];
     [self.oauth1Controller loginWithWebView:webView completion:^(NSDictionary *oauthTokens, NSError *error) {
         if (error != nil) {
             RZLog(RZLogError, @"ConnectStats identification error %@", error);

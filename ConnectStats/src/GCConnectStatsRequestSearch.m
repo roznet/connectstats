@@ -87,6 +87,10 @@ static const NSUInteger kActivityRequestCount = 20;
 }
 
 -(NSURLRequest*)preparedUrlRequest{
+    if( [self isSignedIn] ){
+        self.navigationController = nil;
+    }
+    
     if (self.navigationController) {
         return nil;
     }else{

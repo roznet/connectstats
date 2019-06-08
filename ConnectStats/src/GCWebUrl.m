@@ -88,6 +88,22 @@ static BOOL simulatorError = false;
 static NSString * simulatorURL = nil;
 static NSString * simulatorState = nil;
 static NSString * simulatorDir = nil;
+static BOOL useDevServer = false;
+
+void GCWebUseConnectStatsDevServer(BOOL abool, NSString * url){
+    useDevServer = abool;
+    if( url == nil){
+#if TARGET_IPHONE_SIMULATOR
+        simulatorURL = @"https://localhost";
+        //simulatorURL = @"https://www.ro-z.net";
+#else
+        simulatorURL = @"https://www.ro-z.net";
+#endif
+    }else{
+        simulatorURL = url;
+    }
+
+}
 
 void GCWebUseSimulator( BOOL abool, NSString * url){
     useSimulator = abool;
@@ -126,8 +142,7 @@ BOOL GCWebSimulatorIsInUse(){
 #pragma mark - ConnectStats
 
 NSString * GCWebConnectStatsSearch(void){
-    
-    if (useSimulator) {
+    if (useSimulator || useDevServer) {
         if (simulatorError) {
             return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
         }else{
@@ -139,8 +154,7 @@ NSString * GCWebConnectStatsSearch(void){
 }
 
 NSString * GCWebConnectStatsRegisterUser( NSString * accessToken, NSString * accessTokenSecret){
-    
-    if (useSimulator) {
+    if (useSimulator || useDevServer) {
         if (simulatorError) {
             return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
         }else{
