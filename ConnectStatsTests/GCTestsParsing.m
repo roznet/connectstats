@@ -39,6 +39,7 @@
 #import "GCGarminRequestModernSearch.h"
 #import "GCLap.h"
 #import "GCLapSwim.h"
+#import "GCConnectStatsRequestSearch.h"
 
 @interface NSDictionary (SmartDiff)
 
@@ -261,6 +262,23 @@
     XCTAssertGreaterThan(types.allTypes.count, n, @"Got more types");
     XCTAssertGreaterThanOrEqual(types.allTypes.count, modern.count); // registered all new types
 }
+
+-(void)testConnectStatsSearch{
+    NSString * dbfp = [RZFileOrganizer writeableFilePath:@"test_parsing_cs_search.db"];
+    [RZFileOrganizer removeEditableFile:@"test_parsing_cs_search.db"];
+    FMDatabase * db = [FMDatabase databaseWithPath:dbfp];
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    [GCHealthOrganizer ensureDbStructure:db];
+    GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
+    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
+    organizer.health = health;
+    XCTAssertEqual(organizer.activities.count, 0);
+    [GCConnectStatsRequestSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    
+    XCTAssertEqual(organizer.activities.count, 20);
+}
+
 
 -(void)testModernSearch{
     NSString * dbfp = [RZFileOrganizer writeableFilePath:@"test_parsing_modern_search.db"];

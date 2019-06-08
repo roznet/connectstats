@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 +(GCConnectStatsRequestSearch*)requestWithStart:(NSUInteger)aStart mode:(BOOL)aMode andNavigationController:(nullable UINavigationController*)nav;
 
-//+(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path;
++(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path;
 
 @end
 

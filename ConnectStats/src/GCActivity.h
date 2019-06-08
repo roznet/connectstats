@@ -65,7 +65,8 @@ typedef NS_ENUM(NSUInteger, gcDownloadMethod) {
     gcDownloadMethodFitFile     = 7,
     gcDownloadMethodHealthKit   = 8,
     gcDownloadMethodWithings    = 9,
-    gcDownloadMethodModern      = 10
+    gcDownloadMethodModern      = 10,
+    gcDownloadMethodConnectStats= 11
 };
 
 typedef NS_ENUM(NSUInteger, gcIgnoreMode) {

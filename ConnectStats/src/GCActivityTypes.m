@@ -333,17 +333,17 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
                        @"WIND_KITE_SURFING":@"wind_kite_surfing",
                        };
         NSMutableDictionary * dict = [NSMutableDictionary dictionary];
-        for (NSString * stravaType in types) {
-            NSString * typeKey = types[stravaType];
+        for (NSString * cstype in types) {
+            NSString * typeKey = types[cstype];
             GCActivityType * type = self.typesByKey[typeKey];
             if (type) {
-                dict[[stravaType lowercaseString]] = type;
+                dict[cstype] = type;
             }
         }
         cache = dict;
     }
     
-    return cache[[input uppercaseString] ];
+    return cache[ input ];
 }
 
 -(NSArray<GCActivityType*>*)allTypes{

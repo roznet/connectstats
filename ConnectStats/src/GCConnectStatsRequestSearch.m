@@ -29,6 +29,8 @@
 #import "GCWebUrl.h"
 #import "GCAppGlobal.h"
 #import "GCConnectStatsSearchJsonParser.h"
+#import "GCActivitiesOrganizerListRegister.h"
+#import "GCService.h"
 
 static const NSUInteger kActivityRequestCount = 20;
 
@@ -37,6 +39,7 @@ static const NSUInteger kActivityRequestCount = 20;
 @property (nonatomic,assign) NSUInteger reachedExisting;
 @property (nonatomic,assign) BOOL reloadAll;
 @property (nonatomic,assign) NSUInteger start;
+@property (nonatomic,retain) NSArray<GCActivity*>*activities;
 
 @property (nonatomic,retain) NSDate * lastFoundDate;
 @property (nonatomic,assign) NSUInteger tokenId;
@@ -80,6 +83,7 @@ static const NSUInteger kActivityRequestCount = 20;
 
 -(void)dealloc{
     [_lastFoundDate release];
+    [_activities release];
     [super dealloc];
 }
 
@@ -134,13 +138,41 @@ static const NSUInteger kActivityRequestCount = 20;
     }
 }
 
+-(void)addActivitiesFromParser:(GCConnectStatsSearchJsonParser*)parser
+                   toOrganizer:(GCActivitiesOrganizer*)organizer{
+    GCActivitiesOrganizerListRegister * listRegister = [GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:[GCService service:gcServiceConnectStats] isFirst:(self.start==0)];
+    [listRegister addToOrganizer:organizer];
+    self.reachedExisting = listRegister.reachedExisting;
+    self.activities = parser.activities;
+    NSDate * newDate = self.activities.lastObject.date;
+    if(newDate){
+        self.lastFoundDate = newDate;
+    }
+}
+
 -(void)processParse{
     if ([self checkNoErrors]) {
         NSData * data = [self.theString dataUsingEncoding:self.encoding];
         if( data ){
             GCConnectStatsSearchJsonParser * parser = [[[GCConnectStatsSearchJsonParser alloc] initWithData:data] autorelease];
-            
-            
+            if (parser.success) {
+                GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
+                
+                [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats set:true];
+                self.stage = gcRequestStageSaving;
+                [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+                self.activities = parser.activities;
+                
+                [self addActivitiesFromParser:parser toOrganizer:organizer];
+            }
+            else{
+                self.status = GCWebStatusParsingFailed;
+                NSError * e = nil;
+                NSString * fname = [NSString stringWithFormat:@"error_last_search_cs_%d.json", (int)_start];
+                if(![self.theString writeToFile:[RZFileOrganizer writeableFilePath:fname] atomically:true encoding:self.encoding error:&e]){
+                    RZLog(RZLogError, @"Failed to save %@. %@", fname, e.localizedDescription);
+                }
+            }
         }
     }
     
@@ -155,5 +187,19 @@ static const NSUInteger kActivityRequestCount = 20;
     return nil;
 }
 
++(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path{
+    
+    GCConnectStatsRequestSearch * search = [GCConnectStatsRequestSearch requestWithStart:0 mode:false andNavigationController:nil];
+    
+    NSString * fn = [path stringByAppendingPathComponent:[search searchFileNameForPage:0]];
+    
+    NSData * info = [NSData dataWithContentsOfFile:fn];
+    
+    GCConnectStatsSearchJsonParser * parser = [[[GCConnectStatsSearchJsonParser alloc] initWithData:info] autorelease];
+    search.activities = parser.activities;
+    [search addActivitiesFromParser:parser toOrganizer:organizer];
+    
+    return organizer;
+}
 
 @end

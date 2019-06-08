@@ -394,7 +394,7 @@
     
     GCService * service = [GCService service:gcServiceConnectStats];
     
-    self.activityId = [service activityIdFromServiceId:[data[@"summaryId"] stringValue]];
+    self.activityId = [service activityIdFromServiceId:data[@"summaryId"]];
     
     GCActivityType * atype = [[GCAppGlobal activityTypes] activityTypeForConnectStatsType:data[@"activityType"]];
     self.activityType = atype.topSubRootType.key;
@@ -410,7 +410,7 @@
             self.activityName = [data[@"activityType"] lowercaseString];
         }
     }
-    self.downloadMethod = gcDownloadMethodStrava;
+    self.downloadMethod = gcDownloadMethodConnectStats;
     if (self.metaData==nil) {
         self.metaData = [NSMutableDictionary dictionary];
     }

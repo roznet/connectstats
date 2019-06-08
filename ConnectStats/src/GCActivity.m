@@ -993,11 +993,12 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                     }
                     break;
                 }
-
+                case gcDownloadMethodConnectStats:
+                    break;
                 case gcDownloadMethodTennis:
                 case gcDownloadMethodFitFile:
                 case gcDownloadMethodWithings:
-
+                
                     break;
 
             }
