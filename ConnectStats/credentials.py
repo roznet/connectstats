@@ -1,4 +1,9 @@
 #!/usr/bin/python
+#
+# Simple utility to generate a credentials config file as we update the main credentials.json
+#
+# 
+
 
 import json
 
