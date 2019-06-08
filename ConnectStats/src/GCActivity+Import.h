@@ -37,6 +37,7 @@
 -(GCActivity*)initWithId:(NSString*)aId andSportTracksData:(NSDictionary*)aData;
 -(GCActivity*)initWithId:(NSString *)aId andHealthKitWorkout:(HKWorkout*)workout withSamples:(NSArray*)samples;
 -(GCActivity*)initWithId:(NSString *)aId andHealthKitSummaryData:(NSDictionary*)dict;
+-(GCActivity*)initWithId:(NSString *)aId andConnectStatsData:(NSDictionary*)aData;
 
 -(void)updateWithGarminData:(NSDictionary*)data;
 -(BOOL)updateWithActivity:(GCActivity*)other;

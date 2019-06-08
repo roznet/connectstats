@@ -28,6 +28,7 @@
 #import "GCConnectStatsRequestSearch.h"
 #import "GCWebUrl.h"
 #import "GCAppGlobal.h"
+#import "GCConnectStatsSearchJsonParser.h"
 
 static const NSUInteger kActivityRequestCount = 20;
 
@@ -136,9 +137,10 @@ static const NSUInteger kActivityRequestCount = 20;
 -(void)processParse{
     if ([self checkNoErrors]) {
         NSData * data = [self.theString dataUsingEncoding:self.encoding];
-        NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        if( dict ){
-            NSLog(@"success %@", dict);
+        if( data ){
+            GCConnectStatsSearchJsonParser * parser = [[[GCConnectStatsSearchJsonParser alloc] initWithData:data] autorelease];
+            
+            
         }
     }
     

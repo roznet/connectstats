@@ -42,6 +42,16 @@
 
 @implementation GCActivity (Internal)
 
+-(GCActivity*)initWithId:(NSString *)aId andConnectStatsData:(NSDictionary*)aData{
+    self = [self initWithId:aId];
+    if (self) {
+        self.activityId = aId;
+        [self parseConnectStatsJson:aData];
+        self.settings = [GCActivitySettings defaultsFor:self];
+    }
+    return self;
+}
+
 -(GCActivity*)initWithId:(NSString*)aId andGarminData:(NSDictionary*)aData{
     self = [self initWithId:aId];
     if (self) {

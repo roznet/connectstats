@@ -1870,6 +1870,9 @@
 		42C4159A17B1A23800EBBAFB /* GCActivity+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C4159917B1A23800EBBAFB /* GCActivity+UI.m */; };
 		42C4B0671DBB39E7000A1612 /* strava_training_zones.json in Resources */ = {isa = PBXBuildFile; fileRef = 42C4B0651DBB39E7000A1612 /* strava_training_zones.json */; };
 		42C4B0681DBB39E7000A1612 /* user_hr_zones.json in Resources */ = {isa = PBXBuildFile; fileRef = 42C4B0661DBB39E7000A1612 /* user_hr_zones.json */; };
+		42C5A1B122AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C5A1B022AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m */; };
+		42C5A1B222AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C5A1B022AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m */; };
+		42C5A1B322AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C5A1B022AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m */; };
 		42C7D4221DAADBF20089806B /* activity_1027746730.json in Resources */ = {isa = PBXBuildFile; fileRef = 42C7D4141DAAD7D80089806B /* activity_1027746730.json */; };
 		42C7D4231DAADBFB0089806B /* activitylaps_1027746730.json in Resources */ = {isa = PBXBuildFile; fileRef = 42C7D4151DAAD7D80089806B /* activitylaps_1027746730.json */; };
 		42C7D4241DAADBFB0089806B /* activitytrack_1027746730.json in Resources */ = {isa = PBXBuildFile; fileRef = 42C7D4161DAAD7D80089806B /* activitytrack_1027746730.json */; };
@@ -4104,6 +4107,8 @@
 		42C4159917B1A23800EBBAFB /* GCActivity+UI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCActivity+UI.m"; path = "src/GCActivity+UI.m"; sourceTree = "<group>"; };
 		42C4B0651DBB39E7000A1612 /* strava_training_zones.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_training_zones.json; sourceTree = "<group>"; };
 		42C4B0661DBB39E7000A1612 /* user_hr_zones.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = user_hr_zones.json; sourceTree = "<group>"; };
+		42C5A1AF22AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCConnectStatsSearchJsonParser.h; path = src/GCConnectStatsSearchJsonParser.h; sourceTree = "<group>"; };
+		42C5A1B022AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCConnectStatsSearchJsonParser.m; path = src/GCConnectStatsSearchJsonParser.m; sourceTree = "<group>"; };
 		42C7D4141DAAD7D80089806B /* activity_1027746730.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_1027746730.json; sourceTree = "<group>"; };
 		42C7D4151DAAD7D80089806B /* activitylaps_1027746730.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitylaps_1027746730.json; sourceTree = "<group>"; };
 		42C7D4161DAAD7D80089806B /* activitytrack_1027746730.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitytrack_1027746730.json; sourceTree = "<group>"; };
@@ -6485,12 +6490,8 @@
 		42B8587A229DB643009E309A /* ConnectStats */ = {
 			isa = PBXGroup;
 			children = (
-				42B85885229DB6D9009E309A /* GCConnectStatsRequest.h */,
-				42B85886229DB6D9009E309A /* GCConnectStatsRequest.m */,
-				42B85889229DB716009E309A /* GCConnectStatsRequestLogin.h */,
-				42B8588A229DB716009E309A /* GCConnectStatsRequestLogin.m */,
-				42B85890229DBD55009E309A /* GCConnectStatsRequestSearch.h */,
-				42B85891229DBD55009E309A /* GCConnectStatsRequestSearch.m */,
+				42C5A1AE22AC5D2600D0F6EE /* Requests */,
+				42C5A1A322AC5D1800D0F6EE /* Parsers */,
 			);
 			name = ConnectStats;
 			sourceTree = "<group>";
@@ -7162,6 +7163,28 @@
 			path = zones;
 			sourceTree = "<group>";
 		};
+		42C5A1A322AC5D1800D0F6EE /* Parsers */ = {
+			isa = PBXGroup;
+			children = (
+				42C5A1AF22AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.h */,
+				42C5A1B022AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m */,
+			);
+			name = Parsers;
+			sourceTree = "<group>";
+		};
+		42C5A1AE22AC5D2600D0F6EE /* Requests */ = {
+			isa = PBXGroup;
+			children = (
+				42B85885229DB6D9009E309A /* GCConnectStatsRequest.h */,
+				42B85886229DB6D9009E309A /* GCConnectStatsRequest.m */,
+				42B85889229DB716009E309A /* GCConnectStatsRequestLogin.h */,
+				42B8588A229DB716009E309A /* GCConnectStatsRequestLogin.m */,
+				42B85890229DBD55009E309A /* GCConnectStatsRequestSearch.h */,
+				42B85891229DBD55009E309A /* GCConnectStatsRequestSearch.m */,
+			);
+			name = Requests;
+			sourceTree = "<group>";
+		};
 		42D8AEF31B1DC8C200ADDD31 /* FitnessRequests */ = {
 			isa = PBXGroup;
 			children = (
@@ -7506,6 +7529,7 @@
 			buildConfigurationList = 428FF73615F36888007A88FA /* Build configuration list for PBXNativeTarget "ConnectStats" */;
 			buildPhases = (
 				E1154C16AB148ED69A10029A /* [CP] Check Pods Manifest.lock */,
+				42C5A1B422AC631F00D0F6EE /* Run Script Validate credentials.json */,
 				428FF70515F36888007A88FA /* Sources */,
 				428FF70615F36888007A88FA /* Frameworks */,
 				428FF70715F36888007A88FA /* Resources */,
@@ -9095,6 +9119,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		42C5A1B422AC631F00D0F6EE /* Run Script Validate credentials.json */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script Validate credentials.json";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nCREDENTIALS=$SRCROOT/ConnectStats/credentials.json\nSAMPLE_CREDENTIALS=$SRCROOT/ConnectStats/credentials.sample.json\n\nif [ -f $CREDENTIALS ]; then\n    echo \"Checked $CREDENTIALS\"\nelse\n    if [ -f $SAMPLE_CREDENTIALS ]; then\n        echo \"Creating $CREDENTIALS\"\n        /bin/cp $SAMPLE_CREDENTIALS $CREDENTIALS\n    fi\nfi\n\n";
+		};
 		5F38E408AAF45836E802C5DB /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -9240,6 +9282,7 @@
 				422FAEBC19A1DD6000D09773 /* GCTabBarController.m in Sources */,
 				422FAEBD19A1DD6000D09773 /* GCWebConnect.m in Sources */,
 				42FC177E1E195DEA00F55302 /* FITFitValueStatistics.swift in Sources */,
+				42C5A1B322AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */,
 				422FAEBE19A1DD6000D09773 /* GCWithingsRequestMeasures.m in Sources */,
 				422FAEBF19A1DD6000D09773 /* GCWebUrl.m in Sources */,
 				42BFC25E1DCF516C00EAD40E /* GCStravaAthleteParser.swift in Sources */,
@@ -9754,6 +9797,7 @@
 				42753D7016E6A881005C8281 /* GCMapLapInfoView.m in Sources */,
 				42C92FDF170FB73F0037602F /* GCActivityAutoLapChoices.m in Sources */,
 				42A3AA161D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m in Sources */,
+				42C5A1B122AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */,
 				4285F0E31719CB1800A1FAA8 /* GCSettingsFilterViewController.m in Sources */,
 				421736A42066A07F00ACADC1 /* GCGarminRequestModernActivityTypes.m in Sources */,
 				426B0F0D1DA111AD0091A734 /* GCGarminSearchModernJsonParser.m in Sources */,
@@ -9869,6 +9913,7 @@
 				42B5E25B1BA5B216000FAE4E /* GCHealthOrganizer.m in Sources */,
 				42B5E25C1BA5B216000FAE4E /* GCDerivedRequest.m in Sources */,
 				4287DC101BDB88FE00C54A51 /* GCStatsMultiFieldConfig.m in Sources */,
+				42C5A1B222AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */,
 				422B343E1CA7321200B345CD /* GCFieldCache.m in Sources */,
 				42B5E25D1BA5B216000FAE4E /* GCFitBitActivitiesParser.m in Sources */,
 				42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */,
