@@ -93,6 +93,10 @@
 #define CONFIG_FITBIT_TOKEN             @"config_fitbit_t"
 #define CONFIG_FITBIT_TOKENSECRET       @"config_fitbit_s"
 
+#define CONFIG_CONNECTSTATS_TOKEN       @"config_connectstats_token"
+#define CONFIG_CONNECTSTATS_TOKEN_ID    @"config_connectstats_token_id"
+#define CONFIG_CONNECTSTATS_USER_ID     @"config_connectstats_user_id"
+
 #define CONFIG_GARMIN_FIT_DOWNLOAD      @"config_garmin_fit_download"
 #define CONFIG_GARMIN_FIT_MERGE         @"config_garmin_fit_merge"
 

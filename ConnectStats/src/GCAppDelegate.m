@@ -383,7 +383,9 @@ void checkVersion(){
     BOOL rv = false;
     self.urlToOpen = url;
     // check if fit file
-    if ([url.path hasSuffix:@".fit"]) {
+    if( [url.host isEqualToString:@"oauth-callback"]){
+        
+    }else if ([url.path hasSuffix:@".fit"]) {
         dispatch_async(self.worker,^(){
             [self handleFitFile];
         });

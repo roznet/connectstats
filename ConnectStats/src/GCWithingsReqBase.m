@@ -147,7 +147,7 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
 }
 
 -(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters{
-    NSURLRequest *preparedRequest = [OAuth1WithingsController preparedRequestForPath:path
+    NSURLRequest *preparedRequest = [self.oauth1Controller preparedRequestForPath:path
                                                                   parameters:parameters
                                                                   HTTPmethod:@"GET"
                                                                   oauthToken:self.oauthToken

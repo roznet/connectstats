@@ -113,7 +113,7 @@
 
 -(void)nonGarminSearch{
     if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
-        [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 andMode:true]];
+        [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:true andNavigationController:[GCAppGlobal currentNavigationController]]];
     }
     
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {

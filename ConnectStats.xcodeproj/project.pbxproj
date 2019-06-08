@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1EBEDF98910D13D2C7A115ED /* libPods-ConnectStatsTestApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59253EE8544D849CAA204771 /* libPods-ConnectStatsTestApp.a */; };
+		047DA3A916F1EEF80E547820 /* Pods_ConnectStats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2186DA283B31B12A499CF52 /* Pods_ConnectStats.framework */; };
 		209610B08C097293E888ADCB /* libPods-HealthStats.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FDCC27AED29AB0F64BE174E /* libPods-HealthStats.a */; };
+		3038CC66959411B947C07B8E /* libPods-ConnectStatsTestApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CA098C599FA397790D35A1F /* libPods-ConnectStatsTestApp.a */; };
 		420063FA18C238530031395F /* GCWebConnect+Requests.m in Sources */ = {isa = PBXBuildFile; fileRef = 420063F918C238530031395F /* GCWebConnect+Requests.m */; };
 		420119B01F51BB180093B2CD /* babolat_player.json in Resources */ = {isa = PBXBuildFile; fileRef = 4201199D1F51BAD50093B2CD /* babolat_player.json */; };
 		420119B11F51BB180093B2CD /* babolat_session_8669.json in Resources */ = {isa = PBXBuildFile; fileRef = 4201199E1F51BAD50093B2CD /* babolat_session_8669.json */; };
@@ -547,6 +548,9 @@
 		427C65C91D46A4BB00F5DF70 /* strava_segment_effort_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 427C65C51D46A4BB00F5DF70 /* strava_segment_effort_0.json */; };
 		427C65CB1D46A4BB00F5DF70 /* strava_segments_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 427C65C71D46A4BB00F5DF70 /* strava_segments_0.json */; };
 		427CDB221778F0E10050CFE4 /* GCFieldsCalculatedTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 427CDB211778F0E10050CFE4 /* GCFieldsCalculatedTrack.m */; };
+		427CF8D222ABD6BC00894253 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
+		427CF8D322ABD6BC00894253 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
+		427CF8D422ABD6BC00894253 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
 		427DDCBF1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */; };
 		427DDCC01DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */; };
 		427DDCC81DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCC71DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m */; };
@@ -2015,7 +2019,6 @@
 		42FD55B91B90A39F0070B3B4 /* GCCellActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */; };
 		42FD55BA1B90A39F0070B3B4 /* GCCellActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */; };
 		BF9120CBFA7E3BB8AEA21520 /* Pods_FitFileExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4291909821E226FF00E0B114 /* Pods_FitFileExplorer.framework */; };
-		E15C908392B57B53CFD19123 /* libPods-ConnectStats.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F0D145DB4641081A9A59212 /* libPods-ConnectStats.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2894,6 +2897,7 @@
 		427C65C71D46A4BB00F5DF70 /* strava_segments_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_segments_0.json; sourceTree = "<group>"; };
 		427CDB201778F0E10050CFE4 /* GCFieldsCalculatedTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldsCalculatedTrack.h; path = src/GCFieldsCalculatedTrack.h; sourceTree = "<group>"; };
 		427CDB211778F0E10050CFE4 /* GCFieldsCalculatedTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldsCalculatedTrack.m; path = src/GCFieldsCalculatedTrack.m; sourceTree = "<group>"; };
+		427CF8C722ABD6BC00894253 /* credentials.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = credentials.json; sourceTree = "<group>"; };
 		427DDCBD1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminRequestHeartRateZones.h; path = src/GCGarminRequestHeartRateZones.h; sourceTree = "<group>"; };
 		427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequestHeartRateZones.m; path = src/GCGarminRequestHeartRateZones.m; sourceTree = "<group>"; };
 		427DDCC61DB3D54B007745A7 /* GCGarminHeartRateZoneParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminHeartRateZoneParser.h; path = src/GCGarminHeartRateZoneParser.h; sourceTree = "<group>"; };
@@ -4240,9 +4244,8 @@
 		42FC177F1E196E4B00F55302 /* GCTestActivityFitFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCTestActivityFitFile.swift; sourceTree = "<group>"; };
 		42FD55B71B90A39F0070B3B4 /* GCCellActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCCellActivity.h; path = src/GCCellActivity.h; sourceTree = "<group>"; };
 		42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCCellActivity.m; path = src/GCCellActivity.m; sourceTree = "<group>"; };
-		59253EE8544D849CAA204771 /* libPods-ConnectStatsTestApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ConnectStatsTestApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A27E308E28B0C345991A8A8 /* Pods_FitFileExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FitFileExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6F0D145DB4641081A9A59212 /* libPods-ConnectStats.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ConnectStats.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CA098C599FA397790D35A1F /* libPods-ConnectStatsTestApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ConnectStatsTestApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		722F58FE2B9F9EF1C1D899FD /* Pods-ConnectStatsTestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStatsTestApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		7511076C6F489225E4DB97A3 /* Pods-ConnectStats.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStats.release.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStats/Pods-ConnectStats.release.xcconfig"; sourceTree = "<group>"; };
 		7B4338B72FB5E891D8120070 /* Pods-HealthStats.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthStats.release.xcconfig"; path = "Pods/Target Support Files/Pods-HealthStats/Pods-HealthStats.release.xcconfig"; sourceTree = "<group>"; };
@@ -4251,6 +4254,7 @@
 		998155FAECA4FF8F81D2DC94 /* Pods-HealthStats.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthStats.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HealthStats/Pods-HealthStats.debug.xcconfig"; sourceTree = "<group>"; };
 		A01B1CDDA1437D95D99453C1 /* Pods-FitFileExplorer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FitFileExplorer.release.xcconfig"; path = "Pods/Target Support Files/Pods-FitFileExplorer/Pods-FitFileExplorer.release.xcconfig"; sourceTree = "<group>"; };
 		EBDC45B331B669A42DAFAD9B /* Pods-ConnectStatsTestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStatsTestApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp.release.xcconfig"; sourceTree = "<group>"; };
+		F2186DA283B31B12A499CF52 /* Pods_ConnectStats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ConnectStats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4357,8 +4361,8 @@
 				42DE53C019CF696E00009130 /* HealthKit.framework in Frameworks */,
 				428FF71215F36888007A88FA /* CoreGraphics.framework in Frameworks */,
 				4251B5C1219F7D2600E15F9F /* RZExternalUniversal.framework in Frameworks */,
-				E15C908392B57B53CFD19123 /* libPods-ConnectStats.a in Frameworks */,
 				42EBBEE01FFAB55E0009B385 /* RZExternal.framework in Frameworks */,
+				047DA3A916F1EEF80E547820 /* Pods_ConnectStats.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4391,7 +4395,7 @@
 				42BF1D3422510E63000DF572 /* RZFitFile.framework in Frameworks */,
 				42B5E2FF1BA5B7BF000FAE4E /* libsqlite3.tbd in Frameworks */,
 				42B5E2D01BA5B589000FAE4E /* HealthKit.framework in Frameworks */,
-				1EBEDF98910D13D2C7A115ED /* libPods-ConnectStatsTestApp.a in Frameworks */,
+				3038CC66959411B947C07B8E /* libPods-ConnectStatsTestApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5508,11 +5512,11 @@
 				428FF70D15F36888007A88FA /* UIKit.framework */,
 				428FF70F15F36888007A88FA /* Foundation.framework */,
 				428FF71115F36888007A88FA /* CoreGraphics.framework */,
-				6F0D145DB4641081A9A59212 /* libPods-ConnectStats.a */,
 				1FDCC27AED29AB0F64BE174E /* libPods-HealthStats.a */,
-				59253EE8544D849CAA204771 /* libPods-ConnectStatsTestApp.a */,
 				3665CA8D2236812ED0C4EBE1 /* libPods-tennisstats.a */,
 				5A27E308E28B0C345991A8A8 /* Pods_FitFileExplorer.framework */,
+				F2186DA283B31B12A499CF52 /* Pods_ConnectStats.framework */,
+				6CA098C599FA397790D35A1F /* libPods-ConnectStatsTestApp.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -5536,6 +5540,7 @@
 		428FF71415F36888007A88FA /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				427CF8C722ABD6BC00894253 /* credentials.json */,
 				4287C2FC2221B9590055F584 /* ConnectStats.release.xcconfig */,
 				4287C2FB2221B8D90055F584 /* ConnectStats.debug.xcconfig */,
 				4211C53219AB03A9000DEF87 /* HealthStats */,
@@ -7495,6 +7500,7 @@
 				428FF70715F36888007A88FA /* Resources */,
 				424B56341D3BDBBF00903A99 /* Embed Frameworks */,
 				5F38E408AAF45836E802C5DB /* [CP] Copy Pods Resources */,
+				92D5FC5BA2C48D4766D0C701 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -7922,6 +7928,7 @@
 			files = (
 				4248ED9E1DCFFF6900254216 /* fields.db in Resources */,
 				4253B4651CD49F7E00437E6A /* Assets.xcassets in Resources */,
+				427CF8D422ABD6BC00894253 /* credentials.json in Resources */,
 				4253B4681CD49F7E00437E6A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7969,6 +7976,7 @@
 				42959CCF18D5C58700C0B841 /* fields.db in Resources */,
 				422CCE8D1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */,
 				428FF71815F36888007A88FA /* InfoPlist.strings in Resources */,
+				427CF8D222ABD6BC00894253 /* credentials.json in Resources */,
 				422CCE7C1B7E9B6300A4DAEB /* Cells.xcassets in Resources */,
 				427B20AB1621B5CF00D5C3C5 /* Localizable.strings in Resources */,
 				423F9FBF19ACCBD60057DB5A /* Media.xcassets in Resources */,
@@ -8978,6 +8986,7 @@
 				42B5E5661BA5BA2D000FAE4E /* activity_395288975.html in Resources */,
 				42B5E4591BA5BA2D000FAE4E /* LaunchScreen.xib in Resources */,
 				428BACFC1CB149C50041468A /* activitytrack_1089803211.json in Resources */,
+				427CF8D322ABD6BC00894253 /* credentials.json in Resources */,
 				427F93551BEA9A5900C177F9 /* stats_running_monthly.csv in Resources */,
 				427F93421BEA9A5900C177F9 /* activitylaps_385546640.json in Resources */,
 				42B5E4EA1BA5BA2D000FAE4E /* track_281838126.db in Resources */,
@@ -9101,15 +9110,35 @@
 				"${PODS_ROOT}/Target Support Files/Pods-FitFileExplorer/Pods-FitFileExplorer-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GenericJSON/GenericJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/OAuthSwift/OAuthSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OAuthSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FitFileExplorer/Pods-FitFileExplorer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		92D5FC5BA2C48D4766D0C701 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK-framework/Flurry_iOS_SDK.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E1154C16AB148ED69A10029A /* [CP] Check Pods Manifest.lock */ = {
@@ -10359,7 +10388,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4287C30B2221BA3B0055F584 /* FitFileExplorer.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = FitExplorerAppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LIBRARY = "libc++";
@@ -10393,7 +10422,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4287C3002221BA3B0055F584 /* FitFileExplorer.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = FitExplorerAppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LIBRARY = "libc++";
@@ -10598,7 +10627,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4287C2FB2221B8D90055F584 /* ConnectStats.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsNewAppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -10644,7 +10673,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4287C2FC2221B9590055F584 /* ConnectStats.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsNewAppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -10745,7 +10774,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4287C30C2221BC390055F584 /* ConnectStatsTestApp.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsTestAppIcon;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -10785,7 +10814,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4287C30C2221BC390055F584 /* ConnectStatsTestApp.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsTestAppIcon;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;

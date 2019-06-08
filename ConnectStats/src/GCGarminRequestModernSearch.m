@@ -32,7 +32,7 @@
 #import "GCService.h"
 #import "GCGarminRequestActivityList.h"
 
-const NSUInteger kActivityRequestCount = 20;
+static const NSUInteger kActivityRequestCount = 20;
 
 @interface GCGarminRequestModernSearch ()
 

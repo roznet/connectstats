@@ -31,6 +31,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GCConnectStatsRequest : GCWebRequestStandard
 
+// Set a navigation Controller to present the login web from
+@property (nonatomic,weak) UINavigationController * navigationController;
+@property (nonatomic,readonly) NSString * oauthToken;
+@property (nonatomic,readonly,assign) NSUInteger tokenId;
+@property (nonatomic,readonly,assign) NSUInteger userId;
+
+-(instancetype)initNextWith:(GCConnectStatsRequest*)current;
+
+-(BOOL)isSignedIn;
+-(void)signIn;
+
+-(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters;
+
 @end
 
 NS_ASSUME_NONNULL_END

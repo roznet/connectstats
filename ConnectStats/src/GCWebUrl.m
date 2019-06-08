@@ -125,18 +125,29 @@ BOOL GCWebSimulatorIsInUse(){
 
 #pragma mark - ConnectStats
 
-NSString * GCWebConnectStatsSearch( NSUInteger start ){
-    NSUInteger requestCount = 20;
+NSString * GCWebConnectStatsSearch(void){
     
     if (useSimulator) {
         if (simulatorError) {
             return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
         }else{
-            return [NSString stringWithFormat:@"%@/api/connectstats/activities.php?start=%lu", simulatorURL, (unsigned long)start];
+            return [NSString stringWithFormat:@"%@/api/connectstats/search",simulatorURL];
         }
     }else{
-        //
-        return [NSString stringWithFormat:@"https://ro-z.net/api/connectstats/activities.php?start=%d&limit=%d", (int)start,(int)requestCount];
+        return @"https://ro-z.net/api/connectstats/search";
+    }
+}
+
+NSString * GCWebConnectStatsRegisterUser( NSString * accessToken, NSString * accessTokenSecret){
+    
+    if (useSimulator) {
+        if (simulatorError) {
+            return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
+        }else{
+            return [NSString stringWithFormat:@"%@/api/garmin/user_register?userAccessToken=%@&userAccessTokenSecret=%@",simulatorURL, accessToken, accessTokenSecret];
+        }
+    }else{
+        return [NSString stringWithFormat:@"https://ro-z.net/api/garmin/user_register?userAccessToken=%@&userAccessTokenSecret=%@", accessToken, accessTokenSecret];
     }
 }
 

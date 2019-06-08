@@ -37,9 +37,10 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param aStart page to start from
  @param aMode true is reload all, false stop when reached last
+ @param nav navigation controller to use if need to login
  @return new request
  */
-+(GCConnectStatsRequestSearch*)requestWithStart:(NSUInteger)aStart andMode:(BOOL)aMode;
++(GCConnectStatsRequestSearch*)requestWithStart:(NSUInteger)aStart mode:(BOOL)aMode andNavigationController:(nullable UINavigationController*)nav;
 
 //+(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path;
 

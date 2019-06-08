@@ -21,6 +21,9 @@ extern NSDictionary *CHParametersFromQueryString(NSString *queryString);
 @property (nonatomic, weak) UIWebView *webView;
 @property (nonatomic, strong) WebWiewDelegateHandler delegateHandler;
 
++(NSDictionary*)serviceParametersFromJson:(NSData*)jsonData forServiceName:(NSString*)serviceName;
+
+-(instancetype)initWithServiceParameters:(NSDictionary*)serviceParameters;
 
 - (void)loginWithWebView:(UIWebView *)webWiew
               completion:(void (^)(NSDictionary *oauthTokens, NSError *error))completion;
@@ -30,7 +33,7 @@ extern NSDictionary *CHParametersFromQueryString(NSString *queryString);
              oauthVerifier:(NSString *)oauth_verifier
                 completion:(void (^)(NSError *error, NSDictionary *responseParams))completion;
 
-+ (NSURLRequest *)preparedRequestForPath:(NSString *)path
+- (NSURLRequest *)preparedRequestForPath:(NSString *)url
                               parameters:(NSDictionary *)parameters
                               HTTPmethod:(NSString *)method
                               oauthToken:(NSString *)oauth_token
