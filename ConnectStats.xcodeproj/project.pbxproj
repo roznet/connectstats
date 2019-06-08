@@ -551,6 +551,7 @@
 		427CF8D222ABD6BC00894253 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
 		427CF8D322ABD6BC00894253 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
 		427CF8D422ABD6BC00894253 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
+		427CF8F422AC598D00894253 /* last_connectstats_search_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8E922AC598D00894253 /* last_connectstats_search_0.json */; };
 		427DDCBF1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */; };
 		427DDCC01DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */; };
 		427DDCC81DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCC71DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m */; };
@@ -2898,6 +2899,7 @@
 		427CDB201778F0E10050CFE4 /* GCFieldsCalculatedTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldsCalculatedTrack.h; path = src/GCFieldsCalculatedTrack.h; sourceTree = "<group>"; };
 		427CDB211778F0E10050CFE4 /* GCFieldsCalculatedTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldsCalculatedTrack.m; path = src/GCFieldsCalculatedTrack.m; sourceTree = "<group>"; };
 		427CF8C722ABD6BC00894253 /* credentials.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = credentials.json; sourceTree = "<group>"; };
+		427CF8E922AC598D00894253 /* last_connectstats_search_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_connectstats_search_0.json; sourceTree = "<group>"; };
 		427DDCBD1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminRequestHeartRateZones.h; path = src/GCGarminRequestHeartRateZones.h; sourceTree = "<group>"; };
 		427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequestHeartRateZones.m; path = src/GCGarminRequestHeartRateZones.m; sourceTree = "<group>"; };
 		427DDCC61DB3D54B007745A7 /* GCGarminHeartRateZoneParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminHeartRateZoneParser.h; path = src/GCGarminHeartRateZoneParser.h; sourceTree = "<group>"; };
@@ -5274,6 +5276,14 @@
 			path = strava_segments;
 			sourceTree = "<group>";
 		};
+		427CF8E822AC598D00894253 /* activity_connectstats */ = {
+			isa = PBXGroup;
+			children = (
+				427CF8E922AC598D00894253 /* last_connectstats_search_0.json */,
+			);
+			path = activity_connectstats;
+			sourceTree = "<group>";
+		};
 		427F93061BEA9A5900C177F9 /* InitialSamples */ = {
 			isa = PBXGroup;
 			children = (
@@ -6512,6 +6522,7 @@
 		42C0113C1AB437C10059B6CF /* samples */ = {
 			isa = PBXGroup;
 			children = (
+				427CF8E822AC598D00894253 /* activity_connectstats */,
 				421A76472027534A00D12B6C /* activity_merge_fit */,
 				4213AEB2201494840004B54B /* activities_duplicate.db */,
 				4282B6D81DC4B2270062C313 /* Activities */,
@@ -8013,6 +8024,7 @@
 				42C0119B1AB4891B0059B6CF /* activityweather_678148314.json in Resources */,
 				428BAD151CB14B650041468A /* activitytrack_924421177.json in Resources */,
 				42BB0CC71AB4A99F008D5A10 /* activityweather_486028852.json in Resources */,
+				427CF8F422AC598D00894253 /* last_connectstats_search_0.json in Resources */,
 				42BB0D8D1AB4A9A0008D5A10 /* activityweather_599349123.json in Resources */,
 				42BB0DBC1AB4A9A0008D5A10 /* activityweather_626204429.json in Resources */,
 				42BB0CFE1AB4A9A0008D5A10 /* activityweather_517343056.json in Resources */,

@@ -29,7 +29,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GCConnectStatsRequest : GCWebRequestStandard
+@interface GCConnectStatsRequest : GCWebRequestStandard<NSURLSessionDelegate>
 
 // Set a navigation Controller to present the login web from
 @property (nonatomic,weak) UINavigationController * navigationController;
