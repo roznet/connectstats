@@ -70,6 +70,7 @@ void checkVersion(){
 @interface GCAppDelegate ()
 @property (nonatomic,assign) BOOL needsStartupRefresh;
 @property (nonatomic,retain) GCAppActions * actions;
+@property (nonatomic,retain) NSDictionary<NSString*,NSDictionary*> * credentials;
 
 
 @end
@@ -107,6 +108,7 @@ void checkVersion(){
     [_health release];
     [_segments release];
     [_activityTypes release];
+    [_credentials release];
 
     [_splitViewController release];
     [_tabBarController release];
@@ -129,20 +131,22 @@ void checkVersion(){
 
     RZSimNeedle();
 
+    
+    [self credentialsForService:@"flurry" andKey:@"connectstats"];
 #if !TARGET_IPHONE_SIMULATOR
-	NSString *applicationCode = [GCAppDelegate connectStatsVersion] ? @"RM6VFRQYRM9K68J2JQCG" : @"372FGTVXMTHX7ZWWF8P2";
+	NSString *applicationCode = [GCAppDelegate connectStatsVersion] ? [self credentialsForService:@"flurry" andKey:@"connectstats"] : [self credentialsForService:@"flurry" andKey:@"healthstats"];
     if ([GCAppDelegate healthStatsVersion]) {
-        applicationCode = @"F2M5RDFZJQCWTWTB42Y4";
+        applicationCode =  [self credentialsForService:@"flurry" andKey:@"healthstats"];
     }
     [Flurry startSession:applicationCode];
 #endif
     if ([GCAppDelegate connectStatsVersion]) {
-        [Appirater setAppId:@"581697248"];
+        [Appirater setAppId: [self credentialsForService:@"appstore" andKey:@"connectstats"]];
     }else if ([GCAppDelegate healthStatsVersion]){
-        [Appirater setAppId:@"912378669"];
+        [Appirater setAppId:[self credentialsForService:@"appstore" andKey:@"healthstats"]];
     }
 
-    [GMSServices provideAPIKey:@"AIzaSyCEritHNFjxZd61gJJloCjYWsMg8G5q0YY"];
+    [GMSServices provideAPIKey:[self credentialsForService:@"googlemaps" andKey:@"api_key"]];
     BOOL ok = [self startInit];
     if (!ok) {
         RZLog(RZLogError, @"Multiple failure to start");
@@ -558,6 +562,35 @@ void checkVersion(){
     return YES;
 }
 
+-(NSDictionary<NSString*,NSString*>*)credentialsForService:(NSString*)service{
+    if( self.credentials == nil){
+        NSString * credentialsPath = [RZFileOrganizer bundleFilePath:@"credentials.json"];
+        NSData * credentialsData = [NSData dataWithContentsOfFile:credentialsPath];
+        if( credentialsPath ){
+            NSError * error = nil;
+            NSDictionary * credentials = [NSJSONSerialization JSONObjectWithData:credentialsData options:NSJSONReadingAllowFragments error:&error];
+            if( [credentials isKindOfClass:[NSDictionary class]]){
+                self.credentials = credentials;
+            }else{
+                RZLog(RZLogError, @"Failed to load %@", credentialsPath);
+                self.credentials = @{};
+            }
+        }
+    }
+    NSDictionary * rv = self.credentials[service];
+    return rv ?: @{};
+}
 
+-(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key{
+    NSDictionary * credentials = [self credentialsForService:service];
+    NSString * found = credentials[key];
+    if( [found isKindOfClass:[NSString class]]){
+        return found;
+    }else{
+        // Default empty string, will fail connection as invalid credential...
+        RZLog(RZLogError, @"Didn't find credential %@ for %@", key, service);;
+        return @"";
+    }
+}
 
 @end

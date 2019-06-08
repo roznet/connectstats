@@ -34,8 +34,6 @@ NS_ASSUME_NONNULL_BEGIN
 // Set a navigation Controller to present the login web from
 @property (nonatomic,weak) UINavigationController * navigationController;
 @property (nonatomic,readonly) NSString * oauthToken;
-@property (nonatomic,readonly,assign) NSUInteger tokenId;
-@property (nonatomic,readonly,assign) NSUInteger userId;
 
 -(instancetype)initNextWith:(GCConnectStatsRequest*)current;
 

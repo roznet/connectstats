@@ -148,6 +148,10 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     [[GCAppGlobal appDelegate] cleanWritableFiles];
 }
 
++(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key{
+    return [[GCAppGlobal appDelegate]  credentialsForService:service andKey:key];
+}
+
 +(void)saveSettings{
 
 }

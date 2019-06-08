@@ -39,9 +39,6 @@
     [super dealloc];
 }
 
-
-NSString *kClientID = @"82";
-NSString *kClientSecret = @"a1fc467908cffad6a512877d0cc937eaaeba8027";
 static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
 
 - (GTMOAuth2Authentication *)buildStravaAuth {
@@ -53,8 +50,8 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
         auth = [GTMOAuth2Authentication authenticationWithServiceProvider:@"Strava Service"
                                                                  tokenURL:tokenURL
                                                               redirectURI:redirectURI
-                                                                 clientID:kClientID
-                                                             clientSecret:kClientSecret];
+                                                                 clientID:[GCAppGlobal credentialsForService:@"strava" andKey:@"client_id"]
+                                                             clientSecret:[GCAppGlobal credentialsForService:@"strava" andKey:@"client_secret"]];
         self.stravaAuth = auth;
     }
 

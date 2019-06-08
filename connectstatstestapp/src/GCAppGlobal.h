@@ -72,4 +72,5 @@ extern NSString * kPreservedSettingsName;
 
 +(void)setApplicationDelegate:(GCAppDelegate*)del;
 +(NSString*)simulatorUrl;
++(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;
 @end
