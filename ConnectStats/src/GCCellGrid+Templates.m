@@ -504,6 +504,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     GCFormattedField * speed    = [GCFormattedField formattedField:nil activityType:nil
                                                          forNumber:speednu forSize:12.];
 
+    BOOL skipAlways = activity.skipAlways;
     BOOL showBpm = ( bpmnu != nil && bpmnu.value!=0.);
     BOOL showSpeed = (speednu != nil && speednu.value != 0.);
 
@@ -529,6 +530,14 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     NSDictionary * dateSmallAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
                                      NSForegroundColorAttributeName: [UIColor blackColor]};
 
+    if( skipAlways ){
+        locAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
+                          NSForegroundColorAttributeName: [UIColor darkGrayColor]};
+        dateAttributes = @{NSFontAttributeName: [GCViewConfig boldSystemFontOfSize:16.],
+                                          NSForegroundColorAttributeName: [UIColor darkGrayColor]};
+        dateSmallAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
+                                               NSForegroundColorAttributeName: [UIColor darkGrayColor]};
+    }
     NSDate * date = activity.date;
     NSString * dispname = [activity displayName];
     if (dispname.length>24) {
@@ -564,13 +573,19 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     speed.valueColor = [UIColor darkGrayColor];
     speed.valueFont = [GCViewConfig systemFontOfSize:12.];
 
-    [GCViewConfig setupGradient:self ForActivity:activity];
+    if( skipAlways ){
+        [self setupBackgroundColors:@[ [UIColor lightGrayColor] ]];
+        duration.valueColor = [UIColor darkGrayColor];
+        distance.valueColor = [UIColor darkGrayColor];
+        distance.labelColor = [UIColor darkGrayColor];
+    }else{
+        [GCViewConfig setupGradient:self ForActivity:activity];
+    }
 
     self.enableButtons = true;
-    self.leftButtonText = NSLocalizedString(@"More", @"Grid Cell Button");
+    self.leftButtonText = skipAlways ? NSLocalizedString(@"Use", @"Grid Cell Button") : NSLocalizedString(@"Ignore", @"Grid Cell Button");
     self.rightButtonText = status == gcViewActivityStatusCompare ? NSLocalizedString(@"Clear", @"Grid Cell Button") :
         NSLocalizedString(@"Mark", @"Grid Cell Button");
-
 
     if (width < 600.) {
         [self setupForRows:3 andCols:3];

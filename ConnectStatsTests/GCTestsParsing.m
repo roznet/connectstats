@@ -40,6 +40,7 @@
 #import "GCLap.h"
 #import "GCLapSwim.h"
 #import "GCConnectStatsRequestSearch.h"
+#import "GCHistoryFieldSummaryStats.h"
 
 @interface NSDictionary (SmartDiff)
 
@@ -956,6 +957,49 @@
     }
 }
 
+-(void)testOrganizerSkipAlways{
+    NSString * dbfp = [RZFileOrganizer writeableFilePath:@"test_skipalways.db"];
+    [RZFileOrganizer removeEditableFile:@"test_skipalways.db"];
+    FMDatabase * db = [FMDatabase databaseWithPath:dbfp];
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    [GCHealthOrganizer ensureDbStructure:db];
+    GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
+    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
+    organizer.health = health;
+    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    
+    [organizer fieldsSeries:@[@"SumDistance"] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
+    
+    GCActivity * first = [organizer activityForIndex:0];
+    NSString * activityType = first.activityType;
+    GCNumberWithUnit * dist = [first numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]];
+    
+    GCHistoryFieldSummaryStats * start_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities matching:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCNumberWithUnit * start_nu = [[start_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] sumWithUnit];
+    
+    first.skipAlways = true;
+    [first saveToDb:db];
+    
+    GCHistoryFieldSummaryStats * skip_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities matching:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCNumberWithUnit * skip_nu = [[skip_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] sumWithUnit];
+
+    GCActivitiesOrganizer * reload = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
+
+    GCHistoryFieldSummaryStats * reload_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:reload.activities matching:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCNumberWithUnit * reload_nu = [[reload_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] sumWithUnit];
+
+    first.skipAlways = false;
+    
+    GCHistoryFieldSummaryStats * unskip_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities matching:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCNumberWithUnit * unskip_nu = [[unskip_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] sumWithUnit];
+
+    
+    XCTAssertEqualWithAccuracy(start_nu.value, skip_nu.value+dist.value, 1.e-7);
+    XCTAssertEqualWithAccuracy(reload_nu.value, skip_nu.value, 1.e-7);
+    XCTAssertEqualWithAccuracy(start_nu.value, unskip_nu.value, 1.e-7);
+
+}
 
 -(void)testOrganizerRegister{
     NSData * searchLegacyInfo = [NSData  dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_search_modern.json"
@@ -1018,6 +1062,7 @@
             }
         }
     }
+    
 }
 
 #pragma mark - Utilities

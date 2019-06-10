@@ -49,6 +49,7 @@
 #define GC_PARENT_ID            @"__ParentId__"
 #define GC_CHILD_IDS            @"__ChildIds__"
 #define GC_EXTERNAL_ID          @"__ExternalId__"
+#define GC_IGNORE_SKIP_ALWAYS   @"__IGNORE_SKIP_ALWAYS__"
 
 NSString * kGCActivityNotifyDownloadDone = @"kGCActivityNotifyDownloadDone";
 NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady";
@@ -61,6 +62,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 @property (nonatomic,retain) NSArray * trackpointsCache;
 @property (nonatomic,retain) NSArray * lapsCache;
 
+@property (nonatomic,retain) NSDictionary<NSString*,GCActivityMetaValue*> * metaData;
 
 
 @end
@@ -254,10 +256,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
     return _activityName ?:@"";
 }
--(GCActivityMetaValue*)metaValueForField:(NSString*)field{
-    return _metaData[field];
-}
-
 
 #pragma mark - GCField Access methods
 
@@ -1666,8 +1664,43 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
 }
 
+-(GCActivityMetaValue*)metaValueForField:(NSString*)field{
+    return _metaData[field];
+}
+
+-(void)updateMetaData:(NSDictionary<NSString *,GCActivityMetaValue *> *)meta{
+    self.metaData = meta;
+    [self skipAlways];
+}
+
+-(BOOL)skipAlways{
+    GCActivityMetaValue * val = self.metaData[GC_IGNORE_SKIP_ALWAYS];
+    _skipAlwaysFlag = false;
+    if (val) {
+        _skipAlwaysFlag = true;
+        return [val.display isEqualToString:@"true"];
+    }
+    return FALSE;
+}
+
+-(void)setSkipAlways:(BOOL)skipAlways{
+    if( skipAlways ){
+        _skipAlwaysFlag = true;
+        GCActivityMetaValue * val = [GCActivityMetaValue activityMetaValueForDisplay:@"true" andField:GC_IGNORE_SKIP_ALWAYS];
+        [self addEntriesToMetaData:@{ GC_IGNORE_SKIP_ALWAYS : val}];
+    }else{
+        _skipAlwaysFlag = false;
+        if( self.metaData[GC_IGNORE_SKIP_ALWAYS]){
+            self.metaData = [self.metaData dictionaryByRemovingObjectsForKeys:@[ GC_IGNORE_SKIP_ALWAYS ] ];
+        }
+        
+    }
+}
 
 -(BOOL)ignoreForStats:(gcIgnoreMode)mode{
+    if( _skipAlwaysFlag ){
+        return true;
+    }
     switch (mode) {
         case gcIgnoreModeActivityFocus:
             return [self.activityType isEqualToString:GC_TYPE_MULTISPORT] || [self.activityType isEqualToString:GC_TYPE_DAY];

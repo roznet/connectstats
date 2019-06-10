@@ -37,6 +37,7 @@
 #import "GCCellActivity.h"
 #import "GCActivityPreviewingViewController.h"
 #import <RZExternal/RZExternal.h>
+#import "GCActivity+Database.h"
 
 #define GC_ALERT_CONFIRM_DELETED    1
 #define GC_ALERT_TRIAL              2
@@ -563,35 +564,15 @@ const CGFloat kCellDaySpacing = 2.f;
 -(void)cellGrid:(GCCellGrid*)cell didSelectLeftButtonAt:(NSIndexPath*)indexPath{
     self.activityForAction = [self activityForIndex:indexPath.row];
 
-
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"More Actions", @"More Actions")
-                                                                    message:nil
-                                                             preferredStyle:UIAlertControllerStyleActionSheet];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"More Actions")
-                                              style:UIAlertActionStyleCancel
-                                            handler:^(UIAlertAction*action){
-
-                                            }]];
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Ignore Activity", @"More Actions")
-                                              style:UIAlertActionStyleDefault handler:^(UIAlertAction*action){
-                                                  
-
-                                              }]];
-    
-    if (self.tabBarController) {
-        [self.tabBarController presentViewController:alert animated:YES completion:^(){
-            [[NSNotificationCenter defaultCenter] postNotificationName:GCCellGridShouldHideMenu object:self];
-        }];
+    if( self.activityForAction.skipAlways) {
+        self.activityForAction.skipAlways = false;
     }else{
-        alert.popoverPresentationController.sourceView = cell;
-        CGRect rect = cell.frame;
-        alert.popoverPresentationController.sourceRect = CGRectMake(rect.size.width, rect.size.height/2., 1, 1);
-        [self presentViewController:alert animated:YES completion:^(){
-            [[NSNotificationCenter defaultCenter] postNotificationName:GCCellGridShouldHideMenu object:self];
-        }];
+        self.activityForAction.skipAlways = true;
     }
-
+    if( self.activityForAction.db ){
+        [self.activityForAction saveToDb:self.activityForAction.db];
+    }
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - UIViewControllerPreviewingDelegate

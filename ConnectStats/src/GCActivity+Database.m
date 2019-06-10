@@ -197,7 +197,7 @@
     while ([res next]) {
         mval[[res stringForColumn:@"field"]] = [GCActivityMetaValue activityValueForResultSet:res];
     }
-    self.metaData = mval;
+    [self updateMetaData:mval];
 
     [GCFieldsCalculated addCalculatedFields:self];
 
@@ -236,7 +236,7 @@
         NSDictionary * sData = [NSKeyedUnarchiver unarchiveObjectWithData:[res dataForColumn:@"summaryData"]];
         NSMutableDictionary * mData = [NSKeyedUnarchiver unarchiveObjectWithData:[res dataForColumn:@"metaData"]];
         self.summaryData = sData;
-        self.metaData = mData;
+        [self updateMetaData:mData];
 
     }
 }

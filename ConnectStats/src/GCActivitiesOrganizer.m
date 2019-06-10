@@ -1252,8 +1252,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         }
         currentMeta = meta[one.activityId];
         if (currentMeta) {
-            one.metaData = currentMeta;
+            [one updateMetaData:currentMeta];
         }
+        
         [GCFieldsCalculated addCalculatedFields:one];
     }
 }

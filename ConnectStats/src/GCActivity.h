@@ -78,15 +78,19 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
     // Private Flags
     BOOL _summaryDataLoading;
     BOOL _downloadRequested;
+    BOOL _skipAlwaysFlag;
 }
 
 @property (nonatomic,retain) NSString * activityId;
 
 @property (nonatomic,retain) NSDictionary<GCField*,GCActivitySummaryValue*> * summaryData;
-@property (nonatomic,retain) NSDictionary<NSString*,GCActivityMetaValue*> * metaData;
 @property (nonatomic,retain) NSDictionary<GCField*,GCActivityCalculatedValue*> * calculatedFields;
 @property (nonatomic,retain) NSDictionary<NSString*,NSArray*> * calculatedLaps;
 @property (nonatomic,retain) NSDictionary<GCField*,GCTrackPointExtraIndex*> * cachedExtraTracksIndexes;
+/**
+ @brief public interface is read only, should be set with updateMetaData as some flag need to be sync'd
+ */
+@property (nonatomic,readonly) NSDictionary<NSString*,GCActivityMetaValue*> * metaData;
 /**
  NSString -> GCCalculactedCachedTrackInfo (to be calculated) or GCStatsDataSerieWithUnit
  */
@@ -154,6 +158,11 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  @return Non-nil NSString
  */
 @property (nonatomic,readonly) NSString * displayName;
+
+/**
+ @brief Disable an activity for all stats
+ */
+@property (nonatomic,assign) BOOL skipAlways;
 
 #pragma mark - Methods
 
@@ -312,7 +321,10 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(NSArray<NSString*>*)allFieldsKeys DEPRECATED_MSG_ATTRIBUTE("use allFields.");
 
 -(GCActivityMetaValue*)metaValueForField:(NSString*)field;
-
+/**
+ @brief method to update the dictionary of meta data
+ */
+-(void)updateMetaData:(NSDictionary<NSString*,GCActivityMetaValue*>*)meta;
 
 /**
  Add a dictionary of metavalue entries

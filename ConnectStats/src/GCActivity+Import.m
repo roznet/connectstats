@@ -412,7 +412,7 @@
     }
     self.downloadMethod = gcDownloadMethodConnectStats;
     if (self.metaData==nil) {
-        self.metaData = [NSMutableDictionary dictionary];
+        [self updateMetaData:[NSMutableDictionary dictionary]];
     }
     if (self.activityId && self.activityType) {
         NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionaryWithCapacity:data.count];
@@ -500,7 +500,7 @@
     }
     
     if (self.metaData==nil) {
-        self.metaData = [NSMutableDictionary dictionary];
+        [self updateMetaData:[NSMutableDictionary dictionary]];
     }
     NSArray * foundConnectIQ = data[@"connectIQMeasurements"];
     if( [foundConnectIQ isKindOfClass:[NSArray class]]){
@@ -583,7 +583,7 @@
             extraMeta[ mappedKey ] = metaVal;
         }
     }
-    self.metaData = extraMeta;
+    [self updateMetaData:extraMeta];
 
 }
 
@@ -1036,9 +1036,9 @@
     self.location = @"";
     self.downloadMethod = gcDownloadMethodHealthKit;
 
-    self.metaData = [NSMutableDictionary dictionaryWithObject:[GCActivityMetaValue activityMetaValueForDisplay:workout.sourceRevision.source.name
+    [self updateMetaData:[NSMutableDictionary dictionaryWithObject:[GCActivityMetaValue activityMetaValueForDisplay:workout.sourceRevision.source.name
                                                                                                       andField:GC_META_DEVICE]
-                                                       forKey:GC_META_DEVICE];
+                                                       forKey:GC_META_DEVICE]];
 
     NSMutableDictionary * summary = [NSMutableDictionary dictionary];
 
@@ -1171,7 +1171,7 @@
     self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
     self.downloadMethod = gcDownloadMethodStrava;
     if (self.metaData==nil) {
-        self.metaData = [NSMutableDictionary dictionary];
+        [self updateMetaData:[NSMutableDictionary dictionary]];
     }
     if (self.activityId && self.activityType) {
         NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionaryWithCapacity:data.count];
@@ -1271,7 +1271,7 @@
     BOOL rv = false;
     
     if( self.metaData == nil && other.metaData != nil){
-        self.metaData = [NSDictionary dictionaryWithDictionary:other.metaData];
+        [self updateMetaData:[NSDictionary dictionaryWithDictionary:other.metaData]];
         
         FMDatabase * db = self.db;
         [db beginTransaction];
@@ -1302,7 +1302,7 @@
                 }
             }
             if (newMetaData) {
-                self.metaData = newMetaData;
+                [self updateMetaData:newMetaData];
             }
         }
     }
