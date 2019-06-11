@@ -131,7 +131,7 @@
         totalDistance += activity.sumDistance;
         if( previous != nil){
             if( fabs(activity.sumDistance - previous.sumDistance) < 1.0
-               && [activity.date isSameCalendarDay:previous.date calendar:[GCAppGlobal calculationCalendar]]
+               && [activity.date timeIntervalSinceDate:previous.date] < 24.0*3600.0
                ){
                 RZLog(RZLogInfo,@"Found candidate A id=%@/%@, , dist=%0.1f/%0.1f, date=%@/%@",
                       activity.activityId,
@@ -147,7 +147,7 @@
                 if( [previous.activityId hasPrefix:@"__strava__"]){
                     [toDelete addObject:previous.activityId];
                 }
-            }else if( [activity.date isSameCalendarDay:previous.date calendar:[GCAppGlobal calculationCalendar]]
+            }else if( [activity.date timeIntervalSinceDate:previous.date] < 24.0*3600.0
                      && [previous.activityId hasPrefix:@"__strava__"]
                      && ![activity.activityId hasPrefix:@"__strava__"]
                      ){
