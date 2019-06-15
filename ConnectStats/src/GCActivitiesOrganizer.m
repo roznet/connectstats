@@ -1233,6 +1233,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         currentValue = [GCActivitySummaryValue activitySummaryValueForResultSet:res];
         currentSummary[ [res stringForColumn:@"field"] ] = currentValue;
     }
+    BOOL spuriousActivityCleanupRequired = false;
     query = @"SELECT * FROM gc_activities_meta ORDER BY activityId DESC";
     res = [self.db executeQuery:query];
     while ([res next]) {
@@ -1243,7 +1244,25 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         }
         metaValue = [GCActivityMetaValue activityValueForResultSet:res];
         currentMeta[[res stringForColumn:@"field"]] = metaValue;
+        
+        if( [metaValue.field isEqualToString:@"ownerDisplayName"] && [metaValue.display isEqualToString:@"garmin.connect"] ){
+            spuriousActivityCleanupRequired = true;
+        }
     }
+    
+    if( spuriousActivityCleanupRequired ){
+        NSMutableArray * todelete = [NSMutableArray arrayWithCapacity:self.allActivities.count];
+        for (GCActivity * act in self.allActivities) {
+            GCActivityMetaValue * displayName = meta[act.activityId ][@"ownerDisplayName"];
+            if( meta && [displayName.display isEqualToString:@"garmin.connect"]){
+                [todelete addObject:act.activityId];
+            }
+        }
+        RZLog(RZLogInfo, @"Cleanup spurious activity: delete %lu out of %lu", todelete.count, self.allActivities.count);
+        self.activitiesTrash = todelete;
+        [self deleteActivitiesInTrash];
+    }
+    
 
     for (GCActivity * one in self.allActivities) {
         currentSummary = data[one.activityId];
