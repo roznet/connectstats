@@ -24,13 +24,12 @@
 //  
 
 #import "GCStravaReqBase.h"
+@class GCActivitiesOrganizer;
 
 @interface GCStravaActivityList : GCStravaReqBase
-@property (nonatomic,assign) NSUInteger page;
-@property (nonatomic,assign) NSUInteger parsedCount;
-@property (nonatomic,assign) BOOL reachedExisting;
-@property (nonatomic,retain) NSDate * lastFoundDate;
 
-+(GCStravaActivityList*)stravaActivityList:(UINavigationController*)nav;
++(GCStravaActivityList*)stravaActivityList:(UINavigationController*)nav start:(NSUInteger)start andMode:(BOOL)mode;
 
++(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path;
++(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path start:(NSUInteger)start;
 @end

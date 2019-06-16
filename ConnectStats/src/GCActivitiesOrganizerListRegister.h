@@ -41,4 +41,6 @@
 +(instancetype)listRegisterFor:(NSArray<GCActivity*>*)activities from:(GCService*)service isFirst:(BOOL)isFirst;
 -(void)addToOrganizer:(GCActivitiesOrganizer*)organizer;
 
+-(BOOL)shouldSearchForMoreWith:(NSUInteger)requestCount reloadAll:(BOOL)mode;
+
 @end

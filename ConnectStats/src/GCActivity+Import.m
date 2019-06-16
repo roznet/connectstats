@@ -1573,17 +1573,36 @@
 }
 
 -(BOOL)testForDuplicate:(GCActivity*)other{
-    if (fabs([other.date timeIntervalSinceDate:self.date])<1. && [self.activityType isEqualToString:other.activityType]) {
-        return true;
-    }
-
+    BOOL activitiesAreDuplicate = false;
+    
     // check if from same system (strava/garmin)
     if( (self.externalServiceActivityId && ([self.externalServiceActivityId isEqualToString:other.activityId]))||
        (other.externalServiceActivityId && ([other.externalServiceActivityId isEqualToString:self.activityId]))){
-        return true;
+        activitiesAreDuplicate = true;
+    }
+    
+    //Last:   date                date+sumDuration
+    //        |--------------------|
+    //          |--------------------|
+    //One:      date                 Date+sumDuration
+    
+    if( other.sumDuration > 60.0){
+        NSTimeInterval overlap =
+        MIN(other.date.timeIntervalSinceReferenceDate+other.sumDuration, self.date.timeIntervalSinceReferenceDate+self.sumDuration)-
+        MAX(other.date.timeIntervalSinceReferenceDate, self.date.timeIntervalSinceReferenceDate);
+        
+        double ratio = (double)overlap / self.sumDuration;
+        
+        if( overlap > 0.0 &&  ratio > 0.90 ){
+            activitiesAreDuplicate = true;
+        }
+    }
+    
+    if( [other.date isEqualToDate:self.date] && fabs(other.sumDistance-self.sumDistance)<1.e-7){
+        activitiesAreDuplicate = true;
     }
 
-    return false;
+    return activitiesAreDuplicate;
 }
 
 

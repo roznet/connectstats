@@ -28,16 +28,44 @@
 #import "GCAppGlobal.h"
 #import "GCStravaActivityListParser.h"
 #import "GCActivitiesOrganizer.h"
+#import "GCActivitiesOrganizerListRegister.h"
+#import "GCService.h"
+
+@interface GCStravaActivityList ()
+
+@property (nonatomic,assign) BOOL reloadAll;
+@property (nonatomic,assign) NSUInteger page;
+@property (nonatomic,retain) NSDate * lastFoundDate;
+@property (nonatomic,assign) BOOL searchMore;
+
+@end
 
 @implementation GCStravaActivityList
 
-+(GCStravaActivityList*)stravaActivityList:(UINavigationController*)nav{
++(GCStravaActivityList*)stravaActivityList:(UINavigationController*)nav start:(NSUInteger)start andMode:(BOOL)mode{
     GCStravaActivityList * rv = [[[GCStravaActivityList alloc] init] autorelease];
     if (rv) {
         rv.navigationController = nav;
         rv.lastFoundDate = [NSDate date];
+        rv.reloadAll = mode;
+        rv.page = start;
     }
     return rv;
+}
+
+-(GCStravaActivityList*)initNextWith:(GCStravaActivityList*)current{
+    self = [super init];
+    if( self ){
+        if( current.navigationController ){
+            self.page = current.page;
+        }else{
+            self.page = current.page + 1;
+        }
+        self.lastFoundDate = current.lastFoundDate;
+        self.reloadAll = current.reloadAll;
+        self.stravaAuth = current.stravaAuth;
+    }
+    return self;
 }
 
 -(void)dealloc{
@@ -62,12 +90,17 @@
         return NSLocalizedString(@"Login to strava", @"Strava Upload");
     }else{
         if (self.page > 0) {
-            return [NSString stringWithFormat:NSLocalizedString(@"Downloading History %@", @"Strava Upload"), [self.lastFoundDate?:[NSDate date] dateFormatFromToday]];
+            return [NSString stringWithFormat:NSLocalizedString(@"Downloading Strava %@", @"Strava Upload"), [self.lastFoundDate?:[NSDate date] dateFormatFromToday]];
         }else{
             return NSLocalizedString(@"Downloading strava History", @"Strava Upload");
         }
     }
 }
+
+-(NSString*)searchFileNameForPage:(int)page{
+    return  [NSString stringWithFormat:@"strava_list_%d.json", page];
+}
+
 
 -(void)process{
     if (self.navigationController) {
@@ -76,7 +109,7 @@
     }else{
 #if TARGET_IPHONE_SIMULATOR
         NSError * e = nil;
-        NSString * fn = [NSString stringWithFormat:@"strava_list_%d.json", (int)self.page];
+        NSString * fn = [self searchFileNameForPage:(int)self.page];
         [self.theString writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:true encoding:self.encoding error:&e];
 #endif
         dispatch_async([GCAppGlobal worker],^(){
@@ -91,43 +124,56 @@
     if (parser.hasError) {
         self.status = GCWebStatusParsingFailed;
     }else{
-        self.reachedExisting = false;
-        NSUInteger newActivitiesCount = 0;
-        for (GCActivity * act in parser.activities) {
-            if( act.date) {
-                self.lastFoundDate = act.date;
-            }
-            if ([[GCAppGlobal organizer] activityForId:act.activityId]) {
-                self.reachedExisting = true;
-            }else{
-                newActivitiesCount++;
-            }
-
-            [[GCAppGlobal organizer] registerActivity:act forActivityId:act.activityId];
-        }
-        self.parsedCount = parser.parsedCount;
-        if (newActivitiesCount > 0 && self.reachedExisting) {
-            RZLog(RZLogInfo, @"Found %d new Strava Activities (%d total)", (int)newActivitiesCount,
-                  (int)[[GCAppGlobal organizer] countOfActivities]);
-        }
+        GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
+        
+        [[GCAppGlobal profile] serviceSuccess:gcServiceGarmin set:true];
+        self.stage = gcRequestStageSaving;
+        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+        
+        [self addActivitiesFromParser:parser toOrganizer:organizer];
     }
     [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
 
 }
 
++(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path{
+    return [self testForOrganizer:organizer withFilesInPath:path start:0];
+}
++(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path start:(NSUInteger)start{
+    GCStravaActivityList * search = [GCStravaActivityList stravaActivityList:nil start:start andMode:false];
+    
+    BOOL isDirectory = false;
+    if( [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]){
+        NSString * fn = isDirectory ? [path stringByAppendingPathComponent:[search searchFileNameForPage:start]] : path;
+        
+        NSData * info = [NSData dataWithContentsOfFile:fn];
+        GCStravaActivityListParser * parser = [GCStravaActivityListParser activityListParser:info];
+        [search addActivitiesFromParser:parser toOrganizer:organizer];
+    }
+    
+    return organizer;
+}
+
+-(void)addActivitiesFromParser:(GCStravaActivityListParser*)parser
+                   toOrganizer:(GCActivitiesOrganizer*)organizer{
+    GCActivitiesOrganizerListRegister * listRegister = [GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:[GCService service:gcServiceStrava] isFirst:self.page == 0];
+    [listRegister addToOrganizer:organizer];
+    if (listRegister.childIds.count > 0) {
+        RZLog( RZLogWarning, @"ChildIDs not supported for strava");
+    }
+    //self.activities = parser.activities;
+    NSDate * newDate = parser.activities.lastObject.date;
+    if(newDate){
+        self.lastFoundDate = newDate;
+    }
+    
+    self.searchMore = [listRegister shouldSearchForMoreWith:30 reloadAll:self.reloadAll];
+}
+
 -(id<GCWebRequest>)nextReq{
-    if (self.navigationController) {
-        GCStravaActivityList * next = [GCStravaActivityList stravaActivityList:nil];
-        next.stravaAuth = self.stravaAuth;
+    if (self.navigationController || self.searchMore) {
+        GCStravaActivityList * next = RZReturnAutorelease([[GCStravaActivityList alloc] initNextWith:self]);
         return next;
-    }else{
-        if (self.parsedCount == 30 && !self.reachedExisting) {
-            GCStravaActivityList * next = [GCStravaActivityList stravaActivityList:nil];
-            next.stravaAuth = self.stravaAuth;
-            next.page = self.page + 1;
-            next.lastFoundDate = self.lastFoundDate;
-            return next;
-        }
     }
     return nil;
 }

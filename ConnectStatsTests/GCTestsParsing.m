@@ -37,6 +37,7 @@
 #import "GCTrackStats.h"
 #import "GCGarminRequestModernActivityTypes.h"
 #import "GCGarminRequestModernSearch.h"
+#import "GCStravaActivityList.h"
 #import "GCLap.h"
 #import "GCLapSwim.h"
 #import "GCConnectStatsRequestSearch.h"
@@ -295,13 +296,7 @@
     GCGarminSearchModernJsonParser * modernParser = [[[GCGarminSearchModernJsonParser alloc] initWithData:searchModernInfo] autorelease];
     GCStravaActivityListParser * stravaListParser = [GCStravaActivityListParser activityListParser:searchStravaInfo];
     
-    NSString * dbn = [RZFileOrganizer writeableFilePath:@"test_organizer_parse_reload.db"];
-    [RZFileOrganizer removeEditableFile:@"test_organizer_parse_reload.db"];
-    FMDatabase * db = [FMDatabase databaseWithPath:dbn];
-    [db open];
-    [GCActivitiesOrganizer ensureDbStructure:db];
-    
-    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_organizer_parse_reload.db"];
     GCService * serviceGarmin = [GCService service:gcServiceGarmin];
     
     GCActivitiesOrganizerListRegister * listregisterGarmin =[GCActivitiesOrganizerListRegister listRegisterFor:modernParser.activities from:serviceGarmin isFirst:YES];
@@ -311,7 +306,7 @@
     GCActivitiesOrganizerListRegister * listregisterStrava =[GCActivitiesOrganizerListRegister listRegisterFor:stravaListParser.activities from:serviceStrava isFirst:YES];
     [listregisterStrava addToOrganizer:organizer];
     
-    GCActivitiesOrganizer * reload = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    GCActivitiesOrganizer * reload = [[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db];
     
     XCTAssertEqual(organizer.activities.count, reload.activities.count, @"reloaded same number of activities");
     
@@ -329,7 +324,7 @@
                                                                                        forClass:[self class]]];
     NSData * searchModernInfo = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"activities_list_modern.json"
                                                                                       forClass:[self class]]];
-    NSData * searchStravaInfo =[NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"strava_list_0.json"
+    NSData * searchStravaInfo =[NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"strava_list.json"
                                                                                      forClass:[self class]]];
     
     GCGarminSearchJsonParser * parser=[[[GCGarminSearchJsonParser alloc] initWithData:searchLegacyInfo] autorelease];
@@ -861,15 +856,8 @@
 #pragma mark - Parse List and Search results
 
 -(void)testConnectStatsSearch{
-    NSString * dbfp = [RZFileOrganizer writeableFilePath:@"test_parsing_cs_search.db"];
-    [RZFileOrganizer removeEditableFile:@"test_parsing_cs_search.db"];
-    FMDatabase * db = [FMDatabase databaseWithPath:dbfp];
-    [db open];
-    [GCActivitiesOrganizer ensureDbStructure:db];
-    [GCHealthOrganizer ensureDbStructure:db];
-    GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
-    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
-    organizer.health = health;
+    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_parsing_cs_search.db"];
+    
     XCTAssertEqual(organizer.activities.count, 0);
     [GCConnectStatsRequestSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
     
@@ -878,27 +866,20 @@
 
 
 -(void)testModernSearch{
-    NSString * dbfp = [RZFileOrganizer writeableFilePath:@"test_parsing_modern_search.db"];
-    [RZFileOrganizer removeEditableFile:@"test_parsing_modern_search.db"];
-    FMDatabase * db = [FMDatabase databaseWithPath:dbfp];
-    [db open];
-    [GCActivitiesOrganizer ensureDbStructure:db];
-    [GCHealthOrganizer ensureDbStructure:db];
-    GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
-    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
-    organizer.health = health;
+    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_parsing_modern_search.db"];
+    
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
 
-    NSString * aId = @"2674807009";
+    NSString * aId = @"3743031453";
     
     GCActivity * act = [organizer activityForId:aId];
     
     NSDictionary * expected = @{
                                 // Correct value, before had wrong scaling by 1000...
                                 // These fields have different unit in summary search and activity reload...
-                                @"MaxElevation":[GCNumberWithUnit numberWithUnitName:@"meter" andValue:36.200],
-                                @"MinElevation":[GCNumberWithUnit numberWithUnitName:@"meter" andValue:10.4],
-                                @"SumElapsedDuration":[GCNumberWithUnit numberWithUnitName:@"second" andValue:3179.8],
+                                @"MaxElevation":[GCNumberWithUnit numberWithUnitName:@"meter" andValue:72.400],
+                                @"MinElevation":[GCNumberWithUnit numberWithUnitName:@"meter" andValue:19.6],
+                                @"SumElapsedDuration":[GCNumberWithUnit numberWithUnitName:@"second" andValue:2168.8291015],
                                 };
     
     for (NSString * fieldKey in expected) {
@@ -922,18 +903,11 @@
 
 
 -(void)testParseSearch{
-    NSString * dbfp = [RZFileOrganizer writeableFilePath:@"test_parsingsearch.db"];
-    [RZFileOrganizer removeEditableFile:@"test_parsingsearch.db"];
-    FMDatabase * db = [FMDatabase databaseWithPath:dbfp];
-    [db open];
-    [GCActivitiesOrganizer ensureDbStructure:db];
-    [GCHealthOrganizer ensureDbStructure:db];
-    GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
-    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
-    organizer.health = health;
+    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_parsingsearch.db"];
+    
     [GCGarminSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
     
-    [GCWithingsBodyMeasures testForHealth:health withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] forId:@"188427"];
+    [GCWithingsBodyMeasures testForHealth:organizer.health withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] forId:@"188427"];
     GCField * hf = [GCHealthMeasure healthFieldFromMeasureType:gcMeasureWeight];
     
     NSDictionary * rv = [organizer fieldsSeries:@[ @"WeightedMeanHeartRate", @"WeightedMeanPace", hf] matching:nil useFiltered:NO ignoreMode:gcIgnoreModeActivityFocus];
@@ -958,15 +932,8 @@
 }
 
 -(void)testOrganizerSkipAlways{
-    NSString * dbfp = [RZFileOrganizer writeableFilePath:@"test_skipalways.db"];
-    [RZFileOrganizer removeEditableFile:@"test_skipalways.db"];
-    FMDatabase * db = [FMDatabase databaseWithPath:dbfp];
-    [db open];
-    [GCActivitiesOrganizer ensureDbStructure:db];
-    [GCHealthOrganizer ensureDbStructure:db];
-    GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
-    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
-    organizer.health = health;
+    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_skipalways.db"];
+    
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
     
     [organizer fieldsSeries:@[@"SumDistance"] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
@@ -979,12 +946,12 @@
     GCNumberWithUnit * start_nu = [[start_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] sumWithUnit];
     
     first.skipAlways = true;
-    [first saveToDb:db];
+    [first saveToDb:organizer.db];
     
     GCHistoryFieldSummaryStats * skip_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities matching:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCNumberWithUnit * skip_nu = [[skip_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] sumWithUnit];
 
-    GCActivitiesOrganizer * reload = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
+    GCActivitiesOrganizer * reload = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db] autorelease];
 
     GCHistoryFieldSummaryStats * reload_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:reload.activities matching:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCNumberWithUnit * reload_nu = [[reload_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] sumWithUnit];
@@ -1001,6 +968,107 @@
 
 }
 
+-(GCActivitiesOrganizer*)createEmptyOrganizer:(NSString*)dbname{
+    NSString * dbfp = [RZFileOrganizer writeableFilePath:dbname];
+    [RZFileOrganizer removeEditableFile:dbname];
+    FMDatabase * db = [FMDatabase databaseWithPath:dbfp];
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    [GCHealthOrganizer ensureDbStructure:db];
+    GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
+    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
+    organizer.health = health;
+
+    return organizer;
+}
+
+-(void)testOrganizerMergeServices{
+    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_parsing_modern_merge.db"];
+    GCActivitiesOrganizer * organizer_strava = [self createEmptyOrganizer:@"test_parsing_modern_merge_strava.db"];
+    GCActivitiesOrganizer * organizer_garmin = [self createEmptyOrganizer:@"test_parsing_modern_merge_garmin.db"];
+
+    // Garmin Cycling: 3726595228  -> __strava__2432750438
+    // Garmin Running: 3743031453  -> __strava__2446347224
+    // In Garmin not in strava
+    //     @"3560921097",
+    //     @"3560919931",
+    //     @"3560919337",
+    //     @"3560918864",
+
+    NSString * runGarminId = @"3743031453";
+    NSString * runStravaId = @"__strava__2446347224";
+    NSString * bikeGarminId = @"3726595228";
+    NSString * bikeStravaId = @"__strava__2446347224";
+    
+    // First add garmin
+    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+
+    XCTAssertEqual(organizer.countOfActivities, 20);
+    
+    XCTAssertNotNil([organizer activityForId:runGarminId]);
+    XCTAssertNotNil([organizer activityForId:bikeGarminId]);
+    
+    [GCStravaActivityList testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    [GCStravaActivityList testForOrganizer:organizer_strava withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    // added extra 10 from strava
+    XCTAssertEqual(organizer.countOfActivities, 30);
+    XCTAssertEqual(organizer_strava.countOfActivities, 30);
+    XCTAssertNotNil([organizer activityForId:runGarminId]);
+    XCTAssertNotNil([organizer activityForId:bikeGarminId]);
+    XCTAssertNil([organizer activityForId:runStravaId]);
+    XCTAssertNil([organizer activityForId:bikeStravaId]);
+    XCTAssertNotNil([organizer_strava activityForId:runStravaId]);
+    XCTAssertNotNil([organizer_strava activityForId:bikeStravaId]);
+    XCTAssertTrue([organizer isKnownDuplicate:[organizer_strava activityForId:runStravaId]]);
+    XCTAssertTrue([organizer isKnownDuplicate:[organizer_strava activityForId:bikeStravaId]]);
+    
+    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:20];
+    [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:20];
+    XCTAssertEqual(organizer.countOfActivities, 39);
+    XCTAssertEqual(organizer_garmin.countOfActivities, 39);
+
+    [GCStravaActivityList testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:1];
+    [GCStravaActivityList testForOrganizer:organizer_strava withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:1];
+    XCTAssertEqual(organizer.countOfActivities, 52);
+    XCTAssertEqual(organizer_strava.countOfActivities, 52);
+    
+    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:40];
+    [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:40];
+
+    XCTAssertEqual(organizer.countOfActivities, 56);
+    
+    for (GCActivity * one in organizer_garmin.activities) {
+        GCActivity * found = [organizer activityForId:one.activityId];
+        BOOL knownDuplicate = [organizer isKnownDuplicate:one];
+        XCTAssertTrue(knownDuplicate || found != nil, @"activity %@", one);
+    }
+
+    GCActivitiesOrganizer * reload = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db]);
+    XCTAssertEqual(organizer.countOfActivities,reload.countOfActivities);
+    
+    // Check that import again on reloaded organizer does not add duplicate
+    [GCGarminRequestModernSearch testForOrganizer:reload withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    [GCStravaActivityList testForOrganizer:reload withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    XCTAssertEqual(organizer.countOfActivities,reload.countOfActivities);
+    [GCGarminRequestModernSearch testForOrganizer:reload withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:20];
+    [GCStravaActivityList testForOrganizer:reload withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:1];
+    XCTAssertEqual(organizer.countOfActivities,reload.countOfActivities);
+    
+    
+    /* in garmin, not in strava
+     [GCGarminRequestModernSearch testForOrganizer:organizer_strava withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+     [GCGarminRequestModernSearch testForOrganizer:organizer_strava withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:20];
+     [GCGarminRequestModernSearch testForOrganizer:organizer_strava withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:40];
+
+    <GCActivity other:3560921097>,
+    <GCActivity other:3560919931>,
+    <GCActivity other:3560919337>,
+    <GCActivity other:3560918864>,
+     */
+    
+}
+
 -(void)testOrganizerRegister{
     NSData * searchLegacyInfo = [NSData  dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_search_modern.json"
                                                                                        forClass:[self class]]];
@@ -1011,13 +1079,7 @@
     NSArray<GCActivity*>* activitySubFirstHalf = [parser.activities subarrayWithRange:NSMakeRange(2, 8)];
     NSArray<GCActivity*>* activitySecondHalf = [parser.activities subarrayWithRange:NSMakeRange(10, 10)];
     
-    NSString * dbn = [RZFileOrganizer writeableFilePath:@"test_organizer_register.db"];
-    [RZFileOrganizer removeEditableFile:@"test_organizer_register.db"];
-    FMDatabase * db = [FMDatabase databaseWithPath:dbn];
-    [db open];
-    [GCActivitiesOrganizer ensureDbStructure:db];
-    
-    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_organizer_register.db"];
     GCService * service = [GCService service:gcServiceGarmin];
     
     GCActivitiesOrganizerListRegister * listregister =[GCActivitiesOrganizerListRegister listRegisterFor:activitySubFirstHalf from:service isFirst:YES];
@@ -1041,7 +1103,7 @@
     XCTAssertEqual(organizer.countOfActivities, 19);
     XCTAssertTrue(listregister.reachedExisting);
     
-    GCActivitiesOrganizer * reloaded = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    GCActivitiesOrganizer * reloaded = [[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db];
     XCTAssertEqual(reloaded.countOfActivities, organizer.countOfActivities);
     
     for (NSString * activityType in @[ GC_TYPE_RUNNING, GC_TYPE_CYCLING]) {

@@ -280,7 +280,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     if ([_db tableExists:@"gc_duplicate_activities"]) {
         res = [_db executeQuery:@"SELECT * FROM gc_duplicate_activities"];
         while ([res next]) {
-            duplicates[[res stringForColumn:@"duplicateActivityId"]] = [res stringForColumn:@"activityId"];
+            duplicates[[res stringForColumn:@"activityId"]] = [res stringForColumn:@"duplicateActivityId"];
         }
 
     }
@@ -470,10 +470,28 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         if ([GCAppGlobal configGetBool:CONFIG_MERGE_IMPORT_DUPLICATE defaultValue:true]) {
             GCActivity * other = [self findDuplicate:act];
             if (other) {
-                (self.duplicateActivityIds)[act.activityId] = other.activityId;
-                [self.db executeUpdate:@"INSERT INTO gc_duplicate_activities (activityId,duplicateActivityId) VALUES (?,?)", act.activityId, other.activityId];
-
-                RZLog(RZLogInfo, @"Skipping %@ (duplicate of %@)", act.activityId, other.activityId);
+                // don't record if already
+                if( self.duplicateActivityIds[act.activityId] == nil) {
+                    /*
+                    if( [act.service preferredOver:other.service]){
+                        RZLog(RZLogInfo, @"Duplicate: replacing %@ with preferred %@", act.activityId, other.activityId);
+                        
+                        if( save ){
+                            self.duplicateActivityIds[other.activityId] = act.activityId;
+                            [self.db executeUpdate:@"INSERT INTO gc_duplicate_activities (activityId,duplicateActivityId) VALUES (?,?)", other.activityId, act.activityId];
+                            [self deleteActivityId:other.activityId];
+                        }else{
+                            // If no save, just update
+                            [other updateWithActivity:act];
+                        }
+                    }else{*/
+                        self.duplicateActivityIds[act.activityId] = other.activityId;
+                        [self.db executeUpdate:@"INSERT INTO gc_duplicate_activities (activityId,duplicateActivityId) VALUES (?,?)", act.activityId, other.activityId];
+                        
+                        RZLog(RZLogInfo, @"Duplicate: skipping %@ (preferred: %@)", act.activityId, other.activityId);
+                        
+                    //}
+                }
                 return rv;
             }
         }
@@ -541,32 +559,14 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
                 continue; // will deal with tennis later
             }
             
-            BOOL activitiesAreDuplicate = false;
-            
-            //Last:   date                date+sumDuration
-            //        |--------------------|
-            //          |--------------------|
-            //One:      date                 Date+sumDuration
-            
-            if( last.sumDuration > 60.0){
-                NSTimeInterval overlap =
-                    MIN(last.date.timeIntervalSinceReferenceDate+last.sumDuration, one.date.timeIntervalSinceReferenceDate+one.sumDuration)-
-                MAX(last.date.timeIntervalSinceReferenceDate, one.date.timeIntervalSinceReferenceDate);
-                
-                double ratio = (double)overlap / one.sumDuration;
-                
-                if( overlap > 0.0 &&  ratio > 0.90 ){
-                    activitiesAreDuplicate = true;
-                }
-            }
-            
-            if( [last.date isEqualToDate:one.date] && fabs(last.sumDistance-one.sumDistance)<1.e-7){
-                activitiesAreDuplicate = true;
-            }
+            BOOL activitiesAreDuplicate = [one testForDuplicate:last];
             
             if( activitiesAreDuplicate){
                 BOOL preferLast = true;
                 if( [last.activityType isEqualToString:GC_TYPE_UNCATEGORIZED]){
+                    preferLast = false;
+                }
+                if( [one.service preferredOver:last.service]){
                     preferLast = false;
                 }
 
@@ -625,7 +625,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
     return nil;
 }
-
+-(BOOL)isKnownDuplicate:(GCActivity*)act{
+    return self.duplicateActivityIds[act.activityId] != nil;
+}
 -(GCActivity*)activityForId:(NSString*)aId{
     for (GCActivity * act in _allActivities) {
         if ([act.activityId isEqualToString:aId]) {
@@ -941,6 +943,14 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     NSUInteger idx = 0;
     NSMutableArray * deleteCandidate = [NSMutableArray array];
 
+    NSMutableArray * altIds = [NSMutableArray array];
+    for (NSString * one in inIds) {
+        NSString * dup = self.duplicateActivityIds[one];
+        if( dup ){
+            [altIds addObject:dup];
+        }
+    }
+    
     BOOL foundFirst = isFirst;
     BOOL foundLast = false;
 
@@ -957,7 +967,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             break;
         }
         if (foundFirst) {
-            if ([inIds indexOfObject:act.activityId] == NSNotFound) {
+            if ([inIds indexOfObject:act.activityId] == NSNotFound &&
+                [altIds indexOfObject:act.activityId] == NSNotFound) {
                 if(act.parentId == nil || [inIds indexOfObject:act.parentId] == NSNotFound){
                     [deleteCandidate  addObject:act.activityId];
                 }
@@ -976,10 +987,12 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     [_db executeUpdate:@"DELETE FROM gc_activities"];
     [_db executeUpdate:@"DELETE FROM gc_activities_values"];
     [_db executeUpdate:@"DELETE FROM gc_activities_meta"];
+    [_db executeUpdate:@"DELETE FROM gc_duplicate_activities"];
     [_db commit];
     _currentActivityIndex = 0;
     [GCAppGlobal saveSettings];
     self.allActivities = [NSMutableArray arrayWithCapacity:_allActivities.count];
+    self.duplicateActivityIds = [NSMutableDictionary dictionary];
     [self notify];
 
 }

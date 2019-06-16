@@ -304,6 +304,31 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
 -(UIImage*)icon{
     return nil;
 }
+
+-(BOOL)preferredOver:(GCService*)other{
+    gcService order[gcServiceEnd] = {
+        gcServiceGarmin,
+        gcServiceConnectStats,
+        gcServiceStrava,
+        gcServiceHealthKit,
+        gcServiceFitBit,
+        gcServiceSportTracks
+    };
+    
+    size_t i = 0;
+    size_t o = 0;
+    for(  i = 0; i < gcServiceEnd; i++){
+        if( self.service == order[i] ){
+            break;
+        }
+    }
+    for(  o = 0; o < gcServiceEnd; o++){
+        if( other.service == order[o] ){
+            break;
+        }
+    }
+    return i <= o;
+}
 +(NSString*)serviceIdFromSportTracksUri:(NSString*)uri{
     return [uri componentsSeparatedByString:@"/"].lastObject;
 }

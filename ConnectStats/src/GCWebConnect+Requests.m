@@ -121,7 +121,7 @@
     }
     
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
-        [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController]]];
+        [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:false]];
     }
     // For testing
     if([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_SEGMENTS defaultValue:NO]){
@@ -160,7 +160,7 @@
     }
     // If on wifi, try to download extra missing details
     if ([GCAppGlobal configGetBool:CONFIG_WIFI_DOWNLOAD_DETAILS defaultValue:YES] &&  [RZSystemInfo wifiAvailable]) {
-        [self downloadMissingActivityDetails:15];
+        //[self downloadMissingActivityDetails:15];
     }
 }
 
@@ -189,7 +189,7 @@
 }
 -(void)servicesSearchAllActivities{
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
-        [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController]]];
+        [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:true]];
     }
 
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
