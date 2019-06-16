@@ -107,66 +107,7 @@
         [[GCAppGlobal profile] attach:self];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kNotifySettingsChange object:nil];
 
-        self.remap = [RZTableIndexRemap tableIndexRemap];
-
-        BOOL allSections = [GCAppGlobal connectStatsVersion];
-
-        if ([[GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:@""] isEqualToString:CONFIG_ENABLE_DEBUG_ON]) {
-            [self.remap addSection:GC_SECTION_LOG withRows:@[ @( GC_SETTINGS_SHOW_LOG),
-                                                              @( GC_SETTINGS_TRIGGER_ACTION)]];
-        }
-
-        if (allSections) {
-            [self.remap addSection:GC_SECTION_LOGIN withRows:@[
-                                                               @( GC_SETTINGS_SERVICES    ),
-                                                               @( GC_SETTINGS_PROFILE     ),
-                                                               @( GC_SETTINGS_HEALTH      )]];
-        }else{
-            [self.remap addSection:GC_SECTION_LOGIN withRows:@[
-                                                               @( GC_SETTINGS_SERVICES    ),
-                                                               @( GC_SETTINGS_PROFILE     )
-                                                               ]];
-
-        }
-
-        if (allSections) {
-            [self.remap addSection:GC_SECTION_PARAMS withRows:@[
-                                                                @( GC_SETTINGS_REFRESH     ),
-                                                                @( GC_SETTINGS_UNITS       ),
-                                                                @( GC_SETTINGS_FIRSTDAY    ),
-                                                                @( GC_SETTINGS_PERIOD      ),
-                                                                @( GC_SETTINGS_FILTER      ),
-                                                                @( GC_SETTINGS_LAPS        ),
-                                                                @( GC_SETTINGS_STRIDE      )]];
-        }else{
-            [self.remap addSection:GC_SECTION_PARAMS withRows:@[
-                                                                @( GC_SETTINGS_REFRESH     ),
-                                                                @( GC_SETTINGS_UNITS       ),
-                                                                @( GC_SETTINGS_FIRSTDAY    ),
-                                                                @( GC_SETTINGS_STRIDE      )]];
-
-        }
-
-        [self.remap addSection:GC_SECTION_OTHER withRows:@[
-                                                           @( GC_SETTINGS_HELP            ),
-                                                           @( GC_SETTINGS_BUGREPORT       ),
-                                                           @( GC_SETTINGS_INCLUDEDATA     ),
-                                                           ]];
-
-        if (allSections) {
-            [self.remap addSection:GC_SECTION_ADVANCED withRows:@[
-                                                                  @( GC_SETTINGS_LANGUAGE        ),
-                                                                  @( GC_SETTINGS_INLINE_GRAPHS   ),
-                                                                  @( GC_SETTINGS_INLINE_GRADIENT ),
-                                                                  @( GC_SETTINGS_LAP_OVERLAY     ),
-                                                                  @( GC_SETTINGS_MAP             ),
-                                                                  @( GC_SETTINGS_FASTMAP         ),
-                                                                  @( GC_SETTINGS_CONTINUE_ERROR  ),
-                                                                  @( GC_SETTINGS_ENABLE_DERIVED  ),
-                                                                  @( GC_SETTINGS_SHOW_DOWNLOAD  ),
-                                                                  @( GC_SETTINGS_FONT_STYLE) ]];
-        }
-
+        [self buildRemap];
     }
     return self;
 }
@@ -177,6 +118,69 @@
     [_remap release];
 
     [super dealloc];
+}
+
+-(void)buildRemap{
+    self.remap = [RZTableIndexRemap tableIndexRemap];
+    
+    BOOL allSections = [GCAppGlobal connectStatsVersion];
+    
+    if ([[GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:CONFIG_ENABLE_DEBUG_OFF] isEqualToString:CONFIG_ENABLE_DEBUG_ON]) {
+        [self.remap addSection:GC_SECTION_LOG withRows:@[ @( GC_SETTINGS_SHOW_LOG),
+                                                          @( GC_SETTINGS_TRIGGER_ACTION)]];
+    }
+    
+    if (allSections) {
+        [self.remap addSection:GC_SECTION_LOGIN withRows:@[
+                                                           @( GC_SETTINGS_SERVICES    ),
+                                                           @( GC_SETTINGS_PROFILE     ),
+                                                           @( GC_SETTINGS_HEALTH      )]];
+    }else{
+        [self.remap addSection:GC_SECTION_LOGIN withRows:@[
+                                                           @( GC_SETTINGS_SERVICES    ),
+                                                           @( GC_SETTINGS_PROFILE     )
+                                                           ]];
+        
+    }
+    
+    if (allSections) {
+        [self.remap addSection:GC_SECTION_PARAMS withRows:@[
+                                                            @( GC_SETTINGS_REFRESH     ),
+                                                            @( GC_SETTINGS_UNITS       ),
+                                                            @( GC_SETTINGS_FIRSTDAY    ),
+                                                            @( GC_SETTINGS_PERIOD      ),
+                                                            @( GC_SETTINGS_FILTER      ),
+                                                            @( GC_SETTINGS_LAPS        ),
+                                                            @( GC_SETTINGS_STRIDE      )]];
+    }else{
+        [self.remap addSection:GC_SECTION_PARAMS withRows:@[
+                                                            @( GC_SETTINGS_REFRESH     ),
+                                                            @( GC_SETTINGS_UNITS       ),
+                                                            @( GC_SETTINGS_FIRSTDAY    ),
+                                                            @( GC_SETTINGS_STRIDE      )]];
+        
+    }
+    
+    [self.remap addSection:GC_SECTION_OTHER withRows:@[
+                                                       @( GC_SETTINGS_HELP            ),
+                                                       @( GC_SETTINGS_BUGREPORT       ),
+                                                       @( GC_SETTINGS_INCLUDEDATA     ),
+                                                       ]];
+    
+    if (allSections) {
+        [self.remap addSection:GC_SECTION_ADVANCED withRows:@[
+                                                              @( GC_SETTINGS_LANGUAGE        ),
+                                                              @( GC_SETTINGS_INLINE_GRAPHS   ),
+                                                              @( GC_SETTINGS_INLINE_GRADIENT ),
+                                                              @( GC_SETTINGS_LAP_OVERLAY     ),
+                                                              @( GC_SETTINGS_MAP             ),
+                                                              @( GC_SETTINGS_FASTMAP         ),
+                                                              @( GC_SETTINGS_CONTINUE_ERROR  ),
+                                                              @( GC_SETTINGS_ENABLE_DERIVED  ),
+                                                              @( GC_SETTINGS_SHOW_DOWNLOAD  ),
+                                                              @( GC_SETTINGS_FONT_STYLE) ]];
+    }
+
 }
 - (void)viewDidLoad
 {
@@ -944,6 +948,7 @@
 }
 
 -(void)notifyCallBack:(id)theParent{
+    [self buildRemap];
     [self.tableView reloadData];
 }
 

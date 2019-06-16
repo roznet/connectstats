@@ -106,6 +106,7 @@
 
 #define CONFIG_ENABLE_DEBUG               @"config_enable_debug"
 #define CONFIG_ENABLE_DEBUG_ON            @"enabledebug1970"
+#define CONFIG_ENABLE_DEBUG_OFF           @"disabled"
 
 #define CONFIG_STATS_START_PAGE           @"config_stats_start_page"
 

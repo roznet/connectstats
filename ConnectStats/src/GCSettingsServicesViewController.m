@@ -141,103 +141,9 @@
         self.showFitbit      = false;
         self.showConnectStats = false;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kNotifySettingsChange object:nil];
-
-
-        self.remap = [RZTableIndexRemap tableIndexRemap];
-        BOOL connectStatsVersion = [GCAppGlobal connectStatsVersion];
-        BOOL healthStatsVersion  = [GCAppGlobal healthStatsVersion];
-
-            gcGarminLoginMethod method = (gcGarminLoginMethod)[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
         
-            [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
-                                                                       @( GC_CONNECTSTATS_NAME ),
-                                                                       @( GC_CONNECTSTATS_ENABLE )
-                                                                       ]];
+        [self buildRemap];
         
-            if (method != gcGarminLoginMethodDirect) {
-                [self.remap addSection:GC_SECTIONS_GARMIN withRows:@[
-                                                                     @( GC_GARMIN_SERVICE_NAME  ),
-                                                                     @( GC_GARMIN_ENABLE        ),
-                                                                     @( GC_GARMIN_USERNAME      ),
-                                                                     @( GC_GARMIN_PASSWORD      ),
-                                                                     @( GC_GARMIN_METHOD        ),
-                                                                     @( GC_GARMIN_MODERN_API    ),
-                                                                     //@( GC_GARMIN_MANUAL_LOGIN  )
-                                                                     ]];
-            }else{
-                [self.remap addSection:GC_SECTIONS_GARMIN withRows:@[
-                                                                     @( GC_GARMIN_SERVICE_NAME  ),
-                                                                     @( GC_GARMIN_ENABLE        ),
-                                                                     @( GC_GARMIN_USERNAME      ),
-                                                                     @( GC_GARMIN_PASSWORD      ),
-                                                                     @( GC_GARMIN_MODERN_API    ),
-                                                                     ]];
-
-            }
-            if( [[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:NO] == YES){
-                // OBSOLETE: Only showed if AUTO was on before, should not be used anymore
-                [self.remap addSection:GC_SECTIONS_STRAVA withRows:@[
-                                                                     @( GC_STRAVA_NAME      ),
-                                                                     @( GC_STRAVA_ENABLE    ),
-                                                                     @( GC_STRAVA_AUTO      ),
-                                                                     @( GC_STRAVA_LOGOUT    ) ]];
-                // OBSOLETE: Only showed if AUTO was on before, should not be used anymore
-            }else{
-                [self.remap addSection:GC_SECTIONS_STRAVA withRows:@[
-                                                                     @( GC_STRAVA_NAME      ),
-                                                                     @( GC_STRAVA_ENABLE    ),
-                                                                     //@( GC_STRAVA_SEGMENTS   ),
-                                                                     @( GC_STRAVA_LOGOUT    ) ]];
-
-            }
-
-            if ([GCAppGlobal healthKitStore]) {
-                [self.remap addSection:GC_SECTIONS_HEALTHKIT withRows:@[
-                                                                        @( GC_HEALTHKIT_NAME       ),
-                                                                        @( GC_HEALTHKIT_ENABLE     ),
-                                                                        @( GC_HEALTHKIT_WORKOUT    ),
-                                                                        @( GC_HEALTHKIT_SOURCE     )]];
-            }
-
-            [self.remap addSection:GC_SECTIONS_SPORTTRACKS withRows:@[
-                                                                      @( GC_SPORTTRACKS_SERVICE_NAME ),
-                                                                      @( GC_SPORTTRACKS_ENABLE       )
-                                                                      ]];
-
-#ifdef GC_USE_HEALTHKIT
-        if (healthStatsVersion) {
-            self.showHealthKit   = true;
-        }
-
-#endif
-        // for withings
-#ifdef WITHINGS_OAUTH
-        [self.remap addSection:GC_SECTIONS_WITHINGS withRows:@[
-                                                               @( GC_ROW_SERVICE_NAME ),
-                                                               @( GC_ROW_AUTO         ),
-                                                               @( GC_ROW_STATUS       )]];
-#else
-        [self.remap addSection:GC_SECTIONS_WITHINGS withRows:@[
-                                                               @( GC_ROW_SERVICE_NAME ),
-                                                               @( GC_ROW_AUTO         ),
-                                                               @( GC_ROW_LOGIN        ),
-                                                               @( GC_ROW_PWD          ),
-                                                               @( GC_ROW_USER         ),
-                                                               @( GC_ROW_STATUS       )]];
-#endif
-        if (connectStatsVersion) {
-
-            [self.remap addSection:GC_SECTIONS_OPTIONS withRows:@[
-                                                                  @( GC_OPTIONS_MERGE         )]];
-            [self.remap addSection:GC_SECTIONS_BABOLAT withRows:@[
-                                                                  @( GC_BABOLAT_SERVICE_NAME ),
-                                                                  @( GC_BABOLAT_ENABLE       ),
-                                                                  @( GC_BABOLAT_USERNAME     ),
-                                                                  @( GC_BABOLAT_PWD          )]];
-
-        }
-
-
     }
     return self;
 }
@@ -248,6 +154,105 @@
     [_remap release];
 
     [super dealloc];
+}
+
+-(void)buildRemap{
+    self.remap = [RZTableIndexRemap tableIndexRemap];
+    BOOL connectStatsVersion = [GCAppGlobal connectStatsVersion];
+    BOOL healthStatsVersion  = [GCAppGlobal healthStatsVersion];
+    
+    gcGarminLoginMethod method = (gcGarminLoginMethod)[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
+    if ([[GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:@""] isEqualToString:CONFIG_ENABLE_DEBUG_ON]) {
+        
+        [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
+                                                                   @( GC_CONNECTSTATS_NAME ),
+                                                                   @( GC_CONNECTSTATS_ENABLE )
+                                                                   ]];
+    }
+    if (method != gcGarminLoginMethodDirect) {
+        [self.remap addSection:GC_SECTIONS_GARMIN withRows:@[
+                                                             @( GC_GARMIN_SERVICE_NAME  ),
+                                                             @( GC_GARMIN_ENABLE        ),
+                                                             @( GC_GARMIN_USERNAME      ),
+                                                             @( GC_GARMIN_PASSWORD      ),
+                                                             @( GC_GARMIN_METHOD        ),
+                                                             @( GC_GARMIN_MODERN_API    ),
+                                                             //@( GC_GARMIN_MANUAL_LOGIN  )
+                                                             ]];
+    }else{
+        [self.remap addSection:GC_SECTIONS_GARMIN withRows:@[
+                                                             @( GC_GARMIN_SERVICE_NAME  ),
+                                                             @( GC_GARMIN_ENABLE        ),
+                                                             @( GC_GARMIN_USERNAME      ),
+                                                             @( GC_GARMIN_PASSWORD      ),
+                                                             @( GC_GARMIN_MODERN_API    ),
+                                                             ]];
+        
+    }
+    if( [[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:NO] == YES){
+        // OBSOLETE: Only showed if AUTO was on before, should not be used anymore
+        [self.remap addSection:GC_SECTIONS_STRAVA withRows:@[
+                                                             @( GC_STRAVA_NAME      ),
+                                                             @( GC_STRAVA_ENABLE    ),
+                                                             @( GC_STRAVA_AUTO      ),
+                                                             @( GC_STRAVA_LOGOUT    ) ]];
+        // OBSOLETE: Only showed if AUTO was on before, should not be used anymore
+    }else{
+        [self.remap addSection:GC_SECTIONS_STRAVA withRows:@[
+                                                             @( GC_STRAVA_NAME      ),
+                                                             @( GC_STRAVA_ENABLE    ),
+                                                             //@( GC_STRAVA_SEGMENTS   ),
+                                                             @( GC_STRAVA_LOGOUT    ) ]];
+        
+    }
+    
+    if ([GCAppGlobal healthKitStore]) {
+        [self.remap addSection:GC_SECTIONS_HEALTHKIT withRows:@[
+                                                                @( GC_HEALTHKIT_NAME       ),
+                                                                @( GC_HEALTHKIT_ENABLE     ),
+                                                                @( GC_HEALTHKIT_WORKOUT    ),
+                                                                @( GC_HEALTHKIT_SOURCE     )]];
+    }
+    
+    [self.remap addSection:GC_SECTIONS_SPORTTRACKS withRows:@[
+                                                              @( GC_SPORTTRACKS_SERVICE_NAME ),
+                                                              @( GC_SPORTTRACKS_ENABLE       )
+                                                              ]];
+    
+#ifdef GC_USE_HEALTHKIT
+    if (healthStatsVersion) {
+        self.showHealthKit   = true;
+    }
+    
+#endif
+    // for withings
+#ifdef WITHINGS_OAUTH
+    [self.remap addSection:GC_SECTIONS_WITHINGS withRows:@[
+                                                           @( GC_ROW_SERVICE_NAME ),
+                                                           @( GC_ROW_AUTO         ),
+                                                           @( GC_ROW_STATUS       )]];
+#else
+    [self.remap addSection:GC_SECTIONS_WITHINGS withRows:@[
+                                                           @( GC_ROW_SERVICE_NAME ),
+                                                           @( GC_ROW_AUTO         ),
+                                                           @( GC_ROW_LOGIN        ),
+                                                           @( GC_ROW_PWD          ),
+                                                           @( GC_ROW_USER         ),
+                                                           @( GC_ROW_STATUS       )]];
+#endif
+    if (connectStatsVersion) {
+        
+        [self.remap addSection:GC_SECTIONS_OPTIONS withRows:@[
+                                                              @( GC_OPTIONS_MERGE         )]];
+        [self.remap addSection:GC_SECTIONS_BABOLAT withRows:@[
+                                                              @( GC_BABOLAT_SERVICE_NAME ),
+                                                              @( GC_BABOLAT_ENABLE       ),
+                                                              @( GC_BABOLAT_USERNAME     ),
+                                                              @( GC_BABOLAT_PWD          )]];
+        
+    }
+    
+
 }
 
 - (void)viewDidLoad
@@ -542,7 +547,7 @@
         NSAttributedString * status = [[[NSAttributedString alloc] initWithString:[self statusForService:service]
                                                                        attributes:[GCViewConfig attribute14Gray]] autorelease];
         
-        title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Garmin via ConnectStats",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
+        title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Test Garmin via ConnectStats",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
         [gridcell setIconImage:[UIImage imageNamed:@"garmin"]];
         [gridcell labelForRow:0 andCol:0].attributedText = title;
         [gridcell labelForRow:1 andCol:0].attributedText = status;
@@ -1199,6 +1204,7 @@
 }
 
 -(void)notifyCallBack:(id)theParent{
+    [self buildRemap];
     [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 }
 

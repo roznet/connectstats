@@ -531,7 +531,14 @@ const CGFloat kCellDaySpacing = 2.f;
         [GCAppGlobal publishEvent:EVENT_LIST_SEARCH];
     }
     if (searchText.length > 5 && [searchText isEqualToString:CONFIG_ENABLE_DEBUG_ON]) {
-        [GCAppGlobal configSet:CONFIG_ENABLE_DEBUG stringVal:CONFIG_ENABLE_DEBUG_ON];
+        NSString * current = [GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:CONFIG_ENABLE_DEBUG_OFF];
+        if( [current isEqualToString:CONFIG_ENABLE_DEBUG_ON]){
+            RZLog(RZLogInfo, @"Turning OFF debug");
+            [GCAppGlobal configSet:CONFIG_ENABLE_DEBUG stringVal:CONFIG_ENABLE_DEBUG_OFF];
+        }else{
+            RZLog(RZLogInfo, @"Turning ON debug");
+            [GCAppGlobal configSet:CONFIG_ENABLE_DEBUG stringVal:CONFIG_ENABLE_DEBUG_ON];
+        }
         [GCAppGlobal saveSettings];
     }
 }
