@@ -158,10 +158,10 @@ NSString * GCWebConnectStatsRegisterUser( NSString * accessToken, NSString * acc
         if (simulatorError) {
             return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
         }else{
-            return [NSString stringWithFormat:@"%@/api/garmin/user_register?userAccessToken=%@&userAccessTokenSecret=%@",simulatorURL, accessToken, accessTokenSecret];
+            return [NSString stringWithFormat:@"%@/api/connectstats/user_register?userAccessToken=%@&userAccessTokenSecret=%@",simulatorURL, accessToken, accessTokenSecret];
         }
     }else{
-        return [NSString stringWithFormat:@"https://ro-z.net/api/garmin/user_register?userAccessToken=%@&userAccessTokenSecret=%@", accessToken, accessTokenSecret];
+        return [NSString stringWithFormat:@"https://ro-z.net/api/connectstats/user_register?userAccessToken=%@&userAccessTokenSecret=%@", accessToken, accessTokenSecret];
     }
 }
 

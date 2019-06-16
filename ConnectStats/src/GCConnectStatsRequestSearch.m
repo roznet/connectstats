@@ -36,13 +36,12 @@ static const NSUInteger kActivityRequestCount = 20;
 
 @interface GCConnectStatsRequestSearch ()
 
-@property (nonatomic,assign) NSUInteger reachedExisting;
 @property (nonatomic,assign) BOOL reloadAll;
 @property (nonatomic,assign) NSUInteger start;
-@property (nonatomic,retain) NSArray<GCActivity*>*activities;
 
 @property (nonatomic,retain) NSDate * lastFoundDate;
 @property (nonatomic,assign) NSUInteger tokenId;
+@property (nonatomic,assign) BOOL searchMore;
 @end
 
 @implementation GCConnectStatsRequestSearch
@@ -83,7 +82,6 @@ static const NSUInteger kActivityRequestCount = 20;
 
 -(void)dealloc{
     [_lastFoundDate release];
-    [_activities release];
     [super dealloc];
 }
 
@@ -140,14 +138,14 @@ static const NSUInteger kActivityRequestCount = 20;
 
 -(void)addActivitiesFromParser:(GCConnectStatsSearchJsonParser*)parser
                    toOrganizer:(GCActivitiesOrganizer*)organizer{
-    GCActivitiesOrganizerListRegister * listRegister = [GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:[GCService service:gcServiceConnectStats] isFirst:(self.start==0)];
+        GCActivitiesOrganizerListRegister * listRegister = [GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:[GCService service:gcServiceConnectStats] isFirst:(self.start==0)];
     [listRegister addToOrganizer:organizer];
-    self.reachedExisting = listRegister.reachedExisting;
-    self.activities = parser.activities;
-    NSDate * newDate = self.activities.lastObject.date;
+
+    NSDate * newDate = parser.activities.lastObject.date;
     if(newDate){
         self.lastFoundDate = newDate;
     }
+    self.searchMore = [listRegister shouldSearchForMoreWith:kActivityRequestCount reloadAll:self.reloadAll];
 }
 
 -(void)processParse{
@@ -161,7 +159,6 @@ static const NSUInteger kActivityRequestCount = 20;
                 [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats set:true];
                 self.stage = gcRequestStageSaving;
                 [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
-                self.activities = parser.activities;
                 
                 [self addActivitiesFromParser:parser toOrganizer:organizer];
             }
@@ -183,6 +180,10 @@ static const NSUInteger kActivityRequestCount = 20;
     // later check logic to see if reach existing.
     if( self.navigationController ){
         return [[[GCConnectStatsRequestSearch alloc] initNextWith:self] autorelease];
+    }else{
+        if( self.searchMore ){
+            return [[[GCConnectStatsRequestSearch alloc] initNextWith:self] autorelease];
+        }
     }
     return nil;
 }
@@ -196,7 +197,6 @@ static const NSUInteger kActivityRequestCount = 20;
     NSData * info = [NSData dataWithContentsOfFile:fn];
     
     GCConnectStatsSearchJsonParser * parser = [[[GCConnectStatsSearchJsonParser alloc] initWithData:info] autorelease];
-    search.activities = parser.activities;
     [search addActivitiesFromParser:parser toOrganizer:organizer];
     
     return organizer;

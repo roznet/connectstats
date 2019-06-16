@@ -49,7 +49,7 @@
                 NSMutableArray * found = [NSMutableArray arrayWithCapacity:activityList.count];
                 for (NSDictionary * one in activityList) {
                     if ([one isKindOfClass:[NSDictionary class]]) {
-                        NSString * aId = [[GCService service:gcServiceConnectStats] activityIdFromServiceId:one[@"summaryId"]];
+                        NSString * aId = [[GCService service:gcServiceConnectStats] activityIdFromServiceId:one[@"cs_activity_id"]];
                         if ([aId isKindOfClass:[NSString class]]) {
                             GCActivity * act = [[GCActivity alloc] initWithId:aId andConnectStatsData:one];
                             [found addObject:act];

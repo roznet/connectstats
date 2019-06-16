@@ -144,7 +144,7 @@
     
     BOOL isDirectory = false;
     if( [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]){
-        NSString * fn = isDirectory ? [path stringByAppendingPathComponent:[search searchFileNameForPage:start]] : path;
+        NSString * fn = isDirectory ? [path stringByAppendingPathComponent:[search searchFileNameForPage:(int)start]] : path;
         
         NSData * info = [NSData dataWithContentsOfFile:fn];
         GCStravaActivityListParser * parser = [GCStravaActivityListParser activityListParser:info];

@@ -394,7 +394,9 @@
     
     GCService * service = [GCService service:gcServiceConnectStats];
     
-    self.activityId = [service activityIdFromServiceId:data[@"summaryId"]];
+    self.activityId = [service activityIdFromServiceId:data[@"cs_activity_id"]];
+    
+    self.externalServiceActivityId = [[GCService service:gcServiceGarmin] activityIdFromServiceId:data[@"summaryId"]];
     
     GCActivityType * atype = [[GCAppGlobal activityTypes] activityTypeForConnectStatsType:data[@"activityType"]];
     self.activityType = atype.topSubRootType.key;
