@@ -189,15 +189,21 @@ static const NSUInteger kActivityRequestCount = 20;
 }
 
 +(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path{
+    return [self testForOrganizer:organizer withFilesInPath:path start:0];
+}
++(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path start:(NSUInteger)start{
     
-    GCConnectStatsRequestSearch * search = [GCConnectStatsRequestSearch requestWithStart:0 mode:false andNavigationController:nil];
+    GCConnectStatsRequestSearch * search = [GCConnectStatsRequestSearch requestWithStart:start mode:false andNavigationController:nil];
     
-    NSString * fn = [path stringByAppendingPathComponent:[search searchFileNameForPage:0]];
+    BOOL isDirectory = false;
+    if( [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]){
+        NSString * fn = isDirectory ? [path stringByAppendingPathComponent:[search searchFileNameForPage:(int)start]] : path;
+        
+        NSData * info = [NSData dataWithContentsOfFile:fn];
     
-    NSData * info = [NSData dataWithContentsOfFile:fn];
-    
-    GCConnectStatsSearchJsonParser * parser = [[[GCConnectStatsSearchJsonParser alloc] initWithData:info] autorelease];
-    [search addActivitiesFromParser:parser toOrganizer:organizer];
+        GCConnectStatsSearchJsonParser * parser = [[[GCConnectStatsSearchJsonParser alloc] initWithData:info] autorelease];
+        [search addActivitiesFromParser:parser toOrganizer:organizer];
+    }
     
     return organizer;
 }

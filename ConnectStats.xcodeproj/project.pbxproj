@@ -70,6 +70,11 @@
 		421271BA22B68A5200546081 /* activity_3726595228.fit in Resources */ = {isa = PBXBuildFile; fileRef = 421271B122B68A5200546081 /* activity_3726595228.fit */; };
 		421271BB22B68A5200546081 /* strava_laps_2432750438.json in Resources */ = {isa = PBXBuildFile; fileRef = 421271B222B68A5200546081 /* strava_laps_2432750438.json */; };
 		421271BC22B68A5200546081 /* activity_3726595228.json in Resources */ = {isa = PBXBuildFile; fileRef = 421271B322B68A5200546081 /* activity_3726595228.json */; };
+		421271C222B6E31500546081 /* last_connectstats_search_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 421271BD22B6E31400546081 /* last_connectstats_search_0.json */; };
+		421271C322B6E31500546081 /* last_connectstats_search_40.json in Resources */ = {isa = PBXBuildFile; fileRef = 421271BE22B6E31400546081 /* last_connectstats_search_40.json */; };
+		421271C422B6E31500546081 /* last_connectstats_search_20.json in Resources */ = {isa = PBXBuildFile; fileRef = 421271BF22B6E31400546081 /* last_connectstats_search_20.json */; };
+		421271C522B6E31500546081 /* last_connectstats_search_60.json in Resources */ = {isa = PBXBuildFile; fileRef = 421271C022B6E31400546081 /* last_connectstats_search_60.json */; };
+		421271C622B6E31500546081 /* last_connectstats_search_80.json in Resources */ = {isa = PBXBuildFile; fileRef = 421271C122B6E31500546081 /* last_connectstats_search_80.json */; };
 		4213AEB1201393CC0004B54B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4213AEB0201393CC0004B54B /* MapKit.framework */; };
 		4213AEB3201494840004B54B /* activities_duplicate.db in Resources */ = {isa = PBXBuildFile; fileRef = 4213AEB2201494840004B54B /* activities_duplicate.db */; };
 		421418431CF04FB800642F37 /* FITFitFieldValue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418421CF04FB800642F37 /* FITFitFieldValue.mm */; };
@@ -568,7 +573,6 @@
 		427CF8D222ABD6BC00894253 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
 		427CF8D322ABD6BC00894253 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
 		427CF8D422ABD6BC00894253 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
-		427CF8F422AC598D00894253 /* last_connectstats_search_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8E922AC598D00894253 /* last_connectstats_search_0.json */; };
 		427DDCBF1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */; };
 		427DDCC01DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */; };
 		427DDCC81DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCC71DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m */; };
@@ -2636,6 +2640,11 @@
 		421271B122B68A5200546081 /* activity_3726595228.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = activity_3726595228.fit; sourceTree = "<group>"; };
 		421271B222B68A5200546081 /* strava_laps_2432750438.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_laps_2432750438.json; sourceTree = "<group>"; };
 		421271B322B68A5200546081 /* activity_3726595228.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_3726595228.json; sourceTree = "<group>"; };
+		421271BD22B6E31400546081 /* last_connectstats_search_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_connectstats_search_0.json; sourceTree = "<group>"; };
+		421271BE22B6E31400546081 /* last_connectstats_search_40.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_connectstats_search_40.json; sourceTree = "<group>"; };
+		421271BF22B6E31400546081 /* last_connectstats_search_20.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_connectstats_search_20.json; sourceTree = "<group>"; };
+		421271C022B6E31400546081 /* last_connectstats_search_60.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_connectstats_search_60.json; sourceTree = "<group>"; };
+		421271C122B6E31500546081 /* last_connectstats_search_80.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_connectstats_search_80.json; sourceTree = "<group>"; };
 		4213AEB0201393CC0004B54B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/MapKit.framework; sourceTree = DEVELOPER_DIR; };
 		4213AEB2201494840004B54B /* activities_duplicate.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = activities_duplicate.db; sourceTree = "<group>"; };
 		421418411CF04FB800642F37 /* FITFitFieldValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FITFitFieldValue.h; path = src/FITFitFieldValue.h; sourceTree = "<group>"; };
@@ -2936,7 +2945,6 @@
 		427CDB201778F0E10050CFE4 /* GCFieldsCalculatedTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldsCalculatedTrack.h; path = src/GCFieldsCalculatedTrack.h; sourceTree = "<group>"; };
 		427CDB211778F0E10050CFE4 /* GCFieldsCalculatedTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldsCalculatedTrack.m; path = src/GCFieldsCalculatedTrack.m; sourceTree = "<group>"; };
 		427CF8C722ABD6BC00894253 /* credentials.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = credentials.json; sourceTree = "<group>"; };
-		427CF8E922AC598D00894253 /* last_connectstats_search_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_connectstats_search_0.json; sourceTree = "<group>"; };
 		427DDCBD1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminRequestHeartRateZones.h; path = src/GCGarminRequestHeartRateZones.h; sourceTree = "<group>"; };
 		427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequestHeartRateZones.m; path = src/GCGarminRequestHeartRateZones.m; sourceTree = "<group>"; };
 		427DDCC61DB3D54B007745A7 /* GCGarminHeartRateZoneParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminHeartRateZoneParser.h; path = src/GCGarminHeartRateZoneParser.h; sourceTree = "<group>"; };
@@ -5318,7 +5326,6 @@
 		427CF8E822AC598D00894253 /* activity_connectstats */ = {
 			isa = PBXGroup;
 			children = (
-				427CF8E922AC598D00894253 /* last_connectstats_search_0.json */,
 			);
 			path = activity_connectstats;
 			sourceTree = "<group>";
@@ -6085,6 +6092,11 @@
 		42AEFEB21DA057F500D7DA6D /* activity_modern_json */ = {
 			isa = PBXGroup;
 			children = (
+				421271BD22B6E31400546081 /* last_connectstats_search_0.json */,
+				421271BF22B6E31400546081 /* last_connectstats_search_20.json */,
+				421271BE22B6E31400546081 /* last_connectstats_search_40.json */,
+				421271C022B6E31400546081 /* last_connectstats_search_60.json */,
+				421271C122B6E31500546081 /* last_connectstats_search_80.json */,
 				421271B122B68A5200546081 /* activity_3726595228.fit */,
 				421271B322B68A5200546081 /* activity_3726595228.json */,
 				421271AC22B68A5100546081 /* activitylaps_3726595228.json */,
@@ -8097,7 +8109,6 @@
 				42C0119B1AB4891B0059B6CF /* activityweather_678148314.json in Resources */,
 				428BAD151CB14B650041468A /* activitytrack_924421177.json in Resources */,
 				42BB0CC71AB4A99F008D5A10 /* activityweather_486028852.json in Resources */,
-				427CF8F422AC598D00894253 /* last_connectstats_search_0.json in Resources */,
 				42BB0D8D1AB4A9A0008D5A10 /* activityweather_599349123.json in Resources */,
 				42BB0DBC1AB4A9A0008D5A10 /* activityweather_626204429.json in Resources */,
 				42BB0CFE1AB4A9A0008D5A10 /* activityweather_517343056.json in Resources */,
@@ -8140,6 +8151,7 @@
 				42BB0C771AB4A99F008D5A10 /* activityweather_443933250.json in Resources */,
 				42DC6557209DE2650075A5CE /* activityweather_2674807009.json in Resources */,
 				42BB0DA61AB4A9A0008D5A10 /* activityweather_613001000.json in Resources */,
+				421271C622B6E31500546081 /* last_connectstats_search_80.json in Resources */,
 				42BB0D991AB4A9A0008D5A10 /* activityweather_604564625.json in Resources */,
 				42BB0D391AB4A9A0008D5A10 /* activityweather_547704016.json in Resources */,
 				42BB0BF51AB4A99F008D5A10 /* activityweather_395288945.json in Resources */,
@@ -8445,6 +8457,7 @@
 				42C011AB1AB4891B0059B6CF /* activityweather_685561955.json in Resources */,
 				42BB0C081AB4A99F008D5A10 /* activityweather_406006589.json in Resources */,
 				42BB0C711AB4A99F008D5A10 /* activityweather_437990380.json in Resources */,
+				421271C322B6E31500546081 /* last_connectstats_search_40.json in Resources */,
 				42BB0CDA1AB4A99F008D5A10 /* activityweather_498904671.json in Resources */,
 				42BB0C7E1AB4A99F008D5A10 /* activityweather_447877200.json in Resources */,
 				4213AEB3201494840004B54B /* activities_duplicate.db in Resources */,
@@ -8522,6 +8535,7 @@
 				42BB0D341AB4A9A0008D5A10 /* activityweather_543896768.json in Resources */,
 				42BB0CED1AB4A99F008D5A10 /* activityweather_505444344.json in Resources */,
 				42C0119C1AB4891B0059B6CF /* activityweather_678584067.json in Resources */,
+				421271C522B6E31500546081 /* last_connectstats_search_60.json in Resources */,
 				42BB0DE21AB4A9A0008D5A10 /* activityweather_645715891.json in Resources */,
 				42BB0C271AB4A99F008D5A10 /* activityweather_412209431.json in Resources */,
 				42BB0D441AB4A9A0008D5A10 /* activityweather_553286149.json in Resources */,
@@ -8664,6 +8678,7 @@
 				42BB0CF01AB4A99F008D5A10 /* activityweather_508631027.json in Resources */,
 				42C011B61AB4891B0059B6CF /* activityweather_710564922.json in Resources */,
 				42BB0D7E1AB4A9A0008D5A10 /* activityweather_591872615.json in Resources */,
+				421271C422B6E31500546081 /* last_connectstats_search_20.json in Resources */,
 				42BB0D601AB4A9A0008D5A10 /* activityweather_565301692.json in Resources */,
 				4253B4781CD4A53400437E6A /* activityweather_1083407258.json in Resources */,
 				42BB0C861AB4A99F008D5A10 /* activityweather_456386789.json in Resources */,
@@ -8780,6 +8795,7 @@
 				42BB0D731AB4A9A0008D5A10 /* activityweather_586416721.json in Resources */,
 				42BB0BF11AB4A99F008D5A10 /* activityweather_394558888.json in Resources */,
 				42C011991AB4891B0059B6CF /* activityweather_677757738.json in Resources */,
+				421271C222B6E31500546081 /* last_connectstats_search_0.json in Resources */,
 				42C011A51AB4891B0059B6CF /* activityweather_683733801.json in Resources */,
 				42BB0C461AB4A99F008D5A10 /* activityweather_424866607.json in Resources */,
 				42BB0C581AB4A99F008D5A10 /* activityweather_430968380.json in Resources */,

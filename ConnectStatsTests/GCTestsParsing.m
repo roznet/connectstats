@@ -37,6 +37,7 @@
 #import "GCTrackStats.h"
 #import "GCGarminRequestModernActivityTypes.h"
 #import "GCGarminRequestModernSearch.h"
+#import "GCConnectStatsRequestSearch.h"
 #import "GCStravaActivityList.h"
 #import "GCLap.h"
 #import "GCLapSwim.h"
@@ -983,9 +984,13 @@
 }
 
 -(void)testOrganizerMergeServices{
+    NSString * bundlePath = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
+    
+    
     GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_parsing_modern_merge.db"];
     GCActivitiesOrganizer * organizer_strava = [self createEmptyOrganizer:@"test_parsing_modern_merge_strava.db"];
     GCActivitiesOrganizer * organizer_garmin = [self createEmptyOrganizer:@"test_parsing_modern_merge_garmin.db"];
+    GCActivitiesOrganizer * organizer_cs = [self createEmptyOrganizer:@"test_parsing_modern_merge_cs.db"];
 
     // Garmin Cycling: 3726595228  -> __strava__2432750438
     // Garmin Running: 3743031453  -> __strava__2446347224
@@ -1001,16 +1006,17 @@
     NSString * bikeStravaId = @"__strava__2446347224";
     
     // First add garmin
-    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-    [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath];
+    [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:bundlePath];
 
     XCTAssertEqual(organizer.countOfActivities, 20);
     
     XCTAssertNotNil([organizer activityForId:runGarminId]);
     XCTAssertNotNil([organizer activityForId:bikeGarminId]);
-    
-    [GCStravaActivityList testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-    [GCStravaActivityList testForOrganizer:organizer_strava withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+
+    // then add strava
+    [GCStravaActivityList testForOrganizer:organizer withFilesInPath:bundlePath];
+    [GCStravaActivityList testForOrganizer:organizer_strava withFilesInPath:bundlePath];
     // added extra 10 from strava
     XCTAssertEqual(organizer.countOfActivities, 30);
     XCTAssertEqual(organizer_strava.countOfActivities, 30);
@@ -1023,18 +1029,24 @@
     XCTAssertTrue([organizer isKnownDuplicate:[organizer_strava activityForId:runStravaId]]);
     XCTAssertTrue([organizer isKnownDuplicate:[organizer_strava activityForId:bikeStravaId]]);
     
-    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:20];
-    [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:20];
+    // Add Connectstats
+    [GCConnectStatsRequestSearch testForOrganizer:organizer_cs withFilesInPath:bundlePath];
+    XCTAssertEqual(organizer_cs.countOfActivities, 20);
+    [GCConnectStatsRequestSearch testForOrganizer:organizer_cs withFilesInPath:bundlePath start:20];
+    XCTAssertEqual(organizer_cs.countOfActivities, 40);
+    
+    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath start:20];
+    [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:bundlePath start:20];
     XCTAssertEqual(organizer.countOfActivities, 39);
     XCTAssertEqual(organizer_garmin.countOfActivities, 39);
 
-    [GCStravaActivityList testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:1];
-    [GCStravaActivityList testForOrganizer:organizer_strava withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:1];
+    [GCStravaActivityList testForOrganizer:organizer withFilesInPath:bundlePath start:1];
+    [GCStravaActivityList testForOrganizer:organizer_strava withFilesInPath:bundlePath start:1];
     XCTAssertEqual(organizer.countOfActivities, 52);
     XCTAssertEqual(organizer_strava.countOfActivities, 52);
     
-    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:40];
-    [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:40];
+    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath start:40];
+    [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:bundlePath start:40];
 
     XCTAssertEqual(organizer.countOfActivities, 56);
     
@@ -1048,11 +1060,11 @@
     XCTAssertEqual(organizer.countOfActivities,reload.countOfActivities);
     
     // Check that import again on reloaded organizer does not add duplicate
-    [GCGarminRequestModernSearch testForOrganizer:reload withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-    [GCStravaActivityList testForOrganizer:reload withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    [GCGarminRequestModernSearch testForOrganizer:reload withFilesInPath:bundlePath];
+    [GCStravaActivityList testForOrganizer:reload withFilesInPath:bundlePath];
     XCTAssertEqual(organizer.countOfActivities,reload.countOfActivities);
-    [GCGarminRequestModernSearch testForOrganizer:reload withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:20];
-    [GCStravaActivityList testForOrganizer:reload withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:1];
+    [GCGarminRequestModernSearch testForOrganizer:reload withFilesInPath:bundlePath start:20];
+    [GCStravaActivityList testForOrganizer:reload withFilesInPath:bundlePath start:1];
     XCTAssertEqual(organizer.countOfActivities,reload.countOfActivities);
     
     
