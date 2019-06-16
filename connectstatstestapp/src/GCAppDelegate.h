@@ -65,5 +65,8 @@
 
 -(UINavigationController*)currentNavigationController;
 
+-(NSDictionary<NSString*,NSString*>*)credentialsForService:(NSString*)service;
+-(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;
+
 
 @end

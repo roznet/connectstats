@@ -34,8 +34,6 @@
 #import "Flurry.h"
 #import "GCActivityMetaValue.h"
 #import "GCViewConfig.h"
-#import "GCStravaActivityTransfer.h"
-#import "GCSportTracksActivityUpload.h"
 #import "GCWebConnect+Requests.h"
 #import "GCService.h"
 #import "GCActivitiesOrganizer.h"

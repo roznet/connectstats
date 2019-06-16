@@ -37,7 +37,7 @@
 #endif
     RZlogLevels level = RZLogError;
     [LCLLogFile logWithIdentifier:RZLog_components[level]
-                            level:level
+                            level:(unsigned int)level
                              path:[path cStringUsingEncoding:NSUTF8StringEncoding]
                              line:(unsigned)line
                          function:[funcName cStringUsingEncoding:NSUTF8StringEncoding]
@@ -53,7 +53,7 @@
 #endif
     RZlogLevels level = RZLogInfo;
     [LCLLogFile logWithIdentifier:RZLog_components[level]
-                            level:level
+                            level:(unsigned int)level
                              path:[path cStringUsingEncoding:NSUTF8StringEncoding]
                              line:(unsigned)line
                          function:[funcName cStringUsingEncoding:NSUTF8StringEncoding]
@@ -69,7 +69,7 @@
 #endif
     RZlogLevels level = RZLogWarning;
     [LCLLogFile logWithIdentifier:RZLog_components[level]
-                            level:level
+                            level:(uint32_t)level
                              path:[path cStringUsingEncoding:NSUTF8StringEncoding]
                              line:(unsigned)line
                          function:[funcName cStringUsingEncoding:NSUTF8StringEncoding]
@@ -87,7 +87,7 @@
     NSLog(@"^[%@]: %@", funcName,  msg);
 #endif
     [LCLLogFile logWithIdentifier:RZLog_components[level]
-                            level:level
+                            level:(uint32_t)level
                              path:[path cStringUsingEncoding:NSUTF8StringEncoding]
                              line:(unsigned)line
                          function:[funcName cStringUsingEncoding:NSUTF8StringEncoding]

@@ -25,7 +25,6 @@
 
 #import "GCTestUISamples.h"
 #import "GCAppGlobal.h"
-#import "GCGarminActivityXMLParser.h"
 #import "GCSimpleGraphCachedDataSource+Templates.h"
 #import "GCHistoryFieldDataSerie.h"
 #import "GCHistoryFieldDataSerie+Test.h"
@@ -84,15 +83,6 @@
         }
     }
     return  rv;
-}
-
--(void)loadDataSourceSamples{
-    NSString * xmlfilename = [RZFileOrganizer bundleFilePath:@"activity_234979239_running.tcx"];
-    NSError * e;
-    NSString * content = [NSString stringWithContentsOfFile:xmlfilename encoding:NSUTF8StringEncoding error:&e];
-    GCGarminActivityXMLParser*parser = [[GCGarminActivityXMLParser alloc] initWithString:content andEncoding:NSUTF8StringEncoding];
-    [[GCAppGlobal organizer] registerActivity:@"234979239" withTrackpoints:[parser trackPoints] andLaps:[parser laps]];
-    [parser release];
 }
 
 -(NSArray<GCTestUISampleDataSourceHolder*>*)dataSourceHolderFor:(SEL)selector{

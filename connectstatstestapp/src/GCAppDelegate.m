@@ -36,6 +36,8 @@
 @property (nonatomic,retain) RZSRemoteURLFindValid * findValid;
 @property (nonatomic,retain) NSString * useSimulatorUrl;
 @property (nonatomic,retain) UITabBarController * tabBarController;
+@property (nonatomic,retain) NSDictionary<NSString*,NSDictionary*> * credentials;
+
 @end
 
 @implementation GCAppDelegate
@@ -59,6 +61,7 @@
     [_activityTypes release];
     [_tabBarController release];
     [_testServicesViewController release];
+    [_credentials release];
     
     [super dealloc];
 }
@@ -324,6 +327,38 @@
 }
 -(UINavigationController*)currentNavigationController{
     return self.tabBarController.viewControllers[self.tabBarController.selectedIndex ];
+}
+
+
+-(NSDictionary<NSString*,NSString*>*)credentialsForService:(NSString*)service{
+    if( self.credentials == nil){
+        NSString * credentialsPath = [RZFileOrganizer bundleFilePath:@"credentials.json"];
+        NSData * credentialsData = [NSData dataWithContentsOfFile:credentialsPath];
+        if( credentialsPath ){
+            NSError * error = nil;
+            NSDictionary * credentials = [NSJSONSerialization JSONObjectWithData:credentialsData options:NSJSONReadingAllowFragments error:&error];
+            if( [credentials isKindOfClass:[NSDictionary class]]){
+                self.credentials = credentials;
+            }else{
+                RZLog(RZLogError, @"Failed to load %@", credentialsPath);
+                self.credentials = @{};
+            }
+        }
+    }
+    NSDictionary * rv = self.credentials[service];
+    return rv ?: @{};
+}
+
+-(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key{
+    NSDictionary * credentials = [self credentialsForService:service];
+    NSString * found = credentials[key];
+    if( [found isKindOfClass:[NSString class]]){
+        return found;
+    }else{
+        // Default empty string, will fail connection as invalid credential...
+        RZLog(RZLogError, @"Didn't find credential %@ for %@", key, service);;
+        return @"";
+    }
 }
 
 @end

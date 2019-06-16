@@ -134,7 +134,7 @@
             return nil;
         }
     }else{
-        return GCWebActivityURL(self.activityId);
+        return nil;
     }
 }
 
@@ -146,9 +146,6 @@
             break;
         case gcTrack13RequestTracks:
             fn =[NSString stringWithFormat:@"activitytrack_%@.json", activityId];
-            break;
-        case gcTrack13RequestTCX:
-            fn =[NSString stringWithFormat:@"activity_%@.tcx", activityId];
             break;
         case gcTrack13RequestFit:
             fn = [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_DOWNLOAD defaultValue:TRUE] ? [NSString stringWithFormat:@"activity_%@.fit", activityId] : nil;
@@ -246,10 +243,6 @@
     }else if(self.track13Stage==gcTrack13RequestTracks){
         dispatch_async([GCAppGlobal worker],^(){
             [self processParseTrackpoints];
-        });
-    }else if(self.track13Stage==gcTrack13RequestTCX){
-        dispatch_async([GCAppGlobal worker],^(){
-            [self processParseTCX];
         });
     }else{
         [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];

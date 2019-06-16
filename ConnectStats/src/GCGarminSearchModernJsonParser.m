@@ -52,6 +52,10 @@
                             GCActivity * act = [[GCActivity alloc] initWithId:[aId stringValue] andGarminData:one];
                             [found addObject:act];
                             [act release];
+                            
+                            if( [act.metaData[@"ownerDisplayName"].display isEqualToString:@"garmin.connect"] ){
+                                RZLog(RZLogWarning, @"Spurious activity %@", act.activityId);
+                            }
                         }
                     }
                 }

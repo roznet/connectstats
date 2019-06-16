@@ -29,7 +29,6 @@
 #import "GCHistoryFieldDataSerie.h"
 #import "GCHistoryFieldDataSerie+Test.h"
 #import "GCViewSwimStrokeColors.h"
-#import "GCGarminActivityXMLParser.h"
 //#import "GCSimpleGraphCachedDataSource+Templates.h"
 #import "GCFields.h"
 //#import "GCActivity+Import.h"

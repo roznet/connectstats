@@ -41,6 +41,8 @@
 -(NSDate*)lastSync:(NSString*)aId;
 -(void)recordSync:(NSString*)aId;
 
+-(BOOL)preferredOver:(GCService*)other;
+
 // Helpers
 +(NSString*)serviceIdFromSportTracksUri:(NSString*)uri;
 @end

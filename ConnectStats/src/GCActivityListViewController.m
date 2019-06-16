@@ -37,6 +37,7 @@
 #import "GCCellActivity.h"
 #import "GCActivityPreviewingViewController.h"
 #import <RZExternal/RZExternal.h>
+#import "GCActivity+Database.h"
 
 #define GC_ALERT_CONFIRM_DELETED    1
 #define GC_ALERT_TRIAL              2
@@ -530,7 +531,14 @@ const CGFloat kCellDaySpacing = 2.f;
         [GCAppGlobal publishEvent:EVENT_LIST_SEARCH];
     }
     if (searchText.length > 5 && [searchText isEqualToString:CONFIG_ENABLE_DEBUG_ON]) {
-        [GCAppGlobal configSet:CONFIG_ENABLE_DEBUG stringVal:CONFIG_ENABLE_DEBUG_ON];
+        NSString * current = [GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:CONFIG_ENABLE_DEBUG_OFF];
+        if( [current isEqualToString:CONFIG_ENABLE_DEBUG_ON]){
+            RZLog(RZLogInfo, @"Turning OFF debug");
+            [GCAppGlobal configSet:CONFIG_ENABLE_DEBUG stringVal:CONFIG_ENABLE_DEBUG_OFF];
+        }else{
+            RZLog(RZLogInfo, @"Turning ON debug");
+            [GCAppGlobal configSet:CONFIG_ENABLE_DEBUG stringVal:CONFIG_ENABLE_DEBUG_ON];
+        }
         [GCAppGlobal saveSettings];
     }
 }
@@ -563,97 +571,15 @@ const CGFloat kCellDaySpacing = 2.f;
 -(void)cellGrid:(GCCellGrid*)cell didSelectLeftButtonAt:(NSIndexPath*)indexPath{
     self.activityForAction = [self activityForIndex:indexPath.row];
 
-
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"More Actions", @"More Actions")
-                                                                    message:nil
-                                                             preferredStyle:UIAlertControllerStyleActionSheet];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"More Actions")
-                                              style:UIAlertActionStyleCancel
-                                            handler:^(UIAlertAction*action){
-
-                                            }]];
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Rename Activity", @"More Actions")
-                                              style:UIAlertActionStyleDefault handler:^(UIAlertAction*action){
-                                                  [self renameActivity];
-
-                                              }]];
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Change Type",@"More Actions")
-                                              style:UIAlertActionStyleDefault handler:^(UIAlertAction*action){
-                                                  [self changeActivityType];
-                                              }]];
-    if (self.tabBarController) {
-        [self.tabBarController presentViewController:alert animated:YES completion:^(){
-            [[NSNotificationCenter defaultCenter] postNotificationName:GCCellGridShouldHideMenu object:self];
-        }];
+    if( self.activityForAction.skipAlways) {
+        self.activityForAction.skipAlways = false;
     }else{
-        alert.popoverPresentationController.sourceView = cell;
-        CGRect rect = cell.frame;
-        alert.popoverPresentationController.sourceRect = CGRectMake(rect.size.width, rect.size.height/2., 1, 1);
-        [self presentViewController:alert animated:YES completion:^(){
-            [[NSNotificationCenter defaultCenter] postNotificationName:GCCellGridShouldHideMenu object:self];
-        }];
+        self.activityForAction.skipAlways = true;
     }
-
-}
-
-
--(void)changeActivityType{
-    GCActivityTypeListViewController * detail = [[[GCActivityTypeListViewController alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
-    detail.activity = self.activityForAction;
-    detail.refreshDelegate = self;
-    [self.navigationController pushViewController:detail animated:YES];
-}
-
--(void)renameActivity{
-    // Tested Manually /rename
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Rename Activity",@"Rename Activity")
-                                                                    message:NSLocalizedString(@"Enter new activity name", @"Rename Activity")
-                                                             preferredStyle:UIAlertControllerStyleAlert];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Rename Activity")
-                                              style:UIAlertActionStyleCancel
-                                            handler:^(UIAlertAction*action){
-
-                                            }]];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Rename", @"Rename Activity")
-                                              style:UIAlertActionStyleDefault
-                                            handler:^(UIAlertAction*action){
-                                                GCActivity*act= self.activityForAction;
-                                                [self beginRefreshing];
-                                                if (alert.textFields.count>0) {
-                                                    NSString * txt = alert.textFields[0].text;
-                                                    [[GCAppGlobal web] garminRenameActivity:act.activityId withName:txt];
-                                                    [Flurry logEvent:EVENT_RENAME];
-                                                }
-                                            }]];
-
-    [alert addTextFieldWithConfigurationHandler:^(UITextField*field){
-        field.text = self.activityForAction.activityName;
-    }];
-
-    [self presentViewController:alert animated:YES completion:^(){}];
-}
-
--(void)deleteActivity{
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Delete Activity",@"Delete Activity")
-                                                                    message:NSLocalizedString(@"Are you sure you want to delete this activity on garmin Connect. This can't be undone", @"Delete Activity")
-                                                             preferredStyle:UIAlertControllerStyleAlert];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Delete Activity")
-                                              style:UIAlertActionStyleCancel
-                                            handler:^(UIAlertAction*action){
-
-                                            }]];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", @"Delete Activity")
-                                              style:UIAlertActionStyleDestructive
-                                            handler:^(UIAlertAction * action){
-                                                [self beginRefreshing];
-                                                [[GCAppGlobal web] garminDeleteActivity:self.activityForAction.activityId];
-                                            }]];
-    [self presentViewController:alert animated:YES completion:^(){}];
+    if( self.activityForAction.db ){
+        [self.activityForAction saveToDb:self.activityForAction.db];
+    }
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - UIViewControllerPreviewingDelegate

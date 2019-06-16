@@ -227,7 +227,6 @@
         NSString * fieldkey = nil;
         NSString * uom = nil;
         NSNumber * val = nil;
-        gcFieldFlag flag = gcFieldFlagNone;
         if (def) {
             id valo = data[key];
             if ([valo isKindOfClass:[NSNumber class]]) {
@@ -247,10 +246,7 @@
                 if (subdefs) {
                     fieldkey = subdefs[0];
                     uom = subdefs[2];
-                    id flago = subdefs[1];
-                    if ([flago isKindOfClass:[NSNumber class]]) {
-                        flag = [flago intValue];
-                    }
+                    // Ignore subdefs[1] that contains the flag as int
                 }
             }
         }

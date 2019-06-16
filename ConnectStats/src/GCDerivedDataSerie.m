@@ -73,9 +73,9 @@ sqlite3_int64 kInvalidSerieId = 0;
 
 -(void)encodeWithCoder:(NSCoder *)aCoder{
     [aCoder encodeInt:1                 forKey:kGCVersion];
-    [aCoder encodeInt:_derivedType      forKey:kGCDerivedType];
-    [aCoder encodeInt:_fieldFlag            forKey:kGCField];
-    [aCoder encodeInt:_derivedPeriod    forKey:kGCDerivedPeriod];
+    [aCoder encodeInt:(int)_derivedType      forKey:kGCDerivedType];
+    [aCoder encodeInt:(int)_fieldFlag            forKey:kGCField];
+    [aCoder encodeInt:(int)_derivedPeriod    forKey:kGCDerivedPeriod];
     [aCoder encodeObject:_activityType  forKey:kGCActivityType];
     [aCoder encodeObject:_serieWithUnit forKey:kGCSerie];
     [aCoder encodeObject:_bucketEnd     forKey:kGCBucketEnd];

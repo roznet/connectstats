@@ -25,7 +25,6 @@
 
 #import "GCTestBasics.h"
 #import "GCAppGlobal.h"
-#import "GCGarminActivityXMLParser.h"
 #import "GCGarminActivityDetailJsonParser.h"
 #import "GCGarminActivitySummaryParser.h"
 #import "GCActivity+Calculated.h"
@@ -35,7 +34,6 @@
 #import "GCGarminActivityLapsParser.h"
 #import "GCGarminActivityDetailJsonParser.h"
 #import "GCGarminActivityWeatherParser.h"
-#import "GCGarminActivityWeatherHtml.h"
 #import "GCActivity+Import.h"
 
 #define kRegrUnit @"unit"
@@ -48,9 +46,6 @@
     return @[ @{@"selector":NSStringFromSelector(@selector(testBasics)),
                 @"description":@"Test Upgrade of datasbe for swim and fenix",
                 @"session":@"GC Basics"},
-              @{@"selector":NSStringFromSelector(@selector(testWeatherParsing)),
-                @"description":@"Test weather parsing",
-                @"session":@"GC Weather"},
               ];
 }
 
@@ -66,7 +61,6 @@
     // Need to turn off duplicate check as it will compare to count from db select
     [GCAppGlobal setupSampleState:@"sample_activities_v1.db" config:@{CONFIG_FULL_DUPLICATE_CHECK:@(false)}];
     [self testSwimAlgo:@"sample_activities_v1.db"];
-    [self testFenix:@"sample_activities_v1.db"];
 
     [GCAppGlobal setupSampleState:@"sample_activities.db" config:@{CONFIG_FULL_DUPLICATE_CHECK:@(false)}];
     [self testSwimAlgo:@"sample_activities.db"];
@@ -74,25 +68,6 @@
     [self endSession:@"GC Basics"];
 
 }
-
--(void)testFenix:(NSString*)sampleName{
-    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:sampleName]];
-    [db open];
-    int count = [db intForQuery:@"SELECT count(*) from gc_activities"];
-    int countfenix = [db intForQuery:@"SELECT count(*) from gc_activities_meta where field='device' and display='Garmin Fenix'"];
-    [db close];
-
-    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities]==count, @"loaded activities %d==%d", (int)[[GCAppGlobal organizer] countOfActivities], count);
-
-    NSUInteger details = 0;
-    for (GCActivity * act in [[GCAppGlobal organizer] activities]) {
-        if ([act downloadMethod] == gcDownloadMethodDetails) {
-            details += 1;
-        }
-    }
-    [self assessTestResult:@"Fenix" result:details == countfenix];
-}
-
 
 -(void)testSwimAlgo:(NSString*)sampleName{
     FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:sampleName]];
@@ -342,29 +317,5 @@
     [self assessTrue:(diffTime==0)     msg:@"%@ %d timeDiff:  lap[%d] %@/%@",aId,diffTime, lastBadTimeIdx, lastBadTime,lastBadTime2];
 }
 
-#pragma mark - Weather
 
--(void)testWeatherParsing{
-    [self startSession:@"GC Weather"];
-
-    NSArray * aIds = @[@"395288954",@"395288975",@"397686263",@"397686271",@"397686279",@"397686290",@"398557492"];
-    for (NSString * aId in aIds) {
-        NSStringEncoding encoding = NSUTF8StringEncoding;
-        NSString * fn = [NSString stringWithFormat:@"activity_%@.html",aId];
-        NSError*error =nil;
-        NSString * theString = [NSString stringWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn] encoding:encoding error:&error];
-        theString = [GCGarminActivityWeatherHtml extractWeatherSection:theString];
-        [self assessTrue:theString!=nil msg:@"Extract weather subpart"];
-        if (theString) {
-            GCGarminActivityWeatherParser * parser = [GCGarminActivityWeatherParser garminActivityWeatherParser:theString andEncoding:encoding];
-            [self assessTrue:parser.success msg:@"Weather parsing succeeded"];
-            if (parser.success) {
-                GCWeather * weather= parser.weather;
-                [self assessTrue:weather.valid msg:@"Weather valid"];
-            }
-        }
-    }
-    [self endSession:@"GC Weather"];
-
-}
 @end

@@ -77,6 +77,7 @@
 #define CONFIG_WITHINGS_USER            @"config_withings_user"
 #define CONFIG_WITHINGS_AUTO            @"config_withings_auto"
 #define CONFIG_BABOLAT_ENABLE           @"config_babolat_enable"
+#define CONFIG_CONNECTSTATS_ENABLE      @"config_connectstats_enable"
 #define CONFIG_GARMIN_ENABLE            @"config_garmin_enable"
 #define CONFIG_GARMIN_LOGIN_METHOD      @"config_garmin_login_method"
 #define CONFIG_GARMIN_USE_MODERN        @"config_garmin_use_modern_v2"
@@ -92,6 +93,10 @@
 #define CONFIG_FITBIT_TOKEN             @"config_fitbit_t"
 #define CONFIG_FITBIT_TOKENSECRET       @"config_fitbit_s"
 
+#define CONFIG_CONNECTSTATS_TOKEN       @"config_connectstats_token"
+#define CONFIG_CONNECTSTATS_TOKEN_ID    @"config_connectstats_token_id"
+#define CONFIG_CONNECTSTATS_USER_ID     @"config_connectstats_user_id"
+
 #define CONFIG_GARMIN_FIT_DOWNLOAD      @"config_garmin_fit_download"
 #define CONFIG_GARMIN_FIT_MERGE         @"config_garmin_fit_merge"
 
@@ -101,6 +106,7 @@
 
 #define CONFIG_ENABLE_DEBUG               @"config_enable_debug"
 #define CONFIG_ENABLE_DEBUG_ON            @"enabledebug1970"
+#define CONFIG_ENABLE_DEBUG_OFF           @"disabled"
 
 #define CONFIG_STATS_START_PAGE           @"config_stats_start_page"
 
@@ -141,7 +147,7 @@ typedef NS_ENUM(NSUInteger, gcPeriodType) {
 typedef NS_ENUM(NSUInteger, gcGarminLoginMethod) {
     gcGarminLoginMethodDirect,
     gcGarminLoginMethodWebview,
-    gcGarminLoginMethodLegacy,
+    gcGarminLoginMethodSimulator,
     GCGarminLoginMethodEnd
 };
 
@@ -153,6 +159,7 @@ typedef NS_ENUM(NSUInteger, gcService) {
     gcServiceSportTracks,
     gcServiceHealthKit,
     gcServiceFitBit,
+    gcServiceConnectStats,
     gcServiceEnd
 };
 

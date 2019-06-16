@@ -1284,12 +1284,12 @@
 			isa = PBXGroup;
 			children = (
 				42B2642B1FF8314400E891A1 /* OAuth1Controller.h */,
+				42B264371FF8314400E891A1 /* OAuth1Controller.m */,
 				42B2642C1FF8314400E891A1 /* NSString+URLEncoding.h */,
 				42B2642D1FF8314400E891A1 /* Crypto */,
 				42B264341FF8314400E891A1 /* OAuth1WithingsController.h */,
 				42B264351FF8314400E891A1 /* OAuth1WithingsController.m */,
 				42B264361FF8314400E891A1 /* NSString+URLEncoding.m */,
-				42B264371FF8314400E891A1 /* OAuth1Controller.m */,
 			);
 			path = "Simple-OAuth-FitBit";
 			sourceTree = "<group>";

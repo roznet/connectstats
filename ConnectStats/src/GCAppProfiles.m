@@ -538,6 +538,9 @@
         case gcServiceFitBit:
             rv = [self configGetBool:CONFIG_FITBIT_ENABLE defaultValue:NO];
             break;
+        case gcServiceConnectStats:
+            rv = [self configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO];
+            break;
         case gcServiceEnd:
             rv = false;
             break;
@@ -566,6 +569,9 @@
             break;
         case gcServiceFitBit:
             [self configSet:CONFIG_FITBIT_ENABLE boolVal:set];
+            break;
+        case gcServiceConnectStats:
+            [self configSet:CONFIG_CONNECTSTATS_ENABLE boolVal:set];
             break;
         case gcServiceEnd:
             break;

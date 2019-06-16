@@ -42,6 +42,16 @@
 
 @implementation GCActivity (Internal)
 
+-(GCActivity*)initWithId:(NSString *)aId andConnectStatsData:(NSDictionary*)aData{
+    self = [self initWithId:aId];
+    if (self) {
+        self.activityId = aId;
+        [self parseConnectStatsJson:aData];
+        self.settings = [GCActivitySettings defaultsFor:self];
+    }
+    return self;
+}
+
 -(GCActivity*)initWithId:(NSString*)aId andGarminData:(NSDictionary*)aData{
     self = [self initWithId:aId];
     if (self) {
@@ -100,7 +110,7 @@
     return self;
 }
 
-#pragma mark -
+#pragma mark - Generic Import Tools
 
 -(void)setSummaryField:(gcFieldFlag)which with:(GCNumberWithUnit*)nu{
     switch (which) {
@@ -315,7 +325,134 @@
     }
 
 }
-#pragma mark -
+
+#pragma mark - ConnectStats Service
+
+
+-(NSMutableDictionary*)buildSummaryDataFromGarminConnectStatsData:(NSDictionary*)data{
+    
+    NSArray * fields = @[
+                         @"summaryId", //     string     Unique identifier for the summary.
+                         @"activityType", //     string     Text description of the activity type. See Appendix A for a complete list.
+                         @"deviceName", //     string     Only Fitness activities are associated with a specific Garmin device rather than the user’s overall account. If the user wears two devices at once at the same time and starts a Fitness Activity on each then both will generate separate Activities with two different deviceNames.
+                         @"isParent", //     boolean     If present and set to true, this activity is the parent activity of one or more child activities that should also be made available, // in the data feed to the partner. An activity of type MULTI_SPORT is an example of a parent activity.
+                         @"parentSummaryId", //     integer     If present, this is the summaryId of the related parent activity. An activity of type CYCLING with a parent activity of type MULTI_SPORT is an example of this type of relationship.
+                         @"manual", //     boolean     Indicates that the activity was manually entered directly on the Connect site. This property will only exist for manual activities
+                         
+                         @"startTimeInSeconds", //     integer     Start time of the activity in seconds since January 1, 1970, 00:00:00 UTC (Unix timestamp).
+                         @"startTimeOffsetInSeconds", //     integer     Offset in seconds to add to startTimeInSeconds to derive the "local" time of the device that captured the data.
+                         //@"durationInSeconds", //     integer     Length of the monitoring period in seconds.
+                         //@"averageBikeCadenceInRoundsPerMinute", //     floating point
+                         //@"averageHeartRateInBeatsPerMinute", //     integer
+                         //@"averageRunCadenceInStepsPerMinute", //     floating point
+                         //@"averageSpeedInMetersPerSecond", //     floating point
+                         @"averageSwimCadenceInStrokesPerMinute", //     floating point
+                         @"averagePaceInMinutesPerKilometer", //     floating point
+                         //@"activeKilocalories", //     integer
+                         //@"distanceInMeters", //     floating point
+                         @"maxBikeCadenceInRoundsPerMinute", //     floating point
+                         //@"maxHeartRateInBeatsPerMinute", //     floating point
+                         @"maxPaceInMinutesPerKilometer", //     floating point
+                         @"maxRunCadenceInStepsPerMinute", //     floating point
+                         //@"maxSpeedInMetersPerSecond", //     floating point
+                         @"numberOfActiveLengths", //     integer
+                         @"startingLatitudeInDegree", //     floating point
+                         @"startingLongitudeInDegree", //     floating point
+                         @"steps", //     integer
+                         //@"totalElevationGainInMeters", //     floating point
+                         //@"totalElevationLossInMeters", //     floating point
+                         ];
+    return [NSMutableDictionary dictionaryWithObjects:fields forKeys:fields];
+}
+-(void)parseConnectStatsJson:(NSDictionary*)data{
+    NSDictionary * defs = @{
+                            //@"moving_time":         @[ @"SumMovingDuration",    @"",                                    @"second"],
+                            //@"average_watts":       @[ @"WeightedMeanPower",    @(gcFieldFlagPower),                    @"watt"],
+                            //@"kilojoules":          @[ @"SumTotalWork",         @"",                                    @"kilojoule"],
+                            //@"average_temp":        @[ @"WeightedMeanAirTemperature",@"",                               @"celcius"],
+                            
+                            //@"start_date":          @[ @"BeginTimeStamp",       @"",                                    @"time"],
+                            //@"start_latlng":        @[ @[@"BeginLatitude",@"BeginLongitude"],@"vector", @"dd"],
+                            //@"end_latlng":          @[ @[@"EndLatitude",  @"EndLongitude"],  @"vector", @"dd"],
+                            
+                            
+                            @"durationInSeconds":        @[ @"SumDuration",          @(gcFieldFlagSumDuration),              @"second"],
+                            @"averageHeartRateInBeatsPerMinute":   @[ @"WeightedMeanHeartRate",@(gcFieldFlagWeightedMeanHeartRate),    @"bpm"],
+                            @"averageSpeedInMetersPerSecond":       @[ @"WeightedMeanSpeed",    @(gcFieldFlagWeightedMeanSpeed),        @"mps"],
+                            @"activeKilocalories":            @[ @"SumEnergy",            @"",                                    @"kilocalorie"],
+                            @"distanceInMeters":            @[ @"SumDistance",          @(gcFieldFlagSumDistance),              @"meter"],
+                            @"maxHeartRateInBeatsPerMinute":       @[ @"MaxHeartRate",         @"",                                    @"bpm"],
+                            @"maxSpeedInMetersPerSecond":           @[ @"MaxSpeed",             @"",                                    @"mps"],
+                            @"totalElevationGainInMeters":@[ @"GainElevation",        @"",                                    @"meter"],
+                            @"totalElevationLossInMeters":@[ @"LossElevation",        @"",                                    @"meter"],
+
+                            @"averageBikeCadenceInRoundsPerMinute": @[  @"WeightedMeanBikeCadence", @(gcFieldFlagCadence), @"rpm" ],
+                            @"averageRunCadenceInStepsPerMinute": @[ @"WeightedMeanRunCadence", @(gcFieldFlagCadence), @"stepsPerMinute" ],
+                            
+                            
+                            };
+    
+    GCService * service = [GCService service:gcServiceConnectStats];
+    
+    self.activityId = [service activityIdFromServiceId:data[@"cs_activity_id"]];
+    
+    self.externalServiceActivityId = [[GCService service:gcServiceGarmin] activityIdFromServiceId:data[@"summaryId"]];
+    
+    GCActivityType * atype = [[GCAppGlobal activityTypes] activityTypeForConnectStatsType:data[@"activityType"]];
+    self.activityType = atype.topSubRootType.key;
+    self.activityTypeDetail = atype;
+    self.activityName = @"";
+    self.location = @"";
+    if (self.activityType == nil) {
+        self.activityType = GC_TYPE_OTHER;
+        
+        self.activityTypeDetail = atype;
+        if (self.activityTypeDetail==nil) {
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_OTHER];
+            self.activityName = [data[@"activityType"] lowercaseString];
+        }
+    }
+    self.downloadMethod = gcDownloadMethodConnectStats;
+    if (self.metaData==nil) {
+        [self updateMetaData:[NSMutableDictionary dictionary]];
+    }
+    if (self.activityId && self.activityType) {
+        NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionaryWithCapacity:data.count];
+        [self parseData:data into:newSummaryData usingDefs:defs];
+        
+        self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:self.activityType];
+        if (!self.distanceDisplayUom) {
+            self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:GC_TYPE_ALL];
+        }
+        // few extra derived
+        [self addPaceIfNecessaryWithSummary:newSummaryData];
+        [self mergeSummaryData:newSummaryData];
+        
+        NSString * lat = data[@"startingLatitudeInDegree"];
+        NSString * lon = data[@"startingLongitudeInDegree"];
+        
+        if ([lat respondsToSelector:@selector(doubleValue)] && [lon respondsToSelector:@selector(doubleValue)]) {
+            self.beginCoordinate = CLLocationCoordinate2DMake([lat doubleValue], [lon doubleValue]);
+        }
+        NSString * startdate = data[@"startTimeInSeconds"];
+        if([startdate respondsToSelector:@selector(doubleValue)]) {
+            self.date = [NSDate dateWithTimeIntervalSince1970:[startdate doubleValue] ];
+            if (!self.date) {
+                RZLog(RZLogError, @"%@: Invalid date %@", self.activityId, startdate);
+            }
+        }else{
+            RZLog(RZLogError, @"%@: Invalid date %@", self.activityId, startdate);
+        }
+        NSString * externalId = data[@"summaryId"];
+        if([externalId isKindOfClass:[NSString class]]){
+            self.externalServiceActivityId = [[GCService service:gcServiceGarmin] activityIdFromServiceId:externalId];
+        }
+    }
+    
+}
+
+
+#pragma mark - Garmin Web Service
 
 -(void)parseModernGarminJson:(NSDictionary*)data{
     GCService * service = [GCService service:gcServiceGarmin];
@@ -365,7 +502,7 @@
     }
     
     if (self.metaData==nil) {
-        self.metaData = [NSMutableDictionary dictionary];
+        [self updateMetaData:[NSMutableDictionary dictionary]];
     }
     NSArray * foundConnectIQ = data[@"connectIQMeasurements"];
     if( [foundConnectIQ isKindOfClass:[NSArray class]]){
@@ -448,9 +585,10 @@
             extraMeta[ mappedKey ] = metaVal;
         }
     }
-    self.metaData = extraMeta;
+    [self updateMetaData:extraMeta];
 
 }
+
 
 
 /**
@@ -741,18 +879,12 @@
     }
 
 
-    self.downloadMethod = gcDownloadMethodDefault;
-    if ([GCAppGlobal configGetBool:CONFIG_USE_NEW_TRACK_API defaultValue:true]) {
-        self.downloadMethod = gcDownloadMethod13;
-    }
+    self.downloadMethod = gcDownloadMethod13;
     for (NSString * field in @[@"device",@"activityType",@"eventType"]) {
         NSDictionary * info = aData[field];
         if (info) {
             GCActivityMetaValue * val = [GCActivityMetaValue activityValueForDict:info andField:field];
             newMetaData[field] = val;
-            if ([field isEqualToString:@"device"] && [val.display isEqualToString:@"Garmin Fenix"]) {
-                self.downloadMethod = gcDownloadMethodDetails;
-            }
         }
     }
     for (NSString * field in @[@"garminSwimAlgorithm",@"ispr",@"favorite"]) {
@@ -771,6 +903,8 @@
 
     [GCFieldsCalculated addCalculatedFields:self];
 }
+
+#pragma mark - Other Services
 
 -(void)parseSportTracksJson:(NSDictionary*)data{
 /*
@@ -904,9 +1038,9 @@
     self.location = @"";
     self.downloadMethod = gcDownloadMethodHealthKit;
 
-    self.metaData = [NSMutableDictionary dictionaryWithObject:[GCActivityMetaValue activityMetaValueForDisplay:workout.sourceRevision.source.name
+    [self updateMetaData:[NSMutableDictionary dictionaryWithObject:[GCActivityMetaValue activityMetaValueForDisplay:workout.sourceRevision.source.name
                                                                                                       andField:GC_META_DEVICE]
-                                                       forKey:GC_META_DEVICE];
+                                                       forKey:GC_META_DEVICE]];
 
     NSMutableDictionary * summary = [NSMutableDictionary dictionary];
 
@@ -1039,7 +1173,7 @@
     self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
     self.downloadMethod = gcDownloadMethodStrava;
     if (self.metaData==nil) {
-        self.metaData = [NSMutableDictionary dictionary];
+        [self updateMetaData:[NSMutableDictionary dictionary]];
     }
     if (self.activityId && self.activityType) {
         NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionaryWithCapacity:data.count];
@@ -1074,7 +1208,7 @@
     }
 }
 
-#pragma mark -
+#pragma mark - Update from other activity or part of activity
 
 -(void)updateWithGarminData:(NSDictionary*)data{
 
@@ -1139,7 +1273,7 @@
     BOOL rv = false;
     
     if( self.metaData == nil && other.metaData != nil){
-        self.metaData = [NSDictionary dictionaryWithDictionary:other.metaData];
+        [self updateMetaData:[NSDictionary dictionaryWithDictionary:other.metaData]];
         
         FMDatabase * db = self.db;
         [db beginTransaction];
@@ -1170,7 +1304,7 @@
                 }
             }
             if (newMetaData) {
-                self.metaData = newMetaData;
+                [self updateMetaData:newMetaData];
             }
         }
     }
@@ -1441,17 +1575,36 @@
 }
 
 -(BOOL)testForDuplicate:(GCActivity*)other{
-    if (fabs([other.date timeIntervalSinceDate:self.date])<1. && [self.activityType isEqualToString:other.activityType]) {
-        return true;
-    }
-
+    BOOL activitiesAreDuplicate = false;
+    
     // check if from same system (strava/garmin)
     if( (self.externalServiceActivityId && ([self.externalServiceActivityId isEqualToString:other.activityId]))||
        (other.externalServiceActivityId && ([other.externalServiceActivityId isEqualToString:self.activityId]))){
-        return true;
+        activitiesAreDuplicate = true;
+    }
+    
+    //Last:   date                date+sumDuration
+    //        |--------------------|
+    //          |--------------------|
+    //One:      date                 Date+sumDuration
+    
+    if( other.sumDuration > 60.0){
+        NSTimeInterval overlap =
+        MIN(other.date.timeIntervalSinceReferenceDate+other.sumDuration, self.date.timeIntervalSinceReferenceDate+self.sumDuration)-
+        MAX(other.date.timeIntervalSinceReferenceDate, self.date.timeIntervalSinceReferenceDate);
+        
+        double ratio = (double)overlap / self.sumDuration;
+        
+        if( overlap > 0.0 &&  ratio > 0.90 ){
+            activitiesAreDuplicate = true;
+        }
+    }
+    
+    if( [other.date isEqualToDate:self.date] && fabs(other.sumDistance-self.sumDistance)<1.e-7){
+        activitiesAreDuplicate = true;
     }
 
-    return false;
+    return activitiesAreDuplicate;
 }
 
 

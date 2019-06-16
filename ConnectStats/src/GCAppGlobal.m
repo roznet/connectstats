@@ -250,6 +250,11 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     [appDelegate setupFieldCache];
 }
 
++(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key{
+    GCAppDelegate * appDelegate = _sharedApplicationDelegate();
+    return [appDelegate credentialsForService:service andKey:key];
+}
+
 +(NSDictionary*)debugState{
     if (!_debugState) {
         _debugState = @{};

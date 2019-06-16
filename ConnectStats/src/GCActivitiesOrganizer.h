@@ -74,6 +74,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 
 -(GCActivity*)findDuplicate:(GCActivity*)act;
+-(BOOL)isKnownDuplicate:(GCActivity*)act;
 
 -(NSUInteger)countOfActivities;
 -(NSArray<GCActivity*>*)activities;

@@ -94,4 +94,6 @@ extern NSString *const kNotifySettingsChange;
 
 +(void)setApplicationDelegate:(GCAppDelegate*)del;
 +(NSString*)simulatorUrl;
+
++(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;
 @end

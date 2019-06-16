@@ -481,7 +481,8 @@ class Convert :
         
         of.write( '\n'.join( [
             '// This file is auto generated, Do not edit',
-            'import RZFitFileTypes'
+            'import RZFitFileTypes',
+            '\n'
             ] ) )
         oof.write( '\n'.join( [
             '// This file is auto generated, Do not edit\n',

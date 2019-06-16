@@ -32,6 +32,7 @@
 #import "GCTestServiceStrava.h"
 #import "GCTestServiceWithings.h"
 #import "GCTestServiceBugReport.h"
+#import "GCTestServiceConnectStats.h"
 
 NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
 
@@ -88,6 +89,7 @@ NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
 */
 -(NSArray*)allTestClassNames{
     return @[
+             NSStringFromClass([GCTestServiceConnectStats class]),
              NSStringFromClass([GCTestServiceGarmin class]),
              NSStringFromClass([GCTestServiceStrava class]),
              NSStringFromClass([GCTestServiceBugReport class]),

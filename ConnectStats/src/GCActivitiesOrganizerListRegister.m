@@ -84,11 +84,11 @@
     if (self.activities) {
         for (GCActivity * activity in _activities) {
             [existingInService addObject:activity.activityId];
-            BOOL foundInOrganizer = [organizer activityForId:activity.activityId] != nil;
-            if (foundInOrganizer) {
+            BOOL knownDuplicate = [organizer isKnownDuplicate:activity];
+            BOOL foundInOrganizer = [organizer activityForId:activity.activityId] != nil || knownDuplicate;
+            if (foundInOrganizer || knownDuplicate) {
                 _reachedExisting++;
-            }
-            if (!foundInOrganizer) {
+            }else{
                 newActivitiesCount++;
             }
             if( [organizer registerActivity:activity forActivityId:activity.activityId] ){
@@ -137,4 +137,12 @@
     }
 }
 
+-(BOOL)shouldSearchForMoreWith:(NSUInteger)requestCount reloadAll:(BOOL)mode{
+    // if we got zero new activities, we can stop
+    // Otherwise if we want to reload all or we still found
+    // some new activities (not all are existing) we search for more.
+    return ( self.activities.count > 0 &&
+            (mode || _reachedExisting < requestCount)
+             );
+}
 @end

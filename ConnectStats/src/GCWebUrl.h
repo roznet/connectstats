@@ -28,19 +28,22 @@
 void GCWebUseSimulator( BOOL abool, NSString * url);
 void GCWebSetSimulatorError( BOOL abool);
 void GCWebSetSimulatorState( NSString * state);
+void GCWebUseConnectStatsDevServer(BOOL abool, NSString * url);
 /**
  This will only take effect after the next signin to the simulator
  */
 void GCWebSetSimulatorDir( NSString * dir);
 BOOL GCWebSimulatorIsInUse(void);
 
-NSString * GCWebSigninURL( NSString * uname, NSString * pwd);
+NSString * GCWebSimulatorSigninURL( NSString * uname, NSString * pwd);
 NSString * GCWebLogoutURL(void);
+
+NSString * GCWebConnectStatsSearch(void);
+NSString * GCWebConnectStatsRegisterUser( NSString * accessToken, NSString * accessTokenSecret);
 
 NSString * GCWebSearchURL( NSUInteger start );
 NSString * GCWebModernSearchURL( NSUInteger start, NSUInteger requestCount );
 
-NSString * GCWebActivityURL( NSString * activityID);
 NSString * GCWebActivityURLSummary( NSString * activityID);
 NSString * GCWebActivityURLSplits( NSString * activityID);
 NSString * GCWebActivityURLFitFile( NSString * activityID);
@@ -61,10 +64,5 @@ NSString * GCWebWithingsMeasure(NSString*uid,NSString*key);
 
 NSString * GCWebWeatherHtml(NSString*aId);
 
-// OBSOLETE
-NSString * GCWebRenameActivity(NSString*aId);
-NSString * GCWebChangeActivityType(NSString*aId);
-NSString * GCWebDeleteActivity(NSString*aId);
 NSString * GCWebActivityURLDetail( NSString * activityID);
-//NSString * GCWebActivityURLSwim( NSString * activityID);
 

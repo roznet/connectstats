@@ -489,7 +489,7 @@
 
         [self showMap:self.choices.current.field];
     }else if( indexPath.section == GCVIEW_DETAIL_TITLE_SECTION){
-        [self renameActivity];
+        
     }else if( indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION){
         if (indexPath.row < self.organizedMatchingField.count) {
             GCField * field = self.organizedMatchingField[indexPath.row];
@@ -892,35 +892,6 @@
         [sliding release];
         [optionController release];
     }
-}
-
--(void)renameActivity{
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Rename Profile",@"RenameProfile")
-                                                                    message:NSLocalizedString(@"Enter new activity name", @"RenameProfile")
-                                                             preferredStyle:UIAlertControllerStyleAlert];
-
-    [alert addTextFieldWithConfigurationHandler:^(UITextField * field){
-        field.text = self.activity.activityName;
-    }];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"RenameProfile Button")
-                                              style:UIAlertActionStyleCancel
-                                            handler:^(UIAlertAction*action){
-
-                                            }]];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Rename", @"RenameProfile Button")
-                                              style:UIAlertActionStyleDefault
-                                            handler:^(UIAlertAction * action){
-                                                GCActivity*act= self.activity;
-                                                [[GCAppGlobal web] garminRenameActivity:act.activityId withName:alert.textFields[0].text];
-                                                [self.refreshControl beginRefreshing];
-                                                self.refreshControl.attributedTitle = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Renaming", @"RenameProfile")] autorelease];
-                                                CGPoint newOffset = CGPointMake(0, -(self.tableView).contentInset.top);
-                                                [self.tableView setContentOffset:newOffset animated:YES];
-
-                                            }]];
-    [self presentViewController:alert animated:YES completion:^(){}];
 }
 
 #pragma mark - Configure

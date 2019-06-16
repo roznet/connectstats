@@ -29,8 +29,7 @@ typedef NS_ENUM(NSUInteger, gcTrack13RequestStage){
     gcTrack13RequestTracks,
     gcTrack13RequestLaps,
     gcTrack13RequestFit,
-    gcTrack13RequestEnd,
-    gcTrack13RequestTCX,
+    gcTrack13RequestEnd
 };
 @class GCActivity;
 @class GCLap;

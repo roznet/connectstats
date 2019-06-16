@@ -271,6 +271,81 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
     return cache[[stravaType lowercaseString]];
 }
 
+-(GCActivityType*)activityTypeForConnectStatsType:(NSString*)input{
+    NSDictionary<NSString*,GCActivityType*> * cache = nil;
+    if( cache == nil){
+        NSDictionary * types = @{
+                       @"ALL":@"all",
+                       @"UNCATEGORIZED":@"uncategorized",
+                       @"SEDENTARY":@"sedentary",
+                       @"SLEEP":@"sleep",
+                       @"RUNNING":@"running",
+                       @"STREET_RUNNING":@"street_running",
+                       @"TRACK_RUNNING":@"track_running",
+                       @"TRAIL_RUNNING":@"trail_running",
+                       @"TREADMILL_RUNNING":@"treadmill_running",
+                       @"CYCLING":@"cycling",
+                       @"CYCLOCROSS":@"cyclocross",
+                       @"DOWNHILL_BIKING":@"downhill_biking",
+                       @"INDOOR_CYCLING":@"indoor_cycling",
+                       @"MOUNTAIN_BIKING":@"mountain_biking",
+                       @"RECUMBENT_CYCLING":@"recumbent_cycling",
+                       @"ROAD_BIKING":@"road_biking",
+                       @"TRACK_CYCLING":@"track_cycling",
+                       @"FITNESS_EQUIPMENT":@"fitness_equipment",
+                       @"ELLIPTICAL":@"elliptical",
+                       @"INDOOR_CARDIO":@"indoor_cardio",
+                       @"INDOOR_ROWING":@"indoor_rowing",
+                       @"STAIR_CLIMBING":@"stair_climbing",
+                       @"STRENGTH_TRAINING":@"strength_training",
+                       @"HIKING":@"hiking",
+                       @"SWIMMING":@"swimming",
+                       @"LAP_SWIMMING":@"lap_swimming",
+                       @"OPEN_WATER_SWIMMING":@"open_water_swimming",
+                       @"WALKING":@"walking",
+                       @"CASUAL_WALKING":@"casual_walking",
+                       @"SPEED_WALKING":@"speed_walking",
+                       @"TRANSITION":@"transition",
+                       @"SWIMTOBIKETRANSITION":@"swimToBikeTransition",
+                       @"BIKETORUNTRANSITION":@"bikeToRunTransition",
+                       @"RUNTOBIKETRANSITION":@"runToBikeTransition",
+                       @"MOTORCYCLING":@"motorcycling",
+                       @"OTHER":@"other",
+                       @"BACKCOUNTRY_SKIING_SNOWBOARDING":@"backcountry_skiing_snowboarding",
+                       @"BOATING":@"boating",
+                       @"CROSS_COUNTRY_SKIING":@"cross_country_skiing",
+                       @"DRIVING_GENERAL":@"driving_general",
+                       @"FLYING":@"flying",
+                       @"GOLF":@"golf",
+                       @"HORSEBACK_RIDING":@"horseback_riding",
+                       @"INLINE_SKATING":@"inline_skating",
+                       @"MOUNTAINEERING":@"mountaineering",
+                       @"PADDLING":@"paddling",
+                       @"RESORT_SKIING_SNOWBOARDING":@"resort_skiing_snowboarding",
+                       @"ROWING":@"rowing",
+                       @"SAILING":@"sailing",
+                       @"SKATE_SKIING":@"skate_skiing",
+                       @"SKATING":@"skating",
+                       @"SNOWMOBILING":@"snowmobiling",
+                       @"SNOW_SHOE":@"snow_shoe",
+                       @"STAND_UP_PADDLEBOARDING":@"stand_up_paddleboarding",
+                       @"WHITEWATER_RAFTING_KAYAKING":@"whitewater_rafting_kayaking",
+                       @"WIND_KITE_SURFING":@"wind_kite_surfing",
+                       };
+        NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+        for (NSString * cstype in types) {
+            NSString * typeKey = types[cstype];
+            GCActivityType * type = self.typesByKey[typeKey];
+            if (type) {
+                dict[cstype] = type;
+            }
+        }
+        cache = dict;
+    }
+    
+    return cache[ input ];
+}
+
 -(NSArray<GCActivityType*>*)allTypes{
     NSArray * rv = [self.typesByKey.allValues sortedArrayUsingComparator:^(GCActivityType*a1, GCActivityType*a2){
         return a1.typeId < a2.typeId ? NSOrderedAscending : (a1.typeId > a2.typeId ? NSOrderedDescending : NSOrderedSame);

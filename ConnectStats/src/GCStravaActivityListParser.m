@@ -29,6 +29,7 @@
 #import "GCService.h"
 #import "GCAppGlobal.h"
 
+
 @implementation GCStravaActivityListParser
 
 +(GCStravaActivityListParser*)activityListParser:(NSData*)input{
