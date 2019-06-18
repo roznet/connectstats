@@ -992,6 +992,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                     break;
                 }
                 case gcDownloadMethodConnectStats:
+                    [[GCAppGlobal web] connectStatsDownloadActivityTrackpoints:self];
                     break;
                 case gcDownloadMethodTennis:
                 case gcDownloadMethodFitFile:

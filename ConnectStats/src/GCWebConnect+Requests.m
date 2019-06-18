@@ -41,6 +41,7 @@
 #import "GCGarminRequestHeartRateZones.h"
 
 #import "GCConnectStatsRequestSearch.h"
+#import "GCConnectStatsRequestFitFile.h"
 
 #import "GCSportTracksActivityList.h"
 #import "GCSportTracksActivityDetail.h"
@@ -344,7 +345,13 @@
         self.status = GCWebStatusOK;
     }
 }
+#pragma mark - connectstats
 
+-(void)connectStatsDownloadActivityTrackpoints:(GCActivity*)act{
+    if( [GCAppGlobal currentNavigationController] && [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO]){
+        [self addRequest:[GCConnectStatsRequestFitFile requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
+    }
+}
 #pragma mark - strava
 
 -(void)stravaDownloadActivityTrackPoints:(GCActivity*)act{

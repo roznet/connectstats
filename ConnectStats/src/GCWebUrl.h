@@ -39,6 +39,7 @@ NSString * GCWebSimulatorSigninURL( NSString * uname, NSString * pwd);
 NSString * GCWebLogoutURL(void);
 
 NSString * GCWebConnectStatsSearch(void);
+NSString * GCWebConnectStatsFitFile(void);
 NSString * GCWebConnectStatsRegisterUser( NSString * accessToken, NSString * accessTokenSecret);
 
 NSString * GCWebSearchURL( NSUInteger start );

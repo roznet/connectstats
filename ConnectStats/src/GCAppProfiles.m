@@ -611,6 +611,7 @@
         // for connect stats fitbit/healthkit/withings only auxiliary health data
         return [self serviceEnabled:gcServiceBabolat] ||
         [self serviceEnabled:gcServiceGarmin] ||
+        [self serviceEnabled:gcServiceConnectStats] ||
         [self serviceEnabled:gcServiceStrava] ||
         [self serviceEnabled:gcServiceSportTracks] ||
         [self serviceEnabled:gcServiceHealthKit];
@@ -628,6 +629,7 @@
     rv += [self serviceEnabled:gcServiceSportTracks];
     rv += [self serviceEnabled:gcServiceHealthKit];
     rv += [self serviceEnabled:gcServiceFitBit];
+    rv += [self serviceEnabled:gcServiceConnectStats];
     return rv;
 }
 @end

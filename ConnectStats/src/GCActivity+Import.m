@@ -1337,6 +1337,12 @@
                 
                 RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
                 newSummaryData[field] = otherVal;
+                
+                FMDatabase * db = self.db;
+                [db beginTransaction];
+                [otherVal updateDb:db forActivityId:self.activityId];
+                [db commit];
+
                 rv = true;
             }
         }
@@ -1380,6 +1386,7 @@
         [db executeUpdate:@"UPDATE gc_activities SET WeightedMeanSpeed=? WHERE activityId = ?", @(self.weightedMeanSpeed), self.activityId];
         [db commit];
     }
+
 
     return rv;
 }

@@ -49,6 +49,9 @@
 -(void)garminDownloadActivitySummary:(NSString*)aId;
 -(void)garminDownloadWeather:(GCActivity*)activity;
 
+// ConnectStats
+-(void)connectStatsDownloadActivityTrackpoints:(GCActivity*)act;
+
 // Strava
 -(void)stravaDownloadActivityTrackPoints:(GCActivity*)act;
 

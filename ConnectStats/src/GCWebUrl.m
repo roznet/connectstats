@@ -153,6 +153,19 @@ NSString * GCWebConnectStatsSearch(void){
     }
 }
 
+NSString * GCWebConnectStatsFitFile(void){
+    if (useSimulator || useDevServer) {
+        if (simulatorError) {
+            return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
+        }else{
+            return [NSString stringWithFormat:@"%@/api/connectstats/file",simulatorURL];
+        }
+    }else{
+        return @"https://ro-z.net/api/connectstats/file";
+    }
+
+}
+
 NSString * GCWebConnectStatsRegisterUser( NSString * accessToken, NSString * accessTokenSecret){
     if (useSimulator || useDevServer) {
         if (simulatorError) {

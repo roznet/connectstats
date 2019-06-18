@@ -40,7 +40,6 @@ static const NSUInteger kActivityRequestCount = 20;
 @property (nonatomic,assign) NSUInteger start;
 
 @property (nonatomic,retain) NSDate * lastFoundDate;
-@property (nonatomic,assign) NSUInteger tokenId;
 @property (nonatomic,assign) BOOL searchMore;
 @end
 
@@ -54,7 +53,6 @@ static const NSUInteger kActivityRequestCount = 20;
         rv.stage = gcRequestStageDownload;
         rv.status = GCWebStatusOK;
         rv.lastFoundDate = [NSDate date];
-        rv.tokenId = 1;
         rv.navigationController = nav;
     }
     return rv;

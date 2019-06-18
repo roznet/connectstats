@@ -1,6 +1,6 @@
 //  MIT License
 //
-//  Created on 28/05/2019 for ConnectStats
+//  Created on 17/06/2019 for ConnectStats
 //
 //  Copyright (c) 2019 Brice Rosenzweig
 //
@@ -25,23 +25,16 @@
 
 
 
-#import "GCWebRequestStandard.h"
+#import "GCConnectStatsRequest.h"
+@class GCActivity;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GCConnectStatsRequest : GCWebRequestStandard<NSURLSessionDelegate>
+@interface GCConnectStatsRequestFitFile : GCConnectStatsRequest
 
-// Set a navigation Controller to present the login web from
-@property (nonatomic,weak) UINavigationController * navigationController;
-@property (nonatomic,readonly) NSString * oauthToken;
-@property (nonatomic,readonly) NSUInteger tokenId;
++(GCConnectStatsRequestFitFile*)requestWithActivity:(GCActivity*)act andNavigationController:(nullable UINavigationController*)nav;
 
--(instancetype)initNextWith:(GCConnectStatsRequest*)current;
-
--(BOOL)isSignedIn;
--(void)signIn;
-
--(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters;
++(GCActivity*)testForActivity:(GCActivity*)act withFilesIn:(NSString*)path;
 
 @end
 

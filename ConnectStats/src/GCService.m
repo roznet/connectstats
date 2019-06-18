@@ -184,6 +184,10 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
             }else if([aId hasPrefix:GC_SERVICE_FITBIT]){
                 rv.service = gcServiceFitBit;
                 rv.prefix = GC_SERVICE_FITBIT;
+                
+            }else if([aId hasPrefix:GC_SERVICE_CONNECTSTATS]){
+                rv.service = gcServiceConnectStats;
+                rv.prefix = GC_SERVICE_CONNECTSTATS;
             }else{
                 rv = nil;
             }

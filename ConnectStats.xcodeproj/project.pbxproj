@@ -722,6 +722,10 @@
 		4297DA571D30F4BA0028E439 /* GCHealthZonesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4297DA561D30F4BA0028E439 /* GCHealthZonesViewController.swift */; };
 		429889A41D90371700A22571 /* GCAppDelegate+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 429889A31D90371700A22571 /* GCAppDelegate+Swift.m */; };
 		429912C217E4A0CB003CCCC6 /* GCMapAppleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 429912C117E4A0CB003CCCC6 /* GCMapAppleViewController.m */; };
+		429AFD0E22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 429AFD0D22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m */; };
+		429AFD0F22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 429AFD0D22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m */; };
+		429AFD1022B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 429AFD0D22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m */; };
+		429AFD1122B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 429AFD0D22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m */; };
 		429D752E1651AAB800232BED /* GCActivitiesCacheManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 429D752D1651AAB800232BED /* GCActivitiesCacheManagement.m */; };
 		429D75351651B14E00232BED /* GCGarminRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 429D75341651B14E00232BED /* GCGarminRequest.m */; };
 		429D89A81FF6D89E001CE97A /* GCAthlete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429D89A71FF6D89E001CE97A /* GCAthlete.swift */; };
@@ -3097,6 +3101,8 @@
 		429912C017E4A0CB003CCCC6 /* GCMapAppleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCMapAppleViewController.h; path = src/GCMapAppleViewController.h; sourceTree = "<group>"; };
 		429912C117E4A0CB003CCCC6 /* GCMapAppleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCMapAppleViewController.m; path = src/GCMapAppleViewController.m; sourceTree = "<group>"; };
 		429912C317E4A619003CCCC6 /* GCMapImplementorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCMapImplementorProtocol.h; path = src/GCMapImplementorProtocol.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		429AFD0C22B77EC7006343F0 /* GCConnectStatsRequestFitFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCConnectStatsRequestFitFile.h; path = src/GCConnectStatsRequestFitFile.h; sourceTree = "<group>"; };
+		429AFD0D22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCConnectStatsRequestFitFile.m; path = src/GCConnectStatsRequestFitFile.m; sourceTree = "<group>"; };
 		429D752C1651AAB800232BED /* GCActivitiesCacheManagement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivitiesCacheManagement.h; path = src/GCActivitiesCacheManagement.h; sourceTree = "<group>"; };
 		429D752D1651AAB800232BED /* GCActivitiesCacheManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivitiesCacheManagement.m; path = src/GCActivitiesCacheManagement.m; sourceTree = "<group>"; };
 		429D75331651B14E00232BED /* GCGarminRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCGarminRequest.h; path = src/GCGarminRequest.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -7244,6 +7250,8 @@
 				42B8588A229DB716009E309A /* GCConnectStatsRequestLogin.m */,
 				42B85890229DBD55009E309A /* GCConnectStatsRequestSearch.h */,
 				42B85891229DBD55009E309A /* GCConnectStatsRequestSearch.m */,
+				429AFD0C22B77EC7006343F0 /* GCConnectStatsRequestFitFile.h */,
+				429AFD0D22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m */,
 			);
 			name = Requests;
 			sourceTree = "<group>";
@@ -9343,6 +9351,7 @@
 				426DFE6A19D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */,
 				4211C52D19AAF2D3000DEF87 /* GCHealthKitRequest.m in Sources */,
 				4211C52F19AAF2D3000DEF87 /* GCHealthKitExportActivity.m in Sources */,
+				429AFD1122B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */,
 				4211C53119AAF2D3000DEF87 /* GCHealthKitBodyRequest.m in Sources */,
 				422FAEAA19A1DD6000D09773 /* GCActivityTennisShotValues.m in Sources */,
 				422F52161DFB51F700DD5551 /* FITFitMessageFields.m in Sources */,
@@ -9642,6 +9651,7 @@
 				42769BC81DD2A81D000390F1 /* FITFitFileInterpret.swift in Sources */,
 				42BFC2231DCDD9D900EAD40E /* FITOutlineDataSource.swift in Sources */,
 				429190A821E2423500E0B114 /* Activity.swift in Sources */,
+				429AFD1022B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */,
 				4248ED9D1DCFFD2400254216 /* GCFieldsForCategory.m in Sources */,
 				4248ED911DCFF55900254216 /* GCFields.m in Sources */,
 				42F4E5111DE08D4C001AB244 /* GCMapGradientPathOverlay.m in Sources */,
@@ -9695,6 +9705,7 @@
 				428FF7A015FB412C007A88FA /* GCWebUrl.m in Sources */,
 				42D8AF271B26002500ADDD31 /* GCHealthKitWorkoutParser.m in Sources */,
 				42959E3B18DDA6F500C0B841 /* GCSportTracksBase.m in Sources */,
+				429AFD0E22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */,
 				42EB515818A7E1E800B85FAB /* GCBabolatLoginRequest.m in Sources */,
 				423786871927C53900F575A0 /* GCActivityTennisHeatmap.m in Sources */,
 				42018EA018F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m in Sources */,
@@ -10130,6 +10141,7 @@
 				42B5E2C61BA5B216000FAE4E /* GCLapCompound.m in Sources */,
 				42B5E2C71BA5B216000FAE4E /* GCHistoryFieldDataSerie.m in Sources */,
 				42CC45BF200A57EE003EB805 /* GCTestServiceStrava.m in Sources */,
+				429AFD0F22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */,
 				427F937E1BEDFF4300C177F9 /* GCStatsHistGraphConfig.m in Sources */,
 				42E4FB411D7AB2740061BB38 /* GCSegmentOrganizer.swift in Sources */,
 				422CC87C1E6ACA1700195414 /* FITFitMessage.m in Sources */,
