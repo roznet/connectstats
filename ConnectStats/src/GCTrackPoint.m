@@ -40,7 +40,7 @@
 -(double)valueForField:(gcFieldFlag)aField;
 -(void)setValue:(GCNumberWithUnit*)nu forField:(gcFieldFlag)aField;
 -(double)extraValueForIndex:(GCTrackPointExtraIndex*)idx  ;
--(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(GCActivity*)act;
+-(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(NSObject<GCTrackPointDelegate>*)act;
 
 
 @end
@@ -55,7 +55,7 @@ void buildStatic(){
     self = [super init];
     return self;
 }
--(GCTrackPoint*)initWithDictionary:(NSDictionary*)data forActivity:(GCActivity*)act{
+-(GCTrackPoint*)initWithDictionary:(NSDictionary*)data forActivity:(NSObject<GCTrackPointDelegate>*)act{
     self = [super init];
     if (self) {
         if (data[@"directTimestamp"]) {
@@ -241,7 +241,7 @@ void buildStatic(){
 }
 
 //NEWTRACKFIELD EDIT HERE
--(void)parseDictionary:(NSDictionary*)data inActivity:(GCActivity*)act{
+-(void)parseDictionary:(NSDictionary*)data inActivity:(NSObject<GCTrackPointDelegate>*)act{
     NSString * tmp = nil;
     NSDictionary * d = data[@"directTimestamp"];
     if (d) {
@@ -436,8 +436,8 @@ void buildStatic(){
             }
         }
     }
-
 }
+
 -(NSComparisonResult)compareTime:(GCTrackPoint*)other{
     return [self.time compare:other.time];
 }
@@ -705,7 +705,7 @@ void buildStatic(){
     return 0.;
 }
 
--(void)recordField:(GCField*)field withUnit:(GCUnit*)unit inActivity:(GCActivity*)act{
+-(void)recordField:(GCField*)field withUnit:(GCUnit*)unit inActivity:(NSObject<GCTrackPointDelegate>*)act{
     if( act != nil){
 
         GCTrackPointExtraIndex * index = act.cachedExtraTracksIndexes[field];
@@ -721,7 +721,7 @@ void buildStatic(){
         }
     }
 }
--(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(GCActivity*)act{
+-(void)setExtraValue:(GCNumberWithUnit*)nu forFieldKey:(GCField*)field in:(NSObject<GCTrackPointDelegate>*)act{
     if( field.fieldFlag != gcFieldFlagNone){
         [self setValue:nu forField:field.fieldFlag];
         return; // should not be saved twice.
@@ -734,6 +734,16 @@ void buildStatic(){
     }
     self.extraStorage[field] = nu;
 }
+
+-(void)recordExtraIn:(NSObject<GCTrackPointDelegate>*)act{
+    if( self.extraStorage){
+        for (GCField * field in self.extraStorage) {
+            GCNumberWithUnit * nu = self.extraStorage[field];
+            [self recordField:field withUnit:nu.unit inActivity:act];
+        }
+    }
+}
+
 
 #pragma mark - Locations
 

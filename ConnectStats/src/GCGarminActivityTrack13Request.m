@@ -307,7 +307,8 @@
         self.stage = gcRequestStageParsing;
         [self.delegate loginSuccess:gcWebServiceGarmin];
         [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
-        GCGarminActivityDetailJsonParser * parser = [[[GCGarminActivityDetailJsonParser alloc] initWithString:self.theString andEncoding:self.encoding] autorelease];
+        NSData * data = [self.theString dataUsingEncoding:self.encoding];
+        GCGarminActivityDetailJsonParser * parser = [[[GCGarminActivityDetailJsonParser alloc] initWithData:data forActivity:self.activity] autorelease];
         if (parser.success) {
             self.trackpoints = parser.trackPoints;
             self.laps = @[];
@@ -359,7 +360,7 @@
         NSData * trackdata = [NSData dataWithContentsOfFile:fnTracks];
         NSData * lapsdata = [NSData dataWithContentsOfFile:fnLaps];
 
-        GCGarminActivityDetailJsonParser * parserTracks = [[[GCGarminActivityDetailJsonParser alloc] initWithData:trackdata] autorelease];
+        GCGarminActivityDetailJsonParser * parserTracks = [[[GCGarminActivityDetailJsonParser alloc] initWithData:trackdata forActivity:act] autorelease];
         GCGarminActivityLapsParser * parserLaps = [[[GCGarminActivityLapsParser alloc] initWithData:lapsdata forActivity:act] autorelease];
 
         if (parserLaps.success || parserTracks.success) {

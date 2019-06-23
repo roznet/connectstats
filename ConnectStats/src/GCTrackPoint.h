@@ -73,7 +73,7 @@
 @property (nonatomic,readonly) NSDictionary<GCField*,GCNumberWithUnit*>*extra;
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
--(GCTrackPoint*)initWithDictionary:(NSDictionary*)aDict forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
+-(GCTrackPoint*)initWithDictionary:(NSDictionary*)aDict forActivity:(NSObject<GCTrackPointDelegate>*)act NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithTrackPoint:(GCTrackPoint*)other NS_DESIGNATED_INITIALIZER;
 -(void)saveToDb:(FMDatabase*)trackdb;
@@ -102,6 +102,7 @@
 -(GCNumberWithUnit*)numberWithUnitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;// DEPRECATED_MSG_ATTRIBUTE("use numberWitUnitForField.");
 
 -(void)updateWithExtra:(NSDictionary<GCField*,GCNumberWithUnit*>*)other;
+-(void)recordExtraIn:(NSObject<GCTrackPointDelegate>*)act;
 
 -(void)add:(GCTrackPoint*)other withAccrued:(double)accrued timeAxis:(BOOL)timeAxis;
 

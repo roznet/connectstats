@@ -1221,8 +1221,8 @@
     
     if( ! self.trackpointsReadyNoLoad && other.trackpointsReadyNoLoad){
         // Special case: other has trackpoint self doesnt, just use
-        self.trackpoints = other.trackpoints;
-        self.cachedExtraTracksIndexes = other.cachedExtraTracksIndexes;
+        [self updateWithTrackpoints:other.trackpoints andLaps:other.laps];
+        
         rv = true;
     }else if( self.trackpointsReadyNoLoad && other.trackpointsReadyNoLoad ){
         // Only bother if both have trackpoint
@@ -1238,6 +1238,7 @@
             NSMutableArray<GCField*>*fields = [NSMutableArray array];
             NSArray<GCField*>*otherFields = other.availableTrackFields;
             
+            // only update if new fields
             for (GCField * otherField in otherFields) {
                 if( ! [self hasTrackForField:otherField]){
                     [fields addObject:otherField];
@@ -1263,6 +1264,9 @@
                         self.trackFlags |= one.trackFlags;
                     }
                 }
+            }
+            if( ! self.laps && other.laps){
+                [self updateWithTrackpoints:self.trackpoints andLaps:other.laps];
             }
         }
     }

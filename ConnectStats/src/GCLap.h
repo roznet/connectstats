@@ -36,6 +36,10 @@
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 -(GCLap*)initWithDictionary:(NSDictionary*)aDict forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
+-(GCLap*)initWithSummaryValues:(NSDictionary*)aDict
+                      starting:(NSDate*)start
+                            at:(CLLocationCoordinate2D)coord
+                   forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
 -(GCLap*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 -(GCLap*)initWithLap:(GCLap*)other NS_DESIGNATED_INITIALIZER;
 -(GCLap*)initWithTrackPoint:(GCTrackPoint*)other NS_DESIGNATED_INITIALIZER;

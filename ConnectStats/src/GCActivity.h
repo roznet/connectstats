@@ -33,6 +33,7 @@
 #import "GCActivitySettings.h"
 #import "GCActivityTypes.h"
 #import "GCActivityType.h"
+#import "GCTrackPointExtraIndex.h"
 
 @class GCLapSwim;
 @class GCTrackPointSwim;
@@ -74,7 +75,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
     gcIgnoreModeDayFocus
 };
 
-@interface GCActivity : RZParentObject<RZChildObject>{
+@interface GCActivity : RZParentObject<RZChildObject,GCTrackPointDelegate>{
     // Private Flags
     BOOL _summaryDataLoading;
     BOOL _downloadRequested;
@@ -170,6 +171,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(GCActivity*)initWithId:(NSString*)aId NS_DESIGNATED_INITIALIZER;
 -(GCActivity*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 
+-(BOOL)updateWithTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints andLaps:(NSArray<GCLap*>*)laps;
 -(BOOL)saveTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps;
 -(void)saveTrackpointsSwim:(NSArray<GCTrackPointSwim*> *)aSwim andLaps:(NSArray<GCLapSwim*>*)laps;
 -(void)saveTrackpointsAndLapsToDb:(FMDatabase*)aDb;

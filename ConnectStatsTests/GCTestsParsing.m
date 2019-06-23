@@ -123,20 +123,18 @@
 
 - (void)testParsingModern {
     NSString * file = [RZFileOrganizer bundleFilePath:@"activitytrack_718039360.json" forClass:[self class]];
-    NSError * err = nil;
-    NSString * string = [NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:&err];
     
-    GCGarminActivityDetailJsonParser * parser = [[GCGarminActivityDetailJsonParser alloc] initWithString:string andEncoding:NSUTF8StringEncoding];
-    XCTAssertEqual(parser.trackPoints.count, 575);
-    gcFieldFlag trackFlags = gcFieldFlagNone;
-    
+    NSData * data = [NSData dataWithContentsOfFile:file];
     GCActivity * act = [[GCActivity alloc] init];
     [act setActivityType:GC_TYPE_RUNNING];
 
-    for (NSDictionary * one in parser.trackPoints) {
-        GCTrackPoint * point = [[GCTrackPoint alloc] initWithDictionary:one forActivity:act];
+    GCGarminActivityDetailJsonParser * parser = [[GCGarminActivityDetailJsonParser alloc] initWithData:data forActivity:act];
+    XCTAssertEqual(parser.trackPoints.count, 575);
+    gcFieldFlag trackFlags = gcFieldFlagNone;
+    
+
+    for (GCTrackPoint * point in parser.trackPoints) {
         trackFlags |= point.trackFlags;
-        [point release];
     }
     XCTAssertTrue( (trackFlags & gcFieldFlagWeightedMeanSpeed) == gcFieldFlagWeightedMeanSpeed);
 }

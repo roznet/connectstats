@@ -638,22 +638,17 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 }
 
--(BOOL)saveTrackpoints:(NSArray*)aTrack andLaps:(NSArray *)laps{
+-(BOOL)updateWithTrackpoints:(NSArray<GCTrackPoint*>*)aTrack andLaps:(NSArray<GCLap*> *)laps{
     BOOL rv = true;
-    FMDatabase * db = self.db;
-    FMDatabase * trackdb = self.trackdb;
-
-    if ([trackdb tableExists:@"gc_track"] && [trackdb intForQuery:@"SELECT COUNT(*) FROM gc_track"] == aTrack.count) {
-        rv = false;
-    }
-
+    
     NSMutableArray * trackData = [NSMutableArray arrayWithCapacity:aTrack.count];
-
+    
     NSUInteger lapIdx = 0;
     NSUInteger nLaps = laps.count;
-
+    
     NSMutableArray * newlapsCache = [NSMutableArray arrayWithCapacity:nLaps];
-
+    NSUInteger startTrackpointFlag = self.trackFlags;
+    
     for (id lone in laps) {
         GCLap * nlap = nil;//for release
         GCLap * alap = nil;
@@ -676,7 +671,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     GCLap * nextLap = lapIdx + 1 < nLaps ? _lapsCache[lapIdx+1] : nil;
     BOOL first = true;
     _trackFlags = gcFieldFlagNone;
-
+    
     NSUInteger countBadLaps = 0;
     GCTrackPoint * lastTrack = nil;
     BOOL firstDone = false;
@@ -684,6 +679,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     for (id data in aTrack) {
         GCTrackPoint * npoint = nil;
         GCTrackPoint * point = nil;
+        if(!firstDone){
+            self.cachedExtraTracksIndexes = nil;
+        }
+        
         if ([data isKindOfClass:[GCTrackPoint class]]) {
             point = data;
             if (point.time==nil) {
@@ -693,12 +692,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                     continue;
                 }
             }
+            [point recordExtraIn:self];
         }else if ([data isKindOfClass:[NSDictionary class]]){
             // If parsing from dict, reset extra indexes to rebuild
             // with fields we get in dict
-            if(!firstDone){
-                self.cachedExtraTracksIndexes = nil;
-            }
             npoint = [[GCTrackPoint alloc] initWithDictionary:data forActivity:self];
             point = npoint;
         }
@@ -706,7 +703,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             //[lastTrack updateWithNextPoint:point];
         }
         lastTrack = point;
-
+        
         if (first && nLaps > 0) {
             GCLap * this = _lapsCache[0];
             this.longitudeDegrees = point.longitudeDegrees;
@@ -715,7 +712,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         if (nextLap && [point.time compare:nextLap.time] == NSOrderedDescending) {
             nextLap.longitudeDegrees = point.longitudeDegrees;
             nextLap.latitudeDegrees = point.latitudeDegrees;
-
+            
             lapIdx++;
             nextLap = lapIdx + 1 < nLaps ? _lapsCache[lapIdx+1] : nil;
         }
@@ -727,42 +724,68 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         [npoint release];
         firstDone = true;
     }
-
+    
+    if( self.trackFlags != startTrackpointFlag){
+        rv = true;
+    }
+    
     self.trackpointsCache = trackData;
     [self registerLaps:self.lapsCache forName:GC_LAPS_RECORDED];
-
-    [self saveTrackpointsAndLapsToDb:trackdb];
-
-    if (![db executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){
-        RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
-    }
-    if ([trackdb tableExists:@"gc_activities"]) {
-        if (![trackdb executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){
-            RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
-        }
-    }
+    
     if (![self validCoordinate] && trackData.count>0) {
         self.beginCoordinate = [trackData[0] coordinate2D];
+        rv = true;
+    }
+    
+    [GCFieldsCalculated addCalculatedFieldsToTrackPoints:self.lapsCache forActivity:self];
+    
+    if([self updateSummaryFromTrackpoints:self.trackpointsCache missingOnly:TRUE]){
+        rv = true;
+    }
+    
+    [self notifyForString:kGCActivityNotifyTrackpointReady];
+    
+    return rv;
+}
+
+
+-(BOOL)saveTrackpoints:(NSArray*)aTrack andLaps:(NSArray *)laps{
+    
+    BOOL rv = [self updateWithTrackpoints:aTrack andLaps:laps];
+    FMDatabase * db = self.db;
+    FMDatabase * trackdb = self.trackdb;
+    
+    if ([trackdb tableExists:@"gc_track"] && [trackdb intForQuery:@"SELECT COUNT(*) FROM gc_track"] == aTrack.count) {
+        rv = false;
+    }
+    
+    
+    [self saveTrackpointsAndLapsToDb:trackdb];
+    
+    // save main activities if needed
+    if( rv ){
+        
+        if (![db executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){
+            RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
+        }
+        if ([trackdb tableExists:@"gc_activities"]) {
+            if (![trackdb executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){
+                RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
+            }
+        }
         if (![db executeUpdate:@"UPDATE gc_activities SET BeginLatitude = ?, BeginLongitude = ? WHERE activityId=?",
               @(self.beginCoordinate.latitude), @(self.beginCoordinate.longitude), _activityId]){
             RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
         }
 
-    }
-
-    [GCFieldsCalculated addCalculatedFieldsToTrackPoints:self.lapsCache forActivity:self];
-
-    if([self updateSummaryFromTrackpoints:self.trackpointsCache missingOnly:TRUE]){
         [self saveToDb:self.db];
-    }
     
-    if ([[GCAppGlobal profile] configGetBool:CONFIG_ENABLE_DERIVED defaultValue:[GCAppGlobal connectStatsVersion]]) {
-        dispatch_async([GCAppGlobal worker],^(){
-            [[GCAppGlobal derived] processActivities:@[self]];
-        });
+        if ([[GCAppGlobal profile] configGetBool:CONFIG_ENABLE_DERIVED defaultValue:[GCAppGlobal connectStatsVersion]]) {
+            dispatch_async([GCAppGlobal worker],^(){
+                [[GCAppGlobal derived] processActivities:@[self]];
+            });
+        }
     }
-    [self notifyForString:kGCActivityNotifyTrackpointReady];
-
     return rv;
 }
 

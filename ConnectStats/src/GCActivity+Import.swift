@@ -65,9 +65,25 @@ extension GCActivity {
                 }
             }
         }
+        
+        messages = fitFile.messages(forMessageType: FIT_MESG_NUM_LAP)
+        var laps : [GCLap] = []
+        
+        for item in messages {
+            if let timestamp = item.time( field: "start_time") {
+                let values = interp.summaryValues(fitMessage: item)
+                // coordinate will be update from
+                print( "\(values)")
+                let start = item.coordinate(field: "start_position") ?? CLLocationCoordinate2DMake(0, 0)
+                if let lap = GCLap(summaryValues: values, starting: timestamp, at: start, for: self) {
+                    laps.append(lap)
+                }
+            }
+        }
+        
+        
         // Don't save to db
-        self.trackpoints = trackpoints
-        self.updateSummary(fromTrackpoints: trackpoints, missingOnly: true)
+        self.update(withTrackpoints:trackpoints,andLaps:laps)
     }
 
      func mergeFrom(other : GCActivity){

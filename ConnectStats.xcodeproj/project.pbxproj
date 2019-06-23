@@ -724,7 +724,6 @@
 		429912C217E4A0CB003CCCC6 /* GCMapAppleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 429912C117E4A0CB003CCCC6 /* GCMapAppleViewController.m */; };
 		429AFD0E22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 429AFD0D22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m */; };
 		429AFD0F22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 429AFD0D22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m */; };
-		429AFD1022B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 429AFD0D22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m */; };
 		429AFD1122B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 429AFD0D22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m */; };
 		429D752E1651AAB800232BED /* GCActivitiesCacheManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 429D752D1651AAB800232BED /* GCActivitiesCacheManagement.m */; };
 		429D75351651B14E00232BED /* GCGarminRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 429D75341651B14E00232BED /* GCGarminRequest.m */; };
@@ -9651,7 +9650,6 @@
 				42769BC81DD2A81D000390F1 /* FITFitFileInterpret.swift in Sources */,
 				42BFC2231DCDD9D900EAD40E /* FITOutlineDataSource.swift in Sources */,
 				429190A821E2423500E0B114 /* Activity.swift in Sources */,
-				429AFD1022B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */,
 				4248ED9D1DCFFD2400254216 /* GCFieldsForCategory.m in Sources */,
 				4248ED911DCFF55900254216 /* GCFields.m in Sources */,
 				42F4E5111DE08D4C001AB244 /* GCMapGradientPathOverlay.m in Sources */,

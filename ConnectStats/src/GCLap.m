@@ -74,6 +74,26 @@
     }
     return self;
 }
+
+-(GCLap*)initWithSummaryValues:(NSDictionary*)summary
+                      starting:(NSDate*)start
+                            at:(CLLocationCoordinate2D)coord
+                   forActivity:(GCActivity*)act {
+    self = [super init];
+    if (self) {
+        for (GCField * field in summary) {
+            GCActivitySummaryValue * value = summary[field];
+            GCNumberWithUnit * num = value.numberWithUnit;
+            [self setNumberWithUnit:num forField:field inActivity:act];
+        }
+        self.time  = start;
+        self.latitudeDegrees = coord.latitude;
+        self.longitudeDegrees = coord.longitude;
+    }
+    return self;
+    
+}
+
 -(GCLap*)initWithResultSet:(FMResultSet*)res{
     return [super initWithResultSet:res];;
 }
@@ -175,7 +195,6 @@
     }
     self.time  = [act buildStartDateFromGarminModernData:data];
 }
-
 -(void)parseDict:(NSDictionary*)data inActivity:(GCActivity*)act{
     NSString * atype = act.activityType;
 
