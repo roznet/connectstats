@@ -62,9 +62,11 @@
 #define GC_GARMIN_MODERN_API    6
 #define GC_GARMIN_END           7
 
-#define GC_CONNECTSTATS_NAME    0
-#define GC_CONNECTSTATS_ENABLE  1
-#define GC_CONNECTSTATS_END     2
+#define GC_CONNECTSTATS_NAME        0
+#define GC_CONNECTSTATS_ENABLE      1
+#define GC_CONNECTSTATS_USE         2
+#define GC_CONNECTSTATS_FILLYEAR    3
+#define GC_CONNECTSTATS_END         4
 
 #define GC_STRAVA_NAME      0
 #define GC_STRAVA_ENABLE    1
@@ -166,7 +168,9 @@
         
         [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
                                                                    @( GC_CONNECTSTATS_NAME ),
-                                                                   @( GC_CONNECTSTATS_ENABLE )
+                                                                   @( GC_CONNECTSTATS_ENABLE ),
+                                                                   @( GC_CONNECTSTATS_USE ),
+                                                                   @( GC_CONNECTSTATS_FILLYEAR )
                                                                    ]];
     }
     if (method != gcGarminLoginMethodDirect) {
@@ -336,6 +340,15 @@
         }
     }
     return rv;
+}
+
+-(NSArray<NSString*>*)validYearsForBackfill{
+    NSInteger year = [[GCAppGlobal calculationCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
+    NSMutableArray * years = [NSMutableArray array];
+    for (NSInteger i = MIN(2100,MAX(year,2005)); i>=2005; i--) {
+        [years addObject:[NSString stringWithFormat:@"%@", @(i)]];
+    }
+    return years;
 }
 
 - (UITableViewCell *)withingsTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -561,6 +574,37 @@
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_CONNECTSTATS_ENABLE);
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
+    }else if (indexPath.row == GC_CONNECTSTATS_USE ){
+        gridcell = [GCCellGrid gridCell:tableView];
+        [gridcell setupForRows:2 andCols:2];
+        
+        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Use service for",@"Services")
+                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
+        
+        [gridcell labelForRow:0 andCol:0].attributedText = title;
+        gcConnectStatsServiceUse method = (gcConnectStatsServiceUse)[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_USE defaultValue:gcConnectStatsServiceUseValidate];
+        NSArray * methods = [GCViewConfig validChoicesForConnectStatsServiceUse];
+        if (method < methods.count) {
+            [gridcell labelForRow:0 andCol:1].text = methods[method];
+        }else{
+            [gridcell labelForRow:0 andCol:1].text = NSLocalizedString(@"Unknown",@"Login Method");
+        }
+        rv = gridcell;
+    }else if( indexPath.row == GC_CONNECTSTATS_FILLYEAR){
+        gridcell = [GCCellGrid gridCell:tableView];
+        [gridcell setupForRows:2 andCols:2];
+        
+        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Backfill since ",@"Services")
+                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
+        
+        [gridcell labelForRow:0 andCol:0].attributedText = title;
+        NSArray<NSString*> * years = [self validYearsForBackfill];
+        NSInteger defaultYear = [years.firstObject integerValue] - 1;
+        NSInteger year = (gcConnectStatsServiceUse)[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:defaultYear];
+
+        [gridcell labelForRow:0 andCol:1].text = [NSString stringWithFormat:@"%@", @(year)];
+        rv = gridcell;
+
     }
     return rv;
 }
@@ -1102,6 +1146,19 @@
             [GCAppGlobal saveSettings];
             break;
         }
+        case GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS, GC_CONNECTSTATS_USE):
+        {
+            [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_USE intVal:cell.selected];
+            [GCAppGlobal saveSettings];
+            break;
+        }
+        case GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS, GC_CONNECTSTATS_FILLYEAR):
+        {
+            NSString * selected = [self validYearsForBackfill][cell.selected];
+            [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_FILLYEAR intVal:selected.integerValue];
+            [GCAppGlobal saveSettings];
+            break;
+        }
 
     }
     [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
@@ -1200,6 +1257,27 @@
         GCSettingsSourceTableViewController * source = [[GCSettingsSourceTableViewController alloc] initWithNibName:nil bundle:nil];
         [self.navigationController pushViewController:source animated:YES];
         [source release];
+    }else if( indexPath.section == GC_SECTIONS_CONNECTSTATS && indexPath.row == GC_CONNECTSTATS_USE){
+        GCCellEntryListViewController * list = [GCCellEntryListViewController entryListViewController:[GCViewConfig validChoicesForConnectStatsServiceUse] selected:[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_USE defaultValue:gcConnectStatsServiceUseValidate]];
+        list.entryFieldDelegate = self;
+        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_USE);
+        [self.navigationController pushViewController:list animated:YES];
+
+    }else if( indexPath.section == GC_SECTIONS_CONNECTSTATS && indexPath.row == GC_CONNECTSTATS_FILLYEAR){
+        NSArray<NSString*>* years = [self validYearsForBackfill];
+        NSUInteger index = 0;
+        NSUInteger currentYear = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:[years.firstObject integerValue] - 1];
+        for (NSString * one in years) {
+            if( one.integerValue == currentYear){
+                break;
+            }
+            index++;
+        }
+
+        GCCellEntryListViewController * list = [GCCellEntryListViewController entryListViewController:[self validYearsForBackfill] selected:index];
+        list.entryFieldDelegate = self;
+        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_FILLYEAR);
+        [self.navigationController pushViewController:list animated:YES];
     }
 }
 

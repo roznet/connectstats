@@ -625,6 +625,17 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return rv;
 }
 
++(NSArray*)validChoicesForConnectStatsServiceUse{
+    static NSArray * rv = nil;
+    if (rv==nil) {
+        rv = @[ NSLocalizedString(@"Source", @"ConnectStats Use Method"),
+                NSLocalizedString(@"Validate", @"ConnectStats Use Method")];
+        [rv retain];
+    }
+    return rv;
+
+}
+
 +(NSString*)calendarUnitDescription:(NSCalendarUnit)calendarUnit{
     NSString * rv = nil;
     if (calendarUnit == NSCalendarUnitWeekOfYear) {
