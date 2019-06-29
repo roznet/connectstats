@@ -42,6 +42,7 @@
 
 #import "GCConnectStatsRequestSearch.h"
 #import "GCConnectStatsRequestFitFile.h"
+#import "GCConnectStatsRequestLogin.h"
 
 #import "GCSportTracksActivityList.h"
 #import "GCSportTracksActivityDetail.h"
@@ -118,6 +119,7 @@
         // SWITCH TO PROD LATER
         GCWebUseConnectStatsDevServer(true,nil);
 #endif
+        [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
         [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:true andNavigationController:[GCAppGlobal currentNavigationController]]];
     }
     

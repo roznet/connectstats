@@ -26,6 +26,7 @@
 
 
 #import "GCConnectStatsRequestLogin.h"
+#import "GCWebUrl.h"
 
 @interface GCConnectStatsRequestLogin ()
 
@@ -38,29 +39,46 @@
 
 @implementation GCConnectStatsRequestLogin
 
-
-+(GCConnectStatsRequestLogin*)requestWithSecret:(NSString*)token andToken:(NSString*)secret{
++(GCConnectStatsRequestLogin*)requestNavigationController:(UINavigationController *)nav{
     GCConnectStatsRequestLogin * rv = RZReturnAutorelease([[GCConnectStatsRequestLogin alloc] init]);
-    rv.token = token;
-    rv.secret = secret;
+    rv.navigationController = nav;
     return rv;
 }
-+(GCConnectStatsRequestLogin*)requestWithUserId:(NSUInteger)uid{
-    GCConnectStatsRequestLogin * rv = RZReturnAutorelease([[GCConnectStatsRequestLogin alloc] init]);
-    rv.token = nil;
-    rv.secret = nil;
-    rv.userId = uid;
-    return rv;
-
-}
-
 -(NSString*)url{
-    return [NSString stringWithFormat:@"http://localhost/api/connectstats/login.php?user_id=%lu",(unsigned long) self.userId];
+    return nil;
 }
+
+-(NSURLRequest*)preparedUrlRequest{
+    if( [self isSignedIn] ){
+        self.navigationController = nil;
+    }
+    
+    if (self.navigationController) {
+        return nil;
+    }else{
+        NSString * path = GCWebConnectStatsValidateUser();
+        NSDictionary *parameters = @{
+                                     @"token_id" : @(self.tokenId),
+                                     };
+        
+        return [self preparedUrlRequest:path params:parameters];
+    }
+}
+
 
 -(void)process{
     
+    NSLog(@"user %@", self.theString);
+    
+    [self processDone];
 }
 
+-(id<GCWebRequest>)nextReq{
+    // later check logic to see if reach existing.
+    if( self.navigationController ){
+        return [GCConnectStatsRequestLogin requestNavigationController:nil];
+    }
+    return nil;
+}
 
 @end

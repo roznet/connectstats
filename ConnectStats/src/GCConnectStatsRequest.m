@@ -75,7 +75,6 @@
         self.userId = 0;
         self.tokenId = 0;
     }
-
 }
 
 -(NSURLSession*)sharedSession{
@@ -116,7 +115,8 @@
         if( self.userId == 0 || self.tokenId == 0){
             [self signInConnectStatsStep];
         }else{
-            [self processDone];
+            [self signInConnectStatsStep];
+            //[self processDone];
         }
     }else{
         [self signInGarminStep];

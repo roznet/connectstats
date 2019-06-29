@@ -79,6 +79,9 @@ NSString * kBugNoCommonId = @"-1";
                    
                    CONFIG_GARMIN_FIT_DOWNLOAD      ,
                    CONFIG_GARMIN_FIT_MERGE         ,
+                   
+                   CONFIG_CONNECTSTATS_USE         ,
+                   CONFIG_CONNECTSTATS_FILLYEAR    ,
 
                    
                    ] sortedArrayUsingSelector:@selector(compare:)];

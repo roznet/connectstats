@@ -472,25 +472,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             if (other) {
                 // don't record if already
                 if( self.duplicateActivityIds[act.activityId] == nil) {
-                    /*
-                    if( [act.service preferredOver:other.service]){
-                        RZLog(RZLogInfo, @"Duplicate: replacing %@ with preferred %@", act.activityId, other.activityId);
-                        
-                        if( save ){
-                            self.duplicateActivityIds[other.activityId] = act.activityId;
-                            [self.db executeUpdate:@"INSERT INTO gc_duplicate_activities (activityId,duplicateActivityId) VALUES (?,?)", other.activityId, act.activityId];
-                            [self deleteActivityId:other.activityId];
-                        }else{
-                            // If no save, just update
-                            [other updateWithActivity:act];
-                        }
-                    }else{*/
-                        self.duplicateActivityIds[act.activityId] = other.activityId;
-                        [self.db executeUpdate:@"INSERT INTO gc_duplicate_activities (activityId,duplicateActivityId) VALUES (?,?)", act.activityId, other.activityId];
-                        
-                        RZLog(RZLogInfo, @"Duplicate: skipping %@ (preferred: %@)", act.activityId, other.activityId);
-                        
-                    //}
+                    self.duplicateActivityIds[act.activityId] = other.activityId;
+                    [self.db executeUpdate:@"INSERT INTO gc_duplicate_activities (activityId,duplicateActivityId) VALUES (?,?)", act.activityId, other.activityId];
+                    
+                    RZLog(RZLogInfo, @"Duplicate: skipping %@ (preferred: %@)", act.activityId, other.activityId);
                 }
                 return rv;
             }

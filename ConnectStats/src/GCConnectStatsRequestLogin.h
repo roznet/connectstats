@@ -31,11 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GCConnectStatsRequestLogin : GCConnectStatsRequest
 
-+(GCConnectStatsRequestLogin*)requestWithSecret:(NSString*)token andToken:(NSString*)secret;
-+(GCConnectStatsRequestLogin*)requestWithUserId:(NSUInteger)uid;
-
--(NSString*)url;
--(void)process;
++(GCConnectStatsRequestLogin*)requestNavigationController:(nullable UINavigationController*)nav;
 
 @end
 

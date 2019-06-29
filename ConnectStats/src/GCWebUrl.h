@@ -38,6 +38,7 @@ BOOL GCWebSimulatorIsInUse(void);
 NSString * GCWebSimulatorSigninURL( NSString * uname, NSString * pwd);
 NSString * GCWebLogoutURL(void);
 
+NSString * GCWebConnectStatsValidateUser(void);
 NSString * GCWebConnectStatsSearch(void);
 NSString * GCWebConnectStatsFitFile(void);
 NSString * GCWebConnectStatsRegisterUser( NSString * accessToken, NSString * accessTokenSecret);
