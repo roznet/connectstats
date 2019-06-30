@@ -73,7 +73,9 @@
 -(NSString*)url{
     return nil;
 }
-
+-(NSString*)description{
+    return [NSString stringWithFormat:NSLocalizedString(@"Downloading Activity... %@",@"Request Description"),[self.activity.date dateFormatFromToday]];
+}
 -(NSURLRequest*)preparedUrlRequest{
     if( [self isSignedIn] ){
         self.navigationController = nil;

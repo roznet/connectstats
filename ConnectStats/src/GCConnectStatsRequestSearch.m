@@ -82,7 +82,9 @@ static const NSUInteger kActivityRequestCount = 20;
     [_lastFoundDate release];
     [super dealloc];
 }
-
+-(NSString*)description{
+    return [NSString stringWithFormat:NSLocalizedString(@"Downloading ConnectStats History... %@",@"Request Description"),[self.lastFoundDate dateFormatFromToday]];
+}
 -(NSString*)url{
     return nil;
 }
