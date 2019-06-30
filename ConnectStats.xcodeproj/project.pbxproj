@@ -5481,8 +5481,8 @@
 			isa = PBXGroup;
 			children = (
 				4202AE2121A72D9600D8D696 /* FITGarminDownloadManager.swift */,
-				424053BA21E12B8E00375795 /* GarminRequestActivityList.swift */,
 				429190AB21E24DDD00E0B114 /* GarminRequest.swift */,
+				424053BA21E12B8E00375795 /* GarminRequestActivityList.swift */,
 				42ADFAF521F2834F007BC683 /* GarminRequestFitFile.swift */,
 			);
 			name = Garmin;
