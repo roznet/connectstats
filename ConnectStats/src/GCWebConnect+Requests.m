@@ -215,6 +215,7 @@
     if (![self didLoginSuccessfully:gcWebServiceGarmin]&& [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
         [self garminLogin];
     }
+    
     // other services are automatic
 }
 

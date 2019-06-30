@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(BOOL)isSignedIn;
 -(void)signIn;
++(void)logout;
 
 -(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters;
 

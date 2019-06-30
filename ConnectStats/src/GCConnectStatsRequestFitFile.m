@@ -126,15 +126,15 @@
 }
 
 -(void)processParse:(NSString*)fileName{
-
-    NSString * fp = [[NSFileManager defaultManager] fileExistsAtPath:fileName] ? fileName : [RZFileOrganizer writeableFilePath:fileName];
-                                                                                               
-    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activity.activityId fitFilePath:fp]);
-    
-    [self.activity updateSummaryDataFromActivity:fitAct];
-    [self.activity updateTrackpointsFromActivity:fitAct];
-    [self.activity saveTrackpoints:self.activity.trackpoints andLaps:self.activity.laps];
-
+    if( [self checkNoErrors]){
+        NSString * fp = [[NSFileManager defaultManager] fileExistsAtPath:fileName] ? fileName : [RZFileOrganizer writeableFilePath:fileName];
+        
+        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activity.activityId fitFilePath:fp]);
+        
+        [self.activity updateSummaryDataFromActivity:fitAct];
+        [self.activity updateTrackpointsFromActivity:fitAct];
+        [self.activity saveTrackpoints:self.activity.trackpoints andLaps:self.activity.laps];
+    }
     [self processDone];
 }
 

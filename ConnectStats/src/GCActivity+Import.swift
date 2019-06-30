@@ -73,7 +73,7 @@ extension GCActivity {
             if let timestamp = item.time( field: "start_time") {
                 let values = interp.summaryValues(fitMessage: item)
                 // coordinate will be update from
-                print( "\(values)")
+                
                 let start = item.coordinate(field: "start_position") ?? CLLocationCoordinate2DMake(0, 0)
                 if let lap = GCLap(summaryValues: values, starting: timestamp, at: start, for: self) {
                     laps.append(lap)

@@ -116,7 +116,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
 -(NSArray*)processServiceError{
     NSMutableArray * errorsString = [NSMutableArray arrayWithCapacity:gcWebServiceEnd];
-    gcWebService others[] = {gcWebServiceGarmin,gcWebServiceStrava,gcWebServiceSportTracks,gcWebServiceWithings,gcWebServiceBabolat};
+    gcWebService others[] = {gcWebServiceGarmin,gcWebServiceConnectStats,gcWebServiceStrava,gcWebServiceSportTracks,gcWebServiceWithings,gcWebServiceBabolat};
     for (size_t i=0; i<5; i++) {
         gcWebService service = others[i];
         GCWebStatus status= [[GCAppGlobal web] statusForService:service];

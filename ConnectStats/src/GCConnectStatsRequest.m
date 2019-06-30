@@ -77,6 +77,12 @@
     }
 }
 
++(void)logout{
+    [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_USER_ID intVal:0];
+    [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_TOKEN_ID intVal:0];
+    [[GCAppGlobal profile] setPassword:@"" forService:gcServiceConnectStats];
+}
+
 -(NSURLSession*)sharedSession{
     static NSURLSession * _shared = nil;
     if(_shared == nil){
@@ -101,7 +107,14 @@
     }
 }
 
-
+-(BOOL)checkNoErrors{
+    if( self.delegate.lastStatusCode == 401){
+        self.status = GCWebStatusLoginFailed;
+        // force login next time
+        [GCConnectStatsRequest logout];
+    }
+    return self.status == GCWebStatusOK;
+}
 -(BOOL)isSignedIn{
     BOOL rv = self.oauthToken != nil && self.oauthTokenSecret != nil && self.userId != 0 && self.tokenId != 0;
     if( rv && ! self.oauth1Controller){
@@ -223,4 +236,7 @@
     return preparedRequest;
 }
 
+-(gcWebService)service{
+    return gcWebServiceConnectStats;
+}
 @end

@@ -75,6 +75,9 @@
     return nil;
 }
 
+-(gcWebService)service{
+    return gcWebServiceGarmin;
+}
 @end
 
 #pragma mark -

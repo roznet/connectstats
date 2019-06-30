@@ -199,6 +199,8 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
             return @"HealthStore";
         case gcWebServiceFitbit:
             return @"FitBit";
+        case gcWebServiceConnectStats:
+            return @"ConnectStats";
         case gcWebServiceEnd:
         case gcWebServiceNone:
             return @"Other";
