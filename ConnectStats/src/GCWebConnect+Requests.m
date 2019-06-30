@@ -113,18 +113,18 @@
     }
 }
 
--(void)nonGarminSearch{
+-(void)nonGarminSearch:(BOOL)reloadAll{
     if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
 #if TARGET_IPHONE_SIMULATOR
         // SWITCH TO PROD LATER
         GCWebUseConnectStatsDevServer(true,nil);
 #endif
         [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
-        [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:true andNavigationController:[GCAppGlobal currentNavigationController]]];
+        [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:reloadAll andNavigationController:[GCAppGlobal currentNavigationController]]];
     }
     
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
-        [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:false]];
+        [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:reloadAll]];
     }
     // For testing
     if([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_SEGMENTS defaultValue:NO]){
@@ -176,7 +176,7 @@
             [self addRequest:[[[GCGarminSearch alloc] initWithStart:aStart percent:0.0 andMode:rAll] autorelease]];
         }
     }
-    [self nonGarminSearch];
+    [self nonGarminSearch:rAll];
 }
 
 -(void)servicesSearchRecentActivities{
@@ -188,13 +188,15 @@
         [self addRequest:[[[GCGarminRequestHeartRateZones alloc] init] autorelease]];
     }
 
-    [self nonGarminSearch];
+    [self nonGarminSearch:false];
 }
 -(void)servicesSearchAllActivities{
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
         [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:true]];
     }
-
+    if( [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO]){
+        [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:true andNavigationController:[GCAppGlobal currentNavigationController]]];
+    }
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
         if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] ){
             [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:0 andMode:true] autorelease]];
