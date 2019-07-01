@@ -323,6 +323,10 @@
         GCNumberWithUnit * val = [[movingSpeed numberWithUnit] convertToUnitName:uom];
         newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
     }
+    // Ensure proper default as this is save in the database and nil is an issue
+    if( self.speedDisplayUom == nil){
+        self.speedDisplayUom = @"kph";
+    }
 
 }
 
@@ -423,6 +427,10 @@
         self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:self.activityType];
         if (!self.distanceDisplayUom) {
             self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:GC_TYPE_ALL];
+            if( !self.distanceDisplayUom ){
+                // Default as nil is an issue to save into the database
+                self.distanceDisplayUom = @"kilometer";
+            }
         }
         // few extra derived
         [self addPaceIfNecessaryWithSummary:newSummaryData];
