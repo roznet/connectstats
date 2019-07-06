@@ -28,11 +28,15 @@
 #import "GCConnectStatsRequestLogin.h"
 #import "GCWebUrl.h"
 
+typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
+    GCConnectStatsRequestLoginStageCheck,
+    GCConnectStatsRequestLoginStageBackfill,
+    GCConnectStatsRequestLoginStageEnd
+};
+
 @interface GCConnectStatsRequestLogin ()
 
-@property (nonatomic,nullable,retain) NSString * token;
-@property (nonatomic,nullable,retain) NSString * secret;
-@property (nonatomic,assign) NSUInteger userId;
+@property (nonatomic,assign) GCConnectStatsRequestLoginStage loginStage;
 
 @end
 
@@ -43,6 +47,15 @@
     GCConnectStatsRequestLogin * rv = RZReturnAutorelease([[GCConnectStatsRequestLogin alloc] init]);
     rv.navigationController = nav;
     return rv;
+}
+
+-(GCConnectStatsRequestLogin*)initNextWith:(GCConnectStatsRequestLogin*)current{
+    self = [super initNextWith:current];
+    if( self ){
+        self.navigationController = nil;
+        self.loginStage = current.loginStage + 1;
+    }
+    return self;
 }
 -(NSString*)url{
     return nil;
@@ -56,27 +69,72 @@
     if (self.navigationController) {
         return nil;
     }else{
-        NSString * path = GCWebConnectStatsValidateUser();
-        NSDictionary *parameters = @{
-                                     @"token_id" : @(self.tokenId),
-                                     };
-        
-        return [self preparedUrlRequest:path params:parameters];
+        switch (self.loginStage) {
+            case GCConnectStatsRequestLoginStageCheck:
+            {
+                NSString * path = GCWebConnectStatsValidateUser();
+                NSDictionary *parameters = @{
+                                             @"token_id" : @(self.tokenId),
+                                             };
+                
+                return [self preparedUrlRequest:path params:parameters];
+            }
+            case GCConnectStatsRequestLoginStageBackfill:
+            {
+                NSString * path = GCWebConnectStatsRequestBackfill();
+                NSDictionary *parameters = @{
+                                             @"token_id" : @(self.tokenId),
+                                             @"start_year" : @(2011)
+                                             };
+                
+                return [self preparedUrlRequest:path params:parameters];
+
+            }
+            default:
+                return nil;
+        }
     }
+    return nil;
 }
 
 
 -(void)process{
-    
-    NSLog(@"user %@", self.theString);
-    
-    [self processDone];
+    if (![self isSignedIn]) {
+        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(),^(){
+            [self signIn];
+        });
+        
+    }else{
+
+        if( self.loginStage == GCConnectStatsRequestLoginStageCheck){
+            NSData * jsonData = [self.theString dataUsingEncoding:self.encoding];
+            NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
+            if( [info isKindOfClass:[NSDictionary class]] ){
+                if( [info[@"backfillEndTime"] isKindOfClass:[NSNull class]]){
+                    
+                }else{
+                    NSLog(@"already backfill %@",info);
+                    // no need next stage
+                    self.loginStage = GCConnectStatsRequestLoginStageEnd;
+                    
+                }
+            }else{
+                self.loginStage = GCConnectStatsRequestLoginStageEnd;
+            }
+        }
+        [self processDone];
+    }
 }
 
 -(id<GCWebRequest>)nextReq{
     // later check logic to see if reach existing.
     if( self.navigationController ){
         return [GCConnectStatsRequestLogin requestNavigationController:nil];
+    }else{
+        if( self.loginStage + 1 < GCConnectStatsRequestLoginStageEnd ){
+            return [[[GCConnectStatsRequestLogin alloc] initNextWith:self] autorelease];
+        }
     }
     return nil;
 }

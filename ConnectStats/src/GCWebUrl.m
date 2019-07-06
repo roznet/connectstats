@@ -94,8 +94,8 @@ void GCWebUseConnectStatsDevServer(BOOL abool, NSString * url){
     useDevServer = abool;
     if( url == nil){
 #if TARGET_IPHONE_SIMULATOR
-        simulatorURL = @"https://localhost";
-        simulatorURL = @"https://ro-z.net";
+        simulatorURL = @"https://localhost/dev";
+        simulatorURL = @"https://ro-z.net/dev";
 #else
         simulatorURL = @"https://ro-z.net";
 #endif
@@ -162,6 +162,19 @@ NSString * GCWebConnectStatsFitFile(void){
         }
     }else{
         return @"https://ro-z.net/api/connectstats/file";
+    }
+
+}
+
+NSString * GCWebConnectStatsRequestBackfill(void){
+    if (useSimulator || useDevServer) {
+        if (simulatorError) {
+            return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
+        }else{
+            return [NSString stringWithFormat:@"%@/api/garmin/backfill",simulatorURL];
+        }
+    }else{
+        return [NSString stringWithFormat:@"https://ro-z.net/api/connectstats/backfill"];
     }
 
 }

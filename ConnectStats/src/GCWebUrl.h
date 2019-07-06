@@ -40,6 +40,7 @@ NSString * GCWebLogoutURL(void);
 
 NSString * GCWebConnectStatsValidateUser(void);
 NSString * GCWebConnectStatsSearch(void);
+NSString * GCWebConnectStatsRequestBackfill(void);
 NSString * GCWebConnectStatsFitFile(void);
 NSString * GCWebConnectStatsRegisterUser( NSString * accessToken, NSString * accessTokenSecret);
 

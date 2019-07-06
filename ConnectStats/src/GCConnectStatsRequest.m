@@ -116,6 +116,11 @@
     return self.status == GCWebStatusOK;
 }
 -(BOOL)isSignedIn{
+    // Always check token first as it's possible a previous req in the queue did log in and
+    // we don't want to present a second time.
+    if( ! self.oauthToken ){
+        [self checkToken];
+    }
     BOOL rv = self.oauthToken != nil && self.oauthTokenSecret != nil && self.userId != 0 && self.tokenId != 0;
     if( rv && ! self.oauth1Controller){
         [self buildOAuthController];
