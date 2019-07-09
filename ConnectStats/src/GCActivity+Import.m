@@ -1596,6 +1596,19 @@
 -(BOOL)testForDuplicate:(GCActivity*)other{
     BOOL activitiesAreDuplicate = false;
     
+    // if child activity from multi sport overlap test would succeed but not a duplicate
+    if( self.childIds && [self.childIds isKindOfClass:[NSArray class]]){
+        if( [self.childIds containsObject:other.activityId] ){
+            return false;
+        }
+    }
+    
+    if( other.childIds && [other.childIds isKindOfClass:[NSArray class]]){
+        if( [other.childIds containsObject:self.activityId] ){
+            return false;
+        }
+    }
+    
     // check if from same system (strava/garmin)
     if( (self.externalServiceActivityId && ([self.externalServiceActivityId isEqualToString:other.activityId]))||
        (other.externalServiceActivityId && ([other.externalServiceActivityId isEqualToString:self.activityId]))){
