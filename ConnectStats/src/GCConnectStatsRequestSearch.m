@@ -97,7 +97,7 @@ static const NSUInteger kActivityRequestCount = 20;
     if (self.navigationController) {
         return nil;
     }else{
-        NSString * path = GCWebConnectStatsSearch();
+        NSString * path = GCWebConnectStatsSearch([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]);
         NSDictionary *parameters = @{
                                      @"token_id" : @(self.tokenId),
                                      @"start" : @(self.start),

@@ -159,6 +159,7 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 
 +(NSArray<NSString*>*)validChoicesForGarminLoginMethod;
 +(NSArray<NSString*>*)validChoicesForConnectStatsServiceUse;
++(NSArray<NSString*>*)validChoicesForConnectStatsConfig;
 
 
 @end

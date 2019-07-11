@@ -46,6 +46,7 @@ typedef NS_ENUM(NSUInteger, GCWebStatus) {
     GCWebStatusServiceInternalError,
     GCWebStatusRequireModern,
     GCWebStatusRequirePasswordRenew,
+    GCWebStatusCustomMessage
 };
 
 typedef NS_ENUM(NSUInteger, gcWebService) {
@@ -95,6 +96,7 @@ typedef NS_ENUM(NSUInteger, gcWebService) {
 -(nullable NSURLRequest*)preparedUrlRequest;
 -(nonnull RemoteDownloadPrepareUrl)prepareUrlFunc;
 -(nullable NSError*)lastError;
+-(nullable NSString*)customMessage;
 -(nullable NSString*)httpUserAgent;
 -(void)process:(nonnull NSData*)theData andDelegate:(nonnull id<GCWebRequestDelegate>)delegate;
 @end

@@ -633,7 +633,20 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
         [rv retain];
     }
     return rv;
+}
 
++(NSArray*)validChoicesForConnectStatsConfig{
+    static NSArray * rv = nil;
+    
+    if( rv==nil){
+        
+        rv = @[ NSLocalizedString(@"Production", @"ConnectStats Config"),
+                NSLocalizedString(@"Remote Testing", @"ConnectStats Config"),
+                NSLocalizedString(@"Local Testing", @"ConnectStats Config"),
+                ];
+        [rv retain];
+    }
+    return rv;
 }
 
 +(NSString*)calendarUnitDescription:(NSCalendarUnit)calendarUnit{

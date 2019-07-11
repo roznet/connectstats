@@ -27,6 +27,7 @@
 
 #import "GCConnectStatsRequestLogin.h"
 #import "GCWebUrl.h"
+#import "GCAppGlobal.h"
 
 typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
     GCConnectStatsRequestLoginStageCheck,
@@ -72,7 +73,7 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
         switch (self.loginStage) {
             case GCConnectStatsRequestLoginStageCheck:
             {
-                NSString * path = GCWebConnectStatsValidateUser();
+                NSString * path = GCWebConnectStatsValidateUser([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]);
                 NSDictionary *parameters = @{
                                              @"token_id" : @(self.tokenId),
                                              };
@@ -81,10 +82,11 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
             }
             case GCConnectStatsRequestLoginStageBackfill:
             {
-                NSString * path = GCWebConnectStatsRequestBackfill();
+                NSUInteger year = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:2019];
+                NSString * path = GCWebConnectStatsRequestBackfill([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]);
                 NSDictionary *parameters = @{
                                              @"token_id" : @(self.tokenId),
-                                             @"start_year" : @(2011)
+                                             @"start_year" : @(year)
                                              };
                 
                 return [self preparedUrlRequest:path params:parameters];
@@ -112,9 +114,10 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
             NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
             if( [info isKindOfClass:[NSDictionary class]] ){
                 if( [info[@"backfillEndTime"] isKindOfClass:[NSNull class]]){
-                    
+                    /*self.customMessage = NSLocalizedString(@"New account, starting synchronisation with Garmin", @"Status");
+                    self.status = GCWebStatusCustomMessage;
+                     */
                 }else{
-                    NSLog(@"already backfill %@",info);
                     // no need next stage
                     self.loginStage = GCConnectStatsRequestLoginStageEnd;
                     
@@ -122,6 +125,12 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
             }else{
                 self.loginStage = GCConnectStatsRequestLoginStageEnd;
             }
+        }else if( self.loginStage == GCConnectStatsRequestLoginStageBackfill ){
+            NSData * jsonData = [self.theString dataUsingEncoding:self.encoding];
+            NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
+            NSLog(@"Backfill %@", info);
+            self.customMessage = info[@"status"];
+            self.status = GCWebStatusCustomMessage;
         }
         [self processDone];
     }

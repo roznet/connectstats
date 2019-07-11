@@ -25,10 +25,19 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSUInteger, gcWebConnectStatsConfig) {
+    gcWebConnectStatsConfigProduction,
+    gcWebConnectStatsConfigRemoteTesting,
+    gcWebConnectStatsConfigLocalTesting,
+    gcWebConnectStatsConfigEnd
+};
+
 void GCWebUseSimulator( BOOL abool, NSString * url);
 void GCWebSetSimulatorError( BOOL abool);
 void GCWebSetSimulatorState( NSString * state);
-void GCWebUseConnectStatsDevServer(BOOL abool, NSString * url);
+void GCWebConnectStatsConfigSet(gcWebConnectStatsConfig config);
+gcWebConnectStatsConfig GCWebConnectStatsConfig(void);
+
 /**
  This will only take effect after the next signin to the simulator
  */
@@ -38,11 +47,11 @@ BOOL GCWebSimulatorIsInUse(void);
 NSString * GCWebSimulatorSigninURL( NSString * uname, NSString * pwd);
 NSString * GCWebLogoutURL(void);
 
-NSString * GCWebConnectStatsValidateUser(void);
-NSString * GCWebConnectStatsSearch(void);
-NSString * GCWebConnectStatsRequestBackfill(void);
-NSString * GCWebConnectStatsFitFile(void);
-NSString * GCWebConnectStatsRegisterUser( NSString * accessToken, NSString * accessTokenSecret);
+NSString * GCWebConnectStatsValidateUser(gcWebConnectStatsConfig config);
+NSString * GCWebConnectStatsSearch(gcWebConnectStatsConfig config);
+NSString * GCWebConnectStatsRequestBackfill(gcWebConnectStatsConfig config);
+NSString * GCWebConnectStatsFitFile(gcWebConnectStatsConfig config);
+NSString * GCWebConnectStatsRegisterUser( gcWebConnectStatsConfig config, NSString * accessToken, NSString * accessTokenSecret);
 
 NSString * GCWebSearchURL( NSUInteger start );
 NSString * GCWebModernSearchURL( NSUInteger start, NSUInteger requestCount );

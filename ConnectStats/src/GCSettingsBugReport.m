@@ -82,6 +82,7 @@ NSString * kBugNoCommonId = @"-1";
                    
                    CONFIG_CONNECTSTATS_USE         ,
                    CONFIG_CONNECTSTATS_FILLYEAR    ,
+                   CONFIG_CONNECTSTATS_CONFIG      ,
 
                    
                    ] sortedArrayUsingSelector:@selector(compare:)];

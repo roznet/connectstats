@@ -62,6 +62,16 @@
     }
     return self;
 }
+-(void)dealloc{
+    [_customMessage release];
+    [_oauthToken release];
+    [_oauthTokenSecret release];
+    [_oauth1Controller release];
+    [_webView release];
+    
+    [super dealloc];
+}
+
 -(void)checkToken{
     self.oauthToken = [[GCAppGlobal profile] configGetString:CONFIG_CONNECTSTATS_TOKEN defaultValue:@""];
     self.oauthTokenSecret = [[GCAppGlobal profile] currentPasswordForService:gcServiceConnectStats];
@@ -142,7 +152,8 @@
 }
 
 -(void)signInConnectStatsStep{
-    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:GCWebConnectStatsRegisterUser(self.oauthToken, self.oauthTokenSecret)]];
+    gcWebConnectStatsConfig config = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction];
+    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:GCWebConnectStatsRegisterUser(config, self.oauthToken, self.oauthTokenSecret)]];
     
     [[[self sharedSession] dataTaskWithRequest:request completionHandler:
       ^(NSData * _Nullable data,
@@ -190,7 +201,12 @@
         if( ! credentials ){
             RZLog(RZLogError,@"Failed to read credentials.json %@", error);
         }
-        NSDictionary * params = [OAuth1Controller serviceParametersFromJson:credentials forServiceName:@"garmin"];
+        NSString * serviceName = @"garmin";
+        if( [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction] != gcWebConnectStatsConfigProduction){
+            serviceName = @"garmin_dev";
+        }
+        
+        NSDictionary * params = [OAuth1Controller serviceParametersFromJson:credentials forServiceName:serviceName];
         
         self.oauth1Controller = [[[OAuth1Controller alloc] initWithServiceParameters:params] autorelease];
     }

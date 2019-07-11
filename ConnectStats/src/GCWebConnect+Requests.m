@@ -115,10 +115,6 @@
 
 -(void)nonGarminSearch:(BOOL)reloadAll{
     if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
-#if TARGET_IPHONE_SIMULATOR
-        // SWITCH TO PROD LATER
-        GCWebUseConnectStatsDevServer(true,nil);
-#endif
         [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
         [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:reloadAll andNavigationController:[GCAppGlobal currentNavigationController]]];
     }
@@ -258,7 +254,9 @@
 
 
 -(void)garminDownloadActivityTrackPoints13:(GCActivity*)act{
-    if(  [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
+    // If the service for garmin was successfull, download anyway.
+    // it's possible it's the detail of an old activities, downloaded before the service was turned off.
+    if( [[GCAppGlobal profile] serviceSuccess:gcServiceGarmin] || [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
         [self addRequest:[GCGarminActivityTrack13Request requestWithActivity:act]];
     }
 }

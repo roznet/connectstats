@@ -84,7 +84,7 @@
     if (self.navigationController) {
         return nil;
     }else{
-        NSString * path = GCWebConnectStatsFitFile();
+        NSString * path = GCWebConnectStatsFitFile([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]);
         GCService * service = self.activity.service;
         NSString * aid = [service serviceIdFromActivityId:self.activity.activityId ];
         

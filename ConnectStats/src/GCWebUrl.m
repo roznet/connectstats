@@ -88,22 +88,6 @@ static BOOL simulatorError = false;
 static NSString * simulatorURL = nil;
 static NSString * simulatorState = nil;
 static NSString * simulatorDir = nil;
-static BOOL useDevServer = false;
-
-void GCWebUseConnectStatsDevServer(BOOL abool, NSString * url){
-    useDevServer = abool;
-    if( url == nil){
-#if TARGET_IPHONE_SIMULATOR
-        simulatorURL = @"https://localhost/dev";
-        simulatorURL = @"https://ro-z.net/dev";
-#else
-        simulatorURL = @"https://ro-z.net";
-#endif
-    }else{
-        simulatorURL = url;
-    }
-
-}
 
 void GCWebUseSimulator( BOOL abool, NSString * url){
     useSimulator = abool;
@@ -141,67 +125,68 @@ BOOL GCWebSimulatorIsInUse(){
 
 #pragma mark - ConnectStats
 
-NSString * GCWebConnectStatsSearch(void){
-    if (useSimulator || useDevServer) {
-        if (simulatorError) {
-            return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
-        }else{
-            return [NSString stringWithFormat:@"%@/api/connectstats/search",simulatorURL];
-        }
-    }else{
-        return @"https://ro-z.net/api/connectstats/search";
+NSString * GCWebConnectStatsPrefixForConfig(gcWebConnectStatsConfig config){
+    switch (config) {
+        case gcWebConnectStatsConfigProduction:
+        case gcWebConnectStatsConfigEnd:
+            return @"https://ro-z.net/prod";
+        case gcWebConnectStatsConfigLocalTesting:
+            return @"https://localhost/dev";
+        case gcWebConnectStatsConfigRemoteTesting:
+            return @"https://ro-z.net/dev";
     }
 }
 
-NSString * GCWebConnectStatsFitFile(void){
-    if (useSimulator || useDevServer) {
-        if (simulatorError) {
-            return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
-        }else{
-            return [NSString stringWithFormat:@"%@/api/connectstats/file",simulatorURL];
-        }
+NSString * GCWebConnectStatsSearch(gcWebConnectStatsConfig config){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+    
+    if (simulatorError) {
+        return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
     }else{
-        return @"https://ro-z.net/api/connectstats/file";
+        return [NSString stringWithFormat:@"%@/api/connectstats/search",url];
     }
-
 }
 
-NSString * GCWebConnectStatsRequestBackfill(void){
-    if (useSimulator || useDevServer) {
-        if (simulatorError) {
-            return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
-        }else{
-            return [NSString stringWithFormat:@"%@/api/garmin/backfill",simulatorURL];
-        }
+NSString * GCWebConnectStatsFitFile(gcWebConnectStatsConfig config){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+
+    if (simulatorError) {
+        return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
     }else{
-        return [NSString stringWithFormat:@"https://ro-z.net/api/connectstats/backfill"];
+        return [NSString stringWithFormat:@"%@/api/connectstats/file",url];
     }
 
 }
 
-NSString * GCWebConnectStatsValidateUser(void){
-    if (useSimulator || useDevServer) {
-        if (simulatorError) {
-            return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
-        }else{
-            return [NSString stringWithFormat:@"%@/api/connectstats/validateuser",simulatorURL];
-        }
+NSString * GCWebConnectStatsRequestBackfill(gcWebConnectStatsConfig config){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+    
+    if (simulatorError) {
+        return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
     }else{
-        return [NSString stringWithFormat:@"https://ro-z.net/api/connectstats/validateuser"];
+        return [NSString stringWithFormat:@"%@/api/garmin/backfill",url];
+    }
+}
+
+NSString * GCWebConnectStatsValidateUser(gcWebConnectStatsConfig config){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+
+    if (simulatorError) {
+        return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
+    }else{
+        return [NSString stringWithFormat:@"%@/api/connectstats/validateuser",url];
     }
 }
 
 
 
-NSString * GCWebConnectStatsRegisterUser( NSString * accessToken, NSString * accessTokenSecret){
-    if (useSimulator || useDevServer) {
-        if (simulatorError) {
-            return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
-        }else{
-            return [NSString stringWithFormat:@"%@/api/connectstats/user_register?userAccessToken=%@&userAccessTokenSecret=%@",simulatorURL, accessToken, accessTokenSecret];
-        }
+NSString * GCWebConnectStatsRegisterUser( gcWebConnectStatsConfig config, NSString * accessToken, NSString * accessTokenSecret){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+
+    if (simulatorError) {
+        return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
     }else{
-        return [NSString stringWithFormat:@"https://ro-z.net/api/connectstats/user_register?userAccessToken=%@&userAccessTokenSecret=%@", accessToken, accessTokenSecret];
+        return [NSString stringWithFormat:@"%@/api/connectstats/user_register?userAccessToken=%@&userAccessTokenSecret=%@",url, accessToken, accessTokenSecret];
     }
 }
 

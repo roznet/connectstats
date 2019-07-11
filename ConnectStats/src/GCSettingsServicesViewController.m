@@ -37,6 +37,7 @@
 #import "GCActivitiesOrganizer.h"
 #import "GCHealthOrganizer.h"
 #import "GCStravaReqBase.h"
+#import "GCWebUrl.h"
 
 #define GC_SECTIONS_GARMIN          0
 #define GC_SECTIONS_STRAVA          1
@@ -66,7 +67,8 @@
 #define GC_CONNECTSTATS_ENABLE      1
 #define GC_CONNECTSTATS_USE         2
 #define GC_CONNECTSTATS_FILLYEAR    3
-#define GC_CONNECTSTATS_END         4
+#define GC_CONNECTSTATS_CONFIG      4
+#define GC_CONNECTSTATS_END         5
 
 #define GC_STRAVA_NAME      0
 #define GC_STRAVA_ENABLE    1
@@ -170,8 +172,16 @@
                                                                    @( GC_CONNECTSTATS_NAME ),
                                                                    @( GC_CONNECTSTATS_ENABLE ),
                                                                    @( GC_CONNECTSTATS_USE ),
+                                                                   @( GC_CONNECTSTATS_CONFIG ),
                                                                    @( GC_CONNECTSTATS_FILLYEAR )
                                                                    ]];
+    }else{
+        [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
+                                                                   @( GC_CONNECTSTATS_NAME ),
+                                                                   @( GC_CONNECTSTATS_ENABLE ),
+                                                                   @( GC_CONNECTSTATS_FILLYEAR )
+                                                                   ]];
+
     }
     if (method != gcGarminLoginMethodDirect) {
         [self.remap addSection:GC_SECTIONS_GARMIN withRows:@[
@@ -590,6 +600,23 @@
             [gridcell labelForRow:0 andCol:1].text = NSLocalizedString(@"Unknown",@"Login Method");
         }
         rv = gridcell;
+    }else if (indexPath.row == GC_CONNECTSTATS_CONFIG ){
+        gridcell = [GCCellGrid gridCell:tableView];
+        [gridcell setupForRows:2 andCols:2];
+        
+        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Config",@"Services")
+                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
+        
+        [gridcell labelForRow:0 andCol:0].attributedText = title;
+        gcWebConnectStatsConfig method = (gcWebConnectStatsConfig)[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG   defaultValue:gcWebConnectStatsConfigProduction];
+        NSArray * methods = [GCViewConfig validChoicesForConnectStatsConfig];
+        if (method < methods.count) {
+            [gridcell labelForRow:0 andCol:1].text = methods[method];
+        }else{
+            [gridcell labelForRow:0 andCol:1].text = NSLocalizedString(@"Unknown",@"Login Method");
+        }
+        rv = gridcell;
+
     }else if( indexPath.row == GC_CONNECTSTATS_FILLYEAR){
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:2];
@@ -1152,6 +1179,13 @@
             [GCAppGlobal saveSettings];
             break;
         }
+        case GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS, GC_CONNECTSTATS_CONFIG):
+        {
+            [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_CONFIG intVal:cell.selected];
+            [GCAppGlobal saveSettings];
+            break;
+        }
+
         case GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS, GC_CONNECTSTATS_FILLYEAR):
         {
             NSString * selected = [self validYearsForBackfill][cell.selected];
@@ -1262,7 +1296,11 @@
         list.entryFieldDelegate = self;
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_USE);
         [self.navigationController pushViewController:list animated:YES];
-
+    }else if( indexPath.section == GC_SECTIONS_CONNECTSTATS && indexPath.row == GC_CONNECTSTATS_CONFIG){
+        GCCellEntryListViewController * list = [GCCellEntryListViewController entryListViewController:[GCViewConfig validChoicesForConnectStatsConfig] selected:[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]];
+        list.entryFieldDelegate = self;
+        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_CONFIG);
+        [self.navigationController pushViewController:list animated:YES];
     }else if( indexPath.section == GC_SECTIONS_CONNECTSTATS && indexPath.row == GC_CONNECTSTATS_FILLYEAR){
         NSArray<NSString*>* years = [self validYearsForBackfill];
         NSUInteger index = 0;

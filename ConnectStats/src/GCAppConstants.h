@@ -80,6 +80,7 @@
 #define CONFIG_CONNECTSTATS_ENABLE      @"config_connectstats_enable"
 #define CONFIG_CONNECTSTATS_USE         @"config_connectstats_use"
 #define CONFIG_CONNECTSTATS_FILLYEAR    @"config_connectstats_fillyear"
+#define CONFIG_CONNECTSTATS_CONFIG      @"config_connectstats_config"
 #define CONFIG_GARMIN_ENABLE            @"config_garmin_enable"
 #define CONFIG_GARMIN_LOGIN_METHOD      @"config_garmin_login_method"
 #define CONFIG_GARMIN_USE_MODERN        @"config_garmin_use_modern_v2"

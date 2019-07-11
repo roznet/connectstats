@@ -35,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,weak) UINavigationController * navigationController;
 @property (nonatomic,readonly) NSString * oauthToken;
 @property (nonatomic,readonly) NSUInteger tokenId;
+@property (nonatomic,retain) NSString * customMessage;
 
 -(instancetype)initNextWith:(GCConnectStatsRequest*)current;
 
