@@ -644,7 +644,22 @@
 
 -(NSArray*)sampleIcons{
     NSMutableArray * icons = [NSMutableArray arrayWithCapacity:10];
-    for (NSString * type in @[GC_TYPE_RUNNING,GC_TYPE_SWIMMING,GC_TYPE_OTHER,GC_TYPE_CYCLING,GC_TYPE_FITNESS,GC_TYPE_HIKING]) {
+    for (NSString * type in @[
+                              GC_TYPE_RUNNING,
+                              GC_TYPE_SWIMMING,
+                              GC_TYPE_OTHER,
+                              GC_TYPE_CYCLING,
+                              GC_TYPE_FITNESS,
+                              GC_TYPE_HIKING,
+                              GC_TYPE_TENNIS,
+                              GC_TYPE_MULTISPORT,
+                              GC_TYPE_SKI_BACK,
+                              GC_TYPE_SKI_DOWN,
+                              GC_TYPE_SKI_XC,
+                              GC_TYPE_ROWING,
+                              GC_TYPE_TRANSITION,
+
+                              ]) {
         GCTestIconsCell * iconCell = [GCTestIconsCell iconsCellForActivityType:type];
         NSString * identifier = [NSString stringWithFormat:@"Icons %@", type];
         [icons addObject:[GCTestUISampleCellHolder holderFor:iconCell andIdentifier:identifier]];

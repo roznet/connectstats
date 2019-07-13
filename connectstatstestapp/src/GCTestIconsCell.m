@@ -54,20 +54,7 @@
     if( dynIcon ){
         [v addObject:[rv addImage:dynIcon]];
     }
-    /*
-    if( [GCViewIcons activityTypeBWIconFor:atype] ){
-        UIImageView * merged = [[[UIImageView alloc] initWithImage:[GCViewIcons activityTypeBWIconFor:atype]] autorelease];
-        merged.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:atype];
-        merged.layer.cornerRadius = 5;//merged.layer.frame.size.height/2.0;
-        merged.layer.mask.masksToBounds = YES;
-        merged.layer.borderWidth = 0;
-        merged.image = [merged.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [merged setTintColor:[UIColor whiteColor]];
-        [rv.contentView addSubview:merged];
-        [v addObject:merged];
-    }
-     */
-    [rv.contentView setBackgroundColor:[UIColor whiteColor]];
+    [rv.contentView setBackgroundColor:[GCViewConfig cellBackgroundLighterForActivity:atype]];
     rv.imageViews = v;
     return rv;
 }
