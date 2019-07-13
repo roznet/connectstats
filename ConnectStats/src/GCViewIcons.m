@@ -145,21 +145,28 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,gcUIStyle style,NSString*suffix
     return rv;
 }
 
-+(UIImageView*)activityTypeDynamicIconFor:(NSString*)activityType{
-    UIImage * rv = [UIImage imageNamed:[NSString stringWithFormat:@"%@-bw", activityType]];
-    if( rv == nil){
++(UIImage*)activityTypeDynamicIconFor:(NSString*)activityType{
+    UIImage * icon = [UIImage imageNamed:[NSString stringWithFormat:@"%@-bw", activityType]];
+    if( icon == nil){
         return nil;
     }
-    UIImageView * merged = RZReturnAutorelease([[UIImageView alloc] initWithImage:rv]);
-    merged.backgroundColor = [GCViewConfig cellBackgroundDarkerForActivity:activityType];
+    UIImageView * imgView = RZReturnAutorelease([[UIImageView alloc] initWithImage:icon]);
+    imgView.backgroundColor = [GCViewConfig cellBackgroundDarkerForActivity:activityType];
     
-    merged.layer.cornerRadius = 5;
-    merged.layer.mask.masksToBounds = YES;
-    merged.layer.borderWidth = 0;
-    merged.image = [merged.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [merged setTintColor:[UIColor whiteColor]];
+    imgView.layer.cornerRadius = 5;
+    imgView.layer.mask.masksToBounds = YES;
+    imgView.layer.borderWidth = 0;
+    imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [imgView setTintColor:[UIColor whiteColor]];
     
-    return merged;
+    UIGraphicsBeginImageContextWithOptions(imgView.bounds.size, imgView.isOpaque, 0.0);
+    [imgView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage * rv = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+
+    return rv;
 }
 
 +(UIImage*)activityTypeBWIconFor:(NSString*)activityType{
