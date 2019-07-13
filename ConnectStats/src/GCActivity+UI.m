@@ -31,10 +31,10 @@
 -(UIImage*)icon{
     UIImage * rv = nil;
     if (self.activityTypeDetail) {
-        rv = [GCViewIcons activityTypeColoredIconFor:self.activityTypeDetail.key];
+        rv = [GCViewIcons activityTypeDynamicIconFor:self.activityTypeDetail.key];
     }
     if (!rv) {
-        rv = [GCViewIcons activityTypeColoredIconFor:self.activityType];
+        rv = [GCViewIcons activityTypeDynamicIconFor:self.activityType];
     }
 
     return rv;
