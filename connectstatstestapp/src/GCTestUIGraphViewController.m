@@ -89,12 +89,16 @@ enum uiTestSection {
 }
 
 -(void)refresh{
-    [self buildSamples];
+    dispatch_sync([GCAppGlobal worker],^(){
+        [self buildSamples];
 
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        [[self tableView] reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [[self tableView] reloadData];
+        });
+        
     });
 }
+                
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

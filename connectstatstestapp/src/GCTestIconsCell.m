@@ -48,16 +48,11 @@
     view =[rv addImage:[GCViewIcons activityTypeBWIconFor:atype]];
     if (view) {
         [v addObject:view];
-        UIImageView * merged = [[[UIImageView alloc] initWithImage:[GCViewIcons activityTypeBWIconFor:atype]] autorelease];
-        merged.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:atype];
-        merged.layer.cornerRadius = merged.layer.frame.size.height/2.0;
-        merged.layer.mask.masksToBounds = YES;
-        merged.layer.borderWidth = 0;
-        [rv.contentView addSubview:merged];
-        [v addObject:merged];
-
     }
-
+    view = [GCViewIcons activityTypeDynamicIconFor:atype];
+    if (view) {
+        [v addObject:view];
+    }
 
     [rv.contentView setBackgroundColor:[UIColor whiteColor]];
     rv.imageViews = v;

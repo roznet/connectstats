@@ -949,7 +949,9 @@
 
 -(void)notifyCallBack:(id)theParent{
     [self buildRemap];
-    [self.tableView reloadData];
+    dispatch_async( dispatch_get_main_queue(), ^(){
+        [self.tableView reloadData];
+    });
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{

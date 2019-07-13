@@ -127,12 +127,6 @@
                     [organizer deleteActivitiesInTrash];
                 }
             }
-            if (deleteCandidate == nil) {
-                RZLog(RZLogError, @"didn't find last inorg=%d delete=%d ingc=%d",
-                      (int)[organizer countOfActivities],
-                      (int)[deleteCandidate count],
-                      (int)[existingInService count]);
-            }
         }
     }
 }

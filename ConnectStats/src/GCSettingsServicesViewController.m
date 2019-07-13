@@ -1328,7 +1328,9 @@
     if ([theInfo.stringInfo isEqualToString:NOTIFY_END]) {
         self.updating = false;
     }
-    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.tableView reloadData];
+    });
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPathI{

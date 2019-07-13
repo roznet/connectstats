@@ -145,6 +145,23 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,gcUIStyle style,NSString*suffix
     return rv;
 }
 
++(UIImageView*)activityTypeDynamicIconFor:(NSString*)activityType{
+    UIImage * rv = [UIImage imageNamed:[NSString stringWithFormat:@"%@-bw", activityType]];
+    if( rv == nil){
+        return nil;
+    }
+    UIImageView * merged = RZReturnAutorelease([[UIImageView alloc] initWithImage:rv]);
+    merged.backgroundColor = [GCViewConfig cellBackgroundDarkerForActivity:activityType];
+    
+    merged.layer.cornerRadius = 5;
+    merged.layer.mask.masksToBounds = YES;
+    merged.layer.borderWidth = 0;
+    merged.image = [merged.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [merged setTintColor:[UIColor whiteColor]];
+    
+    return merged;
+}
+
 +(UIImage*)activityTypeBWIconFor:(NSString*)activityType{
     UIImage * rv = [UIImage imageNamed:[NSString stringWithFormat:@"%@-bw", activityType]];
     return rv;

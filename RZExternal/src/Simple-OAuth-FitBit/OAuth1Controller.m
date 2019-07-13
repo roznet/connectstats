@@ -289,7 +289,9 @@ NSDictionary *CHParametersFromQueryString(NSString *queryString)
             completion(nil, oauthParams);
         }
     };
-    [self.webView loadRequest:request];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.webView loadRequest:request];
+    });
 }
 
 

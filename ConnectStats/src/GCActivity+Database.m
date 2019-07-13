@@ -429,6 +429,7 @@
         rv.db = db;
         rv.trackdb = db;
         [rv loadSummaryDataFrom:db];
+        [rv trackpoints];//force load trackpoints
 
         if( rv.activityId ){
             FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_activities_weather_detail WHERE activityId = ?", rv.activityId];

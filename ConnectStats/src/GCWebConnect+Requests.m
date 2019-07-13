@@ -115,8 +115,12 @@
 
 -(void)nonGarminSearch:(BOOL)reloadAll{
     if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
-        [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
-        [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:reloadAll andNavigationController:[GCAppGlobal currentNavigationController]]];
+        // Run on main queue as it accesses a navigation Controller
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
+            [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:reloadAll andNavigationController:[GCAppGlobal currentNavigationController]]];
+        });
+        
     }
     
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {

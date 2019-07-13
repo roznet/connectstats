@@ -1917,6 +1917,10 @@
 		42CFBABB18D26EB400EA4C48 /* GCStravaActivityList.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CFBABA18D26EB400EA4C48 /* GCStravaActivityList.m */; };
 		42D037C1168AF48300789E7D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D037C0168AF48300789E7D /* CFNetwork.framework */; };
 		42D037C3168AF55900789E7D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D037C2168AF55900789E7D /* SystemConfiguration.framework */; };
+		42D1019E22D8A94600A06C0E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42D1019D22D8A94600A06C0E /* Colors.xcassets */; };
+		42D1019F22D8A94600A06C0E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42D1019D22D8A94600A06C0E /* Colors.xcassets */; };
+		42D101A022D8A94600A06C0E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42D1019D22D8A94600A06C0E /* Colors.xcassets */; };
+		42D101A122D8A94600A06C0E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42D1019D22D8A94600A06C0E /* Colors.xcassets */; };
 		42D1D2001DEE66DB00F13D52 /* FITWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D1D1FF1DEE66DB00F13D52 /* FITWindowController.swift */; };
 		42D8AEF81B1FB2CB00ADDD31 /* collected.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42D8AEF71B1FB2CB00ADDD31 /* collected.plist */; };
 		42D8AEFD1B22D1BC00ADDD31 /* GCHealthKitSamplesToPointsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */; };
@@ -4181,6 +4185,7 @@
 		42CFBABA18D26EB400EA4C48 /* GCStravaActivityList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaActivityList.m; path = src/GCStravaActivityList.m; sourceTree = "<group>"; };
 		42D037C0168AF48300789E7D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		42D037C2168AF55900789E7D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		42D1019D22D8A94600A06C0E /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = ConnectStats/icons/Colors.xcassets; sourceTree = "<group>"; };
 		42D1D1FF1DEE66DB00F13D52 /* FITWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITWindowController.swift; path = src/FITWindowController.swift; sourceTree = "<group>"; };
 		42D8AEF71B1FB2CB00ADDD31 /* collected.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = collected.plist; sourceTree = "<group>"; };
 		42D8AEFA1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitSamplesToPointsParser.h; path = src/GCHealthKitSamplesToPointsParser.h; sourceTree = "<group>"; };
@@ -4946,6 +4951,7 @@
 				42EE4565176BCB81003338AF /* Media.xcassets */,
 				428C70351A4AF52500243DC0 /* ConnectStatsLaunchScreen.xib */,
 				42F4E4D91B56EDC00009F2BA /* HealthStatsLaunchScreen.xib */,
+				42D1019D22D8A94600A06C0E /* Colors.xcassets */,
 			);
 			name = Icons;
 			path = ..;
@@ -8024,6 +8030,7 @@
 				4211C53419AB043A000DEF87 /* version.plist in Resources */,
 				422CCE821B7EA81500A4DAEB /* Fields.xcassets in Resources */,
 				422CCE851B7EA8C100A4DAEB /* Weather.xcassets in Resources */,
+				42D101A122D8A94600A06C0E /* Colors.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8031,6 +8038,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42D101A022D8A94600A06C0E /* Colors.xcassets in Resources */,
 				4248ED9E1DCFFF6900254216 /* fields.db in Resources */,
 				4253B4651CD49F7E00437E6A /* Assets.xcassets in Resources */,
 				427CF8D422ABD6BC00894253 /* credentials.json in Resources */,
@@ -8088,6 +8096,7 @@
 				422CCE7E1B7EA7A600A4DAEB /* Services.xcassets in Resources */,
 				422CCE811B7EA81500A4DAEB /* Fields.xcassets in Resources */,
 				428C70361A4AF52500243DC0 /* ConnectStatsLaunchScreen.xib in Resources */,
+				42D1019E22D8A94600A06C0E /* Colors.xcassets in Resources */,
 				422CCE841B7EA8C100A4DAEB /* Weather.xcassets in Resources */,
 				422CCE871B7EAA3000A4DAEB /* Navigation.xcassets in Resources */,
 			);
@@ -8912,6 +8921,7 @@
 				42B5E4FC1BA5BA2D000FAE4E /* track_289259592.db in Resources */,
 				427F934D1BEA9A5900C177F9 /* expected.json in Resources */,
 				42B5E4AF1BA5BA2D000FAE4E /* track_176969424.db in Resources */,
+				42D1019F22D8A94600A06C0E /* Colors.xcassets in Resources */,
 				420119B01F51BB180093B2CD /* babolat_player.json in Resources */,
 				4245DC811BE80CFF00D5B68E /* Cells.xcassets in Resources */,
 				420119B31F51BB180093B2CD /* babolat_sessions.json in Resources */,

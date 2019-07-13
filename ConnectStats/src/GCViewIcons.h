@@ -80,5 +80,6 @@ typedef NS_ENUM(NSUInteger, gcIconCell) {
 +(UIImage*)activityTypeColoredIconFor:(NSString*)activityType;
 +(UIImage*)cellIconFor:(gcIconCell)name;
 +(UIImage*)activityTypeBWIconFor:(NSString*)activityType;
++(UIImageView*)activityTypeDynamicIconFor:(NSString*)activityType;
 +(UIImage*)categoryIconFor:(NSString*)category;
 @end
