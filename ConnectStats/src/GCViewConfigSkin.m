@@ -29,6 +29,7 @@
 
 NSString * kGCSkinKeyActivityCellLighterBackgroundColor = @"ActivityCellLighterBackgroundColor";
 NSString * kGCSkinKeyActivityCellDarkerBackgroundColor = @"ActivityCellDarkerBackgroundColor";
+NSString * kGCSkinKeyActivityCellIconColor = @"ActivityCellIconColor";
 NSString * kGCSkinKeyFieldColors = @"FieldColors";
 NSString * kGCSkinKeyFieldFillColor = @"FieldFillColor";
 NSString * kGCSkinKeyMissingActivityTypeColor = @"ActivityMissingActivityTypeColor";
@@ -117,6 +118,9 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                             @"power":      [UIColor colorWithRed:190./255. green:240./255. blue:50./255. alpha:0.3],
                             @"elevation":  [UIColor colorWithRed:0.0 green:0.8 blue:0. alpha:0.3]
                             },
+                    
+                    kGCSkinKeyActivityCellIconColor:
+                        [UIColor whiteColor],
                     kGCSkinKeyMissingActivityTypeColor:
                         [UIColor colorWithHexValue:0xD2D2D2 andAlpha:1.],
                     kGCSkinKeyDetailsCellBackgroundColors:

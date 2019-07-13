@@ -29,6 +29,7 @@
 
 extern NSString * kGCSkinKeyActivityCellLighterBackgroundColor;
 extern NSString * kGCSkinKeyActivityCellDarkerBackgroundColor;
+extern NSString * kGCSkinKeyActivityCellIconColor;
 extern NSString * kGCSkinKeyFieldFillColor;
 extern NSString * kGCSkinKeyFieldColors;
 extern NSString * kGCSkinKeyTextColorForActivity;

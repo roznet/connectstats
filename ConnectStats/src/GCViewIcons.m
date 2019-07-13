@@ -146,7 +146,7 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,gcUIStyle style,NSString*suffix
 }
 
 +(UIImage*)activityTypeDynamicIconFor:(NSString*)activityType{
-    UIImage * icon = [UIImage imageNamed:[NSString stringWithFormat:@"%@-bw", activityType]];
+    UIImage * icon = [UIImage imageNamed:[NSString stringWithFormat:@"%@-dyn", activityType]];
     if( icon == nil){
         return nil;
     }
@@ -157,7 +157,7 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,gcUIStyle style,NSString*suffix
     imgView.layer.mask.masksToBounds = YES;
     imgView.layer.borderWidth = 0;
     imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [imgView setTintColor:[UIColor whiteColor]];
+    [imgView setTintColor:[GCViewConfig cellIconColorForActivity:activityType]];
     
     UIGraphicsBeginImageContextWithOptions(imgView.bounds.size, imgView.isOpaque, 0.0);
     [imgView.layer renderInContext:UIGraphicsGetCurrentContext()];

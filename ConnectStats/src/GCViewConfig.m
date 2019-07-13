@@ -140,7 +140,11 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return [_current_skin() colorForKey:kGCSkinKeyActivityCellLighterBackgroundColor andActivity:aAct];
 }
 
++(UIColor*)cellIconColorForActivity:(id)aAct{
+    // Expansion to depend on act?
+    return [_current_skin() colorForKey:kGCSkinKeyActivityCellIconColor];
 
+}
 +(UIColor*)cellBackgroundForDetails{
     NSArray * colors = [_current_skin() colorArrayForKey:kGCSkinKeyDetailsCellBackgroundColors];
     return [colors firstObject];
