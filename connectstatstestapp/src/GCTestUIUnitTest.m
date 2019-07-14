@@ -31,6 +31,7 @@
 @interface GCTestUIUnitTest ()
 @property (nonatomic,retain) NSArray * cellDataSource;
 @property (nonatomic,retain) NSArray * graphDataSource;
+@property (nonatomic,assign) BOOL recordMode;
 @end
 
 @implementation GCTestUIUnitTest
@@ -53,7 +54,7 @@
 
 -(void)testSimpleGraph{
     [self startSession:@"UI SimpleGraph"];
-
+    self.recordMode = false;
     [self performSelectorOnMainThread:@selector(checkSimpleGraphSnapshot) withObject:nil waitUntilDone:YES];
 
 
@@ -61,7 +62,7 @@
 
 -(void)testCellGrid{
     [self startSession:@"UI CellGrid"];
-
+    self.recordMode = false;
     [self performSelectorOnMainThread:@selector(checkGridCellSnapshot) withObject:nil waitUntilDone:YES];
 
 
@@ -88,7 +89,7 @@
                                                                            error:nil];
 
     //REBASE
-    //snapshotTestController.recordMode = true;
+    snapshotTestController.recordMode = self.recordMode;
     NSString *envReferenceImageDirectory = [NSProcessInfo processInfo].environment[@"FB_REFERENCE_IMAGE_DIR"];
 
     snapshotTestController.referenceImagesDirectory = envReferenceImageDirectory;
@@ -136,7 +137,7 @@
                                                                         encoding:NSUTF8StringEncoding
                                                                            error:nil];
     //REBASE
-    //snapshotTestController.recordMode = true;
+    snapshotTestController.recordMode = self.recordMode;
     NSString *envReferenceImageDirectory = [NSProcessInfo processInfo].environment[@"FB_REFERENCE_IMAGE_DIR"];
 
     snapshotTestController.referenceImagesDirectory = envReferenceImageDirectory;

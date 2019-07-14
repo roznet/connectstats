@@ -26,7 +26,7 @@
 #import <UIKit/UIKit.h>
 
 @interface GCTestIconsCell : UITableViewCell
-@property (nonatomic,retain) NSArray * imageViews;
+@property (nonatomic,retain) NSArray<UIImageView*> * imageViews;
 
 +(GCTestIconsCell*)iconsCellForActivityType:(NSString*)atype;
 
