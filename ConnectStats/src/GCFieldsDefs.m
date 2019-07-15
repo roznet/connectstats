@@ -71,6 +71,7 @@ NSString * CALC_ENERGY                 = @"__CalcEnergy";
 NSString * CALC_STRIDE_LENGTH          = @"__CalcStrideLength";
 NSString * CALC_DEVELOPMENT            = @"__CalcRotationDevelopment";
 NSString * CALC_ELEVATION_GRADIENT     = @"__CalcElevationGradient";
+NSString * CALC_ACCUMULATED_SPEED      = @"__CalcAccumulatedSpeed";
 NSString * CALC_VERTICAL_SPEED           = @"__CalcVerticalSpeed";
 NSString * CALC_ASCENT_SPEED             = @"__CalcAscentSpeed";
 NSString * CALC_DESCENT_SPEED            = @"__CalcDescentSpeed";

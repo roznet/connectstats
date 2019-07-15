@@ -56,16 +56,12 @@
     [self startSession:@"UI SimpleGraph"];
     self.recordMode = false;
     [self performSelectorOnMainThread:@selector(checkSimpleGraphSnapshot) withObject:nil waitUntilDone:YES];
-
-
 }
 
 -(void)testCellGrid{
     [self startSession:@"UI CellGrid"];
     self.recordMode = false;
     [self performSelectorOnMainThread:@selector(checkGridCellSnapshot) withObject:nil waitUntilDone:YES];
-
-
 }
 
 -(void)buildGraphDataSource{

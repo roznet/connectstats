@@ -38,6 +38,7 @@ typedef BOOL (^GCActivityCompareLapBlock)(GCLap*current,GCLap*candidate);
 -(NSArray*)calculateSkiLaps;
 -(NSArray*)compoundLapForZoneCalculator:(GCHealthZoneCalculator*)zoneCalc;
 -(NSArray*)compoundLapForIndexSerie:(GCStatsDataSerieWithUnit*)serieu desc:(NSString*)desc;
+-(NSArray*)accumulatedLaps;
 
 -(GCActivityCompareLapBlock)compareSpeedBlock;
 -(GCActivityMatchLapBlock)matchDistanceBlockEqual;

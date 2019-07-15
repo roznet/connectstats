@@ -76,6 +76,7 @@
             point.time = time;
             point.speed = speed;
             point.heartRateBpm = hr;
+            point.lapIndex = i;
             
             [tracks addObject:point];
             [point release];
@@ -469,7 +470,8 @@
     XCTAssertEqual([laps count], (NSUInteger)3, @"matching time");
     laps = [act calculatedLapFor:100. match:[act matchTimeBlock] inLap:GC_ALL_LAPS];
     XCTAssertEqual([laps count], (NSUInteger)1, @"matching time");
-    
+    laps = [act accumulatedLaps];
+    NSLog(@"%@", laps);
 }
     
 -(void)testRollingLap{
