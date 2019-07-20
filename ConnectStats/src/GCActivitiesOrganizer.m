@@ -1001,10 +1001,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         [_db beginTransaction];
         for (NSString * activityId in _activitiesTrash) {
             RZLog(RZLogInfo, @"delete index %@", activityId);
-
-            [_db executeUpdate:@"DELETE FROM gc_activities WHERE activityId=?", activityId];
-            [_db executeUpdate:@"DELETE FROM gc_activities_values WHERE activityId=?", activityId];
-            [_db executeUpdate:@"DELETE FROM gc_activities_meta WHERE activityId=?", activityId];
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities WHERE activityId=?", activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_values WHERE activityId=?", activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_meta WHERE activityId=?", activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE activityId=?",activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE duplicateActivityId=?",activityId);
             [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",activityId]];
             [[GCAppGlobal derived] forceReprocessActivity:activityId];
         }
@@ -1032,9 +1033,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
     [_db beginTransaction];
     if (idx<_allActivities.count) {
-        [_db executeUpdate:@"DELETE FROM gc_activities WHERE activityId=?", activityId];
-        [_db executeUpdate:@"DELETE FROM gc_activities_values WHERE activityId=?", activityId];
-        [_db executeUpdate:@"DELETE FROM gc_activities_meta WHERE activityId=?", activityId];
+        RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities WHERE activityId=?", activityId);
+        RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_values WHERE activityId=?", activityId);
+        RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_meta WHERE activityId=?", activityId);
+        RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE activityId=?",activityId);
+        RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE duplicateActivityId=?",activityId);
         [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",activityId]];
     }
     [_db commit];
@@ -1058,13 +1061,15 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
     NSMutableArray * toDelete = [NSMutableArray arrayWithCapacity:(idxto-idxfrom)];
     [_db beginTransaction];
-    for (NSUInteger i=0; i<idxfrom; i++) {
+    for (NSUInteger i=idxfrom; i<idxto; i++) {
         if (i<_allActivities.count) {
             NSString * activityId = [_allActivities[i] activityId];
             [toDelete addObject:[_allActivities[i] activityId]];
-            [_db executeUpdate:@"DELETE FROM gc_activities WHERE activityId=?", activityId];
-            [_db executeUpdate:@"DELETE FROM gc_activities_values WHERE activityId=?", activityId];
-            [_db executeUpdate:@"DELETE FROM gc_activities_meta WHERE activityId=?", activityId];
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities WHERE activityId=?", activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_values WHERE activityId=?", activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_meta WHERE activityId=?", activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE activityId=?",activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE duplicateActivityId=?",activityId);
             [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",activityId]];
         }
     }

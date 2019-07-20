@@ -355,7 +355,7 @@
 #pragma mark - connectstats
 
 -(void)connectStatsDownloadActivityTrackpoints:(GCActivity*)act{
-    if( [GCAppGlobal currentNavigationController] && [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO]){
+    if( [GCAppGlobal currentNavigationController] && ( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] || [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] )){
         [self addRequest:[GCConnectStatsRequestFitFile requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
     }
 }
