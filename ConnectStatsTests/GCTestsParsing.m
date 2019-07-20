@@ -982,6 +982,10 @@
 }
 
 -(void)testOrganizerMergeServices{
+    // To re-create setup for this test:
+    //   copy
+    //
+    
     NSString * bundlePath = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
     
     
@@ -998,10 +1002,13 @@
     //     @"3560919337",
     //     @"3560918864",
 
-    NSString * runGarminId = @"3743031453";
-    NSString * runStravaId = @"__strava__2446347224";
-    NSString * bikeGarminId = @"3726595228";
-    NSString * bikeStravaId = @"__strava__2446347224";
+    NSString * runGarminId = @"3839667339";
+    NSString * runStravaId = @"__strava__2527522241";
+    //NSString * runConnectId = @"__connectstats__1298";
+    
+    NSString * bikeGarminId = @"3846541343";
+    NSString * bikeStravaId = @"__strava__2533351903";
+    //NSString * bikeConnectId = @"__connectstats__1299";
     
     // First add garmin
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath];
@@ -1031,22 +1038,24 @@
     [GCConnectStatsRequestSearch testForOrganizer:organizer_cs withFilesInPath:bundlePath];
     XCTAssertEqual(organizer_cs.countOfActivities, 20);
     [GCConnectStatsRequestSearch testForOrganizer:organizer_cs withFilesInPath:bundlePath start:20];
-    XCTAssertEqual(organizer_cs.countOfActivities, 40);
+    XCTAssertEqual(organizer_cs.countOfActivities, 39);
     
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath start:20];
     [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:bundlePath start:20];
-    XCTAssertEqual(organizer.countOfActivities, 39);
-    XCTAssertEqual(organizer_garmin.countOfActivities, 39);
+    // Duplicate: skipping 3767533538 (preferred: 3765469387) [duplicate record on june 20 edge20/fenix] so 38 instead of 39
+    XCTAssertEqual(organizer.countOfActivities, 38);
+    XCTAssertEqual(organizer_garmin.countOfActivities, 38);
 
+    // Duplicate: skipping __strava__2466681498 (preferred: __strava__2464957164) [duplicate record on june 20 edge20/fenix] so 59 instead of 60
     [GCStravaActivityList testForOrganizer:organizer withFilesInPath:bundlePath start:1];
     [GCStravaActivityList testForOrganizer:organizer_strava withFilesInPath:bundlePath start:1];
-    XCTAssertEqual(organizer.countOfActivities, 52);
-    XCTAssertEqual(organizer_strava.countOfActivities, 52);
+    XCTAssertEqual(organizer.countOfActivities, 59);
+    XCTAssertEqual(organizer_strava.countOfActivities, 59);
     
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath start:40];
     [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:bundlePath start:40];
 
-    XCTAssertEqual(organizer.countOfActivities, 56);
+    XCTAssertEqual(organizer.countOfActivities, 59);
     
     for (GCActivity * one in organizer_garmin.activities) {
         GCActivity * found = [organizer activityForId:one.activityId];

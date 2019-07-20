@@ -29,7 +29,15 @@
 #import "GCAppGlobal.h"
 #import "GCWebConnect+Requests.h"
 #import "GCWebUrl.h"
+#import "GCTestServiceCompare.h"
 
+
+
+@interface GCTestServiceConnectStats ()
+
+@property (assign) gcTestStageServiceCompare stage;
+
+@end
 
 @implementation GCTestServiceConnectStats
 
@@ -43,9 +51,11 @@
 
 -(void)testConnectStatsService{
     [self startSession:@"GC ConnectStats Service"];
-    GCWebUseSimulator(TRUE, nil);
+    GCWebUseSimulator(FALSE, nil);
     
-    [GCAppGlobal setupEmptyState:@"activities_cs.db" withSettingsName:kPreservedSettingsName];
+    self.stage = gcTestServiceServiceCompareSearch;
+    
+    [GCAppGlobal setupEmptyState:kDbPathServiceConnectStats withSettingsName:kPreservedSettingsName];
     [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_ENABLE boolVal:YES];
     
     [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
@@ -58,19 +68,41 @@
 }
 
 -(void)tesConnectStatsServiceEnd{
-    [[GCAppGlobal web] detach:self];
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] > 0, @"End with more than 0");
+    
+    // Need to detach from worker thread as there
+    // maybe quite a few async processes from worker left taht are cleaning up
+    // and may call notify. Need to avoid notify while detach on different thread
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal web] detach:self];
+    });
+    
     
     [self endSession:@"GC ConnectStats Service"];
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
+    
     if( [theParent respondsToSelector:@selector(currentDescription)]){
         [self log:@"%@: %@", theInfo.stringInfo, [theParent currentDescription]];
     }
-    RZ_ASSERT(![[theInfo stringInfo] isEqualToString:@"error"], @"Web request had no error");
-    if ([[theInfo stringInfo] isEqualToString:@"end"] || [[theInfo stringInfo] isEqualToString:@"error"]) {
-        [self tesConnectStatsServiceEnd];
+    RZ_ASSERT(![[theInfo stringInfo] isEqualToString:NOTIFY_ERROR], @"Web request had no error");
+    if ([[theInfo stringInfo] isEqualToString:NOTIFY_END] || [[theInfo stringInfo] isEqualToString:NOTIFY_ERROR]) {
+        self.stage += 1;
+        
+        if( self.stage == gcTestServiceServiceCompareDetails){
+        
+            RZ_ASSERT(kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities], @"Stage within activities count");
+            if( kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities] ){
+                [[GCAppGlobal web] downloadMissingActivityDetails:kCompareDetailCount];
+            }
+        }else{
+            [self tesConnectStatsServiceEnd];
+        }
     }
+    
+    
+    
 }
 
 @end

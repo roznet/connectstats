@@ -921,6 +921,20 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 
+/**
+ This function will look for activities that are in the current organizer but have been removed
+ from the service feed. This means the activity was removed from the service and should be
+ removed from the organizer
+ 
+ The logic will only apply from the first Id if found in the organizer list to the last one,
+ because this is only potentially information about deleted activities BETWEEN the first and last
+ currently being looked at.
+
+ @param inIds List of activities Ids that were returned by the service
+ @param isFirst If this is the first query from the service, we should
+    assume that from the beginning the first activity is present (handle case where latest activity was deleted
+ @return List of activities to delete
+ */
 -(NSArray*)findActivitiesNotIn:(NSArray<NSString*>*)inIds isFirst:(BOOL)isFirst{
     if (inIds.count < 1) {
         return nil;

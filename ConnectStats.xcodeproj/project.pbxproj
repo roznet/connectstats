@@ -57,9 +57,7 @@
 		421271A322B6782D00546081 /* last_modern_search_20.json in Resources */ = {isa = PBXBuildFile; fileRef = 4212719922B6782C00546081 /* last_modern_search_20.json */; };
 		421271A422B6782D00546081 /* last_modern_search_40.json in Resources */ = {isa = PBXBuildFile; fileRef = 4212719A22B6782C00546081 /* last_modern_search_40.json */; };
 		421271A522B6782D00546081 /* last_modern_search_60.json in Resources */ = {isa = PBXBuildFile; fileRef = 4212719B22B6782C00546081 /* last_modern_search_60.json */; };
-		421271A622B6782D00546081 /* strava_list_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 4212719C22B6782C00546081 /* strava_list_1.json */; };
 		421271A722B6782D00546081 /* activity_3743031453.json in Resources */ = {isa = PBXBuildFile; fileRef = 4212719D22B6782C00546081 /* activity_3743031453.json */; };
-		421271A822B6782D00546081 /* strava_list_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 4212719E22B6782D00546081 /* strava_list_2.json */; };
 		421271AA22B6861600546081 /* strava_list.json in Resources */ = {isa = PBXBuildFile; fileRef = 421271A922B6861600546081 /* strava_list.json */; };
 		421271B422B68A5200546081 /* activitytrack_3726595228.json in Resources */ = {isa = PBXBuildFile; fileRef = 421271AB22B68A5100546081 /* activitytrack_3726595228.json */; };
 		421271B522B68A5200546081 /* activitylaps_3726595228.json in Resources */ = {isa = PBXBuildFile; fileRef = 421271AC22B68A5100546081 /* activitylaps_3726595228.json */; };
@@ -819,7 +817,6 @@
 		42AEFED71DA057F600D7DA6D /* last_search_modern.json in Resources */ = {isa = PBXBuildFile; fileRef = 42AEFEC21DA057F600D7DA6D /* last_search_modern.json */; };
 		42AEFED81DA057F600D7DA6D /* strava_laps_724716557.json in Resources */ = {isa = PBXBuildFile; fileRef = 42AEFEC31DA057F600D7DA6D /* strava_laps_724716557.json */; };
 		42AEFED91DA057F600D7DA6D /* strava_laps_728092180.json in Resources */ = {isa = PBXBuildFile; fileRef = 42AEFEC41DA057F600D7DA6D /* strava_laps_728092180.json */; };
-		42AEFEDA1DA057F600D7DA6D /* strava_list_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 42AEFEC51DA057F600D7DA6D /* strava_list_0.json */; };
 		42AEFEDB1DA057F600D7DA6D /* strava_stream_724716557.json in Resources */ = {isa = PBXBuildFile; fileRef = 42AEFEC61DA057F600D7DA6D /* strava_stream_724716557.json */; };
 		42AEFEDC1DA057F600D7DA6D /* strava_stream_728092180.json in Resources */ = {isa = PBXBuildFile; fileRef = 42AEFEC71DA057F600D7DA6D /* strava_stream_728092180.json */; };
 		42B088451C38894D00113306 /* GCTestFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B088441C38894D00113306 /* GCTestFields.m */; };
@@ -827,6 +824,7 @@
 		42B0B97415FE8037008275FF /* GCGarminSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B0B97315FE8037008275FF /* GCGarminSearchJsonParser.m */; };
 		42B34A2E179C31D500688E9F /* GCViewActivityTypeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B34A2D179C31D500688E9F /* GCViewActivityTypeButton.m */; };
 		42B3AB7A1D27FF080072D4CA /* RZUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; };
+		42B4080122E38CFA005C61C4 /* GCTestServiceCompare.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B4080022E38CFA005C61C4 /* GCTestServiceCompare.m */; };
 		42B467BA1DC6A56200279DC8 /* GCAppPasswordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424D08BF1DC5DA4E000B4620 /* GCAppPasswordManager.swift */; };
 		42B467BB1DC6A74200279DC8 /* GCAppProfiles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235DF9D1655B61A00DE316A /* GCAppProfiles.m */; };
 		42B5E1C81BA5AEC9000FAE4E /* ConnectStatsTestApp.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E1C71BA5AEC9000FAE4E /* ConnectStatsTestApp.xcassets */; };
@@ -1765,6 +1763,9 @@
 		42BC539B161E37AE00576097 /* GCHistoryFieldSummaryStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BC539A161E37AE00576097 /* GCHistoryFieldSummaryStats.m */; };
 		42BC539E161E3E2700576097 /* GCFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BC539D161E3E2600576097 /* GCFields.m */; };
 		42BC77E3198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BC77E2198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.m */; };
+		42BE525822E3C44D007D696D /* last_strava_search_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 42BE525422E3C442007D696D /* last_strava_search_0.json */; };
+		42BE525922E3C44D007D696D /* last_strava_search_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 42BE525222E3C442007D696D /* last_strava_search_1.json */; };
+		42BE525A22E3C44D007D696D /* last_strava_search_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 42BE525322E3C442007D696D /* last_strava_search_2.json */; };
 		42BF1D3422510E63000DF572 /* RZFitFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; };
 		42BF1D3522510E63000DF572 /* RZFitFile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42BF1FEC1D3AC233004445C2 /* RZUtilsTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; };
@@ -2634,9 +2635,7 @@
 		4212719922B6782C00546081 /* last_modern_search_20.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_modern_search_20.json; sourceTree = "<group>"; };
 		4212719A22B6782C00546081 /* last_modern_search_40.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_modern_search_40.json; sourceTree = "<group>"; };
 		4212719B22B6782C00546081 /* last_modern_search_60.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_modern_search_60.json; sourceTree = "<group>"; };
-		4212719C22B6782C00546081 /* strava_list_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_list_1.json; sourceTree = "<group>"; };
 		4212719D22B6782C00546081 /* activity_3743031453.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_3743031453.json; sourceTree = "<group>"; };
-		4212719E22B6782D00546081 /* strava_list_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_list_2.json; sourceTree = "<group>"; };
 		421271A922B6861600546081 /* strava_list.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_list.json; sourceTree = "<group>"; };
 		421271AB22B68A5100546081 /* activitytrack_3726595228.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitytrack_3726595228.json; sourceTree = "<group>"; };
 		421271AC22B68A5100546081 /* activitylaps_3726595228.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitylaps_3726595228.json; sourceTree = "<group>"; };
@@ -3207,7 +3206,6 @@
 		42AEFEC21DA057F600D7DA6D /* last_search_modern.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_search_modern.json; sourceTree = "<group>"; };
 		42AEFEC31DA057F600D7DA6D /* strava_laps_724716557.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_laps_724716557.json; sourceTree = "<group>"; };
 		42AEFEC41DA057F600D7DA6D /* strava_laps_728092180.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_laps_728092180.json; sourceTree = "<group>"; };
-		42AEFEC51DA057F600D7DA6D /* strava_list_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_list_0.json; sourceTree = "<group>"; };
 		42AEFEC61DA057F600D7DA6D /* strava_stream_724716557.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_stream_724716557.json; sourceTree = "<group>"; };
 		42AEFEC71DA057F600D7DA6D /* strava_stream_728092180.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_stream_728092180.json; sourceTree = "<group>"; };
 		42B088441C38894D00113306 /* GCTestFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestFields.m; sourceTree = "<group>"; };
@@ -3217,6 +3215,8 @@
 		42B0B97315FE8037008275FF /* GCGarminSearchJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminSearchJsonParser.m; path = src/GCGarminSearchJsonParser.m; sourceTree = "<group>"; };
 		42B34A2C179C31D500688E9F /* GCViewActivityTypeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCViewActivityTypeButton.h; path = src/GCViewActivityTypeButton.h; sourceTree = "<group>"; };
 		42B34A2D179C31D500688E9F /* GCViewActivityTypeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCViewActivityTypeButton.m; path = src/GCViewActivityTypeButton.m; sourceTree = "<group>"; };
+		42B407FF22E38CFA005C61C4 /* GCTestServiceCompare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceCompare.h; path = connectstatstestapp/src/GCTestServiceCompare.h; sourceTree = SOURCE_ROOT; };
+		42B4080022E38CFA005C61C4 /* GCTestServiceCompare.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceCompare.m; path = connectstatstestapp/src/GCTestServiceCompare.m; sourceTree = SOURCE_ROOT; };
 		42B5E1B91BA5AEC9000FAE4E /* ConnectStatsTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ConnectStatsTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42B5E1C71BA5AEC9000FAE4E /* ConnectStatsTestApp.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = ConnectStatsTestApp.xcassets; path = ../connectstatstestapp/ConnectStatsTestApp.xcassets; sourceTree = "<group>"; };
 		42B5E1CA1BA5AEC9000FAE4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -4065,6 +4065,9 @@
 		42BC539D161E3E2600576097 /* GCFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFields.m; path = src/GCFields.m; sourceTree = "<group>"; };
 		42BC77E1198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCHistoryPerformanceAnalysis.h; path = src/GCHistoryPerformanceAnalysis.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		42BC77E2198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHistoryPerformanceAnalysis.m; path = src/GCHistoryPerformanceAnalysis.m; sourceTree = "<group>"; };
+		42BE525222E3C442007D696D /* last_strava_search_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_strava_search_1.json; sourceTree = "<group>"; };
+		42BE525322E3C442007D696D /* last_strava_search_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_strava_search_2.json; sourceTree = "<group>"; };
+		42BE525422E3C442007D696D /* last_strava_search_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_strava_search_0.json; sourceTree = "<group>"; };
 		42BF98371EE3175600F5E094 /* FITFitStatisticsWeight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITFitStatisticsWeight.swift; path = src/FITFitStatisticsWeight.swift; sourceTree = "<group>"; };
 		42BFC2181DCCCB9400EAD40E /* FITOutlineDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITOutlineDataSource.swift; path = src/FITOutlineDataSource.swift; sourceTree = "<group>"; };
 		42BFC2281DCE2C1700EAD40E /* FITSplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITSplitViewController.swift; path = src/FITSplitViewController.swift; sourceTree = "<group>"; };
@@ -4681,6 +4684,8 @@
 				42CC45CF200A6E91003EB805 /* GCTestServiceBugReport.m */,
 				42C3797C217CD9D900B33090 /* GCTestServiceWithings.h */,
 				42C3797D217CD9D900B33090 /* GCTestServiceWithings.m */,
+				42B407FF22E38CFA005C61C4 /* GCTestServiceCompare.h */,
+				42B4080022E38CFA005C61C4 /* GCTestServiceCompare.m */,
 			);
 			name = TestServices;
 			sourceTree = "<group>";
@@ -6103,6 +6108,9 @@
 		42AEFEB21DA057F500D7DA6D /* activity_modern_json */ = {
 			isa = PBXGroup;
 			children = (
+				42BE525422E3C442007D696D /* last_strava_search_0.json */,
+				42BE525222E3C442007D696D /* last_strava_search_1.json */,
+				42BE525322E3C442007D696D /* last_strava_search_2.json */,
 				421271BD22B6E31400546081 /* last_connectstats_search_0.json */,
 				421271BF22B6E31400546081 /* last_connectstats_search_20.json */,
 				421271BE22B6E31400546081 /* last_connectstats_search_40.json */,
@@ -6126,8 +6134,6 @@
 				4212719922B6782C00546081 /* last_modern_search_20.json */,
 				4212719A22B6782C00546081 /* last_modern_search_40.json */,
 				4212719B22B6782C00546081 /* last_modern_search_60.json */,
-				4212719C22B6782C00546081 /* strava_list_1.json */,
-				4212719E22B6782D00546081 /* strava_list_2.json */,
 				42AEFEB31DA057F500D7DA6D /* 1378220136.is.run */,
 				42AEFEB41DA057F500D7DA6D /* 1378220136.is.strava.724716557 */,
 				42AEFEB51DA057F500D7DA6D /* 1382772474.is.cycle */,
@@ -6158,7 +6164,6 @@
 				4209E19C1DA8F1D400B80735 /* modern_activity_types.json */,
 				42AEFEC31DA057F600D7DA6D /* strava_laps_724716557.json */,
 				42AEFEC41DA057F600D7DA6D /* strava_laps_728092180.json */,
-				42AEFEC51DA057F600D7DA6D /* strava_list_0.json */,
 				42AEFEC61DA057F600D7DA6D /* strava_stream_724716557.json */,
 				42AEFEC71DA057F600D7DA6D /* strava_stream_728092180.json */,
 			);
@@ -8115,7 +8120,6 @@
 				42BB0BF41AB4A99F008D5A10 /* activityweather_395288935.json in Resources */,
 				42BB0C681AB4A99F008D5A10 /* activityweather_435788622.json in Resources */,
 				42BB0CBE1AB4A99F008D5A10 /* activityweather_477785702.json in Resources */,
-				421271A822B6782D00546081 /* strava_list_2.json in Resources */,
 				421A7659202754DC00D12B6C /* activitytrack_2477200414.json in Resources */,
 				42BB0D291AB4A9A0008D5A10 /* activityweather_539537018.json in Resources */,
 				427F93701BEC069F00C177F9 /* test_activity_swimming_439303647.db in Resources */,
@@ -8321,6 +8325,7 @@
 				42C011C91AB4891B0059B6CF /* activityweather_713423199.json in Resources */,
 				42BB0C991AB4A99F008D5A10 /* activityweather_463796202.json in Resources */,
 				421271B522B68A5200546081 /* activitylaps_3726595228.json in Resources */,
+				42BE525A22E3C44D007D696D /* last_strava_search_2.json in Resources */,
 				42BB0CF41AB4A99F008D5A10 /* activityweather_513566230.json in Resources */,
 				42BB0DDF1AB4A9A0008D5A10 /* activityweather_644138881.json in Resources */,
 				42BB0D831AB4A9A0008D5A10 /* activityweather_593253924.json in Resources */,
@@ -8328,6 +8333,7 @@
 				42BB0CD31AB4A99F008D5A10 /* activityweather_494473708.json in Resources */,
 				42BB0DBE1AB4A9A0008D5A10 /* activityweather_626624984.json in Resources */,
 				42C011AA1AB4891B0059B6CF /* activityweather_685167199.json in Resources */,
+				42BE525822E3C44D007D696D /* last_strava_search_0.json in Resources */,
 				42BB0C8B1AB4A99F008D5A10 /* activityweather_459301441.json in Resources */,
 				42C011C31AB4891B0059B6CF /* activityweather_711605604.json in Resources */,
 				42BB0DAA1AB4A9A0008D5A10 /* activityweather_614191246.json in Resources */,
@@ -8484,6 +8490,7 @@
 				42BB0D351AB4A9A0008D5A10 /* activityweather_544186225.json in Resources */,
 				42BB0DD11AB4A9A0008D5A10 /* activityweather_635887889.json in Resources */,
 				42BB0DD71AB4A9A0008D5A10 /* activityweather_641333694.json in Resources */,
+				42BE525922E3C44D007D696D /* last_strava_search_1.json in Resources */,
 				42BB0DFB1AB4A9A0008D5A10 /* activityweather_660765704.json in Resources */,
 				428BAD1A1CB14B650041468A /* activityweather_924421177.json in Resources */,
 				42BB0C291AB4A99F008D5A10 /* activityweather_412598790.json in Resources */,
@@ -8571,7 +8578,6 @@
 				42BB0DEE1AB4A9A0008D5A10 /* activityweather_652944216.json in Resources */,
 				42BB0D8A1AB4A9A0008D5A10 /* activityweather_598686780.json in Resources */,
 				42BB0CAB1AB4A99F008D5A10 /* activityweather_471754227.json in Resources */,
-				42AEFEDA1DA057F600D7DA6D /* strava_list_0.json in Resources */,
 				42BB0DCC1AB4A9A0008D5A10 /* activityweather_633095302.json in Resources */,
 				421271AA22B6861600546081 /* strava_list.json in Resources */,
 				42BB0C9A1AB4A99F008D5A10 /* activityweather_463796211.json in Resources */,
@@ -8582,7 +8588,6 @@
 				42BB0C7F1AB4A99F008D5A10 /* activityweather_447877223.json in Resources */,
 				421271B822B68A5200546081 /* strava_stream_2446347224.json in Resources */,
 				42BB0D241AB4A9A0008D5A10 /* activityweather_537939615.json in Resources */,
-				421271A622B6782D00546081 /* strava_list_1.json in Resources */,
 				42BB0C641AB4A99F008D5A10 /* activityweather_434593199.json in Resources */,
 				42BB0BEF1AB4A99F008D5A10 /* activityweather_394558858.json in Resources */,
 				42BB0C201AB4A99F008D5A10 /* activityweather_410083263.json in Resources */,
@@ -10129,6 +10134,7 @@
 				42B5E2B71BA5B216000FAE4E /* GCActivity+Calculated.m in Sources */,
 				42B5E2B81BA5B216000FAE4E /* GCActivity+CachedTracks.m in Sources */,
 				42B5E2B91BA5B216000FAE4E /* GCActivityMetaValue.m in Sources */,
+				42B4080122E38CFA005C61C4 /* GCTestServiceCompare.m in Sources */,
 				42B5E2BA1BA5B216000FAE4E /* GCActivitySummaryValue.m in Sources */,
 				42B5E2BB1BA5B216000FAE4E /* GCActivityCalculatedValue.m in Sources */,
 				42B5E2BC1BA5B216000FAE4E /* GCActivity.m in Sources */,

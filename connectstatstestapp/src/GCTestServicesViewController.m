@@ -33,6 +33,7 @@
 #import "GCTestServiceWithings.h"
 #import "GCTestServiceBugReport.h"
 #import "GCTestServiceConnectStats.h"
+#import "GCTestServiceCompare.h"
 
 NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
 
@@ -94,6 +95,7 @@ NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
              NSStringFromClass([GCTestServiceStrava class]),
              NSStringFromClass([GCTestServiceBugReport class]),
              NSStringFromClass([GCTestServiceWithings class]),
+             NSStringFromClass([GCTestServiceCompare class]),
              ];
 }
 

@@ -657,8 +657,8 @@
     [db open];
     
     GCActivity * act = [GCActivity fullLoadFromDb:db];
-    // Before loading tracks, not there
-    XCTAssertFalse([act hasField:[GCField fieldForKey:CALC_NONZERO_POWER andActivityType:act.activityType]]);
+    // SHould be calculated and loaded upon full load
+    XCTAssertTrue([act hasField:[GCField fieldForKey:CALC_NONZERO_POWER andActivityType:act.activityType]]);
     
     XCTAssertNotNil(act.trackpoints);
     

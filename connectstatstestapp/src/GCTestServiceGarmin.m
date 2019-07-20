@@ -27,8 +27,11 @@
 #import "GCWebConnect+Requests.h"
 #import "GCWebUrl.h"
 #import "GCAppGlobal.h"
+#import "GCTestServiceCompare.h"
 
-
+@interface GCTestServiceGarmin ()
+@property (assign) gcTestStageServiceCompare stage;
+@end
 
 @implementation GCTestServiceGarmin
 
@@ -44,10 +47,11 @@
     [self startSession:@"GC Garmin Connect Alt"];
     GCWebUseSimulator(FALSE, nil);
 
-    [GCAppGlobal setupEmptyState:@"activities_gc_alt.db" withSettingsName:kPreservedSettingsName];
+    [GCAppGlobal setupEmptyState:kDbPathServiceGarmin withSettingsName:kPreservedSettingsName];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:YES];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:YES];
 
+    self.stage = gcTestServiceServiceCompareSearch;
 
     [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
     /*dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -58,7 +62,13 @@
 }
 
 -(void)testGarminConnectModernEnd{
-    [[GCAppGlobal web] detach:self];
+    // Need to detach from worker thread as there
+    // maybe quite a few async processes from worker left taht are cleaning up
+    // and may call notify. Need to avoid notify while detach on different thread
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal web] detach:self];
+    });
+
 
     [self endSession:@"GC Garmin Connect Alt"];
 }
@@ -69,7 +79,17 @@
     }
     RZ_ASSERT(![[theInfo stringInfo] isEqualToString:@"error"], @"Web request had no error");
     if ([[theInfo stringInfo] isEqualToString:@"end"] || [[theInfo stringInfo] isEqualToString:@"error"]) {
-        [self testGarminConnectModernEnd];
+        self.stage += 1;
+        
+        if( self.stage == gcTestServiceServiceCompareDetails){
+            
+            RZ_ASSERT(kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities], @"Stage within activities count");
+            if( kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities] ){
+                [[GCAppGlobal web] downloadMissingActivityDetails:kCompareDetailCount];
+            }
+        }else{
+            [self testGarminConnectModernEnd];
+        }        
     }
 }
 @end

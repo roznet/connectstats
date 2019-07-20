@@ -98,7 +98,7 @@
 }
 
 -(NSString*)searchFileNameForPage:(int)page{
-    return  [NSString stringWithFormat:@"strava_list_%d.json", page];
+    return  [NSString stringWithFormat:@"last_strava_search_%d.json", page];
 }
 
 
