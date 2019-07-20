@@ -147,7 +147,7 @@
     NSString * fp = [path stringByAppendingPathComponent:[req fitFileName]];
     [req processParse:fp];
     
-    return nil;
+    return req.activity;
 }
 
 @end
