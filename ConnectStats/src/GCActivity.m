@@ -906,6 +906,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             [[GCAppGlobal derived] forceReprocessActivity:_activityId];
             [[GCAppGlobal web] garminDownloadActivitySummary:_activityId];
             break;
+        case gcDownloadMethodStrava:
+        case gcDownloadMethodConnectStats:
+            [[GCAppGlobal derived] forceReprocessActivity:_activityId];
+            break;
         case gcDownloadMethodSportTracks:
             [[GCAppGlobal web] sportTracksDownloadActivityTrackPoints:self.activityId withUri:[self metaValueForField:@"uri"].display];
             break;
