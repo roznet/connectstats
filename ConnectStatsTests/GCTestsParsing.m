@@ -864,7 +864,8 @@
 }
 
 
--(void)testModernSearch{
+-(void)disableTestModernSearch{
+    // NEED to upgrade to load from the latest serivce data.
     GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_parsing_modern_search.db"];
     
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
