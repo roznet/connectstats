@@ -46,7 +46,6 @@
 NSString * INFO_ACTIVITY_TYPES = @"activity_types";
 NSString * INFO_RECENT_ACTIVITY_TYPES = @"recent_activity_types";
 
-
 NSString * kNotifyOrganizerLoadComplete = @"kNotifyOrganizerLoadComplete";
 NSString * kNotifyOrganizerListChanged = @"kNotifyOrganizerListChanged";
 NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
@@ -153,7 +152,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
  */
 -(void)recordActivityType:(GCActivity*)act{
     NSString * type = act.activityType;
-
+    if( [type isEqualToString:GC_TYPE_OTHER] ){
+        type = act.activityTypeDetail.key;
+    }
+    
     if (!self.info) {
         [self buildInfoDictionary];
     }

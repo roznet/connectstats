@@ -35,6 +35,14 @@ NSString * kDbPathServiceGarmin = @"activities_gc_alt.db";
 // Download 10 detail files
 NSUInteger kCompareDetailCount = 10;
 
+NSString * kJsonKeySummaries = @"summaries";
+NSString * kJsonKeyDuplicates = @"duplicates";
+NSString * kJsonKeyTypes = @"types";
+
+@interface GCTestServiceCompare ()
+@property (nonatomic,retain) NSMutableDictionary * collectJson;
+@end
+
 @implementation GCTestServiceCompare
 
 -(NSArray*)testDefinitions{
@@ -47,6 +55,12 @@ NSUInteger kCompareDetailCount = 10;
 
 -(void)testCompareServices{
     [self startSession:@"GC Compare Services"];
+    
+    self.collectJson = [NSMutableDictionary dictionaryWithDictionary:@{
+                                                                       kJsonKeySummaries : [NSMutableDictionary dictionary],
+                                                                       kJsonKeyTypes     : [NSMutableDictionary dictionary],
+                                                                       kJsonKeyDuplicates: [NSMutableDictionary dictionary]
+                                                                       }];
     
     NSString * fp_cs = [RZFileOrganizer writeableFilePathIfExists:kDbPathServiceConnectStats];
     NSString * fp_strava = [RZFileOrganizer writeableFilePathIfExists:kDbPathServiceStrava];
@@ -64,35 +78,61 @@ NSUInteger kCompareDetailCount = 10;
     GCActivitiesOrganizer * organizer_strava    = db_strava ? [[GCActivitiesOrganizer alloc] initTestModeWithDb:db_strava]  : nil;
     GCActivitiesOrganizer * organizer_garmin    = db_garmin ? [[GCActivitiesOrganizer alloc] initTestModeWithDb:db_garmin]  : nil;
     
-    NSMutableDictionary * map = [NSMutableDictionary dictionary];
-    
     if( organizer_cs && organizer_garmin){
-        NSDictionary * one = [self compareOrganizer:organizer_garmin withName:@"garmin" to:organizer_cs withName:@"cs"];
-        [self merge:map with:one];
+        [self compareOrganizer:organizer_garmin withName:@"garmin" to:organizer_cs withName:@"cs"];
     }
     if( organizer_strava && organizer_garmin){
-        NSDictionary * one = [self compareOrganizer:organizer_garmin withName:@"garmin" to:organizer_strava withName:@"strava"];
-        [self merge:map with:one];
+        [self compareOrganizer:organizer_garmin withName:@"garmin" to:organizer_strava withName:@"strava"];
     }
     if( organizer_strava && organizer_cs ){
-        NSDictionary * one = [self compareOrganizer:organizer_cs withName:@"cs" to:organizer_strava withName:@"strava"];
-        [self merge:map with:one];
+        [self compareOrganizer:organizer_cs withName:@"cs" to:organizer_strava withName:@"strava"];
     }
-    NSLog(@"%@", map);
+    
+    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:self.collectJson options:NSJSONWritingPrettyPrinted error:nil];
+    if( jsonData ){
+        NSString * jsonFn = [RZFileOrganizer writeableFilePath:@"services_activities.json"];
+        
+        if( [jsonData writeToFile:jsonFn atomically:YES] ){
+            NSLog(@"Wrote %@", jsonFn);
+        }
+    }
+    
     [self endSession:@"GC Compare Services"];
 }
 
--(void)merge:(NSMutableDictionary*)map with:(NSDictionary*)other{
-    for (NSString * key in other) {
-        NSString * val = other[key];
-        NSMutableDictionary * defs = map[key];
-        if( defs == nil){
-            defs = [NSMutableDictionary dictionaryWithDictionary:@{val:@1}];
-            map[key] = defs;
-        }else{
-            defs[val] = @1;
+-(void)recordDuplicate:(GCActivity*)one for:(GCActivity*)two{
+    
+    NSMutableDictionary * dict = self.collectJson[kJsonKeyDuplicates][one.activityId];
+    if( dict == nil){
+        self.collectJson[kJsonKeyDuplicates][one.activityId] = [NSMutableDictionary dictionaryWithObject:@(1) forKey:two.activityId];
+    }else{
+        dict[two.activityId] = @(1);
+    }
+}
+
+-(void)recordSimpleSummary:(GCActivity*)act{
+    NSMutableDictionary * dictionary = [NSMutableDictionary dictionary];
+    for (GCField * field in act.summaryData) {
+        GCActivitySummaryValue * value = act.summaryData[field];
+        if( field.isWeightedAverage || field.canSum){
+            dictionary[field.key] = value.numberWithUnit.savedDict;
         }
     }
+    self.collectJson[kJsonKeySummaries][act.activityId] = dictionary;
+}
+
+-(void)recordType:(GCActivity*)act{
+    NSString * type = act.activityType;
+    if( [type isEqualToString:GC_TYPE_OTHER] ){
+        type = act.activityTypeDetail.key;
+    }
+    NSMutableDictionary * dict = self.collectJson[kJsonKeyTypes][type];
+    if( dict == nil){
+        self.collectJson[kJsonKeyTypes][type] = [NSMutableDictionary dictionaryWithObject:@(1) forKey:act.activityId];
+    }else{
+        dict[act.activityId] = @(1);
+    }
+
 }
 -(void)compareField:(gcFieldFlag)fieldFlag forActivity:(GCActivity*)one withName:(NSString*)nameOne and:(GCActivity*)two withName:(NSString*)nameTwo{
     GCField * field = [GCField fieldForFlag:fieldFlag andActivityType:one.activityType];
@@ -113,10 +153,16 @@ NSUInteger kCompareDetailCount = 10;
         GCActivity * activityOne = [one activityForIndex:idx];
         GCActivity * activityTwo = [two findDuplicate:activityOne];
         
+        [self recordSimpleSummary:activityOne];
+        [self recordSimpleSummary:activityTwo];
+        
+        [self recordType:activityOne];
+        [self recordType:activityTwo];
+        
         RZ_ASSERT(activityTwo != nil, @"Found %@:%@ in %@", nameOne, activityOne, nameTwo);
         if( activityTwo ){
-            rv[activityOne.description] = activityTwo.description;
-            rv[activityTwo.description] = activityOne.description;
+            [self recordDuplicate:activityOne for:activityTwo];
+            [self recordDuplicate:activityTwo for:activityOne];
         }
         NSLog(@"Found %@:%@ = %@:%@", nameOne, activityOne, nameTwo, activityTwo);
         
@@ -125,7 +171,6 @@ NSUInteger kCompareDetailCount = 10;
             [self compareField:gcFieldFlagSumDuration forActivity:activityOne withName:nameOne and:activityTwo withName:nameTwo];
             [self compareField:gcFieldFlagSumDistance forActivity:activityOne withName:nameOne and:activityTwo withName:nameTwo];
         }
-        
     }
     return rv;
 }

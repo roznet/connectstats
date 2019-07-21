@@ -289,7 +289,7 @@
 -(void)testParseReloadAndCompare{
     NSData * searchModernInfo = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"activities_list_modern.json"
                                                                                       forClass:[self class]]];
-    NSData * searchStravaInfo =[NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"strava_list_0.json"
+    NSData * searchStravaInfo =[NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_strava_search_0.json"
                                                                                      forClass:[self class]]];
     
     GCGarminSearchModernJsonParser * modernParser = [[[GCGarminSearchModernJsonParser alloc] initWithData:searchModernInfo] autorelease];
@@ -869,35 +869,40 @@
     
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
 
-    NSString * aId = @"3743031453";
+    NSString * aId = @"3851783991";
     
     GCActivity * act = [organizer activityForId:aId];
     
-    NSDictionary * expected = @{
-                                // Correct value, before had wrong scaling by 1000...
-                                // These fields have different unit in summary search and activity reload...
-                                @"MaxElevation":[GCNumberWithUnit numberWithUnitName:@"meter" andValue:72.400],
-                                @"MinElevation":[GCNumberWithUnit numberWithUnitName:@"meter" andValue:19.6],
-                                @"SumElapsedDuration":[GCNumberWithUnit numberWithUnitName:@"second" andValue:2168.8291015],
-                                };
+    XCTAssertNotNil(act, @"Using activity that exist in samples");
     
-    for (NSString * fieldKey in expected) {
-        GCNumberWithUnit * expNum = expected[fieldKey];
-        GCNumberWithUnit * actNum = [act numberWithUnitForField:[GCField fieldForKey:fieldKey andActivityType:act.activityType]];
-        XCTAssertTrue([expNum compare:actNum withTolerance:0.1] == NSOrderedSame);
+    if( act ){
+        NSDictionary * expected = @{
+                                    // Correct value, before had wrong scaling by 1000...
+                                    // These fields have different unit in summary search and activity reload...
+                                    @"MaxElevation":[GCNumberWithUnit numberWithUnitName:@"meter" andValue:72.400],
+                                    @"MinElevation":[GCNumberWithUnit numberWithUnitName:@"meter" andValue:19.6],
+                                    @"SumElapsedDuration":[GCNumberWithUnit numberWithUnitName:@"second" andValue:2168.8291015],
+                                    };
         
-    }
-    
-    GCActivity * actReload = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-    [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-
-    for (NSString * fieldKey in expected) {
-        GCNumberWithUnit * expNum = expected[fieldKey];
-        GCNumberWithUnit * actNum = [actReload numberWithUnitForField:[GCField fieldForKey:fieldKey andActivityType:act.activityType]];
+        for (NSString * fieldKey in expected) {
+            GCNumberWithUnit * expNum = expected[fieldKey];
+            GCNumberWithUnit * actNum = [act numberWithUnitForField:[GCField fieldForKey:fieldKey andActivityType:act.activityType]];
+            XCTAssertTrue([expNum compare:actNum withTolerance:0.1] == NSOrderedSame);
+        }
         
-        XCTAssertTrue([expNum compare:actNum withTolerance:0.1] == NSOrderedSame);
+        GCActivity * actReload = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        XCTAssertNotNil(actReload);
+        if( actReload ){
+            [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+            
+            for (NSString * fieldKey in expected) {
+                GCNumberWithUnit * expNum = expected[fieldKey];
+                GCNumberWithUnit * actNum = [actReload numberWithUnitForField:[GCField fieldForKey:fieldKey andActivityType:act.activityType]];
+                
+                XCTAssertTrue([expNum compare:actNum withTolerance:0.1] == NSOrderedSame);
+            }
+        }
     }
-
 }
 
 

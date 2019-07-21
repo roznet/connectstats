@@ -119,10 +119,11 @@
     NSString * fn = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"activity_%@.json", activityId]];
 
     NSData * info = [NSData dataWithContentsOfFile:fn];
-
-    GCGarminActivitySummaryParser * parser = [[[GCGarminActivitySummaryParser alloc] initWithData:info] autorelease];
-    act = parser.activity;
-
+    if( info ){
+        GCGarminActivitySummaryParser * parser = [[[GCGarminActivitySummaryParser alloc] initWithData:info] autorelease];
+        act = parser.activity;
+    }
+    
     return act;
 }
 
