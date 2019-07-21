@@ -22,16 +22,6 @@
 				<string>net.ro-z.connectstats.fit</string>
 			</array>
 		</dict>
-		<dict>
-			<key>CFBundleTypeIconFiles</key>
-			<array/>
-			<key>CFBundleTypeName</key>
-			<string>TCX File</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>net.ro-z.connectstats.tcx</string>
-			</array>
-		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
@@ -69,7 +59,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>5.0.0.0</string>
+	<string>5.0.0.1</string>
 	<key>FacebookAppID</key>
 	<string>441964795869831</string>
 	<key>LSRequiresIPhoneOS</key>
