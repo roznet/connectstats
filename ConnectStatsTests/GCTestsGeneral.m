@@ -60,8 +60,9 @@
     GCActivity * act= [[[GCActivity alloc] init] autorelease];
     NSMutableArray * tracks = [NSMutableArray arrayWithCapacity:100];
 
-    double dist = 1.;
+    double dist = 0.;
     NSDate * time = [NSDate date];
+    NSUInteger lapIndex = 0;
     for (NSDictionary * def in defs) {
         double speed = [[def objectForKey:@"speed"] doubleValue];
         NSUInteger n = [[def objectForKey:@"n"] integerValue];
@@ -76,11 +77,13 @@
             point.time = time;
             point.speed = speed;
             point.heartRateBpm = hr;
-            point.lapIndex = i;
+            point.lapIndex = lapIndex;
+            point.trackFlags = gcFieldFlagWeightedMeanHeartRate|gcFieldFlagWeightedMeanSpeed;
             
             [tracks addObject:point];
             [point release];
         }
+        lapIndex++;
     }
     [act setTrackpoints:tracks];
     return act;
@@ -471,7 +474,10 @@
     laps = [act calculatedLapFor:100. match:[act matchTimeBlock] inLap:GC_ALL_LAPS];
     XCTAssertEqual([laps count], (NSUInteger)1, @"matching time");
     laps = [act accumulatedLaps];
-    NSLog(@"%@", laps);
+    GCLap * second = laps[1];
+    XCTAssertEqualWithAccuracy(second.distanceMeters, 162.0, 1.e-5, @"dist of second lap");
+    XCTAssertEqualWithAccuracy(second.speed, 10.8, 1.e-5, @"speed of second lap");
+    
 }
     
 -(void)testRollingLap{

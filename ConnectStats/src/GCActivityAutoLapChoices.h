@@ -31,7 +31,8 @@ typedef NS_ENUM(NSUInteger, gcAutoLapStyle) {
     gcAutoLapStyleRolling,
     gcAutoLapStyleSki,
     gcAutoLapStyleZone,
-    gcAutoLapStyleIndexSerie
+    gcAutoLapStyleIndexSerie,
+    gcAutoLapStyleAccumulated
 };
 @class GCHealthZoneCalculator;
 

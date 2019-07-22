@@ -51,6 +51,7 @@ typedef BOOL (^GCActivityMatchBlock)(GCActivity*act);
 #define GC_LAPS_SPLIT_DISTQTER  @"__LapsDistanceQuarter__"
 #define GC_LAPS_SPLIT_TIMEHALF  @"__LapsTimeHalf__"
 #define GC_LAPS_SPLIT_TIMEQTER  @"__LapsTimeQuarter__"
+#define GC_LAPS_ACCUMULATED     @"__LapsAccumulated__"
 
 extern NSString * kGCActivityNotifyDownloadDone;
 extern NSString * kGCActivityNotifyTrackpointReady;

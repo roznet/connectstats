@@ -74,6 +74,16 @@
 
 }
 
++(GCActivityAutoLapChoiceHolder*)choiceHolderAccumulatedWithLabel:(NSString*)label{
+    GCActivityAutoLapChoiceHolder * rv = [[[GCActivityAutoLapChoiceHolder alloc] init] autorelease];
+    if (rv) {
+        rv.key = label;
+        rv.lapDescription = NSLocalizedString(@"Accumulated", @"Laps Description");
+        rv.style = gcAutoLapStyleAccumulated;
+    }
+    return rv;
+
+}
 +(GCActivityAutoLapChoiceHolder*)choiceHolder:(GCActivityMatchLapBlock)match compare:(GCActivityCompareLapBlock)comp value:(double)value andLabel:(NSString*)label{
     GCActivityAutoLapChoiceHolder * rv = [[[GCActivityAutoLapChoiceHolder alloc] init] autorelease];
     if (rv) {
@@ -124,6 +134,9 @@
             break;
         case gcAutoLapStyleIndexSerie:
             rv = [activity compoundLapForIndexSerie:self.indexSerie desc:self.key];
+            break;
+        case gcAutoLapStyleAccumulated:
+            rv = [activity accumulatedLaps];
             break;
     }
     return rv;
@@ -177,7 +190,7 @@
         GCActivityAutoLapChoiceHolder * recorded = [GCActivityAutoLapChoiceHolder choiceHolder:nil value:0. andLabel:GC_LAPS_RECORDED];
         recorded.lapDescription = [GCActivityAutoLapChoices defaultDescriptionText];
         [choices addObject:recorded];
-
+        [choices addObject:[GCActivityAutoLapChoiceHolder choiceHolderAccumulatedWithLabel:GC_LAPS_ACCUMULATED]];
         ;
         GCHealthZoneCalculator * zoneCalc = [[GCAppGlobal health] zoneCalculatorForField:[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType]];
         if (zoneCalc && [act hasTrackField:gcFieldFlagWeightedMeanHeartRate]) {
@@ -292,6 +305,7 @@
 +(NSString*)defaultDescriptionText{
     return NSLocalizedString(@"As Recorded", @"Autolap Choice");
 }
+
 +(NSAttributedString*)defaultDescription{
     return [[[NSAttributedString alloc] initWithString:[GCActivityAutoLapChoices defaultDescriptionText] attributes:[GCViewConfig attribute14Gray]] autorelease];
 }
