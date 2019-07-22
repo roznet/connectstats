@@ -44,7 +44,7 @@ extern NSString * kGCSkinKeyListOfColorsForMultiplots;
 @interface GCViewConfigSkin : NSObject
 
 +(GCViewConfigSkin*)defaultSkin;
-
++(GCViewConfigSkin*)skinForThemeName:(NSString*)theme;
 
 -(NSArray*)colorArrayForKey:(NSString*)key;
 -(NSArray*)colorArrayForKey:(NSString *)key andField:(GCField*)field;

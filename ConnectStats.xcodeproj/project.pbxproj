@@ -1905,6 +1905,9 @@
 		42C7D4281DAC293B0089806B /* GCLapSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7D4271DAC293B0089806B /* GCLapSwim.m */; };
 		42C7D4291DAC293B0089806B /* GCLapSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7D4271DAC293B0089806B /* GCLapSwim.m */; };
 		42C92FDF170FB73F0037602F /* GCActivityAutoLapChoices.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */; };
+		42CAAF0D22E6685B00D07F0C /* Colors-default.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42CAAF0C22E6685B00D07F0C /* Colors-default.xcassets */; };
+		42CAAF0E22E6685B00D07F0C /* Colors-default.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42CAAF0C22E6685B00D07F0C /* Colors-default.xcassets */; };
+		42CAAF0F22E6685B00D07F0C /* Colors-default.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42CAAF0C22E6685B00D07F0C /* Colors-default.xcassets */; };
 		42CC45B5200A2288003EB805 /* GCTestServiceConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */; };
 		42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */; };
 		42CC45BF200A57EE003EB805 /* GCTestServiceStrava.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45BE200A57EE003EB805 /* GCTestServiceStrava.m */; };
@@ -4171,6 +4174,7 @@
 		42C7D4271DAC293B0089806B /* GCLapSwim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCLapSwim.m; path = src/GCLapSwim.m; sourceTree = "<group>"; };
 		42C92FDD170FB73F0037602F /* GCActivityAutoLapChoices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCActivityAutoLapChoices.h; path = src/GCActivityAutoLapChoices.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityAutoLapChoices.m; path = src/GCActivityAutoLapChoices.m; sourceTree = "<group>"; };
+		42CAAF0C22E6685B00D07F0C /* Colors-default.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Colors-default.xcassets"; path = "ConnectStats/icons/Colors-default.xcassets"; sourceTree = "<group>"; };
 		42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCTestServiceConfig.xib; path = connectstatstestapp/ui/GCTestServiceConfig.xib; sourceTree = SOURCE_ROOT; };
 		42CC45B6200A24C5003EB805 /* GCTestServiceConfigViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceConfigViewController.h; path = connectstatstestapp/src/GCTestServiceConfigViewController.h; sourceTree = SOURCE_ROOT; };
 		42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceConfigViewController.m; path = connectstatstestapp/src/GCTestServiceConfigViewController.m; sourceTree = SOURCE_ROOT; };
@@ -4946,6 +4950,7 @@
 		424C666C160BD02C005F45DD /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				42CAAF0C22E6685B00D07F0C /* Colors-default.xcassets */,
 				422CCE891B7EAB7200A4DAEB /* Activities.xcassets */,
 				422CCE8A1B7EAB7200A4DAEB /* TabBar.xcassets */,
 				422CCE861B7EAA3000A4DAEB /* Navigation.xcassets */,
@@ -8028,6 +8033,7 @@
 				422CCE7F1B7EA7A600A4DAEB /* Services.xcassets in Resources */,
 				422CCE8E1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */,
 				422FAFD219A1DD6000D09773 /* Media.xcassets in Resources */,
+				42CAAF0F22E6685B00D07F0C /* Colors-default.xcassets in Resources */,
 				4245DC821BE80D0400D5B68E /* Cells.xcassets in Resources */,
 				422CCE8C1B7EAB7200A4DAEB /* Activities.xcassets in Resources */,
 				422CCE881B7EAA3000A4DAEB /* Navigation.xcassets in Resources */,
@@ -8089,6 +8095,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42959CCF18D5C58700C0B841 /* fields.db in Resources */,
+				42CAAF0D22E6685B00D07F0C /* Colors-default.xcassets in Resources */,
 				422CCE8D1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */,
 				428FF71815F36888007A88FA /* InfoPlist.strings in Resources */,
 				427CF8D222ABD6BC00894253 /* credentials.json in Resources */,
@@ -9022,6 +9029,7 @@
 				42B5E5481BA5BA2D000FAE4E /* track_346750626.db in Resources */,
 				42B5E5501BA5BA2D000FAE4E /* track_355534296.db in Resources */,
 				427F936F1BEC069F00C177F9 /* test_activity_cycling_940863203.db in Resources */,
+				42CAAF0E22E6685B00D07F0C /* Colors-default.xcassets in Resources */,
 				42B5E5001BA5BA2D000FAE4E /* track_289953371.db in Resources */,
 				42B5E4831BA5BA2D000FAE4E /* strava_list_0_merge.json in Resources */,
 				42B5E5011BA5BA2D000FAE4E /* track_291906345.db in Resources */,

@@ -36,7 +36,7 @@ static GCViewConfigSkin * _skin = nil;
 
 NS_INLINE GCViewConfigSkin * _current_skin(){
     if (_skin == nil) {
-        _skin = [GCViewConfigSkin defaultSkin];
+        _skin = [GCViewConfigSkin skinForThemeName:@"default"]; //[GCViewConfigSkin defaultSkin];
         [_skin retain];
     }
     return _skin;

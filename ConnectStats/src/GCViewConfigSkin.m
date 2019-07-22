@@ -219,7 +219,8 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
 
 +(UIColor*)colorForTheme:(NSString*)theme path:(NSArray<NSString*>*)path{
     NSString * name = [NSString stringWithFormat:@"%@-%@", theme, [path componentsJoinedByString:@"-"]];
-    return [UIColor colorNamed:name];
+    UIColor * rv = [UIColor colorNamed:name];
+    return rv;
 }
 
 +(GCViewConfigSkin*)skinForThemeName:(NSString*)theme{
@@ -230,13 +231,12 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
         rv.defs = @{
                     kGCSkinKeySwimStrokeColor:
                         @{
-                            //@(gcSwimStrokeFree): [GCViewConfigSkin colorForTheme:theme path:@[ kGCSkinKeySwimStrokeColor, @"gcSwimStrokeFree"]],
-                            @(gcSwimStrokeFree): [UIColor colorWithRed:0xC4/255. green:0x3D/255. blue:0xBF/255. alpha:0.8],
-                            @(gcSwimStrokeBack): [UIColor colorWithRed:0x1F/255. green:0x8E/255. blue:0xF0/255. alpha:0.8],
-                            @(gcSwimStrokeBreast): [UIColor colorWithRed:0x95/255. green:0xDE/255. blue:0x2B/255. alpha:0.8],
-                            @(gcSwimStrokeButterfly): [UIColor colorWithRed:0xD5/255. green:0x76/255. blue:0xD1/255. alpha:0.8],
-                            @(gcSwimStrokeOther): [UIColor colorWithRed:0x61/255. green:0xAF/255. blue:0xF3/255. alpha:0.8],
-                            @(gcSwimStrokeMixed): [UIColor colorWithRed:0x61/255. green:0xAF/255. blue:0xF3/255. alpha:0.8]
+                            @(gcSwimStrokeFree):        [GCViewConfigSkin colorForTheme:theme path:@[ kGCSkinKeySwimStrokeColor, @"gcSwimStrokeFree"]],
+                            @(gcSwimStrokeBack):        [GCViewConfigSkin colorForTheme:theme path:@[ kGCSkinKeySwimStrokeColor, @"gcSwimStrokeBack"]],
+                            @(gcSwimStrokeBreast):      [GCViewConfigSkin colorForTheme:theme path:@[ kGCSkinKeySwimStrokeColor, @"gcSwimStrokeBreast"]],
+                            @(gcSwimStrokeButterfly):   [GCViewConfigSkin colorForTheme:theme path:@[ kGCSkinKeySwimStrokeColor, @"gcSwimStrokeButterfly"]],
+                            @(gcSwimStrokeOther):       [GCViewConfigSkin colorForTheme:theme path:@[ kGCSkinKeySwimStrokeColor, @"gcSwimStrokeOther"]],
+                            @(gcSwimStrokeMixed):       [GCViewConfigSkin colorForTheme:theme path:@[ kGCSkinKeySwimStrokeColor, @"gcSwimStrokeMixed"]],
                             },
                     kGCSkinKeyCategoryBackground:
                         @{
@@ -272,39 +272,39 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                     kGCSkinKeyMissingActivityTypeColor:
                         [UIColor colorWithHexValue:0xD2D2D2 andAlpha:1.],
                     kGCSkinKeyDetailsCellBackgroundColors:
-                        @[ [UIColor colorWithRed:210./255. green:210./255 blue:210./255 alpha:1.],
-                           [UIColor colorWithRed:252./255. green:252./255 blue:252./255 alpha:1.] ],
+                        @[ [UIColor colorWithHexValue:0xD2D2D2 andAlpha:1.],
+                           [UIColor colorWithHexValue:0xFCFCFC andAlpha:1.] ],
                     kGCSkinKeyTextColorForActivity:
-                        @{GC_TYPE_SWIMMING:[UIColor orangeColor], //[UIColor colorWithRed:1.0 green:0.5 blue:0.0 alpha:1.0],
-                          GC_TYPE_RUNNING:[UIColor blueColor],    //[UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:1.0],
-                          GC_TYPE_CYCLING:[UIColor redColor],     //[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0],
-                          GC_TYPE_ALL:[UIColor blackColor],       //[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0],
-                          GC_TYPE_OTHER:[UIColor darkGrayColor],  //[UIColor colorWithRed:1.0/3.0 green:1.0/3.0 blue:1.0/3.0 alpha:1.0],
+                        @{GC_TYPE_SWIMMING:[UIColor colorWithHexValue:0xFF7F00 andAlpha:1.], // orange
+                          GC_TYPE_RUNNING:[UIColor colorWithHexValue:0x0000FF andAlpha:1.],    //blue
+                          GC_TYPE_CYCLING:[UIColor colorWithHexValue:0xFF0000 andAlpha:1.],     //red
+                          GC_TYPE_ALL:[UIColor colorWithHexValue:0x000000 andAlpha:1.],       //black
+                          GC_TYPE_OTHER:[UIColor colorWithHexValue:0x555555 andAlpha:1.],  //darkGray
                           },
                     kGCSkinKeyActivityCellLighterBackgroundColor:
-                        @{GC_TYPE_SWIMMING: [UIColor colorWithHexValue:0xFFE4A9 andAlpha:1.],
-                          GC_TYPE_CYCLING:  [UIColor colorWithHexValue:0xFFDADA andAlpha:1.],
-                          GC_TYPE_RUNNING:  [UIColor colorWithHexValue:0xDCEEFF andAlpha:1.],
-                          GC_TYPE_HIKING:   [UIColor colorWithHexValue:0xE8C89E andAlpha:1.],
-                          GC_TYPE_FITNESS:  [UIColor colorWithHexValue:0xCAA4E8 andAlpha:1.],
-                          GC_TYPE_TENNIS:   [UIColor colorWithHexValue:0x22B5B0 andAlpha:1.],
-                          GC_TYPE_MULTISPORT:[UIColor colorWithHexValue:0xA6BB82 andAlpha:1.],
-                          GC_TYPE_OTHER:[UIColor colorWithHexValue:0xD2D2D2 andAlpha:1.],
-                          GC_TYPE_SKI_BACK: [UIColor colorWithHexValue:0xa2d7b5 andAlpha:1.0],
-                          GC_TYPE_SKI_DOWN: [UIColor colorWithHexValue:0xecf0f1 andAlpha:1.0]
-                          
+                        @{GC_TYPE_SWIMMING: [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_SWIMMING]],
+                          GC_TYPE_CYCLING:  [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_CYCLING]],
+                          GC_TYPE_RUNNING:  [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_RUNNING]],
+                          GC_TYPE_HIKING:   [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_HIKING]],
+                          GC_TYPE_FITNESS:  [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_FITNESS]],
+                          GC_TYPE_TENNIS:   [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_TENNIS]],
+                          GC_TYPE_MULTISPORT:[GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_MULTISPORT]],
+                          GC_TYPE_OTHER:[GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_OTHER]],
+                          GC_TYPE_SKI_BACK: [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_SKI_BACK]],
+                          GC_TYPE_SKI_DOWN: [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_SKI_DOWN]],
+
                           },
                     kGCSkinKeyActivityCellDarkerBackgroundColor:
-                        @{GC_TYPE_SWIMMING: [UIColor colorWithHexValue:0xFFD466 andAlpha:1.],
-                          GC_TYPE_CYCLING:  [UIColor colorWithHexValue:0xFFA0A0 andAlpha:1.],
-                          GC_TYPE_RUNNING:  [UIColor colorWithHexValue:0x98D3FF andAlpha:1.],
-                          GC_TYPE_HIKING:   [UIColor colorWithHexValue:0xC8A26A andAlpha:1.],
-                          GC_TYPE_FITNESS:  [UIColor colorWithHexValue:0xF169EF andAlpha:1.],
-                          GC_TYPE_TENNIS:   [UIColor colorWithHexValue:0x96CC00 andAlpha:1.],
-                          GC_TYPE_MULTISPORT:[UIColor colorWithHexValue:0xA6BB82 andAlpha:1.],
-                          GC_TYPE_OTHER:[UIColor colorWithHexValue:0xA6BB82 andAlpha:1.],
-                          GC_TYPE_SKI_BACK: [UIColor colorWithHexValue:0xa2d7b5 andAlpha:1.0],
-                          GC_TYPE_SKI_DOWN: [UIColor colorWithHexValue:0xbdc3c7 andAlpha:1.0]
+                        @{GC_TYPE_SWIMMING: [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_SWIMMING]],
+                          GC_TYPE_CYCLING:  [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_CYCLING]],
+                          GC_TYPE_RUNNING:  [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_RUNNING]],
+                          GC_TYPE_HIKING:   [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_HIKING]],
+                          GC_TYPE_FITNESS:  [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_FITNESS]],
+                          GC_TYPE_TENNIS:   [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_TENNIS]],
+                          GC_TYPE_MULTISPORT:[GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_MULTISPORT]],
+                          GC_TYPE_OTHER:[GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_OTHER]],
+                          GC_TYPE_SKI_BACK: [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_SKI_BACK]],
+                          GC_TYPE_SKI_DOWN: [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_SKI_DOWN]],
                           },
                     kGCSkinKeyFieldFillColor:
                         @{
