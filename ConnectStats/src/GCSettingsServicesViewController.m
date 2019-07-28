@@ -38,6 +38,7 @@
 #import "GCHealthOrganizer.h"
 #import "GCStravaReqBase.h"
 #import "GCWebUrl.h"
+#import "GCDebugServiceKeys.h"
 
 #define GC_SECTIONS_GARMIN          0
 #define GC_SECTIONS_STRAVA          1
@@ -68,7 +69,9 @@
 #define GC_CONNECTSTATS_USE         2
 #define GC_CONNECTSTATS_FILLYEAR    3
 #define GC_CONNECTSTATS_CONFIG      4
-#define GC_CONNECTSTATS_END         5
+#define GC_CONNECTSTATS_LOGOUT      5
+#define GC_CONNECTSTATS_DEBUGKEY    6
+#define GC_CONNECTSTATS_END         7
 
 #define GC_STRAVA_NAME      0
 #define GC_STRAVA_ENABLE    1
@@ -167,14 +170,29 @@
     
     gcGarminLoginMethod method = (gcGarminLoginMethod)[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
     if ([[GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:@""] isEqualToString:CONFIG_ENABLE_DEBUG_ON]) {
+        GCDebugServiceKeys * debugKeys = [GCDebugServiceKeys serviceKeys];
         
-        [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
-                                                                   @( GC_CONNECTSTATS_NAME ),
-                                                                   @( GC_CONNECTSTATS_ENABLE ),
-                                                                   @( GC_CONNECTSTATS_USE ),
-                                                                   @( GC_CONNECTSTATS_CONFIG ),
-                                                                   @( GC_CONNECTSTATS_FILLYEAR )
-                                                                   ]];
+        if( debugKeys.hasDebugKeys ){
+            [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
+                                                                       @( GC_CONNECTSTATS_NAME ),
+                                                                       @( GC_CONNECTSTATS_ENABLE ),
+                                                                       @( GC_CONNECTSTATS_USE ),
+                                                                       @( GC_CONNECTSTATS_DEBUGKEY ),
+                                                                       @( GC_CONNECTSTATS_CONFIG ),
+                                                                       @( GC_CONNECTSTATS_FILLYEAR ),
+                                                                       @( GC_CONNECTSTATS_LOGOUT )
+                                                                       ]];
+
+        }else{
+            [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
+                                                                       @( GC_CONNECTSTATS_NAME ),
+                                                                       @( GC_CONNECTSTATS_ENABLE ),
+                                                                       @( GC_CONNECTSTATS_USE ),
+                                                                       @( GC_CONNECTSTATS_CONFIG ),
+                                                                       @( GC_CONNECTSTATS_FILLYEAR ),
+                                                                       @( GC_CONNECTSTATS_LOGOUT )
+                                                                       ]];
+        }
     }else{
         [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
                                                                    @( GC_CONNECTSTATS_NAME ),
@@ -632,6 +650,24 @@
         [gridcell labelForRow:0 andCol:1].text = [NSString stringWithFormat:@"%@", @(year)];
         rv = gridcell;
 
+    }else if( indexPath.row == GC_CONNECTSTATS_DEBUGKEY){
+        gridcell = [GCCellGrid gridCell:tableView];
+        [gridcell setupForRows:2 andCols:2];
+        
+        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Choose Debug Key ",@"Services")
+                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
+        
+        [gridcell labelForRow:0 andCol:0].attributedText = title;
+        rv = gridcell;
+    }else if( indexPath.row == GC_CONNECTSTATS_LOGOUT){
+        gridcell = [GCCellGrid gridCell:tableView];
+        [gridcell setupForRows:2 andCols:2];
+        
+        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Tap to logout",@"Services")
+                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
+        
+        [gridcell labelForRow:0 andCol:0].attributedText = title;
+        rv = gridcell;
     }
     return rv;
 }
@@ -1193,6 +1229,16 @@
             [GCAppGlobal saveSettings];
             break;
         }
+        case GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS, GC_CONNECTSTATS_DEBUGKEY):
+        {
+            NSUInteger index = cell.selected;
+            GCDebugServiceKeys * debugKeys = [GCDebugServiceKeys serviceKeys];
+            NSArray * available = debugKeys.availableTokenIds;
+            if( cell.selected < available.count ){
+                NSString * token_id = available[index];
+                [debugKeys useKeyForTokenId:token_id];
+            }
+        }
 
     }
     [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
@@ -1316,6 +1362,27 @@
         list.entryFieldDelegate = self;
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_FILLYEAR);
         [self.navigationController pushViewController:list animated:YES];
+    }else if( indexPath.section == GC_SECTIONS_CONNECTSTATS && indexPath.row == GC_CONNECTSTATS_DEBUGKEY ){
+        GCDebugServiceKeys * debugKeys = [GCDebugServiceKeys serviceKeys];
+        NSArray<NSString*>*display = debugKeys.displayAvailableKeys;
+        NSUInteger index = 0;
+        NSUInteger current_token_id = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_TOKEN_ID defaultValue:0];
+        
+        for (NSString * one in display) {
+            if( one.integerValue == current_token_id){
+                break;
+            }
+            index++;
+        }
+        if( index >= display.count){
+            index = 0;
+        }
+        
+        GCCellEntryListViewController * list = [GCCellEntryListViewController entryListViewController:display selected:index];
+        list.entryFieldDelegate = self;
+        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_DEBUGKEY);
+        [self.navigationController pushViewController:list animated:YES];
+
     }
 }
 

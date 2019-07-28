@@ -14,20 +14,28 @@ class FITFitFileInterpret: NSObject {
 
     private let fitFile:RZFitFile
     
-    public lazy var activityType : GCActivityType = {
-        
-        let sportMsg = self.fitFile.messages(forMessageType: FIT_MESG_NUM_SPORT)
-        if let first = sportMsg.first,
-            let sportKey = first.name(field: "sport"){
-            return GCActivityType(forKey: sportKey)
-        }else{
+    private var sessionIndex = 0
+    
+    public var activityType : GCActivityType {
+        get {
+            let sportMsg = self.fitFile.messages(forMessageType: FIT_MESG_NUM_SPORT)
+            if self.sessionIndex < sportMsg.count {
+                let first = sportMsg[sessionIndex]
+                if let sportKey = first.name(field: "sport"){
+                    return GCActivityType(forKey: sportKey)
+                }
+            }
             return GCActivityType.all()
         }
-    }()
+    }
     
     init(fitFile file:RZFitFile){
         fitFile = file
         super.init()
+    }
+    
+    func update(sessionIndex : Int){
+        self.sessionIndex = sessionIndex
     }
     
     func summaryValue(field:String, fitField : RZFitFieldValue) -> GCActivitySummaryValue? {
@@ -283,12 +291,50 @@ class FITFitFileInterpret: NSObject {
         return rv
     }
     
+    func summaryValueFromStatsForMessage(messageType:RZFitMessageType, interval : (from:Date,to:Date)?) -> [GCField:GCActivitySummaryValue] {
+        let stats = self.statsForMessage(messageType: messageType, interval: interval)
+        
+        var rv : [GCField:GCActivitySummaryValue] = [:]
+        
+        let multisport = GCActivityType.multisport()
+        
+        for (fitfield,stat) in stats {
+            if fitfield.starts(with: "avg_") || fitfield.starts(with: "total_") || fitfield.starts(with: "max_") {
+                
+                if let field = FITFitEnumMap.activityField(fromFitField: fitfield, forActivityType: multisport.topSubRoot().key) {
+                    var nu : GCNumberWithUnit?
+                    if( fitfield.starts(with: "avg_")){
+                        nu = stat.value(stats: FITFitValueStatistics.StatsType.avg, field: fitfield)
+                    }else if( fitfield.starts(with: "total_")){
+                        nu = stat.value( stats: FITFitValueStatistics.StatsType.total, field: fitfield)
+                    }else if( fitfield.starts(with: "max_")){
+                        nu = stat.value(stats: FITFitValueStatistics.StatsType.max, field: fitfield)
+                    }
+                    
+                    if let nu = nu {
+                        rv[field] = GCActivitySummaryValue(forField: field.key, value: nu)
+                    }
+                }
+            }
+        }
+        
+        return rv
+    }
+    
     func statsForMessage(messageType:RZFitMessageType, interval : (from:Date,to:Date)?) -> [String:FITFitValueStatistics]{
         let stats = FITFitFieldsStatistics(interval:interval)
         var weights = FITFitStatisticsWeight(count: 0, distance: 0, time: 0)
         var lastItem : RZFitMessage? = nil
         
         let messages = self.fitFile.messages(forMessageType: messageType)
+        
+        var distanceField = "position"
+        
+        if let first = messages.first {
+            if first.interpretedField(key: distanceField) == nil {
+                distanceField = "total_distance"
+            }
+        }
         
         for msg in messages {
             var cond = true
@@ -297,7 +343,7 @@ class FITFitFileInterpret: NSObject {
             }
             
             if cond {
-                let increment = FITFitStatisticsWeight(from: lastItem, to: msg, withTimeField: "timestamp", withDistanceField: "position")
+                let increment = FITFitStatisticsWeight(from: lastItem, to: msg, withTimeField: "timestamp", withDistanceField: distanceField)
                 stats.add(message: msg, weight: increment)
                 weights = weights.add(increment: increment)
                 lastItem = msg

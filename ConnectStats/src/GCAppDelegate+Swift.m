@@ -43,7 +43,7 @@
     [decode parse];
 
     
-    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:[self.urlToOpen.path lastPathComponent] fitFilePath:self.urlToOpen.path]);
+    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:[self.urlToOpen.path lastPathComponent] fitFilePath:self.urlToOpen.path startTime:[NSDate date]]);
     [self.organizer registerTemporaryActivity:fitAct forActivityId:fitAct.activityId];
     [self performSelectorOnMainThread:@selector(handleFitFileDone:) withObject:fitAct.activityId waitUntilDone:NO];
 }

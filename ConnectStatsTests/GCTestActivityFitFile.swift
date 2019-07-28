@@ -9,6 +9,7 @@
 import XCTest
 @testable import ConnectStats
 import RZFitFile
+import RZFitFileTypes
 
 class GCTestActivityFitFile: XCTestCase {
     
@@ -34,7 +35,7 @@ class GCTestActivityFitFile: XCTestCase {
             if 
                 let fitFile = RZFitFile(file: url){
                 
-                let activity = GCActivity(withId: activityId, fitFile: fitFile)
+                let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: Date())
                 if let reload = GCGarminRequestActivityReload.test(forActivity: activityId, withFilesIn:RZFileOrganizer.bundleFilePath(nil, for: type(of: self)) ){
                     reload.updateSummaryData(from: activity)
                     reload.updateTrackpoints(from: activity)
@@ -43,24 +44,38 @@ class GCTestActivityFitFile: XCTestCase {
             }
             
         }
-        
-        /*
-        for (NSString * activityId in @[@"1378220136",@"1382772474"]) {
-            NSData * fitData = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", activityId] forClass:[self class]]];
-            FITFitFileDecode * fitFile = [FITFitFileDecode fitFileDecode:fitData];
-            [fitFile parse];
-            
-            GCActivity * act = [[[GCActivity alloc] initWithId:activityId fitFile:fitFile.fitFile] autorelease];
-            NSLog(@"%@", act);
-        }*/
-
+    
     }
     
-   /* func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testParseFitSwimAndMultiSport() {
+        
+        
+        let testActivityIds = [  "1451", "1525"]
+        for activityId in testActivityIds {
+            
+            let url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath("track_cs_\(activityId).fit", for: type(of: self)))
+            
+            if
+                let fitFile = RZFitFile(file: url){
+                let messages = fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION)
+                var activities : [GCActivity] = []
+                for message in messages {
+                    if let messageStart = message.interpretedField(key: "start_time")?.time{
+                        let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: messageStart)
+                        activities.append(activity)
+                        
+                    }
+                }
+                if messages.count > 1{
+                    // Multi sport test for the whole one.
+                    let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: nil)
+                    activities.append(activity)
+
+                }
+                for activity in activities {
+                    print( "\(activity) \(activity.date) \(activity.trackpoints.count)")
+                }
+            }
         }
-    }*/
-    
+    }
 }

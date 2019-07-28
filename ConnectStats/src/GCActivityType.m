@@ -264,6 +264,9 @@ static GCActivityTypes * _activityTypesCache = nil;
 +(GCActivityType*)all{
     return [[GCActivityType activityTypes] activityTypeForKey:GC_TYPE_ALL];
 }
++(GCActivityType*)multisport{
+    return [[GCActivityType activityTypes] activityTypeForKey:GC_TYPE_MULTISPORT];
+}
 +(nonnull GCActivityType*)day{
     return [[GCActivityType activityTypes] activityTypeForKey:GC_TYPE_DAY];
 }

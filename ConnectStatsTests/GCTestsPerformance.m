@@ -107,7 +107,7 @@
 
     NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
     
-    GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFilePath:fn];
+    GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFilePath:fn startTime:act.date];
 
     //act = fitAct;
     GCField * speedField = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType];
@@ -155,7 +155,7 @@
     [self measureBlock:^{
         for( NSString * aId in aIds ) {
             NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
-            GCActivity * act = [[GCActivity alloc] initWithId:aId fitFilePath:fn];
+            GCActivity * act = [[GCActivity alloc] initWithId:aId fitFilePath:fn startTime:[NSDate date]];
             XCTAssertGreaterThan(act.trackpoints.count, 1);
             [act release];
         }

@@ -130,8 +130,8 @@
 -(void)processParse:(NSString*)fileName{
     if( [self checkNoErrors]){
         NSString * fp = [[NSFileManager defaultManager] fileExistsAtPath:fileName] ? fileName : [RZFileOrganizer writeableFilePath:fileName];
-        
-        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activity.activityId fitFilePath:fp]);
+        NSDate * useStartDate = self.activity.parentId != nil ? self.activity.date : nil;
+        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activity.activityId fitFilePath:fp startTime:useStartDate]);
         
         [self.activity updateSummaryDataFromActivity:fitAct];
         [self.activity updateTrackpointsFromActivity:fitAct];

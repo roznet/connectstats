@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
-        <plugIn identifier="com.apple.MapKitIBPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.MapKitIBPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -933,11 +933,11 @@
             <objects>
                 <viewController title="Data" id="PgC-hb-65G" customClass="FITDataViewController" customModule="FitFileExplorer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="H9v-by-frB">
-                        <rect key="frame" x="0.0" y="0.0" width="518" height="449"/>
+                        <rect key="frame" x="0.0" y="0.0" width="524" height="449"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v6U-Do-7Dd">
-                                <rect key="frame" x="109" y="18" width="78" height="25"/>
+                                <rect key="frame" x="109" y="18" width="84" height="25"/>
                                 <popUpButtonCell key="cell" type="push" title="record" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="lad-7J-B4X" id="lMY-M9-4FS">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -945,6 +945,9 @@
                                         <items>
                                             <menuItem title="record" state="on" id="lad-7J-B4X"/>
                                             <menuItem title="lap" id="Kgg-qE-MwN"/>
+                                            <menuItem title="session" id="e8M-L6-dxC">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
@@ -953,12 +956,15 @@
                                 </connections>
                             </popUpButton>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WSf-Uh-9Oz">
-                                <rect key="frame" x="249" y="18" width="84" height="25"/>
-                                <popUpButtonCell key="cell" type="push" title="session" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ihL-CC-7kC" id="aIJ-ux-uk6">
+                                <rect key="frame" x="255" y="18" width="84" height="25"/>
+                                <popUpButtonCell key="cell" type="push" title="activity" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="pM6-jm-zpN" id="aIJ-ux-uk6">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="dL1-sj-VjJ">
                                         <items>
+                                            <menuItem title="activity" id="pM6-jm-zpN">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
                                             <menuItem title="session" state="on" id="ihL-CC-7kC"/>
                                             <menuItem title="lap" id="hvd-1x-06a"/>
                                         </items>
@@ -977,7 +983,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6tC-tC-II5">
-                                <rect key="frame" x="211" y="23" width="21" height="17"/>
+                                <rect key="frame" x="217" y="23" width="21" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="for" id="zqG-KM-uOh">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -985,9 +991,9 @@
                                 </textFieldCell>
                             </textField>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Bg-lH-3vA">
-                                <rect key="frame" x="20" y="55" width="485" height="374"/>
+                                <rect key="frame" x="20" y="55" width="491" height="374"/>
                                 <clipView key="contentView" id="1Ei-WX-vbA">
-                                    <rect key="frame" x="1" y="0.0" width="483" height="373"/>
+                                    <rect key="frame" x="1" y="0.0" width="489" height="373"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="Drv-Mt-Y77" viewBased="YES" id="loS-tj-HNH">
@@ -1261,7 +1267,7 @@
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="hrt-ob-XqJ">
-                                    <rect key="frame" x="1" y="357" width="483" height="16"/>
+                                    <rect key="frame" x="1" y="357" width="489" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="dFC-TA-Dxd">

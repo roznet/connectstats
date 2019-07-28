@@ -13,39 +13,77 @@ import RZFitFileTypes
 
 extension GCActivity {
     
-    @objc convenience init?(withId activityId:String, fitFilePath:String){
+    @objc convenience init?(withId activityId:String, fitFilePath:String, startTime: Date?){
         if let fit = RZFitFile(file: URL(fileURLWithPath: fitFilePath)) {
-            self.init(withId: activityId, fitFile: fit)
+            self.init(withId: activityId, fitFile: fit, startTime: startTime)
         }else{
             return nil
         }
     }
     
-    convenience init(withId activityId:String, fitFile:RZFitFile){
+    convenience init(withId activityId:String, fitFile:RZFitFile, startTime: Date?){
         self.init(id: activityId)
         let interp  = FITFitFileInterpret(fitFile: fitFile)
         
-        let type  = interp.activityType
-        self.activityType = type.topSubRoot().key
-        self.activityTypeDetail = type
+        var messages = fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION)
+
+        // First if more than one session isolate the session relevant for startTime
+        var messageIndex = 0;
+        
+        var sessionStart : Date?
+        var sessionEnd   : Date?
+        
+        // If multiple session messsages and start time given, pick the matching session
+        if let startTime = startTime {
+            for message in messages {
+                if let messageStart = message.interpretedField(key: "start_time")?.time{
+                    if messageStart == startTime {
+                        sessionStart = messageStart
+                        sessionEnd   = message.time()
+                        break;
+                    }
+                }
+                messageIndex+=1;
+            }
+        }
+        // if not found or no date, use first session
+        if( messageIndex >= messages.count){
+            messageIndex = 0;
+        }
+        
         self.activityName = ""
         self.location = ""
-        
-        var messages = fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION)
-        if messages.count > 0{
-            if let firstmessage = messages.first {
-                var sumValues = interp.summaryValues(fitMessage: firstmessage)
-                let toremove = sumValues.filter {
-                    $1.uom == "datetime"
-                }
-                for (key,_) in toremove{
-                    sumValues.removeValue(forKey: key)
-                }
-                self.mergeSummaryData(sumValues)
-                
-                if let start = firstmessage.time(field: "StartTime"){
-                    self.date = start
-                }
+
+        // Multi sport and no startTime do total stats on all
+        // the sessions
+        if( messages.count > 1 && startTime == nil){
+            let type = GCActivityType.multisport()
+            self.activityType = type.topSubRoot().key
+            self.activityTypeDetail = type
+            
+            let stats = interp.summaryValueFromStatsForMessage(messageType: FIT_MESG_NUM_SESSION, interval: nil)
+            
+            self.mergeSummaryData(stats)
+            
+        }else if messageIndex < messages.count {
+            interp.update(sessionIndex: messageIndex)
+            
+            let type  = interp.activityType
+            self.activityType = type.topSubRoot().key
+            self.activityTypeDetail = type
+            
+            let usemessage = messages[messageIndex]
+            var sumValues = interp.summaryValues(fitMessage: usemessage)
+            let toremove = sumValues.filter {
+                $1.uom == "datetime"
+            }
+            for (key,_) in toremove{
+                sumValues.removeValue(forKey: key)
+            }
+            self.mergeSummaryData(sumValues)
+            
+            if let start = usemessage.time(field: "start_time"){
+                self.date = start
             }
         }
         
@@ -53,6 +91,11 @@ extension GCActivity {
         var trackpoints : [GCTrackPoint] = []
         for item in messages{
             if  let timestamp = item.time(field: "timestamp") {
+                if let checkStart = sessionStart, let checkEnd = sessionEnd {
+                    if timestamp < checkStart || timestamp > checkEnd {
+                        continue;
+                    }
+                }
                 let values = interp.summaryValues(fitMessage: item)
                 var coord = CLLocationCoordinate2DMake(0, 0)
                 
@@ -71,6 +114,12 @@ extension GCActivity {
         
         for item in messages {
             if let timestamp = item.time( field: "start_time") {
+                if let checkStart = sessionStart, let checkEnd = sessionEnd {
+                    if timestamp < checkStart || timestamp > checkEnd {
+                        continue;
+                    }
+                }
+
                 let values = interp.summaryValues(fitMessage: item)
                 // coordinate will be update from
                 
@@ -81,6 +130,19 @@ extension GCActivity {
             }
         }
         
+        messages = fitFile.messages(forMessageType: FIT_MESG_NUM_LENGTH)
+        if messages.count > 0 {
+            for item in messages {
+                if let timestamp = item.time( field: "start_time") {
+                    if let checkStart = sessionStart, let checkEnd = sessionEnd {
+                        if timestamp < checkStart || timestamp > checkEnd {
+                            continue;
+                        }
+                    }
+                    
+                }
+            }
+        }
         
         // Don't save to db
         self.update(withTrackpoints:trackpoints,andLaps:laps)

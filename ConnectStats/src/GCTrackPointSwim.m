@@ -50,6 +50,14 @@
     return self;
 }
 
+/*
+-(GCTrackPointSwim*)initAt:(NSDate*)timestamp
+                       for:(NSDictionary<GCField*,GCActivitySummaryValue*>*)sumValues
+                inActivity:(GCActivity*)act{
+    
+}
+*/
+
 #pragma mark - Parsing
 
 -(void)parseModernDict:(NSDictionary*)data forActivity:(GCActivity*)act{

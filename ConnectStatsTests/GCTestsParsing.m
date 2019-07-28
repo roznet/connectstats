@@ -632,7 +632,7 @@
         
         NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
         
-        GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFilePath:fn];
+        GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFilePath:fn startTime:[NSDate date]];
         
         // All trackfield fields merged
         for (GCField * one in act.availableTrackFields) {
@@ -755,6 +755,10 @@
             }
         }
     }
+}
+
+-(void)testMultiSportAndSwimfitFile{
+    //GCActivity * act = [GCActivity activityWithId]
 }
 
 #pragma mark - Test non activities

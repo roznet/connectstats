@@ -80,6 +80,7 @@
 +(nonnull GCActivityType*)other;
 +(nonnull GCActivityType*)all;
 +(nonnull GCActivityType*)day;
++(nonnull GCActivityType*)multisport;
 
 /**
  All Types

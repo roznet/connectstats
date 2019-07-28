@@ -332,7 +332,7 @@
     if( [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_DOWNLOAD defaultValue:TRUE] && [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_MERGE defaultValue:FALSE]){
         NSString * fn = [GCGarminActivityTrack13Request stageFilename:gcTrack13RequestFit forActivityId:self.activityId];
         
-        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activityId fitFilePath:[RZFileOrganizer writeableFilePath:fn]]);
+        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activityId fitFilePath:[RZFileOrganizer writeableFilePath:fn] startTime:self.activity.date]);
         
         [self.activity updateTrackpointsFromActivity:fitAct];
         
@@ -371,7 +371,7 @@
             }
             
             if( mergeFit && fnFit && [[NSFileManager defaultManager] fileExistsAtPath:fnFit] ){
-                GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:act.activityId fitFilePath:fnFit]);
+                GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:act.activityId fitFilePath:fnFit startTime:act.date]);
                 
                 [act updateSummaryDataFromActivity:fitAct];
                 [act updateTrackpointsFromActivity:fitAct];

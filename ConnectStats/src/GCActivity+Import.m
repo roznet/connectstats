@@ -455,6 +455,11 @@
         if([externalId isKindOfClass:[NSString class]]){
             self.externalServiceActivityId = [[GCService service:gcServiceGarmin] activityIdFromServiceId:externalId];
         }
+        
+        NSString * parentId = data[@"parentSummaryId"];
+        if( parentId ){
+            self.parentId = data[@"parentSummaryId"];
+        }
     }
     
 }
