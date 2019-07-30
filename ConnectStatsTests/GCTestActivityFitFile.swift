@@ -49,7 +49,12 @@ class GCTestActivityFitFile: XCTestCase {
     
     func testParseFitSwimAndMultiSport() {
         
-        
+        if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("multisport.db")){
+            db.open()
+            var organizer : GCActivitiesOrganizer = GCActivitiesOrganizer(testModeWithDb: db)
+            GCConnectStatsRequestSearch.test(for: organizer, withFilesInPath: RZFileOrganizer.bundleFilePath("last_cs_search_multisport.json", for: type(of: self)))
+            print( organizer.countOfActivities() )
+        }
         let testActivityIds = [  "1451", "1525"]
         for activityId in testActivityIds {
             

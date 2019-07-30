@@ -53,6 +53,9 @@
                             NSString * aId = [[GCService service:gcServiceConnectStats] activityIdFromServiceId:one[@"cs_activity_id"]];
                             if ([aId isKindOfClass:[NSString class]]) {
                                 GCActivity * act = [[GCActivity alloc] initWithId:aId andConnectStatsData:one];
+                                if( one[@"cs_parent_activity_id"]){
+                                    act.parentId = [[GCService service:gcServiceConnectStats] activityIdFromServiceId:one[@"cs_parent_activity_id"]];
+                                }
                                 [found addObject:act];
                                 [act release];
                             }

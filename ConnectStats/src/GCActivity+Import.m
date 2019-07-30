@@ -1614,6 +1614,17 @@
         }
     }
     
+    if( self.parentId ){
+        if( [self.parentId isEqualToString:other.activityId] ){
+            return false;
+        }
+    }
+    
+    if( other.parentId ){
+        if( [self.activityId isEqualToString:other.parentId] ){
+            return false;
+        }
+    }
     // check if from same system (strava/garmin)
     if( (self.externalServiceActivityId && ([self.externalServiceActivityId isEqualToString:other.activityId]))||
        (other.externalServiceActivityId && ([other.externalServiceActivityId isEqualToString:self.activityId]))){
