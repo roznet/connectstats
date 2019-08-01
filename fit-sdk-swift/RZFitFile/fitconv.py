@@ -2,6 +2,7 @@
 
 import re
 import argparse
+import json
 
 import os
 
@@ -60,7 +61,7 @@ class Context:
         return rv
 
     def objc_field_num_func(self):
-        mesgs = ['FIT_MESG_NUM_RECORD','FIT_MESG_NUM_LAP','FIT_MESG_NUM_SESSION']
+        mesgs = ['FIT_MESG_NUM_RECORD','FIT_MESG_NUM_LAP','FIT_MESG_NUM_SESSION','FIT_MESG_NUM_LENGTH']
 
         rv = []
         for mesg in mesgs:
@@ -80,6 +81,23 @@ class Context:
 
                ]
         return rv
+
+    def json_update_map(self, existing):
+        mesgs = ['FIT_MESG_NUM_RECORD','FIT_MESG_NUM_LAP','FIT_MESG_NUM_SESSION','FIT_MESG_NUM_LENGTH']
+        rv = existing.copy()
+        for mesg in mesgs:
+            if mesg in rv:
+                msgdict = rv[mesg]
+            else:
+                msgdict = {}
+
+            for (key,val) in self.fieldnum[mesg].iteritems():
+                if val not in msgdict:
+                    msgdict[val] = val
+
+            rv[mesg] = msgdict
+        return rv
+
     
     def swift_field_num_for_mesg_func(self,mesg):
         if mesg in self.fieldnum:
@@ -98,7 +116,7 @@ class Context:
         return []
 
     def swift_field_num_func(self):
-        mesgs = ['FIT_MESG_NUM_RECORD','FIT_MESG_NUM_LAP','FIT_MESG_NUM_SESSION']
+        mesgs = ['FIT_MESG_NUM_RECORD','FIT_MESG_NUM_LAP','FIT_MESG_NUM_SESSION','FIT_MESG_NUM_LENGTH']
 
         rv = []
         for mesg in mesgs:
@@ -467,6 +485,25 @@ class Convert :
         self.args = args
         self.context = Context()
 
+    def generate_json_file(self):
+        
+        if os.path.exists( self.args.mapfile ):
+            mf = open( self.args.mapfile, 'r' )
+            try:
+                existing = json.load( mf )
+                for message in messages:
+                    if message not in messages:
+                        existing[message] = {}
+            except:
+                existing = {}
+        else:
+            existing = {}
+
+        newmap = self.context.json_update_map( existing );
+        with open( self.args.mapfile, 'w' ) as of:
+            json.dump( newmap, of, indent = 2, sort_keys = True )
+            
+        
     def generate_output_file(self):
         of = open( self.args.outputfile, 'w')
         objcf = self.args.outputfile.replace(".swift",".m")
@@ -627,12 +664,14 @@ class Convert :
     def run(self):
         self.parse_input_file()
         self.generate_output_file()
+        self.generate_json_file()
 
                    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser( description='Auto Generate swift file' )
     parser.add_argument( '-o', '--outputfile', default = 'src/rzfit_convert_auto.swift' )
     parser.add_argument( '-i', '--inputfile', default = 'sdk/fit_example.h' )
+    parser.add_argument( '-m', '--mapfile', default = 'map.json' )
     args = parser.parse_args()
     conv = Convert( args )
     

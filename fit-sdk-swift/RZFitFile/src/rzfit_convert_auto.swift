@@ -9842,11 +9842,35 @@ func rzfit_field_num_for_session(field : FIT_UINT16) -> String? {
   default: return nil
   }
 }
+func rzfit_field_num_for_length(field : FIT_UINT16) -> String? {
+  switch field {
+    case 11: return "total_calories"
+    case 10: return "event_group"
+    case 12: return "length_type"
+    case 20: return "stroke_count"
+    case 21: return "zone_count"
+    case 19: return "opponent_score"
+    case 18: return "player_score"
+    case 1: return "event_type"
+    case 0: return "event"
+    case 3: return "total_elapsed_time"
+    case 2: return "start_time"
+    case 5: return "total_strokes"
+    case 4: return "total_timer_time"
+    case 7: return "swim_stroke"
+    case 6: return "avg_speed"
+    case 9: return "avg_swimming_cadence"
+    case 253: return "timestamp"
+    case 254: return "message_index"
+  default: return nil
+  }
+}
 func rzfit_field_num_to_field(messageType : FIT_MESG_NUM, fieldNum : FIT_UINT16 ) -> String? {
   switch messageType {
     case FIT_MESG_NUM_RECORD: return rzfit_field_num_for_record(field: fieldNum)
     case FIT_MESG_NUM_LAP: return rzfit_field_num_for_lap(field: fieldNum)
     case FIT_MESG_NUM_SESSION: return rzfit_field_num_for_session(field: fieldNum)
+    case FIT_MESG_NUM_LENGTH: return rzfit_field_num_for_length(field: fieldNum)
     default: return nil
    }
 }
