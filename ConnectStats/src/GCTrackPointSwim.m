@@ -50,13 +50,28 @@
     return self;
 }
 
-/*
+
 -(GCTrackPointSwim*)initAt:(NSDate*)timestamp
+                    stroke:(gcSwimStrokeType)type
+                    active:(BOOL)active
                        for:(NSDictionary<GCField*,GCActivitySummaryValue*>*)sumValues
                 inActivity:(GCActivity*)act{
-    
+    self = [super init];
+    if (self) {
+        self.time = timestamp;
+        self.directSwimStroke = type;
+        for (GCField * field in sumValues) {
+            GCActivitySummaryValue * value = sumValues[field];
+            [self setNumberWithUnit:value.numberWithUnit forField:field inActivity:act];
+        }
+        if( ! active ){
+            [self setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:0.0] forField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:act.activityType] inActivity:act];
+        }
+        
+    }
+    return self;
 }
-*/
+
 
 #pragma mark - Parsing
 

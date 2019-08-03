@@ -131,6 +131,7 @@ extension GCActivity {
         }
         
         messages = fitFile.messages(forMessageType: FIT_MESG_NUM_LENGTH)
+        var swimpoints : [GCTrackPointSwim] = []
         if messages.count > 0 {
             for item in messages {
                 if let timestamp = item.time( field: "start_time") {
@@ -139,7 +140,14 @@ extension GCActivity {
                             continue;
                         }
                     }
-                    
+                    let values = interp.summaryValues(fitMessage: item)
+                    if let pointswim = GCTrackPointSwim(at: timestamp,
+                                                     stroke:gcSwimStrokeType.free,
+                                                     active:true,
+                                                     for:values,
+                                                     in:self){
+                        swimpoints.append(pointswim)
+                    }
                 }
             }
         }

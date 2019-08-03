@@ -605,10 +605,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         if ([act testForDuplicate:other]) {
             return other;
         }
-
-        if ([other.date compare:act.date] == NSOrderedAscending) {
-            return nil;
-        }
     }
     return nil;
 }

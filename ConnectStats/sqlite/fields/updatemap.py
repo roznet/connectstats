@@ -49,7 +49,7 @@ def known_fields():
         rv[row[0]] = 1
     return rv
 
-with open('map.json', 'r' ) as of:
+with open('fit_map.json', 'r' ) as of:
     existing = json.load( of )
 
 known = known_fields()
@@ -68,7 +68,7 @@ for (msg,defs) in existing.iteritems():
             newdefs[val] = candidate
     existing[msg] = newdefs
 
-with open( 'map.json', 'w' ) as outfile:
+with open( 'fit_map.json', 'w' ) as outfile:
     json.dump( existing, outfile, indent = 2, sort_keys = True )
     
-print( 'Saved map.json' )
+print( 'Saved fit_map.json' )

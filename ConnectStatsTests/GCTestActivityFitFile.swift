@@ -49,36 +49,53 @@ class GCTestActivityFitFile: XCTestCase {
     
     func testParseFitSwimAndMultiSport() {
         
+        RZFileOrganizer.removeEditableFile("multisport.db")
+        
         if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("multisport.db")){
             db.open()
-            var organizer : GCActivitiesOrganizer = GCActivitiesOrganizer(testModeWithDb: db)
-            GCConnectStatsRequestSearch.test(for: organizer, withFilesInPath: RZFileOrganizer.bundleFilePath("last_cs_search_multisport.json", for: type(of: self)))
-            print( organizer.countOfActivities() )
-        }
-        let testActivityIds = [  "1451", "1525"]
-        for activityId in testActivityIds {
+            GCActivitiesOrganizer.ensureDbStructure(db)
+            let organizer : GCActivitiesOrganizer = GCActivitiesOrganizer(testModeWithDb: db)
             
-            let url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath("track_cs_\(activityId).fit", for: type(of: self)))
-            
-            if
-                let fitFile = RZFitFile(file: url){
-                let messages = fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION)
-                var activities : [GCActivity] = []
-                for message in messages {
-                    if let messageStart = message.interpretedField(key: "start_time")?.time{
-                        let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: messageStart)
-                        activities.append(activity)
-                        
+            let testActivityIds = [  "1525", "1451"]
+            for activityId in testActivityIds {
+                
+                GCConnectStatsRequestSearch.test(for: organizer, withFilesInPath: RZFileOrganizer.bundleFilePath("last_cs_search_\(activityId).json", for: type(of: self)))
+                
+                let url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath("track_cs_\(activityId).fit", for: type(of: self)))
+                
+                if
+                    let fitFile = RZFitFile(file: url){
+                    let messages = fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION)
+                    var activities : [GCActivity] = []
+                    for message in messages {
+                        if let messageStart = message.interpretedField(key: "start_time")?.time{
+                            let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: messageStart)
+                            activities.append(activity)
+                            
+                            var downloaded : GCActivity? = nil
+                            for act in organizer.activities() {
+                                if act.date == messageStart && act.activityType == activity.activityType{
+                                    downloaded = act
+                                    break
+                                }
+                            }
+                            XCTAssertNotNil(downloaded)
+                            if  let downloaded = downloaded {
+                                XCTAssertEqual(downloaded.sumDistance, activity.sumDistance, accuracy: 1.0)
+                            }
+                        }
                     }
-                }
-                if messages.count > 1{
-                    // Multi sport test for the whole one.
-                    let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: nil)
-                    activities.append(activity)
-
-                }
-                for activity in activities {
-                    print( "\(activity) \(activity.date) \(activity.trackpoints.count)")
+                    if messages.count > 1{
+                        // Multi sport test for the whole one.
+                        let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: nil)
+                        activities.append(activity)
+                        let service = GCService(gcService.connectStats)
+                        let serviceId = service?.activityId(fromServiceId: activityId)
+                        let downloaded = organizer.activity(forId: serviceId)
+                        XCTAssertNotNil(downloaded)
+                        // we don't check value as they don't tie out for multi sport, not
+                        // sure how they get aggregated/summed in the garmin api...
+                    }
                 }
             }
         }

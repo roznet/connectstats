@@ -671,7 +671,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser( description='Auto Generate swift file' )
     parser.add_argument( '-o', '--outputfile', default = 'src/rzfit_convert_auto.swift' )
     parser.add_argument( '-i', '--inputfile', default = 'sdk/fit_example.h' )
-    parser.add_argument( '-m', '--mapfile', default = 'map.json' )
+    parser.add_argument( '-m', '--mapfile', default = 'fit_map.json' )
     args = parser.parse_args()
     conv = Convert( args )
     

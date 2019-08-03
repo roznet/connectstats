@@ -35,6 +35,12 @@
 -(GCTrackPointSwim*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithDictionary:(NSDictionary*)aDict forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
 -(GCTrackPointSwim*)initWithTrackPoint:(GCTrackPoint*)other NS_DESIGNATED_INITIALIZER;
+-(GCTrackPointSwim*)initAt:(NSDate*)timestamp
+                    stroke:(gcSwimStrokeType)type
+                    active:(BOOL)active
+                       for:(NSDictionary<GCField*,GCActivitySummaryValue*>*)sumValues
+                inActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
+
 
 -(void)updateValueFromResultSet:(FMResultSet*)res inActivity:(GCActivity*)act;
 
