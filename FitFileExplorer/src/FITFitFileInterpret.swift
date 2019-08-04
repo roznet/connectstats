@@ -9,6 +9,7 @@
 import Foundation
 import RZFitFile
 import RZFitFileTypes
+import GenericJSON
 
 class FITFitFileInterpret: NSObject {
 
@@ -28,6 +29,9 @@ class FITFitFileInterpret: NSObject {
             return GCActivityType.all()
         }
     }
+    lazy var fitFieldMap : FITFitFieldMap = {
+        return FITFitFieldMap()
+    }()
     
     init(fitFile file:RZFitFile){
         fitFile = file
@@ -38,10 +42,10 @@ class FITFitFileInterpret: NSObject {
         self.sessionIndex = sessionIndex
     }
     
-    func summaryValue(field:String, fitField : RZFitFieldValue) -> GCActivitySummaryValue? {
+    func summaryValue(fitMessageType: RZFitMessageType, field:String, fitField : RZFitFieldValue) -> GCActivitySummaryValue? {
         var rv : GCActivitySummaryValue?
         let key = field
-        if let activityField = fieldKey(fitField: key),
+        if let activityField = fieldKey(fitMessageType: fitMessageType, fitField: key),
             let nwu = fitField.numberWithUnit {
             
             var nu = nwu
@@ -61,8 +65,35 @@ class FITFitFileInterpret: NSObject {
         return rv;
     }
     
-    func fieldKey(fitField:String) -> GCField?{
-        let found = FITFitEnumMap.activityField(fromFitField: fitField, forActivityType: self.activityType.topSubRoot().key)
+    func strokeType( message : RZFitMessage ) -> gcSwimStrokeType? {
+        if let stroke = message.interpretedFields()["swim_stroke"]?.name {
+            switch stroke {
+            case  "freestyle": return gcSwimStrokeType.free;
+            case  "backstroke": return gcSwimStrokeType.back;
+            case  "breaststroke": return gcSwimStrokeType.breast;
+            case  "butterfly": return gcSwimStrokeType.butterfly;
+            case  "drill": return gcSwimStrokeType.mixed;
+            case  "mixed": return gcSwimStrokeType.mixed;
+            case  "im": return gcSwimStrokeType.mixed;
+            default: return nil
+                
+            }
+        }
+        return nil;
+    }
+    
+    func swimActive( message : RZFitMessage ) -> Bool {
+        if let num_active = message.interpretedFields()["num_active_lengths"]?.valueUnit?.value {
+            return num_active > 0
+        }else if let length_type = message.interpretedFields()["length_type"]?.name {
+            return length_type == "active"
+        }
+        return false
+    }
+    func fieldKey(fitMessageType: RZFitMessageType, fitField:String) -> GCField?{
+        //let found = FITFitEnumMap.activityField(fromFitField: fitField, forActivityType: self.activityType.topSubRoot().key)
+        let key = self.fitFieldMap.fieldKey(messageType: fitMessageType, fitField: fitField)
+        let found = GCField(forKey: key, andActivityType: self.activityType.topSubRoot().key)
         
         return found
     }
@@ -77,9 +108,20 @@ class FITFitFileInterpret: NSObject {
         var rv :[GCField:GCActivitySummaryValue] = [:]
         let fitMessageFields = fitMessage.interpretedFields()
         for (key,fitField) in fitMessageFields {
-            if  let v = self.summaryValue(field: key, fitField: fitField),
-                let f = fieldKey(fitField: key){
+            if  let v = self.summaryValue(fitMessageType:fitMessage.messageType, field: key, fitField: fitField),
+                let f = fieldKey(fitMessageType: fitMessage.messageType, fitField: key){
                 rv[ f ] = v
+            }
+        }
+        // Few special cases, if speed and not pace, add
+        if self.activityType.isPaceValid() {
+            if let paceField = GCField( for: gcFieldFlag.weightedMeanSpeed, andActivityType: self.activityType.topSubRoot().key),
+                let speedField = GCField( forKey: "WeightedMeanSpeed", andActivityType: self.activityType.topSubRoot().key),
+                let speed = rv[ speedField ]{
+                if rv[paceField] == nil {
+                    let nu = speed.numberWithUnit.convert(to: paceField.unit())
+                    rv[paceField] = GCActivitySummaryValue(forField: paceField.key, value: nu)
+                }
             }
         }
         

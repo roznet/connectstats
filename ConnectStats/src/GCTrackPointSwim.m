@@ -67,6 +67,12 @@
         if( ! active ){
             [self setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:0.0] forField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:act.activityType] inActivity:act];
         }
+        if( active && self.distanceMeters == 0){
+            GCNumberWithUnit * length = [act numberWithUnitForField:[GCField fieldForKey:@"pool_length" andActivityType:act.activityType]];
+            if( length ){
+                self.distanceMeters = [length convertToUnit:[GCUnit meter]].value;
+            }
+        }
         
     }
     return self;

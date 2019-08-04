@@ -54,6 +54,59 @@ with open('fit_map.json', 'r' ) as of:
 
 known = known_fields()
 
+oldmap = {
+    'Altitude': 'GainElevation',
+    'AvgAltitude': 'WeightedMeanElevation',
+    'AvgCadence': 'WeightedMeanCadence',
+    'AvgFractionalCadence': 'WeightedMeanFractionalCadence',
+    'AvgHeartRate': 'WeightedMeanHeartRate',
+    'AvgLapTime': 'SumDuration',
+    'AvgLeftPedalSmoothness': 'WeightedMeanLeftPedalSmoothness',
+    'AvgLeftTorqueEffectiveness': 'WeightedMeanLeftTorqueEffectiveness',
+    'AvgNegGrade': 'WeightedMeanNegGrade',
+    'AvgNegVerticalSpeed': 'WeightedMeanNegVerticalSpeed',
+    'AvgPosGrade': 'WeightedMeanPosGrade',
+    'AvgPosVerticalSpeed': 'WeightedMeanPosVerticalSpeed',
+    'AvgPower': 'WeightedMeanPower',
+    'AvgRightPedalSmoothness': 'WeightedMeanRightPedalSmoothness',
+    'AvgRightTorqueEffectiveness': 'WeightedMeanRightTorqueEffectiveness',
+    'AvgRunningCadence': 'WeightedMeanRunCadence',
+    'AvgSpeed': 'WeightedMeanSpeed',
+    'AvgStanceTime': 'WeightedMeanStanceTime',
+    'AvgStanceTimePercent': 'WeightedMeanStanceTimePercent',
+    'AvgStrokeCount': 'WeightedMeanStrokes',
+    'AvgStrokeDistance': 'WeightedMeanStrokeDistance',
+    'AvgTemperature': 'WeightedMeanAirTemperature',
+    'AvgVerticalOscillation': 'WeightedMeanVerticalOscillation',
+    'AvgVerticalRatio' : 'WeightedMeanVerticalRatio',
+    'Cadence': 'WeightedMeanCadence',
+    'Distance': 'SumDistance',
+    'HeartRate': 'WeightedMeanHeartRate',
+    'IntensityFactor': 'SumIntensityFactor',
+    'MaxAltitude': 'MaxElevation',
+    'MaxMeanGroundTime': 'MaxGroundContactTime',
+    'MaxRunningCadence': 'MaxRunCadence',
+    'MaxTemperature': 'MaxAirTemperature',
+    'MinAltitude': 'MinElevation',
+    'NormalizedPower': 'WeightedMeanNormalizedPower',
+    'Power': 'WeightedMeanPower',
+    'Speed': 'WeightedMeanSpeed',
+    'StanceTime': 'WeightedMeanGroundContactTime',
+    'Temperature': 'WeightedMeanAirTemperature',
+    'TotalAscent': 'GainElevation',
+    'TotalCalories': 'SumEnergy',
+    'TotalDescent': 'LossElevation',
+    'TotalDistance': 'SumDistance',
+    'TotalElapsedTime': 'SumElapsedDuration',
+    'TotalMovingTime': 'SumMovingDuration',
+    'TotalTimerTime': 'SumElapsedDuration',
+    'TotalTrainingEffect': 'SumTrainingEffect',
+    'TrainingStressScore': 'SumTrainingStressScore',
+    'VerticalOscillation': 'WeightedMeanVerticalOscillation',
+    'avg_stance_time_balance': 'WeightedMeanStanceTimeBalance',
+}
+
+
 for (msg,defs) in existing.iteritems():
     newdefs = defs.copy()
     for (key,val) in defs.iteritems():
@@ -66,7 +119,12 @@ for (msg,defs) in existing.iteritems():
         candidate = to_camel_case( checkval )
         if candidate in known:
             newdefs[val] = candidate
-    existing[msg] = newdefs
+        elif val in oldmap:
+            newdefs[val] = oldmap[val]
+        elif to_camel_case( val ) in oldmap:
+            newdefs[val] = oldmap[to_camel_case( val )]
+            
+        existing[msg] = newdefs
 
 with open( 'fit_map.json', 'w' ) as outfile:
     json.dump( existing, outfile, indent = 2, sort_keys = True )

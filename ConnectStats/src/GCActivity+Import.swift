@@ -108,9 +108,39 @@ extension GCActivity {
                 }
             }
         }
+
+        var swim : Bool = false;
+        
+        messages = fitFile.messages(forMessageType: FIT_MESG_NUM_LENGTH)
+        var swimpoints : [GCTrackPointSwim] = []
+        if messages.count > 0 {
+            swim = true
+            for item in messages {
+                if let timestamp = item.time( field: "start_time") {
+                    if let checkStart = sessionStart, let checkEnd = sessionEnd {
+                        if timestamp < checkStart || timestamp > checkEnd {
+                            continue;
+                        }
+                    }
+                    
+                    let values = interp.summaryValues(fitMessage: item)
+                    let stroke = interp.strokeType(message: item) ?? gcSwimStrokeType.mixed
+                    let active = interp.swimActive(message: item)
+                    if let pointswim = GCTrackPointSwim(at: timestamp,
+                                                        stroke:stroke,
+                                                        active:active,
+                                                        for:values,
+                                                        in:self){
+                        swimpoints.append(pointswim)
+                    }
+                }
+            }
+        }
+
         
         messages = fitFile.messages(forMessageType: FIT_MESG_NUM_LAP)
         var laps : [GCLap] = []
+        var lapsSwim : [GCLapSwim] = []
         
         for item in messages {
             if let timestamp = item.time( field: "start_time") {
@@ -121,39 +151,29 @@ extension GCActivity {
                 }
 
                 let values = interp.summaryValues(fitMessage: item)
-                // coordinate will be update from
                 
-                let start = item.coordinate(field: "start_position") ?? CLLocationCoordinate2DMake(0, 0)
-                if let lap = GCLap(summaryValues: values, starting: timestamp, at: start, for: self) {
-                    laps.append(lap)
+                if swim {
+                    let stroke = interp.strokeType(message: item) ?? gcSwimStrokeType.mixed
+                    let active = interp.swimActive(message: item)
+                    if let lap = GCLapSwim(at: timestamp, stroke: stroke, active: active, for: values, in: self){
+                        lapsSwim.append(lap)
+                    }
+                }else{
+                    let start = item.coordinate(field: "start_position") ?? CLLocationCoordinate2DMake(0, 0)
+                    if let lap = GCLap(summaryValues: values, starting: timestamp, at: start, for: self) {
+                        laps.append(lap)
+                    }
                 }
             }
         }
         
-        messages = fitFile.messages(forMessageType: FIT_MESG_NUM_LENGTH)
-        var swimpoints : [GCTrackPointSwim] = []
-        if messages.count > 0 {
-            for item in messages {
-                if let timestamp = item.time( field: "start_time") {
-                    if let checkStart = sessionStart, let checkEnd = sessionEnd {
-                        if timestamp < checkStart || timestamp > checkEnd {
-                            continue;
-                        }
-                    }
-                    let values = interp.summaryValues(fitMessage: item)
-                    if let pointswim = GCTrackPointSwim(at: timestamp,
-                                                     stroke:gcSwimStrokeType.free,
-                                                     active:true,
-                                                     for:values,
-                                                     in:self){
-                        swimpoints.append(pointswim)
-                    }
-                }
-            }
-        }
         
         // Don't save to db
-        self.update(withTrackpoints:trackpoints,andLaps:laps)
+        if swim {
+            self.update(withSwimTrackpoints:swimpoints,andSwimLaps:lapsSwim)
+        }else{
+            self.update(withTrackpoints:trackpoints,andLaps:laps)
+        }
     }
 
      func mergeFrom(other : GCActivity){

@@ -173,8 +173,11 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(GCActivity*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 
 -(BOOL)updateWithTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints andLaps:(NSArray<GCLap*>*)laps;
+-(BOOL)updateWithSwimTrackpoints:(NSArray<GCTrackPointSwim*>*)trackpoints andSwimLaps:(NSArray<GCLapSwim*>*)laps;
+
 -(BOOL)saveTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps;
 -(void)saveTrackpointsSwim:(NSArray<GCTrackPointSwim*> *)aSwim andLaps:(NSArray<GCLapSwim*>*)laps;
+
 -(void)saveTrackpointsAndLapsToDb:(FMDatabase*)aDb;
 -(void)saveLocation:(NSString*)aLoc;
 

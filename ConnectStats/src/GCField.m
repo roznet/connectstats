@@ -195,12 +195,17 @@ static void registerInCache(GCField*field){
         dict = @{GC_TYPE_RUNNING:@{ @"WeightedMeanPace":@(gcFieldFlagWeightedMeanSpeed),
                                     @"WeightedMeanSpeed":@(gcFieldFlagNone),// not preferred
                                     @"WeightedMeanRunCadence":          @(gcFieldFlagCadence),
+                                    @"WeightedMeanCadence":          @(gcFieldFlagCadence),
                                     },
                  GC_TYPE_CYCLING:@{ @"WeightedMeanBikeCadence":         @(gcFieldFlagCadence),
+                                    @"WeightedMeanCadence":          @(gcFieldFlagCadence),
                                     @"WeightedMeanPace":                @(gcFieldFlagNone), // not preferred
                                     },
                  GC_TYPE_SWIMMING:@{ @"WeightedMeanSpeed":          @(gcFieldFlagNone),
-                                     @"WeightedMeanPace":@(gcFieldFlagWeightedMeanSpeed) },
+                                     @"WeightedMeanPace":@(gcFieldFlagWeightedMeanSpeed),
+                                     @"WeightedMeanSwimCadence": @(gcFieldFlagCadence),
+                                     @"WeightedMeanCadence": @(gcFieldFlagCadence),
+                                     },
                  GC_TYPE_ALL:@{@"SumDistance":                     @(gcFieldFlagSumDistance),
                                @"SumDuration":                     @(gcFieldFlagSumDuration),
                                @"WeightedMeanHeartRate":           @(gcFieldFlagWeightedMeanHeartRate),

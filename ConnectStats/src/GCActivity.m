@@ -432,12 +432,26 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return self.useTrackDb || [[NSFileManager defaultManager] fileExistsAtPath:[self trackDbFileName]];
 }
 
+-(BOOL)updateWithSwimTrackpoints:(NSArray<GCTrackPointSwim*>*)aSwim andSwimLaps:(NSArray<GCLapSwim*>*)laps{
+    self.garminSwimAlgorithm = true;
+    
+    for (GCTrackPointSwim * point in aSwim) {
+        self.trackFlags |= point.trackFlags;
+    }
+
+    self.trackpointsCache = aSwim;
+    self.lapsCache = laps;
+    [self registerLaps:self.lapsCache forName:GC_LAPS_RECORDED];
+    
+    return true;
+}
 
 -(void)saveTrackpointsSwim:(NSArray<GCTrackPointSwim*> *)aSwim andLaps:(NSArray<GCLapSwim*>*)laps{
+    [self updateWithSwimTrackpoints:aSwim andSwimLaps:laps];
+    
     FMDatabase * db = self.db;
     FMDatabase * trackdb = self.trackdb;
 
-    self.garminSwimAlgorithm = true;
 
     [self createTrackDb:trackdb];
     self.trackFlags = gcFieldFlagNone;
@@ -449,13 +463,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         [lap saveToDb:trackdb];
     }
     for (GCTrackPointSwim * point in aSwim) {
-        self.trackFlags |= point.trackFlags;
         [point saveToDb:trackdb];
     }
 
-    self.trackpointsCache = aSwim;
-    self.lapsCache = laps;
-    [self registerLaps:self.lapsCache forName:GC_LAPS_RECORDED];
     [self saveTrackpointsExtraToDb:trackdb];
     
     [trackdb commit];

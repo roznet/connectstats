@@ -4,6 +4,7 @@ target 'ConnectStats' do
   use_frameworks!
   pod 'GoogleMaps'
   pod 'Flurry-iOS-SDK/FlurrySDK'
+  pod 'GenericJSON', :git => 'https://github.com/roznet/generic-json-swift.git'
 end
 target 'HealthStats' do
   pod 'GoogleMaps'

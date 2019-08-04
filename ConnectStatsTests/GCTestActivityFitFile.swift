@@ -71,7 +71,7 @@ class GCTestActivityFitFile: XCTestCase {
                         if let messageStart = message.interpretedField(key: "start_time")?.time{
                             let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: messageStart)
                             activities.append(activity)
-                            
+                            print( "\(activity) \(activity.summaryData)")
                             var downloaded : GCActivity? = nil
                             for act in organizer.activities() {
                                 if act.date == messageStart && act.activityType == activity.activityType{

@@ -24,8 +24,16 @@
 //  
 
 #import "GCLapSwim.h"
+#import "GCLap.h"
 
 @implementation GCLapSwim
+
+-(GCLapSwim*)initFromLap:(GCLap*)other{
+    self = [super initWithTrackPoint:other];
+    self.useMovingElapsed = other.useMovingElapsed;
+    self.movingElapsed = other.movingElapsed;
+    return self;
+}
 
 -(GCLapSwim*)initWithResultSet:(FMResultSet*)res{
     self = [super init];

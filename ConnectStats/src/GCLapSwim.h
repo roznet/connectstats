@@ -25,9 +25,13 @@
 
 #import "GCTrackPointSwim.h"
 
+@class GCLap;
+
 @interface GCLapSwim : GCTrackPointSwim
 @property (nonatomic,assign) BOOL useMovingElapsed;
 @property (nonatomic,assign) double movingElapsed;
 @property (nonatomic,retain) NSString*label;
+
+-(GCLapSwim*)initFromLap:(GCLap*)other;
 
 @end
