@@ -200,7 +200,7 @@
         NSError * error = nil;
         NSData * credentials = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"credentials.json"] options:0 error:&error];
         if( ! credentials ){
-            RZLog(RZLogError,@"Failed to read credentials.json %@", error);
+            RZLog(  RZLogError,@"Failed to read credentials.json %@", error);
         }
         NSString * serviceName = @"garmin";
         if( [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction] != gcWebConnectStatsConfigProduction){
@@ -208,6 +208,11 @@
         }
         
         NSDictionary * params = [OAuth1Controller serviceParametersFromJson:credentials forServiceName:serviceName];
+        
+        if( !params[@"consumer_secret"] || [params[@"consumer_secret"] isEqualToString:@"***"]){
+            RZLog( RZLogError, @"Credentials not initialized properly, no consumer_secret");
+            
+        }
         
         self.oauth1Controller = [[[OAuth1Controller alloc] initWithServiceParameters:params] autorelease];
     }
