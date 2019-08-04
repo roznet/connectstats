@@ -46,6 +46,7 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 @property (nonatomic,retain) NSString * currentSession;
 @property (nonatomic,assign) gcTestInstance testInstance;
 @property (nonatomic,retain) NSMutableDictionary*cache;
+@property (nonatomic,assign) NSUInteger expectedModernActivitiesCount;
 
 @end
 
@@ -229,7 +230,8 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     [[GCAppGlobal web] servicesSearchRecentActivities];
 }
 -(void)testModernHistoryInitialDone{
-    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
+    self.expectedModernActivitiesCount = 2972;
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == self.expectedModernActivitiesCount , @"Loading %d activities (got %d)", (int)self.expectedModernActivitiesCount, (int)[[GCAppGlobal organizer] countOfActivities]);
     RZ_ASSERT(self.nReq == 160, @"Should have got 160 req %d", (int)self.nReq);
     
     self.cache = [NSMutableDictionary dictionary];
@@ -264,13 +266,13 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     }
 
     [[GCAppGlobal organizer] deleteActivityUpToIndex:10];
-    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985-11, @"deleted 10 activities %d", [[GCAppGlobal organizer] countOfActivities] );
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == self.expectedModernActivitiesCount-11, @"deleted 10 activities %d", [[GCAppGlobal organizer] countOfActivities] );
     
     [[GCAppGlobal web] servicesSearchRecentActivities];
 }
 
 -(void)testModernHistoryReloadFirst10{
-    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == self.expectedModernActivitiesCount , @"Loading %d activities (got %d)", (int)self.expectedModernActivitiesCount, (int)[[GCAppGlobal organizer] countOfActivities]);
     RZ_ASSERT(self.nReq == 216, @"Reloaded only last few %d", (int)self.nReq);
     
     [[GCAppGlobal organizer] deleteActivityFromIndex:2000];
@@ -287,7 +289,7 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 }
 
 -(void)testModernHistoryReloadAll{
-    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2985 , @"Loading 2985 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == self.expectedModernActivitiesCount , @"Loading %d activities (got %d)",(int)self.expectedModernActivitiesCount, (int)[[GCAppGlobal organizer] countOfActivities]);
     RZ_ASSERT(self.nReq == 375, @"Reloaded only last few %d", (int)self.nReq);
     
     

@@ -53,6 +53,12 @@ NSString * kJsonKeyTypes = @"types";
               ];
 }
 
+-(void)dealloc{
+    [_collectJson release];
+    
+    [super dealloc];
+}
+
 -(void)testCompareServices{
     [self startSession:@"GC Compare Services"];
     
@@ -96,6 +102,10 @@ NSString * kJsonKeyTypes = @"types";
             NSLog(@"Wrote %@", jsonFn);
         }
     }
+    
+    [organizer_cs release];
+    [organizer_strava release];
+    [organizer_garmin release];
     
     [self endSession:@"GC Compare Services"];
 }
