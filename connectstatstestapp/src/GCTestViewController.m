@@ -31,7 +31,6 @@
 #import "GCTestTracks.h"
 #import "GCTestTennis.h"
 #import "GCTestBasics.h"
-#import "GCFitTest.h"
 #import "GCTestParsing.h"
 #import "GCTestOrganizer.h"
 #import "GCTestDerived.h"
@@ -41,8 +40,6 @@
 
 -(NSArray*)allTestClassNames{
     return @[
-             NSStringFromClass([GCFitTest class]),
-
              NSStringFromClass([GCTestUIUnitTest class]),
              NSStringFromClass([GCTestDerived class]),
              NSStringFromClass([GCTestParsing class]),

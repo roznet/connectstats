@@ -11,7 +11,9 @@ target 'HealthStats' do
   pod 'Flurry-iOS-SDK/FlurrySDK'
 end
 target 'ConnectStatsTestApp' do
+  use_frameworks!
   pod 'Flurry-iOS-SDK/FlurrySDK'
+  pod 'GenericJSON', :git => 'https://github.com/roznet/generic-json-swift.git'
 end
 target 'FitFileExplorer' do
   use_frameworks!

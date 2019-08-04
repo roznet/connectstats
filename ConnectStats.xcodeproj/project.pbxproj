@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		047DA3A916F1EEF80E547820 /* Pods_ConnectStats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2186DA283B31B12A499CF52 /* Pods_ConnectStats.framework */; };
+		08F9F970B9E97EE50D457C03 /* Pods_ConnectStatsTestApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2363D1E580BD0C9920BCB763 /* Pods_ConnectStatsTestApp.framework */; };
 		209610B08C097293E888ADCB /* libPods-HealthStats.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FDCC27AED29AB0F64BE174E /* libPods-HealthStats.a */; };
-		3038CC66959411B947C07B8E /* libPods-ConnectStatsTestApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CA098C599FA397790D35A1F /* libPods-ConnectStatsTestApp.a */; };
 		420063FA18C238530031395F /* GCWebConnect+Requests.m in Sources */ = {isa = PBXBuildFile; fileRef = 420063F918C238530031395F /* GCWebConnect+Requests.m */; };
 		420119B01F51BB180093B2CD /* babolat_player.json in Resources */ = {isa = PBXBuildFile; fileRef = 4201199D1F51BAD50093B2CD /* babolat_player.json */; };
 		420119B11F51BB180093B2CD /* babolat_session_8669.json in Resources */ = {isa = PBXBuildFile; fileRef = 4201199E1F51BAD50093B2CD /* babolat_session_8669.json */; };
@@ -851,7 +851,6 @@
 		42B5E2171BA5AF9A000FAE4E /* GCTestCommunications.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1F31BA5AF9A000FAE4E /* GCTestCommunications.m */; };
 		42B5E2181BA5AF9A000FAE4E /* GCTestUIGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1F41BA5AF9A000FAE4E /* GCTestUIGraphViewController.m */; };
 		42B5E2191BA5AF9A000FAE4E /* GCAppGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1F61BA5AF9A000FAE4E /* GCAppGlobal.m */; };
-		42B5E21A1BA5AF9A000FAE4E /* GCFitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1F71BA5AF9A000FAE4E /* GCFitTest.m */; };
 		42B5E21B1BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1F81BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.m */; };
 		42B5E21C1BA5AF9A000FAE4E /* GCTestBasics.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1F91BA5AF9A000FAE4E /* GCTestBasics.m */; };
 		42B5E21D1BA5AF9A000FAE4E /* GCTestDerived.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1FB1BA5AF9A000FAE4E /* GCTestDerived.m */; };
@@ -2603,6 +2602,7 @@
 
 /* Begin PBXFileReference section */
 		1FDCC27AED29AB0F64BE174E /* libPods-HealthStats.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HealthStats.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2363D1E580BD0C9920BCB763 /* Pods_ConnectStatsTestApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ConnectStatsTestApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3665CA8D2236812ED0C4EBE1 /* libPods-tennisstats.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tennisstats.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		420063F818C238530031395F /* GCWebConnect+Requests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCWebConnect+Requests.h"; path = "src/GCWebConnect+Requests.h"; sourceTree = "<group>"; };
 		420063F918C238530031395F /* GCWebConnect+Requests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCWebConnect+Requests.m"; path = "src/GCWebConnect+Requests.m"; sourceTree = "<group>"; };
@@ -3257,7 +3257,6 @@
 		42B5E1F41BA5AF9A000FAE4E /* GCTestUIGraphViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestUIGraphViewController.m; path = src/GCTestUIGraphViewController.m; sourceTree = "<group>"; };
 		42B5E1F51BA5AF9A000FAE4E /* GCAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCAppDelegate.h; path = src/GCAppDelegate.h; sourceTree = "<group>"; };
 		42B5E1F61BA5AF9A000FAE4E /* GCAppGlobal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCAppGlobal.m; path = src/GCAppGlobal.m; sourceTree = "<group>"; };
-		42B5E1F71BA5AF9A000FAE4E /* GCFitTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFitTest.m; path = src/GCFitTest.m; sourceTree = "<group>"; };
 		42B5E1F81BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCHistoryFieldDataSerie+Test.m"; path = "src/GCHistoryFieldDataSerie+Test.m"; sourceTree = "<group>"; };
 		42B5E1F91BA5AF9A000FAE4E /* GCTestBasics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestBasics.m; path = src/GCTestBasics.m; sourceTree = "<group>"; };
 		42B5E1FA1BA5AF9A000FAE4E /* GCTestDerived.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestDerived.h; path = src/GCTestDerived.h; sourceTree = "<group>"; };
@@ -3268,7 +3267,6 @@
 		42B5E1FF1BA5AF9A000FAE4E /* GCTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestViewController.m; path = src/GCTestViewController.m; sourceTree = "<group>"; };
 		42B5E2001BA5AF9A000FAE4E /* GCCellGrid+Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCCellGrid+Test.h"; path = "src/GCCellGrid+Test.h"; sourceTree = "<group>"; };
 		42B5E2011BA5AF9A000FAE4E /* GCCellGrid+Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCCellGrid+Test.m"; path = "src/GCCellGrid+Test.m"; sourceTree = "<group>"; };
-		42B5E2021BA5AF9A000FAE4E /* GCFitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFitTest.h; path = src/GCFitTest.h; sourceTree = "<group>"; };
 		42B5E2031BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCHistoryFieldDataSerie+Test.h"; path = "src/GCHistoryFieldDataSerie+Test.h"; sourceTree = "<group>"; };
 		42B5E2041BA5AF9A000FAE4E /* GCTestBasics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestBasics.h; path = src/GCTestBasics.h; sourceTree = "<group>"; };
 		42B5E2051BA5AF9A000FAE4E /* GCTestCommunications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestCommunications.h; path = src/GCTestCommunications.h; sourceTree = "<group>"; };
@@ -4338,7 +4336,6 @@
 		42FD55B71B90A39F0070B3B4 /* GCCellActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCCellActivity.h; path = src/GCCellActivity.h; sourceTree = "<group>"; };
 		42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCCellActivity.m; path = src/GCCellActivity.m; sourceTree = "<group>"; };
 		5A27E308E28B0C345991A8A8 /* Pods_FitFileExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FitFileExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6CA098C599FA397790D35A1F /* libPods-ConnectStatsTestApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ConnectStatsTestApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		722F58FE2B9F9EF1C1D899FD /* Pods-ConnectStatsTestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStatsTestApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		7511076C6F489225E4DB97A3 /* Pods-ConnectStats.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStats.release.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStats/Pods-ConnectStats.release.xcconfig"; sourceTree = "<group>"; };
 		7B4338B72FB5E891D8120070 /* Pods-HealthStats.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthStats.release.xcconfig"; path = "Pods/Target Support Files/Pods-HealthStats/Pods-HealthStats.release.xcconfig"; sourceTree = "<group>"; };
@@ -4488,7 +4485,7 @@
 				42BF1D3422510E63000DF572 /* RZFitFile.framework in Frameworks */,
 				42B5E2FF1BA5B7BF000FAE4E /* libsqlite3.tbd in Frameworks */,
 				42B5E2D01BA5B589000FAE4E /* HealthKit.framework in Frameworks */,
-				3038CC66959411B947C07B8E /* libPods-ConnectStatsTestApp.a in Frameworks */,
+				08F9F970B9E97EE50D457C03 /* Pods_ConnectStatsTestApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5627,7 +5624,7 @@
 				3665CA8D2236812ED0C4EBE1 /* libPods-tennisstats.a */,
 				5A27E308E28B0C345991A8A8 /* Pods_FitFileExplorer.framework */,
 				F2186DA283B31B12A499CF52 /* Pods_ConnectStats.framework */,
-				6CA098C599FA397790D35A1F /* libPods-ConnectStatsTestApp.a */,
+				2363D1E580BD0C9920BCB763 /* Pods_ConnectStatsTestApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -6242,8 +6239,6 @@
 		42B5E1EC1BA5AF70000FAE4E /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				42B5E2021BA5AF9A000FAE4E /* GCFitTest.h */,
-				42B5E1F71BA5AF9A000FAE4E /* GCFitTest.m */,
 				42B5E2031BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.h */,
 				42B5E1F81BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.m */,
 				42B5E1FA1BA5AF9A000FAE4E /* GCTestDerived.h */,
@@ -7704,6 +7699,7 @@
 				42B5E1B61BA5AEC9000FAE4E /* Frameworks */,
 				42B5E1B71BA5AEC9000FAE4E /* Resources */,
 				42EAE412200BB2E40017D65C /* Embed Frameworks */,
+				CA7BA052D74F944BBEA800F2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -9359,6 +9355,26 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		CA7BA052D74F944BBEA800F2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK-framework/Flurry_iOS_SDK.framework",
+				"${BUILT_PRODUCTS_DIR}/GenericJSON-iOS/GenericJSON.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		E1154C16AB148ED69A10029A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -10234,7 +10250,6 @@
 				42CE39471CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */,
 				42B5E2251BA5AF9A000FAE4E /* GCTestParsing.m in Sources */,
 				42B5E2211BA5AF9A000FAE4E /* GCTestViewController.m in Sources */,
-				42B5E21A1BA5AF9A000FAE4E /* GCFitTest.m in Sources */,
 				42B5E2241BA5AF9A000FAE4E /* GCTestOrganizer.m in Sources */,
 				42B5E2231BA5AF9A000FAE4E /* GCTestIconsCell.m in Sources */,
 				42CC45CC200A67C0003EB805 /* GCSettingsBugReport.m in Sources */,
