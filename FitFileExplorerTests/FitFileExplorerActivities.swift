@@ -153,7 +153,7 @@ class FitFileExplorerActivities: XCTestCase {
         var count = 0
         
         var foundEnd = false
-        
+        var first : Bool = true
         for fn in files {
             let url = URL( fileURLWithPath: RZFileOrganizer.bundleFilePath(fn, for: type(of:self)) )
             // check something was added
@@ -163,12 +163,17 @@ class FitFileExplorerActivities: XCTestCase {
                 XCTAssertFalse(foundEnd)
                 foundEnd = true
             }
-            
-            XCTAssertEqual( added.total, added.updated )
+            if first {
+                XCTAssertEqual( added.total, added.updated )
+            }else{
+                XCTAssertEqual( added.total, added.updated+1 )
+            }
+            first = false
             XCTAssertEqual(organizer.activityList.count, count+added.updated)
             count = organizer.activityList.count
         }
-        XCTAssertTrue(foundEnd)
+        // Only load two as test, skip the empty one
+        //XCTAssertTrue(foundEnd)
         
         let activityIds = [ organizer.activityList[0].activityId, organizer.activityList[1].activityId ]
         let count_added = organizer.remove(activityIds: activityIds)

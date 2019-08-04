@@ -161,7 +161,10 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
             if( row < self.displayFields.count){
                 let identifier = self.displayFields[row]
                 if tableColumn?.identifier.rawValue == "field" {
-                    let fieldDisplay = self.selectionContext.displayField(fieldName: identifier)
+                    let idx = self.selectedRow < self.messages.count ? self.selectedRow : 0
+                    let message = self.messages[idx]
+
+                    let fieldDisplay = self.selectionContext.displayField(fitMessageType: message.messageType, fieldName: identifier)
                     cellView.textField?.attributedStringValue = fieldDisplay
                     
                 }else if(tableColumn?.identifier.rawValue == "value"){

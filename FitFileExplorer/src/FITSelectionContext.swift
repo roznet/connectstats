@@ -284,7 +284,7 @@ class FITSelectionContext {
         return nu.description;
     }
     
-    func displayField( fieldName : String ) -> NSAttributedString {
+    func displayField( fitMessageType: RZFitMessageType, fieldName : String ) -> NSAttributedString {
         var displayText = fieldName
         let paragraphStyle = NSMutableParagraphStyle()
         
@@ -298,7 +298,7 @@ class FITSelectionContext {
                      NSAttributedString.Key.paragraphStyle: paragraphStyle]
         
         if self.prettyField {
-            if let field = self.interp.fieldKey(fitField: fieldName){
+            if let field = self.interp.fieldKey(fitMessageType: fitMessageType, fitField: fieldName){
                 displayText = field.displayName()
             }else{
                 

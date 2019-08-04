@@ -86,7 +86,7 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
                     if( row < first.interpretedFieldKeys().count){
                         let identifier = first.interpretedFieldKeys()[row]
                         if tableColumn?.identifier == NSUserInterfaceItemIdentifier("Field") {
-                            let fieldDisplay = self.selectionContext.displayField(fieldName: identifier)
+                            let fieldDisplay = self.selectionContext.displayField(fitMessageType: first.messageType, fieldName: identifier)
                             cellView.textField?.attributedStringValue = fieldDisplay
                             
                         }else{
