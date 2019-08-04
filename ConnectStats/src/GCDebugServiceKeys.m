@@ -50,6 +50,12 @@
     }
     return rv;
 }
+
+-(void)dealloc{
+    [_debugKeys release];
+    [super dealloc];
+}
+
 -(BOOL)hasDebugKeys{
     return  self.debugKeys.count > 0;
 }
