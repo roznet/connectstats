@@ -92,10 +92,9 @@ class FITFitFileInterpret: NSObject {
     }
     func fieldKey(fitMessageType: RZFitMessageType, fitField:String) -> GCField?{
         //let found = FITFitEnumMap.activityField(fromFitField: fitField, forActivityType: self.activityType.topSubRoot().key)
-        let key = self.fitFieldMap.fieldKey(messageType: fitMessageType, fitField: fitField)
-        let found = GCField(forKey: key, andActivityType: self.activityType.topSubRoot().key)
+        let key = self.fitFieldMap.field(messageType: fitMessageType, fitField: fitField, activityType: self.activityType.topSubRoot().key)
         
-        return found
+        return key
     }
     
 

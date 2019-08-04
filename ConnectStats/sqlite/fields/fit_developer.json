@@ -1,0 +1,13 @@
+{
+  "developer_Cadence" : "WeightedMeanCadence",
+  "developer_Elevation" : "GainElevation" ,
+  "developer_Form Power" : "WeightedMeanFormPower" ,
+  "developer_Ground Time" : "WeightedMeanGroundContactTime" ,
+  "developer_Leg Spring Stiffness" : "WeightedMeanLegSpringStiffness" ,
+  "developer_Power" : "WeightedMeanPower" ,
+  "developer_Vertical Oscillation" :"WeightedMeanVerticalOscillation",
+  "developer_cadence" : "WeightedMeanCadence",
+  "developer_power" : "WeightedMeanPower" ,
+  "developer_stance_time" : "WeightedMeanGroundContactTime" ,
+  "developer_vertical_oscillation" :"WeightedMeanVerticalOscillation"
+}

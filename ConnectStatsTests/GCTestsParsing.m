@@ -164,6 +164,7 @@
                 NSString * ident = [NSString stringWithFormat:@"%@_%@", aId, field.key];
                 GCStatsDataSerieWithUnit * expected = [act timeSerieForField:field];
                 GCStatsDataSerieWithUnit * retrieved = [manager retrieveReferenceObject:expected forClasses:classes selector:_cmd identifier:ident error:&error];
+                XCTAssertNotNil( retrieved, @"In activity %@, field %@ does not have saved reference point, maybe a new field?", act, field);
                 XCTAssertNotEqual(expected.count, 0, @"%@[%@] has points",aId,field.key);
                 XCTAssertEqualObjects(expected, retrieved, @"%@[%@]: %@<>%@", aId, field.key, expected, retrieved);
             }
@@ -496,7 +497,7 @@
 -(void)testParseFitFile{
     NSDictionary * epsForField = @{
                                    // somehow some non sensical values:
-                                   @"MaxRunCadence": @(0.6),
+                                   @"MaxRunCadence": @(1.5),
                                    @"MaxSpeed":@(0.0001),
                                    @"MaxPace":@(0.0001),
                                    @"MinAirTemperature":@(50),

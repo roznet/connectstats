@@ -434,7 +434,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 -(BOOL)updateWithSwimTrackpoints:(NSArray<GCTrackPointSwim*>*)aSwim andSwimLaps:(NSArray<GCLapSwim*>*)laps{
     self.garminSwimAlgorithm = true;
-    
+
+    self.trackFlags = gcFieldFlagNone;
+
     for (GCTrackPointSwim * point in aSwim) {
         self.trackFlags |= point.trackFlags;
     }
@@ -452,9 +454,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     FMDatabase * db = self.db;
     FMDatabase * trackdb = self.trackdb;
 
-
     [self createTrackDb:trackdb];
-    self.trackFlags = gcFieldFlagNone;
 
     [trackdb beginTransaction];
     [trackdb setShouldCacheStatements:YES];

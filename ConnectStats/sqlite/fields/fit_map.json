@@ -35,7 +35,7 @@
     "lap_trigger": "lap_trigger", 
     "left_right_balance": "left_right_balance", 
     "max_altitude": "MaxElevation", 
-    "max_cadence": "max_cadence", 
+    "max_cadence": "MaxCadence", 
     "max_fractional_cadence": "MaxFractionalCadence", 
     "max_heart_rate": "MaxHeartRate", 
     "max_neg_grade": "max_neg_grade", 
@@ -79,7 +79,7 @@
     "total_fat_calories": "total_fat_calories", 
     "total_fractional_cycles": "total_fractional_cycles", 
     "total_moving_time": "SumMovingDuration", 
-    "total_timer_time": "SumDuration",
+    "total_timer_time": "SumDuration", 
     "total_work": "total_work", 
     "wkt_step_index": "wkt_step_index", 
     "zone_count": "zone_count"
@@ -101,7 +101,7 @@
     "total_calories": "SumEnergy", 
     "total_elapsed_time": "SumElapsedDuration", 
     "total_strokes": "SumStrokes", 
-    "total_timer_time": "SumDuration",
+    "total_timer_time": "SumDuration", 
     "zone_count": "zone_count"
   }, 
   "FIT_MESG_NUM_RECORD": {
@@ -190,7 +190,7 @@
     "left_right_balance": "left_right_balance", 
     "max_altitude": "MaxElevation", 
     "max_ball_speed": "max_ball_speed", 
-    "max_cadence": "max_cadence", 
+    "max_cadence": "MaxCadence", 
     "max_fractional_cadence": "MaxFractionalCadence", 
     "max_heart_rate": "MaxHeartRate", 
     "max_neg_grade": "max_neg_grade", 

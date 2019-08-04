@@ -86,6 +86,7 @@ oldmap = {
     'MaxAltitude': 'MaxElevation',
     'MaxMeanGroundTime': 'MaxGroundContactTime',
     'MaxRunningCadence': 'MaxRunCadence',
+    'max_cadence': 'MaxCadence',
     'MaxTemperature': 'MaxAirTemperature',
     'MinAltitude': 'MinElevation',
     'NormalizedPower': 'WeightedMeanNormalizedPower',

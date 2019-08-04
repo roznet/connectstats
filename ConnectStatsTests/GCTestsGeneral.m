@@ -515,7 +515,7 @@
             
         }
         XCTAssertEqualWithAccuracy(dist, first.distanceMeters, first.speed, @"match dist %.f", dist);
-        XCTAssertEqualWithAccuracy(secondP.distanceMeters-firstP.distanceMeters, first.distanceMeters, first.speed, @"match dist %.f", dist);
+        XCTAssertEqualWithAccuracy(secondP.distanceMeters-firstP.distanceMeters, first.distanceMeters, second.speed*1.1, @"match dist %.f", dist);
         
     };
     
