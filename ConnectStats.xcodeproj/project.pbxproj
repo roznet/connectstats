@@ -587,7 +587,6 @@
 		427CDB221778F0E10050CFE4 /* GCFieldsCalculatedTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 427CDB211778F0E10050CFE4 /* GCFieldsCalculatedTrack.m */; };
 		427CF8D222ABD6BC00894253 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
 		427CF8D322ABD6BC00894253 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
-		427CF8D422ABD6BC00894253 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
 		427DDCBF1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */; };
 		427DDCC01DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */; };
 		427DDCC81DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCC71DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m */; };
@@ -8094,7 +8093,6 @@
 				42D101A022D8A94600A06C0E /* Colors.xcassets in Resources */,
 				4248ED9E1DCFFF6900254216 /* fields.db in Resources */,
 				4253B4651CD49F7E00437E6A /* Assets.xcassets in Resources */,
-				427CF8D422ABD6BC00894253 /* credentials.json in Resources */,
 				4253B4681CD49F7E00437E6A /* Main.storyboard in Resources */,
 				423D747422F7147C00EE3E71 /* fit_developer.json in Resources */,
 			);
