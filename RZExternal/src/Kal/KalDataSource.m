@@ -73,4 +73,41 @@
 -(UIFont*)boldSystemFontOfSize:(CGFloat)size{
     return [UIFont boldSystemFontOfSize:size];
 }
+
+- (UIColor*)backgroundColor{
+    return [UIColor grayColor];
+}
+- (UIColor*)weekdayTextColor{
+    return [UIColor colorWithRed:0.3f green:0.3f blue:0.3f alpha:1.f];
+}
+- (UIColor*)dayCurrentMonthTextColor{
+    return [UIColor blackColor];
+}
+- (UIColor*)dayAdjacentMonthTextColor{
+    return [UIColor darkGrayColor];
+}
+- (UIColor*)separatorColor{
+    return [UIColor colorWithRed:0.63f green:0.65f blue:0.68f alpha:1.f];
+}
+
+-(UIColor*)daySelectedTextColor{
+    return [UIColor whiteColor];
+}
+-(UIColor*)tileColor{
+    return self.backgroundColor;
+}
+-(UIColor*)tileSelectedColor{
+    //0x1843c7
+    return [UIColor colorWithRed:0.094 green:0.263 blue:0.780 alpha:1.00];
+}
+-(UIColor*)tileTodayColor{
+    //0x7788a2
+    return [UIColor colorWithRed:0.467 green:0.533 blue:0.635 alpha:1.00];
+}
+-(UIColor*)tileTodaySelectedColor{
+    //0x3b7dde
+    return [UIColor colorWithRed:0.231 green:0.490 blue:0.871 alpha:1.00];
+}
+
+
 @end

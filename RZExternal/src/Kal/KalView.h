@@ -40,7 +40,6 @@
  */
 @interface KalView : UIView
 {
-  UILabel *headerTitleLabel;
   KalGridView *gridView;
   UITableView *tableView;
   UIImageView *shadowView;
@@ -54,7 +53,7 @@
 @property (nonatomic, assign) CGSize tileSize;
 @property (nonatomic, assign) id<KalDataSource> dataSource;
 
-- (id)initWithFrame:(CGRect)frame delegate:(id<KalViewDelegate>)delegate logic:(KalLogic *)logic;
+- (id)initWithFrame:(CGRect)frame dataSource:(id<KalDataSource>)source delegate:(id<KalViewDelegate>)delegate logic:(KalLogic *)logic;
 - (BOOL)isSliding;
 - (void)selectDate:(KalDate *)date;
 - (void)markTilesForDates:(NSArray *)dates andSource:(id<KalDataSource>)source;

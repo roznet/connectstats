@@ -33,48 +33,26 @@
 {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGFloat fontSize = 24.f;
-    //UIFont *font = [GCViewConfig boldSystemFontOfSize:fontSize];
-    UIColor *shadowColor = nil;
     UIColor *textColor = nil;
-    UIImage *markerImage = nil;
-    
-    //NSDictionary * attr = @{NSFontAttributeName:[GCViewConfig boldSystemFontOfSize:fontSize]};
-    
-    //CGContextTranslateCTM(ctx, 0, kTileSize.height);
-    //CGContextScaleCTM(ctx, 1, -1);
+    UIColor *tileColor = nil;
     
     if ([self isToday] && self.selected) {
-        [[[UIImage imageNamed:kalBundleFile(@"kal_tile_today_selected.png")] stretchableImageWithLeftCapWidth:6 topCapHeight:0] drawInRect:CGRectMake(0, -1, _tileSize.width+1, _tileSize.height+1)];
-        textColor = [UIColor whiteColor];
-        shadowColor = [UIColor blackColor];
-        markerImage = [UIImage imageNamed:kalBundleFile(@"kal_marker_today.png")];
+        tileColor = self.dataSource.tileTodaySelectedColor;
+        textColor = self.dataSource.dayCurrentMonthTextColor;
     } else if ([self isToday] && !self.selected) {
-        [[[UIImage imageNamed:kalBundleFile(@"kal_tile_today.png")] stretchableImageWithLeftCapWidth:6 topCapHeight:0] drawInRect:CGRectMake(0, -1, _tileSize.width+1, _tileSize.height+1)];
-        textColor = [UIColor whiteColor];
-        shadowColor = [UIColor blackColor];
-        markerImage = [UIImage imageNamed:kalBundleFile(@"kal_marker_today.png")];
+        tileColor = self.dataSource.tileTodayColor;
+        textColor = self.dataSource.dayCurrentMonthTextColor;
     } else if (self.selected) {
-        [[[UIImage imageNamed:kalBundleFile(@"kal_tile_selected.png")] stretchableImageWithLeftCapWidth:1 topCapHeight:0] drawInRect:CGRectMake(0, -1, _tileSize.width+1, _tileSize.height+1)];
-        textColor = [UIColor whiteColor];
-        shadowColor = [UIColor blackColor];
-        markerImage = [UIImage imageNamed:kalBundleFile(@"kal_marker_selected.png")];
+        textColor = self.dataSource.daySelectedTextColor;
+        tileColor = self.dataSource.tileSelectedColor;
     } else if (self.belongsToAdjacentMonth) {
-        if (useIOS7Look()) {
-            textColor = [UIColor lightGrayColor];
-        }else{
-            textColor = [UIColor colorWithPatternImage:[UIImage imageNamed:kalBundleFile(@"kal_tile_dim_text_fill.png")]];
-        }
-        shadowColor = nil;
-        markerImage = [UIImage imageNamed:kalBundleFile(@"kal_marker_dim.png")];
+        textColor = self.dataSource.dayAdjacentMonthTextColor;
+        tileColor = self.dataSource.tileColor;
     } else {
-        if (useIOS7Look()) {
-            textColor = [UIColor darkGrayColor];
-        }else{
-            textColor = [UIColor colorWithPatternImage:[UIImage imageNamed:kalBundleFile(@"kal_tile_text_fill.png")]];
-        }
-        shadowColor = [UIColor whiteColor];
-        markerImage = [UIImage imageNamed:kalBundleFile(@"kal_marker.png")];
+        textColor = self.dataSource.dayCurrentMonthTextColor;
+        tileColor = self.dataSource.tileColor;
     }
+    
     UIFont * systemFont = nil;
     if( [self.dataSource respondsToSelector:@selector(systemFontOfSize:)]){
         systemFont = [self.dataSource systemFontOfSize:fontSize];
@@ -83,15 +61,30 @@
     }
     NSDictionary * attr = @{NSFontAttributeName:systemFont,NSForegroundColorAttributeName:textColor};
 
+    // Draw Background
+    [tileColor setFill];
+    CGContextFillRect(ctx, rect);
+    
+    // Draw Separator line
+    [self.dataSource.separatorColor setFill];
+    CGRect line;
+    line.origin = CGPointMake(0.f, rect.size.height - 1.f);
+    line.size = CGSizeMake(rect.size.width, 1.f);
+    CGContextFillRect(UIGraphicsGetCurrentContext(), line);
+    
     if([dataSource respondsToSelector:@selector(drawBackgroundInRect:forDate:selected:)]){
         [dataSource drawBackgroundInRect:rect forDate:[date NSDate] selected:self.selected];
     }
 
     if (flags.marked){
-        //CGRectMake(3.f,3.f,40.f,7.f)
-        if (dataSource == nil || ![dataSource drawMarkerInRect:CGRectMake(2.f,_tileSize.height-11.f ,_tileSize.width-4.f,7.f) forDate:[date NSDate] selected:self.selected]) {
-            //CGRectMake(21.f, 5.f, 4.f, 5.f)
-            [markerImage drawInRect:CGRectMake(21.f, _tileSize.height-9.f, 4.f, 5.f)];
+        CGRect markerRect = CGRectMake(2.f,_tileSize.height-11.f ,_tileSize.width-4.f,7.f);
+        if (dataSource == nil || ![dataSource drawMarkerInRect:markerRect forDate:[date NSDate] selected:self.selected]) {
+            markerRect.origin.x = _tileSize.width/2.f - 4.f;
+            markerRect.size.width = 8.f;
+            
+            [textColor setFill];
+            CGContextFillRect(ctx, markerRect);
+            
         }
     }
     NSUInteger n = [self.date day];
@@ -101,11 +94,6 @@
     textX = roundf(0.5f * (_tileSize.width - textSize.width));
     //textY = 6.f + roundf(0.5f * (kTileSize.height - textSize.height));
     textY = -2.f + roundf(0.5f * (_tileSize.height - textSize.height));
-    if (shadowColor && ! useIOS7Look()) {
-        [shadowColor setFill];
-        [dayText drawAtPoint:CGPointMake(textX, textY) withAttributes:attr];
-        textY += 1.f;
-    }
     [textColor setFill];
     [dayText drawAtPoint:CGPointMake(textX, textY) withAttributes:attr];
 

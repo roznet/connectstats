@@ -31,16 +31,8 @@ void mach_absolute_difference(uint64_t end, uint64_t start, struct timespec *tp)
 
 NSString *const KalDataSourceChangedNotification = @"KalDataSourceChangedNotification";
 
-BOOL useIOS7Look(){
-    return true;
-}
-
 NSString * kalBundleFile(NSString*f){
-    if (useIOS7Look()) {
-        return [NSString stringWithFormat:@"%@/Kal-ios7.bundle/%@", [NSBundle bundleForClass:[KalDate class]].resourcePath, f];
-    }else{
-        return [NSString stringWithFormat:@"Kal.bundle/%@", f];
-    }
+    return [NSString stringWithFormat:@"%@/Kal-ios7.bundle/%@", [NSBundle bundleForClass:[KalDate class]].resourcePath, f];
 }
 
 @interface KalViewController ()
@@ -71,28 +63,49 @@ NSString * kalBundleFile(NSString*f){
   return [self initWithSelectedDate:[NSDate date]];
 }
 
-- (KalView*)calendarView { return (KalView*)self.view; }
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationSignificantTimeChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:KalDataSourceChangedNotification object:nil];
+    [initialDate release];
+    [selectedDate release];
+    [logic release];
+    [_tableView release];
+    [_titleView release];
+    [super dealloc];
+}
+
+#pragma mark -
+
+- (KalView*)calendarView {
+    return (KalView*)self.view;
+}
+
+-(KalView*)kalView{
+    return (KalView*)self.view;
+}
 
 - (void)setDataSource:(id<KalDataSource>)aDataSource
 {
-  if (dataSource != aDataSource) {
-    dataSource = aDataSource;
-    tableView.dataSource = dataSource;
-  }
+    if (dataSource != aDataSource) {
+        dataSource = aDataSource;
+        self.tableView.dataSource = dataSource;
+    }
 }
 
 - (void)setDelegate:(id<UITableViewDelegate>)aDelegate
 {
-  if (delegate != aDelegate) {
-    delegate = aDelegate;
-    tableView.delegate = delegate;
-  }
+    if (delegate != aDelegate) {
+        delegate = aDelegate;
+        self.tableView.delegate = delegate;
+    }
 }
 
 - (void)clearTable
 {
-  [dataSource removeAllItems];
-  [tableView reloadData];
+    [dataSource removeAllItems];
+    [self.tableView reloadData];
 }
 
 - (void)reloadData
@@ -103,27 +116,27 @@ NSString * kalBundleFile(NSString*f){
         self.navigationItem.rightBarButtonItems = [dataSource rightButtonItems];
     }
     [self setupTitleView];
-
+    
 }
 
 - (void)significantTimeChangeOccurred
 {
-  [[self calendarView] jumpToSelectedMonth];
-  [self reloadData];
+    [[self calendarView] jumpToSelectedMonth];
+    [self reloadData];
 }
 
 // -----------------------------------------
-#pragma mark KalViewDelegate protocol
+#pragma mark - KalViewDelegate protocol
 
 - (void)didSelectDate:(KalDate *)date
 {
-  self.selectedDate = [date NSDate];
-  NSDate *from = [[date NSDate] cc_dateByMovingToBeginningOfDay];
-  NSDate *to = [[date NSDate] cc_dateByMovingToEndOfDay];
-  [self clearTable];
-  [dataSource loadItemsFromDate:from toDate:to];
-  [tableView reloadData];
-  [tableView flashScrollIndicators];
+    self.selectedDate = [date NSDate];
+    NSDate *from = [[date NSDate] cc_dateByMovingToBeginningOfDay];
+    NSDate *to = [[date NSDate] cc_dateByMovingToEndOfDay];
+    [self clearTable];
+    [dataSource loadItemsFromDate:from toDate:to];
+    [self.tableView reloadData];
+    [self.tableView flashScrollIndicators];
 }
 
 -(void)setupTitleView{
@@ -146,7 +159,7 @@ NSString * kalBundleFile(NSString*f){
                                                                               NSForegroundColorAttributeName:[UIColor darkGrayColor]}];
 #endif
     self.titleView.subtitle = attr2;
-
+    
     [attr release];
     [attr2 release];
     [self.titleView setNeedsDisplay];
@@ -157,10 +170,10 @@ NSString * kalBundleFile(NSString*f){
     if( self.navigationController ){
         [self setupTitleView];
     }
-  [self clearTable];
-  [logic retreatToPreviousMonth];
-  [[self calendarView] slideDown];
-  [self reloadData];
+    [self clearTable];
+    [logic retreatToPreviousMonth];
+    [[self calendarView] slideDown];
+    [self reloadData];
 }
 
 - (void)showFollowingMonth
@@ -168,14 +181,14 @@ NSString * kalBundleFile(NSString*f){
     if( self.navigationController ){
         [self setupTitleView];
     }
-  [self clearTable];
-  [logic advanceToFollowingMonth];
-  [[self calendarView] slideUp];
-  [self reloadData];
+    [self clearTable];
+    [logic advanceToFollowingMonth];
+    [[self calendarView] slideUp];
+    [self reloadData];
 }
 
 // -----------------------------------------
-#pragma mark KalDataSourceCallbacks protocol
+#pragma mark - KalDataSourceCallbacks protocol
 
 - (void)loadedDataSource:(id<KalDataSource>)theDataSource;
 {
@@ -196,7 +209,6 @@ NSString * kalBundleFile(NSString*f){
 }
 
 // ---------------------------------------
-#pragma mark -
 
 - (void)showAndSelectDate:(NSDate *)date
 {
@@ -227,27 +239,42 @@ NSString * kalBundleFile(NSString*f){
 
 - (NSDate *)selectedDate
 {
-  return [self.calendarView.selectedDate NSDate];
+    return [self.calendarView.selectedDate NSDate];
 }
 
 
-// -----------------------------------------------------------------------------------
-#pragma mark UIViewController
+#pragma mark - UIViewController
 
 - (void)didReceiveMemoryWarning
 {
-  self.initialDate = self.selectedDate; // must be done before calling super
-  [super didReceiveMemoryWarning];
+    self.initialDate = self.selectedDate; // must be done before calling super
+    [super didReceiveMemoryWarning];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    UIEdgeInsets insets = [[UIApplication sharedApplication] keyWindow].safeAreaInsets;
+    
+    CGRect bar = self.navigationController.navigationBar.frame;
+    CGRect frame = self.view.frame;
+
+    CGFloat adjustTop = bar.size.height + insets.top;
+    
+    frame.origin.y+= adjustTop;
+    frame.size.height -= adjustTop;
+    
+    NSLog( @"%@ -> %@", NSStringFromCGRect(self.view.frame), NSStringFromCGRect(frame));
+
+    self.view.frame = frame;
+    
+    [self.kalView setupFrame:frame];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-#ifdef __IPHONE_9_0
     self.navigationController.navigationBar.titleTextAttributes =@{NSFontAttributeName:[UIFont systemFontOfSize:16.]};
-#else
-    self.navigationController.navigationBar.titleTextAttributes =@{NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue" size:16.]};
-#endif
     
     self.navigationItem.rightBarButtonItems = [dataSource rightButtonItems];
     self.navigationItem.leftBarButtonItems = [dataSource leftButtonItems];
@@ -255,55 +282,24 @@ NSString * kalBundleFile(NSString*f){
     self.titleView = [[[RZNavigationTitleView alloc] initWithFrame:CGRectMake(0., 0., 120., 44)] autorelease];
     self.titleView.backgroundColor = [UIColor clearColor];
     self.navigationItem.titleView = self.titleView;
-
-    // Start with best guess geometry
-    CGRect rect = self.view.frame;
-    KalView *kalView = [[[KalView alloc] initWithFrame:rect delegate:self logic:logic] autorelease];
-    kalView.dataSource = self.dataSource;
+    
+    KalView *kalView = [[[KalView alloc] initWithFrame:self.view.frame dataSource:self.dataSource delegate:self logic:logic] autorelease];
     self.view = kalView;
-    tableView = kalView.tableView;
-    tableView.dataSource = dataSource;
-    tableView.delegate = delegate;
-    [tableView retain];
+    self.tableView = kalView.tableView;
+    self.tableView.dataSource = self.dataSource;
+    self.tableView.delegate = self.dataSource;
     [kalView selectDate:[KalDate dateFromNSDate:self.initialDate]];
     [self reloadData];
 }
 
-#ifdef __IPHONE_9_0
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
-#else
-- (NSUInteger)supportedInterfaceOrientations{
-#endif
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         return UIInterfaceOrientationMaskAll;
     }else{
         return UIInterfaceOrientationMaskPortrait;
     }
 }
-
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
     
-    [self.kalView setupFrame:self.view.frame];
-    [tableView reloadData];
-}
-
--(KalView*)kalView{
-    return (KalView*)self.view;
-}
-#pragma mark -
-
-- (void)dealloc
-{
-  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationSignificantTimeChangeNotification object:nil];
-  [[NSNotificationCenter defaultCenter] removeObserver:self name:KalDataSourceChangedNotification object:nil];
-  [initialDate release];
-  [selectedDate release];
-  [logic release];
-  [tableView release];
-    [_titleView release];
-  [super dealloc];
-}
 
 @end

@@ -71,7 +71,7 @@
 
 @protocol KalDataSourceCallbacks;
 
-@protocol KalDataSource <NSObject, UITableViewDataSource>
+@protocol KalDataSource <NSObject, UITableViewDataSource, UITableViewDelegate>
 - (void)presentingDatesFrom:(NSDate *)fromDate to:(NSDate *)toDate delegate:(id<KalDataSourceCallbacks>)delegate;
 - (NSArray *)markedDatesFrom:(NSDate *)fromDate to:(NSDate *)toDate;
 - (void)loadItemsFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate;
@@ -82,6 +82,21 @@
 - (NSString*)title;
 - (UIFont*)systemFontOfSize:(CGFloat)size;
 - (UIFont*)boldSystemFontOfSize:(CGFloat)size;
+
+-(UIColor*)backgroundColor;
+-(UIColor*)separatorColor;
+
+-(UIColor*)tileColor;
+-(UIColor*)tileSelectedColor;
+-(UIColor*)tileTodayColor;
+-(UIColor*)tileTodaySelectedColor;
+
+-(UIColor*)weekdayTextColor;
+-(UIColor*)daySelectedTextColor;
+-(UIColor*)dayCurrentMonthTextColor;
+-(UIColor*)dayAdjacentMonthTextColor;
+
+
 @optional
 - (BOOL)drawBackgroundInRect:(CGRect)rect forDate:(NSDate*)adate selected:(BOOL)asel;
 - (BOOL)drawForegroundInRect:(CGRect)rect forDate:(NSDate*)adate selected:(BOOL)asel;

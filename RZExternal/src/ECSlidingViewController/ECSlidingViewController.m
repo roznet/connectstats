@@ -461,24 +461,11 @@
     CGRect containerViewFrame = self.view.bounds;
     
     if (!(self.topViewController.edgesForExtendedLayout & UIRectEdgeTop)) {
-        if (@available(iOS 11.0, *)) {
-            containerViewFrame = self.view.safeAreaLayoutGuide.layoutFrame;
-        } else {
-            // Fallback on earlier versions
-            CGFloat topLayoutGuideLength = [self.topLayoutGuide length];
-            containerViewFrame.origin.y     = topLayoutGuideLength;
-            containerViewFrame.size.height -= topLayoutGuideLength;
-        }
+        containerViewFrame = self.view.safeAreaLayoutGuide.layoutFrame;
     }
     
     if (!(self.topViewController.edgesForExtendedLayout & UIRectEdgeBottom)) {
-        if (@available(iOS 11.0, *)) {
-            containerViewFrame = self.view.safeAreaLayoutGuide.layoutFrame;
-        } else {
-            // Fallback on earlier versions
-            CGFloat bottomLayoutGuideLength = [self.bottomLayoutGuide length];
-            containerViewFrame.size.height -= bottomLayoutGuideLength;
-        }
+        containerViewFrame = self.view.safeAreaLayoutGuide.layoutFrame;
     }
     
     switch(position) {
@@ -503,23 +490,10 @@
     CGRect containerViewFrame = self.view.bounds;
     
     if (!(self.underLeftViewController.edgesForExtendedLayout & UIRectEdgeTop)) {
-        if (@available(iOS 11.0, *)) {
-            
-            containerViewFrame = self.view.safeAreaLayoutGuide.layoutFrame;
-        }else{
-            CGFloat topLayoutGuideLength    = [self.topLayoutGuide length];
-            containerViewFrame.origin.y     = topLayoutGuideLength;
-            containerViewFrame.size.height -= topLayoutGuideLength;
-        }
+        containerViewFrame = self.view.safeAreaLayoutGuide.layoutFrame;
     }
     if (!(self.underLeftViewController.edgesForExtendedLayout & UIRectEdgeBottom)) {
-        if (@available(iOS 11.0, *)) {
-            containerViewFrame = self.view.safeAreaLayoutGuide.layoutFrame;
-        } else {
-            // Fallback on earlier versions
-            CGFloat bottomLayoutGuideLength = [self.bottomLayoutGuide length];
-            containerViewFrame.size.height -= bottomLayoutGuideLength;
-        }
+        containerViewFrame = self.view.safeAreaLayoutGuide.layoutFrame;
     }
     
     if (!(self.underLeftViewController.edgesForExtendedLayout & UIRectEdgeRight)) {
@@ -537,24 +511,11 @@
     CGRect containerViewFrame = self.view.bounds;
     
     if (!(self.underRightViewController.edgesForExtendedLayout & UIRectEdgeTop)) {
-        if (@available(iOS 11.0, *)) {
-            containerViewFrame = self.view.safeAreaLayoutGuide.layoutFrame;
-        } else {
-            // Fallback on earlier versions
-            CGFloat topLayoutGuideLength    = [self.topLayoutGuide length];
-            containerViewFrame.origin.y     = topLayoutGuideLength;
-            containerViewFrame.size.height -= topLayoutGuideLength;
-        }
+        containerViewFrame = self.view.safeAreaLayoutGuide.layoutFrame;
     }
     
     if (!(self.underRightViewController.edgesForExtendedLayout & UIRectEdgeBottom)) {
-        if (@available(iOS 11.0, *)) {
-            containerViewFrame = self.view.safeAreaLayoutGuide.layoutFrame;
-        } else {
-            // Fallback on earlier versions
-            CGFloat bottomLayoutGuideLength = [self.bottomLayoutGuide length];
-            containerViewFrame.size.height -= bottomLayoutGuideLength;
-        }
+        containerViewFrame = self.view.safeAreaLayoutGuide.layoutFrame;
     }
     
     if (!(self.underRightViewController.edgesForExtendedLayout & UIRectEdgeLeft)) {

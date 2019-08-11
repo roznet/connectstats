@@ -31,7 +31,7 @@ static NSString *kSlideAnimationId = @"KalSwitchMonths";
 
 @synthesize selectedTile, highlightedTile, transitioning;
 
-- (id)initWithFrame:(CGRect)frame logic:(KalLogic *)theLogic delegate:(id<KalViewDelegate>)theDelegate
+- (id)initWithFrame:(CGRect)frame dataSource:(id<KalDataSource>)source logic:(KalLogic *)theLogic delegate:(id<KalViewDelegate>)theDelegate
 {
     // MobileCal uses 46px wide tiles, with a 2px inner stroke
     // along the top and right edges. Since there are 7 columns,
@@ -42,19 +42,15 @@ static NSString *kSlideAnimationId = @"KalSwitchMonths";
     // will be clipped off the screen, but that's fine because
     // MobileCal does the same thing.
     self.tileSize = CGSizeMake(46.f, 44.f);
-    if (frame.size.width != 320.) {
-        self.tileSize = CGSizeMake(frame.size.width/7., 44.f );
-    }
-    frame.size.width = 7 * self.tileSize.width;
     
     if (self = [super initWithFrame:frame]) {
         self.clipsToBounds = YES;
         logic = [theLogic retain];
         delegate = theDelegate;
+        _dataSource = source;
         
-        CGRect monthRect = CGRectMake(0.f, 0.f, frame.size.width, frame.size.height);
-        frontMonthView = [[KalMonthView alloc] initWithFrame:monthRect andTileSize:self.tileSize];
-        backMonthView = [[KalMonthView alloc] initWithFrame:monthRect andTileSize:self.tileSize];
+        frontMonthView = [[KalMonthView alloc] initWithFrame:frame dataSource:source andTileSize:self.tileSize];
+        backMonthView = [[KalMonthView alloc] initWithFrame:frame dataSource:source andTileSize:self.tileSize];
         backMonthView.hidden = YES;
         [self addSubview:backMonthView];
         [self addSubview:frontMonthView];
@@ -72,21 +68,28 @@ static NSString *kSlideAnimationId = @"KalSwitchMonths";
         [self addGestureRecognizer:gestureUp];
         [self addGestureRecognizer:gestureTap];
         
+        self.backgroundColor = self.dataSource.backgroundColor;
+
     }
     return self;
 }
 
 - (void)drawRect:(CGRect)rect
 {
-  [[UIImage imageNamed:kalBundleFile(@"kal_grid_background.png")] drawInRect:rect];
-  [[UIColor colorWithRed:0.63f green:0.65f blue:0.68f alpha:1.f] setFill];
-  CGRect line;
-  line.origin = CGPointMake(0.f, self.height - 1.f);
-  line.size = CGSizeMake(self.width, 1.f);
-  CGContextFillRect(UIGraphicsGetCurrentContext(), line);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    [self.dataSource.backgroundColor setFill];
+    CGContextFillRect(ctx, rect);
+    
+    [self.dataSource.separatorColor setFill];
+    CGRect line;
+    line.origin = CGPointMake(0.f, self.height - 1.f);
+    line.size = CGSizeMake(self.width, 1.f);
+    CGContextFillRect(ctx, line);
 }
 
 -(void)setupFrame:(CGRect)frame{
+    
     CGRect monthRect = CGRectMake(0.f, 0.f, frame.size.width, frame.size.height);
     self.frame = monthRect;
     frontMonthView.frame = monthRect;

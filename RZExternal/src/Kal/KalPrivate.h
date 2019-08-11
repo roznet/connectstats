@@ -6,4 +6,4 @@
 #import "UIViewAdditions.h"
 #import "NSDateAdditions.h"
 extern NSString * kalBundleFile(NSString*f);
-extern BOOL useIOS7Look(void);
+
