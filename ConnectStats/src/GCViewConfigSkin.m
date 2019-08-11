@@ -44,6 +44,7 @@ NSString * kGCSkinKeyGoalPercentBackgroundColor = @"GoalPercentBackgroundColor";
 
 NSString * kGCSkinKeyBarGraphColor = @"BarGraphColor";
 NSString * kGCSkinKeyListOfColorsForMultiplots = @"ListOfColorsForMultiplots";
+NSString * kGCSkinKeyCalendarColors = @"CalendarColors";
 
 NS_INLINE NSArray * gcArrayForDefinitionValue(id input){
     if ([input isKindOfClass:[NSArray class]]) {
@@ -212,6 +213,19 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                             [UIColor darkGrayColor],
                             [UIColor orangeColor]
                             ],
+                    kGCSkinKeyCalendarColors:
+                        @{
+                            @(gcGCSkinKeyCalendarElementWeekdayTextColor):          [UIColor colorWithRed:0.3f green:0.3f blue:0.3f alpha:1.f],
+                            @(gcGCSkinKeyCalendarElementDayCurrentMonthTextColor):  [UIColor blackColor],
+                            @(gcGCSkinKeyCalendarElementDayAdjacentMonthTextColor): [UIColor darkGrayColor],
+                            @(gcGCSkinKeyCalendarElementDaySelectedTextColor):      [UIColor whiteColor],
+                            @(gcGCSkinKeyCalendarElementSeparatorColor):            [UIColor colorWithRed:0.63f green:0.65f blue:0.68f alpha:1.f],
+                            @(gcGCSkinKeyCalendarElementTileColor):                 [UIColor colorWithHexValue:0xEBEBEB andAlpha:1.f],
+                            @(gcGCSkinKeyCalendarElementTileSelectedColor):         [UIColor colorWithHexValue:0x1843c7 andAlpha:1.f],
+                            @(gcGCSkinKeyCalendarElementTileTodayColor):            [UIColor colorWithHexValue:0x7788a2 andAlpha:1.f],
+                            @(gcGCSkinKeyCalendarElementTileTodaySelectedColor):    [UIColor colorWithHexValue:0x3b7dde andAlpha:1.f]
+                            
+                            }
                     };
     }
     return rv;
@@ -289,7 +303,7 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                           GC_TYPE_FITNESS:  [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_FITNESS]],
                           GC_TYPE_TENNIS:   [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_TENNIS]],
                           GC_TYPE_MULTISPORT:[GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_MULTISPORT]],
-                          GC_TYPE_OTHER:[GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_OTHER]],
+                          GC_TYPE_OTHER:    [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_OTHER]],
                           GC_TYPE_SKI_BACK: [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_SKI_BACK]],
                           GC_TYPE_SKI_DOWN: [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellLighterBackgroundColor, GC_TYPE_SKI_DOWN]],
 
@@ -302,7 +316,7 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                           GC_TYPE_FITNESS:  [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_FITNESS]],
                           GC_TYPE_TENNIS:   [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_TENNIS]],
                           GC_TYPE_MULTISPORT:[GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_MULTISPORT]],
-                          GC_TYPE_OTHER:[GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_OTHER]],
+                          GC_TYPE_OTHER:    [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_OTHER]],
                           GC_TYPE_SKI_BACK: [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_SKI_BACK]],
                           GC_TYPE_SKI_DOWN: [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyActivityCellDarkerBackgroundColor, GC_TYPE_SKI_DOWN]],
                           },
@@ -360,6 +374,20 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                             [UIColor darkGrayColor],
                             [UIColor orangeColor]
                             ],
+                    
+                    kGCSkinKeyCalendarColors:
+                        @{
+                            @(gcGCSkinKeyCalendarElementWeekdayTextColor):          [UIColor colorWithRed:0.3f green:0.3f blue:0.3f alpha:1.f],
+                            @(gcGCSkinKeyCalendarElementDayCurrentMonthTextColor):  [UIColor blackColor],
+                            @(gcGCSkinKeyCalendarElementDayAdjacentMonthTextColor): [UIColor darkGrayColor],
+                            @(gcGCSkinKeyCalendarElementDaySelectedTextColor):      [UIColor whiteColor],
+                            @(gcGCSkinKeyCalendarElementSeparatorColor):            [UIColor colorWithRed:0.63f green:0.65f blue:0.68f alpha:1.f],
+                            @(gcGCSkinKeyCalendarElementTileColor):                 [UIColor colorWithHexValue:0xEBEBEB andAlpha:1.f],
+                            @(gcGCSkinKeyCalendarElementTileSelectedColor):         [UIColor colorWithHexValue:0x1843c7 andAlpha:1.f],
+                            @(gcGCSkinKeyCalendarElementTileTodayColor):            [UIColor colorWithHexValue:0x7788a2 andAlpha:1.f],
+                            @(gcGCSkinKeyCalendarElementTileTodaySelectedColor):    [UIColor colorWithHexValue:0x3b7dde andAlpha:1.f]
+
+                            }
                     };
     }
     return rv;

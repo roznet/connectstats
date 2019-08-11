@@ -222,6 +222,7 @@
     return [RZViewConfig boldSystemFontOfSize:size];
 }
 - (UIColor*)backgroundColor{
+    //return [GCViewConfig colo]
     return [UIColor colorWithHexValue:0xEBEBEB andAlpha:1.f];
 }
 - (UIColor*)weekdayTextColor{
@@ -256,7 +257,6 @@
     //0x3b7dde
     return [UIColor colorWithRed:0.231 green:0.490 blue:0.871 alpha:1.00];
 }
-
 
 -(NSArray*)leftButtonItems{
     [self.activityTypeButton setupBarButtonItem];

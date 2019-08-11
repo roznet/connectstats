@@ -40,6 +40,19 @@ extern NSString * kGCSkinKeyGoalPercentBackgroundColor;
 extern NSString * kGCSkinKeyGoalPercentTextColor;
 extern NSString * kGCSkinKeyBarGraphColor;
 extern NSString * kGCSkinKeyListOfColorsForMultiplots;
+extern NSString * kGCSkinKeyCalendarColors;
+
+typedef NS_ENUM(NSUInteger,gcGCSkinKeyCalendarElement){
+    gcGCSkinKeyCalendarElementWeekdayTextColor,
+    gcGCSkinKeyCalendarElementDayCurrentMonthTextColor,
+    gcGCSkinKeyCalendarElementDayAdjacentMonthTextColor,
+    gcGCSkinKeyCalendarElementDaySelectedTextColor,
+    gcGCSkinKeyCalendarElementSeparatorColor,
+    gcGCSkinKeyCalendarElementTileColor,
+    gcGCSkinKeyCalendarElementTileSelectedColor,
+    gcGCSkinKeyCalendarElementTileTodayColor,
+    gcGCSkinKeyCalendarElementTileTodaySelectedColor
+};
 
 @interface GCViewConfigSkin : NSObject
 
