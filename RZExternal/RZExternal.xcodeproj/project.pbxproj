@@ -318,7 +318,6 @@
 		42B265751FF8314400E891A1 /* KalLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B263E01FF8314400E891A1 /* KalLogic.m */; };
 		42B265761FF8314400E891A1 /* KalDate.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263E11FF8314400E891A1 /* KalDate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B265771FF8314400E891A1 /* Kal.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263E21FF8314400E891A1 /* Kal.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B265781FF8314400E891A1 /* Kal-ios7.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 42B263E31FF8314400E891A1 /* Kal-ios7.bundle */; };
 		42B265791FF8314400E891A1 /* NSDateAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263E41FF8314400E891A1 /* NSDateAdditions.h */; };
 		42B2657B1FF8314400E891A1 /* KalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B263E61FF8314400E891A1 /* KalViewController.m */; };
 		42B2657C1FF8314400E891A1 /* KalPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263E71FF8314400E891A1 /* KalPrivate.h */; };
@@ -416,7 +415,6 @@
 		42248C052014E16A006ADC90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		422626001FFA7C5E000DBD32 /* RZNavigationTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RZNavigationTitleView.m; sourceTree = "<group>"; };
 		422626021FFA7C68000DBD32 /* RZNavigationTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RZNavigationTitleView.h; sourceTree = "<group>"; };
-		422626041FFA8046000DBD32 /* Kal.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Kal.bundle; sourceTree = "<group>"; };
 		4264484020272BA800CF7A04 /* fit_dive_alarm_mesg.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fit_dive_alarm_mesg.hpp; sourceTree = "<group>"; };
 		4264484120272BA800CF7A04 /* fit_dive_settings_mesg.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fit_dive_settings_mesg.hpp; sourceTree = "<group>"; };
 		4264484220272BA800CF7A04 /* fit_dive_summary_mesg_listener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fit_dive_summary_mesg_listener.hpp; sourceTree = "<group>"; };
@@ -662,7 +660,6 @@
 		42B263E01FF8314400E891A1 /* KalLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KalLogic.m; sourceTree = "<group>"; };
 		42B263E11FF8314400E891A1 /* KalDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KalDate.h; sourceTree = "<group>"; };
 		42B263E21FF8314400E891A1 /* Kal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kal.h; sourceTree = "<group>"; };
-		42B263E31FF8314400E891A1 /* Kal-ios7.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = "Kal-ios7.bundle"; sourceTree = "<group>"; };
 		42B263E41FF8314400E891A1 /* NSDateAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDateAdditions.h; sourceTree = "<group>"; };
 		42B263E61FF8314400E891A1 /* KalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KalViewController.m; sourceTree = "<group>"; };
 		42B263E71FF8314400E891A1 /* KalPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KalPrivate.h; sourceTree = "<group>"; };
@@ -1198,8 +1195,6 @@
 				42B263EB1FF8314400E891A1 /* KalLogic.h */,
 				42B263E01FF8314400E891A1 /* KalLogic.m */,
 				42B263E21FF8314400E891A1 /* Kal.h */,
-				422626041FFA8046000DBD32 /* Kal.bundle */,
-				42B263E31FF8314400E891A1 /* Kal-ios7.bundle */,
 				42B263F41FF8314400E891A1 /* KalViewController.h */,
 				42B263E61FF8314400E891A1 /* KalViewController.m */,
 				42B263E71FF8314400E891A1 /* KalPrivate.h */,
@@ -1968,7 +1963,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				42B2669C1FF8314500E891A1 /* GTMOAuth2ViewTouch.xib in Resources */,
-				42B265781FF8314400E891A1 /* Kal-ios7.bundle in Resources */,
 				42B2658E1FF8314400E891A1 /* README.md in Resources */,
 				42B2658C1FF8314400E891A1 /* AppiraterLocalizable.strings in Resources */,
 				42B265901FF8314400E891A1 /* .gitignore in Resources */,

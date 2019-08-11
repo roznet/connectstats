@@ -5,5 +5,3 @@
 
 #import "UIViewAdditions.h"
 #import "NSDateAdditions.h"
-extern NSString * kalBundleFile(NSString*f);
-

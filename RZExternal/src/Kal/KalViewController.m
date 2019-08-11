@@ -31,10 +31,6 @@ void mach_absolute_difference(uint64_t end, uint64_t start, struct timespec *tp)
 
 NSString *const KalDataSourceChangedNotification = @"KalDataSourceChangedNotification";
 
-NSString * kalBundleFile(NSString*f){
-    return [NSString stringWithFormat:@"%@/Kal-ios7.bundle/%@", [NSBundle bundleForClass:[KalDate class]].resourcePath, f];
-}
-
 @interface KalViewController ()
 @property (nonatomic, retain, readwrite) NSDate *initialDate;
 @property (nonatomic, retain, readwrite) NSDate *selectedDate;
