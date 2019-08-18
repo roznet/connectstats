@@ -36,7 +36,8 @@ static GCViewConfigSkin * _skin = nil;
 
 NS_INLINE GCViewConfigSkin * _current_skin(){
     if (_skin == nil) {
-        _skin = [GCViewConfigSkin skinForThemeName:@"default"]; //[GCViewConfigSkin defaultSkin];
+        //_skin = [GCViewConfigSkin skinForThemeName:@"iOS13"]; //[GCViewConfigSkin defaultSkin];
+        _skin = [GCViewConfigSkin defaultSkin]; //[GCViewConfigSkin defaultSkin];
         [_skin retain];
     }
     return _skin;
@@ -189,6 +190,10 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 
 +(UIColor*)barGraphColor{
     return [_current_skin() colorForKey:kGCSkinKeyBarGraphColor];
+}
+
++(UIColor*)colorForCalendarElement:(gcGCSkinKeyCalendarElement)elem{
+    return [_current_skin() colorForKey:kGCSkinKeyCalendarColors andSubkey:@(elem)];
 }
 
 #pragma mark - Fields

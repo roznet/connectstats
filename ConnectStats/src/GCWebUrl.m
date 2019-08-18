@@ -131,7 +131,7 @@ NSString * GCWebConnectStatsPrefixForConfig(gcWebConnectStatsConfig config){
         case gcWebConnectStatsConfigEnd:
             return @"https://ro-z.net/prod";
         case gcWebConnectStatsConfigLocalTesting:
-            return @"https://localhost/dev";
+            return @"https://localhost/prod";
         case gcWebConnectStatsConfigRemoteTesting:
             return @"https://ro-z.net/dev";
     }

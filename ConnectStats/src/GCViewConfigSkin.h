@@ -27,9 +27,12 @@
 
 @class GCField;
 
+// Activity Cells
 extern NSString * kGCSkinKeyActivityCellLighterBackgroundColor;
 extern NSString * kGCSkinKeyActivityCellDarkerBackgroundColor;
 extern NSString * kGCSkinKeyActivityCellIconColor;
+
+// Field for Graphs
 extern NSString * kGCSkinKeyFieldFillColor;
 extern NSString * kGCSkinKeyFieldColors;
 extern NSString * kGCSkinKeyTextColorForActivity;
@@ -41,6 +44,9 @@ extern NSString * kGCSkinKeyGoalPercentTextColor;
 extern NSString * kGCSkinKeyBarGraphColor;
 extern NSString * kGCSkinKeyListOfColorsForMultiplots;
 extern NSString * kGCSkinKeyCalendarColors;
+
+extern NSString * kGCSkinKeyDefaultBackgroundColor;
+
 
 typedef NS_ENUM(NSUInteger,gcGCSkinKeyCalendarElement){
     gcGCSkinKeyCalendarElementWeekdayTextColor,
@@ -56,8 +62,14 @@ typedef NS_ENUM(NSUInteger,gcGCSkinKeyCalendarElement){
 
 @interface GCViewConfigSkin : NSObject
 
+@property (nonatomic,readonly) NSString * skinName;
+
 +(GCViewConfigSkin*)defaultSkin;
++(GCViewConfigSkin*)darkSkin;
 +(GCViewConfigSkin*)skinForThemeName:(NSString*)theme;
+
++(NSArray<NSString*>*)availableSkinNames;
++(GCViewConfigSkin*)skinForName:(NSString*)name;
 
 -(NSArray*)colorArrayForKey:(NSString*)key;
 -(NSArray*)colorArrayForKey:(NSString *)key andField:(GCField*)field;

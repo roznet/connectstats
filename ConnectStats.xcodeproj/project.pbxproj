@@ -555,6 +555,12 @@
 		426DFE6919D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
 		426DFE6A19D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
 		426F42461DB247FB00937DD8 /* GCTestsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 426F42451DB247FB00937DD8 /* GCTestsHelper.m */; };
+		42718BA023020F1F0097CD79 /* Colors-iOS13.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42718B9F23020F1F0097CD79 /* Colors-iOS13.xcassets */; };
+		42718BA123020F1F0097CD79 /* Colors-iOS13.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42718B9F23020F1F0097CD79 /* Colors-iOS13.xcassets */; };
+		42718BA223020F1F0097CD79 /* Colors-iOS13.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42718B9F23020F1F0097CD79 /* Colors-iOS13.xcassets */; };
+		42718BA4230212980097CD79 /* Colors-Dark.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42718BA3230212980097CD79 /* Colors-Dark.xcassets */; };
+		42718BA5230212980097CD79 /* Colors-Dark.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42718BA3230212980097CD79 /* Colors-Dark.xcassets */; };
+		42718BA6230212980097CD79 /* Colors-Dark.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42718BA3230212980097CD79 /* Colors-Dark.xcassets */; };
 		427208621DE7A35300924C90 /* GCActivity+Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427208611DE7A35300924C90 /* GCActivity+Import.swift */; };
 		427208631DE7A35300924C90 /* GCActivity+Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427208611DE7A35300924C90 /* GCActivity+Import.swift */; };
 		427208641DE7A35300924C90 /* GCActivity+Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427208611DE7A35300924C90 /* GCActivity+Import.swift */; };
@@ -1925,9 +1931,6 @@
 		42C7D4281DAC293B0089806B /* GCLapSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7D4271DAC293B0089806B /* GCLapSwim.m */; };
 		42C7D4291DAC293B0089806B /* GCLapSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7D4271DAC293B0089806B /* GCLapSwim.m */; };
 		42C92FDF170FB73F0037602F /* GCActivityAutoLapChoices.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */; };
-		42CAAF0D22E6685B00D07F0C /* Colors-default.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42CAAF0C22E6685B00D07F0C /* Colors-default.xcassets */; };
-		42CAAF0E22E6685B00D07F0C /* Colors-default.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42CAAF0C22E6685B00D07F0C /* Colors-default.xcassets */; };
-		42CAAF0F22E6685B00D07F0C /* Colors-default.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42CAAF0C22E6685B00D07F0C /* Colors-default.xcassets */; };
 		42CC45B5200A2288003EB805 /* GCTestServiceConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */; };
 		42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */; };
 		42CC45BF200A57EE003EB805 /* GCTestServiceStrava.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45BE200A57EE003EB805 /* GCTestServiceStrava.m */; };
@@ -1941,10 +1944,6 @@
 		42CFBABB18D26EB400EA4C48 /* GCStravaActivityList.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CFBABA18D26EB400EA4C48 /* GCStravaActivityList.m */; };
 		42D037C1168AF48300789E7D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D037C0168AF48300789E7D /* CFNetwork.framework */; };
 		42D037C3168AF55900789E7D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D037C2168AF55900789E7D /* SystemConfiguration.framework */; };
-		42D1019E22D8A94600A06C0E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42D1019D22D8A94600A06C0E /* Colors.xcassets */; };
-		42D1019F22D8A94600A06C0E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42D1019D22D8A94600A06C0E /* Colors.xcassets */; };
-		42D101A022D8A94600A06C0E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42D1019D22D8A94600A06C0E /* Colors.xcassets */; };
-		42D101A122D8A94600A06C0E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42D1019D22D8A94600A06C0E /* Colors.xcassets */; };
 		42D1D2001DEE66DB00F13D52 /* FITWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D1D1FF1DEE66DB00F13D52 /* FITWindowController.swift */; };
 		42D8AEF81B1FB2CB00ADDD31 /* collected.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42D8AEF71B1FB2CB00ADDD31 /* collected.plist */; };
 		42D8AEFD1B22D1BC00ADDD31 /* GCHealthKitSamplesToPointsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */; };
@@ -2951,6 +2950,8 @@
 		426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitActivityParser.m; path = src/GCHealthKitActivityParser.m; sourceTree = "<group>"; };
 		426F42441DB247FB00937DD8 /* GCTestsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCTestsHelper.h; sourceTree = "<group>"; };
 		426F42451DB247FB00937DD8 /* GCTestsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestsHelper.m; sourceTree = "<group>"; };
+		42718B9F23020F1F0097CD79 /* Colors-iOS13.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Colors-iOS13.xcassets"; path = "ConnectStats/icons/Colors-iOS13.xcassets"; sourceTree = "<group>"; };
+		42718BA3230212980097CD79 /* Colors-Dark.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Colors-Dark.xcassets"; path = "ConnectStats/icons/Colors-Dark.xcassets"; sourceTree = "<group>"; };
 		427208611DE7A35300924C90 /* GCActivity+Import.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "GCActivity+Import.swift"; path = "src/GCActivity+Import.swift"; sourceTree = "<group>"; };
 		42734B6716941D45003E2177 /* GCGarminActivityDetailJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminActivityDetailJsonParser.h; path = src/GCGarminActivityDetailJsonParser.h; sourceTree = "<group>"; };
 		42734B6816941D45003E2177 /* GCGarminActivityDetailJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminActivityDetailJsonParser.m; path = src/GCGarminActivityDetailJsonParser.m; sourceTree = "<group>"; };
@@ -4202,7 +4203,6 @@
 		42C7D4271DAC293B0089806B /* GCLapSwim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCLapSwim.m; path = src/GCLapSwim.m; sourceTree = "<group>"; };
 		42C92FDD170FB73F0037602F /* GCActivityAutoLapChoices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCActivityAutoLapChoices.h; path = src/GCActivityAutoLapChoices.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityAutoLapChoices.m; path = src/GCActivityAutoLapChoices.m; sourceTree = "<group>"; };
-		42CAAF0C22E6685B00D07F0C /* Colors-default.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Colors-default.xcassets"; path = "ConnectStats/icons/Colors-default.xcassets"; sourceTree = "<group>"; };
 		42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCTestServiceConfig.xib; path = connectstatstestapp/ui/GCTestServiceConfig.xib; sourceTree = SOURCE_ROOT; };
 		42CC45B6200A24C5003EB805 /* GCTestServiceConfigViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceConfigViewController.h; path = connectstatstestapp/src/GCTestServiceConfigViewController.h; sourceTree = SOURCE_ROOT; };
 		42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceConfigViewController.m; path = connectstatstestapp/src/GCTestServiceConfigViewController.m; sourceTree = SOURCE_ROOT; };
@@ -4220,7 +4220,6 @@
 		42CFBABA18D26EB400EA4C48 /* GCStravaActivityList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaActivityList.m; path = src/GCStravaActivityList.m; sourceTree = "<group>"; };
 		42D037C0168AF48300789E7D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		42D037C2168AF55900789E7D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		42D1019D22D8A94600A06C0E /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = ConnectStats/icons/Colors.xcassets; sourceTree = "<group>"; };
 		42D1D1FF1DEE66DB00F13D52 /* FITWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITWindowController.swift; path = src/FITWindowController.swift; sourceTree = "<group>"; };
 		42D8AEF71B1FB2CB00ADDD31 /* collected.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = collected.plist; sourceTree = "<group>"; };
 		42D8AEFA1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitSamplesToPointsParser.h; path = src/GCHealthKitSamplesToPointsParser.h; sourceTree = "<group>"; };
@@ -4980,7 +4979,8 @@
 		424C666C160BD02C005F45DD /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				42CAAF0C22E6685B00D07F0C /* Colors-default.xcassets */,
+				42718BA3230212980097CD79 /* Colors-Dark.xcassets */,
+				42718B9F23020F1F0097CD79 /* Colors-iOS13.xcassets */,
 				422CCE891B7EAB7200A4DAEB /* Activities.xcassets */,
 				422CCE8A1B7EAB7200A4DAEB /* TabBar.xcassets */,
 				422CCE861B7EAA3000A4DAEB /* Navigation.xcassets */,
@@ -4991,7 +4991,6 @@
 				42EE4565176BCB81003338AF /* Media.xcassets */,
 				428C70351A4AF52500243DC0 /* ConnectStatsLaunchScreen.xib */,
 				42F4E4D91B56EDC00009F2BA /* HealthStatsLaunchScreen.xib */,
-				42D1019D22D8A94600A06C0E /* Colors.xcassets */,
 			);
 			name = Icons;
 			path = ..;
@@ -8067,12 +8066,12 @@
 			files = (
 				422FAFC619A1DD6000D09773 /* fields.db in Resources */,
 				422FAFC719A1DD6000D09773 /* InfoPlist.strings in Resources */,
+				42718BA6230212980097CD79 /* Colors-Dark.xcassets in Resources */,
 				422FAFCD19A1DD6000D09773 /* Localizable.strings in Resources */,
 				422CCE7F1B7EA7A600A4DAEB /* Services.xcassets in Resources */,
 				423D745522F57C1200EE3E71 /* fit_map.json in Resources */,
 				422CCE8E1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */,
 				422FAFD219A1DD6000D09773 /* Media.xcassets in Resources */,
-				42CAAF0F22E6685B00D07F0C /* Colors-default.xcassets in Resources */,
 				4245DC821BE80D0400D5B68E /* Cells.xcassets in Resources */,
 				423D747522F7147C00EE3E71 /* fit_developer.json in Resources */,
 				422CCE8C1B7EAB7200A4DAEB /* Activities.xcassets in Resources */,
@@ -8081,7 +8080,7 @@
 				4211C53419AB043A000DEF87 /* version.plist in Resources */,
 				422CCE821B7EA81500A4DAEB /* Fields.xcassets in Resources */,
 				422CCE851B7EA8C100A4DAEB /* Weather.xcassets in Resources */,
-				42D101A122D8A94600A06C0E /* Colors.xcassets in Resources */,
+				42718BA223020F1F0097CD79 /* Colors-iOS13.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8090,7 +8089,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				423D745422F57C1200EE3E71 /* fit_map.json in Resources */,
-				42D101A022D8A94600A06C0E /* Colors.xcassets in Resources */,
 				4248ED9E1DCFFF6900254216 /* fields.db in Resources */,
 				4253B4651CD49F7E00437E6A /* Assets.xcassets in Resources */,
 				4253B4681CD49F7E00437E6A /* Main.storyboard in Resources */,
@@ -8137,22 +8135,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				42959CCF18D5C58700C0B841 /* fields.db in Resources */,
-				42CAAF0D22E6685B00D07F0C /* Colors-default.xcassets in Resources */,
 				422CCE8D1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */,
 				428FF71815F36888007A88FA /* InfoPlist.strings in Resources */,
 				427CF8D222ABD6BC00894253 /* credentials.json in Resources */,
 				422CCE7C1B7E9B6300A4DAEB /* Cells.xcassets in Resources */,
+				42718BA023020F1F0097CD79 /* Colors-iOS13.xcassets in Resources */,
 				423D747222F7147C00EE3E71 /* fit_developer.json in Resources */,
 				427B20AB1621B5CF00D5C3C5 /* Localizable.strings in Resources */,
 				423F9FBF19ACCBD60057DB5A /* Media.xcassets in Resources */,
 				42EC553A1BA421580091D9B3 /* ConnectStats.entitlements in Resources */,
 				42560711169A112E008E9DC3 /* version.plist in Resources */,
 				422CCE8B1B7EAB7200A4DAEB /* Activities.xcassets in Resources */,
+				42718BA4230212980097CD79 /* Colors-Dark.xcassets in Resources */,
 				422CCE7E1B7EA7A600A4DAEB /* Services.xcassets in Resources */,
 				423D745222F57C1200EE3E71 /* fit_map.json in Resources */,
 				422CCE811B7EA81500A4DAEB /* Fields.xcassets in Resources */,
 				428C70361A4AF52500243DC0 /* ConnectStatsLaunchScreen.xib in Resources */,
-				42D1019E22D8A94600A06C0E /* Colors.xcassets in Resources */,
 				422CCE841B7EA8C100A4DAEB /* Weather.xcassets in Resources */,
 				422CCE871B7EAA3000A4DAEB /* Navigation.xcassets in Resources */,
 			);
@@ -8983,7 +8981,6 @@
 				42B5E4FC1BA5BA2D000FAE4E /* track_289259592.db in Resources */,
 				427F934D1BEA9A5900C177F9 /* expected.json in Resources */,
 				42B5E4AF1BA5BA2D000FAE4E /* track_176969424.db in Resources */,
-				42D1019F22D8A94600A06C0E /* Colors.xcassets in Resources */,
 				420119B01F51BB180093B2CD /* babolat_player.json in Resources */,
 				4245DC811BE80CFF00D5B68E /* Cells.xcassets in Resources */,
 				420119B31F51BB180093B2CD /* babolat_sessions.json in Resources */,
@@ -8998,6 +8995,7 @@
 				42B5E4BC1BA5BA2D000FAE4E /* track_216699592.db in Resources */,
 				428BAD051CB149C50041468A /* activityweather_924421177.json in Resources */,
 				42B5E52F1BA5BA2D000FAE4E /* track_328493155.db in Resources */,
+				42718BA123020F1F0097CD79 /* Colors-iOS13.xcassets in Resources */,
 				42B5E55E1BA5BA2D000FAE4E /* track_76241296.db in Resources */,
 				42B5E53E1BA5BA2D000FAE4E /* track_336557921.db in Resources */,
 				42B5E5631BA5BA2D000FAE4E /* workout18340461.xml in Resources */,
@@ -9079,7 +9077,6 @@
 				42B5E5481BA5BA2D000FAE4E /* track_346750626.db in Resources */,
 				42B5E5501BA5BA2D000FAE4E /* track_355534296.db in Resources */,
 				427F936F1BEC069F00C177F9 /* test_activity_cycling_940863203.db in Resources */,
-				42CAAF0E22E6685B00D07F0C /* Colors-default.xcassets in Resources */,
 				42B5E5001BA5BA2D000FAE4E /* track_289953371.db in Resources */,
 				42B5E4831BA5BA2D000FAE4E /* strava_list_0_merge.json in Resources */,
 				42B5E5011BA5BA2D000FAE4E /* track_291906345.db in Resources */,
@@ -9104,6 +9101,7 @@
 				426A135B1C56E41300D61098 /* activity_1027746730.json in Resources */,
 				42B5E52E1BA5BA2D000FAE4E /* track_327324851.db in Resources */,
 				42B5E50C1BA5BA2D000FAE4E /* track_298583894.db in Resources */,
+				42718BA5230212980097CD79 /* Colors-Dark.xcassets in Resources */,
 				42B5E4F91BA5BA2D000FAE4E /* track_287446944.db in Resources */,
 				42B5E4DB1BA5BA2D000FAE4E /* track_278357672.db in Resources */,
 				42B5E48E1BA5BA2D000FAE4E /* sporttracks_list_0.json in Resources */,

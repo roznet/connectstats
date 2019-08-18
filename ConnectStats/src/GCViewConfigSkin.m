@@ -45,6 +45,7 @@ NSString * kGCSkinKeyGoalPercentBackgroundColor = @"GoalPercentBackgroundColor";
 NSString * kGCSkinKeyBarGraphColor = @"BarGraphColor";
 NSString * kGCSkinKeyListOfColorsForMultiplots = @"ListOfColorsForMultiplots";
 NSString * kGCSkinKeyCalendarColors = @"CalendarColors";
+NSString * kGCSkinKeyDefaultBackgroundColor = @"DefaultBackgroundColor";
 
 NS_INLINE NSArray * gcArrayForDefinitionValue(id input){
     if ([input isKindOfClass:[NSArray class]]) {
@@ -68,18 +69,36 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
 
 @interface GCViewConfigSkin ()
 @property (nonatomic,retain) NSDictionary * defs;
+@property (nonatomic,retain) NSString * skinName;
 @end
 
 @implementation GCViewConfigSkin
 
 -(void)dealloc{
+    [_skinName release];
     [_defs release];
+    
     [super dealloc];
 }
+
++(NSArray<NSString*>*)availableSkinNames{
+    return @[ @"Original", @"Dark", @"iOS13"];
+}
++(GCViewConfigSkin*)skinForName:(NSString*)name{
+    if( [name isEqualToString:@"Original"] ){
+        return [self defaultSkin];
+    }else if ([name isEqualToString:@"Dark"] ){
+        return [self darkSkin];
+    }else{
+        return [self skinForThemeName:name];
+    }
+}
+
 
 +(GCViewConfigSkin*)defaultSkin{
     GCViewConfigSkin * rv = [[[GCViewConfigSkin alloc]init]autorelease];
     if (rv) {
+        rv.skinName = @"Original";
         double alp = 0.4;
         
         rv.defs = @{
@@ -119,7 +138,8 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                             @"power":      [UIColor colorWithRed:190./255. green:240./255. blue:50./255. alpha:0.3],
                             @"elevation":  [UIColor colorWithRed:0.0 green:0.8 blue:0. alpha:0.3]
                             },
-                    
+                    kGCSkinKeyDefaultBackgroundColor:
+                        [UIColor colorWithHexValue:0xEBEBEB andAlpha:1.f],
                     kGCSkinKeyActivityCellIconColor:
                         [UIColor whiteColor],
                     kGCSkinKeyMissingActivityTypeColor:
@@ -231,7 +251,165 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
     return rv;
 }
 
-+(UIColor*)colorForTheme:(NSString*)theme path:(NSArray<NSString*>*)path{
++(GCViewConfigSkin*)darkSkin{
+    GCViewConfigSkin * rv = [[[GCViewConfigSkin alloc]init]autorelease];
+    if (rv) {
+        rv.skinName = @"Dark";
+        double alp = 0.4;
+        
+        rv.defs = @{
+                    kGCSkinKeySwimStrokeColor:
+                        @{
+                            @(gcSwimStrokeFree): [UIColor colorWithRed:0xC4/255. green:0x3D/255. blue:0xBF/255. alpha:0.8],
+                            @(gcSwimStrokeBack): [UIColor colorWithRed:0x1F/255. green:0x8E/255. blue:0xF0/255. alpha:0.8],
+                            @(gcSwimStrokeBreast): [UIColor colorWithRed:0x95/255. green:0xDE/255. blue:0x2B/255. alpha:0.8],
+                            @(gcSwimStrokeButterfly): [UIColor colorWithRed:0xD5/255. green:0x76/255. blue:0xD1/255. alpha:0.8],
+                            @(gcSwimStrokeOther): [UIColor colorWithRed:0x61/255. green:0xAF/255. blue:0xF3/255. alpha:0.8],
+                            @(gcSwimStrokeMixed): [UIColor colorWithRed:0x61/255. green:0xAF/255. blue:0xF3/255. alpha:0.8]
+                            },
+                    kGCSkinKeyCategoryBackground:
+                        @{
+                            @"distance":   [UIColor colorWithHexValue:0x85E085 andAlpha:alp],
+                            @"training":   [UIColor colorWithHexValue:0x5CE6B8 andAlpha:alp],
+                            @"temperature":[UIColor colorWithHexValue:0xDBDBFF andAlpha:alp],
+                            @"health":     [UIColor colorWithHexValue:0xCCCC00 andAlpha:alp],
+                            @"other":      [UIColor colorWithHexValue:0x0033CC andAlpha:alp],
+                            @"ignore":     [UIColor colorWithHexValue:0x000000 andAlpha:alp],
+                            @"tennis":     [UIColor colorWithHexValue:0x99FF33 andAlpha:alp],
+                            @"backhands":  [UIColor colorWithHexValue:0x33CCCC andAlpha:alp],
+                            @"forehands":  [UIColor colorWithHexValue:0xFFCC99 andAlpha:alp],
+                            @"serves":     [UIColor colorWithHexValue:0x66FF66 andAlpha:alp],
+                            @"precision":  [UIColor colorWithHexValue:0xDCEEFF andAlpha:alp],
+                            
+                            @"bike":       [UIColor colorWithHexValue:0xFFDADA andAlpha:alp],
+                            @"swim":       [UIColor colorWithHexValue:0x80E6FF andAlpha:alp],
+                            @"run":        [UIColor colorWithHexValue:0xDCEEFF andAlpha:alp],
+                            
+                            @"duration":   [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:alp],
+                            @"pace":       [UIColor colorWithRed:0.0 green:0. blue:1. alpha:alp],
+                            
+                            @"heartrate":  [UIColor colorWithRed:1. green:0.0 blue:0.0 alpha:0.3],
+                            @"cadence":    [UIColor colorWithRed:0.5 green:0.5 blue:0.2 alpha:0.3],
+                            @"speed":      [UIColor colorWithRed:0.0 green:0. blue:1. alpha:0.3],
+                            @"power":      [UIColor colorWithRed:190./255. green:240./255. blue:50./255. alpha:0.3],
+                            @"elevation":  [UIColor colorWithRed:0.0 green:0.8 blue:0. alpha:0.3]
+                            },
+                    
+                    kGCSkinKeyActivityCellIconColor:
+                        [UIColor whiteColor],
+                    kGCSkinKeyMissingActivityTypeColor:
+                        [UIColor colorWithHexValue:0xD2D2D2 andAlpha:1.],
+                    kGCSkinKeyDetailsCellBackgroundColors:
+                        @[ [UIColor colorWithRed:210./255. green:210./255 blue:210./255 alpha:1.],
+                           [UIColor colorWithRed:252./255. green:252./255 blue:252./255 alpha:1.] ],
+                    kGCSkinKeyTextColorForActivity:
+                        @{GC_TYPE_SWIMMING:[UIColor orangeColor],
+                          GC_TYPE_RUNNING:[UIColor blueColor],
+                          GC_TYPE_CYCLING:[UIColor redColor],
+                          GC_TYPE_ALL:[UIColor blackColor],
+                          GC_TYPE_OTHER:[UIColor darkGrayColor],
+                          },
+                    
+                    kGCSkinKeyActivityCellLighterBackgroundColor:
+                        @{GC_TYPE_SWIMMING: [UIColor colorWithHexValue:0x404145 andAlpha:1.],
+                          GC_TYPE_CYCLING:  [UIColor colorWithHexValue:0x404145 andAlpha:1.],
+                          GC_TYPE_RUNNING:  [UIColor colorWithHexValue:0x404145 andAlpha:1.],
+                          GC_TYPE_HIKING:   [UIColor colorWithHexValue:0x404145 andAlpha:1.],
+                          GC_TYPE_FITNESS:  [UIColor colorWithHexValue:0x404145 andAlpha:1.],
+                          GC_TYPE_TENNIS:   [UIColor colorWithHexValue:0x404145 andAlpha:1.],
+                          GC_TYPE_MULTISPORT:[UIColor colorWithHexValue:0x404145 andAlpha:1.],
+                          GC_TYPE_OTHER:[UIColor colorWithHexValue:0x404145 andAlpha:1.],
+                          GC_TYPE_SKI_BACK: [UIColor colorWithHexValue:0x404145 andAlpha:1.0],
+                          GC_TYPE_SKI_DOWN: [UIColor colorWithHexValue:0x404145 andAlpha:1.0]
+                          
+                          },
+                    
+                    kGCSkinKeyActivityCellDarkerBackgroundColor:
+                        @{GC_TYPE_SWIMMING: [UIColor colorWithHexValue:0xFFD466 andAlpha:1.],
+                          GC_TYPE_CYCLING:  [UIColor colorWithHexValue:0xFFA0A0 andAlpha:1.],
+                          GC_TYPE_RUNNING:  [UIColor colorWithHexValue:0x98D3FF andAlpha:1.],
+                          GC_TYPE_HIKING:   [UIColor colorWithHexValue:0xC8A26A andAlpha:1.],
+                          GC_TYPE_FITNESS:  [UIColor colorWithHexValue:0xF169EF andAlpha:1.],
+                          GC_TYPE_TENNIS:   [UIColor colorWithHexValue:0x96CC00 andAlpha:1.],
+                          GC_TYPE_MULTISPORT:[UIColor colorWithHexValue:0xA6BB82 andAlpha:1.],
+                          GC_TYPE_OTHER:[UIColor colorWithHexValue:0xA6BB82 andAlpha:1.],
+                          GC_TYPE_SKI_BACK: [UIColor colorWithHexValue:0xa2d7b5 andAlpha:1.0],
+                          GC_TYPE_SKI_DOWN: [UIColor colorWithHexValue:0xbdc3c7 andAlpha:1.0]
+                          },
+                    kGCSkinKeyFieldFillColor:
+                        @{
+                            @(gcFieldFlagWeightedMeanHeartRate): [UIColor colorWithRed:1. green:0.0 blue:0.0 alpha:0.3],
+                            @(gcFieldFlagWeightedMeanSpeed): [UIColor colorWithRed:0.0 green:0. blue:1. alpha:0.3],
+                            @(gcFieldFlagAltitudeMeters): [UIColor colorWithRed:0.0 green:0.8 blue:0. alpha:0.3],
+                            @(gcFieldFlagGroundContactTime): [UIColor colorWithRed:75./255. green:75./255. blue:200./255. alpha:.3],
+                            @(gcFieldFlagVerticalOscillation): [UIColor colorWithRed:75./255. green:75./255. blue:200./255. alpha:.3],
+                            @(gcFieldFlagCadence): [UIColor colorWithRed:0.5 green:0.5 blue:0.2 alpha:0.3],
+                            @(gcFieldFlagPower): [UIColor colorWithRed:190./255. green:240./255. blue:50./255. alpha:0.3],
+                            @(gcFieldFlagNone): [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.3],
+                            },
+                    kGCSkinKeyFieldColors:
+                        @{
+                            @(gcFieldFlagWeightedMeanHeartRate): @[ [UIColor colorWithRed:1. green:0.0 blue:0.0 alpha:0.3],
+                                                                    [UIColor colorWithRed:0.576 green:0.078 blue:0.094 alpha:0.80]
+                                                                    ],
+                            @(gcFieldFlagWeightedMeanSpeed): @[ [UIColor colorWithHexValue:0xDCEEFF andAlpha:0.7],
+                                                                [UIColor colorWithRed:0.0 green:0. blue:1. alpha:0.9]
+                                                                ],
+                            @(gcFieldFlagPower): @[ [UIColor colorWithRed:0.796 green:0.933 blue:0.980 alpha:0.60],
+                                                    [UIColor colorWithRed:0.031 green:0.263 blue:0.345 alpha:0.90] ],
+                            @(gcFieldFlagNone): @[ [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.3],
+                                                   [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.3]],
+                            
+                            
+                            },
+                    kGCSkinKeyGoalPercentBackgroundColor:
+                        @[ @(0.),  [UIColor colorWithHexValue:0xFF6666 andAlpha:1.], // Red
+                           @(0.5), [UIColor colorWithHexValue:0xFF9999 andAlpha:1.], // Bean Red
+                           @(1.0), [UIColor colorWithHexValue:0xF5FFEB andAlpha:1.], // Bronze
+                           @(1.5), [UIColor colorWithHexValue:0xE0FFC2 andAlpha:1.], // Silver
+                           @(2.0), [UIColor colorWithHexValue:0xCCFF99 andAlpha:1.], // Bright Gold
+                           
+                           ],
+                    kGCSkinKeyGoalPercentTextColor:
+                        @[ @(0.),  [UIColor colorWithHexValue:0xCC2900 andAlpha:1.], // Red
+                           @(0.5), [UIColor colorWithHexValue:0xFF704D andAlpha:1.], // Bean Red
+                           @(1.0), [UIColor colorWithHexValue:0x6B8E23 andAlpha:1.], // Bronze
+                           @(1.5), [UIColor colorWithHexValue:0x228B22 andAlpha:1.], // Silver
+                           @(2.0), [UIColor colorWithHexValue:0xB8860B andAlpha:1.], // Bright Gold
+                           
+                           ],
+                    kGCSkinKeyBarGraphColor:
+                        [UIColor colorWithRed:0. green:0.11 blue:1. alpha:0.8],
+                    
+                    kGCSkinKeyListOfColorsForMultiplots:
+                        @[
+                            [UIColor blackColor],
+                            [UIColor blueColor],
+                            [UIColor redColor],
+                            [UIColor colorWithHexValue:0x000800 andAlpha:1.],
+                            [UIColor darkGrayColor],
+                            [UIColor orangeColor]
+                            ],
+                    kGCSkinKeyCalendarColors:
+                        @{
+                            @(gcGCSkinKeyCalendarElementWeekdayTextColor):          [UIColor colorWithRed:0.9f green:0.9f blue:0.9f alpha:1.f],
+                            @(gcGCSkinKeyCalendarElementDayCurrentMonthTextColor):  [UIColor whiteColor],
+                            @(gcGCSkinKeyCalendarElementDayAdjacentMonthTextColor): [UIColor darkGrayColor],
+                            @(gcGCSkinKeyCalendarElementDaySelectedTextColor):      [UIColor blackColor],
+                            @(gcGCSkinKeyCalendarElementSeparatorColor):            [UIColor colorWithRed:0.63f green:0.65f blue:0.68f alpha:1.f],
+                            @(gcGCSkinKeyCalendarElementTileColor):                 [UIColor colorWithHexValue:0x292a30 andAlpha:1.f],
+                            @(gcGCSkinKeyCalendarElementTileSelectedColor):         [UIColor colorWithHexValue:0xF2F3F1 andAlpha:1.f],
+                            @(gcGCSkinKeyCalendarElementTileTodayColor):            [UIColor colorWithHexValue:0x7788a2 andAlpha:1.f],
+                            @(gcGCSkinKeyCalendarElementTileTodaySelectedColor):    [UIColor colorWithHexValue:0x3b7dde andAlpha:1.f]
+                            
+                            }
+                    };
+    }
+    return rv;
+}
+
+
++(UIColor*)colorForTheme:(NSString*)theme path:(NSArray*)path{
     NSString * name = [NSString stringWithFormat:@"%@-%@", theme, [path componentsJoinedByString:@"-"]];
     UIColor * rv = [UIColor colorNamed:name];
     return rv;
@@ -241,7 +419,7 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
     GCViewConfigSkin * rv = [[[GCViewConfigSkin alloc]init]autorelease];
     if (rv) {
         double alp = 0.4;
-        
+        rv.skinName = theme;
         rv.defs = @{
                     kGCSkinKeySwimStrokeColor:
                         @{
@@ -377,15 +555,15 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                     
                     kGCSkinKeyCalendarColors:
                         @{
-                            @(gcGCSkinKeyCalendarElementWeekdayTextColor):          [UIColor colorWithRed:0.3f green:0.3f blue:0.3f alpha:1.f],
-                            @(gcGCSkinKeyCalendarElementDayCurrentMonthTextColor):  [UIColor blackColor],
-                            @(gcGCSkinKeyCalendarElementDayAdjacentMonthTextColor): [UIColor darkGrayColor],
-                            @(gcGCSkinKeyCalendarElementDaySelectedTextColor):      [UIColor whiteColor],
-                            @(gcGCSkinKeyCalendarElementSeparatorColor):            [UIColor colorWithRed:0.63f green:0.65f blue:0.68f alpha:1.f],
-                            @(gcGCSkinKeyCalendarElementTileColor):                 [UIColor colorWithHexValue:0xEBEBEB andAlpha:1.f],
-                            @(gcGCSkinKeyCalendarElementTileSelectedColor):         [UIColor colorWithHexValue:0x1843c7 andAlpha:1.f],
-                            @(gcGCSkinKeyCalendarElementTileTodayColor):            [UIColor colorWithHexValue:0x7788a2 andAlpha:1.f],
-                            @(gcGCSkinKeyCalendarElementTileTodaySelectedColor):    [UIColor colorWithHexValue:0x3b7dde andAlpha:1.f]
+                            @(gcGCSkinKeyCalendarElementWeekdayTextColor): [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyCalendarColors,@(gcGCSkinKeyCalendarElementWeekdayTextColor)]],
+                            @(gcGCSkinKeyCalendarElementDayCurrentMonthTextColor): [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyCalendarColors,@(gcGCSkinKeyCalendarElementDayCurrentMonthTextColor)]],
+                            @(gcGCSkinKeyCalendarElementDayAdjacentMonthTextColor): [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyCalendarColors,@(gcGCSkinKeyCalendarElementDayAdjacentMonthTextColor)]],
+                            @(gcGCSkinKeyCalendarElementDaySelectedTextColor): [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyCalendarColors,@(gcGCSkinKeyCalendarElementDaySelectedTextColor)]],
+                            @(gcGCSkinKeyCalendarElementSeparatorColor): [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyCalendarColors,@(gcGCSkinKeyCalendarElementSeparatorColor)]],
+                            @(gcGCSkinKeyCalendarElementTileColor): [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyCalendarColors,@(gcGCSkinKeyCalendarElementTileColor)]],
+                            @(gcGCSkinKeyCalendarElementTileSelectedColor): [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyCalendarColors,@(gcGCSkinKeyCalendarElementTileSelectedColor)]],
+                            @(gcGCSkinKeyCalendarElementTileTodayColor): [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyCalendarColors,@(gcGCSkinKeyCalendarElementTileTodayColor)]],
+                            @(gcGCSkinKeyCalendarElementTileTodaySelectedColor): [GCViewConfigSkin colorForTheme:theme path:@[kGCSkinKeyCalendarColors,@(gcGCSkinKeyCalendarElementTileTodaySelectedColor)]],
 
                             }
                     };

@@ -114,13 +114,21 @@ const CGFloat kCellDaySpacing = 2.f;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
--(NSArray*)processServiceError{
+-(NSArray<NSString*>*)reportServiceError{
     NSMutableArray * errorsString = [NSMutableArray arrayWithCapacity:gcWebServiceEnd];
     gcWebService others[] = {gcWebServiceGarmin,gcWebServiceConnectStats,gcWebServiceStrava,gcWebServiceSportTracks,gcWebServiceWithings,gcWebServiceBabolat};
-    for (size_t i=0; i<5; i++) {
+    
+    BOOL messageOnly = true;
+    
+    size_t nServices = sizeof(others)/sizeof(gcWebService);
+    for (size_t i=0; i<nServices; i++) {
         gcWebService service = others[i];
         GCWebStatus status= [[GCAppGlobal web] statusForService:service];
         if ( status!= GCWebStatusOK) {
+            // if only message, don't display Error in the string
+            if( status != GCWebStatusCustomMessage){
+                messageOnly = false;
+            }
             [errorsString addObject:[NSString stringWithFormat:@"%@: %@",
                                      [[GCAppGlobal web] webServiceDescription:service],
                                      [[GCAppGlobal web] statusDescriptionForService:service]]];
@@ -129,15 +137,9 @@ const CGFloat kCellDaySpacing = 2.f;
                 NSString *username = [[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin];
                 if (lastName && ![username isEqualToString:lastName] ) {
                     RZLog(RZLogError, @"Inconsistent username before=%@ now=%@", lastName, [[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]);
-                    NSString * extra = [NSString stringWithFormat:@"Inconsistent username before=%@ now=%@",
-                                        lastName,
-                                        [[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]];
-                    [errorsString addObject:extra];
                 }
                 if (![username isEqualToString:username.lowercaseString]) {
                     RZLog(RZLogError, @"Inconsistent case in username %@ try=%@?", username, [username lowercaseString]);
-                    NSString * extra = [NSString stringWithFormat:@"Inconsistent case in username %@ try=%@?", username, username.lowercaseString];
-                    [errorsString addObject:extra];
                 }
             }
         }
@@ -148,7 +150,7 @@ const CGFloat kCellDaySpacing = 2.f;
         }
     }
     // second loop because login resets status
-    for (size_t i=0; i<5; i++) {
+    for (size_t i=0; i<nServices; i++) {
         gcWebService service = others[i];
         GCWebStatus status= [[GCAppGlobal web] statusForService:service];
         if (service == gcWebServiceGarmin) {
@@ -157,15 +159,12 @@ const CGFloat kCellDaySpacing = 2.f;
             }
         }
     }
-    return errorsString;
-}
-
--(void)reportServiceError{
-    NSArray * errorsString = [self processServiceError];
-
+    
     // Tested by turning off internet
-    [self presentSimpleAlertWithTitle:NSLocalizedString(@"Error updating", @"Error") message:[errorsString componentsJoinedByString:@"\n"]];
-
+    NSString * leaderString = messageOnly ?  NSLocalizedString(@"Message", @"Error") : NSLocalizedString(@"Error updating", @"Error");
+    [self presentSimpleAlertWithTitle:leaderString message:[errorsString componentsJoinedByString:@"\n"]];
+    
+    return errorsString;
 }
 
 -(void)updateRefreshControlTitle{

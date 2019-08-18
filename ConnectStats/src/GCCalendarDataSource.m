@@ -223,39 +223,39 @@
 }
 - (UIColor*)backgroundColor{
     //return [GCViewConfig colo]
-    return [UIColor colorWithHexValue:0xEBEBEB andAlpha:1.f];
+    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementTileColor];
 }
 - (UIColor*)weekdayTextColor{
-    return [UIColor colorWithRed:0.3f green:0.3f blue:0.3f alpha:1.f];
+    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementWeekdayTextColor];
 }
 - (UIColor*)dayCurrentMonthTextColor{
-    return [UIColor blackColor];
+    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementDayCurrentMonthTextColor];
 }
 - (UIColor*)dayAdjacentMonthTextColor{
-    return [UIColor darkGrayColor];
+     return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementDayAdjacentMonthTextColor];
 }
 -(UIColor*)daySelectedTextColor{
-    return [UIColor whiteColor];
+    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementDaySelectedTextColor];
 }
 
 - (UIColor*)separatorColor{
-    return [UIColor colorWithRed:0.63f green:0.65f blue:0.68f alpha:1.f];
+    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementSeparatorColor];
 }
 
 -(UIColor*)tileColor{
-    return self.backgroundColor;
+    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementTileColor];
 }
 -(UIColor*)tileSelectedColor{
     //0x1843c7
-    return [UIColor colorWithRed:0.094 green:0.263 blue:0.780 alpha:1.00];
+    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementTileSelectedColor];
 }
 -(UIColor*)tileTodayColor{
     //0x7788a2
-    return [UIColor colorWithRed:0.467 green:0.533 blue:0.635 alpha:1.00];
+    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementTileTodayColor];
 }
 -(UIColor*)tileTodaySelectedColor{
     //0x3b7dde
-    return [UIColor colorWithRed:0.231 green:0.490 blue:0.871 alpha:1.00];
+    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementTileTodaySelectedColor];
 }
 
 -(NSArray*)leftButtonItems{

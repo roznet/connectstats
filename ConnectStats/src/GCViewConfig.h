@@ -92,9 +92,11 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 
 //+(UIColor*)cellForegroundForActivity:(GCActivity*)aAct;
 
-+(UIColor*)cellBackgroundForDetails;
-+(UIColor*)cellBackgroundSecondForDetails;
+//+(UIColor*)cellBackgroundForDetails;
+//+(UIColor*)cellBackgroundSecondForDetails;
 +(UIColor*)colorForSwimStrokeType:(gcSwimStrokeType)strokeType;
+
+// In calendar
 +(UIColor*)textColorForActivity:(id)aAct;
 
 +(UIColor*)backgroundForCategory:(NSString*)category;
@@ -111,6 +113,8 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(UIColor*)textColorForGoalPercent:(double)pct;
 
 +(UIColor*)backgroundForGroupedTable;
+
++(UIColor*)colorForCalendarElement:(gcGCSkinKeyCalendarElement)elem;
 
 +(void)setupGradient:(GCCellGrid*)aG ForActivity:(id)aAct;
 +(void)setupGradientForDetails:(GCCellGrid*)aG;
