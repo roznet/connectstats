@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 #
 # This script will try to auto populate known field from the fit format to the connectstats format
@@ -108,9 +108,9 @@ oldmap = {
 }
 
 
-for (msg,defs) in existing.iteritems():
+for (msg,defs) in existing.items():
     newdefs = defs.copy()
-    for (key,val) in defs.iteritems():
+    for (key,val) in defs.items():
         if key != val:
             continue
         checkval = val
