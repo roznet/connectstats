@@ -176,7 +176,7 @@
             [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
                                                                        @( GC_CONNECTSTATS_NAME ),
                                                                        @( GC_CONNECTSTATS_ENABLE ),
-                                                                       @( GC_CONNECTSTATS_USE ),
+                                                                       //@( GC_CONNECTSTATS_USE ),
                                                                        @( GC_CONNECTSTATS_DEBUGKEY ),
                                                                        @( GC_CONNECTSTATS_CONFIG ),
                                                                        @( GC_CONNECTSTATS_FILLYEAR ),
@@ -187,7 +187,7 @@
             [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
                                                                        @( GC_CONNECTSTATS_NAME ),
                                                                        @( GC_CONNECTSTATS_ENABLE ),
-                                                                       @( GC_CONNECTSTATS_USE ),
+                                                                       //@( GC_CONNECTSTATS_USE ),
                                                                        @( GC_CONNECTSTATS_CONFIG ),
                                                                        @( GC_CONNECTSTATS_FILLYEAR ),
                                                                        @( GC_CONNECTSTATS_LOGOUT )
@@ -633,6 +633,12 @@
         }else{
             [gridcell labelForRow:0 andCol:1].text = NSLocalizedString(@"Unknown",@"Login Method");
         }
+        
+
+        NSAttributedString * sample = [[[NSAttributedString alloc] initWithString:GCWebConnectStatsSearch(method)
+                                                                       attributes:[GCViewConfig attribute14Gray]] autorelease];
+        [gridcell labelForRow:1 andCol:0].attributedText = sample;
+        [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
         rv = gridcell;
 
     }else if( indexPath.row == GC_CONNECTSTATS_FILLYEAR){
@@ -647,17 +653,33 @@
         NSInteger defaultYear = [years.firstObject integerValue] - 1;
         NSInteger year = (gcConnectStatsServiceUse)[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:defaultYear];
 
+        NSDate * startDate = [NSDate dateForDashedDate:[NSString stringWithFormat:@"%@-01-01", @(year )]];
+        NSTimeInterval timeToCover = [[NSDate date] timeIntervalSinceDate:startDate];
+        NSTimeInterval timeToBackFill = timeToCover / ( 90.0 * 3600.0 * 24.0) * 120.0;// 2min per 90 days
+        GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:timeToBackFill];
+        
+        NSString * timeString = [NSString stringWithFormat:@"Required time to synchronise %@", nu];
         [gridcell labelForRow:0 andCol:1].text = [NSString stringWithFormat:@"%@", @(year)];
+        [gridcell labelForRow:1 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:timeString attributes:[GCViewConfig attribute14Gray]] autorelease];
+        [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
+        
         rv = gridcell;
 
     }else if( indexPath.row == GC_CONNECTSTATS_DEBUGKEY){
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:2];
         
+        NSUInteger userId = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_USER_ID defaultValue:0];
+        NSUInteger tokenId = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_TOKEN_ID defaultValue:0];
+        NSString * current = [NSString stringWithFormat:@"token_id=%lu user_id=%lu", tokenId, userId];
+
         NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Choose Debug Key ",@"Services")
                                                                       attributes:[GCViewConfig attributeBold16]] autorelease];
-        
+        NSAttributedString * subtitle = [[[NSAttributedString alloc] initWithString:current
+                                                                      attributes:[GCViewConfig attribute14Gray]] autorelease];
+
         [gridcell labelForRow:0 andCol:0].attributedText = title;
+        [gridcell labelForRow:1 andCol:0].attributedText = subtitle;
         rv = gridcell;
     }else if( indexPath.row == GC_CONNECTSTATS_LOGOUT){
         gridcell = [GCCellGrid gridCell:tableView];

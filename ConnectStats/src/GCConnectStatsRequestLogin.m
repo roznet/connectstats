@@ -128,7 +128,6 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
         }else if( self.loginStage == GCConnectStatsRequestLoginStageBackfill ){
             NSData * jsonData = [self.theString dataUsingEncoding:self.encoding];
             NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
-            NSLog(@"Backfill %@", info);
             self.customMessage = info[@"status"];
             self.status = GCWebStatusCustomMessage;
         }
