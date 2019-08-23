@@ -58,24 +58,24 @@ static gcFontStyle _fontStyle;
 
 +(NSDictionary<NSString*,id>*)attributeBold16{
     return @{ NSFontAttributeName:  [self boldSystemFontOfSize:16.],
-              NSForegroundColorAttributeName: [RZColor blackColor]
+              NSForegroundColorAttributeName: [self colorForText:rzColorStylePrimaryText]
               };
 }
 +(NSDictionary<NSString*,id>*)attribute16{
     return @{ NSFontAttributeName: [self systemFontOfSize:16.],
-              NSForegroundColorAttributeName: [RZColor blackColor]
+              NSForegroundColorAttributeName: [self colorForText:rzColorStylePrimaryText]
               };
 
 }
 +(NSDictionary<NSString*,id>*)attribute16Gray{
     return @{ NSFontAttributeName: [self systemFontOfSize:16.],
-              NSForegroundColorAttributeName: [RZColor darkGrayColor]
+              NSForegroundColorAttributeName: [self colorForText:rzColorStyleSecondaryText]
               };
 
 }
 +(NSDictionary<NSString*,id>*)attribute14{
     return @{ NSFontAttributeName: [self systemFontOfSize:14.],
-              NSForegroundColorAttributeName: [RZColor blackColor]
+              NSForegroundColorAttributeName: [self colorForText:rzColorStylePrimaryText]
               };
 
 }
@@ -89,20 +89,32 @@ static gcFontStyle _fontStyle;
 
 +(NSDictionary<NSString*,id>*)attributeBold14{
     return @{ NSFontAttributeName: [self boldSystemFontOfSize:14.],
-              NSForegroundColorAttributeName: [RZColor blackColor]
+              NSForegroundColorAttributeName: [self colorForText:rzColorStylePrimaryText]
               };
 
 }
 
 +(NSDictionary<NSString*,id>*)attribute14Gray{
     return @{ NSFontAttributeName: [self systemFontOfSize:14.],
-              NSForegroundColorAttributeName: [RZColor darkGrayColor]
+              NSForegroundColorAttributeName: [self colorForText:rzColorStyleSecondaryText]
               };
 }
 +(RZImage*)checkMarkImage:(BOOL)val{
     return [RZImage imageNamed:val ? @"check" : @"checkoff"];
 }
-
++(RZColor*)colorForText:(rzTextColor)which{
+    switch (which) {
+        case rzColorStylePrimaryText:
+            return [RZColor blackColor];
+        case rzColorStyleSecondaryText:
+            return [RZColor darkGrayColor];
+        case rzColorStyleTertiaryText:
+            return [RZColor darkGrayColor];
+        case rzColorStyleHighlightedText:
+            return [RZColor blueColor];
+    }
+    return nil;
+}
 +(RZFont*)systemFontOfSize:(CGFloat)size{
 #if TARGET_OS_IPHONE
     if (_fontStyle == gcFontStyleDynamicType) {

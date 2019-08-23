@@ -36,7 +36,6 @@ extern NSString * kGCSkinKeyActivityCellIconColor;
 extern NSString * kGCSkinKeyFieldFillColor;
 extern NSString * kGCSkinKeyFieldColors;
 extern NSString * kGCSkinKeyTextColorForActivity;
-extern NSString * kGCSkinKeyDetailsCellBackgroundColors;
 extern NSString * kGCSkinKeySwimStrokeColor;
 extern NSString * kGCSkinKeyCategoryBackground;
 extern NSString * kGCSkinKeyGoalPercentBackgroundColor;
@@ -45,8 +44,18 @@ extern NSString * kGCSkinKeyBarGraphColor;
 extern NSString * kGCSkinKeyListOfColorsForMultiplots;
 extern NSString * kGCSkinKeyCalendarColors;
 
-extern NSString * kGCSkinKeyDefaultBackgroundColor;
+extern NSString * kGCSkinKeyDefaultColors;
 
+typedef NS_ENUM(NSUInteger,gcSkinKeyDefaultColor){
+    gcSkinKeyDefaultColorBackground,
+    gcSkinKeyDefaultColorBackgroundEven, // for things like alternating background in rows
+    gcSkinKeyDefaultColorBackgroundOdd, // for things like alternating background in rows
+    gcSkinKeyDefaultColorPrimaryText, // original = black
+    gcSkinKeyDefaultColorSecondaryText, // original = darkGray
+    gcSkinKeyDefaultColorTertiaryText, // original = lightGray
+    gcSkinKeyDefaultColorHighlightedText,  // Original = blue
+    gcSkinKeyDefaultColorGroupedTable
+};
 
 typedef NS_ENUM(NSUInteger,gcGCSkinKeyCalendarElement){
     gcGCSkinKeyCalendarElementWeekdayTextColor,

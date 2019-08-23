@@ -565,7 +565,7 @@
     }
 
     NSArray<UIColor*>* colors = [GCViewConfig arrayOfColorsForMultiplots];
-    UIColor * defaultColor = [GCViewConfig defaultTextColor];
+    UIColor * defaultColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorPrimaryText];
 
     GCSimpleGraphDataHolder * mth = [GCSimpleGraphDataHolder dataHolder:[self adjustedSerie:serie.serieWithUnit field:fieldflag logScale:logScale]
                                                                   type:gcGraphLine

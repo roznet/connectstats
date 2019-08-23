@@ -35,7 +35,7 @@ NSString * kGCSkinKeyFieldFillColor = @"FieldFillColor";
 NSString * kGCSkinKeyMissingActivityTypeColor = @"ActivityMissingActivityTypeColor";
 NSString * kGCSkinKeyTextColorForActivity = @"TextColorForActivity";
 
-NSString * kGCSkinKeyDetailsCellBackgroundColors = @"DetailsCellBackgroundColors";
+//NSString * kGCSkinKeyDetailsCellBackgroundColors = @"DetailsCellBackgroundColors";
 NSString * kGCSkinKeyCategoryBackground = @"CategoryBackground";
 
 NSString * kGCSkinKeySwimStrokeColor = @"SwimStrokeColor";
@@ -45,7 +45,7 @@ NSString * kGCSkinKeyGoalPercentBackgroundColor = @"GoalPercentBackgroundColor";
 NSString * kGCSkinKeyBarGraphColor = @"BarGraphColor";
 NSString * kGCSkinKeyListOfColorsForMultiplots = @"ListOfColorsForMultiplots";
 NSString * kGCSkinKeyCalendarColors = @"CalendarColors";
-NSString * kGCSkinKeyDefaultBackgroundColor = @"DefaultBackgroundColor";
+NSString * kGCSkinKeyDefaultColors = @"DefaultColors";
 
 NS_INLINE NSArray * gcArrayForDefinitionValue(id input){
     if ([input isKindOfClass:[NSArray class]]) {
@@ -85,6 +85,10 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
     return @[ @"Original", @"Dark", @"iOS13"];
 }
 +(GCViewConfigSkin*)skinForName:(NSString*)name{
+    if( ![[GCViewConfigSkin availableSkinNames] containsObject:name] ){
+        return nil;
+    }
+    
     if( [name isEqualToString:@"Original"] ){
         return [self defaultSkin];
     }else if ([name isEqualToString:@"Dark"] ){
@@ -138,15 +142,21 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                             @"power":      [UIColor colorWithRed:190./255. green:240./255. blue:50./255. alpha:0.3],
                             @"elevation":  [UIColor colorWithRed:0.0 green:0.8 blue:0. alpha:0.3]
                             },
-                    kGCSkinKeyDefaultBackgroundColor:
-                        [UIColor colorWithHexValue:0xEBEBEB andAlpha:1.f],
+                    kGCSkinKeyDefaultColors: @{
+                            @(gcSkinKeyDefaultColorGroupedTable): [UIColor colorWithHexValue:0xF6F3F1 andAlpha:1.],
+                            @(gcSkinKeyDefaultColorPrimaryText):[UIColor colorWithHexValue:0x000000 andAlpha:1.f],
+                            @(gcSkinKeyDefaultColorSecondaryText):[UIColor colorWithHexValue:0x555555 andAlpha:1.f],
+                            @(gcSkinKeyDefaultColorTertiaryText):[UIColor colorWithHexValue:0xAAAAAA andAlpha:1.f],
+                            @(gcSkinKeyDefaultColorHighlightedText):[UIColor colorWithHexValue:0x0000FF andAlpha:1.f],
+                            @(gcSkinKeyDefaultColorBackground):[UIColor colorWithHexValue:0xFFFFFF andAlpha:1.f],
+                            @(gcSkinKeyDefaultColorBackgroundEven):[UIColor colorWithHexValue:0xE7EDF5 andAlpha:1.f],
+                            @(gcSkinKeyDefaultColorBackgroundOdd):[UIColor colorWithHexValue:0xF6F3F1 andAlpha:1.f],
+                            
+                            },
                     kGCSkinKeyActivityCellIconColor:
                         [UIColor whiteColor],
                     kGCSkinKeyMissingActivityTypeColor:
                         [UIColor colorWithHexValue:0xD2D2D2 andAlpha:1.],
-                    kGCSkinKeyDetailsCellBackgroundColors:
-                        @[ [UIColor colorWithRed:210./255. green:210./255 blue:210./255 alpha:1.],
-                           [UIColor colorWithRed:252./255. green:252./255 blue:252./255 alpha:1.] ],
                     kGCSkinKeyTextColorForActivity:
                         @{GC_TYPE_SWIMMING:[UIColor orangeColor],
                           GC_TYPE_RUNNING:[UIColor blueColor],
@@ -294,14 +304,20 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                             @"power":      [UIColor colorWithRed:190./255. green:240./255. blue:50./255. alpha:0.3],
                             @"elevation":  [UIColor colorWithRed:0.0 green:0.8 blue:0. alpha:0.3]
                             },
-                    
+                    kGCSkinKeyDefaultColors: @{
+                            @(gcSkinKeyDefaultColorGroupedTable): [UIColor colorWithHexValue:0xF6F3F1 andAlpha:1.],
+                            @(gcSkinKeyDefaultColorPrimaryText):[UIColor colorWithHexValue:0xFFFFFF andAlpha:1.f],
+                            @(gcSkinKeyDefaultColorSecondaryText):[UIColor colorWithHexValue:0xAAAAAA andAlpha:1.f],
+                            @(gcSkinKeyDefaultColorTertiaryText):[UIColor colorWithHexValue:0x555555 andAlpha:1.f],
+                            @(gcSkinKeyDefaultColorHighlightedText):[UIColor colorWithHexValue:0x0000FF andAlpha:1.f],
+                            @(gcSkinKeyDefaultColorBackground):[UIColor colorWithHexValue:0x404145 andAlpha:1.f],
+                            @(gcSkinKeyDefaultColorBackgroundEven):[UIColor colorWithHexValue:0x313233 andAlpha:1.f],
+                            @(gcSkinKeyDefaultColorBackgroundOdd):[UIColor colorWithHexValue:0x212223 andAlpha:1.f],
+                            },
                     kGCSkinKeyActivityCellIconColor:
-                        [UIColor whiteColor],
+                        [UIColor colorWithHexValue:0x555555 andAlpha:1.f],
                     kGCSkinKeyMissingActivityTypeColor:
                         [UIColor colorWithHexValue:0xD2D2D2 andAlpha:1.],
-                    kGCSkinKeyDetailsCellBackgroundColors:
-                        @[ [UIColor colorWithRed:210./255. green:210./255 blue:210./255 alpha:1.],
-                           [UIColor colorWithRed:252./255. green:252./255 blue:252./255 alpha:1.] ],
                     kGCSkinKeyTextColorForActivity:
                         @{GC_TYPE_SWIMMING:[UIColor orangeColor],
                           GC_TYPE_RUNNING:[UIColor blueColor],
@@ -421,6 +437,17 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
         double alp = 0.4;
         rv.skinName = theme;
         rv.defs = @{
+                    kGCSkinKeyDefaultColors: @{
+                            @(gcSkinKeyDefaultColorGroupedTable): [GCViewConfigSkin colorForTheme:theme path:@[ @"groupedtable" ]],
+                            @(gcSkinKeyDefaultColorPrimaryText):[GCViewConfigSkin colorForTheme:theme path:@[ @"primarytext" ]],
+                            @(gcSkinKeyDefaultColorSecondaryText):[GCViewConfigSkin colorForTheme:theme path:@[ @"secondarytext" ]],
+                            @(gcSkinKeyDefaultColorTertiaryText):[GCViewConfigSkin colorForTheme:theme path:@[ @"tertiarytext" ]],
+                            @(gcSkinKeyDefaultColorHighlightedText):[GCViewConfigSkin colorForTheme:theme path:@[ @"highlightedtext" ]],
+                            @(gcSkinKeyDefaultColorBackground):[GCViewConfigSkin colorForTheme:theme path:@[ @"background" ]],
+                            @(gcSkinKeyDefaultColorBackgroundEven):[GCViewConfigSkin colorForTheme:theme path:@[ @"backgroundodd" ]],
+                            @(gcSkinKeyDefaultColorBackgroundEven):[GCViewConfigSkin colorForTheme:theme path:@[ @"backgroundeven" ]]
+                            },
+
                     kGCSkinKeySwimStrokeColor:
                         @{
                             @(gcSwimStrokeFree):        [GCViewConfigSkin colorForTheme:theme path:@[ kGCSkinKeySwimStrokeColor, @"gcSwimStrokeFree"]],
@@ -463,9 +490,6 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                         [UIColor whiteColor],
                     kGCSkinKeyMissingActivityTypeColor:
                         [UIColor colorWithHexValue:0xD2D2D2 andAlpha:1.],
-                    kGCSkinKeyDetailsCellBackgroundColors:
-                        @[ [UIColor colorWithHexValue:0xD2D2D2 andAlpha:1.],
-                           [UIColor colorWithHexValue:0xFCFCFC andAlpha:1.] ],
                     kGCSkinKeyTextColorForActivity:
                         @{GC_TYPE_SWIMMING:[UIColor colorWithHexValue:0xFF7F00 andAlpha:1.], // orange
                           GC_TYPE_RUNNING:[UIColor colorWithHexValue:0x0000FF andAlpha:1.],    //blue

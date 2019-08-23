@@ -40,6 +40,13 @@ typedef NS_ENUM(NSUInteger, gcFontStyle){
 
 };
 
+typedef NS_ENUM(NSUInteger, rzTextColor){
+    rzColorStylePrimaryText,
+    rzColorStyleSecondaryText,
+    rzColorStyleTertiaryText,
+    rzColorStyleHighlightedText
+};
+
 @interface RZViewConfig : NSObject
 
 +(gcFontStyle)fontStyle;
@@ -57,6 +64,7 @@ typedef NS_ENUM(NSUInteger, gcFontStyle){
 
 +(NSAttributedString*)attributedString:(NSString*)str attribute:(SEL)sel;
 
++(RZColor*)colorForText:(rzTextColor)which;
 +(RZImage*)checkMarkImage:(BOOL)val;
 +(RZFont*)systemFontOfSize:(CGFloat)size;
 +(RZFont*)boldSystemFontOfSize:(CGFloat)size;

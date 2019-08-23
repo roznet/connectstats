@@ -59,7 +59,8 @@
 #define GC_SETTINGS_FILTER      4
 #define GC_SETTINGS_LAPS        5
 #define GC_SETTINGS_STRIDE      6
-#define GC_SETTINGS_PARAMS_END  7
+#define GC_SETTINGS_SKIN        7
+#define GC_SETTINGS_PARAMS_END  8
 
 #define GC_SETTINGS_INLINE_GRAPHS   0
 #define GC_SETTINGS_LAP_OVERLAY     1
@@ -146,6 +147,7 @@
     if (allSections) {
         [self.remap addSection:GC_SECTION_PARAMS withRows:@[
                                                             @( GC_SETTINGS_REFRESH     ),
+                                                            @( GC_SETTINGS_SKIN        ),
                                                             @( GC_SETTINGS_UNITS       ),
                                                             @( GC_SETTINGS_FIRSTDAY    ),
                                                             @( GC_SETTINGS_PERIOD      ),
@@ -155,6 +157,7 @@
     }else{
         [self.remap addSection:GC_SECTION_PARAMS withRows:@[
                                                             @( GC_SETTINGS_REFRESH     ),
+                                                            @( GC_SETTINGS_SKIN        ),
                                                             @( GC_SETTINGS_UNITS       ),
                                                             @( GC_SETTINGS_FIRSTDAY    ),
                                                             @( GC_SETTINGS_STRIDE      )]];
@@ -192,7 +195,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.tableView.backgroundView = nil;
-    self.tableView.backgroundColor = [GCViewConfig backgroundForGroupedTable];
+    self.tableView.backgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorGroupedTable];
 }
 
 - (void)didReceiveMemoryWarning
@@ -229,9 +232,27 @@
 
     if (indexPath.section == GC_SECTION_PARAMS) {
         switch (indexPath.row) {
+            case GC_SETTINGS_SKIN:
+            {
+                gridcell = [GCCellGrid gridCell:tableView];
+                [gridcell setupForRows:1 andCols:2];
+                
+                NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Skin",@"Profile Skin")
+                                                                              attributes:[GCViewConfig attributeBold16]] autorelease];
+                NSString * skin = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:@"Original"];
+                NSAttributedString * current = [[[NSAttributedString alloc] initWithString:skin
+                                                                                attributes:[GCViewConfig attribute16]] autorelease];
+                
+                [gridcell labelForRow:0 andCol:0].attributedText = title;
+                [gridcell labelForRow:0 andCol:1].attributedText = current;
+                
+                rv = gridcell;
+                break;
+
+            }
             case GC_SETTINGS_REFRESH:
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Refresh on startup",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16] withString:NSLocalizedString(@"Refresh on startup",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_REFRESH)];
                 switchcell.entryFieldDelegate = self;
@@ -370,7 +391,7 @@
             case GC_SETTINGS_NEWAPI:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"New track download api",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16] withString:NSLocalizedString(@"New track download api",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_NEWAPI)];
                 switchcell.entryFieldDelegate = self;
@@ -422,7 +443,8 @@
             case GC_SETTINGS_SHOW_DOWNLOAD:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Show Download Icon",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Show Download Icon",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_SHOW_DOWNLOAD)];
                 switchcell.entryFieldDelegate = self;
@@ -433,7 +455,8 @@
             case GC_SETTINGS_INLINE_GRADIENT:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Map Gradient in Tables",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Map Gradient in Tables",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_INLINE_GRADIENT)];
                 switchcell.entryFieldDelegate = self;
@@ -444,7 +467,8 @@
             case GC_SETTINGS_INLINE_GRAPHS:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Graphs in Tables",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Graphs in Tables",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_INLINE_GRAPHS)];
                 switchcell.entryFieldDelegate = self;
@@ -455,7 +479,8 @@
             case GC_SETTINGS_ENABLE_DERIVED:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Compute Best Overall",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Compute Best Overall",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_ENABLE_DERIVED)];
                 switchcell.entryFieldDelegate = self;
@@ -464,7 +489,8 @@
             }
             case GC_SETTINGS_LAP_OVERLAY:
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Laps Overlay in Graphs", @"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Laps Overlay in Graphs", @"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_LAP_OVERLAY)];
                 switchcell.entryFieldDelegate = self;
@@ -473,7 +499,8 @@
             case GC_SETTINGS_FASTMAP:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Map skip points",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Map skip points",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_FASTMAP)];
                 switchcell.entryFieldDelegate = self;
@@ -483,7 +510,8 @@
             case GC_SETTINGS_CONTINUE_ERROR:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Continue on Error",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Continue on Error",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_CONTINUE_ERROR)];
                 switchcell.entryFieldDelegate = self;
@@ -569,7 +597,8 @@
             case GC_SETTINGS_INCLUDEDATA:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Bug Report Include Activity",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Bug Report Include Activity",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_OTHER, GC_SETTINGS_INCLUDEDATA)];
                 switchcell.entryFieldDelegate = self;
@@ -642,15 +671,20 @@
         if (indexPath.row==GC_SETTINGS_TRIGGER_ACTION) {
             gridcell  = [GCCellGrid gridCell:tableView];
             [gridcell setupForRows:1 andCols:1];
-            [gridcell labelForRow:0 andCol:0].text = NSLocalizedString( @"Debug Actions", @"SettingsView");
+            [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:NSLocalizedString( @"Debug Actions", @"SettingsView")];
             rv=gridcell;
         }else if (indexPath.row == GC_SETTINGS_SHOW_LOG){
             gridcell  = [GCCellGrid gridCell:tableView];
             [gridcell setupForRows:1 andCols:1];
-            [gridcell labelForRow:0 andCol:0].text = NSLocalizedString( @"Log", @"SettingsView");
+            [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:NSLocalizedString( @"Log", @"SettingsView")];
             rv=gridcell;
         }
     }
+    
+    rv.backgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground];
+    
     return rv ?: [GCCellGrid gridCell:tableView];
 }
 
@@ -669,6 +703,17 @@
             [GCUnit setGlobalSystem:(gcUnitSystem)[cell selected]];
             [GCAppGlobal saveSettings];
             break;
+        case GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_SKIN):
+        {
+            NSString * newSkin = [[GCViewConfigSkin availableSkinNames] objectAtIndex:cell.selected];
+            GCViewConfigSkin * skin = [GCViewConfigSkin skinForName:newSkin];
+            if( skin ){
+                [GCViewConfig setSkin:skin];
+                [[GCAppGlobal profile] configSet:CONFIG_SKIN_NAME stringVal:newSkin];
+                [GCAppGlobal saveSettings];
+            }
+            break;
+        }
         case GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_FIRSTDAY):
             [GCAppGlobal configSet:CONFIG_FIRST_DAY_WEEK intVal:[GCViewConfig weekDayValue:[cell selected]]];
             [GCAppGlobal saveSettings];
@@ -775,6 +820,14 @@
             GCCellEntryListViewController * choices = [GCCellEntryListViewController entryListViewController:systems selected:selected];
             choices.entryFieldDelegate = self;
             choices.identifierInt = GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_UNITS);
+            [self.navigationController pushViewController:choices animated:YES];
+        }else if( indexPath.row == GC_SETTINGS_SKIN){
+            NSArray * skins = [GCViewConfigSkin availableSkinNames];
+            NSString * skin = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:@"Original"];
+            NSUInteger selected = [skins indexOfObject:skin];
+            GCCellEntryListViewController * choices = [GCCellEntryListViewController entryListViewController:skins selected:selected];
+            choices.entryFieldDelegate = self;
+            choices.identifierInt = GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_SKIN);
             [self.navigationController pushViewController:choices animated:YES];
         }else if(indexPath.row == GC_SETTINGS_PERIOD){
             NSArray * choices = [GCViewConfig periodDescriptions];

@@ -90,10 +90,6 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(UIColor*)cellBackgroundLighterForActivity:(id)aAct;
 +(UIColor*)cellIconColorForActivity:(id)aAct;
 
-//+(UIColor*)cellForegroundForActivity:(GCActivity*)aAct;
-
-//+(UIColor*)cellBackgroundForDetails;
-//+(UIColor*)cellBackgroundSecondForDetails;
 +(UIColor*)colorForSwimStrokeType:(gcSwimStrokeType)strokeType;
 
 // In calendar
@@ -102,17 +98,15 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(UIColor*)backgroundForCategory:(NSString*)category;
 
 +(NSArray<UIColor*>*)arrayOfColorsForMultiplots;
+
 // General Theme
-+(UIColor*)defaultBackgroundColor;
-+(UIColor*)defaultTextColor;
++(UIColor*)defaultColor:(gcSkinKeyDefaultColor)which;
 
 +(UIColor*)fillColorForField:(GCField*)field;
 +(NSArray*)colorsForField:(GCField*)field;
 +(UIColor*)barGraphColor;
 +(UIColor*)colorForGoalPercent:(double)pct;
 +(UIColor*)textColorForGoalPercent:(double)pct;
-
-+(UIColor*)backgroundForGroupedTable;
 
 +(UIColor*)colorForCalendarElement:(gcGCSkinKeyCalendarElement)elem;
 

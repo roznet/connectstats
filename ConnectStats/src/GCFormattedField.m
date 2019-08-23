@@ -43,8 +43,8 @@
         rv.unit = [GCUnit unitForKey:aUnit];
         rv.labelFont = [GCViewConfig systemFontOfSize:aSize];
         rv.valueFont = [GCViewConfig boldSystemFontOfSize:aSize];
-        rv.valueColor = [UIColor blackColor];
-        rv.labelColor = [UIColor blackColor];
+        rv.valueColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorPrimaryText];
+        rv.labelColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorPrimaryText];
     }
     return rv;
 }
@@ -57,8 +57,8 @@
         rv.unit = aN.unit;
         rv.labelFont = [GCViewConfig systemFontOfSize:aSize];
         rv.valueFont = [GCViewConfig boldSystemFontOfSize:aSize];
-        rv.valueColor = [UIColor blackColor];
-        rv.labelColor = [UIColor blackColor];
+        rv.valueColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorPrimaryText];
+        rv.labelColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorPrimaryText];
     }
     return rv;
 }

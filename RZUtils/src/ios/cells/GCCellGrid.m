@@ -280,8 +280,12 @@ NSString *const GCCellGridShouldHideMenu = @"GCCellGridShouldHideMenu";
             [cgcolors addObject:(id)color.CGColor];
         }
         self.gradientLayer.colors = cgcolors;
+        self.backgroundColor = [UIColor clearColor];
     }else{
         self.gradientLayer.colors = nil;
+        if( self.backgroundColors.count == 1){
+            self.backgroundColor = self.backgroundColors.firstObject;
+        }
     }
 }
 

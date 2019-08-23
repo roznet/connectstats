@@ -36,8 +36,13 @@ static GCViewConfigSkin * _skin = nil;
 
 NS_INLINE GCViewConfigSkin * _current_skin(){
     if (_skin == nil) {
-        //_skin = [GCViewConfigSkin skinForThemeName:@"iOS13"]; //[GCViewConfigSkin defaultSkin];
-        _skin = [GCViewConfigSkin defaultSkin]; //[GCViewConfigSkin defaultSkin];
+        
+        NSString * skinName = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:@"Original"];
+        if( skinName ){
+            _skin = [GCViewConfigSkin skinForName:skinName];
+        }else{
+            _skin = [GCViewConfigSkin defaultSkin];
+        }
         [_skin retain];
     }
     return _skin;
@@ -93,29 +98,44 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
                                   ]];
 }
 +(void)setupGradientForDetails:(GCCellGrid*)aG{
-    [aG setupBackgroundColors:@[ [GCViewConfig cellBackgroundSecondForDetails] ]];
+    [aG setupBackgroundColors:@[ [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground] ]];
 }
 +(void)setupGradientForCellsEven:(GCCellGrid*)aG{
 
-    [aG setupBackgroundColors: @[ [UIColor colorWithHexValue:0xE7EDF5 andAlpha:1.] ] ];
+    [aG setupBackgroundColors: @[ [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackgroundEven] ] ];
 }
 
 +(void)setupGradientForCellsOdd:(GCCellGrid*)aG{
-    [aG setupBackgroundColors: @[ [UIColor colorWithHexValue:0xF6F3F1 andAlpha:1.] ] ];
+    [aG setupBackgroundColors: @[ [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackgroundOdd] ] ];
 }
 
-// Not Used Yet
-+(UIColor*)defaultBackgroundColor{
-    return [UIColor whiteColor];
-}
-// Not Used Yet
-+(UIColor*)defaultTextColor{
-    return [UIColor blackColor];
++(UIColor*)defaultColor:(gcSkinKeyDefaultColor)which{
+    return [_current_skin() colorForKey:kGCSkinKeyDefaultColors
+                              andSubkey:@(which)];
 }
 
++(RZColor*)colorForText:(rzTextColor)which{
+    switch (which) {
+        case rzColorStylePrimaryText:
+            return [_current_skin() colorForKey:kGCSkinKeyDefaultColors
+                                      andSubkey:@(gcSkinKeyDefaultColorPrimaryText)];
+        case rzColorStyleSecondaryText:
+            return [_current_skin() colorForKey:kGCSkinKeyDefaultColors
+                                      andSubkey:@(gcSkinKeyDefaultColorSecondaryText)];
+        case rzColorStyleTertiaryText:
+            return [_current_skin() colorForKey:kGCSkinKeyDefaultColors
+                                      andSubkey:@(gcSkinKeyDefaultColorTertiaryText)];
+        case rzColorStyleHighlightedText:
+            return [_current_skin() colorForKey:kGCSkinKeyDefaultColors
+                                      andSubkey:@(gcSkinKeyDefaultColorHighlightedText)];
+    }
+    return nil;
+}
 
 +(UIColor*)backgroundForGroupedTable{
-    return [UIColor colorWithHexValue:0xF6F3F1 andAlpha:1.];
+    return [_current_skin() colorForKey:kGCSkinKeyDefaultColors
+                              andSubkey:@(gcSkinKeyDefaultColorGroupedTable)];
+//    return [UIColor colorWithHexValue:0xF6F3F1 andAlpha:1.];
 }
 +(void)setupGradient:(GCCellGrid*)aG forSwimStroke:(gcSwimStrokeType)tp{
     [aG setupBackgroundColors:@[[GCViewConfig colorForSwimStrokeType:tp],
@@ -145,15 +165,6 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     // Expansion to depend on act?
     return [_current_skin() colorForKey:kGCSkinKeyActivityCellIconColor];
 
-}
-+(UIColor*)cellBackgroundForDetails{
-    NSArray * colors = [_current_skin() colorArrayForKey:kGCSkinKeyDetailsCellBackgroundColors];
-    return [colors firstObject];
-}
-
-+(UIColor*)cellBackgroundSecondForDetails{
-    NSArray * colors = [_current_skin() colorArrayForKey:kGCSkinKeyDetailsCellBackgroundColors];
-    return [colors lastObject];
 }
 
 

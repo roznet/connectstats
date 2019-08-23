@@ -47,7 +47,7 @@
 		label						= [[UILabel alloc] initWithFrame:CGRectZero];
 		label.backgroundColor		= [UIColor clearColor];
 		label.font					= [RZViewConfig boldSystemFontOfSize:16];
-		label.textColor				= [UIColor blackColor];
+		label.textColor				= [RZViewConfig colorForText:rzColorStylePrimaryText];
 
 		toggle						= [[UISwitch alloc] initWithFrame:CGRectZero];
 		[toggle addTarget:self action:@selector(switchElement:) forControlEvents:UIControlEventValueChanged];

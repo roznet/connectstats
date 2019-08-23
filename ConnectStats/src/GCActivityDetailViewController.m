@@ -143,6 +143,8 @@
         self.tableView.tableHeaderView.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:self.activity];
     }
     self.initialized = true;
+    self.view.backgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground];
+    self.tableView.backgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -448,7 +450,6 @@
     }else{
         rv = [GCCellGrid gridCell:tableView];
     }
-
 	return rv;
 
 }
@@ -591,8 +592,8 @@
                 GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
                 if (addNumber) {
                     GCFormattedField* theOne = [GCFormattedField formattedField:addField.key activityType:activity.activityType forNumber:addNumber forSize:14.];
-                    theOne.valueColor = [UIColor darkGrayColor];
-                    theOne.labelColor = [UIColor darkGrayColor];
+                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];
+                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];
                     if ([addNumber sameUnit:mainN]) {
                         theOne.noUnits = true;
                     }
@@ -613,8 +614,8 @@
                 GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
                 if (addNumber) {
                     GCFormattedField* theOne = [GCFormattedField formattedField:addField.key activityType:activity.activityType forNumber:addNumber forSize:14.];
-                    theOne.valueColor = [UIColor darkGrayColor];
-                    theOne.labelColor = [UIColor darkGrayColor];
+                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];
+                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];
                     if ([addNumber sameUnit:mainN]) {
                         theOne.noUnits = true;
                     }

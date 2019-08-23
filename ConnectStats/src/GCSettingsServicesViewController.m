@@ -442,7 +442,8 @@
         rv=gridcell;
     }else if(indexPath.row == GC_ROW_AUTO){
         switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.text = NSLocalizedString(@"Auto Refresh", @"Settings");
+        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Auto Refresh", @"Settings")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_WITHINGS_AUTO defaultValue:false];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_ROW_AUTO);
         switchcell.entryFieldDelegate = self;
@@ -508,7 +509,8 @@
         rv= gridcell;
     }else if (indexPath.row == GC_GARMIN_ENABLE){
         switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.text = NSLocalizedString(@"Download Activities",@"Other Service");
+        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Download Activities",@"Other Service")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:true];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_GARMIN_ENABLE);
         switchcell.entryFieldDelegate = self;
@@ -516,7 +518,8 @@
 
     }else if (indexPath.row == GC_GARMIN_MODERN_API) {
         switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.text = NSLocalizedString(@"Modern API",@"Other Service");
+        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Modern API",@"Other Service")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_GARMIN_MODERN_API);
         switchcell.entryFieldDelegate = self;
@@ -532,9 +535,11 @@
         gcGarminLoginMethod method = (gcGarminLoginMethod)[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
         NSArray * methods = [GCViewConfig validChoicesForGarminLoginMethod];
         if (method < methods.count) {
-            [gridcell labelForRow:0 andCol:1].text = methods[method];
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:methods[method]];
         }else{
-            [gridcell labelForRow:0 andCol:1].text = NSLocalizedString(@"Unknown",@"Login Method");
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:NSLocalizedString(@"Unknown",@"Login Method")];
         }
         rv = gridcell;
     }else if (indexPath.row == GC_GARMIN_USERNAME){
@@ -597,7 +602,8 @@
         rv = gridcell;
     }else if (indexPath.row == GC_CONNECTSTATS_ENABLE){
         switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.text = NSLocalizedString(@"Download Activities",@"Other Service");
+        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Download Activities",@"Other Service")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_CONNECTSTATS_ENABLE);
         switchcell.entryFieldDelegate = self;
@@ -613,9 +619,11 @@
         gcConnectStatsServiceUse method = (gcConnectStatsServiceUse)[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_USE defaultValue:gcConnectStatsServiceUseValidate];
         NSArray * methods = [GCViewConfig validChoicesForConnectStatsServiceUse];
         if (method < methods.count) {
-            [gridcell labelForRow:0 andCol:1].text = methods[method];
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:methods[method]];
         }else{
-            [gridcell labelForRow:0 andCol:1].text = NSLocalizedString(@"Unknown",@"Login Method");
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:NSLocalizedString(@"Unknown",@"Login Method")];
         }
         rv = gridcell;
     }else if (indexPath.row == GC_CONNECTSTATS_CONFIG ){
@@ -629,9 +637,11 @@
         gcWebConnectStatsConfig method = (gcWebConnectStatsConfig)[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG   defaultValue:gcWebConnectStatsConfigProduction];
         NSArray * methods = [GCViewConfig validChoicesForConnectStatsConfig];
         if (method < methods.count) {
-            [gridcell labelForRow:0 andCol:1].text = methods[method];
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:methods[method]];
         }else{
-            [gridcell labelForRow:0 andCol:1].text = NSLocalizedString(@"Unknown",@"Login Method");
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:NSLocalizedString(@"Unknown",@"Login Method")];
         }
         
 
@@ -659,7 +669,8 @@
         GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:timeToBackFill];
         
         NSString * timeString = [NSString stringWithFormat:@"Required time to synchronise %@", nu];
-        [gridcell labelForRow:0 andCol:1].text = [NSString stringWithFormat:@"%@", @(year)];
+        [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                     withString:[NSString stringWithFormat:@"%@", @(year)]];
         [gridcell labelForRow:1 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:timeString attributes:[GCViewConfig attribute14Gray]] autorelease];
         [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
         
@@ -691,6 +702,7 @@
         [gridcell labelForRow:0 andCol:0].attributedText = title;
         rv = gridcell;
     }
+    
     return rv;
 }
 
@@ -719,7 +731,8 @@
         rv = gridcell;
     }else if (indexPath.row == GC_STRAVA_ENABLE){
         switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.text = NSLocalizedString(@"Download Activities",@"Other Service");
+        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Download Activities",@"Other Service")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:false];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_STRAVA_ENABLE);
         switchcell.entryFieldDelegate = self;
@@ -727,7 +740,8 @@
 
     }else if (indexPath.row == GC_STRAVA_SEGMENTS){
         switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.text = NSLocalizedString(@"Download Segments",@"Other Service");
+        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Download Segments",@"Other Service")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_SEGMENTS defaultValue:false];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_STRAVA_SEGMENTS);
         switchcell.entryFieldDelegate = self;
@@ -735,14 +749,16 @@
 
     }else if (indexPath.row == GC_STRAVA_AUTO) {
         switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.text = NSLocalizedString(@"Upload Activities",@"Other Service");
+        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Upload Activities",@"Other Service")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:false];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_STRAVA_AUTO);
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
     }else if (indexPath.row == GC_STRAVA_PRIVATE){
         switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.text = NSLocalizedString(@"Export as private",@"Other Service");
+        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Export as private",@"Other Service")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_PRIVATE defaultValue:false];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_STRAVA_PRIVATE);
         switchcell.entryFieldDelegate = self;
@@ -799,7 +815,8 @@
     }else if (indexPath.row == GC_HEALTHKIT_ENABLE){
         if ([GCHealthKitRequest isSupported]) {
             switchcell = [GCCellEntrySwitch switchCell:tableView];
-            switchcell.label.text = NSLocalizedString(@"Use Health Data",@"Other Service");
+            switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                        withString:NSLocalizedString(@"Use Health Data",@"Other Service")];
             switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_HEALTHKIT_ENABLE defaultValue:[GCAppGlobal healthStatsVersion]];
             switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_HEALTHKIT_ENABLE);
             switchcell.entryFieldDelegate = self;
@@ -807,13 +824,15 @@
         }else{
             gridcell = [GCCellGrid gridCell:tableView];
             [gridcell setupForRows:1 andCols:1];
-            [gridcell labelForRow:0 andCol:0].text = NSLocalizedString(@"Not Supported by device", @"Other Service");
+            [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:NSLocalizedString(@"Not Supported by device", @"Other Service")];
             rv= gridcell;
         }
     }else if (indexPath.row == GC_HEALTHKIT_WORKOUT){
         if ([GCHealthKitRequest isSupported]) {
             switchcell = [GCCellEntrySwitch switchCell:tableView];
-            switchcell.label.text = NSLocalizedString(@"Include Workouts",@"Other Service");
+            switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                        withString:NSLocalizedString(@"Include Workouts",@"Other Service")];
             switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_HEALTHKIT_WORKOUT defaultValue:[GCAppGlobal healthStatsVersion]];
             switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_HEALTHKIT_WORKOUT);
             switchcell.entryFieldDelegate = self;
@@ -821,7 +840,8 @@
         }else{
             gridcell = [GCCellGrid gridCell:tableView];
             [gridcell setupForRows:1 andCols:1];
-            [gridcell labelForRow:0 andCol:0].text = NSLocalizedString(@"Not Supported by device", @"Other Service");
+            [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:NSLocalizedString(@"Not Supported by device", @"Other Service")];
             rv= gridcell;
         }
     }else if (indexPath.row == GC_HEALTHKIT_SOURCE){
@@ -846,7 +866,8 @@
         }else{
             gridcell = [GCCellGrid gridCell:tableView];
             [gridcell setupForRows:1 andCols:1];
-            [gridcell labelForRow:0 andCol:0].text = NSLocalizedString(@"Not Supported by device", @"Other Service");
+            [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:NSLocalizedString(@"Not Supported by device", @"Other Service")];
             rv= gridcell;
         }
     }
@@ -921,7 +942,8 @@
         rv = gridcell;
     }else if (indexPath.row == GC_SPORTTRACKS_ENABLE){
         switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.text = NSLocalizedString(@"Download Activities",@"Other Service");
+        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Download Activities",@"Other Service")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_SPORTTRACKS_ENABLE defaultValue:false];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_SPORTTRACKS_ENABLE);
         switchcell.entryFieldDelegate = self;
@@ -973,7 +995,8 @@
         rv = textcell;
     }else if(indexPath.row == GC_BABOLAT_ENABLE){
         switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.text = NSLocalizedString(@"Enable",@"Other Service");
+        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Enable",@"Other Service")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_BABOLAT_ENABLE defaultValue:false];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_BABOLAT_ENABLE);
         switchcell.entryFieldDelegate = self;
@@ -991,7 +1014,8 @@
 
     if (indexPath.row == GC_OPTIONS_MERGE) {
         switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.text = NSLocalizedString(@"Ignore Duplicate on Download",@"Other Service");
+        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Ignore Duplicate on Download",@"Other Service")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_MERGE_IMPORT_DUPLICATE defaultValue:true];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_OPTIONS_MERGE);
         switchcell.entryFieldDelegate = self;
@@ -1005,27 +1029,31 @@
 {
     NSIndexPath * indexPath = [self.remap remap:indexPathI];
 
+    UITableViewCell * rv = nil;
+    
     if (indexPath.section == GC_SECTIONS_WITHINGS) {
-        return [self withingsTableView:tableView cellForRowAtIndexPath:indexPath];
+        rv = [self withingsTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_GARMIN){
-        return [self garminTableView:tableView cellForRowAtIndexPath:indexPath];
+        rv = [self garminTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section==GC_SECTIONS_STRAVA){
-        return [self stravaTableView:tableView cellForRowAtIndexPath:indexPath];
+        rv = [self stravaTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_SPORTTRACKS){
-        return [self sportTracksTableView:tableView cellForRowAtIndexPath:indexPath];
+        rv = [self sportTracksTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_BABOLAT){
-        return [self babolatTableView:tableView cellForRowAtIndexPath:indexPath];
+        rv = [self babolatTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_OPTIONS){
-        return [self optionsTableView:tableView cellForRowAtIndexPath:indexPath];
+        rv = [self optionsTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_HEALTHKIT){
-        return [self healthKitTableView:tableView cellForRowAtIndexPath:indexPath];
+        rv = [self healthKitTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_FITBIT){
-        return [self fitbitTableView:tableView cellForRowAtIndexPath:indexPath];
+        rv = [self fitbitTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_CONNECTSTATS){
-        return [self connectStatsTableView:tableView cellForRowAtIndexPath:indexPath];
+        rv = [self connectStatsTableView:tableView cellForRowAtIndexPath:indexPath];
+    }else{
+        rv = [GCCellGrid gridCell:tableView];
     }
-
-    return [GCCellGrid gridCell:tableView];
+    rv.backgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground];
+    return rv;
 }
 
 -(void)cellWasChanged:(id<GCEntryFieldProtocol>)cell{
