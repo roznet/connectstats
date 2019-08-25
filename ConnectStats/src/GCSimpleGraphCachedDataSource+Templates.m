@@ -37,8 +37,18 @@
 
 @implementation GCSimpleGraphCachedDataSource (Templates)
 
-+(GCSimpleGraphCachedDataSource*)scatterPlotCacheFrom:(GCHistoryFieldDataSerie *)scatterStats {
++(GCSimpleGraphCachedDataSource*)dataSourceWithStandardColors{
     GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    if( cache ){
+        cache.useBackgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground];
+        cache.useForegroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorPrimaryText];
+        cache.axisColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];
+    }
+    return cache;
+}
+
++(GCSimpleGraphCachedDataSource*)scatterPlotCacheFrom:(GCHistoryFieldDataSerie *)scatterStats {
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
     cache.xUnit = [scatterStats xUnit];
     cache.title = [scatterStats title];
 
@@ -66,7 +76,9 @@
 }
 
 +(GCSimpleGraphCachedDataSource*)calendarView:(GCHistoryFieldDataSerie*)fieldserie calendarUnit:(NSCalendarUnit)aUnit graphChoice:(gcGraphChoice)graphChoice{
-    GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+
+    
     cache.xUnit = [fieldserie xUnit];
     if ([fieldserie.config isYOnly]) {
         switch (aUnit) {
@@ -191,7 +203,7 @@
 }
 
 +(GCSimpleGraphCachedDataSource*)barGraphView:(GCHistoryFieldDataSerie*)fieldserie calendarUnit:(NSCalendarUnit)aUnit after:(NSDate*)afterdate{
-    GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
     cache.xUnit = [fieldserie xUnit];
     switch (aUnit) {
         case NSCalendarUnitWeekOfYear:
@@ -298,7 +310,7 @@
 }
 
 +(GCSimpleGraphCachedDataSource*)fieldHistoryHistogramFrom:(GCHistoryFieldDataSerie*)history width:(CGFloat)width{
-    GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
     cache.xUnit = [history yUnit:0];
     cache.title = [history title];
 
@@ -315,7 +327,7 @@
 
 
 +(GCSimpleGraphCachedDataSource*)fieldHistoryCacheFrom:(GCHistoryFieldDataSerie*)history andMovingAverage:(NSUInteger)samples{
-    GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
     cache.xUnit = [history xUnit];
     cache.title = [history title];
 
@@ -339,7 +351,7 @@
 }
 
 +(GCSimpleGraphCachedDataSource*)dayActivityFieldFrom:(GCTrackStats*)trackStats{
-    GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
     cache.xUnit = [trackStats xUnit];
     cache.title = [trackStats title];
 
@@ -350,7 +362,7 @@
     // Needed or should be trackStats.movingAverage?
     NSUInteger samples = [trackStats.field isNoisy] ? 60 : 0;
 
-    GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
     cache.xUnit = [trackStats xUnit];
     cache.title = [trackStats title];
     if (trackStats.x_field) {
@@ -386,7 +398,7 @@
 
         GCSimpleGraphDataHolder * plot = [GCSimpleGraphDataHolder dataHolder:[trackStats dataSerie:0]
                                                                         type:gcGraphLine
-                                                                       color:[UIColor blackColor]
+                                                                       color:[GCViewConfig defaultColor:gcSkinKeyDefaultColorPrimaryText]
                                                                      andUnit:[trackStats yUnit:0]];
         // If line field, setup gradient Function with value of the line field
         // otherwise, use fill color
@@ -532,7 +544,7 @@
                                        width:(CGFloat)width{
 
     gcFieldFlag fieldflag = fieldInput;
-    GCSimpleGraphCachedDataSource * rv = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
 
     GCDerivedDataSerie * serie = [[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
                                                                    field:fieldflag
@@ -643,7 +655,8 @@
 }
 
 +(GCSimpleGraphCachedDataSource*)performanceAnalysis:(GCHistoryPerformanceAnalysis*)perfAnalysis width:(CGFloat)width{
-    GCSimpleGraphCachedDataSource * rv = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+
     rv.xUnit = [GCUnit unitForKey:@"datemonth"];
 
     GCSimpleGraphDataHolder * lt = [GCSimpleGraphDataHolder dataHolder:perfAnalysis.longTermSerie.serie

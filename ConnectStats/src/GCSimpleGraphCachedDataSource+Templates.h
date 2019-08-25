@@ -30,7 +30,7 @@
 @class GCHistoryFieldDataSerie;
 
 @interface GCSimpleGraphCachedDataSource (Templates)
-
++(GCSimpleGraphCachedDataSource*)dataSourceWithStandardColors;
 +(GCSimpleGraphCachedDataSource*)scatterPlotCacheFrom:(GCHistoryFieldDataSerie *) scatterStats;
 +(GCSimpleGraphCachedDataSource*)fieldHistoryCacheFrom:(GCHistoryFieldDataSerie*)history andMovingAverage:(NSUInteger)samples;
 +(GCSimpleGraphCachedDataSource*)historyView:(GCHistoryFieldDataSerie*)fieldserie calendarUnit:(NSCalendarUnit)aUnit graphChoice:(gcGraphChoice)graphChoice after:(NSDate*)date;

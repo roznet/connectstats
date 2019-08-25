@@ -108,6 +108,11 @@
     //0x3b7dde
     return [UIColor colorWithRed:0.231 green:0.490 blue:0.871 alpha:1.00];
 }
-
+-(UIColor*)primaryTextColor{
+    return [UIColor blackColor];
+}
+-(UIColor*)secondaryTextColor{
+    return [UIColor darkGrayColor];
+}
 
 @end

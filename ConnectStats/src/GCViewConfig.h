@@ -110,12 +110,15 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 
 +(UIColor*)colorForCalendarElement:(gcGCSkinKeyCalendarElement)elem;
 
++(void)setupViewController:(UIViewController*)viewController;
 +(void)setupGradient:(GCCellGrid*)aG ForActivity:(id)aAct;
 +(void)setupGradientForDetails:(GCCellGrid*)aG;
 +(void)setupGradientForCellsEven:(GCCellGrid*)aG;
 +(void)setupGradientForCellsOdd:(GCCellGrid*)aG;
 +(void)setupGradient:(GCCellGrid*)aG forSwimStroke:(gcSwimStrokeType)tp;
 +(void)setupGradient:(GCCellGrid*)aG ForThreshold:(double)pct;
+
++(BOOL)roundedActivityIcons;
 
 // FIELDS
 

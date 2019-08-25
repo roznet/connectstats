@@ -96,6 +96,9 @@
 -(UIColor*)dayCurrentMonthTextColor;
 -(UIColor*)dayAdjacentMonthTextColor;
 
+-(UIColor*)primaryTextColor; // for titles/navbar
+-(UIColor*)secondaryTextColor; // for titles/navbar
+
 
 @optional
 - (BOOL)drawBackgroundInRect:(CGRect)rect forDate:(NSDate*)adate selected:(BOOL)asel;

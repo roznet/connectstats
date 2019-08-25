@@ -137,23 +137,15 @@ NSString *const KalDataSourceChangedNotification = @"KalDataSourceChangedNotific
 
 -(void)setupTitleView{
     NSString * text = [logic selectedMonthNameAndYear];
-#ifdef __IPHONE_9_0
+
     NSAttributedString * attr = [[NSAttributedString alloc] initWithString:text
-                                                                attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16.]}];
-#else
-    NSAttributedString * attr = [[NSAttributedString alloc] initWithString:text
-                                                                attributes:@{NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue" size:16.]}];
-#endif
+                                                                attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16.],
+                                                                             NSForegroundColorAttributeName:[self.dataSource primaryTextColor]
+                                                                             }];
     self.titleView.title = attr  ;
-#ifdef  __IPHONE_9_0
     NSAttributedString * attr2 = [[NSAttributedString alloc] initWithString:[dataSource title]
                                                                  attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12.],
-                                                                              NSForegroundColorAttributeName:[UIColor darkGrayColor]}];
-#else
-    NSAttributedString * attr2 = [[NSAttributedString alloc] initWithString:[dataSource title]
-                                                                 attributes:@{NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue" size:12.],
-                                                                              NSForegroundColorAttributeName:[UIColor darkGrayColor]}];
-#endif
+                                                                              NSForegroundColorAttributeName:[self.dataSource secondaryTextColor]}];
     self.titleView.subtitle = attr2;
     
     [attr release];
@@ -276,7 +268,7 @@ NSString *const KalDataSourceChangedNotification = @"KalDataSourceChangedNotific
     self.navigationItem.leftBarButtonItems = [dataSource leftButtonItems];
     self.navigationItem.leftItemsSupplementBackButton = YES;
     self.titleView = [[[RZNavigationTitleView alloc] initWithFrame:CGRectMake(0., 0., 120., 44)] autorelease];
-    self.titleView.backgroundColor = [UIColor clearColor];
+    self.titleView.backgroundColor = [UIColor clearColor]; // should match navigationbar color
     self.navigationItem.titleView = self.titleView;
     
     KalView *kalView = [[[KalView alloc] initWithFrame:self.view.frame dataSource:self.dataSource delegate:self logic:logic] autorelease];
@@ -284,6 +276,7 @@ NSString *const KalDataSourceChangedNotification = @"KalDataSourceChangedNotific
     self.tableView = kalView.tableView;
     self.tableView.dataSource = self.dataSource;
     self.tableView.delegate = self.dataSource;
+    self.tableView.backgroundColor = self.dataSource.backgroundColor;
     [kalView selectDate:[KalDate dateFromNSDate:self.initialDate]];
     [self reloadData];
 }

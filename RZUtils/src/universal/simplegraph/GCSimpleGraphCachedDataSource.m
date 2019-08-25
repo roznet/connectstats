@@ -83,6 +83,7 @@
 
 +(GCSimpleGraphCachedDataSource*)graphDataSourceWithTitle:(NSString*)title andXUnit:(GCUnit*)xUnit{
     GCSimpleGraphCachedDataSource * rv = RZReturnAutorelease([[GCSimpleGraphCachedDataSource alloc] init]);
+    
     if (rv) {
         rv.title = title;
         rv.xUnit = xUnit;

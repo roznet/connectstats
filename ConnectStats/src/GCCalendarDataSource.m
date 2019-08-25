@@ -223,8 +223,16 @@
 }
 - (UIColor*)backgroundColor{
     //return [GCViewConfig colo]
-    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementTileColor];
+    //return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementTileColor];
+    return [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground];
 }
+-(UIColor*)primaryTextColor{
+    return [GCViewConfig defaultColor:gcSkinKeyDefaultColorPrimaryText];
+}
+-(UIColor*)secondaryTextColor{
+    return [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];
+}
+
 - (UIColor*)weekdayTextColor{
     return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementWeekdayTextColor];
 }
@@ -449,7 +457,7 @@
             CGContextRef ctx = UIGraphicsGetCurrentContext();
             CGFloat fontSize = 9.f;
             UIFont *font = [GCViewConfig systemFontOfSize:fontSize];
-            UIColor * color = selected ? [UIColor whiteColor] : [markers displayTextColor];
+            UIColor * color = selected ? self.daySelectedTextColor : [markers displayTextColor];
 
             CGContextSaveGState(ctx);
 

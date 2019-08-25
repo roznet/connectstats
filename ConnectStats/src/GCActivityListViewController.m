@@ -248,6 +248,10 @@ const CGFloat kCellDaySpacing = 2.f;
 
     [[GCAppGlobal web] attach:self];
 }
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
+}
 
 -(void)setupQuickFilterIcon{
     // iPhone only will have day activities

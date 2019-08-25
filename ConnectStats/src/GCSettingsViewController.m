@@ -197,6 +197,10 @@
     self.tableView.backgroundView = nil;
     self.tableView.backgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorGroupedTable];
 }
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
+}
 
 - (void)didReceiveMemoryWarning
 {

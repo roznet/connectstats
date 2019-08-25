@@ -49,19 +49,11 @@
 #endif
 
 -(UIColor*)useBackgroundColor{
-    if (self.darkMode) {
-        return [UIColor blackColor];
-    }else{
-        return [UIColor whiteColor];//[RZViewConfig backgroundForLegend]
-    }
+    return [self.displayConfig useBackgroundColor];
 }
 
 -(UIColor*)useForegroundColor{
-    if (self.darkMode) {
-        return [UIColor whiteColor];
-    }else{
-        return [UIColor blackColor];
-    }
+    return [self.displayConfig useForegroundColor];
 }
 
 -(NSArray*)numberOfLegends{

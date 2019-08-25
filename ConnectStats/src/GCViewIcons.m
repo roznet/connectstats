@@ -150,14 +150,21 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,gcUIStyle style,NSString*suffix
     if( icon == nil){
         return nil;
     }
-    UIImageView * imgView = RZReturnAutorelease([[UIImageView alloc] initWithImage:icon]);
-    imgView.backgroundColor = [GCViewConfig cellBackgroundDarkerForActivity:activityType];
     
-    imgView.layer.cornerRadius = 5;
-    imgView.layer.mask.masksToBounds = YES;
-    imgView.layer.borderWidth = 0;
-    imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [imgView setTintColor:[GCViewConfig cellIconColorForActivity:activityType]];
+    UIImageView * imgView = RZReturnAutorelease([[UIImageView alloc] initWithImage:icon]);
+    
+    
+    if( [GCViewConfig roundedActivityIcons]){
+        imgView.backgroundColor = [GCViewConfig cellBackgroundDarkerForActivity:activityType];
+        imgView.layer.cornerRadius = 5;
+        imgView.layer.mask.masksToBounds = YES;
+        imgView.layer.borderWidth = 0;
+        imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [imgView setTintColor:[GCViewConfig cellIconColorForActivity:activityType]];
+    }else{
+        imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [imgView setTintColor:[GCViewConfig cellBackgroundDarkerForActivity:activityType]];
+    }
     
     UIGraphicsBeginImageContextWithOptions(imgView.bounds.size, imgView.isOpaque, 0.0);
     [imgView.layer renderInContext:UIGraphicsGetCurrentContext()];

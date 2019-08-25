@@ -207,8 +207,31 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return [_current_skin() colorForKey:kGCSkinKeyCalendarColors andSubkey:@(elem)];
 }
 
-#pragma mark - Fields
++(void)setupViewController:(UIViewController*)viewController{
+    UIColor * backgroundColor = [_current_skin() colorForKey:kGCSkinKeyDefaultColors andSubkey:@(gcSkinKeyDefaultColorBackground)];
+    UIColor * foregroundColor = [_current_skin() colorForKey:kGCSkinKeyDefaultColors andSubkey:@(gcSkinKeyDefaultColorHighlightedText)];
+    viewController.view.backgroundColor = backgroundColor;
+    if( viewController.navigationController ){
+        [UINavigationBar appearance].barTintColor = backgroundColor;
+        [UINavigationBar appearance].tintColor = foregroundColor;
+    }
+    if( viewController.tabBarController ){
+        viewController.tabBarController.tabBar.barTintColor = backgroundColor;
+        viewController.tabBarController.tabBar.tintColor = foregroundColor;
+    }
+    if( [viewController isKindOfClass:[UITableViewController class]]){
+        UITableViewController * tableViewController = (UITableViewController*)viewController;
+        tableViewController.tableView.backgroundColor = backgroundColor;
+    }
+}
 
+#pragma mark - Bool Configuation
+
++(BOOL)roundedActivityIcons{
+    return [_current_skin() boolFor:gcGCSkinKeyBoolRoundedActivityIcons];
+}
+
+#pragma mark - Fields
 
 +(NSArray*)displayDayMainFieldsOrdered{
     return @[

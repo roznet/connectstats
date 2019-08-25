@@ -69,6 +69,11 @@ typedef NS_ENUM(NSUInteger,gcGCSkinKeyCalendarElement){
     gcGCSkinKeyCalendarElementTileTodaySelectedColor
 };
 
+typedef NS_ENUM(NSUInteger,gcGCSkinKeyBool){
+    gcGCSkinKeyBoolRoundedActivityIcons
+};
+
+
 @interface GCViewConfigSkin : NSObject
 
 @property (nonatomic,readonly) NSString * skinName;
@@ -88,4 +93,6 @@ typedef NS_ENUM(NSUInteger,gcGCSkinKeyCalendarElement){
 -(UIColor*)colorForKey:(NSString *)key andField:(GCField*)field;
 -(UIColor*)colorForKey:(NSString *)key andSubkey:(id)subkey;
 -(UIColor*)colorForKey:(NSString*)key andValue:(double)val;
+-(BOOL)boolFor:(gcGCSkinKeyBool)which;
+
 @end
