@@ -575,7 +575,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     speed.valueFont = [GCViewConfig systemFontOfSize:12.];
 
     if( skipAlways ){
-        [self setupBackgroundColors:@[ [UIColor lightGrayColor] ]];
+        [self setupBackgroundColors:@[ [GCViewConfig defaultColor:gcSkinKeyDefaultColorTertiaryText] ]];
         duration.valueColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];
         distance.valueColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];
         distance.labelColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];

@@ -145,7 +145,7 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,gcUIStyle style,NSString*suffix
     return rv;
 }
 
-+(UIImage*)activityTypeDynamicIconFor:(NSString*)activityType{
++(UIImage*)activityTypeDisabledIconFor:(NSString*)activityType{
     UIImage * icon = [UIImage imageNamed:[NSString stringWithFormat:@"%@-dyn", activityType]];
     if( icon == nil){
         return nil;
@@ -153,6 +153,26 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,gcUIStyle style,NSString*suffix
     
     UIImageView * imgView = RZReturnAutorelease([[UIImageView alloc] initWithImage:icon]);
     
+    imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [imgView setTintColor:[GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText]];
+    
+    UIGraphicsBeginImageContextWithOptions(imgView.bounds.size, imgView.isOpaque, 0.0);
+    [imgView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage * rv = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return rv;
+}
+
++(UIImage*)activityTypeDynamicIconFor:(NSString*)activityType{
+    UIImage * icon = [UIImage imageNamed:[NSString stringWithFormat:@"%@-dyn", activityType]];
+    if( icon == nil){
+        return nil;
+    }
+    
+    UIImageView * imgView = RZReturnAutorelease([[UIImageView alloc] initWithImage:icon]);
     
     if( [GCViewConfig roundedActivityIcons]){
         imgView.backgroundColor = [GCViewConfig cellBackgroundDarkerForActivity:activityType];

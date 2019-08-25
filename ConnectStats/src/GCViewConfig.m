@@ -114,7 +114,7 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
                               andSubkey:@(which)];
 }
 
-+(RZColor*)colorForText:(rzTextColor)which{
++(UIColor*)colorForText:(rzTextColor)which{
     switch (which) {
         case rzColorStylePrimaryText:
             return [_current_skin() colorForKey:kGCSkinKeyDefaultColors
