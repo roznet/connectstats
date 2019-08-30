@@ -154,7 +154,7 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,gcUIStyle style,NSString*suffix
     UIImageView * imgView = RZReturnAutorelease([[UIImageView alloc] initWithImage:icon]);
     
     imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [imgView setTintColor:[GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText]];
+    [imgView setTintColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
     
     UIGraphicsBeginImageContextWithOptions(imgView.bounds.size, imgView.isOpaque, 0.0);
     [imgView.layer renderInContext:UIGraphicsGetCurrentContext()];
@@ -203,7 +203,18 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,gcUIStyle style,NSString*suffix
 }
 
 +(UIImage*)cellIconFor:(gcIconCell)name{
-    return imageNamedIn(cellIconDefs(), name, [GCViewConfig uiStyle], nil, nil);
+    UIImage * icon = imageNamedIn(cellIconDefs(), name, [GCViewConfig uiStyle], nil, nil);
+    
+    UIImageView * imgView = RZReturnAutorelease([[UIImageView alloc] initWithImage:icon]);
+    imgView.backgroundColor = [UIColor clearColor];
+    imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [imgView setTintColor:[GCViewConfig colorForGraphElement:gcSkinGraphColorForeground]];
+    UIGraphicsBeginImageContextWithOptions(imgView.bounds.size, imgView.isOpaque, 0.0);
+    [imgView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage * rv = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return rv;
 }
 
 +(UIImage*)categoryIconFor:(NSString*)category{

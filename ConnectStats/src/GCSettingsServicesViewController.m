@@ -297,6 +297,10 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -1052,7 +1056,7 @@
     }else{
         rv = [GCCellGrid gridCell:tableView];
     }
-    rv.backgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground];
+    rv.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
     return rv;
 }
 
@@ -1334,7 +1338,7 @@
             [self.tableView reloadData];
         }
     }else if (indexPath.section==GC_SECTIONS_GARMIN && indexPath.row==GC_GARMIN_METHOD){
-        GCCellEntryListViewController * list = [GCCellEntryListViewController entryListViewController:[GCViewConfig validChoicesForGarminLoginMethod] selected:[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:gcGarminLoginMethodDirect]];
+        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForGarminLoginMethod] selected:[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:gcGarminLoginMethodDirect]];
         list.entryFieldDelegate = self;
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_METHOD);
         [self.navigationController pushViewController:list animated:YES];
@@ -1358,7 +1362,7 @@
                     idx++;
                 }
             }
-            GCCellEntryListViewController * lc = [GCCellEntryListViewController entryListViewController:choices selected:selected];
+            GCCellEntryListViewController * lc = [GCViewConfig standardEntryListViewController:choices selected:selected];
             lc.subtext = subtext;
             lc.entryFieldDelegate = self;
             lc.identifierInt= GC_IDENTIFIER(GC_SECTIONS_WITHINGS, GC_ROW_USER);
@@ -1388,12 +1392,12 @@
         [self.navigationController pushViewController:source animated:YES];
         [source release];
     }else if( indexPath.section == GC_SECTIONS_CONNECTSTATS && indexPath.row == GC_CONNECTSTATS_USE){
-        GCCellEntryListViewController * list = [GCCellEntryListViewController entryListViewController:[GCViewConfig validChoicesForConnectStatsServiceUse] selected:[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_USE defaultValue:gcConnectStatsServiceUseValidate]];
+        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsServiceUse] selected:[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_USE defaultValue:gcConnectStatsServiceUseValidate]];
         list.entryFieldDelegate = self;
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_USE);
         [self.navigationController pushViewController:list animated:YES];
     }else if( indexPath.section == GC_SECTIONS_CONNECTSTATS && indexPath.row == GC_CONNECTSTATS_CONFIG){
-        GCCellEntryListViewController * list = [GCCellEntryListViewController entryListViewController:[GCViewConfig validChoicesForConnectStatsConfig] selected:[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]];
+        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsConfig] selected:[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]];
         list.entryFieldDelegate = self;
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_CONFIG);
         [self.navigationController pushViewController:list animated:YES];
@@ -1408,7 +1412,7 @@
             index++;
         }
 
-        GCCellEntryListViewController * list = [GCCellEntryListViewController entryListViewController:[self validYearsForBackfill] selected:index];
+        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[self validYearsForBackfill] selected:index];
         list.entryFieldDelegate = self;
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_FILLYEAR);
         [self.navigationController pushViewController:list animated:YES];
@@ -1428,7 +1432,7 @@
             index = 0;
         }
         
-        GCCellEntryListViewController * list = [GCCellEntryListViewController entryListViewController:display selected:index];
+        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:display selected:index];
         list.entryFieldDelegate = self;
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_DEBUGKEY);
         [self.navigationController pushViewController:list animated:YES];

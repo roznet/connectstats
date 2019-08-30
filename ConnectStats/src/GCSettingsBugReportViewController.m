@@ -58,6 +58,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
     self.webView.frame = self.view.frame;
 }
 

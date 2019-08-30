@@ -98,43 +98,43 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
                                   ]];
 }
 +(void)setupGradientForDetails:(GCCellGrid*)aG{
-    [aG setupBackgroundColors:@[ [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground] ]];
+    [aG setupBackgroundColors:@[ [GCViewConfig defaultColor:gcSkinDefaultColorBackground] ]];
 }
 +(void)setupGradientForCellsEven:(GCCellGrid*)aG{
 
-    [aG setupBackgroundColors: @[ [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackgroundEven] ] ];
+    [aG setupBackgroundColors: @[ [GCViewConfig defaultColor:gcSkinDefaultColorBackgroundEven] ] ];
 }
 
 +(void)setupGradientForCellsOdd:(GCCellGrid*)aG{
-    [aG setupBackgroundColors: @[ [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackgroundOdd] ] ];
+    [aG setupBackgroundColors: @[ [GCViewConfig defaultColor:gcSkinDefaultColorBackgroundOdd] ] ];
 }
 
-+(UIColor*)defaultColor:(gcSkinKeyDefaultColor)which{
-    return [_current_skin() colorForKey:kGCSkinKeyDefaultColors
++(UIColor*)defaultColor:(gcSkinDefaultColor)which{
+    return [_current_skin() colorForKey:kgcSkinDefaultColors
                               andSubkey:@(which)];
 }
 
 +(UIColor*)colorForText:(rzTextColor)which{
     switch (which) {
         case rzColorStylePrimaryText:
-            return [_current_skin() colorForKey:kGCSkinKeyDefaultColors
-                                      andSubkey:@(gcSkinKeyDefaultColorPrimaryText)];
+            return [_current_skin() colorForKey:kgcSkinDefaultColors
+                                      andSubkey:@(gcSkinDefaultColorPrimaryText)];
         case rzColorStyleSecondaryText:
-            return [_current_skin() colorForKey:kGCSkinKeyDefaultColors
-                                      andSubkey:@(gcSkinKeyDefaultColorSecondaryText)];
+            return [_current_skin() colorForKey:kgcSkinDefaultColors
+                                      andSubkey:@(gcSkinDefaultColorSecondaryText)];
         case rzColorStyleTertiaryText:
-            return [_current_skin() colorForKey:kGCSkinKeyDefaultColors
-                                      andSubkey:@(gcSkinKeyDefaultColorTertiaryText)];
+            return [_current_skin() colorForKey:kgcSkinDefaultColors
+                                      andSubkey:@(gcSkinDefaultColorTertiaryText)];
         case rzColorStyleHighlightedText:
-            return [_current_skin() colorForKey:kGCSkinKeyDefaultColors
-                                      andSubkey:@(gcSkinKeyDefaultColorHighlightedText)];
+            return [_current_skin() colorForKey:kgcSkinDefaultColors
+                                      andSubkey:@(gcSkinDefaultColorHighlightedText)];
     }
     return nil;
 }
 
 +(UIColor*)backgroundForGroupedTable{
-    return [_current_skin() colorForKey:kGCSkinKeyDefaultColors
-                              andSubkey:@(gcSkinKeyDefaultColorGroupedTable)];
+    return [_current_skin() colorForKey:kgcSkinDefaultColors
+                              andSubkey:@(gcSkinDefaultColorGroupedTable)];
 //    return [UIColor colorWithHexValue:0xF6F3F1 andAlpha:1.];
 }
 +(void)setupGradient:(GCCellGrid*)aG forSwimStroke:(gcSwimStrokeType)tp{
@@ -199,22 +199,25 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return [_current_skin() colorForKey:kGCSkinKeyFieldFillColor andField:field] ?: [UIColor colorWithRed:0.0 green:0.3 blue:0. alpha:0.3];
 }
 
-+(UIColor*)barGraphColor{
-    return [_current_skin() colorForKey:kGCSkinKeyBarGraphColor];
-}
-
-+(UIColor*)colorForCalendarElement:(gcGCSkinKeyCalendarElement)elem{
++(UIColor*)colorForCalendarElement:(gcSkinCalendarElement)elem{
     return [_current_skin() colorForKey:kGCSkinKeyCalendarColors andSubkey:@(elem)];
 }
-
++(UIColor*)colorForGraphElement:(gcSkinGraphColor)which{
+    
+    return [_current_skin() colorForKey:kGCSkinKeyGraphColor andSubkey:@(which)];
+}
 +(void)setupViewController:(UIViewController*)viewController{
-    UIColor * backgroundColor = [_current_skin() colorForKey:kGCSkinKeyDefaultColors andSubkey:@(gcSkinKeyDefaultColorBackground)];
-    UIColor * foregroundColor = [_current_skin() colorForKey:kGCSkinKeyDefaultColors andSubkey:@(gcSkinKeyDefaultColorHighlightedText)];
+    UIColor * backgroundColor = [_current_skin() colorForKey:kgcSkinDefaultColors andSubkey:@(gcSkinDefaultColorBackground)];
+    UIColor * foregroundColor = [_current_skin() colorForKey:kgcSkinDefaultColors andSubkey:@(gcSkinDefaultColorHighlightedText)];
     viewController.view.backgroundColor = backgroundColor;
-    if( viewController.navigationController ){
-        [UINavigationBar appearance].barTintColor = backgroundColor;
-        [UINavigationBar appearance].tintColor = foregroundColor;
-    }
+    // General Appearance
+    [UINavigationBar appearance].barTintColor = backgroundColor;
+    [UINavigationBar appearance].tintColor = foregroundColor;
+    [[UINavigationBar appearance] setTitleTextAttributes: @{
+                                                            NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText],
+                                                            NSFontAttributeName: [GCViewConfig systemFontOfSize:20.0],
+                                                            
+                                                            }];
     if( viewController.tabBarController ){
         viewController.tabBarController.tabBar.barTintColor = backgroundColor;
         viewController.tabBarController.tabBar.tintColor = foregroundColor;
@@ -224,11 +227,10 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
         tableViewController.tableView.backgroundColor = backgroundColor;
     }
 }
-
 #pragma mark - Bool Configuation
 
 +(BOOL)roundedActivityIcons{
-    return [_current_skin() boolFor:gcGCSkinKeyBoolRoundedActivityIcons];
+    return [_current_skin() boolFor:gcSkinBoolRoundedActivityIcons];
 }
 
 #pragma mark - Fields
@@ -529,6 +531,17 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 
 
 #pragma mark - Other
+
++(GCCellEntryListViewController*)standardEntryListViewController:(NSArray*)theChoices selected:(NSUInteger)achoice{
+    GCCellEntryListViewController * rv = [GCCellEntryListViewController entryListViewController:theChoices selected:achoice];
+    [self setupViewController:rv];
+    rv.textPrimaryColor = [self defaultColor:gcSkinDefaultColorPrimaryText];
+    rv.textSecondaryColor = [self defaultColor:gcSkinDefaultColorSecondaryText];
+    rv.selectedTextColor = [self defaultColor:gcSkinDefaultColorHighlightedText];
+    rv.cellBackgroundColor = [self defaultColor:gcSkinDefaultColorBackground];
+    return rv;
+}
+
 
 +(NSArray*)languageSettingChoices{
     NSMutableArray * rv = [NSMutableArray arrayWithArray:@[

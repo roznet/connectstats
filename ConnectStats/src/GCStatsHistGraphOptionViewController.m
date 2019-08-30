@@ -126,7 +126,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPathI{
     NSIndexPath * indexPath = [self.remap remap:indexPathI];
     if (indexPath.row == GC_ROW_GRAPH_TYPE) {
-        GCCellEntryListViewController * vc = [GCCellEntryListViewController entryListViewController:[GCStatsHistGraphConfig graphTypeDisplayNames]
+        GCCellEntryListViewController * vc = [GCViewConfig standardEntryListViewController:[GCStatsHistGraphConfig graphTypeDisplayNames]
                                                                                            selected:self.config.graphType];
         vc.identifierInt = indexPath.row;
         vc.entryFieldDelegate = self;

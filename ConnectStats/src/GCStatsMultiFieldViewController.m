@@ -587,6 +587,7 @@
         [graphCell setDataSource:cache andConfig:cache];
     }else{
         GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+        cache.emptyGraphLabel = NSLocalizedString(@"Not enough points", @"Performance Analysis Empty");
         [graphCell setDataSource:cache andConfig:cache];
     }
     return graphCell;
@@ -696,7 +697,7 @@
             rv = [self tableView:tableView derivedCellForRowAtIndexPath:indexPath];
         }
     }
-    rv.backgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground];
+    rv.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
     return rv;
 }
 

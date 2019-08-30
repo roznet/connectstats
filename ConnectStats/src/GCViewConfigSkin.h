@@ -40,37 +40,47 @@ extern NSString * kGCSkinKeySwimStrokeColor;
 extern NSString * kGCSkinKeyCategoryBackground;
 extern NSString * kGCSkinKeyGoalPercentBackgroundColor;
 extern NSString * kGCSkinKeyGoalPercentTextColor;
-extern NSString * kGCSkinKeyBarGraphColor;
+extern NSString * kGCSkinKeyGraphColor;
 extern NSString * kGCSkinKeyListOfColorsForMultiplots;
 extern NSString * kGCSkinKeyCalendarColors;
 
-extern NSString * kGCSkinKeyDefaultColors;
+extern NSString * kgcSkinDefaultColors;
 
-typedef NS_ENUM(NSUInteger,gcSkinKeyDefaultColor){
-    gcSkinKeyDefaultColorBackground,
-    gcSkinKeyDefaultColorBackgroundEven, // for things like alternating background in rows
-    gcSkinKeyDefaultColorBackgroundOdd, // for things like alternating background in rows
-    gcSkinKeyDefaultColorPrimaryText, // original = black
-    gcSkinKeyDefaultColorSecondaryText, // original = darkGray
-    gcSkinKeyDefaultColorTertiaryText, // original = lightGray
-    gcSkinKeyDefaultColorHighlightedText,  // Original = blue
-    gcSkinKeyDefaultColorGroupedTable
+typedef NS_ENUM(NSUInteger,gcSkinDefaultColor){
+    gcSkinDefaultColorBackground,
+    gcSkinDefaultColorBackgroundEven, // for things like alternating background in rows
+    gcSkinDefaultColorBackgroundOdd, // for things like alternating background in rows
+    gcSkinDefaultColorPrimaryText, // original = black
+    gcSkinDefaultColorSecondaryText, // original = darkGray
+    gcSkinDefaultColorTertiaryText, // original = lightGray
+    gcSkinDefaultColorHighlightedText,  // Original = blue
+    gcSkinDefaultColorGroupedTable
 };
 
-typedef NS_ENUM(NSUInteger,gcGCSkinKeyCalendarElement){
-    gcGCSkinKeyCalendarElementWeekdayTextColor,
-    gcGCSkinKeyCalendarElementDayCurrentMonthTextColor,
-    gcGCSkinKeyCalendarElementDayAdjacentMonthTextColor,
-    gcGCSkinKeyCalendarElementDaySelectedTextColor,
-    gcGCSkinKeyCalendarElementSeparatorColor,
-    gcGCSkinKeyCalendarElementTileColor,
-    gcGCSkinKeyCalendarElementTileSelectedColor,
-    gcGCSkinKeyCalendarElementTileTodayColor,
-    gcGCSkinKeyCalendarElementTileTodaySelectedColor
+typedef NS_ENUM(NSUInteger,gcSkinCalendarElement){
+    gcSkinCalendarElementWeekdayTextColor,
+    gcSkinCalendarElementDayCurrentMonthTextColor,
+    gcSkinCalendarElementDayAdjacentMonthTextColor,
+    gcSkinCalendarElementDaySelectedTextColor,
+    gcSkinCalendarElementSeparatorColor,
+    gcSkinCalendarElementTileColor,
+    gcSkinCalendarElementTileSelectedColor,
+    gcSkinCalendarElementTileTodayColor,
+    gcSkinCalendarElementTileTodaySelectedColor
 };
 
-typedef NS_ENUM(NSUInteger,gcGCSkinKeyBool){
-    gcGCSkinKeyBoolRoundedActivityIcons
+typedef NS_ENUM(NSUInteger,gcSkinGraphColor){
+    gcSkinGraphColorBackground,
+    gcSkinGraphColorForeground,
+    gcSkinGraphColorBarGraph,
+    gcSkinGraphColorAxis,
+    gcSkinGraphColorRegressionLine, // For regression line or moving average, etc
+    gcSkinGraphColorLapOverlay,
+    gcSkinGraphColorRegressionLineSecondary // for secondary graph (ex fitness/performance)
+};
+
+typedef NS_ENUM(NSUInteger,gcSkinBool){
+    gcSkinBoolRoundedActivityIcons
 };
 
 
@@ -93,6 +103,6 @@ typedef NS_ENUM(NSUInteger,gcGCSkinKeyBool){
 -(UIColor*)colorForKey:(NSString *)key andField:(GCField*)field;
 -(UIColor*)colorForKey:(NSString *)key andSubkey:(id)subkey;
 -(UIColor*)colorForKey:(NSString*)key andValue:(double)val;
--(BOOL)boolFor:(gcGCSkinKeyBool)which;
+-(BOOL)boolFor:(gcSkinBool)which;
 
 @end

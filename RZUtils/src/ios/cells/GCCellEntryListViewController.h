@@ -34,6 +34,11 @@
 @property (nonatomic,retain)	id<GCEntryFieldDelegate> entryFieldDelegate;
 @property						NSInteger identifierInt;
 
+@property (nonatomic,retain) UIColor * cellBackgroundColor;
+@property (nonatomic,retain) UIColor * textPrimaryColor;
+@property (nonatomic,retain) UIColor * textSecondaryColor;
+@property (nonatomic,retain) UIColor * selectedTextColor;
+
 +(GCCellEntryListViewController*)entryListViewController:(NSArray*)theChoices selected:(NSUInteger)achoice;
 -(void)setIndexPath:(NSIndexPath*)indexPath;
 -(NSIndexPath*)indexPath;

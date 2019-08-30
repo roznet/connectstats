@@ -100,17 +100,19 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(NSArray<UIColor*>*)arrayOfColorsForMultiplots;
 
 // General Theme
-+(UIColor*)defaultColor:(gcSkinKeyDefaultColor)which;
++(UIColor*)defaultColor:(gcSkinDefaultColor)which;
 
 +(UIColor*)fillColorForField:(GCField*)field;
 +(NSArray*)colorsForField:(GCField*)field;
-+(UIColor*)barGraphColor;
+
 +(UIColor*)colorForGoalPercent:(double)pct;
 +(UIColor*)textColorForGoalPercent:(double)pct;
 
-+(UIColor*)colorForCalendarElement:(gcGCSkinKeyCalendarElement)elem;
++(UIColor*)colorForCalendarElement:(gcSkinCalendarElement)elem;
++(UIColor*)colorForGraphElement:(gcSkinGraphColor)which;
 
 +(void)setupViewController:(UIViewController*)viewController;
++(GCCellEntryListViewController*)standardEntryListViewController:(NSArray*)theChoices selected:(NSUInteger)achoice;
 +(void)setupGradient:(GCCellGrid*)aG ForActivity:(id)aAct;
 +(void)setupGradientForDetails:(GCCellGrid*)aG;
 +(void)setupGradientForCellsEven:(GCCellGrid*)aG;

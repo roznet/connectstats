@@ -60,6 +60,10 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -88,9 +92,10 @@
 
     if (indexPath.row == GCVIEW_FILTER_MAIN) {
         GCCellEntrySwitch * cell = [GCCellEntrySwitch switchCell:tableView];
-        cell.label.text = NSLocalizedString(@"Filter bad values", @"Settings Filter");
-        cell.label.font = [GCViewConfig boldSystemFontOfSize:16.];
-        //[cell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_REFRESH)];
+        
+        cell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Filter bad values", @"Settings Filter")];
+
         cell.entryFieldDelegate = self;
         cell.identifierInt = GCVIEW_FILTER_MAIN;
         (cell.toggle).on = [GCAppGlobal configGetBool:CONFIG_FILTER_BAD_VALUES defaultValue:YES];
@@ -120,27 +125,32 @@
         rv = cell;
     }else if(indexPath.row==GCVIEW_FILTER_ACCEL){
         GCCellEntrySwitch * cell = [GCCellEntrySwitch switchCell:tableView];
-        cell.label.text = NSLocalizedString(@"Filter Bad Accelerations", @"Settings Filter");
+        cell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                              withString:NSLocalizedString(@"Filter Bad Accelerations", @"Settings Filter")];
+
         cell.entryFieldDelegate = self;
         cell.identifierInt = GCVIEW_FILTER_ACCEL;
-        cell.label.font = [GCViewConfig boldSystemFontOfSize:16.];
         (cell.toggle).on = [GCAppGlobal configGetBool:CONFIG_FILTER_BAD_ACCEL defaultValue:YES];
 
         rv = cell;
 
     }else if(indexPath.row==GCVIEW_FILTER_ADJUST_LAP){
         GCCellEntrySwitch * cell = [GCCellEntrySwitch switchCell:tableView];
-        cell.label.text = NSLocalizedString(@"Adjust For Lap Avg", @"Settings Filter");
+        cell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                              withString:NSLocalizedString(@"Adjust For Lap Avg", @"Settings Filter")];
         cell.entryFieldDelegate = self;
         cell.identifierInt = GCVIEW_FILTER_ADJUST_LAP;
-        cell.label.font = [GCViewConfig boldSystemFontOfSize:16.];
         (cell.toggle).on = [GCAppGlobal configGetBool:CONFIG_FILTER_ADJUST_FOR_LAP defaultValue:NO];
 
         rv = cell;
 
     }
-
-    return rv?: [GCCellGrid gridCell:tableView];
+    if( rv == nil){
+        rv = [GCCellGrid gridCell:tableView];
+    }
+    rv.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
+    
+    return rv;
 }
 
 #pragma mark - Maximum Power
@@ -240,14 +250,14 @@
     if (indexPath.row == GCVIEW_FILTER_LOW_SPEED) {
         NSArray * choices = [self minimumSpeedChoicesDescriptions];
         NSUInteger selected = [self minimumSpeedChoiceForSpeed:[GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW defaultValue:1.0]];
-        GCCellEntryListViewController * detailViewController = [GCCellEntryListViewController entryListViewController:choices selected:selected];
+        GCCellEntryListViewController * detailViewController = [GCViewConfig standardEntryListViewController:choices selected:selected];
         detailViewController.entryFieldDelegate = self;
         detailViewController.identifierInt = GCVIEW_FILTER_LOW_SPEED;
         [self.navigationController pushViewController:detailViewController animated:YES];
     }else if (indexPath.row==GCVIEW_FILTER_HIGH_POWER){
         NSArray * choices = [self maximumPowerChoicesDescriptions];
         NSUInteger selected = [self maximumPowerChoiceForPower:[GCAppGlobal configGetDouble:CONFIG_FILTER_POWER_ABOVE defaultValue:CONFIG_FILTER_DISABLED_POWER]];
-        GCCellEntryListViewController * detailViewController = [GCCellEntryListViewController entryListViewController:choices selected:selected];
+        GCCellEntryListViewController * detailViewController = [GCViewConfig standardEntryListViewController:choices selected:selected];
         detailViewController.entryFieldDelegate = self;
         detailViewController.identifierInt = GCVIEW_FILTER_HIGH_POWER;
         [self.navigationController pushViewController:detailViewController animated:YES];

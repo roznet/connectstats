@@ -36,6 +36,8 @@
 #import "GCActivity+Database.h"
 #import "GCDerivedOrganizer.h"
 #import "GCHealthOrganizer.h"
+#import "GCViewConfig.h"
+
 @import ObjectiveC;
 
 @interface GCDebugActionsTableViewController ()
@@ -53,6 +55,10 @@
     [super viewDidLoad];
 
     self.availableActions = [self listActions];
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
 }
 
 - (void)didReceiveMemoryWarning {

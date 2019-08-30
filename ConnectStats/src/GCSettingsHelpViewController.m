@@ -27,6 +27,8 @@
 #import "GCViewIcons.h"
 #import "Flurry.h"
 #import "GCAppGlobal.h"
+#import "GCViewConfig.h"
+
 
 @interface GCSettingsHelpViewController ()
 
@@ -70,8 +72,11 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    [GCViewConfig setupViewController:self];
     self.webView.frame = self.view.frame;
     [Flurry logEvent:EVENT_HELP];
+    
 }
 
 - (void)didReceiveMemoryWarning

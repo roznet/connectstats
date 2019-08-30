@@ -143,8 +143,8 @@
         self.tableView.tableHeaderView.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:self.activity];
     }
     self.initialized = true;
-    self.view.backgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground];
-    self.tableView.backgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground];
+    self.view.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
+    self.tableView.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -531,7 +531,7 @@
                 self.autolapChoice = [[[GCActivityAutoLapChoices alloc] initWithActivity:act] autorelease];
             }
 
-            GCCellEntryListViewController * list = [GCCellEntryListViewController entryListViewController:[self.autolapChoice choicesDescriptions]
+            GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[self.autolapChoice choicesDescriptions]
                                                                                                  selected:self.autolapChoice.selected];
             list.entryFieldDelegate = self;
             [self.navigationController pushViewController:list animated:YES];
@@ -592,8 +592,8 @@
                 GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
                 if (addNumber) {
                     GCFormattedField* theOne = [GCFormattedField formattedField:addField.key activityType:activity.activityType forNumber:addNumber forSize:14.];
-                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];
-                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];
+                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     if ([addNumber sameUnit:mainN]) {
                         theOne.noUnits = true;
                     }
@@ -614,8 +614,8 @@
                 GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
                 if (addNumber) {
                     GCFormattedField* theOne = [GCFormattedField formattedField:addField.key activityType:activity.activityType forNumber:addNumber forSize:14.];
-                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];
-                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];
+                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     if ([addNumber sameUnit:mainN]) {
                         theOne.noUnits = true;
                     }

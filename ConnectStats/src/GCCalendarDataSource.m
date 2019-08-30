@@ -223,47 +223,47 @@
 }
 - (UIColor*)backgroundColor{
     //return [GCViewConfig colo]
-    //return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementTileColor];
-    return [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground];
+    //return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementTileColor];
+    return [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
 }
 -(UIColor*)primaryTextColor{
-    return [GCViewConfig defaultColor:gcSkinKeyDefaultColorPrimaryText];
+    return [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText];
 }
 -(UIColor*)secondaryTextColor{
-    return [GCViewConfig defaultColor:gcSkinKeyDefaultColorSecondaryText];
+    return [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
 }
 
 - (UIColor*)weekdayTextColor{
-    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementWeekdayTextColor];
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementWeekdayTextColor];
 }
 - (UIColor*)dayCurrentMonthTextColor{
-    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementDayCurrentMonthTextColor];
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementDayCurrentMonthTextColor];
 }
 - (UIColor*)dayAdjacentMonthTextColor{
-     return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementDayAdjacentMonthTextColor];
+     return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementDayAdjacentMonthTextColor];
 }
 -(UIColor*)daySelectedTextColor{
-    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementDaySelectedTextColor];
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementDaySelectedTextColor];
 }
 
 - (UIColor*)separatorColor{
-    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementSeparatorColor];
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementSeparatorColor];
 }
 
 -(UIColor*)tileColor{
-    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementTileColor];
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementTileColor];
 }
 -(UIColor*)tileSelectedColor{
     //0x1843c7
-    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementTileSelectedColor];
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementTileSelectedColor];
 }
 -(UIColor*)tileTodayColor{
     //0x7788a2
-    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementTileTodayColor];
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementTileTodayColor];
 }
 -(UIColor*)tileTodaySelectedColor{
     //0x3b7dde
-    return [GCViewConfig colorForCalendarElement:gcGCSkinKeyCalendarElementTileTodaySelectedColor];
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementTileTodaySelectedColor];
 }
 
 -(NSArray*)leftButtonItems{

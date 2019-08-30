@@ -65,7 +65,7 @@
     [super viewDidLoad];
 
     self.tableView.backgroundView = nil;
-    self.tableView.backgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorGroupedTable];
+    self.tableView.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorGroupedTable];
 
 }
 

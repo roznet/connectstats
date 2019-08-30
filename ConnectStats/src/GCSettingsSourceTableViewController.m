@@ -40,6 +40,10 @@
     [super viewDidLoad];
     [self notifyCallBack:nil info:nil];
 }
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

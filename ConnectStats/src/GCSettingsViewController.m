@@ -195,7 +195,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.tableView.backgroundView = nil;
-    self.tableView.backgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorGroupedTable];
+    self.tableView.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorGroupedTable];
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -687,7 +687,7 @@
         }
     }
     
-    rv.backgroundColor = [GCViewConfig defaultColor:gcSkinKeyDefaultColorBackground];
+    rv.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
     
     return rv ?: [GCCellGrid gridCell:tableView];
 }
@@ -821,7 +821,7 @@
         if(indexPath.row == GC_SETTINGS_UNITS){
             NSArray * systems = [GCViewConfig unitSystemDescriptions];
             NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_UNIT_SYSTEM defaultValue:GCUnitSystemDefault];
-            GCCellEntryListViewController * choices = [GCCellEntryListViewController entryListViewController:systems selected:selected];
+            GCCellEntryListViewController * choices = [GCViewConfig standardEntryListViewController:systems selected:selected];
             choices.entryFieldDelegate = self;
             choices.identifierInt = GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_UNITS);
             [self.navigationController pushViewController:choices animated:YES];
@@ -829,21 +829,21 @@
             NSArray * skins = [GCViewConfigSkin availableSkinNames];
             NSString * skin = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:@"Original"];
             NSUInteger selected = [skins indexOfObject:skin];
-            GCCellEntryListViewController * choices = [GCCellEntryListViewController entryListViewController:skins selected:selected];
+            GCCellEntryListViewController * choices = [GCViewConfig standardEntryListViewController:skins selected:selected];
             choices.entryFieldDelegate = self;
             choices.identifierInt = GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_SKIN);
             [self.navigationController pushViewController:choices animated:YES];
         }else if(indexPath.row == GC_SETTINGS_PERIOD){
             NSArray * choices = [GCViewConfig periodDescriptions];
             NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_PERIOD_TYPE defaultValue:0];
-            GCCellEntryListViewController * choicesC = [GCCellEntryListViewController entryListViewController:choices selected:selected];
+            GCCellEntryListViewController * choicesC = [GCViewConfig standardEntryListViewController:choices selected:selected];
             choicesC.entryFieldDelegate = self;
             choicesC.identifierInt = GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_PERIOD);
             [self.navigationController pushViewController:choicesC animated:YES];
         }else if(indexPath.row == GC_SETTINGS_FIRSTDAY){
             NSArray * choices = [GCViewConfig weekStartDescriptions];
             NSUInteger selected = [GCViewConfig weekDayIndex:[GCAppGlobal configGetInt:CONFIG_FIRST_DAY_WEEK defaultValue:1]];
-            GCCellEntryListViewController * choicesC = [GCCellEntryListViewController entryListViewController:choices selected:selected];
+            GCCellEntryListViewController * choicesC = [GCViewConfig standardEntryListViewController:choices selected:selected];
             choicesC.entryFieldDelegate = self;
             choicesC.identifierInt = GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_FIRSTDAY);
             [self.navigationController pushViewController:choicesC animated:YES];
@@ -858,7 +858,7 @@
         }else if(indexPath.row==GC_SETTINGS_STRIDE){
             NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_STRIDE_STYLE defaultValue:GCUnitStrideSameFoot];
             NSArray * types = [GCUnit strideStyleDescriptions];
-            GCCellEntryListViewController * choices = [GCCellEntryListViewController entryListViewController:types selected:selected];
+            GCCellEntryListViewController * choices = [GCViewConfig standardEntryListViewController:types selected:selected];
             choices.entryFieldDelegate = self;
             choices.identifierInt = GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_STRIDE);
             [self.navigationController pushViewController:choices animated:YES];
@@ -871,7 +871,7 @@
         }else if(indexPath.row==GC_SETTINGS_MAP){
             NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_USE_MAP defaultValue:gcMapBoth];
             NSArray * types = [GCViewConfig mapTypes];
-            GCCellEntryListViewController * choices = [GCCellEntryListViewController entryListViewController:types selected:selected];
+            GCCellEntryListViewController * choices = [GCViewConfig standardEntryListViewController:types selected:selected];
             choices.entryFieldDelegate = self;
             choices.identifierInt = GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_MAP);
             [self.navigationController pushViewController:choices animated:YES];
@@ -889,7 +889,7 @@
         }else if (indexPath.row == GC_SETTINGS_LANGUAGE){
             NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_LANGUAGE_SETTING defaultValue:gcLanguageSettingAsDownloaded];
             NSArray * types = [GCViewConfig languageSettingChoices];
-            GCCellEntryListViewController * choices = [GCCellEntryListViewController entryListViewController:types selected:selected];
+            GCCellEntryListViewController * choices = [GCViewConfig standardEntryListViewController:types selected:selected];
             choices.entryFieldDelegate = self;
             choices.identifierInt = GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_LANGUAGE);
             [self.navigationController pushViewController:choices animated:YES];
