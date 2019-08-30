@@ -376,7 +376,8 @@
                        ];
 
         GCSimpleGraphDataHolder * xy = [GCSimpleGraphDataHolder dataHolder:[trackStats dataSerie:0]
-                                                                      type:gcScatterPlot color:[GCViewConfig colorForGraphElement:gcSkinGraphColorForeground]
+                                                                      type:gcScatterPlot
+                                                                     color:[GCViewConfig colorForGraphElement:gcSkinGraphColorForeground]
                                                                    andUnit:[trackStats yUnit:0]];
         if (trackStats.x_field.fieldFlag == gcFieldFlagSumDistance) {
             xy.graphType = gcGraphLine;
@@ -397,7 +398,7 @@
         [line sortByX];
         GCSimpleGraphDataHolder * lineinfo = [GCSimpleGraphDataHolder dataHolder:line
                                                                             type:gcGraphLine
-                                                                           color:[GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLine]
+                                                                           color:[GCViewConfig colorForGraphElement:gcSkinGraphColorLineGraph]
                                                                          andUnit:[trackStats yUnit:0]];
         cache.series = [NSMutableArray arrayWithObjects:xy, lineinfo, nil];
 
@@ -405,7 +406,7 @@
 
         GCSimpleGraphDataHolder * plot = [GCSimpleGraphDataHolder dataHolder:[trackStats dataSerie:0]
                                                                         type:gcGraphLine
-                                                                       color:[GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLine]
+                                                                       color:[GCViewConfig colorForGraphElement:gcSkinGraphColorLineGraph]
                                                                      andUnit:[trackStats yUnit:0]];
         // If line field, setup gradient Function with value of the line field
         // otherwise, use fill color

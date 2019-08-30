@@ -73,6 +73,7 @@ typedef NS_ENUM(NSUInteger,gcSkinGraphColor){
     gcSkinGraphColorBackground,
     gcSkinGraphColorForeground,
     gcSkinGraphColorBarGraph,
+    gcSkinGraphColorLineGraph,
     gcSkinGraphColorAxis,
     gcSkinGraphColorRegressionLine, // For regression line or moving average, etc
     gcSkinGraphColorLapOverlay,

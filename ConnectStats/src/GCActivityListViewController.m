@@ -438,7 +438,7 @@ const CGFloat kCellDaySpacing = 2.f;
 }
 
 -(gcCellInset)insetForRowAtIndexPath:(NSIndexPath*)indexPath{
-    return gcCellInsetNone;
+    return gcCellInsetAll;
     /*
     gcCellInset rv = gcCellInsetNone;
     NSUInteger row = indexPath.row;

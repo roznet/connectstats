@@ -161,9 +161,10 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                             },
                     kGCSkinKeyGraphColor:
                         @{
-                            @(gcSkinGraphColorBackground):[UIColor colorWithHexValue:0x404145 andAlpha:1.f],
+                            @(gcSkinGraphColorBackground):[UIColor colorWithHexValue:0xFFFFFF andAlpha:1.f],
                             @(gcSkinGraphColorForeground):[UIColor colorWithHexValue:0x000000 andAlpha:1.f],
                             @(gcSkinGraphColorAxis):[UIColor blueColor],
+                            @(gcSkinGraphColorLineGraph):[UIColor blackColor],
                             @(gcSkinGraphColorBarGraph): [UIColor colorWithHexValue:0x3583f3 andAlpha:0.8],
                             @(gcSkinGraphColorRegressionLine):[UIColor blueColor],
                             @(gcSkinGraphColorLapOverlay): [UIColor colorWithRed:0. green:0.11 blue:1. alpha:0.2],
@@ -353,6 +354,7 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                             @(gcSkinGraphColorForeground):[UIColor colorWithHexValue:0xFFFFFF andAlpha:1.f],
                             @(gcSkinGraphColorAxis):[UIColor colorWithHexValue:0xAAAAAA andAlpha:1.0],
                             @(gcSkinGraphColorBarGraph): [UIColor colorWithHexValue:0x9ba6b2 andAlpha:0.8],
+                            @(gcSkinGraphColorLineGraph):[UIColor colorWithHexValue:0xacd581 andAlpha:1.0],
                             @(gcSkinGraphColorRegressionLine):[UIColor colorWithHexValue:0xacd581 andAlpha:1.0], // greenish type name,
                             @(gcSkinGraphColorLapOverlay): [UIColor colorWithHexValue:0x9ba6b2 andAlpha:0.2],
                             @(gcSkinGraphColorRegressionLineSecondary): [UIColor colorWithHexValue:0x9ba6b2 andAlpha:1.0],
