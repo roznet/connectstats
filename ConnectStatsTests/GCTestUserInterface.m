@@ -107,7 +107,7 @@
             if( jsonDict.count != totalKeys ){
                 NSDictionary * toCompare = [NSDictionary dictionaryWithObjects:jsonDict.allKeys forKeys:jsonDict.allKeys];
                 NSDictionary * diff = lastDict.count > toCompare.count ? [lastDict smartCompareDict:toCompare] :[toCompare smartCompareDict:lastDict];
-                NSLog(@"%@ diffs %@", name, diff.allKeys);
+                RZLog(RZLogError,@"%@ diffs %@", name, diff.allKeys);
             }
         }
         lastDict = [NSDictionary dictionaryWithObjects:jsonDict.allKeys forKeys:jsonDict.allKeys];

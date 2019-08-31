@@ -555,12 +555,6 @@
 		426DFE6919D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
 		426DFE6A19D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
 		426F42461DB247FB00937DD8 /* GCTestsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 426F42451DB247FB00937DD8 /* GCTestsHelper.m */; };
-		42718BA023020F1F0097CD79 /* Colors-iOS13.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42718B9F23020F1F0097CD79 /* Colors-iOS13.xcassets */; };
-		42718BA123020F1F0097CD79 /* Colors-iOS13.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42718B9F23020F1F0097CD79 /* Colors-iOS13.xcassets */; };
-		42718BA223020F1F0097CD79 /* Colors-iOS13.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42718B9F23020F1F0097CD79 /* Colors-iOS13.xcassets */; };
-		42718BA4230212980097CD79 /* Colors-Dark.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42718BA3230212980097CD79 /* Colors-Dark.xcassets */; };
-		42718BA5230212980097CD79 /* Colors-Dark.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42718BA3230212980097CD79 /* Colors-Dark.xcassets */; };
-		42718BA6230212980097CD79 /* Colors-Dark.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42718BA3230212980097CD79 /* Colors-Dark.xcassets */; };
 		427208621DE7A35300924C90 /* GCActivity+Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427208611DE7A35300924C90 /* GCActivity+Import.swift */; };
 		427208631DE7A35300924C90 /* GCActivity+Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427208611DE7A35300924C90 /* GCActivity+Import.swift */; };
 		427208641DE7A35300924C90 /* GCActivity+Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427208611DE7A35300924C90 /* GCActivity+Import.swift */; };
@@ -731,6 +725,9 @@
 		4290238B18EA070300CBF398 /* GCSportTracksActivityListParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4290238A18EA070300CBF398 /* GCSportTracksActivityListParser.m */; };
 		4290238E18EA17F000CBF398 /* GCSportTracksActivityDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 4290238D18EA17F000CBF398 /* GCSportTracksActivityDetail.m */; };
 		429184AE2319B0ED00FD6525 /* GCTestUserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 429184AD2319B0ED00FD6525 /* GCTestUserInterface.m */; };
+		429184C2231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 429184C1231B13EA00FD6525 /* Colors-iOS13.xcassets */; };
+		429184C3231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 429184C1231B13EA00FD6525 /* Colors-iOS13.xcassets */; };
+		429184C4231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 429184C1231B13EA00FD6525 /* Colors-iOS13.xcassets */; };
 		429190A621E2422100E0B114 /* ActivitiesOrganizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429190A521E2422100E0B114 /* ActivitiesOrganizer.swift */; };
 		429190A821E2423500E0B114 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429190A721E2423500E0B114 /* Activity.swift */; };
 		429190AA21E2431600E0B114 /* ActivityValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429190A921E2431600E0B114 /* ActivityValue.swift */; };
@@ -2951,8 +2948,6 @@
 		426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitActivityParser.m; path = src/GCHealthKitActivityParser.m; sourceTree = "<group>"; };
 		426F42441DB247FB00937DD8 /* GCTestsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCTestsHelper.h; sourceTree = "<group>"; };
 		426F42451DB247FB00937DD8 /* GCTestsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestsHelper.m; sourceTree = "<group>"; };
-		42718B9F23020F1F0097CD79 /* Colors-iOS13.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Colors-iOS13.xcassets"; path = "ConnectStats/icons/Colors-iOS13.xcassets"; sourceTree = "<group>"; };
-		42718BA3230212980097CD79 /* Colors-Dark.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Colors-Dark.xcassets"; path = "ConnectStats/icons/Colors-Dark.xcassets"; sourceTree = "<group>"; };
 		427208611DE7A35300924C90 /* GCActivity+Import.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "GCActivity+Import.swift"; path = "src/GCActivity+Import.swift"; sourceTree = "<group>"; };
 		42734B6716941D45003E2177 /* GCGarminActivityDetailJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminActivityDetailJsonParser.h; path = src/GCGarminActivityDetailJsonParser.h; sourceTree = "<group>"; };
 		42734B6816941D45003E2177 /* GCGarminActivityDetailJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminActivityDetailJsonParser.m; path = src/GCGarminActivityDetailJsonParser.m; sourceTree = "<group>"; };
@@ -3109,6 +3104,7 @@
 		4290238D18EA17F000CBF398 /* GCSportTracksActivityDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSportTracksActivityDetail.m; path = src/GCSportTracksActivityDetail.m; sourceTree = "<group>"; };
 		42902C0C20431A560058FB28 /* HealthStats.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = HealthStats.entitlements; path = HealthStats/HealthStats.entitlements; sourceTree = "<group>"; };
 		429184AD2319B0ED00FD6525 /* GCTestUserInterface.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCTestUserInterface.m; sourceTree = "<group>"; };
+		429184C1231B13EA00FD6525 /* Colors-iOS13.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Colors-iOS13.xcassets"; path = "ConnectStats/icons/Colors-iOS13.xcassets"; sourceTree = "<group>"; };
 		4291909821E226FF00E0B114 /* Pods_FitFileExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_FitFileExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		429190A521E2422100E0B114 /* ActivitiesOrganizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivitiesOrganizer.swift; path = src/ActivitiesOrganizer.swift; sourceTree = "<group>"; };
 		429190A721E2423500E0B114 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Activity.swift; path = src/Activity.swift; sourceTree = "<group>"; };
@@ -4981,8 +4977,7 @@
 		424C666C160BD02C005F45DD /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				42718BA3230212980097CD79 /* Colors-Dark.xcassets */,
-				42718B9F23020F1F0097CD79 /* Colors-iOS13.xcassets */,
+				429184C1231B13EA00FD6525 /* Colors-iOS13.xcassets */,
 				422CCE891B7EAB7200A4DAEB /* Activities.xcassets */,
 				422CCE8A1B7EAB7200A4DAEB /* TabBar.xcassets */,
 				422CCE861B7EAA3000A4DAEB /* Navigation.xcassets */,
@@ -8069,7 +8064,6 @@
 			files = (
 				422FAFC619A1DD6000D09773 /* fields.db in Resources */,
 				422FAFC719A1DD6000D09773 /* InfoPlist.strings in Resources */,
-				42718BA6230212980097CD79 /* Colors-Dark.xcassets in Resources */,
 				422FAFCD19A1DD6000D09773 /* Localizable.strings in Resources */,
 				422CCE7F1B7EA7A600A4DAEB /* Services.xcassets in Resources */,
 				423D745522F57C1200EE3E71 /* fit_map.json in Resources */,
@@ -8083,7 +8077,7 @@
 				4211C53419AB043A000DEF87 /* version.plist in Resources */,
 				422CCE821B7EA81500A4DAEB /* Fields.xcassets in Resources */,
 				422CCE851B7EA8C100A4DAEB /* Weather.xcassets in Resources */,
-				42718BA223020F1F0097CD79 /* Colors-iOS13.xcassets in Resources */,
+				429184C4231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8142,14 +8136,13 @@
 				428FF71815F36888007A88FA /* InfoPlist.strings in Resources */,
 				427CF8D222ABD6BC00894253 /* credentials.json in Resources */,
 				422CCE7C1B7E9B6300A4DAEB /* Cells.xcassets in Resources */,
-				42718BA023020F1F0097CD79 /* Colors-iOS13.xcassets in Resources */,
+				429184C2231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */,
 				423D747222F7147C00EE3E71 /* fit_developer.json in Resources */,
 				427B20AB1621B5CF00D5C3C5 /* Localizable.strings in Resources */,
 				423F9FBF19ACCBD60057DB5A /* Media.xcassets in Resources */,
 				42EC553A1BA421580091D9B3 /* ConnectStats.entitlements in Resources */,
 				42560711169A112E008E9DC3 /* version.plist in Resources */,
 				422CCE8B1B7EAB7200A4DAEB /* Activities.xcassets in Resources */,
-				42718BA4230212980097CD79 /* Colors-Dark.xcassets in Resources */,
 				422CCE7E1B7EA7A600A4DAEB /* Services.xcassets in Resources */,
 				423D745222F57C1200EE3E71 /* fit_map.json in Resources */,
 				422CCE811B7EA81500A4DAEB /* Fields.xcassets in Resources */,
@@ -8998,7 +8991,7 @@
 				42B5E4BC1BA5BA2D000FAE4E /* track_216699592.db in Resources */,
 				428BAD051CB149C50041468A /* activityweather_924421177.json in Resources */,
 				42B5E52F1BA5BA2D000FAE4E /* track_328493155.db in Resources */,
-				42718BA123020F1F0097CD79 /* Colors-iOS13.xcassets in Resources */,
+				429184C3231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */,
 				42B5E55E1BA5BA2D000FAE4E /* track_76241296.db in Resources */,
 				42B5E53E1BA5BA2D000FAE4E /* track_336557921.db in Resources */,
 				42B5E5631BA5BA2D000FAE4E /* workout18340461.xml in Resources */,
@@ -9104,7 +9097,6 @@
 				426A135B1C56E41300D61098 /* activity_1027746730.json in Resources */,
 				42B5E52E1BA5BA2D000FAE4E /* track_327324851.db in Resources */,
 				42B5E50C1BA5BA2D000FAE4E /* track_298583894.db in Resources */,
-				42718BA5230212980097CD79 /* Colors-Dark.xcassets in Resources */,
 				42B5E4F91BA5BA2D000FAE4E /* track_287446944.db in Resources */,
 				42B5E4DB1BA5BA2D000FAE4E /* track_278357672.db in Resources */,
 				42B5E48E1BA5BA2D000FAE4E /* sporttracks_list_0.json in Resources */,
