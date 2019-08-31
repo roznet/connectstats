@@ -40,5 +40,5 @@
 
 -(NSArray*)rgbComponents;
 +(RZColor*)colorWithRgbComponents:(NSArray*)array andAlpha:(double)alpha;
-
+-(NSDictionary*)rgbComponentColorSetJsonFormat;
 @end

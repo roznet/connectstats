@@ -88,6 +88,7 @@ typedef NS_ENUM(NSUInteger,gcSkinBool){
 @interface GCViewConfigSkin : NSObject
 
 @property (nonatomic,readonly) NSString * skinName;
+@property (nonatomic,readonly) NSDictionary * defs;
 
 +(GCViewConfigSkin*)defaultSkin;
 +(GCViewConfigSkin*)darkSkin;

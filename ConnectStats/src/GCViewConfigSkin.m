@@ -83,7 +83,11 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
 }
 
 +(NSArray<NSString*>*)availableSkinNames{
-    return @[ @"Original", @"Dark", @"iOS13"];
+    return @[
+             @"Original",
+             @"Dark",
+             @"Dynamic"
+             ];
 }
 +(GCViewConfigSkin*)skinForName:(NSString*)name{
     if( ![[GCViewConfigSkin availableSkinNames] containsObject:name] ){
@@ -94,6 +98,8 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
         return [self defaultSkin];
     }else if ([name isEqualToString:@"Dark"] ){
         return [self darkSkin];
+    }else if( [name isEqualToString:@"Dynamic"]){
+        return [self dynamicSkinFromLight:[self defaultSkin] andDark:[self darkSkin]];
     }else{
         return [self skinForThemeName:name];
     }
@@ -181,7 +187,15 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                           GC_TYPE_CYCLING:[UIColor redColor],
                           GC_TYPE_ALL:[UIColor blackColor],
                           GC_TYPE_OTHER:[UIColor darkGrayColor],
+                          GC_TYPE_HIKING:   [UIColor colorWithHexValue:0xC8A26A andAlpha:1.],
+                          GC_TYPE_FITNESS:  [UIColor colorWithHexValue:0xF169EF andAlpha:1.],
+                          GC_TYPE_TENNIS:   [UIColor colorWithHexValue:0x96CC00 andAlpha:1.],
+                          GC_TYPE_MULTISPORT:[UIColor colorWithHexValue:0xA6BB82 andAlpha:1.],
+                          GC_TYPE_SKI_BACK: [UIColor colorWithHexValue:0xa2d7b5 andAlpha:1.0],
+                          GC_TYPE_SKI_DOWN: [UIColor colorWithHexValue:0xbdc3c7 andAlpha:1.0]
                           },
+                    
+
                     kGCSkinKeyActivityCellLighterBackgroundColor:
                         @{GC_TYPE_SWIMMING: [UIColor colorWithHexValue:0xFFE4A9 andAlpha:1.],
                           GC_TYPE_CYCLING:  [UIColor colorWithHexValue:0xFFDADA andAlpha:1.],
@@ -259,7 +273,8 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
                             [UIColor redColor],
                             [UIColor colorWithHexValue:0x000800 andAlpha:1.],
                             [UIColor darkGrayColor],
-                            [UIColor orangeColor]
+                            [UIColor orangeColor],
+                            [UIColor purpleColor],
                             ],
                     kGCSkinKeyCalendarColors:
                         @{
@@ -474,6 +489,106 @@ NS_INLINE UIColor * gcColorForDefinitionValue(id input){
     return rv;
 }
 
+
++(NSArray*)dynamicMergeLightArray:(NSArray*)lightArray andDarkArray:(NSArray*)darkArray forKey:(NSObject<NSCopying>*)skinKey{
+    NSMutableArray * rv = [NSMutableArray array];
+    
+    for( NSUInteger i=0;i<lightArray.count;i++){
+        id lightVal = lightArray[i];
+        
+        if( i < darkArray.count){
+            id darkVal = darkArray[i];
+            
+            id res = [self dynamicBuildFromLightObj:lightVal andDarkObj:darkVal forKey:skinKey];
+            if( res ){
+                [rv addObject:res];
+            }else{
+                RZLog( RZLogInfo, @"Inconsistency for dynamic merge %@: [%@] = %@!=%@", skinKey, @(i), lightVal, darkVal);
+            }
+        }
+    }
+    return rv;
+}
++(NSDictionary*)dynamicMergeLightDict:(NSDictionary*)lightDict andDarkDict:(NSDictionary*)darkDict forKey:(NSObject<NSCopying>*)skinKey{
+    NSMutableDictionary * rv = [NSMutableDictionary dictionary];
+    
+    for( NSObject<NSCopying>*key in lightDict){
+        id lightVal = lightDict[key];
+        id darkVal = darkDict[key];
+        
+        id res = [self dynamicBuildFromLightObj:lightVal andDarkObj:darkVal forKey:skinKey?:key];
+        if( res ){
+            rv[key] = res;
+        }else{
+            RZLog( RZLogInfo, @"Inconsistency for %@: [%@] = %@!=%@", skinKey, key, lightVal, darkVal);
+            rv[key] = lightVal;
+        }
+    }
+    for( NSObject<NSCopying>*key in darkDict){
+        if( lightDict[key]==nil){
+            RZLog( RZLogInfo, @"Inconsistency for %@: [%@] = nil!=%@", skinKey, key, darkDict[key]);
+        }
+    }
+    return rv;
+}
+
++(NSDictionary*)dynamicColorForLight:(UIColor*)lightColor andDark:(UIColor*)darkColor{
+    //If iOS13: Dynamic color
+
+    return
+    @{ @"colors": @[
+               @{
+                   @"idiom": @"universal",
+                   @"color": [lightColor rgbComponentColorSetJsonFormat]
+               },
+               @{
+                   @"idiom": @"universal",
+                   @"appearances": @[
+                                   @{
+                                       @"appearance": @"luminosity",
+                                       @"value": @"dark"
+                                   }
+                                   ],
+                   @"color": [darkColor rgbComponentColorSetJsonFormat]
+               }
+               ]
+      
+      };
+}
+
++(id)dynamicBuildFromLightObj:(id)lightObj andDarkObj:(id)darkObj forKey:(NSObject<NSCopying>*)skinKey{
+    if( [lightObj isKindOfClass:[NSDictionary class]] && [darkObj isKindOfClass:[NSDictionary class]]){
+        NSDictionary * lightDict = (NSDictionary *)lightObj;
+        NSDictionary * darkDict = (NSDictionary *)darkObj;
+        
+        return [self dynamicMergeLightDict:lightDict andDarkDict:darkDict forKey:skinKey];
+    }else if( [lightObj isKindOfClass:[NSArray class]] && [darkObj isKindOfClass:[NSArray class]] ){
+        NSArray * lightArray = (NSArray*)lightObj;
+        NSArray * darkArray = (NSArray*)darkObj;
+        
+        return [self dynamicMergeLightArray:lightArray andDarkArray:darkArray forKey:skinKey];
+    }else if ([lightObj isKindOfClass:[UIColor class]] && [darkObj isKindOfClass:[UIColor class]]){
+        UIColor * lightColor = (UIColor*)lightObj;
+        UIColor * darkColor = (UIColor*)darkObj;
+        
+        return [self dynamicColorForLight:lightColor andDark:darkColor];
+    }else if ([lightObj isKindOfClass:[NSNumber class]] && [darkObj isKindOfClass:[NSNumber class]]){
+        return @{ @"light": lightObj, @"dark": darkObj };
+    }else{
+        RZLog(RZLogError, @"Don't know how to process [%@] : %@ and %@", skinKey, lightObj, darkObj);
+        return nil;
+    }
+}
+
++(GCViewConfigSkin*)dynamicSkinFromLight:(GCViewConfigSkin*)light andDark:(GCViewConfigSkin*)dark{
+    GCViewConfigSkin * rv = [[[GCViewConfigSkin alloc]init]autorelease];
+    if (rv) {
+        rv.skinName = @"Dynamic";
+        rv.defs = [self dynamicBuildFromLightObj:light.defs andDarkObj:dark.defs forKey:nil];
+    }
+    
+    return rv;
+}
 
 +(UIColor*)colorForTheme:(NSString*)theme path:(NSArray*)path{
     NSString * name = [NSString stringWithFormat:@"%@-%@", theme, [path componentsJoinedByString:@"-"]];

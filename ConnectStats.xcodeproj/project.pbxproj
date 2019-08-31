@@ -730,6 +730,7 @@
 		428FF7A315FB413B007A88FA /* GCActivitiesOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF7A215FB413B007A88FA /* GCActivitiesOrganizer.m */; };
 		4290238B18EA070300CBF398 /* GCSportTracksActivityListParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4290238A18EA070300CBF398 /* GCSportTracksActivityListParser.m */; };
 		4290238E18EA17F000CBF398 /* GCSportTracksActivityDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 4290238D18EA17F000CBF398 /* GCSportTracksActivityDetail.m */; };
+		429184AE2319B0ED00FD6525 /* GCTestUserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 429184AD2319B0ED00FD6525 /* GCTestUserInterface.m */; };
 		429190A621E2422100E0B114 /* ActivitiesOrganizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429190A521E2422100E0B114 /* ActivitiesOrganizer.swift */; };
 		429190A821E2423500E0B114 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429190A721E2423500E0B114 /* Activity.swift */; };
 		429190AA21E2431600E0B114 /* ActivityValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429190A921E2431600E0B114 /* ActivityValue.swift */; };
@@ -3107,6 +3108,7 @@
 		4290238C18EA17F000CBF398 /* GCSportTracksActivityDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSportTracksActivityDetail.h; path = src/GCSportTracksActivityDetail.h; sourceTree = "<group>"; };
 		4290238D18EA17F000CBF398 /* GCSportTracksActivityDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSportTracksActivityDetail.m; path = src/GCSportTracksActivityDetail.m; sourceTree = "<group>"; };
 		42902C0C20431A560058FB28 /* HealthStats.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = HealthStats.entitlements; path = HealthStats/HealthStats.entitlements; sourceTree = "<group>"; };
+		429184AD2319B0ED00FD6525 /* GCTestUserInterface.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCTestUserInterface.m; sourceTree = "<group>"; };
 		4291909821E226FF00E0B114 /* Pods_FitFileExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_FitFileExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		429190A521E2422100E0B114 /* ActivitiesOrganizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivitiesOrganizer.swift; path = src/ActivitiesOrganizer.swift; sourceTree = "<group>"; };
 		429190A721E2423500E0B114 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Activity.swift; path = src/Activity.swift; sourceTree = "<group>"; };
@@ -5689,6 +5691,7 @@
 				42096755189CF49600D32CA7 /* GCTestsSamples.m */,
 				421844B61D75D268005B09BC /* GCTestsSegments.swift */,
 				42B9555218186D0C00BC7AF9 /* GCTestsUtils.m */,
+				429184AD2319B0ED00FD6525 /* GCTestUserInterface.m */,
 				42C0113C1AB437C10059B6CF /* samples */,
 				428FF72C15F36888007A88FA /* Supporting Files */,
 				42A2FE1A1A330284002F2A06 /* TestResources */,
@@ -10079,6 +10082,7 @@
 				42096756189CF49600D32CA7 /* GCTestsSamples.m in Sources */,
 				42C011401AB438050059B6CF /* GCTestsParsing.m in Sources */,
 				42096753189CF33500D32CA7 /* GCTestsDerived.m in Sources */,
+				429184AE2319B0ED00FD6525 /* GCTestUserInterface.m in Sources */,
 				42D90812203383DB000BBE07 /* GCTestCase.m in Sources */,
 				4227C5AC1C0B1310003F0660 /* GCTestsGrid.m in Sources */,
 				428FF73315F36888007A88FA /* GCTestsGeneral.m in Sources */,
