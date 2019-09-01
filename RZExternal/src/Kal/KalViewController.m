@@ -252,10 +252,10 @@ NSString *const KalDataSourceChangedNotification = @"KalDataSourceChangedNotific
     frame.origin.y+= adjustTop;
     frame.size.height -= adjustTop;
     
-    NSLog( @"%@ -> %@", NSStringFromCGRect(self.view.frame), NSStringFromCGRect(frame));
-
     self.view.frame = frame;
-    
+
+    self.titleView.backgroundColor = [UIColor clearColor]; // should match navigationbar color
+    self.tableView.backgroundColor = self.dataSource.backgroundColor;
     [self.kalView setupFrame:frame];
 }
 

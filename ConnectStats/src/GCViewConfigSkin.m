@@ -72,7 +72,9 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
     
     gcDynamicMethodLightOrTheme,
     gcDynamicMethodColorSetJson,
-    //gcDynamicMethodiOS13
+#ifdef __IPHONE_13_0
+    gcDynamicMethodiOS13
+#endif
 };
 
 @interface GCViewConfigSkin ()
@@ -554,6 +556,22 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
             }
             return rv;
         }
+#ifdef __IPHONE_13_0
+        case gcDynamicMethodiOS13:
+        {
+            if( @available(iOS 13.0, *)) {
+                return [UIColor colorWithDynamicProvider:^(UITraitCollection*trait){
+                    if( trait.userInterfaceStyle == UIUserInterfaceStyleDark){
+                        return darkColor;
+                    }else{
+                        return lightColor;
+                    }
+                }];
+            }else{
+                return lightColor;
+            }
+        }
+#endif
         case gcDynamicMethodColorSetJson:
             return
             @{ @"colors": @[
@@ -592,6 +610,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
     }else if ([lightObj isKindOfClass:[NSNumber class]] && [darkObj isKindOfClass:[NSNumber class]]){
         switch(self.dynamicMethod){
             case gcDynamicMethodColorSetJson:
+            case gcDynamicMethodiOS13:
                 return @{ @"light": lightObj, @"dark": darkObj };
             case gcDynamicMethodLightOrTheme:
                 return lightObj;
@@ -606,7 +625,11 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
     GCViewConfigSkin * rv = [[[GCViewConfigSkin alloc]init]autorelease];
     if (rv) {
         rv.skinName = @"Dynamic";
+#ifdef __IPHONE_13_0
+        rv.dynamicMethod = gcDynamicMethodiOS13;
+#else
         rv.dynamicMethod = gcDynamicMethodColorSetJson;
+#endif
         rv.defs = [rv dynamicBuildFromLightObj:light.defs andDarkObj:dark.defs forKey:@[]];
     }
     
@@ -628,6 +651,17 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
     NSNumber * val = self.defs[kGCSkinKeyBoolValues][@(which)];
     if( [val respondsToSelector:@selector(boolValue)] ){
         return val.boolValue;
+    }else if( [val isKindOfClass:[NSDictionary class] ]){
+        NSDictionary * choices = (NSDictionary*)val;
+#ifdef __IPHONE_13_0
+        if( @available( iOS 13.0, *)){
+            if( [UITraitCollection currentTraitCollection].userInterfaceStyle == UIUserInterfaceStyleDark ){
+                return [choices[@"dark"] boolValue];
+            }
+        }
+#endif
+        return [choices[@"light"] boolValue];
+        
     }else{
         return false;
     }
