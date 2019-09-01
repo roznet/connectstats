@@ -566,15 +566,17 @@ void checkVersion(){
     if( self.credentials == nil){
         NSString * credentialsPath = [RZFileOrganizer bundleFilePath:@"credentials.json"];
         NSData * credentialsData = [NSData dataWithContentsOfFile:credentialsPath];
-        if( credentialsPath ){
+        if( credentialsData ){
             NSError * error = nil;
             NSDictionary * credentials = [NSJSONSerialization JSONObjectWithData:credentialsData options:NSJSONReadingAllowFragments error:&error];
             if( [credentials isKindOfClass:[NSDictionary class]]){
                 self.credentials = credentials;
-            }else{
-                RZLog(RZLogError, @"Failed to load %@", credentialsPath);
-                self.credentials = @{};
             }
+        }
+        // if still nil, we didn't succeed
+        if( self.credentials == nil){
+            RZLog(RZLogError, @"Failed to load credentials: %@", credentialsPath);
+            self.credentials = @{};
         }
     }
     NSDictionary * rv = self.credentials[service];

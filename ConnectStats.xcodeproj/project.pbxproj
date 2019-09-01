@@ -1241,6 +1241,7 @@
 		42B955561819B36400BC7AF9 /* GCSettingsReloadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B955551819B36400BC7AF9 /* GCSettingsReloadViewController.m */; };
 		42B9E6AA19C423C500CA6358 /* GCFitBitActivities.m in Sources */ = {isa = PBXBuildFile; fileRef = 42318E7F19AF6821000CD26B /* GCFitBitActivities.m */; };
 		42B9E6AB19C423D400CA6358 /* GCFitBitReqBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42318E7C19AF1B63000CD26B /* GCFitBitReqBase.m */; };
+		42BAB8D4231C07E700639928 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
 		42BB0BE11AB4A99F008D5A10 /* activityweather_206621651.json in Resources */ = {isa = PBXBuildFile; fileRef = 42BB09C61AB4A99C008D5A10 /* activityweather_206621651.json */; };
 		42BB0BE21AB4A99F008D5A10 /* activityweather_255856625.json in Resources */ = {isa = PBXBuildFile; fileRef = 42BB09C71AB4A99D008D5A10 /* activityweather_255856625.json */; };
 		42BB0BE31AB4A99F008D5A10 /* activityweather_364955962.json in Resources */ = {isa = PBXBuildFile; fileRef = 42BB09C81AB4A99D008D5A10 /* activityweather_364955962.json */; };
@@ -8078,6 +8079,7 @@
 				422CCE821B7EA81500A4DAEB /* Fields.xcassets in Resources */,
 				422CCE851B7EA8C100A4DAEB /* Weather.xcassets in Resources */,
 				429184C4231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */,
+				42BAB8D4231C07E700639928 /* credentials.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
