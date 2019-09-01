@@ -59,7 +59,7 @@
 #else
     RZColor * inRgb = [self colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
     
-    red = inRgb.redComponentl
+    red = inRgb.redComponent;
     green = inRgb.greenComponent;
     blue = inRgb.blueComponent;
     alpha = inRgb.alphaComponent;

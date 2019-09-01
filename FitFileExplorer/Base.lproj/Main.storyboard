@@ -957,15 +957,15 @@
                             </popUpButton>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WSf-Uh-9Oz">
                                 <rect key="frame" x="255" y="18" width="84" height="25"/>
-                                <popUpButtonCell key="cell" type="push" title="activity" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="pM6-jm-zpN" id="aIJ-ux-uk6">
+                                <popUpButtonCell key="cell" type="push" title="activity" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="pM6-jm-zpN" id="aIJ-ux-uk6">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="dL1-sj-VjJ">
                                         <items>
-                                            <menuItem title="activity" id="pM6-jm-zpN">
+                                            <menuItem title="activity" state="on" id="pM6-jm-zpN">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="session" state="on" id="ihL-CC-7kC"/>
+                                            <menuItem title="session" id="ihL-CC-7kC"/>
                                             <menuItem title="lap" id="hvd-1x-06a"/>
                                         </items>
                                     </menu>
