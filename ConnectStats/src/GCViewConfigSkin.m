@@ -610,7 +610,9 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
     }else if ([lightObj isKindOfClass:[NSNumber class]] && [darkObj isKindOfClass:[NSNumber class]]){
         switch(self.dynamicMethod){
             case gcDynamicMethodColorSetJson:
+#ifdef __IPHONE_13_0
             case gcDynamicMethodiOS13:
+#endif
                 return @{ @"light": lightObj, @"dark": darkObj };
             case gcDynamicMethodLightOrTheme:
                 return lightObj;

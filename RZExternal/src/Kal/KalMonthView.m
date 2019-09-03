@@ -29,6 +29,7 @@
             for (int j=0; j<7; j++) {
                 CGRect r = CGRectMake(j*_tileSize.width, i*_tileSize.height, _tileSize.width, _tileSize.height);
                 KalTileView * tileView = [[[KalTileView alloc] initWithFrame:r andTileSize:self.tileSize] autorelease];
+                tileView.dataSource = source;
                 [self addSubview:tileView];
             }
         }
