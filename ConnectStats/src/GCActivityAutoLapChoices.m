@@ -141,6 +141,10 @@
     }
     return rv;
 }
+
+-(BOOL)shouldAlwaysRecalculate{
+    return self.style == gcAutoLapStyleAccumulated;
+}
 @end
 
 
@@ -291,7 +295,7 @@
 -(void)changeSelectedTo:(NSUInteger)idx{
     if (idx!=self.selected) {
         GCActivityAutoLapChoiceHolder * holder = (self.choices)[idx];
-        if (![self.activity useLaps:holder.key]) {
+        if (holder.shouldAlwaysRecalculate || ![self.activity useLaps:holder.key]) {
             NSMutableArray * laps = [NSMutableArray arrayWithArray:[holder laps:self.activity]];
             [self.activity registerLaps:laps forName:holder.key];
             [self.activity useLaps:holder.key];

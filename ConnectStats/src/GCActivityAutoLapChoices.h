@@ -52,6 +52,7 @@ typedef NS_ENUM(NSUInteger, gcAutoLapStyle) {
 +(GCActivityAutoLapChoiceHolder*)choiceForIndexSerie:(GCStatsDataSerieWithUnit*)serie andLabel:(NSString*)label;
 
 -(NSArray*)laps:(GCActivity*)activity;
+-(BOOL)shouldAlwaysRecalculate;
 @end
 
 @interface GCActivityAutoLapChoices : NSObject
