@@ -93,10 +93,20 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
 }
 
 +(NSArray<NSString*>*)availableSkinNames{
+#ifdef __IPHONE_13_0
+    if( @available( iOS 13.0, *)) {
+        return @[
+                 @"Original",
+                 @"Dark",
+                 @"Dynamic"
+                 ];
+    }
+#endif
+    
+    //
     return @[
              @"Original",
-             @"Dark",
-             @"Dynamic"
+             @"Dark"
              ];
 }
 +(GCViewConfigSkin*)skinForName:(NSString*)name{
@@ -610,7 +620,9 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
     }else if ([lightObj isKindOfClass:[NSNumber class]] && [darkObj isKindOfClass:[NSNumber class]]){
         switch(self.dynamicMethod){
             case gcDynamicMethodColorSetJson:
+#ifdef __IPHONE_13_0
             case gcDynamicMethodiOS13:
+#endif
                 return @{ @"light": lightObj, @"dark": darkObj };
             case gcDynamicMethodLightOrTheme:
                 return lightObj;
@@ -628,8 +640,19 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
 #ifdef __IPHONE_13_0
         rv.dynamicMethod = gcDynamicMethodiOS13;
 #else
-        rv.dynamicMethod = gcDynamicMethodColorSetJson;
+        rv.dynamicMethod = gcDynamicMethodLightOrTheme;
 #endif
+        rv.defs = [rv dynamicBuildFromLightObj:light.defs andDarkObj:dark.defs forKey:@[]];
+    }
+    
+    return rv;
+}
+
++(GCViewConfigSkin*)dynamicJsonFromLight:(GCViewConfigSkin*)light andDark:(GCViewConfigSkin*)dark{
+    GCViewConfigSkin * rv = [[[GCViewConfigSkin alloc]init]autorelease];
+    if (rv) {
+        rv.skinName = @"Json";
+        rv.dynamicMethod = gcDynamicMethodColorSetJson;
         rv.defs = [rv dynamicBuildFromLightObj:light.defs andDarkObj:dark.defs forKey:@[]];
     }
     

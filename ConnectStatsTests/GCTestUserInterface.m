@@ -96,7 +96,6 @@
     for (NSString * name in [GCViewConfigSkin availableSkinNames]) {
         GCViewConfigSkin * skin = [GCViewConfigSkin skinForName:name];
         XCTAssertNotNil(skin);
-        NSError * error = nil;
         NSMutableDictionary * jsonDict = [NSMutableDictionary dictionary];
         [self buildJson:jsonDict forObj:skin.defs keyPath:@[]];
         XCTAssertNotEqual(jsonDict.count, 0, @"%@ has some keys", name);
@@ -111,15 +110,19 @@
             }
         }
         lastDict = [NSDictionary dictionaryWithObjects:jsonDict.allKeys forKeys:jsonDict.allKeys];
-        NSData * data = [NSJSONSerialization dataWithJSONObject:jsonDict options:NSJSONWritingSortedKeys error:&error];
-        if( data ){
-            NSString *  jsonFName = [NSString stringWithFormat:@"%@-colorset.json",name];
-            [data writeToFile:[RZFileOrganizer writeableFilePath:jsonFName] atomically:YES];
-        }
 
     }
-    
-    
+
+    // Save Json File
+    GCViewConfigSkin * skin = [GCViewConfigSkin skinForName:@"Json"];
+    NSError * error = nil;
+    NSMutableDictionary * jsonDict = [NSMutableDictionary dictionary];
+    [self buildJson:jsonDict forObj:skin.defs keyPath:@[]];
+    NSData * data = [NSJSONSerialization dataWithJSONObject:jsonDict options:NSJSONWritingSortedKeys error:&error];
+    if( data ){
+        NSString *  jsonFName = [NSString stringWithFormat:@"colorset.json"];
+        [data writeToFile:[RZFileOrganizer writeableFilePath:jsonFName] atomically:YES];
+    }
 }
 
 

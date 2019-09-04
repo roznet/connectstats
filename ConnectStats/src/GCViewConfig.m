@@ -40,7 +40,9 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
         NSString * skinName = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:@"Original"];
         if( skinName ){
             _skin = [GCViewConfigSkin skinForName:skinName];
-        }else{
+        }
+        // if still nil (name not matching existing skin for ex)
+        if( _skin == nil){
             _skin = [GCViewConfigSkin defaultSkin];
         }
         [_skin retain];
