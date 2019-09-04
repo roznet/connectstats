@@ -101,8 +101,7 @@ static const NSUInteger kActivityRequestCount = 20;
         NSDictionary *parameters = @{
                                      @"token_id" : @(self.tokenId),
                                      @"start" : @(self.start),
-                                     @"limit" : @(kActivityRequestCount)
-                                     
+                                     @"limit" : @(kActivityRequestCount),
                                      };
         
         return [self preparedUrlRequest:path params:parameters];

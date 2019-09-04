@@ -112,6 +112,7 @@
     fieldListViewController = [[GCStatsMultiFieldViewController alloc] initWithStyle:UITableViewStylePlain];
     settingsViewController = [[GCSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
+    
     UIImage * activityImg = [GCViewIcons tabBarIconFor:gcIconTabList];
     UIImage * detailImg   = [GCViewIcons tabBarIconFor:gcIconTabMap];
     UIImage * calendarImg = [GCViewIcons tabBarIconFor:gcIconTabCalendar];
@@ -150,15 +151,6 @@
 
     (statsNav.navigationBar).titleTextAttributes = @{NSFontAttributeName:[GCViewConfig boldSystemFontOfSize:16.]};
 
-    if ([UIViewController useIOS7Layout]) {
-        [UIViewController setupEdgeExtendedLayout:activityNav];
-        [UIViewController setupEdgeExtendedLayout:detailNav];
-        [UIViewController setupEdgeExtendedLayout:calendarNav];
-        [UIViewController setupEdgeExtendedLayout:settingsNav];
-        [UIViewController setupEdgeExtendedLayout:detailSliding];
-        [UIViewController setupEdgeExtendedLayout:activitySliding];
-    }
-
     detailNav.delegate = self;
 
     UIBarStyle style = UIBarStyleDefault;
@@ -185,6 +177,11 @@
     self.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 
     self.viewControllers = @[activityNav,detailNav,statsNav,calendarNav,settingsNav];
+
+    [GCViewConfig setupViewController:fieldListViewController];
+    [GCViewConfig setupViewController:activityListViewController];
+    [GCViewConfig setupViewController:calendarViewController];
+    [GCViewConfig setupViewController:settingsViewController];
 
     [activityItem release];
     [detailItem release];

@@ -81,6 +81,10 @@
 
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
+}
 -(NSArray<GCFieldsForCategory*>*)setupFields{
     if (self.organizedFields==nil) {
         NSArray<GCField*>*fields = [[self.activity lapNumber:self.lapIndex] availableFieldsInActivity:self.activity];

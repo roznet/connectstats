@@ -47,12 +47,12 @@
 		label						= [[UILabel alloc] initWithFrame:CGRectZero];
 		label.backgroundColor		= [UIColor clearColor];
 		label.font					= [RZViewConfig boldSystemFontOfSize:16];
-		label.textColor				= [UIColor blackColor];
+		label.textColor				= [RZViewConfig colorForText:rzColorStylePrimaryText];;
 
 		textField					= [[UITextField alloc] initWithFrame:CGRectZero];
 		textField.backgroundColor	= [UIColor clearColor];
 		textField.font				= [RZViewConfig systemFontOfSize:16];
-		textField.textColor			= [UIColor blueColor];
+		textField.textColor			= [RZViewConfig colorForText:rzColorStyleHighlightedText];;
 		textField.keyboardType		= UIKeyboardTypeDefault;
 		textField.borderStyle		= UITextBorderStyleRoundedRect;
 

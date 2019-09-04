@@ -245,8 +245,9 @@ const CGFloat kCellDaySpacing = 2.f;
     }];
 
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-
+    
     [[GCAppGlobal web] attach:self];
+    
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
