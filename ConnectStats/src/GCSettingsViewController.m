@@ -243,7 +243,7 @@
                 
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Skin",@"Profile Skin")
                                                                               attributes:[GCViewConfig attributeBold16]] autorelease];
-                NSString * skin = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:@"Original"];
+                NSString * skin = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:kGCSkinNameOriginal];
                 NSAttributedString * current = [[[NSAttributedString alloc] initWithString:skin
                                                                                 attributes:[GCViewConfig attribute16]] autorelease];
                 
@@ -827,7 +827,7 @@
             [self.navigationController pushViewController:choices animated:YES];
         }else if( indexPath.row == GC_SETTINGS_SKIN){
             NSArray * skins = [GCViewConfigSkin availableSkinNames];
-            NSString * skin = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:@"Original"];
+            NSString * skin = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:kGCSkinNameOriginal];
             NSUInteger selected = [skins indexOfObject:skin];
             GCCellEntryListViewController * choices = [GCViewConfig standardEntryListViewController:skins selected:selected];
             choices.entryFieldDelegate = self;

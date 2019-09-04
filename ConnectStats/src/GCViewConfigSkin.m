@@ -48,6 +48,12 @@ NSString * kgcSkinDefaultColors = @"DefaultColors";
 
 NSString * kGCSkinKeyBoolValues = @"BoolValues";
 
+NSString * kGCSkinNameOriginal = @"Original";
+NSString * kGCSkinNameDark     = @"Dark";
+NSString * kGCSkinNameDynamic  = @"Dynamic";
+
+
+
 NS_INLINE NSArray * gcArrayForDefinitionValue(id input){
     if ([input isKindOfClass:[NSArray class]]) {
         return input;
@@ -96,17 +102,17 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
 #ifdef __IPHONE_13_0
     if( @available( iOS 13.0, *)) {
         return @[
-                 @"Original",
-                 @"Dark",
-                 @"Dynamic"
+                 kGCSkinNameOriginal,
+                 kGCSkinNameDark,
+                 kGCSkinNameDynamic
                  ];
     }
 #endif
     
     //
     return @[
-             @"Original",
-             @"Dark"
+             kGCSkinNameOriginal,
+             kGCSkinNameDark,
              ];
 }
 +(GCViewConfigSkin*)skinForName:(NSString*)name{
@@ -114,11 +120,11 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
         return nil;
     }
     
-    if( [name isEqualToString:@"Original"] ){
+    if( [name isEqualToString:kGCSkinNameOriginal] ){
         return [self defaultSkin];
-    }else if ([name isEqualToString:@"Dark"] ){
+    }else if ([name isEqualToString:kGCSkinNameDark] ){
         return [self darkSkin];
-    }else if( [name isEqualToString:@"Dynamic"]){
+    }else if( [name isEqualToString:kGCSkinNameDynamic]){
         return [self dynamicSkinFromLight:[self defaultSkin] andDark:[self darkSkin]];
     }else{
         return [self skinForThemeName:name];
@@ -129,7 +135,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
 +(GCViewConfigSkin*)defaultSkin{
     GCViewConfigSkin * rv = [[[GCViewConfigSkin alloc]init]autorelease];
     if (rv) {
-        rv.skinName = @"Original";
+        rv.skinName = kGCSkinNameOriginal;
         double alp = 0.4;
         
         rv.defs = @{
@@ -327,7 +333,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
 +(GCViewConfigSkin*)darkSkin{
     GCViewConfigSkin * rv = [[[GCViewConfigSkin alloc]init]autorelease];
     if (rv) {
-        rv.skinName = @"Dark";
+        rv.skinName = kGCSkinNameDark;
         double alp = 0.4;
         
         rv.defs = @{
@@ -636,7 +642,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
 +(GCViewConfigSkin*)dynamicSkinFromLight:(GCViewConfigSkin*)light andDark:(GCViewConfigSkin*)dark{
     GCViewConfigSkin * rv = [[[GCViewConfigSkin alloc]init]autorelease];
     if (rv) {
-        rv.skinName = @"Dynamic";
+        rv.skinName = kGCSkinNameDynamic;
 #ifdef __IPHONE_13_0
         rv.dynamicMethod = gcDynamicMethodiOS13;
 #else

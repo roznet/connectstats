@@ -45,6 +45,7 @@ extern NSString * kGCSkinKeyListOfColorsForMultiplots;
 extern NSString * kGCSkinKeyCalendarColors;
 
 extern NSString * kgcSkinDefaultColors;
+extern NSString * kGCSkinNameOriginal;
 
 typedef NS_ENUM(NSUInteger,gcSkinDefaultColor){
     gcSkinDefaultColorBackground,
@@ -92,7 +93,6 @@ typedef NS_ENUM(NSUInteger,gcSkinBool){
 
 +(GCViewConfigSkin*)defaultSkin;
 +(GCViewConfigSkin*)darkSkin;
-+(GCViewConfigSkin*)skinForThemeName:(NSString*)theme;
 
 +(NSArray<NSString*>*)availableSkinNames;
 +(GCViewConfigSkin*)skinForName:(NSString*)name;
