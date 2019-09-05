@@ -713,6 +713,13 @@
             GCViewConfigSkin * skin = [GCViewConfigSkin skinForName:newSkin];
             if( skin ){
                 [GCViewConfig setSkin:skin];
+                [GCViewConfig setupViewController:self];
+                // Spacial case, somehow when you change the settings, the navigationbar
+                // didn't change color unless done expliciatly
+                self.navigationController.navigationBar.barTintColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
+                self.navigationController.navigationBar.tintColor = [GCViewConfig
+                                                                     defaultColor:gcSkinDefaultColorHighlightedText];
+                 
                 [[GCAppGlobal profile] configSet:CONFIG_SKIN_NAME stringVal:newSkin];
                 [GCAppGlobal saveSettings];
             }
