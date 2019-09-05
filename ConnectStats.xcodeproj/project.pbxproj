@@ -507,6 +507,9 @@
 		4255766316D8CA850080F8CE /* GCActivityCalculatedValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4255766216D8CA850080F8CE /* GCActivityCalculatedValue.m */; };
 		42560711169A112E008E9DC3 /* version.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42560710169A112E008E9DC3 /* version.plist */; };
 		4257339A1BC05A1A0080D75F /* GCActivityPreviewingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425733991BC05A1A0080D75F /* GCActivityPreviewingViewController.m */; };
+		4257766423205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4257766323205BB200BD9375 /* GCCellEntryText+GCViewConfig.m */; };
+		4257766523205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4257766323205BB200BD9375 /* GCCellEntryText+GCViewConfig.m */; };
+		4257766623205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4257766323205BB200BD9375 /* GCCellEntryText+GCViewConfig.m */; };
 		425872C61EACA0A4000D4115 /* RZUtilsHealthkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872C31EACA089000D4115 /* RZUtilsHealthkit.framework */; };
 		425872C71EACA0A4000D4115 /* RZUtilsHealthkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 425872C31EACA089000D4115 /* RZUtilsHealthkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		425872CA1EACA0D6000D4115 /* RZUtilsSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; };
@@ -2916,6 +2919,8 @@
 		42560710169A112E008E9DC3 /* version.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = version.plist; path = Full/version.plist; sourceTree = "<group>"; };
 		425733981BC05A1A0080D75F /* GCActivityPreviewingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityPreviewingViewController.h; path = src/GCActivityPreviewingViewController.h; sourceTree = "<group>"; };
 		425733991BC05A1A0080D75F /* GCActivityPreviewingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityPreviewingViewController.m; path = src/GCActivityPreviewingViewController.m; sourceTree = "<group>"; };
+		4257766223205BB200BD9375 /* GCCellEntryText+GCViewConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GCCellEntryText+GCViewConfig.h"; path = "src/GCCellEntryText+GCViewConfig.h"; sourceTree = "<group>"; };
+		4257766323205BB200BD9375 /* GCCellEntryText+GCViewConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "GCCellEntryText+GCViewConfig.m"; path = "src/GCCellEntryText+GCViewConfig.m"; sourceTree = "<group>"; };
 		425ACBB817C163EE00EB23A3 /* GCHealthZone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthZone.h; path = src/GCHealthZone.h; sourceTree = "<group>"; };
 		425ACBB917C163EE00EB23A3 /* GCHealthZone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthZone.m; path = src/GCHealthZone.m; sourceTree = "<group>"; };
 		425ACBBE17C1687E00EB23A3 /* GCGarminUserJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminUserJsonParser.h; path = src/GCGarminUserJsonParser.h; sourceTree = "<group>"; };
@@ -7506,6 +7511,8 @@
 			children = (
 				42F914C2164DC0B900D0C950 /* GCCellGrid+Templates.h */,
 				42F914C3164DC0B900D0C950 /* GCCellGrid+Templates.m */,
+				4257766223205BB200BD9375 /* GCCellEntryText+GCViewConfig.h */,
+				4257766323205BB200BD9375 /* GCCellEntryText+GCViewConfig.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -9490,6 +9497,7 @@
 				421747F919C4FD4800C13C16 /* GCFitBitActivitiesParser.m in Sources */,
 				422FAEB519A1DD6000D09773 /* main.m in Sources */,
 				422FAEB619A1DD6000D09773 /* GCAppDelegate.m in Sources */,
+				4257766623205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */,
 				42BFC2541DCF50DB00EAD40E /* GCFieldInfo.m in Sources */,
 				422FAEB819A1DD6000D09773 /* GCAppGlobal.m in Sources */,
 				422FAEB919A1DD6000D09773 /* GCSportTracksActivityListParser.m in Sources */,
@@ -10038,6 +10046,7 @@
 				42C0589C21D0525200109D54 /* RZFitMessageExtensions.swift in Sources */,
 				4209E19A1DA8E15700B80735 /* GCGarminRequestModernSearch.m in Sources */,
 				42A22DED19E5F30C004407B8 /* GCWithingsSleepMeasures.m in Sources */,
+				4257766423205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */,
 				4234B5B217895CF2002C3B53 /* GCViewMaturityButton.m in Sources */,
 				42B34A2E179C31D500688E9F /* GCViewActivityTypeButton.m in Sources */,
 				422B343D1CA7321200B345CD /* GCFieldCache.m in Sources */,
@@ -10257,6 +10266,7 @@
 				42B5E2B71BA5B216000FAE4E /* GCActivity+Calculated.m in Sources */,
 				42B5E2B81BA5B216000FAE4E /* GCActivity+CachedTracks.m in Sources */,
 				42B5E2B91BA5B216000FAE4E /* GCActivityMetaValue.m in Sources */,
+				4257766523205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */,
 				42B4080122E38CFA005C61C4 /* GCTestServiceCompare.m in Sources */,
 				42B5E2BA1BA5B216000FAE4E /* GCActivitySummaryValue.m in Sources */,
 				42B5E2BB1BA5B216000FAE4E /* GCActivityCalculatedValue.m in Sources */,

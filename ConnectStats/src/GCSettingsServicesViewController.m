@@ -39,6 +39,7 @@
 #import "GCStravaReqBase.h"
 #import "GCWebUrl.h"
 #import "GCDebugServiceKeys.h"
+#import "GCCellEntryText+GCViewConfig.h"
 
 #define GC_SECTIONS_GARMIN          0
 #define GC_SECTIONS_STRAVA          1
@@ -547,7 +548,7 @@
         }
         rv = gridcell;
     }else if (indexPath.row == GC_GARMIN_USERNAME){
-        textcell = [GCCellEntryText textCell:tableView];
+        textcell = [GCCellEntryText textCellViewConfig:tableView];
         [textcell.label setText:NSLocalizedString(@"Login Name", @"")];
         rv = textcell;
         textcell.textField.secureTextEntry = NO;
@@ -555,7 +556,7 @@
         [textcell setIdentifierInt:GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_USERNAME)];
         textcell.entryFieldDelegate = self;
     }else if (indexPath.row == GC_GARMIN_PASSWORD){
-        textcell = [GCCellEntryText textCell:tableView];
+        textcell = [GCCellEntryText textCellViewConfig:tableView];
         [textcell.label setText:NSLocalizedString(@"Password", @"")];
         textcell.textField.secureTextEntry = YES;
         (textcell.textField).text = [[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin];
