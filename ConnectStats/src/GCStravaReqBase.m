@@ -81,7 +81,7 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
         }];
     }else{
         // Specify the appropriate scope string, if any, according to the service's API documentation
-        auth.scope = @"view_private,write";
+        auth.scope = @"activity:read_all,read_all";
 
         NSURL *authURL = [NSURL URLWithString:@"https://www.strava.com/oauth/authorize"];
 
