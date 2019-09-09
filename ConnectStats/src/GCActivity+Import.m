@@ -1242,7 +1242,7 @@
 }
 
 
--(BOOL)updateTrackpointsFromActivity:(GCActivity*)other{
+-(BOOL)updateTrackpointsFromActivity:(GCActivity*)other newOnly:(BOOL)newOnly verbose:(BOOL)verbose{
     BOOL rv = false;
     
     if( other.garminSwimAlgorithm ){
@@ -1303,9 +1303,10 @@
     return rv;
 }
 
--(BOOL)updateSummaryDataFromActivity:(GCActivity*)other{
+-(BOOL)updateSummaryDataFromActivity:(GCActivity*)other newOnly:(BOOL)newOnly verbose:(BOOL)verbose{
     BOOL rv = false;
     
+    // no metaData in current activity, just take the other one as is
     if( self.metaData == nil && other.metaData != nil){
         [self updateMetaData:[NSDictionary dictionaryWithDictionary:other.metaData]];
         
@@ -1321,20 +1322,44 @@
     }else{
         if (self.metaData) {
             NSMutableDictionary * newMetaData = nil;
-            for (NSString * field in self.metaData) {
-                GCActivityMetaValue * thisVal  = (self.metaData)[field];
-                GCActivityMetaValue * otherVal = (other.metaData)[field];
-                if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
-                    if (!newMetaData) {
-                        newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
+            if( ! newOnly ){
+                for (NSString * field in self.metaData) {
+                    GCActivityMetaValue * thisVal  = (self.metaData)[field];
+                    GCActivityMetaValue * otherVal = (other.metaData)[field];
+                    if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
+                        if (!newMetaData) {
+                            newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
+                        }
+                        if( verbose ){
+                            RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.display, otherVal.display);
+                        }
+                        [newMetaData setValue:otherVal forKey:field];
+                        FMDatabase * db = self.db;
+                        [db beginTransaction];
+                        [otherVal updateDb:db forActivityId:self.activityId];
+                        [db commit];
+                        rv = true;
                     }
-                    RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.display, otherVal.display);
-                    [newMetaData setValue:otherVal forKey:field];
-                    FMDatabase * db = self.db;
-                    [db beginTransaction];
-                    [otherVal updateDb:db forActivityId:self.activityId];
-                    [db commit];
-                    rv = true;
+                }
+            }
+            if( other.metaData){
+                for( NSString * field in other.metaData){
+                    // new field
+                    if( self.metaData[field] == nil){
+                        GCActivityMetaValue * otherVal = (other.metaData)[field];
+                        if( !newMetaData){
+                            newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
+                        }
+                        if( verbose ){
+                            RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.display);
+                        }
+                        [newMetaData setValue:otherVal forKey:field];
+                        FMDatabase * db = self.db;
+                        [db beginTransaction];
+                        [otherVal updateDb:db forActivityId:self.activityId];
+                        [db commit];
+                        rv = true;
+                    }
                 }
             }
             if (newMetaData) {
@@ -1344,22 +1369,26 @@
     }
     if (self.summaryData) {
         NSMutableDictionary<GCField*,GCActivitySummaryValue*> * newSummaryData = nil;
-        for (GCField * field in self.summaryData) {
-            GCActivitySummaryValue * thisVal = self.summaryData[field];
-            GCActivitySummaryValue * otherVal = other.summaryData[field];
-            // Only change if formatted value changes, to avoid issue with just low precision diffs
-            if (otherVal && (! [otherVal isEqualToValue:thisVal]) && (![otherVal.formattedValue isEqualToString:thisVal.formattedValue])) {
-                if (!newSummaryData) {
-                    newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
+        if( ! newOnly ){
+            for (GCField * field in self.summaryData) {
+                GCActivitySummaryValue * thisVal = self.summaryData[field];
+                GCActivitySummaryValue * otherVal = other.summaryData[field];
+                // Only change if formatted value changes, to avoid issue with just low precision diffs
+                if (otherVal && (! [otherVal isEqualToValue:thisVal]) && (![otherVal.formattedValue isEqualToString:thisVal.formattedValue])) {
+                    if (!newSummaryData) {
+                        newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
+                    }
+                    if( verbose ){
+                        RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.numberWithUnit, otherVal.numberWithUnit);
+                    }
+                    newSummaryData[field] = otherVal;
+                    
+                    FMDatabase * db = self.db;
+                    [db beginTransaction];
+                    [otherVal updateDb:db forActivityId:self.activityId];
+                    [db commit];
+                    rv = true;
                 }
-                RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.numberWithUnit, otherVal.numberWithUnit);
-                newSummaryData[field] = otherVal;
-                
-                FMDatabase * db = self.db;
-                [db beginTransaction];
-                [otherVal updateDb:db forActivityId:self.activityId];
-                [db commit];
-                rv = true;
             }
         }
         for (GCField * field in other.summaryData) {
@@ -1368,8 +1397,9 @@
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                 }
                 GCActivitySummaryValue * otherVal = other.summaryData[field];
-                
-                RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
+                if( verbose ){
+                    RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
+                }
                 newSummaryData[field] = otherVal;
                 
                 FMDatabase * db = self.db;
@@ -1385,24 +1415,26 @@
         }
     }
     
-    if (fabs(self.sumDistance - other.sumDistance) > 1.e-8) {
-        self.sumDistance = other.sumDistance;
-        rv = true;
-        
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET sumDistance=? WHERE activityId = ?", @(self.sumDistance), self.activityId];
-        [db commit];
-        
-    }
-    if (fabs(self.sumDuration - other.sumDuration) > 1.e-8) {
-        self.sumDuration = other.sumDuration;
-        rv = true;
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET sumDuration=? WHERE activityId = ?", @(self.sumDuration), self.activityId];
-        [db commit];
-        
+    if( ! newOnly ){
+        if (fabs(self.sumDistance - other.sumDistance) > 1.e-8) {
+            self.sumDistance = other.sumDistance;
+            rv = true;
+            
+            FMDatabase * db = self.db;
+            [db beginTransaction];
+            [db executeUpdate:@"UPDATE gc_activities SET sumDistance=? WHERE activityId = ?", @(self.sumDistance), self.activityId];
+            [db commit];
+            
+        }
+        if (fabs(self.sumDuration - other.sumDuration) > 1.e-8) {
+            self.sumDuration = other.sumDuration;
+            rv = true;
+            FMDatabase * db = self.db;
+            [db beginTransaction];
+            [db executeUpdate:@"UPDATE gc_activities SET sumDuration=? WHERE activityId = ?", @(self.sumDuration), self.activityId];
+            [db commit];
+            
+        }
     }
     if( other.speedDisplayUom && ( ![self.speedDisplayUom isEqualToString:other.speedDisplayUom]) ){
         self.speedDisplayUom = other.speedDisplayUom;
@@ -1425,19 +1457,23 @@
     return rv;
 }
 
--(BOOL)updateWithActivity:(GCActivity*)other{
+-(BOOL)updateWithActivity:(GCActivity*)other newOnly:(BOOL)newOnly verbose:(BOOL)verbose{
 
     BOOL rv = false;
 
-    NSString * aType = other.activityType;
-    if (![aType isEqualToString:self.activityType]) {
-        RZLog(RZLogInfo, @"change activity type %@ -> %@", self.activityType,aType);
-        rv = true;
-        self.activityType = aType;
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET activityType=? WHERE activityId = ?", self.activityType, self.activityId];
-        [db commit];
+    if( ! newOnly){
+        NSString * aType = other.activityType;
+        if (![aType isEqualToString:self.activityType]) {
+            if( verbose ){
+                RZLog(RZLogInfo, @"change activity type %@ -> %@", self.activityType,aType);
+            }
+            rv = true;
+            self.activityType = aType;
+            FMDatabase * db = self.db;
+            [db beginTransaction];
+            [db executeUpdate:@"UPDATE gc_activities SET activityType=? WHERE activityId = ?", self.activityType, self.activityId];
+            [db commit];
+        }
     }
 
     if (self.activityTypeDetail!=nil && ![other.activityTypeDetail isEqualToActivityType:self.activityTypeDetail]) {
@@ -1449,24 +1485,42 @@
     }
 
     NSString * aName = other.activityName;
-    if (![aName isEqualToString:self.activityName]) {
-        RZLog(RZLogInfo, @"change activity name");
-        rv = true;
-        self.activityName = aName;
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET activityName=? WHERE activityId = ?", self.activityName, self.activityId];
-        [db commit];
+    if( ! newOnly ){
+        if (![aName isEqualToString:self.activityName]) {
+            if( verbose ){
+                RZLog(RZLogInfo, @"change activity name %@ -> %@", self.activityName, aName);
+            }
+            rv = true;
+            self.activityName = aName;
+            FMDatabase * db = self.db;
+            [db beginTransaction];
+            [db executeUpdate:@"UPDATE gc_activities SET activityName=? WHERE activityId = ?", self.activityName, self.activityId];
+            [db commit];
+        }
     }
-
-    if( [self updateSummaryDataFromActivity:other] ){
+    if( [self updateSummaryDataFromActivity:other newOnly:newOnly verbose:verbose] ){
         rv = true;
     }
     
-    if( [self updateTrackpointsFromActivity:other] ){
+    if( [self updateTrackpointsFromActivity:other newOnly:newOnly verbose:verbose] ){
         rv = true;
     }
     return rv;
+}
+
+-(BOOL)updateMissingFromActivity:(GCActivity*)other{
+    return [self updateWithActivity:other newOnly:true verbose:false];
+}
+-(BOOL)updateWithActivity:(GCActivity*)other{
+    return [self updateWithActivity:other newOnly:false verbose:true];
+}
+-(BOOL)updateSummaryDataFromActivity:(GCActivity*)other{
+    return [self updateSummaryDataFromActivity:other newOnly:false verbose:true];
+    
+}
+-(BOOL)updateTrackpointsFromActivity:(GCActivity*)other{
+    return [self updateTrackpointsFromActivity:other newOnly:false verbose:true];
+    
 }
 
 -(BOOL)updateSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints missingOnly:(BOOL)missingOnly{
@@ -1614,61 +1668,76 @@
     return true;
 
 }
++(NSString*)duplicateDescription:(gcDuplicate)dup{
+    switch (dup) {
+        case gcDuplicateTimeOverlapping:
+            return @"Time Overlapping";
+        case gcDuplicateSynchronizedService:
+            return @"Synchronized Service";
+        case gcDuplicateNotMatching:
+            return @"Not a Duplicate";
+    }
+    return @"Not a Duplicate";
+}
 
--(BOOL)testForDuplicate:(GCActivity*)other{
-    BOOL activitiesAreDuplicate = false;
+-(gcDuplicate)testForDuplicate:(GCActivity*)other{
+    gcDuplicate activitiesAreDuplicate = gcDuplicateNotMatching;
     
     // if child activity from multi sport overlap test would succeed but not a duplicate
     if( self.childIds && [self.childIds isKindOfClass:[NSArray class]]){
         if( [self.childIds containsObject:other.activityId] ){
-            return false;
+            return gcDuplicateNotMatching;
         }
     }
     
     if( other.childIds && [other.childIds isKindOfClass:[NSArray class]]){
         if( [other.childIds containsObject:self.activityId] ){
-            return false;
+            return gcDuplicateNotMatching;
         }
     }
     
     if( self.parentId ){
         if( [self.parentId isEqualToString:other.activityId] ){
-            return false;
+            return gcDuplicateNotMatching;
         }
     }
     
     if( other.parentId ){
         if( [self.activityId isEqualToString:other.parentId] ){
-            return false;
+            return gcDuplicateNotMatching;
         }
     }
+    
     // check if from same system (strava/garmin)
     if( (self.externalServiceActivityId && ([self.externalServiceActivityId isEqualToString:other.activityId]))||
        (other.externalServiceActivityId && ([other.externalServiceActivityId isEqualToString:self.activityId]))){
-        activitiesAreDuplicate = true;
+        activitiesAreDuplicate = gcDuplicateSynchronizedService;
     }
     
-    //Last:   date                date+sumDuration
-    //        |--------------------|
-    //          |--------------------|
-    //One:      date                 Date+sumDuration
-    
-    if( other.sumDuration > 60.0){
-        NSTimeInterval overlap =
-        MIN(other.date.timeIntervalSinceReferenceDate+other.sumDuration, self.date.timeIntervalSinceReferenceDate+self.sumDuration)-
-        MAX(other.date.timeIntervalSinceReferenceDate, self.date.timeIntervalSinceReferenceDate);
-        
-        double ratio = (double)overlap / self.sumDuration;
-        
-        if( overlap > 0.0 &&  ratio > 0.90 ){
-            activitiesAreDuplicate = true;
+    // if not match, check for time overlap
+    if( activitiesAreDuplicate == gcDuplicateNotMatching ){
+        //Last:   date                date+sumDuration
+        //        |--------------------|
+        //          |--------------------|
+        //One:      date                 Date+sumDuration
+        if( other.sumDuration > 60.0){
+            NSTimeInterval overlap =
+            MIN(other.date.timeIntervalSinceReferenceDate+other.sumDuration, self.date.timeIntervalSinceReferenceDate+self.sumDuration)-
+            MAX(other.date.timeIntervalSinceReferenceDate, self.date.timeIntervalSinceReferenceDate);
+            
+            //Last:   date           date+sumDuration
+            //        |--------------|
+            //          |--------------------|
+            //One:      date                 Date+sumDuration
+            // Use min duration otherwise ratio maybe too small even if full overlap
+            // but second activity is much longer
+            double ratio = (double)overlap / MIN(self.sumDuration,other.sumDuration);
+            
+            if( overlap > 0.0 &&  ratio > 0.90 ){
+                activitiesAreDuplicate = gcDuplicateTimeOverlapping;
+            }
         }
     }
-    
-    if( [other.date isEqualToDate:self.date] && fabs(other.sumDistance-self.sumDistance)<1.e-7){
-        activitiesAreDuplicate = true;
-    }
-
     return activitiesAreDuplicate;
 }
 

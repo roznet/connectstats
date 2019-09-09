@@ -5673,23 +5673,17 @@
 		428FF72B15F36888007A88FA /* ConnectStatsXCTests */ = {
 			isa = PBXGroup;
 			children = (
-				421844B51D75D268005B09BC /* ConnectStatsXCTests-Bridging-Header.h */,
-				42FC177F1E196E4B00F55302 /* GCTestActivityFitFile.swift */,
-				42D9081A2033843B000BBE07 /* GCTestCase.h */,
-				42D90811203383DB000BBE07 /* GCTestCase.m */,
+				42C226172325AC0100F52A23 /* Common */,
 				42B088441C38894D00113306 /* GCTestFields.m */,
+				42FC177F1E196E4B00F55302 /* GCTestActivityFitFile.swift */,
 				42A89C251D63B2D7007CF90D /* GCTestHealthZones.m */,
 				426CC4741BAEBD060033978C /* GCTestsActions.m */,
 				425CF5A81813CEEC009279C0 /* GCTestsActivities.m */,
 				42096752189CF33500D32CA7 /* GCTestsDerived.m */,
 				428FF73215F36888007A88FA /* GCTestsGeneral.m */,
 				4227C5AB1C0B1310003F0660 /* GCTestsGrid.m */,
-				426F42441DB247FB00937DD8 /* GCTestsHelper.h */,
-				426F42451DB247FB00937DD8 /* GCTestsHelper.m */,
 				42C0113F1AB438050059B6CF /* GCTestsParsing.m */,
 				42D9081B20338582000BBE07 /* GCTestsPerformance.m */,
-				42096754189CF49600D32CA7 /* GCTestsSamples.h */,
-				42096755189CF49600D32CA7 /* GCTestsSamples.m */,
 				421844B61D75D268005B09BC /* GCTestsSegments.swift */,
 				42B9555218186D0C00BC7AF9 /* GCTestsUtils.m */,
 				429184AD2319B0ED00FD6525 /* GCTestUserInterface.m */,
@@ -7274,6 +7268,20 @@
 				42C0118C1AB4891B0059B6CF /* activityweather_718039360.json */,
 			);
 			path = weather;
+			sourceTree = "<group>";
+		};
+		42C226172325AC0100F52A23 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				421844B51D75D268005B09BC /* ConnectStatsXCTests-Bridging-Header.h */,
+				426F42441DB247FB00937DD8 /* GCTestsHelper.h */,
+				426F42451DB247FB00937DD8 /* GCTestsHelper.m */,
+				42D9081A2033843B000BBE07 /* GCTestCase.h */,
+				42D90811203383DB000BBE07 /* GCTestCase.m */,
+				42096754189CF49600D32CA7 /* GCTestsSamples.h */,
+				42096755189CF49600D32CA7 /* GCTestsSamples.m */,
+			);
+			name = Common;
 			sourceTree = "<group>";
 		};
 		42C4B0641DBB39E7000A1612 /* zones */ = {

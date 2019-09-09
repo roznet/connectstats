@@ -476,8 +476,30 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
                 if( self.duplicateActivityIds[act.activityId] == nil) {
                     self.duplicateActivityIds[act.activityId] = other.activityId;
                     [self.db executeUpdate:@"INSERT INTO gc_duplicate_activities (activityId,duplicateActivityId) VALUES (?,?)", act.activityId, other.activityId];
+                
+                    gcDuplicate reason = [other testForDuplicate:act];
+                    // This is
+                    if( reason == gcDuplicateNotMatching){
+                        reason = [act testForDuplicate:other];
+                        if( reason != gcDuplicateNotMatching ){
+                            RZLog(RZLogWarning,@"Duplicate test for %@ and %@ appear not symetric", act.activityId, other.activityId);
+                        }
+                    }
+                    BOOL duplicateServiceIsPreferred = (reason == gcDuplicateSynchronizedService) && [act.service preferredOver:other.service];
                     
-                    RZLog(RZLogInfo, @"Duplicate: skipping %@ (preferred: %@)", act.activityId, other.activityId);
+                    NSString * reasonDescription = [GCActivity duplicateDescription:reason];
+                    
+                    // If from same service, and preferred, take the extra info
+                    if( duplicateServiceIsPreferred ){
+                        RZLog(RZLogInfo, @"Duplicate (%@): updating %@ (preferred: %@)", reasonDescription, other.activityId, act.activityId );
+                        // Avoid trivial case where exact same pointer/activity
+                        if( act != other ){
+                            [other updateMissingFromActivity:act];
+                        }
+                    }else{
+                        RZLog(RZLogInfo, @"Duplicate (%@): skipping %@ (preferred: %@)", reasonDescription, act.activityId, other.activityId);
+                    }
+                    
                 }
                 return rv;
             }
@@ -546,9 +568,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
                 continue; // will deal with tennis later
             }
             
-            BOOL activitiesAreDuplicate = [one testForDuplicate:last];
+            gcDuplicate activitiesAreDuplicate = [one testForDuplicate:last];
             
-            if( activitiesAreDuplicate){
+            if( activitiesAreDuplicate != gcDuplicateNotMatching){
                 BOOL preferLast = true;
                 if( [last.activityType isEqualToString:GC_TYPE_UNCATEGORIZED]){
                     preferLast = false;
@@ -602,12 +624,14 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             // don't check for exact same activity, of course they would be duplicate...
             continue;
         }
-        if ([act testForDuplicate:other]) {
+        if ([act testForDuplicate:other] != gcDuplicateNotMatching) {
             return other;
         }
     }
     return nil;
 }
+
+
 -(BOOL)isKnownDuplicate:(GCActivity*)act{
     return self.duplicateActivityIds[act.activityId] != nil;
 }

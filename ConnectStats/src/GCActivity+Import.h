@@ -27,6 +27,12 @@
 @class GCActivitySummaryValue;
 @class HKWorkout;
 
+typedef NS_ENUM(NSUInteger,gcDuplicate) {
+    gcDuplicateNotMatching,
+    gcDuplicateSynchronizedService,
+    gcDuplicateTimeOverlapping,
+};
+
 @interface GCActivity (Import)
 
 //-(void)parseGarminJson:(NSDictionary*)aData;
@@ -40,6 +46,8 @@
 -(GCActivity*)initWithId:(NSString *)aId andConnectStatsData:(NSDictionary*)aData;
 
 -(void)updateWithGarminData:(NSDictionary*)data;
+
+-(BOOL)updateMissingFromActivity:(GCActivity*)other;
 -(BOOL)updateWithActivity:(GCActivity*)other;
 -(BOOL)updateSummaryDataFromActivity:(GCActivity*)other;
 -(BOOL)updateTrackpointsFromActivity:(GCActivity*)other;
@@ -102,7 +110,8 @@
 -(void)setSummaryField:(gcFieldFlag)which with:(GCNumberWithUnit*)nu;
 -(GCActivitySummaryValue*)buildSummaryValue:(NSString*)fieldkey uom:(NSString*)uom fieldFlag:(gcFieldFlag)flag andValue:(double)val;
 
--(BOOL)testForDuplicate:(GCActivity*)other;
++(NSString*)duplicateDescription:(gcDuplicate)dup;
+-(gcDuplicate)testForDuplicate:(GCActivity*)other;
 -(BOOL)isEqualToActivity:(GCActivity*)other;
 
 @end
