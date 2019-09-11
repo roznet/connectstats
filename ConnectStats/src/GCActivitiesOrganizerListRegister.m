@@ -94,10 +94,8 @@
             }
             if( [organizer registerActivity:activity forActivityId:activity.activityId] ){
                 actuallyAdded += 1;
-                NSLog(@"Add  %@ [%@]",activity,activity.date);
             }else{
                 skipped += 1;
-                NSLog(@"Skip %@ [%@]",activity,activity.date);
             }
         }
         RZLog(RZLogInfo, @"Parsed %@ [%@-%@]=%lu new=%lu added=%lu existing=%lu newtotal=%lu",
