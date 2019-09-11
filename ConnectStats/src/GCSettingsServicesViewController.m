@@ -345,20 +345,12 @@
 }
 
 -(GCCellEntryText*)textCell:(UITableView*)tableView{
-    GCCellEntryText * cell = (GCCellEntryText*)[tableView dequeueReusableCellWithIdentifier:@"GCText"];
-    if (cell == nil) {
-        cell = [[[GCCellEntryText alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GCText"] autorelease];
-    }
-    return cell;
+    return [GCCellEntryText textCellViewConfig:tableView];
 }
 
 
 -(GCCellGrid*)gridCell:(UITableView*)tableView{
-    GCCellGrid*cell=(GCCellGrid*)[tableView dequeueReusableCellWithIdentifier:@"GCGrid"];
-    if (cell==nil) {
-        cell=[[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GCGrid"] autorelease  ];
-    }
-    return cell;
+    return [GCCellGrid gridCell:tableView];
 }
 
 -(NSString*)statusForService:(gcService)service{

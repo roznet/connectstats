@@ -49,6 +49,7 @@ extern NSString * kGCSkinNameOriginal;
 
 typedef NS_ENUM(NSUInteger,gcSkinDefaultColor){
     gcSkinDefaultColorBackground,
+    gcSkinDefaultColorBackgroundSecondary, // For things like textfield entry zone
     gcSkinDefaultColorBackgroundEven, // for things like alternating background in rows
     gcSkinDefaultColorBackgroundOdd, // for things like alternating background in rows
     gcSkinDefaultColorPrimaryText, // original = black
@@ -82,7 +83,8 @@ typedef NS_ENUM(NSUInteger,gcSkinGraphColor){
 };
 
 typedef NS_ENUM(NSUInteger,gcSkinBool){
-    gcSkinBoolRoundedActivityIcons
+    gcSkinBoolRoundedActivityIcons,
+    gcSkinBoolActivityCellMultiColor
 };
 
 

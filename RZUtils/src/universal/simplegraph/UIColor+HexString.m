@@ -31,6 +31,23 @@
     return [RZColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:alpha];
 }
 
++ (RZColor *)colorWithHexLight:(NSUInteger)rgbValue dark:(NSUInteger)darkRgbValue andAlpha:(double)alpha{
+#ifdef __IPHONE_13_0
+    if( @available(iOS 13.0, *)) {
+        return [UIColor colorWithDynamicProvider:^(UITraitCollection*trait){
+            if( trait.userInterfaceStyle == UIUserInterfaceStyleDark){
+                return [RZColor colorWithRed:((darkRgbValue & 0xFF0000) >> 16)/255.0 green:((darkRgbValue & 0xFF00) >> 8)/255.0 blue:(darkRgbValue & 0xFF)/255.0 alpha:alpha];
+            }else{
+                return [RZColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:alpha];
+            }
+        }];
+    }else{
+        return [RZColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:alpha];
+    }
+#else
+    return [RZColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:alpha];
+#endif
+}
 -(NSArray*)rgbComponents{
 #if TARGET_OS_IPHONE
     CGFloat red=0.0,green=0.0,blue=0.0,alpha=0.0;

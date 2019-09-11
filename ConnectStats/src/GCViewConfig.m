@@ -96,6 +96,7 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 }
 
 +(void)setupGradient:(GCCellGrid*)aG ForActivity:(id)aAct{
+    
     [aG setupBackgroundColors:@[ [GCViewConfig cellBackgroundLighterForActivity:aAct]
                                   ]];
 }
@@ -160,7 +161,11 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 
 // Used for lists
 +(UIColor*)cellBackgroundLighterForActivity:(id)aAct{
-    return [_current_skin() colorForKey:kGCSkinKeyActivityCellLighterBackgroundColor andActivity:aAct];
+    if( [self activityCellMultiColor]){
+        return [_current_skin() colorForKey:kGCSkinKeyActivityCellLighterBackgroundColor andActivity:aAct];
+    }else{
+        return [_current_skin() colorForKey:kgcSkinDefaultColors andSubkey:@(gcSkinDefaultColorBackgroundSecondary)];
+    }
 }
 
 +(UIColor*)cellIconColorForActivity:(id)aAct{
@@ -233,6 +238,10 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 
 +(BOOL)roundedActivityIcons{
     return [_current_skin() boolFor:gcSkinBoolRoundedActivityIcons];
+}
+
++(BOOL)activityCellMultiColor{
+    return [_current_skin() boolFor:gcSkinBoolActivityCellMultiColor];
 }
 
 #pragma mark - Fields

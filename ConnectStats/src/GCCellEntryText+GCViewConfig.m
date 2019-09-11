@@ -36,7 +36,7 @@
     rv.label.font                    = [GCViewConfig boldSystemFontOfSize:16];
     rv.label.textColor                = [GCViewConfig colorForText:rzColorStylePrimaryText];;
     
-    rv.textField.backgroundColor    = [UIColor blackColor];
+    rv.textField.backgroundColor    = [GCViewConfig defaultColor:gcSkinDefaultColorBackgroundSecondary];
     rv.textField.font                = [GCViewConfig systemFontOfSize:16];
     rv.textField.textColor            = [GCViewConfig colorForText:rzColorStyleHighlightedText];;
     

@@ -290,5 +290,14 @@ NSString *const KalDataSourceChangedNotification = @"KalDataSourceChangedNotific
     }
 }
     
+-(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection{
+    
+    if( @available( iOS 13.0, * )){
+        if( self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle ){
+            [self.tableView reloadData];
+        }
+    }
+}
+
 
 @end

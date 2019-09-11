@@ -253,7 +253,14 @@ const CGFloat kCellDaySpacing = 2.f;
     [super viewWillAppear:animated];
     [GCViewConfig setupViewController:self];
 }
-
+-(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection{
+    [super traitCollectionDidChange:previousTraitCollection];
+    if( @available( iOS 13.0, * )){
+        if( self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle ){
+            [self.tableView reloadData];
+        }
+    }
+}
 -(void)setupQuickFilterIcon{
     // iPhone only will have day activities
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ) {

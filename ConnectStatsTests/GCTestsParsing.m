@@ -966,10 +966,10 @@
     NSArray * running_dup = [[dict[@"duplicates"][runGarminId] allKeys] sortedArrayUsingSelector:@selector(compare:)];
     NSArray * cycling_dup = [[dict[@"duplicates"][bikeGarminId] allKeys] sortedArrayUsingSelector:@selector(compare:)];
 
-    NSString * runConnectId = running_dup[0];
+    //NSString * runConnectId = running_dup[0];
     NSString * runStravaId = running_dup[1];
     
-    NSString * bikeConnectId = cycling_dup[0];
+    //NSString * bikeConnectId = cycling_dup[0];
     NSString * bikeStravaId = cycling_dup[1];
     
     
