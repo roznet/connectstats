@@ -230,7 +230,7 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     [[GCAppGlobal web] servicesSearchRecentActivities];
 }
 -(void)testModernHistoryInitialDone{
-    self.expectedModernActivitiesCount = 2972;
+    self.expectedModernActivitiesCount = 2971;
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == self.expectedModernActivitiesCount , @"Loading %d activities (got %d)", (int)self.expectedModernActivitiesCount, (int)[[GCAppGlobal organizer] countOfActivities]);
     RZ_ASSERT(self.nReq == 160, @"Should have got 160 req %d", (int)self.nReq);
     
