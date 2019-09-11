@@ -611,7 +611,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 
 }
-
+-(NSUInteger)countOfKnownDuplicates{
+    return self.duplicateActivityIds.count;
+}
 -(GCActivity*)findDuplicate:(GCActivity*)act{
     if (self.duplicateActivityIds[act.activityId]) {
         NSString * otherId = self.duplicateActivityIds[act.activityId];
@@ -634,6 +636,15 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
 -(BOOL)isKnownDuplicate:(GCActivity*)act{
     return self.duplicateActivityIds[act.activityId] != nil;
+}
+-(NSString*)hasKnownDuplicate:(GCActivity*)act{
+    for (NSString * duplicateId in self.duplicateActivityIds) {
+        if( [self.duplicateActivityIds[duplicateId] isEqualToString:act.activityId]){
+            return duplicateId;
+        }
+    }
+    
+    return( nil );
 }
 -(GCActivity*)activityForId:(NSString*)aId{
     for (GCActivity * act in _allActivities) {

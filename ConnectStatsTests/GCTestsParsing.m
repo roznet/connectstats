@@ -954,20 +954,37 @@
     //     @"3560919337",
     //     @"3560918864",
 
-    NSString * runGarminId = @"3839667339";
-    NSString * runStravaId = @"__strava__2527522241";
-    //NSString * runConnectId = @"__connectstats__1298";
+    NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"services_activities.json" forClass:[self class]]
+                                           options:0 error:nil];
+    NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    NSArray * running_ids = [[dict[@"types"][@"running"] allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    NSArray * cycling_ids = [[dict[@"types"][@"cycling"] allKeys] sortedArrayUsingSelector:@selector(compare:)];
     
-    NSString * bikeGarminId = @"3846541343";
-    NSString * bikeStravaId = @"__strava__2533351903";
-    //NSString * bikeConnectId = @"__connectstats__1299";
+    NSString * runGarminId = running_ids[0];
+    NSString * bikeGarminId = cycling_ids[0];
+    
+    NSArray * running_dup = [[dict[@"duplicates"][runGarminId] allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    NSArray * cycling_dup = [[dict[@"duplicates"][bikeGarminId] allKeys] sortedArrayUsingSelector:@selector(compare:)];
+
+    NSString * runConnectId = running_dup[0];
+    NSString * runStravaId = running_dup[1];
+    
+    NSString * bikeConnectId = cycling_dup[0];
+    NSString * bikeStravaId = cycling_dup[1];
+    
+    
+    NSUInteger addedActivities = 0;
     
     // First add garmin
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath];
     [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:bundlePath];
 
-    XCTAssertEqual(organizer.countOfActivities, 20);
-    
+    // Count activities from garmin as it will only remove duplicate/overlapping
+    addedActivities += organizer_garmin.countOfActivities;
+    // Make sure all added in garmin is total minues overlapping
+    XCTAssertEqual(organizer_garmin.countOfActivities, 20-organizer_garmin.countOfKnownDuplicates);
+    XCTAssertEqual(organizer.countOfActivities, organizer_garmin.countOfActivities);
+
     XCTAssertNotNil([organizer activityForId:runGarminId]);
     XCTAssertNotNil([organizer activityForId:bikeGarminId]);
 
@@ -975,8 +992,10 @@
     [GCStravaActivityList testForOrganizer:organizer withFilesInPath:bundlePath];
     [GCStravaActivityList testForOrganizer:organizer_strava withFilesInPath:bundlePath];
     // added extra 10 from strava
+    // Note that strava already eliminate time overlapping, so should
+    // get 30
     XCTAssertEqual(organizer.countOfActivities, 30);
-    XCTAssertEqual(organizer_strava.countOfActivities, 30);
+    XCTAssertEqual(organizer_strava.countOfActivities, 30); // all should be added
     XCTAssertNotNil([organizer activityForId:runGarminId]);
     XCTAssertNotNil([organizer activityForId:bikeGarminId]);
     XCTAssertNil([organizer activityForId:runStravaId]);
@@ -988,31 +1007,55 @@
     
     // Add Connectstats
     [GCConnectStatsRequestSearch testForOrganizer:organizer_cs withFilesInPath:bundlePath];
-    XCTAssertEqual(organizer_cs.countOfActivities, 20);
+    XCTAssertEqual(organizer_cs.countOfActivities, 20-organizer_cs.countOfKnownDuplicates);
     [GCConnectStatsRequestSearch testForOrganizer:organizer_cs withFilesInPath:bundlePath start:20];
-    XCTAssertEqual(organizer_cs.countOfActivities, 39);
+    XCTAssertEqual(organizer_cs.countOfActivities, 40-organizer_cs.countOfKnownDuplicates);
     
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath start:20];
     [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:bundlePath start:20];
-    // Duplicate: skipping 3767533538 (preferred: 3765469387) [duplicate record on june 20 edge20/fenix] so 38 instead of 39
-    XCTAssertEqual(organizer.countOfActivities, 38);
-    XCTAssertEqual(organizer_garmin.countOfActivities, 38);
+    // should have 40 - duplicates - 1 overlappng (existing)
+    XCTAssertEqual(organizer_garmin.countOfActivities, 40 - organizer_garmin.countOfKnownDuplicates - 1);
+    XCTAssertEqual(organizer.countOfActivities, organizer_garmin.countOfActivities);
+    // connectstats does not send overlapping activities, so should have 1 more
+    XCTAssertEqual(organizer_cs.countOfActivities, organizer_garmin.countOfActivities+1);
 
-    // Duplicate: skipping __strava__2466681498 (preferred: __strava__2464957164) [duplicate record on june 20 edge20/fenix] so 59 instead of 60
     [GCStravaActivityList testForOrganizer:organizer withFilesInPath:bundlePath start:1];
     [GCStravaActivityList testForOrganizer:organizer_strava withFilesInPath:bundlePath start:1];
-    XCTAssertEqual(organizer.countOfActivities, 59);
-    XCTAssertEqual(organizer_strava.countOfActivities, 59);
+    XCTAssertEqual(organizer_strava.countOfActivities, 60);
+
+    NSUInteger beforeLastGarmin = organizer.countOfActivities;
     
+    // Add empty stub should change nothing
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath start:40];
     [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:bundlePath start:40];
 
-    XCTAssertEqual(organizer.countOfActivities, 59);
+    // We added all the extra from strava, so no new one should come from garmin (all sync'd duplicates)
+    XCTAssertEqual(organizer.countOfActivities, beforeLastGarmin);
     
+    NSUInteger beforeLastStrava = organizer_strava.countOfActivities;
+    [GCStravaActivityList testForOrganizer:organizer_strava withFilesInPath:bundlePath start:2];
+    XCTAssertEqual(organizer_strava.countOfActivities, beforeLastStrava);
+
+    // All the activities in garmin shuold be in final merged
+    // or a known duplicate (strava should have more activities)
     for (GCActivity * one in organizer_garmin.activities) {
         GCActivity * found = [organizer activityForId:one.activityId];
         BOOL knownDuplicate = [organizer isKnownDuplicate:one];
         XCTAssertTrue(knownDuplicate || found != nil, @"activity %@", one);
+    }
+
+    for (GCActivity * one in organizer.activities) {
+        GCActivity * found = [organizer_strava activityForId:one.activityId];
+        if( found == nil){
+            NSString * knownDuplicate = [organizer hasKnownDuplicate:one];
+            found = [organizer_strava activityForId:knownDuplicate];
+        }
+        if( found == nil){
+            // Strava will skip activities of less than 30 seconds
+            XCTAssertLessThan(one.sumDuration, 30.0);
+        }else{
+            XCTAssertTrue(found != nil, @"activity %@ in both", one);
+        }
     }
 
     GCActivitiesOrganizer * reload = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db]);
@@ -1025,18 +1068,6 @@
     [GCGarminRequestModernSearch testForOrganizer:reload withFilesInPath:bundlePath start:20];
     [GCStravaActivityList testForOrganizer:reload withFilesInPath:bundlePath start:1];
     XCTAssertEqual(organizer.countOfActivities,reload.countOfActivities);
-    
-    
-    /* in garmin, not in strava
-     [GCGarminRequestModernSearch testForOrganizer:organizer_strava withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
-     [GCGarminRequestModernSearch testForOrganizer:organizer_strava withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:20];
-     [GCGarminRequestModernSearch testForOrganizer:organizer_strava withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] start:40];
-
-    <GCActivity other:3560921097>,
-    <GCActivity other:3560919931>,
-    <GCActivity other:3560919337>,
-    <GCActivity other:3560918864>,
-     */
     
 }
 

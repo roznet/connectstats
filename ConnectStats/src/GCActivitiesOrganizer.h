@@ -72,9 +72,10 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 -(void)registerTennisActivity:(NSString *)aId withFullSession:(NSDictionary *)aData;
 
 
-
+-(NSUInteger)countOfKnownDuplicates;
 -(GCActivity*)findDuplicate:(GCActivity*)act;
 -(BOOL)isKnownDuplicate:(GCActivity*)act;
+-(NSString*)hasKnownDuplicate:(GCActivity*)act;
 
 -(NSUInteger)countOfActivities;
 -(NSArray<GCActivity*>*)activities;

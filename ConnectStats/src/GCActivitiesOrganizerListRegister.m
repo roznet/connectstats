@@ -81,6 +81,7 @@
     _reachedExisting = 0;
     NSUInteger newActivitiesCount = 0;
     NSUInteger actuallyAdded = 0;
+    NSUInteger skipped = 0;
     if (self.activities) {
         for (GCActivity * activity in _activities) {
             [existingInService addObject:activity.activityId];
@@ -93,6 +94,10 @@
             }
             if( [organizer registerActivity:activity forActivityId:activity.activityId] ){
                 actuallyAdded += 1;
+                NSLog(@"Add  %@ [%@]",activity,activity.date);
+            }else{
+                skipped += 1;
+                NSLog(@"Skip %@ [%@]",activity,activity.date);
             }
         }
         RZLog(RZLogInfo, @"Parsed %@ [%@-%@]=%lu new=%lu added=%lu existing=%lu newtotal=%lu",

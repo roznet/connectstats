@@ -28,6 +28,7 @@
 #import "GCTestServiceCompare.h"
 #import "GCAppGlobal.h"
 #import "GCActivitiesOrganizer.h"
+#import "GCActivity+Import.h"
 
 NSString * kDbPathServiceConnectStats = @"activities_cs.db";
 NSString * kDbPathServiceStrava = @"activities_strava.db";
@@ -113,10 +114,15 @@ NSString * kJsonKeyTypes = @"types";
 -(void)recordDuplicate:(GCActivity*)one for:(GCActivity*)two{
     
     NSMutableDictionary * dict = self.collectJson[kJsonKeyDuplicates][one.activityId];
+    
+    NSString * reason = [GCActivity duplicateDescription:[one testForDuplicate:two]];
+    if( reason == nil ){
+        reason = @"Unknown";
+    }
     if( dict == nil){
-        self.collectJson[kJsonKeyDuplicates][one.activityId] = [NSMutableDictionary dictionaryWithObject:@(1) forKey:two.activityId];
+        self.collectJson[kJsonKeyDuplicates][one.activityId] = [NSMutableDictionary dictionaryWithObject:reason forKey:two.activityId];
     }else{
-        dict[two.activityId] = @(1);
+        dict[two.activityId] = reason;
     }
 }
 
