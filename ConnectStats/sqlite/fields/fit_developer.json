@@ -2,6 +2,7 @@
   "developer_Cadence" : "WeightedMeanCadence",
   "developer_Elevation" : "GainElevation" ,
   "developer_Form Power" : "WeightedMeanFormPower" ,
+  "developer_Air Power" : "WeightedMeanAirPower" ,
   "developer_Ground Time" : "WeightedMeanGroundContactTime" ,
   "developer_Leg Spring Stiffness" : "WeightedMeanLegSpringStiffness" ,
   "developer_Power" : "WeightedMeanPower" ,

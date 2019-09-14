@@ -114,7 +114,7 @@ for (msg,defs) in existing.items():
         if key != val:
             continue
         checkval = val
-        for (fit,cs) in [ ('total_', 'sum_'), ('avg_', 'weighted_mean_'), ]:
+        for (fit,cs) in [ ('total_', 'sum_'), ('avg_', 'weighted_mean_'), ('enhanced_avg_', 'weighted_mean_'), ]:
             if checkval.startswith( fit ):
                 checkval = checkval.replace( fit,cs )
         candidate = to_camel_case( checkval )
