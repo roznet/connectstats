@@ -129,7 +129,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    self.view.autoresizesSubviews = YES;
+    [UIViewController setupEdgeExtendedLayout:self];
 	// Do any additional setup after loading the view.
     //self.activity = [[GCAppGlobal organizer] currentActivity] ;
     [[GCAppGlobal organizer] attach:self];
@@ -180,14 +181,15 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-
+    [super viewWillAppear:animated];
+    
     [self setupFrames:[self adjustedViewFrame]];
     [self zoomInOnRoute];
 
     if (self.slidingViewController) {
         (self.slidingViewController).anchorRightRevealAmount = self.view.frame.size.width*0.9;
     }
-    [super viewWillAppear:animated];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -267,10 +269,6 @@
 }
 -(CGRect)adjustedViewFrame{
     CGRect maprect = self.view.frame;
-    if ([UIViewController useIOS7Layout] && self.navigationController  && self.slidingViewController == nil) {
-        maprect = self.navigationController.view.frame;
-        maprect.origin.x = 0.;
-    }
     return maprect;
 }
 

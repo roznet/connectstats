@@ -211,7 +211,7 @@ const CGFloat kCellDaySpacing = 2.f;
     RZLogTrace(@"");
 
     [super viewDidLoad];
-
+    
     //self.tableView.backgroundColor = [GCViewConfig defaultBackgroundColor];
 
     self.navigationItem.titleView = self.titleLabel;

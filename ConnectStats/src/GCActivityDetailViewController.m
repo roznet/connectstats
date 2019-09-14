@@ -847,7 +847,7 @@
 -(void)showMap:(GCField*)field{
     GCMapViewController *detailViewController = [[GCMapViewController alloc] initWithNibName:nil bundle:nil];
     ECSlidingViewController * detailSliding = [[ECSlidingViewController alloc] initWithNibName:nil bundle:nil];
-
+    
     detailViewController.gradientField = field;
     detailViewController.activity = self.activity;
     detailViewController.mapType = (gcMapType)[GCAppGlobal configGetInt:CONFIG_USE_MAP defaultValue:gcMapBoth];
@@ -858,6 +858,9 @@
 
     [UIViewController setupEdgeExtendedLayout:detailViewController];
     [UIViewController setupEdgeExtendedLayout:detailSliding];
+    detailSliding.view.autoresizesSubviews = YES;
+    detailSliding.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+    
 
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     [self.navigationController pushViewController:detailSliding animated:YES];
