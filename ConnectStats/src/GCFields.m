@@ -341,8 +341,10 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
                 return @"WeightedMeanRunCadence";
             }else if ([aAct isEqualToString:GC_TYPE_SWIMMING]){
                 return @"WeightedMeanSwimCadence";
-            }else if ([aAct isEqualToString:GC_TYPE_DAY]){
-                return @"SumStep";
+            /* Used to try to mix cadence and sumstep which was confusing
+             
+             }else if ([aAct isEqualToString:GC_TYPE_DAY]){
+                return @"SumStep";*/
             }else{
                 return @"WeightedMeanBikeCadence";
             }

@@ -524,7 +524,7 @@
             [zones setValue:z forKey:[GCHealthZoneCalculator keyForField:daySpeed andSource:gcHealthZoneSourceAuto]];
         }
     }
-
+    
     GCField * dayCadence = [GCField fieldForFlag:gcFieldFlagCadence andActivityType:GC_TYPE_DAY];
     if ( !zones[[GCHealthZoneCalculator keyForField:dayCadence andSource:gcHealthZoneSourceAuto]]) {
         // in step/min
