@@ -132,16 +132,13 @@
 
     [self selectNewActivity:[[GCAppGlobal organizer] currentActivity]];
 
-    if ([UIViewController useIOS7Layout]) {
-        CGFloat height = 20.;
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            height = 64.;
-        }
-        self.tableView.tableHeaderView = [[[UIView alloc] initWithFrame:CGRectMake(0., 0., 320., height)] autorelease];
+    CGFloat height = 20.;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        height = 64.;
     }
-    if ([GCViewConfig uiStyle] == gcUIStyleIOS7) {
-        self.tableView.tableHeaderView.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:self.activity];
-    }
+    self.tableView.tableHeaderView = [[[UIView alloc] initWithFrame:CGRectMake(0., 0., 320., height)] autorelease];
+
+    self.tableView.tableHeaderView.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:self.activity];
     self.initialized = true;
     self.view.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
     self.tableView.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
@@ -162,10 +159,6 @@
         //[self.slidingViewController setShouldAddPanGestureRecognizerToTopViewSnapshot:YES];
     }
     self.tableView.tableHeaderView.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:self.activity];
-
-#ifdef GC_USE_FLURRY
-    [self publishEvent];
-#endif
 
 }
 
@@ -846,27 +839,16 @@
 
 -(void)showMap:(GCField*)field{
     GCMapViewController *detailViewController = [[GCMapViewController alloc] initWithNibName:nil bundle:nil];
-    ECSlidingViewController * detailSliding = [[ECSlidingViewController alloc] initWithNibName:nil bundle:nil];
     
     detailViewController.gradientField = field;
     detailViewController.activity = self.activity;
     detailViewController.mapType = (gcMapType)[GCAppGlobal configGetInt:CONFIG_USE_MAP defaultValue:gcMapBoth];
     detailViewController.enableTap = true;
 
-    detailSliding.topViewController = detailViewController;
-    detailSliding.underLeftViewController = [[[GCSharingViewController alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
-
-    [UIViewController setupEdgeExtendedLayout:detailViewController];
-    [UIViewController setupEdgeExtendedLayout:detailSliding];
-    detailSliding.view.autoresizesSubviews = YES;
-    detailSliding.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
-    
-
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    [self.navigationController pushViewController:detailSliding animated:YES];
+    [self.navigationController pushViewController:detailViewController animated:YES];
 
     [detailViewController release];
-    [detailSliding release];
 }
 
 -(void)showTrackGraph:(GCField*)afield{

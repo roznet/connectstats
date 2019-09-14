@@ -77,6 +77,7 @@ typedef NS_ENUM(NSUInteger, gcMapImplementor) {
 
 -(void)forceRedisplay;
 -(void)setupFrames:(CGRect)rect;
+-(void)updatePanelFrames;
 -(void)zoomInOnRoute;
 
 -(void)toggleMapType:(id)cb;

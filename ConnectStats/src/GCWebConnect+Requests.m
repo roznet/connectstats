@@ -124,18 +124,16 @@
     }
     
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
-        [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:reloadAll]];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:reloadAll]];
+        });
     }
     // For testing
     if([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_SEGMENTS defaultValue:NO]){
-
-        [self addRequest:[GCStravaAthlete stravaAthlete:[GCAppGlobal currentNavigationController]]];
-        [self addRequest:[GCStravaSegmentListStarred segmentListStarred:[GCAppGlobal currentNavigationController]]];
-        //[self addRequest:[GCStravaSegmentEfforts segmentEfforts:[GCAppGlobal currentNavigationController] for:@"1943525" and:@"1656888"]];
-        //[self addRequest:[GCStravaSegmentEffortStream stravaEffortStream:[GCAppGlobal currentNavigationController] for:@"15963924664" in:@"1943525"]];
-
-        //[self addRequest:[GCStravaTrainingZones stravaTrainingZones:[GCAppGlobal currentNavigationController]]];
-
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCStravaAthlete stravaAthlete:[GCAppGlobal currentNavigationController]]];
+            [self addRequest:[GCStravaSegmentListStarred segmentListStarred:[GCAppGlobal currentNavigationController]]];
+        });
     }
 
     if ([[GCAppGlobal profile] configGetBool:CONFIG_SPORTTRACKS_ENABLE defaultValue:NO]) {
@@ -192,10 +190,14 @@
 }
 -(void)servicesSearchAllActivities{
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
-        [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:true]];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:true]];
+        });
     }
     if( [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO]){
-        [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:true andNavigationController:[GCAppGlobal currentNavigationController]]];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:true andNavigationController:[GCAppGlobal currentNavigationController]]];
+        });
     }
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
         if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] ){
@@ -245,11 +247,13 @@
 }
 -(void)withingsUpdate{
 #ifdef WITHINGS_OAUTH
-    [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
-    if ([GCAppGlobal healthStatsVersion]) {
-        [self addRequest:[GCWithingsSleepMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
-        [self addRequest:[GCWithingsActivityMeasures measuresFromDate:nil toDate:[NSDate date] with:[GCAppGlobal currentNavigationController]]];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
+        if ([GCAppGlobal healthStatsVersion]) {
+            [self addRequest:[GCWithingsSleepMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
+            [self addRequest:[GCWithingsActivityMeasures measuresFromDate:nil toDate:[NSDate date] with:[GCAppGlobal currentNavigationController]]];
+        }
+    });
 #else
     [self addRequest:[GCWithingsRequestOnce withingsRequestOnce]];
 #endif
@@ -356,15 +360,19 @@
 
 -(void)connectStatsDownloadActivityTrackpoints:(GCActivity*)act{
     if( [GCAppGlobal currentNavigationController] && ( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] || [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] )){
-        [self addRequest:[GCConnectStatsRequestFitFile requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCConnectStatsRequestFitFile requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
+        });
     }
 }
 #pragma mark - strava
 
 -(void)stravaDownloadActivityTrackPoints:(GCActivity*)act{
-    if ([GCAppGlobal currentNavigationController] && [[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
-        [self addRequest:[GCStravaActivityStreams stravaActivityStream:[GCAppGlobal currentNavigationController] for:act]];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        if ([GCAppGlobal currentNavigationController] && [[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
+            [self addRequest:[GCStravaActivityStreams stravaActivityStream:[GCAppGlobal currentNavigationController] for:act]];
+        }
+    });
 }
 
 #pragma mark - sporttracks

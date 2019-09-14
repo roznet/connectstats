@@ -1239,19 +1239,19 @@
 		42B264151FF8314400E891A1 /* ECSlidingViewController */ = {
 			isa = PBXGroup;
 			children = (
-				42B264161FF8314400E891A1 /* UIViewController+ECSlidingViewController.h */,
-				42B264171FF8314400E891A1 /* ECSlidingConstants.h */,
-				42B264181FF8314400E891A1 /* ECSlidingViewController.m */,
-				42B264191FF8314400E891A1 /* ECSlidingSegue.h */,
+				42B2641F1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.h */,
 				42B2641A1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.m */,
 				42B2641B1FF8314400E891A1 /* ECSlidingAnimationController.h */,
-				42B2641C1FF8314400E891A1 /* ECSlidingInteractiveTransition.h */,
-				42B2641D1FF8314400E891A1 /* ECSlidingViewController.h */,
-				42B2641E1FF8314400E891A1 /* UIViewController+ECSlidingViewController.m */,
-				42B2641F1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.h */,
-				42B264201FF8314400E891A1 /* ECSlidingSegue.m */,
 				42B264211FF8314400E891A1 /* ECSlidingAnimationController.m */,
+				42B264171FF8314400E891A1 /* ECSlidingConstants.h */,
+				42B2641C1FF8314400E891A1 /* ECSlidingInteractiveTransition.h */,
 				42B264221FF8314400E891A1 /* ECSlidingInteractiveTransition.m */,
+				42B264191FF8314400E891A1 /* ECSlidingSegue.h */,
+				42B264201FF8314400E891A1 /* ECSlidingSegue.m */,
+				42B2641D1FF8314400E891A1 /* ECSlidingViewController.h */,
+				42B264181FF8314400E891A1 /* ECSlidingViewController.m */,
+				42B264161FF8314400E891A1 /* UIViewController+ECSlidingViewController.h */,
+				42B2641E1FF8314400E891A1 /* UIViewController+ECSlidingViewController.m */,
 			);
 			path = ECSlidingViewController;
 			sourceTree = "<group>";

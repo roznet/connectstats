@@ -56,7 +56,7 @@ BOOL isIOS7Layout(){
 }
 
 +(void)setupEdgeExtendedLayout:(UIViewController*)controller{
-    controller.edgesForExtendedLayout = UIRectEdgeAll;
+    controller.edgesForExtendedLayout = UIRectEdgeNone;
     
 }
 
