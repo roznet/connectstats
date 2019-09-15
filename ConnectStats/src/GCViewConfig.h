@@ -161,7 +161,9 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 
 +(UIImage*)mergeImage:(UIImage*)first withImage:(UIImage*)second;
 
-+(NSArray<NSString*>*)validChoicesForGarminLoginMethod;
++(NSArray<NSString*>*)validChoicesForGarminSource;
++(gcGarminDownloadSource)garminDownloadSource;
++(void)setGarminDownloadSource:(gcGarminDownloadSource)source;
 +(NSArray<NSString*>*)validChoicesForConnectStatsServiceUse;
 +(NSArray<NSString*>*)validChoicesForConnectStatsConfig;
 

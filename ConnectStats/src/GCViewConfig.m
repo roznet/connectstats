@@ -682,14 +682,62 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return newImage;
 }
 
-+(NSArray*)validChoicesForGarminLoginMethod{
-    static NSArray * rv = nil;
-    if (rv==nil) {
-        rv = @[ NSLocalizedString(@"Direct", @"Login Method"),
-                NSLocalizedString(@"Web", @"Login Method")];
-        [rv retain];
++(gcGarminDownloadSource)garminDownloadSource{
+    if([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:false] && [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false] ){
+        return gcGarminDownloadSourceBoth;
+    }else if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:false] ){
+        return gcGarminDownloadSourceGarminWeb;
+    }else if( [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false]){
+        return gcGarminDownloadSourceConnectStats;
+    }else{
+        return gcGarminDownloadSourceEnd;
     }
-    return rv;
+}
++(void)setGarminDownloadSource:(gcGarminDownloadSource)source{
+    BOOL garminOn = false;
+    BOOL connectStatsOn = false;
+    switch (source) {
+        case gcGarminDownloadSourceGarminWeb:
+            {
+                garminOn = true;
+                connectStatsOn = false;
+                break;
+            }
+        case gcGarminDownloadSourceBoth:
+            {
+                garminOn = true;
+                connectStatsOn = true;
+                break;
+            }
+        case gcGarminDownloadSourceConnectStats:
+            {
+                garminOn = false;
+                connectStatsOn = true;
+                break;
+            }
+        case gcGarminDownloadSourceEnd:
+            {
+                garminOn = false;
+                connectStatsOn = false;
+                break;
+            }
+
+    }
+    [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_ENABLE boolVal:connectStatsOn];
+    [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:garminOn];
+}
+
++(NSArray<NSString*>*)validChoicesForGarminSource{
+    BOOL debugIsEnabled = [[GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:CONFIG_ENABLE_DEBUG_OFF] isEqualToString:CONFIG_ENABLE_DEBUG_ON];
+    if (debugIsEnabled) {
+        return  @[ NSLocalizedString(@"ConnectStats", @"Login Method"),
+                   NSLocalizedString(@"Garmin Website", @"Login Method"),
+                   NSLocalizedString(@"Both", @"Login Method")
+        ];
+    }
+    return  @[ NSLocalizedString(@"ConnectStats", @"Login Method"),
+               NSLocalizedString(@"Garmin Website", @"Login Method"),
+    ];
 }
 
 +(NSArray*)validChoicesForConnectStatsServiceUse{

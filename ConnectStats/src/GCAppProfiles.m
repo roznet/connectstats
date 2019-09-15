@@ -498,6 +498,10 @@
             break;
         case gcServiceGarmin:
             sstr = PROFILE_SERVICE_GARMIN;
+            break;
+        case gcServiceConnectStats:
+            sstr = PROFILE_SERVICE_CONNECTSTATS;
+            break;
         default:
             break;
     }
@@ -512,6 +516,10 @@
 
 -(void)serviceSuccess:(gcService)service set:(BOOL)set{
     [self configSet:[self key:PROFILE_SERVICE_SETUP forService:service] boolVal:set];
+}
+
+-(BOOL)serviceFullDone:(gcService)service{
+    return [self configGetBool:[self key:PROFILE_FULL_DOWNLOAD_DONE forService:service] defaultValue:NO];
 }
 
 -(BOOL)serviceEnabled:(gcService)service{

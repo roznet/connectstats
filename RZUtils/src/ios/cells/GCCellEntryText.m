@@ -27,7 +27,7 @@
 #import "RZViewConfig.h"
 #import "RZMacros.h"
 
-#define kMarginX 2.f
+#define kMarginX 4.f
 
 @implementation GCCellEntryText
 

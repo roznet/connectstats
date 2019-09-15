@@ -49,8 +49,7 @@
 #define GC_SECTIONS_WITHINGS        5
 #define GC_SECTIONS_BABOLAT         6
 #define GC_SECTIONS_OPTIONS         7
-#define GC_SECTIONS_CONNECTSTATS    8
-#define GC_SECTIONS_END             9
+#define GC_SECTIONS_END             8
 
 #define GC_SPORTTRACKS_SERVICE_NAME 0
 #define GC_SPORTTRACKS_ENABLE       1
@@ -63,16 +62,13 @@
 #define GC_GARMIN_METHOD        4
 #define GC_GARMIN_MANUAL_LOGIN  5
 #define GC_GARMIN_MODERN_API    6
-#define GC_GARMIN_END           7
-
-#define GC_CONNECTSTATS_NAME        0
-#define GC_CONNECTSTATS_ENABLE      1
-#define GC_CONNECTSTATS_USE         2
-#define GC_CONNECTSTATS_FILLYEAR    3
-#define GC_CONNECTSTATS_CONFIG      4
-#define GC_CONNECTSTATS_LOGOUT      5
-#define GC_CONNECTSTATS_DEBUGKEY    6
-#define GC_CONNECTSTATS_END         7
+#define GC_CONNECTSTATS_USE         7
+#define GC_CONNECTSTATS_FILLYEAR    8
+#define GC_CONNECTSTATS_CONFIG      9
+#define GC_CONNECTSTATS_LOGOUT      10
+#define GC_CONNECTSTATS_DEBUGKEY    11
+#define GC_CONNECTSTATS_NAME    12
+#define GC_GARMIN_END           13
 
 #define GC_STRAVA_NAME      0
 #define GC_STRAVA_ENABLE    1
@@ -168,60 +164,38 @@
     self.remap = [RZTableIndexRemap tableIndexRemap];
     BOOL connectStatsVersion = [GCAppGlobal connectStatsVersion];
     BOOL healthStatsVersion  = [GCAppGlobal healthStatsVersion];
+    BOOL debugIsEnabled = [[GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:CONFIG_ENABLE_DEBUG_OFF] isEqualToString:CONFIG_ENABLE_DEBUG_ON];
     
-    gcGarminLoginMethod method = (gcGarminLoginMethod)[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
-    if ([[GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:@""] isEqualToString:CONFIG_ENABLE_DEBUG_ON]) {
+    NSMutableArray * dynamic = [NSMutableArray arrayWithArray:
+                                @[
+                                    @( GC_GARMIN_SERVICE_NAME  ),
+                                    @( GC_GARMIN_ENABLE        ),
+                                    @( GC_GARMIN_METHOD        ),
+                                ]
+                                ];
+    
+    if (debugIsEnabled) {
+        [dynamic addObject:@(GC_CONNECTSTATS_CONFIG)];
+        
         GCDebugServiceKeys * debugKeys = [GCDebugServiceKeys serviceKeys];
-        
         if( debugKeys.hasDebugKeys ){
-            [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
-                                                                       @( GC_CONNECTSTATS_NAME ),
-                                                                       @( GC_CONNECTSTATS_ENABLE ),
-                                                                       //@( GC_CONNECTSTATS_USE ),
-                                                                       @( GC_CONNECTSTATS_DEBUGKEY ),
-                                                                       @( GC_CONNECTSTATS_CONFIG ),
-                                                                       @( GC_CONNECTSTATS_FILLYEAR ),
-                                                                       @( GC_CONNECTSTATS_LOGOUT )
-                                                                       ]];
-
-        }else{
-            [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
-                                                                       @( GC_CONNECTSTATS_NAME ),
-                                                                       @( GC_CONNECTSTATS_ENABLE ),
-                                                                       //@( GC_CONNECTSTATS_USE ),
-                                                                       @( GC_CONNECTSTATS_CONFIG ),
-                                                                       @( GC_CONNECTSTATS_FILLYEAR ),
-                                                                       @( GC_CONNECTSTATS_LOGOUT )
-                                                                       ]];
+            [dynamic addObject:@(GC_CONNECTSTATS_DEBUGKEY)];
         }
-    }else{
-        [self.remap addSection:GC_SECTIONS_CONNECTSTATS withRows:@[
-                                                                   @( GC_CONNECTSTATS_NAME ),
-                                                                   @( GC_CONNECTSTATS_ENABLE ),
-                                                                   @( GC_CONNECTSTATS_FILLYEAR )
-                                                                   ]];
-
     }
-    if (method != gcGarminLoginMethodDirect) {
-        [self.remap addSection:GC_SECTIONS_GARMIN withRows:@[
-                                                             @( GC_GARMIN_SERVICE_NAME  ),
-                                                             @( GC_GARMIN_ENABLE        ),
-                                                             @( GC_GARMIN_USERNAME      ),
-                                                             @( GC_GARMIN_PASSWORD      ),
-                                                             @( GC_GARMIN_METHOD        ),
-                                                             @( GC_GARMIN_MODERN_API    ),
-                                                             //@( GC_GARMIN_MANUAL_LOGIN  )
-                                                             ]];
-    }else{
-        [self.remap addSection:GC_SECTIONS_GARMIN withRows:@[
-                                                             @( GC_GARMIN_SERVICE_NAME  ),
-                                                             @( GC_GARMIN_ENABLE        ),
-                                                             @( GC_GARMIN_USERNAME      ),
-                                                             @( GC_GARMIN_PASSWORD      ),
-                                                             @( GC_GARMIN_MODERN_API    ),
-                                                             ]];
-        
+    if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats]){
+        [dynamic addObject:@( GC_CONNECTSTATS_FILLYEAR )];
     }
+    if( [[GCAppGlobal profile] serviceEnabled:gcServiceGarmin]){
+        [dynamic addObjectsFromArray:@[
+            @( GC_GARMIN_USERNAME      ),
+            @( GC_GARMIN_PASSWORD      ),
+        ]
+         ];
+    }
+    
+    [self.remap addSection:GC_SECTIONS_GARMIN withRows:dynamic];
+    
+    
     if( [[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:NO] == YES){
         // OBSOLETE: Only showed if AUTO was on before, should not be used anymore
         [self.remap addSection:GC_SECTIONS_STRAVA withRows:@[
@@ -335,8 +309,6 @@
         return self.showHealthKit ? nrows : 1;
     }else if (section == GC_SECTIONS_OPTIONS){
         return nrows;
-    }else if (section == GC_SECTIONS_CONNECTSTATS){
-        return self.showConnectStats ? nrows : 1;
     }else if (section == GC_SECTIONS_FITBIT){
         return self.showFitbit ? nrows : 1;
     }
@@ -351,6 +323,27 @@
 
 -(GCCellGrid*)gridCell:(UITableView*)tableView{
     return [GCCellGrid gridCell:tableView];
+}
+
+-(NSString*)statusForGarmin{
+    gcGarminDownloadSource source = [GCViewConfig garminDownloadSource];
+    switch( source ){
+        case gcGarminDownloadSourceEnd:
+            return NSLocalizedString(@"Tap to setup", @"Service Status");
+        case gcGarminDownloadSourceConnectStats:
+            return [self statusForService:gcServiceConnectStats];
+        case gcGarminDownloadSourceGarminWeb:
+            return [self statusForService:gcServiceGarmin];
+        case gcGarminDownloadSourceBoth:
+            if( [[GCAppGlobal profile] serviceSuccess:gcServiceGarmin] && [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats]){
+                return NSLocalizedString(@"Connected Successfully", @"Service status");
+            }else if( [[GCAppGlobal profile] serviceIncomplete:gcServiceGarmin] || [[GCAppGlobal profile] serviceIncomplete:gcServiceConnectStats]){
+                return NSLocalizedString(@"Needs More Inputs", @"Service status");
+            }else{
+                NSLocalizedString(@"Enabled", @"Service status");
+            }
+    }
+    return NSLocalizedString(@"Tap to setup", @"Service Status");
 }
 
 -(NSString*)statusForService:(gcService)service{
@@ -490,14 +483,12 @@
     GCCellEntrySwitch * switchcell = nil;
     //GCCellActivityIndicator * activitycell = nil;
 
-    gcService service= gcServiceGarmin;
-
     if (indexPath.row == GC_GARMIN_SERVICE_NAME) {
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:1];
         NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Garmin Connect",@"Services")
                                                                       attributes:[GCViewConfig attributeBold16]] autorelease];
-        NSAttributedString * status = [[[NSAttributedString alloc] initWithString:[self statusForService:service]
+        NSAttributedString * status = [[[NSAttributedString alloc] initWithString:[self statusForGarmin]
                                                                       attributes:[GCViewConfig attribute14Gray]] autorelease];
         [gridcell setIconImage:[UIImage imageNamed:@"garmin"]];
 
@@ -506,9 +497,10 @@
         rv= gridcell;
     }else if (indexPath.row == GC_GARMIN_ENABLE){
         switchcell = [GCCellEntrySwitch switchCell:tableView];
+        gcGarminDownloadSource source = [GCViewConfig garminDownloadSource];
         switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                     withString:NSLocalizedString(@"Download Activities",@"Other Service")];
-        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:true];
+        switchcell.toggle.on = (source != gcGarminDownloadSourceEnd);
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_GARMIN_ENABLE);
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
@@ -525,18 +517,19 @@
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:2];
 
-        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Login Method",@"Services")
+        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Source",@"Services")
                                                                       attributes:[GCViewConfig attributeBold16]] autorelease];
 
         [gridcell labelForRow:0 andCol:0].attributedText = title;
-        gcGarminLoginMethod method = (gcGarminLoginMethod)[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
-        NSArray * methods = [GCViewConfig validChoicesForGarminLoginMethod];
+        gcGarminDownloadSource method = [GCViewConfig garminDownloadSource];
+        
+        NSArray * methods = [GCViewConfig validChoicesForGarminSource];
         if (method < methods.count) {
             [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                                          withString:methods[method]];
         }else{
-            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                                         withString:NSLocalizedString(@"Unknown",@"Login Method")];
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16Gray]
+                                                                                         withString:NSLocalizedString(@"None",@"Login Method")];
         }
         rv = gridcell;
     }else if (indexPath.row == GC_GARMIN_USERNAME){
@@ -571,6 +564,9 @@
         rv = gridcell;
 
     }
+    if( rv == nil){
+        return [self connectStatsTableView:tableView cellForRowAtIndexPath:indexPath];
+    }
     return rv;
 }
 
@@ -578,12 +574,12 @@
     UITableViewCell * rv = nil;
     //GCCellEntryText * textcell = nil;
     GCCellGrid * gridcell = nil;
-    GCCellEntrySwitch * switchcell = nil;
+    //GCCellEntrySwitch * switchcell = nil;
     //GCCellActivityIndicator * activitycell = nil;
 
     gcService service = gcServiceConnectStats;
     
-    if (indexPath.row ==GC_CONNECTSTATS_NAME) {
+    if (indexPath.row == GC_CONNECTSTATS_NAME) {
         gridcell =[self gridCell:tableView];
         [gridcell setupForRows:2 andCols:1];
         NSAttributedString * title = nil;
@@ -597,14 +593,14 @@
         gridcell.iconPosition = gcIconPositionRight;
         [GCViewConfig setupGradientForDetails:gridcell];
         rv = gridcell;
-    }else if (indexPath.row == GC_CONNECTSTATS_ENABLE){
+    /*}else if (indexPath.row == GC_CONNECTSTATS_ENABLE){
         switchcell = [GCCellEntrySwitch switchCell:tableView];
         switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                     withString:NSLocalizedString(@"Download Activities",@"Other Service")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_CONNECTSTATS_ENABLE);
         switchcell.entryFieldDelegate = self;
-        rv=switchcell;
+        rv=switchcell;*/
     }else if (indexPath.row == GC_CONNECTSTATS_USE ){
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:2];
@@ -665,7 +661,7 @@
         NSTimeInterval timeToBackFill = timeToCover / ( 90.0 * 3600.0 * 24.0) * 120.0;// 2min per 90 days
         GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:timeToBackFill];
         
-        NSString * timeString = [NSString stringWithFormat:@"Required time to synchronise %@", nu];
+        NSString * timeString = [NSString stringWithFormat:@"Required initial time to synchronise %@", nu];
         [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                                      withString:[NSString stringWithFormat:@"%@", @(year)]];
         [gridcell labelForRow:1 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:timeString attributes:[GCViewConfig attribute14Gray]] autorelease];
@@ -1044,8 +1040,6 @@
         rv = [self healthKitTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_FITBIT){
         rv = [self fitbitTableView:tableView cellForRowAtIndexPath:indexPath];
-    }else if (indexPath.section == GC_SECTIONS_CONNECTSTATS){
-        rv = [self connectStatsTableView:tableView cellForRowAtIndexPath:indexPath];
     }else{
         rv = [GCCellGrid gridCell:tableView];
     }
@@ -1103,12 +1097,22 @@
             [GCAppGlobal saveSettings];
             break;
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_METHOD):
-            [[GCAppGlobal profile] configSet:CONFIG_GARMIN_LOGIN_METHOD intVal:[cell selected]];
-            RZLog(RZLogInfo, @"Garmin: Changed Method %lu", (unsigned long)[cell selected]);
+        {
+            [GCViewConfig setGarminDownloadSource:[cell selected]];
+            // adapt choices to new source
+            [self buildRemap];
+            
+            NSArray *choices = [GCViewConfig validChoicesForGarminSource];
+            NSString * choice = cell.selected < choices.count ? choices[cell.selected] : @"None";
+            RZLog(RZLogInfo, @"Garmin: Changed Source %@ Garmin=%lu ConnectStats=%lu",
+                  choice,
+                  (long unsigned)[[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:false],
+                  (long unsigned)[[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false]
+                  );
             [GCAppGlobal saveSettings];
             [[GCAppGlobal web] garminLogin];
             break;
-
+        }
         case GC_IDENTIFIER(GC_SECTIONS_WITHINGS, GC_ROW_LOGIN):
             if (![[cell text] isEqualToString:[[GCAppGlobal profile] currentLoginNameForService:service]]) {
                 [[GCAppGlobal profile] serviceSuccess:service set:NO];
@@ -1143,14 +1147,14 @@
             }
             [GCAppGlobal saveSettings];
             break;
-        case GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS, GC_CONNECTSTATS_ENABLE):
+        /*case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_ENABLE):
             if( [[GCAppGlobal profile] configToggleBool:CONFIG_CONNECTSTATS_ENABLE]){
                 RZLog(RZLogInfo, @"ConnectStats: Enabled");
             }else{
                 RZLog(RZLogInfo, @"ConnectStats: Disabled");
             }
             [GCAppGlobal saveSettings];
-            break;
+            break;*/
         case GC_IDENTIFIER(GC_SECTIONS_SPORTTRACKS, GC_SPORTTRACKS_ENABLE):
             [[GCAppGlobal profile] configToggleBool:CONFIG_SPORTTRACKS_ENABLE];
             [GCAppGlobal saveSettings];
@@ -1256,27 +1260,27 @@
             [GCAppGlobal saveSettings];
             break;
         }
-        case GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS, GC_CONNECTSTATS_USE):
+        case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_USE):
         {
             [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_USE intVal:cell.selected];
             [GCAppGlobal saveSettings];
             break;
         }
-        case GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS, GC_CONNECTSTATS_CONFIG):
+        case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_CONFIG):
         {
             [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_CONFIG intVal:cell.selected];
             [GCAppGlobal saveSettings];
             break;
         }
 
-        case GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS, GC_CONNECTSTATS_FILLYEAR):
+        case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_FILLYEAR):
         {
             NSString * selected = [self validYearsForBackfill][cell.selected];
             [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_FILLYEAR intVal:selected.integerValue];
             [GCAppGlobal saveSettings];
             break;
         }
-        case GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS, GC_CONNECTSTATS_DEBUGKEY):
+        case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_DEBUGKEY):
         {
             NSUInteger index = cell.selected;
             GCDebugServiceKeys * debugKeys = [GCDebugServiceKeys serviceKeys];
@@ -1318,8 +1322,6 @@
             self.showHealthKit = ! self.showHealthKit;
         }else if (indexPath.section==GC_SECTIONS_FITBIT){
             self.showFitbit = ! self.showFitbit;
-        }else if (indexPath.section==GC_SECTIONS_CONNECTSTATS){
-            self.showConnectStats = ! self.showConnectStats;
         }
         [tableView reloadData];
     }
@@ -1331,10 +1333,14 @@
             [self.tableView reloadData];
         }
     }else if (indexPath.section==GC_SECTIONS_GARMIN && indexPath.row==GC_GARMIN_METHOD){
-        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForGarminLoginMethod] selected:[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:gcGarminLoginMethodDirect]];
-        list.entryFieldDelegate = self;
-        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_METHOD);
-        [self.navigationController pushViewController:list animated:YES];
+        gcGarminDownloadSource source = [GCViewConfig garminDownloadSource];
+        if( source < gcGarminDownloadSourceEnd ){
+            GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForGarminSource]
+                                                                                        selected:source];
+            list.entryFieldDelegate = self;
+            list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_METHOD);
+            [self.navigationController pushViewController:list animated:YES];
+        }
     }else if (indexPath.section==GC_SECTIONS_WITHINGS&&indexPath.row==GC_ROW_USER){
         NSArray * list = [[GCAppGlobal profile] configGetArray:CONFIG_WITHINGS_USERSLIST defaultValue:@[]];
         if (list.count > 0) {
@@ -1384,17 +1390,17 @@
         GCSettingsSourceTableViewController * source = [[GCSettingsSourceTableViewController alloc] initWithNibName:nil bundle:nil];
         [self.navigationController pushViewController:source animated:YES];
         [source release];
-    }else if( indexPath.section == GC_SECTIONS_CONNECTSTATS && indexPath.row == GC_CONNECTSTATS_USE){
+    }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_USE){
         GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsServiceUse] selected:[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_USE defaultValue:gcConnectStatsServiceUseValidate]];
         list.entryFieldDelegate = self;
-        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_USE);
+        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_USE);
         [self.navigationController pushViewController:list animated:YES];
-    }else if( indexPath.section == GC_SECTIONS_CONNECTSTATS && indexPath.row == GC_CONNECTSTATS_CONFIG){
+    }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_CONFIG){
         GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsConfig] selected:[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]];
         list.entryFieldDelegate = self;
-        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_CONFIG);
+        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_CONFIG);
         [self.navigationController pushViewController:list animated:YES];
-    }else if( indexPath.section == GC_SECTIONS_CONNECTSTATS && indexPath.row == GC_CONNECTSTATS_FILLYEAR){
+    }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_FILLYEAR){
         NSArray<NSString*>* years = [self validYearsForBackfill];
         NSUInteger index = 0;
         NSUInteger currentYear = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:[years.firstObject integerValue] - 1];
@@ -1407,9 +1413,9 @@
 
         GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[self validYearsForBackfill] selected:index];
         list.entryFieldDelegate = self;
-        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_FILLYEAR);
+        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_FILLYEAR);
         [self.navigationController pushViewController:list animated:YES];
-    }else if( indexPath.section == GC_SECTIONS_CONNECTSTATS && indexPath.row == GC_CONNECTSTATS_DEBUGKEY ){
+    }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_DEBUGKEY ){
         GCDebugServiceKeys * debugKeys = [GCDebugServiceKeys serviceKeys];
         NSArray<NSString*>*display = debugKeys.displayAvailableKeys;
         NSUInteger index = 0;
@@ -1427,7 +1433,7 @@
         
         GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:display selected:index];
         list.entryFieldDelegate = self;
-        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_CONNECTSTATS,GC_CONNECTSTATS_DEBUGKEY);
+        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_DEBUGKEY);
         [self.navigationController pushViewController:list animated:YES];
 
     }

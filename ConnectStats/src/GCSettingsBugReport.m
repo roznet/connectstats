@@ -106,13 +106,7 @@ NSString * kBugNoCommonId = @"-1";
     }
     if([[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:false]){
         RZLog(RZLogInfo, @"Enabled:  Strava Upload");
-    }
-    if ([[GCAppGlobal profile] serviceEnabled:gcServiceGarmin]) {
-        gcGarminLoginMethod method = (gcGarminLoginMethod)[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
-        NSArray * methods = [GCViewConfig validChoicesForGarminLoginMethod];
-        RZLog(RZLogInfo, @"Garmin Method %@", method < methods.count ? methods[method] : @"INVALID");
-    }
-    
+    }    
 }
 
 -(void)checkDb{

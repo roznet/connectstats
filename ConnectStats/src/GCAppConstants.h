@@ -84,9 +84,9 @@
 #define CONFIG_CONNECTSTATS_CONFIG      @"config_connectstats_config"
 #define CONFIG_GARMIN_ENABLE            @"config_garmin_enable"
 #define CONFIG_GARMIN_LOGIN_METHOD      @"config_garmin_login_method"
-#define CONFIG_GARMIN_USE_MODERN        @"config_garmin_use_modern_v2"
+#define CONFIG_GARMIN_USE_MODERN        @"config_garmin_use_modern_v3"
 #define CONFIG_STRAVA_ENABLE            @"config_strava_enable"
-#define CONFIG_STRAVA_SEGMENTS            @"config_strava_segments"
+#define CONFIG_STRAVA_SEGMENTS          @"config_strava_segments"
 #define CONFIG_SHARING_STRAVA_AUTO      @"config_sharing_strava_auto"
 #define CONFIG_SHARING_STRAVA_PRIVATE   @"config_sharing_strava_private"
 #define CONFIG_SPORTTRACKS_ENABLE       @"config_sporttracks_enable"
@@ -128,6 +128,7 @@
 #define PROFILE_FULL_DOWNLOAD_DONE   @"config_full_download_done"
 
 #define PROFILE_SERVICE_STRAVA       @"profile_service_strava"
+#define PROFILE_SERVICE_CONNECTSTATS @"profile_service_connectstats"
 #define PROFILE_SERVICE_BABOLAT      @"profile_service_babolat"
 #define PROFILE_SERVICE_WITHINGS     @"profile_service_withings"
 #define PROFILE_SERVICE_GARMIN       @"profile_service_garmin"
@@ -140,7 +141,7 @@
 #define PROFILE_SERVICE_PWD          @"profile_service_login_pwd_"
 #define PROFILE_SERVICE_SETUP        @"profile_service_setup_"
 #define PROFILE_LAST_KEYCHAIN_SAVE   @"profile_last_keychain_save_"
-
+#define PROFILE_SERVICE_FULL_DONE    @"profile_service_full_done_"
 
 typedef NS_ENUM(NSUInteger, gcPeriodType) {
     gcPeriodCalendar,
@@ -153,6 +154,13 @@ typedef NS_ENUM(NSUInteger, gcGarminLoginMethod) {
     gcGarminLoginMethodWebview,
     gcGarminLoginMethodSimulator,
     GCGarminLoginMethodEnd
+};
+
+typedef NS_ENUM(NSUInteger, gcGarminDownloadSource) {
+    gcGarminDownloadSourceConnectStats,
+    gcGarminDownloadSourceGarminWeb,
+    gcGarminDownloadSourceBoth,
+    gcGarminDownloadSourceEnd
 };
 
 typedef NS_ENUM(NSUInteger, gcConnectStatsServiceUse){
