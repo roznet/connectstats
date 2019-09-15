@@ -521,6 +521,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
 }
 
 +(GCViewConfigSkin*)ios13Skin{
+#ifdef __IPHONE_13_0
     if( @available(iOS 13.0, *)){
         GCViewConfigSkin * rv = [[[GCViewConfigSkin alloc]init]autorelease];
         if (rv) {
@@ -707,7 +708,9 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
     }else{
         return [GCViewConfigSkin defaultSkin];
     }
-    
+#else
+    return [GCViewConfigSkin defaultSkin];
+#endif
 }
 
 
