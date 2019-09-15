@@ -31,7 +31,7 @@
 @property (nonatomic,retain) NSString * oauthTokenSecret;
 @property (nonatomic,retain) NSString * oauthToken;
 
-@property (nonatomic,retain) OAuth1WithingsController * oauth1Controller;
+// (nonatomic,retain) OAuth1WithingsController * oauth1Controller;
 
 @property (nonatomic,retain) UIWebView * webView;
 
@@ -41,8 +41,6 @@
 @end
 
 
-static NSString *kClientID = @"a7523288be94b6d823003d7c30b607de4aae7603726761aca50b74d1c3e80281";
-static NSString *kClientSecret = @"b89c0e3f7bb40ec54f45c54ecf516209ab346b8ae2b1f3a3ecb7ae3d4395fcc2";
 static NSString * kKeychainItemName = @"OAuth2 ConnectStats Withings";
 static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
 
@@ -57,7 +55,7 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
 -(void)dealloc{
     self.webView.delegate = nil;
     [_webView release];
-    [_oauth1Controller release];
+    //[_oauth1Controller release];
     [_withingsAuth release];
     [_oauthToken release];
     [_oauthTokenSecret release];
@@ -77,8 +75,9 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
         auth = [GTMOAuth2Authentication authenticationWithServiceProvider:@"Withings Service"
                                                                  tokenURL:tokenURL
                                                               redirectURI:redirectURI
-                                                                 clientID:kClientID
-                                                             clientSecret:kClientSecret];
+                                                                 clientID:[GCAppGlobal credentialsForService:@"withings" andKey:@"client_id"]
+                                                             clientSecret:[GCAppGlobal credentialsForService:@"withings" andKey:@"client_secret"]];
+
         //auth.additionalTokenRequestParameters = @{@"state":@"connectstats"};
 
         self.withingsAuth = auth;
@@ -91,12 +90,15 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
 -(BOOL)isSignedIn{
     return self.withingsAuth != nil;
 }
++(NSString*)currentKeyChainName{
+    NSString * keyChainName = [kKeychainItemName stringByAppendingString:[[GCAppGlobal profile] currentProfileName]];
+    return keyChainName;
+}
 
 -(void)signInToWithings{
     GTMOAuth2Authentication *auth = [self buildWithingsAuth];
     NSError * error = nil;
-    NSString * keyChainName = [kKeychainItemName stringByAppendingString:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]];
-    BOOL didAuth = [GTMOAuth2ViewControllerTouch authorizeFromKeychainForName:keyChainName
+    BOOL didAuth = [GTMOAuth2ViewControllerTouch authorizeFromKeychainForName:[GCWithingsReqBase currentKeyChainName]
                                                                authentication:auth error:&error];
     
     if (!didAuth && error) {
@@ -117,7 +119,7 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
         GTMOAuth2ViewControllerTouch *viewController;
         viewController = [[[GTMOAuth2ViewControllerTouch alloc] initWithAuthentication:auth
                                                                       authorizationURL:authURL
-                                                                      keychainItemName:keyChainName
+                                                                      keychainItemName:[GCWithingsReqBase currentKeyChainName]
                                                                               delegate:self
                                                                       finishedSelector:@selector(viewController:finishedWithAuth:error:)] autorelease];
         viewController.signIn.additionalAuthorizationParameters = @{@"state":@"connectstats"};
@@ -143,9 +145,11 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
 
 
 +(void)signout{
+    [[GCAppGlobal profile] serviceSuccess:gcServiceWithings set:NO];
+    [GTMOAuth2ViewControllerTouch removeAuthFromKeychainForName:self.currentKeyChainName];
 
 }
-
+/*
 -(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters{
     NSURLRequest *preparedRequest = [self.oauth1Controller preparedRequestForPath:path
                                                                   parameters:parameters
@@ -154,7 +158,7 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
                                                                  oauthSecret:self.oauthTokenSecret];
     return preparedRequest;
 }
-
+*/
 -(gcWebService)service{
     return gcWebServiceWithings;
 }

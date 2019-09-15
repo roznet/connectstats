@@ -75,9 +75,6 @@
 		421F39AD1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 421F39AC1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m */; };
 		421F39AE1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 421F39AC1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m */; };
 		42200E9D17EEF0EC0078B45A /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42200E9C17EEF0EC0078B45A /* StoreKit.framework */; };
-		42200EC517EFA3440078B45A /* GCWithingsRequestOnce.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200EC417EFA3440078B45A /* GCWithingsRequestOnce.m */; };
-		42200EC817EFA36A0078B45A /* GCWithingsRequestUserList.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200EC717EFA36A0078B45A /* GCWithingsRequestUserList.m */; };
-		42200ECB17EFA3850078B45A /* GCWithingsRequestMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200ECA17EFA3850078B45A /* GCWithingsRequestMeasures.m */; };
 		42200ED817F8270D0078B45A /* GCGarminActivityTrack13Request.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200ED717F8270D0078B45A /* GCGarminActivityTrack13Request.m */; };
 		42200EDB17F831B30078B45A /* GCGarminActivityLapsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200EDA17F831B30078B45A /* GCGarminActivityLapsParser.m */; };
 		42247AC121E26242005148F9 /* GarminDataDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42247AC021E26242005148F9 /* GarminDataDefinitions.swift */; };
@@ -183,7 +180,6 @@
 		422FAEBB19A1DD6000D09773 /* GCActivityListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF79615FB4115007A88FA /* GCActivityListViewController.m */; };
 		422FAEBC19A1DD6000D09773 /* GCTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF79815FB4115007A88FA /* GCTabBarController.m */; };
 		422FAEBD19A1DD6000D09773 /* GCWebConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF79C15FB412C007A88FA /* GCWebConnect.m */; };
-		422FAEBE19A1DD6000D09773 /* GCWithingsRequestMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200ECA17EFA3850078B45A /* GCWithingsRequestMeasures.m */; };
 		422FAEBF19A1DD6000D09773 /* GCWebUrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF79E15FB412C007A88FA /* GCWebUrl.m */; };
 		422FAEC119A1DD6000D09773 /* GCSportTracksBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959E3A18DDA6F500C0B841 /* GCSportTracksBase.m */; };
 		422FAEC319A1DD6000D09773 /* GCBabolatLoginRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515718A7E1E800B85FAB /* GCBabolatLoginRequest.m */; };
@@ -223,7 +219,6 @@
 		422FAF0B19A1DD6000D09773 /* GCLapCompound.m in Sources */ = {isa = PBXBuildFile; fileRef = 4244675E1849E2D8009F807E /* GCLapCompound.m */; };
 		422FAF0C19A1DD6000D09773 /* GCActivitySearchElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA288E1637F6AB0054F84A /* GCActivitySearchElement.m */; };
 		422FAF0E19A1DD6000D09773 /* GCHistoryAggregatedActivityStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 422C70AD1642B677003779E0 /* GCHistoryAggregatedActivityStats.m */; };
-		422FAF0F19A1DD6000D09773 /* GCWithingsRequestUserList.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200EC717EFA36A0078B45A /* GCWithingsRequestUserList.m */; };
 		422FAF1219A1DD6000D09773 /* GCActivityTennisCuePoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51D918AE2CF400B85FAB /* GCActivityTennisCuePoint.m */; };
 		422FAF1319A1DD6000D09773 /* GCActivityTennis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB516318A82BC900B85FAB /* GCActivityTennis.m */; };
 		422FAF1419A1DD6000D09773 /* GCSportTracksActivityList.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959E3D18DDC45900C0B841 /* GCSportTracksActivityList.m */; };
@@ -293,7 +288,6 @@
 		422FAF9519A1DD6000D09773 /* GCViewMaturityButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4234B5B117895CF2002C3B53 /* GCViewMaturityButton.m */; };
 		422FAF9619A1DD6000D09773 /* GCViewActivityTypeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B34A2D179C31D500688E9F /* GCViewActivityTypeButton.m */; };
 		422FAF9719A1DD6000D09773 /* GCStravaActivityLapsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42461D221922D169001B03C7 /* GCStravaActivityLapsParser.m */; };
-		422FAF9919A1DD6000D09773 /* GCWithingsRequestOnce.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200EC417EFA3440078B45A /* GCWithingsRequestOnce.m */; };
 		422FAF9A19A1DD6000D09773 /* GCBabolatSessionsListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515D18A7EC6500B85FAB /* GCBabolatSessionsListRequest.m */; };
 		422FAF9C19A1DD6000D09773 /* GCViewIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900317A1AE2C00C131DC /* GCViewIcons.m */; };
 		422FAF9D19A1DD6000D09773 /* GCStatsGraphOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900617A276F100C131DC /* GCStatsGraphOptionViewController.m */; };
@@ -914,9 +908,6 @@
 		42B5E2791BA5B216000FAE4E /* GCWithingsBodyMeasuresParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DE419E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m */; };
 		42B5E27A1BA5B216000FAE4E /* GCWithingsSleepParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF019E726A9004407B8 /* GCWithingsSleepParser.m */; };
 		42B5E27B1BA5B216000FAE4E /* GCWithingsActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF419E87191004407B8 /* GCWithingsActivityParser.m */; };
-		42B5E27C1BA5B216000FAE4E /* GCWithingsRequestOnce.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200EC417EFA3440078B45A /* GCWithingsRequestOnce.m */; };
-		42B5E27D1BA5B216000FAE4E /* GCWithingsRequestUserList.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200EC717EFA36A0078B45A /* GCWithingsRequestUserList.m */; };
-		42B5E27E1BA5B216000FAE4E /* GCWithingsRequestMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200ECA17EFA3850078B45A /* GCWithingsRequestMeasures.m */; };
 		42B5E27F1BA5B216000FAE4E /* GCWithingsReqBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DDB19E1A798004407B8 /* GCWithingsReqBase.m */; };
 		42B5E2801BA5B216000FAE4E /* GCWithingsBodyMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DDF19E1AAFD004407B8 /* GCWithingsBodyMeasures.m */; };
 		42B5E2811BA5B216000FAE4E /* GCWithingsActivityMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DE819E5E9FA004407B8 /* GCWithingsActivityMeasures.m */; };
@@ -2674,12 +2665,6 @@
 		421F39AB1B7A117300CA7200 /* GCTrackFieldChoiceHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTrackFieldChoiceHolder.h; path = src/GCTrackFieldChoiceHolder.h; sourceTree = "<group>"; };
 		421F39AC1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTrackFieldChoiceHolder.m; path = src/GCTrackFieldChoiceHolder.m; sourceTree = "<group>"; };
 		42200E9C17EEF0EC0078B45A /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		42200EC317EFA3440078B45A /* GCWithingsRequestOnce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWithingsRequestOnce.h; path = src/GCWithingsRequestOnce.h; sourceTree = "<group>"; };
-		42200EC417EFA3440078B45A /* GCWithingsRequestOnce.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWithingsRequestOnce.m; path = src/GCWithingsRequestOnce.m; sourceTree = "<group>"; };
-		42200EC617EFA36A0078B45A /* GCWithingsRequestUserList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWithingsRequestUserList.h; path = src/GCWithingsRequestUserList.h; sourceTree = "<group>"; };
-		42200EC717EFA36A0078B45A /* GCWithingsRequestUserList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWithingsRequestUserList.m; path = src/GCWithingsRequestUserList.m; sourceTree = "<group>"; };
-		42200EC917EFA3850078B45A /* GCWithingsRequestMeasures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWithingsRequestMeasures.h; path = src/GCWithingsRequestMeasures.h; sourceTree = "<group>"; };
-		42200ECA17EFA3850078B45A /* GCWithingsRequestMeasures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWithingsRequestMeasures.m; path = src/GCWithingsRequestMeasures.m; sourceTree = "<group>"; };
 		42200ED617F8270D0078B45A /* GCGarminActivityTrack13Request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminActivityTrack13Request.h; path = src/GCGarminActivityTrack13Request.h; sourceTree = "<group>"; };
 		42200ED717F8270D0078B45A /* GCGarminActivityTrack13Request.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminActivityTrack13Request.m; path = src/GCGarminActivityTrack13Request.m; sourceTree = "<group>"; };
 		42200ED917F831B30078B45A /* GCGarminActivityLapsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminActivityLapsParser.h; path = src/GCGarminActivityLapsParser.h; sourceTree = "<group>"; };
@@ -5919,19 +5904,6 @@
 			name = Organizer;
 			sourceTree = "<group>";
 		};
-		42A22DD919E1A540004407B8 /* OldMethod */ = {
-			isa = PBXGroup;
-			children = (
-				42200EC317EFA3440078B45A /* GCWithingsRequestOnce.h */,
-				42200EC417EFA3440078B45A /* GCWithingsRequestOnce.m */,
-				42200EC617EFA36A0078B45A /* GCWithingsRequestUserList.h */,
-				42200EC717EFA36A0078B45A /* GCWithingsRequestUserList.m */,
-				42200EC917EFA3850078B45A /* GCWithingsRequestMeasures.h */,
-				42200ECA17EFA3850078B45A /* GCWithingsRequestMeasures.m */,
-			);
-			name = OldMethod;
-			sourceTree = "<group>";
-		};
 		42A22DE219E1CDF0004407B8 /* Parsers */ = {
 			isa = PBXGroup;
 			children = (
@@ -6085,7 +6057,6 @@
 			isa = PBXGroup;
 			children = (
 				42A22DE219E1CDF0004407B8 /* Parsers */,
-				42A22DD919E1A540004407B8 /* OldMethod */,
 				42A22DDA19E1A798004407B8 /* GCWithingsReqBase.h */,
 				42A22DDB19E1A798004407B8 /* GCWithingsReqBase.m */,
 				42A22DDE19E1AAFD004407B8 /* GCWithingsBodyMeasures.h */,
@@ -9494,7 +9465,6 @@
 				42FC177E1E195DEA00F55302 /* FITFitValueStatistics.swift in Sources */,
 				42C5A1B322AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */,
 				4281AF5D22F732AD00BFE408 /* GCConnectStatsRequestLogin.m in Sources */,
-				422FAEBE19A1DD6000D09773 /* GCWithingsRequestMeasures.m in Sources */,
 				422FAEBF19A1DD6000D09773 /* GCWebUrl.m in Sources */,
 				42BFC25E1DCF516C00EAD40E /* GCStravaAthleteParser.swift in Sources */,
 				422FAEC119A1DD6000D09773 /* GCSportTracksBase.m in Sources */,
@@ -9567,7 +9537,6 @@
 				422FAF0B19A1DD6000D09773 /* GCLapCompound.m in Sources */,
 				422FAF0C19A1DD6000D09773 /* GCActivitySearchElement.m in Sources */,
 				422FAF0E19A1DD6000D09773 /* GCHistoryAggregatedActivityStats.m in Sources */,
-				422FAF0F19A1DD6000D09773 /* GCWithingsRequestUserList.m in Sources */,
 				422FAF1219A1DD6000D09773 /* GCActivityTennisCuePoint.m in Sources */,
 				42BFC25F1DCF517400EAD40E /* GCStravaTrainingZones.m in Sources */,
 				422FAF1319A1DD6000D09773 /* GCActivityTennis.m in Sources */,
@@ -9688,7 +9657,6 @@
 				422FAF9519A1DD6000D09773 /* GCViewMaturityButton.m in Sources */,
 				422FAF9619A1DD6000D09773 /* GCViewActivityTypeButton.m in Sources */,
 				422FAF9719A1DD6000D09773 /* GCStravaActivityLapsParser.m in Sources */,
-				422FAF9919A1DD6000D09773 /* GCWithingsRequestOnce.m in Sources */,
 				42BFC25D1DCF516800EAD40E /* GCStravaAthlete.m in Sources */,
 				422FAF9A19A1DD6000D09773 /* GCBabolatSessionsListRequest.m in Sources */,
 				42A22E0119E8895D004407B8 /* GCHealthSleepBlock.m in Sources */,
@@ -9823,7 +9791,6 @@
 				428FF79915FB4115007A88FA /* GCActivityListViewController.m in Sources */,
 				428FF79A15FB4115007A88FA /* GCTabBarController.m in Sources */,
 				428FF79F15FB412C007A88FA /* GCWebConnect.m in Sources */,
-				42200ECB17EFA3850078B45A /* GCWithingsRequestMeasures.m in Sources */,
 				428FF7A015FB412C007A88FA /* GCWebUrl.m in Sources */,
 				42D8AF271B26002500ADDD31 /* GCHealthKitWorkoutParser.m in Sources */,
 				42959E3B18DDA6F500C0B841 /* GCSportTracksBase.m in Sources */,
@@ -9898,7 +9865,6 @@
 				42AA288F1637F6AB0054F84A /* GCActivitySearchElement.m in Sources */,
 				422549571EE7361F004F4AE5 /* FITFitStatisticsWeight.swift in Sources */,
 				422C70AE1642B677003779E0 /* GCHistoryAggregatedActivityStats.m in Sources */,
-				42200EC817EFA36A0078B45A /* GCWithingsRequestUserList.m in Sources */,
 				42EB51DA18AE2CF400B85FAB /* GCActivityTennisCuePoint.m in Sources */,
 				426B0F111DA119060091A734 /* FITFitMessage.m in Sources */,
 				421A514F1C82FA9400671587 /* GCCalendarDataDateMarkers.m in Sources */,
@@ -10033,7 +9999,6 @@
 				42B34A2E179C31D500688E9F /* GCViewActivityTypeButton.m in Sources */,
 				422B343D1CA7321200B345CD /* GCFieldCache.m in Sources */,
 				42461D231922D169001B03C7 /* GCStravaActivityLapsParser.m in Sources */,
-				42200EC517EFA3440078B45A /* GCWithingsRequestOnce.m in Sources */,
 				42EB515E18A7EC6500B85FAB /* GCBabolatSessionsListRequest.m in Sources */,
 				42C0589721D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */,
 				424340FD1B741652001E22BB /* GCActivity+CSSearch.m in Sources */,
@@ -10176,9 +10141,6 @@
 				42B5E2791BA5B216000FAE4E /* GCWithingsBodyMeasuresParser.m in Sources */,
 				42B5E27A1BA5B216000FAE4E /* GCWithingsSleepParser.m in Sources */,
 				42B5E27B1BA5B216000FAE4E /* GCWithingsActivityParser.m in Sources */,
-				42B5E27C1BA5B216000FAE4E /* GCWithingsRequestOnce.m in Sources */,
-				42B5E27D1BA5B216000FAE4E /* GCWithingsRequestUserList.m in Sources */,
-				42B5E27E1BA5B216000FAE4E /* GCWithingsRequestMeasures.m in Sources */,
 				42B5E27F1BA5B216000FAE4E /* GCWithingsReqBase.m in Sources */,
 				42B5E2801BA5B216000FAE4E /* GCWithingsBodyMeasures.m in Sources */,
 				42B5E2811BA5B216000FAE4E /* GCWithingsActivityMeasures.m in Sources */,

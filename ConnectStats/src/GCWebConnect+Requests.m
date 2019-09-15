@@ -53,7 +53,6 @@
 #import "GCWithingsBodyMeasures.h"
 #import "GCWithingsActivityMeasures.h"
 #import "GCWithingsSleepMeasures.h"
-#import "GCWithingsRequestOnce.h"
 
 #import "GCHealthKitBodyRequest.h"
 #import "GCHealthKitActivityRequest.h"
@@ -246,7 +245,6 @@
     }
 }
 -(void)withingsUpdate{
-#ifdef WITHINGS_OAUTH
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
         if ([GCAppGlobal healthStatsVersion]) {
@@ -254,9 +252,6 @@
             [self addRequest:[GCWithingsActivityMeasures measuresFromDate:nil toDate:[NSDate date] with:[GCAppGlobal currentNavigationController]]];
         }
     });
-#else
-    [self addRequest:[GCWithingsRequestOnce withingsRequestOnce]];
-#endif
 }
 #pragma mark - download track details
 
