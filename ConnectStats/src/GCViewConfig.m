@@ -730,14 +730,23 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 +(NSArray<NSString*>*)validChoicesForGarminSource{
     BOOL debugIsEnabled = [[GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:CONFIG_ENABLE_DEBUG_OFF] isEqualToString:CONFIG_ENABLE_DEBUG_ON];
     if (debugIsEnabled) {
-        return  @[ NSLocalizedString(@"ConnectStats", @"Login Method"),
-                   NSLocalizedString(@"Garmin Website", @"Login Method"),
-                   NSLocalizedString(@"Both", @"Login Method")
+        return  @[ NSLocalizedString(@"ConnectStats", @"Download Source"),
+                   NSLocalizedString(@"Garmin Website", @"Download Source"),
+                   NSLocalizedString(@"Both", @"Download Source")
         ];
     }
-    return  @[ NSLocalizedString(@"ConnectStats", @"Login Method"),
-               NSLocalizedString(@"Garmin Website", @"Login Method"),
+    return  @[ NSLocalizedString(@"ConnectStats", @"Download Source"),
+               NSLocalizedString(@"Garmin Website", @"Download Source"),
     ];
+}
+
++(NSString*)describeGarminSource:(gcGarminDownloadSource)source{
+    NSArray<NSString*>*choices = [self validChoicesForGarminSource];
+    if( source < choices.count){
+        return choices[source];
+    }else{
+        return NSLocalizedString( @"None", @"Download Source");
+    }
 }
 
 +(NSArray*)validChoicesForConnectStatsServiceUse{

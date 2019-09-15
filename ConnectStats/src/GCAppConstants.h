@@ -84,6 +84,7 @@
 #define CONFIG_CONNECTSTATS_CONFIG      @"config_connectstats_config"
 #define CONFIG_GARMIN_ENABLE            @"config_garmin_enable"
 #define CONFIG_GARMIN_LOGIN_METHOD      @"config_garmin_login_method"
+#define CONFIG_GARMIN_LAST_SOURCE       @"config_garmin_last_source"
 #define CONFIG_GARMIN_USE_MODERN        @"config_garmin_use_modern_v3"
 #define CONFIG_STRAVA_ENABLE            @"config_strava_enable"
 #define CONFIG_STRAVA_SEGMENTS          @"config_strava_segments"

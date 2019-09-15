@@ -336,4 +336,14 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
 +(NSString*)serviceIdFromSportTracksUri:(NSString*)uri{
     return [uri componentsSeparatedByString:@"/"].lastObject;
 }
+
+-(BOOL)isEqual:(id)object{
+    if( [object isKindOfClass:[self class]] ){
+        return [self isEqualToService:object];
+    }
+    return false;
+}
+-(BOOL)isEqualToService:(GCService*)other{
+    return self.service == other.service;
+}
 @end

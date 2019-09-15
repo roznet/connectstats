@@ -4271,6 +4271,7 @@
 		42E226B8165842F9008FFD68 /* GCSimpleGraphCachedDataSource+Templates.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "GCSimpleGraphCachedDataSource+Templates.m"; path = "src/GCSimpleGraphCachedDataSource+Templates.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		42E226BA16599AB2008FFD68 /* GCWebReverseGeocode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWebReverseGeocode.h; path = src/GCWebReverseGeocode.h; sourceTree = "<group>"; };
 		42E226BB16599AB2008FFD68 /* GCWebReverseGeocode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWebReverseGeocode.m; path = src/GCWebReverseGeocode.m; sourceTree = "<group>"; };
+		42E4D330232E7158002F114C /* GCSettingsServicesViewConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCSettingsServicesViewConstants.h; path = src/GCSettingsServicesViewConstants.h; sourceTree = "<group>"; };
 		42EAA3A91EDBA6150081B130 /* GCAppProfiles+Swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCAppProfiles+Swift.h"; path = "src/GCAppProfiles+Swift.h"; sourceTree = "<group>"; };
 		42EAA3AA1EDBA6150081B130 /* GCAppProfiles+Swift.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCAppProfiles+Swift.m"; path = "src/GCAppProfiles+Swift.m"; sourceTree = "<group>"; };
 		42EB515618A7E1E800B85FAB /* GCBabolatLoginRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCBabolatLoginRequest.h; path = src/GCBabolatLoginRequest.h; sourceTree = "<group>"; };
@@ -4527,6 +4528,7 @@
 				42B955551819B36400BC7AF9 /* GCSettingsReloadViewController.m */,
 				4231CB5C165AB5E60020FDB2 /* GCSettingsProfilesViewController.h */,
 				4231CB5D165AB5E60020FDB2 /* GCSettingsProfilesViewController.m */,
+				42E4D330232E7158002F114C /* GCSettingsServicesViewConstants.h */,
 				426786D816C6594F00899C8B /* GCSettingsServicesViewController.h */,
 				426786D916C6594F00899C8B /* GCSettingsServicesViewController.m */,
 				42684EF21B2DB2A6001A90D2 /* GCSettingsSourceTableViewController.h */,
@@ -10915,6 +10917,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 5.0.0.5;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -10962,6 +10965,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 5.0.0.5;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = NO;

@@ -37,6 +37,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 @class GCWeather;
 @class GCHealthOrganizer;
+@class GCService;
 
 @interface GCActivitiesOrganizer : RZParentObject<GCWebReverseGeocodeDelegate,RZChildObject>
 
@@ -150,6 +151,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 -(void)recordSynchronized:(GCActivity*)act forService:(NSString*)service;
 -(BOOL)isSynchronized:(GCActivity*)act forService:(NSString*)service;
+-(GCActivity*)mostRecentActivityFromService:(GCService*)service;
 
 +(void)ensureDbStructure:(FMDatabase*)aDb;
 -(void)updateForNewProfile;

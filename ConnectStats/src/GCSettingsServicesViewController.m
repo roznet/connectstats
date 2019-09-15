@@ -40,74 +40,9 @@
 #import "GCWebUrl.h"
 #import "GCDebugServiceKeys.h"
 #import "GCCellEntryText+GCViewConfig.h"
+#import "GCConnectStatsRequest.h"
 
-#define GC_SECTIONS_GARMIN          0
-#define GC_SECTIONS_STRAVA          1
-#define GC_SECTIONS_HEALTHKIT       2
-#define GC_SECTIONS_SPORTTRACKS     3
-#define GC_SECTIONS_FITBIT          4
-#define GC_SECTIONS_WITHINGS        5
-#define GC_SECTIONS_BABOLAT         6
-#define GC_SECTIONS_OPTIONS         7
-#define GC_SECTIONS_END             8
-
-#define GC_SPORTTRACKS_SERVICE_NAME 0
-#define GC_SPORTTRACKS_ENABLE       1
-#define GC_SPORTTRACKS_END          2
-
-#define GC_GARMIN_SERVICE_NAME  0
-#define GC_GARMIN_ENABLE        1
-#define GC_GARMIN_USERNAME      2
-#define GC_GARMIN_PASSWORD      3
-#define GC_GARMIN_METHOD        4
-#define GC_GARMIN_MANUAL_LOGIN  5
-#define GC_GARMIN_MODERN_API    6
-#define GC_CONNECTSTATS_USE         7
-#define GC_CONNECTSTATS_FILLYEAR    8
-#define GC_CONNECTSTATS_CONFIG      9
-#define GC_CONNECTSTATS_LOGOUT      10
-#define GC_CONNECTSTATS_DEBUGKEY    11
-#define GC_CONNECTSTATS_NAME    12
-#define GC_GARMIN_END           13
-
-#define GC_STRAVA_NAME      0
-#define GC_STRAVA_ENABLE    1
-#define GC_STRAVA_AUTO      2
-#define GC_STRAVA_LOGOUT    3
-#define GC_STRAVA_SEGMENTS  4
-#define GC_STRAVA_END       5
-//Disabled
-#define GC_STRAVA_PRIVATE   6
-
-#define GC_HEALTHKIT_NAME       0
-#define GC_HEALTHKIT_ENABLE     1
-#define GC_HEALTHKIT_WORKOUT    2
-#define GC_HEALTHKIT_SOURCE     3
-#define GC_HEALTHKIT_END        4
-
-#define GC_FITBIT_NAME          0
-#define GC_FITBIT_ENABLE        1
-#define GC_FITBIT_SEARCH_OLDER  2
-#define GC_FITBIT_END           3
-
-#define GC_BABOLAT_SERVICE_NAME 0
-#define GC_BABOLAT_ENABLE       1
-#define GC_BABOLAT_USERNAME     2
-#define GC_BABOLAT_PWD          3
-#define GC_BABOLAT_END          4
-
-#define GC_OPTIONS_MERGE         0
-#define GC_OPTIONS_END           1
-
-// for withings
-#define GC_ROW_SERVICE_NAME 0
-#define GC_ROW_AUTO         1
-#define GC_ROW_LOGIN        2
-#define GC_ROW_PWD          3
-#define GC_ROW_USER         4
-#define GC_ROW_STATUS       5
-#define GC_ROW_END          6
-
+#import "GCSettingsServicesViewConstants.h"
 
 @interface GCSettingsServicesViewController ()
 @property (nonatomic,retain) RZTableIndexRemap * remap;
@@ -183,7 +118,10 @@
         }
     }
     if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats]){
-        [dynamic addObject:@( GC_CONNECTSTATS_FILLYEAR )];
+        [dynamic addObjectsFromArray:@[
+            @( GC_CONNECTSTATS_FILLYEAR ),
+            @( GC_CONNECTSTATS_LOGOUT ),
+        ] ];
     }
     if( [[GCAppGlobal profile] serviceEnabled:gcServiceGarmin]){
         [dynamic addObjectsFromArray:@[
@@ -521,16 +459,10 @@
                                                                       attributes:[GCViewConfig attributeBold16]] autorelease];
 
         [gridcell labelForRow:0 andCol:0].attributedText = title;
-        gcGarminDownloadSource method = [GCViewConfig garminDownloadSource];
-        
-        NSArray * methods = [GCViewConfig validChoicesForGarminSource];
-        if (method < methods.count) {
-            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                                         withString:methods[method]];
-        }else{
-            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16Gray]
-                                                                                         withString:NSLocalizedString(@"None",@"Login Method")];
-        }
+        gcGarminDownloadSource source = [GCViewConfig garminDownloadSource];
+        NSString * method = [GCViewConfig describeGarminSource:source];
+        [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                     withString:method];
         rv = gridcell;
     }else if (indexPath.row == GC_GARMIN_USERNAME){
         textcell = [GCCellEntryText textCellViewConfig:tableView];
@@ -687,11 +619,36 @@
         rv = gridcell;
     }else if( indexPath.row == GC_CONNECTSTATS_LOGOUT){
         gridcell = [GCCellGrid gridCell:tableView];
-        [gridcell setupForRows:2 andCols:2];
+        [gridcell setupForRows:2 andCols:1];
         
-        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Tap to logout",@"Services")
+        GCActivity * latest = nil;
+        
+        if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats] ){
+            latest = [[GCAppGlobal organizer] mostRecentActivityFromService:[GCService service:gcServiceConnectStats]];
+        }
+  
+        NSString * message = nil;
+        
+        if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] ){
+            message = NSLocalizedString(@"Successfully Logged in - Tap to logout",@"Services");
+        }else{
+            if( latest ){
+                message = NSLocalizedString(@"Previously Logged in - Tap to start again", @"Service" );
+            }else{
+                message = NSLocalizedString(@"Never Logged in - Tap to start", @"Service" );
+            }
+        }
+        
+        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:message
                                                                       attributes:[GCViewConfig attributeBold16]] autorelease];
         
+        if( latest ){
+            NSAttributedString * subtitle = [NSAttributedString attributedString:[GCViewConfig attribute14Gray]
+                                                                      withFormat:NSLocalizedString(@"Latest Activity %@", @"Services"), [latest.date dateShortFormat]];
+            [gridcell labelForRow:1 andCol:0].attributedText = subtitle;
+        }else{
+            [gridcell labelForRow:1 andCol:0].attributedText = nil;
+        }
         [gridcell labelForRow:0 andCol:0].attributedText = title;
         rv = gridcell;
     }
@@ -1046,6 +1003,13 @@
     rv.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
     return rv;
 }
+-(UINavigationController*)baseNavigationController{
+    return( self.navigationController );
+}
+-(UINavigationItem*)baseNavigationItem{
+    return( self.navigationItem );
+}
+
 
 -(void)cellWasChanged:(id<GCEntryFieldProtocol>)cell{
     gcService service = gcServiceWithings;
@@ -1102,15 +1066,14 @@
             // adapt choices to new source
             [self buildRemap];
             
-            NSArray *choices = [GCViewConfig validChoicesForGarminSource];
-            NSString * choice = cell.selected < choices.count ? choices[cell.selected] : @"None";
-            RZLog(RZLogInfo, @"Garmin: Changed Source %@ Garmin=%lu ConnectStats=%lu",
+            [[GCAppGlobal profile] configSet:CONFIG_GARMIN_LAST_SOURCE intVal:cell.selected];
+            NSString * choice = [GCViewConfig describeGarminSource:cell.selected];
+            RZLog(RZLogInfo, @"Garmin: Changed Source %@ Web=%lu ConnectStats=%lu",
                   choice,
                   (long unsigned)[[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:false],
                   (long unsigned)[[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false]
                   );
             [GCAppGlobal saveSettings];
-            [[GCAppGlobal web] garminLogin];
             break;
         }
         case GC_IDENTIFIER(GC_SECTIONS_WITHINGS, GC_ROW_LOGIN):
@@ -1132,13 +1095,31 @@
             [GCAppGlobal saveSettings];
             break;
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_ENABLE):
-            if([[GCAppGlobal profile] configToggleBool:CONFIG_GARMIN_ENABLE]){
-                RZLog(RZLogInfo, @"Garmin: Enabled");
+        {
+            if( cell.on ){
+                gcGarminDownloadSource lastSource = [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LAST_SOURCE defaultValue:gcGarminDownloadSourceConnectStats];
+                [GCViewConfig setGarminDownloadSource:lastSource];
+                
+                RZLog(RZLogInfo, @"Garmin: Enabled Source %@ Web=%lu ConnectStats=%lu",
+                      [GCViewConfig describeGarminSource:lastSource],
+                      (long unsigned)[[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:false],
+                      (long unsigned)[[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false]
+                      );
             }else{
-                RZLog(RZLogInfo, @"Garmin: Disabled");
+                // Make sure we save the last source used
+                gcGarminDownloadSource lastSource = [GCViewConfig garminDownloadSource];
+                [[GCAppGlobal profile] configSet:CONFIG_GARMIN_LAST_SOURCE intVal:lastSource];
+                [GCViewConfig setGarminDownloadSource:gcGarminDownloadSourceEnd];
+                RZLog(RZLogInfo, @"Garmin: Disabled Source %@ Web=%lu ConnectStats=%lu",
+                      [GCViewConfig describeGarminSource:lastSource],
+                      (long unsigned)[[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:false],
+                      (long unsigned)[[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false]
+                      );
             }
+            
             [GCAppGlobal saveSettings];
             break;
+        }
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_MODERN_API):
             if([[GCAppGlobal profile] configToggleBool:CONFIG_GARMIN_USE_MODERN]){
                 RZLog(RZLogInfo, @"Garmin: Modern");
@@ -1294,13 +1275,6 @@
     }
     [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 }
--(UINavigationController*)baseNavigationController{
-	return( self.navigationController );
-}
--(UINavigationItem*)baseNavigationItem{
-	return( self.navigationItem );
-}
-
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPathI
@@ -1366,6 +1340,12 @@
             lc.entryFieldDelegate = self;
             lc.identifierInt= GC_IDENTIFIER(GC_SECTIONS_WITHINGS, GC_ROW_USER);
             [self.navigationController pushViewController:lc animated:YES];
+        }
+    }else if (indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_LOGOUT){
+        if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] ){
+            [GCConnectStatsRequest logout];
+        }else{
+            [GCAppGlobal searchAllActivities];
         }
     }else if (indexPath.section==GC_SECTIONS_STRAVA&&indexPath.row==GC_STRAVA_LOGOUT){
         NSDate * last = [GCStravaReqBase lastSync:nil];

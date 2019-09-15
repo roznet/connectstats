@@ -38,6 +38,8 @@
 -(UIImage*)icon;
 -(gcService)service;
 
+-(BOOL)isEqualToService:(GCService*)other;
+
 -(NSDate*)lastSync:(NSString*)aId;
 -(void)recordSync:(NSString*)aId;
 

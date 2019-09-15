@@ -1444,6 +1444,14 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     return false;
 }
 
+-(GCActivity*)mostRecentActivityFromService:(GCService*)service{
+    for (GCActivity * act in self.allActivities) {
+        if( [act.service isEqualToService:service] ){
+            return act;
+        }
+    }
+    return nil;
+}
 
 @end
 
