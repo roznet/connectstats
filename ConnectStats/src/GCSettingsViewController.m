@@ -241,7 +241,7 @@
                 gridcell = [GCCellGrid gridCell:tableView];
                 [gridcell setupForRows:1 andCols:2];
                 
-                NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Skin",@"Profile Skin")
+                NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Theme",@"Profile Skin")
                                                                               attributes:[GCViewConfig attributeBold16]] autorelease];
                 NSString * skin = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:kGCSkinNameOriginal];
                 NSAttributedString * current = [[[NSAttributedString alloc] initWithString:skin
