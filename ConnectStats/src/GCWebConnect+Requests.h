@@ -58,17 +58,10 @@
 // Babolat
 -(void)babolatDownloadTennisActivityDetails:(NSString*)aId;
 
-// sporttracks
--(void)sportTracksDownloadActivityTrackPoints:(NSString*)aId withUri:(NSString*)uri;
-
 // GarminLogin
 -(void)garminTestLogin;// should not use only for testing
 -(void)garminLogin;
 -(void)garminLogout;
-
-// FitBit
--(void)fitBitUpdate;
--(void)fitBitUpdateFromDate:(NSDate*)date;
 
 // HealthKti
 -(void)healthStoreExportActivity:(GCActivity*)act;

@@ -27,16 +27,10 @@
 #define GC_SECTIONS_GARMIN          0
 #define GC_SECTIONS_STRAVA          1
 #define GC_SECTIONS_HEALTHKIT       2
-#define GC_SECTIONS_SPORTTRACKS     3
-#define GC_SECTIONS_FITBIT          4
-#define GC_SECTIONS_WITHINGS        5
-#define GC_SECTIONS_BABOLAT         6
-#define GC_SECTIONS_OPTIONS         7
-#define GC_SECTIONS_END             8
-
-#define GC_SPORTTRACKS_SERVICE_NAME 0
-#define GC_SPORTTRACKS_ENABLE       1
-#define GC_SPORTTRACKS_END          2
+#define GC_SECTIONS_WITHINGS        3
+#define GC_SECTIONS_BABOLAT         4
+#define GC_SECTIONS_OPTIONS         5
+#define GC_SECTIONS_END             6
 
 #define GC_GARMIN_SERVICE_NAME  0
 #define GC_GARMIN_ENABLE        1
@@ -67,11 +61,6 @@
 #define GC_HEALTHKIT_WORKOUT    2
 #define GC_HEALTHKIT_SOURCE     3
 #define GC_HEALTHKIT_END        4
-
-#define GC_FITBIT_NAME          0
-#define GC_FITBIT_ENABLE        1
-#define GC_FITBIT_SEARCH_OLDER  2
-#define GC_FITBIT_END           3
 
 #define GC_BABOLAT_SERVICE_NAME 0
 #define GC_BABOLAT_ENABLE       1

@@ -54,11 +54,9 @@
 
 @property (nonatomic,assign) BOOL showGarmin;
 @property (nonatomic,assign) BOOL showStrava;
-@property (nonatomic,assign) BOOL showSportTracks;
 @property (nonatomic,assign) BOOL showBabolat;
 @property (nonatomic,assign) BOOL showWithings;
 @property (nonatomic,assign) BOOL showHealthKit;
-@property (nonatomic,assign) BOOL showFitbit;
 @property (nonatomic,assign) BOOL showConnectStats;
 
 @end
@@ -73,11 +71,9 @@
         [[GCAppGlobal web] attach:self];
         self.showBabolat     = false;
         self.showGarmin      = false;
-        self.showSportTracks = false;
         self.showStrava      = false;
         self.showWithings    = false;
         self.showHealthKit   = false;
-        self.showFitbit      = false;
         self.showConnectStats = false;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kNotifySettingsChange object:nil];
         
@@ -158,12 +154,7 @@
                                                                 @( GC_HEALTHKIT_WORKOUT    ),
                                                                 @( GC_HEALTHKIT_SOURCE     )]];
     }
-    
-    [self.remap addSection:GC_SECTIONS_SPORTTRACKS withRows:@[
-                                                              @( GC_SPORTTRACKS_SERVICE_NAME ),
-                                                              @( GC_SPORTTRACKS_ENABLE       )
-                                                              ]];
-    
+        
 #ifdef GC_USE_HEALTHKIT
     if (healthStatsVersion) {
         self.showHealthKit   = true;
@@ -171,30 +162,21 @@
     
 #endif
     // for withings
-#ifdef WITHINGS_OAUTH
     [self.remap addSection:GC_SECTIONS_WITHINGS withRows:@[
                                                            @( GC_ROW_SERVICE_NAME ),
                                                            @( GC_ROW_AUTO         ),
                                                            @( GC_ROW_STATUS       )]];
-#else
-    [self.remap addSection:GC_SECTIONS_WITHINGS withRows:@[
-                                                           @( GC_ROW_SERVICE_NAME ),
-                                                           @( GC_ROW_AUTO         ),
-                                                           @( GC_ROW_LOGIN        ),
-                                                           @( GC_ROW_PWD          ),
-                                                           @( GC_ROW_USER         ),
-                                                           @( GC_ROW_STATUS       )]];
-#endif
     if (connectStatsVersion) {
         
         [self.remap addSection:GC_SECTIONS_OPTIONS withRows:@[
                                                               @( GC_OPTIONS_MERGE         )]];
-        [self.remap addSection:GC_SECTIONS_BABOLAT withRows:@[
-                                                              @( GC_BABOLAT_SERVICE_NAME ),
-                                                              @( GC_BABOLAT_ENABLE       ),
-                                                              @( GC_BABOLAT_USERNAME     ),
-                                                              @( GC_BABOLAT_PWD          )]];
-        
+        if( debugIsEnabled ){
+            [self.remap addSection:GC_SECTIONS_BABOLAT withRows:@[
+                @( GC_BABOLAT_SERVICE_NAME ),
+                @( GC_BABOLAT_ENABLE       ),
+                @( GC_BABOLAT_USERNAME     ),
+                @( GC_BABOLAT_PWD          )]];
+        }
     }
     
 
@@ -241,14 +223,10 @@
         return self.showGarmin ? nrows : 1;
     }else if (section == GC_SECTIONS_STRAVA){
         return self.showStrava ? nrows : 1;
-    }else if (section == GC_SECTIONS_SPORTTRACKS){
-        return self.showSportTracks ? nrows : 1;
     }else if (section == GC_SECTIONS_HEALTHKIT){
         return self.showHealthKit ? nrows : 1;
     }else if (section == GC_SECTIONS_OPTIONS){
         return nrows;
-    }else if (section == GC_SECTIONS_FITBIT){
-        return self.showFitbit ? nrows : 1;
     }
     // Return the number of rows in the section.
     return 0;
@@ -825,83 +803,6 @@
     return rv;
 }
 
--(UITableViewCell*)fitbitTableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath{
-    UITableViewCell * rv = nil;
-    GCCellGrid * gridcell = nil;
-    GCCellEntrySwitch * switchcell = nil;
-    gcService service = gcServiceFitBit;
-
-    if (indexPath.row == GC_FITBIT_NAME) {
-        gridcell = [GCCellGrid gridCell:tableView];
-        [gridcell setupForRows:2 andCols:1];
-        NSAttributedString * title = nil;
-        NSAttributedString * status = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withString:[self statusForService:service]];
-        title = [NSAttributedString attributedString:[GCViewConfig attributeBold16] withString:@"FitBit"];
-        [gridcell setIconImage:[UIImage imageNamed:@"fitbit"]];
-        [gridcell labelForRow:0 andCol:0].attributedText = title;
-        [gridcell labelForRow:1 andCol:0].attributedText = status;
-        gridcell.iconPosition = gcIconPositionRight;
-        [GCViewConfig setupGradientForDetails:gridcell];
-        rv= gridcell;
-
-    }else if (indexPath.row == GC_FITBIT_ENABLE){
-        switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.text = NSLocalizedString(@"Use FitBit",@"Other Service");
-        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_FITBIT_ENABLE defaultValue:false];
-        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_FITBIT_ENABLE);
-        switchcell.entryFieldDelegate = self;
-        rv=switchcell;
-    }else if (indexPath.row == GC_FITBIT_SEARCH_OLDER){
-        gridcell = [GCCellGrid gridCell:tableView];
-        [gridcell setupForRows:2 andCols:1];
-        NSAttributedString * title = nil;
-        NSDate * last = [[GCAppGlobal organizer] oldestActivity].date;
-        NSAttributedString * status = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString(@"Before %@", @"FitBit Old Date"), [last dateShortFormat]];
-        title = [NSAttributedString attributedString:[GCViewConfig attributeBold16] withString:NSLocalizedString(@"Search Older Days", @"")];
-        [gridcell labelForRow:0 andCol:0].attributedText = title;
-        [gridcell labelForRow:1 andCol:0].attributedText = status;
-        gridcell.iconPosition = gcIconPositionRight;
-        [GCViewConfig setupGradientForDetails:gridcell];
-        rv= gridcell;
-
-    }
-
-    return rv;
-}
-
-- (UITableViewCell *)sportTracksTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell * rv = nil;
-    //GCCellEntryText * textcell = nil;
-    GCCellGrid * gridcell = nil;
-    GCCellEntrySwitch * switchcell = nil;
-    //GCCellActivityIndicator * activitycell = nil;
-    gcService service = gcServiceSportTracks;
-    if (indexPath.row ==GC_SPORTTRACKS_SERVICE_NAME) {
-        gridcell =[self gridCell:tableView];
-        [gridcell setupForRows:2 andCols:1];
-        NSAttributedString * title = nil;
-        NSAttributedString * status = [[[NSAttributedString alloc] initWithString:[self statusForService:service]
-                                                                       attributes:[GCViewConfig attribute14Gray]] autorelease];
-
-        title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"SportTracks",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
-        [gridcell setIconImage:[UIImage imageNamed:@"sporttracks"]];
-        [gridcell labelForRow:0 andCol:0].attributedText = title;
-        [gridcell labelForRow:1 andCol:0].attributedText = status;
-        gridcell.iconPosition = gcIconPositionRight;
-        [GCViewConfig setupGradientForDetails:gridcell];
-        rv = gridcell;
-    }else if (indexPath.row == GC_SPORTTRACKS_ENABLE){
-        switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                    withString:NSLocalizedString(@"Download Activities",@"Other Service")];
-        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_SPORTTRACKS_ENABLE defaultValue:false];
-        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_SPORTTRACKS_ENABLE);
-        switchcell.entryFieldDelegate = self;
-        rv=switchcell;
-    }
-    return rv;
-}
-
 - (UITableViewCell *)babolatTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell * rv = nil;
     GCCellEntryText * textcell = nil;
@@ -987,16 +888,12 @@
         rv = [self garminTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section==GC_SECTIONS_STRAVA){
         rv = [self stravaTableView:tableView cellForRowAtIndexPath:indexPath];
-    }else if (indexPath.section == GC_SECTIONS_SPORTTRACKS){
-        rv = [self sportTracksTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_BABOLAT){
         rv = [self babolatTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_OPTIONS){
         rv = [self optionsTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_HEALTHKIT){
         rv = [self healthKitTableView:tableView cellForRowAtIndexPath:indexPath];
-    }else if (indexPath.section == GC_SECTIONS_FITBIT){
-        rv = [self fitbitTableView:tableView cellForRowAtIndexPath:indexPath];
     }else{
         rv = [GCCellGrid gridCell:tableView];
     }
@@ -1128,21 +1025,6 @@
             }
             [GCAppGlobal saveSettings];
             break;
-        /*case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_ENABLE):
-            if( [[GCAppGlobal profile] configToggleBool:CONFIG_CONNECTSTATS_ENABLE]){
-                RZLog(RZLogInfo, @"ConnectStats: Enabled");
-            }else{
-                RZLog(RZLogInfo, @"ConnectStats: Disabled");
-            }
-            [GCAppGlobal saveSettings];
-            break;*/
-        case GC_IDENTIFIER(GC_SECTIONS_SPORTTRACKS, GC_SPORTTRACKS_ENABLE):
-            [[GCAppGlobal profile] configToggleBool:CONFIG_SPORTTRACKS_ENABLE];
-            [GCAppGlobal saveSettings];
-            if ([[GCAppGlobal profile] configGetBool:CONFIG_SPORTTRACKS_ENABLE defaultValue:NO] == NO) {
-                [GCSportTracksBase signout];
-            }
-            break;
 
         case GC_IDENTIFIER(GC_SECTIONS_BABOLAT, GC_BABOLAT_ENABLE):
             [[GCAppGlobal profile] configToggleBool:CONFIG_BABOLAT_ENABLE];
@@ -1235,12 +1117,6 @@
             [GCAppGlobal saveSettings];
             break;
         }
-        case GC_IDENTIFIER(GC_SECTIONS_FITBIT, GC_FITBIT_ENABLE):
-        {
-            [[GCAppGlobal profile] configToggleBool:CONFIG_FITBIT_ENABLE];
-            [GCAppGlobal saveSettings];
-            break;
-        }
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_USE):
         {
             [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_USE intVal:cell.selected];
@@ -1290,12 +1166,8 @@
             self.showWithings = ! self.showWithings;
         }else if (indexPath.section==GC_SECTIONS_BABOLAT){
             self.showBabolat = ! self.showBabolat;
-        }else if (indexPath.section==GC_SECTIONS_SPORTTRACKS){
-            self.showSportTracks = ! self.showSportTracks;
         }else if (indexPath.section==GC_SECTIONS_HEALTHKIT){
             self.showHealthKit = ! self.showHealthKit;
-        }else if (indexPath.section==GC_SECTIONS_FITBIT){
-            self.showFitbit = ! self.showFitbit;
         }
         [tableView reloadData];
     }
@@ -1363,9 +1235,6 @@
             [self.navigationController pushViewController:detail animated:YES];
         }
         [detail release];
-
-    }else if (indexPath.section == GC_SECTIONS_FITBIT && indexPath.row == GC_FITBIT_SEARCH_OLDER){
-        [[GCAppGlobal web] fitBitUpdateFromDate:[[GCAppGlobal organizer] oldestActivity].date];
     }else if (indexPath.section == GC_SECTIONS_HEALTHKIT && indexPath.row == GC_HEALTHKIT_SOURCE){
         GCSettingsSourceTableViewController * source = [[GCSettingsSourceTableViewController alloc] initWithNibName:nil bundle:nil];
         [self.navigationController pushViewController:source animated:YES];

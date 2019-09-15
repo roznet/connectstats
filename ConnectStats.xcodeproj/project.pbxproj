@@ -26,8 +26,6 @@
 		42018E8118F07CD60089AB7A /* GCSportTracksActivityDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42018E8018F07CD60089AB7A /* GCSportTracksActivityDetailParser.m */; };
 		42018E9618F1877E0089AB7A /* GCFieldsCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42018E9518F1877E0089AB7A /* GCFieldsCategory.m */; };
 		42018EA018F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42018E9F18F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m */; };
-		4201D4CD19D8BC4800059879 /* GCFitBitWeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4201D4CC19D8BC4800059879 /* GCFitBitWeight.m */; };
-		4201D4CE19D8BC4800059879 /* GCFitBitWeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4201D4CC19D8BC4800059879 /* GCFitBitWeight.m */; };
 		4202AE2E21A8A20800D8D696 /* FITGarminDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4202AE2121A72D9600D8D696 /* FITGarminDownloadManager.swift */; };
 		420621F81D3AD48D0013A45E /* RZUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; };
 		42091CFF1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42091CFE1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m */; };
@@ -54,8 +52,6 @@
 		421418481CF054B300642F37 /* FITFitEnumMap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418471CF054B300642F37 /* FITFitEnumMap.mm */; };
 		421516BC19A47C450080CD4C /* GCHealthKitRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 421516BB19A47C450080CD4C /* GCHealthKitRequest.m */; };
 		421736A42066A07F00ACADC1 /* GCGarminRequestModernActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */; };
-		421747F819C4FD4800C13C16 /* GCFitBitActivitiesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 421747F719C4FD4800C13C16 /* GCFitBitActivitiesParser.m */; };
-		421747F919C4FD4800C13C16 /* GCFitBitActivitiesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 421747F719C4FD4800C13C16 /* GCFitBitActivitiesParser.m */; };
 		4217F53F21ACA12500C848A3 /* FITTimeSerieColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217F53E21ACA12500C848A3 /* FITTimeSerieColumn.swift */; };
 		421844B01D75C3F5005B09BC /* GCSegmentOrganizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421844AF1D75C3F5005B09BC /* GCSegmentOrganizer.swift */; };
 		421844B71D75D268005B09BC /* GCTestsSegments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421844B61D75D268005B09BC /* GCTestsSegments.swift */; };
@@ -96,8 +92,6 @@
 		4226B42B1F65E2ED009E1104 /* GCWebRequestStandard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4226B4281F65E2ED009E1104 /* GCWebRequestStandard.m */; };
 		4226E3A7220978540025201B /* RZUtilsSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; };
 		4226E3A8220978540025201B /* RZUtilsSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		422777701C36B878002F1D64 /* 988460411.fit in Resources */ = {isa = PBXBuildFile; fileRef = 4227776D1C36B870002F1D64 /* 988460411.fit */; };
-		422777711C36B87D002F1D64 /* 998171890.fit in Resources */ = {isa = PBXBuildFile; fileRef = 4227776C1C36B870002F1D64 /* 998171890.fit */; };
 		422777741C36C940002F1D64 /* GCField.m in Sources */ = {isa = PBXBuildFile; fileRef = 422777731C36C940002F1D64 /* GCField.m */; };
 		422777751C36C940002F1D64 /* GCField.m in Sources */ = {isa = PBXBuildFile; fileRef = 422777731C36C940002F1D64 /* GCField.m */; };
 		422777761C36C940002F1D64 /* GCField.m in Sources */ = {isa = PBXBuildFile; fileRef = 422777731C36C940002F1D64 /* GCField.m */; };
@@ -327,8 +321,6 @@
 		422FAFCD19A1DD6000D09773 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 427B20AD1621B5CF00D5C3C5 /* Localizable.strings */; };
 		422FAFD219A1DD6000D09773 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42EE4565176BCB81003338AF /* Media.xcassets */; };
 		42305E971DCF81C60024700C /* GCAppDelegate+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 429889A31D90371700A22571 /* GCAppDelegate+Swift.m */; };
-		42318E7D19AF1B63000CD26B /* GCFitBitReqBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42318E7C19AF1B63000CD26B /* GCFitBitReqBase.m */; };
-		42318E8019AF6821000CD26B /* GCFitBitActivities.m in Sources */ = {isa = PBXBuildFile; fileRef = 42318E7F19AF6821000CD26B /* GCFitBitActivities.m */; };
 		4231A2B81603BF9C00C02D79 /* GCActivityDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4231A2B71603BF9C00C02D79 /* GCActivityDetailViewController.m */; };
 		4231CB5E165AB5E60020FDB2 /* GCSettingsProfilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4231CB5D165AB5E60020FDB2 /* GCSettingsProfilesViewController.m */; };
 		423209361868D8F600C8F305 /* GCActivity+CachedTracks.m in Sources */ = {isa = PBXBuildFile; fileRef = 423209351868D8F600C8F305 /* GCActivity+CachedTracks.m */; };
@@ -485,7 +477,6 @@
 		425A736E1D3ACE4E003E5338 /* RZUtilsTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; };
 		425ACBBA17C163EE00EB23A3 /* GCHealthZone.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBB917C163EE00EB23A3 /* GCHealthZone.m */; };
 		425ACBC017C1687F00EB23A3 /* GCGarminUserJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBBF17C1687F00EB23A3 /* GCGarminUserJsonParser.m */; };
-		425AD6D71CCBAA4200A02822 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F932F1BEA9A5900C177F9 /* user.json */; };
 		425CF5A91813CEEC009279C0 /* GCTestsActivities.m in Sources */ = {isa = PBXBuildFile; fileRef = 425CF5A81813CEEC009279C0 /* GCTestsActivities.m */; };
 		426176232001432B008F87FA /* RZExternalCpp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A0098620012B5B00019CB3 /* RZExternalCpp.framework */; };
 		426176242001432B008F87FA /* RZExternalCpp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42A0098620012B5B00019CB3 /* RZExternalCpp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -561,31 +552,9 @@
 		427DDCC91DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCC71DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m */; };
 		427F93301BEA9A5900C177F9 /* activities_large.db in Resources */ = {isa = PBXBuildFile; fileRef = 427F93071BEA9A5900C177F9 /* activities_large.db */; };
 		427F93311BEA9A5900C177F9 /* activities_stats.db in Resources */ = {isa = PBXBuildFile; fileRef = 427F93081BEA9A5900C177F9 /* activities_stats.db */; };
-		427F93321BEA9A5900C177F9 /* activity_188115475_cycling.tcx in Resources */ = {isa = PBXBuildFile; fileRef = 427F93091BEA9A5900C177F9 /* activity_188115475_cycling.tcx */; };
-		427F93331BEA9A5900C177F9 /* activity_217470507_swimming.tcx in Resources */ = {isa = PBXBuildFile; fileRef = 427F930A1BEA9A5900C177F9 /* activity_217470507_swimming.tcx */; };
-		427F93341BEA9A5900C177F9 /* activity_234721416_cycling.tcx in Resources */ = {isa = PBXBuildFile; fileRef = 427F930B1BEA9A5900C177F9 /* activity_234721416_cycling.tcx */; };
-		427F93351BEA9A5900C177F9 /* activity_234979239_running.tcx in Resources */ = {isa = PBXBuildFile; fileRef = 427F930C1BEA9A5900C177F9 /* activity_234979239_running.tcx */; };
-		427F93361BEA9A5900C177F9 /* activity_252083235_swim.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F930D1BEA9A5900C177F9 /* activity_252083235_swim.json */; };
-		427F93371BEA9A5900C177F9 /* activity_255778175.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F930E1BEA9A5900C177F9 /* activity_255778175.json */; };
-		427F93381BEA9A5900C177F9 /* activity_299898549_swim.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F930F1BEA9A5900C177F9 /* activity_299898549_swim.json */; };
-		427F93391BEA9A5900C177F9 /* activity_379125535.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F93101BEA9A5900C177F9 /* activity_379125535.json */; };
-		427F933A1BEA9A5900C177F9 /* activity_379125535.tcx in Resources */ = {isa = PBXBuildFile; fileRef = 427F93111BEA9A5900C177F9 /* activity_379125535.tcx */; };
-		427F933B1BEA9A5900C177F9 /* activity_385546640.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F93121BEA9A5900C177F9 /* activity_385546640.json */; };
-		427F933C1BEA9A5900C177F9 /* activity_385546640.tcx in Resources */ = {isa = PBXBuildFile; fileRef = 427F93131BEA9A5900C177F9 /* activity_385546640.tcx */; };
 		427F933D1BEA9A5900C177F9 /* activity_400587208.html in Resources */ = {isa = PBXBuildFile; fileRef = 427F93141BEA9A5900C177F9 /* activity_400587208.html */; };
-		427F933E1BEA9A5900C177F9 /* activity_400587208.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F93151BEA9A5900C177F9 /* activity_400587208.json */; };
-		427F933F1BEA9A5900C177F9 /* activity_400587208.tcx in Resources */ = {isa = PBXBuildFile; fileRef = 427F93161BEA9A5900C177F9 /* activity_400587208.tcx */; };
-		427F93401BEA9A5900C177F9 /* activitydetails_255778175.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F93171BEA9A5900C177F9 /* activitydetails_255778175.json */; };
-		427F93411BEA9A5900C177F9 /* activitylaps_379125535.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F93181BEA9A5900C177F9 /* activitylaps_379125535.json */; };
-		427F93421BEA9A5900C177F9 /* activitylaps_385546640.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F93191BEA9A5900C177F9 /* activitylaps_385546640.json */; };
-		427F93431BEA9A5900C177F9 /* activitylaps_400587208.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F931A1BEA9A5900C177F9 /* activitylaps_400587208.json */; };
-		427F93441BEA9A5900C177F9 /* activitytrack_379125535.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F931B1BEA9A5900C177F9 /* activitytrack_379125535.json */; };
-		427F93451BEA9A5900C177F9 /* activitytrack_385546640.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F931C1BEA9A5900C177F9 /* activitytrack_385546640.json */; };
-		427F93461BEA9A5900C177F9 /* activitytrack_400587208.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F931D1BEA9A5900C177F9 /* activitytrack_400587208.json */; };
 		427F934C1BEA9A5900C177F9 /* cycling.png in Resources */ = {isa = PBXBuildFile; fileRef = 427F93231BEA9A5900C177F9 /* cycling.png */; };
-		427F934D1BEA9A5900C177F9 /* expected.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F93241BEA9A5900C177F9 /* expected.json */; };
 		427F934E1BEA9A5900C177F9 /* laps_regr.plist in Resources */ = {isa = PBXBuildFile; fileRef = 427F93251BEA9A5900C177F9 /* laps_regr.plist */; };
-		427F934F1BEA9A5900C177F9 /* last_search.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F93261BEA9A5900C177F9 /* last_search.json */; };
 		427F93501BEA9A5900C177F9 /* sample_activities.db in Resources */ = {isa = PBXBuildFile; fileRef = 427F93271BEA9A5900C177F9 /* sample_activities.db */; };
 		427F93511BEA9A5900C177F9 /* sample_activities_v1.db in Resources */ = {isa = PBXBuildFile; fileRef = 427F93281BEA9A5900C177F9 /* sample_activities_v1.db */; };
 		427F93521BEA9A5900C177F9 /* stats_cycling_monthly.csv in Resources */ = {isa = PBXBuildFile; fileRef = 427F93291BEA9A5900C177F9 /* stats_cycling_monthly.csv */; };
@@ -594,7 +563,6 @@
 		427F93551BEA9A5900C177F9 /* stats_running_monthly.csv in Resources */ = {isa = PBXBuildFile; fileRef = 427F932C1BEA9A5900C177F9 /* stats_running_monthly.csv */; };
 		427F93561BEA9A5900C177F9 /* stats_running_weekly.csv in Resources */ = {isa = PBXBuildFile; fileRef = 427F932D1BEA9A5900C177F9 /* stats_running_weekly.csv */; };
 		427F93571BEA9A5900C177F9 /* stats_running_yearly.csv in Resources */ = {isa = PBXBuildFile; fileRef = 427F932E1BEA9A5900C177F9 /* stats_running_yearly.csv */; };
-		427F93581BEA9A5900C177F9 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 427F932F1BEA9A5900C177F9 /* user.json */; };
 		427F935C1BEAA05800C177F9 /* GCTestUISamples.m in Sources */ = {isa = PBXBuildFile; fileRef = 427F935B1BEAA05800C177F9 /* GCTestUISamples.m */; };
 		427F935F1BEAA09E00C177F9 /* GCTestUISampleDataSourceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 427F935E1BEAA09E00C177F9 /* GCTestUISampleDataSourceHolder.m */; };
 		427F93641BEAA5D100C177F9 /* GCTestUIUnitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 427F93631BEAA5D100C177F9 /* GCTestUIUnitTest.m */; };
@@ -880,10 +848,6 @@
 		42B5E25A1BA5B216000FAE4E /* GCHealthSleepBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DFF19E8895D004407B8 /* GCHealthSleepBlock.m */; };
 		42B5E25B1BA5B216000FAE4E /* GCHealthOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB680E16DD5C9400C633BD /* GCHealthOrganizer.m */; };
 		42B5E25C1BA5B216000FAE4E /* GCDerivedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F0A4F21B60620200901CFF /* GCDerivedRequest.m */; };
-		42B5E25D1BA5B216000FAE4E /* GCFitBitActivitiesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 421747F719C4FD4800C13C16 /* GCFitBitActivitiesParser.m */; };
-		42B5E25E1BA5B216000FAE4E /* GCFitBitReqBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42318E7C19AF1B63000CD26B /* GCFitBitReqBase.m */; };
-		42B5E25F1BA5B216000FAE4E /* GCFitBitActivities.m in Sources */ = {isa = PBXBuildFile; fileRef = 42318E7F19AF6821000CD26B /* GCFitBitActivities.m */; };
-		42B5E2601BA5B216000FAE4E /* GCFitBitWeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4201D4CC19D8BC4800059879 /* GCFitBitWeight.m */; };
 		42B5E2611BA5B216000FAE4E /* GCHealthKitActivityRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DE53BC19CF438500009130 /* GCHealthKitActivityRequest.m */; };
 		42B5E2621BA5B216000FAE4E /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
 		42B5E2631BA5B216000FAE4E /* GCHealthKitExportActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C041C319A5D5F200FC20B3 /* GCHealthKitExportActivity.m */; };
@@ -975,7 +939,6 @@
 		42B5E2CD1BA5B216000FAE4E /* GCTrackPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4234943C16091ACA00A770D6 /* GCTrackPoint.m */; };
 		42B5E2CE1BA5B216000FAE4E /* GCTrackPointSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828BD167E7C1700AB9C89 /* GCTrackPointSwim.m */; };
 		42B5E2D01BA5B589000FAE4E /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DE53BF19CF696E00009130 /* HealthKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		42B5E2D31BA5B62E000FAE4E /* GCFitBitActivityTypesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E2D21BA5B62E000FAE4E /* GCFitBitActivityTypesParser.m */; };
 		42B5E2FF1BA5B7BF000FAE4E /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F1356E1B8BB2BE006D186A /* libsqlite3.tbd */; };
 		42B5E3011BA5B8BD000FAE4E /* GCHealthKitDailySummaryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DC51541B2784B600B5C12F /* GCHealthKitDailySummaryParser.m */; };
 		42B5E30E1BA5B900000FAE4E /* GCViewSwimStrokeColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828F71684CDF900AB9C89 /* GCViewSwimStrokeColors.m */; };
@@ -986,8 +949,6 @@
 		42B5E4761BA5BA2D000FAE4E /* test_activity_running_828298988.db in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3521BA5BA2C000FAE4E /* test_activity_running_828298988.db */; };
 		42B5E4771BA5BA2D000FAE4E /* test_activity_running_830807000.db in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3531BA5BA2C000FAE4E /* test_activity_running_830807000.db */; };
 		42B5E4781BA5BA2D000FAE4E /* test_activity_running_835175535.db in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3541BA5BA2C000FAE4E /* test_activity_running_835175535.db */; };
-		42B5E47A1BA5BA2D000FAE4E /* bike.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3571BA5BA2C000FAE4E /* bike.fit */; };
-		42B5E47B1BA5BA2D000FAE4E /* bike_vector.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3581BA5BA2C000FAE4E /* bike_vector.fit */; };
 		42B5E47C1BA5BA2D000FAE4E /* fitbit_activity_types.json in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E35A1BA5BA2C000FAE4E /* fitbit_activity_types.json */; };
 		42B5E47D1BA5BA2D000FAE4E /* fitbit_list.json in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E35B1BA5BA2C000FAE4E /* fitbit_list.json */; };
 		42B5E47E1BA5BA2D000FAE4E /* fitbit_weight.json in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E35C1BA5BA2C000FAE4E /* fitbit_weight.json */; };
@@ -1236,8 +1197,6 @@
 		42B9555118185F9800BC7AF9 /* GCGarminActivityWeatherParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B9555018185F9800BC7AF9 /* GCGarminActivityWeatherParser.m */; };
 		42B9555318186D0C00BC7AF9 /* GCTestsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B9555218186D0C00BC7AF9 /* GCTestsUtils.m */; };
 		42B955561819B36400BC7AF9 /* GCSettingsReloadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B955551819B36400BC7AF9 /* GCSettingsReloadViewController.m */; };
-		42B9E6AA19C423C500CA6358 /* GCFitBitActivities.m in Sources */ = {isa = PBXBuildFile; fileRef = 42318E7F19AF6821000CD26B /* GCFitBitActivities.m */; };
-		42B9E6AB19C423D400CA6358 /* GCFitBitReqBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42318E7C19AF1B63000CD26B /* GCFitBitReqBase.m */; };
 		42BAB8D4231C07E700639928 /* credentials.json in Resources */ = {isa = PBXBuildFile; fileRef = 427CF8C722ABD6BC00894253 /* credentials.json */; };
 		42BB0BE11AB4A99F008D5A10 /* activityweather_206621651.json in Resources */ = {isa = PBXBuildFile; fileRef = 42BB09C61AB4A99C008D5A10 /* activityweather_206621651.json */; };
 		42BB0BE21AB4A99F008D5A10 /* activityweather_255856625.json in Resources */ = {isa = PBXBuildFile; fileRef = 42BB09C71AB4A99D008D5A10 /* activityweather_255856625.json */; };
@@ -2057,6 +2016,8 @@
 		42FC17801E196E4B00F55302 /* GCTestActivityFitFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FC177F1E196E4B00F55302 /* GCTestActivityFitFile.swift */; };
 		42FD55B91B90A39F0070B3B4 /* GCCellActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */; };
 		42FD55BA1B90A39F0070B3B4 /* GCCellActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */; };
+		42FFF6A7232EDAE1008714D5 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 42FFF6A6232EDAE1008714D5 /* user.json */; };
+		42FFF6A8232EDAE1008714D5 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 42FFF6A6232EDAE1008714D5 /* user.json */; };
 		BF9120CBFA7E3BB8AEA21520 /* Pods_FitFileExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4291909821E226FF00E0B114 /* Pods_FitFileExplorer.framework */; };
 		FA5B4E7AA31A2F2A7CA5ED72 /* Pods_HealthStats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A8193CBDBE4DB491C7633CA /* Pods_HealthStats.framework */; };
 /* End PBXBuildFile section */
@@ -2612,8 +2573,6 @@
 		42018E9518F1877E0089AB7A /* GCFieldsCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldsCategory.m; path = src/GCFieldsCategory.m; sourceTree = "<group>"; };
 		42018E9E18F32E2F0089AB7A /* GCTableHeaderFieldsCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTableHeaderFieldsCategory.h; path = src/GCTableHeaderFieldsCategory.h; sourceTree = "<group>"; };
 		42018E9F18F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTableHeaderFieldsCategory.m; path = src/GCTableHeaderFieldsCategory.m; sourceTree = "<group>"; };
-		4201D4CB19D8BC4800059879 /* GCFitBitWeight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFitBitWeight.h; path = src/GCFitBitWeight.h; sourceTree = "<group>"; };
-		4201D4CC19D8BC4800059879 /* GCFitBitWeight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFitBitWeight.m; path = src/GCFitBitWeight.m; sourceTree = "<group>"; };
 		4202AE2121A72D9600D8D696 /* FITGarminDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITGarminDownloadManager.swift; path = src/FITGarminDownloadManager.swift; sourceTree = "<group>"; };
 		42091CFD1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitDailySummaryRequest.h; path = src/GCHealthKitDailySummaryRequest.h; sourceTree = "<group>"; };
 		42091CFE1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitDailySummaryRequest.m; path = src/GCHealthKitDailySummaryRequest.m; sourceTree = "<group>"; };
@@ -2644,8 +2603,6 @@
 		421516BB19A47C450080CD4C /* GCHealthKitRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitRequest.m; path = src/GCHealthKitRequest.m; sourceTree = "<group>"; };
 		421736A22066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCGarminRequestModernActivityTypes.h; path = src/GCGarminRequestModernActivityTypes.h; sourceTree = "<group>"; };
 		421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequestModernActivityTypes.m; path = src/GCGarminRequestModernActivityTypes.m; sourceTree = "<group>"; };
-		421747F619C4FD4800C13C16 /* GCFitBitActivitiesParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFitBitActivitiesParser.h; path = src/GCFitBitActivitiesParser.h; sourceTree = "<group>"; };
-		421747F719C4FD4800C13C16 /* GCFitBitActivitiesParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFitBitActivitiesParser.m; path = src/GCFitBitActivitiesParser.m; sourceTree = "<group>"; };
 		4217F53E21ACA12500C848A3 /* FITTimeSerieColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITTimeSerieColumn.swift; path = src/FITTimeSerieColumn.swift; sourceTree = "<group>"; };
 		421844AF1D75C3F5005B09BC /* GCSegmentOrganizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCSegmentOrganizer.swift; path = src/GCSegmentOrganizer.swift; sourceTree = "<group>"; };
 		421844B51D75D268005B09BC /* ConnectStatsXCTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnectStatsXCTests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -2685,8 +2642,6 @@
 		422657F7181D1C2E00373BDE /* GCWeather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWeather.m; path = src/GCWeather.m; sourceTree = "<group>"; };
 		4226B4271F65E2ED009E1104 /* GCWebRequestStandard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCWebRequestStandard.h; path = src/GCWebRequestStandard.h; sourceTree = "<group>"; };
 		4226B4281F65E2ED009E1104 /* GCWebRequestStandard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCWebRequestStandard.m; path = src/GCWebRequestStandard.m; sourceTree = "<group>"; };
-		4227776C1C36B870002F1D64 /* 998171890.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = 998171890.fit; sourceTree = "<group>"; };
-		4227776D1C36B870002F1D64 /* 988460411.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = 988460411.fit; sourceTree = "<group>"; };
 		422777721C36C940002F1D64 /* GCField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCField.h; path = src/GCField.h; sourceTree = "<group>"; };
 		422777731C36C940002F1D64 /* GCField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCField.m; path = src/GCField.m; sourceTree = "<group>"; };
 		4227C5AB1C0B1310003F0660 /* GCTestsGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestsGrid.m; sourceTree = "<group>"; };
@@ -2729,10 +2684,6 @@
 		422FAFF119A1DD6000D09773 /* HealthStats.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthStats.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		422FAFF219A1DD6100D09773 /* HealthStats-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HealthStats-Info.plist"; sourceTree = SOURCE_ROOT; };
 		42306C331F5C5FC400FC7CCB /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		42318E7B19AF1B63000CD26B /* GCFitBitReqBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFitBitReqBase.h; path = src/GCFitBitReqBase.h; sourceTree = "<group>"; };
-		42318E7C19AF1B63000CD26B /* GCFitBitReqBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFitBitReqBase.m; path = src/GCFitBitReqBase.m; sourceTree = "<group>"; };
-		42318E7E19AF6821000CD26B /* GCFitBitActivities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFitBitActivities.h; path = src/GCFitBitActivities.h; sourceTree = "<group>"; };
-		42318E7F19AF6821000CD26B /* GCFitBitActivities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFitBitActivities.m; path = src/GCFitBitActivities.m; sourceTree = "<group>"; };
 		4231A2B61603BF9C00C02D79 /* GCActivityDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityDetailViewController.h; path = src/GCActivityDetailViewController.h; sourceTree = "<group>"; };
 		4231A2B71603BF9C00C02D79 /* GCActivityDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCActivityDetailViewController.m; path = src/GCActivityDetailViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4231CB5C165AB5E60020FDB2 /* GCSettingsProfilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsProfilesViewController.h; path = src/GCSettingsProfilesViewController.h; sourceTree = "<group>"; };
@@ -2943,31 +2894,9 @@
 		427DDCC71DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminHeartRateZoneParser.m; path = src/GCGarminHeartRateZoneParser.m; sourceTree = "<group>"; };
 		427F93071BEA9A5900C177F9 /* activities_large.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = activities_large.db; sourceTree = "<group>"; };
 		427F93081BEA9A5900C177F9 /* activities_stats.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = activities_stats.db; sourceTree = "<group>"; };
-		427F93091BEA9A5900C177F9 /* activity_188115475_cycling.tcx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = activity_188115475_cycling.tcx; sourceTree = "<group>"; };
-		427F930A1BEA9A5900C177F9 /* activity_217470507_swimming.tcx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = activity_217470507_swimming.tcx; sourceTree = "<group>"; };
-		427F930B1BEA9A5900C177F9 /* activity_234721416_cycling.tcx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = activity_234721416_cycling.tcx; sourceTree = "<group>"; };
-		427F930C1BEA9A5900C177F9 /* activity_234979239_running.tcx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = activity_234979239_running.tcx; sourceTree = "<group>"; };
-		427F930D1BEA9A5900C177F9 /* activity_252083235_swim.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_252083235_swim.json; sourceTree = "<group>"; };
-		427F930E1BEA9A5900C177F9 /* activity_255778175.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_255778175.json; sourceTree = "<group>"; };
-		427F930F1BEA9A5900C177F9 /* activity_299898549_swim.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_299898549_swim.json; sourceTree = "<group>"; };
-		427F93101BEA9A5900C177F9 /* activity_379125535.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_379125535.json; sourceTree = "<group>"; };
-		427F93111BEA9A5900C177F9 /* activity_379125535.tcx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = activity_379125535.tcx; sourceTree = "<group>"; };
-		427F93121BEA9A5900C177F9 /* activity_385546640.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_385546640.json; sourceTree = "<group>"; };
-		427F93131BEA9A5900C177F9 /* activity_385546640.tcx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = activity_385546640.tcx; sourceTree = "<group>"; };
 		427F93141BEA9A5900C177F9 /* activity_400587208.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = activity_400587208.html; sourceTree = "<group>"; };
-		427F93151BEA9A5900C177F9 /* activity_400587208.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_400587208.json; sourceTree = "<group>"; };
-		427F93161BEA9A5900C177F9 /* activity_400587208.tcx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = activity_400587208.tcx; sourceTree = "<group>"; };
-		427F93171BEA9A5900C177F9 /* activitydetails_255778175.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitydetails_255778175.json; sourceTree = "<group>"; };
-		427F93181BEA9A5900C177F9 /* activitylaps_379125535.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitylaps_379125535.json; sourceTree = "<group>"; };
-		427F93191BEA9A5900C177F9 /* activitylaps_385546640.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitylaps_385546640.json; sourceTree = "<group>"; };
-		427F931A1BEA9A5900C177F9 /* activitylaps_400587208.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitylaps_400587208.json; sourceTree = "<group>"; };
-		427F931B1BEA9A5900C177F9 /* activitytrack_379125535.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitytrack_379125535.json; sourceTree = "<group>"; };
-		427F931C1BEA9A5900C177F9 /* activitytrack_385546640.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitytrack_385546640.json; sourceTree = "<group>"; };
-		427F931D1BEA9A5900C177F9 /* activitytrack_400587208.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitytrack_400587208.json; sourceTree = "<group>"; };
 		427F93231BEA9A5900C177F9 /* cycling.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cycling.png; sourceTree = "<group>"; };
-		427F93241BEA9A5900C177F9 /* expected.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = expected.json; sourceTree = "<group>"; };
 		427F93251BEA9A5900C177F9 /* laps_regr.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = laps_regr.plist; sourceTree = "<group>"; };
-		427F93261BEA9A5900C177F9 /* last_search.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_search.json; sourceTree = "<group>"; };
 		427F93271BEA9A5900C177F9 /* sample_activities.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample_activities.db; sourceTree = "<group>"; };
 		427F93281BEA9A5900C177F9 /* sample_activities_v1.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample_activities_v1.db; sourceTree = "<group>"; };
 		427F93291BEA9A5900C177F9 /* stats_cycling_monthly.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stats_cycling_monthly.csv; sourceTree = "<group>"; };
@@ -2976,7 +2905,6 @@
 		427F932C1BEA9A5900C177F9 /* stats_running_monthly.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stats_running_monthly.csv; sourceTree = "<group>"; };
 		427F932D1BEA9A5900C177F9 /* stats_running_weekly.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stats_running_weekly.csv; sourceTree = "<group>"; };
 		427F932E1BEA9A5900C177F9 /* stats_running_yearly.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stats_running_yearly.csv; sourceTree = "<group>"; };
-		427F932F1BEA9A5900C177F9 /* user.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = user.json; sourceTree = "<group>"; };
 		427F935A1BEAA05800C177F9 /* GCTestUISamples.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestUISamples.h; path = src/GCTestUISamples.h; sourceTree = "<group>"; };
 		427F935B1BEAA05800C177F9 /* GCTestUISamples.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestUISamples.m; path = src/GCTestUISamples.m; sourceTree = "<group>"; };
 		427F935D1BEAA09E00C177F9 /* GCTestUISampleDataSourceHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestUISampleDataSourceHolder.h; path = src/GCTestUISampleDataSourceHolder.h; sourceTree = "<group>"; };
@@ -3277,14 +3205,10 @@
 		42B5E2131BA5AF9A000FAE4E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = src/main.m; sourceTree = "<group>"; };
 		42B5E2371BA5B0EC000FAE4E /* ConnectStatsTest-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ConnectStatsTest-Prefix.pch"; path = "src/ConnectStatsTest-Prefix.pch"; sourceTree = "<group>"; };
 		42B5E2CF1BA5B589000FAE4E /* ConnectStatsTestApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ConnectStatsTestApp.entitlements; sourceTree = "<group>"; };
-		42B5E2D11BA5B62E000FAE4E /* GCFitBitActivityTypesParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFitBitActivityTypesParser.h; path = src/GCFitBitActivityTypesParser.h; sourceTree = "<group>"; };
-		42B5E2D21BA5B62E000FAE4E /* GCFitBitActivityTypesParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFitBitActivityTypesParser.m; path = src/GCFitBitActivityTypesParser.m; sourceTree = "<group>"; };
 		42B5E3331BA5BA2C000FAE4E /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LaunchScreen.xib; path = ../connectstatstestapp/icons/LaunchScreen.xib; sourceTree = "<group>"; };
 		42B5E3521BA5BA2C000FAE4E /* test_activity_running_828298988.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_828298988.db; path = ../derived/test_activity_running_828298988.db; sourceTree = "<group>"; };
 		42B5E3531BA5BA2C000FAE4E /* test_activity_running_830807000.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_830807000.db; path = ../derived/test_activity_running_830807000.db; sourceTree = "<group>"; };
 		42B5E3541BA5BA2C000FAE4E /* test_activity_running_835175535.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_835175535.db; path = ../derived/test_activity_running_835175535.db; sourceTree = "<group>"; };
-		42B5E3571BA5BA2C000FAE4E /* bike.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = bike.fit; sourceTree = "<group>"; };
-		42B5E3581BA5BA2C000FAE4E /* bike_vector.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = bike_vector.fit; sourceTree = "<group>"; };
 		42B5E35A1BA5BA2C000FAE4E /* fitbit_activity_types.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fitbit_activity_types.json; sourceTree = "<group>"; };
 		42B5E35B1BA5BA2C000FAE4E /* fitbit_list.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fitbit_list.json; sourceTree = "<group>"; };
 		42B5E35C1BA5BA2C000FAE4E /* fitbit_weight.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fitbit_weight.json; sourceTree = "<group>"; };
@@ -4313,6 +4237,7 @@
 		42FC177F1E196E4B00F55302 /* GCTestActivityFitFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCTestActivityFitFile.swift; sourceTree = "<group>"; };
 		42FD55B71B90A39F0070B3B4 /* GCCellActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCCellActivity.h; path = src/GCCellActivity.h; sourceTree = "<group>"; };
 		42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCCellActivity.m; path = src/GCCellActivity.m; sourceTree = "<group>"; };
+		42FFF6A6232EDAE1008714D5 /* user.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = user.json; path = connectstatstestapp/samples/InitialSamples/user.json; sourceTree = SOURCE_ROOT; };
 		5A27E308E28B0C345991A8A8 /* Pods_FitFileExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FitFileExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		722F58FE2B9F9EF1C1D899FD /* Pods-ConnectStatsTestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStatsTestApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		7511076C6F489225E4DB97A3 /* Pods-ConnectStats.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStats.release.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStats/Pods-ConnectStats.release.xcconfig"; sourceTree = "<group>"; };
@@ -4646,17 +4571,6 @@
 			name = HealthKit;
 			sourceTree = "<group>";
 		};
-		421747F519C4A9A900C13C16 /* Parsers */ = {
-			isa = PBXGroup;
-			children = (
-				42B5E2D11BA5B62E000FAE4E /* GCFitBitActivityTypesParser.h */,
-				42B5E2D21BA5B62E000FAE4E /* GCFitBitActivityTypesParser.m */,
-				421747F619C4FD4800C13C16 /* GCFitBitActivitiesParser.h */,
-				421747F719C4FD4800C13C16 /* GCFitBitActivitiesParser.m */,
-			);
-			name = Parsers;
-			sourceTree = "<group>";
-		};
 		4217847021CEA1F1006FE90A /* RZFitFileExtensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -4803,20 +4717,6 @@
 				42B34A2D179C31D500688E9F /* GCViewActivityTypeButton.m */,
 			);
 			name = Buttons;
-			sourceTree = "<group>";
-		};
-		42318E6E19AF19B3000CD26B /* FitBit */ = {
-			isa = PBXGroup;
-			children = (
-				421747F519C4A9A900C13C16 /* Parsers */,
-				42318E7B19AF1B63000CD26B /* GCFitBitReqBase.h */,
-				42318E7C19AF1B63000CD26B /* GCFitBitReqBase.m */,
-				42318E7E19AF6821000CD26B /* GCFitBitActivities.h */,
-				42318E7F19AF6821000CD26B /* GCFitBitActivities.m */,
-				4201D4CB19D8BC4800059879 /* GCFitBitWeight.h */,
-				4201D4CC19D8BC4800059879 /* GCFitBitWeight.m */,
-			);
-			name = FitBit;
 			sourceTree = "<group>";
 		};
 		4233EAE5166B89A300185978 /* Garmin */ = {
@@ -5389,9 +5289,8 @@
 		427F93061BEA9A5900C177F9 /* InitialSamples */ = {
 			isa = PBXGroup;
 			children = (
+				42FFF6A6232EDAE1008714D5 /* user.json */,
 				427F936B1BEC02FE00C177F9 /* csv */,
-				427F936A1BEC02C400C177F9 /* json */,
-				427F93691BEC02BE00C177F9 /* tcx */,
 				427F93071BEA9A5900C177F9 /* activities_large.db */,
 				427F93081BEA9A5900C177F9 /* activities_stats.db */,
 				427F93141BEA9A5900C177F9 /* activity_400587208.html */,
@@ -5436,43 +5335,6 @@
 				42B5E38F1BA5BA2C000FAE4E /* activities_testaccount.db */,
 			);
 			name = activitiesdb;
-			sourceTree = "<group>";
-		};
-		427F93691BEC02BE00C177F9 /* tcx */ = {
-			isa = PBXGroup;
-			children = (
-				427F93111BEA9A5900C177F9 /* activity_379125535.tcx */,
-				427F93131BEA9A5900C177F9 /* activity_385546640.tcx */,
-				427F93161BEA9A5900C177F9 /* activity_400587208.tcx */,
-				427F93091BEA9A5900C177F9 /* activity_188115475_cycling.tcx */,
-				427F930A1BEA9A5900C177F9 /* activity_217470507_swimming.tcx */,
-				427F930B1BEA9A5900C177F9 /* activity_234721416_cycling.tcx */,
-				427F930C1BEA9A5900C177F9 /* activity_234979239_running.tcx */,
-			);
-			name = tcx;
-			sourceTree = "<group>";
-		};
-		427F936A1BEC02C400C177F9 /* json */ = {
-			isa = PBXGroup;
-			children = (
-				427F93241BEA9A5900C177F9 /* expected.json */,
-				427F93261BEA9A5900C177F9 /* last_search.json */,
-				427F932F1BEA9A5900C177F9 /* user.json */,
-				427F93151BEA9A5900C177F9 /* activity_400587208.json */,
-				427F93171BEA9A5900C177F9 /* activitydetails_255778175.json */,
-				427F93181BEA9A5900C177F9 /* activitylaps_379125535.json */,
-				427F93191BEA9A5900C177F9 /* activitylaps_385546640.json */,
-				427F931A1BEA9A5900C177F9 /* activitylaps_400587208.json */,
-				427F931B1BEA9A5900C177F9 /* activitytrack_379125535.json */,
-				427F931C1BEA9A5900C177F9 /* activitytrack_385546640.json */,
-				427F931D1BEA9A5900C177F9 /* activitytrack_400587208.json */,
-				427F93121BEA9A5900C177F9 /* activity_385546640.json */,
-				427F930D1BEA9A5900C177F9 /* activity_252083235_swim.json */,
-				427F930E1BEA9A5900C177F9 /* activity_255778175.json */,
-				427F930F1BEA9A5900C177F9 /* activity_299898549_swim.json */,
-				427F93101BEA9A5900C177F9 /* activity_379125535.json */,
-			);
-			name = json;
 			sourceTree = "<group>";
 		};
 		427F936B1BEC02FE00C177F9 /* csv */ = {
@@ -5550,13 +5412,6 @@
 				42CE39451CA680E900919292 /* GCDerivedGroupedSeries.m */,
 			);
 			name = Derived;
-			sourceTree = "<group>";
-		};
-		428F1AF019855750006D4293 /* TrainingPeaks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = TrainingPeaks;
 			sourceTree = "<group>";
 		};
 		428FF6FE15F36888007A88FA = {
@@ -5744,9 +5599,7 @@
 			isa = PBXGroup;
 			children = (
 				42F0A4F01B60616500901CFF /* Derived */,
-				42318E6E19AF19B3000CD26B /* FitBit */,
 				421516B919A47C0B0080CD4C /* HealthKit */,
-				428F1AF019855750006D4293 /* TrainingPeaks */,
 				42959E3818DDA6A700C0B841 /* SportTracks */,
 				42EB515518A7E17300B85FAB /* Babolat */,
 				42AB66E016DC1CA300C633BD /* Withings */,
@@ -6254,7 +6107,6 @@
 				422AC6A11C1CC99E002DDA9C /* testactivities */,
 				427F93681BEC028C00C177F9 /* activitiesdb */,
 				427F93061BEA9A5900C177F9 /* InitialSamples */,
-				42B5E3561BA5BA2C000FAE4E /* fit */,
 				42B5E3591BA5BA2C000FAE4E /* fitbit */,
 				42B5E35F1BA5BA2C000FAE4E /* merge */,
 				42B5E3691BA5BA2C000FAE4E /* moves */,
@@ -6265,17 +6117,6 @@
 				42B5E4491BA5BA2D000FAE4E /* weather */,
 			);
 			path = samples;
-			sourceTree = "<group>";
-		};
-		42B5E3561BA5BA2C000FAE4E /* fit */ = {
-			isa = PBXGroup;
-			children = (
-				4227776C1C36B870002F1D64 /* 998171890.fit */,
-				4227776D1C36B870002F1D64 /* 988460411.fit */,
-				42B5E3571BA5BA2C000FAE4E /* bike.fit */,
-				42B5E3581BA5BA2C000FAE4E /* bike_vector.fit */,
-			);
-			path = fit;
 			sourceTree = "<group>";
 		};
 		42B5E3591BA5BA2C000FAE4E /* fitbit */ = {
@@ -8507,6 +8348,7 @@
 				428BAD171CB14B650041468A /* activityweather_1099599108.json in Resources */,
 				42BB0D351AB4A9A0008D5A10 /* activityweather_544186225.json in Resources */,
 				42BB0DD11AB4A9A0008D5A10 /* activityweather_635887889.json in Resources */,
+				42FFF6A8232EDAE1008714D5 /* user.json in Resources */,
 				42BB0DD71AB4A9A0008D5A10 /* activityweather_641333694.json in Resources */,
 				42BB0DFB1AB4A9A0008D5A10 /* activityweather_660765704.json in Resources */,
 				428BAD1A1CB14B650041468A /* activityweather_924421177.json in Resources */,
@@ -8812,7 +8654,6 @@
 				4253B4791CD4A53400437E6A /* track_1083407258.db in Resources */,
 				42BB0D901AB4A9A0008D5A10 /* activityweather_601873509.json in Resources */,
 				42BB0D7F1AB4A9A0008D5A10 /* activityweather_592583825.json in Resources */,
-				425AD6D71CCBAA4200A02822 /* user.json in Resources */,
 				42BB0D461AB4A9A0008D5A10 /* activityweather_553975509.json in Resources */,
 				42BB0C2B1AB4A99F008D5A10 /* activityweather_413382359.json in Resources */,
 				42C011911AB4891B0059B6CF /* activityweather_666522033.json in Resources */,
@@ -8850,24 +8691,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				427F93391BEA9A5900C177F9 /* activity_379125535.json in Resources */,
 				42B5E5571BA5BA2D000FAE4E /* track_364956048.db in Resources */,
 				42B5E4FF1BA5BA2D000FAE4E /* track_289943601.db in Resources */,
 				428BAD011CB149C50041468A /* activityweather_1089803211.json in Resources */,
-				427F93581BEA9A5900C177F9 /* user.json in Resources */,
 				42B5E5081BA5BA2D000FAE4E /* track_298179158.db in Resources */,
-				427F933E1BEA9A5900C177F9 /* activity_400587208.json in Resources */,
 				42B5E4911BA5BA2D000FAE4E /* sporttracks_track_5522409.json in Resources */,
 				420119B11F51BB180093B2CD /* babolat_session_8669.json in Resources */,
 				42B5E4D31BA5BA2D000FAE4E /* track_272621433.db in Resources */,
-				427F93381BEA9A5900C177F9 /* activity_299898549_swim.json in Resources */,
 				42B5E49D1BA5BA2D000FAE4E /* strava_laps_141871826.json in Resources */,
-				427F93351BEA9A5900C177F9 /* activity_234979239_running.tcx in Resources */,
 				42B5E4F31BA5BA2D000FAE4E /* track_286113858.db in Resources */,
 				428BACFA1CB149C50041468A /* activitylaps_1108368135.json in Resources */,
 				42B5E4F41BA5BA2D000FAE4E /* track_286809524.db in Resources */,
 				42B5E5531BA5BA2D000FAE4E /* track_356048305.db in Resources */,
-				427F93431BEA9A5900C177F9 /* activitylaps_400587208.json in Resources */,
 				42B5E4AD1BA5BA2D000FAE4E /* track_106460513.db in Resources */,
 				42B5E4881BA5BA2D000FAE4E /* strava_list_5.json in Resources */,
 				42B5E4771BA5BA2D000FAE4E /* test_activity_running_830807000.db in Resources */,
@@ -8917,7 +8752,6 @@
 				42B5E4CD1BA5BA2D000FAE4E /* track_267988066.db in Resources */,
 				42B5E50A1BA5BA2D000FAE4E /* track_298179177.db in Resources */,
 				42B5E5241BA5BA2D000FAE4E /* track_316610183.db in Resources */,
-				427F93461BEA9A5900C177F9 /* activitytrack_400587208.json in Resources */,
 				42B5E5181BA5BA2D000FAE4E /* track_306765747.db in Resources */,
 				42B5E4E01BA5BA2D000FAE4E /* track_279109271.db in Resources */,
 				42B5E4EB1BA5BA2D000FAE4E /* track_282589195.db in Resources */,
@@ -8935,9 +8769,7 @@
 				426B959F1C4A49FF00426CD2 /* activity_1008868846.json in Resources */,
 				42B5E5101BA5BA2D000FAE4E /* track_298962613.db in Resources */,
 				42B5E52C1BA5BA2D000FAE4E /* track_325023065.db in Resources */,
-				427F93321BEA9A5900C177F9 /* activity_188115475_cycling.tcx in Resources */,
 				42B5E4FC1BA5BA2D000FAE4E /* track_289259592.db in Resources */,
-				427F934D1BEA9A5900C177F9 /* expected.json in Resources */,
 				42B5E4AF1BA5BA2D000FAE4E /* track_176969424.db in Resources */,
 				420119B01F51BB180093B2CD /* babolat_player.json in Resources */,
 				4245DC811BE80CFF00D5B68E /* Cells.xcassets in Resources */,
@@ -8960,7 +8792,6 @@
 				42B5E53D1BA5BA2D000FAE4E /* track_336557897.db in Resources */,
 				42B5E5391BA5BA2D000FAE4E /* track_334088750.db in Resources */,
 				42B5E51D1BA5BA2D000FAE4E /* track_312526010.db in Resources */,
-				427F934F1BEA9A5900C177F9 /* last_search.json in Resources */,
 				42B5E4901BA5BA2D000FAE4E /* sporttracks_list_2.json in Resources */,
 				42B5E5521BA5BA2D000FAE4E /* track_356048291.db in Resources */,
 				422AC6A61C1CC9AA002DDA9C /* test_activity_day___healthkit__Default_20151106.db in Resources */,
@@ -8986,7 +8817,6 @@
 				42B5E5281BA5BA2D000FAE4E /* track_319954805.db in Resources */,
 				42B5E53F1BA5BA2D000FAE4E /* track_336557943.db in Resources */,
 				428BACF21CB149C50041468A /* activity_1089803211.json in Resources */,
-				42B5E47B1BA5BA2D000FAE4E /* bike_vector.fit in Resources */,
 				42B5E5441BA5BA2D000FAE4E /* track_342633568.db in Resources */,
 				420119C31F51BE270093B2CD /* babolat2017_session_924411.json in Resources */,
 				42B5E4D91BA5BA2D000FAE4E /* track_277978396.db in Resources */,
@@ -9046,7 +8876,6 @@
 				42B5E4E81BA5BA2D000FAE4E /* track_281519039.db in Resources */,
 				426B95A21C4A49FF00426CD2 /* activityweather_1008868846.json in Resources */,
 				42B5E5651BA5BA2D000FAE4E /* activity_395288954.html in Resources */,
-				427F933F1BEA9A5900C177F9 /* activity_400587208.tcx in Resources */,
 				42B5E5051BA5BA2D000FAE4E /* track_296300807.db in Resources */,
 				42B5E4CB1BA5BA2D000FAE4E /* track_267421132.db in Resources */,
 				42B5E4FD1BA5BA2D000FAE4E /* track_289943578.db in Resources */,
@@ -9058,6 +8887,7 @@
 				42B5E4A41BA5BA2D000FAE4E /* strava_stream_140735927.json in Resources */,
 				426A135B1C56E41300D61098 /* activity_1027746730.json in Resources */,
 				42B5E52E1BA5BA2D000FAE4E /* track_327324851.db in Resources */,
+				42FFF6A7232EDAE1008714D5 /* user.json in Resources */,
 				42B5E50C1BA5BA2D000FAE4E /* track_298583894.db in Resources */,
 				42B5E4F91BA5BA2D000FAE4E /* track_287446944.db in Resources */,
 				42B5E4DB1BA5BA2D000FAE4E /* track_278357672.db in Resources */,
@@ -9068,30 +8898,23 @@
 				427F93501BEA9A5900C177F9 /* sample_activities.db in Resources */,
 				427F934C1BEA9A5900C177F9 /* cycling.png in Resources */,
 				42B5E47D1BA5BA2D000FAE4E /* fitbit_list.json in Resources */,
-				422777711C36B87D002F1D64 /* 998171890.fit in Resources */,
 				42B5E50F1BA5BA2D000FAE4E /* track_298962575.db in Resources */,
 				42B5E5021BA5BA2D000FAE4E /* track_294945994.db in Resources */,
-				427F93331BEA9A5900C177F9 /* activity_217470507_swimming.tcx in Resources */,
 				42B5E4811BA5BA2D000FAE4E /* last_search_0.json in Resources */,
 				42B5E4C31BA5BA2D000FAE4E /* track_246518182.db in Resources */,
 				427F93301BEA9A5900C177F9 /* activities_large.db in Resources */,
 				42B5E4D21BA5BA2D000FAE4E /* track_271775992.db in Resources */,
 				42B5E5331BA5BA2D000FAE4E /* track_331118611.db in Resources */,
-				427F93411BEA9A5900C177F9 /* activitylaps_379125535.json in Resources */,
 				42B5E4D51BA5BA2D000FAE4E /* track_275746841.db in Resources */,
 				42B5E5611BA5BA2D000FAE4E /* track_88257951.db in Resources */,
 				42B5E5401BA5BA2D000FAE4E /* track_337857792.db in Resources */,
 				42B5E53C1BA5BA2D000FAE4E /* track_336074520.db in Resources */,
 				424208911BCAF9D800F3DB12 /* Activities.xcassets in Resources */,
-				427F93341BEA9A5900C177F9 /* activity_234721416_cycling.tcx in Resources */,
 				427F93561BEA9A5900C177F9 /* stats_running_weekly.csv in Resources */,
-				427F93361BEA9A5900C177F9 /* activity_252083235_swim.json in Resources */,
 				42B5E54D1BA5BA2D000FAE4E /* track_354535224.db in Resources */,
-				42B5E47A1BA5BA2D000FAE4E /* bike.fit in Resources */,
 				420119BF1F51BE270093B2CD /* babolat2017_session_8669.json in Resources */,
 				42B5E4D81BA5BA2D000FAE4E /* track_277014538.db in Resources */,
 				42B5E4BB1BA5BA2D000FAE4E /* track_216699577.db in Resources */,
-				427F93441BEA9A5900C177F9 /* activitytrack_379125535.json in Resources */,
 				42B5E5201BA5BA2D000FAE4E /* track_316236699.db in Resources */,
 				42B5E4C01BA5BA2D000FAE4E /* track_217140612.db in Resources */,
 				428BACF51CB149C50041468A /* activity_1108368135.json in Resources */,
@@ -9111,7 +8934,6 @@
 				42B5E4DF1BA5BA2D000FAE4E /* track_279022423.db in Resources */,
 				42B5E4CA1BA5BA2D000FAE4E /* track_266437979.db in Resources */,
 				42B5E5251BA5BA2D000FAE4E /* track_318141407.db in Resources */,
-				422777701C36B878002F1D64 /* 988460411.fit in Resources */,
 				42B5E4FB1BA5BA2D000FAE4E /* track_289259576.db in Resources */,
 				42B5E4EF1BA5BA2D000FAE4E /* track_283292133.db in Resources */,
 				42B5E57D1BA5BBF1000FAE4E /* fields.db in Resources */,
@@ -9132,10 +8954,8 @@
 				420119C41F51BE270093B2CD /* babolat2017_sessions.json in Resources */,
 				428BACFF1CB149C50041468A /* activitytrack_1108368135.json in Resources */,
 				42B5E5291BA5BA2D000FAE4E /* track_321883606.db in Resources */,
-				427F933C1BEA9A5900C177F9 /* activity_385546640.tcx in Resources */,
 				420119C11F51BE270093B2CD /* babolat2017_session_174029.json in Resources */,
 				42B5E4A31BA5BA2D000FAE4E /* strava_stream_140735593.json in Resources */,
-				427F93371BEA9A5900C177F9 /* activity_255778175.json in Resources */,
 				42B5E5671BA5BA2D000FAE4E /* activity_397686263.html in Resources */,
 				427F93521BEA9A5900C177F9 /* stats_cycling_monthly.csv in Resources */,
 				42B5E5661BA5BA2D000FAE4E /* activity_395288975.html in Resources */,
@@ -9143,20 +8963,17 @@
 				428BACFC1CB149C50041468A /* activitytrack_1089803211.json in Resources */,
 				427CF8D322ABD6BC00894253 /* credentials.json in Resources */,
 				427F93551BEA9A5900C177F9 /* stats_running_monthly.csv in Resources */,
-				427F93421BEA9A5900C177F9 /* activitylaps_385546640.json in Resources */,
 				42B5E4EA1BA5BA2D000FAE4E /* track_281838126.db in Resources */,
 				42B5E5621BA5BA2D000FAE4E /* personId.js in Resources */,
 				428BACF71CB149C50041468A /* activitylaps_1089803211.json in Resources */,
 				428BACFD1CB149C50041468A /* activitytrack_1099599108.json in Resources */,
 				42B5E4BD1BA5BA2D000FAE4E /* track_216699607.db in Resources */,
 				42B5E4D71BA5BA2D000FAE4E /* track_276019749.db in Resources */,
-				427F933A1BEA9A5900C177F9 /* activity_379125535.tcx in Resources */,
 				42B5E4B31BA5BA2D000FAE4E /* track_188726280.db in Resources */,
 				42523AB41D6B289300F6D6C6 /* test_activity_running_1266384539.db in Resources */,
 				42B5E4DD1BA5BA2D000FAE4E /* track_278651129.db in Resources */,
 				42B5E4A11BA5BA2D000FAE4E /* strava_stream_121861761.json in Resources */,
 				42B5E5151BA5BA2D000FAE4E /* track_300889015.db in Resources */,
-				427F933B1BEA9A5900C177F9 /* activity_385546640.json in Resources */,
 				42B5E4D41BA5BA2D000FAE4E /* track_275632201.db in Resources */,
 				42B5E4A71BA5BA2D000FAE4E /* activities_bricegoogle.db in Resources */,
 				42B5E5591BA5BA2D000FAE4E /* track_364956106.db in Resources */,
@@ -9166,14 +8983,12 @@
 				42B5E4D11BA5BA2D000FAE4E /* track_270697493.db in Resources */,
 				42B5E4781BA5BA2D000FAE4E /* test_activity_running_835175535.db in Resources */,
 				42B5E4A91BA5BA2D000FAE4E /* activities_GaryNolan.db in Resources */,
-				427F93451BEA9A5900C177F9 /* activitytrack_385546640.json in Resources */,
 				42B5E4FA1BA5BA2D000FAE4E /* track_288133262.db in Resources */,
 				42B5E4C51BA5BA2D000FAE4E /* track_260624979.db in Resources */,
 				42B5E4D61BA5BA2D000FAE4E /* track_275746920.db in Resources */,
 				42B5E55A1BA5BA2D000FAE4E /* track_64318899.db in Resources */,
 				42B5E4B21BA5BA2D000FAE4E /* track_180037165.db in Resources */,
 				42B5E5581BA5BA2D000FAE4E /* track_364956086.db in Resources */,
-				427F93401BEA9A5900C177F9 /* activitydetails_255778175.json in Resources */,
 				42B5E56A1BA5BA2D000FAE4E /* activity_397686290.html in Resources */,
 				42B5E48B1BA5BA2D000FAE4E /* moves.json in Resources */,
 				42B5E5031BA5BA2D000FAE4E /* track_294946021.db in Resources */,
@@ -9447,7 +9262,6 @@
 				422FAEAC19A1DD6000D09773 /* GCGarminLoginSSORequest.m in Sources */,
 				422FAEB019A1DD6000D09773 /* GCDerivedOrganizer.m in Sources */,
 				422FAEB219A1DD6000D09773 /* GCWebConnect+Requests.m in Sources */,
-				421747F919C4FD4800C13C16 /* GCFitBitActivitiesParser.m in Sources */,
 				422FAEB519A1DD6000D09773 /* main.m in Sources */,
 				422FAEB619A1DD6000D09773 /* GCAppDelegate.m in Sources */,
 				4257766623205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */,
@@ -9468,7 +9282,6 @@
 				422FAEBF19A1DD6000D09773 /* GCWebUrl.m in Sources */,
 				42BFC25E1DCF516C00EAD40E /* GCStravaAthleteParser.swift in Sources */,
 				422FAEC119A1DD6000D09773 /* GCSportTracksBase.m in Sources */,
-				42B9E6AA19C423C500CA6358 /* GCFitBitActivities.m in Sources */,
 				422FAEC319A1DD6000D09773 /* GCBabolatLoginRequest.m in Sources */,
 				422FAEC419A1DD6000D09773 /* GCActivityTennisHeatmap.m in Sources */,
 				422FAEC519A1DD6000D09773 /* GCTableHeaderFieldsCategory.m in Sources */,
@@ -9502,7 +9315,6 @@
 				42BFC2601DCF517700EAD40E /* GCStravaSegmentEffortStream.m in Sources */,
 				422FAEE119A1DD6000D09773 /* GCStatsOneFieldViewController.m in Sources */,
 				422FAEE919A1DD6000D09773 /* GCGarminActivityLapsParser.m in Sources */,
-				4201D4CE19D8BC4800059879 /* GCFitBitWeight.m in Sources */,
 				424F92D71B1073100075C5F1 /* GCMapWindCompass.m in Sources */,
 				42091D001B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m in Sources */,
 				42C011441AB43DFD0059B6CF /* GCGarminRequestActivityWeather.m in Sources */,
@@ -9512,7 +9324,6 @@
 				422FAEF319A1DD6000D09773 /* GCSettingsViewController.m in Sources */,
 				42DC51621B278BE800B5C12F /* GCHealthKitDayDetailParser.m in Sources */,
 				422FAEF419A1DD6000D09773 /* GCStatsMultiFieldViewController.m in Sources */,
-				42B9E6AB19C423D400CA6358 /* GCFitBitReqBase.m in Sources */,
 				422FAEF519A1DD6000D09773 /* GCDerivedDataSerie.m in Sources */,
 				423F9FCA19AD2ACA0057DB5A /* GCStatsHistGraphConfig.m in Sources */,
 				422FAEF719A1DD6000D09773 /* GCSportTracksActivityDetailParser.m in Sources */,
@@ -9830,7 +9641,6 @@
 				4211C52819A72447000DEF87 /* GCHealthKitBodyRequest.m in Sources */,
 				42200EDB17F831B30078B45A /* GCGarminActivityLapsParser.m in Sources */,
 				42BC53611618A90D00576097 /* GCCalendarDataSource.m in Sources */,
-				42318E7D19AF1B63000CD26B /* GCFitBitReqBase.m in Sources */,
 				42091CFF1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m in Sources */,
 				42BC53671618EA1900576097 /* GCTrackStats.m in Sources */,
 				42CC45CB200A67C0003EB805 /* GCSettingsBugReport.m in Sources */,
@@ -9838,7 +9648,6 @@
 				42A3AA3B1D43F51C004FBFD0 /* GCStravaSegmentEffortStream.m in Sources */,
 				42C3CF471DA15E6900C25709 /* GCAppGlobal.swift in Sources */,
 				42BC5395161E350B00576097 /* GCStatsMultiFieldViewController.m in Sources */,
-				42318E8019AF6821000CD26B /* GCFitBitActivities.m in Sources */,
 				420967511895566200D32CA7 /* GCDerivedDataSerie.m in Sources */,
 				42A22DE019E1AAFD004407B8 /* GCWithingsBodyMeasures.m in Sources */,
 				42018E8118F07CD60089AB7A /* GCSportTracksActivityDetailParser.m in Sources */,
@@ -9915,14 +9724,12 @@
 				427208651DE7A4A800924C90 /* FITFitFileInterpret.swift in Sources */,
 				42734CE31695797A003E2177 /* GCActivitySummaryValue.m in Sources */,
 				427208691DE7A4CA00924C90 /* FITFitFile.swift in Sources */,
-				421747F819C4FD4800C13C16 /* GCFitBitActivitiesParser.m in Sources */,
 				42EEAEC0169F67670058965A /* GCExportGoogleEarth.m in Sources */,
 				42EEAED016A1BA2E0058965A /* GCSharingViewController.m in Sources */,
 				42EEAEE316A35EDC0058965A /* GCExportText.m in Sources */,
 				42EEAEE916A3679C0058965A /* GCActivity+ExportText.m in Sources */,
 				42A6E3411D55110C0081608D /* GCStravaTrainingZones.m in Sources */,
 				421F39A81B79EF8900CA7200 /* GCActivityThumbnails.m in Sources */,
-				4201D4CD19D8BC4800059879 /* GCFitBitWeight.m in Sources */,
 				421208901C6E860700E0470D /* GCFieldsForCategory.m in Sources */,
 				4209E1911DA44EC800B80735 /* GCActivitiesOrganizerListRegister.m in Sources */,
 				42A22DDC19E1A798004407B8 /* GCWithingsReqBase.m in Sources */,
@@ -10085,7 +9892,6 @@
 				427F937D1BEDFF3E00C177F9 /* GCStatsOneFieldGraphViewController.m in Sources */,
 				421A51521C82FB4000671587 /* GCStatsHistGraphViewController.m in Sources */,
 				426A7F4C1C426A95000C5BCC /* GCTrackPointExtraIndex.m in Sources */,
-				42B5E2D31BA5B62E000FAE4E /* GCFitBitActivityTypesParser.m in Sources */,
 				426B0F0E1DA111AD0091A734 /* GCGarminSearchModernJsonParser.m in Sources */,
 				42A3AA3D1D44EBB5004FBFD0 /* GCStravaAthlete.m in Sources */,
 				42B5E2541BA5B216000FAE4E /* GCDerivedOrganizer.m in Sources */,
@@ -10101,12 +9907,8 @@
 				4287DC101BDB88FE00C54A51 /* GCStatsMultiFieldConfig.m in Sources */,
 				42C5A1B222AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */,
 				422B343E1CA7321200B345CD /* GCFieldCache.m in Sources */,
-				42B5E25D1BA5B216000FAE4E /* GCFitBitActivitiesParser.m in Sources */,
 				42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */,
-				42B5E25E1BA5B216000FAE4E /* GCFitBitReqBase.m in Sources */,
-				42B5E25F1BA5B216000FAE4E /* GCFitBitActivities.m in Sources */,
 				421208911C6E860700E0470D /* GCFieldsForCategory.m in Sources */,
-				42B5E2601BA5B216000FAE4E /* GCFitBitWeight.m in Sources */,
 				42B5E2611BA5B216000FAE4E /* GCHealthKitActivityRequest.m in Sources */,
 				42B467BB1DC6A74200279DC8 /* GCAppProfiles.m in Sources */,
 				42B5E2621BA5B216000FAE4E /* GCHealthKitActivityParser.m in Sources */,

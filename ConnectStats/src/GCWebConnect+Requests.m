@@ -44,12 +44,6 @@
 #import "GCConnectStatsRequestFitFile.h"
 #import "GCConnectStatsRequestLogin.h"
 
-#import "GCSportTracksActivityList.h"
-#import "GCSportTracksActivityDetail.h"
-
-#import "GCFitBitActivities.h"
-#import "GCFitBitWeight.h"
-
 #import "GCWithingsBodyMeasures.h"
 #import "GCWithingsActivityMeasures.h"
 #import "GCWithingsSleepMeasures.h"
@@ -135,9 +129,6 @@
         });
     }
 
-    if ([[GCAppGlobal profile] configGetBool:CONFIG_SPORTTRACKS_ENABLE defaultValue:NO]) {
-        [self addRequest:[GCSportTracksActivityList activityList:[GCAppGlobal currentNavigationController]]];
-    }
     if ([[GCAppGlobal profile] configGetBool:CONFIG_BABOLAT_ENABLE defaultValue:false]) {
         [self addRequest:[GCBabolatLoginRequest babolatLoginRequest]];
     }
@@ -151,9 +142,6 @@
             }
             [self healthStoreUpdate];
         }
-    }
-    if ([[GCAppGlobal profile] configGetBool:CONFIG_FITBIT_ENABLE defaultValue:NO])  {
-        [self fitBitUpdate];
     }
     if ([[GCAppGlobal profile] configGetBool:CONFIG_ENABLE_DERIVED defaultValue:[GCAppGlobal connectStatsVersion]]) {
         [self derivedComputations:1];
@@ -211,7 +199,6 @@
     [self resetSuccessfulLogin];
     [self clearCookies];
     [GCStravaReqBase signout];
-    [GCSportTracksBase signout];
     [self servicesLogin];
 }
 -(void)servicesLogin{
@@ -370,15 +357,6 @@
     });
 }
 
-#pragma mark - sporttracks
-
--(void)sportTracksDownloadActivityTrackPoints:(NSString*)aId withUri:(NSString*)uri{
-    if ([GCAppGlobal currentNavigationController]) {
-        [self addRequest:[GCSportTracksActivityDetail activityDetail:[GCAppGlobal currentNavigationController] forActivityId:aId andUri:uri]];
-    }
-
-}
-
 #pragma mark - healthstore
 
 -(void)healthStoreUpdate{
@@ -407,18 +385,6 @@
 
 -(void)healthStoreCheckSource{
     [self addRequest:[GCHealthKitSourcesRequest request]];
-}
-
-#pragma mark - fitbit
-
--(void)fitBitUpdate{
-    [self addRequest:[GCFitBitActivities activitiesForDate:[NSDate date] with:[GCAppGlobal currentNavigationController]]];
-    NSDate * last = [[[GCAppGlobal organizer] activities].lastObject date];
-    [self addRequest:[GCFitBitWeight activitiesFromDate:last to:[NSDate date] with:[GCAppGlobal currentNavigationController]]];
-}
-
--(void)fitBitUpdateFromDate:(NSDate*)date{
-    [self addRequest:[GCFitBitActivities activitiesForDate:date with:[GCAppGlobal currentNavigationController]]];
 }
 
 #pragma mark - Babolat
