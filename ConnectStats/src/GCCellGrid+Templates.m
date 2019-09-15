@@ -46,8 +46,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
 -(void)setupForText:(NSString*)aText{
     [self setupForRows:1 andCols:1];
-    [self labelForRow:0 andCol:0].text = aText;
-
+    [self labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16] withString: aText];
 }
 
 #pragma mark - Activity Details Cells
@@ -80,7 +79,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
             self.iconPosition = gcIconPositionLeft;
         }else{
             [self setIconImage:nil];
-            [self labelForRow:0 andCol:1].text = [weather weatherDisplayField:GC_WEATHER_ICON];
+            [self labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                     withString:[weather weatherDisplayField:GC_WEATHER_ICON]];
         }
         [GCViewConfig setupGradientForDetails:self];
     }
@@ -129,6 +129,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
 
     [GCViewConfig setupGradientForDetails:self];
+    
     if(graphIcon){
         [self setIconImage:[GCViewIcons cellIconFor:gcIconCellLineChart]];
     }else{
@@ -162,8 +163,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
                 GCNumberWithUnit * addNumber = [activity numberWithUnitForFieldKey:addField];
                 if (addNumber) {
                     GCFormattedField* theOne = [GCFormattedField formattedField:addField activityType:activity.activityType forNumber:addNumber forSize:14.];
-                    theOne.valueColor = [UIColor darkGrayColor];
-                    theOne.labelColor = [UIColor darkGrayColor];
+                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     if ([addNumber sameUnit:mainN]) {
                         theOne.noUnits = true;
                     }
@@ -184,8 +185,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
                 GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
                 if (addNumber) {
                     GCFormattedField* theOne = [GCFormattedField formattedField:addField.key activityType:activity.activityType forNumber:addNumber forSize:14.];
-                    theOne.valueColor = [UIColor darkGrayColor];
-                    theOne.labelColor = [UIColor darkGrayColor];
+                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     if ([addNumber sameUnit:mainN]) {
                         theOne.noUnits = true;
                     }
@@ -239,11 +240,11 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     [self setupForRows:3 andCols:1];
 
     NSDictionary * locAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
-                                    NSForegroundColorAttributeName: [UIColor blueColor]};
+                                    NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorHighlightedText]};
     NSDictionary * dateAttributes = @{NSFontAttributeName: [GCViewConfig boldSystemFontOfSize:16.],
-                                     NSForegroundColorAttributeName: [UIColor blackColor]};
+                                     NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
     NSDictionary * nameAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:14.],
-                                          NSForegroundColorAttributeName: [UIColor blackColor]};
+                                          NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
 
     NSString * dateStr =[NSDateFormatter localizedStringFromDate:activity.date dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
 
@@ -360,11 +361,11 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
                                                          forNumber:nu_steps forSize:14.];
 
     NSDictionary * dateAttributes = @{ NSFontAttributeName:[GCViewConfig boldSystemFontOfSize:16.],
-                                       NSForegroundColorAttributeName:[UIColor blackColor]
+                                       NSForegroundColorAttributeName:[GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]
                                        };
 
     NSDictionary * dateSmallAttributes = @{ NSFontAttributeName:[GCViewConfig systemFontOfSize:12.],
-                                            NSForegroundColorAttributeName:[UIColor blackColor]
+                                            NSForegroundColorAttributeName:[GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]
                                             };
 
     GCNumberWithUnit * maxHR = [activity numberWithUnitForFieldKey:@"MaxHeartRate"];
@@ -424,11 +425,11 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     GCFormattedField * shots = [GCFormattedField formattedField:nil activityType:nil forNumber:val forSize:16.];
 
     NSDictionary * locAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
-                                     NSForegroundColorAttributeName: [UIColor blueColor]};
+                                     NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorHighlightedText]};
     NSDictionary * dateAttributes = @{NSFontAttributeName: [GCViewConfig boldSystemFontOfSize:16.],
-                                      NSForegroundColorAttributeName: [UIColor blackColor]};
+                                      NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
     NSDictionary * dateSmallAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
-                                           NSForegroundColorAttributeName: [UIColor blackColor]};
+                                           NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
 
     NSDate * date = activity.date;
     NSString * dispname = [activity displayName];
@@ -504,6 +505,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     GCFormattedField * speed    = [GCFormattedField formattedField:nil activityType:nil
                                                          forNumber:speednu forSize:12.];
 
+    BOOL skipAlways = activity.skipAlways;
     BOOL showBpm = ( bpmnu != nil && bpmnu.value!=0.);
     BOOL showSpeed = (speednu != nil && speednu.value != 0.);
 
@@ -523,12 +525,20 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }
 
     NSDictionary * locAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
-                                                                              NSForegroundColorAttributeName: [UIColor blueColor]};
+                                                                              NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorHighlightedText]};
     NSDictionary * dateAttributes = @{NSFontAttributeName: [GCViewConfig boldSystemFontOfSize:16.],
-                                                                                NSForegroundColorAttributeName: [UIColor blackColor]};
+                                                                                NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
     NSDictionary * dateSmallAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
-                                     NSForegroundColorAttributeName: [UIColor blackColor]};
+                                     NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
 
+    if( skipAlways ){
+        locAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
+                          NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]};
+        dateAttributes = @{NSFontAttributeName: [GCViewConfig boldSystemFontOfSize:16.],
+                                          NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]};
+        dateSmallAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
+                                               NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]};
+    }
     NSDate * date = activity.date;
     NSString * dispname = [activity displayName];
     if (dispname.length>24) {
@@ -556,21 +566,27 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
     duration.valueFont = [GCViewConfig systemFontOfSize:16.];// remove bold
 
-    bpm.labelColor = [UIColor darkGrayColor];
-    bpm.valueColor = [UIColor darkGrayColor];
+    bpm.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+    bpm.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
     bpm.valueFont = [GCViewConfig systemFontOfSize:12.];
 
-    speed.labelColor = [UIColor darkGrayColor];
-    speed.valueColor = [UIColor darkGrayColor];
+    speed.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+    speed.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
     speed.valueFont = [GCViewConfig systemFontOfSize:12.];
 
-    [GCViewConfig setupGradient:self ForActivity:activity];
+    if( skipAlways ){
+        [self setupBackgroundColors:@[ [GCViewConfig defaultColor:gcSkinDefaultColorTertiaryText] ]];
+        duration.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+        distance.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+        distance.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+    }else{
+        [GCViewConfig setupGradient:self ForActivity:activity];
+    }
 
     self.enableButtons = true;
-    self.leftButtonText = NSLocalizedString(@"More", @"Grid Cell Button");
+    self.leftButtonText = skipAlways ? NSLocalizedString(@"Use", @"Grid Cell Button") : NSLocalizedString(@"Ignore", @"Grid Cell Button");
     self.rightButtonText = status == gcViewActivityStatusCompare ? NSLocalizedString(@"Clear", @"Grid Cell Button") :
         NSLocalizedString(@"Mark", @"Grid Cell Button");
-
 
     if (width < 600.) {
         [self setupForRows:3 andCols:3];
@@ -718,13 +734,13 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
     }
 
-    detail1.labelColor = [UIColor darkGrayColor];
-    detail1.valueColor = [UIColor darkGrayColor];
+    detail1.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+    detail1.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
     detail1.valueFont = [GCViewConfig systemFontOfSize:14.];
     detail1.labelFont = [GCViewConfig systemFontOfSize:12.];
 
-    detail2.labelColor = [UIColor darkGrayColor];
-    detail2.valueColor = [UIColor darkGrayColor];
+    detail2.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+    detail2.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
     detail2.valueFont = [GCViewConfig systemFontOfSize:14.];
     detail2.labelFont = [GCViewConfig systemFontOfSize:12.];
 
@@ -801,8 +817,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }else if ([data.field isMax]){
         extra = [GCFormattedField formattedField:@"Max" activityType:aType forNumber:[data maxWithUnit:which] forSize:14.];
     }
-    [count setColor:[UIColor darkGrayColor]];
-    [extra setColor:[UIColor darkGrayColor]];
+    [count setColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
+    [extra setColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
 
     count.noDisplayField = true;
     extra.noDisplayField = true;
@@ -860,13 +876,13 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     minF.noDisplayField = true;
     stdF.noDisplayField = true;
 
-    [cntF setColor:[UIColor darkGrayColor]];
-    [maxF setColor:[UIColor darkGrayColor]];
-    [minF setColor:[UIColor darkGrayColor]];
-    [stdF setColor:[UIColor darkGrayColor]];
+    [cntF setColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
+    [maxF setColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
+    [minF setColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
+    [stdF setColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
 
     NSDictionary * dateAttr = @{NSFontAttributeName: [GCViewConfig boldSystemFontOfSize:14.],
-                                     NSForegroundColorAttributeName: [UIColor blackColor]};
+                                     NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
 
     [self setupForRows:3 andCols:3];
     [self labelForRow:0 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:[date calendarUnitFormat:[GCViewConfig calendarUnitForViewChoice:viewChoice]] attributes:dateAttr] autorelease];
@@ -897,8 +913,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     GCFormattedFieldText * sub = [GCFormattedFieldText formattedFieldText:@"Count"
                                                                     value:countText forSize:14.];
 
-    sub.valueColor = [UIColor darkGrayColor];
-    sub.labelColor = [UIColor darkGrayColor];
+    sub.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+    sub.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
 
     [self labelForRow:0 andCol:0].attributedText = [title attributedString];
     [self labelForRow:1 andCol:0].attributedText = [sub attributedString];
@@ -927,7 +943,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 -(void)setupStatsQuartile:(NSUInteger)row in:(GCStatsDataSerie*)quartiles for:(GCHistoryFieldDataSerie*)activityStats{
     if ([quartiles count] < 4) {
         [self setupForRows:1 andCols:1];
-        [self labelForRow:0 andCol:0].text = NSLocalizedString(@"Not enough observations", @"Stats Cell");
+        [self labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                 withString:NSLocalizedString(@"Not enough observations", @"Stats Cell")];
     }
     else{
         [self setupForRows:2 andCols:2];
@@ -1041,15 +1058,16 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         }
     }
     if (lap.label) {
-        [self labelForRow:0 andCol:0].text = lap.label;
+        [self labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                 withString:lap.label];
     }else{
         if (isSki) {
-            [self labelForRow:0 andCol:0].text = [NSString stringWithFormat:NSLocalizedString(@"Run %d",@"Lap Cell"),
-                                                  idx+1];
+            [self labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                           withFormat:NSLocalizedString(@"Run %d",@"Lap Cell"),idx+1];
 
         }else{
-            [self labelForRow:0 andCol:0].text = [NSString stringWithFormat:NSLocalizedString(@"Lap %d",@"Lap Cell"),
-                                                  idx+1];
+            [self labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                     withFormat:NSLocalizedString(@"Lap %d",@"Lap Cell"),idx+1];
         }
     }
     if (wide) {
@@ -1093,7 +1111,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         GCNumberWithUnit * number = [[aLap numberWithUnitForField:field inActivity:activity] convertToUnit:displayUnit];;
         GCFormattedField * numberF = [GCFormattedField formattedField:nil activityType:nil forNumber:number forSize:16.];
 
-        [self labelForRow:0 andCol:0].text = display ?: field.key;
+        [self labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                 withString:display ?: field.key];
         [self labelForRow:0 andCol:1].attributedText = [numberF attributedString];
         if (wide) {
             [self configForRow:0 andCol:1].horizontalAlign = gcHorizontalAlignLeft;
@@ -1140,13 +1159,13 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
             [GCFormattedField formattedField:nil activityType:nil forNumber:number2 forSize:16.]:
             [GCFormattedField formattedField:nil activityType:nil forNumber:number2 forSize:14.];
         if (!wide) {
-            [number2F setColor:[UIColor darkGrayColor]];
+            [number2F setColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
         }
 
         NSAttributedString * under = [[[NSAttributedString alloc] initWithString:display2 ?: field2
                                                                       attributes:wide?[GCViewConfig attribute16]:[GCViewConfig attribute14Gray]] autorelease];
 
-        [self labelForRow:0 andCol:0].text = display1 ?: field1.key;
+        [self labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16] withString:display1 ?: field1.key];
         [self labelForRow:0 andCol:1].attributedText = [numberF1 attributedString];
         if (wide) {
             [self configForRow:0 andCol:1].horizontalAlign = gcHorizontalAlignLeft;
@@ -1199,7 +1218,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
     GCFormattedField * stke  = [GCFormattedField formattedField:[GCFields swimStrokeName:lap.directSwimStroke] activityType:nil forNumber:nil forSize:12];
     stke.noDisplayField = true;
-    [stke setColor:[UIColor darkGrayColor]];
+    [stke setColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
 
     if (![lap active]) {
         distF = [GCFormattedField formattedField:@"Rest" activityType:nil forNumber:nil forSize:14];
@@ -1216,11 +1235,11 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         [is appendAttributedString:[[[NSAttributedString alloc] initWithString:len attributes:[GCViewConfig attribute14Gray]] autorelease]];
         [self labelForRow:0 andCol:0].attributedText = is;
     }else if (lgth){
-        [self labelForRow:0 andCol:0].text = [NSString stringWithFormat:NSLocalizedString(@"Int %d",@"Lap Cell"),
-                                              idx+1];
+        [self labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                       withFormat:NSLocalizedString(@"Int %d",@"Lap Cell"), idx+1];
     }else{
-        [self labelForRow:0 andCol:0].text = [NSString stringWithFormat:NSLocalizedString(@"Len %d",@"Lap Cell"),
-                                              idx+1];
+        [self labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                 withFormat:NSLocalizedString(@"Len %d",@"Lap Cell"),idx+1];
     }
     [self labelForRow:1 andCol:0].attributedText = [stke attributedString];
 
@@ -1286,8 +1305,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     GCFormattedFieldText * heatRight = [GCFormattedFieldText formattedFieldText:rightLabel
                                                                      value:[right formatDouble]
                                                                    forSize:14.];
-    heatRight.labelColor = [UIColor darkGrayColor];
-    heatLeft.labelColor = [UIColor darkGrayColor];
+    heatRight.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+    heatLeft.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
     [self labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:typeLabel attribute:@selector(attribute16)];
     [self labelForRow:0 andCol:1].attributedText = [heat attributedString];
     [self labelForRow:1 andCol:0].attributedText = [heatLeft attributedString];

@@ -24,6 +24,7 @@
 //  
 
 #import "FITFitMessageFields.h"
+#import "FITFitFieldValue.h"
 
 @interface FITFitMessageFields ()
 
@@ -35,15 +36,17 @@
 #if !__has_feature(objc_arc)
 -(void)dealloc{
     [_fields release];
+    [_messageType release];
     [super dealloc];
 }
 #endif
 
-+(FITFitMessageFields * )fitMessageFields:(NSDictionary*)values atIndex:(NSUInteger)index{
++(FITFitMessageFields * )fitMessageFields:(NSDictionary*)values atIndex:(NSUInteger)index forType:(NSString*)type{
     FITFitMessageFields * rv = RZReturnAutorelease([[self alloc] init]);
     if (rv) {
         rv.fields = values;
         rv.messageIndex = index;
+        rv.messageType = type;
     }
     return rv;
 }
@@ -66,5 +69,18 @@
     return [_fields countByEnumeratingWithState:state objects:buffer count:len];
 }
 
-
+-(BOOL)hasDateForKey:(NSString*)key after:(NSDate*)after andStrictlyBefore:(NSDate*)before{
+    NSDate * ts = _fields[key].dateValue;
+    BOOL rv = false;
+    if( ts ){
+        rv = true;
+        if( after && [after compare:ts] == NSOrderedDescending){ // If equal or ascending -> Still true
+            rv = false;
+        }
+        if( before && [ts compare:before] != NSOrderedAscending ){ // Not including
+            rv = false;
+        }
+    }
+    return rv;
+}
 @end

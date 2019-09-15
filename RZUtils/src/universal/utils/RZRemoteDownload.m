@@ -325,7 +325,7 @@ static NSURLRequestCachePolicy _cachePolicy = NSURLRequestReloadIgnoringLocalAnd
     if ([response isKindOfClass:[NSHTTPURLResponse class]]){
         httpResponse = (NSHTTPURLResponse*)response;
         contentType = httpResponse.allHeaderFields[@"Content-Type"];
-        if ([contentType hasPrefix:@"application/x-zip-compressed"]) {
+        if ([contentType hasPrefix:@"application/x-zip-compressed"] || [contentType hasPrefix:@"application/octet-stream"]) {
             dataOnly = true;
         }
     }

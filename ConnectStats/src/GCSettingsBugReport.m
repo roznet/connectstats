@@ -28,6 +28,7 @@
 #import "GCSettingsBugReport.h"
 #import "GCAppGlobal.h"
 @import RZExternal;
+@import RZExternalUniversal;
 #import "GCActivitiesCacheManagement.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCAppGlobal.h"
@@ -78,6 +79,10 @@ NSString * kBugNoCommonId = @"-1";
                    
                    CONFIG_GARMIN_FIT_DOWNLOAD      ,
                    CONFIG_GARMIN_FIT_MERGE         ,
+                   
+                   CONFIG_CONNECTSTATS_USE         ,
+                   CONFIG_CONNECTSTATS_FILLYEAR    ,
+                   CONFIG_CONNECTSTATS_CONFIG      ,
 
                    
                    ] sortedArrayUsingSelector:@selector(compare:)];
@@ -101,13 +106,7 @@ NSString * kBugNoCommonId = @"-1";
     }
     if([[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:false]){
         RZLog(RZLogInfo, @"Enabled:  Strava Upload");
-    }
-    if ([[GCAppGlobal profile] serviceEnabled:gcServiceGarmin]) {
-        gcGarminLoginMethod method = (gcGarminLoginMethod)[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
-        NSArray * methods = [GCViewConfig validChoicesForGarminLoginMethod];
-        RZLog(RZLogInfo, @"Garmin Method %@", method < methods.count ? methods[method] : @"INVALID");
-    }
-    
+    }    
 }
 
 -(void)checkDb{
@@ -120,7 +119,7 @@ NSString * kBugNoCommonId = @"-1";
 -(NSURLRequest*)urlRequest{
     NSString * aURL = @"https://www.ro-z.net/connectstats/bugreport.php?dir=bugs";
 #if TARGET_IPHONE_SIMULATOR
-    //aURL = @"http://localhost/connectstats/bugreport.php?dir=bugs";
+    aURL = @"http://localhost/connectstats/bugreport.php?dir=bugs";
 #endif
 
     return [self urlResquestFor:aURL];
@@ -139,12 +138,12 @@ NSString * kBugNoCommonId = @"-1";
     }
     
     NSString * applicationName = [GCAppGlobal connectStatsVersion] ? @"ConnectStats" : @"HealthStats";
-    
+    DeviceUtil * deviceUtil = RZReturnAutorelease([[DeviceUtil alloc] init]);
     NSDictionary * pData =@{
                             @"systemName": [UIDevice currentDevice].systemName,
                             @"applicationName": applicationName,
                             @"systemVersion": [UIDevice currentDevice].systemVersion,
-                            @"platformString": [DeviceUtil hardwareDescription],
+                            @"platformString": [deviceUtil hardwareDescription] ?: [deviceUtil hardwareString],
                             @"version": [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"],
                             @"commonid": [GCAppGlobal configGetString:CONFIG_BUG_COMMON_ID defaultValue:kBugNoCommonId],
                             };
@@ -155,7 +154,9 @@ NSString * kBugNoCommonId = @"-1";
     
     NSString * bugpath = [RZFileOrganizer writeableFilePath:kBugFilename];
     
-    OZZipFile * zipFile= [[OZZipFile alloc] initWithFileName:bugpath mode:OZZipFileModeCreate];
+    NSError * err = nil;
+    
+    OZZipFile * zipFile= [[OZZipFile alloc] initWithFileName:bugpath mode:OZZipFileModeCreate error:&err];
     
     OZZipWriteStream *stream= [zipFile writeFileInZipWithName:@"bugreport.log" compressionLevel:OZZipCompressionLevelBest];
     [stream writeData:[log dataUsingEncoding:NSUTF8StringEncoding]];

@@ -132,17 +132,16 @@
 
     [self selectNewActivity:[[GCAppGlobal organizer] currentActivity]];
 
-    if ([UIViewController useIOS7Layout]) {
-        CGFloat height = 20.;
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            height = 64.;
-        }
-        self.tableView.tableHeaderView = [[[UIView alloc] initWithFrame:CGRectMake(0., 0., 320., height)] autorelease];
+    CGFloat height = 20.;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        height = 64.;
     }
-    if ([GCViewConfig uiStyle] == gcUIStyleIOS7) {
-        self.tableView.tableHeaderView.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:self.activity];
-    }
+    self.tableView.tableHeaderView = [[[UIView alloc] initWithFrame:CGRectMake(0., 0., 320., height)] autorelease];
+
+    self.tableView.tableHeaderView.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:self.activity];
     self.initialized = true;
+    self.view.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
+    self.tableView.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -160,10 +159,6 @@
         //[self.slidingViewController setShouldAddPanGestureRecognizerToTopViewSnapshot:YES];
     }
     self.tableView.tableHeaderView.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:self.activity];
-
-#ifdef GC_USE_FLURRY
-    [self publishEvent];
-#endif
 
 }
 
@@ -199,6 +194,12 @@
 
 -(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection{
     [self notifyCallBack:nil info:nil];
+    if( @available( iOS 13.0, * )){
+        if( self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle ){
+            [self.tableView reloadData];
+        }
+    }
+
 }
 
 
@@ -448,7 +449,6 @@
     }else{
         rv = [GCCellGrid gridCell:tableView];
     }
-
 	return rv;
 
 }
@@ -489,7 +489,7 @@
 
         [self showMap:self.choices.current.field];
     }else if( indexPath.section == GCVIEW_DETAIL_TITLE_SECTION){
-        [self renameActivity];
+        
     }else if( indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION){
         if (indexPath.row < self.organizedMatchingField.count) {
             GCField * field = self.organizedMatchingField[indexPath.row];
@@ -530,7 +530,7 @@
                 self.autolapChoice = [[[GCActivityAutoLapChoices alloc] initWithActivity:act] autorelease];
             }
 
-            GCCellEntryListViewController * list = [GCCellEntryListViewController entryListViewController:[self.autolapChoice choicesDescriptions]
+            GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[self.autolapChoice choicesDescriptions]
                                                                                                  selected:self.autolapChoice.selected];
             list.entryFieldDelegate = self;
             [self.navigationController pushViewController:list animated:YES];
@@ -591,8 +591,8 @@
                 GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
                 if (addNumber) {
                     GCFormattedField* theOne = [GCFormattedField formattedField:addField.key activityType:activity.activityType forNumber:addNumber forSize:14.];
-                    theOne.valueColor = [UIColor darkGrayColor];
-                    theOne.labelColor = [UIColor darkGrayColor];
+                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     if ([addNumber sameUnit:mainN]) {
                         theOne.noUnits = true;
                     }
@@ -613,8 +613,8 @@
                 GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
                 if (addNumber) {
                     GCFormattedField* theOne = [GCFormattedField formattedField:addField.key activityType:activity.activityType forNumber:addNumber forSize:14.];
-                    theOne.valueColor = [UIColor darkGrayColor];
-                    theOne.labelColor = [UIColor darkGrayColor];
+                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     if ([addNumber sameUnit:mainN]) {
                         theOne.noUnits = true;
                     }
@@ -757,7 +757,9 @@
     self.trackStats = nil;
 
     [self.activity.settings setupWithGlobalConfig:self.activity];
-    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.tableView reloadData];
+    });
 }
 
 -(void)updateUserActivityState:(NSUserActivity *)activity{
@@ -837,24 +839,16 @@
 
 -(void)showMap:(GCField*)field{
     GCMapViewController *detailViewController = [[GCMapViewController alloc] initWithNibName:nil bundle:nil];
-    ECSlidingViewController * detailSliding = [[ECSlidingViewController alloc] initWithNibName:nil bundle:nil];
-
+    
     detailViewController.gradientField = field;
     detailViewController.activity = self.activity;
     detailViewController.mapType = (gcMapType)[GCAppGlobal configGetInt:CONFIG_USE_MAP defaultValue:gcMapBoth];
     detailViewController.enableTap = true;
 
-    detailSliding.topViewController = detailViewController;
-    detailSliding.underLeftViewController = [[[GCSharingViewController alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
-
-    [UIViewController setupEdgeExtendedLayout:detailViewController];
-    [UIViewController setupEdgeExtendedLayout:detailSliding];
-
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    [self.navigationController pushViewController:detailSliding animated:YES];
+    [self.navigationController pushViewController:detailViewController animated:YES];
 
     [detailViewController release];
-    [detailSliding release];
 }
 
 -(void)showTrackGraph:(GCField*)afield{
@@ -892,35 +886,6 @@
         [sliding release];
         [optionController release];
     }
-}
-
--(void)renameActivity{
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Rename Profile",@"RenameProfile")
-                                                                    message:NSLocalizedString(@"Enter new activity name", @"RenameProfile")
-                                                             preferredStyle:UIAlertControllerStyleAlert];
-
-    [alert addTextFieldWithConfigurationHandler:^(UITextField * field){
-        field.text = self.activity.activityName;
-    }];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"RenameProfile Button")
-                                              style:UIAlertActionStyleCancel
-                                            handler:^(UIAlertAction*action){
-
-                                            }]];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Rename", @"RenameProfile Button")
-                                              style:UIAlertActionStyleDefault
-                                            handler:^(UIAlertAction * action){
-                                                GCActivity*act= self.activity;
-                                                [[GCAppGlobal web] garminRenameActivity:act.activityId withName:alert.textFields[0].text];
-                                                [self.refreshControl beginRefreshing];
-                                                self.refreshControl.attributedTitle = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Renaming", @"RenameProfile")] autorelease];
-                                                CGPoint newOffset = CGPointMake(0, -(self.tableView).contentInset.top);
-                                                [self.tableView setContentOffset:newOffset animated:YES];
-
-                                            }]];
-    [self presentViewController:alert animated:YES completion:^(){}];
 }
 
 #pragma mark - Configure

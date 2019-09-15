@@ -258,7 +258,7 @@
     self.shotsData   = fields;
     self.heatmaps    = heatmaps;
     self.summaryData = sumdata;
-    self.metaData    = metdata;
+    [self updateMetaData:metdata];
 
     [self registerTennisFields];
     [self saveToTennisDb];

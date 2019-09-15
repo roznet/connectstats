@@ -62,7 +62,7 @@ class FITWindowController: NSWindowController, NSToolbarDelegate {
                 self.splitViewController().selectionContext?.prettyField = false
             }else{
                 self.splitViewController().selectionContext?.prettyField = true
-                if let idx = GCFieldCache.availableLanguagesNames().index(of: selectedTitle) {
+                if let idx = GCFieldCache.availableLanguagesNames().firstIndex(of: selectedTitle) {
                     let language = GCFieldCache.availableLanguagesCodes()[idx]
                     let cache = GCFieldCache(db: nil, andLanguage: language)
                     GCField.setFieldCache(cache)

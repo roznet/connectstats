@@ -12,9 +12,8 @@ import Cocoa
 class FITAppDelegate : NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let cache = GCFieldCache(db: nil, andLanguage: nil)
-        GCField.setFieldCache(cache)
-        GCFields.setFieldCache(cache)
+        // Force init of the shared global state
+        _ = FITAppGlobal.shared
     }
     
     func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool {

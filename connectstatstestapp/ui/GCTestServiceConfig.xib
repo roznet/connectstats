@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -54,11 +54,17 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vg2-sl-Cpd">
-                    <rect key="frame" x="155" y="289" width="34" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vg2-sl-Cpd">
+                    <rect key="frame" x="170.5" y="216" width="34" height="30"/>
                     <state key="normal" title="Save"/>
                 </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Skin" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CkK-RO-N9T">
+                    <rect key="frame" x="16" y="256" width="33" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -67,11 +73,13 @@
                 <constraint firstItem="8b4-sw-OAm" firstAttribute="top" secondItem="kWo-ro-MZp" secondAttribute="bottom" constant="10" id="Fad-Gj-fju"/>
                 <constraint firstItem="SK2-7r-3SB" firstAttribute="top" secondItem="cqK-QJ-gwO" secondAttribute="bottom" constant="10" id="IdH-7y-pBp"/>
                 <constraint firstItem="SK2-7r-3SB" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="Woe-6Y-8Hz"/>
+                <constraint firstItem="vg2-sl-Cpd" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="YNn-kC-X4w"/>
                 <constraint firstItem="8b4-sw-OAm" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="b4c-sy-P5s"/>
                 <constraint firstItem="8b4-sw-OAm" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="fVJ-tl-bpw"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="SK2-7r-3SB" secondAttribute="trailing" constant="10" id="iZI-uI-lqe"/>
                 <constraint firstItem="SK2-7r-3SB" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="lpM-IG-fEh"/>
                 <constraint firstItem="cqK-QJ-gwO" firstAttribute="top" secondItem="8b4-sw-OAm" secondAttribute="bottom" constant="10" id="nmd-fW-xGA"/>
+                <constraint firstItem="vg2-sl-Cpd" firstAttribute="top" secondItem="SK2-7r-3SB" secondAttribute="bottom" constant="14" id="qZz-wo-oG1"/>
                 <constraint firstItem="cqK-QJ-gwO" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="sTr-BS-TyH"/>
                 <constraint firstItem="kWo-ro-MZp" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="50" id="y9A-lM-g8U"/>
             </constraints>

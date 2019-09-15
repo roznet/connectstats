@@ -36,6 +36,8 @@
 #import "GCActivity+Database.h"
 #import "GCDerivedOrganizer.h"
 #import "GCHealthOrganizer.h"
+#import "GCViewConfig.h"
+
 @import ObjectiveC;
 
 @interface GCDebugActionsTableViewController ()
@@ -53,6 +55,10 @@
     [super viewDidLoad];
 
     self.availableActions = [self listActions];
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -93,17 +99,13 @@
     [tableView reloadData];
 }
 
-#pragma mark - Actions
-
-
-
 -(NSArray*)listActions{
     Class cls = [self class];
     NSMutableArray * rv = [NSMutableArray array];
-
+    
     unsigned int methodCount = 0;
     Method *methods = class_copyMethodList(cls, &methodCount);
-
+    
     for (unsigned int i = 0; i < methodCount; i++) {
         Method method = methods[i];
         NSString * methodName = @(sel_getName(method_getName(method)));
@@ -111,9 +113,101 @@
             [rv addObject:[methodName substringFromIndex:6]];
         }
     }
-
+    
     free(methods);
     return rv;
+}
+
+#pragma mark - Actions
+
+-(void)actionAggressiveDuplicateSearch{
+    NSArray<GCActivity*>* activities = [[GCAppGlobal organizer] activities];
+    NSMutableArray<NSString*>* toDelete = [NSMutableArray array];
+    
+    GCActivity * previous = nil;
+    
+    NSUInteger totalCount = 0.0;
+    double totalDistance = 0.0;
+    double totalDuplicate = 0.0;
+    
+    for (GCActivity * activity in activities) {
+        if( [activity.activityId isEqualToString:@"__strava__2308616037"] || [activity.activityId isEqualToString:@"1707392480"]){
+            RZLog(RZLogInfo,@"%@", activity);
+        }
+        totalDistance += activity.sumDistance;
+        if( previous != nil){
+            if( fabs(activity.sumDistance - previous.sumDistance) < 1.0
+               && [activity.date timeIntervalSinceDate:previous.date] < 24.0*3600.0
+               ){
+                RZLog(RZLogInfo,@"Found candidate A id=%@/%@, , dist=%0.1f/%0.1f, date=%@/%@",
+                      activity.activityId,
+                      previous.activityId,
+                      activity.sumDistance/1000.0,
+                      previous.sumDistance/1000.0,
+                      activity.date,
+                      previous.date
+                      
+                      );
+                totalCount += 1;
+                totalDuplicate += activity.sumDistance;
+                if( [previous.activityId hasPrefix:@"__strava__"]){
+                    [toDelete addObject:previous.activityId];
+                }
+            }else if( [activity.date timeIntervalSinceDate:previous.date] < 24.0*3600.0
+                     && [previous.activityId hasPrefix:@"__strava__"]
+                     && ![activity.activityId hasPrefix:@"__strava__"]
+                     ){
+                RZLog(RZLogInfo,@"Found candidate B id=%@/%@, , dist=%0.1f/%0.1f, date=%@/%@",
+                      activity.activityId,
+                      previous.activityId,
+                      activity.sumDistance/1000.0,
+                      previous.sumDistance/1000.0,
+                      activity.date,
+                      previous.date
+                      
+                      );
+            }else if( fabs(activity.sumDistance - previous.sumDistance) < 1.0
+                     && [previous.activityId hasPrefix:@"__strava__"]
+                     && ![activity.activityId hasPrefix:@"__strava__"]
+                     ){
+                RZLog(RZLogInfo,@"Found candidate C id=%@/%@, , dist=%0.1f/%0.1f, date=%@/%@",
+                      activity.activityId,
+                      previous.activityId,
+                      activity.sumDistance/1000.0,
+                      previous.sumDistance/1000.0,
+                      activity.date,
+                      previous.date
+                      
+                      );
+            }
+            
+            
+        }
+        previous = activity;
+    }
+    if( toDelete.count > 0){
+        [GCAppGlobal organizer].activitiesTrash = toDelete;
+        [[GCAppGlobal organizer] deleteActivitiesInTrash];
+    }
+    RZLog(RZLogInfo,@"TotalCount=%lu TotalDist=%0.1f TotalDup=%0.1f", (unsigned long)totalCount, totalDistance, totalDuplicate);
+}
+
+-(void)actionDumpCountriesCoord{
+    NSArray * activities = [[GCAppGlobal organizer] activities];
+    
+    [RZFileOrganizer removeEditableFile:@"countries.db"];
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"countries.db"]];
+    [db open];
+    RZEXECUTEUPDATE(db, @"CREATE TABLE countries (location TEXT, latitude REAL, longitude REAL)")
+    for (GCActivity * activity in activities) {
+        if( activity.location && activity.beginCoordinate.longitude != 0 && activity.beginCoordinate.latitude){
+            RZEXECUTEUPDATE(db, @"INSERT INTO countries (location,latitude,longitude) VALUES (?,?,?)",
+                            activity.location, @(activity.beginCoordinate.latitude),@(activity.beginCoordinate.longitude));
+        }
+    }
+    [db close];
+    RZLog(RZLogInfo,@"Saved %@", [RZFileOrganizer writeableFilePath:@"countries.db"]);
+
 }
 
 -(void)actionUpdateWeather{
@@ -206,7 +300,7 @@
     BOOL wifi = [RZSystemInfo wifiAvailable];
     BOOL network = [RZSystemInfo networkAvailable];
 
-    NSLog(@"Network: %@ Wifi: %@", network ? @"Yes" : @"No", wifi?@"Yes": @"No");
+    RZLog(RZLogInfo,@"Network: %@ Wifi: %@", network ? @"Yes" : @"No", wifi?@"Yes": @"No");
 }
 
 -(void)actionSaveCurrentActivity{
@@ -232,7 +326,7 @@
     NSData * data = UIImagePNGRepresentation(img);
     NSString * imgname = [NSString stringWithFormat:@"thumb-graph.png"];
     [data writeToFile:[RZFileOrganizer writeableFilePath:imgname] atomically:YES];
-    NSLog(@"%@", [RZFileOrganizer writeableFilePath:imgname]);
+    RZLog(RZLogInfo,@"%@", [RZFileOrganizer writeableFilePath:imgname]);
     [thumbs release];
 }
 
@@ -253,7 +347,7 @@
     for (GCActivity * act in list) {
         [act saveDictAsBlobToDb:db];
     }
-    NSLog(@"Finished %@", perf);
+    RZLog(RZLogInfo,@"Finished %@", perf);
 }
 
 -(void)actionLoadActivityBlob{
@@ -268,8 +362,8 @@
         sFound[ [res stringForColumn:@"activityId"] ] = sData;
         mFound[ [res stringForColumn:@"activityId"] ] = mData;
     }
-    NSLog(@"New Finished %@", perf);
-    NSLog(@"Found %lu", (unsigned long) sFound.count);
+    RZLog(RZLogInfo,@"New Finished %@", perf);
+    RZLog(RZLogInfo,@"Found %lu", (unsigned long) sFound.count);
 
     perf = [RZPerformance start];
 
@@ -305,8 +399,8 @@
         metaValue = [GCActivityMetaValue activityValueForResultSet:res];
         currentMeta[[res stringForColumn:@"field"]] = metaValue;
     }
-    NSLog(@"Old Finished %@", perf);
-    NSLog(@"Found %lu", (unsigned long) data.count);
+    RZLog(RZLogInfo,@"Old Finished %@", perf);
+    RZLog(RZLogInfo,@"Found %lu", (unsigned long) data.count);
 
 }
 -(void)actionDumpMissingFields{
@@ -328,7 +422,8 @@
         }
     }
     [[GCAppGlobal derived] clearDataForActivityType:GC_TYPE_RUNNING andFieldFlag:gcFieldFlagPower];
-    NSLog(@"%@", withPower);
+    RZLog(RZLogInfo,@"%@", withPower);
     //[[GCAppGlobal derived] processActivities:withPower];
 }
+
 @end

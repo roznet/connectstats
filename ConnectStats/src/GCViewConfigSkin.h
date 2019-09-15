@@ -27,23 +27,78 @@
 
 @class GCField;
 
+// Activity Cells
 extern NSString * kGCSkinKeyActivityCellLighterBackgroundColor;
 extern NSString * kGCSkinKeyActivityCellDarkerBackgroundColor;
+extern NSString * kGCSkinKeyActivityCellIconColor;
+
+// Field for Graphs
 extern NSString * kGCSkinKeyFieldFillColor;
 extern NSString * kGCSkinKeyFieldColors;
 extern NSString * kGCSkinKeyTextColorForActivity;
-extern NSString * kGCSkinKeyDetailsCellBackgroundColors;
 extern NSString * kGCSkinKeySwimStrokeColor;
 extern NSString * kGCSkinKeyCategoryBackground;
 extern NSString * kGCSkinKeyGoalPercentBackgroundColor;
 extern NSString * kGCSkinKeyGoalPercentTextColor;
-extern NSString * kGCSkinKeyBarGraphColor;
+extern NSString * kGCSkinKeyGraphColor;
 extern NSString * kGCSkinKeyListOfColorsForMultiplots;
+extern NSString * kGCSkinKeyCalendarColors;
+
+extern NSString * kgcSkinDefaultColors;
+extern NSString * kGCSkinNameOriginal;
+extern NSString * kGCSkinNameiOS13;
+
+typedef NS_ENUM(NSUInteger,gcSkinDefaultColor){
+    gcSkinDefaultColorBackground,
+    gcSkinDefaultColorBackgroundSecondary, // For things like textfield entry zone
+    gcSkinDefaultColorBackgroundEven, // for things like alternating background in rows
+    gcSkinDefaultColorBackgroundOdd, // for things like alternating background in rows
+    gcSkinDefaultColorPrimaryText, // original = black
+    gcSkinDefaultColorSecondaryText, // original = darkGray
+    gcSkinDefaultColorTertiaryText, // original = lightGray
+    gcSkinDefaultColorHighlightedText,  // Original = blue
+    gcSkinDefaultColorGroupedTable
+};
+
+typedef NS_ENUM(NSUInteger,gcSkinCalendarElement){
+    gcSkinCalendarElementWeekdayTextColor,
+    gcSkinCalendarElementDayCurrentMonthTextColor,
+    gcSkinCalendarElementDayAdjacentMonthTextColor,
+    gcSkinCalendarElementDaySelectedTextColor,
+    gcSkinCalendarElementSeparatorColor,
+    gcSkinCalendarElementTileColor,
+    gcSkinCalendarElementTileSelectedColor,
+    gcSkinCalendarElementTileTodayColor,
+    gcSkinCalendarElementTileTodaySelectedColor
+};
+
+typedef NS_ENUM(NSUInteger,gcSkinGraphColor){
+    gcSkinGraphColorBackground,
+    gcSkinGraphColorForeground,
+    gcSkinGraphColorBarGraph,
+    gcSkinGraphColorLineGraph,
+    gcSkinGraphColorAxis,
+    gcSkinGraphColorRegressionLine, // For regression line or moving average, etc
+    gcSkinGraphColorLapOverlay,
+    gcSkinGraphColorRegressionLineSecondary // for secondary graph (ex fitness/performance)
+};
+
+typedef NS_ENUM(NSUInteger,gcSkinBool){
+    gcSkinBoolRoundedActivityIcons,
+    gcSkinBoolActivityCellMultiColor
+};
+
 
 @interface GCViewConfigSkin : NSObject
 
-+(GCViewConfigSkin*)defaultSkin;
+@property (nonatomic,readonly) NSString * skinName;
+@property (nonatomic,readonly) NSDictionary * defs;
 
++(GCViewConfigSkin*)defaultSkin;
++(GCViewConfigSkin*)darkSkin;
+
++(NSArray<NSString*>*)availableSkinNames;
++(GCViewConfigSkin*)skinForName:(NSString*)name;
 
 -(NSArray*)colorArrayForKey:(NSString*)key;
 -(NSArray*)colorArrayForKey:(NSString *)key andField:(GCField*)field;
@@ -53,4 +108,6 @@ extern NSString * kGCSkinKeyListOfColorsForMultiplots;
 -(UIColor*)colorForKey:(NSString *)key andField:(GCField*)field;
 -(UIColor*)colorForKey:(NSString *)key andSubkey:(id)subkey;
 -(UIColor*)colorForKey:(NSString*)key andValue:(double)val;
+-(BOOL)boolFor:(gcSkinBool)which;
+
 @end

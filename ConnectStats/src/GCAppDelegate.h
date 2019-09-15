@@ -56,6 +56,7 @@
 @property (nonatomic, retain) GCActivityTypes * activityTypes;
 @property (nonatomic,retain) NSURL * urlToOpen;
 
+
 -(void)saveSettings;
 -(void)addOrSelectProfile:(NSString*)pName;
 +(void)publishEvent:(NSString*)name;
@@ -72,7 +73,8 @@
 -(BOOL)handleUniveralLink:(NSURL *) url;
 -(void)setupFieldCache;
 
-
+-(NSDictionary<NSString*,NSString*>*)credentialsForService:(NSString*)service;
+-(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;
 
 
 @end

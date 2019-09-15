@@ -719,6 +719,7 @@
 		4238295E1EAB552000252217 /* universal */ = {
 			isa = PBXGroup;
 			children = (
+				427C81742275A86E004D8681 /* SmartCompare */,
 				423DF25D1EAE3E2100160E5D /* systeminfo */,
 				4238295F1EAB552000252217 /* datatable */,
 				4238296A1EAB552000252217 /* foundation */,
@@ -1123,6 +1124,13 @@
 				4238299D1EAB552000252217 /* GCXMLReader.m */,
 			);
 			name = XML;
+			sourceTree = "<group>";
+		};
+		427C81742275A86E004D8681 /* SmartCompare */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = SmartCompare;
 			sourceTree = "<group>";
 		};
 		428BE85520013D4200E14A61 /* RZUtilsTestInfra */ = {
@@ -1633,7 +1641,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1100;
 				ORGANIZATIONNAME = "Brice Rosenzweig";
 				TargetAttributes = {
 					423829261EAB534100252217 = {
@@ -1649,6 +1657,7 @@
 					42382A441EAB584600252217 = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = M7QSSF3624;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					42382A4C1EAB584600252217 = {
@@ -1689,6 +1698,7 @@
 					42382B691EAC9DBD00252217 = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = M7QSSF3624;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					42382B711EAC9DBD00252217 = {
@@ -1704,10 +1714,11 @@
 			};
 			buildConfigurationList = 423829211EAB534100252217 /* Build configuration list for PBXProject "RZUtils" */;
 			compatibilityVersion = "Xcode 8.0";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 4238291D1EAB534100252217;
 			productRefGroup = 423829281EAB534100252217 /* Products */;
@@ -2066,6 +2077,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2112,7 +2124,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -2127,6 +2139,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2167,7 +2180,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -2198,7 +2211,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Debug;
 		};
@@ -2221,7 +2233,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Release;
 		};
@@ -2263,8 +2274,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				SWIFT_VERSION = 4.0;
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -2284,8 +2294,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				SWIFT_VERSION = 4.0;
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -2329,7 +2338,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Debug;
 		};
@@ -2349,7 +2357,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Release;
 		};
@@ -2509,8 +2516,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = macosx;
-				SWIFT_VERSION = 4.0;
-				VALID_ARCHS = x86_64;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -2532,8 +2538,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = macosx;
-				SWIFT_VERSION = 4.0;
-				VALID_ARCHS = x86_64;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -2566,7 +2571,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -2591,7 +2596,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;

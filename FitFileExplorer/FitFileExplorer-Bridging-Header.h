@@ -9,7 +9,6 @@
 #import "FITFitEnumMap.h"
 
 #import "FITOutlineCellView.h"
-#import "FITDocument.h"
 #import "GCFieldCache.h"
 #import "GCField.h"
 #import "GCActivitySummaryValue.h"
@@ -20,3 +19,14 @@
 #import "GCMapAnnotation.h"
 #import "GCActivityTypes.h"
 #import "GCActivityType.h"
+//#import "FITGarminActivityListWrapper.h"
+//#import "FITGarminActivityWrapper.h"
+#import "GCGarminLoginSSORequest.h"
+#import "GCGarminActivityInterpret.h"
+
+#import "GCWebConnect.h"
+
+//#import "RZFitFile-Bridging-Header.h"
+#import "GCUnit+FIT.h"
+#import "FITFitEnumMap.h"
+#import "GCWebUrl.h"

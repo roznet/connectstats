@@ -46,6 +46,7 @@ typedef NS_ENUM(NSUInteger, GCWebStatus) {
     GCWebStatusServiceInternalError,
     GCWebStatusRequireModern,
     GCWebStatusRequirePasswordRenew,
+    GCWebStatusCustomMessage
 };
 
 typedef NS_ENUM(NSUInteger, gcWebService) {
@@ -57,12 +58,13 @@ typedef NS_ENUM(NSUInteger, gcWebService) {
     gcWebServiceSportTracks,
     gcWebServiceHealthStore,
     gcWebServiceFitbit,
+    gcWebServiceConnectStats,
     gcWebServiceEnd
 };
 
 @protocol GCWebRequestDelegate <NSObject>
 
--(void)processDone:(id)req;
+-(void)processDone:(nullable id)req;
 -(void)processNewStage;
 -(void)loginSuccess:(gcWebService)service;
 -(void)requireLogin:(gcWebService)service;
@@ -73,28 +75,29 @@ typedef NS_ENUM(NSUInteger, gcWebService) {
 @protocol GCWebRequest <NSObject>
 
 -(GCWebStatus)status;
--(NSString*)description;
--(NSString*)url;
--(NSDictionary*)postData;
--(NSDictionary*)deleteData;
--(NSData*)fileData;
--(NSString*)fileName;
--(void)process:(NSString*)theString encoding:(NSStringEncoding)encoding andDelegate:(id<GCWebRequestDelegate>) delegate;
--(id<GCWebRequest>)nextReq;
+-(nonnull NSString*)description;
+-(nullable NSString*)url;
+-(nullable NSDictionary*)postData;
+-(nullable NSDictionary*)deleteData;
+-(nullable NSData*)fileData;
+-(nullable NSString*)fileName;
+-(void)process:(nullable NSString*)theString encoding:(NSStringEncoding)encoding andDelegate:(nonnull id<GCWebRequestDelegate>) delegate;
+-(nullable id<GCWebRequest>)nextReq;
 -(gcWebService)service;
 
 @optional
--(NSDictionary*)postJson;
+-(nullable NSDictionary*)postJson;
 -(BOOL)priorityRequest;
--(BOOL)isSameAsRequest:(id)req;
+-(BOOL)isSameAsRequest:(nullable id)req;
 -(void)preConnectionSetup;
--(GTMOAuth2Authentication*)oauth2Authentication;
--(NSString*)activityId;
--(id<GCWebRequest>)remediationReq;
--(NSURLRequest*)preparedUrlRequest;
--(RemoteDownloadPrepareUrl)prepareUrlFunc;
--(NSError*)lastError;
--(NSString*)httpUserAgent;
--(void)process:(NSData*)theData andDelegate:(id<GCWebRequestDelegate>)delegate;
+-(nullable GTMOAuth2Authentication*)oauth2Authentication;
+-(nullable NSString*)activityId;
+-(nullable id<GCWebRequest>)remediationReq;
+-(nullable NSURLRequest*)preparedUrlRequest;
+-(nonnull RemoteDownloadPrepareUrl)prepareUrlFunc;
+-(nullable NSError*)lastError;
+-(nullable NSString*)customMessage;
+-(nullable NSString*)httpUserAgent;
+-(void)process:(nonnull NSData*)theData andDelegate:(nonnull id<GCWebRequestDelegate>)delegate;
 @end
 

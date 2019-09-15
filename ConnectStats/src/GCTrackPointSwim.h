@@ -29,13 +29,18 @@
 @interface GCTrackPointSwim : GCTrackPoint
 
 @property (nonatomic,assign) gcSwimStrokeType directSwimStroke;
-@property (nonatomic,retain) NSMutableDictionary<GCField*,GCNumberWithUnit*> * values;
 @property (nonatomic,assign) NSUInteger lengthIdx;
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 -(GCTrackPointSwim*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithDictionary:(NSDictionary*)aDict forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
 -(GCTrackPointSwim*)initWithTrackPoint:(GCTrackPoint*)other NS_DESIGNATED_INITIALIZER;
+-(GCTrackPointSwim*)initAt:(NSDate*)timestamp
+                    stroke:(gcSwimStrokeType)type
+                    active:(BOOL)active
+                       for:(NSDictionary<GCField*,GCActivitySummaryValue*>*)sumValues
+                inActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
+
 
 -(void)updateValueFromResultSet:(FMResultSet*)res inActivity:(GCActivity*)act;
 
@@ -43,6 +48,7 @@
 
 -(BOOL)active;
 
+// Private but used for derived class
 -(void)fixupDrillData:(NSDate*)time inActivity:(GCActivity*)act;
-
+-(void)saveLengthToDb:(FMDatabase *)trackdb index:(NSUInteger)idx;
 @end

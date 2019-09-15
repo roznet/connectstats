@@ -88,12 +88,14 @@ static void registerInCache(GCField*field){
         RZRetain(cache);
     }
 }
-
++(BOOL)supportsSecureCoding{
+    return YES;
+}
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
-        self.key = [aDecoder decodeObjectForKey:kGCFieldKey];
-        self.activityType = [aDecoder decodeObjectForKey:kGCActivityType];
+        self.key = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCFieldKey];
+        self.activityType = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCActivityType];
         self.fieldFlag = (gcFieldFlag)[aDecoder decodeInt64ForKey:kGCFieldFlag];
     }
     return self;
@@ -193,12 +195,17 @@ static void registerInCache(GCField*field){
         dict = @{GC_TYPE_RUNNING:@{ @"WeightedMeanPace":@(gcFieldFlagWeightedMeanSpeed),
                                     @"WeightedMeanSpeed":@(gcFieldFlagNone),// not preferred
                                     @"WeightedMeanRunCadence":          @(gcFieldFlagCadence),
+                                    @"WeightedMeanCadence":          @(gcFieldFlagCadence),
                                     },
                  GC_TYPE_CYCLING:@{ @"WeightedMeanBikeCadence":         @(gcFieldFlagCadence),
+                                    @"WeightedMeanCadence":          @(gcFieldFlagCadence),
                                     @"WeightedMeanPace":                @(gcFieldFlagNone), // not preferred
                                     },
                  GC_TYPE_SWIMMING:@{ @"WeightedMeanSpeed":          @(gcFieldFlagNone),
-                                     @"WeightedMeanPace":@(gcFieldFlagWeightedMeanSpeed) },
+                                     @"WeightedMeanPace":@(gcFieldFlagWeightedMeanSpeed),
+                                     @"WeightedMeanSwimCadence": @(gcFieldFlagCadence),
+                                     @"WeightedMeanCadence": @(gcFieldFlagCadence),
+                                     },
                  GC_TYPE_ALL:@{@"SumDistance":                     @(gcFieldFlagSumDistance),
                                @"SumDuration":                     @(gcFieldFlagSumDuration),
                                @"WeightedMeanHeartRate":           @(gcFieldFlagWeightedMeanHeartRate),

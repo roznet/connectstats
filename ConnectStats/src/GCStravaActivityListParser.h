@@ -24,10 +24,13 @@
 //  
 
 #import <Foundation/Foundation.h>
+@class GCActivity;
 
 @interface GCStravaActivityListParser : NSObject
-@property (nonatomic,retain) NSArray * activities;
+@property (nonatomic,retain) NSArray<GCActivity*> * activities;
 @property (nonatomic,assign) BOOL hasError;
+
+
 
 +(GCStravaActivityListParser*)activityListParser:(NSData*)input;
 -(NSUInteger)parsedCount;

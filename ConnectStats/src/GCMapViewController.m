@@ -109,6 +109,7 @@
 
         self.implementor = self.appleImplementor;
         [self.view addSubview:(self.implementor).view];
+        [self.implementor setupFrame:self.view.safeAreaLayoutGuide.layoutFrame];
 
     }else if (implementorType == gcMapImplementorGoogle && (self.implementor == nil || self.implementor != self.googleImplementor)){
         if (self.googleImplementor == nil) {
@@ -121,6 +122,7 @@
 
         self.implementor = self.googleImplementor;
         [self.view addSubview:(self.implementor).view];
+        [self.implementor setupFrame:self.view.safeAreaLayoutGuide.layoutFrame];
     }
 }
 
@@ -129,7 +131,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    self.view.autoresizesSubviews = YES;
+    
+    [UIViewController setupEdgeExtendedLayout:self];
 	// Do any additional setup after loading the view.
     //self.activity = [[GCAppGlobal organizer] currentActivity] ;
     [[GCAppGlobal organizer] attach:self];
@@ -180,14 +184,14 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-
-    [self setupFrames:[self adjustedViewFrame]];
+    [super viewWillAppear:animated];
+    [self setupFrames:self.view.safeAreaLayoutGuide.layoutFrame];
     [self zoomInOnRoute];
 
     if (self.slidingViewController) {
         (self.slidingViewController).anchorRightRevealAmount = self.view.frame.size.width*0.9;
     }
-    [super viewWillAppear:animated];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -219,22 +223,27 @@
 -(void)setupFrames:(CGRect)rect{
     self.view.frame = rect;
     [self.implementor setupFrame:rect];
+    
+    [self updatePanelFrames];
+}
 
+-(void)updatePanelFrames{
+    
     if (self.disableInfoViews) {
         self.legendView.frame = CGRectZero;
         self.windCompassView.frame = CGRectZero;
         self.lapInfoView.frame = CGRectZero;
     }else{
-        CGFloat infoWidth = rect.size.width > 320. ? 150. : 130.;
-        CGFloat compassWidth = rect.size.width > 320. ? 50. : 40.;
+        CGFloat infoWidth = self.view.frame.size.width > 320. ? 150. : 130.;
+        CGFloat compassWidth = self.view.frame.size.width > 320. ? 50. : 40.;
 
         CGFloat nextX = 5.0;
 
-        self.legendView.frame = CGRectMake(nextX, self.view.frame.origin.y+ 5.f, infoWidth, 50.);
+        self.legendView.frame = CGRectMake(nextX, 5.f, infoWidth, 50.);
         nextX += infoWidth+5.0;
 
         if (self.showLaps == gcLapDisplayFastestDistanceUnit || (self.showLaps == gcLapDisplayPointInfo && self.gradientField != gcFieldFlagNone)) {
-            self.lapInfoView.frame = CGRectMake(nextX, self.view.frame.origin.y+5., infoWidth, 50.);
+            self.lapInfoView.frame = CGRectMake(nextX, 5., infoWidth, 50.);
             nextX += infoWidth+5.0;
         }else{
             self.lapInfoView.frame = CGRectZero;
@@ -242,7 +251,7 @@
         }
 
         if (self.windCompassView.enabled) {
-            self.windCompassView.frame = CGRectMake(nextX, self.view.frame.origin.y+5. + (50.-compassWidth)/2., // Center if < 50
+            self.windCompassView.frame = CGRectMake(nextX, 5. + (50.-compassWidth)/2., // Center if < 50
                                                     compassWidth, compassWidth);
         }else{
             self.windCompassView.frame = CGRectZero;
@@ -267,10 +276,6 @@
 }
 -(CGRect)adjustedViewFrame{
     CGRect maprect = self.view.frame;
-    if ([UIViewController useIOS7Layout] && self.navigationController  && self.slidingViewController == nil) {
-        maprect = self.navigationController.view.frame;
-        maprect.origin.x = 0.;
-    }
     return maprect;
 }
 
@@ -309,7 +314,7 @@
     self.tappedPoint = min;
     self.showLaps = gcLapDisplayPointInfo;
 
-    [self setupFrames:[self adjustedViewFrame]];
+    [self updatePanelFrames];
     [self refreshOverlayAndInfo];
     if ([self.implementor respondsToSelector:@selector(focusOnLocation:)]) {
         [self.implementor focusOnLocation:[[[CLLocation alloc] initWithCoordinate:min.coordinate2D
@@ -377,8 +382,7 @@
         [self.implementor toggleMapType:self.currentMapType];
     }
 
-    [self setupFrames:[self adjustedViewFrame]];
-    //[self.implementor toggleMapType];
+    
     [self forceRedisplay];
 }
 
@@ -394,7 +398,7 @@
     }else{
         self.showLaps = gcLapDisplayMarkers;
     }
-    [self setupFrames:[self adjustedViewFrame]];
+    [self updatePanelFrames];
     [self refreshOverlayAndInfo];
 }
 

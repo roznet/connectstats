@@ -111,7 +111,7 @@
     calendarViewController.delegate = calendarDataSource;
     fieldListViewController = [[GCStatsMultiFieldViewController alloc] initWithStyle:UITableViewStylePlain];
     settingsViewController = [[GCSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-
+    
     UIImage * activityImg = [GCViewIcons tabBarIconFor:gcIconTabList];
     UIImage * detailImg   = [GCViewIcons tabBarIconFor:gcIconTabMap];
     UIImage * calendarImg = [GCViewIcons tabBarIconFor:gcIconTabCalendar];
@@ -133,31 +133,13 @@
     UITabBarItem * statsItem	= [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Stats",       @"TabBar Title")	image:statsImg tag:0];
     UITabBarItem * settingsItem	= [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Config",      @"TabBar Title")	image:configImg tag:0];
 
-    ECSlidingViewController * detailSliding = [[ECSlidingViewController alloc] initWithNibName:nil bundle:nil];
-    detailSliding.topViewController = activityDetailViewController;
-    detailSliding.underLeftViewController = [[[GCSharingViewController alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
-
-
     UINavigationController *activityNav	= [[UINavigationController alloc] initWithRootViewController:activityListViewController];
-    UINavigationController *detailNav	= [[UINavigationController alloc] initWithRootViewController:detailSliding];
+    UINavigationController *detailNav	= [[UINavigationController alloc] initWithRootViewController:activityDetailViewController];
     UINavigationController *calendarNav	= [[UINavigationController alloc] initWithRootViewController:calendarViewController];
     UINavigationController *statsNav	= [[UINavigationController alloc] initWithRootViewController:fieldListViewController];
     UINavigationController *settingsNav	= [[UINavigationController alloc] initWithRootViewController:settingsViewController];
 
-    ECSlidingViewController * activitySliding = [[ECSlidingViewController alloc] initWithNibName:nil bundle:nil];
-    activitySliding.topViewController = activityNav;
-    activitySliding.underLeftViewController = [[[GCSharingViewController alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
-
     (statsNav.navigationBar).titleTextAttributes = @{NSFontAttributeName:[GCViewConfig boldSystemFontOfSize:16.]};
-
-    if ([UIViewController useIOS7Layout]) {
-        [UIViewController setupEdgeExtendedLayout:activityNav];
-        [UIViewController setupEdgeExtendedLayout:detailNav];
-        [UIViewController setupEdgeExtendedLayout:calendarNav];
-        [UIViewController setupEdgeExtendedLayout:settingsNav];
-        [UIViewController setupEdgeExtendedLayout:detailSliding];
-        [UIViewController setupEdgeExtendedLayout:activitySliding];
-    }
 
     detailNav.delegate = self;
 
@@ -169,7 +151,7 @@
     statsNav.navigationBar.barStyle                         = style;
     settingsNav.navigationBar.barStyle                      = style;
 
-    [detailNav setNavigationBarHidden:YES animated:YES];
+    [detailNav setNavigationBarHidden:NO animated:YES];
     [activityNav setNavigationBarHidden:NO animated:YES];
     [statsNav setNavigationBarHidden:NO animated:YES];
     [settingsNav setNavigationBarHidden:NO animated:YES];
@@ -186,14 +168,17 @@
 
     self.viewControllers = @[activityNav,detailNav,statsNav,calendarNav,settingsNav];
 
+    [GCViewConfig setupViewController:fieldListViewController];
+    [GCViewConfig setupViewController:activityListViewController];
+    [GCViewConfig setupViewController:activityDetailViewController];
+    [GCViewConfig setupViewController:calendarViewController];
+    [GCViewConfig setupViewController:settingsViewController];
+
     [activityItem release];
     [detailItem release];
     [calendarItem release];
     [statsItem release];
     [settingsItem release];
-
-    [detailSliding release];
-    [activitySliding release];
 
     [activityNav release];
     [detailNav release];

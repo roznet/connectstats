@@ -53,4 +53,53 @@
     return [NSDictionary dictionaryWithDictionary:rv];
 }
 
+-(NSDictionary*)smartCompareDict:(NSDictionary*)other{
+    NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithCapacity:self.count];
+    for (NSObject<NSCopying>*key in self) {
+        NSObject * selfVal = self[key];
+        NSObject * otherVal = other[key];
+        if( otherVal == nil){
+            rv[key] = @{@"self":selfVal};
+        }else{
+            if( [selfVal isKindOfClass:[NSDictionary class]] && [otherVal isKindOfClass:[NSDictionary class]]){
+                NSDictionary * selfValDict = (NSDictionary*)selfVal;
+                NSDictionary * otherValDict = (NSDictionary*)otherVal;
+                NSDictionary * subSmartDict = [selfValDict smartCompareDict:otherValDict];
+                if( subSmartDict ){
+                    rv[key] = subSmartDict;
+                }
+            }else if( [selfVal isKindOfClass:[NSNumber class]] && [otherVal isKindOfClass:[NSNumber class]]){
+                NSNumber * selfValNum = (NSNumber*)selfVal;
+                NSNumber * otherValNum = (NSNumber*)otherVal;
+                
+                if( strcmp( selfValNum.objCType, @encode(double)) == 0) {
+                    double selfDouble = selfValNum.doubleValue;
+                    double otherDouble = otherValNum.doubleValue;
+                    if( fabs(selfDouble-otherDouble) > 1.0e-10 ){
+                        rv[key] = @{ @"self":selfValNum, @"other":otherValNum };
+                    }
+                }else{
+                    if( ![selfValNum isEqualToNumber:otherValNum] ){
+                        rv[key] = @{ @"self": selfValNum, @"other": otherValNum };
+                    }
+                }
+            }else{
+                if ([selfVal respondsToSelector:@selector(isEqual:)]){
+                    if( ![selfVal isEqual:otherVal]) {
+                        rv[key] = @{ @"self": selfVal, @"other": selfVal };
+                    }
+                }else{
+                    rv[key] = @{ @"unknownSelf": selfVal, @"unknownOther": selfVal };
+                }
+            }
+        }
+    }
+    if( rv.count ){
+        return rv;
+    }else{
+        return nil;
+    }
+}
+
+
 @end

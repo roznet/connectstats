@@ -172,7 +172,7 @@ class Listener : public fit::MesgListener
 
 -(void)recordMessage:(NSString *)messageType values:(NSDictionary *)dict{
     
-    FITFitMessageFields * fields = [FITFitMessageFields fitMessageFields:dict atIndex:self.currentMessageIndex++];
+    FITFitMessageFields * fields = [FITFitMessageFields fitMessageFields:dict atIndex:self.currentMessageIndex++ forType:messageType];
     
     [self.fitFile addMessageFields:fields forMessageType:messageType];
     

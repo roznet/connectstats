@@ -69,6 +69,10 @@ NSString * GCWebStatusDescription(GCWebStatus status){
             break;
         case GCWebStatusRequirePasswordRenew:
             rv = NSLocalizedString(@"Your password needs to be renewed on Garmin Connect. Please login via a browser to garmin, change your password and try again.", @"GCWebStatus");
+            break;
+        case GCWebStatusCustomMessage:
+            rv = NSLocalizedString(@"Custom Message", @"GCWebStatus");
+            break;
     }
     return rv;
 }
@@ -109,6 +113,10 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
         case GCWebStatusRequirePasswordRenew:
             rv = @"RequirePasswordRenew";
             break;
+            
+        case GCWebStatusCustomMessage:
+            rv = @"CustomMessage";
+            break;
     }
     return rv;
 }
@@ -119,6 +127,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 @property (nonatomic,assign) BOOL loginSuccessful;
 @property (nonatomic,assign) BOOL secondTry;
 @property (nonatomic,retain) NSError * lastError;
+@property (nonatomic,retain) NSString * customMessage;
 +(GCServiceStatusHolder*)statusHolder;
 @end
 
@@ -126,6 +135,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 #if !__has_feature(objc_arc)
 -(void)dealloc{
     [_lastError release];
+    [_customMessage release];
     [super dealloc];
 }
 #endif
@@ -199,6 +209,8 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
             return @"HealthStore";
         case gcWebServiceFitbit:
             return @"FitBit";
+        case gcWebServiceConnectStats:
+            return @"ConnectStats";
         case gcWebServiceEnd:
         case gcWebServiceNone:
             return @"Other";
@@ -209,6 +221,8 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
     GCServiceStatusHolder * holder = [self serviceHolderFor:service];
     if (holder.status == GCWebStatusConnectionError && holder.lastError) {
         return [NSString stringWithFormat:@"%@: %@", GCWebStatusDescription(holder.status),holder.lastError.localizedDescription];
+    }else if( holder.status == GCWebStatusCustomMessage && holder.customMessage != nil){
+        return holder.customMessage;
     }else{
         return GCWebStatusDescription(holder.status);
     }
@@ -396,7 +410,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 
             }
         }
-        [self notifyForString:NOTIFY_NEXT];
+        [self notifyForString:NOTIFY_NEXT safeTries:5];
     }else{
         if (_requests.count == 0) {
             RZLog(RZLogInfo, @"end data=%@", [GCUnit formatBytes:[RZRemoteDownload totalDataUsage]]);
@@ -536,6 +550,12 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
     gcWebService service = [req service];
     if (service < _serviceStatus.count) {
         [self serviceHolderFor:service].status = _status;
+        
+        if( _status == GCWebStatusCustomMessage ){
+            if( [req respondsToSelector:@selector(customMessage)]){
+                [self serviceHolderFor:service].customMessage = req.customMessage;
+            }
+        }
         if ([req respondsToSelector:@selector(lastError)]) {
             self.lastError = [req lastError];
             [self serviceHolderFor:service].lastError = self.lastError;

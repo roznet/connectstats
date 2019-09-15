@@ -185,6 +185,11 @@
     [anotherButton release];
     movingAverageSample = 0;
 }
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
+}
+
 
 -(void)toggleViewChoice{
     [self setupForViewChoice:[GCViewConfig nextViewChoice:_config.viewChoice]];

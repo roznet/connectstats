@@ -27,6 +27,12 @@
 @class GCActivitySummaryValue;
 @class HKWorkout;
 
+typedef NS_ENUM(NSUInteger,gcDuplicate) {
+    gcDuplicateNotMatching,
+    gcDuplicateSynchronizedService,
+    gcDuplicateTimeOverlapping,
+};
+
 @interface GCActivity (Import)
 
 //-(void)parseGarminJson:(NSDictionary*)aData;
@@ -37,8 +43,11 @@
 -(GCActivity*)initWithId:(NSString*)aId andSportTracksData:(NSDictionary*)aData;
 -(GCActivity*)initWithId:(NSString *)aId andHealthKitWorkout:(HKWorkout*)workout withSamples:(NSArray*)samples;
 -(GCActivity*)initWithId:(NSString *)aId andHealthKitSummaryData:(NSDictionary*)dict;
+-(GCActivity*)initWithId:(NSString *)aId andConnectStatsData:(NSDictionary*)aData;
 
 -(void)updateWithGarminData:(NSDictionary*)data;
+
+-(BOOL)updateMissingFromActivity:(GCActivity*)other;
 -(BOOL)updateWithActivity:(GCActivity*)other;
 -(BOOL)updateSummaryDataFromActivity:(GCActivity*)other;
 -(BOOL)updateTrackpointsFromActivity:(GCActivity*)other;
@@ -85,14 +94,24 @@
  */
 -(void)addPaceIfNecessaryWithSummary:(NSMutableDictionary<GCField*,GCActivitySummaryValue*>*)newSummaryData;
 
--(NSMutableDictionary*)buildSummaryDataFromGarminModernData:(NSDictionary*)data;
+/**
+ Build summary data using new format from garmin. Note some format have inconsistent units
+ the dictionary for search have a few units for elevation and elapsed duration that are smaller.
+ laps, activity etc seem to use dto unit
+ 
+ @param data dictionary coming from garmin
+ @param dtoUnits true if data cames from summaryDTO dictionary (as some units are different)
+ @return dictionary field -> summary data
+ */
+-(NSMutableDictionary*)buildSummaryDataFromGarminModernData:(NSDictionary*)data dtoUnits:(BOOL)dtoUnitsFlag;
 -(CLLocationCoordinate2D)buildCoordinateFromGarminModernData:(NSDictionary*)data;
 -(NSDate*)buildStartDateFromGarminModernData:(NSDictionary*)data;
 
 -(void)setSummaryField:(gcFieldFlag)which with:(GCNumberWithUnit*)nu;
 -(GCActivitySummaryValue*)buildSummaryValue:(NSString*)fieldkey uom:(NSString*)uom fieldFlag:(gcFieldFlag)flag andValue:(double)val;
 
--(BOOL)testForDuplicate:(GCActivity*)other;
++(NSString*)duplicateDescription:(gcDuplicate)dup;
+-(gcDuplicate)testForDuplicate:(GCActivity*)other;
 -(BOOL)isEqualToActivity:(GCActivity*)other;
 
 @end

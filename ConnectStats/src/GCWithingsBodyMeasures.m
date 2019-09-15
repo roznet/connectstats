@@ -27,6 +27,7 @@
 #import "GCAppGlobal.h"
 #import "GCWithingsBodyMeasuresParser.h"
 #import "GCHealthOrganizer.h"
+@import RZExternal;
 
 @implementation GCWithingsBodyMeasures
 
@@ -44,17 +45,10 @@
 }
 
 -(NSString*)url{
-    return nil;
-}
-
--(NSURLRequest*)preparedUrlRequest{
     if (self.navigationController) {
         return nil;
     }else{
-        NSString * path = [NSString stringWithFormat:@"measure"];
-        NSDictionary *parameters = @{@"action" : @"getmeas"};
-
-        return [self preparedUrlRequest:path params:parameters];
+        return [NSString stringWithFormat:@"https://wbsapi.withings.net/measure?action=getmeas&access_token=%@",self.withingsAuth.accessToken];
     }
 }
 
@@ -67,7 +61,8 @@
 }
 
 -(void)process{
-    if (![self isSignedIn]) {
+    
+    if (self.navigationController) {
         [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
         [self performSelectorOnMainThread:@selector(signInToWithings) withObject:nil waitUntilDone:NO];
     }else{
@@ -101,6 +96,7 @@
     GCWithingsBodyMeasures * next = nil;
     if (self.navigationController) {
         next = [GCWithingsBodyMeasures measuresSinceDate:self.fromDate with:nil];
+        next.withingsAuth = self.withingsAuth;
     }else{
     }
     return next;

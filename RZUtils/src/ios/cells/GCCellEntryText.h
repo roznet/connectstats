@@ -26,11 +26,8 @@
 #import "GCCellEntryField.h"
 #import <QuartzCore/QuartzCore.h>
 
-@interface GCCellEntryText : GCCellEntryField<UITextFieldDelegate>	{
-    UILabel * label;
-    UITextField * textField;
-    CAGradientLayer * gradientLayer;
-}
+@interface GCCellEntryText : GCCellEntryField<UITextFieldDelegate>
+
 @property (nonatomic,retain) UILabel		* label;
 @property (nonatomic,retain) UITextField	* textField;
 @property (nonatomic,retain) CAGradientLayer * gradientLayer;

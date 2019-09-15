@@ -146,7 +146,7 @@
                                      @"SumFloorClimbed":[GCActivitySummaryValue activitySummaryValueForField:@"SumFloorClimbed" value:[GCNumberWithUnit numberWithUnitName:@"step" andValue:sumFloors]],
 
                                      }];
-            activity.metaData = [NSMutableDictionary dictionary];
+            [activity updateMetaData:[NSMutableDictionary dictionary]];
             if (self.organizer) {
                 [self.organizer registerActivity:activity forActivityId:activity.activityId];
                 [activity saveTrackpoints:points andLaps:@[]];

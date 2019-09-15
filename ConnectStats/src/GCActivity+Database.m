@@ -39,6 +39,7 @@
         [rv setTrackdb:db];
         [rv loadFromDb:db];
         [rv loadSummaryDataFrom:db];
+        rv.settings = [GCActivitySettings defaultsFor:rv];
     }
     return rv;
 }
@@ -130,11 +131,12 @@
                         self.speedDisplayUom,
                         self.distanceDisplayUom,
                         @(self.garminSwimAlgorithm),
-                        @(self.downloadMethod)
+                        @(self.downloadMethod),
+                        @(self.trackFlags)
                         ];
 
     [db setShouldCacheStatements:YES];
-    NSString * sql = @"INSERT INTO gc_activities (activityId,activityType,BeginTimestamp,SumDistance,SumDuration,WeightedMeanHeartRate,activityName, BeginLongitude,BeginLatitude,WeightedMeanSpeed,Location,Flags,SpeedDisplayUom,DistanceDisplayUom,garminSwimAlgorithm,downloadMethod) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    NSString * sql = @"INSERT INTO gc_activities (activityId,activityType,BeginTimestamp,SumDistance,SumDuration,WeightedMeanHeartRate,activityName, BeginLongitude,BeginLatitude,WeightedMeanSpeed,Location,Flags,SpeedDisplayUom,DistanceDisplayUom,garminSwimAlgorithm,downloadMethod,trackFlags) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     [db executeUpdate:sql withArgumentsInArray:dbrow];
     if ([db hadError]) {
         RZLog(RZLogError, @"db update %@", [db lastErrorMessage]);
@@ -195,7 +197,7 @@
     while ([res next]) {
         mval[[res stringForColumn:@"field"]] = [GCActivityMetaValue activityValueForResultSet:res];
     }
-    self.metaData = mval;
+    [self updateMetaData:mval];
 
     [GCFieldsCalculated addCalculatedFields:self];
 
@@ -234,7 +236,7 @@
         NSDictionary * sData = [NSKeyedUnarchiver unarchiveObjectWithData:[res dataForColumn:@"summaryData"]];
         NSMutableDictionary * mData = [NSKeyedUnarchiver unarchiveObjectWithData:[res dataForColumn:@"metaData"]];
         self.summaryData = sData;
-        self.metaData = mData;
+        [self updateMetaData:mData];
 
     }
 }
@@ -427,6 +429,7 @@
         rv.db = db;
         rv.trackdb = db;
         [rv loadSummaryDataFrom:db];
+        [rv trackpoints];//force load trackpoints
 
         if( rv.activityId ){
             FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_activities_weather_detail WHERE activityId = ?", rv.activityId];

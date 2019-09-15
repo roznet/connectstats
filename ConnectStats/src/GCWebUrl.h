@@ -25,22 +25,37 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSUInteger, gcWebConnectStatsConfig) {
+    gcWebConnectStatsConfigProduction,
+    gcWebConnectStatsConfigRemoteTesting,
+    gcWebConnectStatsConfigLocalTesting,
+    gcWebConnectStatsConfigEnd
+};
+
 void GCWebUseSimulator( BOOL abool, NSString * url);
 void GCWebSetSimulatorError( BOOL abool);
 void GCWebSetSimulatorState( NSString * state);
+void GCWebConnectStatsConfigSet(gcWebConnectStatsConfig config);
+gcWebConnectStatsConfig GCWebConnectStatsConfig(void);
+
 /**
  This will only take effect after the next signin to the simulator
  */
 void GCWebSetSimulatorDir( NSString * dir);
 BOOL GCWebSimulatorIsInUse(void);
 
-NSString * GCWebSigninURL( NSString * uname, NSString * pwd);
+NSString * GCWebSimulatorSigninURL( NSString * uname, NSString * pwd);
 NSString * GCWebLogoutURL(void);
+
+NSString * GCWebConnectStatsValidateUser(gcWebConnectStatsConfig config);
+NSString * GCWebConnectStatsSearch(gcWebConnectStatsConfig config);
+NSString * GCWebConnectStatsRequestBackfill(gcWebConnectStatsConfig config);
+NSString * GCWebConnectStatsFitFile(gcWebConnectStatsConfig config);
+NSString * GCWebConnectStatsRegisterUser( gcWebConnectStatsConfig config, NSString * accessToken, NSString * accessTokenSecret);
 
 NSString * GCWebSearchURL( NSUInteger start );
 NSString * GCWebModernSearchURL( NSUInteger start, NSUInteger requestCount );
 
-NSString * GCWebActivityURL( NSString * activityID);
 NSString * GCWebActivityURLSummary( NSString * activityID);
 NSString * GCWebActivityURLSplits( NSString * activityID);
 NSString * GCWebActivityURLFitFile( NSString * activityID);
@@ -61,10 +76,5 @@ NSString * GCWebWithingsMeasure(NSString*uid,NSString*key);
 
 NSString * GCWebWeatherHtml(NSString*aId);
 
-// OBSOLETE
-NSString * GCWebRenameActivity(NSString*aId);
-NSString * GCWebChangeActivityType(NSString*aId);
-NSString * GCWebDeleteActivity(NSString*aId);
 NSString * GCWebActivityURLDetail( NSString * activityID);
-//NSString * GCWebActivityURLSwim( NSString * activityID);
 

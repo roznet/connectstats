@@ -12,7 +12,7 @@
 
 1. Same steps as above
 2. Edit `GCField+Convert.m`
-
+3. Edit developer.json
 
 ## Update Activity Types
 

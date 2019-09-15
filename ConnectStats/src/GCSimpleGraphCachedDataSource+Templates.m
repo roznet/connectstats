@@ -37,12 +37,25 @@
 
 @implementation GCSimpleGraphCachedDataSource (Templates)
 
-+(GCSimpleGraphCachedDataSource*)scatterPlotCacheFrom:(GCHistoryFieldDataSerie *)scatterStats {
++(GCSimpleGraphCachedDataSource*)dataSourceWithStandardColors{
     GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    if( cache ){
+        cache.useBackgroundColor = [GCViewConfig colorForGraphElement:gcSkinGraphColorBackground];
+        cache.useForegroundColor = [GCViewConfig colorForGraphElement:gcSkinGraphColorForeground];
+        cache.axisColor = [GCViewConfig colorForGraphElement:gcSkinGraphColorAxis];
+    }
+    return cache;
+}
+
++(GCSimpleGraphCachedDataSource*)scatterPlotCacheFrom:(GCHistoryFieldDataSerie *)scatterStats {
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
     cache.xUnit = [scatterStats xUnit];
     cache.title = [scatterStats title];
 
-    GCSimpleGraphDataHolder * xy = [GCSimpleGraphDataHolder dataHolder:[scatterStats dataSerie:0] type:gcScatterPlot color:[UIColor redColor] andUnit:[scatterStats yUnit:0]];
+    GCSimpleGraphDataHolder * xy = [GCSimpleGraphDataHolder dataHolder:[scatterStats dataSerie:0]
+                                                                  type:gcScatterPlot
+                                                                 color:[GCViewConfig colorForGraphElement:gcSkinGraphColorForeground]
+                                                               andUnit:[scatterStats yUnit:0]];
     xy.gradientFunction = scatterStats.gradientFunction;
     xy.gradientDataSerie = scatterStats.gradientSerie.serie;
     xy.gradientColors = [GCViewGradientColors gradientColorsRainbow16];
@@ -51,7 +64,8 @@
     GCStatsLinearFunction * reg = [[scatterStats dataSerie:0] regression];
     GCStatsDataSerie * line = [reg valueForXIn:[scatterStats dataSerie:0]];
     [line sortByX];
-    GCSimpleGraphDataHolder * lineinfo = [GCSimpleGraphDataHolder dataHolder:line type:gcGraphLine color:[UIColor blueColor] andUnit:[scatterStats yUnit:0]];
+    GCSimpleGraphDataHolder * lineinfo = [GCSimpleGraphDataHolder dataHolder:line type:gcGraphLine color:[GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLine]
+                                                                     andUnit:[scatterStats yUnit:0]];
 
     cache.series = [NSMutableArray arrayWithObjects:xy, lineinfo, nil];
     return cache;
@@ -66,7 +80,9 @@
 }
 
 +(GCSimpleGraphCachedDataSource*)calendarView:(GCHistoryFieldDataSerie*)fieldserie calendarUnit:(NSCalendarUnit)aUnit graphChoice:(gcGraphChoice)graphChoice{
-    GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+
+    
     cache.xUnit = [fieldserie xUnit];
     if ([fieldserie.config isYOnly]) {
         switch (aUnit) {
@@ -152,7 +168,7 @@
             if (type == gcGraphLine) {
                 color = colors[i];
             }else{
-                color = [UIColor colorWithRed:1.0 green:0. blue:0. alpha:1.-(1.*i/nSeries)];
+                color = [[GCViewConfig colorForGraphElement:gcSkinGraphColorForeground] colorWithAlphaComponent:1.-(1.*i/nSeries)];
             }
             GCSimpleGraphDataHolder * plot = [GCSimpleGraphDataHolder dataHolder:cumul
                                                                             type:type
@@ -170,7 +186,7 @@
         }
     }
     if (bestSerie) {
-        UIColor * bestColor = [UIColor colorWithRed:0. green:0.11 blue:1. alpha:0.8];
+        UIColor * bestColor = [GCViewConfig colorForGraphElement:gcSkinGraphColorForeground];
         GCSimpleGraphDataHolder * plot = [GCSimpleGraphDataHolder dataHolder:bestSerie
                                                                         type:gcGraphLine
                                                                        color:bestColor
@@ -191,7 +207,7 @@
 }
 
 +(GCSimpleGraphCachedDataSource*)barGraphView:(GCHistoryFieldDataSerie*)fieldserie calendarUnit:(NSCalendarUnit)aUnit after:(NSDate*)afterdate{
-    GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
     cache.xUnit = [fieldserie xUnit];
     switch (aUnit) {
         case NSCalendarUnitWeekOfYear:
@@ -221,7 +237,7 @@
         cache.title =[NSString stringWithFormat:@"%@ %@", [GCViewConfig calendarUnitDescription:aUnit], cache.title];
         serie = dict[STATS_AVG];
     }
-    UIColor * color = [UIColor colorWithRed:0. green:0.11 blue:1. alpha:0.8];
+    UIColor * color = [GCViewConfig colorForGraphElement:gcSkinGraphColorBarGraph];
     NSMutableArray * adjusted = [NSMutableArray arrayWithCapacity:serie.count];
 
     NSCalendar * cal = [GCAppGlobal calculationCalendar];
@@ -298,14 +314,14 @@
 }
 
 +(GCSimpleGraphCachedDataSource*)fieldHistoryHistogramFrom:(GCHistoryFieldDataSerie*)history width:(CGFloat)width{
-    GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
     cache.xUnit = [history yUnit:0];
     cache.title = [history title];
 
     NSUInteger n = width > 320. ? 24 : 16;
 
     GCSimpleGraphDataHolder * plot = [GCSimpleGraphDataHolder dataHolder:[[history dataSerie:0] histogramWith:n]
-                                                                    type:gcGraphStep color:[GCViewConfig barGraphColor]
+                                                                    type:gcGraphStep color:[GCViewConfig colorForGraphElement:gcSkinGraphColorBarGraph]
                                                                  andUnit:[GCUnit unitForKey:@"dimensionless"]];
 
     cache.series = [NSMutableArray arrayWithObject:plot];
@@ -315,18 +331,18 @@
 
 
 +(GCSimpleGraphCachedDataSource*)fieldHistoryCacheFrom:(GCHistoryFieldDataSerie*)history andMovingAverage:(NSUInteger)samples{
-    GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
     cache.xUnit = [history xUnit];
     cache.title = [history title];
 
     GCSimpleGraphDataHolder * plot = [GCSimpleGraphDataHolder dataHolder:[history dataSerie:0]
-                                                                    type:gcGraphLine color:[UIColor blackColor]
+                                                                    type:gcGraphLine color:[GCViewConfig colorForGraphElement:gcSkinGraphColorForeground]
                                                                  andUnit:[history yUnit:0]];
 
     if (samples > 0) {
         GCSimpleGraphDataHolder * ma = [GCSimpleGraphDataHolder dataHolder:[[history dataSerie:0] movingAverage:samples]
                                                                             type:gcGraphLine
-                                                                           color:[UIColor blueColor]
+                                                                           color:[GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLine]
                                                                          andUnit:[history yUnit:0]];
         ma.lineWidth = 2.;
 
@@ -339,7 +355,7 @@
 }
 
 +(GCSimpleGraphCachedDataSource*)dayActivityFieldFrom:(GCTrackStats*)trackStats{
-    GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
     cache.xUnit = [trackStats xUnit];
     cache.title = [trackStats title];
 
@@ -350,7 +366,7 @@
     // Needed or should be trackStats.movingAverage?
     NSUInteger samples = [trackStats.field isNoisy] ? 60 : 0;
 
-    GCSimpleGraphCachedDataSource * cache = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
     cache.xUnit = [trackStats xUnit];
     cache.title = [trackStats title];
     if (trackStats.x_field) {
@@ -360,12 +376,13 @@
                        ];
 
         GCSimpleGraphDataHolder * xy = [GCSimpleGraphDataHolder dataHolder:[trackStats dataSerie:0]
-                                                                      type:gcScatterPlot color:[UIColor redColor]
+                                                                      type:gcScatterPlot
+                                                                     color:[GCViewConfig colorForGraphElement:gcSkinGraphColorForeground]
                                                                    andUnit:[trackStats yUnit:0]];
         if (trackStats.x_field.fieldFlag == gcFieldFlagSumDistance) {
             xy.graphType = gcGraphLine;
             xy.lineWidth = 1.;
-            xy.color = [UIColor blackColor];
+            xy.color = [GCViewConfig colorForGraphElement:gcSkinGraphColorForeground];
         }else{
             xy.gradientFunction = trackStats.gradientFunction;
             xy.gradientDataSerie = trackStats.gradientSerie;
@@ -379,14 +396,17 @@
         GCStatsLinearFunction * reg = [[trackStats dataSerie:0] regression];
         GCStatsDataSerie * line = [reg valueForXIn:[trackStats dataSerie:0]];
         [line sortByX];
-        GCSimpleGraphDataHolder * lineinfo = [GCSimpleGraphDataHolder dataHolder:line type:gcGraphLine color:[UIColor blueColor] andUnit:[trackStats yUnit:0]];
+        GCSimpleGraphDataHolder * lineinfo = [GCSimpleGraphDataHolder dataHolder:line
+                                                                            type:gcGraphLine
+                                                                           color:[GCViewConfig colorForGraphElement:gcSkinGraphColorLineGraph]
+                                                                         andUnit:[trackStats yUnit:0]];
         cache.series = [NSMutableArray arrayWithObjects:xy, lineinfo, nil];
 
     }else{
 
         GCSimpleGraphDataHolder * plot = [GCSimpleGraphDataHolder dataHolder:[trackStats dataSerie:0]
                                                                         type:gcGraphLine
-                                                                       color:[UIColor blackColor]
+                                                                       color:[GCViewConfig colorForGraphElement:gcSkinGraphColorLineGraph]
                                                                      andUnit:[trackStats yUnit:0]];
         // If line field, setup gradient Function with value of the line field
         // otherwise, use fill color
@@ -416,12 +436,12 @@
             range.y_min = 0.;
             range.x_max = trackStats.activity.sumDuration;
             plot.range = range;
-            plot.color = [GCViewConfig barGraphColor];
+            plot.color = [GCViewConfig colorForGraphElement:gcSkinGraphColorBarGraph];
             cache.series = [NSMutableArray arrayWithObject:plot];
 
         }else if (trackStats.zoneCalculator){
             plot.graphType = gcGraphStep;
-            plot.color =[GCViewConfig barGraphColor];
+            plot.color = [GCViewConfig colorForGraphElement:gcSkinGraphColorBarGraph];
             plot.yUnit = [GCUnit unitForKey:@"second"];
             cache.xUnit = [GCUnitTrainingZone unitTrainingZoneFor:trackStats.zoneCalculator];
             cache.xAxisIsVertical = [GCAppGlobal configGetBool:CONFIG_ZONE_GRAPH_HORIZONTAL defaultValue:true];
@@ -446,7 +466,7 @@
                 GCSimpleGraphDataHolder * full = [GCSimpleGraphDataHolder dataHolder:trackStats.extra_data.serie type:gcGraphStep color:plot.color andUnit:plot.yUnit];
                 [full.dataSerie addDataPointWithX:range.x_max+1 andY:0.0];
                 full.range = [plot.dataSerie range];
-                plot.color = [UIColor colorWithRed:0. green:0.11 blue:1. alpha:0.2];
+                plot.color = [GCViewConfig colorForGraphElement:gcSkinGraphColorLapOverlay];
                 cache.series = [NSMutableArray arrayWithObjects:plot,full, nil];
             }else{
                 cache.series = [NSMutableArray arrayWithObject:plot];
@@ -456,7 +476,7 @@
 
             if (trackStats.statsStyle==gcTrackStatsHistogram) {
                 plot.graphType = gcGraphStep;
-                plot.color = [GCViewConfig barGraphColor];
+                plot.color = [GCViewConfig colorForGraphElement:gcSkinGraphColorBarGraph];
 
                 NSArray * colors = [GCViewConfig colorsForField:trackStats.field];
                 if (colors && colors.count > 1) {
@@ -483,7 +503,7 @@
                 if ([GCAppGlobal configGetBool:CONFIG_GRAPH_LAP_OVERLAY defaultValue:true]) {
                     // Not very useful for elevation graphs...
                     if (trackStats.field.fieldFlag != gcFieldFlagAltitudeMeters) {
-                        UIColor * lapColor =[UIColor colorWithWhite:0.5 alpha:0.4];
+                        UIColor * lapColor = [GCViewConfig colorForGraphElement:gcSkinGraphColorLapOverlay];
                         GCStatsDataSerieWithUnit * lapSerie = [trackStats.activity lapSerieForTrackField:trackStats.field timeAxis:YES];
                         GCSimpleGraphDataHolder * lap = [GCSimpleGraphDataHolder dataHolder:lapSerie.serie type:gcGraphStep color:lapColor andUnit:[trackStats yUnit:0]];
                         [seriesArray insertObject:lap atIndex:0];
@@ -493,7 +513,7 @@
             if (samples > 0 && trackStats.statsStyle == gcTrackStatsData) {
                 GCSimpleGraphDataHolder * ma = [GCSimpleGraphDataHolder dataHolder:[[trackStats dataSerie:0] movingAverage:samples]
                                                                               type:gcGraphLine
-                                                                             color:[UIColor blueColor]
+                                                                             color:[GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLine]
                                                                            andUnit:[trackStats yUnit:0]];
 
 
@@ -532,7 +552,7 @@
                                        width:(CGFloat)width{
 
     gcFieldFlag fieldflag = fieldInput;
-    GCSimpleGraphCachedDataSource * rv = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
 
     GCDerivedDataSerie * serie = [[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
                                                                    field:fieldflag
@@ -565,7 +585,7 @@
     }
 
     NSArray<UIColor*>* colors = [GCViewConfig arrayOfColorsForMultiplots];
-    UIColor * defaultColor = [GCViewConfig defaultTextColor];
+    UIColor * defaultColor = [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText];
 
     GCSimpleGraphDataHolder * mth = [GCSimpleGraphDataHolder dataHolder:[self adjustedSerie:serie.serieWithUnit field:fieldflag logScale:logScale]
                                                                   type:gcGraphLine
@@ -643,18 +663,19 @@
 }
 
 +(GCSimpleGraphCachedDataSource*)performanceAnalysis:(GCHistoryPerformanceAnalysis*)perfAnalysis width:(CGFloat)width{
-    GCSimpleGraphCachedDataSource * rv = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+
     rv.xUnit = [GCUnit unitForKey:@"datemonth"];
 
     GCSimpleGraphDataHolder * lt = [GCSimpleGraphDataHolder dataHolder:perfAnalysis.longTermSerie.serie
                                                                   type:gcGraphLine
-                                                                 color:[UIColor blueColor]
+                                                                 color:[GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLine]
                                                                andUnit:perfAnalysis.longTermSerie.unit];
     lt.lineWidth =2;
     lt.legend = NSLocalizedString(@"Fitness", @"Performance");
     GCSimpleGraphDataHolder * st = [GCSimpleGraphDataHolder dataHolder:perfAnalysis.shortTermSerie.serie
                                                                   type:gcGraphLine
-                                                                 color:[UIColor redColor]
+                                                                 color:[GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLineSecondary]
                                                                andUnit:perfAnalysis.shortTermSerie.unit];
     st.legend = NSLocalizedString(@"Fatigue", @"Performance");
     GCUnitPerformanceRange * unit = [GCUnitPerformanceRange performanceUnitFrom:st.range.y_min to:st.range.y_max];

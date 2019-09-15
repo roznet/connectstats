@@ -28,7 +28,7 @@
 @class GCActivity;
 typedef void(^GCHealthKitWorkoutFoundActivity)(GCActivity*act, NSString*aId);
 
-@interface GCHealthKitWorkoutParser : NSObject<NSCoding>
+@interface GCHealthKitWorkoutParser : NSObject<NSSecureCoding>
 
 +(instancetype)parserWithWorkouts:(NSArray*)workouts andSamples:(NSDictionary*)samples;
 

@@ -54,10 +54,11 @@
     return rv;
 }
 
--(id)retrieveReferenceObject:(NSObject<NSCoding>*)object
-                                     selector:(SEL)sel
-                                   identifier:(NSString*)ident
-                                        error:(NSError**)error{
+-(id)retrieveReferenceObject:(NSObject<NSSecureCoding>*)object
+                    forClasses:(NSSet<Class>*)cls
+                    selector:(SEL)sel
+                  identifier:(NSString*)ident
+                       error:(NSError**)error{
 
     id rv = nil;
 
@@ -72,10 +73,20 @@
                                                      attributes:nil
                                                           error:&creationError];
         if (didCreateDir) {
-            if(object && [NSKeyedArchiver archiveRootObject:object toFile:filepath]){
-                rv = object;
-            }else{
-                if (error) {
+            //archivedDataWithRootObject:requiringSecureCoding:error
+            BOOL success = false;
+            if( error){
+                *error = nil;
+            }
+            
+            if( object ){
+                success = [[NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:YES error:error] writeToFile:filepath atomically:YES];
+                if( success ){
+                    rv = object;
+                }
+            }
+            if( success ){
+                if (error && !*error) {
                     *error = [NSError errorWithDomain:@"RZRegressionManager" code:ENOENT userInfo:nil];
                 }
             }
@@ -89,7 +100,13 @@
 
     }else{
         if( [fileManager fileExistsAtPath:filepath] ){
-            rv = [NSKeyedUnarchiver unarchiveObjectWithFile:filepath];
+            if( @available(iOS 12.0, *)){
+                
+                NSData * data = [NSData dataWithContentsOfFile:filepath];
+                
+                rv = [NSKeyedUnarchiver unarchivedObjectOfClasses:cls fromData:data error:error];
+            }
+
         }else{
             if (error) {
                 *error = [NSError errorWithDomain:@"RZRegressionManager" code:ENOENT userInfo:nil];

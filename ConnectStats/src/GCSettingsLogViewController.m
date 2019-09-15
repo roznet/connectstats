@@ -25,6 +25,7 @@
 
 #import "GCSettingsLogViewController.h"
 #import "GCViewIcons.h"
+#import "GCViewConfig.h"
 
 @interface GCSettingsLogViewController ()
 
@@ -88,6 +89,8 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
+
     CGRect rect = self.view.frame;
     rect.origin.y=0;
     self.webView.frame = rect;

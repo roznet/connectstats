@@ -25,7 +25,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface GCActivitySummaryValue : NSObject<NSCoding>
+@interface GCActivitySummaryValue : NSObject<NSSecureCoding>
 
 @property (nonatomic,retain) NSString * field;
 @property (nonatomic,retain) GCNumberWithUnit * numberWithUnit;

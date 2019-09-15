@@ -29,7 +29,7 @@
 
 @interface GCActivitiesOrganizerListRegister ()
 @property (nonatomic,retain) NSArray<GCActivity*>*activities;
-@property (nonatomic,assign) BOOL reachedExisting;
+@property (nonatomic,assign) NSUInteger reachedExisting;
 @property (nonatomic,retain) NSArray<NSString*>*childIds;
 @property (nonatomic,retain) GCService * service;
 @property (nonatomic,assign) BOOL isFirst;
@@ -78,23 +78,37 @@
     }
     self.childIds = childIds.count > 0 ? childIds.allKeys : nil;
 
-    _reachedExisting = FALSE;
+    _reachedExisting = 0;
     NSUInteger newActivitiesCount = 0;
+    NSUInteger actuallyAdded = 0;
+    NSUInteger skipped = 0;
     if (self.activities) {
         for (GCActivity * activity in _activities) {
             [existingInService addObject:activity.activityId];
-            BOOL foundInOrganizer = [organizer activityForId:activity.activityId] != nil;
-            if (foundInOrganizer) {
-                _reachedExisting = TRUE;
-            }
-            if (!foundInOrganizer) {
+            BOOL knownDuplicate = [organizer isKnownDuplicate:activity];
+            BOOL foundInOrganizer = [organizer activityForId:activity.activityId] != nil || knownDuplicate;
+            if (foundInOrganizer || knownDuplicate) {
+                _reachedExisting++;
+            }else{
                 newActivitiesCount++;
             }
-            [organizer registerActivity:activity forActivityId:activity.activityId];
+            if( [organizer registerActivity:activity forActivityId:activity.activityId] ){
+                actuallyAdded += 1;
+            }else{
+                skipped += 1;
+            }
         }
-        if (newActivitiesCount>0) {
-            RZLog(RZLogInfo, @"Found %d new activities for %@ (total %d)", (int)newActivitiesCount, self.service.displayName, (int)[organizer countOfActivities]);
-        }
+        RZLog(RZLogInfo, @"Parsed %@ [%@-%@]=%lu new=%lu added=%lu existing=%lu newtotal=%lu",
+              self.service.displayName,
+              [self.activities.firstObject activityId],
+              [self.activities.lastObject activityId],
+              (unsigned long)self.activities.count,
+              (unsigned long)newActivitiesCount,
+              (unsigned long)actuallyAdded,
+              (unsigned long)self.reachedExisting,
+              (unsigned long)[organizer countOfActivities]
+              );
+        
         // FIXME: check for deleted
         if (existingInService.count ) {
             NSArray * deleteCandidate = [organizer findActivitiesNotIn:existingInService isFirst:self.isFirst];
@@ -116,14 +130,16 @@
                     [organizer deleteActivitiesInTrash];
                 }
             }
-            if (deleteCandidate == nil) {
-                RZLog(RZLogError, @"didn't find last inorg=%d delete=%d ingc=%d",
-                      (int)[organizer countOfActivities],
-                      (int)[deleteCandidate count],
-                      (int)[existingInService count]);
-            }
         }
     }
 }
 
+-(BOOL)shouldSearchForMoreWith:(NSUInteger)requestCount reloadAll:(BOOL)mode{
+    // if we got zero new activities, we can stop
+    // Otherwise if we want to reload all or we still found
+    // some new activities (not all are existing) we search for more.
+    return ( self.activities.count > 0 &&
+            (mode || _reachedExisting < requestCount)
+             );
+}
 @end

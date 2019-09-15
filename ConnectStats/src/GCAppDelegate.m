@@ -70,6 +70,7 @@ void checkVersion(){
 @interface GCAppDelegate ()
 @property (nonatomic,assign) BOOL needsStartupRefresh;
 @property (nonatomic,retain) GCAppActions * actions;
+@property (nonatomic,retain) NSDictionary<NSString*,NSDictionary*> * credentials;
 
 
 @end
@@ -107,6 +108,7 @@ void checkVersion(){
     [_health release];
     [_segments release];
     [_activityTypes release];
+    [_credentials release];
 
     [_splitViewController release];
     [_tabBarController release];
@@ -129,20 +131,22 @@ void checkVersion(){
 
     RZSimNeedle();
 
+    
+    [self credentialsForService:@"flurry" andKey:@"connectstats"];
 #if !TARGET_IPHONE_SIMULATOR
-	NSString *applicationCode = [GCAppDelegate connectStatsVersion] ? @"RM6VFRQYRM9K68J2JQCG" : @"372FGTVXMTHX7ZWWF8P2";
+	NSString *applicationCode = [GCAppDelegate connectStatsVersion] ? [self credentialsForService:@"flurry" andKey:@"connectstats"] : [self credentialsForService:@"flurry" andKey:@"healthstats"];
     if ([GCAppDelegate healthStatsVersion]) {
-        applicationCode = @"F2M5RDFZJQCWTWTB42Y4";
+        applicationCode =  [self credentialsForService:@"flurry" andKey:@"healthstats"];
     }
     [Flurry startSession:applicationCode];
 #endif
     if ([GCAppDelegate connectStatsVersion]) {
-        [Appirater setAppId:@"581697248"];
+        [Appirater setAppId: [self credentialsForService:@"appstore" andKey:@"connectstats"]];
     }else if ([GCAppDelegate healthStatsVersion]){
-        [Appirater setAppId:@"912378669"];
+        [Appirater setAppId:[self credentialsForService:@"appstore" andKey:@"healthstats"]];
     }
 
-    [GMSServices provideAPIKey:@"AIzaSyCEritHNFjxZd61gJJloCjYWsMg8G5q0YY"];
+    [GMSServices provideAPIKey:[self credentialsForService:@"googlemaps" andKey:@"api_key"]];
     BOOL ok = [self startInit];
     if (!ok) {
         RZLog(RZLogError, @"Multiple failure to start");
@@ -188,6 +192,13 @@ void checkVersion(){
     }
     [RZViewConfig setFontStyle:[GCAppGlobal configGetInt:CONFIG_FONT_STYLE defaultValue:gcFontStyleDynamicType]];
 
+    if( @available( iOS 13.0, *)){
+        if( [[GCAppGlobal profile] configGetBool:@"CONFIG_FIRST_TIME_IOS13" defaultValue:true] ){
+            [[GCAppGlobal profile] configSet:CONFIG_SKIN_NAME stringVal:kGCSkinNameiOS13];
+            [[GCAppGlobal profile] configSet:@"CONFIG_FIRST_TIME_IOS13" boolVal:false];
+            [GCAppGlobal saveSettings];
+        }
+    }
 
 	_window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     //DONT CHECK IN:
@@ -277,7 +288,7 @@ void checkVersion(){
 
 #pragma mark - User Activities
 
--(BOOL)application:(nonnull UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(nonnull void (^)(NSArray * __nullable))restorationHandler{
+-(BOOL)application:(nonnull UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * __nullable))restorationHandler{
     BOOL rv = false;
 
     if( [userActivity.activityType isEqualToString:kNSUserActivityTypeViewOne]){
@@ -383,7 +394,9 @@ void checkVersion(){
     BOOL rv = false;
     self.urlToOpen = url;
     // check if fit file
-    if ([url.path hasSuffix:@".fit"]) {
+    if( [url.host isEqualToString:@"oauth-callback"]){
+        
+    }else if ([url.path hasSuffix:@".fit"]) {
         dispatch_async(self.worker,^(){
             [self handleFitFile];
         });
@@ -484,7 +497,7 @@ void checkVersion(){
 
 -(void)searchAllActivities{
     // Should have better logic for all services
-    if ([self.profiles configGetBool:PROFILE_FULL_DOWNLOAD_DONE defaultValue:false]) {
+    if ([self.profiles configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] == true || [self.profiles configGetBool:PROFILE_FULL_DOWNLOAD_DONE defaultValue:false]) {
         [self.web servicesSearchRecentActivities];
     }else{
         [self.web servicesSearchActivitiesFrom:[self.profiles configGetInt:PROFILE_LAST_PAGE defaultValue:0] reloadAll:true];
@@ -556,6 +569,37 @@ void checkVersion(){
     return YES;
 }
 
+-(NSDictionary<NSString*,NSString*>*)credentialsForService:(NSString*)service{
+    if( self.credentials == nil){
+        NSString * credentialsPath = [RZFileOrganizer bundleFilePath:@"credentials.json"];
+        NSData * credentialsData = [NSData dataWithContentsOfFile:credentialsPath];
+        if( credentialsData ){
+            NSError * error = nil;
+            NSDictionary * credentials = [NSJSONSerialization JSONObjectWithData:credentialsData options:NSJSONReadingAllowFragments error:&error];
+            if( [credentials isKindOfClass:[NSDictionary class]]){
+                self.credentials = credentials;
+            }
+        }
+        // if still nil, we didn't succeed
+        if( self.credentials == nil){
+            RZLog(RZLogError, @"Failed to load credentials: %@", credentialsPath);
+            self.credentials = @{};
+        }
+    }
+    NSDictionary * rv = self.credentials[service];
+    return rv ?: @{};
+}
 
+-(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key{
+    NSDictionary * credentials = [self credentialsForService:service];
+    NSString * found = credentials[key];
+    if( [found isKindOfClass:[NSString class]]){
+        return found;
+    }else{
+        // Default empty string, will fail connection as invalid credential...
+        RZLog(RZLogError, @"Didn't find credential %@ for %@", key, service);;
+        return @"";
+    }
+}
 
 @end

@@ -118,7 +118,23 @@
     }
     [cell setIconImage:[RZViewConfig checkMarkImage:(indexPath.row == _selected)]];
     cell.iconPosition = gcIconPositionLeft;
-
+    if( self.cellBackgroundColor ){
+        cell.backgroundColor = self.cellBackgroundColor;
+    }
+    if( self.textPrimaryColor){
+        [cell labelForRow:0 andCol:0].textColor = self.textPrimaryColor;
+    }
+    if( self.textSecondaryColor && self.subtext ){
+        [cell labelForRow:1 andCol:0].textColor = self.textSecondaryColor;
+    }
+    if( self.selectedTextColor && indexPath.row == _selected){
+        [cell labelForRow:0 andCol:0].textColor = self.selectedTextColor;
+        if( [choice isKindOfClass:[NSAttributedString class]] ){
+            NSMutableAttributedString * changed = RZReturnAutorelease([[NSMutableAttributedString alloc] initWithAttributedString:choice]);
+            [changed addAttribute:NSForegroundColorAttributeName value:self.selectedTextColor range:NSMakeRange(0,changed.length)];
+            [cell labelForRow:0 andCol:0].attributedText = changed;
+        }
+    }
     return cell;
 }
 

@@ -119,7 +119,7 @@
 }
 
 -(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters{
-    NSURLRequest *preparedRequest = [OAuth1Controller preparedRequestForPath:path
+    NSURLRequest *preparedRequest = [self.oauth1Controller preparedRequestForPath:path
                                                                   parameters:parameters
                                                                   HTTPmethod:@"GET"
                                                                   oauthToken:self.oauthToken

@@ -27,10 +27,9 @@
 #import "RZViewConfig.h"
 #import "RZMacros.h"
 
-#define kMarginX 2.f
+#define kMarginX 4.f
 
 @implementation GCCellEntryText
-@synthesize label,textField,gradientLayer;
 
 +(GCCellEntryText*)textCell:(UITableView*)tableView{
     GCCellEntryText * cell = (GCCellEntryText*)[tableView dequeueReusableCellWithIdentifier:@"GCText"];
@@ -44,34 +43,34 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)frame reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:frame reuseIdentifier:reuseIdentifier]) {
 
-		label						= [[UILabel alloc] initWithFrame:CGRectZero];
-		label.backgroundColor		= [UIColor clearColor];
-		label.font					= [RZViewConfig boldSystemFontOfSize:16];
-		label.textColor				= [UIColor blackColor];
+		_label						= [[UILabel alloc] initWithFrame:CGRectZero];
+		_label.backgroundColor		= [UIColor clearColor];
+		_label.font					= [RZViewConfig boldSystemFontOfSize:16];
+		_label.textColor				= [RZViewConfig colorForText:rzColorStylePrimaryText];;
 
-		textField					= [[UITextField alloc] initWithFrame:CGRectZero];
-		textField.backgroundColor	= [UIColor clearColor];
-		textField.font				= [RZViewConfig systemFontOfSize:16];
-		textField.textColor			= [UIColor blueColor];
-		textField.keyboardType		= UIKeyboardTypeDefault;
-		textField.borderStyle		= UITextBorderStyleRoundedRect;
+		_textField					= [[UITextField alloc] initWithFrame:CGRectZero];
+		_textField.backgroundColor	= [UIColor clearColor];
+		_textField.font				= [RZViewConfig systemFontOfSize:16];
+		_textField.textColor			= [RZViewConfig colorForText:rzColorStyleHighlightedText];;
+		_textField.keyboardType		= UIKeyboardTypeDefault;
+		_textField.borderStyle		= UITextBorderStyleRoundedRect;
 
-		textField.delegate = self;
+		_textField.delegate = self;
 
-        gradientLayer               = [[CAGradientLayer alloc] init];
+        _gradientLayer               = [[CAGradientLayer alloc] init];
 
-		[self.contentView addSubview:textField];
-		[self.contentView addSubview:label];
+		[self.contentView addSubview:_textField];
+		[self.contentView addSubview:_label];
 
-        [self.contentView.layer insertSublayer:gradientLayer atIndex:0];
+        [self.contentView.layer insertSublayer:_gradientLayer atIndex:0];
     }
     return self;
 }
 #if ! __has_feature(objc_arc)
 -(void)dealloc{
-    [textField release];
-    [label release];
-    [gradientLayer release];
+    [_textField release];
+    [_label release];
+    [_gradientLayer release];
 
     [super dealloc];
 }
@@ -84,21 +83,21 @@
 	CGRect baseRect = self.contentView.bounds;
 	CGRect rect = baseRect;
 
-	CGSize labelSize	= [label.text	sizeWithAttributes:@{NSFontAttributeName:label.font}];
+	CGSize labelSize	= [self.label.text	sizeWithAttributes:@{NSFontAttributeName:self.label.font}];
 
     CGRect labelRect = CGRectMake( kMarginX, rect.size.height/2.-labelSize.height/2., labelSize.width, labelSize.height);
 	CGRect fieldRect = CGRectMake(CGRectGetMaxX(labelRect)+10., labelRect.origin.y-2.,
                                   CGRectGetMaxX(baseRect)-(CGRectGetMaxX(labelRect)+15.), labelSize.height+4.);
 
-	label.frame			= labelRect;
-	textField.frame		= fieldRect;
+	_label.frame			= labelRect;
+	_textField.frame		= fieldRect;
 
-    gradientLayer.frame = self.contentView.bounds;
+    _gradientLayer.frame = self.contentView.bounds;
     //[GCViewConfig setupGradientForDetails:gradientLayer];
 }
 
 -(NSString*)text{
-    return textField.text;
+    return self.textField.text;
 }
 /*
 // Only override drawRect: if you perform custom drawing.

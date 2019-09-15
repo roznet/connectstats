@@ -142,5 +142,6 @@ extern NSString * CALC_MAX_ASCENT_SPEED        ;
 extern NSString * CALC_MAX_DESCENT_SPEED       ;
 extern NSString * CALC_10SEC_SPEED             ;
 extern NSString * CALC_LAP_SCALED_SPEED        ;
+extern NSString * CALC_ACCUMULATED_SPEED       ;
 
 extern gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd];

@@ -37,7 +37,6 @@
 #import "GCHealthViewController.h"
 #import "GCSettingsReloadViewController.h"
 #import "GCSettingsLogViewController.h"
-#import "GCGarminLoginViewController.h"
 #import "GCService.h"
 #import "GCDebugActionsTableViewController.h"
 
@@ -60,7 +59,8 @@
 #define GC_SETTINGS_FILTER      4
 #define GC_SETTINGS_LAPS        5
 #define GC_SETTINGS_STRIDE      6
-#define GC_SETTINGS_PARAMS_END  7
+#define GC_SETTINGS_SKIN        7
+#define GC_SETTINGS_PARAMS_END  8
 
 #define GC_SETTINGS_INLINE_GRAPHS   0
 #define GC_SETTINGS_LAP_OVERLAY     1
@@ -108,66 +108,7 @@
         [[GCAppGlobal profile] attach:self];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kNotifySettingsChange object:nil];
 
-        self.remap = [RZTableIndexRemap tableIndexRemap];
-
-        BOOL allSections = [GCAppGlobal connectStatsVersion];
-
-        if ([[GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:@""] isEqualToString:CONFIG_ENABLE_DEBUG_ON]) {
-            [self.remap addSection:GC_SECTION_LOG withRows:@[ @( GC_SETTINGS_SHOW_LOG),
-                                                              @( GC_SETTINGS_TRIGGER_ACTION)]];
-        }
-
-        if (allSections) {
-            [self.remap addSection:GC_SECTION_LOGIN withRows:@[
-                                                               @( GC_SETTINGS_SERVICES    ),
-                                                               @( GC_SETTINGS_PROFILE     ),
-                                                               @( GC_SETTINGS_HEALTH      )]];
-        }else{
-            [self.remap addSection:GC_SECTION_LOGIN withRows:@[
-                                                               @( GC_SETTINGS_SERVICES    ),
-                                                               @( GC_SETTINGS_PROFILE     )
-                                                               ]];
-
-        }
-
-        if (allSections) {
-            [self.remap addSection:GC_SECTION_PARAMS withRows:@[
-                                                                @( GC_SETTINGS_REFRESH     ),
-                                                                @( GC_SETTINGS_UNITS       ),
-                                                                @( GC_SETTINGS_FIRSTDAY    ),
-                                                                @( GC_SETTINGS_PERIOD      ),
-                                                                @( GC_SETTINGS_FILTER      ),
-                                                                @( GC_SETTINGS_LAPS        ),
-                                                                @( GC_SETTINGS_STRIDE      )]];
-        }else{
-            [self.remap addSection:GC_SECTION_PARAMS withRows:@[
-                                                                @( GC_SETTINGS_REFRESH     ),
-                                                                @( GC_SETTINGS_UNITS       ),
-                                                                @( GC_SETTINGS_FIRSTDAY    ),
-                                                                @( GC_SETTINGS_STRIDE      )]];
-
-        }
-
-        [self.remap addSection:GC_SECTION_OTHER withRows:@[
-                                                           @( GC_SETTINGS_HELP            ),
-                                                           @( GC_SETTINGS_BUGREPORT       ),
-                                                           @( GC_SETTINGS_INCLUDEDATA     ),
-                                                           ]];
-
-        if (allSections) {
-            [self.remap addSection:GC_SECTION_ADVANCED withRows:@[
-                                                                  @( GC_SETTINGS_LANGUAGE        ),
-                                                                  @( GC_SETTINGS_INLINE_GRAPHS   ),
-                                                                  @( GC_SETTINGS_INLINE_GRADIENT ),
-                                                                  @( GC_SETTINGS_LAP_OVERLAY     ),
-                                                                  @( GC_SETTINGS_MAP             ),
-                                                                  @( GC_SETTINGS_FASTMAP         ),
-                                                                  @( GC_SETTINGS_CONTINUE_ERROR  ),
-                                                                  @( GC_SETTINGS_ENABLE_DERIVED  ),
-                                                                  @( GC_SETTINGS_SHOW_DOWNLOAD  ),
-                                                                  @( GC_SETTINGS_FONT_STYLE) ]];
-        }
-
+        [self buildRemap];
     }
     return self;
 }
@@ -179,6 +120,71 @@
 
     [super dealloc];
 }
+
+-(void)buildRemap{
+    self.remap = [RZTableIndexRemap tableIndexRemap];
+    
+    BOOL allSections = [GCAppGlobal connectStatsVersion];
+    
+    if ([[GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:CONFIG_ENABLE_DEBUG_OFF] isEqualToString:CONFIG_ENABLE_DEBUG_ON]) {
+        [self.remap addSection:GC_SECTION_LOG withRows:@[ @( GC_SETTINGS_SHOW_LOG),
+                                                          @( GC_SETTINGS_TRIGGER_ACTION)]];
+    }
+    
+    if (allSections) {
+        [self.remap addSection:GC_SECTION_LOGIN withRows:@[
+                                                           @( GC_SETTINGS_SERVICES    ),
+                                                           @( GC_SETTINGS_PROFILE     ),
+                                                           @( GC_SETTINGS_HEALTH      )]];
+    }else{
+        [self.remap addSection:GC_SECTION_LOGIN withRows:@[
+                                                           @( GC_SETTINGS_SERVICES    ),
+                                                           @( GC_SETTINGS_PROFILE     )
+                                                           ]];
+        
+    }
+    
+    if (allSections) {
+        [self.remap addSection:GC_SECTION_PARAMS withRows:@[
+                                                            @( GC_SETTINGS_REFRESH     ),
+                                                            @( GC_SETTINGS_SKIN        ),
+                                                            @( GC_SETTINGS_UNITS       ),
+                                                            @( GC_SETTINGS_FIRSTDAY    ),
+                                                            @( GC_SETTINGS_PERIOD      ),
+                                                            @( GC_SETTINGS_FILTER      ),
+                                                            @( GC_SETTINGS_LAPS        ),
+                                                            @( GC_SETTINGS_STRIDE      )]];
+    }else{
+        [self.remap addSection:GC_SECTION_PARAMS withRows:@[
+                                                            @( GC_SETTINGS_REFRESH     ),
+                                                            @( GC_SETTINGS_SKIN        ),
+                                                            @( GC_SETTINGS_UNITS       ),
+                                                            @( GC_SETTINGS_FIRSTDAY    ),
+                                                            @( GC_SETTINGS_STRIDE      )]];
+        
+    }
+    
+    [self.remap addSection:GC_SECTION_OTHER withRows:@[
+                                                       @( GC_SETTINGS_HELP            ),
+                                                       @( GC_SETTINGS_BUGREPORT       ),
+                                                       @( GC_SETTINGS_INCLUDEDATA     ),
+                                                       ]];
+    
+    if (allSections) {
+        [self.remap addSection:GC_SECTION_ADVANCED withRows:@[
+                                                              @( GC_SETTINGS_LANGUAGE        ),
+                                                              @( GC_SETTINGS_INLINE_GRAPHS   ),
+                                                              @( GC_SETTINGS_INLINE_GRADIENT ),
+                                                              @( GC_SETTINGS_LAP_OVERLAY     ),
+                                                              @( GC_SETTINGS_MAP             ),
+                                                              @( GC_SETTINGS_FASTMAP         ),
+                                                              @( GC_SETTINGS_CONTINUE_ERROR  ),
+                                                              @( GC_SETTINGS_ENABLE_DERIVED  ),
+                                                              @( GC_SETTINGS_SHOW_DOWNLOAD  ),
+                                                              @( GC_SETTINGS_FONT_STYLE) ]];
+    }
+
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -189,7 +195,11 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.tableView.backgroundView = nil;
-    self.tableView.backgroundColor = [GCViewConfig backgroundForGroupedTable];
+    self.tableView.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorGroupedTable];
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -226,9 +236,27 @@
 
     if (indexPath.section == GC_SECTION_PARAMS) {
         switch (indexPath.row) {
+            case GC_SETTINGS_SKIN:
+            {
+                gridcell = [GCCellGrid gridCell:tableView];
+                [gridcell setupForRows:1 andCols:2];
+                
+                NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Theme",@"Profile Skin")
+                                                                              attributes:[GCViewConfig attributeBold16]] autorelease];
+                NSString * skin = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:kGCSkinNameOriginal];
+                NSAttributedString * current = [[[NSAttributedString alloc] initWithString:skin
+                                                                                attributes:[GCViewConfig attribute16]] autorelease];
+                
+                [gridcell labelForRow:0 andCol:0].attributedText = title;
+                [gridcell labelForRow:0 andCol:1].attributedText = current;
+                
+                rv = gridcell;
+                break;
+
+            }
             case GC_SETTINGS_REFRESH:
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Refresh on startup",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16] withString:NSLocalizedString(@"Refresh on startup",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_REFRESH)];
                 switchcell.entryFieldDelegate = self;
@@ -367,7 +395,7 @@
             case GC_SETTINGS_NEWAPI:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"New track download api",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16] withString:NSLocalizedString(@"New track download api",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_NEWAPI)];
                 switchcell.entryFieldDelegate = self;
@@ -419,7 +447,8 @@
             case GC_SETTINGS_SHOW_DOWNLOAD:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Show Download Icon",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Show Download Icon",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_SHOW_DOWNLOAD)];
                 switchcell.entryFieldDelegate = self;
@@ -430,7 +459,8 @@
             case GC_SETTINGS_INLINE_GRADIENT:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Map Gradient in Tables",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Map Gradient in Tables",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_INLINE_GRADIENT)];
                 switchcell.entryFieldDelegate = self;
@@ -441,7 +471,8 @@
             case GC_SETTINGS_INLINE_GRAPHS:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Graphs in Tables",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Graphs in Tables",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_INLINE_GRAPHS)];
                 switchcell.entryFieldDelegate = self;
@@ -452,7 +483,8 @@
             case GC_SETTINGS_ENABLE_DERIVED:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Compute Best Overall",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Compute Best Overall",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_ENABLE_DERIVED)];
                 switchcell.entryFieldDelegate = self;
@@ -461,7 +493,8 @@
             }
             case GC_SETTINGS_LAP_OVERLAY:
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Laps Overlay in Graphs", @"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Laps Overlay in Graphs", @"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_LAP_OVERLAY)];
                 switchcell.entryFieldDelegate = self;
@@ -470,7 +503,8 @@
             case GC_SETTINGS_FASTMAP:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Map skip points",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Map skip points",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_FASTMAP)];
                 switchcell.entryFieldDelegate = self;
@@ -480,7 +514,8 @@
             case GC_SETTINGS_CONTINUE_ERROR:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Continue on Error",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Continue on Error",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_CONTINUE_ERROR)];
                 switchcell.entryFieldDelegate = self;
@@ -566,7 +601,8 @@
             case GC_SETTINGS_INCLUDEDATA:
             {
                 switchcell = [GCCellEntrySwitch switchCell:tableView];
-                [switchcell.label setText:NSLocalizedString(@"Bug Report Include Activity",@"Settings")];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Bug Report Include Activity",@"Settings")];
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_OTHER, GC_SETTINGS_INCLUDEDATA)];
                 switchcell.entryFieldDelegate = self;
@@ -639,15 +675,20 @@
         if (indexPath.row==GC_SETTINGS_TRIGGER_ACTION) {
             gridcell  = [GCCellGrid gridCell:tableView];
             [gridcell setupForRows:1 andCols:1];
-            [gridcell labelForRow:0 andCol:0].text = NSLocalizedString( @"Debug Actions", @"SettingsView");
+            [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:NSLocalizedString( @"Debug Actions", @"SettingsView")];
             rv=gridcell;
         }else if (indexPath.row == GC_SETTINGS_SHOW_LOG){
             gridcell  = [GCCellGrid gridCell:tableView];
             [gridcell setupForRows:1 andCols:1];
-            [gridcell labelForRow:0 andCol:0].text = NSLocalizedString( @"Log", @"SettingsView");
+            [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:NSLocalizedString( @"Log", @"SettingsView")];
             rv=gridcell;
         }
     }
+    
+    rv.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
+    
     return rv ?: [GCCellGrid gridCell:tableView];
 }
 
@@ -666,6 +707,24 @@
             [GCUnit setGlobalSystem:(gcUnitSystem)[cell selected]];
             [GCAppGlobal saveSettings];
             break;
+        case GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_SKIN):
+        {
+            NSString * newSkin = [[GCViewConfigSkin availableSkinNames] objectAtIndex:cell.selected];
+            GCViewConfigSkin * skin = [GCViewConfigSkin skinForName:newSkin];
+            if( skin ){
+                [GCViewConfig setSkin:skin];
+                [GCViewConfig setupViewController:self];
+                // Spacial case, somehow when you change the settings, the navigationbar
+                // didn't change color unless done expliciatly
+                self.navigationController.navigationBar.barTintColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
+                self.navigationController.navigationBar.tintColor = [GCViewConfig
+                                                                     defaultColor:gcSkinDefaultColorHighlightedText];
+                 
+                [[GCAppGlobal profile] configSet:CONFIG_SKIN_NAME stringVal:newSkin];
+                [GCAppGlobal saveSettings];
+            }
+            break;
+        }
         case GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_FIRSTDAY):
             [GCAppGlobal configSet:CONFIG_FIRST_DAY_WEEK intVal:[GCViewConfig weekDayValue:[cell selected]]];
             [GCAppGlobal saveSettings];
@@ -769,21 +828,29 @@
         if(indexPath.row == GC_SETTINGS_UNITS){
             NSArray * systems = [GCViewConfig unitSystemDescriptions];
             NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_UNIT_SYSTEM defaultValue:GCUnitSystemDefault];
-            GCCellEntryListViewController * choices = [GCCellEntryListViewController entryListViewController:systems selected:selected];
+            GCCellEntryListViewController * choices = [GCViewConfig standardEntryListViewController:systems selected:selected];
             choices.entryFieldDelegate = self;
             choices.identifierInt = GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_UNITS);
+            [self.navigationController pushViewController:choices animated:YES];
+        }else if( indexPath.row == GC_SETTINGS_SKIN){
+            NSArray * skins = [GCViewConfigSkin availableSkinNames];
+            NSString * skin = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:kGCSkinNameOriginal];
+            NSUInteger selected = [skins indexOfObject:skin];
+            GCCellEntryListViewController * choices = [GCViewConfig standardEntryListViewController:skins selected:selected];
+            choices.entryFieldDelegate = self;
+            choices.identifierInt = GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_SKIN);
             [self.navigationController pushViewController:choices animated:YES];
         }else if(indexPath.row == GC_SETTINGS_PERIOD){
             NSArray * choices = [GCViewConfig periodDescriptions];
             NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_PERIOD_TYPE defaultValue:0];
-            GCCellEntryListViewController * choicesC = [GCCellEntryListViewController entryListViewController:choices selected:selected];
+            GCCellEntryListViewController * choicesC = [GCViewConfig standardEntryListViewController:choices selected:selected];
             choicesC.entryFieldDelegate = self;
             choicesC.identifierInt = GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_PERIOD);
             [self.navigationController pushViewController:choicesC animated:YES];
         }else if(indexPath.row == GC_SETTINGS_FIRSTDAY){
             NSArray * choices = [GCViewConfig weekStartDescriptions];
             NSUInteger selected = [GCViewConfig weekDayIndex:[GCAppGlobal configGetInt:CONFIG_FIRST_DAY_WEEK defaultValue:1]];
-            GCCellEntryListViewController * choicesC = [GCCellEntryListViewController entryListViewController:choices selected:selected];
+            GCCellEntryListViewController * choicesC = [GCViewConfig standardEntryListViewController:choices selected:selected];
             choicesC.entryFieldDelegate = self;
             choicesC.identifierInt = GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_FIRSTDAY);
             [self.navigationController pushViewController:choicesC animated:YES];
@@ -798,7 +865,7 @@
         }else if(indexPath.row==GC_SETTINGS_STRIDE){
             NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_STRIDE_STYLE defaultValue:GCUnitStrideSameFoot];
             NSArray * types = [GCUnit strideStyleDescriptions];
-            GCCellEntryListViewController * choices = [GCCellEntryListViewController entryListViewController:types selected:selected];
+            GCCellEntryListViewController * choices = [GCViewConfig standardEntryListViewController:types selected:selected];
             choices.entryFieldDelegate = self;
             choices.identifierInt = GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_STRIDE);
             [self.navigationController pushViewController:choices animated:YES];
@@ -811,7 +878,7 @@
         }else if(indexPath.row==GC_SETTINGS_MAP){
             NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_USE_MAP defaultValue:gcMapBoth];
             NSArray * types = [GCViewConfig mapTypes];
-            GCCellEntryListViewController * choices = [GCCellEntryListViewController entryListViewController:types selected:selected];
+            GCCellEntryListViewController * choices = [GCViewConfig standardEntryListViewController:types selected:selected];
             choices.entryFieldDelegate = self;
             choices.identifierInt = GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_MAP);
             [self.navigationController pushViewController:choices animated:YES];
@@ -829,7 +896,7 @@
         }else if (indexPath.row == GC_SETTINGS_LANGUAGE){
             NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_LANGUAGE_SETTING defaultValue:gcLanguageSettingAsDownloaded];
             NSArray * types = [GCViewConfig languageSettingChoices];
-            GCCellEntryListViewController * choices = [GCCellEntryListViewController entryListViewController:types selected:selected];
+            GCCellEntryListViewController * choices = [GCViewConfig standardEntryListViewController:types selected:selected];
             choices.entryFieldDelegate = self;
             choices.identifierInt = GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_LANGUAGE);
             [self.navigationController pushViewController:choices animated:YES];
@@ -945,7 +1012,10 @@
 }
 
 -(void)notifyCallBack:(id)theParent{
-    [self.tableView reloadData];
+    [self buildRemap];
+    dispatch_async( dispatch_get_main_queue(), ^(){
+        [self.tableView reloadData];
+    });
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{

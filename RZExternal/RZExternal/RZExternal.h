@@ -35,10 +35,8 @@ FOUNDATION_EXPORT const unsigned char RZExternalVersionString[];
 
 #import "RZExternal/Appirater.h"
 
-#import "RZExternal/Objective-Zip.h"
-#import "RZExternal/Objective-Zip+NSError.h"
-
 #import "RZExternal/DeviceUtil.h"
 
 #import "RZExternal/CHCSVParser.h"
+#import "RZExternal/SmudgyWindow.h"
 

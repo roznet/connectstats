@@ -498,6 +498,10 @@
             break;
         case gcServiceGarmin:
             sstr = PROFILE_SERVICE_GARMIN;
+            break;
+        case gcServiceConnectStats:
+            sstr = PROFILE_SERVICE_CONNECTSTATS;
+            break;
         default:
             break;
     }
@@ -512,6 +516,10 @@
 
 -(void)serviceSuccess:(gcService)service set:(BOOL)set{
     [self configSet:[self key:PROFILE_SERVICE_SETUP forService:service] boolVal:set];
+}
+
+-(BOOL)serviceFullDone:(gcService)service{
+    return [self configGetBool:[self key:PROFILE_FULL_DOWNLOAD_DONE forService:service] defaultValue:NO];
 }
 
 -(BOOL)serviceEnabled:(gcService)service{
@@ -537,6 +545,9 @@
             break;
         case gcServiceFitBit:
             rv = [self configGetBool:CONFIG_FITBIT_ENABLE defaultValue:NO];
+            break;
+        case gcServiceConnectStats:
+            rv = [self configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO];
             break;
         case gcServiceEnd:
             rv = false;
@@ -566,6 +577,9 @@
             break;
         case gcServiceFitBit:
             [self configSet:CONFIG_FITBIT_ENABLE boolVal:set];
+            break;
+        case gcServiceConnectStats:
+            [self configSet:CONFIG_CONNECTSTATS_ENABLE boolVal:set];
             break;
         case gcServiceEnd:
             break;
@@ -605,6 +619,7 @@
         // for connect stats fitbit/healthkit/withings only auxiliary health data
         return [self serviceEnabled:gcServiceBabolat] ||
         [self serviceEnabled:gcServiceGarmin] ||
+        [self serviceEnabled:gcServiceConnectStats] ||
         [self serviceEnabled:gcServiceStrava] ||
         [self serviceEnabled:gcServiceSportTracks] ||
         [self serviceEnabled:gcServiceHealthKit];
@@ -622,6 +637,7 @@
     rv += [self serviceEnabled:gcServiceSportTracks];
     rv += [self serviceEnabled:gcServiceHealthKit];
     rv += [self serviceEnabled:gcServiceFitBit];
+    rv += [self serviceEnabled:gcServiceConnectStats];
     return rv;
 }
 @end

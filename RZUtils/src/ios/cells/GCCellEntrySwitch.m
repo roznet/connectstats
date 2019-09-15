@@ -47,7 +47,7 @@
 		label						= [[UILabel alloc] initWithFrame:CGRectZero];
 		label.backgroundColor		= [UIColor clearColor];
 		label.font					= [RZViewConfig boldSystemFontOfSize:16];
-		label.textColor				= [UIColor blackColor];
+		label.textColor				= [RZViewConfig colorForText:rzColorStylePrimaryText];
 
 		toggle						= [[UISwitch alloc] initWithFrame:CGRectZero];
 		[toggle addTarget:self action:@selector(switchElement:) forControlEvents:UIControlEventValueChanged];
@@ -90,7 +90,7 @@
 
     CGRect toggleRect = CGRectMake(CGRectGetMaxX(baseRect)-5.-toggleSize.width, baseRect.size.height/2.-toggleSize.height/2.,
                                    toggleSize.width, toggleSize.height );
-    CGRect labelRect  = CGRectMake(2., baseRect.size.height/2.-labelSize.height/2., labelSize.width, labelSize.height);
+    CGRect labelRect  = CGRectMake(4., baseRect.size.height/2.-labelSize.height/2., labelSize.width, labelSize.height);
 
 	label.frame			= labelRect;
 	toggle.frame		= toggleRect;

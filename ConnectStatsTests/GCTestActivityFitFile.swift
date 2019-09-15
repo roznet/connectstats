@@ -7,6 +7,9 @@
 //
 
 import XCTest
+@testable import ConnectStats
+import RZFitFile
+import RZFitFileTypes
 
 class GCTestActivityFitFile: XCTestCase {
     
@@ -29,10 +32,10 @@ class GCTestActivityFitFile: XCTestCase {
             
             let url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath("activity_\(activityId).fit", for: type(of: self)))
 
-            if let fitData = try? Data(contentsOf: url),
-                let decode = FITFitFileDecode(fitData){
-                decode.parse()
-                let activity = GCActivity(withId: activityId, fitFile: decode.fitFile)
+            if 
+                let fitFile = RZFitFile(file: url){
+                
+                let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: Date())
                 if let reload = GCGarminRequestActivityReload.test(forActivity: activityId, withFilesIn:RZFileOrganizer.bundleFilePath(nil, for: type(of: self)) ){
                     reload.updateSummaryData(from: activity)
                     reload.updateTrackpoints(from: activity)
@@ -41,24 +44,60 @@ class GCTestActivityFitFile: XCTestCase {
             }
             
         }
-        
-        /*
-        for (NSString * activityId in @[@"1378220136",@"1382772474"]) {
-            NSData * fitData = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", activityId] forClass:[self class]]];
-            FITFitFileDecode * fitFile = [FITFitFileDecode fitFileDecode:fitData];
-            [fitFile parse];
-            
-            GCActivity * act = [[[GCActivity alloc] initWithId:activityId fitFile:fitFile.fitFile] autorelease];
-            NSLog(@"%@", act);
-        }*/
-
+    
     }
     
-   /* func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testParseFitSwimAndMultiSport() {
+        
+        RZFileOrganizer.removeEditableFile("multisport.db")
+        
+        if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("multisport.db")){
+            db.open()
+            GCActivitiesOrganizer.ensureDbStructure(db)
+            let organizer : GCActivitiesOrganizer = GCActivitiesOrganizer(testModeWithDb: db)
+            
+            let testActivityIds = [  "1525", "1451"]
+            for activityId in testActivityIds {
+                
+                GCConnectStatsRequestSearch.test(for: organizer, withFilesInPath: RZFileOrganizer.bundleFilePath("last_cs_search_\(activityId).json", for: type(of: self)))
+                
+                let url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath("track_cs_\(activityId).fit", for: type(of: self)))
+                
+                if
+                    let fitFile = RZFitFile(file: url){
+                    let messages = fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION)
+                    var activities : [GCActivity] = []
+                    for message in messages {
+                        if let messageStart = message.interpretedField(key: "start_time")?.time{
+                            let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: messageStart)
+                            activities.append(activity)
+                            //print( "\(activity) \(activity.summaryData)")
+                            var downloaded : GCActivity? = nil
+                            for act in organizer.activities() {
+                                if act.date == messageStart && act.activityType == activity.activityType{
+                                    downloaded = act
+                                    break
+                                }
+                            }
+                            XCTAssertNotNil(downloaded)
+                            if  let downloaded = downloaded {
+                                XCTAssertEqual(downloaded.sumDistance, activity.sumDistance, accuracy: 1.0)
+                            }
+                        }
+                    }
+                    if messages.count > 1{
+                        // Multi sport test for the whole one.
+                        let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: nil)
+                        activities.append(activity)
+                        let service = GCService(gcService.connectStats)
+                        let serviceId = service?.activityId(fromServiceId: activityId)
+                        let downloaded = organizer.activity(forId: serviceId)
+                        XCTAssertNotNil(downloaded)
+                        // we don't check value as they don't tie out for multi sport, not
+                        // sure how they get aggregated/summed in the garmin api...
+                    }
+                }
+            }
         }
-    }*/
-    
+    }
 }

@@ -34,6 +34,7 @@
 #import "GCActivitiesOrganizer.h"
 @import RZUtils;
 @import RZExternal;
+@import RZExternalUniversal;
 #import "ConnectStats-Swift.h"
 
 @interface GCGarminActivityTrack13Request ()
@@ -133,7 +134,7 @@
             return nil;
         }
     }else{
-        return GCWebActivityURL(self.activityId);
+        return nil;
     }
 }
 
@@ -145,9 +146,6 @@
             break;
         case gcTrack13RequestTracks:
             fn =[NSString stringWithFormat:@"activitytrack_%@.json", activityId];
-            break;
-        case gcTrack13RequestTCX:
-            fn =[NSString stringWithFormat:@"activity_%@.tcx", activityId];
             break;
         case gcTrack13RequestFit:
             fn = [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_DOWNLOAD defaultValue:TRUE] ? [NSString stringWithFormat:@"activity_%@.fit", activityId] : nil;
@@ -246,10 +244,6 @@
         dispatch_async([GCAppGlobal worker],^(){
             [self processParseTrackpoints];
         });
-    }else if(self.track13Stage==gcTrack13RequestTCX){
-        dispatch_async([GCAppGlobal worker],^(){
-            [self processParseTCX];
-        });
     }else{
         [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
     }
@@ -313,7 +307,8 @@
         self.stage = gcRequestStageParsing;
         [self.delegate loginSuccess:gcWebServiceGarmin];
         [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
-        GCGarminActivityDetailJsonParser * parser = [[[GCGarminActivityDetailJsonParser alloc] initWithString:self.theString andEncoding:self.encoding] autorelease];
+        NSData * data = [self.theString dataUsingEncoding:self.encoding];
+        GCGarminActivityDetailJsonParser * parser = [[[GCGarminActivityDetailJsonParser alloc] initWithData:data forActivity:self.activity] autorelease];
         if (parser.success) {
             self.trackpoints = parser.trackPoints;
             self.laps = @[];
@@ -337,9 +332,7 @@
     if( [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_DOWNLOAD defaultValue:TRUE] && [GCAppGlobal configGetBool:CONFIG_GARMIN_FIT_MERGE defaultValue:FALSE]){
         NSString * fn = [GCGarminActivityTrack13Request stageFilename:gcTrack13RequestFit forActivityId:self.activityId];
         
-        FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:[RZFileOrganizer writeableFilePath:fn]];
-        [fitDecode parse];
-        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activityId fitFile:fitDecode.fitFile]);
+        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activityId fitFilePath:[RZFileOrganizer writeableFilePath:fn] startTime:self.activity.date]);
         
         [self.activity updateTrackpointsFromActivity:fitAct];
         
@@ -367,7 +360,7 @@
         NSData * trackdata = [NSData dataWithContentsOfFile:fnTracks];
         NSData * lapsdata = [NSData dataWithContentsOfFile:fnLaps];
 
-        GCGarminActivityDetailJsonParser * parserTracks = [[[GCGarminActivityDetailJsonParser alloc] initWithData:trackdata] autorelease];
+        GCGarminActivityDetailJsonParser * parserTracks = [[[GCGarminActivityDetailJsonParser alloc] initWithData:trackdata forActivity:act] autorelease];
         GCGarminActivityLapsParser * parserLaps = [[[GCGarminActivityLapsParser alloc] initWithData:lapsdata forActivity:act] autorelease];
 
         if (parserLaps.success || parserTracks.success) {
@@ -378,9 +371,8 @@
             }
             
             if( mergeFit && fnFit && [[NSFileManager defaultManager] fileExistsAtPath:fnFit] ){
-                FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecodeForFile:fnFit];
-                [fitDecode parse];
-                GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:act.activityId fitFile:fitDecode.fitFile]);
+                GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:act.activityId fitFilePath:fnFit startTime:act.date]);
+                
                 [act updateSummaryDataFromActivity:fitAct];
                 [act updateTrackpointsFromActivity:fitAct];
                 [act saveTrackpoints:act.trackpoints andLaps:act.laps];

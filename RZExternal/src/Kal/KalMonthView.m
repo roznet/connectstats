@@ -16,9 +16,10 @@
 
 @synthesize numWeeks;
 
-- (id)initWithFrame:(CGRect)frame andTileSize:(CGSize)size;
+- (id)initWithFrame:(CGRect)frame dataSource:(id<KalDataSource>)source andTileSize:(CGSize)size;
 {
     if ((self = [super initWithFrame:frame])) {
+        self.dataSource = source;
         tileAccessibilityFormatter = [[NSDateFormatter alloc] init];
         [tileAccessibilityFormatter setDateFormat:@"EEEE, MMMM d"];
         self.tileSize = size;
@@ -28,9 +29,11 @@
             for (int j=0; j<7; j++) {
                 CGRect r = CGRectMake(j*_tileSize.width, i*_tileSize.height, _tileSize.width, _tileSize.height);
                 KalTileView * tileView = [[[KalTileView alloc] initWithFrame:r andTileSize:self.tileSize] autorelease];
+                tileView.dataSource = source;
                 [self addSubview:tileView];
             }
         }
+        self.backgroundColor = self.dataSource.backgroundColor;
     }
     return self;
 }
@@ -74,9 +77,8 @@
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    //CGContextDrawTiledImage(ctx, (CGRect){CGPointZero,_tileSize}, [[UIImage imageNamed:kalBundleFile(@"kal_tile.png")] CGImage]);
-    [[UIColor darkGrayColor] setStroke];
-    [[UIColor darkGrayColor] setFill];  
+    [self.dataSource.separatorColor setStroke];
+    [self.dataSource.separatorColor setFill];
     CGContextSetLineWidth(ctx, 0.5f);
     for (int i=0; i<6; i++) {
         CGContextMoveToPoint(ctx, 0., i*_tileSize.height);

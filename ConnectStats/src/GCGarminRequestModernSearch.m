@@ -32,15 +32,18 @@
 #import "GCService.h"
 #import "GCGarminRequestActivityList.h"
 
-const NSUInteger kActivityRequestCount = 20;
+static const NSUInteger kActivityRequestCount = 20;
 
 @interface GCGarminRequestModernSearch ()
 
-@property (nonatomic,assign) BOOL reachedExisting;
+/**
+ Number of existing activity reached. If equal to the total request, we
+ can stop
+ */
 @property (nonatomic,assign) BOOL reloadAll;
 @property (nonatomic,assign) NSUInteger start;
 @property (nonatomic,retain) NSArray<NSString*>*childIds;
-@property (nonatomic,retain) NSArray<GCActivity*>*activities;
+@property (nonatomic,assign) BOOL searchMore;
 
 @property (nonatomic,retain) NSDate * lastFoundDate;
 
@@ -59,8 +62,8 @@ const NSUInteger kActivityRequestCount = 20;
 -(GCGarminRequestModernSearch*)initWithStart:(NSUInteger)aStart andMode:(BOOL)aMode{
     self = [super init];
     if (self) {
-        _reloadAll = aMode;
-        _start  =aStart;
+        self.reloadAll = aMode;
+        self.start  =aStart;
         self.stage = gcRequestStageDownload;
         self.status = GCWebStatusOK;
         self.lastFoundDate = [NSDate date];
@@ -83,7 +86,6 @@ const NSUInteger kActivityRequestCount = 20;
 
 -(void)dealloc{
     [_childIds release];
-    [_activities release];
     [_lastFoundDate release];
 
     [super dealloc];
@@ -97,7 +99,7 @@ const NSUInteger kActivityRequestCount = 20;
 
     switch (self.stage) {
         case gcRequestStageDownload:
-            return [NSString stringWithFormat:NSLocalizedString(@"Downloading History... %@",@"Request Description"),[self.lastFoundDate dateFormatFromToday]];
+            return [NSString stringWithFormat:NSLocalizedString(@"Downloading Garmin History... %@",@"Request Description"),[self.lastFoundDate dateFormatFromToday]];
             break;
         case gcRequestStageParsing:
             return [NSString stringWithFormat:NSLocalizedString( @"Parsing History... ", @"Request Description"),[self.lastFoundDate dateFormatFromToday]];
@@ -131,16 +133,15 @@ const NSUInteger kActivityRequestCount = 20;
 -(void)addActivitiesFromParser:(GCGarminSearchModernJsonParser*)parser
                    toOrganizer:(GCActivitiesOrganizer*)organizer{
     GCActivitiesOrganizerListRegister * listRegister = [GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:[GCService service:gcServiceGarmin] isFirst:(self.start==0)];
-    [listRegister addToOrganizer:[GCAppGlobal organizer]];
-    self.reachedExisting = listRegister.reachedExisting;
+    [listRegister addToOrganizer:organizer];
     if (listRegister.childIds.count > 0) {
         self.childIds = self.childIds ? [self.childIds arrayByAddingObjectsFromArray:listRegister.childIds] : listRegister.childIds;
     }
-    self.activities = parser.activities;
-    NSDate * newDate = self.activities.lastObject.date;
+    NSDate * newDate = parser.activities.lastObject.date;
     if(newDate){
         self.lastFoundDate = newDate;
     }
+    self.searchMore = [listRegister shouldSearchForMoreWith:kActivityRequestCount reloadAll:self.reloadAll];
 }
 
 -(void)processParse{
@@ -155,7 +156,6 @@ const NSUInteger kActivityRequestCount = 20;
             [[GCAppGlobal profile] serviceSuccess:gcServiceGarmin set:true];
             self.stage = gcRequestStageSaving;
             [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
-            self.activities = parser.activities;
 
             [self addActivitiesFromParser:parser toOrganizer:organizer];
         }
@@ -171,7 +171,6 @@ const NSUInteger kActivityRequestCount = 20;
 
     if (self.status != GCWebStatusOK && [GCAppGlobal configGetBool:CONFIG_CONTINUE_ON_ERROR defaultValue:false]) {
         RZLog(RZLogWarning, @"ignoring error for %@", [self url]);
-        _reachedExisting = false;
         self.status = GCWebStatusOK;
     }
 
@@ -179,28 +178,29 @@ const NSUInteger kActivityRequestCount = 20;
 }
 
 +(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path{
-
-    GCGarminRequestModernSearch * search = [[GCGarminRequestModernSearch alloc] initWithStart:0 andMode:false];
-
-    NSString * fn = [path stringByAppendingPathComponent:[search searchFileNameForPage:0]];
-
-    NSData * info = [NSData dataWithContentsOfFile:fn];
-
-    GCGarminSearchModernJsonParser * parser = [[[GCGarminSearchModernJsonParser alloc] initWithData:info] autorelease];
-    search.activities = parser.activities;
-    [search addActivitiesFromParser:parser toOrganizer:organizer];
-
-    RZRelease(search);
-
-    return organizer;
+    return [self testForOrganizer:organizer withFilesInPath:path start:0];
 }
--(NSUInteger)parsedCount{
-    return self.activities.count;
++(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path start:(NSUInteger)start{
+    GCGarminRequestModernSearch * search = [[GCGarminRequestModernSearch alloc] initWithStart:start andMode:false];
+
+    BOOL isDirectory = false;
+    if( [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]){
+        NSString * fn = isDirectory ? [path stringByAppendingPathComponent:[search searchFileNameForPage:(int)start]] : path;
+        
+        NSData * info = [NSData dataWithContentsOfFile:fn];
+        
+        GCGarminSearchModernJsonParser * parser = [[[GCGarminSearchModernJsonParser alloc] initWithData:info] autorelease];
+        [search addActivitiesFromParser:parser toOrganizer:organizer];
+    }
+    RZRelease(search);
+    
+    return organizer;
 }
 
 -(void)processRegister{
     if (self.status == GCWebStatusOK) {
-        if ( (_reloadAll || !_reachedExisting) && self.parsedCount == kActivityRequestCount) {
+        
+        if ( self.searchMore ) {
             self.nextReq = [[[GCGarminRequestModernSearch alloc] initNextWith:self] autorelease];
         }
         if (self.nextReq == nil && self.childIds.count > 0) {

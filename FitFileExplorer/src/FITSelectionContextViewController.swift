@@ -28,17 +28,22 @@ class FITSelectionContextViewController: NSViewController {
         fieldForX.removeAllItems()
         fieldForY.removeAllItems()
         fieldForY2.removeAllItems()
+        fieldForLine.removeAllItems()
         var xFields = selectionContext.availableDateFields()
         xFields.append(contentsOf: selectionContext.availableNumberFields())
         fieldForX.addItems(withTitles: xFields)
         fieldForY.addItems(withTitles: selectionContext.availableNumberFields())
         fieldForY2.addItems(withTitles: selectionContext.availableNumberFields())
+        fieldForLine.addItems(withTitles: selectionContext.availableNumberFields())
 
         if let selectX = self.selectionContext?.selectedXField{
            fieldForX.selectItem(withTitle: selectX)
         }
         if let selectY = self.selectionContext?.selectedYField {
             fieldForY.selectItem(withTitle: selectY)
+        }
+        if let selectY2 = self.selectionContext?.selectedY2Field {
+            fieldForY2.selectItem(withTitle: selectY2)
         }
         if let enableY2On = self.selectionContext?.enableY2 {
             enableY2.state = enableY2On ? NSControl.StateValue.on : NSControl.StateValue.off
@@ -49,7 +54,6 @@ class FITSelectionContextViewController: NSViewController {
         if let identifier = sender.identifier?.rawValue,
             let value = sender.selectedItem?.title,
             let selectionContext = self.selectionContext{
-            print("Update \(identifier) -> \(value)")
             if identifier == "popup_x_field" {
                 selectionContext.selectedXField = value
             }else if identifier == "popup_y_field" {

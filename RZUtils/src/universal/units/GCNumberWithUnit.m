@@ -32,6 +32,9 @@
 
 @implementation GCNumberWithUnit
 
++(BOOL)supportsSecureCoding{
+    return YES;
+}
 
 -(instancetype)init{
     return [super init];
@@ -40,7 +43,7 @@
     self = [self init];
     if (self) {
         self.value = [aDecoder decodeDoubleForKey:GC_CODER_VALUE];
-        self.unit = [GCUnit unitForKey:[aDecoder decodeObjectForKey:GC_CODER_UNIT]];
+        self.unit = [GCUnit unitForKey:[aDecoder decodeObjectOfClass:[NSString class] forKey:GC_CODER_UNIT]];
     }
     return self;
 }
@@ -131,6 +134,7 @@
     return RZReturnAutorelease([[GCNumberWithUnit alloc] initWithUnit:[GCUnit unitForKey:aUnit] andValue:aVal]);
 }
 
+
 #pragma mark - Conversions
 
 -(GCNumberWithUnit*)convertToUnit:(GCUnit*)aUnit{
@@ -178,6 +182,9 @@
 
 #pragma mark - Operations
 
+-(nullable GCNumberWithUnit*)numberWithUnitMultipliedBy:(double)multiplier{
+    return [GCNumberWithUnit numberWithUnit:self.unit andValue:self.value * multiplier];
+}
 -(GCNumberWithUnit*)addNumberWithUnit:(GCNumberWithUnit*)other weight:(double)weight{
     if ([other.unit canConvertTo:self.unit]) {
         return [GCNumberWithUnit numberWithUnit:self.unit andValue:(self.value + weight*[other convertToUnit:self.unit].value)];

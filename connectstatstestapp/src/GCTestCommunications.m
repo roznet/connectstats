@@ -26,7 +26,6 @@
 #import "GCTestCommunications.h"
 #import "GCAppGlobal.h"
 #import "GCWebUrl.h"
-#import "GCGarminActivityXMLParser.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "GCWebConnect+Requests.h"
 #import "GCActivity+Database.h"
@@ -35,42 +34,45 @@
 
 typedef NS_ENUM(NSUInteger, gcTestInstance){
     gcTestInstanceCommunication,
-    gcTestInstanceNewStyleAccount
+    gcTestInstanceNewStyleAccount,
+    gcTestInstanceModernHistory
 };
 
 @interface GCTestCommunications ()
 @property (nonatomic,assign) NSUInteger nCb;
+@property (nonatomic,assign) NSUInteger nReq;
 @property (nonatomic,assign) BOOL completed;
 @property (nonatomic,retain) RZRemoteDownload * remoteDownload;
 @property (nonatomic,retain) NSString * currentSession;
 @property (nonatomic,assign) gcTestInstance testInstance;
+@property (nonatomic,retain) NSMutableDictionary*cache;
+@property (nonatomic,assign) NSUInteger expectedModernActivitiesCount;
 
 @end
 
 @implementation GCTestCommunications
 
 -(void)dealloc{
+    [_cache release];
     [_remoteDownload release];
     [_currentSession release];
     [super dealloc];
 }
 
 -(NSArray*)testDefinitions{
-    return @[ @{@"selector" : NSStringFromSelector(@selector(testNewStyleAccount)),
-                @"description": @"Test New Style Account",
-                @"session": @"GC Com New Style"
+    return @[ @{@"selector": NSStringFromSelector(@selector(testModernHistory)),
+                @"description": @"test modern API with roznet simulator",
+                @"session": @"GC Com Modern"
                 },
-              @{@"selector": NSStringFromSelector(@selector(testOriginalAccount)),
-                @"description": @"test download/communication with roznet simulator",
-                @"session": @"GC Communication" // The session called in endAllTests
-                },
+            
               @{@"selector": NSStringFromSelector(@selector(testUpload)),
                 @"description": @"test upload with roznet simulator",
                 @"session": @"GC Com Upload"
                 },
-
+              
               ];
 }
+
 
 
 #pragma mark - Upload Test
@@ -139,22 +141,27 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 
     _nCb = 0;
     _completed = false;
-    [GCAppGlobal setupEmptyState:@"activities_comm.db"];
+    if( _testInstance == gcTestInstanceModernHistory){
+        [GCAppGlobal setupEmptyState:@"activities_comm_modern.db"];
+        [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:YES];
+        GCWebSetSimulatorDir(@"samples_fullmodern");
+    }else{
+        [GCAppGlobal setupEmptyState:@"activities_comm.db"];
+        [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:NO];
+        GCWebSetSimulatorDir(nil);
+    }
     [GCAppGlobal configSet:CONFIG_WIFI_DOWNLOAD_DETAILS boolVal:NO];
     [GCAppGlobal configSet:CONFIG_GARMIN_FIT_DOWNLOAD boolVal:FALSE];
-    [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:NO];
-    [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:gcGarminLoginMethodLegacy];
+    [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:gcGarminLoginMethodSimulator];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:YES];
     [[GCAppGlobal profile] setLoginName:username forService:gcServiceGarmin];
     [[GCAppGlobal profile] setPassword:@"iamatesterfromapple" forService:gcServiceGarmin];
     
-
     [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self timeOutCheck];
     });
     [[GCAppGlobal web] attach:self];
-
 }
 
 -(void)testCommunicationEnd{
@@ -176,32 +183,31 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     if( [[theInfo stringInfo] isEqualToString:@"error"]){
         NSLog(@"oops");
     }
+    if( [[theInfo stringInfo] isEqualToString:NOTIFY_NEXT]){
+        self.nReq++;
+    }
     RZ_ASSERT(![[theInfo stringInfo] isEqualToString:@"error"], @"Web request had no error");
     if ([[theInfo stringInfo] isEqualToString:@"end"]) {
         _nCb++;
-        //NSLog(@"^cb %lu %@ tot=%lu", _nCb,[theInfo stringInfo],[[GCAppGlobal organizer] countOfActivities]);
         dispatch_async(self.thread,^(){
             switch (_testInstance) {
                 case gcTestInstanceCommunication:
-                    if (_nCb == 1) {
-                        [self testInitialLoadDone];
-                    }else if (_nCb == 2) {
-                        [self testRecentLoadDone];
-                    }else if (_nCb == 3) {
-                        [self testChangeDone];
-                    }else if (_nCb == 4) {
-                        [self testDeletedDone];
-                    }else{
-                        [self testCommunicationEnd];
-                    }
-
-                    break;
-
                 case gcTestInstanceNewStyleAccount:
-                    if (_nCb == 1) {
-                        [self testNewStyleInitialLoadDone];
-                    }else if (_nCb ==2){
-                        [self testNewStrylePointsLoaded];
+                    // obsolete
+                    break;
+                case gcTestInstanceModernHistory:
+                    if (_nCb == 1){
+                        [self testModernHistoryInitialDone];
+                    }else if( _nCb == 2 ){
+                        [self testModernHistoryTrackLoaded];
+                    }else if( _nCb == 3 ){
+                        [self testModernHistoryReloadFirst10];
+                    }else if( _nCb == 4 ){
+                        [self testModernHistoryReloadNothing];
+                    }else if( _nCb == 5 ){
+                        [self testModernHistoryReloadAll];
+                    }else if( _nCb == 6){
+                        [self testModernDeletedAndRenamed];
                     }else{
                         [self testCommunicationEnd];
                     }
@@ -214,11 +220,115 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     }
 }
 
+#pragma mark - Modern History Communication test
+
+-(void)testModernHistory{
+    _testInstance = gcTestInstanceModernHistory;
+    
+    [self testCommunicationStart:@"GC Com Modern" userName:@"simulator"];
+    self.nReq = 0;
+    [[GCAppGlobal web] servicesSearchRecentActivities];
+}
+-(void)testModernHistoryInitialDone{
+    self.expectedModernActivitiesCount = 2971;
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == self.expectedModernActivitiesCount , @"Loading %d activities (got %d)", (int)self.expectedModernActivitiesCount, (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT(self.nReq == 160, @"Should have got 160 req %d", (int)self.nReq);
+    
+    self.cache = [NSMutableDictionary dictionary];
+    
+    for( NSUInteger i=0;i< 10; i++){
+        GCActivity * act = [[GCAppGlobal organizer] activityForIndex:i];
+        self.cache[act.activityId] = [NSDictionary dictionaryWithDictionary:act.summaryData];
+        // Force load of points
+        [act clearTrackdb];
+        RZ_ASSERT(act.trackpoints.count == 0, @"%@ start with 0 points", act);
+    }
+}
+
+-(void)testModernHistoryTrackLoaded{
+    RZ_ASSERT(self.nReq == 210, @"Load track point in 210 req %d", (int)self.nReq);
+    
+    for( NSUInteger i=0;i< 10; i++){
+        GCActivity * act = [[GCAppGlobal organizer] activityForIndex:i];
+        NSDictionary * prev = self.cache[act.activityId];
+        RZ_ASSERT(prev.count <= act.summaryData.count, @"Not less data");
+        for (GCField * field in prev) {
+            GCActivitySummaryValue * prevVal = prev[field];
+            GCActivitySummaryValue * newVal  = act.summaryData[field];
+            RZ_ASSERT(newVal != nil, @"%@ still has %@", act, field);
+            if( newVal ){
+                RZ_ASSERT([prevVal isEqualToValue:newVal], @"%@ == %@ for %@", prevVal, newVal, act);
+            }
+        }
+        // Force load of points
+        RZ_ASSERT(act.trackpoints.count > 0, @"%@ loaded %lu points", act, (unsigned long)act.trackpoints.count);
+        [act clearTrackdb]; //prep for delete coming
+    }
+
+    [[GCAppGlobal organizer] deleteActivityUpToIndex:10];
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == self.expectedModernActivitiesCount-11, @"deleted 10 activities %d", [[GCAppGlobal organizer] countOfActivities] );
+    
+    [[GCAppGlobal web] servicesSearchRecentActivities];
+}
+
+-(void)testModernHistoryReloadFirst10{
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == self.expectedModernActivitiesCount , @"Loading %d activities (got %d)", (int)self.expectedModernActivitiesCount, (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT(self.nReq == 216, @"Reloaded only last few %d", (int)self.nReq);
+    
+    [[GCAppGlobal organizer] deleteActivityFromIndex:2000];
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2000, @"deleted tail activities");
+
+    [[GCAppGlobal web] servicesSearchRecentActivities];
+}
+
+-(void)testModernHistoryReloadNothing{
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2000 , @"Loading 2000 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT(self.nReq == 221, @"Reloaded only last few %d", (int)self.nReq);
+    
+    [[GCAppGlobal web] servicesSearchAllActivities];
+}
+
+-(void)testModernHistoryReloadAll{
+    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == self.expectedModernActivitiesCount , @"Loading %d activities (got %d)",(int)self.expectedModernActivitiesCount, (int)[[GCAppGlobal organizer] countOfActivities]);
+    RZ_ASSERT(self.nReq == 375, @"Reloaded only last few %d", (int)self.nReq);
+    
+    
+    
+    //2655997046 -> deleted
+    //2654853600 -> renamed
+    
+    RZ_ASSERT([[GCAppGlobal organizer] activityForId:@"2655997046"] != nil, @"Activity to be deleted exists");
+    
+    GCActivity * to_be_edited = [[GCAppGlobal organizer] activityForId:@"2654853600"];
+    GCNumberWithUnit * distance = [to_be_edited numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:to_be_edited.activityType]];
+    GCNumberWithUnit * duration = [to_be_edited numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:to_be_edited.activityType]];
+    RZ_ASSERT(![distance isEqualToNumberWithUnit:[GCNumberWithUnit numberWithUnitName:@"meter" andValue:10000.0]], @"Start different from 10000m" );
+    RZ_ASSERT(![duration isEqualToNumberWithUnit:[GCNumberWithUnit numberWithUnitName:@"second" andValue:2160.0]], @"Start different than 2160sec");
+    
+    GCWebSetSimulatorState(@"deleted");
+    [[GCAppGlobal web] servicesSearchRecentActivities];
+}
+
+-(void)testModernDeletedAndRenamed{
+    RZ_ASSERT([[GCAppGlobal organizer] activityForId:@"2655997046"] == nil, @"Activity to be deleted is gone");
+    
+    GCActivity * edited = [[GCAppGlobal organizer] activityForId:@"2654853600"];
+    RZ_ASSERT([edited.activityName isEqualToString:@"New Name"], @"Activity was renamed");
+    GCNumberWithUnit * distance = [edited numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:edited.activityType]];
+    GCNumberWithUnit * duration = [edited numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:edited.activityType]];
+    RZ_ASSERT([distance isEqualToNumberWithUnit:[GCNumberWithUnit numberWithUnitName:@"meter" andValue:10000.0]], @"Start different from 10000m" );
+    RZ_ASSERT([duration isEqualToNumberWithUnit:[GCNumberWithUnit numberWithUnitName:@"second" andValue:2160.0]], @"Start different than 2160sec");
+
+    // End manually
+    [self notifyCallBack:self info:[RZDependencyInfo rzDependencyInfoWithString:@"end"]];
+
+}
 #pragma mark - Original Communication test sequence
 
 -(void)testOriginalAccount{
-    [self testCommunicationStart:@"GC Communication" userName:@"simulator"];
+    
     _testInstance = gcTestInstanceCommunication;
+    [self testCommunicationStart:@"GC Communication" userName:@"simulator"];
 
     [[GCAppGlobal web] servicesSearchActivitiesFrom:20 reloadAll:true];
 }
@@ -385,79 +495,6 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
             }
         }
     }
-}
-
-#pragma mark - Test Account Test
-
--(void)testNewStyleAccount{
-    [self testCommunicationStart:@"GC Com New Style" userName:@"testaccount"];
-    _testInstance = gcTestInstanceNewStyleAccount;
-
-    [[GCAppGlobal web] servicesSearchActivitiesFrom:0 reloadAll:true];
-}
--(void)testNewStyleInitialLoadDone{
-    RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 31 , @"Loading 31 activities");
-
-    // Manually go to next stage, as no web communication here
-    //[self notifyCallBack:self info:[RZDependencyInfo rzDependencyInfoWithString:@"end"]];
-    [self testNewStyleTrackLoading];
-}
-
--(NSArray<NSString*>*)validIdForNewStyle{
-    static NSArray * rv = nil;
-    if( rv == nil){
-        rv = @[
-               @"272316713",
-               @"272334466",
-               @"291906167",
-               @"291906345",
-               @"400587162",
-               @"479063522",
-               @"686445081",
-               @"686445085",
-               @"686445087",
-               @"686445091",
-               @"686445092",
-               @"924421177",
-               ];
-        [rv retain];
-    }
-    return rv;
-
-}
-
--(void)testNewStyleTrackLoading{
-    NSArray<NSString*> * actIds = [self validIdForNewStyle];
-    // Request in parallel on different thread activities points and make sure it works...
-    GCActivity * act = [[GCAppGlobal organizer] activityForId:actIds[0]];
-    NSArray<GCTrackPoint*>*points = [act trackpoints];
-    RZ_ASSERT(points.count == 0, @"Start without points %@", actIds[0]);
-
-    dispatch_async([GCAppGlobal worker], ^(){
-        GCActivity * act = [[GCAppGlobal organizer] activityForId:actIds[1]];
-        NSArray<GCTrackPoint*>*points = [act trackpoints];
-        RZ_ASSERT(points.count==0, @"Start without points %@", actIds[1]);
-    });
-
-    dispatch_async([GCAppGlobal worker], ^(){
-        GCActivity * act = [[GCAppGlobal organizer] activityForId:actIds[2]];
-        NSArray<GCTrackPoint*>*points = [act trackpoints];
-        RZ_ASSERT(points.count==0, @"Start without points %@", actIds[2]);
-
-    });
-}
-
--(void)testNewStrylePointsLoaded{
-    NSArray<NSString*> * actIds = [self validIdForNewStyle];
-    for(NSUInteger i=0;i<3;i++){
-        GCActivity * act = [[GCAppGlobal organizer] activityForId:actIds[i]];
-        NSArray<GCTrackPoint*>*points = [act trackpoints];
-        RZ_ASSERT(points.count > 0, @"Ends with points %@", actIds[i]);
-    }
-
-    // Manually go to next stage, as no web communication here
-    [self notifyCallBack:self info:[RZDependencyInfo rzDependencyInfoWithString:@"end"]];
-
 }
 
 @end

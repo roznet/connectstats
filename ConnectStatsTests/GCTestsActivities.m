@@ -261,10 +261,15 @@
                         ];
     
     RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
-    //manager.recordMode =true;
+    manager.recordMode = [GCTestCase recordModeGlobal];
+    //manager.recordMode = true;
     
+    NSError * error = nil;
+    
+    NSSet * classes = [NSSet setWithObjects:[NSArray class], [GCFieldsForCategory class], [GCField class], nil];
+
     NSArray<GCFieldsForCategory*> * rv = [GCFields categorizeAndOrderFields:tests forActivityType:nil];
-    NSArray<GCFieldsForCategory*> * expected = [manager retrieveReferenceObject:rv selector:_cmd identifier:@"List1" error:nil];
+    NSArray<GCFieldsForCategory*> * expected = [manager retrieveReferenceObject:rv forClasses:classes selector:_cmd identifier:@"List1" error:&error];
     
     XCTAssertEqual(expected.count, rv.count);
     
@@ -333,7 +338,8 @@
                ];
     
     rv = [GCFields categorizeAndOrderFields:tests forActivityType:nil];
-    expected = [manager retrieveReferenceObject:rv selector:_cmd identifier:@"List2" error:nil];
+    
+    expected = [manager retrieveReferenceObject:rv forClasses:classes selector:_cmd identifier:@"List2" error:&error];
     
     XCTAssertEqualObjects(expected, rv);
 
@@ -651,19 +657,21 @@
     [db open];
     
     GCActivity * act = [GCActivity fullLoadFromDb:db];
-    // Before loading tracks, not there
-    XCTAssertFalse([act hasField:[GCField fieldForKey:CALC_NONZERO_POWER andActivityType:act.activityType]]);
+    // SHould be calculated and loaded upon full load
+    XCTAssertTrue([act hasField:[GCField fieldForKey:CALC_NONZERO_POWER andActivityType:act.activityType]]);
     
     XCTAssertNotNil(act.trackpoints);
     
     XCTAssertTrue([act hasField:[GCField fieldForKey:CALC_NONZERO_POWER andActivityType:act.activityType]]);
 
     RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
+    manager.recordMode = [GCTestCase recordModeGlobal];
     //manager.recordMode =true;
     
-    
+    NSSet<Class> * classes = [NSSet setWithObjects:[NSDictionary class], [GCField class], [GCActivityCalculatedValue class], nil ];
+
     NSDictionary<GCField*,GCActivityCalculatedValue*>*calculated = act.calculatedFields;
-    NSDictionary<GCField*,GCActivityCalculatedValue*>*expected = [manager retrieveReferenceObject:calculated selector:_cmd identifier:@"ActivityCalculated" error:nil];
+    NSDictionary<GCField*,GCActivityCalculatedValue*>*expected = [manager retrieveReferenceObject:calculated  forClasses:classes selector:_cmd identifier:@"ActivityCalculated" error:nil];
     
     XCTAssertEqualObjects(calculated, expected);
     

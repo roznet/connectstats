@@ -14,10 +14,6 @@ This project contains several related applications to analyse fitness data:
 
 [FitFileExplorer](https://itunes.apple.com/us/app/fit-file-explorer/id1244431640?ls=1&mt=12) is a [mac os utility](https://ro-z.net/blog/fitfileexplorer/) to view Fit File content
 
-### ![Icon](https://github.com/roznet/connectstats/raw/master/TennisStats/icons/Images.xcassets/AppIcon.appiconset/tennisstats_appIcons76.png) TennisStats
-
-TennisStats is an iOS (iphone or ipad) application to record and analyse tennis matches.
-
 
 ## To compile
 

@@ -1,0 +1,1816 @@
+{
+  "types" : {
+    "running" : {
+      "__connectstats__5567" : 1,
+      "4032162411" : 1,
+      "__strava__2674169797" : 1,
+      "__strava__2686598550" : 1,
+      "__connectstats__5611" : 1,
+      "4017099594" : 1
+    },
+    "cycling" : {
+      "__connectstats__5597" : 1,
+      "__strava__2683992970" : 1,
+      "__strava__2682687598" : 1,
+      "__connectstats__5607" : 1,
+      "__connectstats__5582" : 1,
+      "__strava__2680128776" : 1,
+      "4024290162" : 1,
+      "4025579020" : 1,
+      "4018408912" : 1,
+      "__strava__2677141872" : 1,
+      "4020671575" : 1,
+      "__strava__2681225256" : 1,
+      "4028909687" : 1,
+      "4030657677" : 1,
+      "4027392348" : 1,
+      "__strava__2685383271" : 1,
+      "__connectstats__5589" : 1,
+      "__strava__2675283580" : 1,
+      "__connectstats__5572" : 1,
+      "__connectstats__5591" : 1,
+      "__connectstats__5600" : 1
+    },
+    "hiking" : {
+      "__strava__2689916085" : 1,
+      "__connectstats__5622" : 1,
+      "4036098147" : 1
+    }
+  },
+  "summaries" : {
+    "__connectstats__5597" : {
+      "WeightedMeanSpeed" : {
+        "value" : 18.421199999999999,
+        "unit" : "kph"
+      },
+      "SumEnergy" : {
+        "value" : 190,
+        "unit" : "kilocalorie"
+      },
+      "SumDistance" : {
+        "value" : 9.9821100000000005,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 17.348026652998449,
+        "unit" : "celcius"
+      },
+      "LossElevation" : {
+        "value" : 26,
+        "unit" : "meter"
+      },
+      "WeightedMeanPower" : {
+        "value" : 98,
+        "unit" : "watt"
+      },
+      "SumElapsedDuration" : {
+        "value" : 1950.7560000000001,
+        "unit" : "second"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 118,
+        "unit" : "bpm"
+      },
+      "GainElevation" : {
+        "value" : 17,
+        "unit" : "meter"
+      },
+      "SumTrainingStressScore" : {
+        "value" : 27.399999999999999,
+        "unit" : "dimensionless"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 70,
+        "unit" : "rpm"
+      },
+      "WeightedMeanFractionalCadence" : {
+        "value" : 0.9453125,
+        "unit" : "rpm"
+      },
+      "SumDuration" : {
+        "value" : 1950.7560000000001,
+        "unit" : "second"
+      },
+      "WeightedMeanNormalizedPower" : {
+        "value" : 144,
+        "unit" : "watt"
+      }
+    },
+    "__strava__2686598550" : {
+      "WeightedMeanSpeed" : {
+        "value" : 11.2356,
+        "unit" : "kph"
+      },
+      "WeightedMeanPace" : {
+        "value" : 5.3401687493324799,
+        "unit" : "minperkm"
+      },
+      "SumDistance" : {
+        "value" : 12.0617,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 20,
+        "unit" : "celcius"
+      },
+      "GainElevation" : {
+        "value" : 131.69999999999999,
+        "unit" : "meter"
+      },
+      "SumMovingDuration" : {
+        "value" : 3865,
+        "unit" : "second"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 176.30000000000001,
+        "unit" : "bpm"
+      },
+      "WeightedMeanRunCadence" : {
+        "value" : 80.799999999999997,
+        "unit" : "stepsPerMinute"
+      },
+      "SumDuration" : {
+        "value" : 4458,
+        "unit" : "second"
+      }
+    },
+    "__strava__2683992970" : {
+      "WeightedMeanSpeed" : {
+        "value" : 19.637999999999998,
+        "unit" : "kph"
+      },
+      "SumTotalWork" : {
+        "value" : 174.19999999999999,
+        "unit" : "kilojoule"
+      },
+      "SumMovingDuration" : {
+        "value" : 1844,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 10.059200000000001,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 13,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPower" : {
+        "value" : 94.400000000000006,
+        "unit" : "watt"
+      },
+      "GainElevation" : {
+        "value" : 36,
+        "unit" : "meter"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 65,
+        "unit" : "rpm"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 127.90000000000001,
+        "unit" : "bpm"
+      },
+      "SumDuration" : {
+        "value" : 2072,
+        "unit" : "second"
+      }
+    },
+    "__connectstats__5607" : {
+      "WeightedMeanSpeed" : {
+        "value" : 17.632800000000003,
+        "unit" : "kph"
+      },
+      "SumEnergy" : {
+        "value" : 183,
+        "unit" : "kilocalorie"
+      },
+      "SumDistance" : {
+        "value" : 10.014419999999999,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 17.959433040078224,
+        "unit" : "celcius"
+      },
+      "LossElevation" : {
+        "value" : 29,
+        "unit" : "meter"
+      },
+      "WeightedMeanPower" : {
+        "value" : 91,
+        "unit" : "watt"
+      },
+      "SumElapsedDuration" : {
+        "value" : 2044.742,
+        "unit" : "second"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 117,
+        "unit" : "bpm"
+      },
+      "GainElevation" : {
+        "value" : 16,
+        "unit" : "meter"
+      },
+      "SumTrainingStressScore" : {
+        "value" : 18.300000000000001,
+        "unit" : "dimensionless"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 67,
+        "unit" : "rpm"
+      },
+      "WeightedMeanFractionalCadence" : {
+        "value" : 0.453125,
+        "unit" : "rpm"
+      },
+      "SumDuration" : {
+        "value" : 2044.742,
+        "unit" : "second"
+      },
+      "WeightedMeanNormalizedPower" : {
+        "value" : 115,
+        "unit" : "watt"
+      }
+    },
+    "__strava__2682687598" : {
+      "WeightedMeanSpeed" : {
+        "value" : 21.002399999999998,
+        "unit" : "kph"
+      },
+      "SumTotalWork" : {
+        "value" : 180.90000000000001,
+        "unit" : "kilojoule"
+      },
+      "SumMovingDuration" : {
+        "value" : 1711,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 9.9821000000000009,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 17,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPower" : {
+        "value" : 105.7,
+        "unit" : "watt"
+      },
+      "GainElevation" : {
+        "value" : 17,
+        "unit" : "meter"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 70.900000000000006,
+        "unit" : "rpm"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 121.09999999999999,
+        "unit" : "bpm"
+      },
+      "SumDuration" : {
+        "value" : 1951,
+        "unit" : "second"
+      }
+    },
+    "__connectstats__5582" : {
+      "SumElapsedDuration" : {
+        "value" : 2827.6149999999998,
+        "unit" : "second"
+      },
+      "WeightedMeanSpeed" : {
+        "value" : 14.169599999999999,
+        "unit" : "kph"
+      },
+      "SumDistance" : {
+        "value" : 10.640000000000001,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 24,
+        "unit" : "celcius"
+      },
+      "LossElevation" : {
+        "value" : 25,
+        "unit" : "meter"
+      },
+      "GainElevation" : {
+        "value" : 20,
+        "unit" : "meter"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 114,
+        "unit" : "bpm"
+      },
+      "SumEnergy" : {
+        "value" : 255,
+        "unit" : "kilocalorie"
+      },
+      "SumDuration" : {
+        "value" : 2703,
+        "unit" : "second"
+      }
+    },
+    "__connectstats__5611" : {
+      "WeightedMeanRunCadence" : {
+        "value" : 79,
+        "unit" : "stepsPerMinute"
+      },
+      "WeightedMeanSpeed" : {
+        "value" : 11.231999999999999,
+        "unit" : "kph"
+      },
+      "WeightedMeanStanceTime" : {
+        "value" : 275.39999999999998,
+        "unit" : "ms"
+      },
+      "SumEnergy" : {
+        "value" : 868,
+        "unit" : "kilocalorie"
+      },
+      "SumDistance" : {
+        "value" : 12.062219999999996,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 20,
+        "unit" : "celcius"
+      },
+      "LossElevation" : {
+        "value" : 132,
+        "unit" : "meter"
+      },
+      "WeightedMeanVerticalOscillation" : {
+        "value" : 93.900000000000006,
+        "unit" : "millimeter"
+      },
+      "WeightedMeanPace" : {
+        "value" : 5.3418803418803416,
+        "unit" : "minperkm"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 176,
+        "unit" : "bpm"
+      },
+      "SumElapsedDuration" : {
+        "value" : 4458.3959999999997,
+        "unit" : "second"
+      },
+      "WeightedMeanGroundContactTime" : {
+        "value" : 287.66989183934578,
+        "unit" : "ms"
+      },
+      "GainElevation" : {
+        "value" : 126,
+        "unit" : "meter"
+      },
+      "WeightedMeanFractionalCadence" : {
+        "value" : 0.1015625,
+        "unit" : "stepsPerMinute"
+      },
+      "SumDuration" : {
+        "value" : 3865.665,
+        "unit" : "second"
+      },
+      "WeightedMeanStanceTimePercent" : {
+        "value" : 36.75,
+        "unit" : "percent"
+      }
+    },
+    "__strava__2680128776" : {
+      "WeightedMeanSpeed" : {
+        "value" : 23.936399999999999,
+        "unit" : "kph"
+      },
+      "SumTotalWork" : {
+        "value" : 239.80000000000001,
+        "unit" : "kilojoule"
+      },
+      "SumMovingDuration" : {
+        "value" : 1453,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 9.6611000000000011,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 17,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPower" : {
+        "value" : 165,
+        "unit" : "watt"
+      },
+      "GainElevation" : {
+        "value" : 18,
+        "unit" : "meter"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 80.099999999999994,
+        "unit" : "rpm"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 150.40000000000001,
+        "unit" : "bpm"
+      },
+      "SumDuration" : {
+        "value" : 1648,
+        "unit" : "second"
+      }
+    },
+    "4032162411" : {
+      "WeightedMeanStrideLength" : {
+        "value" : 1.1459000244140627,
+        "unit" : "meter"
+      },
+      "WeightedMeanRunCadence" : {
+        "value" : 79.1015625,
+        "unit" : "stepsPerMinute"
+      },
+      "WeightedMeanSpeed" : {
+        "value" : 11.231999588012695,
+        "unit" : "kph"
+      },
+      "SumMovingDuration" : {
+        "value" : 3731.7460021972656,
+        "unit" : "second"
+      },
+      "SumEnergy" : {
+        "value" : 868,
+        "unit" : "kilocalorie"
+      },
+      "SumDistance" : {
+        "value" : 12.0622197265625,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 176,
+        "unit" : "bpm"
+      },
+      "WeightedMeanGroundContactTime" : {
+        "value" : 275.39999389648438,
+        "unit" : "ms"
+      },
+      "WeightedMeanVerticalRatio" : {
+        "value" : 8.1800003051757812,
+        "unit" : "percent"
+      },
+      "WeightedMeanVerticalOscillation" : {
+        "value" : 9.3900001525878913,
+        "unit" : "centimeter"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 20.160889808587687,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPace" : {
+        "value" : 5.3418805378193532,
+        "unit" : "minperkm"
+      },
+      "GainElevation" : {
+        "value" : 126,
+        "unit" : "meter"
+      },
+      "WeightedMeanGroundContactBalanceLeft" : {
+        "value" : 50.639999389648438,
+        "unit" : "percent"
+      },
+      "LossElevation" : {
+        "value" : 132,
+        "unit" : "meter"
+      },
+      "SumElapsedDuration" : {
+        "value" : 4458.39599609375,
+        "unit" : "second"
+      },
+      "WeightedMeanMovingSpeed" : {
+        "value" : 11.63637369479509,
+        "unit" : "kph"
+      },
+      "SumDuration" : {
+        "value" : 3865.6650390625,
+        "unit" : "second"
+      }
+    },
+    "4024290162" : {
+      "WeightedMeanSpeed" : {
+        "value" : 21.10319995880127,
+        "unit" : "kph"
+      },
+      "WeightedMeanLeftPedalSmoothness" : {
+        "value" : 21,
+        "unit" : "percent"
+      },
+      "SumTotalWork" : {
+        "value" : 262.62213545520075,
+        "unit" : "kilojoule"
+      },
+      "SumMovingDuration" : {
+        "value" : 1421,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 9.6611201171874992,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 17.628640776699029,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPower" : {
+        "value" : 160,
+        "unit" : "watt"
+      },
+      "SumEnergy" : {
+        "value" : 261,
+        "unit" : "kilocalorie"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 149,
+        "unit" : "bpm"
+      },
+      "WeightedMeanLeftTorqueEffectiveness" : {
+        "value" : 73.5,
+        "unit" : "percent"
+      },
+      "SumElapsedDuration" : {
+        "value" : 1648.2320556640625,
+        "unit" : "second"
+      },
+      "GainElevation" : {
+        "value" : 18,
+        "unit" : "meter"
+      },
+      "SumStrokes" : {
+        "value" : 1562,
+        "unit" : "dimensionless"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 80,
+        "unit" : "rpm"
+      },
+      "SumTrainingStressScore" : {
+        "value" : 48.599998474121094,
+        "unit" : "dimensionless"
+      },
+      "LossElevation" : {
+        "value" : 342,
+        "unit" : "meter"
+      },
+      "SumDuration" : {
+        "value" : 1648.2320556640625,
+        "unit" : "second"
+      },
+      "WeightedMeanMovingSpeed" : {
+        "value" : 24.475744139250526,
+        "unit" : "kph"
+      },
+      "WeightedMeanNormalizedPower" : {
+        "value" : 209,
+        "unit" : "watt"
+      }
+    },
+    "4018408912" : {
+      "WeightedMeanSpeed" : {
+        "value" : 21.13199958801269,
+        "unit" : "kph"
+      },
+      "WeightedMeanLeftPedalSmoothness" : {
+        "value" : 13.5,
+        "unit" : "percent"
+      },
+      "SumTotalWork" : {
+        "value" : 179.74138548264688,
+        "unit" : "kilojoule"
+      },
+      "SumMovingDuration" : {
+        "value" : 1561,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 9.7667695312500005,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 23.89122596153846,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPower" : {
+        "value" : 108,
+        "unit" : "watt"
+      },
+      "SumEnergy" : {
+        "value" : 178,
+        "unit" : "kilocalorie"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 142,
+        "unit" : "bpm"
+      },
+      "WeightedMeanLeftTorqueEffectiveness" : {
+        "value" : 42,
+        "unit" : "percent"
+      },
+      "SumElapsedDuration" : {
+        "value" : 1663.708984375,
+        "unit" : "second"
+      },
+      "GainElevation" : {
+        "value" : 30,
+        "unit" : "meter"
+      },
+      "SumStrokes" : {
+        "value" : 1385,
+        "unit" : "dimensionless"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 69,
+        "unit" : "rpm"
+      },
+      "SumTrainingStressScore" : {
+        "value" : 27.100000381469727,
+        "unit" : "dimensionless"
+      },
+      "LossElevation" : {
+        "value" : 27,
+        "unit" : "meter"
+      },
+      "SumDuration" : {
+        "value" : 1663.708984375,
+        "unit" : "second"
+      },
+      "WeightedMeanMovingSpeed" : {
+        "value" : 22.524260289878281,
+        "unit" : "kph"
+      },
+      "WeightedMeanNormalizedPower" : {
+        "value" : 158,
+        "unit" : "watt"
+      }
+    },
+    "__connectstats__5567" : {
+      "WeightedMeanRunCadence" : {
+        "value" : 79,
+        "unit" : "stepsPerMinute"
+      },
+      "WeightedMeanSpeed" : {
+        "value" : 11.743199999999996,
+        "unit" : "kph"
+      },
+      "SumEnergy" : {
+        "value" : 90,
+        "unit" : "kilocalorie"
+      },
+      "SumDistance" : {
+        "value" : 1.8905200000000004,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 26,
+        "unit" : "celcius"
+      },
+      "LossElevation" : {
+        "value" : 3,
+        "unit" : "meter"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 131,
+        "unit" : "bpm"
+      },
+      "WeightedMeanPace" : {
+        "value" : 5.1093398732883735,
+        "unit" : "minperkm"
+      },
+      "SumElapsedDuration" : {
+        "value" : 634.37599999999998,
+        "unit" : "second"
+      },
+      "GainElevation" : {
+        "value" : 0,
+        "unit" : "meter"
+      },
+      "WeightedMeanFractionalCadence" : {
+        "value" : 0.5390625,
+        "unit" : "stepsPerMinute"
+      },
+      "SumDuration" : {
+        "value" : 579.53599999999994,
+        "unit" : "second"
+      }
+    },
+    "4017099594" : {
+      "WeightedMeanStrideLength" : {
+        "value" : 1.2284143164842236,
+        "unit" : "meter"
+      },
+      "WeightedMeanRunCadence" : {
+        "value" : 79.5390625,
+        "unit" : "stepsPerMinute"
+      },
+      "WeightedMeanSpeed" : {
+        "value" : 11.743200302124023,
+        "unit" : "kph"
+      },
+      "SumMovingDuration" : {
+        "value" : 576,
+        "unit" : "second"
+      },
+      "SumEnergy" : {
+        "value" : 90,
+        "unit" : "kilocalorie"
+      },
+      "SumDistance" : {
+        "value" : 1.8905200195312499,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 26.236206896551725,
+        "unit" : "celcius"
+      },
+      "LossElevation" : {
+        "value" : 3,
+        "unit" : "meter"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 131,
+        "unit" : "bpm"
+      },
+      "WeightedMeanPace" : {
+        "value" : 5.1093397418374655,
+        "unit" : "minperkm"
+      },
+      "SumElapsedDuration" : {
+        "value" : 634.3759765625,
+        "unit" : "second"
+      },
+      "GainElevation" : {
+        "value" : 0,
+        "unit" : "meter"
+      },
+      "SumDuration" : {
+        "value" : 579.5360107421875,
+        "unit" : "second"
+      },
+      "WeightedMeanMovingSpeed" : {
+        "value" : 11.815750122070311,
+        "unit" : "kph"
+      }
+    },
+    "4020671575" : {
+      "WeightedMeanSpeed" : {
+        "value" : 14.169600391387938,
+        "unit" : "kph"
+      },
+      "SumDuration" : {
+        "value" : 2703.0029296875,
+        "unit" : "second"
+      },
+      "SumMovingDuration" : {
+        "value" : 2133,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 10.640000000000001,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 24.345414201183431,
+        "unit" : "celcius"
+      },
+      "LossElevation" : {
+        "value" : 25,
+        "unit" : "meter"
+      },
+      "WeightedMeanMovingSpeed" : {
+        "value" : 17.957805907172993,
+        "unit" : "kph"
+      },
+      "GainElevation" : {
+        "value" : 20,
+        "unit" : "meter"
+      },
+      "SumEnergy" : {
+        "value" : 255,
+        "unit" : "kilocalorie"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 114,
+        "unit" : "bpm"
+      },
+      "SumElapsedDuration" : {
+        "value" : 2827.614990234375,
+        "unit" : "second"
+      }
+    },
+    "4036098147" : {
+      "WeightedMeanStrideLength" : {
+        "value" : 0.796810123336682,
+        "unit" : "meter"
+      },
+      "WeightedMeanRunCadence" : {
+        "value" : 60.5234375,
+        "unit" : "stepsPerMinute"
+      },
+      "WeightedMeanSpeed" : {
+        "value" : 5.788800144195557,
+        "unit" : "kph"
+      },
+      "SumMovingDuration" : {
+        "value" : 1091.60498046875,
+        "unit" : "second"
+      },
+      "SumEnergy" : {
+        "value" : 48,
+        "unit" : "kilocalorie"
+      },
+      "LossElevation" : {
+        "value" : 3,
+        "unit" : "meter"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 25.139194139194139,
+        "unit" : "celcius"
+      },
+      "SumDistance" : {
+        "value" : 1.7547800292968749,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 69,
+        "unit" : "bpm"
+      },
+      "SumElapsedDuration" : {
+        "value" : 1091.60498046875,
+        "unit" : "second"
+      },
+      "GainElevation" : {
+        "value" : 4,
+        "unit" : "meter"
+      },
+      "SumDuration" : {
+        "value" : 1091.60498046875,
+        "unit" : "second"
+      },
+      "WeightedMeanMovingSpeed" : {
+        "value" : 5.7870825238961947,
+        "unit" : "kph"
+      }
+    },
+    "__connectstats__5589" : {
+      "WeightedMeanSpeed" : {
+        "value" : 21.103199999999994,
+        "unit" : "kph"
+      },
+      "SumEnergy" : {
+        "value" : 261,
+        "unit" : "kilocalorie"
+      },
+      "SumDistance" : {
+        "value" : 9.6611199999999986,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 17.631067961165041,
+        "unit" : "celcius"
+      },
+      "LossElevation" : {
+        "value" : 342,
+        "unit" : "meter"
+      },
+      "WeightedMeanPower" : {
+        "value" : 160,
+        "unit" : "watt"
+      },
+      "SumElapsedDuration" : {
+        "value" : 1648.232,
+        "unit" : "second"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 149,
+        "unit" : "bpm"
+      },
+      "GainElevation" : {
+        "value" : 18,
+        "unit" : "meter"
+      },
+      "SumTrainingStressScore" : {
+        "value" : 48.600000000000001,
+        "unit" : "dimensionless"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 80,
+        "unit" : "rpm"
+      },
+      "WeightedMeanFractionalCadence" : {
+        "value" : 0.0859375,
+        "unit" : "rpm"
+      },
+      "SumDuration" : {
+        "value" : 1648,
+        "unit" : "second"
+      },
+      "WeightedMeanNormalizedPower" : {
+        "value" : 209,
+        "unit" : "watt"
+      }
+    },
+    "4028909687" : {
+      "WeightedMeanSpeed" : {
+        "value" : 17.481599807739258,
+        "unit" : "kph"
+      },
+      "WeightedMeanLeftPedalSmoothness" : {
+        "value" : 20.5,
+        "unit" : "percent"
+      },
+      "SumTotalWork" : {
+        "value" : 180.73994873532826,
+        "unit" : "kilojoule"
+      },
+      "SumMovingDuration" : {
+        "value" : 1789,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 10.059190429687501,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 13.294401544401545,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPower" : {
+        "value" : 88,
+        "unit" : "watt"
+      },
+      "SumEnergy" : {
+        "value" : 180,
+        "unit" : "kilocalorie"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 126,
+        "unit" : "bpm"
+      },
+      "WeightedMeanLeftTorqueEffectiveness" : {
+        "value" : 71,
+        "unit" : "percent"
+      },
+      "SumElapsedDuration" : {
+        "value" : 2071.68896484375,
+        "unit" : "second"
+      },
+      "GainElevation" : {
+        "value" : 36,
+        "unit" : "meter"
+      },
+      "SumStrokes" : {
+        "value" : 1444,
+        "unit" : "dimensionless"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 64,
+        "unit" : "rpm"
+      },
+      "SumTrainingStressScore" : {
+        "value" : 18.799999237060547,
+        "unit" : "dimensionless"
+      },
+      "LossElevation" : {
+        "value" : 15,
+        "unit" : "meter"
+      },
+      "SumDuration" : {
+        "value" : 2071.68896484375,
+        "unit" : "second"
+      },
+      "WeightedMeanMovingSpeed" : {
+        "value" : 20.242082474496925,
+        "unit" : "kph"
+      },
+      "WeightedMeanNormalizedPower" : {
+        "value" : 116,
+        "unit" : "watt"
+      }
+    },
+    "4030657677" : {
+      "WeightedMeanSpeed" : {
+        "value" : 17.63279914855957,
+        "unit" : "kph"
+      },
+      "WeightedMeanLeftPedalSmoothness" : {
+        "value" : 21,
+        "unit" : "percent"
+      },
+      "SumTotalWork" : {
+        "value" : 185.73276499873512,
+        "unit" : "kilojoule"
+      },
+      "SumMovingDuration" : {
+        "value" : 1782,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 10.014419921875,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 17.95601173020528,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPower" : {
+        "value" : 91,
+        "unit" : "watt"
+      },
+      "SumEnergy" : {
+        "value" : 183,
+        "unit" : "kilocalorie"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 117,
+        "unit" : "bpm"
+      },
+      "WeightedMeanLeftTorqueEffectiveness" : {
+        "value" : 70,
+        "unit" : "percent"
+      },
+      "SumElapsedDuration" : {
+        "value" : 2044.741943359375,
+        "unit" : "second"
+      },
+      "GainElevation" : {
+        "value" : 16,
+        "unit" : "meter"
+      },
+      "SumStrokes" : {
+        "value" : 1621,
+        "unit" : "dimensionless"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 67,
+        "unit" : "rpm"
+      },
+      "SumTrainingStressScore" : {
+        "value" : 18.299999237060547,
+        "unit" : "dimensionless"
+      },
+      "LossElevation" : {
+        "value" : 29,
+        "unit" : "meter"
+      },
+      "SumDuration" : {
+        "value" : 2044.741943359375,
+        "unit" : "second"
+      },
+      "WeightedMeanMovingSpeed" : {
+        "value" : 20.231151357323231,
+        "unit" : "kph"
+      },
+      "WeightedMeanNormalizedPower" : {
+        "value" : 115,
+        "unit" : "watt"
+      }
+    },
+    "4025579020" : {
+      "WeightedMeanSpeed" : {
+        "value" : 17.564400672912598,
+        "unit" : "kph"
+      },
+      "WeightedMeanLeftPedalSmoothness" : {
+        "value" : 20.5,
+        "unit" : "percent"
+      },
+      "SumTotalWork" : {
+        "value" : 226.67385835867134,
+        "unit" : "kilojoule"
+      },
+      "SumMovingDuration" : {
+        "value" : 1745,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 10.05773046875,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 13.744784085395439,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPower" : {
+        "value" : 113,
+        "unit" : "watt"
+      },
+      "SumEnergy" : {
+        "value" : 228,
+        "unit" : "kilocalorie"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 135,
+        "unit" : "bpm"
+      },
+      "WeightedMeanLeftTorqueEffectiveness" : {
+        "value" : 70.5,
+        "unit" : "percent"
+      },
+      "SumElapsedDuration" : {
+        "value" : 2061.575927734375,
+        "unit" : "second"
+      },
+      "GainElevation" : {
+        "value" : 31,
+        "unit" : "meter"
+      },
+      "SumStrokes" : {
+        "value" : 1520,
+        "unit" : "dimensionless"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 71,
+        "unit" : "rpm"
+      },
+      "SumTrainingStressScore" : {
+        "value" : 33.700000762939453,
+        "unit" : "dimensionless"
+      },
+      "LossElevation" : {
+        "value" : 21,
+        "unit" : "meter"
+      },
+      "SumDuration" : {
+        "value" : 2061.575927734375,
+        "unit" : "second"
+      },
+      "WeightedMeanMovingSpeed" : {
+        "value" : 20.749472600286531,
+        "unit" : "kph"
+      },
+      "WeightedMeanNormalizedPower" : {
+        "value" : 157,
+        "unit" : "watt"
+      }
+    },
+    "4027392348" : {
+      "WeightedMeanSpeed" : {
+        "value" : 18.421200370788569,
+        "unit" : "kph"
+      },
+      "WeightedMeanLeftPedalSmoothness" : {
+        "value" : 20.5,
+        "unit" : "percent"
+      },
+      "SumTotalWork" : {
+        "value" : 191.72414451482337,
+        "unit" : "kilojoule"
+      },
+      "SumMovingDuration" : {
+        "value" : 1668,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 9.9821103515625005,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 17.345976422347515,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPower" : {
+        "value" : 98,
+        "unit" : "watt"
+      },
+      "SumEnergy" : {
+        "value" : 190,
+        "unit" : "kilocalorie"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 118,
+        "unit" : "bpm"
+      },
+      "WeightedMeanLeftTorqueEffectiveness" : {
+        "value" : 68.5,
+        "unit" : "percent"
+      },
+      "SumElapsedDuration" : {
+        "value" : 1950.7559814453125,
+        "unit" : "second"
+      },
+      "GainElevation" : {
+        "value" : 17,
+        "unit" : "meter"
+      },
+      "SumStrokes" : {
+        "value" : 1488,
+        "unit" : "dimensionless"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 70,
+        "unit" : "rpm"
+      },
+      "SumTrainingStressScore" : {
+        "value" : 27.399999618530273,
+        "unit" : "dimensionless"
+      },
+      "LossElevation" : {
+        "value" : 26,
+        "unit" : "meter"
+      },
+      "SumDuration" : {
+        "value" : 1950.7559814453125,
+        "unit" : "second"
+      },
+      "WeightedMeanMovingSpeed" : {
+        "value" : 21.54412306092626,
+        "unit" : "kph"
+      },
+      "WeightedMeanNormalizedPower" : {
+        "value" : 144,
+        "unit" : "watt"
+      }
+    },
+    "__connectstats__5572" : {
+      "WeightedMeanSpeed" : {
+        "value" : 21.131999999999991,
+        "unit" : "kph"
+      },
+      "SumEnergy" : {
+        "value" : 178,
+        "unit" : "kilocalorie"
+      },
+      "SumDistance" : {
+        "value" : 9.7667700000000011,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 24,
+        "unit" : "celcius"
+      },
+      "LossElevation" : {
+        "value" : 27,
+        "unit" : "meter"
+      },
+      "WeightedMeanPower" : {
+        "value" : 108,
+        "unit" : "watt"
+      },
+      "SumElapsedDuration" : {
+        "value" : 1663.7090000000001,
+        "unit" : "second"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 142,
+        "unit" : "bpm"
+      },
+      "GainElevation" : {
+        "value" : 30,
+        "unit" : "meter"
+      },
+      "SumTrainingStressScore" : {
+        "value" : 27.100000000000001,
+        "unit" : "dimensionless"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 69,
+        "unit" : "rpm"
+      },
+      "WeightedMeanFractionalCadence" : {
+        "value" : 0.6640625,
+        "unit" : "rpm"
+      },
+      "SumDuration" : {
+        "value" : 1663.7090000000001,
+        "unit" : "second"
+      },
+      "WeightedMeanNormalizedPower" : {
+        "value" : 158,
+        "unit" : "watt"
+      }
+    },
+    "__connectstats__5591" : {
+      "WeightedMeanSpeed" : {
+        "value" : 17.564399999999999,
+        "unit" : "kph"
+      },
+      "SumEnergy" : {
+        "value" : 228,
+        "unit" : "kilocalorie"
+      },
+      "SumDistance" : {
+        "value" : 10.057730000000003,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 13.743813682678287,
+        "unit" : "celcius"
+      },
+      "LossElevation" : {
+        "value" : 21,
+        "unit" : "meter"
+      },
+      "WeightedMeanPower" : {
+        "value" : 113,
+        "unit" : "watt"
+      },
+      "SumElapsedDuration" : {
+        "value" : 2061.576,
+        "unit" : "second"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 135,
+        "unit" : "bpm"
+      },
+      "GainElevation" : {
+        "value" : 31,
+        "unit" : "meter"
+      },
+      "SumTrainingStressScore" : {
+        "value" : 33.700000000000003,
+        "unit" : "dimensionless"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 71,
+        "unit" : "rpm"
+      },
+      "WeightedMeanFractionalCadence" : {
+        "value" : 0.4609375,
+        "unit" : "rpm"
+      },
+      "SumDuration" : {
+        "value" : 2061.576,
+        "unit" : "second"
+      },
+      "WeightedMeanNormalizedPower" : {
+        "value" : 157,
+        "unit" : "watt"
+      }
+    },
+    "__connectstats__5600" : {
+      "WeightedMeanSpeed" : {
+        "value" : 17.4816,
+        "unit" : "kph"
+      },
+      "SumEnergy" : {
+        "value" : 180,
+        "unit" : "kilocalorie"
+      },
+      "SumDistance" : {
+        "value" : 10.059190000000005,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 13.296814671814655,
+        "unit" : "celcius"
+      },
+      "LossElevation" : {
+        "value" : 15,
+        "unit" : "meter"
+      },
+      "WeightedMeanPower" : {
+        "value" : 88,
+        "unit" : "watt"
+      },
+      "SumElapsedDuration" : {
+        "value" : 2071.6889999999999,
+        "unit" : "second"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 126,
+        "unit" : "bpm"
+      },
+      "GainElevation" : {
+        "value" : 36,
+        "unit" : "meter"
+      },
+      "SumTrainingStressScore" : {
+        "value" : 18.800000000000001,
+        "unit" : "dimensionless"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 64,
+        "unit" : "rpm"
+      },
+      "WeightedMeanFractionalCadence" : {
+        "value" : 0.984375,
+        "unit" : "rpm"
+      },
+      "SumDuration" : {
+        "value" : 2071.6889999999999,
+        "unit" : "second"
+      },
+      "WeightedMeanNormalizedPower" : {
+        "value" : 116,
+        "unit" : "watt"
+      }
+    },
+    "__strava__2685383271" : {
+      "WeightedMeanSpeed" : {
+        "value" : 20.048399999999997,
+        "unit" : "kph"
+      },
+      "SumTotalWork" : {
+        "value" : 179.30000000000001,
+        "unit" : "kilojoule"
+      },
+      "SumMovingDuration" : {
+        "value" : 1798,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 10.012799999999999,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 17,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPower" : {
+        "value" : 99.700000000000003,
+        "unit" : "watt"
+      },
+      "GainElevation" : {
+        "value" : 16,
+        "unit" : "meter"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 67.400000000000006,
+        "unit" : "rpm"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 119.59999999999999,
+        "unit" : "bpm"
+      },
+      "SumDuration" : {
+        "value" : 2046,
+        "unit" : "second"
+      }
+    },
+    "__strava__2681225256" : {
+      "WeightedMeanSpeed" : {
+        "value" : 19.915199999999999,
+        "unit" : "kph"
+      },
+      "SumTotalWork" : {
+        "value" : 212.19999999999999,
+        "unit" : "kilojoule"
+      },
+      "SumMovingDuration" : {
+        "value" : 1818,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 10.057700000000001,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 13,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPower" : {
+        "value" : 116.7,
+        "unit" : "watt"
+      },
+      "GainElevation" : {
+        "value" : 31,
+        "unit" : "meter"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 71.5,
+        "unit" : "rpm"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 137.19999999999999,
+        "unit" : "bpm"
+      },
+      "SumDuration" : {
+        "value" : 2061,
+        "unit" : "second"
+      }
+    },
+    "__strava__2677141872" : {
+      "WeightedMeanSpeed" : {
+        "value" : 17.625599999999999,
+        "unit" : "kph"
+      },
+      "SumTotalWork" : {
+        "value" : 224.40000000000001,
+        "unit" : "kilojoule"
+      },
+      "SumMovingDuration" : {
+        "value" : 2173,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 10.640000000000001,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 24,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPower" : {
+        "value" : 103.3,
+        "unit" : "watt"
+      },
+      "GainElevation" : {
+        "value" : 20.399999999999999,
+        "unit" : "meter"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 115.7,
+        "unit" : "bpm"
+      },
+      "SumDuration" : {
+        "value" : 2828,
+        "unit" : "second"
+      }
+    },
+    "__strava__2689916085" : {
+      "WeightedMeanSpeed" : {
+        "value" : 5.7816000000000001,
+        "unit" : "kph"
+      },
+      "SumMovingDuration" : {
+        "value" : 1092,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 1.7534000000000001,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 25,
+        "unit" : "celcius"
+      },
+      "GainElevation" : {
+        "value" : 0,
+        "unit" : "meter"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 60.559523809523824,
+        "unit" : "stepsPerMinute"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 69.400000000000006,
+        "unit" : "bpm"
+      },
+      "SumDuration" : {
+        "value" : 1092,
+        "unit" : "second"
+      }
+    },
+    "__strava__2675283580" : {
+      "WeightedMeanSpeed" : {
+        "value" : 22.2624,
+        "unit" : "kph"
+      },
+      "SumTotalWork" : {
+        "value" : 192.19999999999999,
+        "unit" : "kilojoule"
+      },
+      "SumMovingDuration" : {
+        "value" : 1582,
+        "unit" : "second"
+      },
+      "SumDistance" : {
+        "value" : 9.7832000000000008,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 16,
+        "unit" : "celcius"
+      },
+      "WeightedMeanPower" : {
+        "value" : 121.5,
+        "unit" : "watt"
+      },
+      "GainElevation" : {
+        "value" : 23,
+        "unit" : "meter"
+      },
+      "WeightedMeanBikeCadence" : {
+        "value" : 69.900000000000006,
+        "unit" : "rpm"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 143.09999999999999,
+        "unit" : "bpm"
+      },
+      "SumDuration" : {
+        "value" : 1664,
+        "unit" : "second"
+      }
+    },
+    "__strava__2674169797" : {
+      "WeightedMeanSpeed" : {
+        "value" : 11.746799999999999,
+        "unit" : "kph"
+      },
+      "WeightedMeanPace" : {
+        "value" : 5.1077740320768212,
+        "unit" : "minperkm"
+      },
+      "SumDistance" : {
+        "value" : 1.8892,
+        "unit" : "kilometer"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 26,
+        "unit" : "celcius"
+      },
+      "GainElevation" : {
+        "value" : 2.1000000000000001,
+        "unit" : "meter"
+      },
+      "SumMovingDuration" : {
+        "value" : 579,
+        "unit" : "second"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 131.30000000000001,
+        "unit" : "bpm"
+      },
+      "WeightedMeanRunCadence" : {
+        "value" : 81.599999999999994,
+        "unit" : "stepsPerMinute"
+      },
+      "SumDuration" : {
+        "value" : 634,
+        "unit" : "second"
+      }
+    },
+    "__connectstats__5622" : {
+      "WeightedMeanRunCadence" : {
+        "value" : 60,
+        "unit" : "stepsPerMinute"
+      },
+      "WeightedMeanSpeed" : {
+        "value" : 5.7888000000000002,
+        "unit" : "kph"
+      },
+      "WeightedMeanHeartRate" : {
+        "value" : 69,
+        "unit" : "bpm"
+      },
+      "LossElevation" : {
+        "value" : 3,
+        "unit" : "meter"
+      },
+      "WeightedMeanAirTemperature" : {
+        "value" : 25,
+        "unit" : "celcius"
+      },
+      "SumDistance" : {
+        "value" : 1.75478,
+        "unit" : "kilometer"
+      },
+      "SumEnergy" : {
+        "value" : 48,
+        "unit" : "kilocalorie"
+      },
+      "SumElapsedDuration" : {
+        "value" : 1091.605,
+        "unit" : "second"
+      },
+      "WeightedMeanCadence" : {
+        "value" : 60,
+        "unit" : "rpm"
+      },
+      "GainElevation" : {
+        "value" : 4,
+        "unit" : "meter"
+      },
+      "WeightedMeanFractionalCadence" : {
+        "value" : 0.5234375,
+        "unit" : "rpm"
+      },
+      "SumDuration" : {
+        "value" : 1091.605,
+        "unit" : "second"
+      }
+    }
+  },
+  "duplicates" : {
+    "__connectstats__5597" : {
+      "__strava__2682687598" : "Time Overlapping",
+      "4027392348" : "Synchronized Service"
+    },
+    "__strava__2686598550" : {
+      "4032162411" : "Synchronized Service",
+      "__connectstats__5611" : "Time Overlapping"
+    },
+    "__strava__2683992970" : {
+      "__connectstats__5600" : "Time Overlapping",
+      "4028909687" : "Synchronized Service"
+    },
+    "__connectstats__5607" : {
+      "4030657677" : "Synchronized Service",
+      "__strava__2685383271" : "Time Overlapping"
+    },
+    "__strava__2682687598" : {
+      "__connectstats__5597" : "Time Overlapping",
+      "4027392348" : "Synchronized Service"
+    },
+    "__connectstats__5582" : {
+      "4020671575" : "Synchronized Service",
+      "__strava__2677141872" : "Time Overlapping"
+    },
+    "__connectstats__5611" : {
+      "4032162411" : "Synchronized Service",
+      "__strava__2686598550" : "Time Overlapping"
+    },
+    "__strava__2680128776" : {
+      "4024290162" : "Synchronized Service",
+      "__connectstats__5589" : "Time Overlapping"
+    },
+    "4032162411" : {
+      "__connectstats__5611" : "Synchronized Service",
+      "__strava__2686598550" : "Synchronized Service"
+    },
+    "4024290162" : {
+      "__connectstats__5589" : "Synchronized Service",
+      "__strava__2680128776" : "Synchronized Service"
+    },
+    "4018408912" : {
+      "__connectstats__5572" : "Synchronized Service",
+      "__strava__2675283580" : "Time Overlapping"
+    },
+    "__connectstats__5567" : {
+      "4017099594" : "Synchronized Service",
+      "__strava__2674169797" : "Time Overlapping"
+    },
+    "4017099594" : {
+      "__connectstats__5567" : "Synchronized Service",
+      "__strava__2674169797" : "Synchronized Service"
+    },
+    "4020671575" : {
+      "__strava__2677141872" : "Synchronized Service",
+      "__connectstats__5582" : "Synchronized Service"
+    },
+    "4036098147" : {
+      "__connectstats__5622" : "Synchronized Service",
+      "__strava__2689916085" : "Synchronized Service"
+    },
+    "__connectstats__5589" : {
+      "4024290162" : "Synchronized Service",
+      "__strava__2680128776" : "Time Overlapping"
+    },
+    "4028909687" : {
+      "__strava__2683992970" : "Synchronized Service",
+      "__connectstats__5600" : "Synchronized Service"
+    },
+    "4030657677" : {
+      "__connectstats__5607" : "Synchronized Service",
+      "__strava__2685383271" : "Synchronized Service"
+    },
+    "4025579020" : {
+      "__connectstats__5591" : "Synchronized Service",
+      "__strava__2681225256" : "Synchronized Service"
+    },
+    "4027392348" : {
+      "__strava__2682687598" : "Synchronized Service",
+      "__connectstats__5597" : "Synchronized Service"
+    },
+    "__connectstats__5572" : {
+      "4018408912" : "Synchronized Service",
+      "__strava__2675283580" : "Time Overlapping"
+    },
+    "__connectstats__5591" : {
+      "4025579020" : "Synchronized Service",
+      "__strava__2681225256" : "Time Overlapping"
+    },
+    "__connectstats__5600" : {
+      "__strava__2683992970" : "Time Overlapping",
+      "4028909687" : "Synchronized Service"
+    },
+    "__strava__2685383271" : {
+      "4030657677" : "Synchronized Service",
+      "__connectstats__5607" : "Time Overlapping"
+    },
+    "__strava__2681225256" : {
+      "4025579020" : "Synchronized Service",
+      "__connectstats__5591" : "Time Overlapping"
+    },
+    "__strava__2677141872" : {
+      "4020671575" : "Synchronized Service",
+      "__connectstats__5582" : "Time Overlapping"
+    },
+    "__strava__2689916085" : {
+      "__connectstats__5622" : "Time Overlapping",
+      "4036098147" : "Synchronized Service"
+    },
+    "__strava__2675283580" : {
+      "4018408912" : "Time Overlapping",
+      "__connectstats__5572" : "Time Overlapping"
+    },
+    "__strava__2674169797" : {
+      "4017099594" : "Synchronized Service",
+      "__connectstats__5567" : "Time Overlapping"
+    },
+    "__connectstats__5622" : {
+      "__strava__2689916085" : "Time Overlapping",
+      "4036098147" : "Synchronized Service"
+    }
+  }
+}

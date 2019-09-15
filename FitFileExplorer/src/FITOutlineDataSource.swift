@@ -7,21 +7,38 @@
 //
 
 import Cocoa
+import RZFitFile
+import RZFitFileTypes
 
 class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelegate {
     
     static let kFITNotificationOutlineSelectionChanged = Notification.Name( "kFITNotificationOutlineSelectionChanged" )
     
-    let fitFile: FITFitFile
-    var selectedMessageType : String?
+    let selectionContext : FITSelectionContext
+    let orderedMessageTypes : [FIT_MESG_NUM]
     
-    init(fitFile:FITFitFile) {
-        self.fitFile = fitFile
+    var fitFile: RZFitFile {
+        return self.selectionContext.fitFile
+    }
+    
+    
+    var selectedMessageType : RZFitMessageType {
+        return self.selectionContext.messageType
+    }
+    
+    init(selectionContext : FITSelectionContext) {
+        self.selectionContext = selectionContext
+        
+        self.orderedMessageTypes = selectionContext.fitFile.orderedMessageTypes()
+        
         super.init()
+    }
+    deinit {
+        
     }
     
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
-        return self.fitFile.allMessageTypes().count
+        return self.orderedMessageTypes.count
     }
     
     func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
@@ -29,19 +46,25 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
     }
     
     func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
-        if let types = self.fitFile.allMessageTypes(), index < types.count {
+        let types = self.orderedMessageTypes
+        
+        if index < types.count {
             return types[index]
         }
-        return ""
+        return FIT_MESG_NUM_INVALID
     }
     
     func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
         let cellView = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DataCell"), owner: self)
         if let cellView = cellView as? FITOutlineCellView {
-            if let text = item as? String {
+            cellView.textField?.stringValue = ""
+            cellView.detailTextField.stringValue = ""
+            
+            if let type = item as? RZFitMessageType,
+                let text = self.fitFile.messageTypeDescription(messageType: type){
+                
                 cellView.textField?.stringValue = text
-                let count = self.fitFile.message(forType: text).count()
-                if count > 0{
+                if let count = self.fitFile.messagesByType[type]?.count {
                     cellView.detailTextField.stringValue = "(\(count) items)"
                 }else{
                     cellView.detailTextField.stringValue = ""
@@ -56,9 +79,13 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
     func outlineViewSelectionDidChange(_ notification: Notification) {
         if let obj = notification.object as? NSOutlineView {
             let selected = obj.selectedRow;
-            if let types = self.fitFile.allMessageTypes() {
-                self.selectedMessageType = types[selected];
-                NotificationCenter.default.post(name: FITOutlineDataSource.kFITNotificationOutlineSelectionChanged, object: self)
+            let types = self.orderedMessageTypes
+            
+            if selected < types.count {
+                if( types[selected] != self.selectionContext.messageType){
+                    self.selectionContext.messageType = types[selected];
+                    NotificationCenter.default.post(name: FITOutlineDataSource.kFITNotificationOutlineSelectionChanged, object: self)
+                }
             }
         }
         

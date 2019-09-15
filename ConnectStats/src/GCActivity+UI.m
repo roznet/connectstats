@@ -30,13 +30,16 @@
 
 -(UIImage*)icon{
     UIImage * rv = nil;
-    if (self.activityTypeDetail) {
-        rv = [GCViewIcons activityTypeColoredIconFor:self.activityTypeDetail.key];
+    if( self.skipAlways){
+        rv = [GCViewIcons activityTypeDisabledIconFor:self.activityType];
+    }else{
+        if (self.activityTypeDetail) {
+            rv = [GCViewIcons activityTypeDynamicIconFor:self.activityTypeDetail.key];
+        }
+        if (!rv) {
+            rv = [GCViewIcons activityTypeDynamicIconFor:self.activityType];
+        }
     }
-    if (!rv) {
-        rv = [GCViewIcons activityTypeColoredIconFor:self.activityType];
-    }
-
     return rv;
 }
 

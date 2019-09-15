@@ -41,7 +41,8 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 @interface GCActivitiesOrganizer : RZParentObject<GCWebReverseGeocodeDelegate,RZChildObject>
 
 @property (nonatomic,retain) FMDatabase * db;
-@property (nonatomic,retain) NSArray * activitiesTrash;
+/// set this with an array of activityId to delete and call deleteActivitiesInTrash
+@property (nonatomic,retain) NSArray<NSString*> * activitiesTrash;
 
 @property (nonatomic,assign) BOOL hasCompareActivity;
 @property (nonatomic,assign) NSUInteger currentActivityIndex;
@@ -71,8 +72,10 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 -(void)registerTennisActivity:(NSString *)aId withFullSession:(NSDictionary *)aData;
 
 
-
+-(NSUInteger)countOfKnownDuplicates;
 -(GCActivity*)findDuplicate:(GCActivity*)act;
+-(BOOL)isKnownDuplicate:(GCActivity*)act;
+-(NSString*)hasKnownDuplicate:(GCActivity*)act;
 
 -(NSUInteger)countOfActivities;
 -(NSArray<GCActivity*>*)activities;
@@ -142,6 +145,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 -(void)deleteActivitiesInTrash;
 -(void)deleteAllActivities;
 -(void)deleteActivityUpToIndex:(NSUInteger)idx;
+-(void)deleteActivityFromIndex:(NSUInteger)idx;
 -(void)deleteActivityAtIndex:(NSUInteger)idx;
 
 -(void)recordSynchronized:(GCActivity*)act forService:(NSString*)service;

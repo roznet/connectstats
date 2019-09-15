@@ -31,6 +31,23 @@
     return [RZColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:alpha];
 }
 
++ (RZColor *)colorWithHexLight:(NSUInteger)rgbValue dark:(NSUInteger)darkRgbValue andAlpha:(double)alpha{
+#ifdef __IPHONE_13_0
+    if( @available(iOS 13.0, *)) {
+        return [UIColor colorWithDynamicProvider:^(UITraitCollection*trait){
+            if( trait.userInterfaceStyle == UIUserInterfaceStyleDark){
+                return [RZColor colorWithRed:((darkRgbValue & 0xFF0000) >> 16)/255.0 green:((darkRgbValue & 0xFF00) >> 8)/255.0 blue:(darkRgbValue & 0xFF)/255.0 alpha:alpha];
+            }else{
+                return [RZColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:alpha];
+            }
+        }];
+    }else{
+        return [RZColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:alpha];
+    }
+#else
+    return [RZColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:alpha];
+#endif
+}
 -(NSArray*)rgbComponents{
 #if TARGET_OS_IPHONE
     CGFloat red=0.0,green=0.0,blue=0.0,alpha=0.0;
@@ -47,6 +64,34 @@
 #endif
 }
 
+-(NSDictionary*)rgbComponentColorSetJsonFormat{
+    CGFloat red=0.0,green=0.0,blue=0.0,alpha=0.0;
+#if TARGET_OS_IPHONE
+    if ([self getRed:&red green:&green blue:&blue alpha:&alpha]){
+        //all set
+    }else if( [self getWhite:&red alpha:&alpha] ){
+        green=red;
+        blue=red;
+    }
+#else
+    RZColor * inRgb = [self colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+    
+    red = inRgb.redComponent;
+    green = inRgb.greenComponent;
+    blue = inRgb.blueComponent;
+    alpha = inRgb.alphaComponent;
+#endif
+
+    return @{
+             @"color-space":@"srgb",
+             @"components":@{
+                     @"red":@(red),
+                     @"green":@(green),
+                     @"blue":@(blue),
+                     @"alpha":@(alpha)
+                     }
+             };
+}
 +(RZColor*)colorWithRgbComponents:(NSArray*)array andAlpha:(double)alpha{
     if (array.count >= 3) {
         return [RZColor colorWithRed:[array[0] doubleValue] green:[array[1] doubleValue] blue:[array[2] doubleValue] alpha:alpha];

@@ -19,3 +19,5 @@
 #import "GCGarminRequestSearch.h"
 #import "GCGarminUserJsonParser.h"
 
+#import "GCConnectStatsRequestSearch.h"
+#import "GCService.h"

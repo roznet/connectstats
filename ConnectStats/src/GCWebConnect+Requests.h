@@ -45,17 +45,14 @@
 -(void)withingsChangeUser:(NSString*)shortname;
 
 // Garmin
--(void)garminDownloadActivityTrackPoints:(NSString*)aId;
 -(void)garminDownloadActivityTrackPoints13:(GCActivity*)act;
--(void)garminDownloadActivityDetailTrackPoints:(NSString*)aId;
 -(void)garminDownloadActivitySummary:(NSString*)aId;
 -(void)garminDownloadWeather:(GCActivity*)activity;
--(void)garminDeleteActivity:(NSString*)aId;
--(void)garminRenameActivity:(NSString*)aId withName:(NSString*)name;
--(void)garminUpdateActivity:(NSString*)aId withActivityType:(NSString*)type;
+
+// ConnectStats
+-(void)connectStatsDownloadActivityTrackpoints:(GCActivity*)act;
 
 // Strava
--(void)stravaUpload:(NSString*)aId navigationController:(UINavigationController*)nav extra:(NSDictionary*)extra;
 -(void)stravaDownloadActivityTrackPoints:(GCActivity*)act;
 
 // Babolat
@@ -63,7 +60,6 @@
 
 // sporttracks
 -(void)sportTracksDownloadActivityTrackPoints:(NSString*)aId withUri:(NSString*)uri;
--(void)sportTracksUpload:(NSString*)aId navigationController:(UINavigationController*)nav;
 
 // GarminLogin
 -(void)garminTestLogin;// should not use only for testing

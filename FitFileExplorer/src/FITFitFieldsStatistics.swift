@@ -7,38 +7,37 @@
 //
 
 import Foundation
+import RZFitFile
 
 class FITFitFieldsStatistics: NSObject {
     
-    var stats : [String:FITFitValueStatistics] = [:]
+    var stats : [RZFitFieldKey:FITFitValueStatistics] = [:]
     var interval : (from:Date,to:Date)?
-    var timestampKey : String = "timestamp"
+    var timestampKey : RZFitFieldKey = "timestamp"
     
     init(interval:(from:Date,to:Date)?) {
         self.interval = interval
         super.init()
     }
     
-    func add(messageFields : FITFitMessageFields, weight: FITFitStatisticsWeight) {
+    func add(message : RZFitMessage, weight: FITFitStatisticsWeight) {
         // if interval is setup, just skip if outside.
         if let interval = self.interval,
-            let ts = messageFields[self.timestampKey]?.dateValue{
+            let ts = message.time(field: self.timestampKey){
             if ts < interval.from || ts > interval.to{
                 return
             }
         }
-
-        for item in messageFields {
-            if let key = item as? String {
-                let value :FITFitFieldValue = messageFields[key]
-                
-                if let stat = stats[value.fieldKey]{
-                    stat.add(fieldValue: value, weight: weight)
-                }else{
-                    let stat = FITFitValueStatistics()
-                    stats[value.fieldKey] = stat
-                    stat.add(fieldValue: value, weight: weight)
-                }
+        let interp = message.interpretedFields()
+        
+        for (key,value) in interp {
+            
+            if let stat = stats[key]{
+                stat.add(fieldValue: value, weight: weight)
+            }else{
+                let stat = FITFitValueStatistics()
+                stats[key] = stat
+                stat.add(fieldValue: value, weight: weight)
             }
         }
     }

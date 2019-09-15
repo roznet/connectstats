@@ -70,14 +70,14 @@
     if (self.navigationController) {
         return nil;
     }else{
-        NSString * path = [NSString stringWithFormat:@"v2/measure"];
+        /*NSString * path = [NSString stringWithFormat:@"v2/measure"];
         NSDictionary *parameters = @{@"action" : @"getactivity",
                                      @"startdateymd":[self.fromDate YYYYdashMMdashDD],
                                      @"enddateymd":[[NSDate date] YYYYdashMMdashDD],
                                      @"userid":self.userId
                                      };
-
-        return [self preparedUrlRequest:path params:parameters];
+         */
+        return nil;//[self preparedUrlRequest:path params:parameters];
     }
 }
 

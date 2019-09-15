@@ -26,5 +26,8 @@
 #import <XCTest/XCTest.h>
 
 @interface GCTestCase : XCTestCase
+
++(BOOL)recordModeGlobal;
+
 @end
 

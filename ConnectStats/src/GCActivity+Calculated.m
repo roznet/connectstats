@@ -306,6 +306,35 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
     return @[foundFirst,foundLap,foundNext];
 }
 
+-(NSArray*)accumulatedLaps{
+    NSArray * trackpointsCache = self.trackpoints;
+    
+    if (trackpointsCache.count == 0) {
+        return nil;
+    }
+
+    GCLap * candidateLap   = nil;
+    
+    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:10];
+
+    for (NSUInteger idx = 0; idx < trackpointsCache.count; idx++) {
+        if (candidateLap == nil) {
+            candidateLap = [[[GCLap alloc] initWithTrackPoint:trackpointsCache[idx]] autorelease];
+        }
+        if (idx > 0) {
+            GCTrackPoint * prevPoint = trackpointsCache[idx-1];
+            GCTrackPoint * currPoint = trackpointsCache[idx];
+
+            [candidateLap accumulateFrom:prevPoint to:currPoint inActivity:self];
+            if( currPoint.lapIndex != prevPoint.lapIndex){
+                [rv addObject:candidateLap];
+                candidateLap = [[[GCLap alloc] initWithLap:candidateLap] autorelease];
+            }
+        }
+    }
+    return rv;
+    
+}
 -(NSArray*)calculateSkiLaps{
     NSArray * trackpointsCache = self.trackpoints;
 

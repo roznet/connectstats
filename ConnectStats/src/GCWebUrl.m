@@ -94,6 +94,7 @@ void GCWebUseSimulator( BOOL abool, NSString * url){
     if( url == nil){
 #if TARGET_IPHONE_SIMULATOR
         simulatorURL = @"https://localhost";
+        //simulatorURL = @"https://www.ro-z.net";
 #else
         simulatorURL = @"https://www.ro-z.net";
 #endif
@@ -122,30 +123,87 @@ BOOL GCWebSimulatorIsInUse(){
     return useSimulator;
 }
 
+#pragma mark - ConnectStats
+
+NSString * GCWebConnectStatsPrefixForConfig(gcWebConnectStatsConfig config){
+    switch (config) {
+        case gcWebConnectStatsConfigProduction:
+        case gcWebConnectStatsConfigEnd:
+            return @"https://ro-z.net/prod";
+        case gcWebConnectStatsConfigLocalTesting:
+            return @"https://localhost/prod";
+        case gcWebConnectStatsConfigRemoteTesting:
+            return @"https://ro-z.net/dev";
+    }
+}
+
+NSString * GCWebConnectStatsSearch(gcWebConnectStatsConfig config){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+    
+    if (simulatorError) {
+        return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
+    }else{
+        return [NSString stringWithFormat:@"%@/api/connectstats/search",url];
+    }
+}
+
+NSString * GCWebConnectStatsFitFile(gcWebConnectStatsConfig config){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+
+    if (simulatorError) {
+        return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
+    }else{
+        return [NSString stringWithFormat:@"%@/api/connectstats/file",url];
+    }
+
+}
+
+NSString * GCWebConnectStatsRequestBackfill(gcWebConnectStatsConfig config){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+    
+    if (simulatorError) {
+        return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
+    }else{
+        return [NSString stringWithFormat:@"%@/api/garmin/backfill",url];
+    }
+}
+
+NSString * GCWebConnectStatsValidateUser(gcWebConnectStatsConfig config){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+
+    if (simulatorError) {
+        return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
+    }else{
+        return [NSString stringWithFormat:@"%@/api/connectstats/validateuser",url];
+    }
+}
+
+
+
+NSString * GCWebConnectStatsRegisterUser( gcWebConnectStatsConfig config, NSString * accessToken, NSString * accessTokenSecret){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+
+    if (simulatorError) {
+        return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
+    }else{
+        return [NSString stringWithFormat:@"%@/api/connectstats/user_register?userAccessToken=%@&userAccessTokenSecret=%@",url, accessToken, accessTokenSecret];
+    }
+}
+
 #pragma mark - Garmin
 
-NSString * GCWebSigninURL( NSString * uname, NSString * pwd){
-    if (useSimulator) {
-        if (uname) {
-            NSString * diroption = simulatorDir ? [NSString stringWithFormat:@"&dir=%@", simulatorDir] : @"";
-            NSString * url = [NSString stringWithFormat:@"%@/garminsimul/signin.php?username=%@&password=%@%@",
-                              simulatorURL,
-                              RZWebEncodeURL(uname),
-                              RZWebEncodeURL(pwd),
-                              diroption
-            ];
-            return url;
-        }else{
-            return [NSString stringWithFormat:@"%@/garminsimul/signin.php", simulatorURL];
-        }
+NSString * GCWebSimulatorSigninURL( NSString * uname, NSString * pwd){
+    if (uname) {
+        NSString * diroption = simulatorDir ? [NSString stringWithFormat:@"&dir=%@", simulatorDir] : @"";
+        NSString * url = [NSString stringWithFormat:@"%@/garminsimul/signin.php?username=%@&password=%@%@",
+                          simulatorURL,
+                          RZWebEncodeURL(uname),
+                          RZWebEncodeURL(pwd),
+                          diroption
+                          ];
+        return url;
     }else{
-        if (uname&&pwd) {
-            return @"https://sso.garmin.com/sso/login?service=http%3A%2F%2Fconnect.garmin.com%2Fpost-auth%2Flogin&webhost=olaxpw-connect03.garmin.com&source=http%3A%2F%2Fconnect.garmin.com%2Fen-US%2Fsignin&redirectAfterAccountLoginUrl=http%3A%2F%2Fconnect.garmin.com%2Fpost-auth%2Flogin&redirectAfterAccountCreationUrl=http%3A%2F%2Fconnect.garmin.com%2Fpost-auth%2Flogin&gauthHost=https%3A%2F%2Fsso.garmin.com%2Fsso&locale=en&id=gauth-widget&cssUrl=https%3A%2F%2Fstatic.garmincdn.com%2Fcom.garmin.connect%2Fui%2Fsrc-css%2Fgauth-custom.css&clientId=GarminConnect&rememberMeShown=true&rememberMeChecked=true&createAccountShown=true&openCreateAccount=false&usernameShown=true&displayNameShown=false&consumeServiceTicket=false&initialFocus=true&embedWidget=false";
-            //return @"https://sso.garmin.com/sso/login";
-            //return @"https://connect.garmin.com/signin";
-        }else{
-            return @"https://connect.garmin.com/signin";
-        }
+        return [NSString stringWithFormat:@"%@/garminsimul/signin.php", simulatorURL];
     }
 }
 
@@ -174,14 +232,6 @@ NSString * GCWebModernSearchURL( NSUInteger start, NSUInteger requestCount ){
         return [NSString stringWithFormat:@"https://connect.garmin.com/modern/proxy/activitylist-service/activities?start=%d&limit=%d", (int)start,(int)requestCount];
     }
 
-}
-
-NSString * GCWebActivityURL( NSString * activityID){
-    if (useSimulator) {
-        return [NSString stringWithFormat:@"%@/garminsimul/tcx.php?id=%@&state=%@", simulatorURL, activityID,simulatorState?:@""];
-    }else{
-        return [NSString stringWithFormat:@"https://connect.garmin.com/proxy/activity-service-1.2/tcx/activity/%@?full=true",activityID];
-    }
 }
 
 NSString * GCWebActivityURLDetail( NSString * activityID){

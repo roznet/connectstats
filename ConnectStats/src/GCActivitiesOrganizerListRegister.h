@@ -31,7 +31,7 @@
 
 @interface GCActivitiesOrganizerListRegister : NSObject
 
-@property (nonatomic,readonly) BOOL reachedExisting;
+@property (nonatomic,readonly) NSUInteger reachedExisting;
 @property (nonatomic,readonly) NSArray<NSString*>*childIds;
 /**
  Create object to register list of activities
@@ -40,5 +40,7 @@
  */
 +(instancetype)listRegisterFor:(NSArray<GCActivity*>*)activities from:(GCService*)service isFirst:(BOOL)isFirst;
 -(void)addToOrganizer:(GCActivitiesOrganizer*)organizer;
+
+-(BOOL)shouldSearchForMoreWith:(NSUInteger)requestCount reloadAll:(BOOL)mode;
 
 @end

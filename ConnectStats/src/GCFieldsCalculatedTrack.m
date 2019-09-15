@@ -57,12 +57,18 @@
 
 +(void)addCalculatedFieldsToTrackPointsAndLaps:(GCActivity *)act{
     if( act.trackpoints && act.laps){
-        NSArray<GCFieldsCalculatedTrack*> * fields = @[ [[[GCFieldsCalculatedTrackElevation alloc] init] autorelease] ];
+        
+        
+        NSMutableArray<GCFieldsCalculatedTrack*> * fields =[NSMutableArray array];
+  
+        if( !act.garminSwimAlgorithm ){
+            [fields addObject:[[[GCFieldsCalculatedTrackElevation alloc] init] autorelease] ];
+        }
 
         BOOL lapMissingPower = false;
         if ([act hasTrackField:gcFieldFlagPower]) {
             lapMissingPower = true;
-            fields = [fields arrayByAddingObject:[[[GCFieldsCalculatedTrackNormalizedPower alloc] init] autorelease]];
+            [fields addObject:[[[GCFieldsCalculatedTrackNormalizedPower alloc] init] autorelease]];
         }
         GCLap * totalActivityLap = [[[GCLap alloc] init] autorelease];
 
@@ -126,7 +132,10 @@
 @implementation GCFieldsCalculatedTrackElevation
 
 -(void)setupLap:(GCLap*)lap inActivity:(GCActivity *)act{
-    [lap clearCalculatedForFields:@[ [GCField fieldForKey:CALC_ALTITUDE_GAIN andActivityType:act.activityType], [GCField fieldForKey:CALC_ALTITUDE_LOSS andActivityType:act.activityType] ]];
+    // makes no sense for swimming
+    if( !act.garminSwimAlgorithm){
+        [lap clearCalculatedForFields:@[ [GCField fieldForKey:CALC_ALTITUDE_GAIN andActivityType:act.activityType], [GCField fieldForKey:CALC_ALTITUDE_LOSS andActivityType:act.activityType] ]];
+    };
 }
 
 -(void)startWithPoint:(GCTrackPoint *)point{

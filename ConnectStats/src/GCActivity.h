@@ -33,6 +33,7 @@
 #import "GCActivitySettings.h"
 #import "GCActivityTypes.h"
 #import "GCActivityType.h"
+#import "GCTrackPointExtraIndex.h"
 
 @class GCLapSwim;
 @class GCTrackPointSwim;
@@ -50,6 +51,7 @@ typedef BOOL (^GCActivityMatchBlock)(GCActivity*act);
 #define GC_LAPS_SPLIT_DISTQTER  @"__LapsDistanceQuarter__"
 #define GC_LAPS_SPLIT_TIMEHALF  @"__LapsTimeHalf__"
 #define GC_LAPS_SPLIT_TIMEQTER  @"__LapsTimeQuarter__"
+#define GC_LAPS_ACCUMULATED     @"__LapsAccumulated__"
 
 extern NSString * kGCActivityNotifyDownloadDone;
 extern NSString * kGCActivityNotifyTrackpointReady;
@@ -65,7 +67,8 @@ typedef NS_ENUM(NSUInteger, gcDownloadMethod) {
     gcDownloadMethodFitFile     = 7,
     gcDownloadMethodHealthKit   = 8,
     gcDownloadMethodWithings    = 9,
-    gcDownloadMethodModern      = 10
+    gcDownloadMethodModern      = 10,
+    gcDownloadMethodConnectStats= 11
 };
 
 typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
@@ -73,19 +76,23 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
     gcIgnoreModeDayFocus
 };
 
-@interface GCActivity : RZParentObject<RZChildObject>{
+@interface GCActivity : RZParentObject<RZChildObject,GCTrackPointDelegate>{
     // Private Flags
     BOOL _summaryDataLoading;
     BOOL _downloadRequested;
+    BOOL _skipAlwaysFlag;
 }
 
 @property (nonatomic,retain) NSString * activityId;
 
 @property (nonatomic,retain) NSDictionary<GCField*,GCActivitySummaryValue*> * summaryData;
-@property (nonatomic,retain) NSDictionary<NSString*,GCActivityMetaValue*> * metaData;
 @property (nonatomic,retain) NSDictionary<GCField*,GCActivityCalculatedValue*> * calculatedFields;
 @property (nonatomic,retain) NSDictionary<NSString*,NSArray*> * calculatedLaps;
 @property (nonatomic,retain) NSDictionary<GCField*,GCTrackPointExtraIndex*> * cachedExtraTracksIndexes;
+/**
+ @brief public interface is read only, should be set with updateMetaData as some flag need to be sync'd
+ */
+@property (nonatomic,readonly) NSDictionary<NSString*,GCActivityMetaValue*> * metaData;
 /**
  NSString -> GCCalculactedCachedTrackInfo (to be calculated) or GCStatsDataSerieWithUnit
  */
@@ -154,14 +161,23 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  */
 @property (nonatomic,readonly) NSString * displayName;
 
+/**
+ @brief Disable an activity for all stats
+ */
+@property (nonatomic,assign) BOOL skipAlways;
+
 #pragma mark - Methods
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 -(GCActivity*)initWithId:(NSString*)aId NS_DESIGNATED_INITIALIZER;
 -(GCActivity*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 
+-(BOOL)updateWithTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints andLaps:(NSArray<GCLap*>*)laps;
+-(BOOL)updateWithSwimTrackpoints:(NSArray<GCTrackPointSwim*>*)trackpoints andSwimLaps:(NSArray<GCLapSwim*>*)laps;
+
 -(BOOL)saveTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps;
 -(void)saveTrackpointsSwim:(NSArray<GCTrackPointSwim*> *)aSwim andLaps:(NSArray<GCLapSwim*>*)laps;
+
 -(void)saveTrackpointsAndLapsToDb:(FMDatabase*)aDb;
 -(void)saveLocation:(NSString*)aLoc;
 
@@ -311,7 +327,10 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(NSArray<NSString*>*)allFieldsKeys DEPRECATED_MSG_ATTRIBUTE("use allFields.");
 
 -(GCActivityMetaValue*)metaValueForField:(NSString*)field;
-
+/**
+ @brief method to update the dictionary of meta data
+ */
+-(void)updateMetaData:(NSDictionary<NSString*,GCActivityMetaValue*>*)meta;
 
 /**
  Add a dictionary of metavalue entries

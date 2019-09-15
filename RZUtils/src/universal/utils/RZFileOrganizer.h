@@ -44,7 +44,7 @@ typedef BOOL (^FileOrganizerMatch)(NSString*fn);
  */
 +(NSString*)bundleFilePath:(nullable NSString*)aName;
 +(nullable NSString*)bundleFilePathIfExists:(NSString*)aName;
-+(NSArray*)bundleFilesMatching:(nullable FileOrganizerMatch)match forClass:(Class)cls;
++(NSArray<NSString*>*)bundleFilesMatching:(nullable FileOrganizerMatch)match forClass:(Class)cls;
 
 
 /**
@@ -53,7 +53,7 @@ typedef BOOL (^FileOrganizerMatch)(NSString*fn);
  */
 +(NSString*)writeableFilePath:(nullable NSString*)aName;
 +(nullable NSString*)writeableFilePathIfExists:(NSString*)aName;
-+(NSArray*)writeableFilesMatching:(nullable FileOrganizerMatch)match;
++(NSArray<NSString*>*)writeableFilesMatching:(nullable FileOrganizerMatch)match;
 +(BOOL)ensureWriteableFilePath:(NSString*)aName;
 
 /**

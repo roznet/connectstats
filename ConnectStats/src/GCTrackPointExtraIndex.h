@@ -39,3 +39,10 @@
 +(GCTrackPointExtraIndex*)extraIndex:(size_t)idx field:(GCField*)field andUnit:(GCUnit*)unit;
 +(GCTrackPointExtraIndex*)extraIndexForField:(GCField*)field withUnit:(GCUnit*)unit in:(NSDictionary*)cache;
 @end
+
+@protocol GCTrackPointDelegate
+@required
+-(NSDictionary<GCField*,GCTrackPointExtraIndex*> * )cachedExtraTracksIndexes;
+-(void )setCachedExtraTracksIndexes:(NSDictionary<GCField*,GCTrackPointExtraIndex*> *)dict;
+-(NSString*)activityType;
+@end

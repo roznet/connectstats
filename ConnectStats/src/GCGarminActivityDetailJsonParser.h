@@ -24,15 +24,20 @@
 //  
 
 #import <Foundation/Foundation.h>
+#import "GCTrackPointExtraIndex.h"
 
-@interface GCGarminActivityDetailJsonParser : NSObject
+@class GCActivity;
+@class GCTrackPoint;
+
+@interface GCGarminActivityDetailJsonParser : NSObject<GCTrackPointDelegate>
 
 @property (nonatomic,assign) BOOL success;
 @property (nonatomic,assign) BOOL webError;
-@property (nonatomic,retain) NSArray * trackPoints;
+@property (nonatomic,retain) NSArray<GCTrackPoint*> * trackPoints;
+@property (nonatomic,retain) NSDictionary<GCField*,GCTrackPointExtraIndex*>*cachedExtraTracksIndexes;
+@property (nonatomic,readonly) NSString * activityType;
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
--(GCGarminActivityDetailJsonParser*)initWithString:(NSString*)theString andEncoding:(NSStringEncoding)encoding ;
--(GCGarminActivityDetailJsonParser*)initWithData:(NSData*)jsonData NS_DESIGNATED_INITIALIZER;
+-(GCGarminActivityDetailJsonParser*)initWithData:(NSData*)jsonData forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
 -(NSArray*)laps;
 @end

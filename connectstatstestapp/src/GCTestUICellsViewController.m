@@ -57,10 +57,6 @@
 {
     [super viewDidLoad];
 
-    dispatch_sync([GCAppGlobal worker],^(){
-        [self buildSamples];
-    });
-
     self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:NSLocalizedString(@"Refresh",nil)
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
@@ -71,9 +67,12 @@
 -(void)refresh{
     dispatch_sync([GCAppGlobal worker],^(){
         [self buildSamples];
+        
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [[self tableView] reloadData];
+        });
+        
     });
-
-    [[self tableView] reloadData];
 }
 
 -(void)buildSamples{

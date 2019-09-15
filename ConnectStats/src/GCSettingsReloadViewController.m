@@ -75,6 +75,10 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -106,9 +110,11 @@
     if (indexPath.section == GC_SECTION_STATUS) {
             GCCellActivityIndicator * indic = [GCCellActivityIndicator activityIndicatorCell:tableView parent:[GCAppGlobal web]];
             if ([[GCAppGlobal web] isProcessing]) {
-                indic.label.text = [[GCAppGlobal web] currentDescription];
+                indic.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                       withString:[[GCAppGlobal web] currentDescription]];
             }else{
-                indic.label.text = NSLocalizedString(@"Waiting", @"Cell Status");
+                indic.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                       withString:NSLocalizedString(@"Waiting", @"Cell Status")];
             }
             rv = indic;
     }else{
@@ -121,14 +127,17 @@
             NSString * query = @"select COUNT(a.activityId) FROM gc_activities a LEFT JOIN gc_activities_weather o ON o.activityId = a.activityId WHERE o.activityId IS NULL";
             NSUInteger missing = [db intForQuery:query];//CRASH could fail if db busy
 
-            [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Reload Weather for 50 activities", @"Reload Settings");
+            [cell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                     withString:NSLocalizedString(@"Reload Weather for 50 activities", @"Reload Settings")];
             NSString * msg = [NSString stringWithFormat:NSLocalizedString(@"Missing %lu out of %lu activities", @"Reload Settings"),missing,total];
             [cell labelForRow:1 andCol:0].attributedText =[GCViewConfig attributedString:msg attribute:@selector(attribute14Gray)];
 
         }else if(indexPath.row==GC_ROW_RELOAD_ALL){
-            [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Reload All Activities", @"Reload Settings");
+            [cell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                     withString:NSLocalizedString(@"Reload All Activities", @"Reload Settings")];
         }else if(indexPath.row==GC_ROW_FILL_DETAIL){
-            [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Reload Details for 50 activities", @"Reload Settings");
+            [cell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                     withString:NSLocalizedString(@"Reload Details for 50 activities", @"Reload Settings")];
             NSUInteger total = [[GCAppGlobal organizer] countOfActivities];
             NSUInteger missing = [self activitiesWithout13Detail].count;
             NSString * msg = [NSString stringWithFormat:NSLocalizedString(@"Missing %lu out of %lu activities", @"Reload Settings"),missing,total];

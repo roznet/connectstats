@@ -23,3 +23,8 @@
 #import "FITFitMessageFields.h"
 #import "FITFitFieldValue.h"
 #import "FITFitEnumMap.h"
+
+//#import "RZFitFile-Bridging-Header.h"
+#import "GCUnit+FIT.h"
+#import "GCTrackPointSwim.h"
+#import "GCLapSwim.h"

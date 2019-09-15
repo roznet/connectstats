@@ -28,7 +28,7 @@
 /**
  Grouped Fields
  */
-@interface GCActivityOrganizedFields :NSObject<NSCoding>
+@interface GCActivityOrganizedFields :NSObject<NSSecureCoding>
 /**
  NSArray of NSArray containing field Keys as NSString for related fields
  This is populated by the logic in [GCActivity groupedFields]

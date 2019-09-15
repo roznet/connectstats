@@ -29,6 +29,7 @@
 #import "GCService.h"
 #import "GCAppGlobal.h"
 
+
 @implementation GCStravaActivityListParser
 
 +(GCStravaActivityListParser*)activityListParser:(NSData*)input{
@@ -93,7 +94,7 @@
 
     if (saveBadJson) {
         self.hasError = true;
-        NSString * fn = @"error_strava_list.json";
+        NSString * fn = @"error_strava_search.json";
         [input writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:true];
 
     }

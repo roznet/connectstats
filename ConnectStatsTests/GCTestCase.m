@@ -58,4 +58,7 @@
     [super tearDown];
 }
 
++(BOOL)recordModeGlobal{
+    return false;
+}
 @end

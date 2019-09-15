@@ -86,7 +86,10 @@ NSString *const GCCellGridShouldHideMenu = @"GCCellGridShouldHideMenu";
         _gradientLayer               = [[CAGradientLayer alloc] init];
         marginx = 2.;
         marginy = 1.;
-        cellLayout = gcCellLayoutEven;
+        
+        self.cellLayout = gcCellLayoutEven;
+        self.cellInsetSize = 2.;
+        self.cellInset = gcCellInsetAll;
         self.tableView = nil;
 
     }
@@ -280,8 +283,12 @@ NSString *const GCCellGridShouldHideMenu = @"GCCellGridShouldHideMenu";
             [cgcolors addObject:(id)color.CGColor];
         }
         self.gradientLayer.colors = cgcolors;
+        self.backgroundColor = [UIColor clearColor];
     }else{
         self.gradientLayer.colors = nil;
+        if( self.backgroundColors.count == 1){
+            self.backgroundColor = self.backgroundColors.firstObject;
+        }
     }
 }
 
@@ -310,17 +317,17 @@ NSString *const GCCellGridShouldHideMenu = @"GCCellGridShouldHideMenu";
     }
 
     CGRect rect = self.frame;
-    //rect = CGRectInset(self.frame, 2., 2.);
-
-    if ( RZTestOption(self.cellInset, gcCellInsetTop )) {
-        rect.origin.y += self.cellInsetSize;
-        rect.size.height -= self.cellInsetSize;
+    if( RZTestOption(self.cellInset, gcCellInsetAll)){
+        rect = CGRectInset(self.frame, self.cellInsetSize, self.cellInsetSize);
+    }else{
+        if ( RZTestOption(self.cellInset, gcCellInsetTop )) {
+            rect.origin.y += self.cellInsetSize;
+            rect.size.height -= self.cellInsetSize;
+        }
+        if (RZTestOption(self.cellInset, gcCellInsetBottom)) {
+            rect.size.height -= self.cellInsetSize;
+        }
     }
-
-    if (RZTestOption(self.cellInset, gcCellInsetBottom)) {
-        rect.size.height -= self.cellInsetSize;
-    }
-
     rect.origin.y = 0.;
     self.scrollViewContentView.frame = rect;
 

@@ -107,7 +107,10 @@
     [GCAppGlobal startupRefreshIfNeeded];
 }
 
-
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -582,6 +585,10 @@
         GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource performanceAnalysis:self.performanceAnalysis width:tableView.frame.size.width];
         graphCell.legend = TRUE;
         [graphCell setDataSource:cache andConfig:cache];
+    }else{
+        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+        cache.emptyGraphLabel = NSLocalizedString(@"Not enough points", @"Performance Analysis Empty");
+        [graphCell setDataSource:cache andConfig:cache];
     }
     return graphCell;
 }
@@ -618,7 +625,7 @@
         graphCell.legend = true;
         [graphCell setDataSource:cache andConfig:cache];
     }else{
-        cache = [GCSimpleGraphCachedDataSource graphDataSourceWithTitle:@"" andXUnit:nil];
+        cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
         cache.emptyGraphLabel = @"";
         [graphCell setDataSource:cache andConfig:cache];
     }
@@ -649,6 +656,9 @@
         cache.emptyGraphLabel = NSLocalizedString(@"Pending...", @"Summary Graph");
         [graphCell setDataSource:cache andConfig:cache];
 
+    }else{
+        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+        [graphCell setDataSource:cache andConfig:cache];
     }
     return graphCell;
 }
@@ -664,6 +674,9 @@
                                                                                graphChoice:gcGraphChoiceBarGraph
                                                                                      after:afterdate];
         graphCell.legend = TRUE;
+        [graphCell setDataSource:cache andConfig:cache];
+    }else{
+        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
         [graphCell setDataSource:cache andConfig:cache];
     }
     return graphCell;
@@ -684,6 +697,7 @@
             rv = [self tableView:tableView derivedCellForRowAtIndexPath:indexPath];
         }
     }
+    rv.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
     return rv;
 }
 

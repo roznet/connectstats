@@ -73,6 +73,9 @@
     [self setupDataSource];
 }
 
+
+#pragma mark - Functionality
+
 -(GCActivity*)activity{
     return self.attachedActivity;
 }
@@ -136,14 +139,14 @@
     if (self.slidingViewController) {
         (self.slidingViewController).anchorRightRevealAmount = self.view.frame.size.width*0.9;
     }
-
+    [GCViewConfig setupViewController:self];
     [super viewWillAppear:animated];
 }
 
 -(void)setupFrames{
-    CGRect rect = self.view.frame;
-    self.graphView.frame = rect;
-    self.graphView.drawRect = rect;
+    
+    self.graphView.frame = self.view.safeAreaLayoutGuide.layoutFrame;
+    self.graphView.drawRect = self.view.safeAreaLayoutGuide.layoutFrame;
 }
 
 -(void)publishEvent{
@@ -163,7 +166,7 @@
         [option setupTrackStatsForOther:s];
         self.otherTrackStats = s;
         [s release];
-        UIColor * color = option.movingAverage > 0 ? [UIColor redColor] : [UIColor blueColor];
+        UIColor * color = option.movingAverage > 0 ?  [GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLine]  : [GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLineSecondary] ;
         GCSimpleGraphDataHolder * plot = [GCSimpleGraphDataHolder dataHolder:[self.otherTrackStats dataSerie:0]
                                                                         type:gcGraphLine color:color
                                                                      andUnit:[self.otherTrackStats yUnit:0]];

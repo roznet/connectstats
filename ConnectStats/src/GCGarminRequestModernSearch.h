@@ -24,7 +24,19 @@
 //  
 
 #import "GCGarminRequest.h"
+@class GCActivitiesOrganizer;
 
 @interface GCGarminRequestModernSearch : GCGarminReqBase
+
+/**
+ Search for new activities from garmin
+
+ @param aStart page to start from
+ @param aMode true is reload all, false stop when reached last
+ @return new request
+ */
 -(GCGarminRequestModernSearch*)initWithStart:(NSUInteger)aStart andMode:(BOOL)aMode;
+
++(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path;
++(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path start:(NSUInteger)start;
 @end

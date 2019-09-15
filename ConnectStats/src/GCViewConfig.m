@@ -36,7 +36,15 @@ static GCViewConfigSkin * _skin = nil;
 
 NS_INLINE GCViewConfigSkin * _current_skin(){
     if (_skin == nil) {
-        _skin = [GCViewConfigSkin defaultSkin];
+        
+        NSString * skinName = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:kGCSkinNameOriginal];
+        if( skinName ){
+            _skin = [GCViewConfigSkin skinForName:skinName];
+        }
+        // if still nil (name not matching existing skin for ex)
+        if( _skin == nil){
+            _skin = [GCViewConfigSkin defaultSkin];
+        }
         [_skin retain];
     }
     return _skin;
@@ -88,33 +96,49 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 }
 
 +(void)setupGradient:(GCCellGrid*)aG ForActivity:(id)aAct{
+    
     [aG setupBackgroundColors:@[ [GCViewConfig cellBackgroundLighterForActivity:aAct]
                                   ]];
 }
 +(void)setupGradientForDetails:(GCCellGrid*)aG{
-    [aG setupBackgroundColors:@[ [GCViewConfig cellBackgroundSecondForDetails] ]];
+    [aG setupBackgroundColors:@[ [GCViewConfig defaultColor:gcSkinDefaultColorBackground] ]];
 }
 +(void)setupGradientForCellsEven:(GCCellGrid*)aG{
 
-    [aG setupBackgroundColors: @[ [UIColor colorWithHexValue:0xE7EDF5 andAlpha:1.] ] ];
+    [aG setupBackgroundColors: @[ [GCViewConfig defaultColor:gcSkinDefaultColorBackgroundEven] ] ];
 }
 
 +(void)setupGradientForCellsOdd:(GCCellGrid*)aG{
-    [aG setupBackgroundColors: @[ [UIColor colorWithHexValue:0xF6F3F1 andAlpha:1.] ] ];
+    [aG setupBackgroundColors: @[ [GCViewConfig defaultColor:gcSkinDefaultColorBackgroundOdd] ] ];
 }
 
-// Not Used Yet
-+(UIColor*)defaultBackgroundColor{
-    return [UIColor whiteColor];
-}
-// Not Used Yet
-+(UIColor*)defaultTextColor{
-    return [UIColor blackColor];
++(UIColor*)defaultColor:(gcSkinDefaultColor)which{
+    return [_current_skin() colorForKey:kgcSkinDefaultColors
+                              andSubkey:@(which)];
 }
 
++(UIColor*)colorForText:(rzTextColor)which{
+    switch (which) {
+        case rzColorStylePrimaryText:
+            return [_current_skin() colorForKey:kgcSkinDefaultColors
+                                      andSubkey:@(gcSkinDefaultColorPrimaryText)];
+        case rzColorStyleSecondaryText:
+            return [_current_skin() colorForKey:kgcSkinDefaultColors
+                                      andSubkey:@(gcSkinDefaultColorSecondaryText)];
+        case rzColorStyleTertiaryText:
+            return [_current_skin() colorForKey:kgcSkinDefaultColors
+                                      andSubkey:@(gcSkinDefaultColorTertiaryText)];
+        case rzColorStyleHighlightedText:
+            return [_current_skin() colorForKey:kgcSkinDefaultColors
+                                      andSubkey:@(gcSkinDefaultColorHighlightedText)];
+    }
+    return nil;
+}
 
 +(UIColor*)backgroundForGroupedTable{
-    return [UIColor colorWithHexValue:0xF6F3F1 andAlpha:1.];
+    return [_current_skin() colorForKey:kgcSkinDefaultColors
+                              andSubkey:@(gcSkinDefaultColorGroupedTable)];
+//    return [UIColor colorWithHexValue:0xF6F3F1 andAlpha:1.];
 }
 +(void)setupGradient:(GCCellGrid*)aG forSwimStroke:(gcSwimStrokeType)tp{
     [aG setupBackgroundColors:@[[GCViewConfig colorForSwimStrokeType:tp],
@@ -137,18 +161,17 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 
 // Used for lists
 +(UIColor*)cellBackgroundLighterForActivity:(id)aAct{
-    return [_current_skin() colorForKey:kGCSkinKeyActivityCellLighterBackgroundColor andActivity:aAct];
+    if( [self activityCellMultiColor]){
+        return [_current_skin() colorForKey:kGCSkinKeyActivityCellLighterBackgroundColor andActivity:aAct];
+    }else{
+        return [_current_skin() colorForKey:kgcSkinDefaultColors andSubkey:@(gcSkinDefaultColorBackgroundSecondary)];
+    }
 }
 
++(UIColor*)cellIconColorForActivity:(id)aAct{
+    // Expansion to depend on act?
+    return [_current_skin() colorForKey:kGCSkinKeyActivityCellIconColor];
 
-+(UIColor*)cellBackgroundForDetails{
-    NSArray * colors = [_current_skin() colorArrayForKey:kGCSkinKeyDetailsCellBackgroundColors];
-    return [colors firstObject];
-}
-
-+(UIColor*)cellBackgroundSecondForDetails{
-    NSArray * colors = [_current_skin() colorArrayForKey:kGCSkinKeyDetailsCellBackgroundColors];
-    return [colors lastObject];
 }
 
 
@@ -183,12 +206,45 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return [_current_skin() colorForKey:kGCSkinKeyFieldFillColor andField:field] ?: [UIColor colorWithRed:0.0 green:0.3 blue:0. alpha:0.3];
 }
 
-+(UIColor*)barGraphColor{
-    return [_current_skin() colorForKey:kGCSkinKeyBarGraphColor];
++(UIColor*)colorForCalendarElement:(gcSkinCalendarElement)elem{
+    return [_current_skin() colorForKey:kGCSkinKeyCalendarColors andSubkey:@(elem)];
+}
++(UIColor*)colorForGraphElement:(gcSkinGraphColor)which{
+    
+    return [_current_skin() colorForKey:kGCSkinKeyGraphColor andSubkey:@(which)];
+}
++(void)setupViewController:(UIViewController*)viewController{
+    UIColor * backgroundColor = [_current_skin() colorForKey:kgcSkinDefaultColors andSubkey:@(gcSkinDefaultColorBackground)];
+    UIColor * foregroundColor = [_current_skin() colorForKey:kgcSkinDefaultColors andSubkey:@(gcSkinDefaultColorHighlightedText)];
+    viewController.view.backgroundColor = backgroundColor;
+    // General Appearance
+    [UINavigationBar appearance].barTintColor = backgroundColor;
+    [UINavigationBar appearance].tintColor = foregroundColor;
+    [[UINavigationBar appearance] setTitleTextAttributes: @{
+                                                            NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText],
+                                                            NSFontAttributeName: [GCViewConfig systemFontOfSize:20.0],
+                                                            
+                                                            }];
+    if( viewController.tabBarController ){
+        viewController.tabBarController.tabBar.barTintColor = backgroundColor;
+        viewController.tabBarController.tabBar.tintColor = foregroundColor;
+    }
+    if( [viewController isKindOfClass:[UITableViewController class]]){
+        UITableViewController * tableViewController = (UITableViewController*)viewController;
+        tableViewController.tableView.backgroundColor = backgroundColor;
+    }
+}
+#pragma mark - Bool Configuation
+
++(BOOL)roundedActivityIcons{
+    return [_current_skin() boolFor:gcSkinBoolRoundedActivityIcons];
+}
+
++(BOOL)activityCellMultiColor{
+    return [_current_skin() boolFor:gcSkinBoolActivityCellMultiColor];
 }
 
 #pragma mark - Fields
-
 
 +(NSArray*)displayDayMainFieldsOrdered{
     return @[
@@ -487,6 +543,17 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 
 #pragma mark - Other
 
++(GCCellEntryListViewController*)standardEntryListViewController:(NSArray*)theChoices selected:(NSUInteger)achoice{
+    GCCellEntryListViewController * rv = [GCCellEntryListViewController entryListViewController:theChoices selected:achoice];
+    [self setupViewController:rv];
+    rv.textPrimaryColor = [self defaultColor:gcSkinDefaultColorPrimaryText];
+    rv.textSecondaryColor = [self defaultColor:gcSkinDefaultColorSecondaryText];
+    rv.selectedTextColor = [self defaultColor:gcSkinDefaultColorHighlightedText];
+    rv.cellBackgroundColor = [self defaultColor:gcSkinDefaultColorBackground];
+    return rv;
+}
+
+
 +(NSArray*)languageSettingChoices{
     NSMutableArray * rv = [NSMutableArray arrayWithArray:@[
                                                            NSLocalizedString(@"As Downloaded", @"Language Choice"),
@@ -615,11 +682,83 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return newImage;
 }
 
-+(NSArray*)validChoicesForGarminLoginMethod{
++(gcGarminDownloadSource)garminDownloadSource{
+    if([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:false] && [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false] ){
+        return gcGarminDownloadSourceBoth;
+    }else if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:false] ){
+        return gcGarminDownloadSourceGarminWeb;
+    }else if( [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false]){
+        return gcGarminDownloadSourceConnectStats;
+    }else{
+        return gcGarminDownloadSourceEnd;
+    }
+}
++(void)setGarminDownloadSource:(gcGarminDownloadSource)source{
+    BOOL garminOn = false;
+    BOOL connectStatsOn = false;
+    switch (source) {
+        case gcGarminDownloadSourceGarminWeb:
+            {
+                garminOn = true;
+                connectStatsOn = false;
+                break;
+            }
+        case gcGarminDownloadSourceBoth:
+            {
+                garminOn = true;
+                connectStatsOn = true;
+                break;
+            }
+        case gcGarminDownloadSourceConnectStats:
+            {
+                garminOn = false;
+                connectStatsOn = true;
+                break;
+            }
+        case gcGarminDownloadSourceEnd:
+            {
+                garminOn = false;
+                connectStatsOn = false;
+                break;
+            }
+
+    }
+    [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_ENABLE boolVal:connectStatsOn];
+    [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:garminOn];
+}
+
++(NSArray<NSString*>*)validChoicesForGarminSource{
+    BOOL debugIsEnabled = [[GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:CONFIG_ENABLE_DEBUG_OFF] isEqualToString:CONFIG_ENABLE_DEBUG_ON];
+    if (debugIsEnabled) {
+        return  @[ NSLocalizedString(@"ConnectStats", @"Login Method"),
+                   NSLocalizedString(@"Garmin Website", @"Login Method"),
+                   NSLocalizedString(@"Both", @"Login Method")
+        ];
+    }
+    return  @[ NSLocalizedString(@"ConnectStats", @"Login Method"),
+               NSLocalizedString(@"Garmin Website", @"Login Method"),
+    ];
+}
+
++(NSArray*)validChoicesForConnectStatsServiceUse{
     static NSArray * rv = nil;
     if (rv==nil) {
-        rv = @[ NSLocalizedString(@"Direct", @"Login Method"),
-                NSLocalizedString(@"Web", @"Login Method")];
+        rv = @[ NSLocalizedString(@"Source", @"ConnectStats Use Method"),
+                NSLocalizedString(@"Validate", @"ConnectStats Use Method")];
+        [rv retain];
+    }
+    return rv;
+}
+
++(NSArray*)validChoicesForConnectStatsConfig{
+    static NSArray * rv = nil;
+    
+    if( rv==nil){
+        
+        rv = @[ NSLocalizedString(@"Production", @"ConnectStats Config"),
+                NSLocalizedString(@"Remote Testing", @"ConnectStats Config"),
+                NSLocalizedString(@"Local Testing", @"ConnectStats Config"),
+                ];
         [rv retain];
     }
     return rv;

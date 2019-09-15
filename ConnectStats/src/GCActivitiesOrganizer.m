@@ -46,7 +46,6 @@
 NSString * INFO_ACTIVITY_TYPES = @"activity_types";
 NSString * INFO_RECENT_ACTIVITY_TYPES = @"recent_activity_types";
 
-
 NSString * kNotifyOrganizerLoadComplete = @"kNotifyOrganizerLoadComplete";
 NSString * kNotifyOrganizerListChanged = @"kNotifyOrganizerListChanged";
 NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
@@ -153,7 +152,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
  */
 -(void)recordActivityType:(GCActivity*)act{
     NSString * type = act.activityType;
-
+    if( [type isEqualToString:GC_TYPE_OTHER] ){
+        type = act.activityTypeDetail.key;
+    }
+    
     if (!self.info) {
         [self buildInfoDictionary];
     }
@@ -280,7 +282,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     if ([_db tableExists:@"gc_duplicate_activities"]) {
         res = [_db executeQuery:@"SELECT * FROM gc_duplicate_activities"];
         while ([res next]) {
-            duplicates[[res stringForColumn:@"duplicateActivityId"]] = [res stringForColumn:@"activityId"];
+            duplicates[[res stringForColumn:@"activityId"]] = [res stringForColumn:@"duplicateActivityId"];
         }
 
     }
@@ -470,10 +472,35 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         if ([GCAppGlobal configGetBool:CONFIG_MERGE_IMPORT_DUPLICATE defaultValue:true]) {
             GCActivity * other = [self findDuplicate:act];
             if (other) {
-                (self.duplicateActivityIds)[act.activityId] = other.activityId;
-                [self.db executeUpdate:@"INSERT INTO gc_duplicate_activities (activityId,duplicateActivityId) VALUES (?,?)", act.activityId, other.activityId];
-
-                RZLog(RZLogInfo, @"Skipping %@ (duplicate of %@)", act.activityId, other.activityId);
+                // don't record if already
+                if( self.duplicateActivityIds[act.activityId] == nil) {
+                    self.duplicateActivityIds[act.activityId] = other.activityId;
+                    [self.db executeUpdate:@"INSERT INTO gc_duplicate_activities (activityId,duplicateActivityId) VALUES (?,?)", act.activityId, other.activityId];
+                
+                    gcDuplicate reason = [other testForDuplicate:act];
+                    // This is
+                    if( reason == gcDuplicateNotMatching){
+                        reason = [act testForDuplicate:other];
+                        if( reason != gcDuplicateNotMatching ){
+                            RZLog(RZLogWarning,@"Duplicate test for %@ and %@ appear not symetric", act.activityId, other.activityId);
+                        }
+                    }
+                    BOOL duplicateServiceIsPreferred = (reason == gcDuplicateSynchronizedService) && [act.service preferredOver:other.service];
+                    
+                    NSString * reasonDescription = [GCActivity duplicateDescription:reason];
+                    
+                    // If from same service, and preferred, take the extra info
+                    if( duplicateServiceIsPreferred ){
+                        RZLog(RZLogInfo, @"Duplicate (%@): updating %@ (preferred: %@)", reasonDescription, other.activityId, act.activityId );
+                        // Avoid trivial case where exact same pointer/activity
+                        if( act != other ){
+                            [other updateMissingFromActivity:act];
+                        }
+                    }else{
+                        RZLog(RZLogInfo, @"Duplicate (%@): skipping %@ (preferred: %@)", reasonDescription, act.activityId, other.activityId);
+                    }
+                    
+                }
                 return rv;
             }
         }
@@ -541,32 +568,14 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
                 continue; // will deal with tennis later
             }
             
-            BOOL activitiesAreDuplicate = false;
+            gcDuplicate activitiesAreDuplicate = [one testForDuplicate:last];
             
-            //Last:   date                date+sumDuration
-            //        |--------------------|
-            //          |--------------------|
-            //One:      date                 Date+sumDuration
-            
-            if( last.sumDuration > 60.0){
-                NSTimeInterval overlap =
-                    MIN(last.date.timeIntervalSinceReferenceDate+last.sumDuration, one.date.timeIntervalSinceReferenceDate+one.sumDuration)-
-                MAX(last.date.timeIntervalSinceReferenceDate, one.date.timeIntervalSinceReferenceDate);
-                
-                double ratio = (double)overlap / one.sumDuration;
-                
-                if( overlap > 0.0 &&  ratio > 0.90 ){
-                    activitiesAreDuplicate = true;
-                }
-            }
-            
-            if( [last.date isEqualToDate:one.date] && fabs(last.sumDistance-one.sumDistance)<1.e-7){
-                activitiesAreDuplicate = true;
-            }
-            
-            if( activitiesAreDuplicate){
+            if( activitiesAreDuplicate != gcDuplicateNotMatching){
                 BOOL preferLast = true;
                 if( [last.activityType isEqualToString:GC_TYPE_UNCATEGORIZED]){
+                    preferLast = false;
+                }
+                if( [one.service preferredOver:last.service]){
                     preferLast = false;
                 }
 
@@ -602,7 +611,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 
 }
-
+-(NSUInteger)countOfKnownDuplicates{
+    return self.duplicateActivityIds.count;
+}
 -(GCActivity*)findDuplicate:(GCActivity*)act{
     if (self.duplicateActivityIds[act.activityId]) {
         NSString * otherId = self.duplicateActivityIds[act.activityId];
@@ -615,17 +626,26 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             // don't check for exact same activity, of course they would be duplicate...
             continue;
         }
-        if ([act testForDuplicate:other]) {
+        if ([act testForDuplicate:other] != gcDuplicateNotMatching) {
             return other;
-        }
-
-        if ([other.date compare:act.date] == NSOrderedAscending) {
-            return nil;
         }
     }
     return nil;
 }
 
+
+-(BOOL)isKnownDuplicate:(GCActivity*)act{
+    return self.duplicateActivityIds[act.activityId] != nil;
+}
+-(NSString*)hasKnownDuplicate:(GCActivity*)act{
+    for (NSString * duplicateId in self.duplicateActivityIds) {
+        if( [self.duplicateActivityIds[duplicateId] isEqualToString:act.activityId]){
+            return duplicateId;
+        }
+    }
+    
+    return( nil );
+}
 -(GCActivity*)activityForId:(NSString*)aId{
     for (GCActivity * act in _allActivities) {
         if ([act.activityId isEqualToString:aId]) {
@@ -934,6 +954,20 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 
+/**
+ This function will look for activities that are in the current organizer but have been removed
+ from the service feed. This means the activity was removed from the service and should be
+ removed from the organizer
+ 
+ The logic will only apply from the first Id if found in the organizer list to the last one,
+ because this is only potentially information about deleted activities BETWEEN the first and last
+ currently being looked at.
+
+ @param inIds List of activities Ids that were returned by the service
+ @param isFirst If this is the first query from the service, we should
+    assume that from the beginning the first activity is present (handle case where latest activity was deleted
+ @return List of activities to delete
+ */
 -(NSArray*)findActivitiesNotIn:(NSArray<NSString*>*)inIds isFirst:(BOOL)isFirst{
     if (inIds.count < 1) {
         return nil;
@@ -941,6 +975,14 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     NSUInteger idx = 0;
     NSMutableArray * deleteCandidate = [NSMutableArray array];
 
+    NSMutableArray * altIds = [NSMutableArray array];
+    for (NSString * one in inIds) {
+        NSString * dup = self.duplicateActivityIds[one];
+        if( dup ){
+            [altIds addObject:dup];
+        }
+    }
+    
     BOOL foundFirst = isFirst;
     BOOL foundLast = false;
 
@@ -957,7 +999,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             break;
         }
         if (foundFirst) {
-            if ([inIds indexOfObject:act.activityId] == NSNotFound) {
+            if ([inIds indexOfObject:act.activityId] == NSNotFound &&
+                [altIds indexOfObject:act.activityId] == NSNotFound) {
                 if(act.parentId == nil || [inIds indexOfObject:act.parentId] == NSNotFound){
                     [deleteCandidate  addObject:act.activityId];
                 }
@@ -976,10 +1019,12 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     [_db executeUpdate:@"DELETE FROM gc_activities"];
     [_db executeUpdate:@"DELETE FROM gc_activities_values"];
     [_db executeUpdate:@"DELETE FROM gc_activities_meta"];
+    [_db executeUpdate:@"DELETE FROM gc_duplicate_activities"];
     [_db commit];
     _currentActivityIndex = 0;
     [GCAppGlobal saveSettings];
     self.allActivities = [NSMutableArray arrayWithCapacity:_allActivities.count];
+    self.duplicateActivityIds = [NSMutableDictionary dictionary];
     [self notify];
 
 }
@@ -1003,10 +1048,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         [_db beginTransaction];
         for (NSString * activityId in _activitiesTrash) {
             RZLog(RZLogInfo, @"delete index %@", activityId);
-
-            [_db executeUpdate:@"DELETE FROM gc_activities WHERE activityId=?", activityId];
-            [_db executeUpdate:@"DELETE FROM gc_activities_values WHERE activityId=?", activityId];
-            [_db executeUpdate:@"DELETE FROM gc_activities_meta WHERE activityId=?", activityId];
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities WHERE activityId=?", activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_values WHERE activityId=?", activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_meta WHERE activityId=?", activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE activityId=?",activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE duplicateActivityId=?",activityId);
             [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",activityId]];
             [[GCAppGlobal derived] forceReprocessActivity:activityId];
         }
@@ -1034,9 +1080,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
     [_db beginTransaction];
     if (idx<_allActivities.count) {
-        [_db executeUpdate:@"DELETE FROM gc_activities WHERE activityId=?", activityId];
-        [_db executeUpdate:@"DELETE FROM gc_activities_values WHERE activityId=?", activityId];
-        [_db executeUpdate:@"DELETE FROM gc_activities_meta WHERE activityId=?", activityId];
+        RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities WHERE activityId=?", activityId);
+        RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_values WHERE activityId=?", activityId);
+        RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_meta WHERE activityId=?", activityId);
+        RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE activityId=?",activityId);
+        RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE duplicateActivityId=?",activityId);
         [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",activityId]];
     }
     [_db commit];
@@ -1048,23 +1096,41 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 -(void)deleteActivityUpToIndex:(NSUInteger)idx{
-    RZLog(RZLogInfo, @"delete up to %d", (int)idx);
+    [self deleteActivityFromIndex:0 toIndex:idx+1]; // +1 to delete up and include idx
+}
 
-    NSMutableArray * toDelete = [NSMutableArray arrayWithCapacity:idx];
+-(void)deleteActivityFromIndex:(NSUInteger)idx{
+    [self deleteActivityFromIndex:idx toIndex:self.allActivities.count];
+}
+
+-(void)deleteActivityFromIndex:(NSUInteger)idxfrom toIndex:(NSUInteger)idxto{
+    RZLog(RZLogInfo, @"delete from %d to %d", (unsigned)idxfrom, (unsigned)idxto);
+
+    NSMutableArray * toDelete = [NSMutableArray arrayWithCapacity:(idxto-idxfrom)];
     [_db beginTransaction];
-    for (NSUInteger i=0; i<=idx; i++) {
+    for (NSUInteger i=idxfrom; i<idxto; i++) {
         if (i<_allActivities.count) {
             NSString * activityId = [_allActivities[i] activityId];
             [toDelete addObject:[_allActivities[i] activityId]];
-            [_db executeUpdate:@"DELETE FROM gc_activities WHERE activityId=?", activityId];
-            [_db executeUpdate:@"DELETE FROM gc_activities_values WHERE activityId=?", activityId];
-            [_db executeUpdate:@"DELETE FROM gc_activities_meta WHERE activityId=?", activityId];
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities WHERE activityId=?", activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_values WHERE activityId=?", activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_meta WHERE activityId=?", activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE activityId=?",activityId);
+            RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE duplicateActivityId=?",activityId);
             [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",activityId]];
         }
     }
     [_db commit];
     _currentActivityIndex = 0;
-    self.allActivities = [_allActivities subarrayWithRange:NSMakeRange(idx, _allActivities.count-idx)];
+    if( idxfrom == 0){
+        self.allActivities = [self.allActivities subarrayWithRange:NSMakeRange(idxto, self.allActivities.count-idxto)];
+    }else if (idxto == self.allActivities.count){
+        self.allActivities = [self.allActivities subarrayWithRange:NSMakeRange(0, idxfrom)];
+    }else{
+        NSArray * start = [self.allActivities subarrayWithRange:NSMakeRange(0, idxfrom)];
+        NSArray * end   = [self.allActivities subarrayWithRange:NSMakeRange(idxto, self.allActivities.count-idxto)];
+        self.allActivities = [start arrayByAddingObjectsFromArray:end];
+    }
     [self notify];
 }
 
@@ -1217,6 +1283,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         currentValue = [GCActivitySummaryValue activitySummaryValueForResultSet:res];
         currentSummary[ [res stringForColumn:@"field"] ] = currentValue;
     }
+    BOOL spuriousActivityCleanupRequired = false;
     query = @"SELECT * FROM gc_activities_meta ORDER BY activityId DESC";
     res = [self.db executeQuery:query];
     while ([res next]) {
@@ -1227,7 +1294,25 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         }
         metaValue = [GCActivityMetaValue activityValueForResultSet:res];
         currentMeta[[res stringForColumn:@"field"]] = metaValue;
+        
+        if( [metaValue.field isEqualToString:@"ownerDisplayName"] && [metaValue.display isEqualToString:@"garmin.connect"] ){
+            spuriousActivityCleanupRequired = true;
+        }
     }
+    
+    if( spuriousActivityCleanupRequired ){
+        NSMutableArray * todelete = [NSMutableArray arrayWithCapacity:self.allActivities.count];
+        for (GCActivity * act in self.allActivities) {
+            GCActivityMetaValue * displayName = meta[act.activityId ][@"ownerDisplayName"];
+            if( meta && [displayName.display isEqualToString:@"garmin.connect"]){
+                [todelete addObject:act.activityId];
+            }
+        }
+        RZLog(RZLogInfo, @"Cleanup spurious activity: delete %lu out of %lu", todelete.count, self.allActivities.count);
+        self.activitiesTrash = todelete;
+        [self deleteActivitiesInTrash];
+    }
+    
 
     for (GCActivity * one in self.allActivities) {
         currentSummary = data[one.activityId];
@@ -1236,8 +1321,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         }
         currentMeta = meta[one.activityId];
         if (currentMeta) {
-            one.metaData = currentMeta;
+            [one updateMetaData:currentMeta];
         }
+        
         [GCFieldsCalculated addCalculatedFields:one];
     }
 }

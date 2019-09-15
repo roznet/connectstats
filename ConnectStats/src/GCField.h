@@ -28,7 +28,7 @@
 
 @class GCFieldCache;
 
-@interface GCField : NSObject<NSCopying,NSCoding>
+@interface GCField : NSObject<NSCopying,NSSecureCoding>
 
 @property (nonatomic,readonly) NSString * key;
 @property (nonatomic,readonly) NSString * activityType;

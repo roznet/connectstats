@@ -25,6 +25,8 @@
 
 #import "GCStravaReqBase.h"
 #import "GCAppGlobal.h"
+#import "GCService.h"
+
 @import RZExternal;
 
 @implementation GCStravaReqBase
@@ -37,9 +39,6 @@
     [super dealloc];
 }
 
-
-NSString *kClientID = @"82";
-NSString *kClientSecret = @"a1fc467908cffad6a512877d0cc937eaaeba8027";
 static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
 
 - (GTMOAuth2Authentication *)buildStravaAuth {
@@ -51,8 +50,8 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
         auth = [GTMOAuth2Authentication authenticationWithServiceProvider:@"Strava Service"
                                                                  tokenURL:tokenURL
                                                               redirectURI:redirectURI
-                                                                 clientID:kClientID
-                                                             clientSecret:kClientSecret];
+                                                                 clientID:[GCAppGlobal credentialsForService:@"strava" andKey:@"client_id"]
+                                                             clientSecret:[GCAppGlobal credentialsForService:@"strava" andKey:@"client_secret"]];
         self.stravaAuth = auth;
     }
 
@@ -76,11 +75,13 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
         RZLog(RZLogError, @"Failed to initiate oauth2 %@", error.localizedDescription);
     }
     if (didAuth && auth.canAuthorize) {
-        [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:YES];
-        [self processDone];
+        [auth authorizeRequest:nil completionHandler:^(NSError*error){
+            [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:YES];
+            [self processDone];
+        }];
     }else{
         // Specify the appropriate scope string, if any, according to the service's API documentation
-        auth.scope = @"view_private,write";
+        auth.scope = @"activity:read_all,read_all";
 
         NSURL *authURL = [NSURL URLWithString:@"https://www.strava.com/oauth/authorize"];
 
@@ -114,6 +115,10 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
 
 -(gcWebService)service{
     return gcWebServiceStrava;
+}
+
++(NSDate*)lastSync:(NSString*)aId{
+    return [[GCService service:gcServiceStrava] lastSync:aId];
 }
 
 @end

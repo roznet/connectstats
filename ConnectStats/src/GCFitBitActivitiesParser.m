@@ -165,7 +165,7 @@
     activity.location = @"";
     activity.speedDisplayUom = @"kph";
     [activity setSummaryDataFromKeyDict:summaryData];
-    activity.metaData = metaData;
+    [activity updateMetaData:metaData];
     activity.downloadMethod = gcDownloadMethodFitFile;
     if (activity.sumDistance > 0. || activity.sumDuration > 0.) {
         self.activity = activity;

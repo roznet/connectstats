@@ -30,28 +30,22 @@
 #import "GCAppGlobal.h"
 #import "GCActivityTennis.h"
 
-#import "GCGarminActivityDetailRequest.h"
-#import "GCGarminActivityRequest.h"
 #import "GCGarminRequestSearch.h"
 #import "GCGarminRequestActivityReload.h"
 #import "GCGarminActivityTrack13Request.h"
-#import "GCGarminRenameActivity.h"
-#import "GCGarminRequestUser.h"
-#import "GCGarminActivityWeatherHtml.h"
-#import "GCGarminListActivityTypes.h"
 #import "GCGarminRequestModernActivityTypes.h"
-#import "GCGarminDeleteActivity.h"
-#import "GCGarminChangeActivityType.h"
-#import "GCGarminLoginWebRequest.h"
-#import "GCGarminLoginDirectRequest.h"
+#import "GCGarminLoginSimulatorRequest.h"
 #import "GCGarminLoginSSORequest.h"
 #import "GCGarminRequestActivityWeather.h"
 #import "GCGarminRequestModernSearch.h"
 #import "GCGarminRequestHeartRateZones.h"
 
+#import "GCConnectStatsRequestSearch.h"
+#import "GCConnectStatsRequestFitFile.h"
+#import "GCConnectStatsRequestLogin.h"
+
 #import "GCSportTracksActivityList.h"
 #import "GCSportTracksActivityDetail.h"
-#import "GCSportTracksActivityUpload.h"
 
 #import "GCFitBitActivities.h"
 #import "GCFitBitWeight.h"
@@ -69,7 +63,6 @@
 #import "GCHealthKitExportActivity.h"
 #import "GCHealthKitSourcesRequest.h"
 
-#import "GCStravaActivityTransfer.h"
 #import "GCStravaActivityList.h"
 #import "GCStravaActivityStreams.h"
 #import "GCStravaSegmentListStarred.h"
@@ -120,20 +113,27 @@
     }
 }
 
--(void)nonGarminSearch{
+-(void)nonGarminSearch:(BOOL)reloadAll{
+    if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
+        // Run on main queue as it accesses a navigation Controller
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
+            [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:reloadAll andNavigationController:[GCAppGlobal currentNavigationController]]];
+        });
+        
+    }
+    
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
-        [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController]]];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:reloadAll]];
+        });
     }
     // For testing
     if([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_SEGMENTS defaultValue:NO]){
-
-        [self addRequest:[GCStravaAthlete stravaAthlete:[GCAppGlobal currentNavigationController]]];
-        [self addRequest:[GCStravaSegmentListStarred segmentListStarred:[GCAppGlobal currentNavigationController]]];
-        //[self addRequest:[GCStravaSegmentEfforts segmentEfforts:[GCAppGlobal currentNavigationController] for:@"1943525" and:@"1656888"]];
-        //[self addRequest:[GCStravaSegmentEffortStream stravaEffortStream:[GCAppGlobal currentNavigationController] for:@"15963924664" in:@"1943525"]];
-
-        //[self addRequest:[GCStravaTrainingZones stravaTrainingZones:[GCAppGlobal currentNavigationController]]];
-
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCStravaAthlete stravaAthlete:[GCAppGlobal currentNavigationController]]];
+            [self addRequest:[GCStravaSegmentListStarred segmentListStarred:[GCAppGlobal currentNavigationController]]];
+        });
     }
 
     if ([[GCAppGlobal profile] configGetBool:CONFIG_SPORTTRACKS_ENABLE defaultValue:NO]) {
@@ -168,35 +168,43 @@
 -(void)servicesSearchActivitiesFrom:(NSUInteger)aStart reloadAll:(BOOL)rAll{
     [self servicesLogin];
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
-        [self addRequest:[[[GCGarminSearch alloc] initWithStart:aStart percent:0.0 andMode:rAll] autorelease]];
+        if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] ){
+            [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:rAll] autorelease]];
+        }else{
+            [self addRequest:[[[GCGarminSearch alloc] initWithStart:aStart percent:0.0 andMode:rAll] autorelease]];
+        }
     }
-    [self nonGarminSearch];
+    [self nonGarminSearch:rAll];
 }
 
 -(void)servicesSearchRecentActivities{
     [self servicesLogin];
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
-        if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] ){
-            [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
-            [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:0 andMode:false] autorelease]];
-        }else{
-            [self addRequest:[[[GCGarminListActivityTypes alloc] init] autorelease]];
-            [self addRequest:[[[GCGarminSearch alloc] initWithStart:0 percent:0.0 andMode:false] autorelease]];
-        }
+        [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
+        [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:0 andMode:false] autorelease]];
         // get user/zones
-        [self addRequest:[[[GCGarminRequestUser alloc] init] autorelease]];
         [self addRequest:[[[GCGarminRequestHeartRateZones alloc] init] autorelease]];
     }
 
-    [self nonGarminSearch];
+    [self nonGarminSearch:false];
 }
 -(void)servicesSearchAllActivities{
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
-        [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController]]];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:true]];
+        });
     }
-
+    if( [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO]){
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:true andNavigationController:[GCAppGlobal currentNavigationController]]];
+        });
+    }
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
-        [self addRequest:[[[GCGarminSearch alloc] initWithStart:0 percent:0.0 andMode:true] autorelease]];
+        if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] ){
+            [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:0 andMode:true] autorelease]];
+        }else{
+            [self addRequest:[[[GCGarminSearch alloc] initWithStart:0 percent:0.0 andMode:true] autorelease]];
+        }
     }
 }
 
@@ -211,6 +219,7 @@
     if (![self didLoginSuccessfully:gcWebServiceGarmin]&& [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
         [self garminLogin];
     }
+    
     // other services are automatic
 }
 
@@ -238,11 +247,13 @@
 }
 -(void)withingsUpdate{
 #ifdef WITHINGS_OAUTH
-    [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
-    if ([GCAppGlobal healthStatsVersion]) {
-        [self addRequest:[GCWithingsSleepMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
-        [self addRequest:[GCWithingsActivityMeasures measuresFromDate:nil toDate:[NSDate date] with:[GCAppGlobal currentNavigationController]]];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
+        if ([GCAppGlobal healthStatsVersion]) {
+            [self addRequest:[GCWithingsSleepMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
+            [self addRequest:[GCWithingsActivityMeasures measuresFromDate:nil toDate:[NSDate date] with:[GCAppGlobal currentNavigationController]]];
+        }
+    });
 #else
     [self addRequest:[GCWithingsRequestOnce withingsRequestOnce]];
 #endif
@@ -251,7 +262,9 @@
 
 
 -(void)garminDownloadActivityTrackPoints13:(GCActivity*)act{
-    if(  [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
+    // If the service for garmin was successfull, download anyway.
+    // it's possible it's the detail of an old activities, downloaded before the service was turned off.
+    if( [[GCAppGlobal profile] serviceSuccess:gcServiceGarmin] || [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
         [self addRequest:[GCGarminActivityTrack13Request requestWithActivity:act]];
     }
 }
@@ -261,37 +274,10 @@
     [self addRequest:[GCGarminRequestActivityWeather requestWithActivity:activity]];
 }
 
--(void)garminDownloadActivityDetailTrackPoints:(NSString*)aId{
-    // different format for detail
-    if(  [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
-        [self addRequest:[[[GCGarminActivityDetailRequest alloc] initWithId:aId]autorelease]];
-    }
-}
-
--(void)garminDownloadActivityTrackPoints:(NSString*)aId{
-    if(  [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
-        [self addRequest:[[[GCGarminActivityRequest alloc] initWithId:aId]autorelease]];
-    }
-}
-
 -(void)garminDownloadActivitySummary:(NSString*)aId{
     if(  [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
         [self addRequest:[[[GCGarminRequestActivityReload alloc] initWithId:aId] autorelease]];
     }
-}
-
-#pragma mark - edit activities
-
--(void)garminRenameActivity:(NSString*)aId withName:(NSString*)name{
-    [self addRequest:[[[GCGarminRenameActivity alloc] initWithId:aId andName:name] autorelease]];
-}
-
--(void)garminUpdateActivity:(NSString*)aId withActivityType:(NSString*)type{
-    [self addRequest:[GCGarminChangeActivityType garminChangeActivityType:type forActivityId:aId]];
-}
-
--(void)garminDeleteActivity:(NSString*)aId{
-    [self addRequest:[GCGarminDeleteActivity garminDeleteActivity:aId]];
 }
 
 
@@ -309,13 +295,13 @@
         bool simulatorAccount = [self isGarminSimulatorAccount:username andPassword:password];
 
         if( simulatorAccount ){
-            method = gcGarminLoginMethodLegacy;
+            method = gcGarminLoginMethodSimulator;
             RZLog(RZLogInfo, @"Test Username Detected <%@> entering simulator mode", username);
         }
-        if (method == gcGarminLoginMethodLegacy) {
+        if (method == gcGarminLoginMethodSimulator) {
             [self clearCookies];
-            GCGarminLoginDirectRequest * first  = [[[GCGarminLoginDirectRequest alloc] init] autorelease];
-            GCGarminLoginDirectRequest * second = [[[GCGarminLoginDirectRequest alloc] initWithName:username andPwd:password] autorelease];
+            GCGarminLoginSimulatorRequest * first  = [[[GCGarminLoginSimulatorRequest alloc] init] autorelease];
+            GCGarminLoginSimulatorRequest * second = [[[GCGarminLoginSimulatorRequest alloc] initWithName:username andPwd:password] autorelease];
             if ( simulatorAccount ) {
                 GCWebUseSimulator(true, [GCAppGlobal simulatorUrl]);
             }else{
@@ -333,12 +319,6 @@
             [self resetStatus];
             [self.requests addObject:[GCGarminLoginSSORequest requestWithUser:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
                                                                        andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]]];
-        }else{//gcGarminLoginMethodWebview
-            [self clearCookies];
-            [self.requests removeAllObjects];
-            [self resetStatus];
-            [self.requests addObject:[GCGarminLoginWebRequest request]];
-            self.status = GCWebStatusOK;
         }
     }
 }
@@ -359,8 +339,8 @@
         for (NSHTTPCookie *each in cookieStorage.cookies) {
             [cookieStorage deleteCookie:each];
         }
-        GCGarminLoginDirectRequest * first  = [[[GCGarminLoginDirectRequest alloc] init] autorelease];
-        GCGarminLoginDirectRequest * second = [[[GCGarminLoginDirectRequest alloc] initWithName:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
+        GCGarminLoginSimulatorRequest * first  = [[[GCGarminLoginSimulatorRequest alloc] init] autorelease];
+        GCGarminLoginSimulatorRequest * second = [[[GCGarminLoginSimulatorRequest alloc] initWithName:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
                                                                                          andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]] autorelease];
 
         bool simulatorAccount = [self isGarminSimulatorAccount:second.uname andPassword:second.pwd];
@@ -376,36 +356,23 @@
         self.status = GCWebStatusOK;
     }
 }
+#pragma mark - connectstats
 
+-(void)connectStatsDownloadActivityTrackpoints:(GCActivity*)act{
+    if( [GCAppGlobal currentNavigationController] && ( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] || [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] )){
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCConnectStatsRequestFitFile requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
+        });
+    }
+}
 #pragma mark - strava
 
--(void)stravaUpload:(NSString*)aId navigationController:(UINavigationController*)nav extra:(NSDictionary *)extra{
-    NSMutableDictionary * inputs = [NSMutableDictionary dictionaryWithDictionary:@{@"id":aId}];
-    if (nav) {
-        inputs[@"nav"]=nav;
-    }
-    if (extra) {
-        inputs[@"extra"]=extra;
-    }
-    dispatch_async([GCAppGlobal worker],^(){
-        [self stravaCreateRequest:inputs];
-    });
-}
-
 -(void)stravaDownloadActivityTrackPoints:(GCActivity*)act{
-    if ([GCAppGlobal currentNavigationController] && [[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
-        [self addRequest:[GCStravaActivityStreams stravaActivityStream:[GCAppGlobal currentNavigationController] for:act]];
-    }
-}
-
--(void)stravaCreateRequest:(NSDictionary*)inputs{
-    GCStravaActivityTransfer * req = [GCStravaActivityTransfer garminTransferStrava:inputs[@"id"] andController:inputs[@"nav"] extra:inputs[@"extra"]];
-    if (req) {
-        [self performSelectorOnMainThread:@selector(stravaAddReq:) withObject:req waitUntilDone:NO];
-    }
-}
--(void)stravaAddReq:(GCStravaActivityTransfer*)req{
-    [self addRequest:req];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        if ([GCAppGlobal currentNavigationController] && [[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
+            [self addRequest:[GCStravaActivityStreams stravaActivityStream:[GCAppGlobal currentNavigationController] for:act]];
+        }
+    });
 }
 
 #pragma mark - sporttracks
@@ -413,12 +380,6 @@
 -(void)sportTracksDownloadActivityTrackPoints:(NSString*)aId withUri:(NSString*)uri{
     if ([GCAppGlobal currentNavigationController]) {
         [self addRequest:[GCSportTracksActivityDetail activityDetail:[GCAppGlobal currentNavigationController] forActivityId:aId andUri:uri]];
-    }
-
-}
--(void)sportTracksUpload:(NSString*)aId navigationController:(UINavigationController*)nav{
-    if ([GCAppGlobal currentNavigationController]) {
-        [self addRequest:[GCSportTracksActivityUpload garminTransferSportTracks:aId andController:nav]];
     }
 
 }

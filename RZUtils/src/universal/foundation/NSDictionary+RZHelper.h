@@ -30,4 +30,5 @@
 -(NSDictionary*)dictionaryByAddingEntriesFromDictionary:(NSDictionary*)other;
 -(NSDictionary*)dictionaryByRemovingObjectsForKeys:(NSArray*)keys;
 -(NSDictionary*)dictionarySwappingKeysForObjects;
+-(NSDictionary*)smartCompareDict:(NSDictionary*)other;
 @end

@@ -26,7 +26,9 @@
 #import "GCExportGoogleEarth.h"
 #import "GCFields.h"
 #import "GCActivity+ExportText.h"
+#import "GCField.h"
 @import RZExternal;
+@import RZExternalUniversal;
 
 @implementation GCExportGoogleEarth
 @synthesize activity;
@@ -50,8 +52,9 @@
 
     NSString * kml = [self exportTrackKML];
     NSString * kmzpath = [RZFileOrganizer writeableFilePath:kmzfn];
-
-    OZZipFile * zipFile= [[OZZipFile alloc] initWithFileName:kmzpath mode:OZZipFileModeCreate];
+    NSError * err = nil;
+    
+    OZZipFile * zipFile= [[OZZipFile alloc] initWithFileName:kmzpath mode:OZZipFileModeCreate error:&err];
 
     OZZipWriteStream *stream= [zipFile writeFileInZipWithName:@"track.kml" compressionLevel:OZZipCompressionLevelBest];
     [stream writeData:[kml dataUsingEncoding:NSUTF8StringEncoding]];
@@ -70,14 +73,13 @@
     GCXMLElement * document = [GCXMLElement element:@"Document"];
     GCXMLElement * style = [GCXMLElement element:@"Style"];
 
-    NSArray * fields = [GCFields availableTrackFieldsIn:activity.trackFlags];
+    NSArray<GCField*> * fields = [activity availableTrackFields];
     NSString * activityType = activity.activityType;
 
     GCXMLElement * schema = [GCXMLElement element:@"Schema"];
     [schema addParameter:@"id" withValue:@"schema"];
-    for (NSNumber * n in fields) {
-        gcFieldFlag type = (gcFieldFlag)n.integerValue;
-        NSString * key = [GCFields activityFieldFromTrackField:type andActivityType:activityType];
+    for (GCField * field in fields) {
+        NSString * key = field.key;
         GCXMLElement * schemaField = [GCXMLElement element:@"gx:SimpleArrayField"];
         [schemaField addParameter:@"name" withValue:key];
         [schemaField addParameter:@"type" withValue:@"float"];
@@ -110,9 +112,8 @@
     NSMutableArray * when = [NSMutableArray arrayWithCapacity:points.count];
     NSMutableArray * coords = [NSMutableArray arrayWithCapacity:points.count];
     NSMutableArray * extra = [NSMutableArray arrayWithCapacity:fields.count];
-    for (NSNumber * n in fields) {
-        gcFieldFlag type = (gcFieldFlag)n.integerValue;
-        NSString * key = [GCFields activityFieldFromTrackField:type andActivityType:activityType];
+    for (GCField * field in fields) {
+        NSString * key = field.key;
         GCXMLElement * simpleArray = [GCXMLElement element:@"gx:SimpleArrayData"];
         [simpleArray addParameter:@"name" withValue:key];
         [extra addObject:simpleArray];
@@ -123,9 +124,8 @@
             NSString * coordval = [NSString stringWithFormat:@"%f %f %f", point.longitudeDegrees,point.latitudeDegrees,point.altitude];
             [coords addObject:[GCXMLElement element:@"gx:coord" withValue:coordval]];
             NSUInteger idx = 0;
-            for (NSNumber * n in fields) {
-                gcFieldFlag type = (gcFieldFlag)n.integerValue;
-                GCNumberWithUnit * val = [point numberWithUnitForField:type andActivityType:activity.activityType];
+            for (GCField * field in fields) {
+                GCNumberWithUnit * val = [point numberWithUnitForField:field inActivity:activity];
                 GCXMLElement * elemExtra = [GCXMLElement element:@"gx:value" withValue:[NSString stringWithFormat:@"%f", val.value]];
                 [extra[idx] addChild:elemExtra];
                 idx++;

@@ -31,13 +31,16 @@
 #define GC_CODER_XUNIT @"xunit"
 
 @implementation GCStatsDataSerieWithUnit
++(BOOL)supportsSecureCoding{
+    return YES;
+}
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     if (self) {
-        self.serie = [aDecoder decodeObjectForKey:GC_CODER_SERIE];
-        self.unit  = [GCUnit unitForKey:[aDecoder decodeObjectForKey:GC_CODER_UNIT]];
-        NSString * xKey = [aDecoder decodeObjectForKey:GC_CODER_XUNIT];
+        self.serie = [aDecoder decodeObjectOfClass:[GCStatsDataSerie class] forKey:GC_CODER_SERIE];
+        self.unit  = [GCUnit unitForKey:[aDecoder decodeObjectOfClass:[NSString class] forKey:GC_CODER_UNIT]];
+        NSString * xKey = [aDecoder decodeObjectOfClass:[NSString class] forKey:GC_CODER_XUNIT];
         self.xUnit = xKey ? [GCUnit unitForKey:xKey] : nil;
     }
     return self;

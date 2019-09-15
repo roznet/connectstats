@@ -56,26 +56,21 @@ BOOL isIOS7Layout(){
 }
 
 +(void)setupEdgeExtendedLayout:(UIViewController*)controller{
-#ifdef __IPHONE_7_0
-    if ([UIViewController useIOS7Layout]) {
-        controller.edgesForExtendedLayout = UIRectEdgeNone;
-    }
-#endif
+    controller.edgesForExtendedLayout = UIRectEdgeNone;
+    
 }
 
 
 +(CGRect)adjustedVisibleFrame:(CGRect)input forController:(UIViewController*)controller{
     CGRect rv = input;
-    if (isIOS7Layout()) {
-        if (controller.navigationController) {
-            CGRect nav = controller.navigationController.navigationBar.frame;
-            rv.origin.y = nav.origin.y+nav.size.height;
-            rv.size.height -= (nav.origin.y+nav.size.height);
-        }
-        if (controller.tabBarController) {
-            CGRect tabbar = controller.tabBarController.tabBar.frame;
-            rv.size.height -= tabbar.size.height;
-        }
+    if (controller.navigationController) {
+        CGRect nav = controller.navigationController.navigationBar.frame;
+        rv.origin.y = nav.origin.y+nav.size.height;
+        rv.size.height -= (nav.origin.y+nav.size.height);
+    }
+    if (controller.tabBarController) {
+        CGRect tabbar = controller.tabBarController.tabBar.frame;
+        rv.size.height -= tabbar.size.height;
     }
     return rv;
 }

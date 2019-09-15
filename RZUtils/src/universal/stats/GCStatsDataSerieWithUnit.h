@@ -28,7 +28,7 @@
 #import "GCStatsDataSerie.h"
 #import "GCNumberWithUnit.h"
 
-@interface GCStatsDataSerieWithUnit : NSObject<NSCoding,NSFastEnumeration>
+@interface GCStatsDataSerieWithUnit : NSObject<NSSecureCoding,NSFastEnumeration>
 
 @property (nonatomic,retain) GCStatsDataSerie * serie;
 @property (nonatomic,retain) GCUnit * unit;

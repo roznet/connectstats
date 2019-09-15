@@ -37,6 +37,7 @@
 #import "GCCellActivity.h"
 #import "GCActivityPreviewingViewController.h"
 #import <RZExternal/RZExternal.h>
+#import "GCActivity+Database.h"
 
 #define GC_ALERT_CONFIRM_DELETED    1
 #define GC_ALERT_TRIAL              2
@@ -113,13 +114,21 @@ const CGFloat kCellDaySpacing = 2.f;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
--(NSArray*)processServiceError{
+-(NSArray<NSString*>*)reportServiceError{
     NSMutableArray * errorsString = [NSMutableArray arrayWithCapacity:gcWebServiceEnd];
-    gcWebService others[] = {gcWebServiceGarmin,gcWebServiceStrava,gcWebServiceSportTracks,gcWebServiceWithings,gcWebServiceBabolat};
-    for (size_t i=0; i<5; i++) {
+    gcWebService others[] = {gcWebServiceGarmin,gcWebServiceConnectStats,gcWebServiceStrava,gcWebServiceSportTracks,gcWebServiceWithings,gcWebServiceBabolat};
+    
+    BOOL messageOnly = true;
+    
+    size_t nServices = sizeof(others)/sizeof(gcWebService);
+    for (size_t i=0; i<nServices; i++) {
         gcWebService service = others[i];
         GCWebStatus status= [[GCAppGlobal web] statusForService:service];
         if ( status!= GCWebStatusOK) {
+            // if only message, don't display Error in the string
+            if( status != GCWebStatusCustomMessage){
+                messageOnly = false;
+            }
             [errorsString addObject:[NSString stringWithFormat:@"%@: %@",
                                      [[GCAppGlobal web] webServiceDescription:service],
                                      [[GCAppGlobal web] statusDescriptionForService:service]]];
@@ -128,15 +137,9 @@ const CGFloat kCellDaySpacing = 2.f;
                 NSString *username = [[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin];
                 if (lastName && ![username isEqualToString:lastName] ) {
                     RZLog(RZLogError, @"Inconsistent username before=%@ now=%@", lastName, [[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]);
-                    NSString * extra = [NSString stringWithFormat:@"Inconsistent username before=%@ now=%@",
-                                        lastName,
-                                        [[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]];
-                    [errorsString addObject:extra];
                 }
                 if (![username isEqualToString:username.lowercaseString]) {
                     RZLog(RZLogError, @"Inconsistent case in username %@ try=%@?", username, [username lowercaseString]);
-                    NSString * extra = [NSString stringWithFormat:@"Inconsistent case in username %@ try=%@?", username, username.lowercaseString];
-                    [errorsString addObject:extra];
                 }
             }
         }
@@ -147,7 +150,7 @@ const CGFloat kCellDaySpacing = 2.f;
         }
     }
     // second loop because login resets status
-    for (size_t i=0; i<5; i++) {
+    for (size_t i=0; i<nServices; i++) {
         gcWebService service = others[i];
         GCWebStatus status= [[GCAppGlobal web] statusForService:service];
         if (service == gcWebServiceGarmin) {
@@ -156,15 +159,12 @@ const CGFloat kCellDaySpacing = 2.f;
             }
         }
     }
-    return errorsString;
-}
-
--(void)reportServiceError{
-    NSArray * errorsString = [self processServiceError];
-
+    
     // Tested by turning off internet
-    [self presentSimpleAlertWithTitle:NSLocalizedString(@"Error updating", @"Error") message:[errorsString componentsJoinedByString:@"\n"]];
-
+    NSString * leaderString = messageOnly ?  NSLocalizedString(@"Message", @"Error") : NSLocalizedString(@"Error updating", @"Error");
+    [self presentSimpleAlertWithTitle:leaderString message:[errorsString componentsJoinedByString:@"\n"]];
+    
+    return errorsString;
 }
 
 -(void)updateRefreshControlTitle{
@@ -211,7 +211,7 @@ const CGFloat kCellDaySpacing = 2.f;
     RZLogTrace(@"");
 
     [super viewDidLoad];
-
+    
     //self.tableView.backgroundColor = [GCViewConfig defaultBackgroundColor];
 
     self.navigationItem.titleView = self.titleLabel;
@@ -245,10 +245,22 @@ const CGFloat kCellDaySpacing = 2.f;
     }];
 
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-
+    
     [[GCAppGlobal web] attach:self];
+    
 }
-
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
+}
+-(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection{
+    [super traitCollectionDidChange:previousTraitCollection];
+    if( @available( iOS 13.0, * )){
+        if( self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle ){
+            [self.tableView reloadData];
+        }
+    }
+}
 -(void)setupQuickFilterIcon{
     // iPhone only will have day activities
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ) {
@@ -350,7 +362,9 @@ const CGFloat kCellDaySpacing = 2.f;
 #pragma mark - Refreshing
 
 -(void)searchActivities{
-    [GCAppGlobal searchAllActivities];
+    dispatch_async([GCAppGlobal worker], ^(){
+        [GCAppGlobal searchAllActivities];
+    });
 }
 
 -(void)beginRefreshing{
@@ -432,7 +446,7 @@ const CGFloat kCellDaySpacing = 2.f;
 }
 
 -(gcCellInset)insetForRowAtIndexPath:(NSIndexPath*)indexPath{
-    return gcCellInsetNone;
+    return gcCellInsetAll;
     /*
     gcCellInset rv = gcCellInsetNone;
     NSUInteger row = indexPath.row;
@@ -528,7 +542,14 @@ const CGFloat kCellDaySpacing = 2.f;
         [GCAppGlobal publishEvent:EVENT_LIST_SEARCH];
     }
     if (searchText.length > 5 && [searchText isEqualToString:CONFIG_ENABLE_DEBUG_ON]) {
-        [GCAppGlobal configSet:CONFIG_ENABLE_DEBUG stringVal:CONFIG_ENABLE_DEBUG_ON];
+        NSString * current = [GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:CONFIG_ENABLE_DEBUG_OFF];
+        if( [current isEqualToString:CONFIG_ENABLE_DEBUG_ON]){
+            RZLog(RZLogInfo, @"Turning OFF debug");
+            [GCAppGlobal configSet:CONFIG_ENABLE_DEBUG stringVal:CONFIG_ENABLE_DEBUG_OFF];
+        }else{
+            RZLog(RZLogInfo, @"Turning ON debug");
+            [GCAppGlobal configSet:CONFIG_ENABLE_DEBUG stringVal:CONFIG_ENABLE_DEBUG_ON];
+        }
         [GCAppGlobal saveSettings];
     }
 }
@@ -561,97 +582,15 @@ const CGFloat kCellDaySpacing = 2.f;
 -(void)cellGrid:(GCCellGrid*)cell didSelectLeftButtonAt:(NSIndexPath*)indexPath{
     self.activityForAction = [self activityForIndex:indexPath.row];
 
-
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"More Actions", @"More Actions")
-                                                                    message:nil
-                                                             preferredStyle:UIAlertControllerStyleActionSheet];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"More Actions")
-                                              style:UIAlertActionStyleCancel
-                                            handler:^(UIAlertAction*action){
-
-                                            }]];
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Rename Activity", @"More Actions")
-                                              style:UIAlertActionStyleDefault handler:^(UIAlertAction*action){
-                                                  [self renameActivity];
-
-                                              }]];
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Change Type",@"More Actions")
-                                              style:UIAlertActionStyleDefault handler:^(UIAlertAction*action){
-                                                  [self changeActivityType];
-                                              }]];
-    if (self.tabBarController) {
-        [self.tabBarController presentViewController:alert animated:YES completion:^(){
-            [[NSNotificationCenter defaultCenter] postNotificationName:GCCellGridShouldHideMenu object:self];
-        }];
+    if( self.activityForAction.skipAlways) {
+        self.activityForAction.skipAlways = false;
     }else{
-        alert.popoverPresentationController.sourceView = cell;
-        CGRect rect = cell.frame;
-        alert.popoverPresentationController.sourceRect = CGRectMake(rect.size.width, rect.size.height/2., 1, 1);
-        [self presentViewController:alert animated:YES completion:^(){
-            [[NSNotificationCenter defaultCenter] postNotificationName:GCCellGridShouldHideMenu object:self];
-        }];
+        self.activityForAction.skipAlways = true;
     }
-
-}
-
-
--(void)changeActivityType{
-    GCActivityTypeListViewController * detail = [[[GCActivityTypeListViewController alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
-    detail.activity = self.activityForAction;
-    detail.refreshDelegate = self;
-    [self.navigationController pushViewController:detail animated:YES];
-}
-
--(void)renameActivity{
-    // Tested Manually /rename
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Rename Activity",@"Rename Activity")
-                                                                    message:NSLocalizedString(@"Enter new activity name", @"Rename Activity")
-                                                             preferredStyle:UIAlertControllerStyleAlert];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Rename Activity")
-                                              style:UIAlertActionStyleCancel
-                                            handler:^(UIAlertAction*action){
-
-                                            }]];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Rename", @"Rename Activity")
-                                              style:UIAlertActionStyleDefault
-                                            handler:^(UIAlertAction*action){
-                                                GCActivity*act= self.activityForAction;
-                                                [self beginRefreshing];
-                                                if (alert.textFields.count>0) {
-                                                    NSString * txt = alert.textFields[0].text;
-                                                    [[GCAppGlobal web] garminRenameActivity:act.activityId withName:txt];
-                                                    [Flurry logEvent:EVENT_RENAME];
-                                                }
-                                            }]];
-
-    [alert addTextFieldWithConfigurationHandler:^(UITextField*field){
-        field.text = self.activityForAction.activityName;
-    }];
-
-    [self presentViewController:alert animated:YES completion:^(){}];
-}
-
--(void)deleteActivity{
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Delete Activity",@"Delete Activity")
-                                                                    message:NSLocalizedString(@"Are you sure you want to delete this activity on garmin Connect. This can't be undone", @"Delete Activity")
-                                                             preferredStyle:UIAlertControllerStyleAlert];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Delete Activity")
-                                              style:UIAlertActionStyleCancel
-                                            handler:^(UIAlertAction*action){
-
-                                            }]];
-
-    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", @"Delete Activity")
-                                              style:UIAlertActionStyleDestructive
-                                            handler:^(UIAlertAction * action){
-                                                [self beginRefreshing];
-                                                [[GCAppGlobal web] garminDeleteActivity:self.activityForAction.activityId];
-                                            }]];
-    [self presentViewController:alert animated:YES completion:^(){}];
+    if( self.activityForAction.db ){
+        [self.activityForAction saveToDb:self.activityForAction.db];
+    }
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - UIViewControllerPreviewingDelegate

@@ -41,8 +41,9 @@ typedef NS_ENUM(NSUInteger, gcIconPosition){
 
 typedef NS_OPTIONS(NSUInteger, gcCellInset) {
     gcCellInsetNone = 0,
-    gcCellInsetTop = 1 << 0,
-    gcCellInsetBottom = 2<<0
+    gcCellInsetAll = 1 << 0,
+    gcCellInsetTop = 1 << 1,
+    gcCellInsetBottom = 1 << 2,
 };
 
 extern NSString *const GCCellGridShouldHideMenu;

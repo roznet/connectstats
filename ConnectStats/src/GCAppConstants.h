@@ -72,16 +72,21 @@
 #define CONFIG_ZONE_PREFERRED_SOURCE    @"config_zone_preferred_source"
 #define CONFIG_WIFI_DOWNLOAD_DETAILS    @"config_wifi_download_details"
 #define CONFIG_FULL_DUPLICATE_CHECK     @"config_full_duplicate_check"
+#define CONFIG_SKIN_NAME                @"config_skin_name"
 
 #define CONFIG_WITHINGS_USERSLIST       @"config_withings_userlist"
 #define CONFIG_WITHINGS_USER            @"config_withings_user"
 #define CONFIG_WITHINGS_AUTO            @"config_withings_auto"
 #define CONFIG_BABOLAT_ENABLE           @"config_babolat_enable"
+#define CONFIG_CONNECTSTATS_ENABLE      @"config_connectstats_enable"
+#define CONFIG_CONNECTSTATS_USE         @"config_connectstats_use"
+#define CONFIG_CONNECTSTATS_FILLYEAR    @"config_connectstats_fillyear"
+#define CONFIG_CONNECTSTATS_CONFIG      @"config_connectstats_config"
 #define CONFIG_GARMIN_ENABLE            @"config_garmin_enable"
 #define CONFIG_GARMIN_LOGIN_METHOD      @"config_garmin_login_method"
-#define CONFIG_GARMIN_USE_MODERN        @"config_garmin_use_modern_v2"
+#define CONFIG_GARMIN_USE_MODERN        @"config_garmin_use_modern_v3"
 #define CONFIG_STRAVA_ENABLE            @"config_strava_enable"
-#define CONFIG_STRAVA_SEGMENTS            @"config_strava_segments"
+#define CONFIG_STRAVA_SEGMENTS          @"config_strava_segments"
 #define CONFIG_SHARING_STRAVA_AUTO      @"config_sharing_strava_auto"
 #define CONFIG_SHARING_STRAVA_PRIVATE   @"config_sharing_strava_private"
 #define CONFIG_SPORTTRACKS_ENABLE       @"config_sporttracks_enable"
@@ -92,6 +97,10 @@
 #define CONFIG_FITBIT_TOKEN             @"config_fitbit_t"
 #define CONFIG_FITBIT_TOKENSECRET       @"config_fitbit_s"
 
+#define CONFIG_CONNECTSTATS_TOKEN       @"config_connectstats_token"
+#define CONFIG_CONNECTSTATS_TOKEN_ID    @"config_connectstats_token_id"
+#define CONFIG_CONNECTSTATS_USER_ID     @"config_connectstats_user_id"
+
 #define CONFIG_GARMIN_FIT_DOWNLOAD      @"config_garmin_fit_download"
 #define CONFIG_GARMIN_FIT_MERGE         @"config_garmin_fit_merge"
 
@@ -101,6 +110,7 @@
 
 #define CONFIG_ENABLE_DEBUG               @"config_enable_debug"
 #define CONFIG_ENABLE_DEBUG_ON            @"enabledebug1970"
+#define CONFIG_ENABLE_DEBUG_OFF           @"disabled"
 
 #define CONFIG_STATS_START_PAGE           @"config_stats_start_page"
 
@@ -118,6 +128,7 @@
 #define PROFILE_FULL_DOWNLOAD_DONE   @"config_full_download_done"
 
 #define PROFILE_SERVICE_STRAVA       @"profile_service_strava"
+#define PROFILE_SERVICE_CONNECTSTATS @"profile_service_connectstats"
 #define PROFILE_SERVICE_BABOLAT      @"profile_service_babolat"
 #define PROFILE_SERVICE_WITHINGS     @"profile_service_withings"
 #define PROFILE_SERVICE_GARMIN       @"profile_service_garmin"
@@ -130,7 +141,7 @@
 #define PROFILE_SERVICE_PWD          @"profile_service_login_pwd_"
 #define PROFILE_SERVICE_SETUP        @"profile_service_setup_"
 #define PROFILE_LAST_KEYCHAIN_SAVE   @"profile_last_keychain_save_"
-
+#define PROFILE_SERVICE_FULL_DONE    @"profile_service_full_done_"
 
 typedef NS_ENUM(NSUInteger, gcPeriodType) {
     gcPeriodCalendar,
@@ -141,8 +152,21 @@ typedef NS_ENUM(NSUInteger, gcPeriodType) {
 typedef NS_ENUM(NSUInteger, gcGarminLoginMethod) {
     gcGarminLoginMethodDirect,
     gcGarminLoginMethodWebview,
-    gcGarminLoginMethodLegacy,
+    gcGarminLoginMethodSimulator,
     GCGarminLoginMethodEnd
+};
+
+typedef NS_ENUM(NSUInteger, gcGarminDownloadSource) {
+    gcGarminDownloadSourceConnectStats,
+    gcGarminDownloadSourceGarminWeb,
+    gcGarminDownloadSourceBoth,
+    gcGarminDownloadSourceEnd
+};
+
+typedef NS_ENUM(NSUInteger, gcConnectStatsServiceUse){
+    gcConnectStatsServiceUseSource,
+    gcConnectStatsServiceUseValidate,
+    gcConnectStatsServiceUseEnd
 };
 
 typedef NS_ENUM(NSUInteger, gcService) {
@@ -153,6 +177,7 @@ typedef NS_ENUM(NSUInteger, gcService) {
     gcServiceSportTracks,
     gcServiceHealthKit,
     gcServiceFitBit,
+    gcServiceConnectStats,
     gcServiceEnd
 };
 

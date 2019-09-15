@@ -86,6 +86,10 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [GCViewConfig setupViewController:self];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -148,7 +152,7 @@
                                                                           attributes:[GCViewConfig attributeBold16]] autorelease];
 
             [cell labelForRow:0 andCol:0].attributedText = title;
-            [GCViewConfig setupGradientForCellsOdd:cell];
+            [GCViewConfig setupGradientForDetails:cell];
         }else if (indexPath.row == GC_ADVANCED_DELETE){
             [cell setupForRows:1 andCols:1];
             NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Delete Activities or Profile",@"Profiles")

@@ -16,8 +16,9 @@
 
 @property (nonatomic) NSUInteger numWeeks;
 @property (nonatomic,assign) CGSize tileSize;
+@property (nonatomic,assign) id<KalDataSource> dataSource;
 
-- (id)initWithFrame:(CGRect)frame andTileSize:(CGSize)size;
+- (id)initWithFrame:(CGRect)frame dataSource:(id<KalDataSource>)source andTileSize:(CGSize)size;
 - (void)showDates:(NSArray *)mainDates leadingAdjacentDates:(NSArray *)leadingAdjacentDates trailingAdjacentDates:(NSArray *)trailingAdjacentDates;
 - (KalTileView *)firstTileOfMonth;
 - (KalTileView *)tileForDate:(KalDate *)date;

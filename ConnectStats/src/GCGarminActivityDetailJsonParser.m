@@ -25,21 +25,23 @@
 
 #import "GCGarminActivityDetailJsonParser.h"
 #import "GCField+Convert.h"
+#import "GCActivity.h"
+
+@interface GCGarminActivityDetailJsonParser ()
+@property (nonatomic,retain) GCActivity * activity;
+@end
 
 @implementation GCGarminActivityDetailJsonParser
 
 -(instancetype)init{
     return [super init];
 }
--(GCGarminActivityDetailJsonParser*)initWithString:(NSString*)theString andEncoding:(NSStringEncoding)encoding{
-    NSData *jsonData = [theString dataUsingEncoding:encoding];
-    return [self initWithData:jsonData];
-}
--(GCGarminActivityDetailJsonParser*)initWithData:(NSData*)jsonData{
+
+-(GCGarminActivityDetailJsonParser*)initWithData:(NSData*)jsonData forActivity:(GCActivity*)act{
     self = [super init];
     if (self) {
         NSError *e = nil;
-
+        self.activity = act;
         NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
 
         if (e) {
@@ -71,7 +73,16 @@
 
     return self;
 }
+-(void)dealloc{
+    [_trackPoints release];
+    [_activity release];
+    [_cachedExtraTracksIndexes release];
+    [super dealloc];
+}
 
+-(NSString*)activityType{
+    return self.activity.activityType;
+}
 -(NSArray*)parseClassicFormat:(NSDictionary*)data{
     if (![data isKindOfClass:[NSDictionary class]]) {
         RZLog(RZLogError, @"Expected NSDictionary got %@", NSStringFromClass([data class]));
@@ -167,6 +178,7 @@
     BOOL errorReportedDefs = false;
     if (descriptors && [metrics isKindOfClass:[NSArray class]]) {
         rv = [NSMutableArray arrayWithCapacity:metrics.count];
+        self.cachedExtraTracksIndexes = nil;
         for (NSDictionary * one in metrics) {
             NSArray * values = one[@"metrics"];
 
@@ -207,7 +219,9 @@
                     }
                 }
             }
-            [rv addObject:onemeasurement];
+            GCTrackPoint * tp = [[GCTrackPoint alloc] initWithDictionary:onemeasurement forActivity:self];
+            [rv addObject:tp];
+            [tp release];
         }
     }
     return rv;
@@ -215,9 +229,5 @@
 
 -(NSArray*)laps{
     return @[];
-}
--(void)dealloc{
-    [_trackPoints release];
-    [super dealloc];
 }
 @end

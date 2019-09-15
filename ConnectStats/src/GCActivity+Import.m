@@ -42,6 +42,16 @@
 
 @implementation GCActivity (Internal)
 
+-(GCActivity*)initWithId:(NSString *)aId andConnectStatsData:(NSDictionary*)aData{
+    self = [self initWithId:aId];
+    if (self) {
+        self.activityId = aId;
+        [self parseConnectStatsJson:aData];
+        self.settings = [GCActivitySettings defaultsFor:self];
+    }
+    return self;
+}
+
 -(GCActivity*)initWithId:(NSString*)aId andGarminData:(NSDictionary*)aData{
     self = [self initWithId:aId];
     if (self) {
@@ -100,7 +110,7 @@
     return self;
 }
 
-#pragma mark -
+#pragma mark - Generic Import Tools
 
 -(void)setSummaryField:(gcFieldFlag)which with:(GCNumberWithUnit*)nu{
     switch (which) {
@@ -313,9 +323,149 @@
         GCNumberWithUnit * val = [[movingSpeed numberWithUnit] convertToUnitName:uom];
         newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
     }
+    // Ensure proper default as this is save in the database and nil is an issue
+    if( self.speedDisplayUom == nil){
+        self.speedDisplayUom = @"kph";
+    }
 
 }
-#pragma mark -
+
+#pragma mark - ConnectStats Service
+
+
+-(NSMutableDictionary*)buildSummaryDataFromGarminConnectStatsData:(NSDictionary*)data{
+    
+    NSArray * fields = @[
+                         @"summaryId", //     string     Unique identifier for the summary.
+                         @"activityType", //     string     Text description of the activity type. See Appendix A for a complete list.
+                         @"deviceName", //     string     Only Fitness activities are associated with a specific Garmin device rather than the user’s overall account. If the user wears two devices at once at the same time and starts a Fitness Activity on each then both will generate separate Activities with two different deviceNames.
+                         @"isParent", //     boolean     If present and set to true, this activity is the parent activity of one or more child activities that should also be made available, // in the data feed to the partner. An activity of type MULTI_SPORT is an example of a parent activity.
+                         @"parentSummaryId", //     integer     If present, this is the summaryId of the related parent activity. An activity of type CYCLING with a parent activity of type MULTI_SPORT is an example of this type of relationship.
+                         @"manual", //     boolean     Indicates that the activity was manually entered directly on the Connect site. This property will only exist for manual activities
+                         
+                         @"startTimeInSeconds", //     integer     Start time of the activity in seconds since January 1, 1970, 00:00:00 UTC (Unix timestamp).
+                         @"startTimeOffsetInSeconds", //     integer     Offset in seconds to add to startTimeInSeconds to derive the "local" time of the device that captured the data.
+                         //@"durationInSeconds", //     integer     Length of the monitoring period in seconds.
+                         //@"averageBikeCadenceInRoundsPerMinute", //     floating point
+                         //@"averageHeartRateInBeatsPerMinute", //     integer
+                         //@"averageRunCadenceInStepsPerMinute", //     floating point
+                         //@"averageSpeedInMetersPerSecond", //     floating point
+                         @"averageSwimCadenceInStrokesPerMinute", //     floating point
+                         @"averagePaceInMinutesPerKilometer", //     floating point
+                         //@"activeKilocalories", //     integer
+                         //@"distanceInMeters", //     floating point
+                         @"maxBikeCadenceInRoundsPerMinute", //     floating point
+                         //@"maxHeartRateInBeatsPerMinute", //     floating point
+                         @"maxPaceInMinutesPerKilometer", //     floating point
+                         @"maxRunCadenceInStepsPerMinute", //     floating point
+                         //@"maxSpeedInMetersPerSecond", //     floating point
+                         @"numberOfActiveLengths", //     integer
+                         @"startingLatitudeInDegree", //     floating point
+                         @"startingLongitudeInDegree", //     floating point
+                         @"steps", //     integer
+                         //@"totalElevationGainInMeters", //     floating point
+                         //@"totalElevationLossInMeters", //     floating point
+                         ];
+    return [NSMutableDictionary dictionaryWithObjects:fields forKeys:fields];
+}
+-(void)parseConnectStatsJson:(NSDictionary*)data{
+    NSDictionary * defs = @{
+                            //@"moving_time":         @[ @"SumMovingDuration",    @"",                                    @"second"],
+                            //@"average_watts":       @[ @"WeightedMeanPower",    @(gcFieldFlagPower),                    @"watt"],
+                            //@"kilojoules":          @[ @"SumTotalWork",         @"",                                    @"kilojoule"],
+                            //@"average_temp":        @[ @"WeightedMeanAirTemperature",@"",                               @"celcius"],
+                            
+                            //@"start_date":          @[ @"BeginTimeStamp",       @"",                                    @"time"],
+                            //@"start_latlng":        @[ @[@"BeginLatitude",@"BeginLongitude"],@"vector", @"dd"],
+                            //@"end_latlng":          @[ @[@"EndLatitude",  @"EndLongitude"],  @"vector", @"dd"],
+                            
+                            
+                            @"durationInSeconds":        @[ @"SumDuration",          @(gcFieldFlagSumDuration),              @"second"],
+                            @"averageHeartRateInBeatsPerMinute":   @[ @"WeightedMeanHeartRate",@(gcFieldFlagWeightedMeanHeartRate),    @"bpm"],
+                            @"averageSpeedInMetersPerSecond":       @[ @"WeightedMeanSpeed",    @(gcFieldFlagWeightedMeanSpeed),        @"mps"],
+                            @"activeKilocalories":            @[ @"SumEnergy",            @"",                                    @"kilocalorie"],
+                            @"distanceInMeters":            @[ @"SumDistance",          @(gcFieldFlagSumDistance),              @"meter"],
+                            @"maxHeartRateInBeatsPerMinute":       @[ @"MaxHeartRate",         @"",                                    @"bpm"],
+                            @"maxSpeedInMetersPerSecond":           @[ @"MaxSpeed",             @"",                                    @"mps"],
+                            @"totalElevationGainInMeters":@[ @"GainElevation",        @"",                                    @"meter"],
+                            @"totalElevationLossInMeters":@[ @"LossElevation",        @"",                                    @"meter"],
+
+                            @"averageBikeCadenceInRoundsPerMinute": @[  @"WeightedMeanBikeCadence", @(gcFieldFlagCadence), @"rpm" ],
+                            @"averageRunCadenceInStepsPerMinute": @[ @"WeightedMeanRunCadence", @(gcFieldFlagCadence), @"stepsPerMinute" ],
+                            
+                            
+                            };
+    
+    GCService * service = [GCService service:gcServiceConnectStats];
+    
+    self.activityId = [service activityIdFromServiceId:data[@"cs_activity_id"]];
+    
+    self.externalServiceActivityId = [[GCService service:gcServiceGarmin] activityIdFromServiceId:data[@"summaryId"]];
+    
+    GCActivityType * atype = [[GCAppGlobal activityTypes] activityTypeForConnectStatsType:data[@"activityType"]];
+    self.activityType = atype.topSubRootType.key;
+    self.activityTypeDetail = atype;
+    self.activityName = @"";
+    self.location = @"";
+    if (self.activityType == nil) {
+        self.activityType = GC_TYPE_OTHER;
+        
+        self.activityTypeDetail = atype;
+        if (self.activityTypeDetail==nil) {
+            self.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_OTHER];
+            self.activityName = [data[@"activityType"] lowercaseString];
+        }
+    }
+    self.downloadMethod = gcDownloadMethodConnectStats;
+    if (self.metaData==nil) {
+        [self updateMetaData:[NSMutableDictionary dictionary]];
+    }
+    if (self.activityId && self.activityType) {
+        NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionaryWithCapacity:data.count];
+        [self parseData:data into:newSummaryData usingDefs:defs];
+        
+        self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:self.activityType];
+        if (!self.distanceDisplayUom) {
+            self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:GC_TYPE_ALL];
+            if( !self.distanceDisplayUom ){
+                // Default as nil is an issue to save into the database
+                self.distanceDisplayUom = @"kilometer";
+            }
+        }
+        // few extra derived
+        [self addPaceIfNecessaryWithSummary:newSummaryData];
+        [self mergeSummaryData:newSummaryData];
+        
+        NSString * lat = data[@"startingLatitudeInDegree"];
+        NSString * lon = data[@"startingLongitudeInDegree"];
+        
+        if ([lat respondsToSelector:@selector(doubleValue)] && [lon respondsToSelector:@selector(doubleValue)]) {
+            self.beginCoordinate = CLLocationCoordinate2DMake([lat doubleValue], [lon doubleValue]);
+        }
+        NSString * startdate = data[@"startTimeInSeconds"];
+        if([startdate respondsToSelector:@selector(doubleValue)]) {
+            self.date = [NSDate dateWithTimeIntervalSince1970:[startdate doubleValue] ];
+            if (!self.date) {
+                RZLog(RZLogError, @"%@: Invalid date %@", self.activityId, startdate);
+            }
+        }else{
+            RZLog(RZLogError, @"%@: Invalid date %@", self.activityId, startdate);
+        }
+        NSString * externalId = data[@"summaryId"];
+        if([externalId isKindOfClass:[NSString class]]){
+            self.externalServiceActivityId = [[GCService service:gcServiceGarmin] activityIdFromServiceId:externalId];
+        }
+        
+        NSString * parentId = data[@"parentSummaryId"];
+        if( parentId ){
+            self.parentId = data[@"parentSummaryId"];
+        }
+    }
+    
+}
+
+
+#pragma mark - Garmin Web Service
 
 -(void)parseModernGarminJson:(NSDictionary*)data{
     GCService * service = [GCService service:gcServiceGarmin];
@@ -353,10 +503,10 @@
     self.location = @"";
     self.downloadMethod = gcDownloadMethodModern;
 
-    [self parseGarminModernSummaryData:data];
+    [self parseGarminModernSummaryData:data dtoUnits:false];
     NSDictionary * foundSummaryDTO = data[@"summaryDTO"];
     if([foundSummaryDTO isKindOfClass:[NSDictionary class]]){
-        [self parseGarminModernSummaryData:foundSummaryDTO];
+        [self parseGarminModernSummaryData:foundSummaryDTO dtoUnits:true];
     }
     [self updateMetadataFromModernGarminJson:data];
     NSDictionary * foundMetaDTO = data[@"metadataDTO"];
@@ -365,7 +515,7 @@
     }
     
     if (self.metaData==nil) {
-        self.metaData = [NSMutableDictionary dictionary];
+        [self updateMetaData:[NSMutableDictionary dictionary]];
     }
     NSArray * foundConnectIQ = data[@"connectIQMeasurements"];
     if( [foundConnectIQ isKindOfClass:[NSArray class]]){
@@ -433,7 +583,9 @@
     }
     
     if( self.activityTypeDetail && extraMeta[GC_META_ACTIVITYTYPE] == nil){
-        extraMeta[GC_META_ACTIVITYTYPE] = [GCActivityMetaValue activityMetaValueForDisplay:self.activityTypeDetail.displayName andField:GC_META_ACTIVITYTYPE];
+        GCActivityMetaValue * typeMeta = [GCActivityMetaValue activityMetaValueForDisplay:self.activityTypeDetail.displayName andField:GC_META_ACTIVITYTYPE];
+        typeMeta.key = self.activityTypeDetail.key;
+        extraMeta[GC_META_ACTIVITYTYPE] = typeMeta;
     }
     for( NSString * key in _metaKeys.allKeys){
         NSString * mappedKey = _metaKeys[key];
@@ -446,23 +598,47 @@
             extraMeta[ mappedKey ] = metaVal;
         }
     }
-    self.metaData = extraMeta;
+    [self updateMetaData:extraMeta];
 
 }
 
--(NSMutableDictionary*)buildSummaryDataFromGarminModernData:(NSDictionary*)data{
+
+
+/**
+ Build summary data using new format from garmin. Note some format have inconsistent units
+ the dictionary for search have a few units for elevation and elapsed duration that are smaller.
+
+ @param data dictionary coming from garmin
+ @param dtoUnits true if data cames from summaryDTO dictionary (as some units are different)
+ @return dictionary field -> summary data
+ */
+-(NSMutableDictionary*)buildSummaryDataFromGarminModernData:(NSDictionary*)data dtoUnits:(BOOL)dtoUnitsFlag{
     static NSDictionary * defs = nil;
+    static NSDictionary * defs_dto = nil;
     if( defs == nil){
-        defs = @{
+        NSDictionary * nonDto = @{
+                               @"maxElevation":        @[ @"MaxElevation",        @"",                                    @"centimeter"],
+                               @"minElevation":        @[ @"MinElevation",        @"",                                    @"centimeter"],
+                               @"elapsedDuration":     @[ @"SumElapsedDuration",   @"",                                    @"ms"],
+
+                               };
+        
+        NSDictionary * dto = @{
+                                  @"maxElevation":        @[ @"MaxElevation",        @"",                                    @"meter"],
+                                  @"minElevation":        @[ @"MinElevation",        @"",                                    @"meter"],
+                                  @"elapsedDuration":     @[ @"SumElapsedDuration",   @"",                                    @"second"],
+                                  
+                                  };
+
+        
+        NSDictionary * commondefs = @{
                  @"distance":            @[ @"SumDistance",          @(gcFieldFlagSumDistance),              @"meter"],
                  @"movingDuration":      @[ @"SumMovingDuration",    @"",                                    @"second"],
                  @"duration":            @[ @"SumDuration",          @(gcFieldFlagSumDuration),              @"second"],
-                 @"elapsedDuration":     @[ @"SumElapsedDuration",   @"",                                    @"second"],
 
                  @"elevationGain":       @[ @"GainElevation",        @(gcFieldFlagAltitudeMeters),           @"meter"],
                  @"elevationLoss":       @[ @"LossElevation",        @"",                                    @"meter"],
-                 @"maxElevation":        @[ @"MaxElevation",        @"",                                    @"meter"],
-                 @"minElevation":        @[ @"MinElevation",        @"",                                    @"meter"],
+                 
 
                  @"averageSpeed":        @[ @"WeightedMeanSpeed",    @(gcFieldFlagWeightedMeanSpeed),        @"mps"],
                  @"averageMovingSpeed":  @[ @"WeightedMeanMovingSpeed",    @"",        @"mps"],
@@ -527,10 +703,24 @@
                  /* ALL */
                  @"vO2MaxValue" : @[ @"DirectVO2Max", @"", @"ml/kg/min"],
                  };
-        [defs retain];
+        
+        NSMutableDictionary * buildDefs = [NSMutableDictionary dictionaryWithDictionary:commondefs];
+        NSMutableDictionary * buildDefs_dto = [NSMutableDictionary dictionaryWithDictionary:commondefs];
+        for (NSString * key in nonDto) {
+            buildDefs[key] = nonDto[key];
+        }
+        for (NSString * key in dto) {
+            buildDefs_dto[key] = dto[key];
+        }
+        
+        defs = [NSDictionary dictionaryWithDictionary:buildDefs];
+        defs_dto = [NSDictionary dictionaryWithDictionary:buildDefs_dto];
+        
+        RZRetain(defs);
+        RZRetain(defs_dto);
     }
     NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionaryWithCapacity:data.count];
-    [self parseData:data into:newSummaryData usingDefs:defs];
+    [self parseData:data into:newSummaryData usingDefs:dtoUnitsFlag?defs_dto:defs];
     // few extra derived
     [self addPaceIfNecessaryWithSummary:newSummaryData];
 
@@ -560,10 +750,10 @@
     return rv;
 }
 
--(void)parseGarminModernSummaryData:(NSDictionary*)data{
+-(void)parseGarminModernSummaryData:(NSDictionary*)data dtoUnits:(BOOL)dtoFlag{
 
     if (self.activityType) {
-        NSMutableDictionary * newSummaryData = [self buildSummaryDataFromGarminModernData:data];
+        NSMutableDictionary * newSummaryData = [self buildSummaryDataFromGarminModernData:data dtoUnits:dtoFlag];
 
         self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:self.activityType];
         if (!self.distanceDisplayUom) {
@@ -702,18 +892,12 @@
     }
 
 
-    self.downloadMethod = gcDownloadMethodDefault;
-    if ([GCAppGlobal configGetBool:CONFIG_USE_NEW_TRACK_API defaultValue:true]) {
-        self.downloadMethod = gcDownloadMethod13;
-    }
+    self.downloadMethod = gcDownloadMethod13;
     for (NSString * field in @[@"device",@"activityType",@"eventType"]) {
         NSDictionary * info = aData[field];
         if (info) {
             GCActivityMetaValue * val = [GCActivityMetaValue activityValueForDict:info andField:field];
             newMetaData[field] = val;
-            if ([field isEqualToString:@"device"] && [val.display isEqualToString:@"Garmin Fenix"]) {
-                self.downloadMethod = gcDownloadMethodDetails;
-            }
         }
     }
     for (NSString * field in @[@"garminSwimAlgorithm",@"ispr",@"favorite"]) {
@@ -732,6 +916,8 @@
 
     [GCFieldsCalculated addCalculatedFields:self];
 }
+
+#pragma mark - Other Services
 
 -(void)parseSportTracksJson:(NSDictionary*)data{
 /*
@@ -865,9 +1051,9 @@
     self.location = @"";
     self.downloadMethod = gcDownloadMethodHealthKit;
 
-    self.metaData = [NSMutableDictionary dictionaryWithObject:[GCActivityMetaValue activityMetaValueForDisplay:workout.sourceRevision.source.name
+    [self updateMetaData:[NSMutableDictionary dictionaryWithObject:[GCActivityMetaValue activityMetaValueForDisplay:workout.sourceRevision.source.name
                                                                                                       andField:GC_META_DEVICE]
-                                                       forKey:GC_META_DEVICE];
+                                                       forKey:GC_META_DEVICE]];
 
     NSMutableDictionary * summary = [NSMutableDictionary dictionary];
 
@@ -939,7 +1125,8 @@
             }else if ([fieldkey isEqualToString:@"BeginTimestamp"] && da){
                 self.date = da;
             }else if (nu) {
-                gcFieldFlag flag = [GCFields trackFieldFromActivityField:fieldkey];
+                GCField * field = [GCField fieldForKey:fieldkey andActivityType:self.activityType];
+                gcFieldFlag flag = field.fieldFlag;
                 if (flag != gcFieldFlagNone) {
                     [self setSummaryField:flag with:nu];
                 }
@@ -947,7 +1134,7 @@
                                                                    uom:nu.unit.key
                                                              fieldFlag:flag
                                                               andValue:nu.value];
-                sumData[ [GCField fieldForKey:fieldkey andActivityType:self.activityType] ] = val;
+                sumData[ field ] = val;
             }
         }
         self.summaryData = sumData;
@@ -999,7 +1186,7 @@
     self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
     self.downloadMethod = gcDownloadMethodStrava;
     if (self.metaData==nil) {
-        self.metaData = [NSMutableDictionary dictionary];
+        [self updateMetaData:[NSMutableDictionary dictionary]];
     }
     if (self.activityId && self.activityType) {
         NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionaryWithCapacity:data.count];
@@ -1034,7 +1221,7 @@
     }
 }
 
-#pragma mark -
+#pragma mark - Update from other activity or part of activity
 
 -(void)updateWithGarminData:(NSDictionary*)data{
 
@@ -1042,13 +1229,30 @@
 
 }
 
--(BOOL)updateTrackpointsFromActivity:(GCActivity*)other{
+-(BOOL)updateTrackpointsSwimFromActivity:(GCActivity*)other{
     BOOL rv = false;
+    
+    self.garminSwimAlgorithm = true;
+
+    NSArray<GCTrackPointSwim*>*swimPoints = (NSArray<GCTrackPointSwim*>*) other.trackpoints;
+    NSArray<GCLapSwim*>*swimLaps = (NSArray<GCLapSwim*>*) other.laps;
+    [self updateWithSwimTrackpoints:swimPoints andSwimLaps:swimLaps];
+    
+    return rv;
+}
+
+
+-(BOOL)updateTrackpointsFromActivity:(GCActivity*)other newOnly:(BOOL)newOnly verbose:(BOOL)verbose{
+    BOOL rv = false;
+    
+    if( other.garminSwimAlgorithm ){
+        return [self updateTrackpointsSwimFromActivity:other];
+    }
     
     if( ! self.trackpointsReadyNoLoad && other.trackpointsReadyNoLoad){
         // Special case: other has trackpoint self doesnt, just use
-        self.trackpoints = other.trackpoints;
-        self.cachedExtraTracksIndexes = other.cachedExtraTracksIndexes;
+        [self updateWithTrackpoints:other.trackpoints andLaps:other.laps];
+        
         rv = true;
     }else if( self.trackpointsReadyNoLoad && other.trackpointsReadyNoLoad ){
         // Only bother if both have trackpoint
@@ -1064,6 +1268,7 @@
             NSMutableArray<GCField*>*fields = [NSMutableArray array];
             NSArray<GCField*>*otherFields = other.availableTrackFields;
             
+            // only update if new fields
             for (GCField * otherField in otherFields) {
                 if( ! [self hasTrackForField:otherField]){
                     [fields addObject:otherField];
@@ -1090,16 +1295,20 @@
                     }
                 }
             }
+            if( ! self.laps && other.laps){
+                [self updateWithTrackpoints:self.trackpoints andLaps:other.laps];
+            }
         }
     }
     return rv;
 }
 
--(BOOL)updateSummaryDataFromActivity:(GCActivity*)other{
+-(BOOL)updateSummaryDataFromActivity:(GCActivity*)other newOnly:(BOOL)newOnly verbose:(BOOL)verbose{
     BOOL rv = false;
     
+    // no metaData in current activity, just take the other one as is
     if( self.metaData == nil && other.metaData != nil){
-        self.metaData = [NSDictionary dictionaryWithDictionary:other.metaData];
+        [self updateMetaData:[NSDictionary dictionaryWithDictionary:other.metaData]];
         
         FMDatabase * db = self.db;
         [db beginTransaction];
@@ -1113,44 +1322,73 @@
     }else{
         if (self.metaData) {
             NSMutableDictionary * newMetaData = nil;
-            for (NSString * field in self.metaData) {
-                GCActivityMetaValue * thisVal  = (self.metaData)[field];
-                GCActivityMetaValue * otherVal = (other.metaData)[field];
-                if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
-                    if (!newMetaData) {
-                        newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
+            if( ! newOnly ){
+                for (NSString * field in self.metaData) {
+                    GCActivityMetaValue * thisVal  = (self.metaData)[field];
+                    GCActivityMetaValue * otherVal = (other.metaData)[field];
+                    if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
+                        if (!newMetaData) {
+                            newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
+                        }
+                        if( verbose ){
+                            RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.display, otherVal.display);
+                        }
+                        [newMetaData setValue:otherVal forKey:field];
+                        FMDatabase * db = self.db;
+                        [db beginTransaction];
+                        [otherVal updateDb:db forActivityId:self.activityId];
+                        [db commit];
+                        rv = true;
                     }
-                    RZLog(RZLogInfo, @"%@ changed %@", self, field);
-                    [newMetaData setValue:otherVal forKey:field];
+                }
+            }
+            if( other.metaData){
+                for( NSString * field in other.metaData){
+                    // new field
+                    if( self.metaData[field] == nil){
+                        GCActivityMetaValue * otherVal = (other.metaData)[field];
+                        if( !newMetaData){
+                            newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
+                        }
+                        if( verbose ){
+                            RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.display);
+                        }
+                        [newMetaData setValue:otherVal forKey:field];
+                        FMDatabase * db = self.db;
+                        [db beginTransaction];
+                        [otherVal updateDb:db forActivityId:self.activityId];
+                        [db commit];
+                        rv = true;
+                    }
+                }
+            }
+            if (newMetaData) {
+                [self updateMetaData:newMetaData];
+            }
+        }
+    }
+    if (self.summaryData) {
+        NSMutableDictionary<GCField*,GCActivitySummaryValue*> * newSummaryData = nil;
+        if( ! newOnly ){
+            for (GCField * field in self.summaryData) {
+                GCActivitySummaryValue * thisVal = self.summaryData[field];
+                GCActivitySummaryValue * otherVal = other.summaryData[field];
+                // Only change if formatted value changes, to avoid issue with just low precision diffs
+                if (otherVal && (! [otherVal isEqualToValue:thisVal]) && (![otherVal.formattedValue isEqualToString:thisVal.formattedValue])) {
+                    if (!newSummaryData) {
+                        newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
+                    }
+                    if( verbose ){
+                        RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.numberWithUnit, otherVal.numberWithUnit);
+                    }
+                    newSummaryData[field] = otherVal;
+                    
                     FMDatabase * db = self.db;
                     [db beginTransaction];
                     [otherVal updateDb:db forActivityId:self.activityId];
                     [db commit];
                     rv = true;
                 }
-            }
-            if (newMetaData) {
-                self.metaData = newMetaData;
-            }
-        }
-    }
-    if (self.summaryData) {
-        NSMutableDictionary<GCField*,GCActivitySummaryValue*> * newSummaryData = nil;
-        for (GCField * field in self.summaryData) {
-            GCActivitySummaryValue * thisVal = self.summaryData[field];
-            GCActivitySummaryValue * otherVal = other.summaryData[field];
-            if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
-                if (!newSummaryData) {
-                    newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
-                }
-                RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.numberWithUnit, otherVal.numberWithUnit);
-                newSummaryData[field] = otherVal;
-                
-                FMDatabase * db = self.db;
-                [db beginTransaction];
-                [otherVal updateDb:db forActivityId:self.activityId];
-                [db commit];
-                rv = true;
             }
         }
         for (GCField * field in other.summaryData) {
@@ -1159,9 +1397,17 @@
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                 }
                 GCActivitySummaryValue * otherVal = other.summaryData[field];
-                
-                RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
+                if( verbose ){
+                    RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
+                }
                 newSummaryData[field] = otherVal;
+                
+                FMDatabase * db = self.db;
+                [db beginTransaction];
+                [otherVal updateDb:db forActivityId:self.activityId];
+                [db commit];
+
+                rv = true;
             }
         }
         if (newSummaryData) {
@@ -1169,24 +1415,26 @@
         }
     }
     
-    if (fabs(self.sumDistance - other.sumDistance) > 1.e-8) {
-        self.sumDistance = other.sumDistance;
-        rv = true;
-        
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET sumDistance=? WHERE activityId = ?", @(self.sumDistance), self.activityId];
-        [db commit];
-        
-    }
-    if (fabs(self.sumDuration - other.sumDuration) > 1.e-8) {
-        self.sumDuration = other.sumDuration;
-        rv = true;
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET sumDuration=? WHERE activityId = ?", @(self.sumDuration), self.activityId];
-        [db commit];
-        
+    if( ! newOnly ){
+        if (fabs(self.sumDistance - other.sumDistance) > 1.e-8) {
+            self.sumDistance = other.sumDistance;
+            rv = true;
+            
+            FMDatabase * db = self.db;
+            [db beginTransaction];
+            [db executeUpdate:@"UPDATE gc_activities SET sumDistance=? WHERE activityId = ?", @(self.sumDistance), self.activityId];
+            [db commit];
+            
+        }
+        if (fabs(self.sumDuration - other.sumDuration) > 1.e-8) {
+            self.sumDuration = other.sumDuration;
+            rv = true;
+            FMDatabase * db = self.db;
+            [db beginTransaction];
+            [db executeUpdate:@"UPDATE gc_activities SET sumDuration=? WHERE activityId = ?", @(self.sumDuration), self.activityId];
+            [db commit];
+            
+        }
     }
     if( other.speedDisplayUom && ( ![self.speedDisplayUom isEqualToString:other.speedDisplayUom]) ){
         self.speedDisplayUom = other.speedDisplayUom;
@@ -1205,22 +1453,27 @@
         [db commit];
     }
 
+
     return rv;
 }
 
--(BOOL)updateWithActivity:(GCActivity*)other{
+-(BOOL)updateWithActivity:(GCActivity*)other newOnly:(BOOL)newOnly verbose:(BOOL)verbose{
 
     BOOL rv = false;
 
-    NSString * aType = other.activityType;
-    if (![aType isEqualToString:self.activityType]) {
-        RZLog(RZLogInfo, @"change activity type %@ -> %@", self.activityType,aType);
-        rv = true;
-        self.activityType = aType;
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET activityType=? WHERE activityId = ?", self.activityType, self.activityId];
-        [db commit];
+    if( ! newOnly){
+        NSString * aType = other.activityType;
+        if (![aType isEqualToString:self.activityType]) {
+            if( verbose ){
+                RZLog(RZLogInfo, @"change activity type %@ -> %@", self.activityType,aType);
+            }
+            rv = true;
+            self.activityType = aType;
+            FMDatabase * db = self.db;
+            [db beginTransaction];
+            [db executeUpdate:@"UPDATE gc_activities SET activityType=? WHERE activityId = ?", self.activityType, self.activityId];
+            [db commit];
+        }
     }
 
     if (self.activityTypeDetail!=nil && ![other.activityTypeDetail isEqualToActivityType:self.activityTypeDetail]) {
@@ -1232,24 +1485,42 @@
     }
 
     NSString * aName = other.activityName;
-    if (![aName isEqualToString:self.activityName]) {
-        RZLog(RZLogInfo, @"change activity name");
-        rv = true;
-        self.activityName = aName;
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET activityName=? WHERE activityId = ?", self.activityName, self.activityId];
-        [db commit];
+    if( ! newOnly ){
+        if (![aName isEqualToString:self.activityName]) {
+            if( verbose ){
+                RZLog(RZLogInfo, @"change activity name %@ -> %@", self.activityName, aName);
+            }
+            rv = true;
+            self.activityName = aName;
+            FMDatabase * db = self.db;
+            [db beginTransaction];
+            [db executeUpdate:@"UPDATE gc_activities SET activityName=? WHERE activityId = ?", self.activityName, self.activityId];
+            [db commit];
+        }
     }
-
-    if( [self updateSummaryDataFromActivity:other] ){
+    if( [self updateSummaryDataFromActivity:other newOnly:newOnly verbose:verbose] ){
         rv = true;
     }
     
-    if( [self updateTrackpointsFromActivity:other] ){
+    if( [self updateTrackpointsFromActivity:other newOnly:newOnly verbose:verbose] ){
         rv = true;
     }
     return rv;
+}
+
+-(BOOL)updateMissingFromActivity:(GCActivity*)other{
+    return [self updateWithActivity:other newOnly:true verbose:false];
+}
+-(BOOL)updateWithActivity:(GCActivity*)other{
+    return [self updateWithActivity:other newOnly:false verbose:true];
+}
+-(BOOL)updateSummaryDataFromActivity:(GCActivity*)other{
+    return [self updateSummaryDataFromActivity:other newOnly:false verbose:true];
+    
+}
+-(BOOL)updateTrackpointsFromActivity:(GCActivity*)other{
+    return [self updateTrackpointsFromActivity:other newOnly:false verbose:true];
+    
 }
 
 -(BOOL)updateSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints missingOnly:(BOOL)missingOnly{
@@ -1397,19 +1668,77 @@
     return true;
 
 }
-
--(BOOL)testForDuplicate:(GCActivity*)other{
-    if (fabs([other.date timeIntervalSinceDate:self.date])<1. && [self.activityType isEqualToString:other.activityType]) {
-        return true;
++(NSString*)duplicateDescription:(gcDuplicate)dup{
+    switch (dup) {
+        case gcDuplicateTimeOverlapping:
+            return @"Time Overlapping";
+        case gcDuplicateSynchronizedService:
+            return @"Synchronized Service";
+        case gcDuplicateNotMatching:
+            return @"Not a Duplicate";
     }
+    return @"Not a Duplicate";
+}
 
+-(gcDuplicate)testForDuplicate:(GCActivity*)other{
+    gcDuplicate activitiesAreDuplicate = gcDuplicateNotMatching;
+    
+    // if child activity from multi sport overlap test would succeed but not a duplicate
+    if( self.childIds && [self.childIds isKindOfClass:[NSArray class]]){
+        if( [self.childIds containsObject:other.activityId] ){
+            return gcDuplicateNotMatching;
+        }
+    }
+    
+    if( other.childIds && [other.childIds isKindOfClass:[NSArray class]]){
+        if( [other.childIds containsObject:self.activityId] ){
+            return gcDuplicateNotMatching;
+        }
+    }
+    
+    if( self.parentId ){
+        if( [self.parentId isEqualToString:other.activityId] ){
+            return gcDuplicateNotMatching;
+        }
+    }
+    
+    if( other.parentId ){
+        if( [self.activityId isEqualToString:other.parentId] ){
+            return gcDuplicateNotMatching;
+        }
+    }
+    
     // check if from same system (strava/garmin)
     if( (self.externalServiceActivityId && ([self.externalServiceActivityId isEqualToString:other.activityId]))||
        (other.externalServiceActivityId && ([other.externalServiceActivityId isEqualToString:self.activityId]))){
-        return true;
+        activitiesAreDuplicate = gcDuplicateSynchronizedService;
     }
-
-    return false;
+    
+    // if not match, check for time overlap
+    if( activitiesAreDuplicate == gcDuplicateNotMatching ){
+        //Last:   date                date+sumDuration
+        //        |--------------------|
+        //          |--------------------|
+        //One:      date                 Date+sumDuration
+        if( other.sumDuration > 60.0){
+            NSTimeInterval overlap =
+            MIN(other.date.timeIntervalSinceReferenceDate+other.sumDuration, self.date.timeIntervalSinceReferenceDate+self.sumDuration)-
+            MAX(other.date.timeIntervalSinceReferenceDate, self.date.timeIntervalSinceReferenceDate);
+            
+            //Last:   date           date+sumDuration
+            //        |--------------|
+            //          |--------------------|
+            //One:      date                 Date+sumDuration
+            // Use min duration otherwise ratio maybe too small even if full overlap
+            // but second activity is much longer
+            double ratio = (double)overlap / MIN(self.sumDuration,other.sumDuration);
+            
+            if( overlap > 0.0 &&  ratio > 0.90 ){
+                activitiesAreDuplicate = gcDuplicateTimeOverlapping;
+            }
+        }
+    }
+    return activitiesAreDuplicate;
 }
 
 

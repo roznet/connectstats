@@ -32,6 +32,7 @@
 #import "GCHistoryAggregatedActivityStats.h"
 #import "GCCalendarDataDateMarkers.h"
 #import "GCActivity+UI.h"
+#import "GCActivity+Database.h"
 
 #define GC_SUMMARY_WEEKLY   0
 #define GC_SUMMARY_MONTHLY  1
@@ -60,6 +61,9 @@
 
 @property (nonatomic,assign) BOOL primaryActivityTypesOnly;
 
+//Just for convenience
+@property (nonatomic,weak) GCActivitiesOrganizer * organizer;
+@property (nonatomic,weak) GCActivity *activityForAction;
 @end
 
 @implementation GCCalendarDataSource
@@ -217,6 +221,51 @@
 -(UIFont*)boldSystemFontOfSize:(CGFloat)size{
     return [RZViewConfig boldSystemFontOfSize:size];
 }
+- (UIColor*)backgroundColor{
+    //return [GCViewConfig colo]
+    //return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementTileColor];
+    return [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
+}
+-(UIColor*)primaryTextColor{
+    return [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText];
+}
+-(UIColor*)secondaryTextColor{
+    return [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+}
+
+- (UIColor*)weekdayTextColor{
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementWeekdayTextColor];
+}
+- (UIColor*)dayCurrentMonthTextColor{
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementDayCurrentMonthTextColor];
+}
+- (UIColor*)dayAdjacentMonthTextColor{
+     return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementDayAdjacentMonthTextColor];
+}
+-(UIColor*)daySelectedTextColor{
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementDaySelectedTextColor];
+}
+
+- (UIColor*)separatorColor{
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementSeparatorColor];
+}
+
+-(UIColor*)tileColor{
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementTileColor];
+}
+-(UIColor*)tileSelectedColor{
+    //0x1843c7
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementTileSelectedColor];
+}
+-(UIColor*)tileTodayColor{
+    //0x7788a2
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementTileTodayColor];
+}
+-(UIColor*)tileTodaySelectedColor{
+    //0x3b7dde
+    return [GCViewConfig colorForCalendarElement:gcSkinCalendarElementTileTodaySelectedColor];
+}
+
 -(NSArray*)leftButtonItems{
     [self.activityTypeButton setupBarButtonItem];
     return @[ self.activityTypeButton.activityTypeButtonItem ];
@@ -408,7 +457,7 @@
             CGContextRef ctx = UIGraphicsGetCurrentContext();
             CGFloat fontSize = 9.f;
             UIFont *font = [GCViewConfig systemFontOfSize:fontSize];
-            UIColor * color = selected ? [UIColor whiteColor] : [markers displayTextColor];
+            UIColor * color = selected ? self.daySelectedTextColor : [markers displayTextColor];
 
             CGContextSaveGState(ctx);
 
@@ -450,6 +499,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    cell.delegate = self;
     if (_tableDisplay==gcCalendarTableDisplayActivities) {
         if( indexPath.row < _selectedActivities.count ){
             GCActivity * activity = _selectedActivities[indexPath.row];
@@ -523,6 +573,48 @@
 
         [[NSNotificationCenter defaultCenter] postNotificationName:KalDataSourceChangedNotification  object:self];
     }
+}
+
+
+#pragma mark - GCCellGridDelegate
+
+-(void)cellGrid:(GCCellGrid*)cell didSelectRightButtonAt:(NSIndexPath*)indexPath{
+    self.organizer = [GCAppGlobal organizer];
+    self.activityForAction = _selectedActivities[indexPath.row];
+
+    NSMutableArray * indexPaths = [NSMutableArray arrayWithObject:indexPath];
+    NSUInteger idx = [self.organizer activityIndexForFilteredIndex:indexPath.row];
+    if (self.organizer.hasCompareActivity && idx == self.organizer.selectedCompareActivityIndex) {
+        self.organizer.hasCompareActivity = false;
+    }else{
+        if (self.organizer.selectedCompareActivityIndex < self.organizer.countOfActivities &&
+            self.organizer.selectedCompareActivityIndex != idx) {
+            NSUInteger toclear = [self.organizer filteredIndexForActivityIndex:self.organizer.selectedCompareActivityIndex];
+            if (toclear!=NSNotFound) {
+                [indexPaths addObject:[NSIndexPath indexPathForRow:toclear inSection:indexPath.section]];
+            }
+        }
+        self.organizer.selectedCompareActivityIndex = idx;
+        self.organizer.hasCompareActivity = true;
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:KalDataSourceChangedNotification  object:self];
+    
+}
+
+-(void)cellGrid:(GCCellGrid*)cell didSelectLeftButtonAt:(NSIndexPath*)indexPath{
+    
+    self.activityForAction = _selectedActivities[indexPath.row];
+    
+    if( self.activityForAction.skipAlways) {
+        self.activityForAction.skipAlways = false;
+    }else{
+        self.activityForAction.skipAlways = true;
+    }
+    if( self.activityForAction.db ){
+        [self.activityForAction saveToDb:self.activityForAction.db];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:KalDataSourceChangedNotification  object:self];
 }
 
 @end

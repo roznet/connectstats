@@ -32,12 +32,12 @@
            path:(NSString*)path
            line:(NSInteger)line
         message:(NSString*)msg{
-#if TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR || DEBUG
     NSLog(@"^[%@]: %@", funcName,  msg);
 #endif
     RZlogLevels level = RZLogError;
     [LCLLogFile logWithIdentifier:RZLog_components[level]
-                            level:level
+                            level:(unsigned int)level
                              path:[path cStringUsingEncoding:NSUTF8StringEncoding]
                              line:(unsigned)line
                          function:[funcName cStringUsingEncoding:NSUTF8StringEncoding]
@@ -48,12 +48,12 @@
           path:(NSString*)path
           line:(NSInteger)line
        message:(NSString*)msg{
-#if TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR || DEBUG
     NSLog(@"^[%@]: %@", funcName,  msg);
 #endif
     RZlogLevels level = RZLogInfo;
     [LCLLogFile logWithIdentifier:RZLog_components[level]
-                            level:level
+                            level:(unsigned int)level
                              path:[path cStringUsingEncoding:NSUTF8StringEncoding]
                              line:(unsigned)line
                          function:[funcName cStringUsingEncoding:NSUTF8StringEncoding]
@@ -64,12 +64,12 @@
              path:(NSString*)path
              line:(NSInteger)line
           message:(NSString*)msg{
-#if TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR || DEBUG
     NSLog(@"^[%@]: %@", funcName,  msg);
 #endif
     RZlogLevels level = RZLogWarning;
     [LCLLogFile logWithIdentifier:RZLog_components[level]
-                            level:level
+                            level:(uint32_t)level
                              path:[path cStringUsingEncoding:NSUTF8StringEncoding]
                              line:(unsigned)line
                          function:[funcName cStringUsingEncoding:NSUTF8StringEncoding]
@@ -83,11 +83,11 @@
             path:(NSString*)path
             line:(NSInteger)line
          message:(NSString*)msg{
-#if TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR || DEBUG
     NSLog(@"^[%@]: %@", funcName,  msg);
 #endif
     [LCLLogFile logWithIdentifier:RZLog_components[level]
-                            level:level
+                            level:(uint32_t)level
                              path:[path cStringUsingEncoding:NSUTF8StringEncoding]
                              line:(unsigned)line
                          function:[funcName cStringUsingEncoding:NSUTF8StringEncoding]

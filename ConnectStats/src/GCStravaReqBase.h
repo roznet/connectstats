@@ -35,5 +35,6 @@
 -(void)signInToStrava;
 +(void)signout;
 
++(NSDate*)lastSync:(NSString*)aId;
 
 @end

@@ -33,8 +33,9 @@
 @property (nonatomic, readonly) BOOL transitioning;
 @property (nonatomic, readonly) KalDate *selectedDate;
 @property (nonatomic, assign) CGSize tileSize;
+@property (nonatomic, assign) id<KalDataSource> dataSource;
 
-- (id)initWithFrame:(CGRect)frame logic:(KalLogic *)logic delegate:(id<KalViewDelegate>)delegate;
+- (id)initWithFrame:(CGRect)frame dataSource:(id<KalDataSource>)source logic:(KalLogic *)logic delegate:(id<KalViewDelegate>)delegate;
 - (void)selectDate:(KalDate *)date;
 - (void)markTilesForDates:(NSArray *)dates andSource:(id<KalDataSource>)source;
 

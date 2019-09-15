@@ -9,10 +9,14 @@
 #import "GCTestsHelper.h"
 #import "GCAppDelegate.h"
 #import "GCAppGlobal.h"
+#import "GCFields.h"
+#import "GCFieldCache.h"
 
 @interface GCTestsHelper ()
 @property (nonatomic,retain) NSMutableDictionary * savedSettings;
 @property (nonatomic,retain) NSTimeZone * rememberTimeZone;
+@property (nonatomic,retain) GCFieldCache * fieldCache;
+
 @end
 
 @implementation GCTestsHelper
@@ -45,6 +49,16 @@
     }
     [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithName:@"Europe/London"]];
     [GCAppGlobal ensureCalculationCalendarTimeZone:[NSTimeZone defaultTimeZone]];
+
+    self.fieldCache = [GCField fieldCache];
+    [RZFileOrganizer removeEditableFile:@"field_cache.db"];
+    FMDatabase * cacheDb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"field_cache.db"]];
+    [cacheDb open];
+    GCFieldCache * cache = [GCFieldCache cacheWithDb:cacheDb andLanguage:@"en"];
+    cache.preferPredefined = true;
+    [GCField setFieldCache: cache];
+    [GCFields setFieldCache:cache];
+    [GCActivityType setFieldCache:cache];
 }
 
 -(void)tearDown{
@@ -59,7 +73,11 @@
         [GCAppGlobal ensureCalculationCalendarTimeZone:self.rememberTimeZone];
         self.rememberTimeZone = nil;
     }
+    [GCField setFieldCache:self.fieldCache];
+    [GCFields setFieldCache:self.fieldCache];
+    [GCActivityType setFieldCache:self.fieldCache];
 }
+
 -(void)dealloc{
     [self tearDown];
     

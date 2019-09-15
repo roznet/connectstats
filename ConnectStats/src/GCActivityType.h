@@ -28,7 +28,7 @@
 @class GCFieldCache;
 @class GCActivityTypes;
 
-@interface GCActivityType : NSObject<NSCopying,NSCoding>
+@interface GCActivityType : NSObject<NSCopying,NSSecureCoding>
 
 @property (nonnull,readonly) NSString * key;
 @property (readonly) NSUInteger typeId;
@@ -80,6 +80,7 @@
 +(nonnull GCActivityType*)other;
 +(nonnull GCActivityType*)all;
 +(nonnull GCActivityType*)day;
++(nonnull GCActivityType*)multisport;
 
 /**
  All Types

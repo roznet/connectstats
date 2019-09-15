@@ -145,6 +145,57 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,gcUIStyle style,NSString*suffix
     return rv;
 }
 
++(UIImage*)activityTypeDisabledIconFor:(NSString*)activityType{
+    UIImage * icon = [UIImage imageNamed:[NSString stringWithFormat:@"%@-dyn", activityType]];
+    if( icon == nil){
+        return nil;
+    }
+    
+    UIImageView * imgView = RZReturnAutorelease([[UIImageView alloc] initWithImage:icon]);
+    
+    imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [imgView setTintColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
+    
+    UIGraphicsBeginImageContextWithOptions(imgView.bounds.size, imgView.isOpaque, 0.0);
+    [imgView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage * rv = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return rv;
+}
+
++(UIImage*)activityTypeDynamicIconFor:(NSString*)activityType{
+    UIImage * icon = [UIImage imageNamed:[NSString stringWithFormat:@"%@-dyn", activityType]];
+    if( icon == nil){
+        return nil;
+    }
+    
+    UIImageView * imgView = RZReturnAutorelease([[UIImageView alloc] initWithImage:icon]);
+    
+    if( [GCViewConfig roundedActivityIcons]){
+        imgView.backgroundColor = [GCViewConfig cellBackgroundDarkerForActivity:activityType];
+        imgView.layer.cornerRadius = 5;
+        imgView.layer.mask.masksToBounds = YES;
+        imgView.layer.borderWidth = 0;
+        imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [imgView setTintColor:[GCViewConfig cellIconColorForActivity:activityType]];
+    }else{
+        imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [imgView setTintColor:[GCViewConfig cellBackgroundDarkerForActivity:activityType]];
+    }
+    
+    UIGraphicsBeginImageContextWithOptions(imgView.bounds.size, imgView.isOpaque, 0.0);
+    [imgView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage * rv = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+
+    return rv;
+}
+
 +(UIImage*)activityTypeBWIconFor:(NSString*)activityType{
     UIImage * rv = [UIImage imageNamed:[NSString stringWithFormat:@"%@-bw", activityType]];
     return rv;
@@ -152,7 +203,18 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,gcUIStyle style,NSString*suffix
 }
 
 +(UIImage*)cellIconFor:(gcIconCell)name{
-    return imageNamedIn(cellIconDefs(), name, [GCViewConfig uiStyle], nil, nil);
+    UIImage * icon = imageNamedIn(cellIconDefs(), name, [GCViewConfig uiStyle], nil, nil);
+    
+    UIImageView * imgView = RZReturnAutorelease([[UIImageView alloc] initWithImage:icon]);
+    imgView.backgroundColor = [UIColor clearColor];
+    imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [imgView setTintColor:[GCViewConfig colorForGraphElement:gcSkinGraphColorForeground]];
+    UIGraphicsBeginImageContextWithOptions(imgView.bounds.size, imgView.isOpaque, 0.0);
+    [imgView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage * rv = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return rv;
 }
 
 +(UIImage*)categoryIconFor:(NSString*)category{

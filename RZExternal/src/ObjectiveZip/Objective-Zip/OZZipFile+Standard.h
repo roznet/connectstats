@@ -55,7 +55,7 @@
  @throws OZZipException If the file can't be opened due to an erroror if the
  access mode is invalid.
  */
-- (nonnull instancetype) initWithFileName:(nonnull NSString *)fileName mode:(OZZipFileMode)mode;
+//- (nonnull instancetype) initWithFileName:(nonnull NSString *)fileName mode:(OZZipFileMode)mode;
 
 /**
  @brief Creates a OZZipFile with the specified zip file name, access mode and

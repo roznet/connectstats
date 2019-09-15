@@ -24,14 +24,16 @@
 //  
 
 #import "GCGarminRequest.h"
+@class GTMOAuth2Authentication;
 
 @interface GCWithingsReqBase : GCGarminReqBase
 @property (nonatomic,retain) UINavigationController * navigationController;
 @property (nonatomic,retain) NSString * userId;
+@property (nonatomic,retain) GTMOAuth2Authentication * withingsAuth;
 
 -(void)signInToWithings;
 -(BOOL)isSignedIn;
 +(void)signout;
--(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters;
+//-(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters;
 
 @end

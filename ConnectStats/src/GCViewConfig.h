@@ -88,35 +88,39 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 
 +(UIColor*)cellBackgroundDarkerForActivity:(id)aAct;
 +(UIColor*)cellBackgroundLighterForActivity:(id)aAct;
++(UIColor*)cellIconColorForActivity:(id)aAct;
 
-//+(UIColor*)cellForegroundForActivity:(GCActivity*)aAct;
-
-+(UIColor*)cellBackgroundForDetails;
-+(UIColor*)cellBackgroundSecondForDetails;
 +(UIColor*)colorForSwimStrokeType:(gcSwimStrokeType)strokeType;
+
+// In calendar
 +(UIColor*)textColorForActivity:(id)aAct;
 
 +(UIColor*)backgroundForCategory:(NSString*)category;
 
 +(NSArray<UIColor*>*)arrayOfColorsForMultiplots;
+
 // General Theme
-+(UIColor*)defaultBackgroundColor;
-+(UIColor*)defaultTextColor;
++(UIColor*)defaultColor:(gcSkinDefaultColor)which;
 
 +(UIColor*)fillColorForField:(GCField*)field;
 +(NSArray*)colorsForField:(GCField*)field;
-+(UIColor*)barGraphColor;
+
 +(UIColor*)colorForGoalPercent:(double)pct;
 +(UIColor*)textColorForGoalPercent:(double)pct;
 
-+(UIColor*)backgroundForGroupedTable;
++(UIColor*)colorForCalendarElement:(gcSkinCalendarElement)elem;
++(UIColor*)colorForGraphElement:(gcSkinGraphColor)which;
 
++(void)setupViewController:(UIViewController*)viewController;
++(GCCellEntryListViewController*)standardEntryListViewController:(NSArray*)theChoices selected:(NSUInteger)achoice;
 +(void)setupGradient:(GCCellGrid*)aG ForActivity:(id)aAct;
 +(void)setupGradientForDetails:(GCCellGrid*)aG;
 +(void)setupGradientForCellsEven:(GCCellGrid*)aG;
 +(void)setupGradientForCellsOdd:(GCCellGrid*)aG;
 +(void)setupGradient:(GCCellGrid*)aG forSwimStroke:(gcSwimStrokeType)tp;
 +(void)setupGradient:(GCCellGrid*)aG ForThreshold:(double)pct;
+
++(BOOL)roundedActivityIcons;
 
 // FIELDS
 
@@ -157,8 +161,11 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 
 +(UIImage*)mergeImage:(UIImage*)first withImage:(UIImage*)second;
 
-+(NSArray*)validChoicesForGarminLoginMethod;
-
++(NSArray<NSString*>*)validChoicesForGarminSource;
++(gcGarminDownloadSource)garminDownloadSource;
++(void)setGarminDownloadSource:(gcGarminDownloadSource)source;
++(NSArray<NSString*>*)validChoicesForConnectStatsServiceUse;
++(NSArray<NSString*>*)validChoicesForConnectStatsConfig;
 
 
 @end
