@@ -109,15 +109,29 @@ static gcFontStyle _fontStyle;
     return [RZImage imageNamed:val ? @"check" : @"checkoff"];
 }
 +(RZColor*)colorForText:(rzTextColor)which{
-    switch (which) {
-        case rzColorStylePrimaryText:
-            return [RZColor blackColor];
-        case rzColorStyleSecondaryText:
-            return [RZColor darkGrayColor];
-        case rzColorStyleTertiaryText:
-            return [RZColor darkGrayColor];
-        case rzColorStyleHighlightedText:
-            return [RZColor blueColor];
+    if( @available( iOS 13.0, * ) ){
+        switch (which) {
+                case rzColorStylePrimaryText:
+                    return [RZColor labelColor];
+                case rzColorStyleSecondaryText:
+                    return [RZColor secondaryLabelColor];
+                case rzColorStyleTertiaryText:
+                    return [RZColor tertiaryLabelColor];
+                case rzColorStyleHighlightedText:
+                    return [RZColor linkColor];
+            }
+
+    }else{
+        switch (which) {
+            case rzColorStylePrimaryText:
+                return [RZColor blackColor];
+            case rzColorStyleSecondaryText:
+                return [RZColor darkGrayColor];
+            case rzColorStyleTertiaryText:
+                return [RZColor darkGrayColor];
+            case rzColorStyleHighlightedText:
+                return [RZColor blueColor];
+        }
     }
     return nil;
 }
