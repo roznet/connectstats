@@ -55,6 +55,7 @@ typedef NS_ENUM(NSUInteger, rzTextColor){
 +(RZColor*)backgroundForLegend;
 
 +(NSDictionary<NSString*,id>*)attributeBold16;
++(NSDictionary<NSString*,id>*)attributeBold16Highlighted;
 +(NSDictionary<NSString*,id>*)attribute16;
 +(NSDictionary<NSString*,id>*)attribute14Gray;
 +(NSDictionary<NSString*,id>*)attribute16Gray;

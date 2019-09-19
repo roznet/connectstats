@@ -147,7 +147,7 @@
         [self derivedComputations:1];
     }
     // If on wifi, try to download extra missing details
-    if ([GCAppGlobal configGetBool:CONFIG_WIFI_DOWNLOAD_DETAILS defaultValue:YES] &&  [RZSystemInfo wifiAvailable]) {
+    if ([[GCAppGlobal profile] configGetBool:CONFIG_WIFI_DOWNLOAD_DETAILS defaultValue:false] &&  [RZSystemInfo wifiAvailable]) {
         [self downloadMissingActivityDetails:15];
     }
 }

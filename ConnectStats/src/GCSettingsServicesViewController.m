@@ -169,7 +169,9 @@
     if (connectStatsVersion) {
         
         [self.remap addSection:GC_SECTIONS_OPTIONS withRows:@[
-                                                              @( GC_OPTIONS_MERGE         )]];
+            @( GC_OPTIONS_DOWNLOAD_DETAILS ),
+            @( GC_OPTIONS_MERGE         )
+        ]];
         if( debugIsEnabled ){
             [self.remap addSection:GC_SECTIONS_BABOLAT withRows:@[
                 @( GC_BABOLAT_SERVICE_NAME ),
@@ -871,8 +873,16 @@
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_OPTIONS_MERGE);
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
+    }else if (indexPath.row == GC_OPTIONS_DOWNLOAD_DETAILS) {
+        switchcell = [GCCellEntrySwitch switchCell:tableView];
+        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Download Details Pre-emptively",@"Other Service")];
+        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_WIFI_DOWNLOAD_DETAILS defaultValue:false];
+        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_OPTIONS_DOWNLOAD_DETAILS);
+        switchcell.entryFieldDelegate = self;
+        rv=switchcell;
     }
-
+    
     return rv;
 }
 
@@ -994,7 +1004,7 @@
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_ENABLE):
         {
             if( cell.on ){
-                gcGarminDownloadSource lastSource = [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LAST_SOURCE defaultValue:gcGarminDownloadSourceConnectStats];
+                gcGarminDownloadSource lastSource = [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LAST_SOURCE defaultValue:gcGarminDownloadSourceGarminWeb];
                 [GCViewConfig setGarminDownloadSource:lastSource];
                 
                 RZLog(RZLogInfo, @"Garmin: Enabled Source %@ Web=%lu ConnectStats=%lu",
@@ -1091,6 +1101,13 @@
         case GC_IDENTIFIER(GC_SECTIONS_OPTIONS, GC_OPTIONS_MERGE):
         {
             [[GCAppGlobal profile] configToggleBool:CONFIG_MERGE_IMPORT_DUPLICATE];
+            [GCAppGlobal saveSettings];
+            break;
+        }
+        case GC_IDENTIFIER(GC_SECTIONS_OPTIONS, GC_OPTIONS_DOWNLOAD_DETAILS):
+        {
+            
+            [[GCAppGlobal profile] configToggleBool:CONFIG_WIFI_DOWNLOAD_DETAILS];
             [GCAppGlobal saveSettings];
             break;
         }

@@ -61,6 +61,12 @@ static gcFontStyle _fontStyle;
               NSForegroundColorAttributeName: [self colorForText:rzColorStylePrimaryText]
               };
 }
++(NSDictionary<NSString*,id>*)attributeBold16Highlighted{
+    return @{ NSFontAttributeName:  [self boldSystemFontOfSize:16.],
+              NSForegroundColorAttributeName: [self colorForText:rzColorStyleHighlightedText]
+              };
+}
+
 +(NSDictionary<NSString*,id>*)attribute16{
     return @{ NSFontAttributeName: [self systemFontOfSize:16.],
               NSForegroundColorAttributeName: [self colorForText:rzColorStylePrimaryText]
