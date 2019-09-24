@@ -949,9 +949,6 @@
 		42B5E4761BA5BA2D000FAE4E /* test_activity_running_828298988.db in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3521BA5BA2C000FAE4E /* test_activity_running_828298988.db */; };
 		42B5E4771BA5BA2D000FAE4E /* test_activity_running_830807000.db in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3531BA5BA2C000FAE4E /* test_activity_running_830807000.db */; };
 		42B5E4781BA5BA2D000FAE4E /* test_activity_running_835175535.db in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3541BA5BA2C000FAE4E /* test_activity_running_835175535.db */; };
-		42B5E47C1BA5BA2D000FAE4E /* fitbit_activity_types.json in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E35A1BA5BA2C000FAE4E /* fitbit_activity_types.json */; };
-		42B5E47D1BA5BA2D000FAE4E /* fitbit_list.json in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E35B1BA5BA2C000FAE4E /* fitbit_list.json */; };
-		42B5E47E1BA5BA2D000FAE4E /* fitbit_weight.json in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E35C1BA5BA2C000FAE4E /* fitbit_weight.json */; };
 		42B5E4811BA5BA2D000FAE4E /* last_search_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3601BA5BA2C000FAE4E /* last_search_0.json */; };
 		42B5E4821BA5BA2D000FAE4E /* last_search_20.json in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3611BA5BA2C000FAE4E /* last_search_20.json */; };
 		42B5E4831BA5BA2D000FAE4E /* strava_list_0_merge.json in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E3621BA5BA2C000FAE4E /* strava_list_0_merge.json */; };
@@ -3209,9 +3206,6 @@
 		42B5E3521BA5BA2C000FAE4E /* test_activity_running_828298988.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_828298988.db; path = ../derived/test_activity_running_828298988.db; sourceTree = "<group>"; };
 		42B5E3531BA5BA2C000FAE4E /* test_activity_running_830807000.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_830807000.db; path = ../derived/test_activity_running_830807000.db; sourceTree = "<group>"; };
 		42B5E3541BA5BA2C000FAE4E /* test_activity_running_835175535.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_835175535.db; path = ../derived/test_activity_running_835175535.db; sourceTree = "<group>"; };
-		42B5E35A1BA5BA2C000FAE4E /* fitbit_activity_types.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fitbit_activity_types.json; sourceTree = "<group>"; };
-		42B5E35B1BA5BA2C000FAE4E /* fitbit_list.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fitbit_list.json; sourceTree = "<group>"; };
-		42B5E35C1BA5BA2C000FAE4E /* fitbit_weight.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fitbit_weight.json; sourceTree = "<group>"; };
 		42B5E3601BA5BA2C000FAE4E /* last_search_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_search_0.json; sourceTree = "<group>"; };
 		42B5E3611BA5BA2C000FAE4E /* last_search_20.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_search_20.json; sourceTree = "<group>"; };
 		42B5E3621BA5BA2C000FAE4E /* strava_list_0_merge.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_list_0_merge.json; sourceTree = "<group>"; };
@@ -6107,7 +6101,6 @@
 				422AC6A11C1CC99E002DDA9C /* testactivities */,
 				427F93681BEC028C00C177F9 /* activitiesdb */,
 				427F93061BEA9A5900C177F9 /* InitialSamples */,
-				42B5E3591BA5BA2C000FAE4E /* fitbit */,
 				42B5E35F1BA5BA2C000FAE4E /* merge */,
 				42B5E3691BA5BA2C000FAE4E /* moves */,
 				42B5E36E1BA5BA2C000FAE4E /* sporttracks */,
@@ -6117,16 +6110,6 @@
 				42B5E4491BA5BA2D000FAE4E /* weather */,
 			);
 			path = samples;
-			sourceTree = "<group>";
-		};
-		42B5E3591BA5BA2C000FAE4E /* fitbit */ = {
-			isa = PBXGroup;
-			children = (
-				42B5E35A1BA5BA2C000FAE4E /* fitbit_activity_types.json */,
-				42B5E35B1BA5BA2C000FAE4E /* fitbit_list.json */,
-				42B5E35C1BA5BA2C000FAE4E /* fitbit_weight.json */,
-			);
-			path = fitbit;
 			sourceTree = "<group>";
 		};
 		42B5E35F1BA5BA2C000FAE4E /* merge */ = {
@@ -8822,7 +8805,6 @@
 				42B5E4D91BA5BA2D000FAE4E /* track_277978396.db in Resources */,
 				428BAD041CB149C50041468A /* activityweather_1108368135.json in Resources */,
 				42B5E52B1BA5BA2D000FAE4E /* track_325023051.db in Resources */,
-				42B5E47E1BA5BA2D000FAE4E /* fitbit_weight.json in Resources */,
 				420119C01F51BE270093B2CD /* babolat2017_session_9457.json in Resources */,
 				42B5E51C1BA5BA2D000FAE4E /* track_312525505.db in Resources */,
 				427F93571BEA9A5900C177F9 /* stats_running_yearly.csv in Resources */,
@@ -8897,7 +8879,6 @@
 				42B5E5351BA5BA2D000FAE4E /* track_332763433.db in Resources */,
 				427F93501BEA9A5900C177F9 /* sample_activities.db in Resources */,
 				427F934C1BEA9A5900C177F9 /* cycling.png in Resources */,
-				42B5E47D1BA5BA2D000FAE4E /* fitbit_list.json in Resources */,
 				42B5E50F1BA5BA2D000FAE4E /* track_298962575.db in Resources */,
 				42B5E5021BA5BA2D000FAE4E /* track_294945994.db in Resources */,
 				42B5E4811BA5BA2D000FAE4E /* last_search_0.json in Resources */,
@@ -8927,7 +8908,6 @@
 				428BACF41CB149C50041468A /* activity_1108367966.json in Resources */,
 				42B5E4A21BA5BA2D000FAE4E /* strava_stream_122027318.json in Resources */,
 				42B5E4DE1BA5BA2D000FAE4E /* track_278651141.db in Resources */,
-				42B5E47C1BA5BA2D000FAE4E /* fitbit_activity_types.json in Resources */,
 				42B5E5301BA5BA2D000FAE4E /* track_328493162.db in Resources */,
 				42B5E5321BA5BA2D000FAE4E /* track_331118599.db in Resources */,
 				42B5E4F81BA5BA2D000FAE4E /* track_287446936.db in Resources */,
@@ -10681,7 +10661,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5.0.1.0;
+				CURRENT_PROJECT_VERSION = 5.0.2.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -10700,7 +10680,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 5.0.1;
+				MARKETING_VERSION = 5.0.2;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -10730,7 +10710,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 5.0.1.0;
+				CURRENT_PROJECT_VERSION = 5.0.2.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = NO;
@@ -10750,7 +10730,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 5.0.1;
+				MARKETING_VERSION = 5.0.2;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -10847,7 +10827,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ConnectStatsTestApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.connectstatstestapp";
@@ -10888,7 +10868,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ConnectStatsTestApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.connectstatstestapp";
