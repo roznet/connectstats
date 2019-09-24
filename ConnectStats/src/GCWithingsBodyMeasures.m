@@ -80,8 +80,11 @@
 -(void)parse{
     if (self.theString) {
         GCWithingsBodyMeasuresParser * parser =[GCWithingsBodyMeasuresParser bodyMeasuresParser:[self.theString dataUsingEncoding:self.encoding]];
-        for (GCHealthMeasure * measure in parser.measures) {
-            [[GCAppGlobal health] addHealthMeasure:measure];
+        self.status = parser.status;
+        if( parser.status == GCWebStatusOK){
+            for (GCHealthMeasure * measure in parser.measures) {
+                [[GCAppGlobal health] addHealthMeasure:measure];
+            }
         }
     }else{
         if (self.navigationController==nil) {
@@ -102,10 +105,14 @@
     return next;
 }
 -(id<GCWebRequest>)remediationReq{
-    if (self.status == GCWebStatusLoginFailed && self.navigationController  && [self isSignedIn]) {
+    if (self.status == GCWebStatusLoginFailed && [self isSignedIn]) {
         [GCWithingsReqBase signout];
-        GCWithingsBodyMeasures * next = [GCWithingsBodyMeasures measuresSinceDate:self.fromDate with:self.navigationController];
+        GCWithingsBodyMeasures * next = [GCWithingsBodyMeasures measuresSinceDate:self.fromDate with:[GCAppGlobal currentNavigationController]];
         return next;
+    }else{
+        if( self.status == GCWebStatusLoginFailed){
+            [GCWithingsReqBase signout];
+        }
     }
     return nil;
 }

@@ -55,7 +55,6 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
 -(void)dealloc{
     self.webView.delegate = nil;
     [_webView release];
-    //[_oauth1Controller release];
     [_withingsAuth release];
     [_oauthToken release];
     [_oauthTokenSecret release];

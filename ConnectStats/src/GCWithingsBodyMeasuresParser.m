@@ -42,7 +42,7 @@
 
 -(void)parse:(NSData*)data{
     NSError * err = nil;
-    self.success = false;
+    self.status = GCWebStatusParsingFailed;
     NSDictionary * json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err ];
     if (json==nil) {
         RZLog(RZLogError, @"json parsing failed %@", err);
@@ -76,7 +76,17 @@
                 }
             }
             self.measures = found;
-            self.success = true;
+            self.status = GCWebStatusOK;
+        }else{
+            if( [json[@"status"] respondsToSelector:@selector(integerValue)]){
+                NSInteger errorCode = [json[@"status"] integerValue];
+                if( errorCode == 401){
+                    self.status = GCWebStatusLoginFailed;
+                }else{
+                    self.status = GCWebStatusParsingFailed;
+                }
+            }
+            RZLog(RZLogError, @"Withings issue: Status=%@, error=%@", json[@"status"], json[@"error"]);
         }
     }
 }
