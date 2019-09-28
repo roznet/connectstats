@@ -24,10 +24,11 @@
 //  
 
 #import <Foundation/Foundation.h>
+#import "GCWebRequest.h"
 
 @interface GCWithingsBodyMeasuresParser : NSObject
 @property (nonatomic,retain) NSArray * measures;
-@property (nonatomic,assign) BOOL success;
+@property (nonatomic,assign) GCWebStatus status;
 
 +(GCWithingsBodyMeasuresParser*)bodyMeasuresParser:(NSData*)data;
 @end

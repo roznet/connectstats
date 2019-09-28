@@ -30,8 +30,6 @@
 #import "GCSportTracksActivityDetailParser.h"
 #import "GCSportTracksActivityListParser.h"
 #import "GCStravaActivityLapsParser.h"
-#import "GCFitBitActivitiesParser.h"
-#import "GCFitBitActivityTypesParser.h"
 #import "GCActivity+Database.h"
 #import "GCGarminRequestActivityReload.h"
 #import "GCGarminActivityTrack13Request.h"
@@ -117,28 +115,6 @@
     }*/
 
     [self endSession:@"GC Parsing Extra Fields"];
-}
-
--(void)fitbitParsing{
-    [self startSession:@"GC Parsing FitBit"];
-
-    //NSData * types = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"fitbit_activity_types.json"]];
-    //GCFitBitActivityTypesParser * tparser = [ GCFitBitActivityTypesParser activityTypesParser:types];
-#ifdef GC_USE_HEALTHKIT
-    NSData * actfile = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"fitbit_list.json"]];
-    GCFitBitActivitiesParser * lparser = [GCFitBitActivitiesParser activitiesParser:actfile forDate:[NSDate date]];
-
-    GCActivity * act = lparser.activity;
-    NSString * fn =[RZFileOrganizer writeableFilePath:@"test_fitbit_act.db"];
-    FMDatabase * db = [FMDatabase databaseWithPath:fn];
-    [db open];
-    [GCActivity ensureDbStructure:db];
-    [act setDb:db];
-    [act saveToDb:db];
-    [act setDb:nil];
-    [db close];
-#endif
-    [self endSession:@"GC Parsing FitBit"];
 }
 
 -(void)sportTracksParsing{

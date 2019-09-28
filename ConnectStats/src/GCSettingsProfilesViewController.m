@@ -136,7 +136,7 @@
                                                                                  (int)[[GCAppGlobal profile] activitiesCountForIdx:indexPath.row]]
                                                                      attributes:[GCViewConfig attribute14Gray]] autorelease];
         NSAttributedString * curr = [[[NSAttributedString alloc] initWithString:current ? NSLocalizedString(@"Current Profile",@"Profiles") : NSLocalizedString(@"",@"Profiles")
-                                                                     attributes:[GCViewConfig attribute16]]autorelease];
+                                                                     attributes:[GCViewConfig attributeBold16Highlighted]]autorelease];
         [cell labelForRow:0 andCol:0].attributedText = title;
         [cell labelForRow:0 andCol:1].attributedText = curr;
         [cell labelForRow:1 andCol:1].attributedText = summ;
