@@ -45,7 +45,7 @@
 
 +(void)ensureDbStructure:(FMDatabase*)db;
 
--(void)addHealthMeasure:(GCHealthMeasure*)one;
+-(BOOL)addHealthMeasure:(GCHealthMeasure*)one;
 -(void)addSleepBlocks:(NSArray*)blocks;
 -(GCHealthMeasure*)measureForId:(NSString*)aId andType:(gcMeasureType)aType;
 -(GCStatsDataSerieWithUnit*)dataSerieWithUnitForHealthField:(GCField*)aType;
