@@ -721,7 +721,6 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
                 connectStatsOn = false;
                 break;
             }
-
     }
     [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_ENABLE boolVal:connectStatsOn];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:garminOn];
