@@ -358,6 +358,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
         RZLog(RZLogInfo, @"Loaded %d activities [%.1f sec %@]",(int)[_allActivities count], [[NSDate date] timeIntervalSinceDate:timing_start],
               [RZMemory formatMemoryInUseChangeSince:mem_start]);
+        NSDictionary * summary = [self serviceSummary];
+        for (NSString * serviceName in summary) {
+            NSDictionary *serviceSummary = summary[serviceName];
+            RZLog( RZLogInfo, @"%@: %@ activities [From: %@ to %@]", serviceName, serviceSummary[@"count"], serviceSummary[@"earliest"], serviceSummary[@"latest"]);
+        }
         [_reverseGeocoder start];
         [self performSelectorOnMainThread:@selector(publishEvent) withObject:nil waitUntilDone:NO];
         [self notifyOnMainThread:nil];
@@ -366,6 +371,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         });
     }
     [self lookForAllDuplicate];
+    
 }
 
 
@@ -737,6 +743,41 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     return rv;
 }
 
+-(NSDictionary*)serviceSummary{
+    NSMutableDictionary * rv = [NSMutableDictionary dictionary];
+    for (GCActivity * act in self.allActivities) {
+        GCService * service = act.service;
+        
+        NSMutableDictionary * serviceDict = rv[service.displayName];
+        if( serviceDict == nil){
+            serviceDict = [NSMutableDictionary dictionary];
+            rv[service.displayName] = serviceDict;
+        }
+        
+        NSNumber * count = serviceDict[@"count"];
+        NSDate   * earliest = serviceDict[@"earliest"];
+        NSDate   * latest   = serviceDict[@"latest"];
+        
+        if( count == nil){
+            count = @(1);
+        }else{
+            count = @(count.integerValue + 1);
+        }
+        
+        if( !earliest || [earliest compare:act.date] == NSOrderedDescending ){
+            earliest = act.date;
+        }
+        
+        if( !latest || [latest compare:act.date] == NSOrderedAscending ){
+            latest = act.date;
+        }
+        
+        serviceDict[@"count"] = count;
+        serviceDict[@"earliest"] = earliest;
+        serviceDict[@"latest"] = latest;
+    }
+    return rv;
+}
 
 -(NSArray*)activitiesWithin:(NSTimeInterval)time of:(NSDate*)date{
     NSMutableArray * rv = [NSMutableArray array];
