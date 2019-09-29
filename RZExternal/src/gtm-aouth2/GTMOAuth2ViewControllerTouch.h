@@ -29,6 +29,11 @@
 
 #if TARGET_OS_IPHONE
 
+#if defined(__IPHONE_9_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0)
+#define GTMOAUTH2AUTHENTICATION_DEPRECATE_OLD_ENUMS 1
+#endif
+
+
 #import <UIKit/UIKit.h>
 
 #import "GTMOAuth2Authentication.h"
@@ -298,6 +303,13 @@ typedef void (^GTMOAuth2ViewControllerCompletionHandler)(GTMOAuth2ViewController
 // management scheme.
 - (void)swapInCookies;
 
+// Returns the cookie storage where the system cookies are stored. The default
+// implementation returns [NSHTTPCookieStorage sharedHTTPCookieStorage].
+//
+// Subclasses may override systemCookieStorage to implement their own cookie
+// management.
+- (NSHTTPCookieStorage *)systemCookieStorage;
+
 // apps may replace the sign-in class with their own subclass of it
 + (Class)signInClass;
 + (void)setSignInClass:(Class)theClass;
@@ -358,10 +370,15 @@ typedef void (^GTMOAuth2ViewControllerCompletionHandler)(GTMOAuth2ViewController
 // broken out into a helper class. We declare it here in case you'd like to use
 // it too, to store passwords.
 
-enum {
-  kGTMOAuth2KeychainErrorBadArguments = -1301,
-  kGTMOAuth2KeychainErrorNoPassword = -1302
+typedef NS_ENUM(NSInteger, GTMOAuth2KeychainError) {
+  GTMOAuth2KeychainErrorBadArguments = -1301,
+  GTMOAuth2KeychainErrorNoPassword = -1302
 };
+
+#if !GTMOAUTH2AUTHENTICATION_DEPRECATE_OLD_ENUMS
+#define kGTMOAuth2KeychainErrorBadArguments GTMOAuth2KeychainErrorBadArguments
+#define kGTMOAuth2KeychainErrorNoPassword   GTMOAuth2KeychainErrorNoPassword
+#endif
 
 
 @interface GTMOAuth2Keychain : NSObject

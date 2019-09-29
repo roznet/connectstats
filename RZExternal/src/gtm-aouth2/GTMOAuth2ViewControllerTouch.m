@@ -252,7 +252,6 @@ static GTMOAuth2Keychain* gGTMOAuth2DefaultKeychain = nil;
 
 + (NSBundle *)authNibBundle {
   // subclasses may override this to specify a custom nib bundle
-    // BMR
   return [NSBundle bundleForClass:[self class]];
 }
 
@@ -329,7 +328,7 @@ static GTMOAuth2Keychain* gGTMOAuth2DefaultKeychain = nil;
   if (![auth canAuthorize]) {
     if (error) {
       *error = [NSError errorWithDomain:kGTMOAuth2ErrorDomain
-                                   code:kGTMOAuth2ErrorTokenUnavailable
+                                   code:GTMOAuth2ErrorTokenUnavailable
                                userInfo:nil];
     }
     return NO;
@@ -353,7 +352,7 @@ static GTMOAuth2Keychain* gGTMOAuth2DefaultKeychain = nil;
   NSString *nibPath = nil;
   NSBundle *nibBundle = [self nibBundle];
   if (nibBundle == nil) {
-    nibBundle = [NSBundle mainBundle];
+    nibBundle = [NSBundle bundleForClass:[self class]];
   }
   NSString *nibName = self.nibName;
   if (nibName != nil) {
@@ -497,8 +496,12 @@ static Class gSignInClass = Nil;
   self.signInCookies = [self swapBrowserCookies:self.systemCookies];
 }
 
+- (NSHTTPCookieStorage *)systemCookieStorage {
+  return [NSHTTPCookieStorage sharedHTTPCookieStorage];
+}
+
 - (NSArray *)swapBrowserCookies:(NSArray *)newCookies {
-  NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+  NSHTTPCookieStorage *cookieStorage = [self systemCookieStorage];
 
   NSHTTPCookieAcceptPolicy savedPolicy = [cookieStorage cookieAcceptPolicy];
   [cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
@@ -725,7 +728,7 @@ static Class gSignInClass = Nil;
     // Work around iOS 7.0 bug described in https://devforums.apple.com/thread/207323 by temporarily
     // setting our cookie storage policy to be permissive enough to keep the sign-in server
     // satisfied, just in case the app inherited from Safari a policy that blocks all cookies.
-    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    NSHTTPCookieStorage *storage = [self systemCookieStorage];
     NSHTTPCookieAcceptPolicy policy = [storage cookieAcceptPolicy];
     if (policy == NSHTTPCookieAcceptPolicyNever) {
       savedCookiePolicy_ = policy;
@@ -763,7 +766,7 @@ static Class gSignInClass = Nil;
     }
 
     if (savedCookiePolicy_ != (NSHTTPCookieAcceptPolicy)NSUIntegerMax) {
-      NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+      NSHTTPCookieStorage *storage = [self systemCookieStorage];
       [storage setCookieAcceptPolicy:savedCookiePolicy_];
       savedCookiePolicy_ = (NSHTTPCookieAcceptPolicy)NSUIntegerMax;
     }
@@ -844,7 +847,7 @@ static Class gSignInClass = Nil;
     [self.webView loadRequest:self.request];
   } else {
     [initialActivityIndicator_ setHidden:YES];
-    [signIn_ cookiesChanged:[NSHTTPCookieStorage sharedHTTPCookieStorage]];
+    [signIn_ cookiesChanged:[self systemCookieStorage]];
 
     [self updateUI];
   }
@@ -940,8 +943,11 @@ static Class gSignInClass = Nil;
 
 // The Keychain API isn't available on the iPhone simulator in SDKs before 3.0,
 // so, on early simulators we use a fake API, that just writes, unencrypted, to
-// NSUserDefaults.
-#if TARGET_IPHONE_SIMULATOR && __IPHONE_OS_VERSION_MAX_ALLOWED < 30000
+// NSUserDefaults.  Additionally, to mitigate a keychain bug in the iOS 10 simulator
+// that causes SecItemAdd to fail with -34018, we enable NSUserDefaults storage for iOS 10.0.x and
+// 10.1.x.
+#if TARGET_IPHONE_SIMULATOR && (__IPHONE_OS_VERSION_MAX_ALLOWED < 30000 || \
+    (__IPHONE_OS_VERSION_MAX_ALLOWED >= 100000 && __IPHONE_OS_VERSION_MAX_ALLOWED <= 100100))
 #pragma mark Simulator
 
 // Simulator - just simulated, not secure.
@@ -953,12 +959,12 @@ static Class gSignInClass = Nil;
     result = [defaults stringForKey:key];
     if (result == nil && error != NULL) {
       *error = [NSError errorWithDomain:kGTMOAuth2KeychainErrorDomain
-                                   code:kGTMOAuth2KeychainErrorNoPassword
+                                   code:GTMOAuth2KeychainErrorNoPassword
                                userInfo:nil];
     }
   } else if (error != NULL) {
     *error = [NSError errorWithDomain:kGTMOAuth2KeychainErrorDomain
-                                 code:kGTMOAuth2KeychainErrorBadArguments
+                                 code:GTMOAuth2KeychainErrorBadArguments
                              userInfo:nil];
   }
   return result;
@@ -976,7 +982,7 @@ static Class gSignInClass = Nil;
     [defaults synchronize];
   } else if (error != NULL) {
     *error = [NSError errorWithDomain:kGTMOAuth2KeychainErrorDomain
-                                 code:kGTMOAuth2KeychainErrorBadArguments
+                                 code:GTMOAuth2KeychainErrorBadArguments
                              userInfo:nil];
   }
   return didSucceed;
@@ -997,7 +1003,7 @@ static Class gSignInClass = Nil;
     didSucceed = YES;
   } else if (error != NULL) {
     *error = [NSError errorWithDomain:kGTMOAuth2KeychainErrorDomain
-                                 code:kGTMOAuth2KeychainErrorBadArguments
+                                 code:GTMOAuth2KeychainErrorBadArguments
                              userInfo:nil];
   }
   return didSucceed;
@@ -1024,7 +1030,7 @@ static Class gSignInClass = Nil;
 
 // iPhone
 - (NSString *)passwordForService:(NSString *)service account:(NSString *)account error:(NSError **)error {
-  OSStatus status = kGTMOAuth2KeychainErrorBadArguments;
+  OSStatus status = GTMOAuth2KeychainErrorBadArguments;
   NSString *result = nil;
   if (0 < [service length] && 0 < [account length]) {
     CFDataRef passwordData = NULL;
@@ -1053,7 +1059,7 @@ static Class gSignInClass = Nil;
 
 // iPhone
 - (BOOL)removePasswordForService:(NSString *)service account:(NSString *)account error:(NSError **)error {
-  OSStatus status = kGTMOAuth2KeychainErrorBadArguments;
+  OSStatus status = GTMOAuth2KeychainErrorBadArguments;
   if (0 < [service length] && 0 < [account length]) {
     NSMutableDictionary *keychainQuery = [self keychainQueryForService:service account:account];
     status = SecItemDelete((CFDictionaryRef)keychainQuery);
@@ -1072,7 +1078,7 @@ static Class gSignInClass = Nil;
       accessibility:(CFTypeRef)accessibility
             account:(NSString *)account
               error:(NSError **)error {
-  OSStatus status = kGTMOAuth2KeychainErrorBadArguments;
+  OSStatus status = GTMOAuth2KeychainErrorBadArguments;
   if (0 < [service length] && 0 < [account length]) {
     [self removePasswordForService:service account:account error:nil];
     if (0 < [password length]) {
