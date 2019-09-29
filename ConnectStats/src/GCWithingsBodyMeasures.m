@@ -81,10 +81,18 @@
     if (self.theString) {
         GCWithingsBodyMeasuresParser * parser =[GCWithingsBodyMeasuresParser bodyMeasuresParser:[self.theString dataUsingEncoding:self.encoding]];
         self.status = parser.status;
+        NSUInteger added = 0;
         if( parser.status == GCWebStatusOK){
             for (GCHealthMeasure * measure in parser.measures) {
-                [[GCAppGlobal health] addHealthMeasure:measure];
+                if( [[GCAppGlobal health] addHealthMeasure:measure] ){
+                    added += 1;
+                }
             }
+        }
+        if( added > 0){
+            RZLog(RZLogInfo, @"Received %lu healths measures and added %lu new ones", parser.measures.count, added);
+        }else{
+            RZLog(RZLogInfo, @"Received %lu healths measures but no new ones", parser.measures.count);
         }
     }else{
         if (self.navigationController==nil) {

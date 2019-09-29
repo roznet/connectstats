@@ -280,7 +280,8 @@
 
 -(NSArray<NSString*>*)validYearsForBackfill{
     NSInteger year = [[GCAppGlobal calculationCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
-    NSMutableArray * years = [NSMutableArray array];
+    
+    NSMutableArray * years = [NSMutableArray arrayWithObject:NSLocalizedString(@"No Backfill, Use Website", @"Valid Years")];
     for (NSInteger i = MIN(2100,MAX(year,2005)); i>=2005; i--) {
         [years addObject:[NSString stringWithFormat:@"%@", @(i)]];
     }
@@ -560,25 +561,33 @@
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:2];
         
-        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Backfill since ",@"Services")
-                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
-        
-        [gridcell labelForRow:0 andCol:0].attributedText = title;
-        NSArray<NSString*> * years = [self validYearsForBackfill];
-        NSInteger defaultYear = [years.firstObject integerValue] - 1;
-        NSInteger year = (gcConnectStatsServiceUse)[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:defaultYear];
+        NSInteger year = (gcConnectStatsServiceUse)[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:CONFIG_CONNECTSTATS_NO_BACKFILL];
 
-        NSDate * startDate = [NSDate dateForDashedDate:[NSString stringWithFormat:@"%@-01-01", @(year )]];
-        NSTimeInterval timeToCover = [[NSDate date] timeIntervalSinceDate:startDate];
-        NSTimeInterval timeToBackFill = timeToCover / ( 90.0 * 3600.0 * 24.0) * 120.0;// 2min per 90 days
-        GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:timeToBackFill];
-        
-        NSString * timeString = [NSString stringWithFormat:@"Required initial time to synchronise %@", nu];
-        [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                                     withString:[NSString stringWithFormat:@"%@", @(year)]];
-        [gridcell labelForRow:1 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:timeString attributes:[GCViewConfig attribute14Gray]] autorelease];
-        [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
-        
+        if( year == CONFIG_CONNECTSTATS_NO_BACKFILL ){
+            NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Backfill",@"Services")
+                                                                          attributes:[GCViewConfig attributeBold16]] autorelease];
+            [gridcell labelForRow:0 andCol:0].attributedText = title;
+            NSString * timeString = [NSString stringWithFormat:@"History will be downloaded from Garmin Connect"];
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:@"Disabled"];
+            [gridcell labelForRow:1 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:timeString attributes:[GCViewConfig attribute14Gray]] autorelease];
+            [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
+
+        }else{
+            NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Backfill since ",@"Services")
+                                                                          attributes:[GCViewConfig attributeBold16]] autorelease];
+            [gridcell labelForRow:0 andCol:0].attributedText = title;
+            NSDate * startDate = [NSDate dateForDashedDate:[NSString stringWithFormat:@"%@-01-01", @(year )]];
+            NSTimeInterval timeToCover = [[NSDate date] timeIntervalSinceDate:startDate];
+            NSTimeInterval timeToBackFill = timeToCover / ( 90.0 * 3600.0 * 24.0) * 120.0;// 2min per 90 days
+            GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:timeToBackFill];
+            
+            NSString * timeString = [NSString stringWithFormat:@"Required initial time to synchronise %@", nu];
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:[NSString stringWithFormat:@"%@", @(year)]];
+            [gridcell labelForRow:1 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:timeString attributes:[GCViewConfig attribute14Gray]] autorelease];
+            [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
+        }
         rv = gridcell;
 
     }else if( indexPath.row == GC_CONNECTSTATS_DEBUGKEY){
@@ -1149,8 +1158,12 @@
 
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_FILLYEAR):
         {
-            NSString * selected = [self validYearsForBackfill][cell.selected];
-            [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_FILLYEAR intVal:selected.integerValue];
+            if( cell.selected == 0){
+                [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_FILLYEAR intVal:CONFIG_CONNECTSTATS_NO_BACKFILL];
+            }else{
+                NSString * selected = [self validYearsForBackfill][cell.selected];
+                [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_FILLYEAR intVal:selected.integerValue];
+            }
             [GCAppGlobal saveSettings];
             break;
         }
@@ -1269,7 +1282,7 @@
     }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_FILLYEAR){
         NSArray<NSString*>* years = [self validYearsForBackfill];
         NSUInteger index = 0;
-        NSUInteger currentYear = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:[years.firstObject integerValue] - 1];
+        NSUInteger currentYear = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:CONFIG_CONNECTSTATS_NO_BACKFILL];
         for (NSString * one in years) {
             if( one.integerValue == currentYear){
                 break;

@@ -82,15 +82,18 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
             }
             case GCConnectStatsRequestLoginStageBackfill:
             {
-                NSUInteger year = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:2019];
-                NSString * path = GCWebConnectStatsRequestBackfill([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]);
-                NSDictionary *parameters = @{
-                                             @"token_id" : @(self.tokenId),
-                                             @"start_year" : @(year)
-                                             };
-                
-                return [self preparedUrlRequest:path params:parameters];
-
+                NSUInteger year = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:CONFIG_CONNECTSTATS_NO_BACKFILL];
+                if( year != CONFIG_CONNECTSTATS_NO_BACKFILL){
+                    NSString * path = GCWebConnectStatsRequestBackfill([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]);
+                    NSDictionary *parameters = @{
+                        @"token_id" : @(self.tokenId),
+                        @"start_year" : @(year)
+                    };
+                    
+                    return [self preparedUrlRequest:path params:parameters];
+                }else{
+                    return nil;
+                }
             }
             default:
                 return nil;
@@ -126,10 +129,12 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
                 self.loginStage = GCConnectStatsRequestLoginStageEnd;
             }
         }else if( self.loginStage == GCConnectStatsRequestLoginStageBackfill ){
-            NSData * jsonData = [self.theString dataUsingEncoding:self.encoding];
-            NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
-            self.customMessage = info[@"status"];
-            self.status = GCWebStatusCustomMessage;
+            if( [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:CONFIG_CONNECTSTATS_NO_BACKFILL] != CONFIG_CONNECTSTATS_NO_BACKFILL){
+                NSData * jsonData = [self.theString dataUsingEncoding:self.encoding];
+                NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
+                self.customMessage = info[@"status"];
+                self.status = GCWebStatusCustomMessage;
+            }
         }
         [self processDone];
     }

@@ -116,6 +116,7 @@
 #define CONFIG_STATS_START_PAGE           @"config_stats_start_page"
 
 #define CONFIG_FILTER_DISABLED_POWER    10000.
+#define CONFIG_CONNECTSTATS_NO_BACKFILL 0
 
 // Add new to [GCSettingsBugReportViewController configCheck]?
 
