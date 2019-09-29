@@ -41,7 +41,7 @@
 @end
 
 
-static NSString * kKeychainItemName = @"OAuth2 ConnectStats Withings";
+static NSString * kKeychainWithingsItemName = @"OAuth2 ConnectStats Withings ";
 static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
 
 
@@ -90,7 +90,7 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
     return self.withingsAuth != nil;
 }
 +(NSString*)currentKeyChainName{
-    NSString * keyChainName = [kKeychainItemName stringByAppendingString:[[GCAppGlobal profile] currentProfileName]];
+    NSString * keyChainName = [kKeychainWithingsItemName stringByAppendingString:[[GCAppGlobal profile] currentProfileName]];
     return keyChainName;
 }
 
@@ -99,6 +99,7 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
     NSError * error = nil;
     BOOL didAuth = [GTMOAuth2ViewControllerTouch authorizeFromKeychainForName:[GCWithingsReqBase currentKeyChainName]
                                                                authentication:auth error:&error];
+    RZLog(RZLogInfo, @"Parameters from %@: %@", [GCWithingsReqBase currentKeyChainName], auth.parameters);
     
     if (!didAuth && error) {
         RZLog(RZLogError, @"Failed to initiate oauth2 %@", error.localizedDescription);
@@ -144,20 +145,13 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
 
 
 +(void)signout{
+    RZLog(RZLogInfo, @"Withings signout keychain: %@", self.currentKeyChainName);
+    
     [[GCAppGlobal profile] serviceSuccess:gcServiceWithings set:NO];
     [GTMOAuth2ViewControllerTouch removeAuthFromKeychainForName:self.currentKeyChainName];
 
 }
-/*
--(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters{
-    NSURLRequest *preparedRequest = [self.oauth1Controller preparedRequestForPath:path
-                                                                  parameters:parameters
-                                                                  HTTPmethod:@"GET"
-                                                                  oauthToken:self.oauthToken
-                                                                 oauthSecret:self.oauthTokenSecret];
-    return preparedRequest;
-}
-*/
+
 -(gcWebService)service{
     return gcWebServiceWithings;
 }
