@@ -221,7 +221,7 @@
                     [serie.serie sortByX];
                 }
                 
-                serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:gcStatsLast select:select];
+                serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select];
                 rv[key] = serie;
             }else if(info.track == gcCalculatedCachedTrackDataSerie){
                 if ([info.field.key isEqualToString:CALC_VERTICAL_SPEED]) {

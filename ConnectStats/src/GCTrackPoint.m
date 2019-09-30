@@ -108,6 +108,7 @@ void buildStatic(){
     }
     return rv;
 }
+
 +(GCTrackPoint*)trackPointWithCoordinate2D:(CLLocationCoordinate2D)coord
                                         at:(NSDate*)timestamp
                                        for:(NSDictionary<GCField*,GCActivitySummaryValue*>*)sumValues
