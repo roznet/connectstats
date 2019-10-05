@@ -313,6 +313,43 @@
     return calculating;
 }
 
+-(nullable GCStatsDataSerieWithUnit*)standardSerieSampleForXUnit:(GCUnit*)xUnit{
+    // time
+    static NSMutableDictionary<NSString*,GCStatsDataSerieWithUnit*>* cache = nil;
+    if( cache == nil){
+        cache = [NSMutableDictionary dictionary];
+    }
+    
+    if( [xUnit canConvertTo:GCUnit.second] ){
+        GCStatsDataSerieWithUnit * rv = cache[GCUnit.second.key];
+        if( rv ){
+            return rv;
+        }
+        double xs[] = { 5., 10., 15., 30., 45., 60., 2.*60., 5.*60., 10.*60., 15.*60., 30.*60., 45.*60., 60.*60, 90.*60., 2*60.*60., 5*60.*60. };
+
+        size_t n = sizeof(xs)/sizeof(double);
+        rv = [GCStatsDataSerieWithUnit dataSerieWithUnit:xUnit xUnit:xUnit andSerie:RZReturnAutorelease([[GCStatsDataSerie alloc] init])];
+        for (size_t i=0; i<n; ++i) {
+            [rv.serie addDataPointWithX:xs[i] andY:xs[i]];
+        }
+        cache[GCUnit.second.key] = rv;
+        return rv;
+    }else{
+        return nil;
+    }
+}
+
+-(nullable GCStatsDataSerieWithUnit*)standardizedBestRollingTrack:(nonnull GCField*)field
+                                                           thread:(nullable dispatch_queue_t)thread{
+    
+    GCStatsDataSerieWithUnit * base = [self calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest forField:field thread:thread];
+    if( base ){
+        GCStatsInterpFunction * func = [GCStatsInterpFunction interpFunctionWithSerie:base.serie];
+        GCStatsDataSerieWithUnit * standardSerie = [self standardSerieSampleForXUnit:base.xUnit];
+        [GCStatsDataSerie reduceToCommonRange:standardSerie.serie and:base.serie];
+    }
+    return base;
+}
 
 -(nullable GCStatsDataSerieWithUnit*)calculatedDerivedTrack:(gcCalculatedCachedTrack)track
                                                    forField:(nonnull GCField*)field

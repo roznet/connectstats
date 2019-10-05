@@ -866,20 +866,6 @@
 
 }
 
--(GCActivitiesOrganizer*)createEmptyOrganizer:(NSString*)dbname{
-    NSString * dbfp = [RZFileOrganizer writeableFilePath:dbname];
-    [RZFileOrganizer removeEditableFile:dbname];
-    FMDatabase * db = [FMDatabase databaseWithPath:dbfp];
-    [db open];
-    [GCActivitiesOrganizer ensureDbStructure:db];
-    [GCHealthOrganizer ensureDbStructure:db];
-    GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
-    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
-    organizer.health = health;
-
-    return organizer;
-}
-
 -(void)testOrganizerMergeServices{
     // To re-create setup for this test:
     //   copy

@@ -578,6 +578,7 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
     return rv;
 }
 
+
 -(NSArray*)compoundLapForTimeIndexSerie:(GCStatsDataSerieWithUnit*)serieu desc:(NSString *)desc{
 
     NSArray * trackpointsCache = self.trackpoints;

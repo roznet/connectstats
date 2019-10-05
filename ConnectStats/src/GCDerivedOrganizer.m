@@ -357,7 +357,9 @@ static BOOL kDerivedEnabled = true;
     if (![activity.activityType isEqualToString:GC_TYPE_RUNNING] && ![activity.activityType isEqualToString:GC_TYPE_CYCLING]) {
         return false;
     }
-    return (![activity ignoreForStats:gcIgnoreModeActivityFocus]) && [activity trackPointsRequireDownload] == false && ![self activityAlreadyProcessed:activity] ;
+    return (![activity ignoreForStats:gcIgnoreModeActivityFocus]) &&
+        [activity trackPointsRequireDownload] == false &&
+        ![self activityAlreadyProcessed:activity] ;
 }
 
 -(NSArray*)activitiesRequiringProcessingIn:(NSArray*)activities limit:(NSUInteger)limit{
@@ -382,11 +384,15 @@ static BOOL kDerivedEnabled = true;
     if (![activity trackdbIsObsolete:activity.trackdb]) {
         // no worker here, this function should already be on worker
         GCStatsDataSerieWithUnit * serie =  [activity calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                    forField:[GCField fieldForFlag:element.field andActivityType:activity.activityType]
+                                                                    forField:[GCField fieldForFlag:element.field
+                                                                                   andActivityType:activity.activityType]
                                                                       thread:nil];
         if( [self debugCheckSerie:serie.serie] ){
             RZLog(RZLogError,@"Bad input serie");
         }
+        
+        
+        
         for (NSNumber * num in @[ @(gcDerivedPeriodAll),@(gcDerivedPeriodMonth),@(gcDerivedPeriodYear)]) {
             gcDerivedPeriod period = num.intValue;
             GCDerivedDataSerie * derivedserie = [self derivedDataSerie:element.derivedType
@@ -448,10 +454,12 @@ static BOOL kDerivedEnabled = true;
                                                             andType:gcDerivedTypeBestRolling
                                                        activityLast:NO]];
                 [toProcess addObject:[GCDerivedQueueElement element:activity
-                                                              field:gcFieldFlagWeightedMeanSpeed andType:gcDerivedTypeBestRolling
+                                                              field:gcFieldFlagWeightedMeanSpeed
+                                                            andType:gcDerivedTypeBestRolling
                                                        activityLast:NO]];
                 [toProcess addObject:[GCDerivedQueueElement element:activity
-                                                              field:gcFieldFlagPower andType:gcDerivedTypeBestRolling
+                                                              field:gcFieldFlagPower
+                                                            andType:gcDerivedTypeBestRolling
                                                        activityLast:YES]];
             }
         }
