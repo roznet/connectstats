@@ -37,6 +37,7 @@
 #import "GCActivityTypes.h"
 
 @class GCSegmentOrganizer;
+@class GCWebAuthorization;
 
 @interface GCAppDelegate : UIResponder <UIApplicationDelegate,CLLocationManagerDelegate>
 
@@ -54,8 +55,8 @@
 @property (nonatomic, retain) GCWatchSessionManager * watch;
 @property (nonatomic, retain) GCSegmentOrganizer * segments;
 @property (nonatomic, retain) GCActivityTypes * activityTypes;
-@property (nonatomic,retain) NSURL * urlToOpen;
-
+@property (nonatomic, retain) NSURL * urlToOpen;
+@property (nonatomic, retain) GCWebAuthorization * webAuthorization;
 
 -(void)saveSettings;
 -(void)addOrSelectProfile:(NSString*)pName;

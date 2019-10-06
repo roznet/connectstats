@@ -1,8 +1,8 @@
-//  MIT Licence
+//  MIT License
 //
-//  Created on 05/10/2014.
+//  Created on 06/10/2019 for ConnectStats
 //
-//  Copyright (c) 2014 Brice Rosenzweig.
+//  Copyright (c) 2019 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
-//  
+//
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-//  
+//
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,20 +21,35 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
-//  
+//
 
-#import "GCGarminRequest.h"
-@import AuthenticationServices;
-@class GTMOAuth2Authentication;
 
-@interface GCWithingsReqBase : GCGarminReqBase<ASWebAuthenticationPresentationContextProviding>
-@property (nonatomic,retain) UINavigationController * navigationController;
-@property (nonatomic,retain) NSString * userId;
-@property (nonatomic,retain) GTMOAuth2Authentication * withingsAuth;
 
--(void)signInToWithings;
--(BOOL)isSignedIn;
-+(void)signout;
-//-(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters;
+#import "GCWebAuthorization.h"
+@import AppAuth;
+
+@interface GCWebAuthorization ()
+@property (nonatomic,strong,nullable) id<OIDExternalUserAgentSession> currentAuthorizationFlow;
+@end
+
+@implementation GCWebAuthorization
+
++(GCWebAuthorization*)webAuthorization{
+    return RZReturnAutorelease([[GCWebAuthorization alloc] init]);
+}
+
+-(void)authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest*)request
+                        presentingViewController:(UIViewController*)controller
+                                        callback:(GCWebAuthorizationCallback)callback{
+    self.currentAuthorizationFlow = [OIDAuthState authStateByPresentingAuthorizationRequest:request presentingViewController:controller callback:callback];
+}
+
+-(BOOL)resumeExternalUserAgentFlowWithURL:(NSURL*)url{
+    if( [self.currentAuthorizationFlow resumeExternalUserAgentFlowWithURL:url] ){
+        self.currentAuthorizationFlow = nil;
+        return YES;
+    }
+    return NO;
+}
 
 @end

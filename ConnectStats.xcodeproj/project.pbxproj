@@ -466,6 +466,9 @@
 		4255765F16D8C8D10080F8CE /* GCActivityMetaValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4255765E16D8C8D10080F8CE /* GCActivityMetaValue.m */; };
 		4255766316D8CA850080F8CE /* GCActivityCalculatedValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4255766216D8CA850080F8CE /* GCActivityCalculatedValue.m */; };
 		42560711169A112E008E9DC3 /* version.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42560710169A112E008E9DC3 /* version.plist */; };
+		425636602349EC5600939A1A /* GCWebAuthorization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4256365F2349EC5600939A1A /* GCWebAuthorization.m */; };
+		425636612349EC5600939A1A /* GCWebAuthorization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4256365F2349EC5600939A1A /* GCWebAuthorization.m */; };
+		425636622349EC5600939A1A /* GCWebAuthorization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4256365F2349EC5600939A1A /* GCWebAuthorization.m */; };
 		4257339A1BC05A1A0080D75F /* GCActivityPreviewingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425733991BC05A1A0080D75F /* GCActivityPreviewingViewController.m */; };
 		4257766423205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4257766323205BB200BD9375 /* GCCellEntryText+GCViewConfig.m */; };
 		4257766523205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4257766323205BB200BD9375 /* GCCellEntryText+GCViewConfig.m */; };
@@ -2815,6 +2818,8 @@
 		4255766116D8CA850080F8CE /* GCActivityCalculatedValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityCalculatedValue.h; path = src/GCActivityCalculatedValue.h; sourceTree = "<group>"; };
 		4255766216D8CA850080F8CE /* GCActivityCalculatedValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityCalculatedValue.m; path = src/GCActivityCalculatedValue.m; sourceTree = "<group>"; };
 		42560710169A112E008E9DC3 /* version.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = version.plist; path = Full/version.plist; sourceTree = "<group>"; };
+		4256365E2349EC5600939A1A /* GCWebAuthorization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCWebAuthorization.h; path = src/GCWebAuthorization.h; sourceTree = "<group>"; };
+		4256365F2349EC5600939A1A /* GCWebAuthorization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCWebAuthorization.m; path = src/GCWebAuthorization.m; sourceTree = "<group>"; };
 		425733981BC05A1A0080D75F /* GCActivityPreviewingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityPreviewingViewController.h; path = src/GCActivityPreviewingViewController.h; sourceTree = "<group>"; };
 		425733991BC05A1A0080D75F /* GCActivityPreviewingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityPreviewingViewController.m; path = src/GCActivityPreviewingViewController.m; sourceTree = "<group>"; };
 		4257766223205BB200BD9375 /* GCCellEntryText+GCViewConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GCCellEntryText+GCViewConfig.h"; path = "src/GCCellEntryText+GCViewConfig.h"; sourceTree = "<group>"; };
@@ -5610,6 +5615,8 @@
 				420063F918C238530031395F /* GCWebConnect+Requests.m */,
 				428FF79D15FB412C007A88FA /* GCWebUrl.h */,
 				428FF79E15FB412C007A88FA /* GCWebUrl.m */,
+				4256365E2349EC5600939A1A /* GCWebAuthorization.h */,
+				4256365F2349EC5600939A1A /* GCWebAuthorization.m */,
 			);
 			name = Communications;
 			sourceTree = "<group>";
@@ -9094,15 +9101,15 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FitFileExplorer/Pods-FitFileExplorer-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AppAuth-macOS/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/GenericJSON-macOS/GenericJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/OAuthSwift/OAuthSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OAuthSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -9116,11 +9123,13 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AppAuth-iOS/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
 				"${BUILT_PRODUCTS_DIR}/GenericJSON-iOS/GenericJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
 			);
@@ -9136,11 +9145,13 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AppAuth-iOS/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
 				"${BUILT_PRODUCTS_DIR}/GenericJSON-iOS/GenericJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
 			);
@@ -9156,11 +9167,13 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AppAuth-iOS/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
 				"${BUILT_PRODUCTS_DIR}/GenericJSON-iOS/GenericJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
 			);
@@ -9252,6 +9265,7 @@
 				42BFC2581DCF511A00EAD40E /* GCCalendarDataDateMarkers.m in Sources */,
 				42BFC2571DCF510100EAD40E /* GCGarminRequestHeartRateZones.m in Sources */,
 				42A22DF619E87191004407B8 /* GCWithingsActivityParser.m in Sources */,
+				425636622349EC5600939A1A /* GCWebAuthorization.m in Sources */,
 				422FAEBB19A1DD6000D09773 /* GCActivityListViewController.m in Sources */,
 				42BFC2531DCF50D800EAD40E /* GCFieldCache.m in Sources */,
 				422FAEBC19A1DD6000D09773 /* GCTabBarController.m in Sources */,
@@ -9645,6 +9659,7 @@
 				42959CED18D8F91100C0B841 /* GCStravaActivityStreams.m in Sources */,
 				42AAB087184D2A82004B4D15 /* GCActivityTypeListViewController.m in Sources */,
 				4201528E1624D5AC004F64EF /* GCMapGradientPathOverlayView.m in Sources */,
+				425636602349EC5600939A1A /* GCWebAuthorization.m in Sources */,
 				42A95B1C16321320000B2082 /* GCLap.m in Sources */,
 				42A95B3A1632DB4B000B2082 /* GCMapAnnotation.m in Sources */,
 				42A95B3D1632FC24000B2082 /* GCMapLegendView.m in Sources */,
@@ -9892,6 +9907,7 @@
 				42B5E2611BA5B216000FAE4E /* GCHealthKitActivityRequest.m in Sources */,
 				42B467BB1DC6A74200279DC8 /* GCAppProfiles.m in Sources */,
 				42B5E2621BA5B216000FAE4E /* GCHealthKitActivityParser.m in Sources */,
+				425636612349EC5600939A1A /* GCWebAuthorization.m in Sources */,
 				42B5E2631BA5B216000FAE4E /* GCHealthKitExportActivity.m in Sources */,
 				422CC8811E6ACA1700195414 /* FITFitFileInterpret.swift in Sources */,
 				42B5E2641BA5B216000FAE4E /* GCHealthKitBodyRequest.m in Sources */,

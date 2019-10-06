@@ -31,6 +31,7 @@
 #include <execinfo.h>
 @import RZExternal;
 @import GoogleMaps;
+@import AppAuth;
 #import "GCSettingsBugReportViewController.h"
 #import "GCWebConnect+Requests.h"
 #import "GCAppActions.h"
@@ -39,6 +40,7 @@
 #import "GCActivity+CSSearch.h"
 #import "GCFieldCache.h"
 #import "GCAppDelegate+Swift.h"
+#import "GCWebAuthorization.h"
 
 #define GC_STARTING_FILE @"starting.log"
 
@@ -115,6 +117,7 @@ void checkVersion(){
     [_watch release];
     [_window release];
     [_worker release];
+    [_webAuthorization release];
 
     [super dealloc];
 }
@@ -181,7 +184,8 @@ void checkVersion(){
     if ([self.profiles serviceEnabled:gcServiceGarmin]) {
         [self.web requireLogin:gcWebServiceGarmin];
     }
-
+    self.webAuthorization = [GCWebAuthorization webAuthorization];
+    
     self.derived = [[[GCDerivedOrganizer alloc] initWithDb:nil andThread:self.worker] autorelease];
 
     // Swift initializations:
@@ -394,8 +398,8 @@ void checkVersion(){
     BOOL rv = false;
     self.urlToOpen = url;
     // check if fit file
-    if( [url.host isEqualToString:@"oauth-callback"]){
-        
+    if( [url.host isEqualToString:@"webauthorization-callback"]){
+        rv = [self.webAuthorization resumeExternalUserAgentFlowWithURL:url];
     }else if ([url.path hasSuffix:@".fit"]) {
         dispatch_async(self.worker,^(){
             [self handleFitFile];
@@ -578,6 +582,8 @@ void checkVersion(){
             NSDictionary * credentials = [NSJSONSerialization JSONObjectWithData:credentialsData options:NSJSONReadingAllowFragments error:&error];
             if( [credentials isKindOfClass:[NSDictionary class]]){
                 self.credentials = credentials;
+            }else{
+                RZLog(RZLogError, @"Failed to read credentials.json %@", error.localizedDescription);
             }
         }
         // if still nil, we didn't succeed
