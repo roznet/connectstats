@@ -313,7 +313,7 @@
     return calculating;
 }
 
--(nullable GCStatsDataSerieWithUnit*)standardSerieSampleForXUnit:(GCUnit*)xUnit{
++(nullable GCStatsDataSerieWithUnit*)standardSerieSampleForXUnit:(GCUnit*)xUnit{
     // time
     static NSMutableDictionary<NSString*,GCStatsDataSerieWithUnit*>* cache = nil;
     if( cache == nil){
@@ -344,8 +344,7 @@
     
     GCStatsDataSerieWithUnit * base = [self calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest forField:field thread:thread];
     if( base ){
-        GCStatsInterpFunction * func = [GCStatsInterpFunction interpFunctionWithSerie:base.serie];
-        GCStatsDataSerieWithUnit * standardSerie = [self standardSerieSampleForXUnit:base.xUnit];
+        GCStatsDataSerieWithUnit * standardSerie = [GCActivity standardSerieSampleForXUnit:base.xUnit];
         [GCStatsDataSerie reduceToCommonRange:standardSerie.serie and:base.serie];
     }
     return base;

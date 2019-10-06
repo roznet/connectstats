@@ -80,10 +80,49 @@
     if( ! act.trackPointsRequireDownload){
         GCStatsDataSerieWithUnit * serieu = [act standardizedBestRollingTrack:[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType] thread:nil];
         
-        NSLog(@"%@", serieu);
+        FMDatabase * db = [[GCAppGlobal derived] deriveddb];
+        NSLog(@"db: %@", db.databasePath);
+        [db executeUpdate:@"DROP TABLE IF EXISTS gc_derived_time_serie"];
+        if (![db tableExists:@"gc_derived_time_serie"]) {
+            RZEXECUTEUPDATE(db, @"CREATE TABLE gc_derived_time_serie (activityId TEXT UNIQUE, fieldKey TEXT, date TIMESTAMP)");
+        }
+        FMResultSet * res = [db getTableSchema:@"gc_derived_time_serie"];
+        NSMutableDictionary * cols = [NSMutableDictionary dictionary];
+        NSMutableDictionary * missing = [NSMutableDictionary dictionary];
+        while( [res next]){
+            cols[ res[@"name"] ] = res[@"type"];
+        }
+        for (GCStatsDataPoint * point in [GCActivity standardSerieSampleForXUnit:GCUnit.second]) {
+            NSString * colname = [NSString stringWithFormat:@"x_%.0f", point.x_data];
+            if( cols[colname] == nil){
+                missing[colname] = @(1);
+                NSString * alterQuery = [NSString stringWithFormat:@"ALTER TABLE gc_derived_time_serie ADD COLUMN %@ REAL", colname];
+                RZEXECUTEUPDATE(db, alterQuery);
+            }
+        }
+        
+        
+        NSMutableDictionary * data = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"activityId" : act.activityId,
+            @"date" : @(act.date.timeIntervalSince1970),
+        }];
+        NSMutableArray * insertFields = [NSMutableArray arrayWithArray:@[ @"activityId",  @"date" ]];
+        NSMutableArray * insertValues = [NSMutableArray arrayWithArray:@[ @":activityId", @":date" ]];
+        
+        for (GCStatsDataPoint * point in serieu.serie) {
+            NSString * colname = [NSString stringWithFormat:@"x_%.0f", point.x_data];
+            data[colname] = @(point.y_data);
+            [insertFields addObject:colname];
+            [insertValues addObject:[@":" stringByAppendingString:colname]];
+        }
+        NSString * insertQuery = [NSString stringWithFormat:@"INSERT INTO gc_derived_time_serie (%@) VALUES (%@)",
+                             [insertFields componentsJoinedByString:@","],
+                            [ insertValues componentsJoinedByString:@","]];
+        if( ![db executeUpdate:insertQuery withParameterDictionary:data]){
+            RZLog(RZLogError, @"db error %@", db.lastErrorMessage);
+        }
+
     }
-    
-    
 }
 
 
