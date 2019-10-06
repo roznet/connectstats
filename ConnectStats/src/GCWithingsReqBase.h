@@ -27,7 +27,7 @@
 @import AuthenticationServices;
 @class GTMOAuth2Authentication;
 
-@interface GCWithingsReqBase : GCGarminReqBase<ASWebAuthenticationPresentationContextProviding>
+@interface GCWithingsReqBase : GCGarminReqBase
 @property (nonatomic,retain) UINavigationController * navigationController;
 @property (nonatomic,retain) NSString * userId;
 @property (nonatomic,retain) GTMOAuth2Authentication * withingsAuth;

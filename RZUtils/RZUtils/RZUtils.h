@@ -71,6 +71,7 @@ FOUNDATION_EXPORT const unsigned char RZUtilsVersionString[];
 #import "RZUtils/GCStatsDateBuckets.h"
 #import "RZUtils/GCStatsDataSerieWithUnit.h"
 #import "RZUtils/GCStatsFunctions.h"
+#import "RZUtils/GCStatsDatabase.h"
 
 #import "RZUtils/TSDataCell.h"
 #import "RZUtils/TSDataPivot.h"

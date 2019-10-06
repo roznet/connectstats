@@ -59,10 +59,17 @@
                                            options:0 error:nil];
     NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     
-    NSString * activityId = nil;
+    NSString * activityIdRun = nil;
+    NSString * activityIdCycling = nil;
     for (NSString * aId in dict[@"types"][@"running"]) {
         if( [GCService serviceForActivityId:aId].service == gcServiceConnectStats){
-            activityId = aId;
+            activityIdRun = aId;
+            break;
+        }
+    }
+    for (NSString * aId in dict[@"types"][@"cycling"]) {
+        if( [GCService serviceForActivityId:aId].service == gcServiceConnectStats){
+            activityIdCycling = aId;
             break;
         }
     }
@@ -71,57 +78,38 @@
     GCActivitiesOrganizer * organizer_cs = [self createEmptyOrganizer:@"test_parsing_derived_cs.db"];
 
     [GCConnectStatsRequestSearch testForOrganizer:organizer_cs withFilesInPath:bundlePath];
-    GCActivity * act = [organizer_cs activityForId:activityId];
-    // Disable backgorund calculation of derived tracks
-    act.settings.worker = nil;
-    
-    // If false, it means the samples did not include the fit file for that run activity
-    XCTAssertFalse(act.trackPointsRequireDownload);
-    if( ! act.trackPointsRequireDownload){
-        GCStatsDataSerieWithUnit * serieu = [act standardizedBestRollingTrack:[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType] thread:nil];
-        
-        FMDatabase * db = [[GCAppGlobal derived] deriveddb];
-        NSLog(@"db: %@", db.databasePath);
-        [db executeUpdate:@"DROP TABLE IF EXISTS gc_derived_time_serie"];
-        if (![db tableExists:@"gc_derived_time_serie"]) {
-            RZEXECUTEUPDATE(db, @"CREATE TABLE gc_derived_time_serie (activityId TEXT UNIQUE, fieldKey TEXT, date TIMESTAMP)");
-        }
-        FMResultSet * res = [db getTableSchema:@"gc_derived_time_serie"];
-        NSMutableDictionary * cols = [NSMutableDictionary dictionary];
-        NSMutableDictionary * missing = [NSMutableDictionary dictionary];
-        while( [res next]){
-            cols[ res[@"name"] ] = res[@"type"];
-        }
-        for (GCStatsDataPoint * point in [GCActivity standardSerieSampleForXUnit:GCUnit.second]) {
-            NSString * colname = [NSString stringWithFormat:@"x_%.0f", point.x_data];
-            if( cols[colname] == nil){
-                missing[colname] = @(1);
-                NSString * alterQuery = [NSString stringWithFormat:@"ALTER TABLE gc_derived_time_serie ADD COLUMN %@ REAL", colname];
-                RZEXECUTEUPDATE(db, alterQuery);
-            }
-        }
-        
-        
-        NSMutableDictionary * data = [NSMutableDictionary dictionaryWithDictionary:@{
-            @"activityId" : act.activityId,
-            @"date" : @(act.date.timeIntervalSince1970),
-        }];
-        NSMutableArray * insertFields = [NSMutableArray arrayWithArray:@[ @"activityId",  @"date" ]];
-        NSMutableArray * insertValues = [NSMutableArray arrayWithArray:@[ @":activityId", @":date" ]];
-        
-        for (GCStatsDataPoint * point in serieu.serie) {
-            NSString * colname = [NSString stringWithFormat:@"x_%.0f", point.x_data];
-            data[colname] = @(point.y_data);
-            [insertFields addObject:colname];
-            [insertValues addObject:[@":" stringByAppendingString:colname]];
-        }
-        NSString * insertQuery = [NSString stringWithFormat:@"INSERT INTO gc_derived_time_serie (%@) VALUES (%@)",
-                             [insertFields componentsJoinedByString:@","],
-                            [ insertValues componentsJoinedByString:@","]];
-        if( ![db executeUpdate:insertQuery withParameterDictionary:data]){
-            RZLog(RZLogError, @"db error %@", db.lastErrorMessage);
-        }
 
+    [RZFileOrganizer removeEditableFile:@"derived_test_time_series.db"];
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"derived_test_time_series.db"]];
+    [db open];
+    RZLog(RZLogInfo, @"db: %@", db.databasePath);
+
+    for (NSString * activityId in @[ activityIdRun, activityIdCycling, activityIdRun]) {
+        
+        GCActivity * act = [organizer_cs activityForId:activityId];
+        // Disable backgorund calculation of derived tracks
+        act.settings.worker = nil;
+        
+        // If false, it means the samples did not include the fit file for that run activity
+        XCTAssertFalse(act.trackPointsRequireDownload);
+        if( ! act.trackPointsRequireDownload && act.trackpoints){
+            for (GCField * field in @[ [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType],
+                                       [GCField fieldForFlag:gcFieldFlagPower andActivityType:act.activityType] ] ) {
+                if( [act hasTrackForField:field] ){
+                    RZLog(RZLogInfo, @"%@ %@", act, field);
+                    GCStatsDataSerieWithUnit * serieu = [act standardizedBestRollingTrack:field thread:nil];
+                    
+                    NSDictionary * keys = @{
+                        @"activityId" : act.activityId,
+                        @"fieldKey" : field.key,
+                    };
+                    
+                    GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:@"gc_derived_time_serie_second"];
+                    [statsDb save:serieu keys:keys];
+                }
+            }
+            
+        }
     }
 }
 

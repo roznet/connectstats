@@ -205,6 +205,8 @@
 		42382B851EAC9E3B00252217 /* RZTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42382B821EAC9E3B00252217 /* RZTableView.swift */; };
 		42382B861EAC9E3B00252217 /* RZTaskRunner.h in Headers */ = {isa = PBXBuildFile; fileRef = 42382B831EAC9E3B00252217 /* RZTaskRunner.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42382B871EAC9E3B00252217 /* RZTaskRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = 42382B841EAC9E3B00252217 /* RZTaskRunner.m */; };
+		4256366F234A2E4000939A1A /* GCStatsDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 4256366D234A2E4000939A1A /* GCStatsDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42563670234A2E4000939A1A /* GCStatsDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4256366E234A2E4000939A1A /* GCStatsDatabase.m */; };
 		426ABCFB1F9D221B003A512A /* UIImage+Resize.h in Headers */ = {isa = PBXBuildFile; fileRef = 426ABCF51F9D221A003A512A /* UIImage+Resize.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		426ABCFC1F9D221B003A512A /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 426ABCF61F9D221A003A512A /* UIImage+Resize.m */; };
 		426ABCFD1F9D221B003A512A /* UIImage+Alpha.h in Headers */ = {isa = PBXBuildFile; fileRef = 426ABCF71F9D221A003A512A /* UIImage+Alpha.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -503,6 +505,8 @@
 		42382B821EAC9E3B00252217 /* RZTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RZTableView.swift; sourceTree = "<group>"; };
 		42382B831EAC9E3B00252217 /* RZTaskRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RZTaskRunner.h; sourceTree = "<group>"; };
 		42382B841EAC9E3B00252217 /* RZTaskRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RZTaskRunner.m; sourceTree = "<group>"; };
+		4256366D234A2E4000939A1A /* GCStatsDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCStatsDatabase.h; sourceTree = "<group>"; };
+		4256366E234A2E4000939A1A /* GCStatsDatabase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCStatsDatabase.m; sourceTree = "<group>"; };
 		426ABCF51F9D221A003A512A /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
 		426ABCF61F9D221A003A512A /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
 		426ABCF71F9D221A003A512A /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
@@ -790,6 +794,8 @@
 				423829891EAB552000252217 /* GCStatsDateBuckets.m */,
 				4238298A1EAB552000252217 /* GCStatsFunctions.h */,
 				4238298B1EAB552000252217 /* GCStatsFunctions.m */,
+				4256366D234A2E4000939A1A /* GCStatsDatabase.h */,
+				4256366E234A2E4000939A1A /* GCStatsDatabase.m */,
 			);
 			path = stats;
 			sourceTree = "<group>";
@@ -1264,6 +1270,7 @@
 				42382A0D1EAB552000252217 /* RZAppTimer.h in Headers */,
 				42382A0F1EAB552000252217 /* RZDependencies.h in Headers */,
 				42382A1E1EAB552000252217 /* RZRemoteDownload.h in Headers */,
+				4256366F234A2E4000939A1A /* GCStatsDatabase.h in Headers */,
 				42382AC61EAC9B5A00252217 /* TSDataCell.h in Headers */,
 				42382A031EAB552000252217 /* FMResultSet+RZHelper.h in Headers */,
 				423829E71EAB552000252217 /* NSString+Mangle.h in Headers */,
@@ -1851,6 +1858,7 @@
 				42382A001EAB552000252217 /* GCUnit.m in Sources */,
 				423829F41EAB552000252217 /* GCStatsDataSerieWithUnit.m in Sources */,
 				42382A061EAB552000252217 /* GCXMLElement.m in Sources */,
+				42563670234A2E4000939A1A /* GCStatsDatabase.m in Sources */,
 				42382A0C1EAB552000252217 /* RZAppConfig.m in Sources */,
 				423829F61EAB552000252217 /* GCStatsDateBuckets.m in Sources */,
 				42382A2F1EAB552000252217 /* FMDatabaseQueue.m in Sources */,

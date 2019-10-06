@@ -46,7 +46,6 @@
 
 
 static NSString * kKeychainWithingsItemName = @"OAuth2 ConnectStats Withings ";
-static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
 static NSString * kCredentialServiceName = @"withings_oauth2";
 
 
