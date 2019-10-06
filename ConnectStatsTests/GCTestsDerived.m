@@ -83,7 +83,10 @@
     FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"derived_test_time_series.db"]];
     [db open];
     RZLog(RZLogInfo, @"db: %@", db.databasePath);
-
+    
+    GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:@"gc_derived_time_serie_second"];
+    NSMutableDictionary * done = [NSMutableDictionary dictionary];
+    
     for (NSString * activityId in @[ activityIdRun, activityIdCycling, activityIdRun]) {
         
         GCActivity * act = [organizer_cs activityForId:activityId];
@@ -103,14 +106,20 @@
                         @"activityId" : act.activityId,
                         @"fieldKey" : field.key,
                     };
-                    
-                    GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:@"gc_derived_time_serie_second"];
-                    [statsDb save:serieu keys:keys];
+                    done[keys] = serieu;
+                    [statsDb save:serieu.serie keys:keys];
                 }
             }
-            
         }
     }
+    for (NSDictionary * keys in done) {
+        GCStatsDataSerieWithUnit * serieu = done[keys];
+        GCStatsDataSerie * reload = [statsDb loadForKeys:keys];
+        XCTAssertEqual(reload.count, serieu.count);
+        
+        XCTAssertEqualObjects(reload, serieu.serie);
+    }
+
 }
 
 

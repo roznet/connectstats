@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class FMDatabase;
-@class GCStatsDataSerieWithUnit;
+@class GCStatsDataSerie;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,8 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(GCStatsDatabase*)database:(FMDatabase*)db table:(NSString*)tableName;
 
--(void)save:(GCStatsDataSerieWithUnit*)serie keys:(NSDictionary*)keys;
-
+-(void)save:(GCStatsDataSerie*)serie keys:(NSDictionary*)keys;
+-(GCStatsDataSerie*)loadForKeys:(NSDictionary*)keys;
 
 @end
 
