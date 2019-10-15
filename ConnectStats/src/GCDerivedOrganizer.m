@@ -609,9 +609,6 @@ static BOOL kDerivedEnabled = true;
         DBCHECK([db executeUpdate:@"CREATE TABLE gc_derived_activity_processed (activityId TEXT UNIQUE, version INTEGER, modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"]);
     }
     
-    if( ![db tableExists:@"gc_derived_series_xUnit_seconds"] ){
-        DBCHECK([db executeUpdate:@""]);
-    }
 }
 
 

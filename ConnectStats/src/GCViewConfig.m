@@ -736,6 +736,7 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     }
     return  @[ NSLocalizedString(@"ConnectStats", @"Download Source"),
                NSLocalizedString(@"Garmin Website", @"Download Source"),
+               NSLocalizedString(@"Both", @"Download Source")
     ];
 }
 
