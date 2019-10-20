@@ -228,6 +228,12 @@
     RZEXECUTEUPDATE(db, @"DROP TABLE gc_derived_activity_processed");
 }
 
+-(void)actionProcessSomeDerived{
+    //db tableExists:@"gc_derived_activity_processed"
+    [[GCAppGlobal derived] processSome];
+}
+
+
 -(void)actionReparseCurrentActivity{
     GCActivity * act = [[GCAppGlobal organizer] currentActivity];
     if( act.service.service == gcServiceConnectStats){

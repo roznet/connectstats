@@ -380,19 +380,34 @@ static BOOL kDerivedEnabled = true;
 -(void)processQueueElement:(GCDerivedQueueElement*)element{
     RZPerformance * performance = [RZPerformance start];
     GCActivity * activity = element.activity;
+    GCStatsDatabase * statsDb = [GCStatsDatabase database:self.db table:@"gc_derived_time_serie_second"];
 
     if (![activity trackdbIsObsolete:activity.trackdb]) {
+        
+        GCField * field = [GCField fieldForFlag:element.field
+                                andActivityType:activity.activityType];
+        
         // no worker here, this function should already be on worker
         GCStatsDataSerieWithUnit * serie =  [activity calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                    forField:[GCField fieldForFlag:element.field
-                                                                                   andActivityType:activity.activityType]
+                                                                    forField:field
                                                                       thread:nil];
         if( [self debugCheckSerie:serie.serie] ){
             RZLog(RZLogError,@"Bad input serie");
         }
         
-        
-        
+        if( [serie.xUnit canConvertTo:GCUnit.second]){
+            GCStatsDataSerieWithUnit * standard = [activity standardizedBestRollingTrack:field thread:nil];
+            
+            if( standard.count > 0){
+                NSDictionary * keys = @{
+                    @"activityId" : element.activity.activityId,
+                    @"fieldKey" : field.key,
+                };
+                RZLog(RZLogInfo, @"derived %@ %@ %@", element.activity, field, standard );
+                [statsDb save:standard.serie keys:keys];
+                
+            }
+        }
         for (NSNumber * num in @[ @(gcDerivedPeriodAll),@(gcDerivedPeriodMonth),@(gcDerivedPeriodYear)]) {
             gcDerivedPeriod period = num.intValue;
             GCDerivedDataSerie * derivedserie = [self derivedDataSerie:element.derivedType
@@ -473,10 +488,19 @@ static BOOL kDerivedEnabled = true;
         [self notifyForString:kNOTIFY_DERIVED_END];
         self.queue = nil;
     }
-    dispatch_async(self.worker,^(){
-        [self processNext];
-    });
-
+    
+    if( self.worker ){
+        dispatch_async(self.worker,^(){
+            [self processNext];
+        });
+    }else{
+        for (GCDerivedQueueElement * element in self.queue) {
+            [self notifyForString:kNOTIFY_DERIVED_NEXT];
+            [self processQueueElement:element];
+        }
+        [self notifyForString:kNOTIFY_DERIVED_END];
+        self.queue = nil;
+    }
 }
 
 -(void)processNext{

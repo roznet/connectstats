@@ -84,8 +84,13 @@
     }
     NSString * bundlePath = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
     
-    GCActivitiesOrganizer * organizer_cs = [self createEmptyOrganizer:@"test_parsing_derived_cs.db"];
+    GCActivitiesOrganizer * organizer_cs = [self createEmptyOrganizer:@"test_parsing_bestrolling_cs.db"];
+    [RZFileOrganizer removeEditableFile:@"test_derived_parsing_bestrolling_cs.db"];
+    FMDatabase * deriveddb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"test_derived_parsing_bestrolling_cs.db"]];
+    [deriveddb open];
 
+    GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initWithDb:deriveddb andThread:nil];
+                                    
     [GCConnectStatsRequestSearch testForOrganizer:organizer_cs withFilesInPath:bundlePath];
 
     [RZFileOrganizer removeEditableFile:@"derived_test_time_series.db"];
@@ -107,6 +112,7 @@
         // If false, it means the samples did not include the fit file for that run activity
         XCTAssertFalse(act.trackPointsRequireDownload);
         if( ! act.trackPointsRequireDownload && act.trackpoints){
+            [derived processActivities:@[ act] ];
             for (GCField * field in @[ [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType],
                                        [GCField fieldForFlag:gcFieldFlagPower andActivityType:act.activityType] ] ) {
                 if( [act hasTrackForField:field] ){
@@ -123,10 +129,15 @@
             }
         }
     }
+    NSDictionary * all = [statsDb loadByKeys];
+    
     for (NSDictionary * keys in done) {
+        GCStatsDataSerie * keyreload = all[keys];
+        
         GCStatsDataSerieWithUnit * serieu = done[keys];
         GCStatsDataSerie * reload = [statsDb loadForKeys:keys];
         XCTAssertEqual(reload.count, serieu.count);
+        XCTAssertEqual(reload.count, keyreload.count);
         
         XCTAssertEqualObjects(reload, serieu.serie);
     }

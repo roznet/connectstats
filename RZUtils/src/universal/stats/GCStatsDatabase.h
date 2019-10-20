@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)save:(GCStatsDataSerie*)serie keys:(NSDictionary*)keys;
 -(GCStatsDataSerie*)loadForKeys:(NSDictionary*)keys;
+-(NSDictionary<NSDictionary*,GCStatsDataSerie*>*)loadByKeys;
 
 @end
 

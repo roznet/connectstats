@@ -97,7 +97,17 @@
     }
     return rv;
 }
-
+-(NSDictionary*)keysForResultSet:(FMResultSet*)res{
+    NSMutableDictionary * rv = [NSMutableDictionary dictionary];
+    NSDictionary * dict = res.resultDictionary;
+    
+    for (NSString * colname in dict) {
+        if( ! [colname hasPrefix:self.dataPointColumnNamePrefix] ){
+            rv[colname] = dict[colname];
+        }
+    }
+    return rv;
+}
 -(GCStatsDataSerie*)serieForResultSet:(FMResultSet*)res{
     GCStatsDataSerie * rv = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     NSDictionary * dict = res.resultDictionary;
@@ -122,6 +132,20 @@
         rv = [self serieForResultSet:res];
     }
     return rv;
+}
+-(NSDictionary<NSDictionary*,GCStatsDataSerie*>*)loadByKeys{
+    NSMutableDictionary * rv = [NSMutableDictionary dictionary];
+    
+    NSString * query = [NSString stringWithFormat:@"SELECT * FROM %@", self.tableName];
+    
+    FMResultSet * res = [self.db executeQuery:query];
+    while( [res next]){
+        GCStatsDataSerie * serie = [self serieForResultSet:res];
+        NSDictionary * keys = [self keysForResultSet:res];
+        rv[ keys ] = serie;
+    }
+    return rv;
+
 }
 
 -(NSString*)whereStatementForKeys:(NSDictionary*)keys{
