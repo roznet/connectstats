@@ -45,7 +45,7 @@ typedef NS_ENUM(NSUInteger, gcTrackStatsStyle){
 
 // Output
 @property (nonatomic,readonly) GCStatsDataSerieWithUnit * data;
-@property (nonatomic,readonly) GCStatsDataSerieWithUnit * extra_data;
+@property (nonatomic,readonly) NSArray<GCStatsDataSerieWithUnit*> * extra_data;
 @property (nonatomic,readonly) GCStatsDataSerie * gradientSerie;
 @property (nonatomic,readonly) NSObject<GCStatsFunction> * gradientFunction;
 // Inputs

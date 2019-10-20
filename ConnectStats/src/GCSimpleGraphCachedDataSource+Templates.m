@@ -463,7 +463,7 @@
             }
 
             if (trackStats.highlightLap) {
-                GCSimpleGraphDataHolder * full = [GCSimpleGraphDataHolder dataHolder:trackStats.extra_data.serie type:gcGraphStep color:plot.color andUnit:plot.yUnit];
+                GCSimpleGraphDataHolder * full = [GCSimpleGraphDataHolder dataHolder:trackStats.extra_data[0].serie type:gcGraphStep color:plot.color andUnit:plot.yUnit];
                 [full.dataSerie addDataPointWithX:range.x_max+1 andY:0.0];
                 full.range = [plot.dataSerie range];
                 plot.color = [GCViewConfig colorForGraphElement:gcSkinGraphColorLapOverlay];
@@ -508,6 +508,17 @@
                         GCSimpleGraphDataHolder * lap = [GCSimpleGraphDataHolder dataHolder:lapSerie.serie type:gcGraphStep color:lapColor andUnit:[trackStats yUnit:0]];
                         [seriesArray insertObject:lap atIndex:0];
                     }
+                }
+            }
+            
+            if( [trackStats nDataSeries]>1){
+                for( NSUInteger i = 1; i < [trackStats nDataSeries]; i++){
+                    GCSimpleGraphDataHolder * extra = [GCSimpleGraphDataHolder dataHolder:[trackStats dataSerie:i]
+                                                                                     type:gcGraphLine
+                                                                                    color:[GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLine]
+                                                                                  andUnit:[trackStats yUnit:i]];
+                    extra.lineWidth = 2.;
+                    [seriesArray addObject:extra];
                 }
             }
             if (samples > 0 && trackStats.statsStyle == gcTrackStatsData) {

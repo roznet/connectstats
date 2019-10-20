@@ -14,6 +14,7 @@
 #import "GCService.h"
 #import "GCTestCase.h"
 #import "GCConnectStatsRequestSearch.h"
+#import "GCConnectStatsRequestFitFile.h"
 #import "GCActivity+CachedTracks.h"
 
 @interface GCTestsDerived : GCTestCase
@@ -62,15 +63,23 @@
     NSString * activityIdRun = nil;
     NSString * activityIdCycling = nil;
     for (NSString * aId in dict[@"types"][@"running"]) {
-        if( [GCService serviceForActivityId:aId].service == gcServiceConnectStats){
-            activityIdRun = aId;
-            break;
+        GCService * service = [GCService serviceForActivityId:aId];
+        if( service.service == gcServiceConnectStats){
+            NSString * fileName = [NSString stringWithFormat:@"track_cs_%@.fit", [service serviceIdFromActivityId:aId ]];
+            if( [RZFileOrganizer bundleFilePathIfExists:fileName forClass:[self class]] ){
+                activityIdRun = aId;
+                break;
+            }
         }
     }
     for (NSString * aId in dict[@"types"][@"cycling"]) {
-        if( [GCService serviceForActivityId:aId].service == gcServiceConnectStats){
-            activityIdCycling = aId;
-            break;
+        GCService * service = [GCService serviceForActivityId:aId];
+        if( service.service == gcServiceConnectStats){
+            NSString * fileName = [NSString stringWithFormat:@"track_cs_%@.fit", [service serviceIdFromActivityId:aId ]];
+            if( [RZFileOrganizer bundleFilePathIfExists:fileName forClass:[self class]] ){
+                activityIdCycling = aId;
+                break;
+            }
         }
     }
     NSString * bundlePath = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
@@ -92,6 +101,8 @@
         GCActivity * act = [organizer_cs activityForId:activityId];
         // Disable backgorund calculation of derived tracks
         act.settings.worker = nil;
+        
+        [GCConnectStatsRequestFitFile testForActivity:act withFilesIn:bundlePath];
         
         // If false, it means the samples did not include the fit file for that run activity
         XCTAssertFalse(act.trackPointsRequireDownload);

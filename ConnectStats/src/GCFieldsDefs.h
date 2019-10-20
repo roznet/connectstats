@@ -23,7 +23,6 @@
 //  SOFTWARE.
 //  
 
-
 //NEWTRACKFIELD  avoid gcFieldFlag if possible
 typedef NS_ENUM(NSUInteger, gcFieldFlag) {
     gcFieldFlagNone                     = 0,

@@ -314,25 +314,21 @@
 }
 
 +(nullable GCStatsDataSerieWithUnit*)standardSerieSampleForXUnit:(GCUnit*)xUnit{
-    // time
-    static NSMutableDictionary<NSString*,GCStatsDataSerieWithUnit*>* cache = nil;
-    if( cache == nil){
-        cache = [NSMutableDictionary dictionary];
-    }
     
     if( [xUnit canConvertTo:GCUnit.second] ){
-        GCStatsDataSerieWithUnit * rv = cache[GCUnit.second.key];
-        if( rv ){
-            return rv;
-        }
-        double xs[] = { 5., 10., 15., 30., 45., 60., 2.*60., 5.*60., 10.*60., 15.*60., 30.*60., 45.*60., 60.*60, 90.*60., 2*60.*60., 5*60.*60. };
+        GCStatsDataSerieWithUnit * rv = nil;
+        
+        double xs[] = {
+            5., 10., 15., 30., 45., 60.,
+            2.*60., 5.*60., 10.*60., 15.*60., 20.*60., 25.0*60.,
+            30.*60., 35.*60., 40.*60., 45.*60., 50.0*60., 55.0*60.,
+            60.*60, 90.*60., 2*60.*60., 5*60.*60. };
 
         size_t n = sizeof(xs)/sizeof(double);
         rv = [GCStatsDataSerieWithUnit dataSerieWithUnit:xUnit xUnit:xUnit andSerie:RZReturnAutorelease([[GCStatsDataSerie alloc] init])];
         for (size_t i=0; i<n; ++i) {
             [rv.serie addDataPointWithX:xs[i] andY:xs[i]];
         }
-        cache[GCUnit.second.key] = rv;
         return rv;
     }else{
         return nil;
@@ -344,7 +340,10 @@
     
     GCStatsDataSerieWithUnit * base = [self calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest forField:field thread:thread];
     if( base ){
+        
         GCStatsDataSerieWithUnit * standardSerie = [GCActivity standardSerieSampleForXUnit:base.xUnit];
+        // Make sure we reduce from a copy so we don't destroy the main serie
+        base = [GCStatsDataSerieWithUnit dataSerieWithOther:base];
         [GCStatsDataSerie reduceToCommonRange:standardSerie.serie and:base.serie];
     }
     return base;

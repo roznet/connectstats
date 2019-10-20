@@ -77,12 +77,21 @@
 +(GCStatsDataPoint*)dataPointWithPoint:(GCStatsDataPoint*)aPoint andValue:(double)aValue{
     GCStatsDataPoint * rv = RZReturnAutorelease([[aPoint.class alloc] init]);
     if (rv) {
-        [rv setDate:[aPoint date]];
         rv.x_data = aPoint.x_data;
         rv.y_data = aValue;
     }
     return rv;
 }
+-(GCStatsDataPoint*)copy{
+    GCStatsDataPoint * rv = RZReturnAutorelease([[self.class alloc] init]);
+    if (rv) {
+        rv.x_data = self.x_data;
+        rv.y_data = self.y_data;
+        
+    }
+    return rv;
+}
+
 -(BOOL)hasValue{
     return true;
 }
@@ -155,6 +164,7 @@
 @end
 
 @implementation GCStatsDataPointNoValue
+
 -(BOOL)hasValue{
     return false;
 }

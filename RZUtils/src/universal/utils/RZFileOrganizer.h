@@ -38,6 +38,7 @@ typedef BOOL (^FileOrganizerMatch)(NSString*fn);
  @param cls Class for the bundle.
  */
 +(NSString*)bundleFilePath:(nullable NSString*)aName forClass:(Class)cls;
++(nullable NSString*)bundleFilePathIfExists:(NSString*)aName forClass:(Class)cls;
 /**
  @brief path to a bundle file
  @param aName file name to add to path, if nil, it will return just the path to the sandbox

@@ -94,7 +94,7 @@ class GarminDataInterpreter {
         let summary = self.summary()
         
         let input = summary.summary
-        var definitions = summary.dto ? GarminDataFieldDefinitions.dtoDefinition : GarminDataFieldDefinitions.nonDtoDefinition
+        let definitions = summary.dto ? GarminDataFieldDefinitions.dtoDefinition : GarminDataFieldDefinitions.nonDtoDefinition
         
         for (key,val) in input {
             if let num = val.doubleValue {

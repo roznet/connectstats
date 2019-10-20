@@ -65,5 +65,15 @@
     return rv;
 
 }
+-(GCStatsDataPointMulti*)copy{
+    GCStatsDataPointMulti * rv = RZReturnAutorelease([[self.class alloc] init]);
+    if (rv) {
+        rv.x_data = self.x_data;
+        rv.y_data = self.y_data;
+        rv.z_data = self.z_data;
+        
+    }
+    return rv;
+}
 
 @end

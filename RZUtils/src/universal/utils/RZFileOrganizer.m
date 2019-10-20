@@ -106,6 +106,13 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
     }
 }
 
++(nullable NSString*)bundleFilePathIfExists:(NSString*)aName forClass:(Class)cls{
+    NSString * rv = [[NSBundle bundleForClass:cls].resourcePath stringByAppendingPathComponent:aName];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:rv]) {
+        rv = nil;
+    }
+    return rv;
+}
 
 +(NSString*)bundleFilePath:(nullable NSString*)aName{
     NSString * bundlePath = [NSBundle mainBundle].resourcePath ;
