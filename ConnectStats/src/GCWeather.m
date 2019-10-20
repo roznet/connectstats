@@ -154,6 +154,31 @@ static void buildCache(){
  "image" : "007.png"
  }
  }
+ 
+ {
+ "latitude" : 51.47168,
+ "longitude" : -0.19566,
+ "timezone" : "Europe/London",
+ "currently" : {
+   "time" : 1566033386,
+   "summary" : "Partly Cloudy",
+   "icon" : "partly-cloudy-day",
+   "precipIntensity" : 0,
+   "precipProbability" : 0,
+   "temperature" : 18.78,
+   "apparentTemperature" : 18.78,
+   "dewPoint" : 12.89,
+   "humidity" : 0.69,
+   "pressure" : 1005.21,
+   "windSpeed" : 5.26,
+   "windGust" : 10.05,
+   "windBearing" : 232,
+   "cloudCover" : 0.35,
+   "uvIndex" : 3,
+   "visibility" : 10.013,
+   "ozone" : 315.2
+ },
+
  */
 
 
@@ -162,47 +187,47 @@ static void buildCache(){
     NSNumber * innumber = nil;
     NSString * instring = nil;
 
-    NSDictionary * sub = nil;
-    sub = dict[@"weatherTypeDTO"];
-    if ([sub isKindOfClass:[NSDictionary class]]) {
-        innumber = sub[@"weatherTypePk"];
-        self.weatherType = [innumber respondsToSelector:@selector(integerValue)] ? innumber.integerValue : 0;
-        instring = sub[@"desc"];
+    NSDictionary * currently = dict[@"currently"];
+    
+    if ([currently isKindOfClass:[NSDictionary class]]) {
+        instring = currently[@"icon"];
+        self.weatherType = [instring isKindOfClass:[NSString class]] ? instring : nil;
+        instring = currently[@"summary"];
         if (instring && [instring isKindOfClass:[NSString class]]) {
             self.weatherTypeDesc = instring;
         }
 
     }else{
-        self.weatherType = 0;
+        self.weatherType = nil;
         self.weatherTypeDesc = nil;
     }
 
-    innumber = dict[@"issueDate"];
+    innumber = currently[@"time"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
-        self.weatherDate = [NSDate dateWithTimeIntervalSince1970:innumber.doubleValue/1000.0];
+        self.weatherDate = [NSDate dateWithTimeIntervalSince1970:innumber.doubleValue];
     }
 
-    innumber = dict[@"temp"];
+    innumber = currently[@"temperature"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
-        self.temperature = [[GCNumberWithUnit numberWithUnitName:@"fahrenheit" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
+        self.temperature = [[GCNumberWithUnit numberWithUnitName:@"celcius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
     }
 
-    innumber = dict[@"apparentTemp"];
+    innumber = currently[@"apparentTemperature"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
-        self.apparentTemperature = [[GCNumberWithUnit numberWithUnitName:@"fahrenheit" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
+        self.apparentTemperature = [[GCNumberWithUnit numberWithUnitName:@"celcius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
     }
 
-    innumber = dict[@"windDirection"];
+    innumber = currently[@"windBearing"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
         self.windDirection = innumber;
     }
 
-    innumber = dict[@"windSpeed"];
+    innumber = currently[@"windSpeed"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
         self.windSpeed = [[GCNumberWithUnit numberWithUnitName:@"mph" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_SPEED];
     }
 
-    innumber = dict[@"relativeHumidity"];
+    innumber = dict[@"humidity"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
         self.relativeHumidity = [GCNumberWithUnit numberWithUnitName:@"percent" andValue:innumber.doubleValue];
     }
@@ -217,29 +242,6 @@ static void buildCache(){
             self.weatherStationLocation = coord;
         }
     }
-
-    instring = dict[@"windDirectionCompassPoint"];
-    if (instring && [instring isKindOfClass:[NSString class]]) {
-        self.windDirectionCompassPoint = instring;
-    }
-
-    sub = dict[@"weatherStationDTO"];
-    if ([sub isKindOfClass:[NSDictionary class]]) {
-        instring = sub[@"name"];
-        if (instring && [instring isKindOfClass:[NSString class]]) {
-            self.weatherStationName = instring;
-        }
-
-        instring = sub[@"id"];
-        if (instring && [instring isKindOfClass:[NSString class]]) {
-            self.weatherStationId = instring;
-        }
-
-    }else{
-        self.weatherStationId = nil;
-        self.weatherStationName = nil;
-    }
-
 }
 
 +(GCWeather*)weatherWithData:(NSDictionary*)dict{
@@ -262,10 +264,8 @@ static void buildCache(){
     [_windDirection release];
     [_windSpeed release];
     [_windDirectionCompassPoint release];
-    [_weatherStationId release];
-    [_weatherStationName release];
     [_weatherTypeDesc release];
-
+    [_weatherType release];
     [_weatherData release];
     [super dealloc];
 }
@@ -273,7 +273,8 @@ static void buildCache(){
     GCWeather * rv = [[[GCWeather alloc] init] autorelease];
     if (rv) {
         rv.weatherDate = [res dateForColumn:@"weatherDate"];
-        rv.weatherType = [res intForColumn:@"weatherType"];
+        //FIX
+        //rv.weatherType = [res intForColumn:@"weatherType"];
         rv.weatherTypeDesc = [res stringForColumn:@"weatherTypeDesc"];
         rv.temperature = [GCNumberWithUnit numberWithUnitName:STOREUNIT_TEMPERATURE andValue:[res doubleForColumn:@"temperature"]];
         rv.apparentTemperature = [GCNumberWithUnit numberWithUnitName:STOREUNIT_TEMPERATURE andValue:[res doubleForColumn:@"apparentTemperature"]];
@@ -289,8 +290,6 @@ static void buildCache(){
             rv.windSpeed = [GCNumberWithUnit numberWithUnitName:STOREUNIT_SPEED andValue:[res doubleForColumn:@"windSpeed"]];
         }
         rv.windDirectionCompassPoint = [res stringForColumn:@"windDirectionCompassPoint"];
-        rv.weatherStationId = [res stringForColumn:@"weatherStationId"];
-        rv.weatherStationName = [res stringForColumn:@"weatherStationName"];
         CLLocationCoordinate2D coord;
         coord.latitude = [res doubleForColumn:@"latitude"];
         coord.longitude = [res doubleForColumn:@"longitude"];
@@ -308,7 +307,7 @@ static void buildCache(){
             RZEXECUTEUPDATE(db, @"INSERT OR REPLACE INTO gc_activities_weather_detail (activityId, weatherDate, weatherType, weatherTypeDesc, temperature, apparentTemperature, relativeHumidity, windDirection, windSpeed, windDirectionCompassPoint, weatherStationId, weatherStationName, latitude, longitude) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                             aId,
                             self.weatherDate ? self.weatherDate : [NSNull null],
-                            @(self.weatherType),
+                            self.weatherType,
                             self.weatherTypeDesc,
                             self.temperature ? [self.temperature number] : [NSNull null],
                             self.apparentTemperature ? [self.apparentTemperature number] : [NSNull null],
@@ -316,8 +315,8 @@ static void buildCache(){
                             self.windDirection ? self.windDirection : [NSNull null],
                             self.windSpeed ? [self.windSpeed number] : [NSNull null],
                             self.windDirectionCompassPoint ? self.windDirectionCompassPoint : [NSNull null],
-                            self.weatherStationId ? self.weatherStationId : [NSNull null],
-                            self.weatherStationName ? self.weatherStationName : [NSNull null],
+                            [NSNull null],
+                            [NSNull null],
                             @(self.weatherStationLocation.latitude),
                             @(self.weatherStationLocation.longitude)
 
@@ -399,7 +398,7 @@ static void buildCache(){
     buildCache();
     UIImage * rv = nil;
     if ([self newFormat]) {
-        NSNumber * ntype = @(self.weatherType);
+        NSString * ntype = self.weatherType;
         NSArray * defs = _weatherTypes[ntype];
         if (defs) {
             rv = [UIImage imageNamed:defs[1]];

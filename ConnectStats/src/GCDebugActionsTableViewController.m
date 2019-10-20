@@ -37,6 +37,7 @@
 #import "GCDerivedOrganizer.h"
 #import "GCHealthOrganizer.h"
 #import "GCViewConfig.h"
+#import "GCConnectStatsRequestFitFile.h"
 
 @import ObjectiveC;
 
@@ -215,7 +216,7 @@
     NSUInteger i = 0;
     for (GCActivity * activity in activities) {
         if (activity.downloadMethod == gcDownloadMethod13 || activity.downloadMethod == gcDownloadMethodModern) {
-            [[GCAppGlobal web] garminDownloadWeather:activity];
+            [[GCAppGlobal web] connectStatsDownloadWeather:activity];
             i++;
         }
     }
@@ -227,16 +228,11 @@
     RZEXECUTEUPDATE(db, @"DROP TABLE gc_derived_activity_processed");
 }
 
--(void)actionLoadActivity{
-    NSCalendar * cal = [NSCalendar currentCalendar];
-    NSDateComponents * comp = [[[NSDateComponents alloc] init] autorelease];
-    comp.day = 30;
-    comp.month = 5;
-    comp.year = 2015;
-    NSDate * date = [cal dateFromComponents:comp];
-
-    [[GCAppGlobal web] healthStoreDayDetails:date];
-    //[[GCAppGlobal web] garminDownloadActivitySummary:@"577776645"];
+-(void)actionReparseCurrentActivity{
+    GCActivity * act = [[GCAppGlobal organizer] currentActivity];
+    if( act.service.service == gcServiceConnectStats){
+        [GCConnectStatsRequestFitFile testForActivity:act withFilesIn:[RZFileOrganizer writeableFilePath:nil]];
+    }
 }
 
 -(void)actionParseSavedHealthKitData{

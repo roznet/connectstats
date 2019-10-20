@@ -130,7 +130,6 @@
         
         XCTAssertEqualObjects(reload, serieu.serie);
     }
-
 }
 
 

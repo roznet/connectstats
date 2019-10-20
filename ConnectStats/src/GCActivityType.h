@@ -104,6 +104,8 @@
 -(BOOL)isPaceValid;
 -(BOOL)isSki;
 
+-(nonnull GCUnit*)preferredSpeedDisplayUnit;
+
 +(nonnull GCActivityTypes*)activityTypes;
 +(void)setActivityTypes:(nonnull GCActivityTypes*)a;
 

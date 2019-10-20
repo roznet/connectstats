@@ -36,7 +36,6 @@
 #import "GCGarminRequestModernActivityTypes.h"
 #import "GCGarminLoginSimulatorRequest.h"
 #import "GCGarminLoginSSORequest.h"
-#import "GCGarminRequestActivityWeather.h"
 #import "GCGarminRequestModernSearch.h"
 #import "GCGarminRequestHeartRateZones.h"
 
@@ -235,11 +234,6 @@
     }
 }
 
--(void)garminDownloadWeather:(GCActivity*)activity{
-    //[self addRequest:[GCGarminActivityWeatherHtml garminActivityWeatherHtml:aId]];
-    [self addRequest:[GCGarminRequestActivityWeather requestWithActivity:activity]];
-}
-
 -(void)garminDownloadActivitySummary:(NSString*)aId{
     if(  [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
         [self addRequest:[[[GCGarminRequestActivityReload alloc] initWithId:aId] autorelease]];
@@ -330,6 +324,9 @@
             [self addRequest:[GCConnectStatsRequestFitFile requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
         });
     }
+}
+-(void)connectStatsDownloadWeather:(GCActivity *)act{
+    
 }
 #pragma mark - strava
 

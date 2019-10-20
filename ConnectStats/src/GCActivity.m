@@ -765,7 +765,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     FMDatabase * db = self.db;
     FMDatabase * trackdb = self.trackdb;
     
-    if ([trackdb tableExists:@"gc_track"] && [trackdb intForQuery:@"SELECT COUNT(*) FROM gc_track"] == aTrack.count) {
+    if ([trackdb tableExists:@"gc_track"] && [trackdb intForQuery:@"SELECT COUNT(*) FROM gc_track"] == self.trackpoints.count) {
         rv = false;
     }
     
@@ -1038,13 +1038,15 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             }
             // attempt to download weather at same time
             if (_downloadMethod == gcDownloadMethod13|| _downloadMethod == gcDownloadMethodModern) {
-                if (![self hasWeather]) {
-                    [[GCAppGlobal web] garminDownloadWeather:self];
-                }
                 // DISABLE STRAVA UPLOAD
                 if ([[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:false]) {
                     [[GCAppGlobal profile] configSet:CONFIG_SHARING_STRAVA_AUTO boolVal:false];
                     [GCAppGlobal saveSettings];
+                }
+            }
+            if(_downloadMethod == gcDownloadMethodConnectStats){
+                if (![self hasWeather]) {
+                    [[GCAppGlobal web] connectStatsDownloadWeather:self];
                 }
             }
         }

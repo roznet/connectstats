@@ -706,20 +706,6 @@
 #pragma mark - Test non activities
 
 -(void)testParsingWeather{
-    NSArray * files = [RZFileOrganizer bundleFilesMatching:^(NSString*fn) {
-        return [fn hasPrefix:@"activityweather"];
-    }
-                                                forClass:[self class]];
-    NSError * err = nil;
-    
-    FMDatabase * weatherdb = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"weather.db" forClass:[self class]]];
-    [weatherdb open];
-    
-    // Parse Weather Old Db
-    NSString * query = @"SELECT * FROM gc_activities_weather ORDER BY activityId DESC";
-    NSMutableDictionary * data = [NSMutableDictionary dictionary];
-    NSString * currentId = nil;
-    NSMutableDictionary * currentSummary = nil;
     
     [RZFileOrganizer removeEditableFile:@"test_newweather.db"];
     FMDatabase * newdb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"test_newweather.db"]];
@@ -727,32 +713,23 @@
     [GCActivity ensureDbStructure:newdb];
     [GCWeather ensureDbStructure:newdb];
     
-    FMResultSet * res = [weatherdb executeQuery:query];
-    while ([res next]) {
-        if (currentId==nil || ![currentId isEqualToString:[res stringForColumn:@"activityId"]]) {
-            currentId = [res stringForColumn:@"activityId"];
-            currentSummary = [NSMutableDictionary dictionaryWithCapacity:5];
-            [data setObject:currentSummary forKey:currentId];
-        }
-        NSString * key = [res stringForColumn:@"weatherField"];
-        NSString * val = [res stringForColumn:@"weatherValue"];
-        if (key&&val&&currentSummary) {
-            [currentSummary setObject:val forKey:key];
-        }
-    }
-
-    NSMutableArray * found = [NSMutableArray array];
-    
+    NSArray * files = @[ @"weather_cs_4646.json"];
+    NSError * err = nil;
     for (NSString * fn in files) {
         NSData * jsonData = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn forClass:[self class]]];
         NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
-        NSNumber * aId = json[@"activityId"];
-        if (![aId isKindOfClass:[NSNull class]]) {
-            GCWeather * weatherNew = [GCWeather weatherWithData:json];
-            [weatherNew saveToDb:newdb forActivityId:[aId stringValue]];
-            [found addObject:aId.stringValue];
+        NSArray * dataArray = json[@"weather"];
+        // change later
+        for (NSDictionary * weatherData in dataArray) {
+            NSString * aId = weatherData[@"file_id"];
+            if (![aId isKindOfClass:[NSNull class]]) {
+                GCWeather * weatherNew = [GCWeather weatherWithData:weatherData];
+                [weatherNew saveToDb:newdb forActivityId:aId];
+                //[found addObject:aId];
+            }
         }
     }
+    /*
     res = [newdb executeQuery:@"SELECT * FROM gc_activities_weather_detail"];
     NSUInteger count = 0;
     while ([res next]) {
@@ -769,6 +746,7 @@
         }
     }
     XCTAssertEqual(count, found.count);
+     */
 }
 
 -(void)testParseActivityTypes{
@@ -1188,5 +1166,10 @@
 }
 
 
+-(void)testSingle{
+    NSString * fp = [RZFileOrganizer writeableFilePath:@"track_cs_16557.fit"];
+    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"YO" fitFilePath:fp startTime:nil]);
+    NSLog(@"%@", fitAct );
 
+}
 @end
