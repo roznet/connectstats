@@ -43,12 +43,27 @@
 //mist|17
 //partly-cloudy|41
 
+NSString * kGCWeatherIconClearDay = @"clear-day";
+NSString * kGCWeatherIconClearNight = @"clear-night";
+NSString * kGCWeatherIconRain = @"rain";
+NSString * kGCWeatherIconSnow = @"snow";
+NSString * kGCWeatherIconSleet = @"sleet";
+NSString * kGCWeatherIconWind = @"wind";
+NSString * kGCWeatherIconFog = @"fog";
+NSString * kGCWeatherIconCloudy = @"cloudy";
+NSString * kGCWeatherIconPartlyCloudyDay = @"partly-cloudy-day";
+NSString * kGCWeatherIconPartlyCloudyNight = @"partly-cloudy-night";
+NSString * kGCWeatherIconHail = @"hail";
+NSString * kGCWeatherIconThunderstorm = @"thunderstorm";
+NSString * kGCWeatherIconTornado = @"tornado";
+NSString * kGCWeatherIconHurricane = @"hurricane";
+
 NS_INLINE double degreesToRadians(double x) { return (x * M_PI / 180.0); };
 NS_INLINE double radiandsToDegrees(double x) { return(x * 180.0 / M_PI); };
 
 static NSDictionary * _weatherIcons = nil;
-static NSDictionary * _windDirection = nil;
 static NSDictionary * _weatherTypes = nil;
+static NSDictionary * _weatherIconToTypes = nil;
 
 static void buildCache(){
     if(_weatherIcons==nil){
@@ -72,52 +87,67 @@ static void buildCache(){
                                                                     @(305): @[ @"Haze", @"mist" ],
                                                                     }];
 
+        _weatherIconToTypes = [[NSDictionary alloc] initWithDictionary:@{
+            kGCWeatherIconClearDay : @(100),
+            kGCWeatherIconClearNight : @(100),
+            kGCWeatherIconRain : @(103),
+            kGCWeatherIconSnow : @(302),
+            kGCWeatherIconSleet : @(302),
+            kGCWeatherIconWind : @(301),
+            kGCWeatherIconFog : @(105),
+            kGCWeatherIconCloudy : @(101),
+            kGCWeatherIconPartlyCloudyDay : @(300),
+            kGCWeatherIconPartlyCloudyNight : @(300),
+            kGCWeatherIconHail :@(202),
+            kGCWeatherIconThunderstorm : @(203),
+            kGCWeatherIconTornado : @(203),
+            kGCWeatherIconHurricane : @(203),
+        }];
+        
         _weatherIcons = [[NSDictionary alloc] initWithDictionary:@{
                           @"fair":                  @"861-sun-2",
                           @"partly-cloudy":         @"862-sun-cloud",
                           @"misty":                 @"863-cloud-2",
                           @"chance-of-showers":     @"864-rain-cloud"
                         }]  ;
-        NSArray * defs = @[@"N",@348.75,@11.25,
-                           @"NNE",@11.25,@33.75,
-                           @"NE",@33.75,@56.25,
-                           @"ENE",@56.25,@78.75,
-                           @"E",@78.75,@101.25,
-                           @"ESE",@101.25,@123.75,
-                           @"SE",@123.75,@146.25,
-                           @"SSE",@146.25,@168.75,
-                           @"S",@168.75,@191.25,
-                           @"SSW",@191.25,@213.75,
-                           @"SW",@213.75,@236.25,
-                           @"WSW",@236.25,@258.75,
-                           @"W",@258.75,@281.25,
-                           @"WNW",@281.25,@303.75,
-                           @"NW",@303.75,@326.25,
-                           @"NNW",@326.25,@348.75,
-                           // french
-                           @"SSO",@191.25,@213.75,
-                           @"SO",@213.75,@236.25,
-                           @"OSO",@236.25,@258.75,
-                           @"O",@258.75,@281.25,
-                           @"ONO",@281.25,@303.75,
-                           @"NO",@303.75,@326.25,
-                           @"NNO",@326.25,@348.75,
-          ];
-
-        NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithCapacity:defs.count];
-        for (NSUInteger i=0; i<defs.count; i+=3) {
-            NSString * dir = defs[i];
-            double from = [defs[i+1] doubleValue];
-            double to   = [defs[i+2] doubleValue];
-
-            if (to < from) {
-                from-=360.;
-            }
-
-            dict[dir] = @((to+from)/2.);
-        }
-        _windDirection = dict;
+    
     }
+}
+
+NSString * windDirectionToCompassPoint(double bearing){
+    static NSArray * _windDirectionToCompass = nil;
+    if( _windDirectionToCompass == nil){
+        _windDirectionToCompass = [[NSArray alloc] initWithArray:@[
+                       @"N",@0,@11.25,
+                       @"NNE",@11.25,@33.75,
+                       @"NE",@33.75,@56.25,
+                       @"ENE",@56.25,@78.75,
+                       @"E",@78.75,@101.25,
+                       @"ESE",@101.25,@123.75,
+                       @"SE",@123.75,@146.25,
+                       @"SSE",@146.25,@168.75,
+                       @"S",@168.75,@191.25,
+                       @"SSW",@191.25,@213.75,
+                       @"SW",@213.75,@236.25,
+                       @"WSW",@236.25,@258.75,
+                       @"W",@258.75,@281.25,
+                       @"WNW",@281.25,@303.75,
+                       @"NW",@303.75,@326.25,
+                       @"NNW",@326.25,@348.75,
+                       @"N",@348.75,@360,
+      ] ];
+    }
+    
+    for( NSUInteger i=0;i<_windDirectionToCompass.count;i+=3){
+        NSString * dir = _windDirectionToCompass[i];
+        double from = [_windDirectionToCompass[i+1] doubleValue];
+        double to   = [_windDirectionToCompass[i+2] doubleValue];
+        
+        if( bearing >= from && bearing <= to){
+            return dir;
+        }
+    }
+    return @"N/A";
 }
 
 @interface GCWeather ()
@@ -183,7 +213,8 @@ static void buildCache(){
 
 
 
--(void)parseNew:(NSDictionary*)dict{
+-(void)parseConnectStats:(NSDictionary*)dict{
+    buildCache();
     NSNumber * innumber = nil;
     NSString * instring = nil;
 
@@ -191,14 +222,13 @@ static void buildCache(){
     
     if ([currently isKindOfClass:[NSDictionary class]]) {
         instring = currently[@"icon"];
-        self.weatherType = [instring isKindOfClass:[NSString class]] ? instring : nil;
+        self.weatherType = [_weatherIconToTypes[instring] integerValue];
         instring = currently[@"summary"];
         if (instring && [instring isKindOfClass:[NSString class]]) {
             self.weatherTypeDesc = instring;
         }
-
     }else{
-        self.weatherType = nil;
+        self.weatherType = 0;
         self.weatherTypeDesc = nil;
     }
 
@@ -220,6 +250,7 @@ static void buildCache(){
     innumber = currently[@"windBearing"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
         self.windDirection = innumber;
+        self.windDirectionCompassPoint = windDirectionToCompassPoint(innumber.doubleValue);
     }
 
     innumber = currently[@"windSpeed"];
@@ -250,7 +281,7 @@ static void buildCache(){
         if (dict[GC_WEATHER_ICON] != nil) {
             rv.weatherData = [NSMutableDictionary dictionaryWithDictionary:dict];
         }else{
-            [rv parseNew:dict];
+            [rv parseConnectStats:dict];
         }
     }
     return rv;
@@ -265,7 +296,6 @@ static void buildCache(){
     [_windSpeed release];
     [_windDirectionCompassPoint release];
     [_weatherTypeDesc release];
-    [_weatherType release];
     [_weatherData release];
     [super dealloc];
 }
@@ -273,8 +303,7 @@ static void buildCache(){
     GCWeather * rv = [[[GCWeather alloc] init] autorelease];
     if (rv) {
         rv.weatherDate = [res dateForColumn:@"weatherDate"];
-        //FIX
-        //rv.weatherType = [res intForColumn:@"weatherType"];
+        rv.weatherType = [res intForColumn:@"weatherType"];
         rv.weatherTypeDesc = [res stringForColumn:@"weatherTypeDesc"];
         rv.temperature = [GCNumberWithUnit numberWithUnitName:STOREUNIT_TEMPERATURE andValue:[res doubleForColumn:@"temperature"]];
         rv.apparentTemperature = [GCNumberWithUnit numberWithUnitName:STOREUNIT_TEMPERATURE andValue:[res doubleForColumn:@"apparentTemperature"]];
@@ -307,7 +336,7 @@ static void buildCache(){
             RZEXECUTEUPDATE(db, @"INSERT OR REPLACE INTO gc_activities_weather_detail (activityId, weatherDate, weatherType, weatherTypeDesc, temperature, apparentTemperature, relativeHumidity, windDirection, windSpeed, windDirectionCompassPoint, weatherStationId, weatherStationName, latitude, longitude) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                             aId,
                             self.weatherDate ? self.weatherDate : [NSNull null],
-                            self.weatherType,
+                            @(self.weatherType),
                             self.weatherTypeDesc,
                             self.temperature ? [self.temperature number] : [NSNull null],
                             self.apparentTemperature ? [self.apparentTemperature number] : [NSNull null],
@@ -398,8 +427,8 @@ static void buildCache(){
     buildCache();
     UIImage * rv = nil;
     if ([self newFormat]) {
-        NSString * ntype = self.weatherType;
-        NSArray * defs = _weatherTypes[ntype];
+        NSUInteger ntype = self.weatherType;
+        NSArray * defs = _weatherTypes[@(ntype)];
         if (defs) {
             rv = [UIImage imageNamed:defs[1]];
         }else{

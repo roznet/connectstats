@@ -133,7 +133,6 @@ void checkVersion(){
           [RZSystemInfo systemDescription]);
 
     RZSimNeedle();
-
     
     [self credentialsForService:@"flurry" andKey:@"connectstats"];
 #if !TARGET_IPHONE_SIMULATOR
@@ -196,14 +195,8 @@ void checkVersion(){
     }
     [RZViewConfig setFontStyle:[GCAppGlobal configGetInt:CONFIG_FONT_STYLE defaultValue:gcFontStyleDynamicType]];
 
-    if( @available( iOS 13.0, *)){
-        if( [[GCAppGlobal profile] configGetBool:@"CONFIG_FIRST_TIME_IOS13" defaultValue:true] ){
-            [[GCAppGlobal profile] configSet:CONFIG_SKIN_NAME stringVal:kGCSkinNameiOS13];
-            [[GCAppGlobal profile] configSet:@"CONFIG_FIRST_TIME_IOS13" boolVal:false];
-            [GCAppGlobal saveSettings];
-        }
-    }
-
+    [self settingsUpdateCheck];
+    
 	_window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     //DONT CHECK IN:
     //self.window = [[[SmudgyWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
@@ -398,7 +391,7 @@ void checkVersion(){
     BOOL rv = false;
     self.urlToOpen = url;
     // check if fit file
-    if( [url.host isEqualToString:@"webauthorization-callback"]){
+    if( [url.host isEqualToString:@"ro-z.net"]){
         rv = [self.webAuthorization resumeExternalUserAgentFlowWithURL:url];
     }else if ([url.path hasSuffix:@".fit"]) {
         dispatch_async(self.worker,^(){
@@ -499,6 +492,51 @@ void checkVersion(){
     return attempts < 3;
 }
 
+-(void)settingsUpdateCheck{
+    
+    if( @available( iOS 13.0, *)){
+        if( [[GCAppGlobal profile] configGetBool:@"CONFIG_FIRST_TIME_IOS13" defaultValue:true] ){
+            [[GCAppGlobal profile] configSet:CONFIG_SKIN_NAME stringVal:kGCSkinNameiOS13];
+            [[GCAppGlobal profile] configSet:@"CONFIG_FIRST_TIME_IOS13" boolVal:false];
+            [self saveSettings];
+        }
+    }
+    
+    NSString * currentVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
+    BOOL firstTimeForCurrentVersion = false;
+    
+    NSDictionary * versions = self.settings[CONFIG_VERSIONS_SEEN];
+    if( versions == nil){
+        self.settings[CONFIG_VERSIONS_SEEN] = @{ currentVersion: [NSDate date] };
+        [self saveSettings];
+        firstTimeForCurrentVersion = true;
+    }else{
+        NSDate * already = versions[currentVersion];
+        
+        if( already == nil){
+            NSMutableDictionary * newVersions = [NSMutableDictionary dictionaryWithDictionary:versions];
+            newVersions[currentVersion] = [NSDate date];
+            
+            self.settings[CONFIG_VERSIONS_SEEN] = newVersions;
+            [self saveSettings];
+            firstTimeForCurrentVersion = true;
+        }
+    }
+    
+    if( firstTimeForCurrentVersion ){
+        RZLog(RZLogInfo,@"First time for version %@", currentVersion);
+    }else{
+        RZLog(RZLogInfo,@"Current Version %@ first seen %@ (%lu total versions)", currentVersion, versions[currentVersion], (unsigned long)versions.count);
+    }
+}
+
+-(void)versionSummary{
+    NSDictionary * versionsSeen = self.settings[CONFIG_VERSIONS_SEEN];
+    NSArray<NSString*>*versions = [[versionsSeen allKeys] sortedArrayUsingSelector:@selector(compareVersion:)];
+    for (NSString * version in versions) {
+        RZLog(RZLogInfo,@"Version %@ seen %@", version, versionsSeen[version]);
+    }
+}
 -(void)searchAllActivities{
     // Should have better logic for all services
     if ([self.profiles configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] == true || [self.profiles configGetBool:PROFILE_FULL_DOWNLOAD_DONE defaultValue:false]) {

@@ -33,7 +33,6 @@
 #import "GCHealthZoneCalculator.h"
 #import "GCGarminActivityLapsParser.h"
 #import "GCGarminActivityDetailJsonParser.h"
-#import "GCGarminActivityWeatherParser.h"
 #import "GCActivity+Import.h"
 
 #define kRegrUnit @"unit"

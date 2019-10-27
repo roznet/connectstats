@@ -51,6 +51,7 @@ NSString * GCWebConnectStatsValidateUser(gcWebConnectStatsConfig config);
 NSString * GCWebConnectStatsSearch(gcWebConnectStatsConfig config);
 NSString * GCWebConnectStatsRequestBackfill(gcWebConnectStatsConfig config);
 NSString * GCWebConnectStatsFitFile(gcWebConnectStatsConfig config);
+NSString * GCWebConnectStatsWeather(gcWebConnectStatsConfig config);
 NSString * GCWebConnectStatsRegisterUser( gcWebConnectStatsConfig config, NSString * accessToken, NSString * accessTokenSecret);
 
 NSString * GCWebSearchURL( NSUInteger start );

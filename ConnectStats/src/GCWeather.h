@@ -41,7 +41,7 @@
 
 @interface GCWeather : NSObject
 
-@property (nonatomic,retain) NSString * weatherType;
+@property (nonatomic,assign) NSUInteger weatherType;
 @property (nonatomic,retain) NSDate * weatherDate;
 
 @property (nonatomic,retain) GCNumberWithUnit * temperature;

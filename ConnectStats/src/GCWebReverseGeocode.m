@@ -96,7 +96,7 @@
 }
 
 -(void)reverseGeocodeActivity{
-    if ([self.activity.location isEqualToString:@""]) {
+    if (self.activity.location == nil || [self.activity.location isEqualToString:@""]) {
         CLLocation * loc = [[[CLLocation alloc] initWithLatitude:_activity.beginCoordinate.latitude
                                                        longitude:_activity.beginCoordinate.longitude] autorelease];
         [self.geocoder reverseGeocodeLocation:loc completionHandler:^(NSArray *placemarks, NSError *error) {

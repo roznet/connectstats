@@ -73,6 +73,7 @@
 #define CONFIG_WIFI_DOWNLOAD_DETAILS    @"config_wifi_download_details"
 #define CONFIG_FULL_DUPLICATE_CHECK     @"config_full_duplicate_check"
 #define CONFIG_SKIN_NAME                @"config_skin_name"
+#define CONFIG_VERSIONS_SEEN            @"config_versions_seen"
 
 #define CONFIG_WITHINGS_USERSLIST       @"config_withings_userlist"
 #define CONFIG_WITHINGS_USER            @"config_withings_user"

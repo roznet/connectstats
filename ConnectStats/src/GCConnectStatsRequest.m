@@ -241,8 +241,9 @@
             self.oauthTokenSecret = oauthTokens[@"oauth_token_secret"];
             [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_TOKEN stringVal:self.oauthToken];
             [[GCAppGlobal profile] setPassword:self.oauthTokenSecret forService:gcServiceConnectStats];
-            
-            [GCAppGlobal saveSettings];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [GCAppGlobal saveSettings];
+            });
             
             dispatch_async([GCAppGlobal worker], ^(){
                 [self signInConnectStatsStep];

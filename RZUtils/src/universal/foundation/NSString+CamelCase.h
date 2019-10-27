@@ -40,4 +40,5 @@
  */
 -(NSString *)truncateIfLongerThan:(NSUInteger)nchar ellipsis:(NSString*)ellipsis;
 
+-(NSComparisonResult)compareVersion:(NSString*)other;
 @end

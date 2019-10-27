@@ -193,7 +193,7 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
 }
 
 -(void)signInToWithings{
-    [self signInToWithingsLegacy];
+    [self signInToWithingsAppAuth];
 }
 
 

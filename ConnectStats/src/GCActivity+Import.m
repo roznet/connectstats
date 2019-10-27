@@ -417,9 +417,16 @@
         }
     }
     self.downloadMethod = gcDownloadMethodConnectStats;
-    if (self.metaData==nil) {
-        [self updateMetaData:[NSMutableDictionary dictionary]];
+    
+    NSMutableDictionary * meta = [NSMutableDictionary dictionary];
+    if( data[@"deviceName"] ){
+        meta[ GC_META_DEVICE ] = [GCActivityMetaValue activityMetaValueForDisplay:data[@"deviceName"] andField:GC_META_DEVICE];
     }
+    if( atype ){
+        meta[ GC_META_ACTIVITYTYPE ] = [GCActivityMetaValue activityMetaValueForDisplay:atype.displayName key:atype.key andField:GC_META_ACTIVITYTYPE];
+    }
+    [self addEntriesToMetaData:meta];
+    
     if (self.activityId && self.activityType) {
         NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionaryWithCapacity:data.count];
         [self parseData:data into:newSummaryData usingDefs:defs];
@@ -442,6 +449,7 @@
         if ([lat respondsToSelector:@selector(doubleValue)] && [lon respondsToSelector:@selector(doubleValue)]) {
             self.beginCoordinate = CLLocationCoordinate2DMake([lat doubleValue], [lon doubleValue]);
         }
+        self.location = @"";
         NSString * startdate = data[@"startTimeInSeconds"];
         if([startdate respondsToSelector:@selector(doubleValue)]) {
             self.date = [NSDate dateWithTimeIntervalSince1970:[startdate doubleValue] ];
@@ -455,7 +463,6 @@
         if([externalId isKindOfClass:[NSString class]]){
             self.externalServiceActivityId = [[GCService service:gcServiceGarmin] activityIdFromServiceId:externalId];
         }
-        
         NSString * parentId = data[@"parentSummaryId"];
         if( parentId ){
             self.parentId = data[@"parentSummaryId"];

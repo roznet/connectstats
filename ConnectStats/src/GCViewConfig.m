@@ -731,12 +731,12 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     if (debugIsEnabled) {
         return  @[ NSLocalizedString(@"ConnectStats", @"Download Source"),
                    NSLocalizedString(@"Garmin Website", @"Download Source"),
-                   NSLocalizedString(@"Both", @"Download Source")
+                   NSLocalizedString(@"All", @"Download Source")
         ];
     }
     return  @[ NSLocalizedString(@"ConnectStats", @"Download Source"),
                NSLocalizedString(@"Garmin Website", @"Download Source"),
-               NSLocalizedString(@"Both", @"Download Source")
+               NSLocalizedString(@"All", @"Download Source")
     ];
 }
 

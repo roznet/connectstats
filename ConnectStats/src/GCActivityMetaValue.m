@@ -122,6 +122,17 @@
     return rv;
 
 }
++(GCActivityMetaValue*)activityMetaValueForDisplay:(NSString*)aDisp key:(NSString*)key andField:(NSString*)afield{
+    GCActivityMetaValue * rv = [[[GCActivityMetaValue alloc] init] autorelease];
+    if (rv) {
+        rv.field = afield;
+        rv.display = aDisp;
+        rv.key = key;
+    }
+    return rv;
+
+}
+
 -(void)updateDb:(FMDatabase*)db forActivityId:(NSString*)activityId{
     [db executeUpdate:@"UPDATE gc_activities_meta SET display=?, key=? WHERE activityId = ? AND field = ?",
      self.display,

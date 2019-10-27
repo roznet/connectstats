@@ -251,7 +251,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 }
 
 -(NSString*)displayName{
-    if ([_activityName isEqualToString:@"Untitled"] && ![_location isEqualToString:@""]){
+    if (([_activityName isEqualToString:@"Untitled"] || [_activityName isEqualToString:@""]) && ![_location isEqualToString:@""]){
         return _location;
     }
     return _activityName ?:@"";
@@ -1703,11 +1703,24 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 }
 
 -(GCActivityMetaValue*)metaValueForField:(NSString*)field{
-    return _metaData[field];
+    GCActivityMetaValue * rv = _metaData[field];
+    if( rv == nil){
+        if( [field isEqualToString:GC_META_ACTIVITYTYPE] ){
+            rv = [GCActivityMetaValue activityMetaValueForDisplay:self.activityTypeDetail.displayName andField:GC_META_ACTIVITYTYPE];
+        }else if ([field isEqualToString:GC_META_SERVICE]){
+            rv = [GCActivityMetaValue activityMetaValueForDisplay:self.service.displayName andField:GC_META_ACTIVITYTYPE];
+        }
+    }
+    return rv;
 }
 
 -(void)updateMetaData:(NSDictionary<NSString *,GCActivityMetaValue *> *)meta{
-    self.metaData = meta;
+    if( self.metaData == nil){
+        self.metaData = meta;
+    }else{
+        
+        self.metaData = meta;
+    }
     [self skipAlways];
 }
 

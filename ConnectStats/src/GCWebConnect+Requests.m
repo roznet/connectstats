@@ -42,6 +42,7 @@
 #import "GCConnectStatsRequestSearch.h"
 #import "GCConnectStatsRequestFitFile.h"
 #import "GCConnectStatsRequestLogin.h"
+#import "GCConnectStatsRequestWeather.h"
 
 #import "GCWithingsBodyMeasures.h"
 #import "GCWithingsActivityMeasures.h"
@@ -326,7 +327,12 @@
     }
 }
 -(void)connectStatsDownloadWeather:(GCActivity *)act{
-    
+    if( [GCAppGlobal currentNavigationController] && ( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] || [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] )){
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCConnectStatsRequestWeather requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
+        });
+    }
+
 }
 #pragma mark - strava
 

@@ -77,5 +77,5 @@
 -(NSDictionary<NSString*,NSString*>*)credentialsForService:(NSString*)service;
 -(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;
 
-
+-(void)versionSummary;
 @end

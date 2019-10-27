@@ -1,8 +1,8 @@
-//  MIT Licence
+//  MIT License
 //
-//  Created on 23/02/2013.
+//  Created on 26/10/2019 for ConnectStats
 //
-//  Copyright (c) 2013 Brice Rosenzweig.
+//  Copyright (c) 2019 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
-//  
+//
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-//  
+//
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,25 +21,20 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
-//  
+//
 
-#import <Foundation/Foundation.h>
 
-@interface GCActivityMetaValue : NSObject<NSSecureCoding>
 
-@property (nonatomic,retain) NSString * field;
-@property (nonatomic,retain) NSString * display;
-@property (nonatomic,retain) NSString * key;
+#import "GCConnectStatsRequest.h"
+@class GCActivity;
 
-+(GCActivityMetaValue*)activityValueForResultSet:(FMResultSet*)res;
-+(GCActivityMetaValue*)activityValueForDict:(NSDictionary*)aDict andField:(NSString*)afield;
-+(GCActivityMetaValue*)activityMetaValueForDisplay:(NSString*)aDisp andField:(NSString*)afield;
-+(GCActivityMetaValue*)activityMetaValueForDisplay:(NSString*)aDisp key:(NSString*)key andField:(NSString*)afield;
+NS_ASSUME_NONNULL_BEGIN
 
--(void)updateDb:(FMDatabase*)db forActivityId:(NSString*)activityId;
--(void)saveToDb:(FMDatabase*)db forActivityId:(NSString*)activityId;
--(BOOL)isEqualToValue:(GCActivityMetaValue*)other;
+@interface GCConnectStatsRequestWeather : GCConnectStatsRequest
++(GCConnectStatsRequestWeather*)requestWithActivity:(GCActivity*)act andNavigationController:(nullable UINavigationController*)nav;
 
--(BOOL)match:(NSString*)str;
++(GCActivity*)testForActivity:(GCActivity*)act withFilesIn:(NSString*)path;
 
 @end
+
+NS_ASSUME_NONNULL_END

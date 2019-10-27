@@ -65,9 +65,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         if (weather.newFormat ) {
             [self labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:temp attribute:@selector(attribute16)];
             [self labelForRow:0 andCol:1].attributedText = [GCViewConfig attributedString:[weather weatherDisplayField:GC_WEATHER_WIND] attribute:@selector(attribute16)];
-            [self labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:@"" attribute:@selector(attribute14Gray)];
-            GCNumberWithUnit * distance = [[weather weatherStationDistanceFromCoordinate:activity.beginCoordinate] convertToGlobalSystem];
-            [self labelForRow:1 andCol:1].attributedText = [GCViewConfig attributedString:distance.description attribute:@selector(attribute14Gray)];
+            [self labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:weather.weatherTypeDesc?:@"" attribute:@selector(attribute14Gray)];
         }else{
             [self labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:temp attribute:@selector(attribute16)];
             [self labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:[weather weatherDisplayField:GC_WEATHER_WIND] attribute:@selector(attribute16)];
@@ -308,6 +306,12 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         NSString * device = [activity metaValueForField:GC_META_DEVICE].display;
         if (device) {
             [keys addObject:GC_META_DEVICE];
+        }
+    }
+    if (keys.count < 3) {
+        NSString * service = [activity metaValueForField:GC_META_SERVICE].display;
+        if (service) {
+            [keys addObject:GC_META_SERVICE];
         }
     }
 

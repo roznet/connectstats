@@ -34,6 +34,7 @@
 #import "GCAppGlobal.h"
 #import "GCService.h"
 #import "GCViewConfig.h"
+#import "GCAppDelegate.h"
 
 
 NSString * kBugFilename = @"bugreport.zip";
@@ -106,7 +107,9 @@ NSString * kBugNoCommonId = @"-1";
     }
     if([[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:false]){
         RZLog(RZLogInfo, @"Enabled:  Strava Upload");
-    }    
+    }
+    GCAppDelegate * appDelegate = (GCAppDelegate*)[[UIApplication sharedApplication] delegate];
+    [appDelegate versionSummary];
 }
 
 -(void)checkDb{

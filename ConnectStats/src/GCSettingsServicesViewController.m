@@ -115,7 +115,7 @@
     }
     if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats]){
         [dynamic addObjectsFromArray:@[
-            @( GC_CONNECTSTATS_FILLYEAR ),
+            //@( GC_CONNECTSTATS_FILLYEAR ),
             @( GC_CONNECTSTATS_LOGOUT ),
         ] ];
     }
@@ -1013,7 +1013,7 @@
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_ENABLE):
         {
             if( cell.on ){
-                gcGarminDownloadSource lastSource = [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LAST_SOURCE defaultValue:gcGarminDownloadSourceGarminWeb];
+                gcGarminDownloadSource lastSource = [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LAST_SOURCE defaultValue:gcGarminDownloadSourceBoth];
                 [GCViewConfig setGarminDownloadSource:lastSource];
                 
                 RZLog(RZLogInfo, @"Garmin: Enabled Source %@ Web=%lu ConnectStats=%lu",
