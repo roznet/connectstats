@@ -465,9 +465,6 @@
 		4255765F16D8C8D10080F8CE /* GCActivityMetaValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4255765E16D8C8D10080F8CE /* GCActivityMetaValue.m */; };
 		4255766316D8CA850080F8CE /* GCActivityCalculatedValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4255766216D8CA850080F8CE /* GCActivityCalculatedValue.m */; };
 		42560711169A112E008E9DC3 /* version.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42560710169A112E008E9DC3 /* version.plist */; };
-		425636602349EC5600939A1A /* GCWebAuthorization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4256365F2349EC5600939A1A /* GCWebAuthorization.m */; };
-		425636612349EC5600939A1A /* GCWebAuthorization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4256365F2349EC5600939A1A /* GCWebAuthorization.m */; };
-		425636622349EC5600939A1A /* GCWebAuthorization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4256365F2349EC5600939A1A /* GCWebAuthorization.m */; };
 		4257339A1BC05A1A0080D75F /* GCActivityPreviewingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425733991BC05A1A0080D75F /* GCActivityPreviewingViewController.m */; };
 		4257766423205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4257766323205BB200BD9375 /* GCCellEntryText+GCViewConfig.m */; };
 		4257766523205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4257766323205BB200BD9375 /* GCCellEntryText+GCViewConfig.m */; };
@@ -708,10 +705,6 @@
 		42A22DE119E1AAFD004407B8 /* GCWithingsBodyMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DDF19E1AAFD004407B8 /* GCWithingsBodyMeasures.m */; };
 		42A22DE519E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DE419E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m */; };
 		42A22DE619E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DE419E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m */; };
-		42A22DE919E5E9FA004407B8 /* GCWithingsActivityMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DE819E5E9FA004407B8 /* GCWithingsActivityMeasures.m */; };
-		42A22DEA19E5E9FA004407B8 /* GCWithingsActivityMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DE819E5E9FA004407B8 /* GCWithingsActivityMeasures.m */; };
-		42A22DED19E5F30C004407B8 /* GCWithingsSleepMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DEC19E5F30C004407B8 /* GCWithingsSleepMeasures.m */; };
-		42A22DEE19E5F30C004407B8 /* GCWithingsSleepMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DEC19E5F30C004407B8 /* GCWithingsSleepMeasures.m */; };
 		42A22DF119E726A9004407B8 /* GCWithingsSleepParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF019E726A9004407B8 /* GCWithingsSleepParser.m */; };
 		42A22DF219E726A9004407B8 /* GCWithingsSleepParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF019E726A9004407B8 /* GCWithingsSleepParser.m */; };
 		42A22DF519E87191004407B8 /* GCWithingsActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF419E87191004407B8 /* GCWithingsActivityParser.m */; };
@@ -786,8 +779,6 @@
 		42A66BD1160D000D00DA29A5 /* GCViewConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A66BD0160D000D00DA29A5 /* GCViewConfig.m */; };
 		42A66BDB160D0A0800DA29A5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A66BDA160D0A0800DA29A5 /* QuartzCore.framework */; };
 		42A672C81DECC4EA00BE8E26 /* FITSelectionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A672C71DECC4EA00BE8E26 /* FITSelectionContext.swift */; };
-		42A6E3411D55110C0081608D /* GCStravaTrainingZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A6E3401D55110B0081608D /* GCStravaTrainingZones.m */; };
-		42A6E3421D55110C0081608D /* GCStravaTrainingZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A6E3401D55110B0081608D /* GCStravaTrainingZones.m */; };
 		42A89C1F1D627444007CF90D /* GCUnitTrainingZone.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A89C1E1D627444007CF90D /* GCUnitTrainingZone.m */; };
 		42A89C201D627444007CF90D /* GCUnitTrainingZone.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A89C1E1D627444007CF90D /* GCUnitTrainingZone.m */; };
 		42A89C261D63B2D7007CF90D /* GCTestHealthZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A89C251D63B2D7007CF90D /* GCTestHealthZones.m */; };
@@ -880,8 +871,6 @@
 		42B5E27B1BA5B216000FAE4E /* GCWithingsActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF419E87191004407B8 /* GCWithingsActivityParser.m */; };
 		42B5E27F1BA5B216000FAE4E /* GCWithingsReqBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DDB19E1A798004407B8 /* GCWithingsReqBase.m */; };
 		42B5E2801BA5B216000FAE4E /* GCWithingsBodyMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DDF19E1AAFD004407B8 /* GCWithingsBodyMeasures.m */; };
-		42B5E2811BA5B216000FAE4E /* GCWithingsActivityMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DE819E5E9FA004407B8 /* GCWithingsActivityMeasures.m */; };
-		42B5E2821BA5B216000FAE4E /* GCWithingsSleepMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DEC19E5F30C004407B8 /* GCWithingsSleepMeasures.m */; };
 		42B5E2831BA5B216000FAE4E /* GCStravaActivityStreamsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959CEF18D9016200C0B841 /* GCStravaActivityStreamsParser.m */; };
 		42B5E2841BA5B216000FAE4E /* GCStravaActivityListParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959CCC18D4920900C0B841 /* GCStravaActivityListParser.m */; };
 		42B5E2851BA5B216000FAE4E /* GCStravaActivityLapsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42461D221922D169001B03C7 /* GCStravaActivityLapsParser.m */; };
@@ -1235,7 +1224,6 @@
 		42BFC25C1DCF516000EAD40E /* GCLapSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7D4271DAC293B0089806B /* GCLapSwim.m */; };
 		42BFC25D1DCF516800EAD40E /* GCStravaAthlete.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA301D43EE85004FBFD0 /* GCStravaAthlete.m */; };
 		42BFC25E1DCF516C00EAD40E /* GCStravaAthleteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424C8AA01D8D9F8100D8A50E /* GCStravaAthleteParser.swift */; };
-		42BFC25F1DCF517400EAD40E /* GCStravaTrainingZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A6E3401D55110B0081608D /* GCStravaTrainingZones.m */; };
 		42BFC2601DCF517700EAD40E /* GCStravaSegmentEffortStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA3A1D43F51C004FBFD0 /* GCStravaSegmentEffortStream.m */; };
 		42BFC2611DCF517B00EAD40E /* GCStravaSegmentEfforts.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA371D43F01A004FBFD0 /* GCStravaSegmentEfforts.m */; };
 		42BFC2621DCF517F00EAD40E /* GCStravaSegmentListStarred.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA151D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m */; };
@@ -2209,8 +2197,6 @@
 		4255766116D8CA850080F8CE /* GCActivityCalculatedValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityCalculatedValue.h; path = src/GCActivityCalculatedValue.h; sourceTree = "<group>"; };
 		4255766216D8CA850080F8CE /* GCActivityCalculatedValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityCalculatedValue.m; path = src/GCActivityCalculatedValue.m; sourceTree = "<group>"; };
 		42560710169A112E008E9DC3 /* version.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = version.plist; path = Full/version.plist; sourceTree = "<group>"; };
-		4256365E2349EC5600939A1A /* GCWebAuthorization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCWebAuthorization.h; path = src/GCWebAuthorization.h; sourceTree = "<group>"; };
-		4256365F2349EC5600939A1A /* GCWebAuthorization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCWebAuthorization.m; path = src/GCWebAuthorization.m; sourceTree = "<group>"; };
 		425733981BC05A1A0080D75F /* GCActivityPreviewingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityPreviewingViewController.h; path = src/GCActivityPreviewingViewController.h; sourceTree = "<group>"; };
 		425733991BC05A1A0080D75F /* GCActivityPreviewingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityPreviewingViewController.m; path = src/GCActivityPreviewingViewController.m; sourceTree = "<group>"; };
 		4257766223205BB200BD9375 /* GCCellEntryText+GCViewConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GCCellEntryText+GCViewConfig.h"; path = "src/GCCellEntryText+GCViewConfig.h"; sourceTree = "<group>"; };
@@ -2430,10 +2416,6 @@
 		42A22DDF19E1AAFD004407B8 /* GCWithingsBodyMeasures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWithingsBodyMeasures.m; path = src/GCWithingsBodyMeasures.m; sourceTree = "<group>"; };
 		42A22DE319E1CE14004407B8 /* GCWithingsBodyMeasuresParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWithingsBodyMeasuresParser.h; path = src/GCWithingsBodyMeasuresParser.h; sourceTree = "<group>"; };
 		42A22DE419E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWithingsBodyMeasuresParser.m; path = src/GCWithingsBodyMeasuresParser.m; sourceTree = "<group>"; };
-		42A22DE719E5E9FA004407B8 /* GCWithingsActivityMeasures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWithingsActivityMeasures.h; path = src/GCWithingsActivityMeasures.h; sourceTree = "<group>"; };
-		42A22DE819E5E9FA004407B8 /* GCWithingsActivityMeasures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWithingsActivityMeasures.m; path = src/GCWithingsActivityMeasures.m; sourceTree = "<group>"; };
-		42A22DEB19E5F30C004407B8 /* GCWithingsSleepMeasures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWithingsSleepMeasures.h; path = src/GCWithingsSleepMeasures.h; sourceTree = "<group>"; };
-		42A22DEC19E5F30C004407B8 /* GCWithingsSleepMeasures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWithingsSleepMeasures.m; path = src/GCWithingsSleepMeasures.m; sourceTree = "<group>"; };
 		42A22DEF19E726A9004407B8 /* GCWithingsSleepParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWithingsSleepParser.h; path = src/GCWithingsSleepParser.h; sourceTree = "<group>"; };
 		42A22DF019E726A9004407B8 /* GCWithingsSleepParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWithingsSleepParser.m; path = src/GCWithingsSleepParser.m; sourceTree = "<group>"; };
 		42A22DF319E87191004407B8 /* GCWithingsActivityParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWithingsActivityParser.h; path = src/GCWithingsActivityParser.h; sourceTree = "<group>"; };
@@ -2507,8 +2489,6 @@
 		42A66BD0160D000D00DA29A5 /* GCViewConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCViewConfig.m; path = src/GCViewConfig.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		42A66BDA160D0A0800DA29A5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42A672C71DECC4EA00BE8E26 /* FITSelectionContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITSelectionContext.swift; path = src/FITSelectionContext.swift; sourceTree = "<group>"; };
-		42A6E33F1D55110B0081608D /* GCStravaTrainingZones.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaTrainingZones.h; path = src/GCStravaTrainingZones.h; sourceTree = "<group>"; };
-		42A6E3401D55110B0081608D /* GCStravaTrainingZones.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaTrainingZones.m; path = src/GCStravaTrainingZones.m; sourceTree = "<group>"; };
 		42A89C1D1D627444007CF90D /* GCUnitTrainingZone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCUnitTrainingZone.h; path = src/GCUnitTrainingZone.h; sourceTree = "<group>"; };
 		42A89C1E1D627444007CF90D /* GCUnitTrainingZone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCUnitTrainingZone.m; path = src/GCUnitTrainingZone.m; sourceTree = "<group>"; };
 		42A89C251D63B2D7007CF90D /* GCTestHealthZones.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestHealthZones.m; sourceTree = "<group>"; };
@@ -3688,10 +3668,6 @@
 				42CFBABA18D26EB400EA4C48 /* GCStravaActivityList.m */,
 				42959CEB18D8F91100C0B841 /* GCStravaActivityStreams.h */,
 				42959CEC18D8F91100C0B841 /* GCStravaActivityStreams.m */,
-				42A3AA2F1D43EE85004FBFD0 /* GCStravaAthlete.h */,
-				42A3AA301D43EE85004FBFD0 /* GCStravaAthlete.m */,
-				42A6E33F1D55110B0081608D /* GCStravaTrainingZones.h */,
-				42A6E3401D55110B0081608D /* GCStravaTrainingZones.m */,
 			);
 			name = Requests;
 			sourceTree = "<group>";
@@ -3699,6 +3675,8 @@
 		424C8A9F1D8D9E3B00D8A50E /* Segments */ = {
 			isa = PBXGroup;
 			children = (
+				42A3AA2F1D43EE85004FBFD0 /* GCStravaAthlete.h */,
+				42A3AA301D43EE85004FBFD0 /* GCStravaAthlete.m */,
 				42A3AA141D43D5A5004FBFD0 /* GCStravaSegmentListStarred.h */,
 				42A3AA151D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m */,
 				42A3AA361D43F01A004FBFD0 /* GCStravaSegmentEfforts.h */,
@@ -4394,8 +4372,6 @@
 				420063F918C238530031395F /* GCWebConnect+Requests.m */,
 				428FF79D15FB412C007A88FA /* GCWebUrl.h */,
 				428FF79E15FB412C007A88FA /* GCWebUrl.m */,
-				4256365E2349EC5600939A1A /* GCWebAuthorization.h */,
-				4256365F2349EC5600939A1A /* GCWebAuthorization.m */,
 			);
 			name = Communications;
 			sourceTree = "<group>";
@@ -4694,10 +4670,6 @@
 				42A22DDB19E1A798004407B8 /* GCWithingsReqBase.m */,
 				42A22DDE19E1AAFD004407B8 /* GCWithingsBodyMeasures.h */,
 				42A22DDF19E1AAFD004407B8 /* GCWithingsBodyMeasures.m */,
-				42A22DE719E5E9FA004407B8 /* GCWithingsActivityMeasures.h */,
-				42A22DE819E5E9FA004407B8 /* GCWithingsActivityMeasures.m */,
-				42A22DEB19E5F30C004407B8 /* GCWithingsSleepMeasures.h */,
-				42A22DEC19E5F30C004407B8 /* GCWithingsSleepMeasures.m */,
 			);
 			name = Withings;
 			sourceTree = "<group>";
@@ -6670,13 +6642,11 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FitFileExplorer/Pods-FitFileExplorer-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AppAuth-macOS/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/GenericJSON-macOS/GenericJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
 			);
@@ -6692,13 +6662,11 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AppAuth-iOS/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
 				"${BUILT_PRODUCTS_DIR}/GenericJSON-iOS/GenericJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
 			);
@@ -6714,13 +6682,11 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AppAuth-iOS/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
 				"${BUILT_PRODUCTS_DIR}/GenericJSON-iOS/GenericJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
 			);
@@ -6736,13 +6702,11 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AppAuth-iOS/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
 				"${BUILT_PRODUCTS_DIR}/GenericJSON-iOS/GenericJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
 			);
@@ -6834,7 +6798,6 @@
 				42BFC2581DCF511A00EAD40E /* GCCalendarDataDateMarkers.m in Sources */,
 				42BFC2571DCF510100EAD40E /* GCGarminRequestHeartRateZones.m in Sources */,
 				42A22DF619E87191004407B8 /* GCWithingsActivityParser.m in Sources */,
-				425636622349EC5600939A1A /* GCWebAuthorization.m in Sources */,
 				422FAEBB19A1DD6000D09773 /* GCActivityListViewController.m in Sources */,
 				42BFC2531DCF50D800EAD40E /* GCFieldCache.m in Sources */,
 				422FAEBC19A1DD6000D09773 /* GCTabBarController.m in Sources */,
@@ -6911,7 +6874,6 @@
 				422FAF0C19A1DD6000D09773 /* GCActivitySearchElement.m in Sources */,
 				422FAF0E19A1DD6000D09773 /* GCHistoryAggregatedActivityStats.m in Sources */,
 				422FAF1219A1DD6000D09773 /* GCActivityTennisCuePoint.m in Sources */,
-				42BFC25F1DCF517400EAD40E /* GCStravaTrainingZones.m in Sources */,
 				422FAF1319A1DD6000D09773 /* GCActivityTennis.m in Sources */,
 				42DE53BE19CF438500009130 /* GCHealthKitActivityRequest.m in Sources */,
 				422FAF1419A1DD6000D09773 /* GCSportTracksActivityList.m in Sources */,
@@ -7025,7 +6987,6 @@
 				422FAF9219A1DD6000D09773 /* GCFieldsCalculatedTrack.m in Sources */,
 				422FAF9319A1DD6000D09773 /* GCStravaActivityListParser.m in Sources */,
 				424340FE1B741652001E22BB /* GCActivity+CSSearch.m in Sources */,
-				42A22DEE19E5F30C004407B8 /* GCWithingsSleepMeasures.m in Sources */,
 				42BFC2561DCF50FB00EAD40E /* GCGarminRequestModernSearch.m in Sources */,
 				422FAF9519A1DD6000D09773 /* GCViewMaturityButton.m in Sources */,
 				422FAF9619A1DD6000D09773 /* GCViewActivityTypeButton.m in Sources */,
@@ -7033,7 +6994,6 @@
 				42BFC25D1DCF516800EAD40E /* GCStravaAthlete.m in Sources */,
 				422FAF9A19A1DD6000D09773 /* GCBabolatSessionsListRequest.m in Sources */,
 				42A22E0119E8895D004407B8 /* GCHealthSleepBlock.m in Sources */,
-				42A22DEA19E5E9FA004407B8 /* GCWithingsActivityMeasures.m in Sources */,
 				422FAF9C19A1DD6000D09773 /* GCViewIcons.m in Sources */,
 				422FAF9D19A1DD6000D09773 /* GCStatsGraphOptionViewController.m in Sources */,
 				42C1080E1B7DE8B000092315 /* GCApplicationContext.m in Sources */,
@@ -7227,7 +7187,6 @@
 				42959CED18D8F91100C0B841 /* GCStravaActivityStreams.m in Sources */,
 				42AAB087184D2A82004B4D15 /* GCActivityTypeListViewController.m in Sources */,
 				4201528E1624D5AC004F64EF /* GCMapGradientPathOverlayView.m in Sources */,
-				425636602349EC5600939A1A /* GCWebAuthorization.m in Sources */,
 				42A95B1C16321320000B2082 /* GCLap.m in Sources */,
 				42A95B3A1632DB4B000B2082 /* GCMapAnnotation.m in Sources */,
 				42A95B3D1632FC24000B2082 /* GCMapLegendView.m in Sources */,
@@ -7291,7 +7250,6 @@
 				42EEAED016A1BA2E0058965A /* GCSharingViewController.m in Sources */,
 				42EEAEE316A35EDC0058965A /* GCExportText.m in Sources */,
 				42EEAEE916A3679C0058965A /* GCActivity+ExportText.m in Sources */,
-				42A6E3411D55110C0081608D /* GCStravaTrainingZones.m in Sources */,
 				421F39A81B79EF8900CA7200 /* GCActivityThumbnails.m in Sources */,
 				421208901C6E860700E0470D /* GCFieldsForCategory.m in Sources */,
 				4209E1911DA44EC800B80735 /* GCActivitiesOrganizerListRegister.m in Sources */,
@@ -7358,11 +7316,9 @@
 				4257339A1BC05A1A0080D75F /* GCActivityPreviewingViewController.m in Sources */,
 				427CDB221778F0E10050CFE4 /* GCFieldsCalculatedTrack.m in Sources */,
 				424C8AA11D8D9F8100D8A50E /* GCStravaAthleteParser.swift in Sources */,
-				42A22DE919E5E9FA004407B8 /* GCWithingsActivityMeasures.m in Sources */,
 				42959CCD18D4920900C0B841 /* GCStravaActivityListParser.m in Sources */,
 				42C0589C21D0525200109D54 /* RZFitMessageExtensions.swift in Sources */,
 				4209E19A1DA8E15700B80735 /* GCGarminRequestModernSearch.m in Sources */,
-				42A22DED19E5F30C004407B8 /* GCWithingsSleepMeasures.m in Sources */,
 				4257766423205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */,
 				4234B5B217895CF2002C3B53 /* GCViewMaturityButton.m in Sources */,
 				42B34A2E179C31D500688E9F /* GCViewActivityTypeButton.m in Sources */,
@@ -7475,7 +7431,6 @@
 				42B5E2611BA5B216000FAE4E /* GCHealthKitActivityRequest.m in Sources */,
 				42B467BB1DC6A74200279DC8 /* GCAppProfiles.m in Sources */,
 				42B5E2621BA5B216000FAE4E /* GCHealthKitActivityParser.m in Sources */,
-				425636612349EC5600939A1A /* GCWebAuthorization.m in Sources */,
 				42B5E2631BA5B216000FAE4E /* GCHealthKitExportActivity.m in Sources */,
 				422CC8811E6ACA1700195414 /* FITFitFileInterpret.swift in Sources */,
 				42B5E2641BA5B216000FAE4E /* GCHealthKitBodyRequest.m in Sources */,
@@ -7509,8 +7464,6 @@
 				42B5E27B1BA5B216000FAE4E /* GCWithingsActivityParser.m in Sources */,
 				42B5E27F1BA5B216000FAE4E /* GCWithingsReqBase.m in Sources */,
 				42B5E2801BA5B216000FAE4E /* GCWithingsBodyMeasures.m in Sources */,
-				42B5E2811BA5B216000FAE4E /* GCWithingsActivityMeasures.m in Sources */,
-				42B5E2821BA5B216000FAE4E /* GCWithingsSleepMeasures.m in Sources */,
 				42B5E2831BA5B216000FAE4E /* GCStravaActivityStreamsParser.m in Sources */,
 				422CC8801E6ACA1700195414 /* FITFitFieldValue.mm in Sources */,
 				42B5E2841BA5B216000FAE4E /* GCStravaActivityListParser.m in Sources */,
@@ -7587,7 +7540,6 @@
 				42B5E2C11BA5B216000FAE4E /* GCActivitiesOrganizer.m in Sources */,
 				4209E19B1DA8E15700B80735 /* GCGarminRequestModernSearch.m in Sources */,
 				422CC8761E6ACA1700195414 /* GCUnit+FIT.m in Sources */,
-				42A6E3421D55110C0081608D /* GCStravaTrainingZones.m in Sources */,
 				421A51511C82FB1000671587 /* GCActivity+Fields.m in Sources */,
 				42B5E2C21BA5B216000FAE4E /* GCActivitiesCacheManagement.m in Sources */,
 				42B5E2C31BA5B216000FAE4E /* GCActivitySearch.m in Sources */,
@@ -8243,7 +8195,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5.0.3.0;
+				CURRENT_PROJECT_VERSION = 5.1.0.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8262,7 +8214,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 5.0.3;
+				MARKETING_VERSION = 5.1.0.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -8292,7 +8244,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 5.0.3.0;
+				CURRENT_PROJECT_VERSION = 5.1.0.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = NO;
@@ -8312,7 +8264,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 5.0.3;
+				MARKETING_VERSION = 5.1.0.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

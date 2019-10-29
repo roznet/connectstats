@@ -106,10 +106,6 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     return app.web;
 }
 
-+(GCWebAuthorization*)webAuthorization{
-    GCAppDelegate * app = _sharedApplicationDelegate();
-    return app.webAuthorization;
-}
 +(dispatch_queue_t)worker{
     GCAppDelegate *appDelegate = _sharedApplicationDelegate();
     return appDelegate.worker;

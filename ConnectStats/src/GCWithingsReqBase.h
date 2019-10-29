@@ -30,11 +30,12 @@
 @interface GCWithingsReqBase : GCGarminReqBase
 @property (nonatomic,retain) UINavigationController * navigationController;
 @property (nonatomic,retain) NSString * userId;
-@property (nonatomic,retain) GTMOAuth2Authentication * withingsAuth;
+
+
+-(instancetype)initNextWith:(GCGarminReqBase*)current;
 
 -(void)signInToWithings;
 -(BOOL)isSignedIn;
 +(void)signout;
-//-(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters;
 
 @end

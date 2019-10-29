@@ -275,6 +275,19 @@ static NSURLRequestCachePolicy _cachePolicy = NSURLRequestReloadIgnoringLocalAnd
 }
 
 -(void)processStart{
+    if( [self.downloadDelegate respondsToSelector:@selector(authorizeRequest:completionHandler:)]){
+        [self.downloadDelegate authorizeRequest:(NSMutableURLRequest *)self.request completionHandler:^(NSError*error){
+            if( error ){
+                [self dataTaskDidFailWithError:error];
+            }else{
+                [self processStartDataTask];
+            }
+        }];
+    }else{
+        [self processStartDataTask];
+    }
+}
+-(void)processStartDataTask{
     self.lastError = nil;
 
     self.task = [[self sharedSession] dataTaskWithRequest:self.request completionHandler:^(NSData*data,NSURLResponse*response,NSError*error){
@@ -287,7 +300,7 @@ static NSURLRequestCachePolicy _cachePolicy = NSURLRequestReloadIgnoringLocalAnd
     if (self.task) {
         [self.task resume];
     }else{
-        RZLog(RZLogError, @"failed to create connection");
+        RZLog(RZLogError, @"Failed to create connection");
         [_downloadDelegate downloadFailed:self];
     }
 

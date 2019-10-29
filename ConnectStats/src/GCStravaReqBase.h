@@ -28,10 +28,10 @@
 @class GTMOAuth2Authentication;
 
 @interface GCStravaReqBase : GCGarminReqBase
-@property (nonatomic,retain) GTMOAuth2Authentication * stravaAuth;
 @property (nonatomic,retain) UINavigationController * navigationController;
 @property (nonatomic,retain) NSError * lastError;
 
+-(GCStravaReqBase*)initNextWith:(GCStravaReqBase*)current;
 -(void)signInToStrava;
 +(void)signout;
 

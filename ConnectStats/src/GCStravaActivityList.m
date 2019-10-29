@@ -54,7 +54,7 @@
 }
 
 -(GCStravaActivityList*)initNextWith:(GCStravaActivityList*)current{
-    self = [super init];
+    self = [super initNextWith:current];
     if( self ){
         if( current.navigationController ){
             self.page = current.page;
@@ -63,7 +63,6 @@
         }
         self.lastFoundDate = current.lastFoundDate;
         self.reloadAll = current.reloadAll;
-        self.stravaAuth = current.stravaAuth;
     }
     return self;
 }
@@ -74,10 +73,10 @@
 }
 
 -(NSString*)url{
-    if (self.navigationController) {
+    if( self.navigationController ){
         return nil;
     }else{
-        return [NSString stringWithFormat:@"https://www.strava.com/api/v3/athlete/activities?access_token=%@&page=%d",(self.stravaAuth).accessToken,(int)self.page+1];;
+        return [NSString stringWithFormat:@"https://www.strava.com/api/v3/athlete/activities?page=%d",(int)self.page+1];;
     }
 }
 
@@ -104,8 +103,10 @@
 
 -(void)process{
     if (self.navigationController) {
-        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
-        [self performSelectorOnMainThread:@selector(signInToStrava) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNewStage];
+            [self signInToStrava];
+        });
     }else{
 #if TARGET_IPHONE_SIMULATOR
         NSError * e = nil;
@@ -128,12 +129,15 @@
         
         [[GCAppGlobal profile] serviceSuccess:gcServiceGarmin set:true];
         self.stage = gcRequestStageSaving;
-        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNewStage];
+        });
         
         [self addActivitiesFromParser:parser toOrganizer:organizer];
     }
-    [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
-
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processDone];
+    });
 }
 
 +(GCActivitiesOrganizer*)testForOrganizer:(GCActivitiesOrganizer*)organizer withFilesInPath:(NSString*)path{

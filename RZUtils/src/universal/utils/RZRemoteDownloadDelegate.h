@@ -38,4 +38,5 @@ typedef void(^RemoteDownloadPrepareUrl)(NSMutableURLRequest*req);
 -(RemoteDownloadPrepareUrl)prepareUrlFunc;
 -(void)downloadDataSuccessful:(RZRemoteDownload*)connection data:(NSData*)data;
 -(NSString*)httpUserAgent;
+-(void)authorizeRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError * error))handler;
 @end

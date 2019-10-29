@@ -45,8 +45,6 @@
 #import "GCConnectStatsRequestWeather.h"
 
 #import "GCWithingsBodyMeasures.h"
-#import "GCWithingsActivityMeasures.h"
-#import "GCWithingsSleepMeasures.h"
 
 #import "GCHealthKitBodyRequest.h"
 #import "GCHealthKitActivityRequest.h"
@@ -62,7 +60,6 @@
 #import "GCStravaAthlete.h"
 #import "GCStravaSegmentEfforts.h"
 #import "GCStravaSegmentEffortStream.h"
-#import "GCStravaTrainingZones.h"
 
 #import "GCBabolatLoginRequest.h"
 
@@ -218,14 +215,9 @@
 -(void)withingsUpdate{
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
-        if ([GCAppGlobal healthStatsVersion]) {
-            [self addRequest:[GCWithingsSleepMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
-            [self addRequest:[GCWithingsActivityMeasures measuresFromDate:nil toDate:[NSDate date] with:[GCAppGlobal currentNavigationController]]];
-        }
     });
 }
 #pragma mark - download track details
-
 
 -(void)garminDownloadActivityTrackPoints13:(GCActivity*)act{
     // If the service for garmin was successfull, download anyway.

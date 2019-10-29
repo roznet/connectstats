@@ -30,6 +30,12 @@
 @import RZExternal;
 
 @implementation GCWithingsBodyMeasures
+-(GCWithingsBodyMeasures*)initNextWith:(GCWithingsBodyMeasures*)current{
+    if( self = [super initNextWith:current]){
+        self.fromDate = current.fromDate;
+    }
+    return self;
+}
 
 +(GCWithingsBodyMeasures*)measuresSinceDate:(NSDate*)date with:(UINavigationController*)nav{
     GCWithingsBodyMeasures * rv = [[[GCWithingsBodyMeasures alloc] init] autorelease];
@@ -45,11 +51,10 @@
 }
 
 -(NSString*)url{
-    if (self.navigationController) {
+    if( self.navigationController ){
         return nil;
-    }else{
-        return [NSString stringWithFormat:@"https://wbsapi.withings.net/measure?action=getmeas&access_token=%@",self.withingsAuth.accessToken];
     }
+    return @"https://wbsapi.withings.net/measure?action=getmeas";
 }
 
 -(NSDictionary*)postData{
@@ -63,8 +68,10 @@
 -(void)process{
     
     if (self.navigationController) {
-        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
-        [self performSelectorOnMainThread:@selector(signInToWithings) withObject:nil waitUntilDone:NO];
+        dispatch_async( dispatch_get_main_queue(), ^(){
+            [self processNewStage];
+            [self signInToWithings];
+        });
     }else{
 #if TARGET_IPHONE_SIMULATOR
         NSError * e = nil;
@@ -99,19 +106,19 @@
             RZLog(RZLogWarning, @"No data received");
         }
     }
-
-    [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
+    dispatch_async( dispatch_get_main_queue(), ^(){
+        [self processDone];
+    });
 }
 
 -(id<GCWebRequest>)nextReq{
     GCWithingsBodyMeasures * next = nil;
     if (self.navigationController) {
-        next = [GCWithingsBodyMeasures measuresSinceDate:self.fromDate with:nil];
-        next.withingsAuth = self.withingsAuth;
-    }else{
+        next = RZReturnAutorelease([[GCWithingsBodyMeasures alloc] initNextWith:self]);
     }
     return next;
 }
+
 -(id<GCWebRequest>)remediationReq{
     if (self.status == GCWebStatusLoginFailed && [self isSignedIn]) {
         [GCWithingsReqBase signout];

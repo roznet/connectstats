@@ -71,7 +71,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
             [self labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:[weather weatherDisplayField:GC_WEATHER_WIND] attribute:@selector(attribute16)];
 
         }
-        UIImage * icon = [weather weatherIcon];
+        UIImage * icon = [weather weatherIcon];     
         if (icon) {
             [self setIconImage:icon];
             self.iconPosition = gcIconPositionLeft;

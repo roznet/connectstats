@@ -38,6 +38,7 @@
 @end
 
 @implementation GCStravaActivityStreams
+
 +(GCStravaActivityStreams*)stravaActivityStream:(UINavigationController*)nav for:(GCActivity*)act{
     GCStravaActivityStreams * rv = [[[GCStravaActivityStreams alloc] init] autorelease];
     if (rv) {
@@ -46,6 +47,16 @@
     }
     return rv;
 }
+
+-(GCStravaActivityStreams*)initNextWith:(GCStravaActivityStreams*)current{
+    if( self = [super initNextWith:current]){
+        self.activity = current.activity;
+        self.points = current.points;
+        self.laps = current.laps;
+    }
+    return self;
+}
+
 -(void)dealloc{
     [_activity release];
     [_points release];
@@ -56,30 +67,30 @@
     return self.activity.activityId;
 }
 -(NSString*)url{
-    if (self.navigationController) {
+    if( self.navigationController ){
         return nil;
-    }else{
-        NSString * sid = [[GCService service:gcServiceStrava] serviceIdFromActivityId:self.activityId];
-
-        /*
-         time:	integer seconds
-         latlng:	floats [latitude, longitude]
-         distance:	float meters
-         altitude:	float meters
-         velocity_smooth:	float meters per second
-         heartrate:	integer BPM
-         cadence:	integer RPM
-         watts:	integer watts
-         temp:	integer degrees Celsius
-         moving:	boolean
-         grade_smooth:	float percent
-         */
-        NSString * url = [NSString stringWithFormat:@"https://www.strava.com/api/v3/activities/%@/%@?access_token=%@",
-                          sid,
-                          self.points ? @"laps" : @"streams/latlng,heartrate,time,altitude,cadence,watts,velocity_smooth",
-                          (self.stravaAuth).accessToken];
-        return url;
     }
+    NSString * sid = [[GCService service:gcServiceStrava] serviceIdFromActivityId:self.activityId];
+    
+    /*
+     time:	integer seconds
+     latlng:	floats [latitude, longitude]
+     distance:	float meters
+     altitude:	float meters
+     velocity_smooth:	float meters per second
+     heartrate:	integer BPM
+     cadence:	integer RPM
+     watts:	integer watts
+     temp:	integer degrees Celsius
+     moving:	boolean
+     grade_smooth:	float percent
+     */
+    NSString * url = [NSString stringWithFormat:@"https://www.strava.com/api/v3/activities/%@/%@",
+                      sid,
+                      self.points ? @"laps" : @"streams/latlng,heartrate,time,altitude,cadence,watts,velocity_smooth"
+                      ];
+    return url;
+    
 }
 
 -(NSDictionary*)postData{
@@ -96,8 +107,10 @@
 
 -(void)process{
     if (self.navigationController) {
-        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
-        [self performSelectorOnMainThread:@selector(signInToStrava) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNewStage];
+            [self signInToStrava];
+        });
     }else if(self.points==nil){
 
 #if TARGET_IPHONE_SIMULATOR
@@ -126,16 +139,18 @@
     GCStravaActivityStreamsParser * parser = [GCStravaActivityStreamsParser activityStreamsParser:[self.theString dataUsingEncoding:self.encoding]];
     self.points = parser.points;
     self.inError = parser.inError;
-    [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
-
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processDone];
+    });
 }
 
 -(void)parseLaps{
     self.laps = @[];
     GCStravaActivityLapsParser * parser = [GCStravaActivityLapsParser activityLapsParser:[self.theString dataUsingEncoding:self.encoding] withPoints:self.points inActivity:self.activity];
     [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpoints:self.points andLaps:parser.laps];
-    [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
-
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processDone];
+    });
 }
 
 -(id<GCWebRequest>)nextReq{
@@ -143,9 +158,7 @@
         return nil;
     }
     if (self.navigationController || !self.laps) {
-        GCStravaActivityStreams * next = [GCStravaActivityStreams stravaActivityStream:nil for:self.activity];
-        next.stravaAuth = self.stravaAuth;
-        next.points = self.points;
+        GCStravaActivityStreams * next = RZReturnAutorelease([[GCStravaActivityStreams alloc] initNextWith:self]);
         return next;
     }
     return nil;

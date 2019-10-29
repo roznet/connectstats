@@ -1250,12 +1250,7 @@
             [GCAppGlobal searchAllActivities];
         }
     }else if (indexPath.section==GC_SECTIONS_STRAVA&&indexPath.row==GC_STRAVA_LOGOUT){
-        NSDate * last = [GCStravaReqBase lastSync:nil];
-        if (last) {
-            [GCStravaReqBase signout];
-        }else{
-            [GCAppGlobal searchAllActivities];
-        }
+        [GCAppGlobal searchAllActivities];
     }else if (indexPath.section==GC_SECTIONS_GARMIN&&indexPath.row == GC_GARMIN_MANUAL_LOGIN){
         GCSettingsManualLoginViewController * detail = [[GCSettingsManualLoginViewController alloc] initWithNibName:nil bundle:nil];
         if (self.splitViewController) {

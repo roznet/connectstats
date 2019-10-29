@@ -5,20 +5,17 @@ target 'ConnectStats' do
   pod 'GoogleMaps'
   pod 'Flurry-iOS-SDK/FlurrySDK'
   pod 'GenericJSON'
-  pod 'AppAuth'
 end
 target 'HealthStats' do
   use_frameworks!
   pod 'GoogleMaps'
   pod 'Flurry-iOS-SDK/FlurrySDK'
   pod 'GenericJSON'
-  pod 'AppAuth'
 end
 target 'ConnectStatsTestApp' do
   use_frameworks!
   pod 'Flurry-iOS-SDK/FlurrySDK'
   pod 'GenericJSON'
-  pod 'AppAuth'
 end
 target 'FitFileExplorer' do
   use_frameworks!
@@ -26,5 +23,4 @@ target 'FitFileExplorer' do
   pod 'GenericJSON'
   #pod  'GenericJSON', :path => '../generic-json-swift/'
   pod 'KeychainSwift'
-  pod 'AppAuth'
 end

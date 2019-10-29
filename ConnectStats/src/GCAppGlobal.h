@@ -43,7 +43,6 @@ extern NSString *const kNotifySettingsChange;
 @class GCHealthOrganizer;
 @class GCDerivedOrganizer;
 @class GCActivityTypes;
-@class GCWebAuthorization;
 
 @interface GCAppGlobal : RZAppConfig
 
@@ -95,8 +94,6 @@ extern NSString *const kNotifySettingsChange;
 
 +(void)setApplicationDelegate:(GCAppDelegate*)del;
 +(NSString*)simulatorUrl;
-
-+(GCWebAuthorization*)webAuthorization;
 
 +(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;
 @end

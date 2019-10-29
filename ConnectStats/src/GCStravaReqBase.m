@@ -29,7 +29,21 @@
 
 @import RZExternal;
 
+static NSString * kCredentialServiceName = @"strava";
+
+
+@interface GCStravaReqBase ()
+@property (nonatomic,retain) GTMOAuth2Authentication * stravaAuth;
+@end
+
 @implementation GCStravaReqBase
+
+-(GCStravaReqBase*)initNextWith:(GCStravaReqBase*)current{
+    if( self = [super init]){
+        self.stravaAuth = current.stravaAuth;
+    }
+    return self;
+}
 
 -(void)dealloc{
     [_stravaAuth release];
@@ -43,15 +57,15 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
 
 - (GTMOAuth2Authentication *)buildStravaAuth {
     if (!self.stravaAuth) {
-        NSURL *tokenURL = [NSURL URLWithString:@"https://www.strava.com/oauth/token"];
-        NSString *redirectURI = @"http://www.ro-z.net/connectstats/oauth";
+        NSURL *tokenURL = [NSURL URLWithString:[GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"access_token_url"]];
+        NSString *redirectURI = [GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"redirect_url"];
 
         GTMOAuth2Authentication *auth;
         auth = [GTMOAuth2Authentication authenticationWithServiceProvider:@"Strava Service"
                                                                  tokenURL:tokenURL
                                                               redirectURI:redirectURI
-                                                                 clientID:[GCAppGlobal credentialsForService:@"strava" andKey:@"client_id"]
-                                                             clientSecret:[GCAppGlobal credentialsForService:@"strava" andKey:@"client_secret"]];
+                                                                 clientID:[GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"client_id"]
+                                                             clientSecret:[GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"client_secret"]];
         self.stravaAuth = auth;
     }
 
@@ -71,21 +85,11 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
     BOOL didAuth = [GTMOAuth2ViewControllerTouch authorizeFromKeychainForName:keyChainName
                                                                authentication:auth error:&error];
 
-    if (!didAuth && error) {
-        RZLog(RZLogError, @"Failed to initiate oauth2 %@", error.localizedDescription);
-    }
-    if (didAuth && auth.canAuthorize) {
-        [auth authorizeRequest:nil completionHandler:^(NSError*error){
-            [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:YES];
-            [self processDone];
-        }];
-    }else{
-        // Specify the appropriate scope string, if any, according to the service's API documentation
+    if (!didAuth || !auth.canAuthorize) {
         auth.scope = @"activity:read_all,read_all";
 
-        NSURL *authURL = [NSURL URLWithString:@"https://www.strava.com/oauth/authorize"];
-
-        // Display the authentication view
+        NSURL *authURL = [NSURL URLWithString:[GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"authenticate_url"]];
+        
         GTMOAuth2ViewControllerTouch *viewController;
         viewController = [[[GTMOAuth2ViewControllerTouch alloc] initWithAuthentication:auth
                                                                       authorizationURL:authURL
@@ -93,8 +97,9 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
                                                                               delegate:self
                                                                       finishedSelector:@selector(viewController:finishedWithAuth:error:)] autorelease];
 
-        // Now push our sign-in view
         [self.navigationController pushViewController:viewController animated:YES];
+    }else{
+        [self processDone];
     }
 }
 
@@ -111,6 +116,20 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
         [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:YES];
         [self processDone];
     }
+}
+
+-(void)authorizeRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError * _Nullable))handler{
+    [self.stravaAuth authorizeRequest:request completionHandler:^(NSError*error){
+        if( error == nil){
+            [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:YES];
+        }else{
+            [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:NO];
+            self.lastError = error;
+            self.status = GCWebStatusLoginFailed;
+            RZLog(RZLogError,@"Failed to connect %@", error);
+        }
+        handler(error);
+    }];
 }
 
 -(gcWebService)service{

@@ -99,5 +99,7 @@ typedef NS_ENUM(NSUInteger, gcWebService) {
 -(nullable NSString*)customMessage;
 -(nullable NSString*)httpUserAgent;
 -(void)process:(nonnull NSData*)theData andDelegate:(nonnull id<GCWebRequestDelegate>)delegate;
+-(void)authorizeRequest:(nonnull NSMutableURLRequest *)request completionHandler:(void (^_Nonnull)(NSError * _Nullable error))handler;
+
 @end
 
