@@ -342,16 +342,6 @@
     [appAction execute:url];
 }
 
--(void)actionSaveActivityBlob{
-    NSArray * list = [[GCAppGlobal organizer] activities];
-    FMDatabase * db = [[GCAppGlobal organizer] db];
-    RZPerformance * perf = [RZPerformance start];
-    for (GCActivity * act in list) {
-        [act saveDictAsBlobToDb:db];
-    }
-    RZLog(RZLogInfo,@"Finished %@", perf);
-}
-
 -(void)actionLoadActivityBlob{
     FMDatabase * db = [[GCAppGlobal organizer] db];
     NSMutableDictionary * sFound = [NSMutableDictionary dictionary];

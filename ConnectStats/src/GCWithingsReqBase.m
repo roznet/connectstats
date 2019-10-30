@@ -33,7 +33,7 @@
 @property (nonatomic,retain) NSString * oauthToken;
 @property (nonatomic,retain) GTMOAuth2Authentication * withingsAuth;
 
-@property (nonatomic,retain) UIWebView * webView;
+//@property (nonatomic,retain) UIWebView * webView;
 
 @property (nonatomic,retain) NSError * lastError;
 
@@ -59,8 +59,6 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
 }
 
 -(void)dealloc{
-    self.webView.delegate = nil;
-    [_webView release];
     [_withingsAuth release];
     [_oauthToken release];
     [_oauthTokenSecret release];
