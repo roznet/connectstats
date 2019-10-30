@@ -24,8 +24,9 @@
 //  
 
 #import <UIKit/UIKit.h>
+@import WebKit;
 
-@interface GCSettingsHelpViewController : UIViewController<UIWebViewDelegate>
-@property (nonatomic,retain) UIWebView * webView;
+@interface GCSettingsHelpViewController : UIViewController<WKNavigationDelegate>
+@property (nonatomic,retain) WKWebView * webView;
 
 @end

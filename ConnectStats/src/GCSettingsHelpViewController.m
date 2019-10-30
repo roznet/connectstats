@@ -52,7 +52,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-	UIWebView *contentView	= [[UIWebView alloc] initWithFrame: self.view.frame];
+	WKWebView *contentView	= [[WKWebView alloc] initWithFrame: self.view.frame];
     contentView.delegate = self;
 
     self.webView = contentView;
@@ -84,13 +84,13 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
--(void)webViewDidStartLoad:(UIWebView *)webView{
+-(void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation{
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
--(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
+-(void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error{
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
--(void)webViewDidFinishLoad:(UIWebView *)webView{
+-(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 

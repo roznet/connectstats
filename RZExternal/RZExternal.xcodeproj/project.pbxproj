@@ -367,8 +367,6 @@
 		42B265A91FF8314400E891A1 /* hmac.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264311FF8314400E891A1 /* hmac.h */; };
 		42B265AA1FF8314400E891A1 /* Base64Transcoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B264321FF8314400E891A1 /* Base64Transcoder.c */; };
 		42B265AB1FF8314400E891A1 /* sha1.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264331FF8314400E891A1 /* sha1.h */; };
-		42B265AC1FF8314400E891A1 /* OAuth1WithingsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264341FF8314400E891A1 /* OAuth1WithingsController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B265AD1FF8314400E891A1 /* OAuth1WithingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264351FF8314400E891A1 /* OAuth1WithingsController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		42B265AE1FF8314400E891A1 /* NSString+URLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264361FF8314400E891A1 /* NSString+URLEncoding.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		42B265AF1FF8314400E891A1 /* OAuth1Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264371FF8314400E891A1 /* OAuth1Controller.m */; settings = {COMPILER_FLAGS = "-fobjc-arc -Xclang -analyzer-disable-all-checks"; }; };
 		42B265B01FF8314400E891A1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264391FF8314400E891A1 /* MBProgressHUD.m */; };
@@ -730,8 +728,6 @@
 		42B264311FF8314400E891A1 /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
 		42B264321FF8314400E891A1 /* Base64Transcoder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Base64Transcoder.c; sourceTree = "<group>"; };
 		42B264331FF8314400E891A1 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
-		42B264341FF8314400E891A1 /* OAuth1WithingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuth1WithingsController.h; sourceTree = "<group>"; };
-		42B264351FF8314400E891A1 /* OAuth1WithingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuth1WithingsController.m; sourceTree = "<group>"; };
 		42B264361FF8314400E891A1 /* NSString+URLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+URLEncoding.m"; sourceTree = "<group>"; };
 		42B264371FF8314400E891A1 /* OAuth1Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuth1Controller.m; sourceTree = "<group>"; };
 		42B264391FF8314400E891A1 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
@@ -1282,8 +1278,6 @@
 				42B264371FF8314400E891A1 /* OAuth1Controller.m */,
 				42B2642C1FF8314400E891A1 /* NSString+URLEncoding.h */,
 				42B2642D1FF8314400E891A1 /* Crypto */,
-				42B264341FF8314400E891A1 /* OAuth1WithingsController.h */,
-				42B264351FF8314400E891A1 /* OAuth1WithingsController.m */,
 				42B264361FF8314400E891A1 /* NSString+URLEncoding.m */,
 			);
 			path = "Simple-OAuth-FitBit";
@@ -1765,7 +1759,6 @@
 				42B2657C1FF8314400E891A1 /* KalPrivate.h in Headers */,
 				42B265911FF8314400E891A1 /* Appirater.h in Headers */,
 				42B265921FF8314400E891A1 /* UIViewController+ECSlidingViewController.h in Headers */,
-				42B265AC1FF8314400E891A1 /* OAuth1WithingsController.h in Headers */,
 				42B2658A1FF8314400E891A1 /* SmudgyWindow.h in Headers */,
 				422626031FFA7C68000DBD32 /* RZNavigationTitleView.h in Headers */,
 				42B2659F1FF8314400E891A1 /* GTMNSString+HTML.h in Headers */,
@@ -2078,7 +2071,6 @@
 				42B265741FF8314400E891A1 /* KalDataSource.m in Sources */,
 				42B265AA1FF8314400E891A1 /* Base64Transcoder.c in Sources */,
 				42B2658D1FF8314400E891A1 /* Appirater.m in Sources */,
-				42B265AD1FF8314400E891A1 /* OAuth1WithingsController.m in Sources */,
 				42B266A11FF8314500E891A1 /* GTMOAuth2Authentication.m in Sources */,
 				42B265841FF8314400E891A1 /* KalMonthView.m in Sources */,
 				42B265A61FF8314400E891A1 /* hmac.c in Sources */,

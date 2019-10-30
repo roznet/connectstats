@@ -270,7 +270,6 @@
 		422FAF8519A1DD6000D09773 /* GCHealthMeasure.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB680B16DD5C8100C633BD /* GCHealthMeasure.m */; };
 		422FAF8619A1DD6000D09773 /* GCHealthOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB680E16DD5C9400C633BD /* GCHealthOrganizer.m */; };
 		422FAF8719A1DD6000D09773 /* GCFieldsCalculated.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB681616E0094A00C633BD /* GCFieldsCalculated.m */; };
-		422FAF8819A1DD6000D09773 /* GCSettingsManualLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB681916E14CBC00C633BD /* GCSettingsManualLoginViewController.m */; };
 		422FAF8919A1DD6000D09773 /* GCActivityTrackGraphOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB681C16E2913300C633BD /* GCActivityTrackGraphOptionsViewController.m */; };
 		422FAF8A19A1DD6000D09773 /* GCActivityTrackOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 42753D6916E402EE005C8281 /* GCActivityTrackOptions.m */; };
 		422FAF8C19A1DD6000D09773 /* GCMapLapInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42753D6F16E6A881005C8281 /* GCMapLapInfoView.m */; };
@@ -803,7 +802,6 @@
 		42AB680C16DD5C8100C633BD /* GCHealthMeasure.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB680B16DD5C8100C633BD /* GCHealthMeasure.m */; };
 		42AB680F16DD5C9500C633BD /* GCHealthOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB680E16DD5C9400C633BD /* GCHealthOrganizer.m */; };
 		42AB681716E0094A00C633BD /* GCFieldsCalculated.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB681616E0094A00C633BD /* GCFieldsCalculated.m */; };
-		42AB681A16E14CBD00C633BD /* GCSettingsManualLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB681916E14CBC00C633BD /* GCSettingsManualLoginViewController.m */; };
 		42AB681D16E2913300C633BD /* GCActivityTrackGraphOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB681C16E2913300C633BD /* GCActivityTrackGraphOptionsViewController.m */; };
 		42ACFE9518C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ACFE9418C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.m */; };
 		42ACFE9818C099AB00BF27A5 /* GCGarminLoginSSORequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ACFE9718C099AB00BF27A5 /* GCGarminLoginSSORequest.m */; };
@@ -2523,8 +2521,6 @@
 		42AB680E16DD5C9400C633BD /* GCHealthOrganizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthOrganizer.m; path = src/GCHealthOrganizer.m; sourceTree = "<group>"; };
 		42AB681516E0094A00C633BD /* GCFieldsCalculated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldsCalculated.h; path = src/GCFieldsCalculated.h; sourceTree = "<group>"; };
 		42AB681616E0094A00C633BD /* GCFieldsCalculated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldsCalculated.m; path = src/GCFieldsCalculated.m; sourceTree = "<group>"; };
-		42AB681816E14CBC00C633BD /* GCSettingsManualLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsManualLoginViewController.h; path = src/GCSettingsManualLoginViewController.h; sourceTree = "<group>"; };
-		42AB681916E14CBC00C633BD /* GCSettingsManualLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSettingsManualLoginViewController.m; path = src/GCSettingsManualLoginViewController.m; sourceTree = "<group>"; };
 		42AB681B16E2913200C633BD /* GCActivityTrackGraphOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityTrackGraphOptionsViewController.h; path = src/GCActivityTrackGraphOptionsViewController.h; sourceTree = "<group>"; };
 		42AB681C16E2913300C633BD /* GCActivityTrackGraphOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCActivityTrackGraphOptionsViewController.m; path = src/GCActivityTrackGraphOptionsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		42ACFE9318C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminLoginSimulatorRequest.h; path = src/GCGarminLoginSimulatorRequest.h; sourceTree = "<group>"; };
@@ -3181,8 +3177,6 @@
 				42E186EE16AB620A00D4513B /* GCSettingsBugReportViewController.m */,
 				4235DF9916558F3C00DE316A /* GCSettingsCacheManagementViewController.h */,
 				4235DF9A16558F3C00DE316A /* GCSettingsCacheManagementViewController.m */,
-				42AB681816E14CBC00C633BD /* GCSettingsManualLoginViewController.h */,
-				42AB681916E14CBC00C633BD /* GCSettingsManualLoginViewController.m */,
 				422637A31AFF6C5F005461E3 /* GCDebugActionsTableViewController.h */,
 				422637A41AFF6C5F005461E3 /* GCDebugActionsTableViewController.m */,
 				42CC45C9200A67C0003EB805 /* GCSettingsBugReport.h */,
@@ -6975,7 +6969,6 @@
 				422FAF8519A1DD6000D09773 /* GCHealthMeasure.m in Sources */,
 				422FAF8619A1DD6000D09773 /* GCHealthOrganizer.m in Sources */,
 				422FAF8719A1DD6000D09773 /* GCFieldsCalculated.m in Sources */,
-				422FAF8819A1DD6000D09773 /* GCSettingsManualLoginViewController.m in Sources */,
 				422FAF8919A1DD6000D09773 /* GCActivityTrackGraphOptionsViewController.m in Sources */,
 				422FAF8A19A1DD6000D09773 /* GCActivityTrackOptions.m in Sources */,
 				42BFC2611DCF517B00EAD40E /* GCStravaSegmentEfforts.m in Sources */,
@@ -7301,7 +7294,6 @@
 				42AB680F16DD5C9500C633BD /* GCHealthOrganizer.m in Sources */,
 				42A89C1F1D627444007CF90D /* GCUnitTrainingZone.m in Sources */,
 				42AB681716E0094A00C633BD /* GCFieldsCalculated.m in Sources */,
-				42AB681A16E14CBD00C633BD /* GCSettingsManualLoginViewController.m in Sources */,
 				42AB681D16E2913300C633BD /* GCActivityTrackGraphOptionsViewController.m in Sources */,
 				427C65C01D4677FB00F5DF70 /* GCSegment.swift in Sources */,
 				42753D6A16E402EE005C8281 /* GCActivityTrackOptions.m in Sources */,

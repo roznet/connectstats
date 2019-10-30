@@ -33,8 +33,6 @@
 @property (nonatomic,retain) NSString * oauthToken;
 @property (nonatomic,retain) GTMOAuth2Authentication * withingsAuth;
 
-//@property (nonatomic,retain) UIWebView * webView;
-
 @property (nonatomic,retain) NSError * lastError;
 
 @end

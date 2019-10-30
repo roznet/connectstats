@@ -218,7 +218,7 @@ static GTMOAuth2Keychain* gGTMOAuth2DefaultKeychain = nil;
 #endif
 
 - (void)dealloc {
-  [webView_ setDelegate:nil];
+  [webView_ setNavigationDelegate:nil];
 
   [backButton_ release];
   [forwardButton_ release];
@@ -413,13 +413,13 @@ static GTMOAuth2Keychain* gGTMOAuth2DefaultKeychain = nil;
 }
 
 - (void)notifyWithName:(NSString *)name
-               webView:(UIWebView *)webView
+               webView:(WKWebView *)webView
                   kind:(NSString *)kind {
   BOOL isStarting = [name isEqual:kGTMOAuth2WebViewStartedLoading];
   if (hasNotifiedWebViewStartedLoading_ == isStarting) {
     // Duplicate notification
     //
-    // UIWebView's delegate methods are so unbalanced that there's little
+    // WKWebView's delegate methods are so unbalanced that there's little
     // point trying to keep a count, as it could easily end up stuck greater
     // than zero.
     //
@@ -594,7 +594,7 @@ static Class gSignInClass = Nil;
       // before the sign-in web page loads.
       // The first fetch might be slow, so the client programmer may want
       // to show a local "loading" message.
-      // On iOS 5+, UIWebView will ignore loadHTMLString: if it's followed by
+      // On iOS 5+, WKWebView will ignore loadHTMLString: if it's followed by
       // a loadRequest: call, so if there is a "loading" message we defer
       // the loadRequest: until after after we've drawn the "loading" message.
       //
@@ -704,6 +704,7 @@ static Class gSignInClass = Nil;
 #pragma mark Protocol implementations
 
 - (void)viewWillAppear:(BOOL)animated {
+    webView_.navigationDelegate = self;
   // See the comment on clearBrowserCookies in viewWillDisappear.
   [[NSNotificationCenter defaultCenter] postNotificationName:kGTMOAuth2CookiesWillSwapOut
                                                       object:self
@@ -717,7 +718,7 @@ static Class gSignInClass = Nil;
     }
     if (![signIn_ startSigningIn]) {
       // Can't start signing in. We must pop our view.
-      // UIWebview needs time to stabilize. Animations need time to complete.
+      // WKWebview needs time to stabilize. Animations need time to complete.
       // We remove ourself from the view stack after that.
       [self performSelector:@selector(popView)
                  withObject:nil
@@ -799,18 +800,18 @@ static Class gSignInClass = Nil;
   [initialActivityIndicator_ setCenter:[webView_ center]];
 }
 
-- (BOOL)webView:(UIWebView *)webView
-  shouldStartLoadWithRequest:(NSURLRequest *)request
-              navigationType:(UIWebViewNavigationType)navigationType {
-
-  if (!hasDoneFinalRedirect_) {
-    hasDoneFinalRedirect_ = [signIn_ requestRedirectedToRequest:request];
-    if (hasDoneFinalRedirect_) {
-      // signIn has told the view to close
-      return NO;
+-(void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
+    NSURLRequest * request = navigationAction.request;
+    if (!hasDoneFinalRedirect_) {
+        hasDoneFinalRedirect_ = [signIn_ requestRedirectedToRequest:request];
+        if (hasDoneFinalRedirect_) {
+            // signIn has told the view to close
+            decisionHandler(WKNavigationActionPolicyCancel);
+            return;
+        }
     }
-  }
-  return YES;
+    decisionHandler(WKNavigationActionPolicyAllow);
+    return;
 }
 
 - (void)updateUI {
@@ -818,29 +819,23 @@ static Class gSignInClass = Nil;
   [forwardButton_ setEnabled:[[self webView] canGoForward]];
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)webView {
+-(void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation{
   [self notifyWithName:kGTMOAuth2WebViewStartedLoading
                webView:webView
                   kind:nil];
   [self updateUI];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
+-(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
   [self notifyWithName:kGTMOAuth2WebViewStoppedLoading
                webView:webView
                   kind:kGTMOAuth2WebViewFinished];
 
-  NSString *title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+  NSString *title = [webView title];
   if ([title length] > 0) {
     [signIn_ titleChanged:title];
-  } else {
-#if DEBUG && !defined(NS_BLOCK_ASSERTIONS)
-    // Verify that Javascript is enabled
-    NSString *result = [webView stringByEvaluatingJavaScriptFromString:@"1+1"];
-    NSAssert([result integerValue] == 2, @"GTMOAuth2: Javascript is required");
-#endif  // DEBUG && !defined(NS_BLOCK_ASSERTIONS)
   }
-
+    
   if (self.request && [self.initialHTMLString length] > 0) {
     // The request was pending.
     [self setInitialHTMLString:nil];
@@ -853,7 +848,7 @@ static Class gSignInClass = Nil;
   }
 }
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+-(void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error{
   [self notifyWithName:kGTMOAuth2WebViewStoppedLoading
                webView:webView
                   kind:kGTMOAuth2WebViewFailed];
@@ -870,7 +865,7 @@ static Class gSignInClass = Nil;
       // this error seems to provide a better experience than does immediately
       // cancelling sign-in.
       //
-      // This error also occurs whenever UIWebView is sent the stopLoading
+      // This error also occurs whenever WKWebView is sent the stopLoading
       // message, so if we ever send that message intentionally, we need to
       // revisit this bypass.
       return;
@@ -878,7 +873,7 @@ static Class gSignInClass = Nil;
 
     [signIn_ loadFailedWithError:error];
   } else {
-    // UIWebview needs time to stabilize. Animations need time to complete.
+    // WKWebview needs time to stabilize. Animations need time to complete.
     [signIn_ performSelector:@selector(loadFailedWithError:)
                   withObject:error
                   afterDelay:0.5

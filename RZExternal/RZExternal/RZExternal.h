@@ -23,7 +23,6 @@ FOUNDATION_EXPORT const unsigned char RZExternalVersionString[];
 #import "RZExternal/GTMNSString+HTML.h"
 
 #import "RZExternal/OAuth1Controller.h"
-#import "RZExternal/OAuth1WithingsController.h"
 
 #import "RZExternal/Kal.h"
 #import "RZExternal/KalDate.h"

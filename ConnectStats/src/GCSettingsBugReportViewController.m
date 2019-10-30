@@ -72,7 +72,7 @@
     [super viewDidLoad];
 
 	// Do any additional setup after loading the view.
-	UIWebView *contentView	= [[UIWebView alloc] initWithFrame: self.view.frame];
+	WKWebView *contentView	= [[WKWebView alloc] initWithFrame: self.view.frame];
     contentView.delegate = self;
 
     self.report = [GCSettingsBugReport bugReport];
@@ -97,14 +97,18 @@
     RZLog(RZLogWarning, @"memory warning %@", [RZMemory formatMemoryInUse]);
     // Dispose of any resources that can be recreated.
 }
--(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
+
+-(void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error{
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
--(void)webViewDidStartLoad:(UIWebView *)webView{
+
+
+-(void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation{
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
--(void)webViewDidFinishLoad:(UIWebView *)aWebView{
+
+-(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self.report cleanupAndReset];
     NSString * commonid = [aWebView stringByEvaluatingJavaScriptFromString:@"document.getElementById('commonid').value"];

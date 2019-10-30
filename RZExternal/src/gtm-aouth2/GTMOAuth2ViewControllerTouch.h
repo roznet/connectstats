@@ -35,7 +35,7 @@
 
 
 #import <UIKit/UIKit.h>
-
+@import WebKit;
 #import "GTMOAuth2Authentication.h"
 
 #ifdef __cplusplus
@@ -59,14 +59,14 @@ extern NSString *const kGTMOAuth2CookiesDidSwapIn;
 
 typedef void (^GTMOAuth2ViewControllerCompletionHandler)(GTMOAuth2ViewControllerTouch *viewController, GTMOAuth2Authentication *auth, NSError *error);
 
-@interface GTMOAuth2ViewControllerTouch : UIViewController<UINavigationControllerDelegate, UIWebViewDelegate> {
+@interface GTMOAuth2ViewControllerTouch : UIViewController<UINavigationControllerDelegate, WKNavigationDelegate> {
  @private
   UIButton *backButton_;
   UIButton *forwardButton_;
   UIActivityIndicatorView *initialActivityIndicator_;
   UIView *navButtonsView_;
   UIBarButtonItem *rightBarButtonItem_;
-  UIWebView *webView_;
+  WKWebView *webView_;
 
   // The object responsible for the sign-in networking sequence; it holds
   // onto the authentication object as well.
@@ -172,7 +172,7 @@ typedef void (^GTMOAuth2ViewControllerCompletionHandler)(GTMOAuth2ViewController
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView *initialActivityIndicator;
 @property (nonatomic, retain) IBOutlet UIView *navButtonsView;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *rightBarButtonItem;
-@property (nonatomic, retain) IBOutlet UIWebView *webView;
+@property (nonatomic, retain) IBOutlet WKWebView *webView;
 
 #if NS_BLOCKS_AVAILABLE
 // An optional block to be called when the view should be popped. If not set,

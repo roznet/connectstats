@@ -25,10 +25,11 @@
 
 #import <UIKit/UIKit.h>
 @import RZExternal;
+@import WebKit;
 
-@interface GCSettingsBugReportViewController : UIViewController<UIWebViewDelegate>{
+@interface GCSettingsBugReportViewController : UIViewController<WKNavigationDelegate>{
 }
-@property (nonatomic,retain) UIWebView * webView;
+@property (nonatomic,retain) WKWebView * webView;
 @property (nonatomic,retain) MBProgressHUD * hud;
 @property (nonatomic,retain) UITableViewController * parent;
 @property (nonatomic,assign) BOOL includeErrorFiles;
