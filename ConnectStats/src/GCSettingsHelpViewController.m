@@ -56,7 +56,7 @@
     contentView.navigationDelegate = self;
 
     self.webView = contentView;
-    NSString * aUrl = [GCAppGlobal healthStatsVersion] ? @"https://www.ro-z.net/healthstats" : @"https://www.ro-z.net/connectstats";
+    NSString * aUrl = [GCAppGlobal healthStatsVersion] ? @"https://www.ro-z.net/healthstats" : @"https://ro-z.net/blog/connectstats/documentation/";
 
 #if TARGET_IPHONE_SIMULATOR
     //aUrl = @"http://localhost/connectstats/connectstatsdoc.php";
@@ -83,15 +83,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
--(void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-}
--(void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-}
--(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
 @end

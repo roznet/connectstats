@@ -133,7 +133,7 @@
     [self selectNewActivity:[[GCAppGlobal organizer] currentActivity]];
 
     CGFloat height = 20.;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         height = 64.;
     }
     self.tableView.tableHeaderView = [[[UIView alloc] initWithFrame:CGRectMake(0., 0., 320., height)] autorelease];

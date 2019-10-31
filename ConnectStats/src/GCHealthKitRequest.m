@@ -37,7 +37,7 @@
 
 +(BOOL)isSupported{
 #ifdef GC_USE_HEALTHKIT
-    return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && [HKHealthStore class];
+    return [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone && [HKHealthStore class];
 #else
     return false;
 #endif

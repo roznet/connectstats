@@ -362,5 +362,8 @@
         return @"";
     }
 }
+-(void)versionSummary{
+    RZLog(RZLogInfo,@"Version %@", [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"]);
+}
 
 @end

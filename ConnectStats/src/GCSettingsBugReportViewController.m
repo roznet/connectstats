@@ -102,13 +102,11 @@
             dispatch_async(dispatch_get_main_queue(), ^(){
                 [self.webView loadHTMLString:html baseURL:self.report.urlRequest.URL];;
             });
-            
         }
     }];
     if (self.task) {
         [self.task resume];
     }
-
 }
 
 - (void)didReceiveMemoryWarning
@@ -119,16 +117,8 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-}
-
--(void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-}
 
 -(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self.report cleanupAndReset];
     [self.webView evaluateJavaScript:@"document.getElementById('commonid').value" completionHandler:^(NSString * commonid, NSError*error){
         if (commonid.integerValue>1) {
