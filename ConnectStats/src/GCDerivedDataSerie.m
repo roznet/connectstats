@@ -233,7 +233,8 @@ sqlite3_int64 kInvalidSerieId = 0;
 }
 
 -(void)loadFromFile:(NSString*)fn{
-    GCDerivedDataSerie * loaded = [NSKeyedUnarchiver unarchiveObjectWithFile:fn];
+    NSData * data = [NSData dataWithContentsOfFile:fn];
+    GCDerivedDataSerie * loaded = [NSKeyedUnarchiver unarchivedObjectOfClass:[GCDerivedDataSerie class] fromData:data error:nil];
     if ([loaded isKindOfClass:[GCDerivedDataSerie class]]) {
         if (self.derivedPeriod == loaded.derivedPeriod
             && self.derivedType==loaded.derivedType
@@ -248,8 +249,14 @@ sqlite3_int64 kInvalidSerieId = 0;
 }
 
 -(BOOL)saveToFile:(NSString*)fn{
-    BOOL rv = [NSKeyedArchiver archiveRootObject:self toFile:[RZFileOrganizer writeableFilePath:fn]];
+    NSError * err=nil;
+    BOOL rv = [[NSKeyedArchiver archivedDataWithRootObject:self
+                           requiringSecureCoding:YES error:&err] writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:YES];
+    if(err){
+        RZLog(RZLogError,@"failed to archive %@",err);
+    }
     if (rv) {
+        
         self.filePath = [RZFileOrganizer writeableFilePathIfExists:fn];
     }
     return rv;

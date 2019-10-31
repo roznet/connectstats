@@ -29,6 +29,9 @@
 #define GC_CODER_Z_DATA @"z_data"
 
 @implementation GCStatsDataPointMulti
++(BOOL)supportsSecureCoding{
+    return YES;
+}
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super initWithCoder:aDecoder];
