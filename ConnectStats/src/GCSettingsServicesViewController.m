@@ -30,7 +30,6 @@
 #import "GCService.h"
 #import "GCSportTracksBase.h"
 #import "GCSplitViewController.h"
-#import "GCSettingsManualLoginViewController.h"
 #import "GCHealthKitRequest.h"
 #import "GCHealthKitSourcesRequest.h"
 #import "GCSettingsSourceTableViewController.h"
@@ -461,21 +460,6 @@
         [textcell setIdentifierInt:GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_PASSWORD)];
         textcell.entryFieldDelegate = self;
         rv = textcell;
-    }else if (indexPath.row==GC_GARMIN_MANUAL_LOGIN){
-        gridcell = [GCCellGrid gridCell:tableView];
-        [gridcell setupForRows:2 andCols:1];
-
-        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Manual Login",@"Services")
-                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
-
-        NSString * msg = NSLocalizedString(@"Used to investigate login failures",@"Services");
-        NSAttributedString * details = [[[NSAttributedString alloc] initWithString:msg
-                                                                        attributes:[GCViewConfig attribute14Gray]] autorelease];
-
-        [gridcell labelForRow:0 andCol:0].attributedText = title;
-        [gridcell labelForRow:1 andCol:0].attributedText = details;
-        rv = gridcell;
-
     }
     if( rv == nil){
         return [self connectStatsTableView:tableView cellForRowAtIndexPath:indexPath];
@@ -1251,15 +1235,6 @@
         }
     }else if (indexPath.section==GC_SECTIONS_STRAVA&&indexPath.row==GC_STRAVA_LOGOUT){
         [GCAppGlobal searchAllActivities];
-    }else if (indexPath.section==GC_SECTIONS_GARMIN&&indexPath.row == GC_GARMIN_MANUAL_LOGIN){
-        GCSettingsManualLoginViewController * detail = [[GCSettingsManualLoginViewController alloc] initWithNibName:nil bundle:nil];
-        if (self.splitViewController) {
-            GCSplitViewController*sp = (GCSplitViewController*)self.splitViewController;
-            [sp.activityDetailViewController.navigationController pushViewController:detail animated:YES];
-        }else{
-            [self.navigationController pushViewController:detail animated:YES];
-        }
-        [detail release];
     }else if (indexPath.section == GC_SECTIONS_HEALTHKIT && indexPath.row == GC_HEALTHKIT_SOURCE){
         GCSettingsSourceTableViewController * source = [[GCSettingsSourceTableViewController alloc] initWithNibName:nil bundle:nil];
         [self.navigationController pushViewController:source animated:YES];

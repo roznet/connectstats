@@ -53,7 +53,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 	WKWebView *contentView	= [[WKWebView alloc] initWithFrame: self.view.frame];
-    contentView.delegate = self;
+    contentView.navigationDelegate = self;
 
     self.webView = contentView;
     NSString * aUrl = [GCAppGlobal healthStatsVersion] ? @"https://www.ro-z.net/healthstats" : @"https://www.ro-z.net/connectstats";
