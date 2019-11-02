@@ -689,24 +689,17 @@
     }else if (indexPath.row == GC_STRAVA_LOGOUT){
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:1];
-        NSDate * last = [GCStravaReqBase lastSync:nil];
-        if (last) {
-            // Message for upload
-            [gridcell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Signout", @"Other Service") attribute:@selector(attributeBold16)];
-            NSString * msg = [NSString stringWithFormat:NSLocalizedString(@"Last sync %@", @"Other Service"), last];
-            [gridcell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:msg attribute:@selector(attribute14Gray)];
-        }else{
+        
             // Message for download
-            if ([[GCAppGlobal profile] serviceSuccess:service]){
-                [gridcell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Logged in", @"Other Service") attribute:@selector(attributeBold16)] ;
-                if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:false]) {
-                    [gridcell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Pull down activity list to refresh activities", @"Strava Info") attribute:@selector(attribute14Gray)];
-                }
-            }else{
-                [gridcell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Never logged in - Tap to start", @"Other Service") attribute:@selector(attributeBold16)] ;
-                if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:false]) {
-                    [gridcell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Or pull down activity list to login and download", @"Strava Info") attribute:@selector(attribute14Gray)];
-                }
+        if ([[GCAppGlobal profile] serviceSuccess:service]){
+            [gridcell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Logged in", @"Other Service") attribute:@selector(attributeBold16)] ;
+            if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:false]) {
+                [gridcell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Pull down activity list to refresh or tap to logout", @"Strava Info") attribute:@selector(attribute14Gray)];
+            }
+        }else{
+            [gridcell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Never logged in - Tap to start", @"Other Service") attribute:@selector(attributeBold16)] ;
+            if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:false]) {
+                [gridcell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Or pull down activity list to login and download", @"Strava Info") attribute:@selector(attribute14Gray)];
             }
         }
         rv=gridcell;
@@ -1229,11 +1222,30 @@
         }
     }else if (indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_LOGOUT){
         if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] ){
-            [GCConnectStatsRequest logout];
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Confirm Logout" message:@"Do you want to log out from connectstats" preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addCancelAction];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Logout" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                RZLog(RZLogInfo, @"Log out of ConnectStats");
+                //[GCConnectStatsRequest logout];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
         }else{
             [GCAppGlobal searchAllActivities];
         }
     }else if (indexPath.section==GC_SECTIONS_STRAVA&&indexPath.row==GC_STRAVA_LOGOUT){
+        if( [[GCAppGlobal profile] serviceSuccess:gcServiceStrava] ){
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Confirm Logout" message:@"Are you sure you want to log out from strava" preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addCancelAction];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Logout" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                RZLog(RZLogInfo, @"Log out of Strava");
+                //[GCConnectStatsRequest logout];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }else{
+            [GCAppGlobal searchAllActivities];
+        }
         [GCAppGlobal searchAllActivities];
     }else if (indexPath.section == GC_SECTIONS_HEALTHKIT && indexPath.row == GC_HEALTHKIT_SOURCE){
         GCSettingsSourceTableViewController * source = [[GCSettingsSourceTableViewController alloc] initWithNibName:nil bundle:nil];
