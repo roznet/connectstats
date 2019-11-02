@@ -199,6 +199,7 @@ NSString * kGarminFullUrl =
         }
     }else if (self.ssoStage == gcSSOLoginWithServiceTicket){
         [self.delegate loginSuccess:gcWebServiceGarmin];
+        
     }
     [self saveCookiesForStage];
 
