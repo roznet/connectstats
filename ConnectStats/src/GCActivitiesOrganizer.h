@@ -93,6 +93,11 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 -(GCActivity*)lastActivity;
 -(GCActivity*)oldestActivity;
 /**
+ * Return summary of activities for each service.
+ * @return dictionary with key GCService.displayName to { @"earliest", @"latest", @"count" }
+ */
+-(NSDictionary*)serviceSummary;
+/**
  Return activity compare if selected and valid (same type/but not the same) as given activity or nil
  */
 -(GCActivity*)validCompareActivityFor:(GCActivity*)activity;

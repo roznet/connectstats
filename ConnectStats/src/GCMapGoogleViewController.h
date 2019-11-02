@@ -26,14 +26,10 @@
 #import <UIKit/UIKit.h>
 #import "GCMapImplementorProtocol.h"
 
-@import GoogleMaps;
-
 @interface GCMapGoogleViewController : UIViewController<GCMapImplementorProtocol>
-@property (nonatomic,retain) GMSMapView * mapView;
 @property (nonatomic,assign) NSObject<GCMapDataSourceProtocol> * mapDataSource;
 @property (nonatomic,retain) GCViewGradientColors * gradientColors;
-@property (nonatomic,retain) GMSCoordinateBounds * bounds;
 
 +(NSUInteger)numberOfMapType;
-
++(void)provideAPIKey:(NSString*)key;
 @end

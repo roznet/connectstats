@@ -76,6 +76,7 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
 +(void)signout{
     [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:NO];
     [GTMOAuth2ViewControllerTouch removeAuthFromKeychainForName:[kKeychainItemName stringByAppendingString:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]]];
+    [GCAppGlobal saveSettings];
 }
 
 -(void)signInToStrava{
@@ -111,9 +112,14 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
         self.status = GCWebStatusConnectionError;
         self.lastError = error;
         [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:NO];
+        [GCAppGlobal saveSettings];
         [self processDone];
     } else {
-        [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:YES];
+        // first success
+        if( [[GCAppGlobal profile] serviceEnabled:(gcService)gcServiceStrava] == NO){
+            [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:YES];
+            [GCAppGlobal saveSettings];
+        }
         [self processDone];
     }
 }

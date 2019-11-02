@@ -18,6 +18,8 @@
 		42248C112014E1BC006ADC90 /* RZShapeFileMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 422489772014DC5F006ADC90 /* RZShapeFileMapView.m */; };
 		422626011FFA7C5F000DBD32 /* RZNavigationTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 422626001FFA7C5E000DBD32 /* RZNavigationTitleView.m */; };
 		422626031FFA7C68000DBD32 /* RZNavigationTitleView.h in Headers */ = {isa = PBXBuildFile; fileRef = 422626021FFA7C68000DBD32 /* RZNavigationTitleView.h */; };
+		4245113E236D8956005CDEEC /* DeviceUtil+Constant.h in Headers */ = {isa = PBXBuildFile; fileRef = 4245113C236D8956005CDEEC /* DeviceUtil+Constant.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4245113F236D8956005CDEEC /* DeviceUtil+Constant.m in Sources */ = {isa = PBXBuildFile; fileRef = 4245113D236D8956005CDEEC /* DeviceUtil+Constant.m */; };
 		4251B5B4219F73BA00E15F9F /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B265211FF8314400E891A1 /* KeychainWrapper.swift */; };
 		4251B5B5219F73BA00E15F9F /* KeychainItemAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B265231FF8314400E891A1 /* KeychainItemAccessibility.swift */; };
 		4264484C20272BAA00CF7A04 /* fit_dive_alarm_mesg.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4264484020272BA800CF7A04 /* fit_dive_alarm_mesg.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -413,6 +415,8 @@
 		42248C052014E16A006ADC90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		422626001FFA7C5E000DBD32 /* RZNavigationTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RZNavigationTitleView.m; sourceTree = "<group>"; };
 		422626021FFA7C68000DBD32 /* RZNavigationTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RZNavigationTitleView.h; sourceTree = "<group>"; };
+		4245113C236D8956005CDEEC /* DeviceUtil+Constant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DeviceUtil+Constant.h"; sourceTree = "<group>"; };
+		4245113D236D8956005CDEEC /* DeviceUtil+Constant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DeviceUtil+Constant.m"; sourceTree = "<group>"; };
 		4264484020272BA800CF7A04 /* fit_dive_alarm_mesg.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fit_dive_alarm_mesg.hpp; sourceTree = "<group>"; };
 		4264484120272BA800CF7A04 /* fit_dive_settings_mesg.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fit_dive_settings_mesg.hpp; sourceTree = "<group>"; };
 		4264484220272BA800CF7A04 /* fit_dive_summary_mesg_listener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fit_dive_summary_mesg_listener.hpp; sourceTree = "<group>"; };
@@ -1449,6 +1453,8 @@
 		42B2656D1FF8314400E891A1 /* uidevice-extensions */ = {
 			isa = PBXGroup;
 			children = (
+				4245113C236D8956005CDEEC /* DeviceUtil+Constant.h */,
+				4245113D236D8956005CDEEC /* DeviceUtil+Constant.m */,
 				42B2656E1FF8314400E891A1 /* DeviceUtil.h */,
 				42B2656F1FF8314400E891A1 /* DeviceUtil.m */,
 				42B265701FF8314400E891A1 /* DeviceList.plist */,
@@ -1746,6 +1752,7 @@
 				42B265A21FF8314400E891A1 /* CHCSVParser.h in Headers */,
 				42B2669B1FF8314500E891A1 /* GTMOAuth2Authentication.h in Headers */,
 				42B266951FF8314500E891A1 /* SwiftKeychainWrapper.h in Headers */,
+				4245113E236D8956005CDEEC /* DeviceUtil+Constant.h in Headers */,
 				42B265A71FF8314400E891A1 /* Base64Transcoder.h in Headers */,
 				42B265771FF8314400E891A1 /* Kal.h in Headers */,
 				42B265981FF8314400E891A1 /* ECSlidingInteractiveTransition.h in Headers */,
@@ -2064,6 +2071,7 @@
 				422626011FFA7C5F000DBD32 /* RZNavigationTitleView.m in Sources */,
 				42B265AE1FF8314400E891A1 /* NSString+URLEncoding.m in Sources */,
 				42B265AF1FF8314400E891A1 /* OAuth1Controller.m in Sources */,
+				4245113F236D8956005CDEEC /* DeviceUtil+Constant.m in Sources */,
 				42B265861FF8314400E891A1 /* KalDate.m in Sources */,
 				42B265B01FF8314400E891A1 /* MBProgressHUD.m in Sources */,
 				42B2659A1FF8314400E891A1 /* UIViewController+ECSlidingViewController.m in Sources */,

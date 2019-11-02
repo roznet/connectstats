@@ -30,7 +30,7 @@
 #import "GCActivitiesCacheManagement.h"
 #include <execinfo.h>
 @import RZExternal;
-@import GoogleMaps;
+#include "GCMapGoogleViewController.h"
 #import "GCSettingsBugReportViewController.h"
 #import "GCWebConnect+Requests.h"
 #import "GCAppActions.h"
@@ -146,7 +146,7 @@ void checkVersion(){
         [Appirater setAppId:[self credentialsForService:@"appstore" andKey:@"healthstats"]];
     }
 
-    [GMSServices provideAPIKey:[self credentialsForService:@"googlemaps" andKey:@"api_key"]];
+    [GCMapGoogleViewController provideAPIKey:[self credentialsForService:@"googlemaps" andKey:@"api_key"]];
     BOOL ok = [self startInit];
     if (!ok) {
         RZLog(RZLogError, @"Multiple failure to start");

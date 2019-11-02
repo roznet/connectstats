@@ -40,6 +40,7 @@
 #import "GCDebugServiceKeys.h"
 #import "GCCellEntryText+GCViewConfig.h"
 #import "GCConnectStatsRequest.h"
+#import "GCWithingsReqBase.h"
 
 #import "GCSettingsServicesViewConstants.h"
 
@@ -287,6 +288,37 @@
     return years;
 }
 
+-(void)setupServiceStatusCell:(GCCellGrid*)gridCell forService:(GCService*)service secondary:(GCService*)secondary{
+    NSDictionary * summaryDict = [[GCAppGlobal organizer] serviceSummary];
+    NSDictionary * details = summaryDict[ service.displayName ];
+    NSString * subtitle = NSLocalizedString(@"No activities", @"Service Summary");
+    if( details ){
+        if( secondary != nil && summaryDict[ secondary.displayName ] ){
+            NSDictionary * secondDetails = summaryDict[ secondary.displayName ];
+            
+            subtitle = [NSString stringWithFormat:@"%@+%@ activities, latest %@", details[@"count"], secondDetails[@"count"], [details[@"latest"] dateShortFormat]];
+        }else{
+            subtitle = [NSString stringWithFormat:@"%@ activities, latest %@", details[@"count"], [details[@"latest"] dateShortFormat]];
+        }
+    }
+
+    NSString * title = nil;
+    
+    if( [[GCAppGlobal profile] serviceSuccess:service.service] ){
+        title = NSLocalizedString(@"Successfully Logged in - Tap to logout",@"Services");
+    }else{
+        if( details ){
+            title = NSLocalizedString(@"Previously Logged in - Tap to start again", @"Service" );
+        }else{
+            title = NSLocalizedString(@"Never Logged in - Tap to start", @"Service" );
+        }
+    }
+    
+    [gridCell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attributeBold16] withString:title];
+    [gridCell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withString:subtitle];
+}
+
+
 - (UITableViewCell *)withingsTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell * rv = nil;
     GCCellEntryText * textcell = nil;
@@ -370,19 +402,16 @@
             NSAttributedString * title = nil;
             NSAttributedString * sub   = nil;
 
-            BOOL error = false;
-
-            if ([[GCAppGlobal profile] serviceSuccess:service] && error==false) {
-                title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Setup successful",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
-                NSUInteger count = [GCAppGlobal health].measures.count;
-                NSString * subm = [NSString stringWithFormat:NSLocalizedString(@"%d measures",@"Withings Status"), count];
+            if ([[GCAppGlobal profile] serviceSuccess:gcServiceWithings]) {
+                title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Setup successful - Tap to Logout",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
+                NSArray<GCHealthMeasure*>*measures = [GCAppGlobal health].measures;
+                NSUInteger count = measures.count;
+                GCHealthMeasure * latest = measures.firstObject;
+                NSString * subm = [NSString stringWithFormat:NSLocalizedString(@"%d measures, latest %@",@"Withings Status"), count, [latest.date dateShortFormat]];
                 sub = [[[NSAttributedString alloc] initWithString:subm attributes:[GCViewConfig attribute14Gray]] autorelease];
             }else{
-                title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Press to login",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
+                title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Tap to login",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
                 sub = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"No successful login yet",@"Services") attributes:[GCViewConfig attribute14Gray]] autorelease];
-                if (error) {
-                    sub = [GCViewConfig attributedString:@"An error occured - no successful login yet" attribute:@selector(attribute14Gray)];
-                }
             }
 
             [gridcell labelForRow:0 andCol:0].attributedText = title;
@@ -593,41 +622,15 @@
     }else if( indexPath.row == GC_CONNECTSTATS_LOGOUT){
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:1];
+
+        [self setupServiceStatusCell:gridcell forService:[GCService service:gcServiceConnectStats] secondary:[GCService service:gcServiceGarmin]];
         
-        GCActivity * latest = nil;
-        
-        if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats] ){
-            latest = [[GCAppGlobal organizer] mostRecentActivityFromService:[GCService service:gcServiceConnectStats]];
-        }
-  
-        NSString * message = nil;
-        
-        if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] ){
-            message = NSLocalizedString(@"Successfully Logged in - Tap to logout",@"Services");
-        }else{
-            if( latest ){
-                message = NSLocalizedString(@"Previously Logged in - Tap to start again", @"Service" );
-            }else{
-                message = NSLocalizedString(@"Never Logged in - Tap to start", @"Service" );
-            }
-        }
-        
-        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:message
-                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
-        
-        if( latest ){
-            NSAttributedString * subtitle = [NSAttributedString attributedString:[GCViewConfig attribute14Gray]
-                                                                      withFormat:NSLocalizedString(@"Latest Activity %@", @"Services"), [latest.date dateShortFormat]];
-            [gridcell labelForRow:1 andCol:0].attributedText = subtitle;
-        }else{
-            [gridcell labelForRow:1 andCol:0].attributedText = nil;
-        }
-        [gridcell labelForRow:0 andCol:0].attributedText = title;
         rv = gridcell;
     }
     
     return rv;
 }
+
 
 - (UITableViewCell *)stravaTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell * rv = nil;
@@ -689,19 +692,8 @@
     }else if (indexPath.row == GC_STRAVA_LOGOUT){
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:1];
+        [self setupServiceStatusCell:gridcell forService:[GCService service:gcServiceStrava] secondary:nil];
         
-            // Message for download
-        if ([[GCAppGlobal profile] serviceSuccess:service]){
-            [gridcell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Logged in", @"Other Service") attribute:@selector(attributeBold16)] ;
-            if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:false]) {
-                [gridcell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Pull down activity list to refresh or tap to logout", @"Strava Info") attribute:@selector(attribute14Gray)];
-            }
-        }else{
-            [gridcell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Never logged in - Tap to start", @"Other Service") attribute:@selector(attributeBold16)] ;
-            if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:false]) {
-                [gridcell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Or pull down activity list to login and download", @"Strava Info") attribute:@selector(attribute14Gray)];
-            }
-        }
         rv=gridcell;
     }
     return rv;
@@ -1180,10 +1172,22 @@
     }
 
     if (indexPath.section==GC_SECTIONS_WITHINGS&&indexPath.row==GC_ROW_STATUS) {
-        if (self.updating == false) {
-            self.updating = true;
-            [[GCAppGlobal web] withingsUpdate];
-            [self.tableView reloadData];
+        if( [[GCAppGlobal profile] serviceSuccess:gcServiceWithings] ){
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Confirm Logout" message:@"Do you want to log out from withings" preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addCancelAction];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Logout" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                RZLog(RZLogInfo, @"Log out of Withings");
+                [GCWithingsReqBase signout];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
+
+        }else{
+            if (self.updating == false) {
+                self.updating = true;
+                [[GCAppGlobal web] withingsUpdate];
+                [self.tableView reloadData];
+            }
         }
     }else if (indexPath.section==GC_SECTIONS_GARMIN && indexPath.row==GC_GARMIN_METHOD){
         gcGarminDownloadSource source = [GCViewConfig garminDownloadSource];
@@ -1227,7 +1231,7 @@
             [alert addCancelAction];
             [alert addAction:[UIAlertAction actionWithTitle:@"Logout" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
                 RZLog(RZLogInfo, @"Log out of ConnectStats");
-                //[GCConnectStatsRequest logout];
+                [GCConnectStatsRequest logout];
             }]];
             [self presentViewController:alert animated:YES completion:nil];
         }else{
@@ -1240,7 +1244,7 @@
             [alert addCancelAction];
             [alert addAction:[UIAlertAction actionWithTitle:@"Logout" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
                 RZLog(RZLogInfo, @"Log out of Strava");
-                //[GCConnectStatsRequest logout];
+                [GCStravaReqBase signout];
             }]];
             [self presentViewController:alert animated:YES completion:nil];
         }else{

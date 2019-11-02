@@ -141,7 +141,11 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
 -(void)authorizeRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError * _Nullable))handler{
     [self.withingsAuth authorizeRequest:request completionHandler:^(NSError*error){
         if( error == nil){
-            [[GCAppGlobal profile] serviceSuccess:gcServiceWithings set:YES];
+            // first successs
+            if( [[GCAppGlobal profile] serviceSuccess:gcServiceWithings] == NO){
+                [[GCAppGlobal profile] serviceSuccess:gcServiceWithings set:YES];
+                [GCAppGlobal saveSettings];
+            }
         }else{
             [GCWithingsReqBase signout];
         }
@@ -154,6 +158,7 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
     
     [[GCAppGlobal profile] serviceSuccess:gcServiceWithings set:NO];
     [GTMOAuth2ViewControllerTouch removeAuthFromKeychainForName:self.currentKeyChainName];
+    [GCAppGlobal saveSettings];
 
 }
 

@@ -178,8 +178,6 @@
 
 -(void)servicesResetLogin{
     [self resetSuccessfulLogin];
-    [self clearCookies];
-    [GCStravaReqBase signout];
     [self servicesLogin];
 }
 -(void)servicesLogin{
