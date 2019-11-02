@@ -171,7 +171,7 @@
     self.sleepBlocks = newBlocks;
 
 }
--(void)addHealthMeasure:(GCHealthMeasure*)one{
+-(BOOL)addHealthMeasure:(GCHealthMeasure*)one{
     if (one && [self measureForId:one.measureId andType:one.type]==nil) {
         [one saveToDb:self.db];
         NSMutableArray * measnew= [NSMutableArray arrayWithArray:self.measures];
@@ -180,7 +180,9 @@
             return [obj2.date compare:obj1.date];
         }];
         self.measures = [NSArray arrayWithArray:measnew];
+        return true;
     }
+    return false;
 }
 
 -(GCHealthMeasure*)measureForId:(NSString*)aId andType:(gcMeasureType)aType{

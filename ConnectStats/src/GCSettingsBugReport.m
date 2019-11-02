@@ -34,6 +34,7 @@
 #import "GCAppGlobal.h"
 #import "GCService.h"
 #import "GCViewConfig.h"
+#import "GCAppDelegate.h"
 
 
 NSString * kBugFilename = @"bugreport.zip";
@@ -106,7 +107,9 @@ NSString * kBugNoCommonId = @"-1";
     }
     if([[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:false]){
         RZLog(RZLogInfo, @"Enabled:  Strava Upload");
-    }    
+    }
+    GCAppDelegate * appDelegate = (GCAppDelegate*)[[UIApplication sharedApplication] delegate];
+    [appDelegate versionSummary];
 }
 
 -(void)checkDb{
@@ -117,11 +120,11 @@ NSString * kBugNoCommonId = @"-1";
 }
 
 -(NSURLRequest*)urlRequest{
-    NSString * aURL = @"https://www.ro-z.net/connectstats/bugreport.php?dir=bugs";
+    NSString * aURL = @"https://ro-z.net/connectstats/bugreport.php?dir=bugs";
 #if TARGET_IPHONE_SIMULATOR
     aURL = @"http://localhost/connectstats/bugreport.php?dir=bugs";
 #endif
-
+    //aURL = @"https://ro-z.net/connectstats/bugreport.php?dir=bugs";
     return [self urlResquestFor:aURL];
 }
 

@@ -31,7 +31,7 @@
 
 @interface GCTrackStats ()
 @property (nonatomic,retain) GCStatsDataSerieWithUnit * data;
-@property (nonatomic,retain) GCStatsDataSerieWithUnit * extra_data;
+@property (nonatomic,retain) NSArray<GCStatsDataSerieWithUnit*> * extra_data;
 @property (nonatomic,retain) GCStatsDataSerie * gradientSerie;
 @property (nonatomic,retain) NSObject<GCStatsFunction> * gradientFunction;
 
@@ -48,12 +48,12 @@
 }
 
 -(NSUInteger)nDataSeries{
-    return self.extra_data ? 2 : 1;
+    return self.extra_data ? self.extra_data.count + 1 : 1;
 }
 
 -(GCStatsDataSerie * )dataSerie:(NSUInteger)idx{
-    if (idx==1 && self.extra_data) {
-        return self.extra_data.serie;
+    if (idx>=1 && (idx-1) < self.extra_data.count) {
+        return self.extra_data[idx-1].serie;
     }
     if (_data != nil) {
         return _data.serie;
@@ -98,6 +98,7 @@
     self.zoneCalculator = other.zoneCalculator;
     self.highlightLapIndex = other.highlightLapIndex;
     self.highlightLap = other.highlightLap;
+    self.extra_data = other.extra_data ? [NSArray arrayWithArray:other.extra_data] : nil;
 }
 
 -(CGFloat)maxValue{
@@ -161,6 +162,8 @@
             [nu convertToGlobalSystem];
 
             if(self.field.fieldFlag == gcFieldFlagPower && [GCAppGlobal configGetBool:CONFIG_POWER_CURVE_LOG_SCALE defaultValue:true]){
+                // copy to not mess original serie
+                nu = [GCStatsDataSerieWithUnit dataSerieWithOther:nu];
                 GCUnit * logScale = [GCUnitLogScale logScaleUnitFor:nu.xUnit base:10. scaling:0.1 shift:1.];
                 [nu convertToXUnit:logScale];
             }
@@ -229,6 +232,7 @@
     self.l_field=lField;
 
     self.data = [self serieForStyle:self.statsStyle field:self.field];
+    self.extra_data = nil;
 
     if (xField!=gcFieldFlagNone) {
 
@@ -263,7 +267,7 @@
         GCStatsDataSerie * gserie = [self.activity highlightSerieForLap:self.highlightLapIndex timeAxis:!self.distanceAxis];
         if (self.zoneCalculator) {
             // extra data is the bucket for the lap, data for the whole serie so we see the lap over total
-            self.extra_data = [[self.data filterForNonZeroIn:gserie] bucketWith:[self.zoneCalculator bucketSerieWithUnit]];
+            self.extra_data = @[ [[self.data filterForNonZeroIn:gserie] bucketWith:[self.zoneCalculator bucketSerieWithUnit]] ];
             self.data = [self.data bucketWith:[self.zoneCalculator bucketSerieWithUnit]];
         }else{
             GCStatsNonZeroIndicatorFunction * scaledF= [GCStatsNonZeroIndicatorFunction nonZeroIndicatorFor:gserie];
@@ -272,6 +276,19 @@
         }
     }else if(self.zoneCalculator) {
         self.data = [self.data bucketWith:[self.zoneCalculator bucketSerieWithUnit:self.data.unit]];
+    }else if(self.statsStyle == gcTrackStatsRollingBest){
+        GCStatsDataSerieWithUnit * su = [self.activity standardizedBestRollingTrack:self.field thread:[GCAppGlobal worker]];
+        
+        if(self.field.fieldFlag == gcFieldFlagPower && [GCAppGlobal configGetBool:CONFIG_POWER_CURVE_LOG_SCALE defaultValue:true]){
+            // copy to not mess original serie
+            su = [GCStatsDataSerieWithUnit dataSerieWithOther:su];
+            GCUnit * logScale = [GCUnitLogScale logScaleUnitFor:su.xUnit base:10. scaling:0.1 shift:1.];
+            [su convertToXUnit:logScale];
+        }
+
+        if( su ){
+            self.extra_data = @[ su ];
+        }
     }
 
     if (xField==nil && self.activity.garminSwimAlgorithm) {

@@ -34,7 +34,7 @@
 +(GCActivityMetaValue*)activityValueForResultSet:(FMResultSet*)res;
 +(GCActivityMetaValue*)activityValueForDict:(NSDictionary*)aDict andField:(NSString*)afield;
 +(GCActivityMetaValue*)activityMetaValueForDisplay:(NSString*)aDisp andField:(NSString*)afield;
-
++(GCActivityMetaValue*)activityMetaValueForDisplay:(NSString*)aDisp key:(NSString*)key andField:(NSString*)afield;
 
 -(void)updateDb:(FMDatabase*)db forActivityId:(NSString*)activityId;
 -(void)saveToDb:(FMDatabase*)db forActivityId:(NSString*)activityId;

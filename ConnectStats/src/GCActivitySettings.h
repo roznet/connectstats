@@ -52,6 +52,10 @@
  minimum time interval treated as a gap
  */
 @property (nonatomic,assign) NSTimeInterval gapTimeInterval;
+/**
+ * dispatch queue to use for background calculation, nil to do everything synchronously
+ */
+@property (nonatomic,retain) dispatch_queue_t worker;
 
 -(void)setupWithGlobalConfig:(GCActivity*)act;
 -(BOOL)shouldAdjustToMatchLapAverageForField:(GCField*)field;

@@ -52,80 +52,112 @@ def known_fields():
 with open('fit_map.json', 'r' ) as of:
     existing = json.load( of )
 
+# know are the fields that connectstats will know from the fields database
+# it means it will know the display name and the units
 known = known_fields()
-
-oldmap = {
-    'Altitude': 'GainElevation',
-    'AvgAltitude': 'WeightedMeanElevation',
-    'AvgCadence': 'WeightedMeanCadence',
-    'AvgFractionalCadence': 'WeightedMeanFractionalCadence',
-    'AvgHeartRate': 'WeightedMeanHeartRate',
-    'AvgLapTime': 'SumDuration',
-    'AvgLeftPedalSmoothness': 'WeightedMeanLeftPedalSmoothness',
-    'AvgLeftTorqueEffectiveness': 'WeightedMeanLeftTorqueEffectiveness',
-    'AvgNegGrade': 'WeightedMeanNegGrade',
-    'AvgNegVerticalSpeed': 'WeightedMeanNegVerticalSpeed',
-    'AvgPosGrade': 'WeightedMeanPosGrade',
-    'AvgPosVerticalSpeed': 'WeightedMeanPosVerticalSpeed',
-    'AvgPower': 'WeightedMeanPower',
-    'AvgRightPedalSmoothness': 'WeightedMeanRightPedalSmoothness',
-    'AvgRightTorqueEffectiveness': 'WeightedMeanRightTorqueEffectiveness',
-    'AvgRunningCadence': 'WeightedMeanRunCadence',
-    'AvgSpeed': 'WeightedMeanSpeed',
-    'AvgStanceTime': 'WeightedMeanStanceTime',
-    'AvgStanceTimePercent': 'WeightedMeanStanceTimePercent',
-    'AvgStrokeCount': 'WeightedMeanStrokes',
-    'AvgStrokeDistance': 'WeightedMeanStrokeDistance',
-    'AvgTemperature': 'WeightedMeanAirTemperature',
-    'AvgVerticalOscillation': 'WeightedMeanVerticalOscillation',
-    'AvgVerticalRatio' : 'WeightedMeanVerticalRatio',
-    'Cadence': 'WeightedMeanCadence',
-    'Distance': 'SumDistance',
-    'HeartRate': 'WeightedMeanHeartRate',
-    'IntensityFactor': 'SumIntensityFactor',
-    'MaxAltitude': 'MaxElevation',
-    'MaxMeanGroundTime': 'MaxGroundContactTime',
-    'MaxRunningCadence': 'MaxRunCadence',
-    'max_cadence': 'MaxCadence',
-    'MaxTemperature': 'MaxAirTemperature',
-    'MinAltitude': 'MinElevation',
-    'NormalizedPower': 'WeightedMeanNormalizedPower',
-    'Power': 'WeightedMeanPower',
-    'Speed': 'WeightedMeanSpeed',
-    'StanceTime': 'WeightedMeanGroundContactTime',
-    'Temperature': 'WeightedMeanAirTemperature',
-    'TotalAscent': 'GainElevation',
-    'TotalCalories': 'SumEnergy',
-    'TotalDescent': 'LossElevation',
-    'TotalDistance': 'SumDistance',
-    'TotalElapsedTime': 'SumElapsedDuration',
-    'TotalMovingTime': 'SumMovingDuration',
-    'TotalTimerTime': 'SumElapsedDuration',
-    'TotalTrainingEffect': 'SumTrainingEffect',
-    'TrainingStressScore': 'SumTrainingStressScore',
-    'VerticalOscillation': 'WeightedMeanVerticalOscillation',
-    'avg_stance_time_balance': 'WeightedMeanStanceTimeBalance',
+known_map = {
+    'altitude'                        : 'GainElevation',
+    'avg_altitude'                    : 'WeightedMeanElevation',
+    'avg_cadence'                     : 'WeightedMeanCadence',
+    'avg_fractional_cadence'          : 'WeightedMeanFractionalCadence',
+    'avg_heart_rate'                  : 'WeightedMeanHeartRate',
+    'avg_lap_time'                    : 'SumDuration',
+    'avg_neg_grade'                   : 'WeightedMeanNegGrade',
+    'avg_neg_vertical_speed'          : 'WeightedMeanNegVerticalSpeed',
+    'avg_pos_grade'                   : 'WeightedMeanPosGrade',
+    'avg_pos_vertical_speed'          : 'WeightedMeanPosVerticalSpeed',
+    'avg_power'                       : 'WeightedMeanPower',
+    'avg_speed'                       : 'WeightedMeanSpeed',
+    'avg_stance_time'                 : 'WeightedMeanStanceTime',
+    'avg_stance_time_percent'         : 'WeightedMeanStanceTimePercent',
+    'avg_stroke_count'                : 'WeightedMeanStrokes',
+    'avg_stroke_distance'             : 'WeightedMeanStrokeDistance',
+    'avg_swimming_cadence'            : 'WeightedMeanSwimCadence',
+    'avg_temperature'                 : 'WeightedMeanAirTemperature',
+    'avg_vertical_oscillation'        : 'WeightedMeanVerticalOscillation',
+    'cadence'                         : 'WeightedMeanCadence',
+    'distance'                        : 'SumDistance',
+    'enhanced_altitude'               : 'GainElevation',
+    'enhanced_avg_altitude'           : 'GainElevation',
+    'enhanced_avg_speed'              : 'WeightedMeanSpeed',
+    'enhanced_max_altitude'           : 'MaxElevation',
+    'enhanced_max_speed'              : 'MaxSpeed',
+    'enhanced_min_altitude'           : 'MinElevation',
+    'enhanced_speed'                  : 'WeightedMeanSpeed',
+    'heart_rate'                      : 'WeightedMeanHeartRate',
+    'intensity_factor'                : 'SumIntensityFactor',
+    'left_pedal_smoothness'           : 'WeightedMeanLeftPedalSmoothness',
+    'left_right_balance'              : 'WeightedMeanRightBalance',
+    'left_torque_effectiveness'       : 'WeightedMeanLeftTorqueEffectiveness',
+    'max_altitude'                    : 'MaxElevation',
+    'max_cadence'                     : 'MaxCadence',
+    'max_fractional_cadence'          : 'MaxFractionalCadence',
+    'max_heart_rate'                  : 'MaxHeartRate',
+    'max_power'                       : 'MaxPower',
+    'max_speed'                       : 'MaxSpeed',
+    'max_temperature'                 : 'MaxAirTemperature',
+    'min_altitude'                    : 'MinElevation',
+    'min_heart_rate'                  : 'MinHeartRate',
+    'normalized_power'                : 'WeightedMeanNormalizedPower',
+    'power'                           : 'WeightedMeanPower',
+    'right_pedal_smoothness'          : 'WeightedMeanRightPedalSmoothness',
+    'right_torque_effectiveness'      : 'WeightedMeanRightTorqueEffectiveness',
+    'speed'                           : 'WeightedMeanSpeed',
+    'stance_time'                     : 'WeightedMeanGroundContactTime',
+    'temperature'                     : 'WeightedMeanAirTemperature',
+    'threshold_power'                 : 'ThresholdPower',
+    'total_anaerobic_training_effect' : 'SumAnaerobicTrainingEffect',
+    'total_ascent'                    : 'GainElevation',
+    'total_calories'                  : 'SumEnergy',
+    'total_descent'                   : 'LossElevation',
+    'total_distance'                  : 'SumDistance',
+    'total_elapsed_time'              : 'SumElapsedDuration',
+    'total_moving_time'               : 'SumMovingDuration',
+    'total_strokes'                   : 'SumStrokes',
+    'total_timer_time'                : 'SumDuration',
+    'total_training_effect'           : 'SumTrainingEffect2',
+    'training_stress_score'           : 'SumTrainingStressScore',
+    'vertical_oscillation'            : 'WeightedMeanVerticalOscillation',
 }
 
+verbose = False
 
+oldused = {}
+missing = {}
 for (msg,defs) in existing.items():
     newdefs = defs.copy()
+
     for (key,val) in defs.items():
+
+        # check if already changed in the json file
         if key != val:
+            if val != known_map[key] and verbose:
+                print( 'Diff:    {} maps to {} but expected {}'.format( key, val, known_map[key] ) )
+            if val not in known and verbose:
+                print( 'Unknown: {} maps to {} but not a known field'.format( key, val ) )
             continue
+        
         checkval = val
-        for (fit,cs) in [ ('total_', 'sum_'), ('avg_', 'weighted_mean_'), ('enhanced_avg_', 'weighted_mean_'), ]:
+        for (fit,cs) in [ ('total_', 'sum_'), ('avg_', 'weighted_mean_'), ('enhanced_avg_', 'weighted_mean_'), ('enhanced_', 'weighted_mean_')]:
             if checkval.startswith( fit ):
                 checkval = checkval.replace( fit,cs )
+                break
+            
         candidate = to_camel_case( checkval )
         if candidate in known:
             newdefs[val] = candidate
-        elif val in oldmap:
-            newdefs[val] = oldmap[val]
-        elif to_camel_case( val ) in oldmap:
-            newdefs[val] = oldmap[to_camel_case( val )]
+        elif val in known_map:
+            if val not in known and verbose:
+                print( 'Unknown: {} maps to {} but not a known field'.format( key, val ) )
+            newdefs[val] = known_map[val]
+        else:
+            missing[val] = val
             
-        existing[msg] = newdefs
+    existing[msg] = newdefs
+
+if verbose and len(missing ):
+    print( 'Missing fields:' )
+    pprint( missing )
 
 with open( 'fit_map.json', 'w' ) as outfile:
     json.dump( existing, outfile, indent = 2, sort_keys = True )

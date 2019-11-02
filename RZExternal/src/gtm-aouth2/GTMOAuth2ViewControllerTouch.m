@@ -218,7 +218,7 @@ static GTMOAuth2Keychain* gGTMOAuth2DefaultKeychain = nil;
 #endif
 
 - (void)dealloc {
-  [webView_ setDelegate:nil];
+  [webView_ setNavigationDelegate:nil];
 
   [backButton_ release];
   [forwardButton_ release];
@@ -252,7 +252,6 @@ static GTMOAuth2Keychain* gGTMOAuth2DefaultKeychain = nil;
 
 + (NSBundle *)authNibBundle {
   // subclasses may override this to specify a custom nib bundle
-    // BMR
   return [NSBundle bundleForClass:[self class]];
 }
 
@@ -329,7 +328,7 @@ static GTMOAuth2Keychain* gGTMOAuth2DefaultKeychain = nil;
   if (![auth canAuthorize]) {
     if (error) {
       *error = [NSError errorWithDomain:kGTMOAuth2ErrorDomain
-                                   code:kGTMOAuth2ErrorTokenUnavailable
+                                   code:GTMOAuth2ErrorTokenUnavailable
                                userInfo:nil];
     }
     return NO;
@@ -353,7 +352,7 @@ static GTMOAuth2Keychain* gGTMOAuth2DefaultKeychain = nil;
   NSString *nibPath = nil;
   NSBundle *nibBundle = [self nibBundle];
   if (nibBundle == nil) {
-    nibBundle = [NSBundle mainBundle];
+    nibBundle = [NSBundle bundleForClass:[self class]];
   }
   NSString *nibName = self.nibName;
   if (nibName != nil) {
@@ -414,13 +413,13 @@ static GTMOAuth2Keychain* gGTMOAuth2DefaultKeychain = nil;
 }
 
 - (void)notifyWithName:(NSString *)name
-               webView:(UIWebView *)webView
+               webView:(WKWebView *)webView
                   kind:(NSString *)kind {
   BOOL isStarting = [name isEqual:kGTMOAuth2WebViewStartedLoading];
   if (hasNotifiedWebViewStartedLoading_ == isStarting) {
     // Duplicate notification
     //
-    // UIWebView's delegate methods are so unbalanced that there's little
+    // WKWebView's delegate methods are so unbalanced that there's little
     // point trying to keep a count, as it could easily end up stuck greater
     // than zero.
     //
@@ -497,8 +496,12 @@ static Class gSignInClass = Nil;
   self.signInCookies = [self swapBrowserCookies:self.systemCookies];
 }
 
+- (NSHTTPCookieStorage *)systemCookieStorage {
+  return [NSHTTPCookieStorage sharedHTTPCookieStorage];
+}
+
 - (NSArray *)swapBrowserCookies:(NSArray *)newCookies {
-  NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+  NSHTTPCookieStorage *cookieStorage = [self systemCookieStorage];
 
   NSHTTPCookieAcceptPolicy savedPolicy = [cookieStorage cookieAcceptPolicy];
   [cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
@@ -591,7 +594,7 @@ static Class gSignInClass = Nil;
       // before the sign-in web page loads.
       // The first fetch might be slow, so the client programmer may want
       // to show a local "loading" message.
-      // On iOS 5+, UIWebView will ignore loadHTMLString: if it's followed by
+      // On iOS 5+, WKWebView will ignore loadHTMLString: if it's followed by
       // a loadRequest: call, so if there is a "loading" message we defer
       // the loadRequest: until after after we've drawn the "loading" message.
       //
@@ -701,6 +704,7 @@ static Class gSignInClass = Nil;
 #pragma mark Protocol implementations
 
 - (void)viewWillAppear:(BOOL)animated {
+    webView_.navigationDelegate = self;
   // See the comment on clearBrowserCookies in viewWillDisappear.
   [[NSNotificationCenter defaultCenter] postNotificationName:kGTMOAuth2CookiesWillSwapOut
                                                       object:self
@@ -714,7 +718,7 @@ static Class gSignInClass = Nil;
     }
     if (![signIn_ startSigningIn]) {
       // Can't start signing in. We must pop our view.
-      // UIWebview needs time to stabilize. Animations need time to complete.
+      // WKWebview needs time to stabilize. Animations need time to complete.
       // We remove ourself from the view stack after that.
       [self performSelector:@selector(popView)
                  withObject:nil
@@ -725,7 +729,7 @@ static Class gSignInClass = Nil;
     // Work around iOS 7.0 bug described in https://devforums.apple.com/thread/207323 by temporarily
     // setting our cookie storage policy to be permissive enough to keep the sign-in server
     // satisfied, just in case the app inherited from Safari a policy that blocks all cookies.
-    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    NSHTTPCookieStorage *storage = [self systemCookieStorage];
     NSHTTPCookieAcceptPolicy policy = [storage cookieAcceptPolicy];
     if (policy == NSHTTPCookieAcceptPolicyNever) {
       savedCookiePolicy_ = policy;
@@ -763,7 +767,7 @@ static Class gSignInClass = Nil;
     }
 
     if (savedCookiePolicy_ != (NSHTTPCookieAcceptPolicy)NSUIntegerMax) {
-      NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+      NSHTTPCookieStorage *storage = [self systemCookieStorage];
       [storage setCookieAcceptPolicy:savedCookiePolicy_];
       savedCookiePolicy_ = (NSHTTPCookieAcceptPolicy)NSUIntegerMax;
     }
@@ -796,18 +800,18 @@ static Class gSignInClass = Nil;
   [initialActivityIndicator_ setCenter:[webView_ center]];
 }
 
-- (BOOL)webView:(UIWebView *)webView
-  shouldStartLoadWithRequest:(NSURLRequest *)request
-              navigationType:(UIWebViewNavigationType)navigationType {
-
-  if (!hasDoneFinalRedirect_) {
-    hasDoneFinalRedirect_ = [signIn_ requestRedirectedToRequest:request];
-    if (hasDoneFinalRedirect_) {
-      // signIn has told the view to close
-      return NO;
+-(void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
+    NSURLRequest * request = navigationAction.request;
+    if (!hasDoneFinalRedirect_) {
+        hasDoneFinalRedirect_ = [signIn_ requestRedirectedToRequest:request];
+        if (hasDoneFinalRedirect_) {
+            // signIn has told the view to close
+            decisionHandler(WKNavigationActionPolicyCancel);
+            return;
+        }
     }
-  }
-  return YES;
+    decisionHandler(WKNavigationActionPolicyAllow);
+    return;
 }
 
 - (void)updateUI {
@@ -815,42 +819,36 @@ static Class gSignInClass = Nil;
   [forwardButton_ setEnabled:[[self webView] canGoForward]];
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)webView {
+-(void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation{
   [self notifyWithName:kGTMOAuth2WebViewStartedLoading
                webView:webView
                   kind:nil];
   [self updateUI];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
+-(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
   [self notifyWithName:kGTMOAuth2WebViewStoppedLoading
                webView:webView
                   kind:kGTMOAuth2WebViewFinished];
 
-  NSString *title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+  NSString *title = [webView title];
   if ([title length] > 0) {
     [signIn_ titleChanged:title];
-  } else {
-#if DEBUG && !defined(NS_BLOCK_ASSERTIONS)
-    // Verify that Javascript is enabled
-    NSString *result = [webView stringByEvaluatingJavaScriptFromString:@"1+1"];
-    NSAssert([result integerValue] == 2, @"GTMOAuth2: Javascript is required");
-#endif  // DEBUG && !defined(NS_BLOCK_ASSERTIONS)
   }
-
+    
   if (self.request && [self.initialHTMLString length] > 0) {
     // The request was pending.
     [self setInitialHTMLString:nil];
     [self.webView loadRequest:self.request];
   } else {
     [initialActivityIndicator_ setHidden:YES];
-    [signIn_ cookiesChanged:[NSHTTPCookieStorage sharedHTTPCookieStorage]];
+    [signIn_ cookiesChanged:[self systemCookieStorage]];
 
     [self updateUI];
   }
 }
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+-(void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error{
   [self notifyWithName:kGTMOAuth2WebViewStoppedLoading
                webView:webView
                   kind:kGTMOAuth2WebViewFailed];
@@ -867,7 +865,7 @@ static Class gSignInClass = Nil;
       // this error seems to provide a better experience than does immediately
       // cancelling sign-in.
       //
-      // This error also occurs whenever UIWebView is sent the stopLoading
+      // This error also occurs whenever WKWebView is sent the stopLoading
       // message, so if we ever send that message intentionally, we need to
       // revisit this bypass.
       return;
@@ -875,7 +873,7 @@ static Class gSignInClass = Nil;
 
     [signIn_ loadFailedWithError:error];
   } else {
-    // UIWebview needs time to stabilize. Animations need time to complete.
+    // WKWebview needs time to stabilize. Animations need time to complete.
     [signIn_ performSelector:@selector(loadFailedWithError:)
                   withObject:error
                   afterDelay:0.5
@@ -940,8 +938,11 @@ static Class gSignInClass = Nil;
 
 // The Keychain API isn't available on the iPhone simulator in SDKs before 3.0,
 // so, on early simulators we use a fake API, that just writes, unencrypted, to
-// NSUserDefaults.
-#if TARGET_IPHONE_SIMULATOR && __IPHONE_OS_VERSION_MAX_ALLOWED < 30000
+// NSUserDefaults.  Additionally, to mitigate a keychain bug in the iOS 10 simulator
+// that causes SecItemAdd to fail with -34018, we enable NSUserDefaults storage for iOS 10.0.x and
+// 10.1.x.
+#if TARGET_IPHONE_SIMULATOR && (__IPHONE_OS_VERSION_MAX_ALLOWED < 30000 || \
+    (__IPHONE_OS_VERSION_MAX_ALLOWED >= 100000 && __IPHONE_OS_VERSION_MAX_ALLOWED <= 100100))
 #pragma mark Simulator
 
 // Simulator - just simulated, not secure.
@@ -953,12 +954,12 @@ static Class gSignInClass = Nil;
     result = [defaults stringForKey:key];
     if (result == nil && error != NULL) {
       *error = [NSError errorWithDomain:kGTMOAuth2KeychainErrorDomain
-                                   code:kGTMOAuth2KeychainErrorNoPassword
+                                   code:GTMOAuth2KeychainErrorNoPassword
                                userInfo:nil];
     }
   } else if (error != NULL) {
     *error = [NSError errorWithDomain:kGTMOAuth2KeychainErrorDomain
-                                 code:kGTMOAuth2KeychainErrorBadArguments
+                                 code:GTMOAuth2KeychainErrorBadArguments
                              userInfo:nil];
   }
   return result;
@@ -976,7 +977,7 @@ static Class gSignInClass = Nil;
     [defaults synchronize];
   } else if (error != NULL) {
     *error = [NSError errorWithDomain:kGTMOAuth2KeychainErrorDomain
-                                 code:kGTMOAuth2KeychainErrorBadArguments
+                                 code:GTMOAuth2KeychainErrorBadArguments
                              userInfo:nil];
   }
   return didSucceed;
@@ -997,7 +998,7 @@ static Class gSignInClass = Nil;
     didSucceed = YES;
   } else if (error != NULL) {
     *error = [NSError errorWithDomain:kGTMOAuth2KeychainErrorDomain
-                                 code:kGTMOAuth2KeychainErrorBadArguments
+                                 code:GTMOAuth2KeychainErrorBadArguments
                              userInfo:nil];
   }
   return didSucceed;
@@ -1024,7 +1025,7 @@ static Class gSignInClass = Nil;
 
 // iPhone
 - (NSString *)passwordForService:(NSString *)service account:(NSString *)account error:(NSError **)error {
-  OSStatus status = kGTMOAuth2KeychainErrorBadArguments;
+  OSStatus status = GTMOAuth2KeychainErrorBadArguments;
   NSString *result = nil;
   if (0 < [service length] && 0 < [account length]) {
     CFDataRef passwordData = NULL;
@@ -1053,7 +1054,7 @@ static Class gSignInClass = Nil;
 
 // iPhone
 - (BOOL)removePasswordForService:(NSString *)service account:(NSString *)account error:(NSError **)error {
-  OSStatus status = kGTMOAuth2KeychainErrorBadArguments;
+  OSStatus status = GTMOAuth2KeychainErrorBadArguments;
   if (0 < [service length] && 0 < [account length]) {
     NSMutableDictionary *keychainQuery = [self keychainQueryForService:service account:account];
     status = SecItemDelete((CFDictionaryRef)keychainQuery);
@@ -1072,7 +1073,7 @@ static Class gSignInClass = Nil;
       accessibility:(CFTypeRef)accessibility
             account:(NSString *)account
               error:(NSError **)error {
-  OSStatus status = kGTMOAuth2KeychainErrorBadArguments;
+  OSStatus status = GTMOAuth2KeychainErrorBadArguments;
   if (0 < [service length] && 0 < [account length]) {
     [self removePasswordForService:service account:account error:nil];
     if (0 < [password length]) {

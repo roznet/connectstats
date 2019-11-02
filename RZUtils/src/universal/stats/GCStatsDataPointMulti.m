@@ -29,6 +29,9 @@
 #define GC_CODER_Z_DATA @"z_data"
 
 @implementation GCStatsDataPointMulti
++(BOOL)supportsSecureCoding{
+    return YES;
+}
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super initWithCoder:aDecoder];
@@ -64,6 +67,16 @@
     }
     return rv;
 
+}
+-(GCStatsDataPointMulti*)copy{
+    GCStatsDataPointMulti * rv = RZReturnAutorelease([[self.class alloc] init]);
+    if (rv) {
+        rv.x_data = self.x_data;
+        rv.y_data = self.y_data;
+        rv.z_data = self.z_data;
+        
+    }
+    return rv;
 }
 
 @end

@@ -1,0 +1,166 @@
+{
+  "weather" : [
+    {
+      "latitude" : 51.47168,
+      "longitude" : -0.19566,
+      "timezone" : "Europe/London",
+      "currently" : {
+        "time" : 1566033386,
+        "summary" : "Partly Cloudy",
+        "icon" : "partly-cloudy-day",
+        "precipIntensity" : 0,
+        "precipProbability" : 0,
+        "temperature" : 18.78,
+        "apparentTemperature" : 18.78,
+        "dewPoint" : 12.89,
+        "humidity" : 0.69,
+        "pressure" : 1005.21,
+        "windSpeed" : 5.26,
+        "windGust" : 10.05,
+        "windBearing" : 232,
+        "cloudCover" : 0.35,
+        "uvIndex" : 3,
+        "visibility" : 10.013,
+        "ozone" : 315.2
+      },
+      "minutely" : {
+        "summary" : "Partly cloudy for the hour.",
+        "icon" : "partly-cloudy-day",
+        "data" : [
+          {
+            "time" : 1566033360,
+            "precipIntensity" : 0,
+            "precipProbability" : 0
+          },
+          {
+            "time" : 1566033420,
+            "precipIntensity" : 0,
+            "precipProbability" : 0
+          }
+        ]
+      },
+      "hourly" : {
+        "summary" : "Possible light rain overnight.",
+        "icon" : "rain",
+        "data" : [
+          {
+            "time" : 1566032400,
+            "summary" : "Partly Cloudy",
+            "icon" : "partly-cloudy-day",
+            "precipIntensity" : 0,
+            "precipProbability" : 0,
+            "temperature" : 18.58,
+            "apparentTemperature" : 18.58,
+            "dewPoint" : 12.97,
+            "humidity" : 0.7,
+            "pressure" : 1005.12,
+            "windSpeed" : 5.16,
+            "windGust" : 10.44,
+            "windBearing" : 232,
+            "cloudCover" : 0.28,
+            "uvIndex" : 3,
+            "visibility" : 10.003,
+            "ozone" : 315.2
+          },
+          {
+            "time" : 1566036000,
+            "summary" : "Mostly Cloudy",
+            "icon" : "partly-cloudy-day",
+            "precipIntensity" : 0,
+            "precipProbability" : 0,
+            "temperature" : 19.33,
+            "apparentTemperature" : 19.33,
+            "dewPoint" : 12.7,
+            "humidity" : 0.65,
+            "pressure" : 1005.42,
+            "windSpeed" : 5.53,
+            "windGust" : 9.02,
+            "windBearing" : 231,
+            "cloudCover" : 0.54,
+            "uvIndex" : 4,
+            "visibility" : 10.04,
+            "ozone" : 315.4
+          },
+          {
+            "time" : 1566039600,
+            "summary" : "Mostly Cloudy",
+            "icon" : "partly-cloudy-day",
+            "precipIntensity" : 0,
+            "precipProbability" : 0,
+            "temperature" : 19.34,
+            "apparentTemperature" : 19.34,
+            "dewPoint" : 12.96,
+            "humidity" : 0.67,
+            "pressure" : 1005.67,
+            "windSpeed" : 5.63,
+            "windGust" : 8.95,
+            "windBearing" : 235,
+            "cloudCover" : 0.53,
+            "uvIndex" : 5,
+            "visibility" : 10.087,
+            "ozone" : 315.4
+          }
+        ]
+      },
+      "daily" : {
+        "data" : [
+          {
+            "time" : 1565996400,
+            "summary" : "Mostly cloudy throughout the day.",
+            "icon" : "rain",
+            "sunriseTime" : 1566017446,
+            "sunsetTime" : 1566069717,
+            "moonPhase" : 0.57,
+            "precipIntensity" : 0.0823,
+            "precipIntensityMax" : 0.492,
+            "precipIntensityMaxTime" : 1565996400,
+            "precipProbability" : 0.58,
+            "precipType" : "rain",
+            "temperatureHigh" : 22.04,
+            "temperatureHighTime" : 1566054000,
+            "temperatureLow" : 13.44,
+            "temperatureLowTime" : 1566104400,
+            "apparentTemperatureHigh" : 22.04,
+            "apparentTemperatureHighTime" : 1566054000,
+            "apparentTemperatureLow" : 13.44,
+            "apparentTemperatureLowTime" : 1566104400,
+            "dewPoint" : 13.94,
+            "humidity" : 0.75,
+            "pressure" : 1005.32,
+            "windSpeed" : 4.73,
+            "windGust" : 13.5,
+            "windGustTime" : 1565996400,
+            "windBearing" : 230,
+            "cloudCover" : 0.7,
+            "uvIndex" : 5,
+            "uvIndexTime" : 1566046800,
+            "visibility" : 12.153,
+            "ozone" : 312.9,
+            "temperatureMin" : 16.27,
+            "temperatureMinTime" : 1566018000,
+            "temperatureMax" : 22.04,
+            "temperatureMaxTime" : 1566054000,
+            "apparentTemperatureMin" : 16.28,
+            "apparentTemperatureMinTime" : 1566021600,
+            "apparentTemperatureMax" : 22.04,
+            "apparentTemperatureMaxTime" : 1566054000
+          }
+        ]
+      },
+      "flags" : {
+        "sources" : [
+          "cmc",
+          "gfs",
+          "icon",
+          "isd",
+          "madis",
+          "darksky"
+        ],
+        "nearest-station" : 6.307,
+        "units" : "si"
+      },
+      "offset" : 1,
+      "file_id" : "4646"
+    }
+  ]
+}

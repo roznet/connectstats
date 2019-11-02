@@ -53,6 +53,7 @@ NSString * GC_META_DEVICE = @"device";
 NSString * GC_META_EVENTTYPE = @"eventType";
 NSString * GC_META_DESCRIPTION = @"activityDescription";
 NSString * GC_META_ACTIVITYTYPE = @"activityType";
+NSString * GC_META_SERVICE = @"service";
 
 NSString * STOREUNIT_SPEED =         @"mps";
 NSString * STOREUNIT_DISTANCE =      @"meter";

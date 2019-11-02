@@ -223,7 +223,7 @@ const CGFloat kCellDaySpacing = 2.f;
 	_search.autocapitalizationType	= UITextAutocapitalizationTypeNone;
     _search.placeholder              = NSLocalizedString(@"Search",@"SearchBar");
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         self.tableView.tableHeaderView = self.search;
         UIImage * imagel = [GCViewIcons tabBarIconFor:gcIconTabCalendar];
         UIImage * imager = [GCViewIcons tabBarIconFor:gcIconTabStatsIPad];
@@ -263,7 +263,7 @@ const CGFloat kCellDaySpacing = 2.f;
 }
 -(void)setupQuickFilterIcon{
     // iPhone only will have day activities
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ) {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone ) {
         if ([[GCAppGlobal organizer] isQuickFilterApplicable]) {
             UIImage * filterIcon = [self imageForQuickFilter];
             if (self.navigationItem.rightBarButtonItem == nil) {

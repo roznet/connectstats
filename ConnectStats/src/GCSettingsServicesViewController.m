@@ -30,7 +30,6 @@
 #import "GCService.h"
 #import "GCSportTracksBase.h"
 #import "GCSplitViewController.h"
-#import "GCSettingsManualLoginViewController.h"
 #import "GCHealthKitRequest.h"
 #import "GCHealthKitSourcesRequest.h"
 #import "GCSettingsSourceTableViewController.h"
@@ -41,6 +40,7 @@
 #import "GCDebugServiceKeys.h"
 #import "GCCellEntryText+GCViewConfig.h"
 #import "GCConnectStatsRequest.h"
+#import "GCWithingsReqBase.h"
 
 #import "GCSettingsServicesViewConstants.h"
 
@@ -115,7 +115,7 @@
     }
     if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats]){
         [dynamic addObjectsFromArray:@[
-            @( GC_CONNECTSTATS_FILLYEAR ),
+            //@( GC_CONNECTSTATS_FILLYEAR ),
             @( GC_CONNECTSTATS_LOGOUT ),
         ] ];
     }
@@ -280,12 +280,44 @@
 
 -(NSArray<NSString*>*)validYearsForBackfill{
     NSInteger year = [[GCAppGlobal calculationCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
-    NSMutableArray * years = [NSMutableArray array];
+    
+    NSMutableArray * years = [NSMutableArray arrayWithObject:NSLocalizedString(@"No Backfill, Use Website", @"Valid Years")];
     for (NSInteger i = MIN(2100,MAX(year,2005)); i>=2005; i--) {
         [years addObject:[NSString stringWithFormat:@"%@", @(i)]];
     }
     return years;
 }
+
+-(void)setupServiceStatusCell:(GCCellGrid*)gridCell forService:(GCService*)service secondary:(GCService*)secondary{
+    NSDictionary * summaryDict = [[GCAppGlobal organizer] serviceSummary];
+    NSDictionary * details = summaryDict[ service.displayName ];
+    NSString * subtitle = NSLocalizedString(@"No activities", @"Service Summary");
+    if( details ){
+        if( secondary != nil && summaryDict[ secondary.displayName ] ){
+            NSDictionary * secondDetails = summaryDict[ secondary.displayName ];
+            
+            subtitle = [NSString stringWithFormat:@"%@+%@ activities, latest %@", details[@"count"], secondDetails[@"count"], [details[@"latest"] dateShortFormat]];
+        }else{
+            subtitle = [NSString stringWithFormat:@"%@ activities, latest %@", details[@"count"], [details[@"latest"] dateShortFormat]];
+        }
+    }
+
+    NSString * title = nil;
+    
+    if( [[GCAppGlobal profile] serviceSuccess:service.service] ){
+        title = NSLocalizedString(@"Successfully Logged in - Tap to logout",@"Services");
+    }else{
+        if( details ){
+            title = NSLocalizedString(@"Previously Logged in - Tap to start again", @"Service" );
+        }else{
+            title = NSLocalizedString(@"Never Logged in - Tap to start", @"Service" );
+        }
+    }
+    
+    [gridCell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attributeBold16] withString:title];
+    [gridCell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withString:subtitle];
+}
+
 
 - (UITableViewCell *)withingsTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell * rv = nil;
@@ -370,19 +402,16 @@
             NSAttributedString * title = nil;
             NSAttributedString * sub   = nil;
 
-            BOOL error = false;
-
-            if ([[GCAppGlobal profile] serviceSuccess:service] && error==false) {
-                title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Setup successful",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
-                NSUInteger count = [GCAppGlobal health].measures.count;
-                NSString * subm = [NSString stringWithFormat:NSLocalizedString(@"%d measures",@"Withings Status"), count];
+            if ([[GCAppGlobal profile] serviceSuccess:gcServiceWithings]) {
+                title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Setup successful - Tap to Logout",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
+                NSArray<GCHealthMeasure*>*measures = [GCAppGlobal health].measures;
+                NSUInteger count = measures.count;
+                GCHealthMeasure * latest = measures.firstObject;
+                NSString * subm = [NSString stringWithFormat:NSLocalizedString(@"%d measures, latest %@",@"Withings Status"), count, [latest.date dateShortFormat]];
                 sub = [[[NSAttributedString alloc] initWithString:subm attributes:[GCViewConfig attribute14Gray]] autorelease];
             }else{
-                title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Press to login",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
+                title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Tap to login",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
                 sub = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"No successful login yet",@"Services") attributes:[GCViewConfig attribute14Gray]] autorelease];
-                if (error) {
-                    sub = [GCViewConfig attributedString:@"An error occured - no successful login yet" attribute:@selector(attribute14Gray)];
-                }
             }
 
             [gridcell labelForRow:0 andCol:0].attributedText = title;
@@ -460,21 +489,6 @@
         [textcell setIdentifierInt:GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_PASSWORD)];
         textcell.entryFieldDelegate = self;
         rv = textcell;
-    }else if (indexPath.row==GC_GARMIN_MANUAL_LOGIN){
-        gridcell = [GCCellGrid gridCell:tableView];
-        [gridcell setupForRows:2 andCols:1];
-
-        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Manual Login",@"Services")
-                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
-
-        NSString * msg = NSLocalizedString(@"Used to investigate login failures",@"Services");
-        NSAttributedString * details = [[[NSAttributedString alloc] initWithString:msg
-                                                                        attributes:[GCViewConfig attribute14Gray]] autorelease];
-
-        [gridcell labelForRow:0 andCol:0].attributedText = title;
-        [gridcell labelForRow:1 andCol:0].attributedText = details;
-        rv = gridcell;
-
     }
     if( rv == nil){
         return [self connectStatsTableView:tableView cellForRowAtIndexPath:indexPath];
@@ -560,25 +574,33 @@
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:2];
         
-        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Backfill since ",@"Services")
-                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
-        
-        [gridcell labelForRow:0 andCol:0].attributedText = title;
-        NSArray<NSString*> * years = [self validYearsForBackfill];
-        NSInteger defaultYear = [years.firstObject integerValue] - 1;
-        NSInteger year = (gcConnectStatsServiceUse)[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:defaultYear];
+        NSInteger year = (gcConnectStatsServiceUse)[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:CONFIG_CONNECTSTATS_NO_BACKFILL];
 
-        NSDate * startDate = [NSDate dateForDashedDate:[NSString stringWithFormat:@"%@-01-01", @(year )]];
-        NSTimeInterval timeToCover = [[NSDate date] timeIntervalSinceDate:startDate];
-        NSTimeInterval timeToBackFill = timeToCover / ( 90.0 * 3600.0 * 24.0) * 120.0;// 2min per 90 days
-        GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:timeToBackFill];
-        
-        NSString * timeString = [NSString stringWithFormat:@"Required initial time to synchronise %@", nu];
-        [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                                     withString:[NSString stringWithFormat:@"%@", @(year)]];
-        [gridcell labelForRow:1 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:timeString attributes:[GCViewConfig attribute14Gray]] autorelease];
-        [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
-        
+        if( year == CONFIG_CONNECTSTATS_NO_BACKFILL ){
+            NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Backfill",@"Services")
+                                                                          attributes:[GCViewConfig attributeBold16]] autorelease];
+            [gridcell labelForRow:0 andCol:0].attributedText = title;
+            NSString * timeString = [NSString stringWithFormat:@"History will be downloaded from Garmin Connect"];
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:@"Disabled"];
+            [gridcell labelForRow:1 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:timeString attributes:[GCViewConfig attribute14Gray]] autorelease];
+            [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
+
+        }else{
+            NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Backfill since ",@"Services")
+                                                                          attributes:[GCViewConfig attributeBold16]] autorelease];
+            [gridcell labelForRow:0 andCol:0].attributedText = title;
+            NSDate * startDate = [NSDate dateForDashedDate:[NSString stringWithFormat:@"%@-01-01", @(year )]];
+            NSTimeInterval timeToCover = [[NSDate date] timeIntervalSinceDate:startDate];
+            NSTimeInterval timeToBackFill = timeToCover / ( 90.0 * 3600.0 * 24.0) * 120.0;// 2min per 90 days
+            GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:timeToBackFill];
+            
+            NSString * timeString = [NSString stringWithFormat:@"Required initial time to synchronise %@", nu];
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:[NSString stringWithFormat:@"%@", @(year)]];
+            [gridcell labelForRow:1 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:timeString attributes:[GCViewConfig attribute14Gray]] autorelease];
+            [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
+        }
         rv = gridcell;
 
     }else if( indexPath.row == GC_CONNECTSTATS_DEBUGKEY){
@@ -600,41 +622,15 @@
     }else if( indexPath.row == GC_CONNECTSTATS_LOGOUT){
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:1];
+
+        [self setupServiceStatusCell:gridcell forService:[GCService service:gcServiceConnectStats] secondary:[GCService service:gcServiceGarmin]];
         
-        GCActivity * latest = nil;
-        
-        if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats] ){
-            latest = [[GCAppGlobal organizer] mostRecentActivityFromService:[GCService service:gcServiceConnectStats]];
-        }
-  
-        NSString * message = nil;
-        
-        if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] ){
-            message = NSLocalizedString(@"Successfully Logged in - Tap to logout",@"Services");
-        }else{
-            if( latest ){
-                message = NSLocalizedString(@"Previously Logged in - Tap to start again", @"Service" );
-            }else{
-                message = NSLocalizedString(@"Never Logged in - Tap to start", @"Service" );
-            }
-        }
-        
-        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:message
-                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
-        
-        if( latest ){
-            NSAttributedString * subtitle = [NSAttributedString attributedString:[GCViewConfig attribute14Gray]
-                                                                      withFormat:NSLocalizedString(@"Latest Activity %@", @"Services"), [latest.date dateShortFormat]];
-            [gridcell labelForRow:1 andCol:0].attributedText = subtitle;
-        }else{
-            [gridcell labelForRow:1 andCol:0].attributedText = nil;
-        }
-        [gridcell labelForRow:0 andCol:0].attributedText = title;
         rv = gridcell;
     }
     
     return rv;
 }
+
 
 - (UITableViewCell *)stravaTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell * rv = nil;
@@ -696,26 +692,8 @@
     }else if (indexPath.row == GC_STRAVA_LOGOUT){
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:1];
-        NSDate * last = [GCStravaReqBase lastSync:nil];
-        if (last) {
-            // Message for upload
-            [gridcell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Signout", @"Other Service") attribute:@selector(attributeBold16)];
-            NSString * msg = [NSString stringWithFormat:NSLocalizedString(@"Last sync %@", @"Other Service"), last];
-            [gridcell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:msg attribute:@selector(attribute14Gray)];
-        }else{
-            // Message for download
-            if ([[GCAppGlobal profile] serviceSuccess:service]){
-                [gridcell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Logged in", @"Other Service") attribute:@selector(attributeBold16)] ;
-                if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:false]) {
-                    [gridcell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Pull down activity list to refresh activities", @"Strava Info") attribute:@selector(attribute14Gray)];
-                }
-            }else{
-                [gridcell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Never logged in - Tap to start", @"Other Service") attribute:@selector(attributeBold16)] ;
-                if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:false]) {
-                    [gridcell labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Or pull down activity list to login and download", @"Strava Info") attribute:@selector(attribute14Gray)];
-                }
-            }
-        }
+        [self setupServiceStatusCell:gridcell forService:[GCService service:gcServiceStrava] secondary:nil];
+        
         rv=gridcell;
     }
     return rv;
@@ -1004,7 +982,7 @@
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_ENABLE):
         {
             if( cell.on ){
-                gcGarminDownloadSource lastSource = [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LAST_SOURCE defaultValue:gcGarminDownloadSourceGarminWeb];
+                gcGarminDownloadSource lastSource = [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LAST_SOURCE defaultValue:gcGarminDownloadSourceBoth];
                 [GCViewConfig setGarminDownloadSource:lastSource];
                 
                 RZLog(RZLogInfo, @"Garmin: Enabled Source %@ Web=%lu ConnectStats=%lu",
@@ -1149,8 +1127,12 @@
 
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_FILLYEAR):
         {
-            NSString * selected = [self validYearsForBackfill][cell.selected];
-            [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_FILLYEAR intVal:selected.integerValue];
+            if( cell.selected == 0){
+                [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_FILLYEAR intVal:CONFIG_CONNECTSTATS_NO_BACKFILL];
+            }else{
+                NSString * selected = [self validYearsForBackfill][cell.selected];
+                [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_FILLYEAR intVal:selected.integerValue];
+            }
             [GCAppGlobal saveSettings];
             break;
         }
@@ -1190,10 +1172,22 @@
     }
 
     if (indexPath.section==GC_SECTIONS_WITHINGS&&indexPath.row==GC_ROW_STATUS) {
-        if (self.updating == false) {
-            self.updating = true;
-            [[GCAppGlobal web] withingsUpdate];
-            [self.tableView reloadData];
+        if( [[GCAppGlobal profile] serviceSuccess:gcServiceWithings] ){
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Confirm Logout" message:@"Do you want to log out from withings" preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addCancelAction];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Logout" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                RZLog(RZLogInfo, @"Log out of Withings");
+                [GCWithingsReqBase signout];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
+
+        }else{
+            if (self.updating == false) {
+                self.updating = true;
+                [[GCAppGlobal web] withingsUpdate];
+                [self.tableView reloadData];
+            }
         }
     }else if (indexPath.section==GC_SECTIONS_GARMIN && indexPath.row==GC_GARMIN_METHOD){
         gcGarminDownloadSource source = [GCViewConfig garminDownloadSource];
@@ -1232,26 +1226,31 @@
         }
     }else if (indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_LOGOUT){
         if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] ){
-            [GCConnectStatsRequest logout];
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Confirm Logout" message:@"Do you want to log out from connectstats" preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addCancelAction];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Logout" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                RZLog(RZLogInfo, @"Log out of ConnectStats");
+                [GCConnectStatsRequest logout];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
         }else{
             [GCAppGlobal searchAllActivities];
         }
     }else if (indexPath.section==GC_SECTIONS_STRAVA&&indexPath.row==GC_STRAVA_LOGOUT){
-        NSDate * last = [GCStravaReqBase lastSync:nil];
-        if (last) {
-            [GCStravaReqBase signout];
+        if( [[GCAppGlobal profile] serviceSuccess:gcServiceStrava] ){
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Confirm Logout" message:@"Are you sure you want to log out from strava" preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addCancelAction];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Logout" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                RZLog(RZLogInfo, @"Log out of Strava");
+                [GCStravaReqBase signout];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
         }else{
             [GCAppGlobal searchAllActivities];
         }
-    }else if (indexPath.section==GC_SECTIONS_GARMIN&&indexPath.row == GC_GARMIN_MANUAL_LOGIN){
-        GCSettingsManualLoginViewController * detail = [[GCSettingsManualLoginViewController alloc] initWithNibName:nil bundle:nil];
-        if (self.splitViewController) {
-            GCSplitViewController*sp = (GCSplitViewController*)self.splitViewController;
-            [sp.activityDetailViewController.navigationController pushViewController:detail animated:YES];
-        }else{
-            [self.navigationController pushViewController:detail animated:YES];
-        }
-        [detail release];
+        [GCAppGlobal searchAllActivities];
     }else if (indexPath.section == GC_SECTIONS_HEALTHKIT && indexPath.row == GC_HEALTHKIT_SOURCE){
         GCSettingsSourceTableViewController * source = [[GCSettingsSourceTableViewController alloc] initWithNibName:nil bundle:nil];
         [self.navigationController pushViewController:source animated:YES];
@@ -1269,7 +1268,7 @@
     }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_FILLYEAR){
         NSArray<NSString*>* years = [self validYearsForBackfill];
         NSUInteger index = 0;
-        NSUInteger currentYear = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:[years.firstObject integerValue] - 1];
+        NSUInteger currentYear = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:CONFIG_CONNECTSTATS_NO_BACKFILL];
         for (NSString * one in years) {
             if( one.integerValue == currentYear){
                 break;

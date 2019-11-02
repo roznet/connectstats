@@ -151,13 +151,14 @@ static NSArray * _calculatedFields = nil;
             }
         }
     }
-
+    
     //This use to check for [GCAppGlobal worker] == [NSThread currentThread]
     //[act addStandardCalculatedTracks:[GCAppGlobal worker] == [NSThread currentThread] ? nil : [GCAppGlobal worker] ];
     // Only pass a thread if on main thread.
     // The reason it's important, is if on a worker thread already during a test that require
     // everything in sync on worker, it would break (example derived test in connectstats app)
-    [act addStandardCalculatedTracks:[NSThread isMainThread] ? [GCAppGlobal worker] : nil];
+    
+    [act addStandardCalculatedTracks:[NSThread isMainThread] ? act.settings.worker : nil];
 
 }
 +(void)addCalculatedFields:(GCActivity*)act{

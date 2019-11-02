@@ -186,10 +186,10 @@ NSDictionary *CHParametersFromQueryString(NSString *queryString)
     return self.serviceParameters[key] ?: @"";
 }
 
-- (void)loginWithWebView:(UIWebView *)webWiew completion:(void (^)(NSDictionary *oauthTokens, NSError *error))completion
+- (void)loginWithWebView:(WKWebView *)webWiew completion:(void (^)(NSDictionary *oauthTokens, NSError *error))completion
 {
     self.webView = webWiew;
-    self.webView.delegate = self;
+    self.webView.navigationDelegate = self;
     
     self.loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     self.loadingIndicator.color = [UIColor grayColor];
@@ -298,16 +298,17 @@ NSDictionary *CHParametersFromQueryString(NSString *queryString)
 
 #pragma mark - Webview delegate
 #pragma mark Turn off spinner
-- (void)webViewDidFinishLoad:(UIWebView *)webView
+- (void)webViewDidFinishLoad:(WKWebView *)webView
 {
     [self.loadingIndicator removeFromSuperview];
     self.loadingIndicator = nil;
 }
 
 #pragma mark Used to detect call back in step 2
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+-(void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
     if (_delegateHandler) {
+        NSURLRequest * request = navigationAction.request;
         // For other Oauth 1.0a service providers than LinkedIn, the call back URL might be part of the query of the URL (after the "?"). In this case use index 1 below. In any case NSLog the request URL after the user taps 'Allow'/'Authenticate' after he/she entered his/her username and password and see where in the URL the call back is. Note for some services the callback URL is set once on their website when registering an app, and the OAUTH_CALLBACK set here is ignored.
         NSString *urlWithoutQueryString = [request.URL.absoluteString componentsSeparatedByString:@"?"][0];
         if ([urlWithoutQueryString rangeOfString:[self serviceParameter:OAUTH_CALLBACK]].location != NSNotFound)
@@ -320,7 +321,7 @@ NSDictionary *CHParametersFromQueryString(NSString *queryString)
             _delegateHandler = nil;
         }
     }
-    return YES;
+    decisionHandler(WKNavigationActionPolicyAllow);
 }
 
 #define FacebookAndTumblrAppendedString @"#_=_"

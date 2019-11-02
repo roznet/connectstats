@@ -37,6 +37,7 @@
 
 @interface GCSettingsBugReportViewController ()
 @property (nonatomic,retain) GCSettingsBugReport * report;
+@property (nonatomic,retain) NSURLSessionDataTask * task;
 @end
 
 @implementation GCSettingsBugReportViewController
@@ -45,6 +46,7 @@
     [_webView release];
     [_parent release];
     [_hud release];
+    [_task release];
 
     [super dealloc];
 }
@@ -72,8 +74,8 @@
     [super viewDidLoad];
 
 	// Do any additional setup after loading the view.
-	UIWebView *contentView	= [[UIWebView alloc] initWithFrame: self.view.frame];
-    contentView.delegate = self;
+	WKWebView *contentView	= [[WKWebView alloc] initWithFrame: self.view.frame];
+    contentView.navigationDelegate = self;
 
     self.report = [GCSettingsBugReport bugReport];
     self.report.includeErrorFiles = self.includeErrorFiles;
@@ -81,13 +83,30 @@
     
     self.webView = contentView;
 
-    [contentView loadRequest:self.report.urlRequest];
+    //[contentView loadRequest:self.report.urlRequest];
 
     [self.view addSubview:contentView];
     self.hud =[MBProgressHUD showHUDAddedTo:contentView animated:YES];
     self.hud.labelText = @"Preparing Report";
 
 	[contentView release];
+    
+    self.task = [[NSURLSession sharedSession] dataTaskWithRequest:self.report.urlRequest
+                                        completionHandler:^(NSData*data,NSURLResponse*response,NSError*error){
+        if (error) {
+            RZLog(RZLogError,@"Error loading bugreport %@",error);
+        }else{
+            NSString *encodingName = [response textEncodingName];
+            NSStringEncoding encodingType = encodingName ? CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName)) : NSUTF8StringEncoding;
+            NSString * html = RZReturnAutorelease([[NSString alloc] initWithData:data encoding:encodingType]);
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self.webView loadHTMLString:html baseURL:self.report.urlRequest.URL];;
+            });
+        }
+    }];
+    if (self.task) {
+        [self.task resume];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -97,26 +116,21 @@
     RZLog(RZLogWarning, @"memory warning %@", [RZMemory formatMemoryInUse]);
     // Dispose of any resources that can be recreated.
 }
--(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-}
 
--(void)webViewDidStartLoad:(UIWebView *)webView{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-}
--(void)webViewDidFinishLoad:(UIWebView *)aWebView{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
+-(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
     [self.report cleanupAndReset];
-    NSString * commonid = [aWebView stringByEvaluatingJavaScriptFromString:@"document.getElementById('commonid').value"];
-    if (commonid.integerValue>1) {
-        [GCAppGlobal configSet:CONFIG_BUG_COMMON_ID stringVal:commonid];
-        [GCAppGlobal saveSettings];
-    }
+    [self.webView evaluateJavaScript:@"document.getElementById('commonid').value" completionHandler:^(NSString * commonid, NSError*error){
+        if (commonid.integerValue>1) {
+            [GCAppGlobal configSet:CONFIG_BUG_COMMON_ID stringVal:commonid];
+            [GCAppGlobal saveSettings];
+        }
 
-    [self.hud hide:YES];
-    if (self.parent) {
-        [(self.parent).tableView reloadData];
-    }
+        [self.hud hide:YES];
+        if (self.parent) {
+            [(self.parent).tableView reloadData];
+        }
+    }];
 }
 
 @end

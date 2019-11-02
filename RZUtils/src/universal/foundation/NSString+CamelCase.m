@@ -82,4 +82,25 @@
     }
     return rv;
 }
+
+-(NSComparisonResult)compareVersion:(NSString*)other{
+    NSArray<NSString*>*selfVersion = [self componentsSeparatedByString:@"."];
+    NSArray<NSString*>*otherVersion = [other componentsSeparatedByString:@"."];
+    
+    for( NSUInteger i = 0; i < selfVersion.count || i < otherVersion.count; i++){
+        NSUInteger selfValue = i < selfVersion.count ? [selfVersion[i] integerValue] : 0;
+        NSUInteger otherValue = i < otherVersion.count ? [otherVersion[i] integerValue] : 0;
+        
+        if( selfValue == otherValue){
+            continue;
+        }else{
+            if( selfValue < otherValue ){
+                return NSOrderedAscending;
+            }else{
+                return NSOrderedDescending;
+            }
+        }
+    }
+    return NSOrderedSame;
+}
 @end

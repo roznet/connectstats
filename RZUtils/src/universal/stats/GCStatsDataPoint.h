@@ -34,6 +34,10 @@
 +(GCStatsDataPoint*)dataPointWithDate:(NSDate*)aDate sinceDate:(NSDate*)first andValue:(double)aValue;
 +(GCStatsDataPoint*)dataPointWithX:(double)aX andY:(double)aY;
 +(GCStatsDataPoint*)dataPointWithPoint:(GCStatsDataPoint*)aPoint andValue:(double)aValue;
+/**
+ * Will make copy
+ */
+-(GCStatsDataPoint*)copy;
 
 -(NSDate*)date;
 -(void)setDate:(NSDate*)aDate;

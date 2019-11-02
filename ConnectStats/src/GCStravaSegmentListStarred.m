@@ -50,7 +50,7 @@
     if (self.navigationController) {
         return nil;
     }else{
-        return [NSString stringWithFormat:@"https://www.strava.com/api/v3/segments/starred?access_token=%@&page=%d",(self.stravaAuth).accessToken,(int)self.page+1];;
+        return [NSString stringWithFormat:@"https://www.strava.com/api/v3/segments/starred?access_token=%@&page=%d",@"FIX ME WITH PREP REQ",(int)self.page+1];;
     }
 }
 
@@ -103,12 +103,11 @@
 -(id<GCWebRequest>)nextReq{
     if (self.navigationController) {
         GCStravaSegmentListStarred * next = [GCStravaSegmentListStarred segmentListStarred:nil];
-        next.stravaAuth = self.stravaAuth;
+        //next.stravaAuth = self.stravaAuth;
         return next;
     }else{
         if (self.parsedCount == 30 && !self.reachedExisting) {
             GCStravaSegmentListStarred * next = [GCStravaSegmentListStarred segmentListStarred:nil];
-            next.stravaAuth = self.stravaAuth;
             next.page = self.page + 1;
             return next;
         }

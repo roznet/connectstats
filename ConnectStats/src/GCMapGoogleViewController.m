@@ -28,8 +28,11 @@
 #import "GCMapAnnotation.h"
 #import "GCAppGlobal.h"
 #import "GCMapRouteLogic.h"
+@import GoogleMaps;
 
 @interface GCMapGoogleViewController ()
+@property (nonatomic,retain) GMSMapView * mapView;
+@property (nonatomic,retain) GMSCoordinateBounds * bounds;
 
 @end
 
@@ -51,6 +54,9 @@
     [super dealloc];
 }
 
++(void)provideAPIKey:(NSString*)key{
+    [GMSServices provideAPIKey:key];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];

@@ -11,25 +11,18 @@
 #import "GCTestsSamples.h"
 #import "GCDerivedOrganizer.h"
 #import "GCAppGlobal.h"
+#import "GCService.h"
+#import "GCTestCase.h"
+#import "GCConnectStatsRequestSearch.h"
+#import "GCConnectStatsRequestFitFile.h"
+#import "GCActivity+CachedTracks.h"
 
-@interface GCTestsDerived : XCTestCase
+@interface GCTestsDerived : GCTestCase
 
 @end
 
 @implementation GCTestsDerived
 
-- (void)setUp
-{
-    [super setUp];
-    [GCAppGlobal startSuccessful];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
 
 - (void)testDerivedSerie
 {
@@ -61,8 +54,95 @@
     // process activity 1
     // add activity with sample2 for trackpoint & date & activityType
     // process activity 2
-    // 
+    //
+
+    NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"services_activities.json" forClass:[self class]]
+                                           options:0 error:nil];
+    NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    
+    NSString * activityIdRun = nil;
+    NSString * activityIdCycling = nil;
+    for (NSString * aId in dict[@"types"][@"running"]) {
+        GCService * service = [GCService serviceForActivityId:aId];
+        if( service.service == gcServiceConnectStats){
+            NSString * fileName = [NSString stringWithFormat:@"track_cs_%@.fit", [service serviceIdFromActivityId:aId ]];
+            if( [RZFileOrganizer bundleFilePathIfExists:fileName forClass:[self class]] ){
+                activityIdRun = aId;
+                break;
+            }
+        }
+    }
+    for (NSString * aId in dict[@"types"][@"cycling"]) {
+        GCService * service = [GCService serviceForActivityId:aId];
+        if( service.service == gcServiceConnectStats){
+            NSString * fileName = [NSString stringWithFormat:@"track_cs_%@.fit", [service serviceIdFromActivityId:aId ]];
+            if( [RZFileOrganizer bundleFilePathIfExists:fileName forClass:[self class]] ){
+                activityIdCycling = aId;
+                break;
+            }
+        }
+    }
+    NSString * bundlePath = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
+    
+    GCActivitiesOrganizer * organizer_cs = [self createEmptyOrganizer:@"test_parsing_bestrolling_cs.db"];
+    [RZFileOrganizer removeEditableFile:@"test_derived_parsing_bestrolling_cs.db"];
+    FMDatabase * deriveddb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"test_derived_parsing_bestrolling_cs.db"]];
+    [deriveddb open];
+
+    GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initWithDb:deriveddb andThread:nil];
+                                    
+    [GCConnectStatsRequestSearch testForOrganizer:organizer_cs withFilesInPath:bundlePath];
+
+    [RZFileOrganizer removeEditableFile:@"derived_test_time_series.db"];
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"derived_test_time_series.db"]];
+    [db open];
+    RZLog(RZLogInfo, @"db: %@", db.databasePath);
+    
+    GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:@"gc_derived_time_serie_second"];
+    NSMutableDictionary * done = [NSMutableDictionary dictionary];
+    
+    for (NSString * activityId in @[ activityIdRun, activityIdCycling, activityIdRun]) {
+        
+        GCActivity * act = [organizer_cs activityForId:activityId];
+        // Disable backgorund calculation of derived tracks
+        act.settings.worker = nil;
+        
+        [GCConnectStatsRequestFitFile testForActivity:act withFilesIn:bundlePath];
+        
+        // If false, it means the samples did not include the fit file for that run activity
+        XCTAssertFalse(act.trackPointsRequireDownload);
+        if( ! act.trackPointsRequireDownload && act.trackpoints){
+            [derived processActivities:@[ act] ];
+            for (GCField * field in @[ [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType],
+                                       [GCField fieldForFlag:gcFieldFlagPower andActivityType:act.activityType] ] ) {
+                if( [act hasTrackForField:field] ){
+                    RZLog(RZLogInfo, @"%@ %@", act, field);
+                    GCStatsDataSerieWithUnit * serieu = [act standardizedBestRollingTrack:field thread:nil];
+                    
+                    NSDictionary * keys = @{
+                        @"activityId" : act.activityId,
+                        @"fieldKey" : field.key,
+                    };
+                    done[keys] = serieu;
+                    [statsDb save:serieu.serie keys:keys];
+                }
+            }
+        }
+    }
+    NSDictionary * all = [statsDb loadByKeys];
+    
+    for (NSDictionary * keys in done) {
+        GCStatsDataSerie * keyreload = all[keys];
+        
+        GCStatsDataSerieWithUnit * serieu = done[keys];
+        GCStatsDataSerie * reload = [statsDb loadForKeys:keys];
+        XCTAssertEqual(reload.count, serieu.count);
+        XCTAssertEqual(reload.count, keyreload.count);
+        
+        XCTAssertEqualObjects(reload, serieu.serie);
+    }
 }
+
 
 
 @end

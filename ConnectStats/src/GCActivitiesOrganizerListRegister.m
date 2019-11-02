@@ -98,17 +98,23 @@
                 skipped += 1;
             }
         }
-        RZLog(RZLogInfo, @"Parsed %@ [%@-%@]=%lu new=%lu added=%lu existing=%lu newtotal=%lu",
-              self.service.displayName,
-              [self.activities.firstObject activityId],
-              [self.activities.lastObject activityId],
-              (unsigned long)self.activities.count,
-              (unsigned long)newActivitiesCount,
-              (unsigned long)actuallyAdded,
-              (unsigned long)self.reachedExisting,
-              (unsigned long)[organizer countOfActivities]
-              );
-        
+        if( self.activities.count > 0){
+            RZLog(RZLogInfo, @"Parsed %@ [%@-%@]=%lu new=%lu added=%lu existing=%lu newtotal=%lu",
+                  self.service.displayName,
+                  [self.activities.firstObject activityId],
+                  [self.activities.lastObject activityId],
+                  (unsigned long)self.activities.count,
+                  (unsigned long)newActivitiesCount,
+                  (unsigned long)actuallyAdded,
+                  (unsigned long)self.reachedExisting,
+                  (unsigned long)[organizer countOfActivities]
+                  );
+        }else{
+            RZLog(RZLogInfo, @"Parsed %@ [empty] existing total=%lu",
+                  self.service.displayName,
+                  (unsigned long)[organizer countOfActivities]
+                  );
+        }
         // FIXME: check for deleted
         if (existingInService.count ) {
             NSArray * deleteCandidate = [organizer findActivitiesNotIn:existingInService isFirst:self.isFirst];

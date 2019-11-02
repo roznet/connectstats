@@ -55,13 +55,12 @@
     [super dealloc];
 }
 
+-(NSString*)urlToPrepare{
+    return [NSString stringWithFormat:@"https://www.strava.com/api/v3/segments/%@/all_efforts?page=%d&athlete_id=%@",
+    self.segmentId,(int)self.page+1,self.athleteId];;
+}
 -(NSString*)url{
-    if (self.navigationController) {
-        return nil;
-    }else{
-        return [NSString stringWithFormat:@"https://www.strava.com/api/v3/segments/%@/all_efforts?access_token=%@&page=%d&athlete_id=%@",
-                self.segmentId,(self.stravaAuth).accessToken,(int)self.page+1,self.athleteId];;
-    }
+    return nil;
 }
 
 -(NSDictionary*)postData{
@@ -101,13 +100,12 @@
 -(id<GCWebRequest>)nextReq{
     if (self.navigationController) {
         GCStravaSegmentEfforts * next = [GCStravaSegmentEfforts segmentEfforts:nil for:self.segmentId and:self.athleteId];
-        next.stravaAuth = self.stravaAuth;
 
         return next;
     }else{
         if (self.parsedCount == 30 && !self.reachedExisting) {
             GCStravaSegmentEfforts * next = [GCStravaSegmentEfforts segmentEfforts:nil for:self.segmentId and:self.athleteId];
-            next.stravaAuth = self.stravaAuth;
+
             next.page = self.page + 1;
             return next;
         }

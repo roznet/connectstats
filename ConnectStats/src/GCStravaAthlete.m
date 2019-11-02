@@ -42,7 +42,7 @@
     if (self.navigationController) {
         return nil;
     }else{
-        return [NSString stringWithFormat:@"https://www.strava.com/api/v3/athlete?access_token=%@",(self.stravaAuth).accessToken];
+        return [NSString stringWithFormat:@"https://www.strava.com/api/v3/athlete?access_token=%@",@"FIXMEWITHPREP REQ"];
     }
 }
 
@@ -86,7 +86,7 @@
 -(id<GCWebRequest>)nextReq{
     if (self.navigationController) {
         GCStravaAthlete * next = [GCStravaAthlete stravaAthlete:nil];
-        next.stravaAuth = self.stravaAuth;
+        
         return next;
     }
     return nil;

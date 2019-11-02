@@ -74,7 +74,7 @@
         NSString * url = [NSString stringWithFormat:@"https://www.strava.com/api/v3/segment_efforts/%@/%@?access_token=%@",
                           sid,
                           @"streams/latlng,heartrate,time,altitude,cadence,watts,velocity_smooth,temp",
-                          (self.stravaAuth).accessToken];
+                          @"FIXME USING PREP REQ"];
         return url;
     }
 }
@@ -120,7 +120,7 @@
     }
     if (self.navigationController) {
         GCStravaSegmentEffortStream * next = [GCStravaSegmentEffortStream stravaEffortStream:nil for:self.effortId in:self.segmentId];
-        next.stravaAuth = self.stravaAuth;
+        //next.stravaAuth = self.stravaAuth;
 
         return next;
     }

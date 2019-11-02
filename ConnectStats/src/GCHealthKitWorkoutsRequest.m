@@ -160,7 +160,8 @@
     GCHealthKitWorkoutParser * parser = [GCHealthKitWorkoutParser parserWithWorkouts:self.results andSamples:self.workoutSamples];
     if (self.results.count > 0) {
         NSString * fn = [RZFileOrganizer writeableFilePath:@"last_workout_parser.data"];
-        [NSKeyedArchiver archiveRootObject:parser toFile:fn];
+        [[NSKeyedArchiver archivedDataWithRootObject:parser requiringSecureCoding:YES error:nil]
+         writeToFile:fn atomically:YES];
     }
 
     [parser parse:^(GCActivity *act, NSString*aId){

@@ -54,8 +54,7 @@
 @property (nonatomic, retain) GCWatchSessionManager * watch;
 @property (nonatomic, retain) GCSegmentOrganizer * segments;
 @property (nonatomic, retain) GCActivityTypes * activityTypes;
-@property (nonatomic,retain) NSURL * urlToOpen;
-
+@property (nonatomic, retain) NSURL * urlToOpen;
 
 -(void)saveSettings;
 -(void)addOrSelectProfile:(NSString*)pName;
@@ -76,5 +75,5 @@
 -(NSDictionary<NSString*,NSString*>*)credentialsForService:(NSString*)service;
 -(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;
 
-
+-(void)versionSummary;
 @end

@@ -721,7 +721,6 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
                 connectStatsOn = false;
                 break;
             }
-
     }
     [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_ENABLE boolVal:connectStatsOn];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:garminOn];
@@ -732,11 +731,12 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     if (debugIsEnabled) {
         return  @[ NSLocalizedString(@"ConnectStats", @"Download Source"),
                    NSLocalizedString(@"Garmin Website", @"Download Source"),
-                   NSLocalizedString(@"Both", @"Download Source")
+                   NSLocalizedString(@"All", @"Download Source")
         ];
     }
     return  @[ NSLocalizedString(@"ConnectStats", @"Download Source"),
                NSLocalizedString(@"Garmin Website", @"Download Source"),
+               NSLocalizedString(@"All", @"Download Source")
     ];
 }
 

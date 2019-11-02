@@ -511,6 +511,15 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
     return nil;
 }
 
+-(void)authorizeRequest:(nonnull NSMutableURLRequest *)request completionHandler:(void (^_Nonnull)(NSError * _Nullable error))handler{
+    if( [self.currentRequestObject respondsToSelector:@selector(authorizeRequest:completionHandler:)]){
+        [self.currentRequestObject authorizeRequest:request completionHandler:handler];
+    }else{
+        // no error
+        handler(nil);
+    }
+}
+
 -(RemoteDownloadPrepareUrl)prepareUrlFunc{
     if ([self.currentRequestObject respondsToSelector:@selector(prepareUrlFunc)]) {
         return [self.currentRequestObject prepareUrlFunc];

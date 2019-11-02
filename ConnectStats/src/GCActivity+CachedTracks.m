@@ -221,7 +221,7 @@
                     [serie.serie sortByX];
                 }
                 
-                serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:gcStatsLast select:select];
+                serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select];
                 rv[key] = serie;
             }else if(info.track == gcCalculatedCachedTrackDataSerie){
                 if ([info.field.key isEqualToString:CALC_VERTICAL_SPEED]) {
@@ -313,6 +313,41 @@
     return calculating;
 }
 
++(nullable GCStatsDataSerieWithUnit*)standardSerieSampleForXUnit:(GCUnit*)xUnit{
+    
+    if( [xUnit canConvertTo:GCUnit.second] ){
+        GCStatsDataSerieWithUnit * rv = nil;
+        
+        double xs[] = {
+            5., 10., 15., 30., 45., 60.,
+            2.*60., 5.*60., 10.*60., 15.*60., 20.*60., 25.0*60.,
+            30.*60., 35.*60., 40.*60., 45.*60., 50.0*60., 55.0*60.,
+            60.*60, 90.*60., 2*60.*60., 5*60.*60. };
+
+        size_t n = sizeof(xs)/sizeof(double);
+        rv = [GCStatsDataSerieWithUnit dataSerieWithUnit:xUnit xUnit:xUnit andSerie:RZReturnAutorelease([[GCStatsDataSerie alloc] init])];
+        for (size_t i=0; i<n; ++i) {
+            [rv.serie addDataPointWithX:xs[i] andY:xs[i]];
+        }
+        return rv;
+    }else{
+        return nil;
+    }
+}
+
+-(nullable GCStatsDataSerieWithUnit*)standardizedBestRollingTrack:(nonnull GCField*)field
+                                                           thread:(nullable dispatch_queue_t)thread{
+    
+    GCStatsDataSerieWithUnit * base = [self calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest forField:field thread:thread];
+    if( base ){
+        
+        GCStatsDataSerieWithUnit * standardSerie = [GCActivity standardSerieSampleForXUnit:base.xUnit];
+        // Make sure we reduce from a copy so we don't destroy the main serie
+        base = [GCStatsDataSerieWithUnit dataSerieWithOther:base];
+        [GCStatsDataSerie reduceToCommonRange:standardSerie.serie and:base.serie];
+    }
+    return base;
+}
 
 -(nullable GCStatsDataSerieWithUnit*)calculatedDerivedTrack:(gcCalculatedCachedTrack)track
                                                    forField:(nonnull GCField*)field

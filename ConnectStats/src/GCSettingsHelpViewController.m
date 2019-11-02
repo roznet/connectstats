@@ -52,11 +52,11 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-	UIWebView *contentView	= [[UIWebView alloc] initWithFrame: self.view.frame];
-    contentView.delegate = self;
+	WKWebView *contentView	= [[WKWebView alloc] initWithFrame: self.view.frame];
+    contentView.navigationDelegate = self;
 
     self.webView = contentView;
-    NSString * aUrl = [GCAppGlobal healthStatsVersion] ? @"https://www.ro-z.net/healthstats" : @"https://www.ro-z.net/connectstats";
+    NSString * aUrl = [GCAppGlobal healthStatsVersion] ? @"https://www.ro-z.net/healthstats" : @"https://ro-z.net/blog/connectstats/documentation/";
 
 #if TARGET_IPHONE_SIMULATOR
     //aUrl = @"http://localhost/connectstats/connectstatsdoc.php";
@@ -83,15 +83,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
--(void)webViewDidStartLoad:(UIWebView *)webView{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-}
--(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-}
--(void)webViewDidFinishLoad:(UIWebView *)webView{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
 @end

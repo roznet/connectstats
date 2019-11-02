@@ -23,7 +23,6 @@
 //  SOFTWARE.
 //  
 
-
 //NEWTRACKFIELD  avoid gcFieldFlag if possible
 typedef NS_ENUM(NSUInteger, gcFieldFlag) {
     gcFieldFlagNone                     = 0,
@@ -117,6 +116,7 @@ extern NSString * GC_META_DEVICE;
 extern NSString * GC_META_EVENTTYPE;
 extern NSString * GC_META_DESCRIPTION;
 extern NSString * GC_META_ACTIVITYTYPE;
+extern NSString * GC_META_SERVICE;
 
 extern NSString * STOREUNIT_SPEED;
 extern NSString * STOREUNIT_DISTANCE;

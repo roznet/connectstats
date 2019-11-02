@@ -158,6 +158,18 @@ NSString * GCWebConnectStatsFitFile(gcWebConnectStatsConfig config){
 
 }
 
+NSString * GCWebConnectStatsWeather(gcWebConnectStatsConfig config){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+
+    if (simulatorError) {
+        return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
+    }else{
+        return [NSString stringWithFormat:@"%@/api/connectstats/json",url];
+    }
+
+}
+
+
 NSString * GCWebConnectStatsRequestBackfill(gcWebConnectStatsConfig config){
     NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
     

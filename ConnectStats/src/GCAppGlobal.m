@@ -105,6 +105,7 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     GCAppDelegate * app = _sharedApplicationDelegate();
     return app.web;
 }
+
 +(dispatch_queue_t)worker{
     GCAppDelegate *appDelegate = _sharedApplicationDelegate();
     return appDelegate.worker;

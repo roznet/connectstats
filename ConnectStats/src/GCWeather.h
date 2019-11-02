@@ -41,7 +41,7 @@
 
 @interface GCWeather : NSObject
 
-@property (nonatomic,assign) NSInteger weatherType;
+@property (nonatomic,assign) NSUInteger weatherType;
 @property (nonatomic,retain) NSDate * weatherDate;
 
 @property (nonatomic,retain) GCNumberWithUnit * temperature;
@@ -52,8 +52,6 @@
 @property (nonatomic,retain) GCNumberWithUnit * windSpeed;
 @property (nonatomic,retain) NSString * windDirectionCompassPoint;
 
-@property (nonatomic,retain) NSString * weatherStationId;
-@property (nonatomic,retain) NSString * weatherStationName;
 @property (nonatomic,assign) CLLocationCoordinate2D weatherStationLocation;
 
 @property (nonatomic,retain) NSString * weatherTypeDesc;

@@ -223,24 +223,6 @@
     }
 }
 
--(void)saveDictAsBlobToDb:(FMDatabase*)db{
-    RZEXECUTEUPDATE(db, @"DELETE FROM gc_activities_data WHERE activityId = ?", self.activityId);
-    RZEXECUTEUPDATE(db, @"INSERT INTO gc_activities_data (activityId,summaryData,metaData) VALUES(?,?,?)", self.activityId,
-                    [NSKeyedArchiver archivedDataWithRootObject:self.summaryData],
-                    [NSKeyedArchiver archivedDataWithRootObject:self.metaData]);
-}
-
--(void)loadDictAsBlobFromDb:(FMDatabase*)db{
-    FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_activities_data WHERE activityId = ?", self.activityId];
-    if ([res next]) {
-        NSDictionary * sData = [NSKeyedUnarchiver unarchiveObjectWithData:[res dataForColumn:@"summaryData"]];
-        NSMutableDictionary * mData = [NSKeyedUnarchiver unarchiveObjectWithData:[res dataForColumn:@"metaData"]];
-        self.summaryData = sData;
-        [self updateMetaData:mData];
-
-    }
-}
-
 //select m.activityId,m.display,m2.display,m3.display FROM gc_activities_meta m, gc_activities_meta m2, gc_activities_meta m3 WHERE m.activityId = m2.activityId AND m.field = 'device' AND m2.field = 'activityType' AND m.activityId = m3.activityId AND m3.field='garminSwimAlgorithm';
 +(void)ensureDbStructure:(FMDatabase*)db{
     if (/* DISABLES CODE */ (false)) {

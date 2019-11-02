@@ -244,7 +244,19 @@ static GCActivityTypes * _activityTypesCache = nil;
     return ([self.key isEqualToString:GC_TYPE_SKI_BACK] || [self.key isEqualToString:GC_TYPE_SKI_DOWN] || [self.key isEqualToString:GC_TYPE_SKI_XC]);
 }
 
+-(GCUnit*)preferredSpeedDisplayUnit{
+    GCActivityType * top = [self topSubRootType];
+    
+    
+    if( [top.key isEqualToString:GC_TYPE_RUNNING] ){
+        return [[GCUnit minperkm] unitForGlobalSystem];
+    }
+    if( [top.key isEqualToString:GC_TYPE_SWIMMING] ){
+        return [[GCUnit min100m] unitForGlobalSystem];
+    }
+    return [[GCUnit kph] unitForGlobalSystem];
 
+}
 #pragma mark - Convenience access
 +(nonnull GCActivityType*)activityTypeForKey:(nonnull NSString*)key{
     return [[GCActivityType activityTypes] activityTypeForKey:key];

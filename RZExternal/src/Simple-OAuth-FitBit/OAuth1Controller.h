@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+@import WebKit;
+
 typedef void (^WebWiewDelegateHandler)(NSDictionary *oauthParams);
 
 extern NSArray * CHQueryStringPairsFromDictionary(NSDictionary *dictionary);
@@ -17,15 +19,15 @@ extern NSArray * CHQueryStringPairsFromDictionary(NSDictionary *dictionary);
 extern NSArray * CHQueryStringPairsFromKeyAndValue(NSString *key, id value);
 extern NSDictionary *CHParametersFromQueryString(NSString *queryString);
 
-@interface OAuth1Controller : NSObject <UIWebViewDelegate>
-@property (nonatomic, weak) UIWebView *webView;
+@interface OAuth1Controller : NSObject <WKNavigationDelegate>
+@property (nonatomic, weak) WKWebView *webView;
 @property (nonatomic, strong) WebWiewDelegateHandler delegateHandler;
 
 +(NSDictionary*)serviceParametersFromJson:(NSData*)jsonData forServiceName:(NSString*)serviceName;
 
 -(instancetype)initWithServiceParameters:(NSDictionary*)serviceParameters;
 
-- (void)loginWithWebView:(UIWebView *)webWiew
+- (void)loginWithWebView:(WKWebView *)webWiew
               completion:(void (^)(NSDictionary *oauthTokens, NSError *error))completion;
 
 - (void)requestAccessToken:(NSString *)oauth_token_secret

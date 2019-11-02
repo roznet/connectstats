@@ -24,59 +24,59 @@
 //  
 
 #import "GCWithingsReqBase.h"
+@import RZUtils;
 @import RZExternal;
 #import "GCAppGlobal.h"
 
 @interface GCWithingsReqBase ()
 @property (nonatomic,retain) NSString * oauthTokenSecret;
 @property (nonatomic,retain) NSString * oauthToken;
-
-// (nonatomic,retain) OAuth1WithingsController * oauth1Controller;
-
-@property (nonatomic,retain) UIWebView * webView;
+@property (nonatomic,retain) GTMOAuth2Authentication * withingsAuth;
 
 @property (nonatomic,retain) NSError * lastError;
-
 
 @end
 
 
-static NSString * kKeychainItemName = @"OAuth2 ConnectStats Withings";
-static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
+static NSString * kKeychainWithingsItemName = @"OAuth2 ConnectStats Withings ";
+static NSString * kCredentialServiceName = @"withings_oauth2";
 
 
 @implementation GCWithingsReqBase
 
+-(GCWithingsReqBase*)initNextWith:(GCWithingsReqBase*)next{
+    if( self = [super init]){
+        self.withingsAuth = next.withingsAuth;
+        self.navigationController = nil;
+    }
+    return self;
+}
 -(GCWithingsReqBase*)init{
     self = [super init];
     return self;
 }
 
 -(void)dealloc{
-    self.webView.delegate = nil;
-    [_webView release];
-    //[_oauth1Controller release];
     [_withingsAuth release];
     [_oauthToken release];
     [_oauthTokenSecret release];
     [_userId release];
     [_navigationController release];
     [_lastError release];
-
+    
     [super dealloc];
 }
-
 - (GTMOAuth2Authentication *)buildWithingsAuth {
     if (!self.withingsAuth) {
-        NSURL *tokenURL = [NSURL URLWithString:@"https://account.withings.com/oauth2/token"];
-        NSString *redirectURI = kRedirectCallback;
+        NSURL *tokenURL = [NSURL URLWithString:[GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"access_token_url"]];
+        NSString *redirectURI = [GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"redirect_url"];
         
         GTMOAuth2Authentication *auth;
         auth = [GTMOAuth2Authentication authenticationWithServiceProvider:@"Withings Service"
                                                                  tokenURL:tokenURL
                                                               redirectURI:redirectURI
-                                                                 clientID:[GCAppGlobal credentialsForService:@"withings" andKey:@"client_id"]
-                                                             clientSecret:[GCAppGlobal credentialsForService:@"withings" andKey:@"client_secret"]];
+                                                                 clientID:[GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"client_id"]
+                                                             clientSecret:[GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"client_secret"]];
 
         //auth.additionalTokenRequestParameters = @{@"state":@"connectstats"};
 
@@ -91,7 +91,7 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
     return self.withingsAuth != nil;
 }
 +(NSString*)currentKeyChainName{
-    NSString * keyChainName = [kKeychainItemName stringByAppendingString:[[GCAppGlobal profile] currentProfileName]];
+    NSString * keyChainName = [kKeychainWithingsItemName stringByAppendingString:[[GCAppGlobal profile] currentProfileName]];
     return keyChainName;
 }
 
@@ -99,21 +99,13 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
     GTMOAuth2Authentication *auth = [self buildWithingsAuth];
     NSError * error = nil;
     BOOL didAuth = [GTMOAuth2ViewControllerTouch authorizeFromKeychainForName:[GCWithingsReqBase currentKeyChainName]
-                                                               authentication:auth error:&error];
-    
-    if (!didAuth && error) {
-        RZLog(RZLogError, @"Failed to initiate oauth2 %@", error.localizedDescription);
-    }
-    if (didAuth && auth.canAuthorize) {
-        [auth authorizeRequest:nil completionHandler:^(NSError*error){
-            [[GCAppGlobal profile] serviceSuccess:gcServiceWithings set:YES];
-            [self processDone];
-        }];
-    }else{
+                                                               authentication:auth
+                                                                        error:&error];
+    if (!didAuth || !auth.canAuthorize) {
         // Specify the appropriate scope string, if any, according to the service's API documentation
         auth.scope = @"user.metrics,user.info,user.activity";
         
-        NSURL *authURL = [NSURL URLWithString:@"https://account.withings.com/oauth2_user/authorize2"];
+        NSURL *authURL = [NSURL URLWithString:[GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"authenticate_url"]];
         
         // Display the authentication view
         GTMOAuth2ViewControllerTouch *viewController;
@@ -125,6 +117,8 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
         viewController.signIn.additionalAuthorizationParameters = @{@"state":@"connectstats"};
         // Now push our sign-in view
         [self.navigationController pushViewController:viewController animated:YES];
+    }else{
+        [self processDone];
     }
 }
 
@@ -138,27 +132,36 @@ static NSString * kRedirectCallback = @"https://ro-z.net/connectstats/oauth";
         [[GCAppGlobal profile] serviceSuccess:gcServiceWithings set:NO];
         [self processDone];
     } else {
+        RZLog(RZLogInfo, @"finished with auth");
         [[GCAppGlobal profile] serviceSuccess:gcServiceWithings set:YES];
         [self processDone];
     }
 }
 
+-(void)authorizeRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError * _Nullable))handler{
+    [self.withingsAuth authorizeRequest:request completionHandler:^(NSError*error){
+        if( error == nil){
+            // first successs
+            if( [[GCAppGlobal profile] serviceSuccess:gcServiceWithings] == NO){
+                [[GCAppGlobal profile] serviceSuccess:gcServiceWithings set:YES];
+                [GCAppGlobal saveSettings];
+            }
+        }else{
+            [GCWithingsReqBase signout];
+        }
+        handler(error);
+    }];
+}
 
 +(void)signout{
+    RZLog(RZLogInfo, @"Withings signout keychain: %@", self.currentKeyChainName);
+    
     [[GCAppGlobal profile] serviceSuccess:gcServiceWithings set:NO];
     [GTMOAuth2ViewControllerTouch removeAuthFromKeychainForName:self.currentKeyChainName];
+    [GCAppGlobal saveSettings];
 
 }
-/*
--(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters{
-    NSURLRequest *preparedRequest = [self.oauth1Controller preparedRequestForPath:path
-                                                                  parameters:parameters
-                                                                  HTTPmethod:@"GET"
-                                                                  oauthToken:self.oauthToken
-                                                                 oauthSecret:self.oauthTokenSecret];
-    return preparedRequest;
-}
-*/
+
 -(gcWebService)service{
     return gcWebServiceWithings;
 }

@@ -56,7 +56,4 @@
 +(GCActivity*)fullLoadFromDb:(FMDatabase*)db;
 +(GCActivity*)fullLoadFromDbPath:(NSString*)dbname;
 
--(void)loadDictAsBlobFromDb:(FMDatabase*)db;
--(void)saveDictAsBlobToDb:(FMDatabase*)db;
-
 @end

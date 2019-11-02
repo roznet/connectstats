@@ -109,7 +109,10 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2);
  */
 +(GCStatsDataSerie*)dataSerieWithArrayOfDouble:(NSArray<NSNumber*>*)doubles;
 
-
+/**
+ *  Adjust series points to only keep points for which x is common between serie1 and serie2
+ *  The resulting serie will have the same x and will be modified in place (destructive)
+ */
 +(void)reduceToCommonRange:(GCStatsDataSerie*)serie1 and:(GCStatsDataSerie*)serie2;
 /**
  Will reduce the two series to the set of points that they have in common.

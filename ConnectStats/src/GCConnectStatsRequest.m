@@ -30,6 +30,7 @@
 #import "GCWebUrl.h"
 @import RZUtils;
 @import RZExternal;
+@import WebKit;
 
 @interface GCConnectStatsRequest ()
 @property (nonatomic,retain) NSString * oauthTokenSecret;
@@ -37,7 +38,7 @@
 @property (nonatomic,assign) NSUInteger tokenId;
 @property (nonatomic,assign) NSUInteger userId;
 @property (nonatomic,retain) OAuth1Controller * oauth1Controller;
-@property (nonatomic,retain) UIWebView * webView;
+@property (nonatomic,retain) WKWebView * webView;
 @end
 
 @implementation GCConnectStatsRequest
@@ -222,7 +223,7 @@
 
 -(void)signInGarminStep{
     UIViewController * webCont = [[UIViewController alloc] initWithNibName:nil bundle:nil];
-    UIWebView * webView = [[UIWebView alloc] initWithFrame:self.navigationController.view.frame];
+    WKWebView * webView = [[WKWebView alloc] initWithFrame:self.navigationController.view.frame];
     // keep hold so we can clear the delegate.
     self.webView = webView;
     webCont.view = webView;
@@ -241,8 +242,9 @@
             self.oauthTokenSecret = oauthTokens[@"oauth_token_secret"];
             [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_TOKEN stringVal:self.oauthToken];
             [[GCAppGlobal profile] setPassword:self.oauthTokenSecret forService:gcServiceConnectStats];
-            
-            [GCAppGlobal saveSettings];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [GCAppGlobal saveSettings];
+            });
             
             dispatch_async([GCAppGlobal worker], ^(){
                 [self signInConnectStatsStep];

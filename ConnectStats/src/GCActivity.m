@@ -251,7 +251,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 }
 
 -(NSString*)displayName{
-    if ([_activityName isEqualToString:@"Untitled"] && ![_location isEqualToString:@""]){
+    if (([_activityName isEqualToString:@"Untitled"] || [_activityName isEqualToString:@""]) && ![_location isEqualToString:@""]){
         return _location;
     }
     return _activityName ?:@"";
@@ -765,7 +765,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     FMDatabase * db = self.db;
     FMDatabase * trackdb = self.trackdb;
     
-    if ([trackdb tableExists:@"gc_track"] && [trackdb intForQuery:@"SELECT COUNT(*) FROM gc_track"] == aTrack.count) {
+    if ([trackdb tableExists:@"gc_track"] && [trackdb intForQuery:@"SELECT COUNT(*) FROM gc_track"] == self.trackpoints.count) {
         rv = false;
     }
     
@@ -1038,13 +1038,15 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             }
             // attempt to download weather at same time
             if (_downloadMethod == gcDownloadMethod13|| _downloadMethod == gcDownloadMethodModern) {
-                if (![self hasWeather]) {
-                    [[GCAppGlobal web] garminDownloadWeather:self];
-                }
                 // DISABLE STRAVA UPLOAD
                 if ([[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:false]) {
                     [[GCAppGlobal profile] configSet:CONFIG_SHARING_STRAVA_AUTO boolVal:false];
                     [GCAppGlobal saveSettings];
+                }
+            }
+            if(_downloadMethod == gcDownloadMethodConnectStats){
+                if (![self hasWeather]) {
+                    [[GCAppGlobal web] connectStatsDownloadWeather:self];
                 }
             }
         }
@@ -1701,11 +1703,24 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 }
 
 -(GCActivityMetaValue*)metaValueForField:(NSString*)field{
-    return _metaData[field];
+    GCActivityMetaValue * rv = _metaData[field];
+    if( rv == nil){
+        if( [field isEqualToString:GC_META_ACTIVITYTYPE] ){
+            rv = [GCActivityMetaValue activityMetaValueForDisplay:self.activityTypeDetail.displayName andField:GC_META_ACTIVITYTYPE];
+        }else if ([field isEqualToString:GC_META_SERVICE]){
+            rv = [GCActivityMetaValue activityMetaValueForDisplay:self.service.displayName andField:GC_META_ACTIVITYTYPE];
+        }
+    }
+    return rv;
 }
 
 -(void)updateMetaData:(NSDictionary<NSString *,GCActivityMetaValue *> *)meta{
-    self.metaData = meta;
+    if( self.metaData == nil){
+        self.metaData = meta;
+    }else{
+        
+        self.metaData = meta;
+    }
     [self skipAlways];
 }
 

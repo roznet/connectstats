@@ -114,6 +114,11 @@ class FITGraphViewController: NSViewController {
                                         useSerie2 = serie2.serie
                                     }
                                 }
+                                if( selectedY2 == field ){
+                                    if let raw = useSerie2 {
+                                        useSerie2 = raw.filledSerie(forUnit: 5.0, fillMethod: gcStatsFillMethod.zero)
+                                    }
+                                }
                                 
                                 let dh2 = GCSimpleGraphDataHolder(useSerie2, type: gcGraphType.graphLine, color: NSColor.red, andUnit: serie2.unit)
                                 if( !serie2.unit.canConvert(to: serie.unit)){

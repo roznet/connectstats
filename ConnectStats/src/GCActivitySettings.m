@@ -39,6 +39,7 @@
 
 -(void)dealloc{
     [_serieFilters release];
+    [_worker release];
     [super dealloc];
 }
 
@@ -56,7 +57,8 @@
     self.adjustSeriesToMatchLapAverage = [GCAppGlobal configGetBool:CONFIG_FILTER_ADJUST_FOR_LAP defaultValue:false];
     self.treatGapAsNoValueInSeries = false;
     self.gapTimeInterval = 10.;
-
+    self.worker = [GCAppGlobal worker];
+    
     if ([GCAppGlobal configGetBool:CONFIG_FILTER_BAD_VALUES defaultValue:YES]){
 
         field = [GCField fieldForFlag:gcFieldFlagAltitudeMeters andActivityType:act.activityType];

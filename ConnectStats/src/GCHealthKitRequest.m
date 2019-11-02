@@ -37,7 +37,7 @@
 
 +(BOOL)isSupported{
 #ifdef GC_USE_HEALTHKIT
-    return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && [HKHealthStore class];
+    return [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone && [HKHealthStore class];
 #else
     return false;
 #endif
@@ -211,7 +211,8 @@
     NSString * anchorFileName = [[GCAppGlobal profile] currentQueryAnchorFilePathForClass:[self class]];
     NSString * anchorFilePath = [RZFileOrganizer writeableFilePathIfExists:anchorFileName];
     if (anchorFilePath) {
-        return [NSKeyedUnarchiver unarchiveObjectWithFile:anchorFilePath];
+        NSData * data = [NSData dataWithContentsOfFile:anchorFilePath];
+        return [NSKeyedUnarchiver unarchivedObjectOfClass:[HKQueryAnchor class] fromData:data error:nil];
     }else{
         return [HKQueryAnchor anchorFromValue:HKAnchoredObjectQueryNoAnchor];
     }
@@ -220,7 +221,7 @@
 -(void)setAnchor:(HKQueryAnchor*)nA{
     NSString * anchorFileName = [[GCAppGlobal profile] currentQueryAnchorFilePathForClass:[self class]];
     NSString * anchorFilePath = [RZFileOrganizer writeableFilePath:anchorFileName];
-    [NSKeyedArchiver archiveRootObject:nA toFile:anchorFilePath];
+    [[NSKeyedArchiver archivedDataWithRootObject:nA requiringSecureCoding:YES error:nil] writeToFile:anchorFilePath atomically:YES];
 }
 
 -(void)executeQuery{
@@ -315,7 +316,7 @@
 -(void)saveCollectedData:(NSDictionary*)dict withSuffix:(NSString*)suffix andId:(NSString*)aid{
 #if DEBUG
     NSString * name = [NSString stringWithFormat:@"health_%@_%@.data", suffix, aid];
-    if(![NSKeyedArchiver archiveRootObject:dict toFile:[RZFileOrganizer writeableFilePath:name]]){
+    if(![[NSKeyedArchiver archivedDataWithRootObject:dict requiringSecureCoding:YES error:nil] writeToFile:[RZFileOrganizer writeableFilePath:name] atomically:YES]){
         RZLog(RZLogError, @"ERROR %@", name);
     }
 #endif

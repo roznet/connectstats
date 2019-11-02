@@ -23,14 +23,14 @@ static const NSTimeInterval kDefaultNetworkLossTimeoutInterval = 30.0;
 
 // URI indicating an installed app is signing in. This is described at
 //
-// http://code.google.com/apis/accounts/docs/OAuth2.html#IA
+// https://developers.google.com/identity/protocols/OAuth2InstalledApp#formingtheurl
 //
-NSString *const kOOBString = @"urn:ietf:wg:oauth:2.0:oob";
+static NSString *const kOOBString = @"urn:ietf:wg:oauth:2.0:oob";
 
 
 @interface GTMOAuth2SignIn ()
-@property (assign) BOOL hasHandledCallback;
-@property (retain) GTMOAuth2Fetcher *pendingFetcher;
+@property (atomic, assign) BOOL hasHandledCallback;
+@property (atomic, retain) GTMOAuth2Fetcher *pendingFetcher;
 #if !GTM_OAUTH2_SKIP_GOOGLE_SUPPORT
 @property (nonatomic, retain, readwrite) NSDictionary *userProfile;
 #endif
@@ -90,13 +90,15 @@ finishedWithFetcher:(GTMOAuth2Fetcher *)fetcher
 @synthesize networkLossTimeoutInterval = networkLossTimeoutInterval_;
 
 #if !GTM_OAUTH2_SKIP_GOOGLE_SUPPORT
+// Endpoint URLs are available at https://accounts.google.com/.well-known/openid-configuration
+
 + (NSURL *)googleAuthorizationURL {
-  NSString *str = @"https://accounts.google.com/o/oauth2/auth";
+  NSString *str = @"https://accounts.google.com/o/oauth2/v2/auth";
   return [NSURL URLWithString:str];
 }
 
 + (NSURL *)googleTokenURL {
-  NSString *str = @"https://accounts.google.com/o/oauth2/token";
+  NSString *str = @"https://www.googleapis.com/oauth2/v4/token";
   return [NSURL URLWithString:str];
 }
 
@@ -354,7 +356,7 @@ finishedWithFetcher:(GTMOAuth2Fetcher *)fetcher
   [self stopReachabilityCheck];
 
   NSError *error = [NSError errorWithDomain:kGTMOAuth2ErrorDomain
-                                       code:kGTMOAuth2ErrorWindowClosed
+                                       code:GTMOAuth2ErrorWindowClosed
                                    userInfo:nil];
   [self invokeFinalCallbackWithError:error];
 }
@@ -544,7 +546,7 @@ finishedWithFetcher:(GTMOAuth2Fetcher *)fetcher
     }
 
     error = [NSError errorWithDomain:kGTMOAuth2ErrorDomain
-                                code:kGTMOAuth2ErrorAuthorizationFailed
+                                code:GTMOAuth2ErrorAuthorizationFailed
                             userInfo:userInfo];
   }
 
@@ -625,6 +627,8 @@ finishedWithFetcher:(GTMOAuth2Fetcher *)fetcher
         if ([part2 length] > 0) {
           NSData *data = [[self class] decodeWebSafeBase64:part2];
           if ([data length] > 0) {
+            // We trust this id_token data because it was obtained via SSL connection
+            // directly to the authoritative server.
             [self updateGoogleUserInfoWithData:data];
             if ([[auth userID] length] > 0 && [[auth userEmail] length] > 0) {
               // We obtained user ID and email from the ID token.
