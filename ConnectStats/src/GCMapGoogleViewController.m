@@ -47,12 +47,14 @@
     }
     return self;
 }
+#if !__has_feature(objc_arc)
 -(void)dealloc{
     [_mapView release];
     [_gradientColors release];
     [_bounds release];
     [super dealloc];
 }
+#endif
 
 +(void)provideAPIKey:(NSString*)key{
     [GMSServices provideAPIKey:key];
@@ -150,7 +152,7 @@
     }
     poly.map = self.mapView;
 
-    self.bounds = [[[GMSCoordinateBounds alloc] initWithCoordinate:logic.southWestPoint coordinate:logic.northEastPoint] autorelease];
+    self.bounds = RZReturnAutorelease([[GMSCoordinateBounds alloc] initWithCoordinate:logic.southWestPoint coordinate:logic.northEastPoint]);
     [self zoomInOnRoute];
     [self.mapDataSource setupLegendViewWithThresholds:logic.thresholds];
 
