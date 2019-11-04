@@ -844,6 +844,51 @@
 
 }
 
+-(void)testOrganizerGarminAllSourcesMergeAndReload{
+    NSString * bundlePath = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
+    NSUInteger idx = 0;
+    NSUInteger metaCount = 0;
+    
+    GCActivity * act_cs = nil;
+    GCActivity * act_garmin = nil;
+    GCActivity * act_reload = nil;
+    
+    GCActivitiesOrganizer * organizer_garmin = [self createEmptyOrganizer:@"test_parsing_cs_merge_garmin_dup_save.db"];
+    GCActivitiesOrganizer * organizer_cs_garmin = [self createEmptyOrganizer:@"test_parsing_cs_merge_garmin.db"];
+
+    // Real Life Garmin All setup:
+    // first cs
+    [GCConnectStatsRequestSearch testForOrganizer:organizer_cs_garmin withFilesInPath:bundlePath];
+    idx = 0;
+    act_cs = [organizer_cs_garmin activityForIndex:idx];
+    XCTAssertEqualObjects(act_cs.activityName, @"", @"Starts without name");
+    metaCount = act_cs.metaData.count;
+    XCTAssertEqual(metaCount, 3);
+    
+    // then garmin to get extra fields
+    [GCGarminRequestModernSearch testForOrganizer:organizer_cs_garmin withFilesInPath:bundlePath];
+    [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:bundlePath];
+    
+    GCActivitiesOrganizer * organizer_reload = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer_cs_garmin.db]);
+
+    
+    idx = 0;
+    act_cs = [organizer_cs_garmin activityForIndex:idx];
+    act_garmin = [organizer_garmin activityForIndex:idx];
+    act_reload = [organizer_reload activityForIndex:idx];
+    
+    XCTAssertNotEqualObjects(act_cs.activityName, @"");
+    XCTAssertEqualObjects(act_cs.activityName, act_garmin.activityName);
+    XCTAssertEqualObjects(act_reload.activityName, act_garmin.activityName);
+    
+    XCTAssertGreaterThanOrEqual(act_cs.metaData.count, act_garmin.metaData.count);
+    XCTAssertEqual(act_cs.metaData.count, act_reload.metaData.count);
+    
+    XCTAssertFalse([act_cs updateMissingFromActivity:act_garmin], @"Update missing does not find anything new");
+    
+    
+}
+
 -(void)testOrganizerMergeServices{
     // To re-create setup for this test:
     //   copy
@@ -886,6 +931,8 @@
     
     NSUInteger addedActivities = 0;
     
+
+    
     // First add garmin
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath];
     [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:bundlePath];
@@ -921,6 +968,7 @@
     XCTAssertEqual(organizer_cs.countOfActivities, 20-organizer_cs.countOfKnownDuplicates);
     [GCConnectStatsRequestSearch testForOrganizer:organizer_cs withFilesInPath:bundlePath start:20];
     XCTAssertEqual(organizer_cs.countOfActivities, 40-organizer_cs.countOfKnownDuplicates);
+    
     
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath start:20];
     [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:bundlePath start:20];

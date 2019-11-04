@@ -134,11 +134,18 @@
 }
 
 -(void)updateDb:(FMDatabase*)db forActivityId:(NSString*)activityId{
-    [db executeUpdate:@"UPDATE gc_activities_meta SET display=?, key=? WHERE activityId = ? AND field = ?",
-     self.display,
-     self.key?:@"",
-     activityId,
-     self.field];
+    if( [db executeUpdate:@"UPDATE gc_activities_meta SET display=?, key=? WHERE activityId = ? AND field = ?",
+           self.display,
+           self.key?:@"",
+           activityId,
+           self.field] ){
+        // if didn't exist already so save it
+        if( [db changes] == 0){
+            [self saveToDb:db forActivityId:activityId];
+        }
+    }else{
+        RZLog(RZLogError, @"DB Error %@", [db lastErrorMessage]);
+    }
 
 }
 

@@ -789,7 +789,7 @@
 		42AA288C1637F56F0054F84A /* GCActivitySearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA288B1637F56F0054F84A /* GCActivitySearch.m */; };
 		42AA288F1637F6AB0054F84A /* GCActivitySearchElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA288E1637F6AB0054F84A /* GCActivitySearchElement.m */; };
 		42AAB087184D2A82004B4D15 /* GCActivityTypeListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AAB086184D2A82004B4D15 /* GCActivityTypeListViewController.m */; };
-		42AB66CD16DACABA00C633BD /* GCMapGoogleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB66CC16DACABA00C633BD /* GCMapGoogleViewController.m */; };
+		42AB66CD16DACABA00C633BD /* GCMapGoogleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB66CC16DACABA00C633BD /* GCMapGoogleViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		42AB66CF16DACF6B00C633BD /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66CE16DACF6B00C633BD /* CoreData.framework */; };
 		42AB66D116DACF7600C633BD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66D016DACF7600C633BD /* AVFoundation.framework */; };
 		42AB66D316DACF8A00C633BD /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66D216DACF8A00C633BD /* CoreText.framework */; };
@@ -8187,7 +8187,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5.1.0.0;
+				CURRENT_PROJECT_VERSION = 5.1.2.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8206,7 +8206,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 5.1.0.0;
+				MARKETING_VERSION = 5.1.2;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -8236,7 +8236,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 5.1.0.0;
+				CURRENT_PROJECT_VERSION = 5.1.2.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = NO;
@@ -8256,7 +8256,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 5.1.0.0;
+				MARKETING_VERSION = 5.1.2;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

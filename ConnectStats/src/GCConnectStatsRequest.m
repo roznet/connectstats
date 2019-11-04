@@ -225,6 +225,13 @@
     UIViewController * webCont = [[UIViewController alloc] initWithNibName:nil bundle:nil];
     WKWebView * webView = [[WKWebView alloc] initWithFrame:self.navigationController.view.frame];
     // keep hold so we can clear the delegate.
+
+    // Transfer cookie to avoid second password entry if existing login exists
+    NSHTTPCookieStorage * store = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    for( NSHTTPCookie * cookie in store.cookies){
+        [webView.configuration.websiteDataStore.httpCookieStore setCookie:cookie completionHandler:nil];
+    }
+    
     self.webView = webView;
     webCont.view = webView;
     [self.navigationController pushViewController:webCont animated:YES];

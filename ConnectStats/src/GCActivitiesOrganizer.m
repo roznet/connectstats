@@ -1071,7 +1071,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 -(void)deleteActivitiesInTrash{
-    if (_activitiesTrash.count) {
+    if (self.activitiesTrash.count) {
         NSMutableArray * newActivities = [NSMutableArray arrayWithCapacity:_allActivities.count];
 
         NSMutableDictionary * toDelete = [NSMutableDictionary dictionaryWithObjects:_activitiesTrash forKeys:_activitiesTrash];
@@ -1098,6 +1098,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             [[GCAppGlobal derived] forceReprocessActivity:activityId];
         }
         [_db commit];
+        [self deleteDuplicateForActivities:self.activitiesTrash];
+        self.activitiesTrash = nil;
+        
         dispatch_async(dispatch_get_main_queue(), ^(){
             [self notify];
         });
@@ -1129,6 +1132,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",activityId]];
     }
     [_db commit];
+    [self deleteDuplicateForActivities:@[ activityId ]];
+    
     _currentActivityIndex = 0;
     NSMutableArray * array = [NSMutableArray arrayWithArray:_allActivities];
     [array removeObjectAtIndex:idx];
@@ -1142,6 +1147,17 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
 -(void)deleteActivityFromIndex:(NSUInteger)idx{
     [self deleteActivityFromIndex:idx toIndex:self.allActivities.count];
+}
+
+-(void)deleteDuplicateForActivities:(NSArray<NSString*>*)activityIds{
+    NSMutableDictionary * newDuplicates = [NSMutableDictionary dictionary];
+    for (NSString * key in self.duplicateActivityIds) {
+        NSString * val = self.duplicateActivityIds[key];
+        if( ![activityIds containsObject:val] && ![activityIds containsObject:key] ){
+            newDuplicates[key] = val;
+        }
+    }
+    self.duplicateActivityIds = newDuplicates;
 }
 
 -(void)deleteActivityFromIndex:(NSUInteger)idxfrom toIndex:(NSUInteger)idxto{
@@ -1162,6 +1178,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         }
     }
     [_db commit];
+    [self deleteDuplicateForActivities:toDelete];
+    
     _currentActivityIndex = 0;
     if( idxfrom == 0){
         self.allActivities = [self.allActivities subarrayWithRange:NSMakeRange(idxto, self.allActivities.count-idxto)];

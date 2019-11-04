@@ -1468,6 +1468,9 @@
 
     BOOL rv = false;
 
+    // Special Case were some field should always be imported (like name event etc)
+    BOOL connectstatsFromGarmin = self.service.service == gcServiceConnectStats && other.service.service == gcServiceGarmin;
+    
     if( ! newOnly){
         NSString * aType = other.activityType;
         if (![aType isEqualToString:self.activityType]) {
@@ -1492,7 +1495,7 @@
     }
 
     NSString * aName = other.activityName;
-    if( ! newOnly ){
+    if( ! newOnly || connectstatsFromGarmin){
         if (![aName isEqualToString:self.activityName]) {
             if( verbose ){
                 RZLog(RZLogInfo, @"change activity name %@ -> %@", self.activityName, aName);
