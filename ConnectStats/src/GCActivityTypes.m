@@ -251,12 +251,15 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
                                  @"Surfing":@"surfing",
                                  @"Swim":   GC_TYPE_SWIMMING,
                                  @"VirtualRide":GC_TYPE_CYCLING,
+                                 @"VirtualRun":GC_TYPE_RUNNING,
                                  @"Walk":   GC_TYPE_WALKING,
                                  @"WeightTraining":@"strength_training",
                                  @"Windsurf":@"wind_kite_surfing",
                                  @"Workout":GC_TYPE_FITNESS,
                                  @"Yoga":@"other",
 
+                                 
+                                 
                                  };
         NSMutableDictionary * dict = [NSMutableDictionary dictionary];
         for (NSString * stravaType in types) {
