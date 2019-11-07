@@ -157,6 +157,8 @@ void checkVersion(){
 
     self.needsStartupRefresh = true;
 	self.settings = [NSMutableDictionary dictionaryWithDictionary:[RZFileOrganizer loadDictionary:@"settings.plist"]];
+    BOOL firstTimeEver = (self.settings.count == 0);
+    
     self.profiles = [GCAppProfiles profilesFromSettings:_settings];
     [self setupWorkerThread];
 	self.db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:[_profiles currentDatabasePath]]];
@@ -192,7 +194,7 @@ void checkVersion(){
     }
     [RZViewConfig setFontStyle:[GCAppGlobal configGetInt:CONFIG_FONT_STYLE defaultValue:gcFontStyleDynamicType]];
 
-    [self settingsUpdateCheck];
+    [self settingsUpdateCheck:firstTimeEver];
     
 	_window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     //DONT CHECK IN:
@@ -487,13 +489,14 @@ void checkVersion(){
     return attempts < 3;
 }
 
--(void)settingsUpdateCheck{
+-(void)settingsUpdateCheck:(BOOL)firstTimeEver{
     
+    BOOL needToSaveSettings = false;
     if( @available( iOS 13.0, *)){
         if( [[GCAppGlobal profile] configGetBool:@"CONFIG_FIRST_TIME_IOS13" defaultValue:true] ){
             [[GCAppGlobal profile] configSet:CONFIG_SKIN_NAME stringVal:kGCSkinNameiOS13];
             [[GCAppGlobal profile] configSet:@"CONFIG_FIRST_TIME_IOS13" boolVal:false];
-            [self saveSettings];
+            needToSaveSettings = true;
         }
     }
     
@@ -513,7 +516,7 @@ void checkVersion(){
             newVersions[currentVersion] = [NSDate date];
             
             self.settings[CONFIG_VERSIONS_SEEN] = newVersions;
-            [self saveSettings];
+            needToSaveSettings = true;
             firstTimeForCurrentVersion = true;
         }
     }
@@ -523,6 +526,33 @@ void checkVersion(){
     }else{
         RZLog(RZLogInfo,@"Current Version %@ first seen %@ (%lu total versions)", currentVersion, versions[currentVersion], (unsigned long)versions.count);
     }
+    
+    if( ! firstTimeEver ){
+        if( [self isFirstTimeForFeature:@"UPGRADE_WEATHER_WINDSPEED_UNITS"]){
+            // remove all weather for activities since september 2019
+            needToSaveSettings = true;
+        }
+    }
+    
+    if( needToSaveSettings ){
+        [self saveSettings];
+    }
+}
+
+-(BOOL)isFirstTimeForFeature:(NSString*)feature{
+    BOOL rv = false;
+    NSDictionary * dict = self.settings[CONFIG_FEATURES_SEEN];
+    if( dict == nil || dict[feature] == nil){
+        rv = true;
+        if( dict == nil){
+            self.settings[CONFIG_FEATURES_SEEN] = @{ feature : [NSDate date]};
+        }else{
+            NSMutableDictionary * newFeatures = [NSMutableDictionary dictionaryWithDictionary:dict];
+            newFeatures[feature] = [NSDate date];
+        }
+                
+    }
+    return rv;
 }
 
 -(void)versionSummary{

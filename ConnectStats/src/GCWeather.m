@@ -255,7 +255,7 @@ NSString * windDirectionToCompassPoint(double bearing){
 
     innumber = currently[@"windSpeed"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
-        self.windSpeed = [[GCNumberWithUnit numberWithUnitName:@"mph" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_SPEED];
+        self.windSpeed = [[GCNumberWithUnit numberWithUnitName:@"mps" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_SPEED];
     }
 
     innumber = dict[@"humidity"];
