@@ -69,4 +69,6 @@
 
 -(GCNumberWithUnit*)weatherStationDistanceFromCoordinate:(CLLocationCoordinate2D)coord;
 
++(void)fixWindSpeed:(FMDatabase*)db;
+
 @end

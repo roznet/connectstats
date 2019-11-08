@@ -370,6 +370,33 @@ NSString * windDirectionToCompassPoint(double bearing){
     }
 }
 
++(void)fixWindSpeed:(FMDatabase*)db{
+    FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_activities_weather_detail WHERE activityId LIKE '__connectstats__%'"];
+    NSMutableDictionary * toDo = [NSMutableDictionary dictionary];
+    while( [res next]){
+        NSString * activityId = [res stringForColumn:@"activityId"];
+        if( activityId){
+            toDo[activityId] = @( [res doubleForColumn:@"windSpeed"] );
+        }
+    }
+    GCUnit * mph = [GCUnit mph];
+    GCUnit * mps = [GCUnit mps];
+    GCUnit * stu = [GCUnit unitForKey:STOREUNIT_SPEED];
+
+    GCNumberWithUnit * mult = [GCNumberWithUnit numberWithUnit:mps andValue:[[GCNumberWithUnit numberWithUnit:stu andValue:1.0] convertToUnit:mph].value];
+
+    RZLog(RZLogInfo, @"fixWindSpeed for %lu activities", toDo.count);
+    NSUInteger i=0;
+    for (NSString * activityId in toDo) {
+        NSNumber * val = toDo[activityId];
+        if( i < 5){
+            i++;
+            RZLog(RZLogInfo, @"%@ %@ store %@ kph=%@", activityId, val, @(val.doubleValue*mult.value), [[GCNumberWithUnit numberWithUnitName:STOREUNIT_SPEED andValue:val.doubleValue] convertToUnitName:@"kph"]);
+        }
+        
+        RZEXECUTEUPDATE(db, @"UPDATE gc_activities_weather_detail SET windSpeed = ? WHERE activityId = ?", @(val.doubleValue*mult.value), activityId);
+    }
+}
 +(void)ensureDbStructure:(FMDatabase*)db{
     if (![db tableExists:@"gc_activities_weather_detail"]) {
         RZEXECUTEUPDATE(db, @"CREATE TABLE gc_activities_weather_detail (activityId TEXT PRIMARY KEY, weatherDate REAL, weatherType INT DEFAULT 0, weatherTypeDesc TEXT, temperature REAL, apparentTemperature REAL, relativeHumidity REAL, windDirection REAL, windSpeed REAL, windDirectionCompassPoint TEXT, weatherStationId TEXT, weatherStationName TEXT, latitude REAL, longitude REAL)");

@@ -39,6 +39,7 @@
 #import "GCActivity+CSSearch.h"
 #import "GCFieldCache.h"
 #import "GCAppDelegate+Swift.h"
+#import "GCWeather.h"
 
 #define GC_STARTING_FILE @"starting.log"
 
@@ -174,7 +175,11 @@ void checkVersion(){
     [GCUnit setGlobalSystem:[_settings[CONFIG_UNIT_SYSTEM] intValue]];
     [GCUnit setStrideStyle:[_settings[CONFIG_STRIDE_STYLE] intValue]];
     [GCUnit setCalendar:[GCAppGlobal calculationCalendar]];
+    
+    [self settingsUpdateCheck:firstTimeEver];
 
+    // This will trigger load from db in background,
+    // make sure all setup first
     self.organizer = [[[GCActivitiesOrganizer alloc] initWithDb:self.db andThread:self.worker] autorelease];
     self.health = [[[GCHealthOrganizer alloc] initWithDb:self.db andThread:self.worker] autorelease];
     self.web = [[[GCWebConnect alloc] init] autorelease] ;
@@ -194,8 +199,6 @@ void checkVersion(){
     }
     [RZViewConfig setFontStyle:[GCAppGlobal configGetInt:CONFIG_FONT_STYLE defaultValue:gcFontStyleDynamicType]];
 
-    [self settingsUpdateCheck:firstTimeEver];
-    
 	_window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     //DONT CHECK IN:
     //self.window = [[[SmudgyWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
@@ -527,10 +530,11 @@ void checkVersion(){
         RZLog(RZLogInfo,@"Current Version %@ first seen %@ (%lu total versions)", currentVersion, versions[currentVersion], (unsigned long)versions.count);
     }
     
-    if( ! firstTimeEver ){
-        if( [self isFirstTimeForFeature:@"UPGRADE_WEATHER_WINDSPEED_UNITS"]){
-            // remove all weather for activities since september 2019
-            needToSaveSettings = true;
+    if( [self isFirstTimeForFeature:@"UPGRADE_WEATHER_WINDSPEED_UNITS"]){
+        // remove all weather for activities since september 2019
+        needToSaveSettings = true;
+        if( ! firstTimeEver ){
+            [GCWeather fixWindSpeed:self.db];
         }
     }
     
@@ -549,8 +553,8 @@ void checkVersion(){
         }else{
             NSMutableDictionary * newFeatures = [NSMutableDictionary dictionaryWithDictionary:dict];
             newFeatures[feature] = [NSDate date];
+            self.settings[CONFIG_FEATURES_SEEN] = newFeatures;
         }
-                
     }
     return rv;
 }
