@@ -815,7 +815,7 @@
         if(indexPath.row == GC_SETTINGS_BUGREPORT && ![GCAppGlobal trialVersion]){
             [self showBugReport];
         } else if (indexPath.row == GC_SETTINGS_HELP){
-            GCSettingsHelpViewController * detail = [[GCSettingsHelpViewController alloc] initWithNibName:nil bundle:nil];
+            GCSettingsHelpViewController * detail = [GCSettingsHelpViewController helpViewControllerFor:nil];
             if (self.splitViewController) {
                 GCSplitViewController*sp = (GCSplitViewController*)self.splitViewController;
                 [sp.activityDetailViewController.navigationController pushViewController:detail animated:YES];

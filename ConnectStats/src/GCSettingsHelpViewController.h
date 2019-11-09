@@ -27,6 +27,7 @@
 @import WebKit;
 
 @interface GCSettingsHelpViewController : UIViewController<WKNavigationDelegate>
-@property (nonatomic,retain) WKWebView * webView;
+
++(GCSettingsHelpViewController*)helpViewControllerFor:(NSURL*)url;
 
 @end

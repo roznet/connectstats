@@ -31,7 +31,8 @@
 
 
 @interface GCSettingsHelpViewController ()
-
+@property (nonatomic,retain) WKWebView * webView;
+@property (nonatomic,retain) NSURL * url;
 @end
 
 @implementation GCSettingsHelpViewController
@@ -39,13 +40,22 @@
     [_webView release];
     [super dealloc];
 }
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
+
+
++(GCSettingsHelpViewController*)helpViewControllerFor:(NSURL*)url{
+    GCSettingsHelpViewController * rv = [[GCSettingsHelpViewController alloc] initWithNibName:nil bundle:nil];
+    if (rv) {
+        rv.url = url;
+        if( rv.url == nil){
+            NSString * aUrl = [GCAppGlobal healthStatsVersion] ? @"https://www.ro-z.net/healthstats" : @"https://ro-z.net/blog/connectstats/documentation/";
+            
+#if TARGET_IPHONE_SIMULATOR
+            //aUrl = @"http://localhost/connectstats/connectstatsdoc.php";
+#endif
+            rv.url = [NSURL URLWithString:aUrl];
+        }
     }
-    return self;
+    return rv;
 }
 
 - (void)viewDidLoad
@@ -56,12 +66,8 @@
     contentView.navigationDelegate = self;
 
     self.webView = contentView;
-    NSString * aUrl = [GCAppGlobal healthStatsVersion] ? @"https://www.ro-z.net/healthstats" : @"https://ro-z.net/blog/connectstats/documentation/";
-
-#if TARGET_IPHONE_SIMULATOR
-    //aUrl = @"http://localhost/connectstats/connectstatsdoc.php";
-#endif
-    NSURLRequest * urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:aUrl]];
+    
+    NSURLRequest * urlRequest = [NSURLRequest requestWithURL:self.url];
 
     [contentView loadRequest:urlRequest];
     [self.view addSubview:contentView];
