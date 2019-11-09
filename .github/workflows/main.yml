@@ -10,6 +10,10 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Pre Build
-      run: pod repo update
+      run: |
+	pwd
+	ls
+	pod repo update
+	pod install
     - name: Build
       run: xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme ConnectStats -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.1' build CODE_SIGNING_REQUIRED=NO

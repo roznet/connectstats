@@ -3,6 +3,7 @@ xcode_workspace: ConnectStats.xcworkspace
 xcode_scheme: ConnectStats
 osx_image: xcode11
 before_install: 
+- pod install
 - pod repo update
 script:
 #- xcodebuild -sdk macosx -workspace ConnectStats.xcworkspace -scheme FitFileExplorer build CODE_SIGNING_REQUIRED=NO
