@@ -27,11 +27,11 @@
 #import "GCCellGrid+Templates.h"
 
 @interface GCSettingsCacheManagementViewController ()
-
+@property (nonatomic,retain) GCActivitiesCacheManagement * cacheManagement;
+@property (nonatomic,retain) NSArray<GCActivitiesCacheFileInfo*>*infos;
 @end
 
 @implementation GCSettingsCacheManagementViewController
-@synthesize cacheManagement;
 
 - (instancetype)initWithStyle:(UITableViewStyle)style
 {
@@ -43,7 +43,8 @@
 }
 
 -(void)dealloc{
-    [cacheManagement release];
+    [_cacheManagement release];
+    [_infos release];
     [super dealloc];
 }
 - (void)viewDidLoad
@@ -60,6 +61,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [GCViewConfig setupViewController:self];
+    [self.cacheManagement analyze];
+    self.infos = [self.cacheManagement infos];
 }
 
 - (void)didReceiveMemoryWarning
@@ -79,7 +82,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return gcCacheFileEnd;
+    return self.infos.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -89,37 +92,25 @@
     if (cell == nil) {
         cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-
-    if (indexPath.row < gcCacheFileEnd) {
-        NSArray * typeNames = [GCActivitiesCacheManagement typeNames];
-        gcCacheFile cfile = (gcCacheFile)indexPath.row;
-
-        NSString * typename = typeNames[cfile];
-        NSArray * infos = cacheManagement.cacheFiles[cfile];
-        [cell setupForRows:2 andCols:2];
-        if ( cfile == gcCacheFileActivityDb) {
-            int n = 0;
-            for (int i = 0; i<infos.count; i++) {
-                n += [infos[i] activities];
-            }
-            [cell labelForRow:1 andCol:0].text = [NSString stringWithFormat:@"%d activities",n];
-        }
-        [cell labelForRow:0 andCol:0].text = typename;
-        double size = cacheManagement.sizes[cfile];
-        NSString * sizeStr = nil;
-        if (size < 1024*1024) {
-            sizeStr = [NSString stringWithFormat:@"%.0f Kb",size/1024.];
-        }else{
-            sizeStr = [NSString stringWithFormat:@"%.1f Mb",size/1024./1024.];
-        }
-
-        [cell labelForRow:0 andCol:1].text = sizeStr;
-        [cell labelForRow:1 andCol:1].attributedText =
-        [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d files",(int)infos.count] attributes:[GCViewConfig attribute14Gray]] autorelease];
-
-
+    
+    GCActivitiesCacheFileInfo * info = self.infos[indexPath.row];
+    [cell setupForRows:2 andCols:2];
+    if ( info.type == gcCacheFileActivityDb) {
+        [cell labelForRow:1 andCol:0].text = [NSString stringWithFormat:@"%lu activities",(unsigned long)info.activitiesCount];
     }
-
+    [cell labelForRow:0 andCol:0].text = info.typeKey;
+    double size = info.totalSize;
+    NSString * sizeStr = nil;
+    if (size < 1024*1024) {
+        sizeStr = [NSString stringWithFormat:@"%.0f Kb",size/1024.];
+    }else{
+        sizeStr = [NSString stringWithFormat:@"%.1f Mb",size/1024./1024.];
+    }
+    
+    [cell labelForRow:0 andCol:1].text = sizeStr;
+    [cell labelForRow:1 andCol:1].attributedText =
+    [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d files",(int)info.filesCount] attributes:[GCViewConfig attribute14Gray]] autorelease];
+    
     return cell;
 }
 
@@ -143,12 +134,13 @@
         [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", @"Cache Management")
                                                   style:UIAlertActionStyleDestructive
                                                 handler:^(UIAlertAction*action){
-                                                    gcCacheFile type = (gcCacheFile)indexPath.row;
-                                                    [cacheManagement cleanupFiles:type];
-                                                    [cacheManagement analyze];
-                                                    [self.tableView reloadData];
-
-                                                }]];
+            gcCacheFile type = self.infos[ indexPath.row ].type;
+            [self.cacheManagement cleanupFiles:type];
+            [self.cacheManagement analyze];
+            self.infos = [self.cacheManagement infos];
+            [self.tableView reloadData];
+            
+        }]];
         [self presentViewController:alert animated:YES completion:^(){}];
     }
 }

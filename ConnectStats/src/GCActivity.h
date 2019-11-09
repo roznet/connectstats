@@ -210,7 +210,6 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(void)clearTrackdb;
 
 -(BOOL)hasTrackField:(gcFieldFlag)which;
-//-(void)addTrackPoint:(GCTrackPoint*)point;
 
 /**
  Check if activities has trackfield available. Note it may not be available
@@ -321,10 +320,6 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  Returns all available summary fields as GCField. Includes calculated fields.
  */
 -(NSArray<GCField*>*)allFields;
-/**
- Returns all available summary fields as NSString Keys. Includes calculated fields.
- */
--(NSArray<NSString*>*)allFieldsKeys DEPRECATED_MSG_ATTRIBUTE("use allFields.");
 
 -(GCActivityMetaValue*)metaValueForField:(NSString*)field;
 /**

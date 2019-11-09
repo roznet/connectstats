@@ -26,9 +26,7 @@
 #import <UIKit/UIKit.h>
 #import "GCActivitiesCacheManagement.h"
 
-@interface GCSettingsCacheManagementViewController : UITableViewController<UIAlertViewDelegate>{
-    GCActivitiesCacheManagement * cacheManagement;
-}
-@property (nonatomic,retain) GCActivitiesCacheManagement * cacheManagement;
+@interface GCSettingsCacheManagementViewController : UITableViewController<UIAlertViewDelegate>
+
 
 @end
