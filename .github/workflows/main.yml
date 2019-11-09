@@ -12,4 +12,4 @@ jobs:
     - name: Pre Build
       run: pod repo update
     - name: Build
-      run: xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme ConnectStats -destination 'platform=iOS Simulator,name=iPhone 6,OS=11.2' build CODE_SIGNING_REQUIRED=NO
+      run: xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme ConnectStats -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.1' build CODE_SIGNING_REQUIRED=NO
