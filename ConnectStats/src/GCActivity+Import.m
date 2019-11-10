@@ -1496,7 +1496,7 @@
 
     NSString * aName = other.activityName;
     if( ! newOnly || connectstatsFromGarmin){
-        if (![aName isEqualToString:self.activityName]) {
+        if (aName.length > 0 && ![aName isEqualToString:self.activityName]) {
             if( verbose ){
                 RZLog(RZLogInfo, @"change activity name %@ -> %@", self.activityName, aName);
             }
