@@ -84,8 +84,8 @@
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
-            key = "RS_REFERENCE_OBJECT_DIR"
-            value = "$(SOURCE_ROOT)/ConnectStatsTests/samples/ReferenceObjects"
+            key = "RZ_REFERENCE_OBJECT_DIR"
+            value = "$(SOURCE_ROOT)/connectstatstestapp/samples/ReferenceObjects"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

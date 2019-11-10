@@ -151,7 +151,16 @@
         
         if( self.tryAlternativeService ){
             if( ![GCGarminActivityTrack13Request extractFitDataFromZip:theData intoFitFile:fname] ){
-                RZLog(RZLogError, @"Failed to save %@.", fname);
+                NSString * string = RZReturnAutorelease([[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding]);
+                if( [string hasPrefix:@"{\""] ){
+                    if( [string rangeOfString:@"NotFoundException"].location != NSNotFound ){
+                        RZLog(RZLogInfo, @"%@/%@ was deleted from alternate service: %@", self.activity.activityId, self.activity.externalServiceActivityId, string);
+                    }else{
+                        RZLog(RZLogWarning, @"Error from Alternate Service for %@/%@: %@", self.activity.activityId, self.activity.externalServiceActivityId, string);
+                    }
+                }else{
+                    RZLog(RZLogError, @"Failed to save and process %@.", fname);
+                }
             }
         }else{
             if(![theData writeToFile:[RZFileOrganizer writeableFilePath:fname] atomically:true]){
@@ -169,12 +178,14 @@
 -(void)processParse:(NSString*)fileName{
     if( [self checkNoErrors]){
         NSString * fp = [[NSFileManager defaultManager] fileExistsAtPath:fileName] ? fileName : [RZFileOrganizer writeableFilePath:fileName];
+        
         NSDate * useStartDate = self.activity.parentId != nil ? self.activity.date : nil;
         GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activity.activityId fitFilePath:fp startTime:useStartDate]);
-        
-        [self.activity updateSummaryDataFromActivity:fitAct];
-        [self.activity updateTrackpointsFromActivity:fitAct];
-        [self.activity saveTrackpoints:self.activity.trackpoints andLaps:self.activity.laps];
+        if( fitAct ){ // check if we could parse. Could be no fit file available.
+            [self.activity updateSummaryDataFromActivity:fitAct];
+            [self.activity updateTrackpointsFromActivity:fitAct];
+            [self.activity saveTrackpoints:self.activity.trackpoints andLaps:self.activity.laps];
+        }
     }
     [self processDone];
 }

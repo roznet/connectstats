@@ -41,12 +41,15 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 @interface GCTestCommunications ()
 @property (nonatomic,assign) NSUInteger nCb;
 @property (nonatomic,assign) NSUInteger nReq;
+@property (nonatomic,retain) NSMutableArray<NSString*>*reqDescriptions;
 @property (nonatomic,assign) BOOL completed;
 @property (nonatomic,retain) RZRemoteDownload * remoteDownload;
 @property (nonatomic,retain) NSString * currentSession;
 @property (nonatomic,assign) gcTestInstance testInstance;
 @property (nonatomic,retain) NSMutableDictionary*cache;
 @property (nonatomic,assign) NSUInteger expectedModernActivitiesCount;
+@property (nonatomic,retain) RZRegressionManager * manager;
+@property (nonatomic,retain) NSSet * classes;
 
 @end
 
@@ -56,6 +59,9 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     [_cache release];
     [_remoteDownload release];
     [_currentSession release];
+    [_reqDescriptions release];
+    [_manager release];
+    [_classes release];
     [super dealloc];
 }
 
@@ -182,6 +188,9 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     }
     if( [[theInfo stringInfo] isEqualToString:NOTIFY_NEXT]){
         self.nReq++;
+        NSString * desc = [theParent currentDebugDescription];
+        desc = [desc stringByReplacingOccurrencesOfString:[GCAppGlobal simulatorUrl] withString:@""];
+        [self.reqDescriptions addObject:desc];
     }
     RZ_ASSERT(![[theInfo stringInfo] isEqualToString:@"error"], @"Web request had no error");
     if ([[theInfo stringInfo] isEqualToString:@"end"]) {
@@ -224,12 +233,35 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     
     [self testCommunicationStart:@"GC Com Modern" userName:@"simulator"];
     self.nReq = 0;
+    self.reqDescriptions = [NSMutableArray array];
+    
+    self.manager = [RZRegressionManager managerForTestClass:[self class]];
+    //self.manager.recordMode = true;
+    self.classes = [NSSet setWithObjects:[NSArray class], [NSString class], nil];
+    
     [[GCAppGlobal web] servicesSearchRecentActivities];
 }
+
+-(void)validateReqForBatch:(NSString*)name{
+    NSArray * expected = [self.manager retrieveReferenceObject:self.reqDescriptions forClasses:self.classes selector:_cmd identifier:name error:nil];
+    RZ_ASSERT([expected isEqualToArray:self.reqDescriptions], @"Have Expected Reqs %@", name);
+    if( ! [expected isEqualToArray:self.reqDescriptions] ){
+        NSLog(@"Count %@ %@", @(self.reqDescriptions.count), @(expected.count) );
+        for( NSUInteger i=0;i<MIN(self.reqDescriptions.count,expected.count);i++){
+            if( ![self.reqDescriptions[i] isEqualToString:expected[i]] ){
+                NSLog(@"First Diff[%@] %@ %@", @(i), self.reqDescriptions[i], expected[i] );
+                break;
+            }
+        }
+    }
+    [self.reqDescriptions removeAllObjects];
+}
+
 -(void)testModernHistoryInitialDone{
     self.expectedModernActivitiesCount = 2971;
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == self.expectedModernActivitiesCount , @"Loading %d activities (got %d)", (int)self.expectedModernActivitiesCount, (int)[[GCAppGlobal organizer] countOfActivities]);
-    RZ_ASSERT(self.nReq == 160, @"Should have got 160 req %d", (int)self.nReq);
+    
+    [self validateReqForBatch:NSStringFromSelector(_cmd)];
     
     self.cache = [NSMutableDictionary dictionary];
     
@@ -243,8 +275,8 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 }
 
 -(void)testModernHistoryTrackLoaded{
-    RZ_ASSERT(self.nReq == 210, @"Load track point in 210 req %d", (int)self.nReq);
-    
+    [self validateReqForBatch:NSStringFromSelector(_cmd)];
+
     for( NSUInteger i=0;i< 10; i++){
         GCActivity * act = [[GCAppGlobal organizer] activityForIndex:i];
         NSDictionary * prev = self.cache[act.activityId];
@@ -270,8 +302,8 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 
 -(void)testModernHistoryReloadFirst10{
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == self.expectedModernActivitiesCount , @"Loading %d activities (got %d)", (int)self.expectedModernActivitiesCount, (int)[[GCAppGlobal organizer] countOfActivities]);
-    RZ_ASSERT(self.nReq == 216, @"Reloaded only last few %d", (int)self.nReq);
-    
+    [self validateReqForBatch:NSStringFromSelector(_cmd)];
+
     [[GCAppGlobal organizer] deleteActivityFromIndex:2000];
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2000, @"deleted tail activities");
 
@@ -280,16 +312,14 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 
 -(void)testModernHistoryReloadNothing{
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 2000 , @"Loading 2000 activities (got %d)", (int)[[GCAppGlobal organizer] countOfActivities]);
-    RZ_ASSERT(self.nReq == 221, @"Reloaded only last few %d", (int)self.nReq);
+    [self validateReqForBatch:NSStringFromSelector(_cmd)];
     
     [[GCAppGlobal web] servicesSearchAllActivities];
 }
 
 -(void)testModernHistoryReloadAll{
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == self.expectedModernActivitiesCount , @"Loading %d activities (got %d)",(int)self.expectedModernActivitiesCount, (int)[[GCAppGlobal organizer] countOfActivities]);
-    RZ_ASSERT(self.nReq == 375, @"Reloaded only last few %d", (int)self.nReq);
-    
-    
+    [self validateReqForBatch:NSStringFromSelector(_cmd)];
     
     //2655997046 -> deleted
     //2654853600 -> renamed

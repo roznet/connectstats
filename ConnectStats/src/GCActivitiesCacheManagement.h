@@ -68,5 +68,5 @@ typedef NS_ENUM(NSUInteger, gcCacheFile){
 +(NSArray*)crashFiles;
 -(void)cleanupFiles:(gcCacheFile)type;
 -(NSArray<GCActivitiesCacheFileInfo*>*)infos;
-
+-(NSArray<NSString*>*)fileNamesForType:(gcCacheFile)type;
 @end

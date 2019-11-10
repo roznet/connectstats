@@ -37,6 +37,7 @@
 @property (nonatomic,retain) dispatch_queue_t worker;
 
 -(NSString*)currentDescription;
+-(NSString*)currentDebugDescription;
 -(NSString*)currentUrl;
 
 -(void)next;

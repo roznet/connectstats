@@ -215,11 +215,28 @@
     }
 }
 
--(void)analyze{
-    NSFileManager	*	fileManager			= [NSFileManager defaultManager];
-    NSString	*	documentsDirectory	= [self documentDirectory];
+-(NSArray<NSString*>*)fileNamesForType:(gcCacheFile)type{
     NSError * e;
-    NSArray * files = [fileManager contentsOfDirectoryAtPath:documentsDirectory error:&e];
+    NSArray * files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[self documentDirectory] error:&e];
+    if(!files){
+        RZLog(RZLogError, @"Failed to read %@. %@", [self documentDirectory], e.localizedDescription);
+    }
+
+    NSMutableArray*results = [NSMutableArray array];
+    
+    for (NSString * file in files) {
+        gcCacheFile filetype = [GCActivitiesCacheFileInfo typeForFile:file];
+        if( filetype == type ){
+            [results addObject:file];
+        }
+    }
+    return results;
+}
+
+-(void)analyze{
+    NSString * documentsDirectory = [self documentDirectory];
+    NSError * e;
+    NSArray * files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:&e];
     if(!files){
         RZLog(RZLogError, @"Failed to read %@. %@", documentsDirectory, e.localizedDescription);
     }
