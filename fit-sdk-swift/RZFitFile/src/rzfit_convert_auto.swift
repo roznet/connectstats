@@ -2466,6 +2466,7 @@ func rzfit_manufacturer_string(input : FIT_UINT16) -> String?
     case FIT_MANUFACTURER_VELOSENSE: return "velosense";
     case FIT_MANUFACTURER_CYCLIGENTINC: return "cycligentinc";
     case FIT_MANUFACTURER_TRAILFORKS: return "trailforks";
+    case FIT_MANUFACTURER_MAHLE_EBIKEMOTION: return "mahle_ebikemotion";
     case FIT_MANUFACTURER_ACTIGRAPHCORP: return "actigraphcorp";
     default: return nil
   }
@@ -2885,6 +2886,7 @@ func rzfit_mesg_num_string(input : FIT_UINT16) -> String?
     case FIT_MESG_NUM_DIVE_ALARM: return "dive_alarm";
     case FIT_MESG_NUM_EXERCISE_TITLE: return "exercise_title";
     case FIT_MESG_NUM_DIVE_SUMMARY: return "dive_summary";
+    case FIT_MESG_NUM_JUMP: return "jump";
     default: return nil
   }
 }
@@ -7846,11 +7848,11 @@ func rzfit_field_convert_value_dict( ptr : UnsafePointer<FIT_FIELD_CONVERT>) -> 
     let val : Double = Double(x.base_type)
     rv[ "base_type" ] = val
   }
-  if x.offset_in != FIT_UINT8_INVALID  {
+  if x.offset_in != FIT_UINT16_INVALID  {
     let val : Double = Double(x.offset_in)
     rv[ "offset_in" ] = val
   }
-  if x.offset_local != FIT_UINT8_INVALID  {
+  if x.offset_local != FIT_UINT16_INVALID  {
     let val : Double = Double(x.offset_local)
     rv[ "offset_local" ] = val
   }
@@ -9368,6 +9370,7 @@ public func rzfit_string_to_mesg(mesg : String) -> FIT_MESG_NUM? {
   case "dive_alarm": rv = FIT_MESG_NUM_DIVE_ALARM;
   case "exercise_title": rv = FIT_MESG_NUM_EXERCISE_TITLE;
   case "dive_summary": rv = FIT_MESG_NUM_DIVE_SUMMARY;
+  case "jump": rv = FIT_MESG_NUM_JUMP;
   default:
     rv = nil
   }
