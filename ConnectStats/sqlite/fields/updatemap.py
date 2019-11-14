@@ -117,7 +117,7 @@ known_map = {
     'total_timer_time'                : 'SumDuration',
     'total_training_effect'           : 'SumTrainingEffect2',
     'training_stress_score'           : 'SumTrainingStressScore',
-    'vertical_oscillation'            : 'WeightedMeanVerticalOscillation',
+    'vertical_oscillation'            : 'WeightedMeanVerticalRatio',
 }
 
 verbose = False
