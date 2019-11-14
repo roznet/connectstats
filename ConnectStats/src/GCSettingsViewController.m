@@ -39,6 +39,7 @@
 #import "GCSettingsLogViewController.h"
 #import "GCService.h"
 #import "GCDebugActionsTableViewController.h"
+@import RZExternal;
 
 #define GC_SECTION_LOGIN    0
 #define GC_SECTION_PARAMS   1
@@ -727,6 +728,7 @@
         }
         case GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_FIRSTDAY):
             [GCAppGlobal configSet:CONFIG_FIRST_DAY_WEEK intVal:[GCViewConfig weekDayValue:[cell selected]]];
+            [NSDate cc_setCalculationCalendar:[GCAppGlobal calculationCalendar]];
             [GCAppGlobal saveSettings];
             break;
         case GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_PERIOD):

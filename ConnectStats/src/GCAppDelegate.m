@@ -176,6 +176,7 @@ void checkVersion(){
     [GCUnit setGlobalSystem:[_settings[CONFIG_UNIT_SYSTEM] intValue]];
     [GCUnit setStrideStyle:[_settings[CONFIG_STRIDE_STYLE] intValue]];
     [GCUnit setCalendar:[GCAppGlobal calculationCalendar]];
+    [NSDate cc_setCalculationCalendar:[GCAppGlobal calculationCalendar]];
     
     [self settingsUpdateCheck];
 

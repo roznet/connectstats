@@ -320,7 +320,7 @@
 		42B265751FF8314400E891A1 /* KalLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B263E01FF8314400E891A1 /* KalLogic.m */; };
 		42B265761FF8314400E891A1 /* KalDate.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263E11FF8314400E891A1 /* KalDate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B265771FF8314400E891A1 /* Kal.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263E21FF8314400E891A1 /* Kal.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B265791FF8314400E891A1 /* NSDateAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263E41FF8314400E891A1 /* NSDateAdditions.h */; };
+		42B265791FF8314400E891A1 /* NSDateAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263E41FF8314400E891A1 /* NSDateAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B2657B1FF8314400E891A1 /* KalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B263E61FF8314400E891A1 /* KalViewController.m */; };
 		42B2657C1FF8314400E891A1 /* KalPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263E71FF8314400E891A1 /* KalPrivate.h */; };
 		42B2657D1FF8314400E891A1 /* KalTileView.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263E81FF8314400E891A1 /* KalTileView.h */; };
