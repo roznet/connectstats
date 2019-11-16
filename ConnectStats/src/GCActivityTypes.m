@@ -94,6 +94,15 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
     }
     if( byTypeId.count != byActivityType.count){
         RZLog(RZLogError, @"Inconsistency in types byKey %lu != byTypeId %lu", (unsigned long)byTypeId.count, (unsigned long)byActivityType.count);
+        NSMutableDictionary * found = [NSMutableDictionary dictionary];
+        for (NSNumber * typeId in byTypeId) {
+            GCActivityType * type = byTypeId[typeId];
+            if( found[type.key] != nil){
+                RZLog(RZLogInfo, @"inconsitent %@ %@", type, found[type.key]);
+            }
+            found[type.key] = type;
+            
+        }
     }
     
     self.typesByKey = byActivityType;
