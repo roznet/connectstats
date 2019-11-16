@@ -32,9 +32,9 @@
 @property (nonatomic,assign) BOOL reloadAll;
 @property (nonatomic,retain) NSArray * activities;
 
--(GCGarminSearch*)init NS_DESIGNATED_INITIALIZER;
--(GCGarminSearch*)initWithStart:(NSUInteger)aStart percent:(double)pct andMode:(BOOL)aMode NS_DESIGNATED_INITIALIZER;
--(GCGarminSearch*)initNextWith:(GCGarminSearch*)current NS_DESIGNATED_INITIALIZER;
+-(GCGarminSearch*)init NS_DESIGNATED_INITIALIZER DEPRECATED_MSG_ATTRIBUTE("Use Modern Search");
+-(GCGarminSearch*)initWithStart:(NSUInteger)aStart percent:(double)pct andMode:(BOOL)aMode NS_DESIGNATED_INITIALIZER DEPRECATED_MSG_ATTRIBUTE("Use Modern Search");
+-(GCGarminSearch*)initNextWith:(GCGarminSearch*)current NS_DESIGNATED_INITIALIZER DEPRECATED_MSG_ATTRIBUTE("Use Modern Search");
 -(NSString*)url;
 -(void)process;
 
