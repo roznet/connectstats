@@ -1349,15 +1349,15 @@
 		42B265241FF8314400E891A1 /* gtm-aouth2 */ = {
 			isa = PBXGroup;
 			children = (
+				42B265291FF8314400E891A1 /* GTMOAuth2Authentication.h */,
+				42B2652F1FF8314400E891A1 /* GTMOAuth2Authentication.m */,
 				42B265251FF8314400E891A1 /* GTMOAuth2SignIn.h */,
-				42B265271FF8314400E891A1 /* GTMSessionFetcher.h */,
+				42B2652B1FF8314400E891A1 /* GTMOAuth2SignIn.m */,
 				42B2652D1FF8314400E891A1 /* GTMOAuth2ViewControllerTouch.h */,
 				42B265281FF8314400E891A1 /* GTMOAuth2ViewControllerTouch.m */,
-				42B265291FF8314400E891A1 /* GTMOAuth2Authentication.h */,
 				42B2652A1FF8314400E891A1 /* GTMOAuth2ViewTouch.xib */,
-				42B2652B1FF8314400E891A1 /* GTMOAuth2SignIn.m */,
+				42B265271FF8314400E891A1 /* GTMSessionFetcher.h */,
 				42B2652C1FF8314400E891A1 /* GTMSessionFetcher.m */,
-				42B2652F1FF8314400E891A1 /* GTMOAuth2Authentication.m */,
 			);
 			path = "gtm-aouth2";
 			sourceTree = "<group>";
