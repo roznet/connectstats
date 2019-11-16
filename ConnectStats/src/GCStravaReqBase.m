@@ -124,6 +124,12 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
 }
 
 -(void)authorizeRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError * _Nullable))handler{
+    NSDate * expirationDate = self.stravaAuth.expirationDate;
+    NSTimeInterval timeToExpire = [expirationDate timeIntervalSinceNow];
+    if (expirationDate == nil || timeToExpire < 60.0) {
+        RZLog(RZLogInfo, @"Expect token refresh (expiration %@)", expirationDate);
+    }
+    
     [self.stravaAuth authorizeRequest:request completionHandler:^(NSError*error){
         if( error == nil){
             [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:YES];
