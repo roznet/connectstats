@@ -236,7 +236,6 @@
 		422FAF2C19A1DD6000D09773 /* GCSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4225018816641D2B002CD429 /* GCSplitViewController.m */; };
 		422FAF2D19A1DD6000D09773 /* GCFormattedFieldText.m in Sources */ = {isa = PBXBuildFile; fileRef = 42250225166A0D4D002CD429 /* GCFormattedFieldText.m */; };
 		422FAF3319A1DD6000D09773 /* GCTrackPointSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828BD167E7C1700AB9C89 /* GCTrackPointSwim.m */; };
-		422FAF3419A1DD6000D09773 /* GCGarminRequestSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828E01683C26700AB9C89 /* GCGarminRequestSearch.m */; };
 		422FAF3719A1DD6000D09773 /* GCMapAppleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 429912C117E4A0CB003CCCC6 /* GCMapAppleViewController.m */; };
 		422FAF3819A1DD6000D09773 /* GCViewSwimStrokeColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828F71684CDF900AB9C89 /* GCViewSwimStrokeColors.m */; };
 		422FAF3919A1DD6000D09773 /* GCActivity+Import.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51A718AC33DB00B85FAB /* GCActivity+Import.m */; };
@@ -531,7 +530,6 @@
 		42769BDB1DD4950D000390F1 /* GCActivitySummaryValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 42734CE21695797A003E2177 /* GCActivitySummaryValue.m */; };
 		42769BDF1DD71F58000390F1 /* FITFitMessageFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42769BDE1DD71F58000390F1 /* FITFitMessageFields.swift */; };
 		427828BE167E7C1700AB9C89 /* GCTrackPointSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828BD167E7C1700AB9C89 /* GCTrackPointSwim.m */; };
-		427828E11683C26700AB9C89 /* GCGarminRequestSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828E01683C26700AB9C89 /* GCGarminRequestSearch.m */; };
 		427828F81684CDFA00AB9C89 /* GCViewSwimStrokeColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828F71684CDF900AB9C89 /* GCViewSwimStrokeColors.m */; };
 		427828FB1684E61400AB9C89 /* GCActivitySwimLapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828FA1684E61400AB9C89 /* GCActivitySwimLapViewController.m */; };
 		42793B321F405941005FAF02 /* RZUtilsSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; };
@@ -830,7 +828,6 @@
 		42B5E2211BA5AF9A000FAE4E /* GCTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1FF1BA5AF9A000FAE4E /* GCTestViewController.m */; };
 		42B5E2221BA5AF9A000FAE4E /* GCCellGrid+Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E2011BA5AF9A000FAE4E /* GCCellGrid+Test.m */; };
 		42B5E2231BA5AF9A000FAE4E /* GCTestIconsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E2071BA5AF9A000FAE4E /* GCTestIconsCell.m */; };
-		42B5E2241BA5AF9A000FAE4E /* GCTestOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E2091BA5AF9A000FAE4E /* GCTestOrganizer.m */; };
 		42B5E2251BA5AF9A000FAE4E /* GCTestParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E20B1BA5AF9A000FAE4E /* GCTestParsing.m */; };
 		42B5E2261BA5AF9A000FAE4E /* GCTestTennis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E20E1BA5AF9A000FAE4E /* GCTestTennis.m */; };
 		42B5E2271BA5AF9A000FAE4E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E2131BA5AF9A000FAE4E /* main.m */; };
@@ -884,7 +881,6 @@
 		42B5E2941BA5B216000FAE4E /* GCGarminUserJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBBF17C1687F00EB23A3 /* GCGarminUserJsonParser.m */; };
 		42B5E2951BA5B216000FAE4E /* GCGarminActivityLapsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200EDA17F831B30078B45A /* GCGarminActivityLapsParser.m */; };
 		42B5E2971BA5B216000FAE4E /* GCGarminRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 429D75341651B14E00232BED /* GCGarminRequest.m */; };
-		42B5E2991BA5B216000FAE4E /* GCGarminRequestSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828E01683C26700AB9C89 /* GCGarminRequestSearch.m */; };
 		42B5E29B1BA5B216000FAE4E /* GCGarminActivityTrack13Request.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200ED717F8270D0078B45A /* GCGarminActivityTrack13Request.m */; };
 		42B5E29C1BA5B216000FAE4E /* GCGarminRequestActivityList.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DCA7CB1AF420E20050AAA9 /* GCGarminRequestActivityList.m */; };
 		42B5E29E1BA5B216000FAE4E /* GCGarminRequestActivityReload.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E186CF16A620E800D4513B /* GCGarminRequestActivityReload.m */; };
@@ -2250,8 +2246,6 @@
 		42769BDE1DD71F58000390F1 /* FITFitMessageFields.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITFitMessageFields.swift; path = src/FITFitMessageFields.swift; sourceTree = "<group>"; };
 		427828BC167E7C1700AB9C89 /* GCTrackPointSwim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTrackPointSwim.h; path = src/GCTrackPointSwim.h; sourceTree = "<group>"; };
 		427828BD167E7C1700AB9C89 /* GCTrackPointSwim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTrackPointSwim.m; path = src/GCTrackPointSwim.m; sourceTree = "<group>"; };
-		427828DF1683C26700AB9C89 /* GCGarminRequestSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminRequestSearch.h; path = src/GCGarminRequestSearch.h; sourceTree = "<group>"; };
-		427828E01683C26700AB9C89 /* GCGarminRequestSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCGarminRequestSearch.m; path = src/GCGarminRequestSearch.m; sourceTree = "<group>"; };
 		427828F61684CDD500AB9C89 /* GCViewSwimStrokeColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCViewSwimStrokeColors.h; path = src/GCViewSwimStrokeColors.h; sourceTree = "<group>"; };
 		427828F71684CDF900AB9C89 /* GCViewSwimStrokeColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCViewSwimStrokeColors.m; path = src/GCViewSwimStrokeColors.m; sourceTree = "<group>"; };
 		427828F91684E61300AB9C89 /* GCActivitySwimLapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivitySwimLapViewController.h; path = src/GCActivitySwimLapViewController.h; sourceTree = "<group>"; };
@@ -2563,8 +2557,6 @@
 		42B5E2051BA5AF9A000FAE4E /* GCTestCommunications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestCommunications.h; path = src/GCTestCommunications.h; sourceTree = "<group>"; };
 		42B5E2061BA5AF9A000FAE4E /* GCTestIconsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestIconsCell.h; path = src/GCTestIconsCell.h; sourceTree = "<group>"; };
 		42B5E2071BA5AF9A000FAE4E /* GCTestIconsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestIconsCell.m; path = src/GCTestIconsCell.m; sourceTree = "<group>"; };
-		42B5E2081BA5AF9A000FAE4E /* GCTestOrganizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestOrganizer.h; path = src/GCTestOrganizer.h; sourceTree = "<group>"; };
-		42B5E2091BA5AF9A000FAE4E /* GCTestOrganizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestOrganizer.m; path = src/GCTestOrganizer.m; sourceTree = "<group>"; };
 		42B5E20A1BA5AF9A000FAE4E /* GCTestParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestParsing.h; path = src/GCTestParsing.h; sourceTree = "<group>"; };
 		42B5E20B1BA5AF9A000FAE4E /* GCTestParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestParsing.m; path = src/GCTestParsing.m; sourceTree = "<group>"; };
 		42B5E20C1BA5AF9A000FAE4E /* GCTestStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestStats.h; path = src/GCTestStats.h; sourceTree = "<group>"; };
@@ -3972,8 +3964,6 @@
 				429D75341651B14E00232BED /* GCGarminRequest.m */,
 				4209E1981DA8E15700B80735 /* GCGarminRequestModernSearch.h */,
 				4209E1991DA8E15700B80735 /* GCGarminRequestModernSearch.m */,
-				427828DF1683C26700AB9C89 /* GCGarminRequestSearch.h */,
-				427828E01683C26700AB9C89 /* GCGarminRequestSearch.m */,
 				42200ED617F8270D0078B45A /* GCGarminActivityTrack13Request.h */,
 				42200ED717F8270D0078B45A /* GCGarminActivityTrack13Request.m */,
 				42DCA7CA1AF420E20050AAA9 /* GCGarminRequestActivityList.h */,
@@ -4805,8 +4795,6 @@
 				42B5E1F91BA5AF9A000FAE4E /* GCTestBasics.m */,
 				42B5E2051BA5AF9A000FAE4E /* GCTestCommunications.h */,
 				42B5E1F31BA5AF9A000FAE4E /* GCTestCommunications.m */,
-				42B5E2081BA5AF9A000FAE4E /* GCTestOrganizer.h */,
-				42B5E2091BA5AF9A000FAE4E /* GCTestOrganizer.m */,
 				42B5E20A1BA5AF9A000FAE4E /* GCTestParsing.h */,
 				42B5E20B1BA5AF9A000FAE4E /* GCTestParsing.m */,
 				42B5E20D1BA5AF9A000FAE4E /* GCTestTennis.h */,
@@ -6902,7 +6890,6 @@
 				422FAF2D19A1DD6000D09773 /* GCFormattedFieldText.m in Sources */,
 				42BFC25B1DCF514B00EAD40E /* GCGarminHeartRateZoneParser.m in Sources */,
 				422FAF3319A1DD6000D09773 /* GCTrackPointSwim.m in Sources */,
-				422FAF3419A1DD6000D09773 /* GCGarminRequestSearch.m in Sources */,
 				42453BAC1DD8B5940073ACCA /* GCMapGradientPathOverlay.m in Sources */,
 				42684EF11B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m in Sources */,
 				422FAF3719A1DD6000D09773 /* GCMapAppleViewController.m in Sources */,
@@ -7229,7 +7216,6 @@
 				421516BC19A47C450080CD4C /* GCHealthKitRequest.m in Sources */,
 				42B8588B229DB716009E309A /* GCConnectStatsRequestLogin.m in Sources */,
 				427828BE167E7C1700AB9C89 /* GCTrackPointSwim.m in Sources */,
-				427828E11683C26700AB9C89 /* GCGarminRequestSearch.m in Sources */,
 				429912C217E4A0CB003CCCC6 /* GCMapAppleViewController.m in Sources */,
 				427828F81684CDFA00AB9C89 /* GCViewSwimStrokeColors.m in Sources */,
 				42EB51A818AC33DB00B85FAB /* GCActivity+Import.m in Sources */,
@@ -7480,7 +7466,6 @@
 				42B5E2951BA5B216000FAE4E /* GCGarminActivityLapsParser.m in Sources */,
 				42B5E2971BA5B216000FAE4E /* GCGarminRequest.m in Sources */,
 				422F284020557DD000187478 /* GCField+Convert.m in Sources */,
-				42B5E2991BA5B216000FAE4E /* GCGarminRequestSearch.m in Sources */,
 				422CC8831E6ACA1700195414 /* FITFitValueStatistics.swift in Sources */,
 				42453BAB1DD8B5940073ACCA /* GCMapGradientPathOverlay.m in Sources */,
 				42B5E29B1BA5B216000FAE4E /* GCGarminActivityTrack13Request.m in Sources */,
@@ -7556,7 +7541,6 @@
 				42CE39471CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */,
 				42B5E2251BA5AF9A000FAE4E /* GCTestParsing.m in Sources */,
 				42B5E2211BA5AF9A000FAE4E /* GCTestViewController.m in Sources */,
-				42B5E2241BA5AF9A000FAE4E /* GCTestOrganizer.m in Sources */,
 				42B5E2231BA5AF9A000FAE4E /* GCTestIconsCell.m in Sources */,
 				42CC45CC200A67C0003EB805 /* GCSettingsBugReport.m in Sources */,
 				42B5E2191BA5AF9A000FAE4E /* GCAppGlobal.m in Sources */,

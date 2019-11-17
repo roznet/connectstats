@@ -18,7 +18,6 @@
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminSearchModernJsonParser.h"
 #import "GCGarminActivityLapsParser.h"
-#import "GCGarminRequestSearch.h"
 #import "GCGarminUserJsonParser.h"
 #import "GCStravaSegmentListStarred.h"
 #import "GCStravaActivityListParser.h"
@@ -781,7 +780,7 @@
 -(void)testParseSearch{
     GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_parsingsearch.db"];
     
-    [GCGarminSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
     
     [GCWithingsBodyMeasures testForHealth:organizer.health withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] forId:@"188427"];
     GCField * hf = [GCHealthMeasure healthFieldFromMeasureType:gcMeasureWeight];

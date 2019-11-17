@@ -30,7 +30,6 @@
 #import "GCAppGlobal.h"
 #import "GCActivityTennis.h"
 
-#import "GCGarminRequestSearch.h"
 #import "GCGarminRequestActivityReload.h"
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminRequestModernActivityTypes.h"

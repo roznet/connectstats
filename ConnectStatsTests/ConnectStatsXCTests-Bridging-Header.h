@@ -16,7 +16,6 @@
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminSearchModernJsonParser.h"
 #import "GCGarminActivityLapsParser.h"
-#import "GCGarminRequestSearch.h"
 #import "GCGarminUserJsonParser.h"
 
 #import "GCConnectStatsRequestSearch.h"
