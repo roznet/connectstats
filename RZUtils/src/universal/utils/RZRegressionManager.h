@@ -62,7 +62,7 @@
  @param error if nil error is not reported. Will point to an NSError if error occurs
  @return nil if error or the regression object saved. In record mode, object will be returned
  */
--(id)retrieveReferenceObject:(NSObject<NSCoding>*)object
+-(id)retrieveReferenceObject:(NSObject<NSSecureCoding>*)object
                     forClasses:(NSSet<Class>*)classes
             selector:(SEL)sel
           identifier:(NSString*)ident

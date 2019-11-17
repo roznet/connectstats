@@ -64,10 +64,12 @@
                           @"WeightedMeanSwimCadence",
                           @"WeightedMeanBikeCadence",
                           @"WeightedMeanVerticalOscillation",
+                          @"WeightedMeanGroundContactTime",
                           @"SumEnergy",
                           @"DirectVO2Max",
                           @"WeightedMeanVerticalRatio",
                           @"WeightedMeanAirTemperature",
+                          @"WeightedMeanLegSpringStiffness",
                           ],
                   GC_TYPE_CYCLING:@[
                           @"SumDistance",

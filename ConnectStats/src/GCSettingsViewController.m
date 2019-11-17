@@ -39,6 +39,7 @@
 #import "GCSettingsLogViewController.h"
 #import "GCService.h"
 #import "GCDebugActionsTableViewController.h"
+@import RZExternal;
 
 #define GC_SECTION_LOGIN    0
 #define GC_SECTION_PARAMS   1
@@ -727,6 +728,7 @@
         }
         case GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_FIRSTDAY):
             [GCAppGlobal configSet:CONFIG_FIRST_DAY_WEEK intVal:[GCViewConfig weekDayValue:[cell selected]]];
+            [NSDate cc_setCalculationCalendar:[GCAppGlobal calculationCalendar]];
             [GCAppGlobal saveSettings];
             break;
         case GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_PERIOD):
@@ -815,7 +817,7 @@
         if(indexPath.row == GC_SETTINGS_BUGREPORT && ![GCAppGlobal trialVersion]){
             [self showBugReport];
         } else if (indexPath.row == GC_SETTINGS_HELP){
-            GCSettingsHelpViewController * detail = [[GCSettingsHelpViewController alloc] initWithNibName:nil bundle:nil];
+            GCSettingsHelpViewController * detail = [GCSettingsHelpViewController helpViewControllerFor:nil];
             if (self.splitViewController) {
                 GCSplitViewController*sp = (GCSplitViewController*)self.splitViewController;
                 [sp.activityDetailViewController.navigationController pushViewController:detail animated:YES];

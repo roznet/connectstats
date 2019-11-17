@@ -39,6 +39,7 @@
 #import "GCActivity+CSSearch.h"
 #import "GCFieldCache.h"
 #import "GCAppDelegate+Swift.h"
+#import "GCWeather.h"
 
 #define GC_STARTING_FILE @"starting.log"
 
@@ -71,6 +72,7 @@ void checkVersion(){
 @property (nonatomic,assign) BOOL needsStartupRefresh;
 @property (nonatomic,retain) GCAppActions * actions;
 @property (nonatomic,retain) NSDictionary<NSString*,NSDictionary*> * credentials;
+@property (nonatomic,assign) BOOL firstTimeEver;
 
 
 @end
@@ -157,6 +159,8 @@ void checkVersion(){
 
     self.needsStartupRefresh = true;
 	self.settings = [NSMutableDictionary dictionaryWithDictionary:[RZFileOrganizer loadDictionary:@"settings.plist"]];
+    self.firstTimeEver = (self.settings.count == 0);
+    
     self.profiles = [GCAppProfiles profilesFromSettings:_settings];
     [self setupWorkerThread];
 	self.db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:[_profiles currentDatabasePath]]];
@@ -172,7 +176,12 @@ void checkVersion(){
     [GCUnit setGlobalSystem:[_settings[CONFIG_UNIT_SYSTEM] intValue]];
     [GCUnit setStrideStyle:[_settings[CONFIG_STRIDE_STYLE] intValue]];
     [GCUnit setCalendar:[GCAppGlobal calculationCalendar]];
+    [NSDate cc_setCalculationCalendar:[GCAppGlobal calculationCalendar]];
+    
+    [self settingsUpdateCheck];
 
+    // This will trigger load from db in background,
+    // make sure all setup first
     self.organizer = [[[GCActivitiesOrganizer alloc] initWithDb:self.db andThread:self.worker] autorelease];
     self.health = [[[GCHealthOrganizer alloc] initWithDb:self.db andThread:self.worker] autorelease];
     self.web = [[[GCWebConnect alloc] init] autorelease] ;
@@ -192,8 +201,6 @@ void checkVersion(){
     }
     [RZViewConfig setFontStyle:[GCAppGlobal configGetInt:CONFIG_FONT_STYLE defaultValue:gcFontStyleDynamicType]];
 
-    [self settingsUpdateCheck];
-    
 	_window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     //DONT CHECK IN:
     //self.window = [[[SmudgyWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
@@ -249,7 +256,7 @@ void checkVersion(){
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    RZLog(RZLogInfo,@"");
+    RZLog(RZLogInfo,@"background");
     [RZFileOrganizer saveDictionary:_settings withName:@"settings.plist"];
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
@@ -257,14 +264,14 @@ void checkVersion(){
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    RZLog(RZLogInfo,@"");
+    RZLog(RZLogInfo,@"foreground");
     [GCAppGlobal setApplicationDelegate:self];
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    RZLog(RZLogInfo,@"");
+    RZLog(RZLogInfo,@"active");
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
@@ -487,13 +494,42 @@ void checkVersion(){
     return attempts < 3;
 }
 
--(void)settingsUpdateCheck{
+-(void)settingsUpdateCheckPostStart{
+    BOOL needToSaveSettings = false;
+
+    if( [self isFirstTimeForFeature:@"ENABLE_CONNECTSTATS_SERVICE"] ){
+        if( ! self.firstTimeEver && ([[GCAppGlobal profile] serviceEnabled:gcServiceGarmin] && ![[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats])){
+            needToSaveSettings = true;
+            RZLog(RZLogInfo,@"Suggesting enable ConnectStats Service");
+            
+            NSString * message = NSLocalizedString(@"Do you want to enable the new service for Garmin Data? You can get more information and enable it later in the config page", @"Enable New Service");
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Enable New Service" message:message preferredStyle:UIAlertControllerStyleAlert];
+            [alert addCancelAction];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Enable" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                RZLog(RZLogInfo, @"User enabling connectstats");
+                [GCViewConfig setGarminDownloadSource:gcGarminDownloadSourceBoth];
+                [self saveSettings];
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self searchAllActivities];
+                });
+            }]];
+            [[self.actionDelegate currentNavigationController] presentViewController:alert animated:YES completion:nil];
+        }
+    }
     
+    if( needToSaveSettings ){
+        //[self saveSettings];
+    }
+
+}
+
+-(void)settingsUpdateCheck{
+    BOOL needToSaveSettings = false;
     if( @available( iOS 13.0, *)){
         if( [[GCAppGlobal profile] configGetBool:@"CONFIG_FIRST_TIME_IOS13" defaultValue:true] ){
             [[GCAppGlobal profile] configSet:CONFIG_SKIN_NAME stringVal:kGCSkinNameiOS13];
             [[GCAppGlobal profile] configSet:@"CONFIG_FIRST_TIME_IOS13" boolVal:false];
-            [self saveSettings];
+            needToSaveSettings = true;
         }
     }
     
@@ -513,7 +549,7 @@ void checkVersion(){
             newVersions[currentVersion] = [NSDate date];
             
             self.settings[CONFIG_VERSIONS_SEEN] = newVersions;
-            [self saveSettings];
+            needToSaveSettings = true;
             firstTimeForCurrentVersion = true;
         }
     }
@@ -523,6 +559,34 @@ void checkVersion(){
     }else{
         RZLog(RZLogInfo,@"Current Version %@ first seen %@ (%lu total versions)", currentVersion, versions[currentVersion], (unsigned long)versions.count);
     }
+    
+    if( [self isFirstTimeForFeature:@"UPGRADE_WEATHER_WINDSPEED_UNITS"]){
+        // remove all weather for activities since september 2019
+        needToSaveSettings = true;
+        if( ! self.firstTimeEver ){
+            [GCWeather fixWindSpeed:self.db];
+        }
+    }
+        
+    if( needToSaveSettings ){
+        [self saveSettings];
+    }
+}
+
+-(BOOL)isFirstTimeForFeature:(NSString*)feature{
+    BOOL rv = false;
+    NSDictionary * dict = self.settings[CONFIG_FEATURES_SEEN];
+    if( dict == nil || dict[feature] == nil){
+        rv = true;
+        if( dict == nil){
+            self.settings[CONFIG_FEATURES_SEEN] = @{ feature : [NSDate date]};
+        }else{
+            NSMutableDictionary * newFeatures = [NSMutableDictionary dictionaryWithDictionary:dict];
+            newFeatures[feature] = [NSDate date];
+            self.settings[CONFIG_FEATURES_SEEN] = newFeatures;
+        }
+    }
+    return rv;
 }
 
 -(void)versionSummary{
@@ -579,6 +643,8 @@ void checkVersion(){
         RZLog(RZLogInfo, @"Started");
         [RZFileOrganizer removeEditableFile:GC_STARTING_FILE];
         once = true;
+        
+        [self settingsUpdateCheckPostStart];
     }
 }
 

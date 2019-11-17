@@ -118,13 +118,18 @@
 }
 
 -(NSString*)filePathForSelector:(SEL)selector andIdentifier:(NSString*)identifier{
+    
+    NSCharacterSet *specialCharactersToRemove = [NSCharacterSet characterSetWithCharactersInString:@":'#%^&{}[]/~|?"];
+    NSString * filename = NSStringFromSelector(selector);
+    if (identifier && identifier.length > 0) {
+        filename = [filename stringByAppendingFormat:@"_%@.obj", identifier];
+    }
+
+    filename = [[filename componentsSeparatedByCharactersInSet:specialCharactersToRemove] componentsJoinedByString:@""];
+    
     NSString * rv = [self referenceDirectory];
     rv = [rv stringByAppendingPathComponent:self.testName];
-    rv = [rv stringByAppendingPathComponent:NSStringFromSelector(selector)];
-
-    if (identifier && identifier.length > 0) {
-        rv = [rv stringByAppendingFormat:@"_%@.obj", identifier];
-    }
+    rv = [rv stringByAppendingPathComponent:filename];
 
     return rv;
 }

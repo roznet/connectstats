@@ -139,6 +139,12 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
 }
 
 -(void)authorizeRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError * _Nullable))handler{
+    NSDate * expirationDate = self.withingsAuth.expirationDate;
+    NSTimeInterval timeToExpire = [expirationDate timeIntervalSinceNow];
+    if (expirationDate == nil || timeToExpire < 60.0) {
+        RZLog(RZLogInfo, @"Expect token refresh (expiration %@)", expirationDate);
+    }
+    
     [self.withingsAuth authorizeRequest:request completionHandler:^(NSError*error){
         if( error == nil){
             // first successs

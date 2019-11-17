@@ -30,9 +30,12 @@
 #import "GCActivity.h"
 #import "GCService.h"
 #import "ConnectStats-Swift.h"
+#import "GCGarminActivityTrack13Request.h"
 
 @interface GCConnectStatsRequestFitFile ()
 @property (nonatomic,retain) GCActivity * activity;
+@property (nonatomic,assign) BOOL tryAlternativeService;
+@property (nonatomic,assign) BOOL shouldCheckForAlternativeWhenEmpty;
 @end
 
 @implementation GCConnectStatsRequestFitFile
@@ -42,14 +45,18 @@
     if( rv ){
         rv.activity = act;
         rv.navigationController = nav;
+        rv.shouldCheckForAlternativeWhenEmpty = true;
     }
     return rv;
 }
 
--(GCConnectStatsRequestFitFile*)initWithNext:(GCConnectStatsRequestFitFile*)current{
+-(GCConnectStatsRequestFitFile*)initNextWith:(GCConnectStatsRequestFitFile*)current{
     self = [super initNextWith:current];
     if( self ){
         self.activity = current.activity;
+        self.tryAlternativeService = current.tryAlternativeService;
+        self.shouldCheckForAlternativeWhenEmpty = ! self.tryAlternativeService;
+        
     }
     return self;
 }
@@ -67,6 +74,10 @@
         return RZReturnAutorelease([[GCConnectStatsRequestFitFile alloc] initNextWith:self]);
     }
     else{
+        if( self.shouldCheckForAlternativeWhenEmpty && [self validAlternativeService]){
+            self.tryAlternativeService = true;
+            return RZReturnAutorelease([[GCConnectStatsRequestFitFile alloc] initNextWith:self]);
+        }
         return nil;
     }
 }
@@ -76,6 +87,20 @@
 -(NSString*)description{
     return [NSString stringWithFormat:NSLocalizedString(@"Downloading Activity... %@",@"Request Description"),[self.activity.date dateFormatFromToday]];
 }
+
+-(BOOL)validAlternativeService{
+    BOOL rv = false;
+    BOOL garminSuccess = [[GCAppGlobal profile] serviceSuccess:gcServiceGarmin];
+    if( garminSuccess && self.activity.externalServiceActivityId) {
+        GCService * service = [GCService serviceForActivityId:self.activity.externalActivityId];
+        if( service.service == gcServiceGarmin ){
+            RZLog(RZLogInfo, @"%@ has garmin alternative %@, trying that", self.activity.activityId, self.activity.externalServiceActivityId);
+            rv = true;
+        }
+    }
+    return rv;
+}
+
 -(NSURLRequest*)preparedUrlRequest{
     if( [self isSignedIn] ){
         self.navigationController = nil;
@@ -84,6 +109,12 @@
     if (self.navigationController) {
         return nil;
     }else{
+        if( self.tryAlternativeService ){
+            NSString * path = GCWebActivityURLFitFile(self.activity.externalServiceActivityId);
+            NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:path]];
+            return request;
+        }
+        
         NSString * path = GCWebConnectStatsFitFile([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]);
         GCService * service = self.activity.service;
         NSString * aid = [service serviceIdFromActivityId:self.activity.activityId ];
@@ -98,8 +129,12 @@
 }
 
 -(NSString*)fitFileName{
-    NSString * aid = [self.activity.service serviceIdFromActivityId:self.activity.activityId ];
-    return [NSString stringWithFormat:@"track_cs_%@.fit", aid];
+    if( self.tryAlternativeService){
+        return [NSString stringWithFormat:@"track_csalt_%@.fit", self.activity.externalServiceActivityId];
+    }else{
+        NSString * aid = [self.activity.service serviceIdFromActivityId:self.activity.activityId ];
+        return [NSString stringWithFormat:@"track_cs_%@.fit", aid];
+    }
 }
 
 -(void)process:(NSData *)theData andDelegate:(id<GCWebRequestDelegate>)delegate{
@@ -114,11 +149,24 @@
     }else{
         NSString * fname = [self fitFileName];
         
-        if(![theData writeToFile:[RZFileOrganizer writeableFilePath:fname] atomically:true]){
-            RZLog(RZLogError, @"Failed to save %@.", fname);
+        if( self.tryAlternativeService ){
+            if( ![GCGarminActivityTrack13Request extractFitDataFromZip:theData intoFitFile:fname] ){
+                NSString * string = RZReturnAutorelease([[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding]);
+                if( [string hasPrefix:@"{\""] ){
+                    if( [string rangeOfString:@"NotFoundException"].location != NSNotFound ){
+                        RZLog(RZLogInfo, @"%@/%@ was deleted from alternate service: %@", self.activity.activityId, self.activity.externalServiceActivityId, string);
+                    }else{
+                        RZLog(RZLogWarning, @"Error from Alternate Service for %@/%@: %@", self.activity.activityId, self.activity.externalServiceActivityId, string);
+                    }
+                }else{
+                    RZLog(RZLogError, @"Failed to save and process %@.", fname);
+                }
+            }
+        }else{
+            if(![theData writeToFile:[RZFileOrganizer writeableFilePath:fname] atomically:true]){
+                RZLog(RZLogError, @"Failed to save %@.", fname);
+            }
         }
-        
-        
         self.stage = gcRequestStageParsing;
         [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
         dispatch_async([GCAppGlobal worker],^(){
@@ -130,12 +178,14 @@
 -(void)processParse:(NSString*)fileName{
     if( [self checkNoErrors]){
         NSString * fp = [[NSFileManager defaultManager] fileExistsAtPath:fileName] ? fileName : [RZFileOrganizer writeableFilePath:fileName];
+        
         NSDate * useStartDate = self.activity.parentId != nil ? self.activity.date : nil;
         GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activity.activityId fitFilePath:fp startTime:useStartDate]);
-        
-        [self.activity updateSummaryDataFromActivity:fitAct];
-        [self.activity updateTrackpointsFromActivity:fitAct];
-        [self.activity saveTrackpoints:self.activity.trackpoints andLaps:self.activity.laps];
+        if( fitAct ){ // check if we could parse. Could be no fit file available.
+            [self.activity updateSummaryDataFromActivity:fitAct];
+            [self.activity updateTrackpointsFromActivity:fitAct];
+            [self.activity saveTrackpoints:self.activity.trackpoints andLaps:self.activity.laps];
+        }
     }
     [self processDone];
 }

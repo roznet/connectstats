@@ -28,6 +28,7 @@
 #define FIT_CONVERT_CHECK_FILE_HDR_DATA_TYPE // Define to check file header for FIT data type.  Verifies file is FIT format before starting decode.
 #define FIT_CONVERT_TIME_RECORD // Define to support time records (compressed timestamp).
 #define FIT_CONVERT_MULTI_THREAD // Define to support multiple conversion threads.
+#define FIT_16BIT_MESG_LENGTH_SUPPORT
 
 #if defined(__cplusplus)
    }

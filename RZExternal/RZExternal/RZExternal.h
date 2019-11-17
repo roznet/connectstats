@@ -26,6 +26,7 @@ FOUNDATION_EXPORT const unsigned char RZExternalVersionString[];
 
 #import "RZExternal/Kal.h"
 #import "RZExternal/KalDate.h"
+#import "RZexternal/NSDateAdditions.h"
 
 #import "RZExternal/MBProgressHUD.h"
 

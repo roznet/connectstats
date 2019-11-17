@@ -443,6 +443,24 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
     return [self currentDescription];
 }
 
+-(NSString*)currentDebugDescription{
+    NSString * rv = @"No Requests";
+
+    if (self.currentRequestObject) {
+        NSString * url = [self.currentRequestObject url];
+        if( url == nil && [self.currentRequestObject respondsToSelector:@selector(preparedUrlRequest)]){
+            NSURLRequest * preped = [self.currentRequestObject preparedUrlRequest];
+            url = preped.URL.absoluteString;
+        }
+        if( url == nil ){
+            url = @"NoUrl";
+        }
+        rv = [NSString stringWithFormat:@"%@: %@ (%@)", NSStringFromClass([self.currentRequestObject class]), self.currentRequestObject.description, url];
+        
+    }
+    return rv;
+}
+
 -(NSString*)currentDescription{
     NSString * rv = @"";
 

@@ -66,6 +66,7 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
                                                               redirectURI:redirectURI
                                                                  clientID:[GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"client_id"]
                                                              clientSecret:[GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"client_secret"]];
+        auth.scope = @"activity:read_all,read_all";
         self.stravaAuth = auth;
     }
 
@@ -87,8 +88,6 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
                                                                authentication:auth error:&error];
 
     if (!didAuth || !auth.canAuthorize) {
-        auth.scope = @"activity:read_all,read_all";
-
         NSURL *authURL = [NSURL URLWithString:[GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"authenticate_url"]];
         
         GTMOAuth2ViewControllerTouch *viewController;
@@ -125,6 +124,12 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
 }
 
 -(void)authorizeRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError * _Nullable))handler{
+    NSDate * expirationDate = self.stravaAuth.expirationDate;
+    NSTimeInterval timeToExpire = [expirationDate timeIntervalSinceNow];
+    if (expirationDate == nil || timeToExpire < 60.0) {
+        RZLog(RZLogInfo, @"Expect token refresh (expiration %@)", expirationDate);
+    }
+    
     [self.stravaAuth authorizeRequest:request completionHandler:^(NSError*error){
         if( error == nil){
             [[GCAppGlobal profile] serviceSuccess:gcServiceStrava set:YES];

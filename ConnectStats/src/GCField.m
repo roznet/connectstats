@@ -533,7 +533,7 @@ static void registerInCache(GCField*field){
                     @[@"WeightedMeanBikeCadence",     @"MaxBikeCadence",          CALC_DEVELOPMENT],
                     @[CALC_NORMALIZED_POWER,          CALC_NONZERO_POWER],
                     @[CALC_ALTITUDE_GAIN,             CALC_ALTITUDE_LOSS],
-                    @[@"WeightedMeanVerticalOscillation", @"WeightedMeanGroundContactTime"],
+                    //@[@"WeightedMeanVerticalOscillation", @"WeightedMeanGroundContactTime"],
                     @[@"DirectVO2Max", @"DirectLactateThresholdHeartRate"],
                     @[@"WeightedMeanVerticalRatio",@"WeightedMeanGroundContactBalanceLeft"],
                     @[CALC_ASCENT_SPEED, CALC_MAX_ASCENT_SPEED],

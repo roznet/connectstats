@@ -29,6 +29,7 @@ typedef NS_ENUM(NSUInteger, gcCacheFile){
     gcCacheFileActivityDb,
     gcCacheFileTennisDb,
     gcCacheFileTrackDb,
+    gcCacheFileFit,
     gcCacheFileDerivedData,
     gcCacheFileJson,
     gcCacheFileTcx,
@@ -39,33 +40,33 @@ typedef NS_ENUM(NSUInteger, gcCacheFile){
     gcCacheFileEnd
 };
 
-@interface GCActivitiesCacheFileInfo : NSObject{
-    NSString * filename;
-    double size;
-    NSDate * modified;
-    int activities;
-}
-@property (nonatomic,retain) NSString * filename;
-@property (nonatomic,retain) NSDate * modified;
-@property (nonatomic,assign) double size;
-@property (nonatomic,assign) int activities;
+@interface GCActivitiesCacheFileInfo : NSObject
+
+@property (nonatomic,assign) gcCacheFile type;
+@property (nonatomic,retain) NSDate * latest;
+@property (nonatomic,retain) NSDate * earliest;
+@property (nonatomic,assign) double totalSize;
+@property (nonatomic,assign) NSUInteger activitiesCount;
+@property (nonatomic,assign) NSUInteger filesCount;
+@property (nonatomic,readonly) NSString * typeKey;
+
++(GCActivitiesCacheFileInfo*)cacheFileInfoForType:(gcCacheFile)type;
++(NSArray<NSString*>*)typeNames;
 
 @end
 
 
-@interface GCActivitiesCacheManagement : NSObject{
-    NSArray * cacheFiles;
-    double * sizes;
-}
-@property (nonatomic,retain) NSArray * cacheFiles;
-@property (nonatomic,assign) double * sizes;
+@interface GCActivitiesCacheManagement : NSObject
+
 @property (nonatomic,assign) BOOL useBundlePath;
 
 
-+(NSArray*)typeNames;
+
 -(void)analyze;
+
 +(NSArray*)errorFiles;
 +(NSArray*)crashFiles;
-//-(NSArray*)filesOfType:(gcCacheFile)type containing:(NSString*)string;
 -(void)cleanupFiles:(gcCacheFile)type;
+-(NSArray<GCActivitiesCacheFileInfo*>*)infos;
+-(NSArray<NSString*>*)fileNamesForType:(gcCacheFile)type;
 @end

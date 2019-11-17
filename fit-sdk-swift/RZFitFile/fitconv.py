@@ -1,4 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
+#
+#
+#
 
 import re
 import argparse
@@ -21,9 +24,8 @@ class Context:
         self.fieldnum = {}
 
     def add_units(self,other):
-        for m,u in other.iteritems():
+        for m,u in other.items():
             self.units[m] = u
-
 
     def add_field_num(self,groups):
         mesg = 'FIT_MESG_NUM_{}'.format(groups[1])
@@ -43,8 +45,11 @@ class Context:
             rv = [ 'NSString * objc_{}(FIT_UINT16 field) {{'.format( self.swift_field_num_for_mesg_func_name(mesg) ),
                    '  switch (field) {',
                    ]
-            
-            for (key,val) in self.fieldnum[mesg].iteritems():
+
+            keyorder = [int(x) for x in list(self.fieldnum[mesg].keys())]
+            keyorder.sort()
+            for key in keyorder:
+                val = self.fieldnum[mesg][str(key)]
                 rv += [ '    case {}: return @"{}";'.format( key,val ) ]
 
             rv += [ '  default: return nil;',
@@ -91,7 +96,10 @@ class Context:
             else:
                 msgdict = {}
 
-            for (key,val) in self.fieldnum[mesg].iteritems():
+            keyorder = list(self.fieldnum[mesg])
+            keyorder.sort()
+            for key in keyorder:
+                val = self.fieldnum[mesg][key]
                 if val not in msgdict:
                     msgdict[val] = val
 
@@ -104,8 +112,12 @@ class Context:
             rv = [ 'func {}(field : FIT_UINT16) -> String? {{'.format( self.swift_field_num_for_mesg_func_name(mesg) ),
                    '  switch field {',
                    ]
+
+            keyorder = list(self.fieldnum[mesg].keys())
+            keyorder.sort()
             
-            for (key,val) in self.fieldnum[mesg].iteritems():
+            for key in keyorder:
+                val = self.fieldnum[mesg][key]
                 rv += [ '    case {}: return "{}"'.format( key,val ) ]
 
             rv += [ '  default: return nil',
@@ -141,7 +153,11 @@ class Context:
         rv = [ 'func rzfit_unit_for_field( field : String ) -> String? {',
                '  switch field {',
                ]
-        for member,unit in self.units.iteritems():
+        memberorder = list(self.units.keys())
+        memberorder.sort()
+        
+        for member in memberorder:
+            unit = self.units[member]
             rv +=[ '  case "{}": return "{}"'.format( member,unit ) ]
 
         rv += [ '  default: return nil' ,
@@ -151,13 +167,15 @@ class Context:
 
     def swift_unit_array_function(self,context):
         unitlist = {}
-        for m,u in self.units.iteritems():
+        for m,u in self.units.items():
             unitlist[u] = 1
         
         rv = [ 'func rzfit_known_units( ) -> [String] {',
                '  return [',
                ]
-        for unit,ignore in unitlist.iteritems():
+        unitorder = list(unitlist.keys())
+        unitorder.sort()
+        for unit in unitorder:
             rv +=[ '  "{}",'.format( unit ) ]
 
         rv += [ '  ]',
@@ -536,12 +554,19 @@ class Convert :
         ] ))
 
         if True:
-            for typename,typedef in self.context.types.iteritems():
+            typesorder = list(self.context.types.keys())
+            typesorder.sort()
+            for typename in typesorder:
+                typedef = self.context.types[typename]
                 of.write( typedef.swift_switch_function() )
                 of.write( '\n' )
             
         if True:
-            for typename,structdef in self.context.structs.iteritems():
+            structorder = list( self.context.structs.keys())
+            structorder.sort()
+            
+            for typename in structorder:
+                structdef = self.context.structs[typename]
                 of.write( structdef.swift_dict_function(self.context) )
                 of.write( '\n' )
 

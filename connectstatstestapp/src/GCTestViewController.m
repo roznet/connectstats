@@ -32,7 +32,6 @@
 #import "GCTestTennis.h"
 #import "GCTestBasics.h"
 #import "GCTestParsing.h"
-#import "GCTestOrganizer.h"
 #import "GCTestDerived.h"
 #import "GCTestUIUnitTest.h"
 
@@ -43,7 +42,6 @@
              NSStringFromClass([GCTestUIUnitTest class]),
              NSStringFromClass([GCTestDerived class]),
              NSStringFromClass([GCTestParsing class]),
-             NSStringFromClass([GCTestOrganizer class]),
              NSStringFromClass([GCTestStats class]),
              NSStringFromClass([GCTestBasics class]),
              //NSStringFromClass([GCTestTennis class]),

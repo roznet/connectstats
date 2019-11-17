@@ -1,0 +1,19 @@
+
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: macOS-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Pre Build
+      run: |
+        pwd
+        ls
+        pod install
+    - name: Build
+      run: xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme ConnectStats -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.1' build CODE_SIGNING_REQUIRED=NO

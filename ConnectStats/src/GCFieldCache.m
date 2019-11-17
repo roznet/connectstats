@@ -379,7 +379,7 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
             if (rv == nil) {
                 NSString * keyall = cacheKey(field.key, GC_TYPE_ALL);
                 rv = self.predefinedCache[ keyall];
-                if (rv) {
+                if (rv == nil) {
                     rv = self.cache[keyall];
                 }
             }

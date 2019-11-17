@@ -52,14 +52,14 @@
 -(void)loopThroughActivitiesdb{
     GCActivitiesCacheManagement * cache = [[[GCActivitiesCacheManagement alloc] init] autorelease];
     cache.useBundlePath = true;
-    [cache analyze];
+
     NSUInteger i = 0;
 
     NSUInteger countDb = 0;
     NSUInteger countTotalTracks = 0;
 
-    for (GCActivitiesCacheFileInfo * info in [cache.cacheFiles objectAtIndex:gcCacheFileActivityDb]) {
-        FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:info.filename]];
+    for (NSString * filename in [cache fileNamesForType:gcCacheFileActivityDb]) {
+        FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:filename]];
         [db open];
 
         GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
@@ -70,7 +70,7 @@
         for (GCActivity * activity in organizer.activities) {
             i++;
             if (i%100==0) {
-                NSLog(@"%@:%d", info.filename,(int)i);
+                NSLog(@"%@:%d", filename,(int)i);
             }
             NSString * trackfilename = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"track_%@.db",activity.activityId]];
             if ([[NSFileManager defaultManager] fileExistsAtPath:trackfilename]) {

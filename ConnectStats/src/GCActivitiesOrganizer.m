@@ -747,7 +747,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     NSMutableDictionary * rv = [NSMutableDictionary dictionary];
     for (GCActivity * act in self.allActivities) {
         GCService * service = act.service;
-        
+        if( service == nil){
+            continue;
+        }
         NSMutableDictionary * serviceDict = rv[service.displayName];
         if( serviceDict == nil){
             serviceDict = [NSMutableDictionary dictionary];

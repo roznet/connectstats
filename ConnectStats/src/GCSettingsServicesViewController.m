@@ -41,6 +41,7 @@
 #import "GCCellEntryText+GCViewConfig.h"
 #import "GCConnectStatsRequest.h"
 #import "GCWithingsReqBase.h"
+#import "GCSettingsHelpViewController.h"
 
 #import "GCSettingsServicesViewConstants.h"
 
@@ -113,12 +114,6 @@
             [dynamic addObject:@(GC_CONNECTSTATS_DEBUGKEY)];
         }
     }
-    if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats]){
-        [dynamic addObjectsFromArray:@[
-            //@( GC_CONNECTSTATS_FILLYEAR ),
-            @( GC_CONNECTSTATS_LOGOUT ),
-        ] ];
-    }
     if( [[GCAppGlobal profile] serviceEnabled:gcServiceGarmin]){
         [dynamic addObjectsFromArray:@[
             @( GC_GARMIN_USERNAME      ),
@@ -126,7 +121,15 @@
         ]
          ];
     }
-    
+    if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats]){
+        [dynamic addObjectsFromArray:@[
+            @( GC_CONNECTSTATS_LOGOUT ),
+        ] ];
+    }
+    [dynamic addObjectsFromArray:@[
+        @( GC_CONNECTSTATS_HELP   ),
+    ] ];
+
     [self.remap addSection:GC_SECTIONS_GARMIN withRows:dynamic];
     
     
@@ -472,6 +475,9 @@
         NSString * method = [GCViewConfig describeGarminSource:source];
         [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                                      withString:method];
+        if( source == gcGarminDownloadSourceBoth || source == gcGarminDownloadSourceConnectStats){
+            [gridcell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withString:@"Weather Powered by DarkSky.net"];
+        }
         rv = gridcell;
     }else if (indexPath.row == GC_GARMIN_USERNAME){
         textcell = [GCCellEntryText textCellViewConfig:tableView];
@@ -625,6 +631,15 @@
 
         [self setupServiceStatusCell:gridcell forService:[GCService service:gcServiceConnectStats] secondary:[GCService service:gcServiceGarmin]];
         
+        rv = gridcell;
+    }else if( indexPath.row == GC_CONNECTSTATS_HELP){
+        gridcell = [GCCellGrid gridCell:tableView];
+        [gridcell setupForRows:2 andCols:1];
+
+        NSAttributedString * title = [NSAttributedString attributedString:[GCViewConfig attribute16] withString:NSLocalizedString(@"Garmin Service Setup Help", @"ConnectStats Help")];
+        //NSAttributedString * subtitle = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withString:NSLocalizedString(@"Information about the different options", @"ConnectStats Help")];
+        [gridcell labelForRow:0 andCol:0].attributedText = title;
+        //[gridcell labelForRow:1 andCol:0].attributedText = subtitle;
         rv = gridcell;
     }
     
@@ -1189,15 +1204,6 @@
                 [self.tableView reloadData];
             }
         }
-    }else if (indexPath.section==GC_SECTIONS_GARMIN && indexPath.row==GC_GARMIN_METHOD){
-        gcGarminDownloadSource source = [GCViewConfig garminDownloadSource];
-        if( source < gcGarminDownloadSourceEnd ){
-            GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForGarminSource]
-                                                                                        selected:source];
-            list.entryFieldDelegate = self;
-            list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_METHOD);
-            [self.navigationController pushViewController:list animated:YES];
-        }
     }else if (indexPath.section==GC_SECTIONS_WITHINGS&&indexPath.row==GC_ROW_USER){
         NSArray * list = [[GCAppGlobal profile] configGetArray:CONFIG_WITHINGS_USERSLIST defaultValue:@[]];
         if (list.count > 0) {
@@ -1224,19 +1230,6 @@
             lc.identifierInt= GC_IDENTIFIER(GC_SECTIONS_WITHINGS, GC_ROW_USER);
             [self.navigationController pushViewController:lc animated:YES];
         }
-    }else if (indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_LOGOUT){
-        if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] ){
-            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Confirm Logout" message:@"Do you want to log out from connectstats" preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addCancelAction];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Logout" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
-                RZLog(RZLogInfo, @"Log out of ConnectStats");
-                [GCConnectStatsRequest logout];
-            }]];
-            [self presentViewController:alert animated:YES completion:nil];
-        }else{
-            [GCAppGlobal searchAllActivities];
-        }
     }else if (indexPath.section==GC_SECTIONS_STRAVA&&indexPath.row==GC_STRAVA_LOGOUT){
         if( [[GCAppGlobal profile] serviceSuccess:gcServiceStrava] ){
             UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Confirm Logout" message:@"Are you sure you want to log out from strava" preferredStyle:UIAlertControllerStyleAlert];
@@ -1255,6 +1248,28 @@
         GCSettingsSourceTableViewController * source = [[GCSettingsSourceTableViewController alloc] initWithNibName:nil bundle:nil];
         [self.navigationController pushViewController:source animated:YES];
         [source release];
+    }else if (indexPath.section==GC_SECTIONS_GARMIN && indexPath.row==GC_GARMIN_METHOD){
+        gcGarminDownloadSource source = [GCViewConfig garminDownloadSource];
+        if( source < gcGarminDownloadSourceEnd ){
+            GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForGarminSource]
+                                                                                        selected:source];
+            list.entryFieldDelegate = self;
+            list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_METHOD);
+            [self.navigationController pushViewController:list animated:YES];
+        }
+    }else if (indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_LOGOUT){
+        if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] ){
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Confirm Logout" message:@"Do you want to log out from connectstats" preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alert addCancelAction];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Logout" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                RZLog(RZLogInfo, @"Log out of ConnectStats");
+                [GCConnectStatsRequest logout];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }else{
+            [GCAppGlobal searchAllActivities];
+        }
     }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_USE){
         GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsServiceUse] selected:[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_USE defaultValue:gcConnectStatsServiceUseValidate]];
         list.entryFieldDelegate = self;
@@ -1301,6 +1316,10 @@
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_DEBUGKEY);
         [self.navigationController pushViewController:list animated:YES];
 
+    }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_HELP){
+        NSURL * helpURL = [NSURL URLWithString:@"https://ro-z.net/blog/services-for-garmin-data"];
+        GCSettingsHelpViewController * helpVC = [GCSettingsHelpViewController helpViewControllerFor:helpURL];
+        [self.navigationController pushViewController:helpVC animated:YES];
     }
 }
 
