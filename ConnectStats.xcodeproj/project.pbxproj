@@ -593,6 +593,8 @@
 		4287C2E12221606B0055F584 /* RZFitFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; };
 		4287C2E22221606B0055F584 /* RZFitFile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4287DC101BDB88FE00C54A51 /* GCStatsMultiFieldConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */; };
+		42880C462381EEE00030C3C1 /* track_cs_5582.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42880C3A2381EEDF0030C3C1 /* track_cs_5582.fit */; };
+		42880C472381EEE00030C3C1 /* track_cs_5611.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42880C452381EEDF0030C3C1 /* track_cs_5611.fit */; };
 		428BACF21CB149C50041468A /* activity_1089803211.json in Resources */ = {isa = PBXBuildFile; fileRef = 428BACDD1CB149C50041468A /* activity_1089803211.json */; };
 		428BACF31CB149C50041468A /* activity_1099599108.json in Resources */ = {isa = PBXBuildFile; fileRef = 428BACDE1CB149C50041468A /* activity_1099599108.json */; };
 		428BACF41CB149C50041468A /* activity_1108367966.json in Resources */ = {isa = PBXBuildFile; fileRef = 428BACDF1CB149C50041468A /* activity_1108367966.json */; };
@@ -2303,6 +2305,8 @@
 		4287C30B2221BA3B0055F584 /* FitFileExplorer.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = FitFileExplorer.debug.xcconfig; sourceTree = "<group>"; };
 		4287C30C2221BC390055F584 /* ConnectStatsTestApp.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = ConnectStatsTestApp.debug.xcconfig; path = connectstatstestapp/ConnectStatsTestApp.debug.xcconfig; sourceTree = SOURCE_ROOT; };
 		4287C30D2221BC3A0055F584 /* ConnectStatsTestApp.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = ConnectStatsTestApp.release.xcconfig; path = connectstatstestapp/ConnectStatsTestApp.release.xcconfig; sourceTree = SOURCE_ROOT; };
+		42880C3A2381EEDF0030C3C1 /* track_cs_5582.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = track_cs_5582.fit; sourceTree = "<group>"; };
+		42880C452381EEDF0030C3C1 /* track_cs_5611.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = track_cs_5611.fit; sourceTree = "<group>"; };
 		428BACDD1CB149C50041468A /* activity_1089803211.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_1089803211.json; sourceTree = "<group>"; };
 		428BACDE1CB149C50041468A /* activity_1099599108.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_1099599108.json; sourceTree = "<group>"; };
 		428BACDF1CB149C50041468A /* activity_1108367966.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_1108367966.json; sourceTree = "<group>"; };
@@ -4720,6 +4724,8 @@
 		42AEFEB21DA057F500D7DA6D /* activity_modern_json */ = {
 			isa = PBXGroup;
 			children = (
+				42880C3A2381EEDF0030C3C1 /* track_cs_5582.fit */,
+				42880C452381EEDF0030C3C1 /* track_cs_5611.fit */,
 				42A5D8F523272C8300898FD5 /* activity_4017099594.fit */,
 				42A5D8F123272C8200898FD5 /* activity_4017099594.json */,
 				42A5D8E323272C8000898FD5 /* activity_4018408912.fit */,
@@ -6119,6 +6125,7 @@
 				42A5D90423272C8300898FD5 /* strava_stream_2675283580.json in Resources */,
 				42A5D92F2328774700898FD5 /* activity_1382772474.fit in Resources */,
 				42A5D8F923272C8300898FD5 /* last_connectstats_search_20.json in Resources */,
+				42880C472381EEE00030C3C1 /* track_cs_5611.fit in Resources */,
 				428BAD121CB14B650041468A /* activitytrack_1099599108.json in Resources */,
 				42A5D8F723272C8300898FD5 /* activitylaps_4018408912.json in Resources */,
 				42A5D91123272C8300898FD5 /* activity_4017099594.fit in Resources */,
@@ -6196,6 +6203,7 @@
 				422F283920551AE100187478 /* activitylaps_2545022458.json in Resources */,
 				427C65C81D46A4BB00F5DF70 /* strava_athlete.json in Resources */,
 				42A5D917232874A600898FD5 /* modern_activity_types.json in Resources */,
+				42880C462381EEE00030C3C1 /* track_cs_5582.fit in Resources */,
 				420A57EC1CB32C5900EA3B42 /* withings_getmeas_188427.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
