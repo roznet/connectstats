@@ -117,6 +117,7 @@ static BOOL kDerivedEnabled = true;
 @property (nonatomic,retain) NSMutableArray * queue;
 @property (nonatomic,assign) GCWebConnect * web;
 @property (nonatomic,retain) RZPerformance * performance;
+@property (nonatomic,retain) NSMutableDictionary<NSDictionary*,GCStatsDataSerie*> * seriesByKeys;
 @end
 
 @implementation GCDerivedOrganizer
@@ -156,6 +157,7 @@ static BOOL kDerivedEnabled = true;
     [_performance release];
     [_derivedSeries release];
     [_queue release];
+    [_seriesByKeys release];
 
     [super dealloc];
 }
@@ -184,9 +186,29 @@ static BOOL kDerivedEnabled = true;
             }
             self.derivedSeries[serie.key] = serie;
         }
-        RZLog(RZLogInfo, @"Loaded %d derived series", (int)self.derivedSeries.count);
         [self loadProcesseActivities];
+        
+        if( [db tableExists:@"gc_derived_time_serie_second"]){
+            GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:@"gc_derived_time_serie_second"];
+            self.seriesByKeys = [NSMutableDictionary dictionaryWithDictionary:[statsDb loadByKeys]];
+            RZLog(RZLogInfo, @"Loaded %d derived series and %@ series by key", (int)self.derivedSeries.count, @(self.seriesByKeys.count));
+        }else{
+            RZLog(RZLogInfo, @"Loaded %d derived series", (int)self.derivedSeries.count);
+        }
     }
+}
+
+-(GCStatsSerieOfSerieWithUnits*)timeserieOfSeriesFor:(GCField*)field inActivities:(NSArray<GCActivity*>*)activities{
+    
+    GCStatsSerieOfSerieWithUnits * serieOfSerie = [GCStatsSerieOfSerieWithUnits serieOfSerieWithUnits:[GCUnit date]];
+    for (GCActivity * act in activities) {
+        GCStatsDataSerie * serie = self.seriesByKeys[ @{ @"activityId": act.activityId, @"fieldKey":field.key}];
+        if( serie ){
+            GCStatsDataSerieWithUnit * serieu=[GCStatsDataSerieWithUnit dataSerieWithUnit:[act displayUnitForField:field] xUnit:[GCUnit second] andSerie:serie];
+            [serieOfSerie addSerie:serieu forDate:act.date];
+        }
+    }
+    return serieOfSerie;
 }
 
 -(GCDerivedDataSerie*)derivedDataSerieForKey:(NSString*)key{
@@ -405,6 +427,10 @@ static BOOL kDerivedEnabled = true;
                 };
                 RZLog(RZLogInfo, @"derived %@ %@ %@", element.activity, field, standard );
                 [statsDb save:standard.serie keys:keys];
+                if( ! self.seriesByKeys){
+                    self.seriesByKeys = [NSMutableDictionary dictionary];
+                }
+                self.seriesByKeys[keys] = standard.serie;
                 
             }
         }

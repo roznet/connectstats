@@ -104,8 +104,9 @@
     GCStatsDataSerieWithUnit * rv = [GCStatsDataSerieWithUnit dataSerieWithUnit:x.unit];
     rv.xUnit = self.sUnit;
     for (GCStatsSerieOfSerieHolder * holder in self.series) {
+        rv.unit = holder.serieWithUnit.unit;
         double y = [holder valueForX:x.value];
-        [rv addNumberWithUnit:[GCNumberWithUnit numberWithUnit:x.unit andValue:y] forX:holder.sValue.value];
+        [rv addNumberWithUnit:[GCNumberWithUnit numberWithUnit:holder.serieWithUnit.unit andValue:y] forX:holder.sValue.value];
     }
     return rv;
 }

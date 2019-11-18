@@ -39,6 +39,8 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
 
 -(FMDatabase*)deriveddb;
 
+-(GCStatsSerieOfSerieWithUnits*)timeserieOfSeriesFor:(GCField*)field inActivities:(NSArray<GCActivity*>*)activities;
+
 -(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type
                                  field:(gcFieldFlag)field
                                 period:(gcDerivedPeriod)period
