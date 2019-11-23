@@ -74,6 +74,8 @@ static NSString * kCredentialServiceName = @"strava";
     
     if( [notification.name isEqualToString:kGTMOAuth2AccessTokenRefreshFailed]){
         RZLog(RZLogError, @"%@ %@", name, notification.userInfo);
+        [GCStravaReqBase signout];
+        self.status = GCWebStatusAccessDenied;
     }else{
         RZLog(RZLogInfo, @"%@ (%@)", name, self);
     }
