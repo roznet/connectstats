@@ -124,6 +124,10 @@
     //FIXME: deal with deleted activities on strava
     if (parser.status != GCWebStatusOK) {
         self.status = parser.status;
+        if( self.status == GCWebStatusAccessDenied ){
+            RZLog(RZLogInfo, @"Status is access denied, loging out of strava");
+            [GCStravaReqBase signout];
+        }
     }else{
         GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
         
