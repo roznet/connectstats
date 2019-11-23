@@ -24,10 +24,11 @@
 //  
 
 #import <Foundation/Foundation.h>
+#import "GCWebRequest.h"
 
 @interface GCStravaActivityStreamsParser : NSObject
 @property (nonatomic,retain) NSArray * points;
-@property (nonatomic,assign) BOOL inError;
+@property (nonatomic,assign) GCWebStatus status;
 
 +(GCStravaActivityStreamsParser*)activityStreamsParser:(NSData*)input;
 @end

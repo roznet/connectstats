@@ -71,6 +71,7 @@
  */
 -(void)parse:(NSData*)inputs withPoints:(NSArray*)points inActivity:(GCActivity*)act{
     BOOL saveBadJson = false;
+    self.status = GCWebStatusOK;
     NSError * e = nil;
     NSArray *json = [NSJSONSerialization JSONObjectWithData:inputs options:NSJSONReadingMutableContainers error:&e];
     static NSDictionary * defs = nil;
@@ -147,6 +148,7 @@
         saveBadJson=true;
     }
     if (saveBadJson) {
+        self.status = GCWebStatusParsingFailed;
         NSString * fn = @"error_strava_laps.json";
         [inputs writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:true];
     }

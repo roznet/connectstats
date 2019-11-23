@@ -24,11 +24,13 @@
 //  
 
 #import <Foundation/Foundation.h>
+#import "GCWebRequest.h"
+
 @class GCActivity;
 
 @interface GCStravaActivityListParser : NSObject
 @property (nonatomic,retain) NSArray<GCActivity*> * activities;
-@property (nonatomic,assign) BOOL hasError;
+@property (nonatomic,assign) GCWebStatus status;
 
 
 

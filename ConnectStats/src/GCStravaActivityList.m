@@ -122,8 +122,8 @@
 -(void)parse{
     GCStravaActivityListParser * parser = [GCStravaActivityListParser activityListParser:[self.theString dataUsingEncoding:self.encoding]];
     //FIXME: deal with deleted activities on strava
-    if (parser.hasError) {
-        self.status = GCWebStatusParsingFailed;
+    if (parser.status != GCWebStatusOK) {
+        self.status = parser.status;
     }else{
         GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
         
