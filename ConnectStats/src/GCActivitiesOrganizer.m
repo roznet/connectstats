@@ -478,6 +478,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         if ([GCAppGlobal configGetBool:CONFIG_MERGE_IMPORT_DUPLICATE defaultValue:true]) {
             GCActivity * other = [self findDuplicate:act];
             if (other) {
+                gcDuplicate reason = [other testForDuplicate:act];
+                BOOL duplicateServiceIsPreferred = (reason == gcDuplicateSynchronizedService) && [act.service preferredOver:other.service];
+                
                 // don't record if already
                 if( self.duplicateActivityIds[act.activityId] == nil) {
                     self.duplicateActivityIds[act.activityId] = other.activityId;
@@ -491,7 +494,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
                             RZLog(RZLogWarning,@"Duplicate test for %@ and %@ appear not symetric", act.activityId, other.activityId);
                         }
                     }
-                    BOOL duplicateServiceIsPreferred = (reason == gcDuplicateSynchronizedService) && [act.service preferredOver:other.service];
                     
                     NSString * reasonDescription = [GCActivity duplicateDescription:reason];
                     
@@ -505,7 +507,12 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
                     }else{
                         RZLog(RZLogInfo, @"Duplicate (%@): skipping %@ (preferred: %@)", reasonDescription, act.activityId, other.activityId);
                     }
-                    
+                }else{
+                    // Update missing again as some edit can happen later
+                    if( duplicateServiceIsPreferred && act != other ){
+                        [other updateMissingFromActivity:act];
+                    }
+
                 }
                 return rv;
             }
