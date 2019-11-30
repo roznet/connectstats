@@ -589,6 +589,9 @@
             for (NSUInteger i=1; i<inputs.count; i++) {
                 GCField * addField = inputs[i];
                 GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
+                if( [[addField correspondingWeightedMeanField] isEqualToField:field] && [addNumber.unit canConvertTo:mainN.unit]){
+                    addNumber = [addNumber convertToUnit:mainN.unit];
+                }
                 if (addNumber) {
                     GCFormattedField* theOne = [GCFormattedField formattedField:addField.key activityType:activity.activityType forNumber:addNumber forSize:14.];
                     theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
