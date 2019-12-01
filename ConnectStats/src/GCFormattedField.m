@@ -86,7 +86,7 @@
     NSDictionary * attributesValue = @{NSFontAttributeName: self.valueFont, NSForegroundColorAttributeName:self.valueColor};
 
     NSMutableAttributedString * rv = [[[NSMutableAttributedString alloc] init] autorelease];
-    if (_field) {
+    if (self.field || self.useFieldDisplay) {
         NSString * useFieldDisplay = self.noDisplayField  ? self.field.key : [_field displayName];
         if( self.useFieldDisplay ){
             useFieldDisplay = self.useFieldDisplay;
