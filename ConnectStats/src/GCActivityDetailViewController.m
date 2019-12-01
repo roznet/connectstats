@@ -583,9 +583,9 @@
         if (inputs.count>0) {
             field = inputs[0];
             GCNumberWithUnit * mainN = [activity numberWithUnitForField:field];
-            mainF = [GCFormattedField formattedField:field.key activityType:activity.activityType forNumber:mainN forSize:16.];
+            mainF = [GCFormattedField formattedField:field forNumber:mainN forSize:16.];
             [rv addObject:mainF.attributedString];
-
+            
             for (NSUInteger i=1; i<inputs.count; i++) {
                 GCField * addField = inputs[i];
                 GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
@@ -593,7 +593,8 @@
                     addNumber = [addNumber convertToUnit:mainN.unit];
                 }
                 if (addNumber) {
-                    GCFormattedField* theOne = [GCFormattedField formattedField:addField.key activityType:activity.activityType forNumber:addNumber forSize:14.];
+                    GCFormattedField* theOne = [GCFormattedField formattedField:addField forNumber:addNumber forSize:14.];
+                    theOne.shareFieldLabel = field;
                     theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     if ([addNumber sameUnit:mainN]) {
@@ -609,13 +610,13 @@
             NSArray<GCField*> * related = [field relatedFields];
 
             GCNumberWithUnit * mainN = [activity numberWithUnitForField:field];
-            mainF = [GCFormattedField formattedField:field.key activityType:activity.activityType forNumber:mainN forSize:16.];
+            mainF = [GCFormattedField formattedField:field forNumber:mainN forSize:16.];
             [rv addObject:mainF];
             for (NSUInteger i=0; i<related.count; i++) {
                 GCField * addField = related[i];
                 GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
                 if (addNumber) {
-                    GCFormattedField* theOne = [GCFormattedField formattedField:addField.key activityType:activity.activityType forNumber:addNumber forSize:14.];
+                    GCFormattedField* theOne = [GCFormattedField formattedField:addField forNumber:addNumber forSize:14.];
                     theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     if ([addNumber sameUnit:mainN]) {

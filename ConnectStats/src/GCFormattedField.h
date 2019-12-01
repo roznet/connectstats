@@ -26,23 +26,11 @@
 #import <Foundation/Foundation.h>
 #import "GCFields.h"
 
-@interface GCFormattedField : NSObject{
-    GCUnit * unit;
-    double value;
+@interface GCFormattedField : NSObject
 
-    BOOL noUnits;
-    BOOL noDisplayField;
-
-    UIColor * labelColor;
-    UIColor * valueColor;
-
-    UIFont * labelFont;
-    UIFont * valueFont;
-}
-
-
-@property (nonatomic,retain) GCUnit*unit;
-@property (nonatomic,assign) double value;
+@property (nonatomic,retain) GCField*field;
+@property (nonatomic,retain) GCNumberWithUnit*numberWithUnit;
+@property (nonatomic,retain) GCField * shareFieldLabel;
 
 @property (nonatomic,assign) BOOL noDisplayField;
 @property (nonatomic,assign) BOOL noUnits;
@@ -52,8 +40,11 @@
 @property (nonatomic,retain) UIFont * labelFont;
 @property (nonatomic,retain) UIFont * valueFont;
 
-//+(GCFormattedField*)formattedField:(NSString*)field activityType:(NSString*)aType forValue:(double)value inUnit:(NSString*)aUnit forSize:(CGFloat)aSize;
-+(GCFormattedField*)formattedField:(NSString*)field activityType:(NSString*)aType forNumber:(GCNumberWithUnit*)aN forSize:(CGFloat)aSize;
++(GCFormattedField*)formattedField:(GCField*)field forNumber:(GCNumberWithUnit*)nu forSize:(CGFloat)aSize;
++(GCFormattedField*)formattedFieldDisplay:(NSString*)fieldDisplay forNumber:(GCNumberWithUnit*)nu forSize:(CGFloat)aSize;
++(GCFormattedField*)formattedFieldForNumber:(GCNumberWithUnit*)nu forSize:(CGFloat)aSize;
+
++(GCFormattedField*)formattedField:(NSString*)field activityType:(NSString*)aType forNumber:(GCNumberWithUnit*)aN forSize:(CGFloat)aSize DEPRECATED_MSG_ATTRIBUTE("use init with field and nu.") ;
 
 -(NSAttributedString*)attributedString;
 -(void)setColor:(UIColor*)aColor;

@@ -2029,8 +2029,8 @@
 		42295E031EC6F38C00F4F7EE /* GCTestServicesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestServicesViewController.m; path = src/GCTestServicesViewController.m; sourceTree = "<group>"; };
 		42295E061EC6F4D900F4F7EE /* GCTestServiceGarmin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestServiceGarmin.h; path = src/GCTestServiceGarmin.h; sourceTree = "<group>"; };
 		42295E071EC6F4D900F4F7EE /* GCTestServiceGarmin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceGarmin.m; path = src/GCTestServiceGarmin.m; sourceTree = "<group>"; };
-		422AC6A21C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151106.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "test_activity_day___healthkit__Default_20151106.db"; sourceTree = "<group>"; };
-		422AC6A31C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151109.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "test_activity_day___healthkit__Default_20151109.db"; sourceTree = "<group>"; };
+		422AC6A21C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151106.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activity_day___healthkit__Default_20151106.db; sourceTree = "<group>"; };
+		422AC6A31C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151109.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activity_day___healthkit__Default_20151109.db; sourceTree = "<group>"; };
 		422B343B1CA7321200B345CD /* GCFieldCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldCache.h; path = src/GCFieldCache.h; sourceTree = "<group>"; };
 		422B343C1CA7321200B345CD /* GCFieldCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldCache.m; path = src/GCFieldCache.m; sourceTree = "<group>"; };
 		422B343F1CA7322600B345CD /* GCFieldInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldInfo.h; path = src/GCFieldInfo.h; sourceTree = "<group>"; };
@@ -2910,7 +2910,7 @@
 		42DE53BC19CF438500009130 /* GCHealthKitActivityRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitActivityRequest.m; path = src/GCHealthKitActivityRequest.m; sourceTree = "<group>"; };
 		42DE53BF19CF696E00009130 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		42E06D481B5EF4DC001BDA02 /* test_activity_running_837769405.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_837769405.db; path = ConnectStatsTests/samples/test_activity_running_837769405.db; sourceTree = SOURCE_ROOT; };
-		42E06D4A1B5EFFC4001BDA02 /* test_activity_day___healthkit__20150622.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "test_activity_day___healthkit__20150622.db"; sourceTree = "<group>"; };
+		42E06D4A1B5EFFC4001BDA02 /* test_activity_day___healthkit__20150622.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activity_day___healthkit__20150622.db; sourceTree = "<group>"; };
 		42E10BC621D670E300175C83 /* FITDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITDocument.swift; path = src/FITDocument.swift; sourceTree = "<group>"; };
 		42E11EB31B36C74C00D90E66 /* health_daydetail_20150612.data */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = health_daydetail_20150612.data; path = samples/applewatch/health_daydetail_20150612.data; sourceTree = "<group>"; };
 		42E11EB41B36C74C00D90E66 /* health_daydetail_20150618.data */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = health_daydetail_20150618.data; path = samples/applewatch/health_daydetail_20150618.data; sourceTree = "<group>"; };
@@ -6612,13 +6612,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-resources.sh",
-				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -6630,15 +6629,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FitFileExplorer/Pods-FitFileExplorer-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/GenericJSON-macOS/GenericJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FitFileExplorer/Pods-FitFileExplorer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FitFileExplorer/Pods-FitFileExplorer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -6650,15 +6646,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
-				"${BUILT_PRODUCTS_DIR}/GenericJSON-iOS/GenericJSON.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -6670,15 +6663,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
-				"${BUILT_PRODUCTS_DIR}/GenericJSON-iOS/GenericJSON.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -6690,15 +6680,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
-				"${BUILT_PRODUCTS_DIR}/GenericJSON-iOS/GenericJSON.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -6728,13 +6715,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-resources.sh",
-				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8305,7 +8291,7 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ConnectStats/ConnectStats-Prefix.pch";
-				HEADER_SEARCH_PATHS = $CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources;
+				HEADER_SEARCH_PATHS = "$CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources";
 				INFOPLIST_FILE = "ConnectStatsTests/ConnectStatsTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -8336,7 +8322,7 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ConnectStats/ConnectStats-Prefix.pch";
-				HEADER_SEARCH_PATHS = $CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources;
+				HEADER_SEARCH_PATHS = "$CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources";
 				INFOPLIST_FILE = "ConnectStatsTests/ConnectStatsTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
