@@ -504,7 +504,7 @@
     return [self categoryNameForSection:section];
 }
 
-#pragma mark - Statistics Cells
+#pragma mark - Historical Statistics Cells
 
 -(GCSimpleGraphCachedDataSource*)dataSourceForField:(GCField*)field{
     GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:field];
@@ -534,6 +534,8 @@
     }
     return cell;
 }
+
+#pragma mark - Field Summary Cells
 
 -(UITableViewCell*)tableView:(UITableView *)tableView fieldSummaryCell:(NSIndexPath *)indexPath{
     GCCellGrid * cell = [GCCellGrid gridCell:tableView];
@@ -571,7 +573,7 @@
 }
 
 
-#pragma mark - Summary Cells
+#pragma mark - Analysis Summary Cells
 
 -(UITableViewCell*)tableView:(UITableView *)tableView performanceCellForRowAtIndexPath:(NSIndexPath *)indexPath{
     GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];

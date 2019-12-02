@@ -775,18 +775,29 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         }
     }
 
-    if (mainN==nil) {
-        return;
-    }
-    if (mainN.unit==nil) {
-        RZLog(RZLogError, @"%@ had no unit", data.field);
-        return;
-    }
 
     NSString * fieldName = [data.field displayName];
     if (fieldName==nil) {
         fieldName = data.field.key;
     }
+    
+    if (mainN==nil || mainN.unit==nil) {
+        if (mainN.unit==nil) {
+            RZLog(RZLogError, @"%@ had no unit", data.field);
+        }
+
+        if( [data weightedAverageWithUnit:gcHistoryStatsAll] ){
+            [self setupForRows:2 andCols:2];
+            [self labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:fieldName attribute:@selector(attribute16Gray)];
+            [self configForRow:0 andCol:0].horizontalOverflow = YES;
+            [self labelForRow:0 andCol:1].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"No Data", @"Field Summary") attribute:@selector(attribute14Gray)];
+            [GCViewConfig setupGradientForDetails:self];
+
+        }
+        return;
+    }
+
+    
     GCFormattedField * count = [GCFormattedField formattedFieldDisplay:@"Count" forNumber:[data countWithUnit:which] forSize:14.];
     GCFormattedField * extra = nil;
     if ([data.field canSum]) {
