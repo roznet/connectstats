@@ -48,15 +48,23 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
     if( self = [super init]){
         self.withingsAuth = next.withingsAuth;
         self.navigationController = nil;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshed object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshFailed object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2RefreshTokenChanged object:nil];
     }
     return self;
 }
 -(GCWithingsReqBase*)init{
     self = [super init];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshed object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshFailed object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2RefreshTokenChanged object:nil];
+
     return self;
 }
 
 -(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_withingsAuth release];
     [_oauthToken release];
     [_oauthTokenSecret release];
@@ -66,6 +74,18 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
     
     [super dealloc];
 }
+
+-(void)notifyCallBack:(NSNotification*)notification{
+    //[@"kGTMOAuth2" length] = 10
+    NSString * name = [notification.name substringFromIndex:10];
+    
+    if( [notification.name isEqualToString:kGTMOAuth2AccessTokenRefreshFailed]){
+        RZLog(RZLogError, @"%@ %@", name, notification.userInfo);
+    }else{
+        RZLog(RZLogInfo, @"%@ (%@)", name, self);
+    }
+}
+
 - (GTMOAuth2Authentication *)buildWithingsAuth {
     if (!self.withingsAuth) {
         NSURL *tokenURL = [NSURL URLWithString:[GCAppGlobal credentialsForService:kCredentialServiceName andKey:@"access_token_url"]];
@@ -139,11 +159,6 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
 }
 
 -(void)authorizeRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError * _Nullable))handler{
-    NSDate * expirationDate = self.withingsAuth.expirationDate;
-    NSTimeInterval timeToExpire = [expirationDate timeIntervalSinceNow];
-    if (expirationDate == nil || timeToExpire < 60.0) {
-        RZLog(RZLogInfo, @"Expect token refresh (expiration %@)", expirationDate);
-    }
     
     [self.withingsAuth authorizeRequest:request completionHandler:^(NSError*error){
         if( error == nil){

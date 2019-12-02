@@ -120,7 +120,11 @@
         // If false, it means the samples did not include the fit file for that run activity
         XCTAssertFalse(act.trackPointsRequireDownload);
         if( ! act.trackPointsRequireDownload && act.trackpoints){
-            [derived processActivities:@[ act] ];
+            // Run on worker as could collide with main app init load
+            dispatch_sync([GCAppGlobal worker], ^(){
+                [derived processActivities:@[ act] ];
+            });
+            
             for (GCField * field in @[ [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType],
                                        [GCField fieldForFlag:gcFieldFlagPower andActivityType:act.activityType] ] ) {
                 if( [act hasTrackForField:field] ){

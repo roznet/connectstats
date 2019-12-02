@@ -157,12 +157,10 @@ const CGFloat kGCCellActivityDefaultHeight = 96;
 
     if (self.activity) {
         GCActivity * activity = self.activity;
-        GCFormattedField * distance = [GCFormattedField formattedField:nil activityType:nil
-                                                             forNumber:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDistance] forSize:16.];
+        GCFormattedField * distance = [GCFormattedField formattedField:nil forNumber:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDistance] forSize:16.];
 
         GCNumberWithUnit * nu_steps = [activity numberWithUnitForFieldKey:@"SumStep"];
-        GCFormattedField * steps = [GCFormattedField formattedField:nil activityType:nil
-                                                          forNumber:nu_steps forSize:14.];
+        GCFormattedField * steps = [GCFormattedField formattedField:nil forNumber:nu_steps forSize:14.];
 
         GCHealthMeasure * weight = [[GCAppGlobal health] measureOnSpecificDate:activity.date forType:gcMeasureWeight andCalendar:[GCAppGlobal calculationCalendar]];
 
@@ -188,7 +186,7 @@ const CGFloat kGCCellActivityDefaultHeight = 96;
         [self.viewsGrid labelForRow:0 andColumn:2].attributedText = distance.attributedString;
 
         if (weight) {
-            [self.viewsGrid labelForRow:1 andColumn:2].attributedText = [[GCFormattedField formattedField:nil activityType:nil forNumber:weight.value forSize:12.] attributedString];
+            [self.viewsGrid labelForRow:1 andColumn:2].attributedText = [[GCFormattedField formattedFieldForNumber:weight.value forSize:12.] attributedString];
         }
         if( nu_floors){
             [rightStrings addObject:[GCViewConfig attributedString:nu_floors.formatDouble attribute:@selector(attribute14)]];

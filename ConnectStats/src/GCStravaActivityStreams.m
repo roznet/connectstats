@@ -32,7 +32,6 @@
 #import "GCActivitiesOrganizer.h"
 
 @interface GCStravaActivityStreams ()
-@property (nonatomic,assign) BOOL inError;
 @property (nonatomic,readonly) NSString * activityId;
 
 @end
@@ -138,7 +137,7 @@
 
     GCStravaActivityStreamsParser * parser = [GCStravaActivityStreamsParser activityStreamsParser:[self.theString dataUsingEncoding:self.encoding]];
     self.points = parser.points;
-    self.inError = parser.inError;
+    self.status = parser.status;
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self processDone];
     });
@@ -154,7 +153,7 @@
 }
 
 -(id<GCWebRequest>)nextReq{
-    if (self.inError) {
+    if (self.status != GCWebStatusOK) {
         return nil;
     }
     if (self.navigationController || !self.laps) {

@@ -57,7 +57,7 @@
     NSError * e = nil;
     NSArray *json = [NSJSONSerialization JSONObjectWithData:inputs options:NSJSONReadingMutableContainers error:&e];
     if ([json isKindOfClass:[NSArray class]] && json.count>0) {
-        self.inError =false;
+        self.status = GCWebStatusOK;
         NSUInteger n = [json[0][@"data"] count];
         NSMutableArray * trackpoints = [NSMutableArray arrayWithCapacity:n];
         for (NSUInteger i=0; i<n; i++) {
@@ -109,11 +109,11 @@
                 self.points = @[];
             }else{
                 RZLog(RZLogInfo, @"Got Dictionary %@", dict);
-                self.inError =true;
+                self.status = GCWebStatusParsingFailed;
             }
 
         }else{
-            self.inError =true;
+            self.status = GCWebStatusParsingFailed;
             RZLog(RZLogWarning, @"Failed to download stream got %@", e ?: NSStringFromClass([json class]));
         }
     }

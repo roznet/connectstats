@@ -28,19 +28,17 @@
 #import "GCField.h"
 
 @interface GCFormattedField ()
-@property (nonatomic,retain) GCField*field;
 
+@property (nonatomic,retain) NSString * useFieldDisplay;
 @end
 
 @implementation GCFormattedField
-@synthesize unit,value,valueColor,labelColor,valueFont,labelFont,noUnits,noDisplayField;
 
-+(GCFormattedField*)formattedField:(NSString*)field activityType:(NSString*)aType forValue:(double)value inUnit:(NSString*)aUnit forSize:(CGFloat)aSize{
++(GCFormattedField*)formattedField:(GCField*)field forNumber:(GCNumberWithUnit*)nu forSize:(CGFloat)aSize{
     GCFormattedField * rv = [[[GCFormattedField alloc] init] autorelease];
     if (rv) {
-        rv.field = field ? [GCField fieldForKey:field andActivityType:aType] : nil;
-        rv.value = value;
-        rv.unit = [GCUnit unitForKey:aUnit];
+        rv.field = field;
+        rv.numberWithUnit = nu;
         rv.labelFont = [GCViewConfig systemFontOfSize:aSize];
         rv.valueFont = [GCViewConfig boldSystemFontOfSize:aSize];
         rv.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText];
@@ -48,13 +46,20 @@
     }
     return rv;
 }
++(GCFormattedField*)formattedFieldDisplay:(NSString*)fieldDisplay forNumber:(GCNumberWithUnit*)nu forSize:(CGFloat)aSize{
+    GCFormattedField * rv = [GCFormattedField formattedField:nil forNumber:nu forSize:aSize];
+    rv.useFieldDisplay = fieldDisplay;
+    return rv;
+}
++(GCFormattedField*)formattedFieldForNumber:(GCNumberWithUnit*)nu forSize:(CGFloat)aSize{
+    return [GCFormattedField formattedField:nil forNumber:nu forSize:aSize];
+}
 
 +(GCFormattedField*)formattedField:(NSString*)field activityType:(NSString*)aType forNumber:(GCNumberWithUnit*)aN forSize:(CGFloat)aSize{
     GCFormattedField * rv = [[[GCFormattedField alloc] init] autorelease];
     if (rv) {
         rv.field = field ? [GCField fieldForKey:field andActivityType:aType] : nil;
-        rv.value = aN.value;
-        rv.unit = aN.unit;
+        rv.numberWithUnit = aN;
         rv.labelFont = [GCViewConfig systemFontOfSize:aSize];
         rv.valueFont = [GCViewConfig boldSystemFontOfSize:aSize];
         rv.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText];
@@ -64,11 +69,12 @@
 }
 -(void)dealloc{
     [_field release];
-    [unit release];
-    [labelColor release];
-    [valueColor release];
-    [labelFont release];
-    [valueFont release];
+    [_useFieldDisplay release];
+    [_numberWithUnit release];
+    [_labelColor release];
+    [_valueColor release];
+    [_labelFont release];
+    [_valueFont release];
     [super dealloc];
 }
 -(void)setColor:(UIColor*)aColor{
@@ -76,27 +82,40 @@
     self.labelColor = aColor;
 }
 -(NSAttributedString*)attributedString{
-    NSDictionary * attributesLabel = @{NSFontAttributeName: labelFont, NSForegroundColorAttributeName:labelColor};
-    NSDictionary * attributesValue = @{NSFontAttributeName: valueFont, NSForegroundColorAttributeName:valueColor};
+    NSDictionary * attributesLabel = @{NSFontAttributeName: self.labelFont, NSForegroundColorAttributeName:self.labelColor};
+    NSDictionary * attributesValue = @{NSFontAttributeName: self.valueFont, NSForegroundColorAttributeName:self.valueColor};
 
     NSMutableAttributedString * rv = [[[NSMutableAttributedString alloc] init] autorelease];
-    if (_field) {
-        NSString * useField = noDisplayField  ? _field.key : [_field displayName];
-        if (useField == nil) {
+    if (self.field || self.useFieldDisplay) {
+        NSString * useFieldDisplay = self.noDisplayField  ? self.field.key : [_field displayName];
+        if( self.useFieldDisplay ){
+            useFieldDisplay = self.useFieldDisplay;
+        }
+        if (useFieldDisplay == nil) {
             RZLog(RZLogError, @"Invalid %@ missing display name", _field);
         }else{
-            [rv appendAttributedString:[[[NSAttributedString alloc] initWithString:useField attributes:attributesLabel] autorelease]];
+            if( self.shareFieldLabel && !self.noDisplayField){
+                if( [self.shareFieldLabel isEqualToField:[self.field correspondingWeightedMeanField]]){
+                    // Try to remove duplicated text
+                    NSString * shareFieldDisplay = self.shareFieldLabel.displayName;
+                    if( [shareFieldDisplay hasPrefix:@"Avg "] && [useFieldDisplay hasPrefix:@"Max "] ){
+                        useFieldDisplay = @"Max";
+                    }
+                    if( [shareFieldDisplay hasPrefix:@"Avg "] && [useFieldDisplay hasPrefix:@"Min "] ){
+                        useFieldDisplay = @"Min";
+                    }
+                }
+            }
+            
+            [rv appendAttributedString:[[[NSAttributedString alloc] initWithString:useFieldDisplay attributes:attributesLabel] autorelease]];
             [rv appendAttributedString:[[[NSAttributedString alloc] initWithString:@" " attributes:attributesLabel] autorelease]];
         }
     }
-    GCUnit * useUnit = unit;
-    if (!useUnit) {
-        useUnit = [GCUnit unitForKey:@"dimensionless"];
-    }
-    GCNumberWithUnit * num = [GCNumberWithUnit numberWithUnit:useUnit andValue:value];
+    GCUnit * useUnit = self.numberWithUnit.unit;
+    GCNumberWithUnit * num = self.numberWithUnit;
 
     if (useUnit && [useUnit unitForGlobalSystem] != useUnit) {
-        useUnit = [unit unitForGlobalSystem];
+        useUnit = [useUnit unitForGlobalSystem];
         if ([_field.key hasSuffix:@"Elevation"] && [useUnit.key isEqualToString:@"yard"]) {
             useUnit = [GCUnit unitForKey:@"foot"];
         }
@@ -104,7 +123,7 @@
             num = [num convertToUnit:useUnit];
         }
     }
-    [rv appendAttributedString:[num attributedStringWithValueAttr:attributesValue andUnitAttr: (!noUnits&&unit)?attributesLabel:nil]];
+    [rv appendAttributedString:[num attributedStringWithValueAttr:attributesValue andUnitAttr: (!self.noUnits)?attributesLabel:nil]];
 
     return rv;
 }

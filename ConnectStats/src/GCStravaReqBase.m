@@ -38,19 +38,47 @@ static NSString * kCredentialServiceName = @"strava";
 
 @implementation GCStravaReqBase
 
+
+-(GCStravaReqBase*)init{
+    if( self = [super init] ){
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshed object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshFailed object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2RefreshTokenChanged object:nil];
+    }
+    return self;
+}
+
 -(GCStravaReqBase*)initNextWith:(GCStravaReqBase*)current{
     if( self = [super init]){
         self.stravaAuth = current.stravaAuth;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshed object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshFailed object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2RefreshTokenChanged object:nil];
     }
     return self;
 }
 
 -(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_stravaAuth release];
     [_lastError release];
     [_navigationController release];
 
     [super dealloc];
+}
+
+-(void)notifyCallBack:(NSNotification*)notification{
+    //[@"kGTMOAuth2" length] = 10
+    NSString * name = [notification.name substringFromIndex:10];
+    
+    if( [notification.name isEqualToString:kGTMOAuth2AccessTokenRefreshFailed]){
+        RZLog(RZLogError, @"%@ %@", name, notification.userInfo);
+        [GCStravaReqBase signout];
+        self.status = GCWebStatusAccessDenied;
+    }else{
+        RZLog(RZLogInfo, @"%@ (%@)", name, self);
+    }
 }
 
 static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
@@ -124,11 +152,6 @@ static NSString *const kKeychainItemName = @"OAuth2 ConnectStats Strava";
 }
 
 -(void)authorizeRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(NSError * _Nullable))handler{
-    NSDate * expirationDate = self.stravaAuth.expirationDate;
-    NSTimeInterval timeToExpire = [expirationDate timeIntervalSinceNow];
-    if (expirationDate == nil || timeToExpire < 60.0) {
-        RZLog(RZLogInfo, @"Expect token refresh (expiration %@)", expirationDate);
-    }
     
     [self.stravaAuth authorizeRequest:request completionHandler:^(NSError*error){
         if( error == nil){
