@@ -52,6 +52,7 @@ extern sqlite3_int64 kInvalidSerieId;
 @property (nonatomic,assign) gcDerivedPeriod derivedPeriod;
 @property (nonatomic,readonly) GCField * field;
 @property (nonatomic,readonly) NSDate* bucketStart;
+@property (nonatomic,readonly) NSString * filePath;
 
 @property (nonatomic,retain) GCStatsDataSerieWithUnit * serieWithUnit;
 

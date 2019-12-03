@@ -154,6 +154,9 @@
         NSObject * val = keys[key];
         if( [val isKindOfClass:[NSString class]] ){
             [where addObject:[NSString stringWithFormat:@"%@ = '%@'", key, val]];
+        }else if( [val isKindOfClass:[NSDate class]] ){
+            NSDate * date = (NSDate*) val;
+            [where addObject:[NSString stringWithFormat:@"%@ = '%@'", key, [date sqliteDateFormat]]];
         }else{
             [where addObject:[NSString stringWithFormat:@"%@ = %@", key, val]];
         }

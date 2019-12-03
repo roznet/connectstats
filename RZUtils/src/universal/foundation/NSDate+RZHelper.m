@@ -97,6 +97,18 @@
 
 }
 
++(NSDateFormatter*)sqliteDateFormatter{
+    static NSDateFormatter * formatter = nil;
+    if (formatter==nil) {
+        formatter = [[NSDateFormatter alloc] init];
+        formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+        formatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0.0];
+        formatter.dateFormat = @"yyyy'-'MM'-'dd' 'HH':'mm':'ss";
+    }
+    return formatter;
+
+}
+
 +(NSDateFormatter*)garminModernAlternateDateFormatter{
     static NSDateFormatter * formatter = nil;
     if (formatter==nil) {
@@ -133,6 +145,10 @@
 
 -(NSString*)YYYYdashMMdashDD{
     return [[NSDate dashedDateFormatter] stringFromDate:self];
+}
+
+-(NSString*)sqliteDateFormat{
+    return [[NSDate sqliteDateFormatter] stringFromDate:self];
 }
 
 -(NSString*)YYYYMMDDhhmm{

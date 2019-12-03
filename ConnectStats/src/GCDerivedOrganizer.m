@@ -187,7 +187,7 @@ static BOOL kDerivedEnabled = true;
             self.derivedSeries[serie.key] = serie;
         }
         [self loadProcesseActivities];
-        
+        //[self convertFileSeries];
         if( [db tableExists:@"gc_derived_time_serie_second"]){
             GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:@"gc_derived_time_serie_second"];
             self.seriesByKeys = [NSMutableDictionary dictionaryWithDictionary:[statsDb loadByKeys]];
@@ -196,6 +196,35 @@ static BOOL kDerivedEnabled = true;
             RZLog(RZLogInfo, @"Loaded %d derived series", (int)self.derivedSeries.count);
         }
     }
+}
+
+-(void)convertFileSeries{
+    GCStatsDatabase * statsDb = [GCStatsDatabase database:[self deriveddb] table:@"gc_converted_test"];
+    
+    RZPerformance * perf = [RZPerformance start];
+    for (NSString * key in self.derivedSeries) {
+        GCDerivedDataSerie * serie = self.derivedSeries[key];
+        if( serie.derivedPeriod == gcDerivedPeriodMonth){
+            [serie loadFromFile:serie.filePath];
+            GCStatsDataSerieWithUnit * base = serie.serieWithUnit;
+            if( [base.xUnit canConvertTo:[GCUnit second]] ){
+                GCStatsDataSerieWithUnit * standardSerie = [GCActivity standardSerieSampleForXUnit:base.xUnit];
+                // Make sure we reduce from a copy so we don't destroy the main serie
+                base = [GCStatsDataSerieWithUnit dataSerieWithOther:base];
+                [GCStatsDataSerie reduceToCommonRange:standardSerie.serie and:base.serie];
+                NSDictionary * keys = @{
+                    @"date":serie.bucketStart,
+                    @"field":serie.field.key,
+                    @"activityType":serie.activityType
+                };
+                [statsDb save:base.serie keys:keys];
+            }
+        }
+    }
+    RZLog(RZLogInfo, @"Loaded all in %@", perf);
+    [perf reset];
+    NSDictionary * dict = [statsDb loadByKeys];
+    RZLog(RZLogInfo, @"Loaded all db in %@", perf);
 }
 
 -(GCStatsSerieOfSerieWithUnits*)timeserieOfSeriesFor:(GCField*)field inActivities:(NSArray<GCActivity*>*)activities{
