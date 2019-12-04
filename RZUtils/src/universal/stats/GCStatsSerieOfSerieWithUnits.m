@@ -76,6 +76,13 @@
 }
 #endif
 
+-(void)addSerieOfSerie:(GCStatsSerieOfSerieWithUnits*)other{
+    for (GCStatsSerieOfSerieHolder * holder in other.series) {
+        [self.series addObject:holder];
+    }
+    [self sortSeries];
+}
+
 -(void)addSerie:(GCStatsDataSerieWithUnit*)serie for:(GCNumberWithUnit*)val{
     if( self.series == nil){
         self.series = [NSMutableArray array];

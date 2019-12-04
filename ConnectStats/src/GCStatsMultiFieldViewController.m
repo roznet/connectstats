@@ -605,7 +605,7 @@
     } withLimit:60]];
     
     GCStatsSerieOfSerieWithUnits * historical = [[GCAppGlobal derived] timeSeriesOfSeriesFor:field];
-    serieOfSerie = historical;
+    //[serieOfSerie addSerieOfSerie:historical];
     GCSimpleGraphCachedDataSource * cache = nil;
     if (serieOfSerie) {
         cache = [GCSimpleGraphCachedDataSource derivedHist:self.activityType field:field series:serieOfSerie width:tableView.frame.size.width];
