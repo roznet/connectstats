@@ -138,10 +138,10 @@ static NSArray * _calculatedFields = nil;
     return _calculatedFields;
 }
 
-+(void)addCalculatedFieldsToTrackPoints:(NSArray*)trackpoints forActivity:(GCActivity*)act{
++(void)addCalculatedFieldsToLaps:(NSArray*)laps forActivity:(GCActivity*)act{
     [GCFieldsCalculatedTrack addCalculatedFieldsToTrackPointsAndLaps:act];
     NSArray * calcFields = [GCFieldsCalculated calculatedFields];
-    for (GCTrackPoint * point in trackpoints) {
+    for (GCTrackPoint * point in laps) {
         for (GCFieldsCalculated * one in calcFields) {
             if ([one validForActivity:act] && [one trackPointHasRequiredFields:point inActivity:act]) {
                 GCActivityCalculatedValue * val = [one evaluateForTrackPoint:point inActivity:act];
@@ -161,6 +161,7 @@ static NSArray * _calculatedFields = nil;
     [act addStandardCalculatedTracks:[NSThread isMainThread] ? act.settings.worker : nil];
 
 }
+
 +(void)addCalculatedFields:(GCActivity*)act{
     NSArray * calcFields = [GCFieldsCalculated calculatedFields];
 
@@ -252,7 +253,7 @@ static NSArray * _calculatedFields = nil;
         return false;
     }
     for (GCField * f in inputF) {
-        if( ![act hasTrackForField:f]){
+        if( ![trackPoint hasField:f inActivity:act] ){
             return false;
         }
     }

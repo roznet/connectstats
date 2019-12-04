@@ -662,6 +662,9 @@ void buildStatic(){
     }
     return nil;
 }
+-(BOOL)hasField:(GCField*)field inActivity:(GCActivity*)act{
+    return [self numberWithUnitForField:field inActivity:act] != nil;
+}
 
 -(GCNumberWithUnit*)numberWithUnitForField:(GCField*)aF inActivity:(GCActivity*)act{
     GCNumberWithUnit * rv = nil;
