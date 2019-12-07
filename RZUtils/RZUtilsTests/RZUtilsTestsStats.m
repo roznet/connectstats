@@ -549,12 +549,12 @@
     for (size_t i=0; i<8; i++) {
         [serie addDataPointWithX:i andY:samples[i]];
     }
-    NSString * fn = [RZFileOrganizer writeableFilePath:@"testsavedserie.data"];
-    XCTAssertTrue([NSKeyedArchiver archiveRootObject:serie toFile:fn]);
-    GCStatsDataSerie * load = [NSKeyedUnarchiver unarchiveObjectWithFile:fn];
-    XCTAssertTrue(load && [serie isEqualToSerie:load]);
-    //[RZFileOrganizer removeEditableFile:@"testsavedserie.data"];
+    NSError * error = nil;
+    NSData * data = [NSKeyedArchiver archivedDataWithRootObject:serie requiringSecureCoding:YES error:&error];
+    XCTAssertTrue(data != nil);
     
+    GCStatsDataSerie * load = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    XCTAssertTrue(load && [serie isEqualToSerie:load]);
 }
 
 -(void)testStd{
@@ -1147,7 +1147,22 @@
     //               [-------|
     //                     [-------|
     
-    
+    serie2 = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.,@10., @2.,@20., @3.,@20., @4.,@30., @5.,@12., @7.,@1, @8.,@2 ]];
+    rv = [serie2 movingFunctionForUnit:2. function:^(NSArray<GCStatsDataPoint*>*pts){
+        double max = 0;
+        if( pts.count > 0){
+            max = pts.firstObject.y_data;
+            for (GCStatsDataPoint * pt in pts) {
+                if( pt.y_data > max){
+                    max = pt.y_data;
+                }
+            }
+        }
+        return max;
+    }];
+    expected = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.,@10., @2.,@20., @3.,@20., @4.,@30., @5.,@30., @7.,@12., @8.,@2. ]];
+    XCTAssertTrue([rv isEqualToSerie:expected]);
+
 }
 
 -(void)testOperand{

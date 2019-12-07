@@ -245,6 +245,17 @@
                                  @"upload_id" : @1, // sample: 804813097
                                  @"userPro" : @1, // sample: 0
                                  @"weighted_average_watts" : @1, // sample: 129
+                                 
+                                 // ConnectStats Data Processed outside
+                                 @"startTmeInSeconds": @1575012829,
+                                 @"startingLatitudeInDegree": @51.47216607816517,
+                                 @"averagePaceInMinutesPerKilometer": @5.414771,
+                                 @"maxPaceInMinutesPerKilometer": @4.8676014,
+                                 @"startingLongitudeInDegree": @0.1960058603435755,
+                                 @"startTimeOffsetInSeconds": @0,
+                                 //@"maxRunCadenceInStepsPerMinute": @178,
+                                 //@"maxBikeCadenceInRoundsPerMinute": @96,
+
                                  };
                 [knownMissing retain];
             }
@@ -392,7 +403,10 @@
 
                             @"averageBikeCadenceInRoundsPerMinute": @[  @"WeightedMeanBikeCadence", @(gcFieldFlagCadence), @"rpm" ],
                             @"averageRunCadenceInStepsPerMinute": @[ @"WeightedMeanRunCadence", @(gcFieldFlagCadence), @"stepsPerMinute" ],
-                            
+
+                            @"maxBikeCadenceInRoundsPerMinute": @[  @"MaxBikeCadence", @(gcFieldFlagCadence), @"rpm" ],
+                            @"maxRunCadenceInStepsPerMinute": @[ @"MaxRunCadence", @(gcFieldFlagCadence), @"stepsPerMinute" ],
+
                             
                             };
     

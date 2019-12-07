@@ -26,8 +26,11 @@
 
 - (void)testTimeStampManager {
     NSString * fn = @"test_ts.db";
-    NSString * dbpath = [RZFileOrganizer writeableFilePath:fn];
-    [RZFileOrganizer removeEditableFile:fn];
+    NSString * dbpath = [NSTemporaryDirectory() stringByAppendingPathComponent:fn];
+    
+    if( [[NSFileManager defaultManager] fileExistsAtPath:dbpath] ){
+        [[NSFileManager defaultManager] removeItemAtPath:dbpath error:nil];
+    }
     
     FMDatabase * db = [FMDatabase databaseWithPath:dbpath];
     [db open];
