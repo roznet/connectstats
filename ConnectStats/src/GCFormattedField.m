@@ -75,6 +75,8 @@
     [_valueColor release];
     [_labelFont release];
     [_valueFont release];
+    [_shareFieldLabel release];
+    
     [super dealloc];
 }
 -(void)setColor:(UIColor*)aColor{
@@ -99,10 +101,10 @@
                     // Try to remove duplicated text
                     NSString * shareFieldDisplay = self.shareFieldLabel.displayName;
                     if( [shareFieldDisplay hasPrefix:@"Avg "] && [useFieldDisplay hasPrefix:@"Max "] ){
-                        useFieldDisplay = @"Max";
+                        useFieldDisplay = NSLocalizedString(@"Max",nil);
                     }
                     if( [shareFieldDisplay hasPrefix:@"Avg "] && [useFieldDisplay hasPrefix:@"Min "] ){
-                        useFieldDisplay = @"Min";
+                        useFieldDisplay = NSLocalizedString(@"Min",nil);
                     }
                 }
             }

@@ -604,7 +604,7 @@
         return [act.activityType isEqualToString:self.activityType];
     } withLimit:60]];
     
-    GCStatsSerieOfSerieWithUnits * historical = [[GCAppGlobal derived] timeSeriesOfSeriesFor:field];
+    //GCStatsSerieOfSerieWithUnits * historical = [[GCAppGlobal derived] timeSeriesOfSeriesFor:field];
     //[serieOfSerie addSerieOfSerie:historical];
     GCSimpleGraphCachedDataSource * cache = nil;
     if (serieOfSerie) {

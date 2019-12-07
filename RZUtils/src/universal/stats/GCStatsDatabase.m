@@ -34,6 +34,16 @@
     return rv;
 }
 
+#if !__has_feature(objc_arc)
+-(void)dealloc{
+    [_db release];
+    [_tableName release];
+    [_definitionTableName release];
+    [_dataPointColumnNamePrefix release];
+    
+    [super dealloc];
+}
+#endif
 -(NSDictionary*)convertKeysToType:(NSDictionary*)keys{
     NSMutableDictionary * rv = [NSMutableDictionary dictionary];
     for (NSString * key in keys) {

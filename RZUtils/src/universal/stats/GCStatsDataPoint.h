@@ -37,7 +37,7 @@
 /**
  * Will make copy
  */
--(GCStatsDataPoint*)copy;
+-(GCStatsDataPoint*)duplicate;
 
 -(NSDate*)date;
 -(void)setDate:(NSDate*)aDate;

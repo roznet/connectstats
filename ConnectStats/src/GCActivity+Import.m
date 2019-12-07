@@ -255,6 +255,9 @@
                                  @"startTimeOffsetInSeconds": @0,
                                  //@"maxRunCadenceInStepsPerMinute": @178,
                                  //@"maxBikeCadenceInRoundsPerMinute": @96,
+                                 @"isParent":@0,
+                                 @"hasPolyline":@1,
+                                 @"lapcount":@1,
 
                                  };
                 [knownMissing retain];

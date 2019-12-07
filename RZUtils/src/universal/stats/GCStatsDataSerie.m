@@ -128,7 +128,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     if (rv) {
         NSMutableArray * tmp = [NSMutableArray arrayWithCapacity:other.count];
         for (GCStatsDataPoint * p in other) {
-            [tmp addObject:[p copy]];
+            [tmp addObject:[p duplicate]];
         }
         rv.dataPoints = tmp;
     }
@@ -1002,7 +1002,6 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 
     NSMutableArray * samples = [NSMutableArray arrayWithCapacity:dataPoints.count];
     NSMutableArray * smoothed = [NSMutableArray arrayWithCapacity:dataPoints.count];
-    GCStatsDataSerie * input = [GCStatsDataSerie dataSerieWithPoints:smoothed];
     
     for (GCStatsDataPoint * point in dup.dataPoints) {
         // remove point if out of range

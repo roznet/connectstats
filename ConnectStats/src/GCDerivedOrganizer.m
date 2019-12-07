@@ -190,7 +190,7 @@ static BOOL kDerivedEnabled = true;
         }
         [self loadProcesseActivities];
         
-        [self convertFileSeries];
+        [self loadHistoricalFileSeries];
         
         if( [db tableExists:@"gc_derived_time_serie_second"]){
             GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:@"gc_derived_time_serie_second"];
@@ -202,10 +202,10 @@ static BOOL kDerivedEnabled = true;
     }
 }
 
--(void)convertFileSeries{
-    BOOL convert = ! [[self deriveddb] tableExists:@"gc_converted_test"];
+-(void)loadHistoricalFileSeries{
+    BOOL convert = ! [[self deriveddb] tableExists:@"gc_converted_historical_second"];
     
-    GCStatsDatabase * statsDb = [GCStatsDatabase database:[self deriveddb] table:@"gc_converted_test"];
+    GCStatsDatabase * statsDb = [GCStatsDatabase database:[self deriveddb] table:@"gc_converted_historical_second"];
     RZPerformance * perf = [RZPerformance start];
     if( convert ){
         for (NSString * key in self.derivedSeries) {
@@ -227,7 +227,7 @@ static BOOL kDerivedEnabled = true;
                 }
             }
         }
-        RZLog(RZLogInfo, @"Loaded all in %@", perf);
+        RZLog(RZLogInfo, @"Converted all in %@", perf);
         [perf reset];
     }
     self.historicalSeriesByKeys = [NSMutableDictionary dictionaryWithDictionary:[statsDb loadByKeys]];
@@ -476,7 +476,7 @@ static BOOL kDerivedEnabled = true;
                     @"activityId" : element.activity.activityId,
                     @"fieldKey" : field.key,
                 };
-                RZLog(RZLogInfo, @"derived %@ %@ %@", element.activity, field, standard );
+                RZLog(RZLogInfo, @"derived standard: %@ %@ %@", element.activity.activityId, field.key, standard );
                 [statsDb save:standard.serie keys:keys];
                 if( ! self.seriesByKeys){
                     self.seriesByKeys = [NSMutableDictionary dictionary];
