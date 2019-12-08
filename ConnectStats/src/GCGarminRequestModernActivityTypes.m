@@ -51,11 +51,7 @@
     [super dealloc];
 }
 -(NSString*)url{
-    if( self.modern == nil){
-        return @"https://connect.garmin.com/modern/proxy/activity-service/activity/activityTypes";
-    }else{
-        return GCWebActivityTypes();
-    }
+    return @"https://connect.garmin.com/modern/proxy/activity-service/activity/activityTypes";
 }
 
 -(NSString*)description{
@@ -70,51 +66,37 @@
     }
 }
 
--(void)process{
+-(void)process:(NSData *)theData andDelegate:(id<GCWebRequestDelegate>)delegate{
 #if TARGET_IPHONE_SIMULATOR
-    NSError * e = nil;
     NSString * fn = self.fileName;
-    [self.theString writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:true encoding:self.encoding error:&e];
+    [theData writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:true];
 #endif
     
     self.stage = gcRequestStageParsing;
     [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
     dispatch_async([GCAppGlobal worker],^(){
-        [self processParse];
+        [self processParse:theData];
     });
 }
-
--(id<GCWebRequest>)nextReq{
-    GCGarminRequestModernActivityTypes * rv = nil;
-    
-    if (self.modern && self.legacy == nil) {
-        rv = [[[GCGarminRequestModernActivityTypes alloc] init] autorelease];
-        rv.modern = self.modern;
-    }
-    return rv;
+-(void)process{
+    [self process:[self.theString dataUsingEncoding:self.encoding] andDelegate:self.delegate];
 }
 
--(void)processParse{
+-(void)processParse:(NSData*)jsonData{
     if ([self checkNoErrors]) {
-        NSData *jsonData = [self.theString dataUsingEncoding:self.encoding];
         NSError *e = nil;
 
-        if( self.modern == nil){
-            NSArray * jsonArray = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
-            self.modern = jsonArray ?: @[];
-        }else{
-            NSDictionary * jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
-            
-            self.legacy = jsonDict[@"dictionary"] ?:@[];
-            self.stage = gcRequestStageSaving;
-            [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
-            
-            NSUInteger n = [[GCAppGlobal activityTypes] loadMissingFromGarmin:self.modern withDisplayInfoFrom:self.legacy];
-            if( n > 0){
-                RZLog(RZLogInfo, @"Found %lu new types", (long unsigned)n);
-            }
-            self.status = GCWebStatusOK;
+        NSArray * jsonArray = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
+        self.modern = jsonArray ?: @[];
+        self.legacy = @[];
+        self.stage = gcRequestStageSaving;
+        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+        
+        NSUInteger n = [[GCAppGlobal activityTypes] loadMissingFromGarmin:self.modern withDisplayInfoFrom:self.legacy];
+        if( n > 0){
+            RZLog(RZLogInfo, @"Found %lu new types", (long unsigned)n);
         }
+        self.status = GCWebStatusOK;
     }
     [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
 }
@@ -128,8 +110,7 @@
     jsonData = [NSData dataWithContentsOfFile:[path stringByAppendingPathComponent:rv.fileName]];
     rv.modern = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
     
-    jsonData = [NSData dataWithContentsOfFile:[path stringByAppendingPathComponent:rv.fileName]];
-    rv.legacy = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err][@"dictionary"];
+    rv.legacy = @[];
 
     [types loadMissingFromGarmin:rv.modern withDisplayInfoFrom:rv.legacy];
     

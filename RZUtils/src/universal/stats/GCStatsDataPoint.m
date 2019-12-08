@@ -82,7 +82,7 @@
     }
     return rv;
 }
--(GCStatsDataPoint*)copy{
+-(GCStatsDataPoint*)duplicate{
     GCStatsDataPoint * rv = RZReturnAutorelease([[self.class alloc] init]);
     if (rv) {
         rv.x_data = self.x_data;

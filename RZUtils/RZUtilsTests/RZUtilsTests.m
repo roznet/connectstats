@@ -75,10 +75,11 @@
     RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
     NSDictionary * sample = @{@"a":@1, @"b":@2};
     manager.recordMode = true;
-    [manager retrieveReferenceObject:sample selector:_cmd identifier:@"sampleDict" error:nil];
+    NSSet<Class>*classes =[NSSet setWithObjects:[NSDictionary class], nil];
+    [manager retrieveReferenceObject:sample forClasses:classes selector:_cmd identifier:@"sampleDict" error:nil];
     
     manager.recordMode =false;
-    NSDictionary * retrieve = [manager retrieveReferenceObject:sample selector:_cmd identifier:@"sampleDict" error:nil];
+    NSDictionary * retrieve = [manager retrieveReferenceObject:sample forClasses:classes selector:_cmd identifier:@"sampleDict" error:nil];
     
     XCTAssert([retrieve isEqualToDictionary:sample]);
     

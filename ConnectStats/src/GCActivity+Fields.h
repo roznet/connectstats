@@ -29,8 +29,9 @@
 
 @interface GCActivity (Fields)
 
--(GCNumberWithUnit*)numberWithUnitForFieldFlag:(gcFieldFlag)fieldFlag;
--(GCNumberWithUnit*)numberWithUnitForFieldKey:(NSString*)fieldKey;
+-(GCField*)fieldForKey:(NSString*)fieldkey;
+-(GCNumberWithUnit*)numberWithUnitForFieldFlag:(gcFieldFlag)fieldFlag ;
+-(GCNumberWithUnit*)numberWithUnitForFieldKey:(NSString*)fieldKey ;
 
 /**
  *  Organized and group fields available in the activity

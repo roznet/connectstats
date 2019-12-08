@@ -46,6 +46,7 @@
 -(NSString*)YYYYMMDDhhmmssGMT;
 -(NSString*)YYYYMMDDhhmm;
 -(NSString*)YYYYMMDD;
+-(NSString*)sqliteDateFormat;
 -(BOOL)isSameCalendarDay:(NSDate*)aDate calendar:(NSCalendar*)cal;
 -(NSComparisonResult)compareCalendarDay:(NSDate *)other include:(BOOL)flag calendar:(NSCalendar*)cal;
 -(NSString*)calendarUnitFormat:(NSCalendarUnit)aUnit;

@@ -21,6 +21,8 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).FITDocument</string>
 		</dict>
@@ -42,7 +44,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.0.0</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.sports</string>
 	<key>LSMinimumSystemVersion</key>

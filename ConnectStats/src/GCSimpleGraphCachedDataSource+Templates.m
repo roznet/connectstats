@@ -557,6 +557,29 @@
     return rv;
 }
 
+
++(GCSimpleGraphCachedDataSource*)derivedHist:(NSString*)activityType
+                                       field:(GCField*)field
+                                      series:(GCStatsSerieOfSerieWithUnits*)serieOfSeries
+                                       width:(CGFloat)width{
+    GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+    rv.xUnit = [GCUnit dateshort];
+    NSArray<UIColor*>* colors = [GCViewConfig arrayOfColorsForMultiplots];
+    NSUInteger i=0;
+    for (NSNumber * xval in @[ @(30.0), @(60.0), @(60.*10.0), @(60.*30.0)]) {
+        GCStatsDataSerieWithUnit * serieu = [serieOfSeries serieForX:[GCNumberWithUnit numberWithUnit:[GCUnit second] andValue:xval.doubleValue]];
+        GCSimpleGraphDataHolder * holder = [GCSimpleGraphDataHolder dataHolder:serieu.serie
+                                                                          type:gcGraphLine
+                                                                         color:colors[i]
+                                                                       andUnit:serieu.unit];
+        holder.legend = [[GCNumberWithUnit numberWithUnit:[GCUnit second] andValue:xval.doubleValue] formatDouble];
+        i++;
+        [rv addDataHolder:holder];
+    }
+    
+    return rv;
+}
+
 +(GCSimpleGraphCachedDataSource*)derivedData:(NSString*)activityType
                                        field:(gcFieldFlag)fieldInput
                                          for:(NSDate*)date

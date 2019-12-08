@@ -39,5 +39,6 @@
 +(GCSimpleGraphCachedDataSource*)derivedData:(NSString*)activityType field:(gcFieldFlag)field for:(NSDate*)date width:(CGFloat)width;
 
 +(GCSimpleGraphCachedDataSource*)trackFieldFrom:(GCTrackStats*)trackStats;
++(GCSimpleGraphCachedDataSource*)derivedHist:(NSString*)activityType field:(GCField*)field series:(GCStatsSerieOfSerieWithUnits*)serieOfSeries width:(CGFloat)width;
 
 @end

@@ -156,8 +156,7 @@
         NSString * expectedImperial = one[4];
         NSString * expectedMetric   = one[5];
         
-        GCFormattedField * field = [GCFormattedField formattedField:afield activityType:atype forNumber:num forSize:12.];
-        
+        GCFormattedField * field = [GCFormattedField formattedField:[GCField fieldForKey:afield andActivityType:atype] forNumber:num forSize:12.];
 
         [GCUnit setGlobalSystem:GCUnitSystemImperial];
         XCTAssertEqualObjects(field.attributedString.string, expectedImperial, @"Imperial %@", expectedImperial);

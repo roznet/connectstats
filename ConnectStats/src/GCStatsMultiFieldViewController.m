@@ -504,7 +504,7 @@
     return [self categoryNameForSection:section];
 }
 
-#pragma mark - Statistics Cells
+#pragma mark - Historical Statistics Cells
 
 -(GCSimpleGraphCachedDataSource*)dataSourceForField:(GCField*)field{
     GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:field];
@@ -534,6 +534,8 @@
     }
     return cell;
 }
+
+#pragma mark - Field Summary Cells
 
 -(UITableViewCell*)tableView:(UITableView *)tableView fieldSummaryCell:(NSIndexPath *)indexPath{
     GCCellGrid * cell = [GCCellGrid gridCell:tableView];
@@ -571,7 +573,7 @@
 }
 
 
-#pragma mark - Summary Cells
+#pragma mark - Analysis Summary Cells
 
 -(UITableViewCell*)tableView:(UITableView *)tableView performanceCellForRowAtIndexPath:(NSIndexPath *)indexPath{
     GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
@@ -591,6 +593,33 @@
         [graphCell setDataSource:cache andConfig:cache];
     }
     return graphCell;
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
+    graphCell.cellDelegate = self;
+
+    GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:self.activityType];
+    GCStatsSerieOfSerieWithUnits * serieOfSerie = [[GCAppGlobal derived] timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
+        return [act.activityType isEqualToString:self.activityType];
+    } withLimit:60]];
+    
+    //GCStatsSerieOfSerieWithUnits * historical = [[GCAppGlobal derived] timeSeriesOfSeriesFor:field];
+    //[serieOfSerie addSerieOfSerie:historical];
+    GCSimpleGraphCachedDataSource * cache = nil;
+    if (serieOfSerie) {
+        cache = [GCSimpleGraphCachedDataSource derivedHist:self.activityType field:field series:serieOfSerie width:tableView.frame.size.width];
+        cache.emptyGraphLabel = @"";
+        graphCell.legend = true;
+        [graphCell setDataSource:cache andConfig:cache];
+    }else{
+        cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+        cache.emptyGraphLabel = @"";
+        [graphCell setDataSource:cache andConfig:cache];
+    }
+
+    return graphCell;
+
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView derivedCellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -696,6 +725,8 @@
         }else{
             rv = [self tableView:tableView derivedCellForRowAtIndexPath:indexPath];
         }
+    }else if(indexPath.row == GC_SUMMARY_DERIVED_HIST){
+        rv = [self tableView:tableView derivedHistCellForRowAtIndexPath:indexPath];
     }
     rv.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
     return rv;

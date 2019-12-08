@@ -535,7 +535,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         [point fixupDrillData:time inActivity:self];
         time = [time dateByAddingTimeInterval:point.elapsed];
     }
-    [GCFieldsCalculated addCalculatedFieldsToTrackPoints:self.lapsCache forActivity:self];
+    [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
 }
 
 -(void)loadTrackPointsExtraFromDb:(FMDatabase*)db{
@@ -747,7 +747,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         rv = true;
     }
     
-    [GCFieldsCalculated addCalculatedFieldsToTrackPoints:self.lapsCache forActivity:self];
+    [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
     
     if([self updateSummaryFromTrackpoints:self.trackpointsCache missingOnly:TRUE]){
         rv = true;
@@ -904,7 +904,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         }
     }
 
-    [GCFieldsCalculated addCalculatedFieldsToTrackPoints:self.lapsCache forActivity:self];
+    [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
 }
 
 -(void)forceReloadTrackPoints{
@@ -1206,7 +1206,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if (laps) {
         self.lapsCache = laps;
         [self remapLapIndex:laps];
-        [GCFieldsCalculated addCalculatedFieldsToTrackPoints:self.lapsCache forActivity:self];
+        [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
         self.calculatedLapName = name;
         return true;
     }

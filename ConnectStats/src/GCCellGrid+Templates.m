@@ -154,13 +154,13 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         if (inputs.count>0) {
             field = [GCField field:inputs[0] forActivityType:activity.activityType];
             GCNumberWithUnit * mainN = [activity numberWithUnitForField:field];
-            mainF = [GCFormattedField formattedField:field.key activityType:activity.activityType forNumber:mainN forSize:16.];
+            mainF = [GCFormattedField formattedField:field forNumber:mainN forSize:16.];
 
             for (NSUInteger i=1; i<inputs.count; i++) {
-                NSString * addField = inputs[i];
-                GCNumberWithUnit * addNumber = [activity numberWithUnitForFieldKey:addField];
+                GCField * addField = [activity fieldForKey:inputs[i]];
+                GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
                 if (addNumber) {
-                    GCFormattedField* theOne = [GCFormattedField formattedField:addField activityType:activity.activityType forNumber:addNumber forSize:14.];
+                    GCFormattedField* theOne = [GCFormattedField formattedField:addField forNumber:addNumber forSize:14.];
                     theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     if ([addNumber sameUnit:mainN]) {
@@ -176,13 +176,13 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
             NSArray * related = [field relatedFields];
 
             GCNumberWithUnit * mainN = [activity numberWithUnitForField:field];
-            mainF = [GCFormattedField formattedField:field.key activityType:activity.activityType forNumber:mainN forSize:16.];
+            mainF = [GCFormattedField formattedField:field forNumber:mainN forSize:16.];
 
             for (NSUInteger i=0; i<related.count; i++) {
                 GCField * addField = related[i];
                 GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
                 if (addNumber) {
-                    GCFormattedField* theOne = [GCFormattedField formattedField:addField.key activityType:activity.activityType forNumber:addNumber forSize:14.];
+                    GCFormattedField* theOne = [GCFormattedField formattedField:addField forNumber:addNumber forSize:14.];
                     theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
                     if ([addNumber sameUnit:mainN]) {
@@ -356,13 +356,11 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 #pragma mark - Activity List Summary
 
 -(void)setupSummaryFromDayActivity:(GCActivity *)activity width:(CGFloat)width status:(gcViewActivityStatus)status{
-    GCFormattedField * distance = [GCFormattedField formattedField:nil activityType:nil
-                                                         forNumber:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDistance] forSize:16.];
+    GCFormattedField * distance = [GCFormattedField formattedField:nil forNumber:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDistance] forSize:16.];
 
     GCNumberWithUnit * nu_steps = [activity numberWithUnitForFieldKey:@"SumStep"];
     GCNumberWithUnit * nu_goal  = [activity numberWithUnitForFieldKey:@"GoalSumStep"];
-    GCFormattedField * steps = [GCFormattedField formattedField:nil activityType:nil
-                                                         forNumber:nu_steps forSize:14.];
+    GCFormattedField * steps = [GCFormattedField formattedField:nil forNumber:nu_steps forSize:14.];
 
     NSDictionary * dateAttributes = @{ NSFontAttributeName:[GCViewConfig boldSystemFontOfSize:16.],
                                        NSForegroundColorAttributeName:[GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]
@@ -422,11 +420,10 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 }
 
 -(void)setupSummaryFromTennisActivity:(GCActivityTennis*)activity width:(CGFloat)width status:(gcViewActivityStatus)status{
-    GCFormattedField * duration = [GCFormattedField formattedField:nil activityType:nil
-                                                         forNumber:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDuration] forSize:16.];
+    GCFormattedField * duration = [GCFormattedField formattedFieldForNumber:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDuration] forSize:16.];
 
     GCNumberWithUnit * val = [activity numberWithUnitForFieldFlag:gcFieldFlagTennisShots];
-    GCFormattedField * shots = [GCFormattedField formattedField:nil activityType:nil forNumber:val forSize:16.];
+    GCFormattedField * shots = [GCFormattedField formattedFieldForNumber:val forSize:16.];
 
     NSDictionary * locAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
                                      NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorHighlightedText]};
@@ -497,17 +494,13 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     GCNumberWithUnit * speednu = [activity numberWithUnitForFieldFlag:gcFieldFlagWeightedMeanSpeed];
     GCNumberWithUnit * bpmnu = [activity numberWithUnitForFieldFlag:gcFieldFlagWeightedMeanHeartRate];
 
-    GCFormattedField * duration = [GCFormattedField formattedField:nil activityType:nil
-                                                         forNumber:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDuration] forSize:16.];
+    GCFormattedField * duration = [GCFormattedField formattedFieldForNumber:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDuration] forSize:16.];
 
-    GCFormattedField * distance = [GCFormattedField formattedField:nil activityType:nil
-                                                         forNumber:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDistance] forSize:16.];
+    GCFormattedField * distance = [GCFormattedField formattedFieldForNumber:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDistance] forSize:16.];
 
-    GCFormattedField * bpm      = [GCFormattedField formattedField:nil activityType:nil
-                                                         forNumber:bpmnu forSize:12.];
+    GCFormattedField * bpm      = [GCFormattedField formattedFieldForNumber:bpmnu forSize:12.];
 
-    GCFormattedField * speed    = [GCFormattedField formattedField:nil activityType:nil
-                                                         forNumber:speednu forSize:12.];
+    GCFormattedField * speed    = [GCFormattedField formattedFieldForNumber:speednu forSize:12.];
 
     BOOL skipAlways = activity.skipAlways;
     BOOL showBpm = ( bpmnu != nil && bpmnu.value!=0.);
@@ -517,13 +510,11 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
         if ([activity.activityTypeDetail isEqualToString:GC_TYPE_SKI_DOWN]) {
             GCNumberWithUnit * loss = [activity numberWithUnitForFieldKey:@"LossElevation"];
-            bpm = [GCFormattedField formattedField:nil activityType:nil
-                                           forNumber:loss forSize:12.];
+            bpm = [GCFormattedField formattedFieldForNumber:loss forSize:12.];
             showBpm = true;
         }else{
             GCNumberWithUnit * gain = [activity numberWithUnitForFieldKey:@"GainElevation"];
-            speed = [GCFormattedField formattedField:nil activityType:nil
-                                           forNumber:gain forSize:12.];
+            speed = [GCFormattedField formattedFieldForNumber:gain forSize:12.];
             showSpeed = true;
         }
     }
@@ -562,7 +553,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         //FIX
         GCNumberWithUnit * val = [activity numberWithUnitForFieldFlag:gcFieldFlagTennisShots];
         if (val!=nil && val.value != 0.) {
-            distance = [GCFormattedField formattedField:nil activityType:nil forNumber:val forSize:16.];
+            distance = [GCFormattedField formattedFieldForNumber:val forSize:16.];
         }else{
             distance = nil;
         }
@@ -689,50 +680,32 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     GCFormattedField * detail2  = nil;
 
     if ([data.activityType isEqualToString:GC_TYPE_DAY]) {
-        main1 = [GCFormattedField formattedField:nil
-                                    activityType:nil
-                                       forNumber:[data numberWithUnit:gcAggregatedSumStep statType:gcAggregatedSum andActivityType:GC_TYPE_DAY]
+        main1 = [GCFormattedField formattedFieldForNumber:[data numberWithUnit:gcAggregatedSumStep statType:gcAggregatedSum andActivityType:GC_TYPE_DAY]
                                          forSize:16.];
-        detail1 = [GCFormattedField formattedField:nil
-                                    activityType:nil
-                                       forNumber:durationN
+        detail1 = [GCFormattedField formattedFieldForNumber:durationN
                                          forSize:14.];
     }else if([data.activityType isEqualToString:GC_TYPE_TENNIS]){
 
-        main1 = [GCFormattedField formattedField:nil
-                                    activityType:nil
-                                       forNumber:[data numberWithUnit:gcAggregatedTennisShots statType:gcAggregatedSum andActivityType:GC_TYPE_DAY]
+        main1 = [GCFormattedField formattedFieldForNumber:[data numberWithUnit:gcAggregatedTennisShots statType:gcAggregatedSum andActivityType:GC_TYPE_DAY]
                                          forSize:16.];
-        detail1 = [GCFormattedField formattedField:nil
-                                      activityType:nil
-                                         forNumber:durationN
+        detail1 = [GCFormattedField formattedFieldForNumber:durationN
                                            forSize:14.];
 
     }else{
-        main1 = [GCFormattedField formattedField:nil
-                                    activityType:nil
-                                       forNumber:durationN
+        main1 = [GCFormattedField formattedFieldForNumber:durationN
                                          forSize:16.];
     }
-    main2 = [GCFormattedField formattedField:nil
-                                activityType:nil
-                                   forNumber:distanceN
+    main2 = [GCFormattedField formattedFieldForNumber:distanceN
                                      forSize:16.];
     if(speedN.isValidValue){
-        detail2 = [GCFormattedField formattedField:nil
-                                      activityType:nil
-                                         forNumber:speedN
+        detail2 = [GCFormattedField formattedFieldForNumber:speedN
                                            forSize:14.];
     }
     if ([data hasField:gcAggregatedWeightedHeartRate]) {
-        detail1 = [GCFormattedField formattedField:nil
-                                      activityType:nil
-                                         forNumber:[data numberWithUnit:gcAggregatedWeightedHeartRate statType:gcAggregatedAvg andActivityType:activityType]
+        detail1 = [GCFormattedField formattedFieldForNumber:[data numberWithUnit:gcAggregatedWeightedHeartRate statType:gcAggregatedAvg andActivityType:activityType]
                                            forSize:14.];
     }else if ([data.activityType isEqualToString:GC_TYPE_TENNIS]){
-        detail1 = [GCFormattedField formattedField:nil
-                                      activityType:nil
-                                         forNumber:[data numberWithUnit:gcAggregatedTennisPower statType:gcAggregatedAvg andActivityType:activityType]
+        detail1 = [GCFormattedField formattedFieldForNumber:[data numberWithUnit:gcAggregatedTennisPower statType:gcAggregatedAvg andActivityType:activityType]
                                            forSize:14.];
         detail2 = nil;
 
@@ -802,24 +775,35 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         }
     }
 
-    if (mainN==nil) {
-        return;
-    }
-    if (mainN.unit==nil) {
-        RZLog(RZLogError, @"%@ had no unit", data.field);
-        return;
-    }
 
     NSString * fieldName = [data.field displayName];
     if (fieldName==nil) {
         fieldName = data.field.key;
     }
-    GCFormattedField * count = [GCFormattedField formattedField:@"Count" activityType:aType forNumber:[data countWithUnit:which] forSize:14.];
+    
+    if (mainN==nil || mainN.unit==nil) {
+        if (mainN.unit==nil) {
+            RZLog(RZLogError, @"%@ had no unit", data.field);
+        }
+
+        if( [data weightedAverageWithUnit:gcHistoryStatsAll] ){
+            [self setupForRows:2 andCols:2];
+            [self labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:fieldName attribute:@selector(attribute16Gray)];
+            [self configForRow:0 andCol:0].horizontalOverflow = YES;
+            [self labelForRow:0 andCol:1].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"No Data", @"Field Summary") attribute:@selector(attribute14Gray)];
+            [GCViewConfig setupGradientForDetails:self];
+
+        }
+        return;
+    }
+
+    
+    GCFormattedField * count = [GCFormattedField formattedFieldDisplay:@"Count" forNumber:[data countWithUnit:which] forSize:14.];
     GCFormattedField * extra = nil;
     if ([data.field canSum]) {
-        extra = [GCFormattedField formattedField:@"Average" activityType:aType forNumber:[data averageWithUnit:which] forSize:14.];
+        extra = [GCFormattedField formattedFieldDisplay:@"Average" forNumber:[data averageWithUnit:which] forSize:14.];
     }else if ([data.field isMax]){
-        extra = [GCFormattedField formattedField:@"Max" activityType:aType forNumber:[data maxWithUnit:which] forSize:14.];
+        extra = [GCFormattedField formattedFieldDisplay:@"Max" forNumber:[data maxWithUnit:which] forSize:14.];
     }
     [count setColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
     [extra setColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
@@ -863,17 +847,17 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
 
     if ([field canSum]) {
-        main = [GCFormattedField formattedField:nil     activityType:nil forNumber:sumN forSize: 16.];
-        extra =[GCFormattedField formattedField:@"Avg"  activityType:nil forNumber:avgN forSize:14.];
+        main = [GCFormattedField formattedField:nil     forNumber:sumN forSize: 16.];
+        extra =[GCFormattedField formattedFieldDisplay:@"Avg" forNumber:avgN forSize:14.];
         extra.noDisplayField = true;
     }else{
-        main =[GCFormattedField formattedField:nil activityType:nil forNumber:avgN forSize:16.];
+        main =[GCFormattedField formattedFieldForNumber:avgN forSize:16.];
     }
 
-    GCFormattedField * cntF = [GCFormattedField formattedField:@"Count" activityType:nil forNumber:cntN forSize:12.];
-    GCFormattedField * maxF = [GCFormattedField formattedField:@"Max" activityType:nil forNumber:maxN forSize:12.];
-    GCFormattedField * minF = [GCFormattedField formattedField:@"Min" activityType:nil forNumber:minN forSize:12.];
-    GCFormattedField * stdF = [GCFormattedField formattedField:@"Std" activityType:nil forNumber:stdN forSize:12.];
+    GCFormattedField * cntF = [GCFormattedField formattedFieldDisplay:@"Count" forNumber:cntN forSize:12.];
+    GCFormattedField * maxF = [GCFormattedField formattedFieldDisplay:@"Max"  forNumber:maxN forSize:12.];
+    GCFormattedField * minF = [GCFormattedField formattedFieldDisplay:@"Min" forNumber:minN forSize:12.];
+    GCFormattedField * stdF = [GCFormattedField formattedFieldDisplay:@"Std"  forNumber:stdN forSize:12.];
 
     cntF.noDisplayField = true;
     maxF.noDisplayField = true;
@@ -1023,18 +1007,18 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         pow = [lap numberWithUnitForField:gcFieldFlagPower andActivityType:activity.activityType];
     }
 
-    GCFormattedField * distF = [GCFormattedField formattedField:nil activityType:nil forNumber:dist forSize:16.];
-    GCFormattedField * speedF= [GCFormattedField formattedField:nil activityType:nil forNumber:speed forSize:14.];
-    GCFormattedField * durF= [GCFormattedField formattedField:nil activityType:nil forNumber:dur forSize:16.];
-    GCFormattedField * bpmF= bpm ? [GCFormattedField formattedField:nil activityType:nil forNumber:bpm forSize:14.] : nil;
-    GCFormattedField * cadF= cad ? [GCFormattedField formattedField:nil activityType:nil forNumber:cad forSize:14.] : nil;
-    GCFormattedField * powF= pow ? [GCFormattedField formattedField:nil activityType:nil forNumber:pow forSize:14.] : nil;
+    GCFormattedField * distF = [GCFormattedField formattedFieldForNumber:dist forSize:16.];
+    GCFormattedField * speedF= [GCFormattedField formattedFieldForNumber:speed forSize:14.];
+    GCFormattedField * durF= [GCFormattedField formattedFieldForNumber:dur forSize:16.];
+    GCFormattedField * bpmF= bpm ? [GCFormattedField formattedFieldForNumber:bpm forSize:14.] : nil;
+    GCFormattedField * cadF= cad ? [GCFormattedField formattedFieldForNumber:cad forSize:14.] : nil;
+    GCFormattedField * powF= pow ? [GCFormattedField formattedFieldForNumber:pow forSize:14.] : nil;
 
     BOOL isSki = [activity isSkiActivity];
 
     if ([activity.activityType isEqualToString:GC_TYPE_SWIMMING]) {
         if (dist.value == 0.) {
-            distF = [GCFormattedField formattedField:@"Rest" activityType:nil forNumber:nil forSize:14.];
+            distF = [GCFormattedField formattedFieldDisplay:@"Rest" forNumber:nil forSize:14.];
             distF.noDisplayField = true;
             speedF = nil;
         }
@@ -1058,7 +1042,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
             }
         }
         if (elev) {
-            bpmF = [GCFormattedField formattedField:nil activityType:nil forNumber:elev forSize:14.];
+            bpmF = [GCFormattedField formattedFieldForNumber:elev forSize:14.];
         }
     }
     if (lap.label) {
@@ -1113,7 +1097,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         GCUnit * displayUnit = [activity displayUnitForField:field];
 
         GCNumberWithUnit * number = [[aLap numberWithUnitForField:field inActivity:activity] convertToUnit:displayUnit];;
-        GCFormattedField * numberF = [GCFormattedField formattedField:nil activityType:nil forNumber:number forSize:16.];
+        GCFormattedField * numberF = [GCFormattedField formattedFieldForNumber:number forSize:16.];
 
         [self labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                                  withString:display ?: field.key];
@@ -1155,13 +1139,13 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         NSString * field2   = [GCFields fieldForLapField:key andActivityType:aType];
         NSString * display2 = [GCFields fieldDisplayName:field2 activityType:aType];
 
-        GCFormattedField * numberF1 = [GCFormattedField formattedField:nil activityType:nil forNumber:number1 forSize:16.];
+        GCFormattedField * numberF1 = [GCFormattedField formattedFieldForNumber:number1 forSize:16.];
 
         GCNumberWithUnit * number2 = [aLap numberWithUnitForExtraByField:[GCField fieldForKey:key andActivityType:aType]];
 
         GCFormattedField * number2F = wide ?
-            [GCFormattedField formattedField:nil activityType:nil forNumber:number2 forSize:16.]:
-            [GCFormattedField formattedField:nil activityType:nil forNumber:number2 forSize:14.];
+            [GCFormattedField formattedFieldForNumber:number2 forSize:16.]:
+            [GCFormattedField formattedFieldForNumber:number2 forSize:14.];
         if (!wide) {
             [number2F setColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
         }
@@ -1214,18 +1198,18 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     GCNumberWithUnit * cad  = [lap numberWithUnitForField:gcFieldFlagCadence andActivityType:activity.activityType];
     GCNumberWithUnit * lgth = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"SumNumLengths" andActivityType:GC_TYPE_SWIMMING]];
 
-    GCFormattedField * distF = [GCFormattedField formattedField:nil activityType:nil forNumber:dist  forSize:16.];
-    GCFormattedField * speedF= [GCFormattedField formattedField:nil activityType:nil forNumber:speed forSize:14.];
-    GCFormattedField * durF  = [GCFormattedField formattedField:nil activityType:nil forNumber:dur   forSize:16.];
-    GCFormattedField * cadF  = [GCFormattedField formattedField:nil activityType:nil forNumber:cad   forSize:14.];
+    GCFormattedField * distF = [GCFormattedField formattedFieldForNumber:dist  forSize:16.];
+    GCFormattedField * speedF= [GCFormattedField formattedFieldForNumber:speed forSize:14.];
+    GCFormattedField * durF  = [GCFormattedField formattedFieldForNumber:dur   forSize:16.];
+    GCFormattedField * cadF  = [GCFormattedField formattedFieldForNumber:cad   forSize:14.];
     //GCFormattedField * lgthF = [GCFormattedField formattedField:nil activityType:nil forNumber:lgth forSize:14.];
 
-    GCFormattedField * stke  = [GCFormattedField formattedField:[GCFields swimStrokeName:lap.directSwimStroke] activityType:nil forNumber:nil forSize:12];
+    GCFormattedField * stke  = [GCFormattedField formattedFieldDisplay:[GCFields swimStrokeName:lap.directSwimStroke] forNumber:nil forSize:12];
     stke.noDisplayField = true;
     [stke setColor:[GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText]];
 
     if (![lap active]) {
-        distF = [GCFormattedField formattedField:@"Rest" activityType:nil forNumber:nil forSize:14];
+        distF = [GCFormattedField formattedFieldDisplay:@"Rest" forNumber:nil forSize:14];
         distF.noDisplayField = true;
         speedF = nil;
         cadF = nil;

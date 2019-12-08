@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(GCStatsDatabase*)database:(FMDatabase*)db table:(NSString*)tableName;
 
 -(void)save:(GCStatsDataSerie*)serie keys:(NSDictionary*)keys;
--(GCStatsDataSerie*)loadForKeys:(NSDictionary*)keys;
+-(nullable GCStatsDataSerie*)loadForKeys:(NSDictionary*)keys;
 -(NSDictionary<NSDictionary*,GCStatsDataSerie*>*)loadByKeys;
 
 @end

@@ -178,6 +178,8 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2);
 -(GCStatsDataSerie*)movingAverageForUnit:(double)unit;
 -(GCStatsDataSerie*)movingSumForUnit:(double)unit;
 -(GCStatsDataSerie*)movingAverageOrSumOf:(GCStatsDataSerie*)rawother forUnit:(double)unit offset:(double)offset average:(BOOL)avg;
+-(GCStatsDataSerie*)movingFunctionForUnit:(double)unit function:(double(^)(NSArray<GCStatsDataPoint*>*))fct;
+
 /**
  Generate a serie for which x are bcukets spaning Ys with size spacing * k such that number of bucket is less than maxBucket
 

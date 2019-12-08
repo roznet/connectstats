@@ -237,7 +237,6 @@
                         holderAll.field = fieldAll;
                         fieldKeyData[fieldAll] = holderAll;
                     }
-                    
                     GCNumberWithUnit * nu = [act numberWithUnitForField:field];
                     if (nu) {
                         // weight is either duration (everything) or dist (for pace = invlinear)

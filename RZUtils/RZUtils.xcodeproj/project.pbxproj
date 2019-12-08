@@ -216,6 +216,8 @@
 		42793B141F3F5007005FAF02 /* RZSAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42793B131F3F5007005FAF02 /* RZSAttributedString.swift */; };
 		42793B2A1F40559E005FAF02 /* RZSRemoteURLFindValid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42793B291F40559E005FAF02 /* RZSRemoteURLFindValid.swift */; };
 		4284A89F1EBF6184003B44C1 /* RZUtilsTestsDataPivot.m in Sources */ = {isa = PBXBuildFile; fileRef = 4284A89E1EBF6184003B44C1 /* RZUtilsTestsDataPivot.m */; };
+		42880C382381E1500030C3C1 /* GCStatsSerieOfSerieWithUnits.h in Headers */ = {isa = PBXBuildFile; fileRef = 42880C362381E1500030C3C1 /* GCStatsSerieOfSerieWithUnits.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42880C392381E1500030C3C1 /* GCStatsSerieOfSerieWithUnits.m in Sources */ = {isa = PBXBuildFile; fileRef = 42880C372381E1500030C3C1 /* GCStatsSerieOfSerieWithUnits.m */; };
 		428A0FF61EB7CB3800DD119B /* TSDataCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 423829611EAB552000252217 /* TSDataCell.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		428A0FF71EB7CB3800DD119B /* TSDataPivot+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 423829631EAB552000252217 /* TSDataPivot+Format.m */; };
 		428A0FF81EB7CB3800DD119B /* TSDataPivot.m in Sources */ = {isa = PBXBuildFile; fileRef = 423829651EAB552000252217 /* TSDataPivot.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
@@ -516,6 +518,8 @@
 		42793B131F3F5007005FAF02 /* RZSAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZSAttributedString.swift; sourceTree = "<group>"; };
 		42793B291F40559E005FAF02 /* RZSRemoteURLFindValid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZSRemoteURLFindValid.swift; sourceTree = "<group>"; };
 		4284A89E1EBF6184003B44C1 /* RZUtilsTestsDataPivot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RZUtilsTestsDataPivot.m; sourceTree = "<group>"; };
+		42880C362381E1500030C3C1 /* GCStatsSerieOfSerieWithUnits.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCStatsSerieOfSerieWithUnits.h; sourceTree = "<group>"; };
+		42880C372381E1500030C3C1 /* GCStatsSerieOfSerieWithUnits.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCStatsSerieOfSerieWithUnits.m; sourceTree = "<group>"; };
 		428BE85420013D4200E14A61 /* RZUtilsTestInfra.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RZUtilsTestInfra.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		428BE85620013D4200E14A61 /* RZUtilsTestInfra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RZUtilsTestInfra.h; sourceTree = "<group>"; };
 		428BE85720013D4200E14A61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -796,6 +800,8 @@
 				4238298B1EAB552000252217 /* GCStatsFunctions.m */,
 				4256366D234A2E4000939A1A /* GCStatsDatabase.h */,
 				4256366E234A2E4000939A1A /* GCStatsDatabase.m */,
+				42880C362381E1500030C3C1 /* GCStatsSerieOfSerieWithUnits.h */,
+				42880C372381E1500030C3C1 /* GCStatsSerieOfSerieWithUnits.m */,
 			);
 			path = stats;
 			sourceTree = "<group>";
@@ -1292,6 +1298,7 @@
 				423829F51EAB552000252217 /* GCStatsDateBuckets.h in Headers */,
 				423829EF1EAB552000252217 /* GCStatsDataSerie.h in Headers */,
 				42382AC71EAC9B6500252217 /* TSDataPivot+Format.h in Headers */,
+				42880C382381E1500030C3C1 /* GCStatsSerieOfSerieWithUnits.h in Headers */,
 				42382A331EAB552000252217 /* LCLLogFile.h in Headers */,
 				423829DF1EAB552000252217 /* NSDate+RZHelper.h in Headers */,
 				423829E11EAB552000252217 /* NSDateComponents+RZHelper.h in Headers */,
@@ -1881,6 +1888,7 @@
 				423829F81EAB552000252217 /* GCStatsFunctions.m in Sources */,
 				42382A191EAB552000252217 /* RZMemory.m in Sources */,
 				423829EE1EAB552000252217 /* GCStatsDataPointMulti.m in Sources */,
+				42880C392381E1500030C3C1 /* GCStatsSerieOfSerieWithUnits.m in Sources */,
 				42382A121EAB552000252217 /* RZFileOrganizer.m in Sources */,
 				42382A041EAB552000252217 /* FMResultSet+RZHelper.m in Sources */,
 				42382A291EAB552000252217 /* FMDatabase.m in Sources */,

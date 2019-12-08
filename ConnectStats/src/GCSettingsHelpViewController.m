@@ -38,12 +38,14 @@
 @implementation GCSettingsHelpViewController
 -(void)dealloc{
     [_webView release];
+    [_url release];
+    
     [super dealloc];
 }
 
 
 +(GCSettingsHelpViewController*)helpViewControllerFor:(NSURL*)url{
-    GCSettingsHelpViewController * rv = [[GCSettingsHelpViewController alloc] initWithNibName:nil bundle:nil];
+    GCSettingsHelpViewController * rv = RZReturnAutorelease([[GCSettingsHelpViewController alloc] initWithNibName:nil bundle:nil]);
     if (rv) {
         rv.url = url;
         if( rv.url == nil){

@@ -824,7 +824,6 @@
             }else{
                 [self.navigationController pushViewController:detail animated:YES];
             }
-            [detail release];
         }
     }else if (section == GC_SECTION_PARAMS){
         if(indexPath.row == GC_SETTINGS_UNITS){

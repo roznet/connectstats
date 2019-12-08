@@ -118,6 +118,8 @@
 -(GCNumberWithUnit*)numberWithUnitForField:(GCField*)aF inActivity:(GCActivity*)act;
 -(void)setNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)field inActivity:(GCActivity*)act;
 
+-(BOOL)hasField:(GCField*)field inActivity:(GCActivity*)act;
+
 /**
  Access for extra stored as double*, localized by ExtraIndex
  This is the typical way trackpoints store extra data
@@ -140,5 +142,6 @@
 
 -(void)addNumberWithUnitForCalculated:(GCNumberWithUnit*)aN forField:(GCField*)aF;
 -(void)updateWithNextPoint:(GCTrackPoint*)next;
+
 
 @end

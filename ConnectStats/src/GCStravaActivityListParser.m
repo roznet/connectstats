@@ -44,7 +44,7 @@
     [super dealloc];
 }
 -(NSArray*)parse:(NSData*)input{
-    self.hasError = false;
+    self.status = GCWebStatusOK;
 
     NSError * e = nil;
     id parsed = [NSJSONSerialization JSONObjectWithData:input options:NSJSONReadingMutableContainers error:&e];
@@ -81,6 +81,9 @@
             if (json[@"message"]) {
                 RZLog(RZLogError, @"Got message %@", json[@"message"]);
                 saveBadJson =true;
+                if( [json[@"message"] containsString:@"Authorization Error"]){
+                    self.status = GCWebStatusAccessDenied;
+                }
             }
 
         }else{
@@ -93,7 +96,9 @@
     }
 
     if (saveBadJson) {
-        self.hasError = true;
+        if( self.status == GCWebStatusOK){
+            self.status = GCWebStatusParsingFailed;
+        }
         NSString * fn = @"error_strava_search.json";
         [input writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:true];
 

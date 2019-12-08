@@ -34,6 +34,16 @@
     return rv;
 }
 
+#if !__has_feature(objc_arc)
+-(void)dealloc{
+    [_db release];
+    [_tableName release];
+    [_definitionTableName release];
+    [_dataPointColumnNamePrefix release];
+    
+    [super dealloc];
+}
+#endif
 -(NSDictionary*)convertKeysToType:(NSDictionary*)keys{
     NSMutableDictionary * rv = [NSMutableDictionary dictionary];
     for (NSString * key in keys) {
@@ -154,6 +164,9 @@
         NSObject * val = keys[key];
         if( [val isKindOfClass:[NSString class]] ){
             [where addObject:[NSString stringWithFormat:@"%@ = '%@'", key, val]];
+        }else if( [val isKindOfClass:[NSDate class]] ){
+            NSDate * date = (NSDate*) val;
+            [where addObject:[NSString stringWithFormat:@"%@ = '%@'", key, [date sqliteDateFormat]]];
         }else{
             [where addObject:[NSString stringWithFormat:@"%@ = %@", key, val]];
         }

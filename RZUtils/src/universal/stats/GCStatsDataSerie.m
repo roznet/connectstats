@@ -128,7 +128,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     if (rv) {
         NSMutableArray * tmp = [NSMutableArray arrayWithCapacity:other.count];
         for (GCStatsDataPoint * p in other) {
-            [tmp addObject:[p copy]];
+            [tmp addObject:[p duplicate]];
         }
         rv.dataPoints = tmp;
     }
@@ -991,6 +991,40 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     return rv;
 
 }
+
+-(GCStatsDataSerie*)movingFunctionForUnit:(double)unit function:(double(^)(NSArray<GCStatsDataPoint*>*))fct{
+
+    GCStatsDataSerie * dup = [GCStatsDataSerie dataSerieWithPoints:dataPoints];
+    [dup sortByX];
+    if (fabs(unit)<1.e-8) { // 1 or 0 = same serie
+        return dup;
+    }
+
+    NSMutableArray * samples = [NSMutableArray arrayWithCapacity:dataPoints.count];
+    NSMutableArray * smoothed = [NSMutableArray arrayWithCapacity:dataPoints.count];
+    
+    for (GCStatsDataPoint * point in dup.dataPoints) {
+        // remove point if out of range
+        double left_x = point.x_data - unit;
+        NSUInteger i=0;
+        for (i=0; i<samples.count; i++) {
+            GCStatsDataPoint * sample = samples[i];
+            if (sample.x_data >= left_x ) {
+                break;
+            }
+        }
+        [samples removeObjectsInRange:NSMakeRange(0, i)];
+        [samples addObject:point];
+        double value = fct(samples);
+
+        [smoothed addObject:[GCStatsDataPoint dataPointWithPoint:point andValue:value]];
+    }
+
+    GCStatsDataSerie * rv = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
+    rv.dataPoints = smoothed;
+    return rv;
+}
+
 
 -(GCStatsDataSerie*)movingAverageOrSumForUnit:(double)unit average:(BOOL)avg{
 

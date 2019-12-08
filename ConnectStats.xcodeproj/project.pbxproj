@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -593,6 +593,8 @@
 		4287C2E12221606B0055F584 /* RZFitFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; };
 		4287C2E22221606B0055F584 /* RZFitFile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4287DC101BDB88FE00C54A51 /* GCStatsMultiFieldConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */; };
+		42880C462381EEE00030C3C1 /* track_cs_5582.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42880C3A2381EEDF0030C3C1 /* track_cs_5582.fit */; };
+		42880C472381EEE00030C3C1 /* track_cs_5611.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42880C452381EEDF0030C3C1 /* track_cs_5611.fit */; };
 		428BACF21CB149C50041468A /* activity_1089803211.json in Resources */ = {isa = PBXBuildFile; fileRef = 428BACDD1CB149C50041468A /* activity_1089803211.json */; };
 		428BACF31CB149C50041468A /* activity_1099599108.json in Resources */ = {isa = PBXBuildFile; fileRef = 428BACDE1CB149C50041468A /* activity_1099599108.json */; };
 		428BACF41CB149C50041468A /* activity_1108367966.json in Resources */ = {isa = PBXBuildFile; fileRef = 428BACDF1CB149C50041468A /* activity_1108367966.json */; };
@@ -2303,6 +2305,8 @@
 		4287C30B2221BA3B0055F584 /* FitFileExplorer.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = FitFileExplorer.debug.xcconfig; sourceTree = "<group>"; };
 		4287C30C2221BC390055F584 /* ConnectStatsTestApp.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = ConnectStatsTestApp.debug.xcconfig; path = connectstatstestapp/ConnectStatsTestApp.debug.xcconfig; sourceTree = SOURCE_ROOT; };
 		4287C30D2221BC3A0055F584 /* ConnectStatsTestApp.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = ConnectStatsTestApp.release.xcconfig; path = connectstatstestapp/ConnectStatsTestApp.release.xcconfig; sourceTree = SOURCE_ROOT; };
+		42880C3A2381EEDF0030C3C1 /* track_cs_5582.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = track_cs_5582.fit; sourceTree = "<group>"; };
+		42880C452381EEDF0030C3C1 /* track_cs_5611.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = track_cs_5611.fit; sourceTree = "<group>"; };
 		428BACDD1CB149C50041468A /* activity_1089803211.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_1089803211.json; sourceTree = "<group>"; };
 		428BACDE1CB149C50041468A /* activity_1099599108.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_1099599108.json; sourceTree = "<group>"; };
 		428BACDF1CB149C50041468A /* activity_1108367966.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_1108367966.json; sourceTree = "<group>"; };
@@ -4720,6 +4724,8 @@
 		42AEFEB21DA057F500D7DA6D /* activity_modern_json */ = {
 			isa = PBXGroup;
 			children = (
+				42880C3A2381EEDF0030C3C1 /* track_cs_5582.fit */,
+				42880C452381EEDF0030C3C1 /* track_cs_5611.fit */,
 				42A5D8F523272C8300898FD5 /* activity_4017099594.fit */,
 				42A5D8F123272C8200898FD5 /* activity_4017099594.json */,
 				42A5D8E323272C8000898FD5 /* activity_4018408912.fit */,
@@ -5771,7 +5777,7 @@
 				};
 			};
 			buildConfigurationList = 428FF70315F36888007A88FA /* Build configuration list for PBXProject "ConnectStats" */;
-			compatibilityVersion = "Xcode 8.0";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -6119,6 +6125,7 @@
 				42A5D90423272C8300898FD5 /* strava_stream_2675283580.json in Resources */,
 				42A5D92F2328774700898FD5 /* activity_1382772474.fit in Resources */,
 				42A5D8F923272C8300898FD5 /* last_connectstats_search_20.json in Resources */,
+				42880C472381EEE00030C3C1 /* track_cs_5611.fit in Resources */,
 				428BAD121CB14B650041468A /* activitytrack_1099599108.json in Resources */,
 				42A5D8F723272C8300898FD5 /* activitylaps_4018408912.json in Resources */,
 				42A5D91123272C8300898FD5 /* activity_4017099594.fit in Resources */,
@@ -6196,6 +6203,7 @@
 				422F283920551AE100187478 /* activitylaps_2545022458.json in Resources */,
 				427C65C81D46A4BB00F5DF70 /* strava_athlete.json in Resources */,
 				42A5D917232874A600898FD5 /* modern_activity_types.json in Resources */,
+				42880C462381EEE00030C3C1 /* track_cs_5582.fit in Resources */,
 				420A57EC1CB32C5900EA3B42 /* withings_getmeas_188427.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6604,13 +6612,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-resources.sh",
-				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -6622,15 +6629,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FitFileExplorer/Pods-FitFileExplorer-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/GenericJSON-macOS/GenericJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FitFileExplorer/Pods-FitFileExplorer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FitFileExplorer/Pods-FitFileExplorer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -6642,15 +6646,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
-				"${BUILT_PRODUCTS_DIR}/GenericJSON-iOS/GenericJSON.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -6662,15 +6663,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
-				"${BUILT_PRODUCTS_DIR}/GenericJSON-iOS/GenericJSON.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -6682,15 +6680,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK/Flurry_iOS_SDK.framework",
-				"${BUILT_PRODUCTS_DIR}/GenericJSON-iOS/GenericJSON.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flurry_iOS_SDK.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GenericJSON.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -6720,13 +6715,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-resources.sh",
-				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HealthStats/Pods-HealthStats-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7857,7 +7851,10 @@
 				);
 				INFOPLIST_FILE = "HealthStats/HealthStats-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -7901,7 +7898,10 @@
 				);
 				INFOPLIST_FILE = "HealthStats/HealthStats-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -7935,6 +7935,7 @@
 				CODE_SIGN_ENTITLEMENTS = FitFileExplorer/FitFileExplorer.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2.0.1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -7942,7 +7943,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = FitFileExplorer/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorer";
@@ -7970,6 +7974,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2.0.1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -7978,7 +7983,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = FitFileExplorer/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorer";
@@ -8010,7 +8018,11 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = FitFileExplorerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorerTests";
@@ -8046,7 +8058,11 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = FitFileExplorerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorerTests";
@@ -8152,7 +8168,8 @@
 				PROVISIONING_PROFILE = "14B235DF-EF8A-4F34-BF15-4452D1620A7C";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "14B235DF-EF8A-4F34-BF15-4452D1620A7C";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				WARNING_CFLAGS = "";
@@ -8171,7 +8188,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5.2.0.1;
+				CURRENT_PROJECT_VERSION = 5.2.2.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8188,9 +8205,12 @@
 				GCC_WARN_SHADOW = NO;
 				INFOPLIST_FILE = "ConnectStats/ConnectStats-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 5.2;
+				MARKETING_VERSION = 5.2.2;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -8220,7 +8240,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 5.2.0.1;
+				CURRENT_PROJECT_VERSION = 5.2.2.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = NO;
@@ -8238,9 +8258,12 @@
 				GCC_WARN_SHADOW = NO;
 				INFOPLIST_FILE = "ConnectStats/ConnectStats-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 5.2;
+				MARKETING_VERSION = 5.2.2;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -8249,8 +8272,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.connectstats";
 				PRODUCT_NAME = ConnectStats;
 				PROVISIONING_PROFILE = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStats/ConnectStats-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -8272,7 +8296,11 @@
 				HEADER_SEARCH_PATHS = $CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources;
 				INFOPLIST_FILE = "ConnectStatsTests/ConnectStatsTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.roznet.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -8299,7 +8327,11 @@
 				HEADER_SEARCH_PATHS = $CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources;
 				INFOPLIST_FILE = "ConnectStatsTests/ConnectStatsTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.roznet.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -8339,7 +8371,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ConnectStatsTestApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 5.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.connectstatstestapp";
@@ -8382,7 +8417,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ConnectStatsTestApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 5.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.connectstatstestapp";
@@ -8415,7 +8453,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = HealthStatsTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -8443,7 +8485,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = HealthStatsTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -8476,7 +8522,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ConnectStatsTestAppXCTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.ConnectStatsTestAppXCTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -8511,7 +8561,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ConnectStatsTestAppXCTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.ConnectStatsTestAppXCTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

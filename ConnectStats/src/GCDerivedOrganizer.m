@@ -117,6 +117,8 @@ static BOOL kDerivedEnabled = true;
 @property (nonatomic,retain) NSMutableArray * queue;
 @property (nonatomic,assign) GCWebConnect * web;
 @property (nonatomic,retain) RZPerformance * performance;
+@property (nonatomic,retain) NSMutableDictionary<NSDictionary*,GCStatsDataSerie*> * seriesByKeys;
+@property (nonatomic,retain) NSMutableDictionary<NSDictionary*,GCStatsDataSerie*> * historicalSeriesByKeys;
 @end
 
 @implementation GCDerivedOrganizer
@@ -156,6 +158,8 @@ static BOOL kDerivedEnabled = true;
     [_performance release];
     [_derivedSeries release];
     [_queue release];
+    [_seriesByKeys release];
+    [_historicalSeriesByKeys release];
 
     [super dealloc];
 }
@@ -184,9 +188,80 @@ static BOOL kDerivedEnabled = true;
             }
             self.derivedSeries[serie.key] = serie;
         }
-        RZLog(RZLogInfo, @"Loaded %d derived series", (int)self.derivedSeries.count);
         [self loadProcesseActivities];
+        
+        if( /* DISABLES CODE */ (false) ){
+            [self loadHistoricalFileSeries];
+        }
+        
+        if( [db tableExists:@"gc_derived_time_serie_second"]){
+            GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:@"gc_derived_time_serie_second"];
+            self.seriesByKeys = [NSMutableDictionary dictionaryWithDictionary:[statsDb loadByKeys]];
+            RZLog(RZLogInfo, @"Loaded %d derived series and %@ series by key", (int)self.derivedSeries.count, @(self.seriesByKeys.count));
+        }else{
+            RZLog(RZLogInfo, @"Loaded %d derived series", (int)self.derivedSeries.count);
+        }
     }
+}
+
+-(void)loadHistoricalFileSeries{
+    BOOL convert = ! [[self deriveddb] tableExists:@"gc_converted_historical_second"];
+    
+    GCStatsDatabase * statsDb = [GCStatsDatabase database:[self deriveddb] table:@"gc_converted_historical_second"];
+    RZPerformance * perf = [RZPerformance start];
+    if( convert ){
+        for (NSString * key in self.derivedSeries) {
+            GCDerivedDataSerie * serie = self.derivedSeries[key];
+            if( serie.derivedPeriod == gcDerivedPeriodMonth){
+                [serie loadFromFile:serie.filePath];
+                GCStatsDataSerieWithUnit * base = serie.serieWithUnit;
+                if( [base.xUnit canConvertTo:[GCUnit second]] ){
+                    GCStatsDataSerieWithUnit * standardSerie = [GCActivity standardSerieSampleForXUnit:base.xUnit];
+                    // Make sure we reduce from a copy so we don't destroy the main serie
+                    base = [GCStatsDataSerieWithUnit dataSerieWithOther:base];
+                    [GCStatsDataSerie reduceToCommonRange:standardSerie.serie and:base.serie];
+                    NSDictionary * keys = @{
+                        @"date":serie.bucketStart,
+                        @"field":serie.field.key,
+                        @"activityType":serie.activityType
+                    };
+                    [statsDb save:base.serie keys:keys];
+                }
+            }
+        }
+        RZLog(RZLogInfo, @"Converted all in %@", perf);
+        [perf reset];
+    }
+    self.historicalSeriesByKeys = [NSMutableDictionary dictionaryWithDictionary:[statsDb loadByKeys]];
+    RZLog(RZLogInfo, @"Loaded all db in %@", perf);
+}
+
+-(GCStatsSerieOfSerieWithUnits*)timeSeriesOfSeriesFor:(GCField*)field{
+    GCStatsSerieOfSerieWithUnits * serieOfSerie = [GCStatsSerieOfSerieWithUnits serieOfSerieWithUnits:[GCUnit date]];
+    for (NSDictionary * keys in self.historicalSeriesByKeys) {
+        if( [keys[@"activityType"] isEqualToString:field.activityType] && [keys[@"field"] isEqualToString:field.key] ){
+            NSNumber * dateNum = keys[@"date"];
+            NSDate * date = [NSDate dateWithTimeIntervalSince1970:dateNum.doubleValue];
+            
+            GCStatsDataSerie * serie = self.historicalSeriesByKeys[keys];
+            GCStatsDataSerieWithUnit * serieu=[GCStatsDataSerieWithUnit dataSerieWithUnit:[field unit] xUnit:[GCUnit second] andSerie:serie];
+            [serieOfSerie addSerie:serieu forDate:date];
+        }
+    }
+    return serieOfSerie;
+}
+
+-(GCStatsSerieOfSerieWithUnits*)timeserieOfSeriesFor:(GCField*)field inActivities:(NSArray<GCActivity*>*)activities{
+    
+    GCStatsSerieOfSerieWithUnits * serieOfSerie = [GCStatsSerieOfSerieWithUnits serieOfSerieWithUnits:[GCUnit date]];
+    for (GCActivity * act in activities) {
+        GCStatsDataSerie * serie = self.seriesByKeys[ @{ @"activityId": act.activityId, @"fieldKey":field.key}];
+        if( serie ){
+            GCStatsDataSerieWithUnit * serieu=[GCStatsDataSerieWithUnit dataSerieWithUnit:[act displayUnitForField:field] xUnit:[GCUnit second] andSerie:serie];
+            [serieOfSerie addSerie:serieu forDate:act.date];
+        }
+    }
+    return serieOfSerie;
 }
 
 -(GCDerivedDataSerie*)derivedDataSerieForKey:(NSString*)key{
@@ -403,8 +478,12 @@ static BOOL kDerivedEnabled = true;
                     @"activityId" : element.activity.activityId,
                     @"fieldKey" : field.key,
                 };
-                RZLog(RZLogInfo, @"derived %@ %@ %@", element.activity, field, standard );
+                RZLog(RZLogInfo, @"derived standard: %@ %@ %@", element.activity.activityId, field.key, standard );
                 [statsDb save:standard.serie keys:keys];
+                if( ! self.seriesByKeys){
+                    self.seriesByKeys = [NSMutableDictionary dictionary];
+                }
+                self.seriesByKeys[keys] = standard.serie;
                 
             }
         }

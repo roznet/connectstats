@@ -344,6 +344,8 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
                        @"WHITEWATER_RAFTING_KAYAKING":@"whitewater_rafting_kayaking",
                        @"WIND_KITE_SURFING":@"wind_kite_surfing",
                        @"MULTI_SPORT":@"multi_sport",
+                       @"VIRTUAL_RIDE":@"virtual_ride",
+                       @"VIRTUAL_RUN":@"virtual_run",
                        };
         NSMutableDictionary * dict = [NSMutableDictionary dictionary];
         for (NSString * cstype in types) {

@@ -103,10 +103,11 @@
 
         if (indexPath.row == 0) {
             GCNumberWithUnit * mainN = [self.activity numberWithUnitForFieldKey:@"SumDuration"];
-            GCFormattedField * mainF = [GCFormattedField formattedField:@"SumDuration" activityType:(self.activity).activityType forNumber:mainN forSize:16.];
+            GCFormattedField * mainF = [GCFormattedField formattedField:[GCField fieldForKey:@"SumDuration" andActivityType:self.activity.activityType] forNumber:mainN forSize:16.];
 
             GCNumberWithUnit * secondN = [self.activity numberWithUnitForFieldKey:@"shots"];
-            GCFormattedField * secondF = [GCFormattedField formattedField:@"shots" activityType:(self.activity).activityType forNumber:secondN forSize:16.];
+            
+            GCFormattedField * secondF = [GCFormattedField formattedField:[GCField fieldForKey:@"shots" andActivityType:self.activity.activityType] forNumber:secondN forSize:16.];
 
             secondF.noUnits = true;
             [cell setupForRows:2 andCols:2];

@@ -42,6 +42,9 @@
     return [self numberWithUnitForField:[GCField fieldForFlag:which andActivityType:self.activityType]];
 }
 
+-(GCField*)fieldForKey:(NSString*)fieldkey{
+    return [GCField fieldForKey:fieldkey andActivityType:self.activityType];
+}
 #pragma mark - Grouped Fields
 
 -(NSArray<GCField*>*)displayPrimaryFieldsOrdered{
