@@ -68,8 +68,8 @@ class Activity {
     }
     
     init?(json:[String:JSON]) {
-        if let aId = json["activityId"]?.intValue {
-            self.activityId = "\(aId)"
+        if let aId = json["activityId"]?.doubleValue {
+            self.activityId = String(format: "%.0f", aId)
             
             if let interp = GarminDataInterpreter(json: json) {
                 self.numbers = interp.numbers()
