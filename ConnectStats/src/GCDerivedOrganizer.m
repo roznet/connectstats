@@ -190,7 +190,9 @@ static BOOL kDerivedEnabled = true;
         }
         [self loadProcesseActivities];
         
-        [self loadHistoricalFileSeries];
+        if( /* DISABLES CODE */ (false) ){
+            [self loadHistoricalFileSeries];
+        }
         
         if( [db tableExists:@"gc_derived_time_serie_second"]){
             GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:@"gc_derived_time_serie_second"];
