@@ -330,6 +330,35 @@
             [rv.serie addDataPointWithX:xs[i] andY:xs[i]];
         }
         return rv;
+    }else if( [xUnit canConvertTo:GCUnit.meter] ){
+        GCStatsDataSerieWithUnit * rv = nil;
+        
+        double mile = 1609.344;
+        double km = 1000.0;
+        double marathon = 42.195;
+        
+        double small_xs[] = { 100., 200., 400., 500., 800., 1500. };
+        double big_xs[]   = { 1., 2., 3., 5., 10., 15., 20., 30., 40., 50., 100. };
+        double std_xs[]   = { marathon/2.*km, marathon*km };
+
+        size_t small_n = sizeof(small_xs)/sizeof(double);
+        size_t big_n = sizeof(big_xs)/sizeof(double);
+        size_t std_n = sizeof(std_xs)/sizeof(double);
+
+        rv = [GCStatsDataSerieWithUnit dataSerieWithUnit:xUnit xUnit:xUnit andSerie:RZReturnAutorelease([[GCStatsDataSerie alloc] init])];
+        for (size_t i=0; i<small_n; ++i) {
+            [rv.serie addDataPointWithX:small_xs[i] andY:small_xs[i]];
+        }
+        for (size_t i=0; i<big_n; ++i) {
+            [rv.serie addDataPointWithX:big_xs[i]*km andY:big_xs[i]*km];
+            [rv.serie addDataPointWithX:big_xs[i]*mile andY:big_xs[i]*mile];
+        }
+        for (size_t i=0; i<std_n; ++i) {
+            [rv.serie addDataPointWithX:std_xs[i] andY:std_xs[i]];
+        }
+        [rv.serie sortByX];
+
+        return rv;
     }else{
         return nil;
     }
@@ -340,11 +369,16 @@
     
     GCStatsDataSerieWithUnit * base = [self calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest forField:field thread:thread];
     if( base ){
-        
         GCStatsDataSerieWithUnit * standardSerie = [GCActivity standardSerieSampleForXUnit:base.xUnit];
-        // Make sure we reduce from a copy so we don't destroy the main serie
-        base = [GCStatsDataSerieWithUnit dataSerieWithOther:base];
-        [GCStatsDataSerie reduceToCommonRange:standardSerie.serie and:base.serie];
+        // If standard serie exist, then resample, if not, it means the xUnit likely does not have standard serie
+        if( standardSerie ){
+            // Make sure we reduce from a copy so we don't destroy the main serie
+            base = [GCStatsDataSerieWithUnit dataSerieWithOther:base];
+            [GCStatsDataSerie reduceToCommonRange:standardSerie.serie and:base.serie];
+            
+        }else{
+            base = nil;
+        }
     }
     return base;
 }
@@ -395,7 +429,20 @@
     GCField * altitude = [GCField fieldForFlag:gcFieldFlagAltitudeMeters andActivityType:self.activityType];
 
     GCStatsDataSerieWithUnit * serie = [self timeSerieForField:altitude];
-
+    GCStatsDataSerieWithUnit * adjusted = [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit];
+    adjusted.xUnit = serie.xUnit;
+    
+    double threshold = [[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:5.0] convertToUnit:serie.unit].value;
+    
+    GCNumberWithUnit * current_altitude = [GCNumberWithUnit numberWithUnit:serie.unit andValue:[serie dataPointAtIndex:0].y_data];
+    for (GCStatsDataPoint * point in serie) {
+        i( fabs( current_altitude.value - point.y_data ) > threshold ){
+            current_altitude = [GCNumberWithUnit numberWithUnit:serie.unit andValue:point.y_data];
+        }
+        [adjusted addNumberWithUnit:current_altitude forX:point.x_data];
+    }
+    
+    
     // compute speed with minimum of 10 sec and report for 1min (60secs)
     GCStatsDataSerie * ascentspeed = [serie.serie deltaYSerieForDeltaX:10. scalingFactor:60.0*60.0];
     GCStatsDataSerieWithUnit * final = [GCStatsDataSerieWithUnit dataSerieWithUnit:[GCUnit unitForKey:@"meterperhour"] andSerie:ascentspeed];

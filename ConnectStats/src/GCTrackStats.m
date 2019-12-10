@@ -287,7 +287,7 @@
         }
 
         if( su ){
-            self.extra_data = @[ su ];
+            //DONT CHECKIN self.extra_data = @[ su ];
         }
     }
 

@@ -74,7 +74,7 @@ NSString * kNOTIFY_DERIVED_NEXT = @"derived_next";
 
 #define DBCHECK(x) if(!x){ RZLog( RZLogError, @"Error %@", [db lastErrorMessage]); };
 
-static NSInteger kDerivedCurrentVersion = 2;
+static NSInteger kDerivedCurrentVersion = 3;
 static BOOL kDerivedEnabled = true;
 
 @interface GCDerivedQueueElement : NSObject
@@ -193,10 +193,21 @@ static BOOL kDerivedEnabled = true;
         if( /* DISABLES CODE */ (false) ){
             [self loadHistoricalFileSeries];
         }
+
+        for (GCUnit * xUnit in @[ GCUnit.second, GCUnit.meter ]) {
+            NSString * tableName = [self standardSerieDatabaseNameFor:xUnit];
+            if( [db tableExists:tableName]){
+                GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:tableName];
+                if( self.seriesByKeys == nil ){
+                    self.seriesByKeys = [NSMutableDictionary dictionaryWithDictionary:[statsDb loadByKeys]];
+                }else{
+                    NSDictionary * next = [statsDb loadByKeys];
+                    [self.seriesByKeys addEntriesFromDictionary:next];
+                }
+            }
+        }
         
-        if( [db tableExists:@"gc_derived_time_serie_second"]){
-            GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:@"gc_derived_time_serie_second"];
-            self.seriesByKeys = [NSMutableDictionary dictionaryWithDictionary:[statsDb loadByKeys]];
+        if( self.seriesByKeys.count > 0){
             RZLog(RZLogInfo, @"Loaded %d derived series and %@ series by key", (int)self.derivedSeries.count, @(self.seriesByKeys.count));
         }else{
             RZLog(RZLogInfo, @"Loaded %d derived series", (int)self.derivedSeries.count);
@@ -452,10 +463,13 @@ static BOOL kDerivedEnabled = true;
 
 #pragma mark - Processing
 
+-(NSString*)standardSerieDatabaseNameFor:(GCUnit*)unit{
+    return [NSString stringWithFormat:@"gc_derived_standard_serie_%@", unit.key];
+}
+
 -(void)processQueueElement:(GCDerivedQueueElement*)element{
     RZPerformance * performance = [RZPerformance start];
     GCActivity * activity = element.activity;
-    GCStatsDatabase * statsDb = [GCStatsDatabase database:self.db table:@"gc_derived_time_serie_second"];
 
     if (![activity trackdbIsObsolete:activity.trackdb]) {
         
@@ -470,22 +484,35 @@ static BOOL kDerivedEnabled = true;
             RZLog(RZLogError,@"Bad input serie");
         }
         
-        if( [serie.xUnit canConvertTo:GCUnit.second]){
-            GCStatsDataSerieWithUnit * standard = [activity standardizedBestRollingTrack:field thread:nil];
+        GCStatsDataSerieWithUnit * standard = [activity standardizedBestRollingTrack:field thread:nil];
+        if( standard && standard.count > 0){
+            GCStatsDatabase * statsDb = [GCStatsDatabase database:self.db table:[self standardSerieDatabaseNameFor:standard.xUnit]];
+            NSDictionary * keys = @{
+                @"activityId" : element.activity.activityId,
+                @"fieldKey" : field.key,
+            };
             
-            if( standard.count > 0){
-                NSDictionary * keys = @{
-                    @"activityId" : element.activity.activityId,
-                    @"fieldKey" : field.key,
-                };
-                RZLog(RZLogInfo, @"derived standard: %@ %@ %@", element.activity.activityId, field.key, standard );
-                [statsDb save:standard.serie keys:keys];
-                if( ! self.seriesByKeys){
-                    self.seriesByKeys = [NSMutableDictionary dictionary];
+            // Before we save if applicable, convert to store unit
+            NSArray * storeUnits = @[
+                [GCUnit unitForKey:STOREUNIT_DISTANCE],
+                [GCUnit unitForKey:STOREUNIT_SPEED],
+                [GCUnit unitForKey:STOREUNIT_ELAPSED]
+            ];
+            for (GCUnit * unit in storeUnits) {
+                if( [standard.xUnit canConvertTo:unit] ){
+                    [standard convertToXUnit:unit];
                 }
-                self.seriesByKeys[keys] = standard.serie;
-                
+                if( [standard.unit canConvertTo:unit] ){
+                    [standard convertToUnit:unit];
+                }
             }
+            
+            RZLog(RZLogInfo, @"derived standard[%@]: %@ %@ %@", standard.xUnit.key, element.activity.activityId, field.key, standard );
+            [statsDb save:standard.serie keys:keys];
+            if( ! self.seriesByKeys){
+                self.seriesByKeys = [NSMutableDictionary dictionary];
+            }
+            self.seriesByKeys[keys] = standard.serie;
         }
         for (NSNumber * num in @[ @(gcDerivedPeriodAll),@(gcDerivedPeriodMonth),@(gcDerivedPeriodYear)]) {
             gcDerivedPeriod period = num.intValue;
