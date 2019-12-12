@@ -434,7 +434,7 @@
             plot.graphType = gcGraphStep;
             gcStatsRange range = plot.range;
             range.y_min = 0.;
-            range.x_max = trackStats.activity.sumDuration;
+            range.x_max = [trackStats.activity summaryFieldValueInStoreUnit:gcFieldFlagSumDuration];
             plot.range = range;
             plot.color = [GCViewConfig colorForGraphElement:gcSkinGraphColorBarGraph];
             cache.series = [NSMutableArray arrayWithObject:plot];

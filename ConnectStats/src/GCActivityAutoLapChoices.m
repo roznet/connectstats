@@ -222,17 +222,19 @@
             [choices addObject:[GCActivityAutoLapChoiceHolder choiceHolderSki]];
         }
 
-        GCActivityAutoLapChoiceHolder * disthalf = [GCActivityAutoLapChoiceHolder choiceHolder:[act matchDistanceBlockGreater] value:act.sumDistance/2. andLabel:GC_LAPS_SPLIT_DISTHALF];
+        double sumDistance = [act summaryFieldValueInStoreUnit:gcFieldFlagSumDistance];
+        
+        GCActivityAutoLapChoiceHolder * disthalf = [GCActivityAutoLapChoiceHolder choiceHolder:[act matchDistanceBlockGreater] value:sumDistance/2. andLabel:GC_LAPS_SPLIT_DISTHALF];
         disthalf.lapDescription = NSLocalizedString(@"Split Half Distance", @"Autolap Choice");
         [choices addObject:disthalf];
-        GCActivityAutoLapChoiceHolder * distquarter = [GCActivityAutoLapChoiceHolder choiceHolder:[act matchDistanceBlockGreater] value:act.sumDistance/4. andLabel:GC_LAPS_SPLIT_DISTQTER];
+        GCActivityAutoLapChoiceHolder * distquarter = [GCActivityAutoLapChoiceHolder choiceHolder:[act matchDistanceBlockGreater] value:sumDistance/4. andLabel:GC_LAPS_SPLIT_DISTQTER];
         distquarter.lapDescription = NSLocalizedString(@"Split Quarter Distance", @"Autolap Choice");
         [choices addObject:distquarter];
 
         NSUInteger idx = 0;
         for (GCNumberWithUnit * number in dist) {
             double value = [number convertToUnit:store].value;
-            if (value < act.sumDistance) {
+            if (value < sumDistance) {
                 [choices addObject:[GCActivityAutoLapChoiceHolder choiceHolder:[act matchDistanceBlockGreater] value:value andLabel:number.description]];
                 idx++;
                 if (idx>5) {
@@ -245,7 +247,7 @@
 
         [choices addObject:[GCActivityAutoLapChoiceHolder choiceHolder:[act matchDistanceBlockEqual] compare:[act compareSpeedBlock] value:[store convertDouble:1. fromUnit:mile] andLabel:NSLocalizedString(@"Fastest mile", @"Autolap Choice")]];
 
-        double totaltime = act.sumDuration;
+        double totaltime = [act summaryFieldValueInStoreUnit:gcFieldFlagSumDuration];
         if (act.trackpoints.count>3) {
             totaltime =  [[(act.trackpoints).lastObject time]  timeIntervalSinceDate:[(act.trackpoints)[0] time]];
         }
@@ -266,9 +268,12 @@
                             [GCNumberWithUnit numberWithUnit:minute andValue:1.]
                             ];
         idx = 0;
+        
+        double sumDuration = [act summaryFieldValueInStoreUnit:gcFieldFlagSumDuration];
+        
         for (GCNumberWithUnit * number in time) {
             double value = [number convertToUnit:second].value;
-            if (value < act.sumDuration) {
+            if (value < sumDuration) {
                 [choices addObject:[GCActivityAutoLapChoiceHolder choiceHolder:[act matchTimeBlock] value:value andLabel:number.description]];
                 idx++;
                 if (idx>5) {

@@ -46,6 +46,7 @@
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
 @property (nonatomic,assign) NSUInteger derivedSerieMonthIndex;
 @property (nonatomic,assign) NSUInteger derivedSerieFieldIndex;
+@property (nonatomic,assign) BOOL started;
 @end
 
 @implementation GCStatsMultiFieldViewController
@@ -90,8 +91,6 @@
     self.navigationItem.leftBarButtonItem = self.activityTypeButton.activityTypeButtonItem;
 
     [self setupBarButtonItem];
-    [self setupForCurrentActivityAndViewChoice:self.viewChoice];
-    self.config.viewChoice = (gcViewChoice)[GCAppGlobal configGetInt:CONFIG_STATS_START_PAGE defaultValue:gcViewChoiceSummary];
     if ([GCAppGlobal healthStatsVersion]) {
         self.config.activityType = GC_TYPE_DAY;
     }
@@ -108,7 +107,11 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    self.started = true;
     [super viewWillAppear:animated];
+    [self setupForCurrentActivityAndViewChoice:self.viewChoice];
+    self.config.viewChoice = (gcViewChoice)[GCAppGlobal configGetInt:CONFIG_STATS_START_PAGE defaultValue:gcViewChoiceSummary];
+
     [GCViewConfig setupViewController:self];
 }
 - (void)didReceiveMemoryWarning
@@ -134,6 +137,9 @@
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo*)theInfo{
+    if( ! self.started){
+        return; // don't bother yet
+    }
     // Ignore if organizer notify change to specific activity
     BOOL ignoreNotify = ([theParent isKindOfClass:[GCActivitiesOrganizer class]] && theInfo.stringInfo != nil);
     BOOL skipSetup = [theParent isKindOfClass:[GCHistoryFieldDataSerie class]];

@@ -22,6 +22,8 @@
 #import "GCActivity+CachedTracks.h"
 #import "GCTestsHelper.h"
 
+#import "GCActivity+TestBackwardCompat.h"
+
 @interface GCTestsActivities : GCTestCase
 @end
 
@@ -248,7 +250,7 @@
 
     [GCHealthKitActivityParser healthKitActivityParserWith:dict andOrganizer:organizer];
     
-    XCTAssertEqualWithAccuracy([[organizer activityForId:expectedId] sumDistance], 10., 1.e-7);
+    XCTAssertEqualWithAccuracy([[organizer activityForId:expectedId] sumDistanceCompat], 10., 1.e-7);
     
     [organizer release];
     organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
@@ -256,7 +258,7 @@
     dict = @{ HKQuantityTypeIdentifierDistanceWalkingRunning: @[ sample(gcFieldFlagSumDistance, 5., 8., 15.) ] };
     
     [GCHealthKitActivityParser healthKitActivityParserWith:dict andOrganizer:organizer];
-    XCTAssertEqualWithAccuracy([[organizer activityForId:expectedId] sumDistance], 25., 1.e-7);
+    XCTAssertEqualWithAccuracy([[organizer activityForId:expectedId] sumDistanceCompat], 25., 1.e-7);
 }
 
 -(void)testActivityStatsRunning{

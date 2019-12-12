@@ -979,7 +979,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             }
 
             [filteredIndexes addObject:@(i)];
-            sum += act.sumDistance;
+            sum += [act summaryFieldValueInStoreUnit:gcFieldFlagSumDistance];
             cnt += 1.;
         }
     }
@@ -993,7 +993,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         for (NSNumber * idx in filteredIndexes) {
             if (ii < 30 || (nn-ii)<5) {
                 GCActivity * act = _allActivities[idx.integerValue];
-                RZLog(RZLogInfo, @" %d: %@ %@ %f", ii, [act date], [act activityType], act.sumDistance );
+                RZLog(RZLogInfo, @" %d: %@ %@ %f", ii, [act date], [act activityType], [act summaryFieldValueInStoreUnit:gcFieldFlagSumDistance] );
             }
             ii++;
         }

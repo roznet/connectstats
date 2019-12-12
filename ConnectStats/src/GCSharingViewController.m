@@ -471,8 +471,10 @@
     NSDictionary * postData=@{@"activityId": activity.activityId,
                              @"activityType": activity.activityType,
                              @"location": activity.location,
-                             @"sumDistance": [NSString stringWithFormat:@"%.f",activity.sumDistance],
-                             @"sumDuration": [NSString stringWithFormat:@"%.f",activity.sumDuration],
+                             @"sumDistance": [[activity numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance
+                                                                                     andActivityType:activity.activityType]] description],
+                             @"sumDuration": [[activity numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDuration
+                             andActivityType:activity.activityType]] description],
                              @"device": device?:@""};
     RZRemoteDownload * rl = [[RZRemoteDownload alloc] initWithURL:GCWebUploadURL(@"kml") postData:postData fileName:[self googleFilename] fileData:data andDelegate:self];
     self.remoteDownload = rl;

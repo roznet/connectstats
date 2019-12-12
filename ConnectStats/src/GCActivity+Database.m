@@ -49,11 +49,17 @@
     self.activityType = [res stringForColumn:@"activityType"];
     self.date = [res dateForColumn:@"BeginTimestamp"];
 
-    self.sumDistance = [res doubleForColumn:@"SumDistance"];
-    self.sumDuration = [res doubleForColumn:@"SumDuration"];
-    self.weightedMeanSpeed = [res doubleForColumn:@"WeightedMeanSpeed"];
+    for (GCField * summaryField in [self validStoredSummaryFields]) {
+        NSString * fieldKey = summaryField.key;
+        if( summaryField.fieldFlag == gcFieldFlagWeightedMeanSpeed){
+            fieldKey = @"WeightedMeanSpeed"; // otherwise could be pace...
+        }
+        double value = [res doubleForColumn:fieldKey];
+        GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:[self storeUnitForField:summaryField] andValue:value];
+        [self setSummaryField:summaryField.fieldFlag with:nu];
+    }
+        
     self.speedDisplayUom = [res stringForColumn:@"speedDisplayUom"];
-    self.weightedMeanHeartRate = [res doubleForColumn:@"WeightedMeanHeartRate"];
     self.distanceDisplayUom = [res stringForColumn:@"distanceDisplayUom"];
     self.garminSwimAlgorithm = [res boolForColumn:@"garminSwimAlgorithm"];
 
@@ -115,17 +121,17 @@
         [db executeUpdate:@"DELETE FROM gc_activities_meta WHERE activityId = ?", self.activityId];
         [db executeUpdate:@"DELETE FROM gc_activities_calculated WHERE activityId = ?", self.activityId];
     }
-
+    
     NSArray * dbrow = @[self.activityId,
                         self.activityType,
                         self.date,
-                        @(self.sumDistance),
-                        @(self.sumDuration),
-                        @(self.weightedMeanHeartRate),
+                        @([self summaryFieldValueInStoreUnit:gcFieldFlagSumDistance]),
+                        @([self summaryFieldValueInStoreUnit:gcFieldFlagSumDuration]),
+                        @([self summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanHeartRate]),
                         self.activityName,
                         @(self.beginCoordinate.longitude),
                         @(self.beginCoordinate.latitude),
-                        @(self.weightedMeanSpeed),
+                        @([self summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanSpeed]),
                         self.location,
                         @(self.flags),
                         self.speedDisplayUom,

@@ -141,10 +141,10 @@ NSArray * _elementCache = nil;
 #pragma mark -
 
 @implementation GCSearchElementActivityField
-@synthesize field,value,unit;
+
 -(void)dealloc{
-    [unit release];
-    [_summaryField release];
+    [_unit release];
+    [_fieldKey release];
 
     [super dealloc];
 }
@@ -160,8 +160,8 @@ NSArray * _elementCache = nil;
  pace
  */
 -(GCActivitySearchElement*)nextElementForString:(NSString*)aStr andScanner:(NSScanner*)scanner{
-    gcFieldFlag foundField = gcFieldFlagNone;
-    NSString * foundSummaryField = nil;
+    gcFieldFlag foundFieldFlag = gcFieldFlagNone;
+    NSString * foundFieldKey = nil;
 
     // If aStr is a valid activity type, skip and just match that
     if( [[GCAppGlobal activityTypes] isExistingActivityType:aStr]){
@@ -169,24 +169,24 @@ NSArray * _elementCache = nil;
     }
 
     if ([aStr isEqualToString:@"dist"]||[aStr isEqualToString:@"distance"]) {
-        foundField = gcFieldFlagSumDistance;
+        foundFieldFlag = gcFieldFlagSumDistance;
     }else if([aStr isEqualToString:@"heart"]||[aStr isEqualToString:@"heartrate"]){
-        foundField = gcFieldFlagWeightedMeanHeartRate;
+        foundFieldFlag = gcFieldFlagWeightedMeanHeartRate;
     }else if([aStr isEqualToString:@"duration"]||[aStr isEqualToString:@"dur"]){
-        foundField = gcFieldFlagSumDuration;
+        foundFieldFlag = gcFieldFlagSumDuration;
     }else if([aStr isEqualToString:@"speed"]||[aStr isEqualToString:@"pace"]){
-        foundField = gcFieldFlagWeightedMeanSpeed;
+        foundFieldFlag = gcFieldFlagWeightedMeanSpeed;
     }
-    if (foundField == gcFieldFlagNone) {
+    if (foundFieldFlag == gcFieldFlagNone) {
         NSArray * knowns = [GCFields knownFieldsMatching:aStr];
         if (knowns && knowns.count>0) {
-            foundSummaryField = knowns[0];
+            foundFieldKey = knowns[0];
         }
     }
-    if (foundField != gcFieldFlagNone || foundSummaryField) {
+    if (foundFieldFlag != gcFieldFlagNone || foundFieldKey) {
         GCSearchElementActivityField * rv = [[[GCSearchElementActivityField alloc] init] autorelease];
-        rv.field = foundField;
-        rv.summaryField = foundSummaryField;
+        rv.fieldFlag = foundFieldFlag;
+        rv.fieldKey = foundFieldKey;
 
         NSUInteger location = scanner.scanLocation;
         NSString * foundstr = nil;
@@ -243,52 +243,29 @@ NSArray * _elementCache = nil;
 
 }
 -(BOOL)match:(GCActivity*)activity{
+    
+    GCField * field = self.fieldKey ?
+        [GCField fieldForKey:self.fieldKey andActivityType:activity.activityType] :
+        [GCField fieldForFlag:self.fieldFlag andActivityType:activity.activityType];
+    
     double compareval = 0.;
-    if (self.summaryField) {
-        GCNumberWithUnit * num = [activity numberWithUnitForFieldKey:self.summaryField];
-        if (num==nil) {
-            return false;
-        }
-        if (unit) {
-            compareval = [num convertToUnit:unit].value;
+    GCNumberWithUnit * num = [activity numberWithUnitForField:field];
+    if( num == nil){
+        return false;
+    }else{
+        if (self.unit) {
+            compareval = [num convertToUnit:self.unit].value;
         }else{
             compareval = num.value;
-        }
-    }else{
-        switch (field) {
-            case gcFieldFlagSumDistance:
-            {
-                compareval = activity.sumDistance;
-                if (unit) {
-                    compareval = [unit convertDouble:compareval fromUnit:[GCUnit unitForKey:STOREUNIT_DISTANCE]];
-                }
-                break;
-            }
-            case gcFieldFlagSumDuration:
-                compareval = activity.sumDuration;
-                break;
-            case gcFieldFlagWeightedMeanHeartRate:
-                compareval = activity.weightedMeanHeartRate;
-                break;
-            case gcFieldFlagWeightedMeanSpeed:
-            {
-                compareval = activity.weightedMeanSpeed;
-                if (unit) {
-                    compareval = [unit convertDouble:compareval fromUnit:[GCUnit unitForKey:STOREUNIT_SPEED]];
-                }
-                break;
-            }
-            default:
-                break;
         }
     }
     switch (self.comparison) {
         case gcSearchComparisonEqual:
-            return fabs(compareval/value-1)<0.01;
+            return fabs(compareval/self.value-1)<0.01;
         case gcSearchComparisonGreaterThan:
-            return compareval > value;
+            return compareval > self.value;
         case gcSearchComparisonLessThan:
-            return compareval < value;
+            return compareval < self.value;
 
     }
 }

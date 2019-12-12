@@ -112,6 +112,6 @@ typedef NS_ENUM(NSUInteger,gcDuplicate) {
 
 +(NSString*)duplicateDescription:(gcDuplicate)dup;
 -(gcDuplicate)testForDuplicate:(GCActivity*)other;
--(BOOL)isEqualToActivity:(GCActivity*)other;
+
 
 @end

@@ -87,7 +87,7 @@ NSString * kNSUserActivityUserInfoActivityIdKey = @"activityId";
             CSSearchableItemAttributeSet * attr = [[[CSSearchableItemAttributeSet alloc] init] autorelease];
             attr.identifier = self.activityId;
             attr.startDate = self.date;
-            attr.endDate = [self.date dateByAddingTimeInterval:self.sumDuration];
+            attr.endDate = self.endTime;
             NSMutableArray * alt = [NSMutableArray array];
             if (self.activityName) {
                 [alt addObject:self.activityName];

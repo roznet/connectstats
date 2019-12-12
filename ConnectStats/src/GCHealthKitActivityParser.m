@@ -119,18 +119,25 @@
             activity.date = [points[0] time];
             double sumSteps = 0.;
             double sumFloors =0.;
+            
+            double sumDistance = 0.;
+            double sumDuration = 0.;
+            
             for (GCTrackPoint * point in points) {
                 if (point.elapsed>0) {
                     point.speed = point.distanceMeters/point.elapsed;
                 }
-                activity.sumDistance +=point.distanceMeters;
-                activity.sumDuration +=point.elapsed;
+                sumDistance +=point.distanceMeters;
+                sumDuration +=point.elapsed;
                 activity.flags |= point.trackFlags;
                 activity.trackFlags |= point.trackFlags;
                 sumFloors += point.altitude;
                 sumSteps  += point.cadence;
             }
 
+            [activity setSummaryField:gcFieldFlagSumDistance inStoreUnitValue:sumDistance];
+            [activity setSummaryField:gcFieldFlagSumDuration inStoreUnitValue:sumDuration];
+            
             activity.activityId = key;
             activity.activityType = GC_TYPE_DAY;
             activity.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_DAY];

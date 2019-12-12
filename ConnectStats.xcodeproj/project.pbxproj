@@ -704,14 +704,12 @@
 		42A22DE119E1AAFD004407B8 /* GCWithingsBodyMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DDF19E1AAFD004407B8 /* GCWithingsBodyMeasures.m */; };
 		42A22DE519E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DE419E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m */; };
 		42A22DE619E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DE419E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m */; };
-		42A22DF119E726A9004407B8 /* GCWithingsSleepParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF019E726A9004407B8 /* GCWithingsSleepParser.m */; };
-		42A22DF219E726A9004407B8 /* GCWithingsSleepParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF019E726A9004407B8 /* GCWithingsSleepParser.m */; };
-		42A22DF519E87191004407B8 /* GCWithingsActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF419E87191004407B8 /* GCWithingsActivityParser.m */; };
-		42A22DF619E87191004407B8 /* GCWithingsActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF419E87191004407B8 /* GCWithingsActivityParser.m */; };
 		42A22DF919E87BF9004407B8 /* GCHealthSleepMeasure.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF819E87BF9004407B8 /* GCHealthSleepMeasure.m */; };
 		42A22DFA19E87BF9004407B8 /* GCHealthSleepMeasure.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF819E87BF9004407B8 /* GCHealthSleepMeasure.m */; };
 		42A22E0019E8895D004407B8 /* GCHealthSleepBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DFF19E8895D004407B8 /* GCHealthSleepBlock.m */; };
 		42A22E0119E8895D004407B8 /* GCHealthSleepBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DFF19E8895D004407B8 /* GCHealthSleepBlock.m */; };
+		42A31AF723A0F8A7006F5664 /* GCActivity+TestBackwardCompat.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A31AF623A0F8A7006F5664 /* GCActivity+TestBackwardCompat.m */; };
+		42A31AF823A0F8A7006F5664 /* GCActivity+TestBackwardCompat.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A31AF623A0F8A7006F5664 /* GCActivity+TestBackwardCompat.m */; };
 		42A3609D1EAF6392008EB4E3 /* RZUtilsHealthkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872C31EACA089000D4115 /* RZUtilsHealthkit.framework */; };
 		42A3609E1EAF6392008EB4E3 /* RZUtilsHealthkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 425872C31EACA089000D4115 /* RZUtilsHealthkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42A3AA161D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA151D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m */; };
@@ -864,8 +862,6 @@
 		42B5E2771BA5B216000FAE4E /* GCBabolatSessionsListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515D18A7EC6500B85FAB /* GCBabolatSessionsListRequest.m */; };
 		42B5E2781BA5B216000FAE4E /* GCBabolatSessionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB516018A7EC8300B85FAB /* GCBabolatSessionRequest.m */; };
 		42B5E2791BA5B216000FAE4E /* GCWithingsBodyMeasuresParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DE419E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m */; };
-		42B5E27A1BA5B216000FAE4E /* GCWithingsSleepParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF019E726A9004407B8 /* GCWithingsSleepParser.m */; };
-		42B5E27B1BA5B216000FAE4E /* GCWithingsActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DF419E87191004407B8 /* GCWithingsActivityParser.m */; };
 		42B5E27F1BA5B216000FAE4E /* GCWithingsReqBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DDB19E1A798004407B8 /* GCWithingsReqBase.m */; };
 		42B5E2801BA5B216000FAE4E /* GCWithingsBodyMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DDF19E1AAFD004407B8 /* GCWithingsBodyMeasures.m */; };
 		42B5E2831BA5B216000FAE4E /* GCStravaActivityStreamsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959CEF18D9016200C0B841 /* GCStravaActivityStreamsParser.m */; };
@@ -2412,14 +2408,12 @@
 		42A22DDF19E1AAFD004407B8 /* GCWithingsBodyMeasures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWithingsBodyMeasures.m; path = src/GCWithingsBodyMeasures.m; sourceTree = "<group>"; };
 		42A22DE319E1CE14004407B8 /* GCWithingsBodyMeasuresParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWithingsBodyMeasuresParser.h; path = src/GCWithingsBodyMeasuresParser.h; sourceTree = "<group>"; };
 		42A22DE419E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWithingsBodyMeasuresParser.m; path = src/GCWithingsBodyMeasuresParser.m; sourceTree = "<group>"; };
-		42A22DEF19E726A9004407B8 /* GCWithingsSleepParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWithingsSleepParser.h; path = src/GCWithingsSleepParser.h; sourceTree = "<group>"; };
-		42A22DF019E726A9004407B8 /* GCWithingsSleepParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWithingsSleepParser.m; path = src/GCWithingsSleepParser.m; sourceTree = "<group>"; };
-		42A22DF319E87191004407B8 /* GCWithingsActivityParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWithingsActivityParser.h; path = src/GCWithingsActivityParser.h; sourceTree = "<group>"; };
-		42A22DF419E87191004407B8 /* GCWithingsActivityParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWithingsActivityParser.m; path = src/GCWithingsActivityParser.m; sourceTree = "<group>"; };
 		42A22DF719E87BF9004407B8 /* GCHealthSleepMeasure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthSleepMeasure.h; path = src/GCHealthSleepMeasure.h; sourceTree = "<group>"; };
 		42A22DF819E87BF9004407B8 /* GCHealthSleepMeasure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthSleepMeasure.m; path = src/GCHealthSleepMeasure.m; sourceTree = "<group>"; };
 		42A22DFE19E8895D004407B8 /* GCHealthSleepBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthSleepBlock.h; path = src/GCHealthSleepBlock.h; sourceTree = "<group>"; };
 		42A22DFF19E8895D004407B8 /* GCHealthSleepBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthSleepBlock.m; path = src/GCHealthSleepBlock.m; sourceTree = "<group>"; };
+		42A31AF523A0F8A7006F5664 /* GCActivity+TestBackwardCompat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCActivity+TestBackwardCompat.h"; sourceTree = "<group>"; };
+		42A31AF623A0F8A7006F5664 /* GCActivity+TestBackwardCompat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GCActivity+TestBackwardCompat.m"; sourceTree = "<group>"; };
 		42A3AA141D43D5A5004FBFD0 /* GCStravaSegmentListStarred.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaSegmentListStarred.h; path = src/GCStravaSegmentListStarred.h; sourceTree = "<group>"; };
 		42A3AA151D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaSegmentListStarred.m; path = src/GCStravaSegmentListStarred.m; sourceTree = "<group>"; };
 		42A3AA2F1D43EE85004FBFD0 /* GCStravaAthlete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaAthlete.h; path = src/GCStravaAthlete.h; sourceTree = "<group>"; };
@@ -4506,10 +4500,6 @@
 			children = (
 				42A22DE319E1CE14004407B8 /* GCWithingsBodyMeasuresParser.h */,
 				42A22DE419E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m */,
-				42A22DEF19E726A9004407B8 /* GCWithingsSleepParser.h */,
-				42A22DF019E726A9004407B8 /* GCWithingsSleepParser.m */,
-				42A22DF319E87191004407B8 /* GCWithingsActivityParser.h */,
-				42A22DF419E87191004407B8 /* GCWithingsActivityParser.m */,
 			);
 			name = Parsers;
 			sourceTree = "<group>";
@@ -5198,6 +5188,8 @@
 				42D90811203383DB000BBE07 /* GCTestCase.m */,
 				42096754189CF49600D32CA7 /* GCTestsSamples.h */,
 				42096755189CF49600D32CA7 /* GCTestsSamples.m */,
+				42A31AF523A0F8A7006F5664 /* GCActivity+TestBackwardCompat.h */,
+				42A31AF623A0F8A7006F5664 /* GCActivity+TestBackwardCompat.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -6773,7 +6765,6 @@
 				42A99B261B780D9900994917 /* GCWatchSessionManager.m in Sources */,
 				42BFC2581DCF511A00EAD40E /* GCCalendarDataDateMarkers.m in Sources */,
 				42BFC2571DCF510100EAD40E /* GCGarminRequestHeartRateZones.m in Sources */,
-				42A22DF619E87191004407B8 /* GCWithingsActivityParser.m in Sources */,
 				422FAEBB19A1DD6000D09773 /* GCActivityListViewController.m in Sources */,
 				42BFC2531DCF50D800EAD40E /* GCFieldCache.m in Sources */,
 				422FAEBC19A1DD6000D09773 /* GCTabBarController.m in Sources */,
@@ -6973,7 +6964,6 @@
 				42C1080E1B7DE8B000092315 /* GCApplicationContext.m in Sources */,
 				422FAF9F19A1DD6000D09773 /* GCActivity+UI.m in Sources */,
 				4226B42B1F65E2ED009E1104 /* GCWebRequestStandard.m in Sources */,
-				42A22DF219E726A9004407B8 /* GCWithingsSleepParser.m in Sources */,
 				42BFC2641DCF51AC00EAD40E /* GCSegmentOrganizer.swift in Sources */,
 				422FAFA119A1DD6000D09773 /* GCHealthZone.m in Sources */,
 				422FAFA419A1DD6000D09773 /* GCActivityTypes.m in Sources */,
@@ -7241,7 +7231,6 @@
 				42C7D4281DAC293B0089806B /* GCLapSwim.m in Sources */,
 				42E186D016A620E900D4513B /* GCGarminRequestActivityReload.m in Sources */,
 				421A514C1C82FA6C00671587 /* GCActivity+Fields.m in Sources */,
-				42A22DF519E87191004407B8 /* GCWithingsActivityParser.m in Sources */,
 				4290238E18EA17F000CBF398 /* GCSportTracksActivityDetail.m in Sources */,
 				42E186D316A6225400D4513B /* GCGarminActivitySummaryParser.m in Sources */,
 				42289D5B1C7B9CEE005A5D0E /* GCStatsHistGraphOptionViewController.m in Sources */,
@@ -7269,7 +7258,6 @@
 				42AB66CD16DACABA00C633BD /* GCMapGoogleViewController.m in Sources */,
 				426A135E1C5CCEFA00D61098 /* GCActivitySettings.m in Sources */,
 				42AB680C16DD5C8100C633BD /* GCHealthMeasure.m in Sources */,
-				42A22DF119E726A9004407B8 /* GCWithingsSleepParser.m in Sources */,
 				42B6D5281D70D4090071A924 /* GCActivityListOptionViewController.swift in Sources */,
 				42AB680F16DD5C9500C633BD /* GCHealthOrganizer.m in Sources */,
 				42A89C1F1D627444007CF90D /* GCUnitTrainingZone.m in Sources */,
@@ -7332,6 +7320,7 @@
 				429184AE2319B0ED00FD6525 /* GCTestUserInterface.m in Sources */,
 				42D90812203383DB000BBE07 /* GCTestCase.m in Sources */,
 				4227C5AC1C0B1310003F0660 /* GCTestsGrid.m in Sources */,
+				42A31AF823A0F8A7006F5664 /* GCActivity+TestBackwardCompat.m in Sources */,
 				428FF73315F36888007A88FA /* GCTestsGeneral.m in Sources */,
 				42B9555318186D0C00BC7AF9 /* GCTestsUtils.m in Sources */,
 				42B088451C38894D00113306 /* GCTestFields.m in Sources */,
@@ -7432,8 +7421,6 @@
 				42B5E2771BA5B216000FAE4E /* GCBabolatSessionsListRequest.m in Sources */,
 				42B5E2781BA5B216000FAE4E /* GCBabolatSessionRequest.m in Sources */,
 				42B5E2791BA5B216000FAE4E /* GCWithingsBodyMeasuresParser.m in Sources */,
-				42B5E27A1BA5B216000FAE4E /* GCWithingsSleepParser.m in Sources */,
-				42B5E27B1BA5B216000FAE4E /* GCWithingsActivityParser.m in Sources */,
 				42B5E27F1BA5B216000FAE4E /* GCWithingsReqBase.m in Sources */,
 				42B5E2801BA5B216000FAE4E /* GCWithingsBodyMeasures.m in Sources */,
 				42B5E2831BA5B216000FAE4E /* GCStravaActivityStreamsParser.m in Sources */,
@@ -7476,6 +7463,7 @@
 				427208631DE7A35300924C90 /* GCActivity+Import.swift in Sources */,
 				42B5E2A91BA5B216000FAE4E /* GCService.m in Sources */,
 				42B5E2AA1BA5B216000FAE4E /* GCWeather.m in Sources */,
+				42A31AF723A0F8A7006F5664 /* GCActivity+TestBackwardCompat.m in Sources */,
 				42C0589D21D0525200109D54 /* RZFitMessageExtensions.swift in Sources */,
 				42B5E2AB1BA5B216000FAE4E /* GCFields.m in Sources */,
 				42B5E2AC1BA5B216000FAE4E /* GCFieldsCalculated.m in Sources */,
@@ -7935,7 +7923,7 @@
 				CODE_SIGN_ENTITLEMENTS = FitFileExplorer/FitFileExplorer.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2.0.1;
+				CURRENT_PROJECT_VERSION = 2.0.2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -7974,7 +7962,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.0.1;
+				CURRENT_PROJECT_VERSION = 2.0.2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -8188,7 +8176,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5.2.2.0;
+				CURRENT_PROJECT_VERSION = 5.2.3.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8210,7 +8198,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 5.2.2;
+				MARKETING_VERSION = 5.2.3;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -8240,7 +8228,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 5.2.2.0;
+				CURRENT_PROJECT_VERSION = 5.2.3.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = NO;
@@ -8263,7 +8251,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 5.2.2;
+				MARKETING_VERSION = 5.2.3;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

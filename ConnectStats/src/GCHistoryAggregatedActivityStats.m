@@ -104,10 +104,10 @@
 
     NSUInteger flag = act.flags;
     double data[gcAggregatedFieldEnd];
-    data[gcAggregatedSumDistance] = act.sumDistance;
-    data[gcAggregatedSumDuration] = act.sumDuration;
-    data[gcAggregatedWeightedHeartRate]=act.weightedMeanHeartRate;
-    data[gcAggregatedWeightedSpeed]=isinf(act.weightedMeanSpeed) ? 0. : act.weightedMeanSpeed;
+    data[gcAggregatedSumDistance] = [act summaryFieldValueInStoreUnit:gcFieldFlagSumDistance];
+    data[gcAggregatedSumDuration] = [act summaryFieldValueInStoreUnit:gcFieldFlagSumDuration];
+    data[gcAggregatedWeightedHeartRate]=[act summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanHeartRate];
+    data[gcAggregatedWeightedSpeed]=isinf([act summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanSpeed]) ? 0. : [act summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanSpeed];
 
     data[gcAggregatedAltitudeMeters] = [act numberWithUnitForFieldFlag:gcFieldFlagAltitudeMeters].value;
     data[gcAggregatedCadence] = [act numberWithUnitForFieldFlag:gcFieldFlagCadence].value;

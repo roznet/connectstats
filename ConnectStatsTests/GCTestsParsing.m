@@ -43,6 +43,8 @@
 #import "GCConnectStatsRequestSearch.h"
 #import "GCHistoryFieldSummaryStats.h"
 
+#import "GCActivity+TestBackwardCompat.h"
+
 @interface GCTestsParsing : GCTestCase
 
 @end
@@ -1010,7 +1012,7 @@
         }
         if( found == nil){
             // Strava will skip activities of less than 30 seconds
-            XCTAssertLessThan(one.sumDuration, 30.0);
+            XCTAssertLessThan(one.sumDurationCompat, 30.0);
         }else{
             XCTAssertTrue(found != nil, @"activity %@ in both", one);
         }
