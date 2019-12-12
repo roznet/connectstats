@@ -81,7 +81,9 @@ class GCTestActivityFitFile: XCTestCase {
                             }
                             XCTAssertNotNil(downloaded)
                             if  let downloaded = downloaded {
-                                XCTAssertEqual(downloaded.sumDistance, activity.sumDistance, accuracy: 1.0)
+                                
+                                XCTAssertEqual(downloaded.summaryFieldValue(inStoreUnit: gcFieldFlag.sumDistance),
+                                               activity.summaryFieldValue(inStoreUnit: gcFieldFlag.sumDistance), accuracy: 1.0)
                             }
                         }
                     }

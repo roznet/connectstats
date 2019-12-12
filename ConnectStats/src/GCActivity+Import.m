@@ -112,28 +112,6 @@
 
 #pragma mark - Generic Import Tools
 
--(void)setSummaryField:(gcFieldFlag)which with:(GCNumberWithUnit*)nu{
-    switch (which) {
-        case gcFieldFlagSumDistance:
-            self.sumDistance = [nu convertToUnitName:STOREUNIT_DISTANCE].value;
-            self.flags |= gcFieldFlagSumDistance;
-            break;
-        case gcFieldFlagSumDuration:
-            self.sumDuration = [nu convertToUnitName:STOREUNIT_ELAPSED].value;
-            self.flags |= gcFieldFlagSumDuration;
-            break;
-        case gcFieldFlagWeightedMeanHeartRate:
-            self.weightedMeanHeartRate = nu.value;
-            self.flags |= gcFieldFlagWeightedMeanHeartRate;
-            break;
-        case gcFieldFlagWeightedMeanSpeed:
-            self.weightedMeanSpeed = [nu convertToUnitName:STOREUNIT_SPEED].value;
-            self.flags |= gcFieldFlagWeightedMeanSpeed;
-            break;
-        default:
-            break;
-    }
-}
 -(void)updateSummaryFieldFromSummaryData{
     for (GCField * field in self.summaryData) {
         GCActivitySummaryValue * value = self.summaryData[field];
@@ -837,8 +815,8 @@
     }
     NSDictionary * spee = summary[[GCFields fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:self.activityType]];
 
-    self.sumDuration = [dura[@"value"] doubleValue];
-    self.weightedMeanHeartRate = [hrat[@"value"] doubleValue];
+    [self setSummaryField:gcFieldFlagSumDistance with:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:[dura[@"value"] doubleValue]]];
+    [self setSummaryField:gcFieldFlagWeightedMeanHeartRate with:[GCNumberWithUnit numberWithUnit:GCUnit.bpm andValue:[hrat[@"value"] doubleValue]]];
 
     self.speedDisplayUom = spee[@"uom"];
     if (self.speedDisplayUom==nil) {
@@ -846,14 +824,14 @@
         [self setSpeedDisplayUom:STOREUNIT_SPEED];
     }
     GCUnit * speeU = [GCUnit unitForKey:self.speedDisplayUom];
-    self.weightedMeanSpeed = [speeU convertDouble:[spee[@"value"] doubleValue] toUnit:[GCUnit unitForKey:STOREUNIT_SPEED]];
+    [self setSummaryField:gcFieldFlagWeightedMeanSpeed with:[GCNumberWithUnit numberWithUnit:speeU andValue:[spee[@"value"] doubleValue]]];
 
     self.distanceDisplayUom = dist[@"uom"];
     if (self.distanceDisplayUom==nil) {
         [self setDistanceDisplayUom:STOREUNIT_DISTANCE];
     }
     GCUnit * distU = [GCUnit unitForKey:self.distanceDisplayUom];
-    self.sumDistance = [distU convertDouble:[dist[@"value"] doubleValue] toUnit:[GCUnit unitForKey:STOREUNIT_DISTANCE]];
+    [self setSummaryField:gcFieldFlagSumDistance with:[GCNumberWithUnit numberWithUnit:distU andValue:[dist[@"value"] doubleValue]]];
 
     self.flags  = dist == nil ? 0 : gcFieldFlagSumDistance;
     self.flags |= dura == nil ? 0 : gcFieldFlagSumDuration;
@@ -1082,16 +1060,17 @@
     NSMutableDictionary * summary = [NSMutableDictionary dictionary];
 
     GCActivitySummaryValue * sumVal = nil;
+    double distanceMeter = [workout.totalDistance  doubleValueForUnit:[HKUnit meterUnit]];
+    double durationSecond = workout.duration;
+    [self setSummaryField:gcFieldFlagSumDistance with:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:distanceMeter]];
+    [self setSummaryField:gcFieldFlagSumDuration with:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:durationSecond]];
+    [self setSummaryField:gcFieldFlagWeightedMeanSpeed with:[GCNumberWithUnit numberWithUnit:GCUnit.mps andValue:distanceMeter/durationSecond]];
 
-    self.sumDistance = [workout.totalDistance  doubleValueForUnit:[HKUnit meterUnit]];
-    self.sumDuration = workout.duration;
-    self.weightedMeanSpeed = self.sumDistance/self.sumDuration;
-
-    sumVal = [self buildSummaryValue:@"SumDistance" uom:@"meter" fieldFlag:gcFieldFlagSumDistance andValue:self.sumDistance];
+    sumVal = [self buildSummaryValue:@"SumDistance" uom:@"meter" fieldFlag:gcFieldFlagSumDistance andValue:distanceMeter];
     summary[sumVal.field] = sumVal;
-    sumVal = [self buildSummaryValue:@"SumDuration" uom:@"second" fieldFlag:gcFieldFlagSumDuration andValue:self.sumDuration];
+    sumVal = [self buildSummaryValue:@"SumDuration" uom:@"second" fieldFlag:gcFieldFlagSumDuration andValue:durationSecond];
     summary[sumVal.field] = sumVal;
-    sumVal = [self buildSummaryValue:@"WeightedMeanSpeed" uom:@"mps" fieldFlag:gcFieldFlagWeightedMeanSpeed andValue:self.weightedMeanSpeed];
+    sumVal = [self buildSummaryValue:@"WeightedMeanSpeed" uom:@"mps" fieldFlag:gcFieldFlagWeightedMeanSpeed andValue:distanceMeter/durationSecond];
     summary[sumVal.field] = sumVal;
     double sumEnergy = [workout.totalEnergyBurned doubleValueForUnit:[HKUnit kilocalorieUnit]];
     if (sumEnergy != 0.) {
@@ -1399,6 +1378,10 @@
                 GCActivitySummaryValue * otherVal = other.summaryData[field];
                 // Only change if formatted value changes, to avoid issue with just low precision diffs
                 if (otherVal && (! [otherVal isEqualToValue:thisVal]) && (![otherVal.formattedValue isEqualToString:thisVal.formattedValue])) {
+                    if( thisVal.value != 0.0 && otherVal.value == 0.0){
+                        // Don't put back to 0.0 value that were picked up
+                        continue;
+                    }
                     if (!newSummaryData) {
                         newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                     }
@@ -1416,11 +1399,17 @@
             }
         }
         for (GCField * field in other.summaryData) {
-            if (self.summaryData[field]==nil) {
+            GCActivitySummaryValue * thisVal = self.summaryData[field];
+            GCActivitySummaryValue * otherVal = other.summaryData[field];
+            // Update if missing or if new value is 0.0
+            if( thisVal.value == 0.0 && otherVal.value != 0.0){
+                RZLog( RZLogInfo, @"%@: Overriding 0 with %@", self, otherVal);
+            }
+            if (thisVal==nil || ( thisVal.value == 0.0 && otherVal.value != 0.0) ) {
                 if (!newSummaryData) {
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                 }
-                GCActivitySummaryValue * otherVal = other.summaryData[field];
+                
                 if( verbose ){
                     RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
                 }
@@ -1440,24 +1429,20 @@
     }
     
     if( ! newOnly ){
-        if (fabs(self.sumDistance - other.sumDistance) > 1.e-8) {
-            self.sumDistance = other.sumDistance;
-            rv = true;
-            
-            FMDatabase * db = self.db;
-            [db beginTransaction];
-            [db executeUpdate:@"UPDATE gc_activities SET sumDistance=? WHERE activityId = ?", @(self.sumDistance), self.activityId];
-            [db commit];
-            
-        }
-        if (fabs(self.sumDuration - other.sumDuration) > 1.e-8) {
-            self.sumDuration = other.sumDuration;
-            rv = true;
-            FMDatabase * db = self.db;
-            [db beginTransaction];
-            [db executeUpdate:@"UPDATE gc_activities SET sumDuration=? WHERE activityId = ?", @(self.sumDuration), self.activityId];
-            [db commit];
-            
+        for (GCField * field in @[ [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType],
+                                   [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityType],
+                                   [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:self.activityType],
+                                   [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:self.activityType],
+        ]) {
+            if( [self setNumberWithUnit:[other numberWithUnitForField:field] forField:field] ){
+                rv = true;
+                GCNumberWithUnit * save = [[self numberWithUnitForField:field] convertToUnit:[self storeUnitForField:field]];
+                FMDatabase * db = self.db;
+                [db beginTransaction];
+                NSString * query = [NSString stringWithFormat:@"UPDATE gc_activities SET %@=? WHERE activityId=?", field.key];
+                [db executeUpdate:query, @(save.value), self.activityId];
+                [db commit];
+            }
         }
     }
     if( other.speedDisplayUom && ( ![self.speedDisplayUom isEqualToString:other.speedDisplayUom]) ){
@@ -1468,15 +1453,6 @@
         [db executeUpdate:@"UPDATE gc_activities SET speedDisplayUom=? WHERE activityId = ?", self.speedDisplayUom, self.activityId];
         [db commit];
     }
-    if(fabs(self.weightedMeanSpeed-other.weightedMeanSpeed) > 1.e-8){
-        self.weightedMeanSpeed = other.weightedMeanSpeed;
-        rv = true;
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET WeightedMeanSpeed=? WHERE activityId = ?", @(self.weightedMeanSpeed), self.activityId];
-        [db commit];
-    }
-
 
     return rv;
 }
@@ -1638,63 +1614,6 @@
 
 #pragma mark -
 
--(BOOL)isEqualToActivity:(GCActivity*)other{
-
-    NSString * aType = other.activityType;
-    if (![aType isEqualToString:self.activityType]) {
-        return false;
-    }
-    if (![other.activityName isEqualToString:self.activityName]) {
-        return false;
-    }
-    if (fabs([other.date timeIntervalSinceDate:self.date])>=1.e-5) {
-        return false;
-    }
-    NSArray * fields = self.availableTrackFields;
-    NSArray * otherFields = other.availableTrackFields;
-
-    if (fields.count != otherFields.count) {
-        return false;
-    }
-    for (GCField * one in fields) {
-        GCNumberWithUnit * nu1 = [self numberWithUnitForField:one];
-        GCNumberWithUnit * nu2 = [self numberWithUnitForField:one];
-        if (nu1 == nil || nu2 == nil) {
-            return false;
-        }
-        if ([nu1 compare:nu2 withTolerance:1.e-8]!=NSOrderedSame ){
-            return false;
-        }
-    }
-    if (fabs(self.sumDuration - other.sumDuration) > 1.e-8 || fabs(self.sumDistance-other.sumDistance)> 1.e-8) {
-        return false;
-    }
-    if (self.metaData) {
-        for (NSString * field in self.metaData) {
-            GCActivityMetaValue * thisVal  = (self.metaData)[field];
-            GCActivityMetaValue * otherVal = (other.metaData)[field];
-            if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
-                return false;
-            }
-        }
-    }else if(other.metaData){
-        return false;
-    }
-    if (self.summaryData) {
-        for (GCField * field in self.summaryData) {
-            GCActivitySummaryValue * thisVal = self.summaryData[field];
-            GCActivitySummaryValue * otherVal = other.summaryData[field];
-            if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
-                return false;
-            }
-        }
-    }else if (other.summaryData){
-        return false;
-    }
-
-    return true;
-
-}
 +(NSString*)duplicateDescription:(gcDuplicate)dup{
     switch (dup) {
         case gcDuplicateTimeOverlapping:
@@ -1747,10 +1666,10 @@
         //        |--------------------|
         //          |--------------------|
         //One:      date                 Date+sumDuration
-        if( other.sumDuration > 60.0){
+        if(  [other.endTime timeIntervalSinceDate:other.startTime] > 60.0){
             NSTimeInterval overlap =
-            MIN(other.date.timeIntervalSinceReferenceDate+other.sumDuration, self.date.timeIntervalSinceReferenceDate+self.sumDuration)-
-            MAX(other.date.timeIntervalSinceReferenceDate, self.date.timeIntervalSinceReferenceDate);
+            MIN(other.endTime.timeIntervalSinceReferenceDate, self.endTime.timeIntervalSinceReferenceDate)-
+            MAX(other.startTime.timeIntervalSinceReferenceDate, self.startTime.timeIntervalSinceReferenceDate);
             
             //Last:   date           date+sumDuration
             //        |--------------|
@@ -1758,7 +1677,8 @@
             //One:      date                 Date+sumDuration
             // Use min duration otherwise ratio maybe too small even if full overlap
             // but second activity is much longer
-            double ratio = (double)overlap / MIN(self.sumDuration,other.sumDuration);
+            
+            double ratio = (double)overlap / MIN([self.endTime timeIntervalSinceDate:self.startTime],[other.endTime timeIntervalSinceDate:other.startTime]);
             
             if( overlap > 0.0 &&  ratio > 0.90 ){
                 activitiesAreDuplicate = gcDuplicateTimeOverlapping;

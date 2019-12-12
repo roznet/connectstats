@@ -105,12 +105,13 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 @property (nonatomic,retain) NSString * location;
 @property (nonatomic,retain) NSDate * date;
+/**
+ @brief convenience functions
+ */
+@property (nonatomic,readonly) NSDate * startTime;
+@property (nonatomic,readonly) NSDate * endTime;
 @property (nonatomic,assign) CLLocationCoordinate2D beginCoordinate;
 
-@property (nonatomic,assign) double sumDistance;
-@property (nonatomic,assign) double sumDuration;
-@property (nonatomic,assign) double weightedMeanHeartRate;
-@property (nonatomic,assign) double weightedMeanSpeed;
 @property (nonatomic,retain) NSString * speedDisplayUom;
 @property (nonatomic,retain) NSString * distanceDisplayUom;
 
@@ -293,6 +294,20 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  return numberWithUnit for field. This is the main access function for values
  */
 -(GCNumberWithUnit*)numberWithUnitForField:(GCField*)field;
+/**
+ @brief Set number for field
+ @return true if changed or new, false if unchanged
+*/
+-(BOOL)setNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)field;
+/**
+ *  @brief set summary field
+ *  @return true if value changed
+ */
+-(BOOL)setSummaryField:(gcFieldFlag)which with:(GCNumberWithUnit*)nu;
+-(NSArray<GCField*>*)validStoredSummaryFields;
+
+-(double)summaryFieldValueInStoreUnit:(gcFieldFlag)fieldFlag;
+-(void)setSummaryField:(gcFieldFlag)fieldFlag inStoreUnitValue:(double)value;
 
 /**
  Format a value with unit similar to a given field
@@ -315,6 +330,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(NSString*)formattedValue:(GCField*)field;
 
 -(BOOL)hasField:(GCField*)field;
+-(BOOL)isEqualToActivity:(GCActivity*)other;
 
 /**
  Returns all available summary fields as GCField. Includes calculated fields.

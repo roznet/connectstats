@@ -64,6 +64,11 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 @property (nonatomic,retain) NSDictionary<NSString*,GCActivityMetaValue*> * metaData;
 
+@property (nonatomic,assign) double sumDistance;
+@property (nonatomic,assign) double sumDuration;
+@property (nonatomic,assign) double weightedMeanHeartRate;
+@property (nonatomic,assign) double weightedMeanSpeed;
+
 
 @end
 
@@ -161,6 +166,64 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
 }
 
+-(BOOL)isEqualToActivity:(GCActivity*)other{
+
+    NSString * aType = other.activityType;
+    if (![aType isEqualToString:self.activityType]) {
+        return false;
+    }
+    if (![other.activityName isEqualToString:self.activityName]) {
+        return false;
+    }
+    if (fabs([other.date timeIntervalSinceDate:self.date])>=1.e-5) {
+        return false;
+    }
+    NSArray * fields = self.availableTrackFields;
+    NSArray * otherFields = other.availableTrackFields;
+
+    if (fields.count != otherFields.count) {
+        return false;
+    }
+    for (GCField * one in fields) {
+        GCNumberWithUnit * nu1 = [self numberWithUnitForField:one];
+        GCNumberWithUnit * nu2 = [self numberWithUnitForField:one];
+        if (nu1 == nil || nu2 == nil) {
+            return false;
+        }
+        if ([nu1 compare:nu2 withTolerance:1.e-8]!=NSOrderedSame ){
+            return false;
+        }
+    }
+    if (fabs(self.sumDuration - other.sumDuration) > 1.e-8 || fabs(self.sumDistance-other.sumDistance)> 1.e-8) {
+        return false;
+    }
+    if (self.metaData) {
+        for (NSString * field in self.metaData) {
+            GCActivityMetaValue * thisVal  = (self.metaData)[field];
+            GCActivityMetaValue * otherVal = (other.metaData)[field];
+            if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
+                return false;
+            }
+        }
+    }else if(other.metaData){
+        return false;
+    }
+    if (self.summaryData) {
+        for (GCField * field in self.summaryData) {
+            GCActivitySummaryValue * thisVal = self.summaryData[field];
+            GCActivitySummaryValue * otherVal = other.summaryData[field];
+            if (otherVal && ! [otherVal isEqualToValue:thisVal]) {
+                return false;
+            }
+        }
+    }else if (other.summaryData){
+        return false;
+    }
+
+    return true;
+
+}
+
 #pragma mark - Primary Field Access
 
 /**
@@ -209,7 +272,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         default:
         {
             [self loadSummaryData];
-            GCActivitySummaryValue * val = _summaryData[field];
+            GCActivitySummaryValue * val = self.summaryData[field];
             if (!val) {
                 val = self.calculatedFields[field];
             }
@@ -217,6 +280,119 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         }
     }
     return rv;
+}
+
+-(BOOL)setNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)field{
+    BOOL rv = false;
+    const double eps = 1.0e-8;
+    gcFieldFlag which = field.fieldFlag;
+    
+    switch (which) {
+        case gcFieldFlagWeightedMeanSpeed:
+        case gcFieldFlagWeightedMeanHeartRate:
+        case gcFieldFlagSumDuration:
+        case gcFieldFlagSumDistance:
+            rv = [self setSummaryField:field.fieldFlag with:nu];
+        default:
+            break;
+    }
+    if( [field isCalculatedField] ){
+        GCActivitySummaryValue * sumVal = self.calculatedFields[field];
+        GCActivitySummaryValue * newVal = nil;
+        if( !sumVal || ![nu compare:sumVal.numberWithUnit withTolerance:eps] ){
+            newVal = [GCActivitySummaryValue activitySummaryValueForField:field.key value:nu];
+            NSMutableDictionary * newDict = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
+            newDict[field] = newVal;
+            self.calculatedFields = newDict;
+            rv = true;
+        }
+    }else{
+        GCActivitySummaryValue * sumVal = self.summaryData[field];
+        GCActivitySummaryValue * newVal = nil;
+        if( !sumVal || ![nu compare:sumVal.numberWithUnit withTolerance:eps] ){
+            newVal = [GCActivitySummaryValue activitySummaryValueForField:field.key value:nu];
+            NSMutableDictionary * newDict = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
+            newDict[field] = newVal;
+            self.summaryData = newDict;
+            rv = true;
+        }
+    }
+    return rv;
+}
+-(BOOL)setSummaryField:(gcFieldFlag)which with:(GCNumberWithUnit*)nu{
+    BOOL rv = false;
+    const double eps = 1.0e-8;
+
+    switch (which) {
+        case gcFieldFlagSumDistance:
+        {
+            double val = [nu convertToUnitName:STOREUNIT_DISTANCE].value;
+            rv = fabs(self.sumDistance - val) > eps;
+            self.sumDistance = val;
+            self.flags |= gcFieldFlagSumDistance;
+            break;
+        }
+        case gcFieldFlagSumDuration:
+        {
+            double val = [nu convertToUnitName:STOREUNIT_ELAPSED].value;
+            rv = fabs( self.sumDuration - val) > eps;
+            self.sumDuration = val;
+            self.flags |= gcFieldFlagSumDuration;
+            break;
+        }
+        case gcFieldFlagWeightedMeanHeartRate:
+        {
+            rv = fabs( self.weightedMeanHeartRate - nu.value) > eps;
+            self.weightedMeanHeartRate = nu.value;
+            self.flags |= gcFieldFlagWeightedMeanHeartRate;
+            break;
+        }
+        case gcFieldFlagWeightedMeanSpeed:
+        {
+            double val = [nu convertToUnitName:STOREUNIT_SPEED].value;
+            rv = fabs( self.weightedMeanHeartRate - val) > eps;
+            self.weightedMeanSpeed = val;
+            self.flags |= gcFieldFlagWeightedMeanSpeed;
+            break;
+        }
+        default:
+            break;
+    }
+    return rv;
+}
+-(double)summaryFieldValueInStoreUnit:(gcFieldFlag)fieldFlag{
+    switch (fieldFlag) {
+        case gcFieldFlagWeightedMeanHeartRate:
+            return self.weightedMeanHeartRate;
+        case gcFieldFlagWeightedMeanSpeed:
+            return self.weightedMeanSpeed;
+        case gcFieldFlagSumDuration:
+            return self.sumDuration;
+        case gcFieldFlagSumDistance:
+            return self.sumDistance;
+            
+        default:
+            return 0.0;
+    }
+}
+-(void)setSummaryField:(gcFieldFlag)fieldFlag inStoreUnitValue:(double)value{
+    switch (fieldFlag) {
+        case gcFieldFlagWeightedMeanHeartRate:
+             self.weightedMeanHeartRate = value;
+            break;
+        case gcFieldFlagWeightedMeanSpeed:
+            self.weightedMeanSpeed = value;
+            break;
+        case gcFieldFlagSumDuration:
+            self.sumDuration = value;
+            break;
+        case gcFieldFlagSumDistance:
+            self.sumDistance = value;;
+            break;
+        default:
+            break;
+    }
+
 }
 
 #pragma mark - Test on Fields
@@ -236,6 +412,14 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return [NSArray arrayWithArray:rv];
 }
 
+-(NSArray<GCField*>*)validStoredSummaryFields{
+    return @[
+        [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType],
+        [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityType],
+        [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:self.activityType],
+        [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:self.activityType],
+    ];
+}
 -(NSArray<NSString*>*)allFieldsKeys{
     [self loadSummaryData];
     NSArray<GCField*> * rv = _summaryData.allKeys;
@@ -328,6 +512,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         case gcFieldFlagSumDistance:
             rv = [GCUnit unitForKey:STOREUNIT_DISTANCE];
             break;
+        case gcFieldFlagSumDuration:
+            rv = [GCUnit unitForKey:STOREUNIT_ELAPSED];
+            break;
         default:
         {
             rv = [self numberWithUnitForField:field].unit;
@@ -358,6 +545,13 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return [[nu convertToUnit:unit] formatDouble];
 }
 
+-(NSDate*)startTime{
+    return self.date;
+}
+
+-(NSDate*)endTime{
+    return [self.date dateByAddingTimeInterval:self.sumDuration];
+}
 
 #pragma mark -
 
@@ -1095,6 +1289,27 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return rv;
 }
 
+/**
+ @brief available fields in activitiy
+ */
+-(NSArray<GCField*>*)availableFields{
+    NSMutableDictionary * unique = [NSMutableDictionary dictionary];
+    NSArray * track = [GCFields availableFieldsIn:self.flags forActivityType:self.activityType];
+    for (GCField * one in track) {
+        unique[one] = @1;
+    }
+    for (GCField * one in self.summaryData) {
+        // if speed or pace, don't add twice, was already added above
+        if( one.isSpeedOrPace && (_trackFlags & gcFieldFlagWeightedMeanSpeed ) == gcFieldFlagWeightedMeanSpeed){
+            continue;
+        }
+        if( one.validForGraph ){
+            unique[one] = @1;
+        }
+    }
+    return [unique.allKeys sortedArrayUsingSelector:@selector(compare:)];
+
+}
 /**
  Return list of available fields with Track Points. Will include calculated tracks
  @return NSArray<GCField*>

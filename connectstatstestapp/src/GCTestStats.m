@@ -28,6 +28,8 @@
 #import "GCHistoryAggregatedActivityStats.h"
 #import "GCHistoryFieldSummaryStats.h"
 #import "GCViewConfig.h"
+#import "GCActivity+TestBackwardCompat.h"
+
 @import RZExternal;
 
 @implementation GCTestStats
@@ -87,7 +89,7 @@
                 double cnt = 0.;
                 for (NSUInteger i = 0; i < [actIdx count]; i++) {
                     GCActivity * act = [organizer activityForIndex:[[actIdx objectAtIndex:i] integerValue]];
-                    sum += act.sumDistance;
+                    sum += act.sumDistanceCompat;
                     cnt += 1.;
                 }
                 double aggSum = [data valFor:gcAggregatedSumDistance and:gcAggregatedSum];
@@ -99,7 +101,7 @@
                     NSLog(@"type=%@ viewChoice=%@ filter=%@",activityType,[GCViewConfig viewChoiceDesc:viewChoice],filter);
                     for (NSUInteger i = 0; i < [actIdx count]; i++) {
                         GCActivity * act = [organizer activityForIndex:[[actIdx objectAtIndex:i] integerValue]];
-                        NSLog(@"%@ %@ %f",act,[[act date] dateShortFormat],act.sumDistance);
+                        NSLog(@"%@ %@ %f",act,[[act date] dateShortFormat],act.sumDistanceCompat);
                     }
                 }
                 RZ_ASSERT(fabs(cnt-aggCnt)<1e-6, @"%@ match cnt %f", data,cnt);
