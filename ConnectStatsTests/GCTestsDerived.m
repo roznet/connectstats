@@ -93,7 +93,8 @@
     [RZFileOrganizer removeEditableFile:@"test_derived_parsing_bestrolling_cs.db"];
     FMDatabase * deriveddb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"test_derived_parsing_bestrolling_cs.db"]];
     [deriveddb open];
-
+    [GCDerivedOrganizer ensureDbStructure:deriveddb];
+    
     GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initWithDb:deriveddb andThread:nil];
                                     
     [GCConnectStatsRequestSearch testForOrganizer:organizer_cs withFilesInPath:bundlePath];
