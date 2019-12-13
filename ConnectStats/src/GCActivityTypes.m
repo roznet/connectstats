@@ -101,7 +101,29 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
                 RZLog(RZLogInfo, @"inconsitent %@ %@", type, found[type.key]);
             }
             found[type.key] = type;
-            
+        }
+        [found removeAllObjects];
+        for (NSString * typeName in byActivityType) {
+            GCActivityType * type = byActivityType[typeName];
+            NSNumber * typeId = @(type.typeId);
+            if( byTypeId[typeId] == nil){
+                GCActivityType * candidate = nil;
+                for (GCActivityType * otherType in byTypeId.allValues) {
+                    if( [otherType.key containsString:type.key] || [type.key containsString:otherType.key]){
+                        candidate = otherType;
+                        break;
+                    }
+                }
+                if( candidate ){
+                RZLog(RZLogInfo, @"Missing %@ Candidate: %@", type, candidate);
+                }else{
+                RZLog(RZLogInfo, @"Missing %@", type);
+                }
+            }
+            if( found[typeId] ){
+                RZLog(RZLogInfo, @"inconsitent %@ %@", type, found[type.key]);
+            }
+            found[typeId] = type;
         }
     }
     

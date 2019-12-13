@@ -225,7 +225,7 @@
                                  @"weighted_average_watts" : @1, // sample: 129
                                  
                                  // ConnectStats Data Processed outside
-                                 @"startTmeInSeconds": @1575012829,
+                                 @"startTimeInSeconds" : @1, // sample: 1576060479
                                  @"startingLatitudeInDegree": @51.47216607816517,
                                  @"averagePaceInMinutesPerKilometer": @5.414771,
                                  @"maxPaceInMinutesPerKilometer": @4.8676014,
@@ -237,6 +237,44 @@
                                  @"hasPolyline":@1,
                                  @"lapcount":@1,
 
+                                 // New info in modern garmin data
+                                 @"lapCount" : @1, // sample: 5
+                                 @"beginTimestamp" : @1, // sample: 1576060479000
+                                 @"timeZoneId" : @1, // sample: 149
+                                 @"deviceId" : @1, // sample: 3305029741
+                                 @"activityTrainingLoad" : @1, // sample: 114.1391448974609
+                                 @"purposeful" : @1, // sample: 0
+                                 @"waterEstimated" : @1, // sample: 435
+                                 @"elevationCorrected" : @1, // sample: 0
+                                 @"minActivityLapDuration" : @1, // sample: 355.85400390625
+                                 @"atpActivity" : @1, // sample: 0
+                                 @"maxDoubleCadence" : @1, // sample: 174
+                                 @"sportTypeId" : @1, // sample: 1
+                                 @"minRespirationRate" : @1, // sample: 20.75
+                                 @"avgRespirationRate" : @1, // sample: 20.75
+                                 @"maxRespirationRate" : @1, // sample: 20.75
+                                 @"caloriesConsumed" : @1, // sample: 0
+                                 @"waterConsumed" : @1, // sample: 0
+                                 @"maxAvgPower_20" : @1, // sample: 391
+                                 @"maxAvgPower_600" : @1, // sample: 136
+                                 @"excludeFromPowerCurveReports" : @1, // sample: 0
+                                 @"maxAvgPower_300" : @1, // sample: 168
+                                 @"maxAvgPower_1" : @1, // sample: 529
+                                 @"maxAvgPower_10" : @1, // sample: 423
+                                 @"strokes" : @1, // sample: 1546
+                                 @"maxAvgPower_60" : @1, // sample: 283
+                                 @"maxAvgPower_30" : @1, // sample: 357
+                                 @"maxAvgPower_2" : @1, // sample: 517
+                                 @"maxAvgPower_1200" : @1, // sample: 119
+                                 @"maxAvgPower_5" : @1, // sample: 465
+                                 @"maxAvgPower_1800" : @1, // sample: 106
+                                 @"maxAvgPower_120" : @1, // sample: 245
+                                 @"avgGroundContactTime" : @1, // sample: 256.3999938964844
+                                 @"avgVerticalRatio" : @1, // sample: 7.46999979019165
+                                 @"avgVerticalOscillation" : @1, // sample: 9.030000305175781
+                                 @"avgGroundContactBalance" : @1, // sample: 49.84000015258789
+
+                                 
                                  };
                 [knownMissing retain];
             }
@@ -253,7 +291,7 @@
                     recordMissing[key] = @1;
                 }
                 if( sample != nil && knownMissing[key] == nil){
-                    RZLog(RZLogInfo, @"Modern Unknown Key: %@ sample: %@", key,  sample);
+                    RZLog(RZLogInfo, @"Modern Unknown Key: @\"%@\" : @1, // sample: %@", key, sample);
                 }
             }
 #endif

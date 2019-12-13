@@ -37,7 +37,6 @@
 
 
 -(void)nextGraphField;
--(void)publishEvent;
 -(GCActivity*)compareActivity;
 
 -(void)showMap:(GCField*)field;

@@ -2168,7 +2168,7 @@
 		4253B4561CD49F7E00437E6A /* FitFileExplorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitFileExplorer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4253B4641CD49F7E00437E6A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4253B4671CD49F7E00437E6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		4253B4691CD49F7E00437E6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4253B4691CD49F7E00437E6A /* FitFileExplorer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FitFileExplorer-Info.plist"; sourceTree = "<group>"; };
 		4253B46E1CD4A53400437E6A /* activity_1083407258.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = activity_1083407258.fit; sourceTree = "<group>"; };
 		4253B46F1CD4A53400437E6A /* activity_1083407258.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_1083407258.json; sourceTree = "<group>"; };
 		4253B4701CD4A53400437E6A /* activitylaps_1083407258.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitylaps_1083407258.json; sourceTree = "<group>"; };
@@ -3757,7 +3757,7 @@
 				4287C30B2221BA3B0055F584 /* FitFileExplorer.debug.xcconfig */,
 				4287C3002221BA3B0055F584 /* FitFileExplorer.release.xcconfig */,
 				4253B47A1CDA81EA00437E6A /* FitFileExplorer.entitlements */,
-				4253B4691CD49F7E00437E6A /* Info.plist */,
+				4253B4691CD49F7E00437E6A /* FitFileExplorer-Info.plist */,
 				4262ADD01DCC8F0300F089AA /* OldObjC */,
 				4253B4841CDA858F00437E6A /* main.m */,
 				4248ED991DCFF6E100254216 /* FitFileExplorer-Prefix.pch */,
@@ -8176,7 +8176,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5.2.3.0;
+				CURRENT_PROJECT_VERSION = 5.2.4.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8198,7 +8198,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 5.2.3;
+				MARKETING_VERSION = 5.2.4;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -8228,7 +8228,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 5.2.3.0;
+				CURRENT_PROJECT_VERSION = 5.2.4.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = NO;
@@ -8251,7 +8251,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 5.2.3;
+				MARKETING_VERSION = 5.2.4;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
