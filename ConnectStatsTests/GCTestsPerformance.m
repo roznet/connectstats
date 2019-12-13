@@ -76,6 +76,7 @@
     NSString * fname = [RZFileOrganizer bundleFilePath:@"activities_stats.db" forClass:[self class]];
     FMDatabase * db = [FMDatabase databaseWithPath:fname];
     [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
     
     GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
     

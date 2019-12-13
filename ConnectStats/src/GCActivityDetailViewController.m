@@ -726,19 +726,6 @@
     return self.organizedAttributedStrings;
 }
 
--(void)publishEvent{
-    GCActivity * act = self.activity;
-    if (act) {
-#ifdef GC_USE_FLURRY
-        NSString * actType = act.activityType;
-        [Flurry logEvent:EVENT_ACTIVITY_DETAIL withParameters:@{@"Type":actType ?: @"Unknown"}];
-        GCActivityMetaValue * deviceVal = [act metaValueForField:GC_META_DEVICE];
-        [Flurry logEvent:EVENT_DEVICE withParameters:@{@"device":deviceVal ? (deviceVal.display ?: @"Unknown") : @"Unknown"}];
-#endif
-        RZLog(RZLogInfo, @"%@", act);
-    }
-}
-
 /**
  @brief Set alternative implementor if activity needs it, for example tennis
  */
