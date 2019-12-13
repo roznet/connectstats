@@ -2533,7 +2533,7 @@
 		42B5E1B91BA5AEC9000FAE4E /* ConnectStatsTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ConnectStatsTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42B5E1C71BA5AEC9000FAE4E /* ConnectStatsTestApp.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = ConnectStatsTestApp.xcassets; path = ../connectstatstestapp/ConnectStatsTestApp.xcassets; sourceTree = "<group>"; };
 		42B5E1CA1BA5AEC9000FAE4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		42B5E1CC1BA5AEC9000FAE4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42B5E1CC1BA5AEC9000FAE4E /* ConnectStatsTestApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ConnectStatsTestApp-Info.plist"; sourceTree = "<group>"; };
 		42B5E1F11BA5AF9A000FAE4E /* GCAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCAppDelegate.m; path = src/GCAppDelegate.m; sourceTree = "<group>"; };
 		42B5E1F21BA5AF9A000FAE4E /* GCAppGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCAppGlobal.h; path = src/GCAppGlobal.h; sourceTree = "<group>"; };
 		42B5E1F31BA5AF9A000FAE4E /* GCTestCommunications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestCommunications.m; path = src/GCTestCommunications.m; sourceTree = "<group>"; };
@@ -4757,7 +4757,7 @@
 				427F93601BEAA37100C177F9 /* TestsUI */,
 				42295E051EC6F4B300F4F7EE /* TestServices */,
 				42B5E1EC1BA5AF70000FAE4E /* Tests */,
-				42B5E1CC1BA5AEC9000FAE4E /* Info.plist */,
+				42B5E1CC1BA5AEC9000FAE4E /* ConnectStatsTestApp-Info.plist */,
 				42B5E1BB1BA5AEC9000FAE4E /* Supporting Files */,
 			);
 			path = ConnectStatsTestApp;
@@ -7930,7 +7930,7 @@
 				GCC_PREFIX_HEADER = "FitFileExplorer/src/FitFileExplorer-Prefix.pch";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = FitFileExplorer/Info.plist;
+				INFOPLIST_FILE = "FitFileExplorer/FitFileExplorer-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -7970,7 +7970,7 @@
 				GCC_PREFIX_HEADER = "FitFileExplorer/src/FitFileExplorer-Prefix.pch";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = FitFileExplorer/Info.plist;
+				INFOPLIST_FILE = "FitFileExplorer/FitFileExplorer-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -8357,7 +8357,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = ConnectStatsTestApp/Info.plist;
+				INFOPLIST_FILE = "ConnectStatsTestApp/ConnectStatsTestApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8403,7 +8403,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = ConnectStatsTestApp/Info.plist;
+				INFOPLIST_FILE = "ConnectStatsTestApp/ConnectStatsTestApp-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
