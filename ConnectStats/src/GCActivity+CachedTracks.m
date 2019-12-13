@@ -436,7 +436,7 @@
     
     GCNumberWithUnit * current_altitude = [GCNumberWithUnit numberWithUnit:serie.unit andValue:[serie dataPointAtIndex:0].y_data];
     for (GCStatsDataPoint * point in serie) {
-        i( fabs( current_altitude.value - point.y_data ) > threshold ){
+        if( fabs( current_altitude.value - point.y_data ) > threshold ){
             current_altitude = [GCNumberWithUnit numberWithUnit:serie.unit andValue:point.y_data];
         }
         [adjusted addNumberWithUnit:current_altitude forX:point.x_data];
