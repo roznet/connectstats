@@ -80,6 +80,16 @@ class FITDownloadViewController: NSViewController {
         }
     }
     
+    func selectedActivities() -> [Activity] {
+        let rows = self.activityTable.selectedRowIndexes
+        let acts = dataSource.list()
+        var rv : [Activity] = []
+        for index in rows {
+            rv.append(acts[index])
+        }
+        return rv
+    }
+    
     @IBAction func refresh(_ sender: Any) {
         activityTable.dataSource = self.dataSource
         activityTable.delegate = self.dataSource
@@ -93,51 +103,41 @@ class FITDownloadViewController: NSViewController {
         
         FITAppGlobal.downloadManager().startDownloadList()
     }
-
-    @IBAction func downloadSamples(_ sender: Any) {
-        activityTable.dataSource = self.dataSource
-        activityTable.delegate = self.dataSource
-        FITAppGlobal.downloadManager().loadRawFiles()
-
-    }
     
     @IBAction func openFitFile(_ sender: Any) {
-        let row = self.activityTable.selectedRow
-        if (row > -1) {
-            let act = dataSource.list()[row]
+        let activities = self.selectedActivities()
+        var downloaded : [Activity] = []
+        var needDownload : [Activity] = []
+        
+        for act in activities {
             if act.downloaded, let url = act.fitFilePath {
-                
+                downloaded.append(act)
                 NSDocumentController.shared.openDocument(withContentsOf: url, display: true, completionHandler: {(doc,bool,err) in })
-
             }else{
-            
-                NotificationCenter.default.addObserver(self, selector: #selector(notificationNewFitFile(notification:)),
-                                                       name: GarminRequestFitFile.Notifications.downloaded, object: nil)
-                
-                FITAppGlobal.downloadManager().startDownloadFitFile(activityId: act.activityId)
+                needDownload.append(act)
             }
-        }else{
-            RZSLog.info("No selection, nothing to download")
+        }
+        
+        if( needDownload.count > 0){
+            NotificationCenter.default.addObserver(self, selector: #selector(notificationNewFitFile(notification:)),
+                                                   name: GarminRequestFitFile.Notifications.downloaded, object: nil)
+            
+            FITAppGlobal.downloadManager().startDownloadFitFiles(activities: needDownload )
+
         }
 
     }
     @IBAction func exportAllFitFiles(_ sender: Any) {
-        
+        let todo = self.selectedActivities()
+        print( "\(todo)")
     }
     @IBAction func downloadFITFile(_ sender: Any) {
-        let row = self.activityTable.selectedRow
-        if (row > -1) {
-            let act = dataSource.list()[row].activityId
-            
-            RZSLog.info("Download \(row) \(act)")
-            NotificationCenter.default.addObserver(self, selector: #selector(notificationNewFitFile(notification:)),
-                                                   name: GarminRequestFitFile.Notifications.downloaded, object: nil)
-
-            FITAppGlobal.downloadManager().startDownloadFitFile(activityId: act)
-            
-        }else{
-            RZSLog.info("No selection, nothing to download")
-        }
+        let todo = self.selectedActivities()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationNewFitFile(notification:)),
+                                               name: GarminRequestFitFile.Notifications.downloaded, object: nil)
+        
+        FITAppGlobal.downloadManager().startDownloadFitFiles(activities: todo)
     }
 
     @objc func downloadFinished(notification : Notification){

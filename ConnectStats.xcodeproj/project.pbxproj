@@ -5710,7 +5710,6 @@
 					};
 					4253B4551CD49F7E00437E6A = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = M7QSSF3624;
 						DevelopmentTeamName = "Brice Rosenzweig";
 						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
@@ -7923,8 +7922,9 @@
 				CODE_SIGN_ENTITLEMENTS = FitFileExplorer/FitFileExplorer.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2.0.2;
+				CURRENT_PROJECT_VERSION = 2.1.2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FitFileExplorer/src/FitFileExplorer-Prefix.pch";
@@ -7936,6 +7936,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 2.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -7962,8 +7963,9 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.0.2;
+				CURRENT_PROJECT_VERSION = 2.1.2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -7976,6 +7978,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 2.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";

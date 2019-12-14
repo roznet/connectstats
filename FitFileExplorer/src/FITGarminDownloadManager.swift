@@ -100,9 +100,11 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
         FITAppGlobal.web().addRequest(GarminRequestActivityList(start: 0))
     }
     
-    func startDownloadFitFile(activityId : String ){
+    func startDownloadFitFiles(activities : [Activity] ){
         garminInit()
-        FITAppGlobal.web().addRequest(GarminRequestFitFile(activityId: activityId))
+        for act in activities {
+            FITAppGlobal.web().addRequest(GarminRequestFitFile(activityId: act.activityId))
+        }
     }
     
     func loadOneFile(filePath : String) -> Int {
