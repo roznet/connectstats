@@ -40,7 +40,7 @@ def to_camel_case(not_camel_case):
     return ''.join([x.title() for x in components ] )
     
 
-connto = sqlite3.connect('fields.db')
+connto = sqlite3.connect('out/fields.db')
 
 def known_fields():
     sql = 'SELECT field FROM gc_fields_en GROUP BY field'
@@ -49,7 +49,7 @@ def known_fields():
         rv[row[0]] = 1
     return rv
 
-with open('fit_map.json', 'r' ) as of:
+with open('out/fit_map.json', 'r' ) as of:
     existing = json.load( of )
 
 # know are the fields that connectstats will know from the fields database
@@ -159,7 +159,7 @@ if verbose and len(missing ):
     print( 'Missing fields:' )
     pprint( missing )
 
-with open( 'fit_map.json', 'w' ) as outfile:
+with open( 'out/fit_map.json', 'w' ) as outfile:
     json.dump( existing, outfile, indent = 2, sort_keys = True )
     
-print( 'Saved fit_map.json' )
+print( 'Saved out/fit_map.json' )

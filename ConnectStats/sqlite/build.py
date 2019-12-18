@@ -5,7 +5,7 @@
 
 import sqlite3
 import json
-connto = sqlite3.connect('fields.db')
+connto = sqlite3.connect('out/fields.db')
 
 
 def fieldflags():
@@ -150,32 +150,32 @@ def categoryorder(db_from,table):
 # Will add specific from the language+ what is in english power and manual
 # To add new fields, just add them manually to fields_en_manual
 for lang in [ 'en', 'fr', 'ja', 'de', 'it', 'es', 'pt', 'zh' ] :
-    language( 'fields_%s_metric.db' %(lang,) , 'gc_fields_'+lang )
-    addextra('fields_en_power.db', 'gc_fields_' + lang, 'gc_fields_power')
-    addextra('fields_en_manual.db', 'gc_fields_' + lang, 'gc_fields_manual')
-    activitytype( 'activity_types_%s.json' %( lang, ), 'gc_activityType_' + lang );
+    language( 'cached/fields_%s_metric.db' %(lang,) , 'gc_fields_'+lang )
+    addextra('edit/fields_en_power.db', 'gc_fields_' + lang, 'gc_fields_power')
+    addextra('edit/fields_en_manual.db', 'gc_fields_' + lang, 'gc_fields_manual')
+    activitytype( 'cached/activity_types_%s.json' %( lang, ), 'gc_activityType_' + lang );
 
-activitytype_modern( 'activity_types_modern.json', 'gc_activityType_modern' )
+activitytype_modern( 'download/activity_types_modern.json', 'gc_activityType_modern' )
 #####
 # Add Defaults metric and statute uom
-uom('fields_en_metric.db','gc_fields_uom_metric')
-uom('fields_en_statute.db','gc_fields_uom_statute')
+uom('cached/fields_en_metric.db','gc_fields_uom_metric')
+uom('cached/fields_en_statute.db','gc_fields_uom_statute')
 
 #####
 # Add Uom for power fields
-addextrauom('fields_en_power.db', 'gc_fields_uom_metric', 'gc_fields_power')
-addextrauom('fields_en_power.db', 'gc_fields_uom_statute','gc_fields_power')
+addextrauom('edit/fields_en_power.db', 'gc_fields_uom_metric', 'gc_fields_power')
+addextrauom('edit/fields_en_power.db', 'gc_fields_uom_statute','gc_fields_power')
 
 #####
 # add days field from fields_en_day.db
 # to recreate the db, edit fields_en_day.sql
-addday('fields_en_day.db', 'gc_fields_en')
-adddayuom('fields_en_day.db', 'gc_fields_uom_metric')
+addday('cached/fields_en_day.db', 'gc_fields_en')
+adddayuom('cached/fields_en_day.db', 'gc_fields_uom_metric')
 
 #####
 # Add Field Order and Category order
 # To add new fields, edit fields_order.db
-fieldorder('fields_order.db','fields_order')
-categoryorder('fields_order.db','category_order')
+fieldorder('edit/fields_order.db','fields_order')
+categoryorder('edit/fields_order.db','category_order')
 
 fieldflags()

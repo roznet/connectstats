@@ -132,8 +132,9 @@
     if( [notification.name isEqualToString:kNotifyOrganizerLoadComplete]){
         [self clearFieldDataSeries];
     }
-
-    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.tableView reloadData];
+    });
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo*)theInfo{
