@@ -114,6 +114,58 @@ extension RZFitFile {
         return self.orderKeysFromSample(samples: samples)
     }
     
+    static func csv(messageType:RZFitMessageType, fitFiles:[RZFitFile]) -> [String] {
+        var cols : [String] = ["filename"]
+        var sample : [RZFitFieldKey:Sample] = [:]
+        var rv :[String] = []
+        var line : [String] = []
+        for fitFile in fitFiles {
+            let oneSample = fitFile.sampleValues(messageType: messageType)
+            for one in oneSample {
+                sample[one.key] = one.value
+            }
+            let oneCols = fitFile.orderKeysFromSample(samples: oneSample)
+            for col in oneCols{
+                if !cols.contains(col) {
+                    if let thisSample = oneSample[col]?.one {
+                        cols.append(col)
+                        line.append(contentsOf: thisSample.csvColumns(col: col))
+                    }
+                }
+            }
+        }
+        
+        rv.append( line.joined(separator: ",") )
+        
+        for fitFile in fitFiles {
+            for message in fitFile.messages(forMessageType: messageType) {
+                line = []
+                let vals = message.interpretedFields()
+                for col in cols {
+                    if col == "filename" {
+                        let filename = fitFile.sourceURL?.pathComponents.last ?? ""
+                        line.append(filename)
+                    }else{
+                        if let val = vals[col] {
+                            line.append( contentsOf: val.csvValues(ref: sample[col]?.one))
+                        } else {
+                            if let sampleCols = sample[col]?.one {
+                                let emptyVals : [String] = sampleCols.csvColumns(col: col).map { _ in "" }
+                                line.append(contentsOf: emptyVals)
+                            }else{
+                                line.append(col)
+                            }
+                        }
+                    }
+                }
+                rv.append(line.joined(separator: ","))
+            }
+        }
+        
+        return rv
+    }
+    
+    
     func csv(messageType:RZFitMessageType) -> [String] {
         let sample = self.sampleValues(messageType: messageType)
         let cols = self.orderKeysFromSample(samples: sample)

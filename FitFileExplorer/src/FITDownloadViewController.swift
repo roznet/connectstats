@@ -59,6 +59,8 @@ class FITDownloadViewController: NSViewController {
     @IBOutlet weak var rightStatus: NSTextField!
     @IBOutlet weak var leftStatus: NSTextField!
     
+    
+    var pendingOpen : [Activity] = []
     var dataSource = FITDownloadListDataSource()
     
     // MARK: -
@@ -80,6 +82,54 @@ class FITDownloadViewController: NSViewController {
         }
     }
     
+    func selectedActivities() -> [Activity] {
+        let rows = self.activityTable.selectedRowIndexes
+        let acts = dataSource.list()
+        var rv : [Activity] = []
+        for index in rows {
+            rv.append(acts[index])
+        }
+        return rv
+    }
+    
+    
+    func exportFitFilesAsCSV(messageType:RZFitMessageType){
+        let todo = self.selectedActivities()
+        var files : [RZFitFile] = []
+        for act in todo {
+            if let url = act.fitFilePath {
+                if let file = RZFitFile(file: url){
+                    files.append(file)
+                }
+            }
+        }
+        
+        let csv = RZFitFile.csv(messageType: messageType, fitFiles: files)
+        let content = csv.joined(separator: "\n")
+        
+        let mesg = rzfit_mesg_num_string(input: messageType) ?? "mesg"
+        
+        self.askAndSave(content: content, candidate: "export_\(mesg)")
+    }
+
+    func askAndSave(content:String, candidate:String){
+        let savePanel = NSSavePanel()
+
+        savePanel.message = "Choose the location to save the csv file"
+        savePanel.allowedFileTypes = [ "csv" ]
+        savePanel.nameFieldStringValue = candidate
+        if savePanel.runModal() == NSApplication.ModalResponse.OK, let url = savePanel.url {
+            do {
+                try content.write(to: url, atomically: true, encoding: String.Encoding.utf8)
+            }catch{
+                RZSLog.error( "Failed to save \(url)")
+            }
+        }
+
+    }
+    
+    // MARK: - Buttons and actions
+    
     @IBAction func refresh(_ sender: Any) {
         activityTable.dataSource = self.dataSource
         activityTable.delegate = self.dataSource
@@ -94,52 +144,91 @@ class FITDownloadViewController: NSViewController {
         FITAppGlobal.downloadManager().startDownloadList()
     }
 
-    @IBAction func downloadSamples(_ sender: Any) {
-        activityTable.dataSource = self.dataSource
-        activityTable.delegate = self.dataSource
-        FITAppGlobal.downloadManager().loadRawFiles()
+    @IBAction func downloadFitFile(_ sender: Any) {
+        let activities = self.selectedActivities()
+        var needDownload : [Activity] = []
+        
+        for act in activities {
+            if !act.downloaded {
+                needDownload.append(act)
+            }
+        }
+        
+        if( needDownload.count > 0){
+            NotificationCenter.default.addObserver(self, selector: #selector(notificationNewFitFile(notification:)),
+                                                   name: GarminRequestFitFile.Notifications.downloaded, object: nil)
+            
+            FITAppGlobal.downloadManager().startDownloadFitFiles(activities: needDownload )
 
+        }
     }
     
     @IBAction func openFitFile(_ sender: Any) {
-        let row = self.activityTable.selectedRow
-        if (row > -1) {
-            let act = dataSource.list()[row]
-            if act.downloaded, let url = act.fitFilePath {
-                
-                NSDocumentController.shared.openDocument(withContentsOf: url, display: true, completionHandler: {(doc,bool,err) in })
-
-            }else{
-            
-                NotificationCenter.default.addObserver(self, selector: #selector(notificationNewFitFile(notification:)),
-                                                       name: GarminRequestFitFile.Notifications.downloaded, object: nil)
-                
-                FITAppGlobal.downloadManager().startDownloadFitFile(activityId: act.activityId)
-            }
-        }else{
-            RZSLog.info("No selection, nothing to download")
-        }
-
-    }
-    @IBAction func exportAllFitFiles(_ sender: Any) {
+        let activities = self.selectedActivities()
+        var downloaded : [Activity] = []
+        var needDownload : [Activity] = []
         
-    }
-    @IBAction func downloadFITFile(_ sender: Any) {
-        let row = self.activityTable.selectedRow
-        if (row > -1) {
-            let act = dataSource.list()[row].activityId
-            
-            RZSLog.info("Download \(row) \(act)")
+        for act in activities {
+            if act.downloaded, let url = act.fitFilePath {
+                downloaded.append(act)
+                NSDocumentController.shared.openDocument(withContentsOf: url, display: true, completionHandler: {(doc,bool,err) in })
+            }else{
+                needDownload.append(act)
+            }
+        }
+        
+        if( needDownload.count > 0){
+            self.pendingOpen.append(contentsOf: needDownload)
             NotificationCenter.default.addObserver(self, selector: #selector(notificationNewFitFile(notification:)),
                                                    name: GarminRequestFitFile.Notifications.downloaded, object: nil)
-
-            FITAppGlobal.downloadManager().startDownloadFitFile(activityId: act)
             
-        }else{
-            RZSLog.info("No selection, nothing to download")
+            FITAppGlobal.downloadManager().startDownloadFitFiles(activities: needDownload )
+
         }
+
+    }
+    
+    @IBAction func exportFilesAsCSVSessions(_ sender: Any) {
+        self.exportFitFilesAsCSV(messageType: FIT_MESG_NUM_SESSION)
+    }
+    
+    @IBAction func exportFilesAsCSVLaps(_ sender: Any) {
+        self.exportFitFilesAsCSV(messageType: FIT_MESG_NUM_LAP)
+    }
+    
+    @IBAction func exportFilesAsCSVRecords(_ sender: Any) {
+        self.exportFitFilesAsCSV(messageType: FIT_MESG_NUM_RECORD)
+    }
+    
+    @IBAction func exportList(_ sender: Any) {
+        let organizer = FITAppGlobal.shared.organizer
+        let csv = organizer.csv()
+
+        let content = csv.joined(separator: "\n")
+        
+        self.askAndSave(content: content, candidate: "list")
+        
+    }
+    
+    @IBAction func editUserName(_ sender: Any) {
+        let entered_username = userName.stringValue
+        if( !keychain.set(entered_username, forKey: FITAppGlobal.ConfigParameters.loginName.rawValue) ){
+            RZSLog.error( "failed to save username" )
+        }
+        FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.loginName.rawValue, stringVal: entered_username)
+    }
+    
+    @IBAction func editPassword(_ sender: Any) {
+        let entered_password = password.stringValue
+        if !keychain.set(entered_password, forKey: FITAppGlobal.ConfigParameters.password.rawValue){
+            RZSLog.error("failed to save password")
+        }
+        
+        FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.password.rawValue, stringVal: entered_password)
     }
 
+    // MARK: - notifications
+    
     @objc func downloadFinished(notification : Notification){
         DispatchQueue.main.async {
             self.rebuildColumns()
@@ -161,81 +250,21 @@ class FITDownloadViewController: NSViewController {
     @objc func notificationNewFitFile(notification:Notification){
         if let activityId = notification.object as? String {
             RZSLog.info( "Success Downloaded \(activityId)")
-            if let fp = RZFileOrganizer.writeableFilePathIfExists("\(activityId).fit") {
-                NSDocumentController.shared.openDocument(withContentsOf: URL(fileURLWithPath: fp), display: true, completionHandler: {(doc,bool,err) in })
-            }
-        }
-    }
-
-    // MARK: -
-    
-    func exportByFile() {
-        var units : [String:GCUnit] = [:]
-        
-        for activity  in self.dataSource.list() {
             
-            if let path =  activity.fitFilePath,
-                
-                let fitFile = RZFitFile(file: path) {
-                let interpret = FITFitFileInterpret(fitFile: fitFile)
-                let cols = interpret.columnDataSeries(messageType: FIT_MESG_NUM_RECORD)
-                
-                for (key,values) in cols.values {
-                    var dcols =  [ ["activityId","time",key,"uom"].joined(separator: ",") ]
+            for act in self.pendingOpen {
+                if( act.activityId == activityId ){
                     
-                    for val in values {
-                        let row = [activity.activityId,val.time.formatAsRFC3339(),"\(val.value.value)",val.value.unit.key]
-                        dcols.append(row.joined(separator: ","))
+                    if let fp = RZFileOrganizer.writeableFilePathIfExists("\(activityId).fit") {
+                        NSDocumentController.shared.openDocument(withContentsOf: URL(fileURLWithPath: fp), display: true, completionHandler: {(doc,bool,err) in })
                     }
-                    
-                    if( units[ key ] == nil){
-                        if let first = values.first?.value {
-                            units[key] = first.unit
-                        }
-                    }
-                    let fn = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath("\(key)_\(activity.activityId).csv"))
-                    do {
-                        try dcols.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
-                    }catch { }
+                    break
                 }
-                
-                
-                let fn = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath("position_" + activity.activityId + "_" + activity.activityTypeAsString + ".csv"))
-                do {
-                    let grows = cols.gps.map { tup in
-                        [ activity.activityId, tup.time.formatAsRFC3339(), "\(tup.location.latitude)", "\(tup.location.longitude)"].joined( separator: "," )
-                    }
-                    try grows.joined(separator: "\n").write(to: fn, atomically: true, encoding: .utf8)
-                }catch { }
             }
+            self.pendingOpen.removeAll(where: { $0.activityId == activityId } )
         }
     }
-    
-    func exportSingleCsv() {
 
-        let organizer = FITAppGlobal.shared.organizer
-        let csv = organizer.csv()
-
-        let content = csv.joined(separator: "\n")
-        
-        let fn = RZFileOrganizer.writeableFilePath("list.csv")
-
-        do {
-        try content.write(toFile: fn, atomically: true, encoding: String.Encoding.utf8)
-        }catch {
-            RZSLog.error("Failed to write \(fn)")
-        }
-
-    }
-    
-    @IBAction func exportList(_ sender: Any) {
-        self.exportSingleCsv()
-        
-        
-    }
-    
-
-    // MARK: -
+    // MARK: - View Delegate
         
     override func viewWillAppear() {
         super.viewWillAppear()
@@ -297,22 +326,7 @@ class FITDownloadViewController: NSViewController {
         super.viewWillDisappear()
         NotificationCenter.default.removeObserver(self)
     }
-    @IBAction func editUserName(_ sender: Any) {
-        let entered_username = userName.stringValue
-        if( !keychain.set(entered_username, forKey: FITAppGlobal.ConfigParameters.loginName.rawValue) ){
-            RZSLog.error( "failed to save username" )
-        }
-        FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.loginName.rawValue, stringVal: entered_username)
-    }
     
-    @IBAction func editPassword(_ sender: Any) {
-        let entered_password = password.stringValue
-        if !keychain.set(entered_password, forKey: FITAppGlobal.ConfigParameters.password.rawValue){
-            RZSLog.error("failed to save password")
-        }
-        
-        FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.password.rawValue, stringVal: entered_password)
-    }
     
     func rebuildColumns(){
         let samples = FITAppGlobal.downloadManager().samples()
