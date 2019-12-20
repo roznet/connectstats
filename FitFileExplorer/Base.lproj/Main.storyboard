@@ -806,13 +806,13 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eMA-K4-y93">
-                                <rect key="frame" x="0.0" y="0.0" width="450" height="229"/>
+                                <rect key="frame" x="0.0" y="0.0" width="450" height="181"/>
                                 <clipView key="contentView" id="FLV-4V-vLg">
-                                    <rect key="frame" x="1" y="0.0" width="448" height="228"/>
+                                    <rect key="frame" x="1" y="0.0" width="448" height="180"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="rUX-vh-kKI" viewBased="YES" id="zkV-m3-LYD" customClass="RZTableView" customModule="RZUtilsOSX">
-                                            <rect key="frame" x="0.0" y="0.0" width="448" height="205"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="448" height="157"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -820,7 +820,7 @@
                                             <tableColumns>
                                                 <tableColumn width="116" minWidth="40" maxWidth="1000" id="HMG-BS-RNC">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
@@ -992,13 +992,13 @@
                                 </textFieldCell>
                             </textField>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Bg-lH-3vA">
-                                <rect key="frame" x="20" y="55" width="491" height="303"/>
+                                <rect key="frame" x="20" y="55" width="491" height="255"/>
                                 <clipView key="contentView" id="1Ei-WX-vbA">
-                                    <rect key="frame" x="1" y="0.0" width="489" height="302"/>
+                                    <rect key="frame" x="1" y="0.0" width="489" height="254"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="Drv-Mt-Y77" viewBased="YES" id="loS-tj-HNH">
-                                            <rect key="frame" x="0.0" y="0.0" width="637" height="279"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="637" height="231"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1006,7 +1006,7 @@
                                             <tableColumns>
                                                 <tableColumn identifier="field" width="120" minWidth="40" maxWidth="1000" id="CnD-Wz-PNJ">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Field">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
@@ -1043,7 +1043,7 @@
                                                 </tableColumn>
                                                 <tableColumn identifier="value" width="120" minWidth="40" maxWidth="1000" id="xx8-5D-Ozf">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Value">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
@@ -1080,7 +1080,7 @@
                                                 </tableColumn>
                                                 <tableColumn identifier="avg" width="120" minWidth="10" maxWidth="3.4028234663852886e+38" id="FCl-D0-ur0">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Average">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </tableHeaderCell>
@@ -1117,7 +1117,7 @@
                                                 </tableColumn>
                                                 <tableColumn identifier="count" width="64" minWidth="10" maxWidth="3.4028234663852886e+38" id="qhF-Op-6OM">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Count">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </tableHeaderCell>
@@ -1154,7 +1154,7 @@
                                                 </tableColumn>
                                                 <tableColumn identifier="total" width="64" minWidth="10" maxWidth="3.4028234663852886e+38" id="C0I-vp-SPv">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Total">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </tableHeaderCell>
@@ -1191,7 +1191,7 @@
                                                 </tableColumn>
                                                 <tableColumn identifier="max" width="64" minWidth="10" maxWidth="3.4028234663852886e+38" id="aR6-WV-LTA">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Max">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </tableHeaderCell>
@@ -1228,7 +1228,7 @@
                                                 </tableColumn>
                                                 <tableColumn identifier="min" width="64" minWidth="10" maxWidth="3.4028234663852886e+38" id="aRp-Ty-2AY">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Min">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </tableHeaderCell>
@@ -1268,7 +1268,7 @@
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="hrt-ob-XqJ">
-                                    <rect key="frame" x="1" y="286" width="489" height="16"/>
+                                    <rect key="frame" x="1" y="238" width="489" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="dFC-TA-Dxd">
@@ -1382,7 +1382,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oAz-t0-vVq">
-                                <rect key="frame" x="18" y="336" width="200" height="16"/>
+                                <rect key="frame" x="18" y="284" width="200" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Download From Garmin Account" id="nNl-iP-ppF">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1390,7 +1390,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oKi-sf-doD">
-                                <rect key="frame" x="224" y="333" width="210" height="21"/>
+                                <rect key="frame" x="224" y="281" width="210" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="206" id="Cz8-06-I2P"/>
                                     <constraint firstAttribute="width" constant="210" id="oQw-3A-Zyc"/>
@@ -1405,7 +1405,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w6Q-hM-j5d">
-                                <rect key="frame" x="444" y="336" width="89" height="16"/>
+                                <rect key="frame" x="444" y="284" width="89" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="and Password" id="Gi0-5q-63d">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1413,7 +1413,7 @@
                                 </textFieldCell>
                             </textField>
                             <secureTextField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wHO-cn-gNk">
-                                <rect key="frame" x="535" y="333" width="210" height="21"/>
+                                <rect key="frame" x="535" y="281" width="210" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="210" id="wDT-nA-UOP"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="207" id="zhp-Aj-t1h"/>
@@ -1431,7 +1431,7 @@
                                 </connections>
                             </secureTextField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="s7j-K9-z0k">
-                                <rect key="frame" x="759" y="326" width="87" height="32"/>
+                                <rect key="frame" x="759" y="274" width="87" height="32"/>
                                 <buttonCell key="cell" type="push" title="Refresh" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SHD-Yw-FMt">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1441,13 +1441,13 @@
                                 </connections>
                             </button>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q8I-cB-Gbz">
-                                <rect key="frame" x="0.0" y="25" width="916" height="287"/>
+                                <rect key="frame" x="0.0" y="25" width="916" height="235"/>
                                 <clipView key="contentView" id="1DT-nq-YEJ">
-                                    <rect key="frame" x="1" y="0.0" width="914" height="286"/>
+                                    <rect key="frame" x="1" y="0.0" width="914" height="234"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="RdK-NY-FSq" viewBased="YES" id="edZ-56-Dt3">
-                                            <rect key="frame" x="0.0" y="0.0" width="914" height="261"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="914" height="209"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1455,7 +1455,7 @@
                                             <tableColumns>
                                                 <tableColumn identifier="activityId" width="116" minWidth="40" maxWidth="1000" id="AjN-xZ-Xmb">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Activity Id">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
@@ -1492,7 +1492,7 @@
                                                 </tableColumn>
                                                 <tableColumn identifier="activityType" width="116" minWidth="40" maxWidth="1000" id="NwV-HD-xsP">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Activity Type">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
@@ -1529,7 +1529,7 @@
                                                 </tableColumn>
                                                 <tableColumn identifier="SumDistance" width="116" minWidth="10" maxWidth="3.4028234663852886e+38" id="qAs-4m-0BN">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Distance">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </tableHeaderCell>
@@ -1566,7 +1566,7 @@
                                                 </tableColumn>
                                                 <tableColumn identifier="Date" width="116" minWidth="10" maxWidth="3.4028234663852886e+38" id="L9m-la-aQU">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Date">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </tableHeaderCell>
@@ -1603,7 +1603,7 @@
                                                 </tableColumn>
                                                 <tableColumn width="116" minWidth="10" maxWidth="3.4028234663852886e+38" id="4jR-Q3-SDO">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Duration">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </tableHeaderCell>
@@ -1709,29 +1709,49 @@
                 <customObject id="h4n-hR-gLe" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <menu id="Le1-x8-u84">
                     <items>
-                        <menuItem title="Open Fit File" id="sZP-ZR-lYP">
+                        <menuItem title="Download and Open Fit File(s)" id="sZP-ZR-lYP" userLabel="Open Fit Files">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="openFitFile:" target="1qV-F5-QB0" id="pud-Kf-kcS"/>
                             </connections>
                         </menuItem>
-                        <menuItem title="Download FIT File" id="0Dp-08-oy9">
+                        <menuItem title="Download Fit File(s)" id="Cy3-jM-gL8">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
-                                <action selector="downloadFITFile:" target="1qV-F5-QB0" id="IBQ-wZ-5XT"/>
+                                <action selector="downloadFitFile:" target="1qV-F5-QB0" id="vLy-JH-iah"/>
                             </connections>
                         </menuItem>
-                        <menuItem title="Export List" id="YWd-D3-68K">
+                        <menuItem isSeparatorItem="YES" id="7xL-9o-Oxm"/>
+                        <menuItem title="Export List as CSV" id="YWd-D3-68K" userLabel="Export List as CSV">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="exportList:" target="1qV-F5-QB0" id="aeh-9Y-VeW"/>
                             </connections>
                         </menuItem>
-                        <menuItem title="Export All FIT files" id="htr-pu-ubZ">
+                        <menuItem title="Export Files as CSV" id="yfg-XJ-bgc" userLabel="Export Files as CSV">
                             <modifierMask key="keyEquivalentModifierMask"/>
-                            <connections>
-                                <action selector="exportAllFitFiles:" target="1qV-F5-QB0" id="fGL-li-MWP"/>
-                            </connections>
+                            <menu key="submenu" title="Export Files as CSV" id="fsA-JB-JRU">
+                                <items>
+                                    <menuItem title="Export Sessions" id="125-td-6At">
+                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                        <connections>
+                                            <action selector="exportFilesAsCSVSessions:" target="1qV-F5-QB0" id="2Dk-oF-A8K"/>
+                                        </connections>
+                                    </menuItem>
+                                    <menuItem title="Export Laps" id="Gpj-Gw-ysT">
+                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                        <connections>
+                                            <action selector="exportFilesAsCSVLaps:" target="1qV-F5-QB0" id="8Qu-9N-q4Y"/>
+                                        </connections>
+                                    </menuItem>
+                                    <menuItem title="Export Records" id="htr-pu-ubZ">
+                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                        <connections>
+                                            <action selector="exportFilesAsCSVRecords:" target="1qV-F5-QB0" id="ST4-GW-Fyu"/>
+                                        </connections>
+                                    </menuItem>
+                                </items>
+                            </menu>
                         </menuItem>
                     </items>
                 </menu>
@@ -1747,13 +1767,13 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aS7-UT-aEo">
-                                <rect key="frame" x="0.0" y="0.0" width="250" height="297"/>
+                                <rect key="frame" x="0.0" y="0.0" width="250" height="295"/>
                                 <clipView key="contentView" drawsBackground="NO" id="vi0-Pp-AfE">
-                                    <rect key="frame" x="1" y="1" width="248" height="295"/>
+                                    <rect key="frame" x="1" y="1" width="248" height="293"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="Oru-c7-GEl" id="niR-hw-vYZ">
-                                            <rect key="frame" x="0.0" y="0.0" width="248" height="295"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="248" height="293"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1761,7 +1781,7 @@
                                             <tableColumns>
                                                 <tableColumn width="245" minWidth="16" maxWidth="1000" id="Oru-c7-GEl">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
-                                                        <font key="font" metaFont="menu" size="11"/>
+                                                        <font key="font" metaFont="label" size="11"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
