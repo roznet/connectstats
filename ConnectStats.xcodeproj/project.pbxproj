@@ -467,6 +467,9 @@
 		425CF5A91813CEEC009279C0 /* GCTestsActivities.m in Sources */ = {isa = PBXBuildFile; fileRef = 425CF5A81813CEEC009279C0 /* GCTestsActivities.m */; };
 		426176232001432B008F87FA /* RZExternalCpp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A0098620012B5B00019CB3 /* RZExternalCpp.framework */; };
 		426176242001432B008F87FA /* RZExternalCpp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42A0098620012B5B00019CB3 /* RZExternalCpp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42628A4023ACCFE900EC6673 /* fields.db in Resources */ = {isa = PBXBuildFile; fileRef = 42939CE423AAD79500D2403A /* fields.db */; };
+		42628A4B23ACCFEE00EC6673 /* fit_map.json in Resources */ = {isa = PBXBuildFile; fileRef = 42939CE523AAD79500D2403A /* fit_map.json */; };
+		42628A4C23ACCFF100EC6673 /* fit_developer.json in Resources */ = {isa = PBXBuildFile; fileRef = 42939CEC23AAD7A900D2403A /* fit_developer.json */; };
 		4262ADCF1DCC8DB100F089AA /* FITAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4262ADCE1DCC8DB100F089AA /* FITAppDelegate.swift */; };
 		426786DA16C6594F00899C8B /* GCSettingsServicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 426786D916C6594F00899C8B /* GCSettingsServicesViewController.m */; };
 		42684EF01B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42684EEF1B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m */; };
@@ -6010,7 +6013,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42628A4B23ACCFEE00EC6673 /* fit_map.json in Resources */,
+				42628A4023ACCFE900EC6673 /* fields.db in Resources */,
 				4253B4651CD49F7E00437E6A /* Assets.xcassets in Resources */,
+				42628A4C23ACCFF100EC6673 /* fit_developer.json in Resources */,
 				4253B4681CD49F7E00437E6A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
