@@ -124,9 +124,10 @@
         }else{
 
             [self.activityTypeButtonItem setImage:nil];
-            NSString * otherLabel = [activityType isEqualToString:GC_TYPE_DAY] ? NSLocalizedString( @"Days", @"Activity Type Button") :NSLocalizedString( @"Other", @"Activity Type Button");
-
-            (self.activityTypeButtonItem).title = otherLabel;
+            if( activityType != nil){
+                NSString * otherLabel = [GCActivityType activityTypeForKey:activityType].displayName;
+                (self.activityTypeButtonItem).title = otherLabel;
+            }
         }
     }
 }

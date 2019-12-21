@@ -72,6 +72,7 @@
  */
 -(BOOL)isSameParentType:(nonnull GCActivityType*)other;
 
+-(NSInteger)sortOrder;
 
 // Access Convenience
 +(nonnull GCActivityType*)running;

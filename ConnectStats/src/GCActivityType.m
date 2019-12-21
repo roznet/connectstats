@@ -162,6 +162,11 @@ static GCActivityTypes * _activityTypesCache = nil;
     return [self.key isEqualToString:activityTypeString];
 }
 
+-(NSInteger)sortOrder{
+    // for now, typeid happens to be not too bad
+    return self.typeId;
+}
+
 -(GCActivityType*)rootType{
     if (self.isRootType) {
         return self;

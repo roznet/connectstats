@@ -80,7 +80,7 @@ NS_INLINE BOOL GCActivityTypeIsSki(NSString*at, NSString*atdetail){
 +(NSString*)fieldForLapField:(NSString*)field andActivityType:(NSString*)aType;
 +(GCUnit*)unitForLapField:(NSString*)field activityType:(NSString*)aType;
 
-+(void)registerField:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom DEPRECATED_MSG_ATTRIBUTE("Switch to predefined");
++(void)registerField:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom;// DEPRECATED_MSG_ATTRIBUTE("Switch to predefined");
 
 +(NSString*)fieldForFlag:(gcFieldFlag)which andActivityType:(NSString*)activityType;//DEPRECATED_MSG_ATTRIBUTE("use GCField.");
 
