@@ -219,7 +219,8 @@
 -(NSArray*)minimumSpeedChoicesDescriptions{
     NSArray * sp = [self minimumSpeedChoices];
     NSMutableArray * ar = [NSMutableArray arrayWithCapacity:sp.count];
-    GCUnit * unit = [GCFields fieldUnit:[GCFields fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:GC_TYPE_RUNNING] activityType:GC_TYPE_RUNNING];
+    
+    GCUnit * unit = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:GC_TYPE_RUNNING].unit;
     unit = [unit unitForGlobalSystem];
     for (NSNumber * v in sp) {
         double mps = v.doubleValue;

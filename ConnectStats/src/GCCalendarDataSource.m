@@ -136,10 +136,10 @@
         case gcCalendarDisplayDistance:
         case gcCalendarDisplayDistancePercent:
             // type should not really matter here
-            return [GCFields fieldDisplayName:@"SumDistance" activityType:GC_TYPE_RUNNING];
+            return [GCField fieldForKey:@"SumDistance" andActivityType:GC_TYPE_RUNNING].displayName;
         case gcCalendarDisplayDuration:
         case gcCalendarDisplayDurationPercent:
-            return [GCFields fieldDisplayName:@"SumDuration" activityType:GC_TYPE_RUNNING];
+            return [GCField fieldForKey:@"SumDuration" andActivityType:GC_TYPE_RUNNING].displayName;
         case gcCalendarDisplaySpeed:
             return NSLocalizedString(@"Speed", @"Calendar tabbar");
         default:

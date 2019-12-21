@@ -25,6 +25,7 @@
 
 #import "GCActivitySummaryValue.h"
 #import "GCFields.h"
+#import "GCField.h"
 
 #define kGCVersion @"version"
 #define kGCField   @"field"
@@ -155,7 +156,7 @@
 }
 
 -(NSString*)formattedFieldName:(NSString*)aType{
-    return [GCFields fieldDisplayName:self.field activityType:aType];
+    return [GCField fieldForKey:self.field andActivityType:aType].displayName;
 }
 
 -(NSString*)formattedValue{

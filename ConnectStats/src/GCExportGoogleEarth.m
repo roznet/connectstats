@@ -83,7 +83,7 @@
         GCXMLElement * schemaField = [GCXMLElement element:@"gx:SimpleArrayField"];
         [schemaField addParameter:@"name" withValue:key];
         [schemaField addParameter:@"type" withValue:@"float"];
-        [schemaField addChild:[GCXMLElement element:@"displayName" withValue:[GCFields fieldDisplayName:key activityType:activityType]]];
+        [schemaField addChild:[GCXMLElement element:@"displayName" withValue:[GCField fieldForKey:key andActivityType:activityType].displayName]];
         [schema addChild:schemaField];
     }
 

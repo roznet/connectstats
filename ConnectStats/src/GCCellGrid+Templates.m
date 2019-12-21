@@ -672,7 +672,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
     GCNumberWithUnit * speedmps =[GCNumberWithUnit numberWithUnitName:@"mps" andValue:[distanceN convertToUnitName:@"meter"].value/durationN.value];
 
-    GCNumberWithUnit * speedN = [speedmps convertToUnit:[GCFields fieldUnit:[GCFields fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activityType] activityType:activityType]];
+    GCNumberWithUnit * speedN = [speedmps convertToUnit:[GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activityType].unit];
 
     GCFormattedField * main1    = nil;
     GCFormattedField * main2    = nil;
@@ -1137,7 +1137,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
             display1 = field1.displayName;
         }
         NSString * field2   = [GCFields fieldForLapField:key andActivityType:aType];
-        NSString * display2 = [GCFields fieldDisplayName:field2 activityType:aType];
+        NSString * display2 = [GCField fieldForKey:field2 andActivityType:aType].displayName;
 
         GCFormattedField * numberF1 = [GCFormattedField formattedFieldForNumber:number1 forSize:16.];
 

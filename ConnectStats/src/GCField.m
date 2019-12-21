@@ -249,6 +249,38 @@ static void registerInCache(GCField*field){
     }
     return rv;
 }
+
++(GCField*)fieldForAggregated:(gcAggregatedField)aggregatedField andActivityType:(NSString*)activityType{
+    switch (aggregatedField) {
+        case gcAggregatedWeightedSpeed:
+            if ([activityType isEqualToString:GC_TYPE_RUNNING] || [activityType isEqualToString:GC_TYPE_SWIMMING]) {
+                return [GCField fieldForKey:@"WeightedMeanPace" andActivityType:activityType];
+            }else{
+                return [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:activityType];
+            }
+            break;
+        case gcAggregatedWeightedHeartRate:
+            return [GCField fieldForKey:@"WeightedMeanHeartRate" andActivityType:activityType];
+        case gcAggregatedSumDistance:
+            return [GCField fieldForKey:@"SumDistance" andActivityType:activityType];
+        case gcAggregatedSumDuration:
+            return [GCField fieldForKey:@"SumDuration" andActivityType:activityType];
+        case gcAggregatedTennisPower:
+            return [GCField fieldForKey:@"averagePower" andActivityType:activityType];
+        case gcAggregatedTennisShots:
+            return [GCField fieldForKey:@"shots" andActivityType:activityType];
+        case gcAggregatedCadence:
+            return [GCField fieldForFlag:gcFieldFlagCadence andActivityType:activityType];
+        case gcAggregatedAltitudeMeters:
+            return [GCField fieldForKey:@"GainElevation" andActivityType:activityType];
+        case gcAggregatedFieldEnd:
+            return nil;
+        case gcAggregatedSumStep:
+            return [GCField fieldForKey:@"SumStep" andActivityType:activityType];
+    }
+    return nil;
+
+}
 #if !__has_feature(objc_arc)
 -(void)dealloc{
     [_key release];

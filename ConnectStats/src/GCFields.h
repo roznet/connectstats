@@ -84,7 +84,7 @@ NS_INLINE BOOL GCActivityTypeIsSki(NSString*at, NSString*atdetail){
 
 +(NSString*)fieldForFlag:(gcFieldFlag)which andActivityType:(NSString*)activityType;//DEPRECATED_MSG_ATTRIBUTE("use GCField.");
 
-+(NSString*)fieldForAggregatedField:(gcAggregatedField)which andActivityType:(NSString*)actType;
++(NSString*)fieldForAggregatedField:(gcAggregatedField)which andActivityType:(NSString*)actType DEPRECATED_MSG_ATTRIBUTE("use GCField");
 
 /**
  used in import, can't be on GCField because used on input dictionary of fieldKeys

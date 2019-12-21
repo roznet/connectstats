@@ -118,7 +118,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
 +(gcUnitSystem)fieldUnitSystem{
     gcUnitSystem rv = [GCUnit getGlobalSystem];
     if (rv == GCUnitSystemDefault) {
-        GCUnit * sample = [GCFields fieldUnit:@"SumDistance" activityType:GC_TYPE_ALL];
+        GCUnit * sample =  [GCField fieldForKey:@"SumDistance" andActivityType:GC_TYPE_ALL].unit;
         rv = [sample system];
     }
     return rv;
@@ -584,7 +584,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
         [GCFields buildLapCache];
     }
 
-    GCUnit * found = [GCFields fieldUnit:[GCFields fieldForLapField:field andActivityType:aType] activityType:aType];
+    GCUnit * found = [GCField fieldForKey:[GCFields fieldForLapField:field andActivityType:aType] andActivityType:aType].unit;
     return found ?: [GCUnit unitForKey:@"dimensionless"];
 }
 
