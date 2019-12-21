@@ -363,7 +363,7 @@
     while( [res next] ){
         NSString * key = [res stringForColumn:@"key"];
         NSString * newType = [GCActivityTypes remappedLegacy:key];
-        if( ![key isEqualToString:newType] ){
+        if( key != nil && newType != nil && ![key isEqualToString:newType] ){
             types[key] = newType;
             dict[ [res stringForColumn:@"activityId" ] ] = newType;
         }
