@@ -240,10 +240,15 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
         reported = [NSMutableDictionary dictionary];
         RZRetain(reported);
     }
-    for (id field in fields) {
+    for (GCField * field in fields) {
         if (!reported[field]) {
             // To Fix add to fields_order.db and rerun build.py
-            RZLog(RZLogInfo, @"Non Categorized field: %@ %@", field, aType?:@"");
+            // INSERT INTO fields_order (field,displayOrder,category) VALUES( 'fieldkey',-1,'ignore' );
+            if( [field isKindOfClass:[GCField class]] ){
+                RZLog(RZLogInfo, @"Non Categorized field[%@] VALUES('%@',-1,'ignore')", field.activityType,  field.key );
+            }else{
+                RZLog(RZLogInfo, @"Non Categorized field[%@]", field );
+            }
             reported[field] = field;
         }
     }

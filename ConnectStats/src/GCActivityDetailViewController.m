@@ -761,7 +761,7 @@
     // THis only needed if brand new activity
     if (![act.activityId isEqualToString:self.activity.activityId]) {
         if (act) {
-            RZLog(RZLogInfo, @"%@",act);
+            RZLog(RZLogInfo, @"%@",[act debugDescription]);
         }
         self.activity = act;
         [self setupImplementor];

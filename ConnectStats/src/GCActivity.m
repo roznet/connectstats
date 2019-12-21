@@ -145,6 +145,19 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return [NSString stringWithFormat:@"<%@ %@:%@>", NSStringFromClass([self class]),_activityType,  _activityId];
 }
 
+-(NSString*)debugDescription{
+    NSMutableArray * summary = [NSMutableArray arrayWithArray:@[  self.activityId, [self.date YYYYdashMMdashDD]]];
+    
+    for (NSNumber * flag in @[ @(gcFieldFlagSumDuration), @(gcFieldFlagSumDistance)]) {
+        GCField * field = [GCField fieldForFlag:flag.integerValue andActivityType:self.activityType];
+        if( [self hasField:field] ){
+            [summary addObject:[[self numberWithUnitForField:field] description]];
+        }
+    }
+    
+    return [NSString stringWithFormat:@"<%@ %@:%@>", NSStringFromClass([self class]),self.activityType,[summary componentsJoinedByString:@" "]];
+}
+
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
     if ([theInfo.stringInfo isEqualToString:NOTIFY_END] || [theInfo.stringInfo isEqualToString:NOTIFY_ERROR]) {
         _downloadRequested=false;
@@ -450,6 +463,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 -(BOOL)hasField:(GCField*)field{
     BOOL rv = false;
     switch (field.fieldFlag) {
+        case gcFieldFlagSumDuration:
+            rv = RZTestOption(self.flags, gcFieldFlagSumDuration);
+            break;            
         case gcFieldFlagSumDistance:
             rv = RZTestOption(self.flags, gcFieldFlagSumDistance);
             break;
