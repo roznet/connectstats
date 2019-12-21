@@ -166,8 +166,12 @@ void checkVersion(){
 	self.db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:[_profiles currentDatabasePath]]];
     [_db open];
     // do db op before now before the app send them all to worker thread
-    [GCActivitiesOrganizer ensureDbStructure:_db];
-    [GCHealthOrganizer ensureDbStructure:_db];
+    // Wrap in autorelease pool to ensure no left over db object are released
+    // later while db operation happening on worker
+    @autoreleasepool {
+        [GCActivitiesOrganizer ensureDbStructure:_db];
+        [GCHealthOrganizer ensureDbStructure:_db];
+    }
 
     [self setupFieldCache];
     self.activityTypes = [GCActivityTypes activityTypes];

@@ -348,9 +348,45 @@
         [db executeUpdate:@"INSERT INTO gc_version (version) VALUES(10)"];
         [db commit];
     }
-
-
+    if(max_version < 11){
+        [GCActivity upgradeDatababaseForRemappedTypes:db];
+        RZEXECUTEUPDATE(db, @"INSERT INTO gc_version (version) VALUES(11)");
+    }
 }
+
++(void)upgradeDatababaseForRemappedTypes:(FMDatabase*)db{
+    RZPerformance * perf = [RZPerformance start];
+    
+    FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_activities_meta WHERE field='activityType'"];
+    NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary * types = [NSMutableDictionary dictionary];
+    while( [res next] ){
+        NSString * key = [res stringForColumn:@"key"];
+        NSString * newType = [GCActivityTypes remappedLegacy:key];
+        if( ![key isEqualToString:newType] ){
+            types[key] = newType;
+            dict[ [res stringForColumn:@"activityId" ] ] = newType;
+        }
+    }
+    [db beginTransaction];
+    [db setShouldCacheStatements:YES];
+
+    for (NSString * activityId in dict) {
+        GCActivityType * newType = [GCActivityType activityTypeForKey:dict[activityId]];
+        GCActivityType * parentType = newType.parentType;
+        if( parentType.isRootType){
+            parentType = newType;
+        }
+            
+        RZEXECUTEUPDATE(db, @"UPDATE gc_activities SET activityType=? WHERE activityId=?", parentType.key, activityId);
+        RZEXECUTEUPDATE(db, @"UPDATE gc_activities_meta SET key=? WHERE activityId=? AND field='activityType'", newType.key, activityId);
+    }
+    [db commit];
+    
+    RZLog(RZLogInfo, @"Updated %@ legacy types for %@ activities [%@]", @(types.count), @(dict.count), perf);
+}
+
+
 +(void)fixDbMilesConversion:(FMDatabase*)db{
     NSDate * start = [NSDate date];
     NSString * query = @"select * from gc_activities_values where (uom='mile' and field='SumDistance') or (uom='mph' and field='WeightedMeanSpeed')";

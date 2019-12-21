@@ -63,4 +63,6 @@
  */
 -(NSUInteger)loadMissingFromGarmin:(NSArray<NSDictionary*>*)modern withDisplayInfoFrom:(NSArray<NSDictionary*>*)legacy;
 
+
++(NSString*)remappedLegacy:(NSString*)activityType;
 @end

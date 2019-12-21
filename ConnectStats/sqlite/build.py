@@ -43,15 +43,16 @@ def activitytype_modern(source,table_to):
         connto.execute(sql, (typeKey,typeId,parentTypeId))
     connto.commit()
 
-def activitytype(source,table_to):
+def activitytype(source,table_to,remap):
     connto.execute('DROP TABLE IF EXISTS %s' %(table_to,))
     connto.execute('CREATE TABLE %s (activityType text,activityTypeDetail text,display text)' %(table_to,))
     f = open(source, 'r')
     r = json.loads( f.read() )
     for item in r['dictionary']:
         if 'parent' in item:
-            parent = item[u'parent'][u'key']
-            key=item[u'key']
+            parent =  remap_activityType( item[u'parent'][u'key'] )
+            key= remap_activityType( item[u'key'] )
+
             display = item[u'display']
             sql='INSERT INTO %s (activityType,activityTypeDetail,display) VALUES (?,?,?)' %(table_to,)
             connto.execute( sql, (parent,key,display) )
@@ -64,7 +65,7 @@ def uom(db_from,table_to):
     cursor = conn.execute('select * from gc_fields')
     for row in cursor:
         sql='INSERT INTO %s (field,activityType,uom) VALUES (?,?,?)' %(table_to,)
-        connto.execute( sql, (row[0],row[1],row[3]) )
+        connto.execute( sql, (row[0],remap_activityType( row[1] ),row[3]) )
 
     connto.commit()
 
@@ -75,11 +76,11 @@ def language(db_from,table_to):
     cursor = conn.execute('select * from gc_fields')
     for row in cursor:
         sql = 'SELECT * FROM %s WHERE field=? AND activityType=?' %(table_to,)
-        r = connto.execute( sql, (row[0],row[1] ) )
+        r = connto.execute( sql, (row[0], row[1] ) ) 
         if not r.fetchone():
             sql='INSERT INTO %s (field,activityType,fieldDisplayName) VALUES (?,?,?)' %(table_to,)
             if(row[0]!=row[2]):
-                connto.execute( sql, (row[0],row[1],row[2]) )
+                connto.execute( sql, (row[0],remap_activityType( row[1] ),row[2]) )
 
     connto.commit()
 
@@ -88,10 +89,10 @@ def addextra(db_from,table_to,table_from):
     cursor = conn.execute('select * from %s' %(table_from,) )
     for row in cursor:
         sql = 'SELECT * FROM %s WHERE field=? AND activityType=?' %(table_to,)
-        r = connto.execute( sql, (row[0],row[1] ) )
+        r = connto.execute( sql, (row[0], row[1] ) )
         if not r.fetchone():
             sql='INSERT INTO %s (field,activityType,fieldDisplayName) VALUES (?,?,?)' %(table_to,)
-            connto.execute( sql, (row[0],row[1],row[2]) )
+            connto.execute( sql, (row[0],remap_activityType( row[1] ),row[2]) )
     connto.commit()
 def addextrauom(db_from,table_to,table_from):
     conn = sqlite3.connect(db_from)
@@ -145,6 +146,21 @@ def categoryorder(db_from,table):
         connto.execute( sql, (row[0],row[1],row[2]) )
     connto.commit()
 
+def remap_activityType(atype):
+    remap = {
+        "snowmobiling": "snowmobiling_ws",                     
+        "snow_shoe": "snow_shoe_ws",												 
+        "skating": "skating_ws",
+        "backcountry_skiing_snowboarding": "backcountry_skiing_snowboarding_ws",
+        "skate_skiing": "skate_skiing_ws",
+        "cross_country_skiing": "cross_country_skiing_ws",
+        "resort_skiing_snowboarding": "resort_skiing_snowboarding_ws",
+    }
+    if atype in remap:
+        return remap[atype]
+    else:
+        return atype
+    
 
 # Build int fields.db:
 # Will add specific from the language+ what is in english power and manual

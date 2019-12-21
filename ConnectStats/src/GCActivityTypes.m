@@ -424,4 +424,28 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
     return rv;
 }
 
++(NSString*)remappedLegacy:(NSString*)activityType{
+    static NSDictionary<NSString*,NSString*>*map_ = nil;
+    if(map_==nil){
+        map_ = @{
+            @"cross_country_skiing":            GC_TYPE_SKI_XC,
+            @"resort_skiing_snowboarding":      GC_TYPE_SKI_DOWN,
+            @"backcountry_skiing_snowboarding": GC_TYPE_SKI_BACK,
+            
+            @"snowmobiling":                     @"snowmobiling_ws",
+            @"snow_shoe":                        @"snow_shoe_ws",
+            @"skating":                          @"skating_ws",
+            @"skate_skiing":                     @"skate_skiing_ws",
+        };
+        RZRetain(map_);
+    }
+    
+    NSString * rv = map_[activityType];
+    if( rv == nil){
+        rv = activityType;
+    }
+        
+    return rv;
+}
+
 @end
