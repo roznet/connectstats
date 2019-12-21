@@ -89,6 +89,8 @@
 -(BOOL)hasSuffix:(NSString*)suf;
 -(BOOL)hasPrefix:(NSString*)pref;
 
++(NSString*)displayNameImpliedByFieldKey:(NSString *)fieldKey;
+
 @end
 
 NS_INLINE BOOL RZNilOrEqualToField(GCField* a, GCField* b) { return ( ( (a == nil) && (b == nil) ) || (b != nil && [a isEqualToField:b]) ); };

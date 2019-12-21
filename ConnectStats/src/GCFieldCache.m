@@ -28,18 +28,26 @@
 #import "GCFieldsDefs.h"
 #import "GCField.h"
 #import "GCHealthMeasure.h"
+#import "GCActivityType.h"
 // Only if iPhone/ConnectStats on mac, no calculated fields
 #if TARGET_OS_IPHONE
 #import "GCFieldsCalculated.h"
 #endif
 
-NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
+NS_INLINE NSString * cacheFieldKey(NSString*field,NSString*activityType){
     return [field stringByAppendingString:activityType ?:@"NIL"] ?: @"NIL";
 }
 
+NS_INLINE NSString * cacheActivityTypeKey(NSString*activityType){
+    return activityType ?:@"NIL";
+}
+
+
+
 @interface GCFieldCache ()
 @property (nonatomic,retain) NSDictionary<NSString*,GCFieldInfo*>*cache;
-@property (nonatomic,retain) NSDictionary<NSString*,GCFieldInfo*>*predefinedCache;
+@property (nonatomic,retain) NSDictionary<NSString*,GCFieldInfo*>*predefinedFieldCache;
+@property (nonatomic,retain) NSDictionary<NSString*,GCFieldInfo*>*predefinedActivityTypeCache;
 @property (nonatomic,retain) FMDatabase * db;
 @property (nonatomic,retain) dispatch_queue_t worker;
 @end
@@ -49,7 +57,8 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
 -(void)dealloc{
     [_db release];
     [_cache release];
-    [_predefinedCache release];
+    [_predefinedFieldCache release];
+    [_predefinedActivityTypeCache release];
     [_worker release];
 
     [super dealloc];
@@ -78,7 +87,6 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
         rv.db = db;
         rv.preferPredefined = false;
         [rv buildPredefinedCacheForLanguage:language];
-        [rv buildCache];
     }
     return rv;
 }
@@ -92,9 +100,212 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
     }
 }
 
--(void)buildCache{
+
+-(void)buildPredefinedCacheForLanguage:(nullable NSString*)languageInput{
+
+    NSString * language = languageInput ?: [[NSLocale preferredLanguages][0] substringToIndex:2];
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"fields.db"]];
+    [db open];
+
+    NSMutableDictionary * uoms  = [NSMutableDictionary dictionaryWithCapacity:100];
+    NSString * uomtable = [GCUnit getGlobalSystem]==GCUnitSystemImperial ? @"gc_fields_uom_statute" : @"gc_fields_uom_metric";
+    FMResultSet * res = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@", uomtable]];
+    while ([res next]) {
+        NSString * field = [res stringForColumn:@"field"];
+        NSString * type  = [res stringForColumn:@"activityType"];
+        uoms[cacheFieldKey(field, type)] = [res stringForColumn:@"uom"];
+    }
+
+    NSString * table = [NSString stringWithFormat:@"gc_fields_%@", language];
+    if (![db tableExists:table]) {
+        table = @"gc_fields_en";
+    }
+    res = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@", table]];
+    NSMutableDictionary * fieldCache  = [NSMutableDictionary dictionaryWithCapacity:100];
+    while ([res next]) {
+        NSString * field = [res stringForColumn:@"field"];
+        NSString * type  = [res stringForColumn:@"activityType"];
+        NSString * key = cacheFieldKey(field, type);
+        GCFieldInfo * info = [GCFieldInfo fieldInfoFor:field
+                                                  type:type
+                                           displayName:[res stringForColumn:@"fieldDisplayName"]
+                                           andUnitName:uoms[key]];
+        fieldCache[key] = info;
+    }
+
+    NSMutableDictionary * activityTypeCache  = [NSMutableDictionary dictionaryWithCapacity:100];
+    NSString * activityTypeTable = [NSString stringWithFormat:@"gc_activityType_%@", language];
+    if (![db tableExists:activityTypeTable]) {
+        activityTypeTable = @"gc_activityType_en";
+    }
+    res = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@", activityTypeTable]];
+    while ([res next]) {
+        NSString * aType = [res stringForColumn:@"activityTypeDetail"];
+        NSString * display = [res stringForColumn:@"display"];
+
+        GCFieldInfo * info = [GCFieldInfo fieldInfoFor:aType
+                                                  type:aType
+                                           displayName:display
+                                           andUnitName:@"dimensionless"];
+        NSString * key = cacheActivityTypeKey(aType);
+        activityTypeCache[key] = info;
+    }
+
+    [db close];
+    self.predefinedFieldCache = [NSDictionary dictionaryWithDictionary:fieldCache];
+    self.predefinedActivityTypeCache = [NSDictionary dictionaryWithDictionary:activityTypeCache];
+    self.cache = [NSDictionary dictionary];
+}
+
+
+
+#pragma mark - Query Cache
+
+-(NSArray<NSString*>*)knownFieldsMatching:(NSString*)str{
+    NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithCapacity:1];
+    NSString * exact = nil;
+    for (NSString * key in _cache) {
+        GCFieldInfo * info = _cache[key];
+        if ([info match:str]) {
+            rv[info.field] = info;
+            if ([str compare:info.displayName options:NSCaseInsensitiveSearch] == NSOrderedSame ){
+                exact = info.displayName;
+            }else if([str compare:info.field options:NSCaseInsensitiveSearch]==NSOrderedSame) {
+                exact = info.field;
+            }
+        }
+    }
+    for (NSString * key in _predefinedFieldCache) {
+        GCFieldInfo * info = _predefinedFieldCache[key];
+        if ([info match:str] && !rv[info.field]) {
+            rv[info.field] = info;
+            if ([str compare:info.displayName options:NSCaseInsensitiveSearch] == NSOrderedSame ){
+                exact = info.displayName;
+            }else if([str compare:info.field options:NSCaseInsensitiveSearch]==NSOrderedSame) {
+                exact = info.field;
+            }
+        }
+    }
+
+    return rv.count ? [rv.allKeys sortedArrayUsingComparator:^(id obj1,id obj2){
+        int l1 = (int)[obj1 length];
+        int l2 = (int)[obj2 length];
+        int t  = (int)exact.length;
+
+        int v1 = abs(l1-t);
+        int v2 = abs(l2-t);
+
+        NSComparisonResult lrv = v1 > v2 ? NSOrderedAscending : v1 < v2 ? NSOrderedDescending : NSOrderedSame;
+        return lrv;
+    }]: nil;
+}
+
+-(BOOL)knownField:(NSString*)field activityType:(NSString*)activityType{
+    if (!activityType) {
+        RZLog(RZLogWarning, @"nil activityType, field %@",field);
+        return false;
+    }
+    NSString * key = cacheFieldKey(field, activityType);
+
+    return _cache[ key ] != nil || _predefinedFieldCache[ key ] != nil;
+}
+
+
+-(NSArray*)missingPredefinedField{
+    NSMutableArray * rv = [NSMutableArray array];
+    
+    NSDictionary * localCache = [self buildCache];
+    for (NSString * key in localCache) {
+        if (!self.predefinedFieldCache[key]) {
+            GCFieldInfo * info = localCache[key];
+            if( [info.field isEqualToString:info.activityType] ){
+                GCActivityType * type = [GCActivityType activityTypeForKey:info.field];
+                if( ![type.displayName isEqualToString:info.displayName] ){
+                    [rv addObject:@[ info.field ?: @"missing", info.activityType ?: @"missing", info.uom ?: @"missing", info.displayName ?: @"missing"]];
+                }
+            }else{
+                GCField * field = [GCField fieldForKey:info.field andActivityType:info.activityType];
+                
+                if( ![field.displayName isEqualToString:info.displayName]){
+                    if( ![info.field isEqualToString:info.displayName]){
+                        RZLog(RZLogInfo, @"%@: %@ (cache=%@)", field, field.displayName, info.displayName);
+                        [rv addObject:@[ info.field ?: @"missing", info.activityType ?: @"missing", info.uom ?: @"missing", info.displayName ?: @"missing"]];
+                    }
+                }
+            }
+        }
+    }
+    return [rv sortedArrayUsingComparator:^(NSArray*a1,NSArray*a2){
+        return [a1[1] isEqualToString:a2[1]] ? [a1[0] compare:a2[0]] : [a1[1] compare:a2[1]];
+    }];
+}
+
+
+-(GCFieldInfo*)infoForField:(GCField*)field{
+    GCFieldInfo * rv = nil;
+    NSString * key = cacheFieldKey(field.key, field.activityType);
+    if (self.preferPredefined) {
+        rv = self.predefinedFieldCache[key];
+        if (rv == nil) {
+            rv = self.cache[ key ];
+            if (rv == nil) {
+                NSString * keyall = cacheFieldKey(field.key, GC_TYPE_ALL);
+                rv = self.predefinedFieldCache[ keyall];
+            }
+        }
+    }else{
+        rv = self.cache[ key ];
+        if (rv == nil) {
+            rv = self.predefinedFieldCache[key];
+            if( rv == nil){
+                NSString * keyall = cacheFieldKey(field.key, GC_TYPE_ALL);
+                rv = self.cache[keyall];
+                if (rv == nil) {
+                    rv = self.predefinedFieldCache[keyall];
+                }
+            }
+        }
+    }
+    if( rv == nil && [field isHealthField]){
+        rv = [GCHealthMeasure fieldInfoFromField:field];
+        if (rv) {
+            self.cache = [self.cache dictionaryByAddingEntriesFromDictionary:@{key:rv}];
+        }
+    }
+// Only if iPhone/ConnectStats on mac, no calculated fields
+#if TARGET_OS_IPHONE
+    if( rv == nil && [field isCalculatedField]){
+        rv = [GCFieldsCalculated fieldInfoForCalculatedField:field];
+        if (rv) {
+            self.cache = [self.cache dictionaryByAddingEntriesFromDictionary:@{key:rv}];
+        }
+    }
+#endif
+
+    return rv;
+}
+-(GCFieldInfo*)infoForField:(NSString*)field andActivityType:(NSString*)aType{
+    return [self infoForField:[GCField fieldForKey:field andActivityType:aType]];
+}
+-(GCFieldInfo*)infoForActivityType:(NSString*)activityType{
+    NSString * key = cacheFieldKey(activityType, activityType);
+    GCFieldInfo * rv = nil;
+    if (_preferPredefined) {
+        rv = self.predefinedActivityTypeCache[key];
+    }else{
+        rv = self.cache[key];
+        if (rv==nil) {
+            rv = self.predefinedFieldCache[key];
+        }
+    }
+    return rv;
+}
+
+#pragma mark - Legacy
+
+-(NSDictionary*)buildCache{
     if(!self.db){
-        return;
+        return nil;
     }
 
     NSMutableDictionary * newCache = [NSMutableDictionary dictionary];
@@ -118,13 +329,13 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
             if ([field isEqualToString:@"SumIntensityFactor"]) {
                 info.uom = @"if";
             }
-            NSString * key = cacheKey(field, aType);
-            NSString * allkey = cacheKey(field, GC_TYPE_ALL);
+            NSString * key = cacheFieldKey(field, aType);
+            NSString * allkey = cacheFieldKey(field, GC_TYPE_ALL);
 
             BOOL storeInCache = true;
             // If it was stored with field == displayName and predefined has different name, use that
             if ([info.displayName isEqualToString:field]) {
-                GCFieldInfo * pre = self.predefinedCache[key];
+                GCFieldInfo * pre = self.predefinedFieldCache[key];
                 if (pre && ![pre.displayName isEqualToString:field]) {
                     storeInCache =false;
                 }
@@ -145,7 +356,7 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
                                        andUnitName:[res stringForColumn:@"uom"]];
 
                 if( [infoall.displayName isEqualToString:field]){
-                    GCFieldInfo * preall = self.predefinedCache[allkey];
+                    GCFieldInfo * preall = self.predefinedFieldCache[allkey];
                     if (preall && ![preall.displayName isEqualToString:field]) {
                         storeInCache = false;
                     }
@@ -158,60 +369,7 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
             RZLog(RZLogError, @"nil activityType field=%@", field);
         }
     }
-    self.cache = [NSDictionary dictionaryWithDictionary:newCache];
-}
-
--(void)buildPredefinedCacheForLanguage:(nullable NSString*)languageInput{
-
-    NSString * language = languageInput ?: [[NSLocale preferredLanguages][0] substringToIndex:2];
-    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"fields.db"]];
-    [db open];
-
-    NSMutableDictionary * uoms  = [NSMutableDictionary dictionaryWithCapacity:100];
-    NSString * uomtable = [GCUnit getGlobalSystem]==GCUnitSystemImperial ? @"gc_fields_uom_statute" : @"gc_fields_uom_metric";
-    FMResultSet * res = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@", uomtable]];
-    while ([res next]) {
-        NSString * field = [res stringForColumn:@"field"];
-        NSString * type  = [res stringForColumn:@"activityType"];
-        uoms[cacheKey(field, type)] = [res stringForColumn:@"uom"];
-    }
-
-    NSString * table = [NSString stringWithFormat:@"gc_fields_%@", language];
-    if (![db tableExists:table]) {
-        table = @"gc_fields_en";
-    }
-    res = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@", table]];
-    NSMutableDictionary * rv  = [NSMutableDictionary dictionaryWithCapacity:100];
-    while ([res next]) {
-        NSString * field = [res stringForColumn:@"field"];
-        NSString * type  = [res stringForColumn:@"activityType"];
-        NSString * key = cacheKey(field, type);
-        GCFieldInfo * info = [GCFieldInfo fieldInfoFor:field
-                                                  type:type
-                                           displayName:[res stringForColumn:@"fieldDisplayName"]
-                                           andUnitName:uoms[key]];
-        rv[key] = info;
-    }
-
-    NSString * activityTypeTable = [NSString stringWithFormat:@"gc_activityType_%@", language];
-    if (![db tableExists:activityTypeTable]) {
-        activityTypeTable = @"gc_activityType_en";
-    }
-    res = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM %@", activityTypeTable]];
-    while ([res next]) {
-        NSString * aType = [res stringForColumn:@"activityTypeDetail"];
-        NSString * display = [res stringForColumn:@"display"];
-
-        GCFieldInfo * info = [GCFieldInfo fieldInfoFor:aType
-                                                  type:aType
-                                           displayName:display
-                                           andUnitName:@"dimensionless"];
-        NSString * key = cacheKey(aType, aType);
-        rv[key] = info;
-    }
-
-    [db close];
-    self.predefinedCache = [NSDictionary dictionaryWithDictionary:rv];
+    return [NSDictionary dictionaryWithDictionary:newCache];
 }
 
 -(void)logNullRegister:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom{
@@ -241,9 +399,8 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
 
 
 -(void)registerField:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom{
-    if(!_cache){
+    if(!self.predefinedFieldCache){
         [self buildPredefinedCacheForLanguage:nil];
-        [self buildCache];
     }
     if (!aType||!field) {
         // To Fix: add to one of the fields/*.db and rerun fields.py
@@ -251,13 +408,24 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
         
         return;
     }
-    NSString * key = cacheKey(field, aType);
+    NSString * key = cacheFieldKey(field, aType);
+    GCFieldInfo * info = self.predefinedFieldCache[key];
+    if( info == nil && field && aType && aName && uom){
+        GCFieldInfo * newInfo = [GCFieldInfo fieldInfoFor:field type:aType displayName:aName andUnitName:uom];
+        NSString * key = cacheFieldKey(field, aType);
+        self.cache = [self.cache dictionaryByAddingEntriesFromDictionary:@{key : newInfo}];
+    }
+    if( info != nil && ![info.displayName isEqualToString:aName]){
+        RZLog(RZLogInfo, @"Inconsistent field register %@: %@ %@", field, aName, info.displayName );
+    }
+    return;
+    /*
     if (!_cache[key]) {
         NSString * useName = aName;
         NSString * useUom  = uom;
         // If name == key and predefined has better name use that
         if ([aName isEqualToString:field]) {
-            GCFieldInfo * pre = self.predefinedCache[key];
+            GCFieldInfo * pre = self.predefinedFieldCache[key];
             if (pre) {
                 useName = pre.displayName;
                 //useUom  = pre.uom;
@@ -268,7 +436,7 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
         if(self.db){
             FMDatabase * db = self.db;
             if (!field||!aType||!useName||!useUom) {
-                // To Fix: add to one of the fields/*.db and rerun fields.py
+                // To Fix: add to one of the fields.db and rerun fields.py
                 [self logNullRegister:field activityType:aType displayName:aName andUnitName:uom];
                 return;
             }
@@ -279,7 +447,7 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
         GCFieldInfo * info =[GCFieldInfo fieldInfoFor:field type:aType displayName:useName andUnitName:useUom];
         newFields[key] = info;
 
-        NSString * allkey = cacheKey(field, GC_TYPE_ALL);
+        NSString * allkey = cacheFieldKey(field, GC_TYPE_ALL);
         GCFieldInfo * allpre = _cache[allkey];
         if (allpre) {
             if (![allpre.uom isEqualToString:info.uom]) {
@@ -290,9 +458,12 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
         }
         self.cache = [self.cache dictionaryByAddingEntriesFromDictionary:newFields];
     }
+     */
 }
 
 -(void)saveToDb:(FMDatabase*)db{
+    return;
+    /*
     if(self.db){
         for (NSString * key in self.cache) {
             GCFieldInfo * info = _cache[key];
@@ -301,138 +472,7 @@ NS_INLINE NSString * cacheKey(NSString*field,NSString*activityType){
             };
         }
     }
-}
-
-#pragma mark - Query Cache
-
--(NSArray<NSString*>*)knownFieldsMatching:(NSString*)str{
-    NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithCapacity:1];
-    NSString * exact = nil;
-    for (NSString * key in _cache) {
-        GCFieldInfo * info = _cache[key];
-        if ([info match:str]) {
-            rv[info.field] = info;
-            if ([str compare:info.displayName options:NSCaseInsensitiveSearch] == NSOrderedSame ){
-                exact = info.displayName;
-            }else if([str compare:info.field options:NSCaseInsensitiveSearch]==NSOrderedSame) {
-                exact = info.field;
-            }
-        }
-    }
-    for (NSString * key in _predefinedCache) {
-        GCFieldInfo * info = _predefinedCache[key];
-        if ([info match:str] && !rv[info.field]) {
-            rv[info.field] = info;
-            if ([str compare:info.displayName options:NSCaseInsensitiveSearch] == NSOrderedSame ){
-                exact = info.displayName;
-            }else if([str compare:info.field options:NSCaseInsensitiveSearch]==NSOrderedSame) {
-                exact = info.field;
-            }
-        }
-    }
-
-    return rv.count ? [rv.allKeys sortedArrayUsingComparator:^(id obj1,id obj2){
-        int l1 = (int)[obj1 length];
-        int l2 = (int)[obj2 length];
-        int t  = (int)exact.length;
-
-        int v1 = abs(l1-t);
-        int v2 = abs(l2-t);
-
-        NSComparisonResult lrv = v1 > v2 ? NSOrderedAscending : v1 < v2 ? NSOrderedDescending : NSOrderedSame;
-        return lrv;
-    }]: nil;
-}
-
--(BOOL)knownField:(NSString*)field activityType:(NSString*)activityType{
-    if (!activityType) {
-        RZLog(RZLogWarning, @"nil activityType, field %@",field);
-        return false;
-    }
-    NSString * key = cacheKey(field, activityType);
-
-    return _cache[ key ] != nil || _predefinedCache[ key ] != nil;
-}
-
-
--(NSArray*)missingPredefinedField{
-    NSMutableArray * rv = [NSMutableArray array];
-    for (NSString * key in self.cache) {
-        if (!self.predefinedCache[key]) {
-            GCFieldInfo * info = self.cache[key];
-            [rv addObject:@[ info.field ?: @"missing", info.activityType ?: @"missing", info.uom ?: @"missing", info.displayName ?: @"missing"]];
-        }
-    }
-    return [rv sortedArrayUsingComparator:^(NSArray*a1,NSArray*a2){
-        return [a1[1] isEqualToString:a2[1]] ? [a1[0] compare:a2[0]] : [a1[1] compare:a2[1]];
-    }];
-}
-
-
--(GCFieldInfo*)infoForField:(GCField*)field{
-    GCFieldInfo * rv = nil;
-    NSString * key = cacheKey(field.key, field.activityType);
-    if (self.preferPredefined) {
-        rv = self.predefinedCache[key];
-        if (rv == nil) {
-            rv = self.cache[ key ];
-            if (rv == nil) {
-                NSString * keyall = cacheKey(field.key, GC_TYPE_ALL);
-                rv = self.predefinedCache[ keyall];
-                if (rv == nil) {
-                    rv = self.cache[keyall];
-                }
-            }
-        }
-    }else{
-        rv = self.cache[ key ];
-        if (rv == nil) {
-            rv = self.predefinedCache[key];
-            if( rv == nil){
-                NSString * keyall = cacheKey(field.key, GC_TYPE_ALL);
-                rv = self.cache[keyall];
-                if (rv == nil) {
-                    rv = self.predefinedCache[keyall];
-                }
-            }
-        }
-    }
-    if( rv == nil && [field isHealthField]){
-        rv = [GCHealthMeasure fieldInfoFromField:field];
-        if (rv) {
-            self.cache = [self.cache dictionaryByAddingEntriesFromDictionary:@{key:rv}];
-        }
-    }
-// Only if iPhone/ConnectStats on mac, no calculated fields
-#if TARGET_OS_IPHONE
-    if( rv == nil && [field isCalculatedField]){
-        rv = [GCFieldsCalculated fieldInfoForCalculatedField:field];
-        if (rv) {
-            self.cache = [self.cache dictionaryByAddingEntriesFromDictionary:@{key:rv}];
-        }
-    }
-#endif
-
-    return rv;
-}
--(GCFieldInfo*)infoForField:(NSString*)field andActivityType:(NSString*)aType{
-    return [self infoForField:[GCField fieldForKey:field andActivityType:aType]];
-}
--(GCFieldInfo*)infoForActivityType:(NSString*)activityType{
-    NSString * key = cacheKey(activityType, activityType);
-    GCFieldInfo * rv = nil;
-    if (_preferPredefined) {
-        rv = self.predefinedCache[key];
-        if (rv==nil) {
-            rv = self.cache[key];
-        }
-    }else{
-        rv = self.cache[key];
-        if (rv==nil) {
-            rv = self.predefinedCache[key];
-        }
-    }
-    return rv;
+     */
 }
 
 @end

@@ -28,34 +28,43 @@
 
 @implementation NSString (CamelCase)
 
+- (NSString *)fromCamelCaseToCapitalizedSeparatedByString:(NSString *)aSep{
+    return [self fromCamelCaseToSeparatedByString:aSep capitalized:YES];
+}
 
-- (NSString *)fromCamelCaseToSeparatedByString:(NSString *)aSep {
+- (NSString *)fromCamelCaseToSeparatedByString:(NSString *)aSep{
+    return [self fromCamelCaseToSeparatedByString:aSep capitalized:NO];
+}
+
+- (NSString *)fromCamelCaseToSeparatedByString:(NSString *)aSep capitalized:(BOOL)capitalized{
 
     NSScanner *scanner = [NSScanner scannerWithString:self];
     scanner.caseSensitive = YES;
 
-    NSMutableString *rv = [NSMutableString string];
+    NSMutableArray * words = [NSMutableArray array];
+    NSMutableString * word = [NSMutableString string];
     NSString *buffer = nil;
 
     NSCharacterSet * upperCaseSet = [NSCharacterSet uppercaseLetterCharacterSet];
 
     while (scanner.atEnd == NO) {
-
         if ([scanner scanUpToCharactersFromSet:upperCaseSet intoString:&buffer]) {
-
-            [rv appendString:buffer];
+            [word appendString:buffer];
 
             if ([scanner scanCharactersFromSet:upperCaseSet intoString:&buffer]) {
-                [rv appendString:aSep];
-                [rv appendString:buffer];
+                [words addObject:[NSString stringWithString:capitalized ? [word capitalizedString] : word]];
+                [word setString:buffer];
             }
         }else if ([scanner scanCharactersFromSet:upperCaseSet intoString:&buffer]) {
-            [rv appendString:buffer];
+            [word appendString:buffer];
         }
-
     }
 
-    return rv;
+    if( word.length > 0){
+        [words addObject:[NSString stringWithString:capitalized ? [word capitalizedString] : word]];
+    }
+    
+    return [words componentsJoinedByString:aSep];
 }
 
 -(NSString *)dashSeparatedToSpaceCapitalized{

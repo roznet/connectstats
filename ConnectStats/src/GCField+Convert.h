@@ -33,6 +33,6 @@
 +(NSString*)fieldKeyForConnectIQAppID:(NSString*)appId andFieldNumber:(NSNumber*)num;
 +(NSString*)unitNameForConnectIQAppID:(NSString*)appId andFieldNumber:(NSNumber*)num;
 
-+(NSString*)displayNameImpliedByFieldKey:(NSString*)fieldKey;
+//+(NSString*)displayNameImpliedByFieldKey:(NSString*)fieldKey;
 
 @end

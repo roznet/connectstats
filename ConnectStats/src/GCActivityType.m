@@ -228,7 +228,7 @@ static GCActivityTypes * _activityTypesCache = nil;
     if(_fieldCache==nil){
         [GCActivityType fieldCache];
     }
-    return [_fieldCache infoForActivityType:self.key].displayName?:self.key;
+    return [_fieldCache infoForActivityType:self.key].displayName?: [GCField displayNameImpliedByFieldKey:self.key];
 }
 
 #pragma mark - Properties

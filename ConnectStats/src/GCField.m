@@ -418,8 +418,27 @@ static void registerInCache(GCField*field){
 
 #pragma mark
 
++(NSString*)displayNameImpliedByFieldKey:(NSString *)afield{
+    if( [afield rangeOfString:@"_"].location == NSNotFound){
+        NSString * rv = [afield fromCamelCaseToCapitalizedSeparatedByString:@" "];
+        if( [rv hasPrefix:@"Weighted Mean "]){
+            rv = [rv stringByReplacingOccurrencesOfString:@"Weighted Mean " withString:@""];
+        }
+        if( [rv hasPrefix:@"Direct "]){
+            rv = [rv stringByReplacingOccurrencesOfString:@"Direct " withString:@""];
+        }
+        if( [rv hasPrefix:@"Sum "]){
+            rv = [rv stringByReplacingOccurrencesOfString:@"Sum " withString:@""];
+        }
+
+        return rv;
+    }else{
+        return [afield dashSeparatedToSpaceCapitalized];
+    }
+}
+
 -(NSString*)displayName{
-    return [[_fieldCache infoForField:self] displayName] ?: self.key;
+    return [[_fieldCache infoForField:self] displayName] ?: [GCField displayNameImpliedByFieldKey:self.key];
 }
 -(GCUnit*)unit{
     return [[_fieldCache infoForField:self] unit];

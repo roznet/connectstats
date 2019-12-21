@@ -43,7 +43,7 @@ def activitytype_modern(source,table_to):
         connto.execute(sql, (typeKey,typeId,parentTypeId))
     connto.commit()
 
-def activitytype(source,table_to,remap):
+def activitytype(source,table_to):
     connto.execute('DROP TABLE IF EXISTS %s' %(table_to,))
     connto.execute('CREATE TABLE %s (activityType text,activityTypeDetail text,display text)' %(table_to,))
     f = open(source, 'r')
