@@ -57,9 +57,9 @@ NS_INLINE BOOL GCActivityTypeIsSki(NSString*at, NSString*atdetail){
 
 +(NSArray*)knownFieldsMatching:(NSString*)str;
 +(BOOL)knownField:(NSString*)field activityType:(NSString*)activityType;
-+(GCUnit*)fieldUnit:(NSString*)field activityType:(NSString*)activityType;
-+(NSString*)fieldUnitName:(NSString*)field activityType:(NSString*)activityType;
-+(NSString*)fieldDisplayName:(NSString*)field activityType:(NSString*)activityType;
++(GCUnit*)fieldUnit:(NSString*)field activityType:(NSString*)activityType DEPRECATED_MSG_ATTRIBUTE("Use GCField");
++(NSString*)fieldUnitName:(NSString*)field activityType:(NSString*)activityType DEPRECATED_MSG_ATTRIBUTE("Use GCField");
++(NSString*)fieldDisplayName:(NSString*)field activityType:(NSString*)activityType DEPRECATED_MSG_ATTRIBUTE("Use GCField");
 +(gcUnitSystem)fieldUnitSystem;
 +(NSArray*)missingPredefinedField;
 
@@ -80,7 +80,7 @@ NS_INLINE BOOL GCActivityTypeIsSki(NSString*at, NSString*atdetail){
 +(NSString*)fieldForLapField:(NSString*)field andActivityType:(NSString*)aType;
 +(GCUnit*)unitForLapField:(NSString*)field activityType:(NSString*)aType;
 
-+(void)registerField:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom;
++(void)registerField:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom DEPRECATED_MSG_ATTRIBUTE("Switch to predefined");
 
 +(NSString*)fieldForFlag:(gcFieldFlag)which andActivityType:(NSString*)activityType;//DEPRECATED_MSG_ATTRIBUTE("use GCField.");
 
