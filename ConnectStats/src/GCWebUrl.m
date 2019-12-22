@@ -302,6 +302,15 @@ NSString * GCWebActivityTypes(){
     }
 }
 
+NSString * GCWebActivityTypesModern(){
+    if (useSimulator) {
+        return [NSString stringWithFormat:@"%@/garminsimul/samples_fullmodern/activity_types_modern.json", simulatorURL];
+    }else{
+        return @"https://connect.garmin.com/modern/proxy/activity-service/activity/activityTypes";
+    }
+}
+
+
 NSString * GCWebUserData(){
     if (useSimulator) {
         return [NSString stringWithFormat:@"%@/garminsimul/samples/user.json", simulatorURL];

@@ -157,13 +157,10 @@
     gcLanguageSetting setting = gcLanguageSettingAsDownloaded;
 
     NSString * language = nil;
-    BOOL preferPredefined = false;
 
     if (setting == gcLanguageSettingAsDownloaded) {
-        preferPredefined = false;
         language = nil;
     }else if (setting == gcLanguageSettingSystemLanguage){
-        preferPredefined = true;
         language = nil;
     }else{
         NSArray * languages = [GCFieldCache availableLanguagesCodes];
@@ -171,11 +168,9 @@
         if (languageIndex < languages.count) {
             language = languages[languageIndex];
         }
-        preferPredefined = true;
     }
 
     GCFieldCache * cache = [GCFieldCache cacheWithDb:self.db andLanguage:language];
-    cache.preferPredefined = preferPredefined;
     [GCField setFieldCache: cache];
     [GCFields setFieldCache:cache];
     [GCActivityType setFieldCache:cache];

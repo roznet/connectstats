@@ -832,12 +832,11 @@
     
     for (NSUInteger idx=0; idx<[[organizer activities] count]; idx++) {
         GCActivity * act = [organizer activityForIndex:idx];
-        [act setSummaryData:@{
+        [act mergeSummaryData:@{
                               [self fldFor:@"SumDuration" act:act] :               [self sumVal:@"SumDuration"             val:(idx+1)       uom:@"second" ],
                               [self fldFor:@"WeightedMeanPower" act:act] :         [self sumVal:@"WeightedMeanPower"       val:(idx+1)*1000    uom:@"watt" ],
          }
          ];
-        act.sumDurationCompat = idx+1;
         [GCFieldsCalculated addCalculatedFields:act];
     }
     

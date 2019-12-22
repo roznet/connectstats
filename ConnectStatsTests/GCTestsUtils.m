@@ -136,15 +136,15 @@
 -(void)testFormattedField{
     gcUnitSystem remember = [GCUnit getGlobalSystem];
     
-    NSString * TEST_FIELD = @"__testField";
-    NSString * TEST_TEXT  = @"__testText";
+    NSString * TEST_FIELD = @"testField";
+    NSString * TEST_TEXT  = @"testText";
     
     [GCFields registerField:TEST_FIELD activityType:GC_TYPE_RUNNING displayName:@"Test" andUnitName:@"dimensionless"];
     
     NSArray * tests = @[
                         @[@"", @"", @1800., @"yard", @"1.02 mi", @"1.65 km"],
-                        @[TEST_FIELD, GC_TYPE_ALL, @185., @"second", @"Test 03:05", @"Test 03:05"],
-                        @[TEST_TEXT, @"", @185., @"meter",  @"__testText 202.3 yd", @"__testText 185 m"]
+                        @[TEST_FIELD, GC_TYPE_RUNNING, @185., @"second", @"Test 03:05", @"Test 03:05"],
+                        @[TEST_TEXT, @"", @185., @"meter",  @"Test Text 202.3 yd", @"Test Text 185 m"]
                         ];
     
     for (NSArray * one in tests) {

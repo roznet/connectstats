@@ -31,8 +31,6 @@
 
 @interface GCFieldCache : NSObject
 
-@property (nonatomic,assign) BOOL preferPredefined;
-
 +(NSArray<NSString*>*)availableLanguagesCodes;
 +(NSArray<NSString*>*)availableLanguagesNames;
 
