@@ -490,41 +490,61 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 }
 
 -(void)setupSummaryFromFitnessActivity:(GCActivity*)activity width:(CGFloat)width status:(gcViewActivityStatus)status{
-    
-    GCNumberWithUnit * speednu = [activity numberWithUnitForFieldFlag:gcFieldFlagWeightedMeanSpeed];
-    GCNumberWithUnit * bpmnu = [activity numberWithUnitForFieldFlag:gcFieldFlagWeightedMeanHeartRate];
 
-    GCFormattedField * duration = [GCFormattedField formattedFieldForNumber:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDuration] forSize:16.];
-
-    GCFormattedField * distance = [GCFormattedField formattedFieldForNumber:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDistance] forSize:16.];
-
-    GCFormattedField * bpm      = [GCFormattedField formattedFieldForNumber:bpmnu forSize:12.];
-
-    GCFormattedField * speed    = [GCFormattedField formattedFieldForNumber:speednu forSize:12.];
-
-    BOOL skipAlways = activity.skipAlways;
-    BOOL showBpm = ( bpmnu != nil && bpmnu.value!=0.);
-    BOOL showSpeed = (speednu != nil && speednu.value != 0.);
+    NSArray * preferredMainDisplayFields = @[ @"SumDistance", @"SumDuration"];
+    NSArray * preferredInfoFields = @[ @"WeightedMeanHeartRate", @"WeightedMeanSpeed"];
+    if( activity.activityTypeDetail.isPaceValid){
+        preferredInfoFields = @[ @"WeightedMeanHeartRate", @"WeightedMeanPace"];
+    }
 
     if (activity.isSkiActivity) {
-
         if ([activity.activityTypeDetail isEqualToString:GC_TYPE_SKI_DOWN]) {
-            GCNumberWithUnit * loss = [activity numberWithUnitForFieldKey:@"LossElevation"];
-            bpm = [GCFormattedField formattedFieldForNumber:loss forSize:12.];
-            showBpm = true;
+            preferredInfoFields = @[  @"WeightedMeanSpeed", @"LossElevation" ];
         }else{
-            GCNumberWithUnit * gain = [activity numberWithUnitForFieldKey:@"GainElevation"];
-            speed = [GCFormattedField formattedFieldForNumber:gain forSize:12.];
-            showSpeed = true;
+            preferredInfoFields = @[  @"WeightedMeanHeartRate", @"GainElevation" ];
         }
     }
 
+    if ([activity isKindOfClass:[GCActivityTennis class]]) {
+        preferredMainDisplayFields = @[ @"shots", @"SumDuration" ];
+    }
+    
+    NSMutableArray<GCFormattedField*> * mainFields = [NSMutableArray array];
+    NSMutableArray<GCFormattedField*> * infoFields = [NSMutableArray array];
+    
+    for (NSString * fieldKey in preferredMainDisplayFields) {
+        GCField * field = [GCField fieldForKey:fieldKey andActivityType:activity.activityType];
+        GCNumberWithUnit * num = [activity numberWithUnitForField:field];
+        GCFormattedField * formattedField = [GCFormattedField formattedFieldForNumber:num forSize:16.];
+        if( mainFields.count > 0){
+            // remove bold after top/first one
+            formattedField.valueFont = [GCViewConfig systemFontOfSize:16.];
+        }
+        [mainFields addObject:formattedField];
+    }
+    
+    for (NSString * fieldKey in preferredInfoFields) {
+        GCField * field = [GCField fieldForKey:fieldKey andActivityType:activity.activityType];
+        GCNumberWithUnit * num = [activity numberWithUnitForField:field];
+        if( num != nil && num.value != 0.0){
+            GCFormattedField * formattedField = [GCFormattedField formattedFieldForNumber:num forSize:12.];
+            formattedField.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+            formattedField.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+            formattedField.valueFont = [GCViewConfig systemFontOfSize:12.];
+
+            [infoFields addObject:formattedField];
+        }
+    }
+        
+    
+    BOOL skipAlways = activity.skipAlways;
+
     NSDictionary * locAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
-                                                                              NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorHighlightedText]};
+                                     NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorHighlightedText]};
     NSDictionary * dateAttributes = @{NSFontAttributeName: [GCViewConfig boldSystemFontOfSize:16.],
-                                                                                NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
+                                      NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
     NSDictionary * dateSmallAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
-                                     NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
+                                           NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
 
     if( skipAlways ){
         locAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
@@ -549,31 +569,14 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     NSAttributedString * dat    = [[[NSAttributedString alloc] initWithString:[date dateShortFormat] attributes:dateSmallAttributes] autorelease];
     NSAttributedString * time   = [[[NSAttributedString alloc] initWithString:[date timeShortFormat] attributes:dateSmallAttributes] autorelease];
 
-    if ([activity isKindOfClass:[GCActivityTennis class]]) {
-        //FIX
-        GCNumberWithUnit * val = [activity numberWithUnitForFieldFlag:gcFieldFlagTennisShots];
-        if (val!=nil && val.value != 0.) {
-            distance = [GCFormattedField formattedFieldForNumber:val forSize:16.];
-        }else{
-            distance = nil;
-        }
-    }
 
-    duration.valueFont = [GCViewConfig systemFontOfSize:16.];// remove bold
-
-    bpm.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-    bpm.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-    bpm.valueFont = [GCViewConfig systemFontOfSize:12.];
-
-    speed.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-    speed.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-    speed.valueFont = [GCViewConfig systemFontOfSize:12.];
 
     if( skipAlways ){
         [self setupBackgroundColors:@[ [GCViewConfig defaultColor:gcSkinDefaultColorTertiaryText] ]];
-        duration.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-        distance.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-        distance.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+        for (GCFormattedField * field in mainFields) {
+            field.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+            field.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+        }
     }else{
         [GCViewConfig setupGradient:self ForActivity:activity];
     }
@@ -587,14 +590,14 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         [self setupForRows:3 andCols:3];
         self.marginx = 2.;
         self.marginy = 2.;
-        [self labelForRow:0 andCol:1].attributedText = [distance attributedString];
         [self labelForRow:0 andCol:0].attributedText = day;
+        [self labelForRow:0 andCol:1].attributedText = mainFields.count > 0 ? mainFields[0].attributedString : nil;
         [self labelForRow:0 andCol:2].attributedText = time;
-        [self labelForRow:1 andCol:1].attributedText = [duration attributedString];
+        [self labelForRow:1 andCol:1].attributedText = mainFields.count > 1 ? mainFields[1].attributedString : nil;
         [self labelForRow:1 andCol:0].attributedText = dat;
-        [self labelForRow:1 andCol:2].attributedText = showBpm ? [bpm attributedString] : nil;
+        [self labelForRow:1 andCol:2].attributedText = infoFields.count > 0 ? infoFields[0].attributedString : nil;
         [self labelForRow:2 andCol:0].attributedText = loc;
-        [self labelForRow:2 andCol:2].attributedText = showSpeed ? [speed attributedString] : nil;
+        [self labelForRow:2 andCol:2].attributedText = infoFields.count > 1 ? infoFields[1].attributedString : nil;
 
         [self configForRow:1 andCol:2].verticalAlign = gcVerticalAlignBottom;
         [self configForRow:2 andCol:2].verticalAlign = gcVerticalAlignTop;
@@ -604,13 +607,13 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         self.marginx = 2.;
         self.marginy = 2.;
         [self labelForRow:0 andCol:0].attributedText = day;
-        [self labelForRow:0 andCol:1].attributedText = [distance attributedString];
-        [self labelForRow:0 andCol:2].attributedText = [duration attributedString];
-        [self labelForRow:0 andCol:3].attributedText = showBpm ? [bpm attributedString] : nil;
+        [self labelForRow:0 andCol:1].attributedText = mainFields.count > 0 ? mainFields[0].attributedString : nil;
+        [self labelForRow:0 andCol:2].attributedText = mainFields.count > 1 ? mainFields[1].attributedString : nil;
+        [self labelForRow:0 andCol:3].attributedText = infoFields.count > 0 ? infoFields[0].attributedString : nil;
         [self labelForRow:1 andCol:0].attributedText = dat;
         [self labelForRow:1 andCol:1].attributedText = time;
         [self labelForRow:1 andCol:2].attributedText = loc;
-        [self labelForRow:1 andCol:3].attributedText = showSpeed ? [speed attributedString] : nil;
+        [self labelForRow:1 andCol:3].attributedText = infoFields.count > 1 ? infoFields[1].attributedString : nil;
     }
     if (status==gcViewActivityStatusCompare) {
         [self setIconImage:[GCViewConfig mergeImage:[activity icon] withImage:[GCViewIcons cellIconFor:gcIconCellCheckbox]]];
