@@ -490,7 +490,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 }
 
 -(void)setupSummaryFromFitnessActivity:(GCActivity*)activity width:(CGFloat)width status:(gcViewActivityStatus)status{
-
+    
     GCNumberWithUnit * speednu = [activity numberWithUnitForFieldFlag:gcFieldFlagWeightedMeanSpeed];
     GCNumberWithUnit * bpmnu = [activity numberWithUnitForFieldFlag:gcFieldFlagWeightedMeanHeartRate];
 

@@ -104,6 +104,7 @@ extern NSString * GC_TYPE_TENNIS;
 extern NSString * GC_TYPE_MULTISPORT;
 extern NSString * GC_TYPE_TRANSITION;
 
+extern NSString * GC_TYPE_WINTER_SPORTS;
 extern NSString * GC_TYPE_SKI_XC;
 extern NSString * GC_TYPE_SKI_DOWN;
 extern NSString * GC_TYPE_SKI_BACK;
