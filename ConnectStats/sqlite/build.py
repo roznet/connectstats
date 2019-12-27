@@ -52,6 +52,8 @@ def activitytype(source,table_to):
         if 'parent' in item:
             parent =  remap_activityType( item[u'parent'][u'key'] )
             key= remap_activityType( item[u'key'] )
+            if( key.endswith('_ws' ) and parent == 'other' ):
+                parent = 'winter_sports'
 
             display = item[u'display']
             sql='INSERT INTO %s (activityType,activityTypeDetail,display) VALUES (?,?,?)' %(table_to,)

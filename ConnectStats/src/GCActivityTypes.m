@@ -254,6 +254,80 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
 -(GCActivityType*)activityTypeForGarminId:(NSUInteger)garminActivityId{
     return self.typesById[ @(garminActivityId)];
 }
+
+-(GCActivityType*)activityTypeForFitSport:(NSString*)fitSport{
+    NSDictionary<NSString*,GCActivityType*> * cache = nil;
+    if( cache == nil){
+        NSDictionary * types = @{
+            @"GENERIC": @"other",
+            @"RUNNING": @"running",
+            @"CYCLING": @"cycling",
+            @"TRANSITION": @"transition",
+            @"FITNESS_EQUIPMENT": @"fitness_equipment",
+            @"SWIMMING": @"swimming",
+            @"BASKETBALL": @"other",
+            @"SOCCER": @"other",
+            @"TENNIS": @"tennis",
+            @"AMERICAN_FOOTBALL": @"other",
+            @"TRAINING": @"other",
+            @"WALKING": @"walking",
+            @"CROSS_COUNTRY_SKIING": @"cross_country_skiing_ws",
+            @"ALPINE_SKIING": @"resort_skiing_snowboarding_ws",
+            @"SNOWBOARDING": @"resort_skiing_snowboarding_ws",
+            @"ROWING": @"rowing",
+            @"MOUNTAINEERING": @"mountaineering",
+            @"HIKING": @"hiking",
+            @"MULTISPORT": @"multi_sport",
+            @"PADDLING": @"paddling",
+            @"FLYING": @"flying",
+            @"E_BIKING": @"road_biking",
+            @"MOTORCYCLING": @"motorcycling",
+            @"BOATING": @"boating",
+            @"DRIVING": @"diving",
+            @"GOLF": @"golf",
+            @"HANG_GLIDING": @"hang_gliding",
+            @"HORSEBACK_RIDING": @"horseback_riding",
+            @"HUNTING": @"hunting_fishing",
+            @"FISHING": @"hunting_fishing",
+            @"INLINE_SKATING": @"inline_skating",
+            @"ROCK_CLIMBING": @"rock_climbing",
+            @"SAILING": @"sailing",
+            @"ICE_SKATING": @"inline_skating",
+            @"SKY_DIVING": @"sky_diving",
+            @"SNOWSHOEING": @"snow_shoe_ws",
+            @"SNOWMOBILING": @"snowmobiling_ws",
+            @"STAND_UP_PADDLEBOARDING": @"stand_up_paddleboarding",
+            @"SURFING": @"surfing",
+            @"WAKEBOARDING": @"wakeboarding",
+            @"WATER_SKIING": @"wakeboarding",
+            @"KAYAKING": @"whitewater_rafting_kayaking",
+            @"RAFTING": @"boating",
+            @"WINDSURFING": @"wind_kite_surfing",
+            @"KITESURFING": @"wind_kite_surfing",
+            @"TACTICAL": @"other",
+            @"JUMPMASTER": @"fitness_equiment",
+            @"BOXING": @"other",
+            @"FLOOR_CLIMBING": @"floor_climbing",
+        };
+    
+        NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+        for (NSString * stravaType in types) {
+            NSString * typeKey = types[stravaType];
+            GCActivityType * type = self.typesByKey[typeKey];
+            if (type) {
+                dict[ [stravaType lowercaseString] ] = type;
+            }
+        }
+        cache = dict;
+    }
+    GCActivityType * rv = cache[ [fitSport lowercaseString] ];
+    
+    if( rv == nil) {
+        rv = [GCActivityType activityTypeForKey:[fitSport lowercaseString]];
+    }
+    return rv;
+}
+
 -(GCActivityType*)activityTypeForStravaType:(NSString*)stravaType{
     NSDictionary<NSString*,GCActivityType*> * cache = nil;
     if( cache == nil){
@@ -345,9 +419,9 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
                        @"RUNTOBIKETRANSITION":@"runToBikeTransition",
                        @"MOTORCYCLING":@"motorcycling",
                        @"OTHER":@"other",
-                       @"BACKCOUNTRY_SKIING_SNOWBOARDING":@"backcountry_skiing_snowboarding",
+                       @"BACKCOUNTRY_SKIING_SNOWBOARDING_WS":@"backcountry_skiing_snowboarding_ws",
                        @"BOATING":@"boating",
-                       @"CROSS_COUNTRY_SKIING":@"cross_country_skiing",
+                       @"CROSS_COUNTRY_SKIING_WS":@"cross_country_skiing_ws",
                        @"DRIVING_GENERAL":@"driving_general",
                        @"FLYING":@"flying",
                        @"GOLF":@"golf",
@@ -355,13 +429,13 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
                        @"INLINE_SKATING":@"inline_skating",
                        @"MOUNTAINEERING":@"mountaineering",
                        @"PADDLING":@"paddling",
-                       @"RESORT_SKIING_SNOWBOARDING":@"resort_skiing_snowboarding",
+                       @"RESORT_SKIING_SNOWBOARDING_WS":@"resort_skiing_snowboarding_ws",
                        @"ROWING":@"rowing",
                        @"SAILING":@"sailing",
-                       @"SKATE_SKIING":@"skate_skiing",
-                       @"SKATING":@"skating",
-                       @"SNOWMOBILING":@"snowmobiling",
-                       @"SNOW_SHOE":@"snow_shoe",
+                       @"SKATE_SKIING_WS":@"skate_skiing_ws",
+                       @"SKATING_WS":@"skating_ws",
+                       @"SNOWMOBILING_WS":@"snowmobiling_ws",
+                       @"SNOW_SHOE_WS":@"snow_shoe_ws",
                        @"STAND_UP_PADDLEBOARDING":@"stand_up_paddleboarding",
                        @"WHITEWATER_RAFTING_KAYAKING":@"whitewater_rafting_kayaking",
                        @"WIND_KITE_SURFING":@"wind_kite_surfing",

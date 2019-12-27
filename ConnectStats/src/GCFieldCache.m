@@ -42,7 +42,7 @@ NS_INLINE NSString * cacheActivityTypeKey(NSString*activityType){
     return activityType ?:@"NIL";
 }
 
-
+static NSMutableDictionary * _missingFieldCache = nil;
 
 @interface GCFieldCache ()
 @property (nonatomic,retain) NSDictionary<NSString*,GCFieldInfo*>*cache;
@@ -264,7 +264,13 @@ NS_INLINE NSString * cacheActivityTypeKey(NSString*activityType){
     }
 #endif
     if( rv == nil){
-        RZLog(RZLogInfo,@"Missing %@", field);
+        if( _missingFieldCache == nil){
+            _missingFieldCache = RZReturnRetain([NSMutableDictionary dictionary]);
+        }
+        if( ! _missingFieldCache[field]){
+            _missingFieldCache[field] = @1;
+            RZLog(RZLogInfo,@"Predefined Field Cache Missing %@", field);
+        }
     }
     return rv;
 }
@@ -272,7 +278,7 @@ NS_INLINE NSString * cacheActivityTypeKey(NSString*activityType){
     return [self infoForField:[GCField fieldForKey:field andActivityType:aType]];
 }
 -(GCFieldInfo*)infoForActivityType:(NSString*)activityType{
-    NSString * key = cacheFieldKey(activityType, activityType);
+    NSString * key = cacheActivityTypeKey(activityType);
     GCFieldInfo * rv = self.predefinedActivityTypeCache[key];
     return rv;
 }

@@ -155,6 +155,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 #pragma mark -
 
 @interface GCWebConnect ()
+
 @property (nonatomic,assign) NSUInteger lastBandwidth;
 @property (nonatomic,retain) RZRemoteDownload * remoteDownload;
 @property (nonatomic,retain) id<GCWebRequest> currentRequestObject;

@@ -29,12 +29,12 @@
 #pragma mark -
 
 @interface GCWebConnect : RZParentObject<RZRemoteDownloadDelegate,GCWebRequestDelegate>
-
 @property (retain,nonatomic) NSMutableArray * requests;
 @property (assign) GCWebStatus status;
 @property (nonatomic,assign) NSInteger lastStatusCode;
 @property (nonatomic,retain) NSError * lastError;
 @property (nonatomic,retain) dispatch_queue_t worker;
+
 
 -(NSString*)currentDescription;
 -(NSString*)currentDebugDescription;
