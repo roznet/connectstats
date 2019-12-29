@@ -93,7 +93,7 @@
         self.stage = gcRequestStageSaving;
         [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
         
-        NSUInteger n = [[GCAppGlobal activityTypes] loadMissingFromGarmin:self.modern withDisplayInfoFrom:self.legacy];
+        NSUInteger n = [[GCActivityType activityTypes] loadMissingFromGarmin:self.modern withDisplayInfoFrom:self.legacy];
         if( n > 0){
             RZLog(RZLogInfo, @"Found %lu new types", (long unsigned)n);
         }

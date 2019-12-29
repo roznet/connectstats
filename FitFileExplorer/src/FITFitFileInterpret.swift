@@ -23,7 +23,7 @@ class FITFitFileInterpret: NSObject {
             if self.sessionIndex < sportMsg.count {
                 let first = sportMsg[sessionIndex]
                 if let sportKey = first.name(field: "sport"),
-                    let activityType = GCAppGlobal.activityTypes()?.activityType(forFitSport: sportKey){
+                    let activityType = GCActivityType(forFitSport: sportKey, andSubSport: first.name(field: "sub_sport")){
                     return activityType
                 }
             }

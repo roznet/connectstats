@@ -53,7 +53,6 @@
 @property (nonatomic, retain) GCDerivedOrganizer * derived;
 @property (nonatomic, retain) GCWatchSessionManager * watch;
 @property (nonatomic, retain) GCSegmentOrganizer * segments;
-@property (nonatomic, retain) GCActivityTypes * activityTypes;
 @property (nonatomic, retain) NSURL * urlToOpen;
 
 -(void)saveSettings;

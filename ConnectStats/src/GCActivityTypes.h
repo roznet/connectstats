@@ -43,7 +43,7 @@
 -(GCActivityType*)activityTypeForGarminId:(NSUInteger)garminActivityId;
 -(GCActivityType*)activityTypeForStravaType:(NSString*)stravaType;
 -(GCActivityType*)activityTypeForConnectStatsType:(NSString*)input;
--(GCActivityType*)activityTypeForFitSport:(NSString*)fitSport;
+-(GCActivityType*)activityTypeForFitSport:(NSString*)fitSport andSubSport:(NSString*)fitSubSport;
 
 -(NSArray<GCActivityType*>*)allTypes;
 /**

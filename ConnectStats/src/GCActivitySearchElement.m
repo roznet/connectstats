@@ -164,7 +164,7 @@ NSArray * _elementCache = nil;
     NSString * foundFieldKey = nil;
 
     // If aStr is a valid activity type, skip and just match that
-    if( [[GCAppGlobal activityTypes] isExistingActivityType:aStr]){
+    if( [GCActivityType isExistingActivityType:aStr]){
         return nil;
     }
 

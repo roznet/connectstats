@@ -41,6 +41,12 @@
 
 +(nonnull GCActivityType*)activityTypeForKey:(nonnull NSString*)key;
 
++(nullable GCActivityType*)activityTypeForGarminId:(NSUInteger)garminActivityId;
++(nullable GCActivityType*)activityTypeForStravaType:(nonnull NSString*)stravaType;
++(nullable GCActivityType*)activityTypeForConnectStatsType:(nonnull NSString*)input;
++(nullable GCActivityType*)activityTypeForFitSport:(nonnull NSString*)fitSport andSubSport:(nullable NSString*)fitSubSport;
++(BOOL)isExistingActivityType:(nonnull NSString*)aType;
+
 -(nonnull NSString*)displayName;
 -(BOOL)isRootType;
 -(BOOL)isSameRootType:(nonnull GCActivityType*)other;

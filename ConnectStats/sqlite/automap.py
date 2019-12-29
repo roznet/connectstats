@@ -12,7 +12,7 @@ import numpy as np
 from fuzzywuzzy import fuzz
 
 # replace with which ever list needs to be converted
-tomap = (
+tomap_fitsport = (
 
     "GENERIC",
     "RUNNING",
@@ -63,6 +63,69 @@ tomap = (
     "JUMPMASTER",
     "BOXING",
     "FLOOR_CLIMBING",
+)
+
+tomap = (
+    'GENERIC',                                                    
+    'TREADMILL',                                                  #  Run/Fitness Equipment
+    'STREET',                                                     #  Run
+    'TRAIL',                                                      #  Run
+    'TRACK',                                                      #  Run
+    'SPIN',                                                       #  Cycling
+    'INDOOR_CYCLING',                                             #  Cycling/Fitness Equipment
+    'ROAD',                                                       #  Cycling
+    'MOUNTAIN_BIKING',                                            #  Cycling
+    'DOWNHILL',                                                   #  Cycling
+    'RECUMBENT',                                                  #  Cycling
+    'CYCLOCROSS',                                                 #  Cycling
+    'HAND_CYCLING',                                               #  Cycling
+    'TRACK_CYCLING',                                              #  Cycling
+    'INDOOR_ROWING',                                              #  Fitness Equipment
+    'ELLIPTICAL',                                                 #  Fitness Equipment
+    'STAIR_CLIMBING',                                             #  Fitness Equipment
+    'LAP_SWIMMING',                                               #  Swimming
+    'OPEN_WATER',                                                 #  Swimming
+    'FLEXIBILITY_TRAINING',                                       #  Training
+    'STRENGTH_TRAINING',                                          #  Training
+    'WARM_UP',                                                    #  Tennis
+    'MATCH',                                                      #  Tennis
+    'EXERCISE',                                                   #  Tennis
+    'CHALLENGE',                                                  
+    'INDOOR_SKIING',                                              #  Fitness Equipment
+    'CARDIO_TRAINING',                                            #  Training
+    'INDOOR_WALKING',                                             #  Walking/Fitness Equipment
+    'E_BIKE_FITNESS',                                             #  E-Biking
+    'BMX',                                                        #  Cycling
+    'CASUAL_WALKING',                                             #  Walking
+    'SPEED_WALKING',                                              #  Walking
+    'BIKE_TO_RUN_TRANSITION',                                     #  Transition
+    'RUN_TO_BIKE_TRANSITION',                                     #  Transition
+    'SWIM_TO_BIKE_TRANSITION',                                    #  Transition
+    'ATV',                                                        #  Motorcycling
+    'MOTOCROSS',                                                  #  Motorcycling
+    'BACKCOUNTRY',                                                #  Alpine Skiing/Snowboarding
+    'RESORT',                                                     #  Alpine Skiing/Snowboarding
+    'RC_DRONE',                                                   #  Flying
+    'WINGSUIT',                                                   #  Flying
+    'WHITEWATER',                                                 #  Kayaking/Rafting
+    'SKATE_SKIING',                                               #  Cross Country Skiing
+    'YOGA',                                                       #  Training
+    'PILATES',                                                    #  Fitness Equipment
+    'INDOOR_RUNNING',                                             #  Run
+    'GRAVEL_CYCLING',                                             #  Cycling
+    'E_BIKE_MOUNTAIN',                                            #  Cycling
+    'COMMUTING',                                                  #  Cycling
+    'MIXED_SURFACE',                                              #  Cycling
+    'NAVIGATE',                                                   
+    'TRACK_ME',                                                   
+    'MAP',                                                        
+    'SINGLE_GAS_DIVING',                                          #  Diving
+    'MULTI_GAS_DIVING',                                           #  Diving
+    'GAUGE_DIVING',                                               #  Diving
+    'APNEA_DIVING',                                               #  Diving
+    'APNEA_HUNTING',                                              #  Diving
+    'VIRTUAL_ACTIVITY',                                           
+    'OBSTACLE',                                                   #  Used for events where participants run, crawl through mud, climb over walls, etc.
 )
 
 def search():

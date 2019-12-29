@@ -58,7 +58,6 @@
     [_db release];
     [_derived release];
     [_health release];
-    [_activityTypes release];
     [_tabBarController release];
     [_testServicesViewController release];
     [_credentials release];
@@ -174,7 +173,7 @@
     [GCField setFieldCache: cache];
     [GCFields setFieldCache:cache];
     [GCActivityType setFieldCache:cache];
-    self.activityTypes = [GCActivityTypes activityTypes];
+    [GCActivityType setActivityTypes:[GCActivityTypes activityTypes]];
 }
 
 

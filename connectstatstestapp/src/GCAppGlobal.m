@@ -155,10 +155,6 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 +(void)saveSettings{
 
 }
-+(GCActivityTypes*)activityTypes{
-    GCAppDelegate *appDelegate = _sharedApplicationDelegate();
-    return appDelegate.activityTypes;
-}
 
 +(dispatch_queue_t)worker{
     return [[GCAppGlobal appDelegate] worker];

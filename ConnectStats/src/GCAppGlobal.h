@@ -56,7 +56,6 @@ extern NSString *const kNotifySettingsChange;
 +(GCAppProfiles*)profile;
 +(GCDerivedOrganizer*)derived;
 +(GCSegmentOrganizer*)segments;
-+(GCActivityTypes*)activityTypes;
 
 // Actions
 +(void)focusOnActivityAtIndex:(NSUInteger)idx;

@@ -131,11 +131,6 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     return appDelegate.segments;
 }
 
-+(GCActivityTypes*)activityTypes{
-    GCAppDelegate *appDelegate = _sharedApplicationDelegate();
-    return appDelegate.activityTypes;
-}
-
 #pragma mark - UI Focus Actions
 
 +(void)switchToHealth{

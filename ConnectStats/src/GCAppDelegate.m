@@ -109,7 +109,6 @@ void checkVersion(){
     [_actions release];
     [_health release];
     [_segments release];
-    [_activityTypes release];
     [_credentials release];
 
     [_splitViewController release];
@@ -174,8 +173,7 @@ void checkVersion(){
     }
 
     [self setupFieldCache];
-    self.activityTypes = [GCActivityTypes activityTypes];
-    [GCActivityType setActivityTypes:self.activityTypes];
+    [GCActivityType setActivityTypes:[GCActivityTypes activityTypes]];
 
     [GCUnit setGlobalSystem:[_settings[CONFIG_UNIT_SYSTEM] intValue]];
     [GCUnit setStrideStyle:[_settings[CONFIG_STRIDE_STYLE] intValue]];
