@@ -96,24 +96,31 @@
     for (NSString * aId in activityIds) {
         dispatch_sync([GCAppGlobal worker], ^(){
             GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+            // Disable thread so calculated fields are populated at once
+            act.settings.worker = nil;
             [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
             
             NSArray<GCField*>*fields = [act availableTrackFields];
-            
+            NSMutableArray<GCField*>*newFieds = [NSMutableArray array];
             for (GCField * field in fields) {
                 NSError * error = nil;
                 
                 NSString * ident = [NSString stringWithFormat:@"%@_%@", aId, field.key];
                 GCStatsDataSerieWithUnit * expected = [act timeSerieForField:field];
                 GCStatsDataSerieWithUnit * retrieved = [manager retrieveReferenceObject:expected forClasses:classes selector:_cmd identifier:ident error:&error];
+                if( retrieved == nil){
+                    [newFieds addObject:field];
+                }
                 XCTAssertNotNil( retrieved, @"In activity %@, field %@ does not have saved reference point, maybe a new field?", act, field);
                 XCTAssertNotEqual(expected.count, 0, @"%@[%@] has points",aId,field.key);
                 XCTAssertEqualObjects(expected, retrieved, @"%@[%@]: %@<>%@", aId, field.key, expected, retrieved);
             }
+            if( newFieds.count > 0){
+                RZLog(RZLogInfo, @"%@ potential new fields %@", act, newFieds);
+            }
         });
+        
     }
-    
-    //NSLog(@"act %@", act);
 }
 
 -(void)testParseLapsSwimming{
@@ -172,17 +179,19 @@
         GCActivity * parsedAct = [[[GCActivity alloc] initWithId:activityId andGarminData:json] autorelease];
         parsedAct.db = db;
         parsedAct.trackdb = db;
-        
+        parsedAct.settings.worker = nil;
         [GCGarminActivityTrack13Request testForActivity:parsedAct withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:false];
         [parsedAct saveToDb:db];
         
         XCTAssertGreaterThan(parsedAct.trackpoints.count, 1);
         bool recordMode = [GCTestCase recordModeGlobal];
-        
+
         NSString * identifier = [NSString stringWithFormat:@"parse_reload_%@", activityId];
         [self compareStatsCheckSavedFor:parsedAct identifier:identifier cmd:_cmd recordMode:recordMode];
         
         GCActivity * reloadedAct = [GCActivity activityWithId:activityId andDb:db];
+        // disable threading so calculated value recalculated synchronously.
+        reloadedAct.settings.worker = nil;
         [reloadedAct trackpoints];
         NSDictionary * parsedDict = [self compareStatsDictFor:parsedAct];
         NSDictionary * reloadedDict = [self compareStatsDictFor:reloadedAct];
@@ -536,7 +545,9 @@
                                              
                                              };
     
-    
+    /* Re-base:
+     *   
+     */
     NSArray<NSString*>*aIds = @[ @"1083407258", // Ski Activity
                                  @"2477200414", // Run with Power
                                  ];

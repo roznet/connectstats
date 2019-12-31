@@ -427,21 +427,68 @@
 
 -(NSDictionary*)calculateAltitudeDerivedFields{
     GCField * altitude = [GCField fieldForFlag:gcFieldFlagAltitudeMeters andActivityType:self.activityType];
+    GCField * distance = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType];
 
-    GCStatsDataSerieWithUnit * serie = [self timeSerieForField:altitude];
+    GCStatsDataSerieWithUnit * serie = [GCStatsDataSerieWithUnit dataSerieWithOther:[self timeSerieForField:altitude]];
+    GCStatsDataSerieWithUnit * serie_dist = [GCStatsDataSerieWithUnit dataSerieWithOther:[self timeSerieForField:distance]];
+    
+    [GCStatsDataSerie reduceToCommonRange:serie.serie and:serie_dist.serie];
+    
     GCStatsDataSerieWithUnit * adjusted = [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit];
+    
     adjusted.xUnit = serie.xUnit;
+
+    NSDictionary<NSString*,GCStatsDataSerieWithUnit*>*calc = @{
+        CALC_ALTITUDE_GAIN : [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit],
+        CALC_ALTITUDE_LOSS : [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit],
+        CALC_ELEVATION_GRADIENT : [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit]
+    };
     
     double threshold = [[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:5.0] convertToUnit:serie.unit].value;
     
-    GCNumberWithUnit * current_altitude = [GCNumberWithUnit numberWithUnit:serie.unit andValue:[serie dataPointAtIndex:0].y_data];
-    for (GCStatsDataPoint * point in serie) {
-        if( fabs( current_altitude.value - point.y_data ) > threshold ){
-            current_altitude = [GCNumberWithUnit numberWithUnit:serie.unit andValue:point.y_data];
-        }
-        [adjusted addNumberWithUnit:current_altitude forX:point.x_data];
-    }
+    double current_altitude = [serie dataPointAtIndex:0].y_data;
+    double current_altitude_distance = [serie_dist dataPointAtIndex:0].y_data;
+    double current_elevation_gain = 0.;
+    double current_elevation_loss = 0.;
+    double current_elevation_gradient = 0.;
     
+        
+    double elevation_unit_to_dist_unit = [serie_dist.unit convertDouble:1.0 fromUnit:serie.unit];
+    
+    if( [serie dataPointAtIndex:0].x_data != [serie_dist dataPointAtIndex:0].x_data ){
+        RZLog(RZLogInfo, @"Oops");
+    }
+    NSUInteger idx = 0;
+    NSUInteger idx_current_altitude = 0;
+    
+    for (GCStatsDataPoint * point in serie) {
+        if( point.x_data != [serie_dist dataPointAtIndex:idx].x_data ){
+            RZLog(RZLogInfo, @"Oops");
+        }
+        GCStatsDataPoint * point_dist = [serie_dist dataPointAtIndex:idx];
+        idx++;
+        
+        if( fabs( current_altitude - point.y_data ) > threshold ){
+            if( current_altitude < point.y_data){
+                current_elevation_gain += ( point.y_data - current_altitude);
+            }
+            if( current_altitude > point.y_data){
+                current_elevation_loss += (point.y_data - current_altitude);
+            }
+            current_elevation_gradient = ( point.y_data - current_altitude) * elevation_unit_to_dist_unit / (point_dist.y_data - current_altitude_distance);
+            current_altitude = point.y_data;
+            current_altitude_distance = point_dist.y_data;
+            // Fill Gradient since last elevation
+            for( NSUInteger j = idx_current_altitude; j < idx; j++){
+                [calc[CALC_ELEVATION_GRADIENT].serie addDataPointWithX:[serie dataPointAtIndex:j].x_data
+                                                                  andY:current_elevation_gradient];
+            }
+            idx_current_altitude = idx-1;
+        }
+        [calc[CALC_ALTITUDE_GAIN].serie addDataPointWithX:point.x_data andY:current_elevation_gain];
+        [calc[CALC_ALTITUDE_LOSS].serie addDataPointWithX:point.x_data andY:current_elevation_loss];
+        [adjusted.serie addDataPointWithX:point.x_data andY:current_altitude];
+    }
     
     // compute speed with minimum of 10 sec and report for 1min (60secs)
     GCStatsDataSerie * ascentspeed = [serie.serie deltaYSerieForDeltaX:10. scalingFactor:60.0*60.0];
@@ -464,7 +511,18 @@
     }
     [self addEntriesToCalculatedFields:newFields];
 
-    return @{CALC_VERTICAL_SPEED:final};
+    NSMutableDictionary * rv = [NSMutableDictionary dictionary];
+    if( final.serie.count > 0){
+        rv[CALC_VERTICAL_SPEED] = final;
+    }
+    for (NSString*key in calc) {
+        GCStatsDataSerieWithUnit * su = calc[key];
+        if( su.serie.count > 0){
+            rv[key] = su;
+        }
+    }
+    
+    return rv;
 }
 
 -(NSDictionary*)calculateSpeedDerivedFields{

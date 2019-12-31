@@ -686,6 +686,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if (![db executeUpdate:@"UPDATE gc_activities SET garminSwimAlgorithm = ? WHERE activityId=?",@(_garminSwimAlgorithm), _activityId]){
         RZLog(RZLogError, @"db error %@", [db lastErrorMessage]);
     }
+    
+    [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
 }
 -(void)loadTrackPointsSwim:(FMDatabase*)trackdb{
     NSMutableArray * trackpointsCache = [NSMutableArray arrayWithCapacity:100];
@@ -1346,6 +1348,12 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             unique[one] = @1;
         }
     }
+    if( self.cachedCalculatedTracks.count > 0){
+        for( NSString * field in self.cachedCalculatedTracks){
+            GCField * one = [GCField field:field forActivityType:self.activityType];
+            unique[one] = @1;
+        }
+    }
     return [unique.allKeys sortedArrayUsingSelector:@selector(compare:)];
 }
 
@@ -1735,6 +1743,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 }
 
 -(GCStatsDataSerieWithUnit*)trackSerieForField:(GCField*)field timeAxis:(BOOL)timeAxis{
+    if( self.cachedCalculatedTracks[field] != nil){
+        return self.cachedCalculatedTracks[field];
+    }
     BOOL treatGapAsNoValue = self.settings.treatGapAsNoValueInSeries;
     NSTimeInterval gapTimeInterval = self.settings.gapTimeInterval;
 
