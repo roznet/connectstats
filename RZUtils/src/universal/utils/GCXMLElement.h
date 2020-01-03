@@ -27,23 +27,42 @@
 
 @interface GCXMLElement : NSObject
 
-@property (nonatomic,retain) NSString * tag;
-@property (nonatomic,retain) NSString * value;
-@property (nonatomic,retain) NSMutableArray * children;
-@property (nonatomic,retain) NSMutableArray * params;
+@property (nonatomic,readonly) NSString * tag;
+@property (nonatomic,readonly) NSString * value;
 
 +(GCXMLElement*)element:(NSString*)atag;
 +(GCXMLElement*)element:(NSString*)atag withValue:(NSString*)aValue;
 +(GCXMLElement*)elementValue:(NSString*)aValue;
+
 -(void)addChild:(GCXMLElement*)aChild;
+-(void)addChildren:(NSArray<GCXMLElement*>*)aChild;
 -(void)addParameter:(NSString*)aKey withValue:(NSString*)value;
--(NSString*)valueForParameter:(NSString*)aKey;
 
 -(NSString*)toXML:(NSString*)prefix;
 -(void)setAttributeDict:(NSDictionary*)aDict;
 -(NSDictionary*)attributeDict;
+-(void)updateValue:(NSString*)value;
 
+/**
+ * Return value for the parameter of the element if exists or nil
+ */
+-(NSString*)valueForParameter:(NSString*)aKey;
+/**
+ * Return value for a direct child of the element if exists or nil
+ */
+-(NSString*)valueForChild:(NSString*)aKey;
+
+/**
+ * Return the value for specific path on children
+ */
+-(NSString*)valueForChildPath:(NSArray<NSString*>*)path;
+/**
+ * find all element recursively in any child of specific name
+ */
 -(NSArray*)findElements:(NSString*)elementName;
+/**
+* search recursively children and return the first one matchin elementName
+*/
 -(GCXMLElement*)findFirstElement:(NSString*)elementName;
 
 @end

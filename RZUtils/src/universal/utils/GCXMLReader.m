@@ -68,7 +68,7 @@
     [element setAttributeDict:attributeDict];
     if (parent) {
         if (self.currentString.length>0) {
-            parent.value =self.currentString;
+            [parent updateValue:self.currentString];
         }
         [parent addChild:element];
     }
@@ -80,7 +80,7 @@
     GCXMLElement * parent = self.elementStack.count > 0 ? (self.elementStack).lastObject : nil;
     if (parent) {
         if (self.currentString.length>0) {
-            parent.value = self.currentString;
+            [parent updateValue:self.currentString];
             self.currentString = nil;
         }
     }

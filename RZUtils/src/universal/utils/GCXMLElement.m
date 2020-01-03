@@ -29,6 +29,13 @@
 #import "GCXMLElement.h"
 #import "RZMacros.h"
 
+@interface GCXMLElement ( )
+@property (nonatomic,retain) NSString * tag;
+@property (nonatomic,retain) NSString * value;
+@property (nonatomic,retain) NSMutableArray * children;
+@property (nonatomic,retain) NSMutableArray * params;
+
+@end
 @implementation GCXMLElement
 
 -(void)dealloc{
@@ -86,6 +93,14 @@
     }
     [_children addObject:aChild];
 }
+-(void)addChildren:(NSArray<GCXMLElement*>*)aChild{
+    if (!_children) {
+        self.children = [NSMutableArray arrayWithCapacity:10];
+    }
+    [_children addObjectsFromArray:aChild];
+
+}
+
 -(void)addParameter:(NSString*)aKey withValue:(NSString*)aValue{
     if (!_params) {
         self.params = [NSMutableArray arrayWithCapacity:10];
@@ -102,6 +117,36 @@
         }
     }
     return nil;
+}
+-(NSString*)valueForChild:(NSString*)aKey{
+    if( self.children ){
+        for (GCXMLElement * elem in self.children) {
+            if( [elem.tag isEqualToString:aKey] ){
+                return elem.value;
+            }
+        }
+    }
+    return nil;
+}
+
+-(NSString*)valueForChildPath:(NSArray<NSString*>*)path{
+    GCXMLElement * current = self;
+    
+    for (NSString * key in path) {
+        GCXMLElement * next = nil;
+        if( current.children ){
+            for (GCXMLElement * elem in current.children) {
+                if( [elem.tag isEqualToString:key] ){
+                    next = elem;
+                    break;
+                }
+            }
+        }else{
+            return nil;
+        }
+        current = next;
+    }
+    return current.value;
 }
 
 -(NSString*)toXML:(NSString*)aprefix{
@@ -134,7 +179,9 @@
     }
     return @"";
 }
-
+-(void)updateValue:(NSString*)newValue{
+    self.value = newValue;
+}
 -(void)setAttributeDict:(NSDictionary*)aDict{
     self.params = nil;
     for (NSString * key in aDict) {

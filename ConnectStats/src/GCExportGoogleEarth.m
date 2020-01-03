@@ -134,7 +134,7 @@
     }
     NSMutableArray * trackchildren = [NSMutableArray arrayWithArray:when];
     [trackchildren addObjectsFromArray:coords];
-    track.children = trackchildren;
+    [track addChildren:trackchildren];
 
     GCXMLElement * extended = [GCXMLElement element:@"ExtendedData"];
     GCXMLElement * schemaData = [GCXMLElement element:@"SchemaData"];

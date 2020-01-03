@@ -1355,7 +1355,9 @@
         [db beginTransaction];
         for (NSString * field in self.metaData) {
             GCActivityMetaValue * data = self.metaData[field];
-            [data saveToDb:db forActivityId:self.activityId];
+            if( db ){
+                [data saveToDb:db forActivityId:self.activityId];
+            }
         }
         [db commit];
         rv = true;
@@ -1376,9 +1378,11 @@
                         }
                         [newMetaData setValue:otherVal forKey:field];
                         FMDatabase * db = self.db;
-                        [db beginTransaction];
-                        [otherVal updateDb:db forActivityId:self.activityId];
-                        [db commit];
+                        if( db ){
+                            [db beginTransaction];
+                            [otherVal updateDb:db forActivityId:self.activityId];
+                            [db commit];
+                        }
                         rv = true;
                     }
                 }
@@ -1396,9 +1400,11 @@
                         }
                         [newMetaData setValue:otherVal forKey:field];
                         FMDatabase * db = self.db;
-                        [db beginTransaction];
-                        [otherVal updateDb:db forActivityId:self.activityId];
-                        [db commit];
+                        if( db ){
+                            [db beginTransaction];
+                            [otherVal updateDb:db forActivityId:self.activityId];
+                            [db commit];
+                        }
                         rv = true;
                     }
                 }
@@ -1429,9 +1435,11 @@
                     newSummaryData[field] = otherVal;
                     
                     FMDatabase * db = self.db;
-                    [db beginTransaction];
-                    [otherVal updateDb:db forActivityId:self.activityId];
-                    [db commit];
+                    if( db ){
+                        [db beginTransaction];
+                        [otherVal updateDb:db forActivityId:self.activityId];
+                        [db commit];
+                    }
                     rv = true;
                 }
             }
@@ -1454,10 +1462,11 @@
                 newSummaryData[field] = otherVal;
                 
                 FMDatabase * db = self.db;
-                [db beginTransaction];
-                [otherVal updateDb:db forActivityId:self.activityId];
-                [db commit];
-
+                if( db ){
+                    [db beginTransaction];
+                    [otherVal updateDb:db forActivityId:self.activityId];
+                    [db commit];
+                }
                 rv = true;
             }
         }
@@ -1476,14 +1485,16 @@
                 rv = true;
                 GCNumberWithUnit * save = [[self numberWithUnitForField:field] convertToUnit:[self storeUnitForField:field]];
                 FMDatabase * db = self.db;
-                [db beginTransaction];
-                NSString * fieldKey = field.key;
-                if( field.fieldFlag == gcFieldFlagWeightedMeanSpeed){
-                    fieldKey = @"WeightedMeanSpeed";// avoid pace
+                if( db ){
+                    [db beginTransaction];
+                    NSString * fieldKey = field.key;
+                    if( field.fieldFlag == gcFieldFlagWeightedMeanSpeed){
+                        fieldKey = @"WeightedMeanSpeed";// avoid pace
+                    }
+                    NSString * query = [NSString stringWithFormat:@"UPDATE gc_activities SET %@=? WHERE activityId=?", fieldKey];
+                    [db executeUpdate:query, @(save.value), self.activityId];
+                    [db commit];
                 }
-                NSString * query = [NSString stringWithFormat:@"UPDATE gc_activities SET %@=? WHERE activityId=?", fieldKey];
-                [db executeUpdate:query, @(save.value), self.activityId];
-                [db commit];
             }
         }
     }
@@ -1491,9 +1502,11 @@
         self.speedDisplayUom = other.speedDisplayUom;
         rv = true;
         FMDatabase * db = self.db;
-        [db beginTransaction];
-        [db executeUpdate:@"UPDATE gc_activities SET speedDisplayUom=? WHERE activityId = ?", self.speedDisplayUom, self.activityId];
-        [db commit];
+        if( db ){
+            [db beginTransaction];
+            [db executeUpdate:@"UPDATE gc_activities SET speedDisplayUom=? WHERE activityId = ?", self.speedDisplayUom, self.activityId];
+            [db commit];
+        }
     }
 
     return rv;
@@ -1568,6 +1581,18 @@
     
 }
 
+-(void)updateActivityFieldsFromSummary{
+    for (GCField * field in @[ [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType],
+                               [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityType],
+                               [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:self.activityType],
+                               [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:self.activityType],
+    ]) {
+        if( self.summaryData[field] ){
+            [self setSummaryField:field.fieldFlag with:self.summaryData[field].numberWithUnit];
+        }
+    }
+}
+
 -(BOOL)updateSummaryFromTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints missingOnly:(BOOL)missingOnly{
     BOOL rv = false;
     NSDictionary<GCField*,GCActivitySummaryValue*> * fromPoints = [self buildSummaryFromTrackpoints:trackpoints];
@@ -1590,6 +1615,11 @@
     }
     
     self.summaryData = newSum;
+    
+    if( self.date == nil && trackpoints.count > 0){
+        self.date = trackpoints.firstObject.time;
+    }
+    [self updateActivityFieldsFromSummary];
     return rv;
 }
 
@@ -1600,11 +1630,14 @@
     NSArray<GCField*>*fields = self.availableTrackFields;
     
     double totalElapsed = 0.0;
+    double totalDistance = 0.0;
+    
     GCTrackPoint * point = nil;
     for (GCTrackPoint * next in trackpoints) {
         if (point) {
             NSTimeInterval elapsed = [next timeIntervalSince:point];
             totalElapsed += elapsed;
+            totalDistance += [next distanceMetersFrom:point];
             for (GCField * field in fields) {
 
                 GCNumberWithUnit * num = [point numberWithUnitForField:field inActivity:self];
@@ -1643,6 +1676,12 @@
         point = next;
     }
     NSMutableDictionary<GCField*,GCActivitySummaryValue*> * newSum = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
+    
+    GCField * sumDuration = [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityType];
+    GCField * sumDistance = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType];
+    
+    results[sumDuration] = [[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:totalElapsed] convertToUnit:[self displayUnitForField:sumDuration]];
+    results[sumDistance] = [[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:totalDistance] convertToUnit:[self displayUnitForField:sumDistance]];
     
     for (GCField *field in results) {
         GCNumberWithUnit * num = results[field];

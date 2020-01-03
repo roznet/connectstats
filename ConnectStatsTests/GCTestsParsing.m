@@ -37,6 +37,7 @@
 #import "GCGarminRequestModernActivityTypes.h"
 #import "GCGarminRequestModernSearch.h"
 #import "GCConnectStatsRequestSearch.h"
+#import "GCConnectStatsRequestFitFile.h"
 #import "GCStravaActivityList.h"
 #import "GCLap.h"
 #import "GCLapSwim.h"
@@ -444,6 +445,39 @@
     }
 }
 
+-(void)testParseTCX{
+    NSArray<NSString*>*samples = @[
+        @"234979239", // running
+        @"234721416", // cycling
+        //@"217470507", // swimming
+    ];
+   
+    for (NSString * activityId in samples) {
+        NSString * activityId_tcx = [activityId stringByAppendingString:@"tcx"];
+        NSString * activityId_fit = [activityId stringByAppendingString:@"fit"];
+        
+        GCActivity * act_tcx = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        act_tcx.activityId = activityId_tcx;
+        act_tcx.db = act_tcx.trackdb;
+        GCActivity * act_fit = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        act_fit.activityId = activityId_fit;
+        act_fit.db = act_fit.trackdb;
+        NSString * tcx = [NSString stringWithFormat:@"activity_%@.tcx", activityId];
+        NSString * fit = [NSString stringWithFormat:@"activity_%@.fit", activityId];
+        NSString * fp_tcx = [RZFileOrganizer bundleFilePath:tcx forClass:[self class]];
+        NSString * fp_fit = [RZFileOrganizer bundleFilePath:fit forClass:[self class]];
+        
+        act_tcx = [GCConnectStatsRequestFitFile testForActivity:act_tcx withFilesIn:fp_tcx];
+        act_fit = [GCConnectStatsRequestFitFile testForActivity:act_fit withFilesIn:fp_fit];
+
+        XCTAssertEqualObjects(act_fit.date, act_tcx.date);
+        XCTAssertEqual(act_fit.trackpoints.count, act_tcx.trackpoints.count);
+        XCTAssertTrue(RZTestOption(act_tcx.flags, gcFieldFlagSumDistance));
+        XCTAssertTrue(RZTestOption(act_tcx.flags, gcFieldFlagSumDuration));
+        XCTAssertTrue(RZTestOption(act_tcx.flags, gcFieldFlagWeightedMeanSpeed));
+    }
+    
+}
 
 -(void)testParseFitFile{
     NSDictionary * epsForField = @{
