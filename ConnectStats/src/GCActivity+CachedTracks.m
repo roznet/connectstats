@@ -441,7 +441,7 @@
     NSDictionary<NSString*,GCStatsDataSerieWithUnit*>*calc = @{
         CALC_ALTITUDE_GAIN : [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit],
         CALC_ALTITUDE_LOSS : [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit],
-        CALC_ELEVATION_GRADIENT : [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit]
+        CALC_ELEVATION_GRADIENT : [GCStatsDataSerieWithUnit dataSerieWithUnit:GCUnit.percent]
     };
     
     double threshold = [[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:5.0] convertToUnit:serie.unit].value;
@@ -475,7 +475,7 @@
             if( current_altitude > point.y_data){
                 current_elevation_loss += (point.y_data - current_altitude);
             }
-            current_elevation_gradient = ( point.y_data - current_altitude) * elevation_unit_to_dist_unit / (point_dist.y_data - current_altitude_distance);
+            current_elevation_gradient = 100.0 * ( point.y_data - current_altitude) * elevation_unit_to_dist_unit / (point_dist.y_data - current_altitude_distance);
             current_altitude = point.y_data;
             current_altitude_distance = point_dist.y_data;
             // Fill Gradient since last elevation
@@ -494,7 +494,6 @@
     GCStatsDataSerie * ascentspeed = [serie.serie deltaYSerieForDeltaX:10. scalingFactor:60.0*60.0];
     GCStatsDataSerieWithUnit * final = [GCStatsDataSerieWithUnit dataSerieWithUnit:[GCUnit unitForKey:@"meterperhour"] andSerie:ascentspeed];
     final.xUnit = [GCUnit unitForKey:@"second"];
-    [GCFields registerField:CALC_VERTICAL_SPEED activityType:self.activityType displayName:NSLocalizedString(@"Vertical Speed", @"Calculated Field") andUnitName:@"meterperhour"];
 
     NSDictionary * stats = [final.serie summaryStatistics];
     NSMutableDictionary * newFields = [NSMutableDictionary dictionary];
@@ -521,6 +520,7 @@
             rv[key] = su;
         }
     }
+    [GCActivity registerCalculatedFields:self.activityType];
     
     return rv;
 }
@@ -538,15 +538,23 @@
     final.xUnit = [GCUnit unitForKey:@"second"];
     if ([self.activityType isEqualToString:GC_TYPE_RUNNING]) {
         [final convertToUnit:[GCUnit unitForKey:@"minperkm"]];
-        [GCFields registerField:CALC_10SEC_SPEED activityType:self.activityType displayName:NSLocalizedString(@"10sec Pace", @"Calculated Field") andUnitName:@"minperkm"];
     }else{
         [final convertToUnit:[GCUnit unitForKey:@"kph"]];
-        [GCFields registerField:CALC_10SEC_SPEED activityType:self.activityType displayName:NSLocalizedString(@"10sec Speed", @"Calculated Field") andUnitName:@"kph"];
-
     }
 
+    [GCActivity registerCalculatedFields:self.activityType];
+    
     return  @{CALC_10SEC_SPEED:final};
 }
 
++(void)registerCalculatedFields:(NSString*)activityType{
+    [GCFields registerField:CALC_VERTICAL_SPEED activityType:activityType displayName:NSLocalizedString(@"Vertical Speed", @"Calculated Field") andUnitName:@"meterperhour"];
 
+    if ([activityType isEqualToString:GC_TYPE_RUNNING]) {
+        [GCFields registerField:CALC_10SEC_SPEED activityType:activityType displayName:NSLocalizedString(@"10sec Pace", @"Calculated Field") andUnitName:@"minperkm"];
+    }else{
+        [GCFields registerField:CALC_10SEC_SPEED activityType:activityType displayName:NSLocalizedString(@"10sec Speed", @"Calculated Field") andUnitName:@"kph"];
+    }
+
+}
 @end
