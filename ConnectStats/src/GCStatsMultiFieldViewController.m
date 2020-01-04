@@ -107,12 +107,14 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    self.started = true;
     [super viewWillAppear:animated];
-    [self setupForCurrentActivityAndViewChoice:self.viewChoice];
-    self.config.viewChoice = (gcViewChoice)[GCAppGlobal configGetInt:CONFIG_STATS_START_PAGE defaultValue:gcViewChoiceSummary];
-
-    [GCViewConfig setupViewController:self];
+    if( ! self.started){
+        [self setupForCurrentActivityAndViewChoice:self.viewChoice];
+        self.config.viewChoice = (gcViewChoice)[GCAppGlobal configGetInt:CONFIG_STATS_START_PAGE defaultValue:gcViewChoiceSummary];
+        RZLog(RZLogInfo, @"Initial start page %@", [GCViewConfig viewChoiceDesc:self.config.viewChoice]);
+        [GCViewConfig setupViewController:self];
+    }
+    self.started = true;
 }
 - (void)didReceiveMemoryWarning
 {
@@ -123,6 +125,424 @@
 -(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection{
     [self.tableView reloadData];
 }
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    if (self.viewChoice==gcViewChoiceAll) {
+        return GC_SECTION_DATA+_fieldOrder.count;
+    }else if (self.viewChoice==gcViewChoiceSummary){
+        return 1;
+    }else{
+        return GC_SECTION_END;
+    }
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    // Return the number of rows in the section.
+    if (self.viewChoice == gcViewChoiceAll) {
+        if (section == GC_SECTION_GRAPH) {
+            return 0;
+        }else{
+            NSArray * fields = [self fieldsForSection:section];
+            return fields.count;
+        }
+    }else if(self.viewChoice == gcViewChoiceSummary){
+        return GC_SUMMARY_END;
+    }else{
+        if (section==GC_SECTION_GRAPH) {
+            GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
+
+            return [fieldDataSerie ready] ? 1 : 0;
+        }
+        return [self.aggregatedStats count];
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell * rv =nil;
+    if (self.viewChoice == gcViewChoiceAll) {
+        rv = [self tableView:tableView fieldSummaryCell:indexPath];
+    }else if (self.viewChoice == gcViewChoiceSummary){
+        rv = [self tableView:tableView summaryCellForRowAtIndexPath:indexPath];
+    }else{
+        if (indexPath.section == 0) {
+            rv = [self tableView:tableView graphCell:indexPath];
+        }else{
+            rv = [self tableView:tableView aggregatedCell:indexPath];
+        }
+    }
+
+    return rv;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    if(self.viewChoice == gcViewChoiceAll ){
+        NSString * category = [self categoryNameForSection:section];
+        return [GCTableHeaderFieldsCategory tableView:tableView viewForHeaderCategory:category];
+    }else{
+        return RZReturnAutorelease([[UIView alloc] initWithFrame:CGRectZero]);
+    }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if(self.viewChoice == gcViewChoiceAll ){
+        NSString * category = [self categoryNameForSection:section];
+        return [GCTableHeaderFieldsCategory tableView:tableView heightForHeaderCategory:category];
+    }else{
+        return 0.;
+    }
+}
+
+-(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    if(self.viewChoice == gcViewChoiceAll ){
+        return [self categoryNameForSection:section];
+    }else{
+        return nil;
+    }
+}
+
+
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(self.viewChoice==gcViewChoiceSummary){
+        if (indexPath.row == GC_SUMMARY_DERIVED) {
+            NSArray<GCDerivedGroupedSeries*>*available = [self availableDataSeries];
+            
+            if (self.derivedSerieFieldIndex<available.count) {
+                GCDerivedGroupedSeries*current = available[self.derivedSerieFieldIndex];
+                
+                self.derivedSerieMonthIndex++;
+                if (self.derivedSerieMonthIndex>=MIN(3, current.series.count)) {
+                    self.derivedSerieMonthIndex = 0;
+                    self.derivedSerieFieldIndex++;
+                    if (self.derivedSerieFieldIndex>=available.count) {
+                        self.derivedSerieFieldIndex = 0;
+                    }
+                }
+            }else{
+                self.derivedSerieFieldIndex = 0;
+                self.derivedSerieMonthIndex = 0;
+            }
+            [tableView reloadData];
+        }else if (indexPath.row == GC_SUMMARY_CUMULATIVE_DISTANCE){
+            /* Disabled for emergency 3.1 release
+             GCStatsHistGraphViewController * vc = [[GCStatsHistGraphViewController alloc] initWithNibName:nil bundle:nil];
+             GCStatsHistGraphConfig * config = [[[GCStatsHistGraphConfig alloc] init] autorelease];
+             config.graphType = gcHistGraphTypeCumulative;
+             GCField * field = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType] ;
+             config.timeWindowConfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.config];
+             config.timeWindowConfig.viewChoice = gcViewChoiceYearly;
+             config.fieldConfig = [GCHistoryFieldDataSerieConfig configWithFilter:false field:field ];
+             [vc updateConfig:config];
+             vc.allFields = self.allFields;
+             ECSlidingViewController * ec = [vc slidingViewControllerWithOptions];
+             if (ec) {
+             [self.navigationController pushViewController:ec animated:YES];
+             }
+             [vc release];
+             */
+        }
+    }else if (self.viewChoice == gcViewChoiceAll) {
+        GCField * field = [self fieldsForSection:indexPath.section][indexPath.row];
+        //[[self fieldOrder] objectAtIndex:[indexPath row]];
+        GCStatsOneFieldViewController *statsViewController = [[GCStatsOneFieldViewController alloc] initWithStyle:UITableViewStylePlain];
+        (statsViewController.config).useFilter = self.useFilter;
+        (statsViewController.config).fieldOrder = self.fieldOrder;
+        
+        GCField * xfield = [GCViewConfig nextFieldForGraph:nil fieldOrder:[GCViewConfig validChoicesForGraphIn:self.allFields] differentFrom:field];
+        
+        [statsViewController setupForType:self.activityType field:field
+                                   xField:xfield
+                               viewChoice:gcViewChoiceAll];
+        
+        [UIViewController setupEdgeExtendedLayout:statsViewController];
+        
+        [self.navigationController pushViewController:statsViewController animated:YES];
+        [statsViewController release];
+    }else{
+        if (indexPath.section >= GC_SECTION_DATA) {
+            GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
+            NSString * filter = [GCViewConfig filterFor:self.viewChoice date:data.date andActivityType:self.activityType];
+            [GCAppGlobal debugStateRecord:@{
+                DEBUGSTATE_LAST_CNT : @([data valFor:gcAggregatedSumDistance and:gcAggregatedCnt]),
+                DEBUGSTATE_LAST_SUM : @([data valFor:gcAggregatedSumDistance and:gcAggregatedSum])
+                
+            }];
+            [GCAppGlobal focusOnListWithFilter:filter];
+            self.config.historyStats =gcHistoryStatsAll;
+            [self setupForCurrentActivityType:GC_TYPE_ALL filter:true andViewChoice:gcViewChoiceAll];
+        }else if (indexPath.section == GC_SECTION_GRAPH){
+                GCStatsOneFieldGraphViewController * graph = [[GCStatsOneFieldGraphViewController alloc] initWithNibName:nil bundle:nil];
+                gcGraphChoice choice = self.viewChoice == gcViewChoiceYearly ? gcGraphChoiceCumulative : gcGraphChoiceBarGraph;
+                
+                GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
+                
+                [graph setupForHistoryField:fieldDataSerie graphChoice:choice andViewChoice:self.viewChoice];
+                [graph setCanSum:true];
+                if ([UIViewController useIOS7Layout]) {
+                    [UIViewController setupEdgeExtendedLayout:graph];
+                }
+                
+                [self.navigationController pushViewController:graph animated:YES];
+                [graph release];
+        }
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (self.viewChoice == gcViewChoiceSummary) {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            return 230.;
+        }else{
+            return 200.;
+        }
+    }else if( self.viewChoice == gcViewChoiceAll){
+        return 58.;
+    }else{
+        if (indexPath.section == GC_SECTION_GRAPH ) {
+            return 200.;
+        }else{
+            return 58.;
+        }
+    }
+}
+
+#pragma mark - Historical Statistics Cells
+
+-(GCSimpleGraphCachedDataSource*)dataSourceForField:(GCField*)field{
+    GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:field];
+    return [self.config dataSourceForFieldDataSerie:fieldDataSerie];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView graphCell:(NSIndexPath*)indexPath{
+
+    GCCellSimpleGraph * cell = [GCCellSimpleGraph graphCell:tableView];
+    GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
+    [cell setDataSource:cache andConfig:cache];
+    if (self.config.viewChoice == gcViewChoiceYearly) {// This is Cumulative graph, needs legend
+        cell.legend = true;
+    }else{
+        cell.legend = false;
+    }
+    return cell;
+
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView aggregatedCell:(NSIndexPath *)indexPath{
+    GCCellGrid *cell = [GCCellGrid gridCell:tableView];
+
+    GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
+    if( data ){
+        [cell setupFromHistoryAggregatedData:data index:indexPath.row viewChoice:self.viewChoice andActivityType:self.displayActivityType width:tableView.frame.size.width];
+    }
+    return cell;
+}
+
+
+#pragma mark - Field Summary Cells
+
+-(UITableViewCell*)tableView:(UITableView *)tableView fieldSummaryCell:(NSIndexPath *)indexPath{
+    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    GCField * field =[self fieldsForSection:indexPath.section][indexPath.row];
+
+    static NSDictionary * doGraph = nil;
+    if (doGraph==nil) {
+        doGraph = @{@"SumDistance":             @1,
+                    @"SumEnergy":               @1,
+                    @"WeightedMeanHeartRate":   @2,
+                    @"WeightedMeanPace":        @2,
+                    @"WeightedMeanSpeed":       @2,
+                    @"GainElevation":           @1
+                    };
+        [doGraph retain];
+    }
+
+    GCFieldDataHolder * data = [self.fieldStats dataForField:field];
+    [cell setupForFieldDataHolder:data histStats:self.config.historyStats andActivityType:self.activityType];
+    if ([GCAppGlobal configGetBool:CONFIG_STATS_INLINE_GRAPHS defaultValue:true] && doGraph[field.key]) {
+        GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:field];
+        cache.maximizeGraph = true;
+
+        GCSimpleGraphView * view = [[GCSimpleGraphView alloc] initWithFrame:CGRectZero];
+        view.displayConfig = cache;
+        view.dataSource = cache;
+        [cell setIconView:view withSize:CGSizeMake( tableView.frame.size.width > 400. ? 128. : 64., 60.)];
+        [view release];
+    }else{
+        cell.iconView = nil;
+        cell.iconSize = CGSizeZero;
+    }
+
+    return cell;
+}
+
+
+#pragma mark - Analysis Summary Cells
+
+-(UITableViewCell*)tableView:(UITableView *)tableView performanceCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
+
+    NSDate *from=[[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-6m"]];
+    self.performanceAnalysis = [GCHistoryPerformanceAnalysis performanceAnalysisFromDate:from
+                                                                                forField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.config.activityType]];
+
+    [self.performanceAnalysis calculate];
+    if (![self.performanceAnalysis isEmpty]) {
+        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource performanceAnalysis:self.performanceAnalysis width:tableView.frame.size.width];
+        graphCell.legend = TRUE;
+        [graphCell setDataSource:cache andConfig:cache];
+    }else{
+        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+        cache.emptyGraphLabel = NSLocalizedString(@"Not enough points", @"Performance Analysis Empty");
+        [graphCell setDataSource:cache andConfig:cache];
+    }
+    return graphCell;
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
+    graphCell.cellDelegate = self;
+
+    GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:self.activityType];
+    GCStatsSerieOfSerieWithUnits * serieOfSerie = [[GCAppGlobal derived] timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
+        return [act.activityType isEqualToString:self.activityType];
+    } withLimit:60]];
+    
+    //GCStatsSerieOfSerieWithUnits * historical = [[GCAppGlobal derived] timeSeriesOfSeriesFor:field];
+    //[serieOfSerie addSerieOfSerie:historical];
+    GCSimpleGraphCachedDataSource * cache = nil;
+    if (serieOfSerie) {
+        cache = [GCSimpleGraphCachedDataSource derivedHist:self.activityType field:field series:serieOfSerie width:tableView.frame.size.width];
+        cache.emptyGraphLabel = @"";
+        graphCell.legend = true;
+        [graphCell setDataSource:cache andConfig:cache];
+    }else{
+        cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+        cache.emptyGraphLabel = @"";
+        [graphCell setDataSource:cache andConfig:cache];
+    }
+
+    return graphCell;
+
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView derivedCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
+    graphCell.cellDelegate = self;
+
+    NSArray<GCDerivedGroupedSeries*>*available = [self availableDataSeries];
+    GCDerivedDataSerie * current = nil;
+
+    if (self.derivedSerieFieldIndex >= available.count) {
+        self.derivedSerieFieldIndex = 0;
+        self.derivedSerieMonthIndex = 0;
+    }
+
+    if (self.derivedSerieFieldIndex < available.count) {
+        GCDerivedGroupedSeries * group = available[self.derivedSerieFieldIndex];
+        if( self.derivedSerieMonthIndex < group.series.count){
+            current = group.series[self.derivedSerieMonthIndex];
+        }else if( group.series.count > 0){ // if index is too far reset to zero
+            self.derivedSerieMonthIndex = 0;
+            current = group.series[self.derivedSerieMonthIndex];
+        }
+    }
+
+    GCSimpleGraphCachedDataSource * cache = nil;
+    if (current) {
+         cache = [GCSimpleGraphCachedDataSource derivedData:self.activityType
+                                                      field:current.fieldFlag
+                                                        for:current.bucketStart
+                                                      width:tableView.frame.size.width];
+        cache.emptyGraphLabel = @"";
+        graphCell.legend = true;
+        [graphCell setDataSource:cache andConfig:cache];
+    }else{
+        cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+        cache.emptyGraphLabel = @"";
+        [graphCell setDataSource:cache andConfig:cache];
+    }
+
+    return graphCell;
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView cumulativeDistanceCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
+    graphCell.legend = TRUE;
+    GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
+    NSCalendarUnit unit = [GCAppGlobal healthStatsVersion]?NSCalendarUnitMonth : NSCalendarUnitYear;
+
+    if (![fieldDataSerie isEmpty]) {
+
+        if (unit == NSCalendarUnitYear) {
+            gcStatsRange range = [fieldDataSerie.history.serie range];
+            double span = range.x_max-range.x_min;
+            if (span < 3600.*24.*365.) {// less than 1 year of data
+                unit = NSCalendarUnitMonth;
+            }
+        }
+
+        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource historyView:fieldDataSerie
+                                                                              calendarUnit:unit
+                                                                               graphChoice:gcGraphChoiceCumulative
+                                                                                     after:nil];
+        cache.emptyGraphLabel = NSLocalizedString(@"Pending...", @"Summary Graph");
+        [graphCell setDataSource:cache andConfig:cache];
+
+    }else{
+        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+        [graphCell setDataSource:cache andConfig:cache];
+    }
+    return graphCell;
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView weeklyBarsCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
+
+    GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
+    if (![fieldDataSerie isEmpty]) {
+        NSDate * afterdate = [[fieldDataSerie lastDate] dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-1Y"]];
+        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource historyView:fieldDataSerie
+                                                                              calendarUnit:NSCalendarUnitWeekOfYear
+                                                                               graphChoice:gcGraphChoiceBarGraph
+                                                                                     after:afterdate];
+        graphCell.legend = TRUE;
+        [graphCell setDataSource:cache andConfig:cache];
+    }else{
+        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+        [graphCell setDataSource:cache andConfig:cache];
+    }
+    return graphCell;
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView summaryCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    UITableViewCell * rv = nil;
+    if (indexPath.row == GC_SUMMARY_CUMULATIVE_DISTANCE) {
+        rv = [self tableView:tableView cumulativeDistanceCellForRowAtIndexPath:indexPath];
+    }else if (indexPath.row==GC_SUMMARY_PERFORMANCE){
+        rv = [self tableView:tableView performanceCellForRowAtIndexPath:indexPath];
+
+    }else if (indexPath.row == GC_SUMMARY_DERIVED){
+
+        if ([GCAppGlobal healthStatsVersion]) {
+            rv = [self tableView:tableView weeklyBarsCellForRowAtIndexPath:indexPath];
+        }else{
+            rv = [self tableView:tableView derivedCellForRowAtIndexPath:indexPath];
+        }
+    }else if(indexPath.row == GC_SUMMARY_DERIVED_HIST){
+        rv = [self tableView:tableView derivedHistCellForRowAtIndexPath:indexPath];
+    }
+    rv.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
+    return rv;
+}
+
+
 
 
 #pragma mark - Events
@@ -220,8 +640,6 @@
 }
 
 -(void)swipeLeft:(GCCellSimpleGraph *)cell{
-
-
     NSArray<GCDerivedGroupedSeries*> * available = [self availableDataSeries];
 
     self.derivedSerieFieldIndex++;
@@ -430,7 +848,6 @@
 }
 
 
-#pragma mark - Table view data source
 
 -(NSArray<GCField*>*)fieldsForSection:(NSInteger)section{
     if (section-GC_SECTION_DATA<_fieldOrder.count && section-GC_SECTION_DATA>=0) {
@@ -446,409 +863,5 @@
     }
     return nil;
 }
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    if (self.viewChoice==gcViewChoiceAll) {
-        return GC_SECTION_DATA+_fieldOrder.count;
-    }else if (self.viewChoice==gcViewChoiceSummary){
-        return 1;
-    }else{
-        return GC_SECTION_END;
-    }
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    // Return the number of rows in the section.
-    if (self.viewChoice == gcViewChoiceAll) {
-        if (section == GC_SECTION_GRAPH) {
-            return 0;
-        }else{
-            NSArray * fields = [self fieldsForSection:section];
-            return fields.count;
-        }
-    }else if(self.viewChoice == gcViewChoiceSummary){
-        return GC_SUMMARY_END;
-    }else{
-        if (section==GC_SECTION_GRAPH) {
-            GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
-
-            return [fieldDataSerie ready] ? 1 : 0;
-        }
-        return [self.aggregatedStats count];
-    }
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell * rv =nil;
-    if (self.viewChoice == gcViewChoiceAll) {
-        rv = [self tableView:tableView fieldSummaryCell:indexPath];
-    }else if (self.viewChoice == gcViewChoiceSummary){
-        rv = [self tableView:tableView summaryCellForRowAtIndexPath:indexPath];
-    }else{
-        if (indexPath.section == 0) {
-            rv = [self tableView:tableView graphCell:indexPath];
-        }else{
-            rv = [self tableView:tableView aggregatedCell:indexPath];
-        }
-    }
-
-    return rv;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    NSString * category = [self categoryNameForSection:section];
-    return [GCTableHeaderFieldsCategory tableView:tableView viewForHeaderCategory:category];
-}
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    NSString * category = [self categoryNameForSection:section];
-    return [GCTableHeaderFieldsCategory tableView:tableView heightForHeaderCategory:category];
-}
-
--(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    return [self categoryNameForSection:section];
-}
-
-#pragma mark - Historical Statistics Cells
-
--(GCSimpleGraphCachedDataSource*)dataSourceForField:(GCField*)field{
-    GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:field];
-    return [self.config dataSourceForFieldDataSerie:fieldDataSerie];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView graphCell:(NSIndexPath*)indexPath{
-
-    GCCellSimpleGraph * cell = [GCCellSimpleGraph graphCell:tableView];
-    GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
-    [cell setDataSource:cache andConfig:cache];
-    if (self.config.viewChoice == gcViewChoiceYearly) {// This is Cumulative graph, needs legend
-        cell.legend = true;
-    }else{
-        cell.legend = false;
-    }
-    return cell;
-
-}
-
--(UITableViewCell*)tableView:(UITableView *)tableView aggregatedCell:(NSIndexPath *)indexPath{
-    GCCellGrid *cell = [GCCellGrid gridCell:tableView];
-
-    GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
-    if( data ){
-        [cell setupFromHistoryAggregatedData:data index:indexPath.row viewChoice:self.viewChoice andActivityType:self.displayActivityType width:tableView.frame.size.width];
-    }
-    return cell;
-}
-
-#pragma mark - Field Summary Cells
-
--(UITableViewCell*)tableView:(UITableView *)tableView fieldSummaryCell:(NSIndexPath *)indexPath{
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
-    GCField * field =[self fieldsForSection:indexPath.section][indexPath.row];
-
-    static NSDictionary * doGraph = nil;
-    if (doGraph==nil) {
-        doGraph = @{@"SumDistance":             @1,
-                    @"SumEnergy":               @1,
-                    @"WeightedMeanHeartRate":   @2,
-                    @"WeightedMeanPace":        @2,
-                    @"WeightedMeanSpeed":       @2,
-                    @"GainElevation":           @1
-                    };
-        [doGraph retain];
-    }
-
-    GCFieldDataHolder * data = [self.fieldStats dataForField:field];
-    [cell setupForFieldDataHolder:data histStats:self.config.historyStats andActivityType:self.activityType];
-    if ([GCAppGlobal configGetBool:CONFIG_STATS_INLINE_GRAPHS defaultValue:true] && doGraph[field.key]) {
-        GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:field];
-        cache.maximizeGraph = true;
-
-        GCSimpleGraphView * view = [[GCSimpleGraphView alloc] initWithFrame:CGRectZero];
-        view.displayConfig = cache;
-        view.dataSource = cache;
-        [cell setIconView:view withSize:CGSizeMake( tableView.frame.size.width > 400. ? 128. : 64., 60.)];
-        [view release];
-    }else{
-        cell.iconView = nil;
-        cell.iconSize = CGSizeZero;
-    }
-
-    return cell;
-}
-
-
-#pragma mark - Analysis Summary Cells
-
--(UITableViewCell*)tableView:(UITableView *)tableView performanceCellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
-
-    NSDate *from=[[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-6m"]];
-    self.performanceAnalysis = [GCHistoryPerformanceAnalysis performanceAnalysisFromDate:from
-                                                                                forField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.config.activityType]];
-
-    [self.performanceAnalysis calculate];
-    if (![self.performanceAnalysis isEmpty]) {
-        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource performanceAnalysis:self.performanceAnalysis width:tableView.frame.size.width];
-        graphCell.legend = TRUE;
-        [graphCell setDataSource:cache andConfig:cache];
-    }else{
-        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-        cache.emptyGraphLabel = NSLocalizedString(@"Not enough points", @"Performance Analysis Empty");
-        [graphCell setDataSource:cache andConfig:cache];
-    }
-    return graphCell;
-}
-
--(UITableViewCell*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
-    graphCell.cellDelegate = self;
-
-    GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:self.activityType];
-    GCStatsSerieOfSerieWithUnits * serieOfSerie = [[GCAppGlobal derived] timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
-        return [act.activityType isEqualToString:self.activityType];
-    } withLimit:60]];
-    
-    //GCStatsSerieOfSerieWithUnits * historical = [[GCAppGlobal derived] timeSeriesOfSeriesFor:field];
-    //[serieOfSerie addSerieOfSerie:historical];
-    GCSimpleGraphCachedDataSource * cache = nil;
-    if (serieOfSerie) {
-        cache = [GCSimpleGraphCachedDataSource derivedHist:self.activityType field:field series:serieOfSerie width:tableView.frame.size.width];
-        cache.emptyGraphLabel = @"";
-        graphCell.legend = true;
-        [graphCell setDataSource:cache andConfig:cache];
-    }else{
-        cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-        cache.emptyGraphLabel = @"";
-        [graphCell setDataSource:cache andConfig:cache];
-    }
-
-    return graphCell;
-
-}
-
--(UITableViewCell*)tableView:(UITableView *)tableView derivedCellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
-    graphCell.cellDelegate = self;
-
-    NSArray<GCDerivedGroupedSeries*>*available = [self availableDataSeries];
-    GCDerivedDataSerie * current = nil;
-
-    if (self.derivedSerieFieldIndex >= available.count) {
-        self.derivedSerieFieldIndex = 0;
-        self.derivedSerieMonthIndex = 0;
-    }
-
-    if (self.derivedSerieFieldIndex < available.count) {
-        GCDerivedGroupedSeries * group = available[self.derivedSerieFieldIndex];
-        if( self.derivedSerieMonthIndex < group.series.count){
-            current = group.series[self.derivedSerieMonthIndex];
-        }else if( group.series.count > 0){ // if index is too far reset to zero
-            self.derivedSerieMonthIndex = 0;
-            current = group.series[self.derivedSerieMonthIndex];
-        }
-    }
-
-    GCSimpleGraphCachedDataSource * cache = nil;
-    if (current) {
-         cache = [GCSimpleGraphCachedDataSource derivedData:self.activityType
-                                                      field:current.fieldFlag
-                                                        for:current.bucketStart
-                                                      width:tableView.frame.size.width];
-        cache.emptyGraphLabel = @"";
-        graphCell.legend = true;
-        [graphCell setDataSource:cache andConfig:cache];
-    }else{
-        cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-        cache.emptyGraphLabel = @"";
-        [graphCell setDataSource:cache andConfig:cache];
-    }
-
-    return graphCell;
-}
-
--(UITableViewCell*)tableView:(UITableView *)tableView cumulativeDistanceCellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
-    graphCell.legend = TRUE;
-    GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
-    NSCalendarUnit unit = [GCAppGlobal healthStatsVersion]?NSCalendarUnitMonth : NSCalendarUnitYear;
-
-    if (![fieldDataSerie isEmpty]) {
-
-        if (unit == NSCalendarUnitYear) {
-            gcStatsRange range = [fieldDataSerie.history.serie range];
-            double span = range.x_max-range.x_min;
-            if (span < 3600.*24.*365.) {// less than 1 year of data
-                unit = NSCalendarUnitMonth;
-            }
-        }
-
-        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource historyView:fieldDataSerie
-                                                                              calendarUnit:unit
-                                                                               graphChoice:gcGraphChoiceCumulative
-                                                                                     after:nil];
-        cache.emptyGraphLabel = NSLocalizedString(@"Pending...", @"Summary Graph");
-        [graphCell setDataSource:cache andConfig:cache];
-
-    }else{
-        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-        [graphCell setDataSource:cache andConfig:cache];
-    }
-    return graphCell;
-}
-
--(UITableViewCell*)tableView:(UITableView *)tableView weeklyBarsCellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
-
-    GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
-    if (![fieldDataSerie isEmpty]) {
-        NSDate * afterdate = [[fieldDataSerie lastDate] dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-1Y"]];
-        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource historyView:fieldDataSerie
-                                                                              calendarUnit:NSCalendarUnitWeekOfYear
-                                                                               graphChoice:gcGraphChoiceBarGraph
-                                                                                     after:afterdate];
-        graphCell.legend = TRUE;
-        [graphCell setDataSource:cache andConfig:cache];
-    }else{
-        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-        [graphCell setDataSource:cache andConfig:cache];
-    }
-    return graphCell;
-}
-
--(UITableViewCell*)tableView:(UITableView *)tableView summaryCellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell * rv = nil;
-    if (indexPath.row == GC_SUMMARY_CUMULATIVE_DISTANCE) {
-        rv = [self tableView:tableView cumulativeDistanceCellForRowAtIndexPath:indexPath];
-    }else if (indexPath.row==GC_SUMMARY_PERFORMANCE){
-        rv = [self tableView:tableView performanceCellForRowAtIndexPath:indexPath];
-
-    }else if (indexPath.row == GC_SUMMARY_DERIVED){
-
-        if ([GCAppGlobal healthStatsVersion]) {
-            rv = [self tableView:tableView weeklyBarsCellForRowAtIndexPath:indexPath];
-        }else{
-            rv = [self tableView:tableView derivedCellForRowAtIndexPath:indexPath];
-        }
-    }else if(indexPath.row == GC_SUMMARY_DERIVED_HIST){
-        rv = [self tableView:tableView derivedHistCellForRowAtIndexPath:indexPath];
-    }
-    rv.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
-    return rv;
-}
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if(self.viewChoice==gcViewChoiceSummary){
-        if (indexPath.row == GC_SUMMARY_DERIVED) {
-            NSArray<GCDerivedGroupedSeries*>*available = [self availableDataSeries];
-
-            if (self.derivedSerieFieldIndex<available.count) {
-                GCDerivedGroupedSeries*current = available[self.derivedSerieFieldIndex];
-
-                self.derivedSerieMonthIndex++;
-                if (self.derivedSerieMonthIndex>=MIN(3, current.series.count)) {
-                    self.derivedSerieMonthIndex = 0;
-                    self.derivedSerieFieldIndex++;
-                    if (self.derivedSerieFieldIndex>=available.count) {
-                        self.derivedSerieFieldIndex = 0;
-                    }
-                }
-            }else{
-                self.derivedSerieFieldIndex = 0;
-                self.derivedSerieMonthIndex = 0;
-            }
-            [tableView reloadData];
-        }else if (indexPath.row == GC_SUMMARY_CUMULATIVE_DISTANCE){
-            /* Disabled for emergency 3.1 release
-            GCStatsHistGraphViewController * vc = [[GCStatsHistGraphViewController alloc] initWithNibName:nil bundle:nil];
-            GCStatsHistGraphConfig * config = [[[GCStatsHistGraphConfig alloc] init] autorelease];
-            config.graphType = gcHistGraphTypeCumulative;
-            GCField * field = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType] ;
-            config.timeWindowConfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.config];
-            config.timeWindowConfig.viewChoice = gcViewChoiceYearly;
-            config.fieldConfig = [GCHistoryFieldDataSerieConfig configWithFilter:false field:field ];
-            [vc updateConfig:config];
-            vc.allFields = self.allFields;
-            ECSlidingViewController * ec = [vc slidingViewControllerWithOptions];
-            if (ec) {
-                [self.navigationController pushViewController:ec animated:YES];
-            }
-            [vc release];
-             */
-        }
-    }else{
-        if (indexPath.section >= GC_SECTION_DATA) {
-            if (self.viewChoice == gcViewChoiceAll) {
-                GCField * field = [self fieldsForSection:indexPath.section][indexPath.row];
-                //[[self fieldOrder] objectAtIndex:[indexPath row]];
-                GCStatsOneFieldViewController *statsViewController = [[GCStatsOneFieldViewController alloc] initWithStyle:UITableViewStylePlain];
-                (statsViewController.config).useFilter = self.useFilter;
-                (statsViewController.config).fieldOrder = self.fieldOrder;
-
-                GCField * xfield = [GCViewConfig nextFieldForGraph:nil fieldOrder:[GCViewConfig validChoicesForGraphIn:self.allFields] differentFrom:field];
-
-                [statsViewController setupForType:self.activityType field:field
-                                           xField:xfield
-                                       viewChoice:gcViewChoiceAll];
-
-                [UIViewController setupEdgeExtendedLayout:statsViewController];
-
-                [self.navigationController pushViewController:statsViewController animated:YES];
-                [statsViewController release];
-            }else{
-                GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
-                NSString * filter = [GCViewConfig filterFor:self.viewChoice date:data.date andActivityType:self.activityType];
-                [GCAppGlobal debugStateRecord:@{
-                                                DEBUGSTATE_LAST_CNT : @([data valFor:gcAggregatedSumDistance and:gcAggregatedCnt]),
-                                                DEBUGSTATE_LAST_SUM : @([data valFor:gcAggregatedSumDistance and:gcAggregatedSum])
-
-                                                }];
-                [GCAppGlobal focusOnListWithFilter:filter];
-                self.config.historyStats =gcHistoryStatsAll;
-                [self setupForCurrentActivityType:GC_TYPE_ALL filter:true andViewChoice:gcViewChoiceAll];
-            }
-        }else if (indexPath.section == GC_SECTION_GRAPH){
-            if (self.viewChoice != gcViewChoiceAll) {
-                GCStatsOneFieldGraphViewController * graph = [[GCStatsOneFieldGraphViewController alloc] initWithNibName:nil bundle:nil];
-                gcGraphChoice choice = self.viewChoice == gcViewChoiceYearly ? gcGraphChoiceCumulative : gcGraphChoiceBarGraph;
-
-                GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
-
-                [graph setupForHistoryField:fieldDataSerie graphChoice:choice andViewChoice:self.viewChoice];
-                [graph setCanSum:true];
-                if ([UIViewController useIOS7Layout]) {
-                    [UIViewController setupEdgeExtendedLayout:graph];
-                }
-
-                [self.navigationController pushViewController:graph animated:YES];
-                [graph release];
-
-            }else if(self.viewChoice==gcViewChoiceSummary){
-            }
-        }
-    }
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (self.viewChoice == gcViewChoiceSummary) {
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-            return 230.;
-        }else{
-            return 200.;
-        }
-    }
-    if (indexPath.section == GC_SECTION_GRAPH ) {
-        return 200.;
-    }else{
-        return 58.;
-    }
-}
-
-
 
 @end
