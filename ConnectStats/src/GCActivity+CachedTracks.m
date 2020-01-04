@@ -461,12 +461,17 @@
     NSUInteger idx = 0;
     NSUInteger idx_current_altitude = 0;
     
+    BOOL reportedInconsistency = false;
+    
     for (GCStatsDataPoint * point in serie) {
-        if( point.x_data != [serie_dist dataPointAtIndex:idx].x_data ){
-            RZLog(RZLogInfo, @"Oops");
-        }
         GCStatsDataPoint * point_dist = [serie_dist dataPointAtIndex:idx];
-        idx++;
+        if( point.x_data != point_dist.x_data ){
+            if( ! reportedInconsistency ){
+                // Only report once
+                RZLog(RZLogWarning, @"Inconsistency between dist and serie for %@ and %@ at %lu", point, point_dist, (unsigned long) idx);
+                reportedInconsistency = true;
+            }
+        }
         
         if( fabs( current_altitude - point.y_data ) > threshold ){
             if( current_altitude < point.y_data){
@@ -479,15 +484,17 @@
             current_altitude = point.y_data;
             current_altitude_distance = point_dist.y_data;
             // Fill Gradient since last elevation
-            for( NSUInteger j = idx_current_altitude; j < idx; j++){
+            for( NSUInteger j = idx_current_altitude+1; j <= idx; j++){
                 [calc[CALC_ELEVATION_GRADIENT].serie addDataPointWithX:[serie dataPointAtIndex:j].x_data
                                                                   andY:current_elevation_gradient];
             }
-            idx_current_altitude = idx-1;
+            idx_current_altitude = idx;
         }
         [calc[CALC_ALTITUDE_GAIN].serie addDataPointWithX:point.x_data andY:current_elevation_gain];
         [calc[CALC_ALTITUDE_LOSS].serie addDataPointWithX:point.x_data andY:current_elevation_loss];
         [adjusted.serie addDataPointWithX:point.x_data andY:current_altitude];
+
+        idx++;
     }
     
     // compute speed with minimum of 10 sec and report for 1min (60secs)
