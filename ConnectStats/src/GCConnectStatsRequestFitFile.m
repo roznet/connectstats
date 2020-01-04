@@ -187,7 +187,7 @@
         
         GCActivity * fitAct = nil;
         
-        if( strncmp(start,"<?xml", 5 ) == 0 ){
+        if( data.length > 5 && strncmp(start,"<?xml", 5 ) == 0 ){
             GCConnectStatsActivityTCXParser * parser = [GCConnectStatsActivityTCXParser activityTCXParserWithActivityId:self.activity.activityId andData:data];
             fitAct = parser.activity;
         }else{

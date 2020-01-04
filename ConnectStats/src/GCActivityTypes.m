@@ -323,8 +323,8 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
 #pragma mark - Import
 
 -(GCActivityType*)activityTypeForFitSport:(NSString*)fitSport andSubSport:(NSString*)fitSubSport{
-    NSDictionary<NSString*,GCActivityType*> * cache = nil;
-    NSDictionary<NSString*,GCActivityType*> * cache_sub = nil;
+    static NSDictionary<NSString*,GCActivityType*> * cache = nil;
+    static NSDictionary<NSString*,GCActivityType*> * cache_sub = nil;
     if( cache == nil){
         NSDictionary * sports = @{
             @"ALPINE_SKIING": @"resort_skiing_snowboarding_ws",
