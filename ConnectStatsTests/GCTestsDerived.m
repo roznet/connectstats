@@ -56,6 +56,12 @@
     // process activity 2
     //
 
+    // Disable derived calculation automatically triggered, everything
+    // should be trigger by the test directly
+    BOOL saveDerived = [[GCAppGlobal profile] configGetBool:CONFIG_ENABLE_DERIVED defaultValue:[GCAppGlobal connectStatsVersion]];
+    
+    [[GCAppGlobal profile] configSet:CONFIG_ENABLE_DERIVED boolVal:false];
+
     NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"services_activities.json" forClass:[self class]]
                                            options:0 error:nil];
     NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
@@ -180,6 +186,9 @@
     
     [hrReconstructed sortByX];
     XCTAssertEqualObjects(hrReconstructed, xserieu.serie);
+    
+    [[GCAppGlobal profile] configSet:CONFIG_ENABLE_DERIVED boolVal:saveDerived];
+
 }
 
 

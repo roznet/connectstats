@@ -149,7 +149,9 @@
     [modernAct saveToDb:db];
     
     XCTAssertGreaterThan(modernAct.trackpoints.count, 1);
-    [self compareStatsCheckSavedFor:modernAct identifier:@"modernAct" cmd:_cmd recordMode:[GCTestCase recordModeGlobal]];
+    BOOL recordMode = [GCTestCase recordModeGlobal];
+    //recordMode = true;
+    [self compareStatsCheckSavedFor:modernAct identifier:@"modernAct" cmd:_cmd recordMode:recordMode];
 }
 
 -(void)testParseSaveAndReload{
@@ -186,7 +188,8 @@
         
         XCTAssertGreaterThan(parsedAct.trackpoints.count, 1);
         bool recordMode = [GCTestCase recordModeGlobal];
-
+        //recordMode = true;
+        
         NSString * identifier = [NSString stringWithFormat:@"parse_reload_%@", activityId];
         [self compareStatsCheckSavedFor:parsedAct identifier:identifier cmd:_cmd recordMode:recordMode];
         
