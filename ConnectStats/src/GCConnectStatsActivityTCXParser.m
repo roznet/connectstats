@@ -34,6 +34,11 @@
 
 @implementation GCConnectStatsActivityTCXParser
 
+-(void)dealloc{
+    [_element release];
+    [_activity release];
+    [super dealloc];
+}
 +(instancetype)activityTCXParserWithActivityId:(NSString*)aId andData:(NSData*)thedata{
     GCConnectStatsActivityTCXParser * rv = RZReturnAutorelease([[self alloc] init]);
     if( rv ){
@@ -48,6 +53,7 @@
             for( GCXMLElement * lapElement in [activityElement findElements:@"Lap"]) {
                 GCLap * lap = [[GCLap alloc] initWithTCXElement:lapElement];
                 [laps addObject:lap];
+                RZRelease(lap);
             }
             GCTrackPoint * prev = nil;
             for (GCXMLElement * pointElement in [activityElement findElements:@"Trackpoint"]) {
@@ -56,8 +62,11 @@
                 if( prev ){
                     [prev updateWithNextPoint:point];
                 }
+                RZRelease(prev);
                 prev = point;
             }
+            RZRelease(prev);
+            
             GCActivity * one = RZReturnAutorelease([[GCActivity alloc] initWithId:aId]);
             if( [sport isEqualToString:@"Running"]){
                 one.activityType = GC_TYPE_RUNNING;

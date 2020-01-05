@@ -125,7 +125,7 @@ NSString * kBugNoCommonId = @"-1";
 #if TARGET_IPHONE_SIMULATOR
     aURL = @"http://localhost/connectstats/bugreport.php?dir=bugs";
 #endif
-    aURL = @"https://ro-z.net/connectstats/bugreport.php?dir=bugs";
+    //aURL = @"https://ro-z.net/connectstats/bugreport.php?dir=bugs";
     return [self urlResquestFor:aURL];
 }
 
