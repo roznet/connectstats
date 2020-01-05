@@ -118,7 +118,7 @@ extension RZFitFile {
         var cols : [String] = ["filename"]
         var sample : [RZFitFieldKey:Sample] = [:]
         var rv :[String] = []
-        var line : [String] = []
+        var line : [String] = ["filename"]
         for fitFile in fitFiles {
             let oneSample = fitFile.sampleValues(messageType: messageType)
             for one in oneSample {

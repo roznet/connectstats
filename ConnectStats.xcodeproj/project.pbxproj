@@ -524,7 +524,6 @@
 		42769BDF1DD71F58000390F1 /* FITFitMessageFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42769BDE1DD71F58000390F1 /* FITFitMessageFields.swift */; };
 		4277C0BD23BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4277C0BC23BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m */; };
 		4277C0BE23BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4277C0BC23BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m */; };
-		4277C0BF23BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4277C0BC23BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m */; };
 		4277C0C023BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4277C0BC23BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m */; };
 		4277C0E023BD133D00C1B1B9 /* activitylaps_234979239.json in Resources */ = {isa = PBXBuildFile; fileRef = 4277C0D123BD133C00C1B1B9 /* activitylaps_234979239.json */; };
 		4277C0E123BD133D00C1B1B9 /* activity_217470507.tcx in Resources */ = {isa = PBXBuildFile; fileRef = 4277C0D223BD133C00C1B1B9 /* activity_217470507.tcx */; };
@@ -7081,7 +7080,6 @@
 				423EF01921D2A044005C2605 /* RZFitFileExtensions.swift in Sources */,
 				42BFC2321DCE2FBC00EAD40E /* FITDetailTableViewController.swift in Sources */,
 				42ADFAF621F2834F007BC683 /* GarminRequestFitFile.swift in Sources */,
-				4277C0BF23BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m in Sources */,
 				42F3FB3D1DD7876F0042A9B1 /* FITFitMessage.swift in Sources */,
 				42F4E5091DE08C26001AB244 /* FITMapViewController.swift in Sources */,
 				4273DB7321A1B80B00C09D68 /* FITDownloadListDataSource.swift in Sources */,

@@ -33,12 +33,13 @@
 @end
 
 @implementation GCConnectStatsActivityTCXParser
-
+#if !__has_feature(objc_arc)
 -(void)dealloc{
     [_element release];
     [_activity release];
     [super dealloc];
 }
+#endif
 +(instancetype)activityTCXParserWithActivityId:(NSString*)aId andData:(NSData*)thedata{
     GCConnectStatsActivityTCXParser * rv = RZReturnAutorelease([[self alloc] init]);
     if( rv ){
