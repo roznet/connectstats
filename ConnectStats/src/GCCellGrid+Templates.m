@@ -514,7 +514,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     
     for (NSString * fieldKey in preferredMainDisplayFields) {
         GCField * field = [GCField fieldForKey:fieldKey andActivityType:activity.activityType];
-        GCNumberWithUnit * num = [activity numberWithUnitForField:field];
+        GCNumberWithUnit * num = [[activity numberWithUnitForField:field] convertToUnit:[activity displayUnitForField:field]];
         GCFormattedField * formattedField = [GCFormattedField formattedFieldForNumber:num forSize:16.];
         if( mainFields.count > 0){
             // remove bold after top/first one
@@ -525,7 +525,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     
     for (NSString * fieldKey in preferredInfoFields) {
         GCField * field = [GCField fieldForKey:fieldKey andActivityType:activity.activityType];
-        GCNumberWithUnit * num = [activity numberWithUnitForField:field];
+        GCNumberWithUnit * num = [[activity numberWithUnitForField:field] convertToUnit:[activity displayUnitForField:field]];
         if( num != nil && num.value != 0.0){
             GCFormattedField * formattedField = [GCFormattedField formattedFieldForNumber:num forSize:12.];
             formattedField.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];

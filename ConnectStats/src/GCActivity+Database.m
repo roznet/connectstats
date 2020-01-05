@@ -454,7 +454,11 @@
         rv.trackdb = db;
         [rv loadSummaryDataFrom:db];
         [rv trackpoints];//force load trackpoints
-
+        GCActivityMetaValue * typeDetail = rv.metaData[@"activityType"];
+        if( typeDetail && rv.activityTypeDetail == nil ){
+            rv.activityTypeDetail = [GCActivityType activityTypeForKey:typeDetail.key];
+        }
+        
         if( rv.activityId ){
             FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_activities_weather_detail WHERE activityId = ?", rv.activityId];
             if([res next]){
