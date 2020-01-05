@@ -75,7 +75,7 @@
     }else{
 #if TARGET_IPHONE_SIMULATOR
         NSError * e = nil;
-        NSString * fn = [NSString stringWithFormat:@"withings_getmeas_%@.json", self.userId];
+        NSString * fn = [NSString stringWithFormat:@"withings_getmeas_%@.json", @"last"];
         [self.theString writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:true encoding:kRequestDebugFileEncoding error:&e];
 #endif
         dispatch_async([GCAppGlobal worker],^(){
