@@ -171,11 +171,26 @@
     XCTAssertEqualObjects([@"testOneString" fromCamelCaseToSeparatedByString:@" "], @"test One String");
     XCTAssertEqualObjects([@"TestOneString" fromCamelCaseToSeparatedByString:@" "], @"Test One String");
     XCTAssertEqualObjects([@"T" fromCamelCaseToSeparatedByString:@" "], @"T");
+    XCTAssertEqualObjects([@"t" fromCamelCaseToSeparatedByString:@" "], @"t");
     XCTAssertEqualObjects([@"" fromCamelCaseToSeparatedByString:@" "], @"");
     XCTAssertEqualObjects([@"alllowercase" fromCamelCaseToSeparatedByString:@" "], @"alllowercase");
     XCTAssertEqualObjects([@"ALLUP" fromCamelCaseToSeparatedByString:@" "], @"ALLUP");
     XCTAssertEqualObjects([@" () " fromCamelCaseToSeparatedByString:@" "], @"() ");
     XCTAssertEqualObjects([@" (A) " fromCamelCaseToSeparatedByString:@" "], @"( A) ");
+    XCTAssertEqualObjects([@" (a) " fromCamelCaseToSeparatedByString:@" "], @"(a) ");
+
+    
+    XCTAssertEqualObjects([@"testOneString" fromCamelCaseToCapitalizedSeparatedByString:@" "], @"Test One String");
+    XCTAssertEqualObjects([@"TestOneString" fromCamelCaseToCapitalizedSeparatedByString:@" "], @"Test One String");
+    XCTAssertEqualObjects([@"T" fromCamelCaseToCapitalizedSeparatedByString:@" "], @"T");
+    XCTAssertEqualObjects([@"t" fromCamelCaseToCapitalizedSeparatedByString:@" "], @"T");
+    XCTAssertEqualObjects([@"" fromCamelCaseToCapitalizedSeparatedByString:@" "], @"");
+    XCTAssertEqualObjects([@"alllowercase" fromCamelCaseToCapitalizedSeparatedByString:@" "], @"Alllowercase");
+    XCTAssertEqualObjects([@"ALLUP" fromCamelCaseToCapitalizedSeparatedByString:@" "], @"Allup");
+    XCTAssertEqualObjects([@" () " fromCamelCaseToCapitalizedSeparatedByString:@" "], @"() ");
+    XCTAssertEqualObjects([@" (A) " fromCamelCaseToCapitalizedSeparatedByString:@" "], @"( A) ");
+    XCTAssertEqualObjects([@" (a) " fromCamelCaseToCapitalizedSeparatedByString:@" "], @"(A) ");
+
 }
 
 -(void)testStringEllipsis{

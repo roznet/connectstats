@@ -240,7 +240,7 @@
                     GCNumberWithUnit * nu = [act numberWithUnitForField:field];
                     if (nu) {
                         // weight is either duration (everything) or dist (for pace = invlinear)
-                        double weight =  [nu.unit isKindOfClass:[GCUnitInverseLinear class]] ? act.sumDistance : act.sumDuration;
+                        double weight =  [nu.unit isKindOfClass:[GCUnitInverseLinear class]] ? [act summaryFieldValueInStoreUnit:gcFieldFlagSumDistance] : [act summaryFieldValueInStoreUnit:gcFieldFlagSumDuration];
                         // When doing day -> weight = 1
                         if (field.fieldFlag == gcFieldFlagSumDistance || ignoreMode == gcIgnoreModeDayFocus) {
                             weight=1.;

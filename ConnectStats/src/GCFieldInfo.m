@@ -25,6 +25,8 @@
 
 #import "GCFieldInfo.h"
 #import "GCFieldsDefs.h"
+@interface GCFieldInfo ()
+@end
 
 @implementation GCFieldInfo
 +(GCFieldInfo*)fieldInfoFor:(NSString*)field type:(NSString*)aType displayName:(NSString*)aDisplayName andUnitName:(NSString*)aUom{

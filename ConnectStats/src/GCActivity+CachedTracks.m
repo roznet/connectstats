@@ -330,6 +330,35 @@
             [rv.serie addDataPointWithX:xs[i] andY:xs[i]];
         }
         return rv;
+    }else if( [xUnit canConvertTo:GCUnit.meter] ){
+        GCStatsDataSerieWithUnit * rv = nil;
+        
+        double mile = 1609.344;
+        double km = 1000.0;
+        double marathon = 42.195;
+        
+        double small_xs[] = { 100., 200., 400., 500., 800., 1500. };
+        double big_xs[]   = { 1., 2., 3., 5., 10., 15., 20., 30., 40., 50., 100. };
+        double std_xs[]   = { marathon/2.*km, marathon*km };
+
+        size_t small_n = sizeof(small_xs)/sizeof(double);
+        size_t big_n = sizeof(big_xs)/sizeof(double);
+        size_t std_n = sizeof(std_xs)/sizeof(double);
+
+        rv = [GCStatsDataSerieWithUnit dataSerieWithUnit:xUnit xUnit:xUnit andSerie:RZReturnAutorelease([[GCStatsDataSerie alloc] init])];
+        for (size_t i=0; i<small_n; ++i) {
+            [rv.serie addDataPointWithX:small_xs[i] andY:small_xs[i]];
+        }
+        for (size_t i=0; i<big_n; ++i) {
+            [rv.serie addDataPointWithX:big_xs[i]*km andY:big_xs[i]*km];
+            [rv.serie addDataPointWithX:big_xs[i]*mile andY:big_xs[i]*mile];
+        }
+        for (size_t i=0; i<std_n; ++i) {
+            [rv.serie addDataPointWithX:std_xs[i] andY:std_xs[i]];
+        }
+        [rv.serie sortByX];
+
+        return rv;
     }else{
         return nil;
     }
@@ -340,11 +369,16 @@
     
     GCStatsDataSerieWithUnit * base = [self calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest forField:field thread:thread];
     if( base ){
-        
         GCStatsDataSerieWithUnit * standardSerie = [GCActivity standardSerieSampleForXUnit:base.xUnit];
-        // Make sure we reduce from a copy so we don't destroy the main serie
-        base = [GCStatsDataSerieWithUnit dataSerieWithOther:base];
-        [GCStatsDataSerie reduceToCommonRange:standardSerie.serie and:base.serie];
+        // If standard serie exist, then resample, if not, it means the xUnit likely does not have standard serie
+        if( standardSerie ){
+            // Make sure we reduce from a copy so we don't destroy the main serie
+            base = [GCStatsDataSerieWithUnit dataSerieWithOther:base];
+            [GCStatsDataSerie reduceToCommonRange:standardSerie.serie and:base.serie];
+            
+        }else{
+            base = nil;
+        }
     }
     return base;
 }
@@ -393,14 +427,80 @@
 
 -(NSDictionary*)calculateAltitudeDerivedFields{
     GCField * altitude = [GCField fieldForFlag:gcFieldFlagAltitudeMeters andActivityType:self.activityType];
+    GCField * distance = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType];
 
-    GCStatsDataSerieWithUnit * serie = [self timeSerieForField:altitude];
+    GCStatsDataSerieWithUnit * serie = [GCStatsDataSerieWithUnit dataSerieWithOther:[self timeSerieForField:altitude]];
+    GCStatsDataSerieWithUnit * serie_dist = [GCStatsDataSerieWithUnit dataSerieWithOther:[self timeSerieForField:distance]];
+    
+    [GCStatsDataSerie reduceToCommonRange:serie.serie and:serie_dist.serie];
+    
+    GCStatsDataSerieWithUnit * adjusted = [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit];
+    
+    adjusted.xUnit = serie.xUnit;
 
+    NSDictionary<NSString*,GCStatsDataSerieWithUnit*>*calc = @{
+        CALC_ALTITUDE_GAIN : [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit],
+        CALC_ALTITUDE_LOSS : [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit],
+        CALC_ELEVATION_GRADIENT : [GCStatsDataSerieWithUnit dataSerieWithUnit:GCUnit.percent]
+    };
+    
+    double threshold = [[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:5.0] convertToUnit:serie.unit].value;
+    
+    double current_altitude = [serie dataPointAtIndex:0].y_data;
+    double current_altitude_distance = [serie_dist dataPointAtIndex:0].y_data;
+    double current_elevation_gain = 0.;
+    double current_elevation_loss = 0.;
+    double current_elevation_gradient = 0.;
+    
+        
+    double elevation_unit_to_dist_unit = [serie_dist.unit convertDouble:1.0 fromUnit:serie.unit];
+    
+    if( [serie dataPointAtIndex:0].x_data != [serie_dist dataPointAtIndex:0].x_data ){
+        RZLog(RZLogInfo, @"Oops");
+    }
+    NSUInteger idx = 0;
+    NSUInteger idx_current_altitude = 0;
+    
+    BOOL reportedInconsistency = false;
+    
+    for (GCStatsDataPoint * point in serie) {
+        GCStatsDataPoint * point_dist = [serie_dist dataPointAtIndex:idx];
+        if( point.x_data != point_dist.x_data ){
+            if( ! reportedInconsistency ){
+                // Only report once
+                RZLog(RZLogWarning, @"Inconsistency between dist and serie for %@ and %@ at %lu", point, point_dist, (unsigned long) idx);
+                reportedInconsistency = true;
+            }
+        }
+        
+        if( fabs( current_altitude - point.y_data ) > threshold ){
+            if( current_altitude < point.y_data){
+                current_elevation_gain += ( point.y_data - current_altitude);
+            }
+            if( current_altitude > point.y_data){
+                current_elevation_loss += (point.y_data - current_altitude);
+            }
+            current_elevation_gradient = 100.0 * ( point.y_data - current_altitude) * elevation_unit_to_dist_unit / (point_dist.y_data - current_altitude_distance);
+            current_altitude = point.y_data;
+            current_altitude_distance = point_dist.y_data;
+            // Fill Gradient since last elevation
+            for( NSUInteger j = idx_current_altitude+1; j <= idx; j++){
+                [calc[CALC_ELEVATION_GRADIENT].serie addDataPointWithX:[serie dataPointAtIndex:j].x_data
+                                                                  andY:current_elevation_gradient];
+            }
+            idx_current_altitude = idx;
+        }
+        [calc[CALC_ALTITUDE_GAIN].serie addDataPointWithX:point.x_data andY:current_elevation_gain];
+        [calc[CALC_ALTITUDE_LOSS].serie addDataPointWithX:point.x_data andY:current_elevation_loss];
+        [adjusted.serie addDataPointWithX:point.x_data andY:current_altitude];
+
+        idx++;
+    }
+    
     // compute speed with minimum of 10 sec and report for 1min (60secs)
     GCStatsDataSerie * ascentspeed = [serie.serie deltaYSerieForDeltaX:10. scalingFactor:60.0*60.0];
     GCStatsDataSerieWithUnit * final = [GCStatsDataSerieWithUnit dataSerieWithUnit:[GCUnit unitForKey:@"meterperhour"] andSerie:ascentspeed];
     final.xUnit = [GCUnit unitForKey:@"second"];
-    [GCFields registerField:CALC_VERTICAL_SPEED activityType:self.activityType displayName:NSLocalizedString(@"Vertical Speed", @"Calculated Field") andUnitName:@"meterperhour"];
 
     NSDictionary * stats = [final.serie summaryStatistics];
     NSMutableDictionary * newFields = [NSMutableDictionary dictionary];
@@ -417,7 +517,19 @@
     }
     [self addEntriesToCalculatedFields:newFields];
 
-    return @{CALC_VERTICAL_SPEED:final};
+    NSMutableDictionary * rv = [NSMutableDictionary dictionary];
+    if( final.serie.count > 0){
+        rv[CALC_VERTICAL_SPEED] = final;
+    }
+    for (NSString*key in calc) {
+        GCStatsDataSerieWithUnit * su = calc[key];
+        if( su.serie.count > 0){
+            rv[key] = su;
+        }
+    }
+    [GCActivity registerCalculatedFields:self.activityType];
+    
+    return rv;
 }
 
 -(NSDictionary*)calculateSpeedDerivedFields{
@@ -433,15 +545,23 @@
     final.xUnit = [GCUnit unitForKey:@"second"];
     if ([self.activityType isEqualToString:GC_TYPE_RUNNING]) {
         [final convertToUnit:[GCUnit unitForKey:@"minperkm"]];
-        [GCFields registerField:CALC_10SEC_SPEED activityType:self.activityType displayName:NSLocalizedString(@"10sec Pace", @"Calculated Field") andUnitName:@"minperkm"];
     }else{
         [final convertToUnit:[GCUnit unitForKey:@"kph"]];
-        [GCFields registerField:CALC_10SEC_SPEED activityType:self.activityType displayName:NSLocalizedString(@"10sec Speed", @"Calculated Field") andUnitName:@"kph"];
-
     }
 
+    [GCActivity registerCalculatedFields:self.activityType];
+    
     return  @{CALC_10SEC_SPEED:final};
 }
 
++(void)registerCalculatedFields:(NSString*)activityType{
+    [GCFields registerField:CALC_VERTICAL_SPEED activityType:activityType displayName:NSLocalizedString(@"Vertical Speed", @"Calculated Field") andUnitName:@"meterperhour"];
 
+    if ([activityType isEqualToString:GC_TYPE_RUNNING]) {
+        [GCFields registerField:CALC_10SEC_SPEED activityType:activityType displayName:NSLocalizedString(@"10sec Pace", @"Calculated Field") andUnitName:@"minperkm"];
+    }else{
+        [GCFields registerField:CALC_10SEC_SPEED activityType:activityType displayName:NSLocalizedString(@"10sec Speed", @"Calculated Field") andUnitName:@"kph"];
+    }
+
+}
 @end

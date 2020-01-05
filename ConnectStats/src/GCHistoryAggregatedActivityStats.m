@@ -104,10 +104,10 @@
 
     NSUInteger flag = act.flags;
     double data[gcAggregatedFieldEnd];
-    data[gcAggregatedSumDistance] = act.sumDistance;
-    data[gcAggregatedSumDuration] = act.sumDuration;
-    data[gcAggregatedWeightedHeartRate]=act.weightedMeanHeartRate;
-    data[gcAggregatedWeightedSpeed]=isinf(act.weightedMeanSpeed) ? 0. : act.weightedMeanSpeed;
+    data[gcAggregatedSumDistance] = [act summaryFieldValueInStoreUnit:gcFieldFlagSumDistance];
+    data[gcAggregatedSumDuration] = [act summaryFieldValueInStoreUnit:gcFieldFlagSumDuration];
+    data[gcAggregatedWeightedHeartRate]=[act summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanHeartRate];
+    data[gcAggregatedWeightedSpeed]=isinf([act summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanSpeed]) ? 0. : [act summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanSpeed];
 
     data[gcAggregatedAltitudeMeters] = [act numberWithUnitForFieldFlag:gcFieldFlagAltitudeMeters].value;
     data[gcAggregatedCadence] = [act numberWithUnitForFieldFlag:gcFieldFlagCadence].value;
@@ -206,7 +206,8 @@
     if (flags[f] == false) {
         return @"";
     }
-    GCUnit * unit = [GCFields fieldUnit:[GCFields fieldForAggregatedField:f andActivityType:aType] activityType:aType];
+    GCUnit * unit = [GCField fieldForAggregated:f  andActivityType:aType].unit;
+    
     double val = stats[f*gcAggregatedTypeEnd+s];
     if (f == gcAggregatedSumDistance) {
         val = [unit convertDouble:val fromUnit:[GCUnit unitForKey:STOREUNIT_DISTANCE]];
@@ -227,7 +228,8 @@
 
     if(f*gcAggregatedTypeEnd+s<gcAggregatedTypeEnd*gcAggregatedFieldEnd){
         val = stats[f*gcAggregatedTypeEnd+s];
-        unit = [GCFields fieldUnit:[GCFields fieldForAggregatedField:f andActivityType:aType] activityType:aType];
+        
+        unit = [GCField fieldForAggregated:f  andActivityType:aType].unit;
         if (f == gcAggregatedSumDistance) {
             val = [unit convertDouble:val fromUnit:[GCUnit unitForKey:STOREUNIT_DISTANCE]];
         }else if(f == gcAggregatedWeightedSpeed){

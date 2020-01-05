@@ -27,6 +27,7 @@
 
 @interface NSString (CamelCase)
 
+- (NSString *)fromCamelCaseToCapitalizedSeparatedByString:(NSString*)aSep;
 -(NSString *)fromCamelCaseToSeparatedByString:(NSString*)aSep;
 /**
  returns string separated by dashes to a string separated by space

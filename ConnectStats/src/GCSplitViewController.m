@@ -120,7 +120,6 @@
     [activityDetailViewController.navigationController setNavigationBarHidden:NO animated:YES];
     [activityDetailViewController notifyCallBack:nil info:nil];
     [organizer notifyOnMainThread:NOTIFY_CHANGE];
-    [activityDetailViewController publishEvent];
     [activityListViewController ipadSetupStatButton];
 
 }
@@ -131,7 +130,6 @@
     [activityDetailViewController notifyCallBack:nil info:nil];
     [activityDetailViewController.navigationController popToRootViewControllerAnimated:YES];
     [activityDetailViewController.navigationController setNavigationBarHidden:NO animated:YES];
-    [activityDetailViewController publishEvent];
     [activityListViewController ipadSetupStatButton];
 }
 -(void)focusOnListWithFilter:(NSString*)aFilter{

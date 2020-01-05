@@ -55,7 +55,6 @@
     FMDatabase * cacheDb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"field_cache.db"]];
     [cacheDb open];
     GCFieldCache * cache = [GCFieldCache cacheWithDb:cacheDb andLanguage:@"en"];
-    cache.preferPredefined = true;
     [GCField setFieldCache: cache];
     [GCFields setFieldCache:cache];
     [GCActivityType setFieldCache:cache];

@@ -41,11 +41,13 @@ NSString * GC_TYPE_TENNIS =      @"tennis";
 NSString * GC_TYPE_MULTISPORT =  @"multi_sport";
 NSString * GC_TYPE_TRANSITION =  @"transition";
 
-NSString * GC_TYPE_SKI_XC =      @"cross_country_skiing";
-NSString * GC_TYPE_SKI_DOWN =    @"resort_skiing_snowboarding";
-NSString * GC_TYPE_SKI_BACK =    @"backcountry_skiing_snowboarding";
+NSString * GC_TYPE_WINTER_SPORTS = @"winter_sports";
+NSString * GC_TYPE_SKI_XC =        @"cross_country_skiing_ws";
+NSString * GC_TYPE_SKI_DOWN =      @"resort_skiing_snowboarding_ws";
+NSString * GC_TYPE_SKI_BACK =      @"backcountry_skiing_snowboarding_ws";
+
 NSString * GC_TYPE_INDOOR_ROWING = @"indoor_rowing";
-NSString * GC_TYPE_ROWING =      @"rowing";
+NSString * GC_TYPE_ROWING =        @"rowing";
 
 NSString * GC_TYPE_UNCATEGORIZED = @"uncategorized";
 

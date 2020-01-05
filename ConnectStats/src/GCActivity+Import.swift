@@ -12,7 +12,15 @@ import RZFitFile
 import RZFitFileTypes
 
 extension GCActivity {
-    
+
+    @objc convenience init?(withId activityId:String, fitFileData:Data, fitFilePath:String, startTime: Date?){
+        if let fit = RZFitFile(data: fitFileData, fileURL: URL(fileURLWithPath: fitFilePath)) {
+            self.init(withId: activityId, fitFile: fit, startTime: startTime)
+        }else{
+            return nil
+        }
+    }
+
     @objc convenience init?(withId activityId:String, fitFilePath:String, startTime: Date?){
         if let fit = RZFitFile(file: URL(fileURLWithPath: fitFilePath)) {
             self.init(withId: activityId, fitFile: fit, startTime: startTime)

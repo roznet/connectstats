@@ -162,6 +162,11 @@ static GCActivityTypes * _activityTypesCache = nil;
     return [self.key isEqualToString:activityTypeString];
 }
 
+-(NSInteger)sortOrder{
+    // for now, typeid happens to be not too bad
+    return self.typeId;
+}
+
 -(GCActivityType*)rootType{
     if (self.isRootType) {
         return self;
@@ -228,7 +233,7 @@ static GCActivityTypes * _activityTypesCache = nil;
     if(_fieldCache==nil){
         [GCActivityType fieldCache];
     }
-    return [_fieldCache infoForActivityType:self.key].displayName?:self.key;
+    return [_fieldCache infoForActivityType:self.key].displayName?: [GCField displayNameImpliedByFieldKey:self.key];
 }
 
 #pragma mark - Properties
@@ -258,9 +263,28 @@ static GCActivityTypes * _activityTypesCache = nil;
 
 }
 #pragma mark - Convenience access
+
++(BOOL)isExistingActivityType:(NSString*)aType{
+    return [[GCActivityType activityTypes] isExistingActivityType:aType];
+}
+
 +(nonnull GCActivityType*)activityTypeForKey:(nonnull NSString*)key{
     return [[GCActivityType activityTypes] activityTypeForKey:key];
 }
+
++(nullable GCActivityType*)activityTypeForGarminId:(NSUInteger)garminActivityId{
+    return [[GCActivityType activityTypes] activityTypeForGarminId:garminActivityId];
+}
++(nullable GCActivityType*)activityTypeForStravaType:(NSString*)stravaType{
+    return [[GCActivityType activityTypes] activityTypeForStravaType:stravaType];
+}
++(nullable GCActivityType*)activityTypeForConnectStatsType:(NSString*)input{
+    return [[GCActivityType activityTypes] activityTypeForConnectStatsType:input];
+}
++(nullable GCActivityType*)activityTypeForFitSport:(NSString*)fitSport andSubSport:(NSString *)fitSubSport{
+    return [[GCActivityType activityTypes] activityTypeForFitSport:fitSport andSubSport:fitSubSport];
+}
+
 +(GCActivityType*)running{
     return [[GCActivityType activityTypes] activityTypeForKey:GC_TYPE_RUNNING];
 }

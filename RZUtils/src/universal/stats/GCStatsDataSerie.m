@@ -1768,6 +1768,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     double * values  = calloc(range, sizeof(double));
     double * rolling = calloc(range, sizeof(double));
     double * best    = calloc(range, sizeof(double));
+    double * nonzero = calloc(range, sizeof(double));
     size_t * bestidx = nil;
 
     [self fill:range valuesForUnit:unit into:values fillMethod:fill];
@@ -1776,19 +1777,43 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     bestidx = calloc(range, sizeof(size_t));
 
     // populate per unit data:
+    //   rolling    n:0    1    2    3    4
+    //   values i:0   +0   +0   +0   +0   +0
+    //            1   +1-0 +1   +1   +1   +1
+    //            2   +2-1 +2-0 +2   +2   +2
+    //            3   +3-2 +3-1 +3-0 +3   +3
+    //            4   +4-3 +4-2 +4-1 +4-0 +4
+
+    //
     for (size_t i=0; i<range; i++) {
         for (size_t n=0; n<range; n++) {
             if (i<=n) {
+                if( values[i] > 0){
+                    nonzero[n] += 1;
+                }
+                // We haven't reach n values yet, add i_th
                 rolling[n] += values[i]/(n+1);
             }else{
-                rolling[n] = rolling[n] - values[i-n-1]/(n+1) + values[i]/(n+1);
+                if( values[i] > 0){
+                    nonzero[n] += 1;
+                }
+                if( values[i-n-1] && nonzero[n] > 0){
+                    nonzero[n] -= 1;
+                }
+                // We have reach n values, add i_th, but remove i_th - (n_th+1)
+                double add = values[i]/(n+1) - values[i-n-1]/(n+1);
+                // Don't add <0 numbers
+                rolling[n] = MAX(rolling[n] + add,0.0);
             }
+
+            // We have reach n values, start recording best, initialize with current value
             if (i==n) {
                 best[n]=rolling[n];
                 if (bestidx) {
                     bestidx[n]=i;
                 }
             }else if(i>n){
+                // we now have n values, check if last n better than previous best.
                 if ( (select==gcStatsMax && best[n]<rolling[n]) || (select==gcStatsMin && best[n]>rolling[n])) {
                     best[n]=rolling[n];
                     if (bestidx) {
@@ -1796,6 +1821,12 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                     }
                 }
             }
+            
+            if( n > 0){
+                if ( (select==gcStatsMax && best[n]>best[n-1]) || (select==gcStatsMin && best[n]>rolling[n])) {
+                }
+            }
+
         }
     }
     GCStatsDataSerie * rv = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
@@ -1813,6 +1844,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     free(best);
     free(values);
     free(rolling);
+    free(nonzero);
 
     return rv;
 }

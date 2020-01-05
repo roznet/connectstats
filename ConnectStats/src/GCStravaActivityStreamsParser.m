@@ -105,7 +105,8 @@
         if ([json isKindOfClass:[NSDictionary class]]) {
             NSDictionary * dict = (NSDictionary*)json;
             if ([dict[@"message"] respondsToSelector:@selector(isEqualToString:)] &&
-                [dict[@"message"] isEqualToString:@"Record Not Found"]) {
+                ([dict[@"message"] isEqualToString:@"Record Not Found"] ||
+                 [dict[@"message"] isEqualToString:@"Resource Not Found"])) {
                 self.points = @[];
             }else{
                 RZLog(RZLogInfo, @"Got Dictionary %@", dict);

@@ -230,7 +230,6 @@
     [organizer setCurrentActivityId:aId];
     [activityDetailViewController notifyCallBack:nil info:nil];
     [activityDetailViewController.navigationController popToRootViewControllerAnimated:YES];
-    [activityDetailViewController publishEvent];
     self.selectedIndex = 1;
     [activityDetailViewController.navigationController setNavigationBarHidden:YES animated:YES];
 }

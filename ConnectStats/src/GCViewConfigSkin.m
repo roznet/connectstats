@@ -134,7 +134,9 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
     }
 }
 
-
+/**
+ * Default skin for original designed colors. Will be the light theme for dynamic colors based on ios dark/light mode
+ */
 +(GCViewConfigSkin*)defaultSkin{
     GCViewConfigSkin * rv = [[[GCViewConfigSkin alloc]init]autorelease];
     if (rv) {
@@ -620,7 +622,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
                       GC_TYPE_TENNIS:   [UIColor colorWithHexValue:0x22B5B0 andAlpha:1.],
                       GC_TYPE_MULTISPORT:[UIColor colorWithHexValue:0xA6BB82 andAlpha:1.],
                       GC_TYPE_OTHER:[UIColor colorWithHexValue:0xD2D2D2 andAlpha:1.],
-                      GC_TYPE_SKI_BACK: [UIColor colorWithHexValue:0xa2d7b5 andAlpha:1.0],
+                      GC_TYPE_SKI_BACK: [UIColor colorWithHexValue:0x00dfdc andAlpha:1.0],
                       GC_TYPE_SKI_DOWN: [UIColor colorWithHexValue:0xecf0f1 andAlpha:1.0]
                       
                     },
@@ -633,7 +635,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
                       GC_TYPE_TENNIS:   [UIColor colorWithHexValue:0x96CC00 andAlpha:1.],
                       GC_TYPE_MULTISPORT:[UIColor colorWithHexValue:0xA6BB82 andAlpha:1.],
                       GC_TYPE_OTHER:[UIColor colorWithHexValue:0xA6BB82 andAlpha:1.],
-                      GC_TYPE_SKI_BACK: [UIColor colorWithHexValue:0xa2d7b5 andAlpha:1.0],
+                      GC_TYPE_SKI_BACK: [UIColor colorWithHexValue:0x00c9df andAlpha:1.0],
                       GC_TYPE_SKI_DOWN: [UIColor colorWithHexValue:0xbdc3c7 andAlpha:1.0]
                     },
                 kGCSkinKeyFieldFillColor:

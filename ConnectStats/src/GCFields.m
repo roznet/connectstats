@@ -118,7 +118,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
 +(gcUnitSystem)fieldUnitSystem{
     gcUnitSystem rv = [GCUnit getGlobalSystem];
     if (rv == GCUnitSystemDefault) {
-        GCUnit * sample = [GCFields fieldUnit:@"SumDistance" activityType:GC_TYPE_ALL];
+        GCUnit * sample =  [GCField fieldForKey:@"SumDistance" andActivityType:GC_TYPE_ALL].unit;
         rv = [sample system];
     }
     return rv;
@@ -240,10 +240,15 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
         reported = [NSMutableDictionary dictionary];
         RZRetain(reported);
     }
-    for (id field in fields) {
+    for (GCField * field in fields) {
         if (!reported[field]) {
             // To Fix add to fields_order.db and rerun build.py
-            RZLog(RZLogInfo, @"Non Categorized field: %@ %@", field, aType?:@"");
+            // INSERT INTO fields_order (field,displayOrder,category) VALUES( 'fieldkey',-1,'ignore' );
+            if( [field isKindOfClass:[GCField class]] ){
+                RZLog(RZLogInfo, @"Non Categorized field[%@] VALUES('%@',-1,'ignore')", field.activityType,  field.key );
+            }else{
+                RZLog(RZLogInfo, @"Non Categorized field[%@]", field );
+            }
             reported[field] = field;
         }
     }
@@ -584,7 +589,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
         [GCFields buildLapCache];
     }
 
-    GCUnit * found = [GCFields fieldUnit:[GCFields fieldForLapField:field andActivityType:aType] activityType:aType];
+    GCUnit * found = [GCField fieldForKey:[GCFields fieldForLapField:field andActivityType:aType] andActivityType:aType].unit;
     return found ?: [GCUnit unitForKey:@"dimensionless"];
 }
 

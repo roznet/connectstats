@@ -49,11 +49,17 @@
     self.activityType = [res stringForColumn:@"activityType"];
     self.date = [res dateForColumn:@"BeginTimestamp"];
 
-    self.sumDistance = [res doubleForColumn:@"SumDistance"];
-    self.sumDuration = [res doubleForColumn:@"SumDuration"];
-    self.weightedMeanSpeed = [res doubleForColumn:@"WeightedMeanSpeed"];
+    for (GCField * summaryField in [self validStoredSummaryFields]) {
+        NSString * fieldKey = summaryField.key;
+        if( summaryField.fieldFlag == gcFieldFlagWeightedMeanSpeed){
+            fieldKey = @"WeightedMeanSpeed"; // otherwise could be pace...
+        }
+        double value = [res doubleForColumn:fieldKey];
+        GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:[self storeUnitForField:summaryField] andValue:value];
+        [self setSummaryField:summaryField.fieldFlag with:nu];
+    }
+        
     self.speedDisplayUom = [res stringForColumn:@"speedDisplayUom"];
-    self.weightedMeanHeartRate = [res doubleForColumn:@"WeightedMeanHeartRate"];
     self.distanceDisplayUom = [res stringForColumn:@"distanceDisplayUom"];
     self.garminSwimAlgorithm = [res boolForColumn:@"garminSwimAlgorithm"];
 
@@ -115,17 +121,17 @@
         [db executeUpdate:@"DELETE FROM gc_activities_meta WHERE activityId = ?", self.activityId];
         [db executeUpdate:@"DELETE FROM gc_activities_calculated WHERE activityId = ?", self.activityId];
     }
-
+    
     NSArray * dbrow = @[self.activityId,
                         self.activityType,
                         self.date,
-                        @(self.sumDistance),
-                        @(self.sumDuration),
-                        @(self.weightedMeanHeartRate),
+                        @([self summaryFieldValueInStoreUnit:gcFieldFlagSumDistance]),
+                        @([self summaryFieldValueInStoreUnit:gcFieldFlagSumDuration]),
+                        @([self summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanHeartRate]),
                         self.activityName,
                         @(self.beginCoordinate.longitude),
                         @(self.beginCoordinate.latitude),
-                        @(self.weightedMeanSpeed),
+                        @([self summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanSpeed]),
                         self.location,
                         @(self.flags),
                         self.speedDisplayUom,
@@ -342,9 +348,45 @@
         [db executeUpdate:@"INSERT INTO gc_version (version) VALUES(10)"];
         [db commit];
     }
-
-
+    if(max_version < 11){
+        [GCActivity upgradeDatababaseForRemappedTypes:db];
+        RZEXECUTEUPDATE(db, @"INSERT INTO gc_version (version) VALUES(11)");
+    }
 }
+
++(void)upgradeDatababaseForRemappedTypes:(FMDatabase*)db{
+    RZPerformance * perf = [RZPerformance start];
+    
+    FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_activities_meta WHERE field='activityType'"];
+    NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+    NSMutableDictionary * types = [NSMutableDictionary dictionary];
+    while( [res next] ){
+        NSString * key = [res stringForColumn:@"key"];
+        NSString * newType = [GCActivityTypes remappedLegacy:key];
+        if( key != nil && newType != nil && ![key isEqualToString:newType] ){
+            types[key] = newType;
+            dict[ [res stringForColumn:@"activityId" ] ] = newType;
+        }
+    }
+    [db beginTransaction];
+    [db setShouldCacheStatements:YES];
+
+    for (NSString * activityId in dict) {
+        GCActivityType * newType = [GCActivityType activityTypeForKey:dict[activityId]];
+        GCActivityType * parentType = newType.parentType;
+        if( parentType.isRootType){
+            parentType = newType;
+        }
+            
+        RZEXECUTEUPDATE(db, @"UPDATE gc_activities SET activityType=? WHERE activityId=?", parentType.key, activityId);
+        RZEXECUTEUPDATE(db, @"UPDATE gc_activities_meta SET key=? WHERE activityId=? AND field='activityType'", newType.key, activityId);
+    }
+    [db commit];
+    
+    RZLog(RZLogInfo, @"Updated %@ legacy types for %@ activities [%@]", @(types.count), @(dict.count), perf);
+}
+
+
 +(void)fixDbMilesConversion:(FMDatabase*)db{
     NSDate * start = [NSDate date];
     NSString * query = @"select * from gc_activities_values where (uom='mile' and field='SumDistance') or (uom='mph' and field='WeightedMeanSpeed')";
@@ -412,7 +454,11 @@
         rv.trackdb = db;
         [rv loadSummaryDataFrom:db];
         [rv trackpoints];//force load trackpoints
-
+        GCActivityMetaValue * typeDetail = rv.metaData[@"activityType"];
+        if( typeDetail && rv.activityTypeDetail == nil ){
+            rv.activityTypeDetail = [GCActivityType activityTypeForKey:typeDetail.key];
+        }
+        
         if( rv.activityId ){
             FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_activities_weather_detail WHERE activityId = ?", rv.activityId];
             if([res next]){

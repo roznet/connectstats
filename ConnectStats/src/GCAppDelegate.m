@@ -109,7 +109,6 @@ void checkVersion(){
     [_actions release];
     [_health release];
     [_segments release];
-    [_activityTypes release];
     [_credentials release];
 
     [_splitViewController release];
@@ -166,12 +165,15 @@ void checkVersion(){
 	self.db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:[_profiles currentDatabasePath]]];
     [_db open];
     // do db op before now before the app send them all to worker thread
-    [GCActivitiesOrganizer ensureDbStructure:_db];
-    [GCHealthOrganizer ensureDbStructure:_db];
+    // Wrap in autorelease pool to ensure no left over db object are released
+    // later while db operation happening on worker
+    @autoreleasepool {
+        [GCActivitiesOrganizer ensureDbStructure:_db];
+        [GCHealthOrganizer ensureDbStructure:_db];
+    }
 
     [self setupFieldCache];
-    self.activityTypes = [GCActivityTypes activityTypes];
-    [GCActivityType setActivityTypes:self.activityTypes];
+    [GCActivityType setActivityTypes:[GCActivityTypes activityTypes]];
 
     [GCUnit setGlobalSystem:[_settings[CONFIG_UNIT_SYSTEM] intValue]];
     [GCUnit setStrideStyle:[_settings[CONFIG_STRIDE_STYLE] intValue]];
@@ -440,13 +442,10 @@ void checkVersion(){
     gcLanguageSetting setting = [GCAppGlobal configGetInt:CONFIG_LANGUAGE_SETTING defaultValue:gcLanguageSettingAsDownloaded];
 
     NSString * language = nil;
-    BOOL preferPredefined = false;
 
     if (setting == gcLanguageSettingAsDownloaded) {
-        preferPredefined = false;
         language = nil;
     }else if (setting == gcLanguageSettingSystemLanguage){
-        preferPredefined = true;
         language = nil;
     }else{
         NSArray * languages = [GCFieldCache availableLanguagesCodes];
@@ -454,11 +453,9 @@ void checkVersion(){
         if (languageIndex < languages.count) {
             language = languages[languageIndex];
         }
-        preferPredefined = true;
     }
 
     GCFieldCache * cache = [GCFieldCache cacheWithDb:self.db andLanguage:language];
-    cache.preferPredefined = preferPredefined;
     [GCField setFieldCache: cache];
     [GCFields setFieldCache:cache];
     [GCActivityType setFieldCache:cache];

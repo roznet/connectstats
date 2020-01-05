@@ -198,7 +198,7 @@ NSString * kBugNoCommonId = @"-1";
         
         NSString * dbfile = [RZFileOrganizer writeableFilePathIfExists:[[GCAppGlobal profile] currentDatabasePath]];
         if (dbfile) {
-            OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:[[GCAppGlobal profile] currentDatabasePath]
+            OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:@"activities_bugreport.db"
                                                         compressionLevel:OZZipCompressionLevelBest];
             NSData * data = [NSData dataWithContentsOfFile:dbfile];
             [dbstream writeData:data];
@@ -207,7 +207,7 @@ NSString * kBugNoCommonId = @"-1";
         
         NSString * derivedfile = [RZFileOrganizer writeableFilePathIfExists:[[GCAppGlobal profile] currentDerivedDatabasePath]];
         if (derivedfile) {
-            OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:[[GCAppGlobal profile] currentDerivedDatabasePath]
+            OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:@"derived_bugreport.db"
                                                         compressionLevel:OZZipCompressionLevelBest];
             NSData * data = [NSData dataWithContentsOfFile:derivedfile];
             [dbstream writeData:data];
@@ -216,7 +216,7 @@ NSString * kBugNoCommonId = @"-1";
         
         NSString * settingsFile = [RZFileOrganizer writeableFilePathIfExists:@"settings.plist"];
         if( settingsFile ){
-            OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:@"settings_debug.plist" compressionLevel:OZZipCompressionLevelBest];
+            OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:@"settings_bugreport.plist" compressionLevel:OZZipCompressionLevelBest];
             NSData * data = [NSData dataWithContentsOfFile:settingsFile];
             [dbstream writeData:data];
             [dbstream finishedWriting];

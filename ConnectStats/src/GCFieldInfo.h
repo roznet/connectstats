@@ -31,6 +31,8 @@
 @property (nonatomic,retain) NSString * field;
 @property (nonatomic,retain) NSString * activityType;
 
+//@property (nonatomic,readonly) GCField * field;
+
 +(GCFieldInfo*)fieldInfoFor:(NSString*)field type:(NSString*)aType displayName:(NSString*)aDisplayName andUnitName:(NSString*)aUom;
 
 -(BOOL)match:(NSString*)str;

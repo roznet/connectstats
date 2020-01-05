@@ -37,11 +37,14 @@
 #import "GCGarminRequestModernActivityTypes.h"
 #import "GCGarminRequestModernSearch.h"
 #import "GCConnectStatsRequestSearch.h"
+#import "GCConnectStatsRequestFitFile.h"
 #import "GCStravaActivityList.h"
 #import "GCLap.h"
 #import "GCLapSwim.h"
 #import "GCConnectStatsRequestSearch.h"
 #import "GCHistoryFieldSummaryStats.h"
+
+#import "GCActivity+TestBackwardCompat.h"
 
 @interface GCTestsParsing : GCTestCase
 
@@ -94,24 +97,31 @@
     for (NSString * aId in activityIds) {
         dispatch_sync([GCAppGlobal worker], ^(){
             GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+            // Disable thread so calculated fields are populated at once
+            act.settings.worker = nil;
             [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
             
             NSArray<GCField*>*fields = [act availableTrackFields];
-            
+            NSMutableArray<GCField*>*newFieds = [NSMutableArray array];
             for (GCField * field in fields) {
                 NSError * error = nil;
                 
                 NSString * ident = [NSString stringWithFormat:@"%@_%@", aId, field.key];
                 GCStatsDataSerieWithUnit * expected = [act timeSerieForField:field];
                 GCStatsDataSerieWithUnit * retrieved = [manager retrieveReferenceObject:expected forClasses:classes selector:_cmd identifier:ident error:&error];
+                if( retrieved == nil){
+                    [newFieds addObject:field];
+                }
                 XCTAssertNotNil( retrieved, @"In activity %@, field %@ does not have saved reference point, maybe a new field?", act, field);
                 XCTAssertNotEqual(expected.count, 0, @"%@[%@] has points",aId,field.key);
                 XCTAssertEqualObjects(expected, retrieved, @"%@[%@]: %@<>%@", aId, field.key, expected, retrieved);
             }
+            if( newFieds.count > 0){
+                RZLog(RZLogInfo, @"%@ potential new fields %@", act, newFieds);
+            }
         });
+        
     }
-    
-    //NSLog(@"act %@", act);
 }
 
 -(void)testParseLapsSwimming{
@@ -139,7 +149,9 @@
     [modernAct saveToDb:db];
     
     XCTAssertGreaterThan(modernAct.trackpoints.count, 1);
-    [self compareStatsCheckSavedFor:modernAct identifier:@"modernAct" cmd:_cmd recordMode:[GCTestCase recordModeGlobal]];
+    BOOL recordMode = [GCTestCase recordModeGlobal];
+    //recordMode = true;
+    [self compareStatsCheckSavedFor:modernAct identifier:@"modernAct" cmd:_cmd recordMode:recordMode];
 }
 
 -(void)testParseSaveAndReload{
@@ -170,17 +182,20 @@
         GCActivity * parsedAct = [[[GCActivity alloc] initWithId:activityId andGarminData:json] autorelease];
         parsedAct.db = db;
         parsedAct.trackdb = db;
-        
+        parsedAct.settings.worker = nil;
         [GCGarminActivityTrack13Request testForActivity:parsedAct withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:false];
         [parsedAct saveToDb:db];
         
         XCTAssertGreaterThan(parsedAct.trackpoints.count, 1);
         bool recordMode = [GCTestCase recordModeGlobal];
+        //recordMode = true;
         
         NSString * identifier = [NSString stringWithFormat:@"parse_reload_%@", activityId];
         [self compareStatsCheckSavedFor:parsedAct identifier:identifier cmd:_cmd recordMode:recordMode];
         
         GCActivity * reloadedAct = [GCActivity activityWithId:activityId andDb:db];
+        // disable threading so calculated value recalculated synchronously.
+        reloadedAct.settings.worker = nil;
         [reloadedAct trackpoints];
         NSDictionary * parsedDict = [self compareStatsDictFor:parsedAct];
         NSDictionary * reloadedDict = [self compareStatsDictFor:reloadedAct];
@@ -433,6 +448,39 @@
     }
 }
 
+-(void)testParseTCX{
+    NSArray<NSString*>*samples = @[
+        @"234979239", // running
+        @"234721416", // cycling
+        //@"217470507", // swimming
+    ];
+   
+    for (NSString * activityId in samples) {
+        NSString * activityId_tcx = [activityId stringByAppendingString:@"tcx"];
+        NSString * activityId_fit = [activityId stringByAppendingString:@"fit"];
+        
+        GCActivity * act_tcx = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        act_tcx.activityId = activityId_tcx;
+        act_tcx.db = act_tcx.trackdb;
+        GCActivity * act_fit = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
+        act_fit.activityId = activityId_fit;
+        act_fit.db = act_fit.trackdb;
+        NSString * tcx = [NSString stringWithFormat:@"activity_%@.tcx", activityId];
+        NSString * fit = [NSString stringWithFormat:@"activity_%@.fit", activityId];
+        NSString * fp_tcx = [RZFileOrganizer bundleFilePath:tcx forClass:[self class]];
+        NSString * fp_fit = [RZFileOrganizer bundleFilePath:fit forClass:[self class]];
+        
+        act_tcx = [GCConnectStatsRequestFitFile testForActivity:act_tcx withFilesIn:fp_tcx];
+        act_fit = [GCConnectStatsRequestFitFile testForActivity:act_fit withFilesIn:fp_fit];
+
+        XCTAssertEqualObjects(act_fit.date, act_tcx.date);
+        XCTAssertEqual(act_fit.trackpoints.count, act_tcx.trackpoints.count);
+        XCTAssertTrue(RZTestOption(act_tcx.flags, gcFieldFlagSumDistance));
+        XCTAssertTrue(RZTestOption(act_tcx.flags, gcFieldFlagSumDuration));
+        XCTAssertTrue(RZTestOption(act_tcx.flags, gcFieldFlagWeightedMeanSpeed));
+    }
+    
+}
 
 -(void)testParseFitFile{
     NSDictionary * epsForField = @{
@@ -534,7 +582,9 @@
                                              
                                              };
     
-    
+    /* Re-base:
+     *   
+     */
     NSArray<NSString*>*aIds = @[ @"1083407258", // Ski Activity
                                  @"2477200414", // Run with Power
                                  ];
@@ -1010,7 +1060,7 @@
         }
         if( found == nil){
             // Strava will skip activities of less than 30 seconds
-            XCTAssertLessThan(one.sumDuration, 30.0);
+            XCTAssertLessThan(one.sumDurationCompat, 30.0);
         }else{
             XCTAssertTrue(found != nil, @"activity %@ in both", one);
         }

@@ -88,8 +88,8 @@
 
     HKWorkout * workout = [HKWorkout workoutWithActivityType:type
                                                    startDate:act.date
-                                                     endDate:[act.date dateByAddingTimeInterval:act.sumDuration]
-                                                    duration:act.sumDuration
+                                                     endDate:act.endTime
+                                                    duration:[act.endTime timeIntervalSinceDate:act.startTime]
                                            totalEnergyBurned:[cal hkQuantity]
                                                totalDistance:[dist hkQuantity]
                                                     metadata:@{@"activityId":act.activityId,@"activityName":act.activityName }];

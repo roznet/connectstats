@@ -125,7 +125,10 @@
             num = [num convertToUnit:useUnit];
         }
     }
-    [rv appendAttributedString:[num attributedStringWithValueAttr:attributesValue andUnitAttr: (!self.noUnits)?attributesLabel:nil]];
+    NSAttributedString * add = [num attributedStringWithValueAttr:attributesValue andUnitAttr: (!self.noUnits)?attributesLabel:nil];
+    if( add ){
+        [rv appendAttributedString:add];
+    }
 
     return rv;
 }

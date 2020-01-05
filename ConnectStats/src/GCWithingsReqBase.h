@@ -29,8 +29,6 @@
 
 @interface GCWithingsReqBase : GCGarminReqBase
 @property (nonatomic,retain) UINavigationController * navigationController;
-@property (nonatomic,retain) NSString * userId;
-
 
 -(instancetype)initNextWith:(GCGarminReqBase*)current;
 

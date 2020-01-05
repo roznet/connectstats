@@ -73,12 +73,8 @@
 -(NSString*)display{
     if ([self.field isEqualToString:@"activityType"]) {
         GCFieldCache * cache = [GCField fieldCache];
-        if (cache.preferPredefined) {
-            GCFieldInfo * info = [cache infoForActivityType:self.key];
-            return info ? info.displayName : self.displayOriginal;
-        }else{
-            return self.displayOriginal;
-        }
+        GCFieldInfo * info = [cache infoForActivityType:self.key];
+        return info ? info.displayName : self.displayOriginal;
     }else{
         return self.displayOriginal;
     }

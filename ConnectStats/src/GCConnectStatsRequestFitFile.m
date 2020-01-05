@@ -31,6 +31,7 @@
 #import "GCService.h"
 #import "ConnectStats-Swift.h"
 #import "GCGarminActivityTrack13Request.h"
+#import "GCConnectStatsActivityTCXParser.h"
 
 @interface GCConnectStatsRequestFitFile ()
 @property (nonatomic,retain) GCActivity * activity;
@@ -180,7 +181,18 @@
         NSString * fp = [[NSFileManager defaultManager] fileExistsAtPath:fileName] ? fileName : [RZFileOrganizer writeableFilePath:fileName];
         
         NSDate * useStartDate = self.activity.parentId != nil ? self.activity.date : nil;
-        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activity.activityId fitFilePath:fp startTime:useStartDate]);
+        
+        NSData * data = [NSData dataWithContentsOfFile:fp];
+        const char * start = data.bytes;
+        
+        GCActivity * fitAct = nil;
+        
+        if( data.length > 5 && strncmp(start,"<?xml", 5 ) == 0 ){
+            GCConnectStatsActivityTCXParser * parser = [GCConnectStatsActivityTCXParser activityTCXParserWithActivityId:self.activity.activityId andData:data];
+            fitAct = parser.activity;
+        }else{
+            fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activity.activityId fitFileData:data fitFilePath:fp startTime:useStartDate]);
+        }
         if( fitAct ){ // check if we could parse. Could be no fit file available.
             [self.activity updateSummaryDataFromActivity:fitAct];
             [self.activity updateTrackpointsFromActivity:fitAct];
@@ -194,9 +206,13 @@
     
     GCConnectStatsRequestFitFile * req = [GCConnectStatsRequestFitFile requestWithActivity:act andNavigationController:nil];
     
-    NSString * fp = [path stringByAppendingPathComponent:[req fitFileName]];
-    [req processParse:fp];
+    BOOL isDirectory = false;
     
+    if( [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]){
+        NSString * fp = isDirectory ? [path stringByAppendingPathComponent:[req fitFileName]] : path;
+
+        [req processParse:fp];
+    }
     return req.activity;
 }
 

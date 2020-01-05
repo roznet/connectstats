@@ -196,7 +196,6 @@
             serie = [seriefilter filteredSerieWithUnitFrom:serie];
         }
         if (serie && serie.count > minimumPoints) {
-            RZLog(RZLogInfo, @"Enough points for performance on %@: %lu > 30", self.activityType, serie.count);
             [seriesArray addObject:serie];
         }else{
             RZLog(RZLogInfo, @"Not enough points for performance %@: %lu < 30", self.activityType, serie.count);

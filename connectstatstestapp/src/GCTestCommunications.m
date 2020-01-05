@@ -153,6 +153,7 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
         [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:NO];
         GCWebSetSimulatorDir(nil);
     }
+    [[GCAppGlobal profile] configSet:CONFIG_ENABLE_DERIVED boolVal:NO];
     [[GCAppGlobal profile] configSet:CONFIG_WIFI_DOWNLOAD_DETAILS boolVal:NO];
     [GCAppGlobal configSet:CONFIG_GARMIN_FIT_DOWNLOAD boolVal:FALSE];
     [[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:gcGarminLoginMethodSimulator];

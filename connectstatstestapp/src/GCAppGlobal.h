@@ -59,7 +59,6 @@ extern NSString * kPreservedSettingsName;
 +(BOOL)trialVersion;
 +(BOOL)fullVersion;
 +(BOOL)connectStatsVersion;
-+(GCActivityTypes*)activityTypes;
 
 +(NSDictionary*)debugState;
 +(void)debugStateRecord:(NSDictionary*)dict;

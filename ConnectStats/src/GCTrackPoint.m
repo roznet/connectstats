@@ -60,9 +60,14 @@ void buildStatic(){
     if (self) {
         if (data[@"directTimestamp"]) {
             [self parseDictionary:data inActivity:act];
-        }else{
-            [self parseDictionaryOld:data];
         }
+    }
+    return self;
+}
+-(GCTrackPoint*)initWithTCXElement:(GCXMLElement*)element{
+    self = [self init];
+    if( self ){
+        [self parseTCXElement:element];
     }
     return self;
 }
@@ -358,22 +363,23 @@ void buildStatic(){
 }
 
 
--(void)parseDictionaryOld:(NSDictionary*)data{
+-(void)parseTCXElement:(GCXMLElement*)data{
     NSString * tmp = nil;
 
-    tmp = data[@"Time"];
+    tmp = [data valueForChild:@"Time"];
+    if( tmp == nil){
+        tmp = [data valueForParameter:@"StartTime"];
+    }
     if (tmp) {
-        self.time = [NSDate dateForRFC3339DateTimeString:data[@"Time"]];
+        self.time = [NSDate dateForRFC3339DateTimeString:tmp];
+        if( self.time == nil){
+            self.time = [NSDate dateForStravaTimeString:tmp];
+        }
     }
-    tmp = data[@"LatitudeDegrees"];
-    if (!tmp) {
-        tmp = data[@"directLatitude"][@"value"];
-    }
+    tmp = [data valueForChildPath:@[ @"Position", @"LatitudeDegrees"] ];
     _latitudeDegrees = tmp ? tmp.doubleValue : 0.0;
-    tmp = data[@"LongitudeDegrees"];
-    if (!tmp) {
-        tmp = data[@"directLongitude"][@"value"];
-    }
+    
+    tmp = [data valueForChildPath:@[ @"Position", @"LongitudeDegrees" ]];
     _longitudeDegrees = tmp ? tmp.doubleValue : 0.0;
 
     _distanceMeters = 0.;
@@ -384,7 +390,7 @@ void buildStatic(){
     _power = 0.;
     _trackFlags = gcFieldFlagNone;
 
-    tmp = data[@"DistanceMeters"];
+    tmp = [data valueForChild:@"DistanceMeters"];
     if (tmp) {
         _distanceMeters = tmp.doubleValue;
         if (_distanceMeters > 0.) {
@@ -392,32 +398,46 @@ void buildStatic(){
         }
     }
 
-    tmp = data[@"HeartRateBpm"];
+    tmp = [data valueForChild:@"TotalTimeSeconds"];
+    if( tmp ){
+        _elapsed = tmp.doubleValue;
+        if( _elapsed > 0. ){
+            _trackFlags |= gcFieldFlagSumDuration;
+        }
+    }
+    
+    tmp = [data valueForChildPath:@[@"HeartRateBpm", @"Value" ]];
+    if( tmp == nil){
+    tmp = [data valueForChildPath:@[@"AverageHeartRateBpm", @"Value" ]];
+    }
     if (tmp) {
         _heartRateBpm = [tmp stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].doubleValue;
         _trackFlags |= gcFieldFlagWeightedMeanHeartRate;
     }
-    tmp = data[@"Speed"];
+    tmp = [data findFirstElement:@"AvgSpeed"].value;
+    if( tmp == nil){
+        tmp = [data findFirstElement:@"Speed"].value;
+    }
     if (tmp) {
         _speed = tmp.doubleValue;
         if (_speed>0.) {
             _trackFlags |= gcFieldFlagWeightedMeanSpeed;
         }
     }
-    tmp = data[@"Watts"];
+    tmp = [data valueForChild:@"Watts"];
     if (tmp) {
         _power = tmp.doubleValue;
         _trackFlags |= gcFieldFlagPower;
     }
-    tmp = data[@"Cadence"];
+    tmp = [data valueForChild:@"Cadence"];
     if (!tmp) {
-        tmp = data[@"RunCadence"];
+        tmp = [data valueForChild:@"RunCadence"];
     }
     if (tmp) {
         _cadence = tmp ? tmp.doubleValue : 0.0;
         _trackFlags |= gcFieldFlagCadence;
     }
-    tmp = data[@"AltitudeMeters"];
+    tmp = [data valueForChild:@"AltitudeMeters"];
     if (tmp) {
         _altitude = tmp ? tmp.doubleValue : 0.0;
         _trackFlags |= gcFieldFlagAltitudeMeters;
@@ -426,9 +446,13 @@ void buildStatic(){
 
 -(void)updateWithNextPoint:(GCTrackPoint*)next{
     if (next) {
-        if ( ( _trackFlags & gcFieldFlagWeightedMeanSpeed ) != gcFieldFlagWeightedMeanSpeed) {
-            if ( (_trackFlags & gcFieldFlagSumDistance) == gcFieldFlagSumDistance) {
-                double dt = [next.time timeIntervalSinceDate:self.time];
+        if( ! RZTestOption(_trackFlags, gcFieldFlagSumDuration)){
+            self.elapsed = [next.time timeIntervalSinceDate:self.time];
+            RZSetOption(_trackFlags, gcFieldFlagSumDuration);
+        }
+        if ( !RZTestOption(_trackFlags, gcFieldFlagWeightedMeanSpeed) ) {
+            if ( RZTestOption(_trackFlags, gcFieldFlagSumDistance) ) {
+                double dt = self.elapsed;
                 double dx = next.distanceMeters - self.distanceMeters;
                 if (dt != 0.0) {
                     GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:GCUnit.mps andValue:dx/dt];

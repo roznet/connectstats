@@ -101,7 +101,29 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
                 RZLog(RZLogInfo, @"inconsitent %@ %@", type, found[type.key]);
             }
             found[type.key] = type;
-            
+        }
+        [found removeAllObjects];
+        for (NSString * typeName in byActivityType) {
+            GCActivityType * type = byActivityType[typeName];
+            NSNumber * typeId = @(type.typeId);
+            if( byTypeId[typeId] == nil){
+                GCActivityType * candidate = nil;
+                for (GCActivityType * otherType in byTypeId.allValues) {
+                    if( [otherType.key containsString:type.key] || [type.key containsString:otherType.key]){
+                        candidate = otherType;
+                        break;
+                    }
+                }
+                if( candidate ){
+                RZLog(RZLogInfo, @"Missing %@ Candidate: %@", type, candidate);
+                }else{
+                RZLog(RZLogInfo, @"Missing %@", type);
+                }
+            }
+            if( found[typeId] ){
+                RZLog(RZLogInfo, @"inconsitent %@ %@", type, found[type.key]);
+            }
+            found[typeId] = type;
         }
     }
     
@@ -232,6 +254,225 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
 -(GCActivityType*)activityTypeForGarminId:(NSUInteger)garminActivityId{
     return self.typesById[ @(garminActivityId)];
 }
+
+
+-(NSArray<GCActivityType*>*)allTypes{
+    NSArray * rv = [self.typesByKey.allValues sortedArrayUsingComparator:^(GCActivityType*a1, GCActivityType*a2){
+        return a1.typeId < a2.typeId ? NSOrderedAscending : (a1.typeId > a2.typeId ? NSOrderedDescending : NSOrderedSame);
+    }];
+    return rv;
+}
+-(NSArray<NSString*>*)allTypesKeys{
+    NSArray * allTypes = [self allTypes];
+    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:allTypes.count];
+    for (GCActivityType * type in allTypes) {
+        [rv addObject:type.key];
+    }
+    return rv;
+}
+
+-(NSUInteger)count{
+    return self.typesByKey.count;
+}
+
+-(NSArray<GCActivityType*>*)allParentTypes{
+    NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithCapacity:self.typesByKey.count];
+    for (NSString * key in self.typesByKey) {
+        GCActivityType * type = self.typesByKey[key];
+        if (type.parentType != nil && !type.parentType.isRootType) {
+            rv[type.parentType] = rv[type.parentType] ? @([rv[type.parentType] integerValue]+1) : @(1);
+        }
+    }
+    return rv.allKeys;
+}
+
+-(NSArray<GCActivityType*>*)allTypesForParent:(GCActivityType*)parentType{
+    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:self.typesByKey.count];
+    for (NSString * key in self.typesByKey) {
+        GCActivityType * type = self.typesByKey[key];
+        if (type.parentType != nil && [type.parentType isEqualToActivityType:parentType]){
+            [rv addObject:type];
+        }
+    }
+    return rv;
+}
+
++(NSString*)remappedLegacy:(NSString*)activityType{
+    static NSDictionary<NSString*,NSString*>*map_ = nil;
+    if(map_==nil){
+        map_ = @{
+            @"cross_country_skiing":            GC_TYPE_SKI_XC,
+            @"resort_skiing_snowboarding":      GC_TYPE_SKI_DOWN,
+            @"backcountry_skiing_snowboarding": GC_TYPE_SKI_BACK,
+            
+            @"snowmobiling":                     @"snowmobiling_ws",
+            @"snow_shoe":                        @"snow_shoe_ws",
+            @"skating":                          @"skating_ws",
+            @"skate_skiing":                     @"skate_skiing_ws",
+        };
+        RZRetain(map_);
+    }
+    
+    NSString * rv = map_[activityType];
+    if( rv == nil){
+        rv = activityType;
+    }
+        
+    return rv;
+}
+#pragma mark - Import
+
+-(GCActivityType*)activityTypeForFitSport:(NSString*)fitSport andSubSport:(NSString*)fitSubSport{
+    static NSDictionary<NSString*,GCActivityType*> * cache = nil;
+    static NSDictionary<NSString*,GCActivityType*> * cache_sub = nil;
+    if( cache == nil){
+        NSDictionary * sports = @{
+            @"ALPINE_SKIING": @"resort_skiing_snowboarding_ws",
+            @"AMERICAN_FOOTBALL": @"other",
+            @"BASKETBALL": @"other",
+            @"BOATING": @"boating",
+            @"BOXING": @"other",
+            @"CROSS_COUNTRY_SKIING": @"cross_country_skiing_ws",
+            @"CYCLING": @"cycling",
+            @"DRIVING": @"diving",
+            @"E_BIKING": @"road_biking",
+            @"FISHING": @"hunting_fishing",
+            @"FITNESS_EQUIPMENT": @"fitness_equipment",
+            @"FLOOR_CLIMBING": @"floor_climbing",
+            @"FLYING": @"flying",
+            @"GENERIC": @"other",
+            @"GOLF": @"golf",
+            @"HANG_GLIDING": @"hang_gliding",
+            @"HIKING": @"hiking",
+            @"HORSEBACK_RIDING": @"horseback_riding",
+            @"HUNTING": @"hunting_fishing",
+            @"ICE_SKATING": @"inline_skating",
+            @"INLINE_SKATING": @"inline_skating",
+            @"JUMPMASTER": @"fitness_equiment",
+            @"KAYAKING": @"whitewater_rafting_kayaking",
+            @"KITESURFING": @"wind_kite_surfing",
+            @"MOTORCYCLING": @"motorcycling",
+            @"MOUNTAINEERING": @"mountaineering",
+            @"MULTISPORT": @"multi_sport",
+            @"PADDLING": @"paddling",
+            @"RAFTING": @"boating",
+            @"ROCK_CLIMBING": @"rock_climbing",
+            @"ROWING": @"rowing",
+            @"RUNNING": @"running",
+            @"SAILING": @"sailing",
+            @"SKY_DIVING": @"sky_diving",
+            @"SNOWBOARDING": @"resort_skiing_snowboarding_ws",
+            @"SNOWMOBILING": @"snowmobiling_ws",
+            @"SNOWSHOEING": @"snow_shoe_ws",
+            @"SOCCER": @"other",
+            @"STAND_UP_PADDLEBOARDING": @"stand_up_paddleboarding",
+            @"SURFING": @"surfing",
+            @"SWIMMING": @"swimming",
+            @"TACTICAL": @"other",
+            @"TENNIS": @"tennis",
+            @"TRAINING": @"other",
+            @"TRANSITION": @"transition",
+            @"WAKEBOARDING": @"wakeboarding",
+            @"WALKING": @"walking",
+            @"WATER_SKIING": @"wakeboarding",
+            @"WINDSURFING": @"wind_kite_surfing",
+        };
+    
+        NSDictionary * subsports = @{
+            //@"GENERIC": @"tennis",
+            @"TREADMILL": @"treadmill_running",
+            @"STREET": @"street_running",
+            @"TRAIL": @"trail_running",
+            @"TRACK": @"track_running",
+            //@"SPIN": @"sailing",
+            @"INDOOR_CYCLING": @"indoor_cycling",
+            @"ROAD": @"road_biking",
+            @"MOUNTAIN": @"mountain_biking",
+            @"DOWNHILL": @"downhill_biking",
+            @"RECUMBENT": @"recumbent_cycling",
+            @"CYCLOCROSS": @"cyclocross",
+            //@"HAND_CYCLING": @"indoor_cycling",
+            @"TRACK_CYCLING": @"track_cycling",
+            @"INDOOR_ROWING": @"indoor_rowing",
+            @"ELLIPTICAL": @"elliptical",
+            @"STAIR_CLIMBING": @"stair_climbing",
+            @"LAP_SWIMMING": @"lap_swimming",
+            @"OPEN_WATER": @"open_water_swimming",
+            //@"FLEXIBILITY_TRAINING": @"strength_training",
+            @"STRENGTH_TRAINING": @"strength_training",
+            //@"WARM_UP": @"winter_sports",
+            //@"MATCH": @"stop_watch",
+            //@"EXERCISE": @"tennis",
+            //@"CHALLENGE": @"casual_walking",
+            //@"INDOOR_SKIING": @"indoor_rowing",
+            //@"CARDIO_TRAINING": @"strength_training",
+            //@"INDOOR_WALKING": @"indoor_rowing",
+            //@"E_BIKE_FITNESS": @"road_biking",
+            @"BMX": @"bmx",
+            @"CASUAL_WALKING": @"casual_walking",
+            @"SPEED_WALKING": @"speed_walking",
+            @"BIKE_TO_RUN_TRANSITION": @"bikeToRunTransition",
+            @"RUN_TO_BIKE_TRANSITION": @"runToBikeTransition",
+            @"SWIM_TO_BIKE_TRANSITION": @"swimToBikeTransition",
+            @"ATV": @"atv",
+            @"MOTOCROSS": @"motocross",
+            @"BACKCOUNTRY": @"backcountry_skiing_snowboarding_ws",
+            //@"RESORT": @"winter_sports",
+            @"RC_DRONE": @"rc_drone",
+            @"WINGSUIT": @"wingsuit_flying",
+            @"WHITEWATER": @"whitewater_rafting_kayaking",
+            @"SKATE_SKIING": @"skate_skiing_ws",
+            @"YOGA": @"yoga",
+            @"PILATES": @"pilates",
+            @"INDOOR_RUNNING": @"indoor_running",
+            @"GRAVEL_CYCLING": @"gravel_cycling",
+            //@"E_BIKE_MOUNTAIN": @"bikeToRunTransition",
+            //@"COMMUTING": @"boating",
+            //@"MIXED_SURFACE": @"wind_kite_surfing",
+            //@"NAVIGATE": @"pilates",
+            //@"TRACK_ME": @"track_running",
+            //@"MAP": @"all",
+            @"SINGLE_GAS_DIVING": @"single_gas_diving",
+            @"MULTI_GAS_DIVING": @"multi_gas_diving",
+            @"GAUGE_DIVING": @"gauge_diving",
+            @"APNEA_DIVING": @"apnea_diving",
+            @"APNEA_HUNTING": @"apnea_hunting",
+            //@"VIRTUAL_ACTIVITY": @"virtual_ride",
+            @"OBSTACLE": @"obstacle_run",
+
+        };
+        NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+        for (NSString * sport in sports) {
+            NSString * typeKey = sports[sport];
+            GCActivityType * type = self.typesByKey[typeKey];
+            if (type) {
+                dict[ sport.lowercaseString ] = type;
+            }
+        }
+        NSMutableDictionary * dict_sub = [NSMutableDictionary dictionary];
+        for (NSString*subsport in subsports) {
+            NSString * subtypeKey = subsports[subsport];
+            GCActivityType * type = self.typesByKey[subtypeKey];
+            if( type ){
+                dict_sub[ subsport.lowercaseString ] = type;
+            }
+        }
+        cache = RZReturnRetain(dict);
+        cache_sub = RZReturnRetain( dict_sub );
+    }
+    GCActivityType * rv = cache[ fitSport.lowercaseString ];
+    if( fitSubSport != nil){
+        GCActivityType * sub = cache_sub[ fitSubSport.lowercaseString ];
+        if( sub ){
+            rv = sub;
+        }
+    }
+    if( rv == nil) {
+        rv = [GCActivityType activityTypeForKey:fitSport.lowercaseString];
+    }
+    return rv;
+}
+
 -(GCActivityType*)activityTypeForStravaType:(NSString*)stravaType{
     NSDictionary<NSString*,GCActivityType*> * cache = nil;
     if( cache == nil){
@@ -323,9 +564,9 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
                        @"RUNTOBIKETRANSITION":@"runToBikeTransition",
                        @"MOTORCYCLING":@"motorcycling",
                        @"OTHER":@"other",
-                       @"BACKCOUNTRY_SKIING_SNOWBOARDING":@"backcountry_skiing_snowboarding",
+                       @"BACKCOUNTRY_SKIING_SNOWBOARDING_WS":@"backcountry_skiing_snowboarding_ws",
                        @"BOATING":@"boating",
-                       @"CROSS_COUNTRY_SKIING":@"cross_country_skiing",
+                       @"CROSS_COUNTRY_SKIING_WS":@"cross_country_skiing_ws",
                        @"DRIVING_GENERAL":@"driving_general",
                        @"FLYING":@"flying",
                        @"GOLF":@"golf",
@@ -333,13 +574,13 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
                        @"INLINE_SKATING":@"inline_skating",
                        @"MOUNTAINEERING":@"mountaineering",
                        @"PADDLING":@"paddling",
-                       @"RESORT_SKIING_SNOWBOARDING":@"resort_skiing_snowboarding",
+                       @"RESORT_SKIING_SNOWBOARDING_WS":@"resort_skiing_snowboarding_ws",
                        @"ROWING":@"rowing",
                        @"SAILING":@"sailing",
-                       @"SKATE_SKIING":@"skate_skiing",
-                       @"SKATING":@"skating",
-                       @"SNOWMOBILING":@"snowmobiling",
-                       @"SNOW_SHOE":@"snow_shoe",
+                       @"SKATE_SKIING_WS":@"skate_skiing_ws",
+                       @"SKATING_WS":@"skating_ws",
+                       @"SNOWMOBILING_WS":@"snowmobiling_ws",
+                       @"SNOW_SHOE_WS":@"snow_shoe_ws",
                        @"STAND_UP_PADDLEBOARDING":@"stand_up_paddleboarding",
                        @"WHITEWATER_RAFTING_KAYAKING":@"whitewater_rafting_kayaking",
                        @"WIND_KITE_SURFING":@"wind_kite_surfing",
@@ -359,47 +600,6 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
     }
     
     return cache[ input ];
-}
-
--(NSArray<GCActivityType*>*)allTypes{
-    NSArray * rv = [self.typesByKey.allValues sortedArrayUsingComparator:^(GCActivityType*a1, GCActivityType*a2){
-        return a1.typeId < a2.typeId ? NSOrderedAscending : (a1.typeId > a2.typeId ? NSOrderedDescending : NSOrderedSame);
-    }];
-    return rv;
-}
--(NSArray<NSString*>*)allTypesKeys{
-    NSArray * allTypes = [self allTypes];
-    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:allTypes.count];
-    for (GCActivityType * type in allTypes) {
-        [rv addObject:type.key];
-    }
-    return rv;
-}
-
--(NSUInteger)count{
-    return self.typesByKey.count;
-}
-
--(NSArray<GCActivityType*>*)allParentTypes{
-    NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithCapacity:self.typesByKey.count];
-    for (NSString * key in self.typesByKey) {
-        GCActivityType * type = self.typesByKey[key];
-        if (type.parentType != nil && !type.parentType.isRootType) {
-            rv[type.parentType] = rv[type.parentType] ? @([rv[type.parentType] integerValue]+1) : @(1);
-        }
-    }
-    return rv.allKeys;
-}
-
--(NSArray<GCActivityType*>*)allTypesForParent:(GCActivityType*)parentType{
-    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:self.typesByKey.count];
-    for (NSString * key in self.typesByKey) {
-        GCActivityType * type = self.typesByKey[key];
-        if (type.parentType != nil && [type.parentType isEqualToActivityType:parentType]){
-            [rv addObject:type];
-        }
-    }
-    return rv;
 }
 
 @end

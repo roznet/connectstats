@@ -51,7 +51,7 @@
     [super dealloc];
 }
 -(NSString*)url{
-    return @"https://connect.garmin.com/modern/proxy/activity-service/activity/activityTypes";
+    return GCWebActivityTypesModern();
 }
 
 -(NSString*)description{
@@ -67,6 +67,7 @@
 }
 
 -(void)process:(NSData *)theData andDelegate:(id<GCWebRequestDelegate>)delegate{
+    self.delegate = delegate;
 #if TARGET_IPHONE_SIMULATOR
     NSString * fn = self.fileName;
     [theData writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:true];
@@ -92,7 +93,7 @@
         self.stage = gcRequestStageSaving;
         [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
         
-        NSUInteger n = [[GCAppGlobal activityTypes] loadMissingFromGarmin:self.modern withDisplayInfoFrom:self.legacy];
+        NSUInteger n = [[GCActivityType activityTypes] loadMissingFromGarmin:self.modern withDisplayInfoFrom:self.legacy];
         if( n > 0){
             RZLog(RZLogInfo, @"Found %lu new types", (long unsigned)n);
         }

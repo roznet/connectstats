@@ -29,13 +29,6 @@
 #import "GCLap.h"
 #import "GCActivityCalculatedValue.h"
 
-#define CALC_PREFIX @"__Calc"
-
-#define CALC_ALTITUDE_GAIN CALC_PREFIX @"GainElevation"
-#define CALC_ALTITUDE_LOSS CALC_PREFIX @"LossElevation"
-#define CALC_NORMALIZED_POWER CALC_PREFIX @"NormalizedPower"
-#define CALC_NONZERO_POWER CALC_PREFIX @"NonZeroAvgPower"
-
 
 @implementation GCFieldsCalculatedTrack
 

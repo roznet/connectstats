@@ -42,6 +42,9 @@
 
 -(GCStatsDataSerieWithUnit*)dataSerieConvertedToUnit:(GCUnit*)unit;
 -(GCStatsDataSerieWithUnit*)dataSerieConvertedToXUnit:(GCUnit*)xUnit;
+/**
+ * Create a new serie from an other serie where every object is a duplicate
+ */
 +(GCStatsDataSerieWithUnit*)dataSerieWithOther:(GCStatsDataSerieWithUnit*)other;
 
 -(NSUInteger)count;

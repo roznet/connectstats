@@ -1,12 +1,12 @@
 PODS:
-  - Flurry-iOS-SDK/FlurrySDK (10.0.2)
-  - GenericJSON (2.0.0)
-  - GoogleMaps (3.5.0):
-    - GoogleMaps/Maps (= 3.5.0)
-  - GoogleMaps/Base (3.5.0)
-  - GoogleMaps/Maps (3.5.0):
+  - Flurry-iOS-SDK/FlurrySDK (10.1.0)
+  - GenericJSON (2.0.1)
+  - GoogleMaps (3.7.0):
+    - GoogleMaps/Maps (= 3.7.0)
+  - GoogleMaps/Base (3.7.0)
+  - GoogleMaps/Maps (3.7.0):
     - GoogleMaps/Base
-  - KeychainSwift (17.0.0)
+  - KeychainSwift (18.0.0)
 
 DEPENDENCIES:
   - Flurry-iOS-SDK/FlurrySDK
@@ -22,10 +22,10 @@ SPEC REPOS:
     - KeychainSwift
 
 SPEC CHECKSUMS:
-  Flurry-iOS-SDK: 71da0ebf2088b15d8899da71050efc8b33bfd21f
-  GenericJSON: a967fb5c199c9aae24063e47a771e04e305dc836
-  GoogleMaps: 32ca02de09de357a10ac773f2c70f1986751392d
-  KeychainSwift: 9f43f562dffc88af6efadb57d74b14c598eb337f
+  Flurry-iOS-SDK: be6bfad47f3b3c15a38b5e396935ef74512f1c38
+  GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
+  GoogleMaps: 55da829c68aa931f3ae982b9e341cc2f3d89c587
+  KeychainSwift: c46e1438d121e47459fb304ac88c5e058a2a91ed
 
 PODFILE CHECKSUM: e91e3f4de8dba7d52b9926dcd6d9c1ea64b3d1e7
 

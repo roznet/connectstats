@@ -43,6 +43,7 @@
 -(GCActivityType*)activityTypeForGarminId:(NSUInteger)garminActivityId;
 -(GCActivityType*)activityTypeForStravaType:(NSString*)stravaType;
 -(GCActivityType*)activityTypeForConnectStatsType:(NSString*)input;
+-(GCActivityType*)activityTypeForFitSport:(NSString*)fitSport andSubSport:(NSString*)fitSubSport;
 
 -(NSArray<GCActivityType*>*)allTypes;
 /**
@@ -63,4 +64,6 @@
  */
 -(NSUInteger)loadMissingFromGarmin:(NSArray<NSDictionary*>*)modern withDisplayInfoFrom:(NSArray<NSDictionary*>*)legacy;
 
+
++(NSString*)remappedLegacy:(NSString*)activityType;
 @end

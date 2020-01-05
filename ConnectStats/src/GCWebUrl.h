@@ -62,6 +62,7 @@ NSString * GCWebActivityURLSplits( NSString * activityID);
 NSString * GCWebActivityURLFitFile( NSString * activityID);
 
 NSString * GCWebActivityTypes(void);
+NSString * GCWebActivityTypesModern(void);
 NSString * GCWebUserData(void);
 NSString * GCWebGarminHeartRate(void);
 

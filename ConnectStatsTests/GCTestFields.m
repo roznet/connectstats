@@ -57,42 +57,36 @@
     
     cache = [GCFieldCache cacheWithDb:db andLanguage:@"fr"];
     [GCField setFieldCache: cache];
-    info = [cache infoForField:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING];
+    GCField * weightedMeanPace = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING];
+    info = [cache infoForField:weightedMeanPace];
     XCTAssertEqualObjects(info.displayName, @"Allure moy.");
     XCTAssertEqualObjects(info.uom, @"minperkm");
-    XCTAssertEqualObjects([[GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING] displayName], @"Allure moy.");
-    XCTAssertEqualObjects([[GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING] unitName], @"minperkm");
+    XCTAssertEqualObjects([weightedMeanPace displayName], @"Allure moy.");
+    XCTAssertEqualObjects([weightedMeanPace unitName], @"minperkm");
     
+    // Now use predefined, register will not change
     [cache registerField:@"WeightedMeanPace" activityType:GC_TYPE_RUNNING displayName:@"Pace" andUnitName:@"minpermile"];
-    info = [cache infoForField:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING];
-    XCTAssertEqualObjects(info.displayName, @"Pace");
-    XCTAssertEqualObjects(info.uom, @"minpermile");
-    XCTAssertEqualObjects([[GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING] displayName], @"Pace");
-    XCTAssertEqualObjects([[GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING] unitName], @"minpermile");
-    
-    // Second time register nothing happens
-    [cache registerField:@"WeightedMeanPace" activityType:GC_TYPE_RUNNING displayName:@"Pace23" andUnitName:@"kph"];
-    info = [cache infoForField:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING];
-    XCTAssertEqualObjects(info.displayName, @"Pace");
-    XCTAssertEqualObjects(info.uom, @"minpermile");
-    XCTAssertEqualObjects([[GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING] displayName], @"Pace");
-    XCTAssertEqualObjects([[GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING] unitName], @"minpermile");
+    info = [cache infoForField:weightedMeanPace];
+    XCTAssertEqualObjects(info.displayName, @"Allure moy.");
+    XCTAssertEqualObjects(info.uom, @"minperkm");
+    XCTAssertEqualObjects([weightedMeanPace displayName], @"Allure moy.");
+    XCTAssertEqualObjects([weightedMeanPace unitName], @"minperkm");
     
     // After prefer predefined go back to previous language
-    cache.preferPredefined = true;
-    info = [cache infoForField:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING];
+    info = [cache infoForField:weightedMeanPace];
     XCTAssertEqualObjects(info.displayName, @"Allure moy.");
     XCTAssertEqualObjects(info.uom, @"minperkm");
-    XCTAssertEqualObjects([[GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING] displayName], @"Allure moy.");
-    XCTAssertEqualObjects([[GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING] unitName], @"minperkm");
+    XCTAssertEqualObjects([weightedMeanPace displayName], @"Allure moy.");
+    XCTAssertEqualObjects([weightedMeanPace unitName], @"minperkm");
     
-    // REgister one that does not exists
+    // Register one that does not exists
+    GCField * weightedMeanPace2 = [GCField fieldForKey:@"WeightedMeanPace2" andActivityType:GC_TYPE_RUNNING];
     [cache registerField:@"WeightedMeanPace2" activityType:GC_TYPE_RUNNING displayName:@"Pace2" andUnitName:@"kph"];
-    info = [cache infoForField:@"WeightedMeanPace2" andActivityType:GC_TYPE_RUNNING];
+    info = [cache infoForField:weightedMeanPace2];
     XCTAssertEqualObjects(info.displayName, @"Pace2");
     XCTAssertEqualObjects(info.uom, @"kph");
-    XCTAssertEqualObjects([[GCField fieldForKey:@"WeightedMeanPace2" andActivityType:GC_TYPE_RUNNING] displayName], @"Pace2");
-    XCTAssertEqualObjects([[GCField fieldForKey:@"WeightedMeanPace2" andActivityType:GC_TYPE_RUNNING] unitName], @"kph");
+    XCTAssertEqualObjects([weightedMeanPace2 displayName], @"Pace2");
+    XCTAssertEqualObjects([weightedMeanPace2 unitName], @"kph");
     
     [db close];
     [GCField setFieldCache:oldCache];

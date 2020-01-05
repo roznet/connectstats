@@ -44,7 +44,8 @@
 #define GC_SYNC_KEY(act,service) [[act activityId] stringByAppendingString:service]
 
 NSString * INFO_ACTIVITY_TYPES = @"activity_types";
-NSString * INFO_RECENT_ACTIVITY_TYPES = @"recent_activity_types";
+NSString * INFO_ACTIVITY_TYPE_COUNT = @"activity_type_count";
+NSString * INFO_ACTIVITY_TYPE_LATEST = @"activity_type_latest";
 
 NSString * kNotifyOrganizerLoadComplete = @"kNotifyOrganizerLoadComplete";
 NSString * kNotifyOrganizerListChanged = @"kNotifyOrganizerListChanged";
@@ -143,7 +144,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     if (!self.info) {
         self.info = @{
                       INFO_ACTIVITY_TYPES: [NSMutableDictionary dictionary],
-                      INFO_RECENT_ACTIVITY_TYPES:[NSMutableDictionary dictionary],
                       };
     }
 }
@@ -162,20 +162,19 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
     if(type==nil)
         return;
-    NSNumber * cur = self.info[INFO_ACTIVITY_TYPES][type];
-    if (!cur) {
-        cur = @1;
+    NSDictionary * info = self.info[INFO_ACTIVITY_TYPES][type];
+    if (!info) {
+        info = @{ INFO_ACTIVITY_TYPE_COUNT : @1, INFO_ACTIVITY_TYPE_LATEST : act.date };
     }else{
-        cur = @(cur.integerValue+1);
-    }
-    self.info[INFO_ACTIVITY_TYPES][type] = cur;
-    // Within last 6m.
-    if (fabs([act.date timeIntervalSinceNow]) < 3600.0 * 24.0 * 180.0) {
-        NSDate * prev = self.info[INFO_RECENT_ACTIVITY_TYPES][type];
-        if (! prev || [prev compare:act.date]==NSOrderedAscending) {
-            self.info[INFO_RECENT_ACTIVITY_TYPES][type] = act.date;
+        NSDate * latest = info[INFO_ACTIVITY_TYPE_LATEST];
+        NSNumber * cur = info[INFO_ACTIVITY_TYPE_COUNT];
+        
+        if( [latest compare:act.date] == NSOrderedAscending ){
+            latest = act.date;
         }
+        info = @{ INFO_ACTIVITY_TYPE_COUNT: @(cur.integerValue+1), INFO_ACTIVITY_TYPE_LATEST : latest };
     }
+    self.info[INFO_ACTIVITY_TYPES][type] = info;
 }
 
 /** @brief Record All Available Activities Types, not just the one the currently list contains
@@ -186,16 +185,36 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 /** @brief ActivityTypes currently in the list of activities
  */
 -(NSArray*)listActivityTypes{
-    NSMutableArray * rv = [NSMutableArray arrayWithObject:GC_TYPE_ALL];
-    NSArray * infos = [self.info[INFO_ACTIVITY_TYPES] allKeys];
+    NSMutableArray * rv = [NSMutableArray array];
+    NSDictionary * infos = self.info[INFO_ACTIVITY_TYPES];
     if (infos) {
-        NSArray * main = @[ GC_TYPE_CYCLING,GC_TYPE_RUNNING,GC_TYPE_SWIMMING,GC_TYPE_TENNIS, GC_TYPE_DAY];
         for (NSString * type in infos) {
-            if ([main containsObject:type]) {
+            NSDictionary * info = infos[type];
+            NSNumber * count = info[INFO_ACTIVITY_TYPE_COUNT];
+            NSDate * latest = info[INFO_ACTIVITY_TYPE_LATEST];
+            NSTimeInterval elapsed = [latest timeIntervalSinceNow];
+            // Either more than 20 and oldest less than a year old or more than 5 and less than 3m
+            if( ( count.integerValue > 20 && fabs(elapsed) < 3600. * 24. * 360.) ||
+               ( count.integerValue > 5 && fabs(elapsed) < 3600. * 24. * 90.) )
+            {
                 [rv addObject:type];
             }
         }
     }
+    [rv sortUsingComparator:^(NSString * s1, NSString * s2){
+        GCActivityType * t1 = [GCActivityType activityTypeForKey:s1];
+        GCActivityType * t2 = [GCActivityType activityTypeForKey:s2];
+        
+        if( t1.sortOrder < t2.sortOrder ){
+            return NSOrderedAscending;
+        }else if (t1.sortOrder > t2.sortOrder){
+            return NSOrderedDescending;
+        }else{
+            return NSOrderedSame;
+        }
+    }];
+    // Add ALL at the end
+    [rv addObject:GC_TYPE_ALL];
     return rv;
 }
 
@@ -754,7 +773,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     NSMutableDictionary * rv = [NSMutableDictionary dictionary];
     for (GCActivity * act in self.allActivities) {
         GCService * service = act.service;
-        if( service == nil){
+        if( service == nil || ![service respondsToSelector:@selector(displayName)] ||
+           ![act.date isKindOfClass:[NSDate class]]){
             continue;
         }
         NSMutableDictionary * serviceDict = rv[service.displayName];
@@ -979,7 +999,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             }
 
             [filteredIndexes addObject:@(i)];
-            sum += act.sumDistance;
+            sum += [act summaryFieldValueInStoreUnit:gcFieldFlagSumDistance];
             cnt += 1.;
         }
     }
@@ -993,7 +1013,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         for (NSNumber * idx in filteredIndexes) {
             if (ii < 30 || (nn-ii)<5) {
                 GCActivity * act = _allActivities[idx.integerValue];
-                RZLog(RZLogInfo, @" %d: %@ %@ %f", ii, [act date], [act activityType], act.sumDistance );
+                RZLog(RZLogInfo, @" %d: %@ %@ %f", ii, [act date], [act activityType], [act summaryFieldValueInStoreUnit:gcFieldFlagSumDistance] );
             }
             ii++;
         }

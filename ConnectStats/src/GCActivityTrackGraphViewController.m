@@ -253,10 +253,10 @@
         self.legendView.gradientColors = [self.dataSource gradientColors:0];
         self.legendView.activity = self.activity;
         self.legendView.field = [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activity.activityType];
-
+        GCNumberWithUnit * num = [self.activity numberWithUnitForField:self.legendView.field];
         self.legendView.min = 0.;
-        self.legendView.mid = self.activity.sumDuration/2;
-        self.legendView.max = self.activity.sumDuration;
+        self.legendView.mid = num.value/2;
+        self.legendView.max = num.value;
         [self.legendView setNeedsDisplay];
 
     }else{

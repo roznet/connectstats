@@ -45,6 +45,7 @@
 +(id)field:(id)any forActivityType:(NSString*)activityType;
 +(GCField*)fieldForKey:(NSString*)field andActivityType:(NSString*)activityType;
 +(GCField*)fieldForFlag:(gcFieldFlag)fieldFlag andActivityType:(NSString *)activityType;
++(GCField*)fieldForAggregated:(gcAggregatedField)aggregatedField andActivityType:(NSString*)activityType;
 
 -(BOOL)isEqualToField:(GCField*)other;
 -(NSComparisonResult)compare:(GCField*)other;
@@ -87,6 +88,8 @@
 
 -(BOOL)hasSuffix:(NSString*)suf;
 -(BOOL)hasPrefix:(NSString*)pref;
+
++(NSString*)displayNameImpliedByFieldKey:(NSString *)fieldKey;
 
 @end
 

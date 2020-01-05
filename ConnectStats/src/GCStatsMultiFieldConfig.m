@@ -63,6 +63,13 @@
     return [GCStatsMultiFieldConfig fieldListConfigFrom:self];
 }
 
+-(NSString*)description{
+    return [NSString stringWithFormat:@"<%@: %@ %@>", NSStringFromClass([self class]),
+                self.activityType,
+                [GCViewConfig viewChoiceDesc:self.viewChoice]
+            ];
+}
+
 -(BOOL)isEqualToConfig:(GCStatsMultiFieldConfig*)other{
     return [self.activityType isEqualToString:other.activityType] && self.viewChoice==other.viewChoice && self.useFilter == other.useFilter
     && self.calChoice==other.calChoice && self.historyStats==other.historyStats;

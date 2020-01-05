@@ -83,7 +83,7 @@
         GCXMLElement * schemaField = [GCXMLElement element:@"gx:SimpleArrayField"];
         [schemaField addParameter:@"name" withValue:key];
         [schemaField addParameter:@"type" withValue:@"float"];
-        [schemaField addChild:[GCXMLElement element:@"displayName" withValue:[GCFields fieldDisplayName:key activityType:activityType]]];
+        [schemaField addChild:[GCXMLElement element:@"displayName" withValue:[GCField fieldForKey:key andActivityType:activityType].displayName]];
         [schema addChild:schemaField];
     }
 
@@ -134,7 +134,7 @@
     }
     NSMutableArray * trackchildren = [NSMutableArray arrayWithArray:when];
     [trackchildren addObjectsFromArray:coords];
-    track.children = trackchildren;
+    [track addChildren:trackchildren];
 
     GCXMLElement * extended = [GCXMLElement element:@"ExtendedData"];
     GCXMLElement * schemaData = [GCXMLElement element:@"SchemaData"];

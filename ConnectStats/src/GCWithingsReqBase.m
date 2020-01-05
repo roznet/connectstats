@@ -68,7 +68,6 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
     [_withingsAuth release];
     [_oauthToken release];
     [_oauthTokenSecret release];
-    [_userId release];
     [_navigationController release];
     [_lastError release];
     

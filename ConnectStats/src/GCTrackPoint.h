@@ -76,6 +76,7 @@
 -(GCTrackPoint*)initWithDictionary:(NSDictionary*)aDict forActivity:(NSObject<GCTrackPointDelegate>*)act NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithTrackPoint:(GCTrackPoint*)other NS_DESIGNATED_INITIALIZER;
+-(GCTrackPoint*)initWithTCXElement:(GCXMLElement*)element;
 -(void)saveToDb:(FMDatabase*)trackdb;
 -(void)addExtraFromResultSet:(FMResultSet*)res inActivity:(GCActivity*)act;
 

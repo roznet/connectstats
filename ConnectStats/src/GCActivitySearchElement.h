@@ -49,14 +49,10 @@ typedef NS_ENUM(NSUInteger,gcSearchComparison) {
 @property (nonatomic,retain) NSString * needle;
 @end
 
-@interface GCSearchElementActivityField : GCActivitySearchElement{
-    gcFieldFlag field;
-    double value;
-    GCUnit * unit;
-}
+@interface GCSearchElementActivityField : GCActivitySearchElement
 
-@property (nonatomic,assign) gcFieldFlag field;
-@property (nonatomic,retain) NSString * summaryField;
+@property (nonatomic,assign) gcFieldFlag fieldFlag;
+@property (nonatomic,retain) NSString * fieldKey;
 @property (nonatomic,assign) double value;
 @property (nonatomic,assign) gcSearchComparison comparison;
 @property (nonatomic,retain) GCUnit* unit;

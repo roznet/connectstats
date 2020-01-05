@@ -109,11 +109,10 @@
 
     [self registerTennisFields];
 
-    self.sumDuration = timeMinutes.doubleValue*60.;
+    [self setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.minute andValue:timeMinutes.doubleValue]
+                   forField:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityType] ];
 
-
-    [self setSummaryDataFromKeyDict:@{@"SumDuration":[GCActivitySummaryValue activitySummaryValueForDict:@{@"value":@(self.sumDuration),@"uom":@"second"} andField:@"SumDuration"],
-                         @"shots":[GCActivitySummaryValue activitySummaryValueForDict:@{@"value":shots,@"uom":@"shots"} andField:@"shots"]}];
+    [self setSummaryDataFromKeyDict:@{@"shots":[GCActivitySummaryValue activitySummaryValueForDict:@{@"value":shots,@"uom":@"shots"} andField:@"shots"]}];
 
     self.flags  = gcFieldFlagSumDuration+gcFieldFlagTennisShots;
     self.speedDisplayUom = @"kph";
@@ -291,7 +290,7 @@
     }
 
     [self.tennisdb executeUpdate:@"INSERT INTO babolat_sessions (session_id,start_date,shots,play_time) VALUES(?,?,?,?)",
-     session_id,self.date,@(self.shots),@(self.sumDuration)];
+     session_id,self.date,@(self.shots),@([self summaryFieldValueInStoreUnit:gcFieldFlagSumDuration])];
     for (NSString*field in self.shotsData) {
         GCActivityTennisShotValues *val = self.shotsData[field];
         [val saveToDb:tennisdb forSessionId:session_id];
