@@ -499,15 +499,18 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             break;
         default:
         {
-            rv = [self numberWithUnitForFieldKey:field.key].unit;
-            if (!rv) {
-                GCTrackPointExtraIndex * extra = self.cachedExtraTracksIndexes[field];
-                if (extra) {
-                    rv = extra.unit;
+            rv = field.unit;
+            if( ! rv ){
+                rv = [self numberWithUnitForFieldKey:field.key].unit;
+                if (!rv) {
+                    GCTrackPointExtraIndex * extra = self.cachedExtraTracksIndexes[field];
+                    if (extra) {
+                        rv = extra.unit;
+                    }
                 }
-            }
-            if (!rv) {
-                rv = [field unit];
+                if (!rv) {
+                    rv = [field unit];
+                }
             }
         }
     }
