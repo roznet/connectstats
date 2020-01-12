@@ -95,6 +95,13 @@ static const NSUInteger kActivityRequestCount = 20;
     return GCWebModernSearchURL(self.start, kActivityRequestCount);
 }
 
+-(NSString*)debugDescription{
+    return [NSString stringWithFormat:@"<%@: %@ %@>",
+            NSStringFromClass([self class]),
+            self.start == 0 ? @"first" : [self.lastFoundDate YYYYMMDD],
+            [self.urlDescription truncateIfLongerThan:192 ellipsis:@"..."]];
+}
+
 -(NSString*)description{
 
     switch (self.stage) {

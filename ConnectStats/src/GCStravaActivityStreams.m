@@ -95,6 +95,12 @@
 -(NSDictionary*)postData{
     return nil;
 }
+-(NSString*)debugDescription{
+    return [NSString stringWithFormat:@"<%@: %@ %@>",
+            NSStringFromClass([self class]),
+            self.activity.activityId,
+            [self.urlDescription truncateIfLongerThan:192 ellipsis:@"..."] ];
+}
 
 -(NSString*)description{
     if (self.navigationController) {

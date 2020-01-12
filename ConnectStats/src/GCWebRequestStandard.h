@@ -38,11 +38,12 @@ extern NSStringEncoding kRequestDebugFileEncoding;
 
 @property (nonatomic,assign) GCWebStatus status;
 @property (nonatomic,assign) gcRequestStage stage;
+@property (nonatomic,readonly) NSString * stageDescription;
 @property (nonatomic,strong) GCWebRequestStandard * nextReq;
 @property (nonatomic,strong) NSString*theString;
 @property (nonatomic,assign) NSStringEncoding encoding;
 @property (nonatomic,assign) id<GCWebRequestDelegate> delegate;
-
+@property (nonatomic,readonly) NSString * urlDescription;
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 
 -(void)process;

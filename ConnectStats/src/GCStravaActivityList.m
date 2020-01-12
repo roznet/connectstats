@@ -83,6 +83,12 @@
 -(NSDictionary*)postData{
     return nil;
 }
+-(NSString*)debugDescription{
+    return [NSString stringWithFormat:@"<%@: %@ %@>",
+            NSStringFromClass([self class]),
+            self.page == 0 ? @"first" : [self.lastFoundDate YYYYMMDD],
+            [self.urlDescription truncateIfLongerThan:192 ellipsis:@"..."]];
+}
 
 -(NSString*)description{
     if (self.navigationController) {

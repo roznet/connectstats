@@ -56,6 +56,12 @@
     }
     return @"https://wbsapi.withings.net/measure?action=getmeas";
 }
+-(NSString*)debugDescription{
+    return [NSString stringWithFormat:@"<%@: %@ %@>",
+            NSStringFromClass([self class]),
+            [self.fromDate YYYYMMDD],
+            [self.urlDescription truncateIfLongerThan:192 ellipsis:@"..."] ];
+}
 
 -(NSDictionary*)postData{
     return nil;

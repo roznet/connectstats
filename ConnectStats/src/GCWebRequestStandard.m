@@ -41,6 +41,32 @@ NSStringEncoding kRequestDebugFileEncoding = NSUTF8StringEncoding;
     [super dealloc];
 }
 #endif
+-(NSString*)stageDescription{
+    switch (self.stage) {
+        case gcRequestStageSaving:
+            return @"Saving";
+        case gcRequestStageParsing:
+            return @"Parsing";
+        case gcRequestStageDownload:
+            return @"Downloading";
+    }
+    return @"Invalid";
+}
+
+-(NSString*)debugDescription{
+    return [NSString stringWithFormat:@"<%@: %@>", NSStringFromClass([self class]), [self.urlDescription truncateIfLongerThan:192 ellipsis:@"..."]];
+}
+-(NSString*)urlDescription{
+    NSString * url = [self url];
+    if( url == nil && [self respondsToSelector:@selector(preparedUrlRequest)]){
+        NSURLRequest * preped = [self preparedUrlRequest];
+        url = preped.URL.absoluteString;
+    }
+    if( url == nil ){
+        url = @"NoUrl";
+    }
+    return url;
+}
 
 -(NSString*)description{
     return @"";

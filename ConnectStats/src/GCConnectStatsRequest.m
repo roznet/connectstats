@@ -88,6 +88,7 @@
     }
 }
 
+
 +(void)logout{
     [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_USER_ID intVal:0];
     [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_TOKEN_ID intVal:0];

@@ -51,6 +51,12 @@
     [activityId release];
     [super dealloc];
 }
+-(NSString*)debugDescription{
+    return [NSString stringWithFormat:@"<%@: %@ %@>",
+            NSStringFromClass([self class]),
+            self.activityId,
+            [self.urlDescription truncateIfLongerThan:192 ellipsis:@"..."] ];
+}
 
 -(NSString*)description{
     switch (self.stage) {
