@@ -1486,14 +1486,12 @@
                 GCNumberWithUnit * save = [[self numberWithUnitForField:field] convertToUnit:[self storeUnitForField:field]];
                 FMDatabase * db = self.db;
                 if( db ){
-                    [db beginTransaction];
                     NSString * fieldKey = field.key;
                     if( field.fieldFlag == gcFieldFlagWeightedMeanSpeed){
                         fieldKey = @"WeightedMeanSpeed";// avoid pace
                     }
                     NSString * query = [NSString stringWithFormat:@"UPDATE gc_activities SET %@=? WHERE activityId=?", fieldKey];
-                    [db executeUpdate:query, @(save.value), self.activityId];
-                    [db commit];
+                    RZEXECUTEUPDATE(db, query, @(save.value), self.activityId);
                 }
             }
         }

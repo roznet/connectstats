@@ -153,7 +153,7 @@
     GCHealthKitDayDetailParser * parser = [GCHealthKitDayDetailParser parserWithSamples:self.samples];
     parser.sourceValidator = [[GCAppGlobal profile] currentSourceValidator];
     [parser parse:^(NSArray*points){
-        if (points.count>0) {
+        if (points) {
             [[GCAppGlobal organizer] registerActivity:aId withTrackpoints:points andLaps:nil];
         }
     }];

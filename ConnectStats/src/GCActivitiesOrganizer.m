@@ -1061,6 +1061,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
     for (idx=0; idx < _allActivities.count; idx++ ) {
         GCActivity * act = _allActivities[idx];
+        // Don't look at day activities only fitness
+        if( [act.activityType isEqualToString:GC_TYPE_DAY] ){
+            continue;
+        }
         if ([act.activityId isEqualToString:first]) {
             foundFirst = true;
         }

@@ -312,7 +312,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if( [field isCalculatedField] ){
         GCActivitySummaryValue * sumVal = self.calculatedFields[field];
         GCActivitySummaryValue * newVal = nil;
-        if( !sumVal || ![nu compare:sumVal.numberWithUnit withTolerance:eps] ){
+        if( !sumVal || [nu compare:sumVal.numberWithUnit withTolerance:eps] != NSOrderedSame){
             newVal = [GCActivitySummaryValue activitySummaryValueForField:field.key value:nu];
             NSMutableDictionary * newDict = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
             newDict[field] = newVal;
@@ -322,7 +322,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }else{
         GCActivitySummaryValue * sumVal = self.summaryData[field];
         GCActivitySummaryValue * newVal = nil;
-        if( !sumVal || ![nu compare:sumVal.numberWithUnit withTolerance:eps] ){
+        if( !sumVal || [nu compare:sumVal.numberWithUnit withTolerance:eps] != NSOrderedSame){
             newVal = [GCActivitySummaryValue activitySummaryValueForField:field.key value:nu];
             NSMutableDictionary * newDict = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
             newDict[field] = newVal;
@@ -363,7 +363,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         case gcFieldFlagWeightedMeanSpeed:
         {
             double val = [nu convertToUnitName:STOREUNIT_SPEED].value;
-            rv = fabs( self.weightedMeanHeartRate - val) > eps;
+            rv = fabs( self.weightedMeanSpeed - val) > eps;
             self.weightedMeanSpeed = val;
             self.flags |= gcFieldFlagWeightedMeanSpeed;
             break;
@@ -1236,9 +1236,11 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                     break;
                 case gcDownloadMethodHealthKit:
                 {
+#if !TARGET_OS_SIMULATOR
                     if ([self.activityType isEqualToString:GC_TYPE_DAY]) {
                         [[GCAppGlobal web] healthStoreDayDetails:self.date];
                     }
+#endif
                     break;
                 }
                 case gcDownloadMethodConnectStats:
