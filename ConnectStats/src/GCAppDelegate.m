@@ -198,9 +198,6 @@ void checkVersion(){
     // Swift initializations:
     [self setupSegmentOrganizer];
 
-    if ([GCAppGlobal healthStatsVersion]) {
-        self.watch = [[[GCWatchSessionManager alloc] init] autorelease];
-    }
     [RZViewConfig setFontStyle:[GCAppGlobal configGetInt:CONFIG_FONT_STYLE defaultValue:gcFontStyleDynamicType]];
 
 	_window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];

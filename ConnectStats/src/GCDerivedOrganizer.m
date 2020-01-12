@@ -169,7 +169,7 @@ static BOOL kDerivedEnabled = true;
 -(void)loadFromDb{
     self.derivedSeries= [NSMutableDictionary dictionaryWithCapacity:10];
 
-    if (![GCAppGlobal healthStatsVersion] && kDerivedEnabled) {
+    if ( kDerivedEnabled) {
         FMDatabase * db = [self deriveddb];
         NSMutableDictionary * filenameMap = [NSMutableDictionary dictionary];
 
@@ -703,7 +703,7 @@ static BOOL kDerivedEnabled = true;
 }
 
 -(void)processSome{
-    if ([GCAppGlobal healthStatsVersion] || !kDerivedEnabled) {
+    if (!kDerivedEnabled) {
         [self notifyForString:kNOTIFY_DERIVED_END];
         return;
     }

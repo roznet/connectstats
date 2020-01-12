@@ -252,18 +252,12 @@
             }else if(self.config.secondGraphChoice == gcOneFieldSecondGraphHistogram){
                 cache = [GCSimpleGraphCachedDataSource fieldHistoryHistogramFrom:_activityStats width:tableView.frame.size.width];
             }else if(self.config.secondGraphChoice == gcOneFieldSecondGraphPerformance){
-                if ([GCAppGlobal healthStatsVersion]) {
-                    NSDate *from=[[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-3m"]];
-                    cache = [GCSimpleGraphCachedDataSource historyView:_activityStats calendarUnit:NSCalendarUnitWeekOfYear graphChoice:gcGraphChoiceCumulative after:from];
-
-                }else{
-                    NSDate *from=[[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-6m"]];
-                    self.performanceAnalysis = [GCHistoryPerformanceAnalysis performanceAnalysisFromDate:from forField:self.config.field];
-
-                    [self.performanceAnalysis calculate];
-
-                    cache = [GCSimpleGraphCachedDataSource performanceAnalysis:self.performanceAnalysis width:tableView.frame.size.width];
-                }
+                NSDate *from=[[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-6m"]];
+                self.performanceAnalysis = [GCHistoryPerformanceAnalysis performanceAnalysisFromDate:from forField:self.config.field];
+                
+                [self.performanceAnalysis calculate];
+                
+                cache = [GCSimpleGraphCachedDataSource performanceAnalysis:self.performanceAnalysis width:tableView.frame.size.width];
             }
             [cell setDataSource:cache andConfig:cache];
             return cell;

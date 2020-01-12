@@ -75,7 +75,7 @@
     GCHistoryFieldDataSerie * fieldDataSerie = [[GCHistoryFieldDataSerie alloc] initFromConfig:config] ;
     [fieldDataSerie loadFromOrganizer];
 
-    NSCalendarUnit unit = [GCAppGlobal healthStatsVersion]?NSCalendarUnitMonth : NSCalendarUnitYear;
+    NSCalendarUnit unit = NSCalendarUnitYear;
 
 
     if (![fieldDataSerie isEmpty]) {

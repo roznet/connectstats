@@ -91,9 +91,6 @@
     self.navigationItem.leftBarButtonItem = self.activityTypeButton.activityTypeButtonItem;
 
     [self setupBarButtonItem];
-    if ([GCAppGlobal healthStatsVersion]) {
-        self.config.activityType = GC_TYPE_DAY;
-    }
 
 }
 
@@ -476,7 +473,7 @@
     GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
     graphCell.legend = TRUE;
     GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
-    NSCalendarUnit unit = [GCAppGlobal healthStatsVersion]?NSCalendarUnitMonth : NSCalendarUnitYear;
+    NSCalendarUnit unit = NSCalendarUnitYear;
 
     if (![fieldDataSerie isEmpty]) {
 
@@ -529,12 +526,7 @@
         rv = [self tableView:tableView performanceCellForRowAtIndexPath:indexPath];
 
     }else if (indexPath.row == GC_SUMMARY_DERIVED){
-
-        if ([GCAppGlobal healthStatsVersion]) {
-            rv = [self tableView:tableView weeklyBarsCellForRowAtIndexPath:indexPath];
-        }else{
-            rv = [self tableView:tableView derivedCellForRowAtIndexPath:indexPath];
-        }
+        rv = [self tableView:tableView derivedCellForRowAtIndexPath:indexPath];
     }else if(indexPath.row == GC_SUMMARY_DERIVED_HIST){
         rv = [self tableView:tableView derivedHistCellForRowAtIndexPath:indexPath];
     }
@@ -777,10 +769,6 @@
 
 -(void)setupForCurrentActivityAndViewChoice:(gcViewChoice)choice{
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.config];
-    if (![GCAppGlobal healthStatsVersion]) {
-        // healthStats version prefers to stay on DAY type
-        nconfig.activityType = [[GCAppGlobal organizer] currentActivity].activityType;
-    }
     nconfig.viewChoice = choice;
     [self setupForFieldListConfig:nconfig];
 }
