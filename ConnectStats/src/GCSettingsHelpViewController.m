@@ -49,7 +49,7 @@
     if (rv) {
         rv.url = url;
         if( rv.url == nil){
-            NSString * aUrl = [GCAppGlobal healthStatsVersion] ? @"https://www.ro-z.net/healthstats" : @"https://ro-z.net/blog/connectstats/documentation/";
+            NSString * aUrl = @"https://ro-z.net/blog/connectstats/documentation/";
             
 #if TARGET_IPHONE_SIMULATOR
             //aUrl = @"http://localhost/connectstats/connectstatsdoc.php";

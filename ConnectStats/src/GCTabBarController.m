@@ -121,12 +121,6 @@
     NSString * detailsTitle = NSLocalizedString(@"Details",     @"TabBar Title");
     NSString * activityTitle = NSLocalizedString(@"Activities",  @"TabBar Title");
 
-    if ([GCAppGlobal healthStatsVersion]) {
-        detailImg = [GCViewIcons tabBarIconFor:gcIconTabDay];
-        detailsTitle = NSLocalizedString(@"Day Details",     @"TabBar Title");
-        activityTitle = NSLocalizedString(@"List",  @"TabBar Title");
-    }
-
     UITabBarItem * activityItem	= [[UITabBarItem alloc] initWithTitle:activityTitle                                         image:activityImg tag:0];
     UITabBarItem * detailItem	= [[UITabBarItem alloc] initWithTitle:detailsTitle                                          image:detailImg tag:0];
     UITabBarItem * calendarItem	= [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Calendar",    @"TabBar Title")	image:calendarImg tag:0];

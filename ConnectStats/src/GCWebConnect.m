@@ -326,7 +326,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 }
 
 -(void)log:(id<GCWebRequest>)req stage:(NSString*)stage{
-    RZLog(RZLogInfo, @"%@ %@ %@ %@",stage,[RZMemory formatMemoryInUse],[self describeReq:req],[req description]);
+    RZLog(RZLogInfo, @"%@ %@ %@",stage,[RZMemory formatMemoryInUse],[req debugDescription]);
 }
 
 -(void)next{
@@ -447,17 +447,8 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 -(NSString*)currentDebugDescription{
     NSString * rv = @"No Requests";
 
-    if (self.currentRequestObject) {
-        NSString * url = [self.currentRequestObject url];
-        if( url == nil && [self.currentRequestObject respondsToSelector:@selector(preparedUrlRequest)]){
-            NSURLRequest * preped = [self.currentRequestObject preparedUrlRequest];
-            url = preped.URL.absoluteString;
-        }
-        if( url == nil ){
-            url = @"NoUrl";
-        }
-        rv = [NSString stringWithFormat:@"%@: %@ (%@)", NSStringFromClass([self.currentRequestObject class]), self.currentRequestObject.description, url];
-        
+    if ([self.currentRequestObject respondsToSelector:@selector(debugDescription)]) {
+        rv = [self.currentRequestObject debugDescription];
     }
     return rv;
 }

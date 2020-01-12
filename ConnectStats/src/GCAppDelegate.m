@@ -198,9 +198,6 @@ void checkVersion(){
     // Swift initializations:
     [self setupSegmentOrganizer];
 
-    if ([GCAppGlobal healthStatsVersion]) {
-        self.watch = [[[GCWatchSessionManager alloc] init] autorelease];
-    }
     [RZViewConfig setFontStyle:[GCAppGlobal configGetInt:CONFIG_FONT_STYLE defaultValue:gcFontStyleDynamicType]];
 
 	_window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -562,6 +559,19 @@ void checkVersion(){
         needToSaveSettings = true;
         if( ! self.firstTimeEver ){
             [GCWeather fixWindSpeed:self.db];
+        }
+    }
+    
+    if( [self isFirstTimeForFeature:@"REMOVE_BAD_HEALTHKIT_DUPLICATES"]){
+        needToSaveSettings = true;
+        if( ! self.firstTimeEver ){
+            if( [self.db tableExists:@"gc_duplicate_activities"]){
+                int count = [self.db intForQuery:@"SELECT COUNT(*) FROM gc_duplicate_activities WHERE duplicateActivityId LIKE '__healthkit__%'"];
+                if( count > 0){
+                    RZLog(RZLogInfo, @"Fixing healthkit duplicate (%d)", count);
+                    RZEXECUTEUPDATE(self.db, @"DELETE FROM gc_duplicate_activities WHERE duplicateActivityId LIKE '__healthkit__%'");
+                }
+            }
         }
     }
         

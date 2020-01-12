@@ -94,8 +94,7 @@
 
 -(void)buildRemap{
     self.remap = [RZTableIndexRemap tableIndexRemap];
-    BOOL connectStatsVersion = [GCAppGlobal connectStatsVersion];
-    BOOL healthStatsVersion  = [GCAppGlobal healthStatsVersion];
+
     BOOL debugIsEnabled = [[GCAppGlobal configGetString:CONFIG_ENABLE_DEBUG defaultValue:CONFIG_ENABLE_DEBUG_OFF] isEqualToString:CONFIG_ENABLE_DEBUG_ON];
     
     NSMutableArray * dynamic = [NSMutableArray arrayWithArray:
@@ -158,30 +157,22 @@
                                                                 @( GC_HEALTHKIT_SOURCE     )]];
     }
         
-#ifdef GC_USE_HEALTHKIT
-    if (healthStatsVersion) {
-        self.showHealthKit   = true;
-    }
-    
-#endif
     // for withings
     [self.remap addSection:GC_SECTIONS_WITHINGS withRows:@[
                                                            @( GC_ROW_SERVICE_NAME ),
                                                            @( GC_ROW_AUTO         ),
                                                            @( GC_ROW_STATUS       )]];
-    if (connectStatsVersion) {
-        
-        [self.remap addSection:GC_SECTIONS_OPTIONS withRows:@[
-            @( GC_OPTIONS_DOWNLOAD_DETAILS ),
-            @( GC_OPTIONS_MERGE         )
-        ]];
-        if( debugIsEnabled ){
-            [self.remap addSection:GC_SECTIONS_BABOLAT withRows:@[
-                @( GC_BABOLAT_SERVICE_NAME ),
-                @( GC_BABOLAT_ENABLE       ),
-                @( GC_BABOLAT_USERNAME     ),
-                @( GC_BABOLAT_PWD          )]];
-        }
+
+    [self.remap addSection:GC_SECTIONS_OPTIONS withRows:@[
+        @( GC_OPTIONS_DOWNLOAD_DETAILS ),
+        @( GC_OPTIONS_MERGE         )
+    ]];
+    if( debugIsEnabled ){
+        [self.remap addSection:GC_SECTIONS_BABOLAT withRows:@[
+            @( GC_BABOLAT_SERVICE_NAME ),
+            @( GC_BABOLAT_ENABLE       ),
+            @( GC_BABOLAT_USERNAME     ),
+            @( GC_BABOLAT_PWD          )]];
     }
     
 

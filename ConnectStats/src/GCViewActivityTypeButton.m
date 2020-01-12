@@ -108,7 +108,7 @@
         if (filter) {
             [self.activityTypeButtonItem setTitle:NSLocalizedString( @"Search", @"Activity Type Button")];
         }else{
-            NSString * allLabel = [GCAppGlobal healthStatsVersion] ? NSLocalizedString(@"Workouts", @"Activity Type Button") : NSLocalizedString(@"All", @"Activity Type Button");
+            NSString * allLabel = NSLocalizedString(@"All", @"Activity Type Button");
             (self.activityTypeButtonItem).title = allLabel;
         }
     }else{

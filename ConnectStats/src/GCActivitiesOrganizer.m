@@ -301,9 +301,13 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     if ([_db tableExists:@"gc_duplicate_activities"]) {
         res = [_db executeQuery:@"SELECT * FROM gc_duplicate_activities"];
         while ([res next]) {
-            duplicates[[res stringForColumn:@"activityId"]] = [res stringForColumn:@"duplicateActivityId"];
+            NSString * activityId = [res stringForColumn:@"activityId"];
+            NSString * duplicateActivityId = [res stringForColumn:@"duplicateActivityId"];
+            // some account somehow had duplicate as healthkit
+            if( ![duplicateActivityId hasPrefix:@"__healthkit__"]){
+                duplicates[activityId] = duplicateActivityId;
+            }
         }
-
     }
     self.duplicateActivityIds = duplicates;
 
@@ -1061,6 +1065,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
     for (idx=0; idx < _allActivities.count; idx++ ) {
         GCActivity * act = _allActivities[idx];
+        // Don't look at day activities only fitness
+        if( [act.activityType isEqualToString:GC_TYPE_DAY] ){
+            continue;
+        }
         if ([act.activityId isEqualToString:first]) {
             foundFirst = true;
         }

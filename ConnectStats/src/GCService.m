@@ -169,25 +169,24 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
             rv.service = gcServiceGarmin;
             rv.prefix = GC_SERVICE_GARMIN;
         }else{
-            if ([aId hasPrefix:GC_SERVICE_STRAVA]) {
+            if([aId hasPrefix:GC_SERVICE_CONNECTSTATS]){
+                rv.service = gcServiceConnectStats;
+                rv.prefix = GC_SERVICE_CONNECTSTATS;
+            }else if ([aId hasPrefix:GC_SERVICE_STRAVA]) {
                 rv.service = gcServiceStrava;
                 rv.prefix = GC_SERVICE_STRAVA;
-            }else if ([aId hasPrefix:GC_SERVICE_BABOLAT]){
-                rv.service = gcServiceBabolat;
-                rv.prefix = GC_SERVICE_BABOLAT;
             }else if ([aId hasPrefix:GC_SERVICE_WITHINGS]){
                 rv.service = gcServiceWithings;
                 rv.prefix = GC_SERVICE_WITHINGS;
             }else if([aId hasPrefix:GC_SERVICE_HEALTHKIT]){
                 rv.service = gcServiceHealthKit;
                 rv.prefix = GC_SERVICE_HEALTHKIT;
+            }else if ([aId hasPrefix:GC_SERVICE_BABOLAT]){
+                rv.service = gcServiceBabolat;
+                rv.prefix = GC_SERVICE_BABOLAT;
             }else if([aId hasPrefix:GC_SERVICE_FITBIT]){
                 rv.service = gcServiceFitBit;
                 rv.prefix = GC_SERVICE_FITBIT;
-                
-            }else if([aId hasPrefix:GC_SERVICE_CONNECTSTATS]){
-                rv.service = gcServiceConnectStats;
-                rv.prefix = GC_SERVICE_CONNECTSTATS;
             }else{
                 rv = nil;
             }

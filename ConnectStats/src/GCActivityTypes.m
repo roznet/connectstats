@@ -474,28 +474,28 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
 }
 
 -(GCActivityType*)activityTypeForStravaType:(NSString*)stravaType{
-    NSDictionary<NSString*,GCActivityType*> * cache = nil;
+    static NSMutableDictionary<NSString*,GCActivityType*> * cache = nil;
     if( cache == nil){
         NSDictionary * types = @{
-                                 @"AlpineSki":@"resort_skiing_snowboarding",
-                                 @"BackcountrySki": @"backcountry_skiing_snowboarding",
+                                 @"AlpineSki":@"resort_skiing_snowboarding_ws",
+                                 @"BackcountrySki": @"backcountry_skiing_snowboarding_ws",
                                  @"Canoeing" :@"boating",
                                  @"Crossfit":@"fitness_equipment",
                                  @"EBikeRide":GC_TYPE_CYCLING,
                                  @"Elliptical":@"elliptical",
                                  @"Hike":   GC_TYPE_HIKING,
                                  @"IceSkate": @"skating",
-                                 @"InlineSkate":@"inline_skating",
+                                 @"InlineSkate":@"inline_skating_ws",
                                  @"Kayaking":@"whitewater_rafting_kayaking",
                                  @"Kitesurf":@"wind_kite_surfing",
-                                 @"NordicSki":@"cross_country_skiing",
+                                 @"NordicSki":@"cross_country_skiing_ws",
                                  @"Ride":   GC_TYPE_CYCLING,
                                  @"RockClimbing":@"rock_climbing",
                                  @"RollerSki":@"skate_skiing",
                                  @"Rowing" :@"rowing",
                                  @"Run":    GC_TYPE_RUNNING,
-                                 @"Snowboard":@"resort_skiing_snowboarding",
-                                 @"Snowshoe":@"snow_shoe",
+                                 @"Snowboard":@"resort_skiing_snowboarding_ws",
+                                 @"Snowshoe":@"snow_shoe_ws",
                                  @"StairStepper": @"stair_climbing",
                                  @"StandUpPaddling":@"stand_up_paddleboarding",
                                  @"Surfing":@"surfing",
@@ -520,8 +520,15 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
             }
         }
         cache = dict;
+        RZRetain(cache);
     }
-    return cache[[stravaType lowercaseString]];
+    GCActivityType * rv = cache[[stravaType lowercaseString]];
+    if( rv == nil){
+        RZLog(RZLogInfo, @"Registering missing Strava Type %@ as Other", stravaType);
+        rv = GCActivityType.other;
+        cache[[stravaType lowercaseString]] = rv;
+    }
+    return rv;
 }
 
 -(GCActivityType*)activityTypeForConnectStatsType:(NSString*)input{

@@ -69,6 +69,14 @@
     [super dealloc];
 }
 
+-(NSString*)debugDescription{
+    return [NSString stringWithFormat:@"<%@: %@[%@] %@>",
+            NSStringFromClass([self class]),
+            self.list.count > 0 ? self.activityId : @"",
+            @(self.list.count),
+            [self.urlDescription truncateIfLongerThan:192 ellipsis:@"..."] ];
+}
+
 -(NSString*)description{
     switch (self.stage) {
         case gcRequestStageDownload:

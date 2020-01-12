@@ -607,23 +607,12 @@
     return rv;
 }
 -(BOOL)atLeastOneService{
-    if ([GCAppGlobal healthStatsVersion]) {
-        return [self serviceEnabled:gcServiceBabolat] ||
-        [self serviceEnabled:gcServiceGarmin] ||
-        [self serviceEnabled:gcServiceStrava] ||
-        [self serviceEnabled:gcServiceSportTracks] ||
-        [self serviceEnabled:gcServiceHealthKit] ||
-        [self serviceEnabled:gcServiceFitBit] ||
-        [self serviceEnabled:gcServiceWithings];
-    }else{
-        // for connect stats fitbit/healthkit/withings only auxiliary health data
         return [self serviceEnabled:gcServiceBabolat] ||
         [self serviceEnabled:gcServiceGarmin] ||
         [self serviceEnabled:gcServiceConnectStats] ||
         [self serviceEnabled:gcServiceStrava] ||
         [self serviceEnabled:gcServiceSportTracks] ||
         [self serviceEnabled:gcServiceHealthKit];
-    }
 }
 -(BOOL)profileRequireSetup{
     return [self serviceIncomplete:gcServiceGarmin] || [self atLeastOneService]==false;

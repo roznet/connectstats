@@ -72,17 +72,10 @@
     self = [super init];
     if (self) {
         [[GCAppGlobal organizer] attach:self];
-        if ([GCAppGlobal healthStatsVersion]) {
-            self.activityType = GC_TYPE_DAY;
-            self.activityTypeButton = [GCViewActivityTypeButton activityTypeButtonForDelegate:self];
-            self.listActivityTypes = @[ GC_TYPE_DAY];
-            self.primaryActivityTypesOnly = true;
-        }else{
-            self.activityType = GC_TYPE_ALL;
-            self.activityTypeButton = [GCViewActivityTypeButton activityTypeButtonForDelegate:self];
-            self.listActivityTypes = @[ GC_TYPE_ALL];
-            self.primaryActivityTypesOnly = false;//[GCAppGlobal configGetBool:CONFIG_MAIN_ACTIVITY_TYPE_ONLY defaultValue:true];
-        }
+        self.activityType = GC_TYPE_ALL;
+        self.activityTypeButton = [GCViewActivityTypeButton activityTypeButtonForDelegate:self];
+        self.listActivityTypes = @[ GC_TYPE_ALL];
+        self.primaryActivityTypesOnly = false;//[GCAppGlobal configGetBool:CONFIG_MAIN_ACTIVITY_TYPE_ONLY defaultValue:true];
     }
     return self;
 }
@@ -353,20 +346,12 @@
             angleFrom = angleTo;
         };
 
-        if ([GCAppGlobal healthStatsVersion] && [self.activityType isEqualToString:GC_TYPE_DAY]) {
-            maxValue = _display == gcCalendarDisplayDistancePercent ? _maxInfo.sumDistance.value : _maxInfo.sumSteps.value;
-            [dummy setActivityType:GC_TYPE_DAY];
-            [[GCViewConfig colorForGoalPercent:info.sumDistance.value/_maxInfo.sumDistance.value*2] setStroke];
-            drawArc( _display == gcCalendarDisplayDistancePercent ? info.sumDistance.value: info.sumSteps.value);
-
-        }else{// ConnectStats
-            maxValue = _display == gcCalendarDisplayDistancePercent ? _maxInfo.sumDistance.value : _maxInfo.sumDuration.value;
-            for (NSString * type in @[ GC_TYPE_RUNNING,GC_TYPE_CYCLING, GC_TYPE_SWIMMING, GC_TYPE_OTHER]) {
-                [dummy setActivityType:type];
-                [[GCViewConfig cellBackgroundDarkerForActivity:dummy] setStroke];
-                GCCalendarDataMarkerInfo * info = [markers inforForType:type];
-                drawArc( _display == gcCalendarDisplayDistancePercent ? info.sumDistance.value : info.sumDuration.value);
-            }
+        maxValue = _display == gcCalendarDisplayDistancePercent ? _maxInfo.sumDistance.value : _maxInfo.sumDuration.value;
+        for (NSString * type in @[ GC_TYPE_RUNNING,GC_TYPE_CYCLING, GC_TYPE_SWIMMING, GC_TYPE_OTHER]) {
+            [dummy setActivityType:type];
+            [[GCViewConfig cellBackgroundDarkerForActivity:dummy] setStroke];
+            GCCalendarDataMarkerInfo * info = [markers inforForType:type];
+            drawArc( _display == gcCalendarDisplayDistancePercent ? info.sumDistance.value : info.sumDuration.value);
         }
 
 

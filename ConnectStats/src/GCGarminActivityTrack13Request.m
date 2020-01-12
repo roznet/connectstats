@@ -88,7 +88,15 @@
     return rv;
 }
 
--(NSString*)description{
+-(NSString*)debugDescription{
+    return [NSString stringWithFormat:@"<%@: %@ %@ %@>",
+            NSStringFromClass([self class]),
+            self.activityId,
+            self.trackStageDescription,
+            [self.urlDescription truncateIfLongerThan:192 ellipsis:@"..."] ];
+}
+
+-(NSString*)trackStageDescription{
     NSString * which = nil;
     switch (self.track13Stage) {
         case gcTrack13RequestTracks:
@@ -104,22 +112,16 @@
             which = NSLocalizedString(@"extra", @"Request Description");
             break;
     }
+    return which;
+}
+            
+-(NSString*)description{
+    NSString * which = self.trackStageDescription;
     if (which && _activity && _activity.date) {
         which = [NSString stringWithFormat:@"%@ %@", which, _activity.date.dateShortFormat];
     }
-    NSString * rv = nil;
-    switch (self.stage) {
-        case gcRequestStageDownload:
-            rv = [NSString stringWithFormat:NSLocalizedString(@"Downloading %@", @"Request Description"), which];
-            break;
-        case gcRequestStageParsing:
-            rv = [NSString stringWithFormat:NSLocalizedString( @"Parsing %@", @"Request Description"), which];
-            break;
-        case gcRequestStageSaving:
-            rv = NSLocalizedString( @"Saving track points", @"Request Description");
-            break;
-    }
-    return rv;
+    
+    return [NSString stringWithFormat:@"%@ %@",self.stageDescription, which];
 }
 
 -(NSString*)url{

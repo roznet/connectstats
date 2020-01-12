@@ -608,6 +608,7 @@
         GCActivity * act = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         act.db = db_nofit;
         act.trackdb = db_nofit;
+        act.settings.worker = nil;// sync calculated fields
         [act saveToDb:db_nofit];
         [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         
