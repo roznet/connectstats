@@ -301,9 +301,13 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     if ([_db tableExists:@"gc_duplicate_activities"]) {
         res = [_db executeQuery:@"SELECT * FROM gc_duplicate_activities"];
         while ([res next]) {
-            duplicates[[res stringForColumn:@"activityId"]] = [res stringForColumn:@"duplicateActivityId"];
+            NSString * activityId = [res stringForColumn:@"activityId"];
+            NSString * duplicateActivityId = [res stringForColumn:@"duplicateActivityId"];
+            // some account somehow had duplicate as healthkit
+            if( ![duplicateActivityId hasPrefix:@"__healthkit__"]){
+                duplicates[activityId] = duplicateActivityId;
+            }
         }
-
     }
     self.duplicateActivityIds = duplicates;
 

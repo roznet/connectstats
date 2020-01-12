@@ -561,6 +561,19 @@ void checkVersion(){
             [GCWeather fixWindSpeed:self.db];
         }
     }
+    
+    if( [self isFirstTimeForFeature:@"REMOVE_BAD_HEALTHKIT_DUPLICATES"]){
+        needToSaveSettings = true;
+        if( ! self.firstTimeEver ){
+            if( [self.db tableExists:@"gc_duplicate_activities"]){
+                int count = [self.db intForQuery:@"SELECT COUNT(*) FROM gc_duplicate_activities WHERE duplicateActivityId LIKE '__healthkit__%'"];
+                if( count > 0){
+                    RZLog(RZLogInfo, @"Fixing healthkit duplicate (%d)", count);
+                    RZEXECUTEUPDATE(self.db, @"DELETE FROM gc_duplicate_activities WHERE duplicateActivityId LIKE '__healthkit__%'");
+                }
+            }
+        }
+    }
         
     if( needToSaveSettings ){
         [self saveSettings];

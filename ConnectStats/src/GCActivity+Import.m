@@ -1708,6 +1708,11 @@
 -(gcDuplicate)testForDuplicate:(GCActivity*)other{
     gcDuplicate activitiesAreDuplicate = gcDuplicateNotMatching;
     
+    // Never match health kit activities
+    if( self.service.service == gcServiceHealthKit || other.service.service == gcServiceHealthKit ){
+        return gcDuplicateNotMatching;
+    }
+    
     // if child activity from multi sport overlap test would succeed but not a duplicate
     if( self.childIds && [self.childIds isKindOfClass:[NSArray class]]){
         if( [self.childIds containsObject:other.activityId] ){
