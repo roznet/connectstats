@@ -62,7 +62,18 @@ const NSUInteger kDefsConnectIQUnitNameIndex = 1;
                          @1 : @[ @"WeightedMeanPower", @"watt"],
                          @3 : @[ @"WeightedMeanPower", @"watt"],
                          
-                         }
+                         },
+                 @"18fb2cf0-1a4b-430d-ad66-988c847421f4": @{ // Stryd Power Zone
+                         @0: @[ @"WeightedMeanPower", @"watt" ],
+                         @2: @[ @"WeightedMeanRunPower", @"stepPerMinutes"],
+                         @3: @[ @"WeightedMeanGroundContactTime", @"ms"],
+                         @4: @[ @"WeigthedMeanVerticalOscillation", @"centimeter"],
+                         
+                         @8: @[ @"WeightedMeanFormPower", @"watt"],
+                         @9: @[ @"WeightedMeanLegSpringStiffness", @"kN/m"],
+                         @11:@[ @"WeightedMeanAirPower", @"watt"],
+
+                 }
                  /*
                   741afa11-0250-48e2-86b5-14bd47e29391[3]
                   741afa11-0250-48e2-86b5-14bd47e29391[18]
