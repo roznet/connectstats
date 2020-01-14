@@ -80,6 +80,7 @@ extension GCActivity {
             self.activityType = type.topSubRoot().key
             self.activityTypeDetail = type
             self.speedDisplayUom = type.preferredSpeedDisplayUnit().key
+            self.distanceDisplayUom = GCUnit.kilometer().forGlobalSystem().key
             let usemessage = messages[messageIndex]
             var sumValues = interp.summaryValues(fitMessage: usemessage)
             let toremove = sumValues.filter {

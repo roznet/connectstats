@@ -140,6 +140,21 @@ NSString * kGarminFullUrl =
     }
 }
 
+-(NSString*)urlDescription{
+    // Special implementation or it's too long
+    switch (self.ssoStage) {
+        case gcSSOGetServiceTicket:
+            return @"https://sso.garmin.com/sso/signin?serviceticket";
+        case gcSSOGetSigninFormCRSFToken:
+            return @"https://sso.garmin.com/sso/signin?crsftoken";
+        case gcSSOLoginWithServiceTicket:
+            return RZWebEncodeURLwGet(@"https://connect.garmin.com/modern/", [self dictForGetRequest]);
+        case gcSSOAllDone:
+            return @"https://connect.garmin.com";
+    }
+}
+
+
 -(gcWebService)service{
     return gcWebServiceGarmin;// login
 }

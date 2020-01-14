@@ -169,7 +169,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
 -(void)updateRefreshControlTitle{
     if ((self.refreshControl).refreshing) {
-        self.refreshControl.attributedTitle = RZReturnAutorelease([[NSAttributedString alloc] initWithString:[[GCAppGlobal web] currentDescription]]);
+        self.refreshControl.attributedTitle = RZReturnAutorelease([[NSAttributedString alloc] initWithString:[[GCAppGlobal web] currentDescription] ?: @""]);
     }
 }
 

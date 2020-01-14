@@ -446,6 +446,10 @@
     
     double threshold = [[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:5.0] convertToUnit:serie.unit].value;
     
+    if( serie.count == 0 || serie_dist.count == 0){
+        return @{};
+    }
+    
     double current_altitude = [serie dataPointAtIndex:0].y_data;
     double current_altitude_distance = [serie_dist dataPointAtIndex:0].y_data;
     double current_elevation_gain = 0.;
