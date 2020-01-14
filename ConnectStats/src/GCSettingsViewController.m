@@ -607,7 +607,7 @@
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_OTHER, GC_SETTINGS_INCLUDEDATA)];
                 switchcell.entryFieldDelegate = self;
-                (switchcell.toggle).on = [GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:false];
+                (switchcell.toggle).on = [GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:true];
                 break;
 
             }
@@ -938,7 +938,7 @@
         NSLog(@"%@", RZLogFileContent());
 #endif
         NSString * msg = NSLocalizedString(@"Submitting a bug report will send some debug diagnostic. It does not contains any of your activity data and will help make this app better. Thank you!",nil);
-        if ([GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:false]) {
+        if ([GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:true]) {
             msg = NSLocalizedString(@"Submitting a bug report will send some debug diagnostic. It will help make this app better. Thank you!",nil);
         }
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Bug Report", @"Bug Report")
@@ -956,7 +956,7 @@
                                                 handler:^(UIAlertAction*action){
                                                     NSArray * errors = [GCActivitiesCacheManagement errorFiles];
 
-                                                    if (errors.count && ![GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:false]) {
+                                                    if (errors.count && ![GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:true]) {
                                                         [self showBugReportConfirm];
                                                     }else{
                                                         [self showBugReport:NO];
@@ -993,7 +993,7 @@
     GCSettingsBugReportViewController * bug = [[GCSettingsBugReportViewController alloc] initWithNibName:nil bundle:nil];
     bug.parent = self;
     bug.includeErrorFiles = include;
-    if ([GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:false]) {
+    if ([GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:true]) {
         bug.includeErrorFiles=true;
         bug.includeActivityFiles=true;
     }

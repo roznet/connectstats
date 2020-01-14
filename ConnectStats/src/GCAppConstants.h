@@ -49,7 +49,7 @@
 #define CONFIG_BUG_COMMON_ID            @"config_bug_common_id"
 #define CONFIG_USE_MOVING_ELAPSED       @"config_use_moving_elapsed"
 #define CONFIG_USE_MAP                  @"config_use_map"
-#define CONFIG_BUG_INCLUDE_DATA         @"config_bug_include_data"
+#define CONFIG_BUG_INCLUDE_DATA         @"config_bug_include_data_v2"
 #define CONFIG_USE_NEW_TRACK_API        @"config_use_new_track_api"
 #define CONFIG_FASTER_MAPS              @"config_faster_maps"
 #define CONFIG_CRITICAL_CALC_UNIT       @"config_critical_calc_unit"
