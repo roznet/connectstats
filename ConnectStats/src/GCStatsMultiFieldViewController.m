@@ -769,6 +769,7 @@
 
 -(void)setupForCurrentActivityAndViewChoice:(gcViewChoice)choice{
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.config];
+    nconfig.activityType = [[GCAppGlobal organizer] currentActivity].activityType;
     nconfig.viewChoice = choice;
     [self setupForFieldListConfig:nconfig];
 }
