@@ -891,7 +891,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 //   idx_offset: [
 //   idx_this:   |
 
--(GCStatsDataSerie*)deltaYSerieForDeltaX:(double)dx scalingFactor:(double)scaling{
+-(GCStatsDataSerie*)deltaYSerieForDeltaX:(double)dx scalingFactor:(double)scaling simpleDifference:(BOOL)diffOnly{
     NSUInteger count = self.count;
 
     // Needs at least 2 points
@@ -925,13 +925,19 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
             double delta_y = p_x1.y_data-p_x0.y_data;
             double delta_x = p_x1.x_data-p_x0.x_data;
 
-            double final = delta_y/delta_x * scaling;
+            double final = diffOnly ? delta_y : delta_y/delta_x * scaling;
             [rv_points addObject:[GCStatsDataPoint dataPointWithX:p_x1.x_data andY:final]];
         }
     }
     GCStatsDataSerie * rv = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     rv.dataPoints = rv_points;
     return rv;
+}
+-(GCStatsDataSerie*)deltaYSerieForDeltaX:(double)dx scalingFactor:(double)scaling{
+    return [self deltaYSerieForDeltaX:dx scalingFactor:scaling simpleDifference:NO];
+}
+-(GCStatsDataSerie*)differenceSerieForLag:(double)dx{
+    return [self deltaYSerieForDeltaX:dx scalingFactor:1.0 simpleDifference:YES];
 }
 
 //  --x-x-x-x--x--x----xx------x
@@ -1562,7 +1568,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 }
 
 
--(void)fill:(size_t)range valuesForUnit:(double)unit into:(double*)values fillMethod:(gcStatsFillMethod)fill{
+-(void)fill:(size_t)range valuesForUnit:(double)unit into:(double*)values fillMethod:(gcStatsFillMethod)fill statistic:(gcStats)statistic{
     GCStatsDataPoint * first_p = (self.dataPoints)[0];
     size_t last_i   = 0;
     double first_x  = first_p.x_data;
@@ -1591,15 +1597,30 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 
         if (to_p == nil) {
             // last point allocated to last
-            values[from_i] += from_p.y_data * (unit - accrued)/unit;
+            switch (statistic) {
+                case gcStatsSum:
+                    values[from_i] += from_p.y_data;
+                    break;
+                case gcStatsWeightedMean:
+                    values[from_i] += from_p.y_data * (unit - accrued)/unit;
+                    break;
+            }
         }else if ( to_i==from_i) {
             // didn't cross to next point yet, weighted allocation to current i
             //      f     t
             // I: --|aa---|---
             // P: ----X-X-----
             //        f t
-            values[from_i] += from_p.y_data * (to_x-from_x)/unit;
-            accrued += (to_x-from_x);
+            switch (statistic) {
+                case gcStatsSum:
+                    // sum should go to next point if possible when in between
+                    values[(to_i+1) < range ? (to_i+1) : to_i] += from_p.y_data;
+                    break;
+                case gcStatsWeightedMean:
+                    values[from_i] += from_p.y_data * (to_x-from_x)/unit;
+                    accrued += (to_x-from_x);
+                    break;
+            }
         }else{
             // got to next
             //
@@ -1612,26 +1633,48 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
             // I: |aaa--|-----|-----|-----|
             // P:  --X----------------X---
             //       f                t
-
+            
             for (size_t step_i = from_i; step_i<to_i; step_i++) {
                 size_t next_i = step_i+1;
                 double next_x = unit*next_i;
 
                 double step_x = step_i == from_i ? from_x : unit*step_i;
+                switch (statistic) {
+                    case gcStatsSum:
+                    {
+                        if( step_i == from_i){
+                            values[ step_i+1<range ? step_i+1 : step_i] += from_p.y_data;
+                        }// else keep at 0
+                        break;
+                    }
+                    case gcStatsWeightedMean:
+                    {
+                        double step_v = from_p.y_data * (next_x-step_x)/unit;
+                        // fill steps to far from last with zero (else with last value)
+                        // could impose limit: fill w zero when more than L since last
+                        if (step_i!=from_i ){
+                            switch (fill) {
+                                case gcStatsZero:
+                                    step_v = 0.;
+                                    break;
+                                case gcStatsLinear:
+                                    step_v =  (step_x-from_p.x_data) * (to_p.x_data - from_p.x_data) * (to_p.y_data-from_p.y_data);
+                                    break;
+                                case gcStatsLast:
+                                    // do nothing, use last
+                                    break;
+                                    
+                            }
+                        }
+                        values[step_i] += step_v;
+                        last_i = step_i;
 
-                double step_v = from_p.y_data * (next_x-step_x)/unit;
-                // fill steps to far from last with zero (else with last value)
-                // could impose limit: fill w zero when more than L since last
-                if (step_i!=from_i && fill == gcStatsZero) {
-                    step_v = 0.;
-                }
-                values[step_i] += step_v;
-                last_i = step_i;
-
-                if (next_i < range && next_i == to_i) {
-                    values[to_i] += from_p.y_data * (to_x-next_x)/unit;
-                    last_i = to_i;
-                    accrued = (to_x-next_x);
+                        if (next_i < range && next_i == to_i) {
+                            values[to_i] += from_p.y_data * (to_x-next_x)/unit;
+                            last_i = to_i;
+                            accrued = (to_x-next_x);
+                        }
+                    }
                 }
             }
         }
@@ -1656,7 +1699,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     }
 }
 
--(GCStatsDataSerie*)filledSerieForUnit:(double)unit fillMethod:(gcStatsFillMethod)fill;{
+-(GCStatsDataSerie*)filledSerieForUnit:(double)unit fillMethod:(gcStatsFillMethod)fill statistic:(gcStats)statistic{
     if (self.dataPoints.count < 2) {
         return nil;
     }
@@ -1670,7 +1713,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 
     double * values  = calloc(range, sizeof(double));
 
-    [self fill:range valuesForUnit:unit into:values fillMethod:(gcStatsFillMethod)fill];
+    [self fill:range valuesForUnit:unit into:values fillMethod:(gcStatsFillMethod)fill statistic:statistic];
     GCStatsDataSerie * rv = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     for (size_t n=0; n<range; n++) {
         [rv addDataPointWithX:first_p.x_data+unit*n andY:values[n]];
@@ -1748,7 +1791,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     return rv;
 }
 
--(GCStatsDataSerie*)movingBestByUnitOf:(double)unit fillMethod:(gcStatsFillMethod)fill select:(gcStatsSelection)select{
+-(GCStatsDataSerie*)movingBestByUnitOf:(double)unit fillMethod:(gcStatsFillMethod)fill select:(gcStatsSelection)select statistic:(gcStats)statistic{
 
     if (self.dataPoints.count < 2) {
         return nil;
@@ -1771,7 +1814,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     double * nonzero = calloc(range, sizeof(double));
     size_t * bestidx = nil;
 
-    [self fill:range valuesForUnit:unit into:values fillMethod:fill];
+    [self fill:range valuesForUnit:unit into:values fillMethod:fill statistic:statistic];
 
     //for debugging
     bestidx = calloc(range, sizeof(size_t));
@@ -1791,8 +1834,16 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                 if( values[i] > 0){
                     nonzero[n] += 1;
                 }
-                // We haven't reach n values yet, add i_th
-                rolling[n] += values[i]/(n+1);
+                switch (statistic) {
+                    case gcStatsWeightedMean:
+                        // We haven't reach n values yet, add i_th
+                        rolling[n] += values[i]/(n+1);
+                        break;
+                    case gcStatsSum:
+                        // We haven't reach n values yet, add i_th
+                        rolling[n] += values[i];
+                        break;
+                }
             }else{
                 if( values[i] > 0){
                     nonzero[n] += 1;
@@ -1800,10 +1851,25 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                 if( values[i-n-1] && nonzero[n] > 0){
                     nonzero[n] -= 1;
                 }
-                // We have reach n values, add i_th, but remove i_th - (n_th+1)
-                double add = values[i]/(n+1) - values[i-n-1]/(n+1);
-                // Don't add <0 numbers
-                rolling[n] = MAX(rolling[n] + add,0.0);
+                switch (statistic) {
+                    case gcStatsWeightedMean:
+                    {
+                        // We have reach n values, add i_th, but remove i_th - (n_th+1)
+                        double add = values[i]/(n+1) - values[i-n-1]/(n+1);
+                        // Don't add <0 numbers
+                        rolling[n] = MAX(rolling[n] + add,0.0);
+                        break;
+                    }
+                    case gcStatsSum:
+                    {
+                        // We have reach n values, add i_th, but remove i_th - (n_th+1)
+                        double add = values[i] - values[i-n-1];
+                        // Don't add <0 numbers
+                        rolling[n] = MAX(rolling[n] + add,0.0);
+                        break;
+                    }
+                        
+                }
             }
 
             // We have reach n values, start recording best, initialize with current value

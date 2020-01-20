@@ -1096,18 +1096,18 @@
 -(void)testBestRolling{
     
     GCStatsDataSerie * serie = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.,@10., @2.,@50., @3.,@20., @4.,@30., @5.,@20., @6.,@30. ]];
-    GCStatsDataSerie * rv = [serie movingBestByUnitOf:1. fillMethod:gcStatsLast select:gcStatsMax];
+    GCStatsDataSerie * rv = [serie movingBestByUnitOf:1. fillMethod:gcStatsLast select:gcStatsMax statistic:gcStatsWeightedMean];
     gcStatsRange range = [serie range];
     GCStatsDataSerie * avg = [serie average];
     XCTAssertEqualWithAccuracy([avg[0] y_data], [[rv lastObject] y_data], 1e-6, @"Last is average");
     XCTAssertEqualWithAccuracy(range.y_max, [[rv dataPointAtIndex:0] y_data], 1e-6, @"First is max");
     
     serie = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.,@10., @2.,@50., @2.5,@50., @3.,@20., @4.,@30., @7.,@20., @8.,@30. ]];
-    rv = [serie movingBestByUnitOf:1. fillMethod:gcStatsLast select:gcStatsMax];
+    rv = [serie movingBestByUnitOf:1. fillMethod:gcStatsLast select:gcStatsMax statistic:gcStatsWeightedMean];
     XCTAssertEqualWithAccuracy(range.y_max, [[rv dataPointAtIndex:0] y_data], 1e-6, @"First is max");
     
     GCStatsDataSerie * filled = [serie filledSerieForUnit:2. fillMethod:gcStatsLast];
-    rv = [serie movingBestByUnitOf:2. fillMethod:gcStatsLast select:gcStatsMax];
+    rv = [serie movingBestByUnitOf:2. fillMethod:gcStatsLast select:gcStatsMax  statistic:gcStatsWeightedMean];
     range = [filled range];
     avg = [filled average];
     XCTAssertEqualWithAccuracy([avg[0] y_data], [[rv lastObject] y_data], 1e-6, @"Last is average");

@@ -91,7 +91,7 @@
 -(NSString*)fullDescriptionInActivity:(GCActivity*)act;
 
 -(NSString*)displayLabel;
-
+-(BOOL)updateElapsedIfNecessaryIn:(GCActivity*)act;
 -(BOOL)validCoordinate;
 -(CLLocationCoordinate2D)coordinate2D;
 -(CLLocation*)location;

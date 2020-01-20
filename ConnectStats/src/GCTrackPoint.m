@@ -500,7 +500,14 @@ void buildStatic(){
 -(NSString*)displayLabel{
     return nil;
 }
-
+-(BOOL)updateElapsedIfNecessaryIn:(GCActivity*)act{
+    if( !RZTestOption(self.trackFlags, gcFieldFlagSumDuration) && self.time && act.date){
+        self.elapsed = [self.time timeIntervalSinceDate:act.date];
+        self.trackFlags = RZSetOption(self.trackFlags, gcFieldFlagSumDuration);
+        return true;
+    }
+    return false;
+}
 #pragma mark - Extra Values
 
 

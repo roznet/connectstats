@@ -190,7 +190,7 @@ static BOOL kDerivedEnabled = true;
         }
         [self loadProcesseActivities];
         
-        if( /* DISABLES CODE */ (false) ){
+        if( /* DISABLES CODE */ (true) ){
             [self loadHistoricalFileSeries];
         }
 

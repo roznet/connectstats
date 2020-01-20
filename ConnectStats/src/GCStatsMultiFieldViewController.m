@@ -406,11 +406,16 @@
     GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
     graphCell.cellDelegate = self;
 
-    GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:self.activityType];
-    GCStatsSerieOfSerieWithUnits * serieOfSerie = [[GCAppGlobal derived] timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
-        return [act.activityType isEqualToString:self.activityType];
-    } withLimit:60]];
+    GCDerivedDataSerie * current = [self currentDerivedDataSerie];
+    GCStatsSerieOfSerieWithUnits * serieOfSerie = nil;
+    GCField * field = nil;
     
+    if( current ){
+        field = [GCField fieldForFlag:current.fieldFlag andActivityType:self.activityType];
+        serieOfSerie = [[GCAppGlobal derived] timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
+            return [act.activityType isEqualToString:self.activityType];
+        } withLimit:60]];
+    }
     //GCStatsSerieOfSerieWithUnits * historical = [[GCAppGlobal derived] timeSeriesOfSeriesFor:field];
     //[serieOfSerie addSerieOfSerie:historical];
     GCSimpleGraphCachedDataSource * cache = nil;
@@ -429,10 +434,7 @@
 
 }
 
--(UITableViewCell*)tableView:(UITableView *)tableView derivedCellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
-    graphCell.cellDelegate = self;
-
+-(GCDerivedDataSerie*)currentDerivedDataSerie{
     NSArray<GCDerivedGroupedSeries*>*available = [self availableDataSeries];
     GCDerivedDataSerie * current = nil;
 
@@ -450,6 +452,13 @@
             current = group.series[self.derivedSerieMonthIndex];
         }
     }
+    return current;
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView derivedCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
+    graphCell.cellDelegate = self;
+    GCDerivedDataSerie * current = [self currentDerivedDataSerie];
 
     GCSimpleGraphCachedDataSource * cache = nil;
     if (current) {

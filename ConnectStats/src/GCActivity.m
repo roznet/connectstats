@@ -928,7 +928,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             //[lastTrack updateWithNextPoint:point];
         }
         lastTrack = point;
-        
+        [point updateElapsedIfNecessaryIn:self];
         if (first && nLaps > 0) {
             GCLap * this = _lapsCache[0];
             this.longitudeDegrees = point.longitudeDegrees;
@@ -1036,6 +1036,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
     while ([res next]) {
         GCTrackPoint * point =[[[GCTrackPoint alloc] initWithResultSet:res] autorelease];
+        [point updateElapsedIfNecessaryIn:self];
         loadedTrackFlags |= point.trackFlags;
         [tmptracks addObject:point];
     }

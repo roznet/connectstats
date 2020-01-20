@@ -72,14 +72,12 @@
 @end
 
 #define MAX_FILL_POINTS 28800
-
+#define X_FOR(p) (timeAxis ? p.elapsed : p.distanceMeters)
 
 @implementation GCActivity (CachedTracks)
 
 
 -(nonnull NSArray<GCTrackPoint*>*)resample:(nonnull NSArray<GCTrackPoint*>*)points forUnit:(double)unit useTimeAxis:(BOOL)timeAxis{
-
-#define X_FOR(p) (timeAxis ? p.elapsed : p.distanceMeters)
 
     GCTrackPoint * first_p = points[0];
     size_t last_i   = 0;
@@ -201,28 +199,90 @@
 
             if (info.track==gcCalculatedCachedTrackRollingBest) {
                 BOOL timeAxis = info.fieldFlag != gcFieldFlagWeightedMeanSpeed;
+                BOOL useElapsed = true;
+                if( info.fieldFlag == gcFieldFlagWeightedMeanSpeed){
 
-                GCStatsDataSerieWithUnit * serie = timeAxis?[self timeSerieForField:info.field]:[self distanceSerieForField:info.field];
-                pts += serie.serie.count;
-                gcStatsSelection select = gcStatsMax;
-                if (info.fieldFlag == gcFieldFlagWeightedMeanSpeed && [serie.unit isKindOfClass:[GCUnitInverseLinear class]]) {
-                    select = gcStatsMin;
-                }
+                    if( useElapsed ){
+                        GCField * elapsedfield = [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityType];
+                        GCStatsDataSerieWithUnit * serie = [self distanceSerieForField:elapsedfield];
+                        if( serie.serie.count > 0 && serie.serie.firstObject.x_data > 0 ){
+                            [serie.serie addDataPointWithX:0.0 andY:0.0];
+                            [serie.serie sortByX];
+                        }
 
-                double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
-                if (info.fieldFlag == gcFieldFlagWeightedMeanSpeed) {
-                    unitstride = 10.;
-                }
+                        GCStatsDataSerie * diffSerie = [serie.serie differenceSerieForLag:0.0];
 
-                // HACK serie that are missing zero, as otherwise the best of may not start consistently
-                // and doing max over multiple will have weird quirks at the beginning.
-                if( serie.serie.count > 0 && serie.serie.firstObject.x_data > 0 ){
-                    [serie.serie addDataPointWithX:0.0 andY:serie.serie.firstObject.y_data];
-                    [serie.serie sortByX];
+                        pts += diffSerie.count;
+                        gcStatsSelection select = gcStatsMin;
+                        //DEBUG GCStatsDataSerie * filled = [diffSerie filledSerieForUnit:10. fillMethod:gcStatsZero statistic:gcStatsSum];
+                        double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
+                        unitstride = 10;
+                        serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsSum];
+                        for (GCStatsDataPoint * point in serie.serie) {
+                            if( point.y_data > 0.){
+                                point.y_data = point.x_data/point.y_data; // convert in mps
+                            }
+                        }
+                        serie.unit = [GCUnit mps];
+                        [serie convertToUnit:[GCUnit minperkm]];
+                        if( serie.serie.count > 1 && [serie.serie dataPointAtIndex:0].x_data == 0){
+                            [serie.serie dataPointAtIndex:0].y_data = [serie.serie dataPointAtIndex:1].y_data;
+                        }
+
+                        rv[key] = serie;
+                    }else{
+                        
+                        GCField * distancefield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType];
+                        GCStatsDataSerieWithUnit * serie = [self timeSerieForField:distancefield];
+                        if( serie.serie.count > 0 && serie.serie.firstObject.x_data > 0 ){
+                            [serie.serie addDataPointWithX:0.0 andY:0.0];
+                            [serie.serie sortByX];
+                        }
+                        
+                        GCStatsDataSerie * diffSerie = [serie.serie differenceSerieForLag:0.0];
+                        pts += diffSerie.count;
+                        gcStatsSelection select = gcStatsMax;
+                        
+                        double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
+                        unitstride = 10;
+                        serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsSum];
+                        [serie convertToUnit:[GCUnit meter]];
+                        for (GCStatsDataPoint * point in serie.serie) {
+                            if( point.x_data > 0.){
+                                point.y_data /= point.x_data; // convert in mps
+                            }
+                        }
+                        serie.unit = [GCUnit mps];
+                        [serie convertToUnit:[GCUnit minperkm]];
+                        if( serie.serie.count > 1 && [serie.serie dataPointAtIndex:0].x_data == 0){
+                            [serie.serie dataPointAtIndex:0].y_data = [serie.serie dataPointAtIndex:1].y_data;
+                        }
+                        rv[key] = serie;
+                    }
+                }else{
+                    
+                    GCStatsDataSerieWithUnit * serie = timeAxis?[self timeSerieForField:info.field]:[self distanceSerieForField:info.field];
+                    pts += serie.serie.count;
+                    gcStatsSelection select = gcStatsMax;
+                    if (info.fieldFlag == gcFieldFlagWeightedMeanSpeed && [serie.unit isKindOfClass:[GCUnitInverseLinear class]]) {
+                        select = gcStatsMin;
+                    }
+                    
+                    double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
+                    if (info.fieldFlag == gcFieldFlagWeightedMeanSpeed) {
+                        unitstride = 10.;
+                    }
+                    
+                    // HACK serie that are missing zero, as otherwise the best of may not start consistently
+                    // and doing max over multiple will have weird quirks at the beginning.
+                    if( serie.serie.count > 0 && serie.serie.firstObject.x_data > 0 ){
+                        [serie.serie addDataPointWithX:0.0 andY:serie.serie.firstObject.y_data];
+                        [serie.serie sortByX];
+                    }
+                    
+                    serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsWeightedMean];
+                    rv[key] = serie;
                 }
-                
-                serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select];
-                rv[key] = serie;
             }else if(info.track == gcCalculatedCachedTrackDataSerie){
                 if ([info.field.key isEqualToString:CALC_VERTICAL_SPEED]) {
                     NSDictionary * standard = [self calculateAltitudeDerivedFields];

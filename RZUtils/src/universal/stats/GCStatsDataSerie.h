@@ -53,13 +53,19 @@ NS_INLINE double STDDEV(double cnt, double sum, double ssq ){
 
 typedef NS_ENUM(NSUInteger, gcStatsFillMethod) {
     gcStatsZero,
-    gcStatsLast
+    gcStatsLast,
+    gcStatsLinear
 
 };
 
 typedef NS_ENUM(NSUInteger, gcStatsSelection) {
     gcStatsMax,
     gcStatsMin
+};
+
+typedef NS_ENUM(NSUInteger, gcStats) {
+    gcStatsWeightedMean,
+    gcStatsSum
 };
 
 typedef struct {
@@ -209,6 +215,12 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2);
 -(GCStatsDataSerie*)deltaYSerieForDeltaX:(double)dx scalingFactor:(double)scaling;
 
 /**
+Compute difference serie
+@param dx in the minimum delta x required to compute difference. dx=0 compute between consecutive points
+*/
+-(GCStatsDataSerie*)differenceSerieForLag:(double)dx;
+
+/**
  Return a dictionary with aggregated series for different statistics.
  Each serie will have the statistic for the first day of the bucket
  @param aUnit NSCalendarUnit calendar unit to do the bucketing
@@ -268,9 +280,20 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2);
                       referenceDate:(NSDate*)refOrNil
                         andCalendar:(NSCalendar*)calendar;
 
--(GCStatsDataSerie*)movingBestByUnitOf:(double)unit fillMethod:(gcStatsFillMethod)fill select:(gcStatsSelection)select;
+/// Compute the best rolling value for the original serie. It will resample the serie such that
+/// each value is equally spaced by unit.
+/// @param unit size of the unit between best point
+/// @param fill Method to handle missing point, use Zero or last value
+/// @param select Method to select best of by Min or Max
+/// @param statistic what statistic to compute the best of, weightedmean or simple sum
+-(GCStatsDataSerie*)movingBestByUnitOf:(double)unit
+                            fillMethod:(gcStatsFillMethod)fill
+                                select:(gcStatsSelection)select
+                             statistic:(gcStats)statistic;
 -(GCStatsDataSerie*)histogramWith:(NSUInteger)buckets;
--(GCStatsDataSerie*)filledSerieForUnit:(double)unit fillMethod:(gcStatsFillMethod)fill;
+-(GCStatsDataSerie*)filledSerieForUnit:(double)unit
+                            fillMethod:(gcStatsFillMethod)fill
+                             statistic:(gcStats)statistic;
 -(GCStatsDataSerie*)summedSerieByUnit:(double)unit fillMethod:(gcStatsFillMethod)fill;
 
 -(GCStatsDataSerie*)operate:(gcStatsOperand)operand with:(GCStatsDataSerie*)other;

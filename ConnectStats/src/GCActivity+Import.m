@@ -274,6 +274,12 @@
                                  @"avgVerticalOscillation" : @1, // sample: 9.030000305175781
                                  @"avgGroundContactBalance" : @1, // sample: 49.84000015258789
 
+                                 @"pr_count" : @1, // sample: 0
+                                 @"display_hide_heartrate_option" : @1, // sample: 1
+                                 @"heartrate_opt_out" : @1, // sample: 0
+                                 @"utc_offset" : @1, // sample: 3600
+                                 @"from_accepted_tag" : @1, // sample: 0
+                                 @"workout_type" : @1, // sample: 0
                                  
                                  };
                 [knownMissing retain];
@@ -1448,16 +1454,17 @@
             GCActivitySummaryValue * thisVal = self.summaryData[field];
             GCActivitySummaryValue * otherVal = other.summaryData[field];
             // Update if missing or if new value is 0.0
-            if( thisVal.value == 0.0 && otherVal.value != 0.0){
-                RZLog( RZLogInfo, @"%@: Overriding 0 with %@", self, otherVal);
-            }
             if (thisVal==nil || ( thisVal.value == 0.0 && otherVal.value != 0.0) ) {
                 if (!newSummaryData) {
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                 }
                 
                 if( verbose ){
-                    RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
+                    if( thisVal.value == 0.0 && otherVal.value != 0.0){
+                        RZLog(RZLogInfo, @"%@: Overriding 0 with %@", self, otherVal);
+                    }else{
+                        RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
+                    }
                 }
                 newSummaryData[field] = otherVal;
                 

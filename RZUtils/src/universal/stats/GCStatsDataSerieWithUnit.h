@@ -65,7 +65,7 @@
 -(GCStatsDataSerieWithUnit*)bucketWith:(GCStatsDataSerieWithUnit*)buckets;
 -(GCStatsDataSerieWithUnit*)filterForNonZeroIn:(GCStatsDataSerie*)other;
 -(GCStatsDataSerieWithUnit*)summedBy:(double)unit;
--(GCStatsDataSerieWithUnit*)filledForUnit:(double)unit;
+-(GCStatsDataSerieWithUnit*)filledForUnit:(double)unit ;
 -(GCStatsDataSerieWithUnit*)cumulative;
 -(GCStatsDataSerieWithUnit*)cumulativeDifferenceWith:(GCStatsDataSerieWithUnit*)other;
 
