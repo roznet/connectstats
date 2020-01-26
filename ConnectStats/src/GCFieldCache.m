@@ -361,15 +361,19 @@ static NSMutableDictionary * _missingFieldCache = nil;
     if (!aType||!field) {
         return;
     }
+    
     NSString * key = cacheFieldKey(field, aType);
     GCFieldInfo * info = self.predefinedFieldCache[key];
     if( info == nil && field && aType && aName && uom){
-        GCFieldInfo * newInfo = [GCFieldInfo fieldInfoFor:field type:aType displayName:aName andUnitName:uom];
-        NSString * key = cacheFieldKey(field, aType);
-        self.cache = [self.cache dictionaryByAddingEntriesFromDictionary:@{key : newInfo}];
-    }
-    if( info != nil && ![info.displayName isEqualToString:aName]){
-        RZLog(RZLogInfo, @"Inconsistent field register %@: %@ %@", field, aName, info.displayName );
+        // If we got a name that is different from the field... If same, not useful.
+        if( ![[aName lowercaseString] isEqualToString:[field lowercaseString]] ){
+            GCFieldInfo * newInfo = [GCFieldInfo fieldInfoFor:field type:aType displayName:aName andUnitName:uom];
+            NSString * key = cacheFieldKey(field, aType);
+            self.cache = [self.cache dictionaryByAddingEntriesFromDictionary:@{key : newInfo}];
+            if( info != nil && ![info.displayName isEqualToString:aName]){
+                RZLog(RZLogInfo, @"Inconsistent field register %@: %@ %@", field, aName, info.displayName );
+            }
+        }
     }
     return;
 }

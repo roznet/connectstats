@@ -112,9 +112,6 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 @property (nonatomic,readonly) NSDate * endTime;
 @property (nonatomic,assign) CLLocationCoordinate2D beginCoordinate;
 
-@property (nonatomic,retain) NSString * speedDisplayUom;
-@property (nonatomic,retain) NSString * distanceDisplayUom;
-
 @property (nonatomic,assign) NSUInteger flags;
 @property (nonatomic,assign) NSUInteger trackFlags;
 @property (nonatomic,assign) BOOL garminSwimAlgorithm;
@@ -135,6 +132,8 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 @property (nonatomic,readonly) NSString * externalActivityId;
 @property (nonatomic,readonly) GCService * service;
 
+@property (nonatomic,readonly) GCUnit * speedDisplayUnit;
+@property (nonatomic,readonly) GCUnit * distanceDisplayUnit;
 /**
  Array of trackpoints. Note it maybe lazy loaded so
  can return nil, but asking for this will trigger attempt to load from db

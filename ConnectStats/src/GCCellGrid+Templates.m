@@ -493,7 +493,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
     NSArray * preferredMainDisplayFields = @[ @"SumDistance", @"SumDuration"];
     NSArray * preferredInfoFields = @[ @"WeightedMeanHeartRate", @"WeightedMeanSpeed"];
-    if( activity.activityTypeDetail.isPaceValid){
+    if( activity.activityTypeDetail.isPacePreferred){
         preferredInfoFields = @[ @"WeightedMeanHeartRate", @"WeightedMeanPace"];
     }
 
@@ -992,9 +992,9 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
     GCLap * lap = [activity lapNumber:idx];
     GCNumberWithUnit * dist = [[lap numberWithUnitForField:gcFieldFlagSumDistance andActivityType:activity.activityType]
-                               convertToUnitName:activity.distanceDisplayUom];
+                               convertToUnit:activity.distanceDisplayUnit];
     GCNumberWithUnit * speed= [[lap numberWithUnitForField:gcFieldFlagWeightedMeanSpeed andActivityType:activity.activityType]
-                               convertToUnitName:activity.speedDisplayUom];
+                               convertToUnit:activity.speedDisplayUnit];
     GCNumberWithUnit * dur  = [lap numberWithUnitForField:gcFieldFlagSumDuration andActivityType:activity.activityType];
     GCNumberWithUnit * bpm  = nil;
     GCNumberWithUnit * cad  = nil;
@@ -1133,9 +1133,9 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
             field1 = [GCField fieldForFlag:fieldFlag andActivityType:aType];
             number1 = [aLap numberWithUnitForField:field1.fieldFlag andActivityType:aType];
             if (fieldFlag == gcFieldFlagSumDistance) {
-                number1 = [number1 convertToUnitName:activity.distanceDisplayUom];
+                number1 = [number1 convertToUnit:activity.distanceDisplayUnit];
             }else if(fieldFlag == gcFieldFlagWeightedMeanSpeed){
-                number1 = [number1 convertToUnitName:activity.speedDisplayUom];
+                number1 = [number1 convertToUnit:activity.speedDisplayUnit];
             }
             display1 = field1.displayName;
         }
@@ -1195,8 +1195,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }
     GCNumberWithUnit * dist = [[lap numberWithUnitForField:gcFieldFlagSumDistance
                                            andActivityType:activity.activityType]
-                               convertToUnitName:activity.distanceDisplayUom];
-    GCNumberWithUnit * speed= [[lap numberWithUnitForField:gcFieldFlagWeightedMeanSpeed andActivityType:activity.activityType] convertToUnitName:activity.speedDisplayUom];
+                               convertToUnit:activity.distanceDisplayUnit];
+    GCNumberWithUnit * speed= [[lap numberWithUnitForField:gcFieldFlagWeightedMeanSpeed andActivityType:activity.activityType] convertToUnit:activity.speedDisplayUnit];
     GCNumberWithUnit * dur  = [lap numberWithUnitForField:gcFieldFlagSumDuration andActivityType:activity.activityType];
     GCNumberWithUnit * cad  = [lap numberWithUnitForField:gcFieldFlagCadence andActivityType:activity.activityType];
     GCNumberWithUnit * lgth = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"SumNumLengths" andActivityType:GC_TYPE_SWIMMING]];

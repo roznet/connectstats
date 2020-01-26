@@ -60,7 +60,6 @@ NS_INLINE BOOL GCActivityTypeIsSki(NSString*at, NSString*atdetail){
 +(GCUnit*)fieldUnit:(NSString*)field activityType:(NSString*)activityType DEPRECATED_MSG_ATTRIBUTE("Use GCField");
 +(NSString*)fieldUnitName:(NSString*)field activityType:(NSString*)activityType DEPRECATED_MSG_ATTRIBUTE("Use GCField");
 +(NSString*)fieldDisplayName:(NSString*)field activityType:(NSString*)activityType DEPRECATED_MSG_ATTRIBUTE("Use GCField");
-+(gcUnitSystem)fieldUnitSystem;
 +(NSArray*)missingPredefinedField;
 
 +(NSString*)metaFieldDisplayName:(NSString*)metaField;

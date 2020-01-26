@@ -57,6 +57,7 @@
 -(BOOL)isMax;
 -(BOOL)isMin;
 -(BOOL)isSpeedOrPace;
+-(BOOL)isZeroValid;
 
 /**
  Corresponding Speed or Pace field. If not speed or pace return nil
@@ -75,7 +76,6 @@
 -(NSString*)displayNameWithUnits:(GCUnit*)unit;
 -(GCUnit*)unit;
 -(NSString*)unitName;
--(gcUnitSystem)unitSystem;
 
 -(GCField*)nextFieldIn:(gcFieldFlag)flag;
 -(NSString*)category;

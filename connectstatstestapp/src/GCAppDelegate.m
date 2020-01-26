@@ -30,6 +30,8 @@
 #import "GCAppGlobal.h"
 @import RZUtils;
 #import <RZUtilsSwift/RZUtilsSwift-Swift.h>
+#import "GCTestsSamples.h"
+
 //@import RZUtilsSwift;
 
 @interface GCAppDelegate ()
@@ -89,6 +91,9 @@
     [GCAppGlobal setApplicationDelegate:self];
 
     [self setupWorkerThread];
+    
+    //[GCTestsSamples ensureSampleDbStructure];
+    
     _testViewController = [[GCTestViewController alloc] init];
     _testViewController.runTestOnStartup = false;
     _testUIGraphViewController = [[GCTestUIGraphViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -175,6 +180,8 @@
     [GCActivityType setFieldCache:cache];
     [GCActivityType setActivityTypes:[GCActivityTypes activityTypes]];
 }
+
+
 
 
 -(void)setupEmptyState:(NSString*)name withSettingsName:(NSString*)settingName{

@@ -115,9 +115,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
     [_location release];
 
-    [_speedDisplayUom release];
-    [_distanceDisplayUom release];
-
     [_activityTypeDetail release];
     [_calculatedFields release];
     [_calculatedLaps release];
@@ -254,6 +251,15 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 }
  */
 
+
+-(GCUnit*)speedDisplayUnit{
+    return self.activityTypeDetail.preferredSpeedDisplayUnit ?: [[GCUnit kph] unitForGlobalSystem];
+}
+
+-(GCUnit*)distanceDisplayUnit{
+    return [[GCUnit kilometer] unitForGlobalSystem];
+}
+
 /**
  This method should be the primary access method to get value for any field
  Note that the activityType in field will be ignored, if it does not match
@@ -269,10 +275,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             rv = [GCNumberWithUnit numberWithUnitName:STOREUNIT_ELAPSED andValue:self.sumDuration];
             break;
         case gcFieldFlagSumDistance:
-            rv = [[GCNumberWithUnit numberWithUnitName:STOREUNIT_DISTANCE andValue:self.sumDistance] convertToUnitName:self.distanceDisplayUom];
+            rv = [[GCNumberWithUnit numberWithUnitName:STOREUNIT_DISTANCE andValue:self.sumDistance] convertToUnit:self.distanceDisplayUnit];
             break;
         case gcFieldFlagWeightedMeanSpeed:
-            rv = [[GCNumberWithUnit numberWithUnitName:STOREUNIT_SPEED andValue:self.weightedMeanSpeed] convertToUnitName:self.speedDisplayUom];
+            rv = [[GCNumberWithUnit numberWithUnitName:STOREUNIT_SPEED andValue:self.weightedMeanSpeed] convertToUnit:self.speedDisplayUnit];
             // Guard against inf speed or pace
             if( isinf(rv.value)){
                 rv = nil;
@@ -492,10 +498,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     GCUnit * rv = nil;
     switch (field.fieldFlag) {
         case gcFieldFlagSumDistance:
-            rv = [GCUnit unitForKey:_distanceDisplayUom];
+            rv = self.distanceDisplayUnit;
             break;
         case gcFieldFlagWeightedMeanSpeed:
-            rv = [GCUnit unitForKey:_speedDisplayUom];
+            rv = self.speedDisplayUnit;
             break;
         default:
         {
@@ -1200,14 +1206,13 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 -(BOOL)loadTrackPoints{
     BOOL rv = false;
     if (self.hasTrackDb) {
-        NSDate * timing_start = [NSDate date];
-        unsigned mem_start =[RZMemory memoryInUse];
+        RZPerformance * perf = [RZPerformance start];
+        
         FMDatabase * trackdb = self.trackdb;
 
         if (![self trackdbIsObsolete:trackdb]) {
             [self loadTrackPointsFromDb:trackdb];
-            RZLog(RZLogInfo, @"%@ Loaded trackpoints count = %lu [%.1f sec %@]", self, (unsigned long)self.trackpointsCache.count,
-                  [[NSDate date] timeIntervalSinceDate:timing_start], [RZMemory formatMemoryInUseChangeSince:mem_start]);
+            RZLog(RZLogInfo, @"%@ Loaded trackpoints count = %lu %@", self, (unsigned long)self.trackpointsCache.count, perf);
             [self notifyForString:kGCActivityNotifyTrackpointReady];
             rv = true;
         }
@@ -1596,7 +1601,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                 GCNumberWithUnit * nb = [point numberWithUnitForField:field inActivity:self];
 
                 if (field.fieldFlag == gcFieldFlagWeightedMeanSpeed && nb.value != 0.) {
-                    nb = [nb convertToUnitName:_speedDisplayUom];
+                    nb = [nb convertToUnit:self.speedDisplayUnit];
                 }
                 if (!unit || ![unit isEqualToUnit:nb.unit]) {
                     //TODO should Convert?
@@ -1966,10 +1971,19 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if( self.metaData == nil){
         self.metaData = meta;
     }else{
-        
         self.metaData = meta;
     }
     [self skipAlways];
+}
+
+-(void)updateActivityTypeFromMetaData{
+    GCActivityMetaValue * activityTypeMeta = self.metaData[GC_META_ACTIVITYTYPE];
+    if( activityTypeMeta ){
+        GCActivityType * activityType = [GCActivityType activityTypeForKey:activityTypeMeta.key];
+        if( activityType ) {
+            self.activityTypeDetail = activityType;
+        }   
+    }
 }
 
 -(BOOL)skipAlways{

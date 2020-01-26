@@ -21,6 +21,7 @@
 #import "GCGarminUserJsonParser.h"
 #import "GCActivity+CachedTracks.h"
 #import "GCTestsHelper.h"
+#import "GCTestsSamples.h"
 
 #import "GCActivity+TestBackwardCompat.h"
 
@@ -45,11 +46,7 @@
 #pragma mark - duplicate activities
 
 -(void)testSearchDuplicateActivities{
-    
-    NSString * fname = [RZFileOrganizer bundleFilePath:@"activities_duplicate.db" forClass:[self class]];
-    FMDatabase * db = [FMDatabase databaseWithPath:fname];
-    [db open];
-
+    FMDatabase * db = [GCTestsSamples sampleActivityDatabase:@"activities_duplicate.db"];
     GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
     XCTAssertEqual(organizer.activities.count, 126, @"filtered duplicate properly");
     [organizer release];
@@ -262,9 +259,7 @@
 }
 
 -(void)testActivityStatsRunning{
-    FMDatabase * t1 = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"test_activity_running_837769405.db"
-                                                                        forClass:[self class]]];
-    [t1 open];
+    FMDatabase * t1 = [GCTestsSamples sampleActivityDatabase:@"test_activity_running_837769405.db"];
     
     GCActivity * act = [GCActivity fullLoadFromDb:t1];
     XCTAssertGreaterThan(act.trackpoints.count, 1);
@@ -282,13 +277,11 @@
     XCTAssertNotEqual(hr.count, speed.count);
     XCTAssertEqual([trackStats dataSerie:0].count, [trackStats dataSerie:1].count);// got reduced to same set
 
+    [t1 close];
 }
 
 -(void)testCompareActivitiesRunning{
-    FMDatabase * db1 = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"test_activity_running_1266384539.db" forClass:[self class]]];
-    FMDatabase * db2 = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"test_activity_running_828298988.db"  forClass:[self class]]];
-    [db1 open];
-    [db2 open];
+    FMDatabase * db1 = [GCTestsSamples sampleActivityDatabase:@"test_activity_running_1266384539.db"];
     
     GCActivity * act = [GCActivity fullLoadFromDb:db1];
     
@@ -305,6 +298,7 @@
     XCTAssertEqual([act.trackpoints.lastObject distanceMeters], last.x_data);
 
     /*
+     FMDatabase * db2 = [GCTestsSamples sampleActivityDatabase:@"test_activity_running_828298988.db" ];
      GCActivity * compare = [GCActivity fullLoadFromDb:db2];
      GCStatsDataSerieWithUnit * su2 = [compare progressSerie:false];
     
@@ -429,9 +423,7 @@
     [health registerZoneCalculators:parser.data];
     XCTAssertTrue(parser.success, @"JsonParser Success");
     
-    FMDatabase * t1 = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"test_activity_running_837769405.db"
-                                                                        forClass:[self class]]];
-    [t1 open];
+    FMDatabase * t1 = [GCTestsSamples sampleActivityDatabase:@"test_activity_running_837769405.db"];
     
     GCActivity * act = [GCActivity fullLoadFromDb:t1];
     
@@ -459,15 +451,12 @@
         XCTAssertEqualWithAccuracy(point.y_data, lap.elapsed, 1.e-5);
     }
     
-    //NSLog(@"%@", trackStats.data.serie);
-    //NSLog(@"%@", laps);
+    [t1 close];
 
 }
 
 -(void)testActivityThumbnails{
-    FMDatabase * t1 = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"test_activity_running_837769405.db"
-                                                                        forClass:[self class]]];
-    [t1 open];
+    FMDatabase * t1 = [GCTestsSamples sampleActivityDatabase:@"test_activity_running_837769405.db"];
     
     GCActivity * act = [GCActivity fullLoadFromDb:t1];
     XCTAssertGreaterThan(act.trackpoints.count, 1);
@@ -485,12 +474,11 @@
     XCTAssertEqual(img.size.height, 150.);
     
     [thumbs release];
+    [t1 close];
 }
 
 -(void)testActivityStatsDayHeartRate{
-    FMDatabase * t1 = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"test_activity_day___healthkit__20150622.db"
-                                                                        forClass:[self class]]];
-    [t1 open];
+    FMDatabase * t1 = [GCTestsSamples sampleActivityDatabase:@"test_activity_day___healthkit__20150622.db"];
     
     GCActivity * act = [GCActivity fullLoadFromDb:t1];
     XCTAssertGreaterThan(act.trackpoints.count, 1);
@@ -519,8 +507,7 @@
 -(void)testActivityCalculated{
     // https://www.strava.com/activities/744059200/overview
     // https://connect.garmin.com/modern/activity/1404395287
-    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"test_activity_cycling_1404395287.db" forClass:[self class]]];
-    [db open];
+    FMDatabase * db = [GCTestsSamples sampleActivityDatabase:@"test_activity_cycling_1404395287.db"];
     
     GCActivity * act = [GCActivity fullLoadFromDb:db];
     // SHould be calculated and loaded upon full load

@@ -67,6 +67,7 @@ typedef BOOL (^FileOrganizerMatch)(NSString*fn);
 
 +(void)createEditableCopyOfFile:(NSString*)aName;
 +(BOOL)createEditableCopyOfFileIfNeeded:(NSString*)aName;
++(void)createEditableCopyOfFile:(NSString*)aName forClass:(Class)cls;
 +(void)forceRebuildEditable:(NSString*)aName;
 +(void)removeEditableFile:(NSString*)aName;
 

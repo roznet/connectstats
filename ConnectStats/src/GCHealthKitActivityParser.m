@@ -144,8 +144,6 @@
             activity.activityName = @"";
             activity.downloadMethod = gcDownloadMethodHealthKit;
             activity.location = @"";
-            activity.speedDisplayUom = @"kph";
-            activity.distanceDisplayUom = @"kilometer";
             [activity setSummaryDataFromKeyDict:@{
                                      @"SumDistance":[GCActivitySummaryValue activitySummaryValueForField:@"SumDistance" value:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDistance]],
                                      @"SumDuration":[GCActivitySummaryValue activitySummaryValueForField:@"SumDuration" value:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDuration]],

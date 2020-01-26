@@ -47,6 +47,13 @@
 -(void)loadFromResultSet:(FMResultSet*)res{
     self.activityName = [res stringForColumn:@"activityName"];
     self.activityType = [res stringForColumn:@"activityType"];
+    NSString * detailValue = [res stringForColumn:@"activityTypeDetail"];
+    if( detailValue ){
+        self.activityTypeDetail = [GCActivityType activityTypeForKey:detailValue];
+    }
+    if( self.activityTypeDetail == nil ){
+        self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
+    }
     self.date = [res dateForColumn:@"BeginTimestamp"];
 
     for (GCField * summaryField in [self validStoredSummaryFields]) {
@@ -59,8 +66,6 @@
         [self setSummaryField:summaryField.fieldFlag with:nu];
     }
         
-    self.speedDisplayUom = [res stringForColumn:@"speedDisplayUom"];
-    self.distanceDisplayUom = [res stringForColumn:@"distanceDisplayUom"];
     self.garminSwimAlgorithm = [res boolForColumn:@"garminSwimAlgorithm"];
 
     self.location = [res stringForColumn:@"Location"];
@@ -92,11 +97,8 @@
     if (self.location == nil) {
         [bad addObject:@"location"];
     }
-    if (self.speedDisplayUom == nil) {
-        [bad addObject:@"speedDisplayUom"];
-    }
-    if (self.distanceDisplayUom == nil) {
-        [bad addObject:@"distanceDisplayUom"];
+    if (self.activityTypeDetail.key == nil){
+        [bad addObject:@"activityTypeDetail"];
     }
 
     return bad;
@@ -124,6 +126,7 @@
     
     NSArray * dbrow = @[self.activityId,
                         self.activityType,
+                        self.activityTypeDetail.key,
                         self.date,
                         @([self summaryFieldValueInStoreUnit:gcFieldFlagSumDistance]),
                         @([self summaryFieldValueInStoreUnit:gcFieldFlagSumDuration]),
@@ -134,15 +137,13 @@
                         @([self summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanSpeed]),
                         self.location,
                         @(self.flags),
-                        self.speedDisplayUom,
-                        self.distanceDisplayUom,
                         @(self.garminSwimAlgorithm),
                         @(self.downloadMethod),
                         @(self.trackFlags)
                         ];
 
     [db setShouldCacheStatements:YES];
-    NSString * sql = @"INSERT INTO gc_activities (activityId,activityType,BeginTimestamp,SumDistance,SumDuration,WeightedMeanHeartRate,activityName, BeginLongitude,BeginLatitude,WeightedMeanSpeed,Location,Flags,SpeedDisplayUom,DistanceDisplayUom,garminSwimAlgorithm,downloadMethod,trackFlags) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    NSString * sql = @"INSERT INTO gc_activities (activityId,activityType,activityTypeDetail,BeginTimestamp,SumDistance,SumDuration,WeightedMeanHeartRate,activityName, BeginLongitude,BeginLatitude,WeightedMeanSpeed,Location,Flags,garminSwimAlgorithm,downloadMethod,trackFlags) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     [db executeUpdate:sql withArgumentsInArray:dbrow];
     if ([db hadError]) {
         RZLog(RZLogError, @"db update %@", [db lastErrorMessage]);
@@ -238,7 +239,7 @@
         [db executeUpdate:@"DROP TABLE gc_activities_calculated"];
     }
     if (![db tableExists:@"gc_activities"]) {
-        [db executeUpdate:@"CREATE TABLE gc_activities (activityId TEXT PRIMARY KEY, activityName TEXT, activityType TEXT,BeginTimestamp REAL,SumDistance REAL,SumDuration REAL,WeightedMeanHeartRate REAL,WeightedMeanSpeed REAL,SpeedDisplayUom TEXT,DistanceDisplayUom TEXT,BeginLatitude REAL,BeginLongitude REAL,Location TEXT,Flags REAL,trackFlags INT DEFAULT -1,garminSwimAlgorithm INT DEFAULT 0,downloadMethod INT DEFAULT 0)"];
+        [db executeUpdate:@"CREATE TABLE gc_activities (activityId TEXT PRIMARY KEY, activityName TEXT, activityType TEXT,activityTypeDetail TEXT,BeginTimestamp REAL,SumDistance REAL,SumDuration REAL,WeightedMeanHeartRate REAL,WeightedMeanSpeed REAL,BeginLatitude REAL,BeginLongitude REAL,Location TEXT,Flags REAL,trackFlags INT DEFAULT -1,garminSwimAlgorithm INT DEFAULT 0,downloadMethod INT DEFAULT 0)"];
     }
     if (![db tableExists:@"gc_activities_values"]) {
         [db executeUpdate:@"CREATE TABLE gc_activities_values (activityId TEXT, field TEXT, value REAL, uom TEXT )"];
@@ -352,6 +353,91 @@
         [GCActivity upgradeDatababaseForRemappedTypes:db];
         RZEXECUTEUPDATE(db, @"INSERT INTO gc_version (version) VALUES(11)");
     }
+    if( max_version < 12){
+        [GCActivity upgradeDatababaseForActivityTypeDetails:db];
+        RZEXECUTEUPDATE(db, @"INSERT INTO gc_version (version) VALUES(12)");
+    }
+}
+
++(void)upgradeDatababaseForActivityTypeDetails:(FMDatabase*)db{
+    RZPerformance * perf = [RZPerformance start];
+    RZEXECUTEUPDATE(db, @"DROP TABLE IF EXISTS gc_activities_tmp");
+    
+    RZEXECUTEUPDATE(db, @"CREATE TABLE gc_activities_tmp (activityId TEXT PRIMARY KEY, activityName TEXT, activityType TEXT,activityTypeDetail TEXT,BeginTimestamp REAL,SumDistance REAL,SumDuration REAL,WeightedMeanHeartRate REAL,WeightedMeanSpeed REAL,BeginLatitude REAL,BeginLongitude REAL,Location TEXT,Flags INT DEFAULT 0,trackFlags INT DEFAULT -1,garminSwimAlgorithm INT DEFAULT 0,downloadMethod INT DEFAULT 0)");
+
+    NSMutableDictionary * types = [NSMutableDictionary dictionary];
+    FMResultSet * res = [db executeQuery:@"SELECT activityId,key FROM gc_activities_meta WHERE field = 'activityType'"];
+    while( [res next]){
+        NSString * typeKey = [res stringForColumn:@"key"];
+        NSString * activityId = [res stringForColumn:@"activityId"];
+        if( typeKey && activityId){
+            GCActivityType * type = [GCActivityType activityTypeForKey:typeKey];
+            if( type ){
+                types[activityId] = type;
+            }
+        }
+    }
+    
+    res = [db executeQuery:@"SELECT * FROM gc_activities"];
+    [db setShouldCacheStatements:YES];
+    [db beginTransaction];
+    
+    NSUInteger errors = 0;
+    NSUInteger done = 0;
+    
+    while( [res next] ){
+        NSString * activityId = [res stringForColumn:@"activityId"];
+        GCActivityType * typeDetail = types[activityId];
+        GCActivityType * type = [GCActivityType activityTypeForKey:[res stringForColumn:@"activityType"]];
+        
+        if( typeDetail == nil){
+            typeDetail = type;
+        }else{
+            if( ![type isEqualToActivityType:typeDetail] && ![typeDetail.parentType isEqualToActivityType:type] ){
+                if( errors < 5){
+                    RZLog(RZLogError, @"Incompatible types??? type = %@ detail = %@", type, typeDetail);
+                }
+                errors += 1;
+            }
+        }
+        
+        NSArray * dbrow = @[ activityId,
+                             type.key,
+                             typeDetail.key,
+                            [res dateForColumn:@"BeginTimestamp"],
+                            @([res doubleForColumn:@"SumDistance"]),
+                            @([res doubleForColumn:@"SumDuration"]),
+                            @([res doubleForColumn:@"WeightedMeanHeartRate"]),
+                            [res stringForColumn:@"activityName"],
+                            @([res doubleForColumn:@"BeginLongitude"]),
+                            @([res doubleForColumn:@"BeginLatitude"]),
+                            @([res doubleForColumn:@"WeightedMeanSpeed"]),
+                            [res stringForColumn:@"Location"],
+                            @([res doubleForColumn:@"Flags"]),
+                            @([res intForColumn:@"garminSwimAlgorithm"]),
+                            @([res intForColumn:@"downloadMethod"]),
+                            @([res intForColumn:@"trackFlags"])
+                            ];
+
+        
+        NSString * sql = @"INSERT INTO gc_activities_tmp (activityId,activityType,activityTypeDetail,BeginTimestamp,SumDistance,SumDuration,WeightedMeanHeartRate,activityName, BeginLongitude,BeginLatitude,WeightedMeanSpeed,Location,Flags,garminSwimAlgorithm,downloadMethod,trackFlags) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        
+        if (! [db executeUpdate:sql withArgumentsInArray:dbrow]) {
+            RZLog(RZLogError, @"db update %@", [db lastErrorMessage]);
+            errors += 1;
+        }
+        done += 1;
+    }
+    [db commit];
+    
+    [db beginTransaction];
+    RZEXECUTEUPDATE(db, @"ALTER TABLE gc_activities RENAME TO gc_activities_legacy");
+    RZEXECUTEUPDATE(db, @"ALTER TABLE gc_activities_tmp RENAME TO gc_activities");
+    RZEXECUTEUPDATE(db, @"CREATE INDEX IF NOT EXISTS gc_idx_BeginTimeStamp ON gc_activities (BeginTimestamp DESC)");
+
+    [db commit];
+    
+    RZLog( RZLogInfo, @"Upgraded %@ activities with %@ type details, %@ errors %@", @( done ), @( types.count), @(errors), perf);
 }
 
 +(void)upgradeDatababaseForRemappedTypes:(FMDatabase*)db{

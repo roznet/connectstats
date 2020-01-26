@@ -115,8 +115,6 @@
     [self setSummaryDataFromKeyDict:@{@"shots":[GCActivitySummaryValue activitySummaryValueForDict:@{@"value":shots,@"uom":@"shots"} andField:@"shots"]}];
 
     self.flags  = gcFieldFlagSumDuration+gcFieldFlagTennisShots;
-    self.speedDisplayUom = @"kph";
-    self.distanceDisplayUom = @"meter";
     self.downloadMethod = gcDownloadMethodTennis;
 
     [self saveToDb:self.db];

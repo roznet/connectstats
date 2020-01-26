@@ -28,6 +28,7 @@
 #import "GCActivity+Database.h"
 #import "GCActivity+CachedTracks.h"
 #import "GCWebConnect+Requests.h"
+#import "GCTestsSamples.h"
 
 #define STAGE_START @(0)
 #define STAGE_END   @(1)
@@ -74,8 +75,7 @@
     [[NSFileManager defaultManager] copyItemAtPath:[RZFileOrganizer writeableFilePath:dbname]
                                             toPath:[RZFileOrganizer writeableFilePath:trackdbname] error:&e];
     RZ_ASSERT(e==nil, @"Could copy trackdb");
-    FMDatabase * adb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:dbname]];
-    [adb open];
+    FMDatabase * adb = [GCTestsSamples sampleActivityDatabase:dbname];
     GCActivity * act = [GCActivity activityWithId:aId andDb:adb];
     NSUInteger startWith = [[GCAppGlobal organizer] countOfActivities];
     [[GCAppGlobal organizer] registerActivity:act forActivityId:act.activityId];

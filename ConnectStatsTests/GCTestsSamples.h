@@ -7,10 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "GCActivity.h"
+@class GCActivity;
 
 @interface GCTestsSamples : NSObject
+
 +(NSDictionary*)aggregateSample;
 +(NSDictionary*)aggregateExpected;
 +(GCActivity*)sampleCycling;
+
++(FMDatabase*)sampleActivityDatabase:(NSString*)name;
++(NSString*)sampleActivityDatabasePath:(NSString*)name;
++(void)ensureSampleDbStructure;
+
 @end

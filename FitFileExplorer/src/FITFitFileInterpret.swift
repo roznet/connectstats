@@ -58,7 +58,7 @@ class FITFitFileInterpret: NSObject {
             
             // don't keep mps
             if nu.unit == GCUnit.mps(){
-                nu = nu.convert(to: GCUnit.kph())
+                nu = nu.convert(to: GCUnit.kph().forGlobalSystem() )
             }
             rv = GCActivitySummaryValue(forField: activityField.key, value: nu)
         }
@@ -114,7 +114,7 @@ class FITFitFileInterpret: NSObject {
             }
         }
         // Few special cases, if speed and not pace, add
-        if self.activityType.isPaceValid() {
+        if self.activityType.isPacePreferred() {
             if let paceField = GCField( for: gcFieldFlag.weightedMeanSpeed, andActivityType: self.activityType.topSubRoot().key),
                 let speedField = GCField( forKey: "WeightedMeanSpeed", andActivityType: self.activityType.topSubRoot().key),
                 let speed = rv[ speedField ]{

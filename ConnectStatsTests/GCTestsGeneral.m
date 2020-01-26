@@ -115,8 +115,6 @@
                              @"WeightedMeanHeartRate":  [self sumVal:@"WeightedMeanHeartRate"   val:act.weightedMeanHeartRateCompat   uom:@"bpm"  ],
                              }];
     
-    [act setSpeedDisplayUom:@"kph"];
-    [act setDistanceDisplayUom:@"km"];
     [tmp addObject:act];
     [act release];
     
@@ -130,8 +128,6 @@
     [act setFlags:gcFieldFlagSumDistance+gcFieldFlagSumDuration+gcFieldFlagWeightedMeanHeartRate+gcFieldFlagWeightedMeanSpeed];
     [act setActivityType:GC_TYPE_CYCLING];
     
-    [act setSpeedDisplayUom:@"kph"];
-    [act setDistanceDisplayUom:@"km"];
     [act setSummaryDataFromKeyDict:@{     @"SumDuration" :           [self sumVal:@"SumDuration"             val:act.sumDurationCompat             uom:@"second" ],
                              @"SumDistance" :           [self sumVal:@"SumDistance"             val:act.sumDistanceCompat             uom:@"meter" ],
                              @"WeightedMeanHeartRate":  [self sumVal:@"WeightedMeanHeartRate"   val:act.weightedMeanHeartRateCompat   uom:@"bpm"  ],
@@ -371,8 +367,8 @@
     GCActivitySearch * search = nil;
     GCActivity * one_true = [[[GCActivity alloc] init] autorelease];
     GCActivity * one_false =[[[GCActivity alloc] init] autorelease];
-    [one_true setSumDistanceCompat:20.];
-    [one_false setSumDistanceCompat:2.];
+    [one_true setSumDistanceCompat:20000.];
+    [one_false setSumDistanceCompat:2000.];
     
     for (NSString * st in [NSArray arrayWithObjects:@"distance > 10",@"distance >10",@"distance>10",@"distance> 10", nil]) {
         search = [GCActivitySearch activitySearchWithString:st];
@@ -610,8 +606,6 @@
                                  @"WeightedMeanHeartRate":  [self sumVal:@"WeightedMeanHeartRate"   val:act.weightedMeanHeartRateCompat   uom:@"bpm"  ],
                                  }];
         
-        [act setSpeedDisplayUom:@"kph"];
-        [act setDistanceDisplayUom:@"km"];
         [activities addObject:act];
         [act release];
 
@@ -650,12 +644,14 @@
     XCTAssertEqual(exp_st.count, perfAnalysis.shortTermSerie.serie.count, @"Short Term count as Expected");
     XCTAssertEqual(exp_lt.count, perfAnalysis.longTermSerie.serie.count, @"Long Term count as Expected");
     
+    // Divide by 1000 as display unit is kilometer now, but above is calculated with meters.
+    // it doesn't matter for final display as it's rescaled against the maximium on the serie.
     for (NSUInteger i=0; i<MIN(exp_st.count, perfAnalysis.shortTermSerie.serie.count); i++) {
-        XCTAssertEqualWithAccuracy([exp_st[i] doubleValue], [perfAnalysis.shortTermSerie.serie dataPointAtIndex:i].y_data, 1.e-2, @"Short Term Value [%d]", (int)i );
+        XCTAssertEqualWithAccuracy([exp_st[i] doubleValue]/1000.0, [perfAnalysis.shortTermSerie.serie dataPointAtIndex:i].y_data, 1.e-2, @"Short Term Value [%d]", (int)i );
     }
     
     for (NSUInteger i=0; i<MIN(exp_lt.count, perfAnalysis.longTermSerie.serie.count); i++) {
-        XCTAssertEqualWithAccuracy([exp_lt[i] doubleValue], [perfAnalysis.longTermSerie.serie dataPointAtIndex:i].y_data, 1.e-2, @"Long Term Value [%d]", (int)i );
+        XCTAssertEqualWithAccuracy([exp_lt[i] doubleValue]/1000.0, [perfAnalysis.longTermSerie.serie dataPointAtIndex:i].y_data, 1.e-2, @"Long Term Value [%d]", (int)i );
     }
     
 }
@@ -754,7 +750,6 @@
         [act setDate:[NSDate dateForRFC3339DateTimeString:[sample objectAtIndex:1]]];
         [act setSumDistanceCompat:[[sample objectAtIndex:2] doubleValue]];
         [act setFlags:gcFieldFlagSumDistance];
-        [act setDistanceDisplayUom:[sample objectAtIndex:3]];
         [act setLocation:sample[6]];
         [act setSummaryData:@{[self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:@"WeightedMeanSpeed" val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
         [activities addObject:act];
@@ -814,7 +809,6 @@
         [act setDate:[NSDate dateForRFC3339DateTimeString:[sample objectAtIndex:1]]];
         [act setSumDistanceCompat:[[sample objectAtIndex:2] doubleValue]];
         [act setFlags:gcFieldFlagSumDistance];
-        [act setDistanceDisplayUom:[sample objectAtIndex:3]];
         [act setSummaryData:@{[self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:@"WeightedMeanSpeed" val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
         [activities addObject:act];
     }

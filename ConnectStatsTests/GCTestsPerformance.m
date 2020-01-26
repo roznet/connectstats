@@ -38,6 +38,7 @@
 #import "GCActivityAutoLapChoices.h"
 #import "ConnectStats-Swift.h"
 #import "GCGarminSearchJsonParser.h"
+#import "GCTestsSamples.h"
 
 
 @interface GCTestsPerformance : GCTestCase
@@ -59,9 +60,7 @@
 
 - (void)testPerformanceOrganizerLoad {
     [self measureBlock:^{
-        NSString * fname = [RZFileOrganizer bundleFilePath:@"activities_duplicate.db" forClass:[self class]];
-        FMDatabase * db = [FMDatabase databaseWithPath:fname];
-        [db open];
+        FMDatabase * db = [GCTestsSamples sampleActivityDatabase:@"activities_duplicate.db"];
         
         GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
         XCTAssertEqual(organizer.activities.count, 126, @"filtered duplicate properly");
@@ -73,10 +72,7 @@
 }
 
 -(void)testPerformanceOrganizerStatistics{
-    NSString * fname = [RZFileOrganizer bundleFilePath:@"activities_stats.db" forClass:[self class]];
-    FMDatabase * db = [FMDatabase databaseWithPath:fname];
-    [db open];
-    [GCActivitiesOrganizer ensureDbStructure:db];
+    FMDatabase * db = [GCTestsSamples sampleActivityDatabase:@"activities_stats.db"];
     
     GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
     
@@ -95,11 +91,6 @@
 }
 
 -(void)testPerformanceTrackpoints{
-    FMDatabase * t1 = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"test_activity_running_837769405.db"
-                                                                          forClass:[self class]]];
-    [t1 open];
-    
-    //GCActivity * act = [GCActivity fullLoadFromDb:t1];
     
     NSString * aId = @"1083407258";
     
@@ -183,6 +174,7 @@
         GCActivitiesOrganizerListRegister * listregister =[GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:service isFirst:YES];
         [listregister addToOrganizer:organizer];
         
+        [db close];
         [organizer release];
         [parser release];
     }];

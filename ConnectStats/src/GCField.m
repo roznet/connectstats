@@ -355,6 +355,12 @@ static void registerInCache(GCField*field){
     return [self.key hasPrefix:@"Min"];
 }
 
+-(BOOL)isZeroValid{
+    if( [self.key hasSuffix:@"Elevation"] || self.fieldFlag == gcFieldFlagSumDistance || self.fieldFlag == gcFieldFlagSumDuration ){
+        return true;
+    }
+    return false;
+}
 -(GCField*)fieldBySwappingPrefix:(NSString*)oldPrefix for:(NSString*)newPrefix{
     if( [self.key hasPrefix:oldPrefix]){
         NSString * guess = [NSString stringWithFormat:@"%@%@", newPrefix, [self.key substringFromIndex:[oldPrefix length]]];
@@ -445,9 +451,6 @@ static void registerInCache(GCField*field){
 }
 -(NSString*)unitName{
     return [[_fieldCache infoForField:self] uom];
-}
--(gcUnitSystem)unitSystem{
-    return [GCFields fieldUnitSystem];
 }
 
 -(NSString*)displayNameAndUnits{

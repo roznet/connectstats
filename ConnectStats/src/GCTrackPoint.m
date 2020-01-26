@@ -148,6 +148,10 @@ void buildStatic(){
         self.verticalOscillation = [res doubleForColumn:@"VerticalOscillation"];
         self.groundContactTime = [res doubleForColumn:@"GroundContactTime"];
         self.trackFlags = [res intForColumn:@"trackflags"];
+        if( _elapsed != 0.0){
+            self.trackFlags = RZSetOption(self.trackFlags, gcFieldFlagSumDuration);
+        }
+
     }
     return self;
 }

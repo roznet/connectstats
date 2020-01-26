@@ -462,9 +462,11 @@
         GCActivity * act_tcx = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         act_tcx.activityId = activityId_tcx;
         act_tcx.db = act_tcx.trackdb;
+        [GCActivity ensureDbStructure:act_tcx.db];
         GCActivity * act_fit = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         act_fit.activityId = activityId_fit;
         act_fit.db = act_fit.trackdb;
+        [GCActivity ensureDbStructure:act_fit.db];
         NSString * tcx = [NSString stringWithFormat:@"activity_%@.tcx", activityId];
         NSString * fit = [NSString stringWithFormat:@"activity_%@.fit", activityId];
         NSString * fp_tcx = [RZFileOrganizer bundleFilePath:tcx forClass:[self class]];

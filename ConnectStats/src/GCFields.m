@@ -115,14 +115,6 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
 
     return rv;
 }
-+(gcUnitSystem)fieldUnitSystem{
-    gcUnitSystem rv = [GCUnit getGlobalSystem];
-    if (rv == GCUnitSystemDefault) {
-        GCUnit * sample =  [GCField fieldForKey:@"SumDistance" andActivityType:GC_TYPE_ALL].unit;
-        rv = [sample system];
-    }
-    return rv;
-}
 
 +(NSString*)fieldDisplayNameAndUnits:(NSString *)fieldStr activityType:(NSString*)aType unit:(GCUnit*)unit{
     return [[GCField fieldForKey:fieldStr andActivityType:aType] displayNameWithUnits:unit];

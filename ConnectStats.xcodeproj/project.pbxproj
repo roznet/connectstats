@@ -317,6 +317,7 @@
 		422FAFCD19A1DD6000D09773 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 427B20AD1621B5CF00D5C3C5 /* Localizable.strings */; };
 		422FAFD219A1DD6000D09773 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42EE4565176BCB81003338AF /* Media.xcassets */; };
 		42305E971DCF81C60024700C /* GCAppDelegate+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 429889A31D90371700A22571 /* GCAppDelegate+Swift.m */; };
+		423090DC23DDBB4C008AEE42 /* GCTestsSamples.m in Sources */ = {isa = PBXBuildFile; fileRef = 42096755189CF49600D32CA7 /* GCTestsSamples.m */; };
 		4231A2B81603BF9C00C02D79 /* GCActivityDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4231A2B71603BF9C00C02D79 /* GCActivityDetailViewController.m */; };
 		4231CB5E165AB5E60020FDB2 /* GCSettingsProfilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4231CB5D165AB5E60020FDB2 /* GCSettingsProfilesViewController.m */; };
 		423209361868D8F600C8F305 /* GCActivity+CachedTracks.m in Sources */ = {isa = PBXBuildFile; fileRef = 423209351868D8F600C8F305 /* GCActivity+CachedTracks.m */; };
@@ -7595,6 +7596,7 @@
 				42CC45BF200A57EE003EB805 /* GCTestServiceStrava.m in Sources */,
 				429AFD0F22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */,
 				427F937E1BEDFF4300C177F9 /* GCStatsHistGraphConfig.m in Sources */,
+				423090DC23DDBB4C008AEE42 /* GCTestsSamples.m in Sources */,
 				42E4FB411D7AB2740061BB38 /* GCSegmentOrganizer.swift in Sources */,
 				422CC87C1E6ACA1700195414 /* FITFitMessage.m in Sources */,
 				42B5E2C81BA5B216000FAE4E /* GCHistoryFieldDataSerieConfig.m in Sources */,
