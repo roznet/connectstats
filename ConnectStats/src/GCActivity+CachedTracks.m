@@ -199,7 +199,7 @@
 
             if (info.track==gcCalculatedCachedTrackRollingBest) {
                 BOOL timeAxis = info.fieldFlag != gcFieldFlagWeightedMeanSpeed;
-                BOOL useElapsed = true;
+                BOOL useElapsed = false;
                 if( info.fieldFlag == gcFieldFlagWeightedMeanSpeed){
 
                     if( useElapsed ){
@@ -209,12 +209,18 @@
                             [serie.serie addDataPointWithX:0.0 andY:0.0];
                             [serie.serie sortByX];
                         }
-
+                        [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"distance.csv"]
+                                                          atomically:YES encoding:NSUTF8StringEncoding error:nil];
                         GCStatsDataSerie * diffSerie = [serie.serie differenceSerieForLag:0.0];
+                        [[diffSerie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"distance_diff.csv"]
+                                                          atomically:YES encoding:NSUTF8StringEncoding error:nil];
 
                         pts += diffSerie.count;
                         gcStatsSelection select = gcStatsMin;
-                        //DEBUG GCStatsDataSerie * filled = [diffSerie filledSerieForUnit:10. fillMethod:gcStatsZero statistic:gcStatsSum];
+                        GCStatsDataSerie * filled = [diffSerie filledSerieForUnit:10. fillMethod:gcStatsZero statistic:gcStatsSum];
+                        [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"distance_filled.csv"]
+                                                          atomically:YES encoding:NSUTF8StringEncoding error:nil];
+
                         double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
                         unitstride = 10;
                         serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsSum];
@@ -238,11 +244,20 @@
                             [serie.serie addDataPointWithX:0.0 andY:0.0];
                             [serie.serie sortByX];
                         }
-                        
+                        [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"time.csv"]
+                                                          atomically:YES encoding:NSUTF8StringEncoding error:nil];
+
                         GCStatsDataSerie * diffSerie = [serie.serie differenceSerieForLag:0.0];
+                        [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"time_diff.csv"]
+                                                          atomically:YES encoding:NSUTF8StringEncoding error:nil];
                         pts += diffSerie.count;
                         gcStatsSelection select = gcStatsMax;
                         
+                        GCStatsDataSerie * filled = [diffSerie filledSerieForUnit:10. fillMethod:gcStatsZero statistic:gcStatsSum];
+                        [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"time_filled.csv"]
+                                                          atomically:YES encoding:NSUTF8StringEncoding error:nil];
+
+
                         double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
                         unitstride = 10;
                         serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsSum];
