@@ -3,6 +3,7 @@ xcode_workspace: ConnectStats.xcworkspace
 xcode_scheme: ConnectStats
 osx_image: xcode11
 before_install: 
+- gem install cocoapods -v '1.8.4'
 - pod install
 script:
 - xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme ConnectStats -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.0' build CODE_SIGNING_REQUIRED=NO
