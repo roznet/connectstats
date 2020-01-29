@@ -85,10 +85,8 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 @property (nonatomic,retain) NSString * activityId;
 
-@property (nonatomic,retain) NSDictionary<GCField*,GCActivitySummaryValue*> * summaryData;
-@property (nonatomic,retain) NSDictionary<GCField*,GCActivityCalculatedValue*> * calculatedFields;
-@property (nonatomic,retain) NSDictionary<NSString*,NSArray*> * calculatedLaps;
-@property (nonatomic,retain) NSDictionary<GCField*,GCTrackPointExtraIndex*> * cachedExtraTracksIndexes;
+@property (nonatomic,readonly) NSDictionary<GCField*,GCActivitySummaryValue*> * summaryData;
+
 /**
  @brief public interface is read only, should be set with updateMetaData as some flag need to be sync'd
  */
@@ -210,6 +208,8 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(void)clearTrackdb;
 
 -(BOOL)hasTrackField:(gcFieldFlag)which;
+//-(void)registerTrackpoints:(NSArray<GCTrackPoint*>*)points forName:(NSString*)name;
+//-(BOOL)useTrackpoints:(NSString*)name;
 
 /**
  Check if activities has trackfield available. Note it may not be available
@@ -341,9 +341,13 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  @brief method to update the dictionary of meta data
  */
 -(void)updateMetaData:(NSDictionary<NSString*,GCActivityMetaValue*>*)meta;
+/**
+ @brief method to update the dictionary of summary data
+ */
+-(void)updateSummaryData:(NSDictionary<GCField*,GCActivitySummaryValue*>*)summary;
 
 /**
- Add a dictionary of metavalue entries
+ @brief Add a dictionary of metavalue entries
  */
 -(void)addEntriesToMetaData:(NSDictionary<NSString*,GCActivityMetaValue*> *)dict;
 -(void)addEntriesToCalculatedFields:(NSDictionary<GCField*,GCActivityCalculatedValue*> *)dict;

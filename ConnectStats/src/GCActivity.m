@@ -63,6 +63,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 @property (nonatomic,retain) NSArray * lapsCache;
 
 @property (nonatomic,retain) NSDictionary<NSString*,GCActivityMetaValue*> * metaData;
+@property (nonatomic,retain) NSDictionary<GCField*,GCActivitySummaryValue*> * summaryData;
+@property (nonatomic,retain) NSDictionary<GCField*,GCActivityCalculatedValue*> * calculatedFields;
+@property (nonatomic,retain) NSDictionary<NSString*,NSArray*> * calculatedLaps;
+@property (nonatomic,retain) NSDictionary<GCField*,GCTrackPointExtraIndex*> * cachedExtraTracksIndexes;
 
 @property (nonatomic,assign) double sumDistance;
 @property (nonatomic,assign) double sumDuration;
@@ -1382,11 +1386,13 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if (!_trackpointsCache) {
         [self loadTrackPoints];
     }
-    return _trackpointsCache;
+    return self.trackpointsCache;
 }
 -(void)setTrackpoints:(NSArray<GCTrackPoint *> *)trackpoints{
     self.trackpointsCache = trackpoints;
 }
+
+
 #pragma mark - Laps
 
 -(NSArray*)laps{
@@ -1965,6 +1971,26 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         }
     }
     return rv;
+}
+
+-(void)updateSummaryFieldFromSummaryData{
+    for (GCField * field in self.summaryData) {
+        GCActivitySummaryValue * value = self.summaryData[field];
+        if (field.fieldFlag!= gcFieldFlagNone) {
+            GCNumberWithUnit * nu = value.numberWithUnit;
+            [self setSummaryField:field.fieldFlag with:nu];
+            self.flags |= field.fieldFlag;
+        }
+    }
+}
+
+-(void)updateSummaryData:(NSDictionary<GCField *,GCActivitySummaryValue *> *)summary{
+    if( self.summaryData == nil){
+        self.summaryData = summary;
+    }else{
+        self.summaryData = summary;
+    }
+    [self updateSummaryFieldFromSummaryData];
 }
 
 -(void)updateMetaData:(NSDictionary<NSString *,GCActivityMetaValue *> *)meta{

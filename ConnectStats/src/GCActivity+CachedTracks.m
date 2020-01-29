@@ -643,4 +643,65 @@
     }
 
 }
+
+-(NSArray<GCTrackPoint*>*)matchDistance:(CLLocationDistance)target withPoints:(NSArray<GCTrackPoint*>*)points{
+    CLLocationDistance x_a = 0.0;
+    CLLocationDistance x_b = 5.0;
+    
+    CLLocationDistance  y_a = 0.0;
+    CLLocationDistance  y_b = 0.0;
+
+    CLLocationDistance x_c = 0.0;
+    CLLocationDistance y_c = 0.0;
+
+    y_a = [self filterTrackpoints:points with:x_a addTo:nil];
+    y_b = [self filterTrackpoints:points with:x_b addTo:nil];
+
+    while( (y_a - target) * (y_b - target) < 0 && fabs(y_b-target) > 1.0 && fabs(y_a-target) > 1.0 && fabs(x_a-x_b) > 0.001){
+        x_c = (x_a+x_b)/2.0;
+        y_c = [self filterTrackpoints:points with:x_c  addTo:nil];
+        
+        if( (y_a - target) * (y_c - target) < 0){
+            x_b = x_c;
+            y_b = y_c;
+        }else{
+            x_a = x_c;
+            y_a = y_c;
+        }
+    }
+    NSMutableArray * rv = [NSMutableArray array];
+    if( fabs(y_a -target ) < fabs(y_b-target)){
+        y_c = [self filterTrackpoints:points with:x_a  addTo:rv];
+        x_c = x_a;
+    }else{
+        y_c = [self filterTrackpoints:points with:x_b  addTo:rv];
+        x_c = x_b;
+    }
+    RZLog(RZLogInfo, @"trackpoints(<%f)[%lu] = %fm, orig[%lu] = %fm",x_c,(unsigned long)rv.count, y_c, (unsigned long)points.count, target );
+    return rv;
+}
+    
+
+-(CLLocationDistance)filterTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints with:(CLLocationDistance)minimumDistance addTo:(NSMutableArray*)rv{
+    CLLocationDistance finalDistance = 0.0;
+    CLLocationDistance baseDistance = 0.0;
+    NSUInteger n = 0;
+    GCTrackPoint * last = nil;
+    for (GCTrackPoint * next in trackpoints) {
+        if( last != nil){
+            CLLocationDistance dist = last != nil ? [next distanceMetersFrom:last] : 0.0;
+            baseDistance += dist;
+
+            if( next.validCoordinate && dist > minimumDistance ){
+                finalDistance += dist;
+                [rv addObject:next];
+                n+=1;
+            }
+        }
+        last = next;
+    }
+    return finalDistance;
+}
+
+
 @end

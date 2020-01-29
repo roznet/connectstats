@@ -112,16 +112,6 @@
 
 #pragma mark - Generic Import Tools
 
--(void)updateSummaryFieldFromSummaryData{
-    for (GCField * field in self.summaryData) {
-        GCActivitySummaryValue * value = self.summaryData[field];
-        if (field.fieldFlag!= gcFieldFlagNone) {
-            GCNumberWithUnit * nu = value.numberWithUnit;
-            [self setSummaryField:field.fieldFlag with:nu];
-            self.flags |= field.fieldFlag;
-        }
-    }
-}
 
 -(void)mergeSummaryData:(NSDictionary<GCField*,GCActivitySummaryValue*>*)newDict{
     NSMutableDictionary<GCField*,GCActivitySummaryValue*> * merged = self.summaryData ? [NSMutableDictionary dictionaryWithDictionary:self.summaryData] : [NSMutableDictionary dictionaryWithCapacity:newDict.count];
@@ -143,8 +133,7 @@
 #endif
         }
     }
-    self.summaryData = merged;
-    [self updateSummaryFieldFromSummaryData];
+    [self updateSummaryData:merged];
 }
 
 -(void)parseData:(NSDictionary*)data into:(NSMutableDictionary<GCField*,GCActivitySummaryValue*>*)newSummaryData usingDefs:(NSDictionary*)defs{
@@ -1103,7 +1092,7 @@
         summary[sumVal.field] = sumVal;
     }
     [self addPaceIfNecessaryWithSummary:summary];
-    self.summaryData = summary;
+    [self updateSummaryData:summary];
 
     GCHealthKitSamplesToPointsParser * parser = [GCHealthKitSamplesToPointsParser parserForSamples:samples forActivityType:self.activityType andSource:workout.sourceRevision];
     self.trackFlags = parser.trackFlags;
@@ -1158,8 +1147,7 @@
                 sumData[ field ] = val;
             }
         }
-        self.summaryData = sumData;
-        [self updateSummaryFieldFromSummaryData];
+        [self updateSummaryData:sumData];
     }
 }
 
@@ -1448,7 +1436,7 @@
             }
         }
         if (newSummaryData) {
-            self.summaryData = newSummaryData;
+            [self updateSummaryData:newSummaryData];
         }
     }
     
@@ -1579,7 +1567,7 @@
         }
     }
     
-    self.summaryData = newSum;
+    [self updateSummaryData:newSum];
     
     if( self.date == nil && trackpoints.count > 0){
         self.date = trackpoints.firstObject.time;

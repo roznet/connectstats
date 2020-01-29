@@ -187,7 +187,7 @@
     for (NSString * key in v) {
         newSum[ [GCField fieldForKey:key andActivityType:activityType]] = v[key];
     }
-    self.summaryData = newSum;
+    [self updateSummaryData:newSum];
 }
 
 -(void)loadSummaryDataFrom:(FMDatabase*)db{
