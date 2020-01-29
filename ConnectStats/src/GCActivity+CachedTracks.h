@@ -41,6 +41,7 @@ typedef NS_ENUM(NSUInteger, gcCalculatedCachedTrack) {
 -(BOOL)hasCalculatedDerivedTrack:(gcCalculatedCachedTrack)track forField:(nonnull GCField*)field;
 
 -(nonnull NSArray<GCTrackPoint*>*)resample:(nonnull NSArray<GCTrackPoint*>*)points forUnit:(double)unit useTimeAxis:(BOOL)timeAxis;
+-(nonnull NSArray<GCTrackPoint*>*)matchDistance:(CLLocationDistance)target withPoints:(nonnull NSArray<GCTrackPoint*>*)points;
 
 -(void)addStandardCalculatedTracks:(nullable dispatch_queue_t)threadOrNil;
 +(nullable GCStatsDataSerieWithUnit*)standardSerieSampleForXUnit:(nonnull GCUnit*)xUnit;

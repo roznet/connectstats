@@ -680,7 +680,6 @@
     RZLog(RZLogInfo, @"trackpoints(<%f)[%lu] = %fm, orig[%lu] = %fm",x_c,(unsigned long)rv.count, y_c, (unsigned long)points.count, target );
     return rv;
 }
-    
 
 -(CLLocationDistance)filterTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints with:(CLLocationDistance)minimumDistance addTo:(NSMutableArray*)rv{
     CLLocationDistance finalDistance = 0.0;
