@@ -282,12 +282,6 @@ const CGFloat kCellDaySpacing = 2.f;
 -(void)viewDidAppear:(BOOL)animated{
     RZLogTrace(@"");
 
-    //if 3DTouch:
-    if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)] &&  self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
-        RZLog(RZLogInfo, @"forceTouch Enabled");
-        [self registerForPreviewingWithDelegate:self sourceView:self.view];
-    }
-
     [super viewDidAppear:animated];
 
     [GCAppGlobal startupRefreshIfNeeded];
@@ -593,27 +587,30 @@ const CGFloat kCellDaySpacing = 2.f;
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-#pragma mark - UIViewControllerPreviewingDelegate
+#pragma mark - UIContextMenuInteractionDelegate
 
--(UIViewController*)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location{
-    NSIndexPath * indexPath = [self.tableView indexPathForRowAtPoint:location];
-    GCCellGrid * gridCell = [self.tableView cellForRowAtIndexPath:indexPath];
-    GCActivity * activity = [self.organizer activityForIndex:[self.organizer activityIndexForFilteredIndex:indexPath.row]];
-
-    GCActivityPreviewingViewController * preview = [[[GCActivityPreviewingViewController alloc] initWithNibName:nil bundle:nil] autorelease];
-    preview.activity = activity;
-
-    preview.preferredContentSize = CGSizeMake(0., self.view.frame.size.height*0.75);
-    previewingContext.sourceRect = gridCell.frame;
-
-    return preview;
-}
-
--(void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit{
-    GCActivityPreviewingViewController * preview = nil;
-    if ([viewControllerToCommit isKindOfClass:[GCActivityPreviewingViewController class]]) {
-        preview = (GCActivityPreviewingViewController*)viewControllerToCommit;
+-(UIContextMenuConfiguration*)tableView:(UITableView *)tableView contextMenuConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath point:(CGPoint)point API_AVAILABLE(ios(13.0)){
+    if( @available( iOS 13.0, *)){
+        return [UIContextMenuConfiguration configurationWithIdentifier:nil
+                                                       previewProvider:^(){
+            GCActivity * activity = [self.organizer activityForIndex:[self.organizer activityIndexForFilteredIndex:indexPath.row]];
+            
+            GCActivityPreviewingViewController * preview = [[[GCActivityPreviewingViewController alloc] initWithNibName:nil bundle:nil] autorelease];
+            preview.activity = activity;
+            
+            preview.preferredContentSize = CGSizeMake(0., self.view.frame.size.height*0.75);
+            return preview;
+        }
+                                                        actionProvider:^(NSArray<UIMenuElement *> *suggestedActions){
+            UIAction * open = [UIAction actionWithTitle:@"Open" image:nil identifier:nil handler:^(UIAction * action){
+                GCActivity * activity = [self.organizer activityForIndex:[self.organizer activityIndexForFilteredIndex:indexPath.row]];
+                [GCAppGlobal focusOnActivityId:activity.activityId];
+            }];
+            return [UIMenu menuWithTitle:@"" children:@[open]];
+        }];
+    }else{
+        return nil;
     }
-    [GCAppGlobal focusOnActivityId:preview.activity.activityId];
 }
+
 @end

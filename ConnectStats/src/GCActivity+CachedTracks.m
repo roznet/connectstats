@@ -221,7 +221,7 @@
                         [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"distance_filled.csv"]
                                                           atomically:YES encoding:NSUTF8StringEncoding error:nil];
 
-                        double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
+                        double //unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
                         unitstride = 10;
                         serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsSum];
                         for (GCStatsDataPoint * point in serie.serie) {
@@ -258,7 +258,7 @@
                                                           atomically:YES encoding:NSUTF8StringEncoding error:nil];
 
 
-                        double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
+                        double //unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
                         unitstride = 10;
                         serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsSum];
                         [serie convertToUnit:[GCUnit meter]];
