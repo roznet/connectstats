@@ -85,7 +85,7 @@
 
 -(void)testActivityParsingModern{
     // Add test for
-    NSArray * activityIds = @[ @"1108367966", @"1108368135", @"1089803211", @"924421177"];;
+    NSArray * activityIds = @[ @"1089803211", @"1108367966", @"1108368135", @"924421177"];;
     
     RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
     manager.recordMode = [GCTestCase recordModeGlobal];

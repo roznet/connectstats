@@ -9,6 +9,8 @@
 #import "GCTestsSamples.h"
 #import "GCActivity.h"
 #import "GCActivity+Database.h"
+#import "GCActivitiesOrganizer.h"
+#import "GCHealthOrganizer.h"
 
 @implementation GCTestsSamples
 
@@ -80,7 +82,27 @@
     return rv;
 }
 
++(FMDatabase*)createEmptyActivityDatabase:(NSString*)name{
+    [RZFileOrganizer removeEditableFile:name];
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:name]];
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
 
+    return db;
+}
++(GCActivitiesOrganizer*)createEmptyOrganizer:(NSString*)dbname{
+    NSString * dbfp = [RZFileOrganizer writeableFilePath:dbname];
+    [RZFileOrganizer removeEditableFile:dbname];
+    FMDatabase * db = [FMDatabase databaseWithPath:dbfp];
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    [GCHealthOrganizer ensureDbStructure:db];
+    GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
+    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
+    organizer.health = health;
+
+    return organizer;
+}
 +(FMDatabase*)sampleActivityDatabase:(NSString*)name{
 
     [RZFileOrganizer createEditableCopyOfFile:name forClass:self];

@@ -188,9 +188,8 @@
     XCTAssertGreaterThan(act.trackpoints.count, 1);
     GCActivityAutoLapChoices * choices = [[[GCActivityAutoLapChoices alloc] initWithActivity:act] autorelease];
     NSUInteger n = choices.choices.count;
-    NSDictionary * save = [NSDictionary dictionaryWithDictionary:act.calculatedLaps];
     [self measureBlock:^{
-        act.calculatedLaps = [NSMutableDictionary dictionaryWithDictionary:save];
+        [act clearCalculatedLaps];
         for (NSUInteger i=0; i<n; i++) {
             [choices changeSelectedTo:i];
         }

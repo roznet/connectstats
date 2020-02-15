@@ -330,8 +330,7 @@
         nu = [nu convertToUnitName:displayuom];
     }
     GCActivitySummaryValue * sumVal = [GCActivitySummaryValue activitySummaryValueForField:fieldkey value:nu];
-    [GCFields registerField:fieldkey activityType:self.activityType displayName:display andUnitName:displayuom];
-    [GCFields registerField:fieldkey activityType:GC_TYPE_ALL       displayName:display andUnitName:displayuom];
+    [GCFields registerField:[GCField fieldForKey:fieldkey andActivityType:self.activityType] displayName:display andUnitName:displayuom];
     return sumVal;
 }
 
@@ -342,8 +341,7 @@
         NSString * uom = [GCFields predefinedUomForField:field.key andActivityType:field.activityType];
         NSString * display = [GCFields predefinedDisplayNameForField:field.key andActivityType:field.activityType];
 
-        [GCFields registerField:field.key activityType:self.activityType displayName:display andUnitName:uom];
-        [GCFields registerField:field.key activityType:GC_TYPE_ALL       displayName:display andUnitName:uom];
+        [GCFields registerField:[GCField fieldForKey:field.key andActivityType:self.activityType] displayName:display andUnitName:uom];
         GCNumberWithUnit * val = [[speed numberWithUnit] convertToUnitName:uom];
         newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
         
@@ -354,8 +352,7 @@
         NSString * uom = [GCFields predefinedUomForField:field.key andActivityType:self.activityType];
         NSString * display = [GCFields predefinedDisplayNameForField:field.key andActivityType:self.activityType];
 
-        [GCFields registerField:field.key activityType:self.activityType displayName:display andUnitName:uom];
-        [GCFields registerField:field.key activityType:GC_TYPE_ALL       displayName:display andUnitName:uom];
+        [GCFields registerField:[GCField fieldForKey:field.key andActivityType:self.activityType] displayName:display andUnitName:uom];
         GCNumberWithUnit * val = [[movingSpeed numberWithUnit] convertToUnitName:uom];
         newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
     }
@@ -801,20 +798,8 @@
 
     NSDictionary * atypeDict = aData[@"activityType"];
     self.activityType = atypeDict[@"parent"][@"key"];
-    NSString * activityDisplay = atypeDict[@"parent"][@"display"];
-    [GCFields registerField:self.activityType
-               activityType:self.activityType
-                displayName:activityDisplay
-                andUnitName:@"dimensionless"];
     self.activityTypeDetail = [GCActivityType activityTypeForKey:atypeDict[@"key"]];
-    NSString * detailDisplay = atypeDict[@"display"];
-    if (detailDisplay && self.activityTypeDetail) {
-        [GCFields registerField:self.activityTypeDetail.key
-                   activityType:self.activityTypeDetail.key
-                    displayName:detailDisplay
-                    andUnitName:@"dimensionless"];
-    }
-
+    
     self.activityName = aData[@"activityName"];
     self.date = [NSDate dateForRFC3339DateTimeString:summary[@"BeginTimestamp"][@"value"]];
     if ([self.activityType isEqualToString:GC_TYPE_MULTISPORT]) {
@@ -886,7 +871,7 @@
                 }
             }
 
-            [GCFields registerField:field activityType:self.activityType displayName:info[@"fieldDisplayName"] andUnitName:thisuom];
+            [GCFields registerField:[GCField fieldForKey:field andActivityType:self.activityType] displayName:info[@"fieldDisplayName"] andUnitName:thisuom];
             summaryDataTmp[field] = [GCActivitySummaryValue activitySummaryValueForDict:info andField:(NSString*)field];
         }
     }

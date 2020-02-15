@@ -38,6 +38,7 @@
 #import "GCHealthOrganizer.h"
 #import "GCViewConfig.h"
 #import "GCConnectStatsRequestFitFile.h"
+#import "GCFieldInfo.h"
 
 @import ObjectiveC;
 
@@ -215,11 +216,12 @@
 }
 
 -(void)actionDumpMissingFields{
-    NSArray * missing = [GCFields missingPredefinedField];
+    NSDictionary<GCField*,GCFieldInfo*> * missing = [GCFields missingPredefinedField];
 
     //[rv addObject:@[ info.field ?: @"missing", info.activityType ?: @"missing", info.uom ?: @"missing", info.displayName ?: @"missing"]];
-    for (NSArray * one in missing) {
-        RZLog(RZLogInfo, @"INSERT INTO table_name (activityType,field,uom,fieldDisplayName) VALUES ('%@','%@','%@','%@')", one[1], one[0], one[2], one[3]);
+    for (GCField * one in missing) {
+        GCFieldInfo * info = missing[one];
+        RZLog(RZLogInfo, @"INSERT INTO table_name (activityType,field,uom,fieldDisplayName) VALUES ('%@','%@','%@','%@')", info.activityType,info.field,info.uom,info.displayName);
     }
 }
 

@@ -72,6 +72,11 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     [_fieldCache registerField:field activityType:aType displayName:aName andUnitName:uom];
 }
 
++(void)registerField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom{
+    [_fieldCache registerField:field displayName:aName andUnitName:uom];
+
+}
+
 #pragma mark -
 
 +(NSArray*)knownFieldsMatching:(NSString*)str{
@@ -98,7 +103,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     return [[_fieldCache infoForField:field andActivityType:aType] displayName];
 }
 
-+(NSArray*)missingPredefinedField{
++(NSDictionary<GCField*,GCFieldInfo*>*)missingPredefinedField{
     return [_fieldCache missingPredefinedField];
 }
 

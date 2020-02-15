@@ -521,9 +521,15 @@
     manager.recordMode = [GCTestCase recordModeGlobal];
     //manager.recordMode =true;
     
-    NSSet<Class> * classes = [NSSet setWithObjects:[NSDictionary class], [GCField class], [GCActivityCalculatedValue class], nil ];
+    NSSet<Class> * classes = [NSSet setWithObjects:[NSDictionary class], [GCField class], [GCNumberWithUnit class], nil ];
 
-    NSDictionary<GCField*,GCActivityCalculatedValue*>*calculated = act.calculatedFields;
+    NSMutableDictionary<GCField*,GCNumberWithUnit*>*tmp = [NSMutableDictionary dictionary];
+    for (GCField*field in act.allFields) {
+        if( field.isCalculatedField ){
+            tmp[field] = [act numberWithUnitForField:field];
+        }
+    }
+    NSDictionary<GCField*,GCActivityCalculatedValue*>*calculated = [NSDictionary dictionaryWithDictionary:tmp];
     NSDictionary<GCField*,GCActivityCalculatedValue*>*expected = [manager retrieveReferenceObject:calculated  forClasses:classes selector:_cmd identifier:@"ActivityCalculated" error:nil];
     
     XCTAssertEqualObjects(calculated, expected);

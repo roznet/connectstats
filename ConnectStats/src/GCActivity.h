@@ -311,7 +311,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 /**
  Format a value with unit similar to a given field
  */
--(NSString*)formatValue:(double)aval forField:(GCField*)which;
+-(NSString*)formatValue:(double)aval forField:(GCField*)which DEPRECATED_MSG_ATTRIBUTE("use numberWithUnitForField");
 
 /**
  Format a value with unit similar to a given field, unit name not displayed
@@ -360,6 +360,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(GCTrackPointSwim*)swimLapNumber:(NSUInteger)idx;
 -(void)registerLaps:(NSArray<GCLap*>*)laps forName:(NSString*)name;
 -(BOOL)useLaps:(NSString*)name;
+-(void)clearCalculatedLaps;
 -(void)focusOnLapIndex:(NSUInteger)lapIndex;//cheat/hint for lapcoumpound with several point in same lap
 /**
  return a serie with the value of field for each lap

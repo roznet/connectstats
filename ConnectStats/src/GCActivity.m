@@ -65,8 +65,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 @property (nonatomic,retain) NSDictionary<NSString*,GCActivityMetaValue*> * metaData;
 @property (nonatomic,retain) NSDictionary<GCField*,GCActivitySummaryValue*> * summaryData;
 @property (nonatomic,retain) NSDictionary<GCField*,GCActivityCalculatedValue*> * calculatedFields;
-@property (nonatomic,retain) NSDictionary<NSString*,NSArray*> * calculatedLaps;
 @property (nonatomic,retain) NSDictionary<GCField*,GCTrackPointExtraIndex*> * cachedExtraTracksIndexes;
+
+@property (nonatomic,retain) NSMutableDictionary<NSString*,NSArray*> * calculatedLaps;
 
 @property (nonatomic,assign) double sumDistance;
 @property (nonatomic,assign) double sumDuration;
@@ -444,11 +445,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     ];
 }
 -(NSArray<NSString*>*)allFieldsKeys{
-    [self loadSummaryData];
-    NSArray<GCField*> * rv = _summaryData.allKeys;
-    if (self.calculatedFields) {
-        rv = [rv arrayByAddingObjectsFromArray:self.calculatedFields.allKeys];
-    }
+    NSArray<GCField*> * rv = [self allFields];
+    
     NSMutableArray<NSString*>*final = [NSMutableArray arrayWithCapacity:rv.count];
     
     for (GCField * f in rv) {
@@ -1405,9 +1403,15 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 -(void)registerLaps:(NSArray*)laps forName:(NSString*)name{
     if (self.calculatedLaps == nil) {
-        self.calculatedLaps = [NSMutableDictionary dictionaryWithCapacity:2];
+        self.calculatedLaps = [NSMutableDictionary dictionary];
     }
+    
     [self.calculatedLaps setValue:laps forKey:name];
+}
+-(void)clearCalculatedLaps{
+    NSArray * recorded = self.calculatedLaps[GC_LAPS_RECORDED];
+    self.calculatedLaps = nil;
+    [self registerLaps:recorded forName:GC_LAPS_RECORDED];
 }
 
 -(void)focusOnLapIndex:(NSUInteger)lapIndex{

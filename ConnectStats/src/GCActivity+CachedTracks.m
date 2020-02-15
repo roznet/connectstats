@@ -634,12 +634,14 @@
 }
 
 +(void)registerCalculatedFields:(NSString*)activityType{
-    [GCFields registerField:CALC_VERTICAL_SPEED activityType:activityType displayName:NSLocalizedString(@"Vertical Speed", @"Calculated Field") andUnitName:@"meterperhour"];
+    
+    
+    [GCFields registerField:[GCField fieldForKey:CALC_VERTICAL_SPEED andActivityType:activityType] displayName:NSLocalizedString(@"Vertical Speed", @"Calculated Field") andUnitName:@"meterperhour"];
 
     if ([activityType isEqualToString:GC_TYPE_RUNNING]) {
-        [GCFields registerField:CALC_10SEC_SPEED activityType:activityType displayName:NSLocalizedString(@"10sec Pace", @"Calculated Field") andUnitName:@"minperkm"];
+        [GCFields registerField:[GCField fieldForKey:CALC_10SEC_SPEED andActivityType:activityType] displayName:NSLocalizedString(@"10sec Pace", @"Calculated Field") andUnitName:@"minperkm"];
     }else{
-        [GCFields registerField:CALC_10SEC_SPEED activityType:activityType displayName:NSLocalizedString(@"10sec Speed", @"Calculated Field") andUnitName:@"kph"];
+        [GCFields registerField:[GCField fieldForKey:CALC_10SEC_SPEED andActivityType:activityType] displayName:NSLocalizedString(@"10sec Speed", @"Calculated Field") andUnitName:@"kph"];
     }
 
 }

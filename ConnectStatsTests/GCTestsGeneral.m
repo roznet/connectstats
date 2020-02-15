@@ -151,14 +151,13 @@
     GCActivity * act = [[GCActivity alloc] init];
     act.activityType = GC_TYPE_CYCLING;
     
-    [act setSummaryData:@{
+    [act updateSummaryData:@{
                            [self fldFor:@"SumDuration" act:act] :              [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
                            [self fldFor:@"WeightedMeanPower" act:act]:         [self sumVal:@"WeightedMeanPower"       val:3000    uom:@"watt" ],
                            [self fldFor:@"WeightedMeanSpeed" act:act]:         [self sumVal:@"WeightedMeanSpeed"       val:10.8    uom:@"kph" ],
                            [self fldFor:@"WeightedMeanRunCadence" act:act]:    [self sumVal:@"WeightedMeanRunCadence"  val:90      uom:@"stepsPerMinute" ]
                            }
      ];
-    [act updateSummaryFieldFromSummaryData];
     GCFieldCalcKiloJoules * kj = [[GCFieldCalcKiloJoules alloc] init];
     GCFieldCalcStrideLength * sl = [[GCFieldCalcStrideLength alloc] init];
     GCActivityCalculatedValue * rv = nil;
@@ -171,13 +170,12 @@
     XCTAssertNil(rv, @"Computing Run Calc Field on cycle activity");
     
     act.activityType = GC_TYPE_RUNNING; // Stride only valid for running
-    [act setSummaryData:@{
+    [act updateSummaryData:@{
                           [self fldFor:@"SumDuration" act:act] :              [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
                           [self fldFor:@"WeightedMeanSpeed" act:act]:         [self sumVal:@"WeightedMeanSpeed"       val:10.8    uom:@"kph" ],
                           [self fldFor:@"WeightedMeanRunCadence" act:act]:    [self sumVal:@"WeightedMeanRunCadence"  val:90      uom:@"stepsPerMinute" ]
                           }
      ];
-    [act updateSummaryFieldFromSummaryData];
     
     rv = [sl evaluateForActivity:act];
     XCTAssertEqualObjects(rv.uom, @"stride", @"Right unit for stride length");
@@ -751,7 +749,7 @@
         [act setSumDistanceCompat:[[sample objectAtIndex:2] doubleValue]];
         [act setFlags:gcFieldFlagSumDistance];
         [act setLocation:sample[6]];
-        [act setSummaryData:@{[self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:@"WeightedMeanSpeed" val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
+        [act updateSummaryData:@{[self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:@"WeightedMeanSpeed" val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
         [activities addObject:act];
     }
     [organizer setActivities:activities];
@@ -809,7 +807,7 @@
         [act setDate:[NSDate dateForRFC3339DateTimeString:[sample objectAtIndex:1]]];
         [act setSumDistanceCompat:[[sample objectAtIndex:2] doubleValue]];
         [act setFlags:gcFieldFlagSumDistance];
-        [act setSummaryData:@{[self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:@"WeightedMeanSpeed" val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
+        [act updateSummaryData:@{[self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:@"WeightedMeanSpeed" val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
         [activities addObject:act];
     }
     [organizer setActivities:activities];

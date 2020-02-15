@@ -91,18 +91,9 @@
 
     self.activityType = GC_TYPE_TENNIS;
 
-    [GCFields registerField:GC_TYPE_TENNIS
-               activityType:GC_TYPE_TENNIS
-                displayName:NSLocalizedString(@"Tennis", @"Activity Type")
-                andUnitName:@"dimensionless"];
 
     self.activityTypeDetail = [GCActivityType activityTypeForKey:aData[@"type"]];
     self.activityName = aData[@"type"];
-
-    [GCFields registerField:self.activityTypeDetail.key
-               activityType:self.activityTypeDetail.key
-                displayName:self.activityTypeDetail.key
-                andUnitName:@"dimensionless"];
 
     self.date = [NSDate dateForBabolatTimeString:start_date];
     self.location = @"";
@@ -262,12 +253,13 @@
 }
 
 -(void)registerTennisFields{
+    /*
     [GCFields registerField:@"averagePower" activityType:GC_TYPE_TENNIS displayName:@"Power" andUnitName:@"percent"];
     [GCFields registerField:@"SumDuration" activityType:GC_TYPE_TENNIS displayName:NSLocalizedString(@"Play Time",@"Tennis") andUnitName:@"second"];
     [GCFields registerField:@"shots" activityType:GC_TYPE_TENNIS displayName:NSLocalizedString(@"Shots",@"Tennis") andUnitName:@"shots"];
     [GCFields registerField:@"regularity" activityType:GC_TYPE_TENNIS displayName:NSLocalizedString(@"Consistency",@"Tennis") andUnitName:@"dimensionless"];
     [GCFields registerField:@"energy" activityType:GC_TYPE_TENNIS displayName:NSLocalizedString(@"Energy",@"Tennis") andUnitName:@"dimensionless"];
-
+*/
 }
 
 -(NSString*)sessionId{
@@ -315,8 +307,6 @@
         while ([res next]) {
             GCActivityTennisShotValues * val = [GCActivityTennisShotValues tennisShotValuesForResultSet:res];
             [self.shotsData setValue:val forKey:val.shotType];
-            [GCFields registerField:val.shotType activityType:self.activityType
-                        displayName:[NSString stringWithFormat:@"%@ AvgPower", val.shotType] andUnitName:@"percent"];
         }
         res = [tennisdb executeQuery:@"SELECT * FROM babolat_cuepoints WHERE session_id = ? ORDER BY cuepoint_id", session_id];
         NSMutableArray * cues = [NSMutableArray array];

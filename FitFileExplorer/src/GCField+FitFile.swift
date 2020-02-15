@@ -28,6 +28,16 @@ public extension GCField {
         if fitKey == "speed" && activityType == "running" {
             fieldKey = "WeightedMeanPace"
         }
+        
+        if fieldKey == "WeightedMeanCadence" {
+            switch activityType {
+            case GC_TYPE_RUNNING: fieldKey = "WeightedMeanRunCadence"
+            case GC_TYPE_CYCLING: fieldKey = "WeightedMeanBikeCadence"
+            case GC_TYPE_SWIMMING: fieldKey = "WeightedMeanSwimCadence"
+            default: _
+            }
+        }
+
         return GCField(forKey: fieldKey, andActivityType: activityType)
     }
 }

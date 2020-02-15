@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @class GCActivity;
+@class GCActivitiesOrganizer;
 
 @interface GCTestsSamples : NSObject
 
@@ -17,6 +18,10 @@
 
 +(FMDatabase*)sampleActivityDatabase:(NSString*)name;
 +(NSString*)sampleActivityDatabasePath:(NSString*)name;
+
++(FMDatabase*)createEmptyActivityDatabase:(NSString*)dbname;
++(GCActivitiesOrganizer*)createEmptyOrganizer:(NSString*)dbname;
+
 +(void)ensureSampleDbStructure;
 
 @end
