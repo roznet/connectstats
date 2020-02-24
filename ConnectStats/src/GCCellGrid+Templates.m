@@ -785,7 +785,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }
     
     if (mainN==nil || mainN.unit==nil) {
-        if (mainN.unit==nil) {
+        if (mainN != nil && mainN.unit==nil) {
             RZLog(RZLogError, @"%@ had no unit", data.field);
         }
 
