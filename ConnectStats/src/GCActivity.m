@@ -653,6 +653,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return self.useTrackDb || [[NSFileManager defaultManager] fileExistsAtPath:[self trackDbFileName]];
 }
 
+#pragma mark - Load, Save and Update Trackpoint for Swim
+
 -(BOOL)updateWithSwimTrackpoints:(NSArray<GCTrackPointSwim*>*)aSwim andSwimLaps:(NSArray<GCLapSwim*>*)laps{
     self.garminSwimAlgorithm = true;
 
@@ -700,6 +702,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     
     [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
 }
+
 -(void)loadTrackPointsSwim:(FMDatabase*)trackdb{
     NSMutableArray * trackpointsCache = [NSMutableArray arrayWithCapacity:100];
     FMResultSet * res = [trackdb executeQuery:@"SELECT * FROM gc_length ORDER BY length"];
@@ -761,39 +764,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
 }
 
--(void)loadTrackPointsExtraFromDb:(FMDatabase*)db{
-    if ([db tableExists:@"gc_track_extra_idx"] && [db tableExists:@"gc_track_extra"]) {
-        NSMutableDictionary<GCField*,GCTrackPointExtraIndex*> * extra = [NSMutableDictionary dictionary];
-        FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_track_extra_idx" ];
-        while( [res next]){
-            GCField * field = [GCField fieldForKey:[res stringForColumn:@"field"] andActivityType:self.activityType];
-            size_t idx =  [res intForColumn:@"idx"];
-            GCUnit * unit = [GCUnit unitForKey:[res stringForColumn:@"uom"]];
-            extra[field] = [GCTrackPointExtraIndex extraIndex:idx field:field andUnit:unit];
-        };
-        self.cachedExtraTracksIndexes = extra;
-        if (extra.count && self.trackpointsCache.count > 0) {
-            NSUInteger i=0;
-            GCTrackPoint * point = self.trackpointsCache[i];
-            NSUInteger count = self.trackpointsCache.count;
-            res = [db executeQuery:@"SELECT * FROM gc_track_extra"];
 
-            while ([res next]) {
-                NSDate * time = [res dateForColumn:@"Time"];
-                while (point != nil && [point.time compare:time] == NSOrderedAscending) {
-                    i++;
-                    point = i<count ? self.trackpointsCache[i] : nil;
-                };
-                if ([point.time isEqualToDate:time]) {
-                    for (GCTrackPointExtraIndex * e in extra.allValues) {
-                        GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:e.unit andValue:[res doubleForColumn:e.dataColumnName]];
-                        [point setNumberWithUnit:nu forField:e.field inActivity:self];
-                    }
-                }
-            }
-        }
-    }
-}
+#pragma mark - Load, Save and Update Trackpoint GPS
 
 -(void)saveTrackpointsExtraToDb:(FMDatabase*)db{
     if (self.cachedExtraTracksIndexes.count > 0) {
@@ -871,6 +843,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 }
 
+/// Update trackpoints and laps in memory.
+/// Will update and link the laps indexes to the trackpoints,
+/// @param aTrack An array of GCTrackPoints
+/// @param laps an array of GCLaps
 -(BOOL)updateWithTrackpoints:(NSArray<GCTrackPoint*>*)aTrack andLaps:(NSArray<GCLap*> *)laps{
     BOOL rv = true;
     
@@ -1098,6 +1074,41 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     [self registerLaps:self.lapsCache forName:GC_LAPS_RECORDED];
 }
 
+-(void)loadTrackPointsExtraFromDb:(FMDatabase*)db{
+    if ([db tableExists:@"gc_track_extra_idx"] && [db tableExists:@"gc_track_extra"]) {
+        NSMutableDictionary<GCField*,GCTrackPointExtraIndex*> * extra = [NSMutableDictionary dictionary];
+        FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_track_extra_idx" ];
+        while( [res next]){
+            GCField * field = [GCField fieldForKey:[res stringForColumn:@"field"] andActivityType:self.activityType];
+            size_t idx =  [res intForColumn:@"idx"];
+            GCUnit * unit = [GCUnit unitForKey:[res stringForColumn:@"uom"]];
+            extra[field] = [GCTrackPointExtraIndex extraIndex:idx field:field andUnit:unit];
+        };
+        self.cachedExtraTracksIndexes = extra;
+        if (extra.count && self.trackpointsCache.count > 0) {
+            NSUInteger i=0;
+            GCTrackPoint * point = self.trackpointsCache[i];
+            NSUInteger count = self.trackpointsCache.count;
+            res = [db executeQuery:@"SELECT * FROM gc_track_extra"];
+
+            while ([res next]) {
+                NSDate * time = [res dateForColumn:@"Time"];
+                while (point != nil && [point.time compare:time] == NSOrderedAscending) {
+                    i++;
+                    point = i<count ? self.trackpointsCache[i] : nil;
+                };
+                if ([point.time isEqualToDate:time]) {
+                    for (GCTrackPointExtraIndex * e in extra.allValues) {
+                        GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:e.unit andValue:[res doubleForColumn:e.dataColumnName]];
+                        [point setNumberWithUnit:nu forField:e.field inActivity:self];
+                    }
+                }
+            }
+        }
+    }
+}
+
+#pragma mark - Load Trackpoints
 
 -(void)clearTrackdb{
     [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",_activityId]];
@@ -1205,6 +1216,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return  rv;
 }
 
+
 -(BOOL)loadTrackPoints{
     BOOL rv = false;
     if (self.hasTrackDb) {
@@ -1277,9 +1289,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         }
     }
     return rv;
-}
-
--(void)uploadToStrava{
 }
 
 #pragma mark - Trackpoints

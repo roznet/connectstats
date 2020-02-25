@@ -622,6 +622,7 @@
         [actMerge saveToDb:db_fit];
         
         GCActivity * actMergeReload = [GCActivity activityWithId:aId andDb:db_fit];
+        actMergeReload.settings.worker = nil;
         [actMergeReload trackpoints]; // force load trackpoints
         
         NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
