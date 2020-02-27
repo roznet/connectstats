@@ -29,7 +29,7 @@ extension GCActivity {
         }
     }
     
-    convenience init(withId activityId:String, fitFile:RZFitFile, startTime: Date?){
+    convenience init?(withId activityId:String, fitFile:RZFitFile, startTime: Date?){
         self.init(id: activityId)
         let interp  = FITFitFileInterpret(fitFile: fitFile)
         
@@ -92,6 +92,9 @@ extension GCActivity {
             if let start = usemessage.time(field: "start_time"){
                 self.date = start
             }
+        }else{
+            // no session message
+            return nil;
         }
         
         messages = fitFile.messages(forMessageType: FIT_MESG_NUM_RECORD)
