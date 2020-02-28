@@ -51,6 +51,10 @@
 #define GC_EXTERNAL_ID          @"__ExternalId__"
 #define GC_IGNORE_SKIP_ALWAYS   @"__IGNORE_SKIP_ALWAYS__"
 
+#define GC_TRACKPOINTS_RECORDED  @"__TrackPointsRecorded__"
+#define GC_TRACKPOINTS_RESAMPLED @"__TrackPointsResampled__"
+#define GC_TRACKPOINTS_MATCHED   @"__TrackPointsMatched__"
+
 NSString * kGCActivityNotifyDownloadDone = @"kGCActivityNotifyDownloadDone";
 NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady";
 
@@ -62,12 +66,14 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 @property (nonatomic,retain) NSArray * trackpointsCache;
 @property (nonatomic,retain) NSArray * lapsCache;
 
+@property (nonatomic,retain) NSMutableDictionary<NSString*,NSArray<GCTrackPoint*>*>* calculatedTrackPoints;
+@property (nonatomic,retain) NSMutableDictionary<NSString*,NSArray*> * calculatedLaps;
+
 @property (nonatomic,retain) NSDictionary<NSString*,GCActivityMetaValue*> * metaData;
 @property (nonatomic,retain) NSDictionary<GCField*,GCActivitySummaryValue*> * summaryData;
 @property (nonatomic,retain) NSDictionary<GCField*,GCActivityCalculatedValue*> * calculatedFields;
 @property (nonatomic,retain) NSDictionary<GCField*,GCTrackPointExtraIndex*> * cachedExtraTracksIndexes;
 
-@property (nonatomic,retain) NSMutableDictionary<NSString*,NSArray*> * calculatedLaps;
 
 @property (nonatomic,assign) double sumDistance;
 @property (nonatomic,assign) double sumDuration;
@@ -110,6 +116,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     [_activityId release];
     [_summaryData release];
     [_trackpointsCache release];
+    [_calculatedTrackPoints release];
     [_lapsCache release];
     [_metaData release];
 
@@ -1072,6 +1079,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
     self.lapsCache = tmplaps;
     [self registerLaps:self.lapsCache forName:GC_LAPS_RECORDED];
+    
+    [self addCalculatedTrackPoints];
+    
 }
 
 -(void)loadTrackPointsExtraFromDb:(FMDatabase*)db{
@@ -1105,6 +1115,19 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                 }
             }
         }
+    }
+}
+
+-(void)addCalculatedTrackPoints{
+    if( self.trackpointsCache){
+        NSArray<GCTrackPoint*>*resampled = [self resample:self.trackpointsCache forUnit:5.0 useTimeAxis:YES];
+        NSArray<GCTrackPoint*>*distanceMatched = [self matchDistance:self.sumDistance withPoints:self.trackpointsCache];
+        
+        self.calculatedTrackPoints = [NSMutableDictionary dictionaryWithDictionary:@{
+            GC_TRACKPOINTS_RECORDED: self.trackpointsCache,
+            GC_TRACKPOINTS_MATCHED: distanceMatched,
+            GC_TRACKPOINTS_RESAMPLED: resampled
+        }];
     }
 }
 
@@ -1393,7 +1416,12 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if (!_trackpointsCache) {
         [self loadTrackPoints];
     }
-    return self.trackpointsCache;
+    NSString * useKey = GC_TRACKPOINTS_MATCHED;
+    NSArray*rv = self.calculatedTrackPoints[useKey];
+    if( rv == nil){
+        rv = self.trackpointsCache;
+    }
+    return rv;
 }
 -(void)setTrackpoints:(NSArray<GCTrackPoint *> *)trackpoints{
     self.trackpointsCache = trackpoints;
