@@ -11,6 +11,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class GCStatsDateBuckets;
+
 @interface GCStatsSerieOfSerieWithUnits : NSObject
 @property (nonatomic,readonly) GCUnit * sUnit;
 
@@ -32,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)addSerieOfSerie:(GCStatsSerieOfSerieWithUnits*)other;
 
 -(GCStatsDataSerieWithUnit*)serieForX:(GCNumberWithUnit*)x;
+
 
 @end
 

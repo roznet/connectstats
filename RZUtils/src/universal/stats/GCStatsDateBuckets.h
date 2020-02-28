@@ -39,6 +39,12 @@
 
 +(GCStatsDateBuckets*)statsDateBucketFor:(NSCalendarUnit)unit referenceDate:(NSDate*)refOrNil andCalendar:(NSCalendar*)cal;
 
+/// Will update the bucket to contains date.
+/// Will return true if the bucket changed and bucketStart/bucketEnd were updated, or false if it stayed the same.
+/// @param date to check
 -(BOOL)bucket:(NSDate*)date;
+
+/// check if a date is in the current bucket
+/// @param date to check
 -(BOOL)contains:(NSDate*)date;
 @end
