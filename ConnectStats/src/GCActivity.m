@@ -1120,6 +1120,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 -(void)addCalculatedTrackPoints{
     if( self.trackpointsCache){
+#if DISABLE_NEW_FEATURE
         NSArray<GCTrackPoint*>*resampled = [self resample:self.trackpointsCache forUnit:5.0 useTimeAxis:YES];
         NSArray<GCTrackPoint*>*distanceMatched = [self matchDistance:self.sumDistance withPoints:self.trackpointsCache];
         
@@ -1128,6 +1129,11 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             GC_TRACKPOINTS_MATCHED: distanceMatched,
             GC_TRACKPOINTS_RESAMPLED: resampled
         }];
+#else
+        self.calculatedTrackPoints = [NSMutableDictionary dictionaryWithDictionary:@{
+            GC_TRACKPOINTS_RECORDED: self.trackpointsCache,
+        }];
+#endif
     }
 }
 
@@ -1416,7 +1422,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if (!_trackpointsCache) {
         [self loadTrackPoints];
     }
-    NSString * useKey = GC_TRACKPOINTS_MATCHED;
+    NSString * useKey = GC_TRACKPOINTS_RECORDED;
     NSArray*rv = self.calculatedTrackPoints[useKey];
     if( rv == nil){
         rv = self.trackpointsCache;
