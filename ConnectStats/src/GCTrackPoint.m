@@ -556,7 +556,11 @@ void buildStatic(){
 -(NSArray<GCField*>*)availableFieldsInActivity:(GCActivity*)act{
     NSMutableArray * rv = [NSMutableArray arrayWithArray:[GCFields availableFieldsIn:self.trackFlags forActivityType:act.activityType]];
     if( self.extraStorage ){
-        [rv addObjectsFromArray:self.extraStorage.allKeys];
+        for (GCField * field in self.extraStorage) {
+            if( ! field.isInternal ){
+                [rv addObject:field];
+            }
+        }
     }
     if( self.calculatedStorage ){
         [rv addObjectsFromArray:self.calculatedStorage.allKeys];

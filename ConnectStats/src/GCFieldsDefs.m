@@ -64,6 +64,9 @@ NSString * STOREUNIT_ELAPSED =       @"second";
 NSString * STOREUNIT_TEMPERATURE =   @"celcius";
 NSString * STOREUNIT_HEARTRATE =     @"bpm";
 
+NSString * INTERNAL_PREFIX = @"__Internal";
+NSString * INTERNAL_DIRECT_STROKE_TYPE = @"__InternalDirectStrokeType";
+
 NSString * CALC_PREFIX = @"__Calc";
 NSString * CALC_ALTITUDE_GAIN          = @"__CalcGainElevation";
 NSString * CALC_ALTITUDE_LOSS          = @"__CalcLossElevation";

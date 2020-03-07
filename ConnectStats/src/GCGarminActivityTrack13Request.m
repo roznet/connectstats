@@ -340,7 +340,7 @@
             [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
             self.status = GCWebStatusOK;
             if (self.trackpointsSwim && self.lapsSwim) {
-                [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpointsSwim:self.trackpointsSwim andLaps:self.lapsSwim];
+                [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpoints:self.trackpointsSwim andLaps:self.lapsSwim];
             }else{
                 [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpoints:self.trackpoints andLaps:self.laps];
             }
@@ -426,7 +426,7 @@
 
         if (parserLaps.success || parserTracks.success) {
             if(parserLaps.trackPointSwim || parserLaps.lapsSwim){
-                [act saveTrackpointsSwim:(parserLaps.trackPointSwim ?: @[]) andLaps:(parserLaps.lapsSwim ?: @[]) ];
+                [act saveTrackpoints:(parserLaps.trackPointSwim ?: @[]) andLaps:(parserLaps.lapsSwim ?: @[]) ];
             }else{
                 [act saveTrackpoints:(parserTracks.trackPoints ?:@[]) andLaps:(parserLaps.laps ?:@[])];
             }

@@ -30,7 +30,7 @@
 #import "GCHistoryFieldSummaryStats.h"
 #import "GCFormattedFieldText.h"
 #import "GCHealthMeasure.h"
-#import "GCTrackPointSwim.h"
+#import "GCTrackPoint+Swim.h"
 #import "GCActivity+UI.h"
 #import "GCViewIcons.h"
 #import "GCHistoryFieldDataSerie.h"
@@ -1178,14 +1178,11 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 #pragma mark - Swim
 
 -(void)setupForSwimLap:(NSUInteger)idx andActivity:(GCActivity*)activity width:(CGFloat)width{
-    id one = activity.laps[idx];
-    if ([one isKindOfClass:[GCTrackPointSwim class]]) {
-        GCTrackPointSwim * lap = one;
-        [self setupForSwimTrackpoint:lap index:idx andActivity:activity width:width];
-    }
+    GCLap * one = activity.laps[idx];
+    [self setupForSwimTrackpoint:one index:idx andActivity:activity width:width];
 }
 
--(void)setupForSwimTrackpoint:(GCTrackPointSwim*)lap index:(NSUInteger)idx andActivity:(GCActivity*)activity width:(CGFloat)width{
+-(void)setupForSwimTrackpoint:(GCTrackPoint*)lap index:(NSUInteger)idx andActivity:(GCActivity*)activity width:(CGFloat)width{
     BOOL wide =false;
     if (width > kGC_WIDE_SIZE) {
         wide = true;

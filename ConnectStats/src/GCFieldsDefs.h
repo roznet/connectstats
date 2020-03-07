@@ -126,6 +126,9 @@ extern NSString * STOREUNIT_ELAPSED;
 extern NSString * STOREUNIT_TEMPERATURE;
 extern NSString * STOREUNIT_HEARTRATE;
 
+extern NSString * INTERNAL_PREFIX;
+extern NSString * INTERNAL_DIRECT_STROKE_TYPE;
+
 extern NSString * CALC_PREFIX;
 extern NSString * CALC_ALTITUDE_GAIN         ;
 extern NSString * CALC_ALTITUDE_LOSS         ;

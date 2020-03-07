@@ -171,10 +171,10 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(GCActivity*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 
 -(BOOL)updateWithTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints andLaps:(NSArray<GCLap*>*)laps;
--(BOOL)updateWithSwimTrackpoints:(NSArray<GCTrackPointSwim*>*)trackpoints andSwimLaps:(NSArray<GCLapSwim*>*)laps;
+-(BOOL)updateWithSwimTrackpoints:(NSArray<GCTrackPointSwim*>*)trackpoints andSwimLaps:(NSArray<GCLapSwim*>*)laps DEPRECATED_MSG_ATTRIBUTE("Use trackpoints and laps");
 
 -(BOOL)saveTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps;
--(void)saveTrackpointsSwim:(NSArray<GCTrackPointSwim*> *)aSwim andLaps:(NSArray<GCLapSwim*>*)laps;
+-(void)saveTrackpointsSwim:(NSArray<GCTrackPointSwim*> *)aSwim andLaps:(NSArray<GCLapSwim*>*)laps DEPRECATED_MSG_ATTRIBUTE("Use trackpoints and laps");
 
 -(void)saveTrackpointsAndLapsToDb:(FMDatabase*)aDb;
 -(void)saveLocation:(NSString*)aLoc;
@@ -243,9 +243,9 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 /**
  Special time serie for swimStroke, will return the value of gcSwimStrokeType for
- each swim length recorded
+ each swim length recorded. Will match the x of the other serie in case a filter was applied
  */
--(GCStatsDataSerie*)timeSerieForSwimStroke;
+-(GCStatsDataSerie * )timeSerieForSwimStrokeMatching:(GCStatsDataSerie*)other;
 /**
  Will return a serie for each track point that is 0 if that trackpoint is not
  in lap or the time/distance since the beginning of the lap

@@ -303,6 +303,9 @@ static void registerInCache(GCField*field){
 -(BOOL)isCalculatedField{
     return [self.key hasPrefix:CALC_PREFIX];
 }
+-(BOOL)isInternal{
+    return [self.key hasPrefix:INTERNAL_PREFIX];
+}
 
 -(BOOL)isNoisy{
     if ([self.activityType isEqualToString:GC_TYPE_SWIMMING]) {
@@ -328,6 +331,10 @@ static void registerInCache(GCField*field){
 }
 
 -(BOOL)validForGraph{
+    if( self.isInternal ){
+        return false;
+    }
+    
     if (self.fieldFlag == gcFieldFlagSumDistance || self.fieldFlag == gcFieldFlagSumDuration) {
         return false;
     }

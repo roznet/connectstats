@@ -27,7 +27,7 @@
 #import "GCActivity.h"
 #import "GCCellGrid+Templates.h"
 #import "GCViewIcons.h"
-#import "GCTrackPointSwim.h"
+#import "GCTrackPoint+Swim.h"
 
 #define GCVIEW_SECTION_SUMMARY 0
 #define GCVIEW_SECTION_GRAPH   1
@@ -87,7 +87,7 @@
         NSMutableArray * rv = nil;
         if (all) {
             rv = [NSMutableArray arrayWithCapacity:all.count];
-            for (GCTrackPointSwim * point in all) {
+            for (GCTrackPoint * point in all) {
                 if (point.lapIndex==self.lapIndex) {
                     [rv addObject:point];
                 }
@@ -146,7 +146,7 @@
 
         [cell setupForLap:[self.activity lapNumber:self.lapIndex] key:[keys[indexPath.row] key] andActivity:self.activity width:tableView.frame.size.width];
     }else if(indexPath.section == GCVIEW_SECTION_LENGTHS){
-        GCTrackPointSwim * point = [self lengths][indexPath.row];
+        GCTrackPoint * point = [self lengths][indexPath.row];
         [cell setupForSwimTrackpoint:point index:indexPath.row andActivity:self.activity width:tableView.frame.size.width];
     }else{
         [cell setupForLap:self.lapIndex andActivity:self.activity width:tableView.frame.size.width];

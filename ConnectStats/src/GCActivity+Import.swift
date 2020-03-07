@@ -122,7 +122,7 @@ extension GCActivity {
         var swim : Bool = false;
         
         messages = fitFile.messages(forMessageType: FIT_MESG_NUM_LENGTH)
-        var swimpoints : [GCTrackPointSwim] = []
+        var swimpoints : [GCTrackPoint] = []
         if messages.count > 0 {
             swim = true
             for item in messages {
@@ -136,10 +136,10 @@ extension GCActivity {
                     let values = interp.summaryValues(fitMessage: item)
                     let stroke = interp.strokeType(message: item) ?? gcSwimStrokeType.mixed
                     let active = interp.swimActive(message: item)
-                    if let pointswim = GCTrackPointSwim(at: timestamp,
+                    if let pointswim = GCTrackPoint(at: timestamp,
                                                         stroke:stroke,
                                                         active:active,
-                                                        for:values,
+                                                        with:values,
                                                         in:self){
                         swimpoints.append(pointswim)
                     }
@@ -150,7 +150,7 @@ extension GCActivity {
         
         messages = fitFile.messages(forMessageType: FIT_MESG_NUM_LAP)
         var laps : [GCLap] = []
-        var lapsSwim : [GCLapSwim] = []
+        var lapsSwim : [GCLap] = []
         
         for item in messages {
             if let timestamp = item.time( field: "start_time") {
@@ -165,7 +165,7 @@ extension GCActivity {
                 if swim {
                     let stroke = interp.strokeType(message: item) ?? gcSwimStrokeType.mixed
                     let active = interp.swimActive(message: item)
-                    if let lap = GCLapSwim(at: timestamp, stroke: stroke, active: active, for: values, in: self){
+                    if let lap = GCLap(at: timestamp, stroke: stroke, active: active, with: values, in: self){
                         lapsSwim.append(lap)
                     }
                 }else{
@@ -180,7 +180,7 @@ extension GCActivity {
         
         // Don't save to db
         if swim {
-            self.update(withSwimTrackpoints:swimpoints,andSwimLaps:lapsSwim)
+            self.update(withTrackpoints:swimpoints,andLaps:lapsSwim)
         }else{
             self.update(withTrackpoints:trackpoints,andLaps:laps)
         }

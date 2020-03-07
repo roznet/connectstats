@@ -292,7 +292,7 @@
     }
 
     if (xField==nil && self.activity.garminSwimAlgorithm) {
-        self.gradientSerie = [self.activity timeSerieForSwimStroke];
+        self.gradientSerie = [self.activity timeSerieForSwimStrokeMatching:self.data.serie];
         [self setGradientFunction:nil];
     }
 }

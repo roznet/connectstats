@@ -1219,26 +1219,9 @@
 
 }
 
--(BOOL)updateTrackpointsSwimFromActivity:(GCActivity*)other{
-    BOOL rv = false;
-    
-    self.garminSwimAlgorithm = true;
-
-    NSArray<GCTrackPointSwim*>*swimPoints = (NSArray<GCTrackPointSwim*>*) other.trackpoints;
-    NSArray<GCLapSwim*>*swimLaps = (NSArray<GCLapSwim*>*) other.laps;
-    [self updateWithSwimTrackpoints:swimPoints andSwimLaps:swimLaps];
-    
-    return rv;
-}
-
-
 -(BOOL)updateTrackpointsFromActivity:(GCActivity*)other newOnly:(BOOL)newOnly verbose:(BOOL)verbose{
     BOOL rv = false;
-    
-    if( other.garminSwimAlgorithm ){
-        return [self updateTrackpointsSwimFromActivity:other];
-    }
-    
+        
     if( ! self.trackpointsReadyNoLoad && other.trackpointsReadyNoLoad){
         // Special case: other has trackpoint self doesnt, just use
         [self updateWithTrackpoints:other.trackpoints andLaps:other.laps];

@@ -39,7 +39,7 @@
                     stroke:(gcSwimStrokeType)type
                     active:(BOOL)active
                        for:(NSDictionary<GCField*,GCActivitySummaryValue*>*)sumValues
-                inActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
+                inActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER DEPRECATED_MSG_ATTRIBUTE("USe trackpoints");
 
 
 -(void)updateValueFromResultSet:(FMResultSet*)res inActivity:(GCActivity*)act;

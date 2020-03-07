@@ -28,8 +28,8 @@
 #import "GCTrackPoint.h"
 #import "GCFields.h"
 #import "GCLap.h"
-#import "GCTrackPointSwim.h"
-#import "GCLapSwim.h"
+#import "GCTrackPoint+Swim.h"
+//#import "GCLapSwim.h"
 #import "GCActivitySummaryValue.h"
 #import "GCActivityMetaValue.h"
 #import "GCActivityCalculatedValue.h"
@@ -663,7 +663,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 #pragma mark - Load, Save and Update Trackpoint for Swim
 
 -(BOOL)updateWithSwimTrackpoints:(NSArray<GCTrackPointSwim*>*)aSwim andSwimLaps:(NSArray<GCLapSwim*>*)laps{
-    self.garminSwimAlgorithm = true;
+    /*self.garminSwimAlgorithm = true;
 
     self.trackFlags = gcFieldFlagNone;
 
@@ -674,11 +674,12 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     self.trackpointsCache = aSwim;
     self.lapsCache = laps;
     [self registerLaps:self.lapsCache forName:GC_LAPS_RECORDED];
-    
+    */
     return true;
 }
 
 -(void)saveTrackpointsSwim:(NSArray<GCTrackPointSwim*> *)aSwim andLaps:(NSArray<GCLapSwim*>*)laps{
+    /*
     [self updateWithSwimTrackpoints:aSwim andSwimLaps:laps];
     
     FMDatabase * db = self.db;
@@ -708,9 +709,11 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
     
     [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
+     */
 }
 
 -(void)loadTrackPointsSwim:(FMDatabase*)trackdb{
+    /*
     NSMutableArray * trackpointsCache = [NSMutableArray arrayWithCapacity:100];
     FMResultSet * res = [trackdb executeQuery:@"SELECT * FROM gc_length ORDER BY length"];
     while ([res next]) {
@@ -769,6 +772,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         time = [time dateByAddingTimeInterval:point.elapsed];
     }
     [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
+     */
 }
 
 
@@ -868,7 +872,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     for (id lone in laps) {
         GCLap * nlap = nil;//for release
         GCLap * alap = nil;
-        if ([lone isKindOfClass:[GCLap class]] || [lone isKindOfClass:[GCLapSwim class]]) {
+        if ([lone isKindOfClass:[GCLap class]] /*|| [lone isKindOfClass:[GCLapSwim class]]*/) {
             alap = lone;
         }else if([lone isKindOfClass:[NSDictionary class]]){
             nlap = [[GCLap alloc] initWithDictionary:lone forActivity:self];
@@ -1154,7 +1158,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if ([trackdb tableExists:@"gc_version_track"]) {
         //int version = [trackdb intForQuery:@"SELECT version from gc_version_track"];
         if (_garminSwimAlgorithm) {
-            [self loadTrackPointsSwim:trackdb];
+            [self loadTrackPointsGPS:trackdb];
+            //[self loadTrackPointsSwim:trackdb];
         }else{
             [self loadTrackPointsGPS:trackdb];
         }
@@ -1162,7 +1167,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         // OLDER FILES
         int version = [trackdb intForQuery:@"SELECT version from gc_version"];
         if (_garminSwimAlgorithm && version >= 2) {
-            [self loadTrackPointsSwim:trackdb];
+            [self loadTrackPointsGPS:trackdb];
         }else if(!_garminSwimAlgorithm && version >= 4){
             [self loadTrackPointsGPS:trackdb];
         }
@@ -1586,95 +1591,111 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
     return rv;
 }
--(GCStatsDataSerieWithUnit*)distanceSerieForField:(GCField*)field{
-    if (field.fieldFlag != gcFieldFlagNone) {
-        if (_garminSwimAlgorithm) {
-            return [self timeSerieForTrackFieldSwim:field andLap:GC_ALL_LAPS];
-        }else{
-            return [self trackSerieForField:field timeAxis:false];
+
+-(GCStatsDataSerieWithUnit*)trackSerieForField:(GCField*)field timeAxis:(BOOL)timeAxis{
+    if( self.cachedCalculatedTracks[field] != nil){
+        return self.cachedCalculatedTracks[field];
+    }
+    BOOL treatGapAsNoValue = self.settings.treatGapAsNoValueInSeries;
+    NSTimeInterval gapTimeInterval = self.settings.gapTimeInterval;
+
+    GCUnit * displayUnit = [self displayUnitForField:field];
+    GCUnit * storeUnit   = [self storeUnitForField:field];
+
+    GCStatsDataSerieWithUnit * serieWithUnit = [GCStatsDataSerieWithUnit dataSerieWithUnit:storeUnit];
+    if (timeAxis) {
+        serieWithUnit.xUnit = [GCUnit unitForKey:STOREUNIT_ELAPSED];
+    }else{
+        serieWithUnit.xUnit = [GCUnit unitForKey:STOREUNIT_DISTANCE];
+    }
+    NSDate * firstDate = nil;
+    BOOL useElapsed = ![self.activityType isEqualToString:GC_TYPE_DAY];
+    if (!useElapsed&&timeAxis) {
+        serieWithUnit.xUnit = [GCUnit unitForKey:@"timeofday"];
+    }
+
+    NSArray<GCNumberWithUnit*> * lapAdjustments = nil;
+    if (self.settings.adjustSeriesToMatchLapAverage) {
+        lapAdjustments = [self trackSerieLapAdjustment:field];
+    }
+
+    GCTrackPoint * lastPoint = nil;
+    for (GCTrackPoint * point in self.trackpoints) {
+        // We should always take the first date of the first trackpoint as reference
+        // So time elapsed match even for series where the first few points don't have data
+        if (firstDate == nil) {
+            firstDate = point.time;
+        }
+
+        GCNumberWithUnit * nu = [point numberWithUnitForField:field inActivity:self];
+        
+        if (nu) {
+            if (lapAdjustments && point.lapIndex < lapAdjustments.count) {
+                GCNumberWithUnit * adjustment = lapAdjustments[ point.lapIndex];
+                [nu addNumberWithUnit:adjustment weight:1.0];
+            }
+
+            if (timeAxis) {
+                if (useElapsed) {
+                    if(lastPoint && treatGapAsNoValue){
+                        NSTimeInterval elapsed = [point.time timeIntervalSinceDate:lastPoint.time];
+                        NSTimeInterval checkGapTimeInterval = gapTimeInterval == 0. ? lastPoint.elapsed : gapTimeInterval;
+                        if(elapsed > checkGapTimeInterval){
+                            NSDate * nextDate = [lastPoint.time dateByAddingTimeInterval:checkGapTimeInterval];
+                            [serieWithUnit.serie addDataPointNoValueWithX:[nextDate timeIntervalSinceDate:firstDate]];
+                        }
+                    }
+                    lastPoint = point;
+
+                    [serieWithUnit addNumberWithUnit:nu forDate:point.time since:firstDate];
+                }else{
+                    [serieWithUnit addNumberWithUnit:nu forDate:point.time];
+                }
+            }else{
+                [serieWithUnit addNumberWithUnit:nu forX:point.distanceMeters];
+            }
+        }else if( self.garminSwimAlgorithm){
+            // No value, add point for consistency in number of points
+            [serieWithUnit.serie addDataPointNoValueWithX:[point.time timeIntervalSinceDate:firstDate]];
         }
     }
-    return nil;
+
+    [self applyStandardFilterTo:serieWithUnit ForField:field];
+
+    if (![displayUnit isEqualToUnit:storeUnit]) {
+        [serieWithUnit convertToUnit:displayUnit];
+    }
+    [serieWithUnit convertToGlobalSystem];
+    return serieWithUnit;
+}
+
+
+-(GCStatsDataSerieWithUnit*)distanceSerieForField:(GCField*)field{
+    return [self trackSerieForField:field timeAxis:false];
 }
 
 
 -(GCStatsDataSerieWithUnit*)timeSerieForField:(GCField*)field{
     GCStatsDataSerieWithUnit * rv = nil;
 
-    if (field.fieldFlag != gcFieldFlagNone) {
-        if (_garminSwimAlgorithm) {
-            rv = [self timeSerieForTrackFieldSwim:field andLap:GC_ALL_LAPS];
-        }else{
-            rv = [self trackSerieForField:field timeAxis:true];
-        }
+    if ([self hasCalculatedDerivedTrack:gcCalculatedCachedTrackDataSerie forField:field]) {
+        rv = [self calculatedDerivedTrack:gcCalculatedCachedTrackDataSerie forField:field thread:nil];
     }else{
-        if ([self hasCalculatedDerivedTrack:gcCalculatedCachedTrackDataSerie forField:field]) {
-            rv = [self calculatedDerivedTrack:gcCalculatedCachedTrackDataSerie forField:field thread:nil];
-        }else{
-            rv = [self trackSerieForField:field timeAxis:true];
-        }
+        rv = [self trackSerieForField:field timeAxis:true];
     }
     return rv;
 }
 
--(GCStatsDataSerie * )timeSerieForSwimStroke{
+-(GCStatsDataSerie * )timeSerieForSwimStrokeMatching:(GCStatsDataSerie*)other{
     if (_garminSwimAlgorithm) {
-        GCTrackPointSwim * firstpoint = _trackpointsCache[0];
-        NSDate * firstDate = firstpoint.time;
-        NSDate * nextDate = [firstDate dateByAddingTimeInterval:firstpoint.elapsed];
-
-        NSMutableArray * points = [NSMutableArray arrayWithCapacity:_trackpointsCache.count];
-        for (GCTrackPointSwim * point in _trackpointsCache) {
-            if ([point.time compare:nextDate] == NSOrderedDescending) {
-                [points addObject:[GCStatsDataPoint dataPointWithDate:nextDate andValue:0.]];
-            }
-            [points addObject:[GCStatsDataPoint dataPointWithDate:point.time andValue:point.directSwimStroke]];
-            nextDate = [point.time dateByAddingTimeInterval:point.elapsed];
-
+        GCStatsDataSerieWithUnit * rv = [self trackSerieForField:[GCField fieldForKey:INTERNAL_DIRECT_STROKE_TYPE andActivityType:GC_TYPE_SWIMMING] timeAxis:true];
+        if( rv.count != other.count){
+           // [GCStatsDataSerie reduceToCommonRange:rv.serie and:[GCStatsDataSerie dataSerieWithPointsIn:other]];
         }
-        return [GCStatsDataSerie dataSerieWithPoints:points];
+        return rv.serie;
     }else{
         return nil;
     }
-}
-
--(GCStatsDataSerieWithUnit * )timeSerieForTrackFieldSwim:(GCField*)field andLap:(int)lapIdx{
-    if (_trackpointsCache.count == 0) {
-        return nil;
-    }
-    NSString * swimLapField = [GCFields swimLapFieldFromTrackField:field.fieldFlag];
-    GCUnit * unit = nil;
-    GCStatsDataSerie * rv = [[[GCStatsDataSerie alloc] init] autorelease];
-    GCTrackPointSwim * firstpoint = _trackpointsCache[0];
-    NSDate * firstDate = firstpoint.time;
-    NSDate * nextDate = [firstDate dateByAddingTimeInterval:firstpoint.elapsed];
-    if (swimLapField) {
-        for (GCTrackPointSwim * point in _trackpointsCache) {
-            if (lapIdx == GC_ALL_LAPS || lapIdx == point.lapIndex) {
-                GCNumberWithUnit * nb = [point numberWithUnitForField:field inActivity:self];
-
-                if (field.fieldFlag == gcFieldFlagWeightedMeanSpeed && nb.value != 0.) {
-                    nb = [nb convertToUnit:self.speedDisplayUnit];
-                }
-                if (!unit || ![unit isEqualToUnit:nb.unit]) {
-                    //TODO should Convert?
-                    unit = nb.unit;
-                }
-                if ([point.time compare:nextDate] == NSOrderedDescending) {
-                    [rv addDataPointWithDate:nextDate since:firstDate andValue:0.];
-                }
-                if (nb && !isinf(nb.value)) {// Rest = speed at 0 -> Inf pace
-                    [rv addDataPointWithDate:point.time since:firstDate andValue:nb.value];
-                }else{
-                    [rv addDataPointWithDate:point.time since:firstDate andValue:0.];
-                }
-                nextDate = [point.time dateByAddingTimeInterval:point.elapsed];
-            }
-        }
-    }
-    GCStatsDataSerieWithUnit * nu = [GCStatsDataSerieWithUnit dataSerieWithUnit:unit];
-    nu.serie =rv;
-    return nu;
 }
 
 -(GCStatsDataSerieWithUnit*)progressSerie:(BOOL)timeAxis{
@@ -1804,80 +1825,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
     return rv;
 
-}
-
--(GCStatsDataSerieWithUnit*)trackSerieForField:(GCField*)field timeAxis:(BOOL)timeAxis{
-    if( self.cachedCalculatedTracks[field] != nil){
-        return self.cachedCalculatedTracks[field];
-    }
-    BOOL treatGapAsNoValue = self.settings.treatGapAsNoValueInSeries;
-    NSTimeInterval gapTimeInterval = self.settings.gapTimeInterval;
-
-    GCUnit * displayUnit = [self displayUnitForField:field];
-    GCUnit * storeUnit   = [self storeUnitForField:field];
-
-    GCStatsDataSerieWithUnit * serieWithUnit = [GCStatsDataSerieWithUnit dataSerieWithUnit:storeUnit];
-    if (timeAxis) {
-        serieWithUnit.xUnit = [GCUnit unitForKey:STOREUNIT_ELAPSED];
-    }else{
-        serieWithUnit.xUnit = [GCUnit unitForKey:STOREUNIT_DISTANCE];
-    }
-    NSDate * firstDate = nil;
-    BOOL useElapsed = ![self.activityType isEqualToString:GC_TYPE_DAY];
-    if (!useElapsed&&timeAxis) {
-        serieWithUnit.xUnit = [GCUnit unitForKey:@"timeofday"];
-    }
-
-    NSArray<GCNumberWithUnit*> * lapAdjustments = nil;
-    if (self.settings.adjustSeriesToMatchLapAverage) {
-        lapAdjustments = [self trackSerieLapAdjustment:field];
-    }
-
-    GCTrackPoint * lastPoint = nil;
-    for (GCTrackPoint * point in self.trackpoints) {
-        // We should always take the first date of the first trackpoint as reference
-        // So time elapsed match even for series where the first few points don't have data
-        if (firstDate == nil) {
-            firstDate = point.time;
-        }
-
-        GCNumberWithUnit * nu = [point numberWithUnitForField:field inActivity:self];
-        
-        if (nu) {
-
-            if (lapAdjustments && point.lapIndex < lapAdjustments.count) {
-                GCNumberWithUnit * adjustment = lapAdjustments[ point.lapIndex];
-                [nu addNumberWithUnit:adjustment weight:1.0];
-            }
-
-            if (timeAxis) {
-
-                if (useElapsed) {
-                    if(lastPoint){
-                        NSTimeInterval elapsed = [point.time timeIntervalSinceDate:lastPoint.time];
-                        if(treatGapAsNoValue &&  elapsed > gapTimeInterval){
-                            [serieWithUnit.serie addDataPointNoValueWithX:[lastPoint.time timeIntervalSinceDate:firstDate]+10];
-                        }
-                    }
-                    lastPoint = point;
-
-                    [serieWithUnit addNumberWithUnit:nu forDate:point.time since:firstDate];
-                }else{
-                    [serieWithUnit addNumberWithUnit:nu forDate:point.time];
-                }
-            }else{
-                [serieWithUnit addNumberWithUnit:nu forX:point.distanceMeters];
-            }
-        }
-    }
-
-    [self applyStandardFilterTo:serieWithUnit ForField:field];
-
-    if (![displayUnit isEqualToUnit:storeUnit]) {
-        [serieWithUnit convertToUnit:displayUnit];
-    }
-    [serieWithUnit convertToGlobalSystem];
-    return serieWithUnit;
 }
 
 -(GCStatsDataSerieWithUnit*)applyStandardFilterTo:(GCStatsDataSerieWithUnit*)serieWithUnit ForField:(GCField*)field{

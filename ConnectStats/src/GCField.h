@@ -85,6 +85,7 @@
 
 -(BOOL)isHealthField;
 -(BOOL)isCalculatedField;
+-(BOOL)isInternal;
 
 -(BOOL)hasSuffix:(NSString*)suf;
 -(BOOL)hasPrefix:(NSString*)pref;
