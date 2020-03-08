@@ -598,6 +598,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     [trackdb executeUpdate:@"DROP TABLE IF EXISTS gc_track"];
     [trackdb executeUpdate:@"DROP TABLE IF EXISTS gc_laps"];
     [trackdb executeUpdate:@"DROP TABLE IF EXISTS gc_laps_info"];
+    
+    // In case older database, specific pool data not used anymore
     [trackdb executeUpdate:@"DROP TABLE IF EXISTS gc_length"];
     [trackdb executeUpdate:@"DROP TABLE IF EXISTS gc_length_info"];
     [trackdb executeUpdate:@"DROP TABLE IF EXISTS gc_pool_lap"];
@@ -612,18 +614,15 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     [trackdb executeUpdate:@"CREATE TABLE gc_laps (lap INTEGER, Time REAL,LatitudeDegrees REAL,LongitudeDegrees REAL,DistanceMeters REAL,HeartRateBpm REAL,Speed REAL,Altitude REAL,Cadence REAL,Power REAL,VerticalOscillation REAL,GroundContactTime REAL,elapsed REAL, trackflags INTEGER)"];
     [trackdb executeUpdate:@"CREATE TABLE gc_laps_info (lap INTEGER,field TEXT,value REAL,uom TEXT)"];
 
-    // Pools activity
-    [trackdb executeUpdate:@"CREATE TABLE gc_pool_lap (lap INTEGER, Time REAL, SumDuration REAL,DirectSwimStroke INTEGER,Active INTEGER)"];
-    [trackdb executeUpdate:@"CREATE TABLE gc_pool_lap_info (lap INTEGER,field TEXT,value REAL,uom TEXT)"];
-    [trackdb executeUpdate:@"CREATE TABLE gc_length (Time REAL,SumDuration REAL,length INTEGER,lap INTEGER,DirectSwimStroke INTEGER)"];
-    [trackdb executeUpdate:@"CREATE TABLE gc_length_info (lap INTEGER,length INTEGER,field TEXT,value REAL,uom TEXT)"];
 
     [trackdb executeUpdate:@"CREATE TABLE gc_track_extra_idx (field TEXT, idx INTEGER PRIMARY KEY, uom TEXT)"];
 
     [trackdb executeUpdate:@"CREATE TABLE gc_version_track (version INTEGER)"];
     // Version 1
     // Version 2: Add track_extra
+    // Version 3: Pool Information merge with laps/track
     [trackdb executeUpdate:@"INSERT INTO gc_version_track (version) VALUES (2)"];
+    [trackdb executeUpdate:@"INSERT INTO gc_version_track (version) VALUES (3)"];
 }
 
 -(FMDatabase*)db{
@@ -1113,8 +1112,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                 };
                 if ([point.time isEqualToDate:time]) {
                     for (GCTrackPointExtraIndex * e in extra.allValues) {
-                        GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:e.unit andValue:[res doubleForColumn:e.dataColumnName]];
-                        [point setNumberWithUnit:nu forField:e.field inActivity:self];
+                        if( ! [res columnIsNull:e.dataColumnName]){
+                            GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:e.unit andValue:[res doubleForColumn:e.dataColumnName]];
+                            [point setNumberWithUnit:nu forField:e.field inActivity:self];
+                        }
                     }
                 }
             }
@@ -1219,8 +1220,20 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         rv = true;
     }
     
-    if([trackdb intForQuery:@"SELECT MAX(version) from gc_version_track"] < 1){
+    int version = [trackdb intForQuery:@"SELECT MAX(version) from gc_version_track"];
+    
+    if(version < 1){
         rv = true;
+    }
+    
+    if( version < 3 ){
+        if( self.garminSwimAlgorithm ){
+            // If swim algo, need to re-build
+            rv = true;
+        }else{
+            // If not swim algo, just mark it as valid, as nothing needs changing
+            RZEXECUTEUPDATE(trackdb, @"INSERT INTO gc_version_track (version) VALUES (3)");
+        }
     }
     return rv;
 
@@ -1645,7 +1658,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                             [serieWithUnit.serie addDataPointNoValueWithX:[nextDate timeIntervalSinceDate:firstDate]];
                         }
                     }
-                    lastPoint = point;
 
                     [serieWithUnit addNumberWithUnit:nu forDate:point.time since:firstDate];
                 }else{
@@ -1658,6 +1670,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             // No value, add point for consistency in number of points
             [serieWithUnit.serie addDataPointNoValueWithX:[point.time timeIntervalSinceDate:firstDate]];
         }
+        lastPoint = point;
     }
 
     [self applyStandardFilterTo:serieWithUnit ForField:field];

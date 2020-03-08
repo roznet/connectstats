@@ -239,7 +239,6 @@
 		422FAF2819A1DD6000D09773 /* GCSettingsProfilesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4231CB5D165AB5E60020FDB2 /* GCSettingsProfilesViewController.m */; };
 		422FAF2C19A1DD6000D09773 /* GCSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4225018816641D2B002CD429 /* GCSplitViewController.m */; };
 		422FAF2D19A1DD6000D09773 /* GCFormattedFieldText.m in Sources */ = {isa = PBXBuildFile; fileRef = 42250225166A0D4D002CD429 /* GCFormattedFieldText.m */; };
-		422FAF3319A1DD6000D09773 /* GCTrackPointSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828BD167E7C1700AB9C89 /* GCTrackPointSwim.m */; };
 		422FAF3719A1DD6000D09773 /* GCMapAppleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 429912C117E4A0CB003CCCC6 /* GCMapAppleViewController.m */; };
 		422FAF3819A1DD6000D09773 /* GCViewSwimStrokeColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828F71684CDF900AB9C89 /* GCViewSwimStrokeColors.m */; };
 		422FAF3919A1DD6000D09773 /* GCActivity+Import.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51A718AC33DB00B85FAB /* GCActivity+Import.m */; };
@@ -545,7 +544,6 @@
 		4277C0EC23BD133D00C1B1B9 /* activity_234721416.json in Resources */ = {isa = PBXBuildFile; fileRef = 4277C0DD23BD133D00C1B1B9 /* activity_234721416.json */; };
 		4277C0ED23BD133D00C1B1B9 /* activitytrack_217470507.json in Resources */ = {isa = PBXBuildFile; fileRef = 4277C0DE23BD133D00C1B1B9 /* activitytrack_217470507.json */; };
 		4277C0EE23BD133D00C1B1B9 /* activitylaps_234721416.json in Resources */ = {isa = PBXBuildFile; fileRef = 4277C0DF23BD133D00C1B1B9 /* activitylaps_234721416.json */; };
-		427828BE167E7C1700AB9C89 /* GCTrackPointSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828BD167E7C1700AB9C89 /* GCTrackPointSwim.m */; };
 		427828F81684CDFA00AB9C89 /* GCViewSwimStrokeColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828F71684CDF900AB9C89 /* GCViewSwimStrokeColors.m */; };
 		427828FB1684E61400AB9C89 /* GCActivitySwimLapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828FA1684E61400AB9C89 /* GCActivitySwimLapViewController.m */; };
 		42793B321F405941005FAF02 /* RZUtilsSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; };
@@ -946,7 +944,6 @@
 		42B5E2CB1BA5B216000FAE4E /* GCHistoryPerformanceAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BC77E2198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.m */; };
 		42B5E2CC1BA5B216000FAE4E /* GCTrackStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BC53661618EA1900576097 /* GCTrackStats.m */; };
 		42B5E2CD1BA5B216000FAE4E /* GCTrackPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4234943C16091ACA00A770D6 /* GCTrackPoint.m */; };
-		42B5E2CE1BA5B216000FAE4E /* GCTrackPointSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828BD167E7C1700AB9C89 /* GCTrackPointSwim.m */; };
 		42B5E2D01BA5B589000FAE4E /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DE53BF19CF696E00009130 /* HealthKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		42B5E2FF1BA5B7BF000FAE4E /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F1356E1B8BB2BE006D186A /* libsqlite3.tbd */; };
 		42B5E3011BA5B8BD000FAE4E /* GCHealthKitDailySummaryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DC51541B2784B600B5C12F /* GCHealthKitDailySummaryParser.m */; };
@@ -1236,7 +1233,6 @@
 		42BFC2591DCF512F00EAD40E /* GCDerivedGroupedSeries.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CE39451CA680E900919292 /* GCDerivedGroupedSeries.m */; };
 		42BFC25A1DCF514800EAD40E /* GCGarminSearchModernJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426B0F0C1DA111AD0091A734 /* GCGarminSearchModernJsonParser.m */; };
 		42BFC25B1DCF514B00EAD40E /* GCGarminHeartRateZoneParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCC71DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m */; };
-		42BFC25C1DCF516000EAD40E /* GCLapSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7D4271DAC293B0089806B /* GCLapSwim.m */; };
 		42BFC25D1DCF516800EAD40E /* GCStravaAthlete.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA301D43EE85004FBFD0 /* GCStravaAthlete.m */; };
 		42BFC25E1DCF516C00EAD40E /* GCStravaAthleteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424C8AA01D8D9F8100D8A50E /* GCStravaAthleteParser.swift */; };
 		42BFC2601DCF517700EAD40E /* GCStravaSegmentEffortStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA3A1D43F51C004FBFD0 /* GCStravaSegmentEffortStream.m */; };
@@ -1270,8 +1266,6 @@
 		42C5A1B122AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C5A1B022AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m */; };
 		42C5A1B222AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C5A1B022AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m */; };
 		42C5A1B322AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C5A1B022AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m */; };
-		42C7D4281DAC293B0089806B /* GCLapSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7D4271DAC293B0089806B /* GCLapSwim.m */; };
-		42C7D4291DAC293B0089806B /* GCLapSwim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C7D4271DAC293B0089806B /* GCLapSwim.m */; };
 		42C92FDF170FB73F0037602F /* GCActivityAutoLapChoices.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */; };
 		42CC45B5200A2288003EB805 /* GCTestServiceConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */; };
 		42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */; };
@@ -2284,8 +2278,6 @@
 		4277C0DD23BD133D00C1B1B9 /* activity_234721416.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = activity_234721416.json; path = tcx/activity_234721416.json; sourceTree = "<group>"; };
 		4277C0DE23BD133D00C1B1B9 /* activitytrack_217470507.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = activitytrack_217470507.json; path = tcx/activitytrack_217470507.json; sourceTree = "<group>"; };
 		4277C0DF23BD133D00C1B1B9 /* activitylaps_234721416.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = activitylaps_234721416.json; path = tcx/activitylaps_234721416.json; sourceTree = "<group>"; };
-		427828BC167E7C1700AB9C89 /* GCTrackPointSwim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTrackPointSwim.h; path = src/GCTrackPointSwim.h; sourceTree = "<group>"; };
-		427828BD167E7C1700AB9C89 /* GCTrackPointSwim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTrackPointSwim.m; path = src/GCTrackPointSwim.m; sourceTree = "<group>"; };
 		427828F61684CDD500AB9C89 /* GCViewSwimStrokeColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCViewSwimStrokeColors.h; path = src/GCViewSwimStrokeColors.h; sourceTree = "<group>"; };
 		427828F71684CDF900AB9C89 /* GCViewSwimStrokeColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCViewSwimStrokeColors.m; path = src/GCViewSwimStrokeColors.m; sourceTree = "<group>"; };
 		427828F91684E61300AB9C89 /* GCActivitySwimLapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivitySwimLapViewController.h; path = src/GCActivitySwimLapViewController.h; sourceTree = "<group>"; };
@@ -2895,8 +2887,6 @@
 		42C4B0661DBB39E7000A1612 /* user_hr_zones.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = user_hr_zones.json; sourceTree = "<group>"; };
 		42C5A1AF22AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCConnectStatsSearchJsonParser.h; path = src/GCConnectStatsSearchJsonParser.h; sourceTree = "<group>"; };
 		42C5A1B022AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCConnectStatsSearchJsonParser.m; path = src/GCConnectStatsSearchJsonParser.m; sourceTree = "<group>"; };
-		42C7D4261DAC293B0089806B /* GCLapSwim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCLapSwim.h; path = src/GCLapSwim.h; sourceTree = "<group>"; };
-		42C7D4271DAC293B0089806B /* GCLapSwim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCLapSwim.m; path = src/GCLapSwim.m; sourceTree = "<group>"; };
 		42C92FDD170FB73F0037602F /* GCActivityAutoLapChoices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCActivityAutoLapChoices.h; path = src/GCActivityAutoLapChoices.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityAutoLapChoices.m; path = src/GCActivityAutoLapChoices.m; sourceTree = "<group>"; };
 		42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCTestServiceConfig.xib; path = connectstatstestapp/ui/GCTestServiceConfig.xib; sourceTree = SOURCE_ROOT; };
@@ -3946,8 +3936,6 @@
 				4234943C16091ACA00A770D6 /* GCTrackPoint.m */,
 				42CDF8652413E05C003930A4 /* GCTrackPoint+Swim.h */,
 				42CDF8662413E05C003930A4 /* GCTrackPoint+Swim.m */,
-				427828BC167E7C1700AB9C89 /* GCTrackPointSwim.h */,
-				427828BD167E7C1700AB9C89 /* GCTrackPointSwim.m */,
 				426A7F481C426A95000C5BCC /* GCTrackPointExtraIndex.h */,
 				426A7F491C426A95000C5BCC /* GCTrackPointExtraIndex.m */,
 			);
@@ -4658,8 +4646,6 @@
 			children = (
 				42A95B1A16321320000B2082 /* GCLap.h */,
 				42A95B1B16321320000B2082 /* GCLap.m */,
-				42C7D4261DAC293B0089806B /* GCLapSwim.h */,
-				42C7D4271DAC293B0089806B /* GCLapSwim.m */,
 				4244675D1849E2D8009F807E /* GCLapCompound.h */,
 				4244675E1849E2D8009F807E /* GCLapCompound.m */,
 			);
@@ -6975,7 +6961,6 @@
 				422F52191DFB51F700DD5551 /* GCField+FitFile.swift in Sources */,
 				422FAF2D19A1DD6000D09773 /* GCFormattedFieldText.m in Sources */,
 				42BFC25B1DCF514B00EAD40E /* GCGarminHeartRateZoneParser.m in Sources */,
-				422FAF3319A1DD6000D09773 /* GCTrackPointSwim.m in Sources */,
 				42453BAC1DD8B5940073ACCA /* GCMapGradientPathOverlay.m in Sources */,
 				42684EF11B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m in Sources */,
 				422FAF3719A1DD6000D09773 /* GCMapAppleViewController.m in Sources */,
@@ -7033,7 +7018,6 @@
 				422FAF7819A1DD6000D09773 /* GCSettingsServicesViewController.m in Sources */,
 				4281AF5E22F732B000BFE408 /* GCConnectStatsRequestSearch.m in Sources */,
 				427208641DE7A35300924C90 /* GCActivity+Import.swift in Sources */,
-				42BFC25C1DCF516000EAD40E /* GCLapSwim.m in Sources */,
 				422FAF7F19A1DD6000D09773 /* GCSettingsHelpViewController.m in Sources */,
 				422FAF8019A1DD6000D09773 /* GCActivity+Calculated.m in Sources */,
 				422FAF8119A1DD6000D09773 /* GCActivityMetaValue.m in Sources */,
@@ -7302,7 +7286,6 @@
 				42DCA7CC1AF420E20050AAA9 /* GCGarminRequestActivityList.m in Sources */,
 				421516BC19A47C450080CD4C /* GCHealthKitRequest.m in Sources */,
 				42B8588B229DB716009E309A /* GCConnectStatsRequestLogin.m in Sources */,
-				427828BE167E7C1700AB9C89 /* GCTrackPointSwim.m in Sources */,
 				429912C217E4A0CB003CCCC6 /* GCMapAppleViewController.m in Sources */,
 				427828F81684CDFA00AB9C89 /* GCViewSwimStrokeColors.m in Sources */,
 				42EB51A818AC33DB00B85FAB /* GCActivity+Import.m in Sources */,
@@ -7331,7 +7314,6 @@
 				42EB51A518AADD1200B85FAB /* GCActivityTennisDetailSource.m in Sources */,
 				421844B01D75C3F5005B09BC /* GCSegmentOrganizer.swift in Sources */,
 				42A3AA311D43EE85004FBFD0 /* GCStravaAthlete.m in Sources */,
-				42C7D4281DAC293B0089806B /* GCLapSwim.m in Sources */,
 				42E186D016A620E900D4513B /* GCGarminRequestActivityReload.m in Sources */,
 				421A514C1C82FA6C00671587 /* GCActivity+Fields.m in Sources */,
 				4290238E18EA17F000CBF398 /* GCSportTracksActivityDetail.m in Sources */,
@@ -7583,7 +7565,6 @@
 				427F93771BEDFA6F00C177F9 /* GCStatsMultiFieldViewController.m in Sources */,
 				42B5E2B21BA5B216000FAE4E /* GCExportStrava.m in Sources */,
 				42B5E2B31BA5B216000FAE4E /* GCActivityTennisCuePoint.m in Sources */,
-				42C7D4291DAC293B0089806B /* GCLapSwim.m in Sources */,
 				42B5E2B41BA5B216000FAE4E /* GCActivityTennis.m in Sources */,
 				427F935C1BEAA05800C177F9 /* GCTestUISamples.m in Sources */,
 				42CC45D0200A6E91003EB805 /* GCTestServiceBugReport.m in Sources */,
@@ -7626,7 +7607,6 @@
 				42B85888229DB6D9009E309A /* GCConnectStatsRequest.m in Sources */,
 				42B5E2CC1BA5B216000FAE4E /* GCTrackStats.m in Sources */,
 				42B5E2CD1BA5B216000FAE4E /* GCTrackPoint.m in Sources */,
-				42B5E2CE1BA5B216000FAE4E /* GCTrackPointSwim.m in Sources */,
 				42CE39471CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */,
 				42B5E2251BA5AF9A000FAE4E /* GCTestParsing.m in Sources */,
 				42B5E2211BA5AF9A000FAE4E /* GCTestViewController.m in Sources */,

@@ -27,14 +27,13 @@
 
 @class GCLap;
 @class GCActivity;
-@class GCTrackPointSwim;
-@class GCLapSwim;
+@class GCTrackPoint;
 
 @interface GCGarminActivityLapsParser : NSObject
 
 @property (nonatomic,readonly) NSArray<GCLap*> * laps;
-@property (nonatomic,readonly) NSArray<GCLapSwim*> * lapsSwim;
-@property (nonatomic,readonly) NSArray<GCTrackPointSwim*> * trackPointSwim;
+@property (nonatomic,readonly) NSArray<GCLap*> * lapsSwim;
+@property (nonatomic,readonly) NSArray<GCTrackPoint*> * trackPointSwim;
 @property (nonatomic,assign) BOOL success;
 
 -(GCGarminActivityLapsParser*)initWithData:(NSData*)json forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;

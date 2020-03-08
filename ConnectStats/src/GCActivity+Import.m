@@ -551,6 +551,7 @@
     if( [foundConnectIQ isKindOfClass:[NSArray class]]){
         [self updateConnectIQData:foundConnectIQ];
     }
+    
 }
 
 -(void)updateConnectIQData:(NSArray*)array{
@@ -789,6 +790,10 @@
 
         self.beginCoordinate = [self buildCoordinateFromGarminModernData:data];
         self.date = [self buildStartDateFromGarminModernData:data];
+        
+        if( data[@"numberOfActiveLengths"] != nil || data[@"unitOfPoolLength"] != nil){
+            self.garminSwimAlgorithm = true;
+        }
     }
 }
 

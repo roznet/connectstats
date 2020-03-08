@@ -354,7 +354,7 @@
             hasMissing = true;
         }
     }
-    if (RZTestOption(self.trackFlags, gcFieldFlagSumDistance)) {
+    if (RZTestOption(self.trackFlags, gcFieldFlagSumDistance) && ! self.garminSwimAlgorithm) {
         GCField * field = [GCField fieldForKey:CALC_10SEC_SPEED andActivityType:self.activityType];
         key = [self calculatedCachedTrackKey:gcCalculatedCachedTrackDataSerie forField:field];
         if (rv[key] == nil) {

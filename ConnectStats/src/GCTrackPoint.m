@@ -28,6 +28,7 @@
 #import "GCActivity.h"
 #import "GCTrackPointExtraIndex.h"
 #import "GCActivitySummaryValue.h"
+#import "GCActivity+Import.h"
 
 //static NSArray * _dbColumnNames = nil;
 //static NSArray * _directKeys = nil;
@@ -55,11 +56,13 @@ void buildStatic(){
     self = [super init];
     return self;
 }
--(GCTrackPoint*)initWithDictionary:(NSDictionary*)data forActivity:(NSObject<GCTrackPointDelegate>*)act{
+-(GCTrackPoint*)initWithDictionary:(NSDictionary*)data forActivity:(GCActivity*)act{
     self = [super init];
     if (self) {
         if (data[@"directTimestamp"]) {
             [self parseDictionary:data inActivity:act];
+        }else if( data[@"lengthIndex"] ){
+            [self parseSwimDictionary:data inActivity:act];
         }
     }
     return self;
@@ -247,6 +250,44 @@ void buildStatic(){
     for (GCField * field in summaryData) {
         GCNumberWithUnit * nu = summaryData[field].numberWithUnit;
         [self setNumberWithUnit:nu forField:field inActivity:act];
+    }
+}
+
+-(void)parseSwimDictionary:(NSDictionary*)data inActivity:(GCActivity*)act{
+    NSMutableDictionary * summary = [act buildSummaryDataFromGarminModernData:data dtoUnits:true];
+
+    NSDate * date = [act buildStartDateFromGarminModernData:data];
+    self.time = date;
+
+    for (GCField * field in summary) {
+        GCActivitySummaryValue * value = summary[field];
+        [self setNumberWithUnit:value.numberWithUnit forField:field inActivity:act];
+    }
+    
+    NSString * style = data[@"swimStroke"];
+    if ([style isKindOfClass:[NSString class]]) {
+        static NSDictionary * strokeMap = nil;
+        if (strokeMap == nil) {
+            strokeMap = @{
+                          @"FREESTYLE":@(gcSwimStrokeFree),
+                          @"BUTTERFLY":@(gcSwimStrokeButterfly),
+                          @"BREASTSTROKE":   @(gcSwimStrokeBreast),
+                          @"BACKSTROKE":@(gcSwimStrokeBack),
+                          @"MIXED": @(gcSwimStrokeMixed),
+                          @"DRILL": @(gcSwimStrokeMixed),
+                          };
+            [strokeMap retain];
+        }
+        NSNumber * found = strokeMap[style];
+        gcSwimStrokeType directSwimStroke;
+        if (found) {
+            directSwimStroke = [found intValue];
+            
+        }else{
+            RZLog(RZLogWarning, @"Unknown stroke %@ in %@", style, act);
+            directSwimStroke = gcSwimStrokeOther;
+        }
+        [self setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.dimensionless andValue:directSwimStroke] forField:[GCField fieldForKey:INTERNAL_DIRECT_STROKE_TYPE andActivityType:GC_TYPE_SWIMMING] inActivity:act];
     }
 }
 

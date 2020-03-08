@@ -28,8 +28,6 @@
 #import "GCAppGlobal.h"
 #import "GCGarminActivityDetailJsonParser.h"
 #import "GCGarminActivityLapsParser.h"
-#import "GCTrackPointSwim.h"
-#import "GCLapSwim.h"
 #import "GCActivity.h"
 #import "GCActivitiesOrganizer.h"
 @import RZUtils;
@@ -41,8 +39,8 @@
 @property (nonatomic,retain) GCActivity * activity;
 @property (nonatomic,retain) NSArray<GCTrackPoint*> * trackpoints;
 @property (nonatomic,retain) NSArray<GCLap*> * laps;
-@property (nonatomic, retain) NSArray<GCLapSwim*> * lapsSwim;
-@property (nonatomic,retain) NSArray<GCTrackPointSwim*> * trackpointsSwim;
+@property (nonatomic, retain) NSArray<GCLap*> * lapsSwim;
+@property (nonatomic,retain) NSArray<GCTrackPoint*> * trackpointsSwim;
 
 @end
 

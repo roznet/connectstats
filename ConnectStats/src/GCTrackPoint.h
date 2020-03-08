@@ -73,7 +73,7 @@
 @property (nonatomic,readonly) NSDictionary<GCField*,GCNumberWithUnit*>*extra;
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
--(GCTrackPoint*)initWithDictionary:(NSDictionary*)aDict forActivity:(NSObject<GCTrackPointDelegate>*)act NS_DESIGNATED_INITIALIZER;
+-(GCTrackPoint*)initWithDictionary:(NSDictionary*)aDict forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithTrackPoint:(GCTrackPoint*)other NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithTCXElement:(GCXMLElement*)element;

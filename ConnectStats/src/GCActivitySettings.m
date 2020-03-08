@@ -59,7 +59,7 @@
     self.worker = [GCAppGlobal worker];
     
     if( act.garminSwimAlgorithm ){
-        self.treatGapAsNoValueInSeries = true;
+        self.treatGapAsNoValueInSeries = false;
         self.gapTimeInterval = 0.;
 
     }else{

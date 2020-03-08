@@ -120,7 +120,8 @@
          @(point.distanceMeters)
          ]];
         for (GCField * field  in fields) {
-            [line addObject:[point numberWithUnitForField:field inActivity:self].number];
+            GCNumberWithUnit * nu = [point numberWithUnitForField:field inActivity:self];
+            [line addObject:nu ? nu.number : @(0)];
         }
         [rv appendString:[line componentsJoinedByString:@","]];
         [rv appendString:@"\n"];

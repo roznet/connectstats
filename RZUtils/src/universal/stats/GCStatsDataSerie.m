@@ -745,6 +745,10 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     for (NSUInteger idx = 0; idx < count; idx++) {
         GCStatsDataPoint * point = dataPoints[idx];
 
+        if( !point.hasValue ){
+            continue;
+        }
+        
         BOOL isPos = point.y_data > 0;
         BOOL isNeg = point.y_data < 0;
 
@@ -833,9 +837,11 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
         GCStatsDataPoint * current_sum = [GCStatsDataPoint dataPointWithPoint:dataPoints[0] andValue:0.];
         double current_count = 0;
 
-        for (idx=0; idx<n; idx++) {
-            [current_sum addPoint:dataPoints[idx]];
-            current_count += 1;
+        for (GCStatsDataPoint * point in self.dataPoints) {
+            if( point.hasValue ){
+                [current_sum addPoint:dataPoints[idx]];
+                current_count += 1;
+            }
         }
         if (divide) {
             [current_sum divideByDouble:current_count];
@@ -859,6 +865,10 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
         n    = 0.;
 
         for (GCStatsDataPoint * point in dataPoints) {
+            if( ! point.hasValue ){
+                continue;
+            }
+            
             double x = point.x_data;
             double y = point.y_data;
             if (isinf(x)||isinf(y)||isnan(x)||isnan(y)) {
@@ -967,30 +977,32 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 
     while (idx_this < this.count) {
         GCStatsDataPoint * point = p_this[idx_this++];
-        double x_to = point.x_data-offset;
-        double x_from = x_to-unit;
-        for (idx_sample=0; idx_sample<samples.count; idx_sample++) {
-            GCStatsDataPoint * sample = samples[idx_sample];
-            if (sample.x_data < x_from) {
-                runningSum -= sample.y_data;
-            }else{
-                break;
+        if( point.hasValue ){
+            double x_to = point.x_data-offset;
+            double x_from = x_to-unit;
+            for (idx_sample=0; idx_sample<samples.count; idx_sample++) {
+                GCStatsDataPoint * sample = samples[idx_sample];
+                if (sample.x_data < x_from) {
+                    runningSum -= sample.y_data;
+                }else{
+                    break;
+                }
             }
-        }
-        [samples removeObjectsInRange:NSMakeRange(0, idx_sample)];
-        for (; idx_other<p_other.count; idx_other++) {
-            GCStatsDataPoint * one = p_other[idx_other];
-            if (one.x_data<x_from) {
-                continue;
-            }else if (one.x_data <= x_to) {
-                [samples addObject:one];
-                runningSum += one.y_data;
-            }else{
-                break;
+            [samples removeObjectsInRange:NSMakeRange(0, idx_sample)];
+            for (; idx_other<p_other.count; idx_other++) {
+                GCStatsDataPoint * one = p_other[idx_other];
+                if (one.x_data<x_from) {
+                    continue;
+                }else if (one.x_data <= x_to) {
+                    [samples addObject:one];
+                    runningSum += one.y_data;
+                }else{
+                    break;
+                }
             }
+            [rv_points addObject:[GCStatsDataPoint dataPointWithPoint:point
+                                                             andValue:avg&&samples.count!=0.?runningSum/samples.count:runningSum]];
         }
-        [rv_points addObject:[GCStatsDataPoint dataPointWithPoint:point
-                                                         andValue:avg&&samples.count!=0.?runningSum/samples.count:runningSum]];
     }
     GCStatsDataSerie * rv = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     rv.dataPoints = rv_points;

@@ -40,10 +40,9 @@
 #import "GCConnectStatsRequestFitFile.h"
 #import "GCStravaActivityList.h"
 #import "GCLap.h"
-#import "GCLapSwim.h"
 #import "GCConnectStatsRequestSearch.h"
 #import "GCHistoryFieldSummaryStats.h"
-
+#import "GCActivity+ExportText.h"
 #import "GCActivity+TestBackwardCompat.h"
 
 @interface GCTestsParsing : GCTestCase
@@ -151,6 +150,7 @@
     XCTAssertGreaterThan(modernAct.trackpoints.count, 1);
     BOOL recordMode = [GCTestCase recordModeGlobal];
     //recordMode = true;
+    //[[modernAct exportCsv] writeToFile:[RZFileOrganizer writeableFilePath:@"t.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
     [self compareStatsCheckSavedFor:modernAct identifier:@"modernAct" cmd:_cmd recordMode:recordMode];
 }
 
@@ -197,6 +197,7 @@
         // disable threading so calculated value recalculated synchronously.
         reloadedAct.settings.worker = nil;
         [reloadedAct trackpoints];
+        
         NSDictionary * parsedDict = [self compareStatsDictFor:parsedAct];
         NSDictionary * reloadedDict = [self compareStatsDictFor:reloadedAct];
         
@@ -212,9 +213,9 @@
         
         for (NSUInteger idx=0; idx<MIN(parsedAct.laps.count,reloadedAct.laps.count); idx++) {
             
-            if ([parsedAct.laps[idx] isKindOfClass:[GCLapSwim class]]) {
-                GCLapSwim * parsedLap = (GCLapSwim*)parsedAct.laps[idx];
-                GCLapSwim * reloadedLap = (GCLapSwim*)reloadedAct.laps[idx];
+            if (parsedAct.garminSwimAlgorithm ) {
+                GCLap * parsedLap = (GCLap*)parsedAct.laps[idx];
+                GCLap * reloadedLap = (GCLap*)reloadedAct.laps[idx];
                 
                 XCTAssertEqualObjects(parsedLap.label, reloadedLap.label, @"Label %@/%@", parsedAct.activityId, @(parsedLap.lapIndex));
             }else{ // GCLap
@@ -1208,7 +1209,13 @@
     
     GCTrackStats * trackStats = [[GCTrackStats alloc] init];
     trackStats.activity = act;
-    
+    if( act.garminSwimAlgorithm ){
+        act.settings.treatGapAsNoValueInSeries = NO;
+        act.settings.gapTimeInterval = 0.;
+    }else{
+        act.settings.treatGapAsNoValueInSeries = NO;
+    }
+
     // Make sure allKeys are the same and generated holders are the same
     // then summary statistics for each field is the same.
     NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithObject:fields forKey:@"allkeys"];

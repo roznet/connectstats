@@ -26,14 +26,12 @@
 #import "GCGarminActivityLapsParser.h"
 #import "GCActivity.h"
 #import "GCLap.h"
-#import "GCTrackPointSwim.h"
 #import "GCActivity+Import.h"
-#import "GCLapSwim.h"
 
 @interface GCGarminActivityLapsParser ()
 @property (nonatomic,retain) NSArray<GCLap*> * laps;
-@property (nonatomic,retain) NSArray<GCTrackPointSwim*> * trackPointSwim;
-@property (nonatomic,retain) NSArray<GCLapSwim*> * lapsSwim;
+@property (nonatomic,retain) NSArray<GCTrackPoint*> * trackPointSwim;
+@property (nonatomic,retain) NSArray<GCLap*> * lapsSwim;
 @property (nonatomic,retain) GCActivity * activity;
 @end
 
@@ -70,13 +68,14 @@
                 NSMutableArray * swimPoints = nil;
 
                 NSUInteger lapIdx = 0;
-                NSUInteger lengthIdx = 0;
 
+                GCTrackPoint * last = nil;
+                
                 for (NSDictionary * one in foundLaps) {
                     if([one isKindOfClass:[NSDictionary class]]){
                         NSArray * lengths = one[@"lengthDTOs"];
                         if ([lengths isKindOfClass:[NSArray class]] && lengths.count > 0) {
-                            GCLapSwim * lap = [[GCLapSwim alloc] initWithDictionary:one forActivity:act];
+                            GCLap * lap = [[GCLap alloc] initWithDictionary:one forActivity:act];
                             lap.lapIndex = lapIdx;
 
                             if(lapsSwim == nil){
@@ -87,11 +86,15 @@
                             }
                             for (NSDictionary * length in lengths) {
                                 if ([length isKindOfClass:[NSDictionary class]]) {
-                                    GCTrackPointSwim * swim = [[GCTrackPointSwim alloc] initWithDictionary:length forActivity:act];
-                                    swim.lengthIdx = lengthIdx++;
+                                    GCTrackPoint * swim = [[GCTrackPoint alloc] initWithDictionary:length forActivity:act];
                                     swim.lapIndex = lapIdx;
                                     [swimPoints addObject:swim];
                                     [swim release];
+                                    
+                                    if( last && [last.time compare:swim.time] != NSOrderedAscending){
+                                        NSLog(@"Why?");
+                                    }
+                                    last = swim;
                                 }
                             }
                             [lapsSwim addObject:lap];

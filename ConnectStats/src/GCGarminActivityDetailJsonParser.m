@@ -176,6 +176,7 @@
     NSMutableArray * rv = nil;
     BOOL errorReported = false;
     BOOL errorReportedDefs = false;
+    
     if (descriptors && [metrics isKindOfClass:[NSArray class]]) {
         rv = [NSMutableArray arrayWithCapacity:metrics.count];
         self.cachedExtraTracksIndexes = nil;
@@ -219,7 +220,7 @@
                     }
                 }
             }
-            GCTrackPoint * tp = [[GCTrackPoint alloc] initWithDictionary:onemeasurement forActivity:self];
+            GCTrackPoint * tp = [[GCTrackPoint alloc] initWithDictionary:onemeasurement forActivity:self.activity];
             [rv addObject:tp];
             [tp release];
         }
