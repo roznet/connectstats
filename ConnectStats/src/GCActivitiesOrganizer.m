@@ -567,12 +567,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 }
 
--(void)registerActivity:(NSString*)aId withTrackpointsSwim:(NSArray<GCTrackPointSwim*>*)aTrack andLaps:(NSArray<GCLapSwim*>*)laps{
-    [[self activityForId:aId] saveTrackpointsSwim:aTrack andLaps:laps];
-    [self notifyOnMainThread:aId];
-}
-
-
 #pragma mark - access
 
 -(void)lookForAllDuplicate{

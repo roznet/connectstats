@@ -29,7 +29,6 @@
 #import "GCFields.h"
 #import "GCLap.h"
 #import "GCTrackPoint+Swim.h"
-//#import "GCLapSwim.h"
 #import "GCActivitySummaryValue.h"
 #import "GCActivityMetaValue.h"
 #import "GCActivityCalculatedValue.h"
@@ -659,122 +658,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return self.useTrackDb || [[NSFileManager defaultManager] fileExistsAtPath:[self trackDbFileName]];
 }
 
-#pragma mark - Load, Save and Update Trackpoint for Swim
-
--(BOOL)updateWithSwimTrackpoints:(NSArray<GCTrackPointSwim*>*)aSwim andSwimLaps:(NSArray<GCLapSwim*>*)laps{
-    /*self.garminSwimAlgorithm = true;
-
-    self.trackFlags = gcFieldFlagNone;
-
-    for (GCTrackPointSwim * point in aSwim) {
-        self.trackFlags |= point.trackFlags;
-    }
-
-    self.trackpointsCache = aSwim;
-    self.lapsCache = laps;
-    [self registerLaps:self.lapsCache forName:GC_LAPS_RECORDED];
-    */
-    return true;
-}
-
--(void)saveTrackpointsSwim:(NSArray<GCTrackPointSwim*> *)aSwim andLaps:(NSArray<GCLapSwim*>*)laps{
-    /*
-    [self updateWithSwimTrackpoints:aSwim andSwimLaps:laps];
-    
-    FMDatabase * db = self.db;
-    FMDatabase * trackdb = self.trackdb;
-
-    [self createTrackDb:trackdb];
-
-    [trackdb beginTransaction];
-    [trackdb setShouldCacheStatements:YES];
-
-    for (GCLapSwim * lap in laps) {
-        [lap saveToDb:trackdb];
-    }
-    for (GCTrackPointSwim * point in aSwim) {
-        [point saveToDb:trackdb];
-    }
-
-    [self saveTrackpointsExtraToDb:trackdb];
-    
-    [trackdb commit];
-    //[trackdb setShouldCacheStatements:NO];
-    if (![db executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){
-        RZLog(RZLogError, @"db error %@", [db lastErrorMessage]);
-    }
-    if (![db executeUpdate:@"UPDATE gc_activities SET garminSwimAlgorithm = ? WHERE activityId=?",@(_garminSwimAlgorithm), _activityId]){
-        RZLog(RZLogError, @"db error %@", [db lastErrorMessage]);
-    }
-    
-    [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
-     */
-}
-
--(void)loadTrackPointsSwim:(FMDatabase*)trackdb{
-    /*
-    NSMutableArray * trackpointsCache = [NSMutableArray arrayWithCapacity:100];
-    FMResultSet * res = [trackdb executeQuery:@"SELECT * FROM gc_length ORDER BY length"];
-    while ([res next]) {
-        GCTrackPointSwim * point =[[[GCTrackPointSwim alloc] initWithResultSet:res] autorelease];
-        point.trackFlags = _trackFlags;
-        [trackpointsCache addObject:point];
-    }
-    self.trackpointsCache = trackpointsCache;
-
-    [res close];
-    self.lapsCache = [NSMutableArray arrayWithCapacity:10];
-    NSMutableArray * newLapsCache = [NSMutableArray array];
-
-    res = [trackdb executeQuery:@"SELECT * FROM gc_pool_lap ORDER BY lap"];
-    while ([res next]) {
-        [newLapsCache addObject:[[[GCLapSwim alloc] initWithResultSet:res] autorelease]];
-    }
-    [res close];
-    self.lapsCache = newLapsCache;
-    [self registerLaps:newLapsCache forName:GC_LAPS_RECORDED];
-
-    bool reported = false;
-    res = [trackdb executeQuery:@"SELECT * FROM gc_pool_lap_info ORDER BY lap"];
-    while ([res next]) {
-        NSUInteger lapIdx = [res intForColumn:@"lap"];
-        if( lapIdx < _lapsCache.count){
-            GCTrackPointSwim * point = _lapsCache[lapIdx];
-            [point updateValueFromResultSet:res inActivity:self];
-        }else{
-            if( !reported){
-                RZLog(RZLogError, @"Inconsistent lap info with number of laps");
-                reported = true;
-            }
-        }
-    }
-    reported = false;
-    res = [trackdb executeQuery:@"SELECT * FROM gc_length_info ORDER BY length"];
-    while ([res next]) {
-        NSUInteger lengthIdx = [res intForColumn:@"length"];
-        if( lengthIdx < trackpointsCache.count){
-            GCTrackPointSwim * point = trackpointsCache[lengthIdx];
-            [point updateValueFromResultSet:res inActivity:self];
-        }else{
-            if( !reported){
-                RZLog(RZLogError, @"Inconsistent length info with number of laps");
-                reported = true;
-            }
-        }
-    }
-    NSDate * time = nil;
-    for (GCTrackPointSwim * point in self.trackpointsCache) {
-        if (time==nil || point.directSwimStroke!=gcSwimStrokeOther) {
-            time = point.time;
-        }
-        [point fixupDrillData:time inActivity:self];
-        time = [time dateByAddingTimeInterval:point.elapsed];
-    }
-    [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
-     */
-}
-
-
 #pragma mark - Load, Save and Update Trackpoint GPS
 
 -(void)saveTrackpointsExtraToDb:(FMDatabase*)db{
@@ -871,7 +754,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     for (id lone in laps) {
         GCLap * nlap = nil;//for release
         GCLap * alap = nil;
-        if ([lone isKindOfClass:[GCLap class]] /*|| [lone isKindOfClass:[GCLapSwim class]]*/) {
+        if ([lone isKindOfClass:[GCLap class]] ) {
             alap = lone;
         }else if([lone isKindOfClass:[NSDictionary class]]){
             nlap = [[GCLap alloc] initWithDictionary:lone forActivity:self];
@@ -1156,24 +1039,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 }
 
 -(void)loadTrackPointsFromDb:(FMDatabase*)trackdb{
-    if ([trackdb tableExists:@"gc_version_track"]) {
-        //int version = [trackdb intForQuery:@"SELECT version from gc_version_track"];
-        if (_garminSwimAlgorithm) {
-            [self loadTrackPointsGPS:trackdb];
-            //[self loadTrackPointsSwim:trackdb];
-        }else{
-            [self loadTrackPointsGPS:trackdb];
-        }
-    }else if ([trackdb tableExists:@"gc_version"] ){
-        // OLDER FILES
-        int version = [trackdb intForQuery:@"SELECT version from gc_version"];
-        if (_garminSwimAlgorithm && version >= 2) {
-            [self loadTrackPointsGPS:trackdb];
-        }else if(!_garminSwimAlgorithm && version >= 4){
-            [self loadTrackPointsGPS:trackdb];
-        }
-    }
-
+    [self loadTrackPointsGPS:trackdb];
+    
     [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
 }
 
@@ -1541,13 +1408,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return _lapsCache.count;
 }
 -(GCLap*)lapNumber:(NSUInteger)idx{
-    if (!_lapsCache) {
-        [self loadTrackPoints];
-    }
-    return _lapsCache[idx];
-}
-
--(GCTrackPointSwim*)swimLapNumber:(NSUInteger)idx{
     if (!_lapsCache) {
         [self loadTrackPoints];
     }

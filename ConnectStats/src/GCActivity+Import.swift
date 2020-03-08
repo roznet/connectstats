@@ -41,6 +41,8 @@ extension GCActivity {
         var sessionStart : Date?
         var sessionEnd   : Date?
         
+        var pool_length : Double = 0.0
+        
         // If multiple session messsages and start time given, pick the matching session
         if let startTime = startTime {
             for message in messages {
@@ -80,6 +82,13 @@ extension GCActivity {
             self.activityType = type.topSubRoot().key
             self.activityTypeDetail = type
             let usemessage = messages[messageIndex]
+            
+            if let pool_length_value = usemessage.interpretedField(key: "pool_length"),
+                let one_length = pool_length_value.valueUnit?.value
+            {
+                pool_length = one_length
+            }
+            
             var sumValues = interp.summaryValues(fitMessage: usemessage)
             let toremove = sumValues.filter {
                 $1.uom == "datetime"
@@ -125,6 +134,8 @@ extension GCActivity {
         var swimpoints : [GCTrackPoint] = []
         if messages.count > 0 {
             swim = true
+            var distanceInMeters = 0.0;
+            let distField = GCField(for: gcFieldFlag.sumDistance, andActivityType: GC_TYPE_SWIMMING)
             for item in messages {
                 if let timestamp = item.time( field: "start_time") {
                     if let checkStart = sessionStart, let checkEnd = sessionEnd {
@@ -133,9 +144,17 @@ extension GCActivity {
                         }
                     }
                     
-                    let values = interp.summaryValues(fitMessage: item)
+                    var values = interp.summaryValues(fitMessage: item)
                     let stroke = interp.strokeType(message: item) ?? gcSwimStrokeType.mixed
                     let active = interp.swimActive(message: item)
+                    // add pool length before of after adding the point?
+                    if active {
+                        distanceInMeters += pool_length
+                    }
+                    if let distField = distField {
+                        values[ distField ] =
+                            GCActivitySummaryValue(forField: distField.key, value: GCNumberWithUnit(GCUnit.meter(), andValue: distanceInMeters))
+                    }
                     if let pointswim = GCTrackPoint(at: timestamp,
                                                         stroke:stroke,
                                                         active:active,

@@ -171,10 +171,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(GCActivity*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 
 -(BOOL)updateWithTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints andLaps:(NSArray<GCLap*>*)laps;
--(BOOL)updateWithSwimTrackpoints:(NSArray<GCTrackPointSwim*>*)trackpoints andSwimLaps:(NSArray<GCLapSwim*>*)laps DEPRECATED_MSG_ATTRIBUTE("Use trackpoints and laps");
-
 -(BOOL)saveTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps;
--(void)saveTrackpointsSwim:(NSArray<GCTrackPointSwim*> *)aSwim andLaps:(NSArray<GCLapSwim*>*)laps DEPRECATED_MSG_ATTRIBUTE("Use trackpoints and laps");
 
 -(void)saveTrackpointsAndLapsToDb:(FMDatabase*)aDb;
 -(void)saveLocation:(NSString*)aLoc;
@@ -357,7 +354,6 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(NSArray<GCLap*>*)laps;
 -(NSUInteger)lapCount;
 -(GCLap*)lapNumber:(NSUInteger)idx;
--(GCTrackPointSwim*)swimLapNumber:(NSUInteger)idx;
 -(void)registerLaps:(NSArray<GCLap*>*)laps forName:(NSString*)name;
 -(BOOL)useLaps:(NSString*)name;
 -(void)clearCalculatedLaps;
