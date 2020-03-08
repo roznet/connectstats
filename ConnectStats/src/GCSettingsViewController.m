@@ -40,6 +40,7 @@
 #import "GCService.h"
 #import "GCDebugActionsTableViewController.h"
 @import RZExternal;
+@import SafariServices;
 
 #define GC_SECTION_LOGIN    0
 #define GC_SECTION_PARAMS   1
@@ -51,7 +52,8 @@
 #define GC_SETTINGS_SERVICES    0
 #define GC_SETTINGS_PROFILE     1
 #define GC_SETTINGS_HEALTH      2
-#define GC_SETTINGS_LOGIN_END   3
+#define GC_SETTINGS_BLOG        3
+#define GC_SETTINGS_LOGIN_END   4
 
 #define GC_SETTINGS_REFRESH     0
 #define GC_SETTINGS_UNITS       1
@@ -136,11 +138,13 @@
         [self.remap addSection:GC_SECTION_LOGIN withRows:@[
                                                            @( GC_SETTINGS_SERVICES    ),
                                                            @( GC_SETTINGS_PROFILE     ),
+                                                           @( GC_SETTINGS_BLOG        ),
                                                            @( GC_SETTINGS_HEALTH      )]];
     }else{
         [self.remap addSection:GC_SECTION_LOGIN withRows:@[
                                                            @( GC_SETTINGS_SERVICES    ),
-                                                           @( GC_SETTINGS_PROFILE     )
+                                                           @( GC_SETTINGS_PROFILE     ),
+                                                           @( GC_SETTINGS_BLOG        )
                                                            ]];
         
     }
@@ -595,7 +599,33 @@
                 rv = gridcell;
                 break;
             }
-
+            case GC_SETTINGS_BLOG:
+            {
+                gridcell = [GCCellGrid gridCell:tableView];
+                [gridcell setupForRows:1 andCols:2];
+                
+                NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Blog", @"Settings")
+                                                                              attributes:[GCViewConfig attributeBold16]] autorelease];
+                
+                [gridcell labelForRow:0 andCol:0].attributedText = title;
+                [gridcell labelForRow:0 andCol:1].attributedText = nil;
+                
+                if( /* DISABLES CODE */ (false) ){
+                    CGFloat size = 25;
+                    UIImageView * iv = [[[UIImageView alloc] initWithFrame:CGRectMake(0., 0., size, size)] autorelease];
+                    UILabel * count = [[[UILabel alloc] initWithFrame:CGRectMake(0., 0, size, size)] autorelease];
+                    count.text = @"1";
+                    count.textColor = [UIColor whiteColor];
+                    count.backgroundColor = [UIColor redColor];
+                    count.layer.cornerRadius = size/2.0;
+                    count.layer.masksToBounds = true;
+                    count.textAlignment = NSTextAlignmentCenter;
+                    [iv addSubview:count];
+                    [gridcell setIconView:iv withSize:CGSizeMake(30, 20)];
+                }
+                rv = gridcell;
+                break;
+            }
         }
     }else if(indexPath.section == GC_SECTION_OTHER){
         switch (indexPath.row) {
@@ -812,6 +842,11 @@
             [self.navigationController pushViewController:detail animated:YES];
         }else if (indexPath.row == GC_SETTINGS_SERVICES) {
             [self showServices];
+        }else if( indexPath.row == GC_SETTINGS_BLOG) {
+            NSURL * url = [NSURL URLWithString:@"https://ro-z.net"];
+            
+            SFSafariViewController * vc = RZReturnAutorelease([[SFSafariViewController alloc] initWithURL:url]);
+            [self presentViewController:vc animated:YES completion:^(){}];
         }
     }else if(section == GC_SECTION_OTHER){
         if(indexPath.row == GC_SETTINGS_BUGREPORT && ![GCAppGlobal trialVersion]){
