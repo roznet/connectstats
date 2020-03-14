@@ -861,6 +861,16 @@
     }
 }
 
+-(void)testParseSearchFlying{
+    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_parsing_flying.db"];
+    NSString * flying = [RZFileOrganizer bundleFilePath:@"last_modern_search_flying.json" forClass:[self class]];
+    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:flying];
+    
+    XCTAssertNotNil([organizer activityForId:@"3988198230"]);
+    XCTAssertFalse([organizer activityForId:@"3988198230"].garminSwimAlgorithm);
+
+}
+
 -(void)testOrganizerSkipAlways{
     GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_skipalways.db"];
     

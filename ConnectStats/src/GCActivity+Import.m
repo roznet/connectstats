@@ -791,7 +791,9 @@
         self.beginCoordinate = [self buildCoordinateFromGarminModernData:data];
         self.date = [self buildStartDateFromGarminModernData:data];
         
-        if( data[@"numberOfActiveLengths"] != nil || data[@"unitOfPoolLength"] != nil){
+        if( (data[@"numberOfActiveLengths"] != nil && [data[@"numberOfActiveLengths"] isKindOfClass:[NSNumber class]] ) ||
+           (data[@"unitOfPoolLength"] != nil && [data[@"unitOfPoolLength"] isKindOfClass:[NSNumber class] ] ) ){
+            
             self.garminSwimAlgorithm = true;
         }
     }

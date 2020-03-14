@@ -1560,7 +1560,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 }
 
 -(GCStatsDataSerie * )timeSerieForSwimStrokeMatching:(GCStatsDataSerie*)other{
-    if (_garminSwimAlgorithm) {
+    if (self.garminSwimAlgorithm) {
         GCStatsDataSerieWithUnit * rv = [self trackSerieForField:[GCField fieldForKey:INTERNAL_DIRECT_STROKE_TYPE andActivityType:GC_TYPE_SWIMMING] timeAxis:true];
         if( rv.count != other.count){
            // [GCStatsDataSerie reduceToCommonRange:rv.serie and:[GCStatsDataSerie dataSerieWithPointsIn:other]];

@@ -662,9 +662,14 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
         cache = RZReturnRetain(rv);
         [db close];
     }
-    GCFieldInfo * info = cache[[afield stringByAppendingString:atype]];
-    if (info) {
-        return info.displayName;
+    GCFieldInfo * info = nil;
+    if( atype != nil ){
+        info = cache[[afield stringByAppendingString:atype]];
+        if (info) {
+            return info.displayName;
+        }
+    }else{
+        NSLog(@"NIL");
     }
     info = cache[[afield stringByAppendingString:GC_TYPE_ALL]];
     if (info) {
