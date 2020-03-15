@@ -37,6 +37,7 @@
 #import "GCActivityTypes.h"
 
 @class GCSegmentOrganizer;
+@class GCConnectStatsStatus;
 
 @interface GCAppDelegate : UIResponder <UIApplicationDelegate,CLLocationManagerDelegate>
 
@@ -54,6 +55,7 @@
 @property (nonatomic, retain) GCWatchSessionManager * watch;
 @property (nonatomic, retain) GCSegmentOrganizer * segments;
 @property (nonatomic, retain) NSURL * urlToOpen;
+@property (nonatomic, retain) GCConnectStatsStatus * remoteStatus;
 
 -(void)saveSettings;
 -(void)addOrSelectProfile:(NSString*)pName;

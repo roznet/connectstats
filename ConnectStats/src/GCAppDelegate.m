@@ -40,6 +40,7 @@
 #import "GCFieldCache.h"
 #import "GCAppDelegate+Swift.h"
 #import "GCWeather.h"
+#import "GCConnectStatsStatus.h"
 
 #define GC_STARTING_FILE @"starting.log"
 
@@ -110,6 +111,7 @@ void checkVersion(){
     [_health release];
     [_segments release];
     [_credentials release];
+    [_remoteStatus release];
 
     [_splitViewController release];
     [_tabBarController release];
@@ -243,9 +245,12 @@ void checkVersion(){
             RZLog(RZLogInfo, @"Launch Invalid UserActivity %@", dict);
         }
     }
+    
+    [self remoteStatusCheck];
     return YES;
 }
 
+     
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     [RZFileOrganizer saveDictionary:_settings withName:@"settings.plist"];
@@ -433,6 +438,13 @@ void checkVersion(){
 
 
 #pragma mark - State Management and Actions
+
+-(void)remoteStatusCheck{
+    self.remoteStatus = [GCConnectStatsStatus status];
+    [self.remoteStatus check:^(GCConnectStatsStatus * s){
+        RZLog(RZLogInfo, @"Remote Status: %@", s);
+    }];
+}
 
 -(void)setupFieldCache{
 

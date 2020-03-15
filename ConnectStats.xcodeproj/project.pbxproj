@@ -823,6 +823,9 @@
 		42AB680F16DD5C9500C633BD /* GCHealthOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB680E16DD5C9400C633BD /* GCHealthOrganizer.m */; };
 		42AB681716E0094A00C633BD /* GCFieldsCalculated.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB681616E0094A00C633BD /* GCFieldsCalculated.m */; };
 		42AB681D16E2913300C633BD /* GCActivityTrackGraphOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB681C16E2913300C633BD /* GCActivityTrackGraphOptionsViewController.m */; };
+		42ABD30C241CE31F00D805DF /* GCConnectStatsStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ABD30B241CE31F00D805DF /* GCConnectStatsStatus.m */; };
+		42ABD30D241CE31F00D805DF /* GCConnectStatsStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ABD30B241CE31F00D805DF /* GCConnectStatsStatus.m */; };
+		42ABD30E241CE31F00D805DF /* GCConnectStatsStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ABD30B241CE31F00D805DF /* GCConnectStatsStatus.m */; };
 		42ACFE9518C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ACFE9418C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.m */; };
 		42ACFE9818C099AB00BF27A5 /* GCGarminLoginSSORequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ACFE9718C099AB00BF27A5 /* GCGarminLoginSSORequest.m */; };
 		42ADFAF621F2834F007BC683 /* GarminRequestFitFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ADFAF521F2834F007BC683 /* GarminRequestFitFile.swift */; };
@@ -2555,6 +2558,8 @@
 		42AB681616E0094A00C633BD /* GCFieldsCalculated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldsCalculated.m; path = src/GCFieldsCalculated.m; sourceTree = "<group>"; };
 		42AB681B16E2913200C633BD /* GCActivityTrackGraphOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityTrackGraphOptionsViewController.h; path = src/GCActivityTrackGraphOptionsViewController.h; sourceTree = "<group>"; };
 		42AB681C16E2913300C633BD /* GCActivityTrackGraphOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCActivityTrackGraphOptionsViewController.m; path = src/GCActivityTrackGraphOptionsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		42ABD30A241CE31F00D805DF /* GCConnectStatsStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCConnectStatsStatus.h; path = src/GCConnectStatsStatus.h; sourceTree = "<group>"; };
+		42ABD30B241CE31F00D805DF /* GCConnectStatsStatus.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCConnectStatsStatus.m; path = src/GCConnectStatsStatus.m; sourceTree = "<group>"; };
 		42ACFE9318C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminLoginSimulatorRequest.h; path = src/GCGarminLoginSimulatorRequest.h; sourceTree = "<group>"; };
 		42ACFE9418C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminLoginSimulatorRequest.m; path = src/GCGarminLoginSimulatorRequest.m; sourceTree = "<group>"; };
 		42ACFE9618C099AB00BF27A5 /* GCGarminLoginSSORequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminLoginSSORequest.h; path = src/GCGarminLoginSSORequest.h; sourceTree = "<group>"; };
@@ -4420,6 +4425,8 @@
 				420063F918C238530031395F /* GCWebConnect+Requests.m */,
 				428FF79D15FB412C007A88FA /* GCWebUrl.h */,
 				428FF79E15FB412C007A88FA /* GCWebUrl.m */,
+				42ABD30A241CE31F00D805DF /* GCConnectStatsStatus.h */,
+				42ABD30B241CE31F00D805DF /* GCConnectStatsStatus.m */,
 			);
 			name = Communications;
 			sourceTree = "<group>";
@@ -6981,6 +6988,7 @@
 				422FAF2719A1DD6000D09773 /* GCWebReverseGeocode.m in Sources */,
 				42BFC24F1DCF508800EAD40E /* GCAppProfiles.m in Sources */,
 				422FAF2819A1DD6000D09773 /* GCSettingsProfilesViewController.m in Sources */,
+				42ABD30E241CE31F00D805DF /* GCConnectStatsStatus.m in Sources */,
 				422FAF2C19A1DD6000D09773 /* GCSplitViewController.m in Sources */,
 				422F52191DFB51F700DD5551 /* GCField+FitFile.swift in Sources */,
 				422FAF2D19A1DD6000D09773 /* GCFormattedFieldText.m in Sources */,
@@ -7408,6 +7416,7 @@
 				423F9FC519ACDEA40057DB5A /* GCHistoryFieldDataSerieConfig.m in Sources */,
 				425ACBC017C1687F00EB23A3 /* GCGarminUserJsonParser.m in Sources */,
 				424F9DBA17C35BDD001C73B1 /* GCHealthZoneCalculator.m in Sources */,
+				42ABD30C241CE31F00D805DF /* GCConnectStatsStatus.m in Sources */,
 				424F9DBF17C39ED5001C73B1 /* GCHealthViewController.m in Sources */,
 				429E879717C4A10300B44A3A /* GCTrackFieldChoices.m in Sources */,
 			);
@@ -7516,6 +7525,7 @@
 				42B5E26A1BA5B216000FAE4E /* GCHealthKitWorkoutParser.m in Sources */,
 				42B5E26C1BA5B216000FAE4E /* GCHealthKitDayDetailParser.m in Sources */,
 				42B5E26D1BA5B216000FAE4E /* GCHealthKitRequest.m in Sources */,
+				42ABD30D241CE31F00D805DF /* GCConnectStatsStatus.m in Sources */,
 				42EA5BDE2066EB0200F4617B /* GCGarminRequestModernActivityTypes.m in Sources */,
 				42B5E26E1BA5B216000FAE4E /* GCSportTracksActivityListParser.m in Sources */,
 				42B5E26F1BA5B216000FAE4E /* GCSportTracksActivityDetailParser.m in Sources */,
