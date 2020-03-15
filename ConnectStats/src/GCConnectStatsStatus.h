@@ -38,6 +38,8 @@ typedef void (^GCConnectStatsStatusCallBack)(GCConnectStatsStatus*status);
 +(GCConnectStatsStatus*)status;
 
 -(void)check:(nullable GCConnectStatsStatusCallBack)cb;
+-(NSUInteger)mostRecentStatusId;
+-(NSArray<NSDictionary*>*)recentMessagesSinceId:(NSUInteger)statusId withinDays:(NSUInteger)ndays;
 
 @end
 

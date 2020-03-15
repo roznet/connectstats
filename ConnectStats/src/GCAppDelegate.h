@@ -70,6 +70,8 @@
 -(void)searchAllActivities;
 
 -(NSObject<GCAppActionDelegate>*)actionDelegate;
+-(NSArray<NSDictionary*>*)recentRemoteMessages;
+-(void)recentRemoteMessagesReceived;
 -(BOOL)handleUniveralLink:(NSURL *) url;
 -(void)setupFieldCache;
 

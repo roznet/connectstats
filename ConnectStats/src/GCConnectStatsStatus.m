@@ -110,6 +110,18 @@ const NSUInteger kPreviousStatusMaxCount = 4;
     return rv;
 }
 
+-(NSUInteger)mostRecentStatusId{
+    NSArray * statuses = [self statusSinceId:0];
+    NSUInteger rv = 0;
+    for (NSDictionary * one in statuses) {
+        NSUInteger sid = [self statusIdFor:one];
+        if( sid > rv){
+            rv = sid;
+        }
+    }
+    return rv;
+}
+
 -(NSDictionary*)lastKnownStatus{
     return self.knownStatuses.count == 0 ? nil : self.knownStatuses.lastObject;
 }
@@ -123,14 +135,61 @@ const NSUInteger kPreviousStatusMaxCount = 4;
             }
         }
     }
-    if( [self statusIdFor:self.remoteStatus]){
+    if( self.remoteStatus && [self statusIdFor:self.remoteStatus] > statusId){
         [rv addObject:self.remoteStatus];
     }
     return rv;
 }
 
 -(NSArray<NSDictionary*>*)messagesSinceId:(NSUInteger)statusId{
-    return nil;
+    NSMutableArray * rv = [NSMutableArray array];
+    
+    NSMutableDictionary * remember = [NSMutableDictionary dictionary];
+
+    if( self.knownStatuses==nil){
+        self.knownStatuses = @[];
+    }
+    
+    NSArray * lookat = self.remoteStatus ? [self.knownStatuses arrayByAddingObject:self.remoteStatus] : self.knownStatuses;
+
+    if( lookat.count ){
+        for (NSDictionary * one in lookat) {
+            if( [self statusIdFor:one] > statusId ){
+                NSArray * messages = one[@"messages"];
+                if( [messages isKindOfClass:[NSArray class]]){
+                    for (NSDictionary * message in messages) {
+                        NSUInteger messageId = [self statusIdFor:message];
+                        if( messageId > statusId){
+                            if( remember[@(messageId)] == nil){
+                                [self statusIdFor:message];
+                                remember[@(messageId)] = @1;
+                                [rv addObject:message];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return rv;
+}
+
+-(NSArray<NSDictionary*>*)recentMessagesSinceId:(NSUInteger)statusId withinDays:(NSUInteger)ndays{
+    NSArray<NSDictionary*>*messages = [self messagesSinceId:statusId];
+    NSMutableArray * rv = [NSMutableArray array];
+    
+    NSDate * threshold = [[NSDate date] dateByAddingTimeInterval:-(3600.*24.0*ndays)];
+    
+    for (NSDictionary * one in messages) {
+        NSNumber * unixtime = one[@"unixtime"];
+        if( [unixtime respondsToSelector:@selector(doubleValue)] ){
+            NSDate * date = [NSDate dateWithTimeIntervalSince1970:unixtime.doubleValue];
+            if( [date compare:threshold] == NSOrderedDescending){
+                [rv addObject:one];
+            }
+        }
+    }
+    return rv;
 }
 
 -(NSString*)description{

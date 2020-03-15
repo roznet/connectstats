@@ -32,15 +32,7 @@
 #import "GCCalendarDataSource.h"
 #import "GCAppActionDelegate.h"
 
-@interface GCTabBarController : UITabBarController<UINavigationControllerDelegate,UITabBarControllerDelegate,GCAppActionDelegate>{
-    GCActivityListViewController * activityListViewController;
-    GCActivityDetailViewController * activityDetailViewController;
-    KalViewController * calendarViewController;
-    GCStatsMultiFieldViewController * fieldListViewController;
-    GCSettingsViewController * settingsViewController;
-    GCCalendarDataSource * calendarDataSource;
-
-}
+@interface GCTabBarController : UITabBarController<UINavigationControllerDelegate,UITabBarControllerDelegate,GCAppActionDelegate>
 
 @property (nonatomic,retain)  GCActivityListViewController * activityListViewController;
 @property (nonatomic,retain)  GCActivityDetailViewController * activityDetailViewController;

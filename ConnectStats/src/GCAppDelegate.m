@@ -439,10 +439,25 @@ void checkVersion(){
 
 #pragma mark - State Management and Actions
 
+-(NSArray<NSDictionary*>*)recentRemoteMessages{
+    NSUInteger knownStatus = [GCAppGlobal configGetInt:CONFIG_LAST_REMOTE_STATUS_ID defaultValue:0];
+    NSArray * recent = [self.remoteStatus  recentMessagesSinceId:knownStatus withinDays:21];
+    return recent;
+}
+
+-(void)recentRemoteMessagesReceived{
+    NSUInteger latest = [self.remoteStatus mostRecentStatusId];
+    [GCAppGlobal configSet:CONFIG_LAST_REMOTE_STATUS_ID intVal:latest];
+    [GCAppGlobal saveSettings];
+    [self.actionDelegate updateBadge:0];
+}
 -(void)remoteStatusCheck{
     self.remoteStatus = [GCConnectStatsStatus status];
     [self.remoteStatus check:^(GCConnectStatsStatus * s){
-        RZLog(RZLogInfo, @"Remote Status: %@", s);
+        
+        NSArray * recent = [self recentRemoteMessages];
+        RZLog(RZLogInfo, @"Remote Status[%@]: %@", @(recent.count), s);
+        [self.actionDelegate updateBadge:recent.count];
     }];
 }
 

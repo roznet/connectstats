@@ -131,6 +131,16 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     return appDelegate.segments;
 }
 
++(NSArray<NSDictionary*>*)recentRemoteMessages{
+    GCAppDelegate *appDelegate = _sharedApplicationDelegate();
+    return [appDelegate recentRemoteMessages];
+}
+
++(void)recentRemoteMessagesReceived{
+    GCAppDelegate *appDelegate = _sharedApplicationDelegate();
+    return [appDelegate recentRemoteMessagesReceived];
+}
+
 #pragma mark - UI Focus Actions
 
 +(void)switchToHealth{

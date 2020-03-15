@@ -75,6 +75,7 @@
 #define CONFIG_SKIN_NAME                @"config_skin_name"
 #define CONFIG_VERSIONS_SEEN            @"config_versions_seen"
 #define CONFIG_FEATURES_SEEN            @"config_features_seen"
+#define CONFIG_LAST_REMOTE_STATUS_ID    @"config_last_remote_status_id"
 
 #define CONFIG_WITHINGS_USERSLIST       @"config_withings_userlist"
 #define CONFIG_WITHINGS_USER            @"config_withings_user"

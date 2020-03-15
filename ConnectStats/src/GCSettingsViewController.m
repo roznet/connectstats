@@ -602,7 +602,7 @@
             case GC_SETTINGS_BLOG:
             {
                 gridcell = [GCCellGrid gridCell:tableView];
-                [gridcell setupForRows:1 andCols:2];
+                [gridcell setupForRows:2 andCols:2];
                 
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Blog", @"Settings")
                                                                               attributes:[GCViewConfig attributeBold16]] autorelease];
@@ -610,11 +610,13 @@
                 [gridcell labelForRow:0 andCol:0].attributedText = title;
                 [gridcell labelForRow:0 andCol:1].attributedText = nil;
                 
-                if( /* DISABLES CODE */ (false) ){
+                NSArray * messages = [GCAppGlobal recentRemoteMessages];
+                
+                if( messages.count > 0 ){
                     CGFloat size = 25;
                     UIImageView * iv = [[[UIImageView alloc] initWithFrame:CGRectMake(0., 0., size, size)] autorelease];
                     UILabel * count = [[[UILabel alloc] initWithFrame:CGRectMake(0., 0, size, size)] autorelease];
-                    count.text = @"1";
+                    count.text = [@(messages.count) stringValue];
                     count.textColor = [UIColor whiteColor];
                     count.backgroundColor = [UIColor redColor];
                     count.layer.cornerRadius = size/2.0;
@@ -622,6 +624,10 @@
                     count.textAlignment = NSTextAlignmentCenter;
                     [iv addSubview:count];
                     [gridcell setIconView:iv withSize:CGSizeMake(30, 20)];
+                    NSString * desc = messages.lastObject[@"description"];
+                    if( [desc isKindOfClass:[NSString class]]){
+                        [gridcell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withString:desc];
+                    }
                 }
                 rv = gridcell;
                 break;
@@ -844,6 +850,20 @@
             [self showServices];
         }else if( indexPath.row == GC_SETTINGS_BLOG) {
             NSURL * url = [NSURL URLWithString:@"https://ro-z.net"];
+            NSArray * messages = [GCAppGlobal recentRemoteMessages];
+            if( messages.count > 0){
+                NSDictionary * latest = messages.lastObject;
+                if( [latest isKindOfClass:[NSDictionary class]] ){
+                    if( [latest[@"url"] isKindOfClass:[NSString class]]){
+                        url = [NSURL URLWithString:latest[@"url"]];
+                    }
+                    if( [latest[@"status_id"] isKindOfClass:[NSNumber class]]){
+                        RZLog(RZLogInfo, @"Blog message %@ with URL: %@", latest[@"status_id"], latest[@"url"]);
+                        
+                    }
+                }
+                [GCAppGlobal recentRemoteMessagesReceived];
+            }
             
             SFSafariViewController * vc = RZReturnAutorelease([[SFSafariViewController alloc] initWithURL:url]);
             [self presentViewController:vc animated:YES completion:^(){}];
