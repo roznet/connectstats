@@ -66,7 +66,6 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 -(void)registerActivityTypes:(NSDictionary*)aData;
 
 -(void)registerActivity:(NSString*)aId withTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps;
--(void)registerActivity:(NSString*)aId withTrackpointsSwim:(NSArray<GCTrackPointSwim*>*)aTrack andLaps:(NSArray<GCLapSwim*>*)laps;
 -(void)registerActivity:(NSString *)aId withWeather:(GCWeather *)aData;
 
 -(void)registerTennisActivity:(NSString *)aId withBabolatData:(NSDictionary *)aData;

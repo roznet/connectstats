@@ -47,6 +47,7 @@
 @property (nonatomic,assign) NSUInteger derivedSerieMonthIndex;
 @property (nonatomic,assign) NSUInteger derivedSerieFieldIndex;
 @property (nonatomic,assign) BOOL started;
+@property (nonatomic,assign) gcFieldFlag summaryCumulativeField;
 @end
 
 @implementation GCStatsMultiFieldViewController
@@ -228,22 +229,12 @@
             }
             [tableView reloadData];
         }else if (indexPath.row == GC_SUMMARY_CUMULATIVE_DISTANCE){
-            /* Disabled for emergency 3.1 release
-             GCStatsHistGraphViewController * vc = [[GCStatsHistGraphViewController alloc] initWithNibName:nil bundle:nil];
-             GCStatsHistGraphConfig * config = [[[GCStatsHistGraphConfig alloc] init] autorelease];
-             config.graphType = gcHistGraphTypeCumulative;
-             GCField * field = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType] ;
-             config.timeWindowConfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.config];
-             config.timeWindowConfig.viewChoice = gcViewChoiceYearly;
-             config.fieldConfig = [GCHistoryFieldDataSerieConfig configWithFilter:false field:field ];
-             [vc updateConfig:config];
-             vc.allFields = self.allFields;
-             ECSlidingViewController * ec = [vc slidingViewControllerWithOptions];
-             if (ec) {
-             [self.navigationController pushViewController:ec animated:YES];
-             }
-             [vc release];
-             */
+            if( self.summaryCumulativeField != gcFieldFlagSumDuration ){
+                self.summaryCumulativeField = gcFieldFlagSumDuration;
+            }else{
+                self.summaryCumulativeField = gcFieldFlagSumDistance;
+            }
+            [tableView reloadData];
         }
     }else if (self.viewChoice == gcViewChoiceAll) {
         GCField * field = [self fieldsForSection:indexPath.section][indexPath.row];
@@ -406,11 +397,16 @@
     GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
     graphCell.cellDelegate = self;
 
-    GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:self.activityType];
-    GCStatsSerieOfSerieWithUnits * serieOfSerie = [[GCAppGlobal derived] timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
-        return [act.activityType isEqualToString:self.activityType];
-    } withLimit:60]];
+    GCDerivedDataSerie * current = [self currentDerivedDataSerie];
+    GCStatsSerieOfSerieWithUnits * serieOfSerie = nil;
+    GCField * field = nil;
     
+    if( current ){
+        field = [GCField fieldForFlag:current.fieldFlag andActivityType:self.activityType];
+        serieOfSerie = [[GCAppGlobal derived] timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
+            return [act.activityType isEqualToString:self.activityType];
+        } withLimit:60]];
+    }
     //GCStatsSerieOfSerieWithUnits * historical = [[GCAppGlobal derived] timeSeriesOfSeriesFor:field];
     //[serieOfSerie addSerieOfSerie:historical];
     GCSimpleGraphCachedDataSource * cache = nil;
@@ -429,10 +425,7 @@
 
 }
 
--(UITableViewCell*)tableView:(UITableView *)tableView derivedCellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
-    graphCell.cellDelegate = self;
-
+-(GCDerivedDataSerie*)currentDerivedDataSerie{
     NSArray<GCDerivedGroupedSeries*>*available = [self availableDataSeries];
     GCDerivedDataSerie * current = nil;
 
@@ -450,6 +443,13 @@
             current = group.series[self.derivedSerieMonthIndex];
         }
     }
+    return current;
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView derivedCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
+    graphCell.cellDelegate = self;
+    GCDerivedDataSerie * current = [self currentDerivedDataSerie];
 
     GCSimpleGraphCachedDataSource * cache = nil;
     if (current) {
@@ -472,7 +472,11 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView cumulativeDistanceCellForRowAtIndexPath:(NSIndexPath *)indexPath{
     GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
     graphCell.legend = TRUE;
-    GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
+    
+    // ignore any other value than duration and use distance.
+    gcFieldFlag which = self.summaryCumulativeField == gcFieldFlagSumDuration ? gcFieldFlagSumDuration : gcFieldFlagSumDistance;
+    
+    GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:which andActivityType:self.activityType]];
     NSCalendarUnit unit = NSCalendarUnitYear;
 
     if (![fieldDataSerie isEmpty]) {
@@ -769,6 +773,7 @@
 
 -(void)setupForCurrentActivityAndViewChoice:(gcViewChoice)choice{
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.config];
+    nconfig.activityType = [[GCAppGlobal organizer] currentActivity].activityType;
     nconfig.viewChoice = choice;
     [self setupForFieldListConfig:nconfig];
 }

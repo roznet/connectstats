@@ -219,7 +219,8 @@
                 }else if( [uom isEqualToString:@"mph"] && [dict[@"unitAbbr"] isEqualToString:@"min/mi"]){
                     uom = @"minpermile";
                 }
-                [GCFields registerField:fieldKey activityType:atype displayName:display andUnitName:uom];
+                [GCFields registerField:field displayName:display andUnitName:uom];
+                
                 double numval = [value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].doubleValue;
                 if (trackfield != gcFieldFlagNone) {
                     GCUnit * unit = [GCTrackPoint unitForField:trackfield andActivityType:atype];

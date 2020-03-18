@@ -40,6 +40,7 @@
 #import "GCFieldCache.h"
 #import "GCAppDelegate+Swift.h"
 #import "GCWeather.h"
+#import "GCConnectStatsStatus.h"
 
 #define GC_STARTING_FILE @"starting.log"
 
@@ -110,6 +111,7 @@ void checkVersion(){
     [_health release];
     [_segments release];
     [_credentials release];
+    [_remoteStatus release];
 
     [_splitViewController release];
     [_tabBarController release];
@@ -243,9 +245,12 @@ void checkVersion(){
             RZLog(RZLogInfo, @"Launch Invalid UserActivity %@", dict);
         }
     }
+    
+    [self remoteStatusCheck];
     return YES;
 }
 
+     
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     [RZFileOrganizer saveDictionary:_settings withName:@"settings.plist"];
@@ -433,6 +438,28 @@ void checkVersion(){
 
 
 #pragma mark - State Management and Actions
+
+-(NSArray<NSDictionary*>*)recentRemoteMessages{
+    NSUInteger knownStatus = [GCAppGlobal configGetInt:CONFIG_LAST_REMOTE_STATUS_ID defaultValue:0];
+    NSArray * recent = [self.remoteStatus  recentMessagesSinceId:knownStatus withinDays:21];
+    return recent;
+}
+
+-(void)recentRemoteMessagesReceived{
+    NSUInteger latest = [self.remoteStatus mostRecentStatusId];
+    [GCAppGlobal configSet:CONFIG_LAST_REMOTE_STATUS_ID intVal:latest];
+    [GCAppGlobal saveSettings];
+    [self.actionDelegate updateBadge:0];
+}
+-(void)remoteStatusCheck{
+    self.remoteStatus = [GCConnectStatsStatus status];
+    [self.remoteStatus check:^(GCConnectStatsStatus * s){
+        
+        NSArray * recent = [self recentRemoteMessages];
+        RZLog(RZLogInfo, @"Remote Status[%@]: %@", @(recent.count), s);
+        [self.actionDelegate updateBadge:recent.count];
+    }];
+}
 
 -(void)setupFieldCache{
 

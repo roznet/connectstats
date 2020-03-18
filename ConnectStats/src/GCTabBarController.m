@@ -31,18 +31,21 @@
 #import "GCViewIcons.h"
 #import "GCWebConnect+Requests.h"
 
+@interface GCTabBarController ()
+@property (nonatomic,retain) UITabBarItem * settingsItem;
+@end
 
 @implementation GCTabBarController
 
-@synthesize activityListViewController,activityDetailViewController,calendarViewController,fieldListViewController,settingsViewController,calendarDataSource;
-
 -(void)dealloc{
-    [activityDetailViewController release];
-    [activityListViewController release];
-    [calendarViewController release];
-    [fieldListViewController release];
-    [settingsViewController release];
-    [calendarDataSource release];
+    [_activityDetailViewController release];
+    [_activityListViewController release];
+    [_calendarViewController release];
+    [_fieldListViewController release];
+    [_settingsViewController release];
+    [_calendarDataSource release];
+    [_settingsItem release];
+    
     [super dealloc];
 }
 
@@ -102,15 +105,15 @@
     [super loadView];
     self.delegate = self;
 
-    activityListViewController = [[GCActivityListViewController		alloc] init];
-    activityDetailViewController = [[GCActivityDetailViewController alloc] init];
-    activityListViewController.detailController = activityDetailViewController;
-    calendarViewController = [[KalViewController alloc] init];
-    calendarDataSource = [[GCCalendarDataSource alloc] init];
-    calendarViewController.dataSource = calendarDataSource;
-    calendarViewController.delegate = calendarDataSource;
-    fieldListViewController = [[GCStatsMultiFieldViewController alloc] initWithStyle:UITableViewStylePlain];
-    settingsViewController = [[GCSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    _activityListViewController = [[GCActivityListViewController		alloc] init];
+    _activityDetailViewController = [[GCActivityDetailViewController alloc] init];
+    _activityListViewController.detailController = _activityDetailViewController;
+    _calendarViewController = [[KalViewController alloc] init];
+    _calendarDataSource = [[GCCalendarDataSource alloc] init];
+    _calendarViewController.dataSource = _calendarDataSource;
+    _calendarViewController.delegate = _calendarDataSource;
+    _fieldListViewController = [[GCStatsMultiFieldViewController alloc] initWithStyle:UITableViewStylePlain];
+    _settingsViewController = [[GCSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
     
     UIImage * activityImg = [GCViewIcons tabBarIconFor:gcIconTabList];
     UIImage * detailImg   = [GCViewIcons tabBarIconFor:gcIconTabMap];
@@ -126,12 +129,13 @@
     UITabBarItem * calendarItem	= [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Calendar",    @"TabBar Title")	image:calendarImg tag:0];
     UITabBarItem * statsItem	= [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Stats",       @"TabBar Title")	image:statsImg tag:0];
     UITabBarItem * settingsItem	= [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Config",      @"TabBar Title")	image:configImg tag:0];
-
-    UINavigationController *activityNav	= [[UINavigationController alloc] initWithRootViewController:activityListViewController];
-    UINavigationController *detailNav	= [[UINavigationController alloc] initWithRootViewController:activityDetailViewController];
-    UINavigationController *calendarNav	= [[UINavigationController alloc] initWithRootViewController:calendarViewController];
-    UINavigationController *statsNav	= [[UINavigationController alloc] initWithRootViewController:fieldListViewController];
-    UINavigationController *settingsNav	= [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+    self.settingsItem = settingsItem;
+    
+    UINavigationController *activityNav	= [[UINavigationController alloc] initWithRootViewController:_activityListViewController];
+    UINavigationController *detailNav	= [[UINavigationController alloc] initWithRootViewController:_activityDetailViewController];
+    UINavigationController *calendarNav	= [[UINavigationController alloc] initWithRootViewController:_calendarViewController];
+    UINavigationController *statsNav	= [[UINavigationController alloc] initWithRootViewController:_fieldListViewController];
+    UINavigationController *settingsNav	= [[UINavigationController alloc] initWithRootViewController:_settingsViewController];
 
     (statsNav.navigationBar).titleTextAttributes = @{NSFontAttributeName:[GCViewConfig boldSystemFontOfSize:16.]};
 
@@ -162,11 +166,11 @@
 
     self.viewControllers = @[activityNav,detailNav,statsNav,calendarNav,settingsNav];
 
-    [GCViewConfig setupViewController:fieldListViewController];
-    [GCViewConfig setupViewController:activityListViewController];
-    [GCViewConfig setupViewController:activityDetailViewController];
-    [GCViewConfig setupViewController:calendarViewController];
-    [GCViewConfig setupViewController:settingsViewController];
+    [GCViewConfig setupViewController:_fieldListViewController];
+    [GCViewConfig setupViewController:_activityListViewController];
+    [GCViewConfig setupViewController:_activityDetailViewController];
+    [GCViewConfig setupViewController:_calendarViewController];
+    [GCViewConfig setupViewController:_settingsViewController];
 
     [activityItem release];
     [detailItem release];
@@ -189,46 +193,53 @@
 
 }
 
+-(void)updateBadge:(NSUInteger)count{
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        self.settingsItem.badgeValue = count > 0 ? [@(count) stringValue] : nil;
+        [self.view setNeedsDisplay];
+    });
+}
+
 -(void)beginRefreshing{
     self.selectedIndex = 0;
     //[[GCAppGlobal web] garminLogin];
-    [activityListViewController beginRefreshing];
+    [self.activityListViewController beginRefreshing];
 }
 
 -(void)login{
     self.selectedIndex = 0;
     [[GCAppGlobal web] garminLogin];
-    [activityListViewController beginRefreshing];
-    [activityListViewController refreshData];
+    [self.activityListViewController beginRefreshing];
+    [self.activityListViewController refreshData];
 }
 
 -(void)logout{
     self.selectedIndex = 0;
     [[GCAppGlobal web] garminLogout];
-    [activityListViewController beginRefreshing];
+    [self.activityListViewController beginRefreshing];
     //[activityListViewController refreshData];
 }
 
 -(void)focusOnActivityAtIndex:(NSUInteger)aIdx{
     GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
     organizer.currentActivityIndex = aIdx;
-    [activityDetailViewController.navigationController popToRootViewControllerAnimated:YES];
+    [self.activityDetailViewController.navigationController popToRootViewControllerAnimated:YES];
     self.selectedIndex = 1;
-    [activityDetailViewController.navigationController setNavigationBarHidden:YES animated:YES];
-    [activityDetailViewController notifyCallBack:nil info:nil];
+    [self.activityDetailViewController.navigationController setNavigationBarHidden:YES animated:YES];
+    [self.activityDetailViewController notifyCallBack:nil info:nil];
     [organizer notifyOnMainThread:NOTIFY_CHANGE];
 }
 
 -(void)focusOnActivityId:(NSString*)aId{
     GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
     [organizer setCurrentActivityId:aId];
-    [activityDetailViewController notifyCallBack:nil info:nil];
-    [activityDetailViewController.navigationController popToRootViewControllerAnimated:YES];
+    [self.activityDetailViewController notifyCallBack:nil info:nil];
+    [self.activityDetailViewController.navigationController popToRootViewControllerAnimated:YES];
     self.selectedIndex = 1;
-    [activityDetailViewController.navigationController setNavigationBarHidden:YES animated:YES];
+    [self.activityDetailViewController.navigationController setNavigationBarHidden:YES animated:YES];
 }
 -(void)focusOnListWithFilter:(NSString*)aFilter{
-    [activityListViewController setupFilterForString:aFilter];
+    [self.activityListViewController setupFilterForString:aFilter];
     //[self setSelectedIndex:0];
 }
 -(void)focusOnActivityList{
@@ -244,15 +255,15 @@
 
 - (void)navigationController:(UINavigationController *)navigationController
        didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    if (viewController == activityDetailViewController || viewController == activityDetailViewController.slidingViewController) {
+    if (viewController == self.activityDetailViewController || viewController == self.activityDetailViewController.slidingViewController) {
         [navigationController setNavigationBarHidden:YES animated:YES];
     }
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
-    if (viewController == calendarViewController.navigationController) {
+    if (viewController == self.calendarViewController.navigationController) {
         if ([[GCAppGlobal organizer] countOfActivities]) {
-            [calendarViewController showAndSelectDate:[[GCAppGlobal organizer] currentActivity].date];
+            [self.calendarViewController showAndSelectDate:[[GCAppGlobal organizer] currentActivity].date];
         }
         [Flurry logEvent:EVENT_CALENDAR];
     }

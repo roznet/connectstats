@@ -85,10 +85,8 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 @property (nonatomic,retain) NSString * activityId;
 
-@property (nonatomic,retain) NSDictionary<GCField*,GCActivitySummaryValue*> * summaryData;
-@property (nonatomic,retain) NSDictionary<GCField*,GCActivityCalculatedValue*> * calculatedFields;
-@property (nonatomic,retain) NSDictionary<NSString*,NSArray*> * calculatedLaps;
-@property (nonatomic,retain) NSDictionary<GCField*,GCTrackPointExtraIndex*> * cachedExtraTracksIndexes;
+@property (nonatomic,readonly) NSDictionary<GCField*,GCActivitySummaryValue*> * summaryData;
+
 /**
  @brief public interface is read only, should be set with updateMetaData as some flag need to be sync'd
  */
@@ -112,9 +110,6 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 @property (nonatomic,readonly) NSDate * endTime;
 @property (nonatomic,assign) CLLocationCoordinate2D beginCoordinate;
 
-@property (nonatomic,retain) NSString * speedDisplayUom;
-@property (nonatomic,retain) NSString * distanceDisplayUom;
-
 @property (nonatomic,assign) NSUInteger flags;
 @property (nonatomic,assign) NSUInteger trackFlags;
 @property (nonatomic,assign) BOOL garminSwimAlgorithm;
@@ -135,6 +130,8 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 @property (nonatomic,readonly) NSString * externalActivityId;
 @property (nonatomic,readonly) GCService * service;
 
+@property (nonatomic,readonly) GCUnit * speedDisplayUnit;
+@property (nonatomic,readonly) GCUnit * distanceDisplayUnit;
 /**
  Array of trackpoints. Note it maybe lazy loaded so
  can return nil, but asking for this will trigger attempt to load from db
@@ -174,10 +171,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(GCActivity*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 
 -(BOOL)updateWithTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints andLaps:(NSArray<GCLap*>*)laps;
--(BOOL)updateWithSwimTrackpoints:(NSArray<GCTrackPointSwim*>*)trackpoints andSwimLaps:(NSArray<GCLapSwim*>*)laps;
-
 -(BOOL)saveTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps;
--(void)saveTrackpointsSwim:(NSArray<GCTrackPointSwim*> *)aSwim andLaps:(NSArray<GCLapSwim*>*)laps;
 
 -(void)saveTrackpointsAndLapsToDb:(FMDatabase*)aDb;
 -(void)saveLocation:(NSString*)aLoc;
@@ -211,6 +205,8 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(void)clearTrackdb;
 
 -(BOOL)hasTrackField:(gcFieldFlag)which;
+//-(void)registerTrackpoints:(NSArray<GCTrackPoint*>*)points forName:(NSString*)name;
+//-(BOOL)useTrackpoints:(NSString*)name;
 
 /**
  Check if activities has trackfield available. Note it may not be available
@@ -244,9 +240,9 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 /**
  Special time serie for swimStroke, will return the value of gcSwimStrokeType for
- each swim length recorded
+ each swim length recorded. Will match the x of the other serie in case a filter was applied
  */
--(GCStatsDataSerie*)timeSerieForSwimStroke;
+-(GCStatsDataSerie * )timeSerieForSwimStrokeMatching:(GCStatsDataSerie*)other;
 /**
  Will return a serie for each track point that is 0 if that trackpoint is not
  in lap or the time/distance since the beginning of the lap
@@ -312,7 +308,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 /**
  Format a value with unit similar to a given field
  */
--(NSString*)formatValue:(double)aval forField:(GCField*)which;
+-(NSString*)formatValue:(double)aval forField:(GCField*)which DEPRECATED_MSG_ATTRIBUTE("use numberWithUnitForField");
 
 /**
  Format a value with unit similar to a given field, unit name not displayed
@@ -342,9 +338,13 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  @brief method to update the dictionary of meta data
  */
 -(void)updateMetaData:(NSDictionary<NSString*,GCActivityMetaValue*>*)meta;
+/**
+ @brief method to update the dictionary of summary data
+ */
+-(void)updateSummaryData:(NSDictionary<GCField*,GCActivitySummaryValue*>*)summary;
 
 /**
- Add a dictionary of metavalue entries
+ @brief Add a dictionary of metavalue entries
  */
 -(void)addEntriesToMetaData:(NSDictionary<NSString*,GCActivityMetaValue*> *)dict;
 -(void)addEntriesToCalculatedFields:(NSDictionary<GCField*,GCActivityCalculatedValue*> *)dict;
@@ -354,9 +354,9 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(NSArray<GCLap*>*)laps;
 -(NSUInteger)lapCount;
 -(GCLap*)lapNumber:(NSUInteger)idx;
--(GCTrackPointSwim*)swimLapNumber:(NSUInteger)idx;
 -(void)registerLaps:(NSArray<GCLap*>*)laps forName:(NSString*)name;
 -(BOOL)useLaps:(NSString*)name;
+-(void)clearCalculatedLaps;
 -(void)focusOnLapIndex:(NSUInteger)lapIndex;//cheat/hint for lapcoumpound with several point in same lap
 /**
  return a serie with the value of field for each lap

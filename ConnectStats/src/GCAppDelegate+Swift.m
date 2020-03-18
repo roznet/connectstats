@@ -25,7 +25,6 @@
 
 #import "GCAppDelegate+Swift.h"
 #import "ConnectStats-Swift.h"
-#import "FITFitFileDecode.h"
 
 @implementation GCAppDelegate (Swift)
 
@@ -39,11 +38,8 @@
 
 -(void)handleFitFile{
     NSData * fitData = [NSData dataWithContentsOfURL:self.urlToOpen];
-    FITFitFileDecode * decode = [FITFitFileDecode fitFileDecode:fitData];
-    [decode parse];
+    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:[self.urlToOpen.path lastPathComponent] fitFileData:fitData fitFilePath:self.urlToOpen.path startTime:[NSDate date]]);
 
-    
-    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:[self.urlToOpen.path lastPathComponent] fitFilePath:self.urlToOpen.path startTime:[NSDate date]]);
     [self.organizer registerTemporaryActivity:fitAct forActivityId:fitAct.activityId];
     [self performSelectorOnMainThread:@selector(handleFitFileDone:) withObject:fitAct.activityId waitUntilDone:NO];
 }

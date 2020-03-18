@@ -29,7 +29,7 @@ extension GCActivity {
         }
     }
     
-    convenience init(withId activityId:String, fitFile:RZFitFile, startTime: Date?){
+    convenience init?(withId activityId:String, fitFile:RZFitFile, startTime: Date?){
         self.init(id: activityId)
         let interp  = FITFitFileInterpret(fitFile: fitFile)
         
@@ -40,6 +40,8 @@ extension GCActivity {
         
         var sessionStart : Date?
         var sessionEnd   : Date?
+        
+        var pool_length : Double = 0.0
         
         // If multiple session messsages and start time given, pick the matching session
         if let startTime = startTime {
@@ -79,8 +81,14 @@ extension GCActivity {
             let type  = interp.activityType
             self.activityType = type.topSubRoot().key
             self.activityTypeDetail = type
-            self.speedDisplayUom = type.preferredSpeedDisplayUnit().key
             let usemessage = messages[messageIndex]
+            
+            if let pool_length_value = usemessage.interpretedField(key: "pool_length"),
+                let one_length = pool_length_value.valueUnit?.value
+            {
+                pool_length = one_length
+            }
+            
             var sumValues = interp.summaryValues(fitMessage: usemessage)
             let toremove = sumValues.filter {
                 $1.uom == "datetime"
@@ -93,6 +101,9 @@ extension GCActivity {
             if let start = usemessage.time(field: "start_time"){
                 self.date = start
             }
+        }else{
+            // no session message
+            return nil;
         }
         
         messages = fitFile.messages(forMessageType: FIT_MESG_NUM_RECORD)
@@ -120,9 +131,11 @@ extension GCActivity {
         var swim : Bool = false;
         
         messages = fitFile.messages(forMessageType: FIT_MESG_NUM_LENGTH)
-        var swimpoints : [GCTrackPointSwim] = []
+        var swimpoints : [GCTrackPoint] = []
         if messages.count > 0 {
             swim = true
+            var distanceInMeters = 0.0;
+            let distField = GCField(for: gcFieldFlag.sumDistance, andActivityType: GC_TYPE_SWIMMING)
             for item in messages {
                 if let timestamp = item.time( field: "start_time") {
                     if let checkStart = sessionStart, let checkEnd = sessionEnd {
@@ -131,13 +144,21 @@ extension GCActivity {
                         }
                     }
                     
-                    let values = interp.summaryValues(fitMessage: item)
+                    var values = interp.summaryValues(fitMessage: item)
                     let stroke = interp.strokeType(message: item) ?? gcSwimStrokeType.mixed
                     let active = interp.swimActive(message: item)
-                    if let pointswim = GCTrackPointSwim(at: timestamp,
+                    // add pool length before of after adding the point?
+                    if active {
+                        distanceInMeters += pool_length
+                    }
+                    if let distField = distField {
+                        values[ distField ] =
+                            GCActivitySummaryValue(forField: distField.key, value: GCNumberWithUnit(GCUnit.meter(), andValue: distanceInMeters))
+                    }
+                    if let pointswim = GCTrackPoint(at: timestamp,
                                                         stroke:stroke,
                                                         active:active,
-                                                        for:values,
+                                                        with:values,
                                                         in:self){
                         swimpoints.append(pointswim)
                     }
@@ -148,7 +169,7 @@ extension GCActivity {
         
         messages = fitFile.messages(forMessageType: FIT_MESG_NUM_LAP)
         var laps : [GCLap] = []
-        var lapsSwim : [GCLapSwim] = []
+        var lapsSwim : [GCLap] = []
         
         for item in messages {
             if let timestamp = item.time( field: "start_time") {
@@ -163,7 +184,7 @@ extension GCActivity {
                 if swim {
                     let stroke = interp.strokeType(message: item) ?? gcSwimStrokeType.mixed
                     let active = interp.swimActive(message: item)
-                    if let lap = GCLapSwim(at: timestamp, stroke: stroke, active: active, for: values, in: self){
+                    if let lap = GCLap(at: timestamp, stroke: stroke, active: active, with: values, in: self){
                         lapsSwim.append(lap)
                     }
                 }else{
@@ -178,7 +199,7 @@ extension GCActivity {
         
         // Don't save to db
         if swim {
-            self.update(withSwimTrackpoints:swimpoints,andSwimLaps:lapsSwim)
+            self.update(withTrackpoints:swimpoints,andLaps:lapsSwim)
         }else{
             self.update(withTrackpoints:trackpoints,andLaps:laps)
         }

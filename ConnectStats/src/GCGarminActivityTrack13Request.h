@@ -34,13 +34,12 @@ typedef NS_ENUM(NSUInteger, gcTrack13RequestStage){
 @class GCActivity;
 @class GCLap;
 @class GCTrackPoint;
-@class GCTrackPointSwim;
 
 @interface GCGarminActivityTrack13Request : GCGarminReqBase
 @property (nonatomic,readonly) NSArray<GCTrackPoint*> * trackpoints;
 @property (nonatomic,readonly) NSArray<GCLap*> * laps;
 
-@property (nonatomic,readonly) NSArray<GCTrackPointSwim*> * trackpointsSwim;
+@property (nonatomic,readonly) NSArray<GCTrackPoint*> * trackpointsSwim;
 
 @property (nonatomic,readonly) NSString * activityId;
 @property (nonatomic,assign) gcTrack13RequestStage track13Stage;

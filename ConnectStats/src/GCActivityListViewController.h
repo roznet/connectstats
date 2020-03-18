@@ -29,7 +29,7 @@
 #import "GCActivityTypeListViewController.h"
 
 @interface GCActivityListViewController : UITableViewController<RZChildObject,UISearchBarDelegate,UIAlertViewDelegate,
-                                                                GCCellGridDelegate,UIActionSheetDelegate,GCActivityTypeListViewControllerDelegate,UIViewControllerPreviewingDelegate>
+                                                                GCCellGridDelegate,UIActionSheetDelegate,GCActivityTypeListViewControllerDelegate>
 
 @property (nonatomic,retain) GCActivityDetailViewController * detailController;
 

@@ -22,6 +22,9 @@
 @end
 
 @implementation GCStatsSerieOfSerieHolder
+-(NSString*)description{
+    return [NSString stringWithFormat:@"<%@: %@ %@>", NSStringFromClass([self class]),self.sValue, self.serieWithUnit];
+}
 
 +(GCStatsSerieOfSerieHolder*)serieOfSerieHolder:(GCNumberWithUnit*)num serie:(GCStatsDataSerieWithUnit*)serie{
     GCStatsSerieOfSerieHolder * rv = RZReturnAutorelease([[GCStatsSerieOfSerieHolder alloc] init]);
@@ -57,6 +60,10 @@
 @end
 
 @implementation GCStatsSerieOfSerieWithUnits
+
+-(NSString*)description{
+    return [NSString stringWithFormat:@"<%@: %@ %@ series>", NSStringFromClass([self class]),self.sUnit, @(self.series.count)];
+}
 
 +(GCStatsSerieOfSerieWithUnits*)serieOfSerieWithUnits:(GCUnit*)sUnit{
     GCStatsSerieOfSerieWithUnits * rv = RZReturnAutorelease([[GCStatsSerieOfSerieWithUnits alloc] init]);

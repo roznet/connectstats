@@ -74,7 +74,7 @@
 -(void)setupStatsQuartile:(NSUInteger)row in:(GCStatsDataSerie*)quartiles for:(GCHistoryFieldDataSerie*)activityStats;
 -(void)setupForWeather:(GCActivity*)activity width:(CGFloat)width;
 
--(void)setupForSwimTrackpoint:(GCTrackPointSwim*)lap index:(NSUInteger)idx andActivity:(GCActivity*)activity width:(CGFloat)width;
+-(void)setupForSwimTrackpoint:(GCTrackPoint*)lap index:(NSUInteger)idx andActivity:(GCActivity*)activity width:(CGFloat)width;
 
 -(void)setupForTennisShotValue:(GCActivityTennis*)activity shotValue:(GCActivityTennisShotValues*)values;
 -(void)setupForTennisHeatmap:(GCActivityTennis*)activity field:(NSString*)field;

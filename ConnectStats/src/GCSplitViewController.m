@@ -112,7 +112,9 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+-(void)updateBadge:(NSUInteger)count{
+    
+}
 -(void)focusOnActivityAtIndex:(NSUInteger)aIdx{
     GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
     organizer.currentActivityIndex = aIdx;

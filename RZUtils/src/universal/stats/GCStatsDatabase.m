@@ -146,13 +146,16 @@
 -(NSDictionary<NSDictionary*,GCStatsDataSerie*>*)loadByKeys{
     NSMutableDictionary * rv = [NSMutableDictionary dictionary];
     
-    NSString * query = [NSString stringWithFormat:@"SELECT * FROM %@", self.tableName];
-    
-    FMResultSet * res = [self.db executeQuery:query];
-    while( [res next]){
-        GCStatsDataSerie * serie = [self serieForResultSet:res];
-        NSDictionary * keys = [self keysForResultSet:res];
-        rv[ keys ] = serie;
+    // It's possible nothing there and table wasn't even created
+    if( [self.db tableExists:self.tableName] ){
+        NSString * query = [NSString stringWithFormat:@"SELECT * FROM %@", self.tableName];
+        
+        FMResultSet * res = [self.db executeQuery:query];
+        while( [res next]){
+            GCStatsDataSerie * serie = [self serieForResultSet:res];
+            NSDictionary * keys = [self keysForResultSet:res];
+            rv[ keys ] = serie;
+        }
     }
     return rv;
 

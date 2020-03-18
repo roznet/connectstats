@@ -89,8 +89,7 @@
             dist = point.distanceMeters;
         }
         GCNumberWithUnit * distN = [GCNumberWithUnit numberWithUnitName:@"meter" andValue:dist];
-
-        distN = [[distN convertToUnitName:(self.activity).distanceDisplayUom] convertToGlobalSystem];
+        distN = [distN convertToUnit:self.activity.distanceDisplayUnit];
 
         distDesc = [distN formatDouble];
         pointInfo = [NSString stringWithFormat:@"After: %@ and %@", elapsedDesc, distDesc];
@@ -98,7 +97,7 @@
 
     if (self.gradientField == gcFieldFlagNone) {
         // Fastest km/mile display
-        GCUnit * unit = [[GCUnit unitForKey:(self.activity).distanceDisplayUom] unitForGlobalSystem];
+        GCUnit * unit = self.activity.distanceDisplayUnit;
         GCNumberWithUnit * time = [self.lap numberWithUnitForField:gcFieldFlagSumDuration andActivityType:(self.activity).activityType];
 
         title = [NSString stringWithFormat:@"Time: %@", time];

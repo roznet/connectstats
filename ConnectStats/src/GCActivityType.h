@@ -108,7 +108,7 @@
  
  @return true or false
  */
--(BOOL)isPaceValid;
+-(BOOL)isPacePreferred;
 -(BOOL)isSki;
 
 -(nonnull GCUnit*)preferredSpeedDisplayUnit;

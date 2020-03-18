@@ -57,10 +57,10 @@
     return @"https://wbsapi.withings.net/measure?action=getmeas";
 }
 -(NSString*)debugDescription{
-    return [NSString stringWithFormat:@"<%@: %@ %@>",
+    return [NSString stringWithFormat:@"<%@: %@>",
             NSStringFromClass([self class]),
-            [self.fromDate YYYYMMDD],
-            [self.urlDescription truncateIfLongerThan:192 ellipsis:@"..."] ];
+            
+            self.url ? [self.urlDescription truncateIfLongerThan:192 ellipsis:@"..."] : @"oauth"];
 }
 
 -(NSDictionary*)postData{

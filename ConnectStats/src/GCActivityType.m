@@ -238,11 +238,11 @@ static GCActivityTypes * _activityTypesCache = nil;
 
 #pragma mark - Properties
 
--(BOOL)isPaceValid{
+-(BOOL)isPacePreferred{
     if( [self.key isEqualToString:GC_TYPE_RUNNING] || [self.key isEqualToString:GC_TYPE_SWIMMING])
         return true;
     
-    return self.parentType.isPaceValid;
+    return self.parentType.isPacePreferred;
 }
 
 -(BOOL)isSki{

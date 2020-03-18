@@ -49,7 +49,7 @@
  */
 @property (nonatomic,assign) BOOL treatGapAsNoValueInSeries;
 /**
- minimum time interval treated as a gap
+ minimum time interval treated as a gap. if 0 will then use the elapsed of last point
  */
 @property (nonatomic,assign) NSTimeInterval gapTimeInterval;
 /**

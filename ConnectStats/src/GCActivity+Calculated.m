@@ -524,7 +524,7 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
     double startx = [serieu.serie dataPointAtIndex:0].x_data;
     NSUInteger serieIndex = 0;
     GCUnit * meters = [GCUnit unitForKey:@"meter"];
-    GCUnit * disp =  [[GCUnit unitForKey:self.distanceDisplayUom] unitForGlobalSystem];
+    GCUnit * disp =  self.distanceDisplayUnit;
 
     NSArray * trackpointsCache = self.trackpoints;
 

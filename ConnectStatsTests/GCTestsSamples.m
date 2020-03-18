@@ -7,6 +7,11 @@
 //
 
 #import "GCTestsSamples.h"
+#import "GCActivity.h"
+#import "GCActivity+Database.h"
+#import "GCActivitiesOrganizer.h"
+#import "GCHealthOrganizer.h"
+
 @implementation GCTestsSamples
 
 
@@ -77,6 +82,85 @@
     return rv;
 }
 
++(FMDatabase*)createEmptyActivityDatabase:(NSString*)name{
+    [RZFileOrganizer removeEditableFile:name];
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:name]];
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
 
+    return db;
+}
++(GCActivitiesOrganizer*)createEmptyOrganizer:(NSString*)dbname{
+    NSString * dbfp = [RZFileOrganizer writeableFilePath:dbname];
+    [RZFileOrganizer removeEditableFile:dbname];
+    FMDatabase * db = [FMDatabase databaseWithPath:dbfp];
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    [GCHealthOrganizer ensureDbStructure:db];
+    GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
+    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
+    organizer.health = health;
+
+    return organizer;
+}
++(FMDatabase*)sampleActivityDatabase:(NSString*)name{
+
+    [RZFileOrganizer createEditableCopyOfFile:name forClass:self];
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:name]];
+    [db open];
+    int versionInitial = [db intForQuery:@"SELECT MAX(version) FROM gc_version"];
+    [GCActivity ensureDbStructure:db];
+    int versionFinal = [db intForQuery:@"SELECT MAX(version) FROM gc_version"];
+
+    if( versionInitial != versionFinal) {
+        RZLog(RZLogInfo, @"Database for %@ upgraded from version %@ to %@", name, @(versionInitial), @(versionFinal));
+    }
+    
+    return db;
+}
++(NSString*)sampleActivityDatabasePath:(NSString*)name{
+    return [[self sampleActivityDatabase:name] databasePath];
+}
+
++(void)ensureSampleDbStructure{
+    NSArray<NSString*>*samples = @[
+        // ConnectStatsTestApp
+        @"test_activity_running_828298988.db", // GCTestUISamples sample13_compareStats
+        @"test_activity_running_1266384539.db", // GCTestUISamples sample13_compareStats
+        @"test_activity_running_837769405.db", // GCTestUISamples sample9_trackFieldMultipleLineGraphs
+                                                // GCTestUISamples sample_12_trackStats
+                                                // GCTestUISamples sampleActivities
+        @"test_activity_swimming_439303647.db", // GCTestUISamples sampleActivities
+        @"test_activity_cycling_940863203.db",  // GCTestUISamples sampleActivities
+        @"test_activity_day___healthkit__Default_20151106.db", // GCTestUISamples sampleDayActivities
+        @"test_activity_day___healthkit__Default_20151109.db", // GCTestUISamples sampleDayActivities
+        
+        // XCTests
+        @"activities_duplicate.db", // GCTestsActivities testSearchDuplicateActivities
+        
+        @"test_activity_running_837769405.db", // GCTestsActivities testActivityStatsRunning
+                                               // GCTestsPerformance testPerformanceTrackpoints
+        @"test_activity_running_1266384539.db", // GCtestsActivities testCompareActivitiesRunning
+        @"test_activity_running_828298988.db", // GCtestsActivities testCompareActivitiesRunning
+        
+        @"test_activity_running_837769405.db", // GCTestsActivities testBucketVersusLaps
+                                            // GCTestsActivities testActivityThumbnails
+        @"test_activity_day___healthkit__20150622.db", // GCTestsActivities testActivityStatsDayHeartRate
+        @"test_activity_cycling_1404395287.db", // GCTestsActivities testActivityCalculated
+        
+        @"activities_duplicate.db", // GCTestsPerformance testPerformanceOrganizerLoad
+        @"activities_stats.db", // GCTestsPerformance testPerformanceOrganizerStatistics
+    ];
+    
+    
+    for (NSString*dbname in samples) {
+        NSString * path = [RZFileOrganizer bundleFilePathIfExists:dbname forClass:self];
+        if( path ){
+            @autoreleasepool {
+                [self sampleActivityDatabase:dbname];
+            }
+        }
+    }
+}
 
 @end

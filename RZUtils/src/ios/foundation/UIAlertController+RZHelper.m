@@ -63,7 +63,14 @@
 -(void)presentAnimated:(BOOL)animated
             completion:(void (^)(void))completion
 {
-    UIViewController *rootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *rootVC = nil;
+    
+    for (UIWindow * window in [UIApplication sharedApplication].windows) {
+        if( window.isKeyWindow ){
+            rootVC = window.rootViewController;
+        }
+    }
+    
     if (rootVC != nil) {
         [self presentFromController:rootVC animated:animated completion:completion];
     }

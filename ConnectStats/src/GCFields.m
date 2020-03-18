@@ -72,6 +72,11 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     [_fieldCache registerField:field activityType:aType displayName:aName andUnitName:uom];
 }
 
++(void)registerField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom{
+    [_fieldCache registerField:field displayName:aName andUnitName:uom];
+
+}
+
 #pragma mark -
 
 +(NSArray*)knownFieldsMatching:(NSString*)str{
@@ -98,7 +103,7 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     return [[_fieldCache infoForField:field andActivityType:aType] displayName];
 }
 
-+(NSArray*)missingPredefinedField{
++(NSDictionary<GCField*,GCFieldInfo*>*)missingPredefinedField{
     return [_fieldCache missingPredefinedField];
 }
 
@@ -113,14 +118,6 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
         rv = [GCUnit unitForKey:@"foot"];
     }
 
-    return rv;
-}
-+(gcUnitSystem)fieldUnitSystem{
-    gcUnitSystem rv = [GCUnit getGlobalSystem];
-    if (rv == GCUnitSystemDefault) {
-        GCUnit * sample =  [GCField fieldForKey:@"SumDistance" andActivityType:GC_TYPE_ALL].unit;
-        rv = [sample system];
-    }
     return rv;
 }
 
@@ -665,9 +662,14 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
         cache = RZReturnRetain(rv);
         [db close];
     }
-    GCFieldInfo * info = cache[[afield stringByAppendingString:atype]];
-    if (info) {
-        return info.displayName;
+    GCFieldInfo * info = nil;
+    if( atype != nil ){
+        info = cache[[afield stringByAppendingString:atype]];
+        if (info) {
+            return info.displayName;
+        }
+    }else{
+        NSLog(@"NIL");
     }
     info = cache[[afield stringByAppendingString:GC_TYPE_ALL]];
     if (info) {

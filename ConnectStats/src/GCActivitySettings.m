@@ -55,82 +55,90 @@
     GCField * field = nil;
 
     self.adjustSeriesToMatchLapAverage = [GCAppGlobal configGetBool:CONFIG_FILTER_ADJUST_FOR_LAP defaultValue:false];
-    self.treatGapAsNoValueInSeries = false;
-    self.gapTimeInterval = 10.;
+    
     self.worker = [GCAppGlobal worker];
     
-    if ([GCAppGlobal configGetBool:CONFIG_FILTER_BAD_VALUES defaultValue:YES]){
+    if( act.garminSwimAlgorithm ){
+        self.treatGapAsNoValueInSeries = false;
+        self.gapTimeInterval = 0.;
 
-        field = [GCField fieldForFlag:gcFieldFlagAltitudeMeters andActivityType:act.activityType];
-        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
-        filter.filterHighAcceleration = true;
-        filter.maxAccelerationSpeedThreshold = -1000.; // any altitude checks for big change
-        filter.maxAcceleration = 20.;                // 20. meter change / second
-        filters[ field ] = filter;
-
-        field = [GCField fieldForFlag:gcFieldFlagCadence andActivityType:act.activityType];
-        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
-        filter.minValue = 1e-8;
-        filter.filterMinValue = true;
-        filters[ field ] =filter;
-
-        field = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType];
-        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
-        filter.minValue = [GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW defaultValue:1.0];
-        filter.filterMinValue = [act.activityType isEqualToString:GC_TYPE_RUNNING] ||[act.activityType isEqualToString:GC_TYPE_CYCLING];
-        if ([GCAppGlobal configGetBool:CONFIG_FILTER_BAD_ACCEL defaultValue:YES]) {
+    }else{
+        self.treatGapAsNoValueInSeries = false;
+        self.gapTimeInterval = 10.;
+        
+        if ( [GCAppGlobal configGetBool:CONFIG_FILTER_BAD_VALUES defaultValue:YES]){
+            
+            field = [GCField fieldForFlag:gcFieldFlagAltitudeMeters andActivityType:act.activityType];
+            filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
             filter.filterHighAcceleration = true;
-            filter.maxAccelerationSpeedThreshold = 5.55; // about 20kph in mps
-            filter.maxAcceleration = 1.2;                // 1.2 mps change / second
+            filter.maxAccelerationSpeedThreshold = -1000.; // any altitude checks for big change
+            filter.maxAcceleration = 20.;                // 20. meter change / second
+            filters[ field ] = filter;
+            
+            field = [GCField fieldForFlag:gcFieldFlagCadence andActivityType:act.activityType];
+            filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+            filter.minValue = 1e-8;
+            filter.filterMinValue = true;
+            filters[ field ] =filter;
+            
+            field = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType];
+            filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+            filter.minValue = [GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW defaultValue:1.0];
+            filter.filterMinValue = [act.activityType isEqualToString:GC_TYPE_RUNNING] ||[act.activityType isEqualToString:GC_TYPE_CYCLING];
+            if ([GCAppGlobal configGetBool:CONFIG_FILTER_BAD_ACCEL defaultValue:YES]) {
+                filter.filterHighAcceleration = true;
+                filter.maxAccelerationSpeedThreshold = 5.55; // about 20kph in mps
+                filter.maxAcceleration = 1.2;                // 1.2 mps change / second
+            }
+            filters[ field ] = filter;
+            field = [GCField fieldForKey:CALC_10SEC_SPEED andActivityType:act.activityType];
+            filters[ field ] = filter;
+            
+            field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType];
+            filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+            filter.minValue = 5.;
+            filter.filterMinValue = true;
+            filters[ field ] = filter;
+            
+            field = [GCField fieldForFlag:gcFieldFlagPower andActivityType:act.activityType];
+            filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+            filter.maxValue = [GCAppGlobal configGetDouble:CONFIG_FILTER_POWER_ABOVE defaultValue:CONFIG_FILTER_DISABLED_POWER];
+            filter.filterMaxValue = true;
+            filter.minValue = 0.01;
+            filter.filterMinValue = true;
+            filters[ field] = filter;
+            
+            field = [GCField fieldForFlag:gcFieldFlagVerticalOscillation andActivityType:act.activityType];
+            filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+            filter.minValue = 0.01;
+            filter.filterMinValue = true;
+            filters[ field ] = filter;
+            
+            field = [GCField fieldForFlag:gcFieldFlagGroundContactTime andActivityType:act.activityType];
+            filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+            filter.minValue = 0.01;
+            filter.filterMinValue = true;
+            filters[ field ] = filter;
+            
+            field = [GCField fieldForKey:@"WeightedMeanFormPower" andActivityType:act.activityType];
+            filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+            filter.minValue = 0.01;
+            filter.filterMinValue = true;
+            filters[ field ] = filter;
+            
+            field = [GCField fieldForKey:@"WeightedMeanGroundContactBalanceLeft" andActivityType:act.activityType];
+            filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+            filter.minValue = 0.01;
+            filter.filterMinValue = true;
+            filters[ field ] = filter;
+            
+            field = [GCField fieldForKey:@"WeightedMeanVerticalRatio" andActivityType:act.activityType];
+            filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
+            filter.minValue = 0.01;
+            filter.filterMinValue = true;
+            filters[ field ] = filter;
+            
         }
-        filters[ field ] = filter;
-        field = [GCField fieldForKey:CALC_10SEC_SPEED andActivityType:act.activityType];
-        filters[ field ] = filter;
-
-        field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType];
-        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
-        filter.minValue = 5.;
-        filter.filterMinValue = true;
-        filters[ field ] = filter;
-
-        field = [GCField fieldForFlag:gcFieldFlagPower andActivityType:act.activityType];
-        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
-        filter.maxValue = [GCAppGlobal configGetDouble:CONFIG_FILTER_POWER_ABOVE defaultValue:CONFIG_FILTER_DISABLED_POWER];
-        filter.filterMaxValue = true;
-        filter.minValue = 0.01;
-        filter.filterMinValue = true;
-        filters[ field] = filter;
-
-        field = [GCField fieldForFlag:gcFieldFlagVerticalOscillation andActivityType:act.activityType];
-        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
-        filter.minValue = 0.01;
-        filter.filterMinValue = true;
-        filters[ field ] = filter;
-
-        field = [GCField fieldForFlag:gcFieldFlagGroundContactTime andActivityType:act.activityType];
-        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
-        filter.minValue = 0.01;
-        filter.filterMinValue = true;
-        filters[ field ] = filter;
-
-        field = [GCField fieldForKey:@"WeightedMeanFormPower" andActivityType:act.activityType];
-        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
-        filter.minValue = 0.01;
-        filter.filterMinValue = true;
-        filters[ field ] = filter;
-
-        field = [GCField fieldForKey:@"WeightedMeanGroundContactBalanceLeft" andActivityType:act.activityType];
-        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
-        filter.minValue = 0.01;
-        filter.filterMinValue = true;
-        filters[ field ] = filter;
-
-        field = [GCField fieldForKey:@"WeightedMeanVerticalRatio" andActivityType:act.activityType];
-        filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
-        filter.minValue = 0.01;
-        filter.filterMinValue = true;
-        filters[ field ] = filter;
-
     }
     self.serieFilters = [NSDictionary dictionaryWithDictionary:filters];
 

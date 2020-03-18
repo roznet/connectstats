@@ -28,8 +28,6 @@
 #import "GCAppGlobal.h"
 #import "GCGarminActivityDetailJsonParser.h"
 #import "GCGarminActivityLapsParser.h"
-#import "GCTrackPointSwim.h"
-#import "GCLapSwim.h"
 #import "GCActivity.h"
 #import "GCActivitiesOrganizer.h"
 @import RZUtils;
@@ -41,8 +39,8 @@
 @property (nonatomic,retain) GCActivity * activity;
 @property (nonatomic,retain) NSArray<GCTrackPoint*> * trackpoints;
 @property (nonatomic,retain) NSArray<GCLap*> * laps;
-@property (nonatomic, retain) NSArray<GCLapSwim*> * lapsSwim;
-@property (nonatomic,retain) NSArray<GCTrackPointSwim*> * trackpointsSwim;
+@property (nonatomic, retain) NSArray<GCLap*> * lapsSwim;
+@property (nonatomic,retain) NSArray<GCTrackPoint*> * trackpointsSwim;
 
 @end
 
@@ -340,7 +338,7 @@
             [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
             self.status = GCWebStatusOK;
             if (self.trackpointsSwim && self.lapsSwim) {
-                [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpointsSwim:self.trackpointsSwim andLaps:self.lapsSwim];
+                [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpoints:self.trackpointsSwim andLaps:self.lapsSwim];
             }else{
                 [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpoints:self.trackpoints andLaps:self.laps];
             }
@@ -426,7 +424,7 @@
 
         if (parserLaps.success || parserTracks.success) {
             if(parserLaps.trackPointSwim || parserLaps.lapsSwim){
-                [act saveTrackpointsSwim:(parserLaps.trackPointSwim ?: @[]) andLaps:(parserLaps.lapsSwim ?: @[]) ];
+                [act saveTrackpoints:(parserLaps.trackPointSwim ?: @[]) andLaps:(parserLaps.lapsSwim ?: @[]) ];
             }else{
                 [act saveTrackpoints:(parserTracks.trackPoints ?:@[]) andLaps:(parserLaps.laps ?:@[])];
             }

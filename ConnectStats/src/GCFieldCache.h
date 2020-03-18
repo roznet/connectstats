@@ -40,11 +40,12 @@
 -(GCFieldInfo*)infoForField:(GCField*)field;
 -(GCFieldInfo*)infoForActivityType:(NSString*)activityType;
 
--(void)registerField:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom;// DEPRECATED_MSG_ATTRIBUTE( "Only use predefined");
+-(void)registerField:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom DEPRECATED_MSG_ATTRIBUTE( "Only use predefined");
+-(void)registerField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom;
 
 -(BOOL)knownField:(NSString*)field activityType:(NSString*)activityType;
 -(NSArray<NSString*>*)knownFieldsMatching:(NSString*)str;
 
--(NSArray*)missingPredefinedField;
+-(NSDictionary<GCField*,GCFieldInfo*>*)missingPredefinedField;
 
 @end

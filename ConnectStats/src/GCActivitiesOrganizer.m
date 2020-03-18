@@ -313,13 +313,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
     NSMutableArray * m_activities = [NSMutableArray arrayWithCapacity:[_db intForQuery:@"SELECT count(*) from gc_activities"]];
 
-    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithCapacity:m_activities.count];
-    res = [_db executeQuery:@"SELECT * FROM gc_activities_meta WHERE field='activityType'"];
-    while ([res next]) {
-        GCActivityMetaValue * val = [GCActivityMetaValue activityValueForResultSet:res];
-        dict[[res stringForColumn:@"activityId"]] = val;
-    }
-
     res = [_db executeQuery:@"SELECT * FROM gc_activities ORDER BY BeginTimestamp DESC"];
     if (res == nil) {
         RZLog(RZLogError, @"db error: %@", [_db lastErrorMessage]);
@@ -351,14 +344,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         }
         if (!lastLocation && [act validCoordinate]) {
             lastLocation = true;
-        }
-        GCActivityMetaValue * detailAType = dict[act.activityId];
-        if (detailAType) {
-            if (detailAType.key && ![detailAType.key isEqualToString:@""]) {
-                act.activityTypeDetail = [GCActivityType activityTypeForKey:detailAType.key];
-            }else{
-                act.activityTypeDetail = [GCActivityType activityTypeForKey:detailAType.display];
-            }
         }
         [self recordActivityType:act];
         [m_activities addObject:act];
@@ -581,12 +566,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         [self notifyOnMainThread:aId];
     }
 }
-
--(void)registerActivity:(NSString*)aId withTrackpointsSwim:(NSArray<GCTrackPointSwim*>*)aTrack andLaps:(NSArray<GCLapSwim*>*)laps{
-    [[self activityForId:aId] saveTrackpointsSwim:aTrack andLaps:laps];
-    [self notifyOnMainThread:aId];
-}
-
 
 #pragma mark - access
 

@@ -57,6 +57,9 @@ extern NSString *const kNotifySettingsChange;
 +(GCDerivedOrganizer*)derived;
 +(GCSegmentOrganizer*)segments;
 
++(NSArray<NSDictionary*>*)recentRemoteMessages;
++(void)recentRemoteMessagesReceived;
+
 // Actions
 +(void)focusOnActivityAtIndex:(NSUInteger)idx;
 +(void)focusOnActivityId:(NSString*)aId;

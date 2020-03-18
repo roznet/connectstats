@@ -455,7 +455,7 @@
                 }
             }else if (self.showLaps == gcLapDisplayFastestDistanceUnit) {
                 GCUnit * storeUnit = [GCUnit unitForKey:STOREUNIT_DISTANCE];
-                GCUnit * unit = [[GCUnit unitForKey:(self.activity).distanceDisplayUom] unitForGlobalSystem];
+                GCUnit * unit = self.activity.distanceDisplayUnit;
                 double val = [storeUnit convertDouble:1. fromUnit:unit];
                 laps = [self.activity calculatedRollingLapFor:val match:[self.activity matchDistanceBlockEqual] compare:[self.activity compareSpeedBlock]];
                 if (laps && laps.count>0) {

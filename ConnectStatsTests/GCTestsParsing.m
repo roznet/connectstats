@@ -40,10 +40,9 @@
 #import "GCConnectStatsRequestFitFile.h"
 #import "GCStravaActivityList.h"
 #import "GCLap.h"
-#import "GCLapSwim.h"
 #import "GCConnectStatsRequestSearch.h"
 #import "GCHistoryFieldSummaryStats.h"
-
+#import "GCActivity+ExportText.h"
 #import "GCActivity+TestBackwardCompat.h"
 
 @interface GCTestsParsing : GCTestCase
@@ -85,7 +84,7 @@
 
 -(void)testActivityParsingModern{
     // Add test for
-    NSArray * activityIds = @[ @"1108367966", @"1108368135", @"1089803211", @"924421177"];;
+    NSArray * activityIds = @[ @"1089803211", @"1108367966", @"1108368135", @"924421177"];;
     
     RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
     manager.recordMode = [GCTestCase recordModeGlobal];
@@ -151,6 +150,7 @@
     XCTAssertGreaterThan(modernAct.trackpoints.count, 1);
     BOOL recordMode = [GCTestCase recordModeGlobal];
     //recordMode = true;
+    //[[modernAct exportCsv] writeToFile:[RZFileOrganizer writeableFilePath:@"t.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
     [self compareStatsCheckSavedFor:modernAct identifier:@"modernAct" cmd:_cmd recordMode:recordMode];
 }
 
@@ -197,6 +197,7 @@
         // disable threading so calculated value recalculated synchronously.
         reloadedAct.settings.worker = nil;
         [reloadedAct trackpoints];
+        
         NSDictionary * parsedDict = [self compareStatsDictFor:parsedAct];
         NSDictionary * reloadedDict = [self compareStatsDictFor:reloadedAct];
         
@@ -212,9 +213,9 @@
         
         for (NSUInteger idx=0; idx<MIN(parsedAct.laps.count,reloadedAct.laps.count); idx++) {
             
-            if ([parsedAct.laps[idx] isKindOfClass:[GCLapSwim class]]) {
-                GCLapSwim * parsedLap = (GCLapSwim*)parsedAct.laps[idx];
-                GCLapSwim * reloadedLap = (GCLapSwim*)reloadedAct.laps[idx];
+            if (parsedAct.garminSwimAlgorithm ) {
+                GCLap * parsedLap = (GCLap*)parsedAct.laps[idx];
+                GCLap * reloadedLap = (GCLap*)reloadedAct.laps[idx];
                 
                 XCTAssertEqualObjects(parsedLap.label, reloadedLap.label, @"Label %@/%@", parsedAct.activityId, @(parsedLap.lapIndex));
             }else{ // GCLap
@@ -462,9 +463,11 @@
         GCActivity * act_tcx = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         act_tcx.activityId = activityId_tcx;
         act_tcx.db = act_tcx.trackdb;
+        [GCActivity ensureDbStructure:act_tcx.db];
         GCActivity * act_fit = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         act_fit.activityId = activityId_fit;
         act_fit.db = act_fit.trackdb;
+        [GCActivity ensureDbStructure:act_fit.db];
         NSString * tcx = [NSString stringWithFormat:@"activity_%@.tcx", activityId];
         NSString * fit = [NSString stringWithFormat:@"activity_%@.fit", activityId];
         NSString * fp_tcx = [RZFileOrganizer bundleFilePath:tcx forClass:[self class]];
@@ -620,6 +623,7 @@
         [actMerge saveToDb:db_fit];
         
         GCActivity * actMergeReload = [GCActivity activityWithId:aId andDb:db_fit];
+        actMergeReload.settings.worker = nil;
         [actMergeReload trackpoints]; // force load trackpoints
         
         NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
@@ -855,6 +859,16 @@
             XCTAssertEqualObjects(exp_serie, got_serie, @"Key %@", key);
         }
     }
+}
+
+-(void)testParseSearchFlying{
+    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_parsing_flying.db"];
+    NSString * flying = [RZFileOrganizer bundleFilePath:@"last_modern_search_flying.json" forClass:[self class]];
+    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:flying];
+    
+    XCTAssertNotNil([organizer activityForId:@"3988198230"]);
+    XCTAssertFalse([organizer activityForId:@"3988198230"].garminSwimAlgorithm);
+
 }
 
 -(void)testOrganizerSkipAlways{
@@ -1205,7 +1219,13 @@
     
     GCTrackStats * trackStats = [[GCTrackStats alloc] init];
     trackStats.activity = act;
-    
+    if( act.garminSwimAlgorithm ){
+        act.settings.treatGapAsNoValueInSeries = NO;
+        act.settings.gapTimeInterval = 0.;
+    }else{
+        act.settings.treatGapAsNoValueInSeries = NO;
+    }
+
     // Make sure allKeys are the same and generated holders are the same
     // then summary statistics for each field is the same.
     NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithObject:fields forKey:@"allkeys"];

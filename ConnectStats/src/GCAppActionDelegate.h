@@ -36,6 +36,7 @@
 -(void)login;
 -(void)logout;
 -(void)beginRefreshing;
+-(void)updateBadge:(NSUInteger)count;
 
 -(UINavigationController*)currentNavigationController;
 

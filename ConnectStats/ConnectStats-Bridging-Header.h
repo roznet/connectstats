@@ -26,5 +26,4 @@
 
 //#import "RZFitFile-Bridging-Header.h"
 #import "GCUnit+FIT.h"
-#import "GCTrackPointSwim.h"
-#import "GCLapSwim.h"
+#import "GCTrackPoint+Swim.h"

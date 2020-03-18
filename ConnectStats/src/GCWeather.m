@@ -418,7 +418,7 @@ NSString * windDirectionToCompassPoint(double bearing){
 -(NSString*)weatherDisplayField:(NSString*)key{
     NSString * val = nil;
     if ([self newFormat]) {
-        gcUnitSystem system = [GCFields fieldUnitSystem];
+        gcUnitSystem system = [GCUnit getGlobalSystem];
         if ([key isEqualToString:GC_WEATHER_TEMPERATURE]) {
             val = [self.temperature convertToSystem:system].description;
         }else if ([key isEqualToString:GC_WEATHER_WIND]){

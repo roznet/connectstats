@@ -40,6 +40,7 @@
 #import "GCService.h"
 #import "GCDebugActionsTableViewController.h"
 @import RZExternal;
+@import SafariServices;
 
 #define GC_SECTION_LOGIN    0
 #define GC_SECTION_PARAMS   1
@@ -51,7 +52,8 @@
 #define GC_SETTINGS_SERVICES    0
 #define GC_SETTINGS_PROFILE     1
 #define GC_SETTINGS_HEALTH      2
-#define GC_SETTINGS_LOGIN_END   3
+#define GC_SETTINGS_BLOG        3
+#define GC_SETTINGS_LOGIN_END   4
 
 #define GC_SETTINGS_REFRESH     0
 #define GC_SETTINGS_UNITS       1
@@ -136,11 +138,13 @@
         [self.remap addSection:GC_SECTION_LOGIN withRows:@[
                                                            @( GC_SETTINGS_SERVICES    ),
                                                            @( GC_SETTINGS_PROFILE     ),
+                                                           @( GC_SETTINGS_BLOG        ),
                                                            @( GC_SETTINGS_HEALTH      )]];
     }else{
         [self.remap addSection:GC_SECTION_LOGIN withRows:@[
                                                            @( GC_SETTINGS_SERVICES    ),
-                                                           @( GC_SETTINGS_PROFILE     )
+                                                           @( GC_SETTINGS_PROFILE     ),
+                                                           @( GC_SETTINGS_BLOG        )
                                                            ]];
         
     }
@@ -595,7 +599,39 @@
                 rv = gridcell;
                 break;
             }
-
+            case GC_SETTINGS_BLOG:
+            {
+                gridcell = [GCCellGrid gridCell:tableView];
+                [gridcell setupForRows:2 andCols:2];
+                
+                NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Blog", @"Settings")
+                                                                              attributes:[GCViewConfig attributeBold16]] autorelease];
+                
+                [gridcell labelForRow:0 andCol:0].attributedText = title;
+                [gridcell labelForRow:0 andCol:1].attributedText = nil;
+                
+                NSArray * messages = [GCAppGlobal recentRemoteMessages];
+                
+                if( messages.count > 0 ){
+                    CGFloat size = 25;
+                    UIImageView * iv = [[[UIImageView alloc] initWithFrame:CGRectMake(0., 0., size, size)] autorelease];
+                    UILabel * count = [[[UILabel alloc] initWithFrame:CGRectMake(0., 0, size, size)] autorelease];
+                    count.text = [@(messages.count) stringValue];
+                    count.textColor = [UIColor whiteColor];
+                    count.backgroundColor = [UIColor redColor];
+                    count.layer.cornerRadius = size/2.0;
+                    count.layer.masksToBounds = true;
+                    count.textAlignment = NSTextAlignmentCenter;
+                    [iv addSubview:count];
+                    [gridcell setIconView:iv withSize:CGSizeMake(30, 20)];
+                    NSString * desc = messages.lastObject[@"description"];
+                    if( [desc isKindOfClass:[NSString class]]){
+                        [gridcell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withString:desc];
+                    }
+                }
+                rv = gridcell;
+                break;
+            }
         }
     }else if(indexPath.section == GC_SECTION_OTHER){
         switch (indexPath.row) {
@@ -607,7 +643,7 @@
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_OTHER, GC_SETTINGS_INCLUDEDATA)];
                 switchcell.entryFieldDelegate = self;
-                (switchcell.toggle).on = [GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:false];
+                (switchcell.toggle).on = [GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:true];
                 break;
 
             }
@@ -812,6 +848,25 @@
             [self.navigationController pushViewController:detail animated:YES];
         }else if (indexPath.row == GC_SETTINGS_SERVICES) {
             [self showServices];
+        }else if( indexPath.row == GC_SETTINGS_BLOG) {
+            NSURL * url = [NSURL URLWithString:@"https://ro-z.net"];
+            NSArray * messages = [GCAppGlobal recentRemoteMessages];
+            if( messages.count > 0){
+                NSDictionary * latest = messages.lastObject;
+                if( [latest isKindOfClass:[NSDictionary class]] ){
+                    if( [latest[@"url"] isKindOfClass:[NSString class]]){
+                        url = [NSURL URLWithString:latest[@"url"]];
+                    }
+                    if( [latest[@"status_id"] isKindOfClass:[NSNumber class]]){
+                        RZLog(RZLogInfo, @"Blog message %@ with URL: %@", latest[@"status_id"], latest[@"url"]);
+                        
+                    }
+                }
+                [GCAppGlobal recentRemoteMessagesReceived];
+            }
+            
+            SFSafariViewController * vc = RZReturnAutorelease([[SFSafariViewController alloc] initWithURL:url]);
+            [self presentViewController:vc animated:YES completion:^(){}];
         }
     }else if(section == GC_SECTION_OTHER){
         if(indexPath.row == GC_SETTINGS_BUGREPORT && ![GCAppGlobal trialVersion]){
@@ -938,7 +993,7 @@
         NSLog(@"%@", RZLogFileContent());
 #endif
         NSString * msg = NSLocalizedString(@"Submitting a bug report will send some debug diagnostic. It does not contains any of your activity data and will help make this app better. Thank you!",nil);
-        if ([GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:false]) {
+        if ([GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:true]) {
             msg = NSLocalizedString(@"Submitting a bug report will send some debug diagnostic. It will help make this app better. Thank you!",nil);
         }
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Bug Report", @"Bug Report")
@@ -956,7 +1011,7 @@
                                                 handler:^(UIAlertAction*action){
                                                     NSArray * errors = [GCActivitiesCacheManagement errorFiles];
 
-                                                    if (errors.count && ![GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:false]) {
+                                                    if (errors.count && ![GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:true]) {
                                                         [self showBugReportConfirm];
                                                     }else{
                                                         [self showBugReport:NO];
@@ -993,7 +1048,7 @@
     GCSettingsBugReportViewController * bug = [[GCSettingsBugReportViewController alloc] initWithNibName:nil bundle:nil];
     bug.parent = self;
     bug.includeErrorFiles = include;
-    if ([GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:false]) {
+    if ([GCAppGlobal configGetBool:CONFIG_BUG_INCLUDE_DATA defaultValue:true]) {
         bug.includeErrorFiles=true;
         bug.includeActivityFiles=true;
     }

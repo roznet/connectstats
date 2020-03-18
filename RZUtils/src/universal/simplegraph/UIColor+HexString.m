@@ -64,6 +64,22 @@
     return @[ @(inRgb.redComponent), @(inRgb.greenComponent), @(inRgb.blueComponent)];
 #endif
 }
+-(NSArray*)rgbaComponents{
+#if TARGET_OS_IPHONE
+    CGFloat red=0.0,green=0.0,blue=0.0,alpha=0.0;
+    if ([self getRed:&red green:&green blue:&blue alpha:&alpha]){
+        return @[ @(red), @(green), @(blue), @(alpha)];
+    }else if( [self getWhite:&red alpha:&alpha] ){
+        return @[ @(red), @(red), @(red),@(alpha)];
+    }else{
+        return nil;
+    }
+#else
+    RZColor * inRgb = [self colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+    return @[ @(inRgb.redComponent), @(inRgb.greenComponent), @(inRgb.blueComponent), @(inRgb.alphaComponent)];
+#endif
+}
+
 
 -(NSDictionary*)rgbComponentColorSetJsonFormat{
     CGFloat red=0.0,green=0.0,blue=0.0,alpha=0.0;

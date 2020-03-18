@@ -144,6 +144,31 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
 	};
 }
 
++(void)createEditableCopyOfFile:(NSString*)aName forClass:(Class)cls{
+    BOOL                success;
+    NSError            *    error;
+    NSFileManager    *    fileManager            = [NSFileManager defaultManager];
+    NSString        *    writableFilePath    = [self writeableFilePath:aName];
+
+    success = [fileManager fileExistsAtPath:writableFilePath];
+    if (success){
+        success = [fileManager removeItemAtPath:writableFilePath error:&error];
+        if( ! success )
+            RZLog(RZLogError, @"Failed to delete database file '%@' with message '%@'.", writableFilePath, [error localizedDescription]);
+    }
+
+    NSString *defaultFilePath = [RZFileOrganizer bundleFilePath:aName forClass:cls];
+    success = [fileManager fileExistsAtPath:defaultFilePath];
+    if (!success) {
+        RZLog( RZLogError,@"Failed to find '%@'.", defaultFilePath);
+    }
+
+    success = [fileManager copyItemAtPath:defaultFilePath toPath:writableFilePath error:&error];
+    if (!success) {
+        RZLog(RZLogError, @"Failed to create writable file '%@' with message '%@'.", writableFilePath, [error localizedDescription]);
+    }
+}
+
 
 +(void)createEditableCopyOfFile:(NSString*)aName{
     BOOL				success;

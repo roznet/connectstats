@@ -39,7 +39,8 @@
 + (RZColor *)colorWithHexLight:(NSUInteger)rgbValue dark:(NSUInteger)rgbValue andAlpha:(double)alpha;
 +(RZColor*)colorWithHexString:(NSString*)hexString;
 
--(NSArray*)rgbComponents;
+-(NSArray<NSNumber*>*)rgbComponents;
+-(NSArray<NSNumber*>*)rgbaComponents;
 +(RZColor*)colorWithRgbComponents:(NSArray*)array andAlpha:(double)alpha;
 -(NSDictionary*)rgbComponentColorSetJsonFormat;
 @end

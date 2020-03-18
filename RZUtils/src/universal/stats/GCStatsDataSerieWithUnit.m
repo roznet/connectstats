@@ -320,7 +320,7 @@
     if (rv) {
         rv.unit = self.unit;
         rv.xUnit = self.xUnit;
-        rv.serie = [self.serie filledSerieForUnit:unit fillMethod:gcStatsZero];
+        rv.serie = [self.serie filledSerieForUnit:unit fillMethod:gcStatsZero statistic:gcStatsWeightedMean];
     }
     return rv;
 }

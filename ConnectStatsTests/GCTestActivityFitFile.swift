@@ -68,8 +68,8 @@ class GCTestActivityFitFile: XCTestCase {
                     let messages = fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION)
                     var activities : [GCActivity] = []
                     for message in messages {
-                        if let messageStart = message.interpretedField(key: "start_time")?.time{
-                            let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: messageStart)
+                        if let messageStart = message.interpretedField(key: "start_time")?.time,
+                            let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: messageStart){
                             activities.append(activity)
                             //print( "\(activity) \(activity.summaryData)")
                             var downloaded : GCActivity? = nil
@@ -89,14 +89,15 @@ class GCTestActivityFitFile: XCTestCase {
                     }
                     if messages.count > 1{
                         // Multi sport test for the whole one.
-                        let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: nil)
-                        activities.append(activity)
-                        let service = GCService(gcService.connectStats)
-                        let serviceId = service?.activityId(fromServiceId: activityId)
-                        let downloaded = organizer.activity(forId: serviceId)
-                        XCTAssertNotNil(downloaded)
-                        // we don't check value as they don't tie out for multi sport, not
-                        // sure how they get aggregated/summed in the garmin api...
+                        if let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: nil){
+                            activities.append(activity)
+                            let service = GCService(gcService.connectStats)
+                            let serviceId = service?.activityId(fromServiceId: activityId)
+                            let downloaded = organizer.activity(forId: serviceId)
+                            XCTAssertNotNil(downloaded)
+                            // we don't check value as they don't tie out for multi sport, not
+                            // sure how they get aggregated/summed in the garmin api...
+                        }
                     }
                 }
             }

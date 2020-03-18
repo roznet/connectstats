@@ -112,26 +112,28 @@
 
 #pragma mark - Generic Import Tools
 
--(void)updateSummaryFieldFromSummaryData{
-    for (GCField * field in self.summaryData) {
-        GCActivitySummaryValue * value = self.summaryData[field];
-        if (field.fieldFlag!= gcFieldFlagNone) {
-            GCNumberWithUnit * nu = value.numberWithUnit;
-            [self setSummaryField:field.fieldFlag with:nu];
-            self.flags |= field.fieldFlag;
-        }
-    }
-}
 
 -(void)mergeSummaryData:(NSDictionary<GCField*,GCActivitySummaryValue*>*)newDict{
     NSMutableDictionary<GCField*,GCActivitySummaryValue*> * merged = self.summaryData ? [NSMutableDictionary dictionaryWithDictionary:self.summaryData] : [NSMutableDictionary dictionaryWithCapacity:newDict.count];
 
     for (GCField * field in newDict) {
         GCActivitySummaryValue * new = newDict[field];
-        merged[field] = new;
+        if( new.value != 0. || field.isZeroValid ){
+            merged[field] = new;
+#if TARGET_IPHONE_SIMULATOR
+        }else{
+            static NSMutableDictionary * cache = nil;
+            if( cache == nil){
+                cache = RZReturnRetain([NSMutableDictionary dictionary]);
+            }
+            if( cache[field] == nil){
+                cache[field] = @1;
+                RZLog(RZLogInfo, @"Skipping 0 for %@ %@", field, new.numberWithUnit);
+            }
+#endif
+        }
     }
-    self.summaryData = merged;
-    [self updateSummaryFieldFromSummaryData];
+    [self updateSummaryData:merged];
 }
 
 -(void)parseData:(NSDictionary*)data into:(NSMutableDictionary<GCField*,GCActivitySummaryValue*>*)newSummaryData usingDefs:(NSDictionary*)defs{
@@ -274,6 +276,12 @@
                                  @"avgVerticalOscillation" : @1, // sample: 9.030000305175781
                                  @"avgGroundContactBalance" : @1, // sample: 49.84000015258789
 
+                                 @"pr_count" : @1, // sample: 0
+                                 @"display_hide_heartrate_option" : @1, // sample: 1
+                                 @"heartrate_opt_out" : @1, // sample: 0
+                                 @"utc_offset" : @1, // sample: 3600
+                                 @"from_accepted_tag" : @1, // sample: 0
+                                 @"workout_type" : @1, // sample: 0
                                  
                                  };
                 [knownMissing retain];
@@ -322,8 +330,7 @@
         nu = [nu convertToUnitName:displayuom];
     }
     GCActivitySummaryValue * sumVal = [GCActivitySummaryValue activitySummaryValueForField:fieldkey value:nu];
-    [GCFields registerField:fieldkey activityType:self.activityType displayName:display andUnitName:displayuom];
-    [GCFields registerField:fieldkey activityType:GC_TYPE_ALL       displayName:display andUnitName:displayuom];
+    [GCFields registerField:[GCField fieldForKey:fieldkey andActivityType:self.activityType] displayName:display andUnitName:displayuom];
     return sumVal;
 }
 
@@ -334,13 +341,10 @@
         NSString * uom = [GCFields predefinedUomForField:field.key andActivityType:field.activityType];
         NSString * display = [GCFields predefinedDisplayNameForField:field.key andActivityType:field.activityType];
 
-        [GCFields registerField:field.key activityType:self.activityType displayName:display andUnitName:uom];
-        [GCFields registerField:field.key activityType:GC_TYPE_ALL       displayName:display andUnitName:uom];
+        [GCFields registerField:[GCField fieldForKey:field.key andActivityType:self.activityType] displayName:display andUnitName:uom];
         GCNumberWithUnit * val = [[speed numberWithUnit] convertToUnitName:uom];
         newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
-        self.speedDisplayUom = uom;
-    }else if(speed){ // otherwise it would set for swim or running when speed = nil
-        self.speedDisplayUom = speed ? speed.numberWithUnit.unit.key : @"kph";
+        
     }
     GCActivitySummaryValue * movingSpeed = newSummaryData[ [GCField fieldForKey:@"WeightedMeanMovingSpeed" andActivityType:self.activityType] ];
     if(movingSpeed && [self.activityType isEqualToString:GC_TYPE_RUNNING]){
@@ -348,16 +352,10 @@
         NSString * uom = [GCFields predefinedUomForField:field.key andActivityType:self.activityType];
         NSString * display = [GCFields predefinedDisplayNameForField:field.key andActivityType:self.activityType];
 
-        [GCFields registerField:field.key activityType:self.activityType displayName:display andUnitName:uom];
-        [GCFields registerField:field.key activityType:GC_TYPE_ALL       displayName:display andUnitName:uom];
+        [GCFields registerField:[GCField fieldForKey:field.key andActivityType:self.activityType] displayName:display andUnitName:uom];
         GCNumberWithUnit * val = [[movingSpeed numberWithUnit] convertToUnitName:uom];
         newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
     }
-    // Ensure proper default as this is save in the database and nil is an issue
-    if( self.speedDisplayUom == nil){
-        self.speedDisplayUom = @"kph";
-    }
-
 }
 
 #pragma mark - ConnectStats Service
@@ -464,14 +462,6 @@
         NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionaryWithCapacity:data.count];
         [self parseData:data into:newSummaryData usingDefs:defs];
         
-        self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:self.activityType];
-        if (!self.distanceDisplayUom) {
-            self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:GC_TYPE_ALL];
-            if( !self.distanceDisplayUom ){
-                // Default as nil is an issue to save into the database
-                self.distanceDisplayUom = @"kilometer";
-            }
-        }
         // few extra derived
         [self addPaceIfNecessaryWithSummary:newSummaryData];
         [self mergeSummaryData:newSummaryData];
@@ -561,6 +551,7 @@
     if( [foundConnectIQ isKindOfClass:[NSArray class]]){
         [self updateConnectIQData:foundConnectIQ];
     }
+    
 }
 
 -(void)updateConnectIQData:(NSArray*)array{
@@ -795,14 +786,16 @@
     if (self.activityType) {
         NSMutableDictionary * newSummaryData = [self buildSummaryDataFromGarminModernData:data dtoUnits:dtoFlag];
 
-        self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:self.activityType];
-        if (!self.distanceDisplayUom) {
-            self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:GC_TYPE_ALL];
-        }
         [self mergeSummaryData:newSummaryData];
 
         self.beginCoordinate = [self buildCoordinateFromGarminModernData:data];
         self.date = [self buildStartDateFromGarminModernData:data];
+        
+        if( (data[@"numberOfActiveLengths"] != nil && [data[@"numberOfActiveLengths"] isKindOfClass:[NSNumber class]] ) ||
+           (data[@"unitOfPoolLength"] != nil && [data[@"unitOfPoolLength"] isKindOfClass:[NSNumber class] ] ) ){
+            
+            self.garminSwimAlgorithm = true;
+        }
     }
 }
 
@@ -812,20 +805,8 @@
 
     NSDictionary * atypeDict = aData[@"activityType"];
     self.activityType = atypeDict[@"parent"][@"key"];
-    NSString * activityDisplay = atypeDict[@"parent"][@"display"];
-    [GCFields registerField:self.activityType
-               activityType:self.activityType
-                displayName:activityDisplay
-                andUnitName:@"dimensionless"];
     self.activityTypeDetail = [GCActivityType activityTypeForKey:atypeDict[@"key"]];
-    NSString * detailDisplay = atypeDict[@"display"];
-    if (detailDisplay && self.activityTypeDetail) {
-        [GCFields registerField:self.activityTypeDetail.key
-                   activityType:self.activityTypeDetail.key
-                    displayName:detailDisplay
-                    andUnitName:@"dimensionless"];
-    }
-
+    
     self.activityName = aData[@"activityName"];
     self.date = [NSDate dateForRFC3339DateTimeString:summary[@"BeginTimestamp"][@"value"]];
     if ([self.activityType isEqualToString:GC_TYPE_MULTISPORT]) {
@@ -856,19 +837,10 @@
     [self setSummaryField:gcFieldFlagSumDistance with:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:[dura[@"value"] doubleValue]]];
     [self setSummaryField:gcFieldFlagWeightedMeanHeartRate with:[GCNumberWithUnit numberWithUnit:GCUnit.bpm andValue:[hrat[@"value"] doubleValue]]];
 
-    self.speedDisplayUom = spee[@"uom"];
-    if (self.speedDisplayUom==nil) {
-        // arbitrary uom for 0 anyway.
-        [self setSpeedDisplayUom:STOREUNIT_SPEED];
-    }
-    GCUnit * speeU = [GCUnit unitForKey:self.speedDisplayUom];
+    GCUnit * speeU = self.speedDisplayUnit;
     [self setSummaryField:gcFieldFlagWeightedMeanSpeed with:[GCNumberWithUnit numberWithUnit:speeU andValue:[spee[@"value"] doubleValue]]];
 
-    self.distanceDisplayUom = dist[@"uom"];
-    if (self.distanceDisplayUom==nil) {
-        [self setDistanceDisplayUom:STOREUNIT_DISTANCE];
-    }
-    GCUnit * distU = [GCUnit unitForKey:self.distanceDisplayUom];
+    GCUnit * distU = self.distanceDisplayUnit;
     [self setSummaryField:gcFieldFlagSumDistance with:[GCNumberWithUnit numberWithUnit:distU andValue:[dist[@"value"] doubleValue]]];
 
     self.flags  = dist == nil ? 0 : gcFieldFlagSumDistance;
@@ -906,7 +878,7 @@
                 }
             }
 
-            [GCFields registerField:field activityType:self.activityType displayName:info[@"fieldDisplayName"] andUnitName:thisuom];
+            [GCFields registerField:[GCField fieldForKey:field andActivityType:self.activityType] displayName:info[@"fieldDisplayName"] andUnitName:thisuom];
             summaryDataTmp[field] = [GCActivitySummaryValue activitySummaryValueForDict:info andField:(NSString*)field];
         }
     }
@@ -1031,10 +1003,6 @@
                              };
     [self addEntriesToMetaData:toAdd];
 
-    self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:self.activityType];
-    if (!self.distanceDisplayUom) {
-        self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:GC_TYPE_ALL];
-    }
     [self mergeSummaryData:newSummaryData];
     NSString * startdate = data[@"start_time"];
     if(startdate) {
@@ -1116,12 +1084,7 @@
         summary[sumVal.field] = sumVal;
     }
     [self addPaceIfNecessaryWithSummary:summary];
-    self.summaryData = summary;
-
-    self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:self.activityType];
-    if (!self.distanceDisplayUom) {
-        self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:GC_TYPE_ALL];
-    }
+    [self updateSummaryData:summary];
 
     GCHealthKitSamplesToPointsParser * parser = [GCHealthKitSamplesToPointsParser parserForSamples:samples forActivityType:self.activityType andSource:workout.sourceRevision];
     self.trackFlags = parser.trackFlags;
@@ -1143,8 +1106,6 @@
         self.downloadMethod = gcDownloadMethodHealthKit;
         self.activityName = @"";
         self.location = @"";
-        self.speedDisplayUom = [[GCUnit unitForKey:@"minperkm"] unitForGlobalSystem].key;
-        self.distanceDisplayUom = [[GCUnit unitForKey:@"kilometer"] unitForGlobalSystem].key;
 
         NSMutableDictionary * sumData = [NSMutableDictionary dictionary];
         for (NSString * fieldkey in data) {
@@ -1178,8 +1139,7 @@
                 sumData[ field ] = val;
             }
         }
-        self.summaryData = sumData;
-        [self updateSummaryFieldFromSummaryData];
+        [self updateSummaryData:sumData];
     }
 }
 
@@ -1233,10 +1193,6 @@
         NSMutableDictionary * newSummaryData = [NSMutableDictionary dictionaryWithCapacity:data.count];
         [self parseData:data into:newSummaryData usingDefs:defs];
 
-        self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:self.activityType];
-        if (!self.distanceDisplayUom) {
-            self.distanceDisplayUom = [GCFields predefinedUomForField:@"SumDistance" andActivityType:GC_TYPE_ALL];
-        }
         // few extra derived
         [self addPaceIfNecessaryWithSummary:newSummaryData];
         [self mergeSummaryData:newSummaryData];
@@ -1270,26 +1226,9 @@
 
 }
 
--(BOOL)updateTrackpointsSwimFromActivity:(GCActivity*)other{
-    BOOL rv = false;
-    
-    self.garminSwimAlgorithm = true;
-
-    NSArray<GCTrackPointSwim*>*swimPoints = (NSArray<GCTrackPointSwim*>*) other.trackpoints;
-    NSArray<GCLapSwim*>*swimLaps = (NSArray<GCLapSwim*>*) other.laps;
-    [self updateWithSwimTrackpoints:swimPoints andSwimLaps:swimLaps];
-    
-    return rv;
-}
-
-
 -(BOOL)updateTrackpointsFromActivity:(GCActivity*)other newOnly:(BOOL)newOnly verbose:(BOOL)verbose{
     BOOL rv = false;
-    
-    if( other.garminSwimAlgorithm ){
-        return [self updateTrackpointsSwimFromActivity:other];
-    }
-    
+        
     if( ! self.trackpointsReadyNoLoad && other.trackpointsReadyNoLoad){
         // Special case: other has trackpoint self doesnt, just use
         [self updateWithTrackpoints:other.trackpoints andLaps:other.laps];
@@ -1430,7 +1369,7 @@
                         newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                     }
                     if( verbose ){
-                        RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.numberWithUnit, otherVal.numberWithUnit);
+                        RZLog(RZLogInfo, @"%@ Changed  %@ = %@ (prev %@)", self, field,  otherVal.numberWithUnit, thisVal.numberWithUnit);
                     }
                     newSummaryData[field] = otherVal;
                     
@@ -1448,16 +1387,17 @@
             GCActivitySummaryValue * thisVal = self.summaryData[field];
             GCActivitySummaryValue * otherVal = other.summaryData[field];
             // Update if missing or if new value is 0.0
-            if( thisVal.value == 0.0 && otherVal.value != 0.0){
-                RZLog( RZLogInfo, @"%@: Overriding 0 with %@", self, otherVal);
-            }
-            if (thisVal==nil || ( thisVal.value == 0.0 && otherVal.value != 0.0) ) {
+            if ((thisVal==nil && otherVal.value != 0.0 ) || ( thisVal.value == 0.0 && otherVal.value != 0.0) ) {
                 if (!newSummaryData) {
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                 }
                 
                 if( verbose ){
-                    RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.numberWithUnit);
+                    if( thisVal.value == 0.0 && otherVal.value != 0.0){
+                        RZLog(RZLogInfo, @"%@ New Data %@ = %@ (prev 0)", self, field, otherVal.numberWithUnit);
+                    }else{
+                        RZLog(RZLogInfo, @"%@ New Data %@ = %@", self, field, otherVal.numberWithUnit);
+                    }
                 }
                 newSummaryData[field] = otherVal;
                 
@@ -1471,7 +1411,7 @@
             }
         }
         if (newSummaryData) {
-            self.summaryData = newSummaryData;
+            [self updateSummaryData:newSummaryData];
         }
     }
     
@@ -1496,17 +1436,7 @@
             }
         }
     }
-    if( other.speedDisplayUom && ( ![self.speedDisplayUom isEqualToString:other.speedDisplayUom]) ){
-        self.speedDisplayUom = other.speedDisplayUom;
-        rv = true;
-        FMDatabase * db = self.db;
-        if( db ){
-            [db beginTransaction];
-            [db executeUpdate:@"UPDATE gc_activities SET speedDisplayUom=? WHERE activityId = ?", self.speedDisplayUom, self.activityId];
-            [db commit];
-        }
-    }
-
+    
     return rv;
 }
 
@@ -1612,7 +1542,7 @@
         }
     }
     
-    self.summaryData = newSum;
+    [self updateSummaryData:newSum];
     
     if( self.date == nil && trackpoints.count > 0){
         self.date = trackpoints.firstObject.time;

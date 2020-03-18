@@ -172,7 +172,7 @@
         self.activity = act;
         GCUnit *  store = [GCUnit unitForKey:STOREUNIT_DISTANCE];
 
-        GCUnit * unit  = [[GCUnit unitForKey:act.distanceDisplayUom] unitForGlobalSystem];
+        GCUnit * unit  = act.distanceDisplayUnit;
         GCUnit * mile = [GCUnit unitForKey:@"mile"];
         GCUnit * km   = [GCUnit unitForKey:@"kilometer"];
         GCUnit * other = [unit isEqualToUnit:km] ? mile : km;

@@ -32,6 +32,7 @@
 #import "ConnectStats-Swift.h"
 #import "GCGarminActivityTrack13Request.h"
 #import "GCConnectStatsActivityTCXParser.h"
+#import "GCGarminLoginSSORequest.h"
 
 @interface GCConnectStatsRequestFitFile ()
 @property (nonatomic,retain) GCActivity * activity;
@@ -109,6 +110,17 @@
     }
     return rv;
 }
+-(id<GCWebRequest>)remediationReq{
+    if (self.status==GCWebStatusAccessDenied && self.tryAlternativeService == true) {
+        self.status = GCWebStatusOK;
+        self.stage = gcRequestStageDownload;
+        RZLog(RZLogInfo, @"%@ garmin alternative %@ access denied, attempting login", self.activity.activityId, self.activity.externalServiceActivityId);
+
+        return [GCGarminLoginSSORequest requestWithUser:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
+                                                 andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]];
+    }
+    return nil;
+}
 
 -(NSURLRequest*)preparedUrlRequest{
     if( [self isSignedIn] ){
@@ -159,7 +171,10 @@
         NSString * fname = [self fitFileName];
         
         if( self.tryAlternativeService ){
-            if( ![GCGarminActivityTrack13Request extractFitDataFromZip:theData intoFitFile:fname] ){
+            if( delegate.lastStatusCode == 403){
+                self.status = GCWebStatusAccessDenied;
+            }
+            if( self.status == GCWebStatusOK && ![GCGarminActivityTrack13Request extractFitDataFromZip:theData intoFitFile:fname] ){
                 NSString * string = RZReturnAutorelease([[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding]);
                 if( [string hasPrefix:@"{\""] ){
                     if( [string rangeOfString:@"NotFoundException"].location != NSNotFound ){

@@ -28,6 +28,7 @@
 #import "GCActivity.h"
 #import "GCTrackPointExtraIndex.h"
 #import "GCActivitySummaryValue.h"
+#import "GCActivity+Import.h"
 
 //static NSArray * _dbColumnNames = nil;
 //static NSArray * _directKeys = nil;
@@ -55,11 +56,13 @@ void buildStatic(){
     self = [super init];
     return self;
 }
--(GCTrackPoint*)initWithDictionary:(NSDictionary*)data forActivity:(NSObject<GCTrackPointDelegate>*)act{
+-(GCTrackPoint*)initWithDictionary:(NSDictionary*)data forActivity:(GCActivity*)act{
     self = [super init];
     if (self) {
         if (data[@"directTimestamp"]) {
             [self parseDictionary:data inActivity:act];
+        }else if( data[@"lengthIndex"] ){
+            [self parseSwimDictionary:data inActivity:act];
         }
     }
     return self;
@@ -148,6 +151,10 @@ void buildStatic(){
         self.verticalOscillation = [res doubleForColumn:@"VerticalOscillation"];
         self.groundContactTime = [res doubleForColumn:@"GroundContactTime"];
         self.trackFlags = [res intForColumn:@"trackflags"];
+        if( _elapsed != 0.0){
+            self.trackFlags = RZSetOption(self.trackFlags, gcFieldFlagSumDuration);
+        }
+
     }
     return self;
 }
@@ -243,6 +250,44 @@ void buildStatic(){
     for (GCField * field in summaryData) {
         GCNumberWithUnit * nu = summaryData[field].numberWithUnit;
         [self setNumberWithUnit:nu forField:field inActivity:act];
+    }
+}
+
+-(void)parseSwimDictionary:(NSDictionary*)data inActivity:(GCActivity*)act{
+    NSMutableDictionary * summary = [act buildSummaryDataFromGarminModernData:data dtoUnits:true];
+
+    NSDate * date = [act buildStartDateFromGarminModernData:data];
+    self.time = date;
+
+    for (GCField * field in summary) {
+        GCActivitySummaryValue * value = summary[field];
+        [self setNumberWithUnit:value.numberWithUnit forField:field inActivity:act];
+    }
+    
+    NSString * style = data[@"swimStroke"];
+    if ([style isKindOfClass:[NSString class]]) {
+        static NSDictionary * strokeMap = nil;
+        if (strokeMap == nil) {
+            strokeMap = @{
+                          @"FREESTYLE":@(gcSwimStrokeFree),
+                          @"BUTTERFLY":@(gcSwimStrokeButterfly),
+                          @"BREASTSTROKE":   @(gcSwimStrokeBreast),
+                          @"BACKSTROKE":@(gcSwimStrokeBack),
+                          @"MIXED": @(gcSwimStrokeMixed),
+                          @"DRILL": @(gcSwimStrokeMixed),
+                          };
+            [strokeMap retain];
+        }
+        NSNumber * found = strokeMap[style];
+        gcSwimStrokeType directSwimStroke;
+        if (found) {
+            directSwimStroke = [found intValue];
+            
+        }else{
+            RZLog(RZLogWarning, @"Unknown stroke %@ in %@", style, act);
+            directSwimStroke = gcSwimStrokeOther;
+        }
+        [self setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.dimensionless andValue:directSwimStroke] forField:[GCField fieldForKey:INTERNAL_DIRECT_STROKE_TYPE andActivityType:GC_TYPE_SWIMMING] inActivity:act];
     }
 }
 
@@ -500,7 +545,14 @@ void buildStatic(){
 -(NSString*)displayLabel{
     return nil;
 }
-
+-(BOOL)updateElapsedIfNecessaryIn:(GCActivity*)act{
+    if( !RZTestOption(self.trackFlags, gcFieldFlagSumDuration) && self.time && act.date){
+        self.elapsed = [self.time timeIntervalSinceDate:act.date];
+        self.trackFlags = RZSetOption(self.trackFlags, gcFieldFlagSumDuration);
+        return true;
+    }
+    return false;
+}
 #pragma mark - Extra Values
 
 
@@ -545,7 +597,11 @@ void buildStatic(){
 -(NSArray<GCField*>*)availableFieldsInActivity:(GCActivity*)act{
     NSMutableArray * rv = [NSMutableArray arrayWithArray:[GCFields availableFieldsIn:self.trackFlags forActivityType:act.activityType]];
     if( self.extraStorage ){
-        [rv addObjectsFromArray:self.extraStorage.allKeys];
+        for (GCField * field in self.extraStorage) {
+            if( ! field.isInternal ){
+                [rv addObject:field];
+            }
+        }
     }
     if( self.calculatedStorage ){
         [rv addObjectsFromArray:self.calculatedStorage.allKeys];

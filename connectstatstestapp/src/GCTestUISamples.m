@@ -41,6 +41,7 @@
 #import "GCStatsMultiFieldViewControllerConsts.h"
 #import "GCCellActivity.h"
 #import "GCTrackFieldChoices.h"
+#import "GCTestsSamples.h"
 
 @implementation GCTestUISamples
 
@@ -308,8 +309,7 @@
 }
 
 -(GCSimpleGraphCachedDataSource*)sample9_trackFieldMultipleLineGraphs{
-    //GCActivity * act = [[GCAppGlobal organizer] activityForId:@"234979239"];
-    GCActivity * act = [GCActivity fullLoadFromDbPath:[RZFileOrganizer bundleFilePath:@"test_activity_running_837769405.db" ]];
+    GCActivity * act = [GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_837769405.db"]];
     act.settings.treatGapAsNoValueInSeries = false;
 
     GCSimpleGraphCachedDataSource * sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
@@ -332,7 +332,7 @@
     [hr setAxisForSerie:1];
 
     GCStatsDataSerie * ma = [[speed dataSerie] movingAverage:60];
-    GCSimpleGraphDataHolder * speed_ma = [GCSimpleGraphDataHolder dataHolder:ma type:gcGraphLine color:[UIColor blackColor] andUnit:[GCUnit unitForKey:act.speedDisplayUom]];
+    GCSimpleGraphDataHolder * speed_ma = [GCSimpleGraphDataHolder dataHolder:ma type:gcGraphLine color:[UIColor blackColor] andUnit:act.speedDisplayUnit];
     [speed_ma setLineWidth:2.];
 
     [sample setSeries:[NSMutableArray arrayWithObjects:speed, hr, speed_ma, nil]];
@@ -360,7 +360,7 @@
 }
 
 -(NSArray<GCSimpleGraphCachedDataSource*>*)sample_12_trackStats{
-    GCActivity * activity = [GCActivity fullLoadFromDbPath:[RZFileOrganizer bundleFilePath:@"test_activity_running_837769405.db" ]];
+    GCActivity * activity = [GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_837769405.db" ]];
     GCTrackStats * trackStats = [[GCTrackStats alloc] init];
     trackStats.activity = activity;
     activity.settings.gapTimeInterval = 30.;
@@ -425,8 +425,8 @@
 }
 
 -(NSArray<GCSimpleGraphCachedDataSource*>*)sample13_compareStats{
-    GCActivity * activity = [GCActivity fullLoadFromDbPath:[RZFileOrganizer bundleFilePath:@"test_activity_running_828298988.db" ]];
-    GCActivity * compare = [GCActivity fullLoadFromDbPath:[RZFileOrganizer bundleFilePath:@"test_activity_running_1266384539.db"]];
+    GCActivity * activity = [GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_828298988.db" ]];
+    GCActivity * compare = [GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_1266384539.db"]];
 
     GCTrackStats * trackStats = [[[GCTrackStats alloc] init] autorelease];
     trackStats.activity = activity;
@@ -514,12 +514,12 @@
     NSMutableArray * rv = [NSMutableArray array];
 
     cell = [GCCellActivity activityCell:nil];
-    act = [GCActivity fullLoadFromDbPath:[RZFileOrganizer bundleFilePath:@"test_activity_day___healthkit__Default_20151106.db"]];
+    act = [GCActivity fullLoadFromDb:[GCTestsSamples sampleActivityDatabase:@"test_activity_day___healthkit__Default_20151106.db"]];
     [cell setupForActivity:act];
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:kGCCellActivityDefaultHeight andIdentifier:@"Day Activity hr"]];
 
     cell = [GCCellActivity activityCell:nil];
-    act = [GCActivity fullLoadFromDbPath:[RZFileOrganizer bundleFilePath:@"test_activity_day___healthkit__Default_20151109.db"]];
+    act = [GCActivity fullLoadFromDb:[GCTestsSamples sampleActivityDatabase:@"test_activity_day___healthkit__Default_20151109.db"]];
     [cell setupForActivity:act];
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:kGCCellActivityDefaultHeight andIdentifier:@"Day Activity nohr"]];
 
@@ -534,7 +534,7 @@
     NSMutableArray * activity = [NSMutableArray array];
 
 
-    act =[GCActivity fullLoadFromDbPath:[RZFileOrganizer bundleFilePath:@"test_activity_running_837769405.db" ]];
+    act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_837769405.db" ]];
     cell = [GCCellGrid gridCell:nil];
     [cell setupSummaryFromActivity:act width:320. status:gcViewActivityStatusNone];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Base"]];
@@ -553,7 +553,7 @@
         [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Lap"]];
     }
 
-    act =[GCActivity fullLoadFromDbPath:[RZFileOrganizer bundleFilePath:@"test_activity_swimming_439303647.db" ]];
+    act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_swimming_439303647.db" ]];
     cell = [GCCellGrid gridCell:nil];
     [cell setupSummaryFromActivity:act width:320. status:gcViewActivityStatusNone];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Base"]];
@@ -569,7 +569,7 @@
         [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Lap"]];
     }
 
-    act =[GCActivity fullLoadFromDbPath:[RZFileOrganizer bundleFilePath:@"test_activity_cycling_940863203.db" ]];
+    act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_cycling_940863203.db" ]];
 
     cell = [GCCellGrid gridCell:nil];
     [cell setupSummaryFromActivity:act width:320. status:gcViewActivityStatusNone];
