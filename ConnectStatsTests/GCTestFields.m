@@ -65,7 +65,7 @@
     XCTAssertEqualObjects([weightedMeanPace unitName], @"minperkm");
     
     // Now use predefined, register will not change
-    [cache registerField:@"WeightedMeanPace" activityType:GC_TYPE_RUNNING displayName:@"Pace" andUnitName:@"minpermile"];
+    [cache registerField:weightedMeanPace displayName:@"Pace" andUnitName:@"minpermile"];
     info = [cache infoForField:weightedMeanPace];
     XCTAssertEqualObjects(info.displayName, @"Allure moy.");
     XCTAssertEqualObjects(info.uom, @"minperkm");
@@ -81,7 +81,7 @@
     
     // Register one that does not exists
     GCField * weightedMeanPace2 = [GCField fieldForKey:@"WeightedMeanPace2" andActivityType:GC_TYPE_RUNNING];
-    [cache registerField:@"WeightedMeanPace2" activityType:GC_TYPE_RUNNING displayName:@"Pace2" andUnitName:@"kph"];
+    [cache registerField:weightedMeanPace2 displayName:@"Pace2" andUnitName:@"kph"];
     info = [cache infoForField:weightedMeanPace2];
     XCTAssertEqualObjects(info.displayName, @"Pace2");
     XCTAssertEqualObjects(info.uom, @"kph");
