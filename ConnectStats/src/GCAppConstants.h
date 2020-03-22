@@ -76,6 +76,7 @@
 #define CONFIG_VERSIONS_SEEN            @"config_versions_seen"
 #define CONFIG_FEATURES_SEEN            @"config_features_seen"
 #define CONFIG_LAST_REMOTE_STATUS_ID    @"config_last_remote_status_id"
+#define CONFIG_ENABLE_REMOTE_STATUS    @"config_enable_remote_status"
 
 #define CONFIG_WITHINGS_USERSLIST       @"config_withings_userlist"
 #define CONFIG_WITHINGS_USER            @"config_withings_user"
