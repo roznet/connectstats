@@ -45,14 +45,14 @@
 #import "GCActivitiesOrganizer.h"
 #import "GCDerivedOrganizer.h"
 
-#define GC_PARENT_ID            @"__ParentId__"
-#define GC_CHILD_IDS            @"__ChildIds__"
-#define GC_EXTERNAL_ID          @"__ExternalId__"
-#define GC_IGNORE_SKIP_ALWAYS   @"__IGNORE_SKIP_ALWAYS__"
+NSString * GC_PARENT_ID = @"__ParentId__";
+NSString * GC_CHILD_IDS = @"__ChildIds__";
+NSString * GC_EXTERNAL_ID  = @"__ExternalId__";
+NSString * GC_IGNORE_SKIP_ALWAYS =  @"__IGNORE_SKIP_ALWAYS__";
 
-#define GC_TRACKPOINTS_RECORDED  @"__TrackPointsRecorded__"
-#define GC_TRACKPOINTS_RESAMPLED @"__TrackPointsResampled__"
-#define GC_TRACKPOINTS_MATCHED   @"__TrackPointsMatched__"
+NSString * GC_TRACKPOINTS_RECORDED = @"__TrackPointsRecorded__";
+NSString * GC_TRACKPOINTS_RESAMPLED = @"__TrackPointsResampled__";
+NSString * GC_TRACKPOINTS_MATCHED = @"__TrackPointsMatched__";
 
 NSString * kGCActivityNotifyDownloadDone = @"kGCActivityNotifyDownloadDone";
 NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady";
@@ -861,7 +861,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         rv = false;
     }
     
-    
     [self saveTrackpointsAndLapsToDb:trackdb];
     
     // save main activities if needed
@@ -976,9 +975,14 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_track_extra_idx" ];
         while( [res next]){
             GCField * field = [GCField fieldForKey:[res stringForColumn:@"field"] andActivityType:self.activityType];
+            if( field.isInternal ){
+                field = [field correspondingFieldForActivityType:GC_TYPE_ALL];
+            }
             size_t idx =  [res intForColumn:@"idx"];
             GCUnit * unit = [GCUnit unitForKey:[res stringForColumn:@"uom"]];
             extra[field] = [GCTrackPointExtraIndex extraIndex:idx field:field andUnit:unit];
+            if( field.isInternal ){
+            }
         };
         self.cachedExtraTracksIndexes = extra;
         if (extra.count && self.trackpointsCache.count > 0) {
@@ -1561,7 +1565,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 -(GCStatsDataSerie * )timeSerieForSwimStrokeMatching:(GCStatsDataSerie*)other{
     if (self.garminSwimAlgorithm) {
-        GCStatsDataSerieWithUnit * rv = [self trackSerieForField:[GCField fieldForKey:INTERNAL_DIRECT_STROKE_TYPE andActivityType:GC_TYPE_SWIMMING] timeAxis:true];
+        GCStatsDataSerieWithUnit * rv = [self trackSerieForField:[GCField fieldForKey:INTERNAL_DIRECT_STROKE_TYPE andActivityType:GC_TYPE_ALL] timeAxis:true];
         if( rv.count != other.count){
            // [GCStatsDataSerie reduceToCommonRange:rv.serie and:[GCStatsDataSerie dataSerieWithPointsIn:other]];
         }

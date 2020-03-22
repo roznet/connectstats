@@ -61,6 +61,9 @@
 @property (nonatomic,assign) double groundContactTime;
 @property (nonatomic,assign) double steps;
 
+@property (nonatomic,readonly) gcTrackEventType trackEventType;
+@property (nonatomic,readonly) NSString * trackEventTypeDescription;
+
 /**
  @brief Index in the laps
  */
@@ -77,8 +80,6 @@
 -(GCTrackPoint*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithTrackPoint:(GCTrackPoint*)other NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithTCXElement:(GCXMLElement*)element;
--(void)saveToDb:(FMDatabase*)trackdb;
--(void)addExtraFromResultSet:(FMResultSet*)res inActivity:(GCActivity*)act;
 
 +(GCTrackPoint*)trackPointWithCoordinate2D:(CLLocationCoordinate2D)coord;
 +(GCTrackPoint*)trackPointWithCoordinate2D:(CLLocationCoordinate2D)coord
@@ -86,12 +87,19 @@
                                        for:(NSDictionary<GCField*,GCActivitySummaryValue*>*)sumValues
                                 inActivity:(GCActivity*)act;
 
+-(void)saveToDb:(FMDatabase*)trackdb;
+-(void)addExtraFromResultSet:(FMResultSet*)res inActivity:(GCActivity*)act;
+
 -(BOOL)updateInActivity:(GCActivity*)act fromTrackpoint:(GCTrackPoint*)other fromActivity:(GCActivity*)otheract forFields:(NSArray<GCField*>*)fields;
+-(BOOL)updateElapsedIfNecessaryIn:(GCActivity*)act;
+-(void)updateWithExtra:(NSDictionary<GCField*,GCNumberWithUnit*>*)other;
+-(void)recordExtraIn:(NSObject<GCTrackPointDelegate>*)act;
+
+-(void)recordTrackEventType:(gcTrackEventType)trackEventType inActivity:(GCActivity*)act;
 
 -(NSString*)fullDescriptionInActivity:(GCActivity*)act;
-
 -(NSString*)displayLabel;
--(BOOL)updateElapsedIfNecessaryIn:(GCActivity*)act;
+
 -(BOOL)validCoordinate;
 -(CLLocationCoordinate2D)coordinate2D;
 -(CLLocation*)location;
@@ -100,49 +108,30 @@
 -(NSComparisonResult)compareTime:(GCTrackPoint*)other;
 
 +(GCUnit*)unitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;
--(GCNumberWithUnit*)numberWithUnitForField:(gcFieldFlag)aField andActivityType:(NSString*)aType;// DEPRECATED_MSG_ATTRIBUTE("use numberWitUnitForField.");
-
--(void)updateWithExtra:(NSDictionary<GCField*,GCNumberWithUnit*>*)other;
--(void)recordExtraIn:(NSObject<GCTrackPointDelegate>*)act;
 
 -(void)add:(GCTrackPoint*)other withAccrued:(double)accrued timeAxis:(BOOL)timeAxis;
-
 -(void)mergeWith:(GCTrackPoint*)other;
+-(void)updateWithNextPoint:(GCTrackPoint*)next;
+
 -(BOOL)realisticForActivityType:(NSString*)aType;
 
--(NSArray<GCField*>*)availableFieldsInActivity:(GCActivity*)act;
 
-// for derived classes
 /**
  Main Access for value
  */
 -(GCNumberWithUnit*)numberWithUnitForField:(GCField*)aF inActivity:(GCActivity*)act;
 -(void)setNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)field inActivity:(GCActivity*)act;
 
+-(NSArray<GCField*>*)availableFieldsInActivity:(GCActivity*)act;
 -(BOOL)hasField:(GCField*)field inActivity:(GCActivity*)act;
 
-/**
- Access for extra stored as double*, localized by ExtraIndex
- This is the typical way trackpoints store extra data
-
- @param idx which field to look for
- @return value for the index
- */
--(GCNumberWithUnit*)numberWithUnitForExtraByIndex:(GCTrackPointExtraIndex*)idx;
-/**
- Access for extra data that would be stored as key off a GCField
- This is commonly used by laps. The API is here for consistency, in the case of
- a track point, will return nil
-
- @param aF the field
- @return value or nil if field does not exists
- */
--(GCNumberWithUnit*)numberWithUnitForExtraByField:(GCField*)aF;
--(GCNumberWithUnit*)numberWithUnitForCalculated:(GCField*)aF;
 -(void)clearCalculatedForFields:(NSArray<GCField*>*)fields;
-
 -(void)addNumberWithUnitForCalculated:(GCNumberWithUnit*)aN forField:(GCField*)aF;
--(void)updateWithNextPoint:(GCTrackPoint*)next;
+
+
+-(NSSet<GCField*>*)csvFieldsInActivity:(GCActivity*)act;
+-(NSArray<NSString*>*)csvLabelsForFields:(NSArray<GCField*>*)fields InActivity:(GCActivity*)act;
+-(NSArray<NSString*>*)csvValuesForFields:(NSArray<GCField*>*)fields InActivity:(GCActivity*)act;
 
 
 @end

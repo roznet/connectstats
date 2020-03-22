@@ -44,6 +44,7 @@
 #import "GCHistoryFieldSummaryStats.h"
 #import "GCActivity+ExportText.h"
 #import "GCActivity+TestBackwardCompat.h"
+#import "GCActivity+TrackTransform.h"
 
 @interface GCTestsParsing : GCTestCase
 
@@ -442,7 +443,7 @@
         for (NSDictionary * one in lapsJson) {
             GCLap * lap = [[GCLap alloc] initWithDictionary:one forActivity:modernAct];
             [laps addObject:lap];
-            dist = [dist addNumberWithUnit:[lap numberWithUnitForField:gcFieldFlagSumDistance andActivityType:modernAct.activityType] weight:1.];
+            dist = [dist addNumberWithUnit:[lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:modernAct.activityType] inActivity:modernAct] weight:1.];
             [lap release];
         }
         XCTAssertEqualObjects([modernAct numberWithUnitForField:[GCField fieldForKey:@"SumDistance" andActivityType:modernAct.activityType]], dist);
@@ -483,6 +484,40 @@
         XCTAssertTrue(RZTestOption(act_tcx.flags, gcFieldFlagWeightedMeanSpeed));
     }
     
+}
+
+-(void)testParseFitAndEvents{
+    NSString * db_name = @"test_activity_fit_event.db";
+    
+    [RZFileOrganizer removeEditableFile:db_name];
+    
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:db_name]];
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    
+    NSString * fp = [RZFileOrganizer writeableFilePath:@"track_cs_544406.fit"];
+    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"YO" fitFilePath:fp startTime:nil]);
+    
+    [fitAct fullSaveToDb:db];
+    
+    GCActivity * reload = [GCActivity activityWithId:@"544406b" andDb:db];
+    [reload trackpoints];
+    
+    NSUInteger events = 0;
+    XCTAssertEqual(reload.trackpoints.count, fitAct.trackpoints.count);
+    for (NSUInteger i=0; i<MIN(reload.trackpoints.count, fitAct.trackpoints.count); i++) {
+        XCTAssertEqual([reload.trackpoints[i] trackEventType], [fitAct.trackpoints[i] trackEventType]);
+        if( [reload.trackpoints[i] trackEventType] != gcTrackEventTypeNone){
+            events+=1;
+        }
+    }
+    XCTAssertGreaterThan(events, 0);
+    
+    NSString * raw = [fitAct csvTrackPoints:fitAct.trackpoints];
+    NSString * noStop = [fitAct csvTrackPoints:[fitAct removedStoppedTimer:fitAct.trackpoints]];
+    
+    [raw writeToFile:[RZFileOrganizer writeableFilePath:@"raw.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    [noStop writeToFile:[RZFileOrganizer writeableFilePath:@"noStop.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
 }
 
 -(void)testParseFitFile{

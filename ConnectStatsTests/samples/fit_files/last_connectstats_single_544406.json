@@ -1,0 +1,33 @@
+{
+  "paging": {
+    "total": 1,
+    "start": 0,
+    "limit": 20
+  },
+  "activityList": [
+    {
+      "summaryId": "4679534593",
+      "durationInSeconds": 3539,
+      "startTimeInSeconds": 1584790890,
+      "startTimeOffsetInSeconds": 0,
+      "activityType": "RUNNING",
+      "averageHeartRateInBeatsPerMinute": 171,
+      "averageRunCadenceInStepsPerMinute": 165.57812,
+      "averageSpeedInMetersPerSecond": 3.257,
+      "averagePaceInMinutesPerKilometer": 5.1171837,
+      "activeKilocalories": 796,
+      "deviceName": "fenix6x",
+      "distanceInMeters": 11529.21,
+      "maxHeartRateInBeatsPerMinute": 191,
+      "maxPaceInMinutesPerKilometer": 4.154204,
+      "maxRunCadenceInStepsPerMinute": 175,
+      "maxSpeedInMetersPerSecond": 4.012,
+      "startingLatitudeInDegree": 51.47206180728972,
+      "startingLongitudeInDegree": -0.1958556566387415,
+      "steps": 9692,
+      "totalElevationGainInMeters": 51,
+      "totalElevationLossInMeters": 47,
+      "cs_activity_id": "544406"
+    }
+  ]
+}

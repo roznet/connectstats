@@ -52,6 +52,29 @@ typedef NS_OPTIONS(NSUInteger, gcCalcFieldFlag) {
     gcCalcFieldFlagAscentSpeed
 };
 
+typedef NS_OPTIONS(NSUInteger, gcTrackEventType) {
+    gcTrackEventTypeNone = 0,
+    gcTrackEventTypeStart = 1,
+    gcTrackEventTypeStop = 2,
+    gcTrackEventTypeMarker = 3,
+    gcTrackEventTypeStopAll = 4
+};
+
+/*
+fit_example.h:#define FIT_EVENT_TYPE_INVALID                                                   FIT_ENUM_INVALID
+fit_example.h:#define FIT_EVENT_TYPE_START                                                     ((FIT_EVENT_TYPE)0)
+fit_example.h:#define FIT_EVENT_TYPE_STOP                                                      ((FIT_EVENT_TYPE)1)
+fit_example.h:#define FIT_EVENT_TYPE_CONSECUTIVE_DEPRECIATED                                   ((FIT_EVENT_TYPE)2)
+fit_example.h:#define FIT_EVENT_TYPE_MARKER                                                    ((FIT_EVENT_TYPE)3)
+fit_example.h:#define FIT_EVENT_TYPE_STOP_ALL                                                  ((FIT_EVENT_TYPE)4)
+fit_example.h:#define FIT_EVENT_TYPE_BEGIN_DEPRECIATED                                         ((FIT_EVENT_TYPE)5)
+fit_example.h:#define FIT_EVENT_TYPE_END_DEPRECIATED                                           ((FIT_EVENT_TYPE)6)
+fit_example.h:#define FIT_EVENT_TYPE_END_ALL_DEPRECIATED                                       ((FIT_EVENT_TYPE)7)
+fit_example.h:#define FIT_EVENT_TYPE_STOP_DISABLE                                              ((FIT_EVENT_TYPE)8)
+fit_example.h:#define FIT_EVENT_TYPE_STOP_DISABLE_ALL                                          ((FIT_EVENT_TYPE)9)
+fit_example.h:#define FIT_EVENT_TYPE_COUNT                                                     10
+*/
+
 // HealthKit Field Map
 //    gcFieldFlagDistance                 "SumDistance"         HKQuantityTypeIdentifierDistanceWalkingRunning
 //    gcFieldFlagCadence                  "SumStep"             HKQuantityTypeIdentifierStepCount
@@ -128,6 +151,7 @@ extern NSString * STOREUNIT_HEARTRATE;
 
 extern NSString * INTERNAL_PREFIX;
 extern NSString * INTERNAL_DIRECT_STROKE_TYPE;
+extern NSString * INTERNAL_TRACK_EVENT_TYPE;
 
 extern NSString * CALC_PREFIX;
 extern NSString * CALC_ALTITUDE_GAIN         ;

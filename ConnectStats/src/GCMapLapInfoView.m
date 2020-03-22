@@ -98,7 +98,7 @@
     if (self.gradientField == gcFieldFlagNone) {
         // Fastest km/mile display
         GCUnit * unit = self.activity.distanceDisplayUnit;
-        GCNumberWithUnit * time = [self.lap numberWithUnitForField:gcFieldFlagSumDuration andActivityType:(self.activity).activityType];
+        GCNumberWithUnit * time = [self.lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activity.activityType] inActivity:self.activity];
 
         title = [NSString stringWithFormat:@"Time: %@", time];
         subText = [NSString stringWithFormat:@"Fastest %@", unit.description];

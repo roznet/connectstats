@@ -991,23 +991,23 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }
 
     GCLap * lap = [activity lapNumber:idx];
-    GCNumberWithUnit * dist = [[lap numberWithUnitForField:gcFieldFlagSumDistance andActivityType:activity.activityType]
+    GCNumberWithUnit * dist = [[lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activity.activityType] inActivity:activity]
                                convertToUnit:activity.distanceDisplayUnit];
-    GCNumberWithUnit * speed= [[lap numberWithUnitForField:gcFieldFlagWeightedMeanSpeed andActivityType:activity.activityType]
+    GCNumberWithUnit * speed= [[lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activity.activityType] inActivity:activity]
                                convertToUnit:activity.speedDisplayUnit];
-    GCNumberWithUnit * dur  = [lap numberWithUnitForField:gcFieldFlagSumDuration andActivityType:activity.activityType];
+    GCNumberWithUnit * dur  = [lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:activity.activityType] inActivity:activity];
     GCNumberWithUnit * bpm  = nil;
     GCNumberWithUnit * cad  = nil;
     GCNumberWithUnit * pow  = nil;
 
     if ([activity hasTrackField:gcFieldFlagWeightedMeanHeartRate ]) {
-        bpm = [lap numberWithUnitForField:gcFieldFlagWeightedMeanHeartRate andActivityType:activity.activityType];
+        bpm = [lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:activity.activityType] inActivity:activity];
     }
     if ([activity hasTrackField:gcFieldFlagCadence]) {
-        cad =   [lap numberWithUnitForField:gcFieldFlagCadence andActivityType:activity.activityType];
+        cad =   [lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagCadence andActivityType:activity.activityType] inActivity:activity];
     }
     if ([activity hasTrackField:gcFieldFlagPower]) {
-        pow = [lap numberWithUnitForField:gcFieldFlagPower andActivityType:activity.activityType];
+        pow = [lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagPower andActivityType:activity.activityType] inActivity:activity];
     }
 
     GCFormattedField * distF = [GCFormattedField formattedFieldForNumber:dist forSize:16.];
@@ -1028,20 +1028,20 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }else if (isSki){
         GCNumberWithUnit * elev = nil;
         if ([activity.activityTypeDetail isEqualToString:GC_TYPE_SKI_DOWN]) {
-            elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"LossElevation" andActivityType:activity.activityType]];
+            elev = [lap numberWithUnitForField:[GCField fieldForKey:@"LossElevation" andActivityType:activity.activityType] inActivity:activity];
             if (elev == nil) {
-                elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"LossCorrectedElevation" andActivityType:activity.activityType]];
+                elev = [lap numberWithUnitForField:[GCField fieldForKey:@"LossCorrectedElevation" andActivityType:activity.activityType] inActivity:activity];
             }
             if (elev == nil) {
-                elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"LossUncorrectedElevation" andActivityType:activity.activityType]];
+                elev = [lap numberWithUnitForField:[GCField fieldForKey:@"LossUncorrectedElevation" andActivityType:activity.activityType]  inActivity:activity];
             }
         }else {
-            elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"GainElevation" andActivityType:activity.activityType]];
+            elev = [lap numberWithUnitForField:[GCField fieldForKey:@"GainElevation" andActivityType:activity.activityType] inActivity:activity];
             if (elev == nil) {
-                elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"GainCorrectedElevation" andActivityType:activity.activityType]];
+                elev = [lap numberWithUnitForField:[GCField fieldForKey:@"GainCorrectedElevation" andActivityType:activity.activityType] inActivity:activity];
             }
             if (elev == nil) {
-                elev = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"GainUncorrectedElevation" andActivityType:activity.activityType]];
+                elev = [lap numberWithUnitForField:[GCField fieldForKey:@"GainUncorrectedElevation" andActivityType:activity.activityType] inActivity:activity];
             }
         }
         if (elev) {
@@ -1131,7 +1131,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         }else{
             gcFieldFlag fieldFlag = [group[1] intValue];
             field1 = [GCField fieldForFlag:fieldFlag andActivityType:aType];
-            number1 = [aLap numberWithUnitForField:field1.fieldFlag andActivityType:aType];
+            number1 = [aLap numberWithUnitForField:[GCField fieldForFlag:field1.fieldFlag andActivityType:aType] inActivity:activity];
             if (fieldFlag == gcFieldFlagSumDistance) {
                 number1 = [number1 convertToUnit:activity.distanceDisplayUnit];
             }else if(fieldFlag == gcFieldFlagWeightedMeanSpeed){
@@ -1144,7 +1144,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
         GCFormattedField * numberF1 = [GCFormattedField formattedFieldForNumber:number1 forSize:16.];
 
-        GCNumberWithUnit * number2 = [aLap numberWithUnitForExtraByField:[GCField fieldForKey:key andActivityType:aType]];
+        GCNumberWithUnit * number2 = [aLap numberWithUnitForField:[GCField fieldForKey:key andActivityType:aType] inActivity:activity];
 
         GCFormattedField * number2F = wide ?
             [GCFormattedField formattedFieldForNumber:number2 forSize:16.]:
@@ -1190,13 +1190,13 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }else{
         [self setupForRows:2 andCols:3];
     }
-    GCNumberWithUnit * dist = [[lap numberWithUnitForField:gcFieldFlagSumDistance
-                                           andActivityType:activity.activityType]
+    GCNumberWithUnit * dist = [[lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance
+                                           andActivityType:activity.activityType] inActivity:activity]
                                convertToUnit:activity.distanceDisplayUnit];
-    GCNumberWithUnit * speed= [[lap numberWithUnitForField:gcFieldFlagWeightedMeanSpeed andActivityType:activity.activityType] convertToUnit:activity.speedDisplayUnit];
-    GCNumberWithUnit * dur  = [lap numberWithUnitForField:gcFieldFlagSumDuration andActivityType:activity.activityType];
-    GCNumberWithUnit * cad  = [lap numberWithUnitForField:gcFieldFlagCadence andActivityType:activity.activityType];
-    GCNumberWithUnit * lgth = [lap numberWithUnitForExtraByField:[GCField fieldForKey:@"SumNumLengths" andActivityType:GC_TYPE_SWIMMING]];
+    GCNumberWithUnit * speed= [[lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activity.activityType] inActivity:activity] convertToUnit:activity.speedDisplayUnit];
+    GCNumberWithUnit * dur  = [lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:activity.activityType] inActivity:activity];
+    GCNumberWithUnit * cad  = [lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagCadence andActivityType:activity.activityType] inActivity:activity];
+    GCNumberWithUnit * lgth = [lap numberWithUnitForField:[GCField fieldForKey:@"SumNumLengths" andActivityType:GC_TYPE_SWIMMING] inActivity:activity];
 
     GCFormattedField * distF = [GCFormattedField formattedFieldForNumber:dist  forSize:16.];
     GCFormattedField * speedF= [GCFormattedField formattedFieldForNumber:speed forSize:14.];

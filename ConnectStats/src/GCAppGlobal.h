@@ -83,6 +83,7 @@ extern NSString *const kNotifySettingsChange;
 +(NSCalendar*)calculationCalendar;
 +(void)ensureCalculationCalendarTimeZone:(NSTimeZone*)tz;// Mostly used for testing
 +(NSDate*)referenceDate;
++(NSInteger)currentYear;
 
 +(BOOL)connectStatsVersion;
 +(BOOL)healthStatsVersion;

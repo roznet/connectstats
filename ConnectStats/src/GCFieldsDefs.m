@@ -66,6 +66,7 @@ NSString * STOREUNIT_HEARTRATE =     @"bpm";
 
 NSString * INTERNAL_PREFIX = @"__Internal";
 NSString * INTERNAL_DIRECT_STROKE_TYPE = @"__InternalDirectStrokeType";
+NSString * INTERNAL_TRACK_EVENT_TYPE = @"__InternalTrackEventType";
 
 NSString * CALC_PREFIX = @"__Calc";
 NSString * CALC_ALTITUDE_GAIN          = @"__CalcGainElevation";

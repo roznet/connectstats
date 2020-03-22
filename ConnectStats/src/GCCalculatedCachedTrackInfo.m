@@ -1,8 +1,8 @@
-//  MIT Licence
+//  MIT License
 //
-//  Created on 23/12/2013.
+//  Created on 22/03/2020 for ConnectStats
 //
-//  Copyright (c) 2013 Brice Rosenzweig.
+//  Copyright (c) 2020 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
-//  
+//
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-//  
+//
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,22 +21,42 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
-//  
+//
 
-#import "GCActivity.h"
+
+
 #import "GCCalculatedCachedTrackInfo.h"
 
-@interface GCActivity (CachedTracks)
+@implementation GCCalculactedCachedTrackInfo
+
+/**
+
+ */
++(GCCalculactedCachedTrackInfo*)info:(gcCalculatedCachedTrack)atrack field:(GCField*)afield{
+    GCCalculactedCachedTrackInfo * rv = [[[GCCalculactedCachedTrackInfo alloc] init] autorelease];
+    if (rv) {
+        rv.track = atrack;
+        rv.field = afield;
+        rv.serie = nil;
+        rv.processedPointsCount = 0;
+    }
+    return rv;
+}
+
+-(gcFieldFlag)fieldFlag{
+    return _field.fieldFlag;
+}
+
+-(void)dealloc{
+    [_serie release];
+    [_field release];
+    [_trackpoints release];
+
+    [super dealloc];
+}
 
 
 
--(nullable GCStatsDataSerieWithUnit*)calculatedDerivedTrack:(gcCalculatedCachedTrack)track forField:(nonnull GCField*)field thread:(nullable dispatch_queue_t)thread;
--(nullable GCStatsDataSerieWithUnit*)standardizedBestRollingTrack:(nonnull GCField*)field thread:(nullable dispatch_queue_t)thread;
-
--(BOOL)hasCalculatedDerivedTrack:(gcCalculatedCachedTrack)track forField:(nonnull GCField*)field;
-
-
--(void)addStandardCalculatedTracks:(nullable dispatch_queue_t)threadOrNil;
-+(nullable GCStatsDataSerieWithUnit*)standardSerieSampleForXUnit:(nonnull GCUnit*)xUnit;
 
 @end
+
