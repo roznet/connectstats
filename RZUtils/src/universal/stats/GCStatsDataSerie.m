@@ -287,7 +287,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     for (NSUInteger i=0; i<n; i++) {
         GCStatsDataPoint * point = self.dataPoints[i];
         if (asDate) {
-            [rv appendFormat:@"%d,%@,%f\n", (int)i, point.date, point.y_data];
+            [rv appendFormat:@"%d,%@,%f\n", (int)i, [point.date formatAsRFC3339], point.y_data];
         }else{
             [rv appendFormat:@"%d,%f,%f\n", (int)i, point.x_data, point.y_data];
         }

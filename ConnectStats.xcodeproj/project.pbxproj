@@ -55,6 +55,7 @@
 		421418431CF04FB800642F37 /* FITFitFieldValue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418421CF04FB800642F37 /* FITFitFieldValue.mm */; };
 		421418481CF054B300642F37 /* FITFitEnumMap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 421418471CF054B300642F37 /* FITFitEnumMap.mm */; };
 		421516BC19A47C450080CD4C /* GCHealthKitRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 421516BB19A47C450080CD4C /* GCHealthKitRequest.m */; };
+		421517CC2429607800FEE8D7 /* GCTestsActivitiesCalculated.m in Sources */ = {isa = PBXBuildFile; fileRef = 421517CB2429607800FEE8D7 /* GCTestsActivitiesCalculated.m */; };
 		421736A42066A07F00ACADC1 /* GCGarminRequestModernActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */; };
 		4217F53F21ACA12500C848A3 /* FITTimeSerieColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217F53E21ACA12500C848A3 /* FITTimeSerieColumn.swift */; };
 		421844B01D75C3F5005B09BC /* GCSegmentOrganizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421844AF1D75C3F5005B09BC /* GCSegmentOrganizer.swift */; };
@@ -2011,6 +2012,7 @@
 		421418471CF054B300642F37 /* FITFitEnumMap.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FITFitEnumMap.mm; path = src/FITFitEnumMap.mm; sourceTree = "<group>"; };
 		421516BA19A47C450080CD4C /* GCHealthKitRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitRequest.h; path = src/GCHealthKitRequest.h; sourceTree = "<group>"; };
 		421516BB19A47C450080CD4C /* GCHealthKitRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitRequest.m; path = src/GCHealthKitRequest.m; sourceTree = "<group>"; };
+		421517CB2429607800FEE8D7 /* GCTestsActivitiesCalculated.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCTestsActivitiesCalculated.m; sourceTree = "<group>"; };
 		421736A22066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCGarminRequestModernActivityTypes.h; path = src/GCGarminRequestModernActivityTypes.h; sourceTree = "<group>"; };
 		421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequestModernActivityTypes.m; path = src/GCGarminRequestModernActivityTypes.m; sourceTree = "<group>"; };
 		4217F53E21ACA12500C848A3 /* FITTimeSerieColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITTimeSerieColumn.swift; path = src/FITTimeSerieColumn.swift; sourceTree = "<group>"; };
@@ -4368,6 +4370,7 @@
 				42A89C251D63B2D7007CF90D /* GCTestHealthZones.m */,
 				426CC4741BAEBD060033978C /* GCTestsActions.m */,
 				425CF5A81813CEEC009279C0 /* GCTestsActivities.m */,
+				421517CB2429607800FEE8D7 /* GCTestsActivitiesCalculated.m */,
 				42096752189CF33500D32CA7 /* GCTestsDerived.m */,
 				428FF73215F36888007A88FA /* GCTestsGeneral.m */,
 				4227C5AB1C0B1310003F0660 /* GCTestsGrid.m */,
@@ -7461,6 +7464,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				421517CC2429607800FEE8D7 /* GCTestsActivitiesCalculated.m in Sources */,
 				421844B71D75D268005B09BC /* GCTestsSegments.swift in Sources */,
 				425CF5A91813CEEC009279C0 /* GCTestsActivities.m in Sources */,
 				42D9081C20338582000BBE07 /* GCTestsPerformance.m in Sources */,

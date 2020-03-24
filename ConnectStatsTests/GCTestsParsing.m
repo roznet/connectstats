@@ -486,40 +486,6 @@
     
 }
 
--(void)testParseFitAndEvents{
-    NSString * db_name = @"test_activity_fit_event.db";
-    
-    [RZFileOrganizer removeEditableFile:db_name];
-    
-    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:db_name]];
-    [db open];
-    [GCActivitiesOrganizer ensureDbStructure:db];
-    
-    NSString * fp = [RZFileOrganizer writeableFilePath:@"track_cs_544406.fit"];
-    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"YO" fitFilePath:fp startTime:nil]);
-    
-    [fitAct fullSaveToDb:db];
-    
-    GCActivity * reload = [GCActivity activityWithId:@"544406b" andDb:db];
-    [reload trackpoints];
-    
-    NSUInteger events = 0;
-    XCTAssertEqual(reload.trackpoints.count, fitAct.trackpoints.count);
-    for (NSUInteger i=0; i<MIN(reload.trackpoints.count, fitAct.trackpoints.count); i++) {
-        XCTAssertEqual([reload.trackpoints[i] trackEventType], [fitAct.trackpoints[i] trackEventType]);
-        if( [reload.trackpoints[i] trackEventType] != gcTrackEventTypeNone){
-            events+=1;
-        }
-    }
-    XCTAssertGreaterThan(events, 0);
-    
-    NSString * raw = [fitAct csvTrackPoints:fitAct.trackpoints];
-    NSString * noStop = [fitAct csvTrackPoints:[fitAct removedStoppedTimer:fitAct.trackpoints]];
-    
-    [raw writeToFile:[RZFileOrganizer writeableFilePath:@"raw.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
-    [noStop writeToFile:[RZFileOrganizer writeableFilePath:@"noStop.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
-}
-
 -(void)testParseFitFile{
     NSDictionary * epsForField = @{
                                    // somehow some non sensical values:
