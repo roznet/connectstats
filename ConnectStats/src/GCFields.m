@@ -30,7 +30,6 @@
 #import "GCHealthMeasure.h"
 
 static GCFieldCache * _fieldCache = nil;
-static NSDictionary * _activityFromTrack = nil;
 static NSDictionary * _cacheLapFieldToFieldMap = nil;
 static NSDictionary * _cacheFieldToLapFieldMap = nil;
 static NSArray * _cacheSwimLapField = nil;
@@ -68,10 +67,6 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     }
 }
 
-+(void)registerField:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom{
-    [_fieldCache registerField:field activityType:aType displayName:aName andUnitName:uom];
-}
-
 +(void)registerField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom{
     [_fieldCache registerField:field displayName:aName andUnitName:uom];
 
@@ -83,53 +78,9 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     return [_fieldCache knownFieldsMatching:str];
 }
 
-+(BOOL)knownField:(NSString*)field activityType:(NSString*)activityType{
-    if( [_fieldCache knownField:field activityType:activityType]){
-        return true;
-    }
-    if ([GCHealthMeasure isHealthField:field]) {
-        return true;
-    }
-    return false;
-}
-+(NSString*)fieldUnitName:(NSString*)field activityType:(NSString*)activityType{
-    if ([GCHealthMeasure isHealthField:field]) {
-        return [GCHealthMeasure measureUnit:[GCHealthMeasure measureTypeFromHealthFieldKey:field]].key;
-    }
-
-    return [[_fieldCache infoForField:field andActivityType:activityType] uom];
-}
-+(NSString*)fieldDisplayName:(NSString*)field activityType:(NSString*)aType{
-    return [[_fieldCache infoForField:field andActivityType:aType] displayName];
-}
-
 +(NSDictionary<GCField*,GCFieldInfo*>*)missingPredefinedField{
     return [_fieldCache missingPredefinedField];
 }
-
-+(GCUnit*)fieldUnit:(NSString*)field  activityType:(NSString*)activityType{
-    if ([GCHealthMeasure isHealthField:field]) {
-        return [GCHealthMeasure measureUnit:[GCHealthMeasure measureTypeFromHealthFieldKey:field]];
-    }
-
-    GCUnit * rv = [[[_fieldCache infoForField:field andActivityType:activityType] unit] unitForGlobalSystem];
-
-    if ([field hasSuffix:@"Elevation"] && [rv.key isEqualToString:@"yard"]){
-        rv = [GCUnit unitForKey:@"foot"];
-    }
-
-    return rv;
-}
-
-+(NSString*)fieldDisplayNameAndUnits:(NSString *)fieldStr activityType:(NSString*)aType unit:(GCUnit*)unit{
-    return [[GCField fieldForKey:fieldStr andActivityType:aType] displayNameWithUnits:unit];
-}
-
-+(NSString*)fieldDisplayNameAndUnits:(NSString *)fieldStr activityType:(NSString*)aType{
-    GCUnit * unit = [GCFields fieldUnit:fieldStr activityType:aType];
-    return [GCFields fieldDisplayNameAndUnits:fieldStr activityType:aType unit:unit];
-}
-
 
 +(NSString*)activityTypeDisplay:(NSString*)aType{
     if (!aType) {
@@ -141,35 +92,6 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
 
 #pragma mark - Field Properties
 
-
-//NEWTRACKFIELD  avoid gcFieldFlag if possible
-+(BOOL)trackFieldCanSum:(gcFieldFlag)field{
-    switch (field) {
-        case gcFieldFlagAltitudeMeters:
-        case gcFieldFlagSumDistance:
-        case gcFieldFlagSumDuration:
-        case gcFieldFlagSumStrokes:
-        case gcFieldFlagSumEfficiency:
-        case gcFieldFlagTennisShots:
-        case gcFieldFlagSumStep:
-            return true;
-
-        case gcFieldFlagCadence:
-        case gcFieldFlagGroundContactTime:
-        case gcFieldFlagNone:
-        case gcFieldFlagPower:
-        case gcFieldFlagTennisEnergy:
-        case gcFieldFlagSumSwolf:
-        case gcFieldFlagTennisPower:
-        case gcFieldFlagTennisRegularity:
-        case gcFieldFlagVerticalOscillation:
-        case gcFieldFlagWeightedMeanHeartRate:
-        case gcFieldFlagWeightedMeanSpeed:
-            return false;
-
-    }
-    return false;
-}
 
 +(NSString*)calcOrFieldFor:(NSString*)field{
     if (_calcToField==nil) {
@@ -261,56 +183,9 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
         || [field isEqualToString:@"MinPace"];
 }
 
-+(NSString*)field:(NSString*)field withIntensity:(gcIntensityLevel)level{
-    NSString * rv = nil;
-    switch (level) {
-        case gcIntensityInactive:
-            return nil;
-        case gcIntensityLightlyActive:
-            rv = [NSString stringWithFormat:@"%@LightlyActive", field];
-            break;
-        case gcIntensityModeratelyActive:
-            rv = [NSString stringWithFormat:@"%@ModeratelyActive", field];
-            break;
-        case gcIntensityVeryActive:
-            rv = [NSString stringWithFormat:@"%@VeryActive", field];
-            break;
-    }
-    return rv;
-}
 
 #pragma mark - gcFieldFlag
 
-
-//NEWTRACKFIELD  avoid gcFieldFlag if possible. this should not be required now as trackfield should be deduced from GCField
-+(gcFieldFlag)trackFieldFromActivityField:(NSString*)aActivityField{
-    if (!_activityFromTrack) {
-        _activityFromTrack = @{@"SumDistance":                     @(gcFieldFlagSumDistance),
-                                @"SumDuration":                     @(gcFieldFlagSumDuration),
-                                @"WeightedMeanHeartRate":           @(gcFieldFlagWeightedMeanHeartRate),
-                                @"WeightedMeanPace":                @(gcFieldFlagWeightedMeanSpeed),
-                                @"WeightedMeanSpeed":               @(gcFieldFlagWeightedMeanSpeed),
-                                @"WeightedMeanRunCadence":          @(gcFieldFlagCadence),
-                                @"WeightedMeanBikeCadence":         @(gcFieldFlagCadence),
-                                @"Cadence":                         @(gcFieldFlagCadence),
-                                @"Altitude":                        @(gcFieldFlagAltitudeMeters),
-                                @"GainElevation":                   @(gcFieldFlagAltitudeMeters),
-                                @"MinElevation":                    @(gcFieldFlagAltitudeMeters),
-                                @"MaxElevation":                    @(gcFieldFlagAltitudeMeters),
-                                @"WeightedMeanPower":               @(gcFieldFlagPower),
-                                @"SumStep":                         @(gcFieldFlagSumStep),
-                                @"WeightedMeanGroundContactTime":   @(gcFieldFlagGroundContactTime),
-                                @"WeightedMeanVerticalOscillation": @(gcFieldFlagVerticalOscillation)};
-        RZRetain(_activityFromTrack);
-
-    }
-    NSNumber * rv = _activityFromTrack[aActivityField];
-    return (gcFieldFlag)rv.integerValue;
-}
-
-+(NSString*)trackFieldDisplayName:(gcFieldFlag)which forActivityType:(NSString*)aAct{
-    return [GCFields fieldDisplayName:[GCFields fieldForFlag:which andActivityType:aAct] activityType:aAct];
-}
 
 //NEWTRACKFIELD  avoid gcFieldFlag if possible. GCField should be used to deduce the field key
 +(NSString*)activityFieldFromTrackField:(gcFieldFlag)aTrackField andActivityType:(NSString*)aAct{
@@ -371,48 +246,10 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     return nil;
 }
 
-+(NSString*)fieldForFlag:(gcFieldFlag)which andActivityType:(NSString*)activityType{
-    return [GCFields activityFieldFromTrackField:which andActivityType:activityType];
-}
-
 //NEWTRACKFIELD  avoid gcFieldFlag if possible
 #define FLAGS_COUNT 12
-+(gcFieldFlag)nextTrackField:(gcFieldFlag)which in:(NSUInteger)flag{
-    gcFieldFlag valid[FLAGS_COUNT] = {
-        gcFieldFlagNone,gcFieldFlagWeightedMeanSpeed,gcFieldFlagWeightedMeanHeartRate,
-        gcFieldFlagCadence,gcFieldFlagPower,gcFieldFlagSumStrokes,
-        gcFieldFlagSumSwolf,gcFieldFlagSumEfficiency,gcFieldFlagAltitudeMeters,
-        gcFieldFlagGroundContactTime,gcFieldFlagVerticalOscillation,gcFieldFlagSumStep
-    };
-    size_t c = 0;
-    for (c=0; c<FLAGS_COUNT; c++) {
-        if (valid[c] == which) {
-            break;
-        }
-    }
-    for (c++; c<FLAGS_COUNT; c++) {
-        if (flag & valid[c]) {
-            break;
-        }
-    }
-    if (c==FLAGS_COUNT) {
-        c=0;
-    }
-    return valid[c];
-}
 
 +(NSArray<GCField*>*)availableFieldsIn:(NSUInteger)flag forActivityType:(NSString*)atype{
-    NSArray * found = [GCFields availableTrackFieldsIn:flag];
-    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:found.count];
-    for (NSNumber * one in found) {
-        gcFieldFlag asflag = (gcFieldFlag)one.integerValue;
-        [rv addObject:[GCField fieldForFlag:asflag andActivityType:atype]];
-    }
-    return rv;
-}
-
-//NEWTRACKFIELD avoid gcFieldFlag if possible
-+(NSArray*)availableTrackFieldsIn:(NSUInteger)flag{
     gcFieldFlag valid[FLAGS_COUNT] = {
         gcFieldFlagNone,gcFieldFlagCadence,gcFieldFlagWeightedMeanHeartRate,
         gcFieldFlagWeightedMeanSpeed,gcFieldFlagPower,gcFieldFlagAltitudeMeters,
@@ -423,19 +260,10 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:FLAGS_COUNT];
     for(c =1;c<FLAGS_COUNT;c++){
         if (flag & valid[c]) {
-            [rv addObject:@(valid[c])];
+            [rv addObject:[GCField fieldForFlag:valid[c] andActivityType:atype]];
         }
     }
     return [NSArray arrayWithArray:rv];
-}
-+(NSArray*)describeTrackFields:(gcFieldFlag)flag forActivityType:(NSString*)aType{
-    NSArray * fields = [GCFields availableTrackFieldsIn:flag];
-    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:fields.count];
-    for (NSNumber * n in fields) {
-        gcFieldFlag f = n.intValue;
-        [rv addObject:[GCFields activityFieldFromTrackField:f andActivityType:aType]];
-    }
-    return rv;
 }
 
 #pragma mark - swimLapFields
@@ -591,37 +419,6 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
 }
 
 #pragma mark - gcAggregatedField
-
-+(NSString*)fieldForAggregatedField:(gcAggregatedField)which andActivityType:(NSString*)actType{
-    switch (which) {
-        case gcAggregatedWeightedSpeed:
-            if ([actType isEqualToString:GC_TYPE_RUNNING] || [actType isEqualToString:GC_TYPE_SWIMMING]) {
-                return @"WeightedMeanPace";
-            }else{
-                return @"WeightedMeanSpeed";
-            }
-            break;
-        case gcAggregatedWeightedHeartRate:
-            return @"WeightedMeanHeartRate";
-        case gcAggregatedSumDistance:
-            return @"SumDistance";
-        case gcAggregatedSumDuration:
-            return @"SumDuration";
-        case gcAggregatedTennisPower:
-            return @"averagePower";
-        case gcAggregatedTennisShots:
-            return @"shots";
-        case gcAggregatedCadence:
-            return [GCFields fieldForFlag:gcFieldFlagCadence andActivityType:actType];
-        case gcAggregatedAltitudeMeters:
-            return @"GainElevation";
-        case gcAggregatedFieldEnd:
-            return nil;
-        case gcAggregatedSumStep:
-            return @"SumStep";
-    }
-    return nil;
-}
 
 +(NSString*)metaFieldDisplayName:(NSString*)metaField{
     if ([metaField isEqualToString:@"device"]) {

@@ -543,17 +543,42 @@ void buildStatic(){
     return [self.time compare:other.time];
 }
 
+-(NSString*)bestGuessActivityType{
+    NSString * guessActivityType = GC_TYPE_ALL;
+    BOOL found = false;
+    
+    if( self.extraStorage){
+        for (GCField * one in self.extraStorage) {
+            if( ![one.activityType isEqualToString:GC_TYPE_ALL] ){
+                guessActivityType = one.activityType;
+                found = true;
+                break;
+            }
+        }
+    }
+    if( ! found && self.calculatedStorage ){
+        for (GCField * one in self.calculatedStorage) {
+            if( ![one.activityType isEqualToString:GC_TYPE_ALL] ){
+                guessActivityType = one.activityType;
+                found = true;
+                break;
+            }
+        }
+    }
+    return guessActivityType;
+}
+
 -(NSString*)description{
     NSMutableString * rv = [NSMutableString stringWithFormat:@"<%@: %@,%.1f sec", NSStringFromClass([self class]), _time,_elapsed];
 
-    NSArray<NSNumber*> * available =[GCFields availableTrackFieldsIn:self.trackFlags];
+    NSArray<GCField*> * available =[GCFields availableFieldsIn:self.trackFlags forActivityType:[self bestGuessActivityType]];
+    
     GCNumberWithUnit * nu = [self numberWithUnitForField:gcFieldFlagSumDistance andActivityType:GC_TYPE_ALL];
     if( nu ){
         [rv appendFormat:@", %@", nu];
     }
-    for (NSNumber * one in available) {
-        gcFieldFlag flag = one.intValue;
-        GCNumberWithUnit * nu = [self numberWithUnitForField:flag andActivityType:GC_TYPE_ALL];
+    for (GCField * one in available) {
+        GCNumberWithUnit * nu = [self numberWithUnitForField:one inActivity:nil];
         [rv appendFormat:@", %@", nu];
     }
     gcTrackEventType type = self.trackEventType;

@@ -471,10 +471,11 @@ static BOOL kDerivedEnabled = true;
     RZPerformance * performance = [RZPerformance start];
     GCActivity * activity = element.activity;
 
+    GCField * field = [GCField fieldForFlag:element.field
+                            andActivityType:activity.activityType];
+
     if (![activity trackdbIsObsolete:activity.trackdb]) {
         
-        GCField * field = [GCField fieldForFlag:element.field
-                                andActivityType:activity.activityType];
         
         // no worker here, this function should already be on worker
         GCStatsDataSerieWithUnit * serie =  [activity calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
@@ -542,7 +543,7 @@ static BOOL kDerivedEnabled = true;
         [activity purgeCache];
     }
     if ([performance significant]) {
-        RZLog(RZLogInfo, @"%@ heavy: %@ %@", activity, [GCFields fieldForFlag:element.field andActivityType:activity.activityType], performance);
+        RZLog(RZLogInfo, @"%@ heavy: %@ %@", activity, field, performance);
     }
 }
 

@@ -77,7 +77,6 @@
 -(GCUnit*)unit;
 -(NSString*)unitName;
 
--(GCField*)nextFieldIn:(gcFieldFlag)flag;
 -(NSString*)category;
 -(NSInteger)sortOrder;
 
