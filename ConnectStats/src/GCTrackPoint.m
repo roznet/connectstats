@@ -560,7 +560,6 @@ void buildStatic(){
         for (GCField * one in self.calculatedStorage) {
             if( ![one.activityType isEqualToString:GC_TYPE_ALL] ){
                 guessActivityType = one.activityType;
-                found = true;
                 break;
             }
         }

@@ -65,7 +65,7 @@
     GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"YO" fitFilePath:fp startTime:nil]);
     
     [fitAct fullSaveToDb:db];
-    
+
     GCActivity * reload = [GCActivity activityWithId:@"544406b" andDb:db];
     [reload trackpoints];
     

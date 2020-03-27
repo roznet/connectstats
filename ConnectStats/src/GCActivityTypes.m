@@ -467,13 +467,11 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
             rv = sub;
         }
     }
-    if( rv == nil) {
-        if( [GCActivityType isExistingActivityType:fitSubSport.lowercaseString]){
-            rv = [GCActivityType activityTypeForKey:fitSubSport.lowercaseString];
-        }
-        if( rv == nil && [GCActivityType isExistingActivityType:fitSport.lowercaseString] ){
-            rv = [GCActivityType activityTypeForKey:fitSport.lowercaseString];
-        }
+    if( rv == nil && fitSubSport != nil && [GCActivityType isExistingActivityType:fitSubSport.lowercaseString]){
+        rv = [GCActivityType activityTypeForKey:fitSubSport.lowercaseString];
+    }
+    if( rv == nil && fitSport != nil && [GCActivityType isExistingActivityType:fitSport.lowercaseString] ){
+        rv = [GCActivityType activityTypeForKey:fitSport.lowercaseString];
     }
     return rv;
 }

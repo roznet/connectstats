@@ -816,12 +816,10 @@
 		42AB66CF16DACF6B00C633BD /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66CE16DACF6B00C633BD /* CoreData.framework */; };
 		42AB66D116DACF7600C633BD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66D016DACF7600C633BD /* AVFoundation.framework */; };
 		42AB66D316DACF8A00C633BD /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66D216DACF8A00C633BD /* CoreText.framework */; };
-		42AB66D516DACFC700C633BD /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66D416DACFC700C633BD /* GLKit.framework */; };
 		42AB66D716DACFD500C633BD /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66D616DACFD500C633BD /* ImageIO.framework */; };
 		42AB66D916DACFF000C633BD /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66D816DACFF000C633BD /* libicucore.dylib */; };
 		42AB66DB16DAD00400C633BD /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66DA16DAD00400C633BD /* libstdc++.dylib */; };
 		42AB66DD16DAD01900C633BD /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66DC16DAD01800C633BD /* libz.dylib */; };
-		42AB66DF16DAD02F00C633BD /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66DE16DAD02F00C633BD /* OpenGLES.framework */; };
 		42AB680C16DD5C8100C633BD /* GCHealthMeasure.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB680B16DD5C8100C633BD /* GCHealthMeasure.m */; };
 		42AB680F16DD5C9500C633BD /* GCHealthOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB680E16DD5C9400C633BD /* GCHealthOrganizer.m */; };
 		42AB681716E0094A00C633BD /* GCFieldsCalculated.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB681616E0094A00C633BD /* GCFieldsCalculated.m */; };
@@ -3147,12 +3145,10 @@
 				424B562C1D3BDBBF00903A99 /* RZUtils.framework in Frameworks */,
 				42F3FBF81DD79D910042A9B1 /* RZUtilsUniversal.framework in Frameworks */,
 				42A66BDB160D0A0800DA29A5 /* QuartzCore.framework in Frameworks */,
-				42AB66DF16DAD02F00C633BD /* OpenGLES.framework in Frameworks */,
 				42AB66DD16DAD01900C633BD /* libz.dylib in Frameworks */,
 				42AB66DB16DAD00400C633BD /* libstdc++.dylib in Frameworks */,
 				42AB66D916DACFF000C633BD /* libicucore.dylib in Frameworks */,
 				42AB66D716DACFD500C633BD /* ImageIO.framework in Frameworks */,
-				42AB66D516DACFC700C633BD /* GLKit.framework in Frameworks */,
 				42AB66D116DACF7600C633BD /* AVFoundation.framework in Frameworks */,
 				42AB66CF16DACF6B00C633BD /* CoreData.framework in Frameworks */,
 				42D037C3168AF55900789E7D /* SystemConfiguration.framework in Frameworks */,
