@@ -85,6 +85,13 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 
     return _cacheCalendar;
 }
++(NSInteger)currentYear{
+    static NSInteger currentYear = 0;
+    if( currentYear == 0){
+        currentYear = [[GCAppGlobal calculationCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
+    }
+    return currentYear;
+}
 
 +(GCAppDelegate*)appDelegate{
     GCAppDelegate * app = _sharedApplicationDelegate();
