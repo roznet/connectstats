@@ -28,8 +28,10 @@
 #import "GCActivity+BestRolling.h"
 #import "GCCalculatedCachedTrackInfo.h"
 #import "GCAppGlobal.h"
+#import "GCActivity+Series.h"
 
 @implementation GCActivity (BestRolling)
+
 
 -(GCStatsDataSerieWithUnit*)calculatedRollingBest:(GCCalculactedCachedTrackInfo *)info{
     GCStatsDataSerieWithUnit * rv = nil;
@@ -80,17 +82,17 @@
                 [serie.serie addDataPointWithX:0.0 andY:0.0];
                 [serie.serie sortByX];
             }
-            [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"time.csv"]
+            [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_time.csv"]
                                               atomically:YES encoding:NSUTF8StringEncoding error:nil];
 
             GCStatsDataSerie * diffSerie = [serie.serie differenceSerieForLag:0.0];
-            [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"time_diff.csv"]
+            [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_time_diff.csv"]
                                               atomically:YES encoding:NSUTF8StringEncoding error:nil];
             info.processedPointsCount = diffSerie.count;
             gcStatsSelection select = gcStatsMax;
             
             GCStatsDataSerie * filled = [diffSerie filledSerieForUnit:10. fillMethod:gcStatsZero statistic:gcStatsSum];
-            [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"time_filled.csv"]
+            [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_time_filled.csv"]
                                               atomically:YES encoding:NSUTF8StringEncoding error:nil];
 
 

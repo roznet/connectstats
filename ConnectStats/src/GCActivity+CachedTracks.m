@@ -28,7 +28,7 @@
 #import "GCAppGlobal.h"
 #import "GCActivity+Fields.h"
 #import "GCActivity+BestRolling.h"
-
+#import "GCActivity+Series.h"
 
 @implementation GCActivity (CachedTracks)
 

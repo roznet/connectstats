@@ -28,6 +28,7 @@
 #import "GCTrackPoint.h"
 #import "GCActivity+CachedTracks.h"
 #import "GCAppGlobal.h"
+#import "GCActivity+Series.h"
 
 @interface GCTrackStats ()
 @property (nonatomic,retain) GCStatsDataSerieWithUnit * data;

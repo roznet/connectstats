@@ -82,13 +82,15 @@
     NSString * raw = [fitAct csvTrackPoints:fitAct.trackpoints];
     NSString * noStop = [fitAct csvTrackPoints:[fitAct removedStoppedTimer:fitAct.trackpoints]];
     
-    [raw writeToFile:[RZFileOrganizer writeableFilePath:@"raw.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
-    [noStop writeToFile:[RZFileOrganizer writeableFilePath:@"noStop.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    [raw writeToFile:[RZFileOrganizer writeableFilePath:@"tp_raw.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    [noStop writeToFile:[RZFileOrganizer writeableFilePath:@"tp_noStop.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
     
     GCField * speed = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:fitAct.activityType];
     GCCalculactedCachedTrackInfo * info = [GCCalculactedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:speed];
     GCStatsDataSerieWithUnit * serieU = [fitAct calculatedRollingBest:info];
-    NSLog(@"%@", serieU);
+    [[serieU.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_best.csv"]
+                                      atomically:YES encoding:NSUTF8StringEncoding error:nil];
+
 }
 
 

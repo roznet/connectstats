@@ -613,6 +613,13 @@ void buildStatic(){
             [rv addObject:field];
         }
     }
+    for (GCField * xfield in @[ [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:act.activityType], [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:act.activityType]]) {
+        if( RZTestOption(self.trackFlags, xfield.fieldFlag) &&
+           ![rv containsObject:xfield] ){
+            [rv addObject:xfield];
+        }
+    }
+    
     return rv;
 }
 

@@ -281,7 +281,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 }
 
 -(NSString*)asCSVString:(BOOL)asDate{
-    NSMutableString * rv = [NSMutableString stringWithString:@"i;x;y\n"];
+    NSMutableString * rv = [NSMutableString stringWithString:@"i,x,y\n"];
 
     NSUInteger n=self.dataPoints.count;
     for (NSUInteger i=0; i<n; i++) {

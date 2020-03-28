@@ -27,7 +27,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "GCActivity.h"
 #import "GCAppGlobal.h"
-
+#import "GCActivity+Series.h"
 
 #pragma mark
 
