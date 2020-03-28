@@ -297,12 +297,10 @@
 		422FAFAB19A1DD6000D09773 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DD59E017E60B6E00227A36 /* libc++.dylib */; };
 		422FAFAC19A1DD6000D09773 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66D216DACF8A00C633BD /* CoreText.framework */; };
 		422FAFAD19A1DD6000D09773 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42A66BDA160D0A0800DA29A5 /* QuartzCore.framework */; };
-		422FAFAE19A1DD6000D09773 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66DE16DAD02F00C633BD /* OpenGLES.framework */; };
 		422FAFAF19A1DD6000D09773 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66DC16DAD01800C633BD /* libz.dylib */; };
 		422FAFB019A1DD6000D09773 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66DA16DAD00400C633BD /* libstdc++.dylib */; };
 		422FAFB119A1DD6000D09773 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66D816DACFF000C633BD /* libicucore.dylib */; };
 		422FAFB219A1DD6000D09773 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66D616DACFD500C633BD /* ImageIO.framework */; };
-		422FAFB319A1DD6000D09773 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66D416DACFC700C633BD /* GLKit.framework */; };
 		422FAFB419A1DD6000D09773 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66D016DACF7600C633BD /* AVFoundation.framework */; };
 		422FAFB619A1DD6000D09773 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42AB66CE16DACF6B00C633BD /* CoreData.framework */; };
 		422FAFB719A1DD6000D09773 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D037C2168AF55900789E7D /* SystemConfiguration.framework */; };
@@ -3084,13 +3082,11 @@
 				422FAFAB19A1DD6000D09773 /* libc++.dylib in Frameworks */,
 				422FAFAC19A1DD6000D09773 /* CoreText.framework in Frameworks */,
 				422FAFAD19A1DD6000D09773 /* QuartzCore.framework in Frameworks */,
-				422FAFAE19A1DD6000D09773 /* OpenGLES.framework in Frameworks */,
 				422FAFAF19A1DD6000D09773 /* libz.dylib in Frameworks */,
 				422FAFB019A1DD6000D09773 /* libstdc++.dylib in Frameworks */,
 				422FAFB119A1DD6000D09773 /* libicucore.dylib in Frameworks */,
 				422FAFB219A1DD6000D09773 /* ImageIO.framework in Frameworks */,
 				422F521B1DFB567200DD5551 /* RZUtilsUniversal.framework in Frameworks */,
-				422FAFB319A1DD6000D09773 /* GLKit.framework in Frameworks */,
 				422FAFB419A1DD6000D09773 /* AVFoundation.framework in Frameworks */,
 				422FAFB619A1DD6000D09773 /* CoreData.framework in Frameworks */,
 				422FAFB719A1DD6000D09773 /* SystemConfiguration.framework in Frameworks */,
