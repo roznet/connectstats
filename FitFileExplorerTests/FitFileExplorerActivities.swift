@@ -113,9 +113,6 @@ class FitFileExplorerActivities: XCTestCase {
             for fn in files {
                 let url = URL( fileURLWithPath: RZFileOrganizer.writeableFilePath(fn) )
                 let res = organizer.load(url: url)
-                if fn == "last_modern_search_1040.json" {
-                    print("yo")
-                }
                 if res.updated == 0 {
                     empty+=1
                 }
@@ -151,10 +148,22 @@ class FitFileExplorerActivities: XCTestCase {
         let organizer = ActivitiesOrganizer()
 
         var count = 0
+        var fn_nums : [Int] = []
+        for fn in files {
+            if let f = fn.lastIndex(of: "_"),
+                let t = fn.firstIndex(of: "."){
+                if let n = Int(fn[fn.index(f,offsetBy:1)...fn.index(t,offsetBy: -1)]){
+                    fn_nums.append(n)
+                }
+            }
+        }
+        
+        fn_nums.sort()
         
         var foundEnd = false
         var first : Bool = true
-        for fn in files {
+        for n in fn_nums {
+            let fn = "last_modern_search_\(n).json"
             let url = URL( fileURLWithPath: RZFileOrganizer.bundleFilePath(fn, for: type(of:self)) )
             // check something was added
             let added = organizer.load(url: url)
@@ -162,11 +171,12 @@ class FitFileExplorerActivities: XCTestCase {
             if added.updated == 0 {
                 XCTAssertFalse(foundEnd)
                 foundEnd = true
-            }
-            if first {
-                XCTAssertEqual( added.total, added.updated )
             }else{
-                XCTAssertEqual( added.total, added.updated+1 )
+                if first {
+                    XCTAssertEqual( added.total, added.updated )
+                }else{
+                    XCTAssertEqual( added.total, added.updated+1 )
+                }
             }
             first = false
             XCTAssertEqual(organizer.activityList.count, count+added.updated)
@@ -204,8 +214,10 @@ class FitFileExplorerActivities: XCTestCase {
             if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("test_activities.db")) {
                 db.open()
 
-                XCTAssertEqual(self.intForQuery(db: db, query: "SELECT COUNT(*) FROM activities"), 0)
-
+                if db.tableExists("activities") {
+                    XCTAssertEqual(self.intForQuery(db: db, query: "SELECT COUNT(*) FROM activities"), 0)
+                }
+                
                 organizer.save(to: db)
                 organizer.db = db
                 

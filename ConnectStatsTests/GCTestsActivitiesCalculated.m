@@ -62,7 +62,7 @@
     [GCActivitiesOrganizer ensureDbStructure:db];
     
     NSString * fp = [RZFileOrganizer bundleFilePath:@"track_cs_544406.fit" forClass:[self class]];
-    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"YO" fitFilePath:fp startTime:nil]);
+    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"DummyTestId" fitFilePath:fp startTime:nil]);
     
     [fitAct fullSaveToDb:db];
 

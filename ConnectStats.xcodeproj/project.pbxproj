@@ -612,6 +612,10 @@
 		4287DC101BDB88FE00C54A51 /* GCStatsMultiFieldConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */; };
 		42880C462381EEE00030C3C1 /* track_cs_5582.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42880C3A2381EEDF0030C3C1 /* track_cs_5582.fit */; };
 		42880C472381EEE00030C3C1 /* track_cs_5611.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42880C452381EEDF0030C3C1 /* track_cs_5611.fit */; };
+		428B8D44242F465C00A8CF6E /* last_modern_search_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 42A5D8E023272C7F00898FD5 /* last_modern_search_0.json */; };
+		428B8D45242F465C00A8CF6E /* last_modern_search_20.json in Resources */ = {isa = PBXBuildFile; fileRef = 42A5D8DE23272C7F00898FD5 /* last_modern_search_20.json */; };
+		428B8D46242F465C00A8CF6E /* last_modern_search_40.json in Resources */ = {isa = PBXBuildFile; fileRef = 42A5D8F023272C8200898FD5 /* last_modern_search_40.json */; };
+		428B8D47242F465C00A8CF6E /* last_modern_search_60.json in Resources */ = {isa = PBXBuildFile; fileRef = 42A5D8EB23272C8100898FD5 /* last_modern_search_60.json */; };
 		428BACF21CB149C50041468A /* activity_1089803211.json in Resources */ = {isa = PBXBuildFile; fileRef = 428BACDD1CB149C50041468A /* activity_1089803211.json */; };
 		428BACF31CB149C50041468A /* activity_1099599108.json in Resources */ = {isa = PBXBuildFile; fileRef = 428BACDE1CB149C50041468A /* activity_1099599108.json */; };
 		428BACF41CB149C50041468A /* activity_1108367966.json in Resources */ = {isa = PBXBuildFile; fileRef = 428BACDF1CB149C50041468A /* activity_1108367966.json */; };
@@ -1278,6 +1282,8 @@
 		42CC45CC200A67C0003EB805 /* GCSettingsBugReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45CA200A67C0003EB805 /* GCSettingsBugReport.m */; };
 		42CC45CD200A67C0003EB805 /* GCSettingsBugReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45CA200A67C0003EB805 /* GCSettingsBugReport.m */; };
 		42CC45D0200A6E91003EB805 /* GCTestServiceBugReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45CF200A6E91003EB805 /* GCTestServiceBugReport.m */; };
+		42CD0FEB242F48A40082B597 /* activity_1378220136.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42A5D92A2328774700898FD5 /* activity_1378220136.fit */; };
+		42CD0FF6242F48BB0082B597 /* activity_1382772474.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42A5D91F2328774500898FD5 /* activity_1382772474.fit */; };
 		42CDF8672413E05C003930A4 /* GCTrackPoint+Swim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CDF8662413E05C003930A4 /* GCTrackPoint+Swim.m */; };
 		42CDF8682413E05C003930A4 /* GCTrackPoint+Swim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CDF8662413E05C003930A4 /* GCTrackPoint+Swim.m */; };
 		42CDF8692413E05C003930A4 /* GCTrackPoint+Swim.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CDF8662413E05C003930A4 /* GCTrackPoint+Swim.m */; };
@@ -6149,6 +6155,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				423E8F8E21DCE5F300FB795B /* DeveloperData.fit in Resources */,
+				428B8D45242F465C00A8CF6E /* last_modern_search_20.json in Resources */,
+				42CD0FF6242F48BB0082B597 /* activity_1382772474.fit in Resources */,
+				428B8D47242F465C00A8CF6E /* last_modern_search_60.json in Resources */,
 				423E8F9521DCE5F300FB795B /* WorkoutRepeatSteps.csv in Resources */,
 				423E8F8921DCE5F300FB795B /* Settings.fit in Resources */,
 				423E8F9421DCE5F300FB795B /* WorkoutRepeatGreaterThanStep.csv in Resources */,
@@ -6161,7 +6170,9 @@
 				423E8F8821DCE5F300FB795B /* WorkoutRepeatSteps.fit in Resources */,
 				423E8F8721DCE5F300FB795B /* WeightScaleSingleUser.csv in Resources */,
 				423E8F8B21DCE5F300FB795B /* WorkoutRepeatGreaterThanStep.fit in Resources */,
+				428B8D44242F465C00A8CF6E /* last_modern_search_0.json in Resources */,
 				424053B921E0F55800375795 /* activity_2545022458.fit in Resources */,
+				42CD0FEB242F48A40082B597 /* activity_1378220136.fit in Resources */,
 				423E8F8C21DCE5F300FB795B /* WorkoutIndividualSteps.csv in Resources */,
 				423E8F9021DCE5F300FB795B /* WorkoutCustomTargetValues.fit in Resources */,
 				423E8F8321DCE5F300FB795B /* WeightScaleMultiUser.fit in Resources */,
@@ -6170,6 +6181,7 @@
 				423E8F8621DCE5F300FB795B /* WorkoutCustomTargetValues.csv in Resources */,
 				423E8F9621DCE5F300FB795B /* Settings.csv in Resources */,
 				423E8F9121DCE5F300FB795B /* WeightScaleSingleUser.fit in Resources */,
+				428B8D46242F465C00A8CF6E /* last_modern_search_40.json in Resources */,
 				423E8F8421DCE5F300FB795B /* DeveloperData.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
