@@ -81,6 +81,13 @@ NS_ASSUME_NONNULL_BEGIN
  Standard filter to apply for given trackfield
  */
 -(GCStatsDataSerieWithUnit*)applyStandardFilterTo:(GCStatsDataSerieWithUnit*)serieWithUnit ForField:(GCField*)field;
+/**
+ Main logic to get a serie for a field from trackpoints
+  should not be used except for debugging and testing
+*/
+-(GCStatsDataSerieWithUnit*)trackSerieForField:(GCField*)field
+                                   trackpoints:(NSArray<GCTrackPoint*>*)trackpoints
+                                      timeAxis:(BOOL)timeAxis;
 
 @end
 

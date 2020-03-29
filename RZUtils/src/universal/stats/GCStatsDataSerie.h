@@ -301,4 +301,5 @@ Compute difference serie
 -(BOOL)isEqualToSerie:(GCStatsDataSerie*)other;
 
 -(void)removeAllPoints;
+-(void)removePointAtIndex:(NSUInteger)idx;
 @end

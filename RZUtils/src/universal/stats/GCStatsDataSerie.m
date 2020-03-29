@@ -185,6 +185,9 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 -(void)removeAllPoints{
     [dataPoints removeAllObjects];
 }
+-(void)removePointAtIndex:(NSUInteger)idx{
+    [dataPoints removeObjectAtIndex:idx];
+}
 
 #pragma mark - Sorting
 

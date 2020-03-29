@@ -80,6 +80,75 @@
     return rv;
 }
 
+-(nonnull NSArray<GCTrackPoint*>*)recalculatedSpeed:(nonnull NSArray<GCTrackPoint*>*)points
+                                     minimumDistance:(CLLocationDistance)minDistance
+                                      minimumElapsed:(NSTimeInterval)minElapsed
+                                             useGPS:(BOOL)useGPS
+{
+    NSMutableArray<GCTrackPoint*> * rv = [NSMutableArray arrayWithCapacity:points.count];
+    NSMutableArray<GCTrackPoint*> * trailing = [NSMutableArray array];
+    
+    GCTrackPoint * last_point = nil;
+    
+    CLLocationDistance runningDistance = 0.0;
+    NSTimeInterval runningElapsed = 0.0;
+    
+    double mps = 0.0;
+    
+    BOOL started = false;
+    
+    for (GCTrackPoint * current_point in points) {
+        CLLocationDistance thisDistance = 0.0;
+        NSTimeInterval thisElapsed = 0.0;
+        
+        [trailing addObject:current_point];
+
+        if( last_point ){
+            thisDistance = [current_point distanceMetersFrom:last_point];
+            thisElapsed = last_point.elapsed;  // applies betwen lastpoint and currentpoint
+            
+            runningDistance += thisDistance;
+            runningElapsed += thisElapsed;
+            
+            if( runningElapsed > minElapsed && runningDistance > minDistance){
+                started = true;
+                
+                if( runningElapsed > 0){
+                    mps = runningDistance/runningElapsed;
+                }
+                
+                while( trailing.count > 2 && ( runningElapsed > minElapsed && runningDistance > minDistance )){
+                    
+                    GCTrackPoint * first = trailing.firstObject;
+                    GCTrackPoint * second = trailing[1];
+                    
+                    CLLocationDistance firstDistance = [second distanceMetersFrom:first];
+                    NSTimeInterval firstElapsed  = first.elapsed;
+                    
+                    runningElapsed -= firstElapsed;
+                    runningDistance -= firstDistance;
+                
+                    [trailing removeObjectAtIndex:0];
+                }
+            }
+            if( ! started ){
+                mps = current_point.speed;
+            }
+        }else{
+            mps = current_point.speed;
+        }
+        if( last_point){
+            GCTrackPoint * newPoint = [[GCTrackPoint alloc] initWithTrackPoint:last_point];
+            newPoint.speed = mps;
+            [rv addObject:newPoint];
+            [newPoint release];
+        }
+        last_point = current_point;
+    }
+    return rv;
+}
+
+
 
 -(nonnull NSArray<GCTrackPoint*>*)resample:(nonnull NSArray<GCTrackPoint*>*)points forUnit:(double)unit useTimeAxis:(BOOL)timeAxis{
     //don't bother if no points
@@ -267,5 +336,6 @@
     }
     return rv;
 }
+
 
 @end

@@ -34,7 +34,10 @@ NS_ASSUME_NONNULL_BEGIN
 -(nonnull NSArray<GCTrackPoint*>*)resample:(nonnull NSArray<GCTrackPoint*>*)points forUnit:(double)unit useTimeAxis:(BOOL)timeAxis;
 -(nonnull NSArray<GCTrackPoint*>*)matchDistance:(CLLocationDistance)target withPoints:(nonnull NSArray<GCTrackPoint*>*)points;
 -(NSArray<GCTrackPoint*>*)removedStoppedTimer:(nonnull NSArray<GCTrackPoint*>*)points;
-
+-(nonnull NSArray<GCTrackPoint*>*)recalculatedSpeed:(nonnull NSArray<GCTrackPoint*>*)points
+                                    minimumDistance:(CLLocationDistance)minDistance
+                                     minimumElapsed:(NSTimeInterval)minElapsed
+                                             useGPS:(BOOL)useGPS;
 -(NSString*)csvTrackPoints:(NSArray<GCTrackPoint*>*)trackpoints;
 
 @end

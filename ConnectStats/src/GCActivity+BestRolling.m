@@ -29,11 +29,138 @@
 #import "GCCalculatedCachedTrackInfo.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+Series.h"
+#import "GCActivity+TrackTransform.h"
 
 @implementation GCActivity (BestRolling)
 
+-(GCStatsDataSerieWithUnit*)calculatedRollingBestForSpeed:(GCCalculactedCachedTrackInfo *)info{
+    GCStatsDataSerieWithUnit * rv = nil;
+    
+    BOOL timeByDistance = false;
+    
+    GCStatsDataSerieWithUnit * serie = nil;
+    GCField * referenceField = nil;
+    gcStatsSelection select = gcStatsMin;
+    
+    double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
+    unitstride = 10;
+    
+    NSArray<GCTrackPoint*>*trackpoints = [self removedStoppedTimer:self.trackpoints];
+
+    if( timeByDistance ){
+        referenceField = [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityType];
+        // x is distance, y is time
+        //serie = [self distanceSerieForField:referenceField];
+        serie = [self trackSerieForField:referenceField trackpoints:trackpoints timeAxis:NO];
+    }else{
+        referenceField = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType];
+        // x is time, y is distance
+        serie = [self trackSerieForField:referenceField trackpoints:trackpoints timeAxis:YES];
+        //serie = [self timeSerieForField:referenceField];
+        select = gcStatsMax;
+        [serie convertToUnit:[GCUnit meter]];
+    }
+    
+    
+    // Compute the difference between points (so x,y = dist,dTime or y = time,dDistance)
+    GCStatsDataSerie * diffSerie = [serie.serie differenceSerieForLag:0.0];
+    // Add zero at the beginning if missing
+    if( diffSerie.count > 0 && diffSerie.firstObject.x_data > 0 ){
+        [diffSerie addDataPointWithX:0.0 andY:0.0];
+        [diffSerie sortByX];
+    }
+
+    info.processedPointsCount = diffSerie.count;
+    
+    // rescale by unit of 10 (either every 10 seconds or every 10 meters.
+    GCStatsDataSerie * filled = [diffSerie filledSerieForUnit:10. fillMethod:gcStatsZero statistic:gcStatsSum];
+    
+    [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_raw.csv"]
+                                      atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    [[diffSerie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_diff.csv"]
+                                    atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_filled.csv"]
+                                 atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    
+    serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsSum];
+    for (GCStatsDataPoint * point in serie.serie) {
+        if( point.y_data > 0.){
+            // Add unitstride because a point is applicable between x and next point (= x+stride)
+            // Otherwise the early stage will be counted wrong:
+            //   x = 0*stride -> y_0 meters, x = 1*stride - > y_1
+            //=>         y_0 / 1*stride,        y_1 / (2*stride)
+            if( timeByDistance ){
+                point.y_data = (point.x_data+unitstride)/point.y_data; // convert in mps
+            }else{
+                point.y_data = point.y_data/( point.x_data + unitstride ); // convert in mps
+            }
+        }
+    }
+    serie.unit = [GCUnit mps];
+    
+    if( [serie dataPointAtIndex:0].y_data == 0 ){
+        [serie.serie removePointAtIndex:0];
+    }
+    
+    GCNumberWithUnit * maxSpeed = [self numberWithUnitForField:[GCField fieldForKey:@"MaxSpeed" andActivityType:self.activityType]];
+    if( maxSpeed ){
+        double maxValue = [maxSpeed convertToUnit:[GCUnit mps]].value;
+        NSUInteger n = 0;
+        NSUInteger start_n = serie.serie.count;
+        
+        while( serie.serie.count > 0 && [serie dataPointAtIndex:0].y_data > maxValue ){
+            [serie.serie removePointAtIndex:0];
+            n++;
+        }
+        RZLog(RZLogInfo, @"Removed %@/%@ points faster than MaxSpeed = %@", @(n),@(start_n), maxSpeed );
+    }
+    
+    
+    [serie convertToUnit:[GCUnit minperkm]];
+    if( serie.serie.count > 1 && [serie.serie dataPointAtIndex:0].x_data == 0){
+        [serie.serie dataPointAtIndex:0].y_data = [serie.serie dataPointAtIndex:1].y_data;
+    }
+    
+    rv = serie;
+    return rv;
+}
 
 -(GCStatsDataSerieWithUnit*)calculatedRollingBest:(GCCalculactedCachedTrackInfo *)info{
+    GCStatsDataSerieWithUnit * rv = nil;
+
+    if( info.fieldFlag == gcFieldFlagWeightedMeanSpeed){
+        rv = [self calculatedRollingBestForSpeed:info];
+    }else{
+        
+        GCStatsDataSerieWithUnit * serie = [self timeSerieForField:info.field];
+        
+        NSArray<GCTrackPoint*>*trackpoints = [self removedStoppedTimer:self.trackpoints];
+        
+        serie = [self trackSerieForField:info.field trackpoints:trackpoints timeAxis:YES];
+        
+        info.processedPointsCount = serie.serie.count;
+        gcStatsSelection select = gcStatsMax;
+        if ([serie.unit isKindOfClass:[GCUnitInverseLinear class]]) {
+            select = gcStatsMin;
+        }
+        
+        double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
+        
+        // HACK serie that are missing zero, as otherwise the best of may not start consistently
+        // and doing max over multiple will have weird quirks at the beginning.
+        if( serie.serie.count > 0 && serie.serie.firstObject.x_data > 0 ){
+            [serie.serie addDataPointWithX:0.0 andY:serie.serie.firstObject.y_data];
+            [serie.serie sortByX];
+        }
+        
+        serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsWeightedMean];
+        rv = serie;
+    }
+    return rv;
+}
+
+
+-(GCStatsDataSerieWithUnit*)calculatedRollingBestOLD:(GCCalculactedCachedTrackInfo *)info{
     GCStatsDataSerieWithUnit * rv = nil;
 
     BOOL timeAxis = info.fieldFlag != gcFieldFlagWeightedMeanSpeed;
