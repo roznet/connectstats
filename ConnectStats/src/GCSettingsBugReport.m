@@ -63,7 +63,7 @@ NSString * kBugNoCommonId = @"-1";
                    CONFIG_REFRESH_STARTUP          ,
                    CONFIG_CONTINUE_ON_ERROR        ,
                    CONFIG_GARMIN_USE_MODERN        ,
-                   CONFIG_MERGE_IMPORT_DUPLICATE   ,
+                   CONFIG_DUPLICATE_SKIP_ON_IMPORT   ,
                    
                    CONFIG_USE_MOVING_ELAPSED       ,
                    CONFIG_USE_MAP                  ,

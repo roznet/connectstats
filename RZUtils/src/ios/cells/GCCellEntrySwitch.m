@@ -34,8 +34,11 @@
 +(GCCellEntrySwitch*)switchCell:(UITableView*)tableView{
     GCCellEntrySwitch * cell = (GCCellEntrySwitch*)[tableView dequeueReusableCellWithIdentifier:@"GCSwitch"];
     if (cell == nil) {
-        cell = RZReturnAutorelease([[GCCellEntrySwitch alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GCSwitch"]);
+        cell = RZReturnAutorelease([[GCCellEntrySwitch alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"GCSwitch"]);
     }
+    cell.detailTextLabel.text = nil;
+    cell.textLabel.text = nil;
+    
     return cell;
 }
 
@@ -48,10 +51,9 @@
 		label.backgroundColor		= [UIColor clearColor];
 		label.font					= [RZViewConfig boldSystemFontOfSize:16];
 		label.textColor				= [RZViewConfig colorForText:rzColorStylePrimaryText];
-
 		toggle						= [[UISwitch alloc] initWithFrame:CGRectZero];
 		[toggle addTarget:self action:@selector(switchElement:) forControlEvents:UIControlEventValueChanged];
-
+        
         gradientLayer               = [[CAGradientLayer alloc] init];
 
 		[self.contentView addSubview:label];
@@ -85,14 +87,30 @@
 	// Rect that start at 5 from left bound x
 	CGRect baseRect = self.contentView.bounds;
 
-    CGSize labelSize = [label.text sizeWithAttributes:@{NSFontAttributeName:label.font}];
+    CGSize labelSize = label.attributedText.size;
+    CGSize detailLabelSize = CGSizeZero;
     CGSize toggleSize = toggle.frame.size;
-
+    CGRect labelRect = CGRectZero;
+    CGRect detailLabelRect = CGRectZero;
+    
+    if( self.detailTextLabel.attributedText){
+        detailLabelSize = self.detailTextLabel.attributedText.size;
+        
+        CGFloat spacing = 1.;
+        CGFloat totalHeight = detailLabelSize.height + labelSize.height + spacing;
+        
+        labelRect  = CGRectMake(4., baseRect.size.height/2.-totalHeight/2., labelSize.width, labelSize.height);
+        detailLabelRect = CGRectMake(4., labelRect.origin.y + spacing + labelSize.height, detailLabelSize.width, detailLabelSize.height);
+    }else{
+        labelRect  = CGRectMake(4., baseRect.size.height/2.-labelSize.height/2., labelSize.width, labelSize.height);
+    }
+    
     CGRect toggleRect = CGRectMake(CGRectGetMaxX(baseRect)-5.-toggleSize.width, baseRect.size.height/2.-toggleSize.height/2.,
                                    toggleSize.width, toggleSize.height );
-    CGRect labelRect  = CGRectMake(4., baseRect.size.height/2.-labelSize.height/2., labelSize.width, labelSize.height);
 
 	label.frame			= labelRect;
+    self.detailTextLabel.frame = detailLabelRect;
+    
 	toggle.frame		= toggleRect;
     gradientLayer.frame = self.contentView.bounds;
 }

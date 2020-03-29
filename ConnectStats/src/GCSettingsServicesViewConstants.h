@@ -68,9 +68,10 @@
 #define GC_BABOLAT_PWD          3
 #define GC_BABOLAT_END          4
 
-#define GC_OPTIONS_MERGE            0
+#define GC_OPTIONS_DUPLICATE_IMPORT 0
 #define GC_OPTIONS_DOWNLOAD_DETAILS 1
-#define GC_OPTIONS_END              2
+#define GC_OPTIONS_DUPLICATE_LOAD   2
+#define GC_OPTIONS_END              3
 
 // for withings
 #define GC_ROW_SERVICE_NAME 0

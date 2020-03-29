@@ -378,7 +378,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyOrganizerLoadComplete object:nil];
         });
     }
-    [self lookForAllDuplicate];
+    [self lookForAndRemoveAllDuplicates];
     
 }
 
@@ -417,6 +417,86 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 }
 
+#pragma mark - Register new activities
+
+/**
+    Main register function
+ */
+-(BOOL)registerActivity:(GCActivity*)act forActivityId:(NSString*)aId save:(BOOL)save{
+    if ([GCAppGlobal trialVersion] && _allActivities.count > 20) {
+        return false;
+    }
+    BOOL rv = false;
+
+    if( ![act isActivityValid] || aId == nil){
+        RZLog(RZLogError, @"Trying to register invalid activity %@", act);
+        return rv;
+    }
+
+    GCActivity * existing = [self activityForId:aId];
+
+    if (existing) {
+        if ([existing updateWithActivity:act]){
+            rv = true;
+            if (save) {
+                [existing saveToDb:self.db];
+                RZLog(RZLogInfo, @"%@ update found and saved", act);
+            }
+            [self notifyOnMainThread:aId];
+        }
+    }else{
+        if ([self checkIfActivityIsDuplicate:act]) {
+            return rv;
+        }
+        rv = true;
+        if (save) {
+            [act saveToDb:self.db];
+        }
+        NSMutableArray * m_activities = [NSMutableArray arrayWithArray:_allActivities];
+        if (m_activities.count > 0 && [[m_activities[0] date] compare:act.date] != NSOrderedDescending) {
+            [m_activities insertObject:act atIndex:0];
+        }else{
+            [m_activities addObject:act];
+        }
+        [m_activities sortUsingComparator:^(id obj1, id obj2){
+            return [[obj2 date] compare:[obj1 date]];
+        }];
+        self.allActivities = [NSArray arrayWithArray:m_activities];
+        [self recordActivityType:act];
+        [self notifyOnMainThread:aId];
+        [_reverseGeocoder start];
+    }
+    return rv;
+}
+
+-(void)registerTemporaryActivity:(GCActivity*)act forActivityId:(NSString*)aId{
+    [self registerActivity:act forActivityId:aId save:NO];
+}
+-(BOOL)registerActivity:(GCActivity*)act forActivityId:(NSString*)aId{
+    return [self registerActivity:act forActivityId:aId save:YES];
+}
+
+-(void)registerActivity:(NSString*)aId withStravaData:(NSDictionary*)aData{
+    GCActivity * act = RZReturnAutorelease([[GCActivity alloc] initWithId:aId andStravaData:aData]);
+    [self registerActivity:act forActivityId:aId];
+}
+
+-(void)registerActivity:(NSString*)aId withGarminData:(NSDictionary*)aData{
+    GCActivity * act = RZReturnAutorelease([[GCActivity alloc] initWithId:aId andGarminData:aData]);
+    [self registerActivity:act forActivityId:aId];
+}
+
+-(void)registerActivity:(NSString *)aId withWeather:(GCWeather *)aData{
+    [[self activityForId:aId] recordWeather:aData];
+    //needed?
+    //[self notifyOnMainThread];
+}
+-(void)registerActivity:(NSString*)aId withTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps{
+    if ([[self activityForId:aId] saveTrackpoints:aTrack andLaps:laps]) {
+        [self notifyOnMainThread:aId];
+    }
+}
+
 -(void)registerTennisActivity:(NSString *)aId withBabolatData:(NSDictionary *)aData{
     if ([GCAppGlobal trialVersion] && _allActivities.count > 20) {
         return;
@@ -452,126 +532,75 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 }
 
--(void)registerTemporaryActivity:(GCActivity*)act forActivityId:(NSString*)aId{
-    [self registerActivity:act forActivityId:aId save:NO];
-}
--(BOOL)registerActivity:(GCActivity*)act forActivityId:(NSString*)aId{
-    return [self registerActivity:act forActivityId:aId save:YES];
-}
 
--(BOOL)registerActivity:(GCActivity*)act forActivityId:(NSString*)aId save:(BOOL)save{
-    if ([GCAppGlobal trialVersion] && _allActivities.count > 20) {
-        return false;
-    }
+#pragma mark - Duplicates logic
+
+/**
+ Check if the activity is a duplicate of an existing activity.
+ If so, will potentially update the existing activity if necessary
+ 
+ this function is called while importing new activities
+ 
+ @param act the new activity that need to be checked
+  @return true is this activity is a duplicate and should be ignored, or false if not
+ */
+-(BOOL)checkIfActivityIsDuplicate:(GCActivity*)act{
     BOOL rv = false;
-
-    if( ![act isActivityValid] || aId == nil){
-        RZLog(RZLogError, @"Trying to register invalid activity %@", act);
-        return rv;
-    }
-
-    GCActivity * existing = [self activityForId:aId];
-
-    if (existing) {
-        if ([existing updateWithActivity:act]){
-            rv = true;
-            if (save) {
-                [existing saveToDb:self.db];
-                RZLog(RZLogInfo, @"%@ update found and saved", act);
-            }
-            [self notifyOnMainThread:aId];
-        }
-    }else{
-
-        if ([GCAppGlobal configGetBool:CONFIG_MERGE_IMPORT_DUPLICATE defaultValue:true]) {
-            GCActivity * other = [self findDuplicate:act];
-            if (other) {
+    
+    // If import duplicate is disabled, always add
+    if ([GCAppGlobal configGetBool:CONFIG_DUPLICATE_SKIP_ON_IMPORT defaultValue:true]){
+        GCActivity * other = [self findDuplicate:act];
+        if (other) {
+            gcDuplicate reason = [other testForDuplicate:act];
+            BOOL duplicateServiceIsPreferred = (reason == gcDuplicateSynchronizedService) && [act.service preferredOver:other.service];
+            
+            // don't record if already
+            if( self.duplicateActivityIds[act.activityId] == nil) {
+                self.duplicateActivityIds[act.activityId] = other.activityId;
+                [self.db executeUpdate:@"INSERT INTO gc_duplicate_activities (activityId,duplicateActivityId) VALUES (?,?)", act.activityId, other.activityId];
+                
                 gcDuplicate reason = [other testForDuplicate:act];
-                BOOL duplicateServiceIsPreferred = (reason == gcDuplicateSynchronizedService) && [act.service preferredOver:other.service];
-                
-                // don't record if already
-                if( self.duplicateActivityIds[act.activityId] == nil) {
-                    self.duplicateActivityIds[act.activityId] = other.activityId;
-                    [self.db executeUpdate:@"INSERT INTO gc_duplicate_activities (activityId,duplicateActivityId) VALUES (?,?)", act.activityId, other.activityId];
-                
-                    gcDuplicate reason = [other testForDuplicate:act];
-                    // This is
-                    if( reason == gcDuplicateNotMatching){
-                        reason = [act testForDuplicate:other];
-                        if( reason != gcDuplicateNotMatching ){
-                            RZLog(RZLogWarning,@"Duplicate test for %@ and %@ appear not symetric", act.activityId, other.activityId);
-                        }
+                // This is
+                if( reason == gcDuplicateNotMatching){
+                    reason = [act testForDuplicate:other];
+                    if( reason != gcDuplicateNotMatching ){
+                        RZLog(RZLogWarning,@"Duplicate test for %@ and %@ appear not symetric", act.activityId, other.activityId);
                     }
-                    
-                    NSString * reasonDescription = [GCActivity duplicateDescription:reason];
-                    
-                    // If from same service, and preferred, take the extra info
-                    if( duplicateServiceIsPreferred ){
-                        RZLog(RZLogInfo, @"Duplicate (%@): updating %@ (preferred: %@)", reasonDescription, other.activityId, act.activityId );
-                        // Avoid trivial case where exact same pointer/activity
-                        if( act != other ){
-                            [other updateMissingFromActivity:act];
-                        }
-                    }else{
-                        RZLog(RZLogInfo, @"Duplicate (%@): skipping %@ (preferred: %@)", reasonDescription, act.activityId, other.activityId);
-                    }
-                }else{
-                    // Update missing again as some edit can happen later
-                    if( duplicateServiceIsPreferred && act != other ){
+                }
+                
+                NSString * reasonDescription = [GCActivity duplicateDescription:reason];
+                
+                // If from same service, and preferred, take the extra info
+                if( duplicateServiceIsPreferred ){
+                    RZLog(RZLogInfo, @"Duplicate (%@): updating %@ (preferred: %@)", reasonDescription, other.activityId, act.activityId );
+                    // Avoid trivial case where exact same pointer/activity
+                    if( act != other ){
                         [other updateMissingFromActivity:act];
                     }
-
+                }else{
+                    RZLog(RZLogInfo, @"Duplicate (%@): skipping %@ (preferred: %@)", reasonDescription, act.activityId, other.activityId);
                 }
-                return rv;
+            }else{
+                // Update missing again as some edit can happen later
+                if( duplicateServiceIsPreferred && act != other ){
+                    [other updateMissingFromActivity:act];
+                }
+                
             }
         }
-        rv = true;
-        if (save) {
-            [act saveToDb:self.db];
-        }
-        NSMutableArray * m_activities = [NSMutableArray arrayWithArray:_allActivities];
-        if (m_activities.count > 0 && [[m_activities[0] date] compare:act.date] != NSOrderedDescending) {
-            [m_activities insertObject:act atIndex:0];
-        }else{
-            [m_activities addObject:act];
-        }
-        [m_activities sortUsingComparator:^(id obj1, id obj2){
-            return [[obj2 date] compare:[obj1 date]];
-        }];
-        self.allActivities = [NSArray arrayWithArray:m_activities];
-        [self recordActivityType:act];
-        [self notifyOnMainThread:aId];
-        [_reverseGeocoder start];
     }
     return rv;
 }
 
--(void)registerActivity:(NSString*)aId withStravaData:(NSDictionary*)aData{
-    GCActivity * act = RZReturnAutorelease([[GCActivity alloc] initWithId:aId andStravaData:aData]);
-    [self registerActivity:act forActivityId:aId];
-}
-
--(void)registerActivity:(NSString*)aId withGarminData:(NSDictionary*)aData{
-    GCActivity * act = RZReturnAutorelease([[GCActivity alloc] initWithId:aId andGarminData:aData]);
-    [self registerActivity:act forActivityId:aId];
-}
-
--(void)registerActivity:(NSString *)aId withWeather:(GCWeather *)aData{
-    [[self activityForId:aId] recordWeather:aData];
-    //needed?
-    //[self notifyOnMainThread];
-}
--(void)registerActivity:(NSString*)aId withTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps{
-    if ([[self activityForId:aId] saveTrackpoints:aTrack andLaps:laps]) {
-        [self notifyOnMainThread:aId];
-    }
-}
-
-#pragma mark - access
-
--(void)lookForAllDuplicate{
+/**
+ this function will check if there are any duplicate in the current list of activities
+ and remove them from the list of activities
+ it will check by looking for dupicate in two adjacents activities, and assumes
+ the activities are sorted by time
+ */
+-(void)lookForAndRemoveAllDuplicates{
     // Ability to disable duplicate check for old tests.
-    if (![GCAppGlobal configGetBool:CONFIG_FULL_DUPLICATE_CHECK defaultValue:true]) {
+    if (![[GCAppGlobal profile] configGetBool:CONFIG_DUPLICATE_SKIP_ON_LOAD defaultValue:true]) {
         return;
     }
     NSMutableDictionary * found = [NSMutableDictionary dictionary];
@@ -661,6 +690,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     
     return( nil );
 }
+
+#pragma mark - access
+
 -(GCActivity*)activityForId:(NSString*)aId{
     for (GCActivity * act in _allActivities) {
         if ([act.activityId isEqualToString:aId]) {

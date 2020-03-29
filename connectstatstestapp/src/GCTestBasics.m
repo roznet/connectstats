@@ -58,10 +58,10 @@
     [GCAppGlobal cleanWritableFiles];
 
     // Need to turn off duplicate check as it will compare to count from db select
-    [GCAppGlobal setupSampleState:@"sample_activities_v1.db" config:@{CONFIG_FULL_DUPLICATE_CHECK:@(false)}];
+    [GCAppGlobal setupSampleState:@"sample_activities_v1.db" config:@{CONFIG_DUPLICATE_SKIP_ON_LOAD:@(false)}];
     [self testSwimAlgo:@"sample_activities_v1.db"];
 
-    [GCAppGlobal setupSampleState:@"sample_activities.db" config:@{CONFIG_FULL_DUPLICATE_CHECK:@(false)}];
+    [GCAppGlobal setupSampleState:@"sample_activities.db" config:@{CONFIG_DUPLICATE_SKIP_ON_LOAD:@(false)}];
     [self testSwimAlgo:@"sample_activities.db"];
 
     [self endSession:@"GC Basics"];
