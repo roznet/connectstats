@@ -60,7 +60,9 @@ typedef NS_ENUM(NSUInteger, gcStatsFillMethod) {
 
 typedef NS_ENUM(NSUInteger, gcStatsSelection) {
     gcStatsMax,
-    gcStatsMin
+    gcStatsMin,
+    gcStatsRatioMin,
+    gcStatsRatioMax
 };
 
 typedef NS_ENUM(NSUInteger, gcStats) {
@@ -290,6 +292,21 @@ Compute difference serie
                             fillMethod:(gcStatsFillMethod)fill
                                 select:(gcStatsSelection)select
                              statistic:(gcStats)statistic;
+
+/// Compute the best rolling value for the original serie. It will resample the serie such that
+/// each value is equally spaced by unit.
+/// @param unit size of the unit between best point
+/// @param fill Method to handle missing point, use Zero or last value
+/// @param select Method to select best of by Min or Max
+/// @param statistic what statistic to compute the best of, weightedmean or simple sum
+/// @param fillStatistic what statistic to fill the values
+-(GCStatsDataSerie*)movingBestByUnitOf:(double)unit
+                            fillMethod:(gcStatsFillMethod)fill
+                                select:(gcStatsSelection)select
+                             statistic:(gcStats)statistic
+                        fillStatistics:(gcStats)fillStatistic;
+
+
 -(GCStatsDataSerie*)histogramWith:(NSUInteger)buckets;
 -(GCStatsDataSerie*)filledSerieForUnit:(double)unit
                             fillMethod:(gcStatsFillMethod)fill
