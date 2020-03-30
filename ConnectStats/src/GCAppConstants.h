@@ -70,13 +70,15 @@
 #define CONFIG_ZONE_GRAPH_HORIZONTAL    @"config_zone_gaph_horizontal"
 #define CONFIG_ZONE_PREFERRED_SOURCE    @"config_zone_preferred_source"
 #define CONFIG_WIFI_DOWNLOAD_DETAILS    @"config_wifi_download_details"
-#define CONFIG_DUPLICATE_SKIP_ON_IMPORT @"config_merge_import_duplicate"
-#define CONFIG_DUPLICATE_SKIP_ON_LOAD     @"config_full_duplicate_check"
 #define CONFIG_SKIN_NAME                @"config_skin_name"
 #define CONFIG_VERSIONS_SEEN            @"config_versions_seen"
 #define CONFIG_FEATURES_SEEN            @"config_features_seen"
 #define CONFIG_LAST_REMOTE_STATUS_ID    @"config_last_remote_status_id"
-#define CONFIG_ENABLE_REMOTE_STATUS    @"config_enable_remote_status"
+#define CONFIG_ENABLE_REMOTE_STATUS     @"config_enable_remote_status"
+#define CONFIG_DUPLICATE_CHECK_ON_IMPORT @"config_duplicate_check_on_import"
+#define CONFIG_DUPLICATE_CHECK_ON_LOAD   @"config_duplicate_check_on_load"
+
+#define CONFIG_DUPLICATE_SKIP_ON_IMPORT_OBSOLETE @"config_duplicate_skip_on_import"
 
 #define CONFIG_WITHINGS_USERSLIST       @"config_withings_userlist"
 #define CONFIG_WITHINGS_USER            @"config_withings_user"

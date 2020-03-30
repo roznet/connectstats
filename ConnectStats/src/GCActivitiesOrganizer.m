@@ -548,7 +548,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     BOOL rv = false;
     
     // If import duplicate is disabled, always add
-    if ([GCAppGlobal configGetBool:CONFIG_DUPLICATE_SKIP_ON_IMPORT defaultValue:true]){
+    if ([GCAppGlobal configGetBool:CONFIG_DUPLICATE_CHECK_ON_IMPORT defaultValue:true]){
         GCActivity * other = [self findDuplicate:act];
         if (other) {
             gcDuplicate reason = [other testForDuplicate:act];
@@ -585,8 +585,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
                 if( duplicateServiceIsPreferred && act != other ){
                     [other updateMissingFromActivity:act];
                 }
-                
             }
+            rv = true;
         }
     }
     return rv;
@@ -600,60 +600,58 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
  */
 -(void)lookForAndRemoveAllDuplicates{
     // Ability to disable duplicate check for old tests.
-    if (![[GCAppGlobal profile] configGetBool:CONFIG_DUPLICATE_SKIP_ON_LOAD defaultValue:true]) {
-        return;
-    }
-    NSMutableDictionary * found = [NSMutableDictionary dictionary];
-    GCActivity * last = nil;
-    NSUInteger reportCount = 0;
-    for (GCActivity * one in self.allActivities) {
-        if( last ){
-            if( [last.activityId hasPrefix:@"__bab"]){
-                continue; // will deal with tennis later
-            }
-            
-            gcDuplicate activitiesAreDuplicate = [one testForDuplicate:last];
-            
-            if( activitiesAreDuplicate != gcDuplicateNotMatching){
-                BOOL preferLast = true;
-                if( [last.activityType isEqualToString:GC_TYPE_UNCATEGORIZED]){
-                    preferLast = false;
-                }
-                if( [one.service preferredOver:last.service]){
-                    preferLast = false;
-                }
-
-                if( [one.activityId isEqualToString:last.activityId] ){
-                    if( reportCount++ < 5){
-                        RZLog(RZLogInfo, @"Exact Duplicate =%@ =%@", preferLast ? last : one, preferLast ? one : last);
-                    }
-                }else{
-                    //RZLog(RZLogInfo, @"Duplicate +%@ -%@", preferLast ? last : one, preferLast ? one : last);
-                    if (preferLast) {
-                        found[one.activityId] = one;
-                    }else{
-                        found[last.activityId] = last;
-                    }
-                }
-            }
-        }
-        last = one;
-    }
-    if (found.count > 0) {
-        NSUInteger dupCount = found.count;
-        NSUInteger preCount = self.allActivities.count;
-
-        NSMutableArray * fixed = [NSMutableArray arrayWithCapacity:preCount];
+    if ([[GCAppGlobal profile] configGetBool:CONFIG_DUPLICATE_CHECK_ON_LOAD defaultValue:true]) {
+        NSMutableDictionary * found = [NSMutableDictionary dictionary];
+        GCActivity * last = nil;
+        NSUInteger reportCount = 0;
         for (GCActivity * one in self.allActivities) {
-            if( ! found[one.activityId]){
-                [fixed addObject:one];
+            if( last ){
+                if( [last.activityId hasPrefix:@"__bab"]){
+                    continue; // will deal with tennis later
+                }
+                
+                gcDuplicate activitiesAreDuplicate = [one testForDuplicate:last];
+                
+                if( activitiesAreDuplicate != gcDuplicateNotMatching){
+                    BOOL preferLast = true;
+                    if( [last.activityType isEqualToString:GC_TYPE_UNCATEGORIZED]){
+                        preferLast = false;
+                    }
+                    if( [one.service preferredOver:last.service]){
+                        preferLast = false;
+                    }
+                    
+                    if( [one.activityId isEqualToString:last.activityId] ){
+                        if( reportCount++ < 5){
+                            RZLog(RZLogInfo, @"Exact Duplicate =%@ =%@", preferLast ? last : one, preferLast ? one : last);
+                        }
+                    }else{
+                        //RZLog(RZLogInfo, @"Duplicate +%@ -%@", preferLast ? last : one, preferLast ? one : last);
+                        if (preferLast) {
+                            found[one.activityId] = one;
+                        }else{
+                            found[last.activityId] = last;
+                        }
+                    }
+                }
             }
+            last = one;
         }
-        self.allActivities = fixed;
-        RZLog(RZLogInfo, @"Found %lu duplicates (%lu activities left)", (unsigned long)dupCount, (unsigned long)self.allActivities.count );
-
+        if (found.count > 0) {
+            NSUInteger dupCount = found.count;
+            NSUInteger preCount = self.allActivities.count;
+            
+            NSMutableArray * fixed = [NSMutableArray arrayWithCapacity:preCount];
+            for (GCActivity * one in self.allActivities) {
+                if( ! found[one.activityId]){
+                    [fixed addObject:one];
+                }
+            }
+            self.allActivities = fixed;
+            RZLog(RZLogInfo, @"Found %lu duplicates (%lu activities left)", (unsigned long)dupCount, (unsigned long)self.allActivities.count );
+            
+        }
     }
-
 }
 -(NSUInteger)countOfKnownDuplicates{
     return self.duplicateActivityIds.count;

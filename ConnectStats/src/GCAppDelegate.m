@@ -520,7 +520,7 @@ void checkVersion(){
 
     if( [self isFirstTimeForFeature:@"ENABLE_CONNECTSTATS_SERVICE"] ){
         if( ! self.firstTimeEver && ([[GCAppGlobal profile] serviceEnabled:gcServiceGarmin] && ![[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats])){
-            needToSaveSettings = true;
+            //needToSaveSettings = true;
             RZLog(RZLogInfo,@"Suggesting enable ConnectStats Service");
             
             NSString * message = NSLocalizedString(@"Do you want to enable the new service for Garmin Data? You can get more information and enable it later in the config page", @"Enable New Service");
@@ -539,7 +539,7 @@ void checkVersion(){
     }
     
     if( needToSaveSettings ){
-        //[self saveSettings];
+        [self saveSettings];
     }
 
 }
@@ -558,12 +558,26 @@ void checkVersion(){
     BOOL firstTimeForCurrentVersion = false;
     
     NSDictionary * versions = self.settings[CONFIG_VERSIONS_SEEN];
+    
     if( versions == nil){
-        self.settings[CONFIG_VERSIONS_SEEN] = @{ currentVersion: [NSDate date] };
+        self.settings[CONFIG_VERSIONS_SEEN] = @{ currentVersion: [[NSDate date] formatAsRFC3339]};
         [self saveSettings];
         firstTimeForCurrentVersion = true;
     }else{
-        NSDate * already = versions[currentVersion];
+        if( [self isFirstTimeForFeature:@"CONVERT_VERSION_SEEN_DATE_TO_STRING"]){
+            NSMutableDictionary * newVersions = [NSMutableDictionary dictionary];
+            for (NSString * key in versions) {
+                NSDate * val = versions[key];
+                if( [val isKindOfClass:[NSDate class]]){
+                    newVersions[key] = [val formatAsRFC3339];
+                }
+            }
+            versions = [NSDictionary dictionaryWithDictionary:newVersions];
+            self.settings[CONFIG_VERSIONS_SEEN] = versions;
+            needToSaveSettings = true;
+        }
+
+        NSString * already = versions[currentVersion];
         
         if( already == nil){
             NSMutableDictionary * newVersions = [NSMutableDictionary dictionaryWithDictionary:versions];
@@ -601,7 +615,14 @@ void checkVersion(){
             }
         }
     }
-        
+    
+    if( [self isFirstTimeForFeature:@"NEW_DUPLICATE_CHECK_SETTINGS"]){
+        needToSaveSettings = true;
+        BOOL previous = [GCAppGlobal configGetBool:CONFIG_DUPLICATE_SKIP_ON_IMPORT_OBSOLETE defaultValue:true];
+        [[GCAppGlobal profile] configSet:CONFIG_DUPLICATE_CHECK_ON_IMPORT boolVal:previous];
+        [[GCAppGlobal profile] configSet:CONFIG_DUPLICATE_CHECK_ON_LOAD boolVal:true]; // was always true before
+    }
+    
     if( needToSaveSettings ){
         [self saveSettings];
     }
@@ -626,8 +647,14 @@ void checkVersion(){
 -(void)versionSummary{
     NSDictionary * versionsSeen = self.settings[CONFIG_VERSIONS_SEEN];
     NSArray<NSString*>*versions = [[versionsSeen allKeys] sortedArrayUsingSelector:@selector(compareVersion:)];
+    NSUInteger idx = 0;
+    NSUInteger total = versions.count;
+    // only show first 3 and last 3
     for (NSString * version in versions) {
-        RZLog(RZLogInfo,@"Version %@ seen %@", version, versionsSeen[version]);
+        if( idx > (total - 3) || idx < 3){
+            RZLog(RZLogInfo,@"Version %@ seen %@", version, versionsSeen[version]);
+        }
+        idx ++;
     }
 }
 -(void)searchAllActivities{

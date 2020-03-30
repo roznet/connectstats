@@ -854,7 +854,7 @@
         switchcell = [GCCellEntrySwitch switchCell:tableView];
         switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                     withString:NSLocalizedString(@"Ignore Duplicate on Import",@"Other Service")];
-        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_DUPLICATE_SKIP_ON_IMPORT defaultValue:true];
+        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_DUPLICATE_CHECK_ON_IMPORT defaultValue:true];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_OPTIONS_DUPLICATE_IMPORT);
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
@@ -863,7 +863,7 @@
         switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                     withString:NSLocalizedString(@"Ignore Existing Duplicate",@"Other Service")];
         switchcell.detailTextLabel.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString(@"Even already downloaded", @"Other Service")];
-        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_DUPLICATE_SKIP_ON_LOAD defaultValue:true];
+        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_DUPLICATE_CHECK_ON_LOAD defaultValue:true];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_OPTIONS_DUPLICATE_LOAD);
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
@@ -1095,13 +1095,13 @@
             break;
         case GC_IDENTIFIER(GC_SECTIONS_OPTIONS, GC_OPTIONS_DUPLICATE_IMPORT):
         {
-            [[GCAppGlobal profile] configToggleBool:CONFIG_DUPLICATE_SKIP_ON_IMPORT];
+            [[GCAppGlobal profile] configToggleBool:CONFIG_DUPLICATE_CHECK_ON_IMPORT];
             [GCAppGlobal saveSettings];
             break;
         }
         case GC_IDENTIFIER(GC_SECTIONS_OPTIONS, GC_OPTIONS_DUPLICATE_LOAD):
         {
-            [[GCAppGlobal profile] configToggleBool:CONFIG_DUPLICATE_SKIP_ON_LOAD];
+            [[GCAppGlobal profile] configToggleBool:CONFIG_DUPLICATE_CHECK_ON_LOAD];
             [GCAppGlobal saveSettings];
             break;
         }
