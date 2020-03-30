@@ -36,7 +36,9 @@
 -(GCStatsDataSerieWithUnit*)calculatedRollingBestForSpeed:(GCCalculactedCachedTrackInfo *)info{
     GCStatsDataSerieWithUnit * rv = nil;
     
-    BOOL timeByDistance = false;
+    BOOL timeByDistance = true;
+    BOOL removePause = true;
+    BOOL matchMaxSpeed = true;
     
     GCStatsDataSerieWithUnit * serie = nil;
     GCField * referenceField = nil;
@@ -45,22 +47,19 @@
     double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
     unitstride = 10;
     
-    NSArray<GCTrackPoint*>*trackpoints = [self removedStoppedTimer:self.trackpoints];
+    NSArray<GCTrackPoint*>*trackpoints = removePause ? [self removedStoppedTimer:self.trackpoints] : self.trackpoints;
 
     if( timeByDistance ){
         referenceField = [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityType];
         // x is distance, y is time
-        //serie = [self distanceSerieForField:referenceField];
         serie = [self trackSerieForField:referenceField trackpoints:trackpoints timeAxis:NO];
     }else{
         referenceField = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType];
         // x is time, y is distance
         serie = [self trackSerieForField:referenceField trackpoints:trackpoints timeAxis:YES];
-        //serie = [self timeSerieForField:referenceField];
         select = gcStatsMax;
         [serie convertToUnit:[GCUnit meter]];
     }
-    
     
     // Compute the difference between points (so x,y = dist,dTime or y = time,dDistance)
     GCStatsDataSerie * diffSerie = [serie.serie differenceSerieForLag:0.0];
@@ -75,12 +74,15 @@
     // rescale by unit of 10 (either every 10 seconds or every 10 meters.
     GCStatsDataSerie * filled = [diffSerie filledSerieForUnit:10. fillMethod:gcStatsZero statistic:gcStatsSum];
     
+#if TARGET_IPHONE_SIMULATOR
+    // For debugging
     [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_raw.csv"]
                                       atomically:YES encoding:NSUTF8StringEncoding error:nil];
     [[diffSerie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_diff.csv"]
                                     atomically:YES encoding:NSUTF8StringEncoding error:nil];
     [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_filled.csv"]
                                  atomically:YES encoding:NSUTF8StringEncoding error:nil];
+#endif
     
     serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsSum];
     for (GCStatsDataPoint * point in serie.serie) {
@@ -102,19 +104,20 @@
         [serie.serie removePointAtIndex:0];
     }
     
-    GCNumberWithUnit * maxSpeed = [self numberWithUnitForField:[GCField fieldForKey:@"MaxSpeed" andActivityType:self.activityType]];
-    if( maxSpeed ){
-        double maxValue = [maxSpeed convertToUnit:[GCUnit mps]].value;
-        NSUInteger n = 0;
-        NSUInteger start_n = serie.serie.count;
-        
-        while( serie.serie.count > 0 && [serie dataPointAtIndex:0].y_data > maxValue ){
-            [serie.serie removePointAtIndex:0];
-            n++;
+    if( matchMaxSpeed ){
+        GCNumberWithUnit * maxSpeed = [self numberWithUnitForField:[GCField fieldForKey:@"MaxSpeed" andActivityType:self.activityType]];
+        if( maxSpeed ){
+            double maxValue = [maxSpeed convertToUnit:[GCUnit mps]].value;
+            NSUInteger n = 0;
+            NSUInteger start_n = serie.serie.count;
+            
+            while( serie.serie.count > 0 && [serie dataPointAtIndex:0].y_data > maxValue ){
+                [serie.serie removePointAtIndex:0];
+                n++;
+            }
+            RZLog(RZLogInfo, @"Removed %@/%@ points faster than MaxSpeed = %@", @(n),@(start_n), maxSpeed );
         }
-        RZLog(RZLogInfo, @"Removed %@/%@ points faster than MaxSpeed = %@", @(n),@(start_n), maxSpeed );
     }
-    
     
     [serie convertToUnit:[GCUnit minperkm]];
     if( serie.serie.count > 1 && [serie.serie dataPointAtIndex:0].x_data == 0){
