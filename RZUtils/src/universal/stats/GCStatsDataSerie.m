@@ -284,19 +284,38 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 }
 
 -(NSString*)asCSVString:(BOOL)asDate{
-    NSMutableString * rv = [NSMutableString stringWithString:@"i,x,y\n"];
-
-    NSUInteger n=self.dataPoints.count;
-    for (NSUInteger i=0; i<n; i++) {
-        GCStatsDataPoint * point = self.dataPoints[i];
-        if (asDate) {
-            [rv appendFormat:@"%d,%@,%f\n", (int)i, [point.date formatAsRFC3339], point.y_data];
-        }else{
-            [rv appendFormat:@"%d,%f,%f\n", (int)i, point.x_data, point.y_data];
+    BOOL hasMulti = false;
+    for (GCStatsDataPoint * point in self.dataPoints) {
+        if( [point isKindOfClass:[GCStatsDataPointMulti class]]){
+            hasMulti = true;
+            break;
         }
     }
+    
+    NSMutableArray * lines = [NSMutableArray array];
+    
+    [lines addObject:hasMulti ? @"i,x,y,z" : @"i,x,y" ];
 
-    return rv;
+    NSUInteger i = 0;
+    for (GCStatsDataPoint * point in self.dataPoints) {
+        NSMutableString * line = nil;
+        if (asDate) {
+            line = [NSMutableString stringWithFormat:@"%d,%@,%f", (int)i, [point.date formatAsRFC3339], point.y_data];
+        }else{
+            line = [NSMutableString stringWithFormat:@"%d,%f,%f", (int)i, point.x_data, point.y_data];
+        }
+        if( hasMulti ){
+            if( [point isKindOfClass:[GCStatsDataPointMulti class]] ){
+                GCStatsDataPointMulti * multi = (GCStatsDataPointMulti*)point;
+                [line appendFormat:@",%f", multi.z_data];
+            }else{
+                [line appendFormat:@","];
+            }
+        }
+        [lines addObject:line];
+    }
+    
+    return [lines componentsJoinedByString:@"\n"];
 }
 
 #pragma mark - Access
@@ -1658,7 +1677,8 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                     case gcStatsSum:
                     {
                         if( step_i == from_i){
-                            values[ step_i+1<range ? step_i+1 : step_i] += from_p.y_data;
+                            //values[ step_i+1<range ? step_i+1 : step_i] += from_p.y_data;
+                            values[ step_i ] += from_p.y_data;
                         }// else keep at 0
                         break;
                     }
@@ -1905,7 +1925,9 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
             }else if(i>n){
                 // we now have n values, check if last n better than previous best according to
                 // the appropriate select rule.
-                
+                if( n == 40){
+                    
+                }
                 if (select==gcStatsRatioMin || select==gcStatsRatioMax){
                     // for speed if n: distance, rolling[n]: time, speed is best if dist/time is higher
                     if( rolling[n] != 0.0 && best[n] != 0.0){

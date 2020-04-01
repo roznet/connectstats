@@ -52,6 +52,22 @@
     [super tearDown];
 }
 
+-(void)testBestRolling{
+    
+    // test activity from download if there
+    NSString * fp = [RZFileOrganizer writeableFilePathIfExists:@"track_cs_597233.fit"];
+    if( fp ){
+        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"DummyTestId" fitFilePath:fp startTime:nil]);
+        GCField * speed = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:fitAct.activityType];
+        GCCalculactedCachedTrackInfo * info = [GCCalculactedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:speed];
+        GCStatsDataSerieWithUnit * serieU = [fitAct calculatedRollingBest:info];
+        NSLog(@"%@", serieU);
+    }
+
+}
+
+
+
 -(void)testParseFitAndEvents{
     NSString * db_name = @"test_activity_fit_event.db";
     

@@ -38,7 +38,7 @@
     
     BOOL timeByDistance = true;
     BOOL removePause = true;
-    BOOL useAverage = true;
+    BOOL useAverage = false;
     
     GCStatsDataSerieWithUnit * serie = nil;
     GCField * referenceField = nil;
@@ -54,11 +54,14 @@
         // x is distance, y is time, ratio is mps, so max
         select = gcStatsMin;
         serie = [self trackSerieForField:referenceField trackpoints:trackpoints timeAxis:NO];
-        GCStatsDataSerie * filled = [serie.serie filledSerieForUnit:10. fillMethod:gcStatsZero statistic:gcStatsWeightedMean];
+        // Fill for each 10 meter with average seconds of surrounding points
+        GCStatsDataSerie * filled = [serie.serie filledSerieForUnit:unitstride fillMethod:gcStatsZero statistic:gcStatsWeightedMean];
+#if TARGET_IPHONE_SIMULATOR
         [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_raw.csv"]
                                           atomically:YES encoding:NSUTF8StringEncoding error:nil];
         [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_filled.csv"]
                                         atomically:YES encoding:NSUTF8StringEncoding error:nil];
+#endif
         serie.serie = filled;
     }else{
         referenceField = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType];
@@ -116,11 +119,24 @@
         }
     }
     serie.unit = [GCUnit mps];
-    
+    #if TARGET_IPHONE_SIMULATOR
+            // rescale by unit of 10 (either every 10 seconds or every 10 meters.
+            // For debugging
+            [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_finalmps.csv"]
+                                              atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    #endif
+
     [self rollingBestMatchMaxSpeed:serie];
+    [self rollingBestCorrect:serie select:select==gcStatsMin?gcStatsMax:gcStatsMin];
     
     [serie convertToUnit:[GCUnit minperkm]];
-    
+    #if TARGET_IPHONE_SIMULATOR
+            // rescale by unit of 10 (either every 10 seconds or every 10 meters.
+            // For debugging
+            [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_finalminkm.csv"]
+                                              atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    #endif
+
     if( serie.serie.count > 1 && [serie.serie dataPointAtIndex:0].x_data == 0){
         [serie.serie dataPointAtIndex:0].y_data = [serie.serie dataPointAtIndex:1].y_data;
     }
@@ -129,12 +145,11 @@
     return rv;
 }
 
--(void)rollingBestMatchMaxSpeed:(GCStatsDataSerieWithUnit*)serie{
-    if( [serie dataPointAtIndex:0].y_data == 0 ){
-        [serie.serie removePointAtIndex:0];
-    }
-    
+-(void)rollingBestMatchMaxSpeed:(GCStatsDataSerieWithUnit*)serie{    
     GCNumberWithUnit * max_nu = [self numberWithUnitForField:[GCField fieldForKey:@"MaxSpeed" andActivityType:self.activityType]];
+    if( max_nu == nil){
+        max_nu = [self numberWithUnitForField:[GCField fieldForKey:@"MaxPace" andActivityType:self.activityType]];
+    }
     if( max_nu ){
         double maxValue = [max_nu convertToUnit:serie.unit].value;
         NSUInteger n = 0;
@@ -146,6 +161,24 @@
         }
         RZLog(RZLogInfo, @"Removed %@/%@ points faster than MaxSpeed = %@", @(n),@(start_n), max_nu );
     }
+}
+
+-(void)rollingBestCorrect:(GCStatsDataSerieWithUnit*)serie select:(gcStatsSelection)select{
+    double last_y = 0.;
+    for (GCStatsDataPoint * point in serie) {
+        if( last_y == 0.){
+            last_y = point.y_data;
+        }else{
+            if( (select == gcStatsMax && last_y < point.y_data) ||
+               (select == gcStatsMin && last_y > point.y_data) )
+            {
+                point.y_data = last_y;
+            }else{
+                last_y = point.y_data;
+            }
+        }
+    }
+
 }
 
 -(GCStatsDataSerieWithUnit*)calculatedRollingBestSimple:(GCCalculactedCachedTrackInfo*)info{
@@ -176,6 +209,8 @@
     if( info.field.fieldFlag == gcFieldFlagWeightedMeanSpeed){
         [self rollingBestMatchMaxSpeed:serie];
     }
+    
+    [self rollingBestCorrect:serie select:select];
     
     rv = serie;
 
