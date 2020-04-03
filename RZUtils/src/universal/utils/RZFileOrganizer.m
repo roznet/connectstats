@@ -53,6 +53,18 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
     return [url path];
 }
 
++(NSString*)writeableFilePathWithFormat:(NSString *)fmt, ...{
+    va_list args;
+    va_start(args, fmt);
+    NSString * aName = RZReturnAutorelease([[NSString alloc] initWithFormat:fmt arguments:args]);
+    va_end(args);
+    
+    NSArray        *    paths                = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString    *    documentsDirectory    = paths[0];
+
+    return( aName ? [documentsDirectory stringByAppendingPathComponent:aName] : documentsDirectory);
+}
+
 +(NSString*)writeableFilePath:(nullable NSString*)aName{
     NSArray		*	paths				= NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
     NSString	*	documentsDirectory	= paths[0];

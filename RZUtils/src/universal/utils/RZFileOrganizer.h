@@ -53,6 +53,7 @@ typedef BOOL (^FileOrganizerMatch)(NSString*fn);
  @param aName file name to add to path, if nil, it will return just the path to the sandbox
  */
 +(NSString*)writeableFilePath:(nullable NSString*)aName;
++(NSString*)writeableFilePathWithFormat:(nullable NSString*)fmt, ...;
 +(nullable NSString*)writeableFilePathIfExists:(NSString*)aName;
 +(NSArray<NSString*>*)writeableFilesMatching:(nullable FileOrganizerMatch)match;
 +(BOOL)ensureWriteableFilePath:(NSString*)aName;
