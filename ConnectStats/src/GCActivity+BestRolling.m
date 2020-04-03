@@ -126,10 +126,9 @@
                                               atomically:YES encoding:NSUTF8StringEncoding error:nil];
     #endif
 
-    [self rollingBestMatchMaxSpeed:serie];
-    [self rollingBestCorrect:serie select:select==gcStatsMin?gcStatsMax:gcStatsMin];
+    [self rollingBestMatchMaxForField:info.field andSerie:serie];
+    [self rollingBestCorrectMonotonicity:serie select:select==gcStatsMin?gcStatsMax:gcStatsMin];
     
-    [serie convertToUnit:[GCUnit minperkm]];
     #if TARGET_IPHONE_SIMULATOR
             // rescale by unit of 10 (either every 10 seconds or every 10 meters.
             // For debugging
@@ -145,25 +144,37 @@
     return rv;
 }
 
--(void)rollingBestMatchMaxSpeed:(GCStatsDataSerieWithUnit*)serie{    
-    GCNumberWithUnit * max_nu = [self numberWithUnitForField:[GCField fieldForKey:@"MaxSpeed" andActivityType:self.activityType]];
-    if( max_nu == nil){
-        max_nu = [self numberWithUnitForField:[GCField fieldForKey:@"MaxPace" andActivityType:self.activityType]];
+-(void)rollingBestMatchMaxForField:(GCField*)field andSerie:(GCStatsDataSerieWithUnit*)serie{
+    GCField * maxfield = field.correspondingMaxField;
+    
+    GCNumberWithUnit * max_nu = [self numberWithUnitForField:maxfield];
+    if( max_nu == nil ){
+        maxfield = maxfield.correspondingPaceOrSpeedField;
+        if( maxfield ){
+            max_nu = [self numberWithUnitForField:maxfield];
+        }
     }
     if( max_nu ){
         double maxValue = [max_nu convertToUnit:serie.unit].value;
         NSUInteger n = 0;
-        NSUInteger start_n = serie.serie.count;
         
-        while( serie.serie.count > 0 && ([serie dataPointAtIndex:0].y_data > maxValue || [serie dataPointAtIndex:0].y_data == 0.)){
-            [serie.serie removePointAtIndex:0];
-            n++;
+        for (GCStatsDataPoint * point in serie.serie) {
+            double y_data = point.y_data;
+            if(y_data > maxValue || y_data == 0.){
+                point.y_data = maxValue;
+                n++;
+            }else{
+                // as soon as we reach something below max, stop
+                break;
+            }
         }
-        RZLog(RZLogInfo, @"Removed %@/%@ points faster than MaxSpeed = %@", @(n),@(start_n), max_nu );
+        if( n > 0){
+            RZLog(RZLogInfo, @"BestRolling for %@ capped %@/%@ points greater than %@ = %@",field, @(n),@(serie.count), maxfield, max_nu );
+        }
     }
 }
 
--(void)rollingBestCorrect:(GCStatsDataSerieWithUnit*)serie select:(gcStatsSelection)select{
+-(void)rollingBestCorrectMonotonicity:(GCStatsDataSerieWithUnit*)serie select:(gcStatsSelection)select{
     double last_y = 0.;
     for (GCStatsDataPoint * point in serie) {
         if( last_y == 0.){
@@ -178,15 +189,17 @@
             }
         }
     }
-
 }
 
 -(GCStatsDataSerieWithUnit*)calculatedRollingBestSimple:(GCCalculactedCachedTrackInfo*)info{
     GCStatsDataSerieWithUnit * rv = nil;
     
     BOOL useTimeAxis = (info.field.fieldFlag != gcFieldFlagWeightedMeanSpeed);
+    BOOL removePause = true;
     
-    NSArray<GCTrackPoint*>*trackpoints = [self removedStoppedTimer:self.trackpoints];
+    
+    NSArray<GCTrackPoint*>*trackpoints = removePause ? [self removedStoppedTimer:self.trackpoints] : self.trackpoints;
+    
     GCStatsDataSerieWithUnit * serie = [self trackSerieForField:info.field trackpoints:trackpoints timeAxis:useTimeAxis];
     
     info.processedPointsCount = serie.serie.count;
@@ -204,13 +217,12 @@
         [serie.serie sortByX];
     }
     
-    serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsWeightedMean];
+    // If remove pause, then do linear interpolation, otherwise fill with zeros (assuming pause)
+    serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:removePause ? gcStatsLinear :gcStatsZero select:select statistic:gcStatsWeightedMean];
     
-    if( info.field.fieldFlag == gcFieldFlagWeightedMeanSpeed){
-        [self rollingBestMatchMaxSpeed:serie];
-    }
+    [self rollingBestMatchMaxForField:info.field andSerie:serie];
     
-    [self rollingBestCorrect:serie select:select];
+    [self rollingBestCorrectMonotonicity:serie select:select];
     
     rv = serie;
 
@@ -223,6 +235,7 @@
     if( info.fieldFlag == gcFieldFlagWeightedMeanSpeed){
         //rv= [self calculatedRollingBestSimple:info];
         rv = [self calculatedRollingBestForSpeed:info];
+        [rv convertToUnit:[self speedDisplayUnit]];
     }else{
         rv= [self calculatedRollingBestSimple:info];
     }
