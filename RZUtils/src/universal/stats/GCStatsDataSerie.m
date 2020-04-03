@@ -1605,7 +1605,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 -(void)fill:(size_t)range valuesForUnit:(double)unit into:(double*)values fillMethod:(gcStatsFillMethod)fill statistic:(gcStats)statistic{
     GCStatsDataPoint * first_p = (self.dataPoints)[0];
     size_t last_i   = 0;
-    double first_x  = first_p.x_data;
+    double first_x  = (int)(first_p.x_data/unit);
 
     BOOL inconsistentPoint=false;
 
@@ -1693,7 +1693,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                                     step_v = 0.;
                                     break;
                                 case gcStatsLinear:
-                                    step_v =  (step_x-from_p.x_data) * (to_p.x_data - from_p.x_data) * (to_p.y_data-from_p.y_data);
+                                    step_v = from_p.y_data + ( (step_x-from_p.x_data) / (to_p.x_data - from_p.x_data) * (to_p.y_data-from_p.y_data) );
                                     break;
                                 case gcStatsLast:
                                     // do nothing, use last

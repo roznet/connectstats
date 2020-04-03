@@ -164,7 +164,7 @@
             2.*60., 5.*60., 10.*60., 15.*60., 20.*60., 25.0*60.,
             30.*60., 35.*60., 40.*60., 45.*60., 50.0*60., 55.0*60.,
             60.*60, 90.*60., 2*60.*60., 5*60.*60. };
-
+        
         size_t n = sizeof(xs)/sizeof(double);
         rv = [GCStatsDataSerieWithUnit dataSerieWithUnit:xUnit xUnit:xUnit andSerie:RZReturnAutorelease([[GCStatsDataSerie alloc] init])];
         for (size_t i=0; i<n; ++i) {
@@ -179,7 +179,7 @@
         double marathon = 42.195;
         
         double small_xs[] = { 100., 200., 400., 500., 800., 1500. };
-        double big_xs[]   = { 1., 2., 3., 5., 10., 15., 20., 30., 40., 50., 100. };
+        double big_xs[]   = { 1., 2., 3., 4., 5., 6., 7., 8., 9., 10., 12., 15., 17., 20., 25., 30., 35., 40., 45., 50., 75., 100. };
         double std_xs[]   = { marathon/2.*km, marathon*km };
 
         size_t small_n = sizeof(small_xs)/sizeof(double);

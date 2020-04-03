@@ -288,7 +288,8 @@
         }
 
         if( su ){
-            //DONT CHECKIN self.extra_data = @[ su ];
+            // Display smoothed standardized curve
+            self.extra_data = @[ su ];
         }
     }
 

@@ -55,11 +55,11 @@
         select = gcStatsMin;
         serie = [self trackSerieForField:referenceField trackpoints:trackpoints timeAxis:NO];
         // Fill for each 10 meter with average seconds of surrounding points
-        GCStatsDataSerie * filled = [serie.serie filledSerieForUnit:unitstride fillMethod:gcStatsZero statistic:gcStatsWeightedMean];
+        GCStatsDataSerie * filled = [serie.serie filledSerieForUnit:unitstride fillMethod:gcStatsLinear statistic:gcStatsWeightedMean];
 #if TARGET_IPHONE_SIMULATOR
-        [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_raw.csv"]
+        [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_raw_%@.csv", self.activityId]
                                           atomically:YES encoding:NSUTF8StringEncoding error:nil];
-        [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_filled.csv"]
+        [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_filled_%@.csv", self.activityId]
                                         atomically:YES encoding:NSUTF8StringEncoding error:nil];
 #endif
         serie.serie = filled;
@@ -81,14 +81,14 @@
 
     info.processedPointsCount = diffSerie.count;
     
-    serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:(useAverage ? gcStatsWeightedMean : gcStatsSum)];
+    serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsLinear select:select statistic:(useAverage ? gcStatsWeightedMean : gcStatsSum)];
 
 #if TARGET_IPHONE_SIMULATOR
     // rescale by unit of 10 (either every 10 seconds or every 10 meters.
     // For debugging
-    [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_best.csv"]
+    [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_best_%@.csv", self.activityId]
                                       atomically:YES encoding:NSUTF8StringEncoding error:nil];
-    [[diffSerie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_diff.csv"]
+    [[diffSerie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_diff_%@.csv", self.activityId]
                                     atomically:YES encoding:NSUTF8StringEncoding error:nil];
 #endif
 
@@ -122,7 +122,7 @@
     #if TARGET_IPHONE_SIMULATOR
             // rescale by unit of 10 (either every 10 seconds or every 10 meters.
             // For debugging
-            [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_finalmps.csv"]
+    [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_finalmps_%@.csv", self.activityId]
                                               atomically:YES encoding:NSUTF8StringEncoding error:nil];
     #endif
 
@@ -133,7 +133,7 @@
     #if TARGET_IPHONE_SIMULATOR
             // rescale by unit of 10 (either every 10 seconds or every 10 meters.
             // For debugging
-            [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_finalminkm.csv"]
+    [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_finalminkm_%@.csv", self.activityId]
                                               atomically:YES encoding:NSUTF8StringEncoding error:nil];
     #endif
 

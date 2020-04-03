@@ -500,7 +500,7 @@ void registerUnits(){
     double x_knob_max = x_knob_min;
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:x_nKnobs];
 
-    while (x_knob_min + x_knobSize * x_nKnobs < x_max) {
+    while (fabs(x_knob_min + x_knobSize * x_nKnobs) < fabs(x_max)) {
         x_nKnobs++;
     }
     [rv addObject:@(extend ? x_knob_min : x_min)];

@@ -55,9 +55,11 @@
 -(void)testBestRolling{
     
     // test activity from download if there
-    NSString * fp = [RZFileOrganizer writeableFilePathIfExists:@"track_cs_597233.fit"];
+    //NSString * fp = [RZFileOrganizer writeableFilePathIfExists:@"track_cs_597233.fit"];
+    NSString * fp = [RZFileOrganizer writeableFilePathIfExists:@"activity_1702660059.fit"];
+    NSString * aId = @"1702660059";
     if( fp ){
-        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"DummyTestId" fitFilePath:fp startTime:nil]);
+        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:aId fitFilePath:fp startTime:nil]);
         GCField * speed = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:fitAct.activityType];
         GCCalculactedCachedTrackInfo * info = [GCCalculactedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:speed];
         GCStatsDataSerieWithUnit * serieU = [fitAct calculatedRollingBest:info];
