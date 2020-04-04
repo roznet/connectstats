@@ -249,13 +249,14 @@
             self.settings[key] = config[key];
         }
     }
+    [self setProfile:[GCAppProfiles singleProfileWithValues:config]];
+    [[self profile] serviceEnabled:gcServiceStrava set:false];
+    [[self profile] configSet:PROFILE_DBPATH stringVal:name];
+
     [self setOrganizer:[[[GCActivitiesOrganizer alloc] initWithDb:_db] autorelease]];
     [self setWeb:[[[GCWebConnect alloc] init] autorelease]];
     self.web.worker = self.worker;
     [self setHealth:[[[GCHealthOrganizer alloc] initWithDb:_db andThread:self.worker] autorelease]];
-    [self setProfile:[GCAppProfiles profilesFromSettings:self.settings]];
-    [[self profile] serviceEnabled:gcServiceStrava set:false];
-    [[self profile] configSet:PROFILE_DBPATH stringVal:name];
 }
 
 -(void)reinitFromSampleState:(NSString*)name{

@@ -22,7 +22,7 @@
 #import "GCActivity+CachedTracks.h"
 #import "GCTestsHelper.h"
 #import "GCTestsSamples.h"
-
+#import "GCActivity+Series.h"
 #import "GCActivity+TestBackwardCompat.h"
 
 @interface GCTestsActivities : GCTestCase

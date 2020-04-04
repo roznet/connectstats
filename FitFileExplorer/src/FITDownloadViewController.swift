@@ -341,7 +341,7 @@ class FITDownloadViewController: NSViewController {
         
         let required = dataSource.requiredTableColumnsIdentifiers()
         
-        var valuekeys : [String] = Array(samples.keys)
+        let valuekeys : [String] = Array(samples.keys)
         
         func sortKey(l:String,r:String) -> Bool {
             if let fl = GCField(forKey: l, andActivityType: GC_TYPE_ALL)?.sortOrder(),

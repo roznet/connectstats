@@ -334,6 +334,14 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     }
     return refdate;
 }
+
++(NSInteger)currentYear{
+    static NSInteger currentYear = 0;
+    if( currentYear == 0){
+        currentYear = [[GCAppGlobal calculationCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
+    }
+    return currentYear;
+}
 +(NSString*)simulatorUrl{
     return nil;
 }

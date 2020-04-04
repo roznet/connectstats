@@ -467,7 +467,10 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
             rv = sub;
         }
     }
-    if( rv == nil) {
+    if( rv == nil && fitSubSport != nil && [GCActivityType isExistingActivityType:fitSubSport.lowercaseString]){
+        rv = [GCActivityType activityTypeForKey:fitSubSport.lowercaseString];
+    }
+    if( rv == nil && fitSport != nil && [GCActivityType isExistingActivityType:fitSport.lowercaseString] ){
         rv = [GCActivityType activityTypeForKey:fitSport.lowercaseString];
     }
     return rv;
@@ -605,8 +608,11 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
         }
         cache = dict;
     }
-    
-    return cache[ input ];
+    GCActivityType * rv = cache[ input ];
+    if( rv == nil && [GCActivityType isExistingActivityType:[input lowercaseString]]){
+        rv = [GCActivityType activityTypeForKey:[input lowercaseString]];
+    }
+    return rv;
 }
 
 @end

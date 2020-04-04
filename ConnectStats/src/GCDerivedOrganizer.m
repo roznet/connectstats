@@ -110,13 +110,18 @@ static BOOL kDerivedEnabled = true;
 
 @interface GCDerivedOrganizer ()
 @property (nonatomic,retain) FMDatabase * db;
-@property (nonatomic,retain) NSMutableDictionary * derivedSeries;
-@property (nonatomic,retain) NSMutableDictionary * modifiedSeries;
-@property (nonatomic,retain) NSMutableDictionary * processedActivities;
 @property (nonatomic,retain) dispatch_queue_t worker;
 @property (nonatomic,retain) NSMutableArray * queue;
 @property (nonatomic,assign) GCWebConnect * web;
 @property (nonatomic,retain) RZPerformance * performance;
+
+@property (nonatomic,retain) NSMutableDictionary * processedActivities;
+
+// Old style storage by hard coded series
+@property (nonatomic,retain) NSMutableDictionary * derivedSeries;
+@property (nonatomic,retain) NSMutableDictionary * modifiedSeries;
+
+// New style storage by time series database
 @property (nonatomic,retain) NSMutableDictionary<NSDictionary*,GCStatsDataSerie*> * seriesByKeys;
 @property (nonatomic,retain) NSMutableDictionary<NSDictionary*,GCStatsDataSerie*> * historicalSeriesByKeys;
 @end
@@ -164,7 +169,7 @@ static BOOL kDerivedEnabled = true;
     [super dealloc];
 }
 
-#pragma mark - Accessed Derived Series
+#pragma mark - Load Derived Series
 
 -(void)loadFromDb{
     self.derivedSeries= [NSMutableDictionary dictionaryWithCapacity:10];
@@ -247,7 +252,22 @@ static BOOL kDerivedEnabled = true;
     RZLog(RZLogInfo, @"Loaded all db in %@", perf);
 }
 
--(GCStatsSerieOfSerieWithUnits*)timeSeriesOfSeriesFor:(GCField*)field{
+
+
+-(BOOL)debugCheckSerie:(GCStatsDataSerie*)serie{
+    for( NSUInteger i=0;i<MIN(serie.count,10);i++){
+        double x = [serie dataPointAtIndex:i].x_data;
+        if( lround(x) % 5 != 0  ){
+            return true;
+            break;
+        }
+    }
+    return false;
+}
+
+#pragma mark - access Standardized Series
+
+-(GCStatsSerieOfSerieWithUnits*)historicalTimeSeriesOfSeriesFor:(GCField*)field{
     GCStatsSerieOfSerieWithUnits * serieOfSerie = [GCStatsSerieOfSerieWithUnits serieOfSerieWithUnits:[GCUnit date]];
     for (NSDictionary * keys in self.historicalSeriesByKeys) {
         if( [keys[@"activityType"] isEqualToString:field.activityType] && [keys[@"field"] isEqualToString:field.key] ){
@@ -273,6 +293,27 @@ static BOOL kDerivedEnabled = true;
         }
     }
     return serieOfSerie;
+}
+
+#pragma mark - access Aggregated Series
+
+-(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type field:(gcFieldFlag)field period:(gcDerivedPeriod)period
+                               forDate:(NSDate*)date andActivityType:(NSString*)activityType{
+
+    GCDerivedDataSerie * serie = [GCDerivedDataSerie derivedDataSerie:type field:field period:period forDate:date andActivityType:activityType];
+    NSString * key = serie.key;
+
+    GCDerivedDataSerie * existing = (self.derivedSeries)[key];
+    if (existing) {
+        if (existing.serieWithUnit == nil) {
+            [self loadSerieFromFile:existing];
+        }
+    }else{
+        (self.derivedSeries)[key] = serie;
+        existing = serie;
+        [self loadSerieFromFile:serie];
+    }
+    return existing;
 }
 
 -(GCDerivedDataSerie*)derivedDataSerieForKey:(NSString*)key{
@@ -301,36 +342,6 @@ static BOOL kDerivedEnabled = true;
         [rv addObject:byField[key]];
     }
     return rv;
-}
-
--(BOOL)debugCheckSerie:(GCStatsDataSerie*)serie{
-    for( NSUInteger i=0;i<MIN(serie.count,10);i++){
-        double x = [serie dataPointAtIndex:i].x_data;
-        if( lround(x) % 5 != 0  ){
-            return true;
-            break;
-        }
-    }
-    return false;
-}
-
--(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type field:(gcFieldFlag)field period:(gcDerivedPeriod)period
-                               forDate:(NSDate*)date andActivityType:(NSString*)activityType{
-
-    GCDerivedDataSerie * serie = [GCDerivedDataSerie derivedDataSerie:type field:field period:period forDate:date andActivityType:activityType];
-    NSString * key = serie.key;
-
-    GCDerivedDataSerie * existing = (self.derivedSeries)[key];
-    if (existing) {
-        if (existing.serieWithUnit == nil) {
-            [self loadSerieFromFile:existing];
-        }
-    }else{
-        (self.derivedSeries)[key] = serie;
-        existing = serie;
-        [self loadSerieFromFile:serie];
-    }
-    return existing;
 }
 
 -(NSArray<NSNumber*>*)availableFieldsForType:(NSString*)aType{
@@ -467,82 +478,94 @@ static BOOL kDerivedEnabled = true;
     return [NSString stringWithFormat:@"gc_derived_standard_serie_%@", unit.key];
 }
 
+
+-(void)processStandardizedSerieForActivity:(GCActivity*)activity andField:(GCField*)field{
+    GCStatsDataSerieWithUnit * standard = [activity standardizedBestRollingTrack:field thread:nil];
+    if( standard && standard.count > 0){
+        GCStatsDatabase * statsDb = [GCStatsDatabase database:self.db table:[self standardSerieDatabaseNameFor:standard.xUnit]];
+        NSDictionary * keys = @{
+            @"activityId" : activity.activityId,
+            @"fieldKey" : field.key,
+        };
+        
+        // Before we save if applicable, convert to store unit
+        NSArray * storeUnits = @[
+            [GCUnit unitForKey:STOREUNIT_DISTANCE],
+            [GCUnit unitForKey:STOREUNIT_SPEED],
+            [GCUnit unitForKey:STOREUNIT_ELAPSED]
+        ];
+        for (GCUnit * unit in storeUnits) {
+            if( [standard.xUnit canConvertTo:unit] ){
+                [standard convertToXUnit:unit];
+            }
+            if( [standard.unit canConvertTo:unit] ){
+                [standard convertToUnit:unit];
+            }
+        }
+        
+        RZLog(RZLogInfo, @"derived standard[%@]: %@ %@ %@", standard.xUnit.key, activity.activityId, field.key, standard );
+        [statsDb save:standard.serie keys:keys];
+        if( ! self.seriesByKeys){
+            self.seriesByKeys = [NSMutableDictionary dictionary];
+        }
+        self.seriesByKeys[keys] = standard.serie;
+    }
+}
+
+-(void)processAggregatedSerieForActivity:(GCActivity*)activity derivedType:(gcDerivedType)derivedType andField:(GCField*)field{
+    // no worker here, this function should already be on worker
+    GCStatsDataSerieWithUnit * serie =  [activity calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
+                                                                forField:field
+                                                                  thread:nil];
+    
+    if( [self debugCheckSerie:serie.serie] ){
+        RZLog(RZLogError,@"Bad input serie");
+    }
+    
+
+    for (NSNumber * num in @[ @(gcDerivedPeriodAll),@(gcDerivedPeriodMonth),@(gcDerivedPeriodYear)]) {
+        gcDerivedPeriod period = num.intValue;
+        GCDerivedDataSerie * derivedserie = [self derivedDataSerie:derivedType
+                                                             field:field.fieldFlag
+                                                            period:period
+                                                           forDate:activity.date
+                                                   andActivityType:activity.activityType];
+        if([self debugCheckSerie:derivedserie.serieWithUnit.serie]){
+            RZLog(RZLogError,@"bad derived start");
+        }
+        gcStatsOperand operand = [derivedserie.serieWithUnit.unit betterIsMin] ? gcStatsOperandMin : gcStatsOperandMax;
+        [derivedserie operate:operand with:serie from:activity];
+        if( [self debugCheckSerie:derivedserie.serieWithUnit.serie]){
+            RZLog(RZLogError,@"bad out serie");
+        }
+        NSString * fn = [NSString stringWithFormat:@"%@-%@.data", [[GCAppGlobal profile] currentDerivedFilePrefix],  derivedserie.key];
+        if([derivedserie saveToFile:fn]){
+            [self recordModifiedSerie:derivedserie withActivity:activity intoFile:fn];
+        }else{
+            RZLog( RZLogError, @"Failed to write %@", fn);
+        }
+    }
+}
+
 -(void)processQueueElement:(GCDerivedQueueElement*)element{
     RZPerformance * performance = [RZPerformance start];
     GCActivity * activity = element.activity;
+    
+    GCField * field = [GCField fieldForFlag:element.field
+                            andActivityType:activity.activityType];
 
     if (![activity trackdbIsObsolete:activity.trackdb]) {
         
-        GCField * field = [GCField fieldForFlag:element.field
-                                andActivityType:activity.activityType];
+        [self processAggregatedSerieForActivity:activity derivedType:element.derivedType andField:field];
+        [self processStandardizedSerieForActivity:activity andField:field];
         
-        // no worker here, this function should already be on worker
-        GCStatsDataSerieWithUnit * serie =  [activity calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                    forField:field
-                                                                      thread:nil];
-        if( [self debugCheckSerie:serie.serie] ){
-            RZLog(RZLogError,@"Bad input serie");
-        }
-        
-        GCStatsDataSerieWithUnit * standard = [activity standardizedBestRollingTrack:field thread:nil];
-        if( standard && standard.count > 0){
-            GCStatsDatabase * statsDb = [GCStatsDatabase database:self.db table:[self standardSerieDatabaseNameFor:standard.xUnit]];
-            NSDictionary * keys = @{
-                @"activityId" : element.activity.activityId,
-                @"fieldKey" : field.key,
-            };
-            
-            // Before we save if applicable, convert to store unit
-            NSArray * storeUnits = @[
-                [GCUnit unitForKey:STOREUNIT_DISTANCE],
-                [GCUnit unitForKey:STOREUNIT_SPEED],
-                [GCUnit unitForKey:STOREUNIT_ELAPSED]
-            ];
-            for (GCUnit * unit in storeUnits) {
-                if( [standard.xUnit canConvertTo:unit] ){
-                    [standard convertToXUnit:unit];
-                }
-                if( [standard.unit canConvertTo:unit] ){
-                    [standard convertToUnit:unit];
-                }
-            }
-            
-            RZLog(RZLogInfo, @"derived standard[%@]: %@ %@ %@", standard.xUnit.key, element.activity.activityId, field.key, standard );
-            [statsDb save:standard.serie keys:keys];
-            if( ! self.seriesByKeys){
-                self.seriesByKeys = [NSMutableDictionary dictionary];
-            }
-            self.seriesByKeys[keys] = standard.serie;
-        }
-        for (NSNumber * num in @[ @(gcDerivedPeriodAll),@(gcDerivedPeriodMonth),@(gcDerivedPeriodYear)]) {
-            gcDerivedPeriod period = num.intValue;
-            GCDerivedDataSerie * derivedserie = [self derivedDataSerie:element.derivedType
-                                                                 field:element.field
-                                                                period:period
-                                                               forDate:activity.date
-                                                       andActivityType:activity.activityType];
-            if([self debugCheckSerie:derivedserie.serieWithUnit.serie]){
-                RZLog(RZLogError,@"bad derived start");
-            }
-            gcStatsOperand operand = [derivedserie.serieWithUnit.unit betterIsMin] ? gcStatsOperandMin : gcStatsOperandMax;
-            [derivedserie operate:operand with:serie from:activity];
-            if( [self debugCheckSerie:derivedserie.serieWithUnit.serie]){
-                RZLog(RZLogError,@"bad out serie");
-            }
-            NSString * fn = [NSString stringWithFormat:@"%@-%@.data", [[GCAppGlobal profile] currentDerivedFilePrefix],  derivedserie.key];
-            if([derivedserie saveToFile:fn]){
-                [self recordModifiedSerie:derivedserie withActivity:activity intoFile:fn];
-            }else{
-                RZLog( RZLogError, @"Failed to write %@", fn);
-            }
-        }
     }
 
     if (element.activityLast && activity != [[GCAppGlobal organizer] currentActivity]) {
         [activity purgeCache];
     }
     if ([performance significant]) {
-        RZLog(RZLogInfo, @"%@ heavy: %@ %@", activity, [GCFields fieldForFlag:element.field andActivityType:activity.activityType], performance);
+        RZLog(RZLogInfo, @"%@ heavy: %@ %@", activity, field, performance);
     }
 }
 
@@ -554,7 +577,7 @@ static BOOL kDerivedEnabled = true;
     }
     NSMutableArray * toProcess = [NSMutableArray arrayWithCapacity:activities.count];
     for (GCActivity * activity in activities) {
-        if ([self activityRequireProcessing:(GCActivity*)activity]) {
+        if ([self activityRequireProcessing:activity]) {
             if ([activity.activityType isEqualToString:GC_TYPE_RUNNING]){
                 [toProcess addObject:[GCDerivedQueueElement element:activity
                                                               field:gcFieldFlagWeightedMeanHeartRate

@@ -195,7 +195,11 @@
 
 -(void)updateBadge:(NSUInteger)count{
     dispatch_async(dispatch_get_main_queue(), ^(){
-        self.settingsItem.badgeValue = count > 0 ? [@(count) stringValue] : nil;
+        if([GCAppGlobal configGetBool:CONFIG_ENABLE_REMOTE_STATUS defaultValue:TRUE]){
+            self.settingsItem.badgeValue = count > 0 ? [@(count) stringValue] : nil;
+        }else{
+            self.settingsItem.badgeValue = nil;
+        }
         [self.view setNeedsDisplay];
     });
 }

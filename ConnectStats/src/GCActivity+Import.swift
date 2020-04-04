@@ -106,7 +106,25 @@ extension GCActivity {
             return nil;
         }
         
+        let events = fitFile.messages(forMessageType: FIT_MESG_NUM_EVENT)
+        var timers : [Date:gcTrackEventType] = [:];
+        for event in events {
+            if let time = event.time(field: "timestamp") {
+                var eventtype : gcTrackEventType = []
+                switch event.name(field: "event_type") {
+                case "stop_all": eventtype = gcTrackEventType.stopAll
+                case "start":eventtype = gcTrackEventType.start
+                case "stop": eventtype = gcTrackEventType.stop
+                case "marker": eventtype = gcTrackEventType.marker
+                default: eventtype = []
+                }
+
+                timers[time] = eventtype
+            }
+        }
+        
         messages = fitFile.messages(forMessageType: FIT_MESG_NUM_RECORD)
+        
         var trackpoints : [GCTrackPoint] = []
         for item in messages{
             if  let timestamp = item.time(field: "timestamp") {
@@ -122,12 +140,16 @@ extension GCActivity {
                     coord = icoord
                 }
                 if let point = GCTrackPoint(coordinate2D: coord, at: timestamp, for: values, in: self) {
+                    if let timer = timers[timestamp] {
+                        point.recordTrackEventType(timer, in: self)
+                    }
+
                     trackpoints.append(point)
                     self.trackFlags |= point.trackFlags
                 }
             }
         }
-
+        
         var swim : Bool = false;
         
         messages = fitFile.messages(forMessageType: FIT_MESG_NUM_LENGTH)

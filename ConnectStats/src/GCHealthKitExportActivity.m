@@ -104,7 +104,7 @@
             GCTrackPoint * point = nil;
             for (GCTrackPoint * next in act.trackpoints) {
                 if (point) {
-                    GCNumberWithUnit * hrnu = [point numberWithUnitForField:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType];
+                    GCNumberWithUnit * hrnu = [point numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType] inActivity:act];
                     CLLocationDistance meters = [point distanceMetersFrom:next];
 
                     HKQuantity * diq = [HKQuantity quantityWithUnit:[HKUnit meterUnit] doubleValue:meters];

@@ -85,7 +85,7 @@
             [date dateShortFormat]];
 
     for (size_t i=0; i<gcAggregatedFieldEnd; i++) {
-        NSString * field = [GCFields fieldForFlag:gcAggregatedFieldToFieldFlag[i] andActivityType:self.activityType];
+        GCField * field = [GCField fieldForFlag:gcAggregatedFieldToFieldFlag[i] andActivityType:self.activityType];
         if (flags[i]) {
             [rv appendFormat:@"\n  %@: cnt=%.0f sum=%.1f avg=%.0f",
              field,

@@ -165,7 +165,8 @@
 
     [self.remap addSection:GC_SECTIONS_OPTIONS withRows:@[
         @( GC_OPTIONS_DOWNLOAD_DETAILS ),
-        @( GC_OPTIONS_MERGE         )
+        @( GC_OPTIONS_DUPLICATE_IMPORT ),
+        @( GC_OPTIONS_DUPLICATE_LOAD   ),
     ]];
     if( debugIsEnabled ){
         [self.remap addSection:GC_SECTIONS_BABOLAT withRows:@[
@@ -849,14 +850,24 @@
     //GCCellGrid * gridcell = nil;
     GCCellEntrySwitch * switchcell = nil;
 
-    if (indexPath.row == GC_OPTIONS_MERGE) {
+    if (indexPath.row == GC_OPTIONS_DUPLICATE_IMPORT) {
         switchcell = [GCCellEntrySwitch switchCell:tableView];
         switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                    withString:NSLocalizedString(@"Ignore Duplicate on Download",@"Other Service")];
-        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_MERGE_IMPORT_DUPLICATE defaultValue:true];
-        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_OPTIONS_MERGE);
+                                                                    withString:NSLocalizedString(@"Ignore Duplicate on Import",@"Other Service")];
+        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_DUPLICATE_CHECK_ON_IMPORT defaultValue:true];
+        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_OPTIONS_DUPLICATE_IMPORT);
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
+    }else if (indexPath.row == GC_OPTIONS_DUPLICATE_LOAD){
+        switchcell = [GCCellEntrySwitch switchCell:tableView];
+        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                    withString:NSLocalizedString(@"Ignore Existing Duplicate",@"Other Service")];
+        switchcell.detailTextLabel.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString(@"Even already downloaded", @"Other Service")];
+        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_DUPLICATE_CHECK_ON_LOAD defaultValue:true];
+        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_OPTIONS_DUPLICATE_LOAD);
+        switchcell.entryFieldDelegate = self;
+        rv=switchcell;
+
     }else if (indexPath.row == GC_OPTIONS_DOWNLOAD_DETAILS) {
         switchcell = [GCCellEntrySwitch switchCell:tableView];
         switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
@@ -1082,9 +1093,15 @@
             }
             [GCAppGlobal saveSettings];
             break;
-        case GC_IDENTIFIER(GC_SECTIONS_OPTIONS, GC_OPTIONS_MERGE):
+        case GC_IDENTIFIER(GC_SECTIONS_OPTIONS, GC_OPTIONS_DUPLICATE_IMPORT):
         {
-            [[GCAppGlobal profile] configToggleBool:CONFIG_MERGE_IMPORT_DUPLICATE];
+            [[GCAppGlobal profile] configToggleBool:CONFIG_DUPLICATE_CHECK_ON_IMPORT];
+            [GCAppGlobal saveSettings];
+            break;
+        }
+        case GC_IDENTIFIER(GC_SECTIONS_OPTIONS, GC_OPTIONS_DUPLICATE_LOAD):
+        {
+            [[GCAppGlobal profile] configToggleBool:CONFIG_DUPLICATE_CHECK_ON_LOAD];
             [GCAppGlobal saveSettings];
             break;
         }

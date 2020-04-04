@@ -50,6 +50,8 @@ const NSUInteger kPreviousStatusMaxCount = 4;
 -(void)dealloc{
     [_messagesTask release];
     [_callback release];
+    [_knownStatuses release];
+    [_remoteStatus release];
     
     [super dealloc];
 }

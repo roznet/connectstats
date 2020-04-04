@@ -27,152 +27,10 @@
 #import "GCFields.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+Fields.h"
-
-@interface GCCalculactedCachedTrackInfo : NSObject
-
-@property (nonatomic,assign) gcCalculatedCachedTrack track;
-@property (nonatomic,retain) GCField * field;
-@property (nonatomic,retain) GCStatsDataSerieWithUnit * serie;
-@property (nonatomic,retain) NSArray * trackpoints;
-
-+(GCCalculactedCachedTrackInfo*)info:(gcCalculatedCachedTrack)track field:(GCField*)field;
--(gcFieldFlag)fieldFlag;
-@end
-
-@implementation GCCalculactedCachedTrackInfo
-
-/**
-
- */
-+(GCCalculactedCachedTrackInfo*)info:(gcCalculatedCachedTrack)atrack field:(GCField*)afield{
-    GCCalculactedCachedTrackInfo * rv = [[[GCCalculactedCachedTrackInfo alloc] init] autorelease];
-    if (rv) {
-        rv.track = atrack;
-        rv.field = afield;
-        rv.serie = nil;
-    }
-    return rv;
-}
-
--(gcFieldFlag)fieldFlag{
-    return _field.fieldFlag;
-}
-
--(void)dealloc{
-    [_serie release];
-    [_field release];
-    [_trackpoints release];
-
-    [super dealloc];
-}
-
-
-
-
-@end
-
-#define MAX_FILL_POINTS 28800
-#define X_FOR(p) (timeAxis ? p.elapsed : p.distanceMeters)
+#import "GCActivity+BestRolling.h"
+#import "GCActivity+Series.h"
 
 @implementation GCActivity (CachedTracks)
-
-
--(nonnull NSArray<GCTrackPoint*>*)resample:(nonnull NSArray<GCTrackPoint*>*)points forUnit:(double)unit useTimeAxis:(BOOL)timeAxis{
-
-    GCTrackPoint * first_p = points[0];
-    size_t last_i   = 0;
-    double first_x  =  X_FOR(first_p);
-
-    BOOL inconsistentPoint=false;
-
-    NSUInteger n = points.count;
-
-    double accrued = 0.;
-
-    GCTrackPoint * currentPoint = [[GCTrackPoint alloc] init];
-
-    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:n];
-    [rv addObject:currentPoint];
-
-    for (NSUInteger idx_p = 1;idx_p <= n;idx_p++) {
-        GCTrackPoint * from_p = points[idx_p-1];
-        GCTrackPoint * to_p   = idx_p < n ? points[idx_p] : nil;
-
-        //double elapsed  = [to_p.time timeIntervalSinceDate:from_p.time];
-        //double distance = to_p.validCoordinate && from_p.validCoordinate ? [to_p distanceMetersFrom:from_p] : to_p.distanceMeters-from_p.distanceMeters;
-
-        double from_x  = X_FOR(from_p)-first_x;
-        double to_x    = to_p ? X_FOR(to_p)-first_x : from_x;
-
-        NSUInteger from_i = MIN(from_x/unit,MAX_FILL_POINTS-1);
-        NSUInteger to_i   = MIN(to_x/unit,MAX_FILL_POINTS-1);
-
-        if (from_i!=last_i) {
-            inconsistentPoint = true;
-        }
-
-        //last_i = to_i;
-
-        if (to_p == nil) {
-            // last point allocated to last
-            [currentPoint add:from_p withAccrued:(unit-accrued)/unit timeAxis:timeAxis];
-            // values[from_i] += from_p.y_data * (unit - accrued)/unit;
-        }else if ( to_i==from_i) {
-            // didn't cross to next point yet, weighted allocation to current i
-            //      f     t
-            // I: --|aa---|---
-            // P: ----X-X-----
-            //        f t
-            [currentPoint add:from_p withAccrued:(to_x-from_x)/unit timeAxis:timeAxis];
-            // values[from_i] += from_p.y_data * (to_x-from_x)/unit;
-            accrued += (to_x-from_x);
-        }else{
-            // got to next
-            //
-            //    f     t
-            // I: |aaa--|-----|-----|-----|
-            // P:  --X-----X----------
-            //       f     t
-            //
-            //    f     s     s     t
-            // I: |aaa--|-----|-----|-----|
-            // P:  --X----------------X---
-            //       f                t
-
-            for (size_t step_i = from_i; step_i<to_i; step_i++) {
-                size_t next_i = step_i+1;
-                double next_x = unit*next_i;
-
-                double step_x = step_i == from_i ? from_x : unit*step_i;
-
-                double weight =(next_x-step_x)/unit;
-                // fill steps to far from last with zero (else with last value)
-                // could impose limit: fill w zero when more than L since last
-                /* if (step_i!=from_i && fill == gcStatsZero) {
-                 step_v = 0.;
-                 }*/
-
-                [currentPoint add:from_p withAccrued:weight timeAxis:timeAxis];
-                last_i = step_i;
-
-                if (next_i < MAX_FILL_POINTS && next_i == to_i) {
-                    [currentPoint release];
-                    currentPoint = [[GCTrackPoint alloc] init];
-                    [rv addObject:currentPoint];
-                    [currentPoint add:from_p withAccrued:(to_x-next_x)/unit timeAxis:timeAxis];
-                    last_i = to_i;
-                    accrued = (to_x-next_x);
-                }
-            }
-        }
-    }
-    [currentPoint release];
-    if (inconsistentPoint) {
-        RZLog(RZLogError, @"Logic Error: Inconsistent x");
-    }
-
-    return rv;
-}
 
 -(NSString*)calculatedCachedTrackKey:(gcCalculatedCachedTrack)track forField:(GCField*)field{
     if (track == gcCalculatedCachedTrackDataSerie) {
@@ -189,114 +47,22 @@
 -(void)calculatedCachedTrackCalculations{
     NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithCapacity:(self.cachedCalculatedTracks).count];
     RZPerformance * perf = [RZPerformance start];
-    NSUInteger i = 0;
-    NSUInteger pts = 0;
+
     GCCalculactedCachedTrackInfo * info = nil;
+    
+    NSUInteger processedSeriesCount = 0;
+    NSUInteger processedPointsCount = 0;
+    
     for (NSString * key in self.cachedCalculatedTracks) {
         id obj = (self.cachedCalculatedTracks)[key];
         if ([obj isKindOfClass:[GCCalculactedCachedTrackInfo class]]) {
             info = obj;
 
             if (info.track==gcCalculatedCachedTrackRollingBest) {
-                BOOL timeAxis = info.fieldFlag != gcFieldFlagWeightedMeanSpeed;
-                BOOL useElapsed = false;
-                if( info.fieldFlag == gcFieldFlagWeightedMeanSpeed){
-
-                    if( useElapsed ){
-                        GCField * elapsedfield = [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityType];
-                        GCStatsDataSerieWithUnit * serie = [self distanceSerieForField:elapsedfield];
-                        if( serie.serie.count > 0 && serie.serie.firstObject.x_data > 0 ){
-                            [serie.serie addDataPointWithX:0.0 andY:0.0];
-                            [serie.serie sortByX];
-                        }
-                        [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"distance.csv"]
-                                                          atomically:YES encoding:NSUTF8StringEncoding error:nil];
-                        GCStatsDataSerie * diffSerie = [serie.serie differenceSerieForLag:0.0];
-                        [[diffSerie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"distance_diff.csv"]
-                                                          atomically:YES encoding:NSUTF8StringEncoding error:nil];
-
-                        pts += diffSerie.count;
-                        gcStatsSelection select = gcStatsMin;
-                        GCStatsDataSerie * filled = [diffSerie filledSerieForUnit:10. fillMethod:gcStatsZero statistic:gcStatsSum];
-                        [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"distance_filled.csv"]
-                                                          atomically:YES encoding:NSUTF8StringEncoding error:nil];
-
-                        double //unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
-                        unitstride = 10;
-                        serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsSum];
-                        for (GCStatsDataPoint * point in serie.serie) {
-                            if( point.y_data > 0.){
-                                point.y_data = point.x_data/point.y_data; // convert in mps
-                            }
-                        }
-                        serie.unit = [GCUnit mps];
-                        [serie convertToUnit:[GCUnit minperkm]];
-                        if( serie.serie.count > 1 && [serie.serie dataPointAtIndex:0].x_data == 0){
-                            [serie.serie dataPointAtIndex:0].y_data = [serie.serie dataPointAtIndex:1].y_data;
-                        }
-
-                        rv[key] = serie;
-                    }else{
-                        
-                        GCField * distancefield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType];
-                        GCStatsDataSerieWithUnit * serie = [self timeSerieForField:distancefield];
-                        if( serie.serie.count > 0 && serie.serie.firstObject.x_data > 0 ){
-                            [serie.serie addDataPointWithX:0.0 andY:0.0];
-                            [serie.serie sortByX];
-                        }
-                        [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"time.csv"]
-                                                          atomically:YES encoding:NSUTF8StringEncoding error:nil];
-
-                        GCStatsDataSerie * diffSerie = [serie.serie differenceSerieForLag:0.0];
-                        [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"time_diff.csv"]
-                                                          atomically:YES encoding:NSUTF8StringEncoding error:nil];
-                        pts += diffSerie.count;
-                        gcStatsSelection select = gcStatsMax;
-                        
-                        GCStatsDataSerie * filled = [diffSerie filledSerieForUnit:10. fillMethod:gcStatsZero statistic:gcStatsSum];
-                        [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"time_filled.csv"]
-                                                          atomically:YES encoding:NSUTF8StringEncoding error:nil];
-
-
-                        double //unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
-                        unitstride = 10;
-                        serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsSum];
-                        [serie convertToUnit:[GCUnit meter]];
-                        for (GCStatsDataPoint * point in serie.serie) {
-                            if( point.x_data > 0.){
-                                point.y_data /= point.x_data; // convert in mps
-                            }
-                        }
-                        serie.unit = [GCUnit mps];
-                        [serie convertToUnit:[GCUnit minperkm]];
-                        if( serie.serie.count > 1 && [serie.serie dataPointAtIndex:0].x_data == 0){
-                            [serie.serie dataPointAtIndex:0].y_data = [serie.serie dataPointAtIndex:1].y_data;
-                        }
-                        rv[key] = serie;
-                    }
-                }else{
-                    
-                    GCStatsDataSerieWithUnit * serie = timeAxis?[self timeSerieForField:info.field]:[self distanceSerieForField:info.field];
-                    pts += serie.serie.count;
-                    gcStatsSelection select = gcStatsMax;
-                    if (info.fieldFlag == gcFieldFlagWeightedMeanSpeed && [serie.unit isKindOfClass:[GCUnitInverseLinear class]]) {
-                        select = gcStatsMin;
-                    }
-                    
-                    double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
-                    if (info.fieldFlag == gcFieldFlagWeightedMeanSpeed) {
-                        unitstride = 10.;
-                    }
-                    
-                    // HACK serie that are missing zero, as otherwise the best of may not start consistently
-                    // and doing max over multiple will have weird quirks at the beginning.
-                    if( serie.serie.count > 0 && serie.serie.firstObject.x_data > 0 ){
-                        [serie.serie addDataPointWithX:0.0 andY:serie.serie.firstObject.y_data];
-                        [serie.serie sortByX];
-                    }
-                    
-                    serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:gcStatsZero select:select statistic:gcStatsWeightedMean];
+                GCStatsDataSerieWithUnit * serie = [self calculatedRollingBest:info];
+                if( serie ){
                     rv[key] = serie;
+                    processedPointsCount = info.processedPointsCount;
                 }
             }else if(info.track == gcCalculatedCachedTrackDataSerie){
                 if ([info.field.key isEqualToString:CALC_VERTICAL_SPEED]) {
@@ -313,14 +79,14 @@
                 }
             }
 
-            i++;
+            processedSeriesCount += 1;
         }else{
             rv[key] = obj;
         }
     }
     self.cachedCalculatedTracks = rv;
     if ([perf significant]) {
-        RZLog(RZLogInfo, @"Computed %d tracks (%d pts) %@",(int)i, (int)pts, perf);
+        RZLog(RZLogInfo, @"Computed %d tracks (%d pts) %@",(int)processedSeriesCount, (int)processedPointsCount, perf);
     }
     [self performSelectorOnMainThread:@selector(calculateCachedTrackNotify) withObject:nil waitUntilDone:NO];
 }
@@ -394,11 +160,11 @@
         GCStatsDataSerieWithUnit * rv = nil;
         
         double xs[] = {
-            5., 10., 15., 30., 45., 60.,
+            0., 5., 10., 15., 30., 45., 60.,
             2.*60., 5.*60., 10.*60., 15.*60., 20.*60., 25.0*60.,
             30.*60., 35.*60., 40.*60., 45.*60., 50.0*60., 55.0*60.,
             60.*60, 90.*60., 2*60.*60., 5*60.*60. };
-
+        
         size_t n = sizeof(xs)/sizeof(double);
         rv = [GCStatsDataSerieWithUnit dataSerieWithUnit:xUnit xUnit:xUnit andSerie:RZReturnAutorelease([[GCStatsDataSerie alloc] init])];
         for (size_t i=0; i<n; ++i) {
@@ -412,8 +178,8 @@
         double km = 1000.0;
         double marathon = 42.195;
         
-        double small_xs[] = { 100., 200., 400., 500., 800., 1500. };
-        double big_xs[]   = { 1., 2., 3., 5., 10., 15., 20., 30., 40., 50., 100. };
+        double small_xs[] = { 0., 100., 200., 400., 500., 800., 1500. };
+        double big_xs[]   = { 1., 2., 3., 4., 5., 6., 7., 8., 9., 10., 12., 15., 17., 20., 25., 30., 35., 40., 45., 50., 75., 100. };
         double std_xs[]   = { marathon/2.*km, marathon*km };
 
         size_t small_n = sizeof(small_xs)/sizeof(double);
@@ -644,64 +410,6 @@
         [GCFields registerField:[GCField fieldForKey:CALC_10SEC_SPEED andActivityType:activityType] displayName:NSLocalizedString(@"10sec Speed", @"Calculated Field") andUnitName:@"kph"];
     }
 
-}
-
--(NSArray<GCTrackPoint*>*)matchDistance:(CLLocationDistance)target withPoints:(NSArray<GCTrackPoint*>*)points{
-    CLLocationDistance x_a = 0.0;
-    CLLocationDistance x_b = 5.0;
-    
-    CLLocationDistance  y_a = 0.0;
-    CLLocationDistance  y_b = 0.0;
-
-    CLLocationDistance x_c = 0.0;
-    CLLocationDistance y_c = 0.0;
-
-    y_a = [self filterTrackpoints:points with:x_a addTo:nil];
-    y_b = [self filterTrackpoints:points with:x_b addTo:nil];
-
-    while( (y_a - target) * (y_b - target) < 0 && fabs(y_b-target) > 1.0 && fabs(y_a-target) > 1.0 && fabs(x_a-x_b) > 0.001){
-        x_c = (x_a+x_b)/2.0;
-        y_c = [self filterTrackpoints:points with:x_c  addTo:nil];
-        
-        if( (y_a - target) * (y_c - target) < 0){
-            x_b = x_c;
-            y_b = y_c;
-        }else{
-            x_a = x_c;
-            y_a = y_c;
-        }
-    }
-    NSMutableArray * rv = [NSMutableArray array];
-    if( fabs(y_a -target ) < fabs(y_b-target)){
-        y_c = [self filterTrackpoints:points with:x_a  addTo:rv];
-        x_c = x_a;
-    }else{
-        y_c = [self filterTrackpoints:points with:x_b  addTo:rv];
-        x_c = x_b;
-    }
-    RZLog(RZLogInfo, @"trackpoints(<%f)[%lu] = %fm, orig[%lu] = %fm",x_c,(unsigned long)rv.count, y_c, (unsigned long)points.count, target );
-    return rv;
-}
-
--(CLLocationDistance)filterTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints with:(CLLocationDistance)minimumDistance addTo:(NSMutableArray*)rv{
-    CLLocationDistance finalDistance = 0.0;
-    CLLocationDistance baseDistance = 0.0;
-    NSUInteger n = 0;
-    GCTrackPoint * last = nil;
-    for (GCTrackPoint * next in trackpoints) {
-        if( last != nil){
-            CLLocationDistance dist = last != nil ? [next distanceMetersFrom:last] : 0.0;
-            baseDistance += dist;
-
-            if( next.validCoordinate && dist > minimumDistance ){
-                finalDistance += dist;
-                [rv addObject:next];
-                n+=1;
-            }
-        }
-        last = next;
-    }
-    return finalDistance;
 }
 
 

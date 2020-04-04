@@ -34,6 +34,7 @@
 #import "GCHistoryPerformanceAnalysis.h"
 #import "GCUnitTrainingZone.h"
 #import "GCDerivedOrganizer.h"
+#import "GCActivity+Series.h"
 
 @implementation GCSimpleGraphCachedDataSource (Templates)
 

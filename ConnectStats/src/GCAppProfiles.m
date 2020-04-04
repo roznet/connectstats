@@ -46,6 +46,17 @@
     [super dealloc];
 }
 
++(GCAppProfiles*)singleProfileWithValues:(NSDictionary*)dict{
+    GCAppProfiles * rv = [[[GCAppProfiles alloc] init] autorelease];
+    if (rv) {
+        NSMutableDictionary * defs = [NSMutableDictionary dictionaryWithDictionary:[rv defaultProfile]];
+        [defs addEntriesFromDictionary:dict];
+        rv.profiles = @[ defs ];
+        rv.currentProfile = 0;
+    }
+    return rv;
+
+}
 +(GCAppProfiles*)profilesFromSettings:(NSMutableDictionary*)dict{
     GCAppProfiles * rv = [[[GCAppProfiles alloc] init] autorelease];
     if (rv) {
@@ -53,6 +64,15 @@
     }
     return rv;
 }
+
+-(NSDictionary*)defaultProfile{
+    return @{PROFILE_LOGIN_NAME:@"",
+             PROFILE_NAME:@"Default",
+             PROFILE_DBPATH:@"activities.db",
+             PROFILE_FULL_DOWNLOAD_DONE:@(false)
+    };
+}
+
 -(void)loadFromSettings:(NSMutableDictionary*)dict{
     self.profiles = dict[CONFIG_PROFILES];
     self.currentProfile = [dict[CONFIG_CURRENT_PROFILE] intValue];
@@ -60,11 +80,7 @@
     if (!self.profiles) {
         // Default profile
         
-        NSMutableDictionary * defaultDict = [NSMutableDictionary dictionaryWithDictionary:@{PROFILE_LOGIN_NAME:@"",
-                                                                                            PROFILE_NAME:@"Default",
-                                                                                            PROFILE_DBPATH:@"activities.db",
-                                                                                            PROFILE_FULL_DOWNLOAD_DONE:@(false)
-                                                                                            }];
+        NSMutableDictionary * defaultDict = [NSMutableDictionary dictionaryWithDictionary:[self defaultProfile]];
         
         self.profiles = [NSMutableArray arrayWithArray:@[ defaultDict ] ];
         self.currentProfile = 0;

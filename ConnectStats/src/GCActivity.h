@@ -221,44 +221,6 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(GCField*)nextAvailableTrackField:(GCField*)one;
 
 /**
- Return a dataSerie for the field if available.
- The serie will be indexed by time. The standard Filter for the field
- Will have been applied
- */
--(GCStatsDataSerieWithUnit*)timeSerieForField:(GCField*)field;
-
-/**
- Return a dataSerie for the field if available.
- The serie will be indexed by distance
- */
--(GCStatsDataSerieWithUnit*)distanceSerieForField:(GCField*)field;
-
-/**
- Standard filter to apply for given trackfield
- */
--(GCStatsDataSerieWithUnit*)applyStandardFilterTo:(GCStatsDataSerieWithUnit*)serieWithUnit ForField:(GCField*)field;
-
-/**
- Special time serie for swimStroke, will return the value of gcSwimStrokeType for
- each swim length recorded. Will match the x of the other serie in case a filter was applied
- */
--(GCStatsDataSerie * )timeSerieForSwimStrokeMatching:(GCStatsDataSerie*)other;
-/**
- Will return a serie for each track point that is 0 if that trackpoint is not
- in lap or the time/distance since the beginning of the lap
- */
--(GCStatsDataSerie*)highlightSerieForLap:(NSUInteger)lap timeAxis:(BOOL)timeAxis;
-
-/**
- will return a serie that is the total distance (or time if timeAxis==false) since beginning
- versus elapsed (or distance if timeAxis==false)
- */
--(GCStatsDataSerieWithUnit*)progressSerie:(BOOL)timeAxis;
-/**
- Compare Cumulative Graph
- */
--(GCStatsDataSerieWithUnit*)cumulativeDifferenceSerieWith:(GCActivity*)compareTo timeAxis:(BOOL)timeAxis;
-/**
  Return list of available fields with Track Points. Will include calculated tracks
  @return NSArray<GCField*>
  */
@@ -358,10 +320,6 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(BOOL)useLaps:(NSString*)name;
 -(void)clearCalculatedLaps;
 -(void)focusOnLapIndex:(NSUInteger)lapIndex;//cheat/hint for lapcoumpound with several point in same lap
-/**
- return a serie with the value of field for each lap
- */
--(GCStatsDataSerieWithUnit*)lapSerieForTrackField:(GCField*)field timeAxis:(BOOL)timeAxis;
 
 -(void)purgeCache;
 -(BOOL)validCoordinate;

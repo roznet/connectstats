@@ -832,7 +832,7 @@
     if (hrat[@"bpm"]) {
         hrat=hrat[@"bpm"];
     }
-    NSDictionary * spee = summary[[GCFields fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:self.activityType]];
+    NSDictionary * spee = summary[ [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:self.activityType] ];
 
     [self setSummaryField:gcFieldFlagSumDistance with:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:[dura[@"value"] doubleValue]]];
     [self setSummaryField:gcFieldFlagWeightedMeanHeartRate with:[GCNumberWithUnit numberWithUnit:GCUnit.bpm andValue:[hrat[@"value"] doubleValue]]];

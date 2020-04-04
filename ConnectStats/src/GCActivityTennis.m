@@ -35,6 +35,7 @@
 #import "GCActivityTennisHeatmap.h"
 #import "GCActivity+Fields.h"
 #import "GCActivity+Database.h"
+#import "GCActivity+Series.h"
 
 @interface GCActivityTennis ()
 @property (nonatomic,retain) NSDictionary * shotsData;

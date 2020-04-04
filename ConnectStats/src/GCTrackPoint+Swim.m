@@ -40,7 +40,7 @@
     if (self) {
         self.time = timestamp;
         [self setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.dimensionless andValue:type]
-                       forField:[GCField fieldForKey:INTERNAL_DIRECT_STROKE_TYPE andActivityType:GC_TYPE_SWIMMING] inActivity:act];
+                       forField:[GCField fieldForKey:INTERNAL_DIRECT_STROKE_TYPE andActivityType:GC_TYPE_ALL] inActivity:act];
         
         for (GCField * field in sumValues) {
             GCActivitySummaryValue * value = sumValues[field];
@@ -61,7 +61,7 @@
 }
 
 -(gcSwimStrokeType)directSwimStroke{
-    GCNumberWithUnit * found = [self numberWithUnitForField:[GCField fieldForKey:INTERNAL_DIRECT_STROKE_TYPE andActivityType:GC_TYPE_SWIMMING] inActivity:nil];
+    GCNumberWithUnit * found = [self numberWithUnitForField:[GCField fieldForKey:INTERNAL_DIRECT_STROKE_TYPE andActivityType:GC_TYPE_ALL] inActivity:nil];
     if( found ){
         return (gcSwimStrokeType)found.value;
     }

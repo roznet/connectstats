@@ -65,6 +65,7 @@ extern NSString * kPreservedSettingsName;
 
 +(NSCalendar*)calculationCalendar;
 +(NSDate*)referenceDate;
++(NSInteger)currentYear;
 +(UINavigationController*)currentNavigationController;
 
 +(BOOL)healthStatsVersion;

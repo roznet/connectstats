@@ -327,19 +327,26 @@ NSArray * _elementCache = nil;
             rv.calendarUnits = units[which];
             rv.components = [rv.calendar components:rv.calendarUnits fromDate:found];
 
-            NSUInteger location = scanner.scanLocation;
-            NSString * foundstr = nil;
-
-            [scanner scanUpToCharactersFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet].invertedSet intoString:nil];
-            if ([scanner scanUpToCharactersFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet] intoString:&foundstr]) {
-                int year = foundstr.intValue;
-                if (year > 2000 && year < 2020) {
-                    (rv.components).year = year;
-                    rv.calendarUnits += NSCalendarUnitYear;
-                }else{
-                    // ignore
-                    scanner.scanLocation = location;
+            // If we parsed a year, make sure it's a valid year
+            // otherwise many number may fail
+            if( (rv.calendarUnits & NSCalendarUnitYear) != NSCalendarUnitYear || ( rv.components.year > 2000 && rv.components.year < [GCAppGlobal currentYear] + 2 ) ){
+                
+                NSUInteger location = scanner.scanLocation;
+                NSString * foundstr = nil;
+                
+                [scanner scanUpToCharactersFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet].invertedSet intoString:nil];
+                if ([scanner scanUpToCharactersFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet] intoString:&foundstr]) {
+                    int year = foundstr.intValue;
+                    if (year > 2000 && year < [GCAppGlobal currentYear] + 2) {
+                        (rv.components).year = year;
+                        rv.calendarUnits += NSCalendarUnitYear;
+                    }else{
+                        // ignore
+                        scanner.scanLocation = location;
+                    }
                 }
+            }else{
+                rv = nil;
             }
         }
     }

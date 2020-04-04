@@ -185,6 +185,9 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 -(void)removeAllPoints{
     [dataPoints removeAllObjects];
 }
+-(void)removePointAtIndex:(NSUInteger)idx{
+    [dataPoints removeObjectAtIndex:idx];
+}
 
 #pragma mark - Sorting
 
@@ -281,19 +284,38 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 }
 
 -(NSString*)asCSVString:(BOOL)asDate{
-    NSMutableString * rv = [NSMutableString stringWithString:@"i;x;y\n"];
-
-    NSUInteger n=self.dataPoints.count;
-    for (NSUInteger i=0; i<n; i++) {
-        GCStatsDataPoint * point = self.dataPoints[i];
-        if (asDate) {
-            [rv appendFormat:@"%d,%@,%f\n", (int)i, point.date, point.y_data];
-        }else{
-            [rv appendFormat:@"%d,%f,%f\n", (int)i, point.x_data, point.y_data];
+    BOOL hasMulti = false;
+    for (GCStatsDataPoint * point in self.dataPoints) {
+        if( [point isKindOfClass:[GCStatsDataPointMulti class]]){
+            hasMulti = true;
+            break;
         }
     }
+    
+    NSMutableArray * lines = [NSMutableArray array];
+    
+    [lines addObject:hasMulti ? @"i,x,y,z" : @"i,x,y" ];
 
-    return rv;
+    NSUInteger i = 0;
+    for (GCStatsDataPoint * point in self.dataPoints) {
+        NSMutableString * line = nil;
+        if (asDate) {
+            line = [NSMutableString stringWithFormat:@"%d,%@,%f", (int)i, [point.date formatAsRFC3339], point.y_data];
+        }else{
+            line = [NSMutableString stringWithFormat:@"%d,%f,%f", (int)i, point.x_data, point.y_data];
+        }
+        if( hasMulti ){
+            if( [point isKindOfClass:[GCStatsDataPointMulti class]] ){
+                GCStatsDataPointMulti * multi = (GCStatsDataPointMulti*)point;
+                [line appendFormat:@",%f", multi.z_data];
+            }else{
+                [line appendFormat:@","];
+            }
+        }
+        [lines addObject:line];
+    }
+    
+    return [lines componentsJoinedByString:@"\n"];
 }
 
 #pragma mark - Access
@@ -1583,7 +1605,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 -(void)fill:(size_t)range valuesForUnit:(double)unit into:(double*)values fillMethod:(gcStatsFillMethod)fill statistic:(gcStats)statistic{
     GCStatsDataPoint * first_p = (self.dataPoints)[0];
     size_t last_i   = 0;
-    double first_x  = first_p.x_data;
+    double first_x  = (int)(first_p.x_data/unit);
 
     BOOL inconsistentPoint=false;
 
@@ -1655,7 +1677,8 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                     case gcStatsSum:
                     {
                         if( step_i == from_i){
-                            values[ step_i+1<range ? step_i+1 : step_i] += from_p.y_data;
+                            //values[ step_i+1<range ? step_i+1 : step_i] += from_p.y_data;
+                            values[ step_i ] += from_p.y_data;
                         }// else keep at 0
                         break;
                     }
@@ -1670,7 +1693,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                                     step_v = 0.;
                                     break;
                                 case gcStatsLinear:
-                                    step_v =  (step_x-from_p.x_data) * (to_p.x_data - from_p.x_data) * (to_p.y_data-from_p.y_data);
+                                    step_v = from_p.y_data + ( (step_x-from_p.x_data) / (to_p.x_data - from_p.x_data) * (to_p.y_data-from_p.y_data) );
                                     break;
                                 case gcStatsLast:
                                     // do nothing, use last
@@ -1804,6 +1827,15 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 }
 
 -(GCStatsDataSerie*)movingBestByUnitOf:(double)unit fillMethod:(gcStatsFillMethod)fill select:(gcStatsSelection)select statistic:(gcStats)statistic{
+    return [self movingBestByUnitOf:unit fillMethod:fill select:select statistic:statistic fillStatistics:statistic];
+}
+
+-(GCStatsDataSerie*)movingBestByUnitOf:(double)unit
+                            fillMethod:(gcStatsFillMethod)fill
+                                select:(gcStatsSelection)select
+                             statistic:(gcStats)statistic
+                        fillStatistics:(gcStats)fillStatistic{
+
 
     if (self.dataPoints.count < 2) {
         return nil;
@@ -1826,7 +1858,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     double * nonzero = calloc(range, sizeof(double));
     size_t * bestidx = nil;
 
-    [self fill:range valuesForUnit:unit into:values fillMethod:fill statistic:statistic];
+    [self fill:range valuesForUnit:unit into:values fillMethod:fill statistic:fillStatistic];
 
     //for debugging
     bestidx = calloc(range, sizeof(size_t));
@@ -1891,22 +1923,51 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                     bestidx[n]=i;
                 }
             }else if(i>n){
-                // we now have n values, check if last n better than previous best.
-                if ( (select==gcStatsMax && best[n]<rolling[n]) || (select==gcStatsMin && best[n]>rolling[n])) {
-                    best[n]=rolling[n];
-                    if (bestidx) {
-                        bestidx[n] = i-n;
+                // we now have n values, check if last n better than previous best according to
+                // the appropriate select rule.
+                if( n == 40){
+                    
+                }
+                if (select==gcStatsRatioMin || select==gcStatsRatioMax){
+                    // for speed if n: distance, rolling[n]: time, speed is best if dist/time is higher
+                    if( rolling[n] != 0.0 && best[n] != 0.0){
+                        // for speed if n: distance, rolling[n]: time, speed is best if dist/time is higher
+                        double rollingInvRatio = (unit * (1.0+n))/rolling[n];
+                        double bestInvRatio = (unit * (1.0+n))/best[n];
+                        
+                        // Example: n: meters, rolling[n]: seconds, ratio: n+1*stride / rolling[n] = distance/time (mps) gcStatsRatioMax: highest mps
+                        
+                        if( ( select==gcStatsRatioMin && bestInvRatio > rollingInvRatio ) ||
+                           ( select==gcStatsRatioMax && bestInvRatio < rollingInvRatio ) ){
+                            best[n]=rolling[n];
+                            if (bestidx) {
+                                bestidx[n] = i-n;
+                            }
+                        }
+                    }
+                }else{
+                    if ( (select==gcStatsMax && best[n]<rolling[n]) ||
+                        (select==gcStatsMin && best[n]>rolling[n]) )
+                    {
+                        best[n]=rolling[n];
+                        if (bestidx) {
+                            bestidx[n] = i-n;
+                        }
                     }
                 }
             }
-            
-            if( n > 0){
-                if ( (select==gcStatsMax && best[n]>best[n-1]) || (select==gcStatsMin && best[n]>rolling[n])) {
-                }
-            }
-
         }
     }
+#if TARGET_IPHONE_SIMULATOR
+    size_t bad_count = 0;
+    for(size_t n=0;n<range;n++){
+        // For debugging should not happen
+        if ( (select==gcStatsMax && best[n]<best[n-1]) || (select==gcStatsMin && best[n]>best[n-1])) {
+            bad_count++;
+        }
+    }
+#endif
+
     GCStatsDataSerie * rv = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     if (bestidx) {
         for (size_t n=0; n<range; n++) {

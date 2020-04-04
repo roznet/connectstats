@@ -29,6 +29,8 @@
 #import "GCAppGlobal.h"
 #import "GCViewIcons.h"
 #import "GCTrackFieldChoices.h"
+#import "GCActivity+Series.h"
+
 @import RZExternal;
 
 @interface GCActivityTrackGraphViewController ()

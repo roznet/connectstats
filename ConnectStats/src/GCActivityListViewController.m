@@ -229,10 +229,14 @@ const CGFloat kCellDaySpacing = 2.f;
         UIImage * imager = [GCViewIcons tabBarIconFor:gcIconTabStatsIPad];
         UIImage * imagec = [GCViewIcons tabBarIconFor:gcIconTabSettings];
 
+        
+        UIBarButtonItem * settingsButton = RZReturnAutorelease([[UIBarButtonItem alloc] initWithImage:imagec style:UIBarButtonItemStylePlain target:self action:@selector(ipadSelectSettings)]);
+        
         self.navigationItem.rightBarButtonItem = RZReturnAutorelease([[UIBarButtonItem alloc] initWithImage:imager style:UIBarButtonItemStylePlain target:self action:@selector(ipadSelectStats)]);
          self.navigationItem.leftBarButtonItems = @[
                                                     RZReturnAutorelease([[UIBarButtonItem alloc] initWithImage:imagel style:UIBarButtonItemStylePlain target:self action:@selector(ipadSelectCalendar)]),
-                                                   RZReturnAutorelease([[UIBarButtonItem alloc] initWithImage:imagec style:UIBarButtonItemStylePlain target:self action:@selector(ipadSelectSettings)])
+                                                    settingsButton,
+                                                   
                                                     ];
     }else{
         self.navigationItem.titleView = self.search;

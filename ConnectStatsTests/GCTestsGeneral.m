@@ -30,7 +30,7 @@
 #import "GCTestsHelper.h"
 #import "GCActivity+Database.h"
 #import "GCActivity+Import.h"
-
+#import "GCActivity+TrackTransform.h"
 #import "GCActivity+TestBackwardCompat.h"
 
 @interface GCTestsGeneral : GCTestCase
@@ -364,7 +364,9 @@
 -(void)testSearchString{
     GCActivitySearch * search = nil;
     GCActivity * one_true = [[[GCActivity alloc] init] autorelease];
+    one_true.activityId = @"1111";
     GCActivity * one_false =[[[GCActivity alloc] init] autorelease];
+    one_false.activityId = @"0000";
     [one_true setSumDistanceCompat:20000.];
     [one_false setSumDistanceCompat:2000.];
     
@@ -379,6 +381,10 @@
         XCTAssertFalse([search match:one_true], @"%@(20)",st);
     }
     
+    search = [GCActivitySearch activitySearchWithString:@"1111"];
+    XCTAssertFalse([search match:one_false], @"1111");
+    XCTAssertTrue([search match:one_true], @"1111");
+
     [one_true setSumDistanceCompat:2000.];
     [one_false setSumDistanceCompat:1450.];
     search = [GCActivitySearch activitySearchWithString:@"distance > 1.5km"];

@@ -478,10 +478,6 @@ static void registerInCache(GCField*field){
     return title;
 }
 
--(GCField*)nextFieldIn:(gcFieldFlag)flag{
-    return [GCField fieldForFlag:[GCFields nextTrackField:flag in:flag] andActivityType:self.activityType]  ;
-}
-
 -(NSArray*)fieldCategoryAndOrder{
     static NSMutableDictionary * cache = nil;
     if (!cache) {

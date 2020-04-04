@@ -57,45 +57,23 @@ NS_INLINE BOOL GCActivityTypeIsSki(NSString*at, NSString*atdetail){
 +(NSString*)activityTypeDisplay:(NSString*)activityType;
 
 +(NSArray*)knownFieldsMatching:(NSString*)str;
-+(BOOL)knownField:(NSString*)field activityType:(NSString*)activityType DEPRECATED_MSG_ATTRIBUTE("use GCField");
-+(GCUnit*)fieldUnit:(NSString*)field activityType:(NSString*)activityType DEPRECATED_MSG_ATTRIBUTE("Use GCField");
-+(NSString*)fieldUnitName:(NSString*)field activityType:(NSString*)activityType DEPRECATED_MSG_ATTRIBUTE("Use GCField");
-+(NSString*)fieldDisplayName:(NSString*)field activityType:(NSString*)activityType DEPRECATED_MSG_ATTRIBUTE("Use GCField");
 +(NSDictionary<GCField*,GCFieldInfo*>*)missingPredefinedField;
 
 +(NSString*)metaFieldDisplayName:(NSString*)metaField;
-
-+(NSString*)field:(NSString*)field withIntensity:(gcIntensityLevel)level DEPRECATED_MSG_ATTRIBUTE("use GCField.");
-
-+(gcFieldFlag)trackFieldFromActivityField:(NSString*)aActivityField; //DEPRECATED_MSG_ATTRIBUTE("use GCField.") ;
 +(NSString*)activityFieldFromTrackField:(gcFieldFlag)aTrackField andActivityType:(NSString*)aAct ;
 +(NSArray<GCField*>*)availableFieldsIn:(NSUInteger)flag forActivityType:(NSString*)atype;
-+(NSArray<NSNumber*>*)availableTrackFieldsIn:(NSUInteger)flag;
-+(NSArray*)describeTrackFields:(gcFieldFlag)flag forActivityType:(NSString*)aType;
-+(gcFieldFlag)nextTrackField:(gcFieldFlag)which in:(NSUInteger)flag;
-+(NSString*)trackFieldDisplayName:(gcFieldFlag)which forActivityType:(NSString*)aAct DEPRECATED_MSG_ATTRIBUTE("use GCField.");
-//+(BOOL)trackFieldCanSum:(gcFieldFlag)field;
 
 +(NSString*)lapFieldForField:(NSString*)field;
 +(NSString*)fieldForLapField:(NSString*)field andActivityType:(NSString*)aType;
 +(GCUnit*)unitForLapField:(NSString*)field activityType:(NSString*)aType;
 
-+(void)registerField:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom DEPRECATED_MSG_ATTRIBUTE("Switch to predefined");
 +(void)registerField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom;
-
-+(NSString*)fieldForFlag:(gcFieldFlag)which andActivityType:(NSString*)activityType;//DEPRECATED_MSG_ATTRIBUTE("use GCField.");
-
-+(NSString*)fieldForAggregatedField:(gcAggregatedField)which andActivityType:(NSString*)actType DEPRECATED_MSG_ATTRIBUTE("use GCField");
 
 /**
  used in import, can't be on GCField because used on input dictionary of fieldKeys
  */
 +(BOOL)skipField:(NSString*)field  ;
 +(void)ensureDbStructure:(FMDatabase*)aDb;
-
-+(NSString*)fieldDisplayNameAndUnits:(NSString *)field activityType:(NSString*)aType DEPRECATED_MSG_ATTRIBUTE("use GCField.") ;
-+(NSString*)fieldDisplayNameAndUnits:(NSString *)fieldStr activityType:(NSString*)aType unit:(GCUnit*)unit DEPRECATED_MSG_ATTRIBUTE("use GCField.") ;
-
 
 +(NSArray*)swimLapFields;
 +(NSString*)swimLapFieldFromTrackField:(gcFieldFlag)tfield;

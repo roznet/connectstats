@@ -108,6 +108,37 @@ void buildStatic(){
     [super dealloc];
 }
 
+-(gcTrackEventType)trackEventType{
+    GCNumberWithUnit * found = [self numberWithUnitForField:[GCField fieldForKey:INTERNAL_TRACK_EVENT_TYPE andActivityType:GC_TYPE_ALL] inActivity:nil];
+    if( found ){
+        return (gcTrackEventType)found.value;
+    }
+    return gcTrackEventTypeNone;
+}
+-(NSString * )trackEventTypeDescription{
+    switch (self.trackEventType) {
+        case gcTrackEventTypeNone:
+            return @"none";
+        case gcTrackEventTypeStart:
+            return @"start";
+        case gcTrackEventTypeStop:
+            return @"stop";
+        case gcTrackEventTypeMarker:
+            return @"marker";
+        case gcTrackEventTypeStopAll:
+            return @"stop_all";
+    }
+}
+-(void)recordTrackEventType:(gcTrackEventType)trackEventType inActivity:(GCActivity*)act{
+    if( trackEventType == gcTrackEventTypeNone ){
+        [self setNumberWithUnit:nil
+                       forField:[GCField fieldForKey:INTERNAL_TRACK_EVENT_TYPE andActivityType:GC_TYPE_ALL] inActivity:act];
+
+    }else{
+        [self setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.dimensionless andValue:trackEventType]
+                       forField:[GCField fieldForKey:INTERNAL_TRACK_EVENT_TYPE andActivityType:GC_TYPE_ALL] inActivity:act];
+    }
+}
 +(GCTrackPoint*)trackPointWithCoordinate2D:(CLLocationCoordinate2D)coord{
     GCTrackPoint * rv = [[[GCTrackPoint alloc] init] autorelease];
     if (rv) {
@@ -287,7 +318,7 @@ void buildStatic(){
             RZLog(RZLogWarning, @"Unknown stroke %@ in %@", style, act);
             directSwimStroke = gcSwimStrokeOther;
         }
-        [self setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.dimensionless andValue:directSwimStroke] forField:[GCField fieldForKey:INTERNAL_DIRECT_STROKE_TYPE andActivityType:GC_TYPE_SWIMMING] inActivity:act];
+        [self setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.dimensionless andValue:directSwimStroke] forField:[GCField fieldForKey:INTERNAL_DIRECT_STROKE_TYPE andActivityType:GC_TYPE_ALL] inActivity:act];
     }
 }
 
@@ -512,18 +543,46 @@ void buildStatic(){
     return [self.time compare:other.time];
 }
 
+-(NSString*)bestGuessActivityType{
+    NSString * guessActivityType = GC_TYPE_ALL;
+    BOOL found = false;
+    
+    if( self.extraStorage){
+        for (GCField * one in self.extraStorage) {
+            if( ![one.activityType isEqualToString:GC_TYPE_ALL] ){
+                guessActivityType = one.activityType;
+                found = true;
+                break;
+            }
+        }
+    }
+    if( ! found && self.calculatedStorage ){
+        for (GCField * one in self.calculatedStorage) {
+            if( ![one.activityType isEqualToString:GC_TYPE_ALL] ){
+                guessActivityType = one.activityType;
+                break;
+            }
+        }
+    }
+    return guessActivityType;
+}
+
 -(NSString*)description{
     NSMutableString * rv = [NSMutableString stringWithFormat:@"<%@: %@,%.1f sec", NSStringFromClass([self class]), _time,_elapsed];
 
-    NSArray<NSNumber*> * available =[GCFields availableTrackFieldsIn:self.trackFlags];
+    NSArray<GCField*> * available =[GCFields availableFieldsIn:self.trackFlags forActivityType:[self bestGuessActivityType]];
+    
     GCNumberWithUnit * nu = [self numberWithUnitForField:gcFieldFlagSumDistance andActivityType:GC_TYPE_ALL];
     if( nu ){
         [rv appendFormat:@", %@", nu];
     }
-    for (NSNumber * one in available) {
-        gcFieldFlag flag = one.intValue;
-        GCNumberWithUnit * nu = [self numberWithUnitForField:flag andActivityType:GC_TYPE_ALL];
+    for (GCField * one in available) {
+        GCNumberWithUnit * nu = [self numberWithUnitForField:one inActivity:nil];
         [rv appendFormat:@", %@", nu];
+    }
+    gcTrackEventType type = self.trackEventType;
+    if( type != gcTrackEventTypeNone ){
+        [rv appendFormat:@" %@", self.trackEventTypeDescription];
     }
     [rv appendString:@">"];
     return rv;
@@ -542,6 +601,59 @@ void buildStatic(){
 
     return rv;
 }
+-(NSSet<GCField*>*)csvFieldsInActivity:(GCActivity*)act{
+    NSMutableSet * rv = [NSMutableSet setWithArray:[GCFields availableFieldsIn:self.trackFlags forActivityType:act.activityType]];
+    if( self.extraStorage ){
+        for (GCField * field in self.extraStorage) {
+            [rv addObject:field];
+        }
+    }
+    if( self.calculatedStorage ){
+        for (GCField * field in self.calculatedStorage) {
+            [rv addObject:field];
+        }
+    }
+    for (GCField * xfield in @[ [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:act.activityType], [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:act.activityType]]) {
+        if( RZTestOption(self.trackFlags, xfield.fieldFlag) &&
+           ![rv containsObject:xfield] ){
+            [rv addObject:xfield];
+        }
+    }
+    
+    return rv;
+}
+
+-(NSArray<NSString*>*)csvLabelsForFields:(NSArray<GCField*>*)fields InActivity:(GCActivity*)act{
+    NSMutableArray * rv = [NSMutableArray arrayWithObject:@"time"];
+    for (GCField * field in fields) {
+        GCNumberWithUnit * nu = [self numberWithUnitForField:field inActivity:act];
+        NSString * label = [NSString stringWithFormat:@"%@.%@", field.key, nu.unit.key];
+        [rv addObject:label];
+    }
+    return rv;
+}
+
+-(NSArray<NSString*>*)csvValuesForFields:(NSArray<GCField*>*)fields InActivity:(GCActivity*)act{
+    NSMutableArray * rv = [NSMutableArray arrayWithObject:[self.time formatAsRFC3339]];
+    for (GCField * one in fields) {
+        GCNumberWithUnit * nu = [self numberWithUnitForField:one inActivity:act];
+        if( nu ){
+            if( one.isInternal && [one.key isEqualToString:INTERNAL_TRACK_EVENT_TYPE]){
+                if( self.trackEventType != gcTrackEventTypeNone){
+                    [rv addObject:self.trackEventTypeDescription];
+                }else{
+                    [rv addObject:@""];
+                }
+            }else{
+                [rv addObject:[@(nu.value) stringValue]];
+            }
+        }else{
+            [rv addObject:@""];
+        }
+    }
+    return rv;
+}
+
 -(NSString*)displayLabel{
     return nil;
 }
@@ -553,15 +665,7 @@ void buildStatic(){
     }
     return false;
 }
-#pragma mark - Extra Values
 
-
--(GCNumberWithUnit*)numberWithUnitForExtraByIndex:(GCTrackPointExtraIndex *)idx{
-    return self.extraStorage[idx.field];
-}
--(GCNumberWithUnit*)numberWithUnitForExtraByField:(GCField *)aF{
-    return self.extraStorage[aF];
-}
 -(void)updateWithExtra:(NSDictionary<GCField*,GCNumberWithUnit*>*)other{
     if( ! self.extraStorage ){
         self.extraStorage = [NSMutableDictionary dictionaryWithDictionary:other];
@@ -816,7 +920,13 @@ void buildStatic(){
     if (!self.extraStorage) {
         self.extraStorage = [NSMutableDictionary dictionary];
     }
-    self.extraStorage[field] = nu;
+    if( nu == nil){
+        if( self.extraStorage[field] != nil){
+            [self.extraStorage removeObjectForKey:field];
+        }
+    }else{
+        self.extraStorage[field] = nu;
+    }
 }
 
 -(void)recordExtraIn:(NSObject<GCTrackPointDelegate>*)act{

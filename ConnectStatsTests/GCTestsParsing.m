@@ -44,6 +44,8 @@
 #import "GCHistoryFieldSummaryStats.h"
 #import "GCActivity+ExportText.h"
 #import "GCActivity+TestBackwardCompat.h"
+#import "GCActivity+TrackTransform.h"
+#import "GCactivity+Series.h"
 
 @interface GCTestsParsing : GCTestCase
 
@@ -442,7 +444,7 @@
         for (NSDictionary * one in lapsJson) {
             GCLap * lap = [[GCLap alloc] initWithDictionary:one forActivity:modernAct];
             [laps addObject:lap];
-            dist = [dist addNumberWithUnit:[lap numberWithUnitForField:gcFieldFlagSumDistance andActivityType:modernAct.activityType] weight:1.];
+            dist = [dist addNumberWithUnit:[lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:modernAct.activityType] inActivity:modernAct] weight:1.];
             [lap release];
         }
         XCTAssertEqualObjects([modernAct numberWithUnitForField:[GCField fieldForKey:@"SumDistance" andActivityType:modernAct.activityType]], dist);
@@ -1286,7 +1288,7 @@
 
 -(void)testSingle{
     NSString * fp = [RZFileOrganizer writeableFilePath:@"track_cs_16557.fit"];
-    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"YO" fitFilePath:fp startTime:nil]);
+    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"DummyTestId" fitFilePath:fp startTime:nil]);
     NSLog(@"%@", fitAct );
 
 }
