@@ -33,7 +33,7 @@
 #import "GCActivity+Database.h"
 #import "GCGarminRequestActivityReload.h"
 #import "GCGarminActivityTrack13Request.h"
-
+#import "GCActivity+Series.h"
 
 @implementation GCTestParsing
 

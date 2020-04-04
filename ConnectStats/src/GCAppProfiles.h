@@ -31,6 +31,7 @@
 
 @property (nonatomic,readonly) NSUInteger currentProfile;
 
++(GCAppProfiles*)singleProfileWithValues:(NSDictionary*)dict;
 +(GCAppProfiles*)profilesFromSettings:(NSMutableDictionary*)dict;
 -(void)saveToSettings:(NSMutableDictionary*)dict;
 

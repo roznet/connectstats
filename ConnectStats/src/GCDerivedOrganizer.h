@@ -39,7 +39,9 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
 
 -(FMDatabase*)deriveddb;
 
--(GCStatsSerieOfSerieWithUnits*)timeSeriesOfSeriesFor:(GCField*)field;
+/// Return time serie of best rolling series for field for all the calculated dates
+/// @param field field to query
+-(GCStatsSerieOfSerieWithUnits*)historicalTimeSeriesOfSeriesFor:(GCField*)field;
 -(GCStatsSerieOfSerieWithUnits*)timeserieOfSeriesFor:(GCField*)field inActivities:(NSArray<GCActivity*>*)activities;
 
 -(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type

@@ -30,7 +30,7 @@
 #import "GCTrackStats.h"
 #import "GCFields.h"
 #import "GCTrackFieldChoices.h"
-
+#import "GCActivity+Series.h"
 
 @implementation GCTestTracks
 

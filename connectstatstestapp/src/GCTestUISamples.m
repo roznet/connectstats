@@ -42,6 +42,7 @@
 #import "GCCellActivity.h"
 #import "GCTrackFieldChoices.h"
 #import "GCTestsSamples.h"
+#import "GCActivity+Series.h"
 
 @implementation GCTestUISamples
 
@@ -316,7 +317,7 @@
 
     GCField * speedField = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType];
     GCField * hrField = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType];
-
+    
     GCStatsDataSerieWithUnit * speedSU = [act timeSerieForField:speedField];
     GCStatsDataSerieWithUnit * hrSU    = [act timeSerieForField:hrField];
 

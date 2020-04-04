@@ -47,16 +47,16 @@
 -(void)testStats{
 	[self startSession:@"GC Stats"];
 
-    [[GCAppGlobal profile] configSet:CONFIG_DUPLICATE_SKIP_ON_LOAD boolVal:false];
+    [[GCAppGlobal profile] configSet:CONFIG_DUPLICATE_CHECK_ON_LOAD boolVal:false];
 
     // Needs to turn off duplicate check as it compares to stored values from garmin
     // or from db queries, which didn't handle the duplicates...
-    [GCAppGlobal setupSampleState:@"activities_stats.db" config:@{CONFIG_DUPLICATE_SKIP_ON_LOAD:@(false)}];
+    [GCAppGlobal setupSampleState:@"activities_stats.db" config:@{CONFIG_DUPLICATE_CHECK_ON_LOAD:@(false)}];
 
     [self checkSelfConsistency];
     [self checkHistoryConsistency];
 
-    [[GCAppGlobal profile] configSet:CONFIG_DUPLICATE_SKIP_ON_LOAD boolVal:true];
+    [[GCAppGlobal profile] configSet:CONFIG_DUPLICATE_CHECK_ON_LOAD boolVal:true];
 	[self endSession:@"GC Stats"];
 }
 
