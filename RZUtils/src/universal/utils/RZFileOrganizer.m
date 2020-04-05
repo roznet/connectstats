@@ -28,7 +28,7 @@
 #import "RZLog.h"
 
 NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrganizerMatch match ){
-    NSFileManager	*	fileManager			= [NSFileManager defaultManager];
+    NSFileManager * fileManager = [NSFileManager defaultManager];
 
     NSArray * files = [fileManager contentsOfDirectoryAtPath:documentsDirectory error:nil];
 
@@ -59,22 +59,22 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
     NSString * aName = RZReturnAutorelease([[NSString alloc] initWithFormat:fmt arguments:args]);
     va_end(args);
     
-    NSArray        *    paths                = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString    *    documentsDirectory    = paths[0];
+    NSArray * paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * documentsDirectory = paths[0];
 
     return( aName ? [documentsDirectory stringByAppendingPathComponent:aName] : documentsDirectory);
 }
 
 +(NSString*)writeableFilePath:(nullable NSString*)aName{
-    NSArray		*	paths				= NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString	*	documentsDirectory	= paths[0];
+    NSArray * paths	= NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * documentsDirectory = paths[0];
 
     return( aName ? [documentsDirectory stringByAppendingPathComponent:aName] : documentsDirectory);
 }
 
 +(BOOL)ensureWriteableFilePath:(NSString*)aName{
-    NSArray		*	paths				= NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString	*	documentsDirectory	= paths[0];
+    NSArray * paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * documentsDirectory = paths[0];
     NSString * path = [documentsDirectory stringByAppendingPathComponent:aName];
     NSError * error = nil;
     BOOL rv = [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];
@@ -86,24 +86,39 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
 
 
 +(NSArray*)writeableFilesMatching:(nullable FileOrganizerMatch)match{
-    NSArray		*	paths				= NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString	*	documentsDirectory	= paths[0];
+    NSArray * paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * documentsDirectory = paths[0];
 
     return filesMatchingLogic(documentsDirectory, match);
 }
 
 +(NSArray*)bundleFilesMatching:(nullable FileOrganizerMatch)match forClass:(Class)cls{
-    NSString	*	documentsDirectory	= [NSBundle bundleForClass:cls].resourcePath;
+    NSString * documentsDirectory = [NSBundle bundleForClass:cls].resourcePath;
 
     return filesMatchingLogic(documentsDirectory, match);
 }
 
++(nullable NSString*)writeableFilePathIfExistsWithFormat:(NSString*)fmt, ...{
+    va_list args;
+    va_start(args, fmt);
+    NSString * aName = RZReturnAutorelease([[NSString alloc] initWithFormat:fmt arguments:args]);
+    va_end(args);
+
+    NSArray * paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * documentsDirectory    = paths[0];
+    NSString * rv = [documentsDirectory stringByAppendingPathComponent:aName];
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:rv]){
+        rv = nil;
+    }
+    return( rv );
+}
 
 +(nullable NSString*)writeableFilePathIfExists:(NSString*)aName{
-    NSArray		*	paths				= NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString	*	documentsDirectory	= paths[0];
-    NSString    *   rv = [documentsDirectory stringByAppendingPathComponent:aName];
-    NSFileManager	*	fileManager			= [NSFileManager defaultManager];
+    NSArray * paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * documentsDirectory = paths[0];
+    NSString * rv = [documentsDirectory stringByAppendingPathComponent:aName];
+    NSFileManager * fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:rv]){
         rv = nil;
     }
@@ -132,7 +147,7 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
 }
 
 +(nullable NSString*)bundleFilePathIfExists:(NSString*)aName{
-    NSString * rv  = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:aName];
+    NSString * rv = [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:aName];
     if (![[NSFileManager defaultManager] fileExistsAtPath:rv]) {
         rv = nil;
     }
@@ -141,10 +156,10 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
 
 
 +(void)forceRebuildEditable:(NSString*)aName{
-    BOOL				success;
-    NSError			*	error;
-    NSFileManager	*	fileManager			= [NSFileManager defaultManager];
-    NSString		*	writableFilePath	= [self writeableFilePath:aName];
+    BOOL success;
+    NSError * error;
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSString * writableFilePath = [self writeableFilePath:aName];
 
     success = [fileManager fileExistsAtPath:writableFilePath];
     if (success){
@@ -157,10 +172,10 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
 }
 
 +(void)createEditableCopyOfFile:(NSString*)aName forClass:(Class)cls{
-    BOOL                success;
-    NSError            *    error;
-    NSFileManager    *    fileManager            = [NSFileManager defaultManager];
-    NSString        *    writableFilePath    = [self writeableFilePath:aName];
+    BOOL success;
+    NSError * error;
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSString * writableFilePath = [self writeableFilePath:aName];
 
     success = [fileManager fileExistsAtPath:writableFilePath];
     if (success){
@@ -169,7 +184,7 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
             RZLog(RZLogError, @"Failed to delete database file '%@' with message '%@'.", writableFilePath, [error localizedDescription]);
     }
 
-    NSString *defaultFilePath = [RZFileOrganizer bundleFilePath:aName forClass:cls];
+    NSString * defaultFilePath = [RZFileOrganizer bundleFilePath:aName forClass:cls];
     success = [fileManager fileExistsAtPath:defaultFilePath];
     if (!success) {
         RZLog( RZLogError,@"Failed to find '%@'.", defaultFilePath);
@@ -183,10 +198,10 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
 
 
 +(void)createEditableCopyOfFile:(NSString*)aName{
-    BOOL				success;
-    NSError			*	error;
-    NSFileManager	*	fileManager			= [NSFileManager defaultManager];
-    NSString		*	writableFilePath	= [self writeableFilePath:aName];
+    BOOL success;
+    NSError * error;
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSString * writableFilePath = [self writeableFilePath:aName];
 
     success = [fileManager fileExistsAtPath:writableFilePath];
     if (success){
@@ -208,10 +223,10 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
 }
 
 +(void)removeEditableFile:(NSString*)aName{
-    BOOL				success;
-    NSError			*	error;
-    NSFileManager	*	fileManager			= [NSFileManager defaultManager];
-    NSString		*	writableFilePath	= [self writeableFilePath:aName];
+    BOOL success;
+    NSError * error;
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSString * writableFilePath = [self writeableFilePath:aName];
 
     success = [fileManager fileExistsAtPath:writableFilePath];
     if (success){
@@ -223,11 +238,11 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
 }
 
 +(BOOL)createEditableCopyOfFileIfNeeded:(NSString*)aName {
-    BOOL				success;
-	BOOL				rebuild = NO;
-    NSError			*	error;
-    NSFileManager	*	fileManager			= [NSFileManager defaultManager];
-    NSString		*	writableFilePath	= [self writeableFilePath:aName];
+    BOOL success;
+    BOOL rebuild = NO;
+    NSError * error;
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSString * writableFilePath = [self writeableFilePath:aName];
 
     success = [fileManager fileExistsAtPath:writableFilePath];
     if (success){
@@ -255,9 +270,9 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
 }
 
 +(void)saveDictionary:(NSDictionary*)aDict withName:(NSString*)aName{
-    NSFileManager*	fileManager			= [NSFileManager defaultManager];
-    NSString*		writableFilePath	= [RZFileOrganizer writeableFilePath:aName];
-    NSError*		error				= nil;
+    NSString * writableFilePath = [RZFileOrganizer writeableFilePath:aName];
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSError * error = nil;
 
 	if( ! [aDict writeToFile:writableFilePath atomically:YES] ){
 		RZLog( RZLogError, @"Failed to write %@, deleting", aName);
@@ -268,11 +283,10 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
 }
 
 +(NSDictionary*)loadDictionary:(NSString*)aName{
-    NSFileManager*	fileManager			= [NSFileManager defaultManager];
-    NSString*		writableFilePath	= [self writeableFilePath:aName];
+    NSString * writableFilePath = [RZFileOrganizer writeableFilePath:aName];
+    NSFileManager * fileManager = [NSFileManager defaultManager];
 	NSDictionary * rv = nil;
     if( [fileManager fileExistsAtPath:writableFilePath] ){
-
 		rv = [NSDictionary dictionaryWithContentsOfFile:writableFilePath];
 	}
 	if( !rv ) {
@@ -282,9 +296,9 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
 }
 
 +(void)saveArray:(NSArray*)aDict withName:(NSString*)aName{
-    NSFileManager*	fileManager			= [NSFileManager defaultManager];
-    NSString*		writableFilePath	= [RZFileOrganizer writeableFilePath:aName];
-    NSError*		error				= nil;
+    NSString * writableFilePath = [RZFileOrganizer writeableFilePath:aName];
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSError * error = nil;
 
 	if( ! [aDict writeToFile:writableFilePath atomically:YES] ){
 		RZLog(RZLogError, @"Failed to write %@, deleting", aName);
@@ -294,9 +308,10 @@ NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrgani
 	}
 }
 +(NSArray*)loadArray:(NSString*)aName{
-    NSFileManager*	fileManager			= [NSFileManager defaultManager];
-    NSString*		writableFilePath	= [self writeableFilePath:aName];
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSString * writableFilePath = [self writeableFilePath:aName];
 	NSArray * rv = nil;
+    
     if( [fileManager fileExistsAtPath:writableFilePath] ){
         rv = [NSArray arrayWithContentsOfFile:writableFilePath];
 	}

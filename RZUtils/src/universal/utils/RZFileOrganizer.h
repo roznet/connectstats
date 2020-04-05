@@ -55,6 +55,7 @@ typedef BOOL (^FileOrganizerMatch)(NSString*fn);
 +(NSString*)writeableFilePath:(nullable NSString*)aName;
 +(NSString*)writeableFilePathWithFormat:(nullable NSString*)fmt, ...;
 +(nullable NSString*)writeableFilePathIfExists:(NSString*)aName;
++(nullable NSString*)writeableFilePathIfExistsWithFormat:(NSString*)fmt, ...;
 +(NSArray<NSString*>*)writeableFilesMatching:(nullable FileOrganizerMatch)match;
 +(BOOL)ensureWriteableFilePath:(NSString*)aName;
 
