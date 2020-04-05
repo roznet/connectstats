@@ -84,7 +84,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 #define GC_CODER_VERSION @"version"
 
 @interface GCStatsDataSerie ()
-@property (nonatomic,retain) NSMutableArray * dataPoints;
+@property (nonatomic,retain) NSMutableArray<GCStatsDataPoint*> * dataPoints;
 
 @end
 
@@ -243,6 +243,17 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 }
 
 #pragma mark - Descriptions
+
+-(NSString*)descriptionFrom:(NSUInteger)from to:(NSUInteger)to{
+    NSMutableString * s = [NSMutableString stringWithFormat:@"DataSerie(%d points)[%d..%d]\n", (int)dataPoints.count, (int)from, (int)to];
+    for (NSUInteger i=from; i<to; i++) {
+        if (i<dataPoints.count) {
+            [s appendFormat:@"  [%d]%@\n", (int)i, [dataPoints[i] description]];
+        }
+    }
+    return s;
+}
+
 
 -(NSString*)description{
     NSMutableString * s = [NSMutableString stringWithFormat:@"DataSerie(%d points)\n", (int)dataPoints.count];
@@ -946,11 +957,14 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 
     for (idx_x1=1; idx_x1<count; idx_x1++) {
         GCStatsDataPoint * p_x1 = this.dataPoints[idx_x1];
-
-        while (idx_x0 < idx_x1 && (p_x1.x_data - [this.dataPoints[idx_x0+1]  x_data]) > dx ) {
+                
+        if( dx == 0. || p_x1.x_data - this.dataPoints[idx_x0+1].x_data <= dx){
+            started = true;
+        }
+        
+        while (idx_x0 < idx_x1 && (p_x1.x_data - this.dataPoints[idx_x0+1].x_data) > dx ) {
             idx_x0++;
             p_x0 = this.dataPoints[idx_x0];
-            started = true;
         }
 
         if (started && idx_x0!=idx_x1) {
@@ -1603,134 +1617,34 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 
 
 -(void)fill:(size_t)range valuesForUnit:(double)unit into:(double*)values fillMethod:(gcStatsFillMethod)fill statistic:(gcStats)statistic{
-    GCStatsDataPoint * first_p = (self.dataPoints)[0];
-    size_t last_i   = 0;
-    double first_x  = (int)(first_p.x_data/unit);
-
-    BOOL inconsistentPoint=false;
-
     NSUInteger n = (self.dataPoints).count;
+    if( n < 2){
+        return;
+    }
+    
+    GCStatsDataPoint * first_p = self.dataPoints.firstObject;
+    double first_x  = unit * (int)(first_p.x_data/unit);
 
-    double accrued = 0.;
-
-    for (NSUInteger idx_p = 1;idx_p <= n;idx_p++) {
-        GCStatsDataPoint * from_p = (self.dataPoints)[idx_p-1];
-        GCStatsDataPoint * to_p   = idx_p < n ? (self.dataPoints)[idx_p] : nil;
-
-        double from_x  = from_p.x_data-first_x;
-        double to_x    = to_p ? to_p.x_data-first_x : from_x;
-
-        size_t from_i = MIN(from_x/unit,MAX_FILL_POINTS-1);
-        size_t to_i   = MIN(to_x/unit,MAX_FILL_POINTS-1);
-
-        if (from_i!=last_i) {
-            inconsistentPoint = true;
+    NSUInteger p_idx = 0;
+    GCStatsDataPoint * from_p = self.dataPoints[p_idx];
+    GCStatsDataPoint * to_p = p_idx + 1 < n ? self.dataPoints[p_idx+1] : nil;
+    
+    for(size_t v_idx = 0; v_idx < range; v_idx++){
+        double v_x = first_x + unit*v_idx;
+        while( to_p != nil && to_p.x_data < v_x){
+            p_idx ++;
+            from_p = self.dataPoints[p_idx];
+            to_p = p_idx + 1 < n ? self.dataPoints[p_idx+1] : nil;
         }
-
-        last_i = to_i;
-
-        if (to_p == nil) {
-            // last point allocated to last
-            switch (statistic) {
-                case gcStatsSum:
-                    values[from_i] += from_p.y_data;
-                    break;
-                case gcStatsWeightedMean:
-                    values[from_i] += from_p.y_data * (unit - accrued)/unit;
-                    break;
-            }
-        }else if ( to_i==from_i) {
-            // didn't cross to next point yet, weighted allocation to current i
-            //      f     t
-            // I: --|aa---|---
-            // P: ----X-X-----
-            //        f t
-            switch (statistic) {
-                case gcStatsSum:
-                    // sum should go to next point if possible when in between
-                    values[(to_i+1) < range ? (to_i+1) : to_i] += from_p.y_data;
-                    break;
-                case gcStatsWeightedMean:
-                    values[from_i] += from_p.y_data * (to_x-from_x)/unit;
-                    accrued += (to_x-from_x);
-                    break;
-            }
+        // If we have next point and x_data are not equal (otherwise div by 0...)
+        // If multiple points with the same x (x_data equal), then the
+        // value from the last from_p will be used. Not bad choice, for example
+        // if many point at 0 distance with different times, then use the last one
+        if( to_p && fabs(to_p.x_data - from_p.x_data) > 1.e-10){
+            values[v_idx] = from_p.y_data + (to_p.y_data-from_p.y_data)*(v_x-from_p.x_data)/(to_p.x_data-from_p.x_data);
         }else{
-            // got to next
-            //
-            //    f     t
-            // I: |aaa--|-----|-----|-----|
-            // P:  --X-----X----------
-            //       f     t
-            //
-            //    f     s     s     t
-            // I: |aaa--|-----|-----|-----|
-            // P:  --X----------------X---
-            //       f                t
-            
-            for (size_t step_i = from_i; step_i<to_i; step_i++) {
-                size_t next_i = step_i+1;
-                double next_x = unit*next_i;
-
-                double step_x = step_i == from_i ? from_x : unit*step_i;
-                switch (statistic) {
-                    case gcStatsSum:
-                    {
-                        if( step_i == from_i){
-                            //values[ step_i+1<range ? step_i+1 : step_i] += from_p.y_data;
-                            values[ step_i ] += from_p.y_data;
-                        }// else keep at 0
-                        break;
-                    }
-                    case gcStatsWeightedMean:
-                    {
-                        double step_v = from_p.y_data * (next_x-step_x)/unit;
-                        // fill steps to far from last with zero (else with last value)
-                        // could impose limit: fill w zero when more than L since last
-                        if (step_i!=from_i ){
-                            switch (fill) {
-                                case gcStatsZero:
-                                    step_v = 0.;
-                                    break;
-                                case gcStatsLinear:
-                                    step_v = from_p.y_data + ( (step_x-from_p.x_data) / (to_p.x_data - from_p.x_data) * (to_p.y_data-from_p.y_data) );
-                                    break;
-                                case gcStatsLast:
-                                    // do nothing, use last
-                                    break;
-                                    
-                            }
-                        }
-                        values[step_i] += step_v;
-                        last_i = step_i;
-
-                        if (next_i < range && next_i == to_i) {
-                            values[to_i] += from_p.y_data * (to_x-next_x)/unit;
-                            last_i = to_i;
-                            accrued = (to_x-next_x);
-                        }
-                    }
-                }
-            }
+            values[v_idx] = from_p.y_data;
         }
-    }
-    /*
-    if (false) {
-        NSMutableString * csv = [NSMutableString string];
-        for (NSUInteger i=0; i<n; i++) {
-            [csv appendFormat:@"%d,%f,%f\n", (int)i, [self.dataPoints[i] x_data], [self.dataPoints[i] y_data]];
-        }
-        [csv appendString:@"\n"];
-        for (size_t i=0; i<range; i++) {
-            [csv appendFormat:@"%d,%f,%f\n", (int)i, unit*i, values[i]];
-        }
-        NSString * fn = [RZFileOrganizer writeableFilePath:@"fill.csv"];
-        NSError * e=nil;
-        [csv writeToFile:fn atomically:YES encoding:NSUTF8StringEncoding error:&e];
-    }
-    */
-    if (inconsistentPoint) {
-        RZLog(RZLogError, @"Inconsistent x");
     }
 }
 
@@ -1860,9 +1774,13 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 
     [self fill:range valuesForUnit:unit into:values fillMethod:fill statistic:fillStatistic];
 
-    //for debugging
+    //for debugging,
+    // bestidx will keep the locate of the reached min or max
+    // debugidx if != -1 will dump all the number contributing to that specific
+    // index max or min
     bestidx = calloc(range, sizeof(size_t));
-
+    size_t debugidx = -1;
+    
     // populate per unit data:
     //   rolling    n:0    1    2    3    4
     //   values i:0   +0   +0   +0   +0   +0
@@ -1885,6 +1803,10 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                         break;
                     case gcStatsSum:
                         // We haven't reach n values yet, add i_th
+                        if( n == debugidx ){
+                            RZLog(RZLogInfo,@"add: rolling[%lu] += values[%lu] = %f + %f = %f ", n, i, rolling[n], values[i], rolling[n] + values[i]);
+                        }
+
                         rolling[n] += values[i];
                         break;
                 }
@@ -1907,7 +1829,10 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                     case gcStatsSum:
                     {
                         // We have reach n values, add i_th, but remove i_th - (n_th+1)
-                        double add = values[i] - values[i-n-1];
+                        if( n == debugidx ){
+                            RZLog(RZLogInfo,@"add: rolling[%lu] += values[%lu] - values[%lu] = %f + %f - %f = %f ", n, i, i-n, rolling[n], values[i], values[i-n], rolling[n] + values[i] -values[i-n]);
+                        }
+                        double add = values[i] - values[i-n];
                         // Don't add <0 numbers
                         rolling[n] = MAX(rolling[n] + add,0.0);
                         break;
@@ -1925,9 +1850,6 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
             }else if(i>n){
                 // we now have n values, check if last n better than previous best according to
                 // the appropriate select rule.
-                if( n == 40){
-                    
-                }
                 if (select==gcStatsRatioMin || select==gcStatsRatioMax){
                     // for speed if n: distance, rolling[n]: time, speed is best if dist/time is higher
                     if( rolling[n] != 0.0 && best[n] != 0.0){
@@ -1949,6 +1871,9 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                     if ( (select==gcStatsMax && best[n]<rolling[n]) ||
                         (select==gcStatsMin && best[n]>rolling[n]) )
                     {
+                        if( n == debugidx ){
+                            RZLog(RZLogInfo,@"found: best[%lu]=%f rolling[%lu]=%f index=[%lu-%lu]", n,best[n],n,rolling[n], i-n, i);
+                        }
                         best[n]=rolling[n];
                         if (bestidx) {
                             bestidx[n] = i-n;
@@ -1971,7 +1896,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     GCStatsDataSerie * rv = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     if (bestidx) {
         for (size_t n=0; n<range; n++) {
-            [rv addDataPointWithX:first_x+unit*n y:best[n] andZ:first_p.x_data+bestidx[n]*unit];
+            [rv addDataPointWithX:first_x+unit*n y:best[n] andZ:first_x+bestidx[n]*unit];
         }
         free(bestidx);
     }else{

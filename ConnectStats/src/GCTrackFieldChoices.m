@@ -158,11 +158,7 @@
             // Add Rolling best
             if (first.fieldFlag==gcFieldFlagWeightedMeanSpeed || first.fieldFlag==gcFieldFlagWeightedMeanHeartRate || first.fieldFlag==gcFieldFlagPower) {
                 if (![first.activityType isEqualToString:GC_TYPE_SWIMMING]) {
-                    // if 0. -> disabled
-                    if ([GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.]>0.) {
-                        [styles addObject:[GCTrackFieldChoiceHolder trackFieldChoice:first style:gcTrackStatsRollingBest]];
-                    }
-
+                    [styles addObject:[GCTrackFieldChoiceHolder trackFieldChoice:first style:gcTrackStatsRollingBest]];
                     [styles addObject:[GCTrackFieldChoiceHolder trackFieldChoice:first style:gcTrackStatsHistogram]];
                 }
             }

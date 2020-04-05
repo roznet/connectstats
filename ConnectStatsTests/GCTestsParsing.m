@@ -1268,6 +1268,26 @@
             
             if( [expectedVal respondsToSelector:@selector(isEqual:)]){
                 XCTAssertTrue([expectedVal isEqual:rvVal]);
+                if( ! [expectedVal isEqual:rvVal] && [expectedVal isKindOfClass:[NSArray class]] && [rvVal isKindOfClass:[NSArray class]]){
+                    NSArray * e = (NSArray*)expectedVal;
+                    NSArray * r = (NSArray*)rvVal;
+                    for( NSUInteger i=0;i<MIN(e.count, r.count);i++){
+                        NSArray<GCTrackFieldChoiceHolder*> * eA = e[i];
+                        NSArray<GCTrackFieldChoiceHolder*> * rA = r[i];
+                        if( eA.count != rA.count ){
+                            RZLog(RZLogInfo, @"[%lu] count %@ != %@", (unsigned long)i, @(eA.count), @(rA.count));
+                        }else{
+                            for (NSUInteger j=0; j<eA.count; j++) {
+                                GCTrackFieldChoiceHolder * eH = eA[j];
+                                GCTrackFieldChoiceHolder * rH = rA[j];
+                                
+                                if( [eH.field isEqualToField:rH.field] ){
+                                    RZLog(RZLogInfo, @"[%@] %@ != %@", @(i), eH.field, rH.field);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

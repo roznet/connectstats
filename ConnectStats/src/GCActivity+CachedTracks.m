@@ -121,12 +121,14 @@
         }
     }
     if (RZTestOption(self.trackFlags, gcFieldFlagSumDistance) && ! self.garminSwimAlgorithm) {
-        GCField * field = [GCField fieldForKey:CALC_10SEC_SPEED andActivityType:self.activityType];
-        key = [self calculatedCachedTrackKey:gcCalculatedCachedTrackDataSerie forField:field];
-        if (rv[key] == nil) {
-            GCCalculactedCachedTrackInfo * info = [GCCalculactedCachedTrackInfo info:gcCalculatedCachedTrackDataSerie field:field];
-            rv[key] = info;
-            hasMissing = true;
+        if( [GCAppGlobal configGetBool:CONFIG_ENABLE_SPEED_CALC_FIELDS defaultValue:false]){
+            GCField * field = [GCField fieldForKey:CALC_10SEC_SPEED andActivityType:self.activityType];
+            key = [self calculatedCachedTrackKey:gcCalculatedCachedTrackDataSerie forField:field];
+            if (rv[key] == nil) {
+                GCCalculactedCachedTrackInfo * info = [GCCalculactedCachedTrackInfo info:gcCalculatedCachedTrackDataSerie field:field];
+                rv[key] = info;
+                hasMissing = true;
+            }
         }
     }
     if (hasMissing) {
@@ -378,6 +380,7 @@
 }
 
 -(NSDictionary*)calculateSpeedDerivedFields{
+    
     GCField * distanceField = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType];
 
     GCStatsDataSerieWithUnit * serie = [self timeSerieForField:distanceField];

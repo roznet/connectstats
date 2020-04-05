@@ -181,7 +181,27 @@
     }else if (self.zoneCalculator){
         rv = [NSString stringWithFormat:@"<GCTrackFieldChoiceHolder: %@ in zones>", [self.field displayName] ];
     }else{
-        rv = [NSString stringWithFormat:@"<GCTrackFieldChoiceHolder: %@>", [self.field displayName] ];
+        NSString * qualifier = @"";
+        switch (self.statsStyle) {
+            case gcTrackStatsRollingBest:
+                qualifier = @" rollingbest";
+                break;
+            case gcTrackStatsHistogram:
+                qualifier = @" histogram";
+                break;
+            case gcTrackStatsCompare:
+                qualifier = @" compare";
+                break;
+            case gcTrackStatsBucket:
+                qualifier = @" bucket";
+                break;
+            case gcTrackStatsCumulative:
+                qualifier = @" cumulative";
+                break;
+            case gcTrackStatsData:
+                break;
+        }
+        rv = [NSString stringWithFormat:@"<GCTrackFieldChoiceHolder: %@%@>", [self.field displayName], qualifier ];
     }
     return rv;
 }

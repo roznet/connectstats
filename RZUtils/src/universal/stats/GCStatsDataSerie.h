@@ -67,7 +67,7 @@ typedef NS_ENUM(NSUInteger, gcStatsSelection) {
 
 typedef NS_ENUM(NSUInteger, gcStats) {
     gcStatsWeightedMean,
-    gcStatsSum
+    gcStatsSum,
 };
 
 typedef struct {
@@ -151,6 +151,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2);
 // --- Access
 -(NSString*)description;
 -(NSString*)descriptionAllPoints;
+-(NSString*)descriptionFrom:(NSUInteger)from to:(NSUInteger)to;
 -(NSString*)asCSVString:(BOOL)asDate;
 
 -(NSUInteger)count;
