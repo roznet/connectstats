@@ -16,6 +16,7 @@
 @property (nonatomic,retain) NSMutableDictionary * savedSettings;
 @property (nonatomic,retain) NSTimeZone * rememberTimeZone;
 @property (nonatomic,retain) GCFieldCache * fieldCache;
+@property (nonatomic,retain) GCHealthOrganizer * rememberHealth;
 
 @end
 
@@ -43,7 +44,9 @@
     }
     app.settings = [NSMutableDictionary dictionary];
     app.profiles = [GCAppProfiles profilesFromSettings:app.settings];
-
+    self.rememberHealth = app.health;
+    app.health = RZReturnAutorelease([[GCHealthOrganizer alloc] initForTest]);
+    
     if( self.rememberTimeZone == nil){
         self.rememberTimeZone = [NSTimeZone defaultTimeZone];
     }
@@ -58,11 +61,12 @@
     [GCField setFieldCache: cache];
     [GCFields setFieldCache:cache];
     [GCActivityType setFieldCache:cache];
+    
 }
 
 -(void)tearDown{
+    GCAppDelegate * app = (GCAppDelegate*)[UIApplication sharedApplication].delegate;
     if(self.savedSettings){
-        GCAppDelegate * app = (GCAppDelegate*)[UIApplication sharedApplication].delegate;
         app.settings = self.savedSettings;
         app.profiles = [GCAppProfiles profilesFromSettings:app.settings];
         self.savedSettings = nil;
@@ -71,6 +75,9 @@
         [NSTimeZone setDefaultTimeZone:self.rememberTimeZone];
         [GCAppGlobal ensureCalculationCalendarTimeZone:self.rememberTimeZone];
         self.rememberTimeZone = nil;
+    }
+    if( self.rememberHealth ){
+        app.health = self.rememberHealth;
     }
     [GCField setFieldCache:self.fieldCache];
     [GCFields setFieldCache:self.fieldCache];

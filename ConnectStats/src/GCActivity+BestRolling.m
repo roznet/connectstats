@@ -38,7 +38,6 @@
     
     BOOL timeByDistance = true;
     BOOL removePause = true;
-    BOOL useAverage = false;
     
     GCStatsDataSerieWithUnit * serie = nil;
     GCField * referenceField = nil;
@@ -54,15 +53,6 @@
         // x is distance, y is time, ratio is mps, so max
         select = gcStatsMin;
         serie = [self trackSerieForField:referenceField trackpoints:trackpoints timeAxis:NO];
-        // Fill for each 10 meter with average seconds of surrounding points
-        GCStatsDataSerie * filled = [serie.serie filledSerieForUnit:unitstride fillMethod:gcStatsLinear statistic:gcStatsWeightedMean];
-#if TARGET_IPHONE_SIMULATOR
-        [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_raw_%@.csv", self.activityId]
-                                          atomically:YES encoding:NSUTF8StringEncoding error:nil];
-        [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_filled_%@.csv", self.activityId]
-                                        atomically:YES encoding:NSUTF8StringEncoding error:nil];
-#endif
-        serie.serie = filled;
     }else{
         referenceField = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType];
         // x is time, y is distance
@@ -70,28 +60,35 @@
         select = gcStatsMax;
         [serie convertToUnit:[GCUnit meter]];
     }
-    
+
+    // Fill for each 10 meter with average seconds of surrounding points
+    GCStatsDataSerie * filled = [serie.serie filledSerieForUnit:unitstride fillMethod:gcStatsLinear statistic:gcStatsWeightedMean];
+    #if TARGET_IPHONE_SIMULATOR
+            [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_raw_%@.csv", self.activityId]
+                                              atomically:YES encoding:NSUTF8StringEncoding error:nil];
+            [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_filled_%@.csv", self.activityId]
+                                            atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    #endif
+
     // Compute the difference between points (so x,y = dist,dTime or y = time,dDistance)
-    GCStatsDataSerie * diffSerie = [serie.serie differenceSerieForLag:0.0];
+    GCStatsDataSerie * diffSerie = [filled differenceSerieForLag:0.0];
     // Add zero at the beginning if missing
     if( diffSerie.count > 0 && diffSerie.firstObject.x_data > 0 ){
         [diffSerie addDataPointWithX:0.0 andY:0.0];
         [diffSerie sortByX];
     }
-
-    info.processedPointsCount = diffSerie.count;
     
-    serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsLinear select:select statistic:(useAverage ? gcStatsWeightedMean : gcStatsSum)];
+    info.processedPointsCount = serie.count;
+    serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsLinear select:select statistic:gcStatsSum];
 
 #if TARGET_IPHONE_SIMULATOR
     // rescale by unit of 10 (either every 10 seconds or every 10 meters.
     // For debugging
     [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_best_%@.csv", self.activityId]
                                       atomically:YES encoding:NSUTF8StringEncoding error:nil];
-    [[diffSerie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_diff_%@.csv", self.activityId]
-                                    atomically:YES encoding:NSUTF8StringEncoding error:nil];
 #endif
 
+    // Convert the best time to speed
     for (GCStatsDataPoint * point in serie.serie) {
         if( point.y_data > 0.){
             
@@ -102,19 +99,11 @@
             
             if( timeByDistance ){
                 // x: distance, y: time
-                if( useAverage){
-                    point.y_data = unitstride / point.y_data;
-                }else{
-                    // x_i / y_i   vs x_i+1 / y_i+1, if x_i
-                    point.y_data = (point.x_data+unitstride)/point.y_data; // convert in mps
-                }
+                // x_i / y_i   vs x_i+1 / y_i+1, if x_i
+                point.y_data = (point.x_data/*+unitstride*/)/point.y_data; // convert in mps
             }else{
                 // x: time, y: distance
-                if( useAverage ){
-                    point.y_data = point.y_data/( unitstride ); // convert in mps
-                }else{
-                    point.y_data = point.y_data/( point.x_data + unitstride ); // convert in mps
-                }
+                point.y_data = point.y_data/( point.x_data + unitstride ); // convert in mps
             }
         }
     }
@@ -128,18 +117,22 @@
 
     [self rollingBestMatchMaxForField:info.field andSerie:serie];
     [self rollingBestCorrectMonotonicity:serie select:select==gcStatsMin?gcStatsMax:gcStatsMin];
-    
-    #if TARGET_IPHONE_SIMULATOR
-            // rescale by unit of 10 (either every 10 seconds or every 10 meters.
-            // For debugging
-    [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_finalminkm_%@.csv", self.activityId]
-                                              atomically:YES encoding:NSUTF8StringEncoding error:nil];
-    #endif
+
+
 
     if( serie.serie.count > 1 && [serie.serie dataPointAtIndex:0].x_data == 0){
         [serie.serie dataPointAtIndex:0].y_data = [serie.serie dataPointAtIndex:1].y_data;
     }
-    
+
+    #if TARGET_IPHONE_SIMULATOR
+            // rescale by unit of 10 (either every 10 seconds or every 10 meters.
+            // For debugging
+    [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_finalcorrected_%@.csv", self.activityId]
+                                              atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    #endif
+
+    [serie convertToUnit:[self speedDisplayUnit]];
+
     rv = serie;
     return rv;
 }
@@ -235,7 +228,7 @@
     if( info.fieldFlag == gcFieldFlagWeightedMeanSpeed){
         //rv= [self calculatedRollingBestSimple:info];
         rv = [self calculatedRollingBestForSpeed:info];
-        [rv convertToUnit:[self speedDisplayUnit]];
+        
     }else{
         rv= [self calculatedRollingBestSimple:info];
     }

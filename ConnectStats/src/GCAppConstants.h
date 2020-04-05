@@ -77,6 +77,7 @@
 #define CONFIG_ENABLE_REMOTE_STATUS     @"config_enable_remote_status"
 #define CONFIG_DUPLICATE_CHECK_ON_IMPORT @"config_duplicate_check_on_import"
 #define CONFIG_DUPLICATE_CHECK_ON_LOAD   @"config_duplicate_check_on_load"
+#define CONFIG_ENABLE_SPEED_CALC_FIELDS  @"config_enable_speed_calc_fields"
 
 #define CONFIG_DUPLICATE_SKIP_ON_IMPORT_OBSOLETE @"config_duplicate_skip_on_import"
 

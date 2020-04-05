@@ -43,6 +43,8 @@
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 -(GCHealthOrganizer*)initWithDb:(FMDatabase*)db andThread:(dispatch_queue_t)thread NS_DESIGNATED_INITIALIZER;
 
+-(GCHealthOrganizer*)initForTest NS_DESIGNATED_INITIALIZER;
+
 +(void)ensureDbStructure:(FMDatabase*)db;
 
 -(BOOL)addHealthMeasure:(GCHealthMeasure*)one;

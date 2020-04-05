@@ -73,6 +73,18 @@
     }
     return self;
 }
+
+-(GCHealthOrganizer*)initForTest{
+    self = [super init];
+    if (self) {
+        self.db = nil;
+        self.worker = nil;
+        NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+        [self addDefaultZoneCalculatorTo:dict];
+        self.zones = dict;
+    }
+    return self;
+}
 -(void)updateForNewProfile{
     self.db = [GCAppGlobal db];
     if (self.worker) {
@@ -91,6 +103,13 @@
     }
 }
 -(void)loadFromDb{
+    if( self.db == nil){
+        NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+        [self addDefaultZoneCalculatorTo:dict];
+        self.zones = dict;
+        return;
+    }
+    
     NSMutableArray * meas = [NSMutableArray arrayWithCapacity:100];
     FMResultSet * res = [self.db executeQuery:@"SELECT * FROM gc_health_measures ORDER BY measureDate DESC"];
     if (res == nil) {
