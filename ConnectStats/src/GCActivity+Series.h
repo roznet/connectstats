@@ -50,8 +50,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Special time serie for swimStroke, will return the value of gcSwimStrokeType for
  each swim length recorded. Will match the x of the other serie in case a filter was applied
+  if not on a swim activity will return nil
  */
--(GCStatsDataSerie * )timeSerieForSwimStrokeMatching:(GCStatsDataSerie*)other;
+-(nullable GCStatsDataSerie * )timeSerieForSwimStrokeMatching:(GCStatsDataSerie*)other;
 /**
  Will return a serie for each track point that is 0 if that trackpoint is not
  in lap or the time/distance since the beginning of the lap

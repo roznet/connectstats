@@ -853,7 +853,12 @@
     if (indexPath.row == GC_OPTIONS_DUPLICATE_IMPORT) {
         switchcell = [GCCellEntrySwitch switchCell:tableView];
         switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                    withString:NSLocalizedString(@"Ignore Duplicate on Import",@"Other Service")];
+                                                                    withString:NSLocalizedString(@"Ignore Duplicate from Services",@"Other Service")];
+        if( [[GCAppGlobal profile] configGetBool:CONFIG_DUPLICATE_CHECK_ON_IMPORT defaultValue:true] ){
+            switchcell.detailTextLabel.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString(@"Save only one version of duplicates", @"Other Service")];
+        }else{
+            switchcell.detailTextLabel.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString(@"Save all versions of duplicates", @"Other Service")];
+        }
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_DUPLICATE_CHECK_ON_IMPORT defaultValue:true];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_OPTIONS_DUPLICATE_IMPORT);
         switchcell.entryFieldDelegate = self;
@@ -862,7 +867,11 @@
         switchcell = [GCCellEntrySwitch switchCell:tableView];
         switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                     withString:NSLocalizedString(@"Ignore Existing Duplicate",@"Other Service")];
-        switchcell.detailTextLabel.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString(@"Even already downloaded", @"Other Service")];
+        if( [[GCAppGlobal profile] configGetBool:CONFIG_DUPLICATE_CHECK_ON_LOAD defaultValue:true] ){
+            switchcell.detailTextLabel.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString(@"Hide existing duplicates", @"Other Service")];
+        }else{
+            switchcell.detailTextLabel.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString(@"Show existing duplicates", @"Other Service")];
+        }
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_DUPLICATE_CHECK_ON_LOAD defaultValue:true];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_OPTIONS_DUPLICATE_LOAD);
         switchcell.entryFieldDelegate = self;

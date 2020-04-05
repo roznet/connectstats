@@ -43,8 +43,7 @@
     GCField * referenceField = nil;
     gcStatsSelection select = gcStatsMin;
     
-    double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:5.];
-    unitstride = 10;
+    double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:10.];
     
     NSArray<GCTrackPoint*>*trackpoints = removePause ? [self removedStoppedTimer:self.trackpoints] : self.trackpoints;
 
@@ -201,7 +200,7 @@
         select = gcStatsMin;
     }
     
-    double unitstride = 10.;//[GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:10.];
+    double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:10.];
     
     // HACK serie that are missing zero, as otherwise the best of may not start consistently
     // and doing max over multiple will have weird quirks at the beginning.

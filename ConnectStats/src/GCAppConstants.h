@@ -52,7 +52,7 @@
 #define CONFIG_BUG_INCLUDE_DATA         @"config_bug_include_data_v2"
 #define CONFIG_USE_NEW_TRACK_API        @"config_use_new_track_api"
 #define CONFIG_FASTER_MAPS              @"config_faster_maps"
-#define CONFIG_CRITICAL_CALC_UNIT       @"config_critical_calc_unit"
+#define CONFIG_CRITICAL_CALC_UNIT       @"config_critical_calc_unit_v2"
 #define CONFIG_REFERENCE_DATE           @"config_reference_date"
 #define CONFIG_PERIOD_TYPE              @"config_period_type"
 #define CONFIG_STATS_INLINE_GRAPHS      @"config_stats_inline_graphs"
