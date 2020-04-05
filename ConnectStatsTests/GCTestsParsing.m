@@ -164,7 +164,7 @@
     
     [[GCAppGlobal profile] configSet:CONFIG_ENABLE_DERIVED boolVal:false];
     NSArray<NSString*>*testActivityIds = @[
-                                           //@"1027746730", // Swim activity
+                                           @"1027746730", // Swim activity
                                            @"1378220136", // Running
                                            @"1382772474"  // Cycling
                                            ];
