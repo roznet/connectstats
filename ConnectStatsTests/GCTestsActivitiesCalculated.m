@@ -57,15 +57,7 @@
     // test activity from download if there
     
     
-    /*
-    NSString * fp = [RZFileOrganizer writeableFilePathIfExists:@"activity_1702660059.fit"];
-    NSString * aId = @"1702660059"
-    
-    NSString * fp = [RZFileOrganizer writeableFilePathIfExists:@"track_cs_597233.fit"];
-    NSString * aId = @"__connectstats_597233";
-     
-    */
-    NSString * cs = @"633577";
+    NSString * cs = @"597233";
 
     NSString * fp = [RZFileOrganizer writeableFilePathIfExistsWithFormat:@"track_cs_%@.fit", cs];
     NSString * aId = [NSString stringWithFormat:@"__connectstats_%@", cs];

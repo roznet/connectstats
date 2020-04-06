@@ -183,23 +183,29 @@
     }
 }
 
--(GCStatsDataSerieWithUnit*)calculatedRollingBestSimple:(GCCalculactedCachedTrackInfo*)info{
+-(GCStatsDataSerieWithUnit*)calculatedRollingBestSimpleSpeed:(GCCalculactedCachedTrackInfo*)info{
     GCStatsDataSerieWithUnit * rv = nil;
     
-    BOOL useTimeAxis = (info.field.fieldFlag != gcFieldFlagWeightedMeanSpeed);
+    BOOL useTimeAxis = false;
     BOOL removePause = true;
-    
     
     NSArray<GCTrackPoint*>*trackpoints = removePause ? [self removedStoppedTimer:self.trackpoints] : self.trackpoints;
     
     GCStatsDataSerieWithUnit * serie = [self trackSerieForField:info.field trackpoints:trackpoints timeAxis:useTimeAxis];
     
-    info.processedPointsCount = serie.serie.count;
-    gcStatsSelection select = gcStatsMax;
-    if ([serie.unit isKindOfClass:[GCUnitInverseLinear class]]) {
-        select = gcStatsMin;
-    }
+    // Convert to a unit that is by distance so the interpolation will work
+    // otherwise mps interpolated by distance will be messed up
+    [serie convertToUnit:[GCUnit minperkm]];
     
+    #if TARGET_IPHONE_SIMULATOR
+    [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_simpleraw_%@.csv", self.activityId]
+                                              atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    #endif
+
+    info.processedPointsCount = serie.serie.count;
+    // Min because we switched to minperkm so min is better
+    gcStatsSelection select = gcStatsMin;
+
     double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:10.];
     
     // HACK serie that are missing zero, as otherwise the best of may not start consistently
@@ -211,9 +217,47 @@
     
     // If remove pause, then do linear interpolation, otherwise fill with zeros (assuming pause)
     serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:removePause ? gcStatsLinear :gcStatsZero select:select statistic:gcStatsWeightedMean];
-    
+
     [self rollingBestMatchMaxForField:info.field andSerie:serie];
+    [self rollingBestCorrectMonotonicity:serie select:select];
+    // Convert back to what make sense
+    [serie convertToUnit:[self speedDisplayUnit]];
     
+    rv = serie;
+
+    return rv;
+
+}
+
+-(GCStatsDataSerieWithUnit*)calculatedRollingBestSimple:(GCCalculactedCachedTrackInfo*)info{
+    GCStatsDataSerieWithUnit * rv = nil;
+    
+    BOOL useTimeAxis = true;
+    BOOL removePause = true;
+    
+    NSArray<GCTrackPoint*>*trackpoints = removePause ? [self removedStoppedTimer:self.trackpoints] : self.trackpoints;
+    
+    GCStatsDataSerieWithUnit * serie = [self trackSerieForField:info.field trackpoints:trackpoints timeAxis:useTimeAxis];
+    
+    info.processedPointsCount = serie.serie.count;
+    gcStatsSelection select = gcStatsMax;
+    if ([serie.unit isKindOfClass:[GCUnitInverseLinear class]]) {
+        select = gcStatsMin;
+    }
+
+    double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:10.];
+    
+    // HACK serie that are missing zero, as otherwise the best of may not start consistently
+    // and doing max over multiple will have weird quirks at the beginning.
+    if( serie.serie.count > 0 && serie.serie.firstObject.x_data > 0 ){
+        [serie.serie addDataPointWithX:0.0 andY:serie.serie.firstObject.y_data];
+        [serie.serie sortByX];
+    }
+    
+    // If remove pause, then do linear interpolation, otherwise fill with zeros (assuming pause)
+    serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:removePause ? gcStatsLinear :gcStatsZero select:select statistic:gcStatsWeightedMean];
+
+    [self rollingBestMatchMaxForField:info.field andSerie:serie];
     [self rollingBestCorrectMonotonicity:serie select:select];
     
     rv = serie;
@@ -225,7 +269,7 @@
     GCStatsDataSerieWithUnit * rv = nil;
 
     if( info.fieldFlag == gcFieldFlagWeightedMeanSpeed){
-        //rv= [self calculatedRollingBestSimple:info];
+        //rv= [self calculatedRollingBestSimpleSpeed:info];
         rv = [self calculatedRollingBestForSpeed:info];
         
     }else{
