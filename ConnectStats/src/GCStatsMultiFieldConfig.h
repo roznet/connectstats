@@ -28,6 +28,7 @@
 #import "GCViewConfig.h"
 @class GCSimpleGraphCachedDataSource;
 @class GCHistoryFieldDataSerie;
+@class GCDerivedDataSerie;
 
 @interface GCStatsMultiFieldConfig : NSObject
 
@@ -45,7 +46,8 @@
  */
 @property (nonatomic,assign) gcStatsCalChoice calChoice;
 @property (nonatomic,assign) BOOL useFilter;
-
+@property (nonatomic,readonly) GCDerivedDataSerie * currentDerivedDataSerie;
+@property (nonatomic,readonly) GCField * currentCumulativeSummaryField;
 
 +(GCStatsMultiFieldConfig*)fieldListConfigFrom:(GCStatsMultiFieldConfig*)other;
 -(GCStatsMultiFieldConfig*)sameFieldListConfig;
@@ -57,5 +59,13 @@
 -(GCSimpleGraphCachedDataSource*)dataSourceForFieldDataSerie:(GCHistoryFieldDataSerie*)fieldDataSerie;
 
 -(UIBarButtonItem*)buttonForTarget:(id)target action:(SEL)sel;
+
+
+/// Goes to the next derivedSerie, stepping one by one
+-(void)nextDerivedSerie;
+/// Goes to the derivedSerie for the next field
+-(void)nextDerivedSerieField;
+
+-(void)nextSummaryCumulativeField;
 
 @end

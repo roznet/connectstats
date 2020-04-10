@@ -74,7 +74,7 @@ typedef NS_ENUM(NSUInteger, gcMeasureType){
 +(NSString*)measureKeyFromType:(gcMeasureType)type;
 +(gcMeasureType)measureTypeFromKey:(NSString*)key;
 
-+(GCUnit*)measureUnit:(gcMeasureType)type;
++(NSDictionary<NSNumber*,GCUnit*>*)measureUnit:(gcMeasureType)type;
 +(NSString*)measureName:(gcMeasureType)type;
 
 +(GCHealthMeasure*)healthMeasureFromWithings:(NSDictionary*)dict forDate:(NSDate*)aDate andId:(NSUInteger)aId;

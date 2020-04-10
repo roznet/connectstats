@@ -314,17 +314,20 @@
 
 
 -(GCActivitySummaryValue*)buildSummaryValue:(NSString*)fieldkey uom:(NSString*)uom fieldFlag:(gcFieldFlag)flag andValue:(double)val{
-    NSString * display = [GCFields predefinedDisplayNameForField:fieldkey andActivityType:self.activityType];
-    NSString * displayuom     = [GCFields predefinedUomForField:fieldkey andActivityType:self.activityType];
-    if (!displayuom) {
-        displayuom     = [GCFields predefinedUomForField:fieldkey andActivityType:GC_TYPE_ALL];
-    }
-    if( !displayuom && [GCUnit unitForKey:uom]){
-        displayuom = uom;
+    GCField * field = [GCField fieldForKey:fieldkey andActivityType:self.activityType];
+    GCUnit * unit = [GCUnit unitForKey:uom];
+    
+    // Prefer predefined units
+    NSString * display = field.displayName;
+    NSString * displayuom = field.unit.key;
+
+    if( !displayuom && unit){
+        displayuom = unit.key;
     }
     if (!display) {
-        display = [GCFields predefinedDisplayNameForField:fieldkey andActivityType:GC_TYPE_ALL];
+        display = [field correspondingFieldForActivityType:GC_TYPE_ALL].displayName;
     }
+    
     GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnitName:uom andValue:val];
     if (displayuom && ![displayuom isEqualToString:uom]) {
         nu = [nu convertToUnitName:displayuom];
@@ -338,22 +341,14 @@
     GCActivitySummaryValue * speed = newSummaryData[ [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:self.activityType]];
     if (speed && ([self.activityType isEqualToString:GC_TYPE_RUNNING] || [self.activityType isEqualToString:GC_TYPE_SWIMMING])) {
         GCField * field = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:self.activityType];
-        NSString * uom = [GCFields predefinedUomForField:field.key andActivityType:field.activityType];
-        NSString * display = [GCFields predefinedDisplayNameForField:field.key andActivityType:field.activityType];
-
-        [GCFields registerField:[GCField fieldForKey:field.key andActivityType:self.activityType] displayName:display andUnitName:uom];
-        GCNumberWithUnit * val = [[speed numberWithUnit] convertToUnitName:uom];
+        GCNumberWithUnit * val = [[speed numberWithUnit] convertToUnit:field.unit];
         newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
-        
     }
     GCActivitySummaryValue * movingSpeed = newSummaryData[ [GCField fieldForKey:@"WeightedMeanMovingSpeed" andActivityType:self.activityType] ];
     if(movingSpeed && [self.activityType isEqualToString:GC_TYPE_RUNNING]){
         GCField * field = [GCField fieldForKey:@"WeightedMeanMovingSpeed" andActivityType:self.activityType];
-        NSString * uom = [GCFields predefinedUomForField:field.key andActivityType:self.activityType];
-        NSString * display = [GCFields predefinedDisplayNameForField:field.key andActivityType:self.activityType];
 
-        [GCFields registerField:[GCField fieldForKey:field.key andActivityType:self.activityType] displayName:display andUnitName:uom];
-        GCNumberWithUnit * val = [[movingSpeed numberWithUnit] convertToUnitName:uom];
+        GCNumberWithUnit * val = [[movingSpeed numberWithUnit] convertToUnit:field.unit];
         newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
     }
 }

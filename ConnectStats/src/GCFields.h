@@ -80,7 +80,7 @@ NS_INLINE BOOL GCActivityTypeIsSki(NSString*at, NSString*atdetail){
 +(gcFieldFlag)trackFieldFromSwimLapField:(NSString*)f;
 +(NSString*)swimStrokeName:(gcSwimStrokeType)tp;
 
-+(NSString*)predefinedDisplayNameForField:(NSString*)afield andActivityType:(NSString*)atype;
-+(NSString*)predefinedUomForField:(NSString*)afield andActivityType:(NSString*)atype;
++(NSString*)predefinedDisplayNameForField:(NSString*)afield andActivityType:(NSString*)atype DEPRECATED_MSG_ATTRIBUTE("Use GCField cache");
++(NSString*)predefinedUomForField:(NSString*)afield andActivityType:(NSString*)atype DEPRECATED_MSG_ATTRIBUTE("Use GCField cache");
 
 @end

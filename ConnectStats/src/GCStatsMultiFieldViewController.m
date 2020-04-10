@@ -44,10 +44,7 @@
 
 @interface GCStatsMultiFieldViewController ()
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
-@property (nonatomic,assign) NSUInteger derivedSerieMonthIndex;
-@property (nonatomic,assign) NSUInteger derivedSerieFieldIndex;
 @property (nonatomic,assign) BOOL started;
-@property (nonatomic,assign) gcFieldFlag summaryCumulativeField;
 @end
 
 @implementation GCStatsMultiFieldViewController
@@ -56,6 +53,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
+        
         [[GCAppGlobal organizer] attach:self];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kNotifySettingsChange object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kNotifyOrganizerLoadComplete object:nil];
@@ -90,7 +88,6 @@
     self.navigationItem.hidesBackButton = YES;
     self.activityTypeButton = [GCViewActivityTypeButton activityTypeButtonForDelegate:self];
     self.navigationItem.leftBarButtonItem = self.activityTypeButton.activityTypeButtonItem;
-
     [self setupBarButtonItem];
 
 }
@@ -210,30 +207,10 @@
 {
     if(self.viewChoice==gcViewChoiceSummary){
         if (indexPath.row == GC_SUMMARY_DERIVED) {
-            NSArray<GCDerivedGroupedSeries*>*available = [self availableDataSeries];
-            
-            if (self.derivedSerieFieldIndex<available.count) {
-                GCDerivedGroupedSeries*current = available[self.derivedSerieFieldIndex];
-                
-                self.derivedSerieMonthIndex++;
-                if (self.derivedSerieMonthIndex>=MIN(3, current.series.count)) {
-                    self.derivedSerieMonthIndex = 0;
-                    self.derivedSerieFieldIndex++;
-                    if (self.derivedSerieFieldIndex>=available.count) {
-                        self.derivedSerieFieldIndex = 0;
-                    }
-                }
-            }else{
-                self.derivedSerieFieldIndex = 0;
-                self.derivedSerieMonthIndex = 0;
-            }
+            [self.config nextDerivedSerie];            
             [tableView reloadData];
         }else if (indexPath.row == GC_SUMMARY_CUMULATIVE_DISTANCE){
-            if( self.summaryCumulativeField != gcFieldFlagSumDuration ){
-                self.summaryCumulativeField = gcFieldFlagSumDuration;
-            }else{
-                self.summaryCumulativeField = gcFieldFlagSumDistance;
-            }
+            [self.config nextSummaryCumulativeField];
             [tableView reloadData];
         }
     }else if (self.viewChoice == gcViewChoiceAll) {
@@ -311,7 +288,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView graphCell:(NSIndexPath*)indexPath{
 
     GCCellSimpleGraph * cell = [GCCellSimpleGraph graphCell:tableView];
-    GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
+    cell.cellDelegate = self;
+    GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:self.config.currentCumulativeSummaryField];
     [cell setDataSource:cache andConfig:cache];
     if (self.config.viewChoice == gcViewChoiceYearly) {// This is Cumulative graph, needs legend
         cell.legend = true;
@@ -426,24 +404,7 @@
 }
 
 -(GCDerivedDataSerie*)currentDerivedDataSerie{
-    NSArray<GCDerivedGroupedSeries*>*available = [self availableDataSeries];
-    GCDerivedDataSerie * current = nil;
-
-    if (self.derivedSerieFieldIndex >= available.count) {
-        self.derivedSerieFieldIndex = 0;
-        self.derivedSerieMonthIndex = 0;
-    }
-
-    if (self.derivedSerieFieldIndex < available.count) {
-        GCDerivedGroupedSeries * group = available[self.derivedSerieFieldIndex];
-        if( self.derivedSerieMonthIndex < group.series.count){
-            current = group.series[self.derivedSerieMonthIndex];
-        }else if( group.series.count > 0){ // if index is too far reset to zero
-            self.derivedSerieMonthIndex = 0;
-            current = group.series[self.derivedSerieMonthIndex];
-        }
-    }
-    return current;
+    return [self.config currentDerivedDataSerie];
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView derivedCellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -471,12 +432,10 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cumulativeDistanceCellForRowAtIndexPath:(NSIndexPath *)indexPath{
     GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
+    graphCell.cellDelegate = self;
     graphCell.legend = TRUE;
-    
-    // ignore any other value than duration and use distance.
-    gcFieldFlag which = self.summaryCumulativeField == gcFieldFlagSumDuration ? gcFieldFlagSumDuration : gcFieldFlagSumDistance;
-    
-    GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:which andActivityType:self.activityType]];
+        
+    GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:self.config.currentCumulativeSummaryField];
     NSCalendarUnit unit = NSCalendarUnitYear;
 
     if (![fieldDataSerie isEmpty]) {
@@ -636,32 +595,17 @@
 }
 
 -(void)swipeLeft:(GCCellSimpleGraph *)cell{
-    NSArray<GCDerivedGroupedSeries*> * available = [self availableDataSeries];
-
-    self.derivedSerieFieldIndex++;
-    if (available && self.derivedSerieFieldIndex < available.count) {
-        self.derivedSerieMonthIndex = 0;
+    if( self.config.viewChoice == gcViewChoiceSummary){
+        [self.config nextDerivedSerieField];
     }else{
-        self.derivedSerieMonthIndex = 0;
-        self.derivedSerieFieldIndex = 0;
+        [self.config nextSummaryCumulativeField];
+        [self.tableView reloadData];
     }
-
 
 
     [self.tableView reloadData];
 }
 
-#pragma mark - DerivedDataSerie Management
-
--(NSArray<GCDerivedGroupedSeries*>*)availableDataSeries{
-    NSArray * series = [[GCAppGlobal derived] groupedSeriesMatching:^(GCDerivedDataSerie*serie){
-        BOOL rv = [serie.activityType isEqualToString:self.activityType] &&
-        serie.derivedPeriod == gcDerivedPeriodMonth &&
-        serie.derivedType == gcDerivedTypeBestRolling ;
-        return rv;
-    }];
-    return series;
-}
 
 
 #pragma mark - Setup data

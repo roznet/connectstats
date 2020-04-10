@@ -25,16 +25,22 @@
 
 #import <Foundation/Foundation.h>
 
+@class GCField;
+@class GCUnit;
+
 @interface GCFieldInfo : NSObject
-@property (nonatomic,retain) NSString * displayName;
-@property (nonatomic,retain) NSString * uom;
-@property (nonatomic,retain) NSString * field;
-@property (nonatomic,retain) NSString * activityType;
 
-//@property (nonatomic,readonly) GCField * field;
+@property (nonatomic,readonly) NSString * displayName;
+@property (nonatomic,readonly) GCUnit * unit;
+@property (nonatomic,readonly) GCField * field;
 
-+(GCFieldInfo*)fieldInfoFor:(NSString*)field type:(NSString*)aType displayName:(NSString*)aDisplayName andUnitName:(NSString*)aUom;
+@property (nonatomic,readonly) NSString * activityType DEPRECATED_MSG_ATTRIBUTE("Use field property");
+@property (nonatomic,readonly) NSString * uom DEPRECATED_MSG_ATTRIBUTE("Use unit property");
+
++(GCFieldInfo*)fieldInfoFor:(NSString*)field type:(NSString*)aType displayName:(NSString*)aDisplayName andUnitName:(NSString*)aUom DEPRECATED_MSG_ATTRIBUTE("Use fieldInfoFor:(GCField*)");
++(GCFieldInfo*)fieldInfoFor:(GCField*)field displayName:(NSString*)aDisplayName andUnits:(NSDictionary<NSNumber*,GCUnit*>*)units;
 
 -(BOOL)match:(NSString*)str;
--(GCUnit*)unit;
+-(GCUnit*)unitForSystem:(gcUnitSystem)system;
+
 @end

@@ -75,7 +75,7 @@
 -(NSString*)displayNameAndUnits;
 -(NSString*)displayNameWithUnits:(GCUnit*)unit;
 -(GCUnit*)unit;
--(NSString*)unitName;
+-(NSString*)unitName DEPRECATED_MSG_ATTRIBUTE("Use Unit");
 
 -(NSString*)category;
 -(NSInteger)sortOrder;

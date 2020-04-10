@@ -215,16 +215,6 @@
     [appAction execute:url];
 }
 
--(void)actionDumpMissingFields{
-    NSDictionary<GCField*,GCFieldInfo*> * missing = [GCFields missingPredefinedField];
-
-    //[rv addObject:@[ info.field ?: @"missing", info.activityType ?: @"missing", info.uom ?: @"missing", info.displayName ?: @"missing"]];
-    for (GCField * one in missing) {
-        GCFieldInfo * info = missing[one];
-        RZLog(RZLogInfo, @"INSERT INTO table_name (activityType,field,uom,fieldDisplayName) VALUES ('%@','%@','%@','%@')", info.activityType,info.field,info.uom,info.displayName);
-    }
-}
-
 -(void)actionClearRunningPower{
     NSArray<GCActivity*>* activities = [[GCAppGlobal organizer] activities];
     NSMutableArray<GCActivity*>* withPower = [NSMutableArray array];

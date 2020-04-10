@@ -4,7 +4,9 @@
 #
 
 import sqlite3
+import argparse
 import json
+import os
 import pprint
 from collections import defaultdict
 
@@ -195,24 +197,82 @@ class Fields:
                     conn.execute( sql, vals )
         conn.commit()
         
+class Driver :
+    def __init__(self,args):
+        self.args = args
+        
+    def cmd_build_legacy(self):
+        types = ActivityTypes()
+        types.load_modern_json( 'download/activity_types_modern.json' )
 
-types = ActivityTypes()
-types.load_modern_json( 'download/activity_types_modern.json' )
+        fields = Fields(types)
+        languages = [ 'en', 'fr', 'ja', 'de', 'it', 'es', 'pt', 'zh' ]
 
-fields = Fields(types)
-languages = [ 'en', 'fr', 'ja', 'de', 'it', 'es', 'pt', 'zh' ]
+        for lang in languages:
+            fields.add_db( 'cached/fields_{}_metric.db'.format( lang ), lang, 'metric' )
+            types.add_language( 'cached/activity_types_{}.json'.format( lang ), lang )
+        fields.add_db( 'edit/fields_en_power.db', 'en', 'metric', 'gc_fields_power' )
+        fields.add_db( 'edit/fields_en_manual.db', 'en', 'metric', 'gc_fields_manual' )
+        fields.add_db( 'cached/fields_en_statute.db', 'en', 'statute' )
 
-for lang in languages:
-    fields.add_db( 'cached/fields_{}_metric.db'.format( lang ), lang, 'metric' )
-    types.add_language( 'cached/activity_types_{}.json'.format( lang ), lang )
-fields.add_db( 'edit/fields_en_power.db', 'en', 'metric', 'gc_fields_power' )
-fields.add_db( 'edit/fields_en_manual.db', 'en', 'metric', 'gc_fields_manual' )
-fields.add_db( 'cached/fields_en_statute.db', 'en', 'statute' )
+        #pprint.pprint( list(fields.fields.keys() ) )
+        #pprint.pprint( list(types.typesByKey ) ))
+        #pprint.pprint( [types.typesByKey[x] for x in ['running', 'trail_running'] ] )
+        #pprint.pprint( [fields.fields[x] for x in ['MinPace', 'WeightedMeanHeartRate', 'WeightedMeanPace', 'DirectVO2Max', 'MinHeartRate']] )
 
-#pprint.pprint( list(fields.fields.keys() ) )
-#pprint.pprint( list(types.typesByKey ) ))
-#pprint.pprint( [types.typesByKey[x] for x in ['running', 'trail_running'] ] )
-#pprint.pprint( [fields.fields[x] for x in ['MinPace', 'WeightedMeanHeartRate', 'WeightedMeanPace', 'DirectVO2Max', 'MinHeartRate']] )
+        fields.save_to_db('out/fields_new.db', languages, ['metric', 'statute'])
+        types.save_to_db( 'out/fields_new.db', languages )
 
-fields.save_to_db('out/fields_new.db', languages, ['metric', 'statute'])
-types.save_to_db( 'out/fields_new.db', languages )
+    def cmd_show(self):
+        for fn in self.args.files:
+            self.process_file( fn )
+
+    def sqlite3_table_exists(self,conn,tablename):
+        cursor = conn.execute( "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name=?", (tablename,) )
+        return cursor.fetchone()[0] == 1
+        
+    def load_db(self,dbname):
+        if os.path.exists( dbname ):
+            conn = sqlite3.connect( dbname )
+            if( self.sqlite3_table_exists( conn, 'gc_fields_display' ) ):
+                print( '{} has gc_fields_display'.format( dbname ) )
+            
+        
+    def process_file(self,fn):
+        if os.path.exists( fn ):
+            if fn.endswith( '.db' ) :
+                self.load_db( fn )
+            elif fn.endswith( '.json' ):
+                self.load_json( fn )
+        
+        
+if __name__ == "__main__":
+                
+    commands = {
+        'show':{'attr':'cmd_show','help':'Show status of files'},
+        'legacy':{'attr':'cmd_build_legacy','help':'Build from legacy files'},
+        'add':{'attr':'cmd_add','help':'add information'},
+    }
+    
+    description = "\n".join( [ '  {}: {}'.format( k,v['help'] ) for (k,v) in commands.items() ] )
+
+    languages = [ 'en', 'fr', 'ja', 'de', 'it', 'es', 'pt', 'zh' ]
+    what = ['activityType','unit','display']
+    
+    parser = argparse.ArgumentParser( description='Check configuration', formatter_class=argparse.RawTextHelpFormatter )
+    parser.add_argument( 'command', metavar='Command', help='command to execute:\n' + description)
+    parser.add_argument( '-s', '--save', action='store_true', help='save output otherwise just print' )
+    parser.add_argument( '-o', '--output', help='output file' )
+    parser.add_argument( '-v', '--verbose', action='store_true', help='verbose output' )
+    parser.add_argument( '-w', '--what', help='list what to show or process, defaults to {}'.format( '+'.join(what)), default='+'.join(what))
+    parser.add_argument( '-l', '--languages', help='list of languages to show or process. defaults to {}'.format( '+'.join( languages ) ) , default='+'.join(languages))
+    parser.add_argument( 'files',    metavar='FILES', nargs='*', help='files to process' )
+    args = parser.parse_args()
+
+    command = Driver(args)
+
+    if args.command in commands:
+        getattr(command,commands[args.command]['attr'])()
+    else:
+        print( 'Invalid command "{}"'.format( args.command) )
+        parser.print_help()

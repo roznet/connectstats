@@ -116,22 +116,36 @@ static NSMutableDictionary * _missingFieldCache = nil;
         }
     }
     
-    NSString * uomcolumn = [GCUnit getGlobalSystem]==GCUnitSystemImperial ? @"statute" : @"metric";
-    
     NSMutableDictionary * fieldCache  = [NSMutableDictionary dictionaryWithCapacity:100];
     res = [db executeQuery:@"SELECT field,activityType,metric,statute From gc_fields_uom"];
+    
+    NSDictionary * columnToUnitSystem = @{
+        @"statute" : @(GCUnitSystemImperial),
+        @"metric"  : @(GCUnitSystemMetric)
+    };
+    
     while( [res next] ){
-        NSString * field = [res stringForColumn:@"field"];
-        NSString * uom = [res stringForColumn:uomcolumn] ?: [res stringForColumn:@"metric"];
-        if( uom && field ){
-            NSString * type  = [res stringForColumn:@"activityType"];
-            NSString * display = displays[field] ?: [GCField displayNameImpliedByFieldKey:field];
+        NSString * fieldKey = [res stringForColumn:@"field"];
+        NSString * type  = [res stringForColumn:@"activityType"];
+        GCField * field = [GCField fieldForKey:fieldKey andActivityType:type];
+        
+        NSMutableDictionary * units = [NSMutableDictionary dictionary];
+        
+        for (NSString * column in columnToUnitSystem) {
+            NSNumber * unitSystem = columnToUnitSystem[column];
+            NSString * uom = [res stringForColumn:column];
+            if( uom ){
+                units[ unitSystem ] = uom;
+            }
+        }
+        
+        if( field ){
+            NSString * display = displays[fieldKey] ?: [GCField displayNameImpliedByFieldKey:fieldKey];
 
-            NSString * key = cacheFieldKey(field, type);
+            NSString * key = cacheFieldKey(fieldKey, type);
             GCFieldInfo * info = [GCFieldInfo fieldInfoFor:field
-                                                      type:type
                                                displayName:display
-                                               andUnitName:uom];
+                                                  andUnits:units];
             fieldCache[key] = info;
         }
     }
@@ -209,27 +223,27 @@ static NSMutableDictionary * _missingFieldCache = nil;
 
 
 -(NSArray<NSString*>*)knownFieldsMatching:(NSString*)str{
-    NSMutableDictionary * rv = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString*,GCFieldInfo*> * rv = [NSMutableDictionary dictionary];
     NSString * exact = nil;
     for (GCField * field in _cache) {
         GCFieldInfo * info = _cache[field];
         if ([info match:str]) {
-            rv[info.field] = info;
+            rv[info.field.key] = info;
             if ([str compare:info.displayName options:NSCaseInsensitiveSearch] == NSOrderedSame ){
                 exact = info.displayName;
-            }else if([str compare:info.field options:NSCaseInsensitiveSearch]==NSOrderedSame) {
-                exact = info.field;
+            }else if([str compare:info.field.key options:NSCaseInsensitiveSearch]==NSOrderedSame) {
+                exact = info.field.key;
             }
         }
     }
     for (NSString * key in _predefinedFieldCache) {
         GCFieldInfo * info = _predefinedFieldCache[key];
-        if ([info match:str] && !rv[info.field]) {
-            rv[info.field] = info;
+        if ([info match:str] && !rv[info.field.key]) {
+            rv[info.field.key] = info;
             if ([str compare:info.displayName options:NSCaseInsensitiveSearch] == NSOrderedSame ){
                 exact = info.displayName;
-            }else if([str compare:info.field options:NSCaseInsensitiveSearch]==NSOrderedSame) {
-                exact = info.field;
+            }else if([str compare:info.field.key options:NSCaseInsensitiveSearch]==NSOrderedSame) {
+                exact = info.field.key;
             }
         }
     }
@@ -313,11 +327,7 @@ static NSMutableDictionary * _missingFieldCache = nil;
                                                  type:aType
                                           displayName:[res stringForColumn:@"fieldDisplayName"]
                                           andUnitName:[res stringForColumn:@"uom"]];
-        if (aType) {
-            if ([fieldKey isEqualToString:@"SumIntensityFactor"]) {
-                info.uom = @"if";
-            }
-        }else{
+        if (!aType) {
             RZLog(RZLogError, @"nil activityType field=%@", field);
         }
         newCache[field] = info;

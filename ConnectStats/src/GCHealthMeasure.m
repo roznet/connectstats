@@ -81,7 +81,6 @@
 */
 
 static NSArray * _cacheMeasureNames = nil;
-static NSArray * _cacheMeasureUnits = nil;
 static NSArray * _cacheMeasureKeys  = nil;
 static NSDictionary * _cacheMeasureTypesFromKeys=nil;
 
@@ -193,26 +192,31 @@ gcMeasureType measureTypeForHK(HKQuantityType*type){
     if (field.isHealthField) {
         gcMeasureType type = [GCHealthMeasure measureTypeFromHealthField:field];
 
-        rv = [GCFieldInfo fieldInfoFor:field.key
-                                  type:field.activityType
+        rv = [GCFieldInfo fieldInfoFor:field
                            displayName:[GCHealthMeasure measureName:type]
-                           andUnitName:[GCHealthMeasure measureUnit:type].key];
+                              andUnits:[GCHealthMeasure measureUnit:type]];
     }
     return rv;
 }
-+(GCUnit*)measureUnit:(gcMeasureType)type{
++(NSDictionary<NSNumber*,GCUnit*>*)measureUnit:(gcMeasureType)type{
+    static NSArray<NSDictionary<NSNumber*,GCUnit*>*> * _cacheMeasureUnits = nil;
+
     if (_cacheMeasureUnits==nil) {
         NSArray * base = @[@"dimensionless",@"kilogram",@"meter",@"kilogram",@"percent",@"kilogram",@"bpm"];
 
         NSMutableArray * units = [NSMutableArray arrayWithCapacity:base.count];
         for (NSString * u in base) {
-            [units addObject:[GCUnit unitForKey:u]];
+            NSDictionary * one = @{
+                @(GCUnitSystemMetric):[GCUnit unitForKey:u],
+                @(GCUnitSystemImperial):[[GCUnit unitForKey:u] unitForSystem:GCUnitSystemImperial]
+            };
+            
+            [units addObject:one];
         }
         _cacheMeasureUnits = RZReturnRetain([NSArray arrayWithArray:units]);
     }
     return _cacheMeasureUnits[type];
 }
-
 +(NSString*)measureName:(gcMeasureType)type{
     if (_cacheMeasureNames == nil) {
         _cacheMeasureNames = @[@"None",@"Weight",@"Height", @"Fat Free Mass",@"Fat Ratio",@"Fat Mass Weight",@"Heart Rate"];
