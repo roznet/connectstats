@@ -26,6 +26,7 @@
 #import "GCFieldInfo.h"
 #import "GCFieldsDefs.h"
 #import "GCField.h"
+#import "GCActivityType.h"
 
 @interface GCFieldInfo ()
 @property (nonatomic,retain) NSString * fieldKey;
@@ -58,6 +59,16 @@
         rv.field = field;
         rv.fieldKey = field.key;
         rv.activityType = field.activityType;
+    }
+    return rv;
+}
++(GCFieldInfo*)fieldInfoForActivityType:(NSString*)aType displayName:(NSString*)aDisplayName{
+    GCFieldInfo * rv = RZReturnAutorelease([[GCFieldInfo alloc] init]);
+    if (rv) {
+        rv.displayName = aDisplayName;
+        rv.units = @{};
+        rv.field = nil;
+        rv.activityType = aType;
     }
     return rv;
 }
@@ -105,6 +116,9 @@
 
 - (GCUnit *)unitForSystem:(gcUnitSystem)system { 
     GCUnit * rv = self.units[@(system)];
+    if( rv == nil ){
+        rv = self.units[@(GCUnitSystemDefault)];
+    }
     if( rv == nil ){
         rv = self.units[@(GCUnitSystemMetric)];
     }

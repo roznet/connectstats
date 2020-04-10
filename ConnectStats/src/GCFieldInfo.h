@@ -39,6 +39,7 @@
 
 +(GCFieldInfo*)fieldInfoFor:(NSString*)field type:(NSString*)aType displayName:(NSString*)aDisplayName andUnitName:(NSString*)aUom DEPRECATED_MSG_ATTRIBUTE("Use fieldInfoFor:(GCField*)");
 +(GCFieldInfo*)fieldInfoFor:(GCField*)field displayName:(NSString*)aDisplayName andUnits:(NSDictionary<NSNumber*,GCUnit*>*)units;
++(GCFieldInfo*)fieldInfoForActivityType:( NSString*)activityType displayName:(NSString*)aDisplayName;
 
 -(BOOL)match:(NSString*)str;
 -(GCUnit*)unitForSystem:(gcUnitSystem)system;

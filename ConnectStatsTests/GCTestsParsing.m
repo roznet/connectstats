@@ -475,8 +475,8 @@
         NSString * fp_tcx = [RZFileOrganizer bundleFilePath:tcx forClass:[self class]];
         NSString * fp_fit = [RZFileOrganizer bundleFilePath:fit forClass:[self class]];
         
-        act_tcx = [GCConnectStatsRequestFitFile testForActivity:act_tcx withFilesIn:fp_tcx];
         act_fit = [GCConnectStatsRequestFitFile testForActivity:act_fit withFilesIn:fp_fit];
+        act_tcx = [GCConnectStatsRequestFitFile testForActivity:act_tcx withFilesIn:fp_tcx];
 
         XCTAssertEqualObjects(act_fit.date, act_tcx.date);
         XCTAssertEqual(act_fit.trackpoints.count, act_tcx.trackpoints.count);

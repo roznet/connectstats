@@ -80,7 +80,6 @@
 91    Pulse Wave Velocity (m/s)
 */
 
-static NSArray * _cacheMeasureNames = nil;
 static NSArray * _cacheMeasureKeys  = nil;
 static NSDictionary * _cacheMeasureTypesFromKeys=nil;
 
@@ -187,42 +186,49 @@ gcMeasureType measureTypeForHK(HKQuantityType*type){
     return [_cacheMeasureTypesFromKeys[key] intValue];
 }
 
-+(GCFieldInfo*)fieldInfoFromField:(GCField*)field{
++(GCFieldInfo*)fieldInfoFromMeasureType:(gcMeasureType)type{
+    static NSDictionary<NSNumber*,GCFieldInfo*>*fieldCache = nil;
+    if( fieldCache == nil){
+        NSArray<NSString*>*fieldKeys = @[@"none",@"weight",@"height", @"fat_free_mass",@"fat_ratio",@"fat_mass_weight",@"heart_rate"];
+        NSArray<NSString*>*units = @[@"dimensionless",@"kilogram",@"meter",@"kilogram",@"percent",@"kilogram",@"bpm"];
+        NSArray<NSString*>*displayNames = @[@"None",@"Weight",@"Height", @"Fat Free Mass",@"Fat Ratio",@"Fat Mass Weight",@"Heart Rate"];
+        
+        NSUInteger size = fieldKeys.count;
+        
+        NSMutableDictionary * build = [NSMutableDictionary dictionary];
+        
+        for (NSUInteger i=0;i<size;i++) {
+            GCField * field = [GCField fieldForKey:[GC_HEALTH_PREFIX stringByAppendingString:fieldKeys[i]] andActivityType:GC_TYPE_ALL];
+            GCUnit * unit = [GCUnit unitForKey:units[i]];
+            NSString * displayName = displayNames[i];
+            
+            GCFieldInfo * info = [GCFieldInfo fieldInfoFor:field displayName:displayName andUnits:@{@(GCUnitSystemMetric):unit}];
+            build[@(i)] = info;
+        }
+        
+        fieldCache = build;
+        RZRetain(fieldCache);
+    }
+    
+    GCFieldInfo * rv = fieldCache[@(type)];
+    return rv;
+}
+
++(GCFieldInfo*)fieldInfoFromField:(GCField *)field{
     GCFieldInfo * rv = nil;
     if (field.isHealthField) {
         gcMeasureType type = [GCHealthMeasure measureTypeFromHealthField:field];
 
-        rv = [GCFieldInfo fieldInfoFor:field
-                           displayName:[GCHealthMeasure measureName:type]
-                              andUnits:[GCHealthMeasure measureUnit:type]];
+        rv = [GCHealthMeasure fieldInfoFromMeasureType:type];
     }
     return rv;
 }
-+(NSDictionary<NSNumber*,GCUnit*>*)measureUnit:(gcMeasureType)type{
-    static NSArray<NSDictionary<NSNumber*,GCUnit*>*> * _cacheMeasureUnits = nil;
 
-    if (_cacheMeasureUnits==nil) {
-        NSArray * base = @[@"dimensionless",@"kilogram",@"meter",@"kilogram",@"percent",@"kilogram",@"bpm"];
-
-        NSMutableArray * units = [NSMutableArray arrayWithCapacity:base.count];
-        for (NSString * u in base) {
-            NSDictionary * one = @{
-                @(GCUnitSystemMetric):[GCUnit unitForKey:u],
-                @(GCUnitSystemImperial):[[GCUnit unitForKey:u] unitForSystem:GCUnitSystemImperial]
-            };
-            
-            [units addObject:one];
-        }
-        _cacheMeasureUnits = RZReturnRetain([NSArray arrayWithArray:units]);
-    }
-    return _cacheMeasureUnits[type];
++(GCUnit*)measureUnit:(gcMeasureType)type{
+    return [GCHealthMeasure fieldInfoFromMeasureType:type].unit;
 }
 +(NSString*)measureName:(gcMeasureType)type{
-    if (_cacheMeasureNames == nil) {
-        _cacheMeasureNames = @[@"None",@"Weight",@"Height", @"Fat Free Mass",@"Fat Ratio",@"Fat Mass Weight",@"Heart Rate"];
-        RZRetain(_cacheMeasureNames);
-    }
-    return _cacheMeasureNames[type];
+    return [GCHealthMeasure fieldInfoFromMeasureType:type].displayName;
 }
 
 #ifdef GC_USE_HEALTHKIT

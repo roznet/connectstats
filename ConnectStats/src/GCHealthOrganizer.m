@@ -214,7 +214,10 @@
 }
 
 -(GCStatsDataSerieWithUnit*)dataSerieWithUnitForHealthFieldKey:(NSString*)aType{
-    gcMeasureType type = [GCHealthMeasure measureTypeFromHealthFieldKey:aType];
+    return nil;
+}
+-(GCStatsDataSerieWithUnit*)dataSerieWithUnitForHealthField:(GCField*)field{
+    gcMeasureType type = [GCHealthMeasure measureTypeFromHealthField:field];
     GCUnit * unit = [GCHealthMeasure measureUnit:type];
 
     GCStatsDataSerieWithUnit * rv = [GCStatsDataSerieWithUnit dataSerieWithUnit:unit];
@@ -224,10 +227,6 @@
         }
     }
     return rv;
-
-}
--(GCStatsDataSerieWithUnit*)dataSerieWithUnitForHealthField:(GCField*)aType{
-    return [self dataSerieWithUnitForHealthFieldKey:aType.key];
 }
 -(GCHealthMeasure*)measureOnSpecificDate:(NSDate*)aDate forType:(gcMeasureType)aField andCalendar:(NSCalendar*)calendar{
     for (GCHealthMeasure * one in self.measures) {

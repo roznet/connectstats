@@ -50,7 +50,9 @@ static void registerInCache(GCField*field){
 
     }
     if (field.fieldFlag!=gcFieldFlagNone) {
-
+        if( field.fieldFlag == gcFieldFlagCadence && [field.key isEqualToString:@"WeightedMeanCadence"]){
+            RZLog(RZLogWarning, @"Registering %@ for cadence", field);
+        }
         dict = _cache[@(field.fieldFlag)];
         if (!dict) {
             dict = [NSMutableDictionary dictionaryWithDictionary:@{aType:field}];
