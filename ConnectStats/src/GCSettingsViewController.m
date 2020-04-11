@@ -602,13 +602,13 @@
             case GC_SETTINGS_BLOG:
             {
                 gridcell = [GCCellGrid gridCell:tableView];
-                [gridcell setupForRows:2 andCols:2];
+                [gridcell setupForRows:2 andCols:1];
                 
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Blog", @"Settings")
                                                                               attributes:[GCViewConfig attributeBold16]] autorelease];
                 
                 [gridcell labelForRow:0 andCol:0].attributedText = title;
-                [gridcell labelForRow:0 andCol:1].attributedText = nil;
+                [gridcell labelForRow:1 andCol:0].attributedText = nil;
                 
                 NSArray * messages = [GCAppGlobal recentRemoteMessages];
                 
