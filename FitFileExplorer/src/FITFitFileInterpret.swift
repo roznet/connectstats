@@ -26,6 +26,16 @@ class FITFitFileInterpret: NSObject {
                     let activityType = GCActivityType(forFitSport: sportKey, andSubSport: first.name(field: "sub_sport")){
                     return activityType
                 }
+            }else{
+                // If no sport message see if the sport is in the session message
+                let sessionMsg = self.fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION )
+                if self.sessionIndex < sessionMsg.count {
+                    let first = sessionMsg[sessionIndex]
+                    if let sportKey = first.name(field: "sport"),
+                        let activityType = GCActivityType(forFitSport: sportKey, andSubSport: first.name(field: "sub_sport")){
+                        return activityType
+                    }
+                }
             }
             return GCActivityType.all()
         }

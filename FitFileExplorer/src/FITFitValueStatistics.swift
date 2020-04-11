@@ -56,7 +56,7 @@ class FITFitValueStatistics: NSObject {
     func preferredStatisticsForField(fieldKey : RZFitFieldKey) -> [StatsType] {
         if( fieldKey.hasPrefix("total")){
             return [StatsType.total,StatsType.count]
-        }else if( fieldKey.hasPrefix("max") || fieldKey.hasPrefix("avg") || fieldKey.hasPrefix("min")){
+        }else if( fieldKey.hasPrefix("max") || fieldKey.hasPrefix("avg") || fieldKey.hasPrefix("min") || fieldKey.hasPrefix( "enhanced" )){
             return [StatsType.avg,StatsType.count,StatsType.max,StatsType.min]
         }else{
             if let field = FITFitEnumMap.activityField(fromFitField: fieldKey, forActivityType: nil){

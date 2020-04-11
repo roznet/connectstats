@@ -80,7 +80,4 @@ NS_INLINE BOOL GCActivityTypeIsSki(NSString*at, NSString*atdetail){
 +(gcFieldFlag)trackFieldFromSwimLapField:(NSString*)f;
 +(NSString*)swimStrokeName:(gcSwimStrokeType)tp;
 
-+(NSString*)predefinedDisplayNameForField:(NSString*)afield andActivityType:(NSString*)atype;
-+(NSString*)predefinedUomForField:(NSString*)afield andActivityType:(NSString*)atype;
-
 @end

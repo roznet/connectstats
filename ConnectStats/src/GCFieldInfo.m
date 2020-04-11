@@ -25,22 +25,56 @@
 
 #import "GCFieldInfo.h"
 #import "GCFieldsDefs.h"
+#import "GCField.h"
+#import "GCActivityType.h"
+
 @interface GCFieldInfo ()
+@property (nonatomic,retain) NSString * fieldKey;
+@property (nonatomic,retain) NSString * activityType;
+@property (nonatomic,retain) GCField * field;
+@property (nonatomic,retain) NSDictionary<NSNumber*,GCUnit*> * units;
+@property (nonatomic,retain) NSString * displayName;
+
 @end
 
 @implementation GCFieldInfo
+
 +(GCFieldInfo*)fieldInfoFor:(NSString*)field type:(NSString*)aType displayName:(NSString*)aDisplayName andUnitName:(NSString*)aUom{
     GCFieldInfo * rv = RZReturnAutorelease([[GCFieldInfo alloc] init]);
     if (rv) {
         rv.displayName = aDisplayName;
-        rv.uom = aUom;
-        rv.field = field;
+        rv.units = @{ @(GCUnitSystemMetric):[GCUnit unitForKey:aUom]
+        };
+        rv.field = [GCField fieldForKey:field andActivityType:aType];
+        rv.fieldKey = field;
         rv.activityType = aType;
     }
     return rv;
 }
++ (GCFieldInfo *)fieldInfoFor:(GCField *)field displayName:(NSString *)aDisplayName andUnits:(NSDictionary<NSNumber *,GCUnit *> *)units {
+    GCFieldInfo * rv = RZReturnAutorelease([[GCFieldInfo alloc] init]);
+    if (rv) {
+        rv.displayName = aDisplayName;
+        rv.units = units;
+        rv.field = field;
+        rv.fieldKey = field.key;
+        rv.activityType = field.activityType;
+    }
+    return rv;
+}
++(GCFieldInfo*)fieldInfoForActivityType:(NSString*)aType displayName:(NSString*)aDisplayName{
+    GCFieldInfo * rv = RZReturnAutorelease([[GCFieldInfo alloc] init]);
+    if (rv) {
+        rv.displayName = aDisplayName;
+        rv.units = @{};
+        rv.field = nil;
+        rv.activityType = aType;
+    }
+    return rv;
+}
+
 -(BOOL)match:(NSString*)str{
-    if ([self.field isEqualToString:self.activityType] || [self.activityType isEqualToString:GC_TYPE_ALL]) {
+    if ([self.fieldKey isEqualToString:self.activityType] || [self.activityType isEqualToString:GC_TYPE_ALL]) {
         // special case don't match activity types
         return false;
     }
@@ -48,7 +82,7 @@
     if (res.location != NSNotFound) {
         return true;
     }
-    res = [self.field rangeOfString:str options:NSCaseInsensitiveSearch];
+    res = [self.fieldKey rangeOfString:str options:NSCaseInsensitiveSearch];
     if (res.location != NSNotFound) {
         return true;
     }
@@ -56,20 +90,36 @@
 }
 
 -(GCUnit*)unit{
-    return [GCUnit unitForKey:self.uom];
+    return [self unitForSystem:[GCUnit getGlobalSystem]];
+}
+-(NSString*)activityType{
+    return self.field.activityType;
 }
 #if !__has_feature(objc_arc)
 -(void)dealloc{
     [_displayName release];
-    [_uom release];
     [_field release];
+    [_fieldKey release];
     [_activityType release];
+    [_units release];
 
     [super dealloc];
 }
 #endif
 -(NSString*)description{
-    return [NSString stringWithFormat:@"<GCFieldInfo:%@:%@>",self.field,self.activityType];
+    return [NSString stringWithFormat:@"<GCFieldInfo:%@:%@:%@>",self.fieldKey,self.activityType,self.unit.key];
+}
+
+
+- (GCUnit *)unitForSystem:(gcUnitSystem)system { 
+    GCUnit * rv = self.units[@(system)];
+    if( rv == nil ){
+        rv = self.units[@(GCUnitSystemDefault)];
+    }
+    if( rv == nil ){
+        rv = self.units[@(GCUnitSystemMetric)];
+    }
+    return rv;
 }
 
 @end

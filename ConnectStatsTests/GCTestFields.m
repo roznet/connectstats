@@ -57,36 +57,59 @@
     
     cache = [GCFieldCache cacheWithDb:db andLanguage:@"fr"];
     [GCField setFieldCache: cache];
+    
+    NSArray<GCField*>*allFields = [cache.availableFields sortedArrayUsingComparator:^(GCField*o1,GCField*o2){
+        return [o1.key compare:o2.key];
+    }];
+    
+    for (GCField * field in allFields) {
+        GCUnit * metric = [[cache infoForField:field] unitForSystem:GCUnitSystemMetric];
+        GCUnit * imperial = [[cache infoForField:field] unitForSystem:GCUnitSystemImperial];
+        if( [field.key containsString:@"Elevation"] ){
+            XCTAssertEqualObjects(metric, [GCUnit meter], @"Metric %@ in meter", field);
+            XCTAssertEqualObjects(imperial, [GCUnit foot], @"Imperial %@ in foot", field);
+        }
+        if( [field.key containsString:@"Pace"] && [field.activityType isEqualToString:GC_TYPE_RUNNING] ){
+            XCTAssertEqualObjects(metric, [GCUnit minperkm], @"Metric %@ in min/km", field);
+            XCTAssertEqualObjects(imperial, [GCUnit minpermile], @"Imperial %@ in min/mi", field);
+        }
+        if( [field.key containsString:@"Temperature"] ){
+            XCTAssertEqualObjects(metric, [GCUnit celcius], @"Metric %@ in celcius", field);
+            XCTAssertEqualObjects(imperial, [GCUnit fahrenheit], @"Imperial %@ in fahrenheit", field);
+        }
+    }
+    
     GCField * weightedMeanPace = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING];
+    
     info = [cache infoForField:weightedMeanPace];
     XCTAssertEqualObjects(info.displayName, @"Allure moy.");
-    XCTAssertEqualObjects(info.uom, @"minperkm");
+    XCTAssertEqualObjects(info.unit,[GCUnit minperkm]);
     XCTAssertEqualObjects([weightedMeanPace displayName], @"Allure moy.");
-    XCTAssertEqualObjects([weightedMeanPace unitName], @"minperkm");
+    XCTAssertEqualObjects([weightedMeanPace unit], [GCUnit minperkm]);
     
     // Now use predefined, register will not change
     [cache registerField:weightedMeanPace displayName:@"Pace" andUnitName:@"minpermile"];
     info = [cache infoForField:weightedMeanPace];
     XCTAssertEqualObjects(info.displayName, @"Allure moy.");
-    XCTAssertEqualObjects(info.uom, @"minperkm");
+    XCTAssertEqualObjects(info.unit, [GCUnit minperkm]);
     XCTAssertEqualObjects([weightedMeanPace displayName], @"Allure moy.");
-    XCTAssertEqualObjects([weightedMeanPace unitName], @"minperkm");
+    XCTAssertEqualObjects([weightedMeanPace unit], [GCUnit minperkm]);
     
     // After prefer predefined go back to previous language
     info = [cache infoForField:weightedMeanPace];
     XCTAssertEqualObjects(info.displayName, @"Allure moy.");
-    XCTAssertEqualObjects(info.uom, @"minperkm");
+    XCTAssertEqualObjects(info.unit, [GCUnit minperkm]);
     XCTAssertEqualObjects([weightedMeanPace displayName], @"Allure moy.");
-    XCTAssertEqualObjects([weightedMeanPace unitName], @"minperkm");
+    XCTAssertEqualObjects([weightedMeanPace unit], [GCUnit minperkm]);
     
     // Register one that does not exists
     GCField * weightedMeanPace2 = [GCField fieldForKey:@"WeightedMeanPace2" andActivityType:GC_TYPE_RUNNING];
     [cache registerField:weightedMeanPace2 displayName:@"Pace2" andUnitName:@"kph"];
     info = [cache infoForField:weightedMeanPace2];
     XCTAssertEqualObjects(info.displayName, @"Pace2");
-    XCTAssertEqualObjects(info.uom, @"kph");
+    XCTAssertEqualObjects(info.unit, [GCUnit kph]);
     XCTAssertEqualObjects([weightedMeanPace2 displayName], @"Pace2");
-    XCTAssertEqualObjects([weightedMeanPace2 unitName], @"kph");
+    XCTAssertEqualObjects([weightedMeanPace2 unit], [GCUnit kph]);
     
     [db close];
     [GCField setFieldCache:oldCache];

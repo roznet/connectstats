@@ -51,7 +51,7 @@
 -(void)addSleepBlocks:(NSArray*)blocks;
 -(GCHealthMeasure*)measureForId:(NSString*)aId andType:(gcMeasureType)aType;
 -(GCStatsDataSerieWithUnit*)dataSerieWithUnitForHealthField:(GCField*)aType;
--(GCStatsDataSerieWithUnit*)dataSerieWithUnitForHealthFieldKey:(NSString*)aType;
+-(GCStatsDataSerieWithUnit*)dataSerieWithUnitForHealthFieldKey:(NSString*)aType DEPRECATED_MSG_ATTRIBUTE("use field");
 -(GCHealthMeasure*)measureForDate:(NSDate*)aDate andType:(gcMeasureType)aField;
 -(NSArray<GCHealthMeasure*>*)measuresForDate:(NSDate*)aDate;
 -(GCHealthMeasure*)measureOnSpecificDate:(NSDate*)aDate forType:(gcMeasureType)aField andCalendar:(NSCalendar*)calendar;

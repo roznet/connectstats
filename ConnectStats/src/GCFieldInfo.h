@@ -25,16 +25,21 @@
 
 #import <Foundation/Foundation.h>
 
+@class GCField;
+@class GCUnit;
+
 @interface GCFieldInfo : NSObject
-@property (nonatomic,retain) NSString * displayName;
-@property (nonatomic,retain) NSString * uom;
-@property (nonatomic,retain) NSString * field;
-@property (nonatomic,retain) NSString * activityType;
 
-//@property (nonatomic,readonly) GCField * field;
+@property (nonatomic,readonly) NSString * displayName;
+@property (nonatomic,readonly) GCUnit * unit;
+@property (nonatomic,readonly) GCField * field;
+@property (nonatomic,readonly) NSString * activityType;
 
-+(GCFieldInfo*)fieldInfoFor:(NSString*)field type:(NSString*)aType displayName:(NSString*)aDisplayName andUnitName:(NSString*)aUom;
++(GCFieldInfo*)fieldInfoFor:(NSString*)field type:(NSString*)aType displayName:(NSString*)aDisplayName andUnitName:(NSString*)aUom DEPRECATED_MSG_ATTRIBUTE("Use fieldInfoFor:(GCField*)");
++(GCFieldInfo*)fieldInfoFor:(GCField*)field displayName:(NSString*)aDisplayName andUnits:(NSDictionary<NSNumber*,GCUnit*>*)units;
++(GCFieldInfo*)fieldInfoForActivityType:( NSString*)activityType displayName:(NSString*)aDisplayName;
 
 -(BOOL)match:(NSString*)str;
--(GCUnit*)unit;
+-(GCUnit*)unitForSystem:(gcUnitSystem)system;
+
 @end

@@ -60,14 +60,7 @@ NSString * kNSUserActivityUserInfoActivityIdKey = @"activityId";
 }
 
 -(NSString*)spotLightActivityType{
-    NSString * aType = [GCFields activityTypeDisplay:self.activityType];
-    if (aType==nil) {
-        aType = [GCFields predefinedDisplayNameForField:self.activityType andActivityType:self.activityType];
-    }
-    if (aType==nil) {
-        aType = self.activityType;
-    }
-    return aType;
+    return self.activityTypeDetail.displayName;
 }
 
 -(void)updateUserActivity:(NSUserActivity*)activity{

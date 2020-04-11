@@ -94,7 +94,9 @@
 }
 
 -(void)swipeLeft:(UISwipeGestureRecognizer*)recognizer{
-    [self.cellDelegate swipeLeft:self];
+    if ([self.cellDelegate respondsToSelector:@selector(swipeLeft:)]) {
+        [self.cellDelegate swipeLeft:self];
+    }
 }
 
 -(void)setDataSource:(id<GCSimpleGraphDataSource>)aSource andConfig:(id<GCSimpleGraphDisplayConfig>)aConfig{

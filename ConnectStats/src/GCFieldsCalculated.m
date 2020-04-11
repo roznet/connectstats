@@ -38,86 +38,75 @@ static NSArray * _calculatedFields = nil;
 
 @implementation GCFieldsCalculated
 
-+(GCFieldInfo*)fieldInfoForCalculatedField:(GCField*)field{
-    GCFieldInfo * rv = nil;
-    if (field.isCalculatedField) {
-        NSString * fieldName = [GCFieldsCalculated displayFieldName:field];
-        NSString * unitName  = [GCFieldsCalculated unitName:field];
 
-        rv = [GCFieldInfo fieldInfoFor:field.key type:field.activityType displayName:fieldName andUnitName:unitName];
++(NSString*)unitName:(GCField*)field{
+    return nil;
+}
+
++(GCFieldInfo*)fieldInfoForCalculatedField:(GCField*)field{
+    static NSDictionary<GCField*,GCFieldInfo*> * infoCache = nil;
+    if( infoCache == nil){
+        NSArray * defs = @[
+            [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ALTITUDE_GAIN andActivityType:GC_TYPE_ALL]
+                          displayName:NSLocalizedString( @"Elevation Gain", @"Calculated Field")
+                             andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE]}],
+             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ALTITUDE_LOSS andActivityType:GC_TYPE_ALL]
+                           displayName:NSLocalizedString( @"Elevation Loss", @"Calculated Field")
+                              andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE]}],
+             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_NORMALIZED_POWER andActivityType:GC_TYPE_ALL]
+                           displayName:NSLocalizedString( @"Normalized Power", @"Calculated Field")
+                              andUnits:@{@(GCUnitSystemMetric):[GCUnit watt]}],
+            [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_NONZERO_POWER andActivityType:GC_TYPE_ALL]
+                          displayName:NSLocalizedString( @"Non Zero Avg Power", @"Calculated Field")
+                             andUnits:@{@(GCUnitSystemMetric):[GCUnit watt]}],
+            [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_VERTICAL_SPEED andActivityType:GC_TYPE_ALL]
+                          displayName:NSLocalizedString( @"Vertical Speed", @"Calculated Field")
+                             andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:@"meterperhour"]}],
+            [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ELEVATION_GRADIENT andActivityType:GC_TYPE_ALL]
+                          displayName:NSLocalizedString( @"Elevation Gradient", @"Calculated Field")
+                             andUnits:@{@(GCUnitSystemMetric):[GCUnit percent]}],
+            [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ELEVATION_GRADIENT andActivityType:GC_TYPE_ALL]
+                          displayName:NSLocalizedString( @"Elevation Gradient", @"Calculated Field")
+                             andUnits:@{@(GCUnitSystemMetric):[GCUnit percent]}],
+            [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ASCENT_SPEED andActivityType:GC_TYPE_ALL]
+                          displayName:NSLocalizedString( @"Ascent Speed", @"Calculated Field")
+                             andUnits:@{@(GCUnitSystemMetric):[GCUnit meterperhour]}],
+            [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_DESCENT_SPEED andActivityType:GC_TYPE_ALL]
+                          displayName:NSLocalizedString( @"Descent Speed", @"Calculated Field")
+                             andUnits:@{@(GCUnitSystemMetric):[GCUnit meterperhour]}],
+            [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_MAX_ASCENT_SPEED andActivityType:GC_TYPE_ALL]
+                          displayName:NSLocalizedString( @"Max Ascent Speed", @"Calculated Field")
+                             andUnits:@{@(GCUnitSystemMetric):[GCUnit meterperhour]}],
+            [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_MAX_DESCENT_SPEED andActivityType:GC_TYPE_ALL]
+                          displayName:NSLocalizedString( @"Max Descent Speed", @"Calculated Field")
+                             andUnits:@{@(GCUnitSystemMetric):[GCUnit meterperhour]}],
+            [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_10SEC_SPEED andActivityType:GC_TYPE_RUNNING]
+                          displayName:NSLocalizedString( @"10sec Speed", @"Calculated Field")
+                             andUnits:@{@(GCUnitSystemMetric):[GCUnit minperkm]}],
+            [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_10SEC_SPEED andActivityType:GC_TYPE_ALL]
+                          displayName:NSLocalizedString( @"10sec Speed", @"Calculated Field")
+                             andUnits:@{@(GCUnitSystemMetric):[GCUnit kph]}],
+
+        ];
+        NSMutableDictionary * cache = [NSMutableDictionary dictionary];
+        for (GCFieldInfo * info in defs) {
+            cache[info.field] = info;
+        }
+        infoCache = [NSDictionary dictionaryWithDictionary:cache];
+
+    }
+    GCFieldInfo * rv = infoCache[field];
+    
+    RZRetain(infoCache);
+    
+    if( rv == nil){
+        rv = infoCache[ [field correspondingFieldForActivityType:GC_TYPE_ALL] ];
     }
     return rv;
 }
 
-+(NSString*)unitName:(GCField*)field{
-    NSArray * all = [GCFieldsCalculated calculatedFields];
-    for (GCFieldsCalculated * one in all) {
-        if ([field.key isEqualToString:one.fieldKey]) {
-            return [one unitName];
-        }
-    }
-    if ([field.key isEqualToString:CALC_ALTITUDE_GAIN]) {
-        return STOREUNIT_ALTITUDE;
-    }else if([field.key isEqualToString:CALC_ALTITUDE_LOSS]){
-        return STOREUNIT_ALTITUDE;
-    }else if([field.key isEqualToString:CALC_NORMALIZED_POWER]){
-        return @"watt";
-    }else if([field.key isEqualToString:CALC_NONZERO_POWER]){
-        return @"watt";
-    }else if ([field.key isEqualToString:CALC_VERTICAL_SPEED]){
-        return @"meterperhour";
-    }else if ([field.key isEqualToString:CALC_ELEVATION_GRADIENT]){
-        return @"percent";
-    }else if ([field.key isEqualToString:CALC_MAX_ASCENT_SPEED]){
-        return @"meterperhour";
-    }else if ([field.key isEqualToString:CALC_MAX_DESCENT_SPEED]){
-        return @"meterperhour";
-    }else if ([field.key isEqualToString:CALC_ASCENT_SPEED]){
-        return @"meterperhour";
-    }else if ([field.key isEqualToString:CALC_DESCENT_SPEED]){
-        return @"meterperhour";
-    }else if ([field.key isEqualToString:CALC_10SEC_SPEED]){
-        if( [field.activityType isEqualToString:GC_TYPE_RUNNING]){
-            return @"minperkm";
-        }else{
-            return @"kph";
-        }
-    }
-    return nil;
-}
 +(NSString*)displayFieldName:(GCField*)field{
-    NSArray * all = [GCFieldsCalculated calculatedFields];
-    for (GCFieldsCalculated * one in all) {
-        if ([field.key isEqualToString:one.fieldKey]) {
-            return [one displayName];
-        }
-    }
-    if ([field.key isEqualToString:CALC_ALTITUDE_GAIN]) {
-        return NSLocalizedString( @"Elevation Gain", @"Calculated Field");
-    }else if([field.key isEqualToString:CALC_ALTITUDE_LOSS]){
-        return NSLocalizedString( @"Elevation Loss", @"Calculated Field");
-    }else if([field.key isEqualToString:CALC_NORMALIZED_POWER]){
-        return NSLocalizedString( @"Normalized Power", @"Calculated Field");
-    }else if([field.key isEqualToString:CALC_NONZERO_POWER]){
-        return NSLocalizedString( @"Non Zero Avg Power", @"Calculated Field");
-    }else if ([field.key isEqualToString:CALC_VERTICAL_SPEED]){
-        return NSLocalizedString( @"Vertical Speed", @"Calculated Field");
-    }else if ([field.key isEqualToString:CALC_ELEVATION_GRADIENT]){
-        return NSLocalizedString( @"Elevation Gradient", @"Calculated Field");
-    }else if ([field.key isEqualToString:CALC_MAX_ASCENT_SPEED]){
-        return NSLocalizedString( @"Max Ascent Speed", @"Calculated Field");
-    }else if ([field.key isEqualToString:CALC_MAX_DESCENT_SPEED]){
-        return NSLocalizedString( @"Max Descent Speed", @"Calculated Field");
-    }else if ([field.key isEqualToString:CALC_ASCENT_SPEED]){
-        return NSLocalizedString( @"Ascent Speed", @"Calculated Field");
-    }else if ([field.key isEqualToString:CALC_DESCENT_SPEED]){
-        return NSLocalizedString( @"Descent Speed", @"Calculated Field");
-    }else if ([field.key isEqualToString:CALC_10SEC_SPEED]){
-        return NSLocalizedString(@"10sec Speed", @"Calculated Field");
-    }
-
-
-    return nil;
+    return [self fieldInfoForCalculatedField:field].displayName;
 }
 
 +(BOOL)isCalculatedField:(NSString*)field{
