@@ -410,6 +410,7 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView derivedCellForRowAtIndexPath:(NSIndexPath *)indexPath{
     GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
     graphCell.cellDelegate = self;
+    graphCell.identifier = GC_SUMMARY_DERIVED;
     GCDerivedDataSerie * current = [self currentDerivedDataSerie];
 
     GCSimpleGraphCachedDataSource * cache = nil;
@@ -434,7 +435,8 @@
     GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
     graphCell.cellDelegate = self;
     graphCell.legend = TRUE;
-        
+    graphCell.identifier = GC_SUMMARY_CUMULATIVE_DISTANCE;
+    
     GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:self.config.currentCumulativeSummaryField];
     NSCalendarUnit unit = NSCalendarUnitYear;
 
@@ -596,12 +598,14 @@
 
 -(void)swipeLeft:(GCCellSimpleGraph *)cell{
     if( self.config.viewChoice == gcViewChoiceSummary){
-        [self.config nextDerivedSerieField];
+        if( cell.identifier == GC_SUMMARY_DERIVED){
+            [self.config nextDerivedSerieField];
+        }else if( cell.identifier == GC_SUMMARY_CUMULATIVE_DISTANCE ){
+            [self.config nextSummaryCumulativeField];
+        }
     }else{
         [self.config nextSummaryCumulativeField];
-        [self.tableView reloadData];
     }
-
 
     [self.tableView reloadData];
 }

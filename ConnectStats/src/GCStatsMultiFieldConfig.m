@@ -282,7 +282,7 @@
 }
 
 
-- (void)nextDerivedSerieField { 
+- (void)nextDerivedSerie {
     NSArray<GCDerivedGroupedSeries*>*available = [self availableDataSeries];
     
     if (self.derivedSerieFieldIndex<available.count) {
@@ -302,7 +302,7 @@
     }
 }
 
-- (void)nextDerivedSerie { 
+- (void)nextDerivedSerieField { 
     NSArray<GCDerivedGroupedSeries*> * available = [self availableDataSeries];
     
     self.derivedSerieFieldIndex++;

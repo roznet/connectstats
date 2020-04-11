@@ -43,6 +43,7 @@
 
 @property (nonatomic,assign) NSObject<GCCellSimpleGraphDelegate> * cellDelegate;
 @property (nonatomic,assign) BOOL legend;
+@property (nonatomic,assign) NSInteger identifier;
 
 +(GCCellSimpleGraph*)graphCell:(UITableView*)tableView;
 -(void)setDataSource:(id<GCSimpleGraphDataSource>)aSource andConfig:(id<GCSimpleGraphDisplayConfig>)aConfig;
