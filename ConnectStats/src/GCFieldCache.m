@@ -79,6 +79,26 @@ static NSMutableDictionary * _missingFieldCache = nil;
     return names;
 }
 
+-(NSArray<GCField*>*)availableFields{
+    NSMutableSet * rv = [NSMutableSet set];
+    for (GCFieldInfo * key in self.predefinedFieldCache.allValues) {
+        [rv addObject:key.field];
+    }
+    for(GCFieldInfo * key in self.cache.allValues){
+        [rv addObject:key.field];
+    }
+    return rv.allObjects;
+}
+
+-(NSArray<NSString*>*)availableActivityTypes{
+    NSMutableArray * rv = [NSMutableArray array];
+    for (GCFieldInfo * info in self.predefinedActivityTypeCache) {
+        [rv addObject:info.activityType];
+    }
+    return rv;
+}
+
+
 +(GCFieldCache*)cacheWithDb:(FMDatabase*)db andLanguage:(NSString*)language{
     GCFieldCache * rv = RZReturnAutorelease([[GCFieldCache alloc] init]);
     if (rv) {

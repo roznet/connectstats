@@ -31,21 +31,27 @@
 
 @interface GCFieldCache : NSObject
 
+@property (nonatomic,readonly) NSArray<GCField*>*availableFields;
+@property (nonatomic,readonly) NSArray<NSString*>*availableActivityTypes;
+
 +(NSArray<NSString*>*)availableLanguagesCodes;
 +(NSArray<NSString*>*)availableLanguagesNames;
 
 +(GCFieldCache*)cacheWithDb:(FMDatabase*)db andLanguage:(NSString*)language;
 
--(GCFieldInfo*)infoForField:(NSString*)field andActivityType:(NSString*)aType DEPRECATED_MSG_ATTRIBUTE( "use infoForField:(GCField*)");
 -(GCFieldInfo*)infoForField:(GCField*)field;
 -(GCFieldInfo*)infoForActivityType:(NSString*)activityType;
 
--(void)registerField:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom DEPRECATED_MSG_ATTRIBUTE( "Only use predefined");
 -(void)registerField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom;
 
 -(BOOL)knownField:(NSString*)field activityType:(NSString*)activityType;
 -(NSArray<NSString*>*)knownFieldsMatching:(NSString*)str;
 
 -(NSDictionary<GCField*,GCFieldInfo*>*)missingPredefinedField;
+
+// Deprecated
+-(GCFieldInfo*)infoForField:(NSString*)field andActivityType:(NSString*)aType DEPRECATED_MSG_ATTRIBUTE( "use infoForField:(GCField*)");
+-(void)registerField:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom DEPRECATED_MSG_ATTRIBUTE( "Only use predefined");
+
 
 @end

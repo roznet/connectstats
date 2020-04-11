@@ -458,9 +458,6 @@ static void registerInCache(GCField*field){
 -(GCUnit*)unit{
     return [[_fieldCache infoForField:self] unit];
 }
--(NSString*)unitName{
-    return [[_fieldCache infoForField:self] uom];
-}
 
 -(NSString*)displayNameAndUnits{
     return [self displayNameWithUnits:[self unit]];

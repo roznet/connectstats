@@ -96,6 +96,9 @@ static NSArray * _calculatedFields = nil;
 
     }
     GCFieldInfo * rv = infoCache[field];
+    
+    RZRetain(infoCache);
+    
     if( rv == nil){
         rv = infoCache[ [field correspondingFieldForActivityType:GC_TYPE_ALL] ];
     }

@@ -92,9 +92,6 @@
 -(GCUnit*)unit{
     return [self unitForSystem:[GCUnit getGlobalSystem]];
 }
--(NSString*)uom{
-    return self.unit.key;
-}
 -(NSString*)activityType{
     return self.field.activityType;
 }
@@ -110,7 +107,7 @@
 }
 #endif
 -(NSString*)description{
-    return [NSString stringWithFormat:@"<GCFieldInfo:%@:%@>",self.fieldKey,self.activityType];
+    return [NSString stringWithFormat:@"<GCFieldInfo:%@:%@:%@>",self.fieldKey,self.activityType,self.unit.key];
 }
 
 

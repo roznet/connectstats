@@ -57,6 +57,28 @@
     
     cache = [GCFieldCache cacheWithDb:db andLanguage:@"fr"];
     [GCField setFieldCache: cache];
+    
+    NSArray<GCField*>*allFields = [cache.availableFields sortedArrayUsingComparator:^(GCField*o1,GCField*o2){
+        return [o1.key compare:o2.key];
+    }];
+    
+    for (GCField * field in allFields) {
+        GCUnit * metric = [[cache infoForField:field] unitForSystem:GCUnitSystemMetric];
+        GCUnit * imperial = [[cache infoForField:field] unitForSystem:GCUnitSystemImperial];
+        if( [field.key containsString:@"Elevation"] ){
+            XCTAssertEqualObjects(metric, [GCUnit meter], @"Metric %@ in meter", field);
+            XCTAssertEqualObjects(imperial, [GCUnit foot], @"Imperial %@ in foot", field);
+        }
+        if( [field.key containsString:@"Pace"] && [field.activityType isEqualToString:GC_TYPE_RUNNING] ){
+            XCTAssertEqualObjects(metric, [GCUnit minperkm], @"Metric %@ in min/km", field);
+            XCTAssertEqualObjects(imperial, [GCUnit minpermile], @"Imperial %@ in min/mi", field);
+        }
+        if( [field.key containsString:@"Temperature"] ){
+            XCTAssertEqualObjects(metric, [GCUnit celcius], @"Metric %@ in celcius", field);
+            XCTAssertEqualObjects(imperial, [GCUnit fahrenheit], @"Imperial %@ in fahrenheit", field);
+        }
+    }
+    
     GCField * weightedMeanPace = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING];
     
     info = [cache infoForField:weightedMeanPace];
