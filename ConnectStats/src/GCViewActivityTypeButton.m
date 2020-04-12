@@ -74,7 +74,7 @@
 }
 
 -(NSString*)buttonTitleFor:(NSString*)activityType{
-    NSString * rv = NSLocalizedString( @"All", @"Activity Type Button");
+    NSString * rv = nil;
     BOOL filter = [self.delegate useFilter];
     
     if ([activityType isEqualToString:GC_TYPE_ALL]) {
@@ -101,13 +101,14 @@
 
 -(void)longPress:(UIGestureRecognizer*)gesture{
     if( self.presentingViewController && gesture.state == UIGestureRecognizerStateBegan){
-        UITableViewController * controller = [[UITableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        UITableViewController * controller = RZReturnAutorelease([[UITableViewController alloc] initWithStyle:UITableViewStyleGrouped]);
         controller.modalPresentationStyle = UIModalPresentationPopover;
         controller.tableView.dataSource = self;
         controller.tableView.delegate = self;
         self.popoverViewController = controller;
-        UIPopoverPresentationController * popOver = RZReturnAutorelease([[UIPopoverPresentationController alloc] initWithPresentedViewController:controller presentingViewController:self.presentingViewController]);
-        popOver.barButtonItem = self.activityTypeButtonItem;
+        RZAutorelease([[UIPopoverPresentationController alloc] initWithPresentedViewController:controller
+                                                                      presentingViewController:self.presentingViewController]);
+        controller.popoverPresentationController.barButtonItem = self.activityTypeButtonItem;
         
         [self.presentingViewController presentViewController:controller animated:YES completion:nil];
     }
@@ -226,7 +227,7 @@
         
         [cell labelForRow:0 andCol:0].text = [GCActivityType activityTypeForKey:activityType].displayName;
     }else{
-        [cell labelForRow:0 andCol:0].text = @"Index Error";
+        [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Index Error",@"Activity Type Button");
     }
 
     return cell;
