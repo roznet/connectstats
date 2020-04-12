@@ -87,7 +87,7 @@
 
     self.navigationItem.hidesBackButton = YES;
     self.activityTypeButton = [GCViewActivityTypeButton activityTypeButtonForDelegate:self];
-    self.navigationItem.leftBarButtonItem = self.activityTypeButton.activityTypeButtonItem;
+    
     [self setupBarButtonItem];
 
 }
@@ -593,7 +593,8 @@
             (self.navigationController.navigationBar.topItem).title = [GCFields activityTypeDisplay:self.activityType];
         }
     }
-    [self.activityTypeButton setupBarButtonItem];
+    [self.activityTypeButton setupBarButtonItem:self];
+    self.navigationItem.leftBarButtonItem = self.activityTypeButton.activityTypeButtonItem;
 }
 
 -(void)swipeLeft:(GCCellSimpleGraph *)cell{

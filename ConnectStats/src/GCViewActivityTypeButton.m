@@ -32,7 +32,10 @@
 
 @interface GCViewActivityTypeButton ()
 @property (nonatomic,retain) NSArray * activityTypeList;
-
+@property (nonatomic,retain) UILabel * labelView;
+@property (nonatomic,retain) UIImageView * imageView;
+@property (nonatomic,retain) UIViewController * presentingViewController;
+@property (nonatomic,retain) UITableViewController * popoverViewController;
 @end
 
 @implementation GCViewActivityTypeButton
@@ -41,28 +44,76 @@
     GCViewActivityTypeButton*rv = [[[GCViewActivityTypeButton alloc] init] autorelease];
     if (rv) {
         rv.delegate = del;
-        NSString * activityType = [del activityType];
-        UIImage * img = [GCViewIcons activityTypeBWIconFor:activityType];
-
-        if (img) {
-            rv.activityTypeButtonItem = [[[UIBarButtonItem alloc] initWithImage:img style:UIBarButtonItemStylePlain target:rv action:@selector(titleSingleTap)] autorelease];
-        }else{
-            NSString * otherLabel = [activityType isEqualToString:GC_TYPE_DAY] ? NSLocalizedString( @"Day", @"Activity Type Button") :NSLocalizedString( @"Other", @"Activity Type Button");
-            rv.activityTypeButtonItem = [[[UIBarButtonItem alloc] initWithTitle:otherLabel
-                                                                          style:UIBarButtonItemStylePlain target:rv action:@selector(titleSingleTap)] autorelease];
-        }
+        
+        //[rv setupBarButtonItem:nil];
     }
     return rv;
 }
 
 -(void)dealloc{
+    [_popoverViewController release];
+    [_presentingViewController release];
+    [_imageView release];
+    [_labelView release];
+    
     [_activityTypeList release];
     [_delegate release];
     [_activityTypeButtonItem release];
 
     [super dealloc];
 }
--(void)titleSingleTap{
+
+-(NSArray<NSString*>*)listActivityTypes{
+    NSArray * types = nil;
+    if ([self.delegate respondsToSelector:@selector(listActivityTypes)]) {
+        types = [self.delegate listActivityTypes];
+    }else{
+        types = [[GCAppGlobal organizer] listActivityTypes];
+    }
+    return types;
+}
+
+-(NSString*)buttonTitleFor:(NSString*)activityType{
+    NSString * rv = NSLocalizedString( @"All", @"Activity Type Button");
+    BOOL filter = [self.delegate useFilter];
+    
+    if ([activityType isEqualToString:GC_TYPE_ALL]) {
+        if (filter) {
+            rv = NSLocalizedString( @"Search", @"Activity Type Button");
+        }else{
+            rv = NSLocalizedString(@"All", @"Activity Type Button");
+        }
+    }else{
+        rv = [GCActivityType activityTypeForKey:activityType].displayName;
+    }
+    return rv;
+}
+
+-(UIImage*)imageFor:(NSString*)activityType{
+    UIImage * img = [GCViewIcons activityTypeBWIconFor:activityType];
+    if (img == nil) {
+        if ([self.delegate respondsToSelector:@selector(useColoredIcons)] && [self.delegate useColoredIcons]) {
+            img = [GCViewIcons activityTypeColoredIconFor:activityType];
+        }
+    }
+    return img;
+}
+
+-(void)longPress:(UIGestureRecognizer*)gesture{
+    if( self.presentingViewController && gesture.state == UIGestureRecognizerStateBegan){
+        UITableViewController * controller = [[UITableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        controller.modalPresentationStyle = UIModalPresentationPopover;
+        controller.tableView.dataSource = self;
+        controller.tableView.delegate = self;
+        self.popoverViewController = controller;
+        UIPopoverPresentationController * popOver = RZReturnAutorelease([[UIPopoverPresentationController alloc] initWithPresentedViewController:controller presentingViewController:self.presentingViewController]);
+        popOver.barButtonItem = self.activityTypeButtonItem;
+        
+        [self.presentingViewController presentViewController:controller animated:YES completion:nil];
+    }
+}
+
+-(void)shortPress:(UIGestureRecognizer*)gesture{
     NSArray * types = nil;
     if ([self.delegate respondsToSelector:@selector(listActivityTypes)]) {
         types = [self.delegate listActivityTypes];
@@ -99,37 +150,103 @@
     [self.delegate setupForCurrentActivityType:atype andFilter:currentFilter];
 }
 
--(void)setupBarButtonItem{
+-(BOOL)setupBarButtonItem:(nullable UIViewController*)presentingViewController{
+    BOOL rv = false;
+    
+    self.presentingViewController = presentingViewController;
+    
     NSString * activityType = [self.delegate activityType];
-    BOOL filter = [self.delegate useFilter];
-
-    if ([activityType isEqualToString:GC_TYPE_ALL]) {
-        [self.activityTypeButtonItem setImage:nil];
-        if (filter) {
-            [self.activityTypeButtonItem setTitle:NSLocalizedString( @"Search", @"Activity Type Button")];
+    if( activityType ){
+        
+        NSString * buttonTitle = [self buttonTitleFor:activityType];
+        UIImage * img = [self imageFor:activityType];
+        
+        if (img) {
+            if( self.imageView == nil){
+                self.imageView = RZReturnAutorelease([[UIImageView alloc] initWithImage:[img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]]);
+                UITapGestureRecognizer * tapG = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(shortPress:)];
+                tapG.numberOfTapsRequired = 1;
+                [self.imageView addGestureRecognizer:tapG];
+                [self.imageView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)]];
+            }else{
+                self.imageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            }
+            self.imageView.tintColor = [GCViewConfig defaultColor:gcSkinDefaultColorHighlightedText];
+            if( self.activityTypeButtonItem == nil){
+                self.activityTypeButtonItem = RZReturnAutorelease([[UIBarButtonItem alloc] initWithCustomView:self.imageView]);
+            }else{
+                self.activityTypeButtonItem.customView = self.imageView;
+            }
+            rv = true;
         }else{
-            NSString * allLabel = NSLocalizedString(@"All", @"Activity Type Button");
-            (self.activityTypeButtonItem).title = allLabel;
+            if( self.labelView == nil){
+                self.labelView = RZReturnAutorelease([[UILabel alloc] initWithFrame:CGRectZero]);
+                self.labelView.highlighted = true;
+                self.labelView.userInteractionEnabled = true;
+                UITapGestureRecognizer * tapG = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(shortPress:)];
+                tapG.numberOfTapsRequired = 1;
+                [self.labelView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)]];
+                [self.labelView addGestureRecognizer:tapG];
+            }
+            self.labelView.text = buttonTitle;
+            self.labelView.textColor = [GCViewConfig defaultColor:gcSkinDefaultColorHighlightedText];
+            if( self.activityTypeButtonItem == nil){
+                self.activityTypeButtonItem = RZReturnAutorelease([[UIBarButtonItem alloc] initWithCustomView:self.labelView]);
+            }else{
+                self.activityTypeButtonItem.customView = self.labelView;
+            }
+            rv = true;
         }
-    }else{
+    }
+    return rv;
+}
+
+#pragma mark - UITableViewDataSource
+
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    [cell setupForRows:1 andCols:1];
+    
+    NSArray * types = self.listActivityTypes;
+
+    if( indexPath.row < types.count ){
+        NSString * activityType = types[indexPath.row];
         UIImage * img = [GCViewIcons activityTypeBWIconFor:activityType];
         if (img == nil) {
             if ([self.delegate respondsToSelector:@selector(useColoredIcons)] && [self.delegate useColoredIcons]) {
                 img = [GCViewIcons activityTypeColoredIconFor:activityType];
             }
         }
-        if (img) {
-            (self.activityTypeButtonItem).image = img;
-            [self.activityTypeButtonItem setTitle:nil];
+        if( img ){
+            [cell setIconImage:[img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            cell.iconView.tintColor = [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText];
         }else{
-
-            [self.activityTypeButtonItem setImage:nil];
-            if( activityType != nil){
-                NSString * otherLabel = [GCActivityType activityTypeForKey:activityType].displayName;
-                (self.activityTypeButtonItem).title = otherLabel;
-            }
+            [cell setIconImage:nil];
         }
+        
+        [cell labelForRow:0 andCol:0].text = [GCActivityType activityTypeForKey:activityType].displayName;
+    }else{
+        [cell labelForRow:0 andCol:0].text = @"Index Error";
     }
+
+    return cell;
+}
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+
+    return self.listActivityTypes.count;
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSArray<NSString*>*types = self.listActivityTypes;
+    NSString * type = indexPath.row < types.count ? types[indexPath.row] : types.firstObject;
+    
+    [self.delegate setupForCurrentActivityType:type andFilter:false];
+    [self.popoverViewController dismissViewControllerAnimated:TRUE completion:nil];
 }
 
 @end
