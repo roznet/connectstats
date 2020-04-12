@@ -390,7 +390,13 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     indexes.left = currentIndex;
     indexes.right = currentIndex;
     indexes.cnt = 0;
-
+    // if only 1 point, don't bother
+    if( self.dataPoints.count < 2){
+        indexes.left = 0;
+        indexes.right = 0;
+        return indexes;
+    }
+    
     double curr_x = [dataPoints[indexes.left] x_data];
     // easy edge case
     NSUInteger n = dataPoints.count;

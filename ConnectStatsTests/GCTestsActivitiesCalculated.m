@@ -38,6 +38,8 @@
 #import "GCCalculatedCachedTrackInfo.h"
 #import "GCActivity+BestRolling.h"
 
+#import "GCAppGlobal.h"
+
 @interface GCTestsActivitiesCalculated : GCTestCase
 
 @end
@@ -70,6 +72,20 @@
         NSLog(@"%@", serieU);
     }
 
+}
+
+-(void)testBuildAllBestRolling{
+    GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
+    NSUInteger i = 0;
+    for (GCActivity * act in organizer.activities) {
+        if( !act.trackPointsRequireDownload){
+            i++;
+        }
+    }
+    RZLog(RZLogInfo,@"%@/%@", @(i), @(organizer.countOfActivities));
+    
+    GCDerivedOrganizer *derived = [GCAppGlobal derived];
+    RZLog(RZLogInfo,@"%@", derived);
 }
 
 
