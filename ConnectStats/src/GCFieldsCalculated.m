@@ -43,7 +43,7 @@ static NSArray * _calculatedFields = nil;
     return nil;
 }
 
-+(GCFieldInfo*)fieldInfoForCalculatedField:(GCField*)field{
++(NSDictionary<GCField*,GCFieldInfo*>*)fieldInfoForCalculatedFields{
     static NSDictionary<GCField*,GCFieldInfo*> * infoCache = nil;
     if( infoCache == nil){
         NSArray * defs = @[
@@ -92,12 +92,22 @@ static NSArray * _calculatedFields = nil;
         for (GCFieldInfo * info in defs) {
             cache[info.field] = info;
         }
+        for (GCFieldsCalculated * calculated in [GCFieldsCalculated calculatedFields]) {
+            GCField * field = [GCField fieldForKey:calculated.fieldKey andActivityType:GC_TYPE_ALL];
+            cache[field] = [GCFieldInfo fieldInfoFor:field
+                                              displayName:calculated.displayName
+                                            andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:calculated.unitName]}];
+        }
         infoCache = [NSDictionary dictionaryWithDictionary:cache];
-
+        RZRetain(infoCache);
     }
-    GCFieldInfo * rv = infoCache[field];
     
-    RZRetain(infoCache);
+    return infoCache;
+}
+
++(GCFieldInfo*)fieldInfoForCalculatedField:(GCField*)field{
+    NSDictionary<GCField*,GCFieldInfo*> * infoCache = [self fieldInfoForCalculatedFields];
+    GCFieldInfo * rv = infoCache[field];
     
     if( rv == nil){
         rv = infoCache[ [field correspondingFieldForActivityType:GC_TYPE_ALL] ];

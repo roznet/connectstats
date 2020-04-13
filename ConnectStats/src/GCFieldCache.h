@@ -42,7 +42,8 @@
 -(GCFieldInfo*)infoForField:(GCField*)field;
 -(GCFieldInfo*)infoForActivityType:(NSString*)activityType;
 
--(void)registerField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom;
+-(void)registerFields:(NSDictionary<GCField*,GCFieldInfo*>*)info;
+
 
 -(BOOL)knownField:(NSString*)field activityType:(NSString*)activityType;
 -(NSArray<NSString*>*)knownFieldsMatching:(NSString*)str;
@@ -52,6 +53,7 @@
 // Deprecated
 -(GCFieldInfo*)infoForField:(NSString*)field andActivityType:(NSString*)aType DEPRECATED_MSG_ATTRIBUTE( "use infoForField:(GCField*)");
 -(void)registerField:(NSString*)field activityType:(NSString*)aType displayName:(NSString*)aName  andUnitName:(NSString*)uom DEPRECATED_MSG_ATTRIBUTE( "Only use predefined");
+-(void)registerField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom DEPRECATED_MSG_ATTRIBUTE("Use RegisterFields with FieldInfo");
 
 
 @end

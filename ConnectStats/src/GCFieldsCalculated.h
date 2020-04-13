@@ -41,6 +41,8 @@
 +(BOOL)isCalculatedField:(NSString*)field DEPRECATED_MSG_ATTRIBUTE("use GCField.");
 
 +(NSString*)displayFieldName:(GCField*)field;
+
++(NSDictionary<GCField*,GCFieldInfo*>*)fieldInfoForCalculatedFields;
 +(GCFieldInfo*)fieldInfoForCalculatedField:(GCField*)field;
 
 -(GCActivityCalculatedValue*)evaluateForActivity:(GCActivity*)act;

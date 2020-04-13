@@ -480,6 +480,8 @@ void checkVersion(){
     }
 
     GCFieldCache * cache = [GCFieldCache cacheWithDb:self.db andLanguage:language];
+    [cache registerFields:[GCFieldsCalculated fieldInfoForCalculatedFields]];
+    [cache registerFields:[GCHealthMeasure fieldInfoForMeasureFields]];
     [GCField setFieldCache: cache];
     [GCFields setFieldCache:cache];
     [GCActivityType setFieldCache:cache];

@@ -337,6 +337,16 @@ static NSMutableDictionary * _missingFieldCache = nil;
 }
 
 
+-(void)registerFields:(NSDictionary<GCField*,GCFieldInfo*>*)info{
+    if(!self.predefinedFieldCache){
+        [self buildPredefinedCacheForLanguage:nil];
+    }
+
+    for (GCField * field in info) {
+        self.cache[field] = info[field];
+    }
+}
+
 -(void)registerField:(GCField *)field displayName:(NSString *)aName andUnitName:(NSString *)uom{
     if(!self.predefinedFieldCache){
         [self buildPredefinedCacheForLanguage:nil];
