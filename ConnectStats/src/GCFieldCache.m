@@ -120,7 +120,7 @@ NS_INLINE NSString * cacheActivityTypeKey(NSString*activityType){
 
 -(void)buildPredefinedCacheForLanguage:(nullable NSString*)languageInput{
     NSString * language = languageInput ?: [[NSLocale preferredLanguages][0] substringToIndex:2];
-    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"fields_new.db"]];
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"fields.db"]];
     [db open];
 
     NSMutableDictionary<NSString*,NSString*> * displays = [NSMutableDictionary dictionary];

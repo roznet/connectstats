@@ -139,12 +139,12 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
 
     NSMutableDictionary * defsFromDb = [NSMutableDictionary dictionary];
 
-    FMResultSet * res = [fdb executeQuery:@"SELECT * FROM gc_activityType_modern"];
+    FMResultSet * res = [fdb executeQuery:@"SELECT * FROM gc_activityTypes"];
     while( [res next]){
         NSUInteger typeId = [res intForColumn:@"activityTypeId"];
         defsFromDb[ @(typeId) ] = @{
                                   kTypeId : @(typeId),
-                                  kTypeKey : [res stringForColumn:@"activityTypeDetail"],
+                                  kTypeKey : [res stringForColumn:@"activityType"],
                                   kTypeParent : @([res intForColumn:@"parentActivityTypeId"]),
                                   };
     }

@@ -27,10 +27,6 @@
 		42018E9618F1877E0089AB7A /* GCFieldsCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42018E9518F1877E0089AB7A /* GCFieldsCategory.m */; };
 		42018EA018F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42018E9F18F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m */; };
 		4202AE2E21A8A20800D8D696 /* FITGarminDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4202AE2121A72D9600D8D696 /* FITGarminDownloadManager.swift */; };
-		420478E123F1FEE60019E7ED /* fields_new.db in Resources */ = {isa = PBXBuildFile; fileRef = 420478D623F1FEE60019E7ED /* fields_new.db */; };
-		420478E223F1FEE60019E7ED /* fields_new.db in Resources */ = {isa = PBXBuildFile; fileRef = 420478D623F1FEE60019E7ED /* fields_new.db */; };
-		420478E323F1FEE60019E7ED /* fields_new.db in Resources */ = {isa = PBXBuildFile; fileRef = 420478D623F1FEE60019E7ED /* fields_new.db */; };
-		420478E423F1FEE60019E7ED /* fields_new.db in Resources */ = {isa = PBXBuildFile; fileRef = 420478D623F1FEE60019E7ED /* fields_new.db */; };
 		420621F81D3AD48D0013A45E /* RZUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; };
 		42091CFF1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42091CFE1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m */; };
 		42091D001B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42091CFE1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m */; };
@@ -1989,7 +1985,6 @@
 		42018E9E18F32E2F0089AB7A /* GCTableHeaderFieldsCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTableHeaderFieldsCategory.h; path = src/GCTableHeaderFieldsCategory.h; sourceTree = "<group>"; };
 		42018E9F18F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTableHeaderFieldsCategory.m; path = src/GCTableHeaderFieldsCategory.m; sourceTree = "<group>"; };
 		4202AE2121A72D9600D8D696 /* FITGarminDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITGarminDownloadManager.swift; path = src/FITGarminDownloadManager.swift; sourceTree = "<group>"; };
-		420478D623F1FEE60019E7ED /* fields_new.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = fields_new.db; path = sqlite/out/fields_new.db; sourceTree = "<group>"; };
 		42091CFD1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitDailySummaryRequest.h; path = src/GCHealthKitDailySummaryRequest.h; sourceTree = "<group>"; };
 		42091CFE1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitDailySummaryRequest.m; path = src/GCHealthKitDailySummaryRequest.m; sourceTree = "<group>"; };
 		4209674F1895566200D32CA7 /* GCDerivedDataSerie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCDerivedDataSerie.h; path = src/GCDerivedDataSerie.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -4349,7 +4344,6 @@
 		428FF71415F36888007A88FA /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				420478D623F1FEE60019E7ED /* fields_new.db */,
 				42939CEC23AAD7A900D2403A /* fit_developer.json */,
 				42939CE423AAD79500D2403A /* fields.db */,
 				42939CE523AAD79500D2403A /* fit_map.json */,
@@ -6130,7 +6124,6 @@
 				422CCE8C1B7EAB7200A4DAEB /* Activities.xcassets in Resources */,
 				42939CEF23AAD7A900D2403A /* fit_developer.json in Resources */,
 				422CCE881B7EAA3000A4DAEB /* Navigation.xcassets in Resources */,
-				420478E423F1FEE60019E7ED /* fields_new.db in Resources */,
 				42F4E4DA1B56EDC00009F2BA /* HealthStatsLaunchScreen.xib in Resources */,
 				4211C53419AB043A000DEF87 /* version.plist in Resources */,
 				422CCE821B7EA81500A4DAEB /* Fields.xcassets in Resources */,
@@ -6149,7 +6142,6 @@
 				4253B4651CD49F7E00437E6A /* Assets.xcassets in Resources */,
 				42628A4C23ACCFF100EC6673 /* fit_developer.json in Resources */,
 				4253B4681CD49F7E00437E6A /* Main.storyboard in Resources */,
-				420478E323F1FEE60019E7ED /* fields_new.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6197,7 +6189,6 @@
 				428FF71815F36888007A88FA /* InfoPlist.strings in Resources */,
 				427CF8D222ABD6BC00894253 /* credentials.json in Resources */,
 				422CCE7C1B7E9B6300A4DAEB /* Cells.xcassets in Resources */,
-				420478E123F1FEE60019E7ED /* fields_new.db in Resources */,
 				42939CED23AAD7A900D2403A /* fit_developer.json in Resources */,
 				42939CE623AAD79600D2403A /* fields.db in Resources */,
 				429184C2231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */,
@@ -6572,7 +6563,6 @@
 				42B5E5021BA5BA2D000FAE4E /* track_294945994.db in Resources */,
 				42B5E4811BA5BA2D000FAE4E /* last_search_0.json in Resources */,
 				42B5E4C31BA5BA2D000FAE4E /* track_246518182.db in Resources */,
-				420478E223F1FEE60019E7ED /* fields_new.db in Resources */,
 				427F93301BEA9A5900C177F9 /* activities_large.db in Resources */,
 				42B5E4D21BA5BA2D000FAE4E /* track_271775992.db in Resources */,
 				42B5E5331BA5BA2D000FAE4E /* track_331118611.db in Resources */,

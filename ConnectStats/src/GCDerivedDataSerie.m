@@ -185,7 +185,9 @@ sqlite3_int64 kInvalidSerieId = 0;
     }
 }
 
-
+-(void)reset{
+    self.serieWithUnit = nil;
+}
 -(void)operate:(gcStatsOperand)operand with:(GCStatsDataSerieWithUnit*)other from:(GCActivity*)activity{
     if (self.serieWithUnit) {
         if (self.serieWithUnit.serie) {

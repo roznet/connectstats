@@ -54,7 +54,6 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
 -(void)processSome;
 
 -(void)rebuildDerivedDataSerie:(gcDerivedType)type
-                         field:(gcFieldFlag)field
                         period:(gcDerivedPeriod)period
             containingActivity:(GCActivity*)act;
 
@@ -65,7 +64,6 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
 
 // Debug utils
 -(void)forceReprocessActivity:(NSString*)aId;
--(void)clearDataForActivityType:(NSString*)aType andFieldFlag:(gcFieldFlag)flag;
 
 
 @end

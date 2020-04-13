@@ -295,6 +295,10 @@ static BOOL kDerivedEnabled = true;
     return serieOfSerie;
 }
 
+-(GCStatsDataSerie*)serieFor:(GCDerivedDataSerie*)derivedSerie{
+    return nil;
+}
+
 #pragma mark - access Aggregated Series
 
 -(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type field:(gcFieldFlag)field period:(gcDerivedPeriod)period
@@ -360,27 +364,6 @@ static BOOL kDerivedEnabled = true;
     return all.allKeys;
 }
 
--(void)clearDataForActivityType:(NSString*)aType andFieldFlag:(gcFieldFlag)flag{
-    FMResultSet * res = [self.deriveddb executeQuery:@"SELECT * FROM gc_derived_series s, gc_derived_series_files f WHERE activityType = 'running' AND fieldFlag = 64 AND f.serieId = s.serieId"];
-    NSMutableArray * fileToDelete = [NSMutableArray array];
-    NSMutableArray * seriesToDelete = [NSMutableArray array];
-    while( [res next]){
-        [seriesToDelete addObject:@([res intForColumn:@"serieId"])];
-        [fileToDelete addObject:[res stringForColumn:@"filename"]];
-    }
-    for (NSString * filename in fileToDelete) {
-        [RZFileOrganizer removeEditableFile:filename];
-    }
-    for (NSNumber * serieId in seriesToDelete) {
-        if(![self.deriveddb executeUpdate:@"DELETE FROM gc_derived_series WHERE serieId = ?", serieId]){
-            RZLog(RZLogError, @"Failed to update %@", self.deriveddb.lastErrorMessage);
-        }
-        if(![self.deriveddb executeUpdate:@"DELETE FROM gc_derived_series_files WHERE serieId = ?", serieId]){
-            RZLog(RZLogError, @"Failed to update %@", self.deriveddb.lastErrorMessage);
-        }
-    }
-}
-
 -(void)loadSerieFromFile:(GCDerivedDataSerie*)serie{
     FMResultSet * res = [self.deriveddb executeQuery:@"SELECT filename FROM gc_derived_series_files WHERE serieId = ?", @([self serieId:serie])];
     if ([res next]) {
@@ -407,20 +390,55 @@ static BOOL kDerivedEnabled = true;
 
 #pragma mark - rebuild
 
+-(void)clearDataForSerie:(GCDerivedDataSerie*)serie{
+    [serie reset];
+    
+    FMResultSet * res = [self.deriveddb executeQuery:@"SELECT * FROM gc_derived_series_files WHERE serieId = ?", @(serie.serieId)];
+    NSMutableArray * fileToDelete = [NSMutableArray array];
+    while( [res next]){
+        [fileToDelete addObject:[res stringForColumn:@"filename"]];
+    }
+    for (NSString * filename in fileToDelete) {
+        [RZFileOrganizer removeEditableFile:filename];
+    }
+    if(![self.deriveddb executeUpdate:@"DELETE FROM gc_derived_series WHERE serieId = ?", @(serie.serieId)]){
+        RZLog(RZLogError, @"Failed to update %@", self.deriveddb.lastErrorMessage);
+    }
+    if(![self.deriveddb executeUpdate:@"DELETE FROM gc_derived_series_files WHERE serieId = ?", @(serie.serieId)]){
+        RZLog(RZLogError, @"Failed to update %@", self.deriveddb.lastErrorMessage);
+    }
+}
+
+
 -(void)rebuildDerivedDataSerie:(gcDerivedType)type
-                         field:(gcFieldFlag)field
                         period:(gcDerivedPeriod)period
             containingActivity:(GCActivity*)act{
-    //[[GCAppGlobal organizer] activities]
     
-    GCDerivedDataSerie * serie = [self derivedDataSerie:type field:field period:period forDate:act.date andActivityType:act.activityType];
+    NSArray<GCDerivedDataSerie*> * series =
+    @[
+        [self derivedDataSerie:type field:gcFieldFlagWeightedMeanSpeed period:period forDate:act.date andActivityType:act.activityType],
+        [self derivedDataSerie:type field:gcFieldFlagPower period:period forDate:act.date andActivityType:act.activityType],
+        [self derivedDataSerie:type field:gcFieldFlagWeightedMeanHeartRate period:period forDate:act.date andActivityType:act.activityType]
+    ];
+
     NSMutableArray * toProcess = [NSMutableArray array];
     for (GCActivity * act in [[GCAppGlobal organizer] activities]) {
-        if( [serie containsActivity:act] ){
-            [toProcess addObject:act];
+        for (GCDerivedDataSerie * serie in series) {
+            if( [serie containsActivity:act] ){
+                [toProcess addObject:act];
+                break;
+            }
         }
     }
-    RZLog(RZLogInfo,@"Rebuilding %@ matching %@ with %@/%@ activities", serie, act, @(toProcess.count), @([[GCAppGlobal organizer] countOfActivities]));
+    RZLog(RZLogInfo,@"Rebuilding Derived matching %@ with %@/%@ activities", act, @(toProcess.count), @([[GCAppGlobal organizer] countOfActivities]));
+    
+    for (GCActivity * activity in toProcess) {
+        [self forceReprocessActivity:activity.activityId];
+    }
+    for (GCDerivedDataSerie * serie in series) {
+        [self clearDataForSerie:serie];
+    }
+    [self processActivities:toProcess];
 }
 
 

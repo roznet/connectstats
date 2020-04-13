@@ -492,7 +492,7 @@ static void registerInCache(GCField*field){
         [fdb open];
 
         rv = [NSMutableDictionary dictionary];
-        FMResultSet * res = [fdb executeQuery:@"SELECT * FROM fields_order WHERE activityType is NULL"];
+        FMResultSet * res = [fdb executeQuery:@"SELECT * FROM gc_fields_order WHERE activityType is NULL"];
         while ([res next]) {
             NSString * field = [res stringForColumn:@"field"];
             NSString * category = [res stringForColumn:@"category"];
@@ -504,7 +504,7 @@ static void registerInCache(GCField*field){
             rv[field] = @[category,@(order)];
         }
         if (activityType != nil) {
-            res = [fdb executeQuery:@"SELECT * FROM fields_order WHERE activityType = ?", activityType];
+            res = [fdb executeQuery:@"SELECT * FROM gc_fields_order WHERE activityType = ?", activityType];
             while ([res next]) {
                 NSString * field = [res stringForColumn:@"field"];
                 NSString * category = [res stringForColumn:@"category"];
