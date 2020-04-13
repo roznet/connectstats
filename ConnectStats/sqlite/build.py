@@ -8,6 +8,7 @@ import argparse
 import json
 import os
 import pprint
+import openpyxl
 from collections import defaultdict
 
 
@@ -334,6 +335,32 @@ class Fields:
         
         return { 'gc_fields_uom': uom, 'gc_fields_display': display }
 
+    def save_to_excel(self,wb):
+        ws = wb.create_sheet('gc_fields_display')
+        wb.remove(wb['Sheet'])
+        fields = self.save_to_dict()
+        languages = defaultdict(int)
+        for key,val in fields['gc_fields_display'].items():
+            for l in val.keys():
+                languages[l] += 1
+        cols = ['field']
+        cols.extend( sorted(list(languages.keys()), key=lambda x: languages[x], reverse=True) )
+        row = 1
+        for i in range(len(cols)):
+            ws.cell(row=row,column=(i+1),value=cols[i] )
+        row = 2
+        keys = sorted( fields['gc_fields_display'].keys() )
+        for key in keys:
+            vals = fields['gc_fields_display'][key]
+            if( len(vals )> 0):
+                for i in range(len(cols)):
+                    if i == 0:
+                        ws.cell(row=row,column=(i+1),value=key )
+                    if cols[i] in vals:
+                        ws.cell(row=row,column=(i+1),value=vals[cols[i]] )
+                row += 1
+        
+
 class Category :
     def __init__(self,name,display_order,display_name):
         self.name = name
@@ -417,6 +444,10 @@ class Driver :
             f.update( a )
             with open(output, 'w') as of:
                 json.dump(f, of, indent=2, sort_keys=True)
+        if output.endswith( '.xlsx' ):
+            wb = openpyxl.Workbook()
+            self.fields.save_to_excel(wb)
+            wb.save( output )
             
 
     def cmd_show(self):
@@ -441,7 +472,6 @@ class Driver :
                 self.load_db( fn )
             elif fn.endswith( '.json' ):
                 self.load_json( fn )
-        
         
 if __name__ == "__main__":
                 
