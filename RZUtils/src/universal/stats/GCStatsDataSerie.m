@@ -1891,7 +1891,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     }
 #if TARGET_IPHONE_SIMULATOR
     size_t bad_count = 0;
-    for(size_t n=0;n<range;n++){
+    for(size_t n=1;n<range;n++){
         // For debugging should not happen
         if ( (select==gcStatsMax && best[n]<best[n-1]) || (select==gcStatsMin && best[n]>best[n-1])) {
             bad_count++;

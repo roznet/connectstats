@@ -29,6 +29,7 @@
 #import "GCActivity+Fields.h"
 #import "GCActivity+BestRolling.h"
 #import "GCActivity+Series.h"
+#import "GCFieldInfo.h"
 
 @implementation GCActivity (CachedTracks)
 
@@ -374,8 +375,6 @@
             rv[key] = su;
         }
     }
-    [GCActivity registerCalculatedFields:self.activityType];
-    
     return rv;
 }
 
@@ -397,22 +396,28 @@
         [final convertToUnit:[GCUnit unitForKey:@"kph"]];
     }
 
-    [GCActivity registerCalculatedFields:self.activityType];
-    
     return  @{CALC_10SEC_SPEED:final};
 }
 
-+(void)registerCalculatedFields:(NSString*)activityType{
-    
-    
-    [GCFields registerField:[GCField fieldForKey:CALC_VERTICAL_SPEED andActivityType:activityType] displayName:NSLocalizedString(@"Vertical Speed", @"Calculated Field") andUnitName:@"meterperhour"];
++(NSDictionary<GCField*,GCFieldInfo*>*)fieldInfoForCalculatedTrackFields{
+    NSArray * defs = @[
+        [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_VERTICAL_SPEED andActivityType:GC_TYPE_ALL]
+                      displayName:NSLocalizedString(@"Vertical Speed", @"Calculated Field")
+                         andUnits:@{@(GCUnitSystemMetric):[GCUnit meterperhour]}],
+        
+        [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_10SEC_SPEED andActivityType:GC_TYPE_RUNNING]
+                      displayName:NSLocalizedString(@"10sec Pace", @"Calculated Field")
+                         andUnits:@{@(GCUnitSystemMetric):[GCUnit minperkm],@(GCUnitSystemImperial):[GCUnit minpermile]}],
+        [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_10SEC_SPEED andActivityType:GC_TYPE_ALL]
+                      displayName:NSLocalizedString(@"10sec Speed", @"Calculated Field")
+                         andUnits:@{@(GCUnitSystemMetric):[GCUnit kph],@(GCUnitSystemImperial):[GCUnit mph]}],
 
-    if ([activityType isEqualToString:GC_TYPE_RUNNING]) {
-        [GCFields registerField:[GCField fieldForKey:CALC_10SEC_SPEED andActivityType:activityType] displayName:NSLocalizedString(@"10sec Pace", @"Calculated Field") andUnitName:@"minperkm"];
-    }else{
-        [GCFields registerField:[GCField fieldForKey:CALC_10SEC_SPEED andActivityType:activityType] displayName:NSLocalizedString(@"10sec Speed", @"Calculated Field") andUnitName:@"kph"];
+    ];
+    NSMutableDictionary * rv = [NSMutableDictionary dictionary];
+    for (GCFieldInfo * info in defs) {
+        rv[info.field] = info;
     }
-
+    return rv;
 }
 
 

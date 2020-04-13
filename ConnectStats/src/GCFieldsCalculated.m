@@ -97,6 +97,7 @@ static NSArray * _calculatedFields = nil;
             cache[field] = [GCFieldInfo fieldInfoFor:field
                                               displayName:calculated.displayName
                                             andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:calculated.unitName]}];
+            [field correspondingFieldForActivityType:GC_TYPE_RUNNING];
         }
         infoCache = [NSDictionary dictionaryWithDictionary:cache];
         RZRetain(infoCache);

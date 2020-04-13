@@ -26,6 +26,9 @@
 #import "GCActivity.h"
 #import "GCCalculatedCachedTrackInfo.h"
 
+NS_ASSUME_NONNULL_BEGIN
+@class GCFieldInfo;
+
 @interface GCActivity (CachedTracks)
 
 
@@ -39,4 +42,8 @@
 -(void)addStandardCalculatedTracks:(nullable dispatch_queue_t)threadOrNil;
 +(nullable GCStatsDataSerieWithUnit*)standardSerieSampleForXUnit:(nonnull GCUnit*)xUnit;
 
++(NSDictionary<GCField*,GCFieldInfo*>*)fieldInfoForCalculatedTrackFields;
+
 @end
+NS_ASSUME_NONNULL_END
+
