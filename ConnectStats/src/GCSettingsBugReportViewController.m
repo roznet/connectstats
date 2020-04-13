@@ -38,6 +38,7 @@
 @interface GCSettingsBugReportViewController ()
 @property (nonatomic,retain) GCSettingsBugReport * report;
 @property (nonatomic,retain) NSURLSessionDataTask * task;
+@property (nonatomic,retain) NSURLRequest * urlRequest;
 @end
 
 @implementation GCSettingsBugReportViewController
@@ -83,15 +84,14 @@
     
     self.webView = contentView;
 
-    //[contentView loadRequest:self.report.urlRequest];
-
     [self.view addSubview:contentView];
     self.hud =[MBProgressHUD showHUDAddedTo:contentView animated:YES];
     self.hud.labelText = @"Preparing Report";
 
 	[contentView release];
+    self.urlRequest = self.report.urlRequest;
     
-    self.task = [[NSURLSession sharedSession] dataTaskWithRequest:self.report.urlRequest
+    self.task = [[NSURLSession sharedSession] dataTaskWithRequest:self.urlRequest
                                         completionHandler:^(NSData*data,NSURLResponse*response,NSError*error){
         if (error) {
             RZLog(RZLogError,@"Error loading bugreport %@",error);
@@ -100,7 +100,7 @@
             NSStringEncoding encodingType = encodingName ? CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName)) : NSUTF8StringEncoding;
             NSString * html = RZReturnAutorelease([[NSString alloc] initWithData:data encoding:encodingType]);
             dispatch_async(dispatch_get_main_queue(), ^(){
-                [self.webView loadHTMLString:html baseURL:self.report.urlRequest.URL];;
+                [self.webView loadHTMLString:html baseURL:self.urlRequest.URL];;
             });
         }
     }];

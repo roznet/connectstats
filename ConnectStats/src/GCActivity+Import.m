@@ -333,7 +333,7 @@
         nu = [nu convertToUnitName:displayuom];
     }
     GCActivitySummaryValue * sumVal = [GCActivitySummaryValue activitySummaryValueForField:fieldkey value:nu];
-    [GCFields registerField:[GCField fieldForKey:fieldkey andActivityType:self.activityType] displayName:display andUnitName:displayuom];
+    [GCFields registerMissingField:[GCField fieldForKey:fieldkey andActivityType:self.activityType] displayName:display andUnitName:displayuom];
     return sumVal;
 }
 
@@ -873,7 +873,7 @@
                 }
             }
 
-            [GCFields registerField:[GCField fieldForKey:field andActivityType:self.activityType] displayName:info[@"fieldDisplayName"] andUnitName:thisuom];
+            [GCFields registerMissingField:[GCField fieldForKey:field andActivityType:self.activityType] displayName:info[@"fieldDisplayName"] andUnitName:thisuom];
             summaryDataTmp[field] = [GCActivitySummaryValue activitySummaryValueForDict:info andField:(NSString*)field];
         }
     }

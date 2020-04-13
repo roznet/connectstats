@@ -139,7 +139,7 @@
     NSString * TEST_FIELD = @"testField";
     NSString * TEST_TEXT  = @"testText";
     
-    [GCFields registerField:[GCField fieldForKey:TEST_FIELD andActivityType:GC_TYPE_RUNNING] displayName:@"Test" andUnitName:@"dimensionless"];
+    [GCFields registerMissingField:[GCField fieldForKey:TEST_FIELD andActivityType:GC_TYPE_RUNNING] displayName:@"Test" andUnitName:@"dimensionless"];
     
     NSArray * tests = @[
                         @[@"", @"", @1800., @"yard", @"1.02 mi", @"1.65 km"],

@@ -316,6 +316,8 @@ static BOOL kDerivedEnabled = true;
     return existing;
 }
 
+
+
 -(GCDerivedDataSerie*)derivedDataSerieForKey:(NSString*)key{
     return (self.derivedSeries)[key];
 }
@@ -402,6 +404,25 @@ static BOOL kDerivedEnabled = true;
         (self.modifiedSeries[key])[activity.activityId] = fn;
     }
 }
+
+#pragma mark - rebuild
+
+-(void)rebuildDerivedDataSerie:(gcDerivedType)type
+                         field:(gcFieldFlag)field
+                        period:(gcDerivedPeriod)period
+            containingActivity:(GCActivity*)act{
+    //[[GCAppGlobal organizer] activities]
+    
+    GCDerivedDataSerie * serie = [self derivedDataSerie:type field:field period:period forDate:act.date andActivityType:act.activityType];
+    NSMutableArray * toProcess = [NSMutableArray array];
+    for (GCActivity * act in [[GCAppGlobal organizer] activities]) {
+        if( [serie containsActivity:act] ){
+            [toProcess addObject:act];
+        }
+    }
+    RZLog(RZLogInfo,@"Rebuilding %@ matching %@ with %@/%@ activities", serie, act, @(toProcess.count), @([[GCAppGlobal organizer] countOfActivities]));
+}
+
 
 #pragma mark - Processed Activities
 

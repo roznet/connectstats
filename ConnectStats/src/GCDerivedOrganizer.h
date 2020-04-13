@@ -53,6 +53,11 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
 -(void)processActivities:(NSArray*)activities;
 -(void)processSome;
 
+-(void)rebuildDerivedDataSerie:(gcDerivedType)type
+                         field:(gcFieldFlag)field
+                        period:(gcDerivedPeriod)period
+            containingActivity:(GCActivity*)act;
+
 -(NSArray<NSNumber*>*)availableFieldsForType:(NSString*)aType;
 -(NSArray<GCDerivedGroupedSeries*>*)groupedSeriesMatching:(GCDerivedDataSerieMatchBlock)match;
 

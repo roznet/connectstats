@@ -67,8 +67,8 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     }
 }
 
-+(void)registerField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom{
-    [_fieldCache registerField:field displayName:aName andUnitName:uom];
++(void)registerMissingField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom{
+    [_fieldCache registerMissingField:field displayName:aName andUnitName:uom];
 
 }
 

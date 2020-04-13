@@ -43,9 +43,9 @@
 -(GCFieldInfo*)infoForActivityType:(NSString*)activityType;
 
 -(void)registerFields:(NSDictionary<GCField*,GCFieldInfo*>*)info;
--(void)registerField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom;
+-(void)registerMissingField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom;
 
--(BOOL)knownField:(NSString*)field activityType:(NSString*)activityType;
+-(BOOL)knownField:(NSString*)field activityType:(NSString*)activityType DEPRECATED_MSG_ATTRIBUTE( "Use GCFIeld");
 -(NSArray<NSString*>*)knownFieldsMatching:(NSString*)str;
 
 -(NSDictionary<GCField*,GCFieldInfo*>*)missingPredefinedField;

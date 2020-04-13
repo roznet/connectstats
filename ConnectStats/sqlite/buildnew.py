@@ -105,6 +105,7 @@ class ActivityTypes:
 
     def save_to_dict(self):
         rv = {}
+        types = sorted(list( self.typesByKey.keys() ))
         for key in types:
             type = self.typesByKey[key]
             parent = self.typesById[ type.parentId ].key if type.parentId in self.typesById else None
@@ -112,7 +113,7 @@ class ActivityTypes:
             rv[ key ] = { 'activityType': key, 'parentActivityType': parent, 'activityTypeId':type.typeId, 'parentActivityTypeId':type.parentId }
             rv[ key ].update( type.display )
             
-        return rv
+        return {'gc_activityTypes':rv}
                 
     def __getitem__(self,arg):
         remap = self.remap_activityType(arg)
@@ -200,6 +201,44 @@ class Fields:
             for (idx,col) in enumerate(cols):
                 if col != 'field':
                     self.fields[ fieldKey ].add_display( col,row[idx] )
+
+    def fix_unit_system_missing(self):
+        metric_to_statute = dict()
+        # collect known conversions
+        for key,field in self.fields.items():
+            for t,u in field.unitByType['metric'].items():
+                if t in field.unitByType['statute'] and u != field.unitByType['statute'][t]:
+                    metric_to_statute[u] = field.unitByType['statute'][t]
+                    
+        for key,field in self.fields.items():
+            for t,u in field.unitByType['metric'].items():
+                n_u = None
+                if u in metric_to_statute:
+                    n_u = metric_to_statute[u]
+                    if n_u == 'foot' and 'Elevation' not in key:
+                        n_u = 'yard'
+                if n_u:
+                    if t not in field.unitByType['statute'] or 'statute' not in field.unitByType:
+                        if self.verbose:
+                            print( 'updating missing {}/{} to {} (from {})'.format( key, t, n_u, u) )
+                        if 'statute' in field.unitByType:
+                            field.unitByType['statute'][t] = n_u
+                        else:
+                            field.unitByType = {'statute': {t:n_u} }
+                    if t in field.unitByType['statute'] and n_u != field.unitByType['statute'][t]:
+                        if self.verbose:
+                            print( 'fixing inconsistent {}/{} {} != {} (from {})'.format( key, t, field.unitByType['statute'][t], n_u, u) )
+                        field.unitByType['statute'][t] = n_u
+
+                if 'Elevation' in key and field.unitByType['metric'][t] != 'meter':
+                    if self.verbose:
+                        print( 'fixing elevation {}/{} {}/{} to {}/{}'.format( key, t, field.unitByType['metric'][t], field.unitByType['statute'][t] if t in field.unitByType['statute'] else None , 'meter', 'foot') )
+
+                    field.unitByType['metric'][t] = 'meter'
+                    if t in field.unitByType['statute']:
+                        field.unitByType['statute'][t] = 'foot'
+                    else:
+                        field.unitByType['statue'] = {t:'foot'}
             
     def save_to_db(self,dbname, languages, systems):
         conn = sqlite3.connect(dbname)
@@ -242,54 +281,14 @@ class Fields:
                     vals = [key, t, units[t]['metric'], units[t]['statute'] if 'statute' in units[t] else None]
                     conn.execute( sql, vals )
         conn.commit()
-
-    def fix_unit_system_missing(self):
-        metric_to_statute = dict()
-        # collect known conversions
-        for key,field in self.fields.items():
-            for t,u in field.unitByType['metric'].items():
-                if t in field.unitByType['statute'] and u != field.unitByType['statute'][t]:
-                    metric_to_statute[u] = field.unitByType['statute'][t]
-                    
-        for key,field in self.fields.items():
-            for t,u in field.unitByType['metric'].items():
-                n_u = None
-                if u in metric_to_statute:
-                    n_u = metric_to_statute[u]
-                    if n_u == 'foot' and 'Elevation' not in key:
-                        n_u = 'yard'
-                if n_u:
-                    if t not in field.unitByType['statute'] or 'statute' not in field.unitByType:
-                        if self.verbose:
-                            print( 'updating missing {}/{} to {} (from {})'.format( key, t, n_u, u) )
-                        if 'statute' in field.unitByType:
-                            field.unitByType['statute'][t] = n_u
-                        else:
-                            field.unitByType = {'statute': {t:n_u} }
-                    if t in field.unitByType['statute'] and n_u != field.unitByType['statute'][t]:
-                        if self.verbose:
-                            print( 'fixing inconsistent {}/{} {} != {} (from {})'.format( key, t, field.unitByType['statute'][t], n_u, u) )
-                        field.unitByType['statute'][t] = n_u
-
-                if 'Elevation' in key and field.unitByType['metric'][t] != 'meter':
-                    if self.verbose:
-                        print( 'fixing elevation {}/{} {}/{} to {}/{}'.format( key, t, field.unitByType['metric'][t], field.unitByType['statute'][t] if t in field.unitByType['statute'] else None , 'meter', 'foot') )
-
-                    field.unitByType['metric'][t] = 'meter'
-                    if t in field.unitByType['statute']:
-                        field.unitByType['statute'][t] = 'foot'
-                    else:
-                        field.unitByType['statue'] = {t:'foot'}
         
     def save_to_dict(self):
-        rv = {}
         display = {}
         for key,field in self.fields.items():
             display[key] = field.fieldDisplayNameByLanguage
+            
         uom = {}
-
-
-        for key in fields:
+        for key in self.fields:
             field = self.fields[key]
             units = defaultdict(dict)
             for s,one in field.unitByType.items():
@@ -298,13 +297,13 @@ class Fields:
 
             if len(units) == 1:
                 vals = [key, 'all', units[t]['metric'], units[t]['statute'] if 'statute' in units[t] else None]
-                conn.execute( sql, vals )
+                uom[ key ] = { 'all' : {'metric':units[t]['metric'], 'statute': units[t]['statute'] if 'statute' in units[t] else None } }
             else:
+                uom[ key ] = {}
                 for t in units:
-                    vals = [key, t, units[t]['metric'], units[t]['statute'] if 'statute' in units[t] else None]
-                    conn.execute( sql, vals )
+                    uom[ key ][t] = {'metric':units[t]['metric'], 'statute': units[t]['statute'] if 'statute' in units[t] else None }
         
-            
+        return { 'gc_fields_uom': uom, 'gc_fields_display': display }
         
 class Driver :
     def __init__(self,args):
@@ -344,9 +343,11 @@ class Driver :
             self.fields.save_to_db(self.args.output, self.languages, ['metric', 'statute'])
             self.types.save_to_db( self.args.output, self.languages )
         if output.endswith( '.json' ):
-            a = self.fields.save_dict()
-            b = self.types.save_dict( )
-            print( a )
+            f = self.fields.save_to_dict()
+            a = self.types.save_to_dict( )
+            f.update( a )
+            with open(output, 'w') as of:
+                json.dump(f, of, indent=2, sort_keys=True)
             
 
     def cmd_show(self):

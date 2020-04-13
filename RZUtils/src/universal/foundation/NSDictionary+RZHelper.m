@@ -24,6 +24,7 @@
 //  
 
 #import "NSDictionary+RZHelper.h"
+#import "NSArray+Map.h"
 
 @implementation NSDictionary (RZHelper)
 
@@ -99,6 +100,26 @@
     }else{
         return nil;
     }
+}
+
+-(NSDictionary*)dictionaryWithJSONTypesOnly{
+    NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithCapacity:self.count];
+    for (NSObject<NSCopying>*key in self) {
+        NSObject * obj = self[key];
+        
+        if( [obj isKindOfClass:[NSNumber class]] || [obj isKindOfClass:[NSString class]] || [obj isKindOfClass:[NSNull class]] ){
+            rv[key] = obj;
+        }else if( [obj isKindOfClass:[NSDictionary class]] ){
+            NSDictionary * dict = (NSDictionary*)obj;
+            rv[key] = [dict dictionaryWithJSONTypesOnly];
+        }else if( [obj isKindOfClass:[NSArray class]] ){
+            NSArray * array = (NSArray*)obj;
+            rv[key] = [array arrayWithJSONTypesOnly];
+        }else if( [obj respondsToSelector:@selector(description)] ){
+            rv[key] = [obj description];
+        }
+    }
+    return rv;
 }
 
 

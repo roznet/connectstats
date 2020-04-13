@@ -37,7 +37,7 @@
 #import "GCActivity+TrackTransform.h"
 #import "GCCalculatedCachedTrackInfo.h"
 #import "GCActivity+BestRolling.h"
-
+#import "GCDerivedOrganizer.h"
 #import "GCAppGlobal.h"
 
 @interface GCTestsActivitiesCalculated : GCTestCase
@@ -76,16 +76,33 @@
 
 -(void)testBuildAllBestRolling{
     GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
+    [[GCAppGlobal profile] configSet:CONFIG_DUPLICATE_CHECK_ON_LOAD boolVal:false];
+    GCDerivedOrganizer *derived = [GCAppGlobal derived];
+    
     NSUInteger i = 0;
+    GCActivity * toRebuild = nil;
+    NSString * activityType = GC_TYPE_RUNNING;
+    
+    RZPerformance * perf = [RZPerformance start];
     for (GCActivity * act in organizer.activities) {
-        if( !act.trackPointsRequireDownload){
+        if( [act.activityType isEqualToString:activityType] && !act.trackPointsRequireDownload){
+            GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType];
             i++;
+            GCCalculactedCachedTrackInfo * info = [GCCalculactedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:field];
+            GCStatsDataSerieWithUnit * serieU = [act calculatedRollingBest:info];
+            if( i > 5){
+                toRebuild = act;
+                break;
+            }
+            RZLog(RZLogInfo,@"%@/%@ %@", @(i), @(organizer.countOfActivities), perf);
+            [act purgeCache];
         }
     }
-    RZLog(RZLogInfo,@"%@/%@", @(i), @(organizer.countOfActivities));
+    RZLog(RZLogInfo,@"%@/%@ %@", @(i), @(organizer.countOfActivities), perf);
+
+    [derived rebuildDerivedDataSerie:gcDerivedTypeBestRolling field:gcFieldFlagWeightedMeanSpeed period:gcDerivedPeriodMonth containingActivity:toRebuild];
     
-    GCDerivedOrganizer *derived = [GCAppGlobal derived];
-    RZLog(RZLogInfo,@"%@", derived);
+    //RZLog(RZLogInfo,@"%@ %@", derived, @(series.count));
 }
 
 

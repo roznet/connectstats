@@ -67,7 +67,7 @@ NS_INLINE BOOL GCActivityTypeIsSki(NSString*at, NSString*atdetail){
 +(NSString*)fieldForLapField:(NSString*)field andActivityType:(NSString*)aType;
 +(GCUnit*)unitForLapField:(NSString*)field activityType:(NSString*)aType;
 
-+(void)registerField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom;
++(void)registerMissingField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom;
 
 /**
  used in import, can't be on GCField because used on input dictionary of fieldKeys
