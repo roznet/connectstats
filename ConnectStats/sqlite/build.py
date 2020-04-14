@@ -147,6 +147,7 @@ class Field:
         else:
             if displayName != self.key and displayName != self.fieldDisplayNameByLanguage[language]:
                 print( 'Inconsistent name for {} in {} : {} and {}'.format(self.key, language, displayName, self.fieldDisplayNameByLanguage[language] ) )
+        return rv
                 
     def add_uom(self, system, uom, activityType ):
         rv = False
@@ -335,6 +336,20 @@ class Fields:
         
         return { 'gc_fields_uom': uom, 'gc_fields_display': display }
 
+    def read_from_excel(self,wb):
+        if 'gc_fields_display' in wb.sheetnames:
+            ws = wb['gc_fields_display']
+            cells = list(ws.values)
+            cols = cells[0]
+            values = [dict( zip(cols,x) ) for x in cells[1:]]
+            values = [ {k:v for k,v in x.items() if v is not None} for x in values ]
+            for x in values:
+                field = 
+                changed = fields.add_display(
+
+                       
+
+    
     def save_to_excel(self,wb):
         ws = wb.create_sheet('gc_fields_display')
         wb.remove(wb['Sheet'])
@@ -464,7 +479,11 @@ class Driver :
             conn = sqlite3.connect( dbname )
             if( sqlite3_table_exists( conn, 'gc_fields_display' ) ):
                 self.fields.load_from_db(conn)
-            
+
+    def load_excel(self,xlname):
+        if os.path.exists( xlname ):
+            wb = openpyxl.load_workbook(filename=xlname)
+            self.fields.read_from_excel(wb)
         
     def process_file(self,fn):
         if os.path.exists( fn ):
@@ -472,7 +491,9 @@ class Driver :
                 self.load_db( fn )
             elif fn.endswith( '.json' ):
                 self.load_json( fn )
-        
+            elif fn.endswith( '.xlsx' ):
+                self.load_excel( fn )
+                
 if __name__ == "__main__":
                 
     commands = {

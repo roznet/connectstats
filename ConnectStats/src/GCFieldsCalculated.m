@@ -48,11 +48,11 @@ static NSArray * _calculatedFields = nil;
     if( infoCache == nil){
         NSArray * defs = @[
             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ALTITUDE_GAIN andActivityType:GC_TYPE_ALL]
-                          displayName:NSLocalizedString( @"Elevation Gain", @"Calculated Field")
-                             andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE]}],
+                          displayName:NSLocalizedString( @"GPS Elevation Gain", @"Calculated Field")
+                             andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE], @(GCUnitSystemImperial):[GCUnit foot]}],
              [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ALTITUDE_LOSS andActivityType:GC_TYPE_ALL]
-                           displayName:NSLocalizedString( @"Elevation Loss", @"Calculated Field")
-                              andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE]}],
+                           displayName:NSLocalizedString( @"GPS Elevation Loss", @"Calculated Field")
+                              andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE],@(GCUnitSystemImperial):[GCUnit foot]}],
              [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_NORMALIZED_POWER andActivityType:GC_TYPE_ALL]
                            displayName:NSLocalizedString( @"Normalized Power", @"Calculated Field")
                               andUnits:@{@(GCUnitSystemMetric):[GCUnit watt]}],

@@ -48,7 +48,8 @@
     [_parent release];
     [_hud release];
     [_task release];
-
+    [_urlRequest release];
+    
     [super dealloc];
 }
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
