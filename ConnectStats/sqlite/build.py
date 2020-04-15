@@ -23,7 +23,6 @@ class ActivityType:
         self.parentId = parentId
         self.display = dict()
 
-
     def add_display(self,language,display):
         self.display[language] = display
         
@@ -67,7 +66,7 @@ class ActivityTypes:
         else:
             return atype
 
-    def add_language(self,source,language):
+    def add_legacy_language(self,source,language):
         f = open(source, 'r')
         r = json.loads( f.read() )
         n = 0
@@ -146,7 +145,8 @@ class Field:
                 self.fieldDisplayNameByLanguage[language] = displayName
         else:
             if displayName != self.key and displayName != self.fieldDisplayNameByLanguage[language]:
-                print( 'Inconsistent name for {} in {} : {} and {}'.format(self.key, language, displayName, self.fieldDisplayNameByLanguage[language] ) )
+                rv = True
+                self.fieldDisplayNameByLanguage[language] = displayName
         return rv
                 
     def add_uom(self, system, uom, activityType ):
@@ -344,8 +344,11 @@ class Fields:
             values = [dict( zip(cols,x) ) for x in cells[1:]]
             values = [ {k:v for k,v in x.items() if v is not None} for x in values ]
             for x in values:
-                field = 
-                changed = fields.add_display(
+                field = x['field']
+                for lang,val in x.items():
+                    if x != 'field':
+                        if self.fields[field].add_display(lang,val):
+                            print( 'changed {}[{}] = {}'.format( field,lang,val) )
 
                        
 
@@ -425,7 +428,7 @@ class Driver :
 
         for lang in self.languages:
             self.fields.add_legacy_db( 'cached/fields_{}_metric.db'.format( lang ), lang, 'metric' )
-            self.types.add_language( 'cached/activity_types_{}.json'.format( lang ), lang )
+            self.types.add_legacy_language( 'cached/activity_types_{}.json'.format( lang ), lang )
         self.fields.add_legacy_db( 'edit/fields_en_power.db', 'en', 'metric', 'gc_fields_power' )
         self.fields.add_legacy_db( 'edit/fields_en_manual.db', 'en', 'metric', 'gc_fields_manual' )
         self.fields.add_legacy_db( 'cached/fields_en_statute.db', 'en', 'statute' )
