@@ -22,29 +22,32 @@ class ActivityType:
         rv.data = {
             'activityType' : input['typeKey'],
             'activityTypeId':input['typeId'],
-            'activityTypeId':input['parentTypeId'],
+            'parentActivityTypeId':input['parentTypeId'],
             }
         return rv
 
     def __getitem__(self,item):
-        return self.data[item]
+        return self.data[item] if item in self.data else None
 
+    def activityType(self):
+        return self.data['activityType']
+    
     def update_parent( self, parent ):
-        rv.data['parentActivityType'] = parent['activityType']
+        self.data['parentActivityType'] = parent['activityType']
     
     def add_display(self,language,display):
         self.data[language] = display
         
     def display(self,language):
         rv = None
-        if language in self.displayByLanguage:
-            rv = self.displayByLanguage[language]
+        if language in self.data:
+            rv = self.data[language]
         elif language == 'en':
-            rv = ' '.join( [x.capitalize() for x in  self.key.split( '_' ) ] )
+            rv = ' '.join( [x.capitalize() for x in  self.activityType().split( '_' ) ] )
         return rv
 
     def languages(self):
-        return [key in self.data.keys() if len(key) == 2]
+        return [key for key in self.data.keys() if len(key) == 2]
     
     def to_dict(self):
         return self.info
@@ -96,7 +99,7 @@ class ActivityTypes:
             byTypeId[one['activityTypeId']] = one
         for one in self.types:
             parentId = one['parentActivityTypeId']
-            if parentId != 0:
+            if parentId:
                 one.update_parent( byTypeId[ parentId ] )
         
     def activityType(self,activityType):
@@ -108,7 +111,7 @@ class ActivityTypes:
     def languages(self):
         rv = {}
         for one in self.types:
-            rv.update( dict.fromkeys( one.languages() )
+            rv.update( dict.fromkeys( one.languages() ) )
         return list(rv.keys())
                        
     def read_from_legacy_json(self,source,language):
@@ -122,7 +125,7 @@ class ActivityTypes:
                 display = item['display']
                 self.activityType(key).add_display(language,display)
         if self.verbose:
-            print( 'added {}/{} types display for {} from {}'.format( n, len(self.typesByKey), language, source ) )
+            print( 'added {}/{} types display for {} from {}'.format( n, len(self.types), language, source ) )
             
         self.update_parents()
 
@@ -137,15 +140,11 @@ class ActivityTypes:
         sql = 'CREATE TABLE gc_activityTypes (activityType TEXT, parentActivityType TEXT,activityTypeId INTEGER, parentActivityTypeId INTEGER, {})'.format( columns )
         conn.execute( sql )
 
-        types = sorted(list( self.typesByKey.keys() ))
+        types = sorted( self.types, key = lambda x: (x['parentActivityTypeId'],x['activityTypeId'] ) )
 
         sql='INSERT INTO gc_activityTypes (activityType,parentActivityType,activityTypeId,parentActivityTypeId,{}) VALUES (?,?,?,?,{})'.format( ','.join( languages_cols ), ','.join( ['?' for x in languages] ) )
-        for key in types:
-            type = self.typesByKey[key]
-            parent = self.typesById[ type.parentId ].key if type.parentId in self.typesById else None
-            
-            vals = [key,parent
-                    ,type.typeId,type.parentId]
+        for type in types:
+            vals = [type[x] for x in ['activityType','parentActivityType','activityTypeId','parentActivityTypeId']]
             display = [type.display(x) for x in languages]
             if sum(1 for _ in filter( None.__ne__, display )) > 0:
                 vals.extend( display )
@@ -156,24 +155,17 @@ class ActivityTypes:
                     print( 'MISSING: activityType {}/{} has no display'.format( key, type.typeId ) )
 
     def save_to_dict(self):
-        rv = {}
-        types = sorted(list( self.typesByKey.keys() ))
-        for key in types:
-            type = self.typesByKey[key]
-            parent = self.typesById[ type.parentId ].key if type.parentId in self.typesById else None
-
-            rv[ key ] = { 'activityType': key, 'parentActivityType': parent, 'activityTypeId':type.typeId, 'parentActivityTypeId':type.parentId }
-            rv[ key ].update( type.displayByLanguage )
-            
-        return {'gc_activityTypes':rv}
+        return {'gc_activityTypes':self.types}
                 
     def __getitem__(self,arg):
         remap = self.remap_activityType(arg)
-        if arg in self.typesByKey:
-            return self.typesByKey[arg]
-        elif remap in self.typesByKey:
-            return self.typesByKey[remap]
-        return None
+        alt = None
+        for one in self.types:
+            if one.activityType() == arg:
+                return one
+            if one.activityType() == remap:
+                alt = one
+        return alt
     
 class Field:
     def __init__(self, key):
@@ -183,6 +175,25 @@ class Field:
         self.category = 'ignore'
         self.display_order = -1
 
+    def display_dicts(self):
+        rv = {'field':self.key }
+        rv.update( self.fieldDisplayNameByLanguage )
+        return [ rv ]
+
+    def uom_dicts(self):
+        rv = []
+        for t,units in self.unitByType.items():
+            one = {'field':self.key,'activitytype':t}
+            one.update(units)
+            rv.append( one )
+        return rv
+
+    def order_dicts(self):
+        rv = []
+        rv.append( { 'field':self.key,'category':self.category,'display_order':self.display_order} )
+        return rv
+
+    
     def add_category(self,category):
         self.category = category
 
@@ -225,6 +236,12 @@ class Fields:
         self.activityTypes = types
         self.verbose = types.verbose
 
+    def field(self,key):
+        if key not in self.fields:
+            self.fields[key] = Field(key)
+
+        return self.fields[key]
+        
     def read_from_legacy_db(self, db_from, language, unitsystem, table = 'gc_fields' ):
         conn = sqlite3.connect(db_from)
         cursor = conn.execute('select * from {}'.format(table))
@@ -423,7 +440,7 @@ class Fields:
                 field = x['field']
                 for lang,val in x.items():
                     if x != 'field':
-                        if self.fields[field].add_display(lang,val):
+                        if self.field(field).add_display(lang,val):
                             print( 'changed {}[{}] = {}'.format( field,lang,val) )
         if 'gc_fields_uom' in wb.sheetnames:
             ws = wb['gc_fields_uom']
@@ -435,7 +452,7 @@ class Fields:
                 field = x['field']
                 for lang,val in x.items():
                     if x != 'field':
-                        if self.fields[field].add_display(lang,val):
+                        if self.field(field).add_display(lang,val):
                             print( 'changed {}[{}] = {}'.format( field,lang,val) )
     
     def save_to_excel(self,wb):
@@ -515,22 +532,21 @@ class Driver :
 
         self.types = ActivityTypes()
         self.types.verbose = self.args.verbose
-        self.types.load_modern_json( 'download/activity_types_modern.json' )
+        self.types.read_from_modern_json( 'download/activity_types_modern.json' )
         self.fields = Fields(self.types)
         
         self.languages = [ 'en', 'fr', 'ja', 'de', 'it', 'es', 'pt', 'zh' ]
 
         for lang in self.languages:
-            self.fields.add_legacy_db( 'cached/fields_{}_metric.db'.format( lang ), lang, 'metric' )
-            self.types.add_legacy_language( 'cached/activity_types_{}.json'.format( lang ), lang )
-        self.fields.add_legacy_db( 'edit/fields_en_power.db', 'en', 'metric', 'gc_fields_power' )
-        self.fields.add_legacy_db( 'edit/fields_en_manual.db', 'en', 'metric', 'gc_fields_manual' )
-        self.fields.add_legacy_db( 'cached/fields_en_statute.db', 'en', 'statute' )
+            self.fields.read_from_legacy_db( 'cached/fields_{}_metric.db'.format( lang ), lang, 'metric' )
+            self.types.read_from_legacy_json( 'cached/activity_types_{}.json'.format( lang ), lang )
+        self.fields.read_from_legacy_db( 'cached/fields_en_statute.db', 'en', 'statute' )
+        self.fields.read_from_excel(openpyxl.load_workbook(filename='edit/gc_fields_manual.xlsx'))
         self.fields.fix_legacy_unit_system_missing()
 
         self.categories = Categories()
         self.categories.read_from_db( 'edit/fields_order.db' )
-        self.fields.add_field_order( 'edit/fields_order.db' )
+        self.fields.read_field_order_from_db( 'edit/fields_order.db' )
 
     def init_empty(self):
         self.types = ActivityTypes()
@@ -549,7 +565,7 @@ class Driver :
             self.fields.save_to_db(self.args.output, self.languages, ['metric', 'statute'])
             self.types.save_to_db( self.args.output, self.languages )
             self.categories.save_to_db(self.args.output )
-            self.fields.save_order_to_db(self.args.output,self.categories)
+            self.fields.save_field_order_to_db(self.args.output,self.categories)
         if output.endswith( '.json' ):
             f = self.fields.save_to_dict()
             a = self.types.save_to_dict( )
