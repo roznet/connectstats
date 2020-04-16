@@ -7,12 +7,13 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "GCTestCase.h"
 #import "GCField.h"
 #import "GCFields.h"
 #import "GCFieldCache.h"
 #import "GCActivityType.h"
 
-@interface GCTestFields : XCTestCase
+@interface GCTestFields : GCTestCase
 
 @end
 

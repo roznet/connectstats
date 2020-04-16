@@ -74,7 +74,7 @@
 
 }
 
--(void)testBuildAllBestRolling{
+-(void)disabletestBuildAllBestRolling{
     GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
     [[GCAppGlobal profile] configSet:CONFIG_DUPLICATE_CHECK_ON_LOAD boolVal:false];
     GCDerivedOrganizer *derived = [GCAppGlobal derived];

@@ -91,6 +91,18 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
     }
     if( safeGuard == 0 && stillMissing){
         RZLog(RZLogError, @"Failed to process all types after 5 iterations: parsed %lu < %lu", (unsigned long)byTypeId.count, (unsigned long)defsFromDb.count);
+        for (NSNumber * typeId in defsFromDb) {
+            if( byTypeId[typeId] != nil){
+                continue;
+            }
+            NSDictionary * defs = defsFromDb[typeId];
+            NSNumber * parentId = defs[kTypeParent];
+            GCActivityType * parentType = byTypeId[ parentId];
+            if (parentId.integerValue != 0 && parentType == nil) {
+                RZLog(RZLogInfo, @"Type %@ missing parent %@", defs[kTypeKey], parentId);
+            }
+        }
+
     }
     if( byTypeId.count != byActivityType.count){
         RZLog(RZLogError, @"Inconsistency in types byKey %lu != byTypeId %lu", (unsigned long)byTypeId.count, (unsigned long)byActivityType.count);
