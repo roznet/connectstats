@@ -450,9 +450,10 @@ class Fields:
             values = [ {k:v for k,v in x.items() if v is not None} for x in values ]
             for x in values:
                 field = x['field']
-                for lang,val in x.items():
-                    if x != 'field':
-                        if self.field(field).add_display(lang,val):
+                activityType = x['activityType']
+                for system,unit in x.items():
+                    if x != 'field' and x != 'activityType':
+                        if self.field(field).add_uom(system,unit,activityType):
                             print( 'changed {}[{}] = {}'.format( field,lang,val) )
     
     def save_to_excel(self,wb):
