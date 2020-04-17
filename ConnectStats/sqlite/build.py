@@ -50,7 +50,7 @@ class ActivityType:
         return [key for key in self.data.keys() if len(key) == 2]
     
     def to_dict(self):
-        return self.info
+        return self.data
     
     def __repr__(self):
         return "ActivityType({},'{}',{})".format(self.data['activityType'],self.data['parentActivityType'] );
@@ -155,7 +155,7 @@ class ActivityTypes:
                     print( 'MISSING: activityType {}/{} has no display'.format( key, type.typeId ) )
 
     def save_to_dict(self):
-        return {'gc_activityTypes':self.types}
+        return {'gc_activityTypes':[x.to_dict() for x in self.types]}
                 
     def __getitem__(self,arg):
         remap = self.remap_activityType(arg)
@@ -172,7 +172,7 @@ class Field:
         self.key = key
         self.fieldDisplayNameByLanguage = dict()
         self.unitByType = defaultdict(dict);
-        self.category = 'ignore'
+        self.category = Category('ignore',-1,'Ignore')
         self.display_order = -1
 
     def display_dicts(self):
@@ -182,17 +182,20 @@ class Field:
 
     def uom_dicts(self):
         rv = []
-        for t,units in self.unitByType.items():
+        for system,units in self.unitByType.items():
             one = {'field':self.key,'activitytype':t}
-            one.update(units)
+            for t,unit in units.items():
+                one.update({system:unit})
             rv.append( one )
         return rv
 
     def order_dicts(self):
         rv = []
-        rv.append( { 'field':self.key,'category':self.category,'display_order':self.display_order} )
+        rv.append( { 'field':self.key,'category':self.category.name,'display_order':self.display_order} )
         return rv
 
+    def sort_key(self):
+        return self.key
     
     def add_category(self,category):
         self.category = category
@@ -214,17 +217,20 @@ class Field:
                 
     def add_uom(self, system, uom, activityType ):
         rv = False
-        if activityType not in self.unitByType[system]:
-            self.unitByType[system][activityType] = uom
+        if system not in self.unitByType[activityType]:
+            self.unitByType[activityType][system] = uom
             rv = True
         else:
-            if uom != self.unitByType[system][activityType]:
+            if uom != self.unitByType[activityType][system]:
                 print( 'Inconsistent unit for {} in {} {} : {} and {}'.format(self.key, system, activityType, uom, self.unitByType[system][activityType] ) )
 
-        if 'all' in self.unitByType[system]:
-            to_remove = list([x for x in self.unitByType[system].keys() if x != 'all' and self.unitByType[system][x] == self.unitByType[system]['all'] ])
+        if 'all' in self.unitByType:
+            to_remove = list([x for x in self.unitByType.keys() if x != 'all' and self.unitByType[x][system] == self.unitByType['all'][system] ])
             for x in to_remove:
-                del self.unitByType[system][x]
+                del self.unitByType[x][system]
+            to_remove = list([x for x in self.unitByType.keys() if len(x) == 0])
+            for x in to_remove:
+                del self.unitByType[x]
         return rv
 
     def __repr__(self):
@@ -235,13 +241,19 @@ class Fields:
         self.fields = dict()
         self.activityTypes = types
         self.verbose = types.verbose
+        self.changes = None
 
     def field(self,key):
         if key not in self.fields:
             self.fields[key] = Field(key)
 
         return self.fields[key]
-        
+
+    def record_change(self,key,info):
+        if self.changes is None:
+            self.changes = {}
+        self.changes[key] = info
+            
     def read_from_legacy_db(self, db_from, language, unitsystem, table = 'gc_fields' ):
         conn = sqlite3.connect(db_from)
         cursor = conn.execute('select * from {}'.format(table))
@@ -407,27 +419,17 @@ class Fields:
         conn.commit()
         
     def save_to_dict(self):
-        display = {}
-        for key,field in self.fields.items():
-            display[key] = field.fieldDisplayNameByLanguage
-            
-        uom = {}
-        for key in self.fields:
+        display = []
+        uom = []
+        order = []
+        keys = sorted( self.fields.keys(), key = lambda x: self.fields[x].sort_key() )
+        for key in keys:
             field = self.fields[key]
-            units = defaultdict(dict)
-            for s,one in field.unitByType.items():
-                for t,u in one.items():
-                    units[t][s] = u
-
-            if len(units) == 1:
-                vals = [key, 'all', units[t]['metric'], units[t]['statute'] if 'statute' in units[t] else None]
-                uom[ key ] = { 'all' : {'metric':units[t]['metric'], 'statute': units[t]['statute'] if 'statute' in units[t] else None } }
-            else:
-                uom[ key ] = {}
-                for t in units:
-                    uom[ key ][t] = {'metric':units[t]['metric'], 'statute': units[t]['statute'] if 'statute' in units[t] else None }
-        
-        return { 'gc_fields_uom': uom, 'gc_fields_display': display }
+            display.extend( field.display_dicts() )
+            uom.extend( field.uom_dicts() )
+            order.extend( field.order_dicts() )
+            
+        return { 'gc_fields_uom': uom, 'gc_fields_display': display, 'gc_fields_order': order }
 
     def read_from_excel(self,wb):
         if 'gc_fields_display' in wb.sheetnames:
@@ -441,7 +443,7 @@ class Fields:
                 for lang,val in x.items():
                     if x != 'field':
                         if self.field(field).add_display(lang,val):
-                            print( 'changed {}[{}] = {}'.format( field,lang,val) )
+                            self.record_change(field,('gc_fields_display',lang,val))
         if 'gc_fields_uom' in wb.sheetnames:
             ws = wb['gc_fields_uom']
             cells = list(ws.values)
@@ -454,7 +456,7 @@ class Fields:
                 for system,unit in x.items():
                     if x != 'field' and x != 'activityType':
                         if self.field(field).add_uom(system,unit,activityType):
-                            print( 'changed {}[{}] = {}'.format( field,lang,val) )
+                            self.record_change(field,('gc_fields_uom',activityType,system,unit))
     
     def save_to_excel(self,wb):
         ws = wb.create_sheet('gc_fields_display')
@@ -530,7 +532,6 @@ class Driver :
         self.args = args
         
     def init_legacy(self):
-
         self.types = ActivityTypes()
         self.types.verbose = self.args.verbose
         self.types.read_from_modern_json( 'download/activity_types_modern.json' )

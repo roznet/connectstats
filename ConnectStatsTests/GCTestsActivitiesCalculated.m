@@ -89,7 +89,7 @@
             GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType];
             i++;
             GCCalculactedCachedTrackInfo * info = [GCCalculactedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:field];
-            GCStatsDataSerieWithUnit * serieU = [act calculatedRollingBest:info];
+            [act calculatedRollingBest:info];
             if( i > 5){
                 toRebuild = act;
                 break;
@@ -100,8 +100,7 @@
     }
     RZLog(RZLogInfo,@"%@/%@ %@", @(i), @(organizer.countOfActivities), perf);
 
-    [derived rebuildDerivedDataSerie:gcDerivedTypeBestRolling field:gcFieldFlagWeightedMeanSpeed period:gcDerivedPeriodMonth containingActivity:toRebuild];
-    
+    [derived rebuildDerivedDataSerie:gcDerivedTypeBestRolling period:gcDerivedPeriodMonth containingActivity:toRebuild];
     //RZLog(RZLogInfo,@"%@ %@", derived, @(series.count));
 }
 
