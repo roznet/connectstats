@@ -16,13 +16,142 @@ def sqlite3_table_exists(conn,tablename):
     cursor = conn.execute( "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name=?", (tablename,) )
     return cursor.fetchone()[0] == 1
 
+def is_valid_language(l):
+    valid = dict.fromkeys( [ 'en', 'fr', 'ja', 'de', 'it', 'es', 'pt', 'zh' ], None )
+    return l in valid
+
+def is_valid_uom_system(s):
+    return s == 'metric' or s == 'statute'
+
+def columns_ordered(cols):
+    order = { 'field':10,
+              'activity_type':20,
+              'activity_type_id': 22,
+              'parent_activity_type':30,
+              'parent_activity_type_id':32,
+              'category':40,
+              'category_order':42,
+              'field_order':50,
+              'metric': 60,
+              'statute': 62,
+              'en': 100,
+              'fr': 110,
+              'de': 120,
+              'it': 130,
+              'es': 140,
+              'pt': 150,
+              'ja': 160,
+              'zh': 170
+              }
+    return sorted( cols, key=lambda x: order[x] )
+
+def columns_typed(cols):
+    types = { 'field':'TEXT',
+              'activity_type':'TEXT',
+              'activity_type_id': 'INTEGER',
+              'parent_activity_type':'TEXT',
+              'parent_activity_type_id':'INTEGER',
+              'category':'TEXT',
+              'category_order':'INTEGER',
+              'field_order':'INTEGER',
+              'metric': 'TEXT',
+              'statute': 'TEXT',
+              'en': 'TEXT',
+              'fr': 'TEXT',
+              'de': 'TEXT',
+              'it': 'TEXT',
+              'es': 'TEXT',
+              'pt': 'TEXT',
+              'ja': 'TEXT',
+              'zh': 'TEXT'
+              }
+    return [ '{} {}'.format( x, types[x] ) for x in columns_ordered(cols) ]
+    
+def dict_save_to_db(conn,listsOfDict):
+    '''
+    saved to db a dict of form {'table':[{'col1:'val','col2':'val'},...]}
+    '''
+    for table,listOfDict in listsOfDict.items():
+        conn.execute( 'DROP TABLE IF EXISTS {}'.format(table) )
+
+        sample = {}
+        for one in listOfDict:
+            sample.update( one )
+
+        columns = columns_typed( sample.keys() )
+
+        sql = 'CREATE TABLE {} ({})'.format( table,', '.join(columns) )
+        print( sql )
+        conn.execute( sql )
+
+        for type_dict in listOfDict:
+            cols = ', '.join( type_dict.keys() )
+            vals = ', '.join( [ ':' + x for x in type_dict.keys() ] )
+
+            sql='INSERT INTO {} ({}) VALUES ({})'.format( table, cols, vals )
+            try:
+                conn.execute( sql, type_dict )
+                conn.commit()
+            except:
+                print( 'FAILED: {} {}',sql,type_dict)
+                
+def dict_read_from_db(conn,tables):
+    rv = {}
+    for table in tables:
+        if sqlite3_table_exists(conn,table):
+            sql = 'SELECT * FROM {}'.format(table) ;
+            res = conn.execute( sql )
+            cols = res.description
+            rows = []
+
+            for row in res:
+                one = {}
+                for (idx,col) in enumerate(cols):
+                    one[col[0]] = row[idx]
+                rows.append( one )
+        rv.update( { table : rows } )
+    return rv
+        
+
+def dict_save_to_excel(wb,listsOfDict):
+    '''
+    saved to excel a dict of form {'table':[{'col1:'val','col2':'val'},...]}
+    '''
+    for table,listOfDict in listsOfDict.items():
+        if table in wb.sheetnames:
+            wb.remove(table)
+                      
+        ws = wb.create_sheet(table)
+
+        sample = {}
+        for one in listOfDict:
+            sample.update( one )
+            
+        cols = columns_ordered( sample.keys() )
+        ws.append( cols )
+
+        for type_dict in listOfDict:
+            ws.append( [type_dict[x] if x in type_dict else None  for x in cols ] )
+
+def dict_read_from_excel(wb,tables):
+    rv = {}
+    for table in tables:
+        if table in wb.sheetnames:
+            ws = wb[table]
+            cells = list(ws.values)
+            cols = cells[0]
+            values = [dict( zip(cols,x) ) for x in cells[1:]]
+            values = [ {k:v for k,v in x.items() if v is not None} for x in values ]
+            rv.update( {'table':values} )
+    return rv
+            
 class ActivityType:
     def from_modern_json(input):
         rv = ActivityType()
         rv.data = {
-            'activityType' : input['typeKey'],
-            'activityTypeId':input['typeId'],
-            'parentActivityTypeId':input['parentTypeId'],
+            'activity_type' : input['typeKey'],
+            'activity_type_id':input['typeId'],
+            'parent_activity_type_id':input['parentTypeId'],
             }
         return rv
 
@@ -30,10 +159,10 @@ class ActivityType:
         return self.data[item] if item in self.data else None
 
     def activityType(self):
-        return self.data['activityType']
+        return self.data['activity_type']
     
     def update_parent( self, parent ):
-        self.data['parentActivityType'] = parent['activityType']
+        self.data['parent_activity_type'] = parent['activity_type']
     
     def add_display(self,language,display):
         self.data[language] = display
@@ -49,11 +178,11 @@ class ActivityType:
     def languages(self):
         return [key for key in self.data.keys() if len(key) == 2]
     
-    def to_dict(self):
+    def save_to_dict(self):
         return self.data
     
     def __repr__(self):
-        return "ActivityType({},'{}',{})".format(self.data['activityType'],self.data['parentActivityType'] );
+        return "ActivityType({},'{}',{})".format(self.data['activity_type'],self.data['parent_activity_type'] );
 
 
 class ActivityTypes:
@@ -69,14 +198,14 @@ class ActivityTypes:
         check = {}
         for item in r:
             at = ActivityType.from_modern_json(item)
-            if at['activityType'] in check:
+            if at['activity_type'] in check:
                 print( 'Duplicate type {}'.format( at ) )
-            check[at['activityType']] = at
+            check[at['activity_type']] = at
             self.types.append( at )
             n+=1
 
         if self.verbose:
-            print( 'added {} activityTypes from {}'.format( n, source ) )
+            print( 'added {} ActivityTypes from {}'.format( n, source ) )
 
     def remap_activityType(self,atype):
         remap = {
@@ -96,15 +225,15 @@ class ActivityTypes:
     def update_parents(self):
         byTypeId = {}
         for one in self.types:
-            byTypeId[one['activityTypeId']] = one
+            byTypeId[one['activity_type_id']] = one
         for one in self.types:
-            parentId = one['parentActivityTypeId']
+            parentId = one['parent_activity_type_id']
             if parentId:
                 one.update_parent( byTypeId[ parentId ] )
         
     def activityType(self,activityType):
         for one in self.types:
-            if one['activityType'] == activityType:
+            if one['activity_type'] == activityType:
                 return one
         return None
                        
@@ -129,33 +258,30 @@ class ActivityTypes:
             
         self.update_parents()
 
+
         
-    def save_to_db(self,dbname,languages):
-        conn = sqlite3.connect(dbname)
-        conn.execute( 'DROP TABLE IF EXISTS gc_activityTypes' )
-
-        languages_cols = ['`{}`'.format( x ) for x in languages]
-        columns = ', '.join( ['{} TEXT'.format( x ) for x in languages_cols] )
-        
-        sql = 'CREATE TABLE gc_activityTypes (activityType TEXT, parentActivityType TEXT,activityTypeId INTEGER, parentActivityTypeId INTEGER, {})'.format( columns )
-        conn.execute( sql )
-
-        types = sorted( self.types, key = lambda x: (x['parentActivityTypeId'],x['activityTypeId'] ) )
-
-        sql='INSERT INTO gc_activityTypes (activityType,parentActivityType,activityTypeId,parentActivityTypeId,{}) VALUES (?,?,?,?,{})'.format( ','.join( languages_cols ), ','.join( ['?' for x in languages] ) )
-        for type in types:
-            vals = [type[x] for x in ['activityType','parentActivityType','activityTypeId','parentActivityTypeId']]
-            display = [type.display(x) for x in languages]
-            if sum(1 for _ in filter( None.__ne__, display )) > 0:
-                vals.extend( display )
-                conn.execute( sql, vals )
-                conn.commit()
-            else:
+    def validate_types(self):
+        for one in self.types:
+            display = [type_dict.display(x) for x in languages]
+            if sum(1 for _ in filter( None.__ne__, display )) == 0:
                 if verbose:
-                    print( 'MISSING: activityType {}/{} has no display'.format( key, type.typeId ) )
-
+                    print( 'MISSING: ActivityType {}/{} has no display'.format( key, type.typeId ) )
+        
+    def sort(self):
+        self.types = sorted( self.types, key = lambda x: (x['parent_activity_type_id'],x['activity_type_id'] ) )
+                    
     def save_to_dict(self):
-        return {'gc_activityTypes':[x.to_dict() for x in self.types]}
+        self.sort()
+        return {'gc_activity_types':[x.save_to_dict() for x in self.types]}
+    
+    def save_to_db(self,dbname):
+        conn = sqlite3.connect(dbname)
+        dicts = self.save_to_dict()
+        dict_save_to_db( conn, dicts )
+        
+    def save_to_excel(self,wb):
+        dicts = self.save_to_dict()
+        dict_save_to_excel(wb,dicts)
                 
     def __getitem__(self,arg):
         remap = self.remap_activityType(arg)
@@ -172,21 +298,8 @@ class Field:
         self.key = key
         self.fieldDisplayNameByLanguage = dict()
         self.units = []
-        self.category = Category('ignore',-1,'Ignore')
-        self.display_order = -1
-
-    def display_dicts(self):
-        rv = {'field':self.key }
-        rv.update( self.fieldDisplayNameByLanguage )
-        return [ rv ]
-
-    def uom_dicts(self):
-        return self.units
-
-    def order_dicts(self):
-        rv = []
-        rv.append( { 'field':self.key,'category':self.category.name,'display_order':self.display_order} )
-        return rv
+        self.category = 'ignore'
+        self.field_order = -1
 
     def sort_key(self):
         return self.key
@@ -194,8 +307,8 @@ class Field:
     def add_category(self,category):
         self.category = category
 
-    def add_display_order(self,order):
-        self.display_order = order
+    def add_field_order(self,order):
+        self.field_order = order
 
     def add_display(self, language, displayName, activityType = None ):
         rv = False
@@ -213,12 +326,12 @@ class Field:
         rv = False
         found = None
         for one in self.units:
-            if one['activityType'] == activityType:
+            if one['activity_type'] == activityType:
                 found = one
                 break
             
         if found is None:
-            found = { 'field':self.key,'activityType':activityType}
+            found = { 'field':self.key,'activity_type':activityType}
             self.units.append(found)
             rv = True
         if system in found and found[system] != uom:
@@ -231,7 +344,7 @@ class Field:
     def simplify_uom(self):
         all = None
         for one in self.units:
-            if one['activityType'] == 'all':
+            if one['activity_type'] == 'all':
                 all = one
                 break
         simplified = []
@@ -239,12 +352,26 @@ class Field:
             simplified.append( all )
             for one in self.units:
                 for k,v in one.items():
-                    if k!= 'activityType' and k in all and all[k] != v:
+                    if k!= 'activity_type' and k in all and all[k] != v:
                         simplified.append(one)
                         break
             self.units = simplified
         else:
             print( 'missing all {}'.format( self.units ) )
+            
+    def display_dicts(self):
+        rv = {'field':self.key }
+        rv.update( self.fieldDisplayNameByLanguage )
+        return [ rv ]
+
+    def uom_dicts(self):
+        return self.units
+
+    def order_dicts(self):
+        rv = []
+        rv.append( { 'field':self.key,'category':self.category,'field_order':self.field_order} )
+        return rv
+
     
     def __repr__(self):
         return "Field('{}',{},{})".format(self.key, pprint.pformat( self.fieldDisplayNameByLanguage ), pprint.pformat( dict(self.units) ));
@@ -304,7 +431,7 @@ class Fields:
         for key,field in self.fields.items():
             for one in field.units:
                 u = one['metric']
-                t = one['activityType']
+                t = one['activity_type']
                 n_u = None
                 if u in metric_to_statute:
                     n_u = metric_to_statute[u]
@@ -327,107 +454,54 @@ class Fields:
                     one['metric'] = 'meter'
                     one['statute'] = 'foot'
 
-    def read_field_order_from_db(self,dbname):
-        conn = sqlite3.connect(dbname)
-        if sqlite3_table_exists( conn, 'gc_fields_order' ):
-            sql = 'SELECT field,display_order,category,activityType FROM gc_fields_order';
-            res = conn.execute( sql )
-            self.fields_order = []
-            for row in res:
-                (field,display_order,category,activityType) = row
-                self.fields_order.append( {'field':field,'display_order':display_order,'category':category,'activityType':activityType} )
+    def read_field_order_from_dict(self,d):
+        if 'gc_fields_order' in d:
+            order = d['gc_fields_order']
+            for one in order:
+                field = self.field(one['field'])
+                field.field_order = one['field_order']
+                field.category = one['category']
 
-    def save_field_order_to_db(self,dbname,categories=None ):
-        conn = sqlite3.connect(dbname)
-        conn.execute( 'DROP TABLE IF EXISTS gc_fields_order' )
-        conn.execute('CREATE TABLE gc_fields_order (field TEXT, category TEXT, display_order REAL, activityType TEXT)' )
-        ordered = sorted(self.fields_order, key=lambda x: (categories.categories[x['category']].display_order,x['display_order']) )
-        for one in ordered:
-            sql='INSERT INTO gc_fields_order (field,category,display_order,activityType) VALUES (?,?,?,?)'
-            conn.execute( sql, (one['field'],one['category'],one['display_order'],one['activityType']) )
-        conn.commit()
+    def read_field_display_from_dict(self,d):
+        if 'gc_fields_display' in d:
+            display = d['gc_fields_display']
+            for one in display:
+                field = self.field( one['field'] )
+                for key,val in one.items():
+                    if is_valid_language(key):
+                        field.add_display( key,val )
+
+    def read_field_uom_from_dict(self,d):
+        if 'gc_fields_uom' in d:
+            uom = d['gc_fields_uom']
+            for one in uom:
+                field = self.field(one['field'])
+                for (k,v) in one.items():
+                    if is_valid_uom_system(k):
+                        field.add_uom(k,v,one['activity_type'])
         
-    def read_display_from_db(self,dbname):
-        conn = sqlite3.connect(dbname)
-        sql = 'SELECT * FROM gc_fields_display';
-        res = conn.execute( sql )
-        cols = res.description
-
-        n = 0
-        added = 0
-        for row in res:
-            fieldKey = row[0]
-            if fieldKey:
-                self.fields[ fieldKey ] = Field(fieldKey)
-            for (idx,col) in enumerate(cols):
-                if col != 'field' and row[idx] is not None:
-                    n += 1
-                    if self.fields[ fieldKey ].add_display( col,row[idx] ):
-                        added += 1
-                    
-        if self.verbose:
-            print( 'Added {}/{} display from {}'.format(added,n,dbname) )
-
-    def read_uom_from_db(self,dbname):
-        conn = sqlite3.connect(dbname)
-        sql = 'SELECT * FROM gc_fields_uom';
-        res = conn.execute( sql )
-        cols = res.description
-
-        if self.verbose:
-            print( 'Adding uom from {}'.format(dbname) )
+    def read_from_dict(self,dicts):
+        self.read_field_order_from_dict( dicts )
+        self.read_field_display_from_dict( dicts )
+        self.read_field_uom_from_dict(dicts)
         
-        for row in res:
-            fieldKey = row[0]
-            if fieldKey:
-                self.fields[ fieldKey ] = Field(fieldKey)
-            for (idx,col) in enumerate(cols):
-                if col != 'field':
-                    self.fields[ fieldKey ].add_display( col,row[idx] )
-        
-
-            
-    def save_to_db(self,dbname, languages, systems):
+    def read_from_db(self,dbname):
         conn = sqlite3.connect(dbname)
-        conn.execute( 'DROP TABLE IF EXISTS gc_fields_display' )
-        conn.execute( 'DROP TABLE IF EXISTS gc_fields_uom' )
-
-        languages_cols = ['`{}`'.format( x ) for x in languages]
-        columns = ', '.join( ['{} TEXT'.format( x ) for x in languages_cols] )
+        dicts = dict_read_from_db(conn,['gc_fields_order','gc_fields_display','gc_fields_uom'] )
+        self.read_from_dict(dicts)
         
-        sql = 'CREATE TABLE gc_fields_display (field TEXT, {})'.format( columns )
-        conn.execute( sql )
+    def read_from_excel(self,wb):
+        dicts = dict_read_from_excel(wb,['gc_fields_order','gc_fields_display','gc_fields_uom'])    
+        self.read_from_dict(dicts)
+        
+    def save_to_db(self,dbname):
+        dicts = self.save_to_dict()
+        conn = sqlite3.connect(dbname)
+        dict_save_to_db(conn,dicts)
 
-        fields = sorted(list( self.fields.keys() ))
-        sql='INSERT INTO gc_fields_display (field,{}) VALUES (?,{})'.format( ','.join( languages_cols ), ','.join( ['?' for x in languages] ) )
-        for key in fields:
-            field = self.fields[key]
-            vals = [key]
-            display = [field.fieldDisplayNameByLanguage[x] if x in field.fieldDisplayNameByLanguage else None for x in languages]
-            vals.extend( display )
-            if sum(1 for _ in filter( None.__ne__, display )) > 0:
-                conn.execute( sql, vals )
-        conn.commit()
-
-        sql = 'CREATE TABLE gc_fields_uom (field TEXT,activityType TEXT,metric TEXT,statute TEXT)'
-        conn.execute( sql )
-        sql='INSERT INTO gc_fields_uom (field,activityType,metric,statute) VALUES (?,?,?,?)'
-
-        for key in fields:
-            field = self.fields[key]
-            units = defaultdict(dict)
-            for s,one in field.unitByType.items():
-                for t,u in one.items():
-                    units[t][s] = u
-
-            if len(units) == 1:
-                vals = [key, 'all', units[t]['metric'], units[t]['statute'] if 'statute' in units[t] else None]
-                conn.execute( sql, vals )
-            else:
-                for t in units:
-                    vals = [key, t, units[t]['metric'], units[t]['statute'] if 'statute' in units[t] else None]
-                    conn.execute( sql, vals )
-        conn.commit()
+    def save_to_excel(self,wb):
+        dicts = self.save_to_dict()
+        dict_save_to_excel(wb,dicts)
         
     def save_to_dict(self):
         display = []
@@ -442,68 +516,18 @@ class Fields:
             order.extend( field.order_dicts() )
             
         return { 'gc_fields_uom': uom, 'gc_fields_display': display, 'gc_fields_order': order }
-
-    def read_from_excel(self,wb):
-        if 'gc_fields_display' in wb.sheetnames:
-            ws = wb['gc_fields_display']
-            cells = list(ws.values)
-            cols = cells[0]
-            values = [dict( zip(cols,x) ) for x in cells[1:]]
-            values = [ {k:v for k,v in x.items() if v is not None} for x in values ]
-            for x in values:
-                field = x['field']
-                for lang,val in x.items():
-                    if x != 'field':
-                        if self.field(field).add_display(lang,val):
-                            self.record_change(field,('gc_fields_display',lang,val))
-        if 'gc_fields_uom' in wb.sheetnames:
-            ws = wb['gc_fields_uom']
-            cells = list(ws.values)
-            cols = cells[0]
-            values = [dict( zip(cols,x) ) for x in cells[1:]]
-            values = [ {k:v for k,v in x.items() if v is not None} for x in values ]
-            for x in values:
-                field = x['field']
-                activityType = x['activityType']
-                for system,unit in x.items():
-                    if x != 'field' and x != 'activityType':
-                        if self.field(field).add_uom(system,unit,activityType):
-                            self.record_change(field,('gc_fields_uom',activityType,system,unit))
     
-    def save_to_excel(self,wb):
-        ws = wb.create_sheet('gc_fields_display')
-        wb.remove(wb['Sheet'])
-        fields = self.save_to_dict()
-        languages = defaultdict(int)
-        for key,val in fields['gc_fields_display'].items():
-            for l in val.keys():
-                languages[l] += 1
-        cols = ['field']
-        cols.extend( sorted(list(languages.keys()), key=lambda x: languages[x], reverse=True) )
-        row = 1
-        for i in range(len(cols)):
-            ws.cell(row=row,column=(i+1),value=cols[i] )
-        row = 2
-        keys = sorted( fields['gc_fields_display'].keys() )
-        for key in keys:
-            vals = fields['gc_fields_display'][key]
-            if( len(vals )> 0):
-                for i in range(len(cols)):
-                    if i == 0:
-                        ws.cell(row=row,column=(i+1),value=key )
-                    if cols[i] in vals:
-                        ws.cell(row=row,column=(i+1),value=vals[cols[i]] )
-                row += 1
-        
-
+    
 class Category :
-    def __init__(self,name,display_order,display_name):
+    def __init__(self,name,category_order,display_name):
         self.name = name
-        self.display_order = display_order
-        self.display_name = display_name
+        self.category_order = category_order
+        self.categoryDisplayNameByLanguage = {'en':display_name}
 
     def save_to_dict(self):
-        return {'name':self.name,'display_order':self.display_order,'display_name':self.display_name}
+        rv = {'category':self.name,'category_order':self.category_order}
+        rv.update( self.categoryDisplayNameByLanguage )
+        return rv
 
 class Categories :
     def __init__(self):
@@ -512,29 +536,33 @@ class Categories :
     def add_category(self,category):
         self.categories[ category.name ] = category
 
+    def read_from_dict(self,dicts):
+        if 'gc_category_order' in dicts:
+            for one in dicts['gc_category_order']:
+                cat = Category(one['category'],one['category_order'],one['en'])
+                self.add_category( cat )
+
     def read_from_db(self,dbname):
         conn = sqlite3.connect(dbname)
-        if sqlite3_table_exists( conn, 'gc_category_order' ):
-            cursor = conn.execute('SELECT category,display_order,displayName FROM gc_category_order' )
-            for row in cursor:
-                cat = Category(row[0],row[1],row[2])
-                self.add_category( cat )
-        
+        dicts = dict_read_from_db(conn,['gc_category_order'])
+        self.read_from_dict(dicts)
+
+    def read_from_excel(self,wb):
+        dicts = dict_read_from_excel(wb,['gc_category_order'])
+        self.read_from_dict(dicts)
+
     def save_to_db(self,dbname):
         conn = sqlite3.connect(dbname)
-        conn.execute( 'DROP TABLE IF EXISTS gc_category_order' )
-        conn.execute('CREATE TABLE gc_category_order (category TEXT, display_order REAL, displayName TEXT)' )
+        dicts = self.save_to_dict()
+        dict_save_to_db(conn,dicts)
 
-        ordered = sorted(self.categories.keys(), key=lambda x: self.categories[x].display_order )
-        for key in ordered:
-            sql='INSERT INTO gc_category_order (category,display_order,displayName) VALUES (?,?,?)'
-            cat = self.categories[ key ]
-            conn.execute( sql, (cat.name,cat.display_order,cat.display_name) )
-        conn.commit()
-
+    def save_to_excel(self,wb):
+        dicts = self.save_to_dict()
+        dict_save_to_excel(wb,dicts)
+        
     def save_to_dict(self):
         rv = []
-        ordered = sorted(self.categories.keys(), key=lambda x: self.categories[x].display_order )
+        ordered = sorted(self.categories.keys(), key=lambda x: self.categories[x].category_order )
         for key in ordered:
             rv.append( self.categories[ key ].save_to_dict() )
         return {'gc_category_order':rv}
@@ -542,6 +570,17 @@ class Categories :
 class Driver :
     def __init__(self,args):
         self.args = args
+
+    def init_latest(self):
+        base = self.args.base
+        self.types = ActivityTypes()
+        self.types.verbose = self.args.verbose
+        self.types.read_from_db(base)
+        self.fields = Fields(self.types)
+        self.fields.read_from_db(base)
+        self.categories = Categories()
+        self.categories.read_from_db( base )
+        self.fields.read_field_order_from_db( base )
         
     def init_legacy(self):
         self.types = ActivityTypes()
@@ -552,15 +591,16 @@ class Driver :
         self.languages = [ 'en', 'fr', 'ja', 'de', 'it', 'es', 'pt', 'zh' ]
 
         for lang in self.languages:
-            self.fields.read_from_legacy_db( 'cached/fields_{}_metric.db'.format( lang ), lang, 'metric' )
             self.types.read_from_legacy_json( 'cached/activity_types_{}.json'.format( lang ), lang )
+        for lang in self.languages:
+            self.fields.read_from_legacy_db( 'cached/fields_{}_metric.db'.format( lang ), lang, 'metric' )
         self.fields.read_from_legacy_db( 'cached/fields_en_statute.db', 'en', 'statute' )
         self.fields.read_from_excel(openpyxl.load_workbook(filename='edit/gc_fields_manual.xlsx'))
         self.fields.fix_legacy_unit_system_missing()
 
         self.categories = Categories()
         self.categories.read_from_db( 'edit/fields_order.db' )
-        self.fields.read_field_order_from_db( 'edit/fields_order.db' )
+        self.fields.read_from_db( 'edit/fields_order.db' )
 
     def init_empty(self):
         self.types = ActivityTypes()
@@ -576,10 +616,9 @@ class Driver :
 
         output = self.args.output
         if output.endswith( '.db' ):
-            self.fields.save_to_db(self.args.output, self.languages, ['metric', 'statute'])
-            self.types.save_to_db( self.args.output, self.languages )
+            self.fields.save_to_db(self.args.output )
+            self.types.save_to_db( self.args.output )
             self.categories.save_to_db(self.args.output )
-            self.fields.save_field_order_to_db(self.args.output,self.categories)
         if output.endswith( '.json' ):
             f = self.fields.save_to_dict()
             a = self.types.save_to_dict( )
@@ -589,6 +628,8 @@ class Driver :
         if output.endswith( '.xlsx' ):
             wb = openpyxl.Workbook()
             self.fields.save_to_excel(wb)
+            self.types.save_to_excel(wb)
+            self.categories.save_to_excel(wb)
             wb.save( output )
             
 
@@ -604,16 +645,25 @@ class Driver :
     def load_db(self,dbname):
         if os.path.exists( dbname ):
             conn = sqlite3.connect( dbname )
-            if( sqlite3_table_exists( conn, 'gc_fields_display' ) ):
-                self.fields.load_display_from_db(conn)
-            if( sqlite3_table_exists( conn, 'gc_fields_uom' ) ):
-                self.fields.load_uom_from_db(conn)
+            self.types.read_from_db(conn)
+            self.categories.read_from_db(conn)
+            self.fields.read_from_db(conn)
 
     def load_excel(self,xlname):
         if os.path.exists( xlname ):
             wb = openpyxl.load_workbook(filename=xlname)
+            self.types.read_from_excel(wb)
             self.fields.read_from_excel(wb)
-        
+            self.categories.read_from_excel(wb)
+
+
+    def load_from_json(self,jname):
+        with open(jname,'r') as jf:
+            jd = json.load(jf )
+            self.types.read_from_dict(jd)
+            self.fields.read_from_dict(jd)
+            self.categories.read_from_dict(jd)
+            
     def process_file(self,fn):
         if os.path.exists( fn ):
             if fn.endswith( '.db' ) :
@@ -640,10 +690,11 @@ if __name__ == "__main__":
     init_desc = "\n".join( [ '  {}: {}'.format( k,v['help'] ) for (k,v) in init.items() ] )
 
     languages = [ 'en', 'fr', 'ja', 'de', 'it', 'es', 'pt', 'zh' ]
-    what = ['activityType','unit','display']
+    what = ['activity_type','unit','display']
     
     parser = argparse.ArgumentParser( description='Check configuration', formatter_class=argparse.RawTextHelpFormatter )
     parser.add_argument( 'command', metavar='Command', help='command to execute:\n' + description)
+    parser.add_argument( '-b', '--base', default='out/fields.db', help='db file to init latest from' )
     parser.add_argument( '-s', '--save', action='store_true', help='save output otherwise just print' )
     parser.add_argument( '-o', '--output', help='output file' )
     parser.add_argument( '-i', '--init', help='init method (default legacy)\n' + init_desc, default='legacy' )
