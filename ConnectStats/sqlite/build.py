@@ -171,7 +171,7 @@ class Field:
     def __init__(self, key):
         self.key = key
         self.fieldDisplayNameByLanguage = dict()
-        self.unitByType = defaultdict(dict);
+        self.units = []
         self.category = Category('ignore',-1,'Ignore')
         self.display_order = -1
 
@@ -181,13 +181,7 @@ class Field:
         return [ rv ]
 
     def uom_dicts(self):
-        rv = []
-        for system,units in self.unitByType.items():
-            one = {'field':self.key,'activitytype':t}
-            for t,unit in units.items():
-                one.update({system:unit})
-            rv.append( one )
-        return rv
+        return self.units
 
     def order_dicts(self):
         rv = []
@@ -217,24 +211,43 @@ class Field:
                 
     def add_uom(self, system, uom, activityType ):
         rv = False
-        if system not in self.unitByType[activityType]:
-            self.unitByType[activityType][system] = uom
+        found = None
+        for one in self.units:
+            if one['activityType'] == activityType:
+                found = one
+                break
+            
+        if found is None:
+            found = { 'field':self.key,'activityType':activityType}
+            self.units.append(found)
             rv = True
-        else:
-            if uom != self.unitByType[activityType][system]:
-                print( 'Inconsistent unit for {} in {} {} : {} and {}'.format(self.key, system, activityType, uom, self.unitByType[system][activityType] ) )
+        if system in found and found[system] != uom:
+            rv = True
+            
+        found[system] = uom
 
-        if 'all' in self.unitByType:
-            to_remove = list([x for x in self.unitByType.keys() if x != 'all' and self.unitByType[x][system] == self.unitByType['all'][system] ])
-            for x in to_remove:
-                del self.unitByType[x][system]
-            to_remove = list([x for x in self.unitByType.keys() if len(x) == 0])
-            for x in to_remove:
-                del self.unitByType[x]
         return rv
 
+    def simplify_uom(self):
+        all = None
+        for one in self.units:
+            if one['activityType'] == 'all':
+                all = one
+                break
+        simplified = []
+        if all:
+            simplified.append( all )
+            for one in self.units:
+                for k,v in one.items():
+                    if k!= 'activityType' and k in all and all[k] != v:
+                        simplified.append(one)
+                        break
+            self.units = simplified
+        else:
+            print( 'missing all {}'.format( self.units ) )
+    
     def __repr__(self):
-        return "Field('{}',{},{})".format(self.key, pprint.pformat( self.fieldDisplayNameByLanguage ), pprint.pformat( dict(self.unitByType) ));
+        return "Field('{}',{},{})".format(self.key, pprint.pformat( self.fieldDisplayNameByLanguage ), pprint.pformat( dict(self.units) ));
 
 class Fields:
     def __init__(self,types):
@@ -275,6 +288,8 @@ class Fields:
             if r1 or r2:
                 n[fieldKey] = 1
 
+        for field in self.fields.values():
+            field.simplify_uom()
         if self.verbose:
             print( 'added {}/{} field display (new {}) for {} from {}'.format( len(n), len( self.fields ), len(n_new), language, db_from ) )
             
@@ -282,39 +297,35 @@ class Fields:
         metric_to_statute = dict()
         # collect known conversions
         for key,field in self.fields.items():
-            for t,u in field.unitByType['metric'].items():
-                if t in field.unitByType['statute'] and u != field.unitByType['statute'][t]:
-                    metric_to_statute[u] = field.unitByType['statute'][t]
+            for one in field.units:
+                if 'metric' in one and 'statute' in one:
+                    metric_to_statute[ one['metric'] ] = one['statute']
                     
         for key,field in self.fields.items():
-            for t,u in field.unitByType['metric'].items():
+            for one in field.units:
+                u = one['metric']
+                t = one['activityType']
                 n_u = None
                 if u in metric_to_statute:
                     n_u = metric_to_statute[u]
                     if n_u == 'foot' and 'Elevation' not in key:
                         n_u = 'yard'
                 if n_u:
-                    if t not in field.unitByType['statute'] or 'statute' not in field.unitByType:
+                    if 'statute' not in one:
                         if self.verbose:
                             print( 'updating missing {}/{} to {} (from {})'.format( key, t, n_u, u) )
-                        if 'statute' in field.unitByType:
-                            field.unitByType['statute'][t] = n_u
-                        else:
-                            field.unitByType = {'statute': {t:n_u} }
-                    if t in field.unitByType['statute'] and n_u != field.unitByType['statute'][t]:
+                        one['statute'] = n_u
+                    if  n_u != one['statute']:
                         if self.verbose:
-                            print( 'fixing inconsistent {}/{} {} != {} (from {})'.format( key, t, field.unitByType['statute'][t], n_u, u) )
-                        field.unitByType['statute'][t] = n_u
+                            print( 'fixing inconsistent {}/{} {} != {} (from {})'.format( key, t, one['statute'], n_u, u) )
+                        one['statute'] = n_u
 
-                if 'Elevation' in key and field.unitByType['metric'][t] != 'meter':
+                if 'Elevation' in key and one['metric'] != 'meter':
                     if self.verbose:
-                        print( 'fixing elevation {}/{} {}/{} to {}/{}'.format( key, t, field.unitByType['metric'][t], field.unitByType['statute'][t] if t in field.unitByType['statute'] else None , 'meter', 'foot') )
+                        print( 'fixing elevation {}/{} {}/{} to {}/{}'.format( key, t, one['metric'], one['statute'] if t in one['statute'] else None , 'meter', 'foot') )
 
-                    field.unitByType['metric'][t] = 'meter'
-                    if t in field.unitByType['statute']:
-                        field.unitByType['statute'][t] = 'foot'
-                    else:
-                        field.unitByType['statue'] = {t:'foot'}
+                    one['metric'] = 'meter'
+                    one['statute'] = 'foot'
 
     def read_field_order_from_db(self,dbname):
         conn = sqlite3.connect(dbname)
@@ -423,6 +434,7 @@ class Fields:
         uom = []
         order = []
         keys = sorted( self.fields.keys(), key = lambda x: self.fields[x].sort_key() )
+
         for key in keys:
             field = self.fields[key]
             display.extend( field.display_dicts() )
