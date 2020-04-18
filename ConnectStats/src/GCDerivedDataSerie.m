@@ -124,6 +124,17 @@ sqlite3_int64 kInvalidSerieId = 0;
     [super dealloc];
 }
 
+-(BOOL)containsActivity:(GCActivity*)act{
+    BOOL typeValid = [self.activityType isEqualToString:act.activityType];
+    BOOL dateValid = self.derivedPeriod == gcDerivedPeriodAll;
+    if( typeValid && ! dateValid){
+        if( self.bucketStart && self.bucketEnd){
+            dateValid = [self.bucketStart compare:act.date] != NSOrderedDescending && [self.bucketEnd compare:act.date] != NSOrderedAscending;
+        }
+    }
+    return dateValid && typeValid;
+}
+
 -(GCField*)field{
     return [GCField fieldForFlag:self.fieldFlag andActivityType:self.activityType];
 }
@@ -174,7 +185,9 @@ sqlite3_int64 kInvalidSerieId = 0;
     }
 }
 
-
+-(void)reset{
+    self.serieWithUnit = nil;
+}
 -(void)operate:(gcStatsOperand)operand with:(GCStatsDataSerieWithUnit*)other from:(GCActivity*)activity{
     if (self.serieWithUnit) {
         if (self.serieWithUnit.serie) {

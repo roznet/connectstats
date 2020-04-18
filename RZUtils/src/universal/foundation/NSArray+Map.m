@@ -24,6 +24,7 @@
 //  
 
 #import "NSArray+Map.h"
+#import "NSDictionary+RZHelper.h"
 
 @implementation NSArray (Map)
 
@@ -91,5 +92,25 @@
         [rv addObject:obj];
     }
     return [NSArray arrayWithArray:rv];
+}
+
+-(NSArray*)arrayWithJSONTypesOnly{
+    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:self.count];
+    for( NSObject * obj in self ){
+        if( [obj isKindOfClass:[NSNumber class]] || [obj isKindOfClass:[NSString class]] || [obj isKindOfClass:[NSNull class]] ){
+            [rv addObject:obj];
+        }else if( [obj isKindOfClass:[NSDictionary class]] ){
+            NSDictionary * dict = (NSDictionary*)obj;
+            [rv addObject:[dict dictionaryWithJSONTypesOnly]];
+        }else if( [obj isKindOfClass:[NSArray class]]){
+            NSArray * array = (NSArray*)obj;
+            [rv addObject:[array arrayWithJSONTypesOnly]];
+        }else if( [obj respondsToSelector:@selector(description)]){
+            [rv addObject:[obj description]];
+        }else{
+            [rv addObject:@"<Invalid Object>"];
+        }
+    }
+    return rv;
 }
 @end

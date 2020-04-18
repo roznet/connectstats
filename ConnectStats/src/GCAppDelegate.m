@@ -40,6 +40,7 @@
 #import "GCFieldCache.h"
 #import "GCAppDelegate+Swift.h"
 #import "GCWeather.h"
+#import "GCActivity+CachedTracks.h"
 #import "GCConnectStatsStatus.h"
 
 #define GC_STARTING_FILE @"starting.log"
@@ -480,6 +481,9 @@ void checkVersion(){
     }
 
     GCFieldCache * cache = [GCFieldCache cacheWithDb:self.db andLanguage:language];
+    [cache registerFields:[GCFieldsCalculated fieldInfoForCalculatedFields]];
+    [cache registerFields:[GCHealthMeasure fieldInfoForMeasureFields]];
+    [cache registerFields:[GCActivity fieldInfoForCalculatedTrackFields]];
     [GCField setFieldCache: cache];
     [GCFields setFieldCache:cache];
     [GCActivityType setFieldCache:cache];
@@ -564,19 +568,6 @@ void checkVersion(){
         [self saveSettings];
         firstTimeForCurrentVersion = true;
     }else{
-        if( [self isFirstTimeForFeature:@"CONVERT_VERSION_SEEN_DATE_TO_STRING"]){
-            NSMutableDictionary * newVersions = [NSMutableDictionary dictionary];
-            for (NSString * key in versions) {
-                NSDate * val = versions[key];
-                if( [val isKindOfClass:[NSDate class]]){
-                    newVersions[key] = [val formatAsRFC3339];
-                }
-            }
-            versions = [NSDictionary dictionaryWithDictionary:newVersions];
-            self.settings[CONFIG_VERSIONS_SEEN] = versions;
-            needToSaveSettings = true;
-        }
-
         NSString * already = versions[currentVersion];
         
         if( already == nil){

@@ -7,12 +7,13 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "GCTestCase.h"
 #import "GCField.h"
 #import "GCFields.h"
 #import "GCFieldCache.h"
 #import "GCActivityType.h"
 
-@interface GCTestFields : XCTestCase
+@interface GCTestFields : GCTestCase
 
 @end
 
@@ -88,7 +89,7 @@
     XCTAssertEqualObjects([weightedMeanPace unit], [GCUnit minperkm]);
     
     // Now use predefined, register will not change
-    [cache registerField:weightedMeanPace displayName:@"Pace" andUnitName:@"minpermile"];
+    [cache registerMissingField:weightedMeanPace displayName:@"Pace" andUnitName:@"minpermile"];
     info = [cache infoForField:weightedMeanPace];
     XCTAssertEqualObjects(info.displayName, @"Allure moy.");
     XCTAssertEqualObjects(info.unit, [GCUnit minperkm]);
@@ -104,7 +105,7 @@
     
     // Register one that does not exists
     GCField * weightedMeanPace2 = [GCField fieldForKey:@"WeightedMeanPace2" andActivityType:GC_TYPE_RUNNING];
-    [cache registerField:weightedMeanPace2 displayName:@"Pace2" andUnitName:@"kph"];
+    [cache registerMissingField:weightedMeanPace2 displayName:@"Pace2" andUnitName:@"kph"];
     info = [cache infoForField:weightedMeanPace2];
     XCTAssertEqualObjects(info.displayName, @"Pace2");
     XCTAssertEqualObjects(info.unit, [GCUnit kph]);

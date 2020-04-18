@@ -40,7 +40,7 @@
         [fdb open];
 
         cache = [NSMutableDictionary dictionary];
-        FMResultSet * res = [fdb executeQuery:@"SELECT * FROM category_order"];
+        FMResultSet * res = [fdb executeQuery:@"SELECT * FROM gc_category_order"];
         while ([res next]) {
             NSString * category = [res stringForColumn:@"category"];
             NSString * display = [res stringForColumn:@"displayName"];
@@ -66,10 +66,10 @@
         [fdb open];
 
         rv = [NSMutableDictionary dictionary];
-        FMResultSet * res = [fdb executeQuery:@"SELECT * FROM category_order"];
+        FMResultSet * res = [fdb executeQuery:@"SELECT * FROM gc_category_order"];
         while ([res next]) {
             NSString * category = [res stringForColumn:@"category"];
-            int order = [res intForColumn:@"display_order"];
+            int order = [res intForColumn:@"category_order"];
 
             if (order <= 0) {
                 category = GC_CATEGORY_IGNORE;

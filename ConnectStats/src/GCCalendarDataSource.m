@@ -109,7 +109,7 @@
 }
 -(void)setupForCurrentActivityType:(NSString *)aType andFilter:(BOOL)aFilter{
     self.activityType = aType;
-    [self.activityTypeButton setupBarButtonItem];
+    [self.activityTypeButton setupBarButtonItem:nil];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:KalDataSourceChangedNotification  object:self];
 }
@@ -260,8 +260,11 @@
 }
 
 -(NSArray*)leftButtonItems{
-    [self.activityTypeButton setupBarButtonItem];
-    return @[ self.activityTypeButton.activityTypeButtonItem ];
+    if( [self.activityTypeButton setupBarButtonItem:nil] ){
+        return @[ self.activityTypeButton.activityTypeButtonItem ];
+    }else{
+        return @[];
+    }
 }
 -(NSArray*)rightButtonItems{
 

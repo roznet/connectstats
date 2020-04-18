@@ -1,0 +1,2486 @@
+{
+  "gc_activityTypes": {
+    "all": {
+      "activityType": "all",
+      "activityTypeId": 17,
+      "de": "Beliebiger Aktivit\u00e4tstyp",
+      "en": "Any Activity Type",
+      "es": "Cualquier tipo de actividad",
+      "fr": "Tout type d'activit\u00e9",
+      "it": "Qualsiasi attivit\u00e0",
+      "ja": "\u3059\u3079\u3066\u306e\u30a2\u30af\u30c6\u30a3\u30d3\u30c6\u30a3",
+      "parentActivityType": null,
+      "parentActivityTypeId": 0,
+      "pt": "Qualquer tipo de actividade",
+      "zh": "\u6240\u6709\u6d3b\u52a8"
+    },
+    "apnea_diving": {
+      "activityType": "apnea_diving",
+      "activityTypeId": 148,
+      "en": "Apnea",
+      "parentActivityType": "diving",
+      "parentActivityTypeId": 144
+    },
+    "apnea_hunting": {
+      "activityType": "apnea_hunting",
+      "activityTypeId": 155,
+      "en": "Apnea Hunting",
+      "parentActivityType": "diving",
+      "parentActivityTypeId": 144
+    },
+    "assistance": {
+      "activityType": "assistance",
+      "activityTypeId": 158,
+      "parentActivityType": "safety",
+      "parentActivityTypeId": 157
+    },
+    "atv": {
+      "activityType": "atv",
+      "activityTypeId": 132,
+      "de": "Gel\u00e4ndefahrzeug-Fahren",
+      "en": "ATV",
+      "es": "Todoterreno",
+      "fr": "Tout terrain",
+      "it": "Fuoristrada",
+      "ja": "ATV",
+      "parentActivityType": "motorcycling",
+      "parentActivityTypeId": 71,
+      "pt": "Moto quatro",
+      "zh": "\u5168\u5730\u5f62\u6c7d\u8f66"
+    },
+    "auto_racing": {
+      "activityType": "auto_racing",
+      "activityTypeId": 162,
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4
+    },
+    "backcountry_skiing_snowboarding_ws": {
+      "activityType": "backcountry_skiing_snowboarding_ws",
+      "activityTypeId": 169,
+      "de": "Ski-/Snowboardtour",
+      "en": "Backcountry Skiing/Snowboarding",
+      "es": "Esqu\u00ed de fondo/snowboard",
+      "fr": "Ski de randonn\u00e9e nordique/Surf des neiges",
+      "it": "Sci fuori pista/Snowboard",
+      "ja": "\u30d0\u30c3\u30af\u30ab\u30f3\u30c8\u30ea\u30fc \u30b9\u30ad\u30fc/\u30b9\u30ce\u30fc\u30dc\u30fc\u30c9",
+      "parentActivityType": "winter_sports",
+      "parentActivityTypeId": 165,
+      "pt": "Esqui/snowboard",
+      "zh": "\u91ce\u5916\u6ed1\u96ea\uff0f\u5355\u677f\u6ed1\u96ea"
+    },
+    "bikeToRunTransition": {
+      "activityType": "bikeToRunTransition",
+      "activityTypeId": 85,
+      "de": "\u00dcbergang Radfahren-Schwimmen",
+      "en": "Bike to Run Transition",
+      "es": "Transici\u00f3n bicicleta-carrera",
+      "fr": "Transition entre v\u00e9lo et course",
+      "it": "Transizione da bicicletta a corsa",
+      "ja": "\u81ea\u8ee2\u8eca\u304b\u3089\u30e9\u30f3\u3078\u79fb\u884c",
+      "parentActivityType": "transition",
+      "parentActivityTypeId": 83,
+      "pt": "Transi\u00e7\u00e3o de Bicicleta para Corrida",
+      "zh": "\u81ea\u884c\u8f66/\u8dd1\u6b65 \u4e24\u9879\u94c1\u4eba"
+    },
+    "bmx": {
+      "activityType": "bmx",
+      "activityTypeId": 131,
+      "de": "BMX",
+      "en": "BMX",
+      "es": "BMX",
+      "fr": "BMX",
+      "it": "BMX",
+      "ja": "BMX",
+      "parentActivityType": "cycling",
+      "parentActivityTypeId": 2,
+      "pt": "BMX",
+      "zh": "\u81ea\u884c\u8f66\u8d8a\u91ce"
+    },
+    "boating": {
+      "activityType": "boating",
+      "activityTypeId": 75,
+      "de": "Motorboot",
+      "en": "Boating",
+      "es": "Navegaci\u00f3n",
+      "fr": "Bateau",
+      "it": "Nautica",
+      "ja": "\u30dc\u30fc\u30c8",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Andar de barco",
+      "zh": "\u5212\u8239"
+    },
+    "breathwork": {
+      "activityType": "breathwork",
+      "activityTypeId": 164,
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4
+    },
+    "casual_walking": {
+      "activityType": "casual_walking",
+      "activityTypeId": 15,
+      "de": "Spazieren gehen",
+      "en": "Casual Walking",
+      "es": "Caminar",
+      "fr": "Marche",
+      "it": "Camminata standard",
+      "ja": "\u30ab\u30b8\u30e5\u30a2\u30eb\u30a6\u30a9\u30fc\u30ad\u30f3\u30b0",
+      "parentActivityType": "walking",
+      "parentActivityTypeId": 9,
+      "pt": "Caminhada",
+      "zh": "\u6563\u6b65"
+    },
+    "ccr_diving": {
+      "activityType": "ccr_diving",
+      "activityTypeId": 161,
+      "parentActivityType": "diving",
+      "parentActivityTypeId": 144
+    },
+    "cross_country_skiing_ws": {
+      "activityType": "cross_country_skiing_ws",
+      "activityTypeId": 171,
+      "de": "Langlauf Klassisch",
+      "en": "Cross Country Skiing",
+      "es": "Esqu\u00ed n\u00f3rdico",
+      "fr": "Ski de fond",
+      "it": "Sci di fondo",
+      "ja": "\u30af\u30ed\u30b9\u30ab\u30f3\u30c8\u30ea\u30fc\u30b9\u30ad\u30fc",
+      "parentActivityType": "winter_sports",
+      "parentActivityTypeId": 165,
+      "pt": "Esqui de fundo",
+      "zh": "\u8d8a\u91ce\u6ed1\u96ea"
+    },
+    "cycling": {
+      "activityType": "cycling",
+      "activityTypeId": 2,
+      "de": "Radfahren",
+      "en": "Cycling",
+      "es": "Ciclismo",
+      "fr": "Cyclisme",
+      "it": "Ciclismo",
+      "ja": "\u30b5\u30a4\u30af\u30ea\u30f3\u30b0",
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17,
+      "pt": "Ciclismo",
+      "zh": "\u9a91\u8f66"
+    },
+    "cyclocross": {
+      "activityType": "cyclocross",
+      "activityTypeId": 19,
+      "de": "Cyclocross",
+      "en": "Cyclocross",
+      "es": "Cyclocross",
+      "fr": "Cyclocross",
+      "it": "Ciclocross",
+      "ja": "\u30b7\u30af\u30ed\u30af\u30ed\u30b9",
+      "parentActivityType": "cycling",
+      "parentActivityTypeId": 2,
+      "pt": "Ciclocrosse",
+      "zh": "\u8d8a\u91ce\u81ea\u884c\u8f66"
+    },
+    "diving": {
+      "activityType": "diving",
+      "activityTypeId": 144,
+      "en": "Diving",
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17
+    },
+    "downhill_biking": {
+      "activityType": "downhill_biking",
+      "activityTypeId": 20,
+      "de": "MTB Downhill",
+      "en": "Downhill Biking",
+      "es": "Descenso",
+      "fr": "Cyclisme de descente",
+      "it": "Ciclismo downhill",
+      "ja": "\u30c0\u30a6\u30f3\u30d2\u30eb\u30d0\u30a4\u30af",
+      "parentActivityType": "cycling",
+      "parentActivityTypeId": 2,
+      "pt": "Downhill",
+      "zh": "\u4e0b\u5761\u81ea\u884c\u8f66"
+    },
+    "driving_general": {
+      "activityType": "driving_general",
+      "activityTypeId": 49,
+      "de": "Fahren",
+      "en": "Driving",
+      "es": "Conducci\u00f3n",
+      "fr": "Conduite automobile",
+      "it": "Guida automobilistica",
+      "ja": "\u30c9\u30e9\u30a4\u30d3\u30f3\u30b0",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Condu\u00e7\u00e3o",
+      "zh": "\u9a7e\u9a76"
+    },
+    "elliptical": {
+      "activityType": "elliptical",
+      "activityTypeId": 30,
+      "de": "Crosstrainer",
+      "en": "Elliptical",
+      "es": "El\u00edptico",
+      "fr": "V\u00e9lo elliptique",
+      "it": "Ellittica",
+      "ja": "\u30a8\u30ea\u30d7\u30c6\u30a3\u30ab\u30eb",
+      "parentActivityType": "fitness_equipment",
+      "parentActivityTypeId": 29,
+      "pt": "Bicicleta el\u00edptica",
+      "zh": "\u692d\u5706\u673a"
+    },
+    "fitness_equipment": {
+      "activityType": "fitness_equipment",
+      "activityTypeId": 29,
+      "de": "Fitnessger\u00e4te",
+      "en": "Fitness Equipment",
+      "es": "Equipo de fitness",
+      "fr": "Mat\u00e9riel de remise en forme",
+      "it": "Attrezzatura da fitness",
+      "ja": "\u30d5\u30a3\u30c3\u30c8\u30cd\u30b9\u30c7\u30d0\u30a4\u30b9",
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17,
+      "pt": "Equipamento de fitness",
+      "zh": "\u5065\u8eab\u8bbe\u5907"
+    },
+    "floor_climbing": {
+      "activityType": "floor_climbing",
+      "activityTypeId": 150,
+      "en": "Floor Climbing",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4
+    },
+    "flying": {
+      "activityType": "flying",
+      "activityTypeId": 52,
+      "de": "Sportfliegen",
+      "en": "Flying",
+      "es": "Vuelo",
+      "fr": "Aviation",
+      "it": "Volo",
+      "ja": "\u30d5\u30e9\u30a4\u30f3\u30b0",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Voo",
+      "zh": "\u98de\u884c"
+    },
+    "gauge_diving": {
+      "activityType": "gauge_diving",
+      "activityTypeId": 147,
+      "en": "Gauge Dive",
+      "parentActivityType": "diving",
+      "parentActivityTypeId": 144
+    },
+    "golf": {
+      "activityType": "golf",
+      "activityTypeId": 88,
+      "de": "Golf",
+      "en": "Golf",
+      "es": "Golf",
+      "fr": "Golf",
+      "it": "Golf",
+      "ja": "\u30b4\u30eb\u30d5",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Golf",
+      "zh": "\u9ad8\u5c14\u592b"
+    },
+    "gravel_cycling": {
+      "activityType": "gravel_cycling",
+      "activityTypeId": 143,
+      "de": "Offroad-Radfahren",
+      "en": "Gravel/Unpaved Cycling",
+      "es": "Ciclismo gravel/por zonas sin asfaltar",
+      "fr": "Gravel bike",
+      "it": "Ciclismo su sterrato",
+      "ja": "\u30b0\u30e9\u30d9\u30eb\uff0f\u30aa\u30d5\u30ed\u30fc\u30c9\u30b5\u30a4\u30af\u30ea\u30f3\u30b0",
+      "parentActivityType": "cycling",
+      "parentActivityTypeId": 2,
+      "pt": "Ciclismo em gravilha/estrada sem pavimento",
+      "zh": "\u8d8a\u91ce\u9a91\u884c/\u571f\u8def\u9a91\u884c"
+    },
+    "hang_gliding": {
+      "activityType": "hang_gliding",
+      "activityTypeId": 140,
+      "de": "Drachenfliegen",
+      "en": "Hang Gliding",
+      "es": "Parapente",
+      "fr": "Deltaplane",
+      "it": "Deltaplano",
+      "ja": "\u30cf\u30f3\u30b0\u30b0\u30e9\u30a4\u30c7\u30a3\u30f3\u30b0",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Asa delta",
+      "zh": "\u60ac\u6302\u5f0f\u6ed1\u7fd4"
+    },
+    "hiking": {
+      "activityType": "hiking",
+      "activityTypeId": 3,
+      "de": "Wandern",
+      "en": "Hiking",
+      "es": "Excursionismo",
+      "fr": "Randonn\u00e9e p\u00e9destre",
+      "it": "Escursionismo",
+      "ja": "\u30cf\u30a4\u30ad\u30f3\u30b0",
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17,
+      "pt": "Pedestrianismo",
+      "zh": "\u5f92\u6b65\u65c5\u884c"
+    },
+    "horseback_riding": {
+      "activityType": "horseback_riding",
+      "activityTypeId": 44,
+      "de": "Reiten",
+      "en": "Horseback Riding",
+      "es": "Equitaci\u00f3n",
+      "fr": "Equitation",
+      "it": "Equitazione",
+      "ja": "\u4e57\u99ac",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Hipismo",
+      "zh": "\u9a91\u9a6c"
+    },
+    "hunting_fishing": {
+      "activityType": "hunting_fishing",
+      "activityTypeId": 133,
+      "de": "Jagen/Angeln",
+      "en": "Hunting/Fishing",
+      "es": "Caza/pesca",
+      "fr": "Chasse/p\u00eache",
+      "it": "Caccia/Pesca",
+      "ja": "\u30cf\u30f3\u30c6\u30a3\u30f3\u30b0\uff0f\u91e3\u308a",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Ca\u00e7a/Pesca",
+      "zh": "\u6253\u730e/\u9493\u9c7c"
+    },
+    "incident_detected": {
+      "activityType": "incident_detected",
+      "activityTypeId": 159,
+      "parentActivityType": "safety",
+      "parentActivityTypeId": 157
+    },
+    "indoor_cardio": {
+      "activityType": "indoor_cardio",
+      "activityTypeId": 11,
+      "de": "Cardio",
+      "en": "Cardio",
+      "es": "Cardio",
+      "fr": "Cardio",
+      "it": "Cardio",
+      "ja": "\u6709\u9178\u7d20",
+      "parentActivityType": "fitness_equipment",
+      "parentActivityTypeId": 29,
+      "pt": "C\u00e1rdio",
+      "zh": "\u6709\u6c27\u8fd0\u52a8"
+    },
+    "indoor_cycling": {
+      "activityType": "indoor_cycling",
+      "activityTypeId": 25,
+      "de": "Indoor Cycling",
+      "en": "Indoor Cycling",
+      "es": "Ciclismo indoor",
+      "fr": "V\u00e9lo d'int\u00e9rieur",
+      "it": "Ciclismo indoor",
+      "ja": "\u30a4\u30f3\u30c9\u30a2\u30b5\u30a4\u30af\u30ea\u30f3\u30b0",
+      "parentActivityType": "cycling",
+      "parentActivityTypeId": 2,
+      "pt": "Spinning",
+      "zh": "\u5ba4\u5185\u81ea\u884c\u8f66"
+    },
+    "indoor_rowing": {
+      "activityType": "indoor_rowing",
+      "activityTypeId": 32,
+      "de": "Rudermaschine",
+      "en": "Indoor Rowing",
+      "es": "Remo indoor",
+      "fr": "Rameur d'int\u00e9rieur",
+      "it": "Vogatore",
+      "ja": "\u30a4\u30f3\u30c9\u30a2\u30ed\u30fc\u30a4\u30f3\u30b0",
+      "parentActivityType": "fitness_equipment",
+      "parentActivityTypeId": 29,
+      "pt": "Remo",
+      "zh": "\u5ba4\u5185\u5212\u8239"
+    },
+    "indoor_running": {
+      "activityType": "indoor_running",
+      "activityTypeId": 156,
+      "en": "Indoor Running",
+      "parentActivityType": "running",
+      "parentActivityTypeId": 1
+    },
+    "inline_skating": {
+      "activityType": "inline_skating",
+      "activityTypeId": 63,
+      "de": "Inlineskaten",
+      "en": "Inline Skating",
+      "es": "Patinaje en l\u00ednea",
+      "fr": "Roller",
+      "it": "Pattinaggio in linea",
+      "ja": "\u30a4\u30f3\u30e9\u30a4\u30f3\u30b9\u30b1\u30fc\u30c8",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Patins em linha",
+      "zh": "\u76f4\u6392\u8f6e"
+    },
+    "lap_swimming": {
+      "activityType": "lap_swimming",
+      "activityTypeId": 27,
+      "de": "Bahnenschwimmen",
+      "en": "Lap Swimming",
+      "es": "Nataci\u00f3n libre",
+      "fr": "Natation en piscine",
+      "it": "Nuoto in vasca",
+      "ja": "\u30e9\u30c3\u30d7\u30b9\u30a4\u30df\u30f3\u30b0",
+      "parentActivityType": "swimming",
+      "parentActivityTypeId": 26,
+      "pt": "Nata\u00e7\u00e3o de curta dist\u00e2ncia",
+      "zh": "\u6cf3\u9053\u6e38\u6cf3"
+    },
+    "motocross": {
+      "activityType": "motocross",
+      "activityTypeId": 135,
+      "de": "Motocross",
+      "en": "Motocross",
+      "es": "Motocross",
+      "fr": "Motocross",
+      "it": "Motocross",
+      "ja": "\u30e2\u30c8\u30af\u30ed\u30b9",
+      "parentActivityType": "motorcycling",
+      "parentActivityTypeId": 71,
+      "pt": "Motocrosse",
+      "zh": "\u6469\u6258\u8f66\u8d8a\u91ce"
+    },
+    "motorcycling": {
+      "activityType": "motorcycling",
+      "activityTypeId": 71,
+      "de": "Motorsport",
+      "en": "Motorcycling",
+      "es": "Motociclismo",
+      "fr": "Moto-cross",
+      "it": "Motociclismo",
+      "ja": "\u30e2\u30fc\u30bf\u30fc\u30b5\u30a4\u30af\u30ea\u30f3\u30b0",
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17,
+      "pt": "Motociclismo",
+      "zh": "\u9a91\u6469\u6258\u8f66"
+    },
+    "mountain_biking": {
+      "activityType": "mountain_biking",
+      "activityTypeId": 5,
+      "de": "Mountainbiken",
+      "en": "Mountain Biking",
+      "es": "Ciclismo de monta\u00f1a",
+      "fr": "Mountain Bike",
+      "it": "Mountain bike",
+      "ja": "\u30de\u30a6\u30f3\u30c6\u30f3\u30d0\u30a4\u30af",
+      "parentActivityType": "cycling",
+      "parentActivityTypeId": 2,
+      "pt": "BTT",
+      "zh": "\u8d8a\u91ce\u81ea\u884c\u8f66"
+    },
+    "mountaineering": {
+      "activityType": "mountaineering",
+      "activityTypeId": 37,
+      "de": "Bergsteigen",
+      "en": "Mountaineering",
+      "es": "Monta\u00f1ismo",
+      "fr": "Alpinisme",
+      "it": "Alpinismo",
+      "ja": "\u767b\u5c71",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Montanhismo",
+      "zh": "\u767b\u5c71"
+    },
+    "multi_gas_diving": {
+      "activityType": "multi_gas_diving",
+      "activityTypeId": 146,
+      "en": "Multi-Gas Dive",
+      "parentActivityType": "diving",
+      "parentActivityTypeId": 144
+    },
+    "multi_sport": {
+      "activityType": "multi_sport",
+      "activityTypeId": 89,
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17
+    },
+    "obstacle_run": {
+      "activityType": "obstacle_run",
+      "activityTypeId": 154,
+      "en": "Obstacle Running",
+      "parentActivityType": "running",
+      "parentActivityTypeId": 1
+    },
+    "open_water_swimming": {
+      "activityType": "open_water_swimming",
+      "activityTypeId": 28,
+      "de": "Freiwasserschwimmen",
+      "en": "Open Water Swimming",
+      "es": "Nataci\u00f3n en aguas abiertas",
+      "fr": "Natation en eau libre",
+      "it": "Nuoto in acque libere",
+      "ja": "\u30aa\u30fc\u30d7\u30f3\u30a6\u30a9\u30fc\u30bf\u30fc\u30b9\u30a4\u30df\u30f3\u30b0",
+      "parentActivityType": "swimming",
+      "parentActivityTypeId": 26,
+      "pt": "Nata\u00e7\u00e3o de longa dist\u00e2ncia",
+      "zh": "\u516c\u5f00\u6c34\u57df\u6e38\u6cf3"
+    },
+    "other": {
+      "activityType": "other",
+      "activityTypeId": 4,
+      "de": "Sonstige",
+      "en": "Other",
+      "es": "Otros",
+      "fr": "Autre",
+      "it": "Altro",
+      "ja": "\u305d\u306e\u4ed6",
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17,
+      "pt": "Outra",
+      "zh": "\u5176\u4ed6"
+    },
+    "paddling": {
+      "activityType": "paddling",
+      "activityTypeId": 57,
+      "de": "Kanusport",
+      "en": "Paddling",
+      "es": "Kayac marino",
+      "fr": "Cano\u00eb-kayak",
+      "it": "Canottaggio",
+      "ja": "\u30d1\u30c9\u30ea\u30f3\u30b0",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Canoagem",
+      "zh": "\u76ae\u5212\u8247"
+    },
+    "pilates": {
+      "activityType": "pilates",
+      "activityTypeId": 160,
+      "parentActivityType": "fitness_equipment",
+      "parentActivityTypeId": 29
+    },
+    "rc_drone": {
+      "activityType": "rc_drone",
+      "activityTypeId": 136,
+      "de": "Drohnenfliegen",
+      "en": "RC/Drone",
+      "es": "Control remoto/drones",
+      "fr": "T\u00e9l\u00e9commande Radio du Drone",
+      "it": "Drone Radio Controllato",
+      "ja": "RC\uff0f\u30c9\u30ed\u30fc\u30f3",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Drone/Controlo remoto",
+      "zh": "\u9065\u63a7/\u65e0\u4eba\u673a"
+    },
+    "recumbent_cycling": {
+      "activityType": "recumbent_cycling",
+      "activityTypeId": 22,
+      "de": "Liegerad",
+      "en": "Recumbent Cycling",
+      "es": "Bicicleta reclinada",
+      "fr": "V\u00e9lo couch\u00e9",
+      "it": "Bicicletta reclinata",
+      "ja": "\u30ea\u30ab\u30f3\u30d9\u30f3\u30c8\u30b5\u30a4\u30af\u30ea\u30f3\u30b0",
+      "parentActivityType": "cycling",
+      "parentActivityTypeId": 2,
+      "pt": "Bicicleta reclinada",
+      "zh": "\u659c\u8eba\u81ea\u884c\u8f66"
+    },
+    "resort_skiing_snowboarding_ws": {
+      "activityType": "resort_skiing_snowboarding_ws",
+      "activityTypeId": 172,
+      "de": "Skifahren/Snowboarden",
+      "en": "Resort Skiing/Snowboarding",
+      "es": "Esqu\u00ed en estaci\u00f3n/snowboard",
+      "fr": "Ski sur piste/Surf des neiges",
+      "it": "Sci su pista/Snowboard",
+      "ja": "\u30ea\u30be\u30fc\u30c8 \u30b9\u30ad\u30fc/\u30b9\u30ce\u30fc\u30dc\u30fc\u30c9",
+      "parentActivityType": "winter_sports",
+      "parentActivityTypeId": 165,
+      "pt": "Esqui n\u00f3rdico/snowboard",
+      "zh": "\u6ed1\u96ea\u573a\u6ed1\u96ea\uff0f\u5355\u677f\u6ed1\u96ea"
+    },
+    "road_biking": {
+      "activityType": "road_biking",
+      "activityTypeId": 10,
+      "de": "Rennradfahren",
+      "en": "Road Cycling",
+      "es": "Ciclismo en ruta",
+      "fr": "Cyclisme sur route",
+      "it": "Ciclismo su strada",
+      "ja": "\u30ed\u30fc\u30c9\u30b5\u30a4\u30af\u30ea\u30f3\u30b0",
+      "parentActivityType": "cycling",
+      "parentActivityTypeId": 2,
+      "pt": "Ciclismo de estrada",
+      "zh": "\u516c\u8def\u81ea\u884c\u8f66"
+    },
+    "rock_climbing": {
+      "activityType": "rock_climbing",
+      "activityTypeId": 139,
+      "de": "Klettern",
+      "en": "Rock Climbing",
+      "es": "Escalada",
+      "fr": "Escalade",
+      "it": "Arrampicata",
+      "ja": "\u30ed\u30c3\u30af\u30af\u30e9\u30a4\u30df\u30f3\u30b0",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Escalada",
+      "zh": "\u6500\u5ca9"
+    },
+    "rowing": {
+      "activityType": "rowing",
+      "activityTypeId": 39,
+      "de": "Rudern",
+      "en": "Rowing",
+      "es": "Remo",
+      "fr": "Aviron",
+      "it": "Canottaggio",
+      "ja": "\u30ed\u30fc\u30a4\u30f3\u30b0",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Remo",
+      "zh": "\u5212\u8239"
+    },
+    "runToBikeTransition": {
+      "activityType": "runToBikeTransition",
+      "activityTypeId": 86,
+      "de": "\u00dcbergang Laufen-Radfahren",
+      "en": "Run to Bike Transition",
+      "es": "Transici\u00f3n carrera-bicicleta",
+      "fr": "Transition entre course et v\u00e9lo",
+      "it": "Transizione da corsa a bicicletta",
+      "ja": "\u30e9\u30f3\u304b\u3089\u81ea\u8ee2\u8eca\u3078\u79fb\u884c",
+      "parentActivityType": "transition",
+      "parentActivityTypeId": 83,
+      "pt": "Transi\u00e7\u00e3o de Corrida para Bicicleta",
+      "zh": "\u8dd1\u6b65/\u81ea\u884c\u8f66 \u4e24\u9879\u94c1\u4eba"
+    },
+    "running": {
+      "activityType": "running",
+      "activityTypeId": 1,
+      "de": "Laufen",
+      "en": "Running",
+      "es": "Carrera",
+      "fr": "Course \u00e0 pied",
+      "it": "Corsa",
+      "ja": "\u30e9\u30f3\u30cb\u30f3\u30b0",
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17,
+      "pt": "Correr",
+      "zh": "\u8dd1\u6b65"
+    },
+    "safety": {
+      "activityType": "safety",
+      "activityTypeId": 157,
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17
+    },
+    "sailing": {
+      "activityType": "sailing",
+      "activityTypeId": 77,
+      "de": "Segeln",
+      "en": "Sailing",
+      "es": "Vela",
+      "fr": "Navigation \u00e0 la voile",
+      "it": "Navigazione a vela",
+      "ja": "\u30bb\u30a4\u30ea\u30f3\u30b0",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Velejando",
+      "zh": "\u5e06\u8239"
+    },
+    "single_gas_diving": {
+      "activityType": "single_gas_diving",
+      "activityTypeId": 145,
+      "en": "Single-Gas Dive",
+      "parentActivityType": "diving",
+      "parentActivityTypeId": 144
+    },
+    "skate_skiing_ws": {
+      "activityType": "skate_skiing_ws",
+      "activityTypeId": 170,
+      "de": "Langlauf Skating",
+      "en": "Skate Skiing",
+      "es": "Esqu\u00ed-patinaje",
+      "fr": "Pas de patinage",
+      "it": "Skateskiing",
+      "ja": "\u30b9\u30b1\u30fc\u30c8\u30b9\u30ad\u30fc",
+      "parentActivityType": "winter_sports",
+      "parentActivityTypeId": 165,
+      "pt": "Esqui",
+      "zh": "\u51b0\u978b\u6ed1\u96ea"
+    },
+    "skating_ws": {
+      "activityType": "skating_ws",
+      "activityTypeId": 168,
+      "de": "Eislaufen",
+      "en": "Skating",
+      "es": "Patinaje",
+      "fr": "Patin \u00e0 glace/\u00e0 roulettes",
+      "it": "Passo pattinato",
+      "ja": "\u30b9\u30b1\u30fc\u30c8",
+      "parentActivityType": "winter_sports",
+      "parentActivityTypeId": 165,
+      "pt": "Skating",
+      "zh": "\u6ed1\u51b0"
+    },
+    "sky_diving": {
+      "activityType": "sky_diving",
+      "activityTypeId": 134,
+      "de": "Fallschirmspringen",
+      "en": "Sky Diving",
+      "es": "Paracaidismo",
+      "fr": "Parachutisme",
+      "it": "Skydive",
+      "ja": "\u30b9\u30ab\u30a4\u30c0\u30a4\u30d3\u30f3\u30b0",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Paraquedismo",
+      "zh": "\u8df3\u4f1e"
+    },
+    "snow_shoe_ws": {
+      "activityType": "snow_shoe_ws",
+      "activityTypeId": 167,
+      "de": "Schneeschuhlaufen",
+      "en": "Snowshoeing",
+      "es": "Raqueta de nieve",
+      "fr": "Raquette \u00e0 neige",
+      "it": "Ciaspole",
+      "ja": "\u30b9\u30ce\u30fc\u30b7\u30e5\u30fc",
+      "parentActivityType": "winter_sports",
+      "parentActivityTypeId": 165,
+      "pt": "Raquetes de neve",
+      "zh": "\u96ea\u5730\u5065\u884c"
+    },
+    "snowmobiling_ws": {
+      "activityType": "snowmobiling_ws",
+      "activityTypeId": 166,
+      "de": "Snowmobil fahren",
+      "en": "Snowmobiling",
+      "es": "Motonieve",
+      "fr": "Motoneige",
+      "it": "Motoslitta",
+      "ja": "\u30b9\u30ce\u30fc\u30e2\u30fc\u30d3\u30eb",
+      "parentActivityType": "winter_sports",
+      "parentActivityTypeId": 165,
+      "pt": "Mota de neve",
+      "zh": "\u96ea\u4e0a\u6469\u6258\u8f66"
+    },
+    "speed_walking": {
+      "activityType": "speed_walking",
+      "activityTypeId": 16,
+      "de": "Nordic Walking",
+      "en": "Speed Walking",
+      "es": "Marcha",
+      "fr": "Marche rapide",
+      "it": "Camminata veloce",
+      "ja": "\u30b9\u30d4\u30fc\u30c9\u30a6\u30a9\u30fc\u30ad\u30f3\u30b0",
+      "parentActivityType": "walking",
+      "parentActivityTypeId": 9,
+      "pt": "Marcha atl\u00e9tica",
+      "zh": "\u7ade\u8d70"
+    },
+    "stair_climbing": {
+      "activityType": "stair_climbing",
+      "activityTypeId": 31,
+      "de": "Treppenlauf",
+      "en": "Stair Stepper",
+      "es": "Ascenso de escaleras",
+      "fr": "Simulateur d'escalier",
+      "it": "Stair Climbing",
+      "ja": "\u30b9\u30c6\u30a2\u30af\u30e9\u30a4\u30e0",
+      "parentActivityType": "fitness_equipment",
+      "parentActivityTypeId": 29,
+      "pt": "Step",
+      "zh": "\u767b\u68af\u8fd0\u52a8"
+    },
+    "stand_up_paddleboarding": {
+      "activityType": "stand_up_paddleboarding",
+      "activityTypeId": 87,
+      "de": "Stand Up Paddleboarding",
+      "en": "Stand Up Paddleboarding",
+      "es": "Paddle surf",
+      "fr": "Stand Up Paddleboarding",
+      "it": "Stand Up Paddleboarding",
+      "ja": "\u30b9\u30bf\u30f3\u30c9\u30a2\u30c3\u30d7\u30d1\u30c9\u30eb\u30b5\u30fc\u30d5\u30a3\u30f3",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Stand Up Paddleboarding",
+      "zh": "\u7acb\u5f0f\u5355\u6868\u51b2\u6d6a"
+    },
+    "steps": {
+      "activityType": "steps",
+      "activityTypeId": 108,
+      "de": "Steps",
+      "en": "Steps",
+      "es": "Steps",
+      "fr": "Steps",
+      "it": "Steps",
+      "ja": "\u30b9\u30c6\u30c3\u30d7",
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17,
+      "pt": "Steps",
+      "zh": "\u6b65\u6570"
+    },
+    "stop_watch": {
+      "activityType": "stop_watch",
+      "activityTypeId": 151,
+      "en": "Stopwatch",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4
+    },
+    "street_running": {
+      "activityType": "street_running",
+      "activityTypeId": 7,
+      "de": "Stra\u00dfenlauf",
+      "en": "Street Running",
+      "es": "Asfalto",
+      "fr": "Course \u00e0 pied urbaine",
+      "it": "Corsa su strada",
+      "ja": "\u30b9\u30c8\u30ea\u30fc\u30c8\u30e9\u30f3",
+      "parentActivityType": "running",
+      "parentActivityTypeId": 1,
+      "pt": "Jogging urbano",
+      "zh": "\u8857\u9053\u8def\u8dd1"
+    },
+    "strength_training": {
+      "activityType": "strength_training",
+      "activityTypeId": 13,
+      "de": "Krafttraining",
+      "en": "Strength Training",
+      "es": "Entrenamiento de fuerza",
+      "fr": "Musculation",
+      "it": "Potenziamento",
+      "ja": "\u7b4b\u529b\u30c8\u30ec\u30fc\u30cb\u30f3\u30b0",
+      "parentActivityType": "fitness_equipment",
+      "parentActivityTypeId": 29,
+      "pt": "Treino de for\u00e7a",
+      "zh": "\u91cd\u91cf\u8bad\u7ec3"
+    },
+    "surfing": {
+      "activityType": "surfing",
+      "activityTypeId": 137,
+      "de": "Surfen",
+      "en": "Surfing",
+      "es": "Surf",
+      "fr": "Surf",
+      "it": "Surf",
+      "ja": "\u30b5\u30fc\u30d5\u30a3\u30f3",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Surf",
+      "zh": "\u51b2\u6d6a"
+    },
+    "swimToBikeTransition": {
+      "activityType": "swimToBikeTransition",
+      "activityTypeId": 84,
+      "de": "\u00dcbergang Schwimmen-Radfahren",
+      "en": "Swim to Bike Transition",
+      "es": "Transici\u00f3n nataci\u00f3n-bicicleta",
+      "fr": "Transition entre natation et v\u00e9lo",
+      "it": "Transizione da nuoto a bicicletta",
+      "ja": "\u30b9\u30a4\u30e0\u304b\u3089\u81ea\u8ee2\u8eca\u3078\u79fb\u884c",
+      "parentActivityType": "transition",
+      "parentActivityTypeId": 83,
+      "pt": "Transi\u00e7\u00e3o de Bicicleta para Nata\u00e7\u00e3o",
+      "zh": "\u6e38\u6cf3/\u81ea\u884c\u8f66 \u4e24\u9879\u94c1\u4eba"
+    },
+    "swimming": {
+      "activityType": "swimming",
+      "activityTypeId": 26,
+      "de": "Schwimmen",
+      "en": "Swimming",
+      "es": "Nataci\u00f3n",
+      "fr": "Natation",
+      "it": "Nuoto",
+      "ja": "\u30b9\u30a4\u30df\u30f3\u30b0",
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17,
+      "pt": "Nata\u00e7\u00e3o",
+      "zh": "\u6e38\u6cf3"
+    },
+    "tennis": {
+      "activityType": "tennis",
+      "activityTypeId": 142,
+      "de": "TENNIS",
+      "en": "TENNIS",
+      "es": "TENNIS",
+      "fr": "TENNIS",
+      "it": "TENNIS",
+      "ja": "TENNIS",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "TENNIS",
+      "zh": "TENNIS"
+    },
+    "track_cycling": {
+      "activityType": "track_cycling",
+      "activityTypeId": 21,
+      "de": "Bahnradsport",
+      "en": "Track Cycling",
+      "es": "Ciclismo en pista",
+      "fr": "Cyclisme sur piste",
+      "it": "Ciclismo su pista",
+      "ja": "\u30c8\u30e9\u30c3\u30af\u30b5\u30a4\u30af\u30ea\u30f3\u30b0",
+      "parentActivityType": "cycling",
+      "parentActivityTypeId": 2,
+      "pt": "Ciclismo de pista",
+      "zh": "\u573a\u5730\u81ea\u884c\u8f66"
+    },
+    "track_running": {
+      "activityType": "track_running",
+      "activityTypeId": 8,
+      "de": "Laufen auf der Bahn",
+      "en": "Track Running",
+      "es": "Carrera en pista",
+      "fr": "Course \u00e0 pied sur piste",
+      "it": "Corsa su pista",
+      "ja": "\u30c8\u30e9\u30c3\u30af\u30e9\u30f3\u30cb\u30f3\u30b0",
+      "parentActivityType": "running",
+      "parentActivityTypeId": 1,
+      "pt": "Atletismo de pista",
+      "zh": "\u7530\u5f84\u573a\u8dd1"
+    },
+    "trail_running": {
+      "activityType": "trail_running",
+      "activityTypeId": 6,
+      "de": "Trailrunning",
+      "en": "Trail Running",
+      "es": "Trail running",
+      "fr": "Course \u00e0 pied tout terrain",
+      "it": "Corsa su sentiero",
+      "ja": "\u30c8\u30ec\u30a4\u30eb\u30e9\u30f3\u30cb\u30f3\u30b0",
+      "parentActivityType": "running",
+      "parentActivityTypeId": 1,
+      "pt": "Jogging em terra",
+      "zh": "\u8d8a\u91ce\u8dd1"
+    },
+    "transition": {
+      "activityType": "transition",
+      "activityTypeId": 83,
+      "de": "\u00dcbergang",
+      "en": "Transition",
+      "es": "Transici\u00f3n",
+      "fr": "Transition",
+      "it": "Transizione",
+      "ja": "\u30c8\u30e9\u30f3\u30b8\u30b7\u30e7\u30f3",
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17,
+      "pt": "Transi\u00e7\u00e3o",
+      "zh": "\u8f6c\u6362"
+    },
+    "treadmill_running": {
+      "activityType": "treadmill_running",
+      "activityTypeId": 18,
+      "de": "Laufbandtraining",
+      "en": "Treadmill Running",
+      "es": "Carrera en cinta",
+      "fr": "Course \u00e0 pied sur tapis roulant",
+      "it": "Corsa su tapis roulant",
+      "ja": "\u30c8\u30ec\u30c3\u30c9\u30df\u30eb\u30e9\u30f3\u30cb\u30f3\u30b0",
+      "parentActivityType": "running",
+      "parentActivityTypeId": 1,
+      "pt": "Jogging em passadeira",
+      "zh": "\u8dd1\u6b65\u673a"
+    },
+    "uncategorized": {
+      "activityType": "uncategorized",
+      "activityTypeId": 12,
+      "de": "Nicht klassifiziert",
+      "en": "Uncategorized",
+      "es": "Sin clasificar",
+      "fr": "Sans cat\u00e9gorie",
+      "it": "Non classificata",
+      "ja": "\u672a\u5206\u985e",
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17,
+      "pt": "Sem categoria",
+      "zh": "\u672a\u5206\u7c7b"
+    },
+    "virtual_ride": {
+      "activityType": "virtual_ride",
+      "activityTypeId": 152,
+      "en": "Virtual Cycling",
+      "parentActivityType": "cycling",
+      "parentActivityTypeId": 2
+    },
+    "virtual_run": {
+      "activityType": "virtual_run",
+      "activityTypeId": 153,
+      "en": "Virtual Running",
+      "parentActivityType": "running",
+      "parentActivityTypeId": 1
+    },
+    "wakeboarding": {
+      "activityType": "wakeboarding",
+      "activityTypeId": 138,
+      "de": "Wakeboarding",
+      "en": "Wakeboarding",
+      "es": "Esqu\u00ed acu\u00e1tico",
+      "fr": "Wakeboard",
+      "it": "Wakeboard",
+      "ja": "\u30a6\u30a7\u30a4\u30af\u30dc\u30fc\u30c9",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Wakeboard",
+      "zh": "\u6ed1\u6c34"
+    },
+    "walking": {
+      "activityType": "walking",
+      "activityTypeId": 9,
+      "de": "Gehen",
+      "en": "Walking",
+      "es": "Caminata",
+      "fr": "Marche \u00e0 pied",
+      "it": "Camminata",
+      "ja": "\u30a6\u30a9\u30fc\u30ad\u30f3\u30b0",
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17,
+      "pt": "Caminhar",
+      "zh": "\u6b65\u884c"
+    },
+    "whitewater_rafting_kayaking": {
+      "activityType": "whitewater_rafting_kayaking",
+      "activityTypeId": 60,
+      "de": "Rafting",
+      "en": "Whitewater Kayaking/Rafting",
+      "es": "Rafting",
+      "fr": "Rafting/Kayak d'eau vive",
+      "it": "Kayak/Rafting",
+      "ja": "\u30db\u30ef\u30a4\u30c8\u30a6\u30a9\u30fc\u30bf\u30fc \u30ab\u30e4\u30c3\u30af/\u30e9\u30d5\u30c6\u30a3\u30f3\u30b0",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Caiaque/rafting de rio",
+      "zh": "\u6fc0\u6d41\u72ec\u6728\u821f\uff0f\u6f02\u6d41"
+    },
+    "wind_kite_surfing": {
+      "activityType": "wind_kite_surfing",
+      "activityTypeId": 41,
+      "de": "Wind-/Kitesurfen",
+      "en": "Wind/Kite Surfing",
+      "es": "Windsurf",
+      "fr": "Planche \u00e0 voile/Kitesurf",
+      "it": "Windsurf/Kitesurf",
+      "ja": "\u30a6\u30a4\u30f3\u30c9/\u30ab\u30a4\u30c8 \u30b5\u30fc\u30d5\u30a3\u30f3",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Windsurfing/Kitesurfing",
+      "zh": "\u98ce\u5e06\uff0f\u98ce\u7b5d\u51b2\u6d6a"
+    },
+    "wingsuit_flying": {
+      "activityType": "wingsuit_flying",
+      "activityTypeId": 141,
+      "de": "Wingsuit-Fliegen",
+      "en": "Wingsuit Flying",
+      "es": "Vuelo con traje con alas",
+      "fr": "Vol en wingsuit",
+      "it": "Tuta alare",
+      "ja": "\u30a6\u30a4\u30f3\u30b0\u30b9\u30fc\u30c4\u30d5\u30e9\u30a4\u30f3\u30b0",
+      "parentActivityType": "other",
+      "parentActivityTypeId": 4,
+      "pt": "Voo com wingsuit",
+      "zh": "\u7ffc\u88c5\u98de\u884c"
+    },
+    "winter_sports": {
+      "activityType": "winter_sports",
+      "activityTypeId": 165,
+      "parentActivityType": "all",
+      "parentActivityTypeId": 17
+    },
+    "yoga": {
+      "activityType": "yoga",
+      "activityTypeId": 163,
+      "en": "Yoga",
+      "parentActivityType": "fitness_equipment",
+      "parentActivityTypeId": 29
+    }
+  },
+  "gc_fields_display": {
+    "BeginLatitude": {
+      "en": "Beginnning Latitude",
+      "ja": "\u958b\u59cb\u6642\u7def\u5ea6",
+      "zh": "\u8d77\u59cb\u7eac\u5ea6"
+    },
+    "BeginLongitude": {
+      "en": "Beginning Longitude",
+      "ja": "\u958b\u59cb\u6642\u7d4c\u5ea6",
+      "zh": "\u8d77\u59cb\u7ecf\u5ea6"
+    },
+    "BeginPowerTwentyMinutesDistance": {},
+    "BeginPowerTwentyMinutesTime": {},
+    "BeginPowerTwentyMinutesTimerTime": {},
+    "BeginTimestamp": {},
+    "DirectLactateThresholdHeartRate": {
+      "en": "Lactate Threshold"
+    },
+    "DirectLactateThresholdSpeed": {
+      "en": "Lactate Threshold Speed"
+    },
+    "DirectVO2Max": {
+      "en": "VO2 Max"
+    },
+    "DirectVO2MaxCycling": {
+      "en": "VO2 Max"
+    },
+    "EndLatitude": {},
+    "EndLongitude": {},
+    "EndPowerTwentyMinutesDistance": {},
+    "EndPowerTwentyMinutesTime": {},
+    "EndPowerTwentyMinutesTimerTime": {},
+    "EndTimestamp": {},
+    "GainCorrectedElevation": {},
+    "GainElevation": {
+      "de": "Positiver H\u00f6henunterschied",
+      "en": "Elevation Gain",
+      "es": "Altura ganada",
+      "fr": "Gain d'altitude",
+      "it": "Aumento di quota",
+      "ja": "\u9ad8\u5ea6\u4e0a\u6607\u5024",
+      "pt": "Ganho de eleva\u00e7\u00e3o",
+      "zh": "\u9ad8\u5ea6\u589e\u52a0"
+    },
+    "GainUncorrectedElevation": {},
+    "LossCorrectedElevation": {},
+    "LossElevation": {
+      "de": "Negativer H\u00f6henunterschied",
+      "en": "Elevation Loss",
+      "es": "Altura perdida",
+      "fr": "Perte d'altitude",
+      "it": "Perdita di quota",
+      "ja": "\u9ad8\u5ea6\u4e0b\u964d\u5024",
+      "pt": "Perda de eleva\u00e7\u00e3o",
+      "zh": "\u9ad8\u5ea6\u51cf\u5c11"
+    },
+    "LossUncorrectedElevation": {},
+    "MaxAirPower": {
+      "en": "Max Air Power"
+    },
+    "MaxAirTemperature": {
+      "de": "Max. Temperatur",
+      "en": "Max Temperature",
+      "es": "Temperatura m\u00e1xima",
+      "fr": "Temp\u00e9rature max.",
+      "it": "Temperatura max",
+      "ja": "\u6700\u9ad8\u6c17\u6e29",
+      "pt": "Temperatura M\u00e1x.",
+      "zh": "\u6700\u9ad8\u6e29\u5ea6"
+    },
+    "MaxBikeCadence": {
+      "de": "Max. Trittfrequenz (Fahrrad)",
+      "en": "Max Bike Cadence",
+      "es": "Cadencia de pedaleo m\u00e1xima",
+      "fr": "Cadence de v\u00e9lo max.",
+      "it": "Cadenza pedalata max",
+      "ja": "\u6700\u9ad8\u30d0\u30a4\u30af\u30b1\u30a4\u30c7\u30f3\u30b9",
+      "pt": "Cad\u00eancia m\u00e1x. de bicicleta",
+      "zh": "\u6700\u9ad8\u81ea\u884c\u8f66\u8e0f\u9891"
+    },
+    "MaxCorrectedElevation": {},
+    "MaxDoubleCadence": {
+      "de": "Max Run Cadence",
+      "en": "Max Run Cadence",
+      "es": "Max Run Cadence",
+      "fr": "Max Run Cadence",
+      "it": "Max Run Cadence",
+      "ja": "\u6700\u9ad8\u30e9\u30f3\u30b1\u30a4\u30c7\u30f3\u30b9",
+      "pt": "Max Run Cadence",
+      "zh": "\u6700\u9ad8\u8dd1\u6b65\u8e0f\u9891"
+    },
+    "MaxElevation": {
+      "de": "Max. H\u00f6he",
+      "en": "Max Elevation",
+      "es": "Altura m\u00e1xima",
+      "fr": "Altitude max.",
+      "it": "Quota max",
+      "ja": "\u6700\u9ad8\u9ad8\u5ea6",
+      "pt": "Eleva\u00e7\u00e3o m\u00e1x.",
+      "zh": "\u6700\u9ad8\u6d77\u62d4"
+    },
+    "MaxFormPower": {
+      "en": "Max Form Power"
+    },
+    "MaxFractionalCadence": {
+      "de": "Max Run Cadence",
+      "en": "Max Run Cadence",
+      "es": "Max Run Cadence",
+      "fr": "Max Run Cadence",
+      "it": "Max Run Cadence",
+      "ja": "\u6700\u9ad8\u30e9\u30f3\u30b1\u30a4\u30c7\u30f3\u30b9",
+      "pt": "Max Run Cadence",
+      "zh": "\u6700\u9ad8\u8dd1\u6b65\u8e0f\u9891"
+    },
+    "MaxGroundContactBalanceLeft": {
+      "en": "Max Contact Balance Left"
+    },
+    "MaxHeartRate": {
+      "de": "Max. HF",
+      "en": "Max HR",
+      "es": "FC m\u00e1x.",
+      "fr": "FC max.",
+      "it": "FC max",
+      "ja": "\u6700\u9ad8\u5fc3\u62cd",
+      "pt": "RC m\u00e1x.",
+      "zh": "\u6700\u9ad8\u5fc3\u7387"
+    },
+    "MaxLegSpringStiffness": {
+      "en": "Max Leg Spring"
+    },
+    "MaxPace": {
+      "de": "Beste Pace",
+      "en": "Best Pace",
+      "es": "Ritmo \u00f3ptimo",
+      "fr": "Meilleure allure",
+      "it": "Passo migliore",
+      "ja": "\u30d9\u30b9\u30c8\u30da\u30fc\u30b9",
+      "pt": "Melhor ritmo",
+      "zh": "\u6700\u4f73\u914d\u901f"
+    },
+    "MaxPower": {
+      "en": "Max Power"
+    },
+    "MaxPowerTwentyMinutes": {
+      "en": "Max Avg Power (20 min)"
+    },
+    "MaxRunCadence": {
+      "de": "Max. Schrittfrequenz (Laufen)",
+      "en": "Max Run Cadence",
+      "es": "Cadencia de carrera m\u00e1xima",
+      "fr": "Cadence de course max.",
+      "it": "Ritmo di corsa max",
+      "ja": "\u6700\u9ad8\u30e9\u30f3\u30b1\u30a4\u30c7\u30f3\u30b9",
+      "pt": "Cad\u00eancia m\u00e1x. de corrida",
+      "zh": "\u6700\u9ad8\u8dd1\u6b65\u8e0f\u9891"
+    },
+    "MaxSpeed": {
+      "de": "Max. Geschw.",
+      "en": "Max Speed",
+      "es": "Velocidad m\u00e1xima",
+      "fr": "Vitesse max.",
+      "it": "Velocit\u00e0 max",
+      "ja": "\u6700\u9ad8\u30b9\u30d4\u30fc\u30c9",
+      "pt": "Veloc. M\u00e1xima",
+      "zh": "\u6700\u9ad8\u901f\u5ea6"
+    },
+    "MaxStrokeCadence": {
+      "en": "Max Cadence"
+    },
+    "MaxSwimCadence": {
+      "de": "Maximale Schwimmfrequenz",
+      "en": "Max Swim Cadence",
+      "es": "Cadencia de nado m\u00e1xima",
+      "fr": "Cadence de nage maximale",
+      "it": "Cadenza massima",
+      "ja": "\u6700\u5927\u6c34\u6cf3\u30b1\u30a4\u30c7\u30f3\u30b9",
+      "pt": "M\u00e1ximo de cad\u00eancia de nata\u00e7\u00e3o",
+      "zh": "\u6700\u5927\u5212\u9891"
+    },
+    "MaxUncorrectedElevation": {},
+    "MaxVerticalRatio": {
+      "en": "Max Vertical Ratio"
+    },
+    "MinAirPower": {
+      "en": "Min Air Power"
+    },
+    "MinAirTemperature": {
+      "de": "Min. Temperatur",
+      "en": "Min Temperature",
+      "es": "Temperatura m\u00ednima",
+      "fr": "Temp\u00e9rature min.",
+      "it": "Temperatura min",
+      "ja": "\u6bce\u5206\u6c17\u6e29",
+      "pt": "Temperatura M\u00edn.",
+      "zh": "\u6700\u4f4e\u6e29\u5ea6"
+    },
+    "MinBikeCadence": {},
+    "MinCorrectedElevation": {},
+    "MinEfficiency": {
+      "de": "Beste Effizienz",
+      "en": "Best Efficiency",
+      "es": "Mejor eficacia",
+      "fr": "Meilleure efficacit\u00e9",
+      "it": "Efficienza migliore",
+      "ja": "\u6700\u9ad8\u52b9\u7387",
+      "pt": "Melhor efici\u00eancia",
+      "zh": "\u6700\u4f73\u6548\u7387"
+    },
+    "MinElevation": {
+      "de": "Min. H\u00f6he",
+      "en": "Min Elevation",
+      "es": "Altura m\u00ednima",
+      "fr": "Altitude min.",
+      "it": "Quota min",
+      "ja": "\u6700\u4f4e\u9ad8\u5ea6",
+      "pt": "Eleva\u00e7\u00e3o m\u00edn.",
+      "zh": "\u6700\u4f4e\u6d77\u62d4"
+    },
+    "MinFormPower": {
+      "en": "Min Form Power"
+    },
+    "MinGroundContactBalanceLeft": {
+      "en": "Min Contact Balance Left"
+    },
+    "MinHeartRate": {
+      "en": "Min HR"
+    },
+    "MinLegSpringStiffness": {
+      "en": "Min Leg Spring"
+    },
+    "MinPace": {},
+    "MinPower": {
+      "en": "Min Power"
+    },
+    "MinRunCadence": {},
+    "MinSpeed": {
+      "de": "Min. Geschwindigkeit",
+      "en": "Min Speed",
+      "es": "Velocidad m\u00ednima",
+      "fr": "Vitesse min.",
+      "it": "Velocit\u00e0 min",
+      "ja": "\u6700\u4f4e\u30b9\u30d4\u30fc\u30c9",
+      "pt": "Veloc. m\u00edn.",
+      "zh": "\u6700\u4f4e\u901f\u5ea6"
+    },
+    "MinStrokes": {
+      "de": "Mindestanzahl von Z\u00fcgen",
+      "en": "Min Strokes",
+      "es": "Brazadas m\u00ednimas",
+      "fr": "Nombre minimum de mouvements",
+      "it": "Bracciate minime",
+      "ja": "\u6700\u5c0f\u30b9\u30c8\u30ed\u30fc\u30af\u6570",
+      "pt": "M\u00ednimo de bra\u00e7adas",
+      "zh": "\u6700\u5c11\u5212\u6570"
+    },
+    "MinSwolf": {
+      "de": "Bester SWOLF-Wert",
+      "en": "Best SWOLF",
+      "es": "Mejor SWOLF",
+      "fr": "Meilleur SWOLF",
+      "it": "SWOLF migliore",
+      "ja": "\u6700\u9ad8SWOLF",
+      "pt": "Melhor pontua\u00e7\u00e3o SWOLF",
+      "zh": "\u6700\u4f73 SWOLF"
+    },
+    "MinUncorrectedElevation": {},
+    "MinVerticalRatio": {
+      "en": "Min Vertical Ratio"
+    },
+    "SumDistance": {
+      "de": "Distanz",
+      "en": "Distance",
+      "es": "Distancia",
+      "fr": "Distance",
+      "it": "Distanza",
+      "ja": "\u8ddd\u96e2",
+      "pt": "Dist\u00e2ncia",
+      "zh": "\u8ddd\u79bb"
+    },
+    "SumDuration": {
+      "de": "Zeit",
+      "en": "Time",
+      "es": "Tiempo",
+      "fr": "Temps",
+      "it": "Ora",
+      "ja": "\u30bf\u30a4\u30e0",
+      "pt": "Tempo",
+      "zh": "\u65f6\u95f4"
+    },
+    "SumElapsedDuration": {
+      "de": "Elapsed Time",
+      "en": "Elapsed Time",
+      "es": "Elapsed Time",
+      "fr": "Elapsed Time",
+      "it": "Tempo trascorso",
+      "ja": "\u7d4c\u904e\u6642\u9593",
+      "pt": "Elapsed Time",
+      "zh": "\u7ecf\u8fc7\u65f6\u95f4"
+    },
+    "SumEnergy": {
+      "de": "Kalorien",
+      "en": "Calories",
+      "es": "Calor\u00edas",
+      "fr": "Calories",
+      "it": "Calorie",
+      "ja": "\u30ab\u30ed\u30ea\u30fc",
+      "pt": "Calorias",
+      "zh": "\u5361\u8def\u91cc"
+    },
+    "SumIntensityFactor": {
+      "en": "Intensity Factor (IF)"
+    },
+    "SumMovingDuration": {
+      "de": "Zeit in Bewegung",
+      "en": "Moving Time",
+      "es": "Tiempo en movimiento",
+      "fr": "Tps d\u00e9plac.",
+      "it": "Tempo in movim.",
+      "ja": "\u79fb\u52d5\u6642\u9593",
+      "pt": "Tempo Movimt.",
+      "zh": "\u79fb\u52a8\u65f6\u95f4"
+    },
+    "SumNumActiveLengths": {
+      "de": "Anzahl der Bahnen",
+      "en": "Number of Lengths",
+      "es": "N\u00famero de largos",
+      "fr": "Nombre de longueurs",
+      "it": "Numero di vasche",
+      "ja": "\u30e9\u30c3\u30d7\u6570\uff08\u7247\u9053\uff09",
+      "pt": "N\u00famero de piscinas",
+      "zh": "\u8d9f\u6570"
+    },
+    "SumNumLengths": {
+      "de": "Anzahl der Bahnen",
+      "en": "Number of Lengths",
+      "es": "N\u00famero de largos",
+      "fr": "Nombre de longueurs",
+      "it": "Numero di vasche",
+      "ja": "\u30e9\u30c3\u30d7\u6570\uff08\u7247\u9053\uff09",
+      "pt": "N\u00famero de piscinas",
+      "zh": "\u8d9f\u6570"
+    },
+    "SumPoolLength": {
+      "de": "Schwimmbadl\u00e4nge",
+      "en": "Pool Length",
+      "es": "Largo de piscina",
+      "fr": "Longueur de la piscine",
+      "it": "Lunghezza piscina",
+      "ja": "\u30d7\u30fc\u30eb\u306e\u9577\u3055",
+      "pt": "Comprimento da piscina",
+      "zh": "\u6cf3\u6c60\u957f\u5ea6"
+    },
+    "SumSampleCountDistance": {},
+    "SumSampleCountDoubleCadence": {},
+    "SumSampleCountDuration": {},
+    "SumSampleCountElapsedDuration": {},
+    "SumSampleCountElevation": {},
+    "SumSampleCountFractionalCadence": {},
+    "SumSampleCountHeartRate": {},
+    "SumSampleCountLatitude": {},
+    "SumSampleCountLongitude": {},
+    "SumSampleCountMovingDuration": {},
+    "SumSampleCountMovingSpeed": {},
+    "SumSampleCountRunCadence": {},
+    "SumSampleCountSpeed": {},
+    "SumSampleCountTimestamp": {},
+    "SumStep": {
+      "de": "Schritte",
+      "en": "Steps",
+      "es": "Pasos",
+      "fr": "Pas",
+      "it": "Fasi",
+      "ja": "\u30b9\u30c6\u30c3\u30d7",
+      "pt": "Passos",
+      "zh": "\u6b65\u4f10"
+    },
+    "SumStrokes": {
+      "de": "Z\u00fcge insgesamt",
+      "en": "Total Strokes",
+      "es": "Brazadas totales",
+      "fr": "Nombre total de mouvements",
+      "it": "Totale bracciate",
+      "ja": "\u5408\u8a08\u30b9\u30c8\u30ed\u30fc\u30af\u6570",
+      "pt": "Total de bra\u00e7adas",
+      "zh": "\u603b\u5212\u6570"
+    },
+    "SumTotalWork": {
+      "en": "Work"
+    },
+    "SumTrainingEffect": {
+      "de": "Training Effect",
+      "en": "Training Effect",
+      "es": "Training Effect",
+      "fr": "Training Effect",
+      "it": "Training Effect",
+      "ja": "\u30c8\u30ec\u30fc\u30cb\u30f3\u30b0\u52b9\u679c",
+      "pt": "Training Effect",
+      "zh": "\u8bad\u7ec3\u6210\u6548"
+    },
+    "SumTrainingStressScore": {
+      "en": "Training Stress Score (TSS)"
+    },
+    "ThresholdPower": {
+      "en": "threshold-:-power"
+    },
+    "WeightedMeanAirPower": {
+      "en": "Avg Air Power"
+    },
+    "WeightedMeanAirTemperature": {
+      "de": "\u00d8 Temperatur",
+      "en": "Avg Temperature",
+      "es": "Temperatura media",
+      "fr": "Temp\u00e9rature moy.",
+      "it": "Temperatura med",
+      "ja": "\u5e73\u5747\u6c17\u6e29",
+      "pt": "Temperatura M\u00e9d.",
+      "zh": "\u5e73\u5747\u6e29\u5ea6"
+    },
+    "WeightedMeanBikeCadence": {
+      "de": "\u00d8 Trittfrequenz (Fahrrad)",
+      "en": "Avg Bike Cadence",
+      "es": "Cadencia de pedaleo media",
+      "fr": "Cadence de v\u00e9lo moy.",
+      "it": "Cadenza pedalata media",
+      "ja": "\u5e73\u5747\u30d0\u30a4\u30af\u30b1\u30a4\u30c7\u30f3\u30b9",
+      "pt": "Cad\u00eancia m\u00e9dia de bicicleta",
+      "zh": "\u5e73\u5747\u81ea\u884c\u8f66\u8e0f\u9891"
+    },
+    "WeightedMeanDoubleCadence": {
+      "de": "Avg Run Cadence",
+      "en": "Avg Run Cadence",
+      "es": "Avg Run Cadence",
+      "fr": "Avg Run Cadence",
+      "it": "Avg Run Cadence",
+      "ja": "\u5e73\u5747\u30e9\u30f3\u30b1\u30a4\u30c7\u30f3\u30b9",
+      "pt": "Avg Run Cadence",
+      "zh": "\u5e73\u5747\u8dd1\u6b65\u8e0f\u9891"
+    },
+    "WeightedMeanEfficiency": {
+      "de": "Durchschnittliche Effizienz",
+      "en": "Avg Efficiency",
+      "es": "Eficacia media",
+      "fr": "Efficacit\u00e9 moyenne",
+      "it": "Efficienza media",
+      "ja": "\u5e73\u5747\u52b9\u7387",
+      "pt": "M\u00e9dia de efici\u00eancia",
+      "zh": "\u5e73\u5747\u6548\u7387"
+    },
+    "WeightedMeanElevation": {
+      "en": "Avg Elevation"
+    },
+    "WeightedMeanFormPower": {
+      "en": "Avg Form Power"
+    },
+    "WeightedMeanFractionalCadence": {
+      "de": "Avg Run Cadence",
+      "en": "Avg Run Cadence",
+      "es": "Avg Run Cadence",
+      "fr": "Avg Run Cadence",
+      "it": "Avg Run Cadence",
+      "ja": "\u5e73\u5747\u30e9\u30f3\u30b1\u30a4\u30c7\u30f3\u30b9",
+      "pt": "Avg Run Cadence",
+      "zh": "\u5e73\u5747\u8dd1\u6b65\u8e0f\u9891"
+    },
+    "WeightedMeanGroundContactBalanceLeft": {
+      "en": "Ground Contact Balance Left"
+    },
+    "WeightedMeanGroundContactTime": {
+      "de": "Avg Ground Contact Time",
+      "en": "Avg Ground Contact Time",
+      "es": "Avg Ground Contact Time",
+      "fr": "Avg Ground Contact Time",
+      "it": "Avg Ground Contact Time",
+      "ja": "\u5e73\u5747\u5730\u9762\u63a5\u5730\u6642\u9593",
+      "pt": "Avg Ground Contact Time",
+      "zh": "\u5e73\u5747\u89e6\u5730\u65f6\u95f4"
+    },
+    "WeightedMeanHeartRate": {
+      "de": "\u00d8 HF",
+      "en": "Avg HR",
+      "es": "FC media",
+      "fr": "FC moy.",
+      "it": "FC Media",
+      "ja": "\u5e73\u5747\u5fc3\u62cd",
+      "pt": "RC m\u00e9d.",
+      "zh": "\u5e73\u5747\u5fc3\u7387"
+    },
+    "WeightedMeanLeftPedalSmoothness": {
+      "en": "Pedal Smoothness Left (%)"
+    },
+    "WeightedMeanLeftTorqueEffectiveness": {
+      "en": "Torque Effectiveness Left (%)"
+    },
+    "WeightedMeanLegSpringStiffness": {
+      "en": "Leg Spring"
+    },
+    "WeightedMeanMovingPace": {
+      "de": "Avg Moving Pace",
+      "en": "Avg Moving Pace",
+      "es": "Avg Moving Pace",
+      "fr": "Avg Moving Pace",
+      "it": "Avg Moving Pace",
+      "ja": "\u5e73\u5747\u79fb\u52d5\u30da\u30fc\u30b9",
+      "pt": "Avg Moving Pace",
+      "zh": "\u5e73\u5747\u79fb\u52a8\u914d\u901f"
+    },
+    "WeightedMeanMovingSpeed": {
+      "de": "Avg Moving Speed",
+      "en": "Avg Moving Speed",
+      "es": "Avg Moving Speed",
+      "fr": "Avg Moving Speed",
+      "it": "Velocit\u00e0 media in movim.",
+      "ja": "\u5e73\u5747\u79fb\u52d5\u901f\u5ea6",
+      "pt": "Avg Moving Speed",
+      "zh": "\u5e73\u5747\u79fb\u52a8\u901f\u5ea6"
+    },
+    "WeightedMeanNormalizedPower": {
+      "en": "Normalized Power (NP)"
+    },
+    "WeightedMeanPace": {
+      "de": "\u00d8 Pace",
+      "en": "Avg Pace",
+      "es": "Ritmo medio",
+      "fr": "Allure moy.",
+      "it": "Passo medio",
+      "ja": "\u5e73\u5747\u30da\u30fc\u30b9",
+      "pt": "Ritmo m\u00e9dio",
+      "zh": "\u5e73\u5747\u914d\u901f"
+    },
+    "WeightedMeanPower": {
+      "en": "Avg Power"
+    },
+    "WeightedMeanRightBalance": {
+      "en": "Balance Right (%)"
+    },
+    "WeightedMeanRunCadence": {
+      "de": "\u00d8 Schrittfrequenz (Laufen)",
+      "en": "Avg Run Cadence",
+      "es": "Cadencia de carrera media",
+      "fr": "Cadence de course moy.",
+      "it": "Cadenza di corsa media",
+      "ja": "\u5e73\u5747\u30e9\u30f3\u30b1\u30a4\u30c7\u30f3\u30b9",
+      "pt": "Cad\u00eancia m\u00e9dia de corrida",
+      "zh": "\u5e73\u5747\u8dd1\u6b65\u8e0f\u9891"
+    },
+    "WeightedMeanSpeed": {
+      "de": "\u00d8 Geschw",
+      "en": "Avg Speed",
+      "es": "Velocidad media",
+      "fr": "Vitesse moy.",
+      "it": "Velocit\u00e0 media",
+      "ja": "\u5e73\u5747\u30b9\u30d4\u30fc\u30c9",
+      "pt": "Veloc. M\u00e9dia",
+      "zh": "\u5e73\u5747\u901f\u5ea6"
+    },
+    "WeightedMeanStrideLength": {
+      "de": "Avg Stride Length",
+      "en": "Avg Stride Length",
+      "es": "Avg Stride Length",
+      "fr": "Avg Stride Length",
+      "it": "Avg Stride Length",
+      "ja": "\u5e73\u5747\u6b69\u5e45",
+      "pt": "Avg Stride Length",
+      "zh": "\u5e73\u5747\u6b65\u5e45"
+    },
+    "WeightedMeanStrokeCadence": {
+      "en": "Cadence"
+    },
+    "WeightedMeanStrokeDistance": {
+      "en": "Stroke Distance"
+    },
+    "WeightedMeanStrokes": {
+      "de": "Durchschnittliche Anzahl von Z\u00fcgen",
+      "en": "Avg Strokes",
+      "es": "Promedio brazadas",
+      "fr": "Nombre moyen de mouvements",
+      "it": "Bracciate medie",
+      "ja": "\u5e73\u5747\u30b9\u30c8\u30ed\u30fc\u30af\u6570",
+      "pt": "M\u00e9dia de bra\u00e7adas",
+      "zh": "\u5e73\u5747\u5212\u6570"
+    },
+    "WeightedMeanSwimCadence": {
+      "de": "Durchschnittliche Schwimmfrequenz",
+      "en": "Avg Swim Cadence",
+      "es": "Cadencia de nado media",
+      "fr": "Cadence de nage moyenne",
+      "it": "Cadenza media",
+      "ja": "\u5e73\u5747\u6c34\u6cf3\u30b1\u30a4\u30c7\u30f3\u30b9",
+      "pt": "M\u00e9dia de cad\u00eancia de nata\u00e7\u00e3o",
+      "zh": "\u5e73\u5747\u5212\u9891"
+    },
+    "WeightedMeanSwolf": {
+      "de": "Durchschnittlicher SWOLF-Wert",
+      "en": "Avg SWOLF",
+      "es": "SWOLF medio",
+      "fr": "SWOLF moyen",
+      "it": "SWOLF medio",
+      "ja": "\u5e73\u5747SWOLF",
+      "pt": "M\u00e9dia de pontua\u00e7\u00e3o SWOLF",
+      "zh": "\u5e73\u5747 SWOLF"
+    },
+    "WeightedMeanVerticalOscillation": {
+      "de": "Avg Vertical Oscillation",
+      "en": "Avg Vertical Oscillation",
+      "es": "Avg Vertical Oscillation",
+      "fr": "Avg Vertical Oscillation",
+      "it": "Avg Vertical Oscillation",
+      "ja": "\u5e73\u5747\u30d0\u30a6\u30f3\u30b9\uff08\u4e0a\u4e0b\u52d5\uff09",
+      "pt": "Avg Vertical Oscillation",
+      "zh": "\u5e73\u5747\u5782\u76f4\u6446\u5e45"
+    },
+    "WeightedMeanVerticalRatio": {
+      "en": "Vertical Ratio"
+    },
+    "WeightedMomentaryEnergyExpenditure": {
+      "en": "Momentary Energy Exp"
+    },
+    "WeightedRelativeRunningEconomy": {
+      "en": "Relative Running Economy"
+    }
+  },
+  "gc_fields_uom": {
+    "BeginLatitude": {
+      "all": {
+        "metric": "dd",
+        "statute": "dd"
+      }
+    },
+    "BeginLongitude": {
+      "all": {
+        "metric": "dd",
+        "statute": "dd"
+      }
+    },
+    "BeginPowerTwentyMinutesDistance": {
+      "all": {
+        "metric": "kilometer",
+        "statute": "mile"
+      }
+    },
+    "BeginPowerTwentyMinutesTime": {
+      "all": {
+        "metric": "second",
+        "statute": null
+      }
+    },
+    "BeginPowerTwentyMinutesTimerTime": {
+      "all": {
+        "metric": "second",
+        "statute": null
+      }
+    },
+    "BeginTimestamp": {
+      "all": {
+        "metric": "Europe/London",
+        "statute": "Europe/London"
+      }
+    },
+    "DirectLactateThresholdHeartRate": {
+      "all": {
+        "metric": "bpm",
+        "statute": null
+      }
+    },
+    "DirectLactateThresholdSpeed": {
+      "all": {
+        "metric": "centimetersPerMillisecond",
+        "statute": null
+      }
+    },
+    "DirectVO2Max": {
+      "all": {
+        "metric": "ml/kg/min",
+        "statute": "ml/kg/min"
+      }
+    },
+    "DirectVO2MaxCycling": {
+      "all": {
+        "metric": "ml/kg/min",
+        "statute": null
+      }
+    },
+    "EndLatitude": {
+      "all": {
+        "metric": "dd",
+        "statute": "dd"
+      }
+    },
+    "EndLongitude": {
+      "all": {
+        "metric": "dd",
+        "statute": "dd"
+      }
+    },
+    "EndPowerTwentyMinutesDistance": {
+      "all": {
+        "metric": "kilometer",
+        "statute": "mile"
+      }
+    },
+    "EndPowerTwentyMinutesTime": {
+      "all": {
+        "metric": "second",
+        "statute": null
+      }
+    },
+    "EndPowerTwentyMinutesTimerTime": {
+      "all": {
+        "metric": "second",
+        "statute": null
+      }
+    },
+    "EndTimestamp": {
+      "all": {
+        "metric": "Europe/London",
+        "statute": "Europe/London"
+      }
+    },
+    "GainCorrectedElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "GainElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "GainUncorrectedElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "LossCorrectedElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "LossElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "LossUncorrectedElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "MaxAirPower": {
+      "all": {
+        "metric": "watt",
+        "statute": null
+      }
+    },
+    "MaxAirTemperature": {
+      "all": {
+        "metric": "celcius",
+        "statute": "fahrenheit"
+      }
+    },
+    "MaxBikeCadence": {
+      "all": {
+        "metric": "rpm",
+        "statute": "rpm"
+      }
+    },
+    "MaxCorrectedElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "MaxDoubleCadence": {
+      "all": {
+        "metric": "stepsPerMinute",
+        "statute": "stepsPerMinute"
+      }
+    },
+    "MaxElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "MaxFormPower": {
+      "all": {
+        "metric": "watt",
+        "statute": null
+      }
+    },
+    "MaxFractionalCadence": {
+      "all": {
+        "metric": "rpm",
+        "statute": "rpm"
+      }
+    },
+    "MaxGroundContactBalanceLeft": {
+      "all": {
+        "metric": "percent",
+        "statute": null
+      }
+    },
+    "MaxHeartRate": {
+      "all": {
+        "metric": "bpm",
+        "statute": "bpm"
+      }
+    },
+    "MaxLegSpringStiffness": {
+      "all": {
+        "metric": "kN/m",
+        "statute": null
+      }
+    },
+    "MaxPace": {
+      "all": {
+        "metric": "minperkm",
+        "statute": "minpermile"
+      },
+      "swimming": {
+        "metric": "min100m",
+        "statute": "min100m"
+      }
+    },
+    "MaxPower": {
+      "all": {
+        "metric": "watt",
+        "statute": null
+      }
+    },
+    "MaxPowerTwentyMinutes": {
+      "all": {
+        "metric": "watt",
+        "statute": null
+      }
+    },
+    "MaxRunCadence": {
+      "all": {
+        "metric": "stepsPerMinute",
+        "statute": "stepsPerMinute"
+      }
+    },
+    "MaxSpeed": {
+      "all": {
+        "metric": "kph",
+        "statute": "mph"
+      },
+      "swimming": {
+        "metric": "hmph",
+        "statute": "hmph"
+      }
+    },
+    "MaxStrokeCadence": {
+      "all": {
+        "metric": "strokesPerMinute",
+        "statute": null
+      }
+    },
+    "MaxSwimCadence": {
+      "all": {
+        "metric": "strokesPerMinute",
+        "statute": "strokesPerMinute"
+      }
+    },
+    "MaxUncorrectedElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "MaxVerticalRatio": {
+      "all": {
+        "metric": "percent",
+        "statute": null
+      }
+    },
+    "MinAirPower": {
+      "all": {
+        "metric": "watt",
+        "statute": null
+      }
+    },
+    "MinAirTemperature": {
+      "all": {
+        "metric": "celcius",
+        "statute": "fahrenheit"
+      }
+    },
+    "MinBikeCadence": {
+      "all": {
+        "metric": "rpm",
+        "statute": "rpm"
+      }
+    },
+    "MinCorrectedElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "MinEfficiency": {
+      "all": {
+        "metric": "dimensionless",
+        "statute": "dimensionless"
+      }
+    },
+    "MinElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "MinFormPower": {
+      "all": {
+        "metric": "watt",
+        "statute": null
+      }
+    },
+    "MinGroundContactBalanceLeft": {
+      "all": {
+        "metric": "percent",
+        "statute": null
+      }
+    },
+    "MinHeartRate": {
+      "all": {
+        "metric": "bpm",
+        "statute": "bpm"
+      }
+    },
+    "MinLegSpringStiffness": {
+      "all": {
+        "metric": "kN/m",
+        "statute": null
+      }
+    },
+    "MinPace": {
+      "all": {
+        "metric": "minperkm",
+        "statute": "minpermile"
+      }
+    },
+    "MinPower": {
+      "all": {
+        "metric": "watt",
+        "statute": null
+      }
+    },
+    "MinRunCadence": {
+      "all": {
+        "metric": "stepsPerMinute",
+        "statute": "stepsPerMinute"
+      }
+    },
+    "MinSpeed": {
+      "all": {
+        "metric": "kph",
+        "statute": "mph"
+      }
+    },
+    "MinStrokes": {
+      "all": {
+        "metric": "dimensionless",
+        "statute": "dimensionless"
+      }
+    },
+    "MinSwolf": {
+      "all": {
+        "metric": "dimensionless",
+        "statute": "dimensionless"
+      }
+    },
+    "MinUncorrectedElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "MinVerticalRatio": {
+      "all": {
+        "metric": "percent",
+        "statute": null
+      }
+    },
+    "SumDistance": {
+      "all": {
+        "metric": "kilometer",
+        "statute": "mile"
+      },
+      "swimming": {
+        "metric": "meter",
+        "statute": "yard"
+      }
+    },
+    "SumDuration": {
+      "all": {
+        "metric": "second",
+        "statute": "second"
+      }
+    },
+    "SumElapsedDuration": {
+      "all": {
+        "metric": "second",
+        "statute": "second"
+      }
+    },
+    "SumEnergy": {
+      "all": {
+        "metric": "kilocalorie",
+        "statute": "kilocalorie"
+      }
+    },
+    "SumIntensityFactor": {
+      "all": {
+        "metric": "if",
+        "statute": null
+      }
+    },
+    "SumMovingDuration": {
+      "all": {
+        "metric": "second",
+        "statute": "second"
+      }
+    },
+    "SumNumActiveLengths": {
+      "all": {
+        "metric": "dimensionless",
+        "statute": "dimensionless"
+      }
+    },
+    "SumNumLengths": {
+      "all": {
+        "metric": "dimensionless",
+        "statute": "dimensionless"
+      }
+    },
+    "SumPoolLength": {
+      "all": {
+        "metric": "meter",
+        "statute": "yard"
+      }
+    },
+    "SumSampleCountDistance": {
+      "all": {
+        "metric": "sampleCount",
+        "statute": "sampleCount"
+      }
+    },
+    "SumSampleCountDoubleCadence": {
+      "all": {
+        "metric": "sampleCount",
+        "statute": "sampleCount"
+      }
+    },
+    "SumSampleCountDuration": {
+      "all": {
+        "metric": "sampleCount",
+        "statute": "sampleCount"
+      }
+    },
+    "SumSampleCountElapsedDuration": {
+      "all": {
+        "metric": "sampleCount",
+        "statute": "sampleCount"
+      }
+    },
+    "SumSampleCountElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "SumSampleCountFractionalCadence": {
+      "all": {
+        "metric": "sampleCount",
+        "statute": "sampleCount"
+      }
+    },
+    "SumSampleCountHeartRate": {
+      "all": {
+        "metric": "sampleCount",
+        "statute": "sampleCount"
+      }
+    },
+    "SumSampleCountLatitude": {
+      "all": {
+        "metric": "sampleCount",
+        "statute": "sampleCount"
+      }
+    },
+    "SumSampleCountLongitude": {
+      "all": {
+        "metric": "sampleCount",
+        "statute": "sampleCount"
+      }
+    },
+    "SumSampleCountMovingDuration": {
+      "all": {
+        "metric": "sampleCount",
+        "statute": "sampleCount"
+      }
+    },
+    "SumSampleCountMovingSpeed": {
+      "all": {
+        "metric": "sampleCount",
+        "statute": "sampleCount"
+      }
+    },
+    "SumSampleCountRunCadence": {
+      "all": {
+        "metric": "sampleCount",
+        "statute": "sampleCount"
+      }
+    },
+    "SumSampleCountSpeed": {
+      "all": {
+        "metric": "sampleCount",
+        "statute": "sampleCount"
+      }
+    },
+    "SumSampleCountTimestamp": {
+      "all": {
+        "metric": "sampleCount",
+        "statute": "sampleCount"
+      }
+    },
+    "SumStep": {
+      "all": {
+        "metric": "step",
+        "statute": "step"
+      }
+    },
+    "SumStrokes": {
+      "all": {
+        "metric": "dimensionless",
+        "statute": "dimensionless"
+      }
+    },
+    "SumTotalWork": {
+      "all": {
+        "metric": "kilojoule",
+        "statute": null
+      }
+    },
+    "SumTrainingEffect": {
+      "all": {
+        "metric": "te",
+        "statute": "te"
+      }
+    },
+    "SumTrainingStressScore": {
+      "all": {
+        "metric": "dimensionless",
+        "statute": null
+      }
+    },
+    "ThresholdPower": {
+      "all": {
+        "metric": "watt",
+        "statute": null
+      }
+    },
+    "WeightedMeanAirPower": {
+      "all": {
+        "metric": "watt",
+        "statute": null
+      }
+    },
+    "WeightedMeanAirTemperature": {
+      "all": {
+        "metric": "celcius",
+        "statute": "fahrenheit"
+      }
+    },
+    "WeightedMeanBikeCadence": {
+      "all": {
+        "metric": "rpm",
+        "statute": "rpm"
+      }
+    },
+    "WeightedMeanDoubleCadence": {
+      "all": {
+        "metric": "stepsPerMinute",
+        "statute": "stepsPerMinute"
+      }
+    },
+    "WeightedMeanEfficiency": {
+      "all": {
+        "metric": "dimensionless",
+        "statute": "dimensionless"
+      }
+    },
+    "WeightedMeanElevation": {
+      "all": {
+        "metric": "meter",
+        "statute": "foot"
+      }
+    },
+    "WeightedMeanFormPower": {
+      "all": {
+        "metric": "watt",
+        "statute": null
+      }
+    },
+    "WeightedMeanFractionalCadence": {
+      "all": {
+        "metric": "rpm",
+        "statute": "rpm"
+      }
+    },
+    "WeightedMeanGroundContactBalanceLeft": {
+      "all": {
+        "metric": "percent",
+        "statute": null
+      }
+    },
+    "WeightedMeanGroundContactTime": {
+      "all": {
+        "metric": "ms",
+        "statute": "ms"
+      }
+    },
+    "WeightedMeanHeartRate": {
+      "all": {
+        "metric": "bpm",
+        "statute": "bpm"
+      }
+    },
+    "WeightedMeanLeftPedalSmoothness": {
+      "all": {
+        "metric": "percent",
+        "statute": null
+      }
+    },
+    "WeightedMeanLeftTorqueEffectiveness": {
+      "all": {
+        "metric": "percent",
+        "statute": null
+      }
+    },
+    "WeightedMeanLegSpringStiffness": {
+      "all": {
+        "metric": "kN/m",
+        "statute": null
+      }
+    },
+    "WeightedMeanMovingPace": {
+      "all": {
+        "metric": "minperkm",
+        "statute": "minpermile"
+      },
+      "swimming": {
+        "metric": "min100m",
+        "statute": "min100m"
+      }
+    },
+    "WeightedMeanMovingSpeed": {
+      "all": {
+        "metric": "kph",
+        "statute": "mph"
+      },
+      "swimming": {
+        "metric": "hmph",
+        "statute": "hmph"
+      }
+    },
+    "WeightedMeanNormalizedPower": {
+      "all": {
+        "metric": "watt",
+        "statute": null
+      }
+    },
+    "WeightedMeanPace": {
+      "all": {
+        "metric": "minperkm",
+        "statute": "minpermile"
+      },
+      "swimming": {
+        "metric": "min100m",
+        "statute": "min100m"
+      }
+    },
+    "WeightedMeanPower": {
+      "cycling": {
+        "metric": "watt",
+        "statute": null
+      },
+      "other": {
+        "metric": "watt",
+        "statute": null
+      },
+      "running": {
+        "metric": "watt",
+        "statute": null
+      }
+    },
+    "WeightedMeanRightBalance": {
+      "all": {
+        "metric": "percent",
+        "statute": null
+      }
+    },
+    "WeightedMeanRunCadence": {
+      "all": {
+        "metric": "stepsPerMinute",
+        "statute": "stepsPerMinute"
+      }
+    },
+    "WeightedMeanSpeed": {
+      "all": {
+        "metric": "kph",
+        "statute": "mph"
+      },
+      "swimming": {
+        "metric": "hmph",
+        "statute": "hmph"
+      }
+    },
+    "WeightedMeanStrideLength": {
+      "all": {
+        "metric": "meter",
+        "statute": "yard"
+      }
+    },
+    "WeightedMeanStrokeCadence": {
+      "all": {
+        "metric": "strokesPerMinute",
+        "statute": null
+      }
+    },
+    "WeightedMeanStrokeDistance": {
+      "all": {
+        "metric": "meter",
+        "statute": "yard"
+      }
+    },
+    "WeightedMeanStrokes": {
+      "all": {
+        "metric": "dimensionless",
+        "statute": "dimensionless"
+      }
+    },
+    "WeightedMeanSwimCadence": {
+      "all": {
+        "metric": "strokesPerMinute",
+        "statute": "strokesPerMinute"
+      }
+    },
+    "WeightedMeanSwolf": {
+      "all": {
+        "metric": "dimensionless",
+        "statute": "dimensionless"
+      }
+    },
+    "WeightedMeanVerticalOscillation": {
+      "all": {
+        "metric": "centimeter",
+        "statute": "centimeter"
+      }
+    },
+    "WeightedMeanVerticalRatio": {
+      "all": {
+        "metric": "percent",
+        "statute": null
+      }
+    },
+    "WeightedMomentaryEnergyExpenditure": {
+      "all": {
+        "metric": "c/Hr",
+        "statute": null
+      }
+    },
+    "WeightedRelativeRunningEconomy": {
+      "all": {
+        "metric": "dimensionless",
+        "statute": null
+      }
+    }
+  }
+}

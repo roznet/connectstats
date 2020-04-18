@@ -53,6 +53,10 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
 -(void)processActivities:(NSArray*)activities;
 -(void)processSome;
 
+-(void)rebuildDerivedDataSerie:(gcDerivedType)type
+                        period:(gcDerivedPeriod)period
+            containingActivity:(GCActivity*)act;
+
 -(NSArray<NSNumber*>*)availableFieldsForType:(NSString*)aType;
 -(NSArray<GCDerivedGroupedSeries*>*)groupedSeriesMatching:(GCDerivedDataSerieMatchBlock)match;
 
@@ -60,7 +64,6 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
 
 // Debug utils
 -(void)forceReprocessActivity:(NSString*)aId;
--(void)clearDataForActivityType:(NSString*)aType andFieldFlag:(gcFieldFlag)flag;
 
 
 @end

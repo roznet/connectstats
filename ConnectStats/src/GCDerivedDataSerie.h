@@ -64,9 +64,12 @@ extern sqlite3_int64 kInvalidSerieId;
                                forDate:(NSDate*)date andActivityType:(NSString*)atype;
 +(GCDerivedDataSerie*)derivedDataSerieFromResultSet:(FMResultSet*)res;
 
+-(void)reset;
 -(void)operate:(gcStatsOperand)operand with:(GCStatsDataSerieWithUnit*)other from:(GCActivity*)activity;
 
 -(void)registerFileName:(NSString*)fn;
+
+-(BOOL)containsActivity:(GCActivity*)act;
 
 -(sqlite3_int64)serieId;
 -(sqlite3_int64)saveToDb:(FMDatabase*)db withData:(BOOL)withdata;

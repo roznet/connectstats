@@ -70,6 +70,7 @@ typedef NS_ENUM(NSUInteger, gcMeasureType){
 +(GCField*)healthFieldFromMeasureType:(gcMeasureType)type;
 +(GCField*)healthFieldFromMeasureType:(gcMeasureType)type forActivityType:(NSString*)aType;
 +(GCFieldInfo*)fieldInfoFromField:(GCField*)field;
++(NSDictionary<GCField*,GCFieldInfo*>*)fieldInfoForMeasureFields;
 
 +(NSString*)measureKeyFromType:(gcMeasureType)type;
 +(gcMeasureType)measureTypeFromKey:(NSString*)key;

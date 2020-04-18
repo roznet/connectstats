@@ -113,11 +113,13 @@
 
 - (GCUnit *)unitForSystem:(gcUnitSystem)system { 
     GCUnit * rv = self.units[@(system)];
+    // if not specified, try the other and convert to global system
     if( rv == nil ){
-        rv = self.units[@(GCUnitSystemDefault)];
+        rv = [self.units[@(GCUnitSystemDefault)] unitForGlobalSystem];
     }
     if( rv == nil ){
-        rv = self.units[@(GCUnitSystemMetric)];
+        rv = [self.units[@(GCUnitSystemMetric)] unitForGlobalSystem];
+        
     }
     return rv;
 }

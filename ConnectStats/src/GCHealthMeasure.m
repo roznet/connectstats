@@ -186,7 +186,15 @@ gcMeasureType measureTypeForHK(HKQuantityType*type){
     return [_cacheMeasureTypesFromKeys[key] intValue];
 }
 
-+(GCFieldInfo*)fieldInfoFromMeasureType:(gcMeasureType)type{
++(NSDictionary<GCField*,GCFieldInfo*>*)fieldInfoForMeasureFields{
+    NSDictionary<NSNumber*,GCFieldInfo*>*fieldCache = [self fieldInfoForMeasureTypes];;
+    NSMutableDictionary<GCField*,GCFieldInfo*>*rv = [NSMutableDictionary dictionary];
+    for (GCFieldInfo * info in fieldCache.allValues) {
+        rv[info.field] = info;
+    }
+    return rv;
+}
++(NSDictionary<NSNumber*,GCFieldInfo*>*)fieldInfoForMeasureTypes{
     static NSDictionary<NSNumber*,GCFieldInfo*>*fieldCache = nil;
     if( fieldCache == nil){
         NSArray<NSString*>*fieldKeys = @[@"none",@"weight",@"height", @"fat_free_mass",@"fat_ratio",@"fat_mass_weight",@"heart_rate"];
@@ -202,14 +210,20 @@ gcMeasureType measureTypeForHK(HKQuantityType*type){
             GCUnit * unit = [GCUnit unitForKey:units[i]];
             NSString * displayName = displayNames[i];
             
-            GCFieldInfo * info = [GCFieldInfo fieldInfoFor:field displayName:displayName andUnits:@{@(GCUnitSystemMetric):unit}];
+            NSDictionary * units = @{@(GCUnitSystemMetric):unit};
+            
+            GCFieldInfo * info = [GCFieldInfo fieldInfoFor:field displayName:displayName andUnits:units];
             build[@(i)] = info;
         }
         
         fieldCache = build;
         RZRetain(fieldCache);
     }
-    
+    return fieldCache;
+}
+
++(GCFieldInfo*)fieldInfoFromMeasureType:(gcMeasureType)type{
+    NSDictionary<NSNumber*,GCFieldInfo*>*fieldCache = [self fieldInfoForMeasureTypes];;
     GCFieldInfo * rv = fieldCache[@(type)];
     return rv;
 }
@@ -222,6 +236,10 @@ gcMeasureType measureTypeForHK(HKQuantityType*type){
         rv = [GCHealthMeasure fieldInfoFromMeasureType:type];
     }
     return rv;
+}
+
++(GCUnit*)storeUnit:(gcMeasureType)type{
+    return [[GCHealthMeasure fieldInfoFromMeasureType:type] unitForSystem:GCUnitSystemMetric];
 }
 
 +(GCUnit*)measureUnit:(gcMeasureType)type{
@@ -279,7 +297,8 @@ gcMeasureType measureTypeForHK(HKQuantityType*type){
         rv.measureId = [res stringForColumn:@"measureId"];
         rv.type = [GCHealthMeasure measureTypeFromKey:[res stringForColumn:@"measureType"]];
         rv.date = [res dateForColumn:@"measureDate"];
-        rv.value = [GCNumberWithUnit numberWithUnit:[GCHealthMeasure measureUnit:rv.type] andValue:[res doubleForColumn:@"measureValue"]];
+        
+        rv.value = [GCNumberWithUnit numberWithUnit:[GCHealthMeasure storeUnit:rv.type] andValue:[res doubleForColumn:@"measureValue"]];
     }
     return rv;
 }
@@ -290,11 +309,14 @@ gcMeasureType measureTypeForHK(HKQuantityType*type){
         [db executeUpdate:@"DELETE FROM gc_health_measures WHERE measureId = ? and measureType = ?", self.measureId,key];
     }
 
+    // always save in storeUnit
+    GCNumberWithUnit * toSave = [self.value convertToUnit:[GCHealthMeasure storeUnit:self.type]];
+    
     [db executeUpdate:@"INSERT INTO gc_health_measures (measureId,measureDate,measureType,measureValue) VALUES(?,?,?,?)",
      self.measureId,
      self.date,
      key,
-     @(self.value.value)
+     @(toSave.value)
      ];
     [db commit];
 }

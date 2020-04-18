@@ -141,34 +141,15 @@
 
 }
 
--(void)actionUpdateWeather{
-    NSArray * activities = [[GCAppGlobal organizer] activities];
-    NSUInteger i = 0;
-    for (GCActivity * activity in activities) {
-        if (activity.downloadMethod == gcDownloadMethod13 || activity.downloadMethod == gcDownloadMethodModern) {
-            [[GCAppGlobal web] connectStatsDownloadWeather:activity];
-            i++;
-        }
-    }
-}
 
--(void)actionClearAndReprocessDerived{
-    //db tableExists:@"gc_derived_activity_processed"
-    FMDatabase * db = [[GCAppGlobal derived] deriveddb];
-    RZEXECUTEUPDATE(db, @"DROP TABLE gc_derived_activity_processed");
+-(void)actionClearAndReprocessDerivedForCurrent{
+    GCActivity * act = [[GCAppGlobal organizer] currentActivity];
+    [[GCAppGlobal derived] rebuildDerivedDataSerie:gcDerivedTypeBestRolling period:gcDerivedPeriodMonth containingActivity:act];
 }
 
 -(void)actionProcessSomeDerived{
     //db tableExists:@"gc_derived_activity_processed"
     [[GCAppGlobal derived] processSome];
-}
-
-
--(void)actionReparseCurrentActivity{
-    GCActivity * act = [[GCAppGlobal organizer] currentActivity];
-    if( act.service.service == gcServiceConnectStats){
-        [GCConnectStatsRequestFitFile testForActivity:act withFilesIn:[RZFileOrganizer writeableFilePath:nil]];
-    }
 }
 
 -(void)actionTestNetwork{
@@ -215,18 +196,5 @@
     [appAction execute:url];
 }
 
--(void)actionClearRunningPower{
-    NSArray<GCActivity*>* activities = [[GCAppGlobal organizer] activities];
-    NSMutableArray<GCActivity*>* withPower = [NSMutableArray array];
-    for (GCActivity * activity in activities) {
-        if( [activity.activityType isEqualToString:GC_TYPE_RUNNING] && [activity hasTrackForField:[GCField fieldForFlag:gcFieldFlagPower andActivityType:GC_TYPE_RUNNING]]){
-            [withPower addObject:activity];
-            [[GCAppGlobal derived] forceReprocessActivity:activity.activityId];
-        }
-    }
-    [[GCAppGlobal derived] clearDataForActivityType:GC_TYPE_RUNNING andFieldFlag:gcFieldFlagPower];
-    RZLog(RZLogInfo,@"%@", withPower);
-    //[[GCAppGlobal derived] processActivities:withPower];
-}
 
 @end

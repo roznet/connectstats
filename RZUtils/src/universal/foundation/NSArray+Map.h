@@ -32,4 +32,5 @@ typedef id(^RZMapFunc)(id obj);
 -(NSArray*)arrayByMappingSelector:(SEL)selector;
 -(NSArray*)arrayFlattened;
 -(NSArray*)arrayByRemovingObjectsIn:(NSArray*)toRemove;
+-(NSArray*)arrayWithJSONTypesOnly;
 @end

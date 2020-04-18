@@ -31,4 +31,5 @@
 -(NSDictionary*)dictionaryByRemovingObjectsForKeys:(NSArray*)keys;
 -(NSDictionary*)dictionarySwappingKeysForObjects;
 -(NSDictionary*)smartCompareDict:(NSDictionary*)other;
+-(NSDictionary*)dictionaryWithJSONTypesOnly;
 @end

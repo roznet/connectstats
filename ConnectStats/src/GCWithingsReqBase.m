@@ -80,8 +80,6 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
     
     if( [notification.name isEqualToString:kGTMOAuth2AccessTokenRefreshFailed]){
         RZLog(RZLogError, @"%@ %@", name, notification.userInfo);
-    }else{
-        RZLog(RZLogInfo, @"%@ (%@)", name, self);
     }
 }
 

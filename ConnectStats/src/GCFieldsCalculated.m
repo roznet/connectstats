@@ -43,16 +43,16 @@ static NSArray * _calculatedFields = nil;
     return nil;
 }
 
-+(GCFieldInfo*)fieldInfoForCalculatedField:(GCField*)field{
++(NSDictionary<GCField*,GCFieldInfo*>*)fieldInfoForCalculatedFields{
     static NSDictionary<GCField*,GCFieldInfo*> * infoCache = nil;
     if( infoCache == nil){
         NSArray * defs = @[
             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ALTITUDE_GAIN andActivityType:GC_TYPE_ALL]
-                          displayName:NSLocalizedString( @"Elevation Gain", @"Calculated Field")
-                             andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE]}],
+                          displayName:NSLocalizedString( @"GPS Elevation Gain", @"Calculated Field")
+                             andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE], @(GCUnitSystemImperial):[GCUnit foot]}],
              [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ALTITUDE_LOSS andActivityType:GC_TYPE_ALL]
-                           displayName:NSLocalizedString( @"Elevation Loss", @"Calculated Field")
-                              andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE]}],
+                           displayName:NSLocalizedString( @"GPS Elevation Loss", @"Calculated Field")
+                              andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE],@(GCUnitSystemImperial):[GCUnit foot]}],
              [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_NORMALIZED_POWER andActivityType:GC_TYPE_ALL]
                            displayName:NSLocalizedString( @"Normalized Power", @"Calculated Field")
                               andUnits:@{@(GCUnitSystemMetric):[GCUnit watt]}],
@@ -92,12 +92,23 @@ static NSArray * _calculatedFields = nil;
         for (GCFieldInfo * info in defs) {
             cache[info.field] = info;
         }
+        for (GCFieldsCalculated * calculated in [GCFieldsCalculated calculatedFields]) {
+            GCField * field = [GCField fieldForKey:calculated.fieldKey andActivityType:GC_TYPE_ALL];
+            cache[field] = [GCFieldInfo fieldInfoFor:field
+                                              displayName:calculated.displayName
+                                            andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:calculated.unitName]}];
+            [field correspondingFieldForActivityType:GC_TYPE_RUNNING];
+        }
         infoCache = [NSDictionary dictionaryWithDictionary:cache];
-
+        RZRetain(infoCache);
     }
-    GCFieldInfo * rv = infoCache[field];
     
-    RZRetain(infoCache);
+    return infoCache;
+}
+
++(GCFieldInfo*)fieldInfoForCalculatedField:(GCField*)field{
+    NSDictionary<GCField*,GCFieldInfo*> * infoCache = [self fieldInfoForCalculatedFields];
+    GCFieldInfo * rv = infoCache[field];
     
     if( rv == nil){
         rv = infoCache[ [field correspondingFieldForActivityType:GC_TYPE_ALL] ];

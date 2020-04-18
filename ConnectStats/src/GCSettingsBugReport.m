@@ -35,7 +35,7 @@
 #import "GCService.h"
 #import "GCViewConfig.h"
 #import "GCAppDelegate.h"
-
+#import "GCFieldCache.h"
 
 NSString * kBugFilename = @"bugreport.zip";
 NSString * kBugNoCommonId = @"-1";
@@ -49,41 +49,8 @@ NSString * kBugNoCommonId = @"-1";
 -(void)configCheck{
     NSDictionary * settings = [GCAppGlobal settings];
     NSArray*keys=[@[
-                   CONFIG_FILTER_BAD_VALUES        ,
-                   CONFIG_FILTER_SPEED_BELOW       ,
-                   CONFIG_FILTER_POWER_ABOVE       ,
-                   CONFIG_FILTER_BAD_ACCEL         ,
-                   CONFIG_FILTER_ADJUST_FOR_LAP    ,
-                   CONFIG_UNIT_SYSTEM              ,
-                   CONFIG_STRIDE_STYLE             ,
-                   CONFIG_FIRST_DAY_WEEK           ,
-                   
-                   CONFIG_ZONE_PREFERRED_SOURCE    ,
-                   
-                   CONFIG_REFRESH_STARTUP          ,
-                   CONFIG_CONTINUE_ON_ERROR        ,
-                   CONFIG_GARMIN_USE_MODERN        ,
-                   CONFIG_DUPLICATE_CHECK_ON_IMPORT,
-                   CONFIG_DUPLICATE_CHECK_ON_LOAD  ,
-                   
-                   CONFIG_USE_MOVING_ELAPSED       ,
-                   CONFIG_USE_MAP                  ,
-                   CONFIG_FASTER_MAPS              ,
-                   CONFIG_STATS_INLINE_GRAPHS      ,
-                   CONFIG_PERIOD_TYPE              ,
-                   
-                   CONFIG_GRAPH_LAP_OVERLAY        ,
-                   CONFIG_MAPS_INLINE_GRADIENT     ,
-                   CONFIG_ZONE_GRAPH_HORIZONTAL    ,
-                   
-                   CONFIG_QUICK_FILTER             ,
-                   CONFIG_QUICK_FILTER_TYPE        ,
-                   
-                   CONFIG_GARMIN_FIT_DOWNLOAD      ,
-                   CONFIG_GARMIN_FIT_MERGE         ,
                    
                    CONFIG_CONNECTSTATS_USE         ,
-                   CONFIG_CONNECTSTATS_FILLYEAR    ,
                    CONFIG_CONNECTSTATS_CONFIG      ,
                    CONFIG_CONNECTSTATS_TOKEN_ID    ,
                    CONFIG_CONNECTSTATS_USER_ID
@@ -124,7 +91,7 @@ NSString * kBugNoCommonId = @"-1";
 -(NSURLRequest*)urlRequest{
     NSString * aURL = @"https://ro-z.net/connectstats/bugreport.php?dir=bugs";
 #if TARGET_IPHONE_SIMULATOR
-    aURL = @"http://localhost/connectstats/bugreport.php?dir=bugs";
+    aURL = @"http://localhost/connectstats/bugreport.php?dir=bugs&verbose=1";
 #endif
     //aURL = @"https://ro-z.net/connectstats/bugreport.php?dir=bugs";
     return [self urlResquestFor:aURL];
@@ -144,14 +111,14 @@ NSString * kBugNoCommonId = @"-1";
     
     NSString * applicationName = [GCAppGlobal connectStatsVersion] ? @"ConnectStats" : @"HealthStats";
     DeviceUtil * deviceUtil = RZReturnAutorelease([[DeviceUtil alloc] init]);
-    NSDictionary * pData =@{
+    NSMutableDictionary * pData = [NSMutableDictionary dictionaryWithDictionary:@{
                             @"systemName": [UIDevice currentDevice].systemName,
                             @"applicationName": applicationName,
                             @"systemVersion": [UIDevice currentDevice].systemVersion,
                             @"platformString": [deviceUtil hardwareDescription] ?: [deviceUtil hardwareString],
                             @"version": [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"],
                             @"commonid": [GCAppGlobal configGetString:CONFIG_BUG_COMMON_ID defaultValue:kBugNoCommonId],
-                            };
+                            }];
     if (![[GCAppGlobal configGetString:CONFIG_BUG_COMMON_ID defaultValue:kBugNoCommonId] isEqualToString:kBugNoCommonId]) {
         RZLog(RZLogInfo, @"Had previous bug report: id=%@", [GCAppGlobal configGetString:CONFIG_BUG_COMMON_ID defaultValue:kBugNoCommonId] );
     }
@@ -167,12 +134,15 @@ NSString * kBugNoCommonId = @"-1";
     [stream writeData:[log dataUsingEncoding:NSUTF8StringEncoding]];
     [stream finishedWriting];
     
-    NSArray * crashes = [GCActivitiesCacheManagement crashFiles];
-    for (NSString * file in crashes) {
-        OZZipWriteStream *crashstream= [zipFile writeFileInZipWithName:file compressionLevel:OZZipCompressionLevelBest];
-        NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer writeableFilePath:file]];
-        [crashstream writeData:data];
-        [crashstream finishedWriting];
+    NSDictionary * dict = [self jsonifiedMissingFields];
+    if( dict.count > 0 ){
+        NSData * data = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingSortedKeys|NSJSONWritingPrettyPrinted error:nil];
+        if( data ){
+            OZZipWriteStream *crashstream= [zipFile writeFileInZipWithName:@"missing_fields.json" compressionLevel:OZZipCompressionLevelBest];
+            NSData * data = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingSortedKeys|NSJSONWritingPrettyPrinted error:nil];
+            [crashstream writeData:data];
+            [crashstream finishedWriting];
+        }
     }
     
     if (self.includeErrorFiles) {
@@ -214,18 +184,30 @@ NSString * kBugNoCommonId = @"-1";
             [dbstream writeData:data];
             [dbstream finishedWriting];
         }
-        
-        NSString * settingsFile = [RZFileOrganizer writeableFilePathIfExists:@"settings.plist"];
-        if( settingsFile ){
-            OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:@"settings_bugreport.plist" compressionLevel:OZZipCompressionLevelBest];
-            NSData * data = [NSData dataWithContentsOfFile:settingsFile];
-            [dbstream writeData:data];
-            [dbstream finishedWriting];
-        }
     }
+    
+    NSString * settingsFile = [RZFileOrganizer writeableFilePathIfExists:@"settings.plist"];
+    if( settingsFile ){
+        OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:@"settings_bugreport.plist" compressionLevel:OZZipCompressionLevelBest];
+        NSData * data = [NSData dataWithContentsOfFile:settingsFile];
+        [dbstream writeData:data];
+        [dbstream finishedWriting];
+    }
+    
+    NSDictionary * jsonSettings = [[GCAppGlobal settings] dictionaryWithJSONTypesOnly];
+    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:jsonSettings options:(NSJSONWritingPrettyPrinted|NSJSONWritingSortedKeys) error:&err];
+    if( jsonData ){
+        OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:@"settings_bugreport.json" compressionLevel:OZZipCompressionLevelBest];
+        [dbstream writeData:jsonData];
+        [dbstream finishedWriting];
+    }
+    
     
     [zipFile close];
     [zipFile release];
+
+    NSDictionary * attribute = [[NSFileManager defaultManager] attributesOfItemAtPath:bugpath error:&err];
+    pData[@"filesize"] = attribute[NSFileSize];
     
     NSMutableURLRequest * urlRequest = [RZRemoteDownload urlRequestWithURL:aUrl
                                                                   postData:(NSDictionary*)pData
@@ -234,6 +216,30 @@ NSString * kBugNoCommonId = @"-1";
 
     return urlRequest;
 }
+
+-(NSDictionary*)jsonifiedMissingFields{
+    GCFieldCache * cache = [GCFields fieldCache];
+    NSDictionary * missing = [cache missingPredefinedField];
+
+    NSMutableDictionary * display = [NSMutableDictionary dictionary];
+    NSMutableDictionary * uom     = [NSMutableDictionary dictionary];
+    
+    for (GCField * field  in missing) {
+        GCFieldInfo * info = missing[field];
+        if( info.displayName ){
+            display[field.key] = @{ @"en": info.displayName };
+        }
+        if( uom[field.key] == nil){
+            uom[field.key] = [NSMutableDictionary dictionary];
+        }
+        if( info.unit.key && field.activityType){
+            uom[field.key][field.activityType] = @{@"metric":info.unit.key};
+        }
+    }
+    
+    return @{ @"gc_fields_display": display, @"gc_fields_uom": uom};
+}
+
 -(void)cleanupAndReset{
     [RZFileOrganizer removeEditableFile:kBugFilename];
     NSArray * crashes = [GCActivitiesCacheManagement crashFiles];

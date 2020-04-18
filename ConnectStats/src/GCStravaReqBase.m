@@ -76,8 +76,6 @@ static NSString * kCredentialServiceName = @"strava";
         RZLog(RZLogError, @"%@ %@", name, notification.userInfo);
         [GCStravaReqBase signout];
         self.status = GCWebStatusAccessDenied;
-    }else{
-        RZLog(RZLogInfo, @"%@ (%@)", name, self);
     }
 }
 

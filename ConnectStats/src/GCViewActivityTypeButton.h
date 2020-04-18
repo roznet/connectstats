@@ -25,6 +25,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol GCViewActivityTypeButtonDelegate <NSObject>
 
 -(BOOL)useFilter;
@@ -36,13 +38,15 @@
 -(BOOL)ignoreFilter;
 @end
 
-@interface GCViewActivityTypeButton : NSObject
+@interface GCViewActivityTypeButton : NSObject<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic,retain) UIBarButtonItem * activityTypeButtonItem;
 @property (nonatomic,retain) NSObject<GCViewActivityTypeButtonDelegate> * delegate;
 
 +(GCViewActivityTypeButton*)activityTypeButtonForDelegate:(NSObject<GCViewActivityTypeButtonDelegate>*)del;
 
--(void)setupBarButtonItem;
+-(BOOL)setupBarButtonItem:(nullable UIViewController*)presentingViewController;
 
 @end
+
+NS_ASSUME_NONNULL_END
