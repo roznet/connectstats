@@ -298,19 +298,14 @@ class Field:
         self.key = key
         self.fieldDisplayNameByLanguage = dict()
         self.units = []
-        self.category = 'ignore'
-        self.field_order = -1
+        self.orders = []
+
+        self.changes = defaultdict(list)
 
     def sort_key(self):
         return self.key
     
-    def add_category(self,category):
-        self.category = category
-
-    def add_field_order(self,order):
-        self.field_order = order
-
-    def add_display(self, language, displayName, activityType = None ):
+    def add_display(self, language, displayName ):
         rv = False
         if language not in self.fieldDisplayNameByLanguage:
             if displayName != self.key:
@@ -325,6 +320,7 @@ class Field:
     def add_uom(self, system, uom, activityType ):
         rv = False
         found = None
+        replace = False
         for one in self.units:
             if one['activity_type'] == activityType:
                 found = one
@@ -335,12 +331,35 @@ class Field:
             self.units.append(found)
             rv = True
         if system in found and found[system] != uom:
+            replace = True
             rv = True
             
         found[system] = uom
 
         return rv
 
+    def add_category_and_order(self, info):
+        '''
+        expected info = {'category':STR,'field_order':NUMBER, ['activityType':STR or NULL] }
+        if no activityType or null applies to all
+        '''
+        existing = None
+        if 'activity_type' in info and info['activity_type']:
+            for one in self.orders:
+                if 'activity_type' in one and one['activity_type'] == info['activity_type']:
+                    existing = one
+        else:
+            for one in self.orders:
+                if 'activity_type' not in one:
+                    existing = one
+
+        if existing:
+            if existing != one:
+                self.changes['gc_fields_order'].append( one )
+                existing.update(one)
+        else:
+            self.orders.append( info )
+        
     def simplify_uom(self):
         all = None
         for one in self.units:
@@ -369,14 +388,17 @@ class Field:
 
     def order_dicts(self):
         rv = []
-        rv.append( { 'field':self.key,'category':self.category,'field_order':self.field_order} )
+        rv.extend( self.orders )
         return rv
-
     
     def __repr__(self):
-        return "Field('{}',{},{})".format(self.key, pprint.pformat( self.fieldDisplayNameByLanguage ), pprint.pformat( dict(self.units) ));
+        return "Field('{}',{},{})".format(self.key, pprint.pformat( self.fieldDisplayNameByLanguage ), pprint.pformat( self.units ) );
 
 class Fields:
+    '''
+    fields is a dict of {'key':Field(...),...}
+    activityTypes = ActivityTypes()
+    '''
     def __init__(self,types):
         self.fields = dict()
         self.activityTypes = types
@@ -410,7 +432,7 @@ class Fields:
                 n_new[fieldKey] = 1
                 self.fields[fieldKey] = Field(fieldKey)
 
-            r1 = self.fields[fieldKey].add_display( language, displayName, activityType )
+            r1 = self.fields[fieldKey].add_display( language, displayName )
             r2 = self.fields[fieldKey].add_uom( unitsystem, uom, activityType )
             if r1 or r2:
                 n[fieldKey] = 1
@@ -425,9 +447,9 @@ class Fields:
         # collect known conversions
         for key,field in self.fields.items():
             for one in field.units:
-                if 'metric' in one and 'statute' in one:
+                if 'metric' in one and 'statute' in one and one['metric'] != one['statute']:
                     metric_to_statute[ one['metric'] ] = one['statute']
-                    
+
         for key,field in self.fields.items():
             for one in field.units:
                 u = one['metric']
@@ -441,26 +463,34 @@ class Fields:
                     if 'statute' not in one:
                         if self.verbose:
                             print( 'updating missing {}/{} to {} (from {})'.format( key, t, n_u, u) )
-                        one['statute'] = n_u
+                        field.add_uom( 'statute',n_u, t)
                     if  n_u != one['statute']:
                         if self.verbose:
                             print( 'fixing inconsistent {}/{} {} != {} (from {})'.format( key, t, one['statute'], n_u, u) )
-                        one['statute'] = n_u
+                        field.add_uom( 'statute',n_u, t)
+
 
                 if 'Elevation' in key and one['metric'] != 'meter':
                     if self.verbose:
                         print( 'fixing elevation {}/{} {}/{} to {}/{}'.format( key, t, one['metric'], one['statute'] if t in one['statute'] else None , 'meter', 'foot') )
 
-                    one['metric'] = 'meter'
-                    one['statute'] = 'foot'
+                    field.add_uom( 'metric','meter', t)
+                    field.add_uom( 'statute','foot', t)
 
+    def find(self,needle):
+        rv = []
+        for (key,field) in self.fields.items():
+            if needle in key:
+                rv.append( field )
+
+        return rv
+                    
     def read_field_order_from_dict(self,d):
         if 'gc_fields_order' in d:
             order = d['gc_fields_order']
             for one in order:
                 field = self.field(one['field'])
-                field.field_order = one['field_order']
-                field.category = one['category']
+                field.add_category_and_order(one)
 
     def read_field_display_from_dict(self,d):
         if 'gc_fields_display' in d:

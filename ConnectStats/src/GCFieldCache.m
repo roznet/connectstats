@@ -135,7 +135,7 @@ NS_INLINE NSString * cacheActivityTypeKey(NSString*activityType){
     }
     
     NSMutableDictionary<GCField*,GCFieldInfo*> * fieldCache  = [NSMutableDictionary dictionaryWithCapacity:100];
-    res = [db executeQuery:@"SELECT field,activityType,metric,statute From gc_fields_uom"];
+    res = [db executeQuery:@"SELECT field,activity_type,metric,statute From gc_fields_uom"];
     
     NSDictionary * columnToUnitSystem = @{
         @"statute" : @(GCUnitSystemImperial),
@@ -144,7 +144,7 @@ NS_INLINE NSString * cacheActivityTypeKey(NSString*activityType){
     
     while( [res next] ){
         NSString * fieldKey = [res stringForColumn:@"field"];
-        NSString * type  = [res stringForColumn:@"activityType"];
+        NSString * type  = [res stringForColumn:@"activity_type"];
         GCField * field = [GCField fieldForKey:fieldKey andActivityType:type];
         
         NSMutableDictionary * units = [NSMutableDictionary dictionary];
@@ -171,9 +171,9 @@ NS_INLINE NSString * cacheActivityTypeKey(NSString*activityType){
     }
     
     NSMutableDictionary * activityTypeCache  = [NSMutableDictionary dictionaryWithCapacity:100];
-    res = [db executeQuery:@"SELECT * FROM gc_activityTypes"];
+    res = [db executeQuery:@"SELECT * FROM gc_activity_types"];
     while ([res next]) {
-        NSString * aType = [res stringForColumn:@"activityType"];
+        NSString * aType = [res stringForColumn:@"activity_type"];
         NSString * display = [res stringForColumn:language] ?: [res stringForColumn:@"en"];
         if( display && aType ){
             GCFieldInfo * info = [GCFieldInfo fieldInfoForActivityType:aType displayName:display];
