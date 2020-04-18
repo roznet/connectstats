@@ -660,6 +660,8 @@ class Driver :
             self.fields.save_to_excel(wb)
             self.types.save_to_excel(wb)
             self.categories.save_to_excel(wb)
+            if 'Sheet' in wb.sheetnames:
+                wb.remove(wb['Sheet'])
             wb.save( output )
             
 
