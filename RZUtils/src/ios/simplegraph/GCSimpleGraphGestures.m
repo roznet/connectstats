@@ -28,59 +28,78 @@
 #import "GCSimpleGraphView.h"
 #import "RZMacros.h"
 
+@interface GCSimpleGraphGestures ()
+@property (nonatomic,assign) CGPoint zoomStart;
+@property (nonatomic,assign) CGPoint panStart;
+@property (nonatomic,assign) CGPoint offsetStart;
+
+@end
+
 @implementation GCSimpleGraphGestures
-@synthesize graphView,dataSource,pinchGesture,panGesture;
 
 -(void)dealloc{
-    if (pinchGesture) {
-        [graphView removeGestureRecognizer:pinchGesture];
+    if (_pinchGesture) {
+        [_graphView removeGestureRecognizer:self.pinchGesture];
     }
-    if (panGesture) {
-        [graphView removeGestureRecognizer:panGesture];
+    if (_panGesture) {
+        [_graphView removeGestureRecognizer:self.panGesture];
+    }
+    if (_longPressGesture) {
+        [_graphView removeGestureRecognizer:self.longPressGesture];
     }
 #if ! __has_feature(objc_arc)
-    [graphView release];
-    [panGesture release];
-    [pinchGesture release];
-    [dataSource release];
+    [_graphView release];
+    [_panGesture release];
+    [_pinchGesture release];
+    [_dataSource release];
+    [_longPressGesture release];
 
     [super dealloc];
 #endif
 }
 
 -(void)setupForView:(GCSimpleGraphView*)gview andDataSource:(GCSimpleGraphCachedDataSource*)aDs{
-    if (graphView && pinchGesture) {
-        [graphView removeGestureRecognizer:pinchGesture];
+    if (self.graphView && self.pinchGesture) {
+        [self.graphView removeGestureRecognizer:self.pinchGesture];
     }
-    if (graphView && panGesture) {
-        [graphView removeGestureRecognizer:panGesture];
+    if (self.graphView && self.panGesture) {
+        [self.graphView removeGestureRecognizer:self.panGesture];
     }
     self.graphView = gview;
     self.dataSource = aDs;
 
 	UIPinchGestureRecognizer * pi = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGesture:)];
-	[graphView addGestureRecognizer:pi];
+	[self.graphView addGestureRecognizer:pi];
     self.pinchGesture = pi;
     RZRelease(pi);
 
     UIPanGestureRecognizer * pa = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
-    [graphView addGestureRecognizer:pa];
+    [self.graphView addGestureRecognizer:pa];
     self.panGesture = pa;
     RZRelease(pa);
+    
+    UILongPressGestureRecognizer * lp = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
+    [self.graphView addGestureRecognizer:pa];
+    self.longPressGesture = lp;
+    RZRelease(lp);
+
 }
 
+-(void)longPressGesture:(UILongPressGestureRecognizer*)gestureRecognizer{
+    NSLog(@"Long press");
+}
 -(void)panGesture:(UIPanGestureRecognizer*)panRecognizer {
     if (panRecognizer.state == UIGestureRecognizerStateBegan) {
-        panStart = [panRecognizer translationInView:graphView];
-        offsetStart = dataSource.offsetPercentage;
+        self.panStart = [panRecognizer translationInView:self.graphView];
+        self.offsetStart = self.dataSource.offsetPercentage;
     }else if(panRecognizer.state == UIGestureRecognizerStateChanged){
-        CGPoint current = [panRecognizer translationInView:graphView];
-        CGRect rect = graphView.frame;
-        CGPoint newOffset = offsetStart;
-        newOffset.x -= (current.x-panStart.x)/rect.size.width;
-        newOffset.y += (current.y-panStart.y)/rect.size.height;
-        dataSource.offsetPercentage = newOffset;
-        [graphView setNeedsDisplay];
+        CGPoint current = [panRecognizer translationInView:self.graphView];
+        CGRect rect = self.graphView.frame;
+        CGPoint newOffset = self.offsetStart;
+        newOffset.x -= (current.x-self.panStart.x)/rect.size.width;
+        newOffset.y += (current.y-self.panStart.y)/rect.size.height;
+        self.dataSource.offsetPercentage = newOffset;
+        [self.graphView setNeedsDisplay];
     }
 }
 
@@ -88,27 +107,27 @@
 
 	if (pinchRecognizer.state == UIGestureRecognizerStateBegan) {
         if ([pinchRecognizer numberOfTouches] == 2) {
-            CGRect rect = graphView.frame;
-            CGPoint one = [pinchRecognizer locationOfTouch:0 inView:graphView];
-            CGPoint two = [pinchRecognizer locationOfTouch:1 inView:graphView];
-            zoomStart = CGPointMake(fabs( one.x-two.x )/rect.size.width, fabs(one.y-two.y)/rect.size.height);
+            CGRect rect = self.graphView.frame;
+            CGPoint one = [pinchRecognizer locationOfTouch:0 inView:self.graphView];
+            CGPoint two = [pinchRecognizer locationOfTouch:1 inView:self.graphView];
+            self.zoomStart = CGPointMake(fabs( one.x-two.x )/rect.size.width, fabs(one.y-two.y)/rect.size.height);
         }
 	}
 	else if (pinchRecognizer.state == UIGestureRecognizerStateChanged) {
         if ([pinchRecognizer numberOfTouches] == 2) {
-            CGRect rect = graphView.frame;
-            CGPoint one = [pinchRecognizer locationOfTouch:0 inView:graphView];
-            CGPoint two = [pinchRecognizer locationOfTouch:1 inView:graphView];
+            CGRect rect = self.graphView.frame;
+            CGPoint one = [pinchRecognizer locationOfTouch:0 inView:self.graphView];
+            CGPoint two = [pinchRecognizer locationOfTouch:1 inView:self.graphView];
             CGPoint zoom = CGPointMake(fabs( one.x-two.x )/rect.size.width, fabs(one.y-two.y)/rect.size.height);
-            CGPoint orig = dataSource.zoomPercentage;
-            orig.x = MAX(MIN(orig.x+zoom.x-zoomStart.x, 1.), 0.);
-            orig.y = MAX(MIN(orig.y+zoom.y-zoomStart.y, 1.), 0.);
-            dataSource.zoomPercentage = orig;
-            CGPoint middle = [pinchRecognizer locationInView:graphView];
+            CGPoint orig = self.dataSource.zoomPercentage;
+            orig.x = MAX(MIN(orig.x+zoom.x-self.zoomStart.x, 1.), 0.);
+            orig.y = MAX(MIN(orig.y+zoom.y-self.zoomStart.y, 1.), 0.);
+            self.dataSource.zoomPercentage = orig;
+            CGPoint middle = [pinchRecognizer locationInView:self.graphView];
             middle.x/=rect.size.width;
             middle.y/=rect.size.height;
-            dataSource.offsetPercentage = CGPointMake(middle.x, middle.y);
-            [graphView setNeedsDisplay];
+            self.dataSource.offsetPercentage = CGPointMake(middle.x, middle.y);
+            [self.graphView setNeedsDisplay];
         }
 	}
 }

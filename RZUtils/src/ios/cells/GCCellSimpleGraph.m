@@ -83,6 +83,11 @@
         swipe = RZReturnAutorelease([[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeft:)]);
         swipe.direction = UISwipeGestureRecognizerDirectionLeft;
         [self.contentView addGestureRecognizer:swipe];
+        
+        UILongPressGestureRecognizer * longPress = nil;
+        
+        longPress = RZReturnAutorelease([[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)]);
+        [self.contentView addGestureRecognizer:longPress];
     }
     return self;
 }
@@ -98,7 +103,13 @@
         [self.cellDelegate swipeLeft:self];
     }
 }
-
+-(void)longPress:(UILongPressGestureRecognizer*)recognizer{
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+            if( [self.cellDelegate respondsToSelector:@selector(longPress:)]){
+            [self.cellDelegate longPress:self];
+        }
+    }
+}
 -(void)setDataSource:(id<GCSimpleGraphDataSource>)aSource andConfig:(id<GCSimpleGraphDisplayConfig>)aConfig{
     (self.graphView).dataSource = aSource;
     (self.graphView).displayConfig = aConfig;

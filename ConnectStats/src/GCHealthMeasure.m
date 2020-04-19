@@ -78,12 +78,32 @@
 77    Hydration (kg)
 88    Bone Mass (kg)
 91    Pulse Wave Velocity (m/s)
-*/
+ 
+ */
 
 static NSArray * _cacheMeasureKeys  = nil;
 static NSDictionary * _cacheMeasureTypesFromKeys=nil;
 
 void buildMeasureTypeKeys(){
+    @[
+        @[ @(1),@"weight",@"Weight",@"kilogram"],
+        @[ @(4),@"height",@"Height",@"meter"],
+        @[ @(5),@"fat_free_mass",@"Fat Free Mass",@"kilogram"],
+        @[ @(6),@"fat_ratio",@"Fat Ratio",@"percent"],
+        @[ @(8),@"fat_mass_weight",@"Fat Mass Weight",@"kilogram"],
+        @[ @(9),@"diastolic_blood_pressure",@"Diastolic Blood Pressure",@"mmHg"],
+        @[ @(10),@"systolic_blood_pressure",@"Systolic Blood Pressure",@"mmHg"],
+        @[ @(11),@"heart_pulse",@"Heart Pulse",@"bpm"],
+        @[ @(12),@"temperature",@"Temperature",@"celsius"],
+        @[ @(54),@"sp02",@"SP02",@"percent"],
+        @[ @(71),@"body_temperature",@"Body Temperature",@"celsius"],
+        @[ @(73),@"skin_temperature",@"Skin Temperature",@"celsius"],
+        @[ @(76),@"muscle_mass",@"Muscle Mass",@"kilogram"],
+        @[ @(77),@"hydration",@"Hydration",@"kilogram"],
+        @[ @(88),@"bone_mass",@"Bone Mass",@"kilogram"],
+        @[ @(91),@"pulse_wave_velocity",@"Pulse Wave Velocity",@"mps"],
+    ];
+    
     _cacheMeasureKeys = @[@"none",@"weight",@"height", @"fat_free_mass",@"fat_ratio",@"fat_mass_weight",@"heart_rate"];
     RZRetain(_cacheMeasureKeys);
     NSMutableDictionary * d = [NSMutableDictionary dictionaryWithCapacity:_cacheMeasureKeys.count];
@@ -109,6 +129,14 @@ gcMeasureType measureTypeForWS(unsigned int i){
             return gcMeasureHeartRate;
         default:
             break;
+    }
+    static NSMutableDictionary * cache = nil;
+    if( cache == nil){
+        cache = [NSMutableDictionary dictionary];
+        RZRetain(cache);
+    }
+    if( cache[@(i)] == nil){
+        RZLog(RZLogInfo, @"Got missing withings measure %@", @(i));
     }
     return gcMeasureNone;
 }

@@ -41,10 +41,13 @@
 #import "GCDerivedGroupedSeries.h"
 #import "GCDerivedOrganizer.h"
 #import "GCHealthOrganizer.h"
+#import "GCStatsMultiFieldConfigViewController.h"
 
 @interface GCStatsMultiFieldViewController ()
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
 @property (nonatomic,assign) BOOL started;
+@property (nonatomic,retain) GCStatsMultiFieldConfigViewController * configViewController;
+
 @end
 
 @implementation GCStatsMultiFieldViewController
@@ -74,7 +77,7 @@
     [_fieldDataSeries release];
     [_allFields release];
     [_config release];
-
+    [_configViewController release];
     [super dealloc];
 }
 
@@ -611,7 +614,19 @@
     [self.tableView reloadData];
 }
 
-
+-(void)longPress:(GCCellSimpleGraph*)cell{
+    RZLog(RZLogInfo,@"Long press");
+    self.configViewController = [GCStatsMultiFieldConfigViewController controllerWithDelegate:self];
+    RZAutorelease([[UIPopoverPresentationController alloc] initWithPresentedViewController:self.configViewController
+                                                                  presentingViewController:self]);
+    self.configViewController.popoverPresentationController.sourceView = self.view;
+    self.configViewController.popoverPresentationController.sourceRect = cell.frame;
+    
+    [self presentViewController:self.configViewController animated:YES completion:nil];
+}
+-(void)configViewController:(GCStatsMultiFieldConfigViewController*)vc didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    RZLog(RZLogInfo,@"Long press completed");
+}
 
 #pragma mark - Setup data
 
@@ -805,5 +820,4 @@
     }
     return nil;
 }
-
 @end

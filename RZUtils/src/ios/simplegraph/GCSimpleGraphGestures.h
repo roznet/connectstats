@@ -29,22 +29,14 @@
 @class GCSimpleGraphCachedDataSource;
 @class GCSimpleGraphView;
 
-@interface GCSimpleGraphGestures : NSObject{
-    GCSimpleGraphView * graphView;
-    GCSimpleGraphCachedDataSource * dataSource;
+@interface GCSimpleGraphGestures : NSObject
 
-    UIPinchGestureRecognizer * pinchGesture;
-    UIPanGestureRecognizer * panGesture;
-
-    CGPoint zoomStart;
-    CGPoint panStart;
-    CGPoint offsetStart;
-}
 @property (nonatomic,retain) GCSimpleGraphCachedDataSource * dataSource;
 @property (nonatomic,retain) GCSimpleGraphView * graphView;
 
 @property (nonatomic,retain) UIPinchGestureRecognizer * pinchGesture;
 @property (nonatomic,retain) UIPanGestureRecognizer * panGesture;
+@property (nonatomic,retain) UILongPressGestureRecognizer * longPressGesture;
 
 -(void)setupForView:(GCSimpleGraphView*)gview andDataSource:(GCSimpleGraphCachedDataSource*)aDs;
 

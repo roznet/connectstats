@@ -43,7 +43,7 @@
         FMResultSet * res = [fdb executeQuery:@"SELECT * FROM gc_category_order"];
         while ([res next]) {
             NSString * category = [res stringForColumn:@"category"];
-            NSString * display = [res stringForColumn:@"displayName"];
+            NSString * display = [res stringForColumn:@"en"];
 
             cache[category] = display;
         }

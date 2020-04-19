@@ -30,10 +30,11 @@
 #import "GCHistoryFieldDataSerie.h"
 #import "GCViewActivityTypeButton.h"
 #import "GCStatsMultiFieldConfig.h"
+#import "GCStatsMultiFieldConfigViewController.h"
 
 @class  GCFieldsForCategory;
 
-@interface GCStatsMultiFieldViewController : UITableViewController<RZChildObject,GCViewActivityTypeButtonDelegate,GCCellSimpleGraphDelegate>
+@interface GCStatsMultiFieldViewController : UITableViewController<RZChildObject,GCViewActivityTypeButtonDelegate,GCCellSimpleGraphDelegate,GCStatsMultiFieldConfigViewDelegate>
 
 @property (nonatomic,retain) GCHistoryFieldSummaryStats * fieldStats;
 @property (nonatomic,retain) GCHistoryAggregatedActivityStats * aggregatedStats;

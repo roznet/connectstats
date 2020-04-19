@@ -115,16 +115,29 @@
     if (res == nil) {
         RZLog(RZLogError, @"db error: %@", [self.db lastErrorMessage]);
     }
+    NSMutableDictionary<NSString*,NSNumber*> * summary = [NSMutableDictionary dictionary];
+    NSUInteger n = 0;
     while ([res next]) {
         GCHealthMeasure * one = [GCHealthMeasure healthMeasureFromResultSet:res];
         if (one) {
+            n++;
             [meas addObject:one];
-        }else{
-            //one = [GCHealthMeasure healthMeasureFromResultSet:res];
+            NSString * key = [res stringForColumn:@"measureType"];
+            NSNumber * count = summary[key];
+            if( count == nil){
+                summary[key] = @1;
+            }else{
+                summary[key] = @(1 + count.integerValue);
+            }
         }
     }
+    NSMutableArray * tmp = [NSMutableArray array];
+    for (NSString * key in summary) {
+        [tmp addObject:[NSString stringWithFormat:@"%@[%@]", key, summary[key]]];
+    }
+    RZLog(RZLogInfo,@"Loaded %lu health measures (%@)", (unsigned long)n, [tmp componentsJoinedByString:@", "]);
     self.measures = [NSArray arrayWithArray:meas];
-
+    
     NSMutableDictionary * zon = [NSMutableDictionary dictionaryWithCapacity:5];
     res = [self.db executeQuery:@"SELECT * FROM gc_health_zones ORDER BY zoneNumber"];
     while ([res next]) {
