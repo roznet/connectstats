@@ -443,7 +443,7 @@
         GCCellGrid * cell = [GCCellGrid gridCell:tableView];
 
         GCActivity * act=self.activity;
-        GCHealthMeasure * meas=[[GCAppGlobal health] measureForDate:act.date andType:gcMeasureWeight];
+        GCHealthMeasure * meas=[[GCAppGlobal health] measureForDate:act.date andField:[GCHealthMeasure weight]];
         [cell setupForHealthMeasureSummary:meas];
         rv = cell;
     }else{

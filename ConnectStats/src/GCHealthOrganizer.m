@@ -204,7 +204,7 @@
 
 }
 -(BOOL)addHealthMeasure:(GCHealthMeasure*)one{
-    if (one && [self measureForId:one.measureId andType:one.type]==nil) {
+    if (one && [self measureForId:one.measureId andField:one.field]==nil) {
         [one saveToDb:self.db];
         NSMutableArray * measnew= [NSMutableArray arrayWithArray:self.measures];
         [measnew addObject:one];
@@ -216,55 +216,53 @@
     }
     return false;
 }
-
--(GCHealthMeasure*)measureForId:(NSString*)aId andType:(gcMeasureType)aType{
+-(GCHealthMeasure*)measureForId:(NSString*)aId andField:(GCField*)field{
     for (GCHealthMeasure * one in self.measures) {
-        if ([one.measureId isEqualToString:aId] && one.type==aType) {
+        if ([one.measureId isEqualToString:aId] && [one.field isEqualToField:field]){
             return one;
         }
     }
     return nil;
 }
 
--(GCStatsDataSerieWithUnit*)dataSerieWithUnitForHealthFieldKey:(NSString*)aType{
-    return nil;
-}
--(GCStatsDataSerieWithUnit*)dataSerieWithUnitForHealthField:(GCField*)field{
-    gcMeasureType type = [GCHealthMeasure measureTypeFromHealthField:field];
-    GCUnit * unit = [GCHealthMeasure measureUnit:type];
 
+
+-(GCStatsDataSerieWithUnit*)dataSerieWithUnitForHealthField:(GCField*)field{
+    GCUnit * unit = field.unit;
     GCStatsDataSerieWithUnit * rv = [GCStatsDataSerieWithUnit dataSerieWithUnit:unit];
     for (GCHealthMeasure * one in self.measures) {
-        if (one.type == type) {
+        if ([one.field isEqualToField:field]) {
             [rv addNumberWithUnit:one.value forDate:one.date];
         }
     }
     return rv;
 }
--(GCHealthMeasure*)measureOnSpecificDate:(NSDate*)aDate forType:(gcMeasureType)aField andCalendar:(NSCalendar*)calendar{
-    for (GCHealthMeasure * one in self.measures) {
-        if (one.type == aField && [one.date isSameCalendarDay:aDate calendar:calendar]) {
-            return one;
-        }
-    }
-    return nil;
-}
+
 -(NSArray<GCHealthMeasure*>*)measuresForDate:(NSDate*)aDate{
     NSMutableDictionary * dict = [NSMutableDictionary dictionary];
     for (GCHealthMeasure * one in self.measures) {
         if ([one.date compare:aDate]==NSOrderedAscending) {
-            GCHealthMeasure * found = dict[@(one.type)];
+            GCHealthMeasure * found = dict[one.field];
             if (!found) {
-                dict[@(one.type)] = one;
+                dict[one.field] = one;
             }
         }
     }
     return [dict allValues];
 }
 
--(GCHealthMeasure*)measureForDate:(NSDate*)aDate andType:(gcMeasureType)aType{
+-(GCHealthMeasure*)measureForDate:(NSDate*)aDate andField:(GCField*)aField{
     for (GCHealthMeasure * one in self.measures) {
-        if (one.type == aType && [one.date compare:aDate]==NSOrderedAscending) {
+        if ([one.field isEqualToField:aField] && [one.date compare:aDate]==NSOrderedAscending) {
+            return one;
+        }
+    }
+    return nil;
+}
+
+-(GCHealthMeasure*)measureOnSpecificDate:(NSDate*)aDate forField:(GCField*)aField andCalendar:(NSCalendar*)calendar{
+    for (GCHealthMeasure * one in self.measures) {
+        if ([one.field isEqualToField:aField] && [one.date isSameCalendarDay:aDate calendar:calendar]) {
             return one;
         }
     }

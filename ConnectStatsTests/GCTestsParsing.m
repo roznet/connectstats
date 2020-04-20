@@ -840,7 +840,7 @@
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
     
     [GCWithingsBodyMeasures testForHealth:organizer.health withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] forId:@"188427"];
-    GCField * hf = [GCHealthMeasure healthFieldFromMeasureType:gcMeasureWeight];
+    GCField * hf = [GCHealthMeasure weight];
     
     NSDictionary * rv = [organizer fieldsSeries:@[ @"WeightedMeanHeartRate", @"WeightedMeanPace", hf] matching:nil useFiltered:NO ignoreMode:gcIgnoreModeActivityFocus];
     

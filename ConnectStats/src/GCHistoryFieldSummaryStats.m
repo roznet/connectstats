@@ -298,10 +298,10 @@
 
     for (GCHealthMeasure * measure in measures) {
         // not an interesting measure
-        if (measure.type == gcMeasureHeight) {
+        if ([measure.field isEqualToField:[GCHealthMeasure weight]]) {
             continue;
         }
-        GCField * field = [GCHealthMeasure healthFieldFromMeasureType:measure.type forActivityType:useActivityType];
+        GCField * field = measure.field;
 
         GCFieldDataHolder * holder = healthFieldData[field];
         if (!holder) {
