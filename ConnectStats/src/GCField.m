@@ -322,7 +322,9 @@ static void registerInCache(GCField*field){
         aTrackField == gcFieldFlagGroundContactTime;
 
 }
-
+-(BOOL)isValidForActivityType:(NSString*)activityType{
+    return [self.activityType isEqualToString:activityType] || [self.activityType isEqualToString:GC_TYPE_ALL];
+}
 -(BOOL)canSum{
     NSString * field = self.key;
     

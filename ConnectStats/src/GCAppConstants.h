@@ -100,6 +100,7 @@
 #define CONFIG_SPORTTRACKS_ENABLE       @"config_sporttracks_enable"
 #define CONFIG_HEALTHKIT_ENABLE         @"config_healthkit_enable"
 #define CONFIG_HEALTHKIT_WORKOUT        @"config_healthkit_workout"
+#define CONFIG_HEALTHKIT_DAILY          @"config_healthkit_daily"
 #define CONFIG_HEALTHKIT_SOURCE_CHECKED @"config_healthkit_source_checked"
 #define CONFIG_FITBIT_ENABLE            @"config_fitbit_enable"
 #define CONFIG_FITBIT_TOKEN             @"config_fitbit_t"

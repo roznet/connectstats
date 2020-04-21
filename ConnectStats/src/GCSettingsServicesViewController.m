@@ -153,6 +153,7 @@
         [self.remap addSection:GC_SECTIONS_HEALTHKIT withRows:@[
                                                                 @( GC_HEALTHKIT_NAME       ),
                                                                 @( GC_HEALTHKIT_ENABLE     ),
+                                                                @( GC_HEALTHKIT_DAILY    ),
                                                                 @( GC_HEALTHKIT_WORKOUT    ),
                                                                 @( GC_HEALTHKIT_SOURCE     )]];
     }
@@ -759,6 +760,27 @@
                                                                                          withString:NSLocalizedString(@"Not Supported by device", @"Other Service")];
             rv= gridcell;
         }
+    }else if (indexPath.row == GC_HEALTHKIT_DAILY){
+        if ([GCHealthKitRequest isSupported]) {
+            switchcell = [GCCellEntrySwitch switchCell:tableView];
+            switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                        withString:NSLocalizedString(@"Include Daily Steps",@"Other Service")];
+            switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_HEALTHKIT_DAILY defaultValue:[GCAppGlobal healthStatsVersion]];
+            switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_HEALTHKIT_DAILY);
+            switchcell.entryFieldDelegate = self;
+            if( switchcell.toggle.on){
+                switchcell.detailTextLabel.text = NSLocalizedString(@"Use full daily details",@"Include Daily Steps");
+            }else{
+                switchcell.detailTextLabel.text = NSLocalizedString(@"Only use weight information",@"Include Daily Steps");
+            }
+            rv=switchcell;
+        }else{
+            gridcell = [GCCellGrid gridCell:tableView];
+            [gridcell setupForRows:1 andCols:1];
+            [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:NSLocalizedString(@"Not Supported by device", @"Other Service")];
+            rv= gridcell;
+        }
     }else if (indexPath.row == GC_HEALTHKIT_SOURCE){
         if ([GCHealthKitRequest isSupported]) {
             gridcell = [GCCellGrid gridCell:tableView];
@@ -1140,6 +1162,17 @@
                 RZLog(RZLogInfo,@"Healthkit: Workout Enabled");
             }else{
                 RZLog(RZLogInfo,@"Healthkit: Workout Disabled");
+            }
+            [GCAppGlobal saveSettings];
+            break;
+        }
+        case GC_IDENTIFIER(GC_SECTIONS_HEALTHKIT, GC_HEALTHKIT_DAILY):
+        {
+            [[GCAppGlobal profile] configToggleBool:CONFIG_HEALTHKIT_DAILY];
+            if([[GCAppGlobal profile] configGetBool:CONFIG_HEALTHKIT_DAILY defaultValue:[GCAppGlobal healthStatsVersion]]){
+                RZLog(RZLogInfo,@"Healthkit: Daily Enabled");
+            }else{
+                RZLog(RZLogInfo,@"Healthkit: Daily Disabled");
             }
             [GCAppGlobal saveSettings];
             break;

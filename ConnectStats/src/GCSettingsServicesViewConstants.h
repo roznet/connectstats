@@ -59,8 +59,9 @@
 #define GC_HEALTHKIT_NAME       0
 #define GC_HEALTHKIT_ENABLE     1
 #define GC_HEALTHKIT_WORKOUT    2
-#define GC_HEALTHKIT_SOURCE     3
-#define GC_HEALTHKIT_END        4
+#define GC_HEALTHKIT_DAILY      3
+#define GC_HEALTHKIT_SOURCE     4
+#define GC_HEALTHKIT_END        5
 
 #define GC_BABOLAT_SERVICE_NAME 0
 #define GC_BABOLAT_ENABLE       1

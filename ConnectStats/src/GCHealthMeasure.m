@@ -167,6 +167,14 @@ GCField * fieldForHKQuantityType(HKQuantityType*type){
     return false;
 }
 
++(GCField*)height{
+    static GCField * cache = nil;
+    if( cache == nil){
+        cache = RZReturnRetain([GCField fieldForKey:[GC_HEALTH_PREFIX stringByAppendingString:@"height"] andActivityType:GC_TYPE_ALL]);
+    }
+    return cache;
+}
+
 +(GCField*)weight{
     static GCField * cache = nil;
     if( cache == nil){

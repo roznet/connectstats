@@ -337,8 +337,12 @@
 
 -(void)healthStoreUpdate{
     NSDate * startDate = [NSDate date];
-    [self addRequest:[GCHealthKitDailySummaryRequest requestFor:startDate]];
-    if ([GCAppGlobal healthStatsVersion] && [[GCAppGlobal profile] configGetBool:CONFIG_HEALTHKIT_WORKOUT defaultValue:[GCAppGlobal healthStatsVersion]]) {
+    if( [[GCAppGlobal profile] configGetBool:CONFIG_HEALTHKIT_DAILY defaultValue:[GCAppGlobal healthStatsVersion]]){
+        [self addRequest:[GCHealthKitDailySummaryRequest requestFor:startDate]];
+        [self addRequest:[GCHealthKitDayDetailRequest requestForDate:startDate to:[[NSDate date] dateByAddingTimeInterval:-3600*24*7]]];
+    }
+    
+    if ([[GCAppGlobal profile] configGetBool:CONFIG_HEALTHKIT_WORKOUT defaultValue:[GCAppGlobal healthStatsVersion]]) {
         if( [GCAppGlobal healthStatsVersion] ){
             GCHealthKitWorkoutsRequest * req = [GCHealthKitWorkoutsRequest request];
             //[req resetAnchor];
@@ -347,7 +351,6 @@
             RZLog(RZLogWarning, @"Disabled Workout from healthkit");
         }
     }
-    [self addRequest:[GCHealthKitDayDetailRequest requestForDate:startDate to:[[NSDate date] dateByAddingTimeInterval:-3600*24*7]]];
     [self addRequest:[GCHealthKitBodyRequest request]];
 }
 

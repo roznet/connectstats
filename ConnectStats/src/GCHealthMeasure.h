@@ -57,6 +57,7 @@
 +(NSDictionary<GCField*,GCFieldInfo*>*)fieldInfoForMeasureFields;
 
 +(GCField*)weight;
++(GCField*)height;
 
 +(GCHealthMeasure*)healthMeasureFromWithings:(NSDictionary*)dict forDate:(NSDate*)aDate andId:(NSUInteger)aId;
 +(GCHealthMeasure*)healthMeasureFromResultSet:(FMResultSet*)res;

@@ -661,7 +661,7 @@
 
     NSMutableArray * limitFields = [NSMutableArray arrayWithCapacity:self.allFields.count];
     for (GCField * field in self.allFields) {
-        if ([field.activityType isEqualToString:activityType]) {
+        if ([field.activityType isEqualToString:activityType] || field.isHealthField) {
             [limitFields addObject:field];
         }
     }

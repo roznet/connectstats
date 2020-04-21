@@ -291,14 +291,9 @@
 
     NSMutableDictionary * healthFieldData = [NSMutableDictionary dictionaryWithDictionary:self.fieldData];
 
-    NSString * useActivityType = GC_TYPE_ALL;
-    if (self.foundActivityTypes.count == 1) {
-        useActivityType = self.foundActivityTypes[0];
-    }
-
     for (GCHealthMeasure * measure in measures) {
         // not an interesting measure
-        if ([measure.field isEqualToField:[GCHealthMeasure weight]]) {
+        if ([measure.field isEqualToField:[GCHealthMeasure height]]) {
             continue;
         }
         GCField * field = measure.field;
