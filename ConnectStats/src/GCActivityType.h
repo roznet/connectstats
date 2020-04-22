@@ -24,6 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
+#import "GCFieldsDefs.h"
 
 @class GCFieldCache;
 @class GCActivityTypes;

@@ -34,6 +34,12 @@
 
 @implementation GCAppReferenceData
 
+-(void)dealloc{
+    [_db release];
+    
+    [super dealloc];
+}
+
 + (nonnull GCAppReferenceData *)reference:(nonnull FMDatabase *)db { 
     GCAppReferenceData * rv = RZReturnAutorelease([[GCAppReferenceData alloc] init]);
     if( rv ){

@@ -34,6 +34,11 @@
 
 @implementation GCStatsMultiFieldConfigViewController
 
+-(void)dealloc{
+    [_delegate release];
+    [super dealloc];
+}
+
 +(GCStatsMultiFieldConfigViewController*)controllerWithDelegate:(NSObject<GCStatsMultiFieldConfigViewDelegate>*)delegate{
     GCStatsMultiFieldConfigViewController * rv = RZReturnAutorelease([[GCStatsMultiFieldConfigViewController alloc] initWithStyle:UITableViewStyleGrouped]);
     rv.delegate = delegate;
@@ -49,7 +54,7 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     GCCellGrid * cell = [GCCellGrid gridCell:tableView];
     [cell setupForRows:1 andCols:1];
-    [cell labelForRow:0 andCol:0].text = @"Hi";
+    [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Hi", "Dummy");
     return cell;
 }
 

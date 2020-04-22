@@ -153,7 +153,8 @@ GCField * fieldForHKQuantityType(HKQuantityType*type){
     [_measureId release];
     [_date release];
     [_value release];
-
+    [_field release];
+    
     [super dealloc];
 }
 #endif

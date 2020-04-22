@@ -896,7 +896,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
 -(void)setupStatsHeaders:(GCHistoryFieldDataSerie *)activityStats{
     [self setupForRows:2 andCols:1];
-    GCFormattedFieldText * title = [GCFormattedFieldText formattedFieldText:[GCFields activityTypeDisplay:activityStats.config.activityType]
+    
+    GCFormattedFieldText * title = [GCFormattedFieldText formattedFieldText:[GCActivityType activityTypeForKey:activityStats.config.activityType].displayName
                                                                       value:activityStats.fieldDisplayName
                                                                     forSize:16.];
 

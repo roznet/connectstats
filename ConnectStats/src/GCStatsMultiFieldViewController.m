@@ -593,7 +593,7 @@
         (self.navigationController.navigationBar.topItem).title = [GCAppGlobal organizer].lastSearchString;
     }else{
         if (self.activityType) {
-            (self.navigationController.navigationBar.topItem).title = [GCFields activityTypeDisplay:self.activityType];
+            (self.navigationController.navigationBar.topItem).title = [GCActivityType activityTypeForKey:self.activityType].displayName;
         }
     }
     [self.activityTypeButton setupBarButtonItem:self];
