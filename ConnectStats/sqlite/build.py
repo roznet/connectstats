@@ -164,7 +164,7 @@ def dict_read_from_excel(wb,tables):
             cols = cells[0]
             values = [dict( zip(cols,x) ) for x in cells[1:]]
             values = [ {k:v for k,v in x.items() if v is not None} for x in values ]
-            rv.update( {'table':values} )
+            rv.update( {table:values} )
     return rv
             
 class ActivityType:

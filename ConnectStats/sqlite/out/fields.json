@@ -1111,27 +1111,34 @@
       "zh": "\u8d77\u59cb\u7ecf\u5ea6"
     },
     {
+      "en": "Begin 20min Distance",
       "field": "BeginPowerTwentyMinutesDistance"
     },
     {
+      "en": "Begin 20min Time",
       "field": "BeginPowerTwentyMinutesTime"
     },
     {
+      "en": "Begin 20min Timer",
       "field": "BeginPowerTwentyMinutesTimerTime"
     },
     {
       "field": "BeginTimestamp"
     },
     {
+      "en": "Lactate Threshold",
       "field": "DirectLactateThresholdHeartRate"
     },
     {
+      "en": "Lactate Threshold Speed",
       "field": "DirectLactateThresholdSpeed"
     },
     {
+      "en": "VO2 Max",
       "field": "DirectVO2Max"
     },
     {
+      "en": "VO2 Max",
       "field": "DirectVO2MaxCycling"
     },
     {
@@ -1141,12 +1148,15 @@
       "field": "EndLongitude"
     },
     {
+      "en": "End 20min Distance",
       "field": "EndPowerTwentyMinutesDistance"
     },
     {
+      "en": "End 20min Time",
       "field": "EndPowerTwentyMinutesTime"
     },
     {
+      "en": "End 20min Timer",
       "field": "EndPowerTwentyMinutesTimerTime"
     },
     {
@@ -1199,6 +1209,7 @@
       "field": "LossUncorrectedElevation"
     },
     {
+      "en": "Max Air Power",
       "field": "MaxAirPower"
     },
     {
@@ -1249,6 +1260,7 @@
       "zh": "\u6700\u9ad8\u6d77\u62d4"
     },
     {
+      "en": "Max Form Power",
       "field": "MaxFormPower"
     },
     {
@@ -1263,6 +1275,7 @@
       "zh": "\u6700\u9ad8\u8dd1\u6b65\u8e0f\u9891"
     },
     {
+      "en": "Max Contact Balance Left",
       "field": "MaxGroundContactBalanceLeft"
     },
     {
@@ -1280,6 +1293,7 @@
       "zh": "\u6700\u9ad8\u5fc3\u7387"
     },
     {
+      "en": "Max Leg Spring",
       "field": "MaxLegSpringStiffness"
     },
     {
@@ -1297,9 +1311,11 @@
       "zh": "\u6700\u4f73\u914d\u901f"
     },
     {
+      "en": "Max Power",
       "field": "MaxPower"
     },
     {
+      "en": "Max Avg Power (20 min)",
       "field": "MaxPowerTwentyMinutes"
     },
     {
@@ -1328,6 +1344,10 @@
       "zh": "\u6700\u9ad8\u901f\u5ea6"
     },
     {
+      "en": "Max Cadence",
+      "field": "MaxStrokeCadence"
+    },
+    {
       "de": "Maximale Schwimmfrequenz",
       "en": "Max Swim Cadence",
       "es": "Cadencia de nado m\u00e1xima",
@@ -1345,12 +1365,14 @@
       "field": "MaxVerticalOscillation"
     },
     {
+      "en": "Max Vertical Ratio",
       "field": "MaxVerticalRatio"
     },
     {
       "field": "MaxVerticalSpeed"
     },
     {
+      "en": "Min Air Power",
       "field": "MinAirPower"
     },
     {
@@ -1393,18 +1415,22 @@
       "zh": "\u6700\u4f4e\u6d77\u62d4"
     },
     {
+      "en": "Min Form Power",
       "field": "MinFormPower"
     },
     {
+      "en": "Min Contact Balance Left",
       "field": "MinGroundContactBalanceLeft"
     },
     {
       "field": "MinGroundContactTime"
     },
     {
+      "en": "Min HR",
       "field": "MinHeartRate"
     },
     {
+      "en": "Min Leg Spring",
       "field": "MinLegSpringStiffness"
     },
     {
@@ -1414,6 +1440,7 @@
       "field": "MinPace"
     },
     {
+      "en": "Min Power",
       "field": "MinPower"
     },
     {
@@ -1462,6 +1489,7 @@
       "field": "MinVerticalOscillation"
     },
     {
+      "en": "Min Vertical Ratio",
       "field": "MinVerticalRatio"
     },
     {
@@ -1539,6 +1567,7 @@
       "field": "SumFloorsDescended"
     },
     {
+      "en": "Intensity Factor (IF)",
       "field": "SumIntensityFactor"
     },
     {
@@ -1650,6 +1679,7 @@
       "zh": "\u603b\u5212\u6570"
     },
     {
+      "en": "Work",
       "field": "SumTotalWork"
     },
     {
@@ -1664,12 +1694,15 @@
       "zh": "\u8bad\u7ec3\u6210\u6548"
     },
     {
+      "en": "Training Stress Score (TSS)",
       "field": "SumTrainingStressScore"
     },
     {
+      "en": "Threshold Power",
       "field": "ThresholdPower"
     },
     {
+      "en": "Avg Air Power",
       "field": "WeightedMeanAirPower"
     },
     {
@@ -1717,6 +1750,11 @@
       "zh": "\u5e73\u5747\u6548\u7387"
     },
     {
+      "en": "Avg Elevation",
+      "field": "WeightedMeanElevation"
+    },
+    {
+      "en": "Avg Form Power",
       "field": "WeightedMeanFormPower"
     },
     {
@@ -1731,6 +1769,7 @@
       "zh": "\u5e73\u5747\u8dd1\u6b65\u8e0f\u9891"
     },
     {
+      "en": "Ground Contact Balance Left",
       "field": "WeightedMeanGroundContactBalanceLeft"
     },
     {
@@ -1759,12 +1798,15 @@
       "field": "WeightedMeanLeftBalance"
     },
     {
+      "en": "Pedal Smoothness Left (%)",
       "field": "WeightedMeanLeftPedalSmoothness"
     },
     {
+      "en": "Torque Effectiveness Left (%)",
       "field": "WeightedMeanLeftTorqueEffectiveness"
     },
     {
+      "en": "Leg Spring",
       "field": "WeightedMeanLegSpringStiffness"
     },
     {
@@ -1793,6 +1835,7 @@
       "zh": "\u5e73\u5747\u79fb\u52a8\u901f\u5ea6"
     },
     {
+      "en": "Normalized Power (NP)",
       "field": "WeightedMeanNormalizedPower"
     },
     {
@@ -1807,12 +1850,14 @@
       "zh": "\u5e73\u5747\u914d\u901f"
     },
     {
+      "en": "Avg Power",
       "field": "WeightedMeanPower"
     },
     {
       "field": "WeightedMeanRelativeRunningEconomy"
     },
     {
+      "en": "Balance Right (%)",
       "field": "WeightedMeanRightBalance"
     },
     {
@@ -1853,6 +1898,14 @@
       "ja": "\u5e73\u5747\u6b69\u5e45",
       "pt": "Avg Stride Length",
       "zh": "\u5e73\u5747\u6b65\u5e45"
+    },
+    {
+      "en": "Cadence",
+      "field": "WeightedMeanStrokeCadence"
+    },
+    {
+      "en": "Stroke Distance",
+      "field": "WeightedMeanStrokeDistance"
     },
     {
       "de": "Durchschnittliche Anzahl von Z\u00fcgen",
@@ -1899,10 +1952,19 @@
       "zh": "\u5e73\u5747\u5782\u76f4\u6446\u5e45"
     },
     {
+      "en": "Vertical Ratio",
       "field": "WeightedMeanVerticalRatio"
     },
     {
       "field": "WeightedMeanVerticalSpeed"
+    },
+    {
+      "en": "Momentary Energy Exp",
+      "field": "WeightedMomentaryEnergyExpenditure"
+    },
+    {
+      "en": "Relative Running Economy",
+      "field": "WeightedRelativeRunningEconomy"
     },
     {
       "field": "__CalcAscentSpeed"
@@ -3092,13 +3154,49 @@
     },
     {
       "activity_type": "all",
+      "field": "BeginPowerTwentyMinutesDistance",
+      "metric": "kilometer",
+      "statute": "mile"
+    },
+    {
+      "activity_type": "all",
+      "field": "BeginPowerTwentyMinutesTime",
+      "metric": "second",
+      "statute": "second"
+    },
+    {
+      "activity_type": "all",
+      "field": "BeginPowerTwentyMinutesTimerTime",
+      "metric": "second",
+      "statute": "second"
+    },
+    {
+      "activity_type": "all",
       "field": "BeginTimestamp",
       "metric": "Europe/London",
       "statute": "Europe/London"
     },
     {
       "activity_type": "all",
+      "field": "DirectLactateThresholdHeartRate",
+      "metric": "bpm",
+      "statute": "bpm"
+    },
+    {
+      "activity_type": "all",
+      "field": "DirectLactateThresholdSpeed",
+      "metric": "centimetersPerMillisecond",
+      "statute": "centimetersPerMillisecond"
+    },
+    {
+      "activity_type": "all",
       "field": "DirectVO2Max",
+      "metric": "ml/kg/min",
+      "statute": "ml/kg/min"
+    },
+    {
+      "activity_type": "all",
+      "field": "DirectVO2MaxCycling",
       "metric": "ml/kg/min",
       "statute": "ml/kg/min"
     },
@@ -3113,6 +3211,24 @@
       "field": "EndLongitude",
       "metric": "dd",
       "statute": "dd"
+    },
+    {
+      "activity_type": "all",
+      "field": "EndPowerTwentyMinutesDistance",
+      "metric": "kilometer",
+      "statute": "mile"
+    },
+    {
+      "activity_type": "all",
+      "field": "EndPowerTwentyMinutesTime",
+      "metric": "second",
+      "statute": "second"
+    },
+    {
+      "activity_type": "all",
+      "field": "EndPowerTwentyMinutesTimerTime",
+      "metric": "second",
+      "statute": "second"
     },
     {
       "activity_type": "all",
@@ -3157,6 +3273,12 @@
       "statute": "foot"
     },
     {
+      "activity_type": "running",
+      "field": "MaxAirPower",
+      "metric": "watt",
+      "statute": "watt"
+    },
+    {
       "activity_type": "all",
       "field": "MaxAirTemperature",
       "metric": "celcius",
@@ -3187,16 +3309,34 @@
       "statute": "foot"
     },
     {
+      "activity_type": "running",
+      "field": "MaxFormPower",
+      "metric": "watt",
+      "statute": "watt"
+    },
+    {
       "activity_type": "all",
       "field": "MaxFractionalCadence",
       "metric": "rpm",
       "statute": "rpm"
     },
     {
+      "activity_type": "running",
+      "field": "MaxGroundContactBalanceLeft",
+      "metric": "percent",
+      "statute": "percent"
+    },
+    {
       "activity_type": "all",
       "field": "MaxHeartRate",
       "metric": "bpm",
       "statute": "bpm"
+    },
+    {
+      "activity_type": "running",
+      "field": "MaxLegSpringStiffness",
+      "metric": "kN/m",
+      "statute": "kN/m"
     },
     {
       "activity_type": "all",
@@ -3209,6 +3349,18 @@
       "field": "MaxPace",
       "metric": "min100m",
       "statute": "min100m"
+    },
+    {
+      "activity_type": "running",
+      "field": "MaxPower",
+      "metric": "watt",
+      "statute": "watt"
+    },
+    {
+      "activity_type": "cycling",
+      "field": "MaxPowerTwentyMinutes",
+      "metric": "watt",
+      "statute": "watt"
     },
     {
       "activity_type": "all",
@@ -3229,6 +3381,12 @@
       "statute": "hmph"
     },
     {
+      "activity_type": "fitness_equipment",
+      "field": "MaxStrokeCadence",
+      "metric": "strokesPerMinute",
+      "statute": "strokesPerMinute"
+    },
+    {
       "activity_type": "all",
       "field": "MaxSwimCadence",
       "metric": "strokesPerMinute",
@@ -3239,6 +3397,18 @@
       "field": "MaxUncorrectedElevation",
       "metric": "meter",
       "statute": "foot"
+    },
+    {
+      "activity_type": "running",
+      "field": "MaxVerticalRatio",
+      "metric": "percent",
+      "statute": "percent"
+    },
+    {
+      "activity_type": "running",
+      "field": "MinAirPower",
+      "metric": "watt",
+      "statute": "watt"
     },
     {
       "activity_type": "all",
@@ -3271,16 +3441,40 @@
       "statute": "foot"
     },
     {
+      "activity_type": "running",
+      "field": "MinFormPower",
+      "metric": "watt",
+      "statute": "watt"
+    },
+    {
+      "activity_type": "running",
+      "field": "MinGroundContactBalanceLeft",
+      "metric": "percent",
+      "statute": "percent"
+    },
+    {
       "activity_type": "all",
       "field": "MinHeartRate",
       "metric": "bpm",
       "statute": "bpm"
     },
     {
+      "activity_type": "running",
+      "field": "MinLegSpringStiffness",
+      "metric": "kN/m",
+      "statute": "kN/m"
+    },
+    {
       "activity_type": "all",
       "field": "MinPace",
       "metric": "minperkm",
       "statute": "minpermile"
+    },
+    {
+      "activity_type": "running",
+      "field": "MinPower",
+      "metric": "watt",
+      "statute": "watt"
     },
     {
       "activity_type": "all",
@@ -3313,6 +3507,12 @@
       "statute": "foot"
     },
     {
+      "activity_type": "running",
+      "field": "MinVerticalRatio",
+      "metric": "percent",
+      "statute": "percent"
+    },
+    {
       "activity_type": "all",
       "field": "SumDistance",
       "metric": "kilometer",
@@ -3341,6 +3541,12 @@
       "field": "SumEnergy",
       "metric": "kilocalorie",
       "statute": "kilocalorie"
+    },
+    {
+      "activity_type": "cycling",
+      "field": "SumIntensityFactor",
+      "metric": "if",
+      "statute": "if"
     },
     {
       "activity_type": "all",
@@ -3463,10 +3669,34 @@
       "statute": "dimensionless"
     },
     {
+      "activity_type": "cycling",
+      "field": "SumTotalWork",
+      "metric": "kilojoule",
+      "statute": "kilojoule"
+    },
+    {
       "activity_type": "all",
       "field": "SumTrainingEffect",
       "metric": "te",
       "statute": "te"
+    },
+    {
+      "activity_type": "cycling",
+      "field": "SumTrainingStressScore",
+      "metric": "dimensionless",
+      "statute": "dimensionless"
+    },
+    {
+      "activity_type": "cycling",
+      "field": "ThresholdPower",
+      "metric": "watt",
+      "statute": "watt"
+    },
+    {
+      "activity_type": "running",
+      "field": "WeightedMeanAirPower",
+      "metric": "watt",
+      "statute": "watt"
     },
     {
       "activity_type": "all",
@@ -3494,9 +3724,27 @@
     },
     {
       "activity_type": "all",
+      "field": "WeightedMeanElevation",
+      "metric": "meter",
+      "statute": "foot"
+    },
+    {
+      "activity_type": "running",
+      "field": "WeightedMeanFormPower",
+      "metric": "watt",
+      "statute": "watt"
+    },
+    {
+      "activity_type": "all",
       "field": "WeightedMeanFractionalCadence",
       "metric": "rpm",
       "statute": "rpm"
+    },
+    {
+      "activity_type": "running",
+      "field": "WeightedMeanGroundContactBalanceLeft",
+      "metric": "percent",
+      "statute": "percent"
     },
     {
       "activity_type": "all",
@@ -3509,6 +3757,24 @@
       "field": "WeightedMeanHeartRate",
       "metric": "bpm",
       "statute": "bpm"
+    },
+    {
+      "activity_type": "cycling",
+      "field": "WeightedMeanLeftPedalSmoothness",
+      "metric": "percent",
+      "statute": "percent"
+    },
+    {
+      "activity_type": "cycling",
+      "field": "WeightedMeanLeftTorqueEffectiveness",
+      "metric": "percent",
+      "statute": "percent"
+    },
+    {
+      "activity_type": "running",
+      "field": "WeightedMeanLegSpringStiffness",
+      "metric": "kN/m",
+      "statute": "kN/m"
     },
     {
       "activity_type": "all",
@@ -3535,6 +3801,12 @@
       "statute": "hmph"
     },
     {
+      "activity_type": "cycling",
+      "field": "WeightedMeanNormalizedPower",
+      "metric": "watt",
+      "statute": "watt"
+    },
+    {
       "activity_type": "all",
       "field": "WeightedMeanPace",
       "metric": "minperkm",
@@ -3545,6 +3817,18 @@
       "field": "WeightedMeanPace",
       "metric": "min100m",
       "statute": "min100m"
+    },
+    {
+      "activity_type": "all",
+      "field": "WeightedMeanPower",
+      "metric": "watt",
+      "statute": "watt"
+    },
+    {
+      "activity_type": "cycling",
+      "field": "WeightedMeanRightBalance",
+      "metric": "percent",
+      "statute": "percent"
     },
     {
       "activity_type": "all",
@@ -3572,6 +3856,18 @@
     },
     {
       "activity_type": "all",
+      "field": "WeightedMeanStrokeCadence",
+      "metric": "strokesPerMinute",
+      "statute": "strokesPerMinute"
+    },
+    {
+      "activity_type": "all",
+      "field": "WeightedMeanStrokeDistance",
+      "metric": "meter",
+      "statute": "yard"
+    },
+    {
+      "activity_type": "all",
       "field": "WeightedMeanStrokes",
       "metric": "dimensionless",
       "statute": "dimensionless"
@@ -3593,6 +3889,24 @@
       "field": "WeightedMeanVerticalOscillation",
       "metric": "centimeter",
       "statute": "centimeter"
+    },
+    {
+      "activity_type": "all",
+      "field": "WeightedMeanVerticalRatio",
+      "metric": "percent",
+      "statute": "percent"
+    },
+    {
+      "activity_type": "all",
+      "field": "WeightedMomentaryEnergyExpenditure",
+      "metric": "c/Hr",
+      "statute": "c/Hr"
+    },
+    {
+      "activity_type": "all",
+      "field": "WeightedRelativeRunningEconomy",
+      "metric": "dimensionless",
+      "statute": "dimensionless"
     }
   ]
 }
