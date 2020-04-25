@@ -42,7 +42,6 @@
 
 // Withings
 -(void)withingsUpdate;
--(void)withingsChangeUser:(NSString*)shortname;
 
 // Garmin
 -(void)garminDownloadActivityTrackPoints13:(GCActivity*)act;

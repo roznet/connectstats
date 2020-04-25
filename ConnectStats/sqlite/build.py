@@ -22,7 +22,8 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 #  
-#
+#  To rebuild db form legacy:
+#    ./build.py --init legacy -o out/fields.db build
 #
 
 import sqlite3

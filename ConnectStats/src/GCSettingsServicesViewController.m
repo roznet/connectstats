@@ -28,7 +28,6 @@
 #import "GCAppGlobal.h"
 #import "GCWebConnect+Requests.h"
 #import "GCService.h"
-#import "GCSportTracksBase.h"
 #import "GCSplitViewController.h"
 #import "GCHealthKitRequest.h"
 #import "GCHealthKitSourcesRequest.h"
@@ -160,9 +159,9 @@
         
     // for withings
     [self.remap addSection:GC_SECTIONS_WITHINGS withRows:@[
-                                                           @( GC_ROW_SERVICE_NAME ),
-                                                           @( GC_ROW_AUTO         ),
-                                                           @( GC_ROW_STATUS       )]];
+                                                           @( GC_WITHINGS_SERVICE_NAME ),
+                                                           @( GC_WITHINGS_AUTO         ),
+                                                           @( GC_WITHINGS_STATUS       )]];
 
     [self.remap addSection:GC_SECTIONS_OPTIONS withRows:@[
         @( GC_OPTIONS_DOWNLOAD_DETAILS ),
@@ -317,14 +316,14 @@
 
 - (UITableViewCell *)withingsTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell * rv = nil;
-    GCCellEntryText * textcell = nil;
+    //GCCellEntryText * textcell = nil;
     GCCellGrid * gridcell = nil;
     GCCellEntrySwitch * switchcell = nil;
     GCCellActivityIndicator * activitycell = nil;
 
     gcService service = gcServiceWithings;
 
-    if (indexPath.row ==GC_ROW_SERVICE_NAME) {
+    if (indexPath.row ==GC_WITHINGS_SERVICE_NAME) {
         gridcell =[self gridCell:tableView];
         [gridcell setupForRows:2 andCols:1];
 
@@ -340,51 +339,15 @@
         gridcell.iconPosition = gcIconPositionRight;
         [GCViewConfig setupGradientForDetails:gridcell];
         rv = gridcell;
-    }else if (indexPath.row == GC_ROW_LOGIN) {
-        textcell = [self textCell:tableView];
-        [textcell.label setText:NSLocalizedString(@"Login Name", @"")];
-
-        textcell.textField.secureTextEntry = NO;
-        (textcell.textField).text = [[GCAppGlobal profile] currentLoginNameForService:service];
-        [textcell setIdentifierInt:GC_IDENTIFIER([indexPath section], GC_ROW_LOGIN)];
-        textcell.entryFieldDelegate = self;
-        rv = textcell;
-    }else if(indexPath.row == GC_ROW_PWD){
-        textcell = [self textCell:tableView];
-        [textcell.label setText:NSLocalizedString(@"Password", @"")];
-        textcell.textField.secureTextEntry = YES;
-        (textcell.textField).text = [[GCAppGlobal profile] currentPasswordForService:service];
-        [textcell setIdentifierInt:GC_IDENTIFIER([indexPath section],GC_ROW_PWD)];
-        textcell.entryFieldDelegate = self;
-        rv = textcell;
-    }else if(indexPath.row == GC_ROW_USER){
-        gridcell =[self gridCell:tableView];
-        [gridcell setupForRows:2 andCols:2];
-        [gridcell setIconImage:nil];
-        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"User",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
-        NSString * val = [[GCAppGlobal profile] configGetString:CONFIG_WITHINGS_USER defaultValue:@""];
-        NSAttributedString * uname =[[[NSAttributedString alloc] initWithString:val attributes:[GCViewConfig attribute16]] autorelease];
-        NSArray * users=[[GCAppGlobal profile] configGetArray:CONFIG_WITHINGS_USERSLIST defaultValue:@[]];
-
-        [gridcell labelForRow:0 andCol:0].attributedText=title;
-        [gridcell labelForRow:0 andCol:1].attributedText=uname;
-        NSString * desc = NSLocalizedString(@"No users", @"Services");
-        if (users.count>0) {
-            desc = [NSString stringWithFormat:@"%d users available", (int)users.count];
-
-        }
-        [gridcell labelForRow:1 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:desc
-                                                                                            attributes:[GCViewConfig attribute14Gray]] autorelease];
-        rv=gridcell;
-    }else if(indexPath.row == GC_ROW_AUTO){
+    }else if(indexPath.row == GC_WITHINGS_AUTO){
         switchcell = [GCCellEntrySwitch switchCell:tableView];
         switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                     withString:NSLocalizedString(@"Auto Refresh", @"Settings")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_WITHINGS_AUTO defaultValue:false];
-        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_ROW_AUTO);
+        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_WITHINGS_AUTO);
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
-    }else if(indexPath.row == GC_ROW_STATUS){
+    }else if(indexPath.row == GC_WITHINGS_STATUS){
         if (self.updating) {
             activitycell = [GCCellActivityIndicator activityIndicatorCell:tableView parent:[GCAppGlobal web]];
             rv=activitycell;
@@ -945,8 +908,6 @@
 
 
 -(void)cellWasChanged:(id<GCEntryFieldProtocol>)cell{
-    gcService service = gcServiceWithings;
-
     switch ([cell identifierInt]) {
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_USERNAME):
             if (![[cell text] isEqualToString:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]]) {
@@ -1009,21 +970,7 @@
             [GCAppGlobal saveSettings];
             break;
         }
-        case GC_IDENTIFIER(GC_SECTIONS_WITHINGS, GC_ROW_LOGIN):
-            if (![[cell text] isEqualToString:[[GCAppGlobal profile] currentLoginNameForService:service]]) {
-                [[GCAppGlobal profile] serviceSuccess:service set:NO];
-                [[GCAppGlobal profile] setLoginName:[cell text] forService:service];
-                [GCAppGlobal saveSettings];
-            }
-            break;
-        case GC_IDENTIFIER(GC_SECTIONS_WITHINGS,GC_ROW_PWD):
-            if (![[cell text] isEqualToString:[[GCAppGlobal profile] currentPasswordForService:service]]) {
-                [[GCAppGlobal profile] serviceSuccess:service set:NO];
-                [[GCAppGlobal profile] setPassword:[cell text] forService:service];
-                [GCAppGlobal saveSettings];
-            }
-            break;
-        case GC_IDENTIFIER(GC_SECTIONS_WITHINGS, GC_ROW_AUTO):
+        case GC_IDENTIFIER(GC_SECTIONS_WITHINGS, GC_WITHINGS_AUTO):
             [[GCAppGlobal profile] configToggleBool:CONFIG_WITHINGS_AUTO];
             [GCAppGlobal saveSettings];
             break;
@@ -1083,17 +1030,6 @@
             }
             break;
 
-        case GC_IDENTIFIER(GC_SECTIONS_WITHINGS, GC_ROW_USER):
-        {
-            if (self.updating == false) {
-                NSString * user = [cell choices][[cell selected]];
-                [GCAppGlobal configSet:CONFIG_WITHINGS_USER stringVal:user];
-                self.updating = true;
-                [[GCAppGlobal web] withingsChangeUser:user];
-                [GCAppGlobal saveSettings];
-            }
-            break;
-        }
         case GC_IDENTIFIER(GC_SECTIONS_STRAVA, GC_STRAVA_AUTO):
             [[GCAppGlobal profile] configToggleBool:CONFIG_SHARING_STRAVA_AUTO];
             if ([[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:NO]==YES) {
@@ -1236,7 +1172,7 @@
         [tableView reloadData];
     }
 
-    if (indexPath.section==GC_SECTIONS_WITHINGS&&indexPath.row==GC_ROW_STATUS) {
+    if (indexPath.section==GC_SECTIONS_WITHINGS&&indexPath.row==GC_WITHINGS_STATUS) {
         if( [[GCAppGlobal profile] serviceSuccess:gcServiceWithings] ){
             UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Confirm Logout" message:NSLocalizedString(@"Do you want to log out from withings",nil) preferredStyle:UIAlertControllerStyleAlert];
             
@@ -1253,32 +1189,6 @@
                 [[GCAppGlobal web] withingsUpdate];
                 [self.tableView reloadData];
             }
-        }
-    }else if (indexPath.section==GC_SECTIONS_WITHINGS&&indexPath.row==GC_ROW_USER){
-        NSArray * list = [[GCAppGlobal profile] configGetArray:CONFIG_WITHINGS_USERSLIST defaultValue:@[]];
-        if (list.count > 0) {
-            NSMutableArray * choices = [NSMutableArray arrayWithCapacity:list.count];
-            NSMutableArray * subtext = [NSMutableArray arrayWithCapacity:list.count];
-            NSString * current = [[GCAppGlobal profile] configGetString:CONFIG_WITHINGS_USER defaultValue:@""];
-            NSUInteger selected = 0;
-            NSUInteger idx = 0;
-            for (NSDictionary * one in list) {
-                NSString * shortname = one[@"shortname"];
-                if (shortname) {
-                    if ([shortname isEqualToString:current]) {
-                        selected = idx;
-                    }
-                    NSString * name = [NSString stringWithFormat:@"%@ %@",  one[@"firstname"], one[@"lastname"]];
-                    [choices addObject:shortname];
-                    [subtext addObject:name];
-                    idx++;
-                }
-            }
-            GCCellEntryListViewController * lc = [GCViewConfig standardEntryListViewController:choices selected:selected];
-            lc.subtext = subtext;
-            lc.entryFieldDelegate = self;
-            lc.identifierInt= GC_IDENTIFIER(GC_SECTIONS_WITHINGS, GC_ROW_USER);
-            [self.navigationController pushViewController:lc animated:YES];
         }
     }else if (indexPath.section==GC_SECTIONS_STRAVA&&indexPath.row==GC_STRAVA_LOGOUT){
         if( [[GCAppGlobal profile] serviceSuccess:gcServiceStrava] ){
@@ -1390,7 +1300,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPathI{
     NSIndexPath * indexPath = [self.remap remap:indexPathI];
 
-    if (self.updating && indexPath.section == GC_SECTIONS_WITHINGS && indexPath.row == GC_ROW_STATUS) {
+    if (self.updating && indexPath.section == GC_SECTIONS_WITHINGS && indexPath.row == GC_WITHINGS_STATUS) {
         return [GCCellActivityIndicator height];
     }
 

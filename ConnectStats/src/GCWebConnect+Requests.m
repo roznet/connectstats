@@ -189,26 +189,6 @@
 
 
 #pragma mark - withings
--(void)withingsChangeUser:(NSString*)shortname{
-    NSArray * users = [[GCAppGlobal profile] configGetArray:CONFIG_WITHINGS_USERSLIST defaultValue:@[]];
-    NSString * current = [[GCAppGlobal profile] configGetString:CONFIG_WITHINGS_USER defaultValue:@""];
-    if (users && ![shortname isEqualToString:current]) {
-        NSDictionary * found = nil;
-        for (NSDictionary * one in users) {
-            if ([one[@"shortname"] isEqualToString:current]) {
-                found = one;
-                break;
-            }
-        }
-        if (found) {
-            [[GCAppGlobal profile] configSet:CONFIG_WITHINGS_USER stringVal:shortname];
-            [GCAppGlobal saveSettings];
-            [[GCAppGlobal health] clearAllMeasures];
-            [[GCAppGlobal profile] serviceSuccess:gcServiceWithings set:NO];
-            [self withingsUpdate];
-        }
-    }
-}
 -(void)withingsUpdate{
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];

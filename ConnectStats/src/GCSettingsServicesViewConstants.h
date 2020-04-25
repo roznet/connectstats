@@ -75,11 +75,11 @@
 #define GC_OPTIONS_END              3
 
 // for withings
-#define GC_ROW_SERVICE_NAME 0
-#define GC_ROW_AUTO         1
-#define GC_ROW_LOGIN        2
-#define GC_ROW_PWD          3
-#define GC_ROW_USER         4
-#define GC_ROW_STATUS       5
-#define GC_ROW_END          6
+#define GC_WITHINGS_SERVICE_NAME 0
+#define GC_WITHINGS_AUTO         1
+//#define GC_ROW_LOGIN        2
+//#define GC_ROW_PWD          3
+//#define GC_ROW_USER         4
+#define GC_WITHINGS_STATUS       2
+#define GC_WITHINGS_END          3
 

@@ -553,19 +553,15 @@
         case gcServiceWithings:
             rv = [self configGetBool:CONFIG_WITHINGS_AUTO defaultValue:NO];
             break;
-        case gcServiceSportTracks:
-            rv = [self configGetBool:CONFIG_SPORTTRACKS_ENABLE defaultValue:NO];
-            break;
         case gcServiceHealthKit:
             rv = [self configGetBool:CONFIG_HEALTHKIT_ENABLE defaultValue:[GCAppGlobal healthStatsVersion]];
-            break;
-        case gcServiceFitBit:
-            rv = [self configGetBool:CONFIG_FITBIT_ENABLE defaultValue:NO];
             break;
         case gcServiceConnectStats:
             rv = [self configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO];
             break;
         case gcServiceEnd:
+        case gcServiceFitBit:
+        case gcServiceSportTracks:
             rv = false;
             break;
     }
@@ -582,21 +578,17 @@
         case gcServiceStrava:
             [self configSet:CONFIG_STRAVA_ENABLE boolVal:set];
             break;
-        case gcServiceSportTracks:
-            [self configSet:CONFIG_SPORTTRACKS_ENABLE boolVal:set];
-            break;
         case gcServiceWithings:
             [self configSet:CONFIG_WITHINGS_AUTO boolVal:set];
             break;
         case gcServiceHealthKit:
             [self configSet:CONFIG_HEALTHKIT_ENABLE boolVal:set];
             break;
-        case gcServiceFitBit:
-            [self configSet:CONFIG_FITBIT_ENABLE boolVal:set];
-            break;
         case gcServiceConnectStats:
             [self configSet:CONFIG_CONNECTSTATS_ENABLE boolVal:set];
             break;
+        case gcServiceFitBit:
+        case gcServiceSportTracks:
         case gcServiceEnd:
             break;
     }
