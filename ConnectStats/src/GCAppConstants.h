@@ -84,7 +84,6 @@
 #define CONFIG_WITHINGS_USERSLIST       @"config_withings_userlist"
 #define CONFIG_WITHINGS_USER            @"config_withings_user"
 #define CONFIG_WITHINGS_AUTO            @"config_withings_auto"
-#define CONFIG_BABOLAT_ENABLE           @"config_babolat_enable"
 #define CONFIG_CONNECTSTATS_ENABLE      @"config_connectstats_enable"
 #define CONFIG_CONNECTSTATS_USE         @"config_connectstats_use"
 #define CONFIG_CONNECTSTATS_FILLYEAR    @"config_connectstats_fillyear"
@@ -129,13 +128,13 @@
 #define PROFILE_DBPATH               @"profile_db_path"
 #define PROFILE_NAME                 @"profile_name"
 #define PROFILE_NAME_PWD_SUCCESS     @"config_name_pwd_success"
-#define PROFILE_LAST_PAGE            @"config_last_page"
-#define PROFILE_LAST_TOTAL_PAGES     @"config_last_total_pages"
-#define PROFILE_FULL_DOWNLOAD_DONE   @"config_full_download_done"
+
+#define PROFILE_LAST_PAGE_OBSOLETE            @"config_last_page"
+#define PROFILE_LAST_TOTAL_PAGES_OBSOLETE     @"config_last_total_pages"
+#define PROFILE_FULL_DOWNLOAD_DONE_OBSOLETE   @"config_full_download_done"
 
 #define PROFILE_SERVICE_STRAVA       @"profile_service_strava"
 #define PROFILE_SERVICE_CONNECTSTATS @"profile_service_connectstats"
-#define PROFILE_SERVICE_BABOLAT      @"profile_service_babolat"
 #define PROFILE_SERVICE_WITHINGS     @"profile_service_withings"
 #define PROFILE_SERVICE_GARMIN       @"profile_service_garmin"
 #define PROFILE_SERVICE_SUCCESS      @"profile_service_success"
@@ -148,6 +147,7 @@
 #define PROFILE_SERVICE_SETUP        @"profile_service_setup_"
 #define PROFILE_LAST_KEYCHAIN_SAVE   @"profile_last_keychain_save_"
 #define PROFILE_SERVICE_FULL_DONE    @"profile_service_full_done_"
+#define PROFILE_SERVICE_LAST_ANCHOR  @"profile_service_last_anchor_"
 
 typedef NS_ENUM(NSUInteger, gcPeriodType) {
     gcPeriodCalendar,
@@ -178,11 +178,8 @@ typedef NS_ENUM(NSUInteger, gcConnectStatsServiceUse){
 typedef NS_ENUM(NSUInteger, gcService) {
     gcServiceStrava,
     gcServiceWithings,
-    gcServiceBabolat,
     gcServiceGarmin,
-    gcServiceSportTracks,
     gcServiceHealthKit,
-    gcServiceFitBit,
     gcServiceConnectStats,
     gcServiceEnd
 };

@@ -222,13 +222,6 @@
         }else if (indexPath.row == GC_ADVANCED_DERIVED){
             [[GCAppGlobal web] derivedComputations:16];
             [GCAppGlobal beginRefreshing];
-        }else if (indexPath.row == GC_ADVANCED_RELOAD){
-            [[GCAppGlobal profile] configSet:PROFILE_LAST_PAGE intVal:0];
-            [[GCAppGlobal profile] configSet:PROFILE_FULL_DOWNLOAD_DONE boolVal:NO];
-            [GCAppGlobal saveSettings];
-            [[GCAppGlobal health] clearAllMeasures];
-            [[GCAppGlobal web] servicesSearchActivitiesFrom:0 reloadAll:true];
-            [GCAppGlobal beginRefreshing];
         }else if (indexPath.row == GC_ADVANCED_DETAILS){
             [[GCAppGlobal web] downloadMissingActivityDetails:30];
         }

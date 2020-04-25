@@ -614,6 +614,15 @@ void checkVersion(){
         [[GCAppGlobal profile] configSet:CONFIG_DUPLICATE_CHECK_ON_LOAD boolVal:true]; // was always true before
     }
     
+    if( [self isFirstTimeForFeature:@"UPGRADE_PROFILE_DONE_AND_ANCHOR"]){
+        needToSaveSettings = true;
+        // Transfer old key to new key
+        NSUInteger page = [[GCAppGlobal profile] configGetInt:PROFILE_LAST_PAGE_OBSOLETE defaultValue:0];
+        BOOL fullDone = [[GCAppGlobal profile] configGetBool:PROFILE_FULL_DOWNLOAD_DONE_OBSOLETE defaultValue:false];
+        [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin set:page];
+        [[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin set:fullDone];
+    }
+    
     if( needToSaveSettings ){
         [self saveSettings];
     }
@@ -649,12 +658,7 @@ void checkVersion(){
     }
 }
 -(void)searchAllActivities{
-    // Should have better logic for all services
-    if ([self.profiles configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] == true || [self.profiles configGetBool:PROFILE_FULL_DOWNLOAD_DONE defaultValue:false]) {
-        [self.web servicesSearchRecentActivities];
-    }else{
-        [self.web servicesSearchActivitiesFrom:[self.profiles configGetInt:PROFILE_LAST_PAGE defaultValue:0] reloadAll:true];
-    }
+    [self.web servicesSearchRecentActivities];
 }
 
 -(void)addOrSelectProfile:(NSString*)pName{

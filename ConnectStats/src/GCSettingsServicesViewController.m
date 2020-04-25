@@ -168,14 +168,6 @@
         @( GC_OPTIONS_DUPLICATE_IMPORT ),
         @( GC_OPTIONS_DUPLICATE_LOAD   ),
     ]];
-    if( debugIsEnabled ){
-        [self.remap addSection:GC_SECTIONS_BABOLAT withRows:@[
-            @( GC_BABOLAT_SERVICE_NAME ),
-            @( GC_BABOLAT_ENABLE       ),
-            @( GC_BABOLAT_USERNAME     ),
-            @( GC_BABOLAT_PWD          )]];
-    }
-    
 
 }
 
@@ -214,8 +206,6 @@
     NSInteger section = [self.remap section:sectionI];
     if (section == GC_SECTIONS_WITHINGS) {
         return self.showWithings ? nrows : 1;
-    }else if (section == GC_SECTIONS_BABOLAT){
-        return self.showBabolat ? nrows : 1 ;
     }else if (section == GC_SECTIONS_GARMIN){
         return self.showGarmin ? nrows : 1;
     }else if (section == GC_SECTIONS_STRAVA){
@@ -312,7 +302,6 @@
     [gridCell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attributeBold16] withString:title];
     [gridCell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withString:subtitle];
 }
-
 
 - (UITableViewCell *)withingsTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell * rv = nil;
@@ -775,60 +764,6 @@
     return rv;
 }
 
-- (UITableViewCell *)babolatTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell * rv = nil;
-    GCCellEntryText * textcell = nil;
-    GCCellGrid * gridcell = nil;
-    GCCellEntrySwitch * switchcell = nil;
-    //GCCellActivityIndicator * activitycell = nil;
-
-    gcService service = gcServiceBabolat;
-
-    if (indexPath.row == GC_BABOLAT_SERVICE_NAME){
-        gridcell =[self gridCell:tableView];
-        [gridcell setupForRows:2 andCols:1];
-        NSAttributedString * title = nil;
-        title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Babolat",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
-        NSAttributedString * status = [[[NSAttributedString alloc] initWithString:[self statusForService:service]
-                                                                       attributes:[GCViewConfig attribute14Gray]] autorelease];
-
-        //[gridcell setIconImage:[UIImage imageNamed:@"strava"]];
-        //[gridcell setIconPosition:gcIconPositionLeft];
-        [gridcell labelForRow:0 andCol:0].attributedText = title;
-        [gridcell labelForRow:1 andCol:0].attributedText = status;
-        [GCViewConfig setupGradientForDetails:gridcell];
-        rv = gridcell;
-
-    }else if (indexPath.row == GC_BABOLAT_USERNAME){
-        textcell = [self textCell:tableView];
-        [textcell.label setText:NSLocalizedString(@"Login Name", @"")];
-
-        textcell.textField.secureTextEntry = NO;
-        (textcell.textField).text = [[GCAppGlobal profile] currentLoginNameForService:service];
-        [textcell setIdentifierInt:GC_IDENTIFIER([indexPath section], GC_BABOLAT_USERNAME)];
-        textcell.entryFieldDelegate = self;
-        rv = textcell;
-    }else if(indexPath.row == GC_BABOLAT_PWD){
-        textcell = [self textCell:tableView];
-        [textcell.label setText:NSLocalizedString(@"Password", @"")];
-        textcell.textField.secureTextEntry = YES;
-        (textcell.textField).text = [[GCAppGlobal profile] currentPasswordForService:service];
-        [textcell setIdentifierInt:GC_IDENTIFIER([indexPath section],GC_BABOLAT_PWD)];
-        textcell.entryFieldDelegate = self;
-        rv = textcell;
-    }else if(indexPath.row == GC_BABOLAT_ENABLE){
-        switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                    withString:NSLocalizedString(@"Enable",@"Other Service")];
-        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_BABOLAT_ENABLE defaultValue:false];
-        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_BABOLAT_ENABLE);
-        switchcell.entryFieldDelegate = self;
-        rv=switchcell;
-
-    }
-    return rv;
-}
-
 -(UITableViewCell*)optionsTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell * rv = nil;
     //GCCellEntryText * textcell = nil;
@@ -887,8 +822,6 @@
         rv = [self garminTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section==GC_SECTIONS_STRAVA){
         rv = [self stravaTableView:tableView cellForRowAtIndexPath:indexPath];
-    }else if (indexPath.section == GC_SECTIONS_BABOLAT){
-        rv = [self babolatTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_OPTIONS){
         rv = [self optionsTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section == GC_SECTIONS_HEALTHKIT){
@@ -1007,27 +940,6 @@
                 RZLog(RZLogInfo, @"Garmin: Legacy");
             }
             [GCAppGlobal saveSettings];
-            break;
-
-        case GC_IDENTIFIER(GC_SECTIONS_BABOLAT, GC_BABOLAT_ENABLE):
-            [[GCAppGlobal profile] configToggleBool:CONFIG_BABOLAT_ENABLE];
-            [GCAppGlobal saveSettings];
-            break;
-        case GC_IDENTIFIER(GC_SECTIONS_BABOLAT, GC_BABOLAT_USERNAME):
-        {
-            if (![[cell text] isEqualToString:[[GCAppGlobal profile] currentLoginNameForService:gcServiceBabolat]]) {
-                [[GCAppGlobal profile] serviceSuccess:gcServiceBabolat set:NO];
-                [[GCAppGlobal profile] setLoginName:[cell text] forService:gcServiceBabolat];
-                [GCAppGlobal saveSettings];
-            }
-            break;
-        }
-        case GC_IDENTIFIER(GC_SECTIONS_BABOLAT,GC_BABOLAT_PWD):
-            if (![[cell text] isEqualToString:[[GCAppGlobal profile] currentPasswordForService:gcServiceBabolat]]) {
-                [[GCAppGlobal profile] serviceSuccess:gcServiceBabolat set:NO];
-                [[GCAppGlobal profile] setPassword:[cell text] forService:gcServiceBabolat];
-                [GCAppGlobal saveSettings];
-            }
             break;
 
         case GC_IDENTIFIER(GC_SECTIONS_STRAVA, GC_STRAVA_AUTO):
@@ -1164,8 +1076,6 @@
             self.showStrava = ! self.showStrava;
         }else if (indexPath.section==GC_SECTIONS_WITHINGS){
             self.showWithings = ! self.showWithings;
-        }else if (indexPath.section==GC_SECTIONS_BABOLAT){
-            self.showBabolat = ! self.showBabolat;
         }else if (indexPath.section==GC_SECTIONS_HEALTHKIT){
             self.showHealthKit = ! self.showHealthKit;
         }

@@ -102,7 +102,8 @@
 -(void)nonGarminSearch:(BOOL)reloadAll{
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
         dispatch_async(dispatch_get_main_queue(), ^(){
-            [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:reloadAll]];
+            BOOL stravaReload = (reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava]);
+            [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:stravaReload]];
         });
     }
     // For testing
@@ -133,39 +134,36 @@
     }
 }
 
--(void)garminSearchFrom:(NSUInteger)aStart reloadAll:(BOOL)reloadAll{
+-(void)garminSearch:(BOOL)reloadAll{
     if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
         // Run on main queue as it accesses a navigation Controller
         dispatch_async(dispatch_get_main_queue(), ^(){
+            BOOL connectStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats];
             [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
-            [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:reloadAll andNavigationController:[GCAppGlobal currentNavigationController]]];
+            [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:connectStatsReload andNavigationController:[GCAppGlobal currentNavigationController]]];
         });
         
     }
     
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
         dispatch_async(dispatch_get_main_queue(), ^(){
+            BOOL garminStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats];
+            NSInteger aStart = [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin];
             [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
-            [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:reloadAll] autorelease]];
+            [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:garminStatsReload] autorelease]];
             [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
         });
     }
 }
--(void)servicesSearchActivitiesFrom:(NSUInteger)aStart reloadAll:(BOOL)rAll{
-    [self servicesLogin];
-    [self garminSearchFrom:aStart reloadAll:rAll];
-    [self nonGarminSearch:rAll];
-}
-
 -(void)servicesSearchRecentActivities{
     [self servicesLogin];
-    [self garminSearchFrom:0 reloadAll:false];
+    [self garminSearch:false];
     [self nonGarminSearch:false];
 }
 
 -(void)servicesSearchAllActivities{
     [self servicesLogin];
-    [self garminSearchFrom:0 reloadAll:true];
+    [self garminSearch:true];
     [self nonGarminSearch:true];
 }
 
@@ -185,7 +183,13 @@
 #pragma mark - withings
 -(void)withingsUpdate{
     dispatch_async(dispatch_get_main_queue(), ^(){
-        [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
+        NSInteger anchor = [[GCAppGlobal profile] serviceAnchor:gcServiceWithings];
+        if( anchor == 0 || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceWithings]){
+            [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
+        }else{
+            NSDate * anchorDate = [NSDate dateWithTimeIntervalSince1970:anchor];
+            [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:anchorDate with:[GCAppGlobal currentNavigationController]]];
+        }
     });
 }
 #pragma mark - download track details

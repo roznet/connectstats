@@ -67,6 +67,10 @@
 -(BOOL)serviceEnabled:(gcService)service;
 -(void)serviceEnabled:(gcService)service set:(BOOL)set;
 -(BOOL)serviceIncomplete:(gcService)service;
+-(BOOL)serviceCompletedFull:(gcService)service;
+-(void)serviceCompletedFull:(gcService)service set:(BOOL)set;
+-(NSInteger)serviceAnchor:(gcService)service;
+-(void)serviceAnchor:(gcService)service set:(NSInteger)anchor;
 -(BOOL)profileRequireSetup;
 -(BOOL)atLeastOneService;
 -(NSUInteger)numberOfServices;

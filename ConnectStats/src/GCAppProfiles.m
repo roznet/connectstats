@@ -69,7 +69,7 @@
     return @{PROFILE_LOGIN_NAME:@"",
              PROFILE_NAME:@"Default",
              PROFILE_DBPATH:@"activities.db",
-             PROFILE_FULL_DOWNLOAD_DONE:@(false)
+             PROFILE_SERVICE_FULL_DONE:@(false)
     };
 }
 
@@ -509,9 +509,6 @@
         case gcServiceWithings:
             sstr = PROFILE_SERVICE_WITHINGS;
             break;
-        case gcServiceBabolat:
-            sstr = PROFILE_SERVICE_BABOLAT;
-            break;
         case gcServiceGarmin:
             sstr = PROFILE_SERVICE_GARMIN;
             break;
@@ -534,16 +531,24 @@
     [self configSet:[self key:PROFILE_SERVICE_SETUP forService:service] boolVal:set];
 }
 
--(BOOL)serviceFullDone:(gcService)service{
-    return [self configGetBool:[self key:PROFILE_FULL_DOWNLOAD_DONE forService:service] defaultValue:NO];
+-(BOOL)serviceCompletedFull:(gcService)service{
+    return [self configGetBool:[self key:PROFILE_SERVICE_FULL_DONE forService:service] defaultValue:NO];
+
 }
+-(void)serviceCompletedFull:(gcService)service set:(BOOL)set{
+    [self configSet:[self key:PROFILE_SERVICE_SETUP forService:service] boolVal:set];
+}
+-(NSInteger)serviceAnchor:(gcService)service{
+    return [self configGetInt:[self key:PROFILE_SERVICE_LAST_ANCHOR forService:service] defaultValue:0];
+}
+-(void)serviceAnchor:(gcService)service set:(NSInteger)anchor{
+    return [self configSet:[self key:PROFILE_SERVICE_LAST_ANCHOR forService:service] intVal:anchor];
+}
+
 
 -(BOOL)serviceEnabled:(gcService)service{
     BOOL rv = false;
     switch (service) {
-        case gcServiceBabolat:
-            rv = [self configGetBool:CONFIG_BABOLAT_ENABLE defaultValue:NO];
-            break;
         case gcServiceGarmin:
             rv = [self configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO];
             break;
@@ -560,8 +565,6 @@
             rv = [self configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO];
             break;
         case gcServiceEnd:
-        case gcServiceFitBit:
-        case gcServiceSportTracks:
             rv = false;
             break;
     }
@@ -569,9 +572,6 @@
 }
 -(void)serviceEnabled:(gcService)service set:(BOOL)set{
     switch (service) {
-        case gcServiceBabolat:
-            [self configSet:CONFIG_BABOLAT_ENABLE boolVal:set];
-            break;
         case gcServiceGarmin:
             [self configSet:CONFIG_GARMIN_ENABLE boolVal:set];
             break;
@@ -587,8 +587,6 @@
         case gcServiceConnectStats:
             [self configSet:CONFIG_CONNECTSTATS_ENABLE boolVal:set];
             break;
-        case gcServiceFitBit:
-        case gcServiceSportTracks:
         case gcServiceEnd:
             break;
     }
@@ -615,11 +613,10 @@
     return rv;
 }
 -(BOOL)atLeastOneService{
-        return [self serviceEnabled:gcServiceBabolat] ||
+    return
         [self serviceEnabled:gcServiceGarmin] ||
         [self serviceEnabled:gcServiceConnectStats] ||
         [self serviceEnabled:gcServiceStrava] ||
-        [self serviceEnabled:gcServiceSportTracks] ||
         [self serviceEnabled:gcServiceHealthKit];
 }
 -(BOOL)profileRequireSetup{
@@ -628,12 +625,9 @@
 
 -(NSUInteger)numberOfServices{
     NSUInteger rv = 0;
-    rv += [self serviceEnabled:gcServiceBabolat];
     rv += [self serviceEnabled:gcServiceGarmin];
     rv += [self serviceEnabled:gcServiceStrava];
-    rv += [self serviceEnabled:gcServiceSportTracks];
     rv += [self serviceEnabled:gcServiceHealthKit];
-    rv += [self serviceEnabled:gcServiceFitBit];
     rv += [self serviceEnabled:gcServiceConnectStats];
     return rv;
 }
