@@ -536,7 +536,7 @@
 
 }
 -(void)serviceCompletedFull:(gcService)service set:(BOOL)set{
-    [self configSet:[self key:PROFILE_SERVICE_SETUP forService:service] boolVal:set];
+    [self configSet:[self key:PROFILE_SERVICE_FULL_DONE forService:service] boolVal:set];
 }
 -(NSInteger)serviceAnchor:(gcService)service{
     return [self configGetInt:[self key:PROFILE_SERVICE_LAST_ANCHOR forService:service] defaultValue:0];

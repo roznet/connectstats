@@ -151,7 +151,6 @@
             NSInteger aStart = [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin];
             [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
             [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:garminStatsReload] autorelease]];
-            [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
         });
     }
 }
