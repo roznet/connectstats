@@ -68,10 +68,6 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 -(void)registerActivity:(NSString*)aId withTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps;
 -(void)registerActivity:(NSString *)aId withWeather:(GCWeather *)aData;
 
--(void)registerTennisActivity:(NSString *)aId withBabolatData:(NSDictionary *)aData;
--(void)registerTennisActivity:(NSString *)aId withFullSession:(NSDictionary *)aData;
-
-
 -(NSUInteger)countOfKnownDuplicates;
 -(GCActivity*)findDuplicate:(GCActivity*)act;
 -(BOOL)isKnownDuplicate:(GCActivity*)act;
@@ -122,8 +118,6 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 -(void)filterForQuickFilter;
 -(void)clearFilter;
 -(BOOL)hasFilter;
-
--(FMDatabase*)tennisdb;
 
 -(NSUInteger)countOfFilteredActivities;
 -(GCActivity*)filteredActivityForIndex:(NSUInteger)idx;

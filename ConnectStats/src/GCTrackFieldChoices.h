@@ -30,7 +30,6 @@
 
 @class GCActivity;
 @class GCHealthZoneCalculator;
-@class GCActivityTennis;
 
 
 @interface GCTrackFieldChoices : NSObject
@@ -46,7 +45,6 @@
 @property (nonatomic,retain) NSString * activityType;
 
 +(GCTrackFieldChoices*)trackFieldChoicesWithActivity:(GCActivity*)activity;
-+(GCTrackFieldChoices*)trackFieldChoicesWithTennisActivity:(GCActivityTennis *)activity;
 +(GCTrackFieldChoices*)trackFieldChoicesWithDayActivity:(GCActivity*)activity;
 
 -(void)setupTrackStats:(GCTrackStats*)trackStats;

@@ -27,8 +27,6 @@
 #import "GCActivity+Import.h"
 #import "GCStravaActivityListParser.h"
 #import "GCStravaActivityStreamsParser.h"
-#import "GCSportTracksActivityDetailParser.h"
-#import "GCSportTracksActivityListParser.h"
 #import "GCStravaActivityLapsParser.h"
 #import "GCActivity+Database.h"
 #import "GCGarminRequestActivityReload.h"
@@ -38,10 +36,7 @@
 @implementation GCTestParsing
 
 -(NSArray*)testDefinitions{
-    return @[@{TK_SEL: NSStringFromSelector(@selector(sportTracksParsing)),
-               TK_DESC:@"Test parsing of sporttracks",
-               TK_SESS:@"GC Parsing SportTracks"},
-             @{TK_SEL:NSStringFromSelector(@selector(garminExtraFieldsTests)),
+    return @[@{TK_SEL:NSStringFromSelector(@selector(garminExtraFieldsTests)),
                TK_DESC:@"Test parsing of garmin track with extra fields",
                TK_SESS:@"GC Parsing Extra Fields"},
 
@@ -115,19 +110,6 @@
     }*/
 
     [self endSession:@"GC Parsing Extra Fields"];
-}
-
--(void)sportTracksParsing{
-    [self startSession:@"GC Parsing SportTracks"];
-    GCSportTracksActivityListParser * parser = [GCSportTracksActivityListParser activityListParser:[NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"sporttracks_list_0.json"]]];
-    [self assessTestResult:@"SportTracks List Parsed" result:parser.parsedCount == 25];
-    NSError * e = nil;
-    NSData  * input = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"sporttracks_track_5556610.json"]];
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:input options:NSJSONReadingMutableContainers error:&e];
-    GCActivity * act = [[[GCActivity alloc] initWithId:@"5556610" andSportTracksData:json] autorelease];
-    GCSportTracksActivityDetailParser * detailParser = [GCSportTracksActivityDetailParser activityDetailParser:json forActivity:act];
-    RZLog(RZLogInfo,@"Parsed points %d", (int)detailParser.points.count);
-    [self endSession:@"GC Parsing SportTracks"];
 }
 
 @end

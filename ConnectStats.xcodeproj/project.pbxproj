@@ -163,7 +163,6 @@
 		422F521B1DFB567200DD5551 /* RZUtilsUniversal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F3FBF51DD79D910042A9B1 /* RZUtilsUniversal.framework */; };
 		422F521C1DFB567200DD5551 /* RZUtilsUniversal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42F3FBF51DD79D910042A9B1 /* RZUtilsUniversal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		422F521F1DFB56BF00DD5551 /* GCActivity+Fields.m in Sources */ = {isa = PBXBuildFile; fileRef = 421A514B1C82FA6C00671587 /* GCActivity+Fields.m */; };
-		422FAEAA19A1DD6000D09773 /* GCActivityTennisShotValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51C218AD6F3900B85FAB /* GCActivityTennisShotValues.m */; };
 		422FAEAC19A1DD6000D09773 /* GCGarminLoginSSORequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ACFE9718C099AB00BF27A5 /* GCGarminLoginSSORequest.m */; };
 		422FAEB019A1DD6000D09773 /* GCDerivedOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 428EBF5A186A2A2C0057021D /* GCDerivedOrganizer.m */; };
 		422FAEB219A1DD6000D09773 /* GCWebConnect+Requests.m in Sources */ = {isa = PBXBuildFile; fileRef = 420063F918C238530031395F /* GCWebConnect+Requests.m */; };
@@ -174,14 +173,11 @@
 		422FAEBC19A1DD6000D09773 /* GCTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF79815FB4115007A88FA /* GCTabBarController.m */; };
 		422FAEBD19A1DD6000D09773 /* GCWebConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF79C15FB412C007A88FA /* GCWebConnect.m */; };
 		422FAEBF19A1DD6000D09773 /* GCWebUrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF79E15FB412C007A88FA /* GCWebUrl.m */; };
-		422FAEC319A1DD6000D09773 /* GCBabolatLoginRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515718A7E1E800B85FAB /* GCBabolatLoginRequest.m */; };
-		422FAEC419A1DD6000D09773 /* GCActivityTennisHeatmap.m in Sources */ = {isa = PBXBuildFile; fileRef = 423786861927C53900F575A0 /* GCActivityTennisHeatmap.m */; };
 		422FAEC519A1DD6000D09773 /* GCTableHeaderFieldsCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42018E9F18F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m */; };
 		422FAEC619A1DD6000D09773 /* GCActivitiesOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF7A215FB413B007A88FA /* GCActivitiesOrganizer.m */; };
 		422FAEC719A1DD6000D09773 /* GCActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B0B96315FC9206008275FF /* GCActivity.m */; };
 		422FAEC919A1DD6000D09773 /* GCGarminSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B0B97315FE8037008275FF /* GCGarminSearchJsonParser.m */; };
 		422FAECB19A1DD6000D09773 /* GCGarminLoginSimulatorRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ACFE9418C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.m */; };
-		422FAECE19A1DD6000D09773 /* GCBabolatPlayersRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515A18A7E70400B85FAB /* GCBabolatPlayersRequest.m */; };
 		422FAECF19A1DD6000D09773 /* GCSettingsReloadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B955551819B36400BC7AF9 /* GCSettingsReloadViewController.m */; };
 		422FAED119A1DD6000D09773 /* GCStravaActivityStreamsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959CEF18D9016200C0B841 /* GCStravaActivityStreamsParser.m */; };
 		422FAED419A1DD6000D09773 /* GCActivityDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4231A2B71603BF9C00C02D79 /* GCActivityDetailViewController.m */; };
@@ -210,8 +206,6 @@
 		422FAF0B19A1DD6000D09773 /* GCLapCompound.m in Sources */ = {isa = PBXBuildFile; fileRef = 4244675E1849E2D8009F807E /* GCLapCompound.m */; };
 		422FAF0C19A1DD6000D09773 /* GCActivitySearchElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA288E1637F6AB0054F84A /* GCActivitySearchElement.m */; };
 		422FAF0E19A1DD6000D09773 /* GCHistoryAggregatedActivityStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 422C70AD1642B677003779E0 /* GCHistoryAggregatedActivityStats.m */; };
-		422FAF1219A1DD6000D09773 /* GCActivityTennisCuePoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51D918AE2CF400B85FAB /* GCActivityTennisCuePoint.m */; };
-		422FAF1319A1DD6000D09773 /* GCActivityTennis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB516318A82BC900B85FAB /* GCActivityTennis.m */; };
 		422FAF1719A1DD6000D09773 /* GCWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 422657F7181D1C2E00373BDE /* GCWeather.m */; };
 		422FAF1819A1DD6000D09773 /* GCFormattedField.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F914AE164C538800D0C950 /* GCFormattedField.m */; };
 		422FAF1919A1DD6000D09773 /* GCCellGrid+Templates.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F914C3164DC0B900D0C950 /* GCCellGrid+Templates.m */; };
@@ -244,7 +238,6 @@
 		422FAF4819A1DD6000D09773 /* GCActivity+ExportText.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EEAEE816A3679B0058965A /* GCActivity+ExportText.m */; };
 		422FAF5519A1DD6000D09773 /* GCActivityType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4244676B184B7550009F807E /* GCActivityType.m */; };
 		422FAF5719A1DD6000D09773 /* GCActivity+CachedTracks.m in Sources */ = {isa = PBXBuildFile; fileRef = 423209351868D8F600C8F305 /* GCActivity+CachedTracks.m */; };
-		422FAF5D19A1DD6000D09773 /* GCActivityTennisDetailSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51A418AADD1200B85FAB /* GCActivityTennisDetailSource.m */; };
 		422FAF6719A1DD6000D09773 /* GCGarminRequestActivityReload.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E186CF16A620E800D4513B /* GCGarminRequestActivityReload.m */; };
 		422FAF6919A1DD6000D09773 /* GCGarminActivitySummaryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E186D216A6225400D4513B /* GCGarminActivitySummaryParser.m */; };
 		422FAF6B19A1DD6000D09773 /* GCSettingsLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F23B38183D7E6D004918BB /* GCSettingsLogViewController.m */; };
@@ -258,7 +251,6 @@
 		422FAF8019A1DD6000D09773 /* GCActivity+Calculated.m in Sources */ = {isa = PBXBuildFile; fileRef = 42804DEA16D5215D009E4EEF /* GCActivity+Calculated.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		422FAF8119A1DD6000D09773 /* GCActivityMetaValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4255765E16D8C8D10080F8CE /* GCActivityMetaValue.m */; };
 		422FAF8219A1DD6000D09773 /* GCActivityCalculatedValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4255766216D8CA850080F8CE /* GCActivityCalculatedValue.m */; };
-		422FAF8319A1DD6000D09773 /* GCBabolatSessionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB516018A7EC8300B85FAB /* GCBabolatSessionRequest.m */; };
 		422FAF8419A1DD6000D09773 /* GCMapGoogleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB66CC16DACABA00C633BD /* GCMapGoogleViewController.m */; };
 		422FAF8519A1DD6000D09773 /* GCHealthMeasure.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB680B16DD5C8100C633BD /* GCHealthMeasure.m */; };
 		422FAF8619A1DD6000D09773 /* GCHealthOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB680E16DD5C9400C633BD /* GCHealthOrganizer.m */; };
@@ -273,7 +265,6 @@
 		422FAF9519A1DD6000D09773 /* GCViewMaturityButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4234B5B117895CF2002C3B53 /* GCViewMaturityButton.m */; };
 		422FAF9619A1DD6000D09773 /* GCViewActivityTypeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B34A2D179C31D500688E9F /* GCViewActivityTypeButton.m */; };
 		422FAF9719A1DD6000D09773 /* GCStravaActivityLapsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42461D221922D169001B03C7 /* GCStravaActivityLapsParser.m */; };
-		422FAF9A19A1DD6000D09773 /* GCBabolatSessionsListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515D18A7EC6500B85FAB /* GCBabolatSessionsListRequest.m */; };
 		422FAF9C19A1DD6000D09773 /* GCViewIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900317A1AE2C00C131DC /* GCViewIcons.m */; };
 		422FAF9D19A1DD6000D09773 /* GCStatsGraphOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900617A276F100C131DC /* GCStatsGraphOptionViewController.m */; };
 		422FAF9F19A1DD6000D09773 /* GCActivity+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C4159917B1A23800EBBAFB /* GCActivity+UI.m */; };
@@ -325,7 +316,6 @@
 		4235DF9E1655B61A00DE316A /* GCAppProfiles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235DF9D1655B61A00DE316A /* GCAppProfiles.m */; };
 		4236872D2275F7A3001210AA /* RZFitFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; };
 		4236872E2275F7A3001210AA /* RZFitFile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		423786871927C53900F575A0 /* GCActivityTennisHeatmap.m in Sources */ = {isa = PBXBuildFile; fileRef = 423786861927C53900F575A0 /* GCActivityTennisHeatmap.m */; };
 		4237869E1972D582006CBD4D /* GCStatsMultiFieldConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */; };
 		423953A81CE71ED4009A3AC3 /* FITOutlineCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 423953A71CE71ED4009A3AC3 /* FITOutlineCellView.m */; };
 		4239CD6B1C4B93AE0059B83D /* GCCalendarDataMarkerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4239CD6A1C4B93AE0059B83D /* GCCalendarDataMarkerInfo.m */; };
@@ -849,7 +839,6 @@
 		42B5E2221BA5AF9A000FAE4E /* GCCellGrid+Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E2011BA5AF9A000FAE4E /* GCCellGrid+Test.m */; };
 		42B5E2231BA5AF9A000FAE4E /* GCTestIconsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E2071BA5AF9A000FAE4E /* GCTestIconsCell.m */; };
 		42B5E2251BA5AF9A000FAE4E /* GCTestParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E20B1BA5AF9A000FAE4E /* GCTestParsing.m */; };
-		42B5E2261BA5AF9A000FAE4E /* GCTestTennis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E20E1BA5AF9A000FAE4E /* GCTestTennis.m */; };
 		42B5E2271BA5AF9A000FAE4E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E2131BA5AF9A000FAE4E /* main.m */; };
 		42B5E2541BA5B216000FAE4E /* GCDerivedOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 428EBF5A186A2A2C0057021D /* GCDerivedOrganizer.m */; };
 		42B5E2551BA5B216000FAE4E /* GCDerivedDataSerie.m in Sources */ = {isa = PBXBuildFile; fileRef = 420967501895566200D32CA7 /* GCDerivedDataSerie.m */; };
@@ -872,10 +861,6 @@
 		42B5E26A1BA5B216000FAE4E /* GCHealthKitWorkoutParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8AF231B25FEC000ADDD31 /* GCHealthKitWorkoutParser.m */; };
 		42B5E26C1BA5B216000FAE4E /* GCHealthKitDayDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DC51601B278BE800B5C12F /* GCHealthKitDayDetailParser.m */; };
 		42B5E26D1BA5B216000FAE4E /* GCHealthKitRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 421516BB19A47C450080CD4C /* GCHealthKitRequest.m */; };
-		42B5E2751BA5B216000FAE4E /* GCBabolatLoginRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515718A7E1E800B85FAB /* GCBabolatLoginRequest.m */; };
-		42B5E2761BA5B216000FAE4E /* GCBabolatPlayersRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515A18A7E70400B85FAB /* GCBabolatPlayersRequest.m */; };
-		42B5E2771BA5B216000FAE4E /* GCBabolatSessionsListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515D18A7EC6500B85FAB /* GCBabolatSessionsListRequest.m */; };
-		42B5E2781BA5B216000FAE4E /* GCBabolatSessionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB516018A7EC8300B85FAB /* GCBabolatSessionRequest.m */; };
 		42B5E2791BA5B216000FAE4E /* GCWithingsBodyMeasuresParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DE419E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m */; };
 		42B5E27F1BA5B216000FAE4E /* GCWithingsReqBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DDB19E1A798004407B8 /* GCWithingsReqBase.m */; };
 		42B5E2801BA5B216000FAE4E /* GCWithingsBodyMeasures.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A22DDF19E1AAFD004407B8 /* GCWithingsBodyMeasures.m */; };
@@ -910,10 +895,6 @@
 		42B5E2B01BA5B216000FAE4E /* GCExportText.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EEAEE216A35EDC0058965A /* GCExportText.m */; };
 		42B5E2B11BA5B216000FAE4E /* GCActivity+ExportText.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EEAEE816A3679B0058965A /* GCActivity+ExportText.m */; };
 		42B5E2B21BA5B216000FAE4E /* GCExportStrava.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235448416C4826600AB3E09 /* GCExportStrava.m */; };
-		42B5E2B31BA5B216000FAE4E /* GCActivityTennisCuePoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51D918AE2CF400B85FAB /* GCActivityTennisCuePoint.m */; };
-		42B5E2B41BA5B216000FAE4E /* GCActivityTennis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB516318A82BC900B85FAB /* GCActivityTennis.m */; };
-		42B5E2B51BA5B216000FAE4E /* GCActivityTennisShotValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51C218AD6F3900B85FAB /* GCActivityTennisShotValues.m */; };
-		42B5E2B61BA5B216000FAE4E /* GCActivityTennisHeatmap.m in Sources */ = {isa = PBXBuildFile; fileRef = 423786861927C53900F575A0 /* GCActivityTennisHeatmap.m */; };
 		42B5E2B71BA5B216000FAE4E /* GCActivity+Calculated.m in Sources */ = {isa = PBXBuildFile; fileRef = 42804DEA16D5215D009E4EEF /* GCActivity+Calculated.m */; };
 		42B5E2B81BA5B216000FAE4E /* GCActivity+CachedTracks.m in Sources */ = {isa = PBXBuildFile; fileRef = 423209351868D8F600C8F305 /* GCActivity+CachedTracks.m */; };
 		42B5E2B91BA5B216000FAE4E /* GCActivityMetaValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4255765E16D8C8D10080F8CE /* GCActivityMetaValue.m */; };
@@ -1358,15 +1339,7 @@
 		42EAE40A200BB2E30017D65C /* RZUtilsTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; };
 		42EAE40B200BB2E30017D65C /* RZUtilsTouch.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42EAE40F200BB2E30017D65C /* RZUtilsTestInfra.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 428BE87F20013DF600E14A61 /* RZUtilsTestInfra.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		42EB515818A7E1E800B85FAB /* GCBabolatLoginRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515718A7E1E800B85FAB /* GCBabolatLoginRequest.m */; };
-		42EB515B18A7E70400B85FAB /* GCBabolatPlayersRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515A18A7E70400B85FAB /* GCBabolatPlayersRequest.m */; };
-		42EB515E18A7EC6500B85FAB /* GCBabolatSessionsListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB515D18A7EC6500B85FAB /* GCBabolatSessionsListRequest.m */; };
-		42EB516118A7EC8300B85FAB /* GCBabolatSessionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB516018A7EC8300B85FAB /* GCBabolatSessionRequest.m */; };
-		42EB516418A82BC900B85FAB /* GCActivityTennis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB516318A82BC900B85FAB /* GCActivityTennis.m */; };
-		42EB51A518AADD1200B85FAB /* GCActivityTennisDetailSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51A418AADD1200B85FAB /* GCActivityTennisDetailSource.m */; };
 		42EB51A818AC33DB00B85FAB /* GCActivity+Import.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51A718AC33DB00B85FAB /* GCActivity+Import.m */; };
-		42EB51C318AD6F3900B85FAB /* GCActivityTennisShotValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51C218AD6F3900B85FAB /* GCActivityTennisShotValues.m */; };
-		42EB51DA18AE2CF400B85FAB /* GCActivityTennisCuePoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51D918AE2CF400B85FAB /* GCActivityTennisCuePoint.m */; };
 		42EB51DE18B4F81500B85FAB /* GCMapRouteLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51DD18B4F81500B85FAB /* GCMapRouteLogic.m */; };
 		42EBBEE01FFAB55E0009B385 /* RZExternal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; };
 		42EBBEE11FFAB55E0009B385 /* RZExternal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42EBBEDF1FFAB5400009B385 /* RZExternal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -2109,8 +2082,6 @@
 		4235DF9A16558F3C00DE316A /* GCSettingsCacheManagementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSettingsCacheManagementViewController.m; path = src/GCSettingsCacheManagementViewController.m; sourceTree = "<group>"; };
 		4235DF9C1655B61A00DE316A /* GCAppProfiles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCAppProfiles.h; path = src/GCAppProfiles.h; sourceTree = "<group>"; };
 		4235DF9D1655B61A00DE316A /* GCAppProfiles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCAppProfiles.m; path = src/GCAppProfiles.m; sourceTree = "<group>"; };
-		423786851927C53900F575A0 /* GCActivityTennisHeatmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCActivityTennisHeatmap.h; path = src/GCActivityTennisHeatmap.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		423786861927C53900F575A0 /* GCActivityTennisHeatmap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityTennisHeatmap.m; path = src/GCActivityTennisHeatmap.m; sourceTree = "<group>"; };
 		4237869C1972D582006CBD4D /* GCStatsMultiFieldConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStatsMultiFieldConfig.h; path = src/GCStatsMultiFieldConfig.h; sourceTree = "<group>"; };
 		4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStatsMultiFieldConfig.m; path = src/GCStatsMultiFieldConfig.m; sourceTree = "<group>"; };
 		423953A61CE71ED4009A3AC3 /* FITOutlineCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FITOutlineCellView.h; path = src/FITOutlineCellView.h; sourceTree = "<group>"; };
@@ -2603,8 +2574,6 @@
 		42B5E20A1BA5AF9A000FAE4E /* GCTestParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestParsing.h; path = src/GCTestParsing.h; sourceTree = "<group>"; };
 		42B5E20B1BA5AF9A000FAE4E /* GCTestParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestParsing.m; path = src/GCTestParsing.m; sourceTree = "<group>"; };
 		42B5E20C1BA5AF9A000FAE4E /* GCTestStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestStats.h; path = src/GCTestStats.h; sourceTree = "<group>"; };
-		42B5E20D1BA5AF9A000FAE4E /* GCTestTennis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestTennis.h; path = src/GCTestTennis.h; sourceTree = "<group>"; };
-		42B5E20E1BA5AF9A000FAE4E /* GCTestTennis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestTennis.m; path = src/GCTestTennis.m; sourceTree = "<group>"; };
 		42B5E20F1BA5AF9A000FAE4E /* GCTestTracks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestTracks.h; path = src/GCTestTracks.h; sourceTree = "<group>"; };
 		42B5E2101BA5AF9A000FAE4E /* GCTestUICellsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestUICellsViewController.h; path = src/GCTestUICellsViewController.h; sourceTree = "<group>"; };
 		42B5E2111BA5AF9A000FAE4E /* GCTestUIGraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestUIGraphViewController.h; path = src/GCTestUIGraphViewController.h; sourceTree = "<group>"; };
@@ -2984,24 +2953,8 @@
 		42E4D330232E7158002F114C /* GCSettingsServicesViewConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCSettingsServicesViewConstants.h; path = src/GCSettingsServicesViewConstants.h; sourceTree = "<group>"; };
 		42EAA3A91EDBA6150081B130 /* GCAppProfiles+Swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCAppProfiles+Swift.h"; path = "src/GCAppProfiles+Swift.h"; sourceTree = "<group>"; };
 		42EAA3AA1EDBA6150081B130 /* GCAppProfiles+Swift.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCAppProfiles+Swift.m"; path = "src/GCAppProfiles+Swift.m"; sourceTree = "<group>"; };
-		42EB515618A7E1E800B85FAB /* GCBabolatLoginRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCBabolatLoginRequest.h; path = src/GCBabolatLoginRequest.h; sourceTree = "<group>"; };
-		42EB515718A7E1E800B85FAB /* GCBabolatLoginRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCBabolatLoginRequest.m; path = src/GCBabolatLoginRequest.m; sourceTree = "<group>"; };
-		42EB515918A7E70400B85FAB /* GCBabolatPlayersRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCBabolatPlayersRequest.h; path = src/GCBabolatPlayersRequest.h; sourceTree = "<group>"; };
-		42EB515A18A7E70400B85FAB /* GCBabolatPlayersRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCBabolatPlayersRequest.m; path = src/GCBabolatPlayersRequest.m; sourceTree = "<group>"; };
-		42EB515C18A7EC6500B85FAB /* GCBabolatSessionsListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCBabolatSessionsListRequest.h; path = src/GCBabolatSessionsListRequest.h; sourceTree = "<group>"; };
-		42EB515D18A7EC6500B85FAB /* GCBabolatSessionsListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCBabolatSessionsListRequest.m; path = src/GCBabolatSessionsListRequest.m; sourceTree = "<group>"; };
-		42EB515F18A7EC8300B85FAB /* GCBabolatSessionRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCBabolatSessionRequest.h; path = src/GCBabolatSessionRequest.h; sourceTree = "<group>"; };
-		42EB516018A7EC8300B85FAB /* GCBabolatSessionRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCBabolatSessionRequest.m; path = src/GCBabolatSessionRequest.m; sourceTree = "<group>"; };
-		42EB516218A82BC900B85FAB /* GCActivityTennis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityTennis.h; path = src/GCActivityTennis.h; sourceTree = "<group>"; };
-		42EB516318A82BC900B85FAB /* GCActivityTennis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityTennis.m; path = src/GCActivityTennis.m; sourceTree = "<group>"; };
-		42EB51A318AADD1200B85FAB /* GCActivityTennisDetailSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityTennisDetailSource.h; path = src/GCActivityTennisDetailSource.h; sourceTree = "<group>"; };
-		42EB51A418AADD1200B85FAB /* GCActivityTennisDetailSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityTennisDetailSource.m; path = src/GCActivityTennisDetailSource.m; sourceTree = "<group>"; };
 		42EB51A618AC33DB00B85FAB /* GCActivity+Import.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCActivity+Import.h"; path = "src/GCActivity+Import.h"; sourceTree = "<group>"; };
 		42EB51A718AC33DB00B85FAB /* GCActivity+Import.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCActivity+Import.m"; path = "src/GCActivity+Import.m"; sourceTree = "<group>"; };
-		42EB51C118AD6F3900B85FAB /* GCActivityTennisShotValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityTennisShotValues.h; path = src/GCActivityTennisShotValues.h; sourceTree = "<group>"; };
-		42EB51C218AD6F3900B85FAB /* GCActivityTennisShotValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityTennisShotValues.m; path = src/GCActivityTennisShotValues.m; sourceTree = "<group>"; };
-		42EB51D818AE2CF400B85FAB /* GCActivityTennisCuePoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityTennisCuePoint.h; path = src/GCActivityTennisCuePoint.h; sourceTree = "<group>"; };
-		42EB51D918AE2CF400B85FAB /* GCActivityTennisCuePoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityTennisCuePoint.m; path = src/GCActivityTennisCuePoint.m; sourceTree = "<group>"; };
 		42EB51DC18B4F81500B85FAB /* GCMapRouteLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCMapRouteLogic.h; path = src/GCMapRouteLogic.h; sourceTree = "<group>"; };
 		42EB51DD18B4F81500B85FAB /* GCMapRouteLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCMapRouteLogic.m; path = src/GCMapRouteLogic.m; sourceTree = "<group>"; };
 		42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RZExternal.xcodeproj; path = RZExternal/RZExternal.xcodeproj; sourceTree = "<group>"; };
@@ -3970,7 +3923,6 @@
 		42734CE016957939003E2177 /* Activity */ = {
 			isa = PBXGroup;
 			children = (
-				42EB51AC18AC3AC200B85FAB /* Tennis */,
 				4255766016D8C8D80080F8CE /* Values */,
 				42B0B96215FC9206008275FF /* GCActivity.h */,
 				42B0B96315FC9206008275FF /* GCActivity.m */,
@@ -4416,7 +4368,6 @@
 			children = (
 				42F0A4F01B60616500901CFF /* Derived */,
 				421516B919A47C0B0080CD4C /* HealthKit */,
-				42EB515518A7E17300B85FAB /* Babolat */,
 				42AB66E016DC1CA300C633BD /* Withings */,
 				4235448616C5BC6900AB3E09 /* Strava */,
 				4233EAE7166B91A900185978 /* Geocode */,
@@ -4851,8 +4802,6 @@
 				42B5E1F31BA5AF9A000FAE4E /* GCTestCommunications.m */,
 				42B5E20A1BA5AF9A000FAE4E /* GCTestParsing.h */,
 				42B5E20B1BA5AF9A000FAE4E /* GCTestParsing.m */,
-				42B5E20D1BA5AF9A000FAE4E /* GCTestTennis.h */,
-				42B5E20E1BA5AF9A000FAE4E /* GCTestTennis.m */,
 				42B5E20F1BA5AF9A000FAE4E /* GCTestTracks.h */,
 				42B5E1FD1BA5AF9A000FAE4E /* GCTestTracks.m */,
 			);
@@ -5191,8 +5140,6 @@
 				42AB682216E3EC5D00C633BD /* Laps */,
 				4231A2B61603BF9C00C02D79 /* GCActivityDetailViewController.h */,
 				4231A2B71603BF9C00C02D79 /* GCActivityDetailViewController.m */,
-				42EB51A318AADD1200B85FAB /* GCActivityTennisDetailSource.h */,
-				42EB51A418AADD1200B85FAB /* GCActivityTennisDetailSource.m */,
 			);
 			name = ActivityDetail;
 			sourceTree = "<group>";
@@ -5426,36 +5373,6 @@
 				4273DB7221A1B80B00C09D68 /* FITDownloadListDataSource.swift */,
 			);
 			name = DataSources;
-			sourceTree = "<group>";
-		};
-		42EB515518A7E17300B85FAB /* Babolat */ = {
-			isa = PBXGroup;
-			children = (
-				42EB515618A7E1E800B85FAB /* GCBabolatLoginRequest.h */,
-				42EB515718A7E1E800B85FAB /* GCBabolatLoginRequest.m */,
-				42EB515918A7E70400B85FAB /* GCBabolatPlayersRequest.h */,
-				42EB515A18A7E70400B85FAB /* GCBabolatPlayersRequest.m */,
-				42EB515C18A7EC6500B85FAB /* GCBabolatSessionsListRequest.h */,
-				42EB515D18A7EC6500B85FAB /* GCBabolatSessionsListRequest.m */,
-				42EB515F18A7EC8300B85FAB /* GCBabolatSessionRequest.h */,
-				42EB516018A7EC8300B85FAB /* GCBabolatSessionRequest.m */,
-			);
-			name = Babolat;
-			sourceTree = "<group>";
-		};
-		42EB51AC18AC3AC200B85FAB /* Tennis */ = {
-			isa = PBXGroup;
-			children = (
-				42EB51D818AE2CF400B85FAB /* GCActivityTennisCuePoint.h */,
-				42EB51D918AE2CF400B85FAB /* GCActivityTennisCuePoint.m */,
-				42EB516218A82BC900B85FAB /* GCActivityTennis.h */,
-				42EB516318A82BC900B85FAB /* GCActivityTennis.m */,
-				42EB51C118AD6F3900B85FAB /* GCActivityTennisShotValues.h */,
-				42EB51C218AD6F3900B85FAB /* GCActivityTennisShotValues.m */,
-				423786851927C53900F575A0 /* GCActivityTennisHeatmap.h */,
-				423786861927C53900F575A0 /* GCActivityTennisHeatmap.m */,
-			);
-			name = Tennis;
 			sourceTree = "<group>";
 		};
 		42EBBEDB1FFAB5400009B385 /* Products */ = {
@@ -6863,7 +6780,6 @@
 				429AFD1122B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */,
 				429F2098244C60AB002FDDF5 /* GCStatsMultiFieldConfigViewController.m in Sources */,
 				4211C53119AAF2D3000DEF87 /* GCHealthKitBodyRequest.m in Sources */,
-				422FAEAA19A1DD6000D09773 /* GCActivityTennisShotValues.m in Sources */,
 				422F52161DFB51F700DD5551 /* FITFitMessageFields.m in Sources */,
 				42453BA71DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m in Sources */,
 				422F52141DFB51F700DD5551 /* FITFitMessage.m in Sources */,
@@ -6888,9 +6804,7 @@
 				4281AF5D22F732AD00BFE408 /* GCConnectStatsRequestLogin.m in Sources */,
 				422FAEBF19A1DD6000D09773 /* GCWebUrl.m in Sources */,
 				42BFC25E1DCF516C00EAD40E /* GCStravaAthleteParser.swift in Sources */,
-				422FAEC319A1DD6000D09773 /* GCBabolatLoginRequest.m in Sources */,
 				42BDFE82242F7789001BCDC8 /* GCActivity+Series.m in Sources */,
-				422FAEC419A1DD6000D09773 /* GCActivityTennisHeatmap.m in Sources */,
 				422FAEC519A1DD6000D09773 /* GCTableHeaderFieldsCategory.m in Sources */,
 				42E1A75424278037006C868A /* GCCalculatedCachedTrackInfo.m in Sources */,
 				423EF01A21D2A044005C2605 /* RZFitFileExtensions.swift in Sources */,
@@ -6902,7 +6816,6 @@
 				42D8AF261B26001E00ADDD31 /* GCHealthKitWorkoutParser.m in Sources */,
 				422F284220557DD000187478 /* GCField+Convert.m in Sources */,
 				42BFC2671DCF51F100EAD40E /* GCUnitTrainingZone.m in Sources */,
-				422FAECE19A1DD6000D09773 /* GCBabolatPlayersRequest.m in Sources */,
 				422FAECF19A1DD6000D09773 /* GCSettingsReloadViewController.m in Sources */,
 				42CC45CD200A67C0003EB805 /* GCSettingsBugReport.m in Sources */,
 				422FAED119A1DD6000D09773 /* GCStravaActivityStreamsParser.m in Sources */,
@@ -6955,8 +6868,6 @@
 				422FAF0B19A1DD6000D09773 /* GCLapCompound.m in Sources */,
 				422FAF0C19A1DD6000D09773 /* GCActivitySearchElement.m in Sources */,
 				422FAF0E19A1DD6000D09773 /* GCHistoryAggregatedActivityStats.m in Sources */,
-				422FAF1219A1DD6000D09773 /* GCActivityTennisCuePoint.m in Sources */,
-				422FAF1319A1DD6000D09773 /* GCActivityTennis.m in Sources */,
 				42DE53BE19CF438500009130 /* GCHealthKitActivityRequest.m in Sources */,
 				422FAF1719A1DD6000D09773 /* GCWeather.m in Sources */,
 				422FAF1819A1DD6000D09773 /* GCFormattedField.m in Sources */,
@@ -7026,7 +6937,6 @@
 				4280C7D32364FC7C00223709 /* GCConnectStatsRequestWeather.m in Sources */,
 				422FAF5519A1DD6000D09773 /* GCActivityType.m in Sources */,
 				422FAF5719A1DD6000D09773 /* GCActivity+CachedTracks.m in Sources */,
-				422FAF5D19A1DD6000D09773 /* GCActivityTennisDetailSource.m in Sources */,
 				42BFC25A1DCF514800EAD40E /* GCGarminSearchModernJsonParser.m in Sources */,
 				422F52091DFB51E500DD5551 /* FITFitFileDecode.mm in Sources */,
 				422FAF6719A1DD6000D09773 /* GCGarminRequestActivityReload.m in Sources */,
@@ -7050,7 +6960,6 @@
 				422FAF8019A1DD6000D09773 /* GCActivity+Calculated.m in Sources */,
 				422FAF8119A1DD6000D09773 /* GCActivityMetaValue.m in Sources */,
 				422FAF8219A1DD6000D09773 /* GCActivityCalculatedValue.m in Sources */,
-				422FAF8319A1DD6000D09773 /* GCBabolatSessionRequest.m in Sources */,
 				422FAF8419A1DD6000D09773 /* GCMapGoogleViewController.m in Sources */,
 				422FAF8519A1DD6000D09773 /* GCHealthMeasure.m in Sources */,
 				422FAF8619A1DD6000D09773 /* GCHealthOrganizer.m in Sources */,
@@ -7072,7 +6981,6 @@
 				422FAF9619A1DD6000D09773 /* GCViewActivityTypeButton.m in Sources */,
 				422FAF9719A1DD6000D09773 /* GCStravaActivityLapsParser.m in Sources */,
 				42BFC25D1DCF516800EAD40E /* GCStravaAthlete.m in Sources */,
-				422FAF9A19A1DD6000D09773 /* GCBabolatSessionsListRequest.m in Sources */,
 				42A22E0119E8895D004407B8 /* GCHealthSleepBlock.m in Sources */,
 				422FAF9C19A1DD6000D09773 /* GCViewIcons.m in Sources */,
 				422FAF9D19A1DD6000D09773 /* GCStatsGraphOptionViewController.m in Sources */,
@@ -7183,7 +7091,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42EB51C318AD6F3900B85FAB /* GCActivityTennisShotValues.m in Sources */,
 				42ACFE9818C099AB00BF27A5 /* GCGarminLoginSSORequest.m in Sources */,
 				42E1A74D24277FF9006C868A /* GCActivity+BestRolling.m in Sources */,
 				42A3AA381D43F01A004FBFD0 /* GCStravaSegmentEfforts.m in Sources */,
@@ -7205,8 +7112,6 @@
 				428FF7A015FB412C007A88FA /* GCWebUrl.m in Sources */,
 				42D8AF271B26002500ADDD31 /* GCHealthKitWorkoutParser.m in Sources */,
 				429AFD0E22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */,
-				42EB515818A7E1E800B85FAB /* GCBabolatLoginRequest.m in Sources */,
-				423786871927C53900F575A0 /* GCActivityTennisHeatmap.m in Sources */,
 				42018EA018F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m in Sources */,
 				428FF7A315FB413B007A88FA /* GCActivitiesOrganizer.m in Sources */,
 				427208681DE7A4C600924C90 /* FITFitMessage.swift in Sources */,
@@ -7222,7 +7127,6 @@
 				42ACFE9518C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.m in Sources */,
 				42E1A75224278037006C868A /* GCCalculatedCachedTrackInfo.m in Sources */,
 				42A99B251B780D9900994917 /* GCWatchSessionManager.m in Sources */,
-				42EB515B18A7E70400B85FAB /* GCBabolatPlayersRequest.m in Sources */,
 				42B955561819B36400BC7AF9 /* GCSettingsReloadViewController.m in Sources */,
 				42289D581C7B9B4D005A5D0E /* GCStatsHistGraphViewController.m in Sources */,
 				42959CF018D9016200C0B841 /* GCStravaActivityStreamsParser.m in Sources */,
@@ -7276,10 +7180,8 @@
 				42AA288F1637F6AB0054F84A /* GCActivitySearchElement.m in Sources */,
 				422549571EE7361F004F4AE5 /* FITFitStatisticsWeight.swift in Sources */,
 				422C70AE1642B677003779E0 /* GCHistoryAggregatedActivityStats.m in Sources */,
-				42EB51DA18AE2CF400B85FAB /* GCActivityTennisCuePoint.m in Sources */,
 				426B0F111DA119060091A734 /* FITFitMessage.m in Sources */,
 				421A514F1C82FA9400671587 /* GCCalendarDataDateMarkers.m in Sources */,
-				42EB516418A82BC900B85FAB /* GCActivityTennis.m in Sources */,
 				42C041C419A5D5F200FC20B3 /* GCHealthKitExportActivity.m in Sources */,
 				42453BAA1DD8B5940073ACCA /* GCMapGradientPathOverlay.m in Sources */,
 				42684EF41B2DB2A6001A90D2 /* GCSettingsSourceTableViewController.m in Sources */,
@@ -7339,7 +7241,6 @@
 				42C1080D1B7DE8B000092315 /* GCApplicationContext.m in Sources */,
 				42453BA51DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m in Sources */,
 				421F39AD1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m in Sources */,
-				42EB51A518AADD1200B85FAB /* GCActivityTennisDetailSource.m in Sources */,
 				421844B01D75C3F5005B09BC /* GCSegmentOrganizer.swift in Sources */,
 				42A3AA311D43EE85004FBFD0 /* GCStravaAthlete.m in Sources */,
 				42E186D016A620E900D4513B /* GCGarminRequestActivityReload.m in Sources */,
@@ -7368,7 +7269,6 @@
 				423EF01721D2A044005C2605 /* RZFitFileExtensions.swift in Sources */,
 				422F283F20557DD000187478 /* GCField+Convert.m in Sources */,
 				42DC51551B2784B600B5C12F /* GCHealthKitDailySummaryParser.m in Sources */,
-				42EB516118A7EC8300B85FAB /* GCBabolatSessionRequest.m in Sources */,
 				42AB66CD16DACABA00C633BD /* GCMapGoogleViewController.m in Sources */,
 				426A135E1C5CCEFA00D61098 /* GCActivitySettings.m in Sources */,
 				42AB680C16DD5C8100C633BD /* GCHealthMeasure.m in Sources */,
@@ -7399,7 +7299,6 @@
 				42B34A2E179C31D500688E9F /* GCViewActivityTypeButton.m in Sources */,
 				422B343D1CA7321200B345CD /* GCFieldCache.m in Sources */,
 				42461D231922D169001B03C7 /* GCStravaActivityLapsParser.m in Sources */,
-				42EB515E18A7EC6500B85FAB /* GCBabolatSessionsListRequest.m in Sources */,
 				42C0589721D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */,
 				424340FD1B741652001E22BB /* GCActivity+CSSearch.m in Sources */,
 				426B0F121DA119060091A734 /* FITFitMessageFields.m in Sources */,
@@ -7531,10 +7430,6 @@
 				423EF01821D2A044005C2605 /* RZFitFileExtensions.swift in Sources */,
 				427F93801BEDFF7000C177F9 /* GCTableHeaderFieldsCategory.m in Sources */,
 				422CC8821E6ACA1700195414 /* FITFitFieldsStatistics.swift in Sources */,
-				42B5E2751BA5B216000FAE4E /* GCBabolatLoginRequest.m in Sources */,
-				42B5E2761BA5B216000FAE4E /* GCBabolatPlayersRequest.m in Sources */,
-				42B5E2771BA5B216000FAE4E /* GCBabolatSessionsListRequest.m in Sources */,
-				42B5E2781BA5B216000FAE4E /* GCBabolatSessionRequest.m in Sources */,
 				42B5E2791BA5B216000FAE4E /* GCWithingsBodyMeasuresParser.m in Sources */,
 				42B5E27F1BA5B216000FAE4E /* GCWithingsReqBase.m in Sources */,
 				42B5E2801BA5B216000FAE4E /* GCWithingsBodyMeasures.m in Sources */,
@@ -7595,12 +7490,8 @@
 				42E1A74E24277FF9006C868A /* GCActivity+BestRolling.m in Sources */,
 				427F93771BEDFA6F00C177F9 /* GCStatsMultiFieldViewController.m in Sources */,
 				42B5E2B21BA5B216000FAE4E /* GCExportStrava.m in Sources */,
-				42B5E2B31BA5B216000FAE4E /* GCActivityTennisCuePoint.m in Sources */,
-				42B5E2B41BA5B216000FAE4E /* GCActivityTennis.m in Sources */,
 				427F935C1BEAA05800C177F9 /* GCTestUISamples.m in Sources */,
 				42CC45D0200A6E91003EB805 /* GCTestServiceBugReport.m in Sources */,
-				42B5E2B51BA5B216000FAE4E /* GCActivityTennisShotValues.m in Sources */,
-				42B5E2B61BA5B216000FAE4E /* GCActivityTennisHeatmap.m in Sources */,
 				42B5E2B71BA5B216000FAE4E /* GCActivity+Calculated.m in Sources */,
 				42B5E2B81BA5B216000FAE4E /* GCActivity+CachedTracks.m in Sources */,
 				42B5E2B91BA5B216000FAE4E /* GCActivityMetaValue.m in Sources */,
@@ -7661,7 +7552,6 @@
 				42B5E21B1BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.m in Sources */,
 				42B5E21E1BA5AF9A000FAE4E /* GCTestStats.m in Sources */,
 				42A3AA3E1D44EBB5004FBFD0 /* GCStravaSegmentEfforts.m in Sources */,
-				42B5E2261BA5AF9A000FAE4E /* GCTestTennis.m in Sources */,
 				42B5E2201BA5AF9A000FAE4E /* GCTestUICellsViewController.m in Sources */,
 				42B5E2161BA5AF9A000FAE4E /* GCAppDelegate.m in Sources */,
 				422CC87A1E6ACA1700195414 /* FITFitFile.m in Sources */,

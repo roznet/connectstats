@@ -54,9 +54,6 @@
 // Strava
 -(void)stravaDownloadActivityTrackPoints:(GCActivity*)act;
 
-// Babolat
--(void)babolatDownloadTennisActivityDetails:(NSString*)aId;
-
 // GarminLogin
 -(void)garminTestLogin;// should not use only for testing
 -(void)garminLogin;

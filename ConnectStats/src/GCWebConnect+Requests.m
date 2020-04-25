@@ -28,7 +28,6 @@
 #import "GCService.h"
 #import "GCWebUrl.h"
 #import "GCAppGlobal.h"
-#import "GCActivityTennis.h"
 
 #import "GCGarminRequestActivityReload.h"
 #import "GCGarminActivityTrack13Request.h"
@@ -59,8 +58,6 @@
 #import "GCStravaAthlete.h"
 #import "GCStravaSegmentEfforts.h"
 #import "GCStravaSegmentEffortStream.h"
-
-#import "GCBabolatLoginRequest.h"
 
 #import "GCDerivedRequest.h"
 #import "GCHealthOrganizer.h"
@@ -116,9 +113,6 @@
         });
     }
 
-    if ([[GCAppGlobal profile] configGetBool:CONFIG_BABOLAT_ENABLE defaultValue:false]) {
-        [self addRequest:[GCBabolatLoginRequest babolatLoginRequest]];
-    }
     if ([[GCAppGlobal profile] configGetBool:CONFIG_WITHINGS_AUTO defaultValue:false]) {
         [self withingsUpdate];
     }
@@ -344,16 +338,6 @@
 
 -(void)healthStoreCheckSource{
     [self addRequest:[GCHealthKitSourcesRequest request]];
-}
-
-#pragma mark - Babolat
-
--(void)babolatDownloadTennisActivityDetails:(NSString*)aId{
-    if ([GCActivityTennis isTennisActivityId:aId]) {
-        GCBabolatLoginRequest * req = [GCBabolatLoginRequest babolatLoginRequest];
-        req.sessionId = [[GCService service:gcServiceBabolat] serviceIdFromActivityId:aId];
-        [self addRequest:req];
-    }
 }
 
 #pragma mark - derived
