@@ -352,18 +352,29 @@ class ActivityTypes:
         return alt
     
 class Field:
-    
+    '''
+    units: array of Dict{ 'activityType':xxx,'metrics':xxx,'statute':xxx }
+    fieldDisplayNameByLanguage Dict(language:display)
+    order: array of {'category':STR,'field_order':NUMBER, ['activityType':STR or NULL] }
+    changes: array of dict {'what':xxx, 'old':xxx,'new':xxx }
+    '''    
     def __init__(self, key):
         self.key = key
         self.fieldDisplayNameByLanguage = dict()
         self.units = []
         self.orders = []
 
-        self.changes = defaultdict(list)
-        self.adds = defaultdict(list)
+        self.changes = []
 
     def sort_key(self):
         return self.key
+
+    def reset_changes(self):
+        self.changes = []
+        
+    def report_changes(self):
+        for change in self.changes:
+            print( '{} changed {} from {} to {}'.format( self.key, change['what'], change['old'], change['new'] ) )
     
     def add_display(self, language, displayName ):
         rv = None
@@ -377,6 +388,7 @@ class Field:
         else:
             if displayName != self.key and displayName != self.fieldDisplayNameByLanguage[language]:
                 rv = CHANGED
+                self.changes.append( {'what':language,'old':self.fieldDisplayNameByLanguage[language],'new':displayName} )
                 self.fieldDisplayNameByLanguage[language] = displayName
         return rv
                 
@@ -395,6 +407,7 @@ class Field:
             rv = ADDED
         if system in found and found[system] != uom:
             replace = True
+            self.changes.append( {'what':(activityType,system),'old':found[system],'new':uom} )
             rv = CHANGED
             
         found[system] = uom
@@ -420,7 +433,7 @@ class Field:
 
         if existing:
             if existing != one:
-                self.changes['gc_fields_order'].append( one )
+                self.changes.append( { 'what':'order','old':dict(existing),'new':info} )
                 existing.update(one)
                 rv = CHANGED
         else:
@@ -566,6 +579,10 @@ class Fields:
             self.changes[table].append( field )
         elif field_status == ADDED:
             self.adds[table].append( field )
+
+    def report_changes(self):
+        for one in self.types:
+            one.report_changes()
             
     def report_status(self,table=None):
         keys = [table] if table else list(set().union(self.changes.keys(),self.adds.keys()))
@@ -581,7 +598,7 @@ class Fields:
                     print( 'add {}'.format( one.key ) )
             if k in self.changes:
                 for one in self.changes[k]:
-                    print( 'changed {}'.format( one.key ) )
+                    one.report_changes()
             
     def read_field_order_from_dict(self,d):
         if 'gc_fields_order' in d:
