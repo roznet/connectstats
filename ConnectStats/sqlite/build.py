@@ -572,6 +572,9 @@ class Fields:
             self.changes[k] = []
             self.checks[k] = []
 
+        for key,field in self.fields.items():
+            field.reset_changes()
+
     def record_status(self,table,field,field_status=None):
         self.checks[table].append( field )
         
@@ -593,9 +596,6 @@ class Fields:
         keys = [table] if table else list(set().union(self.changes.keys(),self.adds.keys()))
         for k in keys:
             print( '{}: read {} added {} changed {}'.format( k, len(self.checks[k]) if k in self.checks else 0, len(self.adds[k]) if k in self.adds else 0, len(self.changes[k]) if k in self.changes else 0) )
-            if k in self.adds:
-                for one in self.adds[k]:
-                    print( 'add {}'.format( one.key ) )
             if k in self.changes:
                 for one in self.changes[k]:
                     one.report_changes()
@@ -608,8 +608,6 @@ class Fields:
                 field = self.field(one['field'])
                 rv = field.add_category_and_order(one)
                 self.record_status('gc_fields_order',field,rv)
-            if self.verbose:
-                self.report_status('gc_fields_order')
 
     def read_field_display_from_dict(self,d):
         if 'gc_fields_display' in d:
@@ -624,8 +622,6 @@ class Fields:
                         if rv and not field_status:
                             field_status = rv
                 self.record_status('gc_fields_display',field,field_status)
-            if self.verbose:
-                self.report_status('gc_fields_display')
 
     def read_field_uom_from_dict(self,d):
         if 'gc_fields_uom' in d:
@@ -641,8 +637,7 @@ class Fields:
                             field_status = rv
                         
                 self.record_status('gc_fields_uom',field,field_status)
-            if self.verbose:
-                self.report_status('gc_fields_uom')
+                
     def read_from_dict(self,dicts):
         self.read_field_order_from_dict( dicts )
         self.read_field_display_from_dict( dicts )
@@ -751,6 +746,8 @@ class Driver :
         self.fields = Fields(self.types)
         self.fields.verbose = self.verbose
         self.fields.read_from_db(base)
+        if self.verbose:
+            self.fields.report_status()
         self.categories = Categories()
         self.categories.verbose = self.verbose
         self.categories.read_from_db( base )
@@ -841,7 +838,7 @@ class Driver :
     def process_file(self,fn):
         if os.path.exists( fn ):
             if self.verbose:
-                print( 'processing {}'.format( fn ) )
+                print( 'read {}'.format( fn ) )
             if fn.endswith( '.db' ) :
                 self.load_db( fn )
             elif fn.endswith( '.json' ):
