@@ -34,6 +34,8 @@ import pprint
 import openpyxl
 from collections import defaultdict
 
+CHANGED = 'changed'
+ADDED = 'added'
 
 def sqlite3_table_exists(conn,tablename):
     cursor = conn.execute( "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name=?", (tablename,) )
@@ -104,7 +106,7 @@ def dict_save_to_db(conn,listsOfDict):
         columns = columns_typed( sample.keys() )
 
         sql = 'CREATE TABLE {} ({})'.format( table,', '.join(columns) )
-        print( sql )
+
         conn.execute( sql )
 
         for type_dict in listOfDict:
@@ -130,7 +132,8 @@ def dict_read_from_db(conn,tables):
             for row in res:
                 one = {}
                 for (idx,col) in enumerate(cols):
-                    one[col[0]] = row[idx]
+                    if row[idx] is not None:
+                        one[col[0]] = row[idx]
                 rows.append( one )
         rv.update( { table : rows } )
     return rv
@@ -178,6 +181,11 @@ class ActivityType:
             }
         return rv
 
+    def from_dict(input):
+        rv = ActivityType()
+        rv.data = input
+        return rv
+    
     def __getitem__(self,item):
         return self.data[item] if item in self.data else None
 
@@ -200,12 +208,18 @@ class ActivityType:
 
     def languages(self):
         return [key for key in self.data.keys() if len(key) == 2]
+
+    def update_from_dict(self,d):
+        # only update the languages
+        for (key,item) in d.items():
+            if len(key) == 2 and item:
+                self.data[key] = item
     
     def save_to_dict(self):
         return self.data
     
     def __repr__(self):
-        return "ActivityType({},'{}',{})".format(self.data['activity_type'],self.data['parent_activity_type'] );
+        return "ActivityType({},{},{})".format(self.data['activity_type'],self.data['parent_activity_type'], '+'.join(self.languages()) );
 
 
 class ActivityTypes:
@@ -228,7 +242,8 @@ class ActivityTypes:
             n+=1
 
         if self.verbose:
-            print( 'added {} ActivityTypes from {}'.format( n, source ) )
+            print( 'add {} ActivityTypes from {}'.format( n, source ) )
+        self.update_parents()
 
     def remap_activityType(self,atype):
         remap = {
@@ -281,8 +296,6 @@ class ActivityTypes:
             
         self.update_parents()
 
-
-        
     def validate_types(self):
         for one in self.types:
             display = [type_dict.display(x) for x in languages]
@@ -292,6 +305,28 @@ class ActivityTypes:
         
     def sort(self):
         self.types = sorted( self.types, key = lambda x: (x['parent_activity_type_id'],x['activity_type_id'] ) )
+
+    def read_from_dict(self,dicts):
+        if 'gc_activity_types' in dicts:
+            existings = {}
+            for one in self.types:
+                existings[ one['activity_type'] ] = one
+
+            for one in dicts['gc_activity_types']:
+                if one['activity_type'] in existings:
+                    existings[ one['activity_type'] ].update_from_dict( one )
+                else:
+                    self.types.append( ActivityType.from_dict(one) )
+        self.update_parents()            
+
+    def read_from_db(self,dbname):
+        conn = sqlite3.connect(dbname)
+        dicts = dict_read_from_db(conn,['gc_activity_types'] )
+        self.read_from_dict(dicts)
+        
+    def read_from_excel(self,wb):
+        dicts = dict_read_from_excel(wb,['gc_activity_types'])
+        self.read_from_dict(dicts)
                     
     def save_to_dict(self):
         self.sort()
@@ -317,6 +352,7 @@ class ActivityTypes:
         return alt
     
 class Field:
+    
     def __init__(self, key):
         self.key = key
         self.fieldDisplayNameByLanguage = dict()
@@ -324,24 +360,28 @@ class Field:
         self.orders = []
 
         self.changes = defaultdict(list)
+        self.adds = defaultdict(list)
 
     def sort_key(self):
         return self.key
     
     def add_display(self, language, displayName ):
-        rv = False
+        rv = None
+        if not displayName:
+            return rv
+        
         if language not in self.fieldDisplayNameByLanguage:
             if displayName != self.key:
-                rv = True
+                rv = ADDED
                 self.fieldDisplayNameByLanguage[language] = displayName
         else:
             if displayName != self.key and displayName != self.fieldDisplayNameByLanguage[language]:
-                rv = True
+                rv = CHANGED
                 self.fieldDisplayNameByLanguage[language] = displayName
         return rv
                 
     def add_uom(self, system, uom, activityType ):
-        rv = False
+        rv = None
         found = None
         replace = False
         for one in self.units:
@@ -352,10 +392,10 @@ class Field:
         if found is None:
             found = { 'field':self.key,'activity_type':activityType}
             self.units.append(found)
-            rv = True
+            rv = ADDED
         if system in found and found[system] != uom:
             replace = True
-            rv = True
+            rv = CHANGED
             
         found[system] = uom
 
@@ -366,6 +406,8 @@ class Field:
         expected info = {'category':STR,'field_order':NUMBER, ['activityType':STR or NULL] }
         if no activityType or null applies to all
         '''
+        rv = None
+        
         existing = None
         if 'activity_type' in info and info['activity_type']:
             for one in self.orders:
@@ -380,8 +422,12 @@ class Field:
             if existing != one:
                 self.changes['gc_fields_order'].append( one )
                 existing.update(one)
+                rv = CHANGED
         else:
             self.orders.append( info )
+            rv = ADDED
+
+        return rv
         
     def simplify_uom(self):
         all = None
@@ -426,7 +472,10 @@ class Fields:
         self.fields = dict()
         self.activityTypes = types
         self.verbose = types.verbose
-        self.changes = None
+        
+        self.changes = defaultdict(list)
+        self.adds = defaultdict(list)
+        self.checks = defaultdict(list)
 
     def field(self,key):
         if key not in self.fields:
@@ -434,11 +483,6 @@ class Fields:
 
         return self.fields[key]
 
-    def record_change(self,key,info):
-        if self.changes is None:
-            self.changes = {}
-        self.changes[key] = info
-            
     def read_from_legacy_db(self, db_from, language, unitsystem, table = 'gc_fields' ):
         conn = sqlite3.connect(db_from)
         cursor = conn.execute('select * from {}'.format(table))
@@ -507,32 +551,81 @@ class Fields:
                 rv.append( field )
 
         return rv
-                    
+
+    def reset_status(self,table=None):
+        keys = [table] if table else list(set().union(self.changes.keys(),self.adds.keys(),self.checks.keys()))
+        for k in keys:
+            self.adds[k] = []
+            self.changes[k] = []
+            self.checks[k] = []
+
+    def record_status(self,table,field,field_status=None):
+        self.checks[table].append( field )
+        
+        if field_status == CHANGED:
+            self.changes[table].append( field )
+        elif field_status == ADDED:
+            self.adds[table].append( field )
+            
+    def report_status(self,table=None):
+        keys = [table] if table else list(set().union(self.changes.keys(),self.adds.keys()))
+        for k in keys:
+            print( '{}: read {} added {} changed {}'.format( k, len(self.checks[k]) if k in self.checks else 0, len(self.adds[k]) if k in self.adds else 0, len(self.changes[k]) if k in self.changes else 0) )
+
+    def report_diffs(self,table=None):
+        keys = [table] if table else list(set().union(self.changes.keys(),self.adds.keys()))
+        for k in keys:
+            print( '{}: read {} added {} changed {}'.format( k, len(self.checks[k]) if k in self.checks else 0, len(self.adds[k]) if k in self.adds else 0, len(self.changes[k]) if k in self.changes else 0) )
+            if k in self.adds:
+                for one in self.adds[k]:
+                    print( 'add {}'.format( one.key ) )
+            if k in self.changes:
+                for one in self.changes[k]:
+                    print( 'changed {}'.format( one.key ) )
+            
     def read_field_order_from_dict(self,d):
         if 'gc_fields_order' in d:
             order = d['gc_fields_order']
+            self.reset_status('gc_fields_order')
             for one in order:
                 field = self.field(one['field'])
-                field.add_category_and_order(one)
+                rv = field.add_category_and_order(one)
+                self.record_status('gc_fields_order',field,rv)
+            if self.verbose:
+                self.report_status('gc_fields_order')
 
     def read_field_display_from_dict(self,d):
         if 'gc_fields_display' in d:
+            self.reset_status('gc_fields_display')
             display = d['gc_fields_display']
             for one in display:
                 field = self.field( one['field'] )
+                field_status = None
                 for key,val in one.items():
                     if is_valid_language(key):
-                        field.add_display( key,val )
+                        rv = field.add_display( key,val )
+                        if rv and not field_status:
+                            field_status = rv
+                self.record_status('gc_fields_display',field,field_status)
+            if self.verbose:
+                self.report_status('gc_fields_display')
 
     def read_field_uom_from_dict(self,d):
         if 'gc_fields_uom' in d:
+            self.reset_status('gc_fields_uom')
             uom = d['gc_fields_uom']
             for one in uom:
                 field = self.field(one['field'])
+                field_status = None
                 for (k,v) in one.items():
                     if is_valid_uom_system(k):
-                        field.add_uom(k,v,one['activity_type'])
-        
+                        rv = field.add_uom(k,v,one['activity_type'])
+                        if rv and not field_status:
+                            field_status = rv
+                        
+                self.record_status('gc_fields_uom',field,field_status)
+            if self.verbose:
+                self.report_status('gc_fields_uom')
     def read_from_dict(self,dicts):
         self.read_field_order_from_dict( dicts )
         self.read_field_display_from_dict( dicts )
@@ -585,15 +678,20 @@ class Category :
 class Categories :
     def __init__(self):
         self.categories = {}
+        self.verbose = False
 
     def add_category(self,category):
         self.categories[ category.name ] = category
 
     def read_from_dict(self,dicts):
         if 'gc_category_order' in dicts:
+            start = len(self.categories)
             for one in dicts['gc_category_order']:
-                cat = Category(one['category'],one['category_order'],one['en'])
-                self.add_category( cat )
+                if len(one):
+                    cat = Category(one['category'],one['category_order'],one['en'])
+                    self.add_category( cat )
+            if self.verbose:
+                print( 'gc_category_order: add {} (was {}))'.format( len( self.categories ), start ) )
 
     def read_from_db(self,dbname):
         conn = sqlite3.connect(dbname)
@@ -623,23 +721,29 @@ class Categories :
 class Driver :
     def __init__(self,args):
         self.args = args
+        self.verbose = args.verbose
 
     def init_latest(self):
         base = self.args.base
         self.types = ActivityTypes()
-        self.types.verbose = self.args.verbose
+        self.types.verbose = self.verbose
+        self.types.read_from_modern_json( 'download/activity_types_modern.json' )
+        if self.verbose:
+            print( 'read {}'.format( base ) )
         self.types.read_from_db(base)
         self.fields = Fields(self.types)
+        self.fields.verbose = self.verbose
         self.fields.read_from_db(base)
         self.categories = Categories()
+        self.categories.verbose = self.verbose
         self.categories.read_from_db( base )
-        self.fields.read_field_order_from_db( base )
         
     def init_legacy(self):
         self.types = ActivityTypes()
-        self.types.verbose = self.args.verbose
+        self.types.verbose = self.verbose
         self.types.read_from_modern_json( 'download/activity_types_modern.json' )
         self.fields = Fields(self.types)
+        self.fields.verbose = self.verbose
         
         self.languages = [ 'en', 'fr', 'ja', 'de', 'it', 'es', 'pt', 'zh' ]
 
@@ -652,20 +756,22 @@ class Driver :
         self.fields.fix_legacy_unit_system_missing()
 
         self.categories = Categories()
+        self.categories.verbose = self.verbose
         self.categories.read_from_db( 'edit/fields_order.db' )
         self.fields.read_from_db( 'edit/fields_order.db' )
 
     def init_empty(self):
         self.types = ActivityTypes()
         self.types.verbose = self.args.verbose
+        self.types.read_from_modern_json( 'download/activity_types_modern.json' )
         self.fields = Fields(types)
+        self.fields.verbose = self.verbose
+        self.categories = Categories()
+        self.categories.verbose = self.verbose
         
-    def build(self):
+    def cmd_build(self):
         for fn in self.args.files:
             self.process_file( fn )
-
-    def cmd_build(self):
-        self.build()
 
         output = self.args.output
         if output.endswith( '.db' ):
@@ -688,14 +794,10 @@ class Driver :
             wb.save( output )
             
 
-    def cmd_show(self):
-        self.build()
-
-        #pprint.pprint( sorted(list(self.fields.fields.keys() ) ))
-        #pprint.pprint( sorted(list(self.types.typesByKey ) ) )
-        #pprint.pprint( [types.typesByKey[x] for x in ['running', 'trail_running'] ] )
-        #pprint.pprint( [fields.fields[x] for x in ['MinPace', 'WeightedMeanHeartRate', 'WeightedMeanPace', 'DirectVO2Max', 'MinHeartRate']] )
-
+    def cmd_diff(self):
+        for fn in self.args.files:
+            self.process_file( fn )
+            self.fields.report_diffs()
 
     def load_db(self,dbname):
         if os.path.exists( dbname ):
@@ -721,6 +823,8 @@ class Driver :
             
     def process_file(self,fn):
         if os.path.exists( fn ):
+            if self.verbose:
+                print( 'processing {}'.format( fn ) )
             if fn.endswith( '.db' ) :
                 self.load_db( fn )
             elif fn.endswith( '.json' ):
@@ -731,8 +835,8 @@ class Driver :
 if __name__ == "__main__":
                 
     commands = {
-        'show':{'attr':'cmd_show','help':'Show status of files'},
         'build':{'attr':'cmd_build','help':'Rebuild database'},
+        'diff':{'attr':'cmd_diff','help':'Show Diff if rebuild'},
     }
 
     init = {
@@ -752,7 +856,7 @@ if __name__ == "__main__":
     parser.add_argument( '-b', '--base', default='out/fields.db', help='db file to init latest from' )
     parser.add_argument( '-s', '--save', action='store_true', help='save output otherwise just print' )
     parser.add_argument( '-o', '--output', help='output file' )
-    parser.add_argument( '-i', '--init', help='init method (default legacy)\n' + init_desc, default='legacy' )
+    parser.add_argument( '-i', '--init', help='init method (default legacy)\n' + init_desc, default='latest' )
     parser.add_argument( '-v', '--verbose', action='store_true', help='verbose output' )
     parser.add_argument( '-w', '--what', help='list what to show or process, defaults to {}'.format( '+'.join(what)), default='+'.join(what))
     parser.add_argument( '-l', '--languages', help='list of languages to show or process. defaults to {}'.format( '+'.join( languages ) ) , default='+'.join(languages))
