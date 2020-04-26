@@ -147,7 +147,7 @@
     
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
         dispatch_async(dispatch_get_main_queue(), ^(){
-            BOOL garminStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats];
+            BOOL garminStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin];
             NSInteger aStart = [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin];
             [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
             [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:garminStatsReload] autorelease]];
