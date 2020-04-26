@@ -135,7 +135,7 @@
         NSAttributedString * summ = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d activities",
                                                                                  (int)[[GCAppGlobal profile] activitiesCountForIdx:indexPath.row]]
                                                                      attributes:[GCViewConfig attribute14Gray]] autorelease];
-        NSAttributedString * curr = [[[NSAttributedString alloc] initWithString:current ? NSLocalizedString(@"Current Profile",@"Profiles") : NSLocalizedString(@"",@"Profiles")
+        NSAttributedString * curr = [[[NSAttributedString alloc] initWithString:current ? NSLocalizedString(@"Current Profile",@"Profiles") : @""
                                                                      attributes:[GCViewConfig attributeBold16Highlighted]]autorelease];
         [cell labelForRow:0 andCol:0].attributedText = title;
         [cell labelForRow:0 andCol:1].attributedText = curr;
@@ -245,7 +245,7 @@
                                               style:UIAlertActionStyleDestructive
                                             handler:^(UIAlertAction*action){
                                                 [self confirmDestructiveAction:NSLocalizedString(@"Are you sure you want to delete the whole profile?", nil)
-                                                                         title:NSLocalizedString(@"Delete Profile", nil)
+                                                                         title:NSLocalizedString(@"Delete Profile", @"Profile Delete")
                                                                     completion:^(){
                                                     [[GCAppGlobal profile] deleteProfile:[[GCAppGlobal profile] currentProfileName]];
                                                     [GCAppGlobal saveSettings];

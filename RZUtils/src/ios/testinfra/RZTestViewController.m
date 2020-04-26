@@ -79,16 +79,16 @@
 
 	CGFloat currentY	= 0.0 ;
     self.navigationItem.rightBarButtonItems = @[
-            RZReturnAutorelease([[UIBarButtonItem alloc] initWithTitle:self.runTestOnStartup? NSLocalizedString(@"Rerun",nil):NSLocalizedString(@"RunAll",nil)
+            RZReturnAutorelease([[UIBarButtonItem alloc] initWithTitle:self.runTestOnStartup? NSLocalizedString(@"Rerun",nil):NSLocalizedString(@"RunAll",@"Test Infra")
                                                                  style:UIBarButtonItemStylePlain
                                                                 target:self
                                                                 action:@selector(runTests:)]),
-            RZReturnAutorelease([[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"RunSingle",nil)
+            RZReturnAutorelease([[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"RunSingle",@"Test Infra")
                                                                  style:UIBarButtonItemStylePlain
                                                                 target:self
                                                                 action:@selector(runSingleTest:)])
                                                 ];
-    NSMutableArray * leftItems = [NSMutableArray arrayWithObject:RZReturnAutorelease([[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Clear",nil)
+    NSMutableArray * leftItems = [NSMutableArray arrayWithObject:RZReturnAutorelease([[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Clear",@"Test Infra")
                                                                                                                       style:UIBarButtonItemStylePlain
                                                                                                                      target:self
                                                                                                                      action:@selector(clearResults:)])

@@ -1084,10 +1084,10 @@
 
     if (indexPath.section==GC_SECTIONS_WITHINGS&&indexPath.row==GC_WITHINGS_STATUS) {
         if( [[GCAppGlobal profile] serviceSuccess:gcServiceWithings] ){
-            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Confirm Logout" message:NSLocalizedString(@"Do you want to log out from withings",nil) preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Confirm Logout" message:NSLocalizedString(@"Do you want to log out from withings",@"Service View") preferredStyle:UIAlertControllerStyleAlert];
             
             [alert addCancelAction];
-            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Logout",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Logout",@"Service View") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
                 RZLog(RZLogInfo, @"Log out of Withings");
                 [GCWithingsReqBase signout];
             }]];
@@ -1102,10 +1102,10 @@
         }
     }else if (indexPath.section==GC_SECTIONS_STRAVA&&indexPath.row==GC_STRAVA_LOGOUT){
         if( [[GCAppGlobal profile] serviceSuccess:gcServiceStrava] ){
-            UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Confirm Logout",nil) message:NSLocalizedString(@"Are you sure you want to log out from strava",nil) preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Confirm Logout",@"Service View") message:NSLocalizedString(@"Are you sure you want to log out from strava",nil) preferredStyle:UIAlertControllerStyleAlert];
             
             [alert addCancelAction];
-            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Logout",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Logout",@"Service View") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
                 RZLog(RZLogInfo, @"Log out of Strava");
                 [GCStravaReqBase signout];
             }]];

@@ -435,7 +435,7 @@
                     disp = [disp unitForGlobalSystem];
                     double val = [disp convertDouble:sp fromUnit:mps];
                     if (isnan(val)||isinf(val)) {
-                        d = NSLocalizedString(@"", @"Calendar Empty");
+                        d = @"";
                     }else{
                         d = [disp formatDouble:val];
                     }

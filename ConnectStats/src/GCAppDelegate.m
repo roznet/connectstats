@@ -530,7 +530,7 @@ void checkVersion(){
             NSString * message = NSLocalizedString(@"Do you want to enable the new service for Garmin Data? You can get more information and enable it later in the config page", @"Enable New Service");
             UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Enable New Service" message:message preferredStyle:UIAlertControllerStyleAlert];
             [alert addCancelAction];
-            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Enable",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Enable",@"Service status") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
                 RZLog(RZLogInfo, @"User enabling connectstats");
                 [GCViewConfig setGarminDownloadSource:gcGarminDownloadSourceBoth];
                 [self saveSettings];

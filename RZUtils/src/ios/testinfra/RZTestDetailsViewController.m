@@ -55,7 +55,7 @@
 	[self setView:contentView];
     RZRelease(contentView);
     self.navigationItem.rightBarButtonItems = @[
-                                                RZReturnAutorelease([[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Rerun",nil) style:UIBarButtonItemStylePlain target:self action:@selector(runTests:)]),
+                                                RZReturnAutorelease([[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Rerun",@"Test Infra") style:UIBarButtonItemStylePlain target:self action:@selector(runTests:)]),
                                                 ];
 
 }

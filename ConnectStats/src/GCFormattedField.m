@@ -101,10 +101,10 @@
                     // Try to remove duplicated text
                     NSString * shareFieldDisplay = self.shareFieldLabel.displayName;
                     if( [shareFieldDisplay hasPrefix:@"Avg "] && [useFieldDisplay hasPrefix:@"Max "] ){
-                        useFieldDisplay = NSLocalizedString(@"Max",nil);
+                        useFieldDisplay = NSLocalizedString(@"Max",@"Formatted Field");
                     }
                     if( [shareFieldDisplay hasPrefix:@"Avg "] && [useFieldDisplay hasPrefix:@"Min "] ){
-                        useFieldDisplay = NSLocalizedString(@"Min",nil);
+                        useFieldDisplay = NSLocalizedString(@"Min",@"Formatted Field");
                     }
                 }
             }
