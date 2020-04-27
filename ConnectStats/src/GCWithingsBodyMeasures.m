@@ -117,6 +117,9 @@
         }
     }
     dispatch_async( dispatch_get_main_queue(), ^(){
+        [[GCAppGlobal profile] serviceAnchor:gcServiceWithings set:[NSDate date].timeIntervalSince1970];
+        [[GCAppGlobal profile] serviceCompletedFull:gcServiceWithings set:YES];
+        [GCAppGlobal saveSettings];
         [self processDone];
     });
 }

@@ -177,7 +177,7 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
 
 -(void)addNonGarminTypes{
     NSMutableDictionary<NSNumber*,NSDictionary*>* missing = [NSMutableDictionary dictionary];
-    
+        
     NSUInteger nonActivityAllId = 0;
     if( self.typesByKey[@"non_activity_all"] == nil){
         nonActivityAllId = nonPredefinedTypeId++;
