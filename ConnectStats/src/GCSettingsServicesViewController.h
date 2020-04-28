@@ -27,5 +27,4 @@
 
 
 @interface GCSettingsServicesViewController : UITableViewController<GCEntryFieldDelegate,RZChildObject>
-@property (nonatomic,assign) BOOL updating;
 @end

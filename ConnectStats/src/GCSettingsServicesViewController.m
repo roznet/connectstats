@@ -308,7 +308,6 @@
     //GCCellEntryText * textcell = nil;
     GCCellGrid * gridcell = nil;
     GCCellEntrySwitch * switchcell = nil;
-    GCCellActivityIndicator * activitycell = nil;
 
     gcService service = gcServiceWithings;
 
@@ -337,36 +336,29 @@
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
     }else if(indexPath.row == GC_WITHINGS_STATUS){
-        if (self.updating) {
-            activitycell = [GCCellActivityIndicator activityIndicatorCell:tableView parent:[GCAppGlobal web]];
-            rv=activitycell;
-
+        gridcell =[self gridCell:tableView];
+        [gridcell setupForRows:2 andCols:1];
+        [gridcell setIconImage:nil];
+        
+        NSAttributedString * title = nil;
+        NSAttributedString * sub   = nil;
+        
+        if ([[GCAppGlobal profile] serviceSuccess:gcServiceWithings]) {
+            title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Setup successful - Tap to Logout",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
+            NSArray<GCHealthMeasure*>*measures = [GCAppGlobal health].measures;
+            NSUInteger count = measures.count;
+            GCHealthMeasure * latest = measures.firstObject;
+            NSString * subm = [NSString stringWithFormat:NSLocalizedString(@"%d measures, latest %@",@"Withings Status"), count, [latest.date dateShortFormat]];
+            sub = [[[NSAttributedString alloc] initWithString:subm attributes:[GCViewConfig attribute14Gray]] autorelease];
         }else{
-
-            gridcell =[self gridCell:tableView];
-            [gridcell setupForRows:2 andCols:1];
-            [gridcell setIconImage:nil];
-
-            NSAttributedString * title = nil;
-            NSAttributedString * sub   = nil;
-
-            if ([[GCAppGlobal profile] serviceSuccess:gcServiceWithings]) {
-                title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Setup successful - Tap to Logout",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
-                NSArray<GCHealthMeasure*>*measures = [GCAppGlobal health].measures;
-                NSUInteger count = measures.count;
-                GCHealthMeasure * latest = measures.firstObject;
-                NSString * subm = [NSString stringWithFormat:NSLocalizedString(@"%d measures, latest %@",@"Withings Status"), count, [latest.date dateShortFormat]];
-                sub = [[[NSAttributedString alloc] initWithString:subm attributes:[GCViewConfig attribute14Gray]] autorelease];
-            }else{
-                title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Tap to login",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
-                sub = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"No successful login yet",@"Services") attributes:[GCViewConfig attribute14Gray]] autorelease];
-            }
-
-            [gridcell labelForRow:0 andCol:0].attributedText = title;
-            [gridcell labelForRow:1 andCol:0].attributedText = sub;
-            gridcell.iconPosition = gcIconPositionRight;
-            rv = gridcell;
+            title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Tap to login",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
+            sub = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"No successful login yet",@"Services") attributes:[GCViewConfig attribute14Gray]] autorelease];
         }
+        
+        [gridcell labelForRow:0 andCol:0].attributedText = title;
+        [gridcell labelForRow:1 andCol:0].attributedText = sub;
+        gridcell.iconPosition = gcIconPositionRight;
+        rv = gridcell;
     }
     // Configure the cell...
     return rv;
@@ -397,15 +389,6 @@
                                                                     withString:NSLocalizedString(@"Download Activities",@"Other Service")];
         switchcell.toggle.on = (source != gcGarminDownloadSourceEnd);
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_GARMIN_ENABLE);
-        switchcell.entryFieldDelegate = self;
-        rv=switchcell;
-
-    }else if (indexPath.row == GC_GARMIN_MODERN_API) {
-        switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                    withString:NSLocalizedString(@"Modern API",@"Other Service")];
-        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true];
-        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_GARMIN_MODERN_API);
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
     }else if (indexPath.row == GC_GARMIN_METHOD) {
@@ -454,31 +437,7 @@
     //GCCellEntrySwitch * switchcell = nil;
     //GCCellActivityIndicator * activitycell = nil;
 
-    gcService service = gcServiceConnectStats;
-    
-    if (indexPath.row == GC_CONNECTSTATS_NAME) {
-        gridcell =[self gridCell:tableView];
-        [gridcell setupForRows:2 andCols:1];
-        NSAttributedString * title = nil;
-        NSAttributedString * status = [[[NSAttributedString alloc] initWithString:[self statusForService:service]
-                                                                       attributes:[GCViewConfig attribute14Gray]] autorelease];
-        
-        title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Test Garmin via ConnectStats",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
-        [gridcell setIconImage:[UIImage imageNamed:@"garmin"]];
-        [gridcell labelForRow:0 andCol:0].attributedText = title;
-        [gridcell labelForRow:1 andCol:0].attributedText = status;
-        gridcell.iconPosition = gcIconPositionRight;
-        [GCViewConfig setupGradientForDetails:gridcell];
-        rv = gridcell;
-    /*}else if (indexPath.row == GC_CONNECTSTATS_ENABLE){
-        switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                    withString:NSLocalizedString(@"Download Activities",@"Other Service")];
-        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false];
-        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_CONNECTSTATS_ENABLE);
-        switchcell.entryFieldDelegate = self;
-        rv=switchcell;*/
-    }else if (indexPath.row == GC_CONNECTSTATS_USE ){
+    if (indexPath.row == GC_CONNECTSTATS_USE ){
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:2];
         
@@ -519,39 +478,6 @@
                                                                        attributes:[GCViewConfig attribute14Gray]] autorelease];
         [gridcell labelForRow:1 andCol:0].attributedText = sample;
         [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
-        rv = gridcell;
-
-    }else if( indexPath.row == GC_CONNECTSTATS_FILLYEAR){
-        gridcell = [GCCellGrid gridCell:tableView];
-        [gridcell setupForRows:2 andCols:2];
-        
-        NSInteger year = (gcConnectStatsServiceUse)[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:CONFIG_CONNECTSTATS_NO_BACKFILL];
-
-        if( year == CONFIG_CONNECTSTATS_NO_BACKFILL ){
-            NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Backfill",@"Services")
-                                                                          attributes:[GCViewConfig attributeBold16]] autorelease];
-            [gridcell labelForRow:0 andCol:0].attributedText = title;
-            NSString * timeString = [NSString stringWithFormat:@"History will be downloaded from Garmin Connect"];
-            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                                         withString:@"Disabled"];
-            [gridcell labelForRow:1 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:timeString attributes:[GCViewConfig attribute14Gray]] autorelease];
-            [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
-
-        }else{
-            NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Backfill since ",@"Services")
-                                                                          attributes:[GCViewConfig attributeBold16]] autorelease];
-            [gridcell labelForRow:0 andCol:0].attributedText = title;
-            NSDate * startDate = [NSDate dateForDashedDate:[NSString stringWithFormat:@"%@-01-01", @(year )]];
-            NSTimeInterval timeToCover = [[NSDate date] timeIntervalSinceDate:startDate];
-            NSTimeInterval timeToBackFill = timeToCover / ( 90.0 * 3600.0 * 24.0) * 120.0;// 2min per 90 days
-            GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:timeToBackFill];
-            
-            NSString * timeString = [NSString stringWithFormat:@"Required initial time to synchronise %@", nu];
-            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                                         withString:[NSString stringWithFormat:@"%@", @(year)]];
-            [gridcell labelForRow:1 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:timeString attributes:[GCViewConfig attribute14Gray]] autorelease];
-            [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
-        }
         rv = gridcell;
 
     }else if( indexPath.row == GC_CONNECTSTATS_DEBUGKEY){
@@ -933,14 +859,6 @@
             [GCAppGlobal saveSettings];
             break;
         }
-        case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_MODERN_API):
-            if([[GCAppGlobal profile] configToggleBool:CONFIG_GARMIN_USE_MODERN]){
-                RZLog(RZLogInfo, @"Garmin: Modern");
-            }else{
-                RZLog(RZLogInfo, @"Garmin: Legacy");
-            }
-            [GCAppGlobal saveSettings];
-            break;
 
         case GC_IDENTIFIER(GC_SECTIONS_STRAVA, GC_STRAVA_AUTO):
             [[GCAppGlobal profile] configToggleBool:CONFIG_SHARING_STRAVA_AUTO];
@@ -1038,17 +956,6 @@
             break;
         }
 
-        case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_FILLYEAR):
-        {
-            if( cell.selected == 0){
-                [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_FILLYEAR intVal:CONFIG_CONNECTSTATS_NO_BACKFILL];
-            }else{
-                NSString * selected = [self validYearsForBackfill][cell.selected];
-                [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_FILLYEAR intVal:selected.integerValue];
-            }
-            [GCAppGlobal saveSettings];
-            break;
-        }
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_DEBUGKEY):
         {
             NSUInteger index = cell.selected;
@@ -1064,6 +971,26 @@
     [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 }
 #pragma mark - Table view delegate
+
+-(void)toggleLoginLogout:(gcService)service reqClass:(Class)reqCls{
+    if( [[GCAppGlobal profile] serviceSuccess:service] ){
+        NSString *serviceName = [GCService service:service].displayName;
+        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"Do you want to log out from %@",@"Service View"), serviceName];
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Confirm Logout",@"Service View")
+                                                                        message:message
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addCancelAction];
+        [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Logout",@"Service View") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+            RZLog(RZLogInfo, @"Log out of %@", serviceName);
+            [reqCls signout];
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+
+    }else{
+        [GCAppGlobal searchRecentActivities];
+    }
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPathI
 {
@@ -1083,37 +1010,11 @@
     }
 
     if (indexPath.section==GC_SECTIONS_WITHINGS&&indexPath.row==GC_WITHINGS_STATUS) {
-        if( [[GCAppGlobal profile] serviceSuccess:gcServiceWithings] ){
-            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Confirm Logout" message:NSLocalizedString(@"Do you want to log out from withings",@"Service View") preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addCancelAction];
-            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Logout",@"Service View") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
-                RZLog(RZLogInfo, @"Log out of Withings");
-                [GCWithingsReqBase signout];
-            }]];
-            [self presentViewController:alert animated:YES completion:nil];
-
-        }else{
-            if (self.updating == false) {
-                self.updating = true;
-                [[GCAppGlobal web] withingsUpdate];
-                [self.tableView reloadData];
-            }
-        }
+        [self toggleLoginLogout:gcServiceWithings reqClass:[GCWithingsReqBase class]];
     }else if (indexPath.section==GC_SECTIONS_STRAVA&&indexPath.row==GC_STRAVA_LOGOUT){
-        if( [[GCAppGlobal profile] serviceSuccess:gcServiceStrava] ){
-            UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Confirm Logout",@"Service View") message:NSLocalizedString(@"Are you sure you want to log out from strava",nil) preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addCancelAction];
-            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Logout",@"Service View") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
-                RZLog(RZLogInfo, @"Log out of Strava");
-                [GCStravaReqBase signout];
-            }]];
-            [self presentViewController:alert animated:YES completion:nil];
-        }else{
-            [GCAppGlobal searchAllActivities];
-        }
-        [GCAppGlobal searchAllActivities];
+        [self toggleLoginLogout:gcServiceStrava reqClass:[GCStravaReqBase class]];
+    }else if (indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_LOGOUT){
+        [self toggleLoginLogout:gcServiceConnectStats reqClass:[GCConnectStatsRequest class]];
     }else if (indexPath.section == GC_SECTIONS_HEALTHKIT && indexPath.row == GC_HEALTHKIT_SOURCE){
         GCSettingsSourceTableViewController * source = [[GCSettingsSourceTableViewController alloc] initWithNibName:nil bundle:nil];
         [self.navigationController pushViewController:source animated:YES];
@@ -1127,19 +1028,6 @@
             list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_METHOD);
             [self.navigationController pushViewController:list animated:YES];
         }
-    }else if (indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_LOGOUT){
-        if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] ){
-            UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Confirm Logout",nil) message:NSLocalizedString(@"Do you want to log out from connectstats",nil) preferredStyle:UIAlertControllerStyleAlert];
-            
-            [alert addCancelAction];
-            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Logout",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
-                RZLog(RZLogInfo, @"Log out of ConnectStats");
-                [GCConnectStatsRequest logout];
-            }]];
-            [self presentViewController:alert animated:YES completion:nil];
-        }else{
-            [GCAppGlobal searchAllActivities];
-        }
     }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_USE){
         GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsServiceUse] selected:[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_USE defaultValue:gcConnectStatsServiceUseValidate]];
         list.entryFieldDelegate = self;
@@ -1149,21 +1037,6 @@
         GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsConfig] selected:[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]];
         list.entryFieldDelegate = self;
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_CONFIG);
-        [self.navigationController pushViewController:list animated:YES];
-    }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_FILLYEAR){
-        NSArray<NSString*>* years = [self validYearsForBackfill];
-        NSUInteger index = 0;
-        NSUInteger currentYear = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:CONFIG_CONNECTSTATS_NO_BACKFILL];
-        for (NSString * one in years) {
-            if( one.integerValue == currentYear){
-                break;
-            }
-            index++;
-        }
-
-        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[self validYearsForBackfill] selected:index];
-        list.entryFieldDelegate = self;
-        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_FILLYEAR);
         [self.navigationController pushViewController:list animated:YES];
     }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_DEBUGKEY ){
         GCDebugServiceKeys * debugKeys = [GCDebugServiceKeys serviceKeys];
@@ -1199,21 +1072,12 @@
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
-    if ([theInfo.stringInfo isEqualToString:NOTIFY_END]) {
-        self.updating = false;
-    }
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self.tableView reloadData];
     });
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPathI{
-    NSIndexPath * indexPath = [self.remap remap:indexPathI];
-
-    if (self.updating && indexPath.section == GC_SECTIONS_WITHINGS && indexPath.row == GC_WITHINGS_STATUS) {
-        return [GCCellActivityIndicator height];
-    }
-
     return 58.;
 }
 

@@ -31,7 +31,6 @@
 
 typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
     GCConnectStatsRequestLoginStageCheck,
-    GCConnectStatsRequestLoginStageBackfill,
     GCConnectStatsRequestLoginStageEnd
 };
 
@@ -80,22 +79,7 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
                 
                 return [self preparedUrlRequest:path params:parameters];
             }
-            case GCConnectStatsRequestLoginStageBackfill:
-            {
-                NSUInteger year = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:CONFIG_CONNECTSTATS_NO_BACKFILL];
-                if( year != CONFIG_CONNECTSTATS_NO_BACKFILL){
-                    NSString * path = GCWebConnectStatsRequestBackfill([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]);
-                    NSDictionary *parameters = @{
-                        @"token_id" : @(self.tokenId),
-                        @"start_year" : @(year)
-                    };
-                    
-                    return [self preparedUrlRequest:path params:parameters];
-                }else{
-                    return nil;
-                }
-            }
-            default:
+            case GCConnectStatsRequestLoginStageEnd:
                 return nil;
         }
     }
@@ -115,25 +99,10 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
         if( self.loginStage == GCConnectStatsRequestLoginStageCheck){
             NSData * jsonData = [self.theString dataUsingEncoding:self.encoding];
             NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
-            if( [info isKindOfClass:[NSDictionary class]] ){
-                if( [info[@"backfillEndTime"] isKindOfClass:[NSNull class]]){
-                    /*self.customMessage = NSLocalizedString(@"New account, starting synchronisation with Garmin", @"Status");
-                    self.status = GCWebStatusCustomMessage;
-                     */
-                }else{
-                    // no need next stage
-                    self.loginStage = GCConnectStatsRequestLoginStageEnd;
-                    
-                }
+            if( [info isKindOfClass:[NSDictionary class]] && [info[@"cs_user_id"] respondsToSelector:@selector(integerValue)] && [info[@"cs_user_id"] integerValue] == self.userId){
+                RZLog(RZLogInfo, @"Validated user %@", info[@"cs_user_id"]);
             }else{
-                self.loginStage = GCConnectStatsRequestLoginStageEnd;
-            }
-        }else if( self.loginStage == GCConnectStatsRequestLoginStageBackfill ){
-            if( [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_FILLYEAR defaultValue:CONFIG_CONNECTSTATS_NO_BACKFILL] != CONFIG_CONNECTSTATS_NO_BACKFILL){
-                NSData * jsonData = [self.theString dataUsingEncoding:self.encoding];
-                NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
-                self.customMessage = info[@"status"];
-                self.status = GCWebStatusCustomMessage;
+                RZLog(RZLogWarning, @"Invalid user %@ != %@", info[@"cs_user_id"], @(self.userId));
             }
         }
         [self processDone];

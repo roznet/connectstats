@@ -36,16 +36,12 @@
 #define GC_GARMIN_USERNAME      2
 #define GC_GARMIN_PASSWORD      3
 #define GC_GARMIN_METHOD        4
-#define GC_GARMIN_MODERN_API    5
-#define GC_CONNECTSTATS_USE         6
-#define GC_CONNECTSTATS_FILLYEAR    7
-#define GC_CONNECTSTATS_CONFIG      8
-#define GC_CONNECTSTATS_LOGOUT      9
-#define GC_CONNECTSTATS_DEBUGKEY    10
-#define GC_CONNECTSTATS_NAME    11
-#define GC_CONNECTSTATS_HELP    12
-#define GC_GARMIN_RELOAD        13
-#define GC_GARMIN_END           14
+#define GC_CONNECTSTATS_USE         5
+#define GC_CONNECTSTATS_CONFIG      6
+#define GC_CONNECTSTATS_LOGOUT      7
+#define GC_CONNECTSTATS_DEBUGKEY    8
+#define GC_CONNECTSTATS_HELP    9
+#define GC_GARMIN_END           10
 
 #define GC_STRAVA_NAME      0
 #define GC_STRAVA_ENABLE    1

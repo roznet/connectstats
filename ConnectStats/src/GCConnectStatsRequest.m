@@ -89,7 +89,7 @@
 }
 
 
-+(void)logout{
++(void)signout{
     [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_USER_ID intVal:0];
     [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_TOKEN_ID intVal:0];
     [[GCAppGlobal profile] setPassword:@"" forService:gcServiceConnectStats];
@@ -125,7 +125,7 @@
     if( self.delegate.lastStatusCode == 401){
         self.status = GCWebStatusLoginFailed;
         // force login next time
-        [GCConnectStatsRequest logout];
+        [GCConnectStatsRequest signout];
     }
     return self.status == GCWebStatusOK;
 }
