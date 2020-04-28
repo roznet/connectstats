@@ -106,6 +106,9 @@ static BOOL kDerivedEnabled = true;
     [super dealloc];
 }
 
+-(NSString*)description{
+    return [NSString stringWithFormat:@"<%@: %@%@ %@ %@>", NSStringFromClass([self class]), self.activity, self.activityLast ? @" last" : @"",  [GCField fieldForFlag:self.field andActivityType:self.activity.activityType], @(self.derivedType)];
+}
 @end
 
 @interface GCDerivedOrganizer ()
@@ -560,7 +563,6 @@ static BOOL kDerivedEnabled = true;
     if( [self debugCheckSerie:serie.serie] ){
         RZLog(RZLogError,@"Bad input serie");
     }
-    
 
     for (NSNumber * num in @[ @(gcDerivedPeriodAll),@(gcDerivedPeriodMonth),@(gcDerivedPeriodYear)]) {
         gcDerivedPeriod period = num.intValue;
@@ -618,10 +620,11 @@ static BOOL kDerivedEnabled = true;
     for (GCActivity * activity in activities) {
         if ([self activityRequireProcessing:activity]) {
             if ([activity.activityType isEqualToString:GC_TYPE_RUNNING]){
+                // Flag Last on the "First" activity because queue is processed from end of the array
                 [toProcess addObject:[GCDerivedQueueElement element:activity
                                                               field:gcFieldFlagWeightedMeanHeartRate
                                                             andType:gcDerivedTypeBestRolling
-                                                       activityLast:NO]];
+                                                       activityLast:YES]];
                 [toProcess addObject:[GCDerivedQueueElement element:activity
                                                               field:gcFieldFlagWeightedMeanSpeed
                                                             andType:gcDerivedTypeBestRolling
@@ -629,13 +632,13 @@ static BOOL kDerivedEnabled = true;
                 [toProcess addObject:[GCDerivedQueueElement element:activity
                                                               field:gcFieldFlagPower
                                                             andType:gcDerivedTypeBestRolling
-                                                       activityLast:YES]];
+                                                       activityLast:NO]];
 
             }else if ([activity.activityType isEqualToString:GC_TYPE_CYCLING]) {
                 [toProcess addObject:[GCDerivedQueueElement element:activity
                                                               field:gcFieldFlagWeightedMeanHeartRate
                                                             andType:gcDerivedTypeBestRolling
-                                                       activityLast:NO]];
+                                                       activityLast:YES]];
                 [toProcess addObject:[GCDerivedQueueElement element:activity
                                                               field:gcFieldFlagWeightedMeanSpeed
                                                             andType:gcDerivedTypeBestRolling
@@ -643,7 +646,7 @@ static BOOL kDerivedEnabled = true;
                 [toProcess addObject:[GCDerivedQueueElement element:activity
                                                               field:gcFieldFlagPower
                                                             andType:gcDerivedTypeBestRolling
-                                                       activityLast:YES]];
+                                                       activityLast:NO]];
             }
         }
     }
@@ -675,6 +678,8 @@ static BOOL kDerivedEnabled = true;
     if (self.queue) {
         [self notifyForString:kNOTIFY_DERIVED_NEXT];
 
+        // Process from last to first element in the array
+        // so "last" flag for an activity should be tagged accordingly
         GCDerivedQueueElement * element = (self.queue).lastObject;
 
         [self processQueueElement:element];
