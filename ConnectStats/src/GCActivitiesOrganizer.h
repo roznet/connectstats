@@ -58,11 +58,8 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 -(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb NS_DESIGNATED_INITIALIZER;
 
 -(BOOL)registerActivity:(GCActivity*)act forActivityId:(NSString*)aId;
--(void)registerActivity:(NSString*)aId withGarminData:(NSDictionary*)aData;
--(void)registerActivity:(NSString*)aId withStravaData:(NSDictionary*)aData;
 -(void)registerTemporaryActivity:(GCActivity*)act forActivityId:(NSString*)aId;
 
--(void)reloadActivity:(NSString*)aId withGarminData:(NSDictionary*)aData;
 -(void)registerActivityTypes:(NSDictionary*)aData;
 
 -(void)registerActivity:(NSString*)aId withTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps;

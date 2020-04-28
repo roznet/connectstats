@@ -383,16 +383,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     [self postNotificationReset];
 }
 
--(void)reloadActivity:(NSString*)aId withGarminData:(NSDictionary*)aData{
-    GCActivity * activity = [self activityForId:aId];
-    if (activity) {
-        [activity updateWithGarminData:aData];
-        [activity saveToDb:self.db];
-    }else{
-        [self registerActivity:RZReturnAutorelease([[GCActivity alloc] initWithId:aId andGarminData:aData]) forActivityId:aId];
-    }
-}
-
 #pragma mark - Register new activities
 
 /**
@@ -452,15 +442,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     return [self registerActivity:act forActivityId:aId save:YES];
 }
 
--(void)registerActivity:(NSString*)aId withStravaData:(NSDictionary*)aData{
-    GCActivity * act = RZReturnAutorelease([[GCActivity alloc] initWithId:aId andStravaData:aData]);
-    [self registerActivity:act forActivityId:aId];
-}
-
--(void)registerActivity:(NSString*)aId withGarminData:(NSDictionary*)aData{
-    GCActivity * act = RZReturnAutorelease([[GCActivity alloc] initWithId:aId andGarminData:aData]);
-    [self registerActivity:act forActivityId:aId];
-}
 
 -(void)registerActivity:(NSString *)aId withWeather:(GCWeather *)aData{
     [[self activityForId:aId] recordWeather:aData];
