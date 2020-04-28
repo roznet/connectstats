@@ -161,7 +161,7 @@
             }
         }
         if( n > 0){
-            RZLog(RZLogInfo, @"BestRolling for %@ capped %@/%@ points greater than %@ = %@",field, @(n),@(serie.count), maxfield, max_nu );
+            RZLog(RZLogInfo, @"%@ BestRolling for %@ capped %@/%@ points greater than %@ = %@",self, field, @(n),@(serie.count), maxfield, max_nu );
         }
     }
 }

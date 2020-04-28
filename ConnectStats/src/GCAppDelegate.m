@@ -334,7 +334,7 @@ void checkVersion(){
     if ([shortcutItem.type isEqualToString:kShortCutItemTypeSummaryStats]) {
         [self.actionDelegate focusOnStatsSummary];
     }else if([shortcutItem.type isEqualToString:kShortCutItemTypeRefreshList]){
-        [self searchAllActivities];
+        [self searchRecentActivities];
         [self.actionDelegate focusOnActivityList];
         [self.actionDelegate beginRefreshing];
     }else if ([shortcutItem.type isEqualToString:kShortCutItemTypeLastActivity]){
@@ -535,7 +535,7 @@ void checkVersion(){
                 [GCViewConfig setGarminDownloadSource:gcGarminDownloadSourceBoth];
                 [self saveSettings];
                 dispatch_async(dispatch_get_main_queue(), ^(){
-                    [self searchAllActivities];
+                    [self searchRecentActivities];
                 });
             }]];
             [[self.actionDelegate currentNavigationController] presentViewController:alert animated:YES completion:nil];
@@ -657,13 +657,13 @@ void checkVersion(){
         idx ++;
     }
 }
--(void)searchAllActivities{
+-(void)searchRecentActivities{
     [self.web servicesSearchRecentActivities];
 }
 
 -(void)addOrSelectProfile:(NSString*)pName{
     if (![pName isEqualToString:[self.profiles currentProfileName]]) {
-        RZLog(RZLogInfo, @"Changed profile");
+        RZLog(RZLogInfo, @"Changing profile from %@ to %@", [self.profiles currentProfileName], pName);
 
         [self.db close];
         [self.profiles addOrSelectProfile:pName];
@@ -688,7 +688,7 @@ void checkVersion(){
 
 -(void)startupRefreshIfNeeded{
     if (self.needsStartupRefresh && [self.profiles configGetBool:CONFIG_REFRESH_STARTUP defaultValue:[GCAppGlobal healthStatsVersion]]) {
-        [self searchAllActivities];
+        [self searchRecentActivities];
     }
     self.needsStartupRefresh = false;
 }

@@ -361,7 +361,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
 -(void)searchActivities{
     dispatch_async([GCAppGlobal worker], ^(){
-        [GCAppGlobal searchAllActivities];
+        [GCAppGlobal searchRecentActivities];
     });
 }
 

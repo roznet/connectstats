@@ -99,7 +99,26 @@
     }
 }
 
--(void)nonGarminSearch:(BOOL)reloadAll{
+-(void)servicesSearch:(BOOL)reloadAll{
+    if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
+        // Run on main queue as it accesses a navigation Controller
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            BOOL connectStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats];
+            [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
+            [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:connectStatsReload andNavigationController:[GCAppGlobal currentNavigationController]]];
+        });
+        
+    }
+    
+    if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            BOOL garminStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin];
+            NSInteger aStart = [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin];
+            [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
+            [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:garminStatsReload] autorelease]];
+        });
+    }
+
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
         dispatch_async(dispatch_get_main_queue(), ^(){
             BOOL stravaReload = (reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava]);
@@ -133,37 +152,14 @@
         [self downloadMissingActivityDetails:15];
     }
 }
-
--(void)garminSearch:(BOOL)reloadAll{
-    if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
-        // Run on main queue as it accesses a navigation Controller
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            BOOL connectStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats];
-            [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
-            [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:connectStatsReload andNavigationController:[GCAppGlobal currentNavigationController]]];
-        });
-        
-    }
-    
-    if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            BOOL garminStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin];
-            NSInteger aStart = [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin];
-            [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
-            [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:garminStatsReload] autorelease]];
-        });
-    }
-}
 -(void)servicesSearchRecentActivities{
     [self servicesLogin];
-    [self garminSearch:false];
-    [self nonGarminSearch:false];
+    [self servicesSearch:false];
 }
 
 -(void)servicesSearchAllActivities{
     [self servicesLogin];
-    [self garminSearch:true];
-    [self nonGarminSearch:true];
+    [self servicesSearch:true];
 }
 
 -(void)servicesResetLogin{

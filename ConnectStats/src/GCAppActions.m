@@ -165,7 +165,7 @@ NSString * kArgumentHistoryStats = @"historyStats";
 }
 
 -(void)actionFocusOnListAndRefresh:(RZAction*)action{
-    [GCAppGlobal searchAllActivities];
+    [GCAppGlobal searchRecentActivities];
     [[self appActionDelegate] beginRefreshing];
 }
 

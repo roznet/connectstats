@@ -241,9 +241,9 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     [appDelegate startSuccessful];
 }
 
-+(void)searchAllActivities{
++(void)searchRecentActivities{
     GCAppDelegate *appDelegate = _sharedApplicationDelegate();
-    [appDelegate searchAllActivities];
+    [appDelegate searchRecentActivities];
 }
 
 +(void)startupRefreshIfNeeded{
