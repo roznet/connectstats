@@ -126,6 +126,19 @@
 
 #endif
 
+-(NSString*)debugDescription{
+    #ifdef GC_USE_HEALTHKIT
+        NSString * type = [self currentReadSampleType].identifier;
+        if ([type hasPrefix:@"HKQuantityTypeIdentifier"]) {
+            type = [type substringFromIndex:(@"HKQuantityTypeIdentifier").length];
+        }
+        return [NSString stringWithFormat:@"<%@: [%@/%@] %@>", NSStringFromClass([self class]), @(self.readQuantityIndex),  @([self readSampleTypes].count), type];
+    #else
+        return [NSString stringWithFormat:@"<%@: Disabled>",  type];NSString * type = @"Disabled";
+    #endif
+
+}
+
 -(NSString*)description{
 #ifdef GC_USE_HEALTHKIT
     NSString * type = [self currentReadSampleType].identifier;

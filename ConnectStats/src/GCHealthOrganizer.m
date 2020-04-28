@@ -131,11 +131,7 @@
             }
         }
     }
-    NSMutableArray * tmp = [NSMutableArray array];
-    for (NSString * key in summary) {
-        [tmp addObject:[NSString stringWithFormat:@"%@[%@]", key, summary[key]]];
-    }
-    RZLog(RZLogInfo,@"Loaded %lu health measures (%@)", (unsigned long)n, [tmp componentsJoinedByString:@", "]);
+    RZLog(RZLogInfo,@"Loaded %lu health measures (%@ types)", (unsigned long)n, @(summary.count));
     self.measures = [NSArray arrayWithArray:meas];
     
     NSMutableDictionary * zon = [NSMutableDictionary dictionaryWithCapacity:5];
