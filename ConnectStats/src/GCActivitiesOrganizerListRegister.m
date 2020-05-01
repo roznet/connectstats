@@ -26,6 +26,7 @@
 #import "GCActivitiesOrganizerListRegister.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCService.h"
+#import "GCAppGlobal.h"
 
 @interface GCActivitiesOrganizerListRegister ()
 @property (nonatomic,retain) NSArray<GCActivity*>*activities;
@@ -33,6 +34,7 @@
 @property (nonatomic,retain) NSArray<NSString*>*childIds;
 @property (nonatomic,retain) GCService * service;
 @property (nonatomic,assign) BOOL isFirst;
+@property (nonatomic,assign) BOOL syncDeleteWithPreferred;
 
 @end
 
@@ -44,6 +46,7 @@
         rv.activities = activities;
         rv.service = service;
         rv.isFirst = isFirst;
+        rv.syncDeleteWithPreferred = [[GCAppGlobal profile] configGetBool:CONFIG_SYNC_WITH_PREFERRED defaultValue:true];
     }
     return rv;
 }
@@ -127,11 +130,11 @@
                     if ([GCService serviceForActivityId:one].service == self.service.service){
                         [toTrash addObject:one];
                     }else{
-                        if( [self.service preferredOver:[GCService serviceForActivityId:one]] ){
-                            RZLog(RZLogWarning, @"Deleting activity from preferred service: %@ from %@ (preferred %@)", one, [GCService serviceForActivityId:one], self.service);
+                        if( self.syncDeleteWithPreferred && [self.service preferredOver:[GCService serviceForActivityId:one]] ){
+                            RZLog(RZLogWarning, @"Deleting activity not in preferred service: %@ from %@ not in preferred %@", one, [GCService serviceForActivityId:one], self.service);
                             [toTrash addObject:one];
                         }else{
-                            RZLog(RZLogWarning, @"Ignoring delete an activity from not preferred service: %@ from %@ (not preferred %@)", one, [GCService serviceForActivityId:one], self.service);
+                            RZLog(RZLogWarning, @"Ignoring delete an activity not in preferred service: %@ from %@ not in preferred %@", one, [GCService serviceForActivityId:one], self.service);
                         }
                     }
                 }

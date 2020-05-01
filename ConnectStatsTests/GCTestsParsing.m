@@ -979,6 +979,8 @@
     
     NSString * bundlePath = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
     
+    // Don't pro
+    [[GCAppGlobal profile] configSet:CONFIG_SYNC_WITH_PREFERRED boolVal:false];
     
     GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_parsing_modern_merge.db"];
     GCActivitiesOrganizer * organizer_strava = [self createEmptyOrganizer:@"test_parsing_modern_merge_strava.db"];

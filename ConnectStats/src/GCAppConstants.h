@@ -117,6 +117,7 @@
 #define CONFIG_ENABLE_DEBUG_OFF           @"disabled"
 
 #define CONFIG_STATS_START_PAGE           @"config_stats_start_page"
+#define CONFIG_SYNC_WITH_PREFERRED        @"profile_sync_with_preferred"
 
 #define CONFIG_FILTER_DISABLED_POWER    10000.
 #define CONFIG_CONNECTSTATS_NO_BACKFILL 0
