@@ -70,13 +70,13 @@
             
             GCActivity * one = RZReturnAutorelease([[GCActivity alloc] initWithId:aId]);
             if( [sport isEqualToString:@"Running"]){
-                one.activityType = GC_TYPE_RUNNING;
+                [one changeActivityType:[GCActivityType running]];
             }else if ([sport isEqualToString:@"Biking"]){
-                one.activityType = GC_TYPE_CYCLING;
+                [one changeActivityType:[GCActivityType cycling]];
             }
 
             if( one.activityType != nil ){
-                one.activityTypeDetail = [GCActivityType activityTypeForKey:one.activityType];
+                [one changeActivityType:[GCActivityType activityTypeForKey:one.activityType]];
                 [one updateWithTrackpoints:trackpoints andLaps:laps];
                 [one updateSummaryFromTrackpoints:trackpoints missingOnly:NO];
                 rv.activity = one;

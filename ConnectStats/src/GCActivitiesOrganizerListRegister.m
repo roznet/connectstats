@@ -127,7 +127,12 @@
                     if ([GCService serviceForActivityId:one].service == self.service.service){
                         [toTrash addObject:one];
                     }else{
-                        RZLog(RZLogWarning, @"Attempt to delete an activity from different service: %@ from %@ and %@", one, [GCService serviceForActivityId:one], self.service);
+                        if( [self.service preferredOver:[GCService serviceForActivityId:one]] ){
+                            RZLog(RZLogWarning, @"Deleting activity from preferred service: %@ from %@ (preferred %@)", one, [GCService serviceForActivityId:one], self.service);
+                            [toTrash addObject:one];
+                        }else{
+                            RZLog(RZLogWarning, @"Ignoring delete an activity from not preferred service: %@ from %@ (not preferred %@)", one, [GCService serviceForActivityId:one], self.service);
+                        }
                     }
                 }
                 if (toTrash.count>0) {

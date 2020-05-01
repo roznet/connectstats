@@ -70,6 +70,7 @@
 		421F39A91B79EF8900CA7200 /* GCActivityThumbnails.m in Sources */ = {isa = PBXBuildFile; fileRef = 421F39A71B79EF8900CA7200 /* GCActivityThumbnails.m */; };
 		421F39AD1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 421F39AC1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m */; };
 		421F39AE1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 421F39AC1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m */; };
+		421FB96624596CE10082AB6D /* last_modern_search_0_changes.json in Resources */ = {isa = PBXBuildFile; fileRef = 421FB95B24596CE10082AB6D /* last_modern_search_0_changes.json */; };
 		42200E9D17EEF0EC0078B45A /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42200E9C17EEF0EC0078B45A /* StoreKit.framework */; };
 		42200ED817F8270D0078B45A /* GCGarminActivityTrack13Request.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200ED717F8270D0078B45A /* GCGarminActivityTrack13Request.m */; };
 		42200EDB17F831B30078B45A /* GCGarminActivityLapsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200EDA17F831B30078B45A /* GCGarminActivityLapsParser.m */; };
@@ -1995,6 +1996,7 @@
 		421F39A71B79EF8900CA7200 /* GCActivityThumbnails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityThumbnails.m; path = src/GCActivityThumbnails.m; sourceTree = "<group>"; };
 		421F39AB1B7A117300CA7200 /* GCTrackFieldChoiceHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTrackFieldChoiceHolder.h; path = src/GCTrackFieldChoiceHolder.h; sourceTree = "<group>"; };
 		421F39AC1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTrackFieldChoiceHolder.m; path = src/GCTrackFieldChoiceHolder.m; sourceTree = "<group>"; };
+		421FB95B24596CE10082AB6D /* last_modern_search_0_changes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_modern_search_0_changes.json; sourceTree = "<group>"; };
 		42200E9C17EEF0EC0078B45A /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		42200ED617F8270D0078B45A /* GCGarminActivityTrack13Request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminActivityTrack13Request.h; path = src/GCGarminActivityTrack13Request.h; sourceTree = "<group>"; };
 		42200ED717F8270D0078B45A /* GCGarminActivityTrack13Request.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminActivityTrack13Request.m; path = src/GCGarminActivityTrack13Request.m; sourceTree = "<group>"; };
@@ -4723,6 +4725,7 @@
 		42AEFEB21DA057F500D7DA6D /* activity_modern_json */ = {
 			isa = PBXGroup;
 			children = (
+				421FB95B24596CE10082AB6D /* last_modern_search_0_changes.json */,
 				42880C3A2381EEDF0030C3C1 /* track_cs_5582.fit */,
 				42880C452381EEDF0030C3C1 /* track_cs_5611.fit */,
 				42A5D8F523272C8300898FD5 /* activity_4017099594.fit */,
@@ -6175,6 +6178,7 @@
 				42A5D9342328774700898FD5 /* 1382772474.is.strava.728092180 in Resources */,
 				4277C0E623BD133D00C1B1B9 /* activity_234979239.json in Resources */,
 				42A5D8FD23272C8300898FD5 /* activityweather_4017099594.json in Resources */,
+				421FB96624596CE10082AB6D /* last_modern_search_0_changes.json in Resources */,
 				4277C0E823BD133D00C1B1B9 /* activitylaps_217470507.json in Resources */,
 				421A765A202754DC00D12B6C /* activity_2477200414.fit in Resources */,
 				4277C0E323BD133D00C1B1B9 /* activitytrack_234979239.json in Resources */,

@@ -97,8 +97,8 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 @property (nonatomic,retain) NSDictionary * cachedCalculatedTracks;
 
 
-@property (nonatomic,retain) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("use GCActivityType.");
-@property (nonatomic,retain) GCActivityType * activityTypeDetail;// DEPRECATED_MSG_ATTRIBUTE("use detail of GCActivityType.");
+@property (nonatomic,readonly) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("use GCActivityType.");
+@property (nonatomic,readonly) GCActivityType * activityTypeDetail;// DEPRECATED_MSG_ATTRIBUTE("use detail of GCActivityType.");
 @property (nonatomic,retain) NSString * activityName;
 
 @property (nonatomic,retain) NSString * location;
@@ -172,6 +172,11 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 -(BOOL)updateWithTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints andLaps:(NSArray<GCLap*>*)laps;
 -(BOOL)saveTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps;
+
+/// Logic to change activity type
+/// @param newActivityType if nil will do nothing
+/// @return true if activityType actually changed
+-(BOOL)changeActivityType:(GCActivityType*)newActivityType;
 
 -(void)saveTrackpointsAndLapsToDb:(FMDatabase*)aDb;
 -(void)saveLocation:(NSString*)aLoc;
@@ -327,7 +332,10 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(BOOL)hasWeather;
 -(void)recordWeather:(GCWeather*)dict;
 
-
+/// Check if the activity is the same as an activityId whether from the origianl service or from another
+/// Sync'd service (externalActivityId)
+/// @param activityId THe activity id to check, can be from a sync'd service
+-(BOOL)isSameAsActivityId:(NSString*)activityId;
 /**
  Test wether should be ignored for stats based on the mode
  */

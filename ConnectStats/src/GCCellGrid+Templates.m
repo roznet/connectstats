@@ -834,7 +834,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     [self labelForRow:1 andCol:0].attributedText = [sub attributedString];
     GCActivity * dummy = [[GCActivity alloc] init];
 
-    dummy.activityType = activityStats.config.activityType;
+    [dummy changeActivityType:[GCActivityType activityTypeForKey:activityStats.config.activityType]];
     [GCViewConfig setupGradient:self ForActivity:dummy];
     [dummy release];
 }

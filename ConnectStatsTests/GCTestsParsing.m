@@ -70,7 +70,7 @@
     
     NSData * data = [NSData dataWithContentsOfFile:file];
     GCActivity * act = [[GCActivity alloc] init];
-    [act setActivityType:GC_TYPE_RUNNING];
+    [act changeActivityType:[GCActivityType running]];
 
     GCGarminActivityDetailJsonParser * parser = [[GCGarminActivityDetailJsonParser alloc] initWithData:data forActivity:act];
     XCTAssertEqual(parser.trackPoints.count, 575);
@@ -620,6 +620,7 @@
         GCActivity * actMerge = [GCGarminRequestActivityReload testForActivity:aId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         actMerge.db = db_fit;
         actMerge.trackdb = db_fit;
+        actMerge.settings.worker = nil;
         [actMerge saveToDb:db_fit];
         [GCGarminActivityTrack13Request testForActivity:actMerge withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:TRUE];
         [actMerge saveToDb:db_fit];
@@ -952,7 +953,23 @@
     
     XCTAssertFalse([act_cs updateMissingFromActivity:act_garmin], @"Update missing does not find anything new");
     
+    // Now load with deleted and edited
+    NSUInteger garminStartCount = organizer_garmin.countOfActivities;
+    NSUInteger mergeStartCount  = organizer_cs_garmin.countOfActivities;
+    XCTAssertEqual(mergeStartCount, garminStartCount);
     
+    XCTestExpectation * expectation = RZReturnAutorelease([[XCTestExpectation alloc] initWithDescription:@"Run on worker"]);
+    
+    dispatch_async([GCAppGlobal worker], ^(){
+        [GCGarminRequestModernSearch testForOrganizer:organizer_cs_garmin withFilesInPath:[RZFileOrganizer bundleFilePath:@"last_modern_search_0_changes.json" forClass:[self class]]];
+        [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:[RZFileOrganizer bundleFilePath:@"last_modern_search_0_changes.json" forClass:[self class]]];
+        
+        XCTAssertEqual(mergeStartCount, organizer_cs_garmin.countOfActivities+1);
+        XCTAssertEqual(garminStartCount, organizer_garmin.countOfActivities+1);
+        [expectation fulfill];
+    });
+
+    [self waitForExpectations:@[ expectation] timeout:10.0];
 }
 
 -(void)testOrganizerMergeServices{
@@ -994,10 +1011,7 @@
     //NSString * bikeConnectId = cycling_dup[0];
     NSString * bikeStravaId = cycling_dup[1];
     
-    
     NSUInteger addedActivities = 0;
-    
-
     
     // First add garmin
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath];

@@ -68,8 +68,9 @@ extension GCActivity {
         // the sessions
         if( messages.count > 1 && startTime == nil){
             let type = GCActivityType.multisport()
-            self.activityType = type.key
-            self.activityTypeDetail = type
+            self.changeActivityType(type)
+            //self.activityType = type.key
+            //self.activityTypeDetail = type
             
             let stats = interp.summaryValueFromStatsForMessage(messageType: FIT_MESG_NUM_SESSION, interval: nil)
             
@@ -79,8 +80,9 @@ extension GCActivity {
             interp.update(sessionIndex: messageIndex)
             
             let type  = interp.activityType
-            self.activityType = type.topSubRoot().key
-            self.activityTypeDetail = type
+            self.changeActivityType(type)
+            //self.activityType = type.topSubRoot().key
+            //self.activityTypeDetail = type
             let usemessage = messages[messageIndex]
             
             if let pool_length_value = usemessage.interpretedField(key: "pool_length"),

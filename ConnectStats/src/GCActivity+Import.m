@@ -78,17 +78,6 @@
     return self;
 }
 
--(GCActivity*)initWithId:(NSString*)aId andSportTracksData:(NSDictionary*)aData{
-    self = [self initWithId:aId];
-    if (self) {
-        self.activityId = aId;
-        [self parseSportTracksJson:aData];
-        self.settings = [GCActivitySettings defaultsFor:self];
-    }
-    return self;
-}
-
-
 -(GCActivity*)initWithId:(NSString *)aId andHealthKitWorkout:(HKWorkout*)workout withSamples:(NSArray*)samples{
     self = [self init];
     if (self) {
@@ -429,19 +418,9 @@
     self.externalServiceActivityId = [[GCService service:gcServiceGarmin] activityIdFromServiceId:data[@"summaryId"]];
     
     GCActivityType * atype = [GCActivityType activityTypeForConnectStatsType:data[@"activityType"]];
-    self.activityType = atype.topSubRootType.key;
-    self.activityTypeDetail = atype;
+    [self changeActivityType:atype];
     self.activityName = @"";
     self.location = @"";
-    if (self.activityType == nil) {
-        self.activityType = GC_TYPE_OTHER;
-        
-        self.activityTypeDetail = atype;
-        if (self.activityTypeDetail==nil) {
-            self.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_OTHER];
-            self.activityName = [data[@"activityType"] lowercaseString];
-        }
-    }
     self.downloadMethod = gcDownloadMethodConnectStats;
     
     NSMutableDictionary * meta = [NSMutableDictionary dictionary];
@@ -510,11 +489,9 @@
         if([foundType isKindOfClass:[NSString class]]){
             GCActivityType * fullType = [GCActivityType activityTypeForKey:foundType];
             if (fullType) {
-                self.activityType = fullType.topSubRootType.key;
-                self.activityTypeDetail = [GCActivityType activityTypeForKey:fullType.key];
+                [self changeActivityType:fullType];
             }else{
-                self.activityType = foundType;
-                self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
+                RZLog(RZLogWarning,@"Unable to find type for %@", foundType);
             }
         }
     }
@@ -799,9 +776,11 @@
 
 
     NSDictionary * atypeDict = aData[@"activityType"];
-    self.activityType = atypeDict[@"parent"][@"key"];
-    self.activityTypeDetail = [GCActivityType activityTypeForKey:atypeDict[@"key"]];
     
+    [self changeActivityType:[GCActivityType activityTypeForKey:atypeDict[@"key"]]];
+    if( ! [self.activityType isEqualToString:atypeDict[@"parent"][@"key"]] ){
+        RZLog(RZLogWarning, @"Inconsistent types %@/%@ (vs %@)", atypeDict[@"key"], atypeDict[@"parent"][@"key"], self.activityType);
+    }
     self.activityName = aData[@"activityName"];
     self.date = [NSDate dateForRFC3339DateTimeString:summary[@"BeginTimestamp"][@"value"]];
     if ([self.activityType isEqualToString:GC_TYPE_MULTISPORT]) {
@@ -926,129 +905,36 @@
 
 #pragma mark - Other Services
 
--(void)parseSportTracksJson:(NSDictionary*)data{
-/*
- {
- "start_time" : "2014-03-31T07:18:01+01:00",
- "total_distance" : "9985.88",
- "duration" : "1828.00",
- "type" : "Cycling",
- "name" : "cycling",
- "user_id" : "16964",
- "uri" : "https://api.sporttracks.mobi/api/v2/fitnessActivities/5522409"
- }*/
-    /*Type:
-     Skiing
-     Gym
-     Skiing: Nordic
-     Walking
-     Walking: Hiking
-     */
-    NSDictionary * types = @{
-                             @"Cycling":   GC_TYPE_CYCLING,
-                             @"Running":    GC_TYPE_RUNNING,
-                             @"Swimming":   GC_TYPE_SWIMMING
-                             };
-    NSDictionary * defs = @{
-                            @"total_distance":      @[ @"SumDistance",          @(gcFieldFlagSumDistance),              @"meter"],
-                            @"duration":            @[ @"SumDuration",          @(gcFieldFlagSumDuration),              @"second"],
-                            @"elevation_gain":      @[ @"GainElevation",        @"",                                    @"meter"],
-                            @"avg_speed":           @[ @"WeightedMeanSpeed",    @(gcFieldFlagWeightedMeanSpeed),        @"mps"],
-                            @"max_speed":           @[ @"MaxSpeed",             @"",                                    @"mps"],
-                            @"avg_heartrate":       @[ @"WeightedMeanHeartRate",@(gcFieldFlagWeightedMeanHeartRate),    @"bpm"],
-                            @"max_heartrate":       @[ @"MaxHeartRate",         @"",                                    @"bpm"],
-                            @"calories":            @[ @"SumEnergy",            @"",                                    @"kilocalorie"],
-                            //@"clock_duration":      @[ @"SumMovingDuration",    @"",                                    @"second"],
-                            //@"average_watts":       @[ @"WeightedMeanPower",    @(gcFieldFlagPower),                    @"watt"],
-                            //@"kilojoules":          @[ @"SumTotalWork",         @"",                                    @"kilojoule"],
-                            //@"average_temp":        @[ @"WeightedMeanAirTemperature",@"",                               @"celcius"],
-
-                            @"avg_cadence":         @{ GC_TYPE_RUNNING: @[ @"WeightedMeanRunCadence", @"spm"],
-                                                       GC_TYPE_CYCLING: @[ @"WeightedMeanBikeCadence", @"rpm"] },
-                            @"max_cadence":         @{ GC_TYPE_RUNNING: @[ @"MaxRunCadence", @"spm"],
-                                                       GC_TYPE_CYCLING: @[ @"MaxBikeCadence", @"rpm"] }
-
-                            };
-
-
-    self.activityType = types[data[@"type"]];
-    if (self.activityType==nil) {
-        self.activityType = GC_TYPE_OTHER;
-        RZLog(RZLogInfo, @"Unknown SportTracks type %@", data[@"type"]);
-    }
-    self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
-    //NSString * externalId = [GCService serviceIdFromSportTracksUri:uri];
-
-    //GCService * service = [GCService service:gcServiceSportTracks];
-    self.activityName = data[@"name"];
-    self.location = @"";
-
-    NSMutableDictionary<GCField*,GCActivitySummaryValue*> * newSummaryData = [NSMutableDictionary dictionary];
-    [self parseData:data into:newSummaryData usingDefs:defs];
-
-    [self addPaceIfNecessaryWithSummary:newSummaryData];
-
-    self.downloadMethod = gcDownloadMethodSportTracks;
-    NSString * user_id = data[@"user_id"];
-    NSString * uri = data[@"uri"];
-
-    NSDictionary * toAdd = @{
-                             @"user_id": [GCActivityMetaValue activityMetaValueForDisplay:user_id andField:@"user_id"],
-                             @"uri": [GCActivityMetaValue activityMetaValueForDisplay:uri andField:@"uri"],
-                             };
-    [self addEntriesToMetaData:toAdd];
-
-    [self mergeSummaryData:newSummaryData];
-    NSString * startdate = data[@"start_time"];
-    if(startdate) {
-        self.date = [NSDate dateForSportTracksTimeString:startdate];
-    }
-    if (self.date==nil) {
-        RZLog(RZLogError, @"Invalid date %@", startdate);
-    }
-
-}
 -(void)parseHealthKitWorkout:(HKWorkout*)workout withSamples:(NSArray*)samples{
 #ifdef GC_USE_HEALTHKIT
     switch (workout.workoutActivityType) {
         case HKWorkoutActivityTypeRunning:
-            self.activityType = GC_TYPE_RUNNING;
-            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
+            [self changeActivityType:[GCActivityType running]];
             break;
         case HKWorkoutActivityTypeCycling:
-            self.activityType = GC_TYPE_CYCLING;
-            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
+            [self changeActivityType:[GCActivityType cycling]];
             break;
         case HKWorkoutActivityTypeSwimming:
-            self.activityType = GC_TYPE_SWIMMING;
-            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
-            break;
-        case HKWorkoutActivityTypeTennis:
-            self.activityType = GC_TYPE_TENNIS;
-            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
+            [self changeActivityType:[GCActivityType swimming]];
             break;
         case HKWorkoutActivityTypeHiking:
-            self.activityType = GC_TYPE_HIKING;
-            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
+            [self changeActivityType:[GCActivityType hiking]];
             break;
         case HKWorkoutActivityTypeWalking:
-            self.activityType = GC_TYPE_WALKING;
-            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
+            [self changeActivityType:[GCActivityType walking]];
             break;
         case HKWorkoutActivityTypeElliptical:
-            self.activityType = GC_TYPE_FITNESS;
-            self.activityTypeDetail = [GCActivityType activityTypeForKey:@"elliptical"];
+            [self changeActivityType:[GCActivityType elliptical]];
             break;
         case HKWorkoutActivityTypeTraditionalStrengthTraining:
         case HKWorkoutActivityTypeFunctionalStrengthTraining:
-            self.activityType = GC_TYPE_FITNESS;
-            self.activityTypeDetail = [GCActivityType activityTypeForKey:@"strengh_training"];
+            [self changeActivityType:[GCActivityType strength_training]];
             break;
         default:
-            self.activityType = GC_TYPE_OTHER;
-            self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
+            [self changeActivityType:[GCActivityType other]];
             break;
     }
+    
     self.date = workout.startDate;
     self.activityName = [NSString stringWithFormat:@"%@ Workout", self.activityType];
     self.location = @"";
@@ -1097,7 +983,7 @@
     NSString * aType = data[@"activityType"];
     if (aType && [aType isKindOfClass:[NSString class]]) {
         // We need a type to process fields
-        self.activityType = aType;
+        [self changeActivityType:[GCActivityType activityTypeForKey:aType]];
         self.downloadMethod = gcDownloadMethodHealthKit;
         self.activityName = @"";
         self.location = @"";
@@ -1118,7 +1004,7 @@
             }
 
             if ([fieldkey isEqualToString:@"activityType"] && str) {
-                self.activityTypeDetail = [GCActivityType activityTypeForKey:str];
+                [self changeActivityType:[GCActivityType activityTypeForKey:str]];
             }else if ([fieldkey isEqualToString:@"BeginTimestamp"] && da){
                 self.date = da;
             }else if (nu) {
@@ -1167,19 +1053,12 @@
 
     self.activityId = [service activityIdFromServiceId:[data[@"id"] stringValue]];
     GCActivityType * atype = [GCActivityType activityTypeForStravaType:data[@"type"]];
-    self.activityType = atype.topSubRootType.key;
-    self.activityTypeDetail = atype;
+    [self changeActivityType:atype];
     self.activityName = data[@"name"];
     self.location = @"";
     if (self.activityType == nil) {
-        self.activityType = GC_TYPE_OTHER;
-        
-        self.activityTypeDetail = atype;
-        if (self.activityTypeDetail==nil) {
-            self.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_OTHER];
-        }
+        [self changeActivityType:[GCActivityType other]];
     }
-    self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
     self.downloadMethod = gcDownloadMethodStrava;
     if (self.metaData==nil) {
         [self updateMetaData:[NSMutableDictionary dictionary]];
@@ -1443,26 +1322,18 @@
     BOOL connectstatsFromGarmin = self.service.service == gcServiceConnectStats && other.service.service == gcServiceGarmin;
     
     if( ! newOnly){
-        NSString * aType = other.activityType;
-        if (![aType isEqualToString:self.activityType]) {
+        GCActivityType * aType = other.activityTypeDetail;
+        if (![aType isEqualToActivityType:self.activityTypeDetail]) {
             if( verbose ){
-                RZLog(RZLogInfo, @"change activity type %@ -> %@", self.activityType,aType);
+                RZLog(RZLogInfo, @"change activity type %@ -> %@", self.activityTypeDetail,aType);
             }
             rv = true;
-            self.activityType = aType;
+            [self changeActivityType:aType];
             FMDatabase * db = self.db;
             [db beginTransaction];
             [db executeUpdate:@"UPDATE gc_activities SET activityType=? WHERE activityId = ?", self.activityType, self.activityId];
             [db commit];
         }
-    }
-
-    if (self.activityTypeDetail!=nil && ![other.activityTypeDetail isEqualToActivityType:self.activityTypeDetail]) {
-        // Don't update db because activityTypeDetail comes from meta field which
-        // Should be updated later, but still need to process here, or some icons
-        // may not update properly until restart/reload from db otherwise
-        self.activityTypeDetail = other.activityTypeDetail;
-        rv = true;
     }
 
     NSString * aName = other.activityName;

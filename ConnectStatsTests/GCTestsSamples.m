@@ -57,10 +57,9 @@
 
 +(GCActivity*)sampleCycling{
     GCActivity * rv = [[[GCActivity alloc] init] autorelease];
-    rv.activityType = GC_TYPE_CYCLING;
+    [rv changeActivityType:[GCActivityType cycling]];
     rv.activityId = @"100";
     rv.activityName = @"Untitled";
-    rv.activityTypeDetail = [GCActivityType activityTypeForKey:GC_TYPE_CYCLING];
     rv.trackFlags = gcFieldFlagWeightedMeanSpeed|gcFieldFlagWeightedMeanHeartRate;
     rv.flags = gcFieldFlagWeightedMeanHeartRate|gcFieldFlagWeightedMeanSpeed;
 

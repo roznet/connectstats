@@ -35,18 +35,18 @@ typedef NS_ENUM(NSUInteger, gcCalculatedCachedTrack) {
     gcCalculatedCachedTrackDistanceResample,
     gcCalculatedCachedTrackDataSerie
 };
+@class GCTrackPoint;
 
-
-@interface GCCalculactedCachedTrackInfo : NSObject
+@interface GCCalculatedCachedTrackInfo : NSObject
 
 @property (nonatomic,assign) gcCalculatedCachedTrack track;
 @property (nonatomic,retain) GCField * field;
 @property (nonatomic,retain,nullable) GCStatsDataSerieWithUnit * serie;
-@property (nonatomic,retain) NSArray * trackpoints;
+@property (nonatomic,retain) NSArray<GCTrackPoint*> * trackpoints;
 
 @property (nonatomic,assign) NSUInteger processedPointsCount;
 
-+(GCCalculactedCachedTrackInfo*)info:(gcCalculatedCachedTrack)track field:(GCField*)field;
++(GCCalculatedCachedTrackInfo*)info:(gcCalculatedCachedTrack)track field:(GCField*)field;
 -(gcFieldFlag)fieldFlag;
 @end
 

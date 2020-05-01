@@ -31,11 +31,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class GCStatsDataSerieWithUnit;
-@class GCCalculactedCachedTrackInfo;
+@class GCCalculatedCachedTrackInfo;
 
 @interface GCActivity (BestRolling)
 
--(GCStatsDataSerieWithUnit*)calculatedRollingBest:(GCCalculactedCachedTrackInfo *)info;
+-(GCStatsDataSerieWithUnit*)calculatedRollingBest:(GCCalculatedCachedTrackInfo *)info;
 
 @end
 

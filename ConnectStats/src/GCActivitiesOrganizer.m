@@ -993,16 +993,19 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     NSString * first = inIds[0];
     NSString * last = inIds.lastObject;
 
+    NSString * lastDup = self.duplicateActivityIds[last];
+    NSString * firstDup = self.duplicateActivityIds[first];
+    
     for (idx=0; idx < _allActivities.count; idx++ ) {
         GCActivity * act = _allActivities[idx];
         // Don't look at day activities only fitness
         if( [act.activityType isEqualToString:GC_TYPE_DAY] ){
             continue;
         }
-        if ([act.activityId isEqualToString:first]) {
+        if ([act isSameAsActivityId:first] || [act isSameAsActivityId:firstDup]) {
             foundFirst = true;
         }
-        if ([act.activityId isEqualToString:last]) {
+        if ([act isSameAsActivityId:last] || [act isSameAsActivityId:lastDup]) {
             foundLast = true;
             break;
         }

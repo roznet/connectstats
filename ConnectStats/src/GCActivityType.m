@@ -294,6 +294,19 @@ static GCActivityTypes * _activityTypesCache = nil;
 +(GCActivityType*)swimming{
     return [[GCActivityType activityTypes] activityTypeForKey:GC_TYPE_SWIMMING];
 }
++(GCActivityType*)hiking{
+    return [[GCActivityType activityTypes] activityTypeForKey:GC_TYPE_HIKING];
+}
++(nonnull GCActivityType*)walking{
+    return [[GCActivityType activityTypes] activityTypeForKey:GC_TYPE_WALKING];
+}
++(nonnull GCActivityType*)elliptical{
+    return [[GCActivityType activityTypes] activityTypeForKey:@"elliptical"];
+}
++(nonnull GCActivityType*)strength_training{
+    return [[GCActivityType activityTypes] activityTypeForKey:@"stength_training"];
+}
+
 +(GCActivityType*)other{
     return [[GCActivityType activityTypes] activityTypeForKey:GC_TYPE_OTHER];
 }

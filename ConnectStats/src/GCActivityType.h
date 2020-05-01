@@ -89,6 +89,10 @@
 +(nonnull GCActivityType*)all;
 +(nonnull GCActivityType*)day;
 +(nonnull GCActivityType*)multisport;
++(nonnull GCActivityType*)hiking;
++(nonnull GCActivityType*)walking;
++(nonnull GCActivityType*)elliptical;
++(nonnull GCActivityType*)strength_training;
 
 /**
  All Types
