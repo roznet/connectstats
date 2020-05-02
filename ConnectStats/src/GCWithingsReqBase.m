@@ -50,7 +50,7 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
         self.navigationController = nil;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshed object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshFailed object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2RefreshTokenChanged object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2RefreshTokenUpdated object:nil];
     }
     return self;
 }
@@ -58,7 +58,7 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
     self = [super init];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshed object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshFailed object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2RefreshTokenChanged object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2RefreshTokenUpdated object:nil];
 
     return self;
 }
@@ -79,7 +79,13 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
     NSString * name = [notification.name substringFromIndex:10];
     
     if( [notification.name isEqualToString:kGTMOAuth2AccessTokenRefreshFailed]){
-        RZLog(RZLogError, @"%@ %@", name, notification.userInfo);
+        RZLog(RZLogError, @"%@ %@", name, notification.object);
+    }
+    if( [notification.name isEqualToString:kGTMOAuth2RefreshTokenUpdated]){
+        RZLog(RZLogInfo, @"%@ %@ %@", name, notification.object, notification.userInfo);
+    }
+    if( [notification.name isEqualToString:kGTMOAuth2AccessTokenRefreshed]){
+        RZLog(RZLogInfo, @"%@ %@", name, notification.object);
     }
 }
 
@@ -119,6 +125,8 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
                                                                authentication:auth
                                                                         error:&error];
     if (!didAuth || !auth.canAuthorize) {
+        RZLog(RZLogInfo, @"Can't authorize %@", auth);
+
         // Specify the appropriate scope string, if any, according to the service's API documentation
         auth.scope = @"user.metrics,user.info,user.activity";
         
@@ -135,6 +143,8 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
         // Now push our sign-in view
         [self.navigationController pushViewController:viewController animated:YES];
     }else{
+        RZLog(RZLogInfo, @"Authorized from keychain %@", auth);
+
         [self processDone];
     }
 }

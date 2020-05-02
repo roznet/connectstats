@@ -52,6 +52,7 @@ NSString *const kGTMOAuth2UserSignedIn              = @"kGTMOAuth2UserSignedIn";
 
 NSString *const kGTMOAuth2AccessTokenRefreshed     = @"kGTMOAuth2AccessTokenRefreshed";
 NSString *const kGTMOAuth2RefreshTokenChanged      = @"kGTMOAuth2RefreshTokenChanged";
+NSString *const kGTMOAuth2RefreshTokenUpdated      = @"kGTMOAuth2RefreshTokenUpdated";
 NSString *const kGTMOAuth2AccessTokenRefreshFailed = @"kGTMOAuth2AccessTokenRefreshFailed";
 
 NSString *const kGTMOAuth2WebViewStartedLoading = @"kGTMOAuth2WebViewStartedLoading";
@@ -280,37 +281,49 @@ finishedRefreshWithFetcher:(GTMOAuth2Fetcher *)fetcher
 #pragma mark -
 
 - (void)setKeysForResponseDictionary:(NSDictionary *)dict {
-  if (dict == nil) return;
+    if (dict == nil) return;
+    
+    // If a new code or access token is being set, remove the old expiration
+    NSString *newCode = [dict objectForKey:kOAuth2CodeKey];
+    NSString *newAccessToken = [dict objectForKey:kOAuth2AccessTokenKey];
+    if (newCode || newAccessToken) {
+        self.expiresIn = nil;
+    }
+    
+    BOOL didRefreshTokenChange = NO;
+    BOOL didRefreshTokenUpdate = NO;
+    NSString * refreshTokenBeforeUpdate = nil;
+    NSString *refreshToken = [dict objectForKey:kOAuth2RefreshTokenKey];
+    if (refreshToken) {
+        NSString *priorRefreshToken = self.refreshToken;
 
-  // If a new code or access token is being set, remove the old expiration
-  NSString *newCode = [dict objectForKey:kOAuth2CodeKey];
-  NSString *newAccessToken = [dict objectForKey:kOAuth2AccessTokenKey];
-  if (newCode || newAccessToken) {
-    self.expiresIn = nil;
-  }
-
-  BOOL didRefreshTokenChange = NO;
-  NSString *refreshToken = [dict objectForKey:kOAuth2RefreshTokenKey];
-  if (refreshToken) {
-    NSString *priorRefreshToken = self.refreshToken;
-
-    if (priorRefreshToken != refreshToken
-        && (priorRefreshToken == nil
-            || ![priorRefreshToken isEqual:refreshToken])) {
-          didRefreshTokenChange = YES;
+        if (priorRefreshToken != refreshToken
+            && (priorRefreshToken == nil
+                || ![priorRefreshToken isEqual:refreshToken])) {
+            if( priorRefreshToken != nil){
+                didRefreshTokenUpdate = YES;
+                refreshTokenBeforeUpdate = [NSString stringWithString:priorRefreshToken];
+            }
+            didRefreshTokenChange = YES;
         }
-  }
-
-  [self addParametersFromDictionary:dict];
-  [self updateExpirationDate];
-
-  if (didRefreshTokenChange) {
-    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    [nc postNotificationName:kGTMOAuth2RefreshTokenChanged
-                      object:self
-                    userInfo:nil];
-  }
-  // NSLog(@"keys set ----------------------------\n%@", dict);
+    }
+    
+    [self addParametersFromDictionary:dict];
+    [self updateExpirationDate];
+    
+    if (didRefreshTokenChange) {
+        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+        [nc postNotificationName:kGTMOAuth2RefreshTokenChanged
+                          object:self
+                        userInfo:nil];
+        if( didRefreshTokenUpdate && refreshTokenBeforeUpdate ){
+            [nc postNotificationName:kGTMOAuth2RefreshTokenUpdated
+                              object:self
+                            userInfo:@{@"prior_refresh_token":refreshTokenBeforeUpdate}];
+            
+        }
+    }
+    // NSLog(@"keys set ----------------------------\n%@", dict);
 }
 
 - (void)setKeysForResponseString:(NSString *)str {
