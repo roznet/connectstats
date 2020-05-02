@@ -282,7 +282,7 @@ finishedRefreshWithFetcher:(GTMOAuth2Fetcher *)fetcher
 
 - (void)setKeysForResponseDictionary:(NSDictionary *)dict {
     if (dict == nil) return;
-    
+
     // If a new code or access token is being set, remove the old expiration
     NSString *newCode = [dict objectForKey:kOAuth2CodeKey];
     NSString *newAccessToken = [dict objectForKey:kOAuth2AccessTokenKey];
@@ -315,7 +315,7 @@ finishedRefreshWithFetcher:(GTMOAuth2Fetcher *)fetcher
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc postNotificationName:kGTMOAuth2RefreshTokenChanged
                           object:self
-                        userInfo:nil];
+                        userInfo:@{@"api_response":dict}];
         if( didRefreshTokenUpdate && refreshTokenBeforeUpdate ){
             [nc postNotificationName:kGTMOAuth2RefreshTokenUpdated
                               object:self

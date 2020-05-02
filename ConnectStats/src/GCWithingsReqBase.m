@@ -50,6 +50,7 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
         self.navigationController = nil;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshed object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshFailed object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2RefreshTokenChanged object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2RefreshTokenUpdated object:nil];
     }
     return self;
@@ -58,6 +59,7 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
     self = [super init];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshed object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2AccessTokenRefreshFailed object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2RefreshTokenChanged object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kGTMOAuth2RefreshTokenUpdated object:nil];
 
     return self;
@@ -75,13 +77,13 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
 }
 
 -(void)notifyCallBack:(NSNotification*)notification{
-    //[@"kGTMOAuth2" length] = 10
-    NSString * name = [notification.name substringFromIndex:10];
+    
+    NSString * name = [notification.name substringFromIndex:10]; // 10 = [@"kGTMOAuth2" length]
     
     if( [notification.name isEqualToString:kGTMOAuth2AccessTokenRefreshFailed]){
         RZLog(RZLogError, @"%@ %@", name, notification.object);
     }
-    if( [notification.name isEqualToString:kGTMOAuth2RefreshTokenUpdated]){
+    if( [notification.name isEqualToString:kGTMOAuth2RefreshTokenUpdated] || [notification.name isEqualToString:kGTMOAuth2RefreshTokenChanged]){
         RZLog(RZLogInfo, @"%@ %@ %@", name, notification.object, notification.userInfo);
     }
     if( [notification.name isEqualToString:kGTMOAuth2AccessTokenRefreshed]){
