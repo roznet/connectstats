@@ -617,10 +617,11 @@ void checkVersion(){
     if( [self isFirstTimeForFeature:@"UPGRADE_PROFILE_DONE_AND_ANCHOR"]){
         needToSaveSettings = true;
         // Transfer old key to new key
-        NSUInteger page = [[GCAppGlobal profile] configGetInt:PROFILE_LAST_PAGE_OBSOLETE defaultValue:0];
-        BOOL fullDone = [[GCAppGlobal profile] configGetBool:PROFILE_FULL_DOWNLOAD_DONE_OBSOLETE defaultValue:false];
-        [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin set:page];
-        [[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin set:fullDone];
+        if( [[GCAppGlobal profile] serviceSuccess:gcServiceGarmin]){
+            NSUInteger page = [[GCAppGlobal profile] configGetInt:PROFILE_LAST_PAGE_OBSOLETE defaultValue:0];
+            [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin set:page];
+            [[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin set:YES];
+        }
         
         if( [[GCAppGlobal profile] serviceSuccess:gcServiceStrava]){
             [[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava set:YES];
