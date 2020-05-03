@@ -8,15 +8,6 @@ build.py will update fields.db from:
 
 
 
-## Add a new Field
-
-### Add default unit/Description
-
-1. search for `NEWTRACKFIELD`
-2. `-[GCTrackPoint parseDictionary:]`: add field if necessary
-3. add to `fields_en_manual.db`
-4. rerun `build.py`, this rebuilds the fields.db that the app will use 
-5. if new unit, add to `GCUnit.m`
 
 ### Connect IQ Field
 

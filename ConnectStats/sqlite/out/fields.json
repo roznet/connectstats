@@ -72,6 +72,7 @@
     {
       "activity_type": "virtual_run",
       "activity_type_id": 153,
+      "de": "Virtuelles Laufen",
       "en": "Virtual Running",
       "parent_activity_type": "running",
       "parent_activity_type_id": 1
@@ -79,6 +80,7 @@
     {
       "activity_type": "obstacle_run",
       "activity_type_id": 154,
+      "de": "Hindernislauf",
       "en": "Obstacle Running",
       "parent_activity_type": "running",
       "parent_activity_type_id": 1
@@ -86,6 +88,7 @@
     {
       "activity_type": "indoor_running",
       "activity_type_id": 156,
+      "de": "Indoor-Laufen",
       "en": "Indoor Running",
       "parent_activity_type": "running",
       "parent_activity_type_id": 1
@@ -219,6 +222,7 @@
     {
       "activity_type": "virtual_ride",
       "activity_type_id": 152,
+      "de": "Virtuelles Radfahren",
       "en": "Virtual Cycling",
       "parent_activity_type": "cycling",
       "parent_activity_type_id": 2
@@ -520,7 +524,7 @@
     {
       "activity_type": "tennis",
       "activity_type_id": 142,
-      "de": "TENNIS",
+      "de": "Tennis",
       "en": "TENNIS",
       "es": "TENNIS",
       "fr": "TENNIS",
@@ -534,6 +538,7 @@
     {
       "activity_type": "floor_climbing",
       "activity_type_id": 150,
+      "de": "Treppensteigen",
       "en": "Floor Climbing",
       "parent_activity_type": "other",
       "parent_activity_type_id": 4
@@ -541,6 +546,7 @@
     {
       "activity_type": "stop_watch",
       "activity_type_id": 151,
+      "de": "Stoppuhr",
       "en": "Stopwatch",
       "parent_activity_type": "other",
       "parent_activity_type_id": 4
@@ -548,12 +554,14 @@
     {
       "activity_type": "auto_racing",
       "activity_type_id": 162,
+      "de": "Autorennen",
       "parent_activity_type": "other",
       "parent_activity_type_id": 4
     },
     {
       "activity_type": "breathwork",
       "activity_type_id": 164,
+      "de": "Atem\u00fcbung",
       "parent_activity_type": "other",
       "parent_activity_type_id": 4
     },
@@ -728,13 +736,14 @@
     {
       "activity_type": "multi_sport",
       "activity_type_id": 89,
+      "de": "Multi-Sport",
       "parent_activity_type": "all",
       "parent_activity_type_id": 17
     },
     {
       "activity_type": "steps",
       "activity_type_id": 108,
-      "de": "Steps",
+      "de": "Schritte",
       "en": "Steps",
       "es": "Steps",
       "fr": "Steps",
@@ -748,6 +757,7 @@
     {
       "activity_type": "diving",
       "activity_type_id": 144,
+      "de": "Tauchen",
       "en": "Diving",
       "parent_activity_type": "all",
       "parent_activity_type_id": 17
@@ -755,12 +765,14 @@
     {
       "activity_type": "safety",
       "activity_type_id": 157,
+      "de": "Sicherheit",
       "parent_activity_type": "all",
       "parent_activity_type_id": 17
     },
     {
       "activity_type": "winter_sports",
       "activity_type_id": 165,
+      "de": "Wintersport",
       "parent_activity_type": "all",
       "parent_activity_type_id": 17
     },
@@ -865,12 +877,14 @@
     {
       "activity_type": "pilates",
       "activity_type_id": 160,
+      "de": "Pilates",
       "parent_activity_type": "fitness_equipment",
       "parent_activity_type_id": 29
     },
     {
       "activity_type": "yoga",
       "activity_type_id": 163,
+      "de": "Yoga",
       "en": "Yoga",
       "parent_activity_type": "fitness_equipment",
       "parent_activity_type_id": 29
@@ -948,6 +962,7 @@
     {
       "activity_type": "single_gas_diving",
       "activity_type_id": 145,
+      "de": "Einzelgespr\u00e4che-Tauchgang",
       "en": "Single-Gas Dive",
       "parent_activity_type": "diving",
       "parent_activity_type_id": 144
@@ -955,6 +970,7 @@
     {
       "activity_type": "multi_gas_diving",
       "activity_type_id": 146,
+      "de": "Multigas-Tauchgang",
       "en": "Multi-Gas Dive",
       "parent_activity_type": "diving",
       "parent_activity_type_id": 144
@@ -962,6 +978,7 @@
     {
       "activity_type": "gauge_diving",
       "activity_type_id": 147,
+      "de": "Tiefenmesser-Tauchgang",
       "en": "Gauge Dive",
       "parent_activity_type": "diving",
       "parent_activity_type_id": 144
@@ -969,6 +986,7 @@
     {
       "activity_type": "apnea_diving",
       "activity_type_id": 148,
+      "de": "Apnoetauchgang",
       "en": "Apnea",
       "parent_activity_type": "diving",
       "parent_activity_type_id": 144
@@ -976,6 +994,7 @@
     {
       "activity_type": "apnea_hunting",
       "activity_type_id": 155,
+      "de": "Apnoejagd",
       "en": "Apnea Hunting",
       "parent_activity_type": "diving",
       "parent_activity_type_id": 144
@@ -983,18 +1002,21 @@
     {
       "activity_type": "ccr_diving",
       "activity_type_id": 161,
+      "de": "CCR-Tauchgang",
       "parent_activity_type": "diving",
       "parent_activity_type_id": 144
     },
     {
       "activity_type": "assistance",
       "activity_type_id": 158,
+      "de": "Hilfe",
       "parent_activity_type": "safety",
       "parent_activity_type_id": 157
     },
     {
       "activity_type": "incident_detected",
       "activity_type_id": 159,
+      "de": "Unfall-Benachrichtigungen",
       "parent_activity_type": "safety",
       "parent_activity_type_id": 157
     },
@@ -1099,12 +1121,14 @@
   ],
   "gc_fields_display": [
     {
+      "de": "Beginn Breitengrad",
       "en": "Beginnning Latitude",
       "field": "BeginLatitude",
       "ja": "\u958b\u59cb\u6642\u7def\u5ea6",
       "zh": "\u8d77\u59cb\u7eac\u5ea6"
     },
     {
+      "de": "Beginn L\u00e4ngengrad",
       "en": "Beginning Longitude",
       "field": "BeginLongitude",
       "ja": "\u958b\u59cb\u6642\u7d4c\u5ea6",
@@ -1123,6 +1147,7 @@
       "field": "BeginPowerTwentyMinutesTimerTime"
     },
     {
+      "de": "Beginn Zeitstempel",
       "field": "BeginTimestamp"
     },
     {
@@ -1142,9 +1167,11 @@
       "field": "DirectVO2MaxCycling"
     },
     {
+      "de": "Ende Breitengrad",
       "field": "EndLatitude"
     },
     {
+      "de": "Ende L\u00e4ngengrad",
       "field": "EndLongitude"
     },
     {
@@ -1160,13 +1187,14 @@
       "field": "EndPowerTwentyMinutesTimerTime"
     },
     {
+      "de": "Ende Zeitstempel",
       "field": "EndTimestamp"
     },
     {
       "field": "GainCorrectedElevation"
     },
     {
-      "de": "Positiver H\u00f6henunterschied",
+      "de": "H\u00f6hengewinn",
       "en": "Elevation Gain",
       "es": "Altura ganada",
       "field": "GainElevation",
@@ -1195,7 +1223,7 @@
       "field": "LossCorrectedElevation"
     },
     {
-      "de": "Negativer H\u00f6henunterschied",
+      "de": "H\u00f6henverlust",
       "en": "Elevation Loss",
       "es": "Altura perdida",
       "field": "LossElevation",
@@ -1224,7 +1252,7 @@
       "zh": "\u6700\u9ad8\u6e29\u5ea6"
     },
     {
-      "de": "Max. Trittfrequenz (Fahrrad)",
+      "de": "Max. Trittfrequenz (Rad)",
       "en": "Max Bike Cadence",
       "es": "Cadencia de pedaleo m\u00e1xima",
       "field": "MaxBikeCadence",
@@ -1235,10 +1263,11 @@
       "zh": "\u6700\u9ad8\u81ea\u884c\u8f66\u8e0f\u9891"
     },
     {
+      "de": "Max. korrigierte H\u00f6he",
       "field": "MaxCorrectedElevation"
     },
     {
-      "de": "Max Run Cadence",
+      "de": "Max. Schrittfrequenz",
       "en": "Max Run Cadence",
       "es": "Max Run Cadence",
       "field": "MaxDoubleCadence",
@@ -1264,7 +1293,7 @@
       "field": "MaxFormPower"
     },
     {
-      "de": "Max Run Cadence",
+      "de": "Max. Schrittfrequenz",
       "en": "Max Run Cadence",
       "es": "Max Run Cadence",
       "field": "MaxFractionalCadence",
@@ -1282,7 +1311,7 @@
       "field": "MaxGroundContactTime"
     },
     {
-      "de": "Max. HF",
+      "de": "Max. Puls",
       "en": "Max HR",
       "es": "FC m\u00e1x.",
       "field": "MaxHeartRate",
@@ -1300,7 +1329,7 @@
       "field": "MaxMomentaryEnergyExpenditure"
     },
     {
-      "de": "Beste Pace",
+      "de": "Max. Tempo",
       "en": "Best Pace",
       "es": "Ritmo \u00f3ptimo",
       "field": "MaxPace",
@@ -1311,18 +1340,21 @@
       "zh": "\u6700\u4f73\u914d\u901f"
     },
     {
+      "de": "Max. Leistung",
       "en": "Max Power",
       "field": "MaxPower"
     },
     {
+      "de": "Max. Leistung 20min",
       "en": "Max Avg Power (20 min)",
       "field": "MaxPowerTwentyMinutes"
     },
     {
+      "de": "Max. relative Lauf\u00f6konomie",
       "field": "MaxRelativeRunningEconomy"
     },
     {
-      "de": "Max. Schrittfrequenz (Laufen)",
+      "de": "Max. Schrittfrequenz",
       "en": "Max Run Cadence",
       "es": "Cadencia de carrera m\u00e1xima",
       "field": "MaxRunCadence",
@@ -1348,7 +1380,7 @@
       "field": "MaxStrokeCadence"
     },
     {
-      "de": "Maximale Schwimmfrequenz",
+      "de": "Max. Zugfrequenz",
       "en": "Max Swim Cadence",
       "es": "Cadencia de nado m\u00e1xima",
       "field": "MaxSwimCadence",
@@ -1365,10 +1397,12 @@
       "field": "MaxVerticalOscillation"
     },
     {
+      "de": "Max. vertikales Verh\u00e4ltnis ",
       "en": "Max Vertical Ratio",
       "field": "MaxVerticalRatio"
     },
     {
+      "de": "Max. vertikale Geschw.",
       "field": "MaxVerticalSpeed"
     },
     {
@@ -1387,9 +1421,11 @@
       "zh": "\u6700\u4f4e\u6e29\u5ea6"
     },
     {
+      "de": "Min. Trittfrequenz ",
       "field": "MinBikeCadence"
     },
     {
+      "de": "Min. korrigierter Anstieg",
       "field": "MinCorrectedElevation"
     },
     {
@@ -1426,6 +1462,7 @@
       "field": "MinGroundContactTime"
     },
     {
+      "de": "Min. Puls",
       "en": "Min HR",
       "field": "MinHeartRate"
     },
@@ -1437,9 +1474,11 @@
       "field": "MinMomentaryEnergyExpenditure"
     },
     {
+      "de": "Min. Tempo",
       "field": "MinPace"
     },
     {
+      "de": "Min. Leistung",
       "en": "Min Power",
       "field": "MinPower"
     },
@@ -1447,10 +1486,11 @@
       "field": "MinRelativeRunningEconomy"
     },
     {
+      "de": "Min. Schrittfrequenz",
       "field": "MinRunCadence"
     },
     {
-      "de": "Min. Geschwindigkeit",
+      "de": "Min. Geschw.",
       "en": "Min Speed",
       "es": "Velocidad m\u00ednima",
       "field": "MinSpeed",
@@ -1461,7 +1501,7 @@
       "zh": "\u6700\u4f4e\u901f\u5ea6"
     },
     {
-      "de": "Mindestanzahl von Z\u00fcgen",
+      "de": "Min. Z\u00fcge",
       "en": "Min Strokes",
       "es": "Brazadas m\u00ednimas",
       "field": "MinStrokes",
@@ -1536,7 +1576,7 @@
       "field": "SumDurationVeryActive"
     },
     {
-      "de": "Elapsed Time",
+      "de": "Absolvierte Zeit",
       "en": "Elapsed Time",
       "es": "Elapsed Time",
       "field": "SumElapsedDuration",
@@ -1558,6 +1598,7 @@
       "zh": "\u5361\u8def\u91cc"
     },
     {
+      "de": "Aktivit\u00e4tskalorien",
       "field": "SumEnergyActive"
     },
     {
@@ -1567,6 +1608,7 @@
       "field": "SumFloorsDescended"
     },
     {
+      "de": "Intensit\u00e4tsfaktor",
       "en": "Intensity Factor (IF)",
       "field": "SumIntensityFactor"
     },
@@ -1683,7 +1725,7 @@
       "field": "SumTotalWork"
     },
     {
-      "de": "Training Effect",
+      "de": "Trainingseffekt",
       "en": "Training Effect",
       "es": "Training Effect",
       "field": "SumTrainingEffect",
@@ -1694,10 +1736,12 @@
       "zh": "\u8bad\u7ec3\u6210\u6548"
     },
     {
+      "de": "TSS",
       "en": "Training Stress Score (TSS)",
       "field": "SumTrainingStressScore"
     },
     {
+      "de": "FTP",
       "en": "Threshold Power",
       "field": "ThresholdPower"
     },
@@ -1717,7 +1761,7 @@
       "zh": "\u5e73\u5747\u6e29\u5ea6"
     },
     {
-      "de": "\u00d8 Trittfrequenz (Fahrrad)",
+      "de": "\u00d8 Trittfrequenz (Rad)",
       "en": "Avg Bike Cadence",
       "es": "Cadencia de pedaleo media",
       "field": "WeightedMeanBikeCadence",
@@ -1728,7 +1772,7 @@
       "zh": "\u5e73\u5747\u81ea\u884c\u8f66\u8e0f\u9891"
     },
     {
-      "de": "Avg Run Cadence",
+      "de": "\u00d8 Schrittfrequenz",
       "en": "Avg Run Cadence",
       "es": "Avg Run Cadence",
       "field": "WeightedMeanDoubleCadence",
@@ -1739,7 +1783,7 @@
       "zh": "\u5e73\u5747\u8dd1\u6b65\u8e0f\u9891"
     },
     {
-      "de": "Durchschnittliche Effizienz",
+      "de": "\u00d8 Effizienz",
       "en": "Avg Efficiency",
       "es": "Eficacia media",
       "field": "WeightedMeanEfficiency",
@@ -1758,7 +1802,7 @@
       "field": "WeightedMeanFormPower"
     },
     {
-      "de": "Avg Run Cadence",
+      "de": "\u00d8 Schrittfrequenz",
       "en": "Avg Run Cadence",
       "es": "Avg Run Cadence",
       "field": "WeightedMeanFractionalCadence",
@@ -1773,7 +1817,7 @@
       "field": "WeightedMeanGroundContactBalanceLeft"
     },
     {
-      "de": "Avg Ground Contact Time",
+      "de": "\u00d8 Bodenkontaktzeit",
       "en": "Avg Ground Contact Time",
       "es": "Avg Ground Contact Time",
       "field": "WeightedMeanGroundContactTime",
@@ -1784,7 +1828,7 @@
       "zh": "\u5e73\u5747\u89e6\u5730\u65f6\u95f4"
     },
     {
-      "de": "\u00d8 HF",
+      "de": "\u00d8 Puls",
       "en": "Avg HR",
       "es": "FC media",
       "field": "WeightedMeanHeartRate",
@@ -1813,7 +1857,7 @@
       "field": "WeightedMeanMomentaryEnergyExpenditure"
     },
     {
-      "de": "Avg Moving Pace",
+      "de": "\u00d8 Bewegungstempo",
       "en": "Avg Moving Pace",
       "es": "Avg Moving Pace",
       "field": "WeightedMeanMovingPace",
@@ -1824,7 +1868,7 @@
       "zh": "\u5e73\u5747\u79fb\u52a8\u914d\u901f"
     },
     {
-      "de": "Avg Moving Speed",
+      "de": "\u00d8 Bewegungsgeschw.",
       "en": "Avg Moving Speed",
       "es": "Avg Moving Speed",
       "field": "WeightedMeanMovingSpeed",
@@ -1839,7 +1883,7 @@
       "field": "WeightedMeanNormalizedPower"
     },
     {
-      "de": "\u00d8 Pace",
+      "de": "\u00d8 Tempo",
       "en": "Avg Pace",
       "es": "Ritmo medio",
       "field": "WeightedMeanPace",
@@ -1861,7 +1905,7 @@
       "field": "WeightedMeanRightBalance"
     },
     {
-      "de": "\u00d8 Schrittfrequenz (Laufen)",
+      "de": "\u00d8 Schrittfrequenz",
       "en": "Avg Run Cadence",
       "es": "Cadencia de carrera media",
       "field": "WeightedMeanRunCadence",
@@ -1872,7 +1916,7 @@
       "zh": "\u5e73\u5747\u8dd1\u6b65\u8e0f\u9891"
     },
     {
-      "de": "\u00d8 Geschw",
+      "de": "\u00d8 Geschw.",
       "en": "Avg Speed",
       "es": "Velocidad media",
       "field": "WeightedMeanSpeed",
@@ -1889,7 +1933,7 @@
       "field": "WeightedMeanStanceTimePercent"
     },
     {
-      "de": "Avg Stride Length",
+      "de": "\u00d8 Zugl\u00e4nge",
       "en": "Avg Stride Length",
       "es": "Avg Stride Length",
       "field": "WeightedMeanStrideLength",
@@ -1908,7 +1952,7 @@
       "field": "WeightedMeanStrokeDistance"
     },
     {
-      "de": "Durchschnittliche Anzahl von Z\u00fcgen",
+      "de": "\u00d8 Anzahl von Z\u00fcgen",
       "en": "Avg Strokes",
       "es": "Promedio brazadas",
       "field": "WeightedMeanStrokes",
@@ -1919,7 +1963,7 @@
       "zh": "\u5e73\u5747\u5212\u6570"
     },
     {
-      "de": "Durchschnittliche Schwimmfrequenz",
+      "de": "\u00d8 Zugfrequenz",
       "en": "Avg Swim Cadence",
       "es": "Cadencia de nado media",
       "field": "WeightedMeanSwimCadence",
@@ -1930,7 +1974,7 @@
       "zh": "\u5e73\u5747\u5212\u9891"
     },
     {
-      "de": "Durchschnittlicher SWOLF-Wert",
+      "de": "\u00d8 SWOLF-Wert",
       "en": "Avg SWOLF",
       "es": "SWOLF medio",
       "field": "WeightedMeanSwolf",
@@ -1941,7 +1985,7 @@
       "zh": "\u5e73\u5747 SWOLF"
     },
     {
-      "de": "Avg Vertical Oscillation",
+      "de": "\u00d8 vertikale Bewegung",
       "en": "Avg Vertical Oscillation",
       "es": "Avg Vertical Oscillation",
       "field": "WeightedMeanVerticalOscillation",
@@ -2551,9 +2595,10 @@
       "field_order": 2
     },
     {
-      "category": "dynamics",
+      "activity_type": "swimming",
+      "category": "swim",
       "field": "SumStrokes",
-      "field_order": 2
+      "field_order": 30
     },
     {
       "activity_type": "swimming",
