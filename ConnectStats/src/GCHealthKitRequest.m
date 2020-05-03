@@ -217,13 +217,15 @@
 -(void)resetAnchor{
     NSString * anchorFileName = [[GCAppGlobal profile] currentQueryAnchorFilePathForClass:[self class]];
     [RZFileOrganizer removeEditableFile:anchorFileName];
+    [[GCAppGlobal profile] serviceAnchor:gcServiceHealthKit set:kServiceNoAnchor];
+    [GCAppGlobal saveSettings];
 }
 
 
 -(HKQueryAnchor*)anchor{
     NSString * anchorFileName = [[GCAppGlobal profile] currentQueryAnchorFilePathForClass:[self class]];
     NSString * anchorFilePath = [RZFileOrganizer writeableFilePathIfExists:anchorFileName];
-    if (anchorFilePath) {
+    if (anchorFilePath && [[GCAppGlobal profile] serviceAnchor:gcServiceHealthKit] != kServiceNoAnchor) {
         NSData * data = [NSData dataWithContentsOfFile:anchorFilePath];
         return [NSKeyedUnarchiver unarchivedObjectOfClass:[HKQueryAnchor class] fromData:data error:nil];
     }else{
@@ -235,6 +237,10 @@
     NSString * anchorFileName = [[GCAppGlobal profile] currentQueryAnchorFilePathForClass:[self class]];
     NSString * anchorFilePath = [RZFileOrganizer writeableFilePath:anchorFileName];
     [[NSKeyedArchiver archivedDataWithRootObject:nA requiringSecureCoding:YES error:nil] writeToFile:anchorFilePath atomically:YES];
+    if( [[GCAppGlobal profile] serviceAnchor:gcServiceHealthKit] == kServiceNoAnchor ){
+        [[GCAppGlobal profile] serviceAnchor:gcServiceHealthKit set:1];
+        [GCAppGlobal saveSettings];
+    }
 }
 
 -(void)executeQuery{

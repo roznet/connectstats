@@ -26,6 +26,7 @@
 #import <Foundation/Foundation.h>
 #import "GCAppConstants.h"
 
+extern NSInteger kServiceNoAnchor;
 
 @interface GCAppProfiles : RZParentObject
 

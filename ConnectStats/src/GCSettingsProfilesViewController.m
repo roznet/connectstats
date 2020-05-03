@@ -40,8 +40,7 @@
 #define GC_ADVANCED_CACHE   2
 #define GC_ADVANCED_DERIVED 3
 #define GC_ADVANCED_DETAILS 4
-#define GC_ADVANCED_RELOAD  5
-#define GC_ADVANCED_END     6
+#define GC_ADVANCED_END     5
 
 @interface GCSettingsProfilesViewController ()
 @property (nonatomic,retain) RZTableIndexRemap * remap;
@@ -64,7 +63,6 @@
                                                               @(GC_ADVANCED_DELETE),
                                                               @(GC_ADVANCED_DERIVED),
                                                               @(GC_ADVANCED_DETAILS),
-                                                              @(GC_ADVANCED_RELOAD),
                                                               @(GC_ADVANCED_CACHE)]];
     }
     return self;
@@ -181,14 +179,6 @@
 
             [cell labelForRow:0 andCol:0].attributedText = title;
             [GCViewConfig setupGradientForDetails:cell];
-        }else if (indexPath.row == GC_ADVANCED_RELOAD){
-            [cell setupForRows:1 andCols:1];
-            NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Force Reload Old Activities",@"Profiles")
-                                                                          attributes:[GCViewConfig attributeBold16]] autorelease];
-
-            [cell labelForRow:0 andCol:0].attributedText = title;
-            [GCViewConfig setupGradientForDetails:cell];
-
         }
     }
     return cell;

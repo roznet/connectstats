@@ -167,6 +167,7 @@
         @( GC_OPTIONS_DOWNLOAD_DETAILS ),
         @( GC_OPTIONS_DUPLICATE_IMPORT ),
         @( GC_OPTIONS_DUPLICATE_LOAD   ),
+        @( GC_OPTIONS_FORCE_DOWNLOAD_OLD ),
     ]];
 
 }
@@ -693,7 +694,7 @@
 -(UITableViewCell*)optionsTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell * rv = nil;
     //GCCellEntryText * textcell = nil;
-    //GCCellGrid * gridcell = nil;
+    GCCellGrid * gridcell = nil;
     GCCellEntrySwitch * switchcell = nil;
 
     if (indexPath.row == GC_OPTIONS_DUPLICATE_IMPORT) {
@@ -731,6 +732,17 @@
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_OPTIONS_DOWNLOAD_DETAILS);
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
+    }else if (indexPath.row == GC_OPTIONS_FORCE_DOWNLOAD_OLD){
+        gridcell = [GCCellGrid gridCell:tableView];
+        
+        [gridcell setupForRows:1 andCols:1];
+        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Force Reload Old Activities",@"Other Service")
+                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
+        
+        [gridcell labelForRow:0 andCol:0].attributedText = title;
+        [GCViewConfig setupGradientForDetails:gridcell];
+        
+        rv = gridcell;
     }
     
     return rv;
@@ -1063,6 +1075,31 @@
         NSURL * helpURL = [NSURL URLWithString:@"https://ro-z.net/blog/services-for-garmin-data"];
         GCSettingsHelpViewController * helpVC = [GCSettingsHelpViewController helpViewControllerFor:helpURL];
         [self.navigationController pushViewController:helpVC animated:YES];
+    }else if( indexPath.section == GC_SECTIONS_OPTIONS && indexPath.row == GC_OPTIONS_FORCE_DOWNLOAD_OLD){
+        NSString * message = NSLocalizedString(@"This will force the app to download again your full history of activities", @"Service View");
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Confirm Reload",@"Service View")
+                                                                        message:message
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addCancelAction];
+        [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Download All",@"Service View") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+            gcService services[] = { gcServiceConnectStats,gcServiceGarmin,gcServiceStrava,gcServiceHealthKit,gcServiceWithings};
+            size_t n = sizeof(services)/sizeof(gcService);
+            BOOL atLeastOne = true;
+            for (size_t i=0; i<n; i++) {
+                GCService * service = [GCService service:services[i]];
+                if( [[GCAppGlobal profile] serviceSuccess:service.service]){
+                    RZLog(RZLogInfo,@"Force full download %@", service);
+                    [[GCAppGlobal profile] serviceAnchor:service.service set:kServiceNoAnchor];
+                    [[GCAppGlobal profile] serviceCompletedFull:service.service set:false];
+                }
+            }
+            if( atLeastOne ){
+                [GCAppGlobal saveSettings];
+            }
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+
     }
 }
 

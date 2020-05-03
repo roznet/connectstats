@@ -212,7 +212,9 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 +(void)saveSettings{
 	GCAppDelegate *appDelegate = _sharedApplicationDelegate();
     [appDelegate saveSettings];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotifySettingsChange object:nil];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifySettingsChange object:nil];
+    });
     //
 }
 +(void)beginRefreshing{

@@ -33,6 +33,8 @@
 #define kSOURCE_IDENTIFER @"identifer"
 #define kSOURCE_NAME      @"name"
 
+NSInteger kServiceNoAnchor = 0;
+
 @interface GCAppProfiles ()
 @property (nonatomic,retain) NSArray<NSMutableDictionary*> * profiles;
 @property (nonatomic,assign) NSUInteger currentProfile;
@@ -539,7 +541,7 @@
     [self configSet:[self key:PROFILE_SERVICE_FULL_DONE forService:service] boolVal:set];
 }
 -(NSInteger)serviceAnchor:(gcService)service{
-    return [self configGetInt:[self key:PROFILE_SERVICE_LAST_ANCHOR forService:service] defaultValue:0];
+    return [self configGetInt:[self key:PROFILE_SERVICE_LAST_ANCHOR forService:service] defaultValue:kServiceNoAnchor];
 }
 -(void)serviceAnchor:(gcService)service set:(NSInteger)anchor{
     return [self configSet:[self key:PROFILE_SERVICE_LAST_ANCHOR forService:service] intVal:anchor];

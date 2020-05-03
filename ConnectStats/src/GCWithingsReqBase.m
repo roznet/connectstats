@@ -84,7 +84,7 @@ static NSString * kCredentialServiceName = @"withings_oauth2";
         RZLog(RZLogError, @"%@ %@", name, notification.object);
     }
     if( [notification.name isEqualToString:kGTMOAuth2RefreshTokenUpdated] || [notification.name isEqualToString:kGTMOAuth2RefreshTokenChanged]){
-        RZLog(RZLogInfo, @"%@ %@ %@", name, notification.object, notification.userInfo);
+        RZLog(RZLogInfo, @"%@ %@ api refresh_token=%@", name, notification.object, notification.userInfo[@"api_response"][@"refresh_token"] );
     }
     if( [notification.name isEqualToString:kGTMOAuth2AccessTokenRefreshed]){
         RZLog(RZLogInfo, @"%@ %@", name, notification.object);

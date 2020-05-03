@@ -621,6 +621,13 @@ void checkVersion(){
         BOOL fullDone = [[GCAppGlobal profile] configGetBool:PROFILE_FULL_DOWNLOAD_DONE_OBSOLETE defaultValue:false];
         [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin set:page];
         [[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin set:fullDone];
+        
+        if( [[GCAppGlobal profile] serviceSuccess:gcServiceStrava]){
+            [[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava set:YES];
+        }
+        if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats]){
+            [[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats set:YES];
+        }
     }
     
     if( needToSaveSettings ){

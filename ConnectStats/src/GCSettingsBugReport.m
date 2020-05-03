@@ -51,7 +51,6 @@ NSString * kBugNoCommonId = @"-1";
     NSArray*keys=[@[
                    
                    CONFIG_CONNECTSTATS_USE         ,
-                   CONFIG_CONNECTSTATS_CONFIG      ,
                    CONFIG_CONNECTSTATS_TOKEN_ID    ,
                    CONFIG_CONNECTSTATS_USER_ID
                    
