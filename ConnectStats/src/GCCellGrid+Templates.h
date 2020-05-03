@@ -27,14 +27,11 @@
 #import "GCViewConfig.h"
 
 #import "GCHistoryFieldSummaryStats.h"
-#import "GCActivityTennisHeatmap.h"
 
 @class GCHistoryAggregatedDataHolder;
 @class GCActivity;
 @class GCHealthMeasure;
 @class GCHistoryFieldDataSerie;
-@class GCActivityTennis;
-@class GCActivityTennisShotValues;
 
 @interface GCCellGrid (Templates)
 -(void)setupDetailHeader:(GCActivity*)activity;
@@ -75,8 +72,5 @@
 -(void)setupForWeather:(GCActivity*)activity width:(CGFloat)width;
 
 -(void)setupForSwimTrackpoint:(GCTrackPoint*)lap index:(NSUInteger)idx andActivity:(GCActivity*)activity width:(CGFloat)width;
-
--(void)setupForTennisShotValue:(GCActivityTennis*)activity shotValue:(GCActivityTennisShotValues*)values;
--(void)setupForTennisHeatmap:(GCActivityTennis*)activity field:(NSString*)field;
 
 @end

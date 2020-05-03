@@ -27,13 +27,13 @@
 
 #import "GCCalculatedCachedTrackInfo.h"
 
-@implementation GCCalculactedCachedTrackInfo
+@implementation GCCalculatedCachedTrackInfo
 
 /**
 
  */
-+(GCCalculactedCachedTrackInfo*)info:(gcCalculatedCachedTrack)atrack field:(GCField*)afield{
-    GCCalculactedCachedTrackInfo * rv = [[[GCCalculactedCachedTrackInfo alloc] init] autorelease];
++(GCCalculatedCachedTrackInfo*)info:(gcCalculatedCachedTrack)atrack field:(GCField*)afield{
+    GCCalculatedCachedTrackInfo * rv = [[[GCCalculatedCachedTrackInfo alloc] init] autorelease];
     if (rv) {
         rv.track = atrack;
         rv.field = afield;

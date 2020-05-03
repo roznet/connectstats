@@ -49,13 +49,12 @@
 
 -(BOOL)addHealthMeasure:(GCHealthMeasure*)one;
 -(void)addSleepBlocks:(NSArray*)blocks;
--(GCHealthMeasure*)measureForId:(NSString*)aId andType:(gcMeasureType)aType;
--(GCStatsDataSerieWithUnit*)dataSerieWithUnitForHealthField:(GCField*)aType;
--(GCStatsDataSerieWithUnit*)dataSerieWithUnitForHealthFieldKey:(NSString*)aType DEPRECATED_MSG_ATTRIBUTE("use field");
--(GCHealthMeasure*)measureForDate:(NSDate*)aDate andType:(gcMeasureType)aField;
--(NSArray<GCHealthMeasure*>*)measuresForDate:(NSDate*)aDate;
--(GCHealthMeasure*)measureOnSpecificDate:(NSDate*)aDate forType:(gcMeasureType)aField andCalendar:(NSCalendar*)calendar;
+-(GCHealthMeasure*)measureForId:(NSString*)aId andField:(GCField*)field;
+-(GCStatsDataSerieWithUnit*)dataSerieWithUnitForHealthField:(GCField*)field;
 
+-(NSArray<GCHealthMeasure*>*)measuresForDate:(NSDate*)aDate;
+-(GCHealthMeasure*)measureOnSpecificDate:(NSDate*)aDate forField:(GCField*)aField andCalendar:(NSCalendar*)calendar;
+-(GCHealthMeasure*)measureForDate:(NSDate*)aDate andField:(GCField*)aField;
 
 -(void)updateForNewProfile;
 -(void)clearAllMeasures;

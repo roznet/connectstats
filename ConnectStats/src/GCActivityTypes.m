@@ -151,13 +151,13 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
 
     NSMutableDictionary * defsFromDb = [NSMutableDictionary dictionary];
 
-    FMResultSet * res = [fdb executeQuery:@"SELECT * FROM gc_activityTypes"];
+    FMResultSet * res = [fdb executeQuery:@"SELECT * FROM gc_activity_types"];
     while( [res next]){
-        NSUInteger typeId = [res intForColumn:@"activityTypeId"];
+        NSUInteger typeId = [res intForColumn:@"activity_type_id"];
         defsFromDb[ @(typeId) ] = @{
                                   kTypeId : @(typeId),
-                                  kTypeKey : [res stringForColumn:@"activityType"],
-                                  kTypeParent : @([res intForColumn:@"parentActivityTypeId"]),
+                                  kTypeKey : [res stringForColumn:@"activity_type"],
+                                  kTypeParent : @([res intForColumn:@"parent_activity_type_id"]),
                                   };
     }
 
@@ -177,7 +177,7 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
 
 -(void)addNonGarminTypes{
     NSMutableDictionary<NSNumber*,NSDictionary*>* missing = [NSMutableDictionary dictionary];
-    
+        
     NSUInteger nonActivityAllId = 0;
     if( self.typesByKey[@"non_activity_all"] == nil){
         nonActivityAllId = nonPredefinedTypeId++;

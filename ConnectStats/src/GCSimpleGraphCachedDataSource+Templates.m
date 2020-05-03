@@ -28,7 +28,6 @@
 #import "GCViewConfig.h"
 #import "GCAppGlobal.h"
 #import "GCHealthZoneCalculator.h"
-#import "GCActivityTennis.h"
 #import "GCHistoryFieldDataSerie.h"
 #import "GCTrackStats.h"
 #import "GCHistoryPerformanceAnalysis.h"
@@ -431,15 +430,6 @@
             plot.gradientColors = [GCViewSwimStrokeColors swimStrokeColors];
             plot.gradientDataSerie = trackStats.gradientSerie;
             cache.series = [NSMutableArray arrayWithObject:plot];
-        }else if ([trackStats.activity isKindOfClass:[GCActivityTennis class]]){
-            plot.graphType = gcGraphStep;
-            gcStatsRange range = plot.range;
-            range.y_min = 0.;
-            range.x_max = [trackStats.activity summaryFieldValueInStoreUnit:gcFieldFlagSumDuration];
-            plot.range = range;
-            plot.color = [GCViewConfig colorForGraphElement:gcSkinGraphColorBarGraph];
-            cache.series = [NSMutableArray arrayWithObject:plot];
-
         }else if (trackStats.zoneCalculator){
             plot.graphType = gcGraphStep;
             plot.color = [GCViewConfig colorForGraphElement:gcSkinGraphColorBarGraph];

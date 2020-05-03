@@ -350,10 +350,10 @@
         };
 
         maxValue = _display == gcCalendarDisplayDistancePercent ? _maxInfo.sumDistance.value : _maxInfo.sumDuration.value;
-        for (NSString * type in @[ GC_TYPE_RUNNING,GC_TYPE_CYCLING, GC_TYPE_SWIMMING, GC_TYPE_OTHER]) {
-            [dummy setActivityType:type];
+        for (GCActivityType * type in @[  [GCActivityType running], [GCActivityType cycling], [GCActivityType swimming], [GCActivityType other] ]) {
+            [dummy changeActivityType:type];
             [[GCViewConfig cellBackgroundDarkerForActivity:dummy] setStroke];
-            GCCalendarDataMarkerInfo * info = [markers inforForType:type];
+            GCCalendarDataMarkerInfo * info = [markers inforForType:type.key];
             drawArc( _display == gcCalendarDisplayDistancePercent ? info.sumDistance.value : info.sumDuration.value);
         }
 
@@ -390,7 +390,7 @@
 
             for (NSString * type in types) {
                 GCCalendarDataMarkerInfo * info = [markers inforForType:type];
-                [dummy setActivityType:type];
+                [dummy changeActivityType:[GCActivityType activityTypeForKey:type]];
                 for (size_t i = 0; i < info.count; i++) {
                     current.origin.x = x_base + markerIdx * actPointSize;
                     if (markerIdx < total) {
@@ -435,7 +435,7 @@
                     disp = [disp unitForGlobalSystem];
                     double val = [disp convertDouble:sp fromUnit:mps];
                     if (isnan(val)||isinf(val)) {
-                        d = NSLocalizedString(@"", @"Calendar Empty");
+                        d = @"";
                     }else{
                         d = [disp formatDouble:val];
                     }

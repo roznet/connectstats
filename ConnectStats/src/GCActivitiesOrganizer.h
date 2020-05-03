@@ -58,19 +58,12 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 -(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb NS_DESIGNATED_INITIALIZER;
 
 -(BOOL)registerActivity:(GCActivity*)act forActivityId:(NSString*)aId;
--(void)registerActivity:(NSString*)aId withGarminData:(NSDictionary*)aData;
--(void)registerActivity:(NSString*)aId withStravaData:(NSDictionary*)aData;
 -(void)registerTemporaryActivity:(GCActivity*)act forActivityId:(NSString*)aId;
 
--(void)reloadActivity:(NSString*)aId withGarminData:(NSDictionary*)aData;
 -(void)registerActivityTypes:(NSDictionary*)aData;
 
 -(void)registerActivity:(NSString*)aId withTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps;
 -(void)registerActivity:(NSString *)aId withWeather:(GCWeather *)aData;
-
--(void)registerTennisActivity:(NSString *)aId withBabolatData:(NSDictionary *)aData;
--(void)registerTennisActivity:(NSString *)aId withFullSession:(NSDictionary *)aData;
-
 
 -(NSUInteger)countOfKnownDuplicates;
 -(GCActivity*)findDuplicate:(GCActivity*)act;
@@ -122,8 +115,6 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 -(void)filterForQuickFilter;
 -(void)clearFilter;
 -(BOOL)hasFilter;
-
--(FMDatabase*)tennisdb;
 
 -(NSUInteger)countOfFilteredActivities;
 -(GCActivity*)filteredActivityForIndex:(NSUInteger)idx;

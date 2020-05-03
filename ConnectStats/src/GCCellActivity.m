@@ -162,7 +162,7 @@ const CGFloat kGCCellActivityDefaultHeight = 96;
         GCNumberWithUnit * nu_steps = [activity numberWithUnitForFieldKey:@"SumStep"];
         GCFormattedField * steps = [GCFormattedField formattedField:nil forNumber:nu_steps forSize:14.];
 
-        GCHealthMeasure * weight = [[GCAppGlobal health] measureOnSpecificDate:activity.date forType:gcMeasureWeight andCalendar:[GCAppGlobal calculationCalendar]];
+        GCHealthMeasure * weight = [[GCAppGlobal health] measureOnSpecificDate:activity.date forField:[GCHealthMeasure weight] andCalendar:[GCAppGlobal calculationCalendar]];
 
         NSDictionary * dateAttributes = @{ NSFontAttributeName:[GCViewConfig boldSystemFontOfSize:16.],
                                            NSForegroundColorAttributeName:[UIColor blackColor]

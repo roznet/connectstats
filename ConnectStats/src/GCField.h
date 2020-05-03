@@ -58,6 +58,7 @@
 -(BOOL)isMin;
 -(BOOL)isSpeedOrPace;
 -(BOOL)isZeroValid;
+-(BOOL)isValidForActivityType:(NSString*)activityType;
 
 /**
  Corresponding Speed or Pace field. If not speed or pace return nil

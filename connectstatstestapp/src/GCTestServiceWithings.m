@@ -47,7 +47,7 @@
     [GCAppGlobal setupEmptyState:@"activities_withings.db" withSettingsName:kPreservedSettingsName];
     [[GCAppGlobal profile] configSet:CONFIG_WITHINGS_AUTO boolVal:YES];
     
-    GCField * weight = [GCHealthMeasure healthFieldFromMeasureType:gcMeasureWeight];
+    GCField * weight = [GCHealthMeasure weight];
     GCStatsDataSerieWithUnit * values = [[GCAppGlobal health] dataSerieWithUnitForHealthField:weight];
     
     [self assessTestResult:@"Start with 0" result:values.count == 0 ];
@@ -58,7 +58,7 @@
 -(void)testWithingsEnd{
     [[GCAppGlobal web] detach:self];
     
-    GCField * weight = [GCHealthMeasure healthFieldFromMeasureType:gcMeasureWeight];
+    GCField * weight = [GCHealthMeasure weight];
     GCStatsDataSerieWithUnit * values = [[GCAppGlobal health] dataSerieWithUnitForHealthField:weight];
     
     [self assessTestResult:@"Ends with more than 0" result:values.count > 0 ];

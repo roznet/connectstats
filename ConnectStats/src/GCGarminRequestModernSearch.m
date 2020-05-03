@@ -209,6 +209,12 @@ static const NSUInteger kActivityRequestCount = 20;
         
         if ( self.searchMore ) {
             self.nextReq = [[[GCGarminRequestModernSearch alloc] initNextWith:self] autorelease];
+        }else{
+            if( self.reloadAll ){
+                [[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin set:YES];
+                RZLog(RZLogInfo, @"Garmin completed full");
+                [GCAppGlobal saveSettings];
+            }
         }
         if (self.nextReq == nil && self.childIds.count > 0) {
             self.nextReq = [[[GCGarminRequestActivityList alloc]  initWithIds:self.childIds andParentId:@"parent"] autorelease];

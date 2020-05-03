@@ -60,20 +60,14 @@
 
 +(NSString*)serviceKey:(gcService)service{
     switch (service) {
-        case gcServiceBabolat:
-            return @"babolat";
         case gcServiceGarmin:
             return @"garmin";
         case gcServiceStrava:
             return @"strava";
         case gcServiceWithings:
             return @"withings";
-        case gcServiceSportTracks:
-            return @"sportTracks";
         case gcServiceHealthKit:
             return @"healthkit";
-        case gcServiceFitBit:
-            return @"FitBit";
         case gcServiceConnectStats:
             return @"ConnectStats";
         case gcServiceEnd:
@@ -181,12 +175,6 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
             }else if([aId hasPrefix:GC_SERVICE_HEALTHKIT]){
                 rv.service = gcServiceHealthKit;
                 rv.prefix = GC_SERVICE_HEALTHKIT;
-            }else if ([aId hasPrefix:GC_SERVICE_BABOLAT]){
-                rv.service = gcServiceBabolat;
-                rv.prefix = GC_SERVICE_BABOLAT;
-            }else if([aId hasPrefix:GC_SERVICE_FITBIT]){
-                rv.service = gcServiceFitBit;
-                rv.prefix = GC_SERVICE_FITBIT;
             }else{
                 rv = nil;
             }
@@ -199,9 +187,6 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
     if (rv) {
         rv.service = serv;
         switch (serv) {
-            case gcServiceBabolat:
-                rv.prefix = GC_SERVICE_BABOLAT;
-                break;
             case gcServiceGarmin:
                 rv.prefix = GC_SERVICE_GARMIN;
                 break;
@@ -211,14 +196,8 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
             case gcServiceWithings:
                 rv.prefix = GC_SERVICE_WITHINGS;
                 break;
-            case gcServiceSportTracks:
-                rv.prefix = GC_SERVICE_SPORTTRACKS;
-                break;
             case gcServiceHealthKit:
                 rv.prefix = GC_SERVICE_HEALTHKIT;
-                break;
-            case gcServiceFitBit:
-                rv.prefix = GC_SERVICE_FITBIT;
                 break;
             case gcServiceConnectStats:
                 rv.prefix = GC_SERVICE_CONNECTSTATS;
@@ -283,20 +262,14 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
 
 -(NSString*)displayName{
     switch (self.service) {
-        case gcServiceBabolat:
-            return @"Babolat";
         case gcServiceGarmin:
             return @"Garmin";
         case gcServiceStrava:
             return @"Strava";
         case gcServiceWithings:
             return @"Withings";
-        case gcServiceSportTracks:
-            return @"SportTracks";
         case gcServiceHealthKit:
             return @"HealthKit";
-        case gcServiceFitBit:
-            return @"FitBit";
         case gcServiceConnectStats:
             return @"ConnectStats";
         case gcServiceEnd:
@@ -313,9 +286,8 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
         gcServiceGarmin,
         gcServiceConnectStats,
         gcServiceStrava,
+        gcServiceWithings,
         gcServiceHealthKit,
-        gcServiceFitBit,
-        gcServiceSportTracks
     };
     
     size_t i = 0;

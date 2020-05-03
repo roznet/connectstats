@@ -31,8 +31,6 @@
 #import "GCActivityAutoLapChoices.h"
 #import "GCTrackFieldChoices.h"
 
-@class GCActivityTennisDetailSource;
-
 @interface GCActivityDetailViewController : UITableViewController<RZChildObject,GCSharingImageExporter,UIAlertViewDelegate,GCEntryFieldDelegate,GCCellSimpleGraphDelegate,UIGestureRecognizerDelegate>
 
 

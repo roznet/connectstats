@@ -111,12 +111,6 @@ NSStringFromClass([GCTestCommunications class])
     [self rzRunnerExecute];
 }
 
--(void)testGCTestTennis{
-    self.testClassToRun = @"GCTestTennis";
-    [self rzRunnerExecute];
-}
-
-
 - (void)testGCTestBasics{
     self.testClassToRun = @"GCTestBasics";
     [self rzRunnerExecute];

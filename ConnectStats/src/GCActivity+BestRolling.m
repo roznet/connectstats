@@ -33,7 +33,7 @@
 
 @implementation GCActivity (BestRolling)
 
--(GCStatsDataSerieWithUnit*)calculatedRollingBestForSpeed:(GCCalculactedCachedTrackInfo *)info{
+-(GCStatsDataSerieWithUnit*)calculatedRollingBestForSpeed:(GCCalculatedCachedTrackInfo *)info{
     GCStatsDataSerieWithUnit * rv = nil;
     
     BOOL timeByDistance = true;
@@ -161,7 +161,7 @@
             }
         }
         if( n > 0){
-            RZLog(RZLogInfo, @"BestRolling for %@ capped %@/%@ points greater than %@ = %@",field, @(n),@(serie.count), maxfield, max_nu );
+            RZLog(RZLogInfo, @"%@ BestRolling for %@ capped %@/%@ points greater than %@ = %@",self, field, @(n),@(serie.count), maxfield, max_nu );
         }
     }
 }
@@ -183,7 +183,7 @@
     }
 }
 
--(GCStatsDataSerieWithUnit*)calculatedRollingBestSimpleSpeed:(GCCalculactedCachedTrackInfo*)info{
+-(GCStatsDataSerieWithUnit*)calculatedRollingBestSimpleSpeed:(GCCalculatedCachedTrackInfo*)info{
     GCStatsDataSerieWithUnit * rv = nil;
     
     BOOL useTimeAxis = false;
@@ -229,7 +229,7 @@
 
 }
 
--(GCStatsDataSerieWithUnit*)calculatedRollingBestSimple:(GCCalculactedCachedTrackInfo*)info{
+-(GCStatsDataSerieWithUnit*)calculatedRollingBestSimple:(GCCalculatedCachedTrackInfo*)info{
     GCStatsDataSerieWithUnit * rv = nil;
     
     BOOL useTimeAxis = true;
@@ -265,7 +265,7 @@
     return rv;
 }
 
--(GCStatsDataSerieWithUnit*)calculatedRollingBest:(GCCalculactedCachedTrackInfo *)info{
+-(GCStatsDataSerieWithUnit*)calculatedRollingBest:(GCCalculatedCachedTrackInfo *)info{
     GCStatsDataSerieWithUnit * rv = nil;
 
     if( info.fieldFlag == gcFieldFlagWeightedMeanSpeed){

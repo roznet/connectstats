@@ -41,10 +41,13 @@
 #import "GCDerivedGroupedSeries.h"
 #import "GCDerivedOrganizer.h"
 #import "GCHealthOrganizer.h"
+#import "GCStatsMultiFieldConfigViewController.h"
 
 @interface GCStatsMultiFieldViewController ()
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
 @property (nonatomic,assign) BOOL started;
+@property (nonatomic,retain) GCStatsMultiFieldConfigViewController * configViewController;
+
 @end
 
 @implementation GCStatsMultiFieldViewController
@@ -74,7 +77,7 @@
     [_fieldDataSeries release];
     [_allFields release];
     [_config release];
-
+    [_configViewController release];
     [super dealloc];
 }
 
@@ -590,7 +593,7 @@
         (self.navigationController.navigationBar.topItem).title = [GCAppGlobal organizer].lastSearchString;
     }else{
         if (self.activityType) {
-            (self.navigationController.navigationBar.topItem).title = [GCFields activityTypeDisplay:self.activityType];
+            (self.navigationController.navigationBar.topItem).title = [GCActivityType activityTypeForKey:self.activityType].displayName;
         }
     }
     [self.activityTypeButton setupBarButtonItem:self];
@@ -611,7 +614,19 @@
     [self.tableView reloadData];
 }
 
-
+-(void)longPress:(GCCellSimpleGraph*)cell{
+    RZLog(RZLogInfo,@"Long press");
+    self.configViewController = [GCStatsMultiFieldConfigViewController controllerWithDelegate:self];
+    RZAutorelease([[UIPopoverPresentationController alloc] initWithPresentedViewController:self.configViewController
+                                                                  presentingViewController:self]);
+    self.configViewController.popoverPresentationController.sourceView = self.view;
+    self.configViewController.popoverPresentationController.sourceRect = cell.frame;
+    
+    [self presentViewController:self.configViewController animated:YES completion:nil];
+}
+-(void)configViewController:(GCStatsMultiFieldConfigViewController*)vc didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    RZLog(RZLogInfo,@"Long press completed");
+}
 
 #pragma mark - Setup data
 
@@ -646,7 +661,7 @@
 
     NSMutableArray * limitFields = [NSMutableArray arrayWithCapacity:self.allFields.count];
     for (GCField * field in self.allFields) {
-        if ([field.activityType isEqualToString:activityType]) {
+        if ([field.activityType isEqualToString:activityType] || field.isHealthField) {
             [limitFields addObject:field];
         }
     }
@@ -805,5 +820,4 @@
     }
     return nil;
 }
-
 @end

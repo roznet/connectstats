@@ -49,14 +49,14 @@
     NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithCapacity:(self.cachedCalculatedTracks).count];
     RZPerformance * perf = [RZPerformance start];
 
-    GCCalculactedCachedTrackInfo * info = nil;
+    GCCalculatedCachedTrackInfo * info = nil;
     
     NSUInteger processedSeriesCount = 0;
     NSUInteger processedPointsCount = 0;
     
     for (NSString * key in self.cachedCalculatedTracks) {
         id obj = (self.cachedCalculatedTracks)[key];
-        if ([obj isKindOfClass:[GCCalculactedCachedTrackInfo class]]) {
+        if ([obj isKindOfClass:[GCCalculatedCachedTrackInfo class]]) {
             info = obj;
 
             if (info.track==gcCalculatedCachedTrackRollingBest) {
@@ -116,7 +116,7 @@
         GCField * field = [GCField field:CALC_VERTICAL_SPEED forActivityType:self.activityType];
         key = [self calculatedCachedTrackKey:gcCalculatedCachedTrackDataSerie forField:field];
         if (rv[key] == nil) {
-            GCCalculactedCachedTrackInfo * info = [GCCalculactedCachedTrackInfo info:gcCalculatedCachedTrackDataSerie field:field];
+            GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo info:gcCalculatedCachedTrackDataSerie field:field];
             rv[key] = info;
             hasMissing = true;
         }
@@ -126,7 +126,7 @@
             GCField * field = [GCField fieldForKey:CALC_10SEC_SPEED andActivityType:self.activityType];
             key = [self calculatedCachedTrackKey:gcCalculatedCachedTrackDataSerie forField:field];
             if (rv[key] == nil) {
-                GCCalculactedCachedTrackInfo * info = [GCCalculactedCachedTrackInfo info:gcCalculatedCachedTrackDataSerie field:field];
+                GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo info:gcCalculatedCachedTrackDataSerie field:field];
                 rv[key] = info;
                 hasMissing = true;
             }
@@ -149,7 +149,7 @@
     BOOL calculating = false;
     if (self.cachedCalculatedTracks) {
         for (NSString * key in self.cachedCalculatedTracks) {
-            if ([(self.cachedCalculatedTracks)[key] isKindOfClass:[GCCalculactedCachedTrackInfo class]]) {
+            if ([(self.cachedCalculatedTracks)[key] isKindOfClass:[GCCalculatedCachedTrackInfo class]]) {
                 calculating = true;
             }
         }
@@ -243,7 +243,7 @@
         // start calculation
 
         NSMutableDictionary * next = [NSMutableDictionary dictionaryWithDictionary:self.cachedCalculatedTracks];
-        next[key] = [GCCalculactedCachedTrackInfo info:track field:field];
+        next[key] = [GCCalculatedCachedTrackInfo info:track field:field];
         self.cachedCalculatedTracks = next;
         if (thread) {
             dispatch_async(thread,^(){

@@ -74,7 +74,7 @@ extern NSString *const kNotifySettingsChange;
 +(void)login;
 +(void)logout;
 +(void)beginRefreshing;
-+(void)searchAllActivities;
++(void)searchRecentActivities;
 +(void)startupRefreshIfNeeded;
 +(void)setupFieldCache;
 

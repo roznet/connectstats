@@ -33,7 +33,7 @@
 -(void)swipeLeft:(GCCellSimpleGraph*)cell;
 @optional
 -(void)swipeRight:(GCCellSimpleGraph*)cell;
-
+-(void)longPress:(GCCellSimpleGraph*)cell;
 @end
 
 

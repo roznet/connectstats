@@ -59,6 +59,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 @interface GCActivity ()
 
+@property (nonatomic,retain) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("use GCActivityType.");
+@property (nonatomic,retain) GCActivityType * activityTypeDetail;// DEPRECATED_MSG_ATTRIBUTE("use detail of GCActivityType.");
+
 @property (nonatomic,retain) FMDatabase * useDb;
 @property (nonatomic,retain) FMDatabase * useTrackDb;
 
@@ -269,6 +272,29 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 -(GCUnit*)distanceDisplayUnit{
     return [[GCUnit kilometer] unitForGlobalSystem];
+}
+
+-(BOOL)changeActivityType:(GCActivityType*)newActivityType{
+    BOOL changed = false;
+    if( newActivityType && ( !self.activityType || ![newActivityType isEqualToActivityType:self.activityTypeDetail] ) ){
+        NSString * newSubRoot = newActivityType.topSubRootType.key;
+        changed = true;
+        if( self.activityType && ![newSubRoot isEqualToString:self.activityType] ){
+            self.activityType = newSubRoot;
+            NSMutableDictionary * newSummary = [NSMutableDictionary dictionary];
+            for (GCField * field in self.summaryData) {
+                GCActivitySummaryValue * sumValue = self.summaryData[field];
+                GCField * newField = [field correspondingFieldForActivityType:newSubRoot];
+                newSummary[newField] = sumValue;
+            }
+            // We are not changing any values, so should not need to change the directly stored data like speed, etc
+            self.summaryData = [NSDictionary dictionaryWithDictionary:newSummary];
+        }else{
+            self.activityType = newSubRoot;
+        }
+        self.activityTypeDetail = newActivityType;
+    }
+    return changed;
 }
 
 /**
@@ -1484,7 +1510,11 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     [self setUseTrackDb:nil];
 }
 
-#pragma mark - Parent/Child Ids
+#pragma mark - external activityId
+
+-(BOOL)isSameAsActivityId:(NSString*)activityId{
+    return activityId && ([self.activityId isEqualToString:activityId] || [self.externalActivityId isEqualToString:activityId]);
+}
 
 -(NSString*)externalServiceActivityId{
     GCActivityMetaValue * val = self.metaData[GC_EXTERNAL_ID];
@@ -1506,6 +1536,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         }
     }
 }
+
+#pragma mark - Parent/Child Ids
 
 -(NSString*)parentId{
     GCActivityMetaValue * val = self.metaData[GC_PARENT_ID];

@@ -40,8 +40,7 @@
 #define GC_ADVANCED_CACHE   2
 #define GC_ADVANCED_DERIVED 3
 #define GC_ADVANCED_DETAILS 4
-#define GC_ADVANCED_RELOAD  5
-#define GC_ADVANCED_END     6
+#define GC_ADVANCED_END     5
 
 @interface GCSettingsProfilesViewController ()
 @property (nonatomic,retain) RZTableIndexRemap * remap;
@@ -64,7 +63,6 @@
                                                               @(GC_ADVANCED_DELETE),
                                                               @(GC_ADVANCED_DERIVED),
                                                               @(GC_ADVANCED_DETAILS),
-                                                              @(GC_ADVANCED_RELOAD),
                                                               @(GC_ADVANCED_CACHE)]];
     }
     return self;
@@ -135,7 +133,7 @@
         NSAttributedString * summ = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d activities",
                                                                                  (int)[[GCAppGlobal profile] activitiesCountForIdx:indexPath.row]]
                                                                      attributes:[GCViewConfig attribute14Gray]] autorelease];
-        NSAttributedString * curr = [[[NSAttributedString alloc] initWithString:current ? NSLocalizedString(@"Current Profile",@"Profiles") : NSLocalizedString(@"",@"Profiles")
+        NSAttributedString * curr = [[[NSAttributedString alloc] initWithString:current ? NSLocalizedString(@"Current Profile",@"Profiles") : @""
                                                                      attributes:[GCViewConfig attributeBold16Highlighted]]autorelease];
         [cell labelForRow:0 andCol:0].attributedText = title;
         [cell labelForRow:0 andCol:1].attributedText = curr;
@@ -181,14 +179,6 @@
 
             [cell labelForRow:0 andCol:0].attributedText = title;
             [GCViewConfig setupGradientForDetails:cell];
-        }else if (indexPath.row == GC_ADVANCED_RELOAD){
-            [cell setupForRows:1 andCols:1];
-            NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Force Reload Old Activities",@"Profiles")
-                                                                          attributes:[GCViewConfig attributeBold16]] autorelease];
-
-            [cell labelForRow:0 andCol:0].attributedText = title;
-            [GCViewConfig setupGradientForDetails:cell];
-
         }
     }
     return cell;
@@ -222,12 +212,6 @@
         }else if (indexPath.row == GC_ADVANCED_DERIVED){
             [[GCAppGlobal web] derivedComputations:16];
             [GCAppGlobal beginRefreshing];
-        }else if (indexPath.row == GC_ADVANCED_RELOAD){
-            [[GCAppGlobal profile] configSet:PROFILE_LAST_PAGE intVal:0];
-            [[GCAppGlobal profile] configSet:PROFILE_FULL_DOWNLOAD_DONE boolVal:NO];
-            [GCAppGlobal saveSettings];
-            [[GCAppGlobal web] servicesSearchActivitiesFrom:0 reloadAll:true];
-            [GCAppGlobal beginRefreshing];
         }else if (indexPath.row == GC_ADVANCED_DETAILS){
             [[GCAppGlobal web] downloadMissingActivityDetails:30];
         }
@@ -251,7 +235,7 @@
                                               style:UIAlertActionStyleDestructive
                                             handler:^(UIAlertAction*action){
                                                 [self confirmDestructiveAction:NSLocalizedString(@"Are you sure you want to delete the whole profile?", nil)
-                                                                         title:NSLocalizedString(@"Delete Profile", nil)
+                                                                         title:NSLocalizedString(@"Delete Profile", @"Profile Delete")
                                                                     completion:^(){
                                                     [[GCAppGlobal profile] deleteProfile:[[GCAppGlobal profile] currentProfileName]];
                                                     [GCAppGlobal saveSettings];

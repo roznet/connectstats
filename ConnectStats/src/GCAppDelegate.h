@@ -67,7 +67,7 @@
 -(void)startSuccessful;
 
 -(void)startupRefreshIfNeeded;
--(void)searchAllActivities;
+-(void)searchRecentActivities;
 
 -(NSObject<GCAppActionDelegate>*)actionDelegate;
 -(NSArray<NSDictionary*>*)recentRemoteMessages;

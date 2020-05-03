@@ -28,7 +28,6 @@
 #import "GCService.h"
 #import "GCWebUrl.h"
 #import "GCAppGlobal.h"
-#import "GCActivityTennis.h"
 
 #import "GCGarminRequestActivityReload.h"
 #import "GCGarminActivityTrack13Request.h"
@@ -59,8 +58,6 @@
 #import "GCStravaAthlete.h"
 #import "GCStravaSegmentEfforts.h"
 #import "GCStravaSegmentEffortStream.h"
-
-#import "GCBabolatLoginRequest.h"
 
 #import "GCDerivedRequest.h"
 #import "GCHealthOrganizer.h"
@@ -102,10 +99,30 @@
     }
 }
 
--(void)nonGarminSearch:(BOOL)reloadAll{
+-(void)servicesSearch:(BOOL)reloadAll{
+    if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
+        // Run on main queue as it accesses a navigation Controller
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            BOOL connectStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats];
+            [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
+            [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:connectStatsReload andNavigationController:[GCAppGlobal currentNavigationController]]];
+        });
+        
+    }
+    
+    if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            BOOL garminStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin];
+            NSInteger aStart = [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin];
+            [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
+            [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:garminStatsReload] autorelease]];
+        });
+    }
+
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
         dispatch_async(dispatch_get_main_queue(), ^(){
-            [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:reloadAll]];
+            BOOL stravaReload = (reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava]);
+            [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:stravaReload]];
         });
     }
     // For testing
@@ -116,9 +133,6 @@
         });
     }
 
-    if ([[GCAppGlobal profile] configGetBool:CONFIG_BABOLAT_ENABLE defaultValue:false]) {
-        [self addRequest:[GCBabolatLoginRequest babolatLoginRequest]];
-    }
     if ([[GCAppGlobal profile] configGetBool:CONFIG_WITHINGS_AUTO defaultValue:false]) {
         [self withingsUpdate];
     }
@@ -138,41 +152,14 @@
         [self downloadMissingActivityDetails:15];
     }
 }
-
--(void)garminSearchFrom:(NSUInteger)aStart reloadAll:(BOOL)reloadAll{
-    if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
-        // Run on main queue as it accesses a navigation Controller
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
-            [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:reloadAll andNavigationController:[GCAppGlobal currentNavigationController]]];
-        });
-        
-    }
-    
-    if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
-            [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:reloadAll] autorelease]];
-            [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
-        });
-    }
-}
--(void)servicesSearchActivitiesFrom:(NSUInteger)aStart reloadAll:(BOOL)rAll{
-    [self servicesLogin];
-    [self garminSearchFrom:aStart reloadAll:rAll];
-    [self nonGarminSearch:rAll];
-}
-
 -(void)servicesSearchRecentActivities{
     [self servicesLogin];
-    [self garminSearchFrom:0 reloadAll:false];
-    [self nonGarminSearch:false];
+    [self servicesSearch:false];
 }
 
 -(void)servicesSearchAllActivities{
     [self servicesLogin];
-    [self garminSearchFrom:0 reloadAll:true];
-    [self nonGarminSearch:true];
+    [self servicesSearch:true];
 }
 
 -(void)servicesResetLogin{
@@ -189,29 +176,15 @@
 
 
 #pragma mark - withings
--(void)withingsChangeUser:(NSString*)shortname{
-    NSArray * users = [[GCAppGlobal profile] configGetArray:CONFIG_WITHINGS_USERSLIST defaultValue:@[]];
-    NSString * current = [[GCAppGlobal profile] configGetString:CONFIG_WITHINGS_USER defaultValue:@""];
-    if (users && ![shortname isEqualToString:current]) {
-        NSDictionary * found = nil;
-        for (NSDictionary * one in users) {
-            if ([one[@"shortname"] isEqualToString:current]) {
-                found = one;
-                break;
-            }
-        }
-        if (found) {
-            [[GCAppGlobal profile] configSet:CONFIG_WITHINGS_USER stringVal:shortname];
-            [GCAppGlobal saveSettings];
-            [[GCAppGlobal health] clearAllMeasures];
-            [[GCAppGlobal profile] serviceSuccess:gcServiceWithings set:NO];
-            [self withingsUpdate];
-        }
-    }
-}
 -(void)withingsUpdate{
     dispatch_async(dispatch_get_main_queue(), ^(){
-        [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
+        NSInteger anchor = [[GCAppGlobal profile] serviceAnchor:gcServiceWithings];
+        if( anchor == 0 || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceWithings]){
+            [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
+        }else{
+            NSDate * anchorDate = [NSDate dateWithTimeIntervalSince1970:anchor];
+            [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:anchorDate with:[GCAppGlobal currentNavigationController]]];
+        }
     });
 }
 #pragma mark - download track details
@@ -337,8 +310,12 @@
 
 -(void)healthStoreUpdate{
     NSDate * startDate = [NSDate date];
-    [self addRequest:[GCHealthKitDailySummaryRequest requestFor:startDate]];
-    if ([GCAppGlobal healthStatsVersion] && [[GCAppGlobal profile] configGetBool:CONFIG_HEALTHKIT_WORKOUT defaultValue:[GCAppGlobal healthStatsVersion]]) {
+    if( [[GCAppGlobal profile] configGetBool:CONFIG_HEALTHKIT_DAILY defaultValue:[GCAppGlobal healthStatsVersion]]){
+        [self addRequest:[GCHealthKitDailySummaryRequest requestFor:startDate]];
+        [self addRequest:[GCHealthKitDayDetailRequest requestForDate:startDate to:[[NSDate date] dateByAddingTimeInterval:-3600*24*7]]];
+    }
+    
+    if ([[GCAppGlobal profile] configGetBool:CONFIG_HEALTHKIT_WORKOUT defaultValue:[GCAppGlobal healthStatsVersion]]) {
         if( [GCAppGlobal healthStatsVersion] ){
             GCHealthKitWorkoutsRequest * req = [GCHealthKitWorkoutsRequest request];
             //[req resetAnchor];
@@ -347,7 +324,6 @@
             RZLog(RZLogWarning, @"Disabled Workout from healthkit");
         }
     }
-    [self addRequest:[GCHealthKitDayDetailRequest requestForDate:startDate to:[[NSDate date] dateByAddingTimeInterval:-3600*24*7]]];
     [self addRequest:[GCHealthKitBodyRequest request]];
 }
 
@@ -361,16 +337,6 @@
 
 -(void)healthStoreCheckSource{
     [self addRequest:[GCHealthKitSourcesRequest request]];
-}
-
-#pragma mark - Babolat
-
--(void)babolatDownloadTennisActivityDetails:(NSString*)aId{
-    if ([GCActivityTennis isTennisActivityId:aId]) {
-        GCBabolatLoginRequest * req = [GCBabolatLoginRequest babolatLoginRequest];
-        req.sessionId = [[GCService service:gcServiceBabolat] serviceIdFromActivityId:aId];
-        [self addRequest:req];
-    }
 }
 
 #pragma mark - derived

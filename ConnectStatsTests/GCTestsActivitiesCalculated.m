@@ -67,7 +67,7 @@
     if( fp ){
         GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:aId fitFilePath:fp startTime:nil]);
         GCField * speed = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:fitAct.activityType];
-        GCCalculactedCachedTrackInfo * info = [GCCalculactedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:speed];
+        GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:speed];
         GCStatsDataSerieWithUnit * serieU = [fitAct calculatedRollingBest:info];
         NSLog(@"%@", serieU);
     }
@@ -88,7 +88,7 @@
         if( [act.activityType isEqualToString:activityType] && !act.trackPointsRequireDownload){
             GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType];
             i++;
-            GCCalculactedCachedTrackInfo * info = [GCCalculactedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:field];
+            GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:field];
             [act calculatedRollingBest:info];
             if( i > 5){
                 toRebuild = act;
@@ -142,7 +142,7 @@
     [calcspeed writeToFile:[RZFileOrganizer writeableFilePath:@"tp_calcspeed.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
     
     GCField * speed = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:fitAct.activityType];
-    GCCalculactedCachedTrackInfo * info = [GCCalculactedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:speed];
+    GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:speed];
     GCStatsDataSerieWithUnit * serieU = [fitAct calculatedRollingBest:info];
     [[serieU.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_best.csv"]
                                       atomically:YES encoding:NSUTF8StringEncoding error:nil];

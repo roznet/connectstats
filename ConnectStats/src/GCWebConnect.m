@@ -198,18 +198,12 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
     switch (service) {
         case gcWebServiceWithings:
             return @"Withings";
-        case gcWebServiceSportTracks:
-            return @"SportTracks";
         case gcWebServiceStrava:
             return @"Strava";
         case gcWebServiceGarmin:
             return @"Garmin";
-        case gcWebServiceBabolat:
-            return @"Babolat";
         case gcWebServiceHealthStore:
             return @"HealthStore";
-        case gcWebServiceFitbit:
-            return @"FitBit";
         case gcWebServiceConnectStats:
             return @"ConnectStats";
         case gcWebServiceEnd:

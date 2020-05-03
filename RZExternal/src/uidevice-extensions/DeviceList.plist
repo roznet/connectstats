@@ -35,14 +35,14 @@
 		<key>name</key>
 		<string>Apple TV 4G</string>
 		<key>version</key>
-		<string>5.3</string>
+		<real>5.2999999999999998</real>
 	</dict>
 	<key>AppleTV6,2</key>
 	<dict>
 		<key>name</key>
 		<string>Apple TV 4K</string>
 		<key>version</key>
-		<string>6.2</string>
+		<real>6.2000000000000002</real>
 	</dict>
 	<key>Watch1,1</key>
 	<dict>
@@ -126,21 +126,21 @@
 		<key>name</key>
 		<string>Apple Watch Series 4 (44 mm)</string>
 		<key>version</key>
-		<real>4.0999999999999996</real>
+		<real>4.2000000000000002</real>
 	</dict>
 	<key>Watch4,3</key>
 	<dict>
 		<key>name</key>
 		<string>Apple Watch Series 4 (40 mm/Cellular)</string>
 		<key>version</key>
-		<real>4.0999999999999996</real>
+		<real>4.2999999999999998</real>
 	</dict>
 	<key>Watch4,4</key>
 	<dict>
 		<key>name</key>
 		<string>Apple Watch Series 4 (44 mm/Cellular)</string>
 		<key>version</key>
-		<real>4.0999999999999996</real>
+		<real>4.4000000000000004</real>
 	</dict>
 	<key>Watch5,1</key>
 	<dict>
@@ -450,6 +450,20 @@
 		<key>version</key>
 		<real>7.0999999999999996</real>
 	</dict>
+	<key>iPad7,11</key>
+	<dict>
+		<key>name</key>
+		<string>iPad 10.2-Inch 7th Gen (Wi-Fi Only)</string>
+		<key>version</key>
+		<real>7.1100000000000003</real>
+	</dict>
+	<key>iPad7,12</key>
+	<dict>
+		<key>name</key>
+		<string>iPad 10.2-Inch 7th Gen (Wi-Fi/Cellular Only)</string>
+		<key>version</key>
+		<real>7.1200000000000001</real>
+	</dict>
 	<key>iPad7,2</key>
 	<dict>
 		<key>name</key>
@@ -491,6 +505,27 @@
 		<string>iPad Pro 11-Inch (Wi-Fi Only)</string>
 		<key>version</key>
 		<real>8.0999999999999996</real>
+	</dict>
+	<key>iPad8,10</key>
+	<dict>
+		<key>name</key>
+		<string>iPad Pro 11-Inch (Wi-Fi/Cellular - 2nd Gen)</string>
+		<key>version</key>
+		<real>8.0999999999999996</real>
+	</dict>
+	<key>iPad8,11</key>
+	<dict>
+		<key>name</key>
+		<string>iPad Pro 12.9-Inch 1TB (Wi-Fi Only - 4th Gen)</string>
+		<key>version</key>
+		<real>8.1099999999999994</real>
+	</dict>
+	<key>iPad8,12</key>
+	<dict>
+		<key>name</key>
+		<string>iPad Pro 12.9-Inch (Wi-Fi/Cell - 4th Gen)</string>
+		<key>version</key>
+		<real>8.8000000000000007</real>
 	</dict>
 	<key>iPad8,2</key>
 	<dict>
@@ -540,6 +575,13 @@
 		<string>iPad Pro 12.9-Inch 1TB (Wi-Fi/Cell - 3rd Gen)</string>
 		<key>version</key>
 		<real>8.8000000000000007</real>
+	</dict>
+	<key>iPad8,9</key>
+	<dict>
+		<key>name</key>
+		<string>iPad Pro 11-Inch (Wi-Fi Only - 2nd Gen)</string>
+		<key>version</key>
+		<real>8.9000000000000004</real>
 	</dict>
 	<key>iPhone1,1</key>
 	<dict>

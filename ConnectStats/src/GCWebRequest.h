@@ -54,10 +54,7 @@ typedef NS_ENUM(NSUInteger, gcWebService) {
     gcWebServiceGarmin,
     gcWebServiceStrava,
     gcWebServiceWithings,
-    gcWebServiceBabolat,
-    gcWebServiceSportTracks,
     gcWebServiceHealthStore,
-    gcWebServiceFitbit,
     gcWebServiceConnectStats,
     gcWebServiceEnd
 };

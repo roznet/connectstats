@@ -31,13 +31,9 @@
 #import "GCActivitySearch.h"
 #import "GCHealthOrganizer.h"
 #import "GCWeather.h"
-#import "GCActivityTennis.h"
 #import "GCActivity+Import.h"
 #import "GCActivity+Database.h"
 #import "GCService.h"
-#import "GCActivityTennisShotValues.h"
-#import "GCActivityTennisCuePoint.h"
-#import "GCActivityTennisHeatmap.h"
 #import "GCActivity+Database.h"
 
 
@@ -243,15 +239,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     self.storedHealth = health;
 }
 
--(FMDatabase*)tennisdb{
-    if (!self.tennisdbCache) {
-        self.tennisdbCache = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:[[GCAppGlobal profile] currentTennisDatabasePath]]];
-        [self.tennisdbCache open];
-        [GCActivityTennis ensureDbStructure:self.tennisdbCache];
-    }
-    return self.tennisdbCache;
-}
-
 -(void)publishEvent{
 #ifdef GC_USE_FLURRY
     NSUInteger report = _allActivities.count;
@@ -323,8 +310,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     //restart, clear info dictionary
     [self buildInfoDictionary];
 
-    BOOL hasTennis = false;
-
     while ([res next]) {
         count++;
         // if in background notify to display quick preview when many activities
@@ -332,16 +317,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             self.allActivities = [NSArray arrayWithArray:m_activities];
             [self notifyOnMainThread:nil];
         }
-        gcDownloadMethod method = [res intForColumn:@"downloadMethod"];
-        GCActivity * act = nil;
 
-        if (method==gcDownloadMethodTennis) {
-            act =[[GCActivityTennis alloc] initWithResultSet:res];
-            hasTennis = true;
-        }else{
-            act =[[GCActivity alloc] initWithResultSet:res];
-            [act setDb:self.db];
-        }
+        GCActivity * act = [[GCActivity alloc] initWithResultSet:res];
+        [act setDb:self.db];
+        
         if (!lastLocation && [act validCoordinate]) {
             lastLocation = true;
         }
@@ -352,9 +331,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     [res close];
     self.allActivities = [NSArray arrayWithArray:m_activities];
 
-    if (hasTennis) {
-        [self addTennisFields];
-    }
     [self addSummaryFields:nil];
     [self addWeather];
     [self clearFilter];
@@ -405,16 +381,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     });
 
     [self postNotificationReset];
-}
-
--(void)reloadActivity:(NSString*)aId withGarminData:(NSDictionary*)aData{
-    GCActivity * activity = [self activityForId:aId];
-    if (activity) {
-        [activity updateWithGarminData:aData];
-        [activity saveToDb:self.db];
-    }else{
-        [self registerActivity:RZReturnAutorelease([[GCActivity alloc] initWithId:aId andGarminData:aData]) forActivityId:aId];
-    }
 }
 
 #pragma mark - Register new activities
@@ -476,15 +442,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     return [self registerActivity:act forActivityId:aId save:YES];
 }
 
--(void)registerActivity:(NSString*)aId withStravaData:(NSDictionary*)aData{
-    GCActivity * act = RZReturnAutorelease([[GCActivity alloc] initWithId:aId andStravaData:aData]);
-    [self registerActivity:act forActivityId:aId];
-}
-
--(void)registerActivity:(NSString*)aId withGarminData:(NSDictionary*)aData{
-    GCActivity * act = RZReturnAutorelease([[GCActivity alloc] initWithId:aId andGarminData:aData]);
-    [self registerActivity:act forActivityId:aId];
-}
 
 -(void)registerActivity:(NSString *)aId withWeather:(GCWeather *)aData{
     [[self activityForId:aId] recordWeather:aData];
@@ -496,42 +453,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         [self notifyOnMainThread:aId];
     }
 }
-
--(void)registerTennisActivity:(NSString *)aId withBabolatData:(NSDictionary *)aData{
-    if ([GCAppGlobal trialVersion] && _allActivities.count > 20) {
-        return;
-    }
-    NSString *activityId = [[GCService service:gcServiceBabolat] activityIdFromServiceId:aId];
-
-    GCActivity * existing = [self activityForId:activityId];
-    if (!existing) {
-        NSMutableArray * m_activities = [NSMutableArray arrayWithArray:_allActivities];
-        GCActivityTennis * act = RZReturnAutorelease([[GCActivityTennis alloc] initWithId:activityId andBabolatData:[NSMutableDictionary dictionaryWithDictionary:aData]]);
-        if (m_activities.count > 0 && [[m_activities[0] date] compare:act.date] == NSOrderedAscending) {
-            [m_activities insertObject:act atIndex:0];
-        }else{
-            [m_activities addObject:act];
-        }
-        [m_activities sortUsingComparator:^(id obj1, id obj2){
-            return [[obj2 date] compare:[obj1 date]];
-        }];
-        self.allActivities = [NSArray arrayWithArray:m_activities];
-        [self notifyOnMainThread:aId];
-    }
-}
--(void)registerTennisActivity:(NSString *)aId withFullSession:(NSDictionary *)aData{
-    if ([GCAppGlobal trialVersion] && _allActivities.count > 20) {
-        return;
-    }
-    NSString *activityId = [[GCService service:gcServiceBabolat] activityIdFromServiceId:aId];
-
-    GCActivity * existing = [self activityForId:activityId];
-    if (existing && [existing isKindOfClass:[GCActivityTennis class]]) {
-        GCActivityTennis * activity = (GCActivityTennis*)existing;
-        [activity saveSession:aData];
-    }
-}
-
 
 #pragma mark - Duplicates logic
 
@@ -1072,16 +993,19 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     NSString * first = inIds[0];
     NSString * last = inIds.lastObject;
 
+    NSString * lastDup = self.duplicateActivityIds[last];
+    NSString * firstDup = self.duplicateActivityIds[first];
+    
     for (idx=0; idx < _allActivities.count; idx++ ) {
         GCActivity * act = _allActivities[idx];
         // Don't look at day activities only fitness
         if( [act.activityType isEqualToString:GC_TYPE_DAY] ){
             continue;
         }
-        if ([act.activityId isEqualToString:first]) {
+        if ([act isSameAsActivityId:first] || [act isSameAsActivityId:firstDup]) {
             foundFirst = true;
         }
-        if ([act.activityId isEqualToString:last]) {
+        if ([act isSameAsActivityId:last] || [act isSameAsActivityId:lastDup]) {
             foundLast = true;
             break;
         }
@@ -1304,65 +1228,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             if (dict) {
                 one.weather = [GCWeather weatherWithData:dict];
             }
-        }
-    }
-}
-
--(void)addTennisFields{
-    FMDatabase * tennisdb = [self tennisdb];
-    NSString * query = @"SELECT * FROM babolat_shots ORDER BY session_id DESC";
-
-    NSString * currentId = nil;
-    NSMutableDictionary * currentData = nil;
-    NSMutableDictionary * shots = [NSMutableDictionary dictionary];
-    NSMutableDictionary * cues =[NSMutableDictionary dictionary];
-    NSMutableDictionary * heatmaps=[NSMutableDictionary dictionary];
-
-    FMResultSet * res = [tennisdb executeQuery:query];
-    while ([res next]) {
-        if (![currentId isEqualToString:[res stringForColumn:@"session_id"]]) {
-            currentId = [res stringForColumn:@"session_id"];
-            currentData = [NSMutableDictionary dictionaryWithCapacity:20];
-            shots[currentId] = currentData;
-        }
-        GCActivityTennisShotValues * currentShotValues = [GCActivityTennisShotValues tennisShotValuesForResultSet:res];
-        currentData[currentShotValues.shotType] = currentShotValues;
-    }
-
-    query = @"SELECT * FROM babolat_cuepoints ORDER BY session_id DESC";
-
-    currentId = nil;
-    res = [tennisdb executeQuery:query];
-    NSMutableArray * currentCues = nil;
-    while ([res next]) {
-        if (![currentId isEqualToString:[res stringForColumn:@"session_id"]]) {
-            currentId = [res stringForColumn:@"session_id"];
-            currentCues = [NSMutableArray arrayWithCapacity:15];
-            cues[currentId] = currentCues;
-        }
-        GCActivityTennisCuePoint * currentCuePoint = [GCActivityTennisCuePoint cuePointFromResultSet:res];
-        [currentCues addObject:currentCuePoint];
-    }
-
-    query = @"SELECT * FROM babolat_heatmaps ORDER BY session_id DESC";
-
-    currentId = nil;
-    res = [tennisdb executeQuery:query];
-    NSMutableDictionary * currentHeatmaps = nil;
-    while ([res next]) {
-        if (![currentId isEqualToString:[res stringForColumn:@"session_id"]]) {
-            currentId = [res stringForColumn:@"session_id"];
-            currentHeatmaps = [NSMutableDictionary dictionaryWithCapacity:5];
-            heatmaps[currentId] = currentHeatmaps;
-        }
-        GCActivityTennisHeatmap * currentHeatmap = [GCActivityTennisHeatmap heatmapForResultSet:res];
-        currentHeatmaps[[res stringForColumn:@"heatmap_type"]] = currentHeatmap;
-    }
-
-    for (id obj in self.allActivities) {
-        if ([obj isKindOfClass:[GCActivityTennis class]]) {
-            GCActivityTennis * act = obj;
-            [act addShots:shots[act.sessionId] cuePoints:cues[act.sessionId] andHeatmap:heatmaps[act.sessionId]];
         }
     }
 }

@@ -25,6 +25,7 @@
 
 #import "GCActivity+ExportText.h"
 #import "GCActivity+Fields.h"
+#import "GCActivityType.h"
 
 @implementation GCActivity (ExportText)
 
@@ -60,7 +61,7 @@
         loc= [NSString stringWithFormat:@" %@", self.location];
     }
 
-    return [NSString stringWithFormat:@"%@ %@ %@%@", [self.date dateShortFormat], [GCFields activityTypeDisplay:self.activityType],
+    return [NSString stringWithFormat:@"%@ %@ %@%@", [self.date dateShortFormat], [GCActivityType activityTypeForKey:self.activityType].displayName,
             [[self numberWithUnitForFieldFlag:gcFieldFlagSumDistance] formatDouble], loc];
 }
 -(NSString*)exportFileName:(NSString*)extensionOrNil{

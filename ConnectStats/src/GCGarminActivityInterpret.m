@@ -261,9 +261,8 @@
         for( NSString * fieldkey in @[ @"WeightedMeanSpeed", @"WeightedMeanMovingSpeed" ] ){
             GCNumberWithUnit * speed = newSummaryData[ fieldkey ];
             if (speed ) {
-                NSString * uom = [GCFields predefinedUomForField:fieldkey andActivityType:self.activityTypeAsString];
-                
-                newSummaryData[fieldkey] = [speed convertToUnitName:uom];
+                GCField * field = [GCField fieldForKey:fieldkey andActivityType:self.activityTypeAsString];
+                newSummaryData[fieldkey] = [speed convertToUnit:field.unit];
             }
         }
     }

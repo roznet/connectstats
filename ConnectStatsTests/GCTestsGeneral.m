@@ -108,7 +108,7 @@
     [act setWeightedMeanHeartRateCompat:val*3.];
     [act setWeightedMeanSpeedCompat:val*4.];
     [act setFlags:gcFieldFlagSumDistance+gcFieldFlagSumDuration+gcFieldFlagWeightedMeanHeartRate+gcFieldFlagWeightedMeanSpeed];
-    [act setActivityType:GC_TYPE_RUNNING];
+    [act changeActivityType:[GCActivityType running]];
     
     [act setSummaryDataFromKeyDict:@{     @"SumDuration" :           [self sumVal:@"SumDuration"             val:act.sumDurationCompat             uom:@"second" ],
                              @"SumDistance" :           [self sumVal:@"SumDistance"             val:act.sumDistanceCompat            uom:@"meter" ],
@@ -126,7 +126,7 @@
     [act setWeightedMeanHeartRateCompat:val*7.];
     [act setWeightedMeanSpeedCompat:val*8.];
     [act setFlags:gcFieldFlagSumDistance+gcFieldFlagSumDuration+gcFieldFlagWeightedMeanHeartRate+gcFieldFlagWeightedMeanSpeed];
-    [act setActivityType:GC_TYPE_CYCLING];
+    [act changeActivityType:[GCActivityType cycling]];
     
     [act setSummaryDataFromKeyDict:@{     @"SumDuration" :           [self sumVal:@"SumDuration"             val:act.sumDurationCompat             uom:@"second" ],
                              @"SumDistance" :           [self sumVal:@"SumDistance"             val:act.sumDistanceCompat             uom:@"meter" ],
@@ -149,7 +149,7 @@
 
 -(void)testCalculatedFields{
     GCActivity * act = [[GCActivity alloc] init];
-    act.activityType = GC_TYPE_CYCLING;
+    [act changeActivityType:[GCActivityType cycling]];
     
     [act updateSummaryData:@{
                            [self fldFor:@"SumDuration" act:act] :              [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
@@ -169,7 +169,7 @@
     rv = [sl evaluateForActivity:act];
     XCTAssertNil(rv, @"Computing Run Calc Field on cycle activity");
     
-    act.activityType = GC_TYPE_RUNNING; // Stride only valid for running
+    [act changeActivityType:[GCActivityType running]];
     [act updateSummaryData:@{
                           [self fldFor:@"SumDuration" act:act] :              [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
                           [self fldFor:@"WeightedMeanSpeed" act:act]:         [self sumVal:@"WeightedMeanSpeed"       val:10.8    uom:@"kph" ],
@@ -202,7 +202,8 @@
 
 -(void)testCalculatedFieldsTrackPoints{
     GCActivity * act = [[GCActivity alloc] init];
-    [act setActivityType:GC_TYPE_RUNNING];
+    [act changeActivityType:[GCActivityType running]];
+
     NSDictionary * d = @{ @"averageRunCadence": @180.0,
                           @"duration": @"3.",
                           @"averageSpeed": @3.,
@@ -352,8 +353,8 @@
 
 -(void)atestTrackFieldChoiceOrder{
     GCActivity * activity = [[[GCActivity alloc] init] autorelease];
+    [activity changeActivityType:[GCActivityType running]];
     
-    activity.activityType = GC_TYPE_RUNNING;
     activity.trackFlags = gcFieldFlagSumDistance|gcFieldFlagWeightedMeanSpeed|gcFieldFlagWeightedMeanHeartRate;
     
     GCTrackFieldChoices * choices = [GCTrackFieldChoices trackFieldChoicesWithActivity:activity];
@@ -603,7 +604,7 @@
         [act setWeightedMeanHeartRateCompat:hr];
         [act setWeightedMeanSpeedCompat:speed];
         [act setFlags:gcFieldFlagSumDistance+gcFieldFlagSumDuration+gcFieldFlagWeightedMeanHeartRate+gcFieldFlagWeightedMeanSpeed];
-        [act setActivityType:GC_TYPE_RUNNING];
+        [act changeActivityType:[GCActivityType running]];
         
         [act setSummaryDataFromKeyDict: @{     @"SumDuration" :           [self sumVal:@"SumDuration"             val:act.sumDurationCompat             uom:@"second" ],
                                  @"SumDistance" :           [self sumVal:@"SumDistance"             val:act.sumDistanceCompat             uom:@"meter" ],
@@ -663,7 +664,7 @@
 -(void)testAccumulateTrack{
     
     GCActivity * dummy = [[[GCActivity alloc] init] autorelease];
-    dummy.activityType = GC_TYPE_RUNNING;
+    [dummy changeActivityType:[GCActivityType running]];
     
     GCLap * lap = [[[GCLap alloc] init] autorelease];
     
@@ -750,7 +751,7 @@
     NSMutableArray * activities = [NSMutableArray arrayWithCapacity:[samples count]];
     for (NSArray * sample in samples) {
         GCActivity * act = [[GCActivity alloc] init];
-        [act setActivityType:[sample objectAtIndex:0]];
+        [act changeActivityType:[GCActivityType activityTypeForKey:[sample objectAtIndex:0]]];
         [act setDate:[NSDate dateForRFC3339DateTimeString:[sample objectAtIndex:1]]];
         [act setSumDistanceCompat:[[sample objectAtIndex:2] doubleValue]];
         [act setFlags:gcFieldFlagSumDistance];
@@ -809,7 +810,7 @@
     NSMutableArray * activities = [NSMutableArray arrayWithCapacity:[samples count]];
     for (NSArray * sample in samples) {
         GCActivity * act = [[GCActivity alloc] init];
-        [act setActivityType:[sample objectAtIndex:0]];
+        [act changeActivityType:[GCActivityType activityTypeForKey:[sample objectAtIndex:0]]];
         [act setDate:[NSDate dateForRFC3339DateTimeString:[sample objectAtIndex:1]]];
         [act setSumDistanceCompat:[[sample objectAtIndex:2] doubleValue]];
         [act setFlags:gcFieldFlagSumDistance];

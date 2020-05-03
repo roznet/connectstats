@@ -28,7 +28,6 @@
 #import "GCActivity.h"
 #import "GCTrackStats.h"
 #import "GCAppGlobal.h"
-#import "GCActivityTennis.h"
 #import "GCActivity+CachedTracks.h"
 
 
@@ -41,25 +40,6 @@
 }
 
 #pragma mark - Extract Choices from Activities
-
-+(GCTrackFieldChoices*)trackFieldChoicesWithTennisActivity:(GCActivityTennis *)activity{
-    GCTrackFieldChoices * rv = [[[GCTrackFieldChoices alloc] init] autorelease];
-    if (rv) {
-        NSString * aT = activity.activityType;
-        rv.activityType = activity.activityType;
-        rv.choices = @[ @[[GCTrackFieldChoiceHolder trackFieldChoice:gcFieldFlagTennisPower xField:gcFieldFlagNone movingAverage:0 type:aT],
-                          [GCTrackFieldChoiceHolder trackFieldChoice:gcFieldFlagTennisPower xField:gcFieldFlagTennisRegularity movingAverage:0 type:aT],
-                          [GCTrackFieldChoiceHolder trackFieldChoice:gcFieldFlagTennisPower xField:gcFieldFlagTennisEnergy movingAverage:0  type:aT]],
-                        @[[GCTrackFieldChoiceHolder trackFieldChoice:gcFieldFlagTennisRegularity xField:gcFieldFlagNone movingAverage:0  type:aT],
-                          [GCTrackFieldChoiceHolder trackFieldChoice:gcFieldFlagTennisRegularity xField:gcFieldFlagTennisEnergy movingAverage:0  type:aT] ],
-                        @[[GCTrackFieldChoiceHolder trackFieldChoice:gcFieldFlagTennisEnergy xField:gcFieldFlagNone movingAverage:0  type:aT],
-                          [GCTrackFieldChoiceHolder trackFieldChoice:gcFieldFlagTennisEnergy xField:gcFieldFlagTennisPower movingAverage:0  type:aT]],
-                        @[[GCTrackFieldChoiceHolder trackFieldChoice:gcFieldFlagTennisShots xField:gcFieldFlagNone movingAverage:0  type:aT]]
-                        ];
-
-    }
-    return rv;
-}
 
 // HealthKit Field Map
 //    gcFieldFlagDistance                 "SumDistance"         HKQuantityTypeIdentifierDistanceWalkingRunning

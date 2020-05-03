@@ -37,17 +37,6 @@
 
 #define GC_HEALTH_PREFIX @"__health"
 
-
-typedef NS_ENUM(NSUInteger, gcMeasureType){
-    gcMeasureNone,
-    gcMeasureWeight,
-    gcMeasureHeight,
-    gcMeasureFatFreeMass,
-    gcMeasureFatRatio,
-    gcMeasureFatMassWeight,
-    gcMeasureHeartRate
-};
-
 @class GCField;
 @class GCFieldInfo;
 @class GCNumberWithUnit;
@@ -56,7 +45,7 @@ typedef NS_ENUM(NSUInteger, gcMeasureType){
 
 @property (nonatomic,retain) NSString * measureId;
 @property (nonatomic,retain) NSDate * date;
-@property (nonatomic,assign) gcMeasureType type;
+@property (nonatomic,retain) GCField * field;
 @property (nonatomic,retain) GCNumberWithUnit * value;
 
 /**
@@ -64,19 +53,11 @@ typedef NS_ENUM(NSUInteger, gcMeasureType){
  @param field either GCField or NSString
  */
 +(BOOL)isHealthField:(id)field;
-+(gcMeasureType)measureTypeFromHealthFieldKey:(NSString*)field;
-+(gcMeasureType)measureTypeFromHealthField:(GCField*)field;
-+(NSString*)healthFieldKeyFromMeasureType:(gcMeasureType)type;
-+(GCField*)healthFieldFromMeasureType:(gcMeasureType)type;
-+(GCField*)healthFieldFromMeasureType:(gcMeasureType)type forActivityType:(NSString*)aType;
 +(GCFieldInfo*)fieldInfoFromField:(GCField*)field;
 +(NSDictionary<GCField*,GCFieldInfo*>*)fieldInfoForMeasureFields;
 
-+(NSString*)measureKeyFromType:(gcMeasureType)type;
-+(gcMeasureType)measureTypeFromKey:(NSString*)key;
-
-+(GCUnit*)measureUnit:(gcMeasureType)type;
-+(NSString*)measureName:(gcMeasureType)type;
++(GCField*)weight;
++(GCField*)height;
 
 +(GCHealthMeasure*)healthMeasureFromWithings:(NSDictionary*)dict forDate:(NSDate*)aDate andId:(NSUInteger)aId;
 +(GCHealthMeasure*)healthMeasureFromResultSet:(FMResultSet*)res;
@@ -87,5 +68,13 @@ typedef NS_ENUM(NSUInteger, gcMeasureType){
 #ifdef GC_USE_HEALTHKIT
 +(GCHealthMeasure*)healthMeasureFromHKSample:(HKQuantitySample*)sample;
 #endif
+/*
++(NSString*)measureKeyFromType:(gcMeasureType)type DEPRECATED_MSG_ATTRIBUTE("Use GCField");
++(GCField*)healthFieldFromMeasureType:(gcMeasureType)type forActivityType:(NSString*)aType DEPRECATED_MSG_ATTRIBUTE("Use GCField");
++(NSString*)healthFieldKeyFromMeasureType:(gcMeasureType)type DEPRECATED_MSG_ATTRIBUTE("Use GCField");
++(GCField*)healthFieldFromMeasureType:(gcMeasureType)type DEPRECATED_MSG_ATTRIBUTE("Use GCField");
++(GCUnit*)measureUnit:(gcMeasureType)type DEPRECATED_MSG_ATTRIBUTE("Use GCField");
++(NSString*)measureName:(gcMeasureType)type DEPRECATED_MSG_ATTRIBUTE("Use GCField");
+*/
 
 @end

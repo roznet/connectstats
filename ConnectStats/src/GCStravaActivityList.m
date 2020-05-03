@@ -188,7 +188,14 @@
     if (self.navigationController || self.searchMore) {
         GCStravaActivityList * next = RZReturnAutorelease([[GCStravaActivityList alloc] initNextWith:self]);
         return next;
+    }else{
+        if( self.reloadAll ){
+            [[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava set:YES];
+            RZLog(RZLogInfo, @"Strava completed full");
+            [GCAppGlobal saveSettings];
+        }
     }
+    
     return nil;
 }
 

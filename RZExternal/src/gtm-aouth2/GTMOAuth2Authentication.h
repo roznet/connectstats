@@ -140,6 +140,7 @@ extern NSString *const kGTMOAuth2UserSignedIn;
 // Notification for token changes
 extern NSString *const kGTMOAuth2AccessTokenRefreshed;
 extern NSString *const kGTMOAuth2RefreshTokenChanged;
+extern NSString *const kGTMOAuth2RefreshTokenUpdated;
 extern NSString *const kGTMOAuth2AccessTokenRefreshFailed;
 
 // Notification for WebView loading

@@ -46,14 +46,17 @@
 
 -(void)loadFromResultSet:(FMResultSet*)res{
     self.activityName = [res stringForColumn:@"activityName"];
-    self.activityType = [res stringForColumn:@"activityType"];
+    NSString * activityType = [res stringForColumn:@"activityType"];
     NSString * detailValue = [res stringForColumn:@"activityTypeDetail"];
+    GCActivityType * type = nil;
     if( detailValue ){
-        self.activityTypeDetail = [GCActivityType activityTypeForKey:detailValue];
+        type = [GCActivityType activityTypeForKey:detailValue];
     }
     if( self.activityTypeDetail == nil ){
-        self.activityTypeDetail = [GCActivityType activityTypeForKey:self.activityType];
+        type = [GCActivityType activityTypeForKey:activityType];
     }
+    [self changeActivityType:type];
+    
     self.date = [res dateForColumn:@"BeginTimestamp"];
 
     for (GCField * summaryField in [self validStoredSummaryFields]) {
@@ -542,7 +545,7 @@
         [rv trackpoints];//force load trackpoints
         GCActivityMetaValue * typeDetail = rv.metaData[@"activityType"];
         if( typeDetail && rv.activityTypeDetail == nil ){
-            rv.activityTypeDetail = [GCActivityType activityTypeForKey:typeDetail.key];
+            [rv changeActivityType:[GCActivityType activityTypeForKey:typeDetail.key]];
         }
         
         if( rv.activityId ){

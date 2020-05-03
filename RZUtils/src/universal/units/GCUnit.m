@@ -232,6 +232,9 @@ void registerUnits(){
             registerSimpl0( @[ @"rpm", @"Revolutions per Minute", @"rpm"]);
             registerSimple( @[ @"te", @"Training Effect", @""]);
             registerSimpl3( @[ @"if", @"Intensity Factor", @""]);
+            
+            registerLinea0(@[ @"mmHg", @"mmHg", @"mmHg"], @"mmHg", 1., 0.);
+            registerLinea0(@[ @"cmHg", @"cmHg", @"cmHg"], @"cmHg", 10., 0.);
         }
         registerSimple( @[ @"percent", @"Percent", @"%"]);
         registerSimpl0( @[ @"dimensionless", @"Dimensionless", @""]);

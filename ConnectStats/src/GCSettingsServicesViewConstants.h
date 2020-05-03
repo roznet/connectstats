@@ -28,57 +28,49 @@
 #define GC_SECTIONS_STRAVA          1
 #define GC_SECTIONS_HEALTHKIT       2
 #define GC_SECTIONS_WITHINGS        3
-#define GC_SECTIONS_BABOLAT         4
-#define GC_SECTIONS_OPTIONS         5
-#define GC_SECTIONS_END             6
+#define GC_SECTIONS_OPTIONS         4
+#define GC_SECTIONS_END             5
 
 #define GC_GARMIN_SERVICE_NAME  0
 #define GC_GARMIN_ENABLE        1
 #define GC_GARMIN_USERNAME      2
 #define GC_GARMIN_PASSWORD      3
 #define GC_GARMIN_METHOD        4
-#define GC_GARMIN_MODERN_API    5
-#define GC_CONNECTSTATS_USE         6
-#define GC_CONNECTSTATS_FILLYEAR    7
-#define GC_CONNECTSTATS_CONFIG      8
-#define GC_CONNECTSTATS_LOGOUT      9
-#define GC_CONNECTSTATS_DEBUGKEY    10
-#define GC_CONNECTSTATS_NAME    11
-#define GC_CONNECTSTATS_HELP    12
-#define GC_GARMIN_END           13
+#define GC_CONNECTSTATS_USE         5
+#define GC_CONNECTSTATS_CONFIG      6
+#define GC_CONNECTSTATS_LOGOUT      7
+#define GC_CONNECTSTATS_DEBUGKEY    8
+#define GC_CONNECTSTATS_HELP    9
+#define GC_GARMIN_END           10
 
 #define GC_STRAVA_NAME      0
 #define GC_STRAVA_ENABLE    1
 #define GC_STRAVA_AUTO      2
 #define GC_STRAVA_LOGOUT    3
 #define GC_STRAVA_SEGMENTS  4
-#define GC_STRAVA_END       5
+#define GC_STRAVA_RELOAD    5
+#define GC_STRAVA_END       6
 //Disabled
-#define GC_STRAVA_PRIVATE   6
+#define GC_STRAVA_PRIVATE   7
 
 #define GC_HEALTHKIT_NAME       0
 #define GC_HEALTHKIT_ENABLE     1
 #define GC_HEALTHKIT_WORKOUT    2
-#define GC_HEALTHKIT_SOURCE     3
-#define GC_HEALTHKIT_END        4
+#define GC_HEALTHKIT_DAILY      3
+#define GC_HEALTHKIT_SOURCE     4
+#define GC_HEALTHKIT_RELOAD     5
+#define GC_HEALTHKIT_END        6
 
-#define GC_BABOLAT_SERVICE_NAME 0
-#define GC_BABOLAT_ENABLE       1
-#define GC_BABOLAT_USERNAME     2
-#define GC_BABOLAT_PWD          3
-#define GC_BABOLAT_END          4
-
-#define GC_OPTIONS_DUPLICATE_IMPORT 0
-#define GC_OPTIONS_DOWNLOAD_DETAILS 1
-#define GC_OPTIONS_DUPLICATE_LOAD   2
-#define GC_OPTIONS_END              3
+#define GC_OPTIONS_DUPLICATE_IMPORT     0
+#define GC_OPTIONS_DOWNLOAD_DETAILS     1
+#define GC_OPTIONS_DUPLICATE_LOAD       2
+#define GC_OPTIONS_FORCE_DOWNLOAD_OLD   3
+#define GC_OPTIONS_END                  4
 
 // for withings
-#define GC_ROW_SERVICE_NAME 0
-#define GC_ROW_AUTO         1
-#define GC_ROW_LOGIN        2
-#define GC_ROW_PWD          3
-#define GC_ROW_USER         4
-#define GC_ROW_STATUS       5
-#define GC_ROW_END          6
+#define GC_WITHINGS_SERVICE_NAME 0
+#define GC_WITHINGS_AUTO         1
+#define GC_WITHINGS_STATUS       2
+#define GC_WITHINGS_RELOAD       3
+#define GC_WITHINGS_END          4
 

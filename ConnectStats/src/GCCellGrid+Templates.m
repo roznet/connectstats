@@ -34,9 +34,6 @@
 #import "GCActivity+UI.h"
 #import "GCViewIcons.h"
 #import "GCHistoryFieldDataSerie.h"
-#import "GCActivityTennis.h"
-#import "GCActivityTennisShotValues.h"
-#import "GCActivityTennisHeatmap.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+Fields.h"
 
@@ -419,75 +416,6 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }
 }
 
--(void)setupSummaryFromTennisActivity:(GCActivityTennis*)activity width:(CGFloat)width status:(gcViewActivityStatus)status{
-    GCFormattedField * duration = [GCFormattedField formattedFieldForNumber:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDuration] forSize:16.];
-
-    GCNumberWithUnit * val = [activity numberWithUnitForFieldFlag:gcFieldFlagTennisShots];
-    GCFormattedField * shots = [GCFormattedField formattedFieldForNumber:val forSize:16.];
-
-    NSDictionary * locAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
-                                     NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorHighlightedText]};
-    NSDictionary * dateAttributes = @{NSFontAttributeName: [GCViewConfig boldSystemFontOfSize:16.],
-                                      NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
-    NSDictionary * dateSmallAttributes = @{NSFontAttributeName: [GCViewConfig systemFontOfSize:12.],
-                                           NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
-
-    NSDate * date = activity.date;
-    NSString * dispname = [activity displayName];
-    if (dispname.length>24) {
-        dispname = [NSString stringWithFormat:@"%@...", [dispname substringToIndex:24]];
-    }
-    if (date == nil) {
-        dispname = NSLocalizedString(@"Date Error",@"Services");
-        date =[NSDate date];
-        RZLog(RZLogInfo, @"Invalid Date for %@", activity);
-    }
-    duration.valueFont = [GCViewConfig systemFontOfSize:16.];// remove bold
-    NSAttributedString * loc    = [[[NSAttributedString alloc] initWithString:dispname?:NSLocalizedString(@"Error",@"Fitness") attributes:locAttributes] autorelease];
-    NSAttributedString * day    = [[[NSAttributedString alloc] initWithString:[date dayFormat]       attributes:dateAttributes] autorelease];
-    NSAttributedString * dat    = [[[NSAttributedString alloc] initWithString:[date dateShortFormat] attributes:dateSmallAttributes] autorelease];
-    NSAttributedString * time   = [[[NSAttributedString alloc] initWithString:[date timeShortFormat] attributes:dateSmallAttributes] autorelease];
-
-    if (width < 600.) {
-        [self setupForRows:3 andCols:3];
-        self.marginx = 2.;
-        self.marginy = 2.;
-        [self labelForRow:0 andCol:1].attributedText = [shots attributedString];
-        [self labelForRow:0 andCol:0].attributedText = day;
-        [self labelForRow:0 andCol:2].attributedText = time;
-        [self labelForRow:1 andCol:1].attributedText = [duration attributedString];
-        [self labelForRow:1 andCol:0].attributedText = dat;
-        //[self labelForRow:1 andCol:2].attributedText = showBpm ? [bpm attributedString] : nil;
-        [self labelForRow:2 andCol:0].attributedText = loc;
-        //[self labelForRow:2 andCol:2].attributedText = showSpeed ? [speed attributedString] : nil;
-
-        [self configForRow:1 andCol:2].verticalAlign = gcVerticalAlignBottom;
-        [self configForRow:2 andCol:2].verticalAlign = gcVerticalAlignTop;
-        [self configForRow:2 andCol:0].horizontalOverflow = YES;
-    }else{
-        [self setupForRows:2 andCols:4];
-        self.marginx = 2.;
-        self.marginy = 2.;
-        [self labelForRow:0 andCol:0].attributedText = day;
-        [self labelForRow:0 andCol:1].attributedText = [shots attributedString];
-        [self labelForRow:0 andCol:2].attributedText = [duration attributedString];
-        //[self labelForRow:0 andCol:3].attributedText = showBpm ? [bpm attributedString] : nil;
-        [self labelForRow:1 andCol:0].attributedText = dat;
-        [self labelForRow:1 andCol:1].attributedText = time;
-        [self labelForRow:1 andCol:2].attributedText = loc;
-        //[self labelForRow:1 andCol:3].attributedText = showSpeed ? [speed attributedString] : nil;
-    }
-    if (status==gcViewActivityStatusCompare) {
-        [self setIconImage:[GCViewConfig mergeImage:[activity icon] withImage:[GCViewIcons cellIconFor:gcIconCellCheckbox]]];
-    }else{
-        if ( [GCAppGlobal configGetBool:CONFIG_SHOW_DOWNLOAD_ICON defaultValue:false] && activity.trackPointsRequireDownload) {
-            [self setIconImage:[GCViewConfig mergeImage:[activity icon] withImage:[GCViewIcons cellIconFor:gcIconCellCloudDownload]]];
-        }else{
-            [self setIconImage:[activity icon]];
-        }
-    }
-
-}
 
 -(void)setupSummaryFromFitnessActivity:(GCActivity*)activity width:(CGFloat)width status:(gcViewActivityStatus)status{
 
@@ -503,10 +431,6 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         }else{
             preferredInfoFields = @[  @"WeightedMeanHeartRate", @"GainElevation" ];
         }
-    }
-
-    if ([activity isKindOfClass:[GCActivityTennis class]]) {
-        preferredMainDisplayFields = @[ @"shots", @"SumDuration" ];
     }
     
     NSMutableArray<GCFormattedField*> * mainFields = [NSMutableArray array];
@@ -630,8 +554,6 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 -(void)setupSummaryFromActivity:(GCActivity*)activity width:(CGFloat)width status:(gcViewActivityStatus)status{
     if ([activity.activityType isEqualToString:GC_TYPE_DAY]) {
         [self setupSummaryFromDayActivity:activity width:width status:status];
-    }else if( [activity isKindOfClass:[GCActivityTennis class]]){
-        [self setupSummaryFromTennisActivity:(GCActivityTennis*)activity width:width status:status];
     }else{
         [self setupSummaryFromFitnessActivity:activity width:width status:status];
     }
@@ -896,7 +818,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
 -(void)setupStatsHeaders:(GCHistoryFieldDataSerie *)activityStats{
     [self setupForRows:2 andCols:1];
-    GCFormattedFieldText * title = [GCFormattedFieldText formattedFieldText:[GCFields activityTypeDisplay:activityStats.config.activityType]
+    
+    GCFormattedFieldText * title = [GCFormattedFieldText formattedFieldText:[GCActivityType activityTypeForKey:activityStats.config.activityType].displayName
                                                                       value:activityStats.fieldDisplayName
                                                                     forSize:16.];
 
@@ -911,7 +834,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     [self labelForRow:1 andCol:0].attributedText = [sub attributedString];
     GCActivity * dummy = [[GCActivity alloc] init];
 
-    dummy.activityType = activityStats.config.activityType;
+    [dummy changeActivityType:[GCActivityType activityTypeForKey:activityStats.config.activityType]];
     [GCViewConfig setupGradient:self ForActivity:dummy];
     [dummy release];
 }
@@ -1250,80 +1173,6 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         [GCViewConfig setupGradientForCellsOdd:self];
     }
 
-
-}
-
-#pragma mark - Tennis
-
--(void)setupForTennisHeatmap:(GCActivityTennis*)activity field:(NSString*)field{
-    [self setupForRows:2 andCols:2];
-
-    NSString * type = [GCActivityTennisHeatmap heatmapFieldType:field];
-    NSString * typeLabel = [NSString stringWithFormat:NSLocalizedString( @"%@ Precision", @"tennis"), type];
-    gcHeatmapLocation loc = [GCActivityTennisHeatmap heatmapFieldLocation:field];
-
-    GCActivityTennisHeatmap * heatmap = [activity heatmapForType:type];
-
-    GCNumberWithUnit * center = [heatmap valueForLocation:gcHeatmapLocationCenter];
-
-    GCNumberWithUnit * left   = nil;
-    GCNumberWithUnit * right  = nil;
-    NSString * leftLabel  = nil;
-    NSString * rightLabel = nil;
-
-    if (loc == gcHeatmapLocationCenter ){
-        left = [heatmap valueForLocation:gcHeatmapLocationLeft];
-        right = [heatmap valueForLocation:gcHeatmapLocationRight];
-        leftLabel = NSLocalizedString(@"Left", @"tennis precision");
-        rightLabel  = NSLocalizedString(@"Right", @"tennis precision");
-    }else{
-        left = [heatmap valueForLocation:gcHeatmapLocationUp];
-        right = [heatmap valueForLocation:gcHeatmapLocationDown];
-        leftLabel = NSLocalizedString(@"Up", @"tennis precision");
-        rightLabel  = NSLocalizedString(@"Down", @"tennis precision");
-
-    }
-
-    GCFormattedFieldText * heat = [GCFormattedFieldText formattedFieldText:NSLocalizedString(@"Center", @"heatmap tennis")
-                                                                                         value:[center formatDouble]
-                                                                                       forSize:16.];
-    GCFormattedFieldText * heatLeft = [GCFormattedFieldText formattedFieldText:leftLabel
-                                                                     value:[left formatDouble]
-                                                                   forSize:14.];
-    GCFormattedFieldText * heatRight = [GCFormattedFieldText formattedFieldText:rightLabel
-                                                                     value:[right formatDouble]
-                                                                   forSize:14.];
-    heatRight.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-    heatLeft.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-    [self labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:typeLabel attribute:@selector(attribute16)];
-    [self labelForRow:0 andCol:1].attributedText = [heat attributedString];
-    [self labelForRow:1 andCol:0].attributedText = [heatLeft attributedString];
-    [self labelForRow:1 andCol:1].attributedText = [heatRight attributedString];
-
-}
-
--(void)setupForTennisShotValue:(GCActivityTennis*)activity shotValue:(GCActivityTennisShotValues*)values{
-    [self setupForRows:2 andCols:2];
-
-    GCUnit * pct = [GCUnit unitForKey:@"percent"];
-    GCUnit * sho = [GCUnit unitForKey:@"shots"];
-    GCFormattedFieldText * pow = values.average_power?[GCFormattedFieldText formattedFieldText:NSLocalizedString(@"Power", @"power tennis")
-                                                                    value:[pct formatDouble:(values.average_power).doubleValue]
-                                                                                       forSize:16.]:nil;
-    GCFormattedFieldText * maxpow = values.max_power?[GCFormattedFieldText formattedFieldText:NSLocalizedString(@"Max Power", @"power tennis")
-                                                                       value:[pct formatDouble:(values.max_power).doubleValue]
-                                                                                      forSize:14.]:nil;
-    GCFormattedFieldText * tot = [GCFormattedFieldText formattedFieldText:values.shotType
-                                                                       value:[sho formatDoubleNoUnits:(values.total).doubleValue]
-                                                                     forSize:16.];
-    GCFormattedFieldText * eff = values.average_effect_level ? [GCFormattedFieldText formattedFieldText:NSLocalizedString(@"Effect", @"power tennis")
-                                                                    value:[pct formatDouble:(values.average_effect_level).doubleValue]
-                                                                                                forSize:14.] :nil;
-
-    [self labelForRow:0 andCol:0].attributedText = [tot attributedString];
-    [self labelForRow:0 andCol:1].attributedText = [pow attributedString];
-    [self labelForRow:1 andCol:0].attributedText = [eff attributedString];
-    [self labelForRow:1 andCol:1].attributedText = [maxpow attributedString];
 
 }
 

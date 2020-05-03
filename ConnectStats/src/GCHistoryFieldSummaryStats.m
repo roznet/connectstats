@@ -291,17 +291,12 @@
 
     NSMutableDictionary * healthFieldData = [NSMutableDictionary dictionaryWithDictionary:self.fieldData];
 
-    NSString * useActivityType = GC_TYPE_ALL;
-    if (self.foundActivityTypes.count == 1) {
-        useActivityType = self.foundActivityTypes[0];
-    }
-
     for (GCHealthMeasure * measure in measures) {
         // not an interesting measure
-        if (measure.type == gcMeasureHeight) {
+        if ([measure.field isEqualToField:[GCHealthMeasure height]]) {
             continue;
         }
-        GCField * field = [GCHealthMeasure healthFieldFromMeasureType:measure.type forActivityType:useActivityType];
+        GCField * field = measure.field;
 
         GCFieldDataHolder * holder = healthFieldData[field];
         if (!holder) {

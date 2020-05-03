@@ -30,9 +30,11 @@
 @interface GCWebConnect (Requests)
 
 
-// Global Process
--(void)servicesSearchActivitiesFrom:(NSUInteger)aStart reloadAll:(BOOL)rAll;
+/// Search recent actiivites from all services enabled
+/// If a service already has fully completed will only try to get the most recent
+/// activities
 -(void)servicesSearchRecentActivities;
+/// Search all activities for all services
 -(void)servicesSearchAllActivities;
 
 -(void)servicesResetLogin; // when profile switch
@@ -42,7 +44,6 @@
 
 // Withings
 -(void)withingsUpdate;
--(void)withingsChangeUser:(NSString*)shortname;
 
 // Garmin
 -(void)garminDownloadActivityTrackPoints13:(GCActivity*)act;
@@ -54,9 +55,6 @@
 
 // Strava
 -(void)stravaDownloadActivityTrackPoints:(GCActivity*)act;
-
-// Babolat
--(void)babolatDownloadTennisActivityDetails:(NSString*)aId;
 
 // GarminLogin
 -(void)garminTestLogin;// should not use only for testing

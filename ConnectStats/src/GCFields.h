@@ -29,15 +29,6 @@
 
 @class GCField;
 @class GCFieldInfo;
-
-NS_INLINE BOOL GCActivityTypeIsDay(NSString*at){
-    return [at isEqualToString:GC_TYPE_DAY];
-}
-
-NS_INLINE BOOL GCActivityTypeIsSki(NSString*at, NSString*atdetail){
-    return [at isEqualToString:GC_TYPE_OTHER] && ([atdetail isEqualToString:GC_TYPE_SKI_BACK] || [atdetail isEqualToString:GC_TYPE_SKI_DOWN] || [atdetail isEqualToString:GC_TYPE_SKI_XC]);
-}
-
 @class GCFieldsForCategory;
 @class GCFieldCache;
 
@@ -53,8 +44,6 @@ NS_INLINE BOOL GCActivityTypeIsSki(NSString*at, NSString*atdetail){
  @param activityType is required if a field key is passed instead of GCField
  */
 +(NSArray<GCFieldsForCategory*>*)categorizeAndOrderFields:(NSArray*)fields forActivityType:(NSString*)activityType;
-
-+(NSString*)activityTypeDisplay:(NSString*)activityType;
 
 +(NSArray*)knownFieldsMatching:(NSString*)str;
 +(NSDictionary<GCField*,GCFieldInfo*>*)missingPredefinedField;

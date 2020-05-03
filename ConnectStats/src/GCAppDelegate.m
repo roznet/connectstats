@@ -334,7 +334,7 @@ void checkVersion(){
     if ([shortcutItem.type isEqualToString:kShortCutItemTypeSummaryStats]) {
         [self.actionDelegate focusOnStatsSummary];
     }else if([shortcutItem.type isEqualToString:kShortCutItemTypeRefreshList]){
-        [self searchAllActivities];
+        [self searchRecentActivities];
         [self.actionDelegate focusOnActivityList];
         [self.actionDelegate beginRefreshing];
     }else if ([shortcutItem.type isEqualToString:kShortCutItemTypeLastActivity]){
@@ -530,12 +530,12 @@ void checkVersion(){
             NSString * message = NSLocalizedString(@"Do you want to enable the new service for Garmin Data? You can get more information and enable it later in the config page", @"Enable New Service");
             UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Enable New Service" message:message preferredStyle:UIAlertControllerStyleAlert];
             [alert addCancelAction];
-            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Enable",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Enable",@"Service status") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
                 RZLog(RZLogInfo, @"User enabling connectstats");
                 [GCViewConfig setGarminDownloadSource:gcGarminDownloadSourceBoth];
                 [self saveSettings];
                 dispatch_async(dispatch_get_main_queue(), ^(){
-                    [self searchAllActivities];
+                    [self searchRecentActivities];
                 });
             }]];
             [[self.actionDelegate currentNavigationController] presentViewController:alert animated:YES completion:nil];
@@ -614,6 +614,23 @@ void checkVersion(){
         [[GCAppGlobal profile] configSet:CONFIG_DUPLICATE_CHECK_ON_LOAD boolVal:true]; // was always true before
     }
     
+    if( [self isFirstTimeForFeature:@"UPGRADE_PROFILE_DONE_AND_ANCHOR"]){
+        needToSaveSettings = true;
+        // Transfer old key to new key
+        if( [[GCAppGlobal profile] serviceSuccess:gcServiceGarmin]){
+            NSUInteger page = [[GCAppGlobal profile] configGetInt:PROFILE_LAST_PAGE_OBSOLETE defaultValue:0];
+            [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin set:page];
+            [[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin set:YES];
+        }
+        
+        if( [[GCAppGlobal profile] serviceSuccess:gcServiceStrava]){
+            [[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava set:YES];
+        }
+        if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats]){
+            [[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats set:YES];
+        }
+    }
+    
     if( needToSaveSettings ){
         [self saveSettings];
     }
@@ -648,18 +665,13 @@ void checkVersion(){
         idx ++;
     }
 }
--(void)searchAllActivities{
-    // Should have better logic for all services
-    if ([self.profiles configGetBool:CONFIG_GARMIN_USE_MODERN defaultValue:true] == true || [self.profiles configGetBool:PROFILE_FULL_DOWNLOAD_DONE defaultValue:false]) {
-        [self.web servicesSearchRecentActivities];
-    }else{
-        [self.web servicesSearchActivitiesFrom:[self.profiles configGetInt:PROFILE_LAST_PAGE defaultValue:0] reloadAll:true];
-    }
+-(void)searchRecentActivities{
+    [self.web servicesSearchRecentActivities];
 }
 
 -(void)addOrSelectProfile:(NSString*)pName{
     if (![pName isEqualToString:[self.profiles currentProfileName]]) {
-        RZLog(RZLogInfo, @"Changed profile");
+        RZLog(RZLogInfo, @"Changing profile from %@ to %@", [self.profiles currentProfileName], pName);
 
         [self.db close];
         [self.profiles addOrSelectProfile:pName];
@@ -684,7 +696,7 @@ void checkVersion(){
 
 -(void)startupRefreshIfNeeded{
     if (self.needsStartupRefresh && [self.profiles configGetBool:CONFIG_REFRESH_STARTUP defaultValue:[GCAppGlobal healthStatsVersion]]) {
-        [self searchAllActivities];
+        [self searchRecentActivities];
     }
     self.needsStartupRefresh = false;
 }

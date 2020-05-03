@@ -40,7 +40,6 @@
 #import <RZExternal/RZExternal.h>
 #import "GCActivityTrackGraphOptionsViewController.h"
 #import "GCActivity+ExportText.h"
-#import "GCActivityTennisDetailSource.h"
 #import "GCWebConnect+Requests.h"
 #import "GCActivity+CSSearch.h"
 #import "GCActivityOrganizedFields.h"
@@ -63,7 +62,6 @@
 
 @interface GCActivityDetailViewController ()
 
-@property (nonatomic,retain) NSObject<UITableViewDataSource,UITableViewDelegate> * implementor;
 @property (nonatomic,retain) GCActivitiesOrganizer * organizer;
 @property (nonatomic,retain) GCTrackStats * trackStats;
 @property (nonatomic,assign) BOOL waitingDownload;
@@ -110,7 +108,6 @@
     [_organizer release];
     [_trackStats release];
     [_activity release];
-    [_implementor release];
 
     [super dealloc];
 }
@@ -207,9 +204,6 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (self.implementor) {
-        return [self.implementor numberOfSectionsInTableView:tableView];
-    }
     // Return the number of sections.
     //return [[self fieldsToDisplay] count];
     return GCVIEW_DETAIL_SECTIONS;
@@ -217,10 +211,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.implementor) {
-        return [self.implementor tableView:tableView numberOfRowsInSection:section];
-    }
-
     // Return the number of rows in the section.
     //return [[[self fieldsToDisplay] objectAtIndex:section] count];
     if (section == GCVIEW_DETAIL_MAP_SECTION ) {
@@ -334,9 +324,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.implementor) {
-        return [self.implementor tableView:tableView cellForRowAtIndexPath:indexPath];
-    }
     UITableViewCell * rv = nil;
 
 
@@ -443,7 +430,7 @@
         GCCellGrid * cell = [GCCellGrid gridCell:tableView];
 
         GCActivity * act=self.activity;
-        GCHealthMeasure * meas=[[GCAppGlobal health] measureForDate:act.date andType:gcMeasureWeight];
+        GCHealthMeasure * meas=[[GCAppGlobal health] measureForDate:act.date andField:[GCHealthMeasure weight]];
         [cell setupForHealthMeasureSummary:meas];
         rv = cell;
     }else{
@@ -454,9 +441,6 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (self.implementor) {
-        return [self.implementor tableView:tableView heightForRowAtIndexPath:indexPath];
-    }
     BOOL high = self.tableView.frame.size.height > 600.;
 
     if (indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION) {
@@ -477,9 +461,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.implementor) {
-        return [self.implementor tableView:tableView didSelectRowAtIndexPath:indexPath];
-    }
     // go into stat page
     // stats page:
     // history/activity either accross  time or for this activity points
@@ -551,22 +532,13 @@
 #pragma mark - Table Header
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    if (self.implementor) {
-        return [self.implementor tableView:tableView viewForHeaderInSection:section];
-    }
     return nil;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if (self.implementor) {
-        return [self.implementor tableView:tableView heightForHeaderInSection:section];
-    }
     return 0.;
 }
 
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    if (self.implementor) {
-        return [self.implementor tableView:tableView titleForHeaderInSection:section];
-    }
     return nil;
 }
 
@@ -726,13 +698,6 @@
     return self.organizedAttributedStrings;
 }
 
-/**
- @brief Set alternative implementor if activity needs it, for example tennis
- */
--(void)setupImplementor{
-    self.implementor = [GCActivityTennisDetailSource tennisDetailSourceFor:self.activity];
-}
-
 
 -(GCActivity*)compareActivity{
     return [self.organizer validCompareActivityFor:self.activity];
@@ -764,7 +729,6 @@
             RZLog(RZLogInfo, @"%@",[act debugDescription]);
         }
         self.activity = act;
-        [self setupImplementor];
 
         self.userActivity = [self.activity spotLightUserActivity];
         [self.userActivity becomeCurrent];

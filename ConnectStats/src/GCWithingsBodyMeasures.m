@@ -54,7 +54,11 @@
     if( self.navigationController ){
         return nil;
     }
-    return @"https://wbsapi.withings.net/measure?action=getmeas";
+    if( self.fromDate ){
+        return [NSString stringWithFormat:@"https://wbsapi.withings.net/measure?action=getmeas&lastupdate=%@", @(self.fromDate.timeIntervalSince1970)];
+    }else{
+        return @"https://wbsapi.withings.net/measure?action=getmeas";
+    }
 }
 -(NSString*)debugDescription{
     return [NSString stringWithFormat:@"<%@: %@>",
@@ -113,6 +117,9 @@
         }
     }
     dispatch_async( dispatch_get_main_queue(), ^(){
+        [[GCAppGlobal profile] serviceAnchor:gcServiceWithings set:[NSDate date].timeIntervalSince1970];
+        [[GCAppGlobal profile] serviceCompletedFull:gcServiceWithings set:YES];
+        [GCAppGlobal saveSettings];
         [self processDone];
     });
 }

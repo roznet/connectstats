@@ -33,8 +33,6 @@ static GCFieldCache * _fieldCache = nil;
 static NSDictionary * _cacheLapFieldToFieldMap = nil;
 static NSDictionary * _cacheFieldToLapFieldMap = nil;
 static NSArray * _cacheSwimLapField = nil;
-static NSDictionary * _calcToField = nil;
-static NSDictionary * _fieldToCalc = nil;
 
 gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     gcFieldFlagSumDistance,
@@ -92,20 +90,6 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
 
 #pragma mark - Field Properties
 
-
-+(NSString*)calcOrFieldFor:(NSString*)field{
-    if (_calcToField==nil) {
-        _calcToField =     @{CALC_NORMALIZED_POWER:@"WeightedMeanNormalizedPower",
-                              CALC_ALTITUDE_GAIN:@"GainElevation",
-                              CALC_ALTITUDE_LOSS:@"LossElevation",
-                              CALC_STRIDE_LENGTH:@"WeightedMeanStrideLength"
-                             };
-        RZRetain(_calcToField);
-        _fieldToCalc = RZReturnRetain([_calcToField dictionarySwappingKeysForObjects]);
-    }
-
-    return _calcToField[field] ?: _fieldToCalc[field];
-}
 
 +(NSArray<GCFieldsForCategory*>*)categorizeAndOrderFields:(NSArray*)fields forActivityType:(NSString*)activityType{
     NSMutableDictionary * categories = [NSMutableDictionary dictionary];

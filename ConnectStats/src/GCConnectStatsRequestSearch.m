@@ -191,6 +191,12 @@ static const NSUInteger kActivityRequestCount = 20;
     }else{
         if( self.searchMore ){
             return [[[GCConnectStatsRequestSearch alloc] initNextWith:self] autorelease];
+        }else{
+            if( self.reloadAll ){
+                [[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats set:YES];
+                RZLog(RZLogInfo, @"ConnectStats completed full");
+                [GCAppGlobal saveSettings];
+            }
         }
     }
     return nil;
