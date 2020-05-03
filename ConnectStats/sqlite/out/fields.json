@@ -1191,6 +1191,7 @@
       "field": "EndTimestamp"
     },
     {
+      "en": "Elevation Gain",
       "field": "GainCorrectedElevation"
     },
     {
@@ -1205,6 +1206,7 @@
       "zh": "\u9ad8\u5ea6\u589e\u52a0"
     },
     {
+      "en": "Elevation Gain",
       "field": "GainUncorrectedElevation"
     },
     {
@@ -1220,6 +1222,7 @@
       "field": "GoalSumStep"
     },
     {
+      "en": "Elevation Loss",
       "field": "LossCorrectedElevation"
     },
     {
@@ -1234,6 +1237,7 @@
       "zh": "\u9ad8\u5ea6\u51cf\u5c11"
     },
     {
+      "en": "Elevation Loss",
       "field": "LossUncorrectedElevation"
     },
     {
@@ -1264,6 +1268,7 @@
     },
     {
       "de": "Max. korrigierte H\u00f6he",
+      "en": "Max Elevation",
       "field": "MaxCorrectedElevation"
     },
     {
@@ -1308,6 +1313,7 @@
       "field": "MaxGroundContactBalanceLeft"
     },
     {
+      "en": "Max Ground Contact Time",
       "field": "MaxGroundContactTime"
     },
     {
@@ -1326,6 +1332,7 @@
       "field": "MaxLegSpringStiffness"
     },
     {
+      "en": "Max Energy Expenditure",
       "field": "MaxMomentaryEnergyExpenditure"
     },
     {
@@ -1351,6 +1358,7 @@
     },
     {
       "de": "Max. relative Lauf\u00f6konomie",
+      "en": "Max Running Economy",
       "field": "MaxRelativeRunningEconomy"
     },
     {
@@ -1391,9 +1399,11 @@
       "zh": "\u6700\u5927\u5212\u9891"
     },
     {
+      "en": "Max Elevation",
       "field": "MaxUncorrectedElevation"
     },
     {
+      "en": "Max Vertical Oscillation",
       "field": "MaxVerticalOscillation"
     },
     {
@@ -1403,6 +1413,7 @@
     },
     {
       "de": "Max. vertikale Geschw.",
+      "en": "Max Vertical Speed",
       "field": "MaxVerticalSpeed"
     },
     {
@@ -1422,10 +1433,12 @@
     },
     {
       "de": "Min. Trittfrequenz ",
+      "en": "Min Cadence",
       "field": "MinBikeCadence"
     },
     {
       "de": "Min. korrigierter Anstieg",
+      "en": "Min Elevation",
       "field": "MinCorrectedElevation"
     },
     {
@@ -1459,6 +1472,7 @@
       "field": "MinGroundContactBalanceLeft"
     },
     {
+      "en": "Min Ground Contact Time",
       "field": "MinGroundContactTime"
     },
     {
@@ -1471,10 +1485,12 @@
       "field": "MinLegSpringStiffness"
     },
     {
+      "en": "Min Energy Expenditure",
       "field": "MinMomentaryEnergyExpenditure"
     },
     {
       "de": "Min. Tempo",
+      "en": "Min Pace",
       "field": "MinPace"
     },
     {
@@ -1483,10 +1499,12 @@
       "field": "MinPower"
     },
     {
+      "en": "Min Running Economy",
       "field": "MinRelativeRunningEconomy"
     },
     {
       "de": "Min. Schrittfrequenz",
+      "en": "Min Cadence",
       "field": "MinRunCadence"
     },
     {
@@ -1523,9 +1541,11 @@
       "zh": "\u6700\u4f73 SWOLF"
     },
     {
+      "en": "Min Elevation",
       "field": "MinUncorrectedElevation"
     },
     {
+      "en": "Min Vertical Oscillation",
       "field": "MinVerticalOscillation"
     },
     {
@@ -1533,6 +1553,7 @@
       "field": "MinVerticalRatio"
     },
     {
+      "en": "Anaerobic Training Effect",
       "field": "SumAnaerobicTrainingEffect"
     },
     {
@@ -1602,9 +1623,11 @@
       "field": "SumEnergyActive"
     },
     {
+      "en": "Floors Climbed",
       "field": "SumFloorsClimbed"
     },
     {
+      "en": "Floors Descended",
       "field": "SumFloorsDescended"
     },
     {
@@ -1839,6 +1862,7 @@
       "zh": "\u5e73\u5747\u5fc3\u7387"
     },
     {
+      "en": "Avg Left Balance",
       "field": "WeightedMeanLeftBalance"
     },
     {
@@ -1854,6 +1878,7 @@
       "field": "WeightedMeanLegSpringStiffness"
     },
     {
+      "en": "Avg Energy Expenditure",
       "field": "WeightedMeanMomentaryEnergyExpenditure"
     },
     {
@@ -1898,6 +1923,7 @@
       "field": "WeightedMeanPower"
     },
     {
+      "en": "Avg Running Economy",
       "field": "WeightedMeanRelativeRunningEconomy"
     },
     {
@@ -1927,9 +1953,11 @@
       "zh": "\u5e73\u5747\u901f\u5ea6"
     },
     {
+      "en": "Avg Stance Time",
       "field": "WeightedMeanStanceTime"
     },
     {
+      "en": "Avg Stance Percent",
       "field": "WeightedMeanStanceTimePercent"
     },
     {
@@ -2000,6 +2028,7 @@
       "field": "WeightedMeanVerticalRatio"
     },
     {
+      "en": "Avg Vertical Speed",
       "field": "WeightedMeanVerticalSpeed"
     },
     {
@@ -2595,10 +2624,9 @@
       "field_order": 2
     },
     {
-      "activity_type": "swimming",
-      "category": "swim",
+      "category": "dynamics",
       "field": "SumStrokes",
-      "field_order": 30
+      "field_order": 2
     },
     {
       "activity_type": "swimming",

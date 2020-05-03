@@ -420,7 +420,11 @@ class Field:
         if no activityType or null applies to all
         '''
         rv = None
-        
+        debug = (self.key == 'SumStrokes')
+
+        if debug:
+            print( info )
+            
         existing = None
         if 'activity_type' in info and info['activity_type']:
             for one in self.orders:
@@ -430,7 +434,9 @@ class Field:
             for one in self.orders:
                 if 'activity_type' not in one:
                     existing = one
-
+        if debug:
+            print( f'existing: {existing}' )
+            
         if existing:
             if existing != one:
                 self.changes.append( { 'what':'order','old':dict(existing),'new':info} )
