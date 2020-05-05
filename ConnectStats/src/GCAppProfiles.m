@@ -538,6 +538,12 @@ NSInteger kServiceNoAnchor = 0;
 
 }
 -(void)serviceCompletedFull:(gcService)service set:(BOOL)set{
+    if( set == false ){
+        RZLog(RZLogInfo, @"%@ reset completedFull",[GCService service:service]);
+    }else{
+        RZLog(RZLogInfo, @"%@ mark completedFull",[GCService service:service]);
+    }
+    [self configSet:[self key:PROFILE_SERVICE_LAST_ANCHOR forService:service] intVal:kServiceNoAnchor];
     [self configSet:[self key:PROFILE_SERVICE_FULL_DONE forService:service] boolVal:set];
 }
 -(NSInteger)serviceAnchor:(gcService)service{

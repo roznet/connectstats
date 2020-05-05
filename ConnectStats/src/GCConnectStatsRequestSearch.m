@@ -84,12 +84,17 @@ static const NSUInteger kActivityRequestCount = 20;
 }
 
 -(NSString*)debugDescription{
+    NSString * info = self.start == 0 ? @"first" : [NSString stringWithFormat:@"%@[%@]", [self.lastFoundDate YYYYMMDD], @(self.start)];
+    
+    if(self.reloadAll){
+        info = [NSString stringWithFormat:@"%@/all", info];
+    }
+    
     return [NSString stringWithFormat:@"<%@: %@ %@>",
             NSStringFromClass([self class]),
-            self.start == 0 ? @"first" : [self.lastFoundDate YYYYMMDD],
+            info,
             [self.urlDescription truncateIfLongerThan:192 ellipsis:@"..."]];
 }
-
 
 -(NSString*)description{
     return [NSString stringWithFormat:NSLocalizedString(@"Downloading ConnectStats History... %@",@"Request Description"),[self.lastFoundDate dateFormatFromToday]];
@@ -190,11 +195,16 @@ static const NSUInteger kActivityRequestCount = 20;
         return [[[GCConnectStatsRequestSearch alloc] initNextWith:self] autorelease];
     }else{
         if( self.searchMore ){
+            if( self.reloadAll ){
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [[GCAppGlobal profile] serviceAnchor:gcServiceConnectStats set:self.start];
+                    [GCAppGlobal saveSettings];
+                });
+            }
             return [[[GCConnectStatsRequestSearch alloc] initNextWith:self] autorelease];
         }else{
             if( self.reloadAll ){
                 [[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats set:YES];
-                RZLog(RZLogInfo, @"ConnectStats completed full");
                 [GCAppGlobal saveSettings];
             }
         }
