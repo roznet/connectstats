@@ -96,9 +96,15 @@ static const NSUInteger kActivityRequestCount = 20;
 }
 
 -(NSString*)debugDescription{
+    NSString * info = self.start == 0 ? @"first" : [NSString stringWithFormat:@"%@[%@]", [self.lastFoundDate YYYYMMDD], @(self.start)];
+    
+    if(self.reloadAll){
+        info = [NSString stringWithFormat:@"%@/all", info];
+    }
+    
     return [NSString stringWithFormat:@"<%@: %@ %@>",
             NSStringFromClass([self class]),
-            self.start == 0 ? @"first" : [self.lastFoundDate YYYYMMDD],
+            info,
             [self.urlDescription truncateIfLongerThan:192 ellipsis:@"..."]];
 }
 
@@ -209,11 +215,18 @@ static const NSUInteger kActivityRequestCount = 20;
         
         if ( self.searchMore ) {
             self.nextReq = [[[GCGarminRequestModernSearch alloc] initNextWith:self] autorelease];
+            if( self.reloadAll ){
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin set:self.start];
+                    [GCAppGlobal saveSettings];
+                });
+            }
         }else{
             if( self.reloadAll ){
-                [[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin set:YES];
-                RZLog(RZLogInfo, @"Garmin completed full");
-                [GCAppGlobal saveSettings];
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin set:YES];
+                    [GCAppGlobal saveSettings];
+                });
             }
         }
         if (self.nextReq == nil && self.childIds.count > 0) {
