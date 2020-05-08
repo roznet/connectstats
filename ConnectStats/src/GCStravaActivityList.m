@@ -84,9 +84,15 @@
     return nil;
 }
 -(NSString*)debugDescription{
+    NSString * info = self.page == 0 ? @"first" : [NSString stringWithFormat:@"%@[%@]", [self.lastFoundDate YYYYMMDD], @(self.page)];
+    
+    if(self.reloadAll){
+        info = [NSString stringWithFormat:@"%@/all", info];
+    }
+    
     return [NSString stringWithFormat:@"<%@: %@ %@>",
             NSStringFromClass([self class]),
-            self.page == 0 ? @"first" : [self.lastFoundDate YYYYMMDD],
+            info,
             [self.urlDescription truncateIfLongerThan:192 ellipsis:@"..."]];
 }
 
@@ -187,12 +193,20 @@
 -(id<GCWebRequest>)nextReq{
     if (self.navigationController || self.searchMore) {
         GCStravaActivityList * next = RZReturnAutorelease([[GCStravaActivityList alloc] initNextWith:self]);
+        if( self.reloadAll ){
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [[GCAppGlobal profile] serviceAnchor:gcServiceStrava set:self.page];
+                [GCAppGlobal saveSettings];
+            });
+        }
+
         return next;
     }else{
         if( self.reloadAll ){
-            [[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava set:YES];
-            RZLog(RZLogInfo, @"Strava completed full");
-            [GCAppGlobal saveSettings];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava set:YES];
+                [GCAppGlobal saveSettings];
+            });
         }
     }
     
