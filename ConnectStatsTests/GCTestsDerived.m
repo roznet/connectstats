@@ -191,6 +191,109 @@
 
 }
 
+-(void)testDerivedClear{
+    /*
+     2 activities in april, 2 in may
+     <GCActivity running:__connectstats__857090 2020-05-04 38:13 7.07 km>
+     <GCActivity running:__connectstats__834323 2020-05-01 28:10 5.86 km>
+     <GCActivity running:__connectstats__777501 2020-04-24 26:25 5.53 km>
+     <GCActivity running:__connectstats__728599 2020-04-18 21:42 4.25 km>
+     */
+    
+    NSArray<NSString*>*activityIds = @[   @"857090", @"834323", @"777501", @"728599" ];
+    
+    NSString * db_name = @"test_activities_derived_rebuild.db";
+    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:db_name];
+    GCDerivedOrganizer * derived = [self createEmptyDerived:@"test_derived_rebuild"];
+    
+    gcFieldFlag testFlag = gcFieldFlagWeightedMeanHeartRate;
+    
+    NSString * path = [RZFileOrganizer bundleFilePath:@"last_connectstats_search_derived.json" forClass:[self class]];
+    [GCConnectStatsRequestSearch testForOrganizer:organizer withFilesInPath:path];
+    GCService * service = [GCService service:gcServiceConnectStats];
+    for (NSString * serviceId  in activityIds) {
+        NSString * activityId = [service activityIdFromServiceId:serviceId];
+        GCActivity * act = [organizer activityForId:activityId];
+        act.settings.worker = nil;
+        XCTAssertNotNil(act);
+        NSString * fp_fit = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"track_cs_%@.fit", serviceId]];
+        GCActivity * fit = [GCConnectStatsRequestFitFile testForActivity:act withFilesIn:fp_fit];
+        fit.settings.worker = nil;
+        XCTAssertNotNil(fit);
+        [derived processActivities:@[ fit ] ];
+        
+    }
+    // Skip first
+    NSArray<GCActivity*>*activities = [organizer activities];
+    GCActivity * testForAct = activities.firstObject;
+    NSUInteger bestIdx = 0;
 
+    // Look at serie containing testForAct
+    GCDerivedDataSerie * serie = [derived derivedDataSerie:gcDerivedTypeBestRolling
+                                                      field:testFlag
+                                                     period:gcDerivedPeriodMonth
+                                                    forDate:testForAct.date
+                                            andActivityType:testForAct.activityType];
+    
+    double original_y_max = [serie.serieWithUnit dataPointAtIndex:bestIdx].y_data;
+
+    NSArray<GCActivity*>*bestActivities = [serie bestMatchingSerieIn:[serie containedActivitiesIn:activities] maxCount:serie.serieWithUnit.count];
+    
+    GCActivity * exclude = bestActivities[bestIdx];
+
+    NSMutableArray * sameSerieAsExcluded = [NSMutableArray array];
+    NSMutableArray * allButExcluded = [NSMutableArray array];
+
+    for (GCActivity * one in activities) {
+        if( [one.activityId isEqualToString:exclude.activityId] ){
+            continue; // skip
+        }
+        if( [serie containsActivity:one] ){
+            [sameSerieAsExcluded addObject:one];
+        }
+        [allButExcluded addObject:one];
+    }
+    
+    
+    GCStatsDataSerieWithUnit * excludeBest = [exclude calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
+                                                                    forField:serie.field
+                                                                      thread:nil];
+    // First check best is correct
+    double excluded_y_max = [excludeBest dataPointAtIndex:bestIdx].y_data;
+    XCTAssertEqualWithAccuracy(excluded_y_max, original_y_max, 1.0e-8);
+
+    // Check all the other are lower
+    for (GCActivity * act in sameSerieAsExcluded) {
+        GCStatsDataSerieWithUnit * checkBest = [act calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
+                                                                        forField:serie.field
+                                                                          thread:nil];
+        XCTAssertLessThan([checkBest dataPointAtIndex:bestIdx].y_data, excluded_y_max);
+    }
+    
+    // rebuild now with the first act that wasn't the max. Now new best should be less that excluded serie
+    [derived rebuildDerivedDataSerie:gcDerivedTypeBestRolling
+                              period:gcDerivedPeriodMonth
+                         forActivity:testForAct
+                        inActivities:sameSerieAsExcluded];
+    
+    GCDerivedDataSerie * serieWithoutExcluded = [derived derivedDataSerie:gcDerivedTypeBestRolling
+                                                     field:testFlag
+                                                    period:gcDerivedPeriodMonth
+                                                   forDate:testForAct.date
+                                            andActivityType:testForAct.activityType];
+    double rebuild_y_max = [serieWithoutExcluded.serieWithUnit dataPointAtIndex:bestIdx].y_data;
+    
+    XCTAssertLessThan(rebuild_y_max, excluded_y_max);
+    
+    [derived processActivities:@[ exclude ] ];
+    
+    GCDerivedDataSerie * serieWithExcluded = [derived derivedDataSerie:gcDerivedTypeBestRolling
+                                                     field:testFlag
+                                                    period:gcDerivedPeriodMonth
+                                                   forDate:testForAct.date
+                                            andActivityType:testForAct.activityType];
+    double final_y_max = [serieWithExcluded.serieWithUnit dataPointAtIndex:bestIdx].y_data;
+    XCTAssertEqualWithAccuracy(final_y_max, excluded_y_max, 1.0e-8);
+}
 
 @end

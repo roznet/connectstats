@@ -26,10 +26,12 @@
 #import <XCTest/XCTest.h>
 
 @class GCActivitiesOrganizer;
+@class GCDerivedOrganizer;
 
 @interface GCTestCase : XCTestCase
 
 +(BOOL)recordModeGlobal;
 -(GCActivitiesOrganizer*)createEmptyOrganizer:(NSString*)dbname;
+-(GCDerivedOrganizer*)createEmptyDerived:(NSString*)dbname;
 @end
 

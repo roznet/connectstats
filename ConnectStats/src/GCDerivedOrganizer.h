@@ -35,14 +35,16 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
 @interface GCDerivedOrganizer : RZParentObject<RZChildObject>
 
 
--(GCDerivedOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(dispatch_queue_t)thread NS_DESIGNATED_INITIALIZER;;
+-(GCDerivedOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(dispatch_queue_t)thread NS_DESIGNATED_INITIALIZER;
+-(GCDerivedOrganizer*)initForTestModeWithDb:(FMDatabase*)aDb andFilePrefix:(NSString*)filePrefix;
 
 -(FMDatabase*)deriveddb;
 
 /// Return time serie of best rolling series for field for all the calculated dates
 /// @param field field to query
 -(GCStatsSerieOfSerieWithUnits*)historicalTimeSeriesOfSeriesFor:(GCField*)field;
--(GCStatsSerieOfSerieWithUnits*)timeserieOfSeriesFor:(GCField*)field inActivities:(NSArray<GCActivity*>*)activities;
+-(GCStatsSerieOfSerieWithUnits*)timeserieOfSeriesFor:(GCField*)field
+                                        inActivities:(NSArray<GCActivity*>*)activities;
 
 -(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type
                                  field:(gcFieldFlag)field
@@ -50,12 +52,13 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
                                forDate:(NSDate*)date
                        andActivityType:(NSString*)aType;
 
--(void)processActivities:(NSArray*)activities;
+-(void)processActivities:(NSArray<GCActivity*>*)activities;
 -(void)processSome;
 
 -(void)rebuildDerivedDataSerie:(gcDerivedType)type
                         period:(gcDerivedPeriod)period
-            containingActivity:(GCActivity*)act;
+                   forActivity:(GCActivity*)act
+                  inActivities:(NSArray<GCActivity*>*)activities;
 
 -(NSArray<NSNumber*>*)availableFieldsForType:(NSString*)aType;
 -(NSArray<GCDerivedGroupedSeries*>*)groupedSeriesMatching:(GCDerivedDataSerieMatchBlock)match;

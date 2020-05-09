@@ -127,6 +127,8 @@ static BOOL kDerivedEnabled = true;
 // New style storage by time series database
 @property (nonatomic,retain) NSMutableDictionary<NSDictionary*,GCStatsDataSerie*> * seriesByKeys;
 @property (nonatomic,retain) NSMutableDictionary<NSDictionary*,GCStatsDataSerie*> * historicalSeriesByKeys;
+
+@property (nonatomic, retain) NSString * useDerivedFilePrefix;
 @end
 
 @implementation GCDerivedOrganizer
@@ -158,6 +160,14 @@ static BOOL kDerivedEnabled = true;
     return self;
 }
 
+-(GCDerivedOrganizer*)initForTestModeWithDb:(FMDatabase*)aDb andFilePrefix:(NSString *)filePrefix{
+    self = [self initWithDb:aDb andThread:nil];
+    if( self ){
+        self.useDerivedFilePrefix = filePrefix;
+    }
+    return self;
+}
+
 -(void)dealloc{
     [self.web detach:self];
     [_modifiedSeries release];
@@ -168,6 +178,7 @@ static BOOL kDerivedEnabled = true;
     [_queue release];
     [_seriesByKeys release];
     [_historicalSeriesByKeys release];
+    [_useDerivedFilePrefix release];
 
     [super dealloc];
 }
@@ -415,7 +426,8 @@ static BOOL kDerivedEnabled = true;
 
 -(void)rebuildDerivedDataSerie:(gcDerivedType)type
                         period:(gcDerivedPeriod)period
-            containingActivity:(GCActivity*)act{
+                   forActivity:(GCActivity*)act
+                  inActivities:(NSArray<GCActivity*>*)activities{
     
     NSArray<GCDerivedDataSerie*> * series =
     @[
@@ -425,7 +437,7 @@ static BOOL kDerivedEnabled = true;
     ];
 
     NSMutableArray * toProcess = [NSMutableArray array];
-    for (GCActivity * act in [[GCAppGlobal organizer] activities]) {
+    for (GCActivity * act in activities) {
         for (GCDerivedDataSerie * serie in series) {
             if( [serie containsActivity:act] ){
                 [toProcess addObject:act];
@@ -433,7 +445,7 @@ static BOOL kDerivedEnabled = true;
             }
         }
     }
-    RZLog(RZLogInfo,@"Rebuilding Derived matching %@ with %@/%@ activities", act, @(toProcess.count), @([[GCAppGlobal organizer] countOfActivities]));
+    RZLog(RZLogInfo,@"Rebuilding Derived matching %@ with %@/%@ activities", act, @(toProcess.count), @(activities.count));
     
     for (GCActivity * activity in toProcess) {
         [self forceReprocessActivity:activity.activityId];
@@ -579,13 +591,17 @@ static BOOL kDerivedEnabled = true;
         if( [self debugCheckSerie:derivedserie.serieWithUnit.serie]){
             RZLog(RZLogError,@"bad out serie");
         }
-        NSString * fn = [NSString stringWithFormat:@"%@-%@.data", [[GCAppGlobal profile] currentDerivedFilePrefix],  derivedserie.key];
+        NSString * fn = [NSString stringWithFormat:@"%@-%@.data", self.currentDerivedFilePrefix,  derivedserie.key];
         if([derivedserie saveToFile:fn]){
             [self recordModifiedSerie:derivedserie withActivity:activity intoFile:fn];
         }else{
             RZLog( RZLogError, @"Failed to write %@", fn);
         }
     }
+}
+
+-(NSString*)currentDerivedFilePrefix{
+    return self.useDerivedFilePrefix ? self.useDerivedFilePrefix : [[GCAppGlobal profile] currentDerivedFilePrefix];
 }
 
 -(void)processQueueElement:(GCDerivedQueueElement*)element{
@@ -612,7 +628,7 @@ static BOOL kDerivedEnabled = true;
 
 
 
--(void)processActivities:(NSArray*)activities{
+-(void)processActivities:(NSArray<GCActivity*>*)activities{
     if (self.queue) {
         return;
     }

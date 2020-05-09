@@ -528,6 +528,12 @@
 		427828FB1684E61400AB9C89 /* GCActivitySwimLapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 427828FA1684E61400AB9C89 /* GCActivitySwimLapViewController.m */; };
 		42793B321F405941005FAF02 /* RZUtilsSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; };
 		427B20AB1621B5CF00D5C3C5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 427B20AD1621B5CF00D5C3C5 /* Localizable.strings */; };
+		427B79D42465A11F005EDEAD /* track_cs_834323.fit in Resources */ = {isa = PBXBuildFile; fileRef = 427B79CE2465A11F005EDEAD /* track_cs_834323.fit */; };
+		427B79D52465A11F005EDEAD /* track_cs_777501.fit in Resources */ = {isa = PBXBuildFile; fileRef = 427B79CF2465A11F005EDEAD /* track_cs_777501.fit */; };
+		427B79D62465A11F005EDEAD /* track_cs_728599.fit in Resources */ = {isa = PBXBuildFile; fileRef = 427B79D02465A11F005EDEAD /* track_cs_728599.fit */; };
+		427B79D72465A11F005EDEAD /* track_cs_857090.fit in Resources */ = {isa = PBXBuildFile; fileRef = 427B79D12465A11F005EDEAD /* track_cs_857090.fit */; };
+		427B79D82465A11F005EDEAD /* last_modern_search_derived.json in Resources */ = {isa = PBXBuildFile; fileRef = 427B79D22465A11F005EDEAD /* last_modern_search_derived.json */; };
+		427B79D92465A11F005EDEAD /* last_connectstats_search_derived.json in Resources */ = {isa = PBXBuildFile; fileRef = 427B79D32465A11F005EDEAD /* last_connectstats_search_derived.json */; };
 		427C65C01D4677FB00F5DF70 /* GCSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427C65BF1D4677FB00F5DF70 /* GCSegment.swift */; };
 		427C65C21D469E4E00F5DF70 /* GCStravaSegmentListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427C65C11D469E4E00F5DF70 /* GCStravaSegmentListParser.swift */; };
 		427C65C81D46A4BB00F5DF70 /* strava_athlete.json in Resources */ = {isa = PBXBuildFile; fileRef = 427C65C41D46A4BB00F5DF70 /* strava_athlete.json */; };
@@ -2265,6 +2271,12 @@
 		427828F91684E61300AB9C89 /* GCActivitySwimLapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivitySwimLapViewController.h; path = src/GCActivitySwimLapViewController.h; sourceTree = "<group>"; };
 		427828FA1684E61400AB9C89 /* GCActivitySwimLapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivitySwimLapViewController.m; path = src/GCActivitySwimLapViewController.m; sourceTree = "<group>"; };
 		427B20AC1621B5CF00D5C3C5 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		427B79CE2465A11F005EDEAD /* track_cs_834323.fit */ = {isa = PBXFileReference; lastKnownFileType = file; name = track_cs_834323.fit; path = activity_derived/track_cs_834323.fit; sourceTree = "<group>"; };
+		427B79CF2465A11F005EDEAD /* track_cs_777501.fit */ = {isa = PBXFileReference; lastKnownFileType = file; name = track_cs_777501.fit; path = activity_derived/track_cs_777501.fit; sourceTree = "<group>"; };
+		427B79D02465A11F005EDEAD /* track_cs_728599.fit */ = {isa = PBXFileReference; lastKnownFileType = file; name = track_cs_728599.fit; path = activity_derived/track_cs_728599.fit; sourceTree = "<group>"; };
+		427B79D12465A11F005EDEAD /* track_cs_857090.fit */ = {isa = PBXFileReference; lastKnownFileType = file; name = track_cs_857090.fit; path = activity_derived/track_cs_857090.fit; sourceTree = "<group>"; };
+		427B79D22465A11F005EDEAD /* last_modern_search_derived.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = last_modern_search_derived.json; path = activity_derived/last_modern_search_derived.json; sourceTree = "<group>"; };
+		427B79D32465A11F005EDEAD /* last_connectstats_search_derived.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = last_connectstats_search_derived.json; path = activity_derived/last_connectstats_search_derived.json; sourceTree = "<group>"; };
 		427C65BF1D4677FB00F5DF70 /* GCSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCSegment.swift; path = src/GCSegment.swift; sourceTree = "<group>"; };
 		427C65C11D469E4E00F5DF70 /* GCStravaSegmentListParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCStravaSegmentListParser.swift; path = src/GCStravaSegmentListParser.swift; sourceTree = "<group>"; };
 		427C65C41D46A4BB00F5DF70 /* strava_athlete.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_athlete.json; sourceTree = "<group>"; };
@@ -5161,6 +5173,12 @@
 		42C0113C1AB437C10059B6CF /* samples */ = {
 			isa = PBXGroup;
 			children = (
+				427B79D32465A11F005EDEAD /* last_connectstats_search_derived.json */,
+				427B79D22465A11F005EDEAD /* last_modern_search_derived.json */,
+				427B79D02465A11F005EDEAD /* track_cs_728599.fit */,
+				427B79CF2465A11F005EDEAD /* track_cs_777501.fit */,
+				427B79CE2465A11F005EDEAD /* track_cs_834323.fit */,
+				427B79D12465A11F005EDEAD /* track_cs_857090.fit */,
 				42F6715E241CDA6C0031D224 /* flying */,
 				4277C0D823BD133C00C1B1B9 /* activity_217470507.fit */,
 				4277C0DB23BD133C00C1B1B9 /* activity_217470507.json */,
@@ -6126,6 +6144,7 @@
 				42A5D90F23272C8300898FD5 /* track_cs_5572.fit in Resources */,
 				428BAD181CB14B650041468A /* activityweather_1108367966.json in Resources */,
 				42A5D90623272C8300898FD5 /* activity_4018408912.json in Resources */,
+				427B79D82465A11F005EDEAD /* last_modern_search_derived.json in Resources */,
 				428BAD131CB14B650041468A /* activitytrack_1108367966.json in Resources */,
 				4253B4741CD4A53400437E6A /* activity_1083407258.fit in Resources */,
 				42A5D90423272C8300898FD5 /* strava_stream_2675283580.json in Resources */,
@@ -6197,12 +6216,15 @@
 				42A5D91A232875E300898FD5 /* activity_types_modern.json in Resources */,
 				42A5D90723272C8300898FD5 /* last_modern_search_60.json in Resources */,
 				42523AB11D6B289300F6D6C6 /* test_activity_running_828298988.db in Resources */,
+				427B79D52465A11F005EDEAD /* track_cs_777501.fit in Resources */,
 				42A5D918232874A600898FD5 /* activity_types.json in Resources */,
 				4277C0EA23BD133D00C1B1B9 /* activity_217470507.json in Resources */,
 				42C4B0671DBB39E7000A1612 /* strava_training_zones.json in Resources */,
 				428BAD0B1CB14B650041468A /* activity_924421177.json in Resources */,
 				42A5D92C2328774700898FD5 /* activitylaps_1382772474.json in Resources */,
 				42A5D942232877D900898FD5 /* activitylaps_1027746730.json in Resources */,
+				427B79D92465A11F005EDEAD /* last_connectstats_search_derived.json in Resources */,
+				427B79D42465A11F005EDEAD /* track_cs_834323.fit in Resources */,
 				427F936E1BEC069F00C177F9 /* test_activity_cycling_940863203.db in Resources */,
 				4253B4761CD4A53400437E6A /* activitylaps_1083407258.json in Resources */,
 				42A5D91023272C8300898FD5 /* strava_stream_2674169797.json in Resources */,
@@ -6229,7 +6251,9 @@
 				42A5D917232874A600898FD5 /* modern_activity_types.json in Resources */,
 				42880C462381EEE00030C3C1 /* track_cs_5582.fit in Resources */,
 				4277C0E123BD133D00C1B1B9 /* activity_217470507.tcx in Resources */,
+				427B79D72465A11F005EDEAD /* track_cs_857090.fit in Resources */,
 				420A57EC1CB32C5900EA3B42 /* withings_getmeas_188427.json in Resources */,
+				427B79D62465A11F005EDEAD /* track_cs_728599.fit in Resources */,
 				4285C21B2427C5E5003C522E /* last_connectstats_single_544406.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

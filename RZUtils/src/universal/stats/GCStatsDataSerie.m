@@ -257,16 +257,27 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 
 -(NSString*)description{
     NSMutableString * s = [NSMutableString stringWithFormat:@"DataSerie(%d points)\n", (int)dataPoints.count];
-    for (NSUInteger i=0; i<5; i++) {
-        if (i<dataPoints.count) {
-            [s appendFormat:@"  [%d]%@\n", (int)i, [dataPoints[i] description]];
+    if( dataPoints.count < 6){
+        for (NSUInteger i=0; i<dataPoints.count; i++) {
+            if (i<dataPoints.count) {
+                [s appendFormat:@"  [%d]%@\n", (int)i, [dataPoints[i] description]];
+            }
         }
-    }
-    if (dataPoints.count>5) {
-        if (dataPoints.count >6) {
-            [s appendString:@"  ...\n"];
+    }else{
+        NSUInteger n = dataPoints.count;
+        NSUInteger indexes[] = { 0, 1, 2, n/4, n/2, 3*n/4, n-1 };
+        size_t nn = sizeof(indexes)/sizeof(NSUInteger);
+        for( size_t i = 0; i < nn; i++){
+            NSUInteger index = indexes[i];
+            // if diff with previous is > 1: non contiguous, print ellipses
+            if( i > 0 && (index - indexes[i-1]) > 1 ){
+                [s appendString:@"  ...\n"];
+            }
+            // if diff with prev is 0, index arithmetic yield same index don't print twice
+            if( i == 0 || (index-indexes[i-1]) != 0){
+                [s appendFormat:@"  [%d]%@\n", (int)index, [dataPoints[index] description]];
+            }
         }
-        [s appendFormat:@"  [%d]%@\n", (int)(dataPoints.count-1),[dataPoints.lastObject description]];
     }
     return s;
 }

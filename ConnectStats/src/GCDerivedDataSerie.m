@@ -26,7 +26,7 @@
 #import "GCDerivedDataSerie.h"
 #import "GCActivity.h"
 #import "GCAppGlobal.h"
-
+#import "GCActivity+CachedTracks.h"
 sqlite3_int64 kInvalidSerieId = 0;
 
 @interface GCDerivedDataSerie ()
@@ -133,6 +133,59 @@ sqlite3_int64 kInvalidSerieId = 0;
         }
     }
     return dateValid && typeValid;
+}
+
+-(NSArray<GCActivity*>*)containedActivitiesIn:(NSArray<GCActivity*>*)activities{
+    NSMutableArray<GCActivity*> * rv = [NSMutableArray arrayWithCapacity:activities.count];
+    for (GCActivity * act in activities) {
+        if( [self containsActivity:act] ){
+            [rv addObject:act];
+        }
+    }
+    return rv;
+}
+
+-(NSArray<GCActivity*>*)bestMatchingSerieIn:(NSArray<GCActivity*>*)activities maxCount:(NSUInteger)maxcount{
+    // don't go further that current serie
+    NSUInteger count = MIN(maxcount, self.serieWithUnit.count);
+    
+    NSMutableArray<GCActivity*>* rv = [NSMutableArray arrayWithCapacity:count];
+    BOOL betterIsMin = self.serieWithUnit.unit.betterIsMin;
+    
+    for (GCActivity * act in activities) {
+        if( [self containsActivity:act] ){
+            if( rv.count == 0){
+                // first round, just put activity everywhere
+                for( NSUInteger idx = 0; idx < count; idx++){
+                    [rv addObject:act];
+                }
+            }else{
+                GCStatsDataSerieWithUnit * oneBest = [act calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
+                                                                        forField:self.field
+                                                                          thread:nil];
+
+                for (NSUInteger idx = 0; idx < MIN(count,oneBest.count); idx ++ ) {
+                    GCActivity * currrentBestActivity = rv[idx];
+                    GCStatsDataSerieWithUnit * currentBest = [currrentBestActivity calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
+                                                                                                 forField:self.field
+                                                                                                   thread:nil];
+                    
+                    double y_best = [currentBest dataPointAtIndex:idx].y_data;
+                    double check_y_best = [oneBest dataPointAtIndex:idx].y_data;
+                    if( betterIsMin ){
+                        if( check_y_best < y_best ){
+                            rv[idx] = act;
+                        }
+                    }else{
+                        if( check_y_best > y_best ){
+                            rv[idx] = act;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return rv;
 }
 
 -(GCField*)field{
@@ -269,8 +322,10 @@ sqlite3_int64 kInvalidSerieId = 0;
         RZLog(RZLogError,@"failed to archive %@",err);
     }
     if (rv) {
-        
         self.filePath = [RZFileOrganizer writeableFilePathIfExists:fn];
+        #if TARGET_IPHONE_SIMULATOR
+            [[self.serieWithUnit.serie asCSVString:false] writeToFile:[NSString stringWithFormat:@"%@.csv", self.filePath] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        #endif
     }
     return rv;
 }
