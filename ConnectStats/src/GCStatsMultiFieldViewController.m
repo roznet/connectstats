@@ -626,6 +626,20 @@
 }
 -(void)configViewController:(GCStatsMultiFieldConfigViewController*)vc didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     RZLog(RZLogInfo,@"Long press completed");
+    
+    if( indexPath.row == 0 && indexPath.section == 0){
+        NSArray<GCActivity*>*activities = [[GCAppGlobal organizer] activities];
+        GCActivity * current = [[GCAppGlobal organizer] currentActivity];
+        if( ![current.activityType isEqualToString:self.config.activityType] ){
+            for (GCActivity * one in activities) {
+                if( [one.activityType isEqualToString:self.config.activityType] ){
+                    current = one;
+                    break;
+                }
+            }
+        }
+        [[GCAppGlobal derived] rebuildDerivedDataSerie:gcDerivedTypeBestRolling forActivity:current inActivities:activities];
+    }
 }
 
 #pragma mark - Setup data

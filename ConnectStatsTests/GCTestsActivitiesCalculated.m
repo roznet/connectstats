@@ -100,7 +100,7 @@
     }
     RZLog(RZLogInfo,@"%@/%@ %@", @(i), @(organizer.countOfActivities), perf);
 
-    [derived rebuildDerivedDataSerie:gcDerivedTypeBestRolling period:gcDerivedPeriodMonth forActivity:toRebuild inActivities:organizer.activities];
+    [derived rebuildDerivedDataSerie:gcDerivedTypeBestRolling forActivity:toRebuild inActivities:organizer.activities];
     //RZLog(RZLogInfo,@"%@ %@", derived, @(series.count));
 }
 

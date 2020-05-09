@@ -54,7 +54,11 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     GCCellGrid * cell = [GCCellGrid gridCell:tableView];
     [cell setupForRows:1 andCols:1];
-    [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Hi", "Dummy");
+    
+    
+    [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Rebuild Derived", "Dummy");
+    
+    
     return cell;
 }
 
