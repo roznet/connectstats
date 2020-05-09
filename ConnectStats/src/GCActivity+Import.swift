@@ -219,7 +219,9 @@ extension GCActivity {
                 }
             }
         }
-        
+        #if targetEnvironment(simulator)
+        interp.reportAlternates()
+        #endif
         
         // Don't save to db
         if swim {
