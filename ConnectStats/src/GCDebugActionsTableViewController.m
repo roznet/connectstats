@@ -144,7 +144,7 @@
 
 -(void)actionClearAndReprocessDerivedForCurrent{
     GCActivity * act = [[GCAppGlobal organizer] currentActivity];
-    [[GCAppGlobal derived] rebuildDerivedDataSerie:gcDerivedTypeBestRolling period:gcDerivedPeriodMonth forActivity:act inActivities:[[GCAppGlobal organizer] activities]];
+    [[GCAppGlobal derived] rebuildDerivedDataSerie:gcDerivedTypeBestRolling forActivity:act inActivities:[[GCAppGlobal organizer] activities]];
 }
 
 -(void)actionProcessSomeDerived{

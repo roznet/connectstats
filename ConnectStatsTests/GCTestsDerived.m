@@ -234,12 +234,21 @@
                                                      period:gcDerivedPeriodMonth
                                                     forDate:testForAct.date
                                             andActivityType:testForAct.activityType];
-    
+
+    GCDerivedDataSerie * serieYear= [derived derivedDataSerie:gcDerivedTypeBestRolling
+                                                      field:testFlag
+                                                     period:gcDerivedPeriodYear
+                                                    forDate:testForAct.date
+                                            andActivityType:testForAct.activityType];
+
     double original_y_max = [serie.serieWithUnit dataPointAtIndex:bestIdx].y_data;
+    double original_year_y_max = [serieYear.serieWithUnit dataPointAtIndex:bestIdx].y_data;
 
     NSArray<GCActivity*>*bestActivities = [serie bestMatchingSerieIn:[serie containedActivitiesIn:activities] maxCount:serie.serieWithUnit.count];
-    
+    NSArray<GCActivity*>*bestYearActivities = [serie bestMatchingSerieIn:[serieYear containedActivitiesIn:activities] maxCount:serie.serieWithUnit.count];
+
     GCActivity * exclude = bestActivities[bestIdx];
+    XCTAssertEqualObjects(bestYearActivities[bestIdx].activityId, exclude.activityId, @"Check that testAct was selected in the month with best overall");
 
     NSMutableArray * sameSerieAsExcluded = [NSMutableArray array];
     NSMutableArray * allButExcluded = [NSMutableArray array];
@@ -261,6 +270,8 @@
     // First check best is correct
     double excluded_y_max = [excludeBest dataPointAtIndex:bestIdx].y_data;
     XCTAssertEqualWithAccuracy(excluded_y_max, original_y_max, 1.0e-8);
+    // Note this is because testAct is in the month with the best overall... setup dependent
+    XCTAssertEqualWithAccuracy(excluded_y_max, original_year_y_max, 1.0e-8);
 
     // Check all the other are lower
     for (GCActivity * act in sameSerieAsExcluded) {
@@ -272,7 +283,6 @@
     
     // rebuild now with the first act that wasn't the max. Now new best should be less that excluded serie
     [derived rebuildDerivedDataSerie:gcDerivedTypeBestRolling
-                              period:gcDerivedPeriodMonth
                          forActivity:testForAct
                         inActivities:sameSerieAsExcluded];
     
@@ -281,10 +291,19 @@
                                                     period:gcDerivedPeriodMonth
                                                    forDate:testForAct.date
                                             andActivityType:testForAct.activityType];
+    
+    GCDerivedDataSerie * serieYearWithoutExcluded = [derived derivedDataSerie:gcDerivedTypeBestRolling
+                                                     field:testFlag
+                                                    period:gcDerivedPeriodYear
+                                                   forDate:testForAct.date
+                                            andActivityType:testForAct.activityType];
+
     double rebuild_y_max = [serieWithoutExcluded.serieWithUnit dataPointAtIndex:bestIdx].y_data;
-    
+    double rebuild_year_y_max = [serieYearWithoutExcluded.serieWithUnit dataPointAtIndex:bestIdx].y_data;
+
     XCTAssertLessThan(rebuild_y_max, excluded_y_max);
-    
+    XCTAssertLessThan(rebuild_year_y_max, excluded_y_max);
+
     [derived processActivities:@[ exclude ] ];
     
     GCDerivedDataSerie * serieWithExcluded = [derived derivedDataSerie:gcDerivedTypeBestRolling
@@ -292,8 +311,16 @@
                                                     period:gcDerivedPeriodMonth
                                                    forDate:testForAct.date
                                             andActivityType:testForAct.activityType];
+    GCDerivedDataSerie * serieYearWithExcluded = [derived derivedDataSerie:gcDerivedTypeBestRolling
+                                                     field:testFlag
+                                                    period:gcDerivedPeriodYear
+                                                   forDate:testForAct.date
+                                            andActivityType:testForAct.activityType];
+
     double final_y_max = [serieWithExcluded.serieWithUnit dataPointAtIndex:bestIdx].y_data;
+    double final_year_y_max = [serieYearWithExcluded.serieWithUnit dataPointAtIndex:bestIdx].y_data;
     XCTAssertEqualWithAccuracy(final_y_max, excluded_y_max, 1.0e-8);
+    XCTAssertEqualWithAccuracy(final_year_y_max, excluded_y_max, 1.0e-8);
 }
 
 @end

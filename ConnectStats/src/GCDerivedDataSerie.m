@@ -124,6 +124,21 @@ sqlite3_int64 kInvalidSerieId = 0;
     [super dealloc];
 }
 
+-(BOOL)dependsOnSerie:(GCDerivedDataSerie*)other{
+    BOOL typeValid = [self.activityType isEqualToString:other.activityType];
+    if( typeValid && self.fieldFlag == other.fieldFlag){
+        if( self.derivedPeriod == gcDerivedPeriodAll && other.derivedPeriod != gcDerivedPeriodAll){
+            return true;
+        }
+        if( self.derivedPeriod == gcDerivedPeriodYear && other.derivedPeriod == gcDerivedPeriodMonth){
+            if( self.bucketStart && self.bucketEnd){
+                return [self.bucketStart compare:other.bucketStart] != NSOrderedDescending && [self.bucketEnd compare:other.bucketEnd] != NSOrderedAscending;
+            }
+        }
+    }
+    return false;
+}
+
 -(BOOL)containsActivity:(GCActivity*)act{
     BOOL typeValid = [self.activityType isEqualToString:act.activityType];
     BOOL dateValid = self.derivedPeriod == gcDerivedPeriodAll;

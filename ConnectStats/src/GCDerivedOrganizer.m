@@ -121,7 +121,7 @@ static BOOL kDerivedEnabled = true;
 @property (nonatomic,retain) NSMutableDictionary * processedActivities;
 
 // Old style storage by hard coded series
-@property (nonatomic,retain) NSMutableDictionary * derivedSeries;
+@property (nonatomic,retain) NSMutableDictionary<NSString*,GCDerivedDataSerie*> * derivedSeries;
 @property (nonatomic,retain) NSMutableDictionary * modifiedSeries;
 
 // New style storage by time series database
@@ -423,12 +423,64 @@ static BOOL kDerivedEnabled = true;
     }
 }
 
+-(void)rebuildDependentDerivedDataSerie:(gcDerivedType)type
+                   forActivity:(GCActivity*)act{
+    gcDerivedPeriod period = gcDerivedPeriodMonth;
+
+    NSArray<GCDerivedDataSerie*> * series =
+    @[
+        [self derivedDataSerie:type field:gcFieldFlagWeightedMeanSpeed period:period forDate:act.date andActivityType:act.activityType],
+        [self derivedDataSerie:type field:gcFieldFlagPower period:period forDate:act.date andActivityType:act.activityType],
+        [self derivedDataSerie:type field:gcFieldFlagWeightedMeanHeartRate period:period forDate:act.date andActivityType:act.activityType]
+    ];
+
+    // Redo Years with the months
+    NSMutableArray * years = [NSMutableArray array];
+    for (GCDerivedDataSerie * child in series) {
+        for (GCDerivedDataSerie * serie in self.derivedSeries.allValues) {
+            if( serie.derivedPeriod == gcDerivedPeriodYear && [serie dependsOnSerie:child] ){
+                [years addObject:serie];
+            }
+        }
+    }
+    for (GCDerivedDataSerie * serie in years) {
+        gcStatsOperand operand = serie.serieWithUnit.unit.betterIsMin ? gcStatsOperandMin : gcStatsOperandMax;
+        [serie reset];
+        for (GCDerivedDataSerie * one in self.derivedSeries.allValues) {
+            if( one.derivedPeriod == gcDerivedPeriodMonth && [serie dependsOnSerie:one] ){
+                RZLog( RZLogInfo, @"rebuild %@ using(%@) %@", serie.key, operand == gcStatsOperandMin ? @"min" : @"max", one.key);
+                [serie operate:operand with:one.serieWithUnit from:act];
+            }
+        }
+    }
+    // Then Redo All with the years
+    NSMutableArray * all = [NSMutableArray array];
+    for (GCDerivedDataSerie * child in series) {
+        for (GCDerivedDataSerie * serie in self.derivedSeries.allValues) {
+            if( serie.derivedPeriod == gcDerivedPeriodAll && [serie dependsOnSerie:child] ){
+                [all addObject:serie];
+            }
+        }
+    }
+    for (GCDerivedDataSerie * serie in all) {
+        gcStatsOperand operand = serie.serieWithUnit.unit.betterIsMin ? gcStatsOperandMin : gcStatsOperandMax;
+        [serie reset];
+        for (GCDerivedDataSerie * one in self.derivedSeries.allValues) {
+            if( one.derivedPeriod == gcDerivedPeriodYear && [serie dependsOnSerie:one] ){
+                RZLog( RZLogInfo, @"rebuild %@ using(%@) %@", serie.key, operand == gcStatsOperandMin ? @"min" : @"max", one.key);
+                [serie operate:operand with:one.serieWithUnit from:act];
+            }
+        }
+    }
+}
 
 -(void)rebuildDerivedDataSerie:(gcDerivedType)type
-                        period:(gcDerivedPeriod)period
                    forActivity:(GCActivity*)act
                   inActivities:(NSArray<GCActivity*>*)activities{
     
+    // rebuild month, then we'll rebuild the other
+    
+    gcDerivedPeriod period = gcDerivedPeriodMonth;
     NSArray<GCDerivedDataSerie*> * series =
     @[
         [self derivedDataSerie:type field:gcFieldFlagWeightedMeanSpeed period:period forDate:act.date andActivityType:act.activityType],
@@ -445,15 +497,17 @@ static BOOL kDerivedEnabled = true;
             }
         }
     }
-    RZLog(RZLogInfo,@"Rebuilding Derived matching %@ with %@/%@ activities", act, @(toProcess.count), @(activities.count));
     
     for (GCActivity * activity in toProcess) {
         [self forceReprocessActivity:activity.activityId];
     }
     for (GCDerivedDataSerie * serie in series) {
+        RZLog(RZLogInfo,@"rebuild %@ using %@/%@ activities (for %@)", serie.key,  @(toProcess.count), @(activities.count), act);
         [self clearDataForSerie:serie];
     }
     [self processActivities:toProcess];
+    
+    [self rebuildDependentDerivedDataSerie:type forActivity:act];
 }
 
 

@@ -56,7 +56,6 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
 -(void)processSome;
 
 -(void)rebuildDerivedDataSerie:(gcDerivedType)type
-                        period:(gcDerivedPeriod)period
                    forActivity:(GCActivity*)act
                   inActivities:(NSArray<GCActivity*>*)activities;
 

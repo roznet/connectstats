@@ -69,6 +69,7 @@ extern sqlite3_int64 kInvalidSerieId;
 
 -(void)registerFileName:(NSString*)fn;
 
+-(BOOL)dependsOnSerie:(GCDerivedDataSerie*)other;
 -(BOOL)containsActivity:(GCActivity*)act;
 -(NSArray<GCActivity*>*)containedActivitiesIn:(NSArray<GCActivity*>*)activities;
 
