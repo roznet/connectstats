@@ -44,6 +44,7 @@
 +(GCViewGradientColors*)gradientColorsRainbowHighlight16;
 +(GCViewGradientColors*)gradientColors:(NSUInteger)nColors from:(RZColor*)fromC to:(RZColor*)toC;
 +(GCViewGradientColors*)gradientColorsSingle:(RZColor*)color;
++(GCViewGradientColors*)gradientColorsWith:(NSArray<RZColor*>*)colors;
 
 -(CGColorRef)colorsForValue:(CGFloat)aVal CF_RETURNS_NOT_RETAINED;
 

@@ -24,6 +24,7 @@
 //  
 
 #import "GCViewConfig.h"
+#import "GCDerivedDataSerie.h"
 
 @class GCHistoryPerformanceAnalysis;
 @class GCTrackStats;
@@ -40,5 +41,6 @@
 
 +(GCSimpleGraphCachedDataSource*)trackFieldFrom:(GCTrackStats*)trackStats;
 +(GCSimpleGraphCachedDataSource*)derivedHist:(NSString*)activityType field:(GCField*)field series:(GCStatsSerieOfSerieWithUnits*)serieOfSeries width:(CGFloat)width;
++(GCSimpleGraphCachedDataSource*)derivedDataSingleHighlighted:(NSString*)activityType field:(gcFieldFlag)fieldInput period:(gcDerivedPeriod)period on:(NSDate*)date width:(CGFloat)width;
 
 @end

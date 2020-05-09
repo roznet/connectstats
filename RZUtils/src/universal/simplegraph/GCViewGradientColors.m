@@ -42,6 +42,20 @@
     RZSuperDealloc;
 }
 
++(GCViewGradientColors*)gradientColorsWith:(NSArray<RZColor*>*)colors{
+    GCViewGradientColors * rv = RZReturnAutorelease([[GCViewGradientColors alloc] init]);
+    if (rv) {
+        rv.numberOfColors = colors.count;
+
+        rv.colors = malloc(sizeof(CGColorRef) * rv.numberOfColors);
+        for( size_t i = 0;i<rv.numberOfColors;i++){
+            rv.colors[i] = CGColorCreateCopy(colors[i].CGColor);
+        }
+    }
+    return rv;
+
+}
+
 +(GCViewGradientColors*)gradientColors:(NSUInteger)nColors from:(RZColor*)fromC to:(RZColor*)toC{
     GCViewGradientColors * rv = RZReturnAutorelease([[GCViewGradientColors alloc] init]);
     if (rv) {

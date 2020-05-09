@@ -624,9 +624,7 @@
     
     [self presentViewController:self.configViewController animated:YES completion:nil];
 }
--(void)configViewController:(GCStatsMultiFieldConfigViewController*)vc didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    RZLog(RZLogInfo,@"Long press completed");
-    
+-(void)configViewController:(GCStatsMultiFieldConfigViewController*)vc didSelectRowAtIndexPath:(NSIndexPath *)indexPath{    
     if( indexPath.row == 0 && indexPath.section == 0){
         NSArray<GCActivity*>*activities = [[GCAppGlobal organizer] activities];
         GCActivity * current = [[GCAppGlobal organizer] currentActivity];

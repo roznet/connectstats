@@ -216,7 +216,7 @@
         GCActivity * act = [organizer activityForId:activityId];
         act.settings.worker = nil;
         XCTAssertNotNil(act);
-        NSString * fp_fit = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"track_cs_%@.fit", serviceId]];
+        NSString * fp_fit = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"track_cs_%@.fit", serviceId] forClass:[self class]];
         GCActivity * fit = [GCConnectStatsRequestFitFile testForActivity:act withFilesIn:fp_fit];
         fit.settings.worker = nil;
         XCTAssertNotNil(fit);
@@ -321,6 +321,18 @@
     double final_year_y_max = [serieYearWithExcluded.serieWithUnit dataPointAtIndex:bestIdx].y_data;
     XCTAssertEqualWithAccuracy(final_y_max, excluded_y_max, 1.0e-8);
     XCTAssertEqualWithAccuracy(final_year_y_max, excluded_y_max, 1.0e-8);
+    
+    GCDerivedDataSerie * serieAll = [derived derivedDataSerie:gcDerivedTypeBestRolling
+                                                     field:testFlag
+                                                    period:gcDerivedPeriodAll
+                                                   forDate:testForAct.date
+                                            andActivityType:testForAct.activityType];
+    NSArray<GCDerivedDataSerie*>*bestSeries = [derived bestMatchinSerieIn:serieAll maxCount:serieAll.serieWithUnit.count];
+    double allFromSeries_y_max = [bestSeries[bestIdx].serieWithUnit dataPointAtIndex:bestIdx].y_data;
+    // we recover the best when we do best by serie, because setup such that month of focus is best one
+    XCTAssertEqualWithAccuracy(allFromSeries_y_max, excluded_y_max, 1.0e-8);
+    XCTAssertEqual(bestSeries.count, serieAll.serieWithUnit.count);
+    
 }
 
 @end

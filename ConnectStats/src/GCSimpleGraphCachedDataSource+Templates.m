@@ -571,6 +571,104 @@
     return rv;
 }
 
++(GCSimpleGraphCachedDataSource*)derivedDataSingleHighlighted:(NSString*)activityType
+                                                        field:(gcFieldFlag)fieldInput
+                                                       period:(gcDerivedPeriod)period
+                                                           on:(NSDate*)date
+                                                        width:(CGFloat)width{
+    gcFieldFlag fieldflag = fieldInput;
+    GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+
+    GCDerivedDataSerie * serie = [[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
+                                                                   field:fieldflag
+                                                                  period:period
+                                                                 forDate:date
+                                                         andActivityType:activityType];
+    
+    NSMutableArray<NSString*>*labels = [NSMutableArray array];
+    
+    NSMutableDictionary<NSString*,NSNumber*>*labelsIndexes = [NSMutableDictionary dictionary];
+    
+    NSUInteger labelIndex = 0;
+    
+    
+    if( period == gcDerivedPeriodMonth ){
+        NSArray<GCActivity*>*bestActivities = [serie bestMatchingSerieIn:[serie containedActivitiesIn:[[GCAppGlobal organizer] activities]] maxCount:serie.serieWithUnit.count];
+        for (GCActivity * act in bestActivities) {
+            NSString * label = [act.date dateShortFormat];
+            [labels addObject:label];
+            if( labelsIndexes[label] == nil){
+                labelsIndexes[label] = @(labelIndex);
+                labelIndex++;
+            }
+        }
+    }else{
+        NSArray<GCDerivedDataSerie*>*bestSeries = [[GCAppGlobal derived] bestMatchinSerieIn:serie maxCount:serie.serieWithUnit.count];
+        for (GCDerivedDataSerie * one in bestSeries) {
+            NSString * label = [one.bucketStart calendarUnitFormat:NSCalendarUnitMonth];
+            [labels addObject:label];
+            if( labelsIndexes[label] == nil){
+                labelsIndexes[label] = @(labelIndex);
+                labelIndex++;
+            }
+        }
+    }
+
+    GCField * field = [GCField fieldForFlag:fieldflag andActivityType:activityType];
+
+    GCUnit * xUnit = serie.serieWithUnit.xUnit;
+    if (xUnit == nil) {
+        if (fieldflag == gcFieldFlagWeightedMeanSpeed) {
+            xUnit = [[GCUnit unitForKey:@"kilometer"] unitForGlobalSystem];
+        }else{
+            xUnit = [GCUnit unitForKey:@"second"];
+        }
+    }
+
+    GCUnitLogScale * logScale = nil;
+    if( fieldflag == gcFieldFlagPower && [GCAppGlobal configGetBool:CONFIG_POWER_CURVE_LOG_SCALE defaultValue:true]){
+        logScale = [GCUnitLogScale logScaleUnitFor:xUnit base:10. scaling:0.1 shift:1.];
+        xUnit = logScale;
+    }
+
+    GCStatsDataSerie * graphSerie = serie.serieWithUnit.serie;
+    GCStatsDataSerie * gradientSerie = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
+    
+    GCViewGradientColors * colors = [GCViewGradientColors gradientColorsWith:[GCViewConfig arrayOfColorsForMultiplots]];
+    
+    for (NSUInteger idx = 0; idx < MIN(labels.count,serie.serieWithUnit.count); idx++) {
+        NSString * label = labels[idx];
+        NSUInteger labelIndex = labelsIndexes[label].integerValue;
+        GCStatsDataPoint * point = [graphSerie dataPointAtIndex:idx];
+        if( labelIndex < colors.numberOfColors){
+            [gradientSerie addDataPointWithX:point.x_data andY:labelIndex];
+        }else{
+            // Last color for all the other ones
+            [gradientSerie addDataPointWithX:point.x_data andY:colors.numberOfColors-1];
+        }
+    }
+
+    
+    UIColor * defaultColor = [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText];
+
+    GCSimpleGraphDataHolder * holder = [GCSimpleGraphDataHolder dataHolder:graphSerie
+                                                                      type:gcGraphLine
+                                                                     color:defaultColor
+                                                                   andUnit:serie.serieWithUnit.unit];
+    
+    holder.gradientColors = colors;
+    holder.gradientDataSerie = gradientSerie;
+
+    holder.lineWidth = 1.;
+    [rv addDataHolder:holder];
+    
+    rv.title =[NSString stringWithFormat:NSLocalizedString(@"Best %@", @"Best Rolling Curve"),[field displayName]];
+    rv.xUnit = xUnit;
+    
+    return rv;
+
+}
+
 +(GCSimpleGraphCachedDataSource*)derivedData:(NSString*)activityType
                                        field:(gcFieldFlag)fieldInput
                                          for:(NSDate*)date

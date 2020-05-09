@@ -52,6 +52,8 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
                                forDate:(NSDate*)date
                        andActivityType:(NSString*)aType;
 
+-(NSArray<GCDerivedDataSerie*>*)bestMatchinSerieIn:(GCDerivedDataSerie*)serie maxCount:(NSUInteger)maxcount;
+
 -(void)processActivities:(NSArray<GCActivity*>*)activities;
 -(void)processSome;
 

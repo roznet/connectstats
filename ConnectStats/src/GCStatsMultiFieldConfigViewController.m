@@ -27,6 +27,9 @@
 
 #import "GCStatsMultiFieldConfigViewController.h"
 #import "GCStatsMultiFieldConfig.h"
+#import "GCDerivedGroupedSeries.h"
+#import "GCDerivedOrganizer.h"
+#import "GCSimpleGraphCachedDataSource+Templates.h"
 
 @interface GCStatsMultiFieldConfigViewController ()
 @property (nonatomic,retain) NSObject<GCStatsMultiFieldConfigViewDelegate> * delegate;
@@ -47,17 +50,65 @@
     return rv;
 }
 
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 2;
+}
+
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    if( section == 0){
+        return 2;
+    }else{
+        return 2;
+    }
+}
+
+-(GCDerivedDataSerie*)currentDerivedDataSerie{
+    return [self.config currentDerivedDataSerie];
+}
+-(GCStatsMultiFieldConfig*)config{
+    return self.delegate.config;
+}
+
+-(nonnull UITableViewCell *)tableView:(UITableView *)tableView derivedCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
+    GCDerivedDataSerie * current = [self currentDerivedDataSerie];
+
+    GCSimpleGraphCachedDataSource * cache = nil;
+    if (current) {
+        gcDerivedPeriod period = indexPath.row == 0 ? gcDerivedPeriodYear : gcDerivedPeriodMonth;
+        
+        cache = [GCSimpleGraphCachedDataSource derivedDataSingleHighlighted:self.config.activityType field:current.fieldFlag period:period on:current.bucketStart width:tableView.frame.size.width];
+        cache.emptyGraphLabel = @"";
+        graphCell.legend = true;
+        [graphCell setDataSource:cache andConfig:cache];
+    }else{
+        cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+        cache.emptyGraphLabel = @"";
+        [graphCell setDataSource:cache andConfig:cache];
+    }
+
+    return graphCell;
+
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
-    [cell setupForRows:1 andCols:1];
+    UITableViewCell * cell = nil;
     
-    
-    [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Rebuild Derived", "Dummy");
-    
+    if( indexPath.section == 0){
+        GCCellGrid * grcell = [GCCellGrid gridCell:tableView];
+        [grcell setupForRows:1 andCols:1];
+        
+        if( indexPath.row == 0){
+            [grcell labelForRow:0 andCol:0].text = NSLocalizedString(@"Rebuild Derived", "Dummy");
+        }else{
+            [grcell labelForRow:0 andCol:0].text = NSLocalizedString(@"Done", "Dummy");
+        }
+        cell = grcell;
+    }else if( indexPath.section == 1){
+        if( indexPath.row == 0 || indexPath.row == 1){
+            cell = [self tableView:tableView derivedCellForRowAtIndexPath:indexPath];
+        }
+    }
     
     return cell;
 }
@@ -67,4 +118,11 @@
     [self dismissViewControllerAnimated:true completion:nil];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if( indexPath.section == 0){
+        return 58.;
+    }else{
+        return 200.;
+    }
+}
 @end
