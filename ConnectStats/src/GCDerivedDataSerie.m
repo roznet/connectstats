@@ -172,29 +172,34 @@ sqlite3_int64 kInvalidSerieId = 0;
             if( rv.count == 0){
                 // first round, just put activity everywhere
                 for( NSUInteger idx = 0; idx < count; idx++){
+                    // We may add act beyond the size of that act's best serie.
                     [rv addObject:act];
                 }
             }else{
-                GCStatsDataSerieWithUnit * oneBest = [act calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
+                GCStatsDataSerieWithUnit * actBest = [act calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
                                                                         forField:self.field
                                                                           thread:nil];
 
-                for (NSUInteger idx = 0; idx < MIN(count,oneBest.count); idx ++ ) {
+                for (NSUInteger idx = 0; idx < MIN(count,actBest.count); idx ++ ) {
                     GCActivity * currrentBestActivity = rv[idx];
                     GCStatsDataSerieWithUnit * currentBest = [currrentBestActivity calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
                                                                                                  forField:self.field
                                                                                                    thread:nil];
-                    
-                    double y_best = [currentBest dataPointAtIndex:idx].y_data;
-                    double check_y_best = [oneBest dataPointAtIndex:idx].y_data;
-                    if( betterIsMin ){
-                        if( check_y_best < y_best ){
-                            rv[idx] = act;
+                    if( idx < currentBest.count){
+                        double y_best = [currentBest dataPointAtIndex:idx].y_data;
+                        double check_y_best = [actBest dataPointAtIndex:idx].y_data;
+                        if( betterIsMin ){
+                            if( check_y_best < y_best ){
+                                rv[idx] = act;
+                            }
+                        }else{
+                            if( check_y_best > y_best ){
+                                rv[idx] = act;
+                            }
                         }
                     }else{
-                        if( check_y_best > y_best ){
-                            rv[idx] = act;
-                        }
+                        // If idx is beyond the size of current best, fill with current act, which is going further
+                        rv[idx] = act;
                     }
                 }
             }

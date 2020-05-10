@@ -76,11 +76,21 @@
     GCSimpleGraphCachedDataSource * cache = nil;
     if (current) {
         gcDerivedPeriod period = indexPath.row == 0 ? gcDerivedPeriodYear : gcDerivedPeriodMonth;
-        
-        cache = [GCSimpleGraphCachedDataSource derivedDataSingleHighlighted:self.config.activityType field:current.fieldFlag period:period on:current.bucketStart width:tableView.frame.size.width];
+        NSMutableArray<GCSimpleGraphLegendInfo*>*legends = [NSMutableArray array];
+        cache = [GCSimpleGraphCachedDataSource derivedDataSingleHighlighted:self.config.activityType
+                                                                      field:current.fieldFlag
+                                                                     period:period
+                                                                         on:current.bucketStart
+                                                                addLegendTo:legends
+                                                                      width:tableView.frame.size.width];
         cache.emptyGraphLabel = @"";
-        graphCell.legend = true;
         [graphCell setDataSource:cache andConfig:cache];
+        // Setup legengview AFter otherwise setDataSource override the legend data source
+        GCSimpleGraphLegendView * legendView = [[GCSimpleGraphLegendView alloc] initWithFrame:CGRectZero];
+        [legendView setupWithLegends:legends];
+        legendView.displayConfig = cache;
+        graphCell.legendView = legendView;
+        RZRelease( legendView );
     }else{
         cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
         cache.emptyGraphLabel = @"";

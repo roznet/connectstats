@@ -560,6 +560,7 @@ static BOOL kDerivedEnabled = true;
             if( rv.count == 0){
                 // first round, just put activity everywhere
                 for( NSUInteger idx = 0; idx < count; idx++){
+                    // fill all with first, even is size of one is too small, we'll be careful later
                     [rv addObject:one];
                 }
             }else{
@@ -569,16 +570,21 @@ static BOOL kDerivedEnabled = true;
                     GCDerivedDataSerie * currentBestSerie = rv[idx];
                     GCStatsDataSerieWithUnit * currentBest = currentBestSerie.serieWithUnit;
                     
-                    double y_best = [currentBest dataPointAtIndex:idx].y_data;
-                    double check_y_best = [oneBest dataPointAtIndex:idx].y_data;
-                    if( betterIsMin ){
-                        if( check_y_best < y_best ){
-                            rv[idx] = one;
+                    if( idx < currentBest.count ){
+                        double y_best = [currentBest dataPointAtIndex:idx].y_data;
+                        double check_y_best = [oneBest dataPointAtIndex:idx].y_data;
+                        if( betterIsMin ){
+                            if( check_y_best < y_best ){
+                                rv[idx] = one;
+                            }
+                        }else{
+                            if( check_y_best > y_best ){
+                                rv[idx] = one;
+                            }
                         }
                     }else{
-                        if( check_y_best > y_best ){
-                            rv[idx] = one;
-                        }
+                        // current is going further that last best ,fill with this one.
+                        rv[idx] = one;
                     }
                 }
             }

@@ -575,6 +575,7 @@
                                                         field:(gcFieldFlag)fieldInput
                                                        period:(gcDerivedPeriod)period
                                                            on:(NSDate*)date
+                                                  addLegendTo:(NSMutableArray<GCSimpleGraphLegendInfo*>*)legends
                                                         width:(CGFloat)width{
     gcFieldFlag fieldflag = fieldInput;
     GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
@@ -591,14 +592,25 @@
     
     NSUInteger labelIndex = 0;
     
-    
+    NSArray<UIColor*>*colors = [GCViewConfig arrayOfColorsForMultiplots];
+    GCViewGradientColors * gradientColors = [GCViewGradientColors gradientColorsWith:colors];
+
     if( period == gcDerivedPeriodMonth ){
         NSArray<GCActivity*>*bestActivities = [serie bestMatchingSerieIn:[serie containedActivitiesIn:[[GCAppGlobal organizer] activities]] maxCount:serie.serieWithUnit.count];
         for (GCActivity * act in bestActivities) {
-            NSString * label = [act.date dateShortFormat];
+            NSString * label = [act.date calendarUnitFormat:NSCalendarUnitDay];
             [labels addObject:label];
             if( labelsIndexes[label] == nil){
                 labelsIndexes[label] = @(labelIndex);
+                
+                if( labelIndex < colors.count){
+                    GCSimpleGraphLegendInfo * info = [[GCSimpleGraphLegendInfo alloc] init];
+                    info.text = label;
+                    info.color = colors[labelIndex];
+                    info.lineWidth = 1;
+                    [legends addObject:info];
+                    RZRelease(info);
+                }
                 labelIndex++;
             }
         }
@@ -609,6 +621,14 @@
             [labels addObject:label];
             if( labelsIndexes[label] == nil){
                 labelsIndexes[label] = @(labelIndex);
+                if( labelIndex < colors.count){
+                    GCSimpleGraphLegendInfo * info = [[GCSimpleGraphLegendInfo alloc] init];
+                    info.text = label;
+                    info.color = colors[labelIndex];
+                    info.lineWidth = 1;
+                    [legends addObject:info];
+                    RZRelease(info);
+                }
                 labelIndex++;
             }
         }
@@ -634,17 +654,16 @@
     GCStatsDataSerie * graphSerie = serie.serieWithUnit.serie;
     GCStatsDataSerie * gradientSerie = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     
-    GCViewGradientColors * colors = [GCViewGradientColors gradientColorsWith:[GCViewConfig arrayOfColorsForMultiplots]];
     
     for (NSUInteger idx = 0; idx < MIN(labels.count,serie.serieWithUnit.count); idx++) {
         NSString * label = labels[idx];
         NSUInteger labelIndex = labelsIndexes[label].integerValue;
         GCStatsDataPoint * point = [graphSerie dataPointAtIndex:idx];
-        if( labelIndex < colors.numberOfColors){
+        if( labelIndex < colors.count){
             [gradientSerie addDataPointWithX:point.x_data andY:labelIndex];
         }else{
             // Last color for all the other ones
-            [gradientSerie addDataPointWithX:point.x_data andY:colors.numberOfColors-1];
+            [gradientSerie addDataPointWithX:point.x_data andY:colors.count-1];
         }
     }
 
@@ -656,13 +675,13 @@
                                                                      color:defaultColor
                                                                    andUnit:serie.serieWithUnit.unit];
     
-    holder.gradientColors = colors;
+    holder.gradientColors = gradientColors;
     holder.gradientDataSerie = gradientSerie;
 
     holder.lineWidth = 1.;
     [rv addDataHolder:holder];
     
-    rv.title =[NSString stringWithFormat:NSLocalizedString(@"Best %@", @"Best Rolling Curve"),[field displayName]];
+    rv.title =[NSString stringWithFormat:NSLocalizedString(@"Best %@ for %@", @"Best Rolling Curve"),[field displayName],period == gcDerivedPeriodMonth ? [date calendarUnitFormat:NSCalendarUnitMonth] : [date calendarUnitFormat:NSCalendarUnitYear]];
     rv.xUnit = xUnit;
     
     return rv;
