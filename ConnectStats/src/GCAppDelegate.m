@@ -682,6 +682,7 @@ void checkVersion(){
         [self setupFieldCache];
         [_organizer updateForNewProfile];
         [_health updateForNewProfile];
+        [_derived updateForNewProfile];
         [self saveSettings];
         [[NSNotificationCenter defaultCenter] postNotificationName:KalDataSourceChangedNotification object:self];
         [_web servicesResetLogin];

@@ -30,7 +30,7 @@
 #import "GCHistoryFieldDataSerie.h"
 #import "GCViewActivityTypeButton.h"
 #import "GCStatsMultiFieldConfig.h"
-#import "GCStatsMultiFieldConfigViewController.h"
+#import "GCStatsDerivedAnalysisViewController.h"
 
 @class  GCFieldsForCategory;
 

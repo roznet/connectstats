@@ -585,7 +585,13 @@
                                                                   period:period
                                                                  forDate:date
                                                          andActivityType:activityType];
-    
+
+    GCDerivedDataSerie * serieCompare = [[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
+                                                                   field:fieldflag
+                                                                         period:period == gcDerivedPeriodMonth ? gcDerivedPeriodYear : gcDerivedPeriodMonth
+                                                                 forDate:date
+                                                         andActivityType:activityType];
+
     NSMutableArray<NSString*>*labels = [NSMutableArray array];
     
     NSMutableDictionary<NSString*,NSNumber*>*labelsIndexes = [NSMutableDictionary dictionary];
@@ -674,12 +680,18 @@
                                                                       type:gcGraphLine
                                                                      color:defaultColor
                                                                    andUnit:serie.serieWithUnit.unit];
-    
+
+    GCSimpleGraphDataHolder * holderCompare = [GCSimpleGraphDataHolder dataHolder:serieCompare.serieWithUnit.serie
+                                                                      type:gcGraphLine
+                                                                            color:[GCViewConfig colorForGraphElement:gcSkinGraphColorLapOverlay]
+                                                                   andUnit:serie.serieWithUnit.unit];
+
     holder.gradientColors = gradientColors;
     holder.gradientDataSerie = gradientSerie;
 
     holder.lineWidth = 1.;
     [rv addDataHolder:holder];
+    [rv addDataHolder:holderCompare];
     
     rv.title =[NSString stringWithFormat:NSLocalizedString(@"Best %@ for %@", @"Best Rolling Curve"),[field displayName],period == gcDerivedPeriodMonth ? [date calendarUnitFormat:NSCalendarUnitMonth] : [date calendarUnitFormat:NSCalendarUnitYear]];
     rv.xUnit = xUnit;

@@ -65,6 +65,7 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
 -(NSArray<GCDerivedGroupedSeries*>*)groupedSeriesMatching:(GCDerivedDataSerieMatchBlock)match;
 
 +(void)ensureDbStructure:(FMDatabase*)db;
+-(void)updateForNewProfile;
 
 // Debug utils
 -(void)forceReprocessActivity:(NSString*)aId;

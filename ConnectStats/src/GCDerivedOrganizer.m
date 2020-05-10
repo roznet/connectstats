@@ -330,10 +330,17 @@ static BOOL kDerivedEnabled = true;
 
 #pragma mark - access Aggregated Series
 
--(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type field:(gcFieldFlag)field period:(gcDerivedPeriod)period
-                               forDate:(NSDate*)date andActivityType:(NSString*)activityType{
+-(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type
+                                 field:(gcFieldFlag)field
+                                period:(gcDerivedPeriod)period
+                               forDate:(NSDate*)date
+                       andActivityType:(NSString*)activityType{
 
-    GCDerivedDataSerie * serie = [GCDerivedDataSerie derivedDataSerie:type field:field period:period forDate:date andActivityType:activityType];
+    GCDerivedDataSerie * serie = [GCDerivedDataSerie derivedDataSerie:type
+                                                                field:field
+                                                               period:period
+                                                              forDate:date
+                                                      andActivityType:activityType];
     NSString * key = serie.key;
 
     GCDerivedDataSerie * existing = (self.derivedSeries)[key];
@@ -348,8 +355,6 @@ static BOOL kDerivedEnabled = true;
     }
     return existing;
 }
-
-
 
 -(GCDerivedDataSerie*)derivedDataSerieForKey:(NSString*)key{
     return (self.derivedSeries)[key];
@@ -402,6 +407,7 @@ static BOOL kDerivedEnabled = true;
             RZLog(RZLogError, @"bad serie load");
         }
     }
+    RZLog(RZLogInfo, @"Loaded %@", serie);
 }
 
 -(void)recordModifiedSerie:(GCDerivedDataSerie*)serie withActivity:(GCActivity*)activity intoFile:(NSString*)fn{
@@ -429,9 +435,6 @@ static BOOL kDerivedEnabled = true;
     }
     for (NSString * filename in fileToDelete) {
         [RZFileOrganizer removeEditableFile:filename];
-    }
-    if(![self.deriveddb executeUpdate:@"DELETE FROM gc_derived_series WHERE serieId = ?", @(serie.serieId)]){
-        RZLog(RZLogError, @"Failed to update %@", self.deriveddb.lastErrorMessage);
     }
     if(![self.deriveddb executeUpdate:@"DELETE FROM gc_derived_series_files WHERE serieId = ?", @(serie.serieId)]){
         RZLog(RZLogError, @"Failed to update %@", self.deriveddb.lastErrorMessage);
@@ -548,6 +551,7 @@ static BOOL kDerivedEnabled = true;
     };
     return rv;
 }
+
 -(NSArray<GCDerivedDataSerie*>*)bestMatchinSerieIn:(GCDerivedDataSerie*)serie maxCount:(NSUInteger)maxcount{
     // don't go further that current serie
     NSUInteger count = MIN(maxcount, serie.serieWithUnit.count);
@@ -955,6 +959,9 @@ static BOOL kDerivedEnabled = true;
     }
     
 }
-
+//
+-(void)updateForNewProfile{
+    
+}
 
 @end

@@ -179,7 +179,9 @@ sqlite3_int64 kInvalidSerieId = 0;
                 GCStatsDataSerieWithUnit * actBest = [act calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
                                                                         forField:self.field
                                                                           thread:nil];
-
+                if( actBest.count == 0){
+                    RZLog(RZLogInfo, @"got no points %@", act);
+                }
                 for (NSUInteger idx = 0; idx < MIN(count,actBest.count); idx ++ ) {
                     GCActivity * currrentBestActivity = rv[idx];
                     GCStatsDataSerieWithUnit * currentBest = [currrentBestActivity calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
