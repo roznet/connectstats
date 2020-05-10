@@ -46,7 +46,7 @@
     GCViewGradientColors * rv = RZReturnAutorelease([[GCViewGradientColors alloc] init]);
     if (rv) {
         rv.numberOfColors = colors.count;
-
+        rv.valueIsIndex = true;
         rv.colors = malloc(sizeof(CGColorRef) * rv.numberOfColors);
         for( size_t i = 0;i<rv.numberOfColors;i++){
             rv.colors[i] = CGColorCreateCopy(colors[i].CGColor);
@@ -217,7 +217,7 @@
 
 
 -(CGColorRef)colorsForValue:(CGFloat)aVal{
-    NSUInteger idx = MAX(MIN(self.numberOfColors-1, aVal*self.numberOfColors),0);
+    NSUInteger idx = self.valueIsIndex ? aVal : MAX(MIN(self.numberOfColors-1, aVal*self.numberOfColors),0);
     return self.colors[idx];
 }
 

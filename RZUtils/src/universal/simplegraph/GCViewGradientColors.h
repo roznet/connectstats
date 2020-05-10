@@ -38,6 +38,7 @@
 
 @property (nonatomic,assign) CGColorRef * colors;
 @property (nonatomic,assign) NSUInteger numberOfColors;
+@property (nonatomic,assign) BOOL valueIsIndex;
 
 +(GCViewGradientColors*)gradientColorsRainbow16;
 +(GCViewGradientColors*)gradientColorsTrackHighlight16;

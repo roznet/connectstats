@@ -213,6 +213,8 @@
 		426ABCFE1F9D221B003A512A /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 426ABCF81F9D221B003A512A /* UIImage+RoundedCorner.m */; };
 		426ABCFF1F9D221B003A512A /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 426ABCF91F9D221B003A512A /* UIImage+Alpha.m */; };
 		426ABD001F9D221B003A512A /* UIImage+RoundedCorner.h in Headers */ = {isa = PBXBuildFile; fileRef = 426ABCFA1F9D221B003A512A /* UIImage+RoundedCorner.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		426EC7652467FF9400666068 /* GCSimpleGraphLegendInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 426EC7632467FF9400666068 /* GCSimpleGraphLegendInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		426EC7662467FF9400666068 /* GCSimpleGraphLegendInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 426EC7642467FF9400666068 /* GCSimpleGraphLegendInfo.m */; };
 		42793B141F3F5007005FAF02 /* RZSAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42793B131F3F5007005FAF02 /* RZSAttributedString.swift */; };
 		42793B2A1F40559E005FAF02 /* RZSRemoteURLFindValid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42793B291F40559E005FAF02 /* RZSRemoteURLFindValid.swift */; };
 		4284A89F1EBF6184003B44C1 /* RZUtilsTestsDataPivot.m in Sources */ = {isa = PBXBuildFile; fileRef = 4284A89E1EBF6184003B44C1 /* RZUtilsTestsDataPivot.m */; };
@@ -515,6 +517,8 @@
 		426ABCF81F9D221B003A512A /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
 		426ABCF91F9D221B003A512A /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		426ABCFA1F9D221B003A512A /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
+		426EC7632467FF9400666068 /* GCSimpleGraphLegendInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCSimpleGraphLegendInfo.h; sourceTree = "<group>"; };
+		426EC7642467FF9400666068 /* GCSimpleGraphLegendInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCSimpleGraphLegendInfo.m; sourceTree = "<group>"; };
 		42793B131F3F5007005FAF02 /* RZSAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZSAttributedString.swift; sourceTree = "<group>"; };
 		42793B291F40559E005FAF02 /* RZSRemoteURLFindValid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZSRemoteURLFindValid.swift; sourceTree = "<group>"; };
 		4284A89E1EBF6184003B44C1 /* RZUtilsTestsDataPivot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RZUtilsTestsDataPivot.m; sourceTree = "<group>"; };
@@ -1053,12 +1057,14 @@
 				42382B111EAC9C2E00252217 /* GCSimpleGraphGradientLegendView.m */,
 				42382B121EAC9C2E00252217 /* GCSimpleGraphLapInfo.h */,
 				42382B131EAC9C2E00252217 /* GCSimpleGraphLapInfo.m */,
-				42382B141EAC9C2E00252217 /* GCSimpleGraphLegendView.h */,
-				42382B151EAC9C2E00252217 /* GCSimpleGraphLegendView.m */,
 				42382B161EAC9C2E00252217 /* GCSimpleGraphRulerView.h */,
 				42382B171EAC9C2E00252217 /* GCSimpleGraphRulerView.m */,
 				42382B181EAC9C2E00252217 /* GCSimpleGraphViewController.h */,
 				42382B191EAC9C2E00252217 /* GCSimpleGraphViewController.m */,
+				42382B141EAC9C2E00252217 /* GCSimpleGraphLegendView.h */,
+				42382B151EAC9C2E00252217 /* GCSimpleGraphLegendView.m */,
+				426EC7632467FF9400666068 /* GCSimpleGraphLegendInfo.h */,
+				426EC7642467FF9400666068 /* GCSimpleGraphLegendInfo.m */,
 			);
 			name = simplegraph;
 			path = src/ios/simplegraph;
@@ -1370,6 +1376,7 @@
 				42382B431EAC9C2E00252217 /* UIImage+ImageWithUIView.h in Headers */,
 				42382B5B1EAC9C2E00252217 /* RZMultiSliderControl.h in Headers */,
 				42382B531EAC9C2E00252217 /* GCSimpleGraphRulerView.h in Headers */,
+				426EC7652467FF9400666068 /* GCSimpleGraphLegendInfo.h in Headers */,
 				42382B2B1EAC9C2E00252217 /* GCCellEntryListViewController.h in Headers */,
 				42382B391EAC9C2E00252217 /* GCViewsGrid.h in Headers */,
 				42382B571EAC9C2E00252217 /* RZIconPanelItem.h in Headers */,
@@ -2010,6 +2017,7 @@
 				42382B5E1EAC9C2E00252217 /* RZMultiSliderKnob.m in Sources */,
 				42382B481EAC9C2E00252217 /* UISearchBar+RZHelper.m in Sources */,
 				42382B321EAC9C2E00252217 /* GCCellGrid.m in Sources */,
+				426EC7662467FF9400666068 /* GCSimpleGraphLegendInfo.m in Sources */,
 				42382B461EAC9C2E00252217 /* UIImage+Sheet.m in Sources */,
 				42382B581EAC9C2E00252217 /* RZIconPanelItem.m in Sources */,
 			);
