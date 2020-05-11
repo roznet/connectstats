@@ -71,9 +71,6 @@
 NSString * kNOTIFY_DERIVED_END = @"derived_end";
 NSString * kNOTIFY_DERIVED_NEXT = @"derived_next";
 
-
-#define DBCHECK(x) if(!x){ RZLog( RZLogError, @"Error %@", [db lastErrorMessage]); };
-
 static NSInteger kDerivedCurrentVersion = 3;
 static BOOL kDerivedEnabled = true;
 
@@ -86,7 +83,6 @@ static BOOL kDerivedEnabled = true;
 
 +(GCDerivedQueueElement*)element:(GCActivity*)act field:(gcFieldFlag)field andType:(gcDerivedType)type activityLast:(BOOL)al;
 +(GCDerivedQueueElement*)rebuildElement:(GCActivity*)act type:(gcDerivedType)type;
-
 
 @end
 
@@ -165,7 +161,7 @@ static BOOL kDerivedEnabled = true;
         self.web = [GCAppGlobal web];
         [self.web attach:self];
         if (thread==nil) {
-            self.derivedSeries= [NSMutableDictionary dictionaryWithCapacity:10];
+            self.derivedSeries= [NSMutableDictionary dictionary];
         }else{
             dispatch_async(self.worker,^(){
                 [self loadFromDb];
@@ -200,26 +196,20 @@ static BOOL kDerivedEnabled = true;
 
 #pragma mark - Load Derived Series
 
+-(NSString*)derivedFilePrefix{
+    return self.useDerivedFilePrefix ? self.useDerivedFilePrefix : [[GCAppGlobal profile] currentDerivedFilePrefix];
+}
+
 -(void)loadFromDb{
-    self.derivedSeries= [NSMutableDictionary dictionaryWithCapacity:10];
+    self.derivedSeries = [NSMutableDictionary dictionaryWithCapacity:10];
 
     if ( kDerivedEnabled) {
         FMDatabase * db = [self deriveddb];
-        NSMutableDictionary * filenameMap = [NSMutableDictionary dictionary];
 
-        FMResultSet * res = [self.deriveddb executeQuery:@"SELECT * FROM gc_derived_series_files"];
-        while ([res next]) {
-            NSInteger serieId = [res intForColumn:@"serieId"];
-            NSString * fn = [res stringForColumn:@"filename"];
-            filenameMap[ @(serieId)] = fn;
-        }
-
-        res= [db executeQuery:@"SELECT * FROM gc_derived_series"];
+        FMResultSet * res= [db executeQuery:@"SELECT * FROM gc_derived_series"];
         while ([res next]) {
             GCDerivedDataSerie * serie = [GCDerivedDataSerie derivedDataSerieFromResultSet:res];
-            if (filenameMap[@(serie.serieId)]) {
-                [serie registerFileName:filenameMap[@(serie.serieId)]];
-            }
+            serie.fileNamePrefix = self.derivedFilePrefix;
             self.derivedSeries[serie.key] = serie;
         }
         [self loadProcesseActivities];
@@ -258,7 +248,6 @@ static BOOL kDerivedEnabled = true;
         for (NSString * key in self.derivedSeries) {
             GCDerivedDataSerie * serie = self.derivedSeries[key];
             if( serie.derivedPeriod == gcDerivedPeriodMonth){
-                [serie loadFromFile:serie.filePath];
                 GCStatsDataSerieWithUnit * base = serie.serieWithUnit;
                 if( [base.xUnit canConvertTo:[GCUnit second]] ){
                     GCStatsDataSerieWithUnit * standardSerie = [GCActivity standardSerieSampleForXUnit:base.xUnit];
@@ -280,8 +269,6 @@ static BOOL kDerivedEnabled = true;
     self.historicalSeriesByKeys = [NSMutableDictionary dictionaryWithDictionary:[statsDb loadByKeys]];
     RZLog(RZLogInfo, @"Loaded all db in %@", perf);
 }
-
-
 
 -(BOOL)debugCheckSerie:(GCStatsDataSerie*)serie{
     for( NSUInteger i=0;i<MIN(serie.count,10);i++){
@@ -343,21 +330,17 @@ static BOOL kDerivedEnabled = true;
                                                       andActivityType:activityType];
     NSString * key = serie.key;
 
-    GCDerivedDataSerie * existing = (self.derivedSeries)[key];
-    if (existing) {
-        if (existing.serieWithUnit == nil) {
-            [self loadSerieFromFile:existing];
-        }
-    }else{
-        (self.derivedSeries)[key] = serie;
+    GCDerivedDataSerie * existing = self.derivedSeries[key];
+    if (!existing) {
+        self.derivedSeries[key] = serie;
         existing = serie;
-        [self loadSerieFromFile:serie];
     }
     return existing;
 }
 
 -(GCDerivedDataSerie*)derivedDataSerieForKey:(NSString*)key{
-    return (self.derivedSeries)[key];
+    GCDerivedDataSerie * rv = self.derivedSeries[key];
+    return rv;
 }
 
 -(NSArray<GCDerivedGroupedSeries*>*)groupedSeriesMatching:(GCDerivedDataSerieMatchBlock)match{
@@ -398,47 +381,52 @@ static BOOL kDerivedEnabled = true;
     return all.allKeys;
 }
 
--(void)loadSerieFromFile:(GCDerivedDataSerie*)serie{
-    FMResultSet * res = [self.deriveddb executeQuery:@"SELECT filename FROM gc_derived_series_files WHERE serieId = ?", @([self serieId:serie])];
-    if ([res next]) {
-        NSString * fn = [res stringForColumn:@"filename"];
-        [serie loadFromFile:[RZFileOrganizer writeableFilePath:fn]];
-        if([self debugCheckSerie:serie.serieWithUnit.serie]){
-            RZLog(RZLogError, @"bad serie load");
-        }
-    }
-    RZLog(RZLogInfo, @"Loaded %@", serie);
-}
-
--(void)recordModifiedSerie:(GCDerivedDataSerie*)serie withActivity:(GCActivity*)activity intoFile:(NSString*)fn{
-    NSString * key = [serie key];
+-(void)recordModifiedSerie:(GCDerivedDataSerie*)serie withActivity:(GCActivity*)activity{
+    NSString * key = serie.key;
     if (!self.modifiedSeries) {
         self.modifiedSeries = [NSMutableDictionary dictionary];
     }
     NSMutableDictionary * acts = self.modifiedSeries[key];
     if (!acts) {
-        self.modifiedSeries[key] = [NSMutableDictionary dictionaryWithObject:fn forKey:activity.activityId];
+        self.modifiedSeries[key] = [NSMutableDictionary dictionaryWithDictionary:@{ activity.activityId : @1 }];
     }else{
-        (self.modifiedSeries[key])[activity.activityId] = fn;
+        self.modifiedSeries[key][activity.activityId] = @1;
+    }
+}
+
+-(void)saveModifiedSeries{
+    NSMutableDictionary * activities = [NSMutableDictionary dictionary];
+
+    NSUInteger updateCount = 0;
+    for (NSString * key in self.modifiedSeries) {
+        GCDerivedDataSerie * serie = self.derivedSeries[key];
+        if( [serie saveToFile] ){
+            updateCount++;
+            NSDictionary * activityIds = self.modifiedSeries[key];
+            for (NSString * activityId in activityIds) {
+                activities[activityId] = activityId;
+            }
+        }
+    }
+    if (updateCount > 0) {
+        RZLog(RZLogInfo, @"Derived updated %lu series", (unsigned long)updateCount);
+    }
+    BOOL haserror = false;
+    [self.deriveddb beginTransaction];
+    for (NSString * aId in activities) {
+        if (![self recordProcessedActivity:aId]){
+            haserror = true;
+        }
+    }
+    if( !haserror ){
+        [self.deriveddb commit];
     }
 }
 
 #pragma mark - rebuild
 
 -(void)clearDataForSerie:(GCDerivedDataSerie*)serie{
-    [serie reset];
-    
-    FMResultSet * res = [self.deriveddb executeQuery:@"SELECT * FROM gc_derived_series_files WHERE serieId = ?", @(serie.serieId)];
-    NSMutableArray * fileToDelete = [NSMutableArray array];
-    while( [res next]){
-        [fileToDelete addObject:[res stringForColumn:@"filename"]];
-    }
-    for (NSString * filename in fileToDelete) {
-        [RZFileOrganizer removeEditableFile:filename];
-    }
-    if(![self.deriveddb executeUpdate:@"DELETE FROM gc_derived_series_files WHERE serieId = ?", @(serie.serieId)]){
-        RZLog(RZLogError, @"Failed to update %@", self.deriveddb.lastErrorMessage);
-    }
+    [serie clearDataAndFile];
 }
 
 -(void)rebuildDependentDerivedDataSerie:(gcDerivedType)type
@@ -707,17 +695,8 @@ static BOOL kDerivedEnabled = true;
         if( [self debugCheckSerie:derivedserie.serieWithUnit.serie]){
             RZLog(RZLogError,@"bad out serie");
         }
-        NSString * fn = [NSString stringWithFormat:@"%@-%@.data", self.currentDerivedFilePrefix,  derivedserie.key];
-        if([derivedserie saveToFile:fn]){
-            [self recordModifiedSerie:derivedserie withActivity:activity intoFile:fn];
-        }else{
-            RZLog( RZLogError, @"Failed to write %@", fn);
-        }
+        [self recordModifiedSerie:derivedserie withActivity:activity];
     }
-}
-
--(NSString*)currentDerivedFilePrefix{
-    return self.useDerivedFilePrefix ? self.useDerivedFilePrefix : [[GCAppGlobal profile] currentDerivedFilePrefix];
 }
 
 -(void)processQueueElement:(GCDerivedQueueElement*)element{
@@ -735,10 +714,8 @@ static BOOL kDerivedEnabled = true;
                                 andActivityType:activity.activityType];
         
         if (![activity trackdbIsObsolete:activity.trackdb]) {
-            
             [self processAggregatedSerieForActivity:activity derivedType:element.derivedType andField:field];
             [self processStandardizedSerieForActivity:activity andField:field];
-            
         }
         
         if (element.activityLast && activity != [[GCAppGlobal organizer] currentActivity]) {
@@ -853,60 +830,9 @@ static BOOL kDerivedEnabled = true;
     }
 }
 
--(sqlite3_int64)serieId:(GCDerivedDataSerie*)serie{
-    sqlite3_int64 rv = serie.serieId;
-    if (rv == kInvalidSerieId) {
-        rv = [serie saveToDb:self.deriveddb withData:NO];
-    }
-    return rv;
-}
-
 -(void)processDone{
     RZLog(RZLogInfo, @"queue end %@", self.performance);
-    NSMutableDictionary * activities = [NSMutableDictionary dictionary];
-    NSMutableDictionary * files = [NSMutableDictionary dictionary];
-
-    for (NSString * key in self.modifiedSeries) {
-        // Force all seriesId before below transaction
-        GCDerivedDataSerie * serie = [self derivedDataSerieForKey:key];
-        [self serieId:serie];
-        NSDictionary * series = self.modifiedSeries[key];
-        for (NSString * activityId in series) {
-            NSString * fn = series[activityId];
-            files[key] = fn;
-            activities[activityId] = activityId;
-        }
-    }
-    FMDatabase * db = [self deriveddb];
-    BOOL haserror = false;
-    [db beginTransaction];
-    NSUInteger updateCount = 0;
-    for (NSString * key in files) {
-        GCDerivedDataSerie * serie = [self derivedDataSerieForKey:key];
-        if (!serie) {
-            RZLog(RZLogError, @"Inconsistent Workflow missing %@", key);
-        }else{
-            sqlite3_int64 serieId = [self serieId:serie];
-            if (![db executeUpdate:@"INSERT OR REPLACE INTO gc_derived_series_files (serieId,filename) VALUES (?,?)", @(serieId),files[key]]){
-                RZLog(RZLogError, @"db error %@", [db lastErrorMessage]);
-                haserror = true;
-            }
-            updateCount++;
-        }
-    }
-    if (updateCount > 0) {
-        RZLog(RZLogInfo, @"Derived updated %lu series", (unsigned long)updateCount);
-    }
-    if (!haserror) {
-        for (NSString * aId in activities) {
-            if (![self recordProcessedActivity:aId]){
-                haserror = true;
-            }
-        }
-    }
-    if (!haserror) {
-        [db commit];
-    }
+    [self saveModifiedSeries];
     [self notifyForString:kNOTIFY_DERIVED_END];
 }
 
@@ -952,12 +878,11 @@ static BOOL kDerivedEnabled = true;
 
     [GCDerivedDataSerie ensureDbStructure:db];
     if (![db tableExists:@"gc_derived_series_files"]) {
-        DBCHECK([db executeUpdate:@"CREATE TABLE gc_derived_series_files (serieId INTEGER PRIMARY KEY, filename TEXT, modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"]);
+        RZEXECUTEUPDATE(db, @"CREATE TABLE gc_derived_series_files (serieId INTEGER PRIMARY KEY, filename TEXT, modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
     }
     if (![db tableExists:@"gc_derived_activity_processed"]) {
-        DBCHECK([db executeUpdate:@"CREATE TABLE gc_derived_activity_processed (activityId TEXT UNIQUE, version INTEGER, modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"]);
+        RZEXECUTEUPDATE(db, @"CREATE TABLE gc_derived_activity_processed (activityId TEXT UNIQUE, version INTEGER, modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
     }
-    
 }
 //
 -(void)updateForNewProfile{

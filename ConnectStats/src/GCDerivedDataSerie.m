@@ -27,17 +27,6 @@
 #import "GCActivity.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+CachedTracks.h"
-sqlite3_int64 kInvalidSerieId = 0;
-
-@interface GCDerivedDataSerie ()
-
-@property (nonatomic,retain) NSDate * bucketStart;
-@property (nonatomic,retain) NSDate * bucketEnd;
-@property (nonatomic,assign) sqlite3_int64 serieId;
-@property (nonatomic,retain) NSString * filePath;
-@end
-
-@implementation GCDerivedDataSerie
 
 #define kGCVersion          @"version"
 #define kGCDerivedType      @"derivedType"
@@ -48,9 +37,13 @@ sqlite3_int64 kInvalidSerieId = 0;
 #define kGCBucketEnd        @"bucketEnd"
 #define kGCSerie            @"serie"
 
--(void)registerFileName:(NSString*)fn{
-    self.filePath = [RZFileOrganizer writeableFilePathIfExists:fn];
-}
+@interface GCDerivedDataSerie ()
+@property (nonatomic,retain) GCStatsDataSerieWithUnit * cacheSerieWithUnit;
+@property (nonatomic,retain) NSDate * bucketStart;
+@property (nonatomic,retain) NSDate * bucketEnd;
+@end
+
+@implementation GCDerivedDataSerie
 
 +(BOOL)supportsSecureCoding{
     return YES;
@@ -64,7 +57,7 @@ sqlite3_int64 kInvalidSerieId = 0;
         self.fieldFlag          = [aDecoder decodeIntForKey:kGCField];
         
         self.activityType   = [aDecoder decodeObjectOfClass:[NSString class] forKey:kGCActivityType];
-        self.serieWithUnit  = [aDecoder decodeObjectOfClass:[GCStatsDataSerieWithUnit class] forKey:kGCSerie];
+        self.cacheSerieWithUnit  = [aDecoder decodeObjectOfClass:[GCStatsDataSerieWithUnit class] forKey:kGCSerie];
         self.bucketEnd      = [aDecoder decodeObjectOfClass:[NSDate class] forKey:kGCBucketEnd];
         self.bucketStart    = [aDecoder decodeObjectOfClass:[NSDate class] forKey:kGCBucketStart];
     }
@@ -77,7 +70,7 @@ sqlite3_int64 kInvalidSerieId = 0;
     [aCoder encodeInt:(int)_fieldFlag            forKey:kGCField];
     [aCoder encodeInt:(int)_derivedPeriod    forKey:kGCDerivedPeriod];
     [aCoder encodeObject:_activityType  forKey:kGCActivityType];
-    [aCoder encodeObject:_serieWithUnit forKey:kGCSerie];
+    [aCoder encodeObject:_cacheSerieWithUnit forKey:kGCSerie];
     [aCoder encodeObject:_bucketEnd     forKey:kGCBucketEnd];
     [aCoder encodeObject:_bucketStart   forKey:kGCBucketStart];
 }
@@ -95,7 +88,6 @@ sqlite3_int64 kInvalidSerieId = 0;
         rv.derivedPeriod = period;
         rv.activityType = atype;
 
-
         if (date && period != gcDerivedPeriodAll) {
             GCStatsDateBuckets * buckets = [GCStatsDateBuckets statsDateBucketFor:period == gcDerivedPeriodMonth ? NSCalendarUnitMonth: NSCalendarUnitYear referenceDate:nil andCalendar:[GCAppGlobal calculationCalendar]];
             [buckets bucket:date];
@@ -106,23 +98,24 @@ sqlite3_int64 kInvalidSerieId = 0;
     return rv;
 }
 
-+(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type
-                                 field:(gcFieldFlag)field
-                                period:(gcDerivedPeriod)period
-                           forActivity:(GCActivity *)act{
-    return [GCDerivedDataSerie derivedDataSerie:type field:field period:period
-                                        forDate:act.date andActivityType:act.activityType];
-}
-
 -(void)dealloc{
-    [_serieWithUnit release];
+    [_cacheSerieWithUnit release];
     [_activityType release];
     [_bucketEnd release];
     [_bucketStart release];
-    [_filePath release];
+    [_fileNamePrefix release];
 
     [super dealloc];
 }
+
+-(GCStatsDataSerieWithUnit*)serieWithUnit{
+    if( self.cacheSerieWithUnit == nil && self.fileNamePrefix){
+        [self loadFromFileIfNeeded];
+    }
+    return self.cacheSerieWithUnit;
+}
+
+#pragma mark - Reconstruct with activities or other
 
 -(BOOL)dependsOnSerie:(GCDerivedDataSerie*)other{
     BOOL typeValid = [self.activityType isEqualToString:other.activityType];
@@ -210,6 +203,8 @@ sqlite3_int64 kInvalidSerieId = 0;
     return rv;
 }
 
+#pragma mark - access
+
 -(GCField*)field{
     return [GCField fieldForFlag:self.fieldFlag andActivityType:self.activityType];
 }
@@ -234,7 +229,8 @@ sqlite3_int64 kInvalidSerieId = 0;
 }
 
 -(NSString*)description{
-    return [NSString stringWithFormat:@"<%@: %@%@>", NSStringFromClass([self class]), self.key, self.isEmpty ? @"" : @" hasData"];
+    NSString * points = self.cacheSerieWithUnit.count > 0 ? [NSString stringWithFormat:@" %@ points", @(self.cacheSerieWithUnit.count)] : @"";
+    return [NSString stringWithFormat:@"<%@: %@%@>", NSStringFromClass([self class]), self.key, points];
 }
 
 -(NSString*)bucketKey{
@@ -260,64 +256,78 @@ sqlite3_int64 kInvalidSerieId = 0;
     }
 }
 
+-(BOOL)isEmpty{
+    return self.filePath == nil || (self.serieWithUnit != nil && self.serieWithUnit.serie.count == 0);
+}
+
+#pragma mark - operate
+
 -(void)reset{
-    self.serieWithUnit = nil;
+    self.cacheSerieWithUnit = nil;
 }
 -(void)operate:(gcStatsOperand)operand with:(GCStatsDataSerieWithUnit*)other from:(GCActivity*)activity{
-    if (self.serieWithUnit) {
-        if (self.serieWithUnit.serie) {
+    if (self.cacheSerieWithUnit) {
+        if (self.cacheSerieWithUnit.serie) {
             GCStatsDataSerie * otherSerie = [other dataSerieConvertedToUnit:self.serieWithUnit.unit].serie;
-            [self.serieWithUnit convertToCommonUnitWith:other.unit];
+            [self.cacheSerieWithUnit convertToCommonUnitWith:other.unit];
             GCStatsDataSerie * serie = [self.serieWithUnit.serie operate:operand with:otherSerie];
-            self.serieWithUnit.serie = serie;
+            self.cacheSerieWithUnit.serie = serie;
         }else{
-            self.serieWithUnit.serie = other.serie;
-            self.serieWithUnit.unit = other.unit;
+            self.cacheSerieWithUnit.serie = other.serie;
+            self.cacheSerieWithUnit.unit = other.unit;
         }
     }else{
-        self.serieWithUnit = [GCStatsDataSerieWithUnit dataSerieWithUnit:other.unit xUnit:other.xUnit andSerie:other.serie];
+        self.cacheSerieWithUnit = [GCStatsDataSerieWithUnit dataSerieWithUnit:other.unit xUnit:other.xUnit andSerie:other.serie];
     }
 }
 
-#define DBCHECK(x) if(!x){ RZLog( RZLogError, @"Error %@", [db lastErrorMessage]); };
+#pragma mark - database and file save
 
 +(void)ensureDbStructure:(FMDatabase*)db{
     if (![db tableExists:@"gc_derived_series"]) {
-        DBCHECK([db executeUpdate:@"CREATE TABLE gc_derived_series (serieId INTEGER PRIMARY KEY, key TEXT UNIQUE, activityType TEXT, fieldFlag INTEGER, derivedType INTEGER, derivedPeriod INTEGER, bucketStart REAL, bucketEnd REAL)"]);
-        DBCHECK([db executeUpdate:@"CREATE INDEX IF NOT EXISTS gc_idx_derived_series_key ON gc_derived_series (key)"]);
+        RZEXECUTEUPDATE(db, @"CREATE TABLE gc_derived_series (serieId INTEGER PRIMARY KEY, key TEXT UNIQUE, activityType TEXT, fieldFlag INTEGER, derivedType INTEGER, derivedPeriod INTEGER, bucketStart REAL, bucketEnd REAL)");
+        RZEXECUTEUPDATE(db, @"CREATE INDEX IF NOT EXISTS gc_idx_derived_series_key ON gc_derived_series (key)");
+    }else{
+        if( [db columnExists:@"serieId" inTableWithName:@"gc_derived_series"]){
+            RZLog(RZLogInfo, @"Upgrading ");
+            RZEXECUTEUPDATE(db, @"ALTER TABLE gc_derived_series RENAME TO gc_derived_series_old");
+            RZEXECUTEUPDATE(db, @"CREATE TABLE gc_derived_series (key TEXT PRIMARY KEY, activityType TEXT, fieldFlag INTEGER, derivedType INTEGER, derivedPeriod INTEGER, bucketStart REAL, bucketEnd REAL)")
+            RZEXECUTEUPDATE(db, @"INSERT INTO gc_derived_series SELECT key,activityType,fieldFlag,derivedType,derivedPeriod,bucketStart,bucketEnd FROM gc_derived_series_old");
+        }
     }
-    if (![db tableExists:@"gc_derived_series_data"]) {
-        DBCHECK([db executeUpdate:@"CREATE TABLE gc_derived_series_data (serieId INTEGER, x REAL, y REAL)"]);
-        DBCHECK([db executeUpdate:@"CREATE INDEX IF NOT EXISTS gc_idx_derived_series_data_id ON gc_derived_series_data (serieId)"]);
+    
+    
+    if ([db tableExists:@"gc_derived_series_data"]) {
+        RZEXECUTEUPDATE(db, @"DROP TABLE gc_derived_series_data");
     }
-    if (![db tableExists:@"gc_derived_series_unit"]) {
-        DBCHECK([db executeUpdate:@"CREATE TABLE gc_derived_series_unit (serieId INTEGER PRIMARY KEY, uom TEXT)"]);
+    if ([db tableExists:@"gc_derived_series_unit"]) {
+        RZEXECUTEUPDATE(db, @"DROP TABLE gc_derived_series_unit");
     }
 }
 
--(void)loadFromDb:(FMDatabase*)db{
-    FMResultSet * res = [db executeQuery:@"SELECT serieId FROM gc_derived_series WHERE key = ?", [self key]];
-    if ([res next]) {
-        sqlite_int64 serieId = [res intForColumn:@"serieId"];
-        self.serieId = serieId;
+-(NSString*)filename{
+    NSString * filename = [NSString stringWithFormat:@"%@-%@.data", self.fileNamePrefix, self.key];
+    return filename;
+}
 
-        res = [db executeQuery:@"SELECT x,y FROM gc_derived_series_data WHERE serieId = ? ORDER BY x", serieId];
-        NSMutableArray * points = [NSMutableArray array];
-        while ([res next]) {
-            [points addObject:[GCStatsDataPoint dataPointWithX:[res doubleForColumn:@"x"]
-                                                          andY:[res doubleForColumn:@"y"]]];
-        }
-        if (points.count>0) {
-            GCUnit * unit = nil;
-            res = [db executeQuery:@"SELECT uom FROM gc_derived_series_unit WHERE serieId = ?", @(serieId)];
-            if ([res next]) {
-                unit = [GCUnit unitForKey:[res stringForColumn:@"uom"]];
-            }
-            self.serieWithUnit = [GCStatsDataSerieWithUnit dataSerieWithUnit:unit];
-            self.serieWithUnit.serie = [GCStatsDataSerie dataSerieWithPoints:points];
-        }
+-(NSString*)filePath{
+    NSString * filepath = [RZFileOrganizer writeableFilePath:self.filename];
+    return filepath;
+}
+
+-(void)loadFromFileIfNeeded{
+    if( self.serieWithUnit == nil){
+        [self loadFromFile:self.filePath];
     }
+}
 
+-(void)clearDataAndFile{
+    [self reset];
+    [RZFileOrganizer removeEditableFile:self.filename];
+}
+
+-(BOOL)saveToFile{
+    return([self saveToFile:self.filePath]);
 }
 
 -(void)loadFromFile:(NSString*)fn{
@@ -328,8 +338,7 @@ sqlite3_int64 kInvalidSerieId = 0;
             && self.derivedType==loaded.derivedType
             && self.fieldFlag==loaded.fieldFlag
             && [self.activityType isEqualToString:loaded.activityType]) {
-            self.serieWithUnit = loaded.serieWithUnit;
-            self.filePath = fn;
+            self.cacheSerieWithUnit = loaded.serieWithUnit;
         }else{
             RZLog(RZLogWarning, @"Ignoring load %@ from incompatible %@", self.key, loaded.key);
         }
@@ -339,18 +348,18 @@ sqlite3_int64 kInvalidSerieId = 0;
 -(BOOL)saveToFile:(NSString*)fn{
     NSError * err=nil;
     BOOL rv = [[NSKeyedArchiver archivedDataWithRootObject:self
-                           requiringSecureCoding:YES error:&err] writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:YES];
+                                     requiringSecureCoding:YES error:&err] writeToFile:fn atomically:YES];
     if(err){
         RZLog(RZLogError,@"failed to archive %@",err);
     }
     if (rv) {
-        self.filePath = [RZFileOrganizer writeableFilePathIfExists:fn];
         #if TARGET_IPHONE_SIMULATOR
-            [[self.serieWithUnit.serie asCSVString:false] writeToFile:[NSString stringWithFormat:@"%@.csv", self.filePath] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+            [[self.serieWithUnit.serie asCSVString:false] writeToFile:[NSString stringWithFormat:@"%@.csv", fn] atomically:YES encoding:NSUTF8StringEncoding error:nil];
         #endif
     }
     return rv;
 }
+
 +(GCDerivedDataSerie*)derivedDataSerieFromResultSet:(FMResultSet*)res{
     GCDerivedDataSerie * rv = [[[GCDerivedDataSerie alloc] init] autorelease];
     if (rv) {
@@ -360,49 +369,28 @@ sqlite3_int64 kInvalidSerieId = 0;
         rv.bucketEnd  =[res dateForColumn:@"bucketEnd"];
         rv.bucketStart = [res dateForColumn:@"bucketStart"];
         rv.derivedType =[res intForColumn:@"derivedType"];
-        rv.serieId = [res intForColumn:@"serieId"];
     }
 
     return rv;
 }
 
-
--(sqlite3_int64)saveToDb:(FMDatabase*)db withData:(BOOL)withdata{
+-(BOOL)saveToDb:(FMDatabase*)db{
+    BOOL rv = false;
+    
     [GCDerivedDataSerie ensureDbStructure:db];
 
-    FMResultSet * res = [db executeQuery:@"SELECT serieId FROM gc_derived_series WHERE key = ?", [self key]];
-    sqlite_int64 serieId = 0;
-    [db beginTransaction];
+    FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_derived_series WHERE key = ?", self.key];
     if ([res next]) {
-        self.serieId = [res intForColumn:@"serieId"];
+        rv = false;
     }else{
         if ([db executeUpdate:@"INSERT INTO gc_derived_series (key,activityType,fieldFlag,derivedType,derivedPeriod,bucketStart,bucketEnd) VALUES (?,?,?,?,?,?,?)", self.key, self.activityType, @(_fieldFlag), @(_derivedType), @(_derivedPeriod), self.bucketStart, self.bucketEnd]){
-            self.serieId = [db lastInsertRowId];
+            rv = true;
         }else{
             RZLog(RZLogError, @"Error %@", [db lastErrorMessage]);
         }
     }
-    if (withdata) {
-        if(![db executeUpdate:@"INSERT OR REPLACE INTO gc_derived_series_unit (serieId,uom) VALUES (?,?)", @(self.serieId), self.serieWithUnit.unit.key]){
-            RZLog(RZLogError, @"Error %@", [db lastErrorMessage]);
-        }
-        if (![db executeUpdate:@"DELETE FROM gc_derived_series_data WHERE serieId=?", @(self.serieId)]) {
-            RZLog(RZLogError, @"Error %@", [db lastErrorMessage]);
-        }
-        [db setShouldCacheStatements:YES];
-        for (GCStatsDataPoint * point in self.serieWithUnit) {
-            if(![db executeUpdate:@"INSERT INTO gc_derived_series_data (serieId,x,y) VALUES (?,?,?)", @(serieId), @(point.x_data), @(point.y_data)]){
-                RZLog(RZLogError, @"Error %@", [db lastErrorMessage]);
-            }
-        }
-        //[db setShouldCacheStatements:NO];
-    }
-    [db commit];
-    return self.serieId;
-}
-
--(BOOL)isEmpty{
-    return self.filePath == nil || (self.serieWithUnit != nil && self.serieWithUnit.serie.count == 0);
+    
+    return rv;
 }
 
 @end
