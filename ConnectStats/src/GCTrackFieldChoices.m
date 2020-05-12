@@ -144,13 +144,13 @@
             }
             if (first.fieldFlag == gcFieldFlagWeightedMeanSpeed && (![first.activityType isEqualToString:GC_TYPE_SWIMMING])) {
                 GCField * speed = [GCField fieldForKey:CALC_10SEC_SPEED andActivityType:activity.activityType];
-                if ([activity hasCalculatedDerivedTrack:gcCalculatedCachedTrackDataSerie forField:speed]) {
+                if ([activity hasCalculatedSerieForField:speed]) {
                     [styles addObject:[GCTrackFieldChoiceHolder trackFieldChoice:speed xField:nil]];
                 }
             }
             if (first.fieldFlag==gcFieldFlagAltitudeMeters) {
                 GCField * ascent = [GCField field:CALC_VERTICAL_SPEED forActivityType:activity.activityType];
-                if ([activity hasCalculatedDerivedTrack:gcCalculatedCachedTrackDataSerie forField:ascent]) {
+                if ([activity hasCalculatedSerieForField:ascent]) {
                     [styles addObject:[GCTrackFieldChoiceHolder trackFieldChoice:ascent xField:nil]];
                 }
             }

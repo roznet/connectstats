@@ -135,7 +135,7 @@ def dict_read_from_db(conn,tables):
                     if row[idx] is not None:
                         one[col[0]] = row[idx]
                 rows.append( one )
-        rv.update( { table : rows } )
+            rv.update( { table : rows } )
     return rv
         
 
@@ -320,7 +320,11 @@ class ActivityTypes:
         self.update_parents()            
 
     def read_from_db(self,dbname):
-        conn = sqlite3.connect(dbname)
+        if isinstance(dbname,str):
+            conn = sqlite3.connect(dbname)
+        else:
+            conn = dbname
+            
         dicts = dict_read_from_db(conn,['gc_activity_types'] )
         self.read_from_dict(dicts)
         
@@ -420,10 +424,10 @@ class Field:
         if no activityType or null applies to all
         '''
         rv = None
-        debug = (self.key == 'SumStrokes')
+        debug = (self.key == '__CalcLossElevation')
 
         if debug:
-            print( info )
+            print( f'add: {info}' )
             
         existing = None
         if 'activity_type' in info and info['activity_type']:
@@ -438,9 +442,11 @@ class Field:
             print( f'existing: {existing}' )
             
         if existing:
-            if existing != one:
+            if existing != info:
                 self.changes.append( { 'what':'order','old':dict(existing),'new':info} )
-                existing.update(one)
+                existing.update(info)
+                if debug:
+                    print( f'updated: {existing}' )
                 rv = CHANGED
         else:
             self.orders.append( info )
@@ -650,7 +656,10 @@ class Fields:
         self.read_field_uom_from_dict(dicts)
         
     def read_from_db(self,dbname):
-        conn = sqlite3.connect(dbname)
+        if isinstance(dbname,str):
+            conn = sqlite3.connect(dbname)
+        else:
+            conn = dbname
         dicts = dict_read_from_db(conn,['gc_fields_order','gc_fields_display','gc_fields_uom'] )
         self.read_from_dict(dicts)
         
@@ -712,7 +721,10 @@ class Categories :
                 print( 'gc_category_order: add {} (was {}))'.format( len( self.categories ), start ) )
 
     def read_from_db(self,dbname):
-        conn = sqlite3.connect(dbname)
+        if isinstance(dbname,str):
+            conn = sqlite3.connect(dbname)
+        else:
+            conn = dbname
         dicts = dict_read_from_db(conn,['gc_category_order'])
         self.read_from_dict(dicts)
 

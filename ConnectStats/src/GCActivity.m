@@ -1314,11 +1314,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             unique[one] = @1;
         }
     }
-    if( self.cachedCalculatedTracks.count > 0){
-        for( NSString * field in self.cachedCalculatedTracks){
-            GCField * one = [GCField field:field forActivityType:self.activityType];
-            unique[one] = @1;
-        }
+    for( NSString * field in self.cachedCalculatedTracks){
+        GCField * one = [GCField field:field forActivityType:self.activityType];
+        unique[one] = @1;
     }
     return [unique.allKeys sortedArrayUsingSelector:@selector(compare:)];
 }
@@ -1457,7 +1455,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if (field.fieldFlag != gcFieldFlagNone) {
         rv = RZTestOption(self.trackFlags, field.fieldFlag);
     }else{
-        if ([self hasCalculatedDerivedTrack:gcCalculatedCachedTrackDataSerie forField:field]) {
+        if ([self hasCalculatedSerieForField:field]) {
             rv = true;
         }else{
             rv = (self.cachedExtraTracksIndexes[field] != nil);

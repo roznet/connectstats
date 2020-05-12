@@ -159,7 +159,7 @@
 
         case gcTrackStatsRollingBest:
         {
-            GCStatsDataSerieWithUnit * nu = [self.activity calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest forField:field thread:[GCAppGlobal worker]];
+            GCStatsDataSerieWithUnit * nu = [self.activity calculatedSerieForField:field.correspondingBestRollingField thread:[GCAppGlobal worker]];
             [nu convertToGlobalSystem];
 
             if(self.field.fieldFlag == gcFieldFlagPower && [GCAppGlobal configGetBool:CONFIG_POWER_CURVE_LOG_SCALE defaultValue:true]){

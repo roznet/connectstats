@@ -46,10 +46,9 @@ typedef NS_ENUM(NSUInteger, gcFieldFlag) {
 };
 
 // Calculated Fields.
-typedef NS_OPTIONS(NSUInteger, gcCalcFieldFlag) {
-    gcCalcFieldFlagNone,
-    gcCalcFieldFlagGrade,
-    gcCalcFieldFlagAscentSpeed
+typedef NS_OPTIONS(NSUInteger, gcCalcField) {
+    gcCalcFieldSimple,
+    gcCalcFieldBestRolling,
 };
 
 typedef NS_OPTIONS(NSUInteger, gcTrackEventType) {
@@ -153,7 +152,10 @@ extern NSString * INTERNAL_PREFIX;
 extern NSString * INTERNAL_DIRECT_STROKE_TYPE;
 extern NSString * INTERNAL_TRACK_EVENT_TYPE;
 
+
 extern NSString * CALC_PREFIX;
+extern NSString * CALC_BESTROLLING_PREFIX;
+
 extern NSString * CALC_ALTITUDE_GAIN         ;
 extern NSString * CALC_ALTITUDE_LOSS         ;
 extern NSString * CALC_NORMALIZED_POWER      ;

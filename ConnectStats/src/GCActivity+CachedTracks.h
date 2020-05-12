@@ -31,13 +31,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GCActivity (CachedTracks)
 
+-(NSArray<GCField*>*)availableCalculatedFields;
+-(BOOL)hasCalculatedSerieForField:(nonnull GCField*)field;
 
-
--(nullable GCStatsDataSerieWithUnit*)calculatedDerivedTrack:(gcCalculatedCachedTrack)track forField:(nonnull GCField*)field thread:(nullable dispatch_queue_t)thread;
+/**
+ * Return serie if already calculated
+ */
+//-(GCStatsDataSerieWithUnit*)calculatedSerieForField:(GCField*)field;
+/**
+ * return serie if already calculated or start the calculation if not
+ * if calculation is start a notification will be sent when done
+ */
+-(nullable GCStatsDataSerieWithUnit*)calculatedSerieForField:(nonnull GCField*)field thread:(nullable dispatch_queue_t)thread;
+/**
+ * return standardized serie for a best rolling field, if not calculation will start the calculation
+ */
 -(nullable GCStatsDataSerieWithUnit*)standardizedBestRollingTrack:(nonnull GCField*)field thread:(nullable dispatch_queue_t)thread;
-
--(BOOL)hasCalculatedDerivedTrack:(gcCalculatedCachedTrack)track forField:(nonnull GCField*)field;
-
 
 -(void)addStandardCalculatedTracks:(nullable dispatch_queue_t)threadOrNil;
 +(nullable GCStatsDataSerieWithUnit*)standardSerieSampleForXUnit:(nonnull GCUnit*)xUnit;

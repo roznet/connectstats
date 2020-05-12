@@ -100,9 +100,8 @@
                                                                            forDate:max19k.date
                                                                    andActivityType:max19k.activityType];
             RZ_ASSERT(derived.serieWithUnit.count>0, @"Has Points");
-            GCStatsDataSerieWithUnit * serie = [max19k calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                    forField:[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING]
-                                                                 thread:nil];
+            GCField * bestRolling = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING].correspondingBestRollingField;
+            GCStatsDataSerieWithUnit * serie = [max19k calculatedSerieForField:bestRolling thread:nil];
             RZ_ASSERT([derived.serieWithUnit.serie isEqualToSerie:serie.serie], @"Same as original");
 
             [self processNextStage:which];
@@ -125,11 +124,9 @@
             // force trackpoints
             [max19k trackpoints];
             [max5k trackpoints];
-            GCStatsDataSerieWithUnit * serie19k = [max19k calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                    forField:[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING]
-                                                                 thread:nil];
-            GCStatsDataSerieWithUnit * serie5k = [max5k calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                       forField:[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING]
+            GCField * bestRollingHr = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING].correspondingBestRollingField;
+            GCStatsDataSerieWithUnit * serie19k = [max19k calculatedSerieForField:bestRollingHr thread:nil];
+            GCStatsDataSerieWithUnit * serie5k = [max5k calculatedSerieForField:bestRollingHr
                                                                     thread:nil];
             RZ_ASSERT(![derived.serieWithUnit.serie isEqualToSerie:serie19k.serie], @"Not Same as original");
             RZ_ASSERT(derived.serieWithUnit.serie.count == MAX(serie19k.serie.count, serie5k.serie.count), @"count is max of the 2");
@@ -171,14 +168,11 @@
             [max19k trackpoints];
             [max5k trackpoints];
             [slow10k trackpoints];
-            GCStatsDataSerieWithUnit * serie19k = [max19k calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                       forField:hrField
+            GCStatsDataSerieWithUnit * serie19k = [max19k calculatedSerieForField:hrField.correspondingBestRollingField
                                                                     thread:nil];
-            GCStatsDataSerieWithUnit * serie5k = [max5k calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                     forField:hrField
+            GCStatsDataSerieWithUnit * serie5k = [max5k calculatedSerieForField:hrField.correspondingBestRollingField
                                                                   thread:nil];
-            GCStatsDataSerieWithUnit * serie10k = [slow10k calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                     forField:hrField
+            GCStatsDataSerieWithUnit * serie10k = [slow10k calculatedSerieForField:hrField.correspondingBestRollingField
                                                                   thread:nil];
             RZ_ASSERT(![derived.serieWithUnit.serie isEqualToSerie:serie19k.serie], @"Not Same as original");
             RZ_ASSERT(![derived.serieWithUnit.serie isEqualToSerie:serie10k.serie], @"Not Same as original");

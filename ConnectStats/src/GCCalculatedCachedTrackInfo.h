@@ -30,24 +30,25 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSUInteger, gcCalculatedCachedTrack) {
-    gcCalculatedCachedTrackRollingBest,
-    gcCalculatedCachedTrackDistanceResample,
-    gcCalculatedCachedTrackDataSerie
-};
 @class GCTrackPoint;
 
 @interface GCCalculatedCachedTrackInfo : NSObject
 
-@property (nonatomic,assign) gcCalculatedCachedTrack track;
-@property (nonatomic,retain) GCField * field;
 @property (nonatomic,retain,nullable) GCStatsDataSerieWithUnit * serie;
-@property (nonatomic,retain) NSArray<GCTrackPoint*> * trackpoints;
+
+@property (nonatomic,retain) GCField * field;
+@property (nonatomic,readonly) gcFieldFlag fieldFlag;
+@property (nonatomic,readonly) GCField * underlyingField;
+@property (nonatomic,readonly) gcFieldFlag underlyingFieldFlag;
 
 @property (nonatomic,assign) NSUInteger processedPointsCount;
+@property (nonatomic,readonly) BOOL requiresCalculation;
 
-+(GCCalculatedCachedTrackInfo*)info:(gcCalculatedCachedTrack)track field:(GCField*)field;
--(gcFieldFlag)fieldFlag;
+
++(GCCalculatedCachedTrackInfo*)infoForField:(GCField*)field andSerie:(GCStatsDataSerieWithUnit*)serie;
++(GCCalculatedCachedTrackInfo*)infoForField:(GCField*)field;
+-(void)startCalculation;
+
 @end
 
 

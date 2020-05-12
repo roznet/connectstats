@@ -672,9 +672,7 @@ static BOOL kDerivedEnabled = true;
 
 -(void)processAggregatedSerieForActivity:(GCActivity*)activity derivedType:(gcDerivedType)derivedType andField:(GCField*)field{
     // no worker here, this function should already be on worker
-    GCStatsDataSerieWithUnit * serie =  [activity calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                forField:field
-                                                                  thread:nil];
+    GCStatsDataSerieWithUnit * serie =  [activity calculatedSerieForField:field.correspondingBestRollingField thread:nil];
     
     if( [self debugCheckSerie:serie.serie] ){
         RZLog(RZLogError,@"Bad input serie");

@@ -209,8 +209,8 @@
         for (size_t ii=0; ii<3; ii++) {
             gcFieldFlag fieldFlag = forBestRolling[ii];
             GCField * field = [GCField fieldForFlag:fieldFlag andActivityType:act.activityType];
-            if ([act hasCalculatedDerivedTrack:gcCalculatedCachedTrackRollingBest forField:field ]) {
-                GCStatsDataSerieWithUnit * serieu = [act calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest forField:field thread:[GCAppGlobal worker]];
+            if ([act hasCalculatedSerieForField:field.correspondingBestRollingField ]) {
+                GCStatsDataSerieWithUnit * serieu = [act calculatedSerieForField:field.correspondingBestRollingField thread:[GCAppGlobal worker]];
                 if (serieu) {
                     [choices addObject:[GCActivityAutoLapChoiceHolder choiceForIndexSerie:serieu
                                                                                  andLabel:[field displayName]]];

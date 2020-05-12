@@ -23,7 +23,7 @@
 
 @implementation GCTestsDerived
 
-
+/*
 - (void)testDerivedSerie
 {
     
@@ -47,6 +47,7 @@
         XCTAssertEqualWithAccuracy(point.y_data, [expect[i+1] doubleValue], 1.e-7, @"expected max serie");
     }
 }
+*/
 
 -(void)testDerivedOrganizer{
     // build organizer
@@ -264,8 +265,7 @@
     }
     
     
-    GCStatsDataSerieWithUnit * excludeBest = [exclude calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                    forField:serie.field
+    GCStatsDataSerieWithUnit * excludeBest = [exclude calculatedSerieForField:serie.field.correspondingBestRollingField
                                                                       thread:nil];
     // First check best is correct
     double excluded_y_max = [excludeBest dataPointAtIndex:bestIdx].y_data;
@@ -275,8 +275,7 @@
 
     // Check all the other are lower
     for (GCActivity * act in sameSerieAsExcluded) {
-        GCStatsDataSerieWithUnit * checkBest = [act calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                        forField:serie.field
+        GCStatsDataSerieWithUnit * checkBest = [act calculatedSerieForField:serie.field.correspondingBestRollingField
                                                                           thread:nil];
         XCTAssertLessThan([checkBest dataPointAtIndex:bestIdx].y_data, excluded_y_max);
     }

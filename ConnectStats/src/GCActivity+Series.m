@@ -33,8 +33,8 @@
 -(GCStatsDataSerieWithUnit*)trackSerieForField:(GCField*)field
                                    trackpoints:(NSArray<GCTrackPoint*>*)trackpoints
                                       timeAxis:(BOOL)timeAxis{
-    if( self.cachedCalculatedTracks[field] != nil){
-        return self.cachedCalculatedTracks[field];
+    if( self.cachedCalculatedTracks[field].serie != nil){
+        return self.cachedCalculatedTracks[field].serie;
     }
     BOOL treatGapAsNoValue = self.settings.treatGapAsNoValueInSeries;
     NSTimeInterval gapTimeInterval = self.settings.gapTimeInterval;
@@ -118,8 +118,8 @@
 -(GCStatsDataSerieWithUnit*)timeSerieForField:(GCField*)field{
     GCStatsDataSerieWithUnit * rv = nil;
 
-    if ([self hasCalculatedDerivedTrack:gcCalculatedCachedTrackDataSerie forField:field]) {
-        rv = [self calculatedDerivedTrack:gcCalculatedCachedTrackDataSerie forField:field thread:nil];
+    if ([self hasCalculatedSerieForField:field]) {
+        rv = [self calculatedSerieForField:field thread:nil];
     }else{
         rv = [self trackSerieForField:field trackpoints:self.trackpoints timeAxis:true];
     }

@@ -33,63 +33,75 @@
 
 @implementation GCActivity (CachedTracks)
 
--(NSString*)calculatedCachedTrackKey:(gcCalculatedCachedTrack)track forField:(GCField*)field{
-    if (track == gcCalculatedCachedTrackDataSerie) {
-        return field.key;
-    }else{
-        NSString * prefix = @"__RollingBest";
-        if (track==gcCalculatedCachedTrackDistanceResample) {
-            prefix = @"__DistanceResample";
+#pragma mark - Calculation Process
+
+-(NSArray<GCCalculatedCachedTrackInfo*>*)remainsToBecalculated{
+    NSMutableArray * rv = [NSMutableArray array];
+    for (GCCalculatedCachedTrackInfo * info in self.cachedCalculatedTracks.allValues) {
+        if( info.requiresCalculation ){
+            [rv addObject:info];
         }
-        return [NSString stringWithFormat:@"%@%@", prefix, field.key];
     }
+    return rv;
 }
 
--(void)calculatedCachedTrackCalculations{
-    NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithCapacity:(self.cachedCalculatedTracks).count];
-    RZPerformance * perf = [RZPerformance start];
+-(NSArray<GCField*>*)availableCalculatedFields{
+    return self.cachedCalculatedTracks.allKeys;
+}
 
-    GCCalculatedCachedTrackInfo * info = nil;
+-(BOOL)hasCalculatedSerieForField:(nonnull GCField*)field{
+    return self.cachedCalculatedTracks[field].serie != nil;
+}
+-(void)calculatedCachedTrackCalculations{
+    RZPerformance * perf = [RZPerformance start];
     
     NSUInteger processedSeriesCount = 0;
     NSUInteger processedPointsCount = 0;
     
-    for (NSString * key in self.cachedCalculatedTracks) {
-        id obj = (self.cachedCalculatedTracks)[key];
-        if ([obj isKindOfClass:[GCCalculatedCachedTrackInfo class]]) {
-            info = obj;
-
-            if (info.track==gcCalculatedCachedTrackRollingBest) {
+    NSArray<GCCalculatedCachedTrackInfo*>*missing = [self remainsToBecalculated];
+    NSMutableDictionary * additional = [NSMutableDictionary dictionary];
+    
+    for (GCCalculatedCachedTrackInfo * info in missing) {
+        if( info.requiresCalculation ){
+            if (info.field.isBestRollingField) {
                 GCStatsDataSerieWithUnit * serie = [self calculatedRollingBest:info];
                 if( serie ){
-                    rv[key] = serie;
+                    info.serie = serie;
                     processedPointsCount = info.processedPointsCount;
                 }
-            }else if(info.track == gcCalculatedCachedTrackDataSerie){
+            }else{
                 if ([info.field.key isEqualToString:CALC_VERTICAL_SPEED]) {
                     NSDictionary * standard = [self calculateAltitudeDerivedFields];
                     if (standard) {
-                        [rv addEntriesFromDictionary:standard];
+                        [additional addEntriesFromDictionary:standard];
                     }
                 }
                 if ([info.field.key isEqualToString:CALC_10SEC_SPEED]) {
                     NSDictionary * standard = [self calculateSpeedDerivedFields];
                     if (standard) {
-                        [rv addEntriesFromDictionary:standard];
+                        [additional addEntriesFromDictionary:standard];
                     }
                 }
+                
+                processedSeriesCount += 1;
             }
-
-            processedSeriesCount += 1;
-        }else{
-            rv[key] = obj;
         }
+        [self recordAdditionalCalculatedFields:additional];
+        if ([perf significant]) {
+            RZLog(RZLogInfo, @"Computed %d tracks (%d pts) %@",(int)processedSeriesCount, (int)processedPointsCount, perf);
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self calculateCachedTrackNotify];
+        });
     }
-    self.cachedCalculatedTracks = rv;
-    if ([perf significant]) {
-        RZLog(RZLogInfo, @"Computed %d tracks (%d pts) %@",(int)processedSeriesCount, (int)processedPointsCount, perf);
+}
+
+-(void)recordAdditionalCalculatedFields:(NSDictionary<GCField*,GCCalculatedCachedTrackInfo*>*)additional{
+    @synchronized (self.cachedCalculatedTracks) {
+        NSMutableDictionary * newCache = [NSMutableDictionary dictionaryWithDictionary:self.cachedCalculatedTracks];
+        [newCache addEntriesFromDictionary:additional];
+        self.cachedCalculatedTracks = newCache;
     }
-    [self performSelectorOnMainThread:@selector(calculateCachedTrackNotify) withObject:nil waitUntilDone:NO];
 }
 
 -(void)calculateCachedTrackNotify{
@@ -98,44 +110,25 @@
 }
 
 
--(BOOL)hasCalculatedDerivedTrack:(gcCalculatedCachedTrack)track forField:(nonnull GCField*)field{
-    return (self.cachedCalculatedTracks)[[self calculatedCachedTrackKey:track forField:field]]!=nil;
+-(BOOL)hasCalculatedForField:(nonnull GCField*)field{
+    GCCalculatedCachedTrackInfo * info = self.cachedCalculatedTracks[field];
+    return info != nil && info.serie != nil;
 }
 
--(void)addStandardCalculatedTracks:(nullable dispatch_queue_t)threadOrNil{
-    if ([self isCalculatingTracks]) {
-        return;
-    }
-
-    NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithDictionary:self.cachedCalculatedTracks];
-    NSString * key = nil;
-
-    BOOL hasMissing = false;
-
-    if (RZTestOption(self.trackFlags, gcFieldFlagAltitudeMeters)) {
-        GCField * field = [GCField field:CALC_VERTICAL_SPEED forActivityType:self.activityType];
-        key = [self calculatedCachedTrackKey:gcCalculatedCachedTrackDataSerie forField:field];
-        if (rv[key] == nil) {
-            GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo info:gcCalculatedCachedTrackDataSerie field:field];
-            rv[key] = info;
-            hasMissing = true;
+-(void)launchCalculationForMissing:(NSDictionary<GCField*,GCCalculatedCachedTrackInfo*>*)newCalcFields thread:(nullable dispatch_queue_t)threadOrNil{
+    
+    NSMutableDictionary * updated = [NSMutableDictionary dictionaryWithDictionary:self.cachedCalculatedTracks];
+    
+    for (GCField * field in newCalcFields) {
+        if( updated[field] == nil){
+            updated[field] = newCalcFields[field];
         }
     }
-    if (RZTestOption(self.trackFlags, gcFieldFlagSumDistance) && ! self.garminSwimAlgorithm) {
-        if( [GCAppGlobal configGetBool:CONFIG_ENABLE_SPEED_CALC_FIELDS defaultValue:false]){
-            GCField * field = [GCField fieldForKey:CALC_10SEC_SPEED andActivityType:self.activityType];
-            key = [self calculatedCachedTrackKey:gcCalculatedCachedTrackDataSerie forField:field];
-            if (rv[key] == nil) {
-                GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo info:gcCalculatedCachedTrackDataSerie field:field];
-                rv[key] = info;
-                hasMissing = true;
-            }
-        }
+    
+    @synchronized (self.cachedCalculatedTracks) {
+        self.cachedCalculatedTracks = updated;
     }
-    if (hasMissing) {
-        self.cachedCalculatedTracks = rv;
-    }
-
+    
     if (threadOrNil) {
         dispatch_async(threadOrNil,^(){
             [self calculatedCachedTrackCalculations];
@@ -143,18 +136,31 @@
     }else{
         [self calculatedCachedTrackCalculations];
     }
+
 }
 
--(BOOL)isCalculatingTracks{
-    BOOL calculating = false;
-    if (self.cachedCalculatedTracks) {
-        for (NSString * key in self.cachedCalculatedTracks) {
-            if ([(self.cachedCalculatedTracks)[key] isKindOfClass:[GCCalculatedCachedTrackInfo class]]) {
-                calculating = true;
+-(void)addStandardCalculatedTracks:(nullable dispatch_queue_t)threadOrNil{
+    NSMutableDictionary * missing = [NSMutableDictionary dictionary];
+
+    if (RZTestOption(self.trackFlags, gcFieldFlagAltitudeMeters)) {
+        GCField * field = [GCField field:CALC_VERTICAL_SPEED forActivityType:self.activityType];
+        if (self.cachedCalculatedTracks[field] == nil) {
+            GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo infoForField:field];
+            missing[field] = info;
+        }
+    }
+    if (RZTestOption(self.trackFlags, gcFieldFlagSumDistance) && ! self.garminSwimAlgorithm) {
+        if( [GCAppGlobal configGetBool:CONFIG_ENABLE_SPEED_CALC_FIELDS defaultValue:false]){
+            GCField * field = [GCField fieldForKey:CALC_10SEC_SPEED andActivityType:self.activityType];
+            if (self.cachedCalculatedTracks[field] == nil) {
+                GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo infoForField:field];
+                missing[field] = info;
             }
         }
     }
-    return calculating;
+    if( missing.count > 0){
+        [self launchCalculationForMissing:missing thread:threadOrNil];
+    }
 }
 
 +(nullable GCStatsDataSerieWithUnit*)standardSerieSampleForXUnit:(GCUnit*)xUnit{
@@ -211,7 +217,7 @@
 -(nullable GCStatsDataSerieWithUnit*)standardizedBestRollingTrack:(nonnull GCField*)field
                                                            thread:(nullable dispatch_queue_t)thread{
     
-    GCStatsDataSerieWithUnit * base = [self calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest forField:field thread:thread];
+    GCStatsDataSerieWithUnit * base = [self calculatedSerieForField:field.correspondingBestRollingField thread:thread];
     if( base ){
         GCStatsDataSerieWithUnit * standardSerie = [GCActivity standardSerieSampleForXUnit:base.xUnit];
         // If standard serie exist, then resample, if not, it means the xUnit likely does not have standard serie
@@ -227,41 +233,27 @@
     return base;
 }
 
--(nullable GCStatsDataSerieWithUnit*)calculatedDerivedTrack:(gcCalculatedCachedTrack)track
-                                                   forField:(nonnull GCField*)field
+-(nullable GCStatsDataSerieWithUnit*)calculatedSerieForField:(nonnull GCField*)field
                                                      thread:(nullable dispatch_queue_t)thread{
     if (![self trackpointsReadyOrLoad]) {//don't bother if no trackpoints
         return nil;
     }
     if (!self.cachedCalculatedTracks) {
-        self.cachedCalculatedTracks = [NSMutableDictionary dictionaryWithCapacity:5];
+        self.cachedCalculatedTracks = [NSMutableDictionary dictionary];
     }
     GCStatsDataSerieWithUnit * rv = nil;
-    NSString * key = [self calculatedCachedTrackKey:track forField:field];
-    id exiting = (self.cachedCalculatedTracks)[key];
-    if (exiting == nil && ![self isCalculatingTracks])  {
+    GCCalculatedCachedTrackInfo * existing = self.cachedCalculatedTracks[field];
+    
+    if (existing == nil)  {
         // start calculation
-
-        NSMutableDictionary * next = [NSMutableDictionary dictionaryWithDictionary:self.cachedCalculatedTracks];
-        next[key] = [GCCalculatedCachedTrackInfo info:track field:field];
-        self.cachedCalculatedTracks = next;
-        if (thread) {
-            dispatch_async(thread,^(){
-                [self calculatedCachedTrackCalculations];
-            });
-
-        }else{
-            [self calculatedCachedTrackCalculations];
-            exiting = (self.cachedCalculatedTracks)[key];
-        }
+        [self launchCalculationForMissing:@{field:[GCCalculatedCachedTrackInfo infoForField:field] } thread:thread];
+        existing = self.cachedCalculatedTracks[field];
     }
-
-    if (exiting && [exiting isKindOfClass:[GCStatsDataSerieWithUnit class]]){
-        rv = (GCStatsDataSerieWithUnit*) exiting;
-        if (track == gcCalculatedCachedTrackDataSerie && self.settings.serieFilters[field]) {
-            rv = [GCStatsDataSerieWithUnit dataSerieWithUnit:rv.unit xUnit:rv.xUnit andSerie:rv.serie];
-            rv = [self applyStandardFilterTo:rv ForField:field];
-        }
+    
+    rv = existing.serie;
+    if (rv && !field.isBestRollingField && self.settings.serieFilters[field]) {
+        rv = [GCStatsDataSerieWithUnit dataSerieWithUnit:rv.unit xUnit:rv.xUnit andSerie:rv.serie];
+        rv = [self applyStandardFilterTo:rv ForField:field];
     }
 
     return rv;
@@ -269,7 +261,7 @@
 
 #pragma mark - Derived TRacks
 
--(NSDictionary*)calculateAltitudeDerivedFields{
+-(NSDictionary<GCField*,GCCalculatedCachedTrackInfo*>*)calculateAltitudeDerivedFields{
     GCField * altitude = [GCField fieldForFlag:gcFieldFlagAltitudeMeters andActivityType:self.activityType];
     GCField * distance = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType];
 
@@ -365,14 +357,16 @@
     }
     [self addEntriesToCalculatedFields:newFields];
 
-    NSMutableDictionary * rv = [NSMutableDictionary dictionary];
+    NSMutableDictionary<GCField*,GCCalculatedCachedTrackInfo*> * rv = [NSMutableDictionary dictionary];
     if( final.serie.count > 0){
-        rv[CALC_VERTICAL_SPEED] = final;
+        GCField * field = [GCField fieldForKey:CALC_VERTICAL_SPEED andActivityType:self.activityType];
+        rv[ field ] = [GCCalculatedCachedTrackInfo infoForField:field andSerie:final];
     }
     for (NSString*key in calc) {
         GCStatsDataSerieWithUnit * su = calc[key];
         if( su.serie.count > 0){
-            rv[key] = su;
+            GCField * field = [GCField fieldForKey:key andActivityType:self.activityType];
+            rv[ field ] = [GCCalculatedCachedTrackInfo infoForField:field andSerie:su];
         }
     }
     return rv;

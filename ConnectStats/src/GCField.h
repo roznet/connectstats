@@ -71,6 +71,8 @@
 -(GCField*)correspondingMinField;
 -(GCField*)correspondingFieldTypeAll;
 -(GCField*)correspondingFieldForActivityType:(NSString*)activityType;
+-(GCField*)correspondingBestRollingField;
+-(GCField*)correspondingUnderlyingField;
 
 -(NSString*)displayName;
 -(NSString*)displayNameAndUnits;
@@ -85,6 +87,7 @@
 -(BOOL)isHealthField;
 -(BOOL)isCalculatedField;
 -(BOOL)isInternal;
+-(BOOL)isBestRollingField;
 
 -(BOOL)hasSuffix:(NSString*)suf;
 -(BOOL)hasPrefix:(NSString*)pref;

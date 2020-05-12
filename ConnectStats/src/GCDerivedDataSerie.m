@@ -169,16 +169,14 @@
                     [rv addObject:act];
                 }
             }else{
-                GCStatsDataSerieWithUnit * actBest = [act calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                        forField:self.field
+                GCStatsDataSerieWithUnit * actBest = [act calculatedSerieForField:self.field.correspondingBestRollingField
                                                                           thread:nil];
                 if( actBest.count == 0){
                     RZLog(RZLogInfo, @"got no points %@", act);
                 }
                 for (NSUInteger idx = 0; idx < MIN(count,actBest.count); idx ++ ) {
                     GCActivity * currrentBestActivity = rv[idx];
-                    GCStatsDataSerieWithUnit * currentBest = [currrentBestActivity calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest
-                                                                                                 forField:self.field
+                    GCStatsDataSerieWithUnit * currentBest = [currrentBestActivity calculatedSerieForField:self.field.correspondingBestRollingField
                                                                                                    thread:nil];
                     if( idx < currentBest.count){
                         double y_best = [currentBest dataPointAtIndex:idx].y_data;
@@ -316,7 +314,7 @@
 }
 
 -(void)loadFromFileIfNeeded{
-    if( self.serieWithUnit == nil){
+    if( self.cacheSerieWithUnit == nil){
         [self loadFromFile:self.filePath];
     }
 }

@@ -41,7 +41,8 @@
 @class GCService;
 @class GCActivitySummaryValue;
 @class GCActivityCalculatedValue;
-
+@class GCCalculatedCachedTrackInfo;
+@class GCCalculatedCachedTrackKey;
 
 typedef BOOL (^GCActivityMatchBlock)(GCActivity*act);
 
@@ -92,9 +93,9 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  */
 @property (nonatomic,readonly) NSDictionary<NSString*,GCActivityMetaValue*> * metaData;
 /**
- NSString -> GCCalculactedCachedTrackInfo (to be calculated) or GCStatsDataSerieWithUnit
+    All implementation detail should be hidden in GCActivity+CachedTracked.h
  */
-@property (nonatomic,retain) NSDictionary * cachedCalculatedTracks;
+@property (nonatomic,retain) NSDictionary<GCField*,GCCalculatedCachedTrackInfo*> * cachedCalculatedTracks;
 
 
 @property (nonatomic,readonly) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("use GCActivityType.");

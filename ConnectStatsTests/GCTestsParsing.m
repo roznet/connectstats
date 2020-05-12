@@ -209,7 +209,7 @@
         // Check basics first
         XCTAssertEqual(parsedAct.laps.count, reloadedAct.laps.count);
         
-        [self compareStatsAssertEqual:parsedDict and:reloadedDict withMessage:[NSString stringWithFormat:@"Check Reloaded activity %@", activityId]];
+        [self compareStatsAssertEqual:reloadedDict andExpected:parsedDict withMessage:[NSString stringWithFormat:@"Check Reloaded activity %@", activityId]];
         
         XCTAssertEqual(reloadedAct.laps.count, parsedAct.laps.count, @"Lap count %@", activityId);
         
@@ -1262,7 +1262,7 @@
     return rv;
 }
 
--(void)compareStatsAssertEqual:(NSDictionary*)rv and:(NSDictionary*)expected withMessage:(NSString*)msg{
+-(void)compareStatsAssertEqual:(NSDictionary*)rv andExpected:(NSDictionary*)expected withMessage:(NSString*)msg{
     XCTAssertEqual(expected.allKeys.count, rv.allKeys.count,  @"Same Keys %@", msg);
     
     for (NSObject<NSCopying>*key in expected) {
@@ -1288,17 +1288,25 @@
                     NSArray * e = (NSArray*)expectedVal;
                     NSArray * r = (NSArray*)rvVal;
                     for( NSUInteger i=0;i<MIN(e.count, r.count);i++){
-                        NSArray<GCTrackFieldChoiceHolder*> * eA = e[i];
-                        NSArray<GCTrackFieldChoiceHolder*> * rA = r[i];
-                        if( eA.count != rA.count ){
-                            RZLog(RZLogInfo, @"[%lu] count %@ != %@", (unsigned long)i, @(eA.count), @(rA.count));
+                        if( [e[i] isKindOfClass:[GCField class]] ){
+                            GCField * eA = e[i];
+                            GCField * rA = r[i];
+                            if( ! [eA isEqualToField:rA] ){
+                                RZLog(RZLogInfo, @"%@[%lu]  %@ != %@", key, (unsigned long)i, eA, rA);
+                            }
                         }else{
-                            for (NSUInteger j=0; j<eA.count; j++) {
-                                GCTrackFieldChoiceHolder * eH = eA[j];
-                                GCTrackFieldChoiceHolder * rH = rA[j];
-                                
-                                if( [eH.field isEqualToField:rH.field] ){
-                                    RZLog(RZLogInfo, @"[%@] %@ != %@", @(i), eH.field, rH.field);
+                            NSArray<GCTrackFieldChoiceHolder*> * eA = e[i];
+                            NSArray<GCTrackFieldChoiceHolder*> * rA = r[i];
+                            if( eA.count != rA.count ){
+                                RZLog(RZLogInfo, @"%@[%lu] count %@ != %@", key, (unsigned long)i, @(eA.count), @(rA.count));
+                            }else{
+                                for (NSUInteger j=0; j<eA.count; j++) {
+                                    GCTrackFieldChoiceHolder * eH = eA[j];
+                                    GCTrackFieldChoiceHolder * rH = rA[j];
+                                    
+                                    if( ![eH.field isEqualToField:rH.field] ){
+                                        RZLog(RZLogInfo, @"%@[%@] %@ != %@", key, @(i), eH.field, rH.field);
+                                    }
                                 }
                             }
                         }
@@ -1317,7 +1325,7 @@
     NSError * error = nil;
     NSDictionary * rv = [self compareStatsDictFor:act];
     NSDictionary * expected = [manager retrieveReferenceObject:rv forClasses:classes selector:sel identifier:label error:&error];
-    [self compareStatsAssertEqual:rv and:expected withMessage:[NSString stringWithFormat:@"%@ %@", NSStringFromSelector(sel), label]];
+    [self compareStatsAssertEqual:rv andExpected:expected withMessage:[NSString stringWithFormat:@"%@ %@", NSStringFromSelector(sel), label]];
 
 }
 
