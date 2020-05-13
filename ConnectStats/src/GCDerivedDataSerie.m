@@ -153,53 +153,6 @@
     return rv;
 }
 
--(NSArray<GCActivity*>*)bestMatchingSerieIn:(NSArray<GCActivity*>*)activities maxCount:(NSUInteger)maxcount{
-    // don't go further that current serie
-    NSUInteger count = MIN(maxcount, self.serieWithUnit.count);
-    
-    NSMutableArray<GCActivity*>* rv = [NSMutableArray arrayWithCapacity:count];
-    BOOL betterIsMin = self.serieWithUnit.unit.betterIsMin;
-    
-    for (GCActivity * act in activities) {
-        if( [self containsActivity:act] ){
-            if( rv.count == 0){
-                // first round, just put activity everywhere
-                for( NSUInteger idx = 0; idx < count; idx++){
-                    // We may add act beyond the size of that act's best serie.
-                    [rv addObject:act];
-                }
-            }else{
-                GCStatsDataSerieWithUnit * actBest = [act calculatedSerieForField:self.field.correspondingBestRollingField
-                                                                          thread:nil];
-                if( actBest.count == 0){
-                    RZLog(RZLogInfo, @"got no points %@", act);
-                }
-                for (NSUInteger idx = 0; idx < MIN(count,actBest.count); idx ++ ) {
-                    GCActivity * currrentBestActivity = rv[idx];
-                    GCStatsDataSerieWithUnit * currentBest = [currrentBestActivity calculatedSerieForField:self.field.correspondingBestRollingField
-                                                                                                   thread:nil];
-                    if( idx < currentBest.count){
-                        double y_best = [currentBest dataPointAtIndex:idx].y_data;
-                        double check_y_best = [actBest dataPointAtIndex:idx].y_data;
-                        if( betterIsMin ){
-                            if( check_y_best < y_best ){
-                                rv[idx] = act;
-                            }
-                        }else{
-                            if( check_y_best > y_best ){
-                                rv[idx] = act;
-                            }
-                        }
-                    }else{
-                        // If idx is beyond the size of current best, fill with current act, which is going further
-                        rv[idx] = act;
-                    }
-                }
-            }
-        }
-    }
-    return rv;
-}
 
 #pragma mark - access
 

@@ -245,8 +245,9 @@
     double original_y_max = [serie.serieWithUnit dataPointAtIndex:bestIdx].y_data;
     double original_year_y_max = [serieYear.serieWithUnit dataPointAtIndex:bestIdx].y_data;
 
-    NSArray<GCActivity*>*bestActivities = [serie bestMatchingSerieIn:[serie containedActivitiesIn:activities] maxCount:serie.serieWithUnit.count];
-    NSArray<GCActivity*>*bestYearActivities = [serie bestMatchingSerieIn:[serieYear containedActivitiesIn:activities] maxCount:serie.serieWithUnit.count];
+    
+    NSArray<GCActivity*>*bestActivities = [derived bestMatchingActivitySerieFor:serie within:[serie containedActivitiesIn:activities]];
+    NSArray<GCActivity*>*bestYearActivities = [derived bestMatchingActivitySerieFor:serieYear within:[serieYear containedActivitiesIn:activities]];
 
     GCActivity * exclude = bestActivities[bestIdx];
     XCTAssertEqualObjects(bestYearActivities[bestIdx].activityId, exclude.activityId, @"Check that testAct was selected in the month with best overall");
@@ -326,7 +327,7 @@
                                                     period:gcDerivedPeriodAll
                                                    forDate:testForAct.date
                                             andActivityType:testForAct.activityType];
-    NSArray<GCDerivedDataSerie*>*bestSeries = [derived bestMatchinSerieIn:serieAll maxCount:serieAll.serieWithUnit.count];
+    NSArray<GCDerivedDataSerie*>*bestSeries = [derived bestMatchingDerivedSerieFor:serieAll];
     double allFromSeries_y_max = [bestSeries[bestIdx].serieWithUnit dataPointAtIndex:bestIdx].y_data;
     // we recover the best when we do best by serie, because setup such that month of focus is best one
     XCTAssertEqualWithAccuracy(allFromSeries_y_max, excluded_y_max, 1.0e-8);

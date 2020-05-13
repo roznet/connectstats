@@ -52,7 +52,13 @@ extern NSString * kNOTIFY_DERIVED_NEXT;
                                forDate:(NSDate*)date
                        andActivityType:(NSString*)aType;
 
--(NSArray<GCDerivedDataSerie*>*)bestMatchinSerieIn:(GCDerivedDataSerie*)serie maxCount:(NSUInteger)maxcount;
+-(NSArray<GCDerivedDataSerie*>*)bestMatchingDerivedSerieFor:(GCDerivedDataSerie*)serie;
+
+/// find in the series of activities the activity corresponding to the point in current serie
+///  The resulting serie at Index i will have the activities for which the bestRolling serie at index i is the best
+/// @param serie list of activities with same index as in serie up to idx = count
+/// @param activities find activities up to index count
+-(NSArray<GCActivity*>*)bestMatchingActivitySerieFor:(GCDerivedDataSerie*)serie within:(NSArray<GCActivity*>*)activities;
 
 -(void)processActivities:(NSArray<GCActivity*>*)activities;
 -(void)processSome;

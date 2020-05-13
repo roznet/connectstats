@@ -71,12 +71,6 @@ extern sqlite3_int64 kInvalidSerieId;
 -(BOOL)containsActivity:(GCActivity*)act;
 -(NSArray<GCActivity*>*)containedActivitiesIn:(NSArray<GCActivity*>*)activities;
 
-/// find in the series of activities the activity corresponding to the point in current serie
-///  The resulting serie at Index i will have the activities for which the bestRolling serie at index i is the best
-/// @param activities list of activities with same index as in serie up to idx = count
-/// @param count find activities up to index count
--(NSArray<GCActivity*>*)bestMatchingSerieIn:(NSArray<GCActivity*>*)activities maxCount:(NSUInteger)count;
-
 -(BOOL)saveToDb:(FMDatabase*)db;
 
 -(void)loadFromFileIfNeeded;

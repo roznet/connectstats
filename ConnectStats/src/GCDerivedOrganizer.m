@@ -540,51 +540,6 @@ static BOOL kDerivedEnabled = true;
     return rv;
 }
 
--(NSArray<GCDerivedDataSerie*>*)bestMatchinSerieIn:(GCDerivedDataSerie*)serie maxCount:(NSUInteger)maxcount{
-    // don't go further that current serie
-    NSUInteger count = MIN(maxcount, serie.serieWithUnit.count);
-    
-    NSMutableArray<GCDerivedDataSerie*>* rv = [NSMutableArray arrayWithCapacity:count];
-    BOOL betterIsMin = serie.serieWithUnit.unit.betterIsMin;
-    
-    for (GCDerivedDataSerie * one in self.derivedSeries.allValues) {
-        if( one.derivedPeriod == gcDerivedPeriodMonth && [serie dependsOnSerie:one] ){
-            if( rv.count == 0){
-                // first round, just put activity everywhere
-                for( NSUInteger idx = 0; idx < count; idx++){
-                    // fill all with first, even is size of one is too small, we'll be careful later
-                    [rv addObject:one];
-                }
-            }else{
-                GCStatsDataSerieWithUnit * oneBest = one.serieWithUnit;
-
-                for (NSUInteger idx = 0; idx < MIN(count,oneBest.count); idx ++ ) {
-                    GCDerivedDataSerie * currentBestSerie = rv[idx];
-                    GCStatsDataSerieWithUnit * currentBest = currentBestSerie.serieWithUnit;
-                    
-                    if( idx < currentBest.count ){
-                        double y_best = [currentBest dataPointAtIndex:idx].y_data;
-                        double check_y_best = [oneBest dataPointAtIndex:idx].y_data;
-                        if( betterIsMin ){
-                            if( check_y_best < y_best ){
-                                rv[idx] = one;
-                            }
-                        }else{
-                            if( check_y_best > y_best ){
-                                rv[idx] = one;
-                            }
-                        }
-                    }else{
-                        // current is going further that last best ,fill with this one.
-                        rv[idx] = one;
-                    }
-                }
-            }
-        }
-    }
-    return rv;
-
-}
 -(void)forceReprocessActivity:(NSString*)aId{
     if (!self.processedActivities) {
         [self loadProcesseActivities];
@@ -629,6 +584,102 @@ static BOOL kDerivedEnabled = true;
     }
     return rv;
 }
+
+
+#pragma mark - Reconstruction
+
+-(NSArray<GCDerivedDataSerie*>*)bestMatchingDerivedSerieFor:(GCDerivedDataSerie *)serie{
+    // don't go further that current serie
+    NSUInteger count = serie.serieWithUnit.count;
+    
+    NSMutableArray<GCDerivedDataSerie*>* rv = [NSMutableArray arrayWithCapacity:count];
+    BOOL betterIsMin = serie.serieWithUnit.unit.betterIsMin;
+    
+    for (GCDerivedDataSerie * one in self.derivedSeries.allValues) {
+        if( one.derivedPeriod == gcDerivedPeriodMonth && [serie dependsOnSerie:one] ){
+            if( rv.count == 0){
+                // first round, just put activity everywhere
+                for( NSUInteger idx = 0; idx < count; idx++){
+                    // fill all with first, even is size of one is too small, we'll be careful later
+                    [rv addObject:one];
+                }
+            }else{
+                GCStatsDataSerieWithUnit * oneBest = one.serieWithUnit;
+
+                for (NSUInteger idx = 0; idx < MIN(count,oneBest.count); idx ++ ) {
+                    GCDerivedDataSerie * currentBestSerie = rv[idx];
+                    GCStatsDataSerieWithUnit * currentBest = currentBestSerie.serieWithUnit;
+                    
+                    if( idx < currentBest.count ){
+                        double y_best = [currentBest dataPointAtIndex:idx].y_data;
+                        double check_y_best = [oneBest dataPointAtIndex:idx].y_data;
+                        if( betterIsMin ){
+                            if( check_y_best < y_best ){
+                                rv[idx] = one;
+                            }
+                        }else{
+                            if( check_y_best > y_best ){
+                                rv[idx] = one;
+                            }
+                        }
+                    }else{
+                        // current is going further that last best ,fill with this one.
+                        rv[idx] = one;
+                    }
+                }
+            }
+        }
+    }
+    return rv;
+}
+
+-(NSArray<GCActivity*>*)bestMatchingActivitySerieFor:(GCDerivedDataSerie*)serie within:(NSArray<GCActivity*>*)activities{
+    // don't go further that current serie
+    NSUInteger count = serie.serieWithUnit.count;
+    
+    NSMutableArray<GCActivity*>* rv = [NSMutableArray arrayWithCapacity:count];
+    BOOL betterIsMin = serie.serieWithUnit.unit.betterIsMin;
+    
+    for (GCActivity * act in activities) {
+        if( [serie containsActivity:act] ){
+            if( rv.count == 0){
+                // first round, just put activity everywhere
+                for( NSUInteger idx = 0; idx < count; idx++){
+                    // We may add act beyond the size of that act's best serie.
+                    [rv addObject:act];
+                }
+            }else{
+                GCStatsDataSerieWithUnit * actBest = [act calculatedSerieForField:serie.field.correspondingBestRollingField
+                                                                          thread:nil];
+                if( actBest.count == 0){
+                    RZLog(RZLogInfo, @"got no points %@", act);
+                }
+                for (NSUInteger idx = 0; idx < MIN(count,actBest.count); idx ++ ) {
+                    GCActivity * currrentBestActivity = rv[idx];
+                    GCStatsDataSerieWithUnit * currentBest = [currrentBestActivity calculatedSerieForField:serie.field.correspondingBestRollingField thread:nil];
+                    if( idx < currentBest.count){
+                        double y_best = [currentBest dataPointAtIndex:idx].y_data;
+                        double check_y_best = [actBest dataPointAtIndex:idx].y_data;
+                        if( betterIsMin ){
+                            if( check_y_best < y_best ){
+                                rv[idx] = act;
+                            }
+                        }else{
+                            if( check_y_best > y_best ){
+                                rv[idx] = act;
+                            }
+                        }
+                    }else{
+                        // If idx is beyond the size of current best, fill with current act, which is going further
+                        rv[idx] = act;
+                    }
+                }
+            }
+        }
+    }
+    return rv;
+}
+
 
 #pragma mark - Processing
 

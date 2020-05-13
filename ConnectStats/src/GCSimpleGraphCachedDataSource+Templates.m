@@ -602,7 +602,7 @@
     GCViewGradientColors * gradientColors = [GCViewGradientColors gradientColorsWith:colors];
 
     if( period == gcDerivedPeriodMonth ){
-        NSArray<GCActivity*>*bestActivities = [serie bestMatchingSerieIn:[serie containedActivitiesIn:[[GCAppGlobal organizer] activities]] maxCount:serie.serieWithUnit.count];
+        NSArray<GCActivity*>*bestActivities = [[GCAppGlobal derived] bestMatchingActivitySerieFor:serie within:[serie containedActivitiesIn:[[GCAppGlobal organizer] activities]]];
         for (GCActivity * act in bestActivities) {
             NSString * label = [act.date calendarUnitFormat:NSCalendarUnitDay];
             [labels addObject:label];
@@ -621,7 +621,7 @@
             }
         }
     }else{
-        NSArray<GCDerivedDataSerie*>*bestSeries = [[GCAppGlobal derived] bestMatchinSerieIn:serie maxCount:serie.serieWithUnit.count];
+        NSArray<GCDerivedDataSerie*>*bestSeries = [[GCAppGlobal derived] bestMatchingDerivedSerieFor:serie];
         for (GCDerivedDataSerie * one in bestSeries) {
             NSString * label = [one.bucketStart calendarUnitFormat:NSCalendarUnitMonth];
             [labels addObject:label];
