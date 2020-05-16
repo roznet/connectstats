@@ -59,7 +59,7 @@
     return rv;
 }
 
-+(NSDictionary*)categoryOrder{
++(NSDictionary<NSString*,NSNumber*>*)categoryOrder{
     static NSMutableDictionary * rv = nil;
     if (!rv) {
         FMDatabase * fdb = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"fields.db"]];

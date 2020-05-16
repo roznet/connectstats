@@ -149,7 +149,7 @@
                 }
             }
             if (first.fieldFlag==gcFieldFlagAltitudeMeters) {
-                GCField * ascent = [GCField field:CALC_VERTICAL_SPEED forActivityType:activity.activityType];
+                GCField * ascent = [GCField fieldForKey:CALC_VERTICAL_SPEED andActivityType:activity.activityType];
                 if ([activity hasCalculatedSerieForField:ascent]) {
                     [styles addObject:[GCTrackFieldChoiceHolder trackFieldChoice:ascent xField:nil]];
                 }

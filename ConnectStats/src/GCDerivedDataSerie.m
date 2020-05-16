@@ -214,7 +214,7 @@
 }
 
 -(BOOL)isEmpty{
-    return self.filePath == nil || (self.serieWithUnit != nil && self.serieWithUnit.serie.count == 0);
+    return self.filePath == nil || (self.cacheSerieWithUnit != nil && self.cacheSerieWithUnit.serie.count == 0);
 }
 
 #pragma mark - operate

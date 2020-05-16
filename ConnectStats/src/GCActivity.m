@@ -1304,8 +1304,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     for (GCField * one in track) {
         unique[one] = @1;
     }
-    for (NSString * field in self.cachedExtraTracksIndexes) {
-        GCField * one = [GCField field:field forActivityType:self.activityType];
+    for (GCField * field in self.cachedExtraTracksIndexes) {
+        GCField * one = field;
         // if speed or pace, don't add twice, was already added above
         if( one.isSpeedOrPace && (_trackFlags & gcFieldFlagWeightedMeanSpeed ) == gcFieldFlagWeightedMeanSpeed){
             continue;
@@ -1314,9 +1314,8 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             unique[one] = @1;
         }
     }
-    for( NSString * field in self.cachedCalculatedTracks){
-        GCField * one = [GCField field:field forActivityType:self.activityType];
-        unique[one] = @1;
+    for( GCField * field in self.cachedCalculatedTracks){
+        unique[field] = @1;
     }
     return [unique.allKeys sortedArrayUsingSelector:@selector(compare:)];
 }

@@ -96,24 +96,28 @@
     GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
     GCDerivedDataSerie * current = [self currentDerivedDataSerie];
 
-    GCSimpleGraphCachedDataSource * cache = nil;
     if (current) {
-        gcDerivedPeriod period = indexPath.row == 0 ? gcDerivedPeriodYear : gcDerivedPeriodMonth;
-        NSMutableArray<GCSimpleGraphLegendInfo*>*legends = [NSMutableArray array];
-        cache = [GCSimpleGraphCachedDataSource derivedDataSingleHighlighted:current.field period:period forDate:current.bucketStart addLegendTo:legends width:tableView.frame.size.width];
-        cache.emptyGraphLabel = @"";
-        [graphCell setDataSource:cache andConfig:cache];
-        // Setup legengview AFter otherwise setDataSource override the legend data source
-        GCSimpleGraphLegendView * legendView = [[GCSimpleGraphLegendView alloc] initWithFrame:CGRectZero];
-        [legendView setupWithLegends:legends];
-        legendView.displayConfig = cache;
-        graphCell.legendView = legendView;
-        RZRelease( legendView );
-    }else{
-        cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-        cache.emptyGraphLabel = @"";
-        [graphCell setDataSource:cache andConfig:cache];
+        CGFloat width = tableView.frame.size.width;
+        // Do calculation on worker spread
+        dispatch_async([GCAppGlobal worker], ^(){
+            gcDerivedPeriod period = indexPath.row == 0 ? gcDerivedPeriodYear : gcDerivedPeriodMonth;
+            NSMutableArray<GCSimpleGraphLegendInfo*>*legends = [NSMutableArray array];
+            GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource derivedDataSingleHighlighted:current.field period:period forDate:current.bucketStart addLegendTo:legends width:width];
+            
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [graphCell setDataSource:cache andConfig:cache];
+                // Setup legengview AFter otherwise setDataSource override the legend data source
+                graphCell.legendView.displayConfig = cache;
+                [graphCell.legendView setupWithLegends:legends];
+                [graphCell setNeedsLayout];
+                [graphCell setNeedsDisplay];
+            });
+        });
     }
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
+    cache.emptyGraphLabel = NSLocalizedString(@"Calculating...", @"Derived Calculate");
+    graphCell.legendView = [[[GCSimpleGraphLegendView alloc] initWithFrame:CGRectZero] autorelease];
+    [graphCell setDataSource:cache andConfig:cache];
 
     return graphCell;
 
@@ -136,10 +140,14 @@
         cell = [self tableView:tableView derivedCellForRowAtIndexPath:indexPath];
     }else if( indexPath.section == GC_SECTION_ACTIONS){
         GCCellGrid * grcell = [GCCellGrid gridCell:tableView];
-        [grcell setupForRows:1 andCols:1];
+        [grcell setupForRows:2 andCols:1];
         
         if( indexPath.row == GC_ACTION_REBUILD){
-            [grcell labelForRow:0 andCol:0].text = NSLocalizedString(@"Rebuild Derived", "Dummy");
+            NSString * message = [NSString stringWithFormat:NSLocalizedString(@"Rebuild Analysis for %@", "Derived Analysis"),
+                                  [self.config.currentDerivedDataSerie.bucketStart calendarUnitFormat:NSCalendarUnitMonth]];
+            [grcell labelForRow:0 andCol:0].text = message;
+            [grcell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray]
+                                                                                       withString:NSLocalizedString(@"This action may take some time", "Derived Analysis")];
         }
         cell = grcell;
     }else{

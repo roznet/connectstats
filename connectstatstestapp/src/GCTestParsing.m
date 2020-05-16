@@ -79,7 +79,7 @@
                             ];
 
     for (NSString * expect in expected) {
-        NSInteger found = [available indexOfObject:[GCField field:expect forActivityType:act.activityType]];
+        NSInteger found = [available indexOfObject:[GCField fieldForKey:expect andActivityType:act.activityType]];
         RZ_ASSERT(found != NSNotFound, @"%@ available in %@", expect, act);
     }
     NSUInteger count = 0;

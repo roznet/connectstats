@@ -554,7 +554,7 @@
 
 #pragma mark - Setup and call back
 
--(NSArray<NSAttributedString*>*)attributedStringsForFieldInput:(id)input{
+-(NSArray<NSAttributedString*>*)attributedStringsForFieldInput:(NSArray<GCField*>*)input{
     NSMutableArray * rv = [NSMutableArray array];
     GCActivity * activity = self.activity;
     GCFormattedField * mainF = nil;
@@ -585,30 +585,6 @@
                     [rv addObject:[theOne attributedString]];
                 }
             }
-        }
-    }else {
-        field = [GCField field:input forActivityType:activity.activityType];
-        if (field) {
-            NSArray<GCField*> * related = [field relatedFields];
-
-            GCNumberWithUnit * mainN = [activity numberWithUnitForField:field];
-            mainF = [GCFormattedField formattedField:field forNumber:mainN forSize:16.];
-            [rv addObject:mainF];
-            for (NSUInteger i=0; i<related.count; i++) {
-                GCField * addField = related[i];
-                GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
-                if (addNumber) {
-                    GCFormattedField* theOne = [GCFormattedField formattedField:addField forNumber:addNumber forSize:14.];
-                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-                    if ([addNumber sameUnit:mainN]) {
-                        theOne.noUnits = true;
-                    }
-                    [rv addObject:theOne];
-                }
-            }
-        }else{
-            RZLog(RZLogError, @"Invalid input %@", NSStringFromClass([input class]));
         }
     }
     return rv;
@@ -677,8 +653,8 @@
         NSMutableArray * packed = [NSMutableArray array];
         NSMutableArray * fields = [NSMutableArray array];
         // Start Packing
-        for (NSArray * input in self.organizedFields.groupedPrimaryFields) {
-            GCField * field = [GCField field:input[0] forActivityType:_activity.activityType];
+        for (NSArray<GCField*> * input in self.organizedFields.groupedPrimaryFields) {
+            GCField * field = input.firstObject;
             if(field.fieldFlag == gcFieldFlagSumDistance){
                 field = [GCField fieldForFlag:gcFieldFlagAltitudeMeters andActivityType:_activity.activityType];
             }

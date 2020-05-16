@@ -140,9 +140,6 @@ class FITFitFileInterpret: NSObject {
         for (key,fitField) in fitMessageFields {
             if  let v = self.summaryValue(fitMessageType:fitMessage.messageType, field: key, fitField: fitField),
                 let f = fieldKey(fitMessageType: fitMessage.messageType, fitField: key){
-                if( f.fieldFlag == gcFieldFlag.weightedMeanSpeed){
-                    let vv = self.summaryValue(fitMessageType:fitMessage.messageType, field: key, fitField: fitField)
-                }
                 var save = true
                 if var alternate = messageAlternates.removeValue(forKey: f) {
                     if !alternate.contains(key) {

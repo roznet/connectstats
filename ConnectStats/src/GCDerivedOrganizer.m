@@ -315,7 +315,10 @@ static BOOL kDerivedEnabled = true;
             }
         }
     }
-    NSArray * keys = [[byField allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    NSArray * keys = [[byField allKeys] sortedArrayUsingComparator:^(GCField * f1, GCField * f2){
+        // Reverse order from display field (we want power, hr, speed)
+        return [f2 compare:f1];
+    }];
     for (NSString * key in keys) {
         [rv addObject:byField[key]];
     }
@@ -834,11 +837,14 @@ static BOOL kDerivedEnabled = true;
         
         @synchronized (self.queue) {
             element = self.queue.lastObject;
+            [element retain];
             [self.queue removeLastObject];
             lastElement = (self.queue.count == 0);
         }
 
         [self processQueueElement:element];
+        
+        [element release];
         
         if (lastElement) {
             self.queue = nil;

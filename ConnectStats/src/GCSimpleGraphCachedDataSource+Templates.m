@@ -571,6 +571,7 @@
     return rv;
 }
 
+
 +(GCSimpleGraphCachedDataSource*)derivedDataSingleHighlighted:(GCField*)field
                                                        period:(gcDerivedPeriod)period
                                                       forDate:(NSDate*)date
@@ -652,13 +653,19 @@
         xUnit = logScale;
     }
     
-    GCStatsDataSerie * graphSerie = serie.serieWithUnit.serie;
+    GCStatsDataSerie * graphSerie = nil;
+    GCStatsDataSerie * graphSerieCompare = nil;
+    
     if( logScale ){
         graphSerie = [[GCStatsDataSerieWithUnit dataSerieWithOther:serie.serieWithUnit] convertToXUnit:logScale].serie;
+        graphSerieCompare = [[GCStatsDataSerieWithUnit dataSerieWithOther:serieCompare.serieWithUnit] convertToXUnit:logScale].serie;
+    }else{
+        graphSerie = serie.serieWithUnit.serie;
+        graphSerieCompare = serieCompare.serieWithUnit.serie;
     }
     GCStatsDataSerie * gradientSerie = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     
-    for (NSUInteger idx = 0; idx < MIN(labels.count,serie.serieWithUnit.count); idx++) {
+    for (NSUInteger idx = 0; idx < MIN(labels.count,graphSerie.count); idx++) {
         NSString * label = labels[idx];
         NSUInteger labelIndex = labelsIndexes[label].integerValue;
         GCStatsDataPoint * point = [graphSerie dataPointAtIndex:idx];
@@ -670,7 +677,6 @@
         }
     }
     
-    
     UIColor * defaultColor = [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText];
     
     GCSimpleGraphDataHolder * holder = [GCSimpleGraphDataHolder dataHolder:graphSerie
@@ -678,7 +684,7 @@
                                                                      color:defaultColor
                                                                    andUnit:serie.serieWithUnit.unit];
     
-    GCSimpleGraphDataHolder * holderCompare = [GCSimpleGraphDataHolder dataHolder:serieCompare.serieWithUnit.serie
+    GCSimpleGraphDataHolder * holderCompare = [GCSimpleGraphDataHolder dataHolder:graphSerieCompare
                                                                              type:gcGraphLine
                                                                             color:[GCViewConfig colorForGraphElement:gcSkinGraphColorLapOverlay]
                                                                           andUnit:serie.serieWithUnit.unit];

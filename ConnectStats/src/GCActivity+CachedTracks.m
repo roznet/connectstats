@@ -143,7 +143,7 @@
     NSMutableDictionary * missing = [NSMutableDictionary dictionary];
 
     if (RZTestOption(self.trackFlags, gcFieldFlagAltitudeMeters)) {
-        GCField * field = [GCField field:CALC_VERTICAL_SPEED forActivityType:self.activityType];
+        GCField * field = [GCField fieldForKey:CALC_VERTICAL_SPEED andActivityType:self.activityType];
         if (self.cachedCalculatedTracks[field] == nil) {
             GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo infoForField:field];
             missing[field] = info;

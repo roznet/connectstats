@@ -31,7 +31,7 @@
 
 
 -(GCNumberWithUnit*)numberWithUnitForFieldKey:(NSString*)fieldKey{
-    return [self numberWithUnitForField:[GCField field:fieldKey forActivityType:self.activityType]];
+    return [self numberWithUnitForField:[GCField fieldForKey:fieldKey andActivityType:self.activityType]];
 }
 
 -(GCNumberWithUnit*)numberWithUnitForFieldFlag:(gcFieldFlag)fieldFlag{

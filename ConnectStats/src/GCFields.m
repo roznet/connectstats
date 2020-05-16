@@ -91,16 +91,10 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
 #pragma mark - Field Properties
 
 
-+(NSArray<GCFieldsForCategory*>*)categorizeAndOrderFields:(NSArray*)fields forActivityType:(NSString*)activityType{
++(NSArray<GCFieldsForCategory*>*)categorizeAndOrderFields:(NSArray<GCField*>*)fields forActivityType:(NSString*)activityType{
     NSMutableDictionary * categories = [NSMutableDictionary dictionary];
 
-    for (id one in fields) {
-        GCField * field = nil;
-        if ([one isKindOfClass:[GCField class]]){
-            field = one;
-        }else{
-            field = [GCField field:one forActivityType:activityType];
-        }
+    for (GCField * field in fields) {
         NSString * category = field.category;
 
         if (category) {
