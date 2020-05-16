@@ -418,10 +418,7 @@
 
     GCSimpleGraphCachedDataSource * cache = nil;
     if (current) {
-         cache = [GCSimpleGraphCachedDataSource derivedData:self.activityType
-                                                      field:current.fieldFlag
-                                                        for:current.bucketStart
-                                                      width:tableView.frame.size.width];
+        cache = [GCSimpleGraphCachedDataSource derivedData:current.field forDate:current.bucketStart width:tableView.frame.size.width];
         cache.emptyGraphLabel = @"";
         graphCell.legend = true;
         [graphCell setDataSource:cache andConfig:cache];
@@ -615,7 +612,7 @@
 }
 
 -(void)longPress:(GCCellSimpleGraph*)cell{
-    RZLog(RZLogInfo,@"Long press");
+    RZLog(RZLogInfo,@"Starting Derived Analysis");
     
     self.configViewController = [GCStatsDerivedAnalysisViewController controllerWithDelegate:self];
     

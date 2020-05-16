@@ -46,10 +46,11 @@ typedef NS_ENUM(NSUInteger, gcDerivedType) {
 extern sqlite3_int64 kInvalidSerieId;
 
 @interface GCDerivedDataSerie : NSObject<NSSecureCoding>
-@property (nonatomic,assign) gcDerivedType derivedType;
-@property (nonatomic,retain) NSString * activityType;
-@property (nonatomic,assign) gcFieldFlag fieldFlag;
-@property (nonatomic,assign) gcDerivedPeriod derivedPeriod;
+@property (nonatomic,readonly) gcDerivedType derivedType;
+@property (nonatomic,readonly) gcDerivedPeriod derivedPeriod;
+
+@property (nonatomic,readonly) NSString * activityType;
+@property (nonatomic,readonly) gcFieldFlag fieldFlag;
 @property (nonatomic,readonly) GCField * field;
 @property (nonatomic,readonly) NSDate* bucketStart;
 @property (nonatomic,readonly) NSString * key;
@@ -58,10 +59,10 @@ extern sqlite3_int64 kInvalidSerieId;
 @property (nonatomic,retain) NSString * fileNamePrefix;
 
 +(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type
-                                 field:(gcFieldFlag)field
+                                 field:(GCField*)field
                                 period:(gcDerivedPeriod)period
-                               forDate:(NSDate*)date
-                       andActivityType:(NSString*)atype;
+                               forDate:(NSDate*)date;
+
 +(GCDerivedDataSerie*)derivedDataSerieFromResultSet:(FMResultSet*)res;
 
 -(void)reset;

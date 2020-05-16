@@ -61,7 +61,7 @@
     }
 
     // Fill for each 10 meter with average seconds of surrounding points
-    GCStatsDataSerie * filled = [serie.serie filledSerieForUnit:unitstride fillMethod:gcStatsLinear statistic:gcStatsWeightedMean];
+    GCStatsDataSerie * filled = [serie.serie filledSerieForUnit:unitstride];
     #if TARGET_IPHONE_SIMULATOR
             [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_raw_%@.csv", self.activityId]
                                               atomically:YES encoding:NSUTF8StringEncoding error:nil];
@@ -158,7 +158,8 @@
                 break;
             }
         }
-        if( n > 0){
+        // Report for more than 25% of point capped
+        if( n > serie.count/4 ){
             RZLog(RZLogInfo, @"%@ BestRolling for %@ capped %@/%@ points greater than %@ = %@",self, field, @(n),@(serie.count), maxfield, max_nu );
         }
     }

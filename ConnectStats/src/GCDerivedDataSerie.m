@@ -41,6 +41,13 @@
 @property (nonatomic,retain) GCStatsDataSerieWithUnit * cacheSerieWithUnit;
 @property (nonatomic,retain) NSDate * bucketStart;
 @property (nonatomic,retain) NSDate * bucketEnd;
+
+@property (nonatomic,retain) NSString * activityType;
+@property (nonatomic,assign) gcFieldFlag fieldFlag;
+
+@property (nonatomic,assign) gcDerivedType derivedType;
+@property (nonatomic,assign) gcDerivedPeriod derivedPeriod;
+
 @end
 
 @implementation GCDerivedDataSerie
@@ -76,17 +83,15 @@
 }
 
 +(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type
-                                 field:(gcFieldFlag)field
+                                 field:(GCField*)field
                                 period:(gcDerivedPeriod)period
-                               forDate:(NSDate *)date
-                       andActivityType:(NSString *)atype{
-
+                               forDate:(NSDate*)date{
     GCDerivedDataSerie * rv = [[[GCDerivedDataSerie alloc] init] autorelease];
     if (rv) {
         rv.derivedType = type;
-        rv.fieldFlag = field;
+        rv.fieldFlag = field.fieldFlag;
         rv.derivedPeriod = period;
-        rv.activityType = atype;
+        rv.activityType = field.activityType;
 
         if (date && period != gcDerivedPeriodAll) {
             GCStatsDateBuckets * buckets = [GCStatsDateBuckets statsDateBucketFor:period == gcDerivedPeriodMonth ? NSCalendarUnitMonth: NSCalendarUnitYear referenceDate:nil andCalendar:[GCAppGlobal calculationCalendar]];
@@ -96,6 +101,7 @@
         }
     }
     return rv;
+
 }
 
 -(void)dealloc{
@@ -290,6 +296,10 @@
             && self.fieldFlag==loaded.fieldFlag
             && [self.activityType isEqualToString:loaded.activityType]) {
             self.cacheSerieWithUnit = loaded.serieWithUnit;
+            // rescale for current unitstride
+            double unitstride = [GCAppGlobal configGetDouble:CONFIG_CRITICAL_CALC_UNIT defaultValue:10.];
+            GCStatsDataSerie * resampled = [loaded.serieWithUnit.serie filledSerieForUnit:unitstride];
+            self.cacheSerieWithUnit.serie = resampled;
         }else{
             RZLog(RZLogWarning, @"Ignoring load %@ from incompatible %@", self.key, loaded.key);
         }

@@ -309,9 +309,7 @@ Compute difference serie
 
 
 -(GCStatsDataSerie*)histogramWith:(NSUInteger)buckets;
--(GCStatsDataSerie*)filledSerieForUnit:(double)unit
-                            fillMethod:(gcStatsFillMethod)fill
-                             statistic:(gcStats)statistic;
+-(GCStatsDataSerie*)filledSerieForUnit:(double)unit;
 -(GCStatsDataSerie*)summedSerieByUnit:(double)unit fillMethod:(gcStatsFillMethod)fill;
 
 -(GCStatsDataSerie*)operate:(gcStatsOperand)operand with:(GCStatsDataSerie*)other;

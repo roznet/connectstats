@@ -435,30 +435,32 @@
                     disp = [disp unitForGlobalSystem];
                     double val = [disp convertDouble:sp fromUnit:mps];
                     if (isnan(val)||isinf(val)) {
-                        d = @"";
+                        d = nil;
                     }else{
                         d = [disp formatDouble:val];
                     }
                 }
             }
 
-            CGContextRef ctx = UIGraphicsGetCurrentContext();
-            CGFloat fontSize = 9.f;
-            UIFont *font = [GCViewConfig systemFontOfSize:fontSize];
-            UIColor * color = selected ? self.daySelectedTextColor : [markers displayTextColor];
-
-            CGContextSaveGState(ctx);
-
-            [color setFill];
-            [color setStroke];
-            NSDictionary * attr = @{NSFontAttributeName:font,NSForegroundColorAttributeName:color};
-            CGSize txtSize = [d sizeWithAttributes:attr];
-            CGFloat txtX = roundf((rect.size.width - txtSize.width)*0.5f);
-            if (txtX<0.) {
-                txtX = 0.;
+            if( d ){
+                CGContextRef ctx = UIGraphicsGetCurrentContext();
+                CGFloat fontSize = 9.f;
+                UIFont *font = [GCViewConfig systemFontOfSize:fontSize];
+                UIColor * color = selected ? self.daySelectedTextColor : [markers displayTextColor];
+                
+                CGContextSaveGState(ctx);
+                
+                [color setFill];
+                [color setStroke];
+                NSDictionary * attr = @{NSFontAttributeName:font,NSForegroundColorAttributeName:color};
+                CGSize txtSize = [d sizeWithAttributes:attr];
+                CGFloat txtX = roundf((rect.size.width - txtSize.width)*0.5f);
+                if (txtX<0.) {
+                    txtX = 0.;
+                }
+                [d drawAtPoint:CGPointMake(txtX, rect.origin.y) withAttributes:attr];
+                CGContextRestoreGState(ctx);
             }
-            [d drawAtPoint:CGPointMake(txtX, rect.origin.y) withAttributes:attr];
-            CGContextRestoreGState(ctx);
         }
     }else{
         return false;

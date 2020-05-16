@@ -571,27 +571,24 @@
     return rv;
 }
 
-+(GCSimpleGraphCachedDataSource*)derivedDataSingleHighlighted:(NSString*)activityType
-                                                        field:(gcFieldFlag)fieldInput
++(GCSimpleGraphCachedDataSource*)derivedDataSingleHighlighted:(GCField*)field
                                                        period:(gcDerivedPeriod)period
-                                                           on:(NSDate*)date
+                                                      forDate:(NSDate*)date
                                                   addLegendTo:(NSMutableArray<GCSimpleGraphLegendInfo*>*)legends
                                                         width:(CGFloat)width{
-    gcFieldFlag fieldflag = fieldInput;
+    gcFieldFlag fieldflag = field.fieldFlag;
     GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-
+    
     GCDerivedDataSerie * serie = [[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
-                                                                   field:fieldflag
+                                                                   field:field
                                                                   period:period
-                                                                 forDate:date
-                                                         andActivityType:activityType];
-
+                                                                 forDate:date];
+    
     GCDerivedDataSerie * serieCompare = [[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
-                                                                   field:fieldflag
+                                                                          field:field
                                                                          period:period == gcDerivedPeriodMonth ? gcDerivedPeriodYear : gcDerivedPeriodMonth
-                                                                 forDate:date
-                                                         andActivityType:activityType];
-
+                                                                        forDate:date];
+    
     NSMutableArray<NSString*>*labels = [NSMutableArray array];
     
     NSMutableDictionary<NSString*,NSNumber*>*labelsIndexes = [NSMutableDictionary dictionary];
@@ -600,9 +597,9 @@
     
     NSArray<UIColor*>*colors = [GCViewConfig arrayOfColorsForMultiplots];
     GCViewGradientColors * gradientColors = [GCViewGradientColors gradientColorsWith:colors];
-
+    
     if( period == gcDerivedPeriodMonth ){
-        NSArray<GCActivity*>*bestActivities = [[GCAppGlobal derived] bestMatchingActivitySerieFor:serie within:[serie containedActivitiesIn:[[GCAppGlobal organizer] activities]]];
+        NSArray<GCActivity*>*bestActivities = [[GCAppGlobal derived] bestMatchingActivitySerieFor:serie within:[[GCAppGlobal organizer] activities] completion:nil];
         for (GCActivity * act in bestActivities) {
             NSString * label = [act.date calendarUnitFormat:NSCalendarUnitDay];
             [labels addObject:label];
@@ -621,7 +618,7 @@
             }
         }
     }else{
-        NSArray<GCDerivedDataSerie*>*bestSeries = [[GCAppGlobal derived] bestMatchingDerivedSerieFor:serie];
+        NSArray<GCDerivedDataSerie*>*bestSeries = [[GCAppGlobal derived] bestMatchingDerivedSerieFor:serie completion:nil];
         for (GCDerivedDataSerie * one in bestSeries) {
             NSString * label = [one.bucketStart calendarUnitFormat:NSCalendarUnitMonth];
             [labels addObject:label];
@@ -639,9 +636,7 @@
             }
         }
     }
-
-    GCField * field = [GCField fieldForFlag:fieldflag andActivityType:activityType];
-
+    
     GCUnit * xUnit = serie.serieWithUnit.xUnit;
     if (xUnit == nil) {
         if (fieldflag == gcFieldFlagWeightedMeanSpeed) {
@@ -650,16 +645,18 @@
             xUnit = [GCUnit unitForKey:@"second"];
         }
     }
-
+    
     GCUnitLogScale * logScale = nil;
     if( fieldflag == gcFieldFlagPower && [GCAppGlobal configGetBool:CONFIG_POWER_CURVE_LOG_SCALE defaultValue:true]){
         logScale = [GCUnitLogScale logScaleUnitFor:xUnit base:10. scaling:0.1 shift:1.];
         xUnit = logScale;
     }
-
-    GCStatsDataSerie * graphSerie = serie.serieWithUnit.serie;
-    GCStatsDataSerie * gradientSerie = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     
+    GCStatsDataSerie * graphSerie = serie.serieWithUnit.serie;
+    if( logScale ){
+        graphSerie = [[GCStatsDataSerieWithUnit dataSerieWithOther:serie.serieWithUnit] convertToXUnit:logScale].serie;
+    }
+    GCStatsDataSerie * gradientSerie = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     
     for (NSUInteger idx = 0; idx < MIN(labels.count,serie.serieWithUnit.count); idx++) {
         NSString * label = labels[idx];
@@ -672,23 +669,23 @@
             [gradientSerie addDataPointWithX:point.x_data andY:colors.count-1];
         }
     }
-
+    
     
     UIColor * defaultColor = [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText];
-
+    
     GCSimpleGraphDataHolder * holder = [GCSimpleGraphDataHolder dataHolder:graphSerie
                                                                       type:gcGraphLine
                                                                      color:defaultColor
                                                                    andUnit:serie.serieWithUnit.unit];
-
+    
     GCSimpleGraphDataHolder * holderCompare = [GCSimpleGraphDataHolder dataHolder:serieCompare.serieWithUnit.serie
-                                                                      type:gcGraphLine
+                                                                             type:gcGraphLine
                                                                             color:[GCViewConfig colorForGraphElement:gcSkinGraphColorLapOverlay]
-                                                                   andUnit:serie.serieWithUnit.unit];
-
+                                                                          andUnit:serie.serieWithUnit.unit];
+    
     holder.gradientColors = gradientColors;
     holder.gradientDataSerie = gradientSerie;
-
+    
     holder.lineWidth = 1.;
     [rv addDataHolder:holder];
     [rv addDataHolder:holderCompare];
@@ -697,31 +694,28 @@
     rv.xUnit = xUnit;
     
     return rv;
-
+    
 }
 
-+(GCSimpleGraphCachedDataSource*)derivedData:(NSString*)activityType
-                                       field:(gcFieldFlag)fieldInput
-                                         for:(NSDate*)date
++(GCSimpleGraphCachedDataSource*)derivedData:(GCField*)field
+                                          forDate:(NSDate*)date
                                        width:(CGFloat)width{
+    
 
-    gcFieldFlag fieldflag = fieldInput;
+    gcFieldFlag fieldflag = field.fieldFlag;
     GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
 
     GCDerivedDataSerie * serie = [[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
-                                                                   field:fieldflag
+                                                                   field:field
                                                                   period:gcDerivedPeriodMonth
-                                                                 forDate:date
-                                                         andActivityType:activityType];
+                                                                 forDate:date];
     if ([serie isEmpty]) {
         fieldflag = gcFieldFlagWeightedMeanSpeed;
         serie =[[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
-                                                 field:fieldflag
+                                                 field:field
                                                 period:gcDerivedPeriodMonth
-                                               forDate:date
-                                       andActivityType:activityType];
+                                               forDate:date];
     }
-    GCField * field = [GCField fieldForFlag:fieldflag andActivityType:activityType];
 
     GCUnit * xUnit = serie.serieWithUnit.xUnit;
     if (xUnit == nil) {
@@ -760,10 +754,9 @@
     [comp release];
 
     serie = [[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
-                                              field:fieldflag
+                                              field:field
                                              period:gcDerivedPeriodMonth
-                                            forDate:prevMonth
-                                    andActivityType:activityType];
+                                            forDate:prevMonth];
 
     GCSimpleGraphDataHolder * pmth = [GCSimpleGraphDataHolder dataHolder:[self adjustedSerie:serie.serieWithUnit field:fieldflag logScale:logScale]
                                                                    type:gcGraphLine
@@ -773,10 +766,9 @@
     pmth.legend = [prevMonth calendarUnitFormat:NSCalendarUnitMonth];
 
     serie = [[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
-                                              field:fieldflag
+                                              field:field
                                              period:gcDerivedPeriodYear
-                                            forDate:date
-                                    andActivityType:activityType];
+                                            forDate:date];
 
     GCSimpleGraphDataHolder * year = [GCSimpleGraphDataHolder dataHolder:[self adjustedSerie:serie.serieWithUnit field:fieldflag logScale:logScale]
                                                                    type:gcGraphLine
@@ -786,10 +778,9 @@
     year.fillColorForSerie = [[GCViewConfig fillColorForField:field] colorWithAlphaComponent:0.5];
 
     serie = [[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
-                                              field:fieldflag
+                                              field:field
                                              period:gcDerivedPeriodYear
-                                            forDate:prevYear
-                                    andActivityType:activityType];
+                                            forDate:prevYear];
 
     GCSimpleGraphDataHolder * pyear = [GCSimpleGraphDataHolder dataHolder:[self adjustedSerie:serie.serieWithUnit field:fieldflag logScale:logScale]
                                                                     type:gcGraphLine

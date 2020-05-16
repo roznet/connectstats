@@ -37,10 +37,10 @@
 +(GCSimpleGraphCachedDataSource*)historyView:(GCHistoryFieldDataSerie*)fieldserie calendarUnit:(NSCalendarUnit)aUnit graphChoice:(gcGraphChoice)graphChoice after:(NSDate*)date;
 +(GCSimpleGraphCachedDataSource*)fieldHistoryHistogramFrom:(GCHistoryFieldDataSerie*)history width:(CGFloat)width;
 +(GCSimpleGraphCachedDataSource*)performanceAnalysis:(GCHistoryPerformanceAnalysis*)perfAnalysis width:(CGFloat)width;
-+(GCSimpleGraphCachedDataSource*)derivedData:(NSString*)activityType field:(gcFieldFlag)field for:(NSDate*)date width:(CGFloat)width;
++(GCSimpleGraphCachedDataSource*)derivedData:(GCField*)field forDate:(NSDate*)date width:(CGFloat)width;
 
 +(GCSimpleGraphCachedDataSource*)trackFieldFrom:(GCTrackStats*)trackStats;
 +(GCSimpleGraphCachedDataSource*)derivedHist:(NSString*)activityType field:(GCField*)field series:(GCStatsSerieOfSerieWithUnits*)serieOfSeries width:(CGFloat)width;
-+(GCSimpleGraphCachedDataSource*)derivedDataSingleHighlighted:(NSString*)activityType field:(gcFieldFlag)fieldInput period:(gcDerivedPeriod)period on:(NSDate*)date addLegendTo:(NSMutableArray*)legend width:(CGFloat)width;
++(GCSimpleGraphCachedDataSource*)derivedDataSingleHighlighted:(GCField*)fieldInput period:(gcDerivedPeriod)period forDate:(NSDate*)date addLegendTo:(NSMutableArray*)legend width:(CGFloat)width;
 
 @end

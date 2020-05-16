@@ -346,7 +346,6 @@
     NSArray<GCDerivedGroupedSeries*>*available = [self availableDataSeries];
     NSUInteger newFieldIndex = 0;
     NSUInteger newMonthIndex = 0;
-    BOOL found = false;
     
     for (newFieldIndex = 0; available.count; newFieldIndex++) {
         if( [available[newFieldIndex].field isEqualToField:currentDerivedDataSerie.field] ){
@@ -358,7 +357,6 @@
         GCDerivedGroupedSeries * group = available[newFieldIndex];
         for (newMonthIndex = 0; newMonthIndex < group.series.count; newMonthIndex++) {
             if( [group.series[newMonthIndex].bucketStart isEqualToDate:currentDerivedDataSerie.bucketStart]){
-                found = true;
                 break;
             }
         }

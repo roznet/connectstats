@@ -100,12 +100,7 @@
     if (current) {
         gcDerivedPeriod period = indexPath.row == 0 ? gcDerivedPeriodYear : gcDerivedPeriodMonth;
         NSMutableArray<GCSimpleGraphLegendInfo*>*legends = [NSMutableArray array];
-        cache = [GCSimpleGraphCachedDataSource derivedDataSingleHighlighted:self.config.activityType
-                                                                      field:current.fieldFlag
-                                                                     period:period
-                                                                         on:current.bucketStart
-                                                                addLegendTo:legends
-                                                                      width:tableView.frame.size.width];
+        cache = [GCSimpleGraphCachedDataSource derivedDataSingleHighlighted:current.field period:period forDate:current.bucketStart addLegendTo:legends width:tableView.frame.size.width];
         cache.emptyGraphLabel = @"";
         [graphCell setDataSource:cache andConfig:cache];
         // Setup legengview AFter otherwise setDataSource override the legend data source
@@ -147,6 +142,9 @@
             [grcell labelForRow:0 andCol:0].text = NSLocalizedString(@"Rebuild Derived", "Dummy");
         }
         cell = grcell;
+    }else{
+        cell = [GCCellGrid gridCell:tableView];
+        //don't crash return empty cell
     }
     
     return cell;

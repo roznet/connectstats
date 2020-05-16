@@ -1633,7 +1633,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 }
 
 
--(void)fill:(size_t)range valuesForUnit:(double)unit into:(double*)values fillMethod:(gcStatsFillMethod)fill statistic:(gcStats)statistic{
+-(void)fill:(size_t)range valuesForUnit:(double)unit into:(double*)values{
     NSUInteger n = (self.dataPoints).count;
     if( n < 2){
         return;
@@ -1665,7 +1665,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     }
 }
 
--(GCStatsDataSerie*)filledSerieForUnit:(double)unit fillMethod:(gcStatsFillMethod)fill statistic:(gcStats)statistic{
+-(GCStatsDataSerie*)filledSerieForUnit:(double)unit{ //} fillMethod:(gcStatsFillMethod)fill statistic:(gcStats)statistic{
     if (self.dataPoints.count < 2) {
         return nil;
     }
@@ -1679,7 +1679,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 
     double * values  = calloc(range, sizeof(double));
 
-    [self fill:range valuesForUnit:unit into:values fillMethod:(gcStatsFillMethod)fill statistic:statistic];
+    [self fill:range valuesForUnit:unit into:values];
     GCStatsDataSerie * rv = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     for (size_t n=0; n<range; n++) {
         [rv addDataPointWithX:first_p.x_data+unit*n andY:values[n]];
@@ -1789,7 +1789,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     double * nonzero = calloc(range, sizeof(double));
     size_t * bestidx = nil;
 
-    [self fill:range valuesForUnit:unit into:values fillMethod:fill statistic:fillStatistic];
+    [self fill:range valuesForUnit:unit into:values];
 
     //for debugging,
     // bestidx will keep the locate of the reached min or max

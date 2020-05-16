@@ -92,6 +92,7 @@ extension GCActivity {
             }
             
             var sumValues = interp.summaryValues(fitMessage: usemessage)
+            print( "\(sumValues)")
             let toremove = sumValues.filter {
                 $1.uom == "datetime"
             }

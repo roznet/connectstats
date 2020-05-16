@@ -116,7 +116,7 @@ class FITGraphViewController: NSViewController {
                                 }
                                 if( selectedY2 == field ){
                                     if let raw = useSerie2 {
-                                        useSerie2 = raw.filledSerie(forUnit: 5.0, fillMethod: gcStatsFillMethod.zero, statistic: gcStats.weightedMean)
+                                        useSerie2 = raw.filledSerie(forUnit: 5.0)
                                     }
                                 }
                                 

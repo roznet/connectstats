@@ -49,8 +49,8 @@
 
 -(NSUInteger)count;
 -(GCStatsDataPoint*)dataPointAtIndex:(NSUInteger)idx;
--(void)convertToUnit:(GCUnit*)unit;
--(void)convertToXUnit:(GCUnit*)xUnit;
+-(GCStatsDataSerieWithUnit*)convertToUnit:(GCUnit*)unit;
+-(GCStatsDataSerieWithUnit*)convertToXUnit:(GCUnit*)xUnit;
 -(void)convertToCommonUnitWith:(GCUnit*)unit;
 -(void)convertToGlobalSystem;
 

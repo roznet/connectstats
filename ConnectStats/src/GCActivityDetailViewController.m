@@ -295,30 +295,40 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView activityGraphCellForRowAtIndexPath:(NSIndexPath *)indexPath{
     GCCellSimpleGraph * cell = [GCCellSimpleGraph graphCell:tableView];
     cell.cellDelegate = self;
+    
     GCActivity * activity = self.activity;
-    GCTrackStats * s = [[GCTrackStats alloc] init];
-    s.activity = activity;
-    if (!self.choices || (self.choices).choices.count==0) {
-        self.choices = [GCTrackFieldChoices trackFieldChoicesWithActivity:activity];
-    }
-    [self.choices setupTrackStats:s];
-    self.trackStats = s;
-    GCSimpleGraphCachedDataSource * ds = [GCSimpleGraphCachedDataSource trackFieldFrom:s];
-    GCActivity * compare = [self compareActivity];
-    if (compare) {
-        if ([self.choices validForActivity:compare]) {
-            self.compareTrackStats = [[[GCTrackStats alloc] init] autorelease];
-            self.compareTrackStats.activity = compare;
-            [self.choices setupTrackStats:self.compareTrackStats];
-            GCSimpleGraphCachedDataSource * dsc = [GCSimpleGraphCachedDataSource trackFieldFrom:self.compareTrackStats];
-            [dsc setupAsBackgroundGraph];
-            [ds addDataSource:dsc];
+    
+     dispatch_block_t build = ^(){
+        GCTrackStats * s = [[GCTrackStats alloc] init];
+        s.activity = activity;
+        if (!self.choices || (self.choices).choices.count==0) {
+            self.choices = [GCTrackFieldChoices trackFieldChoicesWithActivity:activity];
         }
+        [self.choices setupTrackStats:s];
+        self.trackStats = s;
+        GCSimpleGraphCachedDataSource * ds = [GCSimpleGraphCachedDataSource trackFieldFrom:s];
+        GCActivity * compare = [self compareActivity];
+        if (compare) {
+            if ([self.choices validForActivity:compare]) {
+                self.compareTrackStats = [[[GCTrackStats alloc] init] autorelease];
+                self.compareTrackStats.activity = compare;
+                [self.choices setupTrackStats:self.compareTrackStats];
+                GCSimpleGraphCachedDataSource * dsc = [GCSimpleGraphCachedDataSource trackFieldFrom:self.compareTrackStats];
+                [dsc setupAsBackgroundGraph];
+                [ds addDataSource:dsc];
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [cell setDataSource:ds andConfig:ds];
+            [cell setNeedsDisplay];
+        });
+        [s release];
+    };
+    if( activity.settings.worker ){
+        dispatch_async(activity.settings.worker,build);
+    }else{
+        build();
     }
-    [cell setDataSource:ds andConfig:ds];
-
-    [s release];
-
     return cell;
 }
 
