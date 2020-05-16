@@ -84,7 +84,7 @@
     CGFloat w = (rect.size.width-8.)/n;
     CGRect gRect = CGRectMake(4., 25., w, 5.);
     for (size_t idx = 0; idx<n; idx++) {
-        CGContextSetFillColorWithColor(context, gradientColors.colors[idx]);
+        [gradientColors.colors[idx] setFill];
         CGContextFillRect(context, gRect);
         gRect.origin.x += w;
     }

@@ -52,7 +52,7 @@
     return _gradientColors.numberOfColors;
 }
 
--(CGColorRef*)colors{
+-(NSArray<UIColor*>*)colors{
     return _gradientColors.colors;
 }
 

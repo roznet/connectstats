@@ -54,6 +54,7 @@
     // use the NSStringFromSelector(@Selector()) idiom so
     // xcode warns about undefined selectors
     NSArray<NSString*> * selectorNames = @[
+                                           NSStringFromSelector(@selector(sample14_SimpleGradientFillPlot)),
                                            NSStringFromSelector(@selector(sample13_compareStats)),
 
                                            NSStringFromSelector(@selector(sample1_simpleLines)),
@@ -141,6 +142,36 @@
 
 }
 
+-(GCSimpleGraphCachedDataSource*)sample14_SimpleGradientFillPlot{
+    GCStatsDataSerie * serie = [[GCStatsDataSerie alloc] init];
+    GCViewGradientColors * colors = [GCViewGradientColors gradientColorsWith:@[ [UIColor redColor], [UIColor greenColor], [UIColor blueColor]]];
+    GCStatsDataSerie * gradientSerie = [[GCStatsDataSerie alloc] init];
+    for (double x = 0.; x < 20.; x+= 0.1) {
+        if( sin(x) > 0.5){
+            [gradientSerie addDataPointWithX:x andY:0.];
+        }else if( sin(x) < -0.5){
+            [gradientSerie addDataPointWithX:x andY:1.];
+        }else{
+            [gradientSerie addDataPointWithX:x andY:2.];
+        }
+        [serie addDataPointWithX:x andY:sin(x)];
+    }
+    
+    GCSimpleGraphCachedDataSource * sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphDataHolder * holder = [GCSimpleGraphDataHolder dataHolder:serie type:gcGraphLine
+                                                                     color:[UIColor blueColor]
+                                                                   andUnit:[GCUnit unitForKey:@"percent"]];
+    holder.gradientDataSerie = gradientSerie;
+    holder.gradientColors = colors;
+    holder.fillColorForSerie = [UIColor colorWithWhite:0.5 alpha:0.5];
+    [sample addDataHolder:holder];
+    [sample setXUnit:[GCUnit unitForKey:@"percent"]];
+    [sample setTitle:@"sample 2"];
+
+    [serie release];
+
+    return sample;
+}
 -(GCSimpleGraphCachedDataSource*)sample2_SimpleSinusPlot{
     GCStatsDataSerie * serie = [[GCStatsDataSerie alloc] init];
     for (double x = 0.; x < 10.; x+= 0.1) {

@@ -211,11 +211,10 @@
     }
     CGFloat lineWidth = [_displayConfig lineWidth:idx];
 
-    RZColor * color = [self graphColor:idx];
-
     GCViewGradientColors * gradientColors = nil;
     id<GCStatsFunction> gradientFunction = nil;
     GCStatsDataSerie * gradientDataSerie = nil;
+    GCViewGradientColors * gradientColorsFill = nil;
 
     [self setupGradientColors:&gradientColors function:&gradientFunction dataSerie:&gradientDataSerie forIndex:idx count:data.count];
 
@@ -224,8 +223,6 @@
 
     CGRect dataXYRect = geometry.dataXYRect;
     CGPoint axis=[geometry pointForX:dataXYRect.origin.x andY:dataXYRect.origin.y];
-
-    RZColor * fillColor = [self graphFillColor:idx];
 
     CGFloat x = [data dataPointAtIndex:0].x_data;
     CGFloat y = [data dataPointAtIndex:0].y_data;
@@ -241,16 +238,28 @@
     if (CGRectContainsPoint(self.drawRect, first)) {
         [path moveToPoint:first];
     }
-    [color setStroke];
-    CGColorRef currentColor = color.CGColor;
-    CGColorRef nextColor = color.CGColor;
+    
+    RZColor * currentColor = [self graphColor:idx];;
+    RZColor * nextColor = currentColor;
 
+    RZColor * fillColor = [self graphFillColor:idx];
+    RZColor * nextFillColor = nil;
+
+    [currentColor setStroke];
+    
     BOOL shouldFill = (fillColor != nil);
     BOOL shouldFillNext = false;
 
     if (gradientColors && gradientDataSerie) {
-        shouldFill = false;
+        GCStatsDataPoint * gradientPoint = [gradientDataSerie dataPointAtIndex:0];
+        CGFloat val = gradientFunction ? [gradientFunction valueForX:gradientPoint.x_data] : gradientPoint.y_data;
+        currentColor = [gradientColors colorsForValue:val];
+        if( shouldFill ){
+            gradientColorsFill = [gradientColors gradientAsBackground];
+            fillColor = [gradientColorsFill colorsForValue:val];
+        }
     }
+    
     NSUInteger paths = 0;
     NSDate * start = [NSDate date];
     BOOL lastPointHasValue = true;
@@ -277,15 +286,15 @@
 
         if (to.x >= range_min.x || to.x <= range_max.x) {
             if (gradientColors && gradientDataSerie) {
-                CGFloat val = gradientFunction ?
-                [gradientFunction valueForX:[gradientDataSerie dataPointAtIndex:i-1].x_data]
-                :
-                [gradientDataSerie dataPointAtIndex:i].y_data;
-                CGColorRef thisColor = [gradientColors colorsForValue:val];
-                if (currentColor == nil || !CGColorEqualToColor(thisColor, currentColor)) {
+                GCStatsDataPoint * gradientPoint = [gradientDataSerie dataPointAtIndex:i];
+                CGFloat val = gradientFunction ? [gradientFunction valueForX:gradientPoint.x_data] : gradientPoint.y_data;
+                UIColor * thisColor = [gradientColors colorsForValue:val];
+                if (currentColor == nil || ![thisColor isEqual:currentColor]) {
                     endCurrentPathSegment = true;
+                    nextFillColor = [gradientColorsFill colorsForValue:val];
                     nextColor = thisColor;
-                    shouldFillNext = (val != 0.) && (fillColor != nil);
+                    
+                    shouldFillNext = (fillColor != nil);
                 }
                 currentColor = thisColor;
             }
@@ -311,18 +320,6 @@
             addCurrentPoint = false;
         }
 
-        if ( addCurrentPoint ) {
-            if (path.empty) {
-                [path moveToPoint:from_adj];
-                first = from_adj;
-            }
-            if (fabs(to_adj.x-last_x)>0.5) {
-                paths++;
-                [path addLineToPoint:to_adj];
-                last_x = to_adj.x;
-            }
-            lastPointHasValue = true;
-        }
         if( endCurrentPathSegment ){
             if (!path.empty) {
                 [path stroke];
@@ -336,12 +333,27 @@
                     [pathIn addLineToPoint:CGPointMake(first.x, first.y)];
                     [pathIn fill];
                 }
+                
                 shouldFill = shouldFillNext;
             }
+            fillColor = nextFillColor;
             currentColor = nextColor;
-            [[RZColor colorWithCGColor:currentColor] setStroke];
+            [currentColor setStroke];
             [path removeAllPoints];
             paths = 0;
+        }
+        
+        if ( addCurrentPoint ) {
+            if (path.empty) {
+                [path moveToPoint:from_adj];
+                first = from_adj;
+            }
+            if (fabs(to_adj.x-last_x)>0.5) {
+                paths++;
+                [path addLineToPoint:to_adj];
+                last_x = to_adj.x;
+            }
+            lastPointHasValue = true;
         }
         last = to;
     }
@@ -425,9 +437,9 @@
                 [gradientFunction valueForX:point.x_data]
                 :
                 [gradientDataSerie dataPointAtIndex:i-1].y_data;
-                CGColorRef thisColor = [gradientColors colorsForValue:val];
-                CGContextSetStrokeColorWithColor(context, thisColor);
-                CGContextSetFillColorWithColor(context, thisColor);
+                RZColor * thisColor = [gradientColors colorsForValue:val];
+                [thisColor setStroke];
+                [thisColor setFill];
             }
 
             CGPoint from_adj = from;
@@ -513,12 +525,12 @@
             [gradientFunction valueForX:[gradientDataSerie dataPointAtIndex:i].x_data]
             :
             [gradientDataSerie dataPointAtIndex:i].y_data;
-            CGColorRef thisColor = [gradientColors colorsForValue:val];
-            if (CGColorGetAlpha(thisColor)<1.) {
+            RZColor * thisColor = [gradientColors colorsForValue:val];
+            if (CGColorGetAlpha(thisColor.CGColor)<1.) {
                 hasTransparent = true;
             }
-            CGContextSetStrokeColorWithColor(context, [RZColor blackColor].CGColor);
-            CGContextSetFillColorWithColor(context, thisColor);
+            [[RZColor blackColor] setStroke];
+            [thisColor setFill];
         }
         to = [geometry pointForX:[data dataPointAtIndex:i].x_data andY:[data dataPointAtIndex:i].y_data];
         if (to.x >= range_min.x && to.x <= range_max.x && to.y >= range_min.y && to.y <= range_max.y) {
@@ -537,12 +549,12 @@
                 [gradientFunction valueForX:[gradientDataSerie dataPointAtIndex:i].x_data]
                 :
                 [gradientDataSerie dataPointAtIndex:i].y_data;
-                CGColorRef thisColor = [gradientColors colorsForValue:val];
-                if (CGColorGetAlpha(thisColor)<1.) {
+                RZColor * thisColor = [gradientColors colorsForValue:val];
+                if (CGColorGetAlpha(thisColor.CGColor)<1.) {
                     continue;
                 }
-                CGContextSetStrokeColorWithColor(context, [RZColor blackColor].CGColor);
-                CGContextSetFillColorWithColor(context, thisColor);
+                [[RZColor blackColor] setStroke];
+                [thisColor setFill];
             }
             to = [geometry pointForX:[data dataPointAtIndex:i].x_data andY:[data dataPointAtIndex:i].y_data];
             if (to.x > range_min.x && to.x < range_max.x && to.y > range_min.y && to.y < range_max.y) {

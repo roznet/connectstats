@@ -610,8 +610,8 @@
                 if( labelIndex < colors.count){
                     GCSimpleGraphLegendInfo * info = [[GCSimpleGraphLegendInfo alloc] init];
                     info.text = label;
-                    info.color = colors[labelIndex];
-                    info.lineWidth = 1;
+                    info.color = [colors[labelIndex] colorWithAlphaComponent:0.6];
+                    info.lineWidth = 5;
                     [legends addObject:info];
                     RZRelease(info);
                 }
@@ -628,8 +628,8 @@
                 if( labelIndex < colors.count){
                     GCSimpleGraphLegendInfo * info = [[GCSimpleGraphLegendInfo alloc] init];
                     info.text = label;
-                    info.color = colors[labelIndex];
-                    info.lineWidth = 1;
+                    info.color = [colors[labelIndex] colorWithAlphaComponent:0.6];
+                    info.lineWidth = 5;
                     [legends addObject:info];
                     RZRelease(info);
                 }
@@ -683,7 +683,7 @@
                                                                       type:gcGraphLine
                                                                      color:defaultColor
                                                                    andUnit:serie.serieWithUnit.unit];
-    
+    holder.fillColorForSerie = [UIColor colorWithWhite:0.5 alpha:0.6]; // fill for gradient will only use alpha.
     GCSimpleGraphDataHolder * holderCompare = [GCSimpleGraphDataHolder dataHolder:graphSerieCompare
                                                                              type:gcGraphLine
                                                                             color:[GCViewConfig colorForGraphElement:gcSkinGraphColorLapOverlay]
