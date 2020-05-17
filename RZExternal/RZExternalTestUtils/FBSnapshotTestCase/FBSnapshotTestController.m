@@ -204,7 +204,7 @@ typedef NS_ENUM(NSUInteger, FBTestSnapshotFileNameType) {
 
     if (_ksDiffScriptFilePath) {
         NSString * sofar = [NSString stringWithContentsOfFile:_ksDiffScriptFilePath encoding:NSUTF8StringEncoding error:nil];
-        NSString * ksdiffCmd = [NSString stringWithFormat:@"ksdiff \"%@\" \"%@\"\n", referencePath, testPath];
+        NSString * ksdiffCmd = [NSString stringWithFormat:@"ksdiff --partial-changeset \"%@\" \"%@\"\n", referencePath, testPath];
         if (sofar) {
             sofar = [sofar stringByAppendingString:ksdiffCmd];
         }else{

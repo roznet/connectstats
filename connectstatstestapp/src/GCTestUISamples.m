@@ -78,7 +78,7 @@
         [GCAppGlobal setupSampleState:@"sample_activities.db"];
         
         // DONT CHECKIN
-        NSString * filter = nil;//@"sample6";
+        NSString * filter = nil;//@"sample8";
         NSInteger which = -1;
         if( filter ){
             for (NSString * one in selectorNames) {
@@ -298,7 +298,7 @@
     GCHistoryFieldDataSerie * history = [[[GCHistoryFieldDataSerie alloc] initFromConfig:config] autorelease];
 
     [history setDb:[GCAppGlobal db]];
-    [history loadFromDb];
+    [history loadFromDb:nil];
 
     GCSimpleGraphCachedDataSource * sample = [GCSimpleGraphCachedDataSource historyView:history
                                                                            calendarUnit:NSCalendarUnitYear
@@ -307,7 +307,7 @@
     return sample;
 }
 
--(GCSimpleGraphCachedDataSource*)sample8_historyBarGraphCoarse{
+-(NSArray<GCSimpleGraphCachedDataSource*>*)sample8_historyBarGraphCoarse{
 
     GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING];
 
@@ -315,17 +315,26 @@
     GCHistoryFieldDataSerie * history = [[[GCHistoryFieldDataSerie alloc] initFromConfig:config] autorelease];
 
     [history setDb:[GCAppGlobal db]];
-    [history loadFromDb];
+    [history loadFromDb:nil];
 
     GCSimpleGraphCachedDataSource * sample = [GCSimpleGraphCachedDataSource historyView:history
                                                                            calendarUnit:NSCalendarUnitMonth
                                                                             graphChoice:gcGraphChoiceBarGraph after:nil];
 
+    [history loadFromDb:^(NSDate * date){
+        BOOL rv = [date compare:[NSDate dateForRFC3339DateTimeString:@"2011-12-01T00:00:00.000Z"]] == NSOrderedAscending ||
+        [date compare:[NSDate dateForRFC3339DateTimeString:@"2012-02-01T00:00:00.000Z"]] == NSOrderedDescending;
+        return rv;
+        
+    }] ;
+    GCSimpleGraphCachedDataSource * sample2 = [GCSimpleGraphCachedDataSource historyView:history
+                                                                           calendarUnit:NSCalendarUnitMonth
+                                                                            graphChoice:gcGraphChoiceBarGraph after:nil];
 
-    return sample;
+    return @[ sample, sample2 ];
 }
 
--(GCSimpleGraphCachedDataSource*)sample9_trackFieldMultipleLineGraphs{
+-(NSArray<GCSimpleGraphCachedDataSource*>*)sample9_trackFieldMultipleLineGraphs{
     GCActivity * act = [GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_837769405.db"]];
     act.settings.treatGapAsNoValueInSeries = false;
 
@@ -356,7 +365,14 @@
     [sample setXUnit:[GCUnit unitForKey:@"second"]];
     [sample setTitle:@"sample 9"];
 
-    return sample;
+    GCSimpleGraphCachedDataSource * sampleTransposed = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    [sampleTransposed setSeries:[NSMutableArray arrayWithObjects:speed, hr, speed_ma, nil]];
+    [sampleTransposed setXUnit:[GCUnit unitForKey:@"second"]];
+    [sampleTransposed setTitle:@"sample 9 transposed"];
+    sampleTransposed.xAxisIsVertical = true;
+
+    
+    return @[ sample, sampleTransposed ];
 }
 
 -(GCSimpleGraphCachedDataSource*)sample11_cumulativeHist{
@@ -367,7 +383,7 @@
     GCHistoryFieldDataSerie * history = [[[GCHistoryFieldDataSerie alloc] initFromConfig:config] autorelease];
 
     [history setDb:[GCAppGlobal db]];
-    [history loadFromDb];
+    [history loadFromDb:nil];
 
     GCSimpleGraphCachedDataSource * sample = [GCSimpleGraphCachedDataSource historyView:history
                                                                            calendarUnit:NSCalendarUnitYear

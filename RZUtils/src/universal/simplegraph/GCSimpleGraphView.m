@@ -57,6 +57,7 @@
 @property (nonatomic,assign) CGPoint range_max;
 
 @property (nonatomic,assign) BOOL barGraph;
+@property (nonatomic,assign) BOOL xAxisIsVertical;
 
 -(GCSimpleGraphViewContext*)initWithSource:(NSObject<GCSimpleGraphDataSource>*)dataSource config:(NSObject<GCSimpleGraphDisplayConfig>*)displayConfig forIndex:(NSUInteger)idx;
 @end
@@ -67,6 +68,7 @@
     self = [super init];
     if( self ){
         self.barGraph = ([displayConfig graphTypeForSerie:idx] == gcGraphStep);
+        self.xAxisIsVertical = [displayConfig respondsToSelector:@selector(xAxisIsVertical)] ? [displayConfig xAxisIsVertical] : false;
         self.gradientColors = [displayConfig respondsToSelector:@selector(gradientColors:)] ? [displayConfig gradientColors:idx] : nil;
         self.gradientColorsFill = [displayConfig respondsToSelector:@selector(gradientColorsFill:)] ? [displayConfig gradientColorsFill:idx] : nil;
         self.gradientFunction = [dataSource respondsToSelector:@selector(gradientFunction:)] ? [dataSource gradientFunction:idx] : nil;
@@ -94,6 +96,11 @@
     [super dealloc];
 }
 #endif
+
+-(void)updateRangeMin:(CGPoint)range_min max:(CGPoint)range_max{
+    self.range_min = range_min;
+    self.range_max = range_max;
+}
 
 -(void)updateColorsForIndex:(NSUInteger)idx{
     if( self.gradientColors || self.gradientColorsFill){
@@ -123,27 +130,38 @@
         _from_adj = _to;
     }
     
-    if (_from_adj.y>_range_max.y || _from_adj.y<_range_min.y) {
-        _from_adj.y = MAX(MIN(_from_adj.y, _range_max.y),_range_min.y);
-        _from_adj.x = _from.x+(_from_adj.y-_from.y)/(_to.y-_from.y)*(_to.x-_from.x);
+    if( _xAxisIsVertical){
+        if( _barGraph ){
+            _to_adj.x = _from_adj.x;
+        }
+    }else{
+        if (_from_adj.y>_range_max.y || _from_adj.y<_range_min.y) {
+            _from_adj.y = MAX(MIN(_from_adj.y, _range_max.y),_range_min.y);
+            _from_adj.x = _from.x+(_from_adj.y-_from.y)/(_to.y-_from.y)*(_to.x-_from.x);
+        }
+        if (_from_adj.x>_range_max.x || _from_adj.x<_range_min.x) {
+            _from_adj.x = MAX(MIN(_from_adj.x,_range_max.x),_range_min.x);
+            _from_adj.y = _from.y+(_from_adj.x-_from.x)/(_to.x-_from.x)*(_to.y-_from.y);
+        }
+        if (_to_adj.y>_range_max.y || _to_adj.y<_range_min.y) {
+            _to_adj.y = MAX(MIN(_to_adj.y, _range_max.y), _range_min.y);
+            _to_adj.x = _from.x+(_to_adj.y-_from.y)/(_to.y-_from.y)*(_to.x-_from.x);
+        }
+        if (_to_adj.x>_range_max.x || _to_adj.x<_range_min.x) {
+            _to_adj.x = MAX(MIN(_to_adj.x, _range_max.x), _range_min.x);
+            _to_adj.y = _from.y+(_to_adj.x-_from.x)/(_to.x-_from.x)*(_to.y-_from.y);
+        }
+        if( _barGraph ){
+            _to_adj.y = _from_adj.y;
+        }
     }
-    if (_from_adj.x>_range_max.x || _from_adj.x<_range_min.x) {
-        _from_adj.x = MAX(MIN(_from_adj.x,_range_max.x),_range_min.x);
-        _from_adj.y = _from.y+(_from_adj.x-_from.x)/(_to.x-_from.x)*(_to.y-_from.y);
+    
+    
+    if( _xAxisIsVertical ){
+        return point.y <= _range_min.y || point.y >= _range_min.y;
+    }else{
+        return point.x >= _range_min.x || point.x <= _range_max.x;
     }
-    if (_to_adj.y>_range_max.y || _to_adj.y<_range_min.y) {
-        _to_adj.y = MAX(MIN(_to_adj.y, _range_max.y), _range_min.y);
-        _to_adj.x = _from.x+(_to_adj.y-_from.y)/(_to.y-_from.y)*(_to.x-_from.x);
-    }
-    if (_to_adj.x>_range_max.x || _to_adj.x<_range_min.x) {
-        _to_adj.x = MAX(MIN(_to_adj.x, _range_max.x), _range_min.x);
-        _to_adj.y = _from.y+(_to_adj.x-_from.x)/(_to.x-_from.x)*(_to.y-_from.y);
-    }
-
-    if( _barGraph ){
-        _to_adj.y = _from_adj.y;
-    }
-    return point.x >= _range_min.x || point.x <= _range_max.x;
 }
 
 @end
@@ -315,7 +333,7 @@
     [simpleContext updateWithFirstCGPoint:[geometry pointForX:point.x_data andY:point.y_data]];
     
     // Keep track of last point we drew so if too many too close we skip them
-    CGFloat last_drawn_point_x = simpleContext.to_adj.x;
+    CGPoint last_drawn_point = simpleContext.to_adj;
     int badpoints=0;
     
     RZBezierPath * path = [RZBezierPath bezierPath];
@@ -344,9 +362,9 @@
 
     NSUInteger paths = 0;
     NSDate * start = [NSDate date];
+    BOOL currentPointHasValue = true;
     BOOL lastPointHasValue = true;
-    
-    
+
     for (i=1; i<n; i++) {
 
         BOOL endCurrentPathSegment = false;
@@ -357,15 +375,22 @@
 
         if (!point.hasValue) {
             endCurrentPathSegment = true;
-            addCurrentPoint = false;
-            lastPointHasValue = false;
+            // Special case, in bargraph is first point with no value
+            // we need to close the bar from the previous point.
+            if( barGraph && lastPointHasValue ){
+                addCurrentPoint = true;
+            }else{
+                addCurrentPoint = false;
+            }
+            currentPointHasValue = false;
             shouldFillNext = false;
         }else{
+            currentPointHasValue = true;
             shouldFillNext = (fillColor != nil);
         }
 
         if( [simpleContext updateWithCGPoint:[geometry pointForX:point.x_data andY:point.y_data]
-                           lastPointHadValue:lastPointHasValue] ){
+                           lastPointHadValue:barGraph ? lastPointHasValue : currentPointHasValue ] ){
             [simpleContext updateColorsForIndex:i];
             
             if (simpleContext.strokeColor && ![simpleContext.strokeColor isEqual:strokeColor]) {
@@ -388,27 +413,40 @@
                 [path moveToPoint:simpleContext.from_adj];
                 first = simpleContext.from_adj;
             }
+            BOOL pointMovedEnough = true;
+            if( simpleContext.xAxisIsVertical ){
+                pointMovedEnough = fabs(simpleContext.to_adj.y-last_drawn_point.y)>0.5;
+            }else{
+                pointMovedEnough = fabs(simpleContext.to_adj.x-last_drawn_point.x)>0.5;
+            }
             // Only draw next point if x has moved than more than 0.5
-            if (fabs(simpleContext.to_adj.x-last_drawn_point_x)>0.5) {
+            if (pointMovedEnough) {
                 paths++;
                 [path addLineToPoint:simpleContext.to_adj];
-                last_drawn_point_x = simpleContext.to_adj.x;
+                last_drawn_point = simpleContext.to_adj;
             }
-            lastPointHasValue = true;
+            
         }
 
         // Stroke and check for fill before start of new segment or end of the graph
         // bar graph also should always fill
         if( endCurrentPathSegment || isLastPoint || barGraph){
+            
             if (!path.empty) {
                 [path stroke];
                 if (shouldFill) {
                     [fillColor setFill];
 
                     RZBezierPath * pathIn = [RZBezierPath bezierPathWithCGPath:path.CGPath];
-                    [pathIn addLineToPoint:CGPointMake(simpleContext.to_adj.x, axis.y)];
-                    [pathIn addLineToPoint:CGPointMake(first.x, axis.y)];
-                    [pathIn addLineToPoint:CGPointMake(first.x, first.y)];
+                    if( simpleContext.xAxisIsVertical ){
+                        [pathIn addLineToPoint:CGPointMake(axis.x, simpleContext.to_adj.y)];
+                        [pathIn addLineToPoint:CGPointMake(axis.x, first.y)];
+                        [pathIn addLineToPoint:CGPointMake(first.x, first.y)];
+                    }else{
+                        [pathIn addLineToPoint:CGPointMake(simpleContext.to_adj.x, axis.y)];
+                        [pathIn addLineToPoint:CGPointMake(first.x, axis.y)];
+                        [pathIn addLineToPoint:CGPointMake(first.x, first.y)];
+                    }
                     [pathIn fill];
                     if( barGraph ){
                         // Bar graph should highlight the bars
@@ -423,6 +461,7 @@
             paths = 0;
         }
         shouldFill = shouldFillNext;
+        lastPointHasValue = currentPointHasValue;
     }
 
     BOOL highlightCurrent = [_displayConfig highlightCurrent:idx];
@@ -453,93 +492,6 @@
 
 }
 
--(void)drawGraphBars:(NSUInteger)idx{
-    NSUInteger i = 0;
-    GCStatsDataSerie * data = [_dataSource dataSerie:idx];
-    GCSimpleGraphGeometry * geometry = [self geometryForIndex:idx];
-
-    NSUInteger n = [data count];
-    if (data == nil || n == 0) {
-        return;
-    }
-
-    BOOL xAxisIsVertical = [_displayConfig respondsToSelector:@selector(xAxisIsVertical)] ? [_displayConfig xAxisIsVertical] : false;
-
-    RZColor * color = [self graphColor:idx];
-
-    GCViewGradientColors * gradientColors = nil;
-    GCViewGradientColors * gradientColorsFill = nil;
-    id<GCStatsFunction> gradientFunction = nil;
-    GCStatsDataSerie * gradientDataSerie = nil;
-
-    gcStatsRange range= geometry.range;
-    CGPoint range_min = geometry.rangeMinPoint;
-    CGPoint range_max = geometry.rangeMaxPoint;
-
-    if (xAxisIsVertical) {
-        range_min = geometry.rangeMaxPoint;
-        range_max = geometry.rangeMinPoint;
-    }
-
-    CGRect dataXYRect = geometry.dataXYRect;
-    CGPoint axis=[geometry pointForX:dataXYRect.origin.x andY:dataXYRect.origin.y];
-    GCStatsDataPoint * point = [data dataPointAtIndex:0];
-    CGPoint last      = [geometry pointForX:point.x_data andY:point.y_data];
-
-    CGContextRef context = UIGRAPHICCURRENTCONTEXT();
-    [color setFill];
-    [color setStroke];
-    CGPoint rightMost = last;
-    BOOL skip = false;
-    for (i=1; i<n; i++) {
-        CGPoint from    = last;
-
-        point = [data dataPointAtIndex:i];
-        CGPoint to      = [geometry pointForX:point.x_data andY:point.y_data];
-        skip = [[data dataPointAtIndex:i-1] isKindOfClass:[GCStatsDataPointNoValue class]];
-        if (to.x >= range_min.x || to.x <= range_max.x) {
-            if (gradientColors && gradientDataSerie) {
-                CGFloat val = gradientFunction ?
-                [gradientFunction valueForX:point.x_data]
-                :
-                [gradientDataSerie dataPointAtIndex:i-1].y_data;
-                RZColor * thisColor = [gradientColors colorsForValue:val];
-                [thisColor setStroke];
-                [thisColor setFill];
-            }
-
-            CGPoint from_adj = from;
-            CGPoint to_adj   = to;
-
-            if (xAxisIsVertical) {
-                to_adj.x = from_adj.x;
-            }else{
-                to_adj.y = from_adj.y;
-            }
-            if (!skip) {
-                CGRect marker;
-                if (xAxisIsVertical) {
-                    marker = CGRectMake(from_adj.x, from_adj.y, -(from_adj.x-axis.x), to_adj.y-from_adj.y);
-                }else{
-                    marker = CGRectMake(from_adj.x, from_adj.y, to_adj.x-from_adj.x, -(from_adj.y-axis.y));
-                }
-                //NSLog(@"%lu: %@ %@", (unsigned long)i, NSStringFromCGPoint(to),  NSStringFromCGRect(marker));
-                CGContextFillRect(context, marker);
-                CGContextStrokeRect(context, marker);
-            }
-            if (to.x > rightMost.x) {
-                rightMost = to;
-            }
-        }
-        last = to;
-    }
-    if (!xAxisIsVertical && rightMost.x < range_max.x) {
-        CGRect marker = CGRectMake(rightMost.x, rightMost.y, range.x_max-rightMost.x, -(rightMost.y-axis.y));
-        CGContextFillRect(context, marker);
-        CGContextStrokeRect(context, marker);
-    }
-
-}
 -(void)drawGraphXY:(NSUInteger)idx{
     NSUInteger i = 0;
     GCStatsDataSerie * data = [_dataSource dataSerie:idx];
@@ -763,12 +715,9 @@
         case gcScatterPlot:
             [self drawGraphXY:idx];
             break;
+        case gcGraphStep:
         case gcGraphLine:
             [self drawGraphLines:idx];
-            break;
-        case gcGraphStep:
-            [self drawGraphLines:idx];
-            //[self drawGraphBars:idx];
             break;
     }
 
