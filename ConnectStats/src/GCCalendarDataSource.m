@@ -537,8 +537,25 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row < _selectedActivities.count) {
-        [GCAppGlobal focusOnActivityId:[_selectedActivities[indexPath.row] activityId]];
+    if (_tableDisplay==gcCalendarTableDisplayActivities) {
+        if (indexPath.row < _selectedActivities.count) {
+            [GCAppGlobal focusOnActivityId:[_selectedActivities[indexPath.row] activityId]];
+        }
+    }else{
+        NSDate * bucket = nil;
+
+        if (_selectedActivities.count) {
+            GCActivity * activity = _selectedActivities[0];
+            bucket = activity.date;
+        }else{
+            bucket = self.currentDate;
+        }
+        gcViewChoice choice = gcViewChoiceWeekly;
+        if (indexPath.row == GC_SUMMARY_MONTHLY) {
+            choice = gcViewChoiceMonthly;
+        }
+        NSString * filter = [GCViewConfig filterFor:choice date:bucket andActivityType:GC_TYPE_ALL];
+        [GCAppGlobal focusOnListWithFilter:filter];
     }
 }
 
