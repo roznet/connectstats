@@ -598,6 +598,7 @@
     
     NSArray<UIColor*>*colors = [GCViewConfig arrayOfColorsForMultiplots];
     GCViewGradientColors * gradientColors = [GCViewGradientColors gradientColorsWith:colors];
+    GCViewGradientColors * gradientColorsFill = [gradientColors gradientAsBackgroundWithAlpha:0.4];
     
     if( period == gcDerivedPeriodMonth ){
         NSArray<GCActivity*>*bestActivities = [[GCAppGlobal derived] bestMatchingActivitySerieFor:serie within:[[GCAppGlobal organizer] activities] completion:nil];
@@ -610,7 +611,8 @@
                 if( labelIndex < colors.count){
                     GCSimpleGraphLegendInfo * info = [[GCSimpleGraphLegendInfo alloc] init];
                     info.text = label;
-                    info.color = [colors[labelIndex] colorWithAlphaComponent:0.6];
+                    
+                    info.color = gradientColorsFill.colors[labelIndex];
                     info.lineWidth = 5;
                     [legends addObject:info];
                     RZRelease(info);
@@ -628,7 +630,7 @@
                 if( labelIndex < colors.count){
                     GCSimpleGraphLegendInfo * info = [[GCSimpleGraphLegendInfo alloc] init];
                     info.text = label;
-                    info.color = [colors[labelIndex] colorWithAlphaComponent:0.6];
+                    info.color = gradientColorsFill.colors[labelIndex];
                     info.lineWidth = 5;
                     [legends addObject:info];
                     RZRelease(info);
@@ -690,7 +692,7 @@
                                                                           andUnit:serie.serieWithUnit.unit];
     
     holder.gradientColors = gradientColors;
-    holder.gradientColorsFill = [gradientColors gradientAsBackgroundWithAlpha:0.4];
+    holder.gradientColorsFill = gradientColorsFill;
     holder.gradientDataSerie = gradientSerie;
     
     holder.lineWidth = 1.;
