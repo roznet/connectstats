@@ -71,6 +71,7 @@ typedef NS_ENUM(NSUInteger, gcGraphType) {
 @optional
 
 -(GCViewGradientColors*)gradientColors:(NSUInteger)idx;
+-(GCViewGradientColors*)gradientColorsFill:(NSUInteger)idx;
 -(CGPoint)zoomPercentage;
 -(CGPoint)offsetPercentage;
 -(NSString*)emptyGraphLabel;

@@ -55,6 +55,7 @@
 @property (nonatomic,retain) GCUnit * yUnit;
 @property (nonatomic,assign) CGFloat lineWidth;
 @property (nonatomic,retain) GCViewGradientColors * gradientColors;
+@property (nonatomic,retain) GCViewGradientColors * gradientColorsFill;
 @property (nonatomic,retain) id<GCStatsFunction> gradientFunction;
 @property (nonatomic,retain) GCStatsDataSerie * gradientDataSerie;
 @property (nonatomic,assign) gcStatsRange range;

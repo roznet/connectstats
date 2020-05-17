@@ -62,7 +62,13 @@
         NSMutableArray<RZColor*>*colors = [NSMutableArray array];
 
         for (NSUInteger i=0; i<nColors; i++) {
-            RZColor * one = [RZColor colorWithRed:startRGBA[0] green:startRGBA[1] blue:startRGBA[2] alpha:startRGBA[3]];
+            CGFloat fract = (CGFloat)i/(CGFloat)(nColors-1);
+            CGFloat components[4];
+            for(size_t j = 0; j < 4;j++ ){
+                components[j] = startRGBA[j] + fract * ( endRGBA[j] - startRGBA[j]);
+            }
+
+            RZColor * one = [RZColor colorWithRed:components[0] green:components[1] blue:components[2] alpha:components[3]];
             [colors addObject:one];
         }
         rv.colors = colors;

@@ -54,8 +54,6 @@
     // use the NSStringFromSelector(@Selector()) idiom so
     // xcode warns about undefined selectors
     NSArray<NSString*> * selectorNames = @[
-                                           NSStringFromSelector(@selector(sample14_SimpleGradientFillPlot)),
-                                           NSStringFromSelector(@selector(sample13_compareStats)),
 
                                            NSStringFromSelector(@selector(sample1_simpleLines)),
                                            NSStringFromSelector(@selector(sample2_SimpleSinusPlot)),
@@ -66,8 +64,10 @@
                                            NSStringFromSelector(@selector(sample8_historyBarGraphCoarse)),
                                            NSStringFromSelector(@selector(sample9_trackFieldMultipleLineGraphs)),
                                            //NSStringFromSelector(@selector(sample10_swimBarGraphFine)),
-                                           NSStringFromSelector(@selector(sample11)),
-                                           NSStringFromSelector(@selector(sample_12_trackStats)),
+                                           NSStringFromSelector(@selector(sample11_cumulativeHist)),
+                                           NSStringFromSelector(@selector(sample12_trackStats)),
+                                           NSStringFromSelector(@selector(sample13_compareStats)),
+                                           NSStringFromSelector(@selector(sample14_SimpleGradientFillPlot)),
 
 
                                            ];
@@ -76,10 +76,25 @@
     NSMutableArray * rv = [NSMutableArray array];
     @autoreleasepool {
         [GCAppGlobal setupSampleState:@"sample_activities.db"];
-
+        
+        // DONT CHECKIN
+        NSString * filter = @"sample14";
+        NSInteger which = -1;
+        if( filter ){
+            for (NSString * one in selectorNames) {
+                if( [one containsString:filter] ){
+                    selectorNames = @[ one ];
+                    break;
+                }
+            }
+        }
+        
         for (NSString * selectorName in selectorNames) {
             
             NSArray<GCTestUISampleDataSourceHolder*> * sources = [self dataSourceHolderFor:NSSelectorFromString(selectorName)];
+            if( filter != nil && which >= 0 && which < sources.count ){
+                sources = @[ sources[which] ];
+            }
             for (GCTestUISampleDataSourceHolder * holder in sources) {
                 [rv addObject:holder];
             }
@@ -142,36 +157,6 @@
 
 }
 
--(GCSimpleGraphCachedDataSource*)sample14_SimpleGradientFillPlot{
-    GCStatsDataSerie * serie = [[GCStatsDataSerie alloc] init];
-    GCViewGradientColors * colors = [GCViewGradientColors gradientColorsWith:@[ [UIColor redColor], [UIColor greenColor], [UIColor blueColor]]];
-    GCStatsDataSerie * gradientSerie = [[GCStatsDataSerie alloc] init];
-    for (double x = 0.; x < 20.; x+= 0.1) {
-        if( sin(x) > 0.5){
-            [gradientSerie addDataPointWithX:x andY:0.];
-        }else if( sin(x) < -0.5){
-            [gradientSerie addDataPointWithX:x andY:1.];
-        }else{
-            [gradientSerie addDataPointWithX:x andY:2.];
-        }
-        [serie addDataPointWithX:x andY:sin(x)];
-    }
-    
-    GCSimpleGraphCachedDataSource * sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
-    GCSimpleGraphDataHolder * holder = [GCSimpleGraphDataHolder dataHolder:serie type:gcGraphLine
-                                                                     color:[UIColor blueColor]
-                                                                   andUnit:[GCUnit unitForKey:@"percent"]];
-    holder.gradientDataSerie = gradientSerie;
-    holder.gradientColors = colors;
-    holder.fillColorForSerie = [UIColor colorWithWhite:0.5 alpha:0.5];
-    [sample addDataHolder:holder];
-    [sample setXUnit:[GCUnit unitForKey:@"percent"]];
-    [sample setTitle:@"sample 2"];
-
-    [serie release];
-
-    return sample;
-}
 -(GCSimpleGraphCachedDataSource*)sample2_SimpleSinusPlot{
     GCStatsDataSerie * serie = [[GCStatsDataSerie alloc] init];
     for (double x = 0.; x < 10.; x+= 0.1) {
@@ -374,7 +359,7 @@
     return sample;
 }
 
--(GCSimpleGraphCachedDataSource*)sample11{
+-(GCSimpleGraphCachedDataSource*)sample11_cumulativeHist{
     GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING];
     GCField * durfield  = [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:GC_TYPE_RUNNING];
 
@@ -391,7 +376,7 @@
     return sample;
 }
 
--(NSArray<GCSimpleGraphCachedDataSource*>*)sample_12_trackStats{
+-(NSArray<GCSimpleGraphCachedDataSource*>*)sample12_trackStats{
     GCActivity * activity = [GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_837769405.db" ]];
     GCTrackStats * trackStats = [[GCTrackStats alloc] init];
     trackStats.activity = activity;
@@ -473,6 +458,39 @@
     [rv addObject:[GCSimpleGraphCachedDataSource trackFieldFrom:trackStats]];
 
     return rv;
+}
+
+-(GCSimpleGraphCachedDataSource*)sample14_SimpleGradientFillPlot{
+    GCStatsDataSerie * serie = [[GCStatsDataSerie alloc] init];
+    GCViewGradientColors * colors = [GCViewGradientColors gradientColorsWith:@[ [UIColor redColor], [UIColor greenColor], [UIColor blueColor]]];
+    GCStatsDataSerie * gradientSerie = [[GCStatsDataSerie alloc] init];
+    for (double x = 0.; x < 20.; x+= 0.1) {
+        if( sin(x) > 0.5){
+            [gradientSerie addDataPointWithX:x andY:0.];
+        }else if( sin(x) < -0.5){
+            [gradientSerie addDataPointWithX:x andY:1.];
+        }else{
+            [gradientSerie addDataPointWithX:x andY:2.];
+        }
+        [serie addDataPointWithX:x andY:sin(x)];
+    }
+    
+    GCSimpleGraphCachedDataSource * sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphDataHolder * holder = [GCSimpleGraphDataHolder dataHolder:serie type:gcGraphLine
+                                                                     color:[UIColor blueColor]
+                                                                   andUnit:[GCUnit unitForKey:@"percent"]];
+    holder.gradientDataSerie = gradientSerie;
+    holder.gradientColors = colors;
+    holder.gradientColorsFill = [colors gradientAsBackgroundWithAlpha:0.5];
+    
+    holder.fillColorForSerie = [UIColor colorWithWhite:0.5 alpha:0.5];
+    [sample addDataHolder:holder];
+    [sample setXUnit:[GCUnit unitForKey:@"percent"]];
+    [sample setTitle:@"sample 14"];
+
+    [serie release];
+
+    return sample;
 }
 
 #pragma mark - Cells Samples

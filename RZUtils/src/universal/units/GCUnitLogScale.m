@@ -56,7 +56,6 @@ NS_INLINE double TO_LOG_SCALE(double x,double base, double shift, double scale) 
     return rv;
 }
 
-
 #if ! __has_feature(objc_arc)
 -(void)dealloc{
     [_underlyingUnit release];

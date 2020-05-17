@@ -42,7 +42,6 @@
 
 @property (nonatomic,assign) CGRect drawRect;
 @property (nonatomic,retain) NSMutableArray * geometries;
-@property (nonatomic,assign) BOOL darkMode;
 @property (nonatomic,readonly) BOOL xAxisIsVertical;
 
 -(GCSimpleGraphGeometry *)geometryForIndex:(NSUInteger)idx;
