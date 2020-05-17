@@ -88,7 +88,7 @@
 -(NSArray<GCFieldsForCategory*>*)setupFields{
     if (self.organizedFields==nil) {
         NSArray<GCField*>*fields = [[self.activity lapNumber:self.lapIndex] availableFieldsInActivity:self.activity];
-        self.organizedFields = [GCFields categorizeAndOrderFields:fields forActivityType:self.activity.activityType];
+        self.organizedFields = [GCFields categorizeAndOrderFields:fields];
     }
     return self.organizedFields;
 }

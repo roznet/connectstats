@@ -677,7 +677,7 @@
     }
     self.allFields = [NSArray arrayWithArray:limitFields];
 
-    self.fieldOrder = [GCFields categorizeAndOrderFields:self.allFields forActivityType:activityType];
+    self.fieldOrder = [GCFields categorizeAndOrderFields:self.allFields];
     self.fieldStats = vals;
 
     [self performSelectorOnMainThread:@selector(updateDone) withObject:nil waitUntilDone:NO];

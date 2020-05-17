@@ -309,6 +309,13 @@
             [serieWithUnit addNumberWithUnit:nu forX:lap.distanceMeters];
         }
     }
+    // Conplete the serie with a novalue point at the very end
+    if(timeAxis){
+        [serieWithUnit.serie addDataPointNoValueWithDate:self.endTime since:firstDate];
+    }else{
+        GCNumberWithUnit * totalDistance = [[self numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]] convertToUnit:serieWithUnit.xUnit];
+        [serieWithUnit.serie addDataPointNoValueWithX:totalDistance.value];
+    }
 
     if (![displayUnit isEqualToUnit:storeUnit]) {
         [serieWithUnit convertToUnit:displayUnit];

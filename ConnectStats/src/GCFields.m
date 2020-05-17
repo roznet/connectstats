@@ -91,8 +91,8 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
 #pragma mark - Field Properties
 
 
-+(NSArray<GCFieldsForCategory*>*)categorizeAndOrderFields:(NSArray<GCField*>*)fields forActivityType:(NSString*)activityType{
-    NSMutableDictionary * categories = [NSMutableDictionary dictionary];
++(NSArray<GCFieldsForCategory*>*)categorizeAndOrderFields:(NSArray<GCField*>*)fields{
+    NSMutableDictionary<NSString*,GCFieldsForCategory*> * categories = [NSMutableDictionary dictionary];
 
     for (GCField * field in fields) {
         NSString * category = field.category;
@@ -109,10 +109,10 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
         }
     }
 
-    NSDictionary * category2Order = [GCFieldsCategory categoryOrder];
+    NSDictionary<NSString*,NSNumber*> * category2Order = [GCFieldsCategory categoryOrder];
 
-    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:10];
-    NSMutableArray * categoriesSorted = [NSMutableArray arrayWithArray:categories.allKeys];
+    NSMutableArray<GCFieldsForCategory*> * rv = [NSMutableArray arrayWithCapacity:10];
+    NSMutableArray<NSString*> * categoriesSorted = [NSMutableArray arrayWithArray:categories.allKeys];
     [categoriesSorted sortUsingComparator:^(NSString*c1,NSString*c2){
         //FIXME: missing category
         return [category2Order[c1] compare:category2Order[c2]];
@@ -124,14 +124,14 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
             continue;
         }
         if([category isEqualToString:GC_CATEGORY_OTHER]) {
-            [GCFields reportOtherFields:orderedFields.fields activityType:activityType];
+            [GCFields reportOtherFields:orderedFields.fields];
         }
         [rv addObject:orderedFields];
     }
     return rv;
 }
 
-+(void)reportOtherFields:(NSArray*)fields activityType:(NSString*)aType{
++(void)reportOtherFields:(NSArray<GCField*>*)fields{
     static NSMutableDictionary * reported = nil;
     if (reported==nil) {
         reported = [NSMutableDictionary dictionary];

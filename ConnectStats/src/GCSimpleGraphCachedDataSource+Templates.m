@@ -455,7 +455,7 @@
 
             if (trackStats.highlightLap) {
                 GCSimpleGraphDataHolder * full = [GCSimpleGraphDataHolder dataHolder:trackStats.extra_data[0].serie type:gcGraphStep color:plot.color andUnit:plot.yUnit];
-                [full.dataSerie addDataPointWithX:range.x_max+1 andY:0.0];
+                [full.dataSerie addDataPointNoValueWithX:range.x_max];
                 full.range = [plot.dataSerie range];
                 plot.color = [GCViewConfig colorForGraphElement:gcSkinGraphColorLapOverlay];
                 cache.series = [NSMutableArray arrayWithObjects:plot,full, nil];

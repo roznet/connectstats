@@ -48,7 +48,7 @@
         rv.choices = fields;
         rv.entryDelegate = delegate;
         rv.currentChoice = current;
-        rv.fieldOrder = [GCFields categorizeAndOrderFields:fields forActivityType:nil];
+        rv.fieldOrder = [GCFields categorizeAndOrderFields:fields];
     }
     return rv;
 }

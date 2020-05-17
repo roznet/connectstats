@@ -425,7 +425,6 @@
                 [path addLineToPoint:simpleContext.to_adj];
                 last_drawn_point = simpleContext.to_adj;
             }
-            
         }
 
         // Stroke and check for fill before start of new segment or end of the graph

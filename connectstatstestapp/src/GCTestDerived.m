@@ -95,10 +95,9 @@
         }else{
             GCActivity * max19k = [[GCAppGlobal organizer] activityForId:@"830807000"];
             GCDerivedDataSerie * derived = [[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
-                                                                             field:gcFieldFlagWeightedMeanHeartRate
+                                                                             field:[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:max19k.activityType]
                                                                             period:gcDerivedPeriodMonth
-                                                                           forDate:max19k.date
-                                                                   andActivityType:max19k.activityType];
+                                                                           forDate:max19k.date];
             RZ_ASSERT(derived.serieWithUnit.count>0, @"Has Points");
             GCField * bestRolling = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING].correspondingBestRollingField;
             GCStatsDataSerieWithUnit * serie = [max19k calculatedSerieForField:bestRolling thread:nil];
@@ -117,10 +116,9 @@
             GCActivity * max5k = [[GCAppGlobal organizer] activityForId:@"828298988"];
 
             GCDerivedDataSerie * derived = [[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
-                                                                             field:gcFieldFlagWeightedMeanHeartRate
+                                                                             field:[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:max19k.activityType]
                                                                             period:gcDerivedPeriodMonth
-                                                                           forDate:max19k.date
-                                                                   andActivityType:max19k.activityType];
+                                                                           forDate:max19k.date];
             // force trackpoints
             [max19k trackpoints];
             [max5k trackpoints];
@@ -160,10 +158,9 @@
             GCField * hrField = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
 
             GCDerivedDataSerie * derived = [[GCAppGlobal derived] derivedDataSerie:gcDerivedTypeBestRolling
-                                                                             field:gcFieldFlagWeightedMeanHeartRate
+                                                                             field:[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:max19k.activityType]
                                                                             period:gcDerivedPeriodMonth
-                                                                           forDate:max19k.date
-                                                                   andActivityType:max19k.activityType];
+                                                                           forDate:max19k.date];
             // force trackpoints
             [max19k trackpoints];
             [max5k trackpoints];

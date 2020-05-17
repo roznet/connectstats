@@ -31,7 +31,7 @@
 
 - (void)testFieldUniqueness{
     NSMutableDictionary * dict = [NSMutableDictionary dictionary];
-    GCField * fSumDistance = [GCField field:@"SumDistance" forActivityType:GC_TYPE_RUNNING];
+    GCField * fSumDistance = [GCField fieldForKey:@"SumDistance" andActivityType:GC_TYPE_RUNNING];
     dict[fSumDistance] = @(1);
     GCField * fFSumDistance = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING];
     

@@ -178,6 +178,13 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     [dataPoints addObject:[GCStatsDataPointNoValue dataPointWithX:x andY:0.]];
 }
 
+-(void)addDataPointNoValueWithDate:(NSDate*)x{
+    [dataPoints addObject:[GCStatsDataPointNoValue dataPointWithDate:x andValue:0.]];
+}
+-(void)addDataPointNoValueWithDate:(NSDate*)aDate since:(NSDate*)first{
+    [dataPoints addObject:[GCStatsDataPointNoValue dataPointWithDate:aDate sinceDate:first andValue:0.]];
+}
+
 -(void)addDataPointWithPoint:(GCStatsDataPoint*)point andValue:(double)value{
     [dataPoints addObject:[GCStatsDataPoint dataPointWithPoint:point andValue:value]];
 }

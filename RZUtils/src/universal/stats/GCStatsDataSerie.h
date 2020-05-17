@@ -136,6 +136,8 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2);
 -(void)addDataPointWithX:(double)x andY:(double)value;
 -(void)addDataPointWithX:(double)x y:(double)y andZ:(double)z;
 -(void)addDataPointNoValueWithX:(double)x;
+-(void)addDataPointNoValueWithDate:(NSDate*)aDate;
+-(void)addDataPointNoValueWithDate:(NSDate*)aDate since:(NSDate*)first;
 /**
  Add new point copy with same class and x_data as point and value
  */
