@@ -78,7 +78,7 @@
         [GCAppGlobal setupSampleState:@"sample_activities.db"];
         
         // DONT CHECKIN
-        NSString * filter = @"sample14";
+        NSString * filter = nil;//@"sample6";
         NSInteger which = -1;
         if( filter ){
             for (NSString * one in selectorNames) {
