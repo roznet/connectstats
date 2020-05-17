@@ -690,6 +690,7 @@
                                                                           andUnit:serie.serieWithUnit.unit];
     
     holder.gradientColors = gradientColors;
+    holder.gradientColorsFill = [gradientColors gradientAsBackgroundWithAlpha:0.4];
     holder.gradientDataSerie = gradientSerie;
     
     holder.lineWidth = 1.;
