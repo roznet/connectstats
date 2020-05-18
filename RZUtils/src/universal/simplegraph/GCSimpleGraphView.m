@@ -436,20 +436,19 @@
                 if (shouldFill) {
                     [fillColor setFill];
 
-                    RZBezierPath * pathIn = [RZBezierPath bezierPathWithCGPath:path.CGPath];
                     if( simpleContext.xAxisIsVertical ){
-                        [pathIn addLineToPoint:CGPointMake(axis.x, simpleContext.to_adj.y)];
-                        [pathIn addLineToPoint:CGPointMake(axis.x, first.y)];
-                        [pathIn addLineToPoint:CGPointMake(first.x, first.y)];
+                        [path addLineToPoint:CGPointMake(axis.x, simpleContext.to_adj.y)];
+                        [path addLineToPoint:CGPointMake(axis.x, first.y)];
+                        [path addLineToPoint:CGPointMake(first.x, first.y)];
                     }else{
-                        [pathIn addLineToPoint:CGPointMake(simpleContext.to_adj.x, axis.y)];
-                        [pathIn addLineToPoint:CGPointMake(first.x, axis.y)];
-                        [pathIn addLineToPoint:CGPointMake(first.x, first.y)];
+                        [path addLineToPoint:CGPointMake(simpleContext.to_adj.x, axis.y)];
+                        [path addLineToPoint:CGPointMake(first.x, axis.y)];
+                        [path addLineToPoint:CGPointMake(first.x, first.y)];
                     }
-                    [pathIn fill];
+                    [path fill];
                     if( barGraph ){
                         // Bar graph should highlight the bars
-                        [pathIn stroke];
+                        [path stroke];
                     }
                 }
             }

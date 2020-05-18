@@ -52,7 +52,7 @@
     return _gradientColors.numberOfColors;
 }
 
--(NSArray<UIColor*>*)colors{
+-(NSArray<RZColor*>*)colors{
     return _gradientColors.colors;
 }
 

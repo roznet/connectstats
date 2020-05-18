@@ -43,6 +43,8 @@
 #import "GCTrackFieldChoices.h"
 #import "GCTestsSamples.h"
 #import "GCActivity+Series.h"
+#import "GCConnectStatsRequestFitFile.h"
+#import "GCGarminActivityTrack13Request.h"
 
 @implementation GCTestUISamples
 
@@ -78,7 +80,7 @@
         [GCAppGlobal setupSampleState:@"sample_activities.db"];
         
         // DONT CHECKIN
-        NSString * filter = nil;//@"sample12";
+        NSString * filter = nil;//= @"sample10";
         NSInteger which = -1;
         if( filter ){
             for (NSString * one in selectorNames) {
@@ -373,6 +375,59 @@
 
     
     return @[ sample, sampleTransposed ];
+}
+
+-(NSArray<GCSimpleGraphCachedDataSource*>*)sample10_swimBarGraphFine{
+    NSMutableArray<GCSimpleGraphCachedDataSource*>*rv =[NSMutableArray array];
+    
+    NSString * activityId = @"1027746730";
+        
+    NSString * fn = [NSString stringWithFormat:@"activity_%@.json", activityId];
+    NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn forClass:[self class]] options:0 error:nil];
+    
+    NSDictionary * json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    GCActivity * activity = [[[GCActivity alloc] initWithId:activityId andGarminData:json] autorelease];
+    [GCGarminActivityTrack13Request testForActivity:activity withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:false];
+
+    GCSimpleGraphCachedDataSource * one = nil;
+
+    GCTrackStats * trackStats = RZReturnAutorelease([[GCTrackStats alloc] init]);
+    trackStats.activity = activity;
+    activity.settings.gapTimeInterval = 30.;
+    GCField * speed = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:GC_TYPE_SWIMMING];
+
+    GCTrackFieldChoiceHolder * choice = [GCTrackFieldChoiceHolder trackFieldChoice:speed style:gcTrackStatsData];
+    [choice setupTrackStats:trackStats];
+    one = [GCSimpleGraphCachedDataSource trackFieldFrom:trackStats];
+    one.xAxisIsVertical = false;
+    [rv addObject:one];
+    
+    trackStats = RZReturnAutorelease([[GCTrackStats alloc] init]);
+     GCActivity * activity2 = [GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_swimming_439303647.db" ]];
+    trackStats.activity = activity2;
+    activity.settings.gapTimeInterval = 30.;
+
+    choice = [GCTrackFieldChoiceHolder trackFieldChoice:speed style:gcTrackStatsData];
+    [choice setupTrackStats:trackStats];
+    one = [GCSimpleGraphCachedDataSource trackFieldFrom:trackStats];
+    one.xAxisIsVertical = false;
+    [rv addObject:one];
+
+    trackStats = RZReturnAutorelease([[GCTrackStats alloc] init]);
+    activityId = @"424479793";
+    NSString * fp_fit = [RZFileOrganizer bundleFilePath:@"activity_424479793.fit"];
+    GCActivity * activity3 = [[[GCActivity alloc] initWithId:activityId] autorelease];
+    activity = [GCConnectStatsRequestFitFile testForActivity:activity3 withFilesIn:fp_fit];
+    trackStats.activity = activity3;
+    activity3.settings.gapTimeInterval = 30.;
+
+    choice = [GCTrackFieldChoiceHolder trackFieldChoice:speed style:gcTrackStatsData];
+    [choice setupTrackStats:trackStats];
+    one = [GCSimpleGraphCachedDataSource trackFieldFrom:trackStats];
+    one.xAxisIsVertical = false;
+    [rv addObject:one];
+
+    return rv;
 }
 
 -(GCSimpleGraphCachedDataSource*)sample11_cumulativeHist{
