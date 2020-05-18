@@ -358,7 +358,7 @@
     [fillColor?:[RZColor clearColor] setFill];
 
     BOOL shouldFill = (fillColor != nil);
-    BOOL shouldFillNext = shouldFill;
+    BOOL shouldFillNext = true;
 
     NSUInteger paths = 0;
     NSDate * start = [NSDate date];

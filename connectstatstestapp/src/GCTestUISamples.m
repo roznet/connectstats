@@ -477,9 +477,9 @@
 }
 
 -(GCSimpleGraphCachedDataSource*)sample14_SimpleGradientFillPlot{
-    GCStatsDataSerie * serie = [[GCStatsDataSerie alloc] init];
+    GCStatsDataSerie * serie = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     GCViewGradientColors * colors = [GCViewGradientColors gradientColorsWith:@[ [UIColor redColor], [UIColor greenColor], [UIColor blueColor]]];
-    GCStatsDataSerie * gradientSerie = [[GCStatsDataSerie alloc] init];
+    GCStatsDataSerie * gradientSerie = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     for (double x = 0.; x < 20.; x+= 0.1) {
         if( sin(x) > 0.5){
             [gradientSerie addDataPointWithX:x andY:0.];
@@ -503,8 +503,6 @@
     [sample addDataHolder:holder];
     [sample setXUnit:[GCUnit unitForKey:@"percent"]];
     [sample setTitle:@"sample 14"];
-
-    [serie release];
 
     return sample;
 }

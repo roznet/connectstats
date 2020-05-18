@@ -651,7 +651,7 @@
     
     GCUnitLogScale * logScale = nil;
     if( fieldflag == gcFieldFlagPower && [GCAppGlobal configGetBool:CONFIG_POWER_CURVE_LOG_SCALE defaultValue:true]){
-        logScale = [GCUnitLogScale logScaleUnitFor:xUnit base:10. scaling:0.1 shift:1.];
+        logScale = [GCUnitLogScale logScaleUnitFor:xUnit base:10. scaling:0.05 shift:1.];
         xUnit = logScale;
     }
     
@@ -737,7 +737,7 @@
 
     GCUnitLogScale * logScale = nil;
     if( fieldflag == gcFieldFlagPower && [GCAppGlobal configGetBool:CONFIG_POWER_CURVE_LOG_SCALE defaultValue:true]){
-        logScale = [GCUnitLogScale logScaleUnitFor:xUnit base:10. scaling:0.1 shift:1.];
+        logScale = [GCUnitLogScale logScaleUnitFor:xUnit base:10. scaling:0.05 shift:1.];
         xUnit = logScale;
     }
 
