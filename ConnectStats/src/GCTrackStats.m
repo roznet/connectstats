@@ -242,10 +242,9 @@
         [GCStatsDataSerieWithUnit reduceToCommonRange:self.data and:xdata];
 
         if (self.highlightLap) {
-            self.gradientSerie = self.data.serie;
             GCStatsDataSerie * gserie = [self.activity highlightSerieForLap:self.highlightLapIndex timeAxis:!self.distanceAxis];
-            GCStatsScaledFunction * scaledF= [GCStatsScaledFunction scaledFunctionWithSerie:gserie];
-            self.gradientFunction = scaledF;
+            self.gradientSerie = gserie;
+            self.gradientFunction = nil;
         }else{
             self.gradientSerie = self.data.serie;
             GCStatsScaledFunction * scaledF= [GCStatsScaledFunction scaledFunctionWithSerie:self.gradientSerie];
@@ -271,9 +270,8 @@
             self.extra_data = @[ [[self.data filterForNonZeroIn:gserie] bucketWith:[self.zoneCalculator bucketSerieWithUnit]] ];
             self.data = [self.data bucketWith:[self.zoneCalculator bucketSerieWithUnit]];
         }else{
-            GCStatsNonZeroIndicatorFunction * scaledF= [GCStatsNonZeroIndicatorFunction nonZeroIndicatorFor:gserie];
-            self.gradientFunction = scaledF;
-            self.gradientSerie = self.data.serie;
+            self.gradientFunction = nil;
+            self.gradientSerie = gserie;
         }
     }else if(self.zoneCalculator) {
         self.data = [self.data bucketWith:[self.zoneCalculator bucketSerieWithUnit:self.data.unit]];

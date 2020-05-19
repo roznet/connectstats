@@ -81,7 +81,7 @@
         [GCAppGlobal setupSampleState:@"sample_activities.db"];
         
         // DONT CHECKIN
-        NSString * filter = @"sample10";
+        NSString * filter = nil;// = @"sample8_";
         NSInteger which = -1;
         if( filter ){
             for (NSString * one in selectorNames) {
@@ -131,7 +131,10 @@
     return rv;
 }
 
--(GCSimpleGraphCachedDataSource*)sample1_simpleLines{
+-(NSArray<GCSimpleGraphCachedDataSource*>*)sample1_simpleLines{
+    
+    NSMutableArray<GCSimpleGraphCachedDataSource*>*rv = [NSMutableArray array];
+    
     GCStatsDataSerie * data = [[GCStatsDataSerie alloc] init];
     GCStatsDataSerie * data2 = [[GCStatsDataSerie alloc] init];
     double x = 0.;
@@ -156,7 +159,27 @@
     [data release];
     [data2 release];
 
-    return sample;
+    [rv addObject:sample];
+    
+    sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCStatsDataSerie * adjusted = [[GCStatsDataSerie alloc] init];
+    for (GCStatsDataPoint * point in data) {
+        if( point.x_data == 4.0){
+            [adjusted addDataPointNoValueWithX:point.x_data];
+        }else{
+            [adjusted addDataPointWithX:point.x_data andY:point.y_data];
+        }
+    }
+    h = [GCSimpleGraphDataHolder dataHolder:adjusted type:gcGraphLine color:[UIColor blackColor] andUnit:[GCUnit unitForKey:@"mps"]];
+    h.fillColorForSerie = [[UIColor redColor] colorWithAlphaComponent:0.5];
+    
+    [sample setSeries:[NSMutableArray arrayWithObjects:h, nil]];
+    [sample setXUnit:[GCUnit unitForKey:@"second"]];
+    [sample setTitle:@"Sample 1"];
+
+    [rv addObject:sample];
+    
+    return rv;
 
 }
 
@@ -405,8 +428,8 @@
     trackStats = RZReturnAutorelease([[GCTrackStats alloc] init]);
     activityId = @"424479793";
     NSString * fp_fit = [RZFileOrganizer bundleFilePath:@"activity_424479793.fit"];
-    GCActivity * activity3 = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil]];;
-    activity3 = [GCConnectStatsRequestFitFile testForActivity:activity3 withFilesIn:fp_fit];
+    //GCActivity * activity3 = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil]];;
+    GCActivity * activity3 = [GCConnectStatsRequestFitFile testForActivity:nil withFilesIn:fp_fit];
     trackStats.activity = activity3;
 
     choice = [GCTrackFieldChoiceHolder trackFieldChoice:speed style:gcTrackStatsData];
@@ -491,6 +514,11 @@
     trackStats.highlightLapIndex = 4;
     [trackStats setNeedsForRecalculate];
     choice = [GCTrackFieldChoiceHolder trackFieldChoice:hr xField:nil];
+    [choice setupTrackStats:trackStats];
+    one = [GCSimpleGraphCachedDataSource trackFieldFrom:trackStats];
+    [rv addObject:one];
+    
+    choice = [GCTrackFieldChoiceHolder trackFieldChoice:hr xField:speed];
     [choice setupTrackStats:trackStats];
     one = [GCSimpleGraphCachedDataSource trackFieldFrom:trackStats];
     [rv addObject:one];

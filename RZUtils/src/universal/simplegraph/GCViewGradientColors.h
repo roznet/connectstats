@@ -43,6 +43,7 @@
 +(GCViewGradientColors*)gradientColors:(NSUInteger)nColors from:(RZColor*)fromC to:(RZColor*)toC;
 +(GCViewGradientColors*)gradientColorsSingle:(RZColor*)color;
 +(GCViewGradientColors*)gradientColorsWith:(NSArray<RZColor*>*)colors;
++(GCViewGradientColors*)gradientColorsTrackHighlight:(RZColor*)color alpha:(CGFloat)alpha;
 
 -(RZColor*)colorsForValue:(CGFloat)aVal;
 

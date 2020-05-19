@@ -417,8 +417,8 @@
                 plot.gradientColors = [GCViewGradientColors gradientColorsRainbow16];
                 plot.lineWidth = 3.;
             }else{
-                plot.fillColorForSerie = [GCViewConfig fillColorForField:trackStats.field];
-                plot.gradientColors = [GCViewGradientColors gradientColorsTrackHighlight16];
+                plot.gradientColorsFill = [GCViewGradientColors gradientColorsTrackHighlight:[GCViewConfig fillColorForField:trackStats.field] alpha:0.1];
+                plot.gradientColors = [GCViewGradientColors gradientColorsTrackHighlight:[GCViewConfig colorForGraphElement:gcSkinGraphColorLineGraph] alpha:0.3];
                 plot.lineWidth = 1.;
             }
         }else{
@@ -497,6 +497,13 @@
                         UIColor * lapColor = [GCViewConfig colorForGraphElement:gcSkinGraphColorLapOverlay];
                         GCStatsDataSerieWithUnit * lapSerie = [trackStats.activity lapSerieForTrackField:trackStats.field timeAxis:YES];
                         GCSimpleGraphDataHolder * lap = [GCSimpleGraphDataHolder dataHolder:lapSerie.serie type:gcGraphStep color:lapColor andUnit:[trackStats yUnit:0]];
+                        
+                        if( trackStats.highlightLap){
+                            GCStatsDataSerieWithUnit * gradientSerie = [trackStats.activity highlightLapSerieForLap:trackStats.highlightLapIndex timeAxis:YES];
+                            lap.gradientDataSerie = gradientSerie.serie;
+                            lap.gradientColorsFill = [GCViewGradientColors gradientColorsTrackHighlight:lapColor alpha:0.1];
+                            lap.gradientColors = [GCViewGradientColors gradientColorsTrackHighlight:lapColor alpha:0.1];
+                        }
                         [seriesArray insertObject:lap atIndex:0];
                     }
                 }

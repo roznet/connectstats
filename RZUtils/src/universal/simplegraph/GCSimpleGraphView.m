@@ -120,15 +120,12 @@
     self.to = first;
 }
 
--(BOOL)updateWithCGPoint:(CGPoint)point lastPointHadValue:(BOOL)lastPointHasValue{
+-(BOOL)updateWithCGPoint:(CGPoint)point{
     self.from = self.to;
     self.to = point;
     
     self.from_adj = _from;
     self.to_adj = _to;
-    if( !lastPointHasValue ){
-        _from_adj = _to;
-    }
     
     if( _xAxisIsVertical){
         if( _barGraph ){
@@ -389,8 +386,7 @@
             shouldFillNext = (fillColor != nil);
         }
 
-        if( [simpleContext updateWithCGPoint:[geometry pointForX:point.x_data andY:point.y_data]
-                           lastPointHadValue:barGraph ? lastPointHasValue : currentPointHasValue ] ){
+        if( [simpleContext updateWithCGPoint:[geometry pointForX:point.x_data andY:point.y_data] ] ){
             [simpleContext updateColorsForIndex:i];
             
             if (simpleContext.strokeColor && ![simpleContext.strokeColor isEqual:strokeColor]) {
@@ -410,8 +406,14 @@
             if (path.empty) {
                 // If starting a new path segment, first move to the start and
                 // record first point of the segment
-                [path moveToPoint:simpleContext.from_adj];
-                first = simpleContext.from_adj;
+                // If previous point had no value start from current
+                if( lastPointHasValue ){
+                    [path moveToPoint:simpleContext.from_adj];
+                    first = simpleContext.from_adj;
+                }else{
+                    [path moveToPoint:simpleContext.to_adj];
+                    first = simpleContext.to_adj;
+                }
             }
             BOOL pointMovedEnough = true;
             if( simpleContext.xAxisIsVertical ){
@@ -429,7 +431,7 @@
 
         // Stroke and check for fill before start of new segment or end of the graph
         // bar graph also should always fill
-        if( endCurrentPathSegment || isLastPoint || barGraph){
+        if( endCurrentPathSegment || isLastPoint || barGraph ){
             
             if (!path.empty) {
                 [path stroke];
@@ -441,7 +443,9 @@
                         [path addLineToPoint:CGPointMake(axis.x, first.y)];
                         [path addLineToPoint:CGPointMake(first.x, first.y)];
                     }else{
-                        [path addLineToPoint:CGPointMake(simpleContext.to_adj.x, axis.y)];
+                        // If no value close from last point, but if barGraph close at the last point to create the rectangle
+                        double close_x = (currentPointHasValue || barGraph) ? simpleContext.to_adj.x : simpleContext.from.x;
+                        [path addLineToPoint:CGPointMake(close_x, axis.y)];
                         [path addLineToPoint:CGPointMake(first.x, axis.y)];
                         [path addLineToPoint:CGPointMake(first.x, first.y)];
                     }

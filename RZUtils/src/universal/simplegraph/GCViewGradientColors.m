@@ -75,6 +75,14 @@
     }
     return rv;
 }
++(GCViewGradientColors*)gradientColorsTrackHighlight:(RZColor*)color alpha:(CGFloat)alpha{
+    GCViewGradientColors * rv = RZReturnAutorelease([[GCViewGradientColors alloc] init]);
+    if (rv) {
+        rv.colors = @[ [color colorWithAlphaComponent:alpha], color ];
+        rv.valueIsIndex = true;
+    }
+    return rv;
+}
 +(GCViewGradientColors*)gradientColorsTrackHighlight16{
     GCViewGradientColors * rv = RZReturnAutorelease([[GCViewGradientColors alloc] init]);
     if (rv) {
@@ -194,7 +202,8 @@
 
 
 -(RZColor*)colorsForValue:(CGFloat)aVal{
-    NSUInteger idx = self.valueIsIndex ? aVal : MAX(MIN(self.numberOfColors-1, aVal*self.numberOfColors),0);
+    NSUInteger idx = self.valueIsIndex ? aVal : aVal*self.numberOfColors;
+    idx = MAX(MIN(self.numberOfColors-1, idx),0);
     return self.colors[idx];
 }
 

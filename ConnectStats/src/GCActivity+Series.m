@@ -173,33 +173,13 @@
 }
 -(GCStatsDataSerie*)highlightSerieForLap:(NSUInteger)lap timeAxis:(BOOL)timeAxis{
     GCStatsDataSerieWithUnit * serieWithUnit = [GCStatsDataSerieWithUnit dataSerieWithUnit:[GCUnit unitForKey:@"dimensionless"]];
-    NSDate * lastDate = nil;
     NSDate * firstDate = nil;
-    double lastDist = 0.;
-
-    BOOL started = false;
-
-    NSUInteger currLap = 0;
 
     for (GCTrackPoint * point in [self trackpoints]) {
-
-        if (!started) {
+        if( firstDate == nil){
             firstDate = point.time;
         }
-        if (currLap != point.lapIndex || !started) {
-            lastDist = point.distanceMeters;
-            lastDate = point.time;
-            currLap = point.lapIndex;
-        }
-
-        started = true;
-
-        double y = 0.;
-        if (point.lapIndex == lap) {
-            // +1 so it's not equal to 0
-            y = timeAxis ? [point.time timeIntervalSinceDate:lastDate]+1. : point.distanceMeters - lastDist;
-        }
-
+        double y = point.lapIndex == lap ? 1 : 0;
         if (timeAxis) {
             [serieWithUnit.serie addDataPointWithDate:point.time since:firstDate andValue:y];
         }else{
@@ -287,6 +267,37 @@
     return serieWithUnit;
 }
 
+-(GCStatsDataSerieWithUnit*)highlightLapSerieForLap:(NSUInteger)lapIndex timeAxis:(BOOL)timeAxis{
+    GCStatsDataSerieWithUnit * serieWithUnit = [GCStatsDataSerieWithUnit dataSerieWithUnit:GCUnit.dimensionless];
+    if (!timeAxis) {
+        serieWithUnit.xUnit = [GCUnit unitForKey:STOREUNIT_DISTANCE];
+    }
+    NSDate * firstDate = nil;
+
+    for (GCLap * lap in [self laps]) {
+        double y = lap.lapIndex == lapIndex ? 1.0 : 0.0;
+        if (timeAxis) {
+            if (firstDate == nil) {
+                firstDate = lap.time;
+            }
+            [serieWithUnit.serie addDataPointWithDate:lap.time since:firstDate andValue:y];
+        }else{
+            [serieWithUnit.serie addDataPointWithX:lap.distanceMeters andY:y];
+        }
+    }
+    // Conplete the serie with a novalue point at the very end
+    if(timeAxis){
+        NSDate * lastDate = self.trackpoints.lastObject.time;
+        //self.endTime
+        [serieWithUnit.serie addDataPointNoValueWithDate:lastDate since:firstDate];
+    }else{
+        GCNumberWithUnit * totalDistance = [[self numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]] convertToUnit:serieWithUnit.xUnit];
+        [serieWithUnit.serie addDataPointNoValueWithX:totalDistance.value];
+    }
+
+    return serieWithUnit;
+}
+
 -(GCStatsDataSerieWithUnit*)lapSerieForTrackField:(GCField*)field timeAxis:(BOOL)timeAxis{
     GCUnit * displayUnit = [self displayUnitForField:field];
     GCUnit * storeUnit   = [self storeUnitForField:field];
@@ -311,7 +322,9 @@
     }
     // Conplete the serie with a novalue point at the very end
     if(timeAxis){
-        [serieWithUnit.serie addDataPointNoValueWithDate:self.endTime since:firstDate];
+        NSDate * lastDate = self.trackpoints.lastObject.time;
+        //self.endTime
+        [serieWithUnit.serie addDataPointNoValueWithDate:lastDate since:firstDate];
     }else{
         GCNumberWithUnit * totalDistance = [[self numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]] convertToUnit:serieWithUnit.xUnit];
         [serieWithUnit.serie addDataPointNoValueWithX:totalDistance.value];

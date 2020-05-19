@@ -214,12 +214,20 @@
             GCConnectStatsActivityTCXParser * parser = [GCConnectStatsActivityTCXParser activityTCXParserWithActivityId:self.activity.activityId andData:data];
             fitAct = parser.activity;
         }else{
-            fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:self.activity.activityId fitFileData:data fitFilePath:fp startTime:useStartDate]);
+            NSString * activityId = self.activity.activityId;
+            if( activityId == nil){
+                activityId = [[fileName lastPathComponent] stringByDeletingPathExtension];
+            }
+            fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:activityId fitFileData:data fitFilePath:fp startTime:useStartDate]);
         }
         if( fitAct ){ // check if we could parse. Could be no fit file available.
-            [self.activity updateSummaryDataFromActivity:fitAct];
-            [self.activity updateTrackpointsFromActivity:fitAct];
-            [self.activity saveTrackpoints:self.activity.trackpoints andLaps:self.activity.laps];
+            if( self.activity == nil){
+                self.activity = fitAct;
+            }else{
+                [self.activity updateSummaryDataFromActivity:fitAct];
+                [self.activity updateTrackpointsFromActivity:fitAct];
+                [self.activity saveTrackpoints:self.activity.trackpoints andLaps:self.activity.laps];
+            }
         }
     }
     [self processDone];
