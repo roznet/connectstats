@@ -185,6 +185,7 @@
         parsedAct.db = db;
         parsedAct.trackdb = db;
         parsedAct.settings.worker = nil;
+        //[parsedAct.settings disableFiltersAndAdjustments];
         [GCGarminActivityTrack13Request testForActivity:parsedAct withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:false];
         [parsedAct saveToDb:db];
         
@@ -198,6 +199,7 @@
         GCActivity * reloadedAct = [GCActivity activityWithId:activityId andDb:db];
         // disable threading so calculated value recalculated synchronously.
         reloadedAct.settings.worker = nil;
+        //[reloadedAct.settings disableFiltersAndAdjustments];
         [reloadedAct trackpoints];
         
         NSDictionary * parsedDict = [self compareStatsDictFor:parsedAct];
