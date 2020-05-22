@@ -735,11 +735,13 @@
     config.calChoice = gcStatsCalAll;
 
     UITableView * tableView = vc.tableView;
-
+    // Force width for consistency accross device run
+    CGRect adjusted = tableView.frame;
+    adjusted.size.width = 320.;
+    tableView.frame = adjusted;
     [vc setupTestModeWithFieldListConfig:config];
 
     UITableViewCell * cell = [vc tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:GC_SECTION_DATA]];
-
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Stats Multi Distance"]];
     cell = [vc tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:GC_SECTION_DATA+1]];
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Stats Multi Time"]];
