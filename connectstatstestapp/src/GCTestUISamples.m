@@ -426,7 +426,7 @@
     [rv addObject:one];
     
     trackStats = RZReturnAutorelease([[GCTrackStats alloc] init]);
-    activityId = @"424479793";
+    //activityId = @"424479793";
     NSString * fp_fit = [RZFileOrganizer bundleFilePath:@"activity_424479793.fit"];
     //GCActivity * activity3 = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil]];;
     GCActivity * activity3 = [GCConnectStatsRequestFitFile testForActivity:nil withFilesIn:fp_fit];
