@@ -31,19 +31,16 @@
 +(GCViewSwimStrokeColors*)swimStrokeColors{
     GCViewSwimStrokeColors * rv = [[[GCViewSwimStrokeColors alloc] init] autorelease];
     if (rv) {
-        rv.numberOfColors = gcSwimStrokeEnd;
-        rv.colors = malloc(sizeof(CGColorRef) * rv.numberOfColors);
-        CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
+        NSMutableArray * colors = [NSMutableArray array];
 
         for (int i = 0; i < gcSwimStrokeEnd; i++) {
-            rv.colors[i] = CGColorCreate(rgb, CGColorGetComponents([GCViewConfig colorForSwimStrokeType:i].CGColor));
+            [colors addObject:[GCViewConfig colorForSwimStrokeType:i]];
         }
-        CGColorSpaceRelease(rgb);
-
+        rv.colors = colors;
     }
     return rv;
 }
--(CGColorRef)colorsForValue:(CGFloat)aVal{
+-(RZColor*)colorsForValue:(CGFloat)aVal{
     NSUInteger idx = MAX(MIN(self.numberOfColors-1, (NSUInteger)aVal),0);
 
     return self.colors[idx];

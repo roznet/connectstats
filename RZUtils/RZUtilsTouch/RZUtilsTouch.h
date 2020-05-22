@@ -38,7 +38,8 @@ FOUNDATION_EXPORT const unsigned char RZUtilsTouchVersionString[];
 #import "RZUtilsTouch/GCSimpleGraphLapInfo.h"
 #import "RZUtilsTouch/GCSimpleGraphRulerView.h"
 #import "RZUtilsTouch/GCSimpleGraphGRadientLegendView.h"
-#import "RZUtilsTouch/GCSimpleGRaphLegendView.h"
+#import "RZUtilsTouch/GCSimpleGraphLegendView.h"
+#import "RZUtilsTouch/GCSimpleGraphLegendInfo.h"
 #import "RZUtilsTouch/GCCellSimpleGRaph.h"
 #import "RZUtilsTouch/GCSimpleGraphViewController.h"
 

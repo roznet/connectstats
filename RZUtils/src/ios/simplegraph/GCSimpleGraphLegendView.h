@@ -26,11 +26,14 @@
 #import <UIKit/UIKit.h>
 #import <RZUtilsUniversal/RZUtilsUniversal.h>
 
-@interface GCSimpleGraphLegendView : UIView{
+@class GCSimpleGraphLegendInfo;
 
-}
+@interface GCSimpleGraphLegendView : UIView
+
 @property (nonatomic,retain) NSObject<GCSimpleGraphDataSource> * dataSource;
 @property (nonatomic,retain) NSObject<GCSimpleGraphDisplayConfig> * displayConfig;
 @property (nonatomic,assign) BOOL darkMode;
+
+-(void)setupWithLegends:(NSArray<GCSimpleGraphLegendInfo*>*)legends;
 
 @end

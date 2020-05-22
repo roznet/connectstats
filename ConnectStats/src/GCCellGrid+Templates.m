@@ -142,56 +142,32 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 /**
  Input can be Field or NSArray
  */
--(void)setupForField:(id)input andActivity:(GCActivity *)activity width:(CGFloat)width{
-    NSMutableArray * fields = [NSMutableArray array];
+-(void)setupForField:(NSString*)input andActivity:(GCActivity *)activity width:(CGFloat)width{
+    NSMutableArray<GCFormattedField*> * fields = [NSMutableArray array];
     GCFormattedField * mainF = nil;
-    GCField * field = nil;
-    if([input isKindOfClass:[NSArray class]]){
-        NSArray * inputs = input;
-        if (inputs.count>0) {
-            field = [GCField field:inputs[0] forActivityType:activity.activityType];
-            GCNumberWithUnit * mainN = [activity numberWithUnitForField:field];
-            mainF = [GCFormattedField formattedField:field forNumber:mainN forSize:16.];
-
-            for (NSUInteger i=1; i<inputs.count; i++) {
-                GCField * addField = [activity fieldForKey:inputs[i]];
-                GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
-                if (addNumber) {
-                    GCFormattedField* theOne = [GCFormattedField formattedField:addField forNumber:addNumber forSize:14.];
-                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-                    if ([addNumber sameUnit:mainN]) {
-                        theOne.noUnits = true;
-                    }
-                    [fields addObject:theOne];
+    GCField * field = [GCField fieldForKey:input andActivityType:activity.activityType];
+    if (field) {
+        NSArray * related = [field relatedFields];
+        
+        GCNumberWithUnit * mainN = [activity numberWithUnitForField:field];
+        mainF = [GCFormattedField formattedField:field forNumber:mainN forSize:16.];
+        
+        for (NSUInteger i=0; i<related.count; i++) {
+            GCField * addField = related[i];
+            GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
+            if (addNumber) {
+                GCFormattedField* theOne = [GCFormattedField formattedField:addField forNumber:addNumber forSize:14.];
+                theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+                theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
+                if ([addNumber sameUnit:mainN]) {
+                    theOne.noUnits = true;
                 }
+                [fields addObject:theOne];
             }
         }
-    }else {
-        field = [GCField field:input forActivityType:activity.activityType];
-        if (field) {
-            NSArray * related = [field relatedFields];
-
-            GCNumberWithUnit * mainN = [activity numberWithUnitForField:field];
-            mainF = [GCFormattedField formattedField:field forNumber:mainN forSize:16.];
-
-            for (NSUInteger i=0; i<related.count; i++) {
-                GCField * addField = related[i];
-                GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
-                if (addNumber) {
-                    GCFormattedField* theOne = [GCFormattedField formattedField:addField forNumber:addNumber forSize:14.];
-                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-                    if ([addNumber sameUnit:mainN]) {
-                        theOne.noUnits = true;
-                    }
-                    [fields addObject:theOne];
-                }
-            }
-        }else{
-            RZLog(RZLogError, @"Invalid input %@", NSStringFromClass([input class]));
-            return;
-        }
+    }else{
+        RZLog(RZLogError, @"Invalid input %@", NSStringFromClass([input class]));
+        return;
     }
     NSUInteger n = fields.count;
     if (width > 600.) {

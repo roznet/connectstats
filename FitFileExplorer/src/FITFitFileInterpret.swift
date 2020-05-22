@@ -16,6 +16,9 @@ class FITFitFileInterpret: NSObject {
     private let fitFile:RZFitFile
     
     private var sessionIndex = 0
+    var preferDeveloperField = false
+    
+    var alternates : [RZFitMessageType : [GCField:[RZFitFieldKey] ] ] = [:]
     
     public var activityType : GCActivityType {
         get {
@@ -108,7 +111,17 @@ class FITFitFileInterpret: NSObject {
         return key
     }
     
-
+    func reportAlternates() {
+        for (messageType,values) in self.alternates{
+            if let messageDescription = rzfit_mesg_num_string(input: messageType) {
+                for (field,keys) in values {
+                    if( keys.count > 1){
+                        print( "Alternates found for \(messageDescription): \(field) \(keys)")
+                    }
+                }
+            }
+        }
+    }
     /// Extract data from a fields message into GCField and numbers, 
     /// will skip unknown fields
     ///
@@ -116,13 +129,37 @@ class FITFitFileInterpret: NSObject {
     /// - Returns: dictionary
     func summaryValues(fitMessage:RZFitMessage) -> [GCField:GCActivitySummaryValue] {
         var rv :[GCField:GCActivitySummaryValue] = [:]
+        if self.alternates[fitMessage.messageType] == nil{
+            self.alternates[fitMessage.messageType] = [:]
+        }
+        
+        // Force expansion because we just created it above
+        var messageAlternates = self.alternates.removeValue(forKey: fitMessage.messageType)!
+        
         let fitMessageFields = fitMessage.interpretedFields()
         for (key,fitField) in fitMessageFields {
             if  let v = self.summaryValue(fitMessageType:fitMessage.messageType, field: key, fitField: fitField),
                 let f = fieldKey(fitMessageType: fitMessage.messageType, fitField: key){
-                rv[ f ] = v
+                var save = true
+                if var alternate = messageAlternates.removeValue(forKey: f) {
+                    if !alternate.contains(key) {
+                        alternate.append(key)
+                    }
+                    // if multiple we only use the field that appeared first
+                    // to ensure consistency
+                    save = (key == alternate.first)
+                    messageAlternates[f] = alternate
+                }else{
+                    messageAlternates[f] = [key]
+                }
+                
+                if save {
+                    rv[ f ] = v
+                }
             }
         }
+        self.alternates[fitMessage.messageType] = messageAlternates
+        
         // Few special cases, if speed and not pace, add
         if self.activityType.isPacePreferred() {
             if let paceField = GCField( for: gcFieldFlag.weightedMeanSpeed, andActivityType: self.activityType.topSubRoot().key),

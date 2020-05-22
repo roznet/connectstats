@@ -26,8 +26,12 @@
 #import "GCUnitLogScale.h"
 #import "RZMacros.h"
 
-#define FROM_LOG_SCALE(x) (pow(_base, x)-_shift)/_scale
-#define TO_LOG_SCALE(x) log(x*_scale+_shift)/log(_base)
+NS_INLINE double FROM_LOG_SCALE(double x,double base, double shift, double scale) {
+    return (pow(base, x)-shift)/scale;
+}
+NS_INLINE double TO_LOG_SCALE(double x,double base, double shift, double scale) {
+    return log(x*scale+shift)/log(base);
+}
 
 @interface GCUnitLogScale ()
 @property (nonatomic,retain) GCUnit * underlyingUnit;
@@ -36,6 +40,7 @@
 @property (nonatomic,assign) double shift;
 
 @end
+
 
 @implementation GCUnitLogScale
 
@@ -51,7 +56,6 @@
     return rv;
 }
 
-
 #if ! __has_feature(objc_arc)
 -(void)dealloc{
     [_underlyingUnit release];
@@ -60,20 +64,20 @@
 #endif
 
 -(double)valueToReferenceUnit:(double)aVal{
-    return FROM_LOG_SCALE(aVal);
+    return FROM_LOG_SCALE(aVal,_base,_shift,_scale);
 }
 
 -(double)valueFromReferenceUnit:(double)aVal{
-    return TO_LOG_SCALE(aVal);
+    return TO_LOG_SCALE(aVal,_base,_shift,_scale);
 }
 
 -(NSString*)formatDoubleNoUnits:(double)aDbl{
-    double unitValue = FROM_LOG_SCALE(aDbl);
+    double unitValue = FROM_LOG_SCALE(aDbl,_base,_shift,_scale);
     return [self.underlyingUnit formatDoubleNoUnits:unitValue];
 }
 
 -(NSString*)formatDouble:(double)aDbl{
-    double unitValue = FROM_LOG_SCALE(aDbl);
+    double unitValue = FROM_LOG_SCALE(aDbl,_base,_shift,_scale);
     return [self.underlyingUnit formatDouble:unitValue];
 }
 

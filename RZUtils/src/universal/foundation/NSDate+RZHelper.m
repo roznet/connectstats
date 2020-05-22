@@ -355,6 +355,11 @@
         formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
         formatter.dateFormat = @"yyyy";
         return [formatter stringFromDate:self];
+    }else if(aUnit == NSCalendarUnitDay){
+        NSDateFormatter * formatter = RZReturnAutorelease([[NSDateFormatter alloc] init]);
+        formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+        formatter.dateFormat = @"MMM dd";
+        return [formatter stringFromDate:self];
     }else{
         NSDateFormatter * formatter = RZReturnAutorelease([[NSDateFormatter alloc] init]);
         formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];

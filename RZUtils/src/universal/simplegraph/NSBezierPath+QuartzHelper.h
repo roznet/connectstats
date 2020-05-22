@@ -35,8 +35,6 @@ extern NSString * NSStringFromCGPoint(CGPoint point);
 
 @interface NSBezierPath (QuartzHelper)
 
-+ (NSBezierPath *)bezierPathWithCGPath:(CGPathRef)CGPath;
--(CGPathRef)CGPath; // DEPRECATED_MSG_ATTRIBUTE("release");
 -(void)addLineToPoint:(CGPoint)point;
 
 @end

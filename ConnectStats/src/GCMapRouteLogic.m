@@ -218,7 +218,7 @@
                 }
                 CGFloat val = (float)idx/n;
 
-                GCMapRouteLogicPointHolder * holder = [GCMapRouteLogicPointHolder pointHolder:point color:[UIColor colorWithCGColor:[self.gradientColors colorsForValue:val]] start:pathStart];
+                GCMapRouteLogicPointHolder * holder = [GCMapRouteLogicPointHolder pointHolder:point color:[self.gradientColors colorsForValue:val] start:pathStart];
                 if (started && lastIdx != idx) {
                     holder.changeColor = true;
                 }else{

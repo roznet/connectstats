@@ -131,7 +131,11 @@
     
     NSSet * classes = [NSSet setWithObjects:[NSArray class], [GCFieldsForCategory class], [GCField class], nil];
 
-    NSArray<GCFieldsForCategory*> * rv = [GCFields categorizeAndOrderFields:tests forActivityType:nil];
+    NSArray<GCField*>*testFields = [tests arrayByMappingBlock:^(NSString*key){
+        return [GCField fieldForKey:key andActivityType:GC_TYPE_RUNNING];
+    }];
+    
+    NSArray<GCFieldsForCategory*> * rv = [GCFields categorizeAndOrderFields:testFields];
     NSArray<GCFieldsForCategory*> * expected = [manager retrieveReferenceObject:rv forClasses:classes selector:_cmd identifier:@"List1" error:&error];
     
     XCTAssertEqual(expected.count, rv.count);
@@ -199,8 +203,10 @@
                @"GainUncorrectedElevation",
                @"SumEnergy"
                ];
-    
-    rv = [GCFields categorizeAndOrderFields:tests forActivityType:nil];
+    testFields = [tests arrayByMappingBlock:^(NSString*key){
+        return [GCField fieldForKey:key andActivityType:GC_TYPE_RUNNING];
+    }];
+    rv = [GCFields categorizeAndOrderFields:testFields];
     
     expected = [manager retrieveReferenceObject:rv forClasses:classes selector:_cmd identifier:@"List2" error:&error];
     

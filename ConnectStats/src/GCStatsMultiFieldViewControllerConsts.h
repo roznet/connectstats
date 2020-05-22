@@ -36,4 +36,3 @@
 // Disabled
 #define GC_SUMMARY_DERIVED_HIST         4
 
-

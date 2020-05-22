@@ -51,6 +51,7 @@
     [gradientFunction release];
     [gradientDataSerie release];
     [gradientColors release];
+    [_gradientColorsFill release];
 
     [dataSerie release];
     [color release];
@@ -158,6 +159,9 @@
 
 -(GCViewGradientColors*)gradientColors:(NSUInteger)idx{
     return [_series[idx] gradientColors];
+}
+-(GCViewGradientColors*)gradientColorsFill:(NSUInteger)idx{
+    return [_series[idx] gradientColorsFill];
 }
 -(id<GCStatsFunction>)gradientFunction:(NSUInteger)idx{
     return [_series[idx] gradientFunction];

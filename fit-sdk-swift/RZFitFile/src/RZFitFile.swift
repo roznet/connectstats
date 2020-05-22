@@ -12,6 +12,11 @@ import RZFitFileTypes
 public typealias RZFitMessageType = FIT_MESG_NUM
 public typealias RZFitFieldKey = String
 
+extension String {
+    public func isRZFitDeveloperField() -> Bool {
+        return self.hasPrefix("developer_")
+    }
+}
 
 public class RZFitFile {
     public typealias Sample = (count:Int,one:RZFitFieldValue)

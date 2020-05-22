@@ -1055,37 +1055,29 @@
     
     ////////////////
     GCStatsDataSerie * serie = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.,@10., @2.,@50., @3.,@20., @4.,@30., @5.,@20., @6.,@30. ]];
-    GCStatsDataSerie * rv = [serie filledSerieForUnit:1. fillMethod:gcStatsZero];
+    GCStatsDataSerie * rv = [serie filledSerieForUnit:1. ];
     checkSame(rv,serie);
     
-    GCStatsDataSerie * expected = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.,@30., @3.,@25., @5.,@25.]];
-    rv = [serie filledSerieForUnit:2. fillMethod:gcStatsZero];
+    GCStatsDataSerie * expected = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @0.,@(10 + (10-50)*(1-0)/(2-1) ), @2.,@50., @4.,@30.]];
+    rv = [serie filledSerieForUnit:2.];
     checkSame(rv, expected);
     
     ////////////////
-    serie = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.,@10., @2.,@50., @2.5,@50., @3.,@20., @4.,@30., @7.,@20., @8.,@30. ]];
+    serie = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.,@10., @2.,@50., @2.5,@50., @3.,@20., @4.,@10., @7.,@40., @8.,@30. ]];
     
-    rv = [serie filledSerieForUnit:1. fillMethod:gcStatsZero];
-    expected = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[@1.,@10., @2.,@50., @3.,@20., @4.,@30., @5.,@0., @6.,@0., @7.,@20., @8.,@30. ]];
+    rv = [serie filledSerieForUnit:1.];
+    expected = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[@1.,@10., @2.,@50., @3.,@20., @4.,@10., @5.,@20., @6.,@30., @7.,@40., @8.,@30. ]];
     checkSame(rv, expected);
     
     //rv = [serie filledSerieForUnit:2. fillMethod:gcStatsZero];
     //expected = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[@1.,@30., @3.,@25., @5.,@0., @7.,@25.]];
     
     ////////////////
-    serie = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[    @1.0,@5.,  @1.5,@10., @2.5,@50., @3.5,@20., @4.5,@30., @5.5,@20., @6.0,@40., @7.0,@100. ]];
-    rv = [serie filledSerieForUnit:1. fillMethod:gcStatsZero];
-    expected = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.0,@7.5, @2.,@30.,  @3.,@35.,  @4.,@25.,  @5.,@25.,  @6.,@40.,  @7.0,@100 ]];
-    checkSame(rv,expected);
-    
-    expected = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.,@18.75,  @3.,@30.,  @5.,@32.5, @7.,@100.]];
-    rv = [serie filledSerieForUnit:2. fillMethod:gcStatsZero];
-    checkSame(rv,expected);
-    
-    ////////////////
-    serie = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.,@10., @2.,@50., @3.,@20., @4.,@30., @5.,@20. ]];
-    rv = [serie filledSerieForUnit:5. fillMethod:gcStatsZero];
-    checkSame(rv, [serie average]);
+    serie = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @0.,@10., @2.,@50., @3.,@20., @4.,@30., @5.,@20. ]];
+    rv = [serie filledSerieForUnit:5.];
+    XCTAssertEqualObjects(rv.firstObject,serie.firstObject);
+    XCTAssertEqualObjects(rv.lastObject,serie.lastObject);
+    XCTAssertEqual(rv.count, 2);
     
     serie = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.,@10., @2.,@10., @5.,@10., @10.,@35., @11.,@5.]];
     rv = [serie summedSerieByUnit:3. fillMethod:gcStatsZero];
@@ -1096,6 +1088,9 @@
 -(void)testBestRolling{
     
     GCStatsDataSerie * serie = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.,@10., @2.,@50., @3.,@20., @4.,@30., @5.,@20., @6.,@30. ]];
+    
+    GCStatsDataSerie * filled2 = [serie filledSerieForUnit:1.];
+    NSLog(@"%@", filled2);
     GCStatsDataSerie * rv = [serie movingBestByUnitOf:1. fillMethod:gcStatsLast select:gcStatsMax statistic:gcStatsWeightedMean];
     gcStatsRange range = [serie range];
     GCStatsDataSerie * avg = [serie average];
@@ -1106,7 +1101,7 @@
     rv = [serie movingBestByUnitOf:1. fillMethod:gcStatsLast select:gcStatsMax statistic:gcStatsWeightedMean];
     XCTAssertEqualWithAccuracy(range.y_max, [[rv dataPointAtIndex:0] y_data], 1e-6, @"First is max");
     
-    GCStatsDataSerie * filled = [serie filledSerieForUnit:2. fillMethod:gcStatsLast];
+    GCStatsDataSerie * filled = [serie filledSerieForUnit:2.];
     rv = [serie movingBestByUnitOf:2. fillMethod:gcStatsLast select:gcStatsMax  statistic:gcStatsWeightedMean];
     range = [filled range];
     avg = [filled average];

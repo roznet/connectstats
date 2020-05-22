@@ -59,6 +59,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(GCStatsDataSerie*)highlightSerieForLap:(NSUInteger)lap timeAxis:(BOOL)timeAxis;
 
+-(GCStatsDataSerieWithUnit*)highlightLapSerieForLap:(NSUInteger)lapIndex timeAxis:(BOOL)timeAxis;
+
 /**
  will return a serie that is the total distance (or time if timeAxis==false) since beginning
  versus elapsed (or distance if timeAxis==false)

@@ -43,7 +43,7 @@
  @param fields is an array of GCField or NSString field Keys (in which case activityType is required
  @param activityType is required if a field key is passed instead of GCField
  */
-+(NSArray<GCFieldsForCategory*>*)categorizeAndOrderFields:(NSArray*)fields forActivityType:(NSString*)activityType;
++(NSArray<GCFieldsForCategory*>*)categorizeAndOrderFields:(NSArray<GCField*>*)fields;
 
 +(NSArray*)knownFieldsMatching:(NSString*)str;
 +(NSDictionary<GCField*,GCFieldInfo*>*)missingPredefinedField;

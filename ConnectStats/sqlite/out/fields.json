@@ -2842,12 +2842,12 @@
     {
       "category": "elevation",
       "field": "__CalcGainElevation",
-      "field_order": 30
+      "field_order": 31
     },
     {
       "category": "elevation",
       "field": "__CalcLossElevation",
-      "field_order": 30
+      "field_order": 33
     },
     {
       "category": "elevation",

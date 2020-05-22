@@ -381,18 +381,19 @@
 #else
             knobRect.origin.y -= C_yKnobOffset+knobRect.size.height;
 #endif
-            if (gtype != gcGraphStep) {
-                knobRect.origin.x -= knobRect.size.width/2.;
+            // Shift left if is vertical
+            if (_xAxisIsVertical) {
+                knobRect.origin.x -= C_xKnobOffset+knobRect.size.width;
+                // Shift up so the label is above the value/knob
+                knobRect.origin.y -= knobRect.size.height;
             }else{
-                // Shift left if is vertical
-                if (_xAxisIsVertical) {
-                    knobRect.origin.x -= C_xKnobOffset+knobRect.size.width;
-                    // Shift up so the label is above the value/knob
-                    knobRect.origin.y -= knobRect.size.height;
+                if (gtype != gcGraphStep) {
+                    knobRect.origin.x -= knobRect.size.width/2.;
                 }else{
                     knobRect.origin.x -= C_xKnobOffset;
                 }
             }
+            
 
             if ((knobRect.origin.x+knobRect.size.width)>CGRectGetMaxX(self.drawRect)) {
                 knobRect.origin.x = CGRectGetMaxX(self.drawRect)-knobRect.size.width;

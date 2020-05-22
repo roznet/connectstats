@@ -136,6 +136,7 @@
 }
 -(void)focusOnListWithFilter:(NSString*)aFilter{
     [activityListViewController setupFilterForString:aFilter];
+    [self focusOnActivityList];
 }
 
 -(void)focusOnStatsSummary{

@@ -67,7 +67,7 @@
     if( fp ){
         GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:aId fitFilePath:fp startTime:nil]);
         GCField * speed = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:fitAct.activityType];
-        GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:speed];
+        GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo infoForField:speed.correspondingBestRollingField];
         GCStatsDataSerieWithUnit * serieU = [fitAct calculatedRollingBest:info];
         NSLog(@"%@", serieU);
     }
@@ -88,7 +88,7 @@
         if( [act.activityType isEqualToString:activityType] && !act.trackPointsRequireDownload){
             GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType];
             i++;
-            GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:field];
+            GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo infoForField:field.correspondingBestRollingField];
             [act calculatedRollingBest:info];
             if( i > 5){
                 toRebuild = act;
@@ -100,7 +100,7 @@
     }
     RZLog(RZLogInfo,@"%@/%@ %@", @(i), @(organizer.countOfActivities), perf);
 
-    [derived rebuildDerivedDataSerie:gcDerivedTypeBestRolling period:gcDerivedPeriodMonth containingActivity:toRebuild];
+    [derived rebuildDerivedDataSerie:gcDerivedTypeBestRolling forActivity:toRebuild inActivities:organizer.activities];
     //RZLog(RZLogInfo,@"%@ %@", derived, @(series.count));
 }
 
@@ -142,7 +142,7 @@
     [calcspeed writeToFile:[RZFileOrganizer writeableFilePath:@"tp_calcspeed.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
     
     GCField * speed = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:fitAct.activityType];
-    GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo info:gcCalculatedCachedTrackRollingBest field:speed];
+    GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo infoForField:speed.correspondingBestRollingField];
     GCStatsDataSerieWithUnit * serieU = [fitAct calculatedRollingBest:info];
     [[serieU.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePath:@"s_best.csv"]
                                       atomically:YES encoding:NSUTF8StringEncoding error:nil];

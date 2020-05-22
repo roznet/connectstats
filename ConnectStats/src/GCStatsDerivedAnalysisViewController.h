@@ -28,18 +28,18 @@
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
-@class GCStatsMultiFieldConfigViewController;
+@class GCStatsDerivedAnalysisViewController;
 @class GCStatsMultiFieldConfig;
 
 @protocol GCStatsMultiFieldConfigViewDelegate <NSObject>
 
--(void)configViewController:(GCStatsMultiFieldConfigViewController*)vc didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+-(void)configChanged;
 -(GCStatsMultiFieldConfig*)config;
 @end
 
-@interface GCStatsMultiFieldConfigViewController : UITableViewController
+@interface GCStatsDerivedAnalysisViewController : UITableViewController<GCEntryFieldDelegate,RZChildObject>
 
-+(GCStatsMultiFieldConfigViewController*)controllerWithDelegate:(NSObject<GCStatsMultiFieldConfigViewDelegate>*)delegate;
++(GCStatsDerivedAnalysisViewController*)controllerWithDelegate:(NSObject<GCStatsMultiFieldConfigViewDelegate>*)delegate;
 
 @end
 

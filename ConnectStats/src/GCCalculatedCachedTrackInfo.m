@@ -29,13 +29,29 @@
 
 @implementation GCCalculatedCachedTrackInfo
 
+-(NSString*)description{
+    return [NSString stringWithFormat:@"<%@: %@ %@>",NSStringFromClass([self class]),self.field,self.serie ? self.serie : @"empty"];
+}
+
+-(BOOL)requiresCalculation{
+    return self.serie == nil ;
+}
+
++(GCCalculatedCachedTrackInfo*)infoForField:(GCField*)afield andSerie:(GCStatsDataSerieWithUnit*)serie{
+    GCCalculatedCachedTrackInfo * rv = [[[GCCalculatedCachedTrackInfo alloc] init] autorelease];
+    if (rv) {
+        rv.field = afield;
+        rv.serie = serie;
+        rv.processedPointsCount = 0;
+    }
+    return rv;
+}
 /**
 
  */
-+(GCCalculatedCachedTrackInfo*)info:(gcCalculatedCachedTrack)atrack field:(GCField*)afield{
++(GCCalculatedCachedTrackInfo*)infoForField:(GCField*)afield{
     GCCalculatedCachedTrackInfo * rv = [[[GCCalculatedCachedTrackInfo alloc] init] autorelease];
     if (rv) {
-        rv.track = atrack;
         rv.field = afield;
         rv.serie = nil;
         rv.processedPointsCount = 0;
@@ -47,15 +63,23 @@
     return _field.fieldFlag;
 }
 
+-(GCField*)underlyingField{
+    return [self.field correspondingUnderlyingField];
+}
+
+-(gcFieldFlag)underlyingFieldFlag{
+    return self.underlyingField.fieldFlag;
+}
 -(void)dealloc{
     [_serie release];
     [_field release];
-    [_trackpoints release];
 
     [super dealloc];
 }
 
-
+-(void)startCalculation{
+    
+}
 
 
 @end

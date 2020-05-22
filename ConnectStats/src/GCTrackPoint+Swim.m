@@ -43,8 +43,13 @@
                        forField:[GCField fieldForKey:INTERNAL_DIRECT_STROKE_TYPE andActivityType:GC_TYPE_ALL] inActivity:act];
         
         for (GCField * field in sumValues) {
+            // ignore speed for inactive, in some files it's present but unused
+            if( !active && (field.fieldFlag == gcFieldFlagWeightedMeanSpeed) ){
+                continue;
+            }
             GCActivitySummaryValue * value = sumValues[field];
             [self setNumberWithUnit:value.numberWithUnit forField:field inActivity:act];
+            
         }
         if( ! active ){
             [self setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:0.0] forField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:act.activityType] inActivity:act];

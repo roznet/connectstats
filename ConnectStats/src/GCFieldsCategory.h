@@ -33,7 +33,7 @@
 +(void)buildCache;
 +(void)forceRebuildCache;
 
-+(NSDictionary*)categoryOrder;
++(NSDictionary<NSString*,NSNumber*>*)categoryOrder;
 +(NSString*)displayNameForCategory:(NSString*)cat;
 
 @end

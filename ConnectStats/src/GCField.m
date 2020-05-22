@@ -308,6 +308,9 @@ static void registerInCache(GCField*field){
 -(BOOL)isInternal{
     return [self.key hasPrefix:INTERNAL_PREFIX];
 }
+-(BOOL)isBestRollingField{
+    return [self.key hasPrefix:CALC_BESTROLLING_PREFIX];
+}
 
 -(BOOL)isNoisy{
     if ([self.activityType isEqualToString:GC_TYPE_SWIMMING]) {
@@ -386,6 +389,19 @@ static void registerInCache(GCField*field){
     }
     return nil;
 }
+
+-(GCField*)correspondingBestRollingField{
+    NSString * subkey = [CALC_BESTROLLING_PREFIX stringByAppendingString:self.key];
+    return [GCField fieldForKey:subkey andActivityType:self.activityType];
+}
+-(GCField*)correspondingUnderlyingField{
+    if( [self.key hasPrefix:CALC_BESTROLLING_PREFIX] ){
+        return [self fieldBySwappingPrefix:CALC_BESTROLLING_PREFIX for:@""];
+    }
+    return self;
+}
+
+
 
 -(GCField*)correspondingPaceOrSpeedField{
     GCField * rv = nil;

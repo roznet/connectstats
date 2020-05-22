@@ -35,7 +35,7 @@
 @property (nonatomic,retain) GCViewGradientColors * gradientColors;
 
 -(NSUInteger)numberOfColors;
--(CGColorRef *)colors NS_RETURNS_INNER_POINTER;
+-(NSArray<RZColor*> *)colors;
 
 -(MKMapRect)calculateBoundingMapRect;
 

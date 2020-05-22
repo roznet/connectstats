@@ -32,7 +32,7 @@
 //
 
 // return uom
--(GCStatsDataSerieWithUnit*)addFromDb:(GCField*)field toSerie:(GCStatsDataSerieWithUnit*)serie{
+-(GCStatsDataSerieWithUnit*)addFromDb:(GCField*)field toSerie:(GCStatsDataSerieWithUnit*)serie filter:(GCHistoryTestFilterBlock)filter{
     NSString * query = @"SELECT v.*, activityType, BeginTimestamp FROM gc_activities_values v, gc_activities a WHERE a.activityId=v.activityId AND v.field=? AND a.activityType = ? ORDER BY BeginTimestamp DESC";
     FMResultSet * res = nil;
     if ([field isHealthField]) {
@@ -48,19 +48,24 @@
 
     while ([res next]) {
         GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnitName:[res stringForColumn:@"uom"] andValue:[res doubleForColumn:@"value"]];
-
-        [serie addNumberWithUnit:nu forDate:[res dateForColumn:@"BeginTimestamp"]];
+        NSDate * date = [res dateForColumn:@"BeginTimestamp"];
+        if( !filter || filter( date )){
+            NSLog(@"%@ in", date);
+            [serie addNumberWithUnit:nu forDate:date];
+        }else{
+            NSLog(@"%@ out", date);
+        }
     }
     return serie;
 }
 
--(void)loadFromDb{
+-(void)loadFromDb:(GCHistoryTestFilterBlock)filter{
     self.dataLock = true;
     [self setHistory:[[[GCStatsDataSerieWithUnit alloc] init] autorelease]];
-    [self addFromDb:self.config.activityField toSerie:self.history];
+    [self addFromDb:self.config.activityField toSerie:self.history filter:filter];
     if (self.config.x_activityField) {
         GCStatsDataSerieWithUnit * xSerie = [[[GCStatsDataSerieWithUnit alloc] init] autorelease];
-        [self addFromDb:self.config.x_activityField toSerie:xSerie];
+        [self addFromDb:self.config.x_activityField toSerie:xSerie filter:filter];
 
         if ([self.config.x_activityField isHealthField]) {
             GCStatsInterpFunction * f = [GCStatsInterpFunction interpFunctionWithSerie:xSerie.serie];

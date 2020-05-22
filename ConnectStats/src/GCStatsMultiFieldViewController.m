@@ -41,12 +41,12 @@
 #import "GCDerivedGroupedSeries.h"
 #import "GCDerivedOrganizer.h"
 #import "GCHealthOrganizer.h"
-#import "GCStatsMultiFieldConfigViewController.h"
+#import "GCStatsDerivedAnalysisViewController.h"
 
 @interface GCStatsMultiFieldViewController ()
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
 @property (nonatomic,assign) BOOL started;
-@property (nonatomic,retain) GCStatsMultiFieldConfigViewController * configViewController;
+@property (nonatomic,retain) GCStatsDerivedAnalysisViewController * configViewController;
 
 @end
 
@@ -418,10 +418,7 @@
 
     GCSimpleGraphCachedDataSource * cache = nil;
     if (current) {
-         cache = [GCSimpleGraphCachedDataSource derivedData:self.activityType
-                                                      field:current.fieldFlag
-                                                        for:current.bucketStart
-                                                      width:tableView.frame.size.width];
+        cache = [GCSimpleGraphCachedDataSource derivedData:current.field forDate:current.bucketStart width:tableView.frame.size.width];
         cache.emptyGraphLabel = @"";
         graphCell.legend = true;
         [graphCell setDataSource:cache andConfig:cache];
@@ -615,17 +612,30 @@
 }
 
 -(void)longPress:(GCCellSimpleGraph*)cell{
-    RZLog(RZLogInfo,@"Long press");
-    self.configViewController = [GCStatsMultiFieldConfigViewController controllerWithDelegate:self];
-    RZAutorelease([[UIPopoverPresentationController alloc] initWithPresentedViewController:self.configViewController
-                                                                  presentingViewController:self]);
-    self.configViewController.popoverPresentationController.sourceView = self.view;
-    self.configViewController.popoverPresentationController.sourceRect = cell.frame;
+    RZLog(RZLogInfo,@"Starting Derived Analysis");
     
-    [self presentViewController:self.configViewController animated:YES completion:nil];
+    self.configViewController = [GCStatsDerivedAnalysisViewController controllerWithDelegate:self];
+    
+    [self.navigationController pushViewController:self.configViewController animated:YES];
 }
--(void)configViewController:(GCStatsMultiFieldConfigViewController*)vc didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    RZLog(RZLogInfo,@"Long press completed");
+
+-(void)configChanged{
+    [self.tableView reloadData];
+}
+-(void)configViewController:(GCStatsDerivedAnalysisViewController*)vc didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if( indexPath.row == 0 && indexPath.section == 0){
+        NSArray<GCActivity*>*activities = [[GCAppGlobal organizer] activities];
+        GCActivity * current = [[GCAppGlobal organizer] currentActivity];
+        if( ![current.activityType isEqualToString:self.config.activityType] ){
+            for (GCActivity * one in activities) {
+                if( [one.activityType isEqualToString:self.config.activityType] ){
+                    current = one;
+                    break;
+                }
+            }
+        }
+        [[GCAppGlobal derived] rebuildDerivedDataSerie:gcDerivedTypeBestRolling forActivity:current inActivities:activities];
+    }
 }
 
 #pragma mark - Setup data
@@ -667,7 +677,7 @@
     }
     self.allFields = [NSArray arrayWithArray:limitFields];
 
-    self.fieldOrder = [GCFields categorizeAndOrderFields:self.allFields forActivityType:activityType];
+    self.fieldOrder = [GCFields categorizeAndOrderFields:self.allFields];
     self.fieldStats = vals;
 
     [self performSelectorOnMainThread:@selector(updateDone) withObject:nil waitUntilDone:NO];

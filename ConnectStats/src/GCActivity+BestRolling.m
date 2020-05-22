@@ -61,7 +61,7 @@
     }
 
     // Fill for each 10 meter with average seconds of surrounding points
-    GCStatsDataSerie * filled = [serie.serie filledSerieForUnit:unitstride fillMethod:gcStatsLinear statistic:gcStatsWeightedMean];
+    GCStatsDataSerie * filled = [serie.serie filledSerieForUnit:unitstride];
     #if TARGET_IPHONE_SIMULATOR
             [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_raw_%@.csv", self.activityId]
                                               atomically:YES encoding:NSUTF8StringEncoding error:nil];
@@ -114,10 +114,8 @@
                                               atomically:YES encoding:NSUTF8StringEncoding error:nil];
     #endif
 
-    [self rollingBestMatchMaxForField:info.field andSerie:serie];
+    [self rollingBestMatchMaxForField:info.underlyingField andSerie:serie];
     [self rollingBestCorrectMonotonicity:serie select:select==gcStatsMin?gcStatsMax:gcStatsMin];
-
-
 
     if( serie.serie.count > 1 && [serie.serie dataPointAtIndex:0].x_data == 0){
         [serie.serie dataPointAtIndex:0].y_data = [serie.serie dataPointAtIndex:1].y_data;
@@ -160,7 +158,8 @@
                 break;
             }
         }
-        if( n > 0){
+        // Report for more than 25% of point capped
+        if( n > serie.count/4 ){
             RZLog(RZLogInfo, @"%@ BestRolling for %@ capped %@/%@ points greater than %@ = %@",self, field, @(n),@(serie.count), maxfield, max_nu );
         }
     }
@@ -191,7 +190,7 @@
     
     NSArray<GCTrackPoint*>*trackpoints = removePause ? [self removedStoppedTimer:self.trackpoints] : self.trackpoints;
     
-    GCStatsDataSerieWithUnit * serie = [self trackSerieForField:info.field trackpoints:trackpoints timeAxis:useTimeAxis];
+    GCStatsDataSerieWithUnit * serie = [self trackSerieForField:info.underlyingField trackpoints:trackpoints timeAxis:useTimeAxis];
     
     // Convert to a unit that is by distance so the interpolation will work
     // otherwise mps interpolated by distance will be messed up
@@ -218,7 +217,7 @@
     // If remove pause, then do linear interpolation, otherwise fill with zeros (assuming pause)
     serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:removePause ? gcStatsLinear :gcStatsZero select:select statistic:gcStatsWeightedMean];
 
-    [self rollingBestMatchMaxForField:info.field andSerie:serie];
+    [self rollingBestMatchMaxForField:info.underlyingField andSerie:serie];
     [self rollingBestCorrectMonotonicity:serie select:select];
     // Convert back to what make sense
     [serie convertToUnit:[self speedDisplayUnit]];
@@ -237,7 +236,7 @@
     
     NSArray<GCTrackPoint*>*trackpoints = removePause ? [self removedStoppedTimer:self.trackpoints] : self.trackpoints;
     
-    GCStatsDataSerieWithUnit * serie = [self trackSerieForField:info.field trackpoints:trackpoints timeAxis:useTimeAxis];
+    GCStatsDataSerieWithUnit * serie = [self trackSerieForField:info.underlyingField trackpoints:trackpoints timeAxis:useTimeAxis];
     
     info.processedPointsCount = serie.serie.count;
     gcStatsSelection select = gcStatsMax;
@@ -257,7 +256,7 @@
     // If remove pause, then do linear interpolation, otherwise fill with zeros (assuming pause)
     serie.serie = [serie.serie movingBestByUnitOf:unitstride fillMethod:removePause ? gcStatsLinear :gcStatsZero select:select statistic:gcStatsWeightedMean];
 
-    [self rollingBestMatchMaxForField:info.field andSerie:serie];
+    [self rollingBestMatchMaxForField:info.underlyingField andSerie:serie];
     [self rollingBestCorrectMonotonicity:serie select:select];
     
     rv = serie;
@@ -268,7 +267,7 @@
 -(GCStatsDataSerieWithUnit*)calculatedRollingBest:(GCCalculatedCachedTrackInfo *)info{
     GCStatsDataSerieWithUnit * rv = nil;
 
-    if( info.fieldFlag == gcFieldFlagWeightedMeanSpeed){
+    if( info.underlyingFieldFlag == gcFieldFlagWeightedMeanSpeed){
         //rv= [self calculatedRollingBestSimpleSpeed:info];
         rv = [self calculatedRollingBestForSpeed:info];
         

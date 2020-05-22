@@ -120,11 +120,6 @@ static NSArray * _calculatedFields = nil;
     return [self fieldInfoForCalculatedField:field].displayName;
 }
 
-+(BOOL)isCalculatedField:(NSString*)field{
-    return [field hasPrefix:CALC_PREFIX];
-}
-
-
 +(NSArray*)calculatedFields{
     if (_calculatedFields==nil) {
         _calculatedFields = [@[

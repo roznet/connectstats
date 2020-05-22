@@ -46,36 +46,37 @@ typedef NS_ENUM(NSUInteger, gcDerivedType) {
 extern sqlite3_int64 kInvalidSerieId;
 
 @interface GCDerivedDataSerie : NSObject<NSSecureCoding>
-@property (nonatomic,assign) gcDerivedType derivedType;
-@property (nonatomic,retain) NSString * activityType;
-@property (nonatomic,assign) gcFieldFlag fieldFlag;
-@property (nonatomic,assign) gcDerivedPeriod derivedPeriod;
+@property (nonatomic,readonly) gcDerivedType derivedType;
+@property (nonatomic,readonly) gcDerivedPeriod derivedPeriod;
+
+@property (nonatomic,readonly) NSString * activityType;
+@property (nonatomic,readonly) gcFieldFlag fieldFlag;
 @property (nonatomic,readonly) GCField * field;
 @property (nonatomic,readonly) NSDate* bucketStart;
-@property (nonatomic,readonly) NSString * filePath;
+@property (nonatomic,readonly) NSString * key;
+@property (nonatomic,readonly) NSString * bucketKey;
+@property (nonatomic,readonly) GCStatsDataSerieWithUnit * serieWithUnit;
+@property (nonatomic,retain) NSString * fileNamePrefix;
 
-@property (nonatomic,retain) GCStatsDataSerieWithUnit * serieWithUnit;
++(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type
+                                 field:(GCField*)field
+                                period:(gcDerivedPeriod)period
+                               forDate:(NSDate*)date;
 
--(NSString*)key;
--(NSString*)bucketKey;
-
-+(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type field:(gcFieldFlag)field period:(gcDerivedPeriod)period forActivity:(GCActivity*)act;
-+(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type field:(gcFieldFlag)field period:(gcDerivedPeriod)period
-                               forDate:(NSDate*)date andActivityType:(NSString*)atype;
 +(GCDerivedDataSerie*)derivedDataSerieFromResultSet:(FMResultSet*)res;
 
 -(void)reset;
 -(void)operate:(gcStatsOperand)operand with:(GCStatsDataSerieWithUnit*)other from:(GCActivity*)activity;
 
--(void)registerFileName:(NSString*)fn;
-
+-(BOOL)dependsOnSerie:(GCDerivedDataSerie*)other;
 -(BOOL)containsActivity:(GCActivity*)act;
+-(NSArray<GCActivity*>*)containedActivitiesIn:(NSArray<GCActivity*>*)activities;
 
--(sqlite3_int64)serieId;
--(sqlite3_int64)saveToDb:(FMDatabase*)db withData:(BOOL)withdata;
--(void)loadFromDb:(FMDatabase*)db;
--(void)loadFromFile:(NSString*)fn;
--(BOOL)saveToFile:(NSString*)fn;
+-(BOOL)saveToDb:(FMDatabase*)db;
+
+-(void)loadFromFileIfNeeded;
+-(BOOL)saveToFile;
+-(void)clearDataAndFile;
 
 +(void)ensureDbStructure:(FMDatabase*)db;
 

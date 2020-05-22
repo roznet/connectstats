@@ -543,7 +543,7 @@
     GCActivity * act= [self buildActivityWithTrackpoints:samples];
 
     GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:GC_TYPE_RUNNING];
-    GCStatsDataSerieWithUnit * v_bestroll = [act calculatedDerivedTrack:gcCalculatedCachedTrackRollingBest forField:field thread:nil];
+    GCStatsDataSerieWithUnit * v_bestroll = [act calculatedSerieForField:field.correspondingBestRollingField thread:nil];
     NSArray * laps = [act compoundLapForIndexSerie:v_bestroll desc:@""];
     
     

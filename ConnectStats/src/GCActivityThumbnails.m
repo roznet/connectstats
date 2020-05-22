@@ -99,7 +99,6 @@
 
         GCSimpleGraphView * graphView = [[GCSimpleGraphView alloc] initWithFrame:CGRectMake(0., 0., size.width, size.height-legendHeight)];
         [view addSubview:graphView];
-        graphView.darkMode = true;
         graphView.dataSource = ds;
         graphView.displayConfig = ds;
 
@@ -132,7 +131,6 @@
         GCSimpleGraphCachedDataSource * ds = [GCSimpleGraphCachedDataSource performanceAnalysis:performanceAnalysis width:size.width];
 
         GCSimpleGraphView * graphView = [[GCSimpleGraphView alloc] initWithFrame:CGRectMake(0., 0., size.width, size.height)];
-        graphView.darkMode = true;
         graphView.dataSource = ds;
         graphView.displayConfig = ds;
         rv = [UIImage imageWithUIView:graphView];

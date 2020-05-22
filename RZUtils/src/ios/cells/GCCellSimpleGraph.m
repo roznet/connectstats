@@ -31,7 +31,7 @@
 
 @interface GCCellSimpleGraph ()
 @property (nonatomic,retain) GCSimpleGraphView * graphView;
-@property (nonatomic,retain) GCSimpleGraphLegendView * legendView;
+@property (nonatomic,retain) GCSimpleGraphLegendView * useLegendView;
 
 @end
 
@@ -47,23 +47,34 @@
     return rv;
 }
 
+-(GCSimpleGraphLegendView*)legendView{
+    return self.useLegendView;
+}
+
+-(void)setLegendView:(GCSimpleGraphLegendView*)lv{
+    if( self.useLegendView ){
+        [self.useLegendView removeFromSuperview];
+    }
+    self.useLegendView = lv;
+    
+    if( self.useLegendView ){
+        [self.contentView addSubview:self.useLegendView];
+    }
+}
+
 -(void)setLegend:(BOOL)legend{
     if (legend) {
         if (!self.legendView) {
             self.legendView = RZReturnAutorelease([[GCSimpleGraphLegendView alloc] initWithFrame:CGRectZero]);
             self.legendView.dataSource = self.graphView.dataSource;
             self.legendView.displayConfig = self.graphView.displayConfig;
-            [self.contentView addSubview:self.legendView];
         }
     }else{
-        if (self.legendView) {
-            [self.legendView removeFromSuperview];
-        }
         self.legendView = nil;
     }
 }
 -(BOOL)legend{
-    return self.legendView == nil;
+    return self.useLegendView != nil;
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier

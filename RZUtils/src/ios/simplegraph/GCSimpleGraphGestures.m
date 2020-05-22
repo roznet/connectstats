@@ -86,7 +86,6 @@
 }
 
 -(void)longPressGesture:(UILongPressGestureRecognizer*)gestureRecognizer{
-    NSLog(@"Long press");
 }
 -(void)panGesture:(UIPanGestureRecognizer*)panRecognizer {
     if (panRecognizer.state == UIGestureRecognizerStateBegan) {

@@ -295,30 +295,40 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView activityGraphCellForRowAtIndexPath:(NSIndexPath *)indexPath{
     GCCellSimpleGraph * cell = [GCCellSimpleGraph graphCell:tableView];
     cell.cellDelegate = self;
+    
     GCActivity * activity = self.activity;
-    GCTrackStats * s = [[GCTrackStats alloc] init];
-    s.activity = activity;
-    if (!self.choices || (self.choices).choices.count==0) {
-        self.choices = [GCTrackFieldChoices trackFieldChoicesWithActivity:activity];
-    }
-    [self.choices setupTrackStats:s];
-    self.trackStats = s;
-    GCSimpleGraphCachedDataSource * ds = [GCSimpleGraphCachedDataSource trackFieldFrom:s];
-    GCActivity * compare = [self compareActivity];
-    if (compare) {
-        if ([self.choices validForActivity:compare]) {
-            self.compareTrackStats = [[[GCTrackStats alloc] init] autorelease];
-            self.compareTrackStats.activity = compare;
-            [self.choices setupTrackStats:self.compareTrackStats];
-            GCSimpleGraphCachedDataSource * dsc = [GCSimpleGraphCachedDataSource trackFieldFrom:self.compareTrackStats];
-            [dsc setupAsBackgroundGraph];
-            [ds addDataSource:dsc];
+    
+     dispatch_block_t build = ^(){
+        GCTrackStats * s = [[GCTrackStats alloc] init];
+        s.activity = activity;
+        if (!self.choices || (self.choices).choices.count==0) {
+            self.choices = [GCTrackFieldChoices trackFieldChoicesWithActivity:activity];
         }
+        [self.choices setupTrackStats:s];
+        self.trackStats = s;
+        GCSimpleGraphCachedDataSource * ds = [GCSimpleGraphCachedDataSource trackFieldFrom:s];
+        GCActivity * compare = [self compareActivity];
+        if (compare) {
+            if ([self.choices validForActivity:compare]) {
+                self.compareTrackStats = [[[GCTrackStats alloc] init] autorelease];
+                self.compareTrackStats.activity = compare;
+                [self.choices setupTrackStats:self.compareTrackStats];
+                GCSimpleGraphCachedDataSource * dsc = [GCSimpleGraphCachedDataSource trackFieldFrom:self.compareTrackStats];
+                [dsc setupAsBackgroundGraph];
+                [ds addDataSource:dsc];
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [cell setDataSource:ds andConfig:ds];
+            [cell setNeedsDisplay];
+        });
+        [s release];
+    };
+    if( activity.settings.worker ){
+        dispatch_async(activity.settings.worker,build);
+    }else{
+        build();
     }
-    [cell setDataSource:ds andConfig:ds];
-
-    [s release];
-
     return cell;
 }
 
@@ -544,7 +554,7 @@
 
 #pragma mark - Setup and call back
 
--(NSArray<NSAttributedString*>*)attributedStringsForFieldInput:(id)input{
+-(NSArray<NSAttributedString*>*)attributedStringsForFieldInput:(NSArray<GCField*>*)input{
     NSMutableArray * rv = [NSMutableArray array];
     GCActivity * activity = self.activity;
     GCFormattedField * mainF = nil;
@@ -575,30 +585,6 @@
                     [rv addObject:[theOne attributedString]];
                 }
             }
-        }
-    }else {
-        field = [GCField field:input forActivityType:activity.activityType];
-        if (field) {
-            NSArray<GCField*> * related = [field relatedFields];
-
-            GCNumberWithUnit * mainN = [activity numberWithUnitForField:field];
-            mainF = [GCFormattedField formattedField:field forNumber:mainN forSize:16.];
-            [rv addObject:mainF];
-            for (NSUInteger i=0; i<related.count; i++) {
-                GCField * addField = related[i];
-                GCNumberWithUnit * addNumber = [activity numberWithUnitForField:addField];
-                if (addNumber) {
-                    GCFormattedField* theOne = [GCFormattedField formattedField:addField forNumber:addNumber forSize:14.];
-                    theOne.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-                    theOne.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-                    if ([addNumber sameUnit:mainN]) {
-                        theOne.noUnits = true;
-                    }
-                    [rv addObject:theOne];
-                }
-            }
-        }else{
-            RZLog(RZLogError, @"Invalid input %@", NSStringFromClass([input class]));
         }
     }
     return rv;
@@ -667,8 +653,8 @@
         NSMutableArray * packed = [NSMutableArray array];
         NSMutableArray * fields = [NSMutableArray array];
         // Start Packing
-        for (NSArray * input in self.organizedFields.groupedPrimaryFields) {
-            GCField * field = [GCField field:input[0] forActivityType:_activity.activityType];
+        for (NSArray<GCField*> * input in self.organizedFields.groupedPrimaryFields) {
+            GCField * field = input.firstObject;
             if(field.fieldFlag == gcFieldFlagSumDistance){
                 field = [GCField fieldForFlag:gcFieldFlagAltitudeMeters andActivityType:_activity.activityType];
             }

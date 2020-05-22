@@ -43,6 +43,9 @@
 #import "GCTrackFieldChoices.h"
 #import "GCTestsSamples.h"
 #import "GCActivity+Series.h"
+#import "GCConnectStatsRequestFitFile.h"
+#import "GCGarminActivityTrack13Request.h"
+#import "GCGarminRequestActivityReload.h"
 
 @implementation GCTestUISamples
 
@@ -54,7 +57,6 @@
     // use the NSStringFromSelector(@Selector()) idiom so
     // xcode warns about undefined selectors
     NSArray<NSString*> * selectorNames = @[
-                                           NSStringFromSelector(@selector(sample13_compareStats)),
 
                                            NSStringFromSelector(@selector(sample1_simpleLines)),
                                            NSStringFromSelector(@selector(sample2_SimpleSinusPlot)),
@@ -64,9 +66,11 @@
                                            NSStringFromSelector(@selector(sample7_historyCumulativeGraph)),
                                            NSStringFromSelector(@selector(sample8_historyBarGraphCoarse)),
                                            NSStringFromSelector(@selector(sample9_trackFieldMultipleLineGraphs)),
-                                           //NSStringFromSelector(@selector(sample10_swimBarGraphFine)),
-                                           NSStringFromSelector(@selector(sample11)),
-                                           NSStringFromSelector(@selector(sample_12_trackStats)),
+                                           NSStringFromSelector(@selector(sample10_swimBarGraphFine)),
+                                           NSStringFromSelector(@selector(sample11_cumulativeHist)),
+                                           NSStringFromSelector(@selector(sample12_trackStats)),
+                                           NSStringFromSelector(@selector(sample13_compareStats)),
+                                           NSStringFromSelector(@selector(sample14_SimpleGradientFillPlot)),
 
 
                                            ];
@@ -75,10 +79,25 @@
     NSMutableArray * rv = [NSMutableArray array];
     @autoreleasepool {
         [GCAppGlobal setupSampleState:@"sample_activities.db"];
-
+        
+        // DONT CHECKIN
+        NSString * filter = nil;// = @"sample8_";
+        NSInteger which = -1;
+        if( filter ){
+            for (NSString * one in selectorNames) {
+                if( [one containsString:filter] ){
+                    selectorNames = @[ one ];
+                    break;
+                }
+            }
+        }
+        
         for (NSString * selectorName in selectorNames) {
             
             NSArray<GCTestUISampleDataSourceHolder*> * sources = [self dataSourceHolderFor:NSSelectorFromString(selectorName)];
+            if( filter != nil && which >= 0 && which < sources.count ){
+                sources = @[ sources[which] ];
+            }
             for (GCTestUISampleDataSourceHolder * holder in sources) {
                 [rv addObject:holder];
             }
@@ -112,7 +131,10 @@
     return rv;
 }
 
--(GCSimpleGraphCachedDataSource*)sample1_simpleLines{
+-(NSArray<GCSimpleGraphCachedDataSource*>*)sample1_simpleLines{
+    
+    NSMutableArray<GCSimpleGraphCachedDataSource*>*rv = [NSMutableArray array];
+    
     GCStatsDataSerie * data = [[GCStatsDataSerie alloc] init];
     GCStatsDataSerie * data2 = [[GCStatsDataSerie alloc] init];
     double x = 0.;
@@ -137,7 +159,27 @@
     [data release];
     [data2 release];
 
-    return sample;
+    [rv addObject:sample];
+    
+    sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCStatsDataSerie * adjusted = [[GCStatsDataSerie alloc] init];
+    for (GCStatsDataPoint * point in data) {
+        if( point.x_data == 4.0){
+            [adjusted addDataPointNoValueWithX:point.x_data];
+        }else{
+            [adjusted addDataPointWithX:point.x_data andY:point.y_data];
+        }
+    }
+    h = [GCSimpleGraphDataHolder dataHolder:adjusted type:gcGraphLine color:[UIColor blackColor] andUnit:[GCUnit unitForKey:@"mps"]];
+    h.fillColorForSerie = [[UIColor redColor] colorWithAlphaComponent:0.5];
+    
+    [sample setSeries:[NSMutableArray arrayWithObjects:h, nil]];
+    [sample setXUnit:[GCUnit unitForKey:@"second"]];
+    [sample setTitle:@"Sample 1"];
+
+    [rv addObject:sample];
+    
+    return rv;
 
 }
 
@@ -282,7 +324,7 @@
     GCHistoryFieldDataSerie * history = [[[GCHistoryFieldDataSerie alloc] initFromConfig:config] autorelease];
 
     [history setDb:[GCAppGlobal db]];
-    [history loadFromDb];
+    [history loadFromDb:nil];
 
     GCSimpleGraphCachedDataSource * sample = [GCSimpleGraphCachedDataSource historyView:history
                                                                            calendarUnit:NSCalendarUnitYear
@@ -291,7 +333,7 @@
     return sample;
 }
 
--(GCSimpleGraphCachedDataSource*)sample8_historyBarGraphCoarse{
+-(NSArray<GCSimpleGraphCachedDataSource*>*)sample8_historyBarGraphCoarse{
 
     GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING];
 
@@ -299,17 +341,26 @@
     GCHistoryFieldDataSerie * history = [[[GCHistoryFieldDataSerie alloc] initFromConfig:config] autorelease];
 
     [history setDb:[GCAppGlobal db]];
-    [history loadFromDb];
+    [history loadFromDb:nil];
 
     GCSimpleGraphCachedDataSource * sample = [GCSimpleGraphCachedDataSource historyView:history
                                                                            calendarUnit:NSCalendarUnitMonth
                                                                             graphChoice:gcGraphChoiceBarGraph after:nil];
 
+    [history loadFromDb:^(NSDate * date){
+        BOOL rv = [date compare:[NSDate dateForRFC3339DateTimeString:@"2011-12-01T00:00:00.000Z"]] == NSOrderedAscending ||
+        [date compare:[NSDate dateForRFC3339DateTimeString:@"2012-02-01T00:00:00.000Z"]] == NSOrderedDescending;
+        return rv;
+        
+    }] ;
+    GCSimpleGraphCachedDataSource * sample2 = [GCSimpleGraphCachedDataSource historyView:history
+                                                                           calendarUnit:NSCalendarUnitMonth
+                                                                            graphChoice:gcGraphChoiceBarGraph after:nil];
 
-    return sample;
+    return @[ sample, sample2 ];
 }
 
--(GCSimpleGraphCachedDataSource*)sample9_trackFieldMultipleLineGraphs{
+-(NSArray<GCSimpleGraphCachedDataSource*>*)sample9_trackFieldMultipleLineGraphs{
     GCActivity * act = [GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_837769405.db"]];
     act.settings.treatGapAsNoValueInSeries = false;
 
@@ -340,10 +391,57 @@
     [sample setXUnit:[GCUnit unitForKey:@"second"]];
     [sample setTitle:@"sample 9"];
 
-    return sample;
+    GCSimpleGraphCachedDataSource * sampleTransposed = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    [sampleTransposed setSeries:[NSMutableArray arrayWithObjects:speed, hr, speed_ma, nil]];
+    [sampleTransposed setXUnit:[GCUnit unitForKey:@"second"]];
+    [sampleTransposed setTitle:@"sample 9 transposed"];
+    sampleTransposed.xAxisIsVertical = true;
+
+    
+    return @[ sample, sampleTransposed ];
 }
 
--(GCSimpleGraphCachedDataSource*)sample11{
+-(NSArray<GCSimpleGraphCachedDataSource*>*)sample10_swimBarGraphFine{
+    NSMutableArray<GCSimpleGraphCachedDataSource*>*rv =[NSMutableArray array];
+    
+    NSString * activityId = @"1027746730";
+        
+    NSString * fn = [NSString stringWithFormat:@"activity_%@.json", activityId];
+    NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn forClass:[self class]] options:0 error:nil];
+    
+    NSDictionary * json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    GCActivity * activity = [[[GCActivity alloc] initWithId:activityId andGarminData:json] autorelease];
+    [GCGarminActivityTrack13Request testForActivity:activity withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:false];
+
+    GCSimpleGraphCachedDataSource * one = nil;
+
+    GCTrackStats * trackStats = RZReturnAutorelease([[GCTrackStats alloc] init]);
+    trackStats.activity = activity;
+    GCField * speed = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:GC_TYPE_SWIMMING];
+
+    GCTrackFieldChoiceHolder * choice = [GCTrackFieldChoiceHolder trackFieldChoice:speed style:gcTrackStatsData];
+    [choice setupTrackStats:trackStats];
+    one = [GCSimpleGraphCachedDataSource trackFieldFrom:trackStats];
+    one.xAxisIsVertical = false;
+    [rv addObject:one];
+    
+    trackStats = RZReturnAutorelease([[GCTrackStats alloc] init]);
+    //activityId = @"424479793";
+    NSString * fp_fit = [RZFileOrganizer bundleFilePath:@"activity_424479793.fit"];
+    //GCActivity * activity3 = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil]];;
+    GCActivity * activity3 = [GCConnectStatsRequestFitFile testForActivity:nil withFilesIn:fp_fit];
+    trackStats.activity = activity3;
+
+    choice = [GCTrackFieldChoiceHolder trackFieldChoice:speed style:gcTrackStatsData];
+    [choice setupTrackStats:trackStats];
+    one = [GCSimpleGraphCachedDataSource trackFieldFrom:trackStats];
+    one.xAxisIsVertical = false;
+    [rv addObject:one];
+
+    return rv;
+}
+
+-(GCSimpleGraphCachedDataSource*)sample11_cumulativeHist{
     GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING];
     GCField * durfield  = [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:GC_TYPE_RUNNING];
 
@@ -351,7 +449,7 @@
     GCHistoryFieldDataSerie * history = [[[GCHistoryFieldDataSerie alloc] initFromConfig:config] autorelease];
 
     [history setDb:[GCAppGlobal db]];
-    [history loadFromDb];
+    [history loadFromDb:nil];
 
     GCSimpleGraphCachedDataSource * sample = [GCSimpleGraphCachedDataSource historyView:history
                                                                            calendarUnit:NSCalendarUnitYear
@@ -360,7 +458,7 @@
     return sample;
 }
 
--(NSArray<GCSimpleGraphCachedDataSource*>*)sample_12_trackStats{
+-(NSArray<GCSimpleGraphCachedDataSource*>*)sample12_trackStats{
     GCActivity * activity = [GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_837769405.db" ]];
     GCTrackStats * trackStats = [[GCTrackStats alloc] init];
     trackStats.activity = activity;
@@ -419,6 +517,11 @@
     [choice setupTrackStats:trackStats];
     one = [GCSimpleGraphCachedDataSource trackFieldFrom:trackStats];
     [rv addObject:one];
+    
+    choice = [GCTrackFieldChoiceHolder trackFieldChoice:hr xField:speed];
+    [choice setupTrackStats:trackStats];
+    one = [GCSimpleGraphCachedDataSource trackFieldFrom:trackStats];
+    [rv addObject:one];
 
 
     [trackStats release];
@@ -442,6 +545,37 @@
     [rv addObject:[GCSimpleGraphCachedDataSource trackFieldFrom:trackStats]];
 
     return rv;
+}
+
+-(GCSimpleGraphCachedDataSource*)sample14_SimpleGradientFillPlot{
+    GCStatsDataSerie * serie = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
+    GCViewGradientColors * colors = [GCViewGradientColors gradientColorsWith:@[ [UIColor redColor], [UIColor greenColor], [UIColor blueColor]]];
+    GCStatsDataSerie * gradientSerie = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
+    for (double x = 0.; x < 20.; x+= 0.1) {
+        if( sin(x) > 0.5){
+            [gradientSerie addDataPointWithX:x andY:0.];
+        }else if( sin(x) < -0.5){
+            [gradientSerie addDataPointWithX:x andY:1.];
+        }else{
+            [gradientSerie addDataPointWithX:x andY:2.];
+        }
+        [serie addDataPointWithX:x andY:sin(x)];
+    }
+    
+    GCSimpleGraphCachedDataSource * sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphDataHolder * holder = [GCSimpleGraphDataHolder dataHolder:serie type:gcGraphLine
+                                                                     color:[UIColor blueColor]
+                                                                   andUnit:[GCUnit unitForKey:@"percent"]];
+    holder.gradientDataSerie = gradientSerie;
+    holder.gradientColors = colors;
+    holder.gradientColorsFill = [colors gradientAsBackgroundWithAlpha:0.5];
+    
+    holder.fillColorForSerie = [UIColor colorWithWhite:0.5 alpha:0.5];
+    [sample addDataHolder:holder];
+    [sample setXUnit:[GCUnit unitForKey:@"percent"]];
+    [sample setTitle:@"sample 14"];
+
+    return sample;
 }
 
 #pragma mark - Cells Samples
@@ -601,11 +735,13 @@
     config.calChoice = gcStatsCalAll;
 
     UITableView * tableView = vc.tableView;
-
+    // Force width for consistency accross device run
+    CGRect adjusted = tableView.frame;
+    adjusted.size.width = 320.;
+    tableView.frame = adjusted;
     [vc setupTestModeWithFieldListConfig:config];
 
     UITableViewCell * cell = [vc tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:GC_SECTION_DATA]];
-
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Stats Multi Distance"]];
     cell = [vc tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:GC_SECTION_DATA+1]];
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Stats Multi Time"]];

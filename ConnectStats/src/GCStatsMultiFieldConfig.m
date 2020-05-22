@@ -281,7 +281,6 @@
     return series;
 }
 
-
 - (void)nextDerivedSerie {
     NSArray<GCDerivedGroupedSeries*>*available = [self availableDataSeries];
     
@@ -342,6 +341,33 @@
     }
     return current;
 }
+
+-(void)setCurrentDerivedDataSerie:(GCDerivedDataSerie *)currentDerivedDataSerie{
+    NSArray<GCDerivedGroupedSeries*>*available = [self availableDataSeries];
+    NSUInteger newFieldIndex = 0;
+    NSUInteger newMonthIndex = 0;
+    
+    for (newFieldIndex = 0; available.count; newFieldIndex++) {
+        if( [available[newFieldIndex].field isEqualToField:currentDerivedDataSerie.field] ){
+            break;
+        }
+    }
+    
+    if( newFieldIndex < available.count ){
+        GCDerivedGroupedSeries * group = available[newFieldIndex];
+        for (newMonthIndex = 0; newMonthIndex < group.series.count; newMonthIndex++) {
+            if( [group.series[newMonthIndex].bucketStart isEqualToDate:currentDerivedDataSerie.bucketStart]){
+                break;
+            }
+        }
+        if( newMonthIndex < group.series.count ){
+            self.derivedSerieFieldIndex = newFieldIndex;
+            self.derivedSerieMonthIndex = newMonthIndex;
+        }
+    }
+}
+
+#pragma mark - cumulative Summary Field
 
 -(GCField*)currentCumulativeSummaryField{
     // Ignore any value other than sumDuration or SumDistance

@@ -38,8 +38,6 @@
 +(void)addCalculatedFields:(GCActivity*)act;
 +(void)addCalculatedFieldsToLaps:(NSArray*)laps forActivity:(GCActivity*)act;
 
-+(BOOL)isCalculatedField:(NSString*)field DEPRECATED_MSG_ATTRIBUTE("use GCField.");
-
 +(NSString*)displayFieldName:(GCField*)field;
 
 +(NSDictionary<GCField*,GCFieldInfo*>*)fieldInfoForCalculatedFields;

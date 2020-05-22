@@ -31,23 +31,24 @@
 #endif
 #import <RZUtils/RZUtils.h>
 
-@interface GCViewGradientColors : NSObject{
-    CGColorRef *colors;
-    NSUInteger numberOfColors;
-}
+@interface GCViewGradientColors : NSObject
 
-@property (nonatomic,assign) CGColorRef * colors;
-@property (nonatomic,assign) NSUInteger numberOfColors;
+@property (nonatomic,retain) NSArray<RZColor*> * colors;
+@property (nonatomic,readonly) NSUInteger numberOfColors;
+@property (nonatomic,assign) BOOL valueIsIndex;
 
 +(GCViewGradientColors*)gradientColorsRainbow16;
 +(GCViewGradientColors*)gradientColorsTrackHighlight16;
 +(GCViewGradientColors*)gradientColorsRainbowHighlight16;
 +(GCViewGradientColors*)gradientColors:(NSUInteger)nColors from:(RZColor*)fromC to:(RZColor*)toC;
 +(GCViewGradientColors*)gradientColorsSingle:(RZColor*)color;
++(GCViewGradientColors*)gradientColorsWith:(NSArray<RZColor*>*)colors;
++(GCViewGradientColors*)gradientColorsTrackHighlight:(RZColor*)color alpha:(CGFloat)alpha;
 
--(CGColorRef)colorsForValue:(CGFloat)aVal CF_RETURNS_NOT_RETAINED;
+-(RZColor*)colorsForValue:(CGFloat)aVal;
 
 -(GCViewGradientColors*)gradientAsBackground;
+-(GCViewGradientColors*)gradientAsBackgroundWithAlpha:(CGFloat)alpha;
 -(GCViewGradientColors*)gradientAsOneColor:(RZColor*)color;
 
 @end

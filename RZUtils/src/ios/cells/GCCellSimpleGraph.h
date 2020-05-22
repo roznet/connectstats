@@ -38,11 +38,13 @@
 
 
 @class GCSimpleGraphGestures;
+@class GCSimpleGraphLegendView;
 
 @interface GCCellSimpleGraph : UITableViewCell
 
 @property (nonatomic,assign) NSObject<GCCellSimpleGraphDelegate> * cellDelegate;
 @property (nonatomic,assign) BOOL legend;
+@property (nonatomic,retain) GCSimpleGraphLegendView * legendView;
 @property (nonatomic,assign) NSInteger identifier;
 
 +(GCCellSimpleGraph*)graphCell:(UITableView*)tableView;

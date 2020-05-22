@@ -34,7 +34,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(GCConnectStatsRequestFitFile*)requestWithActivity:(GCActivity*)act andNavigationController:(nullable UINavigationController*)nav;
 
-+(GCActivity*)testForActivity:(GCActivity*)act withFilesIn:(NSString*)path;
+
+/// Parse file and update or create activity
+/// @param act activity that will be updated with information in fit file. If activity is nil, then a new activity is created
+/// @param path path where the file is located using standard naming convention or explicit filename 
++(GCActivity*)testForActivity:(nullable GCActivity*)act withFilesIn:(NSString*)path;
 
 @end
 

@@ -68,6 +68,8 @@ NSString * INTERNAL_PREFIX = @"__Internal";
 NSString * INTERNAL_DIRECT_STROKE_TYPE = @"__InternalDirectStrokeType";
 NSString * INTERNAL_TRACK_EVENT_TYPE = @"__InternalTrackEventType";
 
+NSString * CALC_BESTROLLING_PREFIX = @"__CalcBestRolling";
+
 NSString * CALC_PREFIX = @"__Calc";
 NSString * CALC_ALTITUDE_GAIN          = @"__CalcGainElevation";
 NSString * CALC_ALTITUDE_LOSS          = @"__CalcLossElevation";

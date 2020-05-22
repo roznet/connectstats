@@ -51,7 +51,7 @@
     XCTAssertEqualWithAccuracy([meter axisKnobSizeFor:3.5 numberOfKnobs:10.], 0.5, 1e-6, @"Axis sample 3.5/10");
     
     GCSimpleGraphGeometry * geometry = [self geometryForXUnit:second unit:meter values:@[ @0., @0., @3420., @12. ] size:CGSizeMake(375., 200.) ];
-    
+    XCTAssertNotNil(geometry);
 }
 
 

@@ -26,6 +26,11 @@
 #import <RZUtilsUniversal/RZUtilsUniversal.h>
 #import "GCSimpleGraphLegendView.h"
 #import "RZViewConfig.h"
+#import "GCSimpleGraphLegendInfo.h"
+
+@interface GCSimpleGraphLegendView ()
+@property (nonatomic,retain) NSArray<GCSimpleGraphLegendInfo*>*legends;
+@end
 
 @implementation GCSimpleGraphLegendView
 
@@ -41,6 +46,7 @@
 
 #if ! __has_feature(objc_arc)
 -(void)dealloc{
+    [_legends release];
     [_dataSource release];
     [_displayConfig release];
 
@@ -56,24 +62,48 @@
     return [self.displayConfig useForegroundColor];
 }
 
--(NSArray*)numberOfLegends{
+-(void)setupWithLegends:(NSArray<GCSimpleGraphLegendInfo*>*)legends{
+    self.legends = legends;
+    self.dataSource = nil;
+}
+
+-(void)setupLegendsFromDataSource{
     NSMutableArray * r = [NSMutableArray arrayWithCapacity:[self.dataSource nDataSeries]];
     for (NSUInteger i = 0; i<[self.dataSource nDataSeries]; i++) {
-        if ([self.dataSource legend:i]) {
-            [r insertObject:@(i) atIndex:0];
+        NSString * legendText = [self.dataSource legend:i];
+        if (legendText) {
+            GCSimpleGraphLegendInfo * info = [[GCSimpleGraphLegendInfo alloc] init];
+            CGFloat lineWidth   = [self.displayConfig lineWidth:i];
+            UIColor * color = [self.displayConfig colorForSerie:i];
+            if ([color isEqual:self.useBackgroundColor]) {
+                color = self.useForegroundColor;
+            }
+
+            info.text = legendText;
+            info.color = color;
+            info.lineWidth = lineWidth;
+            [r addObject:info];
+            RZRelease(info);
         }
     }
-    return r;
+    self.legends = r;
+}
+
+-(void)setupLegends{
+    if( self.dataSource){
+        [self setupLegendsFromDataSource];
+    }
 }
 
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
-    NSArray * legendsIdx = [self numberOfLegends];
-    if (legendsIdx.count==0) {
+    [self setupLegends];
+    if (self.legends.count==0) {
         return;
     }
+    
     // Drawing code
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGRect box = rect;
@@ -98,14 +128,11 @@
 
     CGPoint left = CGPointMake(nextX, nextY);
 
-    for (NSNumber * idx in legendsIdx) {
-        NSUInteger serieIdx = idx.integerValue;
-        NSString * text = [self.dataSource legend:serieIdx];
-        CGFloat lineWidth   = [self.displayConfig lineWidth:serieIdx];
-        UIColor * color = [self.displayConfig colorForSerie:serieIdx];
-        if ([color isEqual:self.useBackgroundColor]) {
-            color = self.useForegroundColor;
-        }
+    for (GCSimpleGraphLegendInfo * info in self.legends) {
+        NSString * text = info.text;
+        CGFloat lineWidth   = info.lineWidth;
+        UIColor * color = info.color;
+        
         CGSize size = [text sizeWithAttributes:valAttr];
         if (left.y + size.height > CGRectGetMaxY(box)) {
             left  = CGPointMake(nextX, box.origin.y+margin);

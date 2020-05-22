@@ -1072,7 +1072,7 @@
         [self.navigationController pushViewController:list animated:YES];
 
     }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_HELP){
-        NSURL * helpURL = [NSURL URLWithString:@"https://ro-z.net/blog/services-for-garmin-data"];
+        NSURL * helpURL = [NSURL URLWithString:@"https://ro-z.net/blog/connectstats/services-for-garmin-data"];
         GCSettingsHelpViewController * helpVC = [GCSettingsHelpViewController helpViewControllerFor:helpURL];
         [self.navigationController pushViewController:helpVC animated:YES];
     }else if( indexPath.section == GC_SECTIONS_OPTIONS && indexPath.row == GC_OPTIONS_FORCE_DOWNLOAD_OLD){

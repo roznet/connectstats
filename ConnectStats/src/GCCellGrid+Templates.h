@@ -43,7 +43,7 @@
                       andActivityType:(NSString*)activityType
                                 width:(CGFloat)width;
 
--(void)setupForField:(NSString*)field
+-(void)setupForField:(NSString*)fieldKey
          andActivity:(GCActivity *)activity
                width:(CGFloat)width;
 

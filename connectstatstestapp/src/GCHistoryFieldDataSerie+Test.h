@@ -25,6 +25,8 @@
 
 #import "GCHistoryFieldDataSerie.h"
 
+typedef BOOL(^GCHistoryTestFilterBlock)(NSDate * date);
+
 @interface GCHistoryFieldDataSerie (Test)
--(void)loadFromDb;
+-(void)loadFromDb:(GCHistoryTestFilterBlock)filter;
 @end

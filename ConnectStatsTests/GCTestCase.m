@@ -77,5 +77,16 @@
     return organizer;
 }
 
+-(GCDerivedOrganizer*)createEmptyDerived:(NSString*)name{
+    NSString * dbname = [NSString stringWithFormat:@"%@.db", name];
+    [RZFileOrganizer removeEditableFile:dbname];
+    FMDatabase * deriveddb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:dbname]];
+    [deriveddb open];
+    [GCDerivedOrganizer ensureDbStructure:deriveddb];
+    
+    [[GCAppGlobal profile] configSet:CONFIG_ENABLE_DERIVED boolVal:false];
+    GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initForTestModeWithDb:deriveddb andFilePrefix:name];
+    return derived;
+}
 
 @end

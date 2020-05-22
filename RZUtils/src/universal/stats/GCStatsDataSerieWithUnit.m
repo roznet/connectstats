@@ -185,12 +185,14 @@
 
 }
 
--(void)convertToXUnit:(GCUnit*)xUnit{
+-(GCStatsDataSerieWithUnit*)convertToXUnit:(GCUnit*)xUnit{
     [self convertToUnit:nil andXUnit:xUnit];
+    return self;
 }
 
--(void)convertToUnit:(GCUnit *)unit{
+-(GCStatsDataSerieWithUnit*)convertToUnit:(GCUnit *)unit{
     [self convertToUnit:unit andXUnit:nil];
+    return self;
 }
 -(void)convertToCommonUnitWith:(GCUnit*)unit{
     if (![unit isEqualToUnit:self.unit]) {
@@ -320,7 +322,7 @@
     if (rv) {
         rv.unit = self.unit;
         rv.xUnit = self.xUnit;
-        rv.serie = [self.serie filledSerieForUnit:unit fillMethod:gcStatsZero statistic:gcStatsWeightedMean];
+        rv.serie = [self.serie filledSerieForUnit:unit];
     }
     return rv;
 }
