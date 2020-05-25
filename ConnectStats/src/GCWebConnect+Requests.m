@@ -49,7 +49,6 @@
 #import "GCHealthKitWorkoutsRequest.h"
 #import "GCHealthKitDailySummaryRequest.h"
 #import "GCHealthKitDayDetailRequest.h"
-#import "GCHealthKitExportActivity.h"
 #import "GCHealthKitSourcesRequest.h"
 
 #import "GCStravaActivityList.h"
@@ -107,7 +106,6 @@
             [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
             [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:connectStatsReload andNavigationController:[GCAppGlobal currentNavigationController]]];
         });
-        
     }
     
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
@@ -123,13 +121,6 @@
         dispatch_async(dispatch_get_main_queue(), ^(){
             BOOL stravaReload = (reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava]);
             [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:stravaReload]];
-        });
-    }
-    // For testing
-    if([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_SEGMENTS defaultValue:NO]){
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            [self addRequest:[GCStravaAthlete stravaAthlete:[GCAppGlobal currentNavigationController]]];
-            [self addRequest:[GCStravaSegmentListStarred segmentListStarred:[GCAppGlobal currentNavigationController]]];
         });
     }
 
@@ -325,10 +316,6 @@
         }
     }
     [self addRequest:[GCHealthKitBodyRequest request]];
-}
-
--(void)healthStoreExportActivity:(GCActivity*)act{
-    [self addRequest:[GCHealthKitExportActivity healthKitExportActivity:act]];
 }
 
 -(void)healthStoreDayDetails:(NSDate * )day{

@@ -1438,7 +1438,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if (!_lapsCache) {
         [self loadTrackPoints];
     }
-    return _lapsCache[idx];
+    return idx < _lapsCache.count ? _lapsCache[idx] : nil;
 }
 
 
