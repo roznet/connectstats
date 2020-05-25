@@ -28,6 +28,5 @@
 // Isolate swift setups
 @interface GCAppDelegate (Swift)
 
--(void)setupSegmentOrganizer;
 -(void)handleFitFile;
 @end

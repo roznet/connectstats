@@ -198,9 +198,6 @@ void checkVersion(){
     
     self.derived = [[[GCDerivedOrganizer alloc] initWithDb:nil andThread:self.worker] autorelease];
 
-    // Swift initializations:
-    [self setupSegmentOrganizer];
-
     [RZViewConfig setFontStyle:[GCAppGlobal configGetInt:CONFIG_FONT_STYLE defaultValue:gcFontStyleDynamicType]];
 
 	_window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];

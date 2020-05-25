@@ -28,14 +28,6 @@
 
 @implementation GCAppDelegate (Swift)
 
--(void)setupSegmentOrganizer{
-    dispatch_async(self.worker, ^(){
-        //This will also ensureDb
-        GCSegmentOrganizer * segments = [[[GCSegmentOrganizer alloc] initWithDb:self.db] autorelease];
-        self.segments = segments;
-    });
-}
-
 -(void)handleFitFile{
     NSData * fitData = [NSData dataWithContentsOfURL:self.urlToOpen];
     GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:[self.urlToOpen.path lastPathComponent] fitFileData:fitData fitFilePath:self.urlToOpen.path startTime:[NSDate date]]);

@@ -53,10 +53,6 @@
 
 #import "GCStravaActivityList.h"
 #import "GCStravaActivityStreams.h"
-#import "GCStravaSegmentListStarred.h"
-#import "GCStravaAthlete.h"
-#import "GCStravaSegmentEfforts.h"
-#import "GCStravaSegmentEffortStream.h"
 
 #import "GCDerivedRequest.h"
 #import "GCHealthOrganizer.h"
