@@ -285,6 +285,7 @@ static BOOL kDerivedEnabled = true;
         if (!existing) {
             self.derivedSeries[key] = serie;
             existing = serie;
+            [serie saveToDb:self.deriveddb];
         }
         if( existing.fileNamePrefix == nil){
             existing.fileNamePrefix = self.derivedFilePrefix;
