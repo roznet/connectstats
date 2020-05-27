@@ -108,7 +108,7 @@ static BOOL kDerivedEnabled = true;
     return [NSString stringWithFormat:@"<%@:%lu series>", NSStringFromClass([self class]), (long unsigned)self.derivedSeries.count];
 }
 
--(GCDerivedOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(dispatch_queue_t)thread{
+-(GCDerivedOrganizer*)initWithDb:(FMDatabase*)aDb thread:(dispatch_queue_t)thread andFilePrefix:(NSString*)filePrefix{
     self = [super init];
     if (self) {
         self.db = aDb;
@@ -116,8 +116,14 @@ static BOOL kDerivedEnabled = true;
         self.queue = nil;
         self.web = [GCAppGlobal web];
         [self.web attach:self];
+        self.useDerivedFilePrefix = filePrefix;
+        
         if (thread==nil) {
-            self.derivedSeries= [NSMutableDictionary dictionary];
+            if( aDb ){
+                [self loadFromDb];
+            }else{
+                self.derivedSeries= [NSMutableDictionary dictionary];
+            }
         }else{
             dispatch_async(self.worker,^(){
                 [self loadFromDb];
@@ -127,12 +133,11 @@ static BOOL kDerivedEnabled = true;
     return self;
 }
 
+-(GCDerivedOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(dispatch_queue_t)thread{
+    return [self initWithDb:aDb thread:thread andFilePrefix:nil];
+}
 -(GCDerivedOrganizer*)initForTestModeWithDb:(FMDatabase*)aDb andFilePrefix:(NSString *)filePrefix{
-    self = [self initWithDb:aDb andThread:nil];
-    if( self ){
-        self.useDerivedFilePrefix = filePrefix;
-    }
-    return self;
+    return [self initWithDb:aDb thread:nil andFilePrefix:filePrefix];
 }
 
 -(void)dealloc{
@@ -161,34 +166,35 @@ static BOOL kDerivedEnabled = true;
 
     if ( kDerivedEnabled) {
         FMDatabase * db = [self deriveddb];
-
-        FMResultSet * res= [db executeQuery:@"SELECT * FROM gc_derived_series"];
-        while ([res next]) {
-            GCDerivedDataSerie * serie = [GCDerivedDataSerie derivedDataSerieFromResultSet:res];
-            serie.fileNamePrefix = self.derivedFilePrefix;
-            self.derivedSeries[serie.key] = serie;
-        }
-        [self loadProcesseActivities];
-        
-        [self loadHistoricalFileSeries];
-
-        for (GCUnit * xUnit in @[ GCUnit.second, GCUnit.meter ]) {
-            NSString * tableName = [self standardSerieDatabaseNameFor:xUnit];
-            if( [db tableExists:tableName]){
-                GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:tableName];
-                if( self.seriesByKeys == nil ){
-                    self.seriesByKeys = [NSMutableDictionary dictionaryWithDictionary:[statsDb loadByKeys]];
-                }else{
-                    NSDictionary * next = [statsDb loadByKeys];
-                    [self.seriesByKeys addEntriesFromDictionary:next];
+        if( db ){
+            FMResultSet * res= [db executeQuery:@"SELECT * FROM gc_derived_series"];
+            while ([res next]) {
+                GCDerivedDataSerie * serie = [GCDerivedDataSerie derivedDataSerieFromResultSet:res];
+                serie.fileNamePrefix = self.derivedFilePrefix;
+                self.derivedSeries[serie.key] = serie;
+            }
+            [self loadProcesseActivities];
+            
+            [self loadHistoricalFileSeries];
+            
+            for (GCUnit * xUnit in @[ GCUnit.second, GCUnit.meter ]) {
+                NSString * tableName = [self standardSerieDatabaseNameFor:xUnit];
+                if( [db tableExists:tableName]){
+                    GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:tableName];
+                    if( self.seriesByKeys == nil ){
+                        self.seriesByKeys = [NSMutableDictionary dictionaryWithDictionary:[statsDb loadByKeys]];
+                    }else{
+                        NSDictionary * next = [statsDb loadByKeys];
+                        [self.seriesByKeys addEntriesFromDictionary:next];
+                    }
                 }
             }
-        }
-        
-        if( self.seriesByKeys.count > 0){
-            RZLog(RZLogInfo, @"Loaded %d derived series and %@ series by key", (int)self.derivedSeries.count, @(self.seriesByKeys.count));
-        }else{
-            RZLog(RZLogInfo, @"Loaded %d derived series", (int)self.derivedSeries.count);
+            
+            if( self.seriesByKeys.count > 0){
+                RZLog(RZLogInfo, @"Loaded %d derived series and %@ series by key", (int)self.derivedSeries.count, @(self.seriesByKeys.count));
+            }else{
+                RZLog(RZLogInfo, @"Loaded %d derived series", (int)self.derivedSeries.count);
+            }
         }
     }
 }
@@ -326,6 +332,10 @@ static BOOL kDerivedEnabled = true;
     return rv;
 }
 
+-(void)clearModifiedSeries{
+    self.modifiedSeries = [NSMutableDictionary dictionary];
+}
+
 -(void)recordModifiedSerie:(GCDerivedDataSerie*)serie withActivity:(GCActivity*)activity{
     NSString * key = serie.key;
     if (!self.modifiedSeries) {
@@ -365,6 +375,7 @@ static BOOL kDerivedEnabled = true;
     }
     if( !haserror ){
         [self.deriveddb commit];
+        self.modifiedSeries = [NSMutableDictionary dictionary];
     }
 }
 
@@ -627,25 +638,27 @@ static BOOL kDerivedEnabled = true;
                     [rv addObject:act];
                 }
             }else{
-                GCStatsDataSerieWithUnit * actBest = [act calculatedSerieForField:serie.field.correspondingBestRollingField thread:nil];
-                for (NSUInteger idx = 0; idx < MIN(count,actBest.count); idx ++ ) {
-                    GCActivity * currrentBestActivity = rv[idx];
-                    GCStatsDataSerieWithUnit * currentBest = [currrentBestActivity calculatedSerieForField:serie.field.correspondingBestRollingField thread:nil];
-                    if( idx < currentBest.count){
-                        double y_best = [currentBest dataPointAtIndex:idx].y_data;
-                        double check_y_best = [actBest dataPointAtIndex:idx].y_data;
-                        if( betterIsMin ){
-                            if( check_y_best < y_best ){
-                                rv[idx] = act;
+                if( ![act trackPointsRequireDownload]){
+                    GCStatsDataSerieWithUnit * actBest = [act calculatedSerieForField:serie.field.correspondingBestRollingField thread:nil];
+                    for (NSUInteger idx = 0; idx < MIN(count,actBest.count); idx ++ ) {
+                        GCActivity * currrentBestActivity = rv[idx];
+                        GCStatsDataSerieWithUnit * currentBest = [currrentBestActivity calculatedSerieForField:serie.field.correspondingBestRollingField thread:nil];
+                        if( idx < currentBest.count){
+                            double y_best = [currentBest dataPointAtIndex:idx].y_data;
+                            double check_y_best = [actBest dataPointAtIndex:idx].y_data;
+                            if( betterIsMin ){
+                                if( check_y_best < y_best ){
+                                    rv[idx] = act;
+                                }
+                            }else{
+                                if( check_y_best > y_best ){
+                                    rv[idx] = act;
+                                }
                             }
                         }else{
-                            if( check_y_best > y_best ){
-                                rv[idx] = act;
-                            }
+                            // If idx is beyond the size of current best, fill with current act, which is going further
+                            rv[idx] = act;
                         }
-                    }else{
-                        // If idx is beyond the size of current best, fill with current act, which is going further
-                        rv[idx] = act;
                     }
                 }
             }
@@ -822,7 +835,7 @@ static BOOL kDerivedEnabled = true;
             [self processQueueElement:element];
             [self.queue removeLastObject];
         }
-        [self notifyForString:kNOTIFY_DERIVED_END];
+        [self processDone];
         self.queue = nil;
     }
 }

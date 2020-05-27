@@ -52,7 +52,6 @@
 		421517CC2429607800FEE8D7 /* GCTestsActivitiesCalculated.m in Sources */ = {isa = PBXBuildFile; fileRef = 421517CB2429607800FEE8D7 /* GCTestsActivitiesCalculated.m */; };
 		421736A42066A07F00ACADC1 /* GCGarminRequestModernActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */; };
 		4217F53F21ACA12500C848A3 /* FITTimeSerieColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217F53E21ACA12500C848A3 /* FITTimeSerieColumn.swift */; };
-		421844B71D75D268005B09BC /* GCTestsSegments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421844B61D75D268005B09BC /* GCTestsSegments.swift */; };
 		421A514C1C82FA6C00671587 /* GCActivity+Fields.m in Sources */ = {isa = PBXBuildFile; fileRef = 421A514B1C82FA6C00671587 /* GCActivity+Fields.m */; };
 		421A514F1C82FA9400671587 /* GCCalendarDataDateMarkers.m in Sources */ = {isa = PBXBuildFile; fileRef = 421A514E1C82FA9400671587 /* GCCalendarDataDateMarkers.m */; };
 		421A51511C82FB1000671587 /* GCActivity+Fields.m in Sources */ = {isa = PBXBuildFile; fileRef = 421A514B1C82FA6C00671587 /* GCActivity+Fields.m */; };
@@ -1967,7 +1966,6 @@
 		421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequestModernActivityTypes.m; path = src/GCGarminRequestModernActivityTypes.m; sourceTree = "<group>"; };
 		4217F53E21ACA12500C848A3 /* FITTimeSerieColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITTimeSerieColumn.swift; path = src/FITTimeSerieColumn.swift; sourceTree = "<group>"; };
 		421844B51D75D268005B09BC /* ConnectStatsXCTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnectStatsXCTests-Bridging-Header.h"; sourceTree = "<group>"; };
-		421844B61D75D268005B09BC /* GCTestsSegments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCTestsSegments.swift; sourceTree = "<group>"; };
 		421A514A1C82FA6C00671587 /* GCActivity+Fields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCActivity+Fields.h"; path = "src/GCActivity+Fields.h"; sourceTree = "<group>"; };
 		421A514B1C82FA6C00671587 /* GCActivity+Fields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCActivity+Fields.m"; path = "src/GCActivity+Fields.m"; sourceTree = "<group>"; };
 		421A514D1C82FA9400671587 /* GCCalendarDataDateMarkers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCCalendarDataDateMarkers.h; path = src/GCCalendarDataDateMarkers.h; sourceTree = "<group>"; };
@@ -4265,7 +4263,6 @@
 				4227C5AB1C0B1310003F0660 /* GCTestsGrid.m */,
 				42C0113F1AB438050059B6CF /* GCTestsParsing.m */,
 				42D9081B20338582000BBE07 /* GCTestsPerformance.m */,
-				421844B61D75D268005B09BC /* GCTestsSegments.swift */,
 				42B9555218186D0C00BC7AF9 /* GCTestsUtils.m */,
 				429184AD2319B0ED00FD6525 /* GCTestUserInterface.m */,
 				42C0113C1AB437C10059B6CF /* samples */,
@@ -7285,7 +7282,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				421517CC2429607800FEE8D7 /* GCTestsActivitiesCalculated.m in Sources */,
-				421844B71D75D268005B09BC /* GCTestsSegments.swift in Sources */,
 				425CF5A91813CEEC009279C0 /* GCTestsActivities.m in Sources */,
 				42D9081C20338582000BBE07 /* GCTestsPerformance.m in Sources */,
 				42A89C261D63B2D7007CF90D /* GCTestHealthZones.m in Sources */,
@@ -8252,7 +8248,6 @@
 				GCC_PREFIX_HEADER = "ConnectStats/ConnectStats-Prefix.pch";
 				HEADER_SEARCH_PATHS = $CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources;
 				INFOPLIST_FILE = "ConnectStatsTests/ConnectStatsTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8283,7 +8278,6 @@
 				GCC_PREFIX_HEADER = "ConnectStats/ConnectStats-Prefix.pch";
 				HEADER_SEARCH_PATHS = $CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources;
 				INFOPLIST_FILE = "ConnectStatsTests/ConnectStatsTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -8,7 +8,6 @@
 #import "GCHealthZoneCalculator.h"
 #import "GCField.h"
 #import "GCViewConfig.h"
-#import "GCStravaSegmentListStarred.h"
 #import "ConnectStats-Bridging-Header.h"
 #import "GCGarminActivityDetailJsonParser.h"
 #import "GCGarminRequestActivityReload.h"

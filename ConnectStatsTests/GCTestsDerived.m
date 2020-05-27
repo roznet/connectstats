@@ -225,8 +225,9 @@
     GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
 
     NSString * db_name = @"test_activities_derived_rebuild.db";
+    NSString * derived_name = @"test_derived_rebuild";
     GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:db_name];
-    GCDerivedOrganizer * derived = [self createEmptyDerived:@"test_derived_rebuild"];
+    GCDerivedOrganizer * derived = [self createEmptyDerived:derived_name];
     
     [self setupDerived:organizer derived:derived field:field activities:activityIds];
     
@@ -288,6 +289,7 @@
     }
     
     // rebuild now with the first act that wasn't the max. Now new best should be less that excluded serie
+    [derived forceReprocessActivity:exclude.activityId];
     [derived rebuildDerivedDataSerie:gcDerivedTypeBestRolling
                          forActivity:testForAct
                         inActivities:sameSerieAsExcluded];
@@ -333,6 +335,26 @@
     // we recover the best when we do best by serie, because setup such that month of focus is best one
     XCTAssertEqualWithAccuracy(allFromSeries_y_max, excluded_y_max, 1.0e-8);
     XCTAssertEqual(bestSeries.count, serieAll.serieWithUnit.count);
+
+    // Tet Reload
+    
+    GCDerivedOrganizer * reload = [[GCDerivedOrganizer alloc] initForTestModeWithDb:derived.deriveddb andFilePrefix:derived_name];
+
+    GCDerivedDataSerie * reload_serie = [reload derivedDataSerie:gcDerivedTypeBestRolling
+                                                      field:field
+                                                     period:gcDerivedPeriodMonth
+                                                    forDate:testForAct.date];
+
+    GCDerivedDataSerie * reload_serieYear= [reload derivedDataSerie:gcDerivedTypeBestRolling
+                                                      field:field
+                                                     period:gcDerivedPeriodYear
+                                                    forDate:testForAct.date];
+
+    double reload_y_max = [reload_serie.serieWithUnit dataPointAtIndex:bestIdx].y_data;
+    double reload_year_y_max = [reload_serieYear.serieWithUnit dataPointAtIndex:bestIdx].y_data;
+
+    XCTAssertEqualWithAccuracy(reload_y_max, original_y_max, 1.0e-8);
+    XCTAssertEqualWithAccuracy(reload_year_y_max, original_year_y_max, 1.0e-8);
 
 
 }
