@@ -37,6 +37,8 @@ typedef void (^GCDerivedDidCompleteBestMatchingSeriesBlock)(NSArray<GCDerivedDat
 
 @interface GCDerivedOrganizer : RZParentObject<RZChildObject>
 
+@property (nonatomic,assign) BOOL pauseCalculation;
+
 -(GCDerivedOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(dispatch_queue_t)thread;
 -(GCDerivedOrganizer*)initForTestModeWithDb:(FMDatabase*)aDb andFilePrefix:(NSString*)filePrefix;
 

@@ -815,6 +815,10 @@ static BOOL kDerivedEnabled = true;
         count = self.queue.count;
     }
     
+    if( self.pauseCalculation ){
+        return;
+    }
+    
     if (count) {
         RZLog( RZLogInfo, @"queue start %d elements", (int)count);
         self.performance= [RZPerformance start];
