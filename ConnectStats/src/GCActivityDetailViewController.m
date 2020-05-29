@@ -64,7 +64,8 @@
 
 @property (nonatomic,retain) GCActivitiesOrganizer * organizer;
 @property (nonatomic,retain) GCTrackStats * trackStats;
-@property (nonatomic,assign) BOOL waitingDownload;
+@property (nonatomic,readonly) BOOL waitingForTrackpoints;
+@property (nonatomic,assign) BOOL waitingForUpdate;
 @property (nonatomic,retain) GCActivityAutoLapChoices * autolapChoice;
 @property (nonatomic,retain) GCTrackFieldChoices * choices;
 @property (nonatomic,retain) GCActivity * activity;
@@ -127,6 +128,7 @@
     self.refreshControl.attributedTitle = nil;
     [self.refreshControl addTarget:self action:@selector(refreshData) forControlEvents:UIControlEventValueChanged];
 
+    // Get ready with current activity
     [self selectNewActivity:[[GCAppGlobal organizer] currentActivity]];
 
     CGFloat height = 20.;
@@ -180,10 +182,16 @@
     if( [NSThread isMainThread]){
         [self selectNewActivity:[[GCAppGlobal organizer] currentActivity]];
         [self.activity forceReloadTrackPoints];
-
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            self.waitingForUpdate = true;
+            [self.activity trackpoints];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self.tableView reloadData];
+            });
+        });
         [self.refreshControl beginRefreshing];
         self.refreshControl.attributedTitle = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Refreshing",@"RefreshControl")] autorelease];
-        [self.tableView reloadData];
+        
     }else{
         [self performSelectorOnMainThread:@selector(refreshData) withObject:nil waitUntilDone:NO];
     }
@@ -214,45 +222,23 @@
     // Return the number of rows in the section.
     //return [[[self fieldsToDisplay] objectAtIndex:section] count];
     if (section == GCVIEW_DETAIL_MAP_SECTION ) {
-        BOOL valid = [self.activity validCoordinate];
-        if (valid) {
-            self.waitingDownload = ![self.activity trackpointsReadyOrLoad];
-
-            return self.waitingDownload ? 0 : 1;
-        }
-        return  0 ;
+        return (self.waitingForTrackpoints || !self.activity.validCoordinate) ? 0 : 1;
     }else if (section == GCVIEW_DETAIL_LOAD_SECTION){
-        self.waitingDownload = [self.activity trackPointsRequireDownload];
-        if (self.waitingDownload) {
-            return 1;
-        }else{
-            return 0;
-        }
+        return self.waitingForTrackpoints && self.waitingForUpdate ? 1 : 0;
     }else if (section == GCVIEW_DETAIL_GRAPH_SECTION){
-        return self.waitingDownload || [self.activity trackpoints].count==0 ? 0 : 1;
+        return (self.waitingForTrackpoints || self.activity.trackpoints.count == 0) ? 0 : 1;
     }else if (section == GCVIEW_DETAIL_TITLE_SECTION){
         return 1;
     }else if (section == GCVIEW_DETAIL_LAPS_SECTION){
-        return [self.activity lapCount];
+        return self.waitingForTrackpoints ? 0 : self.activity.laps.count;
     }else if ( section == GCVIEW_DETAIL_WEATHER_SECTION ){
         return [self.activity hasWeather] ? 1 : 0;
     }else if (section == GCVIEW_DETAIL_LAPS_HEADER){
-        if ([self.activity laps]) {
-            return 1;
-        }else{
-            return 0;
-        }
+        return ( self.waitingForTrackpoints || self.activity.laps.count == 0 ) ? 0 : 1;
     }else if (section == GCVIEW_DETAIL_EXTRA_SECTION){
-        if ((self.activity).metaData.count) {
-            return 1;
-        }
-        return 0;
+        return self.activity.metaData.count > 0 ? 1 : 0;
     }else if (section == GCVIEW_DETAIL_HEALTH_SECTION){
-        if ([[GCAppGlobal health] hasHealthData]) {
-            return 1;
-        }else{
-            return 0;
-        }
+        return [[GCAppGlobal health] hasHealthData] ? 1 : 0;
     }
 
     return [self displayPrimaryAttributedStrings].count;
@@ -336,7 +322,6 @@
 {
     UITableViewCell * rv = nil;
 
-
     if (indexPath.section == GCVIEW_DETAIL_TITLE_SECTION) {
         GCCellGrid * cell = [GCCellGrid gridCell:tableView];
         [cell setupDetailHeader:self.activity];
@@ -371,7 +356,7 @@
         if (cell == nil) {
             cell = [[[GCCellMap alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GCMap"] autorelease];
         }
-        GCActivity * act=self.activity;
+        GCActivity * act = self.activity;
         (cell.mapController).activity = act;
         if ([GCAppGlobal configGetBool:CONFIG_MAPS_INLINE_GRADIENT defaultValue:true]) {
             if (!self.choices || (self.choices).choices.count==0) {
@@ -689,30 +674,16 @@
     return [self.organizer validCompareActivityFor:self.activity];
 }
 
--(void)tableReloadData{
-    RZLogTrace(@"");
+#pragma mark - Activity Change and Prep
 
-    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-}
-
--(void)notifyCallBack:(NSNotification*)notification{
-    self.trackStats = nil;
-
-    [self.activity.settings setupWithGlobalConfig:self.activity];
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        [self.tableView reloadData];
-    });
-}
-
--(void)updateUserActivityState:(NSUserActivity *)activity{
-    [self.activity updateUserActivity:activity];
-}
 -(void)selectNewActivity:(GCActivity*)act{
 
-    // THis only needed if brand new activity
-    if (![act.activityId isEqualToString:self.activity.activityId]) {
+    BOOL activityIsChanging = (![act.activityId isEqualToString:self.activity.activityId]);
+    
+    // This only needed if brand new activity
+    if( activityIsChanging )  {
         if (act) {
-            RZLog(RZLogInfo, @"%@",[act debugDescription]);
+            RZLog(RZLogInfo, @"Display Detail %@",[act debugDescription]);
         }
         self.activity = act;
 
@@ -733,7 +704,48 @@
     }
     self.autolapChoice = nil;
 
-    [self tableReloadData];
+    if( activityIsChanging ){
+        // If no trackpoint load on worker thread
+        if( ! act.trackpointsReadyNoLoad ){
+            dispatch_async([GCAppGlobal worker], ^(){
+                self.waitingForUpdate = true;
+                [act trackpoints];
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    if( !self.waitingForTrackpoints ){
+                        self.waitingForUpdate = false;
+                    }
+                    [self.tableView reloadData];
+                });
+            });
+        }else{
+            [self tableReloadData];
+        }
+    }else{
+        [self tableReloadData];
+    }
+}
+
+-(BOOL)waitingForTrackpoints{
+    return !self.activity.trackpointsReadyNoLoad;
+}
+
+-(void)tableReloadData{
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.tableView reloadData];
+    });
+}
+
+-(void)notifyCallBack:(NSNotification*)notification{
+    self.trackStats = nil;
+
+    [self.activity.settings setupWithGlobalConfig:self.activity];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.tableView reloadData];
+    });
+}
+
+-(void)updateUserActivityState:(NSUserActivity *)activity{
+    [self.activity updateUserActivity:activity];
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo*)theInfo{
@@ -742,6 +754,9 @@
 
     BOOL sameActivityId = [stringInfo isEqualToString:(self.activity).activityId] || (compareId && [stringInfo isEqualToString:compareId]);
 
+    if( !self.waitingForTrackpoints ){
+        self.waitingForUpdate = false;
+    }
     // If notification for a different activityId, don't do anything
     if ((theParent == self.organizer &&
          (sameActivityId || stringInfo == nil)) || // organizer either nil -> all or specific activity Id
@@ -755,7 +770,7 @@
     }else{ // Web Update
         if ([theInfo.stringInfo isEqualToString:NOTIFY_ERROR] ||
             [theInfo.stringInfo isEqualToString:NOTIFY_END]) {
-
+            self.waitingForUpdate = false;
             [self performRefreshControl];
         }
     }
@@ -767,9 +782,10 @@
         [self.refreshControl endRefreshing];
         [self.tableView setContentOffset:CGPointZero animated:YES];
     }else{
-        [self performSelectorOnMainThread:@selector(performRefreshControl) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self performRefreshControl];
+        });
     }
-
 }
 
 #pragma mark - Actions

@@ -269,16 +269,20 @@
 #pragma mark - connectstats
 
 -(void)connectStatsDownloadActivityTrackpoints:(GCActivity*)act{
-    if( [GCAppGlobal currentNavigationController] && ( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] || [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] )){
+    if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] || [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] ){
         dispatch_async(dispatch_get_main_queue(), ^(){
-            [self addRequest:[GCConnectStatsRequestFitFile requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
+            if( [GCAppGlobal currentNavigationController] ){
+                [self addRequest:[GCConnectStatsRequestFitFile requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
+            };
         });
     }
 }
 -(void)connectStatsDownloadWeather:(GCActivity *)act{
-    if( [GCAppGlobal currentNavigationController] && ( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] || [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] )){
+    if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] || [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] ){
         dispatch_async(dispatch_get_main_queue(), ^(){
-            [self addRequest:[GCConnectStatsRequestWeather requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
+            if( [GCAppGlobal currentNavigationController] ){
+                [self addRequest:[GCConnectStatsRequestWeather requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
+            };
         });
     }
 

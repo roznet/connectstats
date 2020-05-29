@@ -1058,12 +1058,13 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 #pragma mark - Load Trackpoints
 
 -(void)clearTrackdb{
-    [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",_activityId]];
+    [self.useTrackDb close];
+    self.useTrackDb = nil;
     [self setTrackpointsCache:nil];
     [self setLapsCache:nil];
     [self setCalculatedLaps:nil];
     [self setCachedCalculatedTracks:nil];
-    self.useTrackDb = nil;
+    [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",_activityId]];
 
     _downloadRequested = false;
 }
