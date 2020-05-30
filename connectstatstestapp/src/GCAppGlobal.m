@@ -137,8 +137,8 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     [[GCAppGlobal appDelegate] setupEmptyState:(NSString*)name];
 
 }
-+(void)setupEmptyStateWithDerived:(NSString*)name{
-    [[GCAppGlobal appDelegate] setupEmptyStateWithDerived:(NSString*)name];
++(void)setupEmptyStateWithDerivedForPrefix:(NSString*)name{
+    [[GCAppGlobal appDelegate] setupEmptyStateWithDerivedForPrefix:name];
 }
 
 +(void)setupSampleState:(NSString*)name{

@@ -218,10 +218,19 @@
 -(void)setupEmptyState:(NSString *)name{
     [self setupEmptyState:name withSettingsName:@"settings.plist"];
 }
--(void)setupEmptyStateWithDerived:(NSString*)name{
+-(void)setupEmptyStateWithDerivedForPrefix:(NSString*)prefix{
+    NSString * name = [NSString stringWithFormat:@"%@.db", prefix];
     [self setupEmptyState:name];
     [RZFileOrganizer removeEditableFile:[self.profile currentDerivedDatabasePath]];
-    [self setDerived:[[[GCDerivedOrganizer alloc] initWithDb:nil andThread:self.worker] autorelease]];
+    NSArray<NSString*>*derivedFiles =[RZFileOrganizer writeableFilesMatching:^(NSString*name){
+        BOOL rv = [name hasPrefix:prefix] && [name hasSuffix:@".data"];
+        return rv;
+    }];
+    for (NSString * file in derivedFiles) {
+        [RZFileOrganizer removeEditableFile:file];
+    }
+    GCDerivedOrganizer * derived = RZReturnAutorelease([[GCDerivedOrganizer alloc] initForTestModeWithDb:nil thread:self.worker andFilePrefix:prefix]);
+    self.derived = derived;
 }
 
 -(void)setupSampleState:(NSString *)name{

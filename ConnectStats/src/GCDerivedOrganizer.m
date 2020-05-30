@@ -136,8 +136,8 @@ static BOOL kDerivedEnabled = true;
 -(GCDerivedOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(dispatch_queue_t)thread{
     return [self initWithDb:aDb thread:thread andFilePrefix:nil];
 }
--(GCDerivedOrganizer*)initForTestModeWithDb:(FMDatabase*)aDb andFilePrefix:(NSString *)filePrefix{
-    return [self initWithDb:aDb thread:nil andFilePrefix:filePrefix];
+-(GCDerivedOrganizer*)initForTestModeWithDb:(FMDatabase*)aDb thread:(dispatch_queue_t)thread andFilePrefix:(NSString*)filePrefix{
+    return [self initWithDb:aDb thread:thread andFilePrefix:filePrefix];
 }
 
 -(void)dealloc{

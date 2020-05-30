@@ -373,6 +373,9 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     }else{
         for (NSUInteger i=0; rv && i<self.count; i++) {
             rv = rv && [[self dataPointAtIndex:i] isEqualToPoint:[other dataPointAtIndex:i]];
+            if( rv == false){
+                NSLog(@"%@ %@ %@", @(i), [self dataPointAtIndex:i], [other dataPointAtIndex:i]);
+            }
         }
     }
     return rv;
