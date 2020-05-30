@@ -338,7 +338,7 @@
 
     // Tet Reload
     
-    GCDerivedOrganizer * reload = [[GCDerivedOrganizer alloc] initForTestModeWithDb:derived.deriveddb andFilePrefix:derived_name];
+    GCDerivedOrganizer * reload = [[GCDerivedOrganizer alloc] initForTestModeWithDb:derived.deriveddb thread:nil andFilePrefix:derived_name];
 
     GCDerivedDataSerie * reload_serie = [reload derivedDataSerie:gcDerivedTypeBestRolling
                                                       field:field
