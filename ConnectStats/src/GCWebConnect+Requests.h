@@ -62,7 +62,6 @@
 -(void)garminLogout;
 
 // HealthKti
--(void)healthStoreExportActivity:(GCActivity*)act;
 -(void)healthStoreDayDetails:(NSDate * )day;
 -(void)healthStoreCheckSource;
 

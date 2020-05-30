@@ -345,6 +345,7 @@
         rv = false;
     }else{
         if ([db executeUpdate:@"INSERT INTO gc_derived_series (key,activityType,fieldFlag,derivedType,derivedPeriod,bucketStart,bucketEnd) VALUES (?,?,?,?,?,?,?)", self.key, self.activityType, @(_fieldFlag), @(_derivedType), @(_derivedPeriod), self.bucketStart, self.bucketEnd]){
+            RZLog(RZLogInfo, @"Created new serie in db %@", self.key);
             rv = true;
         }else{
             RZLog(RZLogError, @"Error %@", [db lastErrorMessage]);

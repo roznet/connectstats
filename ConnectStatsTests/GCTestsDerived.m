@@ -192,22 +192,8 @@
 
 }
 
--(void)testDerivedClear{
-    /*
-     2 activities in april, 2 in may
-     <GCActivity running:__connectstats__857090 2020-05-04 38:13 7.07 km>
-     <GCActivity running:__connectstats__834323 2020-05-01 28:10 5.86 km>
-     <GCActivity running:__connectstats__777501 2020-04-24 26:25 5.53 km>
-     <GCActivity running:__connectstats__728599 2020-04-18 21:42 4.25 km>
-     */
-    
-    NSArray<NSString*>*activityIds = @[   @"857090", @"834323", @"777501", @"728599" ];
-    
-    NSString * db_name = @"test_activities_derived_rebuild.db";
-    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:db_name];
-    GCDerivedOrganizer * derived = [self createEmptyDerived:@"test_derived_rebuild"];
-    
-    GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
+
+-(void)setupDerived:(GCActivitiesOrganizer*)organizer derived:(GCDerivedOrganizer*)derived field:(GCField*)field activities:(NSArray<NSString*>*)activityIds{
     
     NSString * path = [RZFileOrganizer bundleFilePath:@"last_connectstats_search_derived.json" forClass:[self class]];
     [GCConnectStatsRequestSearch testForOrganizer:organizer withFilesInPath:path];
@@ -223,6 +209,28 @@
         XCTAssertNotNil(fit);
         [derived processActivities:@[ fit ] ];
     }
+
+}
+
+-(void)testDerivedRebuild{
+    /*
+     2 activities in april, 2 in may
+     <GCActivity running:__connectstats__857090 2020-05-04 38:13 7.07 km>
+     <GCActivity running:__connectstats__834323 2020-05-01 28:10 5.86 km>
+     <GCActivity running:__connectstats__777501 2020-04-24 26:25 5.53 km>
+     <GCActivity running:__connectstats__728599 2020-04-18 21:42 4.25 km>
+     */
+    
+    NSArray<NSString*>*activityIds = @[   @"857090", @"834323", @"777501", @"728599" ];
+    GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
+
+    NSString * db_name = @"test_activities_derived_rebuild.db";
+    NSString * derived_name = @"test_derived_rebuild";
+    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:db_name];
+    GCDerivedOrganizer * derived = [self createEmptyDerived:derived_name];
+    
+    [self setupDerived:organizer derived:derived field:field activities:activityIds];
+    
     // Skip first
     NSArray<GCActivity*>*activities = [organizer activities];
     GCActivity * testForAct = activities.firstObject;
@@ -242,6 +250,8 @@
     double original_y_max = [serie.serieWithUnit dataPointAtIndex:bestIdx].y_data;
     double original_year_y_max = [serieYear.serieWithUnit dataPointAtIndex:bestIdx].y_data;
 
+
+    // NOW try to rebuild
     
     NSArray<GCActivity*>*bestActivities = [derived bestMatchingActivitySerieFor:serie within:activities completion:nil];
     NSArray<GCActivity*>*bestYearActivities = [derived bestMatchingActivitySerieFor:serieYear within:activities completion:nil];
@@ -279,6 +289,7 @@
     }
     
     // rebuild now with the first act that wasn't the max. Now new best should be less that excluded serie
+    [derived forceReprocessActivity:exclude.activityId];
     [derived rebuildDerivedDataSerie:gcDerivedTypeBestRolling
                          forActivity:testForAct
                         inActivities:sameSerieAsExcluded];
@@ -324,7 +335,69 @@
     // we recover the best when we do best by serie, because setup such that month of focus is best one
     XCTAssertEqualWithAccuracy(allFromSeries_y_max, excluded_y_max, 1.0e-8);
     XCTAssertEqual(bestSeries.count, serieAll.serieWithUnit.count);
+
+    // Tet Reload
     
+    GCDerivedOrganizer * reload = [[GCDerivedOrganizer alloc] initForTestModeWithDb:derived.deriveddb thread:nil andFilePrefix:derived_name];
+
+    GCDerivedDataSerie * reload_serie = [reload derivedDataSerie:gcDerivedTypeBestRolling
+                                                      field:field
+                                                     period:gcDerivedPeriodMonth
+                                                    forDate:testForAct.date];
+
+    GCDerivedDataSerie * reload_serieYear= [reload derivedDataSerie:gcDerivedTypeBestRolling
+                                                      field:field
+                                                     period:gcDerivedPeriodYear
+                                                    forDate:testForAct.date];
+
+    double reload_y_max = [reload_serie.serieWithUnit dataPointAtIndex:bestIdx].y_data;
+    double reload_year_y_max = [reload_serieYear.serieWithUnit dataPointAtIndex:bestIdx].y_data;
+
+    XCTAssertEqualWithAccuracy(reload_y_max, original_y_max, 1.0e-8);
+    XCTAssertEqualWithAccuracy(reload_year_y_max, original_year_y_max, 1.0e-8);
+
+
+}
+
+-(void)testDerivedHistorical{
+    /*
+     2 activities in april, 2 in may
+     <GCActivity running:__connectstats__857090 2020-05-04 38:13 7.07 km>
+     <GCActivity running:__connectstats__834323 2020-05-01 28:10 5.86 km>
+     <GCActivity running:__connectstats__777501 2020-04-24 26:25 5.53 km>
+     <GCActivity running:__connectstats__728599 2020-04-18 21:42 4.25 km>
+     */
+    
+    NSArray<NSString*>*activityIds = @[   @"857090", @"834323", @"777501", @"728599" ];
+    GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
+
+    NSString * db_name = @"test_activities_derived_rebuild.db";
+    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:db_name];
+    GCDerivedOrganizer * derived = [self createEmptyDerived:@"test_derived_rebuild"];
+    
+    [self setupDerived:organizer derived:derived field:field activities:activityIds];
+    // Now test against historical Series
+    GCStatsSerieOfSerieWithUnits * serieOfSeries = [derived timeserieOfSeriesFor:field inActivities:[organizer activities]];
+    XCTAssertNotNil(serieOfSeries);
+
+    // Get the curve from the serie of serie that is f( date ) = y = best rolling( x )
+    
+    GCNumberWithUnit * x = [GCNumberWithUnit numberWithUnit:[GCUnit second] andValue:30.0];
+    GCStatsDataSerieWithUnit * serieForX = [serieOfSeries serieForX:x];
+    GCActivity * one = organizer.activities.firstObject;
+    GCStatsDataSerieWithUnit * oneStandard = [one standardizedBestRollingTrack:field thread:nil];
+    GCStatsDataSerieWithUnit * oneFull = [one calculatedSerieForField:field.correspondingBestRollingField thread:nil];
+
+    // Get value from the series for date, from the standard curve of activity or from full curve of activity
+    // on an anchor like 30.0, all should be equal
+    GCStatsInterpFunction * serieInterp = [GCStatsInterpFunction interpFunctionWithSerie:serieForX.serie];
+    GCStatsInterpFunction * oneStandardInterp = [GCStatsInterpFunction interpFunctionWithSerie:oneStandard.serie];
+    GCStatsInterpFunction * oneFullInterp = [GCStatsInterpFunction interpFunctionWithSerie:oneFull.serie];
+    double eps = 1.0e-8;
+    XCTAssertEqualWithAccuracy([oneStandardInterp valueForX:x.value], [oneFullInterp valueForX:x.value], eps);
+    XCTAssertEqualWithAccuracy([oneStandardInterp valueForX:x.value], [serieInterp valueForX:[one.date timeIntervalSinceReferenceDate]], eps);
+                                                                       
+                                                                       
 }
 
 @end

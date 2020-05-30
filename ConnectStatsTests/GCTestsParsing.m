@@ -19,7 +19,6 @@
 #import "GCGarminSearchModernJsonParser.h"
 #import "GCGarminActivityLapsParser.h"
 #import "GCGarminUserJsonParser.h"
-#import "GCStravaSegmentListStarred.h"
 #import "GCStravaActivityListParser.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCHealthOrganizer.h"

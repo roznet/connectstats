@@ -8,7 +8,6 @@
 #import "GCHealthZoneCalculator.h"
 #import "GCField.h"
 #import "GCViewConfig.h"
-#import "GCStravaAthlete.h"
 #import "GCAppGlobal.h"
 #import "GCActivity.h"
 #import "GCActivity+Import.h"

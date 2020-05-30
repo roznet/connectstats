@@ -40,7 +40,6 @@
 		420A57EC1CB32C5900EA3B42 /* withings_getmeas_188427.json in Resources */ = {isa = PBXBuildFile; fileRef = 420A57EA1CB32C5900EA3B42 /* withings_getmeas_188427.json */; };
 		4211C52819A72447000DEF87 /* GCHealthKitBodyRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4211C52719A72447000DEF87 /* GCHealthKitBodyRequest.m */; };
 		4211C52D19AAF2D3000DEF87 /* GCHealthKitRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 421516BB19A47C450080CD4C /* GCHealthKitRequest.m */; };
-		4211C52F19AAF2D3000DEF87 /* GCHealthKitExportActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C041C319A5D5F200FC20B3 /* GCHealthKitExportActivity.m */; };
 		4211C53119AAF2D3000DEF87 /* GCHealthKitBodyRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4211C52719A72447000DEF87 /* GCHealthKitBodyRequest.m */; };
 		4211C53419AB043A000DEF87 /* version.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4211C53319AB043A000DEF87 /* version.plist */; };
 		421208901C6E860700E0470D /* GCFieldsForCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4212088F1C6E860700E0470D /* GCFieldsForCategory.m */; };
@@ -53,8 +52,6 @@
 		421517CC2429607800FEE8D7 /* GCTestsActivitiesCalculated.m in Sources */ = {isa = PBXBuildFile; fileRef = 421517CB2429607800FEE8D7 /* GCTestsActivitiesCalculated.m */; };
 		421736A42066A07F00ACADC1 /* GCGarminRequestModernActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */; };
 		4217F53F21ACA12500C848A3 /* FITTimeSerieColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217F53E21ACA12500C848A3 /* FITTimeSerieColumn.swift */; };
-		421844B01D75C3F5005B09BC /* GCSegmentOrganizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421844AF1D75C3F5005B09BC /* GCSegmentOrganizer.swift */; };
-		421844B71D75D268005B09BC /* GCTestsSegments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421844B61D75D268005B09BC /* GCTestsSegments.swift */; };
 		421A514C1C82FA6C00671587 /* GCActivity+Fields.m in Sources */ = {isa = PBXBuildFile; fileRef = 421A514B1C82FA6C00671587 /* GCActivity+Fields.m */; };
 		421A514F1C82FA9400671587 /* GCCalendarDataDateMarkers.m in Sources */ = {isa = PBXBuildFile; fileRef = 421A514E1C82FA9400671587 /* GCCalendarDataDateMarkers.m */; };
 		421A51511C82FB1000671587 /* GCActivity+Fields.m in Sources */ = {isa = PBXBuildFile; fileRef = 421A514B1C82FA6C00671587 /* GCActivity+Fields.m */; };
@@ -403,8 +400,6 @@
 		424B56311D3BDBBF00903A99 /* RZUtilsTouch.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		424B7F2A16CB049A000B38AD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424B7F2916CB049A000B38AD /* Security.framework */; };
 		424B7F4816CFBE30000B38AD /* GCSettingsHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424B7F4716CFBE2F000B38AD /* GCSettingsHelpViewController.m */; };
-		424C8AA11D8D9F8100D8A50E /* GCStravaAthleteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424C8AA01D8D9F8100D8A50E /* GCStravaAthleteParser.swift */; };
-		424C8AA21D8D9F8100D8A50E /* GCStravaAthleteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424C8AA01D8D9F8100D8A50E /* GCStravaAthleteParser.swift */; };
 		424D08C01DC5DA4E000B4620 /* GCAppPasswordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424D08BF1DC5DA4E000B4620 /* GCAppPasswordManager.swift */; };
 		424F1A7B21E20477009DD368 /* FITAppGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424F1A7A21E20477009DD368 /* FITAppGlobal.swift */; };
 		424F92D61B1072FD0075C5F1 /* GCDebugActionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422637A41AFF6C5F005461E3 /* GCDebugActionsTableViewController.m */; };
@@ -535,8 +530,6 @@
 		427B79D72465A11F005EDEAD /* track_cs_857090.fit in Resources */ = {isa = PBXBuildFile; fileRef = 427B79D12465A11F005EDEAD /* track_cs_857090.fit */; };
 		427B79D82465A11F005EDEAD /* last_modern_search_derived.json in Resources */ = {isa = PBXBuildFile; fileRef = 427B79D22465A11F005EDEAD /* last_modern_search_derived.json */; };
 		427B79D92465A11F005EDEAD /* last_connectstats_search_derived.json in Resources */ = {isa = PBXBuildFile; fileRef = 427B79D32465A11F005EDEAD /* last_connectstats_search_derived.json */; };
-		427C65C01D4677FB00F5DF70 /* GCSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427C65BF1D4677FB00F5DF70 /* GCSegment.swift */; };
-		427C65C21D469E4E00F5DF70 /* GCStravaSegmentListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427C65C11D469E4E00F5DF70 /* GCStravaSegmentListParser.swift */; };
 		427C65C81D46A4BB00F5DF70 /* strava_athlete.json in Resources */ = {isa = PBXBuildFile; fileRef = 427C65C41D46A4BB00F5DF70 /* strava_athlete.json */; };
 		427C65C91D46A4BB00F5DF70 /* strava_segment_effort_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 427C65C51D46A4BB00F5DF70 /* strava_segment_effort_0.json */; };
 		427C65CB1D46A4BB00F5DF70 /* strava_segments_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 427C65C71D46A4BB00F5DF70 /* strava_segments_0.json */; };
@@ -701,9 +694,6 @@
 		429AFD1122B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 429AFD0D22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m */; };
 		429D752E1651AAB800232BED /* GCActivitiesCacheManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 429D752D1651AAB800232BED /* GCActivitiesCacheManagement.m */; };
 		429D75351651B14E00232BED /* GCGarminRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 429D75341651B14E00232BED /* GCGarminRequest.m */; };
-		429D89A81FF6D89E001CE97A /* GCAthlete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429D89A71FF6D89E001CE97A /* GCAthlete.swift */; };
-		429D89A91FF6D95B001CE97A /* GCAthlete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429D89A71FF6D89E001CE97A /* GCAthlete.swift */; };
-		429D89AA1FF6D95C001CE97A /* GCAthlete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429D89A71FF6D89E001CE97A /* GCAthlete.swift */; };
 		429DD64F219E39FC004FD716 /* GCGarminLoginSSORequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ACFE9718C099AB00BF27A5 /* GCGarminLoginSSORequest.m */; };
 		429DD650219E3CE2004FD716 /* GCGarminRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 429D75341651B14E00232BED /* GCGarminRequest.m */; };
 		429DD651219E3E13004FD716 /* GCWebRequestStandard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4226B4281F65E2ED009E1104 /* GCWebRequestStandard.m */; };
@@ -729,14 +719,6 @@
 		42A31AF823A0F8A7006F5664 /* GCActivity+TestBackwardCompat.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A31AF623A0F8A7006F5664 /* GCActivity+TestBackwardCompat.m */; };
 		42A3609D1EAF6392008EB4E3 /* RZUtilsHealthkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872C31EACA089000D4115 /* RZUtilsHealthkit.framework */; };
 		42A3609E1EAF6392008EB4E3 /* RZUtilsHealthkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 425872C31EACA089000D4115 /* RZUtilsHealthkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		42A3AA161D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA151D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m */; };
-		42A3AA311D43EE85004FBFD0 /* GCStravaAthlete.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA301D43EE85004FBFD0 /* GCStravaAthlete.m */; };
-		42A3AA381D43F01A004FBFD0 /* GCStravaSegmentEfforts.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA371D43F01A004FBFD0 /* GCStravaSegmentEfforts.m */; };
-		42A3AA3B1D43F51C004FBFD0 /* GCStravaSegmentEffortStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA3A1D43F51C004FBFD0 /* GCStravaSegmentEffortStream.m */; };
-		42A3AA3C1D44EBB5004FBFD0 /* GCStravaSegmentListStarred.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA151D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m */; };
-		42A3AA3D1D44EBB5004FBFD0 /* GCStravaAthlete.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA301D43EE85004FBFD0 /* GCStravaAthlete.m */; };
-		42A3AA3E1D44EBB5004FBFD0 /* GCStravaSegmentEfforts.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA371D43F01A004FBFD0 /* GCStravaSegmentEfforts.m */; };
-		42A3AA3F1D44EBB5004FBFD0 /* GCStravaSegmentEffortStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA3A1D43F51C004FBFD0 /* GCStravaSegmentEffortStream.m */; };
 		42A5D8F723272C8300898FD5 /* activitylaps_4018408912.json in Resources */ = {isa = PBXBuildFile; fileRef = 42A5D8DB23272C7F00898FD5 /* activitylaps_4018408912.json */; };
 		42A5D8F823272C8300898FD5 /* activitylaps_4017099594.json in Resources */ = {isa = PBXBuildFile; fileRef = 42A5D8DC23272C7F00898FD5 /* activitylaps_4017099594.json */; };
 		42A5D8F923272C8300898FD5 /* last_connectstats_search_20.json in Resources */ = {isa = PBXBuildFile; fileRef = 42A5D8DD23272C7F00898FD5 /* last_connectstats_search_20.json */; };
@@ -862,7 +844,6 @@
 		42B5E25C1BA5B216000FAE4E /* GCDerivedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F0A4F21B60620200901CFF /* GCDerivedRequest.m */; };
 		42B5E2611BA5B216000FAE4E /* GCHealthKitActivityRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DE53BC19CF438500009130 /* GCHealthKitActivityRequest.m */; };
 		42B5E2621BA5B216000FAE4E /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
-		42B5E2631BA5B216000FAE4E /* GCHealthKitExportActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C041C319A5D5F200FC20B3 /* GCHealthKitExportActivity.m */; };
 		42B5E2641BA5B216000FAE4E /* GCHealthKitBodyRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4211C52719A72447000DEF87 /* GCHealthKitBodyRequest.m */; };
 		42B5E2651BA5B216000FAE4E /* GCHealthKitWorkoutsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DC51571B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m */; };
 		42B5E2661BA5B216000FAE4E /* GCHealthKitDailySummaryRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42091CFE1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m */; };
@@ -1221,19 +1202,10 @@
 		42BFC2591DCF512F00EAD40E /* GCDerivedGroupedSeries.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CE39451CA680E900919292 /* GCDerivedGroupedSeries.m */; };
 		42BFC25A1DCF514800EAD40E /* GCGarminSearchModernJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426B0F0C1DA111AD0091A734 /* GCGarminSearchModernJsonParser.m */; };
 		42BFC25B1DCF514B00EAD40E /* GCGarminHeartRateZoneParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCC71DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m */; };
-		42BFC25D1DCF516800EAD40E /* GCStravaAthlete.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA301D43EE85004FBFD0 /* GCStravaAthlete.m */; };
-		42BFC25E1DCF516C00EAD40E /* GCStravaAthleteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424C8AA01D8D9F8100D8A50E /* GCStravaAthleteParser.swift */; };
-		42BFC2601DCF517700EAD40E /* GCStravaSegmentEffortStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA3A1D43F51C004FBFD0 /* GCStravaSegmentEffortStream.m */; };
-		42BFC2611DCF517B00EAD40E /* GCStravaSegmentEfforts.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA371D43F01A004FBFD0 /* GCStravaSegmentEfforts.m */; };
-		42BFC2621DCF517F00EAD40E /* GCStravaSegmentListStarred.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A3AA151D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m */; };
-		42BFC2641DCF51AC00EAD40E /* GCSegmentOrganizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421844AF1D75C3F5005B09BC /* GCSegmentOrganizer.swift */; };
-		42BFC2651DCF51AF00EAD40E /* GCSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427C65BF1D4677FB00F5DF70 /* GCSegment.swift */; };
-		42BFC2661DCF51D000EAD40E /* GCStravaSegmentListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427C65C11D469E4E00F5DF70 /* GCStravaSegmentListParser.swift */; };
 		42BFC2671DCF51F100EAD40E /* GCUnitTrainingZone.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A89C1E1D627444007CF90D /* GCUnitTrainingZone.m */; };
 		42BFC26C1DCF522D00EAD40E /* GCViewConfigSkin.m in Sources */ = {isa = PBXBuildFile; fileRef = 427F93741BED59D900C177F9 /* GCViewConfigSkin.m */; };
 		42C0113E1AB437C10059B6CF /* activitytrack_718039360.json in Resources */ = {isa = PBXBuildFile; fileRef = 42C0113D1AB437C10059B6CF /* activitytrack_718039360.json */; };
 		42C011401AB438050059B6CF /* GCTestsParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C0113F1AB438050059B6CF /* GCTestsParsing.m */; };
-		42C041C419A5D5F200FC20B3 /* GCHealthKitExportActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C041C319A5D5F200FC20B3 /* GCHealthKitExportActivity.m */; };
 		42C0589721D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C0589621D04B0900109D54 /* RZFitFieldValueExtensions.swift */; };
 		42C0589821D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C0589621D04B0900109D54 /* RZFitFieldValueExtensions.swift */; };
 		42C0589921D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C0589621D04B0900109D54 /* RZFitFieldValueExtensions.swift */; };
@@ -1337,7 +1309,6 @@
 		42E226BC16599AB3008FFD68 /* GCWebReverseGeocode.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E226BB16599AB2008FFD68 /* GCWebReverseGeocode.m */; };
 		42E45FF41F1B72F600CA1F39 /* RZUtilsSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; };
 		42E45FF51F1B72F600CA1F39 /* RZUtilsSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 425872BF1EACA089000D4115 /* RZUtilsSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		42E4FB411D7AB2740061BB38 /* GCSegmentOrganizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421844AF1D75C3F5005B09BC /* GCSegmentOrganizer.swift */; };
 		42EA5BDE2066EB0200F4617B /* GCGarminRequestModernActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */; };
 		42EA5BE62066EB0700F4617B /* GCGarminRequestModernActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */; };
 		42EAA3AB1EDBA6150081B130 /* GCAppProfiles+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EAA3AA1EDBA6150081B130 /* GCAppProfiles+Swift.m */; };
@@ -1368,8 +1339,6 @@
 		42EEAEE016A2BDDC0058965A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42EEAEDF16A2BDDA0058965A /* Social.framework */; };
 		42EEAEE316A35EDC0058965A /* GCExportText.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EEAEE216A35EDC0058965A /* GCExportText.m */; };
 		42EEAEE916A3679C0058965A /* GCActivity+ExportText.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EEAEE816A3679B0058965A /* GCActivity+ExportText.m */; };
-		42EEEB561D582E9E00F1E6DB /* GCSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427C65BF1D4677FB00F5DF70 /* GCSegment.swift */; };
-		42EEEB581D582ECD00F1E6DB /* GCStravaSegmentListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427C65C11D469E4E00F5DF70 /* GCStravaSegmentListParser.swift */; };
 		42F0A4F31B60620200901CFF /* GCDerivedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F0A4F21B60620200901CFF /* GCDerivedRequest.m */; };
 		42F0A4F41B60620200901CFF /* GCDerivedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F0A4F21B60620200901CFF /* GCDerivedRequest.m */; };
 		42F135701B8BB5D5006D186A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F1356E1B8BB2BE006D186A /* libsqlite3.tbd */; };
@@ -1996,9 +1965,7 @@
 		421736A22066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCGarminRequestModernActivityTypes.h; path = src/GCGarminRequestModernActivityTypes.h; sourceTree = "<group>"; };
 		421736A32066A07E00ACADC1 /* GCGarminRequestModernActivityTypes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequestModernActivityTypes.m; path = src/GCGarminRequestModernActivityTypes.m; sourceTree = "<group>"; };
 		4217F53E21ACA12500C848A3 /* FITTimeSerieColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITTimeSerieColumn.swift; path = src/FITTimeSerieColumn.swift; sourceTree = "<group>"; };
-		421844AF1D75C3F5005B09BC /* GCSegmentOrganizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCSegmentOrganizer.swift; path = src/GCSegmentOrganizer.swift; sourceTree = "<group>"; };
 		421844B51D75D268005B09BC /* ConnectStatsXCTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnectStatsXCTests-Bridging-Header.h"; sourceTree = "<group>"; };
-		421844B61D75D268005B09BC /* GCTestsSegments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCTestsSegments.swift; sourceTree = "<group>"; };
 		421A514A1C82FA6C00671587 /* GCActivity+Fields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCActivity+Fields.h"; path = "src/GCActivity+Fields.h"; sourceTree = "<group>"; };
 		421A514B1C82FA6C00671587 /* GCActivity+Fields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCActivity+Fields.m"; path = "src/GCActivity+Fields.m"; sourceTree = "<group>"; };
 		421A514D1C82FA9400671587 /* GCCalendarDataDateMarkers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCCalendarDataDateMarkers.h; path = src/GCCalendarDataDateMarkers.h; sourceTree = "<group>"; };
@@ -2168,7 +2135,6 @@
 		424B7F2916CB049A000B38AD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		424B7F4616CFBE2F000B38AD /* GCSettingsHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsHelpViewController.h; path = src/GCSettingsHelpViewController.h; sourceTree = "<group>"; };
 		424B7F4716CFBE2F000B38AD /* GCSettingsHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSettingsHelpViewController.m; path = src/GCSettingsHelpViewController.m; sourceTree = "<group>"; };
-		424C8AA01D8D9F8100D8A50E /* GCStravaAthleteParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCStravaAthleteParser.swift; path = src/GCStravaAthleteParser.swift; sourceTree = "<group>"; };
 		424D08BF1DC5DA4E000B4620 /* GCAppPasswordManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCAppPasswordManager.swift; path = src/GCAppPasswordManager.swift; sourceTree = "<group>"; };
 		424F1A7A21E20477009DD368 /* FITAppGlobal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITAppGlobal.swift; path = src/FITAppGlobal.swift; sourceTree = "<group>"; };
 		424F9DB817C35BDD001C73B1 /* GCHealthZoneCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthZoneCalculator.h; path = src/GCHealthZoneCalculator.h; sourceTree = "<group>"; };
@@ -2289,8 +2255,6 @@
 		427B79D12465A11F005EDEAD /* track_cs_857090.fit */ = {isa = PBXFileReference; lastKnownFileType = file; name = track_cs_857090.fit; path = activity_derived/track_cs_857090.fit; sourceTree = "<group>"; };
 		427B79D22465A11F005EDEAD /* last_modern_search_derived.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = last_modern_search_derived.json; path = activity_derived/last_modern_search_derived.json; sourceTree = "<group>"; };
 		427B79D32465A11F005EDEAD /* last_connectstats_search_derived.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = last_connectstats_search_derived.json; path = activity_derived/last_connectstats_search_derived.json; sourceTree = "<group>"; };
-		427C65BF1D4677FB00F5DF70 /* GCSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCSegment.swift; path = src/GCSegment.swift; sourceTree = "<group>"; };
-		427C65C11D469E4E00F5DF70 /* GCStravaSegmentListParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCStravaSegmentListParser.swift; path = src/GCStravaSegmentListParser.swift; sourceTree = "<group>"; };
 		427C65C41D46A4BB00F5DF70 /* strava_athlete.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_athlete.json; sourceTree = "<group>"; };
 		427C65C51D46A4BB00F5DF70 /* strava_segment_effort_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_segment_effort_0.json; sourceTree = "<group>"; };
 		427C65C71D46A4BB00F5DF70 /* strava_segments_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = strava_segments_0.json; sourceTree = "<group>"; };
@@ -2437,7 +2401,6 @@
 		429D752D1651AAB800232BED /* GCActivitiesCacheManagement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivitiesCacheManagement.m; path = src/GCActivitiesCacheManagement.m; sourceTree = "<group>"; };
 		429D75331651B14E00232BED /* GCGarminRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCGarminRequest.h; path = src/GCGarminRequest.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		429D75341651B14E00232BED /* GCGarminRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequest.m; path = src/GCGarminRequest.m; sourceTree = "<group>"; };
-		429D89A71FF6D89E001CE97A /* GCAthlete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCAthlete.swift; path = src/GCAthlete.swift; sourceTree = "<group>"; };
 		429E879517C4A10300B44A3A /* GCTrackFieldChoices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTrackFieldChoices.h; path = src/GCTrackFieldChoices.h; sourceTree = "<group>"; };
 		429E879617C4A10300B44A3A /* GCTrackFieldChoices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTrackFieldChoices.m; path = src/GCTrackFieldChoices.m; sourceTree = "<group>"; };
 		429F2094244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedAnalysisViewController.h; path = src/GCStatsDerivedAnalysisViewController.h; sourceTree = "<group>"; };
@@ -2454,14 +2417,6 @@
 		42A22DFF19E8895D004407B8 /* GCHealthSleepBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthSleepBlock.m; path = src/GCHealthSleepBlock.m; sourceTree = "<group>"; };
 		42A31AF523A0F8A7006F5664 /* GCActivity+TestBackwardCompat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCActivity+TestBackwardCompat.h"; sourceTree = "<group>"; };
 		42A31AF623A0F8A7006F5664 /* GCActivity+TestBackwardCompat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GCActivity+TestBackwardCompat.m"; sourceTree = "<group>"; };
-		42A3AA141D43D5A5004FBFD0 /* GCStravaSegmentListStarred.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaSegmentListStarred.h; path = src/GCStravaSegmentListStarred.h; sourceTree = "<group>"; };
-		42A3AA151D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaSegmentListStarred.m; path = src/GCStravaSegmentListStarred.m; sourceTree = "<group>"; };
-		42A3AA2F1D43EE85004FBFD0 /* GCStravaAthlete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaAthlete.h; path = src/GCStravaAthlete.h; sourceTree = "<group>"; };
-		42A3AA301D43EE85004FBFD0 /* GCStravaAthlete.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaAthlete.m; path = src/GCStravaAthlete.m; sourceTree = "<group>"; };
-		42A3AA361D43F01A004FBFD0 /* GCStravaSegmentEfforts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaSegmentEfforts.h; path = src/GCStravaSegmentEfforts.h; sourceTree = "<group>"; };
-		42A3AA371D43F01A004FBFD0 /* GCStravaSegmentEfforts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaSegmentEfforts.m; path = src/GCStravaSegmentEfforts.m; sourceTree = "<group>"; };
-		42A3AA391D43F51C004FBFD0 /* GCStravaSegmentEffortStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaSegmentEffortStream.h; path = src/GCStravaSegmentEffortStream.h; sourceTree = "<group>"; };
-		42A3AA3A1D43F51C004FBFD0 /* GCStravaSegmentEffortStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaSegmentEffortStream.m; path = src/GCStravaSegmentEffortStream.m; sourceTree = "<group>"; };
 		42A5D8DB23272C7F00898FD5 /* activitylaps_4018408912.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitylaps_4018408912.json; sourceTree = "<group>"; };
 		42A5D8DC23272C7F00898FD5 /* activitylaps_4017099594.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitylaps_4017099594.json; sourceTree = "<group>"; };
 		42A5D8DD23272C7F00898FD5 /* last_connectstats_search_20.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_connectstats_search_20.json; sourceTree = "<group>"; };
@@ -2878,8 +2833,6 @@
 		42BFC2491DCF4F1500EAD40E /* GCHealthStatsBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCHealthStatsBridge.swift; path = src/GCHealthStatsBridge.swift; sourceTree = "<group>"; };
 		42C0113D1AB437C10059B6CF /* activitytrack_718039360.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = activitytrack_718039360.json; path = ../activitytrack_718039360.json; sourceTree = "<group>"; };
 		42C0113F1AB438050059B6CF /* GCTestsParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestsParsing.m; sourceTree = "<group>"; };
-		42C041C219A5D5F200FC20B3 /* GCHealthKitExportActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitExportActivity.h; path = src/GCHealthKitExportActivity.h; sourceTree = "<group>"; };
-		42C041C319A5D5F200FC20B3 /* GCHealthKitExportActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitExportActivity.m; path = src/GCHealthKitExportActivity.m; sourceTree = "<group>"; };
 		42C0589621D04B0900109D54 /* RZFitFieldValueExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RZFitFieldValueExtensions.swift; path = src/RZFitFieldValueExtensions.swift; sourceTree = "<group>"; };
 		42C0589B21D0525200109D54 /* RZFitMessageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RZFitMessageExtensions.swift; path = src/RZFitMessageExtensions.swift; sourceTree = "<group>"; };
 		42C072C01AE2FAE000E7E066 /* GCMapWindCompass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCMapWindCompass.h; path = src/GCMapWindCompass.h; sourceTree = "<group>"; };
@@ -3332,7 +3285,7 @@
 			isa = PBXGroup;
 			children = (
 				42D8AF251B25FEEA00ADDD31 /* Obsolete */,
-				42D8AEF41B1DC8D700ADDD31 /* OtherRequests */,
+				42D8AEF41B1DC8D700ADDD31 /* BodyRequests */,
 				42D8AEF31B1DC8C200ADDD31 /* FitnessRequests */,
 				426DFE6B19D6A9930031EFF1 /* Parser */,
 				421516BA19A47C450080CD4C /* GCHealthKitRequest.h */,
@@ -3535,7 +3488,6 @@
 		4235448616C5BC6900AB3E09 /* Strava */ = {
 			isa = PBXGroup;
 			children = (
-				424C8A9F1D8D9E3B00D8A50E /* Segments */,
 				424C8A9A1D8D9DA800D8A50E /* Requests */,
 				42959E2318DD921200C0B841 /* Parsers */,
 			);
@@ -3680,21 +3632,6 @@
 				42959CEC18D8F91100C0B841 /* GCStravaActivityStreams.m */,
 			);
 			name = Requests;
-			sourceTree = "<group>";
-		};
-		424C8A9F1D8D9E3B00D8A50E /* Segments */ = {
-			isa = PBXGroup;
-			children = (
-				42A3AA2F1D43EE85004FBFD0 /* GCStravaAthlete.h */,
-				42A3AA301D43EE85004FBFD0 /* GCStravaAthlete.m */,
-				42A3AA141D43D5A5004FBFD0 /* GCStravaSegmentListStarred.h */,
-				42A3AA151D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m */,
-				42A3AA361D43F01A004FBFD0 /* GCStravaSegmentEfforts.h */,
-				42A3AA371D43F01A004FBFD0 /* GCStravaSegmentEfforts.m */,
-				42A3AA391D43F51C004FBFD0 /* GCStravaSegmentEffortStream.h */,
-				42A3AA3A1D43F51C004FBFD0 /* GCStravaSegmentEffortStream.m */,
-			);
-			name = Segments;
 			sourceTree = "<group>";
 		};
 		424F9DBB17C39E8D001C73B1 /* HealthZones */ = {
@@ -4055,16 +3992,6 @@
 			name = Parsers;
 			sourceTree = "<group>";
 		};
-		427C65BA1D4677D200F5DF70 /* Segments */ = {
-			isa = PBXGroup;
-			children = (
-				429D89A71FF6D89E001CE97A /* GCAthlete.swift */,
-				427C65BF1D4677FB00F5DF70 /* GCSegment.swift */,
-				421844AF1D75C3F5005B09BC /* GCSegmentOrganizer.swift */,
-			);
-			name = Segments;
-			sourceTree = "<group>";
-		};
 		427C65C31D46A4BB00F5DF70 /* strava_segments */ = {
 			isa = PBXGroup;
 			children = (
@@ -4336,7 +4263,6 @@
 				4227C5AB1C0B1310003F0660 /* GCTestsGrid.m */,
 				42C0113F1AB438050059B6CF /* GCTestsParsing.m */,
 				42D9081B20338582000BBE07 /* GCTestsPerformance.m */,
-				421844B61D75D268005B09BC /* GCTestsSegments.swift */,
 				42B9555218186D0C00BC7AF9 /* GCTestsUtils.m */,
 				429184AD2319B0ED00FD6525 /* GCTestUserInterface.m */,
 				42C0113C1AB437C10059B6CF /* samples */,
@@ -4424,7 +4350,6 @@
 		428FF78415FB39D6007A88FA /* Activities */ = {
 			isa = PBXGroup;
 			children = (
-				427C65BA1D4677D200F5DF70 /* Segments */,
 				42959CD218D5ECAD00C0B841 /* Services */,
 				42959CD118D5C5C400C0B841 /* Weather */,
 				42959CD018D5C59D00C0B841 /* Fields */,
@@ -4522,8 +4447,6 @@
 				42959CCC18D4920900C0B841 /* GCStravaActivityListParser.m */,
 				42461D211922D169001B03C7 /* GCStravaActivityLapsParser.h */,
 				42461D221922D169001B03C7 /* GCStravaActivityLapsParser.m */,
-				427C65C11D469E4E00F5DF70 /* GCStravaSegmentListParser.swift */,
-				424C8AA01D8D9F8100D8A50E /* GCStravaAthleteParser.swift */,
 			);
 			name = Parsers;
 			sourceTree = "<group>";
@@ -5307,15 +5230,13 @@
 			name = FitnessRequests;
 			sourceTree = "<group>";
 		};
-		42D8AEF41B1DC8D700ADDD31 /* OtherRequests */ = {
+		42D8AEF41B1DC8D700ADDD31 /* BodyRequests */ = {
 			isa = PBXGroup;
 			children = (
-				42C041C219A5D5F200FC20B3 /* GCHealthKitExportActivity.h */,
-				42C041C319A5D5F200FC20B3 /* GCHealthKitExportActivity.m */,
 				4211C52619A72447000DEF87 /* GCHealthKitBodyRequest.h */,
 				4211C52719A72447000DEF87 /* GCHealthKitBodyRequest.m */,
 			);
-			name = OtherRequests;
+			name = BodyRequests;
 			sourceTree = "<group>";
 		};
 		42D8AF041B24CE8900ADDD31 /* HealthStatsTests */ = {
@@ -6831,7 +6752,6 @@
 			files = (
 				426DFE6A19D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */,
 				4211C52D19AAF2D3000DEF87 /* GCHealthKitRequest.m in Sources */,
-				4211C52F19AAF2D3000DEF87 /* GCHealthKitExportActivity.m in Sources */,
 				429AFD1122B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */,
 				429F2098244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m in Sources */,
 				4211C53119AAF2D3000DEF87 /* GCHealthKitBodyRequest.m in Sources */,
@@ -6858,7 +6778,6 @@
 				42C5A1B322AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */,
 				4281AF5D22F732AD00BFE408 /* GCConnectStatsRequestLogin.m in Sources */,
 				422FAEBF19A1DD6000D09773 /* GCWebUrl.m in Sources */,
-				42BFC25E1DCF516C00EAD40E /* GCStravaAthleteParser.swift in Sources */,
 				42BDFE82242F7789001BCDC8 /* GCActivity+Series.m in Sources */,
 				422FAEC519A1DD6000D09773 /* GCTableHeaderFieldsCategory.m in Sources */,
 				42E1A75424278037006C868A /* GCCalculatedCachedTrackInfo.m in Sources */,
@@ -6881,14 +6800,11 @@
 				42DC51591B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m in Sources */,
 				42FD55BA1B90A39F0070B3B4 /* GCCellActivity.m in Sources */,
 				422F521A1DFB51F700DD5551 /* FITFitFileInterpret.swift in Sources */,
-				42BFC2661DCF51D000EAD40E /* GCStravaSegmentListParser.swift in Sources */,
 				422FAED819A1DD6000D09773 /* GCMapViewController.m in Sources */,
-				42BFC2621DCF517F00EAD40E /* GCStravaSegmentListStarred.m in Sources */,
 				422FAED919A1DD6000D09773 /* GCTrackPoint.m in Sources */,
 				422FAEDA19A1DD6000D09773 /* GCViewConfig.m in Sources */,
 				422FAEDF19A1DD6000D09773 /* GCCellMap.m in Sources */,
 				422FAEE019A1DD6000D09773 /* GCService.m in Sources */,
-				42BFC2601DCF517700EAD40E /* GCStravaSegmentEffortStream.m in Sources */,
 				422FAEE119A1DD6000D09773 /* GCStatsOneFieldViewController.m in Sources */,
 				422FAEE919A1DD6000D09773 /* GCGarminActivityLapsParser.m in Sources */,
 				424F92D71B1073100075C5F1 /* GCMapWindCompass.m in Sources */,
@@ -6969,7 +6885,6 @@
 				42F3FB361DD783550042A9B1 /* GCFieldsDefs.m in Sources */,
 				42BFC24E1DCF507600EAD40E /* GCActivitiesOrganizerListRegister.m in Sources */,
 				42BFC2591DCF512F00EAD40E /* GCDerivedGroupedSeries.m in Sources */,
-				42BFC2651DCF51AF00EAD40E /* GCSegment.swift in Sources */,
 				4239CD6C1C4B93AE0059B83D /* GCCalendarDataMarkerInfo.m in Sources */,
 				42A7CCAA246E939300A1AE39 /* GCDerivedQueueElement.m in Sources */,
 				422F52121DFB51F700DD5551 /* FITFitFile.m in Sources */,
@@ -6983,7 +6898,6 @@
 				42BFC24B1DCF4F7F00EAD40E /* GCHealthZonesViewController.swift in Sources */,
 				42D8AEFD1B22D1BC00ADDD31 /* GCHealthKitSamplesToPointsParser.m in Sources */,
 				4225495F1EE73620004F4AE5 /* FITFitStatisticsWeight.swift in Sources */,
-				429D89A91FF6D95B001CE97A /* GCAthlete.swift in Sources */,
 				422FAF4719A1DD6000D09773 /* GCExportText.m in Sources */,
 				422FAF4819A1DD6000D09773 /* GCActivity+ExportText.m in Sources */,
 				4292B6CD1B1C66B400C7C05D /* GCHealthKitDayDetailRequest.m in Sources */,
@@ -7022,7 +6936,6 @@
 				422FAF8719A1DD6000D09773 /* GCFieldsCalculated.m in Sources */,
 				422FAF8919A1DD6000D09773 /* GCActivityTrackGraphOptionsViewController.m in Sources */,
 				422FAF8A19A1DD6000D09773 /* GCActivityTrackOptions.m in Sources */,
-				42BFC2611DCF517B00EAD40E /* GCStravaSegmentEfforts.m in Sources */,
 				422FAF8C19A1DD6000D09773 /* GCMapLapInfoView.m in Sources */,
 				422FAF9019A1DD6000D09773 /* GCActivityAutoLapChoices.m in Sources */,
 				422F52101DFB51E800DD5551 /* GCUnit+FIT.m in Sources */,
@@ -7036,14 +6949,12 @@
 				422FAF9519A1DD6000D09773 /* GCViewMaturityButton.m in Sources */,
 				422FAF9619A1DD6000D09773 /* GCViewActivityTypeButton.m in Sources */,
 				422FAF9719A1DD6000D09773 /* GCStravaActivityLapsParser.m in Sources */,
-				42BFC25D1DCF516800EAD40E /* GCStravaAthlete.m in Sources */,
 				42A22E0119E8895D004407B8 /* GCHealthSleepBlock.m in Sources */,
 				422FAF9C19A1DD6000D09773 /* GCViewIcons.m in Sources */,
 				422FAF9D19A1DD6000D09773 /* GCStatsGraphOptionViewController.m in Sources */,
 				42C1080E1B7DE8B000092315 /* GCApplicationContext.m in Sources */,
 				422FAF9F19A1DD6000D09773 /* GCActivity+UI.m in Sources */,
 				4226B42B1F65E2ED009E1104 /* GCWebRequestStandard.m in Sources */,
-				42BFC2641DCF51AC00EAD40E /* GCSegmentOrganizer.swift in Sources */,
 				422FAFA119A1DD6000D09773 /* GCHealthZone.m in Sources */,
 				422FAFA419A1DD6000D09773 /* GCActivityTypes.m in Sources */,
 				423F9FC619AD1D170057DB5A /* GCHistoryFieldDataSerieConfig.m in Sources */,
@@ -7149,7 +7060,6 @@
 			files = (
 				42ACFE9818C099AB00BF27A5 /* GCGarminLoginSSORequest.m in Sources */,
 				42E1A74D24277FF9006C868A /* GCActivity+BestRolling.m in Sources */,
-				42A3AA381D43F01A004FBFD0 /* GCStravaSegmentEfforts.m in Sources */,
 				428EBF5B186A2A2C0057021D /* GCDerivedOrganizer.m in Sources */,
 				42F3FB331DD783550042A9B1 /* GCFieldsDefs.m in Sources */,
 				427DDCBF1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */,
@@ -7196,7 +7106,6 @@
 				42A66BD1160D000D00DA29A5 /* GCViewConfig.m in Sources */,
 				4226B4291F65E2ED009E1104 /* GCWebRequestStandard.m in Sources */,
 				42D8CB681613AEFB00C0521B /* GCCellMap.m in Sources */,
-				429D89A81FF6D89E001CE97A /* GCAthlete.swift in Sources */,
 				42B89E7B1C8109C600F7142E /* GCCellEntryFieldChoiceViewController.m in Sources */,
 				4280C7D12364FC7C00223709 /* GCConnectStatsRequestWeather.m in Sources */,
 				42959CD518D5ECC500C0B841 /* GCService.m in Sources */,
@@ -7208,7 +7117,6 @@
 				42BC53671618EA1900576097 /* GCTrackStats.m in Sources */,
 				42CC45CB200A67C0003EB805 /* GCSettingsBugReport.m in Sources */,
 				42BC5391161E34C500576097 /* GCSettingsViewController.m in Sources */,
-				42A3AA3B1D43F51C004FBFD0 /* GCStravaSegmentEffortStream.m in Sources */,
 				42C3CF471DA15E6900C25709 /* GCAppGlobal.swift in Sources */,
 				42BC5395161E350B00576097 /* GCStatsMultiFieldViewController.m in Sources */,
 				420967511895566200D32CA7 /* GCDerivedDataSerie.m in Sources */,
@@ -7238,7 +7146,6 @@
 				422C70AE1642B677003779E0 /* GCHistoryAggregatedActivityStats.m in Sources */,
 				426B0F111DA119060091A734 /* FITFitMessage.m in Sources */,
 				421A514F1C82FA9400671587 /* GCCalendarDataDateMarkers.m in Sources */,
-				42C041C419A5D5F200FC20B3 /* GCHealthKitExportActivity.m in Sources */,
 				42453BAA1DD8B5940073ACCA /* GCMapGradientPathOverlay.m in Sources */,
 				42684EF41B2DB2A6001A90D2 /* GCSettingsSourceTableViewController.m in Sources */,
 				422657F8181D1C2E00373BDE /* GCWeather.m in Sources */,
@@ -7298,8 +7205,6 @@
 				42C1080D1B7DE8B000092315 /* GCApplicationContext.m in Sources */,
 				42453BA51DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m in Sources */,
 				421F39AD1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m in Sources */,
-				421844B01D75C3F5005B09BC /* GCSegmentOrganizer.swift in Sources */,
-				42A3AA311D43EE85004FBFD0 /* GCStravaAthlete.m in Sources */,
 				42E186D016A620E900D4513B /* GCGarminRequestActivityReload.m in Sources */,
 				421A514C1C82FA6C00671587 /* GCActivity+Fields.m in Sources */,
 				42E186D316A6225400D4513B /* GCGarminActivitySummaryParser.m in Sources */,
@@ -7334,12 +7239,9 @@
 				42A89C1F1D627444007CF90D /* GCUnitTrainingZone.m in Sources */,
 				42AB681716E0094A00C633BD /* GCFieldsCalculated.m in Sources */,
 				42AB681D16E2913300C633BD /* GCActivityTrackGraphOptionsViewController.m in Sources */,
-				427C65C01D4677FB00F5DF70 /* GCSegment.swift in Sources */,
 				42753D6A16E402EE005C8281 /* GCActivityTrackOptions.m in Sources */,
-				427C65C21D469E4E00F5DF70 /* GCStravaSegmentListParser.swift in Sources */,
 				42753D7016E6A881005C8281 /* GCMapLapInfoView.m in Sources */,
 				42C92FDF170FB73F0037602F /* GCActivityAutoLapChoices.m in Sources */,
-				42A3AA161D43D5A5004FBFD0 /* GCStravaSegmentListStarred.m in Sources */,
 				42C5A1B122AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */,
 				4285F0E31719CB1800A1FAA8 /* GCSettingsFilterViewController.m in Sources */,
 				42CDF8672413E05C003930A4 /* GCTrackPoint+Swim.m in Sources */,
@@ -7347,7 +7249,6 @@
 				426B0F0D1DA111AD0091A734 /* GCGarminSearchModernJsonParser.m in Sources */,
 				4257339A1BC05A1A0080D75F /* GCActivityPreviewingViewController.m in Sources */,
 				427CDB221778F0E10050CFE4 /* GCFieldsCalculatedTrack.m in Sources */,
-				424C8AA11D8D9F8100D8A50E /* GCStravaAthleteParser.swift in Sources */,
 				42959CCD18D4920900C0B841 /* GCStravaActivityListParser.m in Sources */,
 				42C0589C21D0525200109D54 /* RZFitMessageExtensions.swift in Sources */,
 				4209E19A1DA8E15700B80735 /* GCGarminRequestModernSearch.m in Sources */,
@@ -7381,7 +7282,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				421517CC2429607800FEE8D7 /* GCTestsActivitiesCalculated.m in Sources */,
-				421844B71D75D268005B09BC /* GCTestsSegments.swift in Sources */,
 				425CF5A91813CEEC009279C0 /* GCTestsActivities.m in Sources */,
 				42D9081C20338582000BBE07 /* GCTestsPerformance.m in Sources */,
 				42A89C261D63B2D7007CF90D /* GCTestHealthZones.m in Sources */,
@@ -7417,11 +7317,9 @@
 				422CC87D1E6ACA1700195414 /* FITFitMessage.swift in Sources */,
 				427F937C1BEDFF3E00C177F9 /* GCStatsMultiFieldGraphViewController.m in Sources */,
 				422CC8781E6ACA1700195414 /* GCField+FitFile.swift in Sources */,
-				42A3AA3C1D44EBB5004FBFD0 /* GCStravaSegmentListStarred.m in Sources */,
 				4280C7D22364FC7C00223709 /* GCConnectStatsRequestWeather.m in Sources */,
 				4226B42A1F65E2ED009E1104 /* GCWebRequestStandard.m in Sources */,
 				421A51531C82FB5D00671587 /* GCStatsHistGraphOptionViewController.m in Sources */,
-				42EEEB581D582ECD00F1E6DB /* GCStravaSegmentListParser.swift in Sources */,
 				42295E081EC6F4D900F4F7EE /* GCTestServiceGarmin.m in Sources */,
 				427DDCC01DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */,
 				42453BA61DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m in Sources */,
@@ -7433,11 +7331,9 @@
 				42B5E30E1BA5B900000FAE4E /* GCViewSwimStrokeColors.m in Sources */,
 				427DDCC91DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m in Sources */,
 				42B5E30F1BA5B900000FAE4E /* GCViewConfig.m in Sources */,
-				42EEEB561D582E9E00F1E6DB /* GCSegment.swift in Sources */,
 				42295E041EC6F38C00F4F7EE /* GCTestServicesViewController.m in Sources */,
 				427F935F1BEAA09E00C177F9 /* GCTestUISampleDataSourceHolder.m in Sources */,
 				42B5E3011BA5B8BD000FAE4E /* GCHealthKitDailySummaryParser.m in Sources */,
-				42A3AA3F1D44EBB5004FBFD0 /* GCStravaSegmentEffortStream.m in Sources */,
 				424208901BCAF71500F3DB12 /* GCActivity+UI.m in Sources */,
 				427F93671BEAAAA000C177F9 /* GCTestUISampleCellHolder.m in Sources */,
 				426A13601C5CCEFA00D61098 /* GCActivitySettings.m in Sources */,
@@ -7447,7 +7343,6 @@
 				421A51521C82FB4000671587 /* GCStatsHistGraphViewController.m in Sources */,
 				426A7F4C1C426A95000C5BCC /* GCTrackPointExtraIndex.m in Sources */,
 				426B0F0E1DA111AD0091A734 /* GCGarminSearchModernJsonParser.m in Sources */,
-				42A3AA3D1D44EBB5004FBFD0 /* GCStravaAthlete.m in Sources */,
 				42B5E2541BA5B216000FAE4E /* GCDerivedOrganizer.m in Sources */,
 				42B5E2551BA5B216000FAE4E /* GCDerivedDataSerie.m in Sources */,
 				42B5E2561BA5B216000FAE4E /* GCHealthZoneCalculator.m in Sources */,
@@ -7467,7 +7362,6 @@
 				42B5E2611BA5B216000FAE4E /* GCHealthKitActivityRequest.m in Sources */,
 				42B467BB1DC6A74200279DC8 /* GCAppProfiles.m in Sources */,
 				42B5E2621BA5B216000FAE4E /* GCHealthKitActivityParser.m in Sources */,
-				42B5E2631BA5B216000FAE4E /* GCHealthKitExportActivity.m in Sources */,
 				422CC8811E6ACA1700195414 /* FITFitFileInterpret.swift in Sources */,
 				42B5E2641BA5B216000FAE4E /* GCHealthKitBodyRequest.m in Sources */,
 				42B5E2651BA5B216000FAE4E /* GCHealthKitWorkoutsRequest.m in Sources */,
@@ -7505,7 +7399,6 @@
 				42B5E28D1BA5B216000FAE4E /* GCGarminLoginSimulatorRequest.m in Sources */,
 				42B5E28E1BA5B216000FAE4E /* GCGarminLoginSSORequest.m in Sources */,
 				42B5E2901BA5B216000FAE4E /* GCGarminSearchJsonParser.m in Sources */,
-				424C8AA21D8D9F8100D8A50E /* GCStravaAthleteParser.swift in Sources */,
 				427F93791BEDFF0400C177F9 /* GCStatsOneFieldViewController.m in Sources */,
 				4209E1921DA44EC800B80735 /* GCActivitiesOrganizerListRegister.m in Sources */,
 				42B5E2921BA5B216000FAE4E /* GCGarminActivityDetailJsonParser.m in Sources */,
@@ -7522,7 +7415,6 @@
 				42B5E29B1BA5B216000FAE4E /* GCGarminActivityTrack13Request.m in Sources */,
 				42B5E29C1BA5B216000FAE4E /* GCGarminRequestActivityList.m in Sources */,
 				42B5E29E1BA5B216000FAE4E /* GCGarminRequestActivityReload.m in Sources */,
-				429D89AA1FF6D95C001CE97A /* GCAthlete.swift in Sources */,
 				422AC6A81C1CCA3E002DDA9C /* GCCellActivity.m in Sources */,
 				422777761C36C940002F1D64 /* GCField.m in Sources */,
 				427F937A1BEDFF1A00C177F9 /* GCViewMaturityButton.m in Sources */,
@@ -7579,7 +7471,6 @@
 				429AFD0F22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */,
 				427F937E1BEDFF4300C177F9 /* GCStatsHistGraphConfig.m in Sources */,
 				423090DC23DDBB4C008AEE42 /* GCTestsSamples.m in Sources */,
-				42E4FB411D7AB2740061BB38 /* GCSegmentOrganizer.swift in Sources */,
 				422CC87C1E6ACA1700195414 /* FITFitMessage.m in Sources */,
 				42B5E2C81BA5B216000FAE4E /* GCHistoryFieldDataSerieConfig.m in Sources */,
 				42B5E2C91BA5B216000FAE4E /* GCHistoryFieldSummaryStats.m in Sources */,
@@ -7609,7 +7500,6 @@
 				42B467BA1DC6A56200279DC8 /* GCAppPasswordManager.swift in Sources */,
 				42B5E21B1BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.m in Sources */,
 				42B5E21E1BA5AF9A000FAE4E /* GCTestStats.m in Sources */,
-				42A3AA3E1D44EBB5004FBFD0 /* GCStravaSegmentEfforts.m in Sources */,
 				42B5E2201BA5AF9A000FAE4E /* GCTestUICellsViewController.m in Sources */,
 				42B5E2161BA5AF9A000FAE4E /* GCAppDelegate.m in Sources */,
 				422CC87A1E6ACA1700195414 /* FITFitFile.m in Sources */,
@@ -8183,7 +8073,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -8228,7 +8118,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "14B235DF-EF8A-4F34-BF15-4452D1620A7C";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "14B235DF-EF8A-4F34-BF15-4452D1620A7C";
@@ -8253,7 +8143,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 6.0.0.0;
+				CURRENT_PROJECT_VERSION = 6.0.1.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8274,7 +8164,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 6.0.0;
+				MARKETING_VERSION = 6.0.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -8304,7 +8194,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 6.0.0.0;
+				CURRENT_PROJECT_VERSION = 6.0.1.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = NO;
@@ -8326,7 +8216,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 6.0.0;
+				MARKETING_VERSION = 6.0.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -8358,7 +8248,6 @@
 				GCC_PREFIX_HEADER = "ConnectStats/ConnectStats-Prefix.pch";
 				HEADER_SEARCH_PATHS = $CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources;
 				INFOPLIST_FILE = "ConnectStatsTests/ConnectStatsTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8389,7 +8278,6 @@
 				GCC_PREFIX_HEADER = "ConnectStats/ConnectStats-Prefix.pch";
 				HEADER_SEARCH_PATHS = $CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources;
 				INFOPLIST_FILE = "ConnectStatsTests/ConnectStatsTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8433,7 +8321,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "ConnectStatsTestApp/ConnectStatsTestApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8479,7 +8366,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "ConnectStatsTestApp/ConnectStatsTestApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

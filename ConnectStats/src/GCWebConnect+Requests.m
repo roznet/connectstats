@@ -49,15 +49,10 @@
 #import "GCHealthKitWorkoutsRequest.h"
 #import "GCHealthKitDailySummaryRequest.h"
 #import "GCHealthKitDayDetailRequest.h"
-#import "GCHealthKitExportActivity.h"
 #import "GCHealthKitSourcesRequest.h"
 
 #import "GCStravaActivityList.h"
 #import "GCStravaActivityStreams.h"
-#import "GCStravaSegmentListStarred.h"
-#import "GCStravaAthlete.h"
-#import "GCStravaSegmentEfforts.h"
-#import "GCStravaSegmentEffortStream.h"
 
 #import "GCDerivedRequest.h"
 #import "GCHealthOrganizer.h"
@@ -107,7 +102,6 @@
             [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
             [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:connectStatsReload andNavigationController:[GCAppGlobal currentNavigationController]]];
         });
-        
     }
     
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
@@ -123,13 +117,6 @@
         dispatch_async(dispatch_get_main_queue(), ^(){
             BOOL stravaReload = (reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava]);
             [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:stravaReload]];
-        });
-    }
-    // For testing
-    if([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_SEGMENTS defaultValue:NO]){
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            [self addRequest:[GCStravaAthlete stravaAthlete:[GCAppGlobal currentNavigationController]]];
-            [self addRequest:[GCStravaSegmentListStarred segmentListStarred:[GCAppGlobal currentNavigationController]]];
         });
     }
 
@@ -282,16 +269,20 @@
 #pragma mark - connectstats
 
 -(void)connectStatsDownloadActivityTrackpoints:(GCActivity*)act{
-    if( [GCAppGlobal currentNavigationController] && ( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] || [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] )){
+    if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] || [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] ){
         dispatch_async(dispatch_get_main_queue(), ^(){
-            [self addRequest:[GCConnectStatsRequestFitFile requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
+            if( [GCAppGlobal currentNavigationController] ){
+                [self addRequest:[GCConnectStatsRequestFitFile requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
+            };
         });
     }
 }
 -(void)connectStatsDownloadWeather:(GCActivity *)act{
-    if( [GCAppGlobal currentNavigationController] && ( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] || [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] )){
+    if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] || [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] ){
         dispatch_async(dispatch_get_main_queue(), ^(){
-            [self addRequest:[GCConnectStatsRequestWeather requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
+            if( [GCAppGlobal currentNavigationController] ){
+                [self addRequest:[GCConnectStatsRequestWeather requestWithActivity:act andNavigationController:[GCAppGlobal currentNavigationController]]];
+            };
         });
     }
 
@@ -325,10 +316,6 @@
         }
     }
     [self addRequest:[GCHealthKitBodyRequest request]];
-}
-
--(void)healthStoreExportActivity:(GCActivity*)act{
-    [self addRequest:[GCHealthKitExportActivity healthKitExportActivity:act]];
 }
 
 -(void)healthStoreDayDetails:(NSDate * )day{

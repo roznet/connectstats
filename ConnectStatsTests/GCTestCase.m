@@ -85,7 +85,7 @@
     [GCDerivedOrganizer ensureDbStructure:deriveddb];
     
     [[GCAppGlobal profile] configSet:CONFIG_ENABLE_DERIVED boolVal:false];
-    GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initForTestModeWithDb:deriveddb andFilePrefix:name];
+    GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initForTestModeWithDb:deriveddb thread:nil andFilePrefix:name];
     return derived;
 }
 

@@ -373,6 +373,9 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     }else{
         for (NSUInteger i=0; rv && i<self.count; i++) {
             rv = rv && [[self dataPointAtIndex:i] isEqualToPoint:[other dataPointAtIndex:i]];
+            if( rv == false){
+                NSLog(@"%@ %@ %@", @(i), [self dataPointAtIndex:i], [other dataPointAtIndex:i]);
+            }
         }
     }
     return rv;
@@ -1804,7 +1807,8 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     // debugidx if != -1 will dump all the number contributing to that specific
     // index max or min
     bestidx = calloc(range, sizeof(size_t));
-    size_t debugidx = 5;
+    BOOL debug_trace = false;
+    size_t debugidx = -1;
     
     // populate per unit data:
     //   rolling    n:0    1    2    3    4
@@ -1824,14 +1828,14 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                 switch (statistic) {
                     case gcStatsWeightedMean:
                         // We haven't reach n values yet, add i_th
-                        if( n == debugidx ){
+                        if( debug_trace && n == debugidx ){
                             RZLog(RZLogInfo,@"add: rolling[%lu] += values[%lu] / (n+1) = %f / %lu = %f + %f / %lu = %f ", n, i,  values[i], n+1, rolling[n], values[i], n+1, rolling[n] + (values[i]/(n+1)));
                         }
                         rolling[n] += values[i]/(n+1);
                         break;
                     case gcStatsSum:
                         // We haven't reach n values yet, add i_th
-                        if( n == debugidx ){
+                        if( debug_trace && n == debugidx ){
                             RZLog(RZLogInfo,@"add: rolling[%lu] += values[%lu] = %f + %f = %f ", n, i, rolling[n], values[i], rolling[n] + values[i]);
                         }
 
@@ -1857,7 +1861,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                     case gcStatsSum:
                     {
                         // We have reach n values, add i_th, but remove i_th - (n_th+1)
-                        if( n == debugidx ){
+                        if( debug_trace && n == debugidx ){
                             RZLog(RZLogInfo,@"add: rolling[%lu] += values[%lu] - values[%lu] = %f + %f - %f = %f ", n, i, i-n, rolling[n], values[i], values[i-n], rolling[n] + values[i] -values[i-n]);
                         }
                         double add = values[i] - values[i-n];
@@ -1899,7 +1903,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                     if ( (select==gcStatsMax && best[n]<rolling[n]) ||
                         (select==gcStatsMin && best[n]>rolling[n]) )
                     {
-                        if( n == debugidx ){
+                        if( debug_trace && n == debugidx ){
                             RZLog(RZLogInfo,@"found: best[%lu]=%f rolling[%lu]=%f index=[%lu-%lu]", n,best[n],n,rolling[n], i-n, i);
                         }
                         best[n]=rolling[n];

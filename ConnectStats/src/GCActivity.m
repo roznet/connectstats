@@ -1058,12 +1058,13 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 #pragma mark - Load Trackpoints
 
 -(void)clearTrackdb{
-    [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",_activityId]];
+    [self.useTrackDb close];
+    self.useTrackDb = nil;
     [self setTrackpointsCache:nil];
     [self setLapsCache:nil];
     [self setCalculatedLaps:nil];
     [self setCachedCalculatedTracks:nil];
-    self.useTrackDb = nil;
+    [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",_activityId]];
 
     _downloadRequested = false;
 }
@@ -1086,6 +1087,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         case gcDownloadMethodStrava:
         case gcDownloadMethodConnectStats:
             [[GCAppGlobal derived] forceReprocessActivity:_activityId];
+            /*if( self.externalServiceActivityId ){
+                [[GCAppGlobal web] garminDownloadActivitySummary:self.externalServiceActivityId];
+            }*/
             break;
         case gcDownloadMethodSportTracks:
             break;
@@ -1438,7 +1442,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if (!_lapsCache) {
         [self loadTrackPoints];
     }
-    return _lapsCache[idx];
+    return idx < _lapsCache.count ? _lapsCache[idx] : nil;
 }
 
 

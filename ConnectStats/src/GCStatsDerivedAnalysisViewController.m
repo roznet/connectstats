@@ -33,11 +33,18 @@
 #import "GCStatsDerivedAnalysisViewControllerConsts.h"
 #import "GCAppGlobal.h"
 
+typedef NS_ENUM(NSUInteger) {
+    gcRebuildFree,
+    gcRebuildDownload,
+    gcRebuildCalculate
+} gcRebuildStatus;
+
 @interface GCStatsDerivedAnalysisViewController ()
 @property (nonatomic,retain) NSObject<GCStatsMultiFieldConfigViewDelegate> * delegate;
 @property (nonatomic,retain) NSArray<GCField*>*fields;
 @property (nonatomic,retain) NSArray<GCDerivedDataSerie*>*choices;
 @property (nonatomic,readonly) GCStatsMultiFieldConfig * config;
+@property (nonatomic,assign) gcRebuildStatus rebuildStatus;
 @end
 
 @implementation GCStatsDerivedAnalysisViewController
@@ -54,12 +61,14 @@
     [super viewWillAppear:animated];
     
     [[GCAppGlobal derived] attach:self];
+    [[GCAppGlobal web] attach:self];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
     [[GCAppGlobal derived] detach:self];
+    [[GCAppGlobal web] detach:self];
 }
 
 +(GCStatsDerivedAnalysisViewController*)controllerWithDelegate:(NSObject<GCStatsMultiFieldConfigViewDelegate>*)delegate{
@@ -69,6 +78,8 @@
 
     return rv;
 }
+
+#pragma mark - TableView Delegate and DataSource
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return GC_SECTION_END;
@@ -83,13 +94,6 @@
         return GC_ACTION_END;
     }
     return 0;
-}
-
--(GCDerivedDataSerie*)currentDerivedDataSerie{
-    return [self.config currentDerivedDataSerie];
-}
--(GCStatsMultiFieldConfig*)config{
-    return self.delegate.config;
 }
 
 -(nonnull UITableViewCell *)tableView:(UITableView *)tableView derivedCellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -161,15 +165,8 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if( indexPath.section == GC_SECTION_ACTIONS && indexPath.row == GC_ACTION_REBUILD){
-        NSArray<GCActivity*>*activities = [[GCAppGlobal organizer] activities];
-        GCDerivedDataSerie * current = self.config.currentDerivedDataSerie;
-        NSArray<GCActivity*>*contained = [current containedActivitiesIn:activities];
-        if( contained.count > 0){
-            [[GCAppGlobal derived] rebuildDerivedDataSerie:gcDerivedTypeBestRolling
-                                               forActivity:contained.firstObject
-                                              inActivities:contained];
-            [self.delegate configChanged];
-            [self.tableView reloadData];
+        if( self.rebuildStatus == gcRebuildFree){
+            [self rebuildProcessStart];
         }
     }else if( indexPath.section == GC_SECTION_STATUS){
         NSArray<GCDerivedGroupedSeries*>*series = self.config.availableDataSeries;
@@ -227,10 +224,160 @@
     
 }
 
--(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
+
+#pragma mark - access
+
+-(GCDerivedDataSerie*)currentDerivedDataSerie{
+    return [self.config currentDerivedDataSerie];
+}
+-(GCStatsMultiFieldConfig*)config{
+    return self.delegate.config;
+}
+
+#pragma mark - Rebuild process
+
+-(void)rebuildProcessNextStage{
+    switch( self.rebuildStatus)
+        case gcRebuildFree:{
+            self.rebuildStatus = gcRebuildDownload;
+            break;
+        case gcRebuildDownload:
+            self.rebuildStatus = gcRebuildCalculate;
+            break;
+        case gcRebuildCalculate:
+            self.rebuildStatus = gcRebuildFree;
+            break;
+    }
+    [self rebuildProcess];
+}
+
+-(void)rebuildProcessStart{
+    if( self.rebuildStatus == gcRebuildFree ){
+        [self rebuildProcessNextStage];
+    }
+}
+
+-(void)rebuildUpdateStatusMessage{
+    static NSUInteger counter = 0;
+    NSMutableString * dots = [NSMutableString stringWithString:@"."];
+    
+    counter += 1;
+    
+    for(NSUInteger i=0;i<counter%6;i++){
+        [dots appendString:@"."];
+    }
+    
+    NSString * message = [NSString stringWithFormat:NSLocalizedString(@"Rebuilding %@%@", "Derived Analysis"),
+                          [self.config.currentDerivedDataSerie.bucketStart calendarUnitFormat:NSCalendarUnitMonth],
+                          dots];
+    
+    NSString * subtext = nil;
+    
+    switch( self.rebuildStatus) {
+        case gcRebuildDownload:
+        {
+            subtext = NSLocalizedString(@"Downloading Missing Activities", "Derived Analysis");
+            break;
+        }
+        case gcRebuildCalculate:
+        {
+            subtext = NSLocalizedString(@"Recalculating Best Rolling", "Derived Analysis");
+            break;
+        }
+        case gcRebuildFree:
+        {
+            subtext = NSLocalizedString(@"Done", "Derived Analysis");
+            break;
+        }
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^(){
-        [self.tableView reloadData];
+        GCCellGrid * grcell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:GC_ACTION_REBUILD inSection:GC_SECTION_ACTIONS]];
+        [grcell labelForRow:0 andCol:0].text = message;
+        [grcell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withString:subtext];
     });
+
+}
+
+-(void)rebuildProcess{
+    switch( self.rebuildStatus) {
+        case gcRebuildFree:
+            // do nothing
+            break;
+        case gcRebuildDownload:
+        {
+            [self rebuildUpdateStatusMessage];
+            [GCAppGlobal derived].pauseCalculation = true;
+            RZLog(RZLogInfo, @"Starting rebuild download stage");
+            NSArray<GCActivity*>*activities = [[GCAppGlobal organizer] activities];
+            GCDerivedDataSerie * current = self.config.currentDerivedDataSerie;
+            NSArray<GCActivity*>*contained = [current containedActivitiesIn:activities];
+            BOOL some = false;
+            for (GCActivity * act in contained) {
+                if( [act trackPointsRequireDownload] ){
+                    // force download
+                    [act trackpoints];
+                    some = true;
+                }
+            }
+            if( ! some ){
+                [self rebuildProcessNextStage];
+            }
+            break;
+        }
+        case gcRebuildCalculate:
+        {
+            [self rebuildUpdateStatusMessage];
+            [GCAppGlobal derived].pauseCalculation = false;
+
+            RZLog(RZLogInfo, @"Starting rebuild calculate stage");
+            NSArray<GCActivity*>*activities = [[GCAppGlobal organizer] activities];
+            GCDerivedDataSerie * current = self.config.currentDerivedDataSerie;
+            NSArray<GCActivity*>*contained = [current containedActivitiesIn:activities];
+            if( contained.count > 0){
+                [[GCAppGlobal derived] rebuildDerivedDataSerie:gcDerivedTypeBestRolling
+                                                   forActivity:contained.firstObject
+                                                  inActivities:contained];
+                
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self.delegate configChanged];
+                    [self.tableView reloadData];
+                });
+            }
+        }
+    }
+
+}
+
+#pragma mark - Cell and RZChild Delegate
+
+-(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
+    BOOL reload = false;
+    if( [theParent isKindOfClass:[GCDerivedOrganizer class]]){
+        if( [theInfo.stringInfo isEqualToString:kNOTIFY_DERIVED_END] ){
+            RZLog(RZLogInfo,@"Derived Finished");
+            reload = true;
+            [GCAppGlobal derived].pauseCalculation = false;
+            [self rebuildProcessNextStage];
+        }
+    }else if ([theParent isKindOfClass:[GCWebConnect class]]){
+        if( [theInfo.stringInfo isEqualToString:NOTIFY_END] ){
+            RZLog(RZLogInfo,@"Web Finished");
+            reload = true;
+            [GCAppGlobal derived].pauseCalculation = false;
+            [self rebuildProcessNextStage];
+        }
+    }
+    
+    
+    if( reload ){
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self.delegate configChanged];
+            [self.tableView reloadData];
+        });
+    }else{
+        [self rebuildUpdateStatusMessage];
+    }
 }
 
 -(void)cellWasChanged:(id<GCEntryFieldProtocol>)cell{

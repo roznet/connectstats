@@ -888,7 +888,6 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }else{
         [self setupForRows:2 andCols:3];
     }
-
     GCLap * lap = [activity lapNumber:idx];
     GCNumberWithUnit * dist = [[lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activity.activityType] inActivity:activity]
                                convertToUnit:activity.distanceDisplayUnit];
