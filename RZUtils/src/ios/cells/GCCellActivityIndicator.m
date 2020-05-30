@@ -46,7 +46,11 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.indicator = RZReturnAutorelease([[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium]);
+        if( @available(iOS 13.0, *) ){
+            self.indicator = RZReturnAutorelease([[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium]);
+        }else{
+            self.indicator = RZReturnAutorelease([[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]);
+        }
         self.label = RZReturnAutorelease([[UILabel alloc] initWithFrame:CGRectZero]);
         _label.backgroundColor	= [UIColor clearColor];
 		_label.font				= [RZViewConfig systemFontOfSize:10];
