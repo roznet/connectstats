@@ -32,7 +32,7 @@
 #define GC_SUMMARY_CUMULATIVE_DISTANCE  0
 #define GC_SUMMARY_PERFORMANCE          1
 #define GC_SUMMARY_DERIVED              2
-#define GC_SUMMARY_DERIVED_HIST         3
-#define GC_SUMMARY_END                  4
+#define GC_SUMMARY_END                  3
+#define GC_SUMMARY_DERIVED_HIST         4
 // Disabled
 
