@@ -226,7 +226,7 @@
             }else{
                 [self.activity updateSummaryDataFromActivity:fitAct];
                 [self.activity updateTrackpointsFromActivity:fitAct];
-                [self.activity saveTrackpoints:self.activity.trackpoints andLaps:self.activity.laps];
+                [self.activity saveTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
             }
         }
     }
