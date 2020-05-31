@@ -265,10 +265,10 @@ class StructElem :
         defs = { 'member': member, 'name': self.member, 'invalid': self.ctype + '_INVALID', 'multiplier':self.multiplier, 'offset':self.offset }
         if self.is_value(context):
             formula = 'Double(x.{member})'.format( **defs )
+            if self.multiplier and float(self.multiplier) != 1.0:
+                formula = '({}/Double({multiplier}))'.format(formula, **defs)
             if self.offset and float(self.offset) != 0.0:
                 formula += '-Double({offset})'.format(**defs)
-            if self.multiplier and float(self.multiplier) != 1.0:
-                formula = '({})/Double({multiplier})'.format(formula, **defs)
             lines = [ prefix + 'if x.{member} != {invalid}  {{'.format( **defs ),
                       prefix + '  let val : Double = {}'.format( formula ),
                       prefix + '  rv[ "{name}" ] = val'.format(**defs),

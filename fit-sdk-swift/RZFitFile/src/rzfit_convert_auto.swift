@@ -3919,7 +3919,7 @@ func rzfit_activity_mesg_value_dict( ptr : UnsafePointer<FIT_ACTIVITY_MESG>) -> 
     rv[ "timestamp" ] = val
   }
   if x.total_timer_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_timer_time))/Double(1000)
+    let val : Double = (Double(x.total_timer_time)/Double(1000))
     rv[ "total_timer_time" ] = val
   }
   if x.local_timestamp != FIT_LOCAL_DATE_TIME_INVALID  {
@@ -3983,7 +3983,7 @@ func rzfit_ant_rx_mesg_value_dict( ptr : UnsafePointer<FIT_ANT_RX_MESG>) -> [Str
     rv[ "timestamp" ] = val
   }
   if x.fractional_timestamp != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.fractional_timestamp))/Double(32768)
+    let val : Double = (Double(x.fractional_timestamp)/Double(32768))
     rv[ "fractional_timestamp" ] = val
   }
   if x.mesg_id != FIT_BYTE_INVALID  {
@@ -4032,7 +4032,7 @@ func rzfit_ant_tx_mesg_value_dict( ptr : UnsafePointer<FIT_ANT_TX_MESG>) -> [Str
     rv[ "timestamp" ] = val
   }
   if x.fractional_timestamp != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.fractional_timestamp))/Double(32768)
+    let val : Double = (Double(x.fractional_timestamp)/Double(32768))
     rv[ "fractional_timestamp" ] = val
   }
   if x.mesg_id != FIT_BYTE_INVALID  {
@@ -4097,15 +4097,15 @@ func rzfit_aviation_attitude_mesg_value_dict( ptr : UnsafePointer<FIT_AVIATION_A
     rv[ "roll" ] = val
   }
   if x.accel_lateral != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.accel_lateral))/Double(100)
+    let val : Double = (Double(x.accel_lateral)/Double(100))
     rv[ "accel_lateral" ] = val
   }
   if x.accel_normal != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.accel_normal))/Double(100)
+    let val : Double = (Double(x.accel_normal)/Double(100))
     rv[ "accel_normal" ] = val
   }
   if x.turn_rate != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.turn_rate))/Double(1024)
+    let val : Double = (Double(x.turn_rate)/Double(1024))
     rv[ "turn_rate" ] = val
   }
   if x.track != FIT_UINT16_INVALID  {
@@ -4158,7 +4158,7 @@ func rzfit_bike_profile_mesg_value_dict( ptr : UnsafePointer<FIT_BIKE_PROFILE_ME
   var rv : [String:Double] = [:]
   let x : FIT_BIKE_PROFILE_MESG = ptr.pointee
   if x.odometer != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.odometer))/Double(100)
+    let val : Double = (Double(x.odometer)/Double(100))
     rv[ "odometer" ] = val
   }
   if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
@@ -4182,19 +4182,19 @@ func rzfit_bike_profile_mesg_value_dict( ptr : UnsafePointer<FIT_BIKE_PROFILE_ME
     rv[ "bike_power_ant_id" ] = val
   }
   if x.custom_wheelsize != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.custom_wheelsize))/Double(1000)
+    let val : Double = (Double(x.custom_wheelsize)/Double(1000))
     rv[ "custom_wheelsize" ] = val
   }
   if x.auto_wheelsize != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.auto_wheelsize))/Double(1000)
+    let val : Double = (Double(x.auto_wheelsize)/Double(1000))
     rv[ "auto_wheelsize" ] = val
   }
   if x.bike_weight != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.bike_weight))/Double(10)
+    let val : Double = (Double(x.bike_weight)/Double(10))
     rv[ "bike_weight" ] = val
   }
   if x.power_cal_factor != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.power_cal_factor))/Double(10)
+    let val : Double = (Double(x.power_cal_factor)/Double(10))
     rv[ "power_cal_factor" ] = val
   }
   if x.auto_wheel_cal != FIT_BOOL_INVALID  {
@@ -4636,7 +4636,7 @@ func rzfit_course_point_mesg_value_dict( ptr : UnsafePointer<FIT_COURSE_POINT_ME
     rv[ "position_long" ] = val
   }
   if x.distance != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.distance))/Double(100)
+    let val : Double = (Double(x.distance)/Double(100))
     rv[ "distance" ] = val
   }
   if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
@@ -4762,7 +4762,7 @@ func rzfit_device_info_mesg_value_dict( ptr : UnsafePointer<FIT_DEVICE_INFO_MESG
     rv[ "software_version" ] = val
   }
   if x.battery_voltage != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.battery_voltage))/Double(256)
+    let val : Double = (Double(x.battery_voltage)/Double(256))
     rv[ "battery_voltage" ] = val
   }
   if x.ant_device_number != FIT_UINT16Z_INVALID  {
@@ -5743,7 +5743,7 @@ func rzfit_hrv_mesg_value_dict( ptr : UnsafePointer<FIT_HRV_MESG>) -> [String:Do
   var rv : [String:Double] = [:]
   let x : FIT_HRV_MESG = ptr.pointee
   if x.time != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.time))/Double(1000)
+    let val : Double = (Double(x.time)/Double(1000))
     rv[ "time" ] = val
   }
   return rv
@@ -5784,15 +5784,15 @@ func rzfit_hr_mesg_value_dict( ptr : UnsafePointer<FIT_HR_MESG>) -> [String:Doub
     rv[ "timestamp" ] = val
   }
   if x.event_timestamp != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.event_timestamp))/Double(1024)
+    let val : Double = (Double(x.event_timestamp)/Double(1024))
     rv[ "event_timestamp" ] = val
   }
   if x.fractional_timestamp != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.fractional_timestamp))/Double(32768)
+    let val : Double = (Double(x.fractional_timestamp)/Double(32768))
     rv[ "fractional_timestamp" ] = val
   }
   if x.time256 != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.time256))/Double(256)
+    let val : Double = (Double(x.time256)/Double(256))
     rv[ "time256" ] = val
   }
   if x.filtered_bpm != FIT_UINT8_INVALID  {
@@ -5908,15 +5908,15 @@ func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Do
     rv[ "end_position_long" ] = val
   }
   if x.total_elapsed_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_elapsed_time))/Double(1000)
+    let val : Double = (Double(x.total_elapsed_time)/Double(1000))
     rv[ "total_elapsed_time" ] = val
   }
   if x.total_timer_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_timer_time))/Double(1000)
+    let val : Double = (Double(x.total_timer_time)/Double(1000))
     rv[ "total_timer_time" ] = val
   }
   if x.total_distance != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_distance))/Double(100)
+    let val : Double = (Double(x.total_distance)/Double(100))
     rv[ "total_distance" ] = val
   }
   if x.total_cycles != FIT_UINT32_INVALID  {
@@ -5928,43 +5928,43 @@ func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Do
     rv[ "total_work" ] = val
   }
   if x.total_moving_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_moving_time))/Double(1000)
+    let val : Double = (Double(x.total_moving_time)/Double(1000))
     rv[ "total_moving_time" ] = val
   }
   if x.time_in_hr_zone != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.time_in_hr_zone))/Double(1000)
+    let val : Double = (Double(x.time_in_hr_zone)/Double(1000))
     rv[ "time_in_hr_zone" ] = val
   }
   if x.time_in_speed_zone != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.time_in_speed_zone))/Double(1000)
+    let val : Double = (Double(x.time_in_speed_zone)/Double(1000))
     rv[ "time_in_speed_zone" ] = val
   }
   if x.time_in_cadence_zone != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.time_in_cadence_zone))/Double(1000)
+    let val : Double = (Double(x.time_in_cadence_zone)/Double(1000))
     rv[ "time_in_cadence_zone" ] = val
   }
   if x.time_in_power_zone != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.time_in_power_zone))/Double(1000)
+    let val : Double = (Double(x.time_in_power_zone)/Double(1000))
     rv[ "time_in_power_zone" ] = val
   }
   if x.enhanced_avg_speed != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.enhanced_avg_speed))/Double(1000)
+    let val : Double = (Double(x.enhanced_avg_speed)/Double(1000))
     rv[ "enhanced_avg_speed" ] = val
   }
   if x.enhanced_max_speed != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.enhanced_max_speed))/Double(1000)
+    let val : Double = (Double(x.enhanced_max_speed)/Double(1000))
     rv[ "enhanced_max_speed" ] = val
   }
   if x.enhanced_avg_altitude != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.enhanced_avg_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.enhanced_avg_altitude)/Double(5))-Double(500)
     rv[ "enhanced_avg_altitude" ] = val
   }
   if x.enhanced_min_altitude != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.enhanced_min_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.enhanced_min_altitude)/Double(5))-Double(500)
     rv[ "enhanced_min_altitude" ] = val
   }
   if x.enhanced_max_altitude != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.enhanced_max_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.enhanced_max_altitude)/Double(5))-Double(500)
     rv[ "enhanced_max_altitude" ] = val
   }
   if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
@@ -5980,11 +5980,11 @@ func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Do
     rv[ "total_fat_calories" ] = val
   }
   if x.avg_speed != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_speed))/Double(1000)
+    let val : Double = (Double(x.avg_speed)/Double(1000))
     rv[ "avg_speed" ] = val
   }
   if x.max_speed != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.max_speed))/Double(1000)
+    let val : Double = (Double(x.max_speed)/Double(1000))
     rv[ "max_speed" ] = val
   }
   if x.avg_power != FIT_UINT16_INVALID  {
@@ -6020,7 +6020,7 @@ func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Do
     rv[ "first_length_index" ] = val
   }
   if x.avg_stroke_distance != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_stroke_distance))/Double(100)
+    let val : Double = (Double(x.avg_stroke_distance)/Double(100))
     rv[ "avg_stroke_distance" ] = val
   }
   if x.num_active_lengths != FIT_UINT16_INVALID  {
@@ -6028,47 +6028,47 @@ func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Do
     rv[ "num_active_lengths" ] = val
   }
   if x.avg_altitude != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.avg_altitude)/Double(5))-Double(500)
     rv[ "avg_altitude" ] = val
   }
   if x.max_altitude != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.max_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.max_altitude)/Double(5))-Double(500)
     rv[ "max_altitude" ] = val
   }
   if x.avg_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_grade))/Double(100)
+    let val : Double = (Double(x.avg_grade)/Double(100))
     rv[ "avg_grade" ] = val
   }
   if x.avg_pos_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_pos_grade))/Double(100)
+    let val : Double = (Double(x.avg_pos_grade)/Double(100))
     rv[ "avg_pos_grade" ] = val
   }
   if x.avg_neg_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_neg_grade))/Double(100)
+    let val : Double = (Double(x.avg_neg_grade)/Double(100))
     rv[ "avg_neg_grade" ] = val
   }
   if x.max_pos_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.max_pos_grade))/Double(100)
+    let val : Double = (Double(x.max_pos_grade)/Double(100))
     rv[ "max_pos_grade" ] = val
   }
   if x.max_neg_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.max_neg_grade))/Double(100)
+    let val : Double = (Double(x.max_neg_grade)/Double(100))
     rv[ "max_neg_grade" ] = val
   }
   if x.avg_pos_vertical_speed != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_pos_vertical_speed))/Double(1000)
+    let val : Double = (Double(x.avg_pos_vertical_speed)/Double(1000))
     rv[ "avg_pos_vertical_speed" ] = val
   }
   if x.avg_neg_vertical_speed != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_neg_vertical_speed))/Double(1000)
+    let val : Double = (Double(x.avg_neg_vertical_speed)/Double(1000))
     rv[ "avg_neg_vertical_speed" ] = val
   }
   if x.max_pos_vertical_speed != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.max_pos_vertical_speed))/Double(1000)
+    let val : Double = (Double(x.max_pos_vertical_speed)/Double(1000))
     rv[ "max_pos_vertical_speed" ] = val
   }
   if x.max_neg_vertical_speed != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.max_neg_vertical_speed))/Double(1000)
+    let val : Double = (Double(x.max_neg_vertical_speed)/Double(1000))
     rv[ "max_neg_vertical_speed" ] = val
   }
   if x.repetition_num != FIT_UINT16_INVALID  {
@@ -6076,7 +6076,7 @@ func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Do
     rv[ "repetition_num" ] = val
   }
   if x.min_altitude != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.min_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.min_altitude)/Double(5))-Double(500)
     rv[ "min_altitude" ] = val
   }
   if x.wkt_step_index != FIT_MESSAGE_INDEX_INVALID  {
@@ -6096,15 +6096,15 @@ func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Do
     rv[ "zone_count" ] = val
   }
   if x.avg_vertical_oscillation != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_vertical_oscillation))/Double(10)
+    let val : Double = (Double(x.avg_vertical_oscillation)/Double(10))
     rv[ "avg_vertical_oscillation" ] = val
   }
   if x.avg_stance_time_percent != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_stance_time_percent))/Double(100)
+    let val : Double = (Double(x.avg_stance_time_percent)/Double(100))
     rv[ "avg_stance_time_percent" ] = val
   }
   if x.avg_stance_time != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_stance_time))/Double(10)
+    let val : Double = (Double(x.avg_stance_time)/Double(10))
     rv[ "avg_stance_time" ] = val
   }
   if x.player_score != FIT_UINT16_INVALID  {
@@ -6112,31 +6112,31 @@ func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Do
     rv[ "player_score" ] = val
   }
   if x.avg_total_hemoglobin_conc != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_total_hemoglobin_conc))/Double(100)
+    let val : Double = (Double(x.avg_total_hemoglobin_conc)/Double(100))
     rv[ "avg_total_hemoglobin_conc" ] = val
   }
   if x.min_total_hemoglobin_conc != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.min_total_hemoglobin_conc))/Double(100)
+    let val : Double = (Double(x.min_total_hemoglobin_conc)/Double(100))
     rv[ "min_total_hemoglobin_conc" ] = val
   }
   if x.max_total_hemoglobin_conc != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.max_total_hemoglobin_conc))/Double(100)
+    let val : Double = (Double(x.max_total_hemoglobin_conc)/Double(100))
     rv[ "max_total_hemoglobin_conc" ] = val
   }
   if x.avg_saturated_hemoglobin_percent != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_saturated_hemoglobin_percent))/Double(10)
+    let val : Double = (Double(x.avg_saturated_hemoglobin_percent)/Double(10))
     rv[ "avg_saturated_hemoglobin_percent" ] = val
   }
   if x.min_saturated_hemoglobin_percent != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.min_saturated_hemoglobin_percent))/Double(10)
+    let val : Double = (Double(x.min_saturated_hemoglobin_percent)/Double(10))
     rv[ "min_saturated_hemoglobin_percent" ] = val
   }
   if x.max_saturated_hemoglobin_percent != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.max_saturated_hemoglobin_percent))/Double(10)
+    let val : Double = (Double(x.max_saturated_hemoglobin_percent)/Double(10))
     rv[ "max_saturated_hemoglobin_percent" ] = val
   }
   if x.avg_vam != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_vam))/Double(1000)
+    let val : Double = (Double(x.avg_vam)/Double(1000))
     rv[ "avg_vam" ] = val
   }
   if x.avg_heart_rate != FIT_UINT8_INVALID  {
@@ -6176,15 +6176,15 @@ func rzfit_lap_mesg_value_dict( ptr : UnsafePointer<FIT_LAP_MESG>) -> [String:Do
     rv[ "min_heart_rate" ] = val
   }
   if x.avg_fractional_cadence != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.avg_fractional_cadence))/Double(128)
+    let val : Double = (Double(x.avg_fractional_cadence)/Double(128))
     rv[ "avg_fractional_cadence" ] = val
   }
   if x.max_fractional_cadence != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.max_fractional_cadence))/Double(128)
+    let val : Double = (Double(x.max_fractional_cadence)/Double(128))
     rv[ "max_fractional_cadence" ] = val
   }
   if x.total_fractional_cycles != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.total_fractional_cycles))/Double(128)
+    let val : Double = (Double(x.total_fractional_cycles)/Double(128))
     rv[ "total_fractional_cycles" ] = val
   }
   return rv
@@ -6252,11 +6252,11 @@ func rzfit_length_mesg_value_dict( ptr : UnsafePointer<FIT_LENGTH_MESG>) -> [Str
     rv[ "start_time" ] = val
   }
   if x.total_elapsed_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_elapsed_time))/Double(1000)
+    let val : Double = (Double(x.total_elapsed_time)/Double(1000))
     rv[ "total_elapsed_time" ] = val
   }
   if x.total_timer_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_timer_time))/Double(1000)
+    let val : Double = (Double(x.total_timer_time)/Double(1000))
     rv[ "total_timer_time" ] = val
   }
   if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
@@ -6268,7 +6268,7 @@ func rzfit_length_mesg_value_dict( ptr : UnsafePointer<FIT_LENGTH_MESG>) -> [Str
     rv[ "total_strokes" ] = val
   }
   if x.avg_speed != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_speed))/Double(1000)
+    let val : Double = (Double(x.avg_speed)/Double(1000))
     rv[ "avg_speed" ] = val
   }
   if x.total_calories != FIT_UINT16_INVALID  {
@@ -6518,15 +6518,15 @@ func rzfit_monitoring_mesg_value_dict( ptr : UnsafePointer<FIT_MONITORING_MESG>)
     rv[ "timestamp" ] = val
   }
   if x.distance != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.distance))/Double(100)
+    let val : Double = (Double(x.distance)/Double(100))
     rv[ "distance" ] = val
   }
   if x.cycles != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.cycles))/Double(2)
+    let val : Double = (Double(x.cycles)/Double(2))
     rv[ "cycles" ] = val
   }
   if x.active_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.active_time))/Double(1000)
+    let val : Double = (Double(x.active_time)/Double(1000))
     rv[ "active_time" ] = val
   }
   if x.local_timestamp != FIT_LOCAL_DATE_TIME_INVALID  {
@@ -6725,11 +6725,11 @@ func rzfit_record_mesg_value_dict( ptr : UnsafePointer<FIT_RECORD_MESG>) -> [Str
     rv[ "position_long" ] = val
   }
   if x.distance != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.distance))/Double(100)
+    let val : Double = (Double(x.distance)/Double(100))
     rv[ "distance" ] = val
   }
   if x.time_from_course != FIT_SINT32_INVALID  {
-    let val : Double = (Double(x.time_from_course))/Double(1000)
+    let val : Double = (Double(x.time_from_course)/Double(1000))
     rv[ "time_from_course" ] = val
   }
   if x.total_cycles != FIT_UINT32_INVALID  {
@@ -6741,19 +6741,19 @@ func rzfit_record_mesg_value_dict( ptr : UnsafePointer<FIT_RECORD_MESG>) -> [Str
     rv[ "accumulated_power" ] = val
   }
   if x.enhanced_speed != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.enhanced_speed))/Double(1000)
+    let val : Double = (Double(x.enhanced_speed)/Double(1000))
     rv[ "enhanced_speed" ] = val
   }
   if x.enhanced_altitude != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.enhanced_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.enhanced_altitude)/Double(5))-Double(500)
     rv[ "enhanced_altitude" ] = val
   }
   if x.altitude != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.altitude)/Double(5))-Double(500)
     rv[ "altitude" ] = val
   }
   if x.speed != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.speed))/Double(1000)
+    let val : Double = (Double(x.speed)/Double(1000))
     rv[ "speed" ] = val
   }
   if x.power != FIT_UINT16_INVALID  {
@@ -6761,7 +6761,7 @@ func rzfit_record_mesg_value_dict( ptr : UnsafePointer<FIT_RECORD_MESG>) -> [Str
     rv[ "power" ] = val
   }
   if x.grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.grade))/Double(100)
+    let val : Double = (Double(x.grade)/Double(100))
     rv[ "grade" ] = val
   }
   if x.compressed_accumulated_power != FIT_UINT16_INVALID  {
@@ -6769,7 +6769,7 @@ func rzfit_record_mesg_value_dict( ptr : UnsafePointer<FIT_RECORD_MESG>) -> [Str
     rv[ "compressed_accumulated_power" ] = val
   }
   if x.vertical_speed != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.vertical_speed))/Double(1000)
+    let val : Double = (Double(x.vertical_speed)/Double(1000))
     rv[ "vertical_speed" ] = val
   }
   if x.calories != FIT_UINT16_INVALID  {
@@ -6777,47 +6777,47 @@ func rzfit_record_mesg_value_dict( ptr : UnsafePointer<FIT_RECORD_MESG>) -> [Str
     rv[ "calories" ] = val
   }
   if x.vertical_oscillation != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.vertical_oscillation))/Double(10)
+    let val : Double = (Double(x.vertical_oscillation)/Double(10))
     rv[ "vertical_oscillation" ] = val
   }
   if x.stance_time_percent != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.stance_time_percent))/Double(100)
+    let val : Double = (Double(x.stance_time_percent)/Double(100))
     rv[ "stance_time_percent" ] = val
   }
   if x.stance_time != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.stance_time))/Double(10)
+    let val : Double = (Double(x.stance_time)/Double(10))
     rv[ "stance_time" ] = val
   }
   if x.ball_speed != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.ball_speed))/Double(100)
+    let val : Double = (Double(x.ball_speed)/Double(100))
     rv[ "ball_speed" ] = val
   }
   if x.cadence256 != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.cadence256))/Double(256)
+    let val : Double = (Double(x.cadence256)/Double(256))
     rv[ "cadence256" ] = val
   }
   if x.total_hemoglobin_conc != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.total_hemoglobin_conc))/Double(100)
+    let val : Double = (Double(x.total_hemoglobin_conc)/Double(100))
     rv[ "total_hemoglobin_conc" ] = val
   }
   if x.total_hemoglobin_conc_min != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.total_hemoglobin_conc_min))/Double(100)
+    let val : Double = (Double(x.total_hemoglobin_conc_min)/Double(100))
     rv[ "total_hemoglobin_conc_min" ] = val
   }
   if x.total_hemoglobin_conc_max != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.total_hemoglobin_conc_max))/Double(100)
+    let val : Double = (Double(x.total_hemoglobin_conc_max)/Double(100))
     rv[ "total_hemoglobin_conc_max" ] = val
   }
   if x.saturated_hemoglobin_percent != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.saturated_hemoglobin_percent))/Double(10)
+    let val : Double = (Double(x.saturated_hemoglobin_percent)/Double(10))
     rv[ "saturated_hemoglobin_percent" ] = val
   }
   if x.saturated_hemoglobin_percent_min != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.saturated_hemoglobin_percent_min))/Double(10)
+    let val : Double = (Double(x.saturated_hemoglobin_percent_min)/Double(10))
     rv[ "saturated_hemoglobin_percent_min" ] = val
   }
   if x.saturated_hemoglobin_percent_max != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.saturated_hemoglobin_percent_max))/Double(10)
+    let val : Double = (Double(x.saturated_hemoglobin_percent_max)/Double(10))
     rv[ "saturated_hemoglobin_percent_max" ] = val
   }
   if x.heart_rate != FIT_UINT8_INVALID  {
@@ -6833,7 +6833,7 @@ func rzfit_record_mesg_value_dict( ptr : UnsafePointer<FIT_RECORD_MESG>) -> [Str
     rv[ "resistance" ] = val
   }
   if x.cycle_length != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.cycle_length))/Double(100)
+    let val : Double = (Double(x.cycle_length)/Double(100))
     rv[ "cycle_length" ] = val
   }
   if x.temperature != FIT_SINT8_INVALID  {
@@ -6853,27 +6853,27 @@ func rzfit_record_mesg_value_dict( ptr : UnsafePointer<FIT_RECORD_MESG>) -> [Str
     rv[ "gps_accuracy" ] = val
   }
   if x.left_torque_effectiveness != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.left_torque_effectiveness))/Double(2)
+    let val : Double = (Double(x.left_torque_effectiveness)/Double(2))
     rv[ "left_torque_effectiveness" ] = val
   }
   if x.right_torque_effectiveness != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.right_torque_effectiveness))/Double(2)
+    let val : Double = (Double(x.right_torque_effectiveness)/Double(2))
     rv[ "right_torque_effectiveness" ] = val
   }
   if x.left_pedal_smoothness != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.left_pedal_smoothness))/Double(2)
+    let val : Double = (Double(x.left_pedal_smoothness)/Double(2))
     rv[ "left_pedal_smoothness" ] = val
   }
   if x.right_pedal_smoothness != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.right_pedal_smoothness))/Double(2)
+    let val : Double = (Double(x.right_pedal_smoothness)/Double(2))
     rv[ "right_pedal_smoothness" ] = val
   }
   if x.combined_pedal_smoothness != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.combined_pedal_smoothness))/Double(2)
+    let val : Double = (Double(x.combined_pedal_smoothness)/Double(2))
     rv[ "combined_pedal_smoothness" ] = val
   }
   if x.time128 != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.time128))/Double(128)
+    let val : Double = (Double(x.time128)/Double(128))
     rv[ "time128" ] = val
   }
   if x.zone != FIT_UINT8_INVALID  {
@@ -6881,7 +6881,7 @@ func rzfit_record_mesg_value_dict( ptr : UnsafePointer<FIT_RECORD_MESG>) -> [Str
     rv[ "zone" ] = val
   }
   if x.fractional_cadence != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.fractional_cadence))/Double(128)
+    let val : Double = (Double(x.fractional_cadence)/Double(128))
     rv[ "fractional_cadence" ] = val
   }
   return rv
@@ -6990,7 +6990,7 @@ func rzfit_sdm_profile_mesg_value_dict( ptr : UnsafePointer<FIT_SDM_PROFILE_MESG
   var rv : [String:Double] = [:]
   let x : FIT_SDM_PROFILE_MESG = ptr.pointee
   if x.odometer != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.odometer))/Double(100)
+    let val : Double = (Double(x.odometer)/Double(100))
     rv[ "odometer" ] = val
   }
   if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
@@ -7002,7 +7002,7 @@ func rzfit_sdm_profile_mesg_value_dict( ptr : UnsafePointer<FIT_SDM_PROFILE_MESG
     rv[ "sdm_ant_id" ] = val
   }
   if x.sdm_cal_factor != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.sdm_cal_factor))/Double(10)
+    let val : Double = (Double(x.sdm_cal_factor)/Double(10))
     rv[ "sdm_cal_factor" ] = val
   }
   if x.enabled != FIT_BOOL_INVALID  {
@@ -7222,15 +7222,15 @@ func rzfit_segment_lap_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_MESG
     rv[ "end_position_long" ] = val
   }
   if x.total_elapsed_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_elapsed_time))/Double(1000)
+    let val : Double = (Double(x.total_elapsed_time)/Double(1000))
     rv[ "total_elapsed_time" ] = val
   }
   if x.total_timer_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_timer_time))/Double(1000)
+    let val : Double = (Double(x.total_timer_time)/Double(1000))
     rv[ "total_timer_time" ] = val
   }
   if x.total_distance != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_distance))/Double(100)
+    let val : Double = (Double(x.total_distance)/Double(100))
     rv[ "total_distance" ] = val
   }
   if x.total_cycles != FIT_UINT32_INVALID  {
@@ -7258,27 +7258,27 @@ func rzfit_segment_lap_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_MESG
     rv[ "total_work" ] = val
   }
   if x.total_moving_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_moving_time))/Double(1000)
+    let val : Double = (Double(x.total_moving_time)/Double(1000))
     rv[ "total_moving_time" ] = val
   }
   if x.time_in_hr_zone != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.time_in_hr_zone))/Double(1000)
+    let val : Double = (Double(x.time_in_hr_zone)/Double(1000))
     rv[ "time_in_hr_zone" ] = val
   }
   if x.time_in_speed_zone != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.time_in_speed_zone))/Double(1000)
+    let val : Double = (Double(x.time_in_speed_zone)/Double(1000))
     rv[ "time_in_speed_zone" ] = val
   }
   if x.time_in_cadence_zone != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.time_in_cadence_zone))/Double(1000)
+    let val : Double = (Double(x.time_in_cadence_zone)/Double(1000))
     rv[ "time_in_cadence_zone" ] = val
   }
   if x.time_in_power_zone != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.time_in_power_zone))/Double(1000)
+    let val : Double = (Double(x.time_in_power_zone)/Double(1000))
     rv[ "time_in_power_zone" ] = val
   }
   if x.active_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.active_time))/Double(1000)
+    let val : Double = (Double(x.active_time)/Double(1000))
     rv[ "active_time" ] = val
   }
   if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
@@ -7294,11 +7294,11 @@ func rzfit_segment_lap_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_MESG
     rv[ "total_fat_calories" ] = val
   }
   if x.avg_speed != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_speed))/Double(1000)
+    let val : Double = (Double(x.avg_speed)/Double(1000))
     rv[ "avg_speed" ] = val
   }
   if x.max_speed != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.max_speed))/Double(1000)
+    let val : Double = (Double(x.max_speed)/Double(1000))
     rv[ "max_speed" ] = val
   }
   if x.avg_power != FIT_UINT16_INVALID  {
@@ -7326,47 +7326,47 @@ func rzfit_segment_lap_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_MESG
     rv[ "left_right_balance" ] = val
   }
   if x.avg_altitude != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.avg_altitude)/Double(5))-Double(500)
     rv[ "avg_altitude" ] = val
   }
   if x.max_altitude != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.max_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.max_altitude)/Double(5))-Double(500)
     rv[ "max_altitude" ] = val
   }
   if x.avg_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_grade))/Double(100)
+    let val : Double = (Double(x.avg_grade)/Double(100))
     rv[ "avg_grade" ] = val
   }
   if x.avg_pos_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_pos_grade))/Double(100)
+    let val : Double = (Double(x.avg_pos_grade)/Double(100))
     rv[ "avg_pos_grade" ] = val
   }
   if x.avg_neg_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_neg_grade))/Double(100)
+    let val : Double = (Double(x.avg_neg_grade)/Double(100))
     rv[ "avg_neg_grade" ] = val
   }
   if x.max_pos_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.max_pos_grade))/Double(100)
+    let val : Double = (Double(x.max_pos_grade)/Double(100))
     rv[ "max_pos_grade" ] = val
   }
   if x.max_neg_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.max_neg_grade))/Double(100)
+    let val : Double = (Double(x.max_neg_grade)/Double(100))
     rv[ "max_neg_grade" ] = val
   }
   if x.avg_pos_vertical_speed != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_pos_vertical_speed))/Double(1000)
+    let val : Double = (Double(x.avg_pos_vertical_speed)/Double(1000))
     rv[ "avg_pos_vertical_speed" ] = val
   }
   if x.avg_neg_vertical_speed != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_neg_vertical_speed))/Double(1000)
+    let val : Double = (Double(x.avg_neg_vertical_speed)/Double(1000))
     rv[ "avg_neg_vertical_speed" ] = val
   }
   if x.max_pos_vertical_speed != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.max_pos_vertical_speed))/Double(1000)
+    let val : Double = (Double(x.max_pos_vertical_speed)/Double(1000))
     rv[ "max_pos_vertical_speed" ] = val
   }
   if x.max_neg_vertical_speed != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.max_neg_vertical_speed))/Double(1000)
+    let val : Double = (Double(x.max_neg_vertical_speed)/Double(1000))
     rv[ "max_neg_vertical_speed" ] = val
   }
   if x.repetition_num != FIT_UINT16_INVALID  {
@@ -7374,7 +7374,7 @@ func rzfit_segment_lap_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_MESG
     rv[ "repetition_num" ] = val
   }
   if x.min_altitude != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.min_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.min_altitude)/Double(5))-Double(500)
     rv[ "min_altitude" ] = val
   }
   if x.wkt_step_index != FIT_MESSAGE_INDEX_INVALID  {
@@ -7426,35 +7426,35 @@ func rzfit_segment_lap_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_LAP_MESG
     rv[ "min_heart_rate" ] = val
   }
   if x.avg_left_torque_effectiveness != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.avg_left_torque_effectiveness))/Double(2)
+    let val : Double = (Double(x.avg_left_torque_effectiveness)/Double(2))
     rv[ "avg_left_torque_effectiveness" ] = val
   }
   if x.avg_right_torque_effectiveness != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.avg_right_torque_effectiveness))/Double(2)
+    let val : Double = (Double(x.avg_right_torque_effectiveness)/Double(2))
     rv[ "avg_right_torque_effectiveness" ] = val
   }
   if x.avg_left_pedal_smoothness != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.avg_left_pedal_smoothness))/Double(2)
+    let val : Double = (Double(x.avg_left_pedal_smoothness)/Double(2))
     rv[ "avg_left_pedal_smoothness" ] = val
   }
   if x.avg_right_pedal_smoothness != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.avg_right_pedal_smoothness))/Double(2)
+    let val : Double = (Double(x.avg_right_pedal_smoothness)/Double(2))
     rv[ "avg_right_pedal_smoothness" ] = val
   }
   if x.avg_combined_pedal_smoothness != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.avg_combined_pedal_smoothness))/Double(2)
+    let val : Double = (Double(x.avg_combined_pedal_smoothness)/Double(2))
     rv[ "avg_combined_pedal_smoothness" ] = val
   }
   if x.avg_fractional_cadence != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.avg_fractional_cadence))/Double(128)
+    let val : Double = (Double(x.avg_fractional_cadence)/Double(128))
     rv[ "avg_fractional_cadence" ] = val
   }
   if x.max_fractional_cadence != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.max_fractional_cadence))/Double(128)
+    let val : Double = (Double(x.max_fractional_cadence)/Double(128))
     rv[ "max_fractional_cadence" ] = val
   }
   if x.total_fractional_cycles != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.total_fractional_cycles))/Double(128)
+    let val : Double = (Double(x.total_fractional_cycles)/Double(128))
     rv[ "total_fractional_cycles" ] = val
   }
   return rv
@@ -7527,7 +7527,7 @@ func rzfit_segment_leaderboard_entry_mesg_value_dict( ptr : UnsafePointer<FIT_SE
     rv[ "activity_id" ] = val
   }
   if x.segment_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.segment_time))/Double(1000)
+    let val : Double = (Double(x.segment_time)/Double(1000))
     rv[ "segment_time" ] = val
   }
   if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
@@ -7589,11 +7589,11 @@ func rzfit_segment_point_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_POINT_
     rv[ "position_long" ] = val
   }
   if x.distance != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.distance))/Double(100)
+    let val : Double = (Double(x.distance)/Double(100))
     rv[ "distance" ] = val
   }
   if x.leader_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.leader_time))/Double(1000)
+    let val : Double = (Double(x.leader_time)/Double(1000))
     rv[ "leader_time" ] = val
   }
   if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
@@ -7601,7 +7601,7 @@ func rzfit_segment_point_mesg_value_dict( ptr : UnsafePointer<FIT_SEGMENT_POINT_
     rv[ "message_index" ] = val
   }
   if x.altitude != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.altitude)/Double(5))-Double(500)
     rv[ "altitude" ] = val
   }
   return rv
@@ -7654,15 +7654,15 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "start_position_long" ] = val
   }
   if x.total_elapsed_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_elapsed_time))/Double(1000)
+    let val : Double = (Double(x.total_elapsed_time)/Double(1000))
     rv[ "total_elapsed_time" ] = val
   }
   if x.total_timer_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_timer_time))/Double(1000)
+    let val : Double = (Double(x.total_timer_time)/Double(1000))
     rv[ "total_timer_time" ] = val
   }
   if x.total_distance != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_distance))/Double(100)
+    let val : Double = (Double(x.total_distance)/Double(100))
     rv[ "total_distance" ] = val
   }
   if x.total_cycles != FIT_UINT32_INVALID  {
@@ -7686,7 +7686,7 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "swc_long" ] = val
   }
   if x.avg_stroke_count != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.avg_stroke_count))/Double(10)
+    let val : Double = (Double(x.avg_stroke_count)/Double(10))
     rv[ "avg_stroke_count" ] = val
   }
   if x.total_work != FIT_UINT32_INVALID  {
@@ -7694,47 +7694,47 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "total_work" ] = val
   }
   if x.total_moving_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.total_moving_time))/Double(1000)
+    let val : Double = (Double(x.total_moving_time)/Double(1000))
     rv[ "total_moving_time" ] = val
   }
   if x.time_in_hr_zone != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.time_in_hr_zone))/Double(1000)
+    let val : Double = (Double(x.time_in_hr_zone)/Double(1000))
     rv[ "time_in_hr_zone" ] = val
   }
   if x.time_in_speed_zone != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.time_in_speed_zone))/Double(1000)
+    let val : Double = (Double(x.time_in_speed_zone)/Double(1000))
     rv[ "time_in_speed_zone" ] = val
   }
   if x.time_in_cadence_zone != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.time_in_cadence_zone))/Double(1000)
+    let val : Double = (Double(x.time_in_cadence_zone)/Double(1000))
     rv[ "time_in_cadence_zone" ] = val
   }
   if x.time_in_power_zone != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.time_in_power_zone))/Double(1000)
+    let val : Double = (Double(x.time_in_power_zone)/Double(1000))
     rv[ "time_in_power_zone" ] = val
   }
   if x.avg_lap_time != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.avg_lap_time))/Double(1000)
+    let val : Double = (Double(x.avg_lap_time)/Double(1000))
     rv[ "avg_lap_time" ] = val
   }
   if x.enhanced_avg_speed != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.enhanced_avg_speed))/Double(1000)
+    let val : Double = (Double(x.enhanced_avg_speed)/Double(1000))
     rv[ "enhanced_avg_speed" ] = val
   }
   if x.enhanced_max_speed != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.enhanced_max_speed))/Double(1000)
+    let val : Double = (Double(x.enhanced_max_speed)/Double(1000))
     rv[ "enhanced_max_speed" ] = val
   }
   if x.enhanced_avg_altitude != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.enhanced_avg_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.enhanced_avg_altitude)/Double(5))-Double(500)
     rv[ "enhanced_avg_altitude" ] = val
   }
   if x.enhanced_min_altitude != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.enhanced_min_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.enhanced_min_altitude)/Double(5))-Double(500)
     rv[ "enhanced_min_altitude" ] = val
   }
   if x.enhanced_max_altitude != FIT_UINT32_INVALID  {
-    let val : Double = (Double(x.enhanced_max_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.enhanced_max_altitude)/Double(5))-Double(500)
     rv[ "enhanced_max_altitude" ] = val
   }
   if x.message_index != FIT_MESSAGE_INDEX_INVALID  {
@@ -7750,11 +7750,11 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "total_fat_calories" ] = val
   }
   if x.avg_speed != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_speed))/Double(1000)
+    let val : Double = (Double(x.avg_speed)/Double(1000))
     rv[ "avg_speed" ] = val
   }
   if x.max_speed != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.max_speed))/Double(1000)
+    let val : Double = (Double(x.max_speed)/Double(1000))
     rv[ "max_speed" ] = val
   }
   if x.avg_power != FIT_UINT16_INVALID  {
@@ -7786,11 +7786,11 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "normalized_power" ] = val
   }
   if x.training_stress_score != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.training_stress_score))/Double(10)
+    let val : Double = (Double(x.training_stress_score)/Double(10))
     rv[ "training_stress_score" ] = val
   }
   if x.intensity_factor != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.intensity_factor))/Double(1000)
+    let val : Double = (Double(x.intensity_factor)/Double(1000))
     rv[ "intensity_factor" ] = val
   }
   if x.left_right_balance != FIT_LEFT_RIGHT_BALANCE_100_INVALID  {
@@ -7798,11 +7798,11 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "left_right_balance" ] = val
   }
   if x.avg_stroke_distance != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_stroke_distance))/Double(100)
+    let val : Double = (Double(x.avg_stroke_distance)/Double(100))
     rv[ "avg_stroke_distance" ] = val
   }
   if x.pool_length != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.pool_length))/Double(100)
+    let val : Double = (Double(x.pool_length)/Double(100))
     rv[ "pool_length" ] = val
   }
   if x.threshold_power != FIT_UINT16_INVALID  {
@@ -7814,47 +7814,47 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "num_active_lengths" ] = val
   }
   if x.avg_altitude != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.avg_altitude)/Double(5))-Double(500)
     rv[ "avg_altitude" ] = val
   }
   if x.max_altitude != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.max_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.max_altitude)/Double(5))-Double(500)
     rv[ "max_altitude" ] = val
   }
   if x.avg_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_grade))/Double(100)
+    let val : Double = (Double(x.avg_grade)/Double(100))
     rv[ "avg_grade" ] = val
   }
   if x.avg_pos_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_pos_grade))/Double(100)
+    let val : Double = (Double(x.avg_pos_grade)/Double(100))
     rv[ "avg_pos_grade" ] = val
   }
   if x.avg_neg_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_neg_grade))/Double(100)
+    let val : Double = (Double(x.avg_neg_grade)/Double(100))
     rv[ "avg_neg_grade" ] = val
   }
   if x.max_pos_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.max_pos_grade))/Double(100)
+    let val : Double = (Double(x.max_pos_grade)/Double(100))
     rv[ "max_pos_grade" ] = val
   }
   if x.max_neg_grade != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.max_neg_grade))/Double(100)
+    let val : Double = (Double(x.max_neg_grade)/Double(100))
     rv[ "max_neg_grade" ] = val
   }
   if x.avg_pos_vertical_speed != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_pos_vertical_speed))/Double(1000)
+    let val : Double = (Double(x.avg_pos_vertical_speed)/Double(1000))
     rv[ "avg_pos_vertical_speed" ] = val
   }
   if x.avg_neg_vertical_speed != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.avg_neg_vertical_speed))/Double(1000)
+    let val : Double = (Double(x.avg_neg_vertical_speed)/Double(1000))
     rv[ "avg_neg_vertical_speed" ] = val
   }
   if x.max_pos_vertical_speed != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.max_pos_vertical_speed))/Double(1000)
+    let val : Double = (Double(x.max_pos_vertical_speed)/Double(1000))
     rv[ "max_pos_vertical_speed" ] = val
   }
   if x.max_neg_vertical_speed != FIT_SINT16_INVALID  {
-    let val : Double = (Double(x.max_neg_vertical_speed))/Double(1000)
+    let val : Double = (Double(x.max_neg_vertical_speed)/Double(1000))
     rv[ "max_neg_vertical_speed" ] = val
   }
   if x.best_lap_index != FIT_UINT16_INVALID  {
@@ -7862,7 +7862,7 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "best_lap_index" ] = val
   }
   if x.min_altitude != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.min_altitude)-Double(500))/Double(5)
+    let val : Double = (Double(x.min_altitude)/Double(5))-Double(500)
     rv[ "min_altitude" ] = val
   }
   if x.player_score != FIT_UINT16_INVALID  {
@@ -7882,27 +7882,27 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "zone_count" ] = val
   }
   if x.max_ball_speed != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.max_ball_speed))/Double(100)
+    let val : Double = (Double(x.max_ball_speed)/Double(100))
     rv[ "max_ball_speed" ] = val
   }
   if x.avg_ball_speed != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_ball_speed))/Double(100)
+    let val : Double = (Double(x.avg_ball_speed)/Double(100))
     rv[ "avg_ball_speed" ] = val
   }
   if x.avg_vertical_oscillation != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_vertical_oscillation))/Double(10)
+    let val : Double = (Double(x.avg_vertical_oscillation)/Double(10))
     rv[ "avg_vertical_oscillation" ] = val
   }
   if x.avg_stance_time_percent != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_stance_time_percent))/Double(100)
+    let val : Double = (Double(x.avg_stance_time_percent)/Double(100))
     rv[ "avg_stance_time_percent" ] = val
   }
   if x.avg_stance_time != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_stance_time))/Double(10)
+    let val : Double = (Double(x.avg_stance_time)/Double(10))
     rv[ "avg_stance_time" ] = val
   }
   if x.avg_vam != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.avg_vam))/Double(1000)
+    let val : Double = (Double(x.avg_vam)/Double(1000))
     rv[ "avg_vam" ] = val
   }
   if x.avg_heart_rate != FIT_UINT8_INVALID  {
@@ -7922,7 +7922,7 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "max_cadence" ] = val
   }
   if x.total_training_effect != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.total_training_effect))/Double(10)
+    let val : Double = (Double(x.total_training_effect)/Double(10))
     rv[ "total_training_effect" ] = val
   }
   if x.event_group != FIT_UINT8_INVALID  {
@@ -7950,15 +7950,15 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "opponent_name" ] = val
   }
   if x.avg_fractional_cadence != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.avg_fractional_cadence))/Double(128)
+    let val : Double = (Double(x.avg_fractional_cadence)/Double(128))
     rv[ "avg_fractional_cadence" ] = val
   }
   if x.max_fractional_cadence != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.max_fractional_cadence))/Double(128)
+    let val : Double = (Double(x.max_fractional_cadence)/Double(128))
     rv[ "max_fractional_cadence" ] = val
   }
   if x.total_fractional_cycles != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.total_fractional_cycles))/Double(128)
+    let val : Double = (Double(x.total_fractional_cycles)/Double(128))
     rv[ "total_fractional_cycles" ] = val
   }
   if x.sport_index != FIT_UINT8_INVALID  {
@@ -7966,7 +7966,7 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     rv[ "sport_index" ] = val
   }
   if x.total_anaerobic_training_effect != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.total_anaerobic_training_effect))/Double(10)
+    let val : Double = (Double(x.total_anaerobic_training_effect)/Double(10))
     rv[ "total_anaerobic_training_effect" ] = val
   }
   return rv
@@ -8159,7 +8159,7 @@ func rzfit_speed_zone_mesg_value_dict( ptr : UnsafePointer<FIT_SPEED_ZONE_MESG>)
     rv[ "message_index" ] = val
   }
   if x.high_value != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.high_value))/Double(1000)
+    let val : Double = (Double(x.high_value)/Double(1000))
     rv[ "high_value" ] = val
   }
   return rv
@@ -8376,7 +8376,7 @@ func rzfit_user_profile_mesg_value_dict( ptr : UnsafePointer<FIT_USER_PROFILE_ME
     rv[ "message_index" ] = val
   }
   if x.weight != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.weight))/Double(10)
+    let val : Double = (Double(x.weight)/Double(10))
     rv[ "weight" ] = val
   }
   if x.local_id != FIT_USER_LOCAL_ID_INVALID  {
@@ -8384,11 +8384,11 @@ func rzfit_user_profile_mesg_value_dict( ptr : UnsafePointer<FIT_USER_PROFILE_ME
     rv[ "local_id" ] = val
   }
   if x.user_running_step_length != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.user_running_step_length))/Double(1000)
+    let val : Double = (Double(x.user_running_step_length)/Double(1000))
     rv[ "user_running_step_length" ] = val
   }
   if x.user_walking_step_length != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.user_walking_step_length))/Double(1000)
+    let val : Double = (Double(x.user_walking_step_length)/Double(1000))
     rv[ "user_walking_step_length" ] = val
   }
   if x.age != FIT_UINT8_INVALID  {
@@ -8396,7 +8396,7 @@ func rzfit_user_profile_mesg_value_dict( ptr : UnsafePointer<FIT_USER_PROFILE_ME
     rv[ "age" ] = val
   }
   if x.height != FIT_UINT8_INVALID  {
-    let val : Double = (Double(x.height))/Double(100)
+    let val : Double = (Double(x.height)/Double(100))
     rv[ "height" ] = val
   }
   if x.resting_heart_rate != FIT_UINT8_INVALID  {
@@ -8662,7 +8662,7 @@ func rzfit_weather_conditions_mesg_value_dict( ptr : UnsafePointer<FIT_WEATHER_C
     rv[ "wind_direction" ] = val
   }
   if x.wind_speed != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.wind_speed))/Double(1000)
+    let val : Double = (Double(x.wind_speed)/Double(1000))
     rv[ "wind_speed" ] = val
   }
   if x.temperature != FIT_SINT8_INVALID  {
@@ -8742,35 +8742,35 @@ func rzfit_weight_scale_mesg_value_dict( ptr : UnsafePointer<FIT_WEIGHT_SCALE_ME
     rv[ "timestamp" ] = val
   }
   if x.weight != FIT_WEIGHT_INVALID  {
-    let val : Double = (Double(x.weight))/Double(100)
+    let val : Double = (Double(x.weight)/Double(100))
     rv[ "weight" ] = val
   }
   if x.percent_fat != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.percent_fat))/Double(100)
+    let val : Double = (Double(x.percent_fat)/Double(100))
     rv[ "percent_fat" ] = val
   }
   if x.percent_hydration != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.percent_hydration))/Double(100)
+    let val : Double = (Double(x.percent_hydration)/Double(100))
     rv[ "percent_hydration" ] = val
   }
   if x.visceral_fat_mass != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.visceral_fat_mass))/Double(100)
+    let val : Double = (Double(x.visceral_fat_mass)/Double(100))
     rv[ "visceral_fat_mass" ] = val
   }
   if x.bone_mass != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.bone_mass))/Double(100)
+    let val : Double = (Double(x.bone_mass)/Double(100))
     rv[ "bone_mass" ] = val
   }
   if x.muscle_mass != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.muscle_mass))/Double(100)
+    let val : Double = (Double(x.muscle_mass)/Double(100))
     rv[ "muscle_mass" ] = val
   }
   if x.basal_met != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.basal_met))/Double(4)
+    let val : Double = (Double(x.basal_met)/Double(4))
     rv[ "basal_met" ] = val
   }
   if x.active_met != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.active_met))/Double(4)
+    let val : Double = (Double(x.active_met)/Double(4))
     rv[ "active_met" ] = val
   }
   if x.user_profile_index != FIT_MESSAGE_INDEX_INVALID  {
@@ -8831,7 +8831,7 @@ func rzfit_workout_mesg_value_dict( ptr : UnsafePointer<FIT_WORKOUT_MESG>) -> [S
     rv[ "num_valid_steps" ] = val
   }
   if x.pool_length != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.pool_length))/Double(100)
+    let val : Double = (Double(x.pool_length)/Double(100))
     rv[ "pool_length" ] = val
   }
   return rv
@@ -8895,7 +8895,7 @@ func rzfit_workout_session_mesg_value_dict( ptr : UnsafePointer<FIT_WORKOUT_SESS
     rv[ "first_step_index" ] = val
   }
   if x.pool_length != FIT_UINT16_INVALID  {
-    let val : Double = (Double(x.pool_length))/Double(100)
+    let val : Double = (Double(x.pool_length)/Double(100))
     rv[ "pool_length" ] = val
   }
   return rv
