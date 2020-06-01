@@ -271,6 +271,24 @@ static BOOL kDerivedEnabled = true;
     return serieOfSerie;
 }
 
+-(NSDictionary<NSString*,NSArray<NSString*>*>*)availableActivitiesAndFieldsForTimeSeries{
+    NSMutableDictionary * rv = [NSMutableDictionary dictionary];
+    
+    for (NSDictionary * dict in self.seriesByKeys) {
+        NSString * aId = dict[@"activityId"];
+        NSString * fieldKey = dict[@"fieldKey"];
+        NSMutableArray * one = rv[aId];
+        if( one == nil){
+            rv[aId] = [NSMutableArray arrayWithObject:fieldKey];
+        }else{
+            if( ! [one containsObject:fieldKey]){
+                [one addObject:fieldKey];
+            }
+        }
+    }
+    return rv;
+}
+
 -(GCStatsDataSerie*)serieFor:(GCDerivedDataSerie*)derivedSerie{
     return nil;
 }

@@ -141,7 +141,22 @@
 
 }
 
-
+-(void)actionFilterDerived{
+    GCDerivedOrganizer * derived = [GCAppGlobal derived];
+    GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
+    
+    NSDictionary * found = [derived availableActivitiesAndFieldsForTimeSeries];
+    
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"activities_testderived.db"]];
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    GCActivitiesOrganizer * newOrganizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    for (NSString * aId in found) {
+        GCActivity * act = [organizer activityForId:aId];
+        [newOrganizer registerActivity:act forActivityId:aId];
+    }
+    NSLog(@"%@", @(newOrganizer.countOfActivities));
+}
 -(void)actionClearAndReprocessDerivedForCurrent{
     GCActivity * act = [[GCAppGlobal organizer] currentActivity];
     [[GCAppGlobal derived] rebuildDerivedDataSerie:gcDerivedTypeBestRolling forActivity:act inActivities:[[GCAppGlobal organizer] activities]];

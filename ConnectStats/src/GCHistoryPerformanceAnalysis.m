@@ -189,6 +189,7 @@
     NSDictionary * series = [self.organizer fieldsSeries:self.fields matching:filter useFiltered:self.useFilter ignoreMode:ignoreMode];
     NSMutableArray * seriesArray = [NSMutableArray arrayWithCapacity:self.fields.count];
     NSUInteger minimumPoints = [self samplesForPerformancePeriod:self.longTermPeriod];
+    minimumPoints = 0;
     for (GCField * field in self.fields) {
         GCStatsDataSerieWithUnit * serie = series[field];
         GCStatsDataSerieFilter * seriefilter = [self.organizer standardFilterForField:field];
