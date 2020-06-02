@@ -114,8 +114,17 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     NSMutableArray<GCFieldsForCategory*> * rv = [NSMutableArray arrayWithCapacity:10];
     NSMutableArray<NSString*> * categoriesSorted = [NSMutableArray arrayWithArray:categories.allKeys];
     [categoriesSorted sortUsingComparator:^(NSString*c1,NSString*c2){
-        //FIXME: missing category
-        return [category2Order[c1] compare:category2Order[c2]];
+        NSNumber * n1 = category2Order[c1];
+        NSNumber * n2 = category2Order[c2];
+        if( n1 == nil && n2){
+            return NSOrderedDescending;
+        }else if (n2 == nil && n1){
+            return NSOrderedAscending;
+        }else if( n2 == nil && n1 == nil){
+            return NSOrderedSame;
+        }else{
+            return [n1 compare:n2];
+        }
     }];
 
     for (NSString * category in categoriesSorted) {
