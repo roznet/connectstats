@@ -121,6 +121,10 @@
     _y_data += otherPoint.y_data;
 }
 
+-(void)minusPoint:(GCStatsDataPoint*)otherPoint{
+    _y_data -= otherPoint.y_data;
+}
+
 -(void)multiplyPoint:(GCStatsDataPoint *)otherPoint{
     _y_data *= otherPoint.y_data;
 }

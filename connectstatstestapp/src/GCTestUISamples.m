@@ -71,6 +71,7 @@
                                            NSStringFromSelector(@selector(sample12_trackStats)),
                                            NSStringFromSelector(@selector(sample13_compareStats)),
                                            NSStringFromSelector(@selector(sample14_SimpleGradientFillPlot)),
+                                           NSStringFromSelector(@selector(sample15_HistDerivedGraphs)),
 
 
                                            ];
@@ -81,7 +82,7 @@
         [GCAppGlobal setupSampleState:@"sample_activities.db"];
         
         // DONT CHECKIN
-        NSString * filter = nil;// = @"sample8_";
+        NSString * filter = nil;// = @"sample15_";
         NSInteger which = -1;
         if( filter ){
             for (NSString * one in selectorNames) {
@@ -150,8 +151,14 @@
         [data addDataPointWithX:x andY:2.]; x+=1.;
     }
     GCSimpleGraphCachedDataSource * sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
-    GCSimpleGraphDataHolder * h = [GCSimpleGraphDataHolder dataHolder:data type:gcGraphLine color:[UIColor blackColor] andUnit:[GCUnit unitForKey:@"mps"]];
-    GCSimpleGraphDataHolder * h2 = [GCSimpleGraphDataHolder dataHolder:data2 type:gcGraphLine color:[UIColor blueColor] andUnit:[GCUnit unitForKey:@"mps"]];
+    GCSimpleGraphDataHolder * h = [GCSimpleGraphDataHolder dataHolder:data
+                                                                 type:gcGraphLine
+                                                                color:[UIColor blackColor]
+                                                              andUnit:[GCUnit unitForKey:@"mps"]];
+    GCSimpleGraphDataHolder * h2 = [GCSimpleGraphDataHolder dataHolder:data2
+                                                                  type:gcGraphLine
+                                                                 color:[UIColor blueColor]
+                                                               andUnit:[GCUnit unitForKey:@"mps"]];
 
     [sample setSeries:[NSMutableArray arrayWithObjects:h, h2, nil]];
     [sample setXUnit:[GCUnit unitForKey:@"second"]];
@@ -578,6 +585,91 @@
     return sample;
 }
 
+-(NSArray<GCSimpleGraphCachedDataSource*>*)sample15_HistDerivedGraphs{
+    [RZFileOrganizer createEditableCopyOfFile:@"activities_testderived.db"];
+    [RZFileOrganizer createEditableCopyOfFile:@"derived_testderived.db"];
+    
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"activities_testderived.db"]];
+    [db open];
+    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    FMDatabase * deriveddb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"derived_testderived.db"]];
+    [deriveddb open];
+
+    GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initForTestModeWithDb:deriveddb thread:nil andFilePrefix:@"testderived"];
+    GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
+    GCStatsSerieOfSerieWithUnits * serieOfSeries = [derived timeserieOfSeriesFor:field inActivities:organizer.activities];
+    
+    
+    NSArray<NSNumber*>*seconds = @[ @(0), @(60), @(1800) ];
+    double numberOfDays = 5.;
+    NSArray<UIColor*>*colors = [GCViewConfig arrayOfColorsForMultiplots];
+    GCSimpleGraphCachedDataSource * sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphCachedDataSource * sample_diff = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+
+    GCStatsDataSerie * first = nil;
+    
+    NSUInteger i=0;
+    for (NSNumber * second in seconds) {
+        if( i < colors.count){
+            UIColor * color = colors[i];
+            
+            GCStatsDataSerieWithUnit * one = [serieOfSeries serieForX:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:second.doubleValue]];
+            GCStatsDataSerie * max = [one.serie movingFunctionForUnit:60*60*24*numberOfDays
+                                                             function:^(NSArray<GCStatsDataPoint*>*samples){
+                double max = samples.firstObject.y_data;
+                for (GCStatsDataPoint * point in samples) {
+                    if( point.y_data > max){
+                        max = point.y_data;
+                    }
+                }
+                return max;
+            }];
+                        
+            if( first == nil){
+                first = max;
+            }else{
+                GCSimpleGraphDataHolder * holder = [GCSimpleGraphDataHolder dataHolder:one.serie
+                                                                                  type:gcGraphBezier
+                                                                                 color:[color colorWithAlphaComponent:0.2]
+                                                                               andUnit:one.unit];
+                
+                GCSimpleGraphDataHolder * holder_max = [GCSimpleGraphDataHolder dataHolder:max
+                                                                                      type:gcGraphBezier
+                                                                                     color:color
+                                                                                   andUnit:one.unit];
+                
+                [sample addDataHolder:holder];
+                [sample addDataHolder:holder_max];
+
+                GCStatsDataSerie * diffSerie = [max operate:gcStatsOperandMinus with:first];
+                GCSimpleGraphDataHolder * holder_diff = [GCSimpleGraphDataHolder dataHolder:diffSerie
+                                                                                      type:gcGraphBezier
+                                                                                     color:color
+                                                                                   andUnit:one.unit];
+                GCSimpleGraphDataHolder * holder_diff_line = [GCSimpleGraphDataHolder dataHolder:diffSerie
+                                                                                      type:gcGraphLine
+                                                                                           color:[color colorWithAlphaComponent:0.5]
+                                                                                   andUnit:one.unit];
+
+                //holder_diff.axisForSerie = 1;
+                [sample_diff addDataHolder:holder_diff];
+                [sample_diff addDataHolder:holder_diff_line];
+            }
+            
+
+            
+            i++;
+        }
+    }
+
+    [sample setXUnit:[GCUnit dateshort]];
+    [sample setTitle:@"sample 15 Derivedhist"];
+    [sample_diff setXUnit:[GCUnit dateshort]];
+    [sample_diff setTitle:@"sample 15 Derivedhist Diff"];
+
+    
+    return @[ sample, sample_diff ];
+}
 #pragma mark - Cells Samples
 
 -(NSArray*)sampleCells{

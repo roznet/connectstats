@@ -37,7 +37,6 @@
 #define UIGRAPHICCURRENTCONTEXT() [[NSGraphicsContext currentContext] CGContext]
 #endif
 
-
 @interface GCSimpleGraphViewContext : NSObject
 @property (nonatomic,retain) GCViewGradientColors * gradientColors;
 @property (nonatomic,retain) GCViewGradientColors * gradientColorsFill;
@@ -77,7 +76,7 @@
         // Init color with default
         self.strokeColor = [displayConfig colorForSerie:idx];
         self.fillColor = [displayConfig fillColorForSerie:idx];
-
+                
         if( [displayConfig graphTypeForSerie:idx]== gcGraphStep ){
             if( self.gradientColors && self.gradientColorsFill == nil ){
                 self.gradientColorsFill = self.gradientColors;
@@ -89,13 +88,15 @@
     }
     return self;
 }
-#if ! __has_feature(objc_arc)
+
 -(void)dealloc{
+    
+    #if ! __has_feature(objc_arc)
     [_gradientColors release];
     
     [super dealloc];
+    #endif
 }
-#endif
 
 -(void)updateRangeMin:(CGPoint)range_min max:(CGPoint)range_max{
     self.range_min = range_min;
@@ -306,6 +307,7 @@
 -(void)drawGraphLines:(NSUInteger)idx{
 
     BOOL barGraph = ([_displayConfig graphTypeForSerie:idx] == gcGraphStep);
+    BOOL cubicBezier = ([_displayConfig graphTypeForSerie:idx] == gcGraphBezier);
     
     NSUInteger i = 0;
     GCStatsDataSerie * data = [_dataSource dataSerie:idx];
@@ -318,6 +320,8 @@
     CGFloat lineWidth = [_displayConfig lineWidth:idx];
 
     GCSimpleGraphViewContext * simpleContext = RZReturnAutorelease([[GCSimpleGraphViewContext alloc] initWithSource:self.dataSource config:self.displayConfig forIndex:idx]);
+    
+    GCSimpleGraphViewContext * nextSimpleContext = cubicBezier ? RZReturnAutorelease([[GCSimpleGraphViewContext alloc] initWithSource:self.dataSource config:self.displayConfig forIndex:idx]) : nil;
 
     simpleContext.range_min = geometry.rangeMinPoint;
     simpleContext.range_max = geometry.rangeMaxPoint;
@@ -327,10 +331,20 @@
 
     GCStatsDataPoint * point = [data dataPointAtIndex:0];
     
-    [simpleContext updateWithFirstCGPoint:[geometry pointForX:point.x_data andY:point.y_data]];
+    CGPoint geometryPoint = [geometry pointForX:point.x_data andY:point.y_data];
+    [simpleContext updateWithFirstCGPoint:geometryPoint];
+    if( nextSimpleContext ){
+        [nextSimpleContext updateWithFirstCGPoint:geometryPoint];
+    }
     
     // Keep track of last point we drew so if too many too close we skip them
-    CGPoint last_drawn_point = simpleContext.to_adj;
+    CGPoint last_drawn_point = simpleContext.to;
+    CGPoint cubic_points[4] = { last_drawn_point, last_drawn_point, last_drawn_point, last_drawn_point };
+    CGPoint controlPoint1 = CGPointZero;
+    CGPoint controlPoint2 = CGPointZero;
+    double bezierCubicDerivativeFactor = [_displayConfig respondsToSelector:@selector(bezierCubicDerivativeFactor)] ? [_displayConfig bezierCubicDerivativeFactor] : 0.1;
+    BOOL bezierFourPointsDerivative = [_displayConfig respondsToSelector:@selector(bezierFourPointsDerivative)] ? [_displayConfig bezierFourPointsDerivative] : true;
+    
     int badpoints=0;
     
     RZBezierPath * path = [RZBezierPath bezierPath];
@@ -424,8 +438,49 @@
             // Only draw next point if x has moved than more than 0.5
             if (pointMovedEnough) {
                 paths++;
-                [path addLineToPoint:simpleContext.to_adj];
-                last_drawn_point = simpleContext.to_adj;
+                if( cubicBezier ){
+                    if( lastPointHasValue ){
+                        cubic_points[0] = cubic_points[1];
+                        cubic_points[1] = cubic_points[2];
+                        cubic_points[2] = simpleContext.to_adj;
+                    }else{
+                        cubic_points[0] = simpleContext.to_adj;
+                        cubic_points[1] = simpleContext.to_adj;
+                        cubic_points[2] = simpleContext.to_adj;
+                    }
+                    
+                    if( i + 1 < n){
+                        GCStatsDataPoint * nextPoint = [data dataPointAtIndex:i+1];
+                        [nextSimpleContext updateWithCGPoint:[geometry pointForX:nextPoint.x_data andY:nextPoint.y_data]];
+                        cubic_points[3] = nextSimpleContext.to;
+                    }else{
+                        cubic_points[3] = cubic_points[2];
+                    }
+                    
+                    if( bezierFourPointsDerivative ){
+                        controlPoint1 = CGPointMake(cubic_points[1].x + (cubic_points[2].x - cubic_points[0].x) * bezierCubicDerivativeFactor,
+                                                    cubic_points[1].y + (cubic_points[2].y - cubic_points[0].y) * bezierCubicDerivativeFactor ) ;
+                        
+                        controlPoint2 = CGPointMake(cubic_points[2].x - (cubic_points[3].x - cubic_points[1].x) * bezierCubicDerivativeFactor,
+                                                    cubic_points[2].y - (cubic_points[3].y - cubic_points[1].y) * bezierCubicDerivativeFactor) ;
+                    }else{
+                        controlPoint1 = CGPointMake(cubic_points[1].x + (cubic_points[1].x - cubic_points[0].x) * bezierCubicDerivativeFactor,
+                                                    cubic_points[1].y + (cubic_points[1].y - cubic_points[0].y) * bezierCubicDerivativeFactor ) ;
+                        
+                        controlPoint2 = CGPointMake(cubic_points[2].x - (cubic_points[3].x - cubic_points[2].x) * bezierCubicDerivativeFactor,
+                                                    cubic_points[2].y - (cubic_points[3].y - cubic_points[2].y) * bezierCubicDerivativeFactor) ;
+
+                    }
+                    [path addCurveToPoint:cubic_points[2]
+                            controlPoint1:controlPoint1
+                            controlPoint2:controlPoint2];
+                    //don't adjust to take control point later
+                    cubic_points[2] = simpleContext.to;
+                    last_drawn_point = simpleContext.to_adj;
+                }else{
+                    [path addLineToPoint:simpleContext.to_adj];
+                    last_drawn_point = simpleContext.to_adj;
+                }
             }
         }
 
@@ -719,6 +774,7 @@
             break;
         case gcGraphStep:
         case gcGraphLine:
+        case gcGraphBezier:
             [self drawGraphLines:idx];
             break;
     }

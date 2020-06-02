@@ -386,13 +386,13 @@
         field = [GCField fieldForFlag:current.fieldFlag andActivityType:self.activityType];
         serieOfSerie = [[GCAppGlobal derived] timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
             return [act.activityType isEqualToString:self.activityType];
-        } withLimit:60]];
+        } withLimit:90]];
     }
     //GCStatsSerieOfSerieWithUnits * historical = [[GCAppGlobal derived] timeSeriesOfSeriesFor:field];
     //[serieOfSerie addSerieOfSerie:historical];
     GCSimpleGraphCachedDataSource * cache = nil;
     if (serieOfSerie) {
-        cache = [GCSimpleGraphCachedDataSource derivedHist:self.activityType field:field series:serieOfSerie width:tableView.frame.size.width];
+        cache = [GCSimpleGraphCachedDataSource derivedHist:false field:field series:serieOfSerie width:tableView.frame.size.width];
         cache.emptyGraphLabel = @"";
         graphCell.legend = true;
         [graphCell setDataSource:cache andConfig:cache];

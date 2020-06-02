@@ -556,24 +556,75 @@
 }
 
 
-+(GCSimpleGraphCachedDataSource*)derivedHist:(NSString*)activityType
++(GCSimpleGraphCachedDataSource*)derivedHist:(BOOL)diffMode
                                        field:(GCField*)field
                                       series:(GCStatsSerieOfSerieWithUnits*)serieOfSeries
                                        width:(CGFloat)width{
+    
+    NSArray<NSNumber*>*seconds = @[ @(0), @(60), @(1800) ];
+    double numberOfDays = 5.;
+    
+    NSArray<UIColor*>*colors = [GCViewConfig arrayOfColorsForMultiplots];
     GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-    rv.xUnit = [GCUnit dateshort];
-    NSArray<UIColor*>* colors = [GCViewConfig arrayOfColorsForMultiplots];
+
+    GCStatsDataSerie * first = nil;
+    
     NSUInteger i=0;
-    for (NSNumber * xval in @[ @(30.0), @(60.0), @(60.*10.0), @(60.*30.0)]) {
-        GCStatsDataSerieWithUnit * serieu = [serieOfSeries serieForX:[GCNumberWithUnit numberWithUnit:[GCUnit second] andValue:xval.doubleValue]];
-        GCSimpleGraphDataHolder * holder = [GCSimpleGraphDataHolder dataHolder:serieu.serie
-                                                                          type:gcGraphLine
-                                                                         color:colors[i]
-                                                                       andUnit:serieu.unit];
-        holder.legend = [[GCNumberWithUnit numberWithUnit:[GCUnit second] andValue:xval.doubleValue] formatDouble];
-        i++;
-        [rv addDataHolder:holder];
+    for (NSNumber * second in seconds) {
+        if( i < colors.count){
+            UIColor * color = colors[i];
+            
+            GCStatsDataSerieWithUnit * one = [serieOfSeries serieForX:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:second.doubleValue]];
+            GCStatsDataSerie * max = [one.serie movingFunctionForUnit:60*60*24*numberOfDays
+                                                             function:^(NSArray<GCStatsDataPoint*>*samples){
+                double max = samples.firstObject.y_data;
+                for (GCStatsDataPoint * point in samples) {
+                    if( point.y_data > max){
+                        max = point.y_data;
+                    }
+                }
+                return max;
+            }];
+                        
+            if( first == nil){
+                first = max;
+            }else{
+                if( diffMode ){
+                    GCStatsDataSerie * diffSerie = [max operate:gcStatsOperandMinus with:first];
+                    GCSimpleGraphDataHolder * holder_diff = [GCSimpleGraphDataHolder dataHolder:diffSerie
+                                                                                           type:gcGraphBezier
+                                                                                          color:color
+                                                                                        andUnit:one.unit];
+                    GCSimpleGraphDataHolder * holder_diff_line = [GCSimpleGraphDataHolder dataHolder:diffSerie
+                                                                                                type:gcGraphLine
+                                                                                               color:[color colorWithAlphaComponent:0.5]
+                                                                                             andUnit:one.unit];
+                    holder_diff.legend = [NSString stringWithFormat:@"%@ drop", [GCNumberWithUnit numberWithUnitName:@"minute" andValue:second.doubleValue/60.0]];
+                    //holder_diff.axisForSerie = 1;
+                    [rv addDataHolder:holder_diff];
+                    [rv addDataHolder:holder_diff_line];
+                }else{
+                    
+                    GCSimpleGraphDataHolder * holder = [GCSimpleGraphDataHolder dataHolder:one.serie
+                                                                                      type:gcGraphBezier
+                                                                                     color:[color colorWithAlphaComponent:0.2]
+                                                                                   andUnit:one.unit];
+                    
+                    GCSimpleGraphDataHolder * holder_max = [GCSimpleGraphDataHolder dataHolder:max
+                                                                                          type:gcGraphBezier
+                                                                                         color:color
+                                                                                       andUnit:one.unit];
+                    
+                    holder_max.legend = [NSString stringWithFormat:@"%@", [GCNumberWithUnit numberWithUnitName:@"minute" andValue:second.doubleValue/60.0]];
+                    [rv addDataHolder:holder];
+                    [rv addDataHolder:holder_max];
+                }
+            }
+            i++;
+        }
     }
+
+    [rv setXUnit:[GCUnit dateshort]];
     
     return rv;
 }
@@ -829,13 +880,13 @@
     rv.xUnit = [GCUnit unitForKey:@"datemonth"];
 
     GCSimpleGraphDataHolder * lt = [GCSimpleGraphDataHolder dataHolder:perfAnalysis.longTermSerie.serie
-                                                                  type:gcGraphLine
+                                                                  type:gcGraphBezier
                                                                  color:[GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLine]
                                                                andUnit:perfAnalysis.longTermSerie.unit];
     lt.lineWidth =2;
     lt.legend = NSLocalizedString(@"Fitness", @"Performance");
     GCSimpleGraphDataHolder * st = [GCSimpleGraphDataHolder dataHolder:perfAnalysis.shortTermSerie.serie
-                                                                  type:gcGraphLine
+                                                                  type:gcGraphBezier
                                                                  color:[GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLineSecondary]
                                                                andUnit:perfAnalysis.shortTermSerie.unit];
     st.legend = NSLocalizedString(@"Fatigue", @"Performance");

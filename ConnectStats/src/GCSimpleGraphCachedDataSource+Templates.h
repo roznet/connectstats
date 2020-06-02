@@ -40,7 +40,7 @@
 +(GCSimpleGraphCachedDataSource*)derivedData:(GCField*)field forDate:(NSDate*)date width:(CGFloat)width;
 
 +(GCSimpleGraphCachedDataSource*)trackFieldFrom:(GCTrackStats*)trackStats;
-+(GCSimpleGraphCachedDataSource*)derivedHist:(NSString*)activityType field:(GCField*)field series:(GCStatsSerieOfSerieWithUnits*)serieOfSeries width:(CGFloat)width;
++(GCSimpleGraphCachedDataSource*)derivedHist:(BOOL)diffMode field:(GCField*)field series:(GCStatsSerieOfSerieWithUnits*)serieOfSeries width:(CGFloat)width;
 +(GCSimpleGraphCachedDataSource*)derivedDataSingleHighlighted:(GCField*)fieldInput period:(gcDerivedPeriod)period forDate:(NSDate*)date addLegendTo:(NSMutableArray*)legend width:(CGFloat)width;
 
 @end

@@ -1981,6 +1981,9 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
                         case gcStatsOperandPlus:
                             [newpoint addPoint:o_point];
                             break;
+                        case gcStatsOperandMinus:
+                            [newpoint minusPoint:o_point];
+                            break;
                         case gcStatsOperandMultiply:
                             [newpoint multiplyPoint:o_point];
                             break;

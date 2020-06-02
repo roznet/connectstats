@@ -85,6 +85,7 @@ typedef struct {
 
 typedef NS_ENUM(NSUInteger, gcStatsOperand) {
     gcStatsOperandPlus,
+    gcStatsOperandMinus,
     gcStatsOperandMax,
     gcStatsOperandMin,
     gcStatsOperandMultiply
