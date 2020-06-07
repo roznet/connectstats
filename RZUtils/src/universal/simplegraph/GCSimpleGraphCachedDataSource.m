@@ -38,10 +38,16 @@
         info.dataSerie = aData;
         info.yUnit = aUnit;
         info.range = [aData range];
-        if (aType == gcGraphLine || aType == gcGraphStep) {
-            info.lineWidth = 1.;
-        }else{
-            info.lineWidth = 4.;
+        switch (aType) {
+            case gcGraphLine:
+            case gcGraphStep:
+            case gcGraphBezier:
+                info.lineWidth = 1.;
+                break;
+                
+            case gcScatterPlot:
+                info.lineWidth = 4.;
+                break;
         }
     }
     return info;
