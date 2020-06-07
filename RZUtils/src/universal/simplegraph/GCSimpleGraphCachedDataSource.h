@@ -86,6 +86,7 @@
 @property (nonatomic,retain) RZColor * useForegroundColor;
 @property (nonatomic,retain) RZColor * axisColor;
 @property (nonatomic,assign) BOOL xAxisIsVertical;
+@property (nonatomic,readonly) BOOL requiresLegend;
 
 +(GCSimpleGraphCachedDataSource*)graphDataSourceWithTitle:(NSString*)title andXUnit:(GCUnit*)xUnit;
 

@@ -308,7 +308,7 @@
             }
         }
     }
-
+    
     _origRange = _range;
 
     CGPoint zoom = self.zoomPercentage;

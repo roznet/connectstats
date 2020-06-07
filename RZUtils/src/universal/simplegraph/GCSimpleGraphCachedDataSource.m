@@ -115,6 +115,16 @@
     return _series.count;
 }
 
+-(BOOL)requiresLegend{
+    BOOL rv = false;
+    for (GCSimpleGraphDataHolder*holder in self.series) {
+        if( holder.legend != nil){
+            rv = true;
+        }
+    }
+    return rv;
+}
+
 -(GCStatsDataSerie*)dataSerie:(NSUInteger)idx{
     if (idx < _series.count) {
         return [_series[idx] dataSerie];

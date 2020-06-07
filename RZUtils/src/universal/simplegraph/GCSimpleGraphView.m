@@ -227,6 +227,7 @@
     if (baseRect.size.width == 0 && self.frame.size.width != 0) {
         self.drawRect = self.frame;
     }
+    
     for (NSUInteger i=0; i<[_dataSource nDataSeries]; i++) {
         NSUInteger axis = [_dataSource respondsToSelector:@selector(axisForSerie:)]?[_dataSource axisForSerie:i]:0;
         if (axis>=(self.geometries).count) {
