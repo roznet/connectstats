@@ -27,7 +27,7 @@
 #import "GCAppGlobal.h"
 #import "GCActivitiesOrganizer.h"
 
-#define GC_ONE_DAY 24.*60.*60.
+static const NSTimeInterval kOneDayTimeInterval = 24.*60.*60.;
 
 @interface GCHistoryPerformanceAnalysis ()
 @property (nonatomic,retain) GCActivitiesOrganizer * organizer;
@@ -213,7 +213,7 @@
     GCStatsDataSerie * rv = [[[GCStatsDataSerie alloc] init] autorelease];
     for (GCStatsDataPoint * point in serie) {
         //double x_data = [[point.date dateByAddingTimeInterval:(shift*GC_ONE_DAY)] timeIntervalSinceReferenceDate];
-        double x_data = point.x_data + (shift*GC_ONE_DAY);
+        double x_data = point.x_data + (shift*kOneDayTimeInterval);
         if (x_data >= from_x && x_data <= to_x) {
             [rv addDataPointWithX:x_data andY:point.y_data];
         }
@@ -246,7 +246,7 @@
         RZLog(RZLogError, @"Invalid number of series %lu", (unsigned long)self.series.count);
     }
     if (serie) {
-        serie.serie = [serie.serie summedSerieByUnit:GC_ONE_DAY fillMethod:gcStatsZero];
+        serie.serie = [serie.serie summedSerieByUnit:kOneDayTimeInterval fillMethod:gcStatsZero];
         self.serie = serie;
         self.longTermSerie = [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit andSerie:[serie.serie movingAverage:[self samplesForPerformancePeriod:self.longTermPeriod]]];
         self.shortTermSerie = [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit andSerie:[serie.serie movingAverage:[self samplesForPerformancePeriod:self.shortTermPeriod]]];

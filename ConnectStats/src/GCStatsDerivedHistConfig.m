@@ -26,7 +26,38 @@
 
 
 #import "GCStatsDerivedHistConfig.h"
+#import "GCAppGlobal.h"
 
 @implementation GCStatsDerivedHistConfig
++(GCStatsDerivedHistConfig*)config{
+    GCStatsDerivedHistConfig * rv = [[[GCStatsDerivedHistConfig alloc] init] autorelease];
+    if( rv){
+        [rv setDateForLookbackBucket:@"-6m"];;
+        rv.mode = gcDerivedHistModeAbsolute;
+        rv.smoothing = gcDerivedHistSmoothingMax;
+        rv.pointsForGraphs = @[ @(0), @(60), @(1800) ];
+        ;
+        rv.numberOfDaysForSmoothing = 5;
+
+    }
+    return rv;
+}
+-(void)dealloc{
+    [_fromDate release];
+    [super dealloc];
+}
+-(NSTimeInterval)timeIntervalForSmoothing{
+    return self.numberOfDaysForSmoothing * 24*60*60;
+}
+
+-(void)setDateForLookbackBucket:(NSString*)bucket{
+    NSString * useBucket = bucket;
+    if( ! [useBucket hasPrefix:@"-"] ){
+        useBucket = [NSString stringWithFormat:@"-%@", useBucket];
+    }
+    NSDate *from = [[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:useBucket]];
+    
+    self.fromDate = from;
+}
 
 @end

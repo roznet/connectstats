@@ -42,6 +42,7 @@
 #import "GCDerivedOrganizer.h"
 #import "GCHealthOrganizer.h"
 #import "GCStatsDerivedAnalysisViewController.h"
+#import "GCStatsDerivedHistConfig.h"
 
 @interface GCStatsMultiFieldViewController ()
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
@@ -382,17 +383,22 @@
     GCStatsSerieOfSerieWithUnits * serieOfSerie = nil;
     GCField * field = nil;
     
+    GCStatsDerivedHistConfig * config = [GCStatsDerivedHistConfig config];
+    config.mode = gcDerivedHistModeDrop;
+    
     if( current ){
         field = [GCField fieldForFlag:current.fieldFlag andActivityType:self.activityType];
+        NSDate * from = config.fromDate;
         serieOfSerie = [[GCAppGlobal derived] timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
-            return [act.activityType isEqualToString:self.activityType];
-        } withLimit:90]];
+            BOOL rv = [act.activityType isEqualToString:self.activityType] && ([act.date compare:from] == NSOrderedDescending);
+            return rv;
+        } withLimit:500]];
     }
     //GCStatsSerieOfSerieWithUnits * historical = [[GCAppGlobal derived] timeSeriesOfSeriesFor:field];
     //[serieOfSerie addSerieOfSerie:historical];
     GCSimpleGraphCachedDataSource * cache = nil;
     if (serieOfSerie) {
-        cache = [GCSimpleGraphCachedDataSource derivedHist:false field:field series:serieOfSerie width:tableView.frame.size.width];
+        cache = [GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSerie width:tableView.frame.size.width];
         cache.emptyGraphLabel = @"";
         graphCell.legend = true;
         [graphCell setDataSource:cache andConfig:cache];

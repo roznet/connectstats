@@ -132,6 +132,9 @@ enum uiTestSection {
         }
         GCTestUISampleDataSourceHolder * holder = self.dataSources[indexPath.row];
         [gcell setDataSource:holder.source andConfig:holder.source];
+        if( holder.source.requiresLegend ){
+            gcell.legend = true;
+        }
         cell = gcell;
     }
 

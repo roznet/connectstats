@@ -29,8 +29,31 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GCStatsDerivedHistConfig : NSObject
+/// which value to consider
+/// for the analysis: absolute value of the best of or drop from the max
+typedef NS_ENUM(NSUInteger,gcDerivedHistMode) {
+    gcDerivedHistModeAbsolute,
+    gcDerivedHistModeDrop,
+};
 
+typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
+    gcDerivedHistSmoothingMax,
+    gcDerivedHistSmoothingMovingAverage,
+};
+
+@interface GCStatsDerivedHistConfig : NSObject
+@property (nonatomic,assign) gcDerivedHistSmoothing smoothing;
+@property (nonatomic,assign) gcDerivedHistMode mode;
+@property (nonatomic,readonly) NSTimeInterval timeIntervalForSmoothing;
+@property (nonatomic,assign) NSUInteger numberOfDaysForSmoothing;
+@property (nonatomic,retain) NSDate * fromDate;
+
+/// An array of number corresponding to the X to display
+/// by default @[ @0, @60, @1800 ] which are seconds.
+@property (nonatomic,retain) NSArray<NSNumber*>*pointsForGraphs;
+
++(GCStatsDerivedHistConfig*)config;
+-(void)setDateForLookbackBucket:(NSString*)bucket;
 @end
 
 NS_ASSUME_NONNULL_END

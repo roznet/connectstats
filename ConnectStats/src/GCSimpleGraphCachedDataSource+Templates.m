@@ -34,6 +34,7 @@
 #import "GCUnitTrainingZone.h"
 #import "GCDerivedOrganizer.h"
 #import "GCActivity+Series.h"
+#import "GCStatsDerivedHistConfig.h"
 
 @implementation GCSimpleGraphCachedDataSource (Templates)
 
@@ -556,17 +557,17 @@
 }
 
 
-+(GCSimpleGraphCachedDataSource*)derivedHist:(BOOL)diffMode
++(GCSimpleGraphCachedDataSource*)derivedHist:(GCStatsDerivedHistConfig*)config
                                        field:(GCField*)field
                                       series:(GCStatsSerieOfSerieWithUnits*)serieOfSeries
                                        width:(CGFloat)width{
     
-    NSArray<NSNumber*>*seconds = @[ @(0), @(60), @(1800) ];
-    double numberOfDays = 5.;
-    
+    NSArray<NSNumber*>*seconds = config.pointsForGraphs;
+    NSTimeInterval unitForSmoothing = config.timeIntervalForSmoothing;
     NSArray<UIColor*>*colors = [GCViewConfig arrayOfColorsForMultiplots];
     GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
 
+    GCStatsDataSerie * firstSmoothed = nil;
     GCStatsDataSerie * first = nil;
     
     NSUInteger i=0;
@@ -575,24 +576,31 @@
             UIColor * color = colors[i];
             
             GCStatsDataSerieWithUnit * one = [serieOfSeries serieForX:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:second.doubleValue]];
-            GCStatsDataSerie * max = [one.serie movingFunctionForUnit:60*60*24*numberOfDays
-                                                             function:^(NSArray<GCStatsDataPoint*>*samples){
-                double max = samples.firstObject.y_data;
-                for (GCStatsDataPoint * point in samples) {
-                    if( point.y_data > max){
-                        max = point.y_data;
+            GCStatsDataSerie * smoothed = nil;
+            if (config.smoothing == gcDerivedHistSmoothingMax){
+                smoothed = [one.serie movingFunctionForUnit:unitForSmoothing
+                                                   function:^(NSArray<GCStatsDataPoint*>*samples){
+                    double max = samples.firstObject.y_data;
+                    for (GCStatsDataPoint * point in samples) {
+                        if( point.y_data > max){
+                            max = point.y_data;
+                        }
                     }
-                }
-                return max;
-            }];
-                        
-            if( first == nil){
-                first = max;
+                    return max;
+                }];
             }else{
-                if( diffMode ){
-                    GCStatsDataSerie * diffSerie = [max operate:gcStatsOperandMinus with:first];
-                    GCSimpleGraphDataHolder * holder_diff = [GCSimpleGraphDataHolder dataHolder:diffSerie
-                                                                                           type:gcGraphBezier
+                smoothed = [one.serie movingAverageForUnit:unitForSmoothing];
+            }
+                        
+            if( firstSmoothed == nil){
+                firstSmoothed = smoothed;
+                first = one.serie;
+            }else{
+                if( config.mode == gcDerivedHistModeDrop ){
+                    GCStatsDataSerie * smoothDiffSerie = [smoothed operate:gcStatsOperandMinus with:firstSmoothed];
+                    GCStatsDataSerie * diffSerie = [one.serie operate:gcStatsOperandMinus with:first];
+                    GCSimpleGraphDataHolder * holder_diff = [GCSimpleGraphDataHolder dataHolder:smoothDiffSerie
+                                                                                           type:gcGraphLine
                                                                                           color:color
                                                                                         andUnit:one.unit];
                     GCSimpleGraphDataHolder * holder_diff_line = [GCSimpleGraphDataHolder dataHolder:diffSerie
@@ -600,7 +608,6 @@
                                                                                                color:[color colorWithAlphaComponent:0.5]
                                                                                              andUnit:one.unit];
                     holder_diff.legend = [NSString stringWithFormat:@"%@ drop", [GCNumberWithUnit numberWithUnitName:@"minute" andValue:second.doubleValue/60.0]];
-                    //holder_diff.axisForSerie = 1;
                     [rv addDataHolder:holder_diff];
                     [rv addDataHolder:holder_diff_line];
                 }else{
@@ -610,7 +617,7 @@
                                                                                      color:[color colorWithAlphaComponent:0.2]
                                                                                    andUnit:one.unit];
                     
-                    GCSimpleGraphDataHolder * holder_max = [GCSimpleGraphDataHolder dataHolder:max
+                    GCSimpleGraphDataHolder * holder_max = [GCSimpleGraphDataHolder dataHolder:smoothed
                                                                                           type:gcGraphBezier
                                                                                          color:color
                                                                                        andUnit:one.unit];
@@ -623,8 +630,9 @@
             i++;
         }
     }
-
-    [rv setXUnit:[GCUnit dateshort]];
+    
+    rv.title = [NSString stringWithFormat:@"hist %@", field.displayName];
+    rv.xUnit = [GCUnit unitForKey:@"datemonth"];
     
     return rv;
 }
