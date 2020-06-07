@@ -281,7 +281,9 @@
             }
 
         }
-        [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNextOrDone];
+        });
     }
 }
 
@@ -304,14 +306,18 @@
             [self processParseTrackpoints];
         });
     }else{
-        [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNextOrDone];
+        });
     }
 
 }
 
 -(void)processParseTCX{
     RZLog(RZLogError, @"SHOULD NOT USE ANYMORE");
-    [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processNextOrDone];
+    });
 }
 
 -(void)processParseLaps{
@@ -327,7 +333,9 @@
             self.lapsSwim = parser.lapsSwim;
         }
     }
-    [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processNextOrDone];
+    });
 
 }
 
@@ -348,12 +356,17 @@
             self.status = GCWebStatusParsingFailed;
         }
     }
-    [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processDone];
+    });
+
 }
 
 -(void)processNextOrDone{
     if (self.track13Stage + 1 < gcTrack13RequestEnd) {
-        [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processDone];
+        });
     }else{
         dispatch_async([GCAppGlobal worker],^(){
             [self processSaving];

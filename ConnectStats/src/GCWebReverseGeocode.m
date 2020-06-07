@@ -83,7 +83,9 @@
         [_activity saveLocation:[NSString stringWithFormat:@"%@, %@", aPlacemark.locality, aPlacemark.ISOcountryCode]];
         somethingDone = true;
     }
-    [self performSelectorOnMainThread:@selector(reverseGeocodeDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self reverseGeocodeDone];
+    });
 }
 
 -(void)reverseGeocodeDone{
@@ -106,7 +108,9 @@
             if (error){
                 self.reachedGeocodingLimit = true;
                 RZLog(RZLogInfo, @"Reached geocoding limit after %lu requests", (unsigned long)self.countOfSuccessfulRequest);
-                [self performSelectorOnMainThread:@selector(reverseGeocodeDone) withObject:nil waitUntilDone:NO];
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self reverseGeocodeDone];
+                });
                 return;
             }
             if (placemarks.count) {
@@ -116,11 +120,14 @@
                 });
                 return;
             }
-
-            [self performSelectorOnMainThread:@selector(reverseGeocodeDone) withObject:nil waitUntilDone:NO];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self reverseGeocodeDone];
+            });
         }];
     }else{
-        [self performSelectorOnMainThread:@selector(reverseGeocodeDone) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self reverseGeocodeDone];
+        });
     }
 }
 

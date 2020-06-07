@@ -210,7 +210,9 @@
             }
 
             // Handle success in your app here.
-            [self performSelectorOnMainThread:@selector(executeQuery) withObject:nil waitUntilDone:NO];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self executeQuery];
+            });
         }];
     }
 }
@@ -329,7 +331,9 @@
 //-(NSString*)activityId;
 //-(id<GCWebRequest>)remediationReq;
 -(void)processDone{
-    [self.delegate performSelectorOnMainThread:@selector(processDone:) withObject:self waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.delegate processDone:self];
+    });
 }
 
 -(void)saveCollectedData:(NSDictionary*)dict withSuffix:(NSString*)suffix andId:(NSString*)aid{

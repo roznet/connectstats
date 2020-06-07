@@ -416,8 +416,6 @@
     
     GCStatsDataSerieWithUnit * first = [serieOfSeries serieForX:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:0]];
     GCStatsDataSerieWithUnit * oneMinute = [serieOfSeries serieForX:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:60]];
-    NSLog(@"%@", first);
-    NSLog(@"%@", oneMinute);
     
     GCStatsDataSerie * max = [oneMinute.serie movingFunctionForUnit:60*60*24*5 function:^(NSArray<GCStatsDataPoint*>*samples){
         double max = samples.firstObject.y_data;
