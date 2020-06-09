@@ -384,7 +384,9 @@
     GCField * field = nil;
     
     GCStatsDerivedHistConfig * config = [GCStatsDerivedHistConfig config];
+    config.numberOfDaysForLongTerm = 30;
     config.mode = gcDerivedHistModeDrop;
+    config.smoothing = gcDerivedHistSmoothingMax;
     
     if( current ){
         field = [GCField fieldForFlag:current.fieldFlag andActivityType:self.activityType];

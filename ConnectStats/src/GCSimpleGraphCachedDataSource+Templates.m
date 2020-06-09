@@ -563,12 +563,26 @@
                                        width:(CGFloat)width{
     
     NSArray<NSNumber*>*seconds = config.pointsForGraphs;
-    NSTimeInterval unitForSmoothing = config.timeIntervalForSmoothing;
+    NSTimeInterval unitForLongTerm = config.timeIntervalForLongTerm;
+    NSTimeInterval unitForShortTerm = config.timeIntervalForShortTerm;
+    
+    BOOL adjustShortTerm = (config.numberOfDaysForShortTerm != 0);
+    
     NSArray<UIColor*>*colors = [GCViewConfig arrayOfColorsForMultiplots];
     GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
 
-    GCStatsDataSerie * firstSmoothed = nil;
-    GCStatsDataSerie * first = nil;
+    GCStatsDataSerie * firstLongTerm = nil;
+    GCStatsDataSerie * firstShortTerm = nil;
+    
+    double (^sampleMax)(NSArray<GCStatsDataPoint*>*) = ^(NSArray<GCStatsDataPoint*>*samples){
+        double max = samples.firstObject.y_data;
+        for (GCStatsDataPoint * point in samples) {
+            if( point.y_data > max){
+                max = point.y_data;
+            }
+        }
+        return max;
+    };
     
     NSUInteger i=0;
     for (NSNumber * second in seconds) {
@@ -576,56 +590,48 @@
             UIColor * color = colors[i];
             
             GCStatsDataSerieWithUnit * one = [serieOfSeries serieForX:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:second.doubleValue]];
-            GCStatsDataSerie * smoothed = nil;
+            GCStatsDataSerie * longTerm = nil;
+            GCStatsDataSerie * shortTerm = one.serie;
             if (config.smoothing == gcDerivedHistSmoothingMax){
-                smoothed = [one.serie movingFunctionForUnit:unitForSmoothing
-                                                   function:^(NSArray<GCStatsDataPoint*>*samples){
-                    double max = samples.firstObject.y_data;
-                    for (GCStatsDataPoint * point in samples) {
-                        if( point.y_data > max){
-                            max = point.y_data;
-                        }
-                    }
-                    return max;
-                }];
+                longTerm = [one.serie movingFunctionForUnit:unitForLongTerm function:sampleMax];
+                if( adjustShortTerm ){
+                    shortTerm = [one.serie movingFunctionForUnit:unitForShortTerm function:sampleMax];
+                }
             }else{
-                smoothed = [one.serie movingAverageForUnit:unitForSmoothing];
+                longTerm = [one.serie movingAverageForUnit:unitForLongTerm];
+                if( adjustShortTerm ){
+                    shortTerm = [one.serie movingAverageForUnit:unitForShortTerm];
+                }
             }
                         
-            if( firstSmoothed == nil){
-                firstSmoothed = smoothed;
-                first = one.serie;
+            if( firstLongTerm == nil){
+                firstLongTerm = longTerm;
+                firstShortTerm = shortTerm;
             }else{
+                
+                GCStatsDataSerie * longTermFinalSerie = longTerm;
+                GCStatsDataSerie * shortTermFinalSerie = shortTerm;
                 if( config.mode == gcDerivedHistModeDrop ){
-                    GCStatsDataSerie * smoothDiffSerie = [smoothed operate:gcStatsOperandMinus with:firstSmoothed];
-                    GCStatsDataSerie * diffSerie = [one.serie operate:gcStatsOperandMinus with:first];
-                    GCSimpleGraphDataHolder * holder_diff = [GCSimpleGraphDataHolder dataHolder:smoothDiffSerie
-                                                                                           type:gcGraphLine
-                                                                                          color:color
-                                                                                        andUnit:one.unit];
-                    GCSimpleGraphDataHolder * holder_diff_line = [GCSimpleGraphDataHolder dataHolder:diffSerie
-                                                                                                type:gcGraphLine
-                                                                                               color:[color colorWithAlphaComponent:0.5]
-                                                                                             andUnit:one.unit];
-                    holder_diff.legend = [NSString stringWithFormat:@"%@ drop", [GCNumberWithUnit numberWithUnitName:@"minute" andValue:second.doubleValue/60.0]];
-                    [rv addDataHolder:holder_diff];
-                    [rv addDataHolder:holder_diff_line];
-                }else{
-                    
-                    GCSimpleGraphDataHolder * holder = [GCSimpleGraphDataHolder dataHolder:one.serie
-                                                                                      type:gcGraphBezier
-                                                                                     color:[color colorWithAlphaComponent:0.2]
-                                                                                   andUnit:one.unit];
-                    
-                    GCSimpleGraphDataHolder * holder_max = [GCSimpleGraphDataHolder dataHolder:smoothed
-                                                                                          type:gcGraphBezier
+                    shortTermFinalSerie = [shortTerm operate:gcStatsOperandMinus with:firstShortTerm];
+                    longTermFinalSerie = [longTerm operate:gcStatsOperandMinus with:firstLongTerm];
+                }
+                GCSimpleGraphDataHolder * holderLongTerm = [GCSimpleGraphDataHolder dataHolder:longTermFinalSerie
+                                                                                          type:gcGraphLine
                                                                                          color:color
                                                                                        andUnit:one.unit];
-                    
-                    holder_max.legend = [NSString stringWithFormat:@"%@", [GCNumberWithUnit numberWithUnitName:@"minute" andValue:second.doubleValue/60.0]];
-                    [rv addDataHolder:holder];
-                    [rv addDataHolder:holder_max];
+                GCSimpleGraphDataHolder * holderShortTerm = [GCSimpleGraphDataHolder dataHolder:shortTermFinalSerie
+                                                                                           type:gcGraphLine
+                                                                                          color:[color colorWithAlphaComponent:0.5]
+                                                                                        andUnit:one.unit];
+                holderLongTerm.lineWidth = 2.0;
+                if( config.mode == gcDerivedHistModeDrop){
+                    holderLongTerm.legend = [NSString stringWithFormat:@"%@ drop", [GCNumberWithUnit numberWithUnitName:@"minute" andValue:second.doubleValue/60.0]];
                 }
+                else{
+                    holderLongTerm.legend = [NSString stringWithFormat:@"%@", [GCNumberWithUnit numberWithUnitName:@"minute" andValue:second.doubleValue/60.0]];
+                }
+                [rv addDataHolder:holderLongTerm];
+                [rv addDataHolder:holderShortTerm];
             }
             i++;
         }

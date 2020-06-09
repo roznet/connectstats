@@ -37,7 +37,8 @@
         rv.smoothing = gcDerivedHistSmoothingMax;
         rv.pointsForGraphs = @[ @(0), @(60), @(1800) ];
         ;
-        rv.numberOfDaysForSmoothing = 5;
+        rv.numberOfDaysForLongTerm = 15;
+        rv.numberOfDaysForShortTerm = 0;
 
     }
     return rv;
@@ -46,8 +47,12 @@
     [_fromDate release];
     [super dealloc];
 }
--(NSTimeInterval)timeIntervalForSmoothing{
-    return self.numberOfDaysForSmoothing * 24*60*60;
+-(NSTimeInterval)timeIntervalForLongTerm{
+    return self.numberOfDaysForLongTerm * 24*60*60;
+}
+
+-(NSTimeInterval)timeIntervalForShortTerm{
+    return self.numberOfDaysForShortTerm * 24*60*60;
 }
 
 -(void)setDateForLookbackBucket:(NSString*)bucket{

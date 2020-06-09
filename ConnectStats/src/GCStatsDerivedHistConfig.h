@@ -44,8 +44,10 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
 @interface GCStatsDerivedHistConfig : NSObject
 @property (nonatomic,assign) gcDerivedHistSmoothing smoothing;
 @property (nonatomic,assign) gcDerivedHistMode mode;
-@property (nonatomic,readonly) NSTimeInterval timeIntervalForSmoothing;
-@property (nonatomic,assign) NSUInteger numberOfDaysForSmoothing;
+@property (nonatomic,readonly) NSTimeInterval timeIntervalForLongTerm;
+@property (nonatomic,readonly) NSTimeInterval timeIntervalForShortTerm;
+@property (nonatomic,assign) NSUInteger numberOfDaysForLongTerm;
+@property (nonatomic,assign) NSUInteger numberOfDaysForShortTerm;
 @property (nonatomic,retain) NSDate * fromDate;
 
 /// An array of number corresponding to the X to display
