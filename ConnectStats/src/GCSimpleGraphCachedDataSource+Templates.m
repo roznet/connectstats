@@ -590,33 +590,35 @@
             UIColor * color = colors[i];
             
             GCStatsDataSerieWithUnit * one = [serieOfSeries serieForX:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:second.doubleValue]];
-            GCStatsDataSerie * longTerm = nil;
+            GCStatsDataSerie * longTerm = one.serie;
             GCStatsDataSerie * shortTerm = one.serie;
-            if (config.smoothing == gcDerivedHistSmoothingMax){
-                longTerm = [one.serie movingFunctionForUnit:unitForLongTerm function:sampleMax];
-                if( adjustShortTerm ){
-                    shortTerm = [one.serie movingFunctionForUnit:unitForShortTerm function:sampleMax];
-                }
-            }else{
-                longTerm = [one.serie movingAverageForUnit:unitForLongTerm];
-                if( adjustShortTerm ){
-                    shortTerm = [one.serie movingAverageForUnit:unitForShortTerm];
-                }
-            }
                         
             if( firstLongTerm == nil){
                 firstLongTerm = longTerm;
                 firstShortTerm = shortTerm;
             }else{
-                
                 GCStatsDataSerie * longTermFinalSerie = longTerm;
                 GCStatsDataSerie * shortTermFinalSerie = shortTerm;
                 if( config.mode == gcDerivedHistModeDrop ){
                     shortTermFinalSerie = [shortTerm operate:gcStatsOperandMinus with:firstShortTerm];
                     longTermFinalSerie = [longTerm operate:gcStatsOperandMinus with:firstLongTerm];
                 }
+                
+                if (config.smoothing == gcDerivedHistSmoothingMax){
+                    longTermFinalSerie = [longTermFinalSerie movingFunctionForUnit:unitForLongTerm function:sampleMax];
+                    if( adjustShortTerm ){
+                        shortTermFinalSerie = [shortTermFinalSerie movingAverageForUnit:unitForShortTerm];
+                        //shortTermFinalSerie = [shortTermFinalSerie movingFunctionForUnit:unitForShortTerm function:sampleMax];
+                    }
+                }else{
+                    longTermFinalSerie = [longTermFinalSerie movingAverageForUnit:unitForLongTerm];
+                    if( adjustShortTerm ){
+                        shortTermFinalSerie = [shortTermFinalSerie movingAverageForUnit:unitForShortTerm];
+                    }
+                }
+
                 GCSimpleGraphDataHolder * holderLongTerm = [GCSimpleGraphDataHolder dataHolder:longTermFinalSerie
-                                                                                          type:gcGraphLine
+                                                                                          type:gcGraphBezier
                                                                                          color:color
                                                                                        andUnit:one.unit];
                 GCSimpleGraphDataHolder * holderShortTerm = [GCSimpleGraphDataHolder dataHolder:shortTermFinalSerie
@@ -624,6 +626,7 @@
                                                                                           color:[color colorWithAlphaComponent:0.5]
                                                                                         andUnit:one.unit];
                 holderLongTerm.lineWidth = 2.0;
+                
                 if( config.mode == gcDerivedHistModeDrop){
                     holderLongTerm.legend = [NSString stringWithFormat:@"%@ drop", [GCNumberWithUnit numberWithUnitName:@"minute" andValue:second.doubleValue/60.0]];
                 }
@@ -637,7 +640,11 @@
         }
     }
     
-    rv.title = [NSString stringWithFormat:@"hist %@", field.displayName];
+    if( config.smoothing == gcDerivedHistSmoothingMax ){
+        rv.title = [NSString stringWithFormat:@"%@ Days Max %@", @(config.numberOfDaysForLongTerm), field.displayName];
+    }else{
+        rv.title = [NSString stringWithFormat:@"%@ %@ Days Trend ", field.displayName, @(config.numberOfDaysForLongTerm)];
+    }
     rv.xUnit = [GCUnit unitForKey:@"datemonth"];
     
     return rv;
