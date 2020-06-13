@@ -563,10 +563,10 @@
                                        width:(CGFloat)width{
     
     NSArray<NSNumber*>*seconds = config.pointsForGraphs;
-    NSTimeInterval unitForLongTerm = config.timeIntervalForLongTerm;
-    NSTimeInterval unitForShortTerm = config.timeIntervalForShortTerm;
+    NSTimeInterval unitForLongTerm = config.longTermPeriod.timeInterval;
+    NSTimeInterval unitForShortTerm = config.shortTermPeriod.timeInterval;
     
-    BOOL adjustShortTerm = (config.numberOfDaysForShortTerm != 0);
+    BOOL adjustShortTerm = (config.shortTermPeriod.numberOfDays != 0);
     
     NSArray<UIColor*>*colors = [GCViewConfig arrayOfColorsForMultiplots];
     GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
@@ -622,8 +622,8 @@
                                                                                          color:color
                                                                                        andUnit:one.unit];
                 GCSimpleGraphDataHolder * holderShortTerm = [GCSimpleGraphDataHolder dataHolder:shortTermFinalSerie
-                                                                                           type:gcGraphLine
-                                                                                          color:[color colorWithAlphaComponent:0.5]
+                                                                                           type:gcGraphBezier
+                                                                                          color:[color colorWithAlphaComponent:0.8]
                                                                                         andUnit:one.unit];
                 holderLongTerm.lineWidth = 2.0;
                 
@@ -641,9 +641,9 @@
     }
     
     if( config.smoothing == gcDerivedHistSmoothingMax ){
-        rv.title = [NSString stringWithFormat:@"%@ Days Max %@", @(config.numberOfDaysForLongTerm), field.displayName];
+        rv.title = [NSString stringWithFormat:@"%@ Max %@", config.longTermPeriod.displayName, field.displayName];
     }else{
-        rv.title = [NSString stringWithFormat:@"%@ %@ Days Trend ", field.displayName, @(config.numberOfDaysForLongTerm)];
+        rv.title = [NSString stringWithFormat:@"%@ %@ Trend ", field.displayName, config.longTermPeriod.displayName];
     }
     rv.xUnit = [GCUnit unitForKey:@"datemonth"];
     

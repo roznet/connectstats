@@ -26,6 +26,8 @@
 
 
 #import <Foundation/Foundation.h>
+#import "GCHistoryPerformanceAnalysis.h"
+#import "GCLagPeriod.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -44,18 +46,17 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
 @interface GCStatsDerivedHistConfig : NSObject
 @property (nonatomic,assign) gcDerivedHistSmoothing smoothing;
 @property (nonatomic,assign) gcDerivedHistMode mode;
-@property (nonatomic,readonly) NSTimeInterval timeIntervalForLongTerm;
-@property (nonatomic,readonly) NSTimeInterval timeIntervalForShortTerm;
-@property (nonatomic,assign) NSUInteger numberOfDaysForLongTerm;
-@property (nonatomic,assign) NSUInteger numberOfDaysForShortTerm;
-@property (nonatomic,retain) NSDate * fromDate;
+@property (nonatomic,retain) GCLagPeriod * longTermPeriod;
+@property (nonatomic,retain) GCLagPeriod * shortTermPeriod;
+
+@property (nonatomic,readonly) NSDate * fromDate;
+@property (nonatomic,retain) GCLagPeriod * lookbackPeriod;
 
 /// An array of number corresponding to the X to display
 /// by default @[ @0, @60, @1800 ] which are seconds.
 @property (nonatomic,retain) NSArray<NSNumber*>*pointsForGraphs;
 
 +(GCStatsDerivedHistConfig*)config;
--(void)setDateForLookbackBucket:(NSString*)bucket;
 @end
 
 NS_ASSUME_NONNULL_END

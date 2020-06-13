@@ -384,7 +384,8 @@
     GCField * field = nil;
     
     GCStatsDerivedHistConfig * config = [GCStatsDerivedHistConfig config];
-    config.numberOfDaysForLongTerm = 30;
+    config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
+    config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
     config.mode = gcDerivedHistModeDrop;
     config.smoothing = gcDerivedHistSmoothingMax;
     

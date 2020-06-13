@@ -1,6 +1,6 @@
 //  MIT License
 //
-//  Created on 07/06/2020 for ConnectStats
+//  Created on 13/06/2020 for ConnectStats
 //
 //  Copyright (c) 2020 Brice Rosenzweig
 //
@@ -25,33 +25,30 @@
 
 
 
-#import "GCStatsDerivedHistConfig.h"
-#import "GCAppGlobal.h"
+#import <Foundation/Foundation.h>
 
-@implementation GCStatsDerivedHistConfig
+typedef NS_ENUM(NSUInteger, gcLagPeriod) {
+    gcLagPeriodNone,
+    gcLagPeriodDay,
+    gcLagPeriodWeek,
+    gcLagPeriodTwoWeeks,
+    gcLagPeriodMonth,
+    gcLagPeriodThreeMonths,
+    gcLagPeriodSixMonths,
+    gcLagPeriodYear
+};
 
-+(GCStatsDerivedHistConfig*)config{
-    GCStatsDerivedHistConfig * rv = [[[GCStatsDerivedHistConfig alloc] init] autorelease];
-    if( rv){
-        rv.lookbackPeriod = [GCLagPeriod periodFor:gcLagPeriodSixMonths];
-        rv.mode = gcDerivedHistModeAbsolute;
-        rv.smoothing = gcDerivedHistSmoothingMax;
-        rv.pointsForGraphs = @[ @(0), @(60), @(1800) ];
+NS_ASSUME_NONNULL_BEGIN
 
-        rv.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
-        rv.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodNone];
-    }
-    return rv;
-}
--(void)dealloc{
-    [_shortTermPeriod release];
-    [_longTermPeriod release];
-    [_lookbackPeriod release];
-    [super dealloc];
-}
+@interface GCLagPeriod : NSObject
+@property (nonatomic,readonly) NSUInteger numberOfDays;
+@property (nonatomic,readonly) NSTimeInterval timeInterval;
+@property (nonatomic,readonly) NSString * displayName;
 
--(NSDate*)fromDate{
-    return [self.lookbackPeriod applyToDate:[[GCAppGlobal organizer] lastActivity].date];
-}
++(GCLagPeriod*)periodFor:(gcLagPeriod)period;
+-(NSDate*)applyToDate:(NSDate*)date;
 
++(NSArray<GCLagPeriod*>*)validPeriods;
 @end
+
+NS_ASSUME_NONNULL_END

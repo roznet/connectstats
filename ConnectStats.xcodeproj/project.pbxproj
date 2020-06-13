@@ -1260,6 +1260,9 @@
 		42D4CA6E248D5497003F3AB7 /* GCStatsDerivedHistConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistConfig.m */; };
 		42D4CA6F248D5497003F3AB7 /* GCStatsDerivedHistConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistConfig.m */; };
 		42D4CA70248D5497003F3AB7 /* GCStatsDerivedHistConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistConfig.m */; };
+		42D4CA7D24951AF2003F3AB7 /* GCLagPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA7C24951AF2003F3AB7 /* GCLagPeriod.m */; };
+		42D4CA7E24951AF2003F3AB7 /* GCLagPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA7C24951AF2003F3AB7 /* GCLagPeriod.m */; };
+		42D4CA7F24951AF2003F3AB7 /* GCLagPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA7C24951AF2003F3AB7 /* GCLagPeriod.m */; };
 		42D8AEF81B1FB2CB00ADDD31 /* collected.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42D8AEF71B1FB2CB00ADDD31 /* collected.plist */; };
 		42D8AEFD1B22D1BC00ADDD31 /* GCHealthKitSamplesToPointsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */; };
 		42D8AEFE1B22D1BD00ADDD31 /* GCHealthKitSamplesToPointsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */; };
@@ -2882,6 +2885,8 @@
 		42D1D1FF1DEE66DB00F13D52 /* FITWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITWindowController.swift; path = src/FITWindowController.swift; sourceTree = "<group>"; };
 		42D4CA6C248D5497003F3AB7 /* GCStatsDerivedHistConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedHistConfig.h; path = src/GCStatsDerivedHistConfig.h; sourceTree = "<group>"; };
 		42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCStatsDerivedHistConfig.m; path = src/GCStatsDerivedHistConfig.m; sourceTree = "<group>"; };
+		42D4CA7B24951AF2003F3AB7 /* GCLagPeriod.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCLagPeriod.h; path = src/GCLagPeriod.h; sourceTree = "<group>"; };
+		42D4CA7C24951AF2003F3AB7 /* GCLagPeriod.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCLagPeriod.m; path = src/GCLagPeriod.m; sourceTree = "<group>"; };
 		42D8AEF71B1FB2CB00ADDD31 /* collected.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = collected.plist; sourceTree = "<group>"; };
 		42D8AEFA1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitSamplesToPointsParser.h; path = src/GCHealthKitSamplesToPointsParser.h; sourceTree = "<group>"; };
 		42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitSamplesToPointsParser.m; path = src/GCHealthKitSamplesToPointsParser.m; sourceTree = "<group>"; };
@@ -3897,6 +3902,8 @@
 				422C70AD1642B677003779E0 /* GCHistoryAggregatedActivityStats.m */,
 				42BC77E1198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.h */,
 				42BC77E2198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.m */,
+				42D4CA7B24951AF2003F3AB7 /* GCLagPeriod.h */,
+				42D4CA7C24951AF2003F3AB7 /* GCLagPeriod.m */,
 			);
 			name = History;
 			sourceTree = "<group>";
@@ -6944,6 +6951,7 @@
 				42305E971DCF81C60024700C /* GCAppDelegate+Swift.m in Sources */,
 				422FAF6C19A1DD6000D09773 /* GCHistoryPerformanceAnalysis.m in Sources */,
 				424208971BCC49E200F3DB12 /* GCActivityPreviewingViewController.m in Sources */,
+				42D4CA7F24951AF2003F3AB7 /* GCLagPeriod.m in Sources */,
 				42BFC2331DCF4DF900EAD40E /* GCAppGlobal.swift in Sources */,
 				422FAF7119A1DD6000D09773 /* GCSettingsBugReportViewController.m in Sources */,
 				42A22DE119E1AAFD004407B8 /* GCWithingsBodyMeasures.m in Sources */,
@@ -7289,6 +7297,7 @@
 				42C0589721D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */,
 				424340FD1B741652001E22BB /* GCActivity+CSSearch.m in Sources */,
 				426B0F121DA119060091A734 /* FITFitMessageFields.m in Sources */,
+				42D4CA7D24951AF2003F3AB7 /* GCLagPeriod.m in Sources */,
 				422637A51AFF6C5F005461E3 /* GCDebugActionsTableViewController.m in Sources */,
 				422D900417A1AE2C00C131DC /* GCViewIcons.m in Sources */,
 				422D900717A276F100C131DC /* GCStatsGraphOptionViewController.m in Sources */,
@@ -7397,6 +7406,7 @@
 				42B85893229DBD55009E309A /* GCConnectStatsRequestSearch.m in Sources */,
 				42B5E2661BA5B216000FAE4E /* GCHealthKitDailySummaryRequest.m in Sources */,
 				42EAA3AC1EDBA6150081B130 /* GCAppProfiles+Swift.m in Sources */,
+				42D4CA7E24951AF2003F3AB7 /* GCLagPeriod.m in Sources */,
 				42B5E2671BA5B216000FAE4E /* GCHealthKitDayDetailRequest.m in Sources */,
 				42B5E2681BA5B216000FAE4E /* GCHealthKitSourcesRequest.m in Sources */,
 				426CC4731BAEB9920033978C /* GCAppActions.m in Sources */,

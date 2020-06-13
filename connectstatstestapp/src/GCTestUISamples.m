@@ -85,7 +85,7 @@
         NSString * filter = nil;
         NSInteger which = -1;
         // DONT CHECKIN
-        filter = @"sample15_";
+        //filter = @"sample15_";
         //which = 2;
         if( filter ){
             for (NSString * one in selectorNames) {
@@ -627,23 +627,23 @@
     GCStatsDerivedHistConfig * config = [GCStatsDerivedHistConfig config];
     config.mode = gcDerivedHistModeAbsolute;
     config.smoothing = gcDerivedHistSmoothingMovingAverage;
-    config.numberOfDaysForLongTerm = 15;
-    config.numberOfDaysForShortTerm = 5;
+    config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
+    config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodWeek];
     [rv addObject:[GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSeries width:320.]];
     config.mode = gcDerivedHistModeDrop;
     config.smoothing = gcDerivedHistSmoothingMovingAverage;
-    config.numberOfDaysForLongTerm = 15;
-    config.numberOfDaysForShortTerm = 5;
+    config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
+    config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodWeek];
     [rv addObject:[GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSeries width:320.]];
     config.mode = gcDerivedHistModeAbsolute;
     config.smoothing = gcDerivedHistSmoothingMax;
-    config.numberOfDaysForLongTerm = 10;
-    config.numberOfDaysForShortTerm = 5;
+    config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
+    config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodWeek];
     [rv addObject:[GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSeries width:320.]];
     config.mode = gcDerivedHistModeDrop;
     config.smoothing = gcDerivedHistSmoothingMax;
-    config.numberOfDaysForLongTerm = 10;
-    config.numberOfDaysForShortTerm = 0;
+    config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
+    config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodNone];
     [rv addObject:[GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSeries width:320.]];
 
     return rv;

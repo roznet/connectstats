@@ -43,22 +43,14 @@ static const NSTimeInterval kOneDayTimeInterval = 24.*60.*60.;
         NSString * activityType = field.activityType;
         if ([field canSum]) {
             rv.summableField = field;
-            if ([activityType isEqualToString:GC_TYPE_TENNIS]) {
-                rv.scalingField = [GCField fieldForKey:@"heatmap_all_center" andActivityType:activityType];
-            }else{
-                rv.scalingField = [GCField fieldForKey:@"WeightedMeanHeartRate" andActivityType:activityType] ;
-            }
+            rv.scalingField = [GCField fieldForKey:@"WeightedMeanHeartRate" andActivityType:activityType] ;
         }else{
-            if ([activityType isEqualToString:GC_TYPE_TENNIS]) {
-                rv.summableField = [GCField fieldForKey:@"shots" andActivityType:activityType];
-            }else{
-                rv.summableField = [GCField fieldForKey:@"SumDistance" andActivityType:activityType];
-            }
+            rv.summableField = [GCField fieldForKey:@"SumDistance" andActivityType:activityType];
             rv.scalingField = field;
         }
 
-        rv.shortTermPeriod = gcPerformancePeriodWeek;
-        rv.longTermPeriod = gcPerformancePeriodMonth;
+        rv.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodWeek];
+        rv.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodMonth];
 
         rv.fromDate = date;
     }
@@ -76,6 +68,9 @@ static const NSTimeInterval kOneDayTimeInterval = 24.*60.*60.;
     [_series release];
     [_seriesDescription release];
 
+    [_shortTermPeriod release];
+    [_longTermPeriod release];
+    
     [_longTermSerie release];
     [_shortTermSerie release];
     [_serie release];
@@ -83,66 +78,6 @@ static const NSTimeInterval kOneDayTimeInterval = 24.*60.*60.;
     [super dealloc];
 }
 
-#pragma mark - Utils
-
--(NSDateComponents*)dateComponentsFromPerformancePeriod:(gcPerformancePeriod)p{
-    NSDateComponents * rv = nil;
-
-    switch (p) {
-        case gcPerformancePeriodDay:
-            rv = [NSDateComponents dateComponentsFromString:@"-1d"];
-            break;
-        case gcPerformancePeriodThreeMonths:
-            rv = [NSDateComponents dateComponentsFromString:@"-3m"];
-            break;
-        case gcPerformancePeriodMonth:
-            rv = [NSDateComponents dateComponentsFromString:@"-1m"];
-            break;
-        case gcPerformancePeriodTwoWeeks:
-            rv = [NSDateComponents dateComponentsFromString:@"-2w"];
-            break;
-        case gcPerformancePeriodWeek:
-            rv = [NSDateComponents dateComponentsFromString:@"-1w"];
-            break;
-        case gcPerformancePeriodYear:
-            rv = [NSDateComponents dateComponentsFromString:@"-1y"];
-            break;
-        case gcPerformancePeriodNone:
-            rv = nil;
-            break;
-    }
-    return rv;
-}
-
--(NSUInteger)samplesForPerformancePeriod:(gcPerformancePeriod)p{
-    NSUInteger rv = 0;
-
-    switch (p) {
-        case gcPerformancePeriodNone:
-            rv = 0;
-            break;
-        case gcPerformancePeriodDay:
-            rv = 1;
-            break;
-        case gcPerformancePeriodMonth:
-            rv = 30;
-            break;
-        case gcPerformancePeriodWeek:
-            rv = 7;
-            break;
-        case gcPerformancePeriodYear:
-            rv = 365;
-            break;
-        case gcPerformancePeriodThreeMonths:
-            rv = 30*3;
-            break;
-        case gcPerformancePeriodTwoWeeks:
-            rv = 7*2;
-            break;
-    }
-    return rv;
-
-}
 -(void)useOrganizer:(GCActivitiesOrganizer*)organizer{
     self.organizer = organizer;
 }
@@ -171,8 +106,8 @@ static const NSTimeInterval kOneDayTimeInterval = 24.*60.*60.;
     NSDate * filterDate = nil;
     if(self.fromDate) {
         // substract longTermPeriod for the moving average and short Term Period to account for the shift
-        filterDate = [self.fromDate dateByAddingGregorianComponents:[self dateComponentsFromPerformancePeriod:self.longTermPeriod]];
-        filterDate = [filterDate dateByAddingGregorianComponents:[self dateComponentsFromPerformancePeriod:self.shortTermPeriod]];
+        filterDate = [self.longTermPeriod applyToDate:self.fromDate];
+        filterDate = [self.shortTermPeriod applyToDate:filterDate];
     }
 
     if (checkActivityType || filterDate!=nil) {
@@ -188,7 +123,7 @@ static const NSTimeInterval kOneDayTimeInterval = 24.*60.*60.;
     gcIgnoreMode ignoreMode = [self.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
     NSDictionary * series = [self.organizer fieldsSeries:self.fields matching:filter useFiltered:self.useFilter ignoreMode:ignoreMode];
     NSMutableArray * seriesArray = [NSMutableArray arrayWithCapacity:self.fields.count];
-    NSUInteger minimumPoints = [self samplesForPerformancePeriod:self.longTermPeriod];
+    NSUInteger minimumPoints = self.longTermPeriod.numberOfDays;
     minimumPoints = 0;
     for (GCField * field in self.fields) {
         GCStatsDataSerieWithUnit * serie = series[field];
@@ -206,10 +141,10 @@ static const NSTimeInterval kOneDayTimeInterval = 24.*60.*60.;
     self.series = [NSArray arrayWithArray:seriesArray];
 }
 
--(GCStatsDataSerie*)adjustSerie:(GCStatsDataSerie*)serie shift:(gcPerformancePeriod)period{
+-(GCStatsDataSerie*)adjustSerie:(GCStatsDataSerie*)serie shift:(GCLagPeriod*)period{
     double from_x = self.fromDate ? (self.fromDate).timeIntervalSinceReferenceDate : 0.;
     double to_x = (serie.lastObject).x_data;
-    NSUInteger shift = [self samplesForPerformancePeriod:period];
+    NSUInteger shift = period ? period.numberOfDays : 0;
     GCStatsDataSerie * rv = [[[GCStatsDataSerie alloc] init] autorelease];
     for (GCStatsDataPoint * point in serie) {
         //double x_data = [[point.date dateByAddingTimeInterval:(shift*GC_ONE_DAY)] timeIntervalSinceReferenceDate];
@@ -248,10 +183,11 @@ static const NSTimeInterval kOneDayTimeInterval = 24.*60.*60.;
     if (serie) {
         serie.serie = [serie.serie summedSerieByUnit:kOneDayTimeInterval fillMethod:gcStatsZero];
         self.serie = serie;
-        self.longTermSerie = [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit andSerie:[serie.serie movingAverage:[self samplesForPerformancePeriod:self.longTermPeriod]]];
-        self.shortTermSerie = [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit andSerie:[serie.serie movingAverage:[self samplesForPerformancePeriod:self.shortTermPeriod]]];
+        
+        self.longTermSerie = [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit andSerie:[serie.serie movingAverageForUnit:self.longTermPeriod.timeInterval]];
+        self.shortTermSerie = [GCStatsDataSerieWithUnit dataSerieWithUnit:serie.unit andSerie:[serie.serie movingAverageForUnit:self.shortTermPeriod.timeInterval]];
         self.longTermSerie.serie = [self adjustSerie:self.longTermSerie.serie shift:self.shortTermPeriod];
-        self.shortTermSerie.serie= [self adjustSerie:self.shortTermSerie.serie shift:gcPerformancePeriodNone];
+        self.shortTermSerie.serie= [self adjustSerie:self.shortTermSerie.serie shift:nil];
     }
 }
 @end
