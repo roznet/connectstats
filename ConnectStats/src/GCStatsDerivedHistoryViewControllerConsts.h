@@ -33,7 +33,8 @@
 #define GC_SECTION_END 3
 
 #define GC_OPTIONS_FIELD  0
-#define GC_OPTIONS_END    1
+#define GC_OPTIONS_METHOD  1
+#define GC_OPTIONS_END    2
 
 #define GC_PERIODS_LAG 0
 #define GC_PERIODS_LTPERIOD 1

@@ -37,7 +37,8 @@
     if( rv){
         rv.lookbackPeriod = [GCLagPeriod periodFor:gcLagPeriodSixMonths];
         rv.mode = gcDerivedHistModeAbsolute;
-        rv.smoothing = gcDerivedHistSmoothingMax;
+        rv.longTermSmoothing = gcDerivedHistSmoothingMax;
+        rv.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;
         rv.pointsForGraphs = @[ @(0), @(60), @(1800) ];
         rv.multiFieldConfig = multiFieldConfig;
         rv.derivedAnalysisConfig = derivedConfig;
@@ -61,7 +62,36 @@
     return self.derivedAnalysisConfig.currentDerivedDataSerie.field;
 }
 
--(GCCellSimpleGraph*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath using:(nonnull GCDerivedOrganizer *)derived{
+-(NSString*)method{
+    if( self.longTermSmoothing == gcDerivedHistSmoothingMax && self.shortTermSmoothing == gcDerivedHistSmoothingMax){
+        return NSLocalizedString( @"Max", @"Derived Hist Method");
+    }else if (self.longTermSmoothing == gcDerivedHistSmoothingMovingAverage && self.shortTermSmoothing == gcDerivedHistSmoothingMovingAverage ){
+        return NSLocalizedString( @"Trend", @"Derived Hist Method");
+    }else{
+        return NSLocalizedString( @"Max/Trend", @"Derived Hist Method");
+    }
+}
+-(void)setMethod:(NSString *)method{
+    if( [method isEqualToString:NSLocalizedString( @"Max", @"Derived Hist Method")] ){
+        self.longTermSmoothing = gcDerivedHistSmoothingMax;
+        self.shortTermSmoothing = gcDerivedHistSmoothingMax;
+    }else if( [method isEqualToString:NSLocalizedString( @"Trend", @"Derived Hist Method")] ){
+        self.longTermSmoothing = gcDerivedHistSmoothingMovingAverage;
+        self.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;
+    }else{
+        self.longTermSmoothing = gcDerivedHistSmoothingMax;
+        self.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;
+    }
+}
+
+-(NSArray<NSString*>*)methods{
+    return @[ NSLocalizedString( @"Max/Trend", @"Derived Hist Method"),
+              NSLocalizedString( @"Max", @"Derived Hist Method"),
+              NSLocalizedString( @"Trend", @"Derived Hist Method"),
+    ];
+}
+
+-(GCCellSimpleGraph*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath with:(nonnull GCDerivedOrganizer *)derived{
     GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
 
     GCDerivedDataSerie * current = [self.derivedAnalysisConfig currentDerivedDataSerie];
@@ -77,8 +107,6 @@
             return rv;
         } withLimit:500]];
     }
-    //GCStatsSerieOfSerieWithUnits * historical = [[GCAppGlobal derived] timeSeriesOfSeriesFor:field];
-    //[serieOfSerie addSerieOfSerie:historical];
     GCSimpleGraphCachedDataSource * cache = nil;
     if (serieOfSerie) {
         cache = [GCSimpleGraphCachedDataSource derivedHist:self field:field series:serieOfSerie width:tableView.frame.size.width];

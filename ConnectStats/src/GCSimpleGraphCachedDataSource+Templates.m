@@ -604,15 +604,15 @@
                     longTermFinalSerie = [longTerm operate:gcStatsOperandMinus with:firstLongTerm];
                 }
                 
-                if (config.smoothing == gcDerivedHistSmoothingMax){
+                if (config.longTermSmoothing == gcDerivedHistSmoothingMax){
                     longTermFinalSerie = [longTermFinalSerie movingFunctionForUnit:unitForLongTerm function:sampleMax];
-                    if( adjustShortTerm ){
-                        shortTermFinalSerie = [shortTermFinalSerie movingAverageForUnit:unitForShortTerm];
-                        //shortTermFinalSerie = [shortTermFinalSerie movingFunctionForUnit:unitForShortTerm function:sampleMax];
-                    }
                 }else{
                     longTermFinalSerie = [longTermFinalSerie movingAverageForUnit:unitForLongTerm];
-                    if( adjustShortTerm ){
+                }
+                if( adjustShortTerm ){
+                    if( config.shortTermSmoothing == gcDerivedHistSmoothingMax){
+                        shortTermFinalSerie = [shortTermFinalSerie movingFunctionForUnit:unitForShortTerm function:sampleMax];
+                    }else{
                         shortTermFinalSerie = [shortTermFinalSerie movingAverageForUnit:unitForShortTerm];
                     }
                 }
@@ -640,7 +640,7 @@
         }
     }
     
-    if( config.smoothing == gcDerivedHistSmoothingMax ){
+    if( config.longTermSmoothing == gcDerivedHistSmoothingMax ){
         rv.title = [NSString stringWithFormat:@"%@ Max %@", config.longTermPeriod.displayName, field.displayName];
     }else{
         rv.title = [NSString stringWithFormat:@"%@ %@ Trend ", field.displayName, config.longTermPeriod.displayName];

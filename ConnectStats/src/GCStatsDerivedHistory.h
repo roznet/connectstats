@@ -51,10 +51,15 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
 @property (nonatomic,retain) GCStatsMultiFieldConfig * multiFieldConfig;
 @property (nonatomic,retain) GCStatsDerivedAnalysisConfig * derivedAnalysisConfig;
 
-@property (nonatomic,assign) gcDerivedHistSmoothing smoothing;
+@property (nonatomic,assign) gcDerivedHistSmoothing longTermSmoothing;
+@property (nonatomic,assign) gcDerivedHistSmoothing shortTermSmoothing;
 @property (nonatomic,assign) gcDerivedHistMode mode;
 @property (nonatomic,retain) GCLagPeriod * longTermPeriod;
 @property (nonatomic,retain) GCLagPeriod * shortTermPeriod;
+/// Method for UI/String setup
+@property (nonatomic,retain) NSString * method;
+/// Method need to be on of string in array or default will be set
+@property (nonatomic,readonly) NSArray<NSString*>*methods;
 
 @property (nonatomic,readonly) NSDate * fromDate;
 @property (nonatomic,retain) GCLagPeriod * lookbackPeriod;
@@ -67,8 +72,9 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
 
 +(GCStatsDerivedHistory*)analysisWith:(GCStatsMultiFieldConfig*)multiFieldConfig and:(GCStatsDerivedAnalysisConfig*)derivedConfig;
 
--(GCCellSimpleGraph*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath
-using:(GCDerivedOrganizer*)derived;
+-(GCCellSimpleGraph*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath with:(GCDerivedOrganizer*)derived;
+
+
 
 @end
 

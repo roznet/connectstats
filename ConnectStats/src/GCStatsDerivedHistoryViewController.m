@@ -87,7 +87,7 @@
     UITableViewCell *cell = nil;
     
     if( indexPath.section==GC_SECTION_GRAPHS){
-        GCCellSimpleGraph * graphCell = [self.derivedHistAnalysis tableView:tableView derivedHistCellForRowAtIndexPath:indexPath using:[GCAppGlobal derived]];
+        GCCellSimpleGraph * graphCell = [self.derivedHistAnalysis tableView:tableView derivedHistCellForRowAtIndexPath:indexPath with:[GCAppGlobal derived]];
         cell = graphCell;
     }else if (indexPath.section == GC_SECTION_OPTIONS){
         GCCellGrid * gridCell = [GCCellGrid gridCell:tableView];
@@ -97,20 +97,35 @@
             GCField * current = self.derivedHistAnalysis.field;
             [gridCell labelForRow:0 andCol:1].text = current.displayName;
             //[gridCell labelForRow:0 andCol:1].text = self
+        }else if (indexPath.row == GC_OPTIONS_METHOD){
+            [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Method", @"Derived Hist Analysis Options");
+            [gridCell labelForRow:0 andCol:1].text = self.derivedHistAnalysis.method;
         }
         cell = gridCell;
     }else if (indexPath.section == GC_SECTION_PERIODS){
         GCCellGrid * gridCell = [GCCellGrid gridCell:tableView];
-        [gridCell setupForRows:1 andCols:2];
+        [gridCell setupForRows:2 andCols:2];
         if( indexPath.row == GC_PERIODS_LAG){
-            [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Lag", @"Derived Hist Analysis Options");
+            [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Period", @"Derived Hist Analysis Options");
             [gridCell labelForRow:0 andCol:1].text = self.derivedHistAnalysis.lookbackPeriod.displayName;
         }else if (indexPath.row == GC_PERIODS_LTPERIOD){
-            [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Long Term Period",@"Derived Hist Analysis Options");
+            [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Long Term",@"Derived Hist Analysis Options");
             [gridCell labelForRow:0 andCol:1].text = self.derivedHistAnalysis.longTermPeriod.displayName;
+            if( self.derivedHistAnalysis.longTermSmoothing == gcDerivedHistSmoothingMax ){
+                [gridCell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString( @"Max", @"Derived Hist Method")];
+            }else{
+                [gridCell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString( @"Trend", @"Derived Hist Method")];
+            }
+
         }else if (indexPath.row == GC_PERIODS_STPERIOD){
-            [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Short Term Period",@"Derived Hist Analysis Options");
+            [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Short Term",@"Derived Hist Analysis Options");
             [gridCell labelForRow:0 andCol:1].text = self.derivedHistAnalysis.shortTermPeriod.displayName;
+            if( self.derivedHistAnalysis.shortTermSmoothing == gcDerivedHistSmoothingMax ){
+                [gridCell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString( @"Max", @"Derived Hist Method")];
+            }else{
+                [gridCell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString( @"Trend", @"Derived Hist Method")];
+            }
+
         }
         cell = gridCell;
     }
@@ -155,6 +170,19 @@
             [self.analysisDelegate configChanged];
         };
         [self.navigationController pushViewController:list animated:YES];
+    }else if (indexPath.section == GC_SECTION_OPTIONS){
+        if( indexPath.row == GC_OPTIONS_METHOD ){
+            NSArray<NSString*>*labels = self.derivedHistAnalysis.methods;
+            NSUInteger selected = [labels indexOfObject:self.derivedHistAnalysis.method];
+            GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:labels
+                                                                                        selected:selected];
+            list.entryFieldCompletion = ^(NSObject<GCEntryFieldProtocol>*cb){
+                self.derivedHistAnalysis.method = self.derivedHistAnalysis.methods[cb.selected];
+                [self.tableView reloadData];
+                [self.analysisDelegate configChanged];
+            };
+            [self.navigationController pushViewController:list animated:YES];
+        }
     }
 }
 @end

@@ -384,7 +384,7 @@
         self.derivedHistAnalysis = [GCStatsDerivedHistory analysisWith:self.multiFieldConfig and:self.derivedAnalysisConfig];
     }
     
-    GCCellSimpleGraph * graphCell = [self.derivedHistAnalysis tableView:tableView derivedHistCellForRowAtIndexPath:indexPath using:[GCAppGlobal derived]];
+    GCCellSimpleGraph * graphCell = [self.derivedHistAnalysis tableView:tableView derivedHistCellForRowAtIndexPath:indexPath with:[GCAppGlobal derived]];
     graphCell.cellDelegate = self;
     graphCell.identifier = GC_SUMMARY_DERIVED_HIST;
 
