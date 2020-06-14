@@ -26,10 +26,26 @@
 
 
 #import <Foundation/Foundation.h>
+#import "GCDerivedDataSerie.h"
+#import "GCDerivedGroupedSeries.h"
+#import "GCDerivedOrganizer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GCStatsDerivedDataSerieConfig : NSObject
+@interface GCStatsDerivedAnalysisConfig : NSObject
+@property (nonatomic,retain) GCDerivedOrganizer * derived;
+/// Activity type used to filer series
+@property (nonatomic,retain) NSString * activityType;
+@property (nonatomic,retain) GCDerivedDataSerie * currentDerivedDataSerie;
+
+
++(GCStatsDerivedAnalysisConfig*)configForActivityType:(NSString*)activityType;
+
+/// Goes to the next derivedSerie, stepping one by one
+-(void)nextDerivedSerie;
+/// Goes to the derivedSerie for the next field
+-(void)nextDerivedSerieField;
+-(NSArray<GCDerivedGroupedSeries*>*)availableDataSeries;
 
 @end
 

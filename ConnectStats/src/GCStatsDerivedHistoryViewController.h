@@ -29,19 +29,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @class GCStatsMultiFieldConfig;
-@class GCStatsDerivedHistAnalysis;
+@class GCStatsDerivedHistory;
 
-@protocol GCStatsHistoryAnalysisViewDelegate <NSObject>
+@protocol GCStatsDerivedHistoryViewDelegate <NSObject>
 
 -(void)configChanged;
 
--(GCStatsMultiFieldConfig*)config;
--(GCStatsDerivedHistAnalysis*) derivedHistAnalysis;
+-(GCStatsMultiFieldConfig*)multiFieldConfig;
+-(GCStatsDerivedHistory*) derivedHistAnalysis;
 @end
 
 
-@interface GCStatsHistoryAnalysisViewController : UITableViewController
-+(GCStatsHistoryAnalysisViewController*)controllerWithDelegate:(NSObject<GCStatsHistoryAnalysisViewDelegate>*)delegate;
+@interface GCStatsDerivedHistoryViewController : UITableViewController
++(GCStatsDerivedHistoryViewController*)controllerWithDelegate:(NSObject<GCStatsDerivedHistoryViewDelegate>*)delegate;
 @end
 
 NS_ASSUME_NONNULL_END

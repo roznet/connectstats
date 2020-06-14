@@ -29,6 +29,9 @@
 #import "GCHistoryPerformanceAnalysis.h"
 #import "GCLagPeriod.h"
 #import "GCStatsMultiFieldConfig.h"
+#import "GCStatsDerivedAnalysisConfig.h"
+
+@class GCDerivedOrganizer;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -44,8 +47,9 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
     gcDerivedHistSmoothingMovingAverage,
 };
 
-@interface GCStatsDerivedHistAnalysis : NSObject
-@property (nonatomic,retain) GCStatsMultiFieldConfig * config;
+@interface GCStatsDerivedHistory : NSObject
+@property (nonatomic,retain) GCStatsMultiFieldConfig * multiFieldConfig;
+@property (nonatomic,retain) GCStatsDerivedAnalysisConfig * derivedAnalysisConfig;
 
 @property (nonatomic,assign) gcDerivedHistSmoothing smoothing;
 @property (nonatomic,assign) gcDerivedHistMode mode;
@@ -55,13 +59,16 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
 @property (nonatomic,readonly) NSDate * fromDate;
 @property (nonatomic,retain) GCLagPeriod * lookbackPeriod;
 
+@property (nonatomic,readonly) GCField * field;
+
 /// An array of number corresponding to the X to display
 /// by default @[ @0, @60, @1800 ] which are seconds.
 @property (nonatomic,retain) NSArray<NSNumber*>*pointsForGraphs;
 
-+(GCStatsDerivedHistAnalysis*)analysisWith:(GCStatsMultiFieldConfig*)config;
++(GCStatsDerivedHistory*)analysisWith:(GCStatsMultiFieldConfig*)multiFieldConfig and:(GCStatsDerivedAnalysisConfig*)derivedConfig;
 
--(GCCellSimpleGraph*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath;
+-(GCCellSimpleGraph*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath
+using:(GCDerivedOrganizer*)derived;
 
 @end
 

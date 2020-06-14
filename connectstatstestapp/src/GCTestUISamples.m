@@ -46,7 +46,7 @@
 #import "GCConnectStatsRequestFitFile.h"
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminRequestActivityReload.h"
-#import "GCStatsDerivedHistAnalysis.h"
+#import "GCStatsDerivedHistory.h"
 
 @implementation GCTestUISamples
 
@@ -626,7 +626,7 @@
     
     GCStatsMultiFieldConfig * fieldConfig = nil;
     
-    GCStatsDerivedHistAnalysis * config = [GCStatsDerivedHistAnalysis analysisWith:fieldConfig];;
+    GCStatsDerivedHistory * config = [GCStatsDerivedHistory analysisWith:fieldConfig];;
     config.mode = gcDerivedHistModeAbsolute;
     config.smoothing = gcDerivedHistSmoothingMovingAverage;
     config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];

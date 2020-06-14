@@ -47,7 +47,6 @@
  */
 @property (nonatomic,assign) gcStatsCalChoice calChoice;
 @property (nonatomic,assign) BOOL useFilter;
-@property (nonatomic,retain) GCDerivedDataSerie * currentDerivedDataSerie;
 @property (nonatomic,readonly) GCField * currentCumulativeSummaryField;
 
 +(GCStatsMultiFieldConfig*)fieldListConfigFrom:(GCStatsMultiFieldConfig*)other;
@@ -62,11 +61,6 @@
 -(UIBarButtonItem*)buttonForTarget:(id)target action:(SEL)sel;
 
 
-/// Goes to the next derivedSerie, stepping one by one
--(void)nextDerivedSerie;
-/// Goes to the derivedSerie for the next field
--(void)nextDerivedSerieField;
--(NSArray<GCDerivedGroupedSeries*>*)availableDataSeries;
 
 -(void)nextSummaryCumulativeField;
 

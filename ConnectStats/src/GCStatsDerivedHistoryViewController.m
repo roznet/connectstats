@@ -25,30 +25,32 @@
 
 
 
-#import "GCStatsHistoryAnalysisViewController.h"
-#import "GCStatsHistoryAnalysisViewControllerConsts.h"
-#import "GCStatsDerivedHistAnalysis.h"
+#import "GCStatsDerivedHistoryViewController.h"
+#import "GCStatsDerivedHistoryViewControllerConsts.h"
+#import "GCStatsDerivedHistory.h"
+#import "GCAppGlobal.h"
+#import "GCStatsDerivedAnalysisConfig.h"
 
-@interface GCStatsHistoryAnalysisViewController ()
-@property (nonatomic,retain) NSObject<GCStatsHistoryAnalysisViewDelegate>*analysisDelegate;
+@interface GCStatsDerivedHistoryViewController ()
+@property (nonatomic,retain) NSObject<GCStatsDerivedHistoryViewDelegate>*analysisDelegate;
 @property (nonatomic,readonly) GCStatsMultiFieldConfig * config;
-@property (nonatomic,readonly) GCStatsDerivedHistAnalysis * derivedHistAnalysis;
+@property (nonatomic,readonly) GCStatsDerivedHistory * derivedHistAnalysis;
 @end
 
-@implementation GCStatsHistoryAnalysisViewController
+@implementation GCStatsDerivedHistoryViewController
 
-+(GCStatsHistoryAnalysisViewController*)controllerWithDelegate:(NSObject<GCStatsHistoryAnalysisViewDelegate> *)delegate{
-    GCStatsHistoryAnalysisViewController * rv = RZReturnAutorelease([[GCStatsHistoryAnalysisViewController alloc] initWithStyle:UITableViewStyleGrouped]);
++(GCStatsDerivedHistoryViewController*)controllerWithDelegate:(NSObject<GCStatsDerivedHistoryViewDelegate> *)delegate{
+    GCStatsDerivedHistoryViewController * rv = RZReturnAutorelease([[GCStatsDerivedHistoryViewController alloc] initWithStyle:UITableViewStyleGrouped]);
     if( rv ){
         rv.analysisDelegate = delegate;
     }
     return rv;
 }
 
--(GCStatsMultiFieldConfig*)config{
-    return self.analysisDelegate.config;
+-(GCStatsMultiFieldConfig*)multiFieldConfig{
+    return self.analysisDelegate.multiFieldConfig;
 }
--(GCStatsDerivedHistAnalysis*) derivedHistAnalysis{
+-(GCStatsDerivedHistory*) derivedHistAnalysis{
     return self.analysisDelegate.derivedHistAnalysis;
 }
 
@@ -85,13 +87,15 @@
     UITableViewCell *cell = nil;
     
     if( indexPath.section==GC_SECTION_GRAPHS){
-        GCCellSimpleGraph * graphCell = [self.derivedHistAnalysis tableView:tableView derivedHistCellForRowAtIndexPath:indexPath];
+        GCCellSimpleGraph * graphCell = [self.derivedHistAnalysis tableView:tableView derivedHistCellForRowAtIndexPath:indexPath using:[GCAppGlobal derived]];
         cell = graphCell;
     }else if (indexPath.section == GC_SECTION_OPTIONS){
         GCCellGrid * gridCell = [GCCellGrid gridCell:tableView];
         [gridCell setupForRows:1 andCols:2];
         if (indexPath.row == GC_OPTIONS_FIELD){
             [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Field", @"Derived Hist Analysis Options");
+            GCField * current = self.derivedHistAnalysis.field;
+            [gridCell labelForRow:0 andCol:1].text = current.displayName;
             //[gridCell labelForRow:0 andCol:1].text = self
         }
         cell = gridCell;

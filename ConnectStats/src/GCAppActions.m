@@ -146,7 +146,7 @@ NSString * kArgumentHistoryStats = @"historyStats";
 
     NSDictionary * vals = [action argumentAsDictionary];
 
-    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:vc.config];
+    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:vc.multiFieldConfig];
 
     if (vals[kArgumentViewChoice]) {
         nconfig.viewChoice = [self viewChoiceFromString:vals[kArgumentViewChoice] default:nconfig.viewChoice];

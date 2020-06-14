@@ -32,6 +32,7 @@
 #import "GCSimpleGraphCachedDataSource+Templates.h"
 #import "GCStatsDerivedAnalysisViewControllerConsts.h"
 #import "GCAppGlobal.h"
+#import "GCStatsDerivedAnalysisConfig.h"
 
 typedef NS_ENUM(NSUInteger) {
     gcRebuildFree,
@@ -44,6 +45,7 @@ typedef NS_ENUM(NSUInteger) {
 @property (nonatomic,retain) NSArray<GCField*>*fields;
 @property (nonatomic,retain) NSArray<GCDerivedDataSerie*>*choices;
 @property (nonatomic,readonly) GCStatsMultiFieldConfig * config;
+@property (nonatomic,readonly) GCStatsDerivedAnalysisConfig * derivedAnalysisConfig;
 @property (nonatomic,assign) gcRebuildStatus rebuildStatus;
 @end
 
@@ -134,9 +136,9 @@ typedef NS_ENUM(NSUInteger) {
         [grcell setupForRows:1 andCols:1];
         
         if( indexPath.row == GC_STATUS_FIELD){
-            [grcell labelForRow:0 andCol:0].text = self.config.currentDerivedDataSerie.field.displayName;
+            [grcell labelForRow:0 andCol:0].text = self.derivedAnalysisConfig.currentDerivedDataSerie.field.displayName;
         }else if( indexPath.row == GC_STATUS_PERIOD){
-            [grcell labelForRow:0 andCol:0].text = [self.config.currentDerivedDataSerie.bucketStart calendarUnitFormat:NSCalendarUnitMonth];
+            [grcell labelForRow:0 andCol:0].text = [self.derivedAnalysisConfig.currentDerivedDataSerie.bucketStart calendarUnitFormat:NSCalendarUnitMonth];
         }
         cell = grcell;
     }else if( indexPath.section == GC_SECTION_GRAPHS){
@@ -147,7 +149,7 @@ typedef NS_ENUM(NSUInteger) {
         
         if( indexPath.row == GC_ACTION_REBUILD){
             NSString * message = [NSString stringWithFormat:NSLocalizedString(@"Rebuild Analysis for %@", "Derived Analysis"),
-                                  [self.config.currentDerivedDataSerie.bucketStart calendarUnitFormat:NSCalendarUnitMonth]];
+                                  [self.derivedAnalysisConfig.currentDerivedDataSerie.bucketStart calendarUnitFormat:NSCalendarUnitMonth]];
             [grcell labelForRow:0 andCol:0].text = message;
             [grcell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray]
                                                                                        withString:NSLocalizedString(@"This action may take some time", "Derived Analysis")];
@@ -168,12 +170,12 @@ typedef NS_ENUM(NSUInteger) {
             [self rebuildProcessStart];
         }
     }else if( indexPath.section == GC_SECTION_STATUS){
-        NSArray<GCDerivedGroupedSeries*>*series = self.config.availableDataSeries;
+        NSArray<GCDerivedGroupedSeries*>*series = self.derivedAnalysisConfig.availableDataSeries;
         NSMutableArray<GCDerivedDataSerie*> * choices = [NSMutableArray array];
         NSMutableArray<NSString*>* labels = [NSMutableArray array];
         NSUInteger selected = 0;
 
-        GCDerivedDataSerie * current = self.config.currentDerivedDataSerie;
+        GCDerivedDataSerie * current = self.derivedAnalysisConfig.currentDerivedDataSerie;
         NSDate * date = current.bucketStart;
         GCField * field = current.field;
         
@@ -196,7 +198,7 @@ typedef NS_ENUM(NSUInteger) {
                 [choices addObject:found ?: group.series.firstObject];
             }
         }else if( indexPath.row == GC_STATUS_PERIOD){
-            GCField * field = self.config.currentDerivedDataSerie.field;
+            GCField * field = self.derivedAnalysisConfig.currentDerivedDataSerie.field;
             for (GCDerivedGroupedSeries * group in series) {
                 if( [group.field isEqualToField:field] ){
                     NSUInteger idx = 0;
@@ -227,12 +229,14 @@ typedef NS_ENUM(NSUInteger) {
 #pragma mark - access
 
 -(GCDerivedDataSerie*)currentDerivedDataSerie{
-    return [self.config currentDerivedDataSerie];
+    return [self.derivedAnalysisConfig currentDerivedDataSerie];
 }
--(GCStatsMultiFieldConfig*)config{
-    return self.delegate.config;
+-(GCStatsMultiFieldConfig*)multiFieldConfig{
+    return self.delegate.multiFieldConfig;
 }
-
+-(GCStatsDerivedAnalysisConfig*)derivedAnalysisConfig{
+    return self.delegate.derivedAnalysisConfig;
+}
 #pragma mark - Rebuild process
 
 -(void)rebuildProcessNextStage{
@@ -267,7 +271,7 @@ typedef NS_ENUM(NSUInteger) {
     }
     
     NSString * message = [NSString stringWithFormat:NSLocalizedString(@"Rebuilding %@%@", "Derived Analysis"),
-                          [self.config.currentDerivedDataSerie.bucketStart calendarUnitFormat:NSCalendarUnitMonth],
+                          [self.derivedAnalysisConfig.currentDerivedDataSerie.bucketStart calendarUnitFormat:NSCalendarUnitMonth],
                           dots];
     
     NSString * subtext = nil;
@@ -309,7 +313,7 @@ typedef NS_ENUM(NSUInteger) {
             [GCAppGlobal derived].pauseCalculation = true;
             RZLog(RZLogInfo, @"Starting rebuild download stage");
             NSArray<GCActivity*>*activities = [[GCAppGlobal organizer] activities];
-            GCDerivedDataSerie * current = self.config.currentDerivedDataSerie;
+            GCDerivedDataSerie * current = self.derivedAnalysisConfig.currentDerivedDataSerie;
             NSArray<GCActivity*>*contained = [current containedActivitiesIn:activities];
             BOOL some = false;
             for (GCActivity * act in contained) {
@@ -331,7 +335,7 @@ typedef NS_ENUM(NSUInteger) {
 
             RZLog(RZLogInfo, @"Starting rebuild calculate stage");
             NSArray<GCActivity*>*activities = [[GCAppGlobal organizer] activities];
-            GCDerivedDataSerie * current = self.config.currentDerivedDataSerie;
+            GCDerivedDataSerie * current = self.derivedAnalysisConfig.currentDerivedDataSerie;
             NSArray<GCActivity*>*contained = [current containedActivitiesIn:activities];
             if( contained.count > 0){
                 [[GCAppGlobal derived] rebuildDerivedDataSerie:gcDerivedTypeBestRolling
@@ -381,7 +385,7 @@ typedef NS_ENUM(NSUInteger) {
 
 -(void)cellWasChanged:(id<GCEntryFieldProtocol>)cell{
     if( cell.identifierInt == GC_IDENTIFIER(GC_SECTION_STATUS, GC_STATUS_PERIOD) || cell.identifierInt == GC_IDENTIFIER(GC_SECTION_STATUS, GC_STATUS_FIELD)){
-        self.config.currentDerivedDataSerie = self.choices[cell.selected];
+        self.derivedAnalysisConfig.currentDerivedDataSerie = self.choices[cell.selected];
         [self.delegate configChanged];
     }
     [self.tableView reloadData];
