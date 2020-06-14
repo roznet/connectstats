@@ -42,12 +42,14 @@
 #import "GCDerivedOrganizer.h"
 #import "GCHealthOrganizer.h"
 #import "GCStatsDerivedAnalysisViewController.h"
-#import "GCStatsDerivedHistConfig.h"
+#import "GCStatsDerivedHistAnalysis.h"
+#import "GCStatsHistoryAnalysisViewController.h"
 
 @interface GCStatsMultiFieldViewController ()
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
 @property (nonatomic,assign) BOOL started;
 @property (nonatomic,retain) GCStatsDerivedAnalysisViewController * configViewController;
+@property (nonatomic,retain) GCStatsHistoryAnalysisViewController * histAnalysisViewController;
 
 @end
 
@@ -376,40 +378,13 @@
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
+    if( self.derivedHistAnalysis == nil){
+        self.derivedHistAnalysis = [GCStatsDerivedHistAnalysis analysisWith:self.config];
+    }
+    
+    GCCellSimpleGraph * graphCell = [self.derivedHistAnalysis tableView:tableView derivedHistCellForRowAtIndexPath:indexPath];
     graphCell.cellDelegate = self;
-
-    GCDerivedDataSerie * current = [self currentDerivedDataSerie];
-    GCStatsSerieOfSerieWithUnits * serieOfSerie = nil;
-    GCField * field = nil;
-    
-    GCStatsDerivedHistConfig * config = [GCStatsDerivedHistConfig config];
-    config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
-    config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
-    config.mode = gcDerivedHistModeDrop;
-    config.smoothing = gcDerivedHistSmoothingMax;
-    
-    if( current ){
-        field = [GCField fieldForFlag:current.fieldFlag andActivityType:self.activityType];
-        NSDate * from = config.fromDate;
-        serieOfSerie = [[GCAppGlobal derived] timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
-            BOOL rv = [act.activityType isEqualToString:self.activityType] && ([act.date compare:from] == NSOrderedDescending);
-            return rv;
-        } withLimit:500]];
-    }
-    //GCStatsSerieOfSerieWithUnits * historical = [[GCAppGlobal derived] timeSeriesOfSeriesFor:field];
-    //[serieOfSerie addSerieOfSerie:historical];
-    GCSimpleGraphCachedDataSource * cache = nil;
-    if (serieOfSerie) {
-        cache = [GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSerie width:tableView.frame.size.width];
-        cache.emptyGraphLabel = @"";
-        graphCell.legend = true;
-        [graphCell setDataSource:cache andConfig:cache];
-    }else{
-        cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-        cache.emptyGraphLabel = @"";
-        [graphCell setDataSource:cache andConfig:cache];
-    }
+    graphCell.identifier = GC_SUMMARY_DERIVED_HIST;
 
     return graphCell;
 
@@ -621,11 +596,19 @@
 }
 
 -(void)longPress:(GCCellSimpleGraph*)cell{
-    RZLog(RZLogInfo,@"Starting Derived Analysis");
-    
-    self.configViewController = [GCStatsDerivedAnalysisViewController controllerWithDelegate:self];
-    
-    [self.navigationController pushViewController:self.configViewController animated:YES];
+    if( cell.identifier == GC_SUMMARY_DERIVED){
+        RZLog(RZLogInfo,@"Starting Derived Analysis");
+        
+        self.configViewController = [GCStatsDerivedAnalysisViewController controllerWithDelegate:self];
+        
+        [self.navigationController pushViewController:self.configViewController animated:YES];
+    }else if (cell.identifier == GC_SUMMARY_DERIVED_HIST ){
+        RZLog(RZLogInfo,@"Starting Derived Hist Analysis");
+        
+        self.histAnalysisViewController = [GCStatsHistoryAnalysisViewController controllerWithDelegate:self];
+        
+        [self.navigationController pushViewController:self.histAnalysisViewController animated:YES];
+    }
 }
 
 -(void)configChanged{

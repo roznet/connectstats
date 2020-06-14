@@ -29,7 +29,7 @@
 @class GCHistoryPerformanceAnalysis;
 @class GCTrackStats;
 @class GCHistoryFieldDataSerie;
-@class GCStatsDerivedHistConfig;
+@class GCStatsDerivedHistAnalysis;
 
 @interface GCSimpleGraphCachedDataSource (Templates)
 +(GCSimpleGraphCachedDataSource*)dataSourceWithStandardColors;
@@ -41,7 +41,7 @@
 +(GCSimpleGraphCachedDataSource*)derivedData:(GCField*)field forDate:(NSDate*)date width:(CGFloat)width;
 
 +(GCSimpleGraphCachedDataSource*)trackFieldFrom:(GCTrackStats*)trackStats;
-+(GCSimpleGraphCachedDataSource*)derivedHist:(GCStatsDerivedHistConfig*)diffMode field:(GCField*)field series:(GCStatsSerieOfSerieWithUnits*)serieOfSeries width:(CGFloat)width;
++(GCSimpleGraphCachedDataSource*)derivedHist:(GCStatsDerivedHistAnalysis*)diffMode field:(GCField*)field series:(GCStatsSerieOfSerieWithUnits*)serieOfSeries width:(CGFloat)width;
 +(GCSimpleGraphCachedDataSource*)derivedDataSingleHighlighted:(GCField*)fieldInput period:(gcDerivedPeriod)period forDate:(NSDate*)date addLegendTo:(NSMutableArray*)legend width:(CGFloat)width;
 
 @end

@@ -28,6 +28,7 @@
 #import <Foundation/Foundation.h>
 #import "GCHistoryPerformanceAnalysis.h"
 #import "GCLagPeriod.h"
+#import "GCStatsMultiFieldConfig.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -44,6 +45,8 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
 };
 
 @interface GCStatsDerivedHistAnalysis : NSObject
+@property (nonatomic,retain) GCStatsMultiFieldConfig * config;
+
 @property (nonatomic,assign) gcDerivedHistSmoothing smoothing;
 @property (nonatomic,assign) gcDerivedHistMode mode;
 @property (nonatomic,retain) GCLagPeriod * longTermPeriod;
@@ -56,7 +59,10 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
 /// by default @[ @0, @60, @1800 ] which are seconds.
 @property (nonatomic,retain) NSArray<NSNumber*>*pointsForGraphs;
 
-+(GCStatsDerivedHistAnalysis*)config;
++(GCStatsDerivedHistAnalysis*)analysisWith:(GCStatsMultiFieldConfig*)config;
+
+-(GCCellSimpleGraph*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath;
+
 @end
 
 NS_ASSUME_NONNULL_END

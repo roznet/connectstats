@@ -124,7 +124,6 @@ typedef NS_ENUM(NSUInteger) {
     [graphCell setDataSource:cache andConfig:cache];
 
     return graphCell;
-
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {

@@ -26,12 +26,31 @@
 
 
 #import "GCStatsHistoryAnalysisViewController.h"
+#import "GCStatsHistoryAnalysisViewControllerConsts.h"
+#import "GCStatsDerivedHistAnalysis.h"
 
 @interface GCStatsHistoryAnalysisViewController ()
-
+@property (nonatomic,retain) NSObject<GCStatsHistoryAnalysisViewDelegate>*analysisDelegate;
+@property (nonatomic,readonly) GCStatsMultiFieldConfig * config;
+@property (nonatomic,readonly) GCStatsDerivedHistAnalysis * derivedHistAnalysis;
 @end
 
 @implementation GCStatsHistoryAnalysisViewController
+
++(GCStatsHistoryAnalysisViewController*)controllerWithDelegate:(NSObject<GCStatsHistoryAnalysisViewDelegate> *)delegate{
+    GCStatsHistoryAnalysisViewController * rv = RZReturnAutorelease([[GCStatsHistoryAnalysisViewController alloc] initWithStyle:UITableViewStyleGrouped]);
+    if( rv ){
+        rv.analysisDelegate = delegate;
+    }
+    return rv;
+}
+
+-(GCStatsMultiFieldConfig*)config{
+    return self.analysisDelegate.config;
+}
+-(GCStatsDerivedHistAnalysis*) derivedHistAnalysis{
+    return self.analysisDelegate.derivedHistAnalysis;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -46,67 +65,92 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
+    return GC_SECTION_END;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
+    if( section == GC_SECTION_GRAPHS){
+        return 1;
+    }else if (section == GC_SECTION_OPTIONS){
+        return GC_OPTIONS_END;
+    }else if (section == GC_SECTION_PERIODS){
+        return GC_PERIODS_END;
+    }
     return 0;
 }
 
-/*
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    UITableViewCell *cell = nil;
     
-    // Configure the cell...
-    
+    if( indexPath.section==GC_SECTION_GRAPHS){
+        GCCellSimpleGraph * graphCell = [self.derivedHistAnalysis tableView:tableView derivedHistCellForRowAtIndexPath:indexPath];
+        cell = graphCell;
+    }else if (indexPath.section == GC_SECTION_OPTIONS){
+        GCCellGrid * gridCell = [GCCellGrid gridCell:tableView];
+        [gridCell setupForRows:1 andCols:2];
+        if (indexPath.row == GC_OPTIONS_FIELD){
+            [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Field", @"Derived Hist Analysis Options");
+            //[gridCell labelForRow:0 andCol:1].text = self
+        }
+        cell = gridCell;
+    }else if (indexPath.section == GC_SECTION_PERIODS){
+        GCCellGrid * gridCell = [GCCellGrid gridCell:tableView];
+        [gridCell setupForRows:1 andCols:2];
+        if( indexPath.row == GC_PERIODS_LAG){
+            [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Lag", @"Derived Hist Analysis Options");
+            [gridCell labelForRow:0 andCol:1].text = self.derivedHistAnalysis.lookbackPeriod.displayName;
+        }else if (indexPath.row == GC_PERIODS_LTPERIOD){
+            [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Long Term Period",@"Derived Hist Analysis Options");
+            [gridCell labelForRow:0 andCol:1].text = self.derivedHistAnalysis.longTermPeriod.displayName;
+        }else if (indexPath.row == GC_PERIODS_STPERIOD){
+            [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Short Term Period",@"Derived Hist Analysis Options");
+            [gridCell labelForRow:0 andCol:1].text = self.derivedHistAnalysis.shortTermPeriod.displayName;
+        }
+        cell = gridCell;
+    }
     return cell;
 }
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if( indexPath.section == GC_SECTION_GRAPHS){
+        return 200.;
+    }else{
+        return 58.;
+    }
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if( indexPath.section == GC_SECTION_PERIODS){
+        NSArray<NSString*> * labels = [[GCLagPeriod validPeriods] arrayByMappingBlock:^(GCLagPeriod*period){
+            return period.displayName;
+        }];
+        GCLagPeriod * current = nil;
+        if( indexPath.row == GC_PERIODS_STPERIOD ){
+            current = self.derivedHistAnalysis.shortTermPeriod;
+        }else if (indexPath.row == GC_PERIODS_LTPERIOD){
+            current = self.derivedHistAnalysis.longTermPeriod;
+        }else if( indexPath.row == GC_PERIODS_LAG){
+            current = self.derivedHistAnalysis.lookbackPeriod;
+        }
+        NSUInteger selected = [labels indexOfObject:current.displayName];
+        
+        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:labels
+                                                                                    selected:selected];
+        list.entryFieldCompletion = ^(NSObject<GCEntryFieldProtocol>*cb){
+            GCLagPeriod * choice = [GCLagPeriod validPeriods][cb.selected];
+            if( indexPath.row == GC_PERIODS_STPERIOD ){
+                self.derivedHistAnalysis.shortTermPeriod = choice;
+            }else if (indexPath.row == GC_PERIODS_LTPERIOD){
+                self.derivedHistAnalysis.longTermPeriod = choice;
+            }else if( indexPath.row == GC_PERIODS_LAG){
+                self.derivedHistAnalysis.lookbackPeriod = choice;
+            }
+            [self.tableView reloadData];
+            [self.analysisDelegate configChanged];
+        };
+        [self.navigationController pushViewController:list animated:YES];
+    }
 }
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

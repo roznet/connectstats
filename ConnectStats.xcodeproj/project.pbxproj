@@ -1257,12 +1257,14 @@
 		42D037C1168AF48300789E7D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D037C0168AF48300789E7D /* CFNetwork.framework */; };
 		42D037C3168AF55900789E7D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D037C2168AF55900789E7D /* SystemConfiguration.framework */; };
 		42D1D2001DEE66DB00F13D52 /* FITWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D1D1FF1DEE66DB00F13D52 /* FITWindowController.swift */; };
-		42D4CA6E248D5497003F3AB7 /* GCStatsDerivedHistConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistConfig.m */; };
-		42D4CA6F248D5497003F3AB7 /* GCStatsDerivedHistConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistConfig.m */; };
-		42D4CA70248D5497003F3AB7 /* GCStatsDerivedHistConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistConfig.m */; };
+		42D4CA6E248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.m */; };
+		42D4CA6F248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.m */; };
+		42D4CA70248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.m */; };
 		42D4CA7D24951AF2003F3AB7 /* GCLagPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA7C24951AF2003F3AB7 /* GCLagPeriod.m */; };
 		42D4CA7E24951AF2003F3AB7 /* GCLagPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA7C24951AF2003F3AB7 /* GCLagPeriod.m */; };
 		42D4CA7F24951AF2003F3AB7 /* GCLagPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA7C24951AF2003F3AB7 /* GCLagPeriod.m */; };
+		42D4CA8224952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA8124952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m */; };
+		42D4CA8324952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA8124952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m */; };
 		42D8AEF81B1FB2CB00ADDD31 /* collected.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42D8AEF71B1FB2CB00ADDD31 /* collected.plist */; };
 		42D8AEFD1B22D1BC00ADDD31 /* GCHealthKitSamplesToPointsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */; };
 		42D8AEFE1B22D1BD00ADDD31 /* GCHealthKitSamplesToPointsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */; };
@@ -2883,10 +2885,13 @@
 		42D037C0168AF48300789E7D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		42D037C2168AF55900789E7D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		42D1D1FF1DEE66DB00F13D52 /* FITWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITWindowController.swift; path = src/FITWindowController.swift; sourceTree = "<group>"; };
-		42D4CA6C248D5497003F3AB7 /* GCStatsDerivedHistConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedHistConfig.h; path = src/GCStatsDerivedHistConfig.h; sourceTree = "<group>"; };
-		42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCStatsDerivedHistConfig.m; path = src/GCStatsDerivedHistConfig.m; sourceTree = "<group>"; };
+		42D4CA6C248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedHistAnalysis.h; path = src/GCStatsDerivedHistAnalysis.h; sourceTree = "<group>"; };
+		42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCStatsDerivedHistAnalysis.m; path = src/GCStatsDerivedHistAnalysis.m; sourceTree = "<group>"; };
 		42D4CA7B24951AF2003F3AB7 /* GCLagPeriod.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCLagPeriod.h; path = src/GCLagPeriod.h; sourceTree = "<group>"; };
 		42D4CA7C24951AF2003F3AB7 /* GCLagPeriod.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCLagPeriod.m; path = src/GCLagPeriod.m; sourceTree = "<group>"; };
+		42D4CA8024952616003F3AB7 /* GCStatsHistoryAnalysisViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsHistoryAnalysisViewController.h; path = src/GCStatsHistoryAnalysisViewController.h; sourceTree = "<group>"; };
+		42D4CA8124952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCStatsHistoryAnalysisViewController.m; path = src/GCStatsHistoryAnalysisViewController.m; sourceTree = "<group>"; };
+		42D4CA84249528B3003F3AB7 /* GCStatsHistoryAnalysisViewControllerConsts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsHistoryAnalysisViewControllerConsts.h; path = src/GCStatsHistoryAnalysisViewControllerConsts.h; sourceTree = "<group>"; };
 		42D8AEF71B1FB2CB00ADDD31 /* collected.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = collected.plist; sourceTree = "<group>"; };
 		42D8AEFA1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitSamplesToPointsParser.h; path = src/GCHealthKitSamplesToPointsParser.h; sourceTree = "<group>"; };
 		42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitSamplesToPointsParser.m; path = src/GCHealthKitSamplesToPointsParser.m; sourceTree = "<group>"; };
@@ -3412,6 +3417,8 @@
 				42BC5394161E350A00576097 /* GCStatsMultiFieldViewController.m */,
 				429F2094244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.h */,
 				429F2095244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m */,
+				42D4CA8024952616003F3AB7 /* GCStatsHistoryAnalysisViewController.h */,
+				42D4CA8124952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m */,
 			);
 			name = Lists;
 			sourceTree = "<group>";
@@ -3711,8 +3718,9 @@
 				4237869C1972D582006CBD4D /* GCStatsMultiFieldConfig.h */,
 				4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */,
 				426EC771246831CC00666068 /* GCStatsDerivedAnalysisViewControllerConsts.h */,
-				42D4CA6C248D5497003F3AB7 /* GCStatsDerivedHistConfig.h */,
-				42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistConfig.m */,
+				42D4CA6C248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.h */,
+				42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.m */,
+				42D4CA84249528B3003F3AB7 /* GCStatsHistoryAnalysisViewControllerConsts.h */,
 			);
 			name = Config;
 			sourceTree = "<group>";
@@ -6831,7 +6839,7 @@
 				42BFC24A1DCF4F1500EAD40E /* GCHealthStatsBridge.swift in Sources */,
 				422FAED419A1DD6000D09773 /* GCActivityDetailViewController.m in Sources */,
 				422FAED519A1DD6000D09773 /* GCHistoryFieldDataSerie.m in Sources */,
-				42D4CA70248D5497003F3AB7 /* GCStatsDerivedHistConfig.m in Sources */,
+				42D4CA70248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.m in Sources */,
 				42DC51591B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m in Sources */,
 				42FD55BA1B90A39F0070B3B4 /* GCCellActivity.m in Sources */,
 				422F521A1DFB51F700DD5551 /* FITFitFileInterpret.swift in Sources */,
@@ -6895,6 +6903,7 @@
 				422F52111DFB51F700DD5551 /* FITFitEnumMap.mm in Sources */,
 				422FAF2319A1DD6000D09773 /* GCStravaReqBase.m in Sources */,
 				422FAF2419A1DD6000D09773 /* GCStatsMultiFieldGraphViewController.m in Sources */,
+				42D4CA8324952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m in Sources */,
 				422FAF2519A1DD6000D09773 /* GCSimpleGraphCachedDataSource+Templates.m in Sources */,
 				422FAF2619A1DD6000D09773 /* GCActivity+Database.m in Sources */,
 				42EAA3AD1EDBA6150081B130 /* GCAppProfiles+Swift.m in Sources */,
@@ -7132,6 +7141,7 @@
 				42B955561819B36400BC7AF9 /* GCSettingsReloadViewController.m in Sources */,
 				42289D581C7B9B4D005A5D0E /* GCStatsHistGraphViewController.m in Sources */,
 				42959CF018D9016200C0B841 /* GCStravaActivityStreamsParser.m in Sources */,
+				42D4CA8224952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m in Sources */,
 				4231A2B81603BF9C00C02D79 /* GCActivityDetailViewController.m in Sources */,
 				423493FF160479FA00A770D6 /* GCHistoryFieldDataSerie.m in Sources */,
 				426B0F131DA119060091A734 /* FITFitFile.m in Sources */,
@@ -7246,7 +7256,7 @@
 				42E186D316A6225400D4513B /* GCGarminActivitySummaryParser.m in Sources */,
 				42289D5B1C7B9CEE005A5D0E /* GCStatsHistGraphOptionViewController.m in Sources */,
 				42F23B39183D7E6D004918BB /* GCSettingsLogViewController.m in Sources */,
-				42D4CA6E248D5497003F3AB7 /* GCStatsDerivedHistConfig.m in Sources */,
+				42D4CA6E248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.m in Sources */,
 				42BC77E3198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.m in Sources */,
 				4292B6CC1B1C66B400C7C05D /* GCHealthKitDayDetailRequest.m in Sources */,
 				42E186EF16AB620A00D4513B /* GCSettingsBugReportViewController.m in Sources */,
@@ -7480,7 +7490,7 @@
 				427F93771BEDFA6F00C177F9 /* GCStatsMultiFieldViewController.m in Sources */,
 				42B5E2B21BA5B216000FAE4E /* GCExportStrava.m in Sources */,
 				427F935C1BEAA05800C177F9 /* GCTestUISamples.m in Sources */,
-				42D4CA6F248D5497003F3AB7 /* GCStatsDerivedHistConfig.m in Sources */,
+				42D4CA6F248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.m in Sources */,
 				42CC45D0200A6E91003EB805 /* GCTestServiceBugReport.m in Sources */,
 				42B5E2B71BA5B216000FAE4E /* GCActivity+Calculated.m in Sources */,
 				42B5E2B81BA5B216000FAE4E /* GCActivity+CachedTracks.m in Sources */,

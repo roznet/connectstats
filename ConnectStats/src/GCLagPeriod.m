@@ -115,7 +115,7 @@
             rv = NSLocalizedString(@"1y", @"Lag period");
             break;
         case gcLagPeriodNone:
-            rv = @"";
+            rv = NSLocalizedString(@"No Lag", @"Lag period");
             break;
     }
     return rv;

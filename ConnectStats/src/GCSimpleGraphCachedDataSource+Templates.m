@@ -34,7 +34,7 @@
 #import "GCUnitTrainingZone.h"
 #import "GCDerivedOrganizer.h"
 #import "GCActivity+Series.h"
-#import "GCStatsDerivedHistConfig.h"
+#import "GCStatsDerivedHistAnalysis.h"
 
 @implementation GCSimpleGraphCachedDataSource (Templates)
 
@@ -557,7 +557,7 @@
 }
 
 
-+(GCSimpleGraphCachedDataSource*)derivedHist:(GCStatsDerivedHistConfig*)config
++(GCSimpleGraphCachedDataSource*)derivedHist:(GCStatsDerivedHistAnalysis*)config
                                        field:(GCField*)field
                                       series:(GCStatsSerieOfSerieWithUnits*)serieOfSeries
                                        width:(CGFloat)width{

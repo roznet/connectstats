@@ -28,9 +28,20 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
+@class GCStatsMultiFieldConfig;
+@class GCStatsDerivedHistAnalysis;
+
+@protocol GCStatsHistoryAnalysisViewDelegate <NSObject>
+
+-(void)configChanged;
+
+-(GCStatsMultiFieldConfig*)config;
+-(GCStatsDerivedHistAnalysis*) derivedHistAnalysis;
+@end
+
 
 @interface GCStatsHistoryAnalysisViewController : UITableViewController
-
++(GCStatsHistoryAnalysisViewController*)controllerWithDelegate:(NSObject<GCStatsHistoryAnalysisViewDelegate>*)delegate;
 @end
 
 NS_ASSUME_NONNULL_END

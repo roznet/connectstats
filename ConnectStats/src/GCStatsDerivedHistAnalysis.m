@@ -27,17 +27,18 @@
 
 #import "GCStatsDerivedHistAnalysis.h"
 #import "GCAppGlobal.h"
+#import "GCSimpleGraphCachedDataSource+Templates.h"
 
 @implementation GCStatsDerivedHistAnalysis
 
-+(GCStatsDerivedHistAnalysis*)config{
++(GCStatsDerivedHistAnalysis*)analysisWith:(GCStatsMultiFieldConfig*)config{
     GCStatsDerivedHistAnalysis * rv = [[[GCStatsDerivedHistAnalysis alloc] init] autorelease];
     if( rv){
         rv.lookbackPeriod = [GCLagPeriod periodFor:gcLagPeriodSixMonths];
         rv.mode = gcDerivedHistModeAbsolute;
         rv.smoothing = gcDerivedHistSmoothingMax;
         rv.pointsForGraphs = @[ @(0), @(60), @(1800) ];
-
+        rv.config = config;
         rv.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
         rv.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodNone];
     }
@@ -54,21 +55,21 @@
     return [self.lookbackPeriod applyToDate:[[GCAppGlobal organizer] lastActivity].date];
 }
 
-/*
--(void)sss{
-    GCDerivedDataSerie * current = [self currentDerivedDataSerie];
+-(NSString*)activityType{
+    return self.config.activityType;
+}
+
+-(GCCellSimpleGraph*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
+
+    GCDerivedDataSerie * current = [self.config currentDerivedDataSerie];
     GCStatsSerieOfSerieWithUnits * serieOfSerie = nil;
     GCField * field = nil;
     
-    GCStatsDerivedHistConfig * config = [GCStatsDerivedHistConfig config];
-    config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
-    config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
-    config.mode = gcDerivedHistModeDrop;
-    config.smoothing = gcDerivedHistSmoothingMax;
-    
     if( current ){
-        field = [GCField fieldForFlag:current.fieldFlag andActivityType:self.activityType];
-        NSDate * from = config.fromDate;
+        
+        field = [GCField fieldForFlag:current.fieldFlag andActivityType:self.config.activityType];
+        NSDate * from = self.fromDate;
         serieOfSerie = [[GCAppGlobal derived] timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
             BOOL rv = [act.activityType isEqualToString:self.activityType] && ([act.date compare:from] == NSOrderedDescending);
             return rv;
@@ -78,7 +79,7 @@
     //[serieOfSerie addSerieOfSerie:historical];
     GCSimpleGraphCachedDataSource * cache = nil;
     if (serieOfSerie) {
-        cache = [GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSerie width:tableView.frame.size.width];
+        cache = [GCSimpleGraphCachedDataSource derivedHist:self field:field series:serieOfSerie width:tableView.frame.size.width];
         cache.emptyGraphLabel = @"";
         graphCell.legend = true;
         [graphCell setDataSource:cache andConfig:cache];
@@ -87,7 +88,7 @@
         cache.emptyGraphLabel = @"";
         [graphCell setDataSource:cache andConfig:cache];
     }
-
+    return graphCell;
 }
-*/
+
 @end

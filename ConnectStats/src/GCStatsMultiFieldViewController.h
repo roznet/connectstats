@@ -31,10 +31,12 @@
 #import "GCViewActivityTypeButton.h"
 #import "GCStatsMultiFieldConfig.h"
 #import "GCStatsDerivedAnalysisViewController.h"
+#import "GCStatsDerivedHistAnalysis.h"
+#import "GCStatsHistoryAnalysisViewController.h"
 
 @class  GCFieldsForCategory;
 
-@interface GCStatsMultiFieldViewController : UITableViewController<RZChildObject,GCViewActivityTypeButtonDelegate,GCCellSimpleGraphDelegate,GCStatsMultiFieldConfigViewDelegate>
+@interface GCStatsMultiFieldViewController : UITableViewController<RZChildObject,GCViewActivityTypeButtonDelegate,GCCellSimpleGraphDelegate,GCStatsMultiFieldConfigViewDelegate,GCStatsHistoryAnalysisViewDelegate>
 
 @property (nonatomic,retain) GCHistoryFieldSummaryStats * fieldStats;
 @property (nonatomic,retain) GCHistoryAggregatedActivityStats * aggregatedStats;
@@ -43,6 +45,7 @@
 @property (nonatomic,retain) NSDictionary<GCField*,GCHistoryFieldDataSerie*> * fieldDataSeries;
 @property (nonatomic,retain) GCViewActivityTypeButton * activityTypeButton;
 @property (nonatomic,retain) GCStatsMultiFieldConfig * config;
+@property (nonatomic,retain) GCStatsDerivedHistAnalysis * derivedHistAnalysis;
 
 -(void)setupForCurrentActivityType:(NSString*)aType filter:(BOOL)aFilter andViewChoice:(gcViewChoice)choice;
 -(void)setupForCurrentActivityType:(NSString*)aType andViewChoice:(gcViewChoice)choice;
