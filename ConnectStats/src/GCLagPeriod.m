@@ -76,6 +76,9 @@
     }
     return rv;
 }
+-(NSString*)description{
+    return [NSString stringWithFormat:@"<%@: %@>", NSStringFromClass([self class]), self.displayName];
+}
 
 +(NSArray<GCLagPeriod*>*)validPeriods{
     return @[

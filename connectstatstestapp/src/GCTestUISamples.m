@@ -624,7 +624,9 @@
     
     NSMutableArray * rv = [NSMutableArray array];
     
-    GCStatsDerivedHistAnalysis * config = [GCStatsDerivedHistAnalysis config];
+    GCStatsMultiFieldConfig * fieldConfig = nil;
+    
+    GCStatsDerivedHistAnalysis * config = [GCStatsDerivedHistAnalysis analysisWith:fieldConfig];;
     config.mode = gcDerivedHistModeAbsolute;
     config.smoothing = gcDerivedHistSmoothingMovingAverage;
     config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];

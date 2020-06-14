@@ -1265,6 +1265,10 @@
 		42D4CA7F24951AF2003F3AB7 /* GCLagPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA7C24951AF2003F3AB7 /* GCLagPeriod.m */; };
 		42D4CA8224952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA8124952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m */; };
 		42D4CA8324952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA8124952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m */; };
+		42D4CA8524963F90003F3AB7 /* GCStatsHistoryAnalysisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA8124952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m */; };
+		42D4CA882496622E003F3AB7 /* GCStatsDerivedDataSerieConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA872496622E003F3AB7 /* GCStatsDerivedDataSerieConfig.m */; };
+		42D4CA892496622E003F3AB7 /* GCStatsDerivedDataSerieConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA872496622E003F3AB7 /* GCStatsDerivedDataSerieConfig.m */; };
+		42D4CA8A2496622E003F3AB7 /* GCStatsDerivedDataSerieConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA872496622E003F3AB7 /* GCStatsDerivedDataSerieConfig.m */; };
 		42D8AEF81B1FB2CB00ADDD31 /* collected.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42D8AEF71B1FB2CB00ADDD31 /* collected.plist */; };
 		42D8AEFD1B22D1BC00ADDD31 /* GCHealthKitSamplesToPointsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */; };
 		42D8AEFE1B22D1BD00ADDD31 /* GCHealthKitSamplesToPointsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */; };
@@ -2892,6 +2896,8 @@
 		42D4CA8024952616003F3AB7 /* GCStatsHistoryAnalysisViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsHistoryAnalysisViewController.h; path = src/GCStatsHistoryAnalysisViewController.h; sourceTree = "<group>"; };
 		42D4CA8124952616003F3AB7 /* GCStatsHistoryAnalysisViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCStatsHistoryAnalysisViewController.m; path = src/GCStatsHistoryAnalysisViewController.m; sourceTree = "<group>"; };
 		42D4CA84249528B3003F3AB7 /* GCStatsHistoryAnalysisViewControllerConsts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsHistoryAnalysisViewControllerConsts.h; path = src/GCStatsHistoryAnalysisViewControllerConsts.h; sourceTree = "<group>"; };
+		42D4CA862496622E003F3AB7 /* GCStatsDerivedDataSerieConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedDataSerieConfig.h; path = src/GCStatsDerivedDataSerieConfig.h; sourceTree = "<group>"; };
+		42D4CA872496622E003F3AB7 /* GCStatsDerivedDataSerieConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCStatsDerivedDataSerieConfig.m; path = src/GCStatsDerivedDataSerieConfig.m; sourceTree = "<group>"; };
 		42D8AEF71B1FB2CB00ADDD31 /* collected.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = collected.plist; sourceTree = "<group>"; };
 		42D8AEFA1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitSamplesToPointsParser.h; path = src/GCHealthKitSamplesToPointsParser.h; sourceTree = "<group>"; };
 		42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitSamplesToPointsParser.m; path = src/GCHealthKitSamplesToPointsParser.m; sourceTree = "<group>"; };
@@ -3721,6 +3727,8 @@
 				42D4CA6C248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.h */,
 				42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistAnalysis.m */,
 				42D4CA84249528B3003F3AB7 /* GCStatsHistoryAnalysisViewControllerConsts.h */,
+				42D4CA862496622E003F3AB7 /* GCStatsDerivedDataSerieConfig.h */,
+				42D4CA872496622E003F3AB7 /* GCStatsDerivedDataSerieConfig.m */,
 			);
 			name = Config;
 			sourceTree = "<group>";
@@ -6874,6 +6882,7 @@
 				42A22DE619E1CE14004407B8 /* GCWithingsBodyMeasuresParser.m in Sources */,
 				422FAF0519A1DD6000D09773 /* GCLap.m in Sources */,
 				422FAF0619A1DD6000D09773 /* GCMapAnnotation.m in Sources */,
+				42D4CA8A2496622E003F3AB7 /* GCStatsDerivedDataSerieConfig.m in Sources */,
 				422FAF0719A1DD6000D09773 /* GCMapLegendView.m in Sources */,
 				42CDF8692413E05C003930A4 /* GCTrackPoint+Swim.m in Sources */,
 				422F521F1DFB56BF00DD5551 /* GCActivity+Fields.m in Sources */,
@@ -7181,6 +7190,7 @@
 				42959CED18D8F91100C0B841 /* GCStravaActivityStreams.m in Sources */,
 				42AAB087184D2A82004B4D15 /* GCActivityTypeListViewController.m in Sources */,
 				4201528E1624D5AC004F64EF /* GCMapGradientPathOverlayView.m in Sources */,
+				42D4CA882496622E003F3AB7 /* GCStatsDerivedDataSerieConfig.m in Sources */,
 				42A95B1C16321320000B2082 /* GCLap.m in Sources */,
 				42A95B3A1632DB4B000B2082 /* GCMapAnnotation.m in Sources */,
 				42A95B3D1632FC24000B2082 /* GCMapLegendView.m in Sources */,
@@ -7370,6 +7380,7 @@
 				421A51531C82FB5D00671587 /* GCStatsHistGraphOptionViewController.m in Sources */,
 				42295E081EC6F4D900F4F7EE /* GCTestServiceGarmin.m in Sources */,
 				427DDCC01DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */,
+				42D4CA8524963F90003F3AB7 /* GCStatsHistoryAnalysisViewController.m in Sources */,
 				42453BA61DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m in Sources */,
 				42C3CF481DA15E6900C25709 /* GCAppGlobal.swift in Sources */,
 				422CC87F1E6ACA1700195414 /* FITFitMessageFields.swift in Sources */,
@@ -7458,6 +7469,7 @@
 				42CDF8682413E05C003930A4 /* GCTrackPoint+Swim.m in Sources */,
 				42B5E2951BA5B216000FAE4E /* GCGarminActivityLapsParser.m in Sources */,
 				42B5E2971BA5B216000FAE4E /* GCGarminRequest.m in Sources */,
+				42D4CA892496622E003F3AB7 /* GCStatsDerivedDataSerieConfig.m in Sources */,
 				422F284020557DD000187478 /* GCField+Convert.m in Sources */,
 				422CC8831E6ACA1700195414 /* FITFitValueStatistics.swift in Sources */,
 				42453BAB1DD8B5940073ACCA /* GCMapGradientPathOverlay.m in Sources */,
