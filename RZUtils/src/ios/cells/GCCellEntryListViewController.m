@@ -145,6 +145,9 @@
 {
     _selected = indexPath.row;
     [_entryFieldDelegate cellWasChanged:self];
+    if( self.entryFieldCompletion ){
+        self.entryFieldCompletion(self);
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 

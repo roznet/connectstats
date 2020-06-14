@@ -1,6 +1,6 @@
 //  MIT License
 //
-//  Created on 07/06/2020 for ConnectStats
+//  Created on 13/06/2020 for ConnectStats
 //
 //  Copyright (c) 2020 Brice Rosenzweig
 //
@@ -25,33 +25,12 @@
 
 
 
-#import "GCStatsDerivedHistConfig.h"
-#import "GCAppGlobal.h"
+#import <UIKit/UIKit.h>
 
-@implementation GCStatsDerivedHistConfig
+NS_ASSUME_NONNULL_BEGIN
 
-+(GCStatsDerivedHistConfig*)config{
-    GCStatsDerivedHistConfig * rv = [[[GCStatsDerivedHistConfig alloc] init] autorelease];
-    if( rv){
-        rv.lookbackPeriod = [GCLagPeriod periodFor:gcLagPeriodSixMonths];
-        rv.mode = gcDerivedHistModeAbsolute;
-        rv.smoothing = gcDerivedHistSmoothingMax;
-        rv.pointsForGraphs = @[ @(0), @(60), @(1800) ];
-
-        rv.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
-        rv.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodNone];
-    }
-    return rv;
-}
--(void)dealloc{
-    [_shortTermPeriod release];
-    [_longTermPeriod release];
-    [_lookbackPeriod release];
-    [super dealloc];
-}
-
--(NSDate*)fromDate{
-    return [self.lookbackPeriod applyToDate:[[GCAppGlobal organizer] lastActivity].date];
-}
+@interface GCStatsHistoryAnalysisViewController : UITableViewController
 
 @end
+
+NS_ASSUME_NONNULL_END

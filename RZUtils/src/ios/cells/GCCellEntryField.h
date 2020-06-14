@@ -25,6 +25,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 @protocol GCEntryFieldProtocol <NSObject>
 
 -(NSInteger)identifierInt;
@@ -38,6 +39,8 @@
 
 @end
 
+typedef void(^GCCellEntryFieldCompletion)(NSObject<GCEntryFieldProtocol>*cell);
+
 @protocol GCEntryFieldDelegate <NSObject>
 
 -(void)cellWasChanged:(id<GCEntryFieldProtocol>)cell;
@@ -46,11 +49,9 @@
 
 @end
 
-@interface GCCellEntryField : UITableViewCell<GCEntryFieldProtocol>{
-    id<GCEntryFieldDelegate> entryFieldDelegate;
-    NSInteger			identifierInt;
-}
-@property (nonatomic,retain)	id<GCEntryFieldDelegate> entryFieldDelegate;
+@interface GCCellEntryField : UITableViewCell<GCEntryFieldProtocol>
+@property (nonatomic,retain)	NSObject<GCEntryFieldDelegate> * entryFieldDelegate;
+@property (nonatomic,copy)      GCCellEntryFieldCompletion entryFieldCompletion;
 @property						NSInteger identifierInt;
 
 @end
