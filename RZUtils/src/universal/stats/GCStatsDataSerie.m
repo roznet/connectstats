@@ -1957,7 +1957,7 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
 
     NSUInteger safeguard = 0;
 
-    BOOL operandSupportsDisjoint = (operand != gcStatsOperandMultiply);
+    BOOL operandSupportsDisjoint = (operand != gcStatsOperandMultiply && operand != gcStatsOperandMinus);
 
     while ((s_idx<self.count||o_idx<other.count) && safeguard < maxCount) {
         safeguard++;

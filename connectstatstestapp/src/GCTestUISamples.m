@@ -624,26 +624,31 @@
     
     NSMutableArray * rv = [NSMutableArray array];
     
-    GCStatsMultiFieldConfig * fieldConfig = nil;
+    GCStatsMultiFieldConfig * fieldConfig = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
+    GCStatsDerivedAnalysisConfig * derivedAnalysisConfig = [GCStatsDerivedAnalysisConfig configForActivityType:GC_TYPE_RUNNING];;
     
-    GCStatsDerivedHistory * config = [GCStatsDerivedHistory analysisWith:fieldConfig];;
+    GCStatsDerivedHistory * config = [GCStatsDerivedHistory analysisWith:fieldConfig and:derivedAnalysisConfig];
     config.mode = gcDerivedHistModeAbsolute;
-    config.smoothing = gcDerivedHistSmoothingMovingAverage;
+    config.longTermSmoothing = gcDerivedHistSmoothingMovingAverage;
+    config.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;
     config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
     config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodWeek];
     [rv addObject:[GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSeries width:320.]];
     config.mode = gcDerivedHistModeDrop;
-    config.smoothing = gcDerivedHistSmoothingMovingAverage;
+    config.longTermSmoothing = gcDerivedHistSmoothingMovingAverage;
+    config.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;
     config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
     config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodWeek];
     [rv addObject:[GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSeries width:320.]];
     config.mode = gcDerivedHistModeAbsolute;
-    config.smoothing = gcDerivedHistSmoothingMax;
+    config.longTermSmoothing = gcDerivedHistSmoothingMax;
+    config.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;
     config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
     config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodWeek];
     [rv addObject:[GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSeries width:320.]];
     config.mode = gcDerivedHistModeDrop;
-    config.smoothing = gcDerivedHistSmoothingMax;
+    config.longTermSmoothing = gcDerivedHistSmoothingMax;
+    config.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;
     config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
     config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodNone];
     [rv addObject:[GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSeries width:320.]];
