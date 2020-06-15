@@ -154,7 +154,17 @@
         while( [res next]){
             GCStatsDataSerie * serie = [self serieForResultSet:res];
             NSDictionary * keys = [self keysForResultSet:res];
-            rv[ keys ] = serie;
+            BOOL keep = true;
+            if( [keys[@"fieldKey"] isEqualToString:@"WeightedMeanSpeed"] || [keys[@"fieldKey"] isEqualToString:@"WeightedMeanPace"] ) {
+                gcStatsRange range = serie.range;
+                if( range.y_min < 0 || range.y_max > 30.0 ) {
+                    keep = false;
+                    RZLog(RZLogInfo, @"Skipping bad serie in %@ for %@ %@ in [%@,%@]", self.tableName, keys[@"activityId"], keys[@"fieldKey"], @(range.y_min), @(range.y_max));
+                }
+            }
+            if( keep ){
+                rv[ keys ] = serie;
+            }
         }
     }
     return rv;

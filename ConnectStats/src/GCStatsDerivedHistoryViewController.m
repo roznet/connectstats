@@ -182,6 +182,45 @@
                 [self.analysisDelegate configChanged];
             };
             [self.navigationController pushViewController:list animated:YES];
+        }else if( indexPath.row == GC_OPTIONS_FIELD){
+            
+            GCStatsDerivedAnalysisConfig * derivedAnalysisConfig = self.derivedHistAnalysis.derivedAnalysisConfig;
+            NSArray<GCDerivedGroupedSeries*>*series = derivedAnalysisConfig.availableDataSeries;
+            NSMutableArray<GCDerivedDataSerie*> * choices = [NSMutableArray array];
+            NSMutableArray<NSString*>* labels = [NSMutableArray array];
+            NSUInteger selected = 0;
+
+            GCDerivedDataSerie * current = derivedAnalysisConfig.currentDerivedDataSerie;
+            GCField * field = current.field;
+            NSDate * date = current.bucketStart;
+            NSUInteger idx = 0;
+            for (GCDerivedGroupedSeries * group in series) {
+                [labels addObject:group.field.displayName];
+                if( [group.field isEqualToField:field]){
+                    selected = idx;
+                }
+                idx++;
+                GCDerivedDataSerie * found = nil;
+                for (GCDerivedDataSerie * one in group.series) {
+                    if( [one.bucketStart compare:date] != NSOrderedDescending){
+                        found = one;
+                        break;
+                    }
+                }
+                
+                [choices addObject:found ?: group.series.firstObject];
+            }
+            GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:labels
+                                                                                        selected:selected];
+            
+            list.entryFieldCompletion = ^(NSObject<GCEntryFieldProtocol>*cb){
+                derivedAnalysisConfig.currentDerivedDataSerie = choices[cb.selected];
+                [tableView reloadData];
+                [self.analysisDelegate configChanged];
+            };
+            [self.navigationController pushViewController:list animated:YES];
+
+
         }
     }
 }

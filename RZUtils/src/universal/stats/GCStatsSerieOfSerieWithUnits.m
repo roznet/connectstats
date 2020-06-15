@@ -18,7 +18,7 @@
 +(GCStatsSerieOfSerieHolder*)serieOfSerieHolder:(GCNumberWithUnit*)num serie:(GCStatsDataSerieWithUnit*)serie;
 
 -(double)valueForX:(double)x;
-
+-(BOOL)extendsToX:(double)x;
 @end
 
 @implementation GCStatsSerieOfSerieHolder
@@ -49,6 +49,11 @@
         self.interpFunction = [GCStatsInterpFunction interpFunctionWithSerie:self.serieWithUnit.serie];
     }
     return [self.interpFunction valueForX:x];
+}
+
+-(BOOL)extendsToX:(double)x{
+    GCStatsDataPoint * last = self.serieWithUnit.serie.lastObject;
+    return( last && last.x_data >= x );
 }
 @end
 
@@ -119,8 +124,11 @@
     rv.xUnit = self.sUnit;
     for (GCStatsSerieOfSerieHolder * holder in self.series) {
         rv.unit = holder.serieWithUnit.unit;
-        double y = [holder valueForX:x.value];
-        [rv addNumberWithUnit:[GCNumberWithUnit numberWithUnit:holder.serieWithUnit.unit andValue:y] forX:holder.sValue.value];
+        // if serie is too short, skip
+        if( [holder extendsToX:x.value]){
+            double y = [holder valueForX:x.value];
+            [rv addNumberWithUnit:[GCNumberWithUnit numberWithUnit:holder.serieWithUnit.unit andValue:y] forX:holder.sValue.value];
+        }
     }
     return rv;
 }
