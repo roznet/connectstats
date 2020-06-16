@@ -261,10 +261,14 @@ static BOOL kDerivedEnabled = true;
 -(GCStatsSerieOfSerieWithUnits*)timeserieOfSeriesFor:(GCField*)field inActivities:(NSArray<GCActivity*>*)activities{
     
     GCStatsSerieOfSerieWithUnits * serieOfSerie = [GCStatsSerieOfSerieWithUnits serieOfSerieWithUnits:[GCUnit date]];
+    
+    GCUnit * xUnit = field.fieldFlag == gcFieldFlagWeightedMeanSpeed ? GCUnit.meter : GCUnit.second;
+    
     for (GCActivity * act in activities) {
         GCStatsDataSerie * serie = self.seriesByKeys[ @{ @"activityId": act.activityId, @"fieldKey":field.key}];
         if( serie ){
-            GCStatsDataSerieWithUnit * serieu=[GCStatsDataSerieWithUnit dataSerieWithUnit:[act displayUnitForField:field] xUnit:[GCUnit second] andSerie:serie];
+            GCStatsDataSerieWithUnit * serieu=[GCStatsDataSerieWithUnit dataSerieWithUnit:[act storeUnitForField:field] xUnit:xUnit andSerie:serie];
+            [serieu convertToUnit:[act displayUnitForField:field]];
             [serieOfSerie addSerie:serieu forDate:act.date];
         }
     }
