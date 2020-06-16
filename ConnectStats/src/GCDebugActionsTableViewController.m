@@ -156,6 +156,7 @@
         [newOrganizer registerActivity:act forActivityId:aId];
     }
     NSLog(@"%@", @(newOrganizer.countOfActivities));
+    [newOrganizer release];
 }
 -(void)actionClearAndReprocessDerivedForCurrent{
     GCActivity * act = [[GCAppGlobal organizer] currentActivity];

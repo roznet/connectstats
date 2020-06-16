@@ -400,6 +400,7 @@
                                                                        
 }
 
+#ifdef DISABLE_TEMP
 -(void)testDerivedHist{
     [RZFileOrganizer createEditableCopyOfFile:@"activities_testderived.db" forClass:[self class]];
     [RZFileOrganizer createEditableCopyOfFile:@"derived_testderived.db" forClass:[self class]];
@@ -428,5 +429,6 @@
     }];
     NSLog(@"%@", max);
 }
+#endif
 
 @end

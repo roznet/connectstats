@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,retain) GCDerivedOrganizer * derived;
 /// Activity type used to filer series
 @property (nonatomic,retain) NSString * activityType;
-@property (nonatomic,retain) GCDerivedDataSerie * currentDerivedDataSerie;
+@property (nonatomic,retain,nullable) GCDerivedDataSerie * currentDerivedDataSerie;
 
 
 +(GCStatsDerivedAnalysisConfig*)configForActivityType:(NSString*)activityType;

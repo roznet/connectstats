@@ -622,8 +622,8 @@
     GCHistoryPerformanceAnalysis * perfAnalysis = [[[GCHistoryPerformanceAnalysis alloc] init] autorelease];
     [perfAnalysis useOrganizer:organizer];
     
-    perfAnalysis.shortTermPeriod = gcLagPeriodWeek;
-    perfAnalysis.longTermPeriod  = gcLagPeriodTwoWeeks;
+    perfAnalysis.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodWeek];
+    perfAnalysis.longTermPeriod  = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
     perfAnalysis.summableField = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING];
     perfAnalysis.scalingField = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
 

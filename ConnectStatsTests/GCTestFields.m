@@ -147,8 +147,10 @@
     
     
     
-    NSData * saved = [NSKeyedArchiver archivedDataWithRootObject:[GCActivityType allTypes]];
-    NSArray * retrieved = [NSKeyedUnarchiver unarchiveObjectWithData:saved];
+    NSData * saved = [NSKeyedArchiver archivedDataWithRootObject:[GCActivityType allTypes] requiringSecureCoding:YES error:nil];
+    
+    NSSet<Class>*classes = [NSSet setWithObjects:[NSArray class], [GCActivityType class], [NSString class], nil];
+    NSArray * retrieved = [NSKeyedUnarchiver unarchivedObjectOfClasses:classes fromData:saved error:nil];
     
     XCTAssertEqualObjects(retrieved, [GCActivityType allTypes]);
     

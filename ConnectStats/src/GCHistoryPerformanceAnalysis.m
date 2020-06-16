@@ -123,8 +123,7 @@ static const NSTimeInterval kOneDayTimeInterval = 24.*60.*60.;
     gcIgnoreMode ignoreMode = [self.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
     NSDictionary * series = [self.organizer fieldsSeries:self.fields matching:filter useFiltered:self.useFilter ignoreMode:ignoreMode];
     NSMutableArray * seriesArray = [NSMutableArray arrayWithCapacity:self.fields.count];
-    NSUInteger minimumPoints = self.longTermPeriod.numberOfDays;
-    minimumPoints = 0;
+    NSUInteger minimumPoints = 0;
     for (GCField * field in self.fields) {
         GCStatsDataSerieWithUnit * serie = series[field];
         GCStatsDataSerieFilter * seriefilter = [self.organizer standardFilterForField:field];

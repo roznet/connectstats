@@ -51,6 +51,10 @@
     [_shortTermPeriod release];
     [_longTermPeriod release];
     [_lookbackPeriod release];
+    [_derivedAnalysisConfig release];
+    [_multiFieldConfig release];
+    [_pointsForGraphs release];
+    
     [super dealloc];
 }
 

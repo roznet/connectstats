@@ -47,6 +47,12 @@
     return rv;
 }
 
+-(void)dealloc{
+    [_analysisDelegate release];
+    
+    [super dealloc];
+}
+
 -(GCStatsMultiFieldConfig*)multiFieldConfig{
     return self.analysisDelegate.multiFieldConfig;
 }
@@ -129,7 +135,7 @@
         }
         cell = gridCell;
     }
-    return cell;
+    return cell ?: [GCCellGrid gridCell:tableView];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

@@ -43,6 +43,12 @@
     }
     return rv;
 }
+-(void)dealloc{
+    [_cachedDerived release];
+    [_activityType release];
+    
+    [super dealloc];
+}
 -(GCDerivedOrganizer*)derived{
     return self.cachedDerived ? self.cachedDerived : [GCAppGlobal derived];
 }
