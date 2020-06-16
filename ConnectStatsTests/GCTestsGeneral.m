@@ -629,34 +629,36 @@
 
     [perfAnalysis calculate];
     
-    //NSLog(@"Serie =\n%@", [perfAnalysis.serie.serie asCSVString:true]);
-    //NSLog(@"ST Serie =\n%@", [perfAnalysis.shortTermSerie.serie asCSVString:true]);
-    //NSLog(@"LT Serie =\n%@", [perfAnalysis.longTermSerie.serie asCSVString:true]);
-    // Expected computed from above in XLS: perfAnalysisSample.xlsx
+    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
+    manager.recordMode = [GCTestCase recordModeGlobal];
+    //manager.recordMode = true;
+    NSSet<Class>*classes =[NSSet setWithObjects:[GCStatsDataSerieWithUnit class], nil];
+    NSError * error = nil;
+    
+    GCStatsDataSerieWithUnit * exp_st = [manager retrieveReferenceObject:perfAnalysis.shortTermSerie
+                                                              forClasses:classes
+                                                                selector:_cmd
+                                                              identifier:@"perf.shortTermSerie"
+                                                                   error:&error];
+    GCStatsDataSerieWithUnit * exp_lt = [manager retrieveReferenceObject:perfAnalysis.longTermSerie
+                                                              forClasses:classes
+                                                                selector:_cmd
+                                                              identifier:@"perf.longTermSerie"
+                                                                   error:&error];
 
-    NSArray * exp_st =@[ @967142.8571,  @817142.8571,   @1010000,       @850000,
-                         @850000,       @607142.8571,   @607142.8571,   @655714.2857,
-                         @484285.7143,  @645000,        @887857.1429,   @1102142.857,
-                         @1102142.857,  @1316428.571,   @1173571.429,   @1173571.429,
-                         @820000,       @577142.8571,   @362857.1429,   @362857.1429,
-                         @148571.4286,  @235714.2857,   @464285.7143 ];
-
-    NSArray * exp_lt =@[ @811428.5714, @650714.2857, @827500, @868928.5714,
-                         @976071.4286, @854642.8571, @961785.7143, @914642.8571,
-                         @828928.5714,
-                        ];
     
     XCTAssertEqual(exp_st.count, perfAnalysis.shortTermSerie.serie.count, @"Short Term count as Expected");
     XCTAssertEqual(exp_lt.count, perfAnalysis.longTermSerie.serie.count, @"Long Term count as Expected");
-    
+    //manager.recordMode = true;
+
     // Divide by 1000 as display unit is kilometer now, but above is calculated with meters.
     // it doesn't matter for final display as it's rescaled against the maximium on the serie.
     for (NSUInteger i=0; i<MIN(exp_st.count, perfAnalysis.shortTermSerie.serie.count); i++) {
-        XCTAssertEqualWithAccuracy([exp_st[i] doubleValue]/1000.0, [perfAnalysis.shortTermSerie.serie dataPointAtIndex:i].y_data, 1.e-2, @"Short Term Value [%d]", (int)i );
+        XCTAssertEqualWithAccuracy(exp_st.serie[i].y_data, [perfAnalysis.shortTermSerie.serie dataPointAtIndex:i].y_data, 1.e-2, @"Short Term Value [%d]", (int)i );
     }
     
     for (NSUInteger i=0; i<MIN(exp_lt.count, perfAnalysis.longTermSerie.serie.count); i++) {
-        XCTAssertEqualWithAccuracy([exp_lt[i] doubleValue]/1000.0, [perfAnalysis.longTermSerie.serie dataPointAtIndex:i].y_data, 1.e-2, @"Long Term Value [%d]", (int)i );
+        XCTAssertEqualWithAccuracy(exp_lt.serie[i].y_data , [perfAnalysis.longTermSerie.serie dataPointAtIndex:i].y_data, 1.e-2, @"Long Term Value [%d]", (int)i );
     }
     
 }
