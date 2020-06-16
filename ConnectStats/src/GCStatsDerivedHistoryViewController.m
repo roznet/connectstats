@@ -225,8 +225,6 @@
                 [self.analysisDelegate configChanged];
             };
             [self.navigationController pushViewController:list animated:YES];
-
-
         }
     }
 }

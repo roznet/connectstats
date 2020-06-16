@@ -562,7 +562,7 @@
                                       series:(GCStatsSerieOfSerieWithUnits*)serieOfSeries
                                        width:(CGFloat)width{
     
-    NSArray<NSNumber*>*seconds = config.pointsForGraphs;
+    NSArray<GCNumberWithUnit*>*points = config.pointsForGraphs;
     NSTimeInterval unitForLongTerm = config.longTermPeriod.timeInterval;
     NSTimeInterval unitForShortTerm = config.shortTermPeriod.timeInterval;
     
@@ -585,11 +585,11 @@
     };
     
     NSUInteger i=0;
-    for (NSNumber * second in seconds) {
+    for (GCNumberWithUnit * point in points) {
         if( i < colors.count){
             UIColor * color = colors[i];
             
-            GCStatsDataSerieWithUnit * one = [serieOfSeries serieForX:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:second.doubleValue]];
+            GCStatsDataSerieWithUnit * one = [serieOfSeries serieForX:point];
             GCStatsDataSerie * longTerm = one.serie;
             GCStatsDataSerie * shortTerm = one.serie;
                         
@@ -623,15 +623,15 @@
                                                                                        andUnit:one.unit];
                 GCSimpleGraphDataHolder * holderShortTerm = [GCSimpleGraphDataHolder dataHolder:shortTermFinalSerie
                                                                                            type:gcGraphBezier
-                                                                                          color:[color colorWithAlphaComponent:0.8]
+                                                                                          color:[color colorWithAlphaComponent:0.3]
                                                                                         andUnit:one.unit];
                 holderLongTerm.lineWidth = 2.0;
                 
                 if( config.mode == gcDerivedHistModeDrop){
-                    holderLongTerm.legend = [NSString stringWithFormat:@"%@ drop", [GCNumberWithUnit numberWithUnitName:@"minute" andValue:second.doubleValue/60.0]];
+                    holderLongTerm.legend = [NSString stringWithFormat:@"%@ drop", point];
                 }
                 else{
-                    holderLongTerm.legend = [NSString stringWithFormat:@"%@", [GCNumberWithUnit numberWithUnitName:@"minute" andValue:second.doubleValue/60.0]];
+                    holderLongTerm.legend = [NSString stringWithFormat:@"%@", point];
                 }
                 [rv addDataHolder:holderLongTerm];
                 [rv addDataHolder:holderShortTerm];

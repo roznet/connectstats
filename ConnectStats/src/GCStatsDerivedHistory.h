@@ -68,7 +68,7 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
 
 /// An array of number corresponding to the X to display
 /// by default @[ @0, @60, @1800 ] which are seconds.
-@property (nonatomic,retain) NSArray<NSNumber*>*pointsForGraphs;
+@property (nonatomic,readonly) NSArray<GCNumberWithUnit*>*pointsForGraphs;
 
 +(GCStatsDerivedHistory*)analysisWith:(GCStatsMultiFieldConfig*)multiFieldConfig and:(GCStatsDerivedAnalysisConfig*)derivedConfig;
 

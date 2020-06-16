@@ -39,7 +39,7 @@
         rv.mode = gcDerivedHistModeAbsolute;
         rv.longTermSmoothing = gcDerivedHistSmoothingMax;
         rv.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;
-        rv.pointsForGraphs = @[ @(0), @(60), @(1800) ];
+        //rv.pointsForGraphs = @[ @(0), @(60), @(1800) ];
         rv.multiFieldConfig = multiFieldConfig;
         rv.derivedAnalysisConfig = derivedConfig;
         rv.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
@@ -56,6 +56,20 @@
     [_pointsForGraphs release];
     
     [super dealloc];
+}
+
+-(NSArray<GCNumberWithUnit*>*)pointsForGraphs{
+    if( self.field.fieldFlag == gcFieldFlagWeightedMeanSpeed){
+        return @[ [GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:0.0],
+                  [GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:1000.0],
+                  [GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:5000.0]
+        ];
+    }else{
+        return @[ [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:0.0],
+                  [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:60.0],
+                  [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:1800.0]
+        ];
+    }
 }
 
 -(NSDate*)fromDate{
