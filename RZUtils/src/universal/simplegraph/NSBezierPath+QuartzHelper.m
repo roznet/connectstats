@@ -45,5 +45,8 @@ NSString * NSStringFromCGPoint(CGPoint point){
     [self lineToPoint:point];
 }
 
+-(void)addCurveToPoint:(CGPoint)point controlPoint1:(CGPoint)controlPoint1 controlPoint2:(CGPoint)controlPoint2{
+    [self curveToPoint:point controlPoint1:controlPoint1 controlPoint2:controlPoint2];
+}
 @end
 #endif

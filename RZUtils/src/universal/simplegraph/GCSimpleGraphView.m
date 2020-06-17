@@ -472,6 +472,7 @@
                                                     cubic_points[2].y - (cubic_points[3].y - cubic_points[2].y) * bezierCubicDerivativeFactor) ;
 
                     }
+
                     [path addCurveToPoint:cubic_points[2]
                             controlPoint1:controlPoint1
                             controlPoint2:controlPoint2];
