@@ -411,21 +411,10 @@ void checkVersion(){
 #pragma mark Thread Mgmt
 
 -(void)setupWorkerThread{
-    /*
-    self.worker = [[[NSThread alloc] initWithTarget:self selector:@selector(startWorkerThread) object:nil] autorelease];
-    _worker.name = @"Worker";
-    [_worker start];
-    */
     dispatch_queue_t queue = dispatch_queue_create("net.ro-z.worker", DISPATCH_QUEUE_SERIAL);
     self.worker = queue;
     dispatch_release(queue);
 
-}
-
--(void)startWorkerThread{
-    while (true) {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate distantFuture]];
-    }
 }
 
 +(void)publishEvent:(NSString*)name{

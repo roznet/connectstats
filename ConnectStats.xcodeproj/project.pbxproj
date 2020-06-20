@@ -485,6 +485,7 @@
 		426CC4721BAEB9920033978C /* GCAppActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 426CC4701BAEB9920033978C /* GCAppActions.m */; };
 		426CC4731BAEB9920033978C /* GCAppActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 426CC4701BAEB9920033978C /* GCAppActions.m */; };
 		426CC4751BAEBD060033978C /* GCTestsActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 426CC4741BAEBD060033978C /* GCTestsActions.m */; };
+		426D11A6249B639B00BA38E1 /* GCTestWebAsync.m in Sources */ = {isa = PBXBuildFile; fileRef = 426D11A5249B639B00BA38E1 /* GCTestWebAsync.m */; };
 		426DFE6919D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
 		426DFE6A19D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
 		426F42461DB247FB00937DD8 /* GCTestsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 426F42451DB247FB00937DD8 /* GCTestsHelper.m */; };
@@ -2222,6 +2223,7 @@
 		426CC46F1BAEB9920033978C /* GCAppActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCAppActions.h; path = src/GCAppActions.h; sourceTree = "<group>"; };
 		426CC4701BAEB9920033978C /* GCAppActions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCAppActions.m; path = src/GCAppActions.m; sourceTree = "<group>"; };
 		426CC4741BAEBD060033978C /* GCTestsActions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestsActions.m; sourceTree = "<group>"; };
+		426D11A5249B639B00BA38E1 /* GCTestWebAsync.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCTestWebAsync.m; sourceTree = "<group>"; };
 		426DFE6719D5FE130031EFF1 /* GCHealthKitActivityParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitActivityParser.h; path = src/GCHealthKitActivityParser.h; sourceTree = "<group>"; };
 		426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitActivityParser.m; path = src/GCHealthKitActivityParser.m; sourceTree = "<group>"; };
 		426EC771246831CC00666068 /* GCStatsDerivedAnalysisViewControllerConsts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedAnalysisViewControllerConsts.h; path = src/GCStatsDerivedAnalysisViewControllerConsts.h; sourceTree = "<group>"; };
@@ -4300,6 +4302,7 @@
 				42C0113F1AB438050059B6CF /* GCTestsParsing.m */,
 				42D9081B20338582000BBE07 /* GCTestsPerformance.m */,
 				42B9555218186D0C00BC7AF9 /* GCTestsUtils.m */,
+				426D11A5249B639B00BA38E1 /* GCTestWebAsync.m */,
 				429184AD2319B0ED00FD6525 /* GCTestUserInterface.m */,
 				42C0113C1AB437C10059B6CF /* samples */,
 				428FF72C15F36888007A88FA /* Supporting Files */,
@@ -7348,6 +7351,7 @@
 				426CC4751BAEBD060033978C /* GCTestsActions.m in Sources */,
 				42096756189CF49600D32CA7 /* GCTestsSamples.m in Sources */,
 				42C011401AB438050059B6CF /* GCTestsParsing.m in Sources */,
+				426D11A6249B639B00BA38E1 /* GCTestWebAsync.m in Sources */,
 				42096753189CF33500D32CA7 /* GCTestsDerived.m in Sources */,
 				429184AE2319B0ED00FD6525 /* GCTestUserInterface.m in Sources */,
 				42D90812203383DB000BBE07 /* GCTestCase.m in Sources */,
