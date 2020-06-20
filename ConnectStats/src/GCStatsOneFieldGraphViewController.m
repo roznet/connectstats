@@ -153,7 +153,9 @@
         ds = [GCSimpleGraphCachedDataSource historyView:self.activityStats calendarUnit:unit graphChoice:self.graphChoice after:nil];
 
         self.dataSource = ds;
-        [self performSelectorOnMainThread:@selector(display) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self display];
+        });
     }
 }
 

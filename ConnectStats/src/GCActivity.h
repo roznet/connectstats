@@ -124,6 +124,8 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 @property (nonatomic,retain) GCActivitySettings * settings;
 
+@property (nonatomic,readonly) BOOL pendingUpdate;
+
 #pragma mark - Readonly
 
 @property (nonatomic,readonly) NSString* trackDbFileName;

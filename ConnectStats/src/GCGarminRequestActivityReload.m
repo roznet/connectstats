@@ -85,7 +85,9 @@
     }
 #endif
     self.stage = gcRequestStageParsing;
-    [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processNewStage];
+    });
     dispatch_async([GCAppGlobal worker],^(){
         [self processParse];
     });
@@ -96,7 +98,9 @@
         GCGarminActivitySummaryParser * parser = [[[GCGarminActivitySummaryParser alloc] initWithData:[self.theString dataUsingEncoding:self.encoding]] autorelease];
         if (parser.success) {
             self.stage = gcRequestStageSaving;
-            [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self processNewStage];
+            });
             self.status = GCWebStatusOK;
             [[GCAppGlobal organizer] registerActivity:parser.activity forActivityId:parser.activity.activityId];
         }else{
@@ -108,7 +112,9 @@
             self.status = GCWebStatusParsingFailed;
         }
     }
-    [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processDone];
+    });
 }
 
 +(GCActivity*)testForActivity:(id)actOrId withFilesIn:(NSString*)path{

@@ -249,7 +249,9 @@
 	[_resultsTableView reloadData];
 }
 -(void)notifyUpdate{
-    [_resultsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.resultsTableView reloadData];
+    });
 }
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
     if (!self.runner.running) {
@@ -281,7 +283,9 @@
 
 -(void)displayCurrentResults{
     self.displayResults = self.runner.collectedResults;
-    [self.resultsTableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.resultsTableView reloadData];
+    });
 }
 
 -(void)testFinished{

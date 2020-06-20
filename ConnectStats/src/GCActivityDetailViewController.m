@@ -193,7 +193,9 @@
         self.refreshControl.attributedTitle = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Refreshing",@"RefreshControl")] autorelease];
         
     }else{
-        [self performSelectorOnMainThread:@selector(refreshData) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self refreshData];
+        });
     }
 }
 

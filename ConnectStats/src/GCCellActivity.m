@@ -82,7 +82,9 @@ const CGFloat kGCCellActivityDefaultHeight = 96;
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
     if ([theInfo.stringInfo isEqualToString:kGCActivityNotifyTrackpointReady]) {
         if ([self.activity trackpointsReadyNoLoad]) {
-            [self performSelectorOnMainThread:@selector(updateGraphSource) withObject:nil waitUntilDone:NO];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self updateGraphSource];
+            });
         }
     }
 }

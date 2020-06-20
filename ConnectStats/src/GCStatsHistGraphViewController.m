@@ -194,7 +194,9 @@
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
     if (theParent == self.config) {
-        [self performSelectorOnMainThread:@selector(updateDataSource) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self updateDataSource];
+        });
     }
 }
 @end

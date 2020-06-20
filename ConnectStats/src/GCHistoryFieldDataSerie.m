@@ -255,7 +255,9 @@
     }
 
     self.dataLock = false;
-    [self performSelectorOnMainThread:@selector(notify) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self notify];
+    });
 }
 
 

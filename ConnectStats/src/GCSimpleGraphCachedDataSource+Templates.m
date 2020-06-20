@@ -623,7 +623,7 @@
                                                                                        andUnit:one.unit];
                 GCSimpleGraphDataHolder * holderShortTerm = [GCSimpleGraphDataHolder dataHolder:shortTermFinalSerie
                                                                                            type:gcGraphBezier
-                                                                                          color:[color colorWithAlphaComponent:0.3]
+                                                                                          color:[color colorWithAlphaComponent:0.5]
                                                                                         andUnit:one.unit];
                 holderLongTerm.lineWidth = 2.0;
                 

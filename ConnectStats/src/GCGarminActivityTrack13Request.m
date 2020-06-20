@@ -324,7 +324,9 @@
     if ([self checkNoErrors]) {
         self.stage = gcRequestStageParsing;
         [self.delegate loginSuccess:gcWebServiceGarmin];
-        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNewStage];
+        });
         GCGarminActivityLapsParser * parser = [[[GCGarminActivityLapsParser alloc] initWithData:[self.theString dataUsingEncoding:self.encoding]
                                                                                     forActivity:self.activity] autorelease];
         if (parser.success) {
@@ -343,7 +345,9 @@
     if ([self checkNoErrors]) {
         if (self.trackpoints && self.laps) {
             self.stage = gcRequestStageSaving;
-            [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self processNewStage];
+            });
             self.status = GCWebStatusOK;
             if (self.trackpointsSwim && self.lapsSwim) {
                 [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpoints:self.trackpointsSwim andLaps:self.lapsSwim];
@@ -378,7 +382,9 @@
     if ([self checkNoErrors]) {
         self.stage = gcRequestStageParsing;
         [self.delegate loginSuccess:gcWebServiceGarmin];
-        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNewStage];
+        });
         NSData * data = [self.theString dataUsingEncoding:self.encoding];
         GCGarminActivityDetailJsonParser * parser = [[[GCGarminActivityDetailJsonParser alloc] initWithData:data forActivity:self.activity] autorelease];
         if (parser.success) {
@@ -397,7 +403,10 @@
             }
         }
     }
-    [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processNextOrDone];
+    });
+
 }
 
 -(void)processMergeFitFile{

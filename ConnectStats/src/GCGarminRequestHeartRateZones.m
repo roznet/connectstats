@@ -55,7 +55,10 @@
     }
 #endif
     self.stage = gcRequestStageParsing;
-    [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processNewStage];
+    });
+
     dispatch_async([GCAppGlobal worker],^(){
         [self processParse];
     });
@@ -77,10 +80,14 @@
         }
 
         self.stage = gcRequestStageSaving;
-        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNewStage];
+        });
         self.status = GCWebStatusOK;
     }
-    [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processDone];
+    });
 }
 
 @end

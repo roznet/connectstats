@@ -107,7 +107,9 @@
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
     if ([theInfo.stringInfo isEqualToString:kNOTIFY_DERIVED_END]) {
         [[GCAppGlobal derived] detach:self];
-        [self.delegate performSelectorOnMainThread:@selector(processDone:) withObject:self waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self.delegate processDone:self];
+        });
     }
 }
 

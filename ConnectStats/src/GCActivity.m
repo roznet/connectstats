@@ -1164,6 +1164,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return  rv;
 }
 
+-(BOOL)pendingUpdate{
+    return _downloadRequested;
+}
 
 -(BOOL)loadTrackPoints{
     BOOL rv = false;

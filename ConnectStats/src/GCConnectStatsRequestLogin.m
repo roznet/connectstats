@@ -89,7 +89,9 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
 
 -(void)process{
     if (![self isSignedIn]) {
-        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNewStage];
+        });
         dispatch_async(dispatch_get_main_queue(),^(){
             [self signIn];
         });

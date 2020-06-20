@@ -74,7 +74,9 @@
 #endif
     
     self.stage = gcRequestStageParsing;
-    [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processNewStage];
+    });
     dispatch_async([GCAppGlobal worker],^(){
         [self processParse:theData];
     });
@@ -91,15 +93,18 @@
         self.modern = jsonArray ?: @[];
         self.legacy = @[];
         self.stage = gcRequestStageSaving;
-        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
-        
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNewStage];
+        });
         NSUInteger n = [[GCActivityType activityTypes] loadMissingFromGarmin:self.modern withDisplayInfoFrom:self.legacy];
         if( n > 0){
             RZLog(RZLogInfo, @"Found %lu new types", (long unsigned)n);
         }
         self.status = GCWebStatusOK;
     }
-    [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processDone];
+    });
 }
 
 

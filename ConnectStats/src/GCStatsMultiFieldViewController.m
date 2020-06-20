@@ -514,7 +514,9 @@
         if (!skipSetup) {
             [self setupForCurrentActivityAndViewChoice:self.viewChoice];
         }
-        [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self.tableView reloadData];
+        });
     }
 }
 
@@ -674,7 +676,9 @@
     self.fieldOrder = [GCFields categorizeAndOrderFields:self.allFields];
     self.fieldStats = vals;
 
-    [self performSelectorOnMainThread:@selector(updateDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self updateDone];
+    });
 }
 
 -(void)setupTestModeFieldDataSeries{
@@ -736,7 +740,9 @@
              cutOff:cutOff
          ignoreMode:ignoreMode];
     self.aggregatedStats = vals;
-    [self performSelectorOnMainThread:@selector(updateDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self updateDone];
+    });
 }
 
 -(void)setupForCurrentActivityAndViewChoice:(gcViewChoice)choice{
