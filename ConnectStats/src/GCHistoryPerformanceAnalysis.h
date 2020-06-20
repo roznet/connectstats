@@ -24,21 +24,11 @@
 //  
 
 #import <Foundation/Foundation.h>
+#import "GCLagPeriod.h"
 
 @class  GCStatsDataSerieWithUnit;
 @class  GCActivitiesOrganizer;
 @class GCField;
-
-typedef NS_ENUM(NSUInteger, gcPerformancePeriod) {
-    gcPerformancePeriodNone,
-    gcPerformancePeriodDay,
-    gcPerformancePeriodWeek,
-    gcPerformancePeriodTwoWeeks,
-    gcPerformancePeriodMonth,
-    gcPerformancePeriodThreeMonths,
-    gcPerformancePeriodYear
-
-};
 
 @interface GCHistoryPerformanceAnalysis : NSObject
 
@@ -47,8 +37,8 @@ typedef NS_ENUM(NSUInteger, gcPerformancePeriod) {
 
 @property (nonatomic,readonly,retain) NSString *seriesDescription;
 
-@property (nonatomic,assign) gcPerformancePeriod longTermPeriod;
-@property (nonatomic,assign) gcPerformancePeriod shortTermPeriod;
+@property (nonatomic,retain) GCLagPeriod * longTermPeriod;
+@property (nonatomic,retain) GCLagPeriod * shortTermPeriod;
 
 @property (nonatomic,assign) BOOL useFilter;
 @property (nonatomic,retain) NSDate * fromDate;

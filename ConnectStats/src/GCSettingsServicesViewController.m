@@ -980,7 +980,9 @@
         }
 
     }
-    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.tableView reloadData];
+    });
 }
 #pragma mark - Table view delegate
 
@@ -1105,7 +1107,9 @@
 
 -(void)notifyCallBack:(id)theParent{
     [self buildRemap];
-    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.tableView reloadData];
+    });
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{

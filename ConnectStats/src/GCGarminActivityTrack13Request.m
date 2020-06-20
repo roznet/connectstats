@@ -281,7 +281,9 @@
             }
 
         }
-        [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNextOrDone];
+        });
     }
 }
 
@@ -304,21 +306,27 @@
             [self processParseTrackpoints];
         });
     }else{
-        [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNextOrDone];
+        });
     }
 
 }
 
 -(void)processParseTCX{
     RZLog(RZLogError, @"SHOULD NOT USE ANYMORE");
-    [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processNextOrDone];
+    });
 }
 
 -(void)processParseLaps{
     if ([self checkNoErrors]) {
         self.stage = gcRequestStageParsing;
         [self.delegate loginSuccess:gcWebServiceGarmin];
-        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNewStage];
+        });
         GCGarminActivityLapsParser * parser = [[[GCGarminActivityLapsParser alloc] initWithData:[self.theString dataUsingEncoding:self.encoding]
                                                                                     forActivity:self.activity] autorelease];
         if (parser.success) {
@@ -327,7 +335,9 @@
             self.lapsSwim = parser.lapsSwim;
         }
     }
-    [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processNextOrDone];
+    });
 
 }
 
@@ -335,7 +345,9 @@
     if ([self checkNoErrors]) {
         if (self.trackpoints && self.laps) {
             self.stage = gcRequestStageSaving;
-            [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self processNewStage];
+            });
             self.status = GCWebStatusOK;
             if (self.trackpointsSwim && self.lapsSwim) {
                 [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpoints:self.trackpointsSwim andLaps:self.lapsSwim];
@@ -348,12 +360,17 @@
             self.status = GCWebStatusParsingFailed;
         }
     }
-    [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processDone];
+    });
+
 }
 
 -(void)processNextOrDone{
     if (self.track13Stage + 1 < gcTrack13RequestEnd) {
-        [self performSelectorOnMainThread:@selector(processDone) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processDone];
+        });
     }else{
         dispatch_async([GCAppGlobal worker],^(){
             [self processSaving];
@@ -365,7 +382,9 @@
     if ([self checkNoErrors]) {
         self.stage = gcRequestStageParsing;
         [self.delegate loginSuccess:gcWebServiceGarmin];
-        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNewStage];
+        });
         NSData * data = [self.theString dataUsingEncoding:self.encoding];
         GCGarminActivityDetailJsonParser * parser = [[[GCGarminActivityDetailJsonParser alloc] initWithData:data forActivity:self.activity] autorelease];
         if (parser.success) {
@@ -384,7 +403,10 @@
             }
         }
     }
-    [self performSelectorOnMainThread:@selector(processNextOrDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self processNextOrDone];
+    });
+
 }
 
 -(void)processMergeFitFile{

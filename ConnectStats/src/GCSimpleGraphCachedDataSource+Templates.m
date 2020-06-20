@@ -34,6 +34,7 @@
 #import "GCUnitTrainingZone.h"
 #import "GCDerivedOrganizer.h"
 #import "GCActivity+Series.h"
+#import "GCStatsDerivedHistory.h"
 
 @implementation GCSimpleGraphCachedDataSource (Templates)
 
@@ -556,24 +557,95 @@
 }
 
 
-+(GCSimpleGraphCachedDataSource*)derivedHist:(NSString*)activityType
++(GCSimpleGraphCachedDataSource*)derivedHist:(GCStatsDerivedHistory*)config
                                        field:(GCField*)field
                                       series:(GCStatsSerieOfSerieWithUnits*)serieOfSeries
                                        width:(CGFloat)width{
+    
+    NSArray<GCNumberWithUnit*>*points = config.pointsForGraphs;
+    NSTimeInterval unitForLongTerm = config.longTermPeriod.timeInterval;
+    NSTimeInterval unitForShortTerm = config.shortTermPeriod.timeInterval;
+    
+    BOOL adjustShortTerm = (config.shortTermPeriod.numberOfDays != 0);
+    
+    NSArray<UIColor*>*colors = [GCViewConfig arrayOfColorsForMultiplots];
     GCSimpleGraphCachedDataSource * rv = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-    rv.xUnit = [GCUnit dateshort];
-    NSArray<UIColor*>* colors = [GCViewConfig arrayOfColorsForMultiplots];
+
+    GCStatsDataSerie * firstLongTerm = nil;
+    GCStatsDataSerie * firstShortTerm = nil;
+    
+    double (^sampleMax)(NSArray<GCStatsDataPoint*>*) = ^(NSArray<GCStatsDataPoint*>*samples){
+        double max = samples.firstObject.y_data;
+        for (GCStatsDataPoint * point in samples) {
+            if( point.y_data > max){
+                max = point.y_data;
+            }
+        }
+        return max;
+    };
+    
     NSUInteger i=0;
-    for (NSNumber * xval in @[ @(30.0), @(60.0), @(60.*10.0), @(60.*30.0)]) {
-        GCStatsDataSerieWithUnit * serieu = [serieOfSeries serieForX:[GCNumberWithUnit numberWithUnit:[GCUnit second] andValue:xval.doubleValue]];
-        GCSimpleGraphDataHolder * holder = [GCSimpleGraphDataHolder dataHolder:serieu.serie
-                                                                          type:gcGraphLine
-                                                                         color:colors[i]
-                                                                       andUnit:serieu.unit];
-        holder.legend = [[GCNumberWithUnit numberWithUnit:[GCUnit second] andValue:xval.doubleValue] formatDouble];
-        i++;
-        [rv addDataHolder:holder];
+    for (GCNumberWithUnit * point in points) {
+        if( i < colors.count){
+            UIColor * color = colors[i];
+            
+            GCStatsDataSerieWithUnit * one = [serieOfSeries serieForX:point];
+            GCStatsDataSerie * longTerm = one.serie;
+            GCStatsDataSerie * shortTerm = one.serie;
+                        
+            if( firstLongTerm == nil){
+                firstLongTerm = longTerm;
+                firstShortTerm = shortTerm;
+            }else{
+                GCStatsDataSerie * longTermFinalSerie = longTerm;
+                GCStatsDataSerie * shortTermFinalSerie = shortTerm;
+                if( config.mode == gcDerivedHistModeDrop ){
+                    shortTermFinalSerie = [shortTerm operate:gcStatsOperandMinus with:firstShortTerm];
+                    longTermFinalSerie = [longTerm operate:gcStatsOperandMinus with:firstLongTerm];
+                }
+                
+                if (config.longTermSmoothing == gcDerivedHistSmoothingMax){
+                    longTermFinalSerie = [longTermFinalSerie movingFunctionForUnit:unitForLongTerm function:sampleMax];
+                }else{
+                    longTermFinalSerie = [longTermFinalSerie movingAverageForUnit:unitForLongTerm];
+                }
+                if( adjustShortTerm ){
+                    if( config.shortTermSmoothing == gcDerivedHistSmoothingMax){
+                        shortTermFinalSerie = [shortTermFinalSerie movingFunctionForUnit:unitForShortTerm function:sampleMax];
+                    }else{
+                        shortTermFinalSerie = [shortTermFinalSerie movingAverageForUnit:unitForShortTerm];
+                    }
+                }
+
+                GCSimpleGraphDataHolder * holderLongTerm = [GCSimpleGraphDataHolder dataHolder:longTermFinalSerie
+                                                                                          type:gcGraphBezier
+                                                                                         color:color
+                                                                                       andUnit:one.unit];
+                GCSimpleGraphDataHolder * holderShortTerm = [GCSimpleGraphDataHolder dataHolder:shortTermFinalSerie
+                                                                                           type:gcGraphBezier
+                                                                                          color:[color colorWithAlphaComponent:0.5]
+                                                                                        andUnit:one.unit];
+                holderLongTerm.lineWidth = 2.0;
+                
+                if( config.mode == gcDerivedHistModeDrop){
+                    holderLongTerm.legend = [NSString stringWithFormat:@"%@ drop", point];
+                }
+                else{
+                    holderLongTerm.legend = [NSString stringWithFormat:@"%@", point];
+                }
+                [rv addDataHolder:holderLongTerm];
+                [rv addDataHolder:holderShortTerm];
+            }
+            i++;
+        }
     }
+    
+    if( config.longTermSmoothing == gcDerivedHistSmoothingMax ){
+        rv.title = [NSString stringWithFormat:@"%@ Max %@", config.longTermPeriod.displayName, field.displayName];
+    }else{
+        rv.title = [NSString stringWithFormat:@"%@ %@ Trend ", field.displayName, config.longTermPeriod.displayName];
+    }
+    rv.xUnit = [GCUnit unitForKey:@"datemonth"];
     
     return rv;
 }
@@ -829,13 +901,13 @@
     rv.xUnit = [GCUnit unitForKey:@"datemonth"];
 
     GCSimpleGraphDataHolder * lt = [GCSimpleGraphDataHolder dataHolder:perfAnalysis.longTermSerie.serie
-                                                                  type:gcGraphLine
+                                                                  type:gcGraphBezier
                                                                  color:[GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLine]
                                                                andUnit:perfAnalysis.longTermSerie.unit];
     lt.lineWidth =2;
     lt.legend = NSLocalizedString(@"Fitness", @"Performance");
     GCSimpleGraphDataHolder * st = [GCSimpleGraphDataHolder dataHolder:perfAnalysis.shortTermSerie.serie
-                                                                  type:gcGraphLine
+                                                                  type:gcGraphBezier
                                                                  color:[GCViewConfig colorForGraphElement:gcSkinGraphColorRegressionLineSecondary]
                                                                andUnit:perfAnalysis.shortTermSerie.unit];
     st.legend = NSLocalizedString(@"Fatigue", @"Performance");

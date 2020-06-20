@@ -155,7 +155,9 @@
     self.quartiles = [_activityStats.history.serie quantiles:4];
     self.average = [_activityStats.history.serie standardDeviation];
 
-    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.tableView reloadData];
+    });
 }
 
 -(void)changeXField:(GCField*)xField{

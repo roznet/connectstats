@@ -46,6 +46,7 @@
 #import "GCConnectStatsRequestFitFile.h"
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminRequestActivityReload.h"
+#import "GCStatsDerivedHistory.h"
 
 @implementation GCTestUISamples
 
@@ -71,6 +72,7 @@
                                            NSStringFromSelector(@selector(sample12_trackStats)),
                                            NSStringFromSelector(@selector(sample13_compareStats)),
                                            NSStringFromSelector(@selector(sample14_SimpleGradientFillPlot)),
+                                           NSStringFromSelector(@selector(sample15_HistDerivedGraphs)),
 
 
                                            ];
@@ -80,9 +82,11 @@
     @autoreleasepool {
         [GCAppGlobal setupSampleState:@"sample_activities.db"];
         
-        // DONT CHECKIN
-        NSString * filter = nil;// = @"sample8_";
+        NSString * filter = nil;
         NSInteger which = -1;
+        // DONT CHECKIN
+        //filter = @"sample15_";
+        //which = 2;
         if( filter ){
             for (NSString * one in selectorNames) {
                 if( [one containsString:filter] ){
@@ -149,13 +153,20 @@
         [data2 addDataPointWithX:x andY:0.5+1.*(x-x0)/5.];
         [data addDataPointWithX:x andY:2.]; x+=1.;
     }
+    
     GCSimpleGraphCachedDataSource * sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
-    GCSimpleGraphDataHolder * h = [GCSimpleGraphDataHolder dataHolder:data type:gcGraphLine color:[UIColor blackColor] andUnit:[GCUnit unitForKey:@"mps"]];
-    GCSimpleGraphDataHolder * h2 = [GCSimpleGraphDataHolder dataHolder:data2 type:gcGraphLine color:[UIColor blueColor] andUnit:[GCUnit unitForKey:@"mps"]];
-
+    GCSimpleGraphDataHolder * h = [GCSimpleGraphDataHolder dataHolder:data
+                                                                 type:gcGraphLine
+                                                                color:[UIColor blackColor]
+                                                              andUnit:[GCUnit unitForKey:@"mps"]];
+    GCSimpleGraphDataHolder * h2 = [GCSimpleGraphDataHolder dataHolder:data2
+                                                                  type:gcGraphLine
+                                                                 color:[UIColor blueColor]
+                                                               andUnit:[GCUnit unitForKey:@"mps"]];
+    
     [sample setSeries:[NSMutableArray arrayWithObjects:h, h2, nil]];
     [sample setXUnit:[GCUnit unitForKey:@"second"]];
-    [sample setTitle:@"Sample 1"];
+    [sample setTitle:@"Sample 1 [0]"];
     [data release];
     [data2 release];
 
@@ -163,22 +174,41 @@
     
     sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
     GCStatsDataSerie * adjusted = [[GCStatsDataSerie alloc] init];
+    GCStatsDataSerie * negative = [[GCStatsDataSerie alloc] init];
     for (GCStatsDataPoint * point in data) {
         if( point.x_data == 4.0){
             [adjusted addDataPointNoValueWithX:point.x_data];
+            [negative addDataPointNoValueWithX:point.x_data];
         }else{
             [adjusted addDataPointWithX:point.x_data andY:point.y_data];
+            [negative addDataPointWithX:point.x_data andY:point.y_data*-1];
         }
     }
+    
+    
     h = [GCSimpleGraphDataHolder dataHolder:adjusted type:gcGraphLine color:[UIColor blackColor] andUnit:[GCUnit unitForKey:@"mps"]];
     h.fillColorForSerie = [[UIColor redColor] colorWithAlphaComponent:0.5];
     
     [sample setSeries:[NSMutableArray arrayWithObjects:h, nil]];
     [sample setXUnit:[GCUnit unitForKey:@"second"]];
-    [sample setTitle:@"Sample 1"];
+    [sample setTitle:@"Sample 1 [1]"];
 
     [rv addObject:sample];
     
+
+    sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphDataHolder * h3 = [GCSimpleGraphDataHolder dataHolder:negative
+                                                                  type:gcGraphLine
+                                                                 color:[UIColor blueColor]
+                                                               andUnit:[GCUnit unitForKey:@"mps"]];
+    h3.fillColorForSerie = [[UIColor redColor] colorWithAlphaComponent:0.5];
+    
+    [sample setSeries:[NSMutableArray arrayWithObjects:h3, nil]];
+    [sample setXUnit:[GCUnit unitForKey:@"second"]];
+    [sample setTitle:@"Sample 1 [2]"];
+
+    [rv addObject:sample];
+
     return rv;
 
 }
@@ -578,6 +608,53 @@
     return sample;
 }
 
+-(NSArray<GCSimpleGraphCachedDataSource*>*)sample15_HistDerivedGraphs{
+    [RZFileOrganizer createEditableCopyOfFile:@"activities_testderived.db"];
+    [RZFileOrganizer createEditableCopyOfFile:@"derived_testderived.db"];
+    
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"activities_testderived.db"]];
+    [db open];
+    GCActivitiesOrganizer * organizer = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db]);
+    FMDatabase * deriveddb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"derived_testderived.db"]];
+    [deriveddb open];
+
+    GCDerivedOrganizer * derived = RZReturnAutorelease([[GCDerivedOrganizer alloc] initForTestModeWithDb:deriveddb thread:nil andFilePrefix:@"testderived"]);
+    GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
+    GCStatsSerieOfSerieWithUnits * serieOfSeries = [derived timeserieOfSeriesFor:field inActivities:organizer.activities];
+    
+    NSMutableArray * rv = [NSMutableArray array];
+    
+    GCStatsMultiFieldConfig * fieldConfig = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
+    GCStatsDerivedAnalysisConfig * derivedAnalysisConfig = [GCStatsDerivedAnalysisConfig configForActivityType:GC_TYPE_RUNNING];;
+    
+    GCStatsDerivedHistory * config = [GCStatsDerivedHistory analysisWith:fieldConfig and:derivedAnalysisConfig];
+    config.mode = gcDerivedHistModeAbsolute;
+    config.longTermSmoothing = gcDerivedHistSmoothingMovingAverage;
+    config.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;
+    config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
+    config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodWeek];
+    [rv addObject:[GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSeries width:320.]];
+    config.mode = gcDerivedHistModeDrop;
+    config.longTermSmoothing = gcDerivedHistSmoothingMovingAverage;
+    config.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;
+    config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
+    config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodWeek];
+    [rv addObject:[GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSeries width:320.]];
+    config.mode = gcDerivedHistModeAbsolute;
+    config.longTermSmoothing = gcDerivedHistSmoothingMax;
+    config.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;
+    config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
+    config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodWeek];
+    [rv addObject:[GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSeries width:320.]];
+    config.mode = gcDerivedHistModeDrop;
+    config.longTermSmoothing = gcDerivedHistSmoothingMax;
+    config.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;
+    config.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
+    config.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodNone];
+    [rv addObject:[GCSimpleGraphCachedDataSource derivedHist:config field:field series:serieOfSeries width:320.]];
+
+    return rv;
+}
 #pragma mark - Cells Samples
 
 -(NSArray*)sampleCells{

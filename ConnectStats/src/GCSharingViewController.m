@@ -340,7 +340,9 @@
         });
         [self startHud];
     }else{
-        [self performSelectorOnMainThread:presentSelector withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self presentSelector];
+        });
     }
 }
 
@@ -492,7 +494,9 @@
 }
 -(void)downloadStringSuccessful:(id)connection string:(NSString*)theString{
     if (presentSelector) {
-        [self performSelectorOnMainThread:presentSelector withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self presentSelector];
+        });
     }
 }
 

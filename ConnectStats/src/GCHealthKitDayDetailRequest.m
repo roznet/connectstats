@@ -131,7 +131,9 @@
                 [self parseSamples];
             });
         }else{
-            [self performSelectorOnMainThread:@selector(executeNext) withObject:nil waitUntilDone:NO];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self executeNext];
+            });
         }
     }];
 
@@ -157,8 +159,9 @@
             [[GCAppGlobal organizer] registerActivity:aId withTrackpoints:points andLaps:nil];
         }
     }];
-
-    [self.delegate performSelectorOnMainThread:@selector(processDone:) withObject:self waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.delegate processDone:self];
+    });
 }
 
 -(id<GCWebRequest>)nextReq{

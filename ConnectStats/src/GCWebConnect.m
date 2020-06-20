@@ -260,12 +260,14 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 
 -(BOOL)checkRequestExists:(id<GCWebRequest>)req{
     BOOL already = false;
-    for (id<GCWebRequest> exreq in _requests) {
-        if ([exreq isMemberOfClass:[req class]]) {
-            if ([req respondsToSelector:@selector(isSameAsRequest:)]) {
-                already = [exreq isSameAsRequest:req];
-            }else if ([[exreq url] isEqualToString:[req url]]){
-                already = true;
+    @synchronized (_requests) {
+        for (id<GCWebRequest> exreq in _requests) {
+            if ([exreq isMemberOfClass:[req class]]) {
+                if ([req respondsToSelector:@selector(isSameAsRequest:)]) {
+                    already = [exreq isSameAsRequest:req];
+                }else if ([[exreq url] isEqualToString:[req url]]){
+                    already = true;
+                }
             }
         }
     }
@@ -299,11 +301,13 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 
     if (![self checkRequestExists:req]) {
         // if priority: add it to next slot, else at the end
-        if (isPriority || ([req respondsToSelector:@selector(priorityRequest)] &&
-            [req priorityRequest]) ) {
-            [_requests insertObject:req atIndex:0];
-        }else{
-            [_requests addObject:req];
+        @synchronized (_requests) {
+            if (isPriority || ([req respondsToSelector:@selector(priorityRequest)] &&
+                               [req priorityRequest]) ) {
+                [_requests insertObject:req atIndex:0];
+            }else{
+                [_requests addObject:req];
+            }
         }
     }
     [self next];
@@ -326,9 +330,11 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 -(void)next{
     if (self.currentRequestObject==nil && _requests.count > 0) { // not currently processing one
 
-        id<GCWebRequest> req = _requests[0];
-        self.currentRequestObject = req;
-        [_requests removeObjectAtIndex:0];
+        @synchronized (_requests) {
+            self.currentRequestObject = _requests[0];
+            [_requests removeObjectAtIndex:0];
+        }
+        id<GCWebRequest> req = self.currentRequestObject;
 
         gcWebService service = [req service];
         GCWebStatus serviceStatus = [self serviceHolderFor:service].status;
@@ -378,15 +384,47 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
                     [self downloadNoUrl];
                 }
             }else{
-                if ([req fileData]) {
+                NSData * fileData = nil;
+                NSString * fileName = nil;
+                NSDictionary * postData = nil;
+                NSDictionary * deleteData = nil;
+                
+                BOOL hasFiledata = false;
+                BOOL hasPost = false;
+                BOOL hasDelete = false;
+                
+                if( [req respondsToSelector:@selector(fileData)]){
+                    fileData = [req fileData];
+                    hasFiledata = fileData != nil;
+                    if( [req respondsToSelector:@selector(fileName)]){
+                        fileName = [req fileName];
+                    }else{
+                        fileName = @"temp";
+                    }
+                }
+                
+                if( [req respondsToSelector:@selector(postData)]){
+                    postData = [req postData];
+                    hasPost = postData != nil;
+                }
+                
+                if( [req respondsToSelector:@selector(deleteData)]){
+                    deleteData = [req deleteData];
+                    hasDelete = (deleteData != nil );
+                }
+                
+                
+                if (hasFiledata) {
+                    NSData * fileData = [req fileData];
+                    
                     self.remoteDownload = RZReturnAutorelease([[RZRemoteDownload alloc] initWithURL:[req url]
-                                                                        postData:[req postData]
-                                                                        fileName:[req fileName]
-                                                                        fileData:[req fileData]
+                                                                        postData:postData
+                                                                        fileName:fileName
+                                                                        fileData:fileData
                                                                      andDelegate:self]);
-                }else if ([req postData]) {
+                }else if (hasPost) {
                     self.remoteDownload = RZReturnAutorelease([[RZRemoteDownload alloc] initWithURL:[req url]
-                                                                        postData:[req postData]
+                                                                        postData:postData
                                                                      andDelegate:self]);
                 }else if( [req respondsToSelector:@selector(postJson)] && [req postJson]){
                     self.remoteDownload = RZReturnAutorelease([[RZRemoteDownload alloc] initWithURL:[req url]
@@ -394,9 +432,9 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
                                                                      andDelegate:self]);
 
 
-                }else if ([req deleteData]){
+                }else if (hasDelete){
                     self.remoteDownload = RZReturnAutorelease([[RZRemoteDownload alloc] initWithURL:[req url]
-                                                                      deleteData:[req deleteData]
+                                                                      deleteData:deleteData
                                                                      andDelegate:self]);
                 }else{
                     self.remoteDownload = RZReturnAutorelease([[RZRemoteDownload alloc] initWithURL:[req url]

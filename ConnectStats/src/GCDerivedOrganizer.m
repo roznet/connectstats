@@ -261,14 +261,36 @@ static BOOL kDerivedEnabled = true;
 -(GCStatsSerieOfSerieWithUnits*)timeserieOfSeriesFor:(GCField*)field inActivities:(NSArray<GCActivity*>*)activities{
     
     GCStatsSerieOfSerieWithUnits * serieOfSerie = [GCStatsSerieOfSerieWithUnits serieOfSerieWithUnits:[GCUnit date]];
+    
+    GCUnit * xUnit = field.fieldFlag == gcFieldFlagWeightedMeanSpeed ? GCUnit.meter : GCUnit.second;
+    
     for (GCActivity * act in activities) {
         GCStatsDataSerie * serie = self.seriesByKeys[ @{ @"activityId": act.activityId, @"fieldKey":field.key}];
         if( serie ){
-            GCStatsDataSerieWithUnit * serieu=[GCStatsDataSerieWithUnit dataSerieWithUnit:[act displayUnitForField:field] xUnit:[GCUnit second] andSerie:serie];
+            GCStatsDataSerieWithUnit * serieu=[GCStatsDataSerieWithUnit dataSerieWithUnit:[act storeUnitForField:field] xUnit:xUnit andSerie:serie];
+            [serieu convertToUnit:[act displayUnitForField:field]];
             [serieOfSerie addSerie:serieu forDate:act.date];
         }
     }
     return serieOfSerie;
+}
+
+-(NSDictionary<NSString*,NSArray<NSString*>*>*)availableActivitiesAndFieldsForTimeSeries{
+    NSMutableDictionary * rv = [NSMutableDictionary dictionary];
+    
+    for (NSDictionary * dict in self.seriesByKeys) {
+        NSString * aId = dict[@"activityId"];
+        NSString * fieldKey = dict[@"fieldKey"];
+        NSMutableArray * one = rv[aId];
+        if( one == nil){
+            rv[aId] = [NSMutableArray arrayWithObject:fieldKey];
+        }else{
+            if( ! [one containsObject:fieldKey]){
+                [one addObject:fieldKey];
+            }
+        }
+    }
+    return rv;
 }
 
 -(GCStatsDataSerie*)serieFor:(GCDerivedDataSerie*)derivedSerie{

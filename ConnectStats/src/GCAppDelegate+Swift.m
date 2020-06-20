@@ -33,7 +33,9 @@
     GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:[self.urlToOpen.path lastPathComponent] fitFileData:fitData fitFilePath:self.urlToOpen.path startTime:[NSDate date]]);
 
     [self.organizer registerTemporaryActivity:fitAct forActivityId:fitAct.activityId];
-    [self performSelectorOnMainThread:@selector(handleFitFileDone:) withObject:fitAct.activityId waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self handleFitFileDone:fitAct.activityId];
+    });
 }
 
 -(void)handleFitFileDone:(NSString*)aId{

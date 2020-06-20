@@ -55,13 +55,17 @@
 -(void)testSimpleGraph{
     [self startSession:@"UI SimpleGraph"];
     self.recordMode = false;
-    [self performSelectorOnMainThread:@selector(checkSimpleGraphSnapshot) withObject:nil waitUntilDone:YES];
+    dispatch_sync(dispatch_get_main_queue(), ^(){
+        [self checkSimpleGraphSnapshot];
+    });
 }
 
 -(void)testCellGrid{
     [self startSession:@"UI CellGrid"];
     self.recordMode = false;
-    [self performSelectorOnMainThread:@selector(checkGridCellSnapshot) withObject:nil waitUntilDone:YES];
+    dispatch_sync(dispatch_get_main_queue(), ^(){
+        [self checkGridCellSnapshot];
+    });
 }
 
 -(void)buildGraphDataSource{

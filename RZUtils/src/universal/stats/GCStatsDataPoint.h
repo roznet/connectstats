@@ -46,6 +46,7 @@
 -(NSString*)descriptionWithDate;
 
 -(void)addPoint:(GCStatsDataPoint*)otherPoint;
+-(void)minusPoint:(GCStatsDataPoint*)otherPoint;
 -(void)divideByDouble:(double)aDouble;
 -(BOOL)setToMax:(GCStatsDataPoint*)otherPoint;
 -(BOOL)setToMin:(GCStatsDataPoint*)otherPoint;

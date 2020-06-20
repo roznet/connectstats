@@ -75,15 +75,20 @@
     HKQuantityType *quantityType = self.currentQuantityType;
     if ([quantityType isKindOfClass:[HKWorkoutType class]]) {
         if ( quantityType == nil || [self isLastRequest]) {
-            [self performSelectorOnMainThread:@selector(checkSources) withObject:nil waitUntilDone:NO];
-
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self checkSources];
+            });
         }else{
             [self nextQuantityType];
-            [self performSelectorOnMainThread:@selector(executeQuery) withObject:nil waitUntilDone:NO];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self executeQuery];
+            });
         }
     }else{
         if( quantityType == nil || [self isLastRequest] ){
-            [self performSelectorOnMainThread:@selector(checkSources) withObject:nil waitUntilDone:NO];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self checkSources];
+            });
         }else{
             NSDateComponents *interval = [[[NSDateComponents alloc] init] autorelease];
             interval.year = -1;
@@ -123,11 +128,14 @@
                                                }];
                 }
                 if ([self isLastRequest]) {
-                    [self performSelectorOnMainThread:@selector(checkSources) withObject:nil waitUntilDone:NO];
-                    
+                    dispatch_async(dispatch_get_main_queue(), ^(){
+                        [self checkSources];
+                    });
                 }else{
                     [self nextQuantityType];
-                    [self performSelectorOnMainThread:@selector(executeQuery) withObject:nil waitUntilDone:NO];
+                    dispatch_async(dispatch_get_main_queue(), ^(){
+                        [self executeQuery];
+                    });
                 }
             };
             
@@ -175,7 +183,9 @@
     if (saveSettings) {
         [GCAppGlobal saveSettings];
     }
-    [self.delegate performSelectorOnMainThread:@selector(processDone:) withObject:self waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.delegate processDone:self];
+    });
 }
 
 -(id<GCWebRequest>)nextReq{

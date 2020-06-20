@@ -193,7 +193,9 @@
         self.refreshControl.attributedTitle = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Refreshing",@"RefreshControl")] autorelease];
         
     }else{
-        [self performSelectorOnMainThread:@selector(refreshData) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self refreshData];
+        });
     }
 }
 
@@ -318,7 +320,43 @@
     return cell;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+
+-(UITableViewCell *)tableView:(UITableView *)tableView mapCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellMap *cell = (GCCellMap*)[tableView dequeueReusableCellWithIdentifier:@"GCMap"];
+    if (cell == nil) {
+        cell = [[[GCCellMap alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GCMap"] autorelease];
+    }
+    GCActivity * act = self.activity;
+    cell.mapController.activity = act;
+    dispatch_block_t build = ^(){
+        // make sure we have trackpoints
+        [act trackpoints];
+        if ([GCAppGlobal configGetBool:CONFIG_MAPS_INLINE_GRADIENT defaultValue:true]) {
+            if (!self.choices || (self.choices).choices.count==0) {
+                self.choices = [GCTrackFieldChoices trackFieldChoicesWithActivity:self.activity];
+            }
+            cell.mapController.gradientField = self.choices.current.field;
+            if(self.choices.current.statsStyle == gcTrackStatsCompare && self.compareActivity){
+                cell.mapController.compareActivity = self.compareActivity;
+            }else{
+                cell.mapController.compareActivity = nil;
+            }
+        }else{
+            cell.mapController.gradientField = nil;
+        }
+
+        [cell.mapController notifyCallBack:nil info:nil];
+    };
+    if( self.activity.settings.worker ){
+        dispatch_async(self.activity.settings.worker,build);
+    }else{
+        build();
+    }
+
+    return cell;
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell * rv = nil;
 
@@ -352,27 +390,7 @@
         }
         rv = cell;
     }else if(indexPath.section == GCVIEW_DETAIL_MAP_SECTION){
-        GCCellMap *cell = (GCCellMap*)[tableView dequeueReusableCellWithIdentifier:@"GCMap"];
-        if (cell == nil) {
-            cell = [[[GCCellMap alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GCMap"] autorelease];
-        }
-        GCActivity * act = self.activity;
-        (cell.mapController).activity = act;
-        if ([GCAppGlobal configGetBool:CONFIG_MAPS_INLINE_GRADIENT defaultValue:true]) {
-            if (!self.choices || (self.choices).choices.count==0) {
-                self.choices = [GCTrackFieldChoices trackFieldChoicesWithActivity:self.activity];
-            }
-            cell.mapController.gradientField = self.choices.current.field;
-            if(self.choices.current.statsStyle == gcTrackStatsCompare && self.compareActivity){
-                cell.mapController.compareActivity = self.compareActivity;
-            }else{
-                cell.mapController.compareActivity = nil;
-            }
-        }else{
-            cell.mapController.gradientField = nil;
-        }
-        [cell.mapController notifyCallBack:nil info:nil];
-        rv = cell;
+        rv = [self tableView:tableView mapCellForRowAtIndexPath:indexPath];
     }else if(indexPath.section == GCVIEW_DETAIL_GRAPH_SECTION){
         if ([self.activity.activityType isEqualToString:GC_TYPE_DAY]) {
             rv = [self tableView:tableView dayGraphCellForRowAtIndexPath:indexPath];

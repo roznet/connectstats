@@ -258,9 +258,13 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
 -(void)notifyOnMainThread:(NSString*)stringOrNil{
     if (stringOrNil) {
-        [self performSelectorOnMainThread:@selector(notifyForString:) withObject:stringOrNil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self notifyForString:stringOrNil];
+        });
     }else{
-        [self performSelectorOnMainThread:@selector(notify) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self notify];
+        });
     }
 }
 
@@ -348,10 +352,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             RZLog( RZLogInfo, @"%@: %@ activities [From: %@ to %@]", serviceName, serviceSummary[@"count"], serviceSummary[@"earliest"], serviceSummary[@"latest"]);
         }
         [_reverseGeocoder start];
-        [self performSelectorOnMainThread:@selector(publishEvent) withObject:nil waitUntilDone:NO];
         [self notifyOnMainThread:nil];
         dispatch_async(dispatch_get_main_queue(), ^(){
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyOrganizerLoadComplete object:nil];
+            [self publishEvent];
         });
     }
     [self lookForAndRemoveAllDuplicates];

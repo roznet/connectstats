@@ -108,7 +108,9 @@
                                     }
                                 }
                                 [self.queryArgs removeLastObject];
-                                [self performSelectorOnMainThread:@selector(nextWorkoutSamples) withObject:nil waitUntilDone:NO];
+                                dispatch_async(dispatch_get_main_queue(), ^(){
+                                    [self nextWorkoutSamples];
+                                });
                             }];
 
 
@@ -167,8 +169,9 @@
     [parser parse:^(GCActivity *act, NSString*aId){
         [[GCAppGlobal organizer] registerActivity:act forActivityId:aId];
     }];
-
-    [self.delegate performSelectorOnMainThread:@selector(processDone:) withObject:self waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.delegate processDone:self];
+    });
 }
 
 

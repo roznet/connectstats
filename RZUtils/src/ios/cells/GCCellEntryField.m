@@ -26,7 +26,6 @@
 #import "GCCellEntryField.h"
 
 @implementation GCCellEntryField
-@synthesize entryFieldDelegate,identifierInt;
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -36,6 +35,14 @@
     }
     return self;
 }
+#if !__has_feature(objc_arc)
+-(void)dealloc{
+    [_entryFieldDelegate release];
+    [_entryFieldCompletion release];
+    
+    [super dealloc];
+}
+#endif
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {

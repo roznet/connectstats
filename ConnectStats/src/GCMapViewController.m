@@ -531,7 +531,9 @@
 #pragma mark - others
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
-    [self performSelectorOnMainThread:@selector(forceRedisplay) withObject:nil waitUntilDone:NO];
+    dispatch_async( dispatch_get_main_queue(), ^(){
+        [self forceRedisplay];
+    });
 }
 -(UIImage*)exportImage{
     UIImage * img = [GCViewConfig imageWithView:self.view];

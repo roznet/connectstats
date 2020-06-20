@@ -95,7 +95,9 @@ const CGFloat kCellDaySpacing = 2.f;
 }
 
 -(void)deletedActivity{
-    [self performSelectorOnMainThread:@selector(delayedEndRefreshing:) withObject:self waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self delayedEndRefreshing:self];
+    });
 
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Deleted Activity", @"DeletedActivity")
                                                                     message:NSLocalizedString(@"This activity was deleted from garmin connect, do you want to delete in the app too?",@"DeletedActivity")
@@ -178,7 +180,9 @@ const CGFloat kCellDaySpacing = 2.f;
         [self.tableView reloadData];
         [self setupQuickFilterIcon];
     }else{
-        [self performSelectorOnMainThread:@selector(notifyCallBack:) withObject:theParent waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self notifyCallBack:theParent];
+        });
     }
 }
 
@@ -190,17 +194,27 @@ const CGFloat kCellDaySpacing = 2.f;
         }
         [self notifyCallBack:nil];
     }else{
-        [self performSelectorOnMainThread:@selector(updateRefreshControlTitle) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self updateRefreshControlTitle];
+        });
+
         if ([theInfo.stringInfo isEqualToString:NOTIFY_END]) {
-            [self performSelectorOnMainThread:@selector(delayedEndRefreshing:) withObject:self waitUntilDone:NO];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self delayedEndRefreshing:self];
+            });
             self.loginTries = 0;
         }else if ([theInfo.stringInfo isEqualToString:NOTIFY_ERROR]) {
 
             if ([GCAppGlobal web].status == GCWebStatusDeletedActivity) {
-                [self performSelectorOnMainThread:@selector(deletedActivity) withObject:nil waitUntilDone:NO];
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self deletedActivity];
+                });
+
             }else{
-                [self performSelectorOnMainThread:@selector(reportServiceError) withObject:nil waitUntilDone:NO];
-                [self performSelectorOnMainThread:@selector(delayedEndRefreshing:) withObject:self waitUntilDone:NO];
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self reportServiceError];
+                    [self delayedEndRefreshing:self];
+                });
             }
         }
     }
@@ -350,7 +364,9 @@ const CGFloat kCellDaySpacing = 2.f;
     }else{
         [[GCAppGlobal organizer] clearFilter];
     }
-    [self performSelectorOnMainThread:@selector(refreshAfterFilterSetup:) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self refreshAfterFilterSetup:nil];
+    });
 }
 
 -(UIImage*)imageForQuickFilter{
@@ -371,7 +387,9 @@ const CGFloat kCellDaySpacing = 2.f;
         [self.tableView setContentOffset:CGPointMake(0, -self.tableView.contentInset.top-self.refreshControl.frame.size.height) animated:YES];
         [self.refreshControl beginRefreshing];
     }else{
-        [self performSelectorOnMainThread:@selector(beginRefreshing) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self beginRefreshing];
+        });
     }
 }
 
@@ -386,7 +404,9 @@ const CGFloat kCellDaySpacing = 2.f;
     if ([NSThread isMainThread]) {
         [self performSelector:@selector(endRefreshing) withObject:nil afterDelay:1.0];
     }else{
-        [self performSelectorOnMainThread:@selector(delayedEndRefreshing:) withObject:aObj waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self delayedEndRefreshing:aObj];
+        });
     }
 }
 
@@ -499,7 +519,9 @@ const CGFloat kCellDaySpacing = 2.f;
 
 -(void)setupFilterForString:(NSString*)aFilter{
     [self filterActivityForString:aFilter];
-    [self performSelectorOnMainThread:@selector(refreshAfterFilterSetup:) withObject:aFilter waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self refreshAfterFilterSetup:aFilter];
+    });
 }
 
 -(void)refreshAfterFilterSetup:(NSString*)aFilter{
@@ -508,7 +530,9 @@ const CGFloat kCellDaySpacing = 2.f;
         self.search.text = aFilter;
         [self.search setNeedsDisplay];
     }else{
-        [self performSelectorOnMainThread:@selector(setupFilterForString:) withObject:aFilter waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self setupFilterForString:aFilter];
+        });
     }
 }
 

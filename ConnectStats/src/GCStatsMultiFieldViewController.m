@@ -42,11 +42,16 @@
 #import "GCDerivedOrganizer.h"
 #import "GCHealthOrganizer.h"
 #import "GCStatsDerivedAnalysisViewController.h"
+#import "GCStatsDerivedHistory.h"
+#import "GCStatsDerivedHistoryViewController.h"
 
 @interface GCStatsMultiFieldViewController ()
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
+@property (nonatomic,retain) GCStatsDerivedHistory * derivedHistAnalysis;
+
 @property (nonatomic,assign) BOOL started;
 @property (nonatomic,retain) GCStatsDerivedAnalysisViewController * configViewController;
+@property (nonatomic,retain) GCStatsDerivedHistoryViewController * histAnalysisViewController;
 
 @end
 
@@ -76,7 +81,7 @@
     [_fieldStats release];
     [_fieldDataSeries release];
     [_allFields release];
-    [_config release];
+    [_multiFieldConfig release];
     [_configViewController release];
     [super dealloc];
 }
@@ -108,8 +113,8 @@
     [super viewWillAppear:animated];
     if( ! self.started){
         [self setupForCurrentActivityAndViewChoice:self.viewChoice];
-        self.config.viewChoice = (gcViewChoice)[GCAppGlobal configGetInt:CONFIG_STATS_START_PAGE defaultValue:gcViewChoiceSummary];
-        RZLog(RZLogInfo, @"Initial start page %@", [GCViewConfig viewChoiceDesc:self.config.viewChoice]);
+        self.multiFieldConfig.viewChoice = (gcViewChoice)[GCAppGlobal configGetInt:CONFIG_STATS_START_PAGE defaultValue:gcViewChoiceSummary];
+        RZLog(RZLogInfo, @"Initial start page %@", [GCViewConfig viewChoiceDesc:self.multiFieldConfig.viewChoice]);
         [GCViewConfig setupViewController:self];
     }
     self.started = true;
@@ -210,10 +215,10 @@
 {
     if(self.viewChoice==gcViewChoiceSummary){
         if (indexPath.row == GC_SUMMARY_DERIVED) {
-            [self.config nextDerivedSerie];            
+            [self.derivedAnalysisConfig nextDerivedSerie];
             [tableView reloadData];
         }else if (indexPath.row == GC_SUMMARY_CUMULATIVE_DISTANCE){
-            [self.config nextSummaryCumulativeField];
+            [self.multiFieldConfig nextSummaryCumulativeField];
             [tableView reloadData];
         }
     }else if (self.viewChoice == gcViewChoiceAll) {
@@ -243,7 +248,7 @@
                 
             }];
             [GCAppGlobal focusOnListWithFilter:filter];
-            self.config.historyStats =gcHistoryStatsAll;
+            self.multiFieldConfig.historyStats =gcHistoryStatsAll;
             [self setupForCurrentActivityType:GC_TYPE_ALL filter:true andViewChoice:gcViewChoiceAll];
         }else if (indexPath.section == GC_SECTION_GRAPH){
                 GCStatsOneFieldGraphViewController * graph = [[GCStatsOneFieldGraphViewController alloc] initWithNibName:nil bundle:nil];
@@ -285,16 +290,16 @@
 
 -(GCSimpleGraphCachedDataSource*)dataSourceForField:(GCField*)field{
     GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:field];
-    return [self.config dataSourceForFieldDataSerie:fieldDataSerie];
+    return [self.multiFieldConfig dataSourceForFieldDataSerie:fieldDataSerie];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView graphCell:(NSIndexPath*)indexPath{
 
     GCCellSimpleGraph * cell = [GCCellSimpleGraph graphCell:tableView];
     cell.cellDelegate = self;
-    GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:self.config.currentCumulativeSummaryField];
+    GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:self.multiFieldConfig.currentCumulativeSummaryField];
     [cell setDataSource:cache andConfig:cache];
-    if (self.config.viewChoice == gcViewChoiceYearly) {// This is Cumulative graph, needs legend
+    if (self.multiFieldConfig.viewChoice == gcViewChoiceYearly) {// This is Cumulative graph, needs legend
         cell.legend = true;
     }else{
         cell.legend = false;
@@ -333,7 +338,7 @@
     }
 
     GCFieldDataHolder * data = [self.fieldStats dataForField:field];
-    [cell setupForFieldDataHolder:data histStats:self.config.historyStats andActivityType:self.activityType];
+    [cell setupForFieldDataHolder:data histStats:self.multiFieldConfig.historyStats andActivityType:self.activityType];
     if ([GCAppGlobal configGetBool:CONFIG_STATS_INLINE_GRAPHS defaultValue:true] && doGraph[field.key]) {
         GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:field];
         cache.maximizeGraph = true;
@@ -359,7 +364,7 @@
 
     NSDate *from=[[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-6m"]];
     self.performanceAnalysis = [GCHistoryPerformanceAnalysis performanceAnalysisFromDate:from
-                                                                                forField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.config.activityType]];
+                                                                                forField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.multiFieldConfig.activityType]];
 
     [self.performanceAnalysis calculate];
     if (![self.performanceAnalysis isEmpty]) {
@@ -375,39 +380,20 @@
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
-    graphCell.cellDelegate = self;
-
-    GCDerivedDataSerie * current = [self currentDerivedDataSerie];
-    GCStatsSerieOfSerieWithUnits * serieOfSerie = nil;
-    GCField * field = nil;
+    if( self.derivedHistAnalysis == nil){
+        self.derivedHistAnalysis = [GCStatsDerivedHistory analysisWith:self.multiFieldConfig and:self.derivedAnalysisConfig];
+    }
     
-    if( current ){
-        field = [GCField fieldForFlag:current.fieldFlag andActivityType:self.activityType];
-        serieOfSerie = [[GCAppGlobal derived] timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
-            return [act.activityType isEqualToString:self.activityType];
-        } withLimit:60]];
-    }
-    //GCStatsSerieOfSerieWithUnits * historical = [[GCAppGlobal derived] timeSeriesOfSeriesFor:field];
-    //[serieOfSerie addSerieOfSerie:historical];
-    GCSimpleGraphCachedDataSource * cache = nil;
-    if (serieOfSerie) {
-        cache = [GCSimpleGraphCachedDataSource derivedHist:self.activityType field:field series:serieOfSerie width:tableView.frame.size.width];
-        cache.emptyGraphLabel = @"";
-        graphCell.legend = true;
-        [graphCell setDataSource:cache andConfig:cache];
-    }else{
-        cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-        cache.emptyGraphLabel = @"";
-        [graphCell setDataSource:cache andConfig:cache];
-    }
+    GCCellSimpleGraph * graphCell = [self.derivedHistAnalysis tableView:tableView derivedHistCellForRowAtIndexPath:indexPath with:[GCAppGlobal derived]];
+    graphCell.cellDelegate = self;
+    graphCell.identifier = GC_SUMMARY_DERIVED_HIST;
 
     return graphCell;
 
 }
 
 -(GCDerivedDataSerie*)currentDerivedDataSerie{
-    return [self.config currentDerivedDataSerie];
+    return [self.derivedAnalysisConfig currentDerivedDataSerie];
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView derivedCellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -437,7 +423,7 @@
     graphCell.legend = TRUE;
     graphCell.identifier = GC_SUMMARY_CUMULATIVE_DISTANCE;
     
-    GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:self.config.currentCumulativeSummaryField];
+    GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:self.multiFieldConfig.currentCumulativeSummaryField];
     NSCalendarUnit unit = NSCalendarUnitYear;
 
     if (![fieldDataSerie isEmpty]) {
@@ -528,7 +514,9 @@
         if (!skipSetup) {
             [self setupForCurrentActivityAndViewChoice:self.viewChoice];
         }
-        [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self.tableView reloadData];
+        });
     }
 }
 
@@ -550,21 +538,21 @@
 #pragma mark - Config
 
 -(BOOL)useFilter{
-    return self.config.useFilter;
+    return self.multiFieldConfig.useFilter;
 }
 -(gcViewChoice)viewChoice{
-    return self.config.viewChoice;
+    return self.multiFieldConfig.viewChoice;
 }
 
 -(NSString*)activityType{
-    return self.config.activityType;
+    return self.multiFieldConfig.activityType;
 }
 
 -(NSString*)displayActivityType{
-    if (self.config.useFilter) {
+    if (self.multiFieldConfig.useFilter) {
         return [GCAppGlobal organizer].filteredActivityType;
     }
-    return self.config.activityType;
+    return self.multiFieldConfig.activityType;
 }
 
 -(void)toggleViewChoice{
@@ -572,7 +560,7 @@
 }
 
 -(void)switchCalFilter{
-    [self setupForFieldListConfig:[self.config configForNextFilter]];
+    [self setupForFieldListConfig:[self.multiFieldConfig configForNextFilter]];
     [self setupBarButtonItem];
     [self.tableView reloadData];
 }
@@ -582,7 +570,7 @@
                                                                   style:UIBarButtonItemStylePlain
                                                                  target:self action:@selector(toggleViewChoice)] autorelease];
 
-    UIBarButtonItem * cal = [self.config buttonForTarget:self action:@selector(switchCalFilter)];
+    UIBarButtonItem * cal = [self.multiFieldConfig buttonForTarget:self action:@selector(switchCalFilter)];
 
     self.navigationItem.rightBarButtonItems = cal ? @[rightMost,cal] : @[ rightMost];
 
@@ -598,25 +586,33 @@
 }
 
 -(void)swipeLeft:(GCCellSimpleGraph *)cell{
-    if( self.config.viewChoice == gcViewChoiceSummary){
+    if( self.multiFieldConfig.viewChoice == gcViewChoiceSummary){
         if( cell.identifier == GC_SUMMARY_DERIVED){
-            [self.config nextDerivedSerieField];
+            [self.derivedAnalysisConfig nextDerivedSerieField];
         }else if( cell.identifier == GC_SUMMARY_CUMULATIVE_DISTANCE ){
-            [self.config nextSummaryCumulativeField];
+            [self.multiFieldConfig nextSummaryCumulativeField];
         }
     }else{
-        [self.config nextSummaryCumulativeField];
+        [self.multiFieldConfig nextSummaryCumulativeField];
     }
 
     [self.tableView reloadData];
 }
 
 -(void)longPress:(GCCellSimpleGraph*)cell{
-    RZLog(RZLogInfo,@"Starting Derived Analysis");
-    
-    self.configViewController = [GCStatsDerivedAnalysisViewController controllerWithDelegate:self];
-    
-    [self.navigationController pushViewController:self.configViewController animated:YES];
+    if( cell.identifier == GC_SUMMARY_DERIVED){
+        RZLog(RZLogInfo,@"Starting Derived Analysis");
+        
+        self.configViewController = [GCStatsDerivedAnalysisViewController controllerWithDelegate:self];
+        
+        [self.navigationController pushViewController:self.configViewController animated:YES];
+    }else if (cell.identifier == GC_SUMMARY_DERIVED_HIST ){
+        RZLog(RZLogInfo,@"Starting Derived Hist Analysis");
+        
+        self.histAnalysisViewController = [GCStatsDerivedHistoryViewController controllerWithDelegate:self];
+        
+        [self.navigationController pushViewController:self.histAnalysisViewController animated:YES];
+    }
 }
 
 -(void)configChanged{
@@ -626,9 +622,9 @@
     if( indexPath.row == 0 && indexPath.section == 0){
         NSArray<GCActivity*>*activities = [[GCAppGlobal organizer] activities];
         GCActivity * current = [[GCAppGlobal organizer] currentActivity];
-        if( ![current.activityType isEqualToString:self.config.activityType] ){
+        if( ![current.activityType isEqualToString:self.multiFieldConfig.activityType] ){
             for (GCActivity * one in activities) {
-                if( [one.activityType isEqualToString:self.config.activityType] ){
+                if( [one.activityType isEqualToString:self.multiFieldConfig.activityType] ){
                     current = one;
                     break;
                 }
@@ -680,7 +676,9 @@
     self.fieldOrder = [GCFields categorizeAndOrderFields:self.allFields];
     self.fieldStats = vals;
 
-    [self performSelectorOnMainThread:@selector(updateDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self updateDone];
+    });
 }
 
 -(void)setupTestModeFieldDataSeries{
@@ -734,7 +732,7 @@
     vals.activityType = self.activityType;
     gcIgnoreMode ignoreMode = [self.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
     NSDate * cutOff = nil;
-    if (self.config.calChoice == gcStatsCalToDate) {
+    if (self.multiFieldConfig.calChoice == gcStatsCalToDate) {
         cutOff = [[GCAppGlobal organizer] lastActivity].date;
     }
     [vals aggregate:[GCViewConfig calendarUnitForViewChoice:self.viewChoice]
@@ -742,31 +740,33 @@
              cutOff:cutOff
          ignoreMode:ignoreMode];
     self.aggregatedStats = vals;
-    [self performSelectorOnMainThread:@selector(updateDone) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self updateDone];
+    });
 }
 
 -(void)setupForCurrentActivityAndViewChoice:(gcViewChoice)choice{
-    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.config];
+    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
     nconfig.activityType = [[GCAppGlobal organizer] currentActivity].activityType;
     nconfig.viewChoice = choice;
     [self setupForFieldListConfig:nconfig];
 }
 -(void)setupForCurrentActivityType:(NSString*)aType andViewChoice:(gcViewChoice)choice{
-    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.config];
+    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
     nconfig.activityType = aType;
     nconfig.viewChoice = choice;
     [self setupForFieldListConfig:nconfig];
 }
 
 -(void)setupForCurrentActivityType:(NSString*)aType andFilter:(BOOL)aFilter{
-    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.config];
+    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
     nconfig.activityType = aType;
     nconfig.useFilter = aFilter;
     [self setupForFieldListConfig:nconfig];
 }
 
 -(void)setupForCurrentActivityType:(NSString*)aType filter:(BOOL)aFilter andViewChoice:(gcViewChoice)choice{
-    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.config];
+    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
     nconfig.activityType = aType;
     nconfig.useFilter = aFilter;
     nconfig.viewChoice = choice;
@@ -775,7 +775,7 @@
 }
 
 -(void)setupTestModeWithFieldListConfig:(GCStatsMultiFieldConfig*)nConfig{
-    self.config = nConfig;
+    self.multiFieldConfig = nConfig;
     [self clearFieldDataSeries];
     if (self.viewChoice == gcViewChoiceAll || self.viewChoice == gcViewChoiceSummary) {
         [self setFieldStats:nil];
@@ -791,10 +791,15 @@
 }
 
 -(void)setupForFieldListConfig:(GCStatsMultiFieldConfig*)nConfig{
-    //FIXME: check if does not require full setup
-    if (![self.config isEqualToConfig:nConfig]) {
-        self.config = nConfig;
+    if (![self.multiFieldConfig isEqualToConfig:nConfig]) {
+        self.multiFieldConfig = nConfig;
         [self clearFieldDataSeries];
+        if( self.derivedAnalysisConfig== nil){
+            self.derivedAnalysisConfig = [GCStatsDerivedAnalysisConfig configForActivityType:self.multiFieldConfig.activityType];
+        }else{
+            self.derivedAnalysisConfig.activityType = self.multiFieldConfig.activityType;
+        }
+
         if (self.viewChoice == gcViewChoiceAll || self.viewChoice == gcViewChoiceSummary) {
             [self setFieldStats:nil];
             [self setFieldOrder:nil];

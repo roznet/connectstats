@@ -128,8 +128,8 @@ static const NSUInteger kActivityRequestCount = 20;
 
 -(void)process{
     if (![self isSignedIn]) {
-        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
         dispatch_async(dispatch_get_main_queue(),^(){
+            [self processNewStage];
             [self signIn];
         });
         
@@ -142,7 +142,9 @@ static const NSUInteger kActivityRequestCount = 20;
         }
 #endif
         self.stage = gcRequestStageParsing;
-        [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNewStage];
+        });
         dispatch_async([GCAppGlobal worker],^(){
             [self processParse];
         });
@@ -171,8 +173,10 @@ static const NSUInteger kActivityRequestCount = 20;
                 
                 [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats set:true];
                 self.stage = gcRequestStageSaving;
-                [self performSelectorOnMainThread:@selector(processNewStage) withObject:nil waitUntilDone:NO];
-                
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self processNewStage];
+                });
+
                 [self addActivitiesFromParser:parser toOrganizer:organizer];
             }
             else{

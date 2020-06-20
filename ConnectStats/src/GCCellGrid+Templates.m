@@ -518,7 +518,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     if (status==gcViewActivityStatusCompare) {
         [self setIconImage:[GCViewConfig mergeImage:[activity icon] withImage:[GCViewIcons cellIconFor:gcIconCellCheckbox]]];
     }else{
-        if ( [GCAppGlobal configGetBool:CONFIG_SHOW_DOWNLOAD_ICON defaultValue:false] && activity.trackPointsRequireDownload) {
+        if ( [GCAppGlobal configGetBool:CONFIG_SHOW_DOWNLOAD_ICON defaultValue:true] && activity.trackPointsRequireDownload) {
             [self setIconImage:[GCViewConfig mergeImage:[activity icon] withImage:[GCViewIcons cellIconFor:gcIconCellCloudDownload]]];
         }else{
             [self setIconImage:[activity icon]];

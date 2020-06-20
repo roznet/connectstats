@@ -50,6 +50,7 @@ typedef void (^GCDerivedDidCompleteBestMatchingSeriesBlock)(NSArray<GCDerivedDat
 -(GCStatsSerieOfSerieWithUnits*)timeserieOfSeriesFor:(GCField*)field
                                         inActivities:(NSArray<GCActivity*>*)activities;
 
+-(NSDictionary<NSString*,NSArray<NSString*>*>*)availableActivitiesAndFieldsForTimeSeries;
 -(GCDerivedDataSerie*)derivedDataSerie:(gcDerivedType)type
                                  field:(GCField*)field
                                 period:(gcDerivedPeriod)period

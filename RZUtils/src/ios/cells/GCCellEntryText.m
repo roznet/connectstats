@@ -114,7 +114,7 @@
 }
 
 -(void)textFieldDidBeginEditing:(UITextField*)aField{
-	[entryFieldDelegate baseNavigationItem].rightBarButtonItem = RZReturnAutorelease([[UIBarButtonItem alloc]
+    [self.entryFieldDelegate baseNavigationItem].rightBarButtonItem = RZReturnAutorelease([[UIBarButtonItem alloc]
                                                                  initWithTitle:NSLocalizedString(@"Done", @"Cell Entry Button")
                                                                  style:UIBarButtonItemStyleDone
                                                                  target:self
@@ -124,14 +124,20 @@
 }
 
 -(void)textFieldDidEndEditing:(UITextField*)aField{
-	[entryFieldDelegate cellWasChanged:self];
-    [entryFieldDelegate baseNavigationItem].rightBarButtonItem = nil;
+    [self.entryFieldDelegate cellWasChanged:self];
+    if( self.entryFieldCompletion ){
+        self.entryFieldCompletion(self);
+    }
+    [self.entryFieldDelegate baseNavigationItem].rightBarButtonItem = nil;
 }
 
 
 -(void)doneEditing:(id)sender{
 	[self.textField resignFirstResponder];
-	[entryFieldDelegate cellWasChanged:self];
+    [self.entryFieldDelegate cellWasChanged:self];
+    if( self.entryFieldCompletion ){
+        self.entryFieldCompletion(self);
+    }
 }
 
 @end

@@ -27,12 +27,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "GCCellEntryField.h"
 
+@interface GCCellEntrySwitch : GCCellEntryField
 
-@interface GCCellEntrySwitch : GCCellEntryField{
-    UILabel*	label;
-    UISwitch*	toggle;
-    CAGradientLayer *gradientLayer;
-}
 @property (nonatomic,retain) UILabel*label;
 @property (nonatomic,retain) UISwitch * toggle;
 @property (nonatomic,retain) CAGradientLayer * gradientLayer;

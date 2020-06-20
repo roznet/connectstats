@@ -118,7 +118,7 @@
                   (unsigned long)[organizer countOfActivities]
                   );
         }
-        // FIXME: check for deleted
+
         if (existingInService.count ) {
             NSArray * deleteCandidate = [organizer findActivitiesNotIn:existingInService isFirst:self.isFirst];
 

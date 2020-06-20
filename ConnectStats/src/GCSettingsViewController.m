@@ -457,7 +457,7 @@
                 rv = switchcell;
                 [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_SHOW_DOWNLOAD)];
                 switchcell.entryFieldDelegate = self;
-                (switchcell.toggle).on = [GCAppGlobal configGetBool:CONFIG_SHOW_DOWNLOAD_ICON defaultValue:false];
+                (switchcell.toggle).on = [GCAppGlobal configGetBool:CONFIG_SHOW_DOWNLOAD_ICON defaultValue:true];
                 break;
 
             }
@@ -816,7 +816,9 @@
         default:
             break;
     }
-    [self performSelectorOnMainThread:@selector(reloadView) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self reloadView];
+    });
 }
 
 #pragma mark - Table view delegate
@@ -977,8 +979,9 @@
 
         }
     }
-
-    [self performSelectorOnMainThread:@selector(reloadView) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self reloadView];
+    });
 }
 
 -(void)showBugReport{
