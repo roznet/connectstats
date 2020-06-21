@@ -31,6 +31,7 @@
 #import "GCViewIcons.h"
 #import "GCHistoryFieldDataSerie.h"
 #import "GCAppGlobal.h"
+#import "GCFieldsForCategory.h"
 @import RZExternal;
 
 @interface GCStatsMultiFieldGraphViewController ()
@@ -94,9 +95,12 @@
 }
 
 -(void)nextConfig{
-    //FIXME: test this
+    NSMutableArray<GCField*>*allFields = [NSMutableArray array];
+    for( GCFieldsForCategory * fieldForCategory in self.fieldOrder){
+        [allFields addObjectsFromArray:fieldForCategory.fields];
+    }
     GCField * nextKey = [GCViewConfig nextFieldForGraph:scatterStats.config.x_activityField
-                         fieldOrder:[GCViewConfig validChoicesForGraphIn:self.fieldOrder]
+                         fieldOrder:[GCViewConfig validChoicesForGraphIn:allFields]
                       differentFrom:scatterStats.config.activityField];
 
     self.x_field = nextKey;
