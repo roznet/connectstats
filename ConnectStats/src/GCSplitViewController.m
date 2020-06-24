@@ -84,7 +84,7 @@
         detailSliding.navigationItem.leftBarButtonItem = self.displayModeButtonItem;
 
         self.viewControllers = @[activityNav,detailNav];
-        self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
+        self.preferredDisplayMode = UISplitViewControllerDisplayModeAutomatic;
 
         [activityNav release];
         [detailNav release];
@@ -185,9 +185,9 @@
     return activityDetailViewController.navigationController;
 }
 - (UISplitViewControllerDisplayMode)targetDisplayModeForActionInSplitViewController:(UISplitViewController *)svc {
-    if (svc.displayMode == UISplitViewControllerDisplayModePrimaryOverlay || svc.displayMode == UISplitViewControllerDisplayModePrimaryHidden) {
-        return UISplitViewControllerDisplayModeAllVisible;
+    if (svc.displayMode == UISplitViewControllerDisplayModeOneOverSecondary || svc.displayMode == UISplitViewControllerDisplayModeSecondaryOnly) {
+        return UISplitViewControllerDisplayModeOneBesideSecondary;
     }
-    return UISplitViewControllerDisplayModePrimaryHidden;
+    return UISplitViewControllerDisplayModeSecondaryOnly;
 }
 @end

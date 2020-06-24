@@ -799,7 +799,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
                                                                       value:activityStats.fieldDisplayName
                                                                     forSize:16.];
 
-    NSString * countText= [NSString stringWithFormat:NSLocalizedString(@"%d items",@"Stats Cell"),[activityStats count]];
+    NSString * countText= [NSString stringWithFormat:NSLocalizedString(@"%lu items",@"Stats Cell"),(unsigned long)[activityStats count]];
     GCFormattedFieldText * sub = [GCFormattedFieldText formattedFieldText:@"Count"
                                                                     value:countText forSize:14.];
 
@@ -1115,7 +1115,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }
 
     if ([lap active] && lgth) {
-        NSString * title = [NSString stringWithFormat:NSLocalizedString(@"Int %d ",@"Lap Cell"), idx+1,lgth.value];
+        NSString * title = [NSString stringWithFormat:NSLocalizedString(@"Int %lu ",@"Lap Cell"), (unsigned long)(idx+1)];
         NSString * len   = [NSString stringWithFormat:@"%.0f len", lgth.value];
         NSMutableAttributedString * is = [[[NSMutableAttributedString alloc] initWithString:title attributes:[GCViewConfig attribute14]] autorelease];
         [is appendAttributedString:[[[NSAttributedString alloc] initWithString:len attributes:[GCViewConfig attribute14Gray]] autorelease]];

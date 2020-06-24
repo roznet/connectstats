@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1150"
+   LastUpgradeVersion = "1200"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -30,15 +30,6 @@
       language = "en"
       region = "GB"
       codeCoverageEnabled = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "428FF70815F36888007A88FA"
-            BuildableName = "ConnectStats.app"
-            BlueprintName = "ConnectStats"
-            ReferencedContainer = "container:ConnectStats.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
          <AdditionalOption
             key = "NSZombieEnabled"

@@ -349,7 +349,7 @@
             NSArray<GCHealthMeasure*>*measures = [GCAppGlobal health].measures;
             NSUInteger count = measures.count;
             GCHealthMeasure * latest = measures.firstObject;
-            NSString * subm = [NSString stringWithFormat:NSLocalizedString(@"%d measures, latest %@",@"Withings Status"), count, [latest.date dateShortFormat]];
+            NSString * subm = [NSString stringWithFormat:NSLocalizedString(@"%lu measures, latest %@",@"Withings Status"), (unsigned long)count, [latest.date dateShortFormat]];
             sub = [[[NSAttributedString alloc] initWithString:subm attributes:[GCViewConfig attribute14Gray]] autorelease];
         }else{
             title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Tap to login",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];

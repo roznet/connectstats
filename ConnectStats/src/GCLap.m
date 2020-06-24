@@ -99,7 +99,7 @@
 }
 
 -(NSString*)displayLabel{
-    return self.label ?: [NSString stringWithFormat:NSLocalizedString(@"Lap %d", @"Lap Annotation Callout"), self.lapIndex];
+    return self.label ?: [NSString stringWithFormat:NSLocalizedString(@"Lap %lu", @"Lap Annotation Callout"), self.lapIndex];
 }
 
 #pragma mark - Parsing
