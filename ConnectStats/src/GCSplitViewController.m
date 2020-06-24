@@ -185,9 +185,16 @@
     return activityDetailViewController.navigationController;
 }
 - (UISplitViewControllerDisplayMode)targetDisplayModeForActionInSplitViewController:(UISplitViewController *)svc {
+#if __IPHONE_14_0
     if (svc.displayMode == UISplitViewControllerDisplayModeOneOverSecondary || svc.displayMode == UISplitViewControllerDisplayModeSecondaryOnly) {
         return UISplitViewControllerDisplayModeOneBesideSecondary;
     }
     return UISplitViewControllerDisplayModeSecondaryOnly;
+#else
+    if (svc.displayMode == UISplitViewControllerDisplayModePrimaryOverlay || svc.displayMode == UISplitViewControllerDisplayModePrimaryHidden) {
+        return UISplitViewControllerDisplayModeAllVisible;
+    }
+    return UISplitViewControllerDisplayModePrimaryHidden;
+#endif
 }
 @end
