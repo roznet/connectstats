@@ -95,7 +95,13 @@
                 break;
             case NSCalendarUnitYear:
             default:
-                cache.xUnit = [GCUnit unitForKey:@"yearly"];
+                if( [GCAppGlobal referenceDate] != nil){
+                           cache.xUnit = [GCUnitCalendarUnit calendarUnit:NSCalendarUnitYear
+                                                                 calendar:[GCAppGlobal calculationCalendar]
+                                                            referenceDate:[GCAppGlobal referenceDate]];
+                }else{
+                    cache.xUnit = [GCUnit unitForKey:@"yearly"];
+                }
                 break;
         }
     }
@@ -194,7 +200,8 @@
                                                                      andUnit:[fieldserie yUnit:0]];
         plot.legend = bestLegend;
         [plot setDisableHighlight:true];
-        plot.lineWidth = 2.;
+        plot.lineWidth = 1.;
+        plot.fillColorForSerie = [bestColor colorWithAlphaComponent:0.1];
         if (series.count) {
             [series insertObject:plot atIndex:series.count-1];
         }else{

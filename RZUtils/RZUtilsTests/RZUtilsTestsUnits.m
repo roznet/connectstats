@@ -98,8 +98,6 @@
         NSString * expect = expected[testDate];
         XCTAssertEqualObjects([elapsed formatDouble:testDate.timeIntervalSinceReferenceDate], expect);
     }
-    
-    
 }
 
 -(void)testUnits{
@@ -319,4 +317,33 @@
     min = [min nonZeroMinNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:0.5]];
     XCTAssertEqualWithAccuracy(min.value, 0.5, 1.e-10);
 }
+
+-(void)testCalendarUnit{
+    NSCalendar * calculationCalendar = [NSCalendar currentCalendar];
+    [calculationCalendar setTimeZone:[NSTimeZone timeZoneWithName:@"Europe/London"]];
+    
+    NSDate * date = [NSDate dateForGarminModernString:@"2020-06-23 11:00:05"];
+    GCUnitCalendarUnit * cuY = [GCUnitCalendarUnit calendarUnit:NSCalendarUnitYear calendar:calculationCalendar referenceDate:nil];
+    GCUnitCalendarUnit * cuJul = [GCUnitCalendarUnit calendarUnit:NSCalendarUnitYear calendar:calculationCalendar referenceDate:date];
+    
+    NSUInteger nKnobs = 20;
+    double oneHour = 3600.;
+    double oneDay = 24.*oneHour;
+    double x_min = 10. * oneHour;
+    double x_max = oneDay * 364.0 + 11.* oneHour;
+    
+    NSArray * knY = [cuY axisKnobs:nKnobs min:x_min max:x_max extendToKnobs:NO];
+    NSArray * knJul = [cuJul axisKnobs:nKnobs min:x_min max:x_max extendToKnobs:NO];
+    NSLog(@"%@", knY);
+    NSLog(@"%@", knJul);
+    
+    for (NSNumber * knob in knY) {
+        NSLog(@" %@: %@", @(knob.doubleValue / oneDay), [cuY formatDouble:knob.doubleValue]);
+    }
+    for (NSNumber * knob in knJul) {
+        NSLog(@" %@: %@", @(knob.doubleValue / oneDay), [cuJul formatDouble:knob.doubleValue]);
+    }
+    NSLog(@"END");
+}
+
 @end

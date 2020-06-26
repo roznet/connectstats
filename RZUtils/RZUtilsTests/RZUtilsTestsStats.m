@@ -553,7 +553,7 @@
     NSData * data = [NSKeyedArchiver archivedDataWithRootObject:serie requiringSecureCoding:YES error:&error];
     XCTAssertTrue(data != nil);
     
-    GCStatsDataSerie * load = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    GCStatsDataSerie * load = [NSKeyedUnarchiver unarchivedObjectOfClass:[GCStatsDataSerie class] fromData:data error:nil];
     XCTAssertTrue(load && [serie isEqualToSerie:load]);
 }
 

@@ -21,9 +21,10 @@ FOUNDATION_EXPORT const unsigned char RZUtilsVersionString[];
 #import "RZUtils/RZMacros.h"
 
 #import "RZUtils/GCUnit.h"
+#import "RZUtils/GCUnitCalendarUnit.h"
 
 #import "RZUtils/LCLLogFile.h"
-#import "RZUtils/LCLLogFileCOnfig.h"
+#import "RZUtils/LCLLogFileConfig.h"
 #import "RZUtils/RZLog.h"
 
 #import "RZUtils/GCNumberWithUnit.h"

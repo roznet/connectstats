@@ -27,6 +27,7 @@
 #import "RZMacros.h"
 #include <math.h>
 #import "NSDictionary+RZHelper.h"
+#import "GCUnitCalendarUnit.h"
 
 #define GCUNITFORKEY(my_unit_key) +(GCUnit*)my_unit_key{ return [GCUnit unitForKey:@#my_unit_key]; }
 
@@ -193,14 +194,9 @@ void registerTofD(NSString * name){
 }
 
 void registerCalUnit( NSString * name, NSCalendarUnit calUnit){
-    GCUnitCalendarUnit * unit = [[GCUnitCalendarUnit alloc] init];
-    unit.calendarUnit = calUnit;
-    unit.key = name;
-    unit.abbr = @"";
-    unit.display = @"";
+    GCUnitCalendarUnit * unit = [GCUnitCalendarUnit calendarUnit:calUnit calendar:nil referenceDate:nil];
 
     _unitsRegistry[name] = unit;
-    RZRelease(unit);
 }
 
 #pragma mark
@@ -1254,82 +1250,6 @@ GCUNITFORKEY(kilometer);
     return [super axisKnobs:nKnobs min:x_min max:x_max extendToKnobs:extend];
 }
 
-
-
-@end
-
-#pragma mark -
-@implementation GCUnitCalendarUnit
-#if ! __has_feature(objc_arc)
--(void)dealloc{
-    [_dateFormatter release];
-    [_calendar release];
-    [super dealloc];
-}
-#endif
-
--(double)axisKnobSizeFor:(double)range numberOfKnobs:(NSUInteger)n{
-    if (_calendarUnit == NSCalendarUnitWeekOfYear || _calendarUnit == NSCalendarUnitMonth) {
-        double oneday = 24.*60.*60.;
-        return ceil(range/n/oneday)* oneday;
-    }else if(_calendarUnit == NSCalendarUnitYear){
-        double onemonth = 24.*60.*60.*365./12.;
-        return ceil(range/n/onemonth)* onemonth;
-    }
-    return [super axisKnobSizeFor:range numberOfKnobs:n];
-}
-
--(NSArray*)axisKnobs:(NSUInteger)nKnobs min:(double)x_min max:(double)x_max extendToKnobs:(BOOL)extend{
-
-    if (nKnobs > 0) {// don't bother for edge case
-        double oneday = 24.*60.*60.;
-
-        if (self.calendarUnit==NSCalendarUnitWeekOfYear){
-            NSMutableArray * rv = [NSMutableArray arrayWithCapacity:7];
-            for (NSUInteger i = 0; i<8; i++) {
-                [rv addObject:@(oneday*i)];
-            }
-            return rv;
-        }
-    }
-    return [super axisKnobs:nKnobs min:x_min max:x_max extendToKnobs:extend];
-}
-
-
-
--(NSString*)formatDouble:(double)aDbl addAbbr:(BOOL)addAbbr{
-    if (!_dateFormatter) {
-        [self setDateFormatter:RZReturnAutorelease([[NSDateFormatter alloc] init])];
-        _dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
-
-    }
-    if (!_calendar) {
-        self.calendar = [NSCalendar currentCalendar];
-    }
-    double oneday = 24.*60.*60.;
-    double onemonth = oneday*365./12.;
-    double day = aDbl/oneday;
-    if (_calendarUnit == NSCalendarUnitYear) {
-        double month = aDbl/onemonth;
-        NSUInteger monthIdx = floor(month)+1;
-        NSDateComponents * comp = RZReturnAutorelease([[NSDateComponents alloc] init]);
-        comp.month = monthIdx;
-        _dateFormatter.dateFormat = @"MMM";
-        return [_dateFormatter stringFromDate:[_calendar dateFromComponents:comp]];
-    }else if (_calendarUnit == NSCalendarUnitWeekOfYear){
-        NSUInteger firstWeekday = _calendar.firstWeekday;
-        double weekday = aDbl/oneday;
-        NSDateComponents * comp = RZReturnAutorelease([[NSDateComponents alloc] init]);
-        NSUInteger weekdayIdx = floor(weekday)+firstWeekday;
-        comp.weekday = weekdayIdx;
-        comp.weekdayOrdinal = 1;
-        _dateFormatter.dateFormat = @"EEE";
-        NSString * s = [_dateFormatter stringFromDate:[_calendar dateFromComponents:comp]];
-        return s;
-    }
-
-    return [NSString stringWithFormat:@"%.0f", day];
-}
 
 
 @end

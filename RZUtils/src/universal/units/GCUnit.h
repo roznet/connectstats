@@ -255,12 +255,6 @@ NS_ASSUME_NONNULL_BEGIN;
 @property (nonatomic,retain) NSCalendar * calendar;
 @end
 
-@interface  GCUnitCalendarUnit : GCUnit
-@property (nonatomic,retain) NSDateFormatter * dateFormatter;
-@property (nonatomic,assign) NSCalendarUnit calendarUnit;
-@property (nonatomic,retain) NSCalendar * calendar;
-
-@end
 
 @interface GCUnitElapsedSince :GCUnit
 

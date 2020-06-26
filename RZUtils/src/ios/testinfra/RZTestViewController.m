@@ -66,9 +66,8 @@
 -(void)loadView{
 	[super loadView];
 
-
 	UIView *contentView				= [[UIView alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
-	[contentView setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+    [contentView setBackgroundColor:[UIColor systemGroupedBackgroundColor]];
 	contentView.autoresizesSubviews = YES;
 	contentView.autoresizingMask	= (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 
@@ -109,7 +108,7 @@
 
 	_activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 32.0f, 32.0f)];
     [_activityIndicator setCenter:CGPointMake(160.0f, 208.0f)];
-    [_activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
+    [_activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleLarge];
     [contentView addSubview:_activityIndicator];
     RZRelease(_activityIndicator);
 
