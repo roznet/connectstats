@@ -317,6 +317,8 @@
 		4236872D2275F7A3001210AA /* RZFitFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; };
 		4236872E2275F7A3001210AA /* RZFitFile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4237869E1972D582006CBD4D /* GCStatsMultiFieldConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */; };
+		4237D34724A741E000C55BB8 /* GCAppSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237D34624A741E000C55BB8 /* GCAppSceneDelegate.m */; };
+		4237D34824A741E000C55BB8 /* GCAppSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237D34624A741E000C55BB8 /* GCAppSceneDelegate.m */; };
 		423953A81CE71ED4009A3AC3 /* FITOutlineCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 423953A71CE71ED4009A3AC3 /* FITOutlineCellView.m */; };
 		4239CD6B1C4B93AE0059B83D /* GCCalendarDataMarkerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4239CD6A1C4B93AE0059B83D /* GCCalendarDataMarkerInfo.m */; };
 		4239CD6C1C4B93AE0059B83D /* GCCalendarDataMarkerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4239CD6A1C4B93AE0059B83D /* GCCalendarDataMarkerInfo.m */; };
@@ -2087,6 +2089,8 @@
 		4235DF9D1655B61A00DE316A /* GCAppProfiles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCAppProfiles.m; path = src/GCAppProfiles.m; sourceTree = "<group>"; };
 		4237869C1972D582006CBD4D /* GCStatsMultiFieldConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStatsMultiFieldConfig.h; path = src/GCStatsMultiFieldConfig.h; sourceTree = "<group>"; };
 		4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStatsMultiFieldConfig.m; path = src/GCStatsMultiFieldConfig.m; sourceTree = "<group>"; };
+		4237D34524A741E000C55BB8 /* GCAppSceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCAppSceneDelegate.h; path = src/GCAppSceneDelegate.h; sourceTree = "<group>"; };
+		4237D34624A741E000C55BB8 /* GCAppSceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCAppSceneDelegate.m; path = src/GCAppSceneDelegate.m; sourceTree = "<group>"; };
 		423953A61CE71ED4009A3AC3 /* FITOutlineCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FITOutlineCellView.h; path = src/FITOutlineCellView.h; sourceTree = "<group>"; };
 		423953A71CE71ED4009A3AC3 /* FITOutlineCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FITOutlineCellView.m; path = src/FITOutlineCellView.m; sourceTree = "<group>"; };
 		4239CD691C4B93AE0059B83D /* GCCalendarDataMarkerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCCalendarDataMarkerInfo.h; path = src/GCCalendarDataMarkerInfo.h; sourceTree = "<group>"; };
@@ -4326,6 +4330,8 @@
 				4297DA551D30F4BA0028E439 /* ConnectStats-Bridging-Header.h */,
 				428FF78F15FB40EC007A88FA /* GCAppDelegate.h */,
 				428FF79015FB40EC007A88FA /* GCAppDelegate.m */,
+				4237D34524A741E000C55BB8 /* GCAppSceneDelegate.h */,
+				4237D34624A741E000C55BB8 /* GCAppSceneDelegate.m */,
 				428FF79115FB40EC007A88FA /* GCAppGlobal.h */,
 				428FF79215FB40EC007A88FA /* GCAppGlobal.m */,
 				425466F1162B233300700093 /* GCAppConstants.h */,
@@ -6965,6 +6971,7 @@
 				422F52091DFB51E500DD5551 /* FITFitFileDecode.mm in Sources */,
 				422FAF6719A1DD6000D09773 /* GCGarminRequestActivityReload.m in Sources */,
 				422FAF6919A1DD6000D09773 /* GCGarminActivitySummaryParser.m in Sources */,
+				4237D34824A741E000C55BB8 /* GCAppSceneDelegate.m in Sources */,
 				421F39AE1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m in Sources */,
 				422FAF6B19A1DD6000D09773 /* GCSettingsLogViewController.m in Sources */,
 				42305E971DCF81C60024700C /* GCAppDelegate+Swift.m in Sources */,
@@ -7323,6 +7330,7 @@
 				422D900417A1AE2C00C131DC /* GCViewIcons.m in Sources */,
 				422D900717A276F100C131DC /* GCStatsGraphOptionViewController.m in Sources */,
 				42DE53BD19CF438500009130 /* GCHealthKitActivityRequest.m in Sources */,
+				4237D34724A741E000C55BB8 /* GCAppSceneDelegate.m in Sources */,
 				42C4159A17B1A23800EBBAFB /* GCActivity+UI.m in Sources */,
 				425ACBBA17C163EE00EB23A3 /* GCHealthZone.m in Sources */,
 				4244676F184B756F009F807E /* GCActivityTypes.m in Sources */,

@@ -42,8 +42,6 @@
 @interface GCAppDelegate : UIResponder <UIApplicationDelegate,CLLocationManagerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (nonatomic, retain) GCTabBarController * tabBarController;
-@property (nonatomic, retain) GCSplitViewController * splitViewController;
 @property (nonatomic, retain) GCActivitiesOrganizer * organizer;
 @property (nonatomic, retain) FMDatabase * db;
 @property (nonatomic, retain) NSMutableDictionary * settings;
@@ -74,6 +72,7 @@
 -(void)recentRemoteMessagesReceived;
 -(BOOL)handleUniveralLink:(NSURL *) url;
 -(void)setupFieldCache;
+
 
 -(NSDictionary<NSString*,NSString*>*)credentialsForService:(NSString*)service;
 -(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;

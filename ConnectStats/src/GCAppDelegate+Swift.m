@@ -39,11 +39,7 @@
 }
 
 -(void)handleFitFileDone:(NSString*)aId{
-    if (self.tabBarController) {
-        [self.tabBarController focusOnActivityId:aId];
-    }else{
-        [self.splitViewController focusOnActivityId:aId];
-    }
+    [self.actionDelegate focusOnActivityId:aId];
 }
 
 @end

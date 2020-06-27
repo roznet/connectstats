@@ -143,16 +143,6 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 
 #pragma mark - UI Focus Actions
 
-+(void)switchToHealth{
-	GCAppDelegate *appDelegate = _sharedApplicationDelegate();
-    if (appDelegate.tabBarController) {
-        GCTabBarController * tab = appDelegate.tabBarController;
-        [tab.settingsViewController.navigationController popToRootViewControllerAnimated:NO];
-        GCHealthViewController * cont = [[[GCHealthViewController alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
-        [tab.settingsViewController.navigationController pushViewController:cont animated:NO];
-    }
-}
-
 +(void)focusOnStatsSummary{
     GCAppDelegate *appDelegate = _sharedApplicationDelegate();
     [appDelegate.actionDelegate focusOnStatsSummary];

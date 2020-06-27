@@ -42,6 +42,7 @@
 #import "GCWeather.h"
 #import "GCActivity+CachedTracks.h"
 #import "GCConnectStatsStatus.h"
+#import "GCAppSceneDelegate.h"
 
 #define GC_STARTING_FILE @"starting.log"
 
@@ -114,8 +115,6 @@ void checkVersion(){
     [_credentials release];
     [_remoteStatus release];
 
-    [_splitViewController release];
-    [_tabBarController release];
     [_watch release];
     [_window release];
     [_worker release];
@@ -200,25 +199,6 @@ void checkVersion(){
 
     [RZViewConfig setFontStyle:[GCAppGlobal configGetInt:CONFIG_FONT_STYLE defaultValue:gcFontStyleDynamicType]];
 
-	_window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    //DONT CHECK IN:
-    //self.window = [[[SmudgyWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
-    {
-        // The device is an iPad
-        _splitViewController = [[GCSplitViewController alloc]init];
-        _window.rootViewController = _splitViewController;
-    }
-    else
-    {
-        // The device is an iPhone
-        _tabBarController = [[GCTabBarController alloc] init];
-        _window.rootViewController = _tabBarController;
-    }
-
-    // first use, update, etc workflow
-	[_window makeKeyAndVisible];
     
     [Appirater appLaunched:YES];
 
@@ -273,21 +253,26 @@ void checkVersion(){
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    RZLog(RZLogInfo,@"active");
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    RZLog(RZLogInfo,@"app active");
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     [RZFileOrganizer saveDictionary:_settings withName:@"settings.plist"];
-    RZLog(RZLogInfo, @"normal exit");
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    RZLog(RZLogInfo, @"app normal exit");
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application{
     RZLog(RZLogWarning, @"memory warning %@", [RZMemory formatMemoryInUse]);
     [_organizer purgeCache];
 }
+#pragma mark - Scenes
+
+
+-(UISceneConfiguration*)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options{
+    return RZReturnAutorelease([[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role]);
+}
+
 
 #pragma mark - User Activities
 
@@ -476,8 +461,21 @@ void checkVersion(){
 
 }
 
+-(GCAppSceneDelegate*)currentSceneDelegate{
+    NSSet<UIScene*> * scenes = [[UIApplication sharedApplication] connectedScenes];
+    GCAppSceneDelegate * delegate = nil;
+    
+    for (UIScene * scene in scenes) {
+        if( [scene.delegate isKindOfClass:[GCAppSceneDelegate class]] ){
+            delegate = (GCAppSceneDelegate*)scene.delegate;
+            break;
+        }
+    }
+    return delegate;
+}
+
 -(NSObject<GCAppActionDelegate>*)actionDelegate{
-    return self.tabBarController ?:self.splitViewController;
+    return [[self currentSceneDelegate] actionDelegate];
 }
 
 -(BOOL)startInit{
