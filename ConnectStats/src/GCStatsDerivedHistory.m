@@ -51,6 +51,8 @@
     [_shortTermPeriod release];
     [_longTermPeriod release];
     [_lookbackPeriod release];
+    [_shortTermX release];
+    [_longTermX release];
     [_derivedAnalysisConfig release];
     [_multiFieldConfig release];
     
@@ -58,17 +60,33 @@
 }
 
 -(NSArray<GCNumberWithUnit*>*)pointsForGraphs{
+    NSMutableArray * rv = [NSMutableArray array];
     if( self.field.fieldFlag == gcFieldFlagWeightedMeanSpeed){
-        return @[ [GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:0.0],
-                  [GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:1000.0],
-                  [GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:5000.0]
-        ];
+        [rv addObject:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:0.0]];
+        if( [self.shortTermX.unit canConvertTo:GCUnit.meter] ){
+            [rv addObject:[self.shortTermX convertToUnit:GCUnit.meter]];
+        }else{
+            [rv addObject:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:1000.0]];
+        }
+        if( [self.longTermX.unit canConvertTo:GCUnit.meter]){
+            [rv addObject:[self.longTermX convertToUnit:GCUnit.meter]];
+        }else{
+            [rv addObject:[GCNumberWithUnit numberWithUnit:GCUnit.meter andValue:5000.0]];
+        }
     }else{
-        return @[ [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:0.0],
-                  [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:60.0],
-                  [GCNumberWithUnit numberWithUnit:GCUnit.second andValue:1800.0]
-        ];
+        [rv addObject:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:0.0]];
+        if( [self.shortTermX.unit canConvertTo:GCUnit.second] ){
+            [rv addObject:[self.shortTermX convertToUnit:GCUnit.second]];
+        }else{
+            [rv addObject:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:60.0]];
+        }
+        if( [self.longTermX.unit canConvertTo:GCUnit.second]){
+            [rv addObject:[self.longTermX convertToUnit:GCUnit.second]];
+        }else{
+            [rv addObject:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:1800.0]];
+        }
     }
+    return rv;
 }
 
 -(NSDate*)fromDate{

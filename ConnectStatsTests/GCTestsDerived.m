@@ -400,7 +400,7 @@
                                                                        
 }
 
-#ifdef DISABLE_TEMP
+
 -(void)testDerivedHist{
     [RZFileOrganizer createEditableCopyOfFile:@"activities_testderived.db" forClass:[self class]];
     [RZFileOrganizer createEditableCopyOfFile:@"derived_testderived.db" forClass:[self class]];
@@ -414,21 +414,13 @@
     GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initForTestModeWithDb:deriveddb thread:nil andFilePrefix:@"testderived"];
     GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
     GCStatsSerieOfSerieWithUnits * serieOfSeries = [derived timeserieOfSeriesFor:field inActivities:organizer.activities];
-    
-    GCStatsDataSerieWithUnit * first = [serieOfSeries serieForX:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:0]];
-    GCStatsDataSerieWithUnit * oneMinute = [serieOfSeries serieForX:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:60]];
-    
-    GCStatsDataSerie * max = [oneMinute.serie movingFunctionForUnit:60*60*24*5 function:^(NSArray<GCStatsDataPoint*>*samples){
-        double max = samples.firstObject.y_data;
-        for (GCStatsDataPoint * point in samples) {
-            if( point.y_data > max){
-                max = point.y_data;
-            }
-        }
-        return max;
-    }];
-    NSLog(@"%@", max);
+        
+    NSArray<GCNumberWithUnit*>*xs = [serieOfSeries allXs];
+    for (GCNumberWithUnit * nu in xs) {
+        GCStatsDataSerieWithUnit * one = [serieOfSeries serieForX:nu];
+        XCTAssertGreaterThan(one.count, 0);
+        // should save series into reference object
+    }
 }
-#endif
 
 @end

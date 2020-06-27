@@ -56,6 +56,10 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
 @property (nonatomic,assign) gcDerivedHistMode mode;
 @property (nonatomic,retain) GCLagPeriod * longTermPeriod;
 @property (nonatomic,retain) GCLagPeriod * shortTermPeriod;
+
+@property (nonatomic,retain,nullable) GCNumberWithUnit * longTermX;
+@property (nonatomic,retain,nullable) GCNumberWithUnit * shortTermX;
+
 /// Method for UI/String setup
 @property (nonatomic,retain) NSString * method;
 /// Method need to be on of string in array or default will be set

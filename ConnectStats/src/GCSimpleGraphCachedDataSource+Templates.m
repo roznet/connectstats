@@ -635,10 +635,10 @@
                 holderLongTerm.lineWidth = 2.0;
                 
                 if( config.mode == gcDerivedHistModeDrop){
-                    holderLongTerm.legend = [NSString stringWithFormat:@"%@ drop", point];
+                    holderLongTerm.legend = [NSString stringWithFormat:@"%@ dCP", point];
                 }
                 else{
-                    holderLongTerm.legend = [NSString stringWithFormat:@"%@", point];
+                    holderLongTerm.legend = [NSString stringWithFormat:@"CP %@", point];
                 }
                 [rv addDataHolder:holderLongTerm];
                 [rv addDataHolder:holderShortTerm];
@@ -648,9 +648,9 @@
     }
     
     if( config.longTermSmoothing == gcDerivedHistSmoothingMax ){
-        rv.title = [NSString stringWithFormat:@"%@ Max %@", config.longTermPeriod.displayName, field.displayName];
+        rv.title = [NSString stringWithFormat:@"%@ Max Critical %@", config.longTermPeriod.displayName, field.displayName];
     }else{
-        rv.title = [NSString stringWithFormat:@"%@ %@ Trend ", field.displayName, config.longTermPeriod.displayName];
+        rv.title = [NSString stringWithFormat:@"Critical %@ %@ Trend ", field.displayName, config.longTermPeriod.displayName];
     }
     rv.xUnit = [GCUnit unitForKey:@"datemonth"];
     

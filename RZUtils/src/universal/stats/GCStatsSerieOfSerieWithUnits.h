@@ -35,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(GCStatsDataSerieWithUnit*)serieForX:(GCNumberWithUnit*)x;
 
+-(NSArray<GCNumberWithUnit*>*)allXs;
+
 
 @end
 

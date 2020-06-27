@@ -133,4 +133,20 @@
     return rv;
 }
 
+-(NSArray<GCNumberWithUnit*>*)allXs{
+    NSMutableSet<GCNumberWithUnit*>*rv = [NSMutableSet set];
+    GCUnit * unit = nil;
+    for (GCStatsSerieOfSerieHolder * holder in self.series) {
+        if(unit == nil){
+            unit = holder.serieWithUnit.xUnit;
+        }else if( ![unit isEqualToUnit:holder.serieWithUnit.xUnit]){
+            continue;
+        }
+        for (GCStatsDataPoint * point in holder.serieWithUnit.serie) {
+            [rv addObject:[GCNumberWithUnit numberWithUnit:unit andValue:point.x_data]];
+        }        
+    }
+    return [rv.allObjects sortedArrayUsingSelector:@selector(compare:)];
+}
+
 @end
