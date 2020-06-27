@@ -29,6 +29,7 @@
 #import "GCTabBarController.h"
 #import "GCSplitViewController.h"
 #import "GCHealthViewController.h"
+#import "GCAppGlobal.h"
 
 @interface GCAppSceneDelegate ()
 @property (nonatomic, retain) GCTabBarController * tabBarController;
@@ -86,6 +87,7 @@
     // Release any resources associated with this scene that can be re-created the next time the scene connects.
     // The scene may re-connect later, as its session was not neccessarily discarded (see `application:didDiscardSceneSessions` instead).
     RZLog(RZLogInfo,@"scene disconnect");
+    [GCAppGlobal saveSettings];
 }
 
 
@@ -93,11 +95,13 @@
     // Called when the scene has moved from an inactive state to an active state.
     // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
     RZLog(RZLogInfo,@"scene active");
+    
 }
 
 
 - (void)sceneWillResignActive:(UIScene *)scene {
     RZLog(RZLogInfo,@"scene resign active");
+    [GCAppGlobal saveSettings];
 }
 
 
@@ -111,6 +115,7 @@
     // Called as the scene transitions from the foreground to the background.
     // Use this method to save data, release shared resources, and store enough scene-specific state information
     // to restore the scene back to its current state.
+    [GCAppGlobal saveSettings];
 }
 
 -(NSObject<GCAppActionDelegate>*)actionDelegate{    
