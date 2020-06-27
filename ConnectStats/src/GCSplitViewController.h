@@ -32,20 +32,7 @@
 #import "GCSettingsViewController.h"
 #import "GCAppActionDelegate.h"
 
-@interface GCSplitViewController : UISplitViewController<UISplitViewControllerDelegate,GCAppActionDelegate>{
-    GCActivityListViewController * activityListViewController;
-    GCActivityDetailViewController * activityDetailViewController;
-    KalViewController * calendarViewController;
-    GCCalendarDataSource * calendarDataSource;
-    GCStatsMultiFieldViewController * fieldListViewController;
-    GCSettingsViewController * settingsViewController;
-}
-@property (nonatomic,retain) GCActivityListViewController * activityListViewController;
-@property (nonatomic,retain) GCActivityDetailViewController * activityDetailViewController;
-@property (nonatomic,retain) KalViewController * calendarViewController;
-@property (nonatomic,retain) GCCalendarDataSource * calendarDataSource;
-@property (nonatomic,retain) GCStatsMultiFieldViewController * fieldListViewController;
-@property (nonatomic,retain) GCSettingsViewController * settingsViewController;
+@interface GCSplitViewController : UISplitViewController<UISplitViewControllerDelegate,GCAppActionDelegate>
 
 
 @end

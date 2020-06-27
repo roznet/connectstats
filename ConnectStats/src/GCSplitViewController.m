@@ -31,18 +31,25 @@
 
 @interface GCSplitViewController ()
 
+@property (nonatomic,retain) GCActivityListViewController * activityListViewController;
+@property (nonatomic,retain) GCActivityDetailViewController * activityDetailViewController;
+@property (nonatomic,retain) KalViewController * calendarViewController;
+@property (nonatomic,retain) GCCalendarDataSource * calendarDataSource;
+@property (nonatomic,retain) GCStatsMultiFieldViewController * fieldListViewController;
+@property (nonatomic,retain) GCSettingsViewController * settingsViewController;
+
 @end
 
 @implementation GCSplitViewController
-@synthesize activityDetailViewController,activityListViewController,calendarViewController,calendarDataSource,fieldListViewController,settingsViewController;
 
 -(void)dealloc{
-    [activityDetailViewController release];
-    [activityListViewController release];
-    [calendarDataSource release];
-    [calendarViewController release];
-    [fieldListViewController release];
-    [settingsViewController release];
+    [_activityDetailViewController release];
+    [_activityListViewController release];
+    [_calendarDataSource release];
+    [_calendarViewController release];
+    [_fieldListViewController release];
+    [_settingsViewController release];
+    
     [super dealloc];
 }
 
@@ -50,22 +57,18 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        activityListViewController = [[GCActivityListViewController		alloc] init];
-        activityDetailViewController = [[GCActivityDetailViewController alloc] init];
-        activityListViewController.detailController = activityDetailViewController;
-        calendarViewController = [[KalViewController alloc] init];
-        calendarDataSource = [[GCCalendarDataSource alloc] init];
-        calendarViewController.dataSource = calendarDataSource;
-        calendarViewController.delegate = calendarDataSource;
-        fieldListViewController = [[GCStatsMultiFieldViewController alloc] init];
-        settingsViewController = [[GCSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        _activityListViewController = [[GCActivityListViewController		alloc] init];
+        _activityDetailViewController = [[GCActivityDetailViewController alloc] init];
+        _activityListViewController.detailController = _activityDetailViewController;
+        _calendarViewController = [[KalViewController alloc] init];
+        _calendarDataSource = [[GCCalendarDataSource alloc] init];
+        _calendarViewController.dataSource = _calendarDataSource;
+        _calendarViewController.delegate = _calendarDataSource;
+        _fieldListViewController = [[GCStatsMultiFieldViewController alloc] init];
+        _settingsViewController = [[GCSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
-        ECSlidingViewController * detailSliding = [[ECSlidingViewController alloc] initWithNibName:nil bundle:nil];
-        detailSliding.topViewController = activityDetailViewController;
-        detailSliding.underLeftViewController = [[[GCSharingViewController alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
-
-        UINavigationController *activityNav	= [[UINavigationController alloc] initWithRootViewController:activityListViewController];
-        UINavigationController *detailNav	= [[UINavigationController alloc] initWithRootViewController:detailSliding];
+        UINavigationController *activityNav	= [[UINavigationController alloc] initWithRootViewController:_activityListViewController];
+        UINavigationController *detailNav	= [[UINavigationController alloc] initWithRootViewController:_activityDetailViewController];
 
         (detailNav.navigationBar).titleTextAttributes = @{NSFontAttributeName:[GCViewConfig boldSystemFontOfSize:16.]};
         (activityNav.navigationBar).titleTextAttributes = @{NSFontAttributeName:[GCViewConfig boldSystemFontOfSize:16.]};
@@ -78,16 +81,13 @@
         [detailNav setNavigationBarHidden:NO animated:YES];
         [activityNav setNavigationBarHidden:NO animated:YES];
 
-        detailSliding.navigationItem.leftBarButtonItem = self.displayModeButtonItem;
+        _activityDetailViewController.navigationItem.leftBarButtonItem = self.displayModeButtonItem;
 
         self.viewControllers = @[activityNav,detailNav];
-        self.preferredDisplayMode = UISplitViewControllerDisplayModeAutomatic;
-
+        self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
+        self.presentsWithGesture = true;
         [activityNav release];
         [detailNav release];
-        [detailSliding release];
-        //self.maximumPrimaryColumnWidth = 320.;
-        //self.minimumPrimaryColumnWidth = 320.;
     }
     return self;
 }
@@ -115,24 +115,24 @@
 -(void)focusOnActivityAtIndex:(NSUInteger)aIdx{
     GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
     organizer.currentActivityIndex = aIdx;
-    [activityDetailViewController.navigationController popToRootViewControllerAnimated:YES];
-    [activityDetailViewController.navigationController setNavigationBarHidden:NO animated:YES];
-    [activityDetailViewController notifyCallBack:nil info:nil];
+    [_activityDetailViewController.navigationController popToRootViewControllerAnimated:YES];
+    [_activityDetailViewController.navigationController setNavigationBarHidden:NO animated:YES];
+    [_activityDetailViewController notifyCallBack:nil info:nil];
     [organizer notifyOnMainThread:NOTIFY_CHANGE];
-    [activityListViewController ipadSetupStatButton];
+    [_activityListViewController ipadSetupStatButton];
 
 }
 
 -(void)focusOnActivityId:(NSString*)aId{
     GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
     [organizer setCurrentActivityId:aId];
-    [activityDetailViewController notifyCallBack:nil info:nil];
-    [activityDetailViewController.navigationController popToRootViewControllerAnimated:YES];
-    [activityDetailViewController.navigationController setNavigationBarHidden:NO animated:YES];
-    [activityListViewController ipadSetupStatButton];
+    [_activityDetailViewController notifyCallBack:nil info:nil];
+    [_activityDetailViewController.navigationController popToRootViewControllerAnimated:YES];
+    [_activityDetailViewController.navigationController setNavigationBarHidden:NO animated:YES];
+    [_activityListViewController ipadSetupStatButton];
 }
 -(void)focusOnListWithFilter:(NSString*)aFilter{
-    [activityListViewController setupFilterForString:aFilter];
+    [_activityListViewController setupFilterForString:aFilter];
     [self focusOnActivityList];
 }
 
@@ -144,19 +144,19 @@
 }
 
 -(void)login{
-    [activityListViewController.navigationController popToRootViewControllerAnimated:YES];
+    [_activityListViewController.navigationController popToRootViewControllerAnimated:YES];
     [[GCAppGlobal web] garminLogin];
-    [activityListViewController beginRefreshing];
-    [activityListViewController refreshData];
+    [_activityListViewController beginRefreshing];
+    [_activityListViewController refreshData];
 }
 -(void)beginRefreshing{
-    [activityListViewController.navigationController popToRootViewControllerAnimated:YES];
-    [activityListViewController beginRefreshing];
+    [_activityListViewController.navigationController popToRootViewControllerAnimated:YES];
+    [_activityListViewController beginRefreshing];
 }
 -(void)logout{
-    [activityListViewController.navigationController popToRootViewControllerAnimated:YES];
+    [_activityListViewController.navigationController popToRootViewControllerAnimated:YES];
     [[GCAppGlobal web] garminLogout];
-    [activityListViewController beginRefreshing];
+    [_activityListViewController beginRefreshing];
 }
 
 -(void)startWorkflow{
@@ -168,18 +168,18 @@
 
         [GCAppGlobal configSet:CONFIG_LAST_USED_VERSION intVal:1];
         [GCAppGlobal saveSettings];
-        [activityListViewController.navigationController pushViewController:settingsViewController animated:YES];
-        [settingsViewController showServices];
+        [_activityListViewController.navigationController pushViewController:_settingsViewController animated:YES];
+        [_settingsViewController showServices];
     }else{
         if ([[GCAppGlobal profile] profileRequireSetup]) {
-            [activityListViewController.navigationController pushViewController:settingsViewController animated:YES];
-            [settingsViewController showServices];
+            [_activityListViewController.navigationController pushViewController:_settingsViewController animated:YES];
+            [_settingsViewController showServices];
         }
     }
 }
 
 -(UINavigationController*)currentNavigationController{
-    return activityDetailViewController.navigationController;
+    return _activityDetailViewController.navigationController;
 }
 - (UISplitViewControllerDisplayMode)targetDisplayModeForActionInSplitViewController:(UISplitViewController *)svc {
 #if __IPHONE_14_0

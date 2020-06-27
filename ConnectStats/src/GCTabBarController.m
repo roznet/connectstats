@@ -32,6 +32,13 @@
 #import "GCWebConnect+Requests.h"
 
 @interface GCTabBarController ()
+@property (nonatomic,retain)  GCActivityListViewController * activityListViewController;
+@property (nonatomic,retain)  GCActivityDetailViewController * activityDetailViewController;
+@property (nonatomic,retain)  KalViewController * calendarViewController;
+@property (nonatomic,retain)  GCStatsMultiFieldViewController * fieldListViewController;
+@property (nonatomic,retain)  GCSettingsViewController * settingsViewController;
+@property (nonatomic,retain)  GCCalendarDataSource * calendarDataSource;
+
 @property (nonatomic,retain) UITabBarItem * settingsItem;
 @end
 

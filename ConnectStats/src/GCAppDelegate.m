@@ -426,10 +426,12 @@ void checkVersion(){
 -(void)remoteStatusCheck{
     self.remoteStatus = [GCConnectStatsStatus status];
     [self.remoteStatus check:^(GCConnectStatsStatus * s){
-        
-        NSArray * recent = [self recentRemoteMessages];
-        RZLog(RZLogInfo, @"Remote Status[%@]: %@", @(recent.count), s);
-        [self.actionDelegate updateBadge:recent.count];
+        //
+        NSUInteger count = [self recentRemoteMessages].count;
+        RZLog(RZLogInfo, @"Remote Status[%@]: %@", @(count), s);
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self.actionDelegate updateBadge:count];
+        });
     }];
 }
 

@@ -34,11 +34,5 @@
 
 @interface GCTabBarController : UITabBarController<UINavigationControllerDelegate,UITabBarControllerDelegate,GCAppActionDelegate>
 
-@property (nonatomic,retain)  GCActivityListViewController * activityListViewController;
-@property (nonatomic,retain)  GCActivityDetailViewController * activityDetailViewController;
-@property (nonatomic,retain)  KalViewController * calendarViewController;
-@property (nonatomic,retain)  GCStatsMultiFieldViewController * fieldListViewController;
-@property (nonatomic,retain)  GCSettingsViewController * settingsViewController;
-@property (nonatomic,retain)  GCCalendarDataSource * calendarDataSource;
 
 @end
