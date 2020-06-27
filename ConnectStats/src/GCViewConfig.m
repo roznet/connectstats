@@ -30,7 +30,6 @@
 #import "GCFieldCache.h"
 
 static NSArray * _unitSystems = nil;
-static gcUIStyle _uiStyle = gcUIStyleUndefined;
 
 static GCViewConfigSkin * _skin = nil;
 
@@ -56,23 +55,6 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     [_skin release];
     _skin = skin;
     [_skin retain];
-}
-+(gcUIStyle)uiStyle{
-    if (_uiStyle == gcUIStyleUndefined) {
-        NSString * version = [UIDevice currentDevice].systemVersion;
-        NSArray  * comp    = [version componentsSeparatedByString:@"."];
-        BOOL has7 = false;
-#ifdef __IPHONE_7_0
-        has7=true;
-#endif
-
-        if ([comp[0] intValue] >= 7 && has7) {
-            _uiStyle = gcUIStyleIOS7;
-        }else{
-            _uiStyle = gcUIStyleClassic;
-        }
-    }
-    return _uiStyle;
 }
 
 +(CGRect)adjustedFrame:(UIViewController*)vc{
@@ -608,11 +590,7 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 
 +(UIImage*)iconForActivityType:(NSString *)activityType{
     NSArray * suffix = nil;
-    if ([GCViewConfig uiStyle] == gcUIStyleIOS7) {
-        suffix = @[@"-bw-ios7",@"-bw"];
-    }else{
-        suffix = @[@"-bw"];
-    }
+    suffix = @[@"-bw-ios7",@"-bw"];
     UIImage * rv = nil;
     NSString * base = activityType.lowercaseString;
     for (NSString * ext in suffix) {

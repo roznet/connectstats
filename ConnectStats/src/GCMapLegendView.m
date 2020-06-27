@@ -60,15 +60,9 @@
     }
     CGContextRef context = UIGraphicsGetCurrentContext();
     UIBezierPath *roundedRectanglePath = nil;
-    if ([GCViewConfig uiStyle] == gcUIStyleIOS7) {
-        roundedRectanglePath = [UIBezierPath bezierPathWithRect:rect];
-        [[GCViewConfig backgroundForLegend] setStroke];
-        [[GCViewConfig backgroundForLegend] setFill];
-    }else{
-        roundedRectanglePath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:5.];
-        [[UIColor blackColor] setStroke];
-        [[GCViewConfig backgroundForLegend] setFill];
-    }
+    roundedRectanglePath = [UIBezierPath bezierPathWithRect:rect];
+    [[GCViewConfig backgroundForLegend] setStroke];
+    [[GCViewConfig backgroundForLegend] setFill];
 
     roundedRectanglePath.lineWidth = 1.;
     [roundedRectanglePath fill];

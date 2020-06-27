@@ -58,13 +58,8 @@ typedef NS_ENUM(NSUInteger, gcStatsCalChoice)  {
     gcStatsCal6M,
     gcStatsCal1Y,
     gcStatsCalToDate,
+    gcStatsCalCompare,
     gcStatsCalEnd
-};
-
-typedef NS_ENUM(NSUInteger, gcUIStyle){
-    gcUIStyleUndefined,
-    gcUIStyleClassic,
-    gcUIStyleIOS7
 };
 
 typedef NS_ENUM(NSUInteger, gcMapType) {
@@ -81,7 +76,6 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 
 +(void)setSkin:(GCViewConfigSkin*)skin;
 
-+(gcUIStyle)uiStyle;
 
 
 // COLORS

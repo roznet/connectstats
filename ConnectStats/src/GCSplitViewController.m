@@ -70,10 +70,7 @@
         (detailNav.navigationBar).titleTextAttributes = @{NSFontAttributeName:[GCViewConfig boldSystemFontOfSize:16.]};
         (activityNav.navigationBar).titleTextAttributes = @{NSFontAttributeName:[GCViewConfig boldSystemFontOfSize:16.]};
 
-        UIBarStyle style = UIBarStyleBlack;
-        if ([GCViewConfig uiStyle]==gcUIStyleIOS7) {
-            style = UIBarStyleDefault;
-        }
+        UIBarStyle style = UIBarStyleDefault;
 
         activityNav.navigationBar.barStyle						= style;
         detailNav.navigationBar.barStyle						= style;

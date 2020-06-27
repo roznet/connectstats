@@ -173,6 +173,7 @@
             case gcStatsCalToDate:
             case gcStatsCalAll:
             case gcStatsCalEnd:
+            case gcStatsCalCompare:
                 image = nil;//[GCViewIcons navigationIconFor:gcIconNavAggregated];
                 break;
 
@@ -241,6 +242,7 @@
                 break;
             case gcStatsCalAll:
             case gcStatsCalEnd:
+            case gcStatsCalCompare:
             case gcStatsCalToDate:
                 break;
         }
