@@ -83,6 +83,8 @@
         return GC_OPTIONS_END;
     }else if (section == GC_SECTION_PERIODS){
         return GC_PERIODS_END;
+    }else if (section == GC_SECTION_XS){
+        return GC_XS_END;
     }
     return 0;
 }
@@ -132,6 +134,18 @@
                 [gridCell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString( @"Trend", @"Derived Hist Method")];
             }
 
+        }
+        cell = gridCell;
+    }else if (indexPath.section == GC_SECTION_XS){
+        GCCellGrid * gridCell = [GCCellGrid gridCell:tableView];
+        [gridCell setupForRows:2 andCols:2];
+        NSArray<GCNumberWithUnit*>*points = self.derivedHistAnalysis.pointsForGraphs;
+        if( indexPath.row == GC_XS_SHORT){
+            [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Short Period for CP", @"x unit for CP");
+            [gridCell labelForRow:0 andCol:1].text = [points[1] description];
+        }else if( indexPath.row == GC_XS_LONG){
+            [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Long Period for CP", @"x unit for CP");
+            [gridCell labelForRow:0 andCol:1].text = [points[2] description];
         }
         cell = gridCell;
     }
@@ -226,6 +240,45 @@
             };
             [self.navigationController pushViewController:list animated:YES];
         }
+    }else if( indexPath.section == GC_SECTION_XS){
+        GCStatsSerieOfSerieWithUnits * serieOfSeries = [self.derivedHistAnalysis serieOfSeries:[GCAppGlobal derived]];
+        NSArray<GCNumberWithUnit*>* Xs = [serieOfSeries allXs];
+        NSArray<NSString*>* xsLabels = [Xs arrayByMappingBlock:^(GCNumberWithUnit*nu){
+            return [nu formatDouble];
+        }];
+
+        GCCellEntryFieldCompletion cb = nil;
+        NSUInteger current = 0;
+
+        if( indexPath.row == GC_XS_SHORT){
+            for (GCNumberWithUnit * nu in Xs) {
+                if( [nu isEqualToNumberWithUnit:self.derivedHistAnalysis.shortTermX] ){
+                    break;
+                }
+                current++;
+            }
+            cb = ^(NSObject<GCEntryFieldProtocol>*cb){
+                self.derivedHistAnalysis.shortTermX = Xs[cb.selected];
+                [tableView reloadData];
+                [self.analysisDelegate configChanged];
+            };
+        }else if (indexPath.row == GC_XS_LONG){
+            for (GCNumberWithUnit * nu in Xs) {
+                if( [nu isEqualToNumberWithUnit:self.derivedHistAnalysis.longTermX] ){
+                    break;
+                }
+                current++;
+            }
+            cb = ^(NSObject<GCEntryFieldProtocol>*cb){
+                self.derivedHistAnalysis.longTermX = Xs[cb.selected];
+                [tableView reloadData];
+                [self.analysisDelegate configChanged];
+            };
+        }
+        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:xsLabels selected:current];
+        list.entryFieldCompletion = cb;
+        [self.navigationController pushViewController:list animated:YES];
+
     }
 }
 @end

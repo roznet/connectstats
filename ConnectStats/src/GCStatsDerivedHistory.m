@@ -97,6 +97,10 @@
     return self.derivedAnalysisConfig.currentDerivedDataSerie.field;
 }
 
+-(GCDerivedDataSerie*)currentDerivedDataSerie{
+    return self.derivedAnalysisConfig.currentDerivedDataSerie;
+}
+
 -(NSString*)method{
     if( self.longTermSmoothing == gcDerivedHistSmoothingMax && self.shortTermSmoothing == gcDerivedHistSmoothingMax){
         return NSLocalizedString( @"Max", @"Derived Hist Method");
@@ -126,21 +130,30 @@
     ];
 }
 
+-(GCStatsSerieOfSerieWithUnits*)serieOfSeries:(GCDerivedOrganizer*)derived matching:(GCDerivedDataSerie*)current{
+    GCField * field = current.field;
+
+    NSDate * from = self.fromDate;
+    GCStatsSerieOfSerieWithUnits * serieOfSerie = [derived timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
+        BOOL rv = [act.activityType isEqualToString:field.activityType] && ([act.date compare:from] == NSOrderedDescending);
+        return rv;
+    } withLimit:500]];
+    
+    return serieOfSerie;
+}
+
+-(GCStatsSerieOfSerieWithUnits*)serieOfSeries:(GCDerivedOrganizer*)derived{
+    return [self serieOfSeries:derived matching:self.currentDerivedDataSerie];
+}
+
 -(GCCellSimpleGraph*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath with:(nonnull GCDerivedOrganizer *)derived{
     GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
 
-    GCDerivedDataSerie * current = [self.derivedAnalysisConfig currentDerivedDataSerie];
     GCStatsSerieOfSerieWithUnits * serieOfSerie = nil;
-    GCField * field = nil;
+    GCField * field = self.field;
     
-    if( current ){
-        
-        field = current.field;
-        NSDate * from = self.fromDate;
-        serieOfSerie = [derived timeserieOfSeriesFor:field inActivities:[[GCAppGlobal organizer] activitiesMatching:^(GCActivity * act){
-            BOOL rv = [act.activityType isEqualToString:field.activityType] && ([act.date compare:from] == NSOrderedDescending);
-            return rv;
-        } withLimit:500]];
+    if( field ){
+        serieOfSerie = [self serieOfSeries:derived];
     }
     GCSimpleGraphCachedDataSource * cache = nil;
     if (serieOfSerie) {

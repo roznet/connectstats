@@ -69,6 +69,7 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
 @property (nonatomic,retain) GCLagPeriod * lookbackPeriod;
 
 @property (nonatomic,readonly) GCField * field;
+@property (nonatomic,readonly) GCDerivedDataSerie * currentDerivedDataSerie;
 
 /// An array of number corresponding to the X to display
 /// by default @[ @0, @60, @1800 ] which are seconds.
@@ -78,7 +79,7 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
 
 -(GCCellSimpleGraph*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath with:(GCDerivedOrganizer*)derived;
 
-
+-(GCStatsSerieOfSerieWithUnits*)serieOfSeries:(GCDerivedOrganizer*)derived;
 
 @end
 

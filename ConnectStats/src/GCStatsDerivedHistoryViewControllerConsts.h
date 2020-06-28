@@ -29,8 +29,13 @@
 
 #define GC_SECTION_GRAPHS  0
 #define GC_SECTION_OPTIONS  1
-#define GC_SECTION_PERIODS  2
-#define GC_SECTION_END 3
+#define GC_SECTION_XS  2
+#define GC_SECTION_PERIODS  3
+#define GC_SECTION_END 4
+
+#define GC_XS_SHORT 0
+#define GC_XS_LONG 1
+#define GC_XS_END 2
 
 #define GC_OPTIONS_FIELD  0
 #define GC_OPTIONS_METHOD  1
