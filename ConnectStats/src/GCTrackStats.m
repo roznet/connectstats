@@ -334,6 +334,15 @@
                     ];
 
         }
+    }else if( self.statsStyle==gcTrackStatsRollingBest ){
+        gcFieldFlag flag = self.field.fieldFlag;
+        NSString * rv = nil;
+        if( flag == gcFieldFlagPower || flag == gcFieldFlagWeightedMeanHeartRate  || flag == gcFieldFlagWeightedMeanSpeed){
+            rv = [self.field.correspondingBestRollingField displayNameWithUnits:[self yUnit:0]];
+        }else{
+            rv = [NSString stringWithFormat:NSLocalizedString(@"Rolling Best %@", @"Best Rolling Title"), [self.field displayNameWithUnits:[self yUnit:0]]];
+        }
+        return rv;
     }else{
         return [self.field displayNameWithUnits:[self yUnit:0]];
     }

@@ -492,7 +492,6 @@
             }
             else if (trackStats.statsStyle==gcTrackStatsRollingBest) {
                 cache.emptyGraphLabel = NSLocalizedString(@"Calculating...", @"Calculating Graph Label");
-                cache.title = [NSString stringWithFormat:NSLocalizedString(@"Rolling Best %@", @"Graph Title"), cache.title];
             } else if (trackStats.statsStyle == gcTrackStatsBucket){
                 plot.graphType = gcGraphStep;
                 plot.color = [GCViewConfig fillColorForField:trackStats.field];
@@ -648,9 +647,9 @@
     }
     
     if( config.longTermSmoothing == gcDerivedHistSmoothingMax ){
-        rv.title = [NSString stringWithFormat:@"%@ Max Critical %@", config.longTermPeriod.displayName, field.displayName];
+        rv.title = [NSString stringWithFormat:@"%@ Max %@", config.longTermPeriod.displayName, field.correspondingBestRollingField.displayName];
     }else{
-        rv.title = [NSString stringWithFormat:@"Critical %@ %@ Trend ", field.displayName, config.longTermPeriod.displayName];
+        rv.title = [NSString stringWithFormat:@"%@ %@ Trend ", field.correspondingBestRollingField.displayName, config.longTermPeriod.displayName];
     }
     rv.xUnit = [GCUnit unitForKey:@"datemonth"];
     
@@ -896,7 +895,7 @@
         }
     }
     if (hasOne) {
-        rv.title =[NSString stringWithFormat:NSLocalizedString(@"Best %@", @"Best Rolling Curve"),[field displayName]];
+        rv.title =[NSString stringWithFormat:NSLocalizedString(@"Best %@", @"Best Rolling Curve"),field.correspondingBestRollingField.displayName];
     }
 
     return rv;
