@@ -1,23 +1,23 @@
 {
-  "images": [
+  "images" : [
     {
-      "filename": "multi_sport.png", 
-      "idiom": "universal", 
-      "scale": "1x"
-    }, 
+      "filename" : "multisport.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
     {
-      "filename": "multi_sport@2x.png", 
-      "idiom": "universal", 
-      "scale": "2x"
-    }, 
+      "filename" : "multisport@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
     {
-      "filename": "multi_sport@3x.png", 
-      "idiom": "universal", 
-      "scale": "3x"
+      "filename" : "multisport@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
     }
-  ], 
-  "info": {
-    "author": "dir2xcassets", 
-    "version": 1
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
   }
 }

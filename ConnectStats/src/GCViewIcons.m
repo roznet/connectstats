@@ -139,7 +139,7 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,NSString*suffix,NSString*bundle
 }
 
 +(UIImage*)activityTypeDisabledIconFor:(NSString*)activityType{
-    UIImage * icon = [UIImage imageNamed:[NSString stringWithFormat:@"%@-dyn", activityType]];
+    UIImage * icon = [UIImage imageNamed:[NSString stringWithFormat:@"%@", activityType]];
     if( icon == nil){
         return nil;
     }
@@ -160,7 +160,7 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,NSString*suffix,NSString*bundle
 }
 
 +(UIImage*)activityTypeDynamicIconFor:(NSString*)activityType{
-    UIImage * icon = [UIImage imageNamed:[NSString stringWithFormat:@"%@-dyn", activityType]];
+    UIImage * icon = [UIImage imageNamed:[NSString stringWithFormat:@"%@", activityType]];
     if( icon == nil){
         return nil;
     }
@@ -190,7 +190,7 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,NSString*suffix,NSString*bundle
 }
 
 +(UIImage*)activityTypeBWIconFor:(NSString*)activityType{
-    UIImage * rv = [UIImage imageNamed:[NSString stringWithFormat:@"%@-bw", activityType]];
+    UIImage * rv = [UIImage imageNamed:[NSString stringWithFormat:@"%@", activityType]];
     return rv;
 
 }
