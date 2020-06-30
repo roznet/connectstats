@@ -2043,6 +2043,22 @@
       "field": "__CalcAscentSpeed"
     },
     {
+      "en": "Critical Heart Rate",
+      "field": "__CalcBestRollingWeightedMeanHeartRate"
+    },
+    {
+      "en": "Critical Pace",
+      "field": "__CalcBestRollingWeightedMeanPace"
+    },
+    {
+      "en": "Critical Power",
+      "field": "__CalcBestRollingWeightedMeanPower"
+    },
+    {
+      "en": "Critical Speed",
+      "field": "__CalcBestRollingWeightedMeanSpeed"
+    },
+    {
       "field": "__CalcDescentSpeed"
     },
     {
@@ -3808,6 +3824,30 @@
       "field": "WeightedRelativeRunningEconomy",
       "metric": "dimensionless",
       "statute": "dimensionless"
+    },
+    {
+      "activity_type": "all",
+      "field": "__CalcBestRollingWeightedMeanHeartRate",
+      "metric": "bpm",
+      "statute": "bpm"
+    },
+    {
+      "activity_type": "all",
+      "field": "__CalcBestRollingWeightedMeanPace",
+      "metric": "minperkm",
+      "statute": "minpermile"
+    },
+    {
+      "activity_type": "all",
+      "field": "__CalcBestRollingWeightedMeanPower",
+      "metric": "watt",
+      "statute": "watt"
+    },
+    {
+      "activity_type": "all",
+      "field": "__CalcBestRollingWeightedMeanSpeed",
+      "metric": "kph",
+      "statute": "mph"
     }
   ]
 }

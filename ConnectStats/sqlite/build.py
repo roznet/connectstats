@@ -22,9 +22,16 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 #  
-#  To rebuild db form legacy:
+#  To rebuild db from legacy:
 #    ./build.py --init legacy -o out/fields.db build
 #
+#  To rebuild db adding changes for a file (example here edit/gc_fields_manual.xlsx)
+#       -v : verbose
+#       -i : init from latest
+#       -b : latest use as base out/fields.db
+#       -o : save to fields.json
+#    ./build.py -v -b out/fields.db -i latest -o out/fields.json build edit/gc_fields_manual.xlsx
+#       then git diff will show what changed or use 'diff' as a command instead of 'build'
 
 import sqlite3
 import argparse
