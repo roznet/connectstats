@@ -52,6 +52,7 @@
 /**
  YES if only process filtered activities, NO for all activities
  */
+
 @property (nonatomic,assign) BOOL useFilter;
 /**
  For health series, decide time to look back sum. If non zero the value for y will become

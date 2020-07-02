@@ -37,6 +37,7 @@
 #import "GCStatsGraphOptionViewController.h"
 #import "GCHistoryPerformanceAnalysis.h"
 #import "GCActivitiesOrganizer.h"
+#import "GCStatsCalendarAggregationConfig.h"
 
 #define GC_S_NAME 0
 #define GC_S_GRAPH 1
@@ -128,10 +129,12 @@
 
     if (choice != _config.viewChoice) {
         self.config.viewChoice = choice;
-        self.config.calendarUnit = [GCViewConfig calendarUnitForViewChoice:choice];
         if (_config.viewChoice != gcViewChoiceAll) {
             if ([_activityStats ready]) {
-                self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:_config.calendarUnit referenceDate:[GCAppGlobal referenceDate] andCalendar:[GCAppGlobal calculationCalendar]];
+                GCStatsCalendarAggregationConfig * calendarConfig = self.config.calendarConfig;
+                self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
+                                                                                       referenceDate:calendarConfig.referenceDate
+                                                                                         andCalendar:calendarConfig.calendar];
             }else{
                 [self setSummarizedHistory:nil];
             }
@@ -149,7 +152,10 @@
 
     if (_config.viewChoice != gcViewChoiceAll) {
         if (_summarizedHistory == nil && [_activityStats ready]) {
-            self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:_config.calendarUnit referenceDate:[GCAppGlobal referenceDate] andCalendar:[GCAppGlobal calculationCalendar]];
+            GCStatsCalendarAggregationConfig * calendarConfig = self.config.calendarConfig;
+            self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
+                                                                                   referenceDate:calendarConfig.referenceDate
+                                                                                     andCalendar:calendarConfig.calendar];
         }
     }
     self.quartiles = [_activityStats.history.serie quantiles:4];
@@ -194,7 +200,8 @@
 
 
 -(void)toggleViewChoice{
-    [self setupForViewChoice:[GCViewConfig nextViewChoice:_config.viewChoice]];
+    [self.config nextViewChoice];
+    [self setupForViewChoice:self.config.viewChoice];
     self.navigationItem.rightBarButtonItem.title = [GCViewConfig viewChoiceDesc:_config.viewChoice];
 
     [self.tableView reloadData];
@@ -247,7 +254,7 @@
             GCSimpleGraphCachedDataSource * cache = nil;
             if (self.config.secondGraphChoice == gcOneFieldSecondGraphHistory) {
                 cache = [GCSimpleGraphCachedDataSource historyView:_activityStats
-                                                      calendarUnit:NSCalendarUnitMonth
+                                                      calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth]
                                                        graphChoice:gcGraphChoiceBarGraph
                                                              after:nil];
 
@@ -276,7 +283,7 @@
                     //FIXME: check to use Field
                     gcGraphChoice choice = [GCViewConfig graphChoiceForField:_config.field andUnit:unit];
                     cache = [GCSimpleGraphCachedDataSource historyView:_activityStats
-                                                          calendarUnit:unit
+                                                          calendarConfig:self.config.calendarConfig
                                                            graphChoice:choice after:nil];
                     [cell setDataSource:cache andConfig:cache];
                 }else{
@@ -351,7 +358,8 @@
             //FIXME: use gcfield instead of key
             gcGraphChoice choice = [GCViewConfig graphChoiceForField:_config.field andUnit:[GCViewConfig calendarUnitForViewChoice:_config.viewChoice]];
 
-            [graph setupForHistoryField:self.activityStats graphChoice:choice andViewChoice:_config.viewChoice];
+            [graph setupForHistoryField:self.activityStats graphChoice:choice andConfig:_config];
+            
             graph.canSum = [_config.field canSum];
 
             if ([UIViewController useIOS7Layout]) {

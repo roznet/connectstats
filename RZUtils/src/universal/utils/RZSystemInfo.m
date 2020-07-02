@@ -50,7 +50,7 @@
         BOOL has13 = false;
         BOOL has14 = false;
 #ifdef __IPHONE_14_0
-        has13 = true;
+        has14 = true;
 #endif
 
 #ifdef __IPHONE_13_0

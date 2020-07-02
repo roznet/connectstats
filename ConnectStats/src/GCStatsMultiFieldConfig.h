@@ -26,6 +26,8 @@
 #import <Foundation/Foundation.h>
 #import "GCHistoryFieldSummaryStats.h"
 #import "GCViewConfig.h"
+#import "GCStatsCalendarAggregationConfig.h"
+
 @class GCSimpleGraphCachedDataSource;
 @class GCHistoryFieldDataSerie;
 @class GCDerivedDataSerie;
@@ -48,6 +50,7 @@
 @property (nonatomic,assign) gcStatsCalChoice calChoice;
 @property (nonatomic,assign) BOOL useFilter;
 @property (nonatomic,readonly) GCField * currentCumulativeSummaryField;
+@property (nonatomic,readonly) GCStatsCalendarAggregationConfig * calendarConfig;
 
 +(GCStatsMultiFieldConfig*)fieldListConfigFrom:(GCStatsMultiFieldConfig*)other;
 -(GCStatsMultiFieldConfig*)sameFieldListConfig;

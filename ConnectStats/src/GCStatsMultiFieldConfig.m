@@ -63,6 +63,11 @@
     }
     return rv;
 }
+
+-(GCStatsCalendarAggregationConfig*)calendarConfig{
+    return [GCStatsCalendarAggregationConfig globalConfigFor:[GCViewConfig calendarUnitForViewChoice:self.viewChoice]];
+}
+
 -(GCStatsMultiFieldConfig*)sameFieldListConfig{
     return [GCStatsMultiFieldConfig fieldListConfigFrom:self];
 }
@@ -253,14 +258,14 @@
     }
 
     cache = [GCSimpleGraphCachedDataSource historyView:fieldDataSerie
-                                          calendarUnit:calunit
+                                        calendarConfig:[self.calendarConfig equivalentConfigFor:calunit]
                                            graphChoice:choice
                                                  after:afterdate];
     if (self.calChoice == gcStatsCalToDate && ( self.viewChoice == gcViewChoiceMonthly||self.viewChoice== gcViewChoiceWeekly || self.viewChoice == gcViewChoiceYearly)) {
         [cache setupAsBackgroundGraph];
         GCHistoryFieldDataSerie * cut = [fieldDataSerie serieWithCutOff:fieldDataSerie.lastDate inCalendarUnit:calunit withReferenceDate:nil];
         GCSimpleGraphCachedDataSource * main = [GCSimpleGraphCachedDataSource historyView:cut
-                                                                             calendarUnit:calunit
+                                                                           calendarConfig:self.calendarConfig
                                                                               graphChoice:choice
                                                                                     after:afterdate];
         [main addDataSource:cache];

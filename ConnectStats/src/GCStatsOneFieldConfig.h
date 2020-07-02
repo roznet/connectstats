@@ -26,6 +26,7 @@
 #import <Foundation/Foundation.h>
 #import "GCViewConfig.h"
 #import "GCHistoryFieldDataSerieConfig.h"
+#import "GCStatsCalendarAggregationConfig.h"
 
 /********
  * History Stats: zoom on a field
@@ -39,20 +40,25 @@ typedef NS_ENUM(NSUInteger, gcOneFieldSecondGraph) {
     gcOneFieldSecondGraphHistogram,
     gcOneFieldSecondGraphEnd
 };
+@class GCStatsMultiFieldConfig;
 
 @interface GCStatsOneFieldConfig : NSObject
 @property (nonatomic,retain) GCField * field;
 @property (nonatomic,retain) GCField * x_field;
 
-@property (nonatomic,assign) NSCalendarUnit calendarUnit;
 @property (nonatomic,retain) NSString * activityType;
 @property (nonatomic,assign) gcViewChoice viewChoice;
 @property (nonatomic,assign) gcOneFieldSecondGraph secondGraphChoice;
+@property (nonatomic,retain) GCStatsCalendarAggregationConfig * calendarConfig;
 
 @property (nonatomic,assign) BOOL useFilter;
 @property (nonatomic,retain) NSArray * fieldOrder;
 
++(GCStatsOneFieldConfig*)configFromMultiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig;
+
 -(GCHistoryFieldDataSerieConfig*)historyConfig;
 -(GCHistoryFieldDataSerieConfig*)historyConfigXY;
+
+-(void)nextViewChoice;
 
 @end

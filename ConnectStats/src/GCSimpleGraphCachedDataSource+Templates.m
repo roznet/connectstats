@@ -35,6 +35,7 @@
 #import "GCDerivedOrganizer.h"
 #import "GCActivity+Series.h"
 #import "GCStatsDerivedHistory.h"
+#import "GCStatsCalendarAggregationConfig.h"
 
 @implementation GCSimpleGraphCachedDataSource (Templates)
 
@@ -72,21 +73,24 @@
     return cache;
 }
 
-+(GCSimpleGraphCachedDataSource*)historyView:(GCHistoryFieldDataSerie*)fieldserie calendarUnit:(NSCalendarUnit)aUnit graphChoice:(gcGraphChoice)graphChoice after:(NSDate*)date{
++(GCSimpleGraphCachedDataSource*)historyView:(GCHistoryFieldDataSerie*)fieldserie
+                                calendarConfig:(GCStatsCalendarAggregationConfig*)aUnit
+                                 graphChoice:(gcGraphChoice)graphChoice after:(NSDate*)date{
     if (graphChoice == gcGraphChoiceBarGraph) {
-        return [GCSimpleGraphCachedDataSource barGraphView:fieldserie calendarUnit:aUnit after:(NSDate*)date];
+        return [GCSimpleGraphCachedDataSource barGraphView:fieldserie calendarConfig:aUnit after:(NSDate*)date];
     }else{
-        return [GCSimpleGraphCachedDataSource calendarView:fieldserie calendarUnit:aUnit graphChoice:graphChoice];
+        return [GCSimpleGraphCachedDataSource calendarView:fieldserie calendarConfig:aUnit graphChoice:graphChoice];
     }
 }
 
-+(GCSimpleGraphCachedDataSource*)calendarView:(GCHistoryFieldDataSerie*)fieldserie calendarUnit:(NSCalendarUnit)aUnit graphChoice:(gcGraphChoice)graphChoice{
++(GCSimpleGraphCachedDataSource*)calendarView:(GCHistoryFieldDataSerie*)fieldserie
+                                 calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig
+                                  graphChoice:(gcGraphChoice)graphChoice{
     GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-
-    
+    NSCalendarUnit aUnit = calendarConfig.calendarUnit;
     cache.xUnit = [fieldserie xUnit];
     if ([fieldserie.config isYOnly]) {
-        switch (aUnit) {
+        switch (calendarConfig.calendarUnit) {
             case NSCalendarUnitWeekOfYear:
                 cache.xUnit = [GCUnit unitForKey:@"weekly"];
                 break;
@@ -95,10 +99,10 @@
                 break;
             case NSCalendarUnitYear:
             default:
-                if( [GCAppGlobal referenceDate] != nil){
+                if( calendarConfig.referenceDate != nil){
                            cache.xUnit = [GCUnitCalendarUnit calendarUnit:NSCalendarUnitYear
-                                                                 calendar:[GCAppGlobal calculationCalendar]
-                                                            referenceDate:[GCAppGlobal referenceDate]];
+                                                                 calendar:calendarConfig.calendar
+                                                            referenceDate:calendarConfig.referenceDate];
                 }else{
                     cache.xUnit = [GCUnit unitForKey:@"yearly"];
                 }
@@ -108,12 +112,17 @@
 
     cache.title = [fieldserie title];
 
-    NSDate * refdate = [GCAppGlobal referenceDate];
+    NSDate * refdate = calendarConfig.referenceDate;
 
     NSDictionary * dict = [fieldserie.config isXY] ?
-        [fieldserie.history.serie xyCumulativeRescaledByCalendarUnit:aUnit inTimeSerie:fieldserie.gradientSerie.serie withCalendar:[GCAppGlobal calculationCalendar]]
+        [fieldserie.history.serie xyCumulativeRescaledByCalendarUnit:calendarConfig.calendarUnit
+                                                         inTimeSerie:fieldserie.gradientSerie.serie
+                                                        withCalendar:calendarConfig.calendar]
     :
-        [fieldserie.history.serie rescaleWithinCalendarUnit:aUnit merged:NO referenceDate:refdate andCalendar:[GCAppGlobal calculationCalendar]];
+        [fieldserie.history.serie rescaleWithinCalendarUnit:calendarConfig.calendarUnit
+                                                     merged:NO
+                                              referenceDate:refdate
+                                                andCalendar:calendarConfig.calendar];
 
     NSArray * keys = [dict.allKeys sortedArrayUsingComparator:^(id obj1, id obj2){
         return [obj2 compare:obj1];
@@ -214,9 +223,11 @@
 
 }
 
-+(GCSimpleGraphCachedDataSource*)barGraphView:(GCHistoryFieldDataSerie*)fieldserie calendarUnit:(NSCalendarUnit)aUnit after:(NSDate*)afterdate{
++(GCSimpleGraphCachedDataSource*)barGraphView:(GCHistoryFieldDataSerie*)fieldserie                                      calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig
+                                        after:(NSDate*)afterdate{
     GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
     cache.xUnit = [fieldserie xUnit];
+    NSCalendarUnit aUnit = calendarConfig.calendarUnit;
     switch (aUnit) {
         case NSCalendarUnitWeekOfYear:
             cache.xUnit = [GCUnit unitForKey:@"dateshort"];
@@ -234,7 +245,9 @@
 
     cache.title = [fieldserie title];
 
-    NSDictionary * dict = [fieldserie.history.serie aggregatedStatsByCalendarUnit:aUnit referenceDate:[GCAppGlobal referenceDate] andCalendar:[GCAppGlobal calculationCalendar]];
+    NSDictionary * dict = [fieldserie.history.serie aggregatedStatsByCalendarUnit:aUnit
+                                                                    referenceDate:calendarConfig.referenceDate
+                                                                      andCalendar:calendarConfig.calendar];
 
     gcGraphType type = gcGraphStep;
 
@@ -248,7 +261,7 @@
     UIColor * color = [GCViewConfig colorForGraphElement:gcSkinGraphColorBarGraph];
     NSMutableArray * adjusted = [NSMutableArray arrayWithCapacity:serie.count];
 
-    NSCalendar * cal = [GCAppGlobal calculationCalendar];
+    NSCalendar * cal = calendarConfig.calendar;
 
     NSDateComponents * oneUnit = [[[NSDateComponents alloc] init] autorelease];
     if (aUnit == NSCalendarUnitWeekOfYear) {

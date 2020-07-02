@@ -42,7 +42,8 @@
 -(void)dealloc{
     [_splitViewController release];
     [_tabBarController release];
-
+    [_window release];
+    
     [super dealloc];
 }
 

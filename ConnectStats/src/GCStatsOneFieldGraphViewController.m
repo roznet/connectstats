@@ -88,15 +88,12 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(gcViewChoice)viewChoice{
+    return self.oneFieldConfig.viewChoice;
+}
 
 -(void)nextViewChoice{
-    if (self.viewChoice == gcViewChoiceMonthly) {
-        self.viewChoice = gcViewChoiceYearly;
-    }else if(self.viewChoice == gcViewChoiceYearly){
-        self.viewChoice = gcViewChoiceWeekly;
-    }else {
-        self.viewChoice = gcViewChoiceMonthly;
-    }
+    [self.oneFieldConfig nextViewChoice];
     dispatch_async([GCAppGlobal worker],^(){
         [self configureGraph];
     });
@@ -132,9 +129,9 @@
     });
 }
 
--(void)setupForHistoryField:(GCHistoryFieldDataSerie*)serie graphChoice:(gcGraphChoice)gChoice andViewChoice:(gcViewChoice)vChoice{
+-(void)setupForHistoryField:(GCHistoryFieldDataSerie*)serie graphChoice:(gcGraphChoice)gChoice andConfig:(GCStatsOneFieldConfig *)vChoice{
     self.activityStats = [GCHistoryFieldDataSerie historyFieldDataSerieFrom:serie];
-    self.viewChoice = vChoice;
+    self.oneFieldConfig=vChoice;
     self.graphChoice = gChoice;
     self.x_activityField = nil;
     self.activityStats.config.fromDate = nil;
@@ -146,11 +143,14 @@
 -(void)configureGraph{
     if (self.activityStats) {
         GCSimpleGraphCachedDataSource * ds = nil;
-        NSCalendarUnit unit = [GCViewConfig calendarUnitForViewChoice:self.viewChoice];
+        
         self.activityStats.config.fromDate = [self.maturityButton currentFromDate];
         self.activityStats.config.x_activityField = self.x_activityField;
         [self.activityStats loadFromOrganizer];
-        ds = [GCSimpleGraphCachedDataSource historyView:self.activityStats calendarUnit:unit graphChoice:self.graphChoice after:nil];
+        ds = [GCSimpleGraphCachedDataSource historyView:self.activityStats
+                                         calendarConfig:self.oneFieldConfig.calendarConfig
+                                            graphChoice:self.graphChoice
+                                                  after:nil];
 
         self.dataSource = ds;
         dispatch_async(dispatch_get_main_queue(), ^(){

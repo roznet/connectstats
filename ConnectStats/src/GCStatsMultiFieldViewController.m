@@ -225,6 +225,7 @@
         GCField * field = [self fieldsForSection:indexPath.section][indexPath.row];
         //[[self fieldOrder] objectAtIndex:[indexPath row]];
         GCStatsOneFieldViewController *statsViewController = [[GCStatsOneFieldViewController alloc] initWithStyle:UITableViewStylePlain];
+        statsViewController.config = [GCStatsOneFieldConfig configFromMultiFieldConfig:self.multiFieldConfig];
         (statsViewController.config).useFilter = self.useFilter;
         (statsViewController.config).fieldOrder = self.fieldOrder;
         
@@ -256,7 +257,7 @@
                 
                 GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
                 
-                [graph setupForHistoryField:fieldDataSerie graphChoice:choice andViewChoice:self.viewChoice];
+                [graph setupForHistoryField:fieldDataSerie graphChoice:choice andConfig:[GCStatsOneFieldConfig configFromMultiFieldConfig:self.multiFieldConfig]];
                 [graph setCanSum:true];
                 if ([UIViewController useIOS7Layout]) {
                     [UIViewController setupEdgeExtendedLayout:graph];
@@ -437,31 +438,12 @@
         }
 
         GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource historyView:fieldDataSerie
-                                                                              calendarUnit:unit
+                                                                              calendarConfig:[self.multiFieldConfig.calendarConfig equivalentConfigFor:unit]
                                                                                graphChoice:gcGraphChoiceCumulative
                                                                                      after:nil];
         cache.emptyGraphLabel = NSLocalizedString(@"Pending...", @"Summary Graph");
         [graphCell setDataSource:cache andConfig:cache];
 
-    }else{
-        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-        [graphCell setDataSource:cache andConfig:cache];
-    }
-    return graphCell;
-}
-
--(UITableViewCell*)tableView:(UITableView *)tableView weeklyBarsCellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    GCCellSimpleGraph * graphCell = [GCCellSimpleGraph graphCell:tableView];
-
-    GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
-    if (![fieldDataSerie isEmpty]) {
-        NSDate * afterdate = [[fieldDataSerie lastDate] dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-1Y"]];
-        GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource historyView:fieldDataSerie
-                                                                              calendarUnit:NSCalendarUnitWeekOfYear
-                                                                               graphChoice:gcGraphChoiceBarGraph
-                                                                                     after:afterdate];
-        graphCell.legend = TRUE;
-        [graphCell setDataSource:cache andConfig:cache];
     }else{
         GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
         [graphCell setDataSource:cache andConfig:cache];

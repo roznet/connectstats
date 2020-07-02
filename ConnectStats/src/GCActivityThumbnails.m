@@ -32,6 +32,7 @@
 #import "GCAppGlobal.h"
 #import "GCHistoryPerformanceAnalysis.h"
 #import "GCActivitiesOrganizer.h"
+#import "GCStatsCalendarAggregationConfig.h"
 
 @implementation GCActivityThumbnails
 
@@ -90,7 +91,7 @@
         const CGFloat legendHeight = 12.;
 
         GCSimpleGraphCachedDataSource * ds = [GCSimpleGraphCachedDataSource historyView:fieldDataSerie
-                                                                              calendarUnit:unit
+                                                                         calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:unit]
                                                                                graphChoice:gcGraphChoiceCumulative
                                                                                      after:nil];
         ds.emptyGraphLabel = NSLocalizedString(@"Pending...", @"Summary Graph");

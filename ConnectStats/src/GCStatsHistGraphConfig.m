@@ -198,9 +198,8 @@
 
 // Used in OneFieldViewController
 -(BOOL)buildForCumulativeGraph{
-    NSCalendarUnit unit = [GCViewConfig calendarUnitForViewChoice:self.timeWindowConfig.viewChoice];
     GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource historyView:self.dataSerie
-                                                                          calendarUnit:unit
+                                                                          calendarConfig:self.timeWindowConfig.calendarConfig
                                                                            graphChoice:gcGraphChoiceCumulative
                                                                                  after:nil];
     self.dataSource = cache;
@@ -209,12 +208,10 @@
 
 // Used in OneFieldViewController
 -(BOOL)buildForSimpleBarGraph{
-
-    NSCalendarUnit unit = [GCViewConfig calendarUnitForViewChoice:self.timeWindowConfig.viewChoice];
     //FIXME: use field instead of key
-    gcGraphChoice choice = [GCViewConfig graphChoiceForField:self.fieldConfig.activityField andUnit:unit];
+    gcGraphChoice choice = [GCViewConfig graphChoiceForField:self.fieldConfig.activityField andUnit:self.timeWindowConfig.calendarConfig.calendarUnit];
     self.dataSource = [GCSimpleGraphCachedDataSource historyView:self.dataSerie
-                                                    calendarUnit:unit
+                                                  calendarConfig:self.timeWindowConfig.calendarConfig
                                                      graphChoice:choice
                                                            after:nil];
     return  true;

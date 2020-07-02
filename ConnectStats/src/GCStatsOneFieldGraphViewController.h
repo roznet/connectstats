@@ -27,10 +27,12 @@
 #import "GCViewConfig.h"
 #import "GCHistoryFieldDataSerie.h"
 #import "GCViewMaturityButton.h"
+#import "GCStatsOneFieldConfig.h"
 
 @interface GCStatsOneFieldGraphViewController : UIViewController<GCViewMaturityButtonDelegate>
 
-@property (nonatomic,assign) gcViewChoice viewChoice;
+@property (nonatomic,readonly) gcViewChoice viewChoice;
+@property (nonatomic,retain) GCStatsOneFieldConfig * oneFieldConfig;
 @property (nonatomic,assign) gcGraphChoice graphChoice;
 @property (nonatomic,retain) GCHistoryFieldDataSerie * activityStats;
 @property (nonatomic,retain) GCSimpleGraphView * graphView;
@@ -40,6 +42,6 @@
 @property (nonatomic,retain) GCViewMaturityButton * maturityButton;
 @property (nonatomic,retain) GCField * x_activityField;
 
--(void)setupForHistoryField:(GCHistoryFieldDataSerie*)serie graphChoice:(gcGraphChoice)gChoice andViewChoice:(gcViewChoice)vChoice;
+-(void)setupForHistoryField:(GCHistoryFieldDataSerie*)serie graphChoice:(gcGraphChoice)gChoice andConfig:(GCStatsOneFieldConfig*)vChoice;
 
 @end
