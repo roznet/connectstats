@@ -64,7 +64,8 @@
     [_legendView release];
     [_maturityButton release];
     [_x_activityField release];
-
+    [_oneFieldConfig release];
+    
     [super dealloc];
 }
 

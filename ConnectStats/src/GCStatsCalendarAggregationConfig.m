@@ -39,6 +39,14 @@
     }
     return rv;
 }
+
+-(void)dealloc{
+    [_referenceDate release];
+    [_calendar release];
+    
+    [super dealloc];
+}
+
 +(GCStatsCalendarAggregationConfig*)globalConfigFor:(NSCalendarUnit)aUnit{
     return [GCStatsCalendarAggregationConfig configFor:aUnit referenceDate:[GCAppGlobal referenceDate] calendar:[GCAppGlobal calculationCalendar]];
 }

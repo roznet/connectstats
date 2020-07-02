@@ -52,7 +52,7 @@
     if( detailValue ){
         type = [GCActivityType activityTypeForKey:detailValue];
     }
-    if( self.activityTypeDetail == nil ){
+    if( type == nil ){
         type = [GCActivityType activityTypeForKey:activityType];
     }
     [self changeActivityType:type];
