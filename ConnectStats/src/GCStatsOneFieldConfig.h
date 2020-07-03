@@ -56,11 +56,15 @@ typedef NS_ENUM(NSUInteger, gcOneFieldSecondGraph) {
 @property (nonatomic,retain) GCStatsCalendarAggregationConfig * calendarConfig;
 
 @property (nonatomic,assign) BOOL useFilter;
-@property (nonatomic,retain) NSArray * fieldOrder;
 
-+(GCStatsOneFieldConfig*)configFromMultiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig;
++(GCStatsOneFieldConfig*)configFromMultiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig forY:(GCField*)field andX:(GCField*)xfield;
+
+
+-(BOOL)isEqualToConfig:(GCStatsOneFieldConfig*)other;
 
 -(GCHistoryFieldDataSerieConfig*)historyConfig;
 -(GCHistoryFieldDataSerieConfig*)historyConfigXY;
+
+-(BOOL)nextView;
 
 @end

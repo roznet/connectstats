@@ -112,10 +112,9 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if( ! self.started){
-        [self setupForCurrentActivityAndViewChoice:self.viewChoice];
-        self.multiFieldConfig.viewChoice = (gcViewChoice)[GCAppGlobal configGetInt:CONFIG_STATS_START_PAGE defaultValue:gcViewChoiceSummary];
-        RZLog(RZLogInfo, @"Initial start page %@", [GCViewConfig viewChoiceDesc:self.multiFieldConfig.viewChoice calendarConfig:self.multiFieldConfig.calendarConfig]);
+        [self setupForCurrentActivityAndViewChoice:gcViewChoiceSummary];
         [GCViewConfig setupViewController:self];
+        RZLog(RZLogInfo, @"Initial start page %@", self.multiFieldConfig);
     }
     self.started = true;
 }
@@ -223,18 +222,12 @@
         }
     }else if (self.viewChoice == gcViewChoiceAll) {
         GCField * field = [self fieldsForSection:indexPath.section][indexPath.row];
-        //[[self fieldOrder] objectAtIndex:[indexPath row]];
-        GCStatsOneFieldViewController *statsViewController = [[GCStatsOneFieldViewController alloc] initWithStyle:UITableViewStylePlain];
-        statsViewController.config = [GCStatsOneFieldConfig configFromMultiFieldConfig:self.multiFieldConfig];
-        statsViewController.config.useFilter = self.useFilter;
-        statsViewController.config.fieldOrder = self.fieldOrder;
-        
         GCField * xfield = [GCViewConfig nextFieldForGraph:nil fieldOrder:[GCViewConfig validChoicesForGraphIn:self.allFields] differentFrom:field];
         
-        [statsViewController setupForType:self.activityType
-                                    field:field
-                                   xField:xfield
-                               viewChoice:gcViewChoiceAll];
+        GCStatsOneFieldViewController *statsViewController = [[GCStatsOneFieldViewController alloc] initWithStyle:UITableViewStylePlain];
+        statsViewController.fieldOrder = self.fieldOrder;
+        
+        [statsViewController setupForConfig:[GCStatsOneFieldConfig configFromMultiFieldConfig:self.multiFieldConfig forY:field andX:xfield]];
         
         [UIViewController setupEdgeExtendedLayout:statsViewController];
         
@@ -258,7 +251,7 @@
                 
                 GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
                 
-                [graph setupForHistoryField:fieldDataSerie graphChoice:choice andConfig:[GCStatsOneFieldConfig configFromMultiFieldConfig:self.multiFieldConfig]];
+            [graph setupForHistoryField:fieldDataSerie graphChoice:choice andConfig:[GCStatsOneFieldConfig configFromMultiFieldConfig:self.multiFieldConfig forY:fieldDataSerie.activityField andX:nil]];
                 [graph setCanSum:true];
                 if ([UIViewController useIOS7Layout]) {
                     [UIViewController setupEdgeExtendedLayout:graph];
@@ -521,7 +514,6 @@
     [Flurry logEvent:EVENT_REPORT withParameters:params];
 }
 
-
 #pragma mark - Config
 
 -(BOOL)useFilter{
@@ -544,14 +536,7 @@
 
 -(void)toggleViewChoice{
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
-    if( nconfig.viewChoice == gcViewChoiceCalendar){
-        BOOL done = [nconfig.calendarConfig nextCalendarUnit];
-        if( done ){
-            nconfig.viewChoice = [GCViewConfig nextViewChoice:nconfig.viewChoice];
-        }
-    }else{
-        nconfig.viewChoice = [GCViewConfig nextViewChoice:nconfig.viewChoice];
-    }
+    [nconfig nextView];
     
     [self setupForFieldListConfig:nconfig];
 }
@@ -564,9 +549,7 @@
 
 -(void)setupBarButtonItem{
     NSString * title = self.multiFieldConfig.viewDescription;
-    if( self.viewChoice == gcViewChoiceCalendar){
-        title = self.multiFieldConfig.calendarConfig.calendarUnitDescription;
-    }
+    
     UIBarButtonItem * rightMost =[[[UIBarButtonItem alloc] initWithTitle:title
                                                                   style:UIBarButtonItemStylePlain
                                                                  target:self action:@selector(toggleViewChoice)] autorelease];
@@ -814,6 +797,7 @@
                 [self setupAggregatedStats];
             });
         }
+        RZLog(RZLogInfo, @"config %@", self.multiFieldConfig)
 #ifdef GC_USE_FLURRY
         [self publishEvent];
 #endif

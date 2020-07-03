@@ -41,13 +41,14 @@
  */
 @property (nonatomic,assign) gcViewChoice viewChoice;
 /**
- *  History Stats is monthly, weekly or all -> quick filter on thumbnail graphs
+ *  HistoryStats displayed can be current month, week, year or all -> quick filter on thumbnail graphs
  */
 @property (nonatomic,assign) gcHistoryStats historyStats;
 /**
- *  Stats calChoice, is how far back to look in summary pages, can also be toDate/All
+ *  Stats calChoice, is how far back to look in summary pages, 3m, 6m, 1y, can also be toDate/All
  */
 @property (nonatomic,assign) gcStatsCalChoice calChoice;
+
 @property (nonatomic,assign) BOOL useFilter;
 @property (nonatomic,readonly) GCField * currentCumulativeSummaryField;
 @property (nonatomic,readonly) GCStatsCalendarAggregationConfig * calendarConfig;
@@ -56,7 +57,7 @@
 
 +(GCStatsMultiFieldConfig*)fieldListConfigFrom:(GCStatsMultiFieldConfig*)other;
 -(GCStatsMultiFieldConfig*)sameFieldListConfig;
--(GCStatsMultiFieldConfig*)nextViewChoiceConfig;
+
 -(BOOL)isEqualToConfig:(GCStatsMultiFieldConfig*)other;
 
 -(GCStatsMultiFieldConfig*)configForNextFilter;
@@ -65,7 +66,7 @@
 
 -(UIBarButtonItem*)buttonForTarget:(id)target action:(SEL)sel;
 
-
+-(BOOL)nextView;
 
 -(void)nextSummaryCumulativeField;
 

@@ -60,7 +60,7 @@
     [super dealloc];
 }
 -(NSString*)description{
-    return [NSString stringWithFormat:@"<%@: %@ %@>", NSStringFromClass([self class]), self.calendarUnitDescription, self.referenceDate];
+    return [NSString stringWithFormat:@"<%@: %@ %@>", NSStringFromClass([self class]), self.calendarUnitDescription, self.referenceDate ? @"Rolling" : @""];
 }
 
 -(NSString*)calendarUnitDescription{
@@ -70,7 +70,7 @@
     }else if(self.calendarUnit == NSCalendarUnitMonth){
         rv = NSLocalizedString(@"Monthly", @"Calendar Unit Description");
     }else if(self.calendarUnit == NSCalendarUnitYear){
-        rv = NSLocalizedString(@"Annual", @"Calendar Unit Description");
+        rv = NSLocalizedString(@"Yearly", @"Calendar Unit Description");
     }else{
         rv = NSLocalizedString(@"Error", @"Calendar Unit Description");
     }
@@ -79,6 +79,18 @@
 
 -(GCStatsCalendarAggregationConfig*)equivalentConfigFor:(NSCalendarUnit)aUnit{
     return [GCStatsCalendarAggregationConfig configFor:aUnit referenceDate:self.referenceDate calendar:self.calendar];
+}
+
+-(gcHistoryStats)historyStats{
+    if (self.calendarUnit == NSCalendarUnitWeekOfYear) {
+        return gcHistoryStatsYear;
+    }else if(self.calendarUnit == NSCalendarUnitMonth){
+        return gcHistoryStatsMonth;
+    }else if( self.calendarUnit == NSCalendarUnitWeekOfYear){
+        return gcHistoryStatsWeek;
+    }else{
+        return gcHistoryStatsAll;
+    }
 }
 
 -(BOOL)nextCalendarUnit{

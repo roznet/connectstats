@@ -32,6 +32,7 @@ typedef NS_ENUM(NSUInteger, gcHistoryStats) {
     gcHistoryStatsAll,
     gcHistoryStatsWeek,
     gcHistoryStatsMonth,
+    gcHistoryStatsYear,
     gcHistoryStatsEnd
 };
 @class GCHealthMeasure;

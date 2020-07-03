@@ -40,7 +40,6 @@
 @property (nonatomic,retain) GCSimpleGraphCachedDataSource * dataSource;
 @property (nonatomic,assign) BOOL canSum;
 @property (nonatomic,retain) GCViewMaturityButton * maturityButton;
-@property (nonatomic,retain) GCField * x_activityField;
 
 -(void)setupForHistoryField:(GCHistoryFieldDataSerie*)serie graphChoice:(gcGraphChoice)gChoice andConfig:(GCStatsOneFieldConfig*)vChoice;
 

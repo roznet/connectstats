@@ -43,6 +43,9 @@
 -(GCStatsMultiFieldConfig*)init{
     self = [super init];
     if( self ){
+        self.calChoice = gcStatsCalAll;
+        self.historyStats = gcHistoryStatsWeek;
+        self.viewChoice = gcViewChoiceSummary;
         self.calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitWeekOfYear];
     }
     return self;
@@ -81,9 +84,12 @@
     return [GCViewConfig viewChoiceDesc:self.viewChoice calendarConfig:self.calendarConfig];
 }
 -(NSString*)description{
-    return [NSString stringWithFormat:@"<%@: %@ %@>", NSStringFromClass([self class]),
-                self.activityType,
-                self.viewDescription
+    return [NSString stringWithFormat:@"<%@: %@ %@ %@ %@>", NSStringFromClass([self class]),
+            self.activityType,
+            self.viewDescription,
+            @(self.historyStats),
+            @(self.calChoice)
+            
             ];
 }
 
@@ -92,10 +98,17 @@
     && self.calChoice==other.calChoice && self.historyStats==other.historyStats && [self.calendarConfig isEqualToConfig:other.calendarConfig];
 }
 
--(GCStatsMultiFieldConfig*)nextViewChoiceConfig{
-    GCStatsMultiFieldConfig * rv = [GCStatsMultiFieldConfig fieldListConfigFrom:self];
-    rv.viewChoice = [GCViewConfig nextViewChoice:self.viewChoice];
-    return rv;
+-(BOOL)nextView{
+    if( self.viewChoice == gcViewChoiceCalendar){
+        BOOL done = [self.calendarConfig nextCalendarUnit];
+        if( done ){
+            self.viewChoice = [GCViewConfig nextViewChoice:self.viewChoice];
+        }
+    }else{
+        self.viewChoice = [GCViewConfig nextViewChoice:self.viewChoice];
+    }
+    // true if we are at the start
+    return (self.viewChoice == gcViewChoiceSummary);
 }
 
 -(GCStatsMultiFieldConfig*)configForNextFilter{
@@ -109,6 +122,10 @@
             case gcHistoryStatsWeek:
                 nconfig.historyStats = gcHistoryStatsMonth;
                 break;
+            case gcHistoryStatsMonth:
+                nconfig.historyStats = gcHistoryStatsYear;
+                break;
+
             default:
                 nconfig.historyStats = gcHistoryStatsAll;
                 break;
@@ -167,7 +184,11 @@
             case gcHistoryStatsWeek:
                 image = [GCViewIcons navigationIconFor:gcIconNavWeekly];
                 break;
-            default:
+            case gcHistoryStatsYear:
+                image = [GCViewIcons navigationIconFor:gcIconNavYearly];
+                break;
+            case gcHistoryStatsAll:
+            case gcHistoryStatsEnd:
                 image = [GCViewIcons navigationIconFor:gcIconNavAggregated];
                 break;
         }
@@ -229,6 +250,10 @@
             case gcHistoryStatsWeek:
                 compstr = @"-3M";
                 calunit = NSCalendarUnitWeekOfYear;
+                break;
+            case gcHistoryStatsYear:
+                compstr = @"-5Y";
+                calunit = NSCalendarUnitYear;
                 break;
             case gcHistoryStatsAll:
             case gcHistoryStatsEnd:

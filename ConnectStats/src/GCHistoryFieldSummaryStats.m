@@ -127,7 +127,7 @@
 
 -(NSString*)description{
     NSMutableString * rv = [NSMutableString stringWithFormat:@"<GCFieldDataHolder: %@ %@:\n",self.field,self.unit];
-    NSArray * desc = @[ @"All", @"W", @"M" ];
+    NSArray * desc = @[ @"All", @"W", @"M", @"Y" ];
     for (gcHistoryStats i = 0; i<gcHistoryStatsEnd; i++) {
         [rv appendFormat:@"  %@: Cnt %@, Avg %@, Sum %@, Max %@, Min %@\n", desc[i], [self countWithUnit:i], [self averageWithUnit:i],
          [self sumWithUnit:i], [self maxWithUnit:i], [self minWithUnit:i]];
@@ -217,6 +217,7 @@
 
         GCStatsDateBuckets * weekBucket = nil;
         GCStatsDateBuckets * monthBucket= nil;
+        GCStatsDateBuckets * yearBucket = nil;
         NSMutableDictionary * activityTypes = [NSMutableDictionary dictionary];
         for (GCActivity * act in activities) {
             if (![act ignoreForStats:ignoreMode] && ( match == nil || match(act) ) ) {
@@ -254,8 +255,12 @@
                             monthBucket= [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitMonth
                                                                   referenceDate:refOrNil
                                                                     andCalendar:[GCAppGlobal calculationCalendar]];
+                            yearBucket= [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitYear
+                                                                  referenceDate:refOrNil
+                                                                    andCalendar:[GCAppGlobal calculationCalendar]];
                             [weekBucket bucket:act.date];
                             [monthBucket bucket:act.date];
+                            [yearBucket bucket:act.date];
                         }
                         if ([weekBucket contains:act.date]) {
                             [holder addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsWeek];
@@ -264,6 +269,10 @@
                         if ([monthBucket contains:act.date]) {
                             [holder addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsMonth];
                             [holderAll addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsMonth];
+                        }
+                        if ([yearBucket contains:act.date]) {
+                            [holder addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsYear];
+                            [holderAll addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsYear];
                         }
                     }
                 }
@@ -288,6 +297,7 @@
 -(void)addHealthMeasures:(NSArray<GCHealthMeasure*>*)measures referenceDate:(NSDate*)refOrNil{
     GCStatsDateBuckets * weekBucket = nil;
     GCStatsDateBuckets * monthBucket= nil;
+    GCStatsDateBuckets * yearBucket= nil;
 
     NSMutableDictionary * healthFieldData = [NSMutableDictionary dictionaryWithDictionary:self.fieldData];
 
@@ -309,14 +319,19 @@
         if (weekBucket==nil) {
             weekBucket = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitWeekOfYear referenceDate:refOrNil andCalendar:[GCAppGlobal calculationCalendar]];
             monthBucket= [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitMonth referenceDate:refOrNil andCalendar:[GCAppGlobal calculationCalendar]];
+            yearBucket = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitYear referenceDate:refOrNil andCalendar:[GCAppGlobal calculationCalendar]];
             [weekBucket bucket:measure.date];
             [monthBucket bucket:measure.date];
+            [yearBucket bucket:measure.date];
         }
         if ([weekBucket contains:measure.date]) {
             [holder addNumberWithUnit:measure.value withWeight:1. for:gcHistoryStatsWeek];
         }
         if ([monthBucket contains:measure.date]) {
             [holder addNumberWithUnit:measure.value withWeight:1. for:gcHistoryStatsMonth];
+        }
+        if ([yearBucket contains:measure.date]) {
+            [holder addNumberWithUnit:measure.value withWeight:1. for:gcHistoryStatsYear];
         }
 
     }

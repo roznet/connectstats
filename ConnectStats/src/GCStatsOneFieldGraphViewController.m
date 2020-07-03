@@ -63,10 +63,13 @@
     [_dataSource release];
     [_legendView release];
     [_maturityButton release];
-    [_x_activityField release];
     [_oneFieldConfig release];
     
     [super dealloc];
+}
+
+-(GCField*)x_activityField{
+    return self.oneFieldConfig.x_field;
 }
 
 - (void)viewDidLoad
@@ -106,7 +109,7 @@
     size_t nchoices = 2;
     gcGraphChoice choices[2] = { gcGraphChoiceCumulative,gcGraphChoiceBarGraph };
     if (self.graphChoice == gcGraphChoiceCumulative && self.canSum && self.x_activityField == nil) {
-        self.x_activityField = [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityStats.activityField.activityType];
+        self.oneFieldConfig.x_field = [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityStats.activityField.activityType];
     }else{
         size_t i = 0;
         for (i = 0; i<nchoices; i++) {
@@ -122,7 +125,7 @@
             i=0;
         }
         self.graphChoice = choices[i];
-        self.x_activityField = nil;
+        self.oneFieldConfig.x_field = nil;
     }
     dispatch_async([GCAppGlobal worker],^(){
         [self configureGraph];
@@ -133,7 +136,6 @@
     self.activityStats = [GCHistoryFieldDataSerie historyFieldDataSerieFrom:serie];
     self.oneFieldConfig=vChoice;
     self.graphChoice = gChoice;
-    self.x_activityField = nil;
     self.activityStats.config.fromDate = nil;
     dispatch_async([GCAppGlobal worker],^(){
         [self configureGraph];
@@ -145,7 +147,7 @@
         GCSimpleGraphCachedDataSource * ds = nil;
         
         self.activityStats.config.fromDate = [self.maturityButton currentFromDate];
-        self.activityStats.config.x_activityField = self.x_activityField;
+        self.activityStats.config.x_activityField = self.oneFieldConfig.x_field;
         [self.activityStats loadFromOrganizer];
         ds = [GCSimpleGraphCachedDataSource historyView:self.activityStats
                                          calendarConfig:self.oneFieldConfig.calendarConfig

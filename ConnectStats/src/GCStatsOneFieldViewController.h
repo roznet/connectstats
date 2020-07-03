@@ -38,10 +38,11 @@
 @property (nonatomic,retain) NSDictionary * summarizedHistory;
 @property (nonatomic,retain) GCStatsDataSerie * average;
 @property (nonatomic,retain) GCStatsDataSerie * quartiles;
-@property (nonatomic,retain) GCStatsOneFieldConfig * config;
+@property (nonatomic,retain) GCStatsOneFieldConfig * oneFieldConfig;
+@property (nonatomic,retain) NSArray<GCFieldsForCategory*> * fieldOrder;
 
--(void)setupForType:(NSString*)aType field:(GCField*)field xField:(GCField*)xf viewChoice:(gcViewChoice)choice;
--(void)setupForViewChoice:(gcViewChoice)choice;
+-(void)setupForConfig:(GCStatsOneFieldConfig*)oneFieldConfig;
+//-(void)setupForViewChoice:(gcViewChoice)choice;
 -(void)changeXField:(GCField*)xField;
 
 @end

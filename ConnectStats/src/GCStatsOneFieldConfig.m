@@ -30,17 +30,22 @@
 
 @implementation GCStatsOneFieldConfig
 
-+(GCStatsOneFieldConfig*)configFromMultiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig{
++(GCStatsOneFieldConfig*)configFromMultiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig forY:(GCField*)field andX:(GCField*)xfield{
     GCStatsOneFieldConfig * rv  = [[[GCStatsOneFieldConfig alloc] init] autorelease];
     if(rv){
         rv.calendarConfig = multiFieldConfig.calendarConfig;
+        rv.useFilter = multiFieldConfig.useFilter;
+        rv.viewChoice = gcViewChoiceAll;
+        rv.activityType = multiFieldConfig.activityType;
+        rv.useFilter = multiFieldConfig.useFilter;
+        rv.field = field;
+        rv.x_field = xfield;
     }
     return rv;
 }
 -(void)dealloc{
     [_activityType release];
     [_x_field release];
-    [_fieldOrder release];
     [_field release];
     [_calendarConfig release];
     
@@ -50,6 +55,23 @@
     return [GCViewConfig viewChoiceDesc:self.viewChoice calendarConfig:self.calendarConfig];
 }
 
+-(BOOL)isEqualToConfig:(GCStatsOneFieldConfig*)other{
+    return [self.field isEqualToField:other.field] && [self.x_field isEqualToField:other.x_field] &&
+    self.secondGraphChoice == other.secondGraphChoice && self.viewChoice == other.viewChoice &&
+    [self.calendarConfig isEqualToConfig:other.calendarConfig];
+}
+-(bool)nextView{
+    if( self.viewChoice == gcViewChoiceAll){
+        self.viewChoice = gcViewChoiceCalendar;
+    }else if( self.viewChoice == gcViewChoiceCalendar){
+        if( [self.calendarConfig nextCalendarUnit] ){
+            self.viewChoice = gcViewChoiceAll;
+        }
+    }else{
+        self.viewChoice = gcViewChoiceAll;
+    }
+    return self.viewChoice == gcViewChoiceAll;
+}
 -(GCHistoryFieldDataSerieConfig*)historyConfig{
     return [GCHistoryFieldDataSerieConfig configWithField:_field xField:nil filter:_useFilter fromDate:nil];
 }
