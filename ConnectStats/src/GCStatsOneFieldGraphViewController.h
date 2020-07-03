@@ -31,7 +31,7 @@
 
 @interface GCStatsOneFieldGraphViewController : UIViewController<GCViewMaturityButtonDelegate>
 
-@property (nonatomic,readonly) gcViewChoice viewChoice;
+@property (nonatomic,readonly) NSCalendarUnit calendarUnit;
 @property (nonatomic,retain) GCStatsOneFieldConfig * oneFieldConfig;
 @property (nonatomic,assign) gcGraphChoice graphChoice;
 @property (nonatomic,retain) GCHistoryFieldDataSerie * activityStats;

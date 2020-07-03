@@ -255,7 +255,7 @@
     if ([fieldserie.config.activityField canSum]) {
         serie = dict[STATS_SUM];
     }else{
-        cache.title =[NSString stringWithFormat:@"%@ %@", [GCViewConfig calendarUnitDescription:aUnit], cache.title];
+        cache.title =[NSString stringWithFormat:@"%@ %@", calendarConfig.calendarUnitDescription, cache.title];
         serie = dict[STATS_AVG];
     }
     UIColor * color = [GCViewConfig colorForGraphElement:gcSkinGraphColorBarGraph];

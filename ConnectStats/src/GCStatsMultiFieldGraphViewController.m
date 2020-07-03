@@ -39,7 +39,6 @@
 @end
 
 @implementation GCStatsMultiFieldGraphViewController
-@synthesize scatterStats,cache,graphView,gestures,legendView;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -57,12 +56,12 @@
     return self;
 }
 -(void)dealloc{
-    [cache release];
-    [scatterStats detach:self];
-    [scatterStats release];
-    [gestures release];
-    [legendView release];
-    [graphView release];
+    [_cache release];
+    [_scatterStats detach:self];
+    [_scatterStats release];
+    [_gestures release];
+    [_legendView release];
+    [_graphView release];
     [_rulerView release];
     [_maturityButton release];
     [_fieldOrder release];
@@ -71,9 +70,9 @@
 }
 
 -(void)publishEvent{
-    GCField * x = scatterStats.config.x_activityField;
-    NSString * t = scatterStats.config.activityType;
-    GCField * f = scatterStats.config.activityField;
+    GCField * x  = self.historyFieldConfig.x_activityField;
+    NSString * t = self.historyFieldConfig.activityType;
+    GCField * f  = self.historyFieldConfig.activityField;
 
     NSDictionary * params= @{@"XField": x ?: @"None",
                             @"ActivityType": t ?: @"None",
@@ -81,6 +80,9 @@
     [Flurry logEvent:EVENT_GRAPH_HISTORY withParameters:params];
 }
 
+-(GCHistoryFieldDataSerieConfig *)historyFieldConfig{
+    return self.scatterStats.config;
+}
 -(gcViewChoice)viewChoice{
     return gcViewChoiceAll;
 }
@@ -99,9 +101,9 @@
     for( GCFieldsForCategory * fieldForCategory in self.fieldOrder){
         [allFields addObjectsFromArray:fieldForCategory.fields];
     }
-    GCField * nextKey = [GCViewConfig nextFieldForGraph:scatterStats.config.x_activityField
+    GCField * nextKey = [GCViewConfig nextFieldForGraph:self.historyFieldConfig.x_activityField
                          fieldOrder:[GCViewConfig validChoicesForGraphIn:allFields]
-                      differentFrom:scatterStats.config.activityField];
+                      differentFrom:self.historyFieldConfig.activityField];
 
     self.x_field = nextKey;
     if (self.x_field ) {
@@ -114,49 +116,54 @@
 
 -(void)configureGraph{
     if (self.x_field) {
-        [scatterStats attach:self];
+        [_scatterStats attach:self];
 
-        GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithField:scatterStats.config.activityField xField:self.x_field  filter:false fromDate:[self.maturityButton currentFromDate]];
-        //[scatterStats setupForField:scatterStats.config.activityField xField:self.x_field type:scatterStats.config.activityType fromDate:[self.maturityButton currentFromDate]];
-        [scatterStats setupAndLoadForConfig:config withThread:[GCAppGlobal worker]];
+        GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithField:self.historyFieldConfig.activityField xField:self.x_field  filter:false fromDate:[self.maturityButton currentFromDate]];
+        //[scatterStats setupForField:self.config.activityField xField:self.x_field type:self.config.activityType fromDate:[self.maturityButton currentFromDate]];
+        [self.scatterStats setupAndLoadForConfig:config withThread:[GCAppGlobal worker]];
     }
 }
+
+- (NSCalendarUnit)calendarUnit {
+    return NSCalendarUnitYear;
+}
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.cache = [GCSimpleGraphCachedDataSource scatterPlotCacheFrom:scatterStats];
-
-    graphView.dataSource = cache;
-    graphView.displayConfig = cache;
-
+    self.cache = [GCSimpleGraphCachedDataSource scatterPlotCacheFrom:self.scatterStats];
+    
+    self.graphView.dataSource = self.cache;
+    self.graphView.displayConfig = self.cache;
+    
     UINavigationItem * item = self.slidingViewController ? self.slidingViewController.navigationItem : self.navigationItem;
-
+    
     UIBarButtonItem * rightButton = [[UIBarButtonItem alloc] initWithImage:[GCViewIcons navigationIconFor:gcIconNavGear] style:UIBarButtonItemStylePlain target:self action:@selector(nextConfig)];
     UIBarButtonItem * slide = [[UIBarButtonItem alloc] initWithImage:[GCViewIcons navigationIconFor:gcIconNavSliders] style:UIBarButtonItemStylePlain target:self action:@selector(showOptions)];
     self.maturityButton = [GCViewMaturityButton maturityButtonForDelegate:self];
     item.rightBarButtonItems = @[rightButton,self.maturityButton.fromButtonItem,slide];
-
+    
     [rightButton release];
     [slide release];
-
-    legendView.gradientColors = [cache respondsToSelector:@selector(gradientColors:)] ? [cache gradientColors:0] : nil;
-
-    if ([scatterStats.gradientSerie count]) {
-        legendView.first = [[scatterStats.gradientSerie dataPointAtIndex:0] date];
-        legendView.last = [[scatterStats.gradientSerie dataPointAtIndex:[scatterStats.gradientSerie count]-1] date];
+    
+    self.legendView.gradientColors = [self.cache respondsToSelector:@selector(gradientColors:)] ? [self.cache gradientColors:0] : nil;
+    
+    if ([self.scatterStats.gradientSerie count]) {
+        self.legendView.first = [[self.scatterStats.gradientSerie dataPointAtIndex:0] date];
+        self.legendView.last  = [[self.scatterStats.gradientSerie dataPointAtIndex:[self.scatterStats.gradientSerie count]-1] date];
     }else{
-        legendView.first = nil;
-        legendView.last  = nil;
+        self.legendView.first = nil;
+        self.legendView.last  = nil;
     }
-
-    [self.view addSubview:graphView];
-    [self.view addSubview:legendView];
+    
+    [self.view addSubview:self.graphView];
+    [self.view addSubview:self.legendView];
     [self.view addSubview:self.rulerView];
-    [gestures setupForView:graphView andDataSource:cache];
-
+    [self.gestures setupForView:self.graphView andDataSource:self.cache];
+    
     //[self setupFrames];
-	// Do any additional setup after loading the view.
+    // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -164,7 +171,7 @@
     if (self.slidingViewController) {
         (self.slidingViewController).anchorRightRevealAmount = self.view.frame.size.width*0.9;
     }
-
+    
     [super viewWillAppear:animated];
 }
 // iphone 5
@@ -189,46 +196,46 @@
     //UIInterfaceOrientation  orientation = self.interfaceOrientation;
     BOOL portrait = false;
     /*if (orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown) {
-        portrait = true;
-    }*/
-
+     portrait = true;
+     }*/
+    
     CGRect rect = self.view.frame;
     CGRect drawRect = rect;
-
-    graphView.frame = rect;
+    
+    self.graphView.frame = rect;
     self.rulerView.frame = rect;
-
+    
     if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {// special case, squarish = portrait
         portrait = true;
     }
-
+    
     if (portrait) {
         rect.origin.y = self.view.frame.size.height-55.;
         rect.origin.x = 5.;
         rect.size.height = 50.;
         rect.size.width = 150.;
-
+        
         drawRect.origin.y = 0.;
         drawRect.size.height -= 50.;
-        graphView.drawRect = drawRect;
-
+        self.graphView.drawRect = drawRect;
+        
         CGAffineTransform transform = CGAffineTransformMakeRotation(0);
-        legendView.transform = transform;
-
+        self.legendView.transform = transform;
+        
     }else{
         rect.origin.y = 5.;
         rect.origin.x = rect.size.width-55.;
         rect.size.height = 150.;
         rect.size.width = 50.;
         drawRect.size.width -= 50.;
-        graphView.drawRect = drawRect;
-
+        self.graphView.drawRect = drawRect;
+        
         CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI/2);
-        legendView.transform = transform;
+        self.legendView.transform = transform;
     }
-
-    legendView.frame = rect;
-
+    
+    self.legendView.frame = rect;
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -238,16 +245,16 @@
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
-    if ([scatterStats ready]) {
-        self.cache = [GCSimpleGraphCachedDataSource scatterPlotCacheFrom:scatterStats];
-        graphView.dataSource = cache;
-        graphView.displayConfig = cache;
-        [gestures setupForView:graphView andDataSource:cache];
-        if ([scatterStats.gradientSerie count]) {
-            legendView.first = [[scatterStats.gradientSerie dataPointAtIndex:0] date];
+    if ([self.scatterStats ready]) {
+        self.cache = [GCSimpleGraphCachedDataSource scatterPlotCacheFrom:self.scatterStats];
+        self.graphView.dataSource = self.cache;
+        self.graphView.displayConfig = self.cache;
+        [self.gestures setupForView:self.graphView andDataSource:self.cache];
+        if ([self.scatterStats.gradientSerie count]) {
+            self.legendView.first = [[self.scatterStats.gradientSerie dataPointAtIndex:0] date];
         }
-        [legendView setNeedsDisplay];
-        [graphView setNeedsDisplay];
+        [self.legendView setNeedsDisplay];
+        [self.graphView setNeedsDisplay];
     }
 }
 
@@ -256,8 +263,5 @@
     [self.graphView setNeedsDisplay];
     [self.legendView setNeedsDisplay];
     [self setupFrames];
-
 }
-
-
 @end

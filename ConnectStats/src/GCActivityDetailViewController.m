@@ -28,7 +28,6 @@
 #import "GCMapViewController.h"
 #import "GCCellMap.h"
 #import "GCViewConfig.h"
-#import "GCStatsOneFieldViewController.h"
 #import "GCFields.h"
 #import "GCCellGrid+Templates.h"
 #import "GCActivityLapViewController.h"

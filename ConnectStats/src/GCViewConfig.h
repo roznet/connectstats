@@ -33,9 +33,7 @@
 
 typedef NS_ENUM(NSUInteger, gcViewChoice) {
     gcViewChoiceAll,
-    gcViewChoiceWeekly,
-    gcViewChoiceMonthly,
-    gcViewChoiceYearly,
+    gcViewChoiceCalendar,
     gcViewChoiceSummary
 };
 
@@ -69,6 +67,7 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 };
 
 @class GCCellGrid;
+@class GCStatsCalendarAggregationConfig;
 
 @interface GCViewConfig : RZViewConfig
 
@@ -132,14 +131,11 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 
 +(gcFieldFlag)nextTrackFieldForGraph:(gcFieldFlag)curr differentFrom:(gcFieldFlag)avoid valid:(gcFieldFlag)valid;
 
-+(NSCalendarUnit)calendarUnitForViewChoice:(gcViewChoice)choice;
-+(NSDateFormatter*)dateFormatterForViewChoice:(gcViewChoice)choice;
-+(gcViewChoice)nextViewChoice:(gcViewChoice)current;
-+(gcViewChoice)nextViewChoiceWithSummary:(gcViewChoice)current;
-+(NSString*)viewChoiceDesc:(gcViewChoice)choice;
++(gcViewChoice)nextViewChoice:(gcViewChoice)current;// DEPRECATED_MSG_ATTRIBUTE("do local"); 
++(NSString*)viewChoiceDesc:(gcViewChoice)choice calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig;
 
 +(gcGraphChoice)graphChoiceForField:(GCField*)field andUnit:(NSCalendarUnit)aUnit;
-+(NSString*)filterFor:(gcViewChoice)viewChoice date:(NSDate*)date andActivityType:(NSString*)activityType;
++(NSString*)filterFor:(GCStatsCalendarAggregationConfig*)calendarConfig date:(NSDate*)date andActivityType:(NSString*)activityType;
 
 
 +(NSArray*)unitSystemDescriptions;
@@ -147,7 +143,6 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(NSArray*)weekStartDescriptions;
 +(NSUInteger)weekDayValue:(NSUInteger)idx;
 +(NSUInteger)weekDayIndex:(NSUInteger)idx;
-+(NSString*)calendarUnitDescription:(NSCalendarUnit)calendarUnit;
 
 +(NSArray*)periodDescriptions;
 +(NSString*)periodDescriptionFromType:(gcPeriodType)tp;

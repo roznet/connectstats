@@ -31,8 +31,7 @@
 // Full StatsDataSerie for a field (or two: x)
 
 
-@interface GCHistoryFieldDataSerie : RZParentObject<GCSimpleGraphDataSource,RZChildObject>{
-}
+@interface GCHistoryFieldDataSerie : RZParentObject<GCSimpleGraphDataSource,RZChildObject>
 
 @property (nonatomic,retain) GCStatsDataSerieWithUnit * history;
 @property (nonatomic,retain) GCStatsDataSerieWithUnit * gradientSerie;

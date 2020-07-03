@@ -48,9 +48,9 @@
 }
 
 -(NSArray*)fromDateChoices{
-    if (self.delegate.viewChoice == gcViewChoiceMonthly) {
+    if (self.delegate.calendarUnit == NSCalendarUnitMonth) {
         return @[@"All",@"3m",@"6m",@"1y"];
-    }else if(self.delegate.viewChoice == gcViewChoiceYearly){
+    }else if(self.delegate.calendarUnit == NSCalendarUnitYear){
         return @[@"All",@"1y",@"2y"];
     }else {
         return @[@"All",@"3m",@"6m",@"1y"];

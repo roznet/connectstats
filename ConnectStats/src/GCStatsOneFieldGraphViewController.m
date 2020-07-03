@@ -47,7 +47,7 @@
         self.legendView = [[[GCSimpleGraphLegendView alloc] initWithFrame:CGRectZero] autorelease];
         //[self setGestures:[[[GCSimpleGraphGestures alloc] init] autorelease]];
         UIBarButtonItem * gearButton = [[UIBarButtonItem alloc] initWithImage:img style:UIBarButtonItemStylePlain target:self action:@selector(nextGraphStyle)];
-        UIBarButtonItem * calendarButton = [[UIBarButtonItem alloc] initWithImage:img2 style:UIBarButtonItemStylePlain target:self action:@selector(nextViewChoice)];
+        UIBarButtonItem * calendarButton = [[UIBarButtonItem alloc] initWithImage:img2 style:UIBarButtonItemStylePlain target:self action:@selector(nextCalendarUnit)];
         self.maturityButton = [GCViewMaturityButton maturityButtonForDelegate:self];
         self.maturityButton.useWorkerThread = true;
         self.navigationItem.rightBarButtonItems = @[self.maturityButton.fromButtonItem, gearButton, calendarButton];
@@ -89,12 +89,11 @@
     // Dispose of any resources that can be recreated.
 }
 
--(gcViewChoice)viewChoice{
-    return self.oneFieldConfig.viewChoice;
+-(NSCalendarUnit)calendarUnit{
+    return self.oneFieldConfig.calendarConfig.calendarUnit;
 }
-
--(void)nextViewChoice{
-    [self.oneFieldConfig nextViewChoice];
+-(void)nextCalendarUnit{
+    [self.oneFieldConfig.calendarConfig nextCalendarUnit];
     dispatch_async([GCAppGlobal worker],^(){
         [self configureGraph];
     });

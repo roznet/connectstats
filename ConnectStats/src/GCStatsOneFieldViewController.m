@@ -70,7 +70,6 @@
     [_activityStats detach:self];
     [_scatterStats detach:self];
 
-
     [_activityStats release];
     [_summarizedHistory release];
     [_average release];
@@ -84,11 +83,9 @@
 }
 
 -(void)publishEvent{
-    NSString * choice = [GCViewConfig viewChoiceDesc:_config.viewChoice];
     NSDictionary * params = @{@"Type": _config.activityType ?: @"Unknown",
                              @"Field": _config.field ?: @"None",
-                             @"XField": _config.x_field ?: @"None",
-                             @"Choice": choice ?: @"Unknown"};
+                             @"XField": _config.x_field ?: @"None"};
     [Flurry logEvent:EVENT_STATISTICS withParameters:params];
 }
 
@@ -127,17 +124,14 @@
         [self.slidingViewController resetTopViewAnimated:YES];
     }
 
-    if (choice != _config.viewChoice) {
-        self.config.viewChoice = choice;
-        if (_config.viewChoice != gcViewChoiceAll) {
-            if ([_activityStats ready]) {
-                GCStatsCalendarAggregationConfig * calendarConfig = self.config.calendarConfig;
-                self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
-                                                                                       referenceDate:calendarConfig.referenceDate
-                                                                                         andCalendar:calendarConfig.calendar];
-            }else{
-                [self setSummarizedHistory:nil];
-            }
+    if (_config.viewChoice != gcViewChoiceAll) {
+        if ([_activityStats ready]) {
+            GCStatsCalendarAggregationConfig * calendarConfig = self.config.calendarConfig;
+            self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
+                                                                                   referenceDate:calendarConfig.referenceDate
+                                                                                     andCalendar:calendarConfig.calendar];
+        }else{
+            [self setSummarizedHistory:nil];
         }
     }
 }
@@ -187,7 +181,8 @@
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:[GCViewConfig viewChoiceDesc:_config.viewChoice] style:UIBarButtonItemStylePlain
+    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:[GCViewConfig viewChoiceDesc:self.config.viewChoice
+                                                                                          calendarConfig:self.config.calendarConfig] style:UIBarButtonItemStylePlain
                                                                      target:self action:@selector(toggleViewChoice)];
     self.navigationItem.rightBarButtonItem = anotherButton;
     [anotherButton release];
@@ -200,9 +195,17 @@
 
 
 -(void)toggleViewChoice{
-    [self.config nextViewChoice];
+    if( self.config.viewChoice == gcViewChoiceAll){
+        self.config.viewChoice = gcViewChoiceCalendar;
+    }else if( self.config.viewChoice == gcViewChoiceCalendar){
+        if( [self.config.calendarConfig nextCalendarUnit] ){
+            self.config.viewChoice = gcViewChoiceAll;
+        }
+    }else{
+        self.config.viewChoice = gcViewChoiceAll;
+    }
     [self setupForViewChoice:self.config.viewChoice];
-    self.navigationItem.rightBarButtonItem.title = [GCViewConfig viewChoiceDesc:_config.viewChoice];
+    self.navigationItem.rightBarButtonItem.title = self.config.viewDescription;
 
     [self.tableView reloadData];
 }
@@ -279,7 +282,7 @@
             }else{
                 if ([_activityStats ready]) {
                     GCSimpleGraphCachedDataSource * cache = nil;
-                    NSCalendarUnit unit = [GCViewConfig calendarUnitForViewChoice:_config.viewChoice];
+                    NSCalendarUnit unit = _config.calendarConfig.calendarUnit;
                     //FIXME: check to use Field
                     gcGraphChoice choice = [GCViewConfig graphChoiceForField:_config.field andUnit:unit];
                     cache = [GCSimpleGraphCachedDataSource historyView:_activityStats
@@ -298,7 +301,7 @@
     }else if(indexPath.section == GC_S_QUARTILES && _config.viewChoice != gcViewChoiceAll){
         NSUInteger idx = [_summarizedHistory[STATS_AVG] count]-indexPath.row-1;
         GCCellGrid * cell = [GCCellGrid gridCell:tableView];
-        [cell setUpForSummarizedHistory:_summarizedHistory atIndex:idx forField:_config.field viewChoice:_config.viewChoice];
+        [cell setUpForSummarizedHistory:_summarizedHistory atIndex:idx forField:_config.field calendarConfig:self.config.calendarConfig];
         return cell;
     }else{
         GCCellGrid * cell = [GCCellGrid gridCell:tableView];
@@ -356,7 +359,7 @@
         }else{
             GCStatsOneFieldGraphViewController * graph = [[GCStatsOneFieldGraphViewController alloc] initWithNibName:nil bundle:nil];
             //FIXME: use gcfield instead of key
-            gcGraphChoice choice = [GCViewConfig graphChoiceForField:_config.field andUnit:[GCViewConfig calendarUnitForViewChoice:_config.viewChoice]];
+            gcGraphChoice choice = [GCViewConfig graphChoiceForField:_config.field andUnit:self.config.calendarConfig.calendarUnit];
 
             [graph setupForHistoryField:self.activityStats graphChoice:choice andConfig:_config];
             
@@ -379,7 +382,7 @@
             NSNumber * cnt = @(point.y_data);
             [GCAppGlobal debugStateRecord:@{DEBUGSTATE_LAST_CNT:cnt}];
 
-            NSString * filter = [GCViewConfig filterFor:_config.viewChoice date:date andActivityType:_config.activityType];
+            NSString * filter = [GCViewConfig filterFor:_config.calendarConfig date:date andActivityType:_config.activityType];
             [GCAppGlobal focusOnListWithFilter:filter];
 
         }

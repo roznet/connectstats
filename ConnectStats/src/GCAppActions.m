@@ -66,19 +66,24 @@ NSString * kArgumentHistoryStats = @"historyStats";
 
 #pragma mark - Parsing Of Arguments
 
--(gcViewChoice)viewChoiceFromString:(NSString*)val default:(gcViewChoice)def{
-    gcViewChoice rv = def;
+-(BOOL)setupMultiFieldConfig:(GCStatsMultiFieldConfig*)config fromChoice:(NSString*)val{
+    BOOL rv = true;
     NSString * vallower = [val lowercaseString];
     if ([vallower isEqualToString:@"all"]) {
-        rv = gcViewChoiceAll;
+        config.viewChoice = gcViewChoiceAll;
     }else if ([vallower isEqualToString:@"weekly"]){
-        rv = gcViewChoiceWeekly;
+        config.viewChoice = gcViewChoiceCalendar;
+        config.calendarConfig.calendarUnit = NSCalendarUnitWeekOfYear;
     }else if ([vallower isEqualToString:@"monthly"]){
-        rv = gcViewChoiceMonthly;
+        config.viewChoice = gcViewChoiceCalendar;
+        config.calendarConfig.calendarUnit = NSCalendarUnitMonth;
     }else if ([vallower isEqualToString:@"yearly"]){
-        rv = gcViewChoiceYearly;
+        config.viewChoice = gcViewChoiceCalendar;
+        config.calendarConfig.calendarUnit = NSCalendarUnitMonth;
     }else if ([vallower isEqualToString:@"summary"]){
-        rv = gcViewChoiceSummary;
+        config.viewChoice = gcViewChoiceSummary;
+    }else{
+        rv = false;
     }
     return  rv;
 }
@@ -149,7 +154,7 @@ NSString * kArgumentHistoryStats = @"historyStats";
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:vc.multiFieldConfig];
 
     if (vals[kArgumentViewChoice]) {
-        nconfig.viewChoice = [self viewChoiceFromString:vals[kArgumentViewChoice] default:nconfig.viewChoice];
+        [self setupMultiFieldConfig:nconfig fromChoice:vals[kArgumentViewChoice]];
     }
     if (vals[kArgumentActivityType]) {
         nconfig.activityType = [self activityTypeFromString:vals[kArgumentActivityType] default:nconfig.activityType];

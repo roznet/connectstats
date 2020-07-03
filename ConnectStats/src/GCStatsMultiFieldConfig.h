@@ -52,6 +52,8 @@
 @property (nonatomic,readonly) GCField * currentCumulativeSummaryField;
 @property (nonatomic,readonly) GCStatsCalendarAggregationConfig * calendarConfig;
 
+@property (nonatomic,readonly) NSString * viewDescription;
+
 +(GCStatsMultiFieldConfig*)fieldListConfigFrom:(GCStatsMultiFieldConfig*)other;
 -(GCStatsMultiFieldConfig*)sameFieldListConfig;
 -(GCStatsMultiFieldConfig*)nextViewChoiceConfig;

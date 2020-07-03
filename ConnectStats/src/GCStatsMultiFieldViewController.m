@@ -114,7 +114,7 @@
     if( ! self.started){
         [self setupForCurrentActivityAndViewChoice:self.viewChoice];
         self.multiFieldConfig.viewChoice = (gcViewChoice)[GCAppGlobal configGetInt:CONFIG_STATS_START_PAGE defaultValue:gcViewChoiceSummary];
-        RZLog(RZLogInfo, @"Initial start page %@", [GCViewConfig viewChoiceDesc:self.multiFieldConfig.viewChoice]);
+        RZLog(RZLogInfo, @"Initial start page %@", [GCViewConfig viewChoiceDesc:self.multiFieldConfig.viewChoice calendarConfig:self.multiFieldConfig.calendarConfig]);
         [GCViewConfig setupViewController:self];
     }
     self.started = true;
@@ -226,12 +226,13 @@
         //[[self fieldOrder] objectAtIndex:[indexPath row]];
         GCStatsOneFieldViewController *statsViewController = [[GCStatsOneFieldViewController alloc] initWithStyle:UITableViewStylePlain];
         statsViewController.config = [GCStatsOneFieldConfig configFromMultiFieldConfig:self.multiFieldConfig];
-        (statsViewController.config).useFilter = self.useFilter;
-        (statsViewController.config).fieldOrder = self.fieldOrder;
+        statsViewController.config.useFilter = self.useFilter;
+        statsViewController.config.fieldOrder = self.fieldOrder;
         
         GCField * xfield = [GCViewConfig nextFieldForGraph:nil fieldOrder:[GCViewConfig validChoicesForGraphIn:self.allFields] differentFrom:field];
         
-        [statsViewController setupForType:self.activityType field:field
+        [statsViewController setupForType:self.activityType
+                                    field:field
                                    xField:xfield
                                viewChoice:gcViewChoiceAll];
         
@@ -242,7 +243,7 @@
     }else{
         if (indexPath.section >= GC_SECTION_DATA) {
             GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
-            NSString * filter = [GCViewConfig filterFor:self.viewChoice date:data.date andActivityType:self.activityType];
+            NSString * filter = [GCViewConfig filterFor:self.multiFieldConfig.calendarConfig date:data.date andActivityType:self.activityType];
             [GCAppGlobal debugStateRecord:@{
                 DEBUGSTATE_LAST_CNT : @([data valFor:gcAggregatedSumDistance and:gcAggregatedCnt]),
                 DEBUGSTATE_LAST_SUM : @([data valFor:gcAggregatedSumDistance and:gcAggregatedSum])
@@ -253,7 +254,7 @@
             [self setupForCurrentActivityType:GC_TYPE_ALL filter:true andViewChoice:gcViewChoiceAll];
         }else if (indexPath.section == GC_SECTION_GRAPH){
                 GCStatsOneFieldGraphViewController * graph = [[GCStatsOneFieldGraphViewController alloc] initWithNibName:nil bundle:nil];
-                gcGraphChoice choice = self.viewChoice == gcViewChoiceYearly ? gcGraphChoiceCumulative : gcGraphChoiceBarGraph;
+                gcGraphChoice choice = self.multiFieldConfig.calendarConfig.calendarUnit == NSCalendarUnitYear ? gcGraphChoiceCumulative : gcGraphChoiceBarGraph;
                 
                 GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
                 
@@ -300,7 +301,7 @@
     cell.cellDelegate = self;
     GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:self.multiFieldConfig.currentCumulativeSummaryField];
     [cell setDataSource:cache andConfig:cache];
-    if (self.multiFieldConfig.viewChoice == gcViewChoiceYearly) {// This is Cumulative graph, needs legend
+    if (self.multiFieldConfig.calendarConfig.calendarUnit == NSCalendarUnitYear) {// This is Cumulative graph, needs legend
         cell.legend = true;
     }else{
         cell.legend = false;
@@ -314,7 +315,11 @@
 
     GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
     if( data ){
-        [cell setupFromHistoryAggregatedData:data index:indexPath.row viewChoice:self.viewChoice andActivityType:self.displayActivityType width:tableView.frame.size.width];
+        [cell setupFromHistoryAggregatedData:data
+                                       index:indexPath.row
+                                calendarUnit:self.multiFieldConfig.calendarConfig.calendarUnit
+                             andActivityType:self.displayActivityType
+                                       width:tableView.frame.size.width];
     }
     return cell;
 }
@@ -510,7 +515,7 @@
 }
 
 -(void)publishEvent{
-    NSString * choice = [GCViewConfig viewChoiceDesc:self.viewChoice];
+    NSString * choice = self.multiFieldConfig.viewDescription;
     NSDictionary * params = @{@"ActivityType": self.activityType ?: @"None",
                              @"Choice": choice ?: @"None"};
     [Flurry logEvent:EVENT_REPORT withParameters:params];
@@ -538,7 +543,17 @@
 }
 
 -(void)toggleViewChoice{
-    [self setupForCurrentActivityType:self.activityType andViewChoice:[GCViewConfig nextViewChoiceWithSummary:self.viewChoice]];
+    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
+    if( nconfig.viewChoice == gcViewChoiceCalendar){
+        BOOL done = [nconfig.calendarConfig nextCalendarUnit];
+        if( done ){
+            nconfig.viewChoice = [GCViewConfig nextViewChoice:nconfig.viewChoice];
+        }
+    }else{
+        nconfig.viewChoice = [GCViewConfig nextViewChoice:nconfig.viewChoice];
+    }
+    
+    [self setupForFieldListConfig:nconfig];
 }
 
 -(void)switchCalFilter{
@@ -548,7 +563,11 @@
 }
 
 -(void)setupBarButtonItem{
-    UIBarButtonItem * rightMost =[[[UIBarButtonItem alloc] initWithTitle:[GCViewConfig viewChoiceDesc:self.viewChoice]
+    NSString * title = self.multiFieldConfig.viewDescription;
+    if( self.viewChoice == gcViewChoiceCalendar){
+        title = self.multiFieldConfig.calendarConfig.calendarUnitDescription;
+    }
+    UIBarButtonItem * rightMost =[[[UIBarButtonItem alloc] initWithTitle:title
                                                                   style:UIBarButtonItemStylePlain
                                                                  target:self action:@selector(toggleViewChoice)] autorelease];
 
@@ -717,8 +736,8 @@
     if (self.multiFieldConfig.calChoice == gcStatsCalToDate) {
         cutOff = [[GCAppGlobal organizer] lastActivity].date;
     }
-    [vals aggregate:[GCViewConfig calendarUnitForViewChoice:self.viewChoice]
-      referenceDate:[GCAppGlobal referenceDate]
+    [vals aggregate:self.multiFieldConfig.calendarConfig.calendarUnit
+      referenceDate:self.multiFieldConfig.calendarConfig.referenceDate
              cutOff:cutOff
          ignoreMode:ignoreMode];
     self.aggregatedStats = vals;

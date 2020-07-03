@@ -28,7 +28,7 @@
 
 @protocol GCViewMaturityButtonDelegate <NSObject>
 
--(gcViewChoice)viewChoice;
+-(NSCalendarUnit)calendarUnit;
 -(void)configureGraph;
 
 @end

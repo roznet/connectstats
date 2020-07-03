@@ -28,6 +28,7 @@
 #import "GCViewIcons.h"
 #import "GCViewConfigSkin.h"
 #import "GCFieldCache.h"
+#import "GCStatsCalendarAggregationConfig.h"
 
 static NSArray * _unitSystems = nil;
 
@@ -434,48 +435,11 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 
 #pragma mark - viewChoices and Calendar
 
-+(NSDateFormatter*)dateFormatterForViewChoice:(gcViewChoice)viewChoice{
-    NSDateFormatter * dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-    //[dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
-    //[dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-
-    if (viewChoice == gcViewChoiceMonthly) {
-        dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
-        dateFormatter.dateFormat = @"MMMM yyyy";
-    }else if(viewChoice == gcViewChoiceYearly){
-        dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
-        dateFormatter.dateFormat = @"yyyy";
-    }else{
-        dateFormatter.dateStyle = NSDateFormatterShortStyle;
-        dateFormatter.timeStyle = NSDateFormatterNoStyle;
-    }
-    return dateFormatter;
-
-}
 +(gcViewChoice)nextViewChoice:(gcViewChoice)current{
     switch (current) {
         case gcViewChoiceAll:
-            return gcViewChoiceWeekly;
-        case gcViewChoiceWeekly:
-            return gcViewChoiceMonthly;
-        case gcViewChoiceMonthly:
-            return gcViewChoiceYearly;
-        case gcViewChoiceYearly:
-            return gcViewChoiceAll;
-        case gcViewChoiceSummary:
-            return gcViewChoiceAll;
-    }
-    return gcViewChoiceAll;
-}
-+(gcViewChoice)nextViewChoiceWithSummary:(gcViewChoice)current{
-    switch (current) {
-        case gcViewChoiceAll:
-            return gcViewChoiceWeekly;
-        case gcViewChoiceWeekly:
-            return gcViewChoiceMonthly;
-        case gcViewChoiceMonthly:
-            return gcViewChoiceYearly;
-        case gcViewChoiceYearly:
+            return gcViewChoiceCalendar;
+        case gcViewChoiceCalendar:
             return gcViewChoiceSummary;
         case gcViewChoiceSummary:
             return gcViewChoiceAll;
@@ -483,31 +447,12 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return gcViewChoiceAll;
 }
 
-+(NSCalendarUnit)calendarUnitForViewChoice:(gcViewChoice)choice{
-    switch (choice) {
-        case gcViewChoiceMonthly:
-            return NSCalendarUnitMonth;
-        case gcViewChoiceWeekly:
-            return NSCalendarUnitWeekOfYear;
-        case gcViewChoiceYearly:
-            return NSCalendarUnitYear;
-        case gcViewChoiceAll:
-        case gcViewChoiceSummary:
-            return 0;
-    }
-    return 0;
-
-}
-+(NSString*)viewChoiceDesc:(gcViewChoice)choice{
++(NSString*)viewChoiceDesc:(gcViewChoice)choice calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig{
     switch (choice) {
         case gcViewChoiceAll:
             return NSLocalizedString(@"All", @"viewchoice");
-        case gcViewChoiceMonthly:
-            return NSLocalizedString(@"Monthly", @"viewchoice");
-        case gcViewChoiceWeekly:
-            return NSLocalizedString(@"Weekly", @"viewchoice");
-        case gcViewChoiceYearly:
-            return NSLocalizedString(@"Yearly", @"viewchoice");
+        case gcViewChoiceCalendar:
+            return calendarConfig.calendarUnitDescription;
         case gcViewChoiceSummary:
             return NSLocalizedString(@"Summary", @"viewchoice");
     }
@@ -613,12 +558,12 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return gcGraphChoiceBarGraph;
 }
 
-+(NSString*)filterFor:(gcViewChoice)viewChoice date:(NSDate*)date andActivityType:(NSString*)activityType{
++(NSString*)filterFor:(GCStatsCalendarAggregationConfig*)calendarConfig date:(NSDate*)date andActivityType:(NSString*)activityType{
     NSString * filter = nil;
-    NSDateFormatter * dateFormatter = [GCViewConfig dateFormatterForViewChoice:viewChoice];
+    NSDateFormatter * dateFormatter = calendarConfig.dateFormatter;
     NSString * typeStr = [activityType isEqualToString:GC_TYPE_ALL] ? @"" : [NSString stringWithFormat:@"%@ ", activityType];
 
-    if (viewChoice != gcViewChoiceWeekly) {
+    if (calendarConfig.calendarUnit != NSCalendarUnitWeekOfYear) {
         filter = [NSString stringWithFormat:@"%@%@",typeStr,[dateFormatter stringFromDate:date]];
     }else{
         filter = [NSString stringWithFormat:@"%@weekof %@",typeStr,[dateFormatter stringFromDate:date]];
@@ -750,20 +695,5 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     }
     return rv;
 }
-
-+(NSString*)calendarUnitDescription:(NSCalendarUnit)calendarUnit{
-    NSString * rv = nil;
-    if (calendarUnit == NSCalendarUnitWeekOfYear) {
-        rv = NSLocalizedString(@"Weekly", @"Calendar Unit Description");
-    }else if(calendarUnit == NSCalendarUnitMonth){
-        rv = NSLocalizedString(@"Monthly", @"Calendar Unit Description");
-    }else if(calendarUnit == NSCalendarUnitYear){
-        rv = NSLocalizedString(@"Annual", @"Calendar Unit Description");
-    }else{
-        rv = NSLocalizedString(@"Error", @"Calendar Unit Description");
-    }
-    return rv;
-}
-
 
 @end

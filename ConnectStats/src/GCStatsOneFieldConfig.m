@@ -29,6 +29,7 @@
 @end
 
 @implementation GCStatsOneFieldConfig
+
 +(GCStatsOneFieldConfig*)configFromMultiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig{
     GCStatsOneFieldConfig * rv  = [[[GCStatsOneFieldConfig alloc] init] autorelease];
     if(rv){
@@ -45,34 +46,15 @@
     
     [super dealloc];
 }
+-(NSString *)viewDescription{
+    return [GCViewConfig viewChoiceDesc:self.viewChoice calendarConfig:self.calendarConfig];
+}
 
--(gcViewChoice)viewChoice{
-    NSCalendarUnit unit = self.calendarConfig.calendarUnit;
-    if(unit == NSCalendarUnitMonth){
-        return gcViewChoiceMonthly;
-    }else if(unit == NSCalendarUnitWeekOfYear){
-        return gcViewChoiceWeekly;
-    }else{
-        return gcViewChoiceYearly;
-    }
-}
--(void)setViewChoice:(gcViewChoice)viewChoice{
-    self.calendarConfig.calendarUnit = [GCViewConfig calendarUnitForViewChoice:viewChoice];
-}
 -(GCHistoryFieldDataSerieConfig*)historyConfig{
     return [GCHistoryFieldDataSerieConfig configWithField:_field xField:nil filter:_useFilter fromDate:nil];
 }
 -(GCHistoryFieldDataSerieConfig*)historyConfigXY{
     return [GCHistoryFieldDataSerieConfig configWithField:_field xField:_x_field filter:_useFilter fromDate:nil];
 
-}
--(void)nextViewChoice{
-    if (self.viewChoice == gcViewChoiceMonthly) {
-        self.viewChoice = gcViewChoiceYearly;
-    }else if(self.viewChoice == gcViewChoiceYearly){
-        self.viewChoice = gcViewChoiceWeekly;
-    }else {
-        self.viewChoice = gcViewChoiceMonthly;
-    }
 }
 @end

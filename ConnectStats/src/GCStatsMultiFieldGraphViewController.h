@@ -29,14 +29,10 @@
 @class GCSimpleGraphGestures;
 @class GCHistoryFieldDataSerie;
 @class GCSimpleGraphGradientLegendView;
+@class GCHistoryFieldDataSerieConfig;
 
-@interface GCStatsMultiFieldGraphViewController : UIViewController<RZChildObject,GCViewMaturityButtonDelegate>{
-    GCSimpleGraphCachedDataSource * cache;
-    GCHistoryFieldDataSerie * scatterStats;
-    GCSimpleGraphView * graphView;
-    GCSimpleGraphGestures * gestures;
-    GCSimpleGraphGradientLegendView * legendView;
-}
+@interface GCStatsMultiFieldGraphViewController : UIViewController<RZChildObject,GCViewMaturityButtonDelegate>
+
 @property (nonatomic,retain) GCSimpleGraphCachedDataSource * cache;
 @property (nonatomic,retain) GCHistoryFieldDataSerie * scatterStats;
 @property (nonatomic,retain) GCSimpleGraphView * graphView;
@@ -44,6 +40,7 @@
 @property (nonatomic,retain) GCSimpleGraphGradientLegendView * legendView;
 @property (nonatomic,retain) GCSimpleGraphRulerView * rulerView;
 @property (nonatomic,retain) GCViewMaturityButton * maturityButton;
+@property (nonatomic,readonly) GCHistoryFieldDataSerieConfig * historyFieldConfig;
 @property (nonatomic,retain) GCField * x_field;
 @property (nonatomic,retain) NSArray * fieldOrder;
 

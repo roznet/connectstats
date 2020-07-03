@@ -33,6 +33,7 @@
 #import "GCCalendarDataDateMarkers.h"
 #import "GCActivity+UI.h"
 #import "GCActivity+Database.h"
+#import "GCStatsCalendarAggregationConfig.h"
 
 #define GC_SUMMARY_WEEKLY   0
 #define GC_SUMMARY_MONTHLY  1
@@ -506,19 +507,19 @@
             bucket = self.currentDate;
         }
         GCHistoryAggregatedDataHolder * holder = nil;
-        gcViewChoice choice = gcViewChoiceWeekly;
+        NSCalendarUnit calUnit = NSCalendarUnitWeekOfYear;
 
         if (indexPath.row == GC_SUMMARY_MONTHLY) {
             holder = [self.monthlyStats dataForDate:bucket];
-            choice = gcViewChoiceMonthly;
+            calUnit = NSCalendarUnitMonth;
         }else if (indexPath.row==GC_SUMMARY_WEEKLY){
             holder = [self.weeklyStats dataForDate:bucket];
-            choice = gcViewChoiceWeekly;
+            calUnit = NSCalendarUnitWeekOfYear;
         }
         if (holder) {
             [cell setupFromHistoryAggregatedData:holder
                                            index:indexPath.row
-                                      viewChoice:choice
+                                      calendarUnit:calUnit
                                  andActivityType:holder.activityType?:GC_TYPE_ALL
                                            width:tableView.frame.size.width];
         }else{
@@ -550,11 +551,14 @@
         }else{
             bucket = self.currentDate;
         }
-        gcViewChoice choice = gcViewChoiceWeekly;
+        GCStatsCalendarAggregationConfig * calendarConfig = nil;
+        
         if (indexPath.row == GC_SUMMARY_MONTHLY) {
-            choice = gcViewChoiceMonthly;
+            calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth];
+        }else{
+            calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitWeekOfYear];
         }
-        NSString * filter = [GCViewConfig filterFor:choice date:bucket andActivityType:GC_TYPE_ALL];
+        NSString * filter = [GCViewConfig filterFor:calendarConfig date:bucket andActivityType:GC_TYPE_ALL];
         [GCAppGlobal focusOnListWithFilter:filter];
     }
 }

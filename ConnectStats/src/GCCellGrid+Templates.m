@@ -36,6 +36,7 @@
 #import "GCHistoryFieldDataSerie.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+Fields.h"
+#import "GCStatsCalendarAggregationConfig.h"
 
 const CGFloat kGC_WIDE_SIZE = 420.0f;
 
@@ -539,7 +540,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
 -(void)setupFromHistoryAggregatedData:(GCHistoryAggregatedDataHolder*)data
                                 index:(NSUInteger)idx
-                           viewChoice:(gcViewChoice)viewChoice
+                           calendarUnit:(NSCalendarUnit)calUnit
                       andActivityType:(NSString*)activityType
                                 width:(CGFloat)width{
     BOOL wide =false;
@@ -561,7 +562,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
     NSDictionary * dateAttributes = [GCViewConfig attributeBold14];
 
-    NSString * dateFmt = [data.date calendarUnitFormat:[GCViewConfig calendarUnitForViewChoice:viewChoice]];
+    NSString * dateFmt = [data.date calendarUnitFormat:calUnit];
     if (!dateFmt) {
         RZLog(RZLogError, @"Got no date: idx=%d data=%@ date=%@",(int)idx,data,[data date]);
         dateFmt = NSLocalizedString(@"ERROR", @"Date");
@@ -723,8 +724,10 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     [GCViewConfig setupGradientForDetails:self];
 }
 
--(void)setUpForSummarizedHistory:(NSDictionary*)summarizedHistory atIndex:(NSUInteger)idx forField:(GCField*)field
-                      viewChoice:(gcViewChoice)viewChoice{
+-(void)setUpForSummarizedHistory:(NSDictionary*)summarizedHistory
+                         atIndex:(NSUInteger)idx
+                        forField:(GCField*)field
+                      calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig{
     double avg = [summarizedHistory[STATS_AVG] dataPointAtIndex:idx].y_data;
     double sum = [summarizedHistory[STATS_SUM] dataPointAtIndex:idx].y_data;
     double max = [summarizedHistory[STATS_MAX] dataPointAtIndex:idx].y_data;
@@ -774,7 +777,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
                                      NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText]};
 
     [self setupForRows:3 andCols:3];
-    [self labelForRow:0 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:[date calendarUnitFormat:[GCViewConfig calendarUnitForViewChoice:viewChoice]] attributes:dateAttr] autorelease];
+    [self labelForRow:0 andCol:0].attributedText = [[[NSAttributedString alloc] initWithString:[date calendarUnitFormat:calendarConfig.calendarUnit] attributes:dateAttr] autorelease];
 
     [self labelForRow:0 andCol:2].attributedText = [main attributedString];
     [self labelForRow:1 andCol:2].attributedText = [extra attributedString];

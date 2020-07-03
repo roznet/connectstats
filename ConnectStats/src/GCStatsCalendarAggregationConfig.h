@@ -35,10 +35,20 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,retain,nullable) NSDate * referenceDate;
 @property (nonatomic,retain) NSCalendar * calendar;
 
+@property (nonatomic,readonly) NSDateFormatter * dateFormatter;
+@property (nonatomic,readonly) NSString * calendarUnitDescription;
+
 +(GCStatsCalendarAggregationConfig*)configFor:(NSCalendarUnit)aUnit referenceDate:(nullable NSDate*)referenceDate calendar:(NSCalendar*)calendar;
 +(GCStatsCalendarAggregationConfig*)globalConfigFor:(NSCalendarUnit)aUnit;
++(GCStatsCalendarAggregationConfig*)configFrom:(GCStatsCalendarAggregationConfig*)other;
 
 -(GCStatsCalendarAggregationConfig*)equivalentConfigFor:(NSCalendarUnit)aUnit;
+
+/// Go to next  calendar unit between week, month, year
+/// @return true if finished the loop and starting again
+-(BOOL)nextCalendarUnit;
+
+-(BOOL)isEqualToConfig:(GCStatsCalendarAggregationConfig*)other;
 
 @end
 

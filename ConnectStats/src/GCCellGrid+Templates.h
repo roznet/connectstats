@@ -39,7 +39,7 @@
 -(void)setupSummaryFromActivity:(GCActivity*)activity width:(CGFloat)width status:(gcViewActivityStatus)status;
 -(void)setupFromHistoryAggregatedData:(GCHistoryAggregatedDataHolder*)data
                                 index:(NSUInteger)idx
-                           viewChoice:(gcViewChoice)viewChoice
+                           calendarUnit:(NSCalendarUnit)viewChoice
                       andActivityType:(NSString*)activityType
                                 width:(CGFloat)width;
 
@@ -54,7 +54,7 @@
 -(void)setUpForSummarizedHistory:(NSDictionary*)summarizedHistory
                          atIndex:(NSUInteger)idx
                         forField:(GCField*)field
-                      viewChoice:(gcViewChoice)viewChoice;
+                  calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig;
 -(void)setupForAttributedStrings:(NSArray<NSAttributedString*>*)attrStrings
                         graphIcon:(BOOL)graphIcon
                            width:(CGFloat)width;

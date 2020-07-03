@@ -32,6 +32,7 @@
 #import "GCActivity+Import.h"
 #import "GCActivity+TrackTransform.h"
 #import "GCActivity+TestBackwardCompat.h"
+#import "GCStatsCalendarAggregationConfig.h"
 
 @interface GCTestsGeneral : GCTestCase
 @end
@@ -911,7 +912,7 @@
     NSDate * first = [serie[0] date];
     
     GCSimpleGraphCachedDataSource * dataSource = [GCSimpleGraphCachedDataSource historyView:dataserie
-                                                                               calendarUnit:NSCalendarUnitMonth
+                                                                               calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth]
                                                                                 graphChoice:gcGraphChoiceBarGraph
                                                   after:nil];
     
