@@ -28,7 +28,7 @@
 #import <XCTest/XCTest.h>
 #import "GCTestCase.h"
 #import "GCViewConfig.h"
-
+#import "GCStatsMultiFieldConfig.h"
 @interface GCTestUserInterface : GCTestCase
 
 @end
@@ -125,5 +125,38 @@
     }
 }
 
+-(void)testStatsConfig{
+    GCStatsMultiFieldConfig * config = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
+    config.activityType = GC_TYPE_RUNNING;
+    NSMutableArray * configs = [NSMutableArray array];
+    BOOL hasMoreView = true;
+    while( hasMoreView ){
+        BOOL hasMoreConfig = true;
+        while( hasMoreConfig ){
+            [configs addObject:config];
+            config = [config sameFieldListConfig];
+            if( [config nextViewConfig] ){
+                hasMoreConfig = false;
+            }
+        }
+        config = [config sameFieldListConfig];
+        if( [config nextView] ){
+            hasMoreView = false;
+        }
+    }
+    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
+    manager.recordMode = [GCTestCase recordModeGlobal];
+    //manager.recordMode = true;
+    
+    NSArray * generated = [configs arrayByMappingBlock:^(GCStatsMultiFieldConfig * config) {
+        return config.description;
+    }];
+    NSError * error = nil;
+    NSSet<Class>*classes = [NSSet setWithObjects:[NSArray class], nil];
+    NSArray * retrieved = [manager retrieveReferenceObject:generated forClasses:classes selector:_cmd identifier:@"" error:&error];
+    XCTAssertEqualObjects(generated, retrieved);
+    
+    
+}
 
 @end

@@ -43,8 +43,7 @@
 -(GCStatsMultiFieldConfig*)init{
     self = [super init];
     if( self ){
-        self.calChoice = gcStatsCalAll;
-        self.historyStats = gcHistoryStatsWeek;
+        self.viewConfig = gcStatsViewConfigAll;
         self.viewChoice = gcViewChoiceSummary;
         self.calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitWeekOfYear];
     }
@@ -65,12 +64,10 @@
             rv.activityType = other.activityType;
             rv.viewChoice = other.viewChoice;
             rv.useFilter = other.useFilter;
-            rv.calChoice = other.calChoice;
-            rv.historyStats = other.historyStats;
+            rv.viewConfig = other.viewConfig;
             rv.calendarConfig = [GCStatsCalendarAggregationConfig configFrom:other.calendarConfig];
         }else{
-            rv.calChoice = gcStatsCalAll;
-            rv.historyStats = gcHistoryStatsWeek;
+            rv.viewConfig = gcStatsViewConfigAll;
             rv.calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitWeekOfYear];
         }
     }
@@ -84,73 +81,116 @@
     return [GCViewConfig viewChoiceDesc:self.viewChoice calendarConfig:self.calendarConfig];
 }
 -(NSString*)description{
-    return [NSString stringWithFormat:@"<%@: %@ %@ %@ %@>", NSStringFromClass([self class]),
+    return [NSString stringWithFormat:@"<%@: %@ view:%@ calUnit:%@ config:%@>", NSStringFromClass([self class]),
             self.activityType,
-            self.viewDescription,
-            @(self.historyStats),
-            @(self.calChoice)
-            
+            self.viewChoiceKey,
+            self.calendarConfig.calendarUnitKey,
+            self.viewConfigKey
             ];
 }
 
 -(BOOL)isEqualToConfig:(GCStatsMultiFieldConfig*)other{
     return [self.activityType isEqualToString:other.activityType] && self.viewChoice==other.viewChoice && self.useFilter == other.useFilter
-    && self.calChoice==other.calChoice && self.historyStats==other.historyStats && [self.calendarConfig isEqualToConfig:other.calendarConfig];
+    && self.viewConfig==other.viewConfig && self.historyStats==other.historyStats && [self.calendarConfig isEqualToConfig:other.calendarConfig];
+}
+
+-(gcHistoryStats)historyStats{
+    return self.calendarConfig.historyStats;
+}
+
+-(NSString*)viewChoiceKey{
+    return [GCViewConfig viewChoiceKey:self.viewChoice];
+}
+-(void)setViewChoiceKey:(NSString *)viewChoiceKey{
+    self.viewChoice = [GCViewConfig viewChoiceFromKey:viewChoiceKey];
+}
+
+-(NSString*)viewConfigKey{
+    return [GCViewConfig viewConfigKey:self.viewConfig];
+}
+
+-(void)setViewConfigKey:(NSString *)viewConfigKey{
+    self.viewConfig = [GCViewConfig viewConfigFromKey:viewConfigKey];
 }
 
 -(BOOL)nextView{
-    if( self.viewChoice == gcViewChoiceCalendar){
-        BOOL done = [self.calendarConfig nextCalendarUnit];
-        if( done ){
-            self.viewChoice = [GCViewConfig nextViewChoice:self.viewChoice];
+    switch (self.viewChoice) {
+        case gcViewChoiceAll:
+        {
+            self.viewChoice = gcViewChoiceCalendar;
+            self.viewConfig = gcStatsViewConfigAll;
+            self.calendarConfig.calendarUnit = NSCalendarUnitWeekOfYear;
+            break;
         }
-    }else{
-        self.viewChoice = [GCViewConfig nextViewChoice:self.viewChoice];
+        case gcViewChoiceCalendar:
+        {
+            BOOL done = [self.calendarConfig nextCalendarUnit];
+            if( done ){
+                self.viewChoice = gcViewChoiceSummary;
+                self.viewConfig = gcStatsViewConfigUnused;
+                self.calendarConfig.calendarUnit = NSCalendarUnitWeekOfYear;
+            }
+            break;
+        }
+        case gcViewChoiceSummary:
+        {
+            self.viewChoice = gcViewChoiceAll;
+            self.viewConfig = gcStatsViewConfigUnused;
+            self.calendarConfig.calendarUnit = NSCalendarUnitWeekOfYear;
+            break;
+        }
     }
-    // true if we are at the start
+    // summary is the first
     return (self.viewChoice == gcViewChoiceSummary);
 }
 
--(GCStatsMultiFieldConfig*)configForNextFilter{
-    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self];
-    // View all Fields, then rotate between view week or month
-    if (nconfig.viewChoice == gcViewChoiceAll || nconfig.viewChoice == gcViewChoiceSummary) {
-        switch (nconfig.historyStats) {
-            case gcHistoryStatsAll:
-                nconfig.historyStats = gcHistoryStatsWeek;
-                break;
-            case gcHistoryStatsWeek:
-                nconfig.historyStats = gcHistoryStatsMonth;
-                break;
-            case gcHistoryStatsMonth:
-                nconfig.historyStats = gcHistoryStatsYear;
-                break;
-
-            default:
-                nconfig.historyStats = gcHistoryStatsAll;
-                break;
+-(BOOL)nextViewConfig{
+    BOOL rv = false;
+    
+    switch (self.viewChoice ){
+        case gcViewChoiceSummary:
+        {
+            // no config for summary;
+            self.viewConfig = gcStatsViewConfigAll;
+            rv = true;
+            break;
         }
-    }else{ // View monthly, weekly or yearly aggregated stats
-        gcStatsCalChoice start = gcStatsCalAll;
-        NSCalendarUnit calUnit = nconfig.calendarConfig.calendarUnit;
-        if (calUnit == NSCalendarUnitWeekOfYear) {
-            start = gcStatsCal3M;
-        }else if(calUnit == NSCalendarUnitMonth){
-            start = gcStatsCal6M;
-        }else{
-            start = gcStatsCalToDate;
+        case gcViewChoiceAll:
+        {
+            // View all Fields, then rotate between view week or month
+            // if comes as anything but end, next is end nd use calendarUnit
+            // (if was switch to all then next is End/CalUnit)
+            self.viewConfig = gcStatsViewConfigUnused;
+            if( [self.calendarConfig nextCalendarUnit] ){
+                rv = true;
+            }
+            break;
         }
-        if (nconfig.calChoice==gcStatsCalAll) {
-            nconfig.calChoice = start;
-        }else{
-            nconfig.calChoice++;
-        }
-        if (nconfig.calChoice >= gcStatsCalEnd) {
-            nconfig.calChoice = gcStatsCalAll;
+        case gcViewChoiceCalendar:
+        { // View monthly, weekly or yearly aggregated stats
+            gcStatsViewConfig start = gcStatsViewConfigAll;
+            NSCalendarUnit calUnit = self.calendarConfig.calendarUnit;
+            if (calUnit == NSCalendarUnitWeekOfYear) {
+                start = gcStatsViewConfigLast3M;
+            }else if(calUnit == NSCalendarUnitMonth){
+                start = gcStatsViewConfigLast6M;
+            }else{
+                start = gcStatsViewConfigToDate;
+            }
+            if (self.viewConfig==gcStatsViewConfigAll) {
+                self.viewConfig = start;
+            }else{
+                self.viewConfig++;
+            }
+            if (self.viewConfig >= gcStatsViewConfigUnused) {
+                self.viewConfig = gcStatsViewConfigAll;
+                rv = true;
+            }
+            break;
         }
     }
 
-    return nconfig;
+    return rv;
 }
 
 #pragma mark - Setups
@@ -195,20 +235,19 @@
     }else if (self.viewChoice==gcViewChoiceSummary){
         image = nil;
     }else{
-        switch (self.calChoice) {
-            case gcStatsCal3M:
+        switch (self.viewConfig) {
+            case gcStatsViewConfigLast3M:
                 image = [GCViewIcons navigationIconFor:gcIconNavQuarterly];
                 break;
-            case gcStatsCal6M:
+            case gcStatsViewConfigLast6M:
                 image = [GCViewIcons navigationIconFor:gcIconNavSemiAnnually];
                 break;
-            case gcStatsCal1Y:
+            case gcStatsViewConfigLast1Y:
                 image = [GCViewIcons navigationIconFor:gcIconNavYearly];
                 break;
-            case gcStatsCalToDate:
-            case gcStatsCalAll:
-            case gcStatsCalEnd:
-            case gcStatsCalCompare:
+            case gcStatsViewConfigToDate:
+            case gcStatsViewConfigAll:
+            case gcStatsViewConfigUnused:
                 image = nil;//[GCViewIcons navigationIconFor:gcIconNavAggregated];
                 break;
 
@@ -218,7 +257,7 @@
     if (self.viewChoice == gcViewChoiceSummary) {
         calTitle = nil;
     }
-    if (self.calChoice == gcStatsCalToDate) {
+    if (self.viewConfig == gcStatsViewConfigToDate) {
         NSCalendarUnit calUnit = self.calendarConfig.calendarUnit;
         if (calUnit == NSCalendarUnitYear) {
             calTitle = NSLocalizedString(@"YTD", @"Button Calendar");
@@ -270,20 +309,19 @@
         }
     }else{
         calunit = self.calendarConfig.calendarUnit;
-        switch (self.calChoice) {
-            case gcStatsCal1Y:
+        switch (self.viewConfig) {
+            case gcStatsViewConfigLast1Y:
                 compstr = @"-1Y";
                 break;
-            case gcStatsCal3M:
+            case gcStatsViewConfigLast3M:
                 compstr = @"-3M";
                 break;
-            case gcStatsCal6M:
+            case gcStatsViewConfigLast6M:
                 compstr = @"-6M";
                 break;
-            case gcStatsCalAll:
-            case gcStatsCalEnd:
-            case gcStatsCalCompare:
-            case gcStatsCalToDate:
+            case gcStatsViewConfigAll:
+            case gcStatsViewConfigUnused:
+            case gcStatsViewConfigToDate:
                 break;
         }
     }
@@ -296,7 +334,7 @@
                                         calendarConfig:[self.calendarConfig equivalentConfigFor:calunit]
                                            graphChoice:choice
                                                  after:afterdate];
-    if (self.calChoice == gcStatsCalToDate &&  self.viewChoice == gcViewChoiceCalendar) {
+    if (self.viewConfig == gcStatsViewConfigToDate &&  self.viewChoice == gcViewChoiceCalendar) {
         [cache setupAsBackgroundGraph];
         GCHistoryFieldDataSerie * cut = [fieldDataSerie serieWithCutOff:fieldDataSerie.lastDate inCalendarUnit:calunit withReferenceDate:nil];
         GCSimpleGraphCachedDataSource * main = [GCSimpleGraphCachedDataSource historyView:cut

@@ -50,14 +50,15 @@ typedef NS_ENUM(NSUInteger, gcGraphChoice){
     gcGraphChoiceLine
 };
 
-typedef NS_ENUM(NSUInteger, gcStatsCalChoice)  {
-    gcStatsCalAll,
-    gcStatsCal3M,
-    gcStatsCal6M,
-    gcStatsCal1Y,
-    gcStatsCalToDate,
-    gcStatsCalCompare,
-    gcStatsCalEnd
+typedef NS_ENUM(NSUInteger, gcStatsViewConfig)  {
+    gcStatsViewConfigAll,
+    gcStatsViewConfigLast3M,
+    gcStatsViewConfigLast6M,
+    gcStatsViewConfigLast1Y,
+    gcStatsViewConfigToDate,
+    // Unused location is important as while iterating throuwh 6m,16,  todate, it checks
+    // when unused is reach. new config should got after unused
+    gcStatsViewConfigUnused
 };
 
 typedef NS_ENUM(NSUInteger, gcMapType) {
@@ -131,7 +132,7 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 
 +(gcFieldFlag)nextTrackFieldForGraph:(gcFieldFlag)curr differentFrom:(gcFieldFlag)avoid valid:(gcFieldFlag)valid;
 
-+(gcViewChoice)nextViewChoice:(gcViewChoice)current;// DEPRECATED_MSG_ATTRIBUTE("do local"); 
++(gcViewChoice)nextViewChoice:(gcViewChoice)current DEPRECATED_MSG_ATTRIBUTE("do local");
 +(NSString*)viewChoiceDesc:(gcViewChoice)choice calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig;
 
 +(gcGraphChoice)graphChoiceForField:(GCField*)field andUnit:(NSCalendarUnit)aUnit;
@@ -157,5 +158,10 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(NSArray<NSString*>*)validChoicesForConnectStatsServiceUse;
 +(NSArray<NSString*>*)validChoicesForConnectStatsConfig;
 
++(NSString*)viewChoiceKey:(gcViewChoice)viewChoice;
++(gcViewChoice)viewChoiceFromKey:(NSString*)viewChoiceKey;
+
++(NSString*)viewConfigKey:(gcStatsViewConfig)viewConfig;
++(gcStatsViewConfig)viewConfigFromKey:(NSString*)viewConfigKey;
 
 @end

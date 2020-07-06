@@ -809,7 +809,7 @@
     config.activityType = GC_TYPE_RUNNING;
     config.viewChoice = gcViewChoiceAll;
     config.historyStats = gcHistoryStatsAll;
-    config.calChoice = gcStatsCalAll;
+    config.calChoice = gcStatsViewConfigAll;
 
     UITableView * tableView = vc.tableView;
     // Force width for consistency accross device run

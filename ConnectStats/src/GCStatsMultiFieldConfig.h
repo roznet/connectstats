@@ -40,32 +40,41 @@
  *  ViewChoice, decide what you display: all, monthly, weekly, yearly, summary
  */
 @property (nonatomic,assign) gcViewChoice viewChoice;
+@property (nonatomic,assign) NSString * viewChoiceKey;
+/**
+ *  ViewConfig, is how far back to look in summary pages, 3m, 6m, 1y, can also be toDate/All
+ */
+@property (nonatomic,assign) gcStatsViewConfig viewConfig;
+@property (nonatomic,assign) NSString * viewConfigKey;
+
+@property (nonatomic,assign) BOOL useFilter;
+
 /**
  *  HistoryStats displayed can be current month, week, year or all -> quick filter on thumbnail graphs
  */
-@property (nonatomic,assign) gcHistoryStats historyStats;
-/**
- *  Stats calChoice, is how far back to look in summary pages, 3m, 6m, 1y, can also be toDate/All
- */
-@property (nonatomic,assign) gcStatsCalChoice calChoice;
-
-@property (nonatomic,assign) BOOL useFilter;
+@property (nonatomic,readonly) gcHistoryStats historyStats;
 @property (nonatomic,readonly) GCField * currentCumulativeSummaryField;
 @property (nonatomic,readonly) GCStatsCalendarAggregationConfig * calendarConfig;
 
 @property (nonatomic,readonly) NSString * viewDescription;
+
 
 +(GCStatsMultiFieldConfig*)fieldListConfigFrom:(GCStatsMultiFieldConfig*)other;
 -(GCStatsMultiFieldConfig*)sameFieldListConfig;
 
 -(BOOL)isEqualToConfig:(GCStatsMultiFieldConfig*)other;
 
--(GCStatsMultiFieldConfig*)configForNextFilter;
 
 -(GCSimpleGraphCachedDataSource*)dataSourceForFieldDataSerie:(GCHistoryFieldDataSerie*)fieldDataSerie;
 
 -(UIBarButtonItem*)buttonForTarget:(id)target action:(SEL)sel;
 
+/// Iterate through the different configuration for the current view
+/// depending on the view will iterate though historyStats filter or calChoice.
+-(BOOL)nextViewConfig;
+
+/// Iterate through the different view, summary, all, calendar(weekly,monthly,annual)
+/// return true if cycle complete and back to first view
 -(BOOL)nextView;
 
 -(void)nextSummaryCumulativeField;

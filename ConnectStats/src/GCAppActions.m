@@ -101,19 +101,19 @@ NSString * kArgumentHistoryStats = @"historyStats";
     }
     return rv;
 }
--(gcStatsCalChoice)statsCalChoiceFromString:(NSString*)val default:(gcStatsCalChoice)def{
-    gcStatsCalChoice rv = def;
+-(gcStatsViewConfig)statsCalChoiceFromString:(NSString*)val default:(gcStatsViewConfig)def{
+    gcStatsViewConfig rv = def;
     NSString * vallower = [val lowercaseString];
     if ([vallower isEqualToString:@"all"]) {
-        rv = gcStatsCalAll;
+        rv = gcStatsViewConfigAll;
     }else if ([vallower isEqualToString:@"3m"]){
-        rv = gcStatsCal3M;
+        rv = gcStatsViewConfigLast3M;
     }else if ([vallower isEqualToString:@"1y"]){
-        rv = gcStatsCal1Y;
+        rv = gcStatsViewConfigLast1Y;
     }else if ([vallower isEqualToString:@"6m"]){
-        rv = gcStatsCal6M;
+        rv = gcStatsViewConfigLast6M;
     }else if ([vallower isEqualToString:@"todate"]){
-        rv = gcStatsCalToDate;
+        rv = gcStatsViewConfigToDate;
     }
     return rv;
 }
@@ -160,10 +160,11 @@ NSString * kArgumentHistoryStats = @"historyStats";
         nconfig.activityType = [self activityTypeFromString:vals[kArgumentActivityType] default:nconfig.activityType];
     }
     if (vals[kArgumentCalChoice]) {
-        nconfig.calChoice = [self statsCalChoiceFromString:vals[kArgumentCalChoice] default:nconfig.calChoice];
+        nconfig.viewConfig = [self statsCalChoiceFromString:vals[kArgumentCalChoice] default:nconfig.viewConfig];
     }
     if (vals[kArgumentHistoryStats]) {
-        nconfig.historyStats = [self historyStatsFromString:vals[kArgumentHistoryStats] default:nconfig.historyStats];
+#pragma message "update to calendar unit"
+        //nconfig.historyStats = [self historyStatsFromString:vals[kArgumentHistoryStats] default:nconfig.historyStats];
     }
 
     [vc setupForFieldListConfig:nconfig];

@@ -76,18 +76,38 @@
     }
     return rv;
 }
+-(NSString *) calendarUnitKey{
+    NSString * rv = nil;
+    if (self.calendarUnit == NSCalendarUnitWeekOfYear) {
+        rv = @"weekly";
+    }else if(self.calendarUnit == NSCalendarUnitMonth){
+        rv = @"monthly";
+    }else if(self.calendarUnit == NSCalendarUnitYear){
+        rv = @"yearly";
+    }
+    return rv;
+}
 
+-(void)setCalendarUnitKey:(NSString *)calendarUnitKey{
+    if( [calendarUnitKey isEqualToString:@"weekly"] ){
+        self.calendarUnit = NSCalendarUnitWeekOfYear;
+    }else if ([calendarUnitKey isEqualToString:@"monthly"]){
+        self.calendarUnit = NSCalendarUnitMonth;
+    }else if ([calendarUnitKey isEqualToString:@"yearly"]){
+        self.calendarUnit = NSCalendarUnitYear;
+    }
+}
 -(GCStatsCalendarAggregationConfig*)equivalentConfigFor:(NSCalendarUnit)aUnit{
     return [GCStatsCalendarAggregationConfig configFor:aUnit referenceDate:self.referenceDate calendar:self.calendar];
 }
 
 -(gcHistoryStats)historyStats{
     if (self.calendarUnit == NSCalendarUnitWeekOfYear) {
-        return gcHistoryStatsYear;
+        return gcHistoryStatsWeek;
     }else if(self.calendarUnit == NSCalendarUnitMonth){
         return gcHistoryStatsMonth;
-    }else if( self.calendarUnit == NSCalendarUnitWeekOfYear){
-        return gcHistoryStatsWeek;
+    }else if( self.calendarUnit == NSCalendarUnitYear){
+        return gcHistoryStatsYear;
     }else{
         return gcHistoryStatsAll;
     }

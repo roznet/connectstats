@@ -459,6 +459,62 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return NSLocalizedString(@"All", @"viewchoice");
 }
 
++(NSString*)viewChoiceKey:(gcViewChoice)viewChoice{
+    switch (viewChoice) {
+        case gcViewChoiceAll:
+            return @"all";
+        case gcViewChoiceCalendar:
+            return @"calendar";
+        case gcViewChoiceSummary:
+            return @"summary";
+    }
+    return nil;
+
+}
++(gcViewChoice)viewChoiceFromKey:(NSString*)viewChoiceKey{
+    if( [viewChoiceKey isEqualToString:@"all"]){
+        return gcViewChoiceAll;
+    }else if ([viewChoiceKey isEqualToString:@"calendar"]){
+        return gcViewChoiceCalendar;
+    }else if ([viewChoiceKey isEqualToString:@"summary"]){
+        return gcViewChoiceSummary;
+    }
+    return gcViewChoiceSummary;
+}
++(NSString*)viewConfigKey:(gcStatsViewConfig)viewConfig{
+    switch(viewConfig){
+        case gcStatsViewConfigAll:
+            return @"all";
+        case gcStatsViewConfigLast3M:
+            return @"last3m";
+        case gcStatsViewConfigLast6M:
+            return @"last6m";
+        case gcStatsViewConfigLast1Y:
+            return @"last1y";
+        case gcStatsViewConfigToDate:
+            return @"todate";
+        case gcStatsViewConfigUnused:
+            return @"unused";
+    }
+    return nil;
+}
++(gcStatsViewConfig)viewConfigFromKey:(NSString*)viewConfigKey{
+    if( [viewConfigKey isEqualToString:@"all"] ){
+        return gcStatsViewConfigAll;
+    }else if( [viewConfigKey isEqualToString:@"last3m"] ){
+        return gcStatsViewConfigLast3M;
+    }else if( [viewConfigKey isEqualToString:@"last6m"] ){
+            return gcStatsViewConfigLast6M;
+    }else if( [viewConfigKey isEqualToString:@"last1y"] ){
+        return gcStatsViewConfigLast1Y;
+    }else if( [viewConfigKey isEqualToString:@"today"] ){
+        return gcStatsViewConfigToDate;
+    }else if( [viewConfigKey isEqualToString:@"unused"] ){
+        return gcStatsViewConfigUnused;
+    }
+    return gcStatsViewConfigUnused;
+}
+
 +(BOOL)trackFieldValidForPlotXAxis:(gcFieldFlag)aTrackField{
     return aTrackField != gcFieldFlagNone;
 }

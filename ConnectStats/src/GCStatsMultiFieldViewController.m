@@ -243,7 +243,7 @@
                 
             }];
             [GCAppGlobal focusOnListWithFilter:filter];
-            self.multiFieldConfig.historyStats =gcHistoryStatsAll;
+            self.multiFieldConfig.viewConfig = gcStatsViewConfigAll;
             [self setupForCurrentActivityType:GC_TYPE_ALL filter:true andViewChoice:gcViewChoiceAll];
         }else if (indexPath.section == GC_SECTION_GRAPH){
                 GCStatsOneFieldGraphViewController * graph = [[GCStatsOneFieldGraphViewController alloc] initWithNibName:nil bundle:nil];
@@ -542,7 +542,9 @@
 }
 
 -(void)switchCalFilter{
-    [self setupForFieldListConfig:[self.multiFieldConfig configForNextFilter]];
+    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
+    [nconfig nextViewConfig];
+    [self setupForFieldListConfig:nconfig];
     [self setupBarButtonItem];
     [self.tableView reloadData];
 }
@@ -716,7 +718,7 @@
     vals.activityType = self.activityType;
     gcIgnoreMode ignoreMode = [self.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
     NSDate * cutOff = nil;
-    if (self.multiFieldConfig.calChoice == gcStatsCalToDate) {
+    if (self.multiFieldConfig.viewConfig == gcStatsViewConfigToDate) {
         cutOff = [[GCAppGlobal organizer] lastActivity].date;
     }
     [vals aggregate:self.multiFieldConfig.calendarConfig.calendarUnit

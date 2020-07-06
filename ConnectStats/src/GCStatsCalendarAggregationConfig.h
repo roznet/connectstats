@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,readonly) NSDateFormatter * dateFormatter;
 @property (nonatomic,readonly) NSString * calendarUnitDescription;
+@property (nonatomic,retain) NSString * calendarUnitKey;
 
 @property (nonatomic,readonly) gcHistoryStats historyStats;
 
