@@ -158,10 +158,4 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(NSArray<NSString*>*)validChoicesForConnectStatsServiceUse;
 +(NSArray<NSString*>*)validChoicesForConnectStatsConfig;
 
-+(NSString*)viewChoiceKey:(gcViewChoice)viewChoice;
-+(gcViewChoice)viewChoiceFromKey:(NSString*)viewChoiceKey;
-
-+(NSString*)viewConfigKey:(gcStatsViewConfig)viewConfig;
-+(gcStatsViewConfig)viewConfigFromKey:(NSString*)viewConfigKey;
-
 @end

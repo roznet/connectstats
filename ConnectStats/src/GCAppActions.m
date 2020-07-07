@@ -88,19 +88,6 @@ NSString * kArgumentHistoryStats = @"historyStats";
     return  rv;
 }
 
--(gcHistoryStats)historyStatsFromString:(NSString*)val default:(gcHistoryStats)def{
-    gcHistoryStats rv = def;
-
-    NSString*vallower = [val lowercaseString];
-    if ([vallower isEqualToString:@"all"]) {
-        rv = gcHistoryStatsAll;
-    }else if ([vallower isEqualToString:@"week"]){
-        rv = gcHistoryStatsWeek;
-    }else if ([vallower isEqualToString:@"month"]){
-        rv = gcHistoryStatsMonth;
-    }
-    return rv;
-}
 -(gcStatsViewConfig)statsCalChoiceFromString:(NSString*)val default:(gcStatsViewConfig)def{
     gcStatsViewConfig rv = def;
     NSString * vallower = [val lowercaseString];
@@ -163,8 +150,7 @@ NSString * kArgumentHistoryStats = @"historyStats";
         nconfig.viewConfig = [self statsCalChoiceFromString:vals[kArgumentCalChoice] default:nconfig.viewConfig];
     }
     if (vals[kArgumentHistoryStats]) {
-#pragma message "update to calendar unit"
-        //nconfig.historyStats = [self historyStatsFromString:vals[kArgumentHistoryStats] default:nconfig.historyStats];
+        nconfig.calendarConfig.calendarUnitKey = vals[kArgumentHistoryStats];
     }
 
     [vc setupForFieldListConfig:nconfig];

@@ -99,18 +99,61 @@
 }
 
 -(NSString*)viewChoiceKey{
-    return [GCViewConfig viewChoiceKey:self.viewChoice];
+    switch (self.viewChoice) {
+        case gcViewChoiceAll:
+            return @"all";
+        case gcViewChoiceCalendar:
+            return @"calendar";
+        case gcViewChoiceSummary:
+            return @"summary";
+    }
+    return nil;
 }
+
 -(void)setViewChoiceKey:(NSString *)viewChoiceKey{
-    self.viewChoice = [GCViewConfig viewChoiceFromKey:viewChoiceKey];
+    if( [viewChoiceKey isEqualToString:@"all"]){
+        self.viewChoice =  gcViewChoiceAll;
+    }else if ([viewChoiceKey isEqualToString:@"calendar"]){
+        self.viewChoice =  gcViewChoiceCalendar;
+    }else if ([viewChoiceKey isEqualToString:@"summary"]){
+        self.viewChoice =  gcViewChoiceSummary;
+    }
+    self.viewChoice =  gcViewChoiceSummary;
 }
 
 -(NSString*)viewConfigKey{
-    return [GCViewConfig viewConfigKey:self.viewConfig];
+    switch(self.viewConfig){
+        case gcStatsViewConfigAll:
+            return @"all";
+        case gcStatsViewConfigLast3M:
+            return @"last3m";
+        case gcStatsViewConfigLast6M:
+            return @"last6m";
+        case gcStatsViewConfigLast1Y:
+            return @"last1y";
+        case gcStatsViewConfigToDate:
+            return @"todate";
+        case gcStatsViewConfigUnused:
+            return @"unused";
+    }
+    return nil;
 }
 
 -(void)setViewConfigKey:(NSString *)viewConfigKey{
-    self.viewConfig = [GCViewConfig viewConfigFromKey:viewConfigKey];
+    if( [viewConfigKey isEqualToString:@"all"] ){
+        self.viewConfig = gcStatsViewConfigAll;
+    }else if( [viewConfigKey isEqualToString:@"last3m"] ){
+        self.viewConfig = gcStatsViewConfigLast3M;
+    }else if( [viewConfigKey isEqualToString:@"last6m"] ){
+            self.viewConfig = gcStatsViewConfigLast6M;
+    }else if( [viewConfigKey isEqualToString:@"last1y"] ){
+        self.viewConfig = gcStatsViewConfigLast1Y;
+    }else if( [viewConfigKey isEqualToString:@"today"] ){
+        self.viewConfig = gcStatsViewConfigToDate;
+    }else if( [viewConfigKey isEqualToString:@"unused"] ){
+        self.viewConfig = gcStatsViewConfigUnused;
+    }
+    self.viewConfig = gcStatsViewConfigUnused;
 }
 
 -(BOOL)nextView{
