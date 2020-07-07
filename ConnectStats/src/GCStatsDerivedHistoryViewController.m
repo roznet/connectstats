@@ -250,9 +250,12 @@
         GCCellEntryFieldCompletion cb = nil;
         NSUInteger current = 0;
 
+        NSArray<GCNumberWithUnit*>*points = self.derivedHistAnalysis.pointsForGraphs;
         if( indexPath.row == GC_XS_SHORT){
+            
+            GCNumberWithUnit * sx = points[1];
             for (GCNumberWithUnit * nu in Xs) {
-                if( [nu isEqualToNumberWithUnit:self.derivedHistAnalysis.shortTermX] ){
+                if( [nu isEqualToNumberWithUnit:sx] ){
                     break;
                 }
                 current++;
@@ -263,8 +266,9 @@
                 [self.analysisDelegate configChanged];
             };
         }else if (indexPath.row == GC_XS_LONG){
+            GCNumberWithUnit * lx = points[2];
             for (GCNumberWithUnit * nu in Xs) {
-                if( [nu isEqualToNumberWithUnit:self.derivedHistAnalysis.longTermX] ){
+                if( [nu isEqualToNumberWithUnit:lx] ){
                     break;
                 }
                 current++;
