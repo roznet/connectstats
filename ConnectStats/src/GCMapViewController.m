@@ -38,7 +38,8 @@
 
 
 @interface GCMapViewController ()
-
+// Use to get snapshot
+@property (nonatomic,retain) UIWindow * tempWindow;
 @end
 
 @implementation GCMapViewController
@@ -74,6 +75,9 @@
     [_lapInfoView release];
     [_windCompassView release];
     [_gradientField release];
+    
+    [_tempWindow release];
+    [_completionHandler release];
 
     [super dealloc];
 }
@@ -530,6 +534,11 @@
 
 #pragma mark - others
 
+-(void)finishedRendering:(BOOL)fullyRendered{
+    if( self.completionHandler ){
+        self.completionHandler();
+    }
+}
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
     dispatch_async( dispatch_get_main_queue(), ^(){
         [self forceRedisplay];
@@ -545,6 +554,33 @@
     return img;
 }
 
+-(void)mapImageForActivity:(GCActivity*)act size:(CGSize)size completion:(void(^)(UIImage*))handler{
+    
+    self.activity = act;
+    self.view.frame = CGRectMake(0.0, 0.0, size.width, size.height);
+    
+    UIWindow *window = self.view.window;
+    if (window == nil) {
+        window = RZReturnAutorelease([[UIWindow alloc] initWithFrame:self.view.bounds]);
+        [window addSubview:self.view];
+        [window makeKeyAndVisible];
+        self.tempWindow = window;
+    }
 
+    self.completionHandler = ^(){
+        UIImage * img = [self mapInternal];
+        handler(img);
+    };
+}
+
+-(UIImage*)mapInternal{
+    CGSize screenShotSize = self.view.bounds.size;
+    UIGraphicsBeginImageContext(screenShotSize);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    [self.view.layer renderInContext:ctx];
+    UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}
 
 @end

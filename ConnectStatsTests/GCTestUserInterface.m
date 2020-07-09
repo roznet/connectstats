@@ -29,6 +29,8 @@
 #import "GCTestCase.h"
 #import "GCViewConfig.h"
 #import "GCStatsMultiFieldConfig.h"
+#import "GCMapViewController.h"
+
 @interface GCTestUserInterface : GCTestCase
 
 @end
@@ -157,6 +159,22 @@
     XCTAssertEqualObjects(generated, retrieved);
     
     
+}
+
+-(void)testMapSnapshot{
+    NSString * aId = @"2477200414";
+    NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
+    GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFilePath:fn startTime:[NSDate date]];
+    NSLog(@"%@", fitAct);
+    
+    XCTestExpectation * expectation = RZReturnAutorelease([[XCTestExpectation alloc] initWithDescription:@"Map Snapshot"]);
+    [GCMapViewController mapImageForActivity:fitAct size:CGSizeMake(250.,250.) completion:^(UIImage*img){
+        XCTAssertEqual(img.size.height, 250.);
+        XCTAssertEqual(img.size.width, 250.);
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectations:@[ expectation ] timeout:5.0];
 }
 
 @end

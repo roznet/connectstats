@@ -3,6 +3,7 @@
 //
 
 #import "UIImage+ImageWithUIView.h"
+@import RZUtils;
 
 @implementation UIImage (ImageWithUIView)
 #pragma mark -
@@ -10,6 +11,14 @@
 
 + (UIImage *)imageWithUIView:(UIView *)view
 {
+    UIWindow *window = view.window;
+    if (window == nil) {
+        window = RZReturnAutorelease([[UIWindow alloc] initWithFrame:view.bounds]);
+        [window addSubview:view];
+        [window makeKeyAndVisible];
+    }
+
+    
     CGSize screenShotSize = view.bounds.size;
     UIImage *img;
     UIGraphicsBeginImageContext(screenShotSize);

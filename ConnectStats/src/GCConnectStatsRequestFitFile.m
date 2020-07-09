@@ -33,6 +33,8 @@
 #import "GCGarminActivityTrack13Request.h"
 #import "GCConnectStatsActivityTCXParser.h"
 #import "GCGarminLoginSSORequest.h"
+#import "GCMapViewController.h"
+#import "GCWebImagesRequests.h"
 
 @interface GCConnectStatsRequestFitFile ()
 @property (nonatomic,retain) GCActivity * activity;
@@ -80,7 +82,7 @@
             self.tryAlternativeService = true;
             return RZReturnAutorelease([[GCConnectStatsRequestFitFile alloc] initNextWith:self]);
         }
-        return nil;
+        return [GCWebImagesRequests imagesRequestFor:self.activity];
     }
 }
 -(NSString*)url{
@@ -234,6 +236,7 @@
         }
     }
     [self processDone];
+
 }
 
 +(GCActivity*)testForActivity:(GCActivity*)act withFilesIn:(NSString*)path{

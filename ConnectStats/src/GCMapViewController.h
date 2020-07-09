@@ -44,9 +44,9 @@ typedef NS_ENUM(NSUInteger, gcMapImplementor) {
     gcMapImplementorGoogle
 };
 
-@interface GCMapViewController : UIViewController<RZChildObject,GCSharingImageExporter,GCMapDataSourceProtocol>{
+typedef void(^gcMapViewControllerCompletion)(void);
 
-}
+@interface GCMapViewController : UIViewController<RZChildObject,GCSharingImageExporter,GCMapDataSourceProtocol>
 
 @property (nonatomic,retain) GCActivity * activity;
 @property (nonatomic,retain) GCActivity * compareActivity;
@@ -58,6 +58,7 @@ typedef NS_ENUM(NSUInteger, gcMapImplementor) {
 @property (nonatomic,assign) NSUInteger lapIndex;
 @property (nonatomic,assign) NSUInteger movingAverage;
 @property (nonatomic,retain) GCMapLapInfoView *lapInfoView;
+@property (nonatomic,copy) gcMapViewControllerCompletion completionHandler;
 
 @property (nonatomic,retain) GCMapAppleViewController * appleImplementor;
 @property (nonatomic,retain) GCMapGoogleViewController * googleImplementor;
@@ -83,5 +84,7 @@ typedef NS_ENUM(NSUInteger, gcMapImplementor) {
 -(void)toggleMapType:(id)cb;
 -(void)toggleShowLap:(id)cb;
 -(void)toggleField:(id)cb;
+
+-(void)mapImageForActivity:(GCActivity*)act size:(CGSize)size completion:(void(^)(UIImage*))handler;
 
 @end
