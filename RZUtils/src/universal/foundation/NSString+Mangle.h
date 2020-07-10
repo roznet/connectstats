@@ -35,4 +35,6 @@
 -(NSString*)specialCharacterReplacedBySeparator:(NSString*)sep;
 
 -(NSString*)stringByEscapingForHTML;
+
+-(NSString*)sha256String;
 @end

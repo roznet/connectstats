@@ -26,11 +26,27 @@
 
 
 #import "GCActivity.h"
+@import Photos;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GCActivity (Images)
--(void)findImages;
+@interface GCActivity (Assets)
+
+@property (nonatomic,readonly) NSString * assetInfoJsonFileName;
+@property (nonatomic,readonly) BOOL hasAssets;
+
+@property (nonatomic,retain) NSArray<NSString*>*assetsPhotosLocalIdentifiers;
+@property (nonatomic,readonly) BOOL hasPhotos;
+
+@property (nonatomic,readonly) NSString * assetsMapSnapshotFileName;
+@property (nonatomic,retain,nullable) UIImage * assetsMapSnapshot;
+@property (nonatomic,readonly) BOOL hasMapSnapshot;
+
+-(void)saveAssetInfo;
+-(void)loadAssetInfo;
+
+-(BOOL)updateAssetInfoForImageAssets;
+
 @end
 
 NS_ASSUME_NONNULL_END

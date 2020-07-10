@@ -46,7 +46,7 @@
 #import "GCFormattedField.h"
 #import "GCHealthOrganizer.h"
 #import "ConnectStats-Swift.h"
-#import "GCActivity+Images.h"
+#import "GCActivity+Assets.h"
 
 #define GCVIEW_DETAIL_TITLE_SECTION     0
 #define GCVIEW_DETAIL_LOAD_SECTION      1
@@ -722,8 +722,6 @@
         self.trackStats = nil;
     }
     self.autolapChoice = nil;
-
-    [act findImages];
     
     if( activityIsChanging ){
         // If no trackpoint load on worker thread

@@ -74,7 +74,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
         self.quickFilter = [GCAppGlobal configGetBool:CONFIG_QUICK_FILTER defaultValue:false];
 
-        self.showImages = true;
+        self.showImages = [GCAppGlobal configGetBool:CONFIG_SHOW_PHOTOS defaultValue:false];
         
         self.refreshControl = RZReturnAutorelease([[UIRefreshControl alloc] init]);
         self.refreshControl.attributedTitle = nil;

@@ -1186,9 +1186,9 @@
 		42BF1D3422510E63000DF572 /* RZFitFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; };
 		42BF1D3522510E63000DF572 /* RZFitFile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42BF1FEC1D3AC233004445C2 /* RZUtilsTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; };
-		42BF8D7924B505EB001E1C72 /* GCActivity+Images.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D7824B505EB001E1C72 /* GCActivity+Images.m */; };
-		42BF8D7A24B505EB001E1C72 /* GCActivity+Images.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D7824B505EB001E1C72 /* GCActivity+Images.m */; };
-		42BF8D7B24B505EB001E1C72 /* GCActivity+Images.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D7824B505EB001E1C72 /* GCActivity+Images.m */; };
+		42BF8D7924B505EB001E1C72 /* GCActivity+Assets.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D7824B505EB001E1C72 /* GCActivity+Assets.m */; };
+		42BF8D7A24B505EB001E1C72 /* GCActivity+Assets.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D7824B505EB001E1C72 /* GCActivity+Assets.m */; };
+		42BF8D7B24B505EB001E1C72 /* GCActivity+Assets.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D7824B505EB001E1C72 /* GCActivity+Assets.m */; };
 		42BF8D8824B7708B001E1C72 /* GCWebImagesRequests.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D8724B7708B001E1C72 /* GCWebImagesRequests.m */; };
 		42BF8D8924B7708B001E1C72 /* GCWebImagesRequests.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D8724B7708B001E1C72 /* GCWebImagesRequests.m */; };
 		42BF8D8A24B7708B001E1C72 /* GCWebImagesRequests.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D8724B7708B001E1C72 /* GCWebImagesRequests.m */; };
@@ -2857,8 +2857,8 @@
 		42BC77E2198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHistoryPerformanceAnalysis.m; path = src/GCHistoryPerformanceAnalysis.m; sourceTree = "<group>"; };
 		42BDFE7E242F7789001BCDC8 /* GCActivity+Series.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GCActivity+Series.h"; path = "src/GCActivity+Series.h"; sourceTree = "<group>"; };
 		42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "GCActivity+Series.m"; path = "src/GCActivity+Series.m"; sourceTree = "<group>"; };
-		42BF8D7724B505EB001E1C72 /* GCActivity+Images.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GCActivity+Images.h"; path = "src/GCActivity+Images.h"; sourceTree = "<group>"; };
-		42BF8D7824B505EB001E1C72 /* GCActivity+Images.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "GCActivity+Images.m"; path = "src/GCActivity+Images.m"; sourceTree = "<group>"; };
+		42BF8D7724B505EB001E1C72 /* GCActivity+Assets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GCActivity+Assets.h"; path = "src/GCActivity+Assets.h"; sourceTree = "<group>"; };
+		42BF8D7824B505EB001E1C72 /* GCActivity+Assets.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "GCActivity+Assets.m"; path = "src/GCActivity+Assets.m"; sourceTree = "<group>"; };
 		42BF8D8624B7708B001E1C72 /* GCWebImagesRequests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCWebImagesRequests.h; path = src/GCWebImagesRequests.h; sourceTree = "<group>"; };
 		42BF8D8724B7708B001E1C72 /* GCWebImagesRequests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCWebImagesRequests.m; path = src/GCWebImagesRequests.m; sourceTree = "<group>"; };
 		42BF98371EE3175600F5E094 /* FITFitStatisticsWeight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITFitStatisticsWeight.swift; path = src/FITFitStatisticsWeight.swift; sourceTree = "<group>"; };
@@ -3503,7 +3503,7 @@
 			name = Garmin;
 			sourceTree = "<group>";
 		};
-		4233EAE7166B91A900185978 /* Geocode&Images */ = {
+		4233EAE7166B91A900185978 /* Geocode & Images */ = {
 			isa = PBXGroup;
 			children = (
 				42BF8D8624B7708B001E1C72 /* GCWebImagesRequests.h */,
@@ -3511,7 +3511,7 @@
 				42E226BA16599AB2008FFD68 /* GCWebReverseGeocode.h */,
 				42E226BB16599AB2008FFD68 /* GCWebReverseGeocode.m */,
 			);
-			name = "Geocode&Images";
+			name = "Geocode & Images";
 			sourceTree = "<group>";
 		};
 		4234943616090DD300A770D6 /* Pages */ = {
@@ -3967,8 +3967,8 @@
 				426A135D1C5CCEFA00D61098 /* GCActivitySettings.m */,
 				428DD4B8219A3BA2006DF5B5 /* GCGarminActivityInterpret.h */,
 				428DD4B9219A3BA2006DF5B5 /* GCGarminActivityInterpret.m */,
-				42BF8D7724B505EB001E1C72 /* GCActivity+Images.h */,
-				42BF8D7824B505EB001E1C72 /* GCActivity+Images.m */,
+				42BF8D7724B505EB001E1C72 /* GCActivity+Assets.h */,
+				42BF8D7824B505EB001E1C72 /* GCActivity+Assets.m */,
 			);
 			name = Activity;
 			sourceTree = "<group>";
@@ -4394,7 +4394,7 @@
 				421516B919A47C0B0080CD4C /* HealthKit */,
 				42AB66E016DC1CA300C633BD /* Withings */,
 				4235448616C5BC6900AB3E09 /* Strava */,
-				4233EAE7166B91A900185978 /* Geocode&Images */,
+				4233EAE7166B91A900185978 /* Geocode & Images */,
 				4233EAE5166B89A300185978 /* Garmin */,
 				42B8587A229DB643009E309A /* ConnectStats */,
 				4250039418BAC6B10030AA8A /* GCWebRequest.h */,
@@ -6842,7 +6842,7 @@
 				422FAEB519A1DD6000D09773 /* main.m in Sources */,
 				422FAEB619A1DD6000D09773 /* GCAppDelegate.m in Sources */,
 				4257766623205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */,
-				42BF8D7B24B505EB001E1C72 /* GCActivity+Images.m in Sources */,
+				42BF8D7B24B505EB001E1C72 /* GCActivity+Assets.m in Sources */,
 				42BFC2541DCF50DB00EAD40E /* GCFieldInfo.m in Sources */,
 				422FAEB819A1DD6000D09773 /* GCAppGlobal.m in Sources */,
 				42A99B261B780D9900994917 /* GCWatchSessionManager.m in Sources */,
@@ -7330,7 +7330,7 @@
 				42A89C1F1D627444007CF90D /* GCUnitTrainingZone.m in Sources */,
 				42AB681716E0094A00C633BD /* GCFieldsCalculated.m in Sources */,
 				42AB681D16E2913300C633BD /* GCActivityTrackGraphOptionsViewController.m in Sources */,
-				42BF8D7924B505EB001E1C72 /* GCActivity+Images.m in Sources */,
+				42BF8D7924B505EB001E1C72 /* GCActivity+Assets.m in Sources */,
 				42753D6A16E402EE005C8281 /* GCActivityTrackOptions.m in Sources */,
 				42753D7016E6A881005C8281 /* GCMapLapInfoView.m in Sources */,
 				42C92FDF170FB73F0037602F /* GCActivityAutoLapChoices.m in Sources */,
@@ -7414,7 +7414,7 @@
 				422CC8781E6ACA1700195414 /* GCField+FitFile.swift in Sources */,
 				4280C7D22364FC7C00223709 /* GCConnectStatsRequestWeather.m in Sources */,
 				4226B42A1F65E2ED009E1104 /* GCWebRequestStandard.m in Sources */,
-				42BF8D7A24B505EB001E1C72 /* GCActivity+Images.m in Sources */,
+				42BF8D7A24B505EB001E1C72 /* GCActivity+Assets.m in Sources */,
 				421A51531C82FB5D00671587 /* GCStatsHistGraphOptionViewController.m in Sources */,
 				42295E081EC6F4D900F4F7EE /* GCTestServiceGarmin.m in Sources */,
 				427DDCC01DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */,

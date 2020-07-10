@@ -157,6 +157,11 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 @property (nonatomic,retain) NSString*externalServiceActivityId;
 
 /**
+ Avoid to use directly, should be used via GCActivity+Assets functions
+ */
+@property (nonatomic,retain) NSDictionary * assetsInfo;
+
+/**
  @brief Display name, if none, will use location.
  @return Non-nil NSString
  */
