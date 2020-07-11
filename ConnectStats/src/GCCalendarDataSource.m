@@ -203,8 +203,9 @@
     self.monthlyStats.activityType = GC_TYPE_ALL;
     self.weeklyStats.activities = self.activities;
     self.monthlyStats.activities = self.activities;
-    [self.weeklyStats aggregate:NSCalendarUnitWeekOfYear referenceDate:[GCAppGlobal referenceDate] ignoreMode:ignoreMode];
-    [self.monthlyStats aggregate:NSCalendarUnitMonth referenceDate:[GCAppGlobal referenceDate] ignoreMode:ignoreMode];
+    // reference date nil as always for gcPeriodCalendar
+    [self.weeklyStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:ignoreMode];
+    [self.monthlyStats aggregate:NSCalendarUnitMonth referenceDate:nil ignoreMode:ignoreMode];
 
     return rv;
 }

@@ -82,7 +82,7 @@ extern NSString *const kNotifySettingsChange;
 
 +(NSCalendar*)calculationCalendar;
 +(void)ensureCalculationCalendarTimeZone:(NSTimeZone*)tz;// Mostly used for testing
-+(NSDate*)referenceDate;
++(NSDate*)referenceDate DEPRECATED_MSG_ATTRIBUTE("use calendar config");
 +(NSInteger)currentYear;
 
 +(BOOL)connectStatsVersion;

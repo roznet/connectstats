@@ -27,14 +27,16 @@
 
 #import "GCStatsCalendarAggregationConfig.h"
 #import "GCAppGlobal.h"
-
+@interface GCStatsCalendarAggregationConfig ()
+@property (nonatomic,retain) NSDate * fixedReferenceDate;
+@end
 @implementation GCStatsCalendarAggregationConfig
 
-+(GCStatsCalendarAggregationConfig*)configFor:(NSCalendarUnit)aUnit referenceDate:(nullable NSDate*)referenceDate calendar:(NSCalendar*)calendar{
++(GCStatsCalendarAggregationConfig*)configFor:(NSCalendarUnit)aUnit calendar:(NSCalendar*)calendar{
     GCStatsCalendarAggregationConfig * rv = [[[GCStatsCalendarAggregationConfig alloc] init] autorelease];
     if (rv) {
         rv.calendar = calendar;
-        rv.referenceDate = referenceDate;
+        rv.periodType = gcPeriodCalendar;
         rv.calendarUnit = aUnit;
     }
     return rv;
@@ -43,22 +45,48 @@
     GCStatsCalendarAggregationConfig * rv = [[[GCStatsCalendarAggregationConfig alloc] init] autorelease];
     if (rv) {
         rv.calendar = other.calendar;
-        rv.referenceDate = other.referenceDate;
+        rv.periodType = other.periodType;
+        rv.fixedReferenceDate = other.fixedReferenceDate;
         rv.calendarUnit = other.calendarUnit;
     }
     return rv;
 
 }
 +(GCStatsCalendarAggregationConfig*)globalConfigFor:(NSCalendarUnit)aUnit{
-    return [GCStatsCalendarAggregationConfig configFor:aUnit referenceDate:[GCAppGlobal referenceDate] calendar:[GCAppGlobal calculationCalendar]];
+    GCStatsCalendarAggregationConfig * rv = [GCStatsCalendarAggregationConfig configFor:aUnit calendar:[GCAppGlobal calculationCalendar]];
+    rv.periodType = (gcPeriodType)[GCAppGlobal configGetInt:CONFIG_PERIOD_TYPE defaultValue:gcPeriodCalendar];
+    return rv;
 }
 
 -(void)dealloc{
-    [_referenceDate release];
+    [_fixedReferenceDate release];
     [_calendar release];
     
     [super dealloc];
 }
+
+-(NSDate*)referenceDate{
+    switch (self.periodType){
+        case gcPeriodRolling:
+            return [NSDate date];
+        case gcPeriodCalendar:
+            return nil;
+        case gcPeriodReferenceDate:
+            return self.fixedReferenceDate;
+    }
+    return nil;
+}
+
+-(void)setReferenceDate:(NSDate *)referenceDate{
+    if( referenceDate == nil ){
+        self.periodType = gcPeriodCalendar;
+        self.fixedReferenceDate = nil;
+    }else{
+        self.fixedReferenceDate = referenceDate;
+        self.periodType = gcPeriodReferenceDate;
+    }
+}
+
 -(NSString*)description{
     return [NSString stringWithFormat:@"<%@: %@ %@>", NSStringFromClass([self class]), self.calendarUnitDescription, self.referenceDate ? @"Rolling" : @""];
 }
@@ -98,7 +126,9 @@
     }
 }
 -(GCStatsCalendarAggregationConfig*)equivalentConfigFor:(NSCalendarUnit)aUnit{
-    return [GCStatsCalendarAggregationConfig configFor:aUnit referenceDate:self.referenceDate calendar:self.calendar];
+    GCStatsCalendarAggregationConfig * rv = [GCStatsCalendarAggregationConfig configFrom:self];
+    rv.calendarUnit = aUnit;
+    return rv;
 }
 
 -(gcHistoryStats)historyStats{

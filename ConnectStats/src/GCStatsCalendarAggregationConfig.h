@@ -27,6 +27,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GCHistoryFieldSummaryStats.h"
+#import "GCAppConstants.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -39,10 +40,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,readonly) NSDateFormatter * dateFormatter;
 @property (nonatomic,readonly) NSString * calendarUnitDescription;
 @property (nonatomic,retain) NSString * calendarUnitKey;
+@property (nonatomic,assign) gcPeriodType periodType;
 
 @property (nonatomic,readonly) gcHistoryStats historyStats;
 
-+(GCStatsCalendarAggregationConfig*)configFor:(NSCalendarUnit)aUnit referenceDate:(nullable NSDate*)referenceDate calendar:(NSCalendar*)calendar;
++(GCStatsCalendarAggregationConfig*)configFor:(NSCalendarUnit)aUnit calendar:(NSCalendar*)calendar;
 +(GCStatsCalendarAggregationConfig*)globalConfigFor:(NSCalendarUnit)aUnit;
 +(GCStatsCalendarAggregationConfig*)configFrom:(GCStatsCalendarAggregationConfig*)other;
 

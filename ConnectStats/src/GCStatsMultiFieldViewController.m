@@ -633,12 +633,12 @@
     NSArray * useActivities = self.useFilter ? [[GCAppGlobal organizer] filteredActivities] : [[GCAppGlobal organizer] activities];
     GCHistoryFieldSummaryStats * vals = [GCHistoryFieldSummaryStats fieldStatsWithActivities:useActivities
                                                                                     matching:filter
-                                                                               referenceDate:[GCAppGlobal referenceDate]
+                                                                               referenceDate:self.multiFieldConfig.calendarConfig.referenceDate
                                                                                   ignoreMode:ignoreMode
                                          ];
     //RZLog(RZLogInfo, @"Stats found [%@]", [vals.foundActivityTypes componentsJoinedByString:@", "]);
     if ([[GCAppGlobal health] hasHealthData]) {
-        [vals addHealthMeasures:[GCAppGlobal health].measures referenceDate:[GCAppGlobal referenceDate]];
+        [vals addHealthMeasures:[GCAppGlobal health].measures referenceDate:self.multiFieldConfig.calendarConfig.referenceDate];
     }
 
     self.allFields = vals.fieldData.allKeys;
