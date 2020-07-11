@@ -396,6 +396,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
 -(void)setupSummaryFromFitnessActivity:(GCActivity*)activity width:(CGFloat)width status:(gcViewActivityStatus)status{
 
+    BOOL addImages = true;
+    
     NSArray * preferredMainDisplayFields = @[ @"SumDistance", @"SumDuration"];
     NSArray * preferredInfoFields = @[ @"WeightedMeanHeartRate", @"WeightedMeanSpeed"];
     if( activity.activityTypeDetail.isPacePreferred){
@@ -488,7 +490,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         NSLocalizedString(@"Mark", @"Grid Cell Button");
 
     if (width < 600.) {
-        [self setupForRows:3 andCols:3];
+        [self setupForRows:addImages ? 4 : 3 andCols:3];
         self.marginx = 2.;
         self.marginy = 2.;
         [self labelForRow:0 andCol:0].attributedText = day;
@@ -891,7 +893,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }else{
         [self setupForRows:2 andCols:3];
     }
-    GCLap * lap = [activity lapNumber:idx];
+        GCLap * lap = idx < activity.lapCount ? [activity lapNumber:idx]  :nil;
     GCNumberWithUnit * dist = [[lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activity.activityType] inActivity:activity]
                                convertToUnit:activity.distanceDisplayUnit];
     GCNumberWithUnit * speed= [[lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activity.activityType] inActivity:activity]

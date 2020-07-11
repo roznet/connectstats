@@ -1,8 +1,8 @@
-//  MIT Licence
+//  MIT License
 //
-//  Created on 24/11/2012.
+//  Created on 09/07/2020 for ConnectStats
 //
-//  Copyright (c) 2012 Brice Rosenzweig.
+//  Copyright (c) 2020 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
-//  
+//
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-//  
+//
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,20 +21,20 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
-//  
+//
 
-#import <Foundation/Foundation.h>
 
-@interface NSString (Mangle)
 
--(NSData*)mangledDataWithKey:(NSString*)key;
-+(NSString*)stringFromMangedData:(NSData*)ad withKey:(NSString*)key;
+#import "GCWebRequestStandard.h"
 
--(NSArray*)specialCharacters;
--(NSArray*)charactersInSet:(NSCharacterSet*)charSet;
--(NSString*)specialCharacterReplacedBySeparator:(NSString*)sep;
+@class GCActivity;
 
--(NSString*)stringByEscapingForHTML;
+NS_ASSUME_NONNULL_BEGIN
 
--(NSString*)sha256String;
+@interface GCWebImagesRequests : GCWebRequestStandard
+
++(GCWebImagesRequests*)imagesRequestFor:(GCActivity*)act;
+
 @end
+
+NS_ASSUME_NONNULL_END

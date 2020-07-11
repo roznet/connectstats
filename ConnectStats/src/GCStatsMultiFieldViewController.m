@@ -684,7 +684,6 @@
 -(GCHistoryFieldDataSerie*)fieldDataSerieFor:(GCField*)field{
     GCHistoryFieldDataSerie * stats = self.fieldDataSeries[field];
     if (!stats) {
-
         if (field) {
             NSMutableDictionary * newSeries = self.fieldDataSeries?[NSMutableDictionary dictionaryWithDictionary:self.fieldDataSeries]:[NSMutableDictionary dictionary];
 
@@ -693,7 +692,6 @@
             [stats attach:self];
             newSeries[field] = stats;
             self.fieldDataSeries = [NSDictionary dictionaryWithDictionary:newSeries];
-
         }
     }
 

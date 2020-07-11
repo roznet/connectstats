@@ -53,6 +53,7 @@ const CGFloat kCellDaySpacing = 2.f;
 @property (nonatomic,retain) UISearchBar * search;
 @property (nonatomic,retain) GCActivity * activityForAction;
 @property (nonatomic,assign) BOOL quickFilter;
+@property (nonatomic,assign) BOOL showImages;
 
 @end
 
@@ -73,6 +74,8 @@ const CGFloat kCellDaySpacing = 2.f;
 
         self.quickFilter = [GCAppGlobal configGetBool:CONFIG_QUICK_FILTER defaultValue:false];
 
+        self.showImages = [GCAppGlobal configGetBool:CONFIG_SHOW_PHOTOS defaultValue:false];
+        
         self.refreshControl = RZReturnAutorelease([[UIRefreshControl alloc] init]);
         self.refreshControl.attributedTitle = nil;
         [self.refreshControl addTarget:self action:@selector(refreshData) forControlEvents:UIControlEventValueChanged];
@@ -436,7 +439,6 @@ const CGFloat kCellDaySpacing = 2.f;
     if (![act.activityType isEqualToString:GC_TYPE_DAY]) {
         return [self tableView:tableView activityCellForRowAtIndexPath:indexPath];
     }else{
-        //return [self tableView:tableView activityCellForRowAtIndexPath:indexPath];
         return [self tableView:tableView dayCellForRowAtIndexPath:indexPath];
     }
 }
@@ -447,6 +449,23 @@ const CGFloat kCellDaySpacing = 2.f;
     [cell setupForActivity:[self activityForIndex:indexPath.row]];
     return cell;
 }
+
+- (UITableViewCell *)tableView:(UITableView *)tableView activityCellWithImagesForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    cell.delegate = self;
+    gcViewActivityStatus status = gcViewActivityStatusNone;
+    if (self.organizer.hasCompareActivity && [self.organizer activityIndexForFilteredIndex:indexPath.row]==self.organizer.selectedCompareActivityIndex) {
+        status = gcViewActivityStatusCompare;
+    }
+    [cell setupSummaryFromActivity:[self activityForIndex:indexPath.row] width:tableView.frame.size.width status:status];
+    cell.cellInset = [self insetForRowAtIndexPath:indexPath];
+    cell.cellInsetSize = kCellDaySpacing;
+    
+    
+    return cell;
+}
+
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView activityCellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -460,6 +479,7 @@ const CGFloat kCellDaySpacing = 2.f;
     [cell setupSummaryFromActivity:[self activityForIndex:indexPath.row] width:tableView.frame.size.width status:status];
     cell.cellInset = [self insetForRowAtIndexPath:indexPath];
     cell.cellInsetSize = kCellDaySpacing;
+    
 	return cell;
 }
 
@@ -497,6 +517,10 @@ const CGFloat kCellDaySpacing = 2.f;
     GCActivity * act = [self activityForIndex:indexPath.row];
     if ([act.activityType isEqualToString:GC_TYPE_DAY]) {
         rv = kGCCellActivityDefaultHeight;
+    }else{
+        if( self.showImages ){
+            rv = 150.;
+        }
     }
 
     if ([self insetForRowAtIndexPath:indexPath]) {

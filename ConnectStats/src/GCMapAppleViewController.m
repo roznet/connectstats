@@ -48,6 +48,7 @@ typedef NS_ENUM(NSUInteger,gcMapViewType) {
 -(void)dealloc{
     [_routeLine release];
     [_routeLineView release];
+    _mapView.delegate = nil;
     [_mapView release];
     [_gradientRoute release];
     [_gradientRouteView release];
@@ -202,6 +203,7 @@ typedef NS_ENUM(NSUInteger,gcMapViewType) {
         //camera.pitch = 50;
         self.mapView.pitchEnabled = YES;
         self.mapView.showsBuildings = YES;
+        self.mapView.showsUserLocation = NO;
         [self.mapView setCamera:camera animated:YES];
 
     }else{
@@ -472,18 +474,9 @@ typedef NS_ENUM(NSUInteger,gcMapViewType) {
     }
     return annotationView;
 }
-/*
--(void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray<MKAnnotationView *> *)views{
-    //NSLog(@"Finished Annotation");
-}
--(void)mapViewDidFailLoadingMap:(MKMapView *)mapView withError:(NSError *)error{
-    //NSLog(@"Failed Loading");
-}
 -(void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered{
-    //NSLog(@"Finished Rendering");
+    
+    [self.mapDataSource finishedRendering:fullyRendered];
 }
--(void)mapViewDidFinishLoadingMap:(MKMapView *)mapView{
-    //NSLog(@"Finished Loading");
-}
- */
+
 @end

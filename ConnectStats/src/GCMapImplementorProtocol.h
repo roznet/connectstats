@@ -69,4 +69,6 @@ typedef NS_ENUM(NSUInteger, gcLapDisplay){
 -(BOOL)enableTap;
 -(void)tapPoint:(CLLocationCoordinate2D)coord;
 
+-(void)finishedRendering:(BOOL)fullyRendered;
+
 @end

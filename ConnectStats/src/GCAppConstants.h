@@ -71,6 +71,7 @@
 #define CONFIG_ZONE_PREFERRED_SOURCE    @"config_zone_preferred_source"
 #define CONFIG_WIFI_DOWNLOAD_DETAILS    @"config_wifi_download_details"
 #define CONFIG_SKIN_NAME                @"config_skin_name"
+#define CONFIG_SHOW_PHOTOS              @"config_show_photos"
 #define CONFIG_VERSIONS_SEEN            @"config_versions_seen"
 #define CONFIG_FEATURES_SEEN            @"config_features_seen"
 #define CONFIG_LAST_REMOTE_STATUS_ID    @"config_last_remote_status_id"

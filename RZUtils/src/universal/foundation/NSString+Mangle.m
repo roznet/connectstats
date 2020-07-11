@@ -26,6 +26,7 @@
 #import "NSString+Mangle.h"
 #import "RZMacros.h"
 #import "NSArray+Map.h"
+#import <CommonCrypto/CommonDigest.h>
 
 @implementation NSString (Mangle)
 
@@ -99,5 +100,18 @@
               stringByReplacingOccurrencesOfString: @"'" withString: @"&#39;"]
              stringByReplacingOccurrencesOfString: @">" withString: @"&gt;"]
             stringByReplacingOccurrencesOfString: @"<" withString: @"&lt;"];
+}
+
+-(NSString*)sha256String{
+    NSData * stringdata = [self dataUsingEncoding:NSUTF8StringEncoding];;
+
+    unsigned char result[CC_SHA256_DIGEST_LENGTH];
+    CC_SHA256( stringdata.bytes, (CC_LONG)stringdata.length, result );
+
+    NSMutableString *rv = [NSMutableString string];
+    for (int i=0; i < CC_SHA256_DIGEST_LENGTH; i++) {
+      [rv appendFormat:@"%02x", result[i]];
+    }
+    return rv;
 }
 @end
