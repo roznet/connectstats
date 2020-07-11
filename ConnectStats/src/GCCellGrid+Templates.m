@@ -396,7 +396,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
 -(void)setupSummaryFromFitnessActivity:(GCActivity*)activity width:(CGFloat)width status:(gcViewActivityStatus)status{
 
-    BOOL addImages = true;
+    BOOL addImages = false;
     
     NSArray * preferredMainDisplayFields = @[ @"SumDistance", @"SumDuration"];
     NSArray * preferredInfoFields = @[ @"WeightedMeanHeartRate", @"WeightedMeanSpeed"];
