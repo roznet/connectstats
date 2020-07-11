@@ -337,10 +337,10 @@
     //    Oct -> Cnt 2, Sum 3.2+2.1=5.3
     //    Sep -> Cnt 1, Sum 1.2
 
-    NSArray * cutOffExpected = @[ @[ @"2012-11-01", @(0.2)], @[ @"2012-10-01", @(5.3)], @[@"2012-09-01", @(1.2)]];
+    NSArray * cutOffExpected = @[ @[ @"2012-11-01T00:00:00.000Z", @(0.2)], @[ @"2012-10-01T00:00:00.000Z", @(5.3)], @[@"2012-09-01T00:00:00.000Z", @(1.2)]];
     NSUInteger i=0;
     for (NSArray * one in cutOffExpected) {
-        NSDate * date = [NSDate dateForDashedDate:one[0]];
+        NSDate * date = [NSDate dateForRFC3339DateTimeString:one[0]];
         NSNumber * value = one[1];
         GCHistoryAggregatedDataHolder * holder = [stats dataForIndex:i++];
         XCTAssertTrue([holder.date isSameCalendarDay:date calendar:[GCAppGlobal calculationCalendar]], @"same date %@ / %@", holder.date, date);

@@ -30,9 +30,10 @@
 #import "GCViewConfig.h"
 #import "GCStatsMultiFieldConfig.h"
 #import "GCMapViewController.h"
+#import "ConnectStats-Swift.h"
 
 @interface GCTestUserInterface : GCTestCase
-
+@property (nonatomic,retain) GCMapViewController * mapViewController;
 @end
 
 @implementation GCTestUserInterface
@@ -45,6 +46,13 @@
 - (void)tearDown {
     [super tearDown];
     // Put teardown code here. This method is called after the invocation of each test method in the class.
+    self.mapViewController = nil;
+}
+
+-(void)dealloc{
+    [_mapViewController release];
+    
+    [super dealloc];
 }
 
 -(void)buildJson:(NSMutableDictionary*)json
@@ -168,7 +176,9 @@
     NSLog(@"%@", fitAct);
     
     XCTestExpectation * expectation = RZReturnAutorelease([[XCTestExpectation alloc] initWithDescription:@"Map Snapshot"]);
-    [GCMapViewController mapImageForActivity:fitAct size:CGSizeMake(250.,250.) completion:^(UIImage*img){
+    
+    self.mapViewController = RZReturnAutorelease([[GCMapViewController alloc] initWithNibName:nil bundle:nil]);
+    [self.mapViewController mapImageForActivity:fitAct size:CGSizeMake(250.,250.) completion:^(UIImage*img){
         XCTAssertEqual(img.size.height, 250.);
         XCTAssertEqual(img.size.width, 250.);
         [expectation fulfill];
