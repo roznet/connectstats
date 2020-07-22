@@ -28,16 +28,12 @@
 #import "GCFields.h"
 #import "GCActivity.h"
 
-@interface GCMapLegendView : UIView {
-    GCViewGradientColors * gradientColors;
-    GCActivity * activity;
-    double min;
-    double max;
-    double mid;
-}
+@interface GCMapLegendView : UIView
+
 @property (nonatomic,retain) GCViewGradientColors * gradientColors;
 @property (nonatomic,retain) GCActivity * activity;
 @property (nonatomic,retain) GCField * field;
+@property (nonatomic,assign) BOOL invertedColors;
 @property (nonatomic,assign) double min;
 @property (nonatomic,assign) double max;
 @property (nonatomic,assign) double mid;

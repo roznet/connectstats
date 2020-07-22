@@ -29,7 +29,6 @@
 #import "GCViewConfig.h"
 
 @implementation GCMapLegendView
-@synthesize min,max,mid,gradientColors,activity;
 
 -(GCMapLegendView*)initWithFrame:(CGRect)rect{
     self = [super initWithFrame:rect];
@@ -42,8 +41,8 @@
 }
 
 -(void)dealloc{
-    [gradientColors release];
-    [activity release];
+    [_gradientColors release];
+    [_activity release];
     [_field release];
     [super dealloc];
 }
@@ -55,7 +54,7 @@
     }else{
         self.alpha = 1.;
     }
-    if (!activity || !activity.activityType) {
+    if (!self.activity || !self.activity.activityType) {
         return;
     }
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -69,34 +68,38 @@
     [roundedRectanglePath stroke];
 
     [[UIColor blackColor] setFill];
-    GCUnit * unit = [activity displayUnitForField:self.field];
+    GCUnit * unit = [self.activity displayUnitForField:self.field];
     NSString * title = [self.field displayNameWithUnits:unit];
     [title drawAtPoint:CGPointMake(7., 5.) withAttributes:@{NSFontAttributeName:[GCViewConfig systemFontOfSize:12.]}];
 
-    size_t n = gradientColors.numberOfColors;
+    size_t n = self.gradientColors.numberOfColors;
 
     CGFloat w = (rect.size.width-8.)/n;
     CGRect gRect = CGRectMake(4., 25., w, 5.);
     for (size_t idx = 0; idx<n; idx++) {
-        [gradientColors.colors[idx] setFill];
+        if( self.invertedColors ){
+            [self.gradientColors.colors[n-1-idx] setFill];
+        }else{
+            [self.gradientColors.colors[idx] setFill];
+        }
         CGContextFillRect(context, gRect);
         gRect.origin.x += w;
     }
     [[UIColor blackColor] setFill];
     UIFont * valFont = [GCViewConfig systemFontOfSize:10.];
-    NSString * val = [activity formatValueNoUnits:min forField:self.field];
+    NSString * val = [self.activity formatValueNoUnits:self.min forField:self.field];
     gRect.origin.x = 4.;
     gRect.origin.y = 32.;
     NSDictionary * valAttr = @{NSFontAttributeName:valFont};
     gRect.size = [val sizeWithAttributes:valAttr];
     [val drawInRect:gRect withAttributes:valAttr];
 
-    val = [activity formatValueNoUnits:mid forField:self.field];
+    val = [self.activity formatValueNoUnits:self.mid forField:self.field];
     gRect.size = [val sizeWithAttributes:valAttr];
     gRect.origin.x = rect.size.width/2. - gRect.size.width/2.;
     [val drawInRect:gRect withAttributes:valAttr];
 
-    val = [activity formatValueNoUnits:max forField:self.field];
+    val = [self.activity formatValueNoUnits:self.max forField:self.field];
     gRect.size = [val sizeWithAttributes:valAttr];
     gRect.origin.x = rect.size.width - gRect.size.width - 4.;
     [val drawInRect:gRect withAttributes:valAttr];

@@ -514,6 +514,7 @@
     (self.legendView).activity = self.activity;
     //FIX
     self.legendView.field = self.gradientField;
+    self.legendView.invertedColors = [self.activity displayUnitForField:self.gradientField].betterIsMin;
     (self.legendView).gradientColors = [self.implementor gradientColors];
     NSUInteger n = [self.implementor numberOfColors];
     if (n-1<thresholds.count) {

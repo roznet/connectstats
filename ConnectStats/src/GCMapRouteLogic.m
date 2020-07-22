@@ -145,6 +145,8 @@
 
         double startTime = points.count > 0 ? [[points[0] time] timeIntervalSinceReferenceDate] : 0.;
 
+        BOOL invertedColor = valsWUnit.unit.betterIsMin;
+        
         for (GCTrackPoint * aPoint in points) {
             if (mod!=0 && count++%mod!=0) {
                 continue;
@@ -216,6 +218,11 @@
                         break;
                     }
                 }
+                
+                if( invertedColor ){
+                    idx = n - 1 - idx;
+                }
+                
                 CGFloat val = (float)idx/n;
 
                 GCMapRouteLogicPointHolder * holder = [GCMapRouteLogicPointHolder pointHolder:point color:[self.gradientColors colorsForValue:val] start:pathStart];
