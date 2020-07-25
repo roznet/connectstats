@@ -15,6 +15,7 @@ end
 target 'ConnectStatsTestApp' do
   use_frameworks!
   pod 'Flurry-iOS-SDK/FlurrySDK'
+  pod 'GoogleMaps'
   pod 'GenericJSON'
 end
 target 'FitFileExplorer' do

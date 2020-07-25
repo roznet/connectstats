@@ -355,9 +355,9 @@
 
     [history setDb:[GCAppGlobal db]];
     [history loadFromDb:nil];
-
+    
     GCSimpleGraphCachedDataSource * sample = [GCSimpleGraphCachedDataSource historyView:history
-                                                                           calendarUnit:NSCalendarUnitYear
+                                                                           calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitYear]
                                                                             graphChoice:gcGraphChoiceCumulative after:nil];
 
     return sample;
@@ -374,7 +374,7 @@
     [history loadFromDb:nil];
 
     GCSimpleGraphCachedDataSource * sample = [GCSimpleGraphCachedDataSource historyView:history
-                                                                           calendarUnit:NSCalendarUnitMonth
+                                                                           calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth]
                                                                             graphChoice:gcGraphChoiceBarGraph after:nil];
 
     [history loadFromDb:^(NSDate * date){
@@ -384,7 +384,7 @@
         
     }] ;
     GCSimpleGraphCachedDataSource * sample2 = [GCSimpleGraphCachedDataSource historyView:history
-                                                                           calendarUnit:NSCalendarUnitMonth
+                                                                           calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth]
                                                                             graphChoice:gcGraphChoiceBarGraph after:nil];
 
     return @[ sample, sample2 ];
@@ -482,7 +482,7 @@
     [history loadFromDb:nil];
 
     GCSimpleGraphCachedDataSource * sample = [GCSimpleGraphCachedDataSource historyView:history
-                                                                           calendarUnit:NSCalendarUnitYear
+                                                                           calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitYear]
                                                                             graphChoice:gcGraphChoiceCumulative after:nil];
 
     return sample;
@@ -808,8 +808,8 @@
     GCStatsMultiFieldConfig * config = RZReturnAutorelease([[GCStatsMultiFieldConfig alloc] init]);
     config.activityType = GC_TYPE_RUNNING;
     config.viewChoice = gcViewChoiceAll;
-    config.historyStats = gcHistoryStatsAll;
-    config.calChoice = gcStatsViewConfigAll;
+    config.viewConfig = gcStatsViewConfigAll;
+    config.calendarConfig.calendarUnit = kCalendarUnitNone;
 
     UITableView * tableView = vc.tableView;
     // Force width for consistency accross device run
@@ -824,8 +824,9 @@
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Stats Multi Time"]];
     cell = [vc tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:GC_SECTION_DATA+2]];
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Stats Multi HR"]];
-
-    config.viewChoice = gcViewChoiceMonthly;
+    
+    config.viewChoice = gcViewChoiceCalendar;
+    config.calendarConfig.calendarUnit = NSCalendarUnitMonth;
     [vc setupTestModeWithFieldListConfig:config];
     cell = [vc tableView:tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:GC_SECTION_DATA]];
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Stats Multi Last Month"]];
@@ -845,12 +846,12 @@
     [aggregatedStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
     cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    [cell setupFromHistoryAggregatedData:[aggregatedStats dataForIndex:0] index:0 viewChoice:gcViewChoiceWeekly andActivityType:GC_TYPE_RUNNING width:320.];
+    [cell setupFromHistoryAggregatedData:[aggregatedStats dataForIndex:0] index:0 calendarUnit:NSCalendarUnitWeekOfYear andActivityType:GC_TYPE_RUNNING width:320.];
     [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Weekly"]];
 
     [aggregatedStats aggregate:NSCalendarUnitMonth referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    [cell setupFromHistoryAggregatedData:[aggregatedStats dataForIndex:0] index:0 viewChoice:gcViewChoiceMonthly andActivityType:GC_TYPE_RUNNING width:320.];
+    [cell setupFromHistoryAggregatedData:[aggregatedStats dataForIndex:0] index:0 calendarUnit:NSCalendarUnitMonth andActivityType:GC_TYPE_RUNNING width:320.];
     [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Monthly"]];
 
     return stats;

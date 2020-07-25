@@ -558,7 +558,6 @@
 		427F93551BEA9A5900C177F9 /* stats_running_monthly.csv in Resources */ = {isa = PBXBuildFile; fileRef = 427F932C1BEA9A5900C177F9 /* stats_running_monthly.csv */; };
 		427F93561BEA9A5900C177F9 /* stats_running_weekly.csv in Resources */ = {isa = PBXBuildFile; fileRef = 427F932D1BEA9A5900C177F9 /* stats_running_weekly.csv */; };
 		427F93571BEA9A5900C177F9 /* stats_running_yearly.csv in Resources */ = {isa = PBXBuildFile; fileRef = 427F932E1BEA9A5900C177F9 /* stats_running_yearly.csv */; };
-		427F935C1BEAA05800C177F9 /* GCTestUISamples.m in Sources */ = {isa = PBXBuildFile; fileRef = 427F935B1BEAA05800C177F9 /* GCTestUISamples.m */; };
 		427F935F1BEAA09E00C177F9 /* GCTestUISampleDataSourceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 427F935E1BEAA09E00C177F9 /* GCTestUISampleDataSourceHolder.m */; };
 		427F93641BEAA5D100C177F9 /* GCTestUIUnitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 427F93631BEAA5D100C177F9 /* GCTestUIUnitTest.m */; };
 		427F93671BEAAAA000C177F9 /* GCTestUISampleCellHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 427F93661BEAAAA000C177F9 /* GCTestUISampleCellHolder.m */; };
@@ -1220,6 +1219,16 @@
 		42BFC26C1DCF522D00EAD40E /* GCViewConfigSkin.m in Sources */ = {isa = PBXBuildFile; fileRef = 427F93741BED59D900C177F9 /* GCViewConfigSkin.m */; };
 		42C0113E1AB437C10059B6CF /* activitytrack_718039360.json in Resources */ = {isa = PBXBuildFile; fileRef = 42C0113D1AB437C10059B6CF /* activitytrack_718039360.json */; };
 		42C011401AB438050059B6CF /* GCTestsParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C0113F1AB438050059B6CF /* GCTestsParsing.m */; };
+		42C038CF24CCACB7003FB689 /* GCTestUISamples.m in Sources */ = {isa = PBXBuildFile; fileRef = 427F935B1BEAA05800C177F9 /* GCTestUISamples.m */; };
+		42C038D024CCAD21003FB689 /* GCMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4234943916090E7300A770D6 /* GCMapViewController.m */; };
+		42C038D124CCAD21003FB689 /* GCMapRouteLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EB51DD18B4F81500B85FAB /* GCMapRouteLogic.m */; };
+		42C038D224CCAD21003FB689 /* GCMapGradientPathOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4201528D1624D5AC004F64EF /* GCMapGradientPathOverlayView.m */; };
+		42C038D324CCAD21003FB689 /* GCMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A95B391632DB4B000B2082 /* GCMapAnnotation.m */; };
+		42C038D424CCAD35003FB689 /* GCMapGoogleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AB66CC16DACABA00C633BD /* GCMapGoogleViewController.m */; };
+		42C038D524CCAD35003FB689 /* GCMapAppleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 429912C117E4A0CB003CCCC6 /* GCMapAppleViewController.m */; };
+		42C038D924CCADBB003FB689 /* GCMapWindCompass.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C072C11AE2FAE000E7E066 /* GCMapWindCompass.m */; };
+		42C038DA24CCADBB003FB689 /* GCMapLegendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A95B3C1632FC24000B2082 /* GCMapLegendView.m */; };
+		42C038DB24CCADBB003FB689 /* GCMapLapInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42753D6F16E6A881005C8281 /* GCMapLapInfoView.m */; };
 		42C0589721D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C0589621D04B0900109D54 /* RZFitFieldValueExtensions.swift */; };
 		42C0589821D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C0589621D04B0900109D54 /* RZFitFieldValueExtensions.swift */; };
 		42C0589921D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C0589621D04B0900109D54 /* RZFitFieldValueExtensions.swift */; };
@@ -5677,6 +5686,7 @@
 				42B5E1B71BA5AEC9000FAE4E /* Resources */,
 				42EAE412200BB2E40017D65C /* Embed Frameworks */,
 				CA7BA052D74F944BBEA800F2 /* [CP] Embed Pods Frameworks */,
+				213834454543D176F21EE27B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -6635,6 +6645,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		213834454543D176F21EE27B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3FC44B97C0482AE32C2538D2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -7431,6 +7458,7 @@
 				42C3CF481DA15E6900C25709 /* GCAppGlobal.swift in Sources */,
 				422CC87F1E6ACA1700195414 /* FITFitMessageFields.swift in Sources */,
 				427F93781BEDFF0000C177F9 /* GCStatsOneFieldConfig.m in Sources */,
+				42C038D324CCAD21003FB689 /* GCMapAnnotation.m in Sources */,
 				42B5E3111BA5B915000FAE4E /* GCTrackFieldChoices.m in Sources */,
 				42BF8D8924B7708B001E1C72 /* GCWebImagesRequests.m in Sources */,
 				42B5E3121BA5B915000FAE4E /* GCTrackFieldChoiceHolder.m in Sources */,
@@ -7445,12 +7473,14 @@
 				426A13601C5CCEFA00D61098 /* GCActivitySettings.m in Sources */,
 				422549601EE73622004F4AE5 /* FITFitStatisticsWeight.swift in Sources */,
 				426A13571C54D0B300D61098 /* GCActivityOrganizedFields.m in Sources */,
+				42C038D524CCAD35003FB689 /* GCMapAppleViewController.m in Sources */,
 				427F937D1BEDFF3E00C177F9 /* GCStatsOneFieldGraphViewController.m in Sources */,
 				421A51521C82FB4000671587 /* GCStatsHistGraphViewController.m in Sources */,
 				426A7F4C1C426A95000C5BCC /* GCTrackPointExtraIndex.m in Sources */,
 				426B0F0E1DA111AD0091A734 /* GCGarminSearchModernJsonParser.m in Sources */,
 				42B5E2541BA5B216000FAE4E /* GCDerivedOrganizer.m in Sources */,
 				42B5E2551BA5B216000FAE4E /* GCDerivedDataSerie.m in Sources */,
+				42C038DB24CCADBB003FB689 /* GCMapLapInfoView.m in Sources */,
 				42B5E2561BA5B216000FAE4E /* GCHealthZoneCalculator.m in Sources */,
 				42B5E2571BA5B216000FAE4E /* GCHealthZone.m in Sources */,
 				42BDFE81242F7789001BCDC8 /* GCActivity+Series.m in Sources */,
@@ -7467,6 +7497,7 @@
 				421208911C6E860700E0470D /* GCFieldsForCategory.m in Sources */,
 				42B5E2611BA5B216000FAE4E /* GCHealthKitActivityRequest.m in Sources */,
 				42B467BB1DC6A74200279DC8 /* GCAppProfiles.m in Sources */,
+				42C038D424CCAD35003FB689 /* GCMapGoogleViewController.m in Sources */,
 				42B5E2621BA5B216000FAE4E /* GCHealthKitActivityParser.m in Sources */,
 				422CC8811E6ACA1700195414 /* FITFitFileInterpret.swift in Sources */,
 				42B5E2641BA5B216000FAE4E /* GCHealthKitBodyRequest.m in Sources */,
@@ -7548,19 +7579,22 @@
 				42E1A74E24277FF9006C868A /* GCActivity+BestRolling.m in Sources */,
 				427F93771BEDFA6F00C177F9 /* GCStatsMultiFieldViewController.m in Sources */,
 				42B5E2B21BA5B216000FAE4E /* GCExportStrava.m in Sources */,
-				427F935C1BEAA05800C177F9 /* GCTestUISamples.m in Sources */,
 				42D4CA6F248D5497003F3AB7 /* GCStatsDerivedHistory.m in Sources */,
 				42CC45D0200A6E91003EB805 /* GCTestServiceBugReport.m in Sources */,
 				42B5E2B71BA5B216000FAE4E /* GCActivity+Calculated.m in Sources */,
+				42C038DA24CCADBB003FB689 /* GCMapLegendView.m in Sources */,
 				42B5E2B81BA5B216000FAE4E /* GCActivity+CachedTracks.m in Sources */,
 				42B5E2B91BA5B216000FAE4E /* GCActivityMetaValue.m in Sources */,
 				4257766523205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */,
 				42B4080122E38CFA005C61C4 /* GCTestServiceCompare.m in Sources */,
+				42C038D024CCAD21003FB689 /* GCMapViewController.m in Sources */,
 				42B5E2BA1BA5B216000FAE4E /* GCActivitySummaryValue.m in Sources */,
 				42B5E2BB1BA5B216000FAE4E /* GCActivityCalculatedValue.m in Sources */,
+				42C038D924CCADBB003FB689 /* GCMapWindCompass.m in Sources */,
 				42B5E2BC1BA5B216000FAE4E /* GCActivity.m in Sources */,
 				42B5E2BD1BA5B216000FAE4E /* GCActivity+Import.m in Sources */,
 				424FBFFA22EC328400E2059A /* GCDebugServiceKeys.m in Sources */,
+				42C038D224CCAD21003FB689 /* GCMapGradientPathOverlayView.m in Sources */,
 				42B5E2BE1BA5B216000FAE4E /* GCActivity+Database.m in Sources */,
 				42B5E2BF1BA5B216000FAE4E /* GCActivityType.m in Sources */,
 				42B5E2C01BA5B216000FAE4E /* GCActivityTypes.m in Sources */,
@@ -7601,6 +7635,7 @@
 				42B5E21F1BA5AF9A000FAE4E /* GCTestTracks.m in Sources */,
 				422B34421CA7322600B345CD /* GCFieldInfo.m in Sources */,
 				421A51541C82FB7100671587 /* GCCellEntryFieldChoiceViewController.m in Sources */,
+				42C038CF24CCACB7003FB689 /* GCTestUISamples.m in Sources */,
 				42B5E21D1BA5AF9A000FAE4E /* GCTestDerived.m in Sources */,
 				42B5E2271BA5AF9A000FAE4E /* main.m in Sources */,
 				42B5E21C1BA5AF9A000FAE4E /* GCTestBasics.m in Sources */,
@@ -7612,6 +7647,7 @@
 				42B5E21E1BA5AF9A000FAE4E /* GCTestStats.m in Sources */,
 				42B5E2201BA5AF9A000FAE4E /* GCTestUICellsViewController.m in Sources */,
 				42B5E2161BA5AF9A000FAE4E /* GCAppDelegate.m in Sources */,
+				42C038D124CCAD21003FB689 /* GCMapRouteLogic.m in Sources */,
 				422CC87A1E6ACA1700195414 /* FITFitFile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

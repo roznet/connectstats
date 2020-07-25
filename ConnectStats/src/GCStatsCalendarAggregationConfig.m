@@ -27,6 +27,10 @@
 
 #import "GCStatsCalendarAggregationConfig.h"
 #import "GCAppGlobal.h"
+
+const NSUInteger kCalendarUnitNone = 0;
+
+
 @interface GCStatsCalendarAggregationConfig ()
 @property (nonatomic,retain) NSDate * fixedReferenceDate;
 @end

@@ -31,6 +31,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern const NSUInteger kCalendarUnitNone;
+
 @interface GCStatsCalendarAggregationConfig : NSObject
 
 @property (nonatomic,assign) NSCalendarUnit calendarUnit;

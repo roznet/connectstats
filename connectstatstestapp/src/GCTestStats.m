@@ -29,6 +29,7 @@
 #import "GCHistoryFieldSummaryStats.h"
 #import "GCViewConfig.h"
 #import "GCActivity+TestBackwardCompat.h"
+#import "GCStatsCalendarAggregationConfig.h"
 
 @import RZExternal;
 
@@ -68,22 +69,24 @@
 
 -(void)checkSelfConsistency{
     NSArray * atype= @[ GC_TYPE_RUNNING, GC_TYPE_SWIMMING,GC_TYPE_CYCLING,GC_TYPE_ALL ];
-    NSArray * vtype=  @[ @(gcViewChoiceWeekly), @(gcViewChoiceMonthly), @(gcViewChoiceYearly) ];
+    NSArray * ctype=  @[ @(NSCalendarUnitWeekOfYear), @(NSCalendarUnitMonth), @(NSCalendarUnitYear) ];
 
     // Try to match aggregator with manual sum on activities
     // returned by manual filter
     for (NSString * activityType in atype) {
-        for (NSNumber * vc in vtype) {
-            gcViewChoice viewChoice = [vc intValue];
+        for (NSNumber * vc in ctype) {
+            NSCalendarUnit calendarUnit = [vc intValue];
+            GCStatsCalendarAggregationConfig * calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:calendarUnit];
             GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
             GCHistoryAggregatedActivityStats * vals = [[[GCHistoryAggregatedActivityStats alloc] init] autorelease];
             [vals setActivityType:activityType];
             [vals setActivitiesFromOrganizer:organizer];
-            [vals aggregate:[GCViewConfig calendarUnitForViewChoice:viewChoice] referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+            
+            [vals aggregate:calendarUnit referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
             for (NSUInteger k = 0; k<[vals count]; k++) {
                 GCHistoryAggregatedDataHolder * data = [vals dataForIndex:k];
-                NSString * filter = [GCViewConfig filterFor:viewChoice date:[data date] andActivityType:activityType];
+                NSString * filter = [GCViewConfig filterFor:calendarConfig date:[data date] andActivityType:activityType];
                 NSArray * actIdx = [organizer activityIndexesMatchingString:filter];
                 double sum = 0.;
                 double cnt = 0.;
@@ -98,7 +101,7 @@
                 if (fabs(cnt-aggCnt) > 1e-7) {
                     actIdx = [organizer activityIndexesMatchingString:filter];
 
-                    NSLog(@"type=%@ viewChoice=%@ filter=%@",activityType,[GCViewConfig viewChoiceDesc:viewChoice],filter);
+                    NSLog(@"type=%@ config=%@ filter=%@",activityType,calendarConfig,filter);
                     for (NSUInteger i = 0; i < [actIdx count]; i++) {
                         GCActivity * act = [organizer activityForIndex:[[actIdx objectAtIndex:i] integerValue]];
                         NSLog(@"%@ %@ %f",act,[[act date] dateShortFormat],act.sumDistanceCompat);
@@ -107,7 +110,7 @@
                 RZ_ASSERT(fabs(cnt-aggCnt)<1e-6, @"%@ match cnt %f", data,cnt);
                 RZ_ASSERT(fabs(sum-aggSum)<1e-6, @"%@ match sum %f", data,sum);
             }
-            [self checkGarminConsistency:vals activityType:activityType viewChoice:viewChoice];
+            [self checkGarminConsistency:vals activityType:activityType calendarConfig:calendarConfig];
 
         }
     }
@@ -194,14 +197,14 @@
     }
 }
 
--(void)checkGarminConsistency:(GCHistoryAggregatedActivityStats*)vals activityType:(NSString*)activityType viewChoice:(gcViewChoice)viewChoice{
+-(void)checkGarminConsistency:(GCHistoryAggregatedActivityStats*)vals activityType:(NSString*)activityType calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig{
     if ([activityType isEqualToString:GC_TYPE_CYCLING] || [activityType isEqualToString:GC_TYPE_RUNNING]) {
-        NSString * file = [NSString stringWithFormat:@"stats_%@_%@.csv",activityType,[[GCViewConfig viewChoiceDesc:viewChoice] lowercaseString]];
+        NSString * file = [NSString stringWithFormat:@"stats_%@_%@.csv",activityType,[calendarConfig.calendarUnitDescription lowercaseString]];
         NSArray * gc=[NSArray arrayWithContentsOfCSVFile:[RZFileOrganizer bundleFilePath:file]];
         NSDateFormatter * formatter = [[[NSDateFormatter alloc] init] autorelease];
-        if (viewChoice == gcViewChoiceMonthly) {
+        if (calendarConfig.calendarUnit == NSCalendarUnitMonth) {
             [formatter setDateFormat:@"MMM yyyy"];
-        }else if (viewChoice == gcViewChoiceWeekly){
+        }else if (calendarConfig.calendarUnit == NSCalendarUnitWeekOfYear){
             [formatter setDateFormat:@"MM/dd/yyyy"];
         }else{
             [formatter setDateFormat:@"yyyy"];
@@ -221,7 +224,7 @@
                 double cs_dist  = [data valFor:gcAggregatedSumDistance and:gcAggregatedSum]/1000.;
                 //double cs_hr    = [data valFor:gcAggregatedWeightedHeartRate and:gcAggregatedAvg];
 
-                NSString * hdr = [NSString stringWithFormat:@"%@ %@ %@", activityType, [GCViewConfig viewChoiceDesc:viewChoice], dateStr];
+                NSString * hdr = [NSString stringWithFormat:@"%@ %@ %@", activityType, calendarConfig, dateStr];
 
                 NSString * msg = [NSString stringWithFormat:@"%@: %@ == %@", hdr, dateStr, [formatter stringFromDate:[data date]]];
                 BOOL res = [[formatter stringFromDate:[data date]] isEqualToString:dateStr];
