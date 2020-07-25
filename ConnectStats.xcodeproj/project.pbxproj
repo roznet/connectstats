@@ -1978,7 +1978,6 @@
 		420A57EA1CB32C5900EA3B42 /* withings_getmeas_188427.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = withings_getmeas_188427.json; sourceTree = "<group>"; };
 		4211C52619A72447000DEF87 /* GCHealthKitBodyRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitBodyRequest.h; path = src/GCHealthKitBodyRequest.h; sourceTree = "<group>"; };
 		4211C52719A72447000DEF87 /* GCHealthKitBodyRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitBodyRequest.m; path = src/GCHealthKitBodyRequest.m; sourceTree = "<group>"; };
-		4211C52B19AAF26C000DEF87 /* HealthStats.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HealthStats.entitlements; sourceTree = SOURCE_ROOT; };
 		4211C53319AB043A000DEF87 /* version.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = version.plist; path = HealthStats/version.plist; sourceTree = "<group>"; };
 		4212088E1C6E860700E0470D /* GCFieldsForCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldsForCategory.h; path = src/GCFieldsForCategory.h; sourceTree = "<group>"; };
 		4212088F1C6E860700E0470D /* GCFieldsForCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldsForCategory.m; path = src/GCFieldsForCategory.m; sourceTree = "<group>"; };
@@ -2398,7 +2397,7 @@
 		428FF79E15FB412C007A88FA /* GCWebUrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWebUrl.m; path = src/GCWebUrl.m; sourceTree = "<group>"; };
 		428FF7A115FB413B007A88FA /* GCActivitiesOrganizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivitiesOrganizer.h; path = src/GCActivitiesOrganizer.h; sourceTree = "<group>"; };
 		428FF7A215FB413B007A88FA /* GCActivitiesOrganizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivitiesOrganizer.m; path = src/GCActivitiesOrganizer.m; sourceTree = "<group>"; };
-		42902C0C20431A560058FB28 /* HealthStats.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = HealthStats.entitlements; path = HealthStats/HealthStats.entitlements; sourceTree = "<group>"; };
+		42902C0C20431A560058FB28 /* HealthStats.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = HealthStats.entitlements; path = ../HealthStats/HealthStats.entitlements; sourceTree = "<group>"; };
 		429184AD2319B0ED00FD6525 /* GCTestUserInterface.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCTestUserInterface.m; sourceTree = "<group>"; };
 		429184C1231B13EA00FD6525 /* Colors-iOS13.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Colors-iOS13.xcassets"; path = "ConnectStats/icons/Colors-iOS13.xcassets"; sourceTree = "<group>"; };
 		4291909821E226FF00E0B114 /* Pods_FitFileExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_FitFileExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3315,7 +3314,7 @@
 			isa = PBXGroup;
 			children = (
 				422FAFF219A1DD6100D09773 /* HealthStats-Info.plist */,
-				4211C52B19AAF26C000DEF87 /* HealthStats.entitlements */,
+				42902C0C20431A560058FB28 /* HealthStats.entitlements */,
 				4211C53319AB043A000DEF87 /* version.plist */,
 				42BFC2491DCF4F1500EAD40E /* GCHealthStatsBridge.swift */,
 			);
@@ -4213,7 +4212,6 @@
 			isa = PBXGroup;
 			children = (
 				4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */,
-				42902C0C20431A560058FB28 /* HealthStats.entitlements */,
 				42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */,
 				423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */,
 				4245CD811B7DE351006B85B4 /* Common */,
@@ -5744,7 +5742,7 @@
 			attributes = {
 				CLASSPREFIX = GC;
 				LastSwiftUpdateCheck = 0810;
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Brice Rosenzweig";
 				TargetAttributes = {
 					422FAEA319A1DD6000D09773 = {
@@ -7910,7 +7908,6 @@
 					"GC_USE_HEALTHKIT=1",
 				);
 				INFOPLIST_FILE = "HealthStats/HealthStats-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -7959,7 +7956,6 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "HealthStats/HealthStats-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8160,6 +8156,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -8212,6 +8209,7 @@
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -8513,7 +8511,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = HealthStatsTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8545,7 +8543,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = HealthStatsTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8582,7 +8580,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ConnectStatsTestAppXCTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8621,7 +8619,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ConnectStatsTestAppXCTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
