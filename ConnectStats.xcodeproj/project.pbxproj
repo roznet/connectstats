@@ -456,6 +456,8 @@
 		42628A4B23ACCFEE00EC6673 /* fit_map.json in Resources */ = {isa = PBXBuildFile; fileRef = 42939CE523AAD79500D2403A /* fit_map.json */; };
 		42628A4C23ACCFF100EC6673 /* fit_developer.json in Resources */ = {isa = PBXBuildFile; fileRef = 42939CEC23AAD7A900D2403A /* fit_developer.json */; };
 		4262ADCF1DCC8DB100F089AA /* FITAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4262ADCE1DCC8DB100F089AA /* FITAppDelegate.swift */; };
+		42656CEA24CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42656CE824CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.swift */; };
+		42656CEB24CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42656CE924CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.xib */; };
 		426786DA16C6594F00899C8B /* GCSettingsServicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 426786D916C6594F00899C8B /* GCSettingsServicesViewController.m */; };
 		42684EF01B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42684EEF1B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m */; };
 		42684EF11B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42684EEF1B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m */; };
@@ -2223,6 +2225,8 @@
 		425ACBBF17C1687F00EB23A3 /* GCGarminUserJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminUserJsonParser.m; path = src/GCGarminUserJsonParser.m; sourceTree = "<group>"; };
 		425CF5A81813CEEC009279C0 /* GCTestsActivities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestsActivities.m; sourceTree = "<group>"; };
 		4262ADCE1DCC8DB100F089AA /* FITAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITAppDelegate.swift; path = src/FITAppDelegate.swift; sourceTree = "<group>"; };
+		42656CE824CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCStatsMultiFieldConfigViewController.swift; path = src/GCStatsMultiFieldConfigViewController.swift; sourceTree = "<group>"; };
+		42656CE924CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCStatsMultiFieldConfigViewController.xib; path = src/GCStatsMultiFieldConfigViewController.xib; sourceTree = "<group>"; };
 		426786D816C6594F00899C8B /* GCSettingsServicesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsServicesViewController.h; path = src/GCSettingsServicesViewController.h; sourceTree = "<group>"; };
 		426786D916C6594F00899C8B /* GCSettingsServicesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSettingsServicesViewController.m; path = src/GCSettingsServicesViewController.m; sourceTree = "<group>"; };
 		42684EEE1B2CDE35001A90D2 /* GCHealthKitSourcesRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitSourcesRequest.h; path = src/GCHealthKitSourcesRequest.h; sourceTree = "<group>"; };
@@ -3484,6 +3488,8 @@
 				42289D5A1C7B9CEE005A5D0E /* GCStatsHistGraphOptionViewController.m */,
 				42C2A80124B9A82600E76F60 /* GCStatsMultiFieldConfigViewController.h */,
 				42C2A80224B9A82600E76F60 /* GCStatsMultiFieldConfigViewController.m */,
+				42656CE824CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.swift */,
+				42656CE924CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.xib */,
 			);
 			name = Options;
 			sourceTree = "<group>";
@@ -6126,6 +6132,7 @@
 				429184C2231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */,
 				427B20AB1621B5CF00D5C3C5 /* Localizable.strings in Resources */,
 				423F9FBF19ACCBD60057DB5A /* Media.xcassets in Resources */,
+				42656CEB24CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.xib in Resources */,
 				42560711169A112E008E9DC3 /* version.plist in Resources */,
 				42939CE923AAD79600D2403A /* fit_map.json in Resources */,
 				422CCE8B1B7EAB7200A4DAEB /* Activities.xcassets in Resources */,
@@ -7309,6 +7316,7 @@
 				42A7CCA8246E939300A1AE39 /* GCDerivedQueueElement.m in Sources */,
 				4237869E1972D582006CBD4D /* GCStatsMultiFieldConfig.m in Sources */,
 				427828FB1684E61400AB9C89 /* GCActivitySwimLapViewController.m in Sources */,
+				42656CEA24CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.swift in Sources */,
 				42734B6916941D46003E2177 /* GCGarminActivityDetailJsonParser.m in Sources */,
 				427208651DE7A4A800924C90 /* FITFitFileInterpret.swift in Sources */,
 				42734CE31695797A003E2177 /* GCActivitySummaryValue.m in Sources */,

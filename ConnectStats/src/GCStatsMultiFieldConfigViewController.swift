@@ -1,8 +1,8 @@
 //  MIT License
 //
-//  Created on 11/07/2020 for ConnectStats
+//  Created on 26/07/2020 for ConnectStats
 //
-//  Copyright (c) 2020 Brice Test User
+//  Copyright (c) 2020 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,28 @@
 
 
 
-#import <UIKit/UIKit.h>
+import UIKit
 
-NS_ASSUME_NONNULL_BEGIN
+class GCStatsMultiFieldConfigViewController: UIViewController {
 
-@interface GCStatsMultiFieldConfigViewController2 : UITableViewController
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-@end
+        // Do any additional setup after loading the view.
+    }
 
-NS_ASSUME_NONNULL_END
+    @IBAction func done(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+    }
+    */
+
+}

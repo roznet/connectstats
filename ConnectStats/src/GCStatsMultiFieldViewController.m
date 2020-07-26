@@ -44,6 +44,7 @@
 #import "GCStatsDerivedAnalysisViewController.h"
 #import "GCStatsDerivedHistory.h"
 #import "GCStatsDerivedHistoryViewController.h"
+#import "ConnectStats-Swift.h"
 
 @interface GCStatsMultiFieldViewController ()
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
@@ -52,6 +53,7 @@
 @property (nonatomic,assign) BOOL started;
 @property (nonatomic,retain) GCStatsDerivedAnalysisViewController * configViewController;
 @property (nonatomic,retain) GCStatsDerivedHistoryViewController * histAnalysisViewController;
+@property (nonatomic,retain) UIViewController * popoverViewController;
 
 @end
 
@@ -71,6 +73,7 @@
 }
 
 -(void)dealloc{
+    [_popoverViewController release];
     [_activityTypeButton release];
     [self clearFieldDataSeries];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -552,10 +555,13 @@
 -(void)setupBarButtonItem{
     NSString * title = self.multiFieldConfig.viewDescription;
     
-    UIBarButtonItem * rightMost =[[[UIBarButtonItem alloc] initWithTitle:title
-                                                                  style:UIBarButtonItemStylePlain
-                                                                 target:self action:@selector(toggleViewChoice)] autorelease];
-
+    UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
+    [button setTitle:title forState:UIControlStateNormal];
+    [button addGestureRecognizer:RZReturnAutorelease([[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleViewChoice)])];
+    [button addGestureRecognizer:RZReturnAutorelease(([[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(configLongPress:)]))];
+    
+    UIBarButtonItem * rightMost = RZReturnAutorelease([[UIBarButtonItem alloc] initWithCustomView:button]);
+    
     UIBarButtonItem * cal = [self.multiFieldConfig buttonForTarget:self action:@selector(switchCalFilter)];
 
     self.navigationItem.rightBarButtonItems = cal ? @[rightMost,cal] : @[ rightMost];
@@ -599,6 +605,21 @@
         
         [self.navigationController pushViewController:self.histAnalysisViewController animated:YES];
     }
+}
+
+-(void)configLongPress:(UIGestureRecognizer*)gesture{
+    NSLog(@"Config Long Press");
+    
+    if( gesture.state == UIGestureRecognizerStateBegan){
+        GCStatsMultiFieldConfigViewController * controller=[[[GCStatsMultiFieldConfigViewController alloc] initWithNibName:@"GCStatsMultiFieldConfigViewController" bundle:nil] autorelease];
+        controller.modalPresentationStyle = UIModalPresentationPopover;
+        self.popoverViewController = controller;
+        RZAutorelease([[UIPopoverPresentationController alloc] initWithPresentedViewController:controller
+                                                                      presentingViewController:self.presentingViewController]);
+        
+        [self presentViewController:controller animated:YES completion:nil];
+    }
+
 }
 
 -(void)configChanged{

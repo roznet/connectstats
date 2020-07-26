@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17140" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17115"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GCStatsMultiFieldConfigViewController" customModule="ConnectStats" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="esS-Ri-oXM">
+                    <rect key="frame" x="89" y="424" width="209" height="32"/>
+                    <segments>
+                        <segment title="Weekly"/>
+                        <segment title="Monthly"/>
+                        <segment title="Yearly"/>
+                    </segments>
+                </segmentedControl>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="v9i-Dv-sfU">
+                    <rect key="frame" x="81.5" y="353" width="251" height="32"/>
+                    <segments>
+                        <segment title="Summary"/>
+                        <segment title="Aggregate"/>
+                        <segment title="Fields"/>
+                    </segments>
+                </segmentedControl>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YUL-Mj-m0d">
+                    <rect key="frame" x="38" y="118" width="338" height="200"/>
+                    <color key="backgroundColor" systemColor="systemGray2Color"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="200" id="voL-Sw-eFY"/>
+                    </constraints>
+                </view>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="CkL-O0-emO">
+                    <rect key="frame" x="41" y="494" width="335" height="32"/>
+                    <segments>
+                        <segment title="All"/>
+                        <segment title="Last Week"/>
+                        <segment title="Last 3M"/>
+                        <segment title="Last 6M"/>
+                    </segments>
+                </segmentedControl>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="cLV-dy-ZfV">
+                    <rect key="frame" x="89" y="556" width="228" height="32"/>
+                    <segments>
+                        <segment title="Calendar"/>
+                        <segment title="Rolling"/>
+                        <segment title="To Date"/>
+                    </segments>
+                </segmentedControl>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Fn-KP-WWz">
+                    <rect key="frame" x="331" y="58" width="37" height="30"/>
+                    <state key="normal" title="Done"/>
+                    <connections>
+                        <action selector="done:" destination="-1" eventType="touchUpInside" id="KXD-Dg-hib"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="v9i-Dv-sfU" firstAttribute="top" secondItem="YUL-Mj-m0d" secondAttribute="bottom" constant="35" id="1Jm-xa-Ff9"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="7Fn-KP-WWz" secondAttribute="trailing" constant="46" id="8c6-gk-bpA"/>
+                <constraint firstItem="YUL-Mj-m0d" firstAttribute="top" secondItem="7Fn-KP-WWz" secondAttribute="bottom" constant="30" id="At5-14-sDf"/>
+                <constraint firstItem="esS-Ri-oXM" firstAttribute="firstBaseline" secondItem="v9i-Dv-sfU" secondAttribute="baseline" constant="16" symbolType="layoutAnchor" id="G0Q-JC-MVW"/>
+                <constraint firstItem="esS-Ri-oXM" firstAttribute="centerX" secondItem="v9i-Dv-sfU" secondAttribute="centerX" id="GgP-VC-BU1"/>
+                <constraint firstItem="CkL-O0-emO" firstAttribute="top" secondItem="esS-Ri-oXM" secondAttribute="bottom" constant="39" id="Iv2-x2-daf"/>
+                <constraint firstItem="cLV-dy-ZfV" firstAttribute="centerX" secondItem="CkL-O0-emO" secondAttribute="centerX" id="f1H-xx-1dd"/>
+                <constraint firstItem="7Fn-KP-WWz" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="14" id="jLa-1w-O2G"/>
+                <constraint firstItem="cLV-dy-ZfV" firstAttribute="top" secondItem="CkL-O0-emO" secondAttribute="bottom" constant="31" id="mCl-63-YWU"/>
+                <constraint firstItem="CkL-O0-emO" firstAttribute="centerX" secondItem="esS-Ri-oXM" secondAttribute="centerX" id="qoG-Uj-EbS"/>
+                <constraint firstItem="esS-Ri-oXM" firstAttribute="top" secondItem="v9i-Dv-sfU" secondAttribute="bottom" constant="40" id="r0b-wa-sMS"/>
+                <constraint firstItem="v9i-Dv-sfU" firstAttribute="centerX" secondItem="YUL-Mj-m0d" secondAttribute="centerX" id="wTg-d0-xh3"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="YUL-Mj-m0d" secondAttribute="trailing" constant="38" id="xZM-oF-13Y"/>
+                <constraint firstItem="YUL-Mj-m0d" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="38" id="ywe-un-ZSp"/>
+            </constraints>
+            <point key="canvasLocation" x="137.68115942028987" y="106.47321428571428"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

@@ -28,11 +28,11 @@
 #import "GCStatsMultiFieldConfigViewController.h"
 #import "GCStatsMultiFieldViewControllerConsts.h"
 
-@interface GCStatsMultiFieldConfigViewController ()
+@interface GCStatsMultiFieldConfigViewController2 ()
 
 @end
 
-@implementation GCStatsMultiFieldConfigViewController
+@implementation GCStatsMultiFieldConfigViewController2
 
 - (void)viewDidLoad {
     [super viewDidLoad];
