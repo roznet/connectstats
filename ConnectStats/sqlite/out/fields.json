@@ -2043,19 +2043,19 @@
       "field": "__CalcAscentSpeed"
     },
     {
-      "en": "Critical Heart Rate",
+      "en": "Peak Heart Rate",
       "field": "__CalcBestRollingWeightedMeanHeartRate"
     },
     {
-      "en": "Critical Pace",
+      "en": "Peak Pace",
       "field": "__CalcBestRollingWeightedMeanPace"
     },
     {
-      "en": "Critical Power",
+      "en": "Peak Power",
       "field": "__CalcBestRollingWeightedMeanPower"
     },
     {
-      "en": "Critical Speed",
+      "en": "Peak Speed",
       "field": "__CalcBestRollingWeightedMeanSpeed"
     },
     {

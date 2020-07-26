@@ -26,13 +26,21 @@
 #import "GCAppDelegate+Swift.h"
 #import "ConnectStats-Swift.h"
 
+BOOL kOpenTemporary = false;
+
 @implementation GCAppDelegate (Swift)
 
 -(void)handleFitFile{
     NSData * fitData = [NSData dataWithContentsOfURL:self.urlToOpen];
     GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:[self.urlToOpen.path lastPathComponent] fitFileData:fitData fitFilePath:self.urlToOpen.path startTime:[NSDate date]]);
 
-    [self.organizer registerTemporaryActivity:fitAct forActivityId:fitAct.activityId];
+    if( kOpenTemporary ){
+        [self.organizer registerTemporaryActivity:fitAct forActivityId:fitAct.activityId];
+    }else{
+    
+        [self.organizer registerActivity:fitAct forActivityId:fitAct.activityId];
+        [self.organizer registerActivity:fitAct.activityId withTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
+    }
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self handleFitFileDone:fitAct.activityId];
     });
