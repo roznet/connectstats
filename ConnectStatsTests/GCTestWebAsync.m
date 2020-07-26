@@ -48,6 +48,12 @@
     [super dealloc];
 }
 
+-(BOOL)isSameAsRequest:(GCWebRequestTest*)req{
+    return [self.expectation isEqual:req.expectation];
+}
+-(NSString*)debugDescription{
+    return [NSString stringWithFormat:@"<%@: %@>", NSStringFromClass([self class]), self.expectation];
+}
 -(void)process{
     NSLog(@"Done %@", self.expectation);
     [self.expectation fulfill];

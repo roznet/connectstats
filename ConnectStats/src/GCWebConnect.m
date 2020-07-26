@@ -260,14 +260,12 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 
 -(BOOL)checkRequestExists:(id<GCWebRequest>)req{
     BOOL already = false;
-    @synchronized (_requests) {
-        for (id<GCWebRequest> exreq in _requests) {
-            if ([exreq isMemberOfClass:[req class]]) {
-                if ([req respondsToSelector:@selector(isSameAsRequest:)]) {
-                    already = [exreq isSameAsRequest:req];
-                }else if ([[exreq url] isEqualToString:[req url]]){
-                    already = true;
-                }
+    for (id<GCWebRequest> exreq in _requests) {
+        if ([exreq isMemberOfClass:[req class]]) {
+            if ([req respondsToSelector:@selector(isSameAsRequest:)]) {
+                already = [exreq isSameAsRequest:req];
+            }else if ([[exreq url] isEqualToString:[req url]]){
+                already = true;
             }
         }
     }
@@ -299,9 +297,9 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
         self.started = true;
     }
 
-    if (![self checkRequestExists:req]) {
+    @synchronized (_requests) {
+        if (![self checkRequestExists:req]) {
         // if priority: add it to next slot, else at the end
-        @synchronized (_requests) {
             if (isPriority || ([req respondsToSelector:@selector(priorityRequest)] &&
                                [req priorityRequest]) ) {
                 [_requests insertObject:req atIndex:0];

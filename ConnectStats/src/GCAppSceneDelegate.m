@@ -30,6 +30,7 @@
 #import "GCSplitViewController.h"
 #import "GCHealthViewController.h"
 #import "GCAppGlobal.h"
+#import "GCAppDelegate.h"
 
 @interface GCAppSceneDelegate ()
 @property (nonatomic, retain) GCTabBarController * tabBarController;
@@ -123,4 +124,14 @@
     return self.tabBarController ?:self.splitViewController;
 }
 
+-(void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts{
+    NSLog(@"CAlled %@", URLContexts);
+    GCAppDelegate * delegate = (GCAppDelegate*)[UIApplication sharedApplication].delegate;
+    for (UIOpenURLContext * context in URLContexts) {
+        if( [context.URL.path hasSuffix:@".fit"] ){
+            [delegate application:[UIApplication sharedApplication] openURL:context.URL options:@{}];
+            break;
+        }
+    }
+}
 @end
