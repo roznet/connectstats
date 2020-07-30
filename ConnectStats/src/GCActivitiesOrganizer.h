@@ -90,6 +90,11 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
  */
 -(NSDictionary*)serviceSummary;
 /**
+ * Return summary of activities for each service, similar to serviceSummary but also report missing tracks
+ * @return dictionary with key GCService.displayName to { @"earliest", @"latest", @"count" }
+ */
+-(NSDictionary*)serviceSummaryMissingTracks;
+/**
  Return activity compare if selected and valid (same type/but not the same) as given activity or nil
  */
 -(GCActivity*)validCompareActivityFor:(GCActivity*)activity;

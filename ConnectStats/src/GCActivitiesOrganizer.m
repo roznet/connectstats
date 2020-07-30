@@ -708,6 +708,13 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 -(NSDictionary*)serviceSummary{
+    return [self serviceSummaryReportTrack:false];
+}
+-(NSDictionary*)serviceSummaryMissingTracks{
+    return [self serviceSummaryReportTrack:true];
+}
+
+-(NSDictionary*)serviceSummaryReportTrack:(BOOL)track{
     NSMutableDictionary * rv = [NSMutableDictionary dictionary];
     for (GCActivity * act in self.allActivities) {
         GCService * service = act.service;
@@ -724,11 +731,22 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         NSNumber * count = serviceDict[@"count"];
         NSDate   * earliest = serviceDict[@"earliest"];
         NSDate   * latest   = serviceDict[@"latest"];
+        NSNumber * missingTrack = serviceDict[@"missingTracks"];
         
         if( count == nil){
             count = @(1);
         }else{
             count = @(count.integerValue + 1);
+        }
+
+        if( track ){
+            if( [act trackPointsRequireDownload] ){
+                if( missingTrack == nil){
+                    missingTrack = @(1);
+                }else{
+                    missingTrack = @( missingTrack.integerValue + 1);
+                }
+            }
         }
         
         if( !earliest || [earliest compare:act.date] == NSOrderedDescending ){
@@ -742,6 +760,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         serviceDict[@"count"] = count;
         serviceDict[@"earliest"] = earliest;
         serviceDict[@"latest"] = latest;
+        if( track && missingTrack ){
+            serviceDict[@"missingTracks"] = missingTrack;
+        }
     }
     return rv;
 }

@@ -730,6 +730,12 @@
                                                                     withString:NSLocalizedString(@"Download Details Pre-emptively",@"Other Service")];
         switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_WIFI_DOWNLOAD_DETAILS defaultValue:false];
         switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_OPTIONS_DOWNLOAD_DETAILS);
+        if( [[GCAppGlobal profile] configGetBool:CONFIG_WIFI_DOWNLOAD_DETAILS defaultValue:false] ){
+            switchcell.detailTextLabel.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString(@"Download additional activities details", @"Other Service")];
+        }else{
+            switchcell.detailTextLabel.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:NSLocalizedString(@"Download details only as required", @"Other Service")];
+
+        }
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
     }else if (indexPath.row == GC_OPTIONS_FORCE_DOWNLOAD_OLD){

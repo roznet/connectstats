@@ -178,7 +178,11 @@
             [cell setupForRows:1 andCols:1];
             NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Force Download Details",@"Profiles")
                                                                           attributes:[GCViewConfig attributeBold16]] autorelease];
-
+            NSDictionary * summary = [[GCAppGlobal organizer] serviceSummaryMissingTracks];
+            for (NSString * serviceName in summary) {
+                NSDictionary *serviceSummary = summary[serviceName];
+                RZLog( RZLogInfo, @"%@: missing details %@/%@ activities [From: %@ to %@]", serviceName, serviceSummary[@"missingTracks"], serviceSummary[@"count"], serviceSummary[@"earliest"], serviceSummary[@"latest"]);
+            }
             [cell labelForRow:0 andCol:0].attributedText = title;
             [GCViewConfig setupGradientForDetails:cell];
         }
