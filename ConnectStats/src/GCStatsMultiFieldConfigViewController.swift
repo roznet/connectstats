@@ -28,17 +28,124 @@
 import UIKit
 
 class GCStatsMultiFieldConfigViewController: UIViewController {
-
+    @IBOutlet var viewChoiceSegment: UISegmentedControl!
+    @IBOutlet var calendarAggregationSegment: UISegmentedControl!
+    @IBOutlet var filterViewConfig: UISegmentedControl!
+    @IBOutlet var rollingSegment: UISegmentedControl!
+    
+    @IBOutlet var previewTableView: UITableView!
+    
+    @objc var multiFieldViewController : GCStatsMultiFieldViewController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.previewTableView.dataSource = self.multiFieldViewController
+        self.previewTableView.delegate = self.multiFieldViewController
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.synchronizeConfigToView()
+    }
     @IBAction func done(_ sender: Any) {
+        self.multiFieldViewController?.notifyCallBack(self, info: RZDependencyInfo())
         self.dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func changeSegment(_ sender: Any) {
+        self.synchronizeViewToConfig()
+    }
+    
+    func synchronizeConfigToView() {
+        if let multiFieldConfig : GCStatsMultiFieldConfig = self.multiFieldViewController?.multiFieldConfig {
+            switch multiFieldConfig.viewChoice {
+            case gcViewChoice.summary:
+                viewChoiceSegment.selectedSegmentIndex = 0
+                filterViewConfig.isEnabled = false
+                calendarAggregationSegment.isEnabled = false
+            case gcViewChoice.calendar:
+                viewChoiceSegment.selectedSegmentIndex = 1
+                filterViewConfig.isEnabled = true
+                calendarAggregationSegment.isEnabled = true
+            case gcViewChoice.all:
+                viewChoiceSegment.selectedSegmentIndex = 2
+                filterViewConfig.isEnabled = true
+                calendarAggregationSegment.isEnabled = true
+            @unknown default:
+                viewChoiceSegment.selectedSegmentIndex = 0
+            }
+            switch multiFieldConfig.viewConfig {
+            case gcStatsViewConfig.all:
+                filterViewConfig.selectedSegmentIndex = 0
+            case gcStatsViewConfig.last3M:
+                filterViewConfig.selectedSegmentIndex = 1
+            case gcStatsViewConfig.last6M:
+                filterViewConfig.selectedSegmentIndex = 2
+            case gcStatsViewConfig.last1Y:
+                filterViewConfig.selectedSegmentIndex = 3
+            default:
+                filterViewConfig.isEnabled = false
+            }
+            
+            switch  multiFieldConfig.calendarConfig.calendarUnit {
+            case NSCalendar.Unit.weekOfYear:
+                calendarAggregationSegment.selectedSegmentIndex = 0
+                filterViewConfig.setEnabled(true, forSegmentAt: 1)
+                filterViewConfig.setEnabled(true, forSegmentAt: 2)
+                filterViewConfig.setEnabled(true, forSegmentAt: 3)
+            case NSCalendar.Unit.month:
+                calendarAggregationSegment.selectedSegmentIndex = 1
+                filterViewConfig.setEnabled(false, forSegmentAt: 1)
+                filterViewConfig.setEnabled(true, forSegmentAt: 2)
+                filterViewConfig.setEnabled(true, forSegmentAt: 3)
+            case NSCalendar.Unit.year:
+                calendarAggregationSegment.selectedSegmentIndex = 2
+                filterViewConfig.setEnabled(false, forSegmentAt: 1)
+                filterViewConfig.setEnabled(false, forSegmentAt: 2)
+                filterViewConfig.setEnabled(false, forSegmentAt: 3)
+            default:
+                calendarAggregationSegment.selectedSegmentIndex = 0
+            }
+        }
+    }
+    
+    func synchronizeViewToConfig() {
+        if let multiFieldConfig : GCStatsMultiFieldConfig = self.multiFieldViewController?.multiFieldConfig {
+            let viewIndex = self.viewChoiceSegment.selectedSegmentIndex
+            if viewIndex == 0 {
+                multiFieldConfig.viewChoice = gcViewChoice.summary
+            }else if viewIndex == 1{
+                multiFieldConfig.viewChoice = gcViewChoice.calendar
+            }else if viewIndex == 2{
+                multiFieldConfig.viewChoice = gcViewChoice.all
+            }
+            let filterIndex = self.filterViewConfig.selectedSegmentIndex
+            if filterIndex == 0 {
+                multiFieldConfig.viewConfig = gcStatsViewConfig.all
+            }else if filterIndex == 1{
+                multiFieldConfig.viewConfig = gcStatsViewConfig.last3M
+            }else if filterIndex == 2{
+                multiFieldConfig.viewConfig = gcStatsViewConfig.last6M
+            }else if filterIndex == 3{
+                multiFieldConfig.viewConfig = gcStatsViewConfig.last1Y
+            }
+            let calendarIndex = calendarAggregationSegment.selectedSegmentIndex
+            if calendarIndex == 0{
+                multiFieldConfig.calendarConfig.calendarUnit = NSCalendar.Unit.weekOfYear
+            }else if calendarIndex == 1{
+                multiFieldConfig.calendarConfig.calendarUnit = NSCalendar.Unit.month
+            }else if calendarIndex == 2{
+                multiFieldConfig.calendarConfig.calendarUnit = NSCalendar.Unit.year
+            }
+        }
+        // to update consistencies
+        self.synchronizeConfigToView()
+        self.previewTableView.reloadData()
+    }
+   
     /*
     // MARK: - Navigation
 

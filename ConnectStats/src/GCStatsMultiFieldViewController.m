@@ -612,6 +612,7 @@
     
     if( gesture.state == UIGestureRecognizerStateBegan){
         GCStatsMultiFieldConfigViewController * controller=[[[GCStatsMultiFieldConfigViewController alloc] initWithNibName:@"GCStatsMultiFieldConfigViewController" bundle:nil] autorelease];
+        controller.multiFieldViewController = self;
         controller.modalPresentationStyle = UIModalPresentationPopover;
         self.popoverViewController = controller;
         RZAutorelease([[UIPopoverPresentationController alloc] initWithPresentedViewController:controller
