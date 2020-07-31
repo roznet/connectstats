@@ -117,6 +117,9 @@
 
 #pragma mark - Kal data source
 
+-(void)didSelectDate:(NSDate*)date{
+    RZLog(RZLogInfo, @"selected date %@", date);
+}
 
 - (void)presentingDatesFrom:(NSDate *)fromDate to:(NSDate *)toDate delegate:(id<KalDataSourceCallbacks>)delegate{
     [delegate loadedDataSource:self];
@@ -314,7 +317,9 @@
     if (markers && GC_IS_PERCENT(_display)) {
 
         GCActivity * dummy = [[GCActivity alloc] init];
-
+        
+        BOOL edgeOnly = false;
+        
         __block double maxValue = 0.;
 
         __block CGFloat angleFrom = M_PI_2 * -1.0;
@@ -327,6 +332,7 @@
         arc.lineWidth = 6.;
         [[[UIColor lightGrayColor] colorWithAlphaComponent:0.2] setStroke];
         [arc stroke];
+        
         // Highlight the max
         GCCalendarDataMarkerInfo * info = markers.infoTotals;
         BOOL isMax = false;
@@ -336,26 +342,44 @@
             isMax = [info.sumDuration compare:self.maxInfo.sumDuration withTolerance:1.e-5] == NSOrderedSame;
         }
         if (isMax) {
-            [[[UIColor lightGrayColor] colorWithAlphaComponent:0.4] setFill];
-            [arc fill];
+            if( edgeOnly ){
+                [[[UIColor lightGrayColor] colorWithAlphaComponent:0.4] setFill];
+                [arc fill];
+            }else{
+                [[[UIColor blackColor] colorWithAlphaComponent:0.4] setStroke];
+                arc.lineWidth = 6.;
+                [arc stroke];
+
+            }
+            
         }
 
         void (^drawArc)(double value) = ^(double value){
             angleTo = angleFrom + (value / maxValue) * ( 2.* M_PI);
 
-            UIBezierPath * onearc = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:angleFrom endAngle:angleTo clockwise:YES];
-            onearc.lineCapStyle = kCGLineCapRound;
-            onearc.lineWidth = 3.;
+            UIBezierPath * onearc = nil;
+            if( edgeOnly ){
+                onearc = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:angleFrom endAngle:angleTo clockwise:YES];
+                onearc.lineCapStyle = kCGLineCapRound;
+                onearc.lineWidth = 3.;
+            }else{
+                onearc = [UIBezierPath bezierPath];
+                [onearc moveToPoint:center];
+                [onearc addArcWithCenter:center radius:radius startAngle:angleFrom endAngle:angleTo clockwise:YES];
+                
+                [onearc fill];
+            }
             [onearc stroke];
-
             angleFrom = angleTo;
         };
 
         maxValue = _display == gcCalendarDisplayDistancePercent ? _maxInfo.sumDistance.value : _maxInfo.sumDuration.value;
-        for (GCActivityType * type in @[  [GCActivityType running], [GCActivityType cycling], [GCActivityType swimming], [GCActivityType other] ]) {
-            [dummy changeActivityType:type];
+        for (NSString * type in markers.orderedActivityTypes) {
+            [dummy changeActivityType:[GCActivityType activityTypeForKey:type]];
             [[GCViewConfig cellBackgroundDarkerForActivity:dummy] setStroke];
-            GCCalendarDataMarkerInfo * info = [markers inforForType:type.key];
+            [[GCViewConfig cellBackgroundLighterForActivity:dummy] setFill];
+            
+            GCCalendarDataMarkerInfo * info = [markers inforForType:type];
             drawArc( _display == gcCalendarDisplayDistancePercent ? info.sumDistance.value : info.sumDuration.value);
         }
 

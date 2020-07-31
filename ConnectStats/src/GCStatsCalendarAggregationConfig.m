@@ -153,6 +153,8 @@ const NSUInteger kCalendarUnitNone = 0;
         self.calendarUnit = NSCalendarUnitMonth;
     }else if(self.calendarUnit == NSCalendarUnitMonth){
         self.calendarUnit = NSCalendarUnitYear;
+    }else if(self.calendarUnit == NSCalendarUnitYear ){
+        self.calendarUnit = kCalendarUnitNone;
     }else {
         self.calendarUnit = NSCalendarUnitWeekOfYear;
         rv = true;

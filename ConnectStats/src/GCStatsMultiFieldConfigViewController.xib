@@ -32,11 +32,12 @@
                     </connections>
                 </button>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="esS-Ri-oXM">
-                    <rect key="frame" x="102.5" y="135" width="209" height="32"/>
+                    <rect key="frame" x="67.5" y="135" width="279" height="32"/>
                     <segments>
                         <segment title="Weekly"/>
                         <segment title="Monthly"/>
                         <segment title="Yearly"/>
+                        <segment title="All"/>
                     </segments>
                     <connections>
                         <action selector="changeSegment:" destination="-1" eventType="valueChanged" id="Qhz-Gi-38Y"/>
