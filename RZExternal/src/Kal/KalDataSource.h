@@ -103,6 +103,7 @@
 @optional
 - (BOOL)drawBackgroundInRect:(CGRect)rect forDate:(NSDate*)adate selected:(BOOL)asel;
 - (BOOL)drawForegroundInRect:(CGRect)rect forDate:(NSDate*)adate selected:(BOOL)asel;
+- (void)didSelectDate:(NSDate*)date;
 
 @end
 

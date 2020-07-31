@@ -124,9 +124,13 @@ NSString *const KalDataSourceChangedNotification = @"KalDataSourceChangedNotific
 // -----------------------------------------
 #pragma mark - KalViewDelegate protocol
 
-- (void)didSelectDate:(KalDate *)date
+- (void)didSelectDate:(KalDate *)date userAction:(BOOL)userAction
 {
-    self.selectedDate = [date NSDate];
+    NSDate * selected = [date NSDate];
+    self.selectedDate = selected;
+    if( userAction && [self.dataSource respondsToSelector:@selector(didSelectDate:)] ){
+        [self.dataSource didSelectDate:selected];
+    }
     NSDate *from = [[date NSDate] cc_dateByMovingToBeginningOfDay];
     NSDate *to = [[date NSDate] cc_dateByMovingToEndOfDay];
     [self clearTable];
@@ -186,7 +190,7 @@ NSString *const KalDataSourceChangedNotification = @"KalDataSourceChangedNotific
         [dates replaceObjectAtIndex:i withObject:[KalDate dateFromNSDate:[dates objectAtIndex:i]]];
     
     [[self calendarView] markTilesForDates:dates andSource:dataSource];
-    [self didSelectDate:self.calendarView.selectedDate];
+    [self didSelectDate:self.calendarView.selectedDate userAction:false];
     [self setupNavigationItem];
 }
 

@@ -120,12 +120,12 @@ static NSString *kSlideAnimationId = @"KalSwitchMonths";
 
 - (void)setSelectedTile:(KalTileView *)tile
 {
-  if (selectedTile != tile) {
-    selectedTile.selected = NO;
-    selectedTile = [tile retain];
-    tile.selected = YES;
-    [delegate didSelectDate:tile.date];
-  }
+    if (selectedTile != tile) {
+        selectedTile.selected = NO;
+        selectedTile = [tile retain];
+        tile.selected = YES;
+        [delegate didSelectDate:tile.date userAction:false];
+    }
 }
 
 - (void)receivedTouches:(NSSet *)touches withEvent:event
@@ -163,6 +163,7 @@ static NSString *kSlideAnimationId = @"KalSwitchMonths";
     
     if ([hitView isKindOfClass:[KalTileView class]]) {
         KalTileView *tile = (KalTileView*)hitView;
+        
         if (tile.belongsToAdjacentMonth) {
             if ([tile.date compare:[KalDate dateFromNSDate:logic.baseDate]] == NSOrderedDescending) {
                 [delegate showFollowingMonth];
@@ -173,6 +174,7 @@ static NSString *kSlideAnimationId = @"KalSwitchMonths";
         } else {
             self.selectedTile = tile;
         }
+        [delegate didSelectDate:tile.date userAction:true];
     }
     self.highlightedTile = nil;
 }
