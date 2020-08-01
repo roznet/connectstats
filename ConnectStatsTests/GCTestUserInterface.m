@@ -154,6 +154,17 @@
             hasMoreView = false;
         }
     }
+    
+    BOOL first = true;
+    // we looped and came back to first
+    for (GCStatsMultiFieldConfig * check in configs) {
+        if( first ){
+            XCTAssertEqualObjects(check, config);
+            first = false;
+        }else{
+            XCTAssertNotEqualObjects(check, config);
+        }
+    }
     RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
     manager.recordMode = [GCTestCase recordModeGlobal];
     //manager.recordMode = true;
@@ -165,8 +176,6 @@
     NSSet<Class>*classes = [NSSet setWithObjects:[NSArray class], nil];
     NSArray * retrieved = [manager retrieveReferenceObject:generated forClasses:classes selector:_cmd identifier:@"" error:&error];
     XCTAssertEqualObjects(generated, retrieved);
-    
-    
 }
 
 -(void)testMapSnapshot{

@@ -91,6 +91,14 @@
             ];
 }
 
+-(BOOL)isEqual:(GCStatsMultiFieldConfig*)object{
+    if( [object isKindOfClass:[GCStatsMultiFieldConfig class]]){
+        return [self isEqualToConfig:object];
+    }else{
+        return FALSE;
+    }
+}
+
 -(BOOL)isEqualToConfig:(GCStatsMultiFieldConfig*)other{
     return [self.activityType isEqualToString:other.activityType] && self.viewChoice==other.viewChoice && self.useFilter == other.useFilter
     && self.viewConfig==other.viewConfig && self.historyStats==other.historyStats && [self.calendarConfig isEqualToConfig:other.calendarConfig];
@@ -166,10 +174,10 @@
         case gcViewChoiceCalendar:
         {
             BOOL done = [self.calendarConfig nextCalendarUnit];
-            if( done ){
+            if( done || self.calendarConfig.calendarUnit == kCalendarUnitNone){
                 self.viewChoice = gcViewChoiceSummary;
                 self.viewConfig = gcStatsViewConfigUnused;
-                self.calendarConfig.calendarUnit = NSCalendarUnitWeekOfYear;
+                self.calendarConfig.calendarUnit = kCalendarUnitNone;
             }
             break;
         }
@@ -213,26 +221,30 @@
             // viewConfig all, last3m, last6m, last1y, all
             // periodType cal, cal,    cal,    cal,    todate
             
-            gcStatsViewConfig start = gcStatsViewConfigAll;
+            gcStatsViewConfig start = gcStatsViewConfigUnused;
             NSCalendarUnit calUnit = self.calendarConfig.calendarUnit;
             if (calUnit == NSCalendarUnitWeekOfYear) {
                 start = gcStatsViewConfigLast3M;
             }else if(calUnit == NSCalendarUnitMonth){
                 start = gcStatsViewConfigLast6M;
             }
+            
+            // if all and todate: end of the cycle, start again
+            // don't change viewConfig as remains all, but switch back to calendar period
+            // otherwise start at next one.
             if (self.viewConfig==gcStatsViewConfigAll) {
                 if( self.calendarConfig.periodType == gcPeriodToDate ){
                     self.calendarConfig.periodType = gcPeriodCalendar;
                     rv = true;
+                }else{
+                    self.viewConfig = start;
                 }
-                self.viewConfig = start;
             }else{
                 self.viewConfig++;
             }
             if (self.viewConfig >= gcStatsViewConfigUnused) {
                 self.viewConfig = gcStatsViewConfigAll;
                 self.calendarConfig.periodType = gcPeriodToDate;
-                rv = true;
             }
             break;
         }

@@ -188,7 +188,7 @@ const NSCalendarUnit kCalendarUnitNone = 0;
 }
 
 -(BOOL)isEqualToConfig:(GCStatsCalendarAggregationConfig*)other{
-    return self.calendarUnit == other.calendarUnit && RZNilOrEqualToDate(self.referenceDate, other.referenceDate) &&  [self.calendar isEqual:other.calendar];
+    return self.calendarUnit == other.calendarUnit && RZNilOrEqualToDate(self.referenceDate, other.referenceDate) &&  [self.calendar isEqual:other.calendar] && self.periodType == other.periodType;
 }
 
 -(BOOL)isEqual:(id)object{
