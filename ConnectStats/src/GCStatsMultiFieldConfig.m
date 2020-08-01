@@ -67,8 +67,9 @@
             rv.viewConfig = other.viewConfig;
             rv.calendarConfig = [GCStatsCalendarAggregationConfig configFrom:other.calendarConfig];
         }else{
-            rv.viewConfig = gcStatsViewConfigAll;
-            rv.calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitWeekOfYear];
+            rv.viewConfig = gcStatsViewConfigUnused;
+            rv.viewChoice = gcViewChoiceSummary;
+            rv.calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:kCalendarUnitNone];
         }
     }
     return rv;
@@ -81,11 +82,12 @@
     return [GCViewConfig viewChoiceDesc:self.viewChoice calendarConfig:self.calendarConfig];
 }
 -(NSString*)description{
-    return [NSString stringWithFormat:@"<%@: %@ view:%@ calUnit:%@ config:%@>", NSStringFromClass([self class]),
+    return [NSString stringWithFormat:@"<%@: %@ view:%@ calUnit:%@ config:%@ period:%@>", NSStringFromClass([self class]),
             self.activityType,
             self.viewChoiceKey,
             self.calendarConfig.calendarUnitKey,
-            self.viewConfigKey
+            self.viewConfigKey,
+            self.calendarConfig.periodTypeKey
             ];
 }
 

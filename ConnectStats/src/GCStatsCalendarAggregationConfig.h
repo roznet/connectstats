@@ -43,6 +43,7 @@ extern const NSCalendarUnit kCalendarUnitNone;
 @property (nonatomic,readonly) NSString * calendarUnitDescription;
 @property (nonatomic,retain) NSString * calendarUnitKey;
 @property (nonatomic,assign) gcPeriodType periodType;
+@property (nonatomic,retain) NSString * periodTypeKey;
 
 @property (nonatomic,readonly) gcHistoryStats historyStats;
 

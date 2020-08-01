@@ -115,6 +115,8 @@ const NSCalendarUnit kCalendarUnitNone = 0;
         rv = @"monthly";
     }else if(self.calendarUnit == NSCalendarUnitYear){
         rv = @"yearly";
+    }else if (self.calendarUnit == kCalendarUnitNone){
+        rv = @"none";
     }
     return rv;
 }
@@ -126,6 +128,30 @@ const NSCalendarUnit kCalendarUnitNone = 0;
         self.calendarUnit = NSCalendarUnitMonth;
     }else if ([calendarUnitKey isEqualToString:@"yearly"]){
         self.calendarUnit = NSCalendarUnitYear;
+    }else if ([calendarUnitKey isEqualToString:@"none"]){
+        self.calendarUnit = kCalendarUnitNone;
+    }
+}
+
+-(NSString*)periodTypeKey{
+    switch (self.periodType) {
+        case gcPeriodToDate:
+            return @"todate";
+        case gcPeriodRolling:
+            return @"rolling";
+        case gcPeriodCalendar:
+            return @"calendar";
+    }
+    return nil;
+}
+
+-(void)setPeriodTypeKey:(NSString *)periodTypeKey{
+    if( [periodTypeKey isEqualToString:@"todate"]){
+        self.periodType = gcPeriodToDate;
+    }else if ([periodTypeKey isEqualToString:@"rolling"]){
+        self.periodType = gcPeriodRolling;
+    }else if ([periodTypeKey isEqualToString:@"calendar"]){
+        self.periodType = gcPeriodCalendar;
     }
 }
 -(GCStatsCalendarAggregationConfig*)equivalentConfigFor:(NSCalendarUnit)aUnit{
