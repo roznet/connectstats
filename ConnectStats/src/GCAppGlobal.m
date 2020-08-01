@@ -305,24 +305,6 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     gcPeriodType period = (gcPeriodType)[GCAppGlobal configGetInt:CONFIG_PERIOD_TYPE defaultValue:gcPeriodCalendar];
     if (period==gcPeriodRolling) {
         refdate = [NSDate date];
-        /* Test
-        NSDateComponents * comp = [[[NSDateComponents alloc] init] autorelease];
-        comp.month = 3;
-        comp.year=2014;
-        comp.day=9;
-        refdate = [[GCAppGlobal calculationCalendar] dateFromComponents:comp];
-        */
-    }else if(period==gcPeriodReferenceDate){
-        NSTimeInterval refInterval = [GCAppGlobal configGetDouble:CONFIG_REFERENCE_DATE defaultValue:0.];
-        if (refInterval==0.) {
-            NSDateComponents * comp = [[[NSDateComponents alloc] init] autorelease];
-            comp.month = 3;
-            comp.year=2014;
-            comp.day=9;
-            refdate = [[GCAppGlobal calculationCalendar] dateFromComponents:comp];
-        }else{
-            refdate = [NSDate dateWithTimeIntervalSinceReferenceDate:refInterval];
-        }
     }
     return refdate;
 }

@@ -1,5 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '11.0'
+platform :ios, '13.0'
 target 'ConnectStats' do
   use_frameworks!
   pod 'GoogleMaps'

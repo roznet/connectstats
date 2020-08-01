@@ -437,19 +437,19 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 
 +(gcViewChoice)nextViewChoice:(gcViewChoice)current{
     switch (current) {
-        case gcViewChoiceAll:
+        case gcViewChoiceFields:
             return gcViewChoiceCalendar;
         case gcViewChoiceCalendar:
             return gcViewChoiceSummary;
         case gcViewChoiceSummary:
-            return gcViewChoiceAll;
+            return gcViewChoiceFields;
     }
-    return gcViewChoiceAll;
+    return gcViewChoiceFields;
 }
 
 +(NSString*)viewChoiceDesc:(gcViewChoice)choice calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig{
     switch (choice) {
-        case gcViewChoiceAll:
+        case gcViewChoiceFields:
             return NSLocalizedString(@"All", @"viewchoice");
         case gcViewChoiceCalendar:
             return calendarConfig.calendarUnitDescription;

@@ -154,7 +154,7 @@
 typedef NS_ENUM(NSUInteger, gcPeriodType) {
     gcPeriodCalendar,
     gcPeriodRolling,
-    gcPeriodReferenceDate
+    gcPeriodToDate
 };
 
 typedef NS_ENUM(NSUInteger, gcGarminLoginMethod) {

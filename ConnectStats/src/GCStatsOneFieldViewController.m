@@ -123,7 +123,7 @@
         [self.slidingViewController resetTopViewAnimated:YES];
     }
 
-    if (self.oneFieldConfig.viewChoice != gcViewChoiceAll) {
+    if (self.oneFieldConfig.viewChoice != gcViewChoiceFields) {
         if ([_activityStats ready]) {
             GCStatsCalendarAggregationConfig * calendarConfig = self.oneFieldConfig.calendarConfig;
             self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
@@ -143,7 +143,7 @@
         self.scatterStatsLock = false;
     }
 
-    if (_oneFieldConfig.viewChoice != gcViewChoiceAll) {
+    if (_oneFieldConfig.viewChoice != gcViewChoiceFields) {
         if (_summarizedHistory == nil && [_activityStats ready]) {
             GCStatsCalendarAggregationConfig * calendarConfig = self.oneFieldConfig.calendarConfig;
             self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
@@ -223,13 +223,13 @@
     }else if( section == GC_S_AVERAGE){
         return 1;
     }else if(section == GC_S_QUARTILES){
-        if (_oneFieldConfig.viewChoice == gcViewChoiceAll) {
+        if (_oneFieldConfig.viewChoice == gcViewChoiceFields) {
             return 2;
         }else{
             return [_summarizedHistory[STATS_AVG] count];
         }
     }else if(section == GC_S_GRAPH){
-        if (_oneFieldConfig.viewChoice == gcViewChoiceAll) {
+        if (_oneFieldConfig.viewChoice == gcViewChoiceFields) {
             if ( _activityStatsLock == false && _scatterStatsLock==false && [_activityStats ready] && [_scatterStats ready]) {
                 return 2;
             }
@@ -268,7 +268,7 @@
         }else{
             GCCellSimpleGraph * cell = [GCCellSimpleGraph graphCell:tableView];
 
-            if (_oneFieldConfig.viewChoice==gcViewChoiceAll) {
+            if (_oneFieldConfig.viewChoice==gcViewChoiceFields) {
                 GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource scatterPlotCacheFrom:_scatterStats];
                 [cell setDataSource:cache andConfig:cache];
             }else{
@@ -290,7 +290,7 @@
 
             return cell;
         }
-    }else if(indexPath.section == GC_S_QUARTILES && _oneFieldConfig.viewChoice != gcViewChoiceAll){
+    }else if(indexPath.section == GC_S_QUARTILES && _oneFieldConfig.viewChoice != gcViewChoiceFields){
         NSUInteger idx = [_summarizedHistory[STATS_AVG] count]-indexPath.row-1;
         GCCellGrid * cell = [GCCellGrid gridCell:tableView];
         [cell setUpForSummarizedHistory:_summarizedHistory atIndex:idx forField:_oneFieldConfig.field calendarConfig:self.oneFieldConfig.calendarConfig];
@@ -318,7 +318,7 @@
 {
     // Navigation logic may go here. Create and push another view controller.
     if (indexPath.section == GC_S_GRAPH) {
-        if (_oneFieldConfig.viewChoice==gcViewChoiceAll) {
+        if (_oneFieldConfig.viewChoice==gcViewChoiceFields) {
             if (indexPath.row == 0) {
                 GCStatsMultiFieldGraphViewController * viewController = [[GCStatsMultiFieldGraphViewController alloc] initWithNibName:nil bundle:nil];
                 viewController.scatterStats = _scatterStats;
@@ -365,7 +365,7 @@
             [graph release];
 
         }
-    }else if(indexPath.section==GC_S_QUARTILES && _oneFieldConfig.viewChoice != gcViewChoiceAll){
+    }else if(indexPath.section==GC_S_QUARTILES && _oneFieldConfig.viewChoice != gcViewChoiceFields){
         NSUInteger n = [_summarizedHistory[STATS_CNT] count];
         if (indexPath.row < n) {
             NSUInteger idx = n-indexPath.row-1;
@@ -384,7 +384,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == GC_S_GRAPH ) {
         return 200.;
-    }else if(indexPath.section == GC_S_QUARTILES && _oneFieldConfig.viewChoice != gcViewChoiceAll){
+    }else if(indexPath.section == GC_S_QUARTILES && _oneFieldConfig.viewChoice != gcViewChoiceFields){
         return 64.;
     }else{
         return 58.;

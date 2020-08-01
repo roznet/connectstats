@@ -70,7 +70,7 @@ NSString * kArgumentHistoryStats = @"historyStats";
     BOOL rv = true;
     NSString * vallower = [val lowercaseString];
     if ([vallower isEqualToString:@"all"]) {
-        config.viewChoice = gcViewChoiceAll;
+        config.viewChoice = gcViewChoiceFields;
     }else if ([vallower isEqualToString:@"weekly"]){
         config.viewChoice = gcViewChoiceCalendar;
         config.calendarConfig.calendarUnit = NSCalendarUnitWeekOfYear;
@@ -99,8 +99,6 @@ NSString * kArgumentHistoryStats = @"historyStats";
         rv = gcStatsViewConfigLast1Y;
     }else if ([vallower isEqualToString:@"6m"]){
         rv = gcStatsViewConfigLast6M;
-    }else if ([vallower isEqualToString:@"todate"]){
-        rv = gcStatsViewConfigToDate;
     }
     return rv;
 }

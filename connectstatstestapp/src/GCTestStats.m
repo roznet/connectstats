@@ -156,7 +156,7 @@
 
         GCHistoryFieldSummaryStats * vals_mem = [GCHistoryFieldSummaryStats fieldStatsWithActivities:[[GCAppGlobal organizer] activities]
                                                                                             matching:filter
-                                                                                       referenceDate:[GCAppGlobal referenceDate]
+                                                                                       referenceDate:nil
                                                                                           ignoreMode:gcIgnoreModeActivityFocus];
         for (GCField * field in vals_db.fieldData) {
             if (![field isCalculatedField]) {
@@ -266,7 +266,7 @@
 
     GCHistoryFieldSummaryStats * vals_sum = [GCHistoryFieldSummaryStats fieldStatsWithActivities:[[GCAppGlobal organizer] activities]
                                                                                         matching:filter
-                                                                                   referenceDate:[GCAppGlobal referenceDate]
+                                                                                   referenceDate:nil
                                                                                       ignoreMode:gcIgnoreModeActivityFocus];
 
     GCHistoryAggregatedActivityStats * vals_agg = [[[GCHistoryAggregatedActivityStats alloc] init] autorelease];

@@ -32,7 +32,7 @@
 #import <RZUtilsUniversal/RZUtilsUniversal.h>
 
 typedef NS_ENUM(NSUInteger, gcViewChoice) {
-    gcViewChoiceAll,
+    gcViewChoiceFields,
     gcViewChoiceCalendar,
     gcViewChoiceSummary
 };
@@ -55,7 +55,6 @@ typedef NS_ENUM(NSUInteger, gcStatsViewConfig)  {
     gcStatsViewConfigLast3M,
     gcStatsViewConfigLast6M,
     gcStatsViewConfigLast1Y,
-    gcStatsViewConfigToDate,
     // Unused location is important as while iterating throuwh 6m,16,  todate, it checks
     // when unused is reach. new config should got after unused
     gcStatsViewConfigUnused

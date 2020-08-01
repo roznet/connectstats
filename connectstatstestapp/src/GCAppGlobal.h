@@ -64,7 +64,7 @@ extern NSString * kPreservedSettingsName;
 +(void)debugStateRecord:(NSDictionary*)dict;
 
 +(NSCalendar*)calculationCalendar;
-+(NSDate*)referenceDate;
++(NSDate*)referenceDate DEPRECATED_MSG_ATTRIBUTE("Use Calendar Config");
 +(NSInteger)currentYear;
 +(UINavigationController*)currentNavigationController;
 

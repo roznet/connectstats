@@ -84,7 +84,7 @@
     return self.scatterStats.config;
 }
 -(gcViewChoice)viewChoice{
-    return gcViewChoiceAll;
+    return gcViewChoiceFields;
 }
 
 -(void)showOptions{

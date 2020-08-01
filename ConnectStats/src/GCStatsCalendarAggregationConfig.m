@@ -28,7 +28,7 @@
 #import "GCStatsCalendarAggregationConfig.h"
 #import "GCAppGlobal.h"
 
-const NSUInteger kCalendarUnitNone = 0;
+const NSCalendarUnit kCalendarUnitNone = 0;
 
 
 @interface GCStatsCalendarAggregationConfig ()
@@ -72,11 +72,10 @@ const NSUInteger kCalendarUnitNone = 0;
 -(NSDate*)referenceDate{
     switch (self.periodType){
         case gcPeriodRolling:
-            return [NSDate date];
+            return self.fixedReferenceDate ?: [NSDate date];
+        case gcPeriodToDate:
         case gcPeriodCalendar:
             return nil;
-        case gcPeriodReferenceDate:
-            return self.fixedReferenceDate;
     }
     return nil;
 }
@@ -87,7 +86,7 @@ const NSUInteger kCalendarUnitNone = 0;
         self.fixedReferenceDate = nil;
     }else{
         self.fixedReferenceDate = referenceDate;
-        self.periodType = gcPeriodReferenceDate;
+        self.periodType = gcPeriodRolling;
     }
 }
 

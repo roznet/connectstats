@@ -35,7 +35,7 @@
     if(rv){
         rv.calendarConfig = multiFieldConfig.calendarConfig;
         rv.useFilter = multiFieldConfig.useFilter;
-        rv.viewChoice = gcViewChoiceAll;
+        rv.viewChoice = gcViewChoiceFields;
         rv.activityType = multiFieldConfig.activityType;
         rv.useFilter = multiFieldConfig.useFilter;
         rv.field = field;
@@ -61,16 +61,16 @@
     [self.calendarConfig isEqualToConfig:other.calendarConfig];
 }
 -(bool)nextView{
-    if( self.viewChoice == gcViewChoiceAll){
+    if( self.viewChoice == gcViewChoiceFields){
         self.viewChoice = gcViewChoiceCalendar;
     }else if( self.viewChoice == gcViewChoiceCalendar){
         if( [self.calendarConfig nextCalendarUnit] ){
-            self.viewChoice = gcViewChoiceAll;
+            self.viewChoice = gcViewChoiceFields;
         }
     }else{
-        self.viewChoice = gcViewChoiceAll;
+        self.viewChoice = gcViewChoiceFields;
     }
-    return self.viewChoice == gcViewChoiceAll;
+    return self.viewChoice == gcViewChoiceFields;
 }
 -(GCHistoryFieldDataSerieConfig*)historyConfig{
     return [GCHistoryFieldDataSerieConfig configWithField:_field xField:nil filter:_useFilter fromDate:nil];

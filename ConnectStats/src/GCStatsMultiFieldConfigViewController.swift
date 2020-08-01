@@ -70,7 +70,7 @@ class GCStatsMultiFieldConfigViewController: UIViewController {
                 viewChoiceSegment.selectedSegmentIndex = 1
                 filterViewConfig.isEnabled = true
                 calendarAggregationSegment.isEnabled = true
-            case gcViewChoice.all:
+            case gcViewChoice.fields:
                 viewChoiceSegment.selectedSegmentIndex = 2
                 filterViewConfig.isEnabled = true
                 calendarAggregationSegment.isEnabled = true
@@ -107,7 +107,11 @@ class GCStatsMultiFieldConfigViewController: UIViewController {
                 filterViewConfig.setEnabled(false, forSegmentAt: 2)
                 filterViewConfig.setEnabled(false, forSegmentAt: 3)
             default:
-                calendarAggregationSegment.selectedSegmentIndex = 0
+                if multiFieldConfig.calendarConfig.calendarUnit == kCalendarUnitNone {
+                    calendarAggregationSegment.selectedSegmentIndex = 3
+                }else{
+                    calendarAggregationSegment.selectedSegmentIndex = 0
+                }
             }
         }
     }
@@ -120,7 +124,7 @@ class GCStatsMultiFieldConfigViewController: UIViewController {
             }else if viewIndex == 1{
                 multiFieldConfig.viewChoice = gcViewChoice.calendar
             }else if viewIndex == 2{
-                multiFieldConfig.viewChoice = gcViewChoice.all
+                multiFieldConfig.viewChoice = gcViewChoice.fields
             }
             let filterIndex = self.filterViewConfig.selectedSegmentIndex
             if filterIndex == 0 {
@@ -139,6 +143,8 @@ class GCStatsMultiFieldConfigViewController: UIViewController {
                 multiFieldConfig.calendarConfig.calendarUnit = NSCalendar.Unit.month
             }else if calendarIndex == 2{
                 multiFieldConfig.calendarConfig.calendarUnit = NSCalendar.Unit.year
+            }else if calendarIndex == 3{
+                multiFieldConfig.calendarConfig.calendarUnit = kCalendarUnitNone
             }
         }
         // to update consistencies

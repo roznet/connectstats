@@ -135,7 +135,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (self.viewChoice==gcViewChoiceAll) {
+    if (self.viewChoice==gcViewChoiceFields) {
         return GC_SECTION_DATA+_fieldOrder.count;
     }else if (self.viewChoice==gcViewChoiceSummary){
         return 1;
@@ -147,7 +147,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if (self.viewChoice == gcViewChoiceAll) {
+    if (self.viewChoice == gcViewChoiceFields) {
         if (section == GC_SECTION_GRAPH) {
             return 0;
         }else{
@@ -169,7 +169,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell * rv =nil;
-    if (self.viewChoice == gcViewChoiceAll) {
+    if (self.viewChoice == gcViewChoiceFields) {
         rv = [self tableView:tableView fieldSummaryCell:indexPath];
     }else if (self.viewChoice == gcViewChoiceSummary){
         rv = [self tableView:tableView summaryCellForRowAtIndexPath:indexPath];
@@ -185,7 +185,7 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    if(self.viewChoice == gcViewChoiceAll ){
+    if(self.viewChoice == gcViewChoiceFields ){
         NSString * category = [self categoryNameForSection:section];
         return [GCTableHeaderFieldsCategory tableView:tableView viewForHeaderCategory:category];
     }else{
@@ -194,7 +194,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if(self.viewChoice == gcViewChoiceAll ){
+    if(self.viewChoice == gcViewChoiceFields ){
         NSString * category = [self categoryNameForSection:section];
         return [GCTableHeaderFieldsCategory tableView:tableView heightForHeaderCategory:category];
     }else{
@@ -203,7 +203,7 @@
 }
 
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    if(self.viewChoice == gcViewChoiceAll ){
+    if(self.viewChoice == gcViewChoiceFields ){
         return [self categoryNameForSection:section];
     }else{
         return nil;
@@ -223,7 +223,7 @@
             [self.multiFieldConfig nextSummaryCumulativeField];
             [tableView reloadData];
         }
-    }else if (self.viewChoice == gcViewChoiceAll) {
+    }else if (self.viewChoice == gcViewChoiceFields) {
         GCField * field = [self fieldsForSection:indexPath.section][indexPath.row];
         GCField * xfield = [GCViewConfig nextFieldForGraph:nil fieldOrder:[GCViewConfig validChoicesForGraphIn:self.allFields] differentFrom:field];
         
@@ -247,7 +247,7 @@
             }];
             [GCAppGlobal focusOnListWithFilter:filter];
             self.multiFieldConfig.viewConfig = gcStatsViewConfigAll;
-            [self setupForCurrentActivityType:GC_TYPE_ALL filter:true andViewChoice:gcViewChoiceAll];
+            [self setupForCurrentActivityType:GC_TYPE_ALL filter:true andViewChoice:gcViewChoiceFields];
         }else if (indexPath.section == GC_SECTION_GRAPH){
                 GCStatsOneFieldGraphViewController * graph = [[GCStatsOneFieldGraphViewController alloc] initWithNibName:nil bundle:nil];
                 gcGraphChoice choice = self.multiFieldConfig.calendarConfig.calendarUnit == NSCalendarUnitYear ? gcGraphChoiceCumulative : gcGraphChoiceBarGraph;
@@ -273,7 +273,7 @@
         }else{
             return 200.;
         }
-    }else if( self.viewChoice == gcViewChoiceAll){
+    }else if( self.viewChoice == gcViewChoiceFields){
         return 58.;
     }else{
         if (indexPath.section == GC_SECTION_GRAPH ) {
@@ -738,7 +738,7 @@
     vals.activityType = self.activityType;
     gcIgnoreMode ignoreMode = [self.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
     NSDate * cutOff = nil;
-    if (self.multiFieldConfig.viewConfig == gcStatsViewConfigToDate) {
+    if (self.multiFieldConfig.calendarConfig.periodType == gcPeriodToDate) {
         cutOff = [[GCAppGlobal organizer] lastActivity].date;
     }
     [vals aggregate:self.multiFieldConfig.calendarConfig.calendarUnit
@@ -783,7 +783,7 @@
 -(void)setupTestModeWithFieldListConfig:(GCStatsMultiFieldConfig*)nConfig{
     self.multiFieldConfig = nConfig;
     [self clearFieldDataSeries];
-    if (self.viewChoice == gcViewChoiceAll || self.viewChoice == gcViewChoiceSummary) {
+    if (self.viewChoice == gcViewChoiceFields || self.viewChoice == gcViewChoiceSummary) {
         [self setFieldStats:nil];
         [self setFieldOrder:nil];
         [self setupFieldStats];
@@ -806,7 +806,7 @@
             self.derivedAnalysisConfig.activityType = self.multiFieldConfig.activityType;
         }
 
-        if (self.viewChoice == gcViewChoiceAll || self.viewChoice == gcViewChoiceSummary) {
+        if (self.viewChoice == gcViewChoiceFields || self.viewChoice == gcViewChoiceSummary) {
             [self setFieldStats:nil];
             [self setFieldOrder:nil];
             dispatch_async([GCAppGlobal worker],^(){
