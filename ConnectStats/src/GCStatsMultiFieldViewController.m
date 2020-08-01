@@ -86,6 +86,7 @@
     [_allFields release];
     [_multiFieldConfig release];
     [_configViewController release];
+    [_updateCallback release];
     [super dealloc];
 }
 
@@ -249,19 +250,19 @@
             self.multiFieldConfig.viewConfig = gcStatsViewConfigAll;
             [self setupForCurrentActivityType:GC_TYPE_ALL filter:true andViewChoice:gcViewChoiceFields];
         }else if (indexPath.section == GC_SECTION_GRAPH){
-                GCStatsOneFieldGraphViewController * graph = [[GCStatsOneFieldGraphViewController alloc] initWithNibName:nil bundle:nil];
-                gcGraphChoice choice = self.multiFieldConfig.calendarConfig.calendarUnit == NSCalendarUnitYear ? gcGraphChoiceCumulative : gcGraphChoiceBarGraph;
-                
-                GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
-                
+            GCStatsOneFieldGraphViewController * graph = [[GCStatsOneFieldGraphViewController alloc] initWithNibName:nil bundle:nil];
+            gcGraphChoice choice = self.multiFieldConfig.graphChoice;
+            
+            GCHistoryFieldDataSerie * fieldDataSerie = [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
+            
             [graph setupForHistoryField:fieldDataSerie graphChoice:choice andConfig:[GCStatsOneFieldConfig configFromMultiFieldConfig:self.multiFieldConfig forY:fieldDataSerie.activityField andX:nil]];
-                [graph setCanSum:true];
-                if ([UIViewController useIOS7Layout]) {
-                    [UIViewController setupEdgeExtendedLayout:graph];
-                }
-                
-                [self.navigationController pushViewController:graph animated:YES];
-                [graph release];
+            [graph setCanSum:true];
+            if ([UIViewController useIOS7Layout]) {
+                [UIViewController setupEdgeExtendedLayout:graph];
+            }
+            
+            [self.navigationController pushViewController:graph animated:YES];
+            [graph release];
         }
     }
 }
@@ -297,7 +298,7 @@
     cell.cellDelegate = self;
     GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:self.multiFieldConfig.currentCumulativeSummaryField];
     [cell setDataSource:cache andConfig:cache];
-    if (self.multiFieldConfig.calendarConfig.calendarUnit == NSCalendarUnitYear) {// This is Cumulative graph, needs legend
+    if (self.multiFieldConfig.graphChoice == gcGraphChoiceCumulative) {// This is Cumulative graph, needs legend
         cell.legend = true;
     }else{
         cell.legend = false;
@@ -499,6 +500,9 @@
         }
         dispatch_async(dispatch_get_main_queue(), ^(){
             [self.tableView reloadData];
+            if( self.updateCallback ){
+                self.updateCallback();
+            }
         });
     }
 }
@@ -507,7 +511,9 @@
     [self setupBarButtonItem];
     [self.tableView reloadData];
     [self.navigationController.navigationBar setNeedsDisplay];
-
+    if( self.updateCallback ){
+        self.updateCallback();
+    }
 }
 
 -(void)publishEvent{
@@ -798,6 +804,7 @@
 
 -(void)setupForFieldListConfig:(GCStatsMultiFieldConfig*)nConfig{
     if (![self.multiFieldConfig isEqualToConfig:nConfig]) {
+        RZLog(RZLogInfo, @"setup from %@ to %@", self.multiFieldConfig, nConfig);
         self.multiFieldConfig = nConfig;
         [self clearFieldDataSeries];
         if( self.derivedAnalysisConfig== nil){

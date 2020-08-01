@@ -12,11 +12,12 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GCStatsMultiFieldConfigViewController" customModule="ConnectStats" customModuleProvider="target">
             <connections>
                 <outlet property="calendarAggregationSegment" destination="esS-Ri-oXM" id="Xdp-QB-fjY"/>
-                <outlet property="filterViewConfig" destination="CkL-O0-emO" id="kow-Qa-rhi"/>
+                <outlet property="graphTypeSegment" destination="neD-Zc-8VE" id="CgF-sX-9Q4"/>
+                <outlet property="periodSegment" destination="cLV-dy-ZfV" id="GX9-pU-gag"/>
                 <outlet property="previewTableView" destination="ycw-Hc-iaR" id="0tk-53-uwR"/>
-                <outlet property="rollingSegment" destination="cLV-dy-ZfV" id="GX9-pU-gag"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="viewChoiceSegment" destination="v9i-Dv-sfU" id="yvk-hE-nFB"/>
+                <outlet property="viewConfigSegment" destination="CkL-O0-emO" id="kow-Qa-rhi"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -81,12 +82,23 @@
                     <rect key="frame" x="0.0" y="268" width="414" height="584"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </tableView>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="neD-Zc-8VE">
+                    <rect key="frame" x="20" y="53.5" width="93" height="32"/>
+                    <segments>
+                        <segment title="" image="858-line-chart"/>
+                        <segment title="" image="859-bar-chart"/>
+                    </segments>
+                    <connections>
+                        <action selector="changeSegment:" destination="-1" eventType="valueChanged" id="moP-g0-WLc"/>
+                    </connections>
+                </segmentedControl>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="ycw-Hc-iaR" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="7qY-qk-zHM"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="7Fn-KP-WWz" secondAttribute="trailing" constant="35" id="8c6-gk-bpA"/>
+                <constraint firstItem="neD-Zc-8VE" firstAttribute="centerY" secondItem="7Fn-KP-WWz" secondAttribute="centerY" id="BQq-de-cc4"/>
                 <constraint firstItem="ycw-Hc-iaR" firstAttribute="top" secondItem="cLV-dy-ZfV" secondAttribute="bottom" constant="20" id="DVI-rw-DKM"/>
                 <constraint firstItem="esS-Ri-oXM" firstAttribute="firstBaseline" secondItem="v9i-Dv-sfU" secondAttribute="baseline" constant="16" symbolType="layoutAnchor" id="G0Q-JC-MVW"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="ycw-Hc-iaR" secondAttribute="trailing" id="GLq-g2-gDX"/>
@@ -102,12 +114,15 @@
                 <constraint firstItem="CkL-O0-emO" firstAttribute="centerX" secondItem="esS-Ri-oXM" secondAttribute="centerX" id="qoG-Uj-EbS"/>
                 <constraint firstItem="esS-Ri-oXM" firstAttribute="top" secondItem="v9i-Dv-sfU" secondAttribute="bottom" constant="10" id="r0b-wa-sMS"/>
                 <constraint firstItem="esS-Ri-oXM" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="uVe-TD-Tyu"/>
+                <constraint firstItem="neD-Zc-8VE" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="wuS-ME-g3m"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="ycw-Hc-iaR" secondAttribute="bottom" constant="10" id="xf9-Ks-JLI"/>
             </constraints>
             <point key="canvasLocation" x="137.68115942028987" y="106.47321428571428"/>
         </view>
     </objects>
     <resources>
+        <image name="858-line-chart" width="28" height="14"/>
+        <image name="859-bar-chart" width="28" height="14"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

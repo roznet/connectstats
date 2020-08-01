@@ -65,6 +65,7 @@
             rv.viewChoice = other.viewChoice;
             rv.useFilter = other.useFilter;
             rv.viewConfig = other.viewConfig;
+            rv.graphChoice = other.graphChoice;
             rv.calendarConfig = [GCStatsCalendarAggregationConfig configFrom:other.calendarConfig];
         }else{
             rv.viewConfig = gcStatsViewConfigUnused;
@@ -82,12 +83,13 @@
     return [GCViewConfig viewChoiceDesc:self.viewChoice calendarConfig:self.calendarConfig];
 }
 -(NSString*)description{
-    return [NSString stringWithFormat:@"<%@: %@ view:%@ calUnit:%@ config:%@ period:%@>", NSStringFromClass([self class]),
+    return [NSString stringWithFormat:@"<%@: %@ view:%@ calUnit:%@ config:%@ period:%@ gr:%@>", NSStringFromClass([self class]),
             self.activityType,
             self.viewChoiceKey,
             self.calendarConfig.calendarUnitKey,
             self.viewConfigKey,
-            self.calendarConfig.periodTypeKey
+            self.calendarConfig.periodTypeKey,
+            self.graphChoiceKey
             ];
 }
 
@@ -100,8 +102,10 @@
 }
 
 -(BOOL)isEqualToConfig:(GCStatsMultiFieldConfig*)other{
-    return [self.activityType isEqualToString:other.activityType] && self.viewChoice==other.viewChoice && self.useFilter == other.useFilter
-    && self.viewConfig==other.viewConfig && self.historyStats==other.historyStats && [self.calendarConfig isEqualToConfig:other.calendarConfig];
+    return [self.activityType isEqualToString:other.activityType] && self.viewChoice==other.viewChoice &&
+    self.useFilter == other.useFilter && self.viewConfig==other.viewConfig && self.historyStats==other.historyStats &&
+    self.graphChoice == other.graphChoice &&
+    [self.calendarConfig isEqualToConfig:other.calendarConfig];
 }
 
 -(gcHistoryStats)historyStats{
@@ -162,6 +166,18 @@
     self.viewConfig = gcStatsViewConfigUnused;
 }
 
+-(NSString*)graphChoiceKey{
+    return self.graphChoice == gcGraphChoiceCumulative ? @"cum" : @"bar";
+}
+
+-(void)setGraphChoiceKey:(NSString *)graphChoiceKey{
+    if( [graphChoiceKey isEqualToString:@"cum"] ){
+        self.graphChoice = gcGraphChoiceCumulative;
+    }else{
+        self.graphChoice = gcGraphChoiceBarGraph;
+    }
+}
+
 -(BOOL)nextView{
     switch (self.viewChoice) {
         case gcViewChoiceFields:
@@ -169,6 +185,7 @@
             self.viewChoice = gcViewChoiceCalendar;
             self.viewConfig = gcStatsViewConfigAll;
             self.calendarConfig.calendarUnit = NSCalendarUnitWeekOfYear;
+            self.graphChoice = gcGraphChoiceBarGraph;
             break;
         }
         case gcViewChoiceCalendar:
@@ -178,6 +195,11 @@
                 self.viewChoice = gcViewChoiceSummary;
                 self.viewConfig = gcStatsViewConfigUnused;
                 self.calendarConfig.calendarUnit = kCalendarUnitNone;
+            }
+            if( self.calendarConfig.calendarUnit == NSCalendarUnitYear){
+                self.graphChoice = gcGraphChoiceCumulative;
+            }else{
+                self.graphChoice = gcGraphChoiceBarGraph;
             }
             break;
         }
@@ -334,11 +356,11 @@
 -(GCSimpleGraphCachedDataSource*)dataSourceForFieldDataSerie:(GCHistoryFieldDataSerie*)fieldDataSerie{
     GCField * field = fieldDataSerie.activityField;
     GCSimpleGraphCachedDataSource * cache = nil;
-    gcGraphChoice choice = self.calendarConfig.calendarUnit == NSCalendarUnitYear ? gcGraphChoiceCumulative : gcGraphChoiceBarGraph;
+    gcGraphChoice choice = self.graphChoice;
 
     NSDate * afterdate = nil;
     NSString * compstr = nil;
-    NSCalendarUnit calunit =NSCalendarUnitWeekOfYear;
+    NSCalendarUnit calunit = NSCalendarUnitWeekOfYear;
     if (self.viewChoice == gcViewChoiceFields ||self.viewChoice == gcViewChoiceSummary) {
         switch (self.historyStats) {
             case gcHistoryStatsMonth:

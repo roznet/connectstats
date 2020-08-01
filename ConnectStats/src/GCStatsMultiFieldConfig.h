@@ -49,6 +49,9 @@
 
 @property (nonatomic,assign) BOOL useFilter;
 
+@property (nonatomic,assign) gcGraphChoice graphChoice;
+@property (nonatomic,retain) NSString * graphChoiceKey;
+
 /**
  *  HistoryStats displayed can be current month, week, year or all -> quick filter on thumbnail graphs
  */
