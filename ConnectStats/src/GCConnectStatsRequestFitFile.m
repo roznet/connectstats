@@ -218,7 +218,7 @@
         if( data.length > 5 && strncmp(start,"<?xml", 5 ) == 0 ){
             GCConnectStatsActivityTCXParser * parser = [GCConnectStatsActivityTCXParser activityTCXParserWithActivityId:self.activity.activityId andData:data];
             fitAct = parser.activity;
-        }else{
+        }else if( data.length > 13 ){ // should check bytes
             NSString * activityId = self.activity.activityId;
             if( activityId == nil){
                 activityId = [[fileName lastPathComponent] stringByDeletingPathExtension];
