@@ -32,6 +32,7 @@
 @class GCActivity;
 @class GCHealthMeasure;
 @class GCHistoryFieldDataSerie;
+@class GCStatsMultiFieldConfig;
 
 @interface GCCellGrid (Templates)
 -(void)setupDetailHeader:(GCActivity*)activity;
@@ -39,7 +40,7 @@
 -(void)setupSummaryFromActivity:(GCActivity*)activity width:(CGFloat)width status:(gcViewActivityStatus)status;
 -(void)setupFromHistoryAggregatedData:(GCHistoryAggregatedDataHolder*)data
                                 index:(NSUInteger)idx
-                           calendarUnit:(NSCalendarUnit)viewChoice
+                           multiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig
                       andActivityType:(NSString*)activityType
                                 width:(CGFloat)width;
 

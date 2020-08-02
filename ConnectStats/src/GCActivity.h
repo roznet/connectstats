@@ -130,6 +130,9 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 @property (nonatomic,readonly) NSString* trackDbFileName;
 
+/**
+ @brief the activityId on the external service if differetn from the activityId in the database (for example 1234 when the activityId is __service__1234)
+ */
 @property (nonatomic,readonly) NSString * externalActivityId;
 @property (nonatomic,readonly) GCService * service;
 
@@ -152,7 +155,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  */
 @property (nonatomic,retain) NSArray<NSString*> * childIds;
 /**
- @brief To maintain an activityId in an external system
+ @brief To maintain an activityId in an external system. For example an activity from ConnectStats Service should have a activityID on the garmin service
  */
 @property (nonatomic,retain) NSString*externalServiceActivityId;
 

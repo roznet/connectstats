@@ -314,7 +314,7 @@
     if( data ){
         [cell setupFromHistoryAggregatedData:data
                                        index:indexPath.row
-                                calendarUnit:self.multiFieldConfig.calendarConfig.calendarUnit
+                                multiFieldConfig:self.multiFieldConfig
                              andActivityType:self.displayActivityType
                                        width:tableView.frame.size.width];
     }

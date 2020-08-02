@@ -36,6 +36,7 @@
 #import "GCHistoryFieldDataSerie.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+Fields.h"
+#import "GCStatsMultiFieldConfig.h"
 #import "GCStatsCalendarAggregationConfig.h"
 
 const CGFloat kGC_WIDE_SIZE = 420.0f;
@@ -542,9 +543,10 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
 -(void)setupFromHistoryAggregatedData:(GCHistoryAggregatedDataHolder*)data
                                 index:(NSUInteger)idx
-                           calendarUnit:(NSCalendarUnit)calUnit
+                     multiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig
                       andActivityType:(NSString*)activityType
                                 width:(CGFloat)width{
+    NSCalendarUnit calUnit = multiFieldConfig.calendarConfig.calendarUnit;
     BOOL wide =false;
     if (width > kGC_WIDE_SIZE) {
         wide = true;
@@ -564,7 +566,9 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
     NSDictionary * dateAttributes = [GCViewConfig attributeBold14];
 
-    NSString * dateFmt = [data.date calendarUnitFormat:calUnit];
+    BOOL rolling = multiFieldConfig.calendarConfig.periodType == gcPeriodRolling;
+    // if rolling use none that will just print the date
+    NSString * dateFmt = [data.date calendarUnitFormat:rolling ? kCalendarUnitNone : calUnit];
     if (!dateFmt) {
         RZLog(RZLogError, @"Got no date: idx=%d data=%@ date=%@",(int)idx,data,[data date]);
         dateFmt = NSLocalizedString(@"ERROR", @"Date");

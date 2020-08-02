@@ -846,12 +846,16 @@
     [aggregatedStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
     cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    [cell setupFromHistoryAggregatedData:[aggregatedStats dataForIndex:0] index:0 calendarUnit:NSCalendarUnitWeekOfYear andActivityType:GC_TYPE_RUNNING width:320.];
+    GCStatsMultiFieldConfig * config = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
+    config.calendarConfig.calendarUnit= NSCalendarUnitWeekOfYear;
+    
+    [cell setupFromHistoryAggregatedData:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config andActivityType:GC_TYPE_RUNNING width:320.];
     [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Weekly"]];
 
     [aggregatedStats aggregate:NSCalendarUnitMonth referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    [cell setupFromHistoryAggregatedData:[aggregatedStats dataForIndex:0] index:0 calendarUnit:NSCalendarUnitMonth andActivityType:GC_TYPE_RUNNING width:320.];
+    config.calendarConfig.calendarUnit = NSCalendarUnitMonth;
+    [cell setupFromHistoryAggregatedData:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config andActivityType:GC_TYPE_RUNNING width:320.];
     [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Monthly"]];
 
     return stats;

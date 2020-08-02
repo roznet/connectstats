@@ -70,6 +70,7 @@
         }else{
             rv.viewConfig = gcStatsViewConfigUnused;
             rv.viewChoice = gcViewChoiceSummary;
+            rv.graphChoice = gcGraphChoiceBarGraph;
             rv.calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:kCalendarUnitNone];
         }
     }

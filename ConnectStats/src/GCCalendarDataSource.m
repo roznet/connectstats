@@ -34,6 +34,7 @@
 #import "GCActivity+UI.h"
 #import "GCActivity+Database.h"
 #import "GCStatsCalendarAggregationConfig.h"
+#import "GCStatsMultiFieldConfig.h"
 
 #define GC_SUMMARY_WEEKLY   0
 #define GC_SUMMARY_MONTHLY  1
@@ -542,9 +543,13 @@
             calUnit = NSCalendarUnitWeekOfYear;
         }
         if (holder) {
+            
+            GCStatsMultiFieldConfig * multiFieldConfig = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
+            multiFieldConfig.calendarConfig.calendarUnit = calUnit;
+            
             [cell setupFromHistoryAggregatedData:holder
                                            index:indexPath.row
-                                      calendarUnit:calUnit
+                                multiFieldConfig:multiFieldConfig
                                  andActivityType:holder.activityType?:GC_TYPE_ALL
                                            width:tableView.frame.size.width];
         }else{
