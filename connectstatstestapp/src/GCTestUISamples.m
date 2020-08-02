@@ -807,7 +807,7 @@
     GCStatsMultiFieldViewController * vc = RZReturnAutorelease([[GCStatsMultiFieldViewController alloc] initWithStyle:UITableViewStyleGrouped]);
     GCStatsMultiFieldConfig * config = RZReturnAutorelease([[GCStatsMultiFieldConfig alloc] init]);
     config.activityType = GC_TYPE_RUNNING;
-    config.viewChoice = gcViewChoiceAll;
+    config.viewChoice = gcViewChoiceFields;
     config.viewConfig = gcStatsViewConfigAll;
     config.calendarConfig.calendarUnit = kCalendarUnitNone;
 
