@@ -34,6 +34,7 @@
 @import RZExternal;
 @import RZExternalUniversal;
 #import "ConnectStats-Swift.h"
+#import "GCService.h"
 
 @interface GCGarminActivityTrack13Request ()
 @property (nonatomic,retain) GCActivity * activity;
@@ -56,6 +57,14 @@
     [super dealloc];
 }
 -(NSString*)activityId{
+    if( self.activity.service.service == gcServiceGarmin ){
+        return self.activity.activityId;
+    }else if( self.activity.externalServiceActivityId){
+        GCService * service = [GCService serviceForActivityId:self.activity.externalServiceActivityId];
+        if( service.service == gcServiceGarmin ){
+            return self.activity.externalServiceActivityId;
+        }
+    }
     return self.activity.activityId;
 }
 +(GCGarminActivityTrack13Request*)requestWithActivity:(GCActivity*)act{
@@ -350,9 +359,9 @@
             });
             self.status = GCWebStatusOK;
             if (self.trackpointsSwim && self.lapsSwim) {
-                [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpoints:self.trackpointsSwim andLaps:self.lapsSwim];
+                [[GCAppGlobal organizer] registerActivity:self.activity.activityId withTrackpoints:self.trackpointsSwim andLaps:self.lapsSwim];
             }else{
-                [[GCAppGlobal organizer] registerActivity:self.activityId withTrackpoints:self.trackpoints andLaps:self.laps];
+                [[GCAppGlobal organizer] registerActivity:self.activity.activityId withTrackpoints:self.trackpoints andLaps:self.laps];
             }
             [self processMergeFitFile];
         }else{

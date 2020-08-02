@@ -80,9 +80,10 @@
     else{
         if( self.shouldCheckForAlternativeWhenEmpty && [self validAlternativeService]){
             self.tryAlternativeService = true;
-            return RZReturnAutorelease([[GCConnectStatsRequestFitFile alloc] initNextWith:self]);
+            return [GCGarminActivityTrack13Request requestWithActivity:self.activity];
+            //return RZReturnAutorelease([[GCConnectStatsRequestFitFile alloc] initNextWith:self]);
         }
-        return [GCWebImagesRequests imagesRequestFor:self.activity];
+        return nil;
     }
 }
 -(NSString*)url{
@@ -104,7 +105,7 @@
     BOOL rv = false;
     BOOL garminSuccess = [[GCAppGlobal profile] serviceSuccess:gcServiceGarmin];
     if( garminSuccess && self.activity.externalServiceActivityId) {
-        GCService * service = [GCService serviceForActivityId:self.activity.externalActivityId];
+        GCService * service = [GCService serviceForActivityId:self.activity.externalServiceActivityId];
         if( service.service == gcServiceGarmin ){
             RZLog(RZLogInfo, @"%@ has garmin alternative %@, trying that", self.activity.activityId, self.activity.externalServiceActivityId);
             rv = true;
@@ -232,6 +233,8 @@
                 [self.activity updateSummaryDataFromActivity:fitAct];
                 [self.activity updateTrackpointsFromActivity:fitAct];
                 [self.activity saveTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
+                // don't go further if successful
+                self.shouldCheckForAlternativeWhenEmpty = false;
             }
         }
     }
