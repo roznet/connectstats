@@ -26,45 +26,10 @@
 #import <Foundation/Foundation.h>
 #import "GCActivity.h"
 #import "GCActivitiesOrganizer.h"
-#import "GCFields.h"
-
-typedef NS_ENUM(NSUInteger, gcAggregatedType) {
-    gcAggregatedSum = 0,
-    gcAggregatedAvg = 1,
-    gcAggregatedCnt = 2,
-    gcAggregatedMax = 3,
-    gcAggregatedMin = 4,
-    gcAggregatedStd = 5,
-    gcAggregatedSsq = 6,
-    gcAggregatedWvg = 7,
-    gcAggregatedTypeEnd = 8
-};
+#import "GCHistoryAggregatedDataHolder.h"
 
 
 
-@interface GCHistoryAggregatedDataHolder : NSObject{
-    double * stats;
-    NSDate * date;
-    BOOL * flags;
-    BOOL started;
-}
-@property (nonatomic,retain) NSDate * date;
-@property (nonatomic,assign) double * stats;
-@property (nonatomic,assign) BOOL * flags;
-@property (nonatomic,retain) NSString * activityType;
-
--(GCHistoryAggregatedDataHolder*)init NS_DESIGNATED_INITIALIZER;
--(GCHistoryAggregatedDataHolder*)initForDate:(NSDate*)adate NS_DESIGNATED_INITIALIZER;
-
--(void)aggregateActivity:(GCActivity*)act;
--(void)aggregateEnd:(NSDate*)adate;
-
--(BOOL)hasField:(gcAggregatedField)f;
--(double)valFor:(gcAggregatedField)field and:(gcAggregatedType)tp;
--(NSString*)formatValue:(gcAggregatedField)f statType:(gcAggregatedType)s andActivityType:(NSString*)aType;
--(GCNumberWithUnit*)numberWithUnit:(gcAggregatedField)field statType:(gcAggregatedType)tp andActivityType:(NSString*)aType;
-
-@end
 
 @interface GCHistoryAggregatedActivityStats : NSObject
 

@@ -672,6 +672,9 @@
 		428FF79F15FB412C007A88FA /* GCWebConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF79C15FB412C007A88FA /* GCWebConnect.m */; };
 		428FF7A015FB412C007A88FA /* GCWebUrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF79E15FB412C007A88FA /* GCWebUrl.m */; };
 		428FF7A315FB413B007A88FA /* GCActivitiesOrganizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF7A215FB413B007A88FA /* GCActivitiesOrganizer.m */; };
+		429133E924D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 429133E824D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.m */; };
+		429133EA24D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 429133E824D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.m */; };
+		429133EB24D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 429133E824D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.m */; };
 		429184AE2319B0ED00FD6525 /* GCTestUserInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 429184AD2319B0ED00FD6525 /* GCTestUserInterface.m */; };
 		429184C2231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 429184C1231B13EA00FD6525 /* Colors-iOS13.xcassets */; };
 		429184C3231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 429184C1231B13EA00FD6525 /* Colors-iOS13.xcassets */; };
@@ -2412,6 +2415,8 @@
 		428FF7A115FB413B007A88FA /* GCActivitiesOrganizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivitiesOrganizer.h; path = src/GCActivitiesOrganizer.h; sourceTree = "<group>"; };
 		428FF7A215FB413B007A88FA /* GCActivitiesOrganizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivitiesOrganizer.m; path = src/GCActivitiesOrganizer.m; sourceTree = "<group>"; };
 		42902C0C20431A560058FB28 /* HealthStats.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = HealthStats.entitlements; path = ../HealthStats/HealthStats.entitlements; sourceTree = "<group>"; };
+		429133E724D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCHistoryAggregatedDataHolder.h; path = src/GCHistoryAggregatedDataHolder.h; sourceTree = "<group>"; };
+		429133E824D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCHistoryAggregatedDataHolder.m; path = src/GCHistoryAggregatedDataHolder.m; sourceTree = "<group>"; };
 		429184AD2319B0ED00FD6525 /* GCTestUserInterface.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCTestUserInterface.m; sourceTree = "<group>"; };
 		429184C1231B13EA00FD6525 /* Colors-iOS13.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Colors-iOS13.xcassets"; path = "ConnectStats/icons/Colors-iOS13.xcassets"; sourceTree = "<group>"; };
 		4291909821E226FF00E0B114 /* Pods_FitFileExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_FitFileExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3961,6 +3966,8 @@
 				423493FE160479FA00A770D6 /* GCHistoryFieldDataSerie.m */,
 				42BC5396161E376600576097 /* GCHistoryFieldSummaryStats.h */,
 				42BC539A161E37AE00576097 /* GCHistoryFieldSummaryStats.m */,
+				429133E724D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.h */,
+				429133E824D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.m */,
 				422C70AC1642B2ED003779E0 /* GCHistoryAggregatedActivityStats.h */,
 				422C70AD1642B677003779E0 /* GCHistoryAggregatedActivityStats.m */,
 				42BC77E1198BEF1C008BA3D6 /* GCHistoryPerformanceAnalysis.h */,
@@ -6926,6 +6933,7 @@
 				422FAED919A1DD6000D09773 /* GCTrackPoint.m in Sources */,
 				422FAEDA19A1DD6000D09773 /* GCViewConfig.m in Sources */,
 				422FAEDF19A1DD6000D09773 /* GCCellMap.m in Sources */,
+				429133EB24D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.m in Sources */,
 				422FAEE019A1DD6000D09773 /* GCService.m in Sources */,
 				422FAEE119A1DD6000D09773 /* GCStatsOneFieldViewController.m in Sources */,
 				422FAEE919A1DD6000D09773 /* GCGarminActivityLapsParser.m in Sources */,
@@ -7287,6 +7295,7 @@
 				429D752E1651AAB800232BED /* GCActivitiesCacheManagement.m in Sources */,
 				429D75351651B14E00232BED /* GCGarminRequest.m in Sources */,
 				4235DF9B16558F3C00DE316A /* GCSettingsCacheManagementViewController.m in Sources */,
+				429133E924D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.m in Sources */,
 				42018E9618F1877E0089AB7A /* GCFieldsCategory.m in Sources */,
 				42B85892229DBD55009E309A /* GCConnectStatsRequestSearch.m in Sources */,
 				42CFBABB18D26EB400EA4C48 /* GCStravaActivityList.m in Sources */,
@@ -7549,6 +7558,7 @@
 				427F93791BEDFF0400C177F9 /* GCStatsOneFieldViewController.m in Sources */,
 				4209E1921DA44EC800B80735 /* GCActivitiesOrganizerListRegister.m in Sources */,
 				42B5E2921BA5B216000FAE4E /* GCGarminActivityDetailJsonParser.m in Sources */,
+				429133EA24D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.m in Sources */,
 				421BD67924D6BED500F47190 /* GCStatsMultiFieldConfigViewController.swift in Sources */,
 				42B5E2931BA5B216000FAE4E /* GCGarminActivitySummaryParser.m in Sources */,
 				42B5E2941BA5B216000FAE4E /* GCGarminUserJsonParser.m in Sources */,

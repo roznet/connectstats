@@ -38,7 +38,7 @@
     }
     BOOL treatGapAsNoValue = self.settings.treatGapAsNoValueInSeries;
     NSTimeInterval gapTimeInterval = self.settings.gapTimeInterval;
-
+    
     GCUnit * displayUnit = [self displayUnitForField:field];
     GCUnit * storeUnit   = [self storeUnitForField:field];
 
@@ -67,37 +67,49 @@
             firstDate = point.time;
         }
 
-        GCNumberWithUnit * nu = [point numberWithUnitForField:field inActivity:self];
-        
-        if (nu) {
-            if (lapAdjustments && point.lapIndex < lapAdjustments.count) {
-                GCNumberWithUnit * adjustment = lapAdjustments[ point.lapIndex];
-                [nu addNumberWithUnit:adjustment weight:1.0];
-            }
-
+        if( point.trackEventType == gcTrackEventTypeStop || point.trackEventType == gcTrackEventTypeStopAll){
             if (timeAxis) {
                 if (useElapsed) {
-                    if(lastPoint && treatGapAsNoValue){
-                        NSTimeInterval elapsed = [point.time timeIntervalSinceDate:lastPoint.time];
-                        NSTimeInterval checkGapTimeInterval = gapTimeInterval == 0. ? lastPoint.elapsed : gapTimeInterval;
-                        if(elapsed > checkGapTimeInterval){
-                            NSDate * nextDate = [lastPoint.time dateByAddingTimeInterval:checkGapTimeInterval];
-                            [serieWithUnit.serie addDataPointNoValueWithX:[nextDate timeIntervalSinceDate:firstDate]];
-                        }
-                    }
-
-                    [serieWithUnit addNumberWithUnit:nu forDate:point.time since:firstDate];
+                    [serieWithUnit.serie addDataPointNoValueWithDate:point.time since:firstDate];
                 }else{
-                    [serieWithUnit addNumberWithUnit:nu forDate:point.time];
+                    [serieWithUnit.serie addDataPointNoValueWithDate:point.time];
                 }
             }else{
-                [serieWithUnit addNumberWithUnit:nu forX:point.distanceMeters];
+                [serieWithUnit.serie addDataPointNoValueWithX:point.distanceMeters];
             }
-        }else if( self.garminSwimAlgorithm){
-            // No value, add point for consistency in number of points
-            [serieWithUnit.serie addDataPointNoValueWithX:[point.time timeIntervalSinceDate:firstDate]];
+        }else{
+            GCNumberWithUnit * nu = [point numberWithUnitForField:field inActivity:self];
+            
+            if (nu) {
+                if (lapAdjustments && point.lapIndex < lapAdjustments.count) {
+                    GCNumberWithUnit * adjustment = lapAdjustments[ point.lapIndex];
+                    [nu addNumberWithUnit:adjustment weight:1.0];
+                }
+                
+                if (timeAxis) {
+                    if (useElapsed) {
+                        if(lastPoint && treatGapAsNoValue){
+                            NSTimeInterval elapsed = [point.time timeIntervalSinceDate:lastPoint.time];
+                            NSTimeInterval checkGapTimeInterval = gapTimeInterval == 0. ? lastPoint.elapsed : gapTimeInterval;
+                            if(elapsed > checkGapTimeInterval){
+                                NSDate * nextDate = [lastPoint.time dateByAddingTimeInterval:checkGapTimeInterval];
+                                [serieWithUnit.serie addDataPointNoValueWithX:[nextDate timeIntervalSinceDate:firstDate]];
+                            }
+                        }
+                        
+                        [serieWithUnit addNumberWithUnit:nu forDate:point.time since:firstDate];
+                    }else{
+                        [serieWithUnit addNumberWithUnit:nu forDate:point.time];
+                    }
+                }else{
+                    [serieWithUnit addNumberWithUnit:nu forX:point.distanceMeters];
+                }
+            }else if( self.garminSwimAlgorithm){
+                // No value, add point for consistency in number of points
+                [serieWithUnit.serie addDataPointNoValueWithX:[point.time timeIntervalSinceDate:firstDate]];
+            }
+            lastPoint = point;
         }
-        lastPoint = point;
     }
 
     [self applyStandardFilterTo:serieWithUnit ForField:field];
