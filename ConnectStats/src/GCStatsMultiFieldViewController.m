@@ -277,14 +277,18 @@
             return 200.;
         }
     }else if( self.viewChoice == gcViewChoiceFields){
-        return 58.;
-    }else{
+        return [GCViewConfig sizeForNumberOfRows:3];
+    }else if( self.viewChoice == gcViewChoiceCalendar){
         if (indexPath.section == GC_SECTION_GRAPH ) {
             return 200.;
         }else{
-            return 58.;
+            //GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
+            CGFloat height = [GCViewConfig sizeForNumberOfRows:3];
+            return height;
+;
         }
     }
+    return 58.;
 }
 
 #pragma mark - Historical Statistics Cells

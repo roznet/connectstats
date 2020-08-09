@@ -54,6 +54,7 @@ typedef NS_ENUM(NSUInteger, rzTextColor){
 
 +(RZColor*)backgroundForLegend;
 
+
 +(NSDictionary<NSString*,id>*)attributeBold16;
 +(NSDictionary<NSString*,id>*)attributeBold16Highlighted;
 +(NSDictionary<NSString*,id>*)attribute16;
@@ -69,6 +70,7 @@ typedef NS_ENUM(NSUInteger, rzTextColor){
 +(RZImage*)checkMarkImage:(BOOL)val;
 +(RZFont*)systemFontOfSize:(CGFloat)size;
 +(RZFont*)boldSystemFontOfSize:(CGFloat)size;
++(CGFloat)sizeForNumberOfRows:(NSUInteger)rows;
 
 #if TARGET_OS_IPHONE
 +(RZImage*)imageWithView:(UIView *)view;

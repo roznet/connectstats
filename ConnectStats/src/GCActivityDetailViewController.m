@@ -458,7 +458,7 @@
     BOOL high = self.tableView.frame.size.height > 600.;
 
     if (indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION) {
-        return 58.;
+        return [GCViewConfig sizeForNumberOfRows:3];
     }else if(indexPath.section==GCVIEW_DETAIL_MAP_SECTION){
         return high ? 200. : 150.;
     }else if(indexPath.section==GCVIEW_DETAIL_LOAD_SECTION){
@@ -466,9 +466,9 @@
     }else if(indexPath.section==GCVIEW_DETAIL_GRAPH_SECTION){
         return high ? 200. : 150.;
     }else if(indexPath.section == GCVIEW_DETAIL_TITLE_SECTION){
-        return 64.;
+        return [GCViewConfig sizeForNumberOfRows:3];
     }
-    return 58.;
+    return [GCViewConfig sizeForNumberOfRows:3];
 }
 
 #pragma mark - Table view delegate

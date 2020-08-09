@@ -135,6 +135,13 @@ static gcFontStyle _fontStyle;
     }
     return nil;
 }
+
++(CGFloat)sizeForNumberOfRows:(NSUInteger)rows{
+    CGSize size = [@"A" sizeWithAttributes:[self attribute16]];
+    CGFloat rv = size.height  * rows;
+    return ceil( rv * 1.05 ); // 5% margin
+}
+
 +(RZFont*)systemFontOfSize:(CGFloat)size{
 #if TARGET_OS_IPHONE
     if (_fontStyle == gcFontStyleDynamicType) {

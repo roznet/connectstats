@@ -512,7 +512,7 @@ const CGFloat kCellDaySpacing = 2.f;
 #pragma mark - Table view delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    CGFloat rv = 64.;
+    CGFloat rv = [GCViewConfig sizeForNumberOfRows:3];
 
     GCActivity * act = [self activityForIndex:indexPath.row];
     if ([act.activityType isEqualToString:GC_TYPE_DAY]) {
