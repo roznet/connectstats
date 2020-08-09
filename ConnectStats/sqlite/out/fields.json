@@ -3156,38 +3156,38 @@
     {
       "activity_type": "all",
       "field": "GainCorrectedElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "all",
       "field": "GainElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "all",
       "field": "GainUncorrectedElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "all",
       "field": "LossCorrectedElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "all",
       "field": "LossElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "all",
       "field": "LossUncorrectedElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "running",
@@ -3210,8 +3210,8 @@
     {
       "activity_type": "all",
       "field": "MaxCorrectedElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "all",
@@ -3222,8 +3222,8 @@
     {
       "activity_type": "all",
       "field": "MaxElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "running",
@@ -3312,8 +3312,8 @@
     {
       "activity_type": "all",
       "field": "MaxUncorrectedElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "running",
@@ -3342,8 +3342,8 @@
     {
       "activity_type": "all",
       "field": "MinCorrectedElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "all",
@@ -3354,8 +3354,8 @@
     {
       "activity_type": "all",
       "field": "MinElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "running",
@@ -3420,8 +3420,8 @@
     {
       "activity_type": "all",
       "field": "MinUncorrectedElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "running",
@@ -3516,8 +3516,8 @@
     {
       "activity_type": "all",
       "field": "SumSampleCountElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "all",
@@ -3642,8 +3642,8 @@
     {
       "activity_type": "all",
       "field": "WeightedMeanElevation",
-      "metric": "meter",
-      "statute": "foot"
+      "metric": "meterelevation",
+      "statute": "footelevation"
     },
     {
       "activity_type": "running",

@@ -63,6 +63,7 @@ void buildUnitSystemCache(){
                           @"strideyd"   : @"stride",
                           @"pound"      : @"kilogram",
                           @"feetperhour": @"meterperhour",
+                          @"footelevation": @"meterelevation",
                           };
 
         // Meter -> yard or foot ambiguous, default should be yard
@@ -298,6 +299,9 @@ void registerUnits(){
         registerLinea1( @[ @"centimeter",@"Centimeters",@"cm"],  @"meter", 0.01,          0.0);
         registerLinea1( @[ @"millimeter",@"Millimeter",@"mm"],   @"meter", 0.001,         0.0);
         registerLinea0( @[ @"floor",     @"Floor",      @"floors"],    @"meter", 3.0,           0.0);
+        // special meterelevation that will not have coumpounding
+        registerLinea0( @[ @"meterelevation",     @"Meters",     @"m" ],  @"meter", 1.0,           0.0);
+        registerLinear( @[ @"footelevation",      @"Feet",       @"ft"],  @"meter", GCUNIT_FOOT,   0.0);
 
         //mass
         registerLinear( @[ @"kilogram", @"Kilograms", @"kg"],  @"kilogram", 1.0, 0.0);
