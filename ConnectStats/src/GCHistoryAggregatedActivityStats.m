@@ -42,6 +42,7 @@
 @property (nonatomic,assign) NSDate * cutOff;
 
 @property (nonatomic, retain) NSArray<GCField*>*fields;
+@property (nonatomic, retain) NSSet<GCField*>*foundFields;
 
 @end
 
@@ -111,6 +112,8 @@
     self.calendarUnit = aUnit;
     self.refOrNil = refOrNil;
     self.cutOff = cutOff;
+    
+    NSMutableSet * found = [NSMutableSet set];
 
     NSArray * useActivities = self.activities;
 
@@ -155,6 +158,7 @@
             BOOL changedBucket = [bucketer bucket:thisdate];
             if (changedBucket) {
                 [dataHolder aggregateEnd:nil];
+                [found addObjectsFromArray:dataHolder.availableFields];
                 [_aggregatedStats addObject:dataHolder];
                 [dataHolder release];
                 dataHolder = [[GCHistoryAggregatedDataHolder alloc] initForDate:bucketer.bucketStart andFields:self.fields];
@@ -168,6 +172,8 @@
             }
         }
         [dataHolder aggregateEnd:nil];
+        [found addObjectsFromArray:dataHolder.availableFields];
+        self.foundFields = found;
         [_aggregatedStats addObject:dataHolder];
         [dataHolder release];
         [_aggregatedStats sortUsingComparator:^(id obj1, id obj2){

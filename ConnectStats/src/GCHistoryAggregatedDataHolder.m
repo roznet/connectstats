@@ -42,6 +42,10 @@
 
 @implementation GCHistoryAggregatedDataHolder
 
+-(GCHistoryAggregatedDataHolder*)init{
+    return [self initForDate:[NSDate date] andFields:@[]];
+}
+
 -(GCHistoryAggregatedDataHolder*)initForDate:(NSDate*)adate andFields:(NSArray<GCField*>*)fields{
     self = [super init];
     if (self) {
@@ -123,6 +127,16 @@
     return rv;
 }
 
+-(NSArray<GCField*>*)availableFields{
+    NSMutableArray<GCField*>*rv = [NSMutableArray array];
+    for (size_t i=0; i<self.fields.count; i++) {
+        if( self.flags[i]){
+            [rv addObject:self.fields[i]];
+        }
+    }
+    return rv;
+}
+
 -(void)aggregateActivity:(GCActivity*)act{
     size_t fieldEnd = self.fields.count;
     // don't bother if no fields
@@ -130,13 +144,20 @@
         return;
     }
     double data[fieldEnd];
-
+    int dummy = 0;
     BOOL hasField = false;
     for( size_t i=0;i<fieldEnd;i++){
         GCNumberWithUnit * nu = [act numberWithUnitForField:self.fields[i]];
         if( nu ){
             GCUnit * unit = self.units[i];
+            if( self.fields[i].fieldFlag == gcFieldFlagPower){
+                //NSLog(@"%@ %@ %@", act, nu, @([unit convertDouble:nu.value fromUnit:nu.unit]));
+                dummy ++;
+            }
             data[i] = [unit convertDouble:nu.value fromUnit:nu.unit];
+            if( isnan(data[i])){
+                NSLog(@"%@ %@ %@", act, nu, @([unit convertDouble:nu.value fromUnit:nu.unit]));
+            }
             hasField = true;
         }
     }
@@ -197,7 +218,13 @@
 
 -(void)aggregateEnd:(NSDate*)adate{
     size_t fieldEnd = self.fields.count;
+    int dummy = 0;
     for (size_t f =0;f<fieldEnd; f++) {
+        
+        if( self.fields[f].fieldFlag == gcFieldFlagPower ){
+            dummy++;
+        }
+
         double cnt = _stats[f*gcAggregatedTypeEnd+gcAggregatedCnt];
         double sum = _stats[f*gcAggregatedTypeEnd+gcAggregatedSum];
         double ssq = _stats[f*gcAggregatedTypeEnd+gcAggregatedSsq];
@@ -215,7 +242,9 @@
 -(GCNumberWithUnit*)numberWithUnit:(GCField*)field statType:(gcAggregatedType)s{
 
     double val = 0.;
-    GCUnit * unit = field.unit;
+    GCUnit * displayUnit = field.unit;
+    displayUnit = [displayUnit unitForGlobalSystem];
+    GCUnit * unit = nil;
     size_t f = self.fields.count;
     
     for( f = 0; f < self.fields.count; f++){
@@ -226,14 +255,14 @@
     if(f*gcAggregatedTypeEnd+s<gcAggregatedTypeEnd*self.fields.count){
         val = _stats[f*gcAggregatedTypeEnd+s];
         unit = self.units[f];
-    }
-    GCUnit * global = [unit unitForGlobalSystem];
-    if (global != unit) {
-        val = [global convertDouble:val fromUnit:unit];
-        unit = global;
+        if (![displayUnit isEqualToUnit:unit]) {
+            val = [displayUnit convertDouble:val fromUnit:unit];
+        }
+        return [GCNumberWithUnit numberWithUnit:displayUnit andValue:val];
+    }else{
+        return nil;
     }
 
-    return unit ? [GCNumberWithUnit numberWithUnit:unit andValue:val] : nil;
 }
 
 -(BOOL)hasField:(GCField *)field{

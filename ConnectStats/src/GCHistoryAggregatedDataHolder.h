@@ -56,6 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(BOOL)hasField:(GCField*)field;
 -(GCNumberWithUnit*)numberWithUnit:(GCField*)field statType:(gcAggregatedType)tp;
+-(NSArray<GCField*>*)availableFields;
 
 @end
 

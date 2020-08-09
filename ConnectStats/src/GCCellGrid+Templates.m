@@ -552,7 +552,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         wide = true;
         [self setupForRows:2 andCols:5];
     }else{
-        [self setupForRows:2 andCols:3];
+        [self setupForRows:3 andCols:3];
     }
     if (idx %2==0) {
         [GCViewConfig setupGradientForCellsEven:self];
@@ -575,85 +575,63 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     }
     NSAttributedString * dateStr = [[[NSAttributedString alloc] initWithString:dateFmt attributes:dateAttributes] autorelease];
     
-    GCNumberWithUnit * durationN =[data numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:activityType] statType:gcAggregatedSum];
-    GCNumberWithUnit * distanceN =[data numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType] statType:gcAggregatedSum];;
-
-    GCNumberWithUnit * speedmps =[GCNumberWithUnit numberWithUnitName:@"mps" andValue:[distanceN convertToUnitName:@"meter"].value/durationN.value];
-
-    GCNumberWithUnit * speedN = [speedmps convertToUnit:[GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activityType].unit];
-
-    GCFormattedField * main1    = nil;
-    GCFormattedField * main2    = nil;
-    GCFormattedField * detail1  = nil;
-    GCFormattedField * detail2  = nil;
-
-    if ([data.activityType isEqualToString:GC_TYPE_DAY]) {
-        GCField * step = [GCField fieldForFlag:gcFieldFlagSumStep andActivityType:GC_TYPE_DAY];
-        main1 = [GCFormattedField formattedFieldForNumber:[data numberWithUnit:step statType:gcAggregatedSum]
-                                         forSize:16.];
-        detail1 = [GCFormattedField formattedFieldForNumber:durationN
-                                         forSize:14.];
-    }else{
-        main1 = [GCFormattedField formattedFieldForNumber:durationN
-                                         forSize:16.];
-    }
-    main2 = [GCFormattedField formattedFieldForNumber:distanceN
-                                     forSize:16.];
-    if(speedN.isValidValue){
-        detail2 = [GCFormattedField formattedFieldForNumber:speedN
-                                           forSize:14.];
-    }
-    GCField * hr = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:activityType];
-    if ([data hasField:hr]) {
-        detail1 = [GCFormattedField formattedFieldForNumber:[data numberWithUnit:hr statType:gcAggregatedAvg]
-                                                    forSize:14.];
-    }
-
-    detail1.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-    detail1.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-    detail1.valueFont = [GCViewConfig systemFontOfSize:14.];
-    detail1.labelFont = [GCViewConfig systemFontOfSize:12.];
-
-    detail2.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-    detail2.valueColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];
-    detail2.valueFont = [GCViewConfig systemFontOfSize:14.];
-    detail2.labelFont = [GCViewConfig systemFontOfSize:12.];
-
+    NSArray<GCField*> * fields = @[
+        [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:activityType],
+        [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType],
+        
+        [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activityType],
+        [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:activityType],
+        [GCField fieldForFlag:gcFieldFlagPower andActivityType:activityType],
+        [GCField fieldForKey:@"GainElevation" andActivityType:activityType],
+    ];
+    
+    NSUInteger row = 0;
+    NSUInteger col = 1;
+    NSUInteger fieldidx = 0;
+    NSUInteger colCount = wide ? 5 : 3;
+    NSUInteger mainCount = 2;
+    
     [self labelForRow:0 andCol:0].attributedText = dateStr;
-    if (wide) {
-        [self labelForRow:1 andCol:1].attributedText = [main2 attributedString];
-        [self labelForRow:1 andCol:2].attributedText = [main1 attributedString];
-        [self labelForRow:1 andCol:3].attributedText = [detail2 attributedString];
-        [self labelForRow:1 andCol:4].attributedText = [detail1 attributedString];
-    }else{
-        [self labelForRow:0 andCol:1].attributedText = [main2 attributedString];
-        [self labelForRow:0 andCol:2].attributedText = [main1 attributedString];
-        [self labelForRow:1 andCol:1].attributedText = [detail2 attributedString];
-        [self labelForRow:1 andCol:2].attributedText = [detail1 attributedString];
+    for (GCField * field in fields) {
+        if( idx == 0 && (field.fieldFlag == gcFieldFlagPower || field.fieldFlag == gcFieldFlagAltitudeMeters)){
+            NSLog(@"debug");
+        }
+        if( [data hasField:field] ){
+            gcAggregatedType type = gcAggregatedAvg;
+            if( field.canSum ){
+                type = gcAggregatedSum;
+            }
+            GCNumberWithUnit * nu = [data numberWithUnit:field statType:type];
+            if( field.fieldFlag == gcFieldFlagWeightedMeanSpeed){
+                // Special case for speed, override
+                GCNumberWithUnit * durationN =[data numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:activityType] statType:gcAggregatedSum];
+                GCNumberWithUnit * distanceN =[data numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType] statType:gcAggregatedSum];;
+                nu = [GCNumberWithUnit numberWithUnitName:@"mps" andValue:[distanceN convertToUnitName:@"meter"].value/durationN.value];
+                nu = [nu convertToUnit:field.unit];
+            }
+            if( nu.isValidValue){
+                NSDictionary * attr = fieldidx < mainCount ? [GCViewConfig attributeBold14] : [GCViewConfig attribute14Gray];
+                NSAttributedString * at = [NSAttributedString attributedString:attr withString:nu.formatDouble];
+                
+                [self labelForRow:row andCol:col].attributedText = at;
+            }else{
+                [self labelForRow:row andCol:col].attributedText = nil;
+            }
+            [self configForRow:row andCol:col].verticalAlign = gcVerticalAlignCenter;
+            [self configForRow:row andCol:col].horizontalAlign = gcHorizontalAlignRight;
+        }else{
+            [self labelForRow:row andCol:col].attributedText = nil;
+        }
+        col ++;
+        if( col >= colCount){
+            row ++;
+            col = 1;
+        }
+
+        fieldidx ++;
     }
+    
     [self configForRow:0 andCol:0].verticalAlign = gcVerticalAlignCenter;
-    if (wide) {
-        [self configForRow:1 andCol:1].verticalAlign = gcVerticalAlignCenter;
-        [self configForRow:1 andCol:2].verticalAlign = gcVerticalAlignCenter;
-        [self configForRow:1 andCol:3].verticalAlign = gcVerticalAlignCenter;
-        [self configForRow:1 andCol:4].verticalAlign = gcVerticalAlignCenter;
-    }else{
-        [self configForRow:0 andCol:1].verticalAlign = gcVerticalAlignCenter;
-        [self configForRow:0 andCol:2].verticalAlign = gcVerticalAlignCenter;
-        [self configForRow:1 andCol:1].verticalAlign = gcVerticalAlignCenter;
-        [self configForRow:1 andCol:2].verticalAlign = gcVerticalAlignCenter;
-    }
-    if (wide) {
-        [self configForRow:1 andCol:1].horizontalAlign = gcHorizontalAlignRight;
-        [self configForRow:1 andCol:2].horizontalAlign = gcHorizontalAlignRight;
-        [self configForRow:1 andCol:3].horizontalAlign = gcHorizontalAlignRight;
-        [self configForRow:1 andCol:4].horizontalAlign = gcHorizontalAlignRight;
-    }else{
-        [self configForRow:0 andCol:1].horizontalAlign = gcHorizontalAlignRight;
-        [self configForRow:0 andCol:2].horizontalAlign = gcHorizontalAlignRight;
-        [self configForRow:1 andCol:1].horizontalAlign = gcHorizontalAlignRight;
-        [self configForRow:1 andCol:2].horizontalAlign = gcHorizontalAlignRight;
-    }
 }
 
 #pragma mark - Field Statistics
