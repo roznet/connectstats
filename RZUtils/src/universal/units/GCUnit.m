@@ -90,7 +90,7 @@ void registerSimple( NSArray * defs){
 void registerSimpl0( NSArray * defs){
     GCUnit * unit = RZReturnAutorelease([[GCUnit alloc] initWithArray:defs]);
     unit.format = GCUnitIntegerFormat;
-    unit.referenceUnit = unit.key;  // make sure can convert to itself...
+    unit.referenceUnitKey = unit.key;  // make sure can convert to itself...
     _unitsRegistry[defs[0]] = unit;
 }
 
@@ -305,8 +305,9 @@ void registerUnits(){
         registerLinear( @[ @"gram",     @"Gram",      @""],    @"kilogram", 0.001, 0.0);
 
         // temperature
-        registerLinea0( @[ @"celcius",    @"°Celsius",    @"°C"], @"fahrenheit", 1.8,      32.0);
-        registerLinea0( @[ @"fahrenheit", @"°Fahrenheit", @"°F"], @"fahrenheit", 1.,     0.0);
+        registerLinea0( @[ @"celcius",    @"°Celsius",    @"°C"], @"celsius", 1.8,      32.0);
+        registerLinea0( @[ @"celsius",    @"°Celsius",    @"°C"], @"celsius", 1.,        0.0);
+        registerLinea0( @[ @"fahrenheit", @"°Fahrenheit", @"°F"], @"celsius", 5./9.,     -32.*5./9.);
 
         // dates
         registerDate(@"date",      NSDateFormatterMediumStyle, NSDateFormatterNoStyle, nil);
@@ -378,7 +379,7 @@ void registerUnits(){
     [_abbr release];
     [_fractionUnit release];
     [_compoundUnit release];
-    [_referenceUnit release];
+    [_referenceUnitKey release];
 
     [super dealloc];
 }
@@ -517,6 +518,10 @@ void registerUnits(){
 
 #pragma mark - Access
 
+-(GCUnit*)referenceUnit{
+    return self.referenceUnitKey ? [GCUnit unitForKey:self.referenceUnitKey] : nil;
+}
+
 +(GCUnit*)unitForKey:(NSString *)aKey{
     if (!_unitsRegistry) {
         registerUnits();
@@ -574,7 +579,7 @@ void registerUnits(){
 
 
 -(BOOL)canConvertTo:(GCUnit*)otherUnit{
-    return _referenceUnit != nil && otherUnit.referenceUnit && [otherUnit.referenceUnit isEqualToString:_referenceUnit];
+    return _referenceUnitKey != nil && otherUnit.referenceUnitKey && [otherUnit.referenceUnitKey isEqualToString:_referenceUnitKey];
 }
 -(NSArray<GCUnit*>*)compatibleUnits{
     if (!_unitsRegistry) {
@@ -583,7 +588,7 @@ void registerUnits(){
     NSMutableArray<GCUnit*>*rv = [NSMutableArray arrayWithObject:self];
     for (NSString * key in _unitsRegistry) {
         GCUnit * other = _unitsRegistry[key];
-        if( [other.referenceUnit isEqualToString:self.referenceUnit] && ![other.key isEqualToString:self.key]){
+        if( [other.referenceUnitKey isEqualToString:self.referenceUnitKey] && ![other.key isEqualToString:self.key]){
             [rv addObject:other];
         }
     }
@@ -592,7 +597,7 @@ void registerUnits(){
 
 -(GCUnit*)commonUnit:(GCUnit*)otherUnit{
     GCUnit * rv = self;
-    if (_referenceUnit != nil && otherUnit.referenceUnit && [otherUnit.referenceUnit isEqualToString:_referenceUnit]) {
+    if (_referenceUnitKey != nil && otherUnit.referenceUnitKey && [otherUnit.referenceUnitKey isEqualToString:_referenceUnitKey]) {
         double thisInv = [self isKindOfClass:[GCUnitInverseLinear class]] ? -1. : 1.;
         double otherInv= [otherUnit isKindOfClass:[GCUnitInverseLinear class]] ? -1. : 1.;
 
@@ -980,6 +985,7 @@ GCUNITFORKEY(secpermile);
 GCUNITFORKEY(min100m);
 GCUNITFORKEY(second);
 GCUNITFORKEY(celcius);
+GCUNITFORKEY(celsius);
 GCUNITFORKEY(percent);
 GCUNITFORKEY(minperkm);
 GCUNITFORKEY(sec100yd);
@@ -1026,7 +1032,7 @@ GCUNITFORKEY(kilometer);
     if (rv) {
         rv.multiplier = aMult;
         rv.offset = aOffset;
-        rv.referenceUnit = ref;
+        rv.referenceUnitKey = ref;
     }
     return rv;
 }
@@ -1057,7 +1063,7 @@ GCUNITFORKEY(kilometer);
     if (rv) {
         rv.multiplier = aMult;
         rv.offset = aOffset;
-        rv.referenceUnit = ref;
+        rv.referenceUnitKey = ref;
     }
     return rv;
 }

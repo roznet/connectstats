@@ -574,9 +574,9 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         dateFmt = NSLocalizedString(@"ERROR", @"Date");
     }
     NSAttributedString * dateStr = [[[NSAttributedString alloc] initWithString:dateFmt attributes:dateAttributes] autorelease];
-
-    GCNumberWithUnit * durationN =[data numberWithUnit:gcAggregatedSumDuration statType:gcAggregatedSum andActivityType:activityType];
-    GCNumberWithUnit * distanceN =[data numberWithUnit:gcAggregatedSumDistance statType:gcAggregatedSum andActivityType:activityType];
+    
+    GCNumberWithUnit * durationN =[data numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:activityType] statType:gcAggregatedSum];
+    GCNumberWithUnit * distanceN =[data numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType] statType:gcAggregatedSum];;
 
     GCNumberWithUnit * speedmps =[GCNumberWithUnit numberWithUnitName:@"mps" andValue:[distanceN convertToUnitName:@"meter"].value/durationN.value];
 
@@ -588,17 +588,11 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     GCFormattedField * detail2  = nil;
 
     if ([data.activityType isEqualToString:GC_TYPE_DAY]) {
-        main1 = [GCFormattedField formattedFieldForNumber:[data numberWithUnit:gcAggregatedSumStep statType:gcAggregatedSum andActivityType:GC_TYPE_DAY]
+        GCField * step = [GCField fieldForFlag:gcFieldFlagSumStep andActivityType:GC_TYPE_DAY];
+        main1 = [GCFormattedField formattedFieldForNumber:[data numberWithUnit:step statType:gcAggregatedSum]
                                          forSize:16.];
         detail1 = [GCFormattedField formattedFieldForNumber:durationN
                                          forSize:14.];
-    }else if([data.activityType isEqualToString:GC_TYPE_TENNIS]){
-
-        main1 = [GCFormattedField formattedFieldForNumber:[data numberWithUnit:gcAggregatedTennisShots statType:gcAggregatedSum andActivityType:GC_TYPE_DAY]
-                                         forSize:16.];
-        detail1 = [GCFormattedField formattedFieldForNumber:durationN
-                                           forSize:14.];
-
     }else{
         main1 = [GCFormattedField formattedFieldForNumber:durationN
                                          forSize:16.];
@@ -609,14 +603,10 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         detail2 = [GCFormattedField formattedFieldForNumber:speedN
                                            forSize:14.];
     }
-    if ([data hasField:gcAggregatedWeightedHeartRate]) {
-        detail1 = [GCFormattedField formattedFieldForNumber:[data numberWithUnit:gcAggregatedWeightedHeartRate statType:gcAggregatedAvg andActivityType:activityType]
-                                           forSize:14.];
-    }else if ([data.activityType isEqualToString:GC_TYPE_TENNIS]){
-        detail1 = [GCFormattedField formattedFieldForNumber:[data numberWithUnit:gcAggregatedTennisPower statType:gcAggregatedAvg andActivityType:activityType]
-                                           forSize:14.];
-        detail2 = nil;
-
+    GCField * hr = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:activityType];
+    if ([data hasField:hr]) {
+        detail1 = [GCFormattedField formattedFieldForNumber:[data numberWithUnit:hr statType:gcAggregatedAvg]
+                                                    forSize:14.];
     }
 
     detail1.labelColor = [GCViewConfig defaultColor:gcSkinDefaultColorSecondaryText];

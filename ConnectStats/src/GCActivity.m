@@ -332,6 +332,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             if (!val) {
                 val = self.calculatedFields[field];
             }
+            if( val == nil && [field.activityType isEqualToString:GC_TYPE_ALL]){
+                GCField * typedField = [field correspondingFieldForActivityType:self.activityType];
+                val = self.summaryData[ typedField ];
+            }
             rv = val.numberWithUnit;
         }
     }
@@ -416,6 +420,20 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
     return rv;
 }
+
+-(GCNumberWithUnit*)numberWithForFieldInStoreUnit:(GCField *)field{
+    switch (field.fieldFlag) {
+        case gcFieldFlagWeightedMeanSpeed:
+            return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_SPEED]];
+        case gcFieldFlagSumDistance:
+            return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_DISTANCE]];
+        case gcFieldFlagSumDuration:
+            return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_ELAPSED]];
+        default:
+            return [self numberWithUnitForField:field];
+    }
+}
+
 -(double)summaryFieldValueInStoreUnit:(gcFieldFlag)fieldFlag{
     switch (fieldFlag) {
         case gcFieldFlagWeightedMeanHeartRate:

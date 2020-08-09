@@ -840,8 +840,7 @@
 
     NSMutableArray * stats = [NSMutableArray array];
 
-    GCHistoryAggregatedActivityStats * aggregatedStats = [[[GCHistoryAggregatedActivityStats alloc] init] autorelease];
-    [aggregatedStats setActivityType:GC_TYPE_RUNNING];
+    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:GC_TYPE_RUNNING];
     [aggregatedStats setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     [aggregatedStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 

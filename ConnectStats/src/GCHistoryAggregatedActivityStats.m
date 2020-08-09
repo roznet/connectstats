@@ -41,11 +41,34 @@
 
 @property (nonatomic,assign) NSDate * cutOff;
 
+@property (nonatomic, retain) NSArray<GCField*>*fields;
 
 @end
 
 
 @implementation GCHistoryAggregatedActivityStats
+
++(GCHistoryAggregatedActivityStats*)aggregatedActivitStatsForActivityType:(NSString*)activityType{
+    GCHistoryAggregatedActivityStats * rv = [[[GCHistoryAggregatedActivityStats alloc] init] autorelease];
+    if( rv ){
+        rv.fields = [GCHistoryAggregatedActivityStats defaultFieldsForActivityType:activityType];
+        rv.activityType = activityType;
+    }
+    return rv;
+}
+
++(NSArray<GCField*>*)defaultFieldsForActivityType:(NSString*)activityType{
+    return @[
+        [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activityType],
+        [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:activityType],
+        [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType],
+        [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:activityType],
+        [GCField fieldForFlag:gcFieldFlagPower andActivityType:activityType],
+        [GCField fieldForFlag:gcFieldFlagCadence andActivityType:activityType],
+        [GCField fieldForKey:@"GainElevation" andActivityType:activityType],
+        [GCField fieldForKey:@"SumStep" andActivityType:activityType]
+    ];
+}
 
 -(void)dealloc{
     [_activities release];
@@ -121,7 +144,7 @@
 
         NSDate * thisdate = [serie[0] date];
         [bucketer bucket:thisdate];
-        GCHistoryAggregatedDataHolder * dataHolder = [[GCHistoryAggregatedDataHolder alloc] initForDate:bucketer.bucketStart];
+        GCHistoryAggregatedDataHolder * dataHolder = [[GCHistoryAggregatedDataHolder alloc] initForDate:bucketer.bucketStart andFields:self.fields];
 
         GCActivity * activity = nil;
 
@@ -134,7 +157,7 @@
                 [dataHolder aggregateEnd:nil];
                 [_aggregatedStats addObject:dataHolder];
                 [dataHolder release];
-                dataHolder = [[GCHistoryAggregatedDataHolder alloc] initForDate:bucketer.bucketStart];
+                dataHolder = [[GCHistoryAggregatedDataHolder alloc] initForDate:bucketer.bucketStart andFields:self.fields];
             }
             // In To CutOff mode, skip if later.
             if (self.cutOff && [activity.date timeIntervalSinceDate:bucketer.bucketStart] > cutOffInterval) {

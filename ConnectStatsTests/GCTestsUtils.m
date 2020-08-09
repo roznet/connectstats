@@ -63,6 +63,17 @@
 
 #pragma mark - GCUnit
 
+-(void)testStoreUnit{
+    // Make sure store unit consistent with referenceUnit
+    // so we can have a generic way to know which unit to use to store just with the unit
+    // without doing if on the field for future improvement
+    XCTAssertEqualObjects(STOREUNIT_SPEED, [GCUnit minperkm].referenceUnitKey);
+    XCTAssertEqualObjects(STOREUNIT_DISTANCE, [GCUnit kilometer].referenceUnitKey);
+    XCTAssertEqualObjects(STOREUNIT_ALTITUDE, [GCUnit meter].referenceUnitKey);
+    XCTAssertEqualObjects(STOREUNIT_ELAPSED, [GCUnit second].referenceUnitKey);
+    XCTAssertEqualObjects(STOREUNIT_TEMPERATURE, [GCUnit celcius].referenceUnitKey);
+    XCTAssertEqualObjects(STOREUNIT_HEARTRATE, [GCUnit bpm].referenceUnitKey);
+}
 
 #ifdef GC_USE_HEALTHKIT
 -(void)testHealthKitUnit{

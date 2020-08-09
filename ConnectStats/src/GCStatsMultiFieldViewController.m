@@ -241,10 +241,12 @@
         if (indexPath.section >= GC_SECTION_DATA) {
             GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
             NSString * filter = [GCViewConfig filterFor:self.multiFieldConfig.calendarConfig date:data.date andActivityType:self.activityType];
+            GCNumberWithUnit * sum = [data numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType] statType:gcAggregatedSum];
+            GCNumberWithUnit * cnt = [data numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType] statType:gcAggregatedCnt];
+            
             [GCAppGlobal debugStateRecord:@{
-                DEBUGSTATE_LAST_CNT : @([data valFor:gcAggregatedSumDistance and:gcAggregatedCnt]),
-                DEBUGSTATE_LAST_SUM : @([data valFor:gcAggregatedSumDistance and:gcAggregatedSum])
-                
+                DEBUGSTATE_LAST_CNT : cnt.number,
+                DEBUGSTATE_LAST_SUM : sum.number
             }];
             [GCAppGlobal focusOnListWithFilter:filter];
             self.multiFieldConfig.viewConfig = gcStatsViewConfigAll;
@@ -738,7 +740,7 @@
 
     [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
 
-    GCHistoryAggregatedActivityStats * vals = [[[GCHistoryAggregatedActivityStats alloc] init] autorelease];
+    GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:self.activityType];
     vals.useFilter = self.useFilter;
     [vals setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     vals.activityType = self.activityType;

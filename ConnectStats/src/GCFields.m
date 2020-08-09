@@ -34,18 +34,6 @@ static NSDictionary * _cacheLapFieldToFieldMap = nil;
 static NSDictionary * _cacheFieldToLapFieldMap = nil;
 static NSArray * _cacheSwimLapField = nil;
 
-gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
-    gcFieldFlagSumDistance,
-    gcFieldFlagSumDuration,
-    gcFieldFlagWeightedMeanHeartRate,
-    gcFieldFlagWeightedMeanSpeed,
-    gcFieldFlagCadence,
-    gcFieldFlagAltitudeMeters,
-    gcFieldFlagTennisShots,
-    gcFieldFlagTennisPower,
-    gcFieldFlagSumStep
-};
-
 @implementation GCFields
 
 +(GCFieldCache*)fieldCache{
@@ -405,7 +393,6 @@ gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd] = {
     return found ?: [GCUnit unitForKey:@"dimensionless"];
 }
 
-#pragma mark - gcAggregatedField
 
 +(NSString*)metaFieldDisplayName:(NSString*)metaField{
     if ([metaField isEqualToString:@"device"]) {

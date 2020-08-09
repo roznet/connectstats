@@ -28,66 +28,93 @@
 #import "GCHistoryAggregatedDataHolder.h"
 #import "GCActivity+Fields.h"
 
-@implementation GCHistoryAggregatedDataHolder
-@synthesize stats,date,flags;
+@interface GCHistoryAggregatedDataHolder ()
+@property (nonatomic,assign) BOOL started;
+@property (nonatomic,assign) double * stats;
+@property (nonatomic,assign) BOOL * flags;
 
--(GCHistoryAggregatedDataHolder*)init{
+@property (nonatomic,retain) NSArray<GCField*>*fields;
+@property (nonatomic,retain) NSMutableArray<GCUnit*>*units;
+@property (nonatomic,assign) size_t indexForDurationField;
+@property (nonatomic,assign) size_t indexForDistanceField;
+
+@end
+
+@implementation GCHistoryAggregatedDataHolder
+
+-(GCHistoryAggregatedDataHolder*)initForDate:(NSDate*)adate andFields:(NSArray<GCField*>*)fields{
     self = [super init];
     if (self) {
-        size_t n = gcAggregatedTypeEnd*gcAggregatedFieldEnd;
-        stats= malloc(sizeof(double)*n);
-        for (size_t i=0; i<n; i++) {
-            stats[i] = 0.;
-        }
-        flags = malloc(sizeof(BOOL)*gcAggregatedFieldEnd);
-        for (size_t i=0; i<gcAggregatedFieldEnd; i++) {
-            flags[i]=false;
-        }
-        self.date = nil;
-        started = false;
+        _stats = nil;
+        _flags = nil;
+        self.date = adate;
+        [self setupForFields:fields];
     }
     return self;
+
 }
 
--(GCHistoryAggregatedDataHolder*)initForDate:(NSDate*)adate{
-    self = [super init];
-    if (self) {
-        size_t n = gcAggregatedTypeEnd*gcAggregatedFieldEnd;
-        stats= malloc(sizeof(double)*n);
-        for (size_t i=0; i<n; i++) {
-            stats[i] = 0.;
-        }
-        flags = malloc(sizeof(BOOL)*gcAggregatedFieldEnd);
-        for (size_t i=0; i<gcAggregatedFieldEnd; i++) {
-            flags[i]=false;
-        }
-        self.date = adate;
-        started = false;
+-(void)setupForFields:(NSArray<GCField*>*)fields{
+    self.fields = fields;
+    self.units = [NSMutableArray array];
+    for (GCField * field in fields) {
+        [self.units addObject:field.unit.referenceUnit ?: [GCUnit dimensionless]];
     }
-    return self;
-
+    size_t n = gcAggregatedTypeEnd*fields.count;
+    
+    if( _stats ){
+        free( _stats );
+    }
+    if( _flags ){
+        free(_flags);
+    }
+    _stats = malloc(sizeof(double)*n);
+    _flags = malloc(sizeof(BOOL)*fields.count);
+    
+    for (size_t i=0; i<n; i++) {
+        _stats[i] = 0.;
+    }
+    self.indexForDurationField = fields.count;
+    self.indexForDistanceField = fields.count;
+    
+    for (size_t i=0; i<fields.count; i++) {
+        GCField * field = fields[i];
+        if( field.fieldFlag == gcFieldFlagSumDuration){
+            self.indexForDurationField = i;
+        }
+        if( field.fieldFlag == gcFieldFlagSumDistance){
+            self.indexForDistanceField = i;
+        }
+        _flags[i]=false;
+    }
+    _started = false;
 }
 
 -(void)dealloc{
     [_activityType release];
-    free(stats);
-    free(flags);
-    [date release];
+    if( _stats){
+        free(_stats);
+    }
+    if( _flags){
+        free(_flags);
+    }
+    [_date release];
     [super dealloc];
 }
 
 -(NSString*)description{
     NSMutableString * rv = [NSMutableString stringWithFormat:@"<GCHistoryAggregatedDataHolder:%@>",
-            [date dateShortFormat]];
-
-    for (size_t i=0; i<gcAggregatedFieldEnd; i++) {
-        GCField * field = [GCField fieldForFlag:gcAggregatedFieldToFieldFlag[i] andActivityType:self.activityType];
-        if (flags[i]) {
-            [rv appendFormat:@"\n  %@: cnt=%.0f sum=%.1f avg=%.0f",
+            [self.date dateShortFormat]];
+    size_t n = self.fields.count;
+    for (size_t i=0; i<n; i++) {
+        GCField * field = self.fields[i];
+        if (_flags[i]) {
+            [rv appendFormat:@"\n  %@: cnt=%.0f sum=%.1f avg=%.0f (%@)",
              field,
-             stats[i*gcAggregatedTypeEnd+gcAggregatedCnt],
-             stats[i*gcAggregatedTypeEnd+gcAggregatedSum],
-             stats[i*gcAggregatedTypeEnd+gcAggregatedAvg]
+             _stats[i*gcAggregatedTypeEnd+gcAggregatedCnt],
+             _stats[i*gcAggregatedTypeEnd+gcAggregatedSum],
+             _stats[i*gcAggregatedTypeEnd+gcAggregatedAvg],
+             self.units[i]
              ];
         }else{
             [rv appendFormat:@"\n  %@: N/A", field];
@@ -97,29 +124,23 @@
 }
 
 -(void)aggregateActivity:(GCActivity*)act{
-
-    NSUInteger flag = act.flags;
-    double data[gcAggregatedFieldEnd];
-    data[gcAggregatedSumDistance] = [act summaryFieldValueInStoreUnit:gcFieldFlagSumDistance];
-    data[gcAggregatedSumDuration] = [act summaryFieldValueInStoreUnit:gcFieldFlagSumDuration];
-    data[gcAggregatedWeightedHeartRate]=[act summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanHeartRate];
-    data[gcAggregatedWeightedSpeed]=isinf([act summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanSpeed]) ? 0. : [act summaryFieldValueInStoreUnit:gcFieldFlagWeightedMeanSpeed];
-
-    data[gcAggregatedAltitudeMeters] = [act numberWithUnitForFieldFlag:gcFieldFlagAltitudeMeters].value;
-    data[gcAggregatedCadence] = [act numberWithUnitForFieldFlag:gcFieldFlagCadence].value;
-    if ([act.activityType isEqualToString:GC_TYPE_TENNIS]) {
-        data[gcAggregatedTennisShots] = [act numberWithUnitForFieldFlag:gcFieldFlagTennisShots].value;
-        data[gcAggregatedTennisPower] = [act numberWithUnitForFieldFlag:gcFieldFlagTennisPower].value;
-    }else{
-        data[gcAggregatedTennisShots] = 0;
-        data[gcAggregatedTennisPower] = 0;
+    size_t fieldEnd = self.fields.count;
+    // don't bother if no fields
+    if( fieldEnd == 0 ){
+        return;
     }
-    if ([act.activityType isEqualToString:GC_TYPE_DAY]) {
-        data[gcAggregatedSumStep] = [act numberWithUnitForFieldKey:@"SumStep"].value;
-    }else{
-        data[gcAggregatedSumStep] = 0;
-    }
+    double data[fieldEnd];
 
+    BOOL hasField = false;
+    for( size_t i=0;i<fieldEnd;i++){
+        GCNumberWithUnit * nu = [act numberWithUnitForField:self.fields[i]];
+        if( nu ){
+            GCUnit * unit = self.units[i];
+            data[i] = [unit convertDouble:nu.value fromUnit:nu.unit];
+            hasField = true;
+        }
+    }
+    
     if (_activityType==nil) {
         self.activityType = act.activityType;
     }else if (![_activityType isEqualToString:act.activityType]){
@@ -127,58 +148,63 @@
         self.activityType = GC_TYPE_ALL;
     }
 
-    if (!started) {
+    if (!_started) {
         // first round set everything to current data
-        started = true;
-        for (size_t f =0; f<gcAggregatedFieldEnd; f++) {
-            for (size_t s =0; s<gcAggregatedTypeEnd; s++) {
-                if (flag & gcAggregatedFieldToFieldFlag[f]) {
-                    flags[f] = true;
+        _started = true;
+        for (size_t f = 0; f<fieldEnd; f++) {
+            for (size_t s = 0; s<gcAggregatedTypeEnd; s++) {
+                if (hasField) {
+                    self.flags[f] = true;
                     if (s == gcAggregatedCnt) {
-                        stats[f*gcAggregatedTypeEnd+s] = 1.;
+                        _stats[f*gcAggregatedTypeEnd+s] = 1.;
                     }else if (s == gcAggregatedSsq){
-                        stats[f*gcAggregatedTypeEnd+s] = data[f]*data[f];
+                        _stats[f*gcAggregatedTypeEnd+s] = data[f]*data[f];
                     }else{
-                        stats[f*gcAggregatedTypeEnd+s] = data[f];
+                        _stats[f*gcAggregatedTypeEnd+s] = data[f];
                     }
                 }else{
                     if (s == gcAggregatedCnt) {
-                        stats[f*gcAggregatedTypeEnd+s] = 0.;
+                        _stats[f*gcAggregatedTypeEnd+s] = 0.;
                     }else{
-                        stats[f*gcAggregatedTypeEnd+s] = 0.;
+                        _stats[f*gcAggregatedTypeEnd+s] = 0.;
                     }
                 }
             }
         }
     }else{
-        double dur_w0  = stats[gcAggregatedSumDuration*gcAggregatedTypeEnd+gcAggregatedSum];
-        double dur_w1  = data[gcAggregatedSumDuration];
+        double dur_w0 = 0.;
+        double dur_w1 = 1.;
+        if( self.indexForDurationField < self.fields.count){
+            dur_w0  = _stats[self.indexForDurationField*gcAggregatedTypeEnd+gcAggregatedSum];
+            dur_w1  = data[self.indexForDurationField];
+        }
         double dur_tot = dur_w0+dur_w1;
 
-        for (size_t f =0; f<gcAggregatedFieldEnd; f++) {
-            if (flag & gcAggregatedFieldToFieldFlag[f]) {
-                flags[f]=true;
-                stats[f*gcAggregatedTypeEnd+gcAggregatedSsq] += data[f]*data[f];
-                stats[f*gcAggregatedTypeEnd+gcAggregatedSum] += data[f];
-                stats[f*gcAggregatedTypeEnd+gcAggregatedAvg] += data[f];
-                stats[f*gcAggregatedTypeEnd+gcAggregatedCnt] += 1.;
-                stats[f*gcAggregatedTypeEnd+gcAggregatedMax] = MAX(data[f], stats[f*gcAggregatedTypeEnd+gcAggregatedMax]);
-                stats[f*gcAggregatedTypeEnd+gcAggregatedMin] = MIN(data[f], stats[f*gcAggregatedTypeEnd+gcAggregatedMin]);
-                stats[f*gcAggregatedTypeEnd+gcAggregatedWvg] = (stats[f*gcAggregatedTypeEnd+gcAggregatedWvg]*dur_w0+data[f]*dur_w1)/dur_tot;
+        for (size_t f =0; f<fieldEnd; f++) {
+            if (hasField) {
+                _flags[f]=true;
+                _stats[f*gcAggregatedTypeEnd+gcAggregatedSsq] += data[f]*data[f];
+                _stats[f*gcAggregatedTypeEnd+gcAggregatedSum] += data[f];
+                _stats[f*gcAggregatedTypeEnd+gcAggregatedAvg] += data[f];
+                _stats[f*gcAggregatedTypeEnd+gcAggregatedCnt] += 1.;
+                _stats[f*gcAggregatedTypeEnd+gcAggregatedMax] = MAX(data[f], _stats[f*gcAggregatedTypeEnd+gcAggregatedMax]);
+                _stats[f*gcAggregatedTypeEnd+gcAggregatedMin] = MIN(data[f], _stats[f*gcAggregatedTypeEnd+gcAggregatedMin]);
+                _stats[f*gcAggregatedTypeEnd+gcAggregatedWvg] = (_stats[f*gcAggregatedTypeEnd+gcAggregatedWvg]*dur_w0+data[f]*dur_w1)/dur_tot;
             }
         }
     }
 }
 
 -(void)aggregateEnd:(NSDate*)adate{
-    for (size_t f =0; f<gcAggregatedFieldEnd; f++) {
-        double cnt = stats[f*gcAggregatedTypeEnd+gcAggregatedCnt];
-        double sum = stats[f*gcAggregatedTypeEnd+gcAggregatedSum];
-        double ssq = stats[f*gcAggregatedTypeEnd+gcAggregatedSsq];
+    size_t fieldEnd = self.fields.count;
+    for (size_t f =0;f<fieldEnd; f++) {
+        double cnt = _stats[f*gcAggregatedTypeEnd+gcAggregatedCnt];
+        double sum = _stats[f*gcAggregatedTypeEnd+gcAggregatedSum];
+        double ssq = _stats[f*gcAggregatedTypeEnd+gcAggregatedSsq];
 
         if (cnt>0) {
-            stats[f*gcAggregatedTypeEnd+gcAggregatedAvg] /= cnt;
-            stats[f*gcAggregatedTypeEnd+gcAggregatedStd] = STDDEV(cnt, sum, ssq);
+            _stats[f*gcAggregatedTypeEnd+gcAggregatedAvg] /= cnt;
+            _stats[f*gcAggregatedTypeEnd+gcAggregatedStd] = STDDEV(cnt, sum, ssq);
         }
     }
     if (adate) {
@@ -186,51 +212,20 @@
     }
 }
 
--(BOOL)hasField:(gcAggregatedField)f{
-    return flags[f];
-}
--(double)valFor:(gcAggregatedField)f and:(gcAggregatedType)s{
-    if(f*gcAggregatedTypeEnd+s<gcAggregatedTypeEnd*gcAggregatedFieldEnd){
-        return stats[f*gcAggregatedTypeEnd+s];
-    }else{
-        RZLog(RZLogWarning, @"Invalid index for stats lookup");
-        return 0.;
-    }
-}
-
--(NSString*)formatValue:(gcAggregatedField)f statType:(gcAggregatedType)s andActivityType:(NSString*)aType{
-    if (flags[f] == false) {
-        return @"";
-    }
-    GCUnit * unit = [GCField fieldForAggregated:f  andActivityType:aType].unit;
-    
-    double val = stats[f*gcAggregatedTypeEnd+s];
-    if (f == gcAggregatedSumDistance) {
-        val = [unit convertDouble:val fromUnit:[GCUnit unitForKey:STOREUNIT_DISTANCE]];
-    }else if(f == gcAggregatedWeightedSpeed){
-        val = [unit convertDouble:val fromUnit:[GCUnit unitForKey:STOREUNIT_SPEED]];
-    }
-    GCUnit * global = [unit unitForGlobalSystem];
-    if (global != unit) {
-        val = [global convertDouble:val fromUnit:unit];
-        unit = global;
-    }
-    return [unit formatDouble:val];
-}
--(GCNumberWithUnit*)numberWithUnit:(gcAggregatedField)f statType:(gcAggregatedType)s andActivityType:(NSString*)aType{
+-(GCNumberWithUnit*)numberWithUnit:(GCField*)field statType:(gcAggregatedType)s{
 
     double val = 0.;
-    GCUnit * unit = nil;
-
-    if(f*gcAggregatedTypeEnd+s<gcAggregatedTypeEnd*gcAggregatedFieldEnd){
-        val = stats[f*gcAggregatedTypeEnd+s];
-        
-        unit = [GCField fieldForAggregated:f  andActivityType:aType].unit;
-        if (f == gcAggregatedSumDistance) {
-            val = [unit convertDouble:val fromUnit:[GCUnit unitForKey:STOREUNIT_DISTANCE]];
-        }else if(f == gcAggregatedWeightedSpeed){
-            val = [unit convertDouble:val fromUnit:[GCUnit unitForKey:STOREUNIT_SPEED]];
+    GCUnit * unit = field.unit;
+    size_t f = self.fields.count;
+    
+    for( f = 0; f < self.fields.count; f++){
+        if( [field matchesField:self.fields[f]] ){
+            break;
         }
+    }
+    if(f*gcAggregatedTypeEnd+s<gcAggregatedTypeEnd*self.fields.count){
+        val = _stats[f*gcAggregatedTypeEnd+s];
+        unit = self.units[f];
     }
     GCUnit * global = [unit unitForGlobalSystem];
     if (global != unit) {
@@ -239,5 +234,14 @@
     }
 
     return unit ? [GCNumberWithUnit numberWithUnit:unit andValue:val] : nil;
+}
+
+-(BOOL)hasField:(GCField *)field{
+    for (GCField * one in self.fields) {
+        if( [field isEqualToField:one] ){
+            return true;
+        }
+    }
+    return false;
 }
 @end

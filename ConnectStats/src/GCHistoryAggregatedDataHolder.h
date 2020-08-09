@@ -44,29 +44,18 @@ typedef NS_ENUM(NSUInteger, gcAggregatedType) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GCHistoryAggregatedDataHolder : NSObject{
-    double * stats;
-    NSDate * date;
-    BOOL * flags;
-    BOOL started;
-}
+@interface GCHistoryAggregatedDataHolder : NSObject
+
 @property (nonatomic,retain,nullable) NSDate * date;
-@property (nonatomic,assign) double * stats;
-@property (nonatomic,assign) BOOL * flags;
 @property (nonatomic,retain) NSString * activityType;
 
-@property (nonatomic,retain) NSArray<GCField*>*fields;
-
--(GCHistoryAggregatedDataHolder*)init NS_DESIGNATED_INITIALIZER;
--(GCHistoryAggregatedDataHolder*)initForDate:(NSDate*)adate NS_DESIGNATED_INITIALIZER;
+-(GCHistoryAggregatedDataHolder*)initForDate:(NSDate*)adate andFields:(NSArray<GCField*>*)fields NS_DESIGNATED_INITIALIZER;
 
 -(void)aggregateActivity:(GCActivity*)act;
 -(void)aggregateEnd:(nullable NSDate*)adate;
 
--(BOOL)hasField:(gcAggregatedField)f;
--(double)valFor:(gcAggregatedField)field and:(gcAggregatedType)tp;
--(NSString*)formatValue:(gcAggregatedField)f statType:(gcAggregatedType)s andActivityType:(NSString*)aType;
--(GCNumberWithUnit*)numberWithUnit:(gcAggregatedField)field statType:(gcAggregatedType)tp andActivityType:(NSString*)aType;
+-(BOOL)hasField:(GCField*)field;
+-(GCNumberWithUnit*)numberWithUnit:(GCField*)field statType:(gcAggregatedType)tp;
 
 @end
 

@@ -44,10 +44,12 @@
  */
 +(GCField*)fieldForKey:(NSString*)field andActivityType:(NSString*)activityType;
 +(GCField*)fieldForFlag:(gcFieldFlag)fieldFlag andActivityType:(NSString *)activityType;
-+(GCField*)fieldForAggregated:(gcAggregatedField)aggregatedField andActivityType:(NSString*)activityType;
 
 -(BOOL)isEqualToField:(GCField*)other;
 -(NSComparisonResult)compare:(GCField*)other;
+/// Similar to isEqualToField but also matches if one of the field is of type all and same key
+/// @param other field to compare
+-(BOOL)matchesField:(GCField*)other;
 
 -(BOOL)isNoisy;
 -(BOOL)canSum;

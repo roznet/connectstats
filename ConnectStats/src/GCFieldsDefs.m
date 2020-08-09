@@ -61,7 +61,7 @@ NSString * STOREUNIT_SPEED =         @"mps";
 NSString * STOREUNIT_DISTANCE =      @"meter";
 NSString * STOREUNIT_ALTITUDE =      @"meter";
 NSString * STOREUNIT_ELAPSED =       @"second";
-NSString * STOREUNIT_TEMPERATURE =   @"celcius";
+NSString * STOREUNIT_TEMPERATURE =   @"celsius";
 NSString * STOREUNIT_HEARTRATE =     @"bpm";
 
 NSString * INTERNAL_PREFIX = @"__Internal";

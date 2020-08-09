@@ -33,6 +33,7 @@
 #import "GCActivity+TrackTransform.h"
 #import "GCActivity+TestBackwardCompat.h"
 #import "GCStatsCalendarAggregationConfig.h"
+#import "GCActivity.h"
 
 @interface GCTestsGeneral : GCTestCase
 @end
@@ -266,7 +267,7 @@
     [e_sum sortByReverseDate];
     [e_max sortByReverseDate];
     
-    GCHistoryAggregatedActivityStats * stats = [[GCHistoryAggregatedActivityStats alloc] init];
+    GCHistoryAggregatedActivityStats * stats = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:GC_TYPE_RUNNING];
     [stats setActivitiesFromOrganizer:organizer];
     [stats setActivityType:GC_TYPE_RUNNING];
     [stats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
@@ -281,35 +282,35 @@
     NSCalendar * cal = [NSCalendar currentCalendar];
     
     for(NSUInteger i = 0; i<[e_avg count];i++){
-        
         GCHistoryAggregatedDataHolder * holder = [stats dataForIndex:i];
+
         if (![[holder date] isSameCalendarDay:[[e_avg dataPointAtIndex:i] date] calendar:cal]) {
             NSLog(@"%d: %@!=%@",(int)i,[holder date], [[e_avg dataPointAtIndex:i] date]);
         }
         XCTAssertTrue([[holder date] isSameCalendarDay:[[e_avg dataPointAtIndex:i] date] calendar:cal], @"same date avg %@ %@", [holder date], [[e_avg dataPointAtIndex:i] date] );
-        gcAggregatedField f = gcAggregatedSumDistance;
+        GCField * f = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING];
         double x = 1.;
-        XCTAssertEqualWithAccuracy([holder valFor:f and:gcAggregatedAvg], [[e_avg dataPointAtIndex:i] y_data]*x, 1e-6, @"Same Average");
-        XCTAssertEqualWithAccuracy([holder valFor:f and:gcAggregatedSum], [[e_sum dataPointAtIndex:i] y_data]*x, 1e-6, @"Same sum");
-        XCTAssertEqualWithAccuracy([holder valFor:f and:gcAggregatedMax], [[e_max dataPointAtIndex:i] y_data]*x, 1e-6, @"Same max");
+        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedAvg].value, [e_avg dataPointAtIndex:i].y_data*x, 1e-6, @"Same Average");
+        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedSum].value, [e_sum dataPointAtIndex:i].y_data*x, 1e-6, @"Same sum");
+        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedMax].value, [e_max dataPointAtIndex:i].y_data*x, 1e-6, @"Same max");
         
-        f = gcAggregatedSumDuration;
+        f = [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:GC_TYPE_RUNNING];
         x = 2.;
-        XCTAssertEqualWithAccuracy([holder valFor:f and:gcAggregatedAvg], [[e_avg dataPointAtIndex:i] y_data]*x, 1e-6, @"Same Average");
-        XCTAssertEqualWithAccuracy([holder valFor:f and:gcAggregatedSum], [[e_sum dataPointAtIndex:i] y_data]*x, 1e-6, @"Same sum");
-        XCTAssertEqualWithAccuracy([holder valFor:f and:gcAggregatedMax], [[e_max dataPointAtIndex:i] y_data]*x, 1e-6, @"Same max");
+        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedAvg].value, [e_avg dataPointAtIndex:i].y_data*x, 1e-6, @"Same Average");
+        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedSum].value, [e_sum dataPointAtIndex:i].y_data*x, 1e-6, @"Same sum");
+        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedMax].value, [e_max dataPointAtIndex:i].y_data*x, 1e-6, @"Same max");
 
-        f = gcAggregatedWeightedHeartRate;
+        f = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
         x = 3.;
-        XCTAssertEqualWithAccuracy([holder valFor:f and:gcAggregatedAvg], [[e_avg dataPointAtIndex:i] y_data]*x, 1e-6, @"Same Average");
-        XCTAssertEqualWithAccuracy([holder valFor:f and:gcAggregatedSum], [[e_sum dataPointAtIndex:i] y_data]*x, 1e-6, @"Same sum");
-        XCTAssertEqualWithAccuracy([holder valFor:f and:gcAggregatedMax], [[e_max dataPointAtIndex:i] y_data]*x, 1e-6, @"Same max");
-        
-        f = gcAggregatedWeightedSpeed;
+        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedAvg].value, [e_avg dataPointAtIndex:i].y_data*x, 1e-6, @"Same Average");
+        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedSum].value, [e_sum dataPointAtIndex:i].y_data*x, 1e-6, @"Same sum");
+        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedMax].value, [e_max dataPointAtIndex:i].y_data*x, 1e-6, @"Same max");
+
+        f = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:GC_TYPE_RUNNING];
         x = 4.;
-        XCTAssertEqualWithAccuracy([holder valFor:f and:gcAggregatedAvg], [[e_avg dataPointAtIndex:i] y_data]*x, 1e-6, @"Same Average");
-        XCTAssertEqualWithAccuracy([holder valFor:f and:gcAggregatedSum], [[e_sum dataPointAtIndex:i] y_data]*x, 1e-6, @"Same sum");
-        XCTAssertEqualWithAccuracy([holder valFor:f and:gcAggregatedMax], [[e_max dataPointAtIndex:i] y_data]*x, 1e-6, @"Same max");
+        XCTAssertEqualWithAccuracy([[holder numberWithUnit:f statType:gcAggregatedAvg] convertToUnit:GCUnit.mps].value, [e_avg dataPointAtIndex:i].y_data*x, 1e-6, @"Same Average");
+        XCTAssertEqualWithAccuracy([[holder numberWithUnit:f statType:gcAggregatedSum] convertToUnit:GCUnit.mps].value, [e_sum dataPointAtIndex:i].y_data*x, 1e-6, @"Same sum");
+        XCTAssertEqualWithAccuracy([[holder numberWithUnit:f statType:gcAggregatedMax] convertToUnit:GCUnit.mps].value, [e_max dataPointAtIndex:i].y_data*x, 1e-6, @"Same max");
     }
     
     [stats setActivityType:GC_TYPE_ALL];
@@ -320,10 +321,10 @@
     
     GCField * hrfield =[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_ALL];
     
-    XCTAssertEqualWithAccuracy([holder valFor:gcAggregatedWeightedHeartRate and:gcAggregatedAvg],
+    XCTAssertEqualWithAccuracy([holder numberWithUnit:hrfield statType:gcAggregatedAvg].value,
                                [[sumStats dataForField:hrfield] averageWithUnit:gcHistoryStatsWeek].value,
                                1.e-7, @"Average equals");
-    XCTAssertEqualWithAccuracy([holder valFor:gcAggregatedWeightedHeartRate and:gcAggregatedCnt],
+    XCTAssertEqualWithAccuracy([holder numberWithUnit:hrfield statType:gcAggregatedCnt].value,
                                [[sumStats dataForField:hrfield] count:gcHistoryStatsWeek],
                                1.e-7, @"Count equals");
     
@@ -344,11 +345,10 @@
         NSNumber * value = one[1];
         GCHistoryAggregatedDataHolder * holder = [stats dataForIndex:i++];
         XCTAssertTrue([holder.date isSameCalendarDay:date calendar:[GCAppGlobal calculationCalendar]], @"same date %@ / %@", holder.date, date);
-        XCTAssertEqualWithAccuracy([holder valFor:gcAggregatedSumDistance and:gcAggregatedSum], value.doubleValue, 1.e-7);
+        XCTAssertEqualWithAccuracy([holder numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING] statType: gcAggregatedSum].value, value.doubleValue, 1.e-7);
     }
     
     
-    [stats release];
     [organizer release];
 }
 

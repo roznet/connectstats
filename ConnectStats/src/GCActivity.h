@@ -282,6 +282,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 -(double)summaryFieldValueInStoreUnit:(gcFieldFlag)fieldFlag;
 -(void)setSummaryField:(gcFieldFlag)fieldFlag inStoreUnitValue:(double)value;
+-(GCNumberWithUnit*)numberWithForFieldInStoreUnit:(GCField *)field;
 
 /**
  Format a value with unit similar to a given field
