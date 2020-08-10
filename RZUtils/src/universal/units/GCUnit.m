@@ -85,6 +85,7 @@ void registerDouble( NSArray * defs){
 void registerSimple( NSArray * defs){
     GCUnit * unit = RZReturnAutorelease([[GCUnit alloc] initWithArray:defs]);
     unit.format = GCunitDoubleTwoDigitFormat;
+    unit.referenceUnitKey = unit.key;  // make sure can convert to itself...
     _unitsRegistry[defs[0]] = unit;
 }
 
@@ -98,11 +99,13 @@ void registerSimpl0( NSArray * defs){
 void registerSimpl1( NSArray * defs){
     GCUnit * unit = RZReturnAutorelease([[GCUnit alloc] initWithArray:defs]);
     unit.format = GCUnitDoubleOneDigitFormat;
+    unit.referenceUnitKey = unit.key;  // make sure can convert to itself...
     _unitsRegistry[defs[0]] = unit;
 }
 void registerSimpl3( NSArray * defs){
     GCUnit * unit = RZReturnAutorelease([[GCUnit alloc] initWithArray:defs]);
     unit.format = GCunitDoubleThreeDigitFormat;
+    unit.referenceUnitKey = unit.key;  // make sure can convert to itself...
     _unitsRegistry[defs[0]] = unit;
 }
 
