@@ -55,15 +55,18 @@ typedef NS_ENUM(NSUInteger, rzTextColor){
 +(RZColor*)backgroundForLegend;
 
 
++(NSDictionary<NSString*,id>*)attribute16;
++(NSDictionary<NSString*,id>*)attribute16Gray;
 +(NSDictionary<NSString*,id>*)attributeBold16;
 +(NSDictionary<NSString*,id>*)attributeBold16Highlighted;
-+(NSDictionary<NSString*,id>*)attribute16;
-+(NSDictionary<NSString*,id>*)attribute14Gray;
-+(NSDictionary<NSString*,id>*)attribute16Gray;
 +(NSDictionary<NSString*,id>*)attribute14;
++(NSDictionary<NSString*,id>*)attribute14Gray;
 +(NSDictionary<NSString*,id>*)attribute14White;
++(NSDictionary<NSString*,id>*)attribute14Highlighted;
 +(NSDictionary<NSString*,id>*)attributeBold14;
-
++(NSDictionary<NSString*,id>*)attribute12;
++(NSDictionary<NSString*,id>*)attribute12Gray;
++(NSDictionary<NSString*,id>*)attribute12Highlighted;
 +(NSAttributedString*)attributedString:(NSString*)str attribute:(SEL)sel;
 
 +(RZColor*)colorForText:(rzTextColor)which;
@@ -76,5 +79,11 @@ typedef NS_ENUM(NSUInteger, rzTextColor){
 +(RZImage*)imageWithView:(UIView *)view;
 #endif
 
+
+@end
+
+@interface NSDictionary (RZViewConfig)
+
+-(NSDictionary<NSString*,id>*)viewConfigAttributeDisabled;
 
 @end

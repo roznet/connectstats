@@ -81,6 +81,7 @@ const CGFloat kCellDaySpacing = 2.f;
         [self.refreshControl addTarget:self action:@selector(refreshData) forControlEvents:UIControlEventValueChanged];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kNotifySettingsChange object:nil];
 
+        self.extendedDisplay = true;
     }
     return self;
 }
@@ -458,7 +459,7 @@ const CGFloat kCellDaySpacing = 2.f;
     if (self.organizer.hasCompareActivity && [self.organizer activityIndexForFilteredIndex:indexPath.row]==self.organizer.selectedCompareActivityIndex) {
         status = gcViewActivityStatusCompare;
     }
-    [cell setupSummaryFromActivity:[self activityForIndex:indexPath.row] width:tableView.frame.size.width status:status];
+    [cell setupSummaryFromActivity:[self activityForIndex:indexPath.row] rows:3 width:tableView.frame.size.width status:status];
     cell.cellInset = [self insetForRowAtIndexPath:indexPath];
     cell.cellInsetSize = kCellDaySpacing;
     
@@ -476,7 +477,8 @@ const CGFloat kCellDaySpacing = 2.f;
     if (self.organizer.hasCompareActivity && [self.organizer activityIndexForFilteredIndex:indexPath.row]==self.organizer.selectedCompareActivityIndex) {
         status = gcViewActivityStatusCompare;
     }
-    [cell setupSummaryFromActivity:[self activityForIndex:indexPath.row] width:tableView.frame.size.width status:status];
+    
+    [cell setupSummaryFromActivity:[self activityForIndex:indexPath.row] rows:self.extendedDisplay ? 4 : 3 width:tableView.frame.size.width status:status];
     cell.cellInset = [self insetForRowAtIndexPath:indexPath];
     cell.cellInsetSize = kCellDaySpacing;
     
@@ -512,8 +514,8 @@ const CGFloat kCellDaySpacing = 2.f;
 #pragma mark - Table view delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    CGFloat rv = [GCViewConfig sizeForNumberOfRows:3];
-
+    CGFloat rv = [GCViewConfig sizeForNumberOfRows:self.extendedDisplay ? 4 : 3];
+    
     GCActivity * act = [self activityForIndex:indexPath.row];
     if ([act.activityType isEqualToString:GC_TYPE_DAY]) {
         rv = kGCCellActivityDefaultHeight;

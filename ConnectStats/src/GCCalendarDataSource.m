@@ -520,7 +520,7 @@
     if (_tableDisplay==gcCalendarTableDisplayActivities) {
         if( indexPath.row < _selectedActivities.count ){
             GCActivity * activity = _selectedActivities[indexPath.row];
-            [cell setupSummaryFromActivity:activity width:tableView.frame.size.width status:gcViewActivityStatusNone];
+            [cell setupSummaryFromActivity:activity rows:3 width:tableView.frame.size.width status:gcViewActivityStatusNone];
         }
     }else{
 

@@ -144,21 +144,24 @@
         return;
     }
     double data[fieldEnd];
-    int dummy = 0;
-    BOOL hasField = false;
+    
+    BOOL hasField[fieldEnd];;
     for( size_t i=0;i<fieldEnd;i++){
         GCNumberWithUnit * nu = [act numberWithUnitForField:self.fields[i]];
+        if( self.fields[i].fieldFlag == gcFieldFlagPower && nu.value == 0.){
+            // power of zero means didn't record
+            nu = nil;
+        }
+
         if( nu ){
             GCUnit * unit = self.units[i];
-            if( self.fields[i].fieldFlag == gcFieldFlagPower){
-                //NSLog(@"%@ %@ %@", act, nu, @([unit convertDouble:nu.value fromUnit:nu.unit]));
-                dummy ++;
-            }
             data[i] = [unit convertDouble:nu.value fromUnit:nu.unit];
             if( isnan(data[i])){
                 NSLog(@"%@ %@ %@", act, nu, @([unit convertDouble:nu.value fromUnit:nu.unit]));
             }
-            hasField = true;
+            hasField[i] = true;
+        }else{
+            hasField[i] = false;
         }
     }
     
@@ -174,7 +177,7 @@
         _started = true;
         for (size_t f = 0; f<fieldEnd; f++) {
             for (size_t s = 0; s<gcAggregatedTypeEnd; s++) {
-                if (hasField) {
+                if (hasField[f]) {
                     self.flags[f] = true;
                     if (s == gcAggregatedCnt) {
                         _stats[f*gcAggregatedTypeEnd+s] = 1.;
@@ -202,7 +205,7 @@
         double dur_tot = dur_w0+dur_w1;
 
         for (size_t f =0; f<fieldEnd; f++) {
-            if (hasField) {
+            if (hasField[f]) {
                 _flags[f]=true;
                 _stats[f*gcAggregatedTypeEnd+gcAggregatedSsq] += data[f]*data[f];
                 _stats[f*gcAggregatedTypeEnd+gcAggregatedSum] += data[f];

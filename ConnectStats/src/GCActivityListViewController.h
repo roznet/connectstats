@@ -32,6 +32,7 @@
                                                                 GCCellGridDelegate,UIActionSheetDelegate,GCActivityTypeListViewControllerDelegate>
 
 @property (nonatomic,retain) GCActivityDetailViewController * detailController;
+@property (nonatomic,assign) BOOL extendedDisplay;
 
 -(void)filterActivityForString:(NSString*)str;
 -(NSUInteger)countOfActivities;
