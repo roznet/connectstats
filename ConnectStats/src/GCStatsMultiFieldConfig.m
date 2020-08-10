@@ -429,12 +429,15 @@
 }
 
 -(void)nextSummaryCumulativeField{
-    if( self.summaryCumulativeFieldFlag != gcFieldFlagSumDuration ){
+    if( self.summaryCumulativeFieldFlag == gcFieldFlagSumDistance ){
         self.summaryCumulativeFieldFlag = gcFieldFlagSumDuration;
+    }else if( self.summaryCumulativeFieldFlag == gcFieldFlagSumDuration){
+        self.summaryCumulativeFieldFlag = gcFieldFlagAltitudeMeters;
+    }else if( self.summaryCumulativeFieldFlag == gcFieldFlagAltitudeMeters){
+        self.summaryCumulativeFieldFlag = gcFieldFlagSumDistance;
     }else{
         self.summaryCumulativeFieldFlag = gcFieldFlagSumDistance;
     }
-
 }
 
 
@@ -442,7 +445,12 @@
 
 -(GCField*)currentCumulativeSummaryField{
     // Ignore any value other than sumDuration or SumDistance
-    gcFieldFlag which = self.summaryCumulativeFieldFlag == gcFieldFlagSumDuration ? gcFieldFlagSumDuration : gcFieldFlagSumDistance;
+    if( self.summaryCumulativeFieldFlag != gcFieldFlagSumDistance && self.summaryCumulativeFieldFlag != gcFieldFlagSumDuration && self.summaryCumulativeFieldFlag != gcFieldFlagAltitudeMeters){
+        self.summaryCumulativeFieldFlag = gcFieldFlagSumDistance;
+    }
+    
+    gcFieldFlag which = self.summaryCumulativeFieldFlag;
+    
     return [GCField fieldForFlag:which andActivityType:self.activityType];
 }
 @end

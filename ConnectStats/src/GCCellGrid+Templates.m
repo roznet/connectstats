@@ -400,9 +400,9 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
                                  width:(CGFloat)width
                                 status:(gcViewActivityStatus)status{
 
-    BOOL addImages = false;
+    //BOOL addImages = false;
     BOOL skipAlways = activity.skipAlways;
-    BOOL wide = width > 600.;
+    //BOOL wide = width > 600.;
     
     NSMutableArray<GCField*>*fields = [NSMutableArray array];
     
@@ -580,9 +580,6 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     
     [self labelForRow:0 andCol:0].attributedText = dateStr;
     for (GCField * field in fields) {
-        if( idx == 0 && (field.fieldFlag == gcFieldFlagPower || field.fieldFlag == gcFieldFlagAltitudeMeters)){
-            NSLog(@"debug");
-        }
         if( [data hasField:field] ){
             gcAggregatedType type = gcAggregatedAvg;
             if( field.canSum ){
@@ -596,7 +593,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
                 nu = [GCNumberWithUnit numberWithUnitName:@"mps" andValue:[distanceN convertToUnitName:@"meter"].value/durationN.value];
                 nu = [nu convertToUnit:field.unit];
             }
-            if( nu.isValidValue){
+            if( nu.isValidValue && nu.value != 0.){
                 NSDictionary * attr = fieldidx < mainCount ? [GCViewConfig attributeBold14] : [GCViewConfig attribute14Gray];
                 NSAttributedString * at = [NSAttributedString attributedString:attr withString:nu.formatDouble];
                 
