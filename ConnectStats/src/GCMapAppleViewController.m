@@ -129,6 +129,17 @@ typedef NS_ENUM(NSUInteger,gcMapViewType) {
     return YES;
 }
 
+-(void)clearAllOverlayAndAnnotations{
+    NSArray * overlays = (self.mapView).overlays;
+    if (overlays && [overlays isKindOfClass:[NSArray class]] && overlays.count>0) {
+        [self.mapView removeOverlays:overlays];//CRASH
+    }
+    NSArray * annotations = (self.mapView).annotations;
+    if (annotations && [annotations isKindOfClass:[NSArray class]] && annotations.count>0) {
+        [self.mapView removeAnnotations:annotations];
+    }
+}
+
 -(void)setupOverlayAndAnnotations{
     self.freezeMapAnnotations = true;
 
@@ -138,15 +149,8 @@ typedef NS_ENUM(NSUInteger,gcMapViewType) {
         [self loadRoute];
     }
 	// add the overlay to the map
-    NSArray * overlays = (self.mapView).overlays;
-    if (overlays && [overlays isKindOfClass:[NSArray class]] && overlays.count>0) {
-        [self.mapView removeOverlays:overlays];//CRASH
-    }
-    NSArray * annotations = (self.mapView).annotations;
-    if (annotations && [annotations isKindOfClass:[NSArray class]] && annotations.count>0) {
-        [self.mapView removeAnnotations:annotations];
-    }
-
+    [self clearAllOverlayAndAnnotations];
+    
 	if (nil != self.routeLine) {
 		[self.mapView addOverlay:self.routeLine];
 	}
@@ -165,7 +169,7 @@ typedef NS_ENUM(NSUInteger,gcMapViewType) {
     if (nil != self.compareRouteLine) {
         [self.mapView addOverlay:self.compareRouteLine];
     }
-    annotations = [self.mapDataSource annotations];
+    NSArray * annotations = [self.mapDataSource annotations];
     if (nil!=annotations) {
         [self.mapView addAnnotations:annotations];
     }

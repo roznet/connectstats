@@ -80,6 +80,7 @@ typedef void(^gcMapViewControllerCompletion)(void);
 -(void)setupFrames:(CGRect)rect;
 -(void)updatePanelFrames;
 -(void)zoomInOnRoute;
+-(void)clearAllOverlayAndAnnotations;
 
 -(void)toggleMapType:(id)cb;
 -(void)toggleShowLap:(id)cb;

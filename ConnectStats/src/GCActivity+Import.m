@@ -1289,6 +1289,16 @@
         }
     }
     
+    if( self.garminSwimAlgorithm != other.garminSwimAlgorithm ){
+        if( verbose){
+            RZLog(RZLogInfo, @"%@ Change swimAlgoritm=%@", self, other.garminSwimAlgorithm ? @"on" : @"off");
+        }
+
+        self.garminSwimAlgorithm = other.garminSwimAlgorithm;
+        NSString * query = [NSString stringWithFormat:@"UPDATE gc_activities SET %@=? WHERE activityId=?", @"garminSwimAlgorithm"];
+        RZEXECUTEUPDATE(self.db, query, @(self.garminSwimAlgorithm), self.activityId);
+    }
+    
     if( ! newOnly ){
         for (GCField * field in @[ [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType],
                                    [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityType],

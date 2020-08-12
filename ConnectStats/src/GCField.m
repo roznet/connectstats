@@ -47,9 +47,8 @@ static void registerInCache(GCField*field){
         if(field){
             dict[aType] = field;
         }
-
     }
-    if (field.fieldFlag!=gcFieldFlagNone) {
+    if (field.fieldFlag != gcFieldFlagNone) {
         if( field.fieldFlag == gcFieldFlagCadence && [field.key isEqualToString:@"WeightedMeanCadence"]){
             RZLog(RZLogWarning, @"Registering %@ for cadence", field);
         }

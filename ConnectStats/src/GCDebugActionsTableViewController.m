@@ -235,8 +235,7 @@
             }
         }
     }
-    NSLog(@"Fixed bad elevation");
-    
+    RZLog(RZLogInfo, @"Fixed bad elevation");
 }
 
 @end
