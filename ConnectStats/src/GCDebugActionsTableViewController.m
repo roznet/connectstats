@@ -212,5 +212,31 @@
     [appAction execute:url];
 }
 
+-(void)actionFixBadElevation{
+    NSArray<GCActivity*>* activites = [[GCAppGlobal organizer] activities];
+    NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+    
+    for (GCActivity * act in activites) {
+        NSString * device = [act metaValueForField:@"device"].display;
+        if( device ){
+            NSMutableDictionary * data = dict[device];
+            if( data == nil){
+                data = [NSMutableDictionary dictionaryWithDictionary:@{ @"count":@0, @"sum":@0}];
+                dict[device] = data;
+            }
+            GCNumberWithUnit * nu = [act numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagAltitudeMeters andActivityType:act.activityType]];
+            if( nu ){
+                data[ @"count" ] = @( [data[@"count"] doubleValue] + 1 );
+                data[ @"sum" ] = @( [data[@"sum"] doubleValue] + [nu convertToUnit:[GCUnit meter]].value  );
+            }
+            if( [device isEqualToString:@"Garmin Forerunner 610"]
+               ||[device isEqualToString:@"Garmin Forerunner 620"]){
+                [act setNumberWithUnit:[GCNumberWithUnit numberWithUnitName:@"meter" andValue:0.0] forField:[GCField fieldForFlag:gcFieldFlagAltitudeMeters andActivityType:act.activityType]];
+            }
+        }
+    }
+    NSLog(@"Fixed bad elevation");
+    
+}
 
 @end

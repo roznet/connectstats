@@ -67,11 +67,13 @@
             rv.viewConfig = other.viewConfig;
             rv.graphChoice = other.graphChoice;
             rv.calendarConfig = [GCStatsCalendarAggregationConfig configFrom:other.calendarConfig];
+            rv.summaryCumulativeFieldFlag = other.summaryCumulativeFieldFlag;
         }else{
             rv.viewConfig = gcStatsViewConfigUnused;
             rv.viewChoice = gcViewChoiceSummary;
             rv.graphChoice = gcGraphChoiceBarGraph;
             rv.calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:kCalendarUnitNone];
+            rv.summaryCumulativeFieldFlag = gcFieldFlagSumDistance;
         }
     }
     return rv;
