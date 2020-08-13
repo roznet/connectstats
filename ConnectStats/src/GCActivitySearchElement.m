@@ -46,6 +46,7 @@ NSArray * _elementCache = nil;
         NSMutableArray * cache = [NSMutableArray arrayWithCapacity:20];
         [cache addObject:[[[GCSearchElementActivityField alloc] init] autorelease]];
         [cache addObject:[[[GCSearchElementDate alloc] init] autorelease]];
+        [cache addObject:[[[GCSearchElementNear alloc] init] autorelease]];
         _elementCache = [NSArray arrayWithArray:cache];
         RZRetain(_elementCache);
     }
@@ -383,3 +384,36 @@ NSArray * _elementCache = nil;
     return [NSString stringWithFormat:@"<GCSearchElementDate:%@>",s];
 }
 @end
+
+
+@interface GCSearchElementNear ()
+@property (nonatomic,retain) CLLocation * location;
+@end
+
+@implementation GCSearchElementNear
+
+-(void)dealloc{
+    [_location release];
+    [super dealloc];
+}
+-(GCActivitySearchElement*)nextElementForString:(NSString*)aStr andScanner:(NSScanner*)scanner{
+    if([aStr isEqualToString:@"near"] && [[[GCAppGlobal organizer] currentActivity] validCoordinate]){
+        GCSearchElementNear * rv = [[[GCSearchElementNear alloc] init] autorelease];
+        CLLocationCoordinate2D coord = [[[GCAppGlobal organizer] currentActivity] beginCoordinate];
+        rv.location = [[[CLLocation alloc] initWithLatitude:coord.latitude longitude:coord.longitude] autorelease];
+        return rv;
+    }
+    return nil;
+}
+
+-(BOOL)match:(GCActivity*)activity{
+    if( activity.validCoordinate ){
+        CLLocation * cl = [[[CLLocation alloc] initWithLatitude:activity.beginCoordinate.latitude longitude:activity.beginCoordinate.longitude] autorelease];
+        if( [cl distanceFromLocation:self.location] < 10000 ){
+            return true;
+        }
+    }
+    return false;
+}
+@end
+
