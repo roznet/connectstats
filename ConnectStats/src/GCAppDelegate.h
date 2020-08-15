@@ -54,11 +54,12 @@
 @property (nonatomic, retain) GCSegmentOrganizer * segments;
 @property (nonatomic, retain) NSURL * urlToOpen;
 @property (nonatomic, retain) GCConnectStatsStatus * remoteStatus;
+// Will be either the currnet location from the phone or the location of the current activity
+@property (nonatomic, readonly) CLLocation * currentLocation;
 
 -(void)saveSettings;
 -(void)addOrSelectProfile:(NSString*)pName;
 +(void)publishEvent:(NSString*)name;
-+(BOOL)trialVersion;
 +(BOOL)connectStatsVersion;
 +(BOOL)healthStatsVersion;
 
@@ -73,6 +74,7 @@
 -(BOOL)handleUniveralLink:(NSURL *) url;
 -(void)setupFieldCache;
 
+-(void)startLocationRequest;
 
 -(NSDictionary<NSString*,NSString*>*)credentialsForService:(NSString*)service;
 -(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;

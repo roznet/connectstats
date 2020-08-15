@@ -268,6 +268,14 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 }
 
+-(CLLocation * )currentActivityLocation{
+    GCActivity * act = self.currentActivity;
+    if( [act validCoordinate] ){
+        return RZReturnAutorelease([[CLLocation alloc] initWithLatitude:act.beginCoordinate.latitude longitude:act.beginCoordinate.longitude]);
+    }
+    return nil;
+}
+
 #pragma mark - load and update
 
 -(void)loadSegments{
@@ -393,9 +401,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     Main register function
  */
 -(BOOL)registerActivity:(GCActivity*)act forActivityId:(NSString*)aId save:(BOOL)save{
-    if ([GCAppGlobal trialVersion] && _allActivities.count > 20) {
-        return false;
-    }
     BOOL rv = false;
 
     if( ![act isActivityValid] || aId == nil){
@@ -829,6 +834,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 -(void)filterForQuickFilter{
     self.filteredIndices = [self activityIndexesForQuickFilter];
     self.lastSearchString = nil;
+}
+
+-(void)filterForLastSearchString{
+    [self filterForSearchString:self.lastSearchString];
 }
 
 -(void)filterForSearchString:(NSString*)str{

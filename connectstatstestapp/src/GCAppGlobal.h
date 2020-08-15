@@ -56,8 +56,6 @@ extern NSString * kPreservedSettingsName;
 +(void)reinitFromSampleState:(NSString*)name;
 +(void)cleanWritableFiles;
 +(void)saveSettings;
-+(BOOL)trialVersion;
-+(BOOL)fullVersion;
 +(BOOL)connectStatsVersion;
 
 +(NSDictionary*)debugState;

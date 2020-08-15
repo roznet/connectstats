@@ -885,7 +885,7 @@
             [self presentViewController:vc animated:YES completion:^(){}];
         }
     }else if(section == GC_SECTION_OTHER){
-        if(indexPath.row == GC_SETTINGS_BUGREPORT && ![GCAppGlobal trialVersion]){
+        if(indexPath.row == GC_SETTINGS_BUGREPORT ){
             [self showBugReport];
         } else if (indexPath.row == GC_SETTINGS_HELP){
             GCSettingsHelpViewController * detail = [GCSettingsHelpViewController helpViewControllerFor:nil];

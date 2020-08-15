@@ -141,6 +141,8 @@
 	<string>Use Health Data in plots and statistics</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>This app only reads data but will not update data</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>For searching activities "near me"</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Display Pictures Taken during an activity</string>
 	<key>UIApplicationSceneManifest</key>

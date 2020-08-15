@@ -388,6 +388,7 @@ NSArray * _elementCache = nil;
 
 @interface GCSearchElementNear ()
 @property (nonatomic,retain) CLLocation * location;
+@property (nonatomic,assign) CLLocationDistance distance;
 @end
 
 @implementation GCSearchElementNear
@@ -397,11 +398,42 @@ NSArray * _elementCache = nil;
     [super dealloc];
 }
 -(GCActivitySearchElement*)nextElementForString:(NSString*)aStr andScanner:(NSScanner*)scanner{
+    GCSearchElementNear * rv = nil;
+    
     if([aStr isEqualToString:@"near"] && [[[GCAppGlobal organizer] currentActivity] validCoordinate]){
-        GCSearchElementNear * rv = [[[GCSearchElementNear alloc] init] autorelease];
-        CLLocationCoordinate2D coord = [[[GCAppGlobal organizer] currentActivity] beginCoordinate];
-        rv.location = [[[CLLocation alloc] initWithLatitude:coord.latitude longitude:coord.longitude] autorelease];
-        return rv;
+        
+        NSUInteger location = scanner.scanLocation;
+        NSString * foundstr = nil;
+
+        rv = [[[GCSearchElementNear alloc] init] autorelease];
+
+        [scanner scanUpToCharactersFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet].invertedSet intoString:nil];
+        if ([scanner scanUpToCharactersFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet] intoString:&foundstr]) {
+            if( [foundstr isEqualToString:@"me"] ){
+                rv.location = [GCAppGlobal currentLocation];
+                if( rv.location == nil){
+                    [GCAppGlobal startLocationRequest];
+                }
+            }else if( [foundstr isEqualToString:@"current"]){
+                rv.location = [[GCAppGlobal organizer] currentActivityLocation];
+            }else{
+                rv.location = [[GCAppGlobal organizer] currentActivityLocation];
+                scanner.scanLocation = location;
+            }
+        }
+        
+        if( rv.location == nil){
+            rv.location = [[GCAppGlobal organizer] currentActivityLocation];
+        }
+        
+        GCNumberWithUnit * distance = [GCNumberWithUnit numberWithUnitFromScanner:scanner];
+        if( distance ){
+            rv.distance = [distance convertToUnitName:@"meter"].value;
+        }else{
+            rv.distance = 10000;
+        }
+        
+        return rv.location != nil ? rv : nil;
     }
     return nil;
 }
@@ -409,7 +441,7 @@ NSArray * _elementCache = nil;
 -(BOOL)match:(GCActivity*)activity{
     if( activity.validCoordinate ){
         CLLocation * cl = [[[CLLocation alloc] initWithLatitude:activity.beginCoordinate.latitude longitude:activity.beginCoordinate.longitude] autorelease];
-        if( [cl distanceFromLocation:self.location] < 10000 ){
+        if( [cl distanceFromLocation:self.location] < self.distance ){
             return true;
         }
     }

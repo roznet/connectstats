@@ -46,13 +46,6 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     _cacheApplicationDelegate = del;
 }
 
-+(BOOL)trialVersion{
-    return false;
-}
-+(BOOL)fullVersion{
-    return true;
-}
-
 +(NSDictionary*)debugState{
     if (!_debugState) {
         _debugState = @{};

@@ -80,6 +80,8 @@ const CGFloat kCellDaySpacing = 2.f;
         self.refreshControl.attributedTitle = nil;
         [self.refreshControl addTarget:self action:@selector(refreshData) forControlEvents:UIControlEventValueChanged];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kNotifySettingsChange object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kNotifyLocationRequestComplete object:nil];
+
     }
     return self;
 }
@@ -181,13 +183,16 @@ const CGFloat kCellDaySpacing = 2.f;
     }
 }
 
--(void)notifyCallBack:(id)theParent{
+-(void)notifyCallBack:(NSNotification*)notification{
     if ([[NSThread currentThread] isMainThread]) {
+        if( [notification.name isEqualToString:kNotifyLocationRequestComplete] ){
+            [self.organizer filterForLastSearchString];
+        }
         [self.tableView reloadData];
         [self setupQuickFilterIcon];
     }else{
         dispatch_async(dispatch_get_main_queue(), ^(){
-            [self notifyCallBack:theParent];
+            [self notifyCallBack:notification];
         });
     }
 }

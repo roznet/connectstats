@@ -28,6 +28,8 @@ FOUNDATION_EXPORT const unsigned char RZUtilsVersionString[];
 #import "RZUtils/RZLog.h"
 
 #import "RZUtils/GCNumberWithUnit.h"
+#import "RZUtils/GCNumberWithUnit+Scanner.h"
+
 #import "RZUtils/GCUnitLogScale.h"
 #import "RZUtils/GCXMLElement.h"
 #import "RZUtils/GCXMLReader.h"

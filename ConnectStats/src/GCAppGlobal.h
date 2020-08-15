@@ -33,6 +33,7 @@
 #import "GCDerivedOrganizer.h"
 
 extern NSString *const kNotifySettingsChange;
+extern NSString *const kNotifyLocationRequestComplete;
 
 @class GCActivitiesOrganizer;
 @class GCAppDelegate;
@@ -78,6 +79,9 @@ extern NSString *const kNotifySettingsChange;
 +(void)startupRefreshIfNeeded;
 +(void)setupFieldCache;
 
++(void)startLocationRequest;
++(CLLocation*)currentLocation;
+
 +(UINavigationController*)currentNavigationController;
 
 +(NSCalendar*)calculationCalendar;
@@ -87,7 +91,6 @@ extern NSString *const kNotifySettingsChange;
 
 +(BOOL)connectStatsVersion;
 +(BOOL)healthStatsVersion;
-+(BOOL)trialVersion;
 
 +(HKHealthStore*)healthKitStore;
 

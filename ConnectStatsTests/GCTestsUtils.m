@@ -180,6 +180,31 @@
     [GCUnit setGlobalSystem:remember];
 }
 
+-(void)testUnitParser{
+    NSArray*cases = @[
+        @[ @"hello", @"", @"hello"],
+        @[ @"10km", [GCNumberWithUnit numberWithUnitName:@"km" andValue:10.], @""],
+        @[ @"10 km", [GCNumberWithUnit numberWithUnitName:@"km" andValue:10.], @""],
+        @[ @"10 km aa", [GCNumberWithUnit numberWithUnitName:@"km" andValue:10.], @"aa"],
+        @[ @"10 mile bb", [GCNumberWithUnit numberWithUnitName:@"mile" andValue:10.], @"bb"],
+        @[ @"10.5 hello", [GCNumberWithUnit numberWithUnitName:@"dimentionless" andValue:10.5], @"hello"],
+        @[ @"1:05 <bye", [GCNumberWithUnit numberWithUnitName:@"second" andValue:65], @"<bye"],
+        @[ @"5:05 minperkm", [GCNumberWithUnit numberWithUnitName:@"minperkm" andValue:(5.+(5./60.))], @""],
+    ];
+
+    for (NSArray * one in cases) {
+        NSString * input = one[0];
+        GCNumberWithUnit * expected = [one[1] isKindOfClass:[GCNumberWithUnit class]] ? one[1] : nil;
+        NSString * expectedRemain = one[2];
+        NSString * foundRemain = nil;
+        NSScanner * scanner = [NSScanner scannerWithString:input];
+        GCNumberWithUnit * found = [GCNumberWithUnit numberWithUnitFromScanner:scanner];
+        [scanner scanUpToCharactersFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet] intoString:&foundRemain];
+        XCTAssertEqualObjects(expected, found);
+        XCTAssertEqualObjects(expectedRemain, foundRemain?:@"");
+    }
+
+}
 
 
 -(void)testHealthZoneBuckets{

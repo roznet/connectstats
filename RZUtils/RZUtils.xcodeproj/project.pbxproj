@@ -243,6 +243,8 @@
 		42AD171F1EC8601D001E660E /* RZUtilsTestsTimeStamps.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AD171E1EC8601D001E660E /* RZUtilsTestsTimeStamps.m */; };
 		42AD17221EC86032001E660E /* RZTimeStampManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 42AD17201EC86032001E660E /* RZTimeStampManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42AD17231EC86032001E660E /* RZTimeStampManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AD17211EC86032001E660E /* RZTimeStampManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		42E783FE24E81C39006B592E /* GCNumberWithUnit+Scanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 42E783FC24E81C39006B592E /* GCNumberWithUnit+Scanner.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42E783FF24E81C39006B592E /* GCNumberWithUnit+Scanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E783FD24E81C39006B592E /* GCNumberWithUnit+Scanner.m */; };
 		42FFD33724A4BB65004641B1 /* GCUnitCalendarUnit.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFD33524A4BB65004641B1 /* GCUnitCalendarUnit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42FFD33824A4BB65004641B1 /* GCUnitCalendarUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FFD33624A4BB65004641B1 /* GCUnitCalendarUnit.m */; };
 /* End PBXBuildFile section */
@@ -544,6 +546,8 @@
 		42AD171E1EC8601D001E660E /* RZUtilsTestsTimeStamps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RZUtilsTestsTimeStamps.m; sourceTree = "<group>"; };
 		42AD17201EC86032001E660E /* RZTimeStampManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RZTimeStampManager.h; sourceTree = "<group>"; };
 		42AD17211EC86032001E660E /* RZTimeStampManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RZTimeStampManager.m; sourceTree = "<group>"; };
+		42E783FC24E81C39006B592E /* GCNumberWithUnit+Scanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCNumberWithUnit+Scanner.h"; sourceTree = "<group>"; };
+		42E783FD24E81C39006B592E /* GCNumberWithUnit+Scanner.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GCNumberWithUnit+Scanner.m"; sourceTree = "<group>"; };
 		42FFD33524A4BB65004641B1 /* GCUnitCalendarUnit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCUnitCalendarUnit.h; sourceTree = "<group>"; };
 		42FFD33624A4BB65004641B1 /* GCUnitCalendarUnit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCUnitCalendarUnit.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -825,6 +829,8 @@
 				423829961EAB552000252217 /* GCUnitLogScale.m */,
 				42FFD33524A4BB65004641B1 /* GCUnitCalendarUnit.h */,
 				42FFD33624A4BB65004641B1 /* GCUnitCalendarUnit.m */,
+				42E783FC24E81C39006B592E /* GCNumberWithUnit+Scanner.h */,
+				42E783FD24E81C39006B592E /* GCNumberWithUnit+Scanner.m */,
 			);
 			path = units;
 			sourceTree = "<group>";
@@ -1299,6 +1305,7 @@
 				423829E91EAB552000252217 /* NSThread+Block.h in Headers */,
 				42382A241EAB552000252217 /* RZSystemInfo.h in Headers */,
 				42382A281EAB552000252217 /* FMDatabase.h in Headers */,
+				42E783FE24E81C39006B592E /* GCNumberWithUnit+Scanner.h in Headers */,
 				423829DB1EAB552000252217 /* NSArray+Map.h in Headers */,
 				42382A151EAB552000252217 /* RZLog.h in Headers */,
 				423829F71EAB552000252217 /* GCStatsFunctions.h in Headers */,
@@ -1891,6 +1898,7 @@
 				428A0FF81EB7CB3800DD119B /* TSDataPivot.m in Sources */,
 				423829EC1EAB552000252217 /* GCStatsDataPoint.m in Sources */,
 				423829E21EAB552000252217 /* NSDateComponents+RZHelper.m in Sources */,
+				42E783FF24E81C39006B592E /* GCNumberWithUnit+Scanner.m in Sources */,
 				423829FC1EAB552000252217 /* GCNumberWithUnit.m in Sources */,
 				423829F01EAB552000252217 /* GCStatsDataSerie.m in Sources */,
 				42382A0A1EAB552000252217 /* RZAction.m in Sources */,

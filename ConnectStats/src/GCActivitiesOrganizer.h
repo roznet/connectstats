@@ -51,6 +51,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 @property (nonatomic,retain) NSString * lastSearchString;
 @property (nonatomic,retain) NSString * filteredActivityType;
 @property (nonatomic,retain) GCHealthOrganizer * health;
+@property (nonatomic,readonly) CLLocation * currentActivityLocation;
 
 -(GCActivitiesOrganizer*)init;
 -(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb;
@@ -117,6 +118,8 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 -(BOOL)isQuickFilterApplicable;
 -(void)filterForSearchString:(NSString*)str;
+// Force refresh if something changed, for example location
+-(void)filterForLastSearchString;
 -(void)filterForQuickFilter;
 -(void)clearFilter;
 -(BOOL)hasFilter;

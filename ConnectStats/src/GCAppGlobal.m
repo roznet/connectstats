@@ -34,6 +34,7 @@
 #endif
 
 NSString *const kNotifySettingsChange = @"NotifySettingsChange";
+NSString *const kNotifyLocationRequestComplete = @"NoticationLocationRequestComplete";
 
 static NSDictionary * _debugState = nil;
 static NSCalendar * _cacheCalendar = nil;
@@ -72,9 +73,6 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 
 +(BOOL)connectStatsVersion{
     return [GCAppDelegate connectStatsVersion];
-}
-+(BOOL)trialVersion{
-    return [GCAppDelegate trialVersion];
 }
 +(BOOL)healthStatsVersion{
     return [GCAppDelegate healthStatsVersion];
@@ -259,6 +257,14 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
         [_debugState retain];
     }
     return _debugState;
+}
++(void)startLocationRequest{
+    GCAppDelegate * appDelegate = _sharedApplicationDelegate();
+    [appDelegate startLocationRequest];
+}
++(CLLocation*)currentLocation{
+    GCAppDelegate * appDelegate = _sharedApplicationDelegate();
+    return [appDelegate currentLocation];
 }
 
 +(void)debugStateRecord:(NSDictionary*)dict{

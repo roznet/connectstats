@@ -46,7 +46,7 @@
 
 #define GC_STARTING_FILE @"starting.log"
 
-static BOOL fullVersion = false;
+static BOOL connectStatsVersion = false;
 static BOOL checkedVersion = false;
 static BOOL healthStatsVersion = false;
 
@@ -61,8 +61,8 @@ void checkVersion(){
     NSDictionary * dict = [NSDictionary dictionaryWithContentsOfFile:path];
     if (dict) {
         NSString * version = dict[@"version"];
-        if (version && [version isEqualToString:@"full"]) {
-            fullVersion = true;
+        if (version && [version isEqualToString:@"connectstats"]) {
+            connectStatsVersion = true;
         }
         if (version && [version isEqualToString:@"healthstats"]) {
             healthStatsVersion = true;
@@ -76,6 +76,8 @@ void checkVersion(){
 @property (nonatomic,retain) GCAppActions * actions;
 @property (nonatomic,retain) NSDictionary<NSString*,NSDictionary*> * credentials;
 @property (nonatomic,assign) BOOL firstTimeEver;
+@property (nonatomic,retain) CLLocationManager * locationManager;
+@property (nonatomic,retain) CLLocation * lastReceivedLocation;
 
 
 @end
@@ -92,13 +94,7 @@ void checkVersion(){
     if (!checkedVersion) {
         checkVersion();
     }
-    return fullVersion;
-}
-+(BOOL)trialVersion{
-    if (!checkedVersion) {
-        checkVersion();
-    }
-    return !fullVersion&&!healthStatsVersion;
+    return connectStatsVersion;
 }
 
 -(void)dealloc{
@@ -114,6 +110,8 @@ void checkVersion(){
     [_segments release];
     [_credentials release];
     [_remoteStatus release];
+    [_locationManager release];
+    [_lastReceivedLocation release];
 
     [_watch release];
     [_window release];
@@ -408,7 +406,42 @@ void checkVersion(){
 #endif
 }
 
+#pragma mark - Location Manager
 
+-(CLLocation*)currentLocation{
+    if( self.lastReceivedLocation ){
+        return self.lastReceivedLocation;
+    }else{
+        return nil;
+    }
+}
+
+-(void)startLocationRequest{
+    self.locationManager = RZReturnAutorelease([[CLLocationManager alloc] init]);
+    self.locationManager.delegate = self;
+    RZLog(RZLogInfo,@"Requested Location");
+    [self.locationManager requestWhenInUseAuthorization];
+}
+
+-(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status{
+    if( status == kCLAuthorizationStatusAuthorizedWhenInUse ){
+        [self.locationManager requestLocation];
+    }else{
+        RZLog(RZLogInfo,@"Location Request denied %@", @(status));
+    }
+}
+
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    if( locations.count > 0){
+        self.lastReceivedLocation = locations.lastObject;
+        RZLog(RZLogInfo, @"Received location %@", self.lastReceivedLocation );
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyLocationRequestComplete object:self.lastReceivedLocation];
+    }
+}
+
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+    // ignore
+}
 #pragma mark - State Management and Actions
 
 -(NSArray<NSDictionary*>*)recentRemoteMessages{

@@ -90,9 +90,6 @@
     if (last_version == 0) {
 
         NSString * msg = NSLocalizedString(@"Setup your service, enter your user name and password to start downloading your activities", @"Initial");
-        if ([GCAppGlobal trialVersion]) {
-            msg = @"This is a trial version, you'll be limited to 20 activities. Enter your user name and password to start downloading your activities";
-        }
 
         [self presentSimpleAlertWithTitle:NSLocalizedString(@"Welcome", @"Initial") message:msg];
 
