@@ -312,17 +312,29 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             rv = [GCNumberWithUnit numberWithUnitName:STOREUNIT_ELAPSED andValue:self.sumDuration];
             break;
         case gcFieldFlagSumDistance:
-            rv = [[GCNumberWithUnit numberWithUnitName:STOREUNIT_DISTANCE andValue:self.sumDistance] convertToUnit:self.distanceDisplayUnit];
+            if( RZTestOption(self.flags, flag) ){
+                rv = [[GCNumberWithUnit numberWithUnitName:STOREUNIT_DISTANCE andValue:self.sumDistance] convertToUnit:self.distanceDisplayUnit];
+            }else{
+                rv = nil;
+            }
             break;
         case gcFieldFlagWeightedMeanSpeed:
-            rv = [[GCNumberWithUnit numberWithUnitName:STOREUNIT_SPEED andValue:self.weightedMeanSpeed] convertToUnit:self.speedDisplayUnit];
-            // Guard against inf speed or pace
-            if( isinf(rv.value)){
+            if( RZTestOption(self.flags, flag) ){
+                rv = [[GCNumberWithUnit numberWithUnitName:STOREUNIT_SPEED andValue:self.weightedMeanSpeed] convertToUnit:self.speedDisplayUnit];
+                // Guard against inf speed or pace
+                if( isinf(rv.value)){
+                    rv = nil;
+                }
+            }else{
                 rv = nil;
             }
             break;
         case gcFieldFlagWeightedMeanHeartRate:
-            rv = [GCNumberWithUnit numberWithUnitName:STOREUNIT_HEARTRATE andValue:self.weightedMeanHeartRate];
+            if( RZTestOption(self.flags, flag) ){
+                rv = [GCNumberWithUnit numberWithUnitName:STOREUNIT_HEARTRATE andValue:self.weightedMeanHeartRate];
+            }else{
+                rv = nil;
+            }
             break;
 
         default:
@@ -331,6 +343,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             GCActivitySummaryValue * val = self.summaryData[field];
             if (!val) {
                 val = self.calculatedFields[field];
+            }
+            if( val == nil && [field.activityType isEqualToString:GC_TYPE_ALL]){
+                GCField * typedField = [field correspondingFieldForActivityType:self.activityType];
+                val = self.summaryData[ typedField ];
             }
             rv = val.numberWithUnit;
         }
@@ -416,6 +432,20 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
     return rv;
 }
+
+-(GCNumberWithUnit*)numberWithForFieldInStoreUnit:(GCField *)field{
+    switch (field.fieldFlag) {
+        case gcFieldFlagWeightedMeanSpeed:
+            return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_SPEED]];
+        case gcFieldFlagSumDistance:
+            return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_DISTANCE]];
+        case gcFieldFlagSumDuration:
+            return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_ELAPSED]];
+        default:
+            return [self numberWithUnitForField:field];
+    }
+}
+
 -(double)summaryFieldValueInStoreUnit:(gcFieldFlag)fieldFlag{
     switch (fieldFlag) {
         case gcFieldFlagWeightedMeanHeartRate:

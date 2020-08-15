@@ -53,7 +53,7 @@ typedef NS_ENUM(NSUInteger, gcLapDisplay){
 
 @optional
 -(void)focusOnLocation:(CLLocation*)location;
-
+-(void)clearAllOverlayAndAnnotations;
 @end
 
 @protocol GCMapDataSourceProtocol <NSObject>

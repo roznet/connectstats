@@ -147,9 +147,17 @@
     if( max_nu ){
         double maxValue = [max_nu convertToUnit:serie.unit].value;
         NSUInteger n = 0;
-        
+        BOOL first = true;
         for (GCStatsDataPoint * point in serie.serie) {
             double y_data = point.y_data;
+            // make sure we match the max
+            // Because of resampling, first value may not be
+            // exactly max
+            if( first && y_data < maxValue){
+                point.y_data = maxValue;
+            }
+            first = false;
+            
             if(y_data > maxValue || y_data == 0.){
                 point.y_data = maxValue;
                 n++;

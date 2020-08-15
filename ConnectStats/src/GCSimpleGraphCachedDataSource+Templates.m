@@ -235,6 +235,7 @@
         case NSCalendarUnitYear:
             cache.xUnit = [GCUnit unitForKey:@"dateyear"];
             break;
+        // default to month if anyother unit
         case NSCalendarUnitMonth:
         default:
             cache.xUnit = [GCUnit unitForKey:@"datemonth"];
@@ -266,12 +267,12 @@
     NSDateComponents * oneUnit = [[[NSDateComponents alloc] init] autorelease];
     if (aUnit == NSCalendarUnitWeekOfYear) {
         oneUnit.weekOfYear = 1;
-    }else if(aUnit == NSCalendarUnitMonth){
-        oneUnit.month = 1;
+
     }else if(aUnit == NSCalendarUnitYear){
         oneUnit.year = 1;
+    }else { // default to month if anyother unit   if(aUnit == NSCalendarUnitMonth){
+        oneUnit.month = 1;
     }
-
     // bottom of the gcGraphStep is 0 or min
     double plot_y_min = 0.;
     if (true) {

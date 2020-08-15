@@ -56,23 +56,31 @@ static gcFontStyle _fontStyle;
     return RZReturnAutorelease([[NSAttributedString alloc] initWithString:str attributes:attr]);
 }
 
-+(NSDictionary<NSString*,id>*)attributeBold16{
-    return @{ NSFontAttributeName:  [self boldSystemFontOfSize:16.],
-              NSForegroundColorAttributeName: [self colorForText:rzColorStylePrimaryText]
-              };
-}
-+(NSDictionary<NSString*,id>*)attributeBold16Highlighted{
-    return @{ NSFontAttributeName:  [self boldSystemFontOfSize:16.],
-              NSForegroundColorAttributeName: [self colorForText:rzColorStyleHighlightedText]
-              };
-}
-
 +(NSDictionary<NSString*,id>*)attribute16{
     return @{ NSFontAttributeName: [self systemFontOfSize:16.],
               NSForegroundColorAttributeName: [self colorForText:rzColorStylePrimaryText]
               };
 
 }
+
++(NSDictionary<NSString*,id>*)attributeBold16{
+    return @{ NSFontAttributeName:  [self boldSystemFontOfSize:16.],
+              NSForegroundColorAttributeName: [self colorForText:rzColorStylePrimaryText]
+              };
+}
+
++(NSDictionary<NSString*,id>*)attributeBold16Highlighted{
+    return @{ NSFontAttributeName:  [self boldSystemFontOfSize:16.],
+              NSForegroundColorAttributeName: [self colorForText:rzColorStyleHighlightedText]
+              };
+}
+
++(NSDictionary<NSString*,id>*)attribute16Highlighted{
+    return @{ NSFontAttributeName:  [self systemFontOfSize:16.],
+              NSForegroundColorAttributeName: [self colorForText:rzColorStyleHighlightedText]
+              };
+}
+
 +(NSDictionary<NSString*,id>*)attribute16Gray{
     return @{ NSFontAttributeName: [self systemFontOfSize:16.],
               NSForegroundColorAttributeName: [self colorForText:rzColorStyleSecondaryText]
@@ -84,6 +92,12 @@ static gcFontStyle _fontStyle;
               NSForegroundColorAttributeName: [self colorForText:rzColorStylePrimaryText]
               };
 
+}
+
++(NSDictionary<NSString*,id>*)attribute14Highlighted{
+    return @{ NSFontAttributeName:  [self systemFontOfSize:14.],
+              NSForegroundColorAttributeName: [self colorForText:rzColorStyleHighlightedText]
+              };
 }
 
 +(NSDictionary<NSString*,id>*)attribute14White{
@@ -105,6 +119,25 @@ static gcFontStyle _fontStyle;
               NSForegroundColorAttributeName: [self colorForText:rzColorStyleSecondaryText]
               };
 }
+
++(NSDictionary<NSString*,id>*)attribute12{
+    return @{ NSFontAttributeName: [self systemFontOfSize:12.],
+              NSForegroundColorAttributeName: [self colorForText:rzColorStylePrimaryText]
+              };
+
+}
++(NSDictionary<NSString*,id>*)attribute12Highlighted{
+    return @{ NSFontAttributeName:  [self systemFontOfSize:12.],
+              NSForegroundColorAttributeName: [self colorForText:rzColorStyleHighlightedText]
+              };
+}
+
++(NSDictionary<NSString*,id>*)attribute12Gray{
+    return @{ NSFontAttributeName: [self systemFontOfSize:12.],
+              NSForegroundColorAttributeName: [self colorForText:rzColorStyleSecondaryText]
+              };
+}
+
 +(RZImage*)checkMarkImage:(BOOL)val{
     return [RZImage imageNamed:val ? @"check" : @"checkoff"];
 }
@@ -135,6 +168,13 @@ static gcFontStyle _fontStyle;
     }
     return nil;
 }
+
++(CGFloat)sizeForNumberOfRows:(NSUInteger)rows{
+    CGSize size = [@"A" sizeWithAttributes:[self attribute16]];
+    CGFloat rv = size.height  * rows;
+    return ceil( rv * 1.05 ); // 5% margin
+}
+
 +(RZFont*)systemFontOfSize:(CGFloat)size{
 #if TARGET_OS_IPHONE
     if (_fontStyle == gcFontStyleDynamicType) {
@@ -203,5 +243,15 @@ static gcFontStyle _fontStyle;
 }
 #endif
 
+
+@end
+
+@implementation NSDictionary (RZViewConfig)
+
+-(NSDictionary<NSString*,id>*)viewConfigAttributeDisabled{
+    NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithDictionary:self];
+    rv[NSForegroundColorAttributeName] = [RZViewConfig colorForText:rzColorStyleSecondaryText];
+    return rv;
+}
 
 @end

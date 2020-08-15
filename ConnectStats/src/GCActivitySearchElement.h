@@ -71,3 +71,7 @@ typedef NS_ENUM(NSUInteger,gcSearchComparison) {
 @property (nonatomic,retain) NSCalendar * calendar;
 
 @end
+
+@interface GCSearchElementNear : GCActivitySearchElement
+
+@end

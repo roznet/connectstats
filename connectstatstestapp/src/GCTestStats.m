@@ -78,8 +78,7 @@
             NSCalendarUnit calendarUnit = [vc intValue];
             GCStatsCalendarAggregationConfig * calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:calendarUnit];
             GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
-            GCHistoryAggregatedActivityStats * vals = [[[GCHistoryAggregatedActivityStats alloc] init] autorelease];
-            [vals setActivityType:activityType];
+            GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:activityType];
             [vals setActivitiesFromOrganizer:organizer];
             
             [vals aggregate:calendarUnit referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
@@ -88,28 +87,35 @@
                 GCHistoryAggregatedDataHolder * data = [vals dataForIndex:k];
                 NSString * filter = [GCViewConfig filterFor:calendarConfig date:[data date] andActivityType:activityType];
                 NSArray * actIdx = [organizer activityIndexesMatchingString:filter];
-                double sum = 0.;
+                GCNumberWithUnit * sum = nil;
                 double cnt = 0.;
                 for (NSUInteger i = 0; i < [actIdx count]; i++) {
                     GCActivity * act = [organizer activityForIndex:[[actIdx objectAtIndex:i] integerValue]];
-                    sum += act.sumDistanceCompat;
+                    GCNumberWithUnit * dist = [act numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:act.activityType]];
+                    if( sum == nil){
+                        sum = dist;
+                    }else{
+                        sum = [sum addNumberWithUnit:dist weight:1.0];
+                    }
                     cnt += 1.;
                 }
-                double aggSum = [data valFor:gcAggregatedSumDistance and:gcAggregatedSum];
-                double aggCnt = [data valFor:gcAggregatedSumDistance and:gcAggregatedCnt];
+                GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType];
+                GCNumberWithUnit * aggSum = [data numberWithUnit:distfield statType:gcAggregatedSum];
+                double aggCnt = [data numberWithUnit:distfield statType:gcAggregatedCnt].value;
 
-                if (fabs(cnt-aggCnt) > 1e-7) {
+                if (fabs(cnt-aggCnt) > 1e-7 || ![aggSum isEqualToNumberWithUnit:sum]) {
                     actIdx = [organizer activityIndexesMatchingString:filter];
-
+                    NSLog( @"%@", data);
                     NSLog(@"type=%@ config=%@ filter=%@",activityType,calendarConfig,filter);
                     for (NSUInteger i = 0; i < [actIdx count]; i++) {
                         GCActivity * act = [organizer activityForIndex:[[actIdx objectAtIndex:i] integerValue]];
                         NSLog(@"%@ %@ %f",act,[[act date] dateShortFormat],act.sumDistanceCompat);
                     }
                 }
-                RZ_ASSERT(fabs(cnt-aggCnt)<1e-6, @"%@ match cnt %f", data,cnt);
-                RZ_ASSERT(fabs(sum-aggSum)<1e-6, @"%@ match sum %f", data,sum);
+                RZ_ASSERT(fabs(cnt-aggCnt)<1e-6, @"%f match cnt %f", aggCnt,cnt);
+                RZ_ASSERT([aggSum isEqualToNumberWithUnit:sum], @"%@ match sum %f", aggSum,sum);
             }
+            
             [self checkGarminConsistency:vals activityType:activityType calendarConfig:calendarConfig];
 
         }
@@ -220,8 +226,9 @@
                 double gc_dist = [[[line objectAtIndex:2] stringByReplacingOccurrencesOfString:@"," withString:@""] doubleValue];
                 //double gc_hr   = [[line objectAtIndex:6] integerValue];
 
-                double cs_count = [data valFor:gcAggregatedSumDistance and:gcAggregatedCnt];
-                double cs_dist  = [data valFor:gcAggregatedSumDistance and:gcAggregatedSum]/1000.;
+                GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType];
+                double cs_count = [data numberWithUnit:distfield statType:gcAggregatedCnt].value;
+                double cs_dist  = [data numberWithUnit:distfield statType:gcAggregatedSum].value;
                 //double cs_hr    = [data valFor:gcAggregatedWeightedHeartRate and:gcAggregatedAvg];
 
                 NSString * hdr = [NSString stringWithFormat:@"%@ %@ %@", activityType, calendarConfig, dateStr];
@@ -269,30 +276,29 @@
                                                                                    referenceDate:nil
                                                                                       ignoreMode:gcIgnoreModeActivityFocus];
 
-    GCHistoryAggregatedActivityStats * vals_agg = [[[GCHistoryAggregatedActivityStats alloc] init] autorelease];
-    [vals_agg setActivityType:activityType];
+    GCHistoryAggregatedActivityStats * vals_agg = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:activityType];
     [vals_agg setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     [vals_agg aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
-    void (^testOne)(NSString*field, gcAggregatedField aggField) = ^(NSString*fieldkey,gcAggregatedField aggField){
+    void (^testOne)(NSString*field) = ^(NSString*fieldkey){
         GCField * field = [GCField fieldForKey:fieldkey andActivityType:activityType];
 
         GCHistoryAggregatedDataHolder * data_agg = [vals_agg dataForIndex:0];
         GCFieldDataHolder * data_sum = [vals_sum dataForField:field];
         //nu_agg is always same
-        GCNumberWithUnit* nu_agg = [data_agg numberWithUnit:aggField statType:gcAggregatedSum andActivityType:GC_TYPE_CYCLING];
+        GCNumberWithUnit* nu_agg = [data_agg numberWithUnit:field statType:gcAggregatedSum];
         GCNumberWithUnit* nu_sum = [data_sum sumWithUnit:gcHistoryStatsWeek];
 
         [self assessTrue: [nu_agg compare:nu_sum withTolerance:1.e-7]==NSOrderedSame msg:@"%@ sum match %@ == %@", field, nu_sum,nu_agg];
 
-        nu_agg = [data_agg numberWithUnit:aggField statType:gcAggregatedAvg andActivityType:GC_TYPE_CYCLING];
+        nu_agg = [data_agg numberWithUnit:field statType:gcAggregatedAvg];
         nu_sum = [data_sum averageWithUnit:gcHistoryStatsWeek];
 
         [self assessTrue: [nu_agg compare:nu_sum withTolerance:1.e-7]==NSOrderedSame msg:@"%@ avg match %@ == %@", field, nu_sum,nu_agg];
     };
 
-    testOne(@"SumDistance", gcAggregatedSumDistance);
-    testOne(@"WeightedMeanSpeed", gcAggregatedWeightedSpeed);
+    testOne(@"SumDistance");
+    testOne(@"WeightedMeanSpeed");
 
     GCHistoryAggregatedDataHolder * data_agg = [vals_agg dataForIndex:0];
     GCFieldDataHolder * dist_sum = [vals_sum dataForField:[GCField fieldForKey:@"SumDistance" andActivityType:activityType]];
@@ -319,7 +325,8 @@
     seconds = [dur_nu convertToUnitName:@"second"].value;
     implied_speed = [GCNumberWithUnit numberWithUnitName:@"mps" andValue:meters/seconds];
 
-    GCNumberWithUnit * wspeed_agg_nu = [data_agg numberWithUnit:gcAggregatedWeightedSpeed statType:gcAggregatedWvg andActivityType:GC_TYPE_CYCLING];
+    GCField * speed = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activityType];
+    GCNumberWithUnit * wspeed_agg_nu = [data_agg numberWithUnit:speed statType:gcAggregatedWvg];
 
     //NSLog(@"(%@ = %@ = %@) != %@ ", [implied_speed convertToUnit:speed_nu.unit], wspeed_nu, wspeed_agg_nu, speed_nu);
 

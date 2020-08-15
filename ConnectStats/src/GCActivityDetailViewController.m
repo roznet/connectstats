@@ -328,6 +328,10 @@
         cell = [[[GCCellMap alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GCMap"] autorelease];
     }
     GCActivity * act = self.activity;
+    if( ![cell.mapController.activity.activityId isEqualToString:act.activityId] ){
+        RZLog(RZLogInfo, @"Changing map activity");
+        //[cell.mapController clearAllOverlayAndAnnotations];
+    }
     cell.mapController.activity = act;
     dispatch_block_t build = ^(){
         // make sure we have trackpoints
@@ -458,7 +462,7 @@
     BOOL high = self.tableView.frame.size.height > 600.;
 
     if (indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION) {
-        return 58.;
+        return [GCViewConfig sizeForNumberOfRows:3];
     }else if(indexPath.section==GCVIEW_DETAIL_MAP_SECTION){
         return high ? 200. : 150.;
     }else if(indexPath.section==GCVIEW_DETAIL_LOAD_SECTION){
@@ -466,9 +470,9 @@
     }else if(indexPath.section==GCVIEW_DETAIL_GRAPH_SECTION){
         return high ? 200. : 150.;
     }else if(indexPath.section == GCVIEW_DETAIL_TITLE_SECTION){
-        return 64.;
+        return [GCViewConfig sizeForNumberOfRows:3];
     }
-    return 58.;
+    return [GCViewConfig sizeForNumberOfRows:3];
 }
 
 #pragma mark - Table view delegate
@@ -800,6 +804,7 @@
     if ([NSThread isMainThread]) {
         [self.refreshControl endRefreshing];
         [self.tableView setContentOffset:CGPointZero animated:YES];
+        [self.tableView reloadData];
     }else{
         dispatch_async(dispatch_get_main_queue(), ^(){
             [self performRefreshControl];

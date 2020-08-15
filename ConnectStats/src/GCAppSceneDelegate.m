@@ -58,9 +58,9 @@
         UIWindowScene * windowScene = (UIWindowScene*)scene;
 
         _window = [[UIWindow alloc] initWithFrame:windowScene.coordinateSpace.bounds];
-        _window.windowScene = windowScene;
         //DONT CHECK IN:
-        //self.window = [[[SmudgyWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+        //self.window = [[[SmudgyWindow alloc] initWithFrame:windowScene.coordinateSpace.bounds] autorelease];
+        _window.windowScene = windowScene;
 
         if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
         {

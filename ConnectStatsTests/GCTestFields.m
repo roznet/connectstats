@@ -67,8 +67,8 @@
         GCUnit * metric = [[cache infoForField:field] unitForSystem:GCUnitSystemMetric];
         GCUnit * imperial = [[cache infoForField:field] unitForSystem:GCUnitSystemImperial];
         if( [field.key containsString:@"Elevation"] ){
-            XCTAssertEqualObjects(metric, [GCUnit meter], @"Metric %@ in meter", field);
-            XCTAssertEqualObjects(imperial, [GCUnit foot], @"Imperial %@ in foot", field);
+            XCTAssertEqualObjects(metric.key, @"meterelevation", @"Metric %@ in meter", field);
+            XCTAssertEqualObjects(imperial.key, @"footelevation", @"Imperial %@ in foot", field);
         }
         if( [field.key containsString:@"Pace"] && [field.activityType isEqualToString:GC_TYPE_RUNNING] ){
             XCTAssertEqualObjects(metric, [GCUnit minperkm], @"Metric %@ in min/km", field);

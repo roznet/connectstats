@@ -48,7 +48,7 @@ NS_INLINE double TO_LOG_SCALE(double x,double base, double shift, double scale) 
     GCUnitLogScale * rv = RZReturnAutorelease([[GCUnitLogScale alloc] init]);
     if (rv) {
         rv.underlyingUnit = underlying;
-        rv.referenceUnit = underlying.key;
+        rv.referenceUnitKey = underlying.key;
         rv.base = base;
         rv.scale = scale;
         rv.shift = shift;

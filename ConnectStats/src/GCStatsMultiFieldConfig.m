@@ -54,6 +54,7 @@
     [_filterButtonImage release];
     [_filterButtonTitle release];
     [_activityType release];
+    [_calendarConfig release];
     [super dealloc];
 }
 
@@ -67,10 +68,13 @@
             rv.viewConfig = other.viewConfig;
             rv.graphChoice = other.graphChoice;
             rv.calendarConfig = [GCStatsCalendarAggregationConfig configFrom:other.calendarConfig];
+            rv.summaryCumulativeFieldFlag = other.summaryCumulativeFieldFlag;
         }else{
             rv.viewConfig = gcStatsViewConfigUnused;
             rv.viewChoice = gcViewChoiceSummary;
+            rv.graphChoice = gcGraphChoiceBarGraph;
             rv.calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:kCalendarUnitNone];
+            rv.summaryCumulativeFieldFlag = gcFieldFlagSumDistance;
         }
     }
     return rv;
@@ -428,12 +432,15 @@
 }
 
 -(void)nextSummaryCumulativeField{
-    if( self.summaryCumulativeFieldFlag != gcFieldFlagSumDuration ){
+    if( self.summaryCumulativeFieldFlag == gcFieldFlagSumDistance ){
         self.summaryCumulativeFieldFlag = gcFieldFlagSumDuration;
+    }else if( self.summaryCumulativeFieldFlag == gcFieldFlagSumDuration){
+        self.summaryCumulativeFieldFlag = gcFieldFlagAltitudeMeters;
+    }else if( self.summaryCumulativeFieldFlag == gcFieldFlagAltitudeMeters){
+        self.summaryCumulativeFieldFlag = gcFieldFlagSumDistance;
     }else{
         self.summaryCumulativeFieldFlag = gcFieldFlagSumDistance;
     }
-
 }
 
 
@@ -441,7 +448,12 @@
 
 -(GCField*)currentCumulativeSummaryField{
     // Ignore any value other than sumDuration or SumDistance
-    gcFieldFlag which = self.summaryCumulativeFieldFlag == gcFieldFlagSumDuration ? gcFieldFlagSumDuration : gcFieldFlagSumDistance;
+    if( self.summaryCumulativeFieldFlag != gcFieldFlagSumDistance && self.summaryCumulativeFieldFlag != gcFieldFlagSumDuration && self.summaryCumulativeFieldFlag != gcFieldFlagAltitudeMeters){
+        self.summaryCumulativeFieldFlag = gcFieldFlagSumDistance;
+    }
+    
+    gcFieldFlag which = self.summaryCumulativeFieldFlag;
+    
     return [GCField fieldForFlag:which andActivityType:self.activityType];
 }
 @end

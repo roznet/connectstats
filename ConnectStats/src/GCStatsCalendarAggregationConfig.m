@@ -117,6 +117,8 @@ const NSCalendarUnit kCalendarUnitNone = 0;
         rv = @"yearly";
     }else if (self.calendarUnit == kCalendarUnitNone){
         rv = @"none";
+    }else{
+        rv = @"none";
     }
     return rv;
 }

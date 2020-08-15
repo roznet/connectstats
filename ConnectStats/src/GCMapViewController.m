@@ -529,6 +529,12 @@
     [self.implementor setupOverlayAndAnnotations];
 }
 
+-(void)clearAllOverlayAndAnnotations{
+    if( [self.implementor respondsToSelector:@selector(clearAllOverlayAndAnnotations)]){
+        [self.implementor clearAllOverlayAndAnnotations];
+    }
+}
+
 -(void)zoomInOnRoute{
     [self.implementor zoomInOnRoute];
 }

@@ -81,19 +81,6 @@ fit_example.h:#define FIT_EVENT_TYPE_COUNT                                      
 //    gcFieldFlagPower                    "SumDistanceCycling"  HKQuantityTypeIdentifierDistanceCycling
 //    gcFieldFlagWeightedMeanSpeed        "WeightedMeanSpeed"   Calculated
 
-typedef NS_ENUM(NSUInteger, gcAggregatedField) {
-    gcAggregatedSumDistance         ,
-    gcAggregatedSumDuration         ,
-    gcAggregatedWeightedHeartRate   ,
-    gcAggregatedWeightedSpeed       ,
-    gcAggregatedCadence             ,
-    gcAggregatedAltitudeMeters      ,
-    gcAggregatedTennisShots         ,
-    gcAggregatedTennisPower         ,
-    gcAggregatedSumStep             ,
-    gcAggregatedFieldEnd
-};
-
 typedef NS_ENUM(NSUInteger, gcSwimStrokeType) {
     gcSwimStrokeFree        = 0,
     gcSwimStrokeBack        = 1,
@@ -173,5 +160,3 @@ extern NSString * CALC_MAX_DESCENT_SPEED       ;
 extern NSString * CALC_10SEC_SPEED             ;
 extern NSString * CALC_LAP_SCALED_SPEED        ;
 extern NSString * CALC_ACCUMULATED_SPEED       ;
-
-extern gcFieldFlag gcAggregatedFieldToFieldFlag[gcAggregatedFieldEnd];
