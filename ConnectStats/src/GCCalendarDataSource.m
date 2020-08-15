@@ -96,6 +96,10 @@
     [super dealloc];
 }
 
+-(BOOL)extendedDisplay{
+    return [GCAppGlobal configGetBool:CONFIG_CELL_EXTENDED_DISPLAY defaultValue:true];
+}
+
 #pragma mark - GCViewActivityTypeButton
 
 -(BOOL)useColoredIcons{
@@ -520,7 +524,7 @@
     if (_tableDisplay==gcCalendarTableDisplayActivities) {
         if( indexPath.row < _selectedActivities.count ){
             GCActivity * activity = _selectedActivities[indexPath.row];
-            [cell setupSummaryFromActivity:activity rows:3 width:tableView.frame.size.width status:gcViewActivityStatusNone];
+            [cell setupSummaryFromActivity:activity rows:self.extendedDisplay ? 4 : 3 width:tableView.frame.size.width status:gcViewActivityStatusNone];
         }
     }else{
 
@@ -547,10 +551,11 @@
             GCStatsMultiFieldConfig * multiFieldConfig = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
             multiFieldConfig.calendarConfig.calendarUnit = calUnit;
             
+            // Always aggregated with ALL type, when activityTYpe is set the activities themselves are filtered
             [cell setupFromHistoryAggregatedData:holder
                                            index:indexPath.row
                                 multiFieldConfig:multiFieldConfig
-                                 andActivityType:holder.activityType?:GC_TYPE_ALL
+                                 andActivityType:GC_TYPE_ALL
                                            width:tableView.frame.size.width];
         }else{
             [cell setupForRows:0 andCols:0];
@@ -562,7 +567,9 @@
 #pragma mark - Table view delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 58.;
+    NSUInteger rows = self.tableDisplay == gcCalendarTableDisplayActivities && self.extendedDisplay ? 4 : 3;
+        CGFloat rv = [GCViewConfig sizeForNumberOfRows:rows];
+    return rv;
 }
 
 

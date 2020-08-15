@@ -74,6 +74,7 @@
 #define CONFIG_SHOW_PHOTOS              @"config_show_photos"
 #define CONFIG_VERSIONS_SEEN            @"config_versions_seen"
 #define CONFIG_FEATURES_SEEN            @"config_features_seen"
+#define CONFIG_CELL_EXTENDED_DISPLAY    @"config_cell_extended_display"
 #define CONFIG_LAST_REMOTE_STATUS_ID    @"config_last_remote_status_id"
 #define CONFIG_ENABLE_REMOTE_STATUS     @"config_enable_remote_status"
 #define CONFIG_DUPLICATE_CHECK_ON_IMPORT @"config_duplicate_check_on_import"

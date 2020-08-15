@@ -60,7 +60,7 @@ typedef NS_ENUM(NSUInteger, gcCalendarTableDisplay) {
 
 @property (nonatomic,assign) gcCalendarDisplay display;
 @property (nonatomic,assign) gcCalendarTableDisplay tableDisplay;
-
+@property (nonatomic,readonly) BOOL extendedDisplay;
 
 -(void)toggleDisplay;
 -(void)toggleTableDisplay;

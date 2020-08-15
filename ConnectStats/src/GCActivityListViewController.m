@@ -80,8 +80,6 @@ const CGFloat kCellDaySpacing = 2.f;
         self.refreshControl.attributedTitle = nil;
         [self.refreshControl addTarget:self action:@selector(refreshData) forControlEvents:UIControlEventValueChanged];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kNotifySettingsChange object:nil];
-
-        self.extendedDisplay = true;
     }
     return self;
 }
@@ -96,6 +94,10 @@ const CGFloat kCellDaySpacing = 2.f;
     RZRelease(_titleLabel);
 
     RZSuperDealloc;
+}
+
+-(BOOL)extendedDisplay{
+    return [GCAppGlobal configGetBool:CONFIG_CELL_EXTENDED_DISPLAY defaultValue:true];
 }
 
 -(void)deletedActivity{
