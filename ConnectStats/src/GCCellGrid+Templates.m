@@ -424,15 +424,21 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     
     NSDate * date = activity.date;
     NSString * dispname = [activity displayName];
-    if (dispname.length>32) {
-        dispname = [NSString stringWithFormat:@"%@...", [dispname substringToIndex:32]];
+    
+    NSUInteger maxLengh = 32;
+    if( nrows < 4 ){
+        maxLengh = 24;
+    }
+    
+    if (dispname.length>maxLengh) {
+        dispname = [NSString stringWithFormat:@"%@...", [dispname substringToIndex:maxLengh]];
     }
     if (date == nil) {
         dispname = NSLocalizedString(@"Date Error",@"Services");
         date =[NSDate date];
         RZLog(RZLogInfo, @"Invalid Date for %@", activity);
     }
-    
+
     NSArray<NSAttributedString*>*dateAttributed = @[
         [NSAttributedString attributedString:[GCViewConfig attribute16] withString:[date dayFormat]],
         [NSAttributedString attributedString:[GCViewConfig attribute14] withString:[date dateShortFormat]],
@@ -446,7 +452,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
             [NSAttributedString attributedString:[[GCViewConfig attribute16] viewConfigAttributeDisabled] withString:[date dayFormat]],
             [NSAttributedString attributedString:[[GCViewConfig attribute14] viewConfigAttributeDisabled] withString:[date dateShortFormat]],
             [NSAttributedString attributedString:[[GCViewConfig attribute14] viewConfigAttributeDisabled] withString:[date timeShortFormat]],
-            [NSAttributedString attributedString:[[GCViewConfig attribute14Highlighted] viewConfigAttributeDisabled]  withString:dispname?:NSLocalizedString(@"Error",@"Fitness")],
+            [NSAttributedString attributedString:[[GCViewConfig attribute16Highlighted] viewConfigAttributeDisabled]  withString:dispname?:NSLocalizedString(@"Error",@"Fitness")],
         ];
     }else{
         [GCViewConfig setupGradient:self ForActivity:activity];
@@ -465,7 +471,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         for(NSUInteger row = 0; row < nrows; row++){
             [self labelForRow:row andCol:0].attributedText = dateAttributed[row];
         }
-        
+        // overflow the bottom line with the name
+        [self configForRow:nrows-1 andCol:0].horizontalOverflow = YES;
         if( nrows < dateAttributed.count){
             // if too big put the date on the right as before
             [self labelForRow:nrows-1 andCol:0].attributedText = dateAttributed[nrows];
@@ -474,12 +481,16 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
             for(NSUInteger fieldIdx = 0; fieldIdx < 4; fieldIdx++){
                 GCNumberWithUnit * nu = [activity numberWithUnitForField:fields[fieldIdx]];
                 NSUInteger col = fieldIdx < 2 ? 1 : 2;
-                NSDictionary * attr = (col == 1 || row < 1) ? [RZViewConfig attribute14] : [RZViewConfig attribute14Gray];
+                NSDictionary * attr = (col == 1 || row < 1) ? [RZViewConfig attribute16] : [RZViewConfig attribute12Gray];
                 if( skipAlways ){
                     attr = [attr viewConfigAttributeDisabled];
                 }
-                NSAttributedString * at = [NSAttributedString attributedString:attr withString:nu.formatDouble];
-                [self labelForRow:row andCol:col].attributedText = at;
+                if( nu ){
+                    NSAttributedString * at = [NSAttributedString attributedString:attr withString:nu.formatDouble];
+                    [self labelForRow:row andCol:col].attributedText = at;
+                }else{
+                    [self labelForRow:row andCol:col].attributedText = nil;
+                }
                 row++;
                 if( row >= nrows){
                     row = 1;

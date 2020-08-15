@@ -784,6 +784,11 @@
     cell = [GCCellGrid gridCell:nil];
     [cell setupSummaryFromActivity:act rows:nrows width:320. status:gcViewActivityStatusNone];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:@"Swim Activity Base"]];
+
+    cell = [GCCellGrid gridCell:nil];
+    [cell setupSummaryFromActivity:act rows:nrowsExtended width:320. status:gcViewActivityStatusNone];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"Swim Activity Base Ext"]];
+
     cell = [GCCellGrid gridCell:nil];
     [cell setupDetailHeader:act];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Detail"]];

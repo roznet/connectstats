@@ -153,6 +153,12 @@
             nu = nil;
         }
 
+        if( self.fields[i].fieldFlag != gcFieldFlagNone && ( ( self.fields[i].fieldFlag & act.flags ) == 0) ){
+            if( nu != nil){
+                NSLog(@"counting missing");
+            }
+        }
+        
         if( nu ){
             GCUnit * unit = self.units[i];
             data[i] = [unit convertDouble:nu.value fromUnit:nu.unit];
