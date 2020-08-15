@@ -745,14 +745,29 @@
 
     NSMutableArray * activity = [NSMutableArray array];
 
+    NSUInteger nrows = 3;
+    CGFloat height = [GCViewConfig sizeForNumberOfRows:nrows];
+
+    NSUInteger nrowsExtended = 4;
+    CGFloat heightExtended = [GCViewConfig sizeForNumberOfRows:nrowsExtended];
 
     act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_837769405.db" ]];
     cell = [GCCellGrid gridCell:nil];
-    [cell setupSummaryFromActivity:act width:320. status:gcViewActivityStatusNone];
-    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Base"]];
+    [cell setupSummaryFromActivity:act rows:nrows width:320. status:gcViewActivityStatusNone];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:@"Running Activity Base"]];
+    
     cell = [GCCellGrid gridCell:nil];
-    [cell setupSummaryFromActivity:act width:320. status:gcViewActivityStatusCompare];
-    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Compare"]];
+    [cell setupSummaryFromActivity:act rows:nrowsExtended width:320. status:gcViewActivityStatusNone];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"Running Activity Base Ext"]];
+    
+    cell = [GCCellGrid gridCell:nil];
+    [cell setupSummaryFromActivity:act rows:nrows width:320. status:gcViewActivityStatusCompare];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:@"Running Activity Compare"]];
+    
+    cell = [GCCellGrid gridCell:nil];
+    [cell setupSummaryFromActivity:act rows:nrowsExtended width:320. status:gcViewActivityStatusCompare];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"Running Activity Compare Ext"]];
+    
     cell = [GCCellGrid gridCell:nil];
     [cell setupDetailHeader:act];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Detail"]];
@@ -767,8 +782,8 @@
 
     act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_swimming_439303647.db" ]];
     cell = [GCCellGrid gridCell:nil];
-    [cell setupSummaryFromActivity:act width:320. status:gcViewActivityStatusNone];
-    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Base"]];
+    [cell setupSummaryFromActivity:act rows:nrows width:320. status:gcViewActivityStatusNone];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:@"Swim Activity Base"]];
     cell = [GCCellGrid gridCell:nil];
     [cell setupDetailHeader:act];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Detail"]];
@@ -784,8 +799,13 @@
     act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_cycling_940863203.db" ]];
 
     cell = [GCCellGrid gridCell:nil];
-    [cell setupSummaryFromActivity:act width:320. status:gcViewActivityStatusNone];
-    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Base"]];
+    [cell setupSummaryFromActivity:act rows:nrows width:320. status:gcViewActivityStatusNone];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:@"Cycle Activity Base"]];
+
+    cell = [GCCellGrid gridCell:nil];
+    [cell setupSummaryFromActivity:act rows:nrowsExtended width:320. status:gcViewActivityStatusNone];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"Cycle Activity Base Ext"]];
+
     cell = [GCCellGrid gridCell:nil];
     [cell setupDetailHeader:act];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Detail"]];

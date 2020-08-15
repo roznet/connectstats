@@ -290,9 +290,10 @@
         XCTAssertTrue([[holder date] isSameCalendarDay:[[e_avg dataPointAtIndex:i] date] calendar:cal], @"same date avg %@ %@", [holder date], [[e_avg dataPointAtIndex:i] date] );
         GCField * f = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING];
         double x = 1.;
-        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedAvg].value, [e_avg dataPointAtIndex:i].y_data*x, 1e-6, @"Same Average");
-        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedSum].value, [e_sum dataPointAtIndex:i].y_data*x, 1e-6, @"Same sum");
-        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedMax].value, [e_max dataPointAtIndex:i].y_data*x, 1e-6, @"Same max");
+        // number with unit on holder report in display unit (km)
+        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedAvg].value, [e_avg dataPointAtIndex:i].y_data*x/1000., 1e-6, @"Same Average");
+        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedSum].value, [e_sum dataPointAtIndex:i].y_data*x/1000., 1e-6, @"Same sum");
+        XCTAssertEqualWithAccuracy([holder numberWithUnit:f statType:gcAggregatedMax].value, [e_max dataPointAtIndex:i].y_data*x/1000., 1e-6, @"Same max");
         
         f = [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:GC_TYPE_RUNNING];
         x = 2.;
@@ -338,7 +339,7 @@
     //    Oct -> Cnt 2, Sum 3.2+2.1=5.3
     //    Sep -> Cnt 1, Sum 1.2
 
-    NSArray * cutOffExpected = @[ @[ @"2012-11-01T00:00:00.000Z", @(0.2)], @[ @"2012-10-01T00:00:00.000Z", @(5.3)], @[@"2012-09-01T00:00:00.000Z", @(1.2)]];
+    NSArray * cutOffExpected = @[ @[ @"2012-11-01T00:00:00.000Z", @(0.2/1000.)], @[ @"2012-10-01T00:00:00.000Z", @(5.3/1000.)], @[@"2012-09-01T00:00:00.000Z", @(1.2/1000.)]];
     NSUInteger i=0;
     for (NSArray * one in cutOffExpected) {
         NSDate * date = [NSDate dateForRFC3339DateTimeString:one[0]];

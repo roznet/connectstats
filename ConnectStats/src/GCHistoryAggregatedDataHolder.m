@@ -257,11 +257,19 @@
     }
     if(f*gcAggregatedTypeEnd+s<gcAggregatedTypeEnd*self.fields.count){
         val = _stats[f*gcAggregatedTypeEnd+s];
-        unit = self.units[f];
-        if (![displayUnit isEqualToUnit:unit]) {
-            val = [displayUnit convertDouble:val fromUnit:unit];
+        switch (s) {
+            case gcAggregatedCnt:
+                return [GCNumberWithUnit numberWithUnit:[GCUnit dimensionless] andValue:val];
+            default:
+            {
+                unit = self.units[f];
+                if (![displayUnit isEqualToUnit:unit]) {
+                    val = [displayUnit convertDouble:val fromUnit:unit];
+                }
+                return [GCNumberWithUnit numberWithUnit:displayUnit andValue:val];
+
+            }
         }
-        return [GCNumberWithUnit numberWithUnit:displayUnit andValue:val];
     }else{
         return nil;
     }
