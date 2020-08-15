@@ -75,12 +75,13 @@
 #define GC_SETTINGS_SHOW_DOWNLOAD   7
 #define GC_SETTINGS_INLINE_GRADIENT 8
 #define GC_SETTINGS_LANGUAGE        9
-#define GC_SETTINGS_ADVANCED_END    10
+#define GC_SETTINGS_EXTENDED_DISPAY 10
+#define GC_SETTINGS_ADVANCED_END    11
 
 
 //disabled
-#define GC_SETTINGS_NEWAPI          10
-#define GC_SETTINGS_RELOAD          11
+#define GC_SETTINGS_NEWAPI          1000
+#define GC_SETTINGS_RELOAD          1001
 
 #define GC_SETTINGS_HELP            0
 #define GC_SETTINGS_BUGREPORT       1
@@ -181,11 +182,12 @@
                                                               @( GC_SETTINGS_INLINE_GRAPHS   ),
                                                               @( GC_SETTINGS_INLINE_GRADIENT ),
                                                               @( GC_SETTINGS_LAP_OVERLAY     ),
-                                                              @( GC_SETTINGS_MAP             ),
                                                               @( GC_SETTINGS_FASTMAP         ),
                                                               @( GC_SETTINGS_CONTINUE_ERROR  ),
                                                               @( GC_SETTINGS_ENABLE_DERIVED  ),
-                                                              @( GC_SETTINGS_SHOW_DOWNLOAD  ),
+                                                              @( GC_SETTINGS_EXTENDED_DISPAY ),
+                                                              @( GC_SETTINGS_SHOW_DOWNLOAD   ),
+                                                              @( GC_SETTINGS_MAP             ),
                                                               @( GC_SETTINGS_FONT_STYLE) ]];
     }
 
@@ -448,6 +450,18 @@
                 [gridcell labelForRow:0 andCol:1].attributedText = current;
                 rv = gridcell;
                 break;
+            }
+            case GC_SETTINGS_EXTENDED_DISPAY:
+            {
+                switchcell = [GCCellEntrySwitch switchCell:tableView];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                            withString:NSLocalizedString(@"Activity List shows more Data",@"Settings")];
+                rv = switchcell;
+                [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_EXTENDED_DISPAY)];
+                switchcell.entryFieldDelegate = self;
+                (switchcell.toggle).on = [GCAppGlobal configGetBool:CONFIG_CELL_EXTENDED_DISPLAY defaultValue:true];
+                break;
+
             }
             case GC_SETTINGS_SHOW_DOWNLOAD:
             {
@@ -781,6 +795,10 @@
             break;
         case GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_SHOW_DOWNLOAD):
             [GCAppGlobal configSet:CONFIG_SHOW_DOWNLOAD_ICON boolVal:[cell on]];
+            [GCAppGlobal saveSettings];
+            break;
+        case GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_EXTENDED_DISPAY):
+            [GCAppGlobal configSet:CONFIG_CELL_EXTENDED_DISPLAY boolVal:[cell on]];
             [GCAppGlobal saveSettings];
             break;
         case GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_LAP_OVERLAY):
