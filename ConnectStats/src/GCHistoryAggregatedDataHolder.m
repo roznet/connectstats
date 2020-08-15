@@ -103,6 +103,8 @@
         free(_flags);
     }
     [_date release];
+    [_fields release];
+    [_units release];
     [super dealloc];
 }
 
@@ -254,9 +256,9 @@
     GCUnit * displayUnit = field.unit;
     displayUnit = [displayUnit unitForGlobalSystem];
     GCUnit * unit = nil;
-    size_t f = self.fields.count;
+    size_t f = 0;
     
-    for( f = 0; f < self.fields.count; f++){
+    for( ; f < self.fields.count; f++){
         if( [field matchesField:self.fields[f]] ){
             break;
         }

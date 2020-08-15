@@ -64,7 +64,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     GCCellGrid * cell = [GCCellGrid gridCell:tableView];
     [cell setupForRows:1 andCols:2];
-    [cell labelForRow:0 andCol:0].text = @"Hello";
+    [cell labelForRow:0 andCol:0].text = nil;
     
     
     return cell;

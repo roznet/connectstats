@@ -76,6 +76,8 @@
     [_aggregatedStats release];
     [_activityType release];
     [_refOrNil release];
+    [_fields release];
+    [_foundFields release];
     [super dealloc];
 }
 

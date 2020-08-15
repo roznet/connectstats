@@ -54,6 +54,7 @@
     [_filterButtonImage release];
     [_filterButtonTitle release];
     [_activityType release];
+    [_calendarConfig release];
     [super dealloc];
 }
 

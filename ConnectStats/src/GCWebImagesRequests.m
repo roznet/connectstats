@@ -54,6 +54,8 @@ static BOOL gcDownloadPhotos = false;
 -(void)dealloc{
     [_activity release];
     [_mapViewController release];
+    [_foundAssets release];
+
     [super dealloc];
 }
 

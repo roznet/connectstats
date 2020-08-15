@@ -55,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)aggregateEnd:(nullable NSDate*)adate;
 
 -(BOOL)hasField:(GCField*)field;
--(GCNumberWithUnit*)numberWithUnit:(GCField*)field statType:(gcAggregatedType)tp;
+-(nullable GCNumberWithUnit*)numberWithUnit:(GCField*)field statType:(gcAggregatedType)tp;
 -(NSArray<GCField*>*)availableFields;
 
 @end
