@@ -368,12 +368,19 @@
     GCActivitySearch * search = nil;
     GCActivity * one_true = [[[GCActivity alloc] init] autorelease];
     one_true.activityId = @"1111";
+    one_true.date = [NSDate date];
+    [one_true changeActivityType:[GCActivityType running]];
+    
     GCActivity * one_false =[[[GCActivity alloc] init] autorelease];
+    one_false.activityId = @"0000";
+    one_false.date = [NSDate date];
+    [one_false changeActivityType:[GCActivityType running]];
+
     one_false.activityId = @"0000";
     [one_true setSumDistanceCompat:20000.];
     [one_false setSumDistanceCompat:2000.];
     
-    for (NSString * st in [NSArray arrayWithObjects:@"distance > 10",@"distance >10",@"distance>10",@"distance> 10", nil]) {
+    for (NSString * st in [NSArray arrayWithObjects:@"distance > 10km",@"distance >10 km",@"distance>10km",@"distance> 10", nil]) {
         search = [GCActivitySearch activitySearchWithString:st];
         XCTAssertTrue([search match:one_true], @"%@(20)",st);
         XCTAssertFalse([search match:one_false], @"%@(20)",st);

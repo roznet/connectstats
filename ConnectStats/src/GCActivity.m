@@ -464,16 +464,20 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 -(void)setSummaryField:(gcFieldFlag)fieldFlag inStoreUnitValue:(double)value{
     switch (fieldFlag) {
         case gcFieldFlagWeightedMeanHeartRate:
-             self.weightedMeanHeartRate = value;
+            self.weightedMeanHeartRate = value;
+            self.flags |= fieldFlag;
             break;
         case gcFieldFlagWeightedMeanSpeed:
             self.weightedMeanSpeed = value;
+            self.flags |= fieldFlag;
             break;
         case gcFieldFlagSumDuration:
             self.sumDuration = value;
+            self.flags |= fieldFlag;
             break;
         case gcFieldFlagSumDistance:
-            self.sumDistance = value;;
+            self.sumDistance = value;
+            self.flags |= fieldFlag;
             break;
         default:
             break;

@@ -31,6 +31,10 @@
 #import "GCActivity+Series.h"
 #import "GCActivity+TrackTransform.h"
 
+#if TARGET_IPHONE_SIMULATOR
+//#define CS_DEBUG_BEST_ROLLING 1
+#endif
+
 @implementation GCActivity (BestRolling)
 
 -(GCStatsDataSerieWithUnit*)calculatedRollingBestForSpeed:(GCCalculatedCachedTrackInfo *)info{
@@ -62,7 +66,7 @@
 
     // Fill for each 10 meter with average seconds of surrounding points
     GCStatsDataSerie * filled = [serie.serie filledSerieForUnit:unitstride];
-    #if TARGET_IPHONE_SIMULATOR
+    #if CS_DEBUG_BEST_ROLLING
             [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_raw_%@.csv", self.activityId]
                                               atomically:YES encoding:NSUTF8StringEncoding error:nil];
             [[filled asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_filled_%@.csv", self.activityId]
@@ -80,7 +84,7 @@
     info.processedPointsCount = serie.count;
     serie.serie = [diffSerie movingBestByUnitOf:unitstride fillMethod:gcStatsLinear select:select statistic:gcStatsSum];
 
-#if TARGET_IPHONE_SIMULATOR
+#if CS_DEBUG_BEST_ROLLING
     // rescale by unit of 10 (either every 10 seconds or every 10 meters.
     // For debugging
     [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_best_%@.csv", self.activityId]
@@ -107,7 +111,7 @@
         }
     }
     serie.unit = [GCUnit mps];
-    #if TARGET_IPHONE_SIMULATOR
+    #if CS_DEBUG_BEST_ROLLING
             // rescale by unit of 10 (either every 10 seconds or every 10 meters.
             // For debugging
     [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_finalmps_%@.csv", self.activityId]
@@ -121,7 +125,7 @@
         [serie.serie dataPointAtIndex:0].y_data = [serie.serie dataPointAtIndex:1].y_data;
     }
 
-    #if TARGET_IPHONE_SIMULATOR
+    #if CS_DEBUG_BEST_ROLLING
             // rescale by unit of 10 (either every 10 seconds or every 10 meters.
             // For debugging
     [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_finalcorrected_%@.csv", self.activityId]
@@ -204,7 +208,7 @@
     // otherwise mps interpolated by distance will be messed up
     [serie convertToUnit:[GCUnit minperkm]];
     
-    #if TARGET_IPHONE_SIMULATOR
+    #if CS_DEBUG_BEST_ROLLING
     [[serie.serie asCSVString:false] writeToFile:[RZFileOrganizer writeableFilePathWithFormat:@"s_simpleraw_%@.csv", self.activityId]
                                               atomically:YES encoding:NSUTF8StringEncoding error:nil];
     #endif
