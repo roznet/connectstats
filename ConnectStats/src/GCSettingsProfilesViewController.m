@@ -87,7 +87,14 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [GCViewConfig setupViewController:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notify:) name:kNotifyOrganizerReset object:nil];
 }
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -178,11 +185,6 @@
             [cell setupForRows:1 andCols:1];
             NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Force Download Details",@"Profiles")
                                                                           attributes:[GCViewConfig attributeBold16]] autorelease];
-            NSDictionary * summary = [[GCAppGlobal organizer] serviceSummaryMissingTracks];
-            for (NSString * serviceName in summary) {
-                NSDictionary *serviceSummary = summary[serviceName];
-                RZLog( RZLogInfo, @"%@: missing details %@/%@ activities [From: %@ to %@]", serviceName, serviceSummary[@"missingTracks"], serviceSummary[@"count"], serviceSummary[@"earliest"], serviceSummary[@"latest"]);
-            }
             [cell labelForRow:0 andCol:0].attributedText = title;
             [GCViewConfig setupGradientForDetails:cell];
         }
@@ -224,6 +226,19 @@
     }
 }
 
+-(void)notify:(NSNotification*)notification{
+    if( [notification.name isEqualToString:kNotifyOrganizerReset] ){
+        RZLog(RZLogInfo,@"Organizer Reset");
+        NSDictionary * summary = [[GCAppGlobal organizer] serviceSummaryMissingTracks];
+        for (NSString * serviceName in summary) {
+            NSDictionary *serviceSummary = summary[serviceName];
+            RZLog( RZLogInfo, @"%@: missing details %@/%@ activities [From: %@ to %@]", serviceName, serviceSummary[@"missingTracks"], serviceSummary[@"count"], serviceSummary[@"earliest"], serviceSummary[@"latest"]);
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self.tableView reloadData];
+        });
+    }
+}
 #pragma mark - UIActionSheet Delegate
 
 -(void)presentActionSheet{

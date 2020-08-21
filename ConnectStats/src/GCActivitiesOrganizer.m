@@ -390,9 +390,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     _currentActivityIndex = 0;
     dispatch_async([GCAppGlobal worker],^(){
         [self loadFromDb];
+        [self postNotificationReset];
     });
-
-    [self postNotificationReset];
 }
 
 #pragma mark - Register new activities
