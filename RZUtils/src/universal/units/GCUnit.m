@@ -312,7 +312,7 @@ void registerUnits(){
         registerLinear( @[ @"gram",     @"Gram",      @""],    @"kilogram", 0.001, 0.0);
 
         // temperature
-        registerLinea0( @[ @"celcius",    @"°Celsius",    @"°C"], @"celsius", 1.8,      32.0);
+        registerLinea0( @[ @"celcius",    @"°Celsius",    @"°C"], @"celsius", 1.,        0.0);
         registerLinea0( @[ @"celsius",    @"°Celsius",    @"°C"], @"celsius", 1.,        0.0);
         registerLinea0( @[ @"fahrenheit", @"°Fahrenheit", @"°F"], @"celsius", 5./9.,     -32.*5./9.);
 
