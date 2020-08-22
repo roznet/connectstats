@@ -28,6 +28,8 @@
 #import "GCService.h"
 #import "GCAppGlobal.h"
 
+NSUInteger kDownloadTrackPointCount = 7;
+
 @interface GCActivitiesOrganizerListRegister ()
 @property (nonatomic,retain) NSArray<GCActivity*>*activities;
 @property (nonatomic,assign) NSUInteger reachedExisting;
@@ -35,6 +37,7 @@
 @property (nonatomic,retain) GCService * service;
 @property (nonatomic,assign) BOOL isFirst;
 @property (nonatomic,assign) BOOL syncDeleteWithPreferred;
+@property (nonatomic,assign) NSUInteger loadTracks;
 
 @end
 
@@ -47,6 +50,7 @@
         rv.service = service;
         rv.isFirst = isFirst;
         rv.syncDeleteWithPreferred = [[GCAppGlobal profile] configGetBool:CONFIG_SYNC_WITH_PREFERRED defaultValue:true];
+        rv.loadTracks = isFirst?kDownloadTrackPointCount:0;
     }
     return rv;
 }
@@ -85,6 +89,7 @@
     NSUInteger newActivitiesCount = 0;
     NSUInteger actuallyAdded = 0;
     NSUInteger skipped = 0;
+    NSUInteger trackpoints = 0;
     if (self.activities) {
         for (GCActivity * activity in _activities) {
             [existingInService addObject:activity.activityId];
@@ -100,9 +105,16 @@
             }else{
                 skipped += 1;
             }
+            if( self.loadTracks > 0 && ! knownDuplicate){
+                if( activity.trackPointsRequireDownload ){
+                    [activity trackpoints];
+                    trackpoints+=1;
+                    self.loadTracks--;
+                }
+            }
         }
         if( self.activities.count > 0){
-            RZLog(RZLogInfo, @"Parsed %@ [%@-%@]=%lu new=%lu added=%lu existing=%lu newtotal=%lu",
+            RZLog(RZLogInfo, @"Parsed %@ [%@-%@]=%lu new=%lu added=%lu existing=%lu newtotal=%lu details=%lu",
                   self.service.displayName,
                   [self.activities.firstObject activityId],
                   [self.activities.lastObject activityId],
@@ -110,7 +122,8 @@
                   (unsigned long)newActivitiesCount,
                   (unsigned long)actuallyAdded,
                   (unsigned long)self.reachedExisting,
-                  (unsigned long)[organizer countOfActivities]
+                  (unsigned long)[organizer countOfActivities],
+                  (unsigned long)trackpoints
                   );
         }else{
             RZLog(RZLogInfo, @"Parsed %@ [empty] existing total=%lu",
