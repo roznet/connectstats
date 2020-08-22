@@ -1659,10 +1659,17 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
     
     for(size_t v_idx = 0; v_idx < range; v_idx++){
         double v_x = first_x + unit*v_idx;
+        // Find the two index of point with value surrounding v_x
         while( to_p != nil && to_p.x_data < v_x){
-            p_idx ++;
-            from_p = self.dataPoints[p_idx];
-            to_p = p_idx + 1 < n ? self.dataPoints[p_idx+1] : nil;
+            do {
+                p_idx ++;
+                from_p = self.dataPoints[p_idx];
+            } while (!from_p.hasValue && p_idx < n);
+            NSUInteger n_idx = p_idx;
+            do {
+                n_idx++;
+                to_p = n_idx < n ? self.dataPoints[n_idx] : nil;
+            } while (to_p && !to_p.hasValue);
         }
         // If we have next point and x_data are not equal (otherwise div by 0...)
         // If multiple points with the same x (x_data equal), then the
