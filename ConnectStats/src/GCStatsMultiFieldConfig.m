@@ -187,8 +187,9 @@
         case gcViewChoiceFields:
         {
             self.viewChoice = gcViewChoiceCalendar;
-            self.viewConfig = gcStatsViewConfigAll;
+            self.viewConfig = gcStatsViewConfigLast6M;
             self.calendarConfig.calendarUnit = NSCalendarUnitWeekOfYear;
+            self.calendarConfig.periodType = gcPeriodCalendar;
             self.graphChoice = gcGraphChoiceBarGraph;
             break;
         }
@@ -244,32 +245,35 @@
         case gcViewChoiceCalendar:
         { // View monthly, weekly or yearly aggregated stats
             // :          all, last3m, last6m, last1y, todate
-            // viewConfig all, last3m, last6m, last1y, all
+            // viewConfig all, last3m, last6m, last1y, 1m:last1y|1w:last6m
             // periodType cal, cal,    cal,    cal,    todate
             
             gcStatsViewConfig start = gcStatsViewConfigUnused;
+            gcStatsViewConfig todate = gcStatsViewConfigUnused;
             NSCalendarUnit calUnit = self.calendarConfig.calendarUnit;
             if (calUnit == NSCalendarUnitWeekOfYear) {
                 start = gcStatsViewConfigLast3M;
+                todate = gcStatsViewConfigLast6M;
             }else if(calUnit == NSCalendarUnitMonth){
                 start = gcStatsViewConfigLast6M;
+                todate = gcStatsViewConfigLast1Y;
             }
             
             // if all and todate: end of the cycle, start again
             // don't change viewConfig as remains all, but switch back to calendar period
             // otherwise start at next one.
-            if (self.viewConfig==gcStatsViewConfigAll) {
-                if( self.calendarConfig.periodType == gcPeriodToDate ){
-                    self.calendarConfig.periodType = gcPeriodCalendar;
-                    rv = true;
-                }else{
-                    self.viewConfig = start;
-                }
+            if (self.calendarConfig.periodType == gcPeriodToDate) {
+                self.calendarConfig.periodType = gcPeriodCalendar;
+                self.viewConfig = gcStatsViewConfigAll;
+                rv = true;
+            }else if( self.viewConfig == gcStatsViewConfigAll){
+                self.viewConfig = start;
             }else{
                 self.viewConfig++;
             }
+            // When reach unused, go to the todate config
             if (self.viewConfig >= gcStatsViewConfigUnused) {
-                self.viewConfig = gcStatsViewConfigAll;
+                self.viewConfig = todate;
                 self.calendarConfig.periodType = gcPeriodToDate;
             }
             break;
@@ -321,21 +325,25 @@
     }else if (self.viewChoice==gcViewChoiceSummary){
         image = nil;
     }else{
-        switch (self.viewConfig) {
-            case gcStatsViewConfigLast3M:
-                image = [GCViewIcons navigationIconFor:gcIconNavQuarterly];
-                break;
-            case gcStatsViewConfigLast6M:
-                image = [GCViewIcons navigationIconFor:gcIconNavSemiAnnually];
-                break;
-            case gcStatsViewConfigLast1Y:
-                image = [GCViewIcons navigationIconFor:gcIconNavYearly];
-                break;
-            case gcStatsViewConfigAll:
-            case gcStatsViewConfigUnused:
-                image = nil;//[GCViewIcons navigationIconFor:gcIconNavAggregated];
-                break;
-
+        if( self.calendarConfig.periodType == gcPeriodToDate){
+            image = nil;
+        }else{
+            switch (self.viewConfig) {
+                case gcStatsViewConfigLast3M:
+                    image = [GCViewIcons navigationIconFor:gcIconNavQuarterly];
+                    break;
+                case gcStatsViewConfigLast6M:
+                    image = [GCViewIcons navigationIconFor:gcIconNavSemiAnnually];
+                    break;
+                case gcStatsViewConfigLast1Y:
+                    image = [GCViewIcons navigationIconFor:gcIconNavYearly];
+                    break;
+                case gcStatsViewConfigAll:
+                case gcStatsViewConfigUnused:
+                    image = nil;//[GCViewIcons navigationIconFor:gcIconNavAggregated];
+                    break;
+                    
+            }
         }
     }
     NSString * calTitle = NSLocalizedString(@"All", @"Button Calendar");
