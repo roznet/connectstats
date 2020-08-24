@@ -1331,10 +1331,4 @@
 }
 
 
--(void)testSingle{
-    NSString * fp = [RZFileOrganizer writeableFilePath:@"track_cs_16557.fit"];
-    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"DummyTestId" fitFilePath:fp startTime:nil]);
-    NSLog(@"%@", fitAct );
-
-}
 @end

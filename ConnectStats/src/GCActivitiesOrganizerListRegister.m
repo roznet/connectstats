@@ -28,7 +28,7 @@
 #import "GCService.h"
 #import "GCAppGlobal.h"
 
-NSUInteger kDownloadTrackPointCount = 7;
+NSUInteger kDownloadTrackPointCount = 5;
 
 @interface GCActivitiesOrganizerListRegister ()
 @property (nonatomic,retain) NSArray<GCActivity*>*activities;

@@ -157,7 +157,7 @@
 
         if( self.fields[i].fieldFlag != gcFieldFlagNone && ( ( self.fields[i].fieldFlag & act.flags ) == 0) ){
             if( nu != nil){
-                NSLog(@"counting missing");
+                RZLog(RZLogInfo, @"counting missing %@ %@ %@", act, self.fields[i], nu);
             }
         }
         
@@ -165,7 +165,7 @@
             GCUnit * unit = self.units[i];
             data[i] = [unit convertDouble:nu.value fromUnit:nu.unit];
             if( isnan(data[i])){
-                NSLog(@"%@ %@ %@", act, nu, @([unit convertDouble:nu.value fromUnit:nu.unit]));
+                RZLog(RZLogInfo, @"%@ %@ %@ %@", act, self.fields[i], nu, @([unit convertDouble:nu.value fromUnit:nu.unit]));
             }
             hasField[i] = true;
         }else{

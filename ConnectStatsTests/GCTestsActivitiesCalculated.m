@@ -149,5 +149,37 @@
 
 }
 
+-(void)disabletestOnWriteableFile{
+    NSArray * l = @[
+        /*@"1707802.fit",
+        @"1711614.fit",
+        @"1711615.fit",
+        @"1711616.fit",
+        @"1711617.fit",
+        @"1711618.fit",
+        @"1711619.fit",
+        @"1711621.fit",
+        @"1711622.fit",
+    
+    @"1621653.fit",
+    @"1621656.fit",
+    @"1664378.fit",
+    @"1664381.fit",
+    @"1666141.fit",
+    @"1698022.fit",*/
+    
+    @"1621642.fit",
+        @"1726676.fit"
+    ];
+    for (NSString * one in l) {
+        NSString * fp = [RZFileOrganizer writeableFilePath:one];
+        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:@"DummyTestId" fitFilePath:fp startTime:nil]);
+        NSLog(@"%@", fitAct );
+        GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:fitAct.activityType];
+        GCCalculatedCachedTrackInfo * info = [GCCalculatedCachedTrackInfo infoForField:field.correspondingBestRollingField];
+        GCStatsDataSerieWithUnit * serieU = [fitAct calculatedRollingBest:info];
+        NSLog(@"%@", serieU);
+    }
+}
 
 @end
