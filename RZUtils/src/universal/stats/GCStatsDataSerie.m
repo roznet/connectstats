@@ -1663,8 +1663,10 @@ gcStatsRange maxRangeXOnly( gcStatsRange range1, gcStatsRange range2){
         while( to_p != nil && to_p.x_data < v_x){
             do {
                 p_idx ++;
-                from_p = self.dataPoints[p_idx];
-            } while (!from_p.hasValue && p_idx < n);
+                if( p_idx < n && self.dataPoints[p_idx].hasValue){
+                    from_p =  self.dataPoints[p_idx] ;
+                }
+            } while (p_idx < n && !self.dataPoints[p_idx].hasValue );
             NSUInteger n_idx = p_idx;
             do {
                 n_idx++;

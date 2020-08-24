@@ -1083,6 +1083,17 @@
     rv = [serie summedSerieByUnit:3. fillMethod:gcStatsZero];
     expected = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @1.,@20.,  @4.,@10.,  @7.,@0., @10.,@40.]];
     checkSame(rv, expected);
+    
+    serie = [GCStatsDataSerie dataSerieWithPoints:@[ [GCStatsDataPoint dataPointWithX:0 andY:1],
+                                             [GCStatsDataPointNoValue dataPointWithX:2 andY:0],
+                                             [GCStatsDataPointNoValue dataPointWithX:5 andY:0],
+                                             [GCStatsDataPointNoValue dataPointWithX:10 andY:0],
+                                             [GCStatsDataPointNoValue dataPointWithX:11 andY:0]
+    ]];
+    rv = [serie filledSerieForUnit:5.];
+    expected = [GCStatsDataSerie dataSerieWithArrayOfDouble:@[ @0.,@1.,  @5.,@1.,  @10.,@1.]];
+    checkSame(rv, expected);
+
 }
 
 -(void)testBestRolling{
