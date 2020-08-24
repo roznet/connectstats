@@ -403,12 +403,27 @@ static BOOL kDerivedEnabled = true;
 
 #pragma mark - rebuild
 
--(NSArray<GCDerivedDataSerie*>*)validDerivedSeriesForActivity:(GCActivity*)act type:(gcDerivedType)type andPeriod:(gcDerivedPeriod)period{
-    return @[
-        [self derivedDataSerie:type field:[GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType] period:period forDate:act.date],
-        [self derivedDataSerie:type field:[GCField fieldForFlag:gcFieldFlagPower andActivityType:act.activityType] period:period forDate:act.date],
-        [self derivedDataSerie:type field:[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType] period:period forDate:act.date],
+-(NSArray<GCField*>*)fieldsForActivity:(GCActivity*)activity{
+    NSArray<GCField*>*fields = @[ [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:activity.activityType],
+                                  [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activity.activityType],
+                                  [GCField fieldForFlag:gcFieldFlagPower andActivityType:activity.activityType],
     ];
+    NSMutableArray * rv = [NSMutableArray array];
+    for (GCField * field in fields) {
+        if( [activity hasField:field] ){
+            [rv addObject:field];
+        }
+    }
+    return rv;
+}
+
+-(NSArray<GCDerivedDataSerie*>*)validDerivedSeriesForActivity:(GCActivity*)act type:(gcDerivedType)type andPeriod:(gcDerivedPeriod)period{
+    NSArray<GCField*>*fields = [self fieldsForActivity:act];
+    NSMutableArray * rv = [NSMutableArray array];
+    for (GCField * field in fields) {
+        [rv addObject:[self derivedDataSerie:type field:field period:period forDate:act.date]];
+    }
+    return rv;
 }
 
 -(void)clearDataForSerie:(GCDerivedDataSerie*)serie{
@@ -760,6 +775,7 @@ static BOOL kDerivedEnabled = true;
     [self processActivities:activities rebuild:nil];
 }
 
+
 -(void)processActivities:(NSArray<GCActivity*>*)activities rebuild:(GCActivity*)rebuildAct{
     NSMutableArray<GCDerivedQueueElement*> * toProcess = [NSMutableArray array];
     
@@ -773,10 +789,7 @@ static BOOL kDerivedEnabled = true;
             if ([activity.activityType isEqualToString:GC_TYPE_RUNNING] || [activity.activityType isEqualToString:GC_TYPE_CYCLING]){
                 // Flag Last on the "First" activity because queue is processed from end of the array
                 
-                NSArray<GCField*>*fields = @[ [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:activity.activityType],
-                                              [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activity.activityType],
-                                              [GCField fieldForFlag:gcFieldFlagPower andActivityType:activity.activityType],
-                ];
+                NSArray<GCField*>*fields = [self fieldsForActivity:activity];
                 [toProcess addObject:[GCDerivedQueueElement elementAdd:activity fields:fields andType:gcQueueElementTypeBestRolling]];
             }
         }
@@ -804,7 +817,7 @@ static BOOL kDerivedEnabled = true;
         {
             for (GCActivity * activity in element.activities) {
                 for (GCField * field in element.fields) {
-                    if (![activity trackdbIsObsolete:activity.trackdb]) {
+                    if (![activity trackdbIsObsolete:activity.trackdb] && [activity hasField:field]) {
                         [self processAggregatedSerieForActivity:activity derivedType:gcDerivedTypeBestRolling andField:field];
                         [self processStandardizedSerieForActivity:activity andField:field];
                     }
