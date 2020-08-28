@@ -122,5 +122,23 @@
     return rv;
 }
 
+-(id)objectOfClass:(Class)cls forFirstmatchingKeyPaths:(NSArray<NSString*>*)keyPaths{
+    for (NSString * path in keyPaths) {
+        id val = [self valueForKeyPath:path];
+        if( [val isKindOfClass:cls] ){
+            return val;
+        }
+    }
+    return nil;
+}
+
+-(NSNumber*)numberForFirstMatchingKeyPaths:(NSArray<NSString*>*)keypaths{
+    return [self objectOfClass:[NSNumber class] forFirstmatchingKeyPaths:keypaths];
+}
+-(NSString*)stringForFirstMatchingKeyPaths:(NSArray<NSString*>*)keypaths{
+    return [self objectOfClass:[NSString class] forFirstmatchingKeyPaths:keypaths];
+}
+
+
 
 @end

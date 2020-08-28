@@ -310,6 +310,7 @@
 		4234943D16091ACA00A770D6 /* GCTrackPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 4234943C16091ACA00A770D6 /* GCTrackPoint.m */; };
 		423494431609275E00A770D6 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423494421609275E00A770D6 /* CoreLocation.framework */; };
 		423494451609276C00A770D6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423494441609276B00A770D6 /* MapKit.framework */; };
+		423498D524F83254005BF25D /* weather_cs_2288.json in Resources */ = {isa = PBXBuildFile; fileRef = 423498D424F83254005BF25D /* weather_cs_2288.json */; };
 		4234B5B217895CF2002C3B53 /* GCViewMaturityButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4234B5B117895CF2002C3B53 /* GCViewMaturityButton.m */; };
 		4235448216C1A83300AB3E09 /* GCStatsOneFieldGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235448116C1A83200AB3E09 /* GCStatsOneFieldGraphViewController.m */; };
 		4235448516C4826600AB3E09 /* GCExportStrava.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235448416C4826600AB3E09 /* GCExportStrava.m */; };
@@ -2102,6 +2103,7 @@
 		4234943C16091ACA00A770D6 /* GCTrackPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTrackPoint.m; path = src/GCTrackPoint.m; sourceTree = "<group>"; };
 		423494421609275E00A770D6 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		423494441609276B00A770D6 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		423498D424F83254005BF25D /* weather_cs_2288.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = weather_cs_2288.json; sourceTree = "<group>"; };
 		4234B5B017895CF2002C3B53 /* GCViewMaturityButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCViewMaturityButton.h; path = src/GCViewMaturityButton.h; sourceTree = "<group>"; };
 		4234B5B117895CF2002C3B53 /* GCViewMaturityButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCViewMaturityButton.m; path = src/GCViewMaturityButton.m; sourceTree = "<group>"; };
 		4235448016C1A83200AB3E09 /* GCStatsOneFieldGraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStatsOneFieldGraphViewController.h; path = src/GCStatsOneFieldGraphViewController.h; sourceTree = "<group>"; };
@@ -5252,6 +5254,7 @@
 		42C011491AB4891B0059B6CF /* weather */ = {
 			isa = PBXGroup;
 			children = (
+				423498D424F83254005BF25D /* weather_cs_2288.json */,
 				428E0DED235CCC1B006F4BC5 /* weather_cs_4646.json */,
 			);
 			path = weather;
@@ -6194,6 +6197,7 @@
 				4253B4741CD4A53400437E6A /* activity_1083407258.fit in Resources */,
 				42A5D90423272C8300898FD5 /* strava_stream_2675283580.json in Resources */,
 				42A5D92F2328774700898FD5 /* activity_1382772474.fit in Resources */,
+				423498D524F83254005BF25D /* weather_cs_2288.json in Resources */,
 				42A5D8F923272C8300898FD5 /* last_connectstats_search_20.json in Resources */,
 				42880C472381EEE00030C3C1 /* track_cs_5611.fit in Resources */,
 				428BAD121CB14B650041468A /* activitytrack_1099599108.json in Resources */,

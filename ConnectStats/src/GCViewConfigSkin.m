@@ -601,10 +601,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
                 kGCSkinKeyMissingActivityTypeColor:
                     [UIColor quaternaryLabelColor],
                 kGCSkinKeyTextColorForActivity:
-                    @{/*GC_TYPE_SWIMMING: [UIColor colorWithHexValue:0xFFD466 andAlpha:1.],
-                      GC_TYPE_CYCLING:  [UIColor colorWithHexValue:0xFFA0A0 andAlpha:1.],
-                      GC_TYPE_RUNNING:  [UIColor colorWithHexValue:0x98D3FF andAlpha:1.],*/
-                      GC_TYPE_ALL:[UIColor labelColor],
+                    @{GC_TYPE_ALL:[UIColor labelColor],
                       GC_TYPE_SWIMMING: [UIColor systemYellowColor],
                       GC_TYPE_CYCLING:  [UIColor systemRedColor],
                       GC_TYPE_RUNNING:  [UIColor systemBlueColor],
