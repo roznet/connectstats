@@ -601,16 +601,19 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
                 kGCSkinKeyMissingActivityTypeColor:
                     [UIColor quaternaryLabelColor],
                 kGCSkinKeyTextColorForActivity:
-                    @{GC_TYPE_SWIMMING: [UIColor colorWithHexValue:0xFFD466 andAlpha:1.],
+                    @{/*GC_TYPE_SWIMMING: [UIColor colorWithHexValue:0xFFD466 andAlpha:1.],
                       GC_TYPE_CYCLING:  [UIColor colorWithHexValue:0xFFA0A0 andAlpha:1.],
-                      GC_TYPE_RUNNING:  [UIColor colorWithHexValue:0x98D3FF andAlpha:1.],
+                      GC_TYPE_RUNNING:  [UIColor colorWithHexValue:0x98D3FF andAlpha:1.],*/
+                      GC_TYPE_ALL:[UIColor labelColor],
+                      GC_TYPE_SWIMMING: [UIColor systemYellowColor],
+                      GC_TYPE_CYCLING:  [UIColor systemRedColor],
+                      GC_TYPE_RUNNING:  [UIColor systemBlueColor],
                       GC_TYPE_HIKING:   [UIColor colorWithHexValue:0xC8A26A andAlpha:1.],
                       GC_TYPE_FITNESS:  [UIColor colorWithHexValue:0xF169EF andAlpha:1.],
                       GC_TYPE_TENNIS:   [UIColor colorWithHexValue:0x96CC00 andAlpha:1.],
                       GC_TYPE_MULTISPORT:[UIColor colorWithHexValue:0xA6BB82 andAlpha:1.],
                       GC_TYPE_OTHER:[UIColor colorWithHexValue:0xA6BB82 andAlpha:1.],
                       GC_TYPE_SKI_BACK: [UIColor colorWithHexValue:0xa2d7b5 andAlpha:1.0],
-                      GC_TYPE_ALL:[UIColor colorWithHexValue:0xFFFFFF andAlpha:1.f],
                       GC_TYPE_SKI_DOWN: [UIColor colorWithHexValue:0xbdc3c7 andAlpha:1.0]
                     },
                 kGCSkinKeyActivityCellLighterBackgroundColor:
