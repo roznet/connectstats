@@ -89,7 +89,13 @@ const NSCalendarUnit kCalendarUnitNone = 0;
         self.periodType = gcPeriodRolling;
     }
 }
-
+-(NSDate*)cutOff{
+    NSDate * rv = nil;
+    if( self.periodType == gcPeriodToDate){
+        rv = [[GCAppGlobal organizer] lastActivity].date;
+    }
+    return rv;
+}
 -(NSString*)description{
     return [NSString stringWithFormat:@"<%@: %@ %@>", NSStringFromClass([self class]), self.calendarUnitDescription, self.referenceDate ? @"Rolling" : @""];
 }
