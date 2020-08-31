@@ -30,7 +30,8 @@
 #import "GCAppGlobal.h"
 
 typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
-    GCConnectStatsRequestLoginStageCheck,
+    GCConnectStatsRequestLoginStageAPICheck,
+    GCConnectStatsRequestLoginStageValidateUser,
     GCConnectStatsRequestLoginStageEnd
 };
 
@@ -58,6 +59,13 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
     return self;
 }
 -(NSString*)url{
+    switch (self.loginStage) {
+        case GCConnectStatsRequestLoginStageValidateUser:
+        case GCConnectStatsRequestLoginStageEnd:
+            return nil;
+        case GCConnectStatsRequestLoginStageAPICheck:
+            return GCWebConnectStatsApiCheck([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet]);
+    }
     return nil;
 }
 
@@ -70,9 +78,10 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
         return nil;
     }else{
         switch (self.loginStage) {
-            case GCConnectStatsRequestLoginStageCheck:
+                
+            case GCConnectStatsRequestLoginStageValidateUser:
             {
-                NSString * path = GCWebConnectStatsValidateUser([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]);
+                NSString * path = GCWebConnectStatsValidateUser([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet]);
                 NSDictionary *parameters = @{
                                              @"token_id" : @(self.tokenId),
                                              };
@@ -80,6 +89,7 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
                 return [self preparedUrlRequest:path params:parameters];
             }
             case GCConnectStatsRequestLoginStageEnd:
+            case GCConnectStatsRequestLoginStageAPICheck:
                 return nil;
         }
     }
@@ -98,7 +108,7 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
         
     }else{
 
-        if( self.loginStage == GCConnectStatsRequestLoginStageCheck){
+        if( self.loginStage == GCConnectStatsRequestLoginStageValidateUser){
             NSData * jsonData = [self.theString dataUsingEncoding:self.encoding];
             NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
             if( [info isKindOfClass:[NSDictionary class]] && [info[@"cs_user_id"] respondsToSelector:@selector(integerValue)] && [info[@"cs_user_id"] integerValue] == self.userId){
@@ -106,6 +116,36 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
             }else{
                 RZLog(RZLogWarning, @"Invalid user %@ != %@", info[@"cs_user_id"], @(self.userId));
             }
+        }else if (self.loginStage == GCConnectStatsRequestLoginStageAPICheck){
+            if( self.theString != nil){
+                NSData * jsonData = [self.theString dataUsingEncoding:self.encoding];
+                NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
+                if( [info isKindOfClass:[NSDictionary class]] && [info[@"status"] respondsToSelector:@selector(integerValue)] && [info[@"status"] integerValue] == 1){
+                    RZLog(RZLogInfo, @"Api Check Success");
+                    
+                    if( [info[@"redirect"] isKindOfClass:[NSString class]] ){
+                        gcWebConnectStatsConfig redirect = GCWebConnectStatsConfigForRedirect(info[@"redirect"]);
+                        gcWebConnectStatsConfig currentConfig = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet];
+                        if( redirect != gcWebConnectStatsConfigEnd && redirect != currentConfig){
+                            RZLog( RZLogInfo, @"API Check requesting redirect from %@ to %@",
+                                  GCWebConnectStatsApiCheck(currentConfig),
+                                  GCWebConnectStatsApiCheck(redirect));
+                            
+                            [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_CONFIG intVal:redirect];
+                            [GCAppGlobal saveSettings];
+                        }else{
+                            RZLog(RZLogInfo, @"API Check success. Already redirected." );
+                        }
+                    }else{
+                        RZLog(RZLogInfo, @"API Check success. No redirect." );
+                    }
+                }else{
+                    RZLog(RZLogError, @"API Check FAILED %@", info);
+                }
+            }else{
+                RZLog(RZLogInfo, @"API Check not supported");
+            }
+
         }
         [self processDone];
     }

@@ -110,7 +110,7 @@
         [cell labelForRow:0 andCol:0].attributedText = choice;
     }
 
-    id sub = (self.subtext && self.selected < self.subtext.count) ? (self.subtext)[self.selected] : nil;
+    id sub = (self.subtext && indexPath.row < self.subtext.count) ? self.subtext[indexPath.row] : nil;
     if (sub && [sub isKindOfClass:[NSString class]]) {
         [cell labelForRow:1 andCol:0].text = sub;
     }else if(sub && [sub isKindOfClass:[NSAttributedString class]]){

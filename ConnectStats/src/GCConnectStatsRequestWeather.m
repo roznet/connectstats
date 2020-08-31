@@ -33,6 +33,7 @@
 
 @interface GCConnectStatsRequestWeather ()
 @property (nonatomic,retain) GCActivity * activity;
+@property (nonatomic,retain) NSData * weatherData;
 @end
 
 @implementation GCConnectStatsRequestWeather
@@ -58,6 +59,7 @@
 #if !__has_feature(objc_arc)
 -(void)dealloc{
     [_activity release];
+    [_weatherData release];
     [super dealloc];
 }
 #endif
@@ -91,7 +93,7 @@
     if (self.navigationController) {
         return nil;
     }else{
-        NSString * path = GCWebConnectStatsWeather([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction]);
+        NSString * path = GCWebConnectStatsWeather([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet]);
         GCService * service = self.activity.service;
         NSString * aid = [service serviceIdFromActivityId:self.activity.activityId ];
         
@@ -110,7 +112,9 @@
     return [NSString stringWithFormat:@"weather_cs_%@.json", aid];
 }
 
--(void)process{
+-(void)process:(NSData *)theData andDelegate:(id<GCWebRequestDelegate>)delegate{
+    self.delegate = delegate;
+
     if (![self isSignedIn]) {
         dispatch_async(dispatch_get_main_queue(),^(){
             [self processNewStage];
@@ -119,15 +123,15 @@
         
     }else{
 #if TARGET_IPHONE_SIMULATOR
-        NSError * e;
         NSString * fname = [self weatherFileName];
-        if(![self.theString writeToFile:[RZFileOrganizer writeableFilePath:fname] atomically:true encoding:kRequestDebugFileEncoding error:&e]){
-            RZLog(RZLogError, @"Failed to save %@. %@", fname, e.localizedDescription);
+        if(![theData writeToFile:[RZFileOrganizer writeableFilePath:fname] atomically:true]){
+            RZLog(RZLogError, @"Failed to save %@", fname);
         }
 #endif
         dispatch_async(dispatch_get_main_queue(), ^(){
             [self processNewStage];
         });
+        self.weatherData = theData;
         dispatch_async([GCAppGlobal worker],^(){
             [self processParse];
         });
@@ -137,7 +141,7 @@
 -(void)processParse{
     if( [self checkNoErrors]){
         
-        NSData * data = [self.theString dataUsingEncoding:self.encoding];
+        NSData * data = self.weatherData;;
         if( data ){
             NSError * err = nil;
             NSDictionary * json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments

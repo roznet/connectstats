@@ -156,7 +156,7 @@
 }
 
 -(void)signInConnectStatsStep{
-    gcWebConnectStatsConfig config = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction];
+    gcWebConnectStatsConfig config = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet];
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:GCWebConnectStatsRegisterUser(config, self.oauthToken, self.oauthTokenSecret)]];
     
     [[[self sharedSession] dataTaskWithRequest:request completionHandler:
@@ -206,7 +206,7 @@
             RZLog(  RZLogError,@"Failed to read credentials.json %@", error);
         }
         NSString * serviceName = @"garmin";
-        if( [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProduction] == gcWebConnectStatsConfigRemoteTesting){
+        if( [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet] == gcWebConnectStatsConfigRemoteTesting){
             serviceName = @"garmin_dev";
             RZLog(RZLogInfo, @"Using credentials for garmin_dev");
         }
