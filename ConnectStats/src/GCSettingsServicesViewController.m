@@ -1008,6 +1008,7 @@
         [self presentViewController:alert animated:YES completion:nil];
 
     }else{
+        [reqCls signout];
         [GCAppGlobal searchRecentActivities];
     }
 }
