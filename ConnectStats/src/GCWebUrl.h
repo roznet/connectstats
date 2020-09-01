@@ -28,7 +28,7 @@
 typedef NS_ENUM(NSUInteger, gcWebConnectStatsConfig) {
     gcWebConnectStatsConfigProductionRozNet,
     gcWebConnectStatsConfigProductionConnectStatsApp,
-    gcWebConnectStatsConfigRemoteTesting,
+    gcWebConnectStatsConfigRemoteDevTesting,
     gcWebConnectStatsConfigLocalProdTesting,
     gcWebConnectStatsConfigLocalDevTesting,
     gcWebConnectStatsConfigEnd

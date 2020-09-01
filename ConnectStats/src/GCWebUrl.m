@@ -136,7 +136,7 @@ NSString * GCWebConnectStatsPrefixForConfig(gcWebConnectStatsConfig config){
             return @"https://localhost.ro-z.me/prod";
         case gcWebConnectStatsConfigLocalDevTesting:
             return @"https://localhost.ro-z.me/dev";
-        case gcWebConnectStatsConfigRemoteTesting:
+        case gcWebConnectStatsConfigRemoteDevTesting:
             return @"https://connectstats.app/dev";
     }
 }
@@ -148,7 +148,7 @@ gcWebConnectStatsConfig GCWebConnectStatsConfigForRedirect(NSString * redirect){
     }else if ([redirect isEqualToString:@"https://localhost.ro-z.me/dev"]){
         return gcWebConnectStatsConfigLocalDevTesting;
     }else if ([redirect isEqualToString:@"https://connectstats.app/dev"] ){
-        return gcWebConnectStatsConfigRemoteTesting;
+        return gcWebConnectStatsConfigRemoteDevTesting;
     }else if ([redirect isEqualToString:@"https://connectstats.app/prod"] ){
         return gcWebConnectStatsConfigProductionConnectStatsApp;
     }else{

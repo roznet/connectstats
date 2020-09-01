@@ -206,7 +206,8 @@
             RZLog(  RZLogError,@"Failed to read credentials.json %@", error);
         }
         NSString * serviceName = @"garmin";
-        if( [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet] == gcWebConnectStatsConfigRemoteTesting){
+        gcWebConnectStatsConfig config = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet];
+        if( config == gcWebConnectStatsConfigRemoteDevTesting || config == gcWebConnectStatsConfigLocalDevTesting){
             serviceName = @"garmin_dev";
             RZLog(RZLogInfo, @"Using credentials for garmin_dev");
         }

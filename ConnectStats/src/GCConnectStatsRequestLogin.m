@@ -59,13 +59,6 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
     return self;
 }
 -(NSString*)url{
-    switch (self.loginStage) {
-        case GCConnectStatsRequestLoginStageValidateUser:
-        case GCConnectStatsRequestLoginStageEnd:
-            return nil;
-        case GCConnectStatsRequestLoginStageAPICheck:
-            return GCWebConnectStatsApiCheck([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet]);
-    }
     return nil;
 }
 
@@ -88,8 +81,11 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
                 
                 return [self preparedUrlRequest:path params:parameters];
             }
-            case GCConnectStatsRequestLoginStageEnd:
             case GCConnectStatsRequestLoginStageAPICheck:
+            {
+                return [NSURLRequest requestWithURL:[NSURL URLWithString:GCWebConnectStatsApiCheck([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet])]];
+            }
+            case GCConnectStatsRequestLoginStageEnd:
                 return nil;
         }
     }
@@ -136,8 +132,6 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
                         }else{
                             RZLog(RZLogInfo, @"API Check success. Already redirected." );
                         }
-                    }else{
-                        RZLog(RZLogInfo, @"API Check success. No redirect." );
                     }
                 }else{
                     RZLog(RZLogError, @"API Check FAILED %@", info);
