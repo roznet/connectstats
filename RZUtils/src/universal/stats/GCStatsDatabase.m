@@ -159,7 +159,13 @@
                 gcStatsRange range = serie.range;
                 if( range.y_min < 0 || range.y_max > 30.0 ) {
                     keep = false;
-                    RZLog(RZLogInfo, @"Skipping bad serie in %@ for %@ %@ in [%@,%@]", self.tableName, keys[@"activityId"], keys[@"fieldKey"], @(range.y_min), @(range.y_max));
+                    static NSUInteger _badSerie = 0;
+                    if( _badSerie < 5){
+                        RZLog(RZLogInfo, @"Skipping bad serie in %@ for %@ %@ in [%@,%@]", self.tableName, keys[@"activityId"], keys[@"fieldKey"], @(range.y_min), @(range.y_max));
+                    }else if( _badSerie % 25 == 0){
+                        RZLog(RZLogInfo, @"Skipped %@ bad series", @(_badSerie));
+                    }
+                    _badSerie++;
                 }
             }
             if( keep ){
