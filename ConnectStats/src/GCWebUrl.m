@@ -155,6 +155,17 @@ gcWebConnectStatsConfig GCWebConnectStatsConfigForRedirect(NSString * redirect){
         return gcWebConnectStatsConfigEnd;
     }
 }
+NSString * GCWebConnectStatsBugReport( gcWebConnectStatsConfig config ){
+    switch (config) {
+        case gcWebConnectStatsConfigProductionRozNet:
+            return [NSString stringWithFormat:@"https://connectstats.app/prod/bugreport/new"];
+        default:
+        {
+            NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
+            return [NSString stringWithFormat:@"%@/bugreport/new",url];
+        }
+    }
+}
 
 NSString * GCWebConnectStatsApiCheck(gcWebConnectStatsConfig config){
     NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);

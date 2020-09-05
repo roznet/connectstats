@@ -464,7 +464,7 @@
                                                                       attributes:[GCViewConfig attributeBold16]] autorelease];
         
         [gridcell labelForRow:0 andCol:0].attributedText = title;
-        gcWebConnectStatsConfig method = (gcWebConnectStatsConfig)[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG   defaultValue:gcWebConnectStatsConfigProductionRozNet];
+        gcWebConnectStatsConfig method = [GCAppGlobal webConnectsStatsConfig];
         NSArray * methods = [GCViewConfig validChoicesForConnectStatsConfig];
         if (method < methods.count) {
             [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
@@ -1055,7 +1055,7 @@
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_USE);
         [self.navigationController pushViewController:list animated:YES];
     }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_CONFIG){
-        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsConfig] selected:[[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet]];
+        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsConfig] selected:[GCAppGlobal webConnectsStatsConfig]];
         
         NSMutableArray * subtext = [NSMutableArray array];
         for (gcWebConnectStatsConfig csc = 0; csc < gcWebConnectStatsConfigEnd; csc++) {

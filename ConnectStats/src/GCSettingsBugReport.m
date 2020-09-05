@@ -88,12 +88,10 @@ NSString * kBugNoCommonId = @"-1";
 }
 
 -(NSURLRequest*)urlRequest{
-    NSString * aURL = @"https://ro-z.net/connectstats/bugreport.php?dir=bugs";
+    NSString * aURL = GCWebConnectStatsBugReport([GCAppGlobal webConnectsStatsConfig]);
 #if TARGET_IPHONE_SIMULATOR
     aURL = @"https://localhost.ro-z.me/prod/bugreport/new?verbose=1";
-    aURL = @"https://connectstats.app/prod/bugreport/new?verbose=1";
 #endif
-    //aURL = @"https://ro-z.net/connectstats/bugreport.php?dir=bugs";
     return [self urlResquestFor:aURL];
 }
 

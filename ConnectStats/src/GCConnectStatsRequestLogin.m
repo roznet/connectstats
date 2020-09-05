@@ -74,7 +74,7 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
                 
             case GCConnectStatsRequestLoginStageValidateUser:
             {
-                NSString * path = GCWebConnectStatsValidateUser([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet]);
+                NSString * path = GCWebConnectStatsValidateUser([GCAppGlobal webConnectsStatsConfig]);
                 NSDictionary *parameters = @{
                                              @"token_id" : @(self.tokenId),
                                              };
@@ -83,7 +83,7 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
             }
             case GCConnectStatsRequestLoginStageAPICheck:
             {
-                return [NSURLRequest requestWithURL:[NSURL URLWithString:GCWebConnectStatsApiCheck([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet])]];
+                return [NSURLRequest requestWithURL:[NSURL URLWithString:GCWebConnectStatsApiCheck([GCAppGlobal webConnectsStatsConfig])]];
             }
             case GCConnectStatsRequestLoginStageEnd:
                 return nil;
@@ -121,7 +121,7 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
                     
                     if( [info[@"redirect"] isKindOfClass:[NSString class]] ){
                         gcWebConnectStatsConfig redirect = GCWebConnectStatsConfigForRedirect(info[@"redirect"]);
-                        gcWebConnectStatsConfig currentConfig = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet];
+                        gcWebConnectStatsConfig currentConfig = [GCAppGlobal webConnectsStatsConfig];
                         if( redirect != gcWebConnectStatsConfigEnd && redirect != currentConfig){
                             RZLog( RZLogInfo, @"API Check requesting redirect from %@ to %@",
                                   GCWebConnectStatsApiCheck(currentConfig),

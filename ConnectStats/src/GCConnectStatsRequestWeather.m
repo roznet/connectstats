@@ -93,7 +93,7 @@
     if (self.navigationController) {
         return nil;
     }else{
-        NSString * path = GCWebConnectStatsWeather([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet]);
+        NSString * path = GCWebConnectStatsWeather([GCAppGlobal webConnectsStatsConfig]);
         GCService * service = self.activity.service;
         NSString * aid = [service serviceIdFromActivityId:self.activity.activityId ];
         

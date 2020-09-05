@@ -31,6 +31,7 @@
 #import "GCAppProfiles.h"
 #import "GCHealthOrganizer.h"
 #import "GCDerivedOrganizer.h"
+#import "GCWebUrl.h"
 
 extern NSString *const kNotifySettingsChange;
 extern NSString *const kNotifyLocationRequestComplete;
@@ -102,4 +103,7 @@ extern NSString *const kNotifyLocationRequestComplete;
 +(NSString*)simulatorUrl;
 
 +(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;
+
++(gcWebConnectStatsConfig)webConnectsStatsConfig;
+
 @end

@@ -58,6 +58,8 @@ NSString * GCWebConnectStatsWeather(gcWebConnectStatsConfig config);
 NSString * GCWebConnectStatsApiCheck(gcWebConnectStatsConfig config);
 NSString * GCWebConnectStatsRegisterUser( gcWebConnectStatsConfig config, NSString * accessToken, NSString * accessTokenSecret);
 
+NSString * GCWebConnectStatsBugReport( gcWebConnectStatsConfig config );
+
 NSString * GCWebSearchURL( NSUInteger start );
 NSString * GCWebModernSearchURL( NSUInteger start, NSUInteger requestCount );
 

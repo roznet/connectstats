@@ -139,7 +139,7 @@
             return request;
         }
         
-        NSString * path = GCWebConnectStatsFitFile([[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet]);
+        NSString * path = GCWebConnectStatsFitFile([GCAppGlobal webConnectsStatsConfig]);
         GCService * service = self.activity.service;
         NSString * aid = [service serviceIdFromActivityId:self.activity.activityId ];
         
