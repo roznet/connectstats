@@ -46,6 +46,9 @@ extern const NSCalendarUnit kCalendarUnitNone;
 @property (nonatomic,retain) NSString * periodTypeKey;
 
 @property (nonatomic,readonly) gcHistoryStats historyStats;
+/// Cut off date to use in to date calculation.
+/// usually last date of last activity (could be change to current time later)
+@property (nonatomic,readonly,nullable) NSDate * cutOff;
 
 +(GCStatsCalendarAggregationConfig*)configFor:(NSCalendarUnit)aUnit calendar:(NSCalendar*)calendar;
 +(GCStatsCalendarAggregationConfig*)globalConfigFor:(NSCalendarUnit)aUnit;

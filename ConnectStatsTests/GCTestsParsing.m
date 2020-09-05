@@ -764,31 +764,48 @@
 #pragma mark - Test non activities
 
 -(void)testParsingWeather{
-    
     [RZFileOrganizer removeEditableFile:@"test_newweather.db"];
     FMDatabase * newdb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"test_newweather.db"]];
     [newdb open];
     [GCActivity ensureDbStructure:newdb];
     [GCWeather ensureDbStructure:newdb];
     
-    NSArray * files = @[ @"weather_cs_4646.json"];
+    NSArray * files = @[ @"weather_cs_2288.json", // multi sources/new format
+                         @"weather_cs_4646.json"  // darkSky only/old format
+    ];
     NSError * err = nil;
+    NSMutableDictionary * rv = [NSMutableDictionary dictionary];
     for (NSString * fn in files) {
         NSData * jsonData = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn forClass:[self class]]];
         NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
         NSArray * dataArray = json[@"weather"];
         // change later
         for (NSDictionary * weatherData in dataArray) {
-            NSString * aId = weatherData[@"file_id"];
-            if (![aId isKindOfClass:[NSNull class]]) {
-                GCWeather * weatherNew = [GCWeather weatherWithData:weatherData];
-                [weatherNew saveToDb:newdb forActivityId:aId];
-                //[found addObject:aId];
+            for (NSString * provider in @[ kGCWeatherProviderDarkSky, kGCWeatherProviderVisualCrossing, kGCWeatherProviderOpenWeatherMap] ) {
+                NSString * aId = weatherData[@"file_id"];
+                if (![aId isKindOfClass:[NSNull class]]) {
+                    aId = [aId.description stringByAppendingString:provider];
+                    GCWeather * weatherNew = [GCWeather weatherWithData:weatherData preferredProvider:@[ provider, kGCWeatherProviderDarkSky ] ];
+                    rv[aId] = weatherNew.description;
+                    [weatherNew saveToDb:newdb forActivityId:aId];
+
+                }
             }
         }
     }
+    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
+    manager.recordMode = [GCTestCase recordModeGlobal];
+    //manager.recordMode = true;
+    
+    NSError * error = nil;
+    NSSet<Class>*classes = [NSSet setWithObjects:[NSDictionary class], nil];
+
+    NSDictionary * expected = [manager retrieveReferenceObject:rv forClasses:classes selector:_cmd identifier:@"parsed weather" error:&error];
+    XCTAssertEqualObjects(expected, rv);
+    
+    
     /*
-    res = [newdb executeQuery:@"SELECT * FROM gc_activities_weather_detail"];
+    FMResultSet * res = [newdb executeQuery:@"SELECT * FROM gc_activities_weather_detail"];
     NSUInteger count = 0;
     while ([res next]) {
         count++;

@@ -685,11 +685,21 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 +(NSArray*)validChoicesForConnectStatsConfig{
     static NSArray * rv = nil;
     
+    /*
+     gcWebConnectStatsConfigProductionRozNet,
+     gcWebConnectStatsConfigProductionConnectStatsApp,
+     gcWebConnectStatsConfigRemoteTesting,
+     gcWebConnectStatsConfigLocalProdTesting,
+     gcWebConnectStatsConfigLocalDevTesting,
+     gcWebConnectStatsConfigEnd
+     */
     if( rv==nil){
         
-        rv = @[ NSLocalizedString(@"Production", @"ConnectStats Config"),
+        rv = @[ NSLocalizedString(@"Production roznet", @"ConnectStats Config"),
+                NSLocalizedString(@"Production csapp", @"ConnectStats Config"),
                 NSLocalizedString(@"Remote Testing", @"ConnectStats Config"),
-                NSLocalizedString(@"Local Testing", @"ConnectStats Config"),
+                NSLocalizedString(@"Local Prod Testing", @"ConnectStats Config"),
+                NSLocalizedString(@"Local Dev Testing", @"ConnectStats Config"),
                 ];
         [rv retain];
     }

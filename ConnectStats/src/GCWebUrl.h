@@ -26,9 +26,11 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, gcWebConnectStatsConfig) {
-    gcWebConnectStatsConfigProduction,
-    gcWebConnectStatsConfigRemoteTesting,
-    gcWebConnectStatsConfigLocalTesting,
+    gcWebConnectStatsConfigProductionRozNet,
+    gcWebConnectStatsConfigProductionConnectStatsApp,
+    gcWebConnectStatsConfigRemoteDevTesting,
+    gcWebConnectStatsConfigLocalProdTesting,
+    gcWebConnectStatsConfigLocalDevTesting,
     gcWebConnectStatsConfigEnd
 };
 
@@ -36,6 +38,7 @@ void GCWebUseSimulator( BOOL abool, NSString * url);
 void GCWebSetSimulatorError( BOOL abool);
 void GCWebSetSimulatorState( NSString * state);
 void GCWebConnectStatsConfigSet(gcWebConnectStatsConfig config);
+gcWebConnectStatsConfig GCWebConnectStatsConfigForRedirect(NSString * redirect);
 gcWebConnectStatsConfig GCWebConnectStatsConfig(void);
 
 /**
@@ -52,7 +55,10 @@ NSString * GCWebConnectStatsSearch(gcWebConnectStatsConfig config);
 NSString * GCWebConnectStatsRequestBackfill(gcWebConnectStatsConfig config);
 NSString * GCWebConnectStatsFitFile(gcWebConnectStatsConfig config);
 NSString * GCWebConnectStatsWeather(gcWebConnectStatsConfig config);
+NSString * GCWebConnectStatsApiCheck(gcWebConnectStatsConfig config);
 NSString * GCWebConnectStatsRegisterUser( gcWebConnectStatsConfig config, NSString * accessToken, NSString * accessTokenSecret);
+
+NSString * GCWebConnectStatsBugReport( gcWebConnectStatsConfig config );
 
 NSString * GCWebSearchURL( NSUInteger start );
 NSString * GCWebModernSearchURL( NSUInteger start, NSUInteger requestCount );

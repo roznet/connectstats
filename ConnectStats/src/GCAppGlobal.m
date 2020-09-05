@@ -325,4 +325,10 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 +(NSString*)simulatorUrl{
     return nil;
 }
+
++(gcWebConnectStatsConfig)webConnectsStatsConfig{
+    gcWebConnectStatsConfig config = [self configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet];
+    return config;
+}
+
 @end

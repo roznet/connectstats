@@ -428,7 +428,9 @@
                                                  after:afterdate];
     if (self.calendarConfig.periodType == gcPeriodToDate &&  self.viewChoice == gcViewChoiceCalendar) {
         [cache setupAsBackgroundGraph];
-        GCHistoryFieldDataSerie * cut = [fieldDataSerie serieWithCutOff:fieldDataSerie.lastDate inCalendarUnit:calunit withReferenceDate:nil];
+        GCHistoryFieldDataSerie * cut = [fieldDataSerie serieWithCutOff:self.calendarConfig.cutOff
+                                                         inCalendarUnit:calunit
+                                                      withReferenceDate:nil];
         GCSimpleGraphCachedDataSource * main = [GCSimpleGraphCachedDataSource historyView:cut
                                                                            calendarConfig:self.calendarConfig
                                                                               graphChoice:choice

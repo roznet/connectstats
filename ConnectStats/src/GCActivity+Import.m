@@ -1268,7 +1268,11 @@
                 
                 if( verbose ){
                     if( thisVal.value == 0.0 && otherVal.value != 0.0){
-                        RZLog(RZLogInfo, @"%@ New Data %@ = %@ (prev 0)", self, field, otherVal.numberWithUnit);
+                        static NSUInteger _prevZero = 0;
+                        if( _prevZero < 5 || _prevZero % 25 == 0){
+                            RZLog(RZLogInfo, @"[#%@] %@ New Data %@ = %@ (prev 0)", @(_prevZero), self, field, otherVal.numberWithUnit);
+                        }
+                        _prevZero++;
                     }else{
                         RZLog(RZLogInfo, @"%@ New Data %@ = %@", self, field, otherVal.numberWithUnit);
                     }

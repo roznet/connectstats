@@ -32,4 +32,8 @@
 -(NSDictionary*)dictionarySwappingKeysForObjects;
 -(NSDictionary*)smartCompareDict:(NSDictionary*)other;
 -(NSDictionary*)dictionaryWithJSONTypesOnly;
+
+-(NSNumber*)numberForFirstMatchingKeyPaths:(NSArray<NSString*>*)keypaths;
+-(NSString*)stringForFirstMatchingKeyPaths:(NSArray<NSString*>*)keypaths;
+
 @end

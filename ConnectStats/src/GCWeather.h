@@ -39,6 +39,10 @@
 @class FMResultSet;
 @class FMDatabase;
 
+extern NSString * kGCWeatherProviderOpenWeatherMap;
+extern NSString * kGCWeatherProviderDarkSky;
+extern NSString * kGCWeatherProviderVisualCrossing;
+
 @interface GCWeather : NSObject
 
 @property (nonatomic,assign) NSUInteger weatherType;
@@ -57,6 +61,7 @@
 @property (nonatomic,retain) NSString * weatherTypeDesc;
 
 +(GCWeather*)weatherWithData:(NSDictionary*)dict;
++(GCWeather*)weatherWithData:(NSDictionary*)dict preferredProvider:(NSArray<NSString*>*)providers;
 +(GCWeather*)weatherWithResultSet:(FMResultSet*)res;
 +(void)ensureDbStructure:(FMDatabase*)db;
 -(void)saveToDb:(FMDatabase*)db forActivityId:(NSString*)aId;

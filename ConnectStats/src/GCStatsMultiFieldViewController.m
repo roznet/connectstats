@@ -749,13 +749,9 @@
     [vals setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     vals.activityType = self.activityType;
     gcIgnoreMode ignoreMode = [self.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
-    NSDate * cutOff = nil;
-    if (self.multiFieldConfig.calendarConfig.periodType == gcPeriodToDate) {
-        cutOff = [[GCAppGlobal organizer] lastActivity].date;
-    }
     [vals aggregate:self.multiFieldConfig.calendarConfig.calendarUnit
       referenceDate:self.multiFieldConfig.calendarConfig.referenceDate
-             cutOff:cutOff
+             cutOff:self.multiFieldConfig.calendarConfig.cutOff
          ignoreMode:ignoreMode];
     self.aggregatedStats = vals;
     dispatch_async(dispatch_get_main_queue(), ^(){

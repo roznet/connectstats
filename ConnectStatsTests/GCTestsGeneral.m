@@ -338,15 +338,35 @@
     //    Nov -> Cnt 1, Sum 0.2
     //    Oct -> Cnt 2, Sum 3.2+2.1=5.3
     //    Sep -> Cnt 1, Sum 1.2
-
+    
+    // Reconstruct the cut off by field Serie
+    GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING];
+    GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithFilter:false field:distfield];
+    GCHistoryFieldDataSerie * dataserie = [[GCHistoryFieldDataSerie alloc] initFromConfig:config];
+    dataserie.organizer = organizer;
+    [dataserie loadFromOrganizer];
+    GCHistoryFieldDataSerie * withcutoff = [dataserie serieWithCutOff:cutoff inCalendarUnit:NSCalendarUnitMonth withReferenceDate:nil];
+    NSDictionary * dict = [withcutoff.history.serie aggregatedStatsByCalendarUnit:NSCalendarUnitMonth
+                                                                    referenceDate:nil
+                                                                      andCalendar:[GCAppGlobal calculationCalendar]];
+    GCStatsDataSerie * histCutSum = dict[@"sum"];
     NSArray * cutOffExpected = @[ @[ @"2012-11-01T00:00:00.000Z", @(0.2/1000.)], @[ @"2012-10-01T00:00:00.000Z", @(5.3/1000.)], @[@"2012-09-01T00:00:00.000Z", @(1.2/1000.)]];
     NSUInteger i=0;
     for (NSArray * one in cutOffExpected) {
         NSDate * date = [NSDate dateForRFC3339DateTimeString:one[0]];
         NSNumber * value = one[1];
         GCHistoryAggregatedDataHolder * holder = [stats dataForIndex:i++];
+        GCNumberWithUnit * nu = [holder numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING] statType: gcAggregatedSum];
         XCTAssertTrue([holder.date isSameCalendarDay:date calendar:[GCAppGlobal calculationCalendar]], @"same date %@ / %@", holder.date, date);
-        XCTAssertEqualWithAccuracy([holder numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING] statType: gcAggregatedSum].value, value.doubleValue, 1.e-7);
+        XCTAssertEqualWithAccuracy( nu.value, value.doubleValue, 1.e-7);
+        BOOL found = false;
+        for (GCStatsDataPoint * point in histCutSum) {
+            if( [point.date isSameCalendarDay:date calendar:[GCAppGlobal calculationCalendar]]){
+                XCTAssertEqualWithAccuracy(nu.value, point.y_data, 1.0e-7);
+                found = true;
+            }
+        }
+        XCTAssertTrue(found, @"found %@ in History Field Data Serie", date);
     }
     
     

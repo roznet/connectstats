@@ -127,18 +127,57 @@ BOOL GCWebSimulatorIsInUse(){
 
 NSString * GCWebConnectStatsPrefixForConfig(gcWebConnectStatsConfig config){
     switch (config) {
-        case gcWebConnectStatsConfigProduction:
+        case gcWebConnectStatsConfigProductionRozNet:
         case gcWebConnectStatsConfigEnd:
             return @"https://ro-z.net/prod";
-        case gcWebConnectStatsConfigLocalTesting:
-            return @"https://localhost/prod";
-        case gcWebConnectStatsConfigRemoteTesting:
-            return @"https://ro-z.net/dev";
+        case gcWebConnectStatsConfigProductionConnectStatsApp:
+            return @"https://connectstats.app/prod";
+        case gcWebConnectStatsConfigLocalProdTesting:
+            return @"https://localhost.ro-z.me/prod";
+        case gcWebConnectStatsConfigLocalDevTesting:
+            return @"https://localhost.ro-z.me/dev";
+        case gcWebConnectStatsConfigRemoteDevTesting:
+            return @"https://connectstats.app/dev";
+    }
+}
+gcWebConnectStatsConfig GCWebConnectStatsConfigForRedirect(NSString * redirect){
+    if( [redirect isEqualToString:@"https://ro-z.net/prod"] ){
+        return gcWebConnectStatsConfigProductionRozNet;
+    }else if ([redirect isEqualToString:@"https://localhost.ro-z.me/prod"]){
+        return gcWebConnectStatsConfigLocalProdTesting;
+    }else if ([redirect isEqualToString:@"https://localhost.ro-z.me/dev"]){
+        return gcWebConnectStatsConfigLocalDevTesting;
+    }else if ([redirect isEqualToString:@"https://connectstats.app/dev"] ){
+        return gcWebConnectStatsConfigRemoteDevTesting;
+    }else if ([redirect isEqualToString:@"https://connectstats.app/prod"] ){
+        return gcWebConnectStatsConfigProductionConnectStatsApp;
+    }else{
+        return gcWebConnectStatsConfigEnd;
+    }
+}
+NSString * GCWebConnectStatsBugReport( gcWebConnectStatsConfig config ){
+    switch (config) {
+        case gcWebConnectStatsConfigProductionRozNet:
+            return [NSString stringWithFormat:@"https://connectstats.app/prod/bugreport/new"];
+        default:
+        {
+            NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
+            return [NSString stringWithFormat:@"%@/bugreport/new",url];
+        }
     }
 }
 
+NSString * GCWebConnectStatsApiCheck(gcWebConnectStatsConfig config){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
+    
+    if (simulatorError) {
+        return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
+    }else{
+        return [NSString stringWithFormat:@"%@/api/connectstats/apicheck",url];
+    }
+}
 NSString * GCWebConnectStatsSearch(gcWebConnectStatsConfig config){
-    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
     
     if (simulatorError) {
         return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
@@ -148,7 +187,7 @@ NSString * GCWebConnectStatsSearch(gcWebConnectStatsConfig config){
 }
 
 NSString * GCWebConnectStatsFitFile(gcWebConnectStatsConfig config){
-    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
 
     if (simulatorError) {
         return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
@@ -159,7 +198,7 @@ NSString * GCWebConnectStatsFitFile(gcWebConnectStatsConfig config){
 }
 
 NSString * GCWebConnectStatsWeather(gcWebConnectStatsConfig config){
-    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
 
     if (simulatorError) {
         return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
@@ -171,7 +210,7 @@ NSString * GCWebConnectStatsWeather(gcWebConnectStatsConfig config){
 
 
 NSString * GCWebConnectStatsRequestBackfill(gcWebConnectStatsConfig config){
-    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
     
     if (simulatorError) {
         return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
@@ -181,7 +220,7 @@ NSString * GCWebConnectStatsRequestBackfill(gcWebConnectStatsConfig config){
 }
 
 NSString * GCWebConnectStatsValidateUser(gcWebConnectStatsConfig config){
-    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
 
     if (simulatorError) {
         return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
@@ -193,7 +232,7 @@ NSString * GCWebConnectStatsValidateUser(gcWebConnectStatsConfig config){
 
 
 NSString * GCWebConnectStatsRegisterUser( gcWebConnectStatsConfig config, NSString * accessToken, NSString * accessTokenSecret){
-    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalTesting : config);
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
 
     if (simulatorError) {
         return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];

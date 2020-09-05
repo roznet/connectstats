@@ -58,6 +58,11 @@ NSString * kGCWeatherIconThunderstorm = @"thunderstorm";
 NSString * kGCWeatherIconTornado = @"tornado";
 NSString * kGCWeatherIconHurricane = @"hurricane";
 
+NSString * kGCWeatherProviderOpenWeatherMap = @"openWeatherMap";
+NSString * kGCWeatherProviderDarkSky = @"darkSky";
+NSString * kGCWeatherProviderVisualCrossing = @"visualCrossing";
+
+
 NS_INLINE double degreesToRadians(double x) { return (x * M_PI / 180.0); };
 NS_INLINE double radiandsToDegrees(double x) { return(x * 180.0 / M_PI); };
 
@@ -111,6 +116,7 @@ static void buildCache(){
                           @"chance-of-showers":     @"864-rain-cloud"
                         }]  ;
     
+        
     }
 }
 
@@ -211,14 +217,40 @@ NSString * windDirectionToCompassPoint(double bearing){
 
  */
 
-
-
--(void)parseConnectStats:(NSDictionary*)dict{
+-(void)parseConnectStats:(NSDictionary*)dict preferredProvider:(NSArray<NSString*>*)preferred{
     buildCache();
+    BOOL done = false;
+    for (NSString * provider in preferred) {
+        NSDictionary * data = dict[provider];
+        if( [data isKindOfClass:[NSDictionary class]] ){
+            if( [provider isEqualToString:kGCWeatherProviderDarkSky] && dict[kGCWeatherProviderDarkSky] != nil ){
+                [self parseDarkSky:dict[kGCWeatherProviderDarkSky]];
+                done = true;
+                break;
+            }else if ([provider isEqualToString:kGCWeatherProviderVisualCrossing] && dict[kGCWeatherProviderVisualCrossing] != nil){
+                [self parseVisualCrossing:dict[kGCWeatherProviderVisualCrossing]];
+                done = true;
+                break;
+            }else if ([provider isEqualToString:kGCWeatherProviderOpenWeatherMap] && dict[kGCWeatherProviderOpenWeatherMap] != nil){
+                [self parseOpenWeatherMap:dict[kGCWeatherProviderOpenWeatherMap]];
+                done = true;
+                break;
+            }
+        }
+    }
+    // old format
+    if( !done && [dict[@"currently"] isKindOfClass:[NSDictionary class]] ){
+        [self parseDarkSky:dict];
+    }
+}
+
+
+
+-(void)parseDarkSky:(NSDictionary*)dict{
     NSNumber * innumber = nil;
     NSString * instring = nil;
 
-    NSDictionary * currently = dict[@"currently"];
+    NSDictionary * currently = dict[ @"currently"];
     
     if ([currently isKindOfClass:[NSDictionary class]]) {
         instring = currently[@"icon"];
@@ -258,7 +290,7 @@ NSString * windDirectionToCompassPoint(double bearing){
         self.windSpeed = [[GCNumberWithUnit numberWithUnitName:@"mps" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_SPEED];
     }
 
-    innumber = dict[@"humidity"];
+    innumber = currently[@"humidity"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
         self.relativeHumidity = [GCNumberWithUnit numberWithUnitName:@"percent" andValue:innumber.doubleValue];
     }
@@ -275,17 +307,145 @@ NSString * windDirectionToCompassPoint(double bearing){
     }
 }
 
+-(void)parseOpenWeatherMap:(NSDictionary*)dict{
+    NSNumber * innumber = nil;
+    NSString * instring = nil;
+    
+    NSDictionary * current = dict[ @"current" ];
+    
+    NSArray * weather = current[@"weather"];
+    self.weatherType = 0;
+    self.weatherTypeDesc = nil;
+    if( [weather isKindOfClass:[NSArray class]] ){
+        if( weather.count > 0 ){
+            NSDictionary * info = weather[0];
+            if( [info isKindOfClass:[NSDictionary class]] ){
+                innumber = info[@"id"];
+                self.weatherType = innumber.integerValue;
+                instring = info[@"description"];
+                if (instring && [instring isKindOfClass:[NSString class]]) {
+                    self.weatherTypeDesc = instring;
+                }
+            }
+        }
+    }
+
+    innumber = current[@"dt"];
+    if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
+        self.weatherDate = [NSDate dateWithTimeIntervalSince1970:innumber.doubleValue];
+    }
+
+    innumber = current[@"temp"];
+    if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
+        self.temperature = [[GCNumberWithUnit numberWithUnitName:@"celcius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
+    }
+
+    innumber = current[@"feels_like"];
+    if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
+        self.apparentTemperature = [[GCNumberWithUnit numberWithUnitName:@"celcius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
+    }
+
+    innumber = current[@"wind_deg"];
+    if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
+        self.windDirection = innumber;
+        self.windDirectionCompassPoint = windDirectionToCompassPoint(innumber.doubleValue);
+    }
+
+    innumber = current[@"wind_speed"];
+    if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
+        self.windSpeed = [[GCNumberWithUnit numberWithUnitName:@"mps" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_SPEED];
+    }
+
+    innumber = current[@"humidity"];
+    if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
+        self.relativeHumidity = [GCNumberWithUnit numberWithUnitName:@"percent" andValue:innumber.doubleValue];
+    }
+
+    CLLocationCoordinate2D coord;
+    innumber = dict[@"lat"];
+    if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
+        coord.latitude = innumber.doubleValue;
+        innumber = dict[@"long"];
+        if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
+            coord.longitude = innumber.doubleValue;
+            self.weatherStationLocation = coord;
+        }
+    }
+}
+
+
+-(void)parseVisualCrossing:(NSDictionary*)dict{
+    NSNumber * innumber = nil;
+    NSString * instring = nil;
+    NSDictionary * values = nil;
+    NSDictionary * location = dict[@"location"];
+    
+    NSArray * valuesArray = location[@"values"];
+    if( [valuesArray isKindOfClass:[NSArray class]] && valuesArray.count > 0){
+        values = valuesArray[0];
+        if( ![values isKindOfClass:[NSDictionary class]] ){
+            values = nil;
+        }
+    }
+    
+    instring = values[@"conditions"];
+    self.weatherType = 0;
+    if (instring && [instring isKindOfClass:[NSString class]]) {
+        self.weatherType = 1;
+        self.weatherTypeDesc = instring;
+    }else{
+        self.weatherTypeDesc = nil;
+    }
+
+    innumber = values[@"datetime"];
+    if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
+        self.weatherDate = [NSDate dateWithTimeIntervalSince1970:innumber.doubleValue/1000.];
+    }
+
+    innumber = values[@"temp"];
+    if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
+        self.temperature = [[GCNumberWithUnit numberWithUnitName:@"celcius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
+        self.apparentTemperature = [[GCNumberWithUnit numberWithUnitName:@"celcius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
+    }
+
+    innumber = values[@"wdir"];
+    if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
+        self.windDirection = innumber;
+        self.windDirectionCompassPoint = windDirectionToCompassPoint(innumber.doubleValue);
+    }
+
+    innumber = values[@"wspd"];
+    if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
+        self.windSpeed = [[GCNumberWithUnit numberWithUnitName:@"kph" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_SPEED];
+    }
+
+    innumber = values[@"humidity"];
+    if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
+        self.relativeHumidity = [GCNumberWithUnit numberWithUnitName:@"percent" andValue:innumber.doubleValue];
+    }
+}
+
+
 +(GCWeather*)weatherWithData:(NSDictionary*)dict{
     GCWeather * rv = [[[GCWeather alloc] init] autorelease];
     if (rv) {
         if (dict[GC_WEATHER_ICON] != nil) {
             rv.weatherData = [NSMutableDictionary dictionaryWithDictionary:dict];
         }else{
-            [rv parseConnectStats:dict];
+            [rv parseConnectStats:dict preferredProvider:@[ kGCWeatherProviderDarkSky, kGCWeatherProviderVisualCrossing, kGCWeatherProviderOpenWeatherMap]];
         }
     }
     return rv;
 }
+
++(GCWeather*)weatherWithData:(NSDictionary*)dict preferredProvider:(NSArray<NSString *> *)providers{
+    GCWeather * rv = [[[GCWeather alloc] init] autorelease];
+    if (rv) {
+        [rv parseConnectStats:dict preferredProvider:providers];
+    }
+    return rv;
+}
+
 
 -(void)dealloc{
     [_weatherDate release];

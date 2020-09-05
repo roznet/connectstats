@@ -219,9 +219,9 @@ const NSUInteger kPreviousStatusMaxCount = 4;
 -(void)check:(GCConnectStatsStatusCallBack) cb{
     self.callback = cb;
     
-    NSString * statusURL = @"https://ro-z.net/connectstats/status";
+    NSString * statusURL = @"https://connectstats.app/prod/api/status/app";
 #if TARGET_IPHONE_SIMULATOR
-    statusURL = @"http://localhost/connectstats/status";
+    statusURL = @"https://localhost.ro-z.me/prod/api/status/app";
 #endif
     
     self.messagesTask = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:statusURL] completionHandler:^(NSData * data, NSURLResponse*response, NSError * error ){
