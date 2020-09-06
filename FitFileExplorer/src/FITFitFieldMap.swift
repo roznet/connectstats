@@ -102,6 +102,8 @@ class FITFitFieldMap: NSObject {
                 if fieldKey == "WeightedMeanCadence" {
                     switch activityType {
                     case GC_TYPE_RUNNING: fieldKey = "WeightedMeanRunCadence"
+                    case GC_TYPE_WALKING: fieldKey = "WeightedMeanRunCadence"
+                    case GC_TYPE_HIKING: fieldKey = "WeightedMeanRunCadence"
                     case GC_TYPE_CYCLING: fieldKey = "WeightedMeanBikeCadence"
                     case GC_TYPE_SWIMMING: fieldKey = "WeightedMeanSwimCadence"
                     default: fieldKey = mapped
@@ -110,6 +112,8 @@ class FITFitFieldMap: NSObject {
                 if fieldKey == "MaxCadence" {
                     switch activityType {
                     case GC_TYPE_RUNNING: fieldKey = "MaxRunCadence"
+                    case GC_TYPE_WALKING: fieldKey = "MaxRunCadence"
+                    case GC_TYPE_HIKING: fieldKey = "MaxRunCadence"
                     case GC_TYPE_CYCLING: fieldKey = "MaxBikeCadence"
                     case GC_TYPE_SWIMMING: fieldKey = "MaxSwimCadence"
                     default: fieldKey = mapped
