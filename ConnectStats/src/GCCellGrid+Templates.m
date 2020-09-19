@@ -505,7 +505,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
                 if( skipAlways ){
                     attr = [attr viewConfigAttributeDisabled];
                 }
-                NSAttributedString * at = nu ? [NSAttributedString attributedString:attr withString:nu.formatDouble] : nil;
+                NSString * formattedDouble = nu.formatDouble;
+                NSAttributedString * at = formattedDouble ? [NSAttributedString attributedString:attr withString:formattedDouble] : nil;
                 [self labelForRow:row andCol:col].attributedText = at;
                 if( col == 2){
                     row ++;
