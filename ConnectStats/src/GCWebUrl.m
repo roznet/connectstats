@@ -173,7 +173,7 @@ NSString * GCWebConnectStatsApiCheck(gcWebConnectStatsConfig config){
     if (simulatorError) {
         return [NSString stringWithFormat:@"%@/garminsimul/samples/last_search_error.html", simulatorURL];
     }else{
-        return [NSString stringWithFormat:@"%@/api/connectstats/apicheck",url];
+        return [NSString stringWithFormat:@"%@/api/status/api",url];
     }
 }
 NSString * GCWebConnectStatsSearch(gcWebConnectStatsConfig config){

@@ -327,7 +327,7 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 }
 
 +(gcWebConnectStatsConfig)webConnectsStatsConfig{
-    gcWebConnectStatsConfig config = [self configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet];
+    gcWebConnectStatsConfig config = [[self profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionRozNet];
     return config;
 }
 
