@@ -92,7 +92,11 @@ const NSCalendarUnit kCalendarUnitNone = 0;
 -(NSDate*)cutOff{
     NSDate * rv = nil;
     if( self.periodType == gcPeriodToDate){
-        rv = [[GCAppGlobal organizer] lastActivity].date;
+        if( [[GCAppGlobal profile] configGetBool:CONFIG_TODATE_LAST_ACTIVITY defaultValue:true]){
+            rv = [[GCAppGlobal organizer] lastActivity].date;
+        }else{
+            rv = [NSDate date];
+        }
     }
     return rv;
 }

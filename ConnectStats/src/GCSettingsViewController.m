@@ -63,7 +63,8 @@
 #define GC_SETTINGS_LAPS        5
 #define GC_SETTINGS_STRIDE      6
 #define GC_SETTINGS_SKIN        7
-#define GC_SETTINGS_PARAMS_END  8
+#define GC_SETTINGS_TO_DATE     8
+#define GC_SETTINGS_PARAMS_END  9
 
 #define GC_SETTINGS_INLINE_GRAPHS   0
 #define GC_SETTINGS_LAP_OVERLAY     1
@@ -157,6 +158,7 @@
                                                             @( GC_SETTINGS_UNITS       ),
                                                             @( GC_SETTINGS_FIRSTDAY    ),
                                                             @( GC_SETTINGS_PERIOD      ),
+                                                            @( GC_SETTINGS_TO_DATE     ),
                                                             @( GC_SETTINGS_FILTER      ),
                                                             @( GC_SETTINGS_LAPS        ),
                                                             @( GC_SETTINGS_STRIDE      )]];
@@ -364,6 +366,17 @@
                 break;
 
             }
+            case GC_SETTINGS_TO_DATE:
+            {
+                switchcell = [GCCellEntrySwitch switchCell:tableView];
+                switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16] withString:NSLocalizedString(@"To Date use last activity",@"Settings")];
+                rv = switchcell;
+                [switchcell setIdentifierInt:GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_TO_DATE)];
+                switchcell.entryFieldDelegate = self;
+                switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_TODATE_LAST_ACTIVITY defaultValue:true];
+                break;
+            }
+
             case GC_SETTINGS_LAPS:
             {
                 gridcell = [GCCellGrid gridCell:tableView];
@@ -779,6 +792,10 @@
             break;
         case GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_PERIOD):
             [GCAppGlobal configSet:CONFIG_PERIOD_TYPE intVal:[cell selected]];
+            [GCAppGlobal saveSettings];
+            break;
+        case GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_TO_DATE):
+            [[GCAppGlobal  profile] configSet:CONFIG_TODATE_LAST_ACTIVITY boolVal:cell.on];
             [GCAppGlobal saveSettings];
             break;
         case GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_MAP):
