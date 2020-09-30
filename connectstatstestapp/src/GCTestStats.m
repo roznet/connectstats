@@ -196,8 +196,8 @@
                 if (!match_cnt) {
                     match_cnt = fabs([data_mem count:gcHistoryStatsAll] - [data_db count:gcHistoryStatsAll])<1.e-7;
                 }
-                RZ_ASSERT(match_val, @"%@ sum match", field);
-                RZ_ASSERT(match_cnt, @"%@ cnt match", field);
+                RZ_ASSERT(match_val, @"%@ sum match $@ != %@", field, sum_mem, sum_db);
+                RZ_ASSERT(match_cnt, @"%@ cnt match %@ != %@", field, @([data_mem count:gcHistoryStatsAll]), @([data_db count:gcHistoryStatsAll]));
             }
         }
     }
