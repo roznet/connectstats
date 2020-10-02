@@ -53,6 +53,9 @@ typedef NS_ENUM(NSUInteger, gcHistoryStats) {
 -(GCNumberWithUnit*)countWithUnit:(gcHistoryStats)which;
 -(double)count:(gcHistoryStats)which;
 
+// Used for testing
+-(void)addSumWithUnit:(GCNumberWithUnit*)num andCount:(NSUInteger)count for:(gcHistoryStats)which;
+
 @end
 
 // Summary of all fields stats

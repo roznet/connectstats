@@ -169,15 +169,15 @@
                 GCFieldDataHolder * data_mem = vals_mem.fieldData[field];
                 GCFieldDataHolder * data_db  = vals_db.fieldData[field];
 
-                GCNumberWithUnit * sum_mem = [data_mem sumWithUnit];
-                GCNumberWithUnit * sum_db  = [data_db sumWithUnit];
+                GCNumberWithUnit * sum_mem = [data_mem sumWithUnit:gcHistoryStatsAll];
+                GCNumberWithUnit * sum_db  = [data_db sumWithUnit:gcHistoryStatsAll];
 
                 double tolerance = 1.e-7;
 
                 if (sum_db.unit.betterIsMin != sum_mem.unit.betterIsMin) {
                     // If inverted unit, converted sum won't match but average should (min/km vs km/h typically)
-                    sum_mem = [data_mem averageWithUnit];
-                    sum_db = [data_db averageWithUnit];
+                    sum_mem = [data_mem weightedSumWithUnit:gcHistoryStatsAll];
+                    sum_db = [data_db weightedSumWithUnit:gcHistoryStatsAll];
                     // This case somehow does not match well, but pace is exact
                     // so hopefully it's a numerical issue
                     if ([field.key isEqualToString:@"WeightedMeanSpeed"]) {

@@ -44,7 +44,7 @@
 -(void)addNumberWithUnit:(GCNumberWithUnit*)num;
 -(void)addNumberWithUnit:(GCNumberWithUnit*)num withTimeWeight:(double)tw distWeight:(double)dw for:(gcHistoryStats)which;
 
--(void)addSumWithUnit:(GCNumberWithUnit*)num andCount:(NSUInteger)count for:(gcHistoryStats)which;
+
 
 @end
 
