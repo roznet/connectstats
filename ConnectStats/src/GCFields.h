@@ -58,6 +58,8 @@
 
 +(void)registerMissingField:(GCField*)field displayName:(NSString*)aName andUnitName:(NSString*)uom;
 
++(BOOL)pacePreferredForActivityType:(NSString*)activityType;
+
 /**
  used in import, can't be on GCField because used on input dictionary of fieldKeys
  */

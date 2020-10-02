@@ -184,7 +184,6 @@ static void registerInCache(GCField*field){
             rv.key = field;
             rv.activityType = activityType;
             rv.fieldFlag = [rv derivedFieldFlag];
-
             registerInCache(rv);
         }
 

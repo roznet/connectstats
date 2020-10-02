@@ -42,24 +42,17 @@ typedef NS_ENUM(NSUInteger, gcHistoryStats) {
 @property (nonatomic,retain) GCField * field;
 @property (nonatomic,readonly) NSString * displayField;
 
--(GCNumberWithUnit*)averageWithUnit;
--(GCNumberWithUnit*)sumWithUnit;
-
 -(GCNumberWithUnit*)maxWithUnit:(gcHistoryStats)which;
 -(GCNumberWithUnit*)minWithUnit:(gcHistoryStats)which;
 
 -(GCNumberWithUnit*)averageWithUnit:(gcHistoryStats)which;
 -(GCNumberWithUnit*)sumWithUnit:(gcHistoryStats)which;
--(GCNumberWithUnit*)weightWithUnit:(gcHistoryStats)which;
+-(GCNumberWithUnit*)weightWithUnit:(gcHistoryStats)which DEPRECATED_MSG_ATTRIBUTE("use sum or avg");
 -(GCNumberWithUnit*)weightedSumWithUnit:(gcHistoryStats)which;
 -(GCNumberWithUnit*)weightedAverageWithUnit:(gcHistoryStats)which;
 -(GCNumberWithUnit*)countWithUnit:(gcHistoryStats)which;
 -(double)count:(gcHistoryStats)which;
 
--(void)addNumberWithUnit:(GCNumberWithUnit*)num;
--(void)addNumberWithUnit:(GCNumberWithUnit*)num withWeight:(double)w for:(gcHistoryStats)which;
-
--(void)addSumWithUnit:(GCNumberWithUnit*)num andCount:(NSUInteger)count for:(gcHistoryStats)which;
 @end
 
 // Summary of all fields stats

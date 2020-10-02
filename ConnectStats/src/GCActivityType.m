@@ -239,8 +239,9 @@ static GCActivityTypes * _activityTypesCache = nil;
 #pragma mark - Properties
 
 -(BOOL)isPacePreferred{
-    if( [self.key isEqualToString:GC_TYPE_RUNNING] || [self.key isEqualToString:GC_TYPE_SWIMMING])
+    if( [GCFields pacePreferredForActivityType:self.key]){
         return true;
+    }
     
     return self.parentType.isPacePreferred;
 }
@@ -252,12 +253,10 @@ static GCActivityTypes * _activityTypesCache = nil;
 -(GCUnit*)preferredSpeedDisplayUnit{
     GCActivityType * top = [self topSubRootType];
     
-    
-    if( [top.key isEqualToString:GC_TYPE_RUNNING] ){
-        return [[GCUnit minperkm] unitForGlobalSystem];
-    }
     if( [top.key isEqualToString:GC_TYPE_SWIMMING] ){
         return [[GCUnit min100m] unitForGlobalSystem];
+    }else if( [GCFields pacePreferredForActivityType:top.key]){
+        return [[GCUnit minperkm] unitForGlobalSystem];
     }
     return [[GCUnit kph] unitForGlobalSystem];
 
