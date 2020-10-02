@@ -139,7 +139,6 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
             }else{
                 RZLog(RZLogInfo, @"API Check not supported");
             }
-
         }
         [self processDone];
     }

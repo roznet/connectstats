@@ -481,10 +481,9 @@
 #pragma mark - Events
 
 -(void)notifyCallBack:(NSNotification*)notification{
-    RZLogTrace(@"");
-    if( [notification.name isEqualToString:kNotifyOrganizerLoadComplete]){
-        [self clearFieldDataSeries];
-    }
+    RZLogTrace(@"Clear all and reload");
+    [self clearFieldDataSeries];
+    
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self.tableView reloadData];
     });

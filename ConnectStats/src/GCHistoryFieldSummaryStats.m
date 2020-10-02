@@ -36,8 +36,15 @@
 @property (nonatomic,assign) double * count;
 @property (nonatomic,assign) double * max;
 @property (nonatomic,assign) double * min;
-@property (nonatomic,assign) double * wsum;
-@property (nonatomic,assign) double * weight;
+@property (nonatomic,assign) double * timewsum;
+@property (nonatomic,assign) double * timeweight;
+@property (nonatomic,assign) double * distwsum;
+@property (nonatomic,assign) double * distweight;
+
+-(void)addNumberWithUnit:(GCNumberWithUnit*)num;
+-(void)addNumberWithUnit:(GCNumberWithUnit*)num withTimeWeight:(double)tw distWeight:(double)dw for:(gcHistoryStats)which;
+
+
 
 @end
 
@@ -49,8 +56,10 @@
         _count  = calloc(sizeof(double), gcHistoryStatsEnd);
         _max    = calloc(sizeof(double), gcHistoryStatsEnd);
         _min    = calloc(sizeof(double), gcHistoryStatsEnd);
-        _wsum   = calloc(sizeof(double), gcHistoryStatsEnd);
-        _weight = calloc(sizeof(double), gcHistoryStatsEnd);
+        _timewsum   = calloc(sizeof(double), gcHistoryStatsEnd);
+        _timeweight = calloc(sizeof(double), gcHistoryStatsEnd);
+        _distwsum   = calloc(sizeof(double), gcHistoryStatsEnd);
+        _distweight = calloc(sizeof(double), gcHistoryStatsEnd);
     }
     return self;
 }
@@ -60,8 +69,10 @@
     free(_count);
     free(_max);
     free(_min);
-    free(_wsum);
-    free(_weight);
+    free(_timewsum);
+    free(_timeweight);
+    free(_distwsum);
+    free(_distweight);
     [_field release];
     [_unit release];
 
@@ -87,18 +98,31 @@
 }
 
 -(GCNumberWithUnit*)weightWithUnit:(gcHistoryStats)which{
-    return [GCNumberWithUnit numberWithUnitName:@"dimensionless" andValue:_weight[which]];
+    return [GCNumberWithUnit numberWithUnitName:@"dimensionless" andValue:_timeweight[which]];
 
 }
 -(GCNumberWithUnit*)weightedSumWithUnit:(gcHistoryStats)which{
-    return [self numberWithUnitForValue:self.wsum[which]];
+    return [self numberWithUnitForValue:self.timewsum[which]];
 }
 -(GCNumberWithUnit*)weightedAverageWithUnit:(gcHistoryStats)which{
-    if (self.weight[which]!= 0.) {
-        return [self numberWithUnitForValue:self.wsum[which]/self.weight[which]];
-    }else{
-        return nil;
+    switch (self.unit.sumWeightBy) {
+        case GCUnitSumWeightByTime:
+            if (self.timeweight[which]!= 0.) {
+                return [self numberWithUnitForValue:self.timewsum[which]/self.timeweight[which]];
+            }
+            break;
+        case GCUnitSumWeightByCount:
+            if( self.count[which] != 0.){
+                return [self numberWithUnitForValue:self.sum[which]/self.count[which]];
+            }
+            break;
+        case GCUnitSumWeightByDistance:
+            if (self.distweight[which]!= 0.) {
+                return [self numberWithUnitForValue:self.distwsum[which]/self.distweight[which]];
+            }
+            break;
     }
+    return nil;
 
 }
 
@@ -146,7 +170,7 @@
                 self.sum[i] = [common convertDouble:self.sum[i] fromUnit:self.unit];
                 self.max[i] = [common convertDouble:self.max[i] fromUnit:self.unit];
                 self.min[i] = [common convertDouble:self.min[i] fromUnit:self.unit];
-                self.wsum[i]= [common convertDouble:self.wsum[i] fromUnit:self.unit];
+                self.timewsum[i]= [common convertDouble:self.timewsum[i] fromUnit:self.unit];
             }
             self.unit = common;
         }
@@ -154,15 +178,16 @@
 }
 
 -(void)addNumberWithUnit:(GCNumberWithUnit*)num{
-    [self addNumberWithUnit:num withWeight:1. for:gcHistoryStatsAll];
+    [self addNumberWithUnit:num withTimeWeight:1.0 distWeight:1.0 for:gcHistoryStatsAll];
 }
--(void)addNumberWithUnit:(GCNumberWithUnit*)num withWeight:(double)weight for:(gcHistoryStats)which{
+-(void)addNumberWithUnit:(GCNumberWithUnit*)num withTimeWeight:(double)tw distWeight:(double)dw for:(gcHistoryStats)which{
     if ([num.unit isEqualToUnit:self.unit]) {
         if (!isinf(num.value)) {
             self.sum[which] += num.value;
             self.max[which] = MAX(self.max[which], num.value);
             self.min[which] = MIN(self.min[which], num.value);
-            self.wsum[which] += num.value * weight;
+            self.timewsum[which] += num.value * tw;
+            self.distwsum[which] += num.value * dw;
         }
     }else{
         [self convertToUnit:num.unit];
@@ -171,11 +196,13 @@
             self.sum[which] += val;
             self.max[which] = MAX(self.max[which], val);
             self.min[which] = MIN(self.min[which], val);
-            self.wsum[which] =  val * weight;
+            self.timewsum[which] =  val * tw;
+            self.distwsum[which] =  val * dw;
         }
     }
     self.count[which] +=1.;
-    self.weight[which]+=weight;
+    self.timeweight[which]+=tw;
+    self.distweight[which]+=dw;
 }
 -(void)addSumWithUnit:(GCNumberWithUnit*)num andCount:(NSUInteger)count for:(gcHistoryStats)which{
     if ([num.unit isEqualToUnit:self.unit]) {
@@ -210,6 +237,8 @@
                                          referenceDate:(NSDate*)refOrNil
                                             ignoreMode:(gcIgnoreMode)ignoreMode{
     GCHistoryFieldSummaryStats * rv = [[[GCHistoryFieldSummaryStats alloc] init] autorelease];
+    
+    GCField * badField = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:@"all"];
     if (rv) {
         // First collect by indexing on Keys/NSStirng for speed
         // Then after cleanup by adding the type
@@ -232,22 +261,30 @@
                         fieldKeyData[field] = holder;
                     }
                     GCField * fieldAll = [field correspondingFieldTypeAll];
+                    BOOL bad = [fieldAll isEqualToField:badField];
                     GCFieldDataHolder * holderAll = fieldKeyData[fieldAll];
                     if(!holderAll){
                         holderAll = RZReturnAutorelease([[GCFieldDataHolder alloc] init]);
                         holderAll.field = fieldAll;
                         fieldKeyData[fieldAll] = holderAll;
                     }
+                    if( bad && [act.activityId isEqualToString:@"101787619"]){
+                        NSLog(@"%@", act);
+                    }
                     GCNumberWithUnit * nu = [act numberWithUnitForField:field];
                     if (nu) {
                         // weight is either duration (everything) or dist (for pace = invlinear)
-                        double weight =  [nu.unit isKindOfClass:[GCUnitInverseLinear class]] ? [act summaryFieldValueInStoreUnit:gcFieldFlagSumDistance] : [act summaryFieldValueInStoreUnit:gcFieldFlagSumDuration];
+                        double timeweight = [act summaryFieldValueInStoreUnit:gcFieldFlagSumDuration];
+                        double distweight = [act summaryFieldValueInStoreUnit:gcFieldFlagSumDistance];
                         // When doing day -> weight = 1
                         if (field.fieldFlag == gcFieldFlagSumDistance || ignoreMode == gcIgnoreModeDayFocus) {
-                            weight=1.;
+                            distweight=1.;
+                            timeweight=1.;
                         }
-                        [holder addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsAll];
-                        [holderAll addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsAll];
+                        
+                        [holder addNumberWithUnit:nu withTimeWeight:timeweight distWeight:distweight for:gcHistoryStatsAll];
+                        [holderAll addNumberWithUnit:nu withTimeWeight:timeweight distWeight:distweight for:gcHistoryStatsAll];
+
                         if (weekBucket==nil) {
                             weekBucket = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitWeekOfYear
                                                                   referenceDate:refOrNil
@@ -263,16 +300,16 @@
                             [yearBucket bucket:act.date];
                         }
                         if ([weekBucket contains:act.date]) {
-                            [holder addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsWeek];
-                            [holderAll addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsWeek];
+                            [holder addNumberWithUnit:nu withTimeWeight:timeweight distWeight:distweight for:gcHistoryStatsWeek];
+                            [holderAll addNumberWithUnit:nu withTimeWeight:timeweight distWeight:distweight for:gcHistoryStatsWeek];
                         }
                         if ([monthBucket contains:act.date]) {
-                            [holder addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsMonth];
-                            [holderAll addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsMonth];
+                            [holder addNumberWithUnit:nu withTimeWeight:timeweight distWeight:distweight for:gcHistoryStatsMonth];
+                            [holderAll addNumberWithUnit:nu withTimeWeight:timeweight distWeight:distweight for:gcHistoryStatsMonth];
                         }
                         if ([yearBucket contains:act.date]) {
-                            [holder addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsYear];
-                            [holderAll addNumberWithUnit:nu withWeight:weight for:gcHistoryStatsYear];
+                            [holder addNumberWithUnit:nu withTimeWeight:timeweight distWeight:distweight for:gcHistoryStatsYear];
+                            [holderAll addNumberWithUnit:nu withTimeWeight:timeweight distWeight:distweight for:gcHistoryStatsYear];
                         }
                     }
                 }
@@ -325,13 +362,13 @@
             [yearBucket bucket:measure.date];
         }
         if ([weekBucket contains:measure.date]) {
-            [holder addNumberWithUnit:measure.value withWeight:1. for:gcHistoryStatsWeek];
+            [holder addNumberWithUnit:measure.value withTimeWeight:1. distWeight:1. for:gcHistoryStatsWeek];
         }
         if ([monthBucket contains:measure.date]) {
-            [holder addNumberWithUnit:measure.value withWeight:1. for:gcHistoryStatsMonth];
+            [holder addNumberWithUnit:measure.value withTimeWeight:1. distWeight:1.  for:gcHistoryStatsMonth];
         }
         if ([yearBucket contains:measure.date]) {
-            [holder addNumberWithUnit:measure.value withWeight:1. for:gcHistoryStatsYear];
+            [holder addNumberWithUnit:measure.value withTimeWeight:1. distWeight:1.  for:gcHistoryStatsYear];
         }
 
     }

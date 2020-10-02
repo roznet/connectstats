@@ -184,7 +184,6 @@ static void registerInCache(GCField*field){
             rv.key = field;
             rv.activityType = activityType;
             rv.fieldFlag = [rv derivedFieldFlag];
-
             registerInCache(rv);
         }
 
@@ -203,6 +202,17 @@ static void registerInCache(GCField*field){
                                     @"WeightedMeanRunCadence":          @(gcFieldFlagCadence),
                                     @"WeightedMeanCadence":          @(gcFieldFlagCadence),
                                     },
+                 GC_TYPE_HIKING:@{ @"WeightedMeanPace":@(gcFieldFlagWeightedMeanSpeed),
+                                             @"WeightedMeanSpeed":@(gcFieldFlagNone),// not preferred
+                                             @"WeightedMeanRunCadence":          @(gcFieldFlagCadence),
+                                             @"WeightedMeanCadence":          @(gcFieldFlagCadence),
+                                             },
+                 GC_TYPE_WALKING:@{ @"WeightedMeanPace":@(gcFieldFlagWeightedMeanSpeed),
+                                             @"WeightedMeanSpeed":@(gcFieldFlagNone),// not preferred
+                                             @"WeightedMeanRunCadence":          @(gcFieldFlagCadence),
+                                             @"WeightedMeanCadence":          @(gcFieldFlagCadence),
+                                             },
+
                  GC_TYPE_CYCLING:@{ @"WeightedMeanBikeCadence":         @(gcFieldFlagCadence),
                                     @"WeightedMeanCadence":          @(gcFieldFlagCadence),
                                     @"WeightedMeanPace":                @(gcFieldFlagNone), // not preferred

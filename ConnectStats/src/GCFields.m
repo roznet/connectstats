@@ -158,6 +158,9 @@ static NSArray * _cacheSwimLapField = nil;
         || [field isEqualToString:@"MinPace"];
 }
 
++(BOOL)pacePreferredForActivityType:(NSString*)activityType{
+    return [activityType isEqualToString:GC_TYPE_RUNNING] || [activityType isEqualToString:GC_TYPE_SWIMMING] || [activityType isEqualToString:GC_TYPE_HIKING];
+}
 
 #pragma mark - gcFieldFlag
 
@@ -182,7 +185,7 @@ static NSArray * _cacheSwimLapField = nil;
         case gcFieldFlagSumStep:
             return @"SumStep";
         case gcFieldFlagWeightedMeanSpeed:{
-            if ([aAct isEqualToString:GC_TYPE_RUNNING] || [aAct isEqualToString:GC_TYPE_SWIMMING]) {
+            if( [self pacePreferredForActivityType:aAct]){
                 return @"WeightedMeanPace";
             }else{
                 return @"WeightedMeanSpeed";

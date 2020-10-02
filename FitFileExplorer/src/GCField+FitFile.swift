@@ -32,6 +32,8 @@ public extension GCField {
         if fieldKey == "WeightedMeanCadence" {
             switch activityType {
             case GC_TYPE_RUNNING: fieldKey = "WeightedMeanRunCadence"
+            case GC_TYPE_WALKING: fieldKey = "WeightedMeanRunCadence"
+            case GC_TYPE_HIKING: fieldKey = "WeightedMeanRunCadence"
             case GC_TYPE_CYCLING: fieldKey = "WeightedMeanBikeCadence"
             case GC_TYPE_SWIMMING: fieldKey = "WeightedMeanSwimCadence"
             default: RZSLog.warning("cadence for activityType \(activityType) without dedicated cadence field ")

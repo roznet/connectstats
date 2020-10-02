@@ -174,7 +174,7 @@
     NSString * rv = defs[fitfield];
     if( activityType){
         if( [rv isEqualToString:@"WeightedMeanCadence"]){
-            if( [activityType isEqualToString:GC_TYPE_RUNNING]){
+            if( [activityType isEqualToString:GC_TYPE_RUNNING] || [activityType isEqualToString:GC_TYPE_HIKING] || [activityType isEqualToString:GC_TYPE_WALKING]){
                 rv = @"WeightedMeanRunCadence";
             }else if ([activityType isEqualToString:GC_TYPE_CYCLING]){
                 rv = @"WeightedMeanBikeCadence";

@@ -55,6 +55,7 @@
 #define CONFIG_CRITICAL_CALC_UNIT       @"config_critical_calc_unit_v2"
 #define CONFIG_REFERENCE_DATE           @"config_reference_date"
 #define CONFIG_PERIOD_TYPE              @"config_period_type"
+#define CONFIG_TODATE_LAST_ACTIVITY     @"config_period_todate_last_activity"
 #define CONFIG_STATS_INLINE_GRAPHS      @"config_stats_inline_graphs"
 #define CONFIG_MAPS_INLINE_GRADIENT     @"config_maps_inline_gradient"
 #define CONFIG_GRAPH_LAP_OVERLAY        @"config_graph_lap_overlay"
