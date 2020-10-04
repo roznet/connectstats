@@ -228,7 +228,10 @@
             [self.requests removeAllObjects];
             [self resetStatus];
             [self.requests addObject:[GCGarminLoginSSORequest requestWithUser:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
-                                                                       andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]]];
+                                                                       andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]
+                                                                   validation:^(){
+                return [[GCAppGlobal profile] serviceEnabled:gcServiceGarmin];
+            }]];
         }
     }
 }

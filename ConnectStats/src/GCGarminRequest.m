@@ -64,7 +64,8 @@
         self.stage = gcRequestStageDownload;
 #if TARGET_OS_IPHONE
         return [GCGarminLoginSSORequest requestWithUser:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
-                                                 andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]];
+                                                 andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]
+                                             validation:nil];
 #else
         //FIXME:
         return nil;//[GCGarminLoginSSORequest requestWithUser:[FITAppGlobal currentLoginName]
