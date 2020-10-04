@@ -229,6 +229,16 @@
     return [GCCellGrid gridCell:tableView];
 }
 
+-(BOOL)garminCredentialNeededAndMissing{
+    BOOL rv = false;
+    
+    if( [[GCAppGlobal profile] serviceEnabled:gcServiceGarmin] && [[GCAppGlobal profile] serviceIncomplete:gcServiceGarmin]){
+        rv = true;
+    }
+    
+    return rv;
+}
+
 -(NSString*)statusForGarmin{
     gcGarminDownloadSource source = [GCViewConfig garminDownloadSource];
     switch( source ){
@@ -500,8 +510,12 @@
     }else if( indexPath.row == GC_CONNECTSTATS_LOGOUT){
         gridcell = [GCCellGrid gridCell:tableView];
         [gridcell setupForRows:2 andCols:1];
-
-        [self setupServiceStatusCell:gridcell forService:[GCService service:gcServiceConnectStats] secondary:[GCService service:gcServiceGarmin]];
+        if( [self garminCredentialNeededAndMissing] ){
+            NSString * title = NSLocalizedString(@"Please enter credentials above", @"service");
+            [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attributeBold16] withString:title];
+        }else{
+            [self setupServiceStatusCell:gridcell forService:[GCService service:gcServiceConnectStats] secondary:[GCService service:gcServiceGarmin]];
+        }
         
         rv = gridcell;
     }else if( indexPath.row == GC_CONNECTSTATS_HELP){
@@ -1035,7 +1049,9 @@
     }else if (indexPath.section==GC_SECTIONS_STRAVA&&indexPath.row==GC_STRAVA_LOGOUT){
         [self toggleLoginLogout:gcServiceStrava reqClass:[GCStravaReqBase class]];
     }else if (indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_LOGOUT){
-        [self toggleLoginLogout:gcServiceConnectStats reqClass:[GCConnectStatsRequest class]];
+        if( ![self garminCredentialNeededAndMissing] ){
+            [self toggleLoginLogout:gcServiceConnectStats reqClass:[GCConnectStatsRequest class]];
+        }
     }else if (indexPath.section == GC_SECTIONS_HEALTHKIT && indexPath.row == GC_HEALTHKIT_SOURCE){
         GCSettingsSourceTableViewController * source = [[GCSettingsSourceTableViewController alloc] initWithNibName:nil bundle:nil];
         [self.navigationController pushViewController:source animated:YES];

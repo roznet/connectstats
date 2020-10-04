@@ -25,8 +25,10 @@
 
 #import "GCGarminRequest.h"
 
+typedef BOOL (^GCGarminLoginValidationFunc)(void);
+
 @interface GCGarminLoginSSORequest : GCGarminReqBase
 
-+(GCGarminLoginSSORequest*)requestWithUser:(NSString*)name andPwd:(NSString*)pwd;
++(GCGarminLoginSSORequest*)requestWithUser:(NSString*)name andPwd:(NSString*)pwd validation:(GCGarminLoginValidationFunc)val;
 
 @end

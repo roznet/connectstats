@@ -43,15 +43,17 @@ NSString * kGarminFullUrl =
 @property (nonatomic,assign) gcSSOStages ssoStage;
 @property (nonatomic,retain) NSString * serviceTicket;
 @property (nonatomic,retain) NSString * csrfToken;
+@property (nonatomic,copy) GCGarminLoginValidationFunc validationFunc;
 
 @end
 
 @implementation GCGarminLoginSSORequest
-+(GCGarminLoginSSORequest*)requestWithUser:(NSString*)name andPwd:(NSString*)pwd{
++(GCGarminLoginSSORequest*)requestWithUser:(NSString*)name andPwd:(NSString*)pwd validation:(GCGarminLoginValidationFunc)val{
     GCGarminLoginSSORequest * rv = RZReturnAutorelease([[GCGarminLoginSSORequest alloc] init]);
     if (rv) {
         rv.uname = name;
         rv.pwd = pwd;
+        rv.validationFunc = val;
     }
     return rv;
 }
@@ -73,6 +75,7 @@ NSString * kGarminFullUrl =
     [_pwd release];
     [_csrfToken release];
     [_serviceTicket release];
+    [_validationFunc release];
 
     [super dealloc];
 }
@@ -127,7 +130,19 @@ NSString * kGarminFullUrl =
 -(void)preConnectionSetup{
 }
 
+-(BOOL)incomplete{
+    return self.pwd.length == 0 || self.uname.length == 0;
+}
+
+-(BOOL)shouldRun{
+    return self.validationFunc == nil || self.validationFunc();
+}
+
 -(NSString*)url{
+    if( [self incomplete] || ![self shouldRun]){
+        return nil;
+    }
+    
     switch (self.ssoStage) {
         case gcSSOGetServiceTicket:
             return kGarminFullUrl;
@@ -184,6 +199,29 @@ NSString * kGarminFullUrl =
 }
 
 -(void)process{
+    if( ![self shouldRun] || [self incomplete]){
+        NSMutableArray * msg = [NSMutableArray array];
+        if(  [self incomplete] ){
+            [msg addObject:@"incomplete"];
+        }
+        if( ![self shouldRun] ){
+            [msg addObject:@"should not run"];
+        }
+
+        if( [self shouldRun] && [self incomplete] ){
+            self.status = GCWebStatusLoginFailed;
+            RZLog(RZLogError,@"Trying to do garmin login but %@", [msg componentsJoinedByString:@" and "] );
+        }else{
+            RZLog(RZLogInfo,@"Trying to do garmin login but %@", [msg componentsJoinedByString:@" and "] );
+            self.status = GCWebStatusOK;
+        }
+
+        // don't do anything more
+        self.ssoStage = gcSSOAllDone;
+        [self processDone];
+        return;
+    }
+    
 #if TARGET_IPHONE_SIMULATOR
     NSString * fn = [NSString stringWithFormat:@"garmin_sso_stage_%d.html", (int)self.ssoStage];
     NSError * e = nil;
@@ -234,7 +272,7 @@ NSString * kGarminFullUrl =
     gcSSOStages nextStage = self.ssoStage+1;
 
     if (nextStage < gcSSOAllDone) {
-        rv = [GCGarminLoginSSORequest requestWithUser:self.uname andPwd:self.pwd];
+        rv = [GCGarminLoginSSORequest requestWithUser:self.uname andPwd:self.pwd validation:self.validationFunc];
         rv.serviceTicket = self.serviceTicket;
         rv.csrfToken = self.csrfToken;
         rv.ssoStage = nextStage;

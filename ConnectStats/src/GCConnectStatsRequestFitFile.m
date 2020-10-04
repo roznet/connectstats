@@ -120,7 +120,10 @@
         RZLog(RZLogInfo, @"%@ garmin alternative %@ access denied, attempting login", self.activity.activityId, self.activity.externalServiceActivityId);
 
         return [GCGarminLoginSSORequest requestWithUser:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
-                                                 andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]];
+                                                 andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]
+                                             validation:^(){
+            return [[GCAppGlobal profile] serviceEnabled:gcServiceGarmin];
+        }];
     }
     return nil;
 }

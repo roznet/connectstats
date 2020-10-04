@@ -93,7 +93,8 @@
         XCTestExpectation * expectation = [[XCTestExpectation alloc] initWithDescription:[NSString stringWithFormat:@"exp %@",@(i)]];
         [self.expectations addObject:expectation];
         // send them all async at the same time to stress the system...
-        dispatch_async( dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^(){
+        // delay start a bit so the expectation don't get realized before the wait
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.01), dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^(){
             [self.web addRequest:[GCWebRequestTest testWithExpectation:expectation]];
         });
     }
