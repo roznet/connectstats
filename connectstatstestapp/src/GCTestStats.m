@@ -89,33 +89,37 @@
                 NSArray * actIdx = [organizer activityIndexesMatchingString:filter];
                 GCNumberWithUnit * sum = nil;
                 double cnt = 0.;
-                for (NSUInteger i = 0; i < [actIdx count]; i++) {
-                    GCActivity * act = [organizer activityForIndex:[[actIdx objectAtIndex:i] integerValue]];
-                    GCNumberWithUnit * dist = [act numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:act.activityType]];
-                    if( sum == nil){
-                        sum = dist;
-                    }else{
-                        sum = [sum addNumberWithUnit:dist weight:1.0];
-                    }
-                    cnt += 1.;
-                }
-                GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType];
-                GCNumberWithUnit * aggSum = [data numberWithUnit:distfield statType:gcAggregatedSum];
-                double aggCnt = [data numberWithUnit:distfield statType:gcAggregatedCnt].value;
-
-                if (fabs(cnt-aggCnt) > 1e-7 || ![aggSum isEqualToNumberWithUnit:sum]) {
-                    actIdx = [organizer activityIndexesMatchingString:filter];
-                    NSLog( @"%@", data);
-                    NSLog(@"type=%@ config=%@ filter=%@",activityType,calendarConfig,filter);
+                RZ_ASSERT([actIdx count]>0, @"some activities");
+                if( actIdx.count > 0){
                     for (NSUInteger i = 0; i < [actIdx count]; i++) {
                         GCActivity * act = [organizer activityForIndex:[[actIdx objectAtIndex:i] integerValue]];
-                        NSLog(@"%@ %@ %f",act,[[act date] dateShortFormat],act.sumDistanceCompat);
+                        GCNumberWithUnit * dist = [act numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:act.activityType]];
+                        if( sum == nil){
+                            sum = dist;
+                        }else{
+                            sum = [sum addNumberWithUnit:dist weight:1.0];
+                        }
+                        cnt += 1.;
+                    }
+                    GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType];
+                    GCNumberWithUnit * aggSum = [data numberWithUnit:distfield statType:gcAggregatedSum];
+                    double aggCnt = [data numberWithUnit:distfield statType:gcAggregatedCnt].value;
+                    
+                    if ( sum != nil && ( fabs(cnt-aggCnt) > 1e-7 || ![aggSum isEqualToNumberWithUnit:sum]) ) {
+                        actIdx = [organizer activityIndexesMatchingString:filter];
+                        NSLog( @"%@", data);
+                        NSLog(@"type=%@ config=%@ filter=%@",activityType,calendarConfig,filter);
+                        for (NSUInteger i = 0; i < [actIdx count]; i++) {
+                            GCActivity * act = [organizer activityForIndex:[[actIdx objectAtIndex:i] integerValue]];
+                            NSLog(@"%@ %@ %f",act,[[act date] dateShortFormat],act.sumDistanceCompat);
+                        }
+                    }
+                    RZ_ASSERT(fabs(cnt-aggCnt)<1e-6, @"%f match cnt %f", aggCnt,cnt);
+                    if( sum != nil){
+                        RZ_ASSERT([aggSum isEqualToNumberWithUnit:sum], @"%@ match sum %f", aggSum,sum);
                     }
                 }
-                RZ_ASSERT(fabs(cnt-aggCnt)<1e-6, @"%f match cnt %f", aggCnt,cnt);
-                RZ_ASSERT([aggSum isEqualToNumberWithUnit:sum], @"%@ match sum %f", aggSum,sum);
             }
-            
             [self checkGarminConsistency:vals activityType:activityType calendarConfig:calendarConfig];
 
         }
