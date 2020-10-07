@@ -238,7 +238,6 @@
                                             ignoreMode:(gcIgnoreMode)ignoreMode{
     GCHistoryFieldSummaryStats * rv = [[[GCHistoryFieldSummaryStats alloc] init] autorelease];
     
-    GCField * badField = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:@"all"];
     if (rv) {
         // First collect by indexing on Keys/NSStirng for speed
         // Then after cleanup by adding the type
@@ -261,15 +260,11 @@
                         fieldKeyData[field] = holder;
                     }
                     GCField * fieldAll = [field correspondingFieldTypeAll];
-                    BOOL bad = [fieldAll isEqualToField:badField];
                     GCFieldDataHolder * holderAll = fieldKeyData[fieldAll];
                     if(!holderAll){
                         holderAll = RZReturnAutorelease([[GCFieldDataHolder alloc] init]);
                         holderAll.field = fieldAll;
                         fieldKeyData[fieldAll] = holderAll;
-                    }
-                    if( bad && [act.activityId isEqualToString:@"101787619"]){
-                        NSLog(@"%@", act);
                     }
                     GCNumberWithUnit * nu = [act numberWithUnitForField:field];
                     if (nu) {
@@ -298,6 +293,7 @@
                             [weekBucket bucket:act.date];
                             [monthBucket bucket:act.date];
                             [yearBucket bucket:act.date];
+                            RZLog(RZLogInfo, @"Week: %@", weekBucket);
                         }
                         if ([weekBucket contains:act.date]) {
                             [holder addNumberWithUnit:nu withTimeWeight:timeweight distWeight:distweight for:gcHistoryStatsWeek];

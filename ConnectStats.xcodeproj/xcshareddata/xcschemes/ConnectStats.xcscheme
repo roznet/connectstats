@@ -78,6 +78,11 @@
             isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
+            key = "CG_NUMERICS_SHOW_BACKTRACE"
+            value = "1"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
             key = "RZ_REFERENCE_OBJECT_DIR"
             value = "$(SOURCE_ROOT)/ConnectStatsTests/samples/ReferenceObjects"
             isEnabled = "YES">

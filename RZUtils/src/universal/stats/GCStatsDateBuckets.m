@@ -95,6 +95,13 @@
     return rv;
 }
 
+-(NSString*)description{
+    if( self.bucketStart) {
+        return [NSString stringWithFormat:@"<%@: [%@,%@]>", NSStringFromClass([self class]), self.bucketStart, self.bucketEnd];
+    }else{
+        return [NSString stringWithFormat:@"<%@: Empty>", NSStringFromClass([self class])];
+    }
+}
 
 -(BOOL)bucket:(NSDate*)date{
     BOOL changedBucket = false;
@@ -102,19 +109,8 @@
     // find a date before
     if (!self.bucketStart || [self.bucketStart compare:date] == NSOrderedDescending) {
         if (self.refOrNil) {
-            NSDateComponents *comps = [self.calendar components:self.calendarUnit fromDate:date  toDate:self.refOrNil  options:0];
-            NSInteger diff = [self componentUnitValueFrom:comps];
-            if (diff == 0 && [self.refOrNil compare:date] == NSOrderedAscending) {
-                self.bucketStart = self.refOrNil;
-            }else{
-                if (diff >= 0) {
-                    diff = -diff-1;
-                }else{
-                    diff = -diff;
-                }
-                [self setComponentUnitFor:diff];
-                self.bucketStart = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.refOrNil options:0];
-            }
+            [self setComponentUnitFor:-1];
+            self.bucketStart = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.refOrNil options:0];
         }else{
             NSDate * start = nil;
             NSTimeInterval extends;
