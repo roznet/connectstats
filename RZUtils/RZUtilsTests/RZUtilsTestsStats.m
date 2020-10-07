@@ -927,49 +927,73 @@
 }
 
 -(void)testBucketDate{
-    NSDateComponents * comp = [[NSDateComponents alloc] init];
-    NSDateComponents * diff = nil;
+    //   Reference Date = fixed or nil
+    //   move 60 days back, check date when bucket changes:
+    //          Either 7/30 days away
+    //          or date before change had different unit
     
-    NSArray * cases = @[
-                        @[ @"2012-10-29T15:00:01.000Z", @[ @10,@29, @2015 ], @(NSCalendarUnitYear)  ],
-                        @[ @"2012-10-29T15:00:01.000Z", @[ @10,@29, @2010 ], @(NSCalendarUnitYear)  ],
-                        @[ @"2012-10-29T15:00:01.000Z", @[ @10,@29, @2012 ], @(NSCalendarUnitYear)  ],
-                        @[ @"2012-10-29T15:00:01.000Z", @[ @9, @29, @2013 ], @(NSCalendarUnitYear)  ],
-                        
-                        @[ @"2012-10-02T15:00:01.000Z", @[ @10,@29, @2015 ], @(NSCalendarUnitMonth)  ],
-                        @[ @"2012-10-02T15:00:01.000Z", @[ @10,@29, @2010 ], @(NSCalendarUnitMonth)  ],
-                        @[ @"2012-10-02T15:00:01.000Z", @[ @10,@29, @2012 ], @(NSCalendarUnitMonth)  ],
-                        
-                        @[ @"2012-10-29T15:00:01.000Z", @[ @9, @10, @2010 ], @(NSCalendarUnitMonth) ],
-                        @[ @"2012-10-29T15:00:01.000Z", @[ @9, @10, @2015 ], @(NSCalendarUnitMonth) ],
-                        @[ @"2012-10-29T15:00:01.000Z", @[ @10,@29, @2012 ], @(NSCalendarUnitMonth) ],
-                        ];
+    NSCalendar * cal = [RZUtilsTestsSamples calculationCalendar];
+
+    NSDate * testdate = [NSDate dateForRFC3339DateTimeString:@"2020-10-07T09:22:00.000Z"];
+    NSDate * refdate = [testdate endOfDayForCalendar:cal];
     
-    for (NSArray * one in cases) {
-        NSString * datestr = one[0];
-        NSArray * refArray = one[1];
-        NSCalendarUnit unit = [one[2] intValue];
+    GCStatsDateBuckets * bucket_week_calendar  = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitWeekOfYear referenceDate:nil andCalendar:cal];
+    GCStatsDateBuckets * bucket_week_rolling   = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitWeekOfYear referenceDate:refdate andCalendar:cal];
+    GCStatsDateBuckets * bucket_month_calendar = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitMonth referenceDate:nil andCalendar:cal];
+    GCStatsDateBuckets * bucket_month_rolling  = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitMonth referenceDate:refdate andCalendar:cal];
+
+    [bucket_week_calendar bucket:testdate];
+    [bucket_week_rolling bucket:testdate];
+    [bucket_month_calendar bucket:testdate];
+    [bucket_month_rolling bucket:testdate];
+    
+    // start at -1. because already one inside the bucket when we start
+    NSInteger count_unchanged_week = -1;
+    NSInteger count_unchanged_month = 0;
+    
+    for( size_t i=0;i<70;i++){
+        NSDate * previous_date = [testdate dateByAddingTimeInterval:-24.0*3600.0];
+        NSLog(@"%@ => %@", testdate, previous_date);
+
+        BOOL changed_week_calendar = [bucket_week_calendar bucket:previous_date];
+        BOOL changed_week_rolling = [bucket_week_rolling bucket:previous_date];
+        BOOL changed_month_calendar = [bucket_month_calendar bucket:previous_date];
+        BOOL changed_month_rolling = [bucket_month_rolling bucket:previous_date];
+
+        NSInteger week_previous = [cal component:NSCalendarUnitWeekOfYear fromDate:previous_date];
+        NSInteger week_testdate = [cal component:NSCalendarUnitWeekOfYear fromDate:testdate];
         
-        comp.month = [refArray[0] integerValue];;
-        comp.day = [refArray[1] integerValue];
-        comp.year = [refArray[2] integerValue];
+        NSInteger month_previous = [cal component:NSCalendarUnitMonth fromDate:previous_date];
+        NSInteger month_testdate = [cal component:NSCalendarUnitMonth fromDate:testdate];
+
+        if( changed_week_calendar){
+            XCTAssertNotEqual(week_previous, week_testdate, @"Calendar Week changed");
+        }
+        if( changed_month_calendar){
+            XCTAssertNotEqual(month_previous, month_testdate, @"Calendar Month Changed");
+        }
         
-        NSDate * refdate = [[RZUtilsTestsSamples calculationCalendar] dateFromComponents:comp];
+        if( changed_week_rolling ){
+            XCTAssertEqual(count_unchanged_week, 6, @"7 days since last change");
+        }
+        if( changed_month_rolling ){
+            NSLog(@"month rolling changed %@ %@", previous_date, @(count_unchanged_month) );
+            NSLog(@"month rolling bucket %@", bucket_month_rolling);
+        }
         
-        NSDate * date  = [NSDate dateForRFC3339DateTimeString:datestr];
-        GCStatsDateBuckets * bucketer = [GCStatsDateBuckets statsDateBucketFor:unit referenceDate:refdate andCalendar:[RZUtilsTestsSamples calculationCalendar]];
-        [bucketer.calendar setFirstWeekday:1];
-        [bucketer bucket:date];
-        
-        diff = [bucketer.calendar components:unit fromDate:bucketer.bucketStart toDate:date options:0];
-        NSUInteger relevant = [diff monthWeekOrYear:unit];
-        XCTAssertEqual([date compare:bucketer.bucketStart], NSOrderedDescending, @"Bucket start before");
-        XCTAssertEqual([date compare:bucketer.bucketEnd],   NSOrderedAscending,  @"Bucket start before");
-        XCTAssertEqual(relevant, (NSUInteger)0, @"Within same unit");
-        
-        
+
+        if( changed_week_rolling ){
+            count_unchanged_week = 0;
+        }else{
+            count_unchanged_week += 1;
+        }
+        if( changed_month_rolling ){
+            count_unchanged_month = 0;
+        }else{
+            count_unchanged_month += 1;
+        }
+        testdate = previous_date;
     }
-    
     
 }
 

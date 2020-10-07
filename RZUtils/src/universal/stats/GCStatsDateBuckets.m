@@ -104,38 +104,54 @@
 }
 
 -(BOOL)bucket:(NSDate*)date{
-    BOOL changedBucket = false;
-
-    // find a date before
-    if (!self.bucketStart || [self.bucketStart compare:date] == NSOrderedDescending) {
-        if (self.refOrNil) {
+    // if already set up and same, just continue;
+    if( self.bucketStart != nil && [self.bucketStart compare:date] != NSOrderedDescending && [self.bucketEnd compare:date] == NSOrderedDescending){
+        return false;
+    }
+    
+    if (self.refOrNil) {
+        if (!self.bucketStart ) {
             [self setComponentUnitFor:-1];
-            self.bucketStart = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.refOrNil options:0];
+            self.bucketEnd = self.refOrNil;
+            self.bucketStart = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.bucketEnd options:0];
+            [self setComponentUnitFor:1];
         }else{
-            NSDate * start = nil;
-            NSTimeInterval extends;
+            NSComparisonResult res = [self.bucketEnd compare:date];
+            [self setComponentUnitFor:1];
+            // look forwards
+            while ( res != NSOrderedDescending) {
+                self.bucketStart = self.bucketEnd;
+                self.bucketEnd   = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.bucketStart options:0];
 
-            [self.calendar rangeOfUnit:self.calendarUnit startDate:&start interval:&extends forDate:date];
-            self.bucketStart = start;
+                res = [self.bucketEnd compare:date];
+            }
+            
+            res = [self.bucketStart compare:date];
+            
+            // look backwards
+            [self setComponentUnitFor:-1];
+            while ( res != NSOrderedAscending) {
+                self.bucketEnd = self.bucketStart;
+                self.bucketStart   = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.bucketStart options:0];
+
+                res = [self.bucketStart compare:date];
+            }
+            [self setComponentUnitFor:1];
         }
+
+    }else{
+        NSDate * start = nil;
+        NSTimeInterval extends;
+        // We already know we are not in the same bucket from first test.
+        [self.calendar rangeOfUnit:self.calendarUnit startDate:&start interval:&extends forDate:date];
+        
+        self.bucketStart = start;
         [self setComponentUnitFor:1];
-        self.bucketEnd = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.bucketStart options:0];
-        changedBucket = true;
-
-        return changedBucket;
-    }
-    //FIX if refdate should always compute from refdate
-    NSComparisonResult res = [self.bucketEnd compareCalendarDay:date include:true calendar:self.calendar];
-
-    while ( res != NSOrderedDescending) {
-        changedBucket = true;
-        self.bucketStart = self.bucketEnd;
         self.bucketEnd   = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.bucketStart options:0];
-
-        res = [self.bucketEnd compareCalendarDay:date include:true calendar:self.calendar];
+        
     }
 
-    return changedBucket;
+    return true;
 }
 -(BOOL)contains:(NSDate*)date{
     if (!self.bucketStart) {
