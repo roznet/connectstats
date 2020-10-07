@@ -860,67 +860,87 @@
     
     NSCalendar * cal = [RZUtilsTestsSamples calculationCalendar];
 
-    NSDate * testdate = [NSDate dateForRFC3339DateTimeString:@"2020-10-07T09:22:00.000Z"];
-    NSDate * refdate = [testdate endOfDayForCalendar:cal];
-    
-    GCStatsDateBuckets * bucket_week_calendar  = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitWeekOfYear referenceDate:nil andCalendar:cal];
-    GCStatsDateBuckets * bucket_week_rolling   = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitWeekOfYear referenceDate:refdate andCalendar:cal];
-    GCStatsDateBuckets * bucket_month_calendar = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitMonth referenceDate:nil andCalendar:cal];
-    GCStatsDateBuckets * bucket_month_rolling  = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitMonth referenceDate:refdate andCalendar:cal];
 
-    [bucket_week_calendar bucket:testdate];
-    [bucket_week_rolling bucket:testdate];
-    [bucket_month_calendar bucket:testdate];
-    [bucket_month_rolling bucket:testdate];
-    
-    // start at -1. because already one inside the bucket when we start
-    NSInteger count_unchanged_week = -1;
-    NSInteger count_unchanged_month = 0;
-    
-    for( size_t i=0;i<70;i++){
-        NSDate * previous_date = [testdate dateByAddingTimeInterval:-24.0*3600.0];
-        NSLog(@"%@ => %@", testdate, previous_date);
-
-        BOOL changed_week_calendar = [bucket_week_calendar bucket:previous_date];
-        BOOL changed_week_rolling = [bucket_week_rolling bucket:previous_date];
-        BOOL changed_month_calendar = [bucket_month_calendar bucket:previous_date];
-        BOOL changed_month_rolling = [bucket_month_rolling bucket:previous_date];
-
-        NSInteger week_previous = [cal component:NSCalendarUnitWeekOfYear fromDate:previous_date];
-        NSInteger week_testdate = [cal component:NSCalendarUnitWeekOfYear fromDate:testdate];
+    for( size_t j=0;j<2;j++){
+        NSTimeInterval delta = (j == 0) ? -24.0*3600.0 : 24.0*3600.0;
         
-        NSInteger month_previous = [cal component:NSCalendarUnitMonth fromDate:previous_date];
-        NSInteger month_testdate = [cal component:NSCalendarUnitMonth fromDate:testdate];
+        NSDate * testdate = [NSDate dateForRFC3339DateTimeString:@"2020-10-07T09:22:00.000Z"];
+        NSDate * refdate = [testdate endOfDayForCalendar:cal];
 
-        if( changed_week_calendar){
-            XCTAssertNotEqual(week_previous, week_testdate, @"Calendar Week changed");
-        }
-        if( changed_month_calendar){
-            XCTAssertNotEqual(month_previous, month_testdate, @"Calendar Month Changed");
+        if( delta > 0){
+            // if > 0 move just past the refdate
+            // as all the count assume starting at the beginning/first day of the bucket
+            testdate = [testdate dateByAddingTimeInterval:delta];
         }
         
-        if( changed_week_rolling ){
-            XCTAssertEqual(count_unchanged_week, 6, @"7 days since last change");
-        }
-        if( changed_month_rolling ){
-            NSLog(@"month rolling changed %@ %@", previous_date, @(count_unchanged_month) );
-            NSLog(@"month rolling bucket %@", bucket_month_rolling);
-        }
-        
+        GCStatsDateBuckets * bucket_week_calendar  = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitWeekOfYear referenceDate:nil andCalendar:cal];
+        GCStatsDateBuckets * bucket_week_rolling   = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitWeekOfYear referenceDate:refdate andCalendar:cal];
+        GCStatsDateBuckets * bucket_month_calendar = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitMonth referenceDate:nil andCalendar:cal];
+        GCStatsDateBuckets * bucket_month_rolling  = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitMonth referenceDate:refdate andCalendar:cal];
 
-        if( changed_week_rolling ){
-            count_unchanged_week = 0;
-        }else{
-            count_unchanged_week += 1;
+        [bucket_week_calendar bucket:testdate];
+        [bucket_week_rolling bucket:testdate];
+        [bucket_month_calendar bucket:testdate];
+        [bucket_month_rolling bucket:testdate];
+        
+        // start at -1. because already one inside the bucket when we start
+        NSInteger count_unchanged_week = 0;
+        NSInteger count_unchanged_month = 0;
+
+        // Will move forward and then backward by over one year in each direction
+        //
+        // then check at each bucket change:
+        //      - rolling bucket: number of days before change
+        //      - calendar bucket: calendar unit changed just for date before and after change.
+        
+        for( size_t i=0;i<370;i++){
+            NSDate * previous_date = [testdate dateByAddingTimeInterval:delta];
+            
+            BOOL changed_week_calendar = [bucket_week_calendar bucket:previous_date];
+            BOOL changed_week_rolling = [bucket_week_rolling bucket:previous_date];
+            BOOL changed_month_calendar = [bucket_month_calendar bucket:previous_date];
+            BOOL changed_month_rolling = [bucket_month_rolling bucket:previous_date];
+            
+            NSInteger week_previous = [cal component:NSCalendarUnitWeekOfYear fromDate:previous_date];
+            NSInteger week_testdate = [cal component:NSCalendarUnitWeekOfYear fromDate:testdate];
+            
+            NSInteger month_previous = [cal component:NSCalendarUnitMonth fromDate:previous_date];
+            NSInteger month_testdate = [cal component:NSCalendarUnitMonth fromDate:testdate];
+            
+            if( changed_week_calendar){
+                XCTAssertNotEqual(week_previous, week_testdate, @"Calendar Week changed");
+            }
+            if( changed_month_calendar){
+                XCTAssertNotEqual(month_previous, month_testdate, @"Calendar Month Changed");
+            }
+            
+            if( changed_week_rolling ){
+                XCTAssertEqual(count_unchanged_week, 6, @"7 days since last change");
+            }
+            if( changed_month_rolling ){
+                NSDate * month_date = previous_date;
+                if( delta > 0){
+                    // when moving forward is the number of days of the previous month that matters
+                    NSDateComponents * comp = [NSDateComponents dateComponentsFromString:@"-1m"];
+                    month_date = [cal dateByAddingComponents:comp toDate:previous_date options:0];
+                }
+                NSRange total_days = [cal rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:month_date];
+                XCTAssertEqual(total_days.length, count_unchanged_month+1);
+            }
+            
+            if( changed_week_rolling ){
+                count_unchanged_week = 0;
+            }else{
+                count_unchanged_week += 1;
+            }
+            if( changed_month_rolling ){
+                count_unchanged_month = 0;
+            }else{
+                count_unchanged_month += 1;
+            }
+            testdate = previous_date;
         }
-        if( changed_month_rolling ){
-            count_unchanged_month = 0;
-        }else{
-            count_unchanged_month += 1;
-        }
-        testdate = previous_date;
     }
-    
 }
 
 -(void)testSerieFilter{
