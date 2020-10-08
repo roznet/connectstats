@@ -77,14 +77,20 @@ class GCStatsMultiFieldConfigViewController: UIViewController {
                 viewChoiceSegment.selectedSegmentIndex = 0
                 viewConfigSegment.isEnabled = false
                 calendarAggregationSegment.isEnabled = false
+                periodSegment.isEnabled = false
             case gcViewChoice.calendar:
                 viewChoiceSegment.selectedSegmentIndex = 1
                 viewConfigSegment.isEnabled = true
                 calendarAggregationSegment.isEnabled = true
+                periodSegment.isEnabled = true
+                periodSegment.setEnabled(true, forSegmentAt: 2)
             case gcViewChoice.fields:
                 viewChoiceSegment.selectedSegmentIndex = 2
                 viewConfigSegment.isEnabled = true
                 calendarAggregationSegment.isEnabled = true
+                periodSegment.isEnabled = true
+                periodSegment.setEnabled(false, forSegmentAt: 2)
+
             @unknown default:
                 viewChoiceSegment.selectedSegmentIndex = 0
             }
