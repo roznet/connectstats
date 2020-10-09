@@ -95,7 +95,14 @@
 
 }
 -(GCNumberWithUnit*)weightedSumWithUnit:(gcHistoryStats)which{
-    return [self numberWithUnitForValue:self.timewsum[which]];
+    switch (self.unit.sumWeightBy) {
+        case GCUnitSumWeightByTime:
+            return [self numberWithUnitForValue:self.timewsum[which]];
+        case GCUnitSumWeightByCount:
+            return [self numberWithUnitForValue:self.sum[which]];
+        case GCUnitSumWeightByDistance:
+            return [self numberWithUnitForValue:self.distwsum[which]];
+    }
 }
 -(GCNumberWithUnit*)weightedAverageWithUnit:(gcHistoryStats)which{
     switch (self.unit.sumWeightBy) {
