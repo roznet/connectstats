@@ -293,7 +293,6 @@
                             [weekBucket bucket:act.date];
                             [monthBucket bucket:act.date];
                             [yearBucket bucket:act.date];
-                            RZLog(RZLogInfo, @"Week: %@", weekBucket);
                         }
                         if ([weekBucket contains:act.date]) {
                             [holder addNumberWithUnit:nu withTimeWeight:timeweight distWeight:distweight for:gcHistoryStatsWeek];
