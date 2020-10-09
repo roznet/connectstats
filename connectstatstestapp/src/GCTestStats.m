@@ -30,6 +30,7 @@
 #import "GCViewConfig.h"
 #import "GCActivity+TestBackwardCompat.h"
 #import "GCStatsCalendarAggregationConfig.h"
+#import "GCHistoryFieldDataHolder.h"
 
 @import RZExternal;
 
@@ -133,12 +134,12 @@
         query = @"select distinct field,uom,count(value) as count,sum(value) as sum from gc_activities_values v, gc_activities a where a.activityId=v.activityId group by field,uom";
     }
     FMResultSet * res = [aDb executeQuery:query, activityType];
-    NSMutableDictionary<GCField*,GCFieldDataHolder*> * fieldData = [NSMutableDictionary dictionary];
+    NSMutableDictionary<GCField*,GCHistoryFieldDataHolder*> * fieldData = [NSMutableDictionary dictionary];
     while ([res next]) {
         GCField * field = [GCField fieldForKey:[res stringForColumn:@"field"] andActivityType:activityType];
-        GCFieldDataHolder * pre = [fieldData objectForKey:field];
+        GCHistoryFieldDataHolder * pre = [fieldData objectForKey:field];
         if (!pre) {
-            GCFieldDataHolder * v =[[GCFieldDataHolder alloc] init];
+            GCHistoryFieldDataHolder * v =[[GCHistoryFieldDataHolder alloc] init];
             [v setField:field];
             fieldData[field] = v;
             pre = v;
@@ -170,8 +171,8 @@
                                                                                           ignoreMode:gcIgnoreModeActivityFocus];
         for (GCField * field in vals_db.fieldData) {
             if (![field isCalculatedField]) {
-                GCFieldDataHolder * data_mem = vals_mem.fieldData[field];
-                GCFieldDataHolder * data_db  = vals_db.fieldData[field];
+                GCHistoryFieldDataHolder * data_mem = vals_mem.fieldData[field];
+                GCHistoryFieldDataHolder * data_db  = vals_db.fieldData[field];
 
                 GCNumberWithUnit * sum_mem = [data_mem sumWithUnit:gcHistoryStatsAll];
                 GCNumberWithUnit * sum_db  = [data_db sumWithUnit:gcHistoryStatsAll];
@@ -288,7 +289,7 @@
         GCField * field = [GCField fieldForKey:fieldkey andActivityType:activityType];
 
         GCHistoryAggregatedDataHolder * data_agg = [vals_agg dataForIndex:0];
-        GCFieldDataHolder * data_sum = [vals_sum dataForField:field];
+        GCHistoryFieldDataHolder * data_sum = [vals_sum dataForField:field];
         //nu_agg is always same
         GCNumberWithUnit* nu_agg = [data_agg numberWithUnit:field statType:gcAggregatedSum];
         GCNumberWithUnit* nu_sum = [data_sum sumWithUnit:gcHistoryStatsWeek];
@@ -305,9 +306,9 @@
     testOne(@"WeightedMeanSpeed");
 
     GCHistoryAggregatedDataHolder * data_agg = [vals_agg dataForIndex:0];
-    GCFieldDataHolder * dist_sum = [vals_sum dataForField:[GCField fieldForKey:@"SumDistance" andActivityType:activityType]];
-    GCFieldDataHolder * dur_sum  = [vals_sum dataForField:[GCField fieldForKey:@"SumDuration" andActivityType:activityType]];
-    GCFieldDataHolder * speed_sum= [vals_sum dataForField:[GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:activityType]];
+    GCHistoryFieldDataHolder * dist_sum = [vals_sum dataForField:[GCField fieldForKey:@"SumDistance" andActivityType:activityType]];
+    GCHistoryFieldDataHolder * dur_sum  = [vals_sum dataForField:[GCField fieldForKey:@"SumDuration" andActivityType:activityType]];
+    GCHistoryFieldDataHolder * speed_sum= [vals_sum dataForField:[GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:activityType]];
 
     GCNumberWithUnit* dist_nu   = [dist_sum sumWithUnit:gcHistoryStatsAll];
     GCNumberWithUnit* dur_nu    = [dur_sum sumWithUnit:gcHistoryStatsAll];

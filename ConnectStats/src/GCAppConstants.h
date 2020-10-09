@@ -194,6 +194,15 @@ typedef NS_ENUM(NSUInteger, gcLanguageSetting){
     gcLanguageSettingPredefinedStart
 };
 
+typedef NS_ENUM(NSUInteger, gcHistoryStats) {
+    gcHistoryStatsAll,
+    gcHistoryStatsWeek,
+    gcHistoryStatsMonth,
+    gcHistoryStatsYear,
+    gcHistoryStatsEnd
+};
+
+
 typedef BOOL(^gcServiceSourceValidator)(NSString*sourceidentifier);
 
 

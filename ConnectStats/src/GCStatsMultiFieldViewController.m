@@ -346,7 +346,7 @@
         [doGraph retain];
     }
 
-    GCFieldDataHolder * data = [self.fieldStats dataForField:field];
+    GCHistoryFieldDataHolder * data = [self.fieldStats dataForField:field];
     [cell setupForFieldDataHolder:data histStats:self.multiFieldConfig.historyStats andActivityType:self.activityType];
     if ([GCAppGlobal configGetBool:CONFIG_STATS_INLINE_GRAPHS defaultValue:true] && doGraph[field.key]) {
         GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:field];

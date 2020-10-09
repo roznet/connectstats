@@ -825,6 +825,9 @@
 		42B088451C38894D00113306 /* GCTestFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B088441C38894D00113306 /* GCTestFields.m */; };
 		42B0B96415FC9206008275FF /* GCActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B0B96315FC9206008275FF /* GCActivity.m */; };
 		42B0B97415FE8037008275FF /* GCGarminSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B0B97315FE8037008275FF /* GCGarminSearchJsonParser.m */; };
+		42B231D0253058680080D743 /* GCHistoryFieldDataHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B231CF253058680080D743 /* GCHistoryFieldDataHolder.m */; };
+		42B231D1253058680080D743 /* GCHistoryFieldDataHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B231CF253058680080D743 /* GCHistoryFieldDataHolder.m */; };
+		42B231D2253058680080D743 /* GCHistoryFieldDataHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B231CF253058680080D743 /* GCHistoryFieldDataHolder.m */; };
 		42B34A2E179C31D500688E9F /* GCViewActivityTypeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B34A2D179C31D500688E9F /* GCViewActivityTypeButton.m */; };
 		42B3AB7A1D27FF080072D4CA /* RZUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; };
 		42B4080122E38CFA005C61C4 /* GCTestServiceCompare.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B4080022E38CFA005C61C4 /* GCTestServiceCompare.m */; };
@@ -2579,6 +2582,8 @@
 		42B0B96315FC9206008275FF /* GCActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivity.m; path = src/GCActivity.m; sourceTree = "<group>"; };
 		42B0B97115FE7FE7008275FF /* GCGarminSearchJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminSearchJsonParser.h; path = src/GCGarminSearchJsonParser.h; sourceTree = "<group>"; };
 		42B0B97315FE8037008275FF /* GCGarminSearchJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminSearchJsonParser.m; path = src/GCGarminSearchJsonParser.m; sourceTree = "<group>"; };
+		42B231CE253058680080D743 /* GCHistoryFieldDataHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCHistoryFieldDataHolder.h; path = src/GCHistoryFieldDataHolder.h; sourceTree = "<group>"; };
+		42B231CF253058680080D743 /* GCHistoryFieldDataHolder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCHistoryFieldDataHolder.m; path = src/GCHistoryFieldDataHolder.m; sourceTree = "<group>"; };
 		42B34A2C179C31D500688E9F /* GCViewActivityTypeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCViewActivityTypeButton.h; path = src/GCViewActivityTypeButton.h; sourceTree = "<group>"; };
 		42B34A2D179C31D500688E9F /* GCViewActivityTypeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCViewActivityTypeButton.m; path = src/GCViewActivityTypeButton.m; sourceTree = "<group>"; };
 		42B407FF22E38CFA005C61C4 /* GCTestServiceCompare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceCompare.h; path = connectstatstestapp/src/GCTestServiceCompare.h; sourceTree = SOURCE_ROOT; };
@@ -3966,6 +3971,8 @@
 			children = (
 				423493FC160477F200A770D6 /* GCHistoryFieldDataSerie.h */,
 				423493FE160479FA00A770D6 /* GCHistoryFieldDataSerie.m */,
+				42B231CE253058680080D743 /* GCHistoryFieldDataHolder.h */,
+				42B231CF253058680080D743 /* GCHistoryFieldDataHolder.m */,
 				42BC5396161E376600576097 /* GCHistoryFieldSummaryStats.h */,
 				42BC539A161E37AE00576097 /* GCHistoryFieldSummaryStats.m */,
 				429133E724D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.h */,
@@ -7087,6 +7094,7 @@
 				42843EE824AD20C400E60609 /* GCStatsCalendarAggregationConfig.m in Sources */,
 				42E1A74F24277FF9006C868A /* GCActivity+BestRolling.m in Sources */,
 				422FAF9519A1DD6000D09773 /* GCViewMaturityButton.m in Sources */,
+				42B231D2253058680080D743 /* GCHistoryFieldDataHolder.m in Sources */,
 				422FAF9619A1DD6000D09773 /* GCViewActivityTypeButton.m in Sources */,
 				422FAF9719A1DD6000D09773 /* GCStravaActivityLapsParser.m in Sources */,
 				42A22E0119E8895D004407B8 /* GCHealthSleepBlock.m in Sources */,
@@ -7267,6 +7275,7 @@
 				426B0F0F1DA119060091A734 /* FITFitFileDecode.mm in Sources */,
 				423F9FC919AD2ACA0057DB5A /* GCStatsHistGraphConfig.m in Sources */,
 				42BC539B161E37AE00576097 /* GCHistoryFieldSummaryStats.m in Sources */,
+				42B231D0253058680080D743 /* GCHistoryFieldDataHolder.m in Sources */,
 				42FD55B91B90A39F0070B3B4 /* GCCellActivity.m in Sources */,
 				423D746322F59D9A00EE3E71 /* FITFitFieldMap.swift in Sources */,
 				42F0A4F31B60620200901CFF /* GCDerivedRequest.m in Sources */,
@@ -7656,6 +7665,7 @@
 				42CC45CC200A67C0003EB805 /* GCSettingsBugReport.m in Sources */,
 				42B5E2191BA5AF9A000FAE4E /* GCAppGlobal.m in Sources */,
 				42B5E2171BA5AF9A000FAE4E /* GCTestCommunications.m in Sources */,
+				42B231D1253058680080D743 /* GCHistoryFieldDataHolder.m in Sources */,
 				42B5E21F1BA5AF9A000FAE4E /* GCTestTracks.m in Sources */,
 				422B34421CA7322600B345CD /* GCFieldInfo.m in Sources */,
 				421A51541C82FB7100671587 /* GCCellEntryFieldChoiceViewController.m in Sources */,

@@ -38,6 +38,7 @@
 #import "GCActivity+Fields.h"
 #import "GCStatsMultiFieldConfig.h"
 #import "GCStatsCalendarAggregationConfig.h"
+#import "GCHistoryFieldDataHolder.h"
 
 const CGFloat kGC_WIDE_SIZE = 420.0f;
 
@@ -632,7 +633,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
 #pragma mark - Field Statistics
 
--(void)setupForFieldDataHolder:(GCFieldDataHolder*)data histStats:(gcHistoryStats)which andActivityType:(NSString *)aType{
+-(void)setupForFieldDataHolder:(GCHistoryFieldDataHolder*)data histStats:(gcHistoryStats)which andActivityType:(NSString *)aType{
 
     //gcHistoryStats which = gcHistoryStatsAll;
 
