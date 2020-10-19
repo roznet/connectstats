@@ -243,6 +243,8 @@
 		42AD171F1EC8601D001E660E /* RZUtilsTestsTimeStamps.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AD171E1EC8601D001E660E /* RZUtilsTestsTimeStamps.m */; };
 		42AD17221EC86032001E660E /* RZTimeStampManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 42AD17201EC86032001E660E /* RZTimeStampManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42AD17231EC86032001E660E /* RZTimeStampManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AD17211EC86032001E660E /* RZTimeStampManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		42B8E9C2253C924900287228 /* GCStatsCluster.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B8E9C0253C924900287228 /* GCStatsCluster.h */; };
+		42B8E9C3253C924900287228 /* GCStatsCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B8E9C1253C924900287228 /* GCStatsCluster.m */; };
 		42E783FE24E81C39006B592E /* GCNumberWithUnit+Scanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 42E783FC24E81C39006B592E /* GCNumberWithUnit+Scanner.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42E783FF24E81C39006B592E /* GCNumberWithUnit+Scanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E783FD24E81C39006B592E /* GCNumberWithUnit+Scanner.m */; };
 		42FFD33724A4BB65004641B1 /* GCUnitCalendarUnit.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFD33524A4BB65004641B1 /* GCUnitCalendarUnit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -546,6 +548,8 @@
 		42AD171E1EC8601D001E660E /* RZUtilsTestsTimeStamps.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RZUtilsTestsTimeStamps.m; sourceTree = "<group>"; };
 		42AD17201EC86032001E660E /* RZTimeStampManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RZTimeStampManager.h; sourceTree = "<group>"; };
 		42AD17211EC86032001E660E /* RZTimeStampManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RZTimeStampManager.m; sourceTree = "<group>"; };
+		42B8E9C0253C924900287228 /* GCStatsCluster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCStatsCluster.h; sourceTree = "<group>"; };
+		42B8E9C1253C924900287228 /* GCStatsCluster.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCStatsCluster.m; sourceTree = "<group>"; };
 		42E783FC24E81C39006B592E /* GCNumberWithUnit+Scanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCNumberWithUnit+Scanner.h"; sourceTree = "<group>"; };
 		42E783FD24E81C39006B592E /* GCNumberWithUnit+Scanner.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GCNumberWithUnit+Scanner.m"; sourceTree = "<group>"; };
 		42FFD33524A4BB65004641B1 /* GCUnitCalendarUnit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCUnitCalendarUnit.h; sourceTree = "<group>"; };
@@ -814,6 +818,8 @@
 				4256366E234A2E4000939A1A /* GCStatsDatabase.m */,
 				42880C362381E1500030C3C1 /* GCStatsSerieOfSerieWithUnits.h */,
 				42880C372381E1500030C3C1 /* GCStatsSerieOfSerieWithUnits.m */,
+				42B8E9C0253C924900287228 /* GCStatsCluster.h */,
+				42B8E9C1253C924900287228 /* GCStatsCluster.m */,
 			);
 			path = stats;
 			sourceTree = "<group>";
@@ -1306,6 +1312,7 @@
 				42382A241EAB552000252217 /* RZSystemInfo.h in Headers */,
 				42382A281EAB552000252217 /* FMDatabase.h in Headers */,
 				42E783FE24E81C39006B592E /* GCNumberWithUnit+Scanner.h in Headers */,
+				42B8E9C2253C924900287228 /* GCStatsCluster.h in Headers */,
 				423829DB1EAB552000252217 /* NSArray+Map.h in Headers */,
 				42382A151EAB552000252217 /* RZLog.h in Headers */,
 				423829F71EAB552000252217 /* GCStatsFunctions.h in Headers */,
@@ -1922,6 +1929,7 @@
 				423829F21EAB552000252217 /* GCStatsDataSerieFilter.m in Sources */,
 				42382A141EAB552000252217 /* RZFilteredSelectedArray.m in Sources */,
 				423829E01EAB552000252217 /* NSDate+RZHelper.m in Sources */,
+				42B8E9C3253C924900287228 /* GCStatsCluster.m in Sources */,
 				428A0FFA1EB7CB3800DD119B /* TSDataTable.m in Sources */,
 				42382A271EAB552000252217 /* RZWebURL.m in Sources */,
 				42382A1F1EAB552000252217 /* RZRemoteDownload.m in Sources */,
