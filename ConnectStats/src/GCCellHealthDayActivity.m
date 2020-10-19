@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //  
 
-#import "GCCellActivity.h"
+#import "GCCellHealthDayActivity.h"
 #import "GCActivity.h"
 #import "GCTrackStats.h"
 #import "GCSimpleGraphCachedDataSource+Templates.h"
@@ -37,7 +37,7 @@
 
 const CGFloat kGCCellActivityDefaultHeight = 96;
 
-@interface GCCellActivity ()
+@interface GCCellHealthDayActivity ()
 @property (nonatomic,retain) UITableView * tableView;
 @property (nonatomic,retain) GCActivity * activity;
 
@@ -47,12 +47,12 @@ const CGFloat kGCCellActivityDefaultHeight = 96;
 
 @end
 
-@implementation GCCellActivity
+@implementation GCCellHealthDayActivity
 
-+(GCCellActivity*)activityCell:(UITableView*)tableView{
-    GCCellActivity*cell=(GCCellActivity*)[tableView dequeueReusableCellWithIdentifier:@"GCActivity"];
++(GCCellHealthDayActivity*)activityCell:(UITableView*)tableView{
+    GCCellHealthDayActivity*cell=(GCCellHealthDayActivity*)[tableView dequeueReusableCellWithIdentifier:@"GCActivity"];
     if (cell==nil) {
-        cell=RZReturnAutorelease([[GCCellActivity alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GCActivity"]);
+        cell=RZReturnAutorelease([[GCCellHealthDayActivity alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GCActivity"]);
         cell.tableView = tableView;
         GCSimpleGraphView * graphView = RZReturnAutorelease([[GCSimpleGraphView alloc] initWithFrame:CGRectZero]);
         cell.graphView = graphView;

@@ -103,7 +103,7 @@
 		422A24F7247325FB00D6C2FB /* activity_424479793.json in Resources */ = {isa = PBXBuildFile; fileRef = 422A24EB247325FB00D6C2FB /* activity_424479793.json */; };
 		422AC6A61C1CC9AA002DDA9C /* test_activity_day___healthkit__Default_20151106.db in Resources */ = {isa = PBXBuildFile; fileRef = 422AC6A21C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151106.db */; };
 		422AC6A71C1CC9AF002DDA9C /* test_activity_day___healthkit__Default_20151109.db in Resources */ = {isa = PBXBuildFile; fileRef = 422AC6A31C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151109.db */; };
-		422AC6A81C1CCA3E002DDA9C /* GCCellActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */; };
+		422AC6A81C1CCA3E002DDA9C /* GCCellHealthDayActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellHealthDayActivity.m */; };
 		422B343D1CA7321200B345CD /* GCFieldCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 422B343C1CA7321200B345CD /* GCFieldCache.m */; };
 		422B343E1CA7321200B345CD /* GCFieldCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 422B343C1CA7321200B345CD /* GCFieldCache.m */; };
 		422B34411CA7322600B345CD /* GCFieldInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 422B34401CA7322600B345CD /* GCFieldInfo.m */; };
@@ -1330,6 +1330,15 @@
 		42DE53C019CF696E00009130 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DE53BF19CF696E00009130 /* HealthKit.framework */; };
 		42DE53C119CF69ED00009130 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DE53BF19CF696E00009130 /* HealthKit.framework */; };
 		42DE53C219CF6E8800009130 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DE53BF19CF696E00009130 /* HealthKit.framework */; };
+		42E04E4D2538C34B005FFD5E /* GCCellActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E04E4B2538C34B005FFD5E /* GCCellActivity.swift */; };
+		42E04E4E2538C34B005FFD5E /* GCCellActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E04E4B2538C34B005FFD5E /* GCCellActivity.swift */; };
+		42E04E4F2538C34B005FFD5E /* GCCellActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E04E4B2538C34B005FFD5E /* GCCellActivity.swift */; };
+		42E04E502538C34B005FFD5E /* GCCellActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42E04E4C2538C34B005FFD5E /* GCCellActivity.xib */; };
+		42E04E512538C34B005FFD5E /* GCCellActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42E04E4C2538C34B005FFD5E /* GCCellActivity.xib */; };
+		42E04E522538C34B005FFD5E /* GCCellActivity.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42E04E4C2538C34B005FFD5E /* GCCellActivity.xib */; };
+		42E04E5825398099005FFD5E /* GCCellRoundedPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E04E5725398099005FFD5E /* GCCellRoundedPatternView.swift */; };
+		42E04E5925398099005FFD5E /* GCCellRoundedPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E04E5725398099005FFD5E /* GCCellRoundedPatternView.swift */; };
+		42E04E5A25398099005FFD5E /* GCCellRoundedPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E04E5725398099005FFD5E /* GCCellRoundedPatternView.swift */; };
 		42E06D491B5EF4DC001BDA02 /* test_activity_running_837769405.db in Resources */ = {isa = PBXBuildFile; fileRef = 42E06D481B5EF4DC001BDA02 /* test_activity_running_837769405.db */; };
 		42E06D4B1B5EFFC4001BDA02 /* test_activity_day___healthkit__20150622.db in Resources */ = {isa = PBXBuildFile; fileRef = 42E06D4A1B5EFFC4001BDA02 /* test_activity_day___healthkit__20150622.db */; };
 		42E10BC721D670E300175C83 /* FITDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E10BC621D670E300175C83 /* FITDocument.swift */; };
@@ -1424,8 +1433,8 @@
 		42FC177D1E195DE800F55302 /* FITFitValueStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCEF841E181E3500F66AF1 /* FITFitValueStatistics.swift */; };
 		42FC177E1E195DEA00F55302 /* FITFitValueStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCEF841E181E3500F66AF1 /* FITFitValueStatistics.swift */; };
 		42FC17801E196E4B00F55302 /* GCTestActivityFitFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FC177F1E196E4B00F55302 /* GCTestActivityFitFile.swift */; };
-		42FD55B91B90A39F0070B3B4 /* GCCellActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */; };
-		42FD55BA1B90A39F0070B3B4 /* GCCellActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */; };
+		42FD55B91B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellHealthDayActivity.m */; };
+		42FD55BA1B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellHealthDayActivity.m */; };
 		42FFF6A7232EDAE1008714D5 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 42FFF6A6232EDAE1008714D5 /* user.json */; };
 		42FFF6A8232EDAE1008714D5 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 42FFF6A6232EDAE1008714D5 /* user.json */; };
 		BF9120CBFA7E3BB8AEA21520 /* Pods_FitFileExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4291909821E226FF00E0B114 /* Pods_FitFileExplorer.framework */; };
@@ -2978,6 +2987,9 @@
 		42DE53BB19CF438500009130 /* GCHealthKitActivityRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitActivityRequest.h; path = src/GCHealthKitActivityRequest.h; sourceTree = "<group>"; };
 		42DE53BC19CF438500009130 /* GCHealthKitActivityRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitActivityRequest.m; path = src/GCHealthKitActivityRequest.m; sourceTree = "<group>"; };
 		42DE53BF19CF696E00009130 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		42E04E4B2538C34B005FFD5E /* GCCellActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCCellActivity.swift; path = src/GCCellActivity.swift; sourceTree = "<group>"; };
+		42E04E4C2538C34B005FFD5E /* GCCellActivity.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCCellActivity.xib; path = src/GCCellActivity.xib; sourceTree = "<group>"; };
+		42E04E5725398099005FFD5E /* GCCellRoundedPatternView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCCellRoundedPatternView.swift; path = src/GCCellRoundedPatternView.swift; sourceTree = "<group>"; };
 		42E06D481B5EF4DC001BDA02 /* test_activity_running_837769405.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_837769405.db; path = ConnectStatsTests/samples/test_activity_running_837769405.db; sourceTree = SOURCE_ROOT; };
 		42E06D4A1B5EFFC4001BDA02 /* test_activity_day___healthkit__20150622.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "test_activity_day___healthkit__20150622.db"; sourceTree = "<group>"; };
 		42E10BC621D670E300175C83 /* FITDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITDocument.swift; path = src/FITDocument.swift; sourceTree = "<group>"; };
@@ -3052,8 +3064,8 @@
 		42F97BED200B7B97009905D2 /* ConnectStatsTestAppXCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnectStatsTestAppXCTests.m; sourceTree = "<group>"; };
 		42F97BEF200B7B97009905D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42FC177F1E196E4B00F55302 /* GCTestActivityFitFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCTestActivityFitFile.swift; sourceTree = "<group>"; };
-		42FD55B71B90A39F0070B3B4 /* GCCellActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCCellActivity.h; path = src/GCCellActivity.h; sourceTree = "<group>"; };
-		42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCCellActivity.m; path = src/GCCellActivity.m; sourceTree = "<group>"; };
+		42FD55B71B90A39F0070B3B4 /* GCCellHealthDayActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCCellHealthDayActivity.h; path = src/GCCellHealthDayActivity.h; sourceTree = "<group>"; };
+		42FD55B81B90A39F0070B3B4 /* GCCellHealthDayActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCCellHealthDayActivity.m; path = src/GCCellHealthDayActivity.m; sourceTree = "<group>"; };
 		42FFF6A6232EDAE1008714D5 /* user.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = user.json; path = connectstatstestapp/samples/InitialSamples/user.json; sourceTree = SOURCE_ROOT; };
 		5A27E308E28B0C345991A8A8 /* Pods_FitFileExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FitFileExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		722F58FE2B9F9EF1C1D899FD /* Pods-ConnectStatsTestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStatsTestApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -5548,10 +5560,13 @@
 		42FD55B61B90A37A0070B3B4 /* Specialized */ = {
 			isa = PBXGroup;
 			children = (
-				42FD55B71B90A39F0070B3B4 /* GCCellActivity.h */,
-				42FD55B81B90A39F0070B3B4 /* GCCellActivity.m */,
+				42FD55B71B90A39F0070B3B4 /* GCCellHealthDayActivity.h */,
+				42FD55B81B90A39F0070B3B4 /* GCCellHealthDayActivity.m */,
 				42B89E791C8109C600F7142E /* GCCellEntryFieldChoiceViewController.h */,
 				42B89E7A1C8109C600F7142E /* GCCellEntryFieldChoiceViewController.m */,
+				42E04E4B2538C34B005FFD5E /* GCCellActivity.swift */,
+				42E04E4C2538C34B005FFD5E /* GCCellActivity.xib */,
+				42E04E5725398099005FFD5E /* GCCellRoundedPatternView.swift */,
 			);
 			name = Specialized;
 			sourceTree = "<group>";
@@ -6077,6 +6092,7 @@
 				422CCE8E1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */,
 				422FAFD219A1DD6000D09773 /* Media.xcassets in Resources */,
 				4245DC821BE80D0400D5B68E /* Cells.xcassets in Resources */,
+				42E04E522538C34B005FFD5E /* GCCellActivity.xib in Resources */,
 				422CCE8C1B7EAB7200A4DAEB /* Activities.xcassets in Resources */,
 				42939CEF23AAD7A900D2403A /* fit_developer.json in Resources */,
 				422CCE881B7EAA3000A4DAEB /* Navigation.xcassets in Resources */,
@@ -6158,6 +6174,7 @@
 				422CCE811B7EA81500A4DAEB /* Fields.xcassets in Resources */,
 				428C70361A4AF52500243DC0 /* ConnectStatsLaunchScreen.xib in Resources */,
 				422CCE841B7EA8C100A4DAEB /* Weather.xcassets in Resources */,
+				42E04E502538C34B005FFD5E /* GCCellActivity.xib in Resources */,
 				422CCE871B7EAA3000A4DAEB /* Navigation.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6568,6 +6585,7 @@
 				42B5E5321BA5BA2D000FAE4E /* track_331118599.db in Resources */,
 				42B5E4F81BA5BA2D000FAE4E /* track_287446936.db in Resources */,
 				42B5E4DF1BA5BA2D000FAE4E /* track_279022423.db in Resources */,
+				42E04E512538C34B005FFD5E /* GCCellActivity.xib in Resources */,
 				42B5E4CA1BA5BA2D000FAE4E /* track_266437979.db in Resources */,
 				42B5E5251BA5BA2D000FAE4E /* track_318141407.db in Resources */,
 				42B5E4FB1BA5BA2D000FAE4E /* track_289259576.db in Resources */,
@@ -6938,7 +6956,7 @@
 				422FAED519A1DD6000D09773 /* GCHistoryFieldDataSerie.m in Sources */,
 				42D4CA70248D5497003F3AB7 /* GCStatsDerivedHistory.m in Sources */,
 				42DC51591B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m in Sources */,
-				42FD55BA1B90A39F0070B3B4 /* GCCellActivity.m in Sources */,
+				42FD55BA1B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */,
 				422F521A1DFB51F700DD5551 /* FITFitFileInterpret.swift in Sources */,
 				422FAED819A1DD6000D09773 /* GCMapViewController.m in Sources */,
 				422FAED919A1DD6000D09773 /* GCTrackPoint.m in Sources */,
@@ -6959,6 +6977,7 @@
 				422FAEF519A1DD6000D09773 /* GCDerivedDataSerie.m in Sources */,
 				423F9FCA19AD2ACA0057DB5A /* GCStatsHistGraphConfig.m in Sources */,
 				42F0A4F41B60620200901CFF /* GCDerivedRequest.m in Sources */,
+				42E04E5A25398099005FFD5E /* GCCellRoundedPatternView.swift in Sources */,
 				422FAEF819A1DD6000D09773 /* GCHistoryFieldSummaryStats.m in Sources */,
 				4239E4CC19ABDA65000E67A2 /* GCStatsOneFieldConfig.m in Sources */,
 				422777751C36C940002F1D64 /* GCField.m in Sources */,
@@ -7021,6 +7040,7 @@
 				422FAF3819A1DD6000D09773 /* GCViewSwimStrokeColors.m in Sources */,
 				422FAF3919A1DD6000D09773 /* GCActivity+Import.m in Sources */,
 				422FAF3A19A1DD6000D09773 /* GCStatsMultiFieldConfig.m in Sources */,
+				42E04E4F2538C34B005FFD5E /* GCCellActivity.swift in Sources */,
 				422FAF3B19A1DD6000D09773 /* GCActivitySwimLapViewController.m in Sources */,
 				4281AF5C22F732A900BFE408 /* GCConnectStatsRequest.m in Sources */,
 				422F52171DFB51F700DD5551 /* FITFitMessageFields.swift in Sources */,
@@ -7237,6 +7257,7 @@
 				42B0B96415FC9206008275FF /* GCActivity.m in Sources */,
 				4277C0BD23BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m in Sources */,
 				42B0B97415FE8037008275FF /* GCGarminSearchJsonParser.m in Sources */,
+				42E04E4D2538C34B005FFD5E /* GCCellActivity.swift in Sources */,
 				426DFE6919D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */,
 				42A22DF919E87BF9004407B8 /* GCHealthSleepMeasure.m in Sources */,
 				42ACFE9518C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.m in Sources */,
@@ -7276,7 +7297,7 @@
 				423F9FC919AD2ACA0057DB5A /* GCStatsHistGraphConfig.m in Sources */,
 				42BC539B161E37AE00576097 /* GCHistoryFieldSummaryStats.m in Sources */,
 				42B231D0253058680080D743 /* GCHistoryFieldDataHolder.m in Sources */,
-				42FD55B91B90A39F0070B3B4 /* GCCellActivity.m in Sources */,
+				42FD55B91B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */,
 				423D746322F59D9A00EE3E71 /* FITFitFieldMap.swift in Sources */,
 				42F0A4F31B60620200901CFF /* GCDerivedRequest.m in Sources */,
 				42BC539E161E3E2700576097 /* GCFields.m in Sources */,
@@ -7377,6 +7398,7 @@
 				426786DA16C6594F00899C8B /* GCSettingsServicesViewController.m in Sources */,
 				428F9EEE244C505100666625 /* GCAppReferenceData.m in Sources */,
 				424FBFF922EC328400E2059A /* GCDebugServiceKeys.m in Sources */,
+				42E04E5825398099005FFD5E /* GCCellRoundedPatternView.swift in Sources */,
 				42C072C21AE2FAE000E7E066 /* GCMapWindCompass.m in Sources */,
 				424B7F4816CFBE30000B38AD /* GCSettingsHelpViewController.m in Sources */,
 				426CC4711BAEB9920033978C /* GCAppActions.m in Sources */,
@@ -7560,6 +7582,7 @@
 				42B5E2851BA5B216000FAE4E /* GCStravaActivityLapsParser.m in Sources */,
 				42B8588C229DB716009E309A /* GCConnectStatsRequestLogin.m in Sources */,
 				42B5E2871BA5B216000FAE4E /* GCStravaReqBase.m in Sources */,
+				42E04E5925398099005FFD5E /* GCCellRoundedPatternView.swift in Sources */,
 				42B5E2881BA5B216000FAE4E /* GCStravaActivityList.m in Sources */,
 				422CC87B1E6ACA1700195414 /* FITFitFile.swift in Sources */,
 				42B5E2891BA5B216000FAE4E /* GCStravaActivityStreams.m in Sources */,
@@ -7587,7 +7610,7 @@
 				42B5E29B1BA5B216000FAE4E /* GCGarminActivityTrack13Request.m in Sources */,
 				42B5E29C1BA5B216000FAE4E /* GCGarminRequestActivityList.m in Sources */,
 				42B5E29E1BA5B216000FAE4E /* GCGarminRequestActivityReload.m in Sources */,
-				422AC6A81C1CCA3E002DDA9C /* GCCellActivity.m in Sources */,
+				422AC6A81C1CCA3E002DDA9C /* GCCellHealthDayActivity.m in Sources */,
 				422777761C36C940002F1D64 /* GCField.m in Sources */,
 				427F937A1BEDFF1A00C177F9 /* GCViewMaturityButton.m in Sources */,
 				42B5E2A61BA5B216000FAE4E /* GCWebConnect.m in Sources */,
@@ -7674,6 +7697,7 @@
 				42B5E2271BA5AF9A000FAE4E /* main.m in Sources */,
 				42B5E21C1BA5AF9A000FAE4E /* GCTestBasics.m in Sources */,
 				42B5E2221BA5AF9A000FAE4E /* GCCellGrid+Test.m in Sources */,
+				42E04E4E2538C34B005FFD5E /* GCCellActivity.swift in Sources */,
 				42B5E2181BA5AF9A000FAE4E /* GCTestUIGraphViewController.m in Sources */,
 				42A89C201D627444007CF90D /* GCUnitTrainingZone.m in Sources */,
 				42B467BA1DC6A56200279DC8 /* GCAppPasswordManager.swift in Sources */,

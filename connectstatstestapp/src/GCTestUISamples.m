@@ -39,7 +39,7 @@
 #import "GCActivity+Database.h"
 #import "GCStatsMultiFieldViewController.h"
 #import "GCStatsMultiFieldViewControllerConsts.h"
-#import "GCCellActivity.h"
+#import "GCCellHealthDayActivity.h"
 #import "GCTrackFieldChoices.h"
 #import "GCTestsSamples.h"
 #import "GCActivity+Series.h"
@@ -721,16 +721,16 @@
 
 -(NSArray*)sampleDayActivities{
     GCActivity * act = nil;
-    GCCellActivity * cell =  nil;
+    GCCellHealthDayActivity * cell =  nil;
 
     NSMutableArray * rv = [NSMutableArray array];
 
-    cell = [GCCellActivity activityCell:nil];
+    cell = [GCCellHealthDayActivity activityCell:nil];
     act = [GCActivity fullLoadFromDb:[GCTestsSamples sampleActivityDatabase:@"test_activity_day___healthkit__Default_20151106.db"]];
     [cell setupForActivity:act];
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:kGCCellActivityDefaultHeight andIdentifier:@"Day Activity hr"]];
 
-    cell = [GCCellActivity activityCell:nil];
+    cell = [GCCellHealthDayActivity activityCell:nil];
     act = [GCActivity fullLoadFromDb:[GCTestsSamples sampleActivityDatabase:@"test_activity_day___healthkit__Default_20151109.db"]];
     [cell setupForActivity:act];
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:kGCCellActivityDefaultHeight andIdentifier:@"Day Activity nohr"]];

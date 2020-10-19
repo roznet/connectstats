@@ -29,9 +29,9 @@ extern const CGFloat kGCCellActivityDefaultHeight;
 
 @class GCActivity;
 
-@interface GCCellActivity : UITableViewCell<RZChildObject>
+@interface GCCellHealthDayActivity : UITableViewCell<RZChildObject>
 
-+(GCCellActivity*)activityCell:(UITableView*)tableView;
++(GCCellHealthDayActivity*)activityCell:(UITableView*)tableView;
 
 -(void)setupForActivity:(GCActivity*)activity;
 

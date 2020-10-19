@@ -34,7 +34,7 @@
 #import "GCActivityTypeListViewController.h"
 #import "Flurry.h"
 #import "GCWebConnect+Requests.h"
-#import "GCCellActivity.h"
+#import "GCCellHealthDayActivity.h"
 #import "GCActivityPreviewingViewController.h"
 #import <RZExternal/RZExternal.h>
 #import "GCActivity+Database.h"
@@ -453,7 +453,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView dayCellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    GCCellActivity * cell = [GCCellActivity activityCell:tableView];
+    GCCellHealthDayActivity * cell = [GCCellHealthDayActivity activityCell:tableView];
     [cell setupForActivity:[self activityForIndex:indexPath.row]];
     return cell;
 }
