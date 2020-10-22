@@ -24,7 +24,7 @@
 //  
 
 #import "RZDependencies.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 #import "RZLog.h"
 
 #define DEBUG_DEP

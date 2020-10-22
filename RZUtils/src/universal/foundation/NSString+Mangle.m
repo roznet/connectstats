@@ -24,7 +24,7 @@
 //  
 
 #import "NSString+Mangle.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 #import "NSArray+Map.h"
 #import <CommonCrypto/CommonDigest.h>
 

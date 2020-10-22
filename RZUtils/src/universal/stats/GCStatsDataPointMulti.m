@@ -24,7 +24,7 @@
 //  
 
 #import "GCStatsDataPointMulti.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 #define GC_CODER_Z_DATA @"z_data"
 

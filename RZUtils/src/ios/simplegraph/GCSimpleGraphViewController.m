@@ -24,7 +24,7 @@
 //  
 
 #import "GCSimpleGraphViewController.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @interface GCSimpleGraphViewController ()
 

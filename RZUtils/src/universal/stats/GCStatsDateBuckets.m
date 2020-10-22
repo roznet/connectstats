@@ -26,7 +26,7 @@
 #import "GCStatsDateBuckets.h"
 #import "NSDate+RZHelper.h"
 #import "RZLog.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @implementation GCStatsDateBuckets
 

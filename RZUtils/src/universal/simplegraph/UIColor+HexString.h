@@ -31,7 +31,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#import "RZUtils/RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @interface RZColor (HexString)
 

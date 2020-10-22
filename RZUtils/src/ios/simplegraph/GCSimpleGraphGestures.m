@@ -26,7 +26,7 @@
 #import "GCSimpleGraphGestures.h"
 #import "GCSimpleGraphCachedDataSource.h"
 #import "GCSimpleGraphView.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @interface GCSimpleGraphGestures ()
 @property (nonatomic,assign) CGPoint zoomStart;

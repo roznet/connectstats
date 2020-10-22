@@ -24,8 +24,8 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import "GCStatsDataSerie.h"
-#import "GCStatsDataSerieWithUnit.h"
+#import <RZUtils/GCStatsDataSerie.h>
+#import <RZUtils/GCStatsDataSerieWithUnit.h>
 
 @interface GCStatsDataSerieFilter : NSObject
 

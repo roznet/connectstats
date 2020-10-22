@@ -7,7 +7,7 @@
 //
 
 #import "FMDatabasePool.h"
-#import "FMDatabase.h"
+#import <RZUtils/FMDatabase.h>
 
 @interface FMDatabasePool()
 

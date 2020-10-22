@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //  
 
-#import "TSDataCell.h"
+#import <RZUtils/TSDataCell.h>
 
 @interface TSDataCell ()
 @property (nonatomic,retain) NSString * field;

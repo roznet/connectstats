@@ -24,7 +24,7 @@
 //  
 
 #import "RZAppTimer.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @implementation RZAppTimer
 

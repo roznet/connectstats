@@ -24,8 +24,8 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import "TSDataTable.h"
-#import "TSDataCell.h"
+#import <RZUtils/TSDataTable.h>
+#import <RZUtils/TSDataCell.h>
 
 @interface TSDataPivot : NSObject
 

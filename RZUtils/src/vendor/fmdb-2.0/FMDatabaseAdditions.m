@@ -6,7 +6,7 @@
 //  Copyright 2005 Flying Meat Inc.. All rights reserved.
 //
 
-#import "FMDatabase.h"
+#import <RZUtils/FMDatabase.h>
 #import "FMDatabaseAdditions.h"
 #import "TargetConditionals.h"
 

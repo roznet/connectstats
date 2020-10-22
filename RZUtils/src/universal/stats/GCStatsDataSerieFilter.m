@@ -28,7 +28,7 @@
 #endif
 #import "GCStatsDataSerieFilter.h"
 #import "RZLog.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @implementation GCStatsDataSerieFilter
 

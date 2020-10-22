@@ -24,7 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import "TSDataRow.h"
+#import <RZUtils/TSDataRow.h>
 
 
 typedef NS_ENUM(NSUInteger, tsPivotCellType) {

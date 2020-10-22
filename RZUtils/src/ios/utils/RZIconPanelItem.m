@@ -24,7 +24,7 @@
 //  
 
 #import "RZIconPanelItem.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 #import "RZViewConfig.h"
 
 @interface RZIconPanelItem()

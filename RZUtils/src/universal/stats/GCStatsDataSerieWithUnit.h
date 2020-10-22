@@ -24,9 +24,9 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import "GCUnit.h"
-#import "GCStatsDataSerie.h"
-#import "GCNumberWithUnit.h"
+#import <RZUtils/GCUnit.h>
+#import <RZUtils/GCStatsDataSerie.h>
+#import <RZUtils/GCNumberWithUnit.h>
 
 @interface GCStatsDataSerieWithUnit : NSObject<NSSecureCoding,NSFastEnumeration>
 

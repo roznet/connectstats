@@ -24,7 +24,7 @@
 //  
 
 #import "GCViewsGrid.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 #import "GCCellGridConfig.h"
 
 

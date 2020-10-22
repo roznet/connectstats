@@ -23,8 +23,8 @@
 //  SOFTWARE.
 //  
 
-#import "TSDataRow.h"
-#import "FMDatabase.h"
+#import <RZUtils/TSDataRow.h>
+#import <RZUtils/FMDatabase.h>
 
 @interface TSDataRow ()
 @end

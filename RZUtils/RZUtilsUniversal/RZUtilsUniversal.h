@@ -22,12 +22,12 @@ FOUNDATION_EXPORT const unsigned char RZUtilsUniversalVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <RZUtilsUniversal/PublicHeader.h>
 
-#import "RZUtilsUniversal/UIColor+HexString.h"
-#import "RZUtilsUniversal/RZViewConfig.h"
-#import "RZUtilsUniversal/GCSimpleGraphView.h"
-#import "RZUtilsUniversal/GCSimpleGraphProtocol.h"
-#import "RZUtilsUniversal/GCSimpleGraphGeometry.h"
-#import "RZUtilsUniversal/GCSimpleGraphCachedDataSource.h"
-#import "RZUtilsUniversal/GCViewGradientColors.h"
-#import "RZUtilsUniversal/NSBezierPath+QuartzHelper.h"
+#import <RZUtilsUniversal/UIColor+HexString.h>
+#import <RZUtilsUniversal/RZViewConfig.h>
+#import <RZUtilsUniversal/GCSimpleGraphView.h>
+#import <RZUtilsUniversal/GCSimpleGraphProtocol.h>
+#import <RZUtilsUniversal/GCSimpleGraphGeometry.h>
+#import <RZUtilsUniversal/GCSimpleGraphCachedDataSource.h>
+#import <RZUtilsUniversal/GCViewGradientColors.h>
+#import <RZUtilsUniversal/NSBezierPath+QuartzHelper.h>
 

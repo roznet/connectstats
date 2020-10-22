@@ -23,13 +23,13 @@
 //  SOFTWARE.
 //  
 
-#import "GCStatsDataSerie.h"
+#import <RZUtils/GCStatsDataSerie.h>
 #import "GCStatsFunctions.h"
 #import "NSDate+RZHelper.h"
 #import "GCStatsDateBuckets.h"
 #import "GCStatsDataPointMulti.h"
 #import "RZFileOrganizer.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 #import "RZLog.h"
 #import "NSDateComponents+RZHelper.h"
 

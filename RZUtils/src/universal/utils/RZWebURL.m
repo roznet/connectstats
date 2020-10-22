@@ -24,7 +24,7 @@
 //  
 
 #import "RZWebURL.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 NSString * RZWebEncodeURLwGet( NSString * URL, NSDictionary * getparams ){
     return [NSString stringWithFormat:@"%@?%@", URL,RZWebEncodeDictionary(getparams)];
 }

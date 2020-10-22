@@ -23,8 +23,8 @@
 //  SOFTWARE.
 //  
 
-#import "GCStatsDataPoint.h"
-#import "RZMacros.h"
+#import <RZUtils/GCStatsDataPoint.h>
+#import <RZUtils/RZMacros.h>
 
 #define GC_CODER_X_DATA     @"x_data"
 #define GC_CODER_Y_DATA     @"y_data"

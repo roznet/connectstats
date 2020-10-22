@@ -24,7 +24,7 @@
 //  
 
 #import "NSDate+RZHelper.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 
 @implementation NSDate (RZHelper)

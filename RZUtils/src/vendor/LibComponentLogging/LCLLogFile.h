@@ -81,7 +81,7 @@
 
 
 #import <Foundation/Foundation.h>
-#import "LCLLogFileConfig.h"
+#import <RZUtils/LCLLogFileConfig.h>
 
 
 @interface LCLLogFile : NSObject {

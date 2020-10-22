@@ -31,7 +31,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 #import <RZUtils/RZUtils.h>
-#import "GCSimpleGraphProtocol.h"
+#import <RZUtilsUniversal/GCSimpleGraphProtocol.h>
 
 @class GCViewGradientColors;
 

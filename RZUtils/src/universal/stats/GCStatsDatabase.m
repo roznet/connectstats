@@ -7,10 +7,10 @@
 //
 
 #import "GCStatsDatabase.h"
-#import "RZMacros.h"
-#import "FMDatabase.h"
+#import <RZUtils/RZMacros.h>
+#import <RZUtils/FMDatabase.h>
 #import "FMDatabaseAdditions.h"
-#import "GCStatsDataSerieWithUnit.h"
+#import <RZUtils/GCStatsDataSerieWithUnit.h>
 #import "RZUtils/RZUtils.h"
 
 @interface GCStatsDatabase ()

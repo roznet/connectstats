@@ -33,8 +33,8 @@
 #endif
 #import <CoreGraphics/CoreGraphics.h>
 #import <RZUtils/RZUtils.h>
-#import "GCSimpleGraphProtocol.h"
-#import "GCSimpleGraphGeometry.h"
+#import <RZUtilsUniversal/GCSimpleGraphProtocol.h>
+#import <RZUtilsUniversal/GCSimpleGraphGeometry.h>
 
 @interface GCSimpleGraphView : RZView
 @property (nonatomic,retain) id<GCSimpleGraphDataSource> dataSource;

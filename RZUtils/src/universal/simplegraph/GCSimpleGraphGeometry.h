@@ -30,7 +30,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 #import <RZUtils/RZUtils.h>
-#import "GCSimpleGraphProtocol.h"
+#import <RZUtilsUniversal/GCSimpleGraphProtocol.h>
 
 @interface GCAxisKnob : NSObject
 

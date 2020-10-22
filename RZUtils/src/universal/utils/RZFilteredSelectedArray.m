@@ -24,7 +24,7 @@
 //  
 
 #import "RZFilteredSelectedArray.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @interface RZFilteredSelectedArray ()
 

@@ -24,8 +24,8 @@
 //  
 
 #import "GCStatsFunctions.h"
-#import "GCStatsDataSerieWithUnit.h"
-#import "RZMacros.h"
+#import <RZUtils/GCStatsDataSerieWithUnit.h>
+#import <RZUtils/RZMacros.h>
 
 @implementation GCStatsLinearFunction
 @synthesize alpha,beta;

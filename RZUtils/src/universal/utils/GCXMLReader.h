@@ -24,7 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import "GCXMLElement.h"
+#import <RZUtils/GCXMLElement.h>
 
 @interface GCXMLReader : NSObject<NSXMLParserDelegate>
 

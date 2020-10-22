@@ -25,7 +25,7 @@
 
 
 #import <Foundation/Foundation.h>
-#import "RZUtils/LCLLogFile.h"
+#import <RZUtils/LCLLogFile.h>
 
 typedef NS_ENUM(NSUInteger, RZlogLevels)  {
     RZLogInfo       = 0,

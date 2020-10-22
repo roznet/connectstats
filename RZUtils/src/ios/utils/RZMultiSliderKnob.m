@@ -24,7 +24,7 @@
 //  
 
 #import "RZMultiSliderKnob.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @implementation RZMultiSliderKnob
 #if ! __has_feature(objc_arc)

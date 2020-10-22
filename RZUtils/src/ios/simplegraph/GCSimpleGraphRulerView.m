@@ -26,7 +26,7 @@
 #import <RZUtilsUniversal/RZUtilsUniversal.h>
 #import "GCSimpleGraphRulerView.h"
 #import "RZViewConfig.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @implementation GCSimpleGraphRulerView
 

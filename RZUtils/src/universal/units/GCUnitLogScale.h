@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //  
 
-#import "GCUnit.h"
+#import <RZUtils/GCUnit.h>
 
 @interface GCUnitLogScale : GCUnit
 

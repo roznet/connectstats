@@ -7,7 +7,7 @@
 //
 
 #import "FMDatabaseQueue.h"
-#import "FMDatabase.h"
+#import <RZUtils/FMDatabase.h>
 #import "RZUtils/RZUtils.h"
 /*
  

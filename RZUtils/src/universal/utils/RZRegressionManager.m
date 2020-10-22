@@ -24,7 +24,7 @@
 //  
 
 #import "RZRegressionManager.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @interface RZRegressionManager ()
 @property (nonatomic,retain) NSString * testName;
