@@ -24,7 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import "GCCellGridConfig.h"
+#import <RZUtilsTouch/GCCellGridConfig.h>
 
 typedef struct {
     NSUInteger row;

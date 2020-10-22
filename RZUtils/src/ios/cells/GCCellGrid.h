@@ -26,7 +26,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import <RZUtils/RZUtils.h>
-#import "GCCellGridConfig.h"
+#import <RZUtilsTouch/GCCellGridConfig.h>
 
 typedef NS_ENUM(NSUInteger, gcCellLayout){
     gcCellLayoutEven,  // divide by number of cols
