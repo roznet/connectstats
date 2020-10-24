@@ -926,7 +926,7 @@
 
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:10];
 
-    [rv addObject:[self sampleNew]];
+    //[rv addObject:[self sampleNew]];
     [rv addObject:[self sampleCells]];
     [rv addObject:[self sampleDayActivities]];
     [rv addObject:[self sampleMultiFieldsStats]];
