@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //  
 
-#import "TSDataPivot.h"
+#import <RZUtils/TSDataPivot.h>
 
 @interface TSDataPivot (Format)
 

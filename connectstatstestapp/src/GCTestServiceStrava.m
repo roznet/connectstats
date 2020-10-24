@@ -30,6 +30,7 @@
 #import "GCWebConnect+Requests.h"
 #import "GCWebUrl.h"
 #import "GCTestServiceCompare.h"
+#import "GCTestAppGlobal.h"
 
 @interface GCTestServiceStrava ()
 @property (assign) gcTestStageServiceCompare stage;
@@ -48,7 +49,7 @@
     [self startSession:@"GC Strava"];
     GCWebUseSimulator(FALSE, nil);
     
-    [GCAppGlobal setupEmptyState:kDbPathServiceStrava withSettingsName:kPreservedSettingsName];
+    [GCTestAppGlobal setupEmptyState:kDbPathServiceStrava withSettingsName:kPreservedSettingsName];
     [[GCAppGlobal profile] configSet:CONFIG_STRAVA_ENABLE boolVal:YES];
 
     self.stage = gcTestServiceServiceCompareSearch;

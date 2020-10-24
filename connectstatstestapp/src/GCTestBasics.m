@@ -34,6 +34,7 @@
 #import "GCGarminActivityLapsParser.h"
 #import "GCGarminActivityDetailJsonParser.h"
 #import "GCActivity+Import.h"
+#import "GCTestAppGlobal.h"
 
 #define kRegrUnit @"unit"
 #define kRegrValue @"value"
@@ -55,13 +56,13 @@
 -(void)testBasics{
     [self startSession:@"GC Basics"];
 
-    [GCAppGlobal cleanWritableFiles];
+    [GCTestAppGlobal cleanWritableFiles];
 
     // Need to turn off duplicate check as it will compare to count from db select
-    [GCAppGlobal setupSampleState:@"sample_activities_v1.db" config:@{CONFIG_DUPLICATE_CHECK_ON_IMPORT:@(false),CONFIG_DUPLICATE_CHECK_ON_LOAD:@(false)}];
+    [GCTestAppGlobal setupSampleState:@"sample_activities_v1.db" config:@{CONFIG_DUPLICATE_CHECK_ON_IMPORT:@(false),CONFIG_DUPLICATE_CHECK_ON_LOAD:@(false)}];
     [self testSwimAlgo:@"sample_activities_v1.db"];
 
-    [GCAppGlobal setupSampleState:@"sample_activities.db" config:@{CONFIG_DUPLICATE_CHECK_ON_IMPORT:@(false),CONFIG_DUPLICATE_CHECK_ON_LOAD:@(false)}];
+    [GCTestAppGlobal setupSampleState:@"sample_activities.db" config:@{CONFIG_DUPLICATE_CHECK_ON_IMPORT:@(false),CONFIG_DUPLICATE_CHECK_ON_LOAD:@(false)}];
     [self testSwimAlgo:@"sample_activities.db"];
 
     [self endSession:@"GC Basics"];

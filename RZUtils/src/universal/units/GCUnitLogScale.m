@@ -24,7 +24,7 @@
 //  
 
 #import "GCUnitLogScale.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 NS_INLINE double FROM_LOG_SCALE(double x,double base, double shift, double scale) {
     return (pow(base, x)-shift)/scale;

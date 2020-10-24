@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //  
 
-#import "GCStatsDataPoint.h"
+#import <RZUtils/GCStatsDataPoint.h>
 
 @interface GCStatsDataPointMulti : GCStatsDataPoint
 @property (nonatomic,assign) double z_data;

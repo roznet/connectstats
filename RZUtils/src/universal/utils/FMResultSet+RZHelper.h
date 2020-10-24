@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //  
 
-#import "FMResultSet.h"
+#import <RZUtils/FMResultSet.h>
 
 @interface FMResultSet (RZHelper)
 

@@ -23,9 +23,9 @@
 //  SOFTWARE.
 //  
 
-#import "TSDataPivot.h"
-#import "TSDataCell.h"
-#import "TSDataRow.h"
+#import <RZUtils/TSDataPivot.h>
+#import <RZUtils/TSDataCell.h>
+#import <RZUtils/TSDataRow.h>
 
 @interface TSDataPivotFieldValues : NSObject
 @property (nonatomic,retain) NSString *field;

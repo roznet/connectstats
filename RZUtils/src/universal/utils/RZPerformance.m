@@ -24,7 +24,7 @@
 //  
 
 #import "RZPerformance.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 #import "RZMemory.h"
 
 @interface RZPerformance ()

@@ -23,8 +23,8 @@
 //  SOFTWARE.
 //  
 
-#import "TSDataTable.h"
-#import "TSDataRow.h"
+#import <RZUtils/TSDataTable.h>
+#import <RZUtils/TSDataRow.h>
 
 @interface TSDataTable ()
 @end

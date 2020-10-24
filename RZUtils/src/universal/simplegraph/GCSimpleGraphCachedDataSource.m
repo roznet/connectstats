@@ -25,8 +25,8 @@
 
 
 #import "GCSimpleGraphCachedDataSource.h"
-#import "GCStatsDataSerie.h"
-#import "RZMacros.h"
+#import <RZUtils/GCStatsDataSerie.h>
+#import <RZUtils/RZMacros.h>
 
 @implementation GCSimpleGraphDataHolder;
 @synthesize dataSerie,graphType,color,yUnit,lineWidth,gradientColors,gradientFunction,gradientDataSerie,range,currentPoint,highlightCurrent,legend;

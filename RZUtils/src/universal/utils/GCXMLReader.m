@@ -24,7 +24,7 @@
 //  
 
 #import "GCXMLReader.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @interface GCXMLReader ()
 @property (nonatomic,retain) NSMutableArray * elementStack;

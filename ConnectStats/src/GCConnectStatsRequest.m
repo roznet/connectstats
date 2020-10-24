@@ -268,6 +268,9 @@
 }
 
 -(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters{
+    if( self.oauth1Controller == nil){
+        RZLog(RZLogError, @"Trying to prepare url %@ but no oauth1Controller built", path);
+    }
     NSURLRequest *preparedRequest = [self.oauth1Controller preparedRequestForPath:path
                                                                        parameters:parameters
                                                                        HTTPmethod:@"GET"

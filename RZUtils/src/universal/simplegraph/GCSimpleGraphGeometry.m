@@ -23,10 +23,10 @@
 //  SOFTWARE.
 //  
 
-#import "GCSimpleGraphGeometry.h"
-#import "GCUnit.h"
+#import <RZUtilsUniversal/GCSimpleGraphGeometry.h>
+#import <RZUtils/GCUnit.h>
 #import "RZViewConfig.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @interface GCSimpleGraphGeometry (){
     CGFloat _horizontalScaling;

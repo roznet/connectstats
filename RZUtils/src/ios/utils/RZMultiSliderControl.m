@@ -25,7 +25,7 @@
 
 #import "RZMultiSliderControl.h"
 #import "RZMultiSliderKnob.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @interface RZMultiSliderControl ()
 

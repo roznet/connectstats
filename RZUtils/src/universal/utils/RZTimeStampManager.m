@@ -24,8 +24,8 @@
 //  
 
 #import "RZTimeStampManager.h"
-#import "RZMacros.h"
-#import "FMDatabase.h"
+#import <RZUtils/RZMacros.h>
+#import <RZUtils/FMDatabase.h>
 #import "FMDatabaseAdditions.h"
 #import "RZLog.h"
 

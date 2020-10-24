@@ -26,8 +26,8 @@
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
 #endif
-#import "GCXMLElement.h"
-#import "RZMacros.h"
+#import <RZUtils/GCXMLElement.h>
+#import <RZUtils/RZMacros.h>
 
 @interface GCXMLElement ( )
 @property (nonatomic,retain) NSString * tag;

@@ -24,7 +24,7 @@
 //  
 
 #import "CLLocation+RZHelper.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 #define degreesToRadians(x) (M_PI * x / 180.0)
 #define radiandsToDegrees(x) (x * 180.0 / M_PI)

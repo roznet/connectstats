@@ -23,8 +23,8 @@
 //  SOFTWARE.
 //  
 
-#import "GCStatsDataSerieWithUnit.h"
-#import "RZMacros.h"
+#import <RZUtils/GCStatsDataSerieWithUnit.h>
+#import <RZUtils/RZMacros.h>
 
 #define GC_CODER_SERIE @"serie"
 #define GC_CODER_UNIT @"unit"

@@ -26,7 +26,7 @@
 #import "RZRemoteDownload.h"
 #import "RZWebURL.h"
 #import "RZLog.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 static NSUInteger _totalDataUsage = 0;
 

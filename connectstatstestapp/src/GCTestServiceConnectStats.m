@@ -30,8 +30,7 @@
 #import "GCWebConnect+Requests.h"
 #import "GCWebUrl.h"
 #import "GCTestServiceCompare.h"
-
-
+#import "GCTestAppGlobal.h"
 
 @interface GCTestServiceConnectStats ()
 
@@ -55,7 +54,7 @@
     
     self.stage = gcTestServiceServiceCompareSearch;
     
-    [GCAppGlobal setupEmptyState:kDbPathServiceConnectStats withSettingsName:kPreservedSettingsName];
+    [GCTestAppGlobal setupEmptyState:kDbPathServiceConnectStats withSettingsName:kPreservedSettingsName];
     [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_ENABLE boolVal:YES];
     
     [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];

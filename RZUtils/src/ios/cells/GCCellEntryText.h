@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //  
 
-#import "GCCellEntryField.h"
+#import <RZUtilsTouch/GCCellEntryField.h>
 #import <QuartzCore/QuartzCore.h>
 
 @interface GCCellEntryText : GCCellEntryField<UITextFieldDelegate>

@@ -29,6 +29,7 @@
 #import "GCWebConnect+Requests.h"
 #import "GCWebUrl.h"
 #import "GCAppGlobal.h"
+#import "GCTestAppGlobal.h"
 
 @implementation GCTestServiceWithings
 
@@ -44,7 +45,7 @@
     [self startSession:@"GC Withings"];
     GCWebUseSimulator(FALSE, nil);
     
-    [GCAppGlobal setupEmptyState:@"activities_withings.db" withSettingsName:kPreservedSettingsName];
+    [GCTestAppGlobal setupEmptyState:@"activities_withings.db" withSettingsName:kPreservedSettingsName];
     [[GCAppGlobal profile] configSet:CONFIG_WITHINGS_AUTO boolVal:YES];
     
     GCField * weight = [GCHealthMeasure weight];

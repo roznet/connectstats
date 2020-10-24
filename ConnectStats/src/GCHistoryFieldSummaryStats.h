@@ -25,38 +25,9 @@
 
 #import <Foundation/Foundation.h>
 #import "GCActivity.h"
-//
-// For each field, sum/avg queried from db
 
-typedef NS_ENUM(NSUInteger, gcHistoryStats) {
-    gcHistoryStatsAll,
-    gcHistoryStatsWeek,
-    gcHistoryStatsMonth,
-    gcHistoryStatsYear,
-    gcHistoryStatsEnd
-};
 @class GCHealthMeasure;
-
-@interface GCFieldDataHolder : NSObject
-
-@property (nonatomic,retain) GCField * field;
-@property (nonatomic,readonly) NSString * displayField;
-
--(GCNumberWithUnit*)maxWithUnit:(gcHistoryStats)which;
--(GCNumberWithUnit*)minWithUnit:(gcHistoryStats)which;
-
--(GCNumberWithUnit*)averageWithUnit:(gcHistoryStats)which;
--(GCNumberWithUnit*)sumWithUnit:(gcHistoryStats)which;
--(GCNumberWithUnit*)weightWithUnit:(gcHistoryStats)which DEPRECATED_MSG_ATTRIBUTE("use sum or avg");
--(GCNumberWithUnit*)weightedSumWithUnit:(gcHistoryStats)which;
--(GCNumberWithUnit*)weightedAverageWithUnit:(gcHistoryStats)which;
--(GCNumberWithUnit*)countWithUnit:(gcHistoryStats)which;
--(double)count:(gcHistoryStats)which;
-
-// Used for testing
--(void)addSumWithUnit:(GCNumberWithUnit*)num andCount:(NSUInteger)count for:(gcHistoryStats)which;
-
-@end
+@class GCHistoryFieldDataHolder;
 
 // Summary of all fields stats
 @interface GCHistoryFieldSummaryStats : NSObject
@@ -65,7 +36,7 @@ typedef NS_ENUM(NSUInteger, gcHistoryStats) {
  Summary Stats for fields in activities, all, last month, last week
  Keys will be each fields broken down the activityTypes and total in GC_TYPE_ALL
  */
-@property (nonatomic,retain) NSDictionary<GCField*,GCFieldDataHolder*> * fieldData;
+@property (nonatomic,retain) NSDictionary<GCField*,GCHistoryFieldDataHolder*> * fieldData;
 /**
  Array of all types found while processing activities
  */
@@ -78,8 +49,8 @@ typedef NS_ENUM(NSUInteger, gcHistoryStats) {
 +(GCHistoryFieldSummaryStats*)fieldStatsWithHealthMeasures:(NSArray*)measures;
 -(void)addHealthMeasures:(NSArray<GCHealthMeasure*>*)measures referenceDate:(NSDate*)refOrNil;
 
--(GCFieldDataHolder*)dataForIndex:(NSUInteger)aIdx;
--(GCFieldDataHolder*)dataForField:(GCField*)aField;
+-(GCHistoryFieldDataHolder*)dataForIndex:(NSUInteger)aIdx;
+-(GCHistoryFieldDataHolder*)dataForField:(GCField*)aField;
 -(NSUInteger)countOfFieldData;
 
 @end

@@ -23,8 +23,8 @@
 //  SOFTWARE.
 //  
 
-#import "GCUnit.h"
-#import "RZMacros.h"
+#import <RZUtils/GCUnit.h>
+#import <RZUtils/RZMacros.h>
 #include <math.h>
 #import "NSDictionary+RZHelper.h"
 #import "GCUnitCalendarUnit.h"
@@ -69,6 +69,7 @@ void buildUnitSystemCache(){
         // Meter -> yard or foot ambiguous, default should be yard
         NSMutableDictionary * tempImperial = [NSMutableDictionary dictionaryWithDictionary:[_unitsMetrics dictionarySwappingKeysForObjects]];
         tempImperial[@"meter"] = @"yard";
+        tempImperial[@"celsius"] = @"fahrenheit";
         _unitsImperial = [NSDictionary dictionaryWithDictionary:tempImperial];
         RZRetain(_unitsMetrics);
         RZRetain(_unitsImperial);

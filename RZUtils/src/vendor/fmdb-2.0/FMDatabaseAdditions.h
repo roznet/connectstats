@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FMDatabase.h"
+#import <RZUtils/FMDatabase.h>
 
 
 /** Category of additions for `<FMDatabase>` class.

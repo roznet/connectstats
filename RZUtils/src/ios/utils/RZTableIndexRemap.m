@@ -24,7 +24,7 @@
 //  
 
 #import "RZTableIndexRemap.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 // For indexRemap
 #if TARGET_OS_IPHONE
 @import UIKit;

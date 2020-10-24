@@ -45,6 +45,7 @@
 #import "GCActivity+TestBackwardCompat.h"
 #import "GCActivity+TrackTransform.h"
 #import "GCactivity+Series.h"
+#import "GCHistoryFieldDataHolder.h"
 
 @interface GCTestsParsing : GCTestCase
 

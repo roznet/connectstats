@@ -25,7 +25,7 @@
 
 #import "GCCellGrid.h"
 #import "RZViewConfig.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 #import "GCViewsGrid.h"
 
 #define kCatchWidth 148.f

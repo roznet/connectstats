@@ -30,6 +30,7 @@
 #import "GCWebConnect+Requests.h"
 #import "GCActivity+Database.h"
 #import "GCActivity+Import.h"
+#import "GCTestAppGlobal.h"
 
 
 typedef NS_ENUM(NSUInteger, gcTestInstance){
@@ -145,11 +146,11 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     _nCb = 0;
     _completed = false;
     if( _testInstance == gcTestInstanceModernHistory){
-        [GCAppGlobal setupEmptyState:@"activities_comm_modern.db"];
+        [GCTestAppGlobal setupEmptyState:@"activities_comm_modern.db"];
         [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:YES];
         GCWebSetSimulatorDir(@"samples_fullmodern");
     }else{
-        [GCAppGlobal setupEmptyState:@"activities_comm.db"];
+        [GCTestAppGlobal setupEmptyState:@"activities_comm.db"];
         [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:NO];
         GCWebSetSimulatorDir(nil);
     }

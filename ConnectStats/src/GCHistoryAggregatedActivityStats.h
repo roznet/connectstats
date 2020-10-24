@@ -35,7 +35,7 @@
 
 +(GCHistoryAggregatedActivityStats*)aggregatedActivitStatsForActivityType:(NSString*)activityType;
 
-@property (nonatomic,retain) NSArray * activities;
+@property (nonatomic,retain) NSArray<GCActivity*> * activities;
 @property (nonatomic,retain) NSString * activityType;
 @property (nonatomic,assign) BOOL useFilter;
 

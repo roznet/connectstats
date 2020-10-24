@@ -26,7 +26,7 @@
 #import "GCStatsDateBuckets.h"
 #import "NSDate+RZHelper.h"
 #import "RZLog.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @implementation GCStatsDateBuckets
 
@@ -52,13 +52,7 @@
         }
         rv.calendar = cal;
         if (refOrNil) {
-            // Check ref date and set it to midnight from calc calendar
-            NSDateComponents * c = [rv.calendar components:NSCalendarUnitDay fromDate:refOrNil];
-            if (c.day > 28 && (unit == NSCalendarUnitMonth || NSCalendarUnitYear==unit)) {
-                RZLog(RZLogWarning, @"Ref date too close to end of month %@", refOrNil);
-            }
-            c = [rv.calendar components:NSCalendarUnitDay+NSCalendarUnitMonth+NSCalendarUnitYear fromDate:refOrNil];
-            rv.refOrNil = [rv.calendar dateFromComponents:c];
+            rv.refOrNil = refOrNil;
         }
     }
     return rv;
@@ -95,51 +89,61 @@
     return rv;
 }
 
+-(NSString*)description{
+    if( self.bucketStart) {
+        return [NSString stringWithFormat:@"<%@: [%@,%@]>", NSStringFromClass([self class]), self.bucketStart, self.bucketEnd];
+    }else{
+        return [NSString stringWithFormat:@"<%@: Empty>", NSStringFromClass([self class])];
+    }
+}
 
 -(BOOL)bucket:(NSDate*)date{
-    BOOL changedBucket = false;
-
-    // find a date before
-    if (!self.bucketStart || [self.bucketStart compare:date] == NSOrderedDescending) {
-        if (self.refOrNil) {
-            NSDateComponents *comps = [self.calendar components:self.calendarUnit fromDate:date  toDate:self.refOrNil  options:0];
-            NSInteger diff = [self componentUnitValueFrom:comps];
-            if (diff == 0 && [self.refOrNil compare:date] == NSOrderedAscending) {
-                self.bucketStart = self.refOrNil;
-            }else{
-                if (diff >= 0) {
-                    diff = -diff-1;
-                }else{
-                    diff = -diff;
-                }
-                [self setComponentUnitFor:diff];
-                self.bucketStart = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.refOrNil options:0];
-            }
-        }else{
-            NSDate * start = nil;
-            NSTimeInterval extends;
-
-            [self.calendar rangeOfUnit:self.calendarUnit startDate:&start interval:&extends forDate:date];
-            self.bucketStart = start;
+    // if already set up and same, just continue;
+    if( self.bucketStart != nil && [self.bucketStart compare:date] != NSOrderedDescending && [self.bucketEnd compare:date] == NSOrderedDescending){
+        return false;
+    }
+    
+    if (self.refOrNil) {
+        if (!self.bucketStart ) {
+            [self setComponentUnitFor:-1];
+            self.bucketEnd = self.refOrNil;
+            self.bucketStart = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.bucketEnd options:0];
+            [self setComponentUnitFor:1];
+        }
+        NSComparisonResult res = [self.bucketEnd compare:date];
+        [self setComponentUnitFor:1];
+        // look forwards
+        while ( res != NSOrderedDescending) {
+            self.bucketStart = self.bucketEnd;
+            self.bucketEnd   = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.bucketStart options:0];
+            
+            res = [self.bucketEnd compare:date];
+        }
+        
+        res = [self.bucketStart compare:date];
+        
+        // look backwards
+        [self setComponentUnitFor:-1];
+        while ( res != NSOrderedAscending) {
+            self.bucketEnd = self.bucketStart;
+            self.bucketStart   = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.bucketStart options:0];
+            
+            res = [self.bucketStart compare:date];
         }
         [self setComponentUnitFor:1];
-        self.bucketEnd = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.bucketStart options:0];
-        changedBucket = true;
-
-        return changedBucket;
-    }
-    //FIX if refdate should always compute from refdate
-    NSComparisonResult res = [self.bucketEnd compareCalendarDay:date include:true calendar:self.calendar];
-
-    while ( res != NSOrderedDescending) {
-        changedBucket = true;
-        self.bucketStart = self.bucketEnd;
+    }else{
+        NSDate * start = nil;
+        NSTimeInterval extends;
+        // We already know we are not in the same bucket from first test.
+        [self.calendar rangeOfUnit:self.calendarUnit startDate:&start interval:&extends forDate:date];
+        
+        self.bucketStart = start;
+        [self setComponentUnitFor:1];
         self.bucketEnd   = [self.calendar dateByAddingComponents:self.componentUnit toDate:self.bucketStart options:0];
-
-        res = [self.bucketEnd compareCalendarDay:date include:true calendar:self.calendar];
+        
     }
 
-    return changedBucket;
+    return true;
 }
 -(BOOL)contains:(NSDate*)date{
     if (!self.bucketStart) {

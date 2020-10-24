@@ -24,7 +24,7 @@
 //  
 
 #import "RZFileOrganizer.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 #import "RZLog.h"
 
 NS_INLINE NSArray * filesMatchingLogic(NSString * documentsDirectory, FileOrganizerMatch match ){

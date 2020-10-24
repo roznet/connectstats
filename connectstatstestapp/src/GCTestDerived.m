@@ -29,6 +29,7 @@
 #import "GCActivity+CachedTracks.h"
 #import "GCWebConnect+Requests.h"
 #import "GCTestsSamples.h"
+#import "GCTestAppGlobal.h"
 
 #define STAGE_START @(0)
 #define STAGE_END   @(1)
@@ -51,7 +52,7 @@
 
 -(void)testDerived{
     [self startSession:@"GC Derived"];
-    [GCAppGlobal setupEmptyStateWithDerivedForPrefix:@"activities_derived"];
+    [GCTestAppGlobal setupEmptyStateWithDerivedForPrefix:@"activities_derived"];
     self.stage = 0;
     [[GCAppGlobal derived] attach:self];
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] == 0, @"Starts empty");
@@ -222,7 +223,7 @@
 -(void)finishedDerived{
     [[GCAppGlobal derived] detach:self];
     // Force re-init/cleanup of derived
-    [GCAppGlobal setupEmptyState:@"activities_derived.db"];
+    [GCTestAppGlobal setupEmptyState:@"activities_derived.db"];
     [self endSession:@"GC Derived"];
 }
 

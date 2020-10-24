@@ -29,7 +29,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-#import "GCViewGradientColors.h"
+#import <RZUtilsUniversal/GCViewGradientColors.h>
 #import <RZUtils/RZUtils.h>
 
 typedef NS_ENUM(NSUInteger, gcGraphType) {

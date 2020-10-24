@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //  
 
-#import "GCCellGridConfig.h"
+#import <RZUtilsTouch/GCCellGridConfig.h>
 
 #ifdef __LP64__
 NS_INLINE BOOL RZEqualsCGFloat( CGFloat val1, CGFloat val2) { return fabs( val1-val2) < 1.e-5; };

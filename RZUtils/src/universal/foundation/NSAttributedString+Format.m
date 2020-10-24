@@ -24,7 +24,7 @@
 //  
 
 #import "NSAttributedString+Format.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @implementation NSAttributedString (Format)
 

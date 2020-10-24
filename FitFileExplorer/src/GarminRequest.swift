@@ -60,7 +60,7 @@ class GarminRequest : GCWebRequestStandard {
             self.status = GCWebStatus.OK
             self.stage = gcRequestStage.download
             
-            return GCGarminLoginSSORequest(user: FITAppGlobal.currentLoginName(), andPwd: FITAppGlobal.currentPassword())
+            return GCGarminLoginSSORequest(user: FITAppGlobal.currentLoginName(), andPwd: FITAppGlobal.currentPassword(), validation: nil)
         }
         
         return nil

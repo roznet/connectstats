@@ -24,8 +24,8 @@
 //  
 
 #import "GCViewsGrid.h"
-#import "RZMacros.h"
-#import "GCCellGridConfig.h"
+#import <RZUtils/RZMacros.h>
+#import <RZUtilsTouch/GCCellGridConfig.h>
 
 
 @interface GCCellViewHolder : NSObject

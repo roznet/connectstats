@@ -30,6 +30,8 @@
 #import "GCViewConfig.h"
 #import "GCActivity+TestBackwardCompat.h"
 #import "GCStatsCalendarAggregationConfig.h"
+#import "GCHistoryFieldDataHolder.h"
+#import "GCTestAppGlobal.h"
 
 @import RZExternal;
 
@@ -52,7 +54,7 @@
 
     // Needs to turn off duplicate check as it compares to stored values from garmin
     // or from db queries, which didn't handle the duplicates...
-    [GCAppGlobal setupSampleState:@"activities_stats.db" config:@{CONFIG_DUPLICATE_CHECK_ON_LOAD:@(false)}];
+    [GCTestAppGlobal setupSampleState:@"activities_stats.db" config:@{CONFIG_DUPLICATE_CHECK_ON_LOAD:@(false)}];
 
     [self checkSelfConsistency];
     [self checkHistoryConsistency];
@@ -89,33 +91,37 @@
                 NSArray * actIdx = [organizer activityIndexesMatchingString:filter];
                 GCNumberWithUnit * sum = nil;
                 double cnt = 0.;
-                for (NSUInteger i = 0; i < [actIdx count]; i++) {
-                    GCActivity * act = [organizer activityForIndex:[[actIdx objectAtIndex:i] integerValue]];
-                    GCNumberWithUnit * dist = [act numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:act.activityType]];
-                    if( sum == nil){
-                        sum = dist;
-                    }else{
-                        sum = [sum addNumberWithUnit:dist weight:1.0];
-                    }
-                    cnt += 1.;
-                }
-                GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType];
-                GCNumberWithUnit * aggSum = [data numberWithUnit:distfield statType:gcAggregatedSum];
-                double aggCnt = [data numberWithUnit:distfield statType:gcAggregatedCnt].value;
-
-                if (fabs(cnt-aggCnt) > 1e-7 || ![aggSum isEqualToNumberWithUnit:sum]) {
-                    actIdx = [organizer activityIndexesMatchingString:filter];
-                    NSLog( @"%@", data);
-                    NSLog(@"type=%@ config=%@ filter=%@",activityType,calendarConfig,filter);
+                RZ_ASSERT([actIdx count]>0, @"some activities");
+                if( actIdx.count > 0){
                     for (NSUInteger i = 0; i < [actIdx count]; i++) {
                         GCActivity * act = [organizer activityForIndex:[[actIdx objectAtIndex:i] integerValue]];
-                        NSLog(@"%@ %@ %f",act,[[act date] dateShortFormat],act.sumDistanceCompat);
+                        GCNumberWithUnit * dist = [act numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:act.activityType]];
+                        if( sum == nil){
+                            sum = dist;
+                        }else{
+                            sum = [sum addNumberWithUnit:dist weight:1.0];
+                        }
+                        cnt += 1.;
+                    }
+                    GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType];
+                    GCNumberWithUnit * aggSum = [data numberWithUnit:distfield statType:gcAggregatedSum];
+                    double aggCnt = [data numberWithUnit:distfield statType:gcAggregatedCnt].value;
+                    
+                    if ( sum != nil && ( fabs(cnt-aggCnt) > 1e-7 || ![aggSum isEqualToNumberWithUnit:sum]) ) {
+                        actIdx = [organizer activityIndexesMatchingString:filter];
+                        NSLog( @"%@", data);
+                        NSLog(@"type=%@ config=%@ filter=%@",activityType,calendarConfig,filter);
+                        for (NSUInteger i = 0; i < [actIdx count]; i++) {
+                            GCActivity * act = [organizer activityForIndex:[[actIdx objectAtIndex:i] integerValue]];
+                            NSLog(@"%@ %@ %f",act,[[act date] dateShortFormat],act.sumDistanceCompat);
+                        }
+                    }
+                    RZ_ASSERT(fabs(cnt-aggCnt)<1e-6, @"%f match cnt %f", aggCnt,cnt);
+                    if( sum != nil){
+                        RZ_ASSERT([aggSum isEqualToNumberWithUnit:sum], @"%@ match sum %f", aggSum,sum);
                     }
                 }
-                RZ_ASSERT(fabs(cnt-aggCnt)<1e-6, @"%f match cnt %f", aggCnt,cnt);
-                RZ_ASSERT([aggSum isEqualToNumberWithUnit:sum], @"%@ match sum %f", aggSum,sum);
             }
-            
             [self checkGarminConsistency:vals activityType:activityType calendarConfig:calendarConfig];
 
         }
@@ -129,12 +135,12 @@
         query = @"select distinct field,uom,count(value) as count,sum(value) as sum from gc_activities_values v, gc_activities a where a.activityId=v.activityId group by field,uom";
     }
     FMResultSet * res = [aDb executeQuery:query, activityType];
-    NSMutableDictionary<GCField*,GCFieldDataHolder*> * fieldData = [NSMutableDictionary dictionary];
+    NSMutableDictionary<GCField*,GCHistoryFieldDataHolder*> * fieldData = [NSMutableDictionary dictionary];
     while ([res next]) {
         GCField * field = [GCField fieldForKey:[res stringForColumn:@"field"] andActivityType:activityType];
-        GCFieldDataHolder * pre = [fieldData objectForKey:field];
+        GCHistoryFieldDataHolder * pre = [fieldData objectForKey:field];
         if (!pre) {
-            GCFieldDataHolder * v =[[GCFieldDataHolder alloc] init];
+            GCHistoryFieldDataHolder * v =[[GCHistoryFieldDataHolder alloc] init];
             [v setField:field];
             fieldData[field] = v;
             pre = v;
@@ -166,8 +172,8 @@
                                                                                           ignoreMode:gcIgnoreModeActivityFocus];
         for (GCField * field in vals_db.fieldData) {
             if (![field isCalculatedField]) {
-                GCFieldDataHolder * data_mem = vals_mem.fieldData[field];
-                GCFieldDataHolder * data_db  = vals_db.fieldData[field];
+                GCHistoryFieldDataHolder * data_mem = vals_mem.fieldData[field];
+                GCHistoryFieldDataHolder * data_db  = vals_db.fieldData[field];
 
                 GCNumberWithUnit * sum_mem = [data_mem sumWithUnit:gcHistoryStatsAll];
                 GCNumberWithUnit * sum_db  = [data_db sumWithUnit:gcHistoryStatsAll];
@@ -260,7 +266,7 @@
 }
 
 -(void)testsHistoryStats{
-    [GCAppGlobal setupSampleState:@"activities_large.db"];
+    [GCTestAppGlobal setupSampleState:@"activities_large.db"];
 
     NSString * activityType = GC_TYPE_CYCLING;
 
@@ -284,7 +290,7 @@
         GCField * field = [GCField fieldForKey:fieldkey andActivityType:activityType];
 
         GCHistoryAggregatedDataHolder * data_agg = [vals_agg dataForIndex:0];
-        GCFieldDataHolder * data_sum = [vals_sum dataForField:field];
+        GCHistoryFieldDataHolder * data_sum = [vals_sum dataForField:field];
         //nu_agg is always same
         GCNumberWithUnit* nu_agg = [data_agg numberWithUnit:field statType:gcAggregatedSum];
         GCNumberWithUnit* nu_sum = [data_sum sumWithUnit:gcHistoryStatsWeek];
@@ -301,9 +307,9 @@
     testOne(@"WeightedMeanSpeed");
 
     GCHistoryAggregatedDataHolder * data_agg = [vals_agg dataForIndex:0];
-    GCFieldDataHolder * dist_sum = [vals_sum dataForField:[GCField fieldForKey:@"SumDistance" andActivityType:activityType]];
-    GCFieldDataHolder * dur_sum  = [vals_sum dataForField:[GCField fieldForKey:@"SumDuration" andActivityType:activityType]];
-    GCFieldDataHolder * speed_sum= [vals_sum dataForField:[GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:activityType]];
+    GCHistoryFieldDataHolder * dist_sum = [vals_sum dataForField:[GCField fieldForKey:@"SumDistance" andActivityType:activityType]];
+    GCHistoryFieldDataHolder * dur_sum  = [vals_sum dataForField:[GCField fieldForKey:@"SumDuration" andActivityType:activityType]];
+    GCHistoryFieldDataHolder * speed_sum= [vals_sum dataForField:[GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:activityType]];
 
     GCNumberWithUnit* dist_nu   = [dist_sum sumWithUnit:gcHistoryStatsAll];
     GCNumberWithUnit* dur_nu    = [dur_sum sumWithUnit:gcHistoryStatsAll];

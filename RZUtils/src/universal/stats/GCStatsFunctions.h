@@ -24,7 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import "GCStatsDataSerie.h"
+#import <RZUtils/GCStatsDataSerie.h>
 
 @class GCStatsDataSerieWithUnit;
 

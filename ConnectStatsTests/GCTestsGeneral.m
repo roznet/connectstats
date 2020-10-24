@@ -34,6 +34,7 @@
 #import "GCActivity+TestBackwardCompat.h"
 #import "GCStatsCalendarAggregationConfig.h"
 #import "GCActivity.h"
+#import "GCHistoryFieldDataHolder.h"
 
 @interface GCTestsGeneral : GCTestCase
 @end

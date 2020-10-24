@@ -24,7 +24,7 @@
 //  
 
 #import "NSDate+RZHelper.h"
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 
 @implementation NSDate (RZHelper)
@@ -379,5 +379,13 @@
     return [_gregorianCalendar dateByAddingComponents:comp toDate:self options:0];
 }
 
+-(NSDate*)endOfDayForCalendar:(NSCalendar*)cal{
+    NSDateComponents * components = [cal components: (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond)  fromDate:self];
+    [components setHour:23];
+    [components setMinute:59];
+    [components setSecond:59];
+    
+    return [cal dateFromComponents:components];
+}
 
 @end

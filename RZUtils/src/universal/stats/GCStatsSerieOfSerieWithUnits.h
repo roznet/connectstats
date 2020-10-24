@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "GCStatsDataSerieWithUnit.h"
+#import <RZUtils/GCStatsDataSerieWithUnit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

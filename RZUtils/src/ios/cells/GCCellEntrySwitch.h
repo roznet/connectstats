@@ -25,7 +25,7 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import "GCCellEntryField.h"
+#import <RZUtilsTouch/GCCellEntryField.h>
 
 @interface GCCellEntrySwitch : GCCellEntryField
 

@@ -23,8 +23,8 @@
 //  SOFTWARE.
 //  
 
-#import "GCViewGradientColors.h"
-#import "RZMacros.h"
+#import <RZUtilsUniversal/GCViewGradientColors.h>
+#import <RZUtils/RZMacros.h>
 
 @implementation GCViewGradientColors
 

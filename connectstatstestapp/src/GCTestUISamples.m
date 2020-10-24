@@ -24,7 +24,7 @@
 //  
 
 #import "GCTestUISamples.h"
-#import "GCAppGlobal.h"
+#import "ConnectStats-Swift.h"
 #import "GCSimpleGraphCachedDataSource+Templates.h"
 #import "GCHistoryFieldDataSerie.h"
 #import "GCHistoryFieldDataSerie+Test.h"
@@ -39,7 +39,7 @@
 #import "GCActivity+Database.h"
 #import "GCStatsMultiFieldViewController.h"
 #import "GCStatsMultiFieldViewControllerConsts.h"
-#import "GCCellActivity.h"
+#import "GCCellHealthDayActivity.h"
 #import "GCTrackFieldChoices.h"
 #import "GCTestsSamples.h"
 #import "GCActivity+Series.h"
@@ -47,6 +47,7 @@
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminRequestActivityReload.h"
 #import "GCStatsDerivedHistory.h"
+#import "GCTestAppGlobal.h"
 
 @implementation GCTestUISamples
 
@@ -80,7 +81,7 @@
 
     NSMutableArray * rv = [NSMutableArray array];
     @autoreleasepool {
-        [GCAppGlobal setupSampleState:@"sample_activities.db"];
+        [GCTestAppGlobal setupSampleState:@"sample_activities.db"];
         
         NSString * filter = nil;
         NSInteger which = -1;
@@ -721,16 +722,16 @@
 
 -(NSArray*)sampleDayActivities{
     GCActivity * act = nil;
-    GCCellActivity * cell =  nil;
+    GCCellHealthDayActivity * cell =  nil;
 
     NSMutableArray * rv = [NSMutableArray array];
 
-    cell = [GCCellActivity activityCell:nil];
+    cell = [GCCellHealthDayActivity activityCell:nil];
     act = [GCActivity fullLoadFromDb:[GCTestsSamples sampleActivityDatabase:@"test_activity_day___healthkit__Default_20151106.db"]];
     [cell setupForActivity:act];
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:kGCCellActivityDefaultHeight andIdentifier:@"Day Activity hr"]];
 
-    cell = [GCCellActivity activityCell:nil];
+    cell = [GCCellHealthDayActivity activityCell:nil];
     act = [GCActivity fullLoadFromDb:[GCTestsSamples sampleActivityDatabase:@"test_activity_day___healthkit__Default_20151109.db"]];
     [cell setupForActivity:act];
     [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:kGCCellActivityDefaultHeight andIdentifier:@"Day Activity nohr"]];
@@ -910,12 +911,22 @@
     return icons;
 }
 
+-(NSArray*)sampleNew{
+    UINib * nib = [UINib nibWithNibName:@"GCCellActivity" bundle:[NSBundle mainBundle]];
+    GCCellActivity * cell = [nib instantiateWithOwner:self options:nil][0];
+    //GCCellActivity * cell = [[GCCellActivity alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"mycell"];
+    cell.textLabel.text = @"Hello";
+    return @[
+        [GCTestUISampleCellHolder holderFor:cell andIdentifier:@"new cell"]
+    ];
+}
 
 -(NSArray*)gridCellSamples{
-    [GCAppGlobal setupSampleState:@"sample_activities.db"];
+    [GCTestAppGlobal setupSampleState:@"sample_activities.db"];
 
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:10];
 
+    //[rv addObject:[self sampleNew]];
     [rv addObject:[self sampleCells]];
     [rv addObject:[self sampleDayActivities]];
     [rv addObject:[self sampleMultiFieldsStats]];

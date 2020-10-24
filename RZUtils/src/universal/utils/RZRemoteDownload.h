@@ -24,8 +24,8 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import "RZMacros.h"
-#import "RZRemoteDownloadDelegate.h"
+#import <RZUtils/RZMacros.h>
+#import <RZUtils/RZRemoteDownloadDelegate.h>
 
 @interface RZRemoteDownload : NSObject<NSURLSessionDelegate>
 

@@ -35,7 +35,7 @@
 
 @interface GCHistoryAggregatedActivityStats ()
 
-@property (nonatomic,retain) NSMutableArray * aggregatedStats;
+@property (nonatomic,retain) NSArray<GCHistoryAggregatedDataHolder*> * aggregatedStats;
 @property (nonatomic,retain) NSDate * refOrNil;
 @property (nonatomic,assign) NSCalendarUnit calendarUnit;
 
@@ -115,11 +115,11 @@
     self.refOrNil = refOrNil;
     self.cutOff = cutOff;
     
-    NSMutableSet * found = [NSMutableSet set];
+    NSMutableSet<GCField*> * found = [NSMutableSet set];
 
-    NSArray * useActivities = self.activities;
+    NSArray<GCActivity*> * useActivities = self.activities;
 
-    NSMutableArray * serie = [NSMutableArray arrayWithCapacity:useActivities.count];
+    NSMutableArray<GCActivity*> * serie = [NSMutableArray arrayWithCapacity:useActivities.count];
     if ([_activityType isEqualToString:GC_TYPE_ALL]) {
         [serie addObjectsFromArray:useActivities];
     }else{
@@ -129,16 +129,12 @@
             }
         }
     }
-    self.aggregatedStats = [NSMutableArray arrayWithCapacity:serie.count];
     [serie sortUsingComparator:^(id obj1, id obj2){
         return [[obj1 date] compare:[obj2 date]];
     }];
 
-
-    NSUInteger idx = 0;
-    NSUInteger n = serie.count;
-
-    if (n > 0) {
+    NSMutableArray<GCHistoryAggregatedDataHolder*> * aggregatedStats = [NSMutableArray arrayWithCapacity:serie.count];
+    if (serie.count > 0) {
         GCStatsDateBuckets * bucketer = [GCStatsDateBuckets statsDateBucketFor:aUnit referenceDate:refOrNil andCalendar:[GCAppGlobal calculationCalendar]];
 
         NSTimeInterval cutOffInterval = 0.;
@@ -147,21 +143,18 @@
             cutOffInterval = [self.cutOff timeIntervalSinceDate:bucketer.bucketStart];
         }
 
-        NSDate * thisdate = [serie[0] date];
+        NSDate * thisdate = serie.firstObject.date;
         [bucketer bucket:thisdate];
         GCHistoryAggregatedDataHolder * dataHolder = [[GCHistoryAggregatedDataHolder alloc] initForDate:bucketer.bucketStart andFields:self.fields];
 
-        GCActivity * activity = nil;
-
-        for (idx=0; idx<n; idx++) {
-            activity   = serie[idx];
+        for (GCActivity * activity in serie) {
             thisdate = activity.date;
 
             BOOL changedBucket = [bucketer bucket:thisdate];
             if (changedBucket) {
                 [dataHolder aggregateEnd:nil];
                 [found addObjectsFromArray:dataHolder.availableFields];
-                [_aggregatedStats addObject:dataHolder];
+                [aggregatedStats addObject:dataHolder];
                 [dataHolder release];
                 dataHolder = [[GCHistoryAggregatedDataHolder alloc] initForDate:bucketer.bucketStart andFields:self.fields];
             }
@@ -175,15 +168,14 @@
         }
         [dataHolder aggregateEnd:nil];
         [found addObjectsFromArray:dataHolder.availableFields];
-        self.foundFields = found;
-        [_aggregatedStats addObject:dataHolder];
+        [aggregatedStats addObject:dataHolder];
         [dataHolder release];
-        [_aggregatedStats sortUsingComparator:^(id obj1, id obj2){
+        [aggregatedStats sortUsingComparator:^(id obj1, id obj2){
             return [[obj2 date] compare:[obj1 date]];
         }];
     }
+    self.foundFields = found;
+    self.aggregatedStats = aggregatedStats;
 }
-
-
 
 @end

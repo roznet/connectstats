@@ -28,199 +28,8 @@
 #import "GCHealthMeasure.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+Fields.h"
+#import "GCHistoryFieldDataHolder.h"
 
-@interface GCFieldDataHolder ()
-
-@property (nonatomic,retain) GCUnit * unit;
-@property (nonatomic,assign) double * sum;
-@property (nonatomic,assign) double * count;
-@property (nonatomic,assign) double * max;
-@property (nonatomic,assign) double * min;
-@property (nonatomic,assign) double * timewsum;
-@property (nonatomic,assign) double * timeweight;
-@property (nonatomic,assign) double * distwsum;
-@property (nonatomic,assign) double * distweight;
-
--(void)addNumberWithUnit:(GCNumberWithUnit*)num;
--(void)addNumberWithUnit:(GCNumberWithUnit*)num withTimeWeight:(double)tw distWeight:(double)dw for:(gcHistoryStats)which;
-
-
-
-@end
-
-@implementation GCFieldDataHolder
--(GCFieldDataHolder*)init{
-    self = [super init];
-    if (self) {
-        _sum    = calloc(sizeof(double), gcHistoryStatsEnd);
-        _count  = calloc(sizeof(double), gcHistoryStatsEnd);
-        _max    = calloc(sizeof(double), gcHistoryStatsEnd);
-        _min    = calloc(sizeof(double), gcHistoryStatsEnd);
-        _timewsum   = calloc(sizeof(double), gcHistoryStatsEnd);
-        _timeweight = calloc(sizeof(double), gcHistoryStatsEnd);
-        _distwsum   = calloc(sizeof(double), gcHistoryStatsEnd);
-        _distweight = calloc(sizeof(double), gcHistoryStatsEnd);
-    }
-    return self;
-}
-
--(void)dealloc{
-    free(_sum);
-    free(_count);
-    free(_max);
-    free(_min);
-    free(_timewsum);
-    free(_timeweight);
-    free(_distwsum);
-    free(_distweight);
-    [_field release];
-    [_unit release];
-
-
-    [super dealloc];
-}
-
--(NSString*)displayField{
-    return [self.field displayName];
-}
-
--(GCNumberWithUnit*)averageWithUnit{
-    return [self averageWithUnit:gcHistoryStatsAll];
-}
--(GCNumberWithUnit*)sumWithUnit{
-    return [self sumWithUnit:gcHistoryStatsAll];
-}
--(double)count:(gcHistoryStats)which{
-    return _count[which];
-}
--(GCNumberWithUnit*)countWithUnit:(gcHistoryStats)which{
-    return [GCNumberWithUnit numberWithUnitName:@"dimensionless" andValue:_count[which]];
-}
-
--(GCNumberWithUnit*)weightWithUnit:(gcHistoryStats)which{
-    return [GCNumberWithUnit numberWithUnitName:@"dimensionless" andValue:_timeweight[which]];
-
-}
--(GCNumberWithUnit*)weightedSumWithUnit:(gcHistoryStats)which{
-    return [self numberWithUnitForValue:self.timewsum[which]];
-}
--(GCNumberWithUnit*)weightedAverageWithUnit:(gcHistoryStats)which{
-    switch (self.unit.sumWeightBy) {
-        case GCUnitSumWeightByTime:
-            if (self.timeweight[which]!= 0.) {
-                return [self numberWithUnitForValue:self.timewsum[which]/self.timeweight[which]];
-            }
-            break;
-        case GCUnitSumWeightByCount:
-            if( self.count[which] != 0.){
-                return [self numberWithUnitForValue:self.sum[which]/self.count[which]];
-            }
-            break;
-        case GCUnitSumWeightByDistance:
-            if (self.distweight[which]!= 0.) {
-                return [self numberWithUnitForValue:self.distwsum[which]/self.distweight[which]];
-            }
-            break;
-    }
-    return nil;
-
-}
-
--(GCNumberWithUnit*)averageWithUnit:(gcHistoryStats)which{
-    if (self.count[which] > 0.) {
-        return [self numberWithUnitForValue:self.sum[which]/self.count[which]];
-    }else{
-        return nil;
-    }
-}
--(GCNumberWithUnit*)numberWithUnitForValue:(double)val{
-    GCNumberWithUnit * rv = [GCNumberWithUnit numberWithUnit:self.unit andValue:val];
-    rv = [rv convertToGlobalSystem];
-    return rv;
-}
-
--(GCNumberWithUnit*)sumWithUnit:(gcHistoryStats)which{
-    return [self numberWithUnitForValue:self.sum[which]];
-}
--(GCNumberWithUnit*)maxWithUnit:(gcHistoryStats)which{
-    return [self numberWithUnitForValue:self.max[which]];
-}
--(GCNumberWithUnit*)minWithUnit:(gcHistoryStats)which{
-    return [self numberWithUnitForValue:self.min[which]];
-}
-
--(NSString*)description{
-    NSMutableString * rv = [NSMutableString stringWithFormat:@"<GCFieldDataHolder: %@ %@:\n",self.field,self.unit];
-    NSArray * desc = @[ @"All", @"W", @"M", @"Y" ];
-    for (gcHistoryStats i = 0; i<gcHistoryStatsEnd; i++) {
-        [rv appendFormat:@"  %@: Cnt %@, Avg %@, Sum %@, Max %@, Min %@\n", desc[i], [self countWithUnit:i], [self averageWithUnit:i],
-         [self sumWithUnit:i], [self maxWithUnit:i], [self minWithUnit:i]];
-    }
-    [rv appendString:@">"];
-    return rv;
-}
-
--(void)convertToUnit:(GCUnit*)unit{
-    if ([unit isEqualToUnit:self.unit]) {
-        return;
-    }else{
-        GCUnit * common = [unit commonUnit:self.unit];
-        if (![common isEqualToUnit:self.unit]) {
-            for (gcHistoryStats i=0; i<gcHistoryStatsEnd; i++) {
-                self.sum[i] = [common convertDouble:self.sum[i] fromUnit:self.unit];
-                self.max[i] = [common convertDouble:self.max[i] fromUnit:self.unit];
-                self.min[i] = [common convertDouble:self.min[i] fromUnit:self.unit];
-                self.timewsum[i]= [common convertDouble:self.timewsum[i] fromUnit:self.unit];
-            }
-            self.unit = common;
-        }
-    }
-}
-
--(void)addNumberWithUnit:(GCNumberWithUnit*)num{
-    [self addNumberWithUnit:num withTimeWeight:1.0 distWeight:1.0 for:gcHistoryStatsAll];
-}
--(void)addNumberWithUnit:(GCNumberWithUnit*)num withTimeWeight:(double)tw distWeight:(double)dw for:(gcHistoryStats)which{
-    if ([num.unit isEqualToUnit:self.unit]) {
-        if (!isinf(num.value)) {
-            self.sum[which] += num.value;
-            self.max[which] = MAX(self.max[which], num.value);
-            self.min[which] = MIN(self.min[which], num.value);
-            self.timewsum[which] += num.value * tw;
-            self.distwsum[which] += num.value * dw;
-        }
-    }else{
-        [self convertToUnit:num.unit];
-        double val = [num convertToUnit:self.unit].value;
-        if (!isinf(val)) {
-            self.sum[which] += val;
-            self.max[which] = MAX(self.max[which], val);
-            self.min[which] = MIN(self.min[which], val);
-            self.timewsum[which] =  val * tw;
-            self.distwsum[which] =  val * dw;
-        }
-    }
-    self.count[which] +=1.;
-    self.timeweight[which]+=tw;
-    self.distweight[which]+=dw;
-}
--(void)addSumWithUnit:(GCNumberWithUnit*)num andCount:(NSUInteger)count for:(gcHistoryStats)which{
-    if ([num.unit isEqualToUnit:self.unit]) {
-        self.sum[which] += num.value;
-        self.max[which] = MAX(self.max[which], num.value);
-        self.min[which] = MIN(self.min[which], num.value);
-    }else{
-        [self convertToUnit:num.unit];
-        double val = [num convertToUnit:self.unit].value;
-        self.sum[which] += val;
-        self.max[which] = MAX(self.max[which], val);
-        self.min[which] = MIN(self.min[which], val);
-
-    }
-    self.count[which] +=count;
-}
-
-@end
 
 
 @implementation GCHistoryFieldSummaryStats
@@ -238,11 +47,10 @@
                                             ignoreMode:(gcIgnoreMode)ignoreMode{
     GCHistoryFieldSummaryStats * rv = [[[GCHistoryFieldSummaryStats alloc] init] autorelease];
     
-    GCField * badField = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:@"all"];
     if (rv) {
         // First collect by indexing on Keys/NSStirng for speed
         // Then after cleanup by adding the type
-        NSMutableDictionary<GCField*,GCFieldDataHolder*> * fieldKeyData = [NSMutableDictionary dictionary];
+        NSMutableDictionary<GCField*,GCHistoryFieldDataHolder*> * fieldKeyData = [NSMutableDictionary dictionary];
 
         GCStatsDateBuckets * weekBucket = nil;
         GCStatsDateBuckets * monthBucket= nil;
@@ -254,22 +62,18 @@
                 NSArray<GCField*> * fields = [act allFields];
                 for (GCField * field in fields) {
                     //
-                    GCFieldDataHolder * holder = fieldKeyData[field];
+                    GCHistoryFieldDataHolder * holder = fieldKeyData[field];
                     if (!holder) {
-                        holder = [[[GCFieldDataHolder alloc] init] autorelease];
+                        holder = [[[GCHistoryFieldDataHolder alloc] init] autorelease];
                         holder.field = field;
                         fieldKeyData[field] = holder;
                     }
                     GCField * fieldAll = [field correspondingFieldTypeAll];
-                    BOOL bad = [fieldAll isEqualToField:badField];
-                    GCFieldDataHolder * holderAll = fieldKeyData[fieldAll];
+                    GCHistoryFieldDataHolder * holderAll = fieldKeyData[fieldAll];
                     if(!holderAll){
-                        holderAll = RZReturnAutorelease([[GCFieldDataHolder alloc] init]);
+                        holderAll = RZReturnAutorelease([[GCHistoryFieldDataHolder alloc] init]);
                         holderAll.field = fieldAll;
                         fieldKeyData[fieldAll] = holderAll;
-                    }
-                    if( bad && [act.activityId isEqualToString:@"101787619"]){
-                        NSLog(@"%@", act);
                     }
                     GCNumberWithUnit * nu = [act numberWithUnitForField:field];
                     if (nu) {
@@ -345,14 +149,14 @@
         }
         GCField * field = measure.field;
 
-        GCFieldDataHolder * holder = healthFieldData[field];
+        GCHistoryFieldDataHolder * holder = healthFieldData[field];
         if (!holder) {
-            holder = [[[GCFieldDataHolder alloc] init] autorelease];
+            holder = [[[GCHistoryFieldDataHolder alloc] init] autorelease];
             holder.field = field;
 
             healthFieldData[field] = holder;
         }
-        [holder addNumberWithUnit:measure.value];
+        [holder addNumberWithUnit:measure.value withTimeWeight:1.0 distWeight:1.0 for:gcHistoryStatsAll];
         if (weekBucket==nil) {
             weekBucket = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitWeekOfYear referenceDate:refOrNil andCalendar:[GCAppGlobal calculationCalendar]];
             monthBucket= [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitMonth referenceDate:refOrNil andCalendar:[GCAppGlobal calculationCalendar]];
@@ -375,8 +179,8 @@
     self.fieldData = [NSDictionary dictionaryWithDictionary:healthFieldData];
 }
 
--(GCFieldDataHolder*)dataForIndex:(NSUInteger)aIdx{
-    GCFieldDataHolder * rv = nil;
+-(GCHistoryFieldDataHolder*)dataForIndex:(NSUInteger)aIdx{
+    GCHistoryFieldDataHolder * rv = nil;
     if (aIdx < self.fieldData.count) {
         GCField * field = [self.fieldData keysSortedByValueUsingSelector:@selector(compare:)][aIdx];
         rv = self.fieldData[field];
@@ -387,7 +191,7 @@
     return self.fieldData.count;
 }
 
--(GCFieldDataHolder*)dataForField:(GCField*)aField{
+-(GCHistoryFieldDataHolder*)dataForField:(GCField*)aField{
     return self.fieldData[aField];
 }
 

@@ -24,7 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 @interface RZDependencyInfo : NSObject
 

@@ -24,7 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import "RZMacros.h"
+#import <RZUtils/RZMacros.h>
 
 typedef NS_ENUM(NSUInteger, GCUnitNumberFormat) {
     GCUnitTimeFormat,

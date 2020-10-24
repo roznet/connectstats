@@ -51,5 +51,6 @@
 -(NSComparisonResult)compareCalendarDay:(NSDate *)other include:(BOOL)flag calendar:(NSCalendar*)cal;
 -(NSString*)calendarUnitFormat:(NSCalendarUnit)aUnit;
 -(NSDate*)dateByAddingGregorianComponents:(NSDateComponents*)comp;
+-(NSDate*)endOfDayForCalendar:(NSCalendar*)cal;
 
 @end
