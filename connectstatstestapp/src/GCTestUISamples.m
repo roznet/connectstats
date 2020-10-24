@@ -24,7 +24,7 @@
 //  
 
 #import "GCTestUISamples.h"
-#import "GCAppGlobal.h"
+#import "ConnectStats-Swift.h"
 #import "GCSimpleGraphCachedDataSource+Templates.h"
 #import "GCHistoryFieldDataSerie.h"
 #import "GCHistoryFieldDataSerie+Test.h"
@@ -47,6 +47,7 @@
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminRequestActivityReload.h"
 #import "GCStatsDerivedHistory.h"
+#import "GCTestAppGlobal.h"
 
 @implementation GCTestUISamples
 
@@ -80,7 +81,7 @@
 
     NSMutableArray * rv = [NSMutableArray array];
     @autoreleasepool {
-        [GCAppGlobal setupSampleState:@"sample_activities.db"];
+        [GCTestAppGlobal setupSampleState:@"sample_activities.db"];
         
         NSString * filter = nil;
         NSInteger which = -1;
@@ -910,12 +911,22 @@
     return icons;
 }
 
+-(NSArray*)sampleNew{
+    UINib * nib = [UINib nibWithNibName:@"GCCellActivity" bundle:[NSBundle mainBundle]];
+    GCCellActivity * cell = [nib instantiateWithOwner:self options:nil][0];
+    //GCCellActivity * cell = [[GCCellActivity alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"mycell"];
+    cell.textLabel.text = @"Hello";
+    return @[
+        [GCTestUISampleCellHolder holderFor:cell andIdentifier:@"new cell"]
+    ];
+}
 
 -(NSArray*)gridCellSamples{
-    [GCAppGlobal setupSampleState:@"sample_activities.db"];
+    [GCTestAppGlobal setupSampleState:@"sample_activities.db"];
 
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:10];
 
+    [rv addObject:[self sampleNew]];
     [rv addObject:[self sampleCells]];
     [rv addObject:[self sampleDayActivities]];
     [rv addObject:[self sampleMultiFieldsStats]];

@@ -48,13 +48,6 @@ extern NSString * kPreservedSettingsName;
 +(GCHealthOrganizer*)health;
 +(GCDerivedOrganizer*)derived;
 
-+(void)setupEmptyState:(NSString*)name;
-+(void)setupEmptyState:(NSString*)name withSettingsName:(NSString*)settingName;
-+(void)setupEmptyStateWithDerivedForPrefix:(NSString*)name;
-+(void)setupSampleState:(NSString*)name config:(NSDictionary*)config;
-+(void)setupSampleState:(NSString*)name;
-+(void)reinitFromSampleState:(NSString*)name;
-+(void)cleanWritableFiles;
 +(void)saveSettings;
 +(BOOL)connectStatsVersion;
 

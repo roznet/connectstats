@@ -465,6 +465,7 @@
 		42684EF11B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42684EEF1B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m */; };
 		42684EF41B2DB2A6001A90D2 /* GCSettingsSourceTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42684EF31B2DB2A6001A90D2 /* GCSettingsSourceTableViewController.m */; };
 		42684EF51B2DB4BC001A90D2 /* GCSettingsSourceTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42684EF31B2DB2A6001A90D2 /* GCSettingsSourceTableViewController.m */; };
+		426872482542122A00F04E83 /* GCTestAppGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 426872472542122A00F04E83 /* GCTestAppGlobal.m */; };
 		426A13571C54D0B300D61098 /* GCActivityOrganizedFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 4253FC391C3301E200F26A47 /* GCActivityOrganizedFields.m */; };
 		426A135E1C5CCEFA00D61098 /* GCActivitySettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 426A135D1C5CCEFA00D61098 /* GCActivitySettings.m */; };
 		426A135F1C5CCEFA00D61098 /* GCActivitySettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 426A135D1C5CCEFA00D61098 /* GCActivitySettings.m */; };
@@ -2251,6 +2252,8 @@
 		42684EEF1B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitSourcesRequest.m; path = src/GCHealthKitSourcesRequest.m; sourceTree = "<group>"; };
 		42684EF21B2DB2A6001A90D2 /* GCSettingsSourceTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsSourceTableViewController.h; path = src/GCSettingsSourceTableViewController.h; sourceTree = "<group>"; };
 		42684EF31B2DB2A6001A90D2 /* GCSettingsSourceTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSettingsSourceTableViewController.m; path = src/GCSettingsSourceTableViewController.m; sourceTree = "<group>"; };
+		426872462542122A00F04E83 /* GCTestAppGlobal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestAppGlobal.h; path = connectstatstestapp/src/GCTestAppGlobal.h; sourceTree = SOURCE_ROOT; };
+		426872472542122A00F04E83 /* GCTestAppGlobal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestAppGlobal.m; path = connectstatstestapp/src/GCTestAppGlobal.m; sourceTree = SOURCE_ROOT; };
 		426A135C1C5CCEFA00D61098 /* GCActivitySettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivitySettings.h; path = src/GCActivitySettings.h; sourceTree = "<group>"; };
 		426A135D1C5CCEFA00D61098 /* GCActivitySettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivitySettings.m; path = src/GCActivitySettings.m; sourceTree = "<group>"; };
 		426A7F481C426A95000C5BCC /* GCTrackPointExtraIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTrackPointExtraIndex.h; path = src/GCTrackPointExtraIndex.h; sourceTree = "<group>"; };
@@ -4895,6 +4898,8 @@
 				42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */,
 				42CC45B6200A24C5003EB805 /* GCTestServiceConfigViewController.h */,
 				42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */,
+				426872462542122A00F04E83 /* GCTestAppGlobal.h */,
+				426872472542122A00F04E83 /* GCTestAppGlobal.m */,
 			);
 			name = TestApp;
 			sourceTree = "<group>";
@@ -7680,6 +7685,7 @@
 				42E1A758242784B3006C868A /* GCActivity+TrackTransform.m in Sources */,
 				42B5E2CC1BA5B216000FAE4E /* GCTrackStats.m in Sources */,
 				42B5E2CD1BA5B216000FAE4E /* GCTrackPoint.m in Sources */,
+				426872482542122A00F04E83 /* GCTestAppGlobal.m in Sources */,
 				42CE39471CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */,
 				429F2097244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m in Sources */,
 				42B5E2251BA5AF9A000FAE4E /* GCTestParsing.m in Sources */,

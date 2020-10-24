@@ -31,6 +31,7 @@
 #import "GCActivity+TestBackwardCompat.h"
 #import "GCStatsCalendarAggregationConfig.h"
 #import "GCHistoryFieldDataHolder.h"
+#import "GCTestAppGlobal.h"
 
 @import RZExternal;
 
@@ -53,7 +54,7 @@
 
     // Needs to turn off duplicate check as it compares to stored values from garmin
     // or from db queries, which didn't handle the duplicates...
-    [GCAppGlobal setupSampleState:@"activities_stats.db" config:@{CONFIG_DUPLICATE_CHECK_ON_LOAD:@(false)}];
+    [GCTestAppGlobal setupSampleState:@"activities_stats.db" config:@{CONFIG_DUPLICATE_CHECK_ON_LOAD:@(false)}];
 
     [self checkSelfConsistency];
     [self checkHistoryConsistency];
@@ -265,7 +266,7 @@
 }
 
 -(void)testsHistoryStats{
-    [GCAppGlobal setupSampleState:@"activities_large.db"];
+    [GCTestAppGlobal setupSampleState:@"activities_large.db"];
 
     NSString * activityType = GC_TYPE_CYCLING;
 

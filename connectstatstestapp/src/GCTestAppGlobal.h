@@ -1,6 +1,6 @@
 //  MIT License
 //
-//  Created on 15/10/2020 for ConnectStats
+//  Created on 22/10/2020 for ConnectStatsTestApp
 //
 //  Copyright (c) 2020 Brice Rosenzweig
 //
@@ -24,21 +24,20 @@
 //
 
 
+@import Foundation;
 
-import UIKit
+NS_ASSUME_NONNULL_BEGIN
 
-class GCCellActivity: UITableViewCell {
+@interface GCTestAppGlobal : NSObject
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-        self.backgroundColor = UIColor.lightGray
-    }
++(void)setupEmptyState:(NSString*)name;
++(void)setupEmptyState:(NSString*)name withSettingsName:(NSString*)settingName;
++(void)setupEmptyStateWithDerivedForPrefix:(NSString*)name;
++(void)setupSampleState:(NSString*)name config:(NSDictionary*)config;
++(void)setupSampleState:(NSString*)name;
++(void)reinitFromSampleState:(NSString*)name;
++(void)cleanWritableFiles;
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+@end
 
-        // Configure the view for the selected state
-    }
-    
-}
+NS_ASSUME_NONNULL_END

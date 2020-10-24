@@ -29,23 +29,48 @@ import UIKit
 
 class GCCellRoundedPatternView: UIView {
 
-    var cornerRadii : CGFloat = 5.0;
+    var cornerRadii : CGFloat = 40.0;
+    var lineWidth : CGFloat = 5.0;
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.isOpaque = false
+        self.backgroundColor = UIColor.clear
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
         // Drawing code
         let path = UIBezierPath()
         
-        path.move(to: rect.origin)
-        path.move(to: CGPoint(x: rect.origin.x + rect.width - cornerRadii, y: rect.origin.y + rect.size.height) )
-        path.addCurve(to: CGPoint( x: rect.origin.x+rect.width, y: rect.origin.y + rect.size.height - cornerRadii),
-                      controlPoint1: CGPoint( x: rect.origin.x+rect.width, y: rect.origin.y + rect.size.height ),
-                      controlPoint2: CGPoint( x: rect.origin.x+rect.width, y: rect.origin.y + rect.size.height ))
-        path.move(to: CGPoint(x: rect.origin.x + rect.width, y: rect.origin.y - rect.size.height + cornerRadii) )
-        path.addCurve(to: CGPoint( x: rect.origin.x+rect.width - cornerRadii, y: rect.origin.y - rect.size.height - cornerRadii),
-                      controlPoint1: CGPoint( x: rect.origin.x+rect.width, y: rect.origin.y + rect.size.height ),
-                      controlPoint2: CGPoint( x: rect.origin.x+rect.width, y: rect.origin.y + rect.size.height ))
+        let halfWidth = lineWidth/2.0
+        
+        let inrect = rect.inset(by: UIEdgeInsets(top: halfWidth, left: 0, bottom: halfWidth, right: halfWidth))
+        path.move(to: inrect.origin)
+        path.addLine(to:  CGPoint( x: inrect.origin.x + inrect.width - cornerRadii,
+                                   y: inrect.origin.y) )
+        path.addCurve(to: CGPoint( x: inrect.origin.x + inrect.width,
+                                   y: inrect.origin.y + cornerRadii),
+                      controlPoint1: CGPoint( x: inrect.origin.x+inrect.width,
+                                              y: inrect.origin.y  ),
+                      controlPoint2: CGPoint( x: inrect.origin.x+inrect.width,
+                                              y: inrect.origin.y  ) )
+        path.addLine(to: CGPoint(x: inrect.origin.x + inrect.width,
+                                 y: inrect.origin.y + inrect.size.height - cornerRadii) )
+        path.addCurve(to: CGPoint( x: inrect.origin.x + inrect.width - cornerRadii,
+                                   y: inrect.origin.y + inrect.size.height),
+                      controlPoint1: CGPoint( x: inrect.origin.x+inrect.width, y: inrect.origin.y + inrect.size.height ),
+                      controlPoint2: CGPoint( x: inrect.origin.x+inrect.width, y: inrect.origin.y + inrect.size.height ))
+        path.addLine(to: CGPoint(x: inrect.origin.x,
+                                 y: inrect.origin.y + inrect.height))
+        UIColor.yellow.setStroke()
+        path.lineWidth = lineWidth;
+        path.stroke()
 
     }
     

@@ -28,6 +28,7 @@
 #import "GCWebUrl.h"
 #import "GCAppGlobal.h"
 #import "GCTestServiceCompare.h"
+#import "GCTestAppGlobal.h"
 
 @interface GCTestServiceGarmin ()
 @property (assign) gcTestStageServiceCompare stage;
@@ -47,7 +48,7 @@
     [self startSession:@"GC Garmin Connect Alt"];
     GCWebUseSimulator(FALSE, nil);
 
-    [GCAppGlobal setupEmptyState:kDbPathServiceGarmin withSettingsName:kPreservedSettingsName];
+    [GCTestAppGlobal setupEmptyState:kDbPathServiceGarmin withSettingsName:kPreservedSettingsName];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:YES];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:YES];
 

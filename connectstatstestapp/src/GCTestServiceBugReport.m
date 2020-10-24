@@ -28,6 +28,7 @@
 #import "GCTestServiceBugReport.h"
 #import "GCAppGlobal.h"
 #import "GCSettingsBugReport.h"
+#import "GCTestAppGlobal.h"
 
 @interface GCTestServiceBugReport ()
 @property (nonatomic,retain) RZRemoteDownload * remoteDownload;
@@ -50,7 +51,7 @@
 
     [self startSession:@"GC BugReport"];
 
-    [GCAppGlobal setupSampleState:@"sample_activities.db"];
+    [GCTestAppGlobal setupSampleState:@"sample_activities.db"];
 
     GCSettingsBugReport * report = [GCSettingsBugReport bugReport];
     report.includeActivityFiles = true;

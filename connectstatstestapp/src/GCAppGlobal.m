@@ -123,30 +123,6 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     return nil;
 }
 
-+(void)setupEmptyState:(NSString*)name withSettingsName:(NSString*)settingName{
-    [[GCAppGlobal appDelegate] setupEmptyState:(NSString*)name withSettingsName:settingName];
-}
-+(void)setupEmptyState:(NSString*)name{
-    [[GCAppGlobal appDelegate] setupEmptyState:(NSString*)name];
-
-}
-+(void)setupEmptyStateWithDerivedForPrefix:(NSString*)name{
-    [[GCAppGlobal appDelegate] setupEmptyStateWithDerivedForPrefix:name];
-}
-
-+(void)setupSampleState:(NSString*)name{
-    [[GCAppGlobal appDelegate] setupSampleState:(NSString*)name];
-}
-+(void)setupSampleState:(NSString*)name config:(NSDictionary *)config{
-    [[GCAppGlobal appDelegate] setupSampleState:(NSString*)name config:config];
-}
-
-+(void)reinitFromSampleState:(NSString*)name{
-    [[GCAppGlobal appDelegate] reinitFromSampleState:name];
-}
-+(void)cleanWritableFiles{
-    [[GCAppGlobal appDelegate] cleanWritableFiles];
-}
 
 +(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key{
     return [[GCAppGlobal appDelegate]  credentialsForService:service andKey:key];
