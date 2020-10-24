@@ -86,7 +86,7 @@
     [super tearDown];
 }
 
-- (void)testParallelAdd {
+- (void)disabletestParallelAdd {
     self.expectations = [NSMutableArray array];
     dispatch_queue_t queue = dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0);
     
