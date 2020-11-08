@@ -227,7 +227,7 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,NSString*suffix,NSString*bundle
                  @"backhands":  @"backhand",
                  @"forehands":  @"forehand",
                  @"serves":     @"serve",
-                 @"precision":  @"784-target"
+                 @"precision":  @"784-target",
                  };
         [defs retain];
     }

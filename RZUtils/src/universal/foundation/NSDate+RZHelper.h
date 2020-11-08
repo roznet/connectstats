@@ -24,6 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
+NS_ASSUME_NONNULL_BEGIN
 
 @interface NSDate (RZHelper)
 
@@ -54,3 +55,5 @@
 -(NSDate*)endOfDayForCalendar:(NSCalendar*)cal;
 
 @end
+
+NS_ASSUME_NONNULL_END

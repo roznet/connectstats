@@ -912,13 +912,28 @@
 }
 
 -(NSArray*)sampleNew{
+    GCActivity * act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_837769405.db" ]];
+
+    NSMutableArray * rv = [NSMutableArray array];
+    
+    NSUInteger nrowsExtended = 4;
+    CGFloat heightExtended = [GCViewConfig sizeForNumberOfRows:nrowsExtended];
+
     UINib * nib = [UINib nibWithNibName:@"GCCellActivity" bundle:[NSBundle mainBundle]];
     GCCellActivity * cell = [nib instantiateWithOwner:self options:nil][0];
-    //GCCellActivity * cell = [[GCCellActivity alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"mycell"];
-    cell.textLabel.text = @"Hello";
-    return @[
-        [GCTestUISampleCellHolder holderFor:cell andIdentifier:@"new cell"]
-    ];
+    [cell setupFor:act];
+    [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"new cell"]];
+    act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_swimming_439303647.db" ]];
+    cell = [nib instantiateWithOwner:self options:nil][0];
+    [cell setupFor:act];
+    [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"new cell"]];
+
+    act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_cycling_940863203.db" ]];
+    cell = [nib instantiateWithOwner:self options:nil][0];
+    [cell setupFor:act];
+    [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"new cell"]];
+
+    return rv;
 }
 
 -(NSArray*)gridCellSamples{
@@ -926,7 +941,7 @@
 
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:10];
 
-    //[rv addObject:[self sampleNew]];
+    [rv addObject:[self sampleNew]];
     [rv addObject:[self sampleCells]];
     [rv addObject:[self sampleDayActivities]];
     [rv addObject:[self sampleMultiFieldsStats]];

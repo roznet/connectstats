@@ -19,3 +19,5 @@
 #import "GCUnit+FIT.h"
 #import "GCTrackPoint+Swim.h"
 #import "GCStatsMultiFieldViewController.h"
+
+#import "GCViewIcons.h"

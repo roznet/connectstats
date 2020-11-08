@@ -92,7 +92,7 @@ class GCHealthZonesViewController: UIViewController, RZMultiSliderControlDelegat
         let zones:Array<GCHealthZone> = self.healthZoneCalc.zones;
         let useidx:Int = min(zones.count-1, Int(idx))
         let zone:GCHealthZone = zones[useidx];
-        return NSAttributedString(string: zone.rangeLabel(), attributes:  NSAttributedString.convertObjcAttributesDict( attributes:GCViewConfig.attribute14()));
+        return NSAttributedString(string: zone.rangeLabel(), attributes:  GCViewConfig.attribute14());
     }
 
     func multiSlider(_ multi: RZMultiSliderControl!, formatValue val: CGFloat) -> NSAttributedString! {
@@ -104,7 +104,7 @@ class GCHealthZonesViewController: UIViewController, RZMultiSliderControlDelegat
         }
         
         
-        return NSAttributedString(string: label, attributes: NSAttributedString.convertObjcAttributesDict(attributes: GCViewConfig.attribute14White()));
+        return NSAttributedString(string: label, attributes: GCViewConfig.attribute14White());
         
     }
 }

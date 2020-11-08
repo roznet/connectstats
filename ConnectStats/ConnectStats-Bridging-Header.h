@@ -17,6 +17,7 @@
 #import "GCHealthOrganizer.h"
 #import "GCDerivedOrganizer.h"
 
+#import "GCViewIcons.h"
 #import "FITFitFileDecode.h"
 #import "FITFitFile.h"
 #import "FITFitMessageFields.h"

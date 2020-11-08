@@ -27,12 +27,33 @@
 
 import UIKit
 
-class GCCellActivity: UITableViewCell {
+extension UIStackView {
+    func removeAllArrangedSubviews() {
+        arrangedSubviews.forEach {
+            self.removeArrangedSubview($0)
+            NSLayoutConstraint.deactivate($0.constraints)
+            $0.removeFromSuperview()
+        }
+    }
+}
 
+class GCCellActivity: UITableViewCell {
+    @IBOutlet var borderView: GCCellRoundedPatternView!
+    @IBOutlet var leftBorderView: GCCellRoundedPatternView!
+    @IBOutlet var iconView: UIImageView!
+
+    @IBOutlet var leftStack: UIStackView!
+    @IBOutlet var rightStack: UIStackView!
+    
+    @IBOutlet var today: UILabel!
+    @IBOutlet var date: UILabel!
+    @IBOutlet var time: UILabel!
+    @IBOutlet var year: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.backgroundColor = UIColor.lightGray
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -41,4 +62,54 @@ class GCCellActivity: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    
+    @objc func setup(for activity : GCActivity){
+        self.backgroundColor = UIColor.black
+        self.leftStack.backgroundColor = UIColor.clear
+        self.rightStack.backgroundColor = UIColor.clear
+        
+        self.leftStack.removeAllArrangedSubviews()
+        self.rightStack.removeAllArrangedSubviews()
+        
+        self.borderView.insideColor = GCViewConfig.cellBackgroundDarker(forActivity: activity)
+        self.leftBorderView.insideColor = GCViewConfig.cellBackgroundLighter(forActivity: activity)
+        self.borderView.borderColor = GCViewConfig.textColor(forActivity: activity)
+        self.leftBorderView.borderColor = GCViewConfig.textColor(forActivity: activity)
+        
+        if let icon = GCViewIcons.activityTypeDynamicIcon(for: activity.activityType){
+            self.iconView.image = icon
+        }
+        
+        if let distanceField = GCField(for: gcFieldFlag.sumDistance, andActivityType: activity.activityType),
+           let distance = activity.numberWithUnit(for: distanceField ){
+            let distanceView = GCCellFieldValueView(field: distanceField, numberWithUnit: distance, attr: GCViewConfig.attributeBold16())
+            self.leftStack.addArrangedSubview( distanceView )
+        }
+        
+        if let durationField = GCField(for: gcFieldFlag.sumDuration, andActivityType: activity.activityType),
+           let duration = activity.numberWithUnit(for: durationField){
+            let durationView = GCCellFieldValueView(field: durationField, numberWithUnit: duration, attr: GCViewConfig.attributeBold16())
+            self.leftStack.addArrangedSubview( durationView )
+        }
+        
+        let rightFields : [GCField] = [
+            GCField(for: gcFieldFlag.weightedMeanSpeed, andActivityType: activity.activityType),
+            GCField(for: gcFieldFlag.weightedMeanHeartRate, andActivityType: activity.activityType),
+            GCField(for: gcFieldFlag.power, andActivityType: activity.activityType),
+            GCField(for: gcFieldFlag.altitudeMeters, andActivityType: activity.activityType),
+        ]
+        for field in rightFields {
+            if let nu = activity.numberWithUnit(for: field) {
+                let fieldView = GCCellFieldValueView(field: field, numberWithUnit: nu, attr: GCViewConfig.attribute12Gray())
+                self.rightStack.addArrangedSubview(fieldView)
+            }
+        }
+        let useDate = (activity.date as NSDate)
+        self.today.text = useDate.dayFormat()
+        self.date.text = useDate.calendarUnitFormat(NSCalendar.Unit.day)
+        self.time.text = useDate.timeShortFormat()
+        
+    }
+               
+               
 }

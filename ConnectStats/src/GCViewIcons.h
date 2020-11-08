@@ -75,12 +75,12 @@ typedef NS_ENUM(NSUInteger, gcIconCell) {
 
 @interface GCViewIcons : NSObject
 
-+(UIImage*)navigationIconFor:(gcIconNav)name;
-+(UIImage*)tabBarIconFor:(gcIconTab)name;
-+(UIImage*)activityTypeColoredIconFor:(NSString*)activityType;
-+(UIImage*)cellIconFor:(gcIconCell)name;
-+(UIImage*)activityTypeBWIconFor:(NSString*)activityType;
-+(UIImage*)activityTypeDynamicIconFor:(NSString*)activityType;
-+(UIImage*)activityTypeDisabledIconFor:(NSString*)activityType;
-+(UIImage*)categoryIconFor:(NSString*)category;
++(nullable UIImage*)navigationIconFor:(gcIconNav)name;
++(nullable UIImage*)tabBarIconFor:(gcIconTab)name;
++(nullable UIImage*)activityTypeColoredIconFor:(nonnull NSString*)activityType;
++(nullable UIImage*)cellIconFor:(gcIconCell)name;
++(nullable UIImage*)activityTypeBWIconFor:(nonnull NSString*)activityType;
++(nullable UIImage*)activityTypeDynamicIconFor:(nonnull NSString*)activityType;
++(nullable UIImage*)activityTypeDisabledIconFor:(nonnull NSString*)activityType;
++(nullable UIImage*)categoryIconFor:(nonnull NSString*)category;
 @end
