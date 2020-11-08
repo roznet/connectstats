@@ -6,6 +6,8 @@ This project contains several related applications to analyse fitness data:
 
 [ConnectStats](https://itunes.apple.com/app/apple-store/id581697248?mt=8) is an application for iOS (iPhone or iPad) that allows display, statistics and graphs on sports activities recorded with a garmin device or strava. This application is quite mature and available on the [app store](https://itunes.apple.com/app/apple-store/id581697248?mt=8) and has a [home page](https://ro-z.net/blog/connectstats/)
 
+ConnectStats relies on a server with the implementation [here](https://github.com/roznet/connectstats_server)
+
 ### ![Icon](https://github.com/roznet/connectstats/raw/master/ConnectStats/Media.xcassets/HealthStatsAppIcon.appiconset/Icon76.png) HealthStats
 
 [HealthStats](https://itunes.apple.com/us/app/healthstats/id912378669?ls=1&mt=8&ign-msr=https%3A%2F%2Fitunesconnect.apple.com%2FWebObjects%2FiTunesConnect.woa%2Fra%2Fng%2Fapp%2F912378669) is a variation of ConnectStats to display activities and data extracted from apple Health. Some information can be found [here](https://ro-z.net/blog/healthstats/)
