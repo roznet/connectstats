@@ -906,7 +906,7 @@
                               ]) {
         GCTestIconsCell * iconCell = [GCTestIconsCell iconsCellForActivityType:type];
         NSString * identifier = [NSString stringWithFormat:@"Icons %@", type];
-        [icons addObject:[GCTestUISampleCellHolder holderFor:iconCell andIdentifier:identifier]];
+        [icons addObject:[GCTestUISampleCellHolder holderFor:iconCell height:56 andIdentifier:identifier]];
     }
     return icons;
 }

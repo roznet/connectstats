@@ -65,7 +65,7 @@ class GCCellFieldValueView: UIView {
                 let iconRect = CGRect(x: 0.0, y: 0.0, width: size.height, height: size.height)
                 icon.withTintColor(UIColor.white).draw(in: iconRect)
             }
-            print( "\(rect) \(value)")
+            
             str.draw(at: CGPoint(x:size.height,y:0.0),
                      withAttributes:attr
             )

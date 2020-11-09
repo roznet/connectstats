@@ -190,7 +190,10 @@ static gcFontStyle _fontStyle;
         if (descriptor == nil) {
             return [RZFont systemFontOfSize:size];
         }else{
-            descriptor = [descriptor fontDescriptorByAddingAttributes:@{UIFontWeightTrait:@( UIFontWeightLight )}];
+            descriptor = [descriptor fontDescriptorByAddingAttributes:@{UIFontWeightTrait:@( UIFontWeightLight ),
+                                                                        //UIFontDescriptorFamilyAttribute:@"Avenir"
+            }];
+            
             return [UIFont fontWithDescriptor:descriptor size:descriptor.pointSize];
         }
     }else{

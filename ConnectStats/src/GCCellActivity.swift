@@ -76,8 +76,13 @@ class GCCellActivity: UITableViewCell {
         self.borderView.borderColor = GCViewConfig.textColor(forActivity: activity)
         self.leftBorderView.borderColor = GCViewConfig.textColor(forActivity: activity)
         
+        self.borderView.setNeedsDisplay()
+        self.leftBorderView.setNeedsDisplay()
+        
         if let icon = GCViewIcons.activityTypeDynamicIcon(for: activity.activityType){
             self.iconView.image = icon
+        }else{
+            self.iconView.image = nil;
         }
         
         if let distanceField = GCField(for: gcFieldFlag.sumDistance, andActivityType: activity.activityType),
@@ -108,6 +113,7 @@ class GCCellActivity: UITableViewCell {
         self.today.text = useDate.dayFormat()
         self.date.text = useDate.calendarUnitFormat(NSCalendar.Unit.day)
         self.time.text = useDate.timeShortFormat()
+        
         
     }
                
