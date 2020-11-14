@@ -28,13 +28,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSDate (RZHelper)
 
-+(NSDate *)dateForRFC3339DateTimeString:(NSString *)rfc3339DateTimeString;
-+(NSDate*)dateForBabolatTimeString:(NSString*)babolatTimeString;
-+(NSDate*)dateForStravaTimeString:(NSString*)stravaTimeString;
-+(NSDate*)dateForSportTracksTimeString:(NSString*)stravaTimeString;
-+(NSDate*)dateForFitTimestamp:(NSUInteger)timesamp;
-+(NSDate*)dateForDashedDate:(NSString*)dashedString;
-+(NSDate*)dateForGarminModernString:(NSString*)garminString;
++(nullable NSDate*)dateForRFC3339DateTimeString:(NSString *)rfc3339DateTimeString;
++(nullable NSDate*)dateForBabolatTimeString:(NSString*)babolatTimeString;
++(nullable NSDate*)dateForStravaTimeString:(NSString*)stravaTimeString;
++(nullable NSDate*)dateForSportTracksTimeString:(NSString*)stravaTimeString;
++(nullable NSDate*)dateForFitTimestamp:(NSUInteger)timesamp;
++(nullable NSDate*)dateForDashedDate:(NSString*)dashedString;
++(nullable NSDate*)dateForGarminModernString:(NSString*)garminString;
 
 -(NSString*)formatAsRFC3339;
 -(NSString*)dateFormatFromToday;
