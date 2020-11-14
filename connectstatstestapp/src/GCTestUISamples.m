@@ -48,6 +48,7 @@
 #import "GCGarminRequestActivityReload.h"
 #import "GCStatsDerivedHistory.h"
 #import "GCTestAppGlobal.h"
+#import "GCActivitiesOrganizer.h"
 
 @implementation GCTestUISamples
 
@@ -912,7 +913,11 @@
 }
 
 -(NSArray*)sampleNew{
-    GCActivity * act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_837769405.db" ]];
+    
+    NSString * name = @"activities_types_samples.db";
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:name]];
+    [db open];
+    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
 
     NSMutableArray * rv = [NSMutableArray array];
     
@@ -920,19 +925,14 @@
     CGFloat heightExtended = [GCViewConfig sizeForNumberOfRows:nrowsExtended];
 
     UINib * nib = [UINib nibWithNibName:@"GCCellActivity" bundle:[NSBundle mainBundle]];
-    GCCellActivity * cell = [nib instantiateWithOwner:self options:nil][0];
-    [cell setupFor:act];
-    [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"new cell"]];
-    act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_swimming_439303647.db" ]];
-    cell = [nib instantiateWithOwner:self options:nil][0];
-    [cell setupFor:act];
-    [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"new cell"]];
-
-    act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_cycling_940863203.db" ]];
-    cell = [nib instantiateWithOwner:self options:nil][0];
-    [cell setupFor:act];
-    [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"new cell"]];
-
+    
+    for (GCActivity * act in organizer.activities) {
+        GCCellActivity * cell = [nib instantiateWithOwner:self options:nil][0];
+        [cell setupFor:act];
+        [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"new cell"]];
+    }
+    [db close];
+    
     return rv;
 }
 
@@ -942,12 +942,12 @@
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:10];
 
     [rv addObject:[self sampleNew]];
-    [rv addObject:[self sampleCells]];
+    /*[rv addObject:[self sampleCells]];
     [rv addObject:[self sampleDayActivities]];
     [rv addObject:[self sampleMultiFieldsStats]];
     [rv addObject:[self sampleActivities]];
     [rv addObject:[self sampleStats]];
-    [rv addObject:[self sampleIcons]];
+    [rv addObject:[self sampleIcons]];*/
 
     return rv;
 }

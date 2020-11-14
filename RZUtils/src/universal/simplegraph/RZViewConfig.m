@@ -191,7 +191,7 @@ static gcFontStyle _fontStyle;
             return [RZFont systemFontOfSize:size];
         }else{
             descriptor = [descriptor fontDescriptorByAddingAttributes:@{UIFontWeightTrait:@( UIFontWeightLight ),
-                                                                        //UIFontDescriptorFamilyAttribute:@"Avenir"
+                                                                        UIFontDescriptorFamilyAttribute:@"Avenir"
             }];
             
             return [UIFont fontWithDescriptor:descriptor size:descriptor.pointSize];
@@ -220,7 +220,7 @@ static gcFontStyle _fontStyle;
         if (descriptor == nil) {
             return [RZFont systemFontOfSize:size];
         }else{
-            descriptor = [descriptor fontDescriptorByAddingAttributes:@{UIFontWeightTrait:@(UIFontWeightRegular)}];
+            descriptor = [descriptor fontDescriptorByAddingAttributes:@{UIFontWeightTrait:@(UIFontWeightRegular),UIFontDescriptorFamilyAttribute:@"Avenir"}];
             return [UIFont fontWithDescriptor:descriptor size:descriptor.pointSize];
         }
     }else{

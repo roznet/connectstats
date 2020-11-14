@@ -42,8 +42,8 @@ class GCCellActivity: UITableViewCell {
     @IBOutlet var leftBorderView: GCCellRoundedPatternView!
     @IBOutlet var iconView: UIImageView!
 
-    @IBOutlet var leftStack: UIStackView!
-    @IBOutlet var rightStack: UIStackView!
+    @IBOutlet var leftFieldValues: GCCellFieldValueColumnView!
+    @IBOutlet var rightFieldValues: GCCellFieldValueColumnView!
     
     @IBOutlet var today: UILabel!
     @IBOutlet var date: UILabel!
@@ -65,11 +65,11 @@ class GCCellActivity: UITableViewCell {
     
     @objc func setup(for activity : GCActivity){
         self.backgroundColor = UIColor.black
-        self.leftStack.backgroundColor = UIColor.clear
-        self.rightStack.backgroundColor = UIColor.clear
+        self.leftFieldValues.backgroundColor = UIColor.clear
+        self.rightFieldValues.backgroundColor = UIColor.clear
         
-        self.leftStack.removeAllArrangedSubviews()
-        self.rightStack.removeAllArrangedSubviews()
+        self.leftFieldValues.clearFieldAndNumbers()
+        self.rightFieldValues.clearFieldAndNumbers()
         
         self.borderView.insideColor = GCViewConfig.cellBackgroundDarker(forActivity: activity)
         self.leftBorderView.insideColor = GCViewConfig.cellBackgroundLighter(forActivity: activity)
@@ -87,15 +87,17 @@ class GCCellActivity: UITableViewCell {
         
         if let distanceField = GCField(for: gcFieldFlag.sumDistance, andActivityType: activity.activityType),
            let distance = activity.numberWithUnit(for: distanceField ){
-            let distanceView = GCCellFieldValueView(field: distanceField, numberWithUnit: distance, attr: GCViewConfig.attributeBold16())
-            self.leftStack.addArrangedSubview( distanceView )
+            self.leftFieldValues.add(field: distanceField, numberWithUnit: distance)
         }
         
         if let durationField = GCField(for: gcFieldFlag.sumDuration, andActivityType: activity.activityType),
            let duration = activity.numberWithUnit(for: durationField){
-            let durationView = GCCellFieldValueView(field: durationField, numberWithUnit: duration, attr: GCViewConfig.attributeBold16())
-            self.leftStack.addArrangedSubview( durationView )
+            self.leftFieldValues.add(field: durationField, numberWithUnit: duration)
         }
+        self.leftFieldValues.valueAttribute = GCViewConfig.attributeBold16()
+        self.leftFieldValues.unitAttribute = GCViewConfig.attribute16Gray()
+        self.leftFieldValues.displayIcons = false
+        self.rightFieldValues.displayIcons = false
         
         let rightFields : [GCField] = [
             GCField(for: gcFieldFlag.weightedMeanSpeed, andActivityType: activity.activityType),
@@ -105,10 +107,12 @@ class GCCellActivity: UITableViewCell {
         ]
         for field in rightFields {
             if let nu = activity.numberWithUnit(for: field) {
-                let fieldView = GCCellFieldValueView(field: field, numberWithUnit: nu, attr: GCViewConfig.attribute12Gray())
-                self.rightStack.addArrangedSubview(fieldView)
+                self.rightFieldValues.add(field: field, numberWithUnit: nu)
             }
         }
+        self.rightFieldValues.valueAttribute = GCViewConfig.attributeBold14()
+        self.rightFieldValues.unitAttribute = GCViewConfig.attribute14Gray()
+        
         let useDate = (activity.date as NSDate)
         self.today.text = useDate.dayFormat()
         self.date.text = useDate.calendarUnitFormat(NSCalendar.Unit.day)

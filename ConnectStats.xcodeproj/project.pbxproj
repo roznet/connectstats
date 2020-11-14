@@ -1309,6 +1309,10 @@
 		42D4CA882496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA872496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m */; };
 		42D4CA892496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA872496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m */; };
 		42D4CA8A2496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA872496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m */; };
+		42D5798825603B5B004A540F /* activities_types_samples.db in Resources */ = {isa = PBXBuildFile; fileRef = 42D5797D25603B5B004A540F /* activities_types_samples.db */; };
+		42D5798E25603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D5798D25603E3E004A540F /* GCCellFieldValueColumnView.swift */; };
+		42D5798F25603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D5798D25603E3E004A540F /* GCCellFieldValueColumnView.swift */; };
+		42D5799025603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D5798D25603E3E004A540F /* GCCellFieldValueColumnView.swift */; };
 		42D8AEF81B1FB2CB00ADDD31 /* collected.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42D8AEF71B1FB2CB00ADDD31 /* collected.plist */; };
 		42D8AEFD1B22D1BC00ADDD31 /* GCHealthKitSamplesToPointsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */; };
 		42D8AEFE1B22D1BD00ADDD31 /* GCHealthKitSamplesToPointsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */; };
@@ -2972,6 +2976,8 @@
 		42D4CA84249528B3003F3AB7 /* GCStatsDerivedHistoryViewControllerConsts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedHistoryViewControllerConsts.h; path = src/GCStatsDerivedHistoryViewControllerConsts.h; sourceTree = "<group>"; };
 		42D4CA862496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedAnalysisConfig.h; path = src/GCStatsDerivedAnalysisConfig.h; sourceTree = "<group>"; };
 		42D4CA872496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCStatsDerivedAnalysisConfig.m; path = src/GCStatsDerivedAnalysisConfig.m; sourceTree = "<group>"; };
+		42D5797D25603B5B004A540F /* activities_types_samples.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = activities_types_samples.db; path = connectstatstestapp/samples/testactivities/activities_types_samples.db; sourceTree = SOURCE_ROOT; };
+		42D5798D25603E3E004A540F /* GCCellFieldValueColumnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCCellFieldValueColumnView.swift; path = src/GCCellFieldValueColumnView.swift; sourceTree = "<group>"; };
 		42D8AEF71B1FB2CB00ADDD31 /* collected.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = collected.plist; sourceTree = "<group>"; };
 		42D8AEFA1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitSamplesToPointsParser.h; path = src/GCHealthKitSamplesToPointsParser.h; sourceTree = "<group>"; };
 		42D8AEFB1B22D1A500ADDD31 /* GCHealthKitSamplesToPointsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitSamplesToPointsParser.m; path = src/GCHealthKitSamplesToPointsParser.m; sourceTree = "<group>"; };
@@ -3469,6 +3475,7 @@
 		422AC6A11C1CC99E002DDA9C /* testactivities */ = {
 			isa = PBXGroup;
 			children = (
+				42D5797D25603B5B004A540F /* activities_types_samples.db */,
 				42B5E3521BA5BA2C000FAE4E /* test_activity_running_828298988.db */,
 				42B5E3531BA5BA2C000FAE4E /* test_activity_running_830807000.db */,
 				42B5E3541BA5BA2C000FAE4E /* test_activity_running_835175535.db */,
@@ -5586,6 +5593,7 @@
 				42E04E4C2538C34B005FFD5E /* GCCellActivity.xib */,
 				42A425DE2556C4E800E4AFBE /* GCCellFieldValueView.swift */,
 				42E04E5725398099005FFD5E /* GCCellRoundedPatternView.swift */,
+				42D5798D25603E3E004A540F /* GCCellFieldValueColumnView.swift */,
 			);
 			name = Specialized;
 			sourceTree = "<group>";
@@ -6647,6 +6655,7 @@
 				42B5E4D71BA5BA2D000FAE4E /* track_276019749.db in Resources */,
 				42B5E4B31BA5BA2D000FAE4E /* track_188726280.db in Resources */,
 				42523AB41D6B289300F6D6C6 /* test_activity_running_1266384539.db in Resources */,
+				42D5798825603B5B004A540F /* activities_types_samples.db in Resources */,
 				42B5E4DD1BA5BA2D000FAE4E /* track_278651129.db in Resources */,
 				42B5E4A11BA5BA2D000FAE4E /* strava_stream_121861761.json in Resources */,
 				42B5E5151BA5BA2D000FAE4E /* track_300889015.db in Resources */,
@@ -7016,6 +7025,7 @@
 				422FAF0519A1DD6000D09773 /* GCLap.m in Sources */,
 				422FAF0619A1DD6000D09773 /* GCMapAnnotation.m in Sources */,
 				42D4CA8A2496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */,
+				42D5799025603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */,
 				422FAF0719A1DD6000D09773 /* GCMapLegendView.m in Sources */,
 				42CDF8692413E05C003930A4 /* GCTrackPoint+Swim.m in Sources */,
 				422F521F1DFB56BF00DD5551 /* GCActivity+Fields.m in Sources */,
@@ -7476,6 +7486,7 @@
 				42C4159A17B1A23800EBBAFB /* GCActivity+UI.m in Sources */,
 				425ACBBA17C163EE00EB23A3 /* GCHealthZone.m in Sources */,
 				4244676F184B756F009F807E /* GCActivityTypes.m in Sources */,
+				42D5798E25603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */,
 				423F9FC519ACDEA40057DB5A /* GCHistoryFieldDataSerieConfig.m in Sources */,
 				425ACBC017C1687F00EB23A3 /* GCGarminUserJsonParser.m in Sources */,
 				424F9DBA17C35BDD001C73B1 /* GCHealthZoneCalculator.m in Sources */,
@@ -7659,6 +7670,7 @@
 				427F937B1BEDFF1A00C177F9 /* GCViewActivityTypeButton.m in Sources */,
 				42B5E2AF1BA5B216000FAE4E /* GCExportGoogleEarth.m in Sources */,
 				42B5E2B01BA5B216000FAE4E /* GCExportText.m in Sources */,
+				42D5798F25603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */,
 				42B5E2B11BA5B216000FAE4E /* GCActivity+ExportText.m in Sources */,
 				42E1A74E24277FF9006C868A /* GCActivity+BestRolling.m in Sources */,
 				427F93771BEDFA6F00C177F9 /* GCStatsMultiFieldViewController.m in Sources */,

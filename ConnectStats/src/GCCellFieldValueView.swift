@@ -59,9 +59,9 @@ class GCCellFieldValueView: UIView {
             let str = value.formatDouble() as NSString
             let attr = self.attribute
             let size = str.size(withAttributes: attr)
-            
             if let field = self.field,
                let icon = field.icon(){
+                //print( "\(field) \(value.formatDouble()) \(value.formatDoubleNoUnits())")
                 let iconRect = CGRect(x: 0.0, y: 0.0, width: size.height, height: size.height)
                 icon.withTintColor(UIColor.white).draw(in: iconRect)
             }
