@@ -331,7 +331,11 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             break;
         case gcFieldFlagWeightedMeanHeartRate:
             if( RZTestOption(self.flags, flag) ){
-                rv = [GCNumberWithUnit numberWithUnitName:STOREUNIT_HEARTRATE andValue:self.weightedMeanHeartRate];
+                if( self.weightedMeanHeartRate == 0){
+                    rv = nil;
+                }else{
+                    rv = [GCNumberWithUnit numberWithUnitName:STOREUNIT_HEARTRATE andValue:self.weightedMeanHeartRate];
+                }
             }else{
                 rv = nil;
             }
