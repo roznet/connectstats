@@ -175,26 +175,45 @@ static gcFontStyle _fontStyle;
     return ceil( rv * 1.05 ); // 5% margin
 }
 
+/// Override in a sub class to return a font name to use if desired
++(nullable NSString*)systemFontName{
+    return nil;
+}
+
+/// Override in a sub class to return a font name to use if desired
++(nullable NSString*)boldSystemFontName{
+    return nil;
+}
+
 +(RZFont*)systemFontOfSize:(CGFloat)size{
 #if TARGET_OS_IPHONE
     if (_fontStyle == gcFontStyleDynamicType) {
-        UIFontDescriptor * descriptor = nil;
-        if (size == 12.) {
-            descriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleFootnote];
-        }else if(size==14.){
-            descriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleSubheadline];
-        }else if (size==16.){
-            descriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
-        }
-        //return [RZFont boldSystemFontOfSize:size];
-        if (descriptor == nil) {
-            return [RZFont systemFontOfSize:size];
+        NSString * systemFontName = [self systemFontName];
+        if( systemFontName ){
+            UIFont * rv = [UIFont fontWithName:systemFontName size:size];
+            if (size == 12.) {
+                rv = [RZReturnAutorelease([[UIFontMetrics alloc] initForTextStyle:UIFontTextStyleFootnote]) scaledFontForFont:rv];
+            }else if(size==14.){
+                rv = [RZReturnAutorelease([[UIFontMetrics alloc] initForTextStyle:UIFontTextStyleSubheadline]) scaledFontForFont:rv];
+            }else if (size==16.){
+                rv = [RZReturnAutorelease([[UIFontMetrics alloc] initForTextStyle:UIFontTextStyleBody]) scaledFontForFont:rv];
+            }
+            return rv;
         }else{
-            descriptor = [descriptor fontDescriptorByAddingAttributes:@{UIFontWeightTrait:@( UIFontWeightLight ),
-                                                                        UIFontDescriptorFamilyAttribute:@"Avenir"
-            }];
-            
-            return [UIFont fontWithDescriptor:descriptor size:descriptor.pointSize];
+            UIFontDescriptor * descriptor = nil;
+            if (size == 12.) {
+                descriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleFootnote];
+            }else if(size==14.){
+                descriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleSubheadline];
+            }else if (size==16.){
+                descriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
+            }
+            if (descriptor == nil) {
+                return [RZFont systemFontOfSize:size];
+            }else{
+                descriptor = [descriptor fontDescriptorByAddingAttributes:@{UIFontWeightTrait:@( UIFontWeightLight )}];
+                return [UIFont fontWithDescriptor:descriptor size:descriptor.pointSize];
+            }
         }
     }else{
         return [RZFont fontWithName:@"HelveticaNeue-Light" size:size];
@@ -207,21 +226,33 @@ static gcFontStyle _fontStyle;
 +(RZFont*)boldSystemFontOfSize:(CGFloat)size{
 #if TARGET_OS_IPHONE
     if (_fontStyle == gcFontStyleDynamicType) {
-
-        UIFontDescriptor * descriptor = nil;
-        if (size == 12.) {
-            descriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleFootnote];
-        }else if(size==14.){
-            descriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleSubheadline];
-        }else if (size==16.){
-            descriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
-        }
-        //return [RZFont boldSystemFontOfSize:size];
-        if (descriptor == nil) {
-            return [RZFont systemFontOfSize:size];
+        NSString * boldSystemFontName = [self boldSystemFontName];
+        if( boldSystemFontName ){
+            UIFont * rv = [UIFont fontWithName:boldSystemFontName size:size];
+            if (size == 12.) {
+                rv = [RZReturnAutorelease([[UIFontMetrics alloc] initForTextStyle:UIFontTextStyleFootnote]) scaledFontForFont:rv];
+            }else if(size==14.){
+                rv = [RZReturnAutorelease([[UIFontMetrics alloc] initForTextStyle:UIFontTextStyleSubheadline]) scaledFontForFont:rv];
+            }else if (size==16.){
+                rv = [RZReturnAutorelease([[UIFontMetrics alloc] initForTextStyle:UIFontTextStyleBody]) scaledFontForFont:rv];
+            }
+            return rv;
         }else{
-            descriptor = [descriptor fontDescriptorByAddingAttributes:@{UIFontWeightTrait:@(UIFontWeightRegular),UIFontDescriptorFamilyAttribute:@"Avenir"}];
-            return [UIFont fontWithDescriptor:descriptor size:descriptor.pointSize];
+            UIFontDescriptor * descriptor = nil;
+            if (size == 12.) {
+                descriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleFootnote];
+            }else if(size==14.){
+                descriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleSubheadline];
+            }else if (size==16.){
+                descriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
+            }
+            //return [RZFont boldSystemFontOfSize:size];
+            if (descriptor == nil) {
+                return [RZFont systemFontOfSize:size];
+            }else{
+                descriptor = [descriptor fontDescriptorByAddingAttributes:@{UIFontWeightTrait:@(UIFontWeightRegular)}];
+                return [UIFont fontWithDescriptor:descriptor size:descriptor.pointSize];
+            }
         }
     }else{
         return [RZFont fontWithName:@"HelveticaNeue" size:size];

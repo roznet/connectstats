@@ -54,6 +54,11 @@ typedef NS_ENUM(NSUInteger, rzTextColor){
 
 +(RZColor*)backgroundForLegend;
 
+// All ttributes below will use the preferred font name
+// Unless either or both of below
+//     +(nullable NSString*)systemFontName;
+//     +(nullable NSString*)boldSystemFontName;
+// are overwritten and return non nil with the name of the font to use
 
 +(NSDictionary<NSAttributedStringKey,id>*)attribute16;
 +(NSDictionary<NSAttributedStringKey,id>*)attribute16Gray;
@@ -69,6 +74,9 @@ typedef NS_ENUM(NSUInteger, rzTextColor){
 +(NSDictionary<NSAttributedStringKey,id>*)attribute12Gray;
 +(NSDictionary<NSAttributedStringKey,id>*)attribute12Highlighted;
 +(NSAttributedString*)attributedString:(NSString*)str attribute:(SEL)sel;
+
+
+
 
 +(RZColor*)colorForText:(rzTextColor)which;
 +(RZImage*)checkMarkImage:(BOOL)val;
