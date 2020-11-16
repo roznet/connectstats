@@ -36,6 +36,7 @@ class GCCellFieldValueColumnView: UIView {
     var displayIcons = true;
     var defaultSpacing :CGFloat = 0.0
     var iconColor : UIColor = UIColor.white
+    var distributeVertically = true
     
     func add(field:GCField, numberWithUnit:GCNumberWithUnit){
         fields.append(field)
@@ -56,6 +57,7 @@ class GCCellFieldValueColumnView: UIView {
         var numberWidth : CGFloat = 0.0
         
         var height : CGFloat = 0.0;
+        
         for numberWithUnit in numberWithUnits {
             let fmtNoUnit = numberWithUnit.formatDoubleNoUnits()
             let fmt  = numberWithUnit.formatDouble()
@@ -82,8 +84,10 @@ class GCCellFieldValueColumnView: UIView {
         if( height < rect.size.height){
             spacing = (rect.size.height - height) / CGFloat(self.numberWithUnits.count)
         }
-        
-        var current = CGPoint(x: rect.origin.x, y: rect.origin.y+rect.height)
+        if( distributeVertically == false){
+            spacing = 0.0
+        }
+        var current = CGPoint(x: rect.origin.x + (rect.width-(numberWidth+unitWidth))/2.0, y: rect.origin.y)
         //
         //     !-----!-----||------!
         //      icon   23.2 km
@@ -111,12 +115,10 @@ class GCCellFieldValueColumnView: UIView {
                 // less than number line up to the right
                 numberPoint.x += (numberWidth-numberSize.width)
             }// else line up to the left, so keep x
-            numberPoint.y -= numberSize.height
-            unitPoint.y -= numberSize.height
             // add icon
             if self.displayIcons{
                 if let icon = field.icon(){
-                    let iconRect = CGRect(x: current.x, y: current.y - numberSize.height, width: numberSize.height, height: numberSize.height)
+                    let iconRect = CGRect(x: current.x, y: current.y, width: numberSize.height, height: numberSize.height)
                     icon.withTintColor(self.iconColor).draw(in: iconRect)
                 }
                 // shift all text to the right by size of the icon
@@ -128,7 +130,7 @@ class GCCellFieldValueColumnView: UIView {
                 (fmtUnit as NSString).draw(at: unitPoint, withAttributes: self.unitAttribute)
             }
             
-            current.y -= (numberSize.height + spacing)
+            current.y += (numberSize.height + spacing)
         }
     }
     

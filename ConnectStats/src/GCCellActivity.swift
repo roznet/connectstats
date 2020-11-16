@@ -112,11 +112,13 @@ class GCCellActivity: UITableViewCell {
         }
         self.rightFieldValues.valueAttribute = GCViewConfig.attributeBold14()
         self.rightFieldValues.unitAttribute = GCViewConfig.attribute14Gray()
-        
+        self.leftFieldValues.distributeVertically = true;
+        self.rightFieldValues.distributeVertically = false
         let useDate = (activity.date as NSDate)
         self.today.text = useDate.dayFormat()
         self.date.text = useDate.calendarUnitFormat(NSCalendar.Unit.day)
         self.time.text = useDate.timeShortFormat()
+        self.year.text = String(useDate.calendarUnitFormat(NSCalendar.Unit.year).suffix(2))
         
         
     }

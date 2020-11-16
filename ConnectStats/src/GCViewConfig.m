@@ -217,12 +217,27 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
         tableViewController.tableView.backgroundColor = backgroundColor;
     }
 }
+
+#pragma mark - Font Configuration
+
++(nullable NSString*)systemFontName{
+    return [_current_skin() stringFor:gcSkinStringSystemFontName];
+}
+
++(nullable NSString*)boldSystemFontName{
+    return [_current_skin() stringFor:gcSkinStringSystemFontName];
+}
+
+
 #pragma mark - Bool Configuation
 
 +(BOOL)roundedActivityIcons{
     return [_current_skin() boolFor:gcSkinBoolRoundedActivityIcons];
 }
 
++(BOOL)cellBandedFormat{
+    return [_current_skin() boolFor:gcSkinBoolActivityCellBandedFormat];
+}
 +(BOOL)activityCellMultiColor{
     return [_current_skin() boolFor:gcSkinBoolActivityCellMultiColor];
 }

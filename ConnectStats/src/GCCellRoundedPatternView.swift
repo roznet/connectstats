@@ -29,7 +29,7 @@ import UIKit
 
 class GCCellRoundedPatternView: UIView {
 
-    var cornerRadii : CGFloat = 40.0;
+    var cornerRadii : CGFloat = 15.0;
     var lineWidth : CGFloat = 2.0;
     
     var borderColor : UIColor = UIColor.white

@@ -483,7 +483,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView activityCellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BOOL newStyle = false;
+    BOOL newStyle = [GCViewConfig cellBandedFormat];
     if( newStyle ){
         GCCellActivity * cell = [self.tableView dequeueReusableCellWithIdentifier:@"GCCellActivity" forIndexPath:indexPath];
         [cell setupFor:[self activityForIndex:indexPath.row]];

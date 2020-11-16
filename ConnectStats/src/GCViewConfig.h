@@ -76,7 +76,6 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(void)setSkin:(GCViewConfigSkin*)skin;
 
 
-
 // COLORS
 
 +(UIColor*)cellBackgroundDarkerForActivity:(id)aAct;
@@ -114,6 +113,7 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(void)setupGradient:(GCCellGrid*)aG ForThreshold:(double)pct;
 
 +(BOOL)roundedActivityIcons;
++(BOOL)cellBandedFormat;
 
 // FIELDS
 
