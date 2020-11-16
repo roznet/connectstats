@@ -942,12 +942,12 @@
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:10];
 
     [rv addObject:[self sampleNew]];
-    /*[rv addObject:[self sampleCells]];
+    [rv addObject:[self sampleCells]];
     [rv addObject:[self sampleDayActivities]];
     [rv addObject:[self sampleMultiFieldsStats]];
     [rv addObject:[self sampleActivities]];
     [rv addObject:[self sampleStats]];
-    [rv addObject:[self sampleIcons]];*/
+    [rv addObject:[self sampleIcons]];
 
     return rv;
 }
