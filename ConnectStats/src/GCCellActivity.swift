@@ -97,7 +97,10 @@ class GCCellActivity: UITableViewCell {
         self.leftFieldValues.valueAttribute = GCViewConfig.attributeBold16()
         self.leftFieldValues.unitAttribute = GCViewConfig.attribute16Gray()
         self.leftFieldValues.displayIcons = false
+        self.leftFieldValues.defaultSpacing = 2.0
         self.rightFieldValues.displayIcons = false
+        self.rightFieldValues.iconColor = UIColor.darkGray
+        self.rightFieldValues.defaultSpacing = 2.0
         
         let rightFields : [GCField] = [
             GCField(for: gcFieldFlag.weightedMeanSpeed, andActivityType: activity.activityType),
@@ -107,7 +110,9 @@ class GCCellActivity: UITableViewCell {
         ]
         for field in rightFields {
             if let nu = activity.numberWithUnit(for: field) {
-                self.rightFieldValues.add(field: field, numberWithUnit: nu)
+                if nu.value != 0.0 {
+                    self.rightFieldValues.add(field: field, numberWithUnit: nu)
+                }
             }
         }
         self.rightFieldValues.valueAttribute = GCViewConfig.attributeBold14()

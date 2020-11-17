@@ -81,13 +81,13 @@ class GCCellFieldValueColumnView: UIView {
         
         var spacing = self.defaultSpacing
         
-        if( height < rect.size.height){
-            spacing = (rect.size.height - height) / CGFloat(self.numberWithUnits.count)
+        if( height < rect.size.height - (2.0 * self.defaultSpacing)) {
+            spacing = (rect.size.height - height - 2.0 * self.defaultSpacing) / CGFloat(self.numberWithUnits.count)
         }
         if( distributeVertically == false){
-            spacing = 0.0
+            spacing = self.defaultSpacing
         }
-        var current = CGPoint(x: rect.origin.x + (rect.width-(numberWidth+unitWidth))/2.0, y: rect.origin.y)
+        var current = CGPoint(x: rect.origin.x + (rect.width-(numberWidth+unitWidth))/2.0, y: rect.origin.y + self.defaultSpacing)
         //
         //     !-----!-----||------!
         //      icon   23.2 km
@@ -119,7 +119,8 @@ class GCCellFieldValueColumnView: UIView {
             if self.displayIcons{
                 if let icon = field.icon(){
                     let iconRect = CGRect(x: current.x, y: current.y, width: numberSize.height, height: numberSize.height)
-                    icon.withTintColor(self.iconColor).draw(in: iconRect)
+                    let insetValue :CGFloat = 2.0
+                    icon.withTintColor(self.iconColor).draw(in: iconRect.insetBy(dx: insetValue, dy: insetValue))
                 }
                 // shift all text to the right by size of the icon
                 numberPoint.x += numberSize.height
