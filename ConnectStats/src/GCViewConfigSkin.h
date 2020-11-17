@@ -96,6 +96,7 @@ typedef NS_ENUM(NSUInteger,gcSkinString){
     gcSkinStringBoldSystemFontName
 };
 
+
 @interface GCViewConfigSkin : NSObject
 
 @property (nonatomic,readonly) NSString * skinName;
@@ -105,16 +106,16 @@ typedef NS_ENUM(NSUInteger,gcSkinString){
 +(GCViewConfigSkin*)darkSkin;
 
 +(NSArray<NSString*>*)availableSkinNames;
-+(GCViewConfigSkin*)skinForName:(NSString*)name;
++(nullable GCViewConfigSkin*)skinForName:(NSString*)name;
 
 -(NSArray*)colorArrayForKey:(NSString*)key;
--(NSArray*)colorArrayForKey:(NSString *)key andField:(GCField*)field;
+-(nullable NSArray*)colorArrayForKey:(NSString *)key andField:(GCField*)field;
 
--(UIColor*)colorForKey:(NSString*)key;
--(UIColor*)colorForKey:(NSString *)key andActivity:(id)aAct;
--(UIColor*)colorForKey:(NSString *)key andField:(GCField*)field;
--(UIColor*)colorForKey:(NSString *)key andSubkey:(id)subkey;
--(UIColor*)colorForKey:(NSString*)key andValue:(double)val;
+-(nullable UIColor*)colorForKey:(NSString*)key;
+-(nullable UIColor*)colorForKey:(NSString *)key andActivity:(id)aAct;
+-(nullable UIColor*)colorForKey:(NSString *)key andField:(GCField*)field;
+-(nullable UIColor*)colorForKey:(NSString *)key andSubkey:(id)subkey;
+-(nullable UIColor*)colorForKey:(NSString*)key andValue:(double)val;
 -(BOOL)boolFor:(gcSkinBool)which;
 
 -(nullable NSString*)stringFor:(gcSkinString)which;

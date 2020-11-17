@@ -1075,7 +1075,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
     }
 }
 
--(nullable NSString*)stringFor:(gcSkinString)which{
+-(NSString*)stringFor:(gcSkinString)which{
     NSString * val = self.defs[kGCSkinKeyStringValues][@(which)];
     if( [val isKindOfClass:[NSDictionary class]] ){
         NSDictionary * choices = (NSDictionary*)val;

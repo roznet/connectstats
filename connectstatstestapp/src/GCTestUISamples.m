@@ -917,7 +917,7 @@
     NSString * name = @"activities_types_samples.db";
     FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:name]];
     [db open];
-    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    GCActivitiesOrganizer * organizer = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db]);
 
     NSMutableArray * rv = [NSMutableArray array];
     
