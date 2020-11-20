@@ -245,6 +245,7 @@
 		42AD17231EC86032001E660E /* RZTimeStampManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AD17211EC86032001E660E /* RZTimeStampManager.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		42B8E9C2253C924900287228 /* GCStatsCluster.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B8E9C0253C924900287228 /* GCStatsCluster.h */; };
 		42B8E9C3253C924900287228 /* GCStatsCluster.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B8E9C1253C924900287228 /* GCStatsCluster.m */; };
+		42D2234C2567CA2F009BCACE /* RZNumberWithUnitGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D2234B2567CA2F009BCACE /* RZNumberWithUnitGeometry.swift */; };
 		42E783FE24E81C39006B592E /* GCNumberWithUnit+Scanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 42E783FC24E81C39006B592E /* GCNumberWithUnit+Scanner.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42E783FF24E81C39006B592E /* GCNumberWithUnit+Scanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E783FD24E81C39006B592E /* GCNumberWithUnit+Scanner.m */; };
 		42FFD33724A4BB65004641B1 /* GCUnitCalendarUnit.h in Headers */ = {isa = PBXBuildFile; fileRef = 42FFD33524A4BB65004641B1 /* GCUnitCalendarUnit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -550,6 +551,7 @@
 		42AD17211EC86032001E660E /* RZTimeStampManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RZTimeStampManager.m; sourceTree = "<group>"; };
 		42B8E9C0253C924900287228 /* GCStatsCluster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCStatsCluster.h; sourceTree = "<group>"; };
 		42B8E9C1253C924900287228 /* GCStatsCluster.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCStatsCluster.m; sourceTree = "<group>"; };
+		42D2234B2567CA2F009BCACE /* RZNumberWithUnitGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RZNumberWithUnitGeometry.swift; sourceTree = "<group>"; };
 		42E783FC24E81C39006B592E /* GCNumberWithUnit+Scanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GCNumberWithUnit+Scanner.h"; sourceTree = "<group>"; };
 		42E783FD24E81C39006B592E /* GCNumberWithUnit+Scanner.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GCNumberWithUnit+Scanner.m"; sourceTree = "<group>"; };
 		42FFD33524A4BB65004641B1 /* GCUnitCalendarUnit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCUnitCalendarUnit.h; sourceTree = "<group>"; };
@@ -908,6 +910,7 @@
 				42382A3B1EAB56CC00252217 /* RZSLog.swift */,
 				42793B131F3F5007005FAF02 /* RZSAttributedString.swift */,
 				42793B291F40559E005FAF02 /* RZSRemoteURLFindValid.swift */,
+				42D2234B2567CA2F009BCACE /* RZNumberWithUnitGeometry.swift */,
 			);
 			name = swift;
 			path = src/swift;
@@ -1957,6 +1960,7 @@
 			files = (
 				42382A5C1EAB587000252217 /* RZSLog.swift in Sources */,
 				42793B2A1F40559E005FAF02 /* RZSRemoteURLFindValid.swift in Sources */,
+				42D2234C2567CA2F009BCACE /* RZNumberWithUnitGeometry.swift in Sources */,
 				42382A5E1EAB5C5F00252217 /* RZSLogBridge.m in Sources */,
 				42793B141F3F5007005FAF02 /* RZSAttributedString.swift in Sources */,
 			);

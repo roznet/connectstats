@@ -407,6 +407,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     
     NSMutableArray<GCField*>*fields = [NSMutableArray array];
     
+    
     [fields addObjectsFromArray:@[
         [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activity.activityType],
         [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:activity.activityType],
@@ -417,6 +418,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         
     //activity.activityTypeDetail.isPacePreferred)
     
+
     if ([activity.activityTypeDetail isEqualToString:GC_TYPE_SKI_DOWN]) {
         [fields addObject:[GCField fieldForKey:@"LossElevation" andActivityType:activity.activityType]];
     }else{
@@ -464,6 +466,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     self.rightButtonText = status == gcViewActivityStatusCompare ? NSLocalizedString(@"Clear", @"Grid Cell Button") :
         NSLocalizedString(@"Mark", @"Grid Cell Button");
 
+    
+    
     if (width < 600.) {
         
         [self setupForRows:nrows andCols:3];

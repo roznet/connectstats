@@ -1297,6 +1297,9 @@
 		42D037C1168AF48300789E7D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D037C0168AF48300789E7D /* CFNetwork.framework */; };
 		42D037C3168AF55900789E7D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D037C2168AF55900789E7D /* SystemConfiguration.framework */; };
 		42D1D2001DEE66DB00F13D52 /* FITWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D1D1FF1DEE66DB00F13D52 /* FITWindowController.swift */; };
+		42D223962567E6B3009BCACE /* GCCellGrid+Activities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D223952567E6B3009BCACE /* GCCellGrid+Activities.swift */; };
+		42D223972567E6B3009BCACE /* GCCellGrid+Activities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D223952567E6B3009BCACE /* GCCellGrid+Activities.swift */; };
+		42D223982567E6B3009BCACE /* GCCellGrid+Activities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D223952567E6B3009BCACE /* GCCellGrid+Activities.swift */; };
 		42D4CA6E248D5497003F3AB7 /* GCStatsDerivedHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistory.m */; };
 		42D4CA6F248D5497003F3AB7 /* GCStatsDerivedHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistory.m */; };
 		42D4CA70248D5497003F3AB7 /* GCStatsDerivedHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistory.m */; };
@@ -2967,6 +2970,7 @@
 		42D037C0168AF48300789E7D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		42D037C2168AF55900789E7D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		42D1D1FF1DEE66DB00F13D52 /* FITWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITWindowController.swift; path = src/FITWindowController.swift; sourceTree = "<group>"; };
+		42D223952567E6B3009BCACE /* GCCellGrid+Activities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "GCCellGrid+Activities.swift"; path = "src/GCCellGrid+Activities.swift"; sourceTree = "<group>"; };
 		42D4CA6C248D5497003F3AB7 /* GCStatsDerivedHistory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedHistory.h; path = src/GCStatsDerivedHistory.h; sourceTree = "<group>"; };
 		42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCStatsDerivedHistory.m; path = src/GCStatsDerivedHistory.m; sourceTree = "<group>"; };
 		42D4CA7B24951AF2003F3AB7 /* GCLagPeriod.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCLagPeriod.h; path = src/GCLagPeriod.h; sourceTree = "<group>"; };
@@ -5549,6 +5553,7 @@
 				42F914C3164DC0B900D0C950 /* GCCellGrid+Templates.m */,
 				4257766223205BB200BD9375 /* GCCellEntryText+GCViewConfig.h */,
 				4257766323205BB200BD9375 /* GCCellEntryText+GCViewConfig.m */,
+				42D223952567E6B3009BCACE /* GCCellGrid+Activities.swift */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -7016,6 +7021,7 @@
 				422777751C36C940002F1D64 /* GCField.m in Sources */,
 				421F39A91B79EF8900CA7200 /* GCActivityThumbnails.m in Sources */,
 				42C0589A21D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */,
+				42D223982567E6B3009BCACE /* GCCellGrid+Activities.swift in Sources */,
 				422FAEF919A1DD6000D09773 /* GCFields.m in Sources */,
 				426A7F4B1C426A95000C5BCC /* GCTrackPointExtraIndex.m in Sources */,
 				422FAEFB19A1DD6000D09773 /* GCStravaActivityStreams.m in Sources */,
@@ -7337,6 +7343,7 @@
 				42F0A4F31B60620200901CFF /* GCDerivedRequest.m in Sources */,
 				42BC539E161E3E2700576097 /* GCFields.m in Sources */,
 				422B34411CA7322600B345CD /* GCFieldInfo.m in Sources */,
+				42D223962567E6B3009BCACE /* GCCellGrid+Activities.swift in Sources */,
 				4297DA571D30F4BA0028E439 /* GCHealthZonesViewController.swift in Sources */,
 				425257FA19AB905300993F61 /* GCStatsOneFieldConfig.m in Sources */,
 				42959CED18D8F91100C0B841 /* GCStravaActivityStreams.m in Sources */,
@@ -7724,6 +7731,7 @@
 				426872482542122A00F04E83 /* GCTestAppGlobal.m in Sources */,
 				42CE39471CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */,
 				429F2097244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m in Sources */,
+				42D223972567E6B3009BCACE /* GCCellGrid+Activities.swift in Sources */,
 				42B5E2251BA5AF9A000FAE4E /* GCTestParsing.m in Sources */,
 				42B5E2211BA5AF9A000FAE4E /* GCTestViewController.m in Sources */,
 				42B5E2231BA5AF9A000FAE4E /* GCTestIconsCell.m in Sources */,
