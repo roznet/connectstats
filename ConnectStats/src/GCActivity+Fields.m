@@ -54,6 +54,7 @@
                   GC_TYPE_RUNNING:@[
                           @"SumDistance",
                           @"SumDuration",
+                          @"GainElevation",
                           @"WeightedMeanHeartRate",
                           @"WeightedMeanPace",
                           @"WeightedMeanSpeed",
@@ -77,6 +78,7 @@
                   GC_TYPE_CYCLING:@[
                           @"SumDistance",
                           @"SumDuration",
+                          @"GainElevation",
                           @"WeightedMeanHeartRate",
                           @"WeightedMeanSpeed",
                           @"WeightedMeanStrokes",
@@ -106,6 +108,7 @@
                   GC_TYPE_HIKING:@[
                           @"SumDistance",
                           @"SumDuration",
+                          @"GainElevation",
                           @"WeightedMeanHeartRate",
                           @"WeightedMeanPace",
                           @"WeightedMeanSpeed",
@@ -136,6 +139,7 @@
                   GC_TYPE_WINTER_SPORTS:@[
                           @"SumDistance",
                           @"SumDuration",
+                          @"GainElevation",
                           @"WeightedMeanHeartRate",
                           @"WeightedMeanPace",
                           @"SumIntensityFactor",
@@ -164,6 +168,7 @@
                   GC_TYPE_OTHER:@[
                           @"SumDistance",
                           @"SumDuration",
+                          @"GainElevation",
                           @"WeightedMeanHeartRate",
                           @"WeightedMeanPace",
                           @"WeightedMeanSpeed",

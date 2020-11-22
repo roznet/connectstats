@@ -47,6 +47,15 @@ typedef NS_ENUM(NSUInteger, rzTextColor){
     rzColorStyleHighlightedText
 };
 
+typedef NS_ENUM(NSUInteger, rzAttribute){
+    rzAttributeField,
+    rzAttributeValue,
+    rzAttributeUnit,
+    rzAttributeSecondaryField,
+    rzAttributeSecondaryValue,
+    rzAttributeSecondaryUnit,
+};
+
 @interface RZViewConfig : NSObject
 
 +(gcFontStyle)fontStyle;
@@ -73,6 +82,10 @@ typedef NS_ENUM(NSUInteger, rzTextColor){
 +(NSDictionary<NSAttributedStringKey,id>*)attribute12;
 +(NSDictionary<NSAttributedStringKey,id>*)attribute12Gray;
 +(NSDictionary<NSAttributedStringKey,id>*)attribute12Highlighted;
+
++(NSDictionary<NSAttributedStringKey,id>*)attribute:(rzAttribute)attr;
+
+
 +(NSAttributedString*)attributedString:(NSString*)str attribute:(SEL)sel;
 
 

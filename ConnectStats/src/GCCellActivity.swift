@@ -85,17 +85,17 @@ class GCCellActivity: UITableViewCell {
             self.iconView.image = nil;
         }
         
+        if let durationField = GCField(for: gcFieldFlag.sumDuration, andActivityType: activity.activityType),
+           let duration = activity.numberWithUnit(for: durationField){
+            self.leftFieldValues.add(field: durationField, numberWithUnit: duration)
+        }
         if let distanceField = GCField(for: gcFieldFlag.sumDistance, andActivityType: activity.activityType),
            let distance = activity.numberWithUnit(for: distanceField ){
             self.leftFieldValues.add(field: distanceField, numberWithUnit: distance)
         }
         
-        if let durationField = GCField(for: gcFieldFlag.sumDuration, andActivityType: activity.activityType),
-           let duration = activity.numberWithUnit(for: durationField){
-            self.leftFieldValues.add(field: durationField, numberWithUnit: duration)
-        }
-        self.leftFieldValues.valueAttribute = GCViewConfig.attributeBold16()
-        self.leftFieldValues.unitAttribute = GCViewConfig.attribute16Gray()
+        self.leftFieldValues.valueAttribute = GCViewConfig.attribute(rzAttribute.value)
+        self.leftFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.unit)
         self.leftFieldValues.displayIcons = false
         self.leftFieldValues.defaultSpacing = 2.0
         self.rightFieldValues.displayIcons = false
@@ -115,8 +115,8 @@ class GCCellActivity: UITableViewCell {
                 }
             }
         }
-        self.rightFieldValues.valueAttribute = GCViewConfig.attributeBold14()
-        self.rightFieldValues.unitAttribute = GCViewConfig.attribute14Gray()
+        self.rightFieldValues.valueAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
+        self.rightFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
         self.leftFieldValues.distributeVertically = true;
         self.rightFieldValues.distributeVertically = false
         let useDate = (activity.date as NSDate)

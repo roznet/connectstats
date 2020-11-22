@@ -456,6 +456,24 @@ static void registerInCache(GCField*field){
 -(NSString*)displayName{
     return [[_fieldCache infoForField:self] displayName] ?: [GCField displayNameImpliedByFieldKey:self.key];
 }
+
+-(NSString*)displayNameWithPrimary:(GCField*)primary{
+    NSString * primaryDisplay = [primary displayName];
+    NSString * display = [[self displayName] stringByReplacingOccurrencesOfString:primaryDisplay withString:@""];
+
+    
+    if( [primaryDisplay hasPrefix:@"Avg "] ){
+        NSString * primaryBase = [primaryDisplay stringByReplacingOccurrencesOfString:@"Avg " withString:@""];
+        display = [display stringByReplacingOccurrencesOfString:primaryBase withString:@""];
+    }
+    if( [primaryDisplay hasPrefix:@"Elevation "]){
+        display = [display stringByReplacingOccurrencesOfString:@"Elevation " withString:@""];
+        display = [display stringByReplacingOccurrencesOfString:@" Elevation" withString:@""];
+    }
+    
+    return display;
+}
+
 -(GCUnit*)unit{
     return [[_fieldCache infoForField:self] unit];
 }
@@ -581,8 +599,8 @@ static void registerInCache(GCField*field){
     if (_groups==nil) {
         _groups = @[
                     @[@"SumDuration", @"SumElapsedDuration", @"SumMovingDuration" ],
-                    @[@"SumDistance", @"GainElevation",      @"LossElevation", @"MaxElevation"],
-                    @[@"SumEnergy",   @"SumTrainingEffect",  CALC_ENERGY,      CALC_METABOLIC_EFFICIENCY],
+                    @[@"GainElevation", @"LossElevation", @"MaxElevation"],
+                    @[@"SumEnergy",   @"SumTrainingEffect",  CALC_ENERGY,  CALC_METABOLIC_EFFICIENCY],
                     
                     @[@"SumIntensityFactor",          @"SumTrainingStressScore"],
                     @[@"WeightedMeanNormalizedPower", CALC_NONZERO_POWER, @"WeightedMeanLeftBalance", @"WeightedMeanRightBalance"],
