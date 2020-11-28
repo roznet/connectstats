@@ -177,6 +177,7 @@ NSString * objc_rzfit_field_num_for_session(FIT_UINT16 field) {
     case 30: return @"nec_long";
     case 31: return @"swc_lat";
     case 32: return @"swc_long";
+    case 33: return @"num_lengths";
     case 34: return @"normalized_power";
     case 35: return @"training_stress_score";
     case 36: return @"intensity_factor";

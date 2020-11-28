@@ -208,6 +208,7 @@
     "normalized_power": "normalized_power",
     "num_active_lengths": "num_active_lengths",
     "num_laps": "num_laps",
+    "num_lengths": "num_lengths",
     "opponent_name": "opponent_name",
     "opponent_score": "opponent_score",
     "player_score": "player_score",

@@ -966,6 +966,7 @@ func rzfit_event_string(input : FIT_ENUM) -> String?
     case FIT_EVENT_ELEV_HIGH_ALERT: return "elev_high_alert";
     case FIT_EVENT_ELEV_LOW_ALERT: return "elev_low_alert";
     case FIT_EVENT_COMM_TIMEOUT: return "comm_timeout";
+    case FIT_EVENT_RADAR_THREAT_ALERT: return "radar_threat_alert";
     default: return nil
   }
 }
@@ -1395,7 +1396,10 @@ func rzfit_garmin_product_string(input : FIT_UINT16) -> String?
     case FIT_GARMIN_PRODUCT_BCM: return "bcm";
     case FIT_GARMIN_PRODUCT_AXS01: return "axs01";
     case FIT_GARMIN_PRODUCT_HRM_TRI_SINGLE_BYTE_PRODUCT_ID: return "hrm_tri_single_byte_product_id";
+    case FIT_GARMIN_PRODUCT_HRM4_RUN_SINGLE_BYTE_PRODUCT_ID: return "hrm4_run_single_byte_product_id";
     case FIT_GARMIN_PRODUCT_FR225_SINGLE_BYTE_PRODUCT_ID: return "fr225_single_byte_product_id";
+    case FIT_GARMIN_PRODUCT_GEN3_BSM_SINGLE_BYTE_PRODUCT_ID: return "gen3_bsm_single_byte_product_id";
+    case FIT_GARMIN_PRODUCT_GEN3_BCM_SINGLE_BYTE_PRODUCT_ID: return "gen3_bcm_single_byte_product_id";
     case FIT_GARMIN_PRODUCT_FR301_CHINA: return "fr301_china";
     case FIT_GARMIN_PRODUCT_FR301_JAPAN: return "fr301_japan";
     case FIT_GARMIN_PRODUCT_FR301_KOREA: return "fr301_korea";
@@ -1424,6 +1428,7 @@ func rzfit_garmin_product_string(input : FIT_UINT16) -> String?
     case FIT_GARMIN_PRODUCT_VECTOR_CP: return "vector_cp";
     case FIT_GARMIN_PRODUCT_EDGE800_CHINA: return "edge800_china";
     case FIT_GARMIN_PRODUCT_EDGE500_CHINA: return "edge500_china";
+    case FIT_GARMIN_PRODUCT_APPROACH_G10: return "approach_g10";
     case FIT_GARMIN_PRODUCT_FR610_JAPAN: return "fr610_japan";
     case FIT_GARMIN_PRODUCT_EDGE500_KOREA: return "edge500_korea";
     case FIT_GARMIN_PRODUCT_FR70: return "fr70";
@@ -1498,6 +1503,7 @@ func rzfit_garmin_product_string(input : FIT_UINT16) -> String?
     case FIT_GARMIN_PRODUCT_FR620_TAIWAN: return "fr620_taiwan";
     case FIT_GARMIN_PRODUCT_FR220_TAIWAN: return "fr220_taiwan";
     case FIT_GARMIN_PRODUCT_TRUSWING: return "truswing";
+    case FIT_GARMIN_PRODUCT_D2AIRVENU: return "d2airvenu";
     case FIT_GARMIN_PRODUCT_FENIX3_CHINA: return "fenix3_china";
     case FIT_GARMIN_PRODUCT_FENIX3_TWN: return "fenix3_twn";
     case FIT_GARMIN_PRODUCT_VARIA_HEADLIGHT: return "varia_headlight";
@@ -1507,17 +1513,36 @@ func rzfit_garmin_product_string(input : FIT_UINT16) -> String?
     case FIT_GARMIN_PRODUCT_VARIA_RADAR_TAILLIGHT: return "varia_radar_taillight";
     case FIT_GARMIN_PRODUCT_VARIA_RADAR_DISPLAY: return "varia_radar_display";
     case FIT_GARMIN_PRODUCT_EDGE20: return "edge20";
+    case FIT_GARMIN_PRODUCT_EDGE520_ASIA: return "edge520_asia";
+    case FIT_GARMIN_PRODUCT_EDGE520_JAPAN: return "edge520_japan";
     case FIT_GARMIN_PRODUCT_D2_BRAVO: return "d2_bravo";
     case FIT_GARMIN_PRODUCT_APPROACH_S20: return "approach_s20";
+    case FIT_GARMIN_PRODUCT_VIVO_SMART2: return "vivo_smart2";
+    case FIT_GARMIN_PRODUCT_EDGE1000_THAI: return "edge1000_thai";
     case FIT_GARMIN_PRODUCT_VARIA_REMOTE: return "varia_remote";
+    case FIT_GARMIN_PRODUCT_EDGE25_ASIA: return "edge25_asia";
+    case FIT_GARMIN_PRODUCT_EDGE25_JPN: return "edge25_jpn";
+    case FIT_GARMIN_PRODUCT_EDGE20_ASIA: return "edge20_asia";
     case FIT_GARMIN_PRODUCT_APPROACH_X40: return "approach_x40";
+    case FIT_GARMIN_PRODUCT_FENIX3_JAPAN: return "fenix3_japan";
+    case FIT_GARMIN_PRODUCT_VIVO_SMART_EMEA: return "vivo_smart_emea";
+    case FIT_GARMIN_PRODUCT_FR630_ASIA: return "fr630_asia";
+    case FIT_GARMIN_PRODUCT_FR630_JPN: return "fr630_jpn";
+    case FIT_GARMIN_PRODUCT_FR230_JPN: return "fr230_jpn";
     case FIT_GARMIN_PRODUCT_HRM4_RUN: return "hrm4_run";
+    case FIT_GARMIN_PRODUCT_EPIX_JAPAN: return "epix_japan";
     case FIT_GARMIN_PRODUCT_VIVO_ACTIVE_HR: return "vivo_active_hr";
     case FIT_GARMIN_PRODUCT_VIVO_SMART_GPS_HR: return "vivo_smart_gps_hr";
     case FIT_GARMIN_PRODUCT_VIVO_SMART_HR: return "vivo_smart_hr";
+    case FIT_GARMIN_PRODUCT_VIVO_SMART_HR_ASIA: return "vivo_smart_hr_asia";
+    case FIT_GARMIN_PRODUCT_VIVO_SMART_GPS_HR_ASIA: return "vivo_smart_gps_hr_asia";
     case FIT_GARMIN_PRODUCT_VIVO_MOVE: return "vivo_move";
+    case FIT_GARMIN_PRODUCT_VARIA_TAILLIGHT: return "varia_taillight";
+    case FIT_GARMIN_PRODUCT_FR235_JAPAN: return "fr235_japan";
     case FIT_GARMIN_PRODUCT_VARIA_VISION: return "varia_vision";
     case FIT_GARMIN_PRODUCT_VIVO_FIT3: return "vivo_fit3";
+    case FIT_GARMIN_PRODUCT_FENIX3_KOREA: return "fenix3_korea";
+    case FIT_GARMIN_PRODUCT_FENIX3_SEA: return "fenix3_sea";
     case FIT_GARMIN_PRODUCT_FENIX3_HR: return "fenix3_hr";
     case FIT_GARMIN_PRODUCT_VIRB_ULTRA_30: return "virb_ultra_30";
     case FIT_GARMIN_PRODUCT_INDEX_SMART_SCALE: return "index_smart_scale";
@@ -1525,6 +1550,12 @@ func rzfit_garmin_product_string(input : FIT_UINT16) -> String?
     case FIT_GARMIN_PRODUCT_FENIX3_CHRONOS: return "fenix3_chronos";
     case FIT_GARMIN_PRODUCT_OREGON7XX: return "oregon7xx";
     case FIT_GARMIN_PRODUCT_RINO7XX: return "rino7xx";
+    case FIT_GARMIN_PRODUCT_EPIX_KOREA: return "epix_korea";
+    case FIT_GARMIN_PRODUCT_FENIX3_HR_CHN: return "fenix3_hr_chn";
+    case FIT_GARMIN_PRODUCT_FENIX3_HR_TWN: return "fenix3_hr_twn";
+    case FIT_GARMIN_PRODUCT_FENIX3_HR_JPN: return "fenix3_hr_jpn";
+    case FIT_GARMIN_PRODUCT_FENIX3_HR_SEA: return "fenix3_hr_sea";
+    case FIT_GARMIN_PRODUCT_FENIX3_HR_KOR: return "fenix3_hr_kor";
     case FIT_GARMIN_PRODUCT_NAUTIX: return "nautix";
     case FIT_GARMIN_PRODUCT_VIVO_ACTIVE_HR_APAC: return "vivo_active_hr_apac";
     case FIT_GARMIN_PRODUCT_OREGON7XX_WW: return "oregon7xx_ww";
@@ -1536,11 +1567,20 @@ func rzfit_garmin_product_string(input : FIT_UINT16) -> String?
     case FIT_GARMIN_PRODUCT_D2_BRAVO_TITANIUM: return "d2_bravo_titanium";
     case FIT_GARMIN_PRODUCT_VARIA_UT800: return "varia_ut800";
     case FIT_GARMIN_PRODUCT_RUNNING_DYNAMICS_POD: return "running_dynamics_pod";
+    case FIT_GARMIN_PRODUCT_EDGE_820_CHINA: return "edge_820_china";
+    case FIT_GARMIN_PRODUCT_EDGE_820_JAPAN: return "edge_820_japan";
     case FIT_GARMIN_PRODUCT_FENIX5X: return "fenix5x";
     case FIT_GARMIN_PRODUCT_VIVO_FIT_JR: return "vivo_fit_jr";
     case FIT_GARMIN_PRODUCT_VIVO_SMART3: return "vivo_smart3";
     case FIT_GARMIN_PRODUCT_VIVO_SPORT: return "vivo_sport";
+    case FIT_GARMIN_PRODUCT_EDGE_820_TAIWAN: return "edge_820_taiwan";
+    case FIT_GARMIN_PRODUCT_EDGE_820_KOREA: return "edge_820_korea";
+    case FIT_GARMIN_PRODUCT_EDGE_820_SEA: return "edge_820_sea";
+    case FIT_GARMIN_PRODUCT_FR35_HEBREW: return "fr35_hebrew";
     case FIT_GARMIN_PRODUCT_APPROACH_S60: return "approach_s60";
+    case FIT_GARMIN_PRODUCT_FR35_APAC: return "fr35_apac";
+    case FIT_GARMIN_PRODUCT_FR35_JAPAN: return "fr35_japan";
+    case FIT_GARMIN_PRODUCT_FENIX3_CHRONOS_ASIA: return "fenix3_chronos_asia";
     case FIT_GARMIN_PRODUCT_VIRB_360: return "virb_360";
     case FIT_GARMIN_PRODUCT_FR935: return "fr935";
     case FIT_GARMIN_PRODUCT_FENIX5: return "fenix5";
@@ -1549,43 +1589,116 @@ func rzfit_garmin_product_string(input : FIT_UINT16) -> String?
     case FIT_GARMIN_PRODUCT_FORETREX_601_701: return "foretrex_601_701";
     case FIT_GARMIN_PRODUCT_VIVO_MOVE_HR: return "vivo_move_hr";
     case FIT_GARMIN_PRODUCT_EDGE_1030: return "edge_1030";
+    case FIT_GARMIN_PRODUCT_FENIX5_ASIA: return "fenix5_asia";
+    case FIT_GARMIN_PRODUCT_FENIX5S_ASIA: return "fenix5s_asia";
+    case FIT_GARMIN_PRODUCT_FENIX5X_ASIA: return "fenix5x_asia";
     case FIT_GARMIN_PRODUCT_APPROACH_Z80: return "approach_z80";
     case FIT_GARMIN_PRODUCT_FR35_KOREA: return "fr35_korea";
     case FIT_GARMIN_PRODUCT_D2CHARLIE: return "d2charlie";
     case FIT_GARMIN_PRODUCT_VIVO_SMART3_APAC: return "vivo_smart3_apac";
     case FIT_GARMIN_PRODUCT_VIVO_SPORT_APAC: return "vivo_sport_apac";
+    case FIT_GARMIN_PRODUCT_FR935_ASIA: return "fr935_asia";
     case FIT_GARMIN_PRODUCT_DESCENT: return "descent";
     case FIT_GARMIN_PRODUCT_FR645: return "fr645";
     case FIT_GARMIN_PRODUCT_FR645M: return "fr645m";
+    case FIT_GARMIN_PRODUCT_FR30: return "fr30";
     case FIT_GARMIN_PRODUCT_FENIX5S_PLUS: return "fenix5s_plus";
     case FIT_GARMIN_PRODUCT_EDGE_130: return "edge_130";
+    case FIT_GARMIN_PRODUCT_EDGE_1030_ASIA: return "edge_1030_asia";
     case FIT_GARMIN_PRODUCT_VIVOSMART_4: return "vivosmart_4";
+    case FIT_GARMIN_PRODUCT_VIVO_MOVE_HR_ASIA: return "vivo_move_hr_asia";
     case FIT_GARMIN_PRODUCT_APPROACH_X10: return "approach_x10";
+    case FIT_GARMIN_PRODUCT_FR30_ASIA: return "fr30_asia";
     case FIT_GARMIN_PRODUCT_VIVOACTIVE3M_W: return "vivoactive3m_w";
+    case FIT_GARMIN_PRODUCT_FR645_ASIA: return "fr645_asia";
+    case FIT_GARMIN_PRODUCT_FR645M_ASIA: return "fr645m_asia";
     case FIT_GARMIN_PRODUCT_EDGE_EXPLORE: return "edge_explore";
     case FIT_GARMIN_PRODUCT_GPSMAP66: return "gpsmap66";
     case FIT_GARMIN_PRODUCT_APPROACH_S10: return "approach_s10";
     case FIT_GARMIN_PRODUCT_VIVOACTIVE3M_L: return "vivoactive3m_l";
     case FIT_GARMIN_PRODUCT_APPROACH_G80: return "approach_g80";
+    case FIT_GARMIN_PRODUCT_EDGE_130_ASIA: return "edge_130_asia";
+    case FIT_GARMIN_PRODUCT_EDGE_1030_BONTRAGER: return "edge_1030_bontrager";
     case FIT_GARMIN_PRODUCT_FENIX5_PLUS: return "fenix5_plus";
     case FIT_GARMIN_PRODUCT_FENIX5X_PLUS: return "fenix5x_plus";
     case FIT_GARMIN_PRODUCT_EDGE_520_PLUS: return "edge_520_plus";
+    case FIT_GARMIN_PRODUCT_FR945: return "fr945";
+    case FIT_GARMIN_PRODUCT_EDGE_530: return "edge_530";
+    case FIT_GARMIN_PRODUCT_EDGE_830: return "edge_830";
     case FIT_GARMIN_PRODUCT_FENIX5S_PLUS_APAC: return "fenix5s_plus_apac";
     case FIT_GARMIN_PRODUCT_FENIX5X_PLUS_APAC: return "fenix5x_plus_apac";
     case FIT_GARMIN_PRODUCT_EDGE_520_PLUS_APAC: return "edge_520_plus_apac";
+    case FIT_GARMIN_PRODUCT_FR235L_ASIA: return "fr235l_asia";
+    case FIT_GARMIN_PRODUCT_FR245_ASIA: return "fr245_asia";
+    case FIT_GARMIN_PRODUCT_VIVO_ACTIVE3M_APAC: return "vivo_active3m_apac";
+    case FIT_GARMIN_PRODUCT_GEN3_BSM: return "gen3_bsm";
+    case FIT_GARMIN_PRODUCT_GEN3_BCM: return "gen3_bcm";
+    case FIT_GARMIN_PRODUCT_VIVO_SMART4_ASIA: return "vivo_smart4_asia";
+    case FIT_GARMIN_PRODUCT_VIVOACTIVE4_SMALL: return "vivoactive4_small";
+    case FIT_GARMIN_PRODUCT_VIVOACTIVE4_LARGE: return "vivoactive4_large";
+    case FIT_GARMIN_PRODUCT_VENU: return "venu";
+    case FIT_GARMIN_PRODUCT_MARQ_DRIVER: return "marq_driver";
+    case FIT_GARMIN_PRODUCT_MARQ_AVIATOR: return "marq_aviator";
+    case FIT_GARMIN_PRODUCT_MARQ_CAPTAIN: return "marq_captain";
+    case FIT_GARMIN_PRODUCT_MARQ_COMMANDER: return "marq_commander";
+    case FIT_GARMIN_PRODUCT_MARQ_EXPEDITION: return "marq_expedition";
+    case FIT_GARMIN_PRODUCT_MARQ_ATHLETE: return "marq_athlete";
+    case FIT_GARMIN_PRODUCT_FENIX6S_SPORT: return "fenix6s_sport";
+    case FIT_GARMIN_PRODUCT_FENIX6S: return "fenix6s";
+    case FIT_GARMIN_PRODUCT_FENIX6_SPORT: return "fenix6_sport";
+    case FIT_GARMIN_PRODUCT_FENIX6: return "fenix6";
+    case FIT_GARMIN_PRODUCT_FENIX6X: return "fenix6x";
     case FIT_GARMIN_PRODUCT_HRM_DUAL: return "hrm_dual";
     case FIT_GARMIN_PRODUCT_VIVO_MOVE3_PREMIUM: return "vivo_move3_premium";
     case FIT_GARMIN_PRODUCT_APPROACH_S40: return "approach_s40";
+    case FIT_GARMIN_PRODUCT_FR245M_ASIA: return "fr245m_asia";
     case FIT_GARMIN_PRODUCT_EDGE_530_APAC: return "edge_530_apac";
     case FIT_GARMIN_PRODUCT_EDGE_830_APAC: return "edge_830_apac";
     case FIT_GARMIN_PRODUCT_VIVO_MOVE3: return "vivo_move3";
+    case FIT_GARMIN_PRODUCT_VIVO_ACTIVE4_SMALL_ASIA: return "vivo_active4_small_asia";
+    case FIT_GARMIN_PRODUCT_VIVO_ACTIVE4_LARGE_ASIA: return "vivo_active4_large_asia";
+    case FIT_GARMIN_PRODUCT_VIVO_ACTIVE4_OLED_ASIA: return "vivo_active4_oled_asia";
     case FIT_GARMIN_PRODUCT_SWIM2: return "swim2";
+    case FIT_GARMIN_PRODUCT_MARQ_DRIVER_ASIA: return "marq_driver_asia";
+    case FIT_GARMIN_PRODUCT_MARQ_AVIATOR_ASIA: return "marq_aviator_asia";
     case FIT_GARMIN_PRODUCT_VIVO_MOVE3_ASIA: return "vivo_move3_asia";
+    case FIT_GARMIN_PRODUCT_FR945_ASIA: return "fr945_asia";
+    case FIT_GARMIN_PRODUCT_VIVO_ACTIVE3T_CHN: return "vivo_active3t_chn";
+    case FIT_GARMIN_PRODUCT_MARQ_CAPTAIN_ASIA: return "marq_captain_asia";
+    case FIT_GARMIN_PRODUCT_MARQ_COMMANDER_ASIA: return "marq_commander_asia";
+    case FIT_GARMIN_PRODUCT_MARQ_EXPEDITION_ASIA: return "marq_expedition_asia";
+    case FIT_GARMIN_PRODUCT_MARQ_ATHLETE_ASIA: return "marq_athlete_asia";
+    case FIT_GARMIN_PRODUCT_FR45_ASIA: return "fr45_asia";
     case FIT_GARMIN_PRODUCT_VIVOACTIVE3_DAIMLER: return "vivoactive3_daimler";
+    case FIT_GARMIN_PRODUCT_FENIX6S_SPORT_ASIA: return "fenix6s_sport_asia";
+    case FIT_GARMIN_PRODUCT_FENIX6S_ASIA: return "fenix6s_asia";
+    case FIT_GARMIN_PRODUCT_FENIX6_SPORT_ASIA: return "fenix6_sport_asia";
+    case FIT_GARMIN_PRODUCT_FENIX6_ASIA: return "fenix6_asia";
+    case FIT_GARMIN_PRODUCT_FENIX6X_ASIA: return "fenix6x_asia";
+    case FIT_GARMIN_PRODUCT_EDGE_130_PLUS: return "edge_130_plus";
+    case FIT_GARMIN_PRODUCT_EDGE_1030_PLUS: return "edge_1030_plus";
+    case FIT_GARMIN_PRODUCT_FR745: return "fr745";
+    case FIT_GARMIN_PRODUCT_VENUSQ: return "venusq";
+    case FIT_GARMIN_PRODUCT_MARQ_ADVENTURER: return "marq_adventurer";
+    case FIT_GARMIN_PRODUCT_MARQ_ADVENTURER_ASIA: return "marq_adventurer_asia";
     case FIT_GARMIN_PRODUCT_SWIM2_APAC: return "swim2_apac";
+    case FIT_GARMIN_PRODUCT_VENU_DAIMLER_ASIA: return "venu_daimler_asia";
+    case FIT_GARMIN_PRODUCT_MARQ_GOLFER: return "marq_golfer";
+    case FIT_GARMIN_PRODUCT_VENU_DAIMLER: return "venu_daimler";
+    case FIT_GARMIN_PRODUCT_FR745_ASIA: return "fr745_asia";
+    case FIT_GARMIN_PRODUCT_EDGE_1030_PLUS_ASIA: return "edge_1030_plus_asia";
+    case FIT_GARMIN_PRODUCT_EDGE_130_PLUS_ASIA: return "edge_130_plus_asia";
+    case FIT_GARMIN_PRODUCT_VENUSQ_ASIA: return "venusq_asia";
+    case FIT_GARMIN_PRODUCT_MARQ_GOLFER_ASIA: return "marq_golfer_asia";
+    case FIT_GARMIN_PRODUCT_VENU2PLUS: return "venu2plus";
     case FIT_GARMIN_PRODUCT_SDM4: return "sdm4";
     case FIT_GARMIN_PRODUCT_EDGE_REMOTE: return "edge_remote";
+    case FIT_GARMIN_PRODUCT_TACX_TRAINING_APP_WIN: return "tacx_training_app_win";
+    case FIT_GARMIN_PRODUCT_TACX_TRAINING_APP_MAC: return "tacx_training_app_mac";
     case FIT_GARMIN_PRODUCT_TRAINING_CENTER: return "training_center";
+    case FIT_GARMIN_PRODUCT_TACX_TRAINING_APP_ANDROID: return "tacx_training_app_android";
+    case FIT_GARMIN_PRODUCT_TACX_TRAINING_APP_IOS: return "tacx_training_app_ios";
+    case FIT_GARMIN_PRODUCT_TACX_TRAINING_APP_LEGACY: return "tacx_training_app_legacy";
     case FIT_GARMIN_PRODUCT_CONNECTIQ_SIMULATOR: return "connectiq_simulator";
     case FIT_GARMIN_PRODUCT_ANDROID_ANTPLUS_PLUGIN: return "android_antplus_plugin";
     case FIT_GARMIN_PRODUCT_CONNECT: return "connect";
@@ -2214,6 +2327,7 @@ func rzfit_manufacturer_string(input : FIT_UINT16) -> String?
     case FIT_MANUFACTURER_VERSA_DESIGN: return "versa_design";
     case FIT_MANUFACTURER_CHILEAF: return "chileaf";
     case FIT_MANUFACTURER_CYCPLUS: return "cycplus";
+    case FIT_MANUFACTURER_GRAVAA_BYTE: return "gravaa_byte";
     case FIT_MANUFACTURER_DEVELOPMENT: return "development";
     case FIT_MANUFACTURER_HEALTHANDLIFE: return "healthandlife";
     case FIT_MANUFACTURER_LEZYNE: return "lezyne";
@@ -2260,6 +2374,14 @@ func rzfit_manufacturer_string(input : FIT_UINT16) -> String?
     case FIT_MANUFACTURER_MAHLE_EBIKEMOTION: return "mahle_ebikemotion";
     case FIT_MANUFACTURER_NURVV: return "nurvv";
     case FIT_MANUFACTURER_MICROPROGRAM: return "microprogram";
+    case FIT_MANUFACTURER_ZONE5CLOUD: return "zone5cloud";
+    case FIT_MANUFACTURER_GREENTEG: return "greenteg";
+    case FIT_MANUFACTURER_YAMAHA_MOTORS: return "yamaha_motors";
+    case FIT_MANUFACTURER_WHOOP: return "whoop";
+    case FIT_MANUFACTURER_GRAVAA: return "gravaa";
+    case FIT_MANUFACTURER_ONELAP: return "onelap";
+    case FIT_MANUFACTURER_MONARK_EXERCISE: return "monark_exercise";
+    case FIT_MANUFACTURER_FORM: return "form";
     case FIT_MANUFACTURER_ACTIGRAPHCORP: return "actigraphcorp";
     default: return nil
   }
@@ -2742,6 +2864,17 @@ func rzfit_pwr_zone_calc_string(input : FIT_ENUM) -> String?
     default: return nil
   }
 }
+// Auto-generated by swift_switch_function_name(FIT_RADAR_THREAT_LEVEL_TYPE)
+func rzfit_radar_threat_level_type_string(input : FIT_ENUM) -> String? 
+{
+  switch  input {
+    case FIT_RADAR_THREAT_LEVEL_TYPE_THREAT_UNKNOWN: return "threat_unknown";
+    case FIT_RADAR_THREAT_LEVEL_TYPE_THREAT_NONE: return "threat_none";
+    case FIT_RADAR_THREAT_LEVEL_TYPE_THREAT_APPROACHING: return "threat_approaching";
+    case FIT_RADAR_THREAT_LEVEL_TYPE_THREAT_APPROACHING_FAST: return "threat_approaching_fast";
+    default: return nil
+  }
+}
 // Auto-generated by swift_switch_function_name(FIT_RIDER_POSITION_TYPE)
 func rzfit_rider_position_type_string(input : FIT_ENUM) -> String? 
 {
@@ -3106,6 +3239,7 @@ func rzfit_sport_string(input : FIT_ENUM) -> String?
     case FIT_SPORT_JUMPMASTER: return "jumpmaster";
     case FIT_SPORT_BOXING: return "boxing";
     case FIT_SPORT_FLOOR_CLIMBING: return "floor_climbing";
+    case FIT_SPORT_DIVING: return "diving";
     case FIT_SPORT_ALL: return "all";
     default: return nil
   }
@@ -5015,6 +5149,10 @@ func rzfit_event_mesg_value_dict( ptr : UnsafePointer<FIT_EVENT_MESG>) -> [Strin
     let val : Double = Double(x.rear_gear)
     rv[ "rear_gear" ] = val
   }
+  if x.radar_threat_count != FIT_UINT8_INVALID  {
+    let val : Double = Double(x.radar_threat_count)
+    rv[ "radar_threat_count" ] = val
+  }
   return rv
 }
 func rzfit_event_mesg_enum_dict( ptr : UnsafePointer<FIT_EVENT_MESG>) -> [String:String] {
@@ -5025,6 +5163,9 @@ func rzfit_event_mesg_enum_dict( ptr : UnsafePointer<FIT_EVENT_MESG>) -> [String
   }
   if( x.event_type != FIT_EVENT_TYPE_INVALID ) {
     rv[ "event_type" ] = rzfit_event_type_string(input: x.event_type)
+  }
+  if( x.radar_threat_level_max != FIT_RADAR_THREAT_LEVEL_TYPE_INVALID ) {
+    rv[ "radar_threat_level_max" ] = rzfit_radar_threat_level_type_string(input: x.radar_threat_level_max)
   }
   return rv
 }
@@ -7781,6 +7922,10 @@ func rzfit_session_mesg_value_dict( ptr : UnsafePointer<FIT_SESSION_MESG>) -> [S
     let val : Double = Double(x.num_laps)
     rv[ "num_laps" ] = val
   }
+  if x.num_lengths != FIT_UINT16_INVALID  {
+    let val : Double = Double(x.num_lengths)
+    rv[ "num_lengths" ] = val
+  }
   if x.normalized_power != FIT_UINT16_INVALID  {
     let val : Double = Double(x.normalized_power)
     rv[ "normalized_power" ] = val
@@ -9971,6 +10116,7 @@ func rzfit_field_num_for_session(field : FIT_UINT16) -> String? {
     case 30: return "nec_long"
     case 31: return "swc_lat"
     case 32: return "swc_long"
+    case 33: return "num_lengths"
     case 34: return "normalized_power"
     case 35: return "training_stress_score"
     case 36: return "intensity_factor"
