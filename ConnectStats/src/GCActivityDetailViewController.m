@@ -41,12 +41,12 @@
 #import "GCActivity+ExportText.h"
 #import "GCWebConnect+Requests.h"
 #import "GCActivity+CSSearch.h"
-#import "GCActivityOrganizedFields.h"
 #import "GCActivity+Fields.h"
 #import "GCFormattedField.h"
 #import "GCHealthOrganizer.h"
 #import "ConnectStats-Swift.h"
 #import "GCActivity+Assets.h"
+#import "ConnectStats-Swift.h"
 
 #define GCVIEW_DETAIL_TITLE_SECTION     0
 #define GCVIEW_DETAIL_LOAD_SECTION      1
@@ -122,6 +122,10 @@
     return self.tableView.frame.size.width > 600.0;
 }
 
+-(BOOL)organizedFieldsReady{
+    return self.cachedOrganizedFields != nil;
+}
+
 -(GCActivityOrganizedFields*)organizedFields{
     if( ! self.cachedOrganizedFields ){
         self.cachedOrganizedFields = [self.activity groupedFields];
@@ -130,7 +134,7 @@
 }
 
 -(void)setOrganizedFields:(GCActivityOrganizedFields*)organizedFields{
-    self.organizedFields  = organizedFields;
+    self.cachedOrganizedFields  = organizedFields;
 }
 #pragma mark - UIView
 
@@ -391,7 +395,7 @@
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView OldFieldCellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
     
     if (!self.organizedFields) {
         self.organizedFields = [self.activity groupedFields];
@@ -445,7 +449,7 @@
     UITableViewCell * rv = nil;
 
     if (indexPath.section == GCVIEW_DETAIL_TITLE_SECTION) {
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         [cell setupDetailHeader:self.activity];
 
         rv = cell;
@@ -453,7 +457,7 @@
         if( self.isNewStyle ){
             rv = [self tableView:tableView fieldCellForRowAtIndexPath:indexPath];
         }else{
-            GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+            GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
             
             //GCActivity * act=self.activity;
             NSArray<NSArray*>*primary = [self displayPrimaryAttributedStrings];
@@ -517,25 +521,25 @@
         rv = cell;
 
     }else if (indexPath.section == GCVIEW_DETAIL_EXTRA_SECTION){
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         GCActivity * act=self.activity;
         [cell setupForExtraSummary:act width:tableView.frame.size.width];
         rv = cell;
     }else if (indexPath.section == GCVIEW_DETAIL_WEATHER_SECTION){
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
 
         GCActivity * act=self.activity;
         [cell setupForWeather:act width:tableView.frame.size.width];
         rv = cell;
     }else if (indexPath.section == GCVIEW_DETAIL_HEALTH_SECTION){
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
 
         GCActivity * act=self.activity;
         GCHealthMeasure * meas=[[GCAppGlobal health] measureForDate:act.date andField:[GCHealthMeasure weight]];
         [cell setupForHealthMeasureSummary:meas];
         rv = cell;
     }else{
-        rv = [GCCellGrid gridCell:tableView];
+        rv = [GCCellGrid cellGrid:tableView];
     }
 	return rv;
 
@@ -545,10 +549,11 @@
     BOOL high = self.tableView.frame.size.height > 600.;
 
     if (indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION) {
-        if (!self.organizedFields) {
-            self.organizedFields = [self.activity groupedFields];
+        if( self.isNewStyle && indexPath.row < self.organizedFields.groupedPrimaryFields.count ){
+            return [GCViewConfig sizeForNumberOfRows:[self.organizedFields.groupedPrimaryFields[indexPath.row] count]+1];
+        }else{
+            return [GCViewConfig sizeForNumberOfRows:3];
         }
-        return [GCViewConfig sizeForNumberOfRows:[self.organizedFields.groupedPrimaryFields[indexPath.row] count]+1];
     }else if(indexPath.section==GCVIEW_DETAIL_MAP_SECTION){
         return high ? 200. : 150.;
     }else if(indexPath.section==GCVIEW_DETAIL_LOAD_SECTION){
@@ -741,9 +746,7 @@
 }
 
 -(GCActivityOrganizedFields*)displayOrganizedFields{
-    if (!self.organizedFields) {
-        self.organizedFields = [self.activity groupedFields];
-
+    if (!self.organizedFieldsReady) {
         CGFloat tablewidth = self.tableView.frame.size.width;
         NSMutableArray * packed = [NSMutableArray array];
         NSMutableArray * fields = [NSMutableArray array];
@@ -771,7 +774,7 @@
             RZLog(RZLogWarning, @"Organized Arrays be equals size");
         }
     }
-    return _organizedFields;
+    return self.organizedFields;
 }
 
 -(NSArray<NSArray*>*)displayPrimaryAttributedStrings{

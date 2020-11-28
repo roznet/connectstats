@@ -754,73 +754,73 @@
     CGFloat heightExtended = [GCViewConfig sizeForNumberOfRows:nrowsExtended];
 
     act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_837769405.db" ]];
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupSummaryFromActivity:act rows:nrows width:320. status:gcViewActivityStatusNone];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:@"Running Activity Base"]];
     
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupSummaryFromActivity:act rows:nrowsExtended width:320. status:gcViewActivityStatusNone];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"Running Activity Base Ext"]];
     
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupSummaryFromActivity:act rows:nrows width:320. status:gcViewActivityStatusCompare];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:@"Running Activity Compare"]];
     
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupSummaryFromActivity:act rows:nrowsExtended width:320. status:gcViewActivityStatusCompare];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"Running Activity Compare Ext"]];
     
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupDetailHeader:act];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Detail"]];
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupForField:@"WeightedMeanPace" andActivity:act width:320.];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Pace Field"]];
     if ([act trackpointsReadyOrLoad] && [[act laps] count] > 0) {
-        cell = [GCCellGrid gridCell:nil];
+        cell = [GCCellGrid cellGrid:nil];
         [cell setupForLap:0 andActivity:act width:320.];
         [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Lap"]];
     }
 
     act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_swimming_439303647.db" ]];
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupSummaryFromActivity:act rows:nrows width:320. status:gcViewActivityStatusNone];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:@"Swim Activity Base"]];
 
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupSummaryFromActivity:act rows:nrowsExtended width:320. status:gcViewActivityStatusNone];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"Swim Activity Base Ext"]];
 
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupDetailHeader:act];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Detail"]];
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupForField:@"WeightedMeanPace" andActivity:act width:320.];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Pace Field"]];
     if ([act trackpointsReadyOrLoad] && [[act laps] count] > 0) {
-        cell = [GCCellGrid gridCell:nil];
+        cell = [GCCellGrid cellGrid:nil];
         [cell setupForLap:0 andActivity:act width:320.];
         [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Lap"]];
     }
 
     act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_cycling_940863203.db" ]];
 
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupSummaryFromActivity:act rows:nrows width:320. status:gcViewActivityStatusNone];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:@"Cycle Activity Base"]];
 
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupSummaryFromActivity:act rows:nrowsExtended width:320. status:gcViewActivityStatusNone];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"Cycle Activity Base Ext"]];
 
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupDetailHeader:act];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Detail"]];
-    cell = [GCCellGrid gridCell:nil];
+    cell = [GCCellGrid cellGrid:nil];
     [cell setupForField:@"WeightedMeanSpeed" andActivity:act width:320.];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Speed Field"]];
     if ([act trackpointsReadyOrLoad] && [[act laps] count] > 0) {
-        cell = [GCCellGrid gridCell:nil];
+        cell = [GCCellGrid cellGrid:nil];
         [cell setupForLap:0 andActivity:act width:320.];
         [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Lap"]];
     }

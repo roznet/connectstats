@@ -25,7 +25,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GCActivity.h"
-#import "GCActivityOrganizedFields.h"
+#import "ConnectStats-Swift.h"
 
 @interface GCActivity (Fields)
 

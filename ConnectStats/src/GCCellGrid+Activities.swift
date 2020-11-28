@@ -30,12 +30,5 @@ import RZUtilsSwift
 
 extension GCCellGrid {
 
-    @objc func setupActivitySummary() {
-        let geometry = RZNumberWithUnitGeometry()
-        
-        let nu = GCNumberWithUnit(unit: GCUnit.meter(), andValue: 2.0)
-        
-        //geometry.adjust(for: nu)
-    }
     
 }

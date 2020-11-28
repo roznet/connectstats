@@ -96,7 +96,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    GCCellGrid *cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid *cell = [GCCellGrid cellGrid:tableView];
 
     if (self.subtext) {
         [cell setupForRows:2 andCols:1];

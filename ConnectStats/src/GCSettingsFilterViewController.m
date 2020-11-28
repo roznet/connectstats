@@ -102,7 +102,7 @@
 
         rv = cell;
     }else if(indexPath.row==GCVIEW_FILTER_LOW_SPEED){
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         cell.marginx = 5.;
         [cell setupForRows:1 andCols:2];
         [cell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Minimum running speed", @"Settings Filter") attribute:@selector(attributeBold16)];
@@ -113,7 +113,7 @@
 
         rv = cell;
     }else if(indexPath.row==GCVIEW_FILTER_HIGH_POWER){
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         cell.marginx = 5.;
         [cell setupForRows:1 andCols:2];
         [cell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Maximum cycling power", @"Settings Filter") attribute:@selector(attributeBold16)];
@@ -146,7 +146,7 @@
 
     }
     if( rv == nil){
-        rv = [GCCellGrid gridCell:tableView];
+        rv = [GCCellGrid cellGrid:tableView];
     }
     rv.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
     

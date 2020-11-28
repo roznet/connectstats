@@ -292,11 +292,11 @@
         }
     }else if(indexPath.section == GC_S_QUARTILES && _oneFieldConfig.viewChoice != gcViewChoiceFields){
         NSUInteger idx = [_summarizedHistory[STATS_AVG] count]-indexPath.row-1;
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         [cell setUpForSummarizedHistory:_summarizedHistory atIndex:idx forField:_oneFieldConfig.field calendarConfig:self.oneFieldConfig.calendarConfig];
         return cell;
     }else{
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         if (indexPath.section == GC_S_NAME) {
             [cell setupStatsHeaders:self.activityStats];
         }else if (indexPath.section == GC_S_AVERAGE){

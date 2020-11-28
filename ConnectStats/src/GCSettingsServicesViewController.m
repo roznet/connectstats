@@ -226,7 +226,7 @@
 
 
 -(GCCellGrid*)gridCell:(UITableView*)tableView{
-    return [GCCellGrid gridCell:tableView];
+    return [GCCellGrid cellGrid:tableView];
 }
 
 -(BOOL)garminCredentialNeededAndMissing{
@@ -382,7 +382,7 @@
     //GCCellActivityIndicator * activitycell = nil;
 
     if (indexPath.row == GC_GARMIN_SERVICE_NAME) {
-        gridcell = [GCCellGrid gridCell:tableView];
+        gridcell = [GCCellGrid cellGrid:tableView];
         [gridcell setupForRows:2 andCols:1];
         NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Garmin Connect",@"Services")
                                                                       attributes:[GCViewConfig attributeBold16]] autorelease];
@@ -403,7 +403,7 @@
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
     }else if (indexPath.row == GC_GARMIN_METHOD) {
-        gridcell = [GCCellGrid gridCell:tableView];
+        gridcell = [GCCellGrid cellGrid:tableView];
         [gridcell setupForRows:2 andCols:2];
 
         NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Source",@"Services")
@@ -449,7 +449,7 @@
     //GCCellActivityIndicator * activitycell = nil;
 
     if (indexPath.row == GC_CONNECTSTATS_USE ){
-        gridcell = [GCCellGrid gridCell:tableView];
+        gridcell = [GCCellGrid cellGrid:tableView];
         [gridcell setupForRows:2 andCols:2];
         
         NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Use service for",@"Services")
@@ -467,7 +467,7 @@
         }
         rv = gridcell;
     }else if (indexPath.row == GC_CONNECTSTATS_CONFIG ){
-        gridcell = [GCCellGrid gridCell:tableView];
+        gridcell = [GCCellGrid cellGrid:tableView];
         [gridcell setupForRows:2 andCols:2];
         
         NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Config",@"Services")
@@ -492,7 +492,7 @@
         rv = gridcell;
 
     }else if( indexPath.row == GC_CONNECTSTATS_DEBUGKEY){
-        gridcell = [GCCellGrid gridCell:tableView];
+        gridcell = [GCCellGrid cellGrid:tableView];
         [gridcell setupForRows:2 andCols:2];
         
         NSUInteger userId = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_USER_ID defaultValue:0];
@@ -508,7 +508,7 @@
         [gridcell labelForRow:1 andCol:0].attributedText = subtitle;
         rv = gridcell;
     }else if( indexPath.row == GC_CONNECTSTATS_LOGOUT){
-        gridcell = [GCCellGrid gridCell:tableView];
+        gridcell = [GCCellGrid cellGrid:tableView];
         [gridcell setupForRows:2 andCols:1];
         if( [self garminCredentialNeededAndMissing] ){
             NSString * title = NSLocalizedString(@"Please enter credentials above", @"service");
@@ -519,7 +519,7 @@
         
         rv = gridcell;
     }else if( indexPath.row == GC_CONNECTSTATS_HELP){
-        gridcell = [GCCellGrid gridCell:tableView];
+        gridcell = [GCCellGrid cellGrid:tableView];
         [gridcell setupForRows:2 andCols:1];
 
         NSAttributedString * title = [NSAttributedString attributedString:[GCViewConfig attribute16] withString:NSLocalizedString(@"Garmin Service Setup Help", @"ConnectStats Help")];
@@ -591,7 +591,7 @@
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
     }else if (indexPath.row == GC_STRAVA_LOGOUT){
-        gridcell = [GCCellGrid gridCell:tableView];
+        gridcell = [GCCellGrid cellGrid:tableView];
         [gridcell setupForRows:2 andCols:1];
         [self setupServiceStatusCell:gridcell forService:[GCService service:gcServiceStrava] secondary:nil];
         
@@ -607,7 +607,7 @@
     gcService service = gcServiceHealthKit;
 
     if (indexPath.row == GC_HEALTHKIT_NAME) {
-        gridcell = [GCCellGrid gridCell:tableView];
+        gridcell = [GCCellGrid cellGrid:tableView];
         [gridcell setupForRows:2 andCols:1];
         NSAttributedString * title = nil;
         NSAttributedString * status = [[[NSAttributedString alloc] initWithString:[self statusForService:service]
@@ -631,7 +631,7 @@
             switchcell.entryFieldDelegate = self;
             rv=switchcell;
         }else{
-            gridcell = [GCCellGrid gridCell:tableView];
+            gridcell = [GCCellGrid cellGrid:tableView];
             [gridcell setupForRows:1 andCols:1];
             [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                                          withString:NSLocalizedString(@"Not Supported by device", @"Other Service")];
@@ -647,7 +647,7 @@
             switchcell.entryFieldDelegate = self;
             rv=switchcell;
         }else{
-            gridcell = [GCCellGrid gridCell:tableView];
+            gridcell = [GCCellGrid cellGrid:tableView];
             [gridcell setupForRows:1 andCols:1];
             [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                                          withString:NSLocalizedString(@"Not Supported by device", @"Other Service")];
@@ -668,7 +668,7 @@
             }
             rv=switchcell;
         }else{
-            gridcell = [GCCellGrid gridCell:tableView];
+            gridcell = [GCCellGrid cellGrid:tableView];
             [gridcell setupForRows:1 andCols:1];
             [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                                          withString:NSLocalizedString(@"Not Supported by device", @"Other Service")];
@@ -676,7 +676,7 @@
         }
     }else if (indexPath.row == GC_HEALTHKIT_SOURCE){
         if ([GCHealthKitRequest isSupported]) {
-            gridcell = [GCCellGrid gridCell:tableView];
+            gridcell = [GCCellGrid cellGrid:tableView];
             [gridcell setupForRows:1 andCols:2];
             NSString * source = [[GCAppGlobal profile] configGetString:PROFILE_CURRENT_SOURCE defaultValue:@""];
             if (source.length == 0) {
@@ -694,7 +694,7 @@
                                                                                          withString: NSLocalizedString(@"Source", @"Other Service")];
             rv= gridcell;
         }else{
-            gridcell = [GCCellGrid gridCell:tableView];
+            gridcell = [GCCellGrid cellGrid:tableView];
             [gridcell setupForRows:1 andCols:1];
             [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                                          withString:NSLocalizedString(@"Not Supported by device", @"Other Service")];
@@ -753,7 +753,7 @@
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
     }else if (indexPath.row == GC_OPTIONS_FORCE_DOWNLOAD_OLD){
-        gridcell = [GCCellGrid gridCell:tableView];
+        gridcell = [GCCellGrid cellGrid:tableView];
         
         [gridcell setupForRows:1 andCols:1];
         NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Force Reload Old Activities",@"Other Service")
@@ -785,7 +785,7 @@
     }else if (indexPath.section == GC_SECTIONS_HEALTHKIT){
         rv = [self healthKitTableView:tableView cellForRowAtIndexPath:indexPath];
     }else{
-        rv = [GCCellGrid gridCell:tableView];
+        rv = [GCCellGrid cellGrid:tableView];
     }
     rv.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
     return rv;

@@ -107,6 +107,7 @@ NS_ASSUME_NONNULL_BEGIN;
 -(NSString*)formatDouble:(double)aDbl;
 -(NSString*)formatDoubleNoUnits:(double)aDbl;
 -(NSAttributedString*)attributedStringFor:(double)aDbl valueAttr:(NSDictionary*)vAttr unitAttr:(nullable NSDictionary*)uAttr;
+-(NSArray<NSString*>*)formatComponentsForDouble:(double)aDbl;
 
 -(GCUnit*)unitForSystem:(gcUnitSystem)system;
 -(GCUnit*)unitForGlobalSystem;

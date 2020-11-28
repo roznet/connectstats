@@ -465,7 +465,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView activityCellWithImagesForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
     cell.delegate = self;
     gcViewActivityStatus status = gcViewActivityStatusNone;
     if (self.organizer.hasCompareActivity && [self.organizer activityIndexForFilteredIndex:indexPath.row]==self.organizer.selectedCompareActivityIndex) {
@@ -489,7 +489,7 @@ const CGFloat kCellDaySpacing = 2.f;
         [cell setupFor:[self activityForIndex:indexPath.row]];
         return cell;
     }else{
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         cell.delegate = self;
         gcViewActivityStatus status = gcViewActivityStatusNone;
         if (self.organizer.hasCompareActivity && [self.organizer activityIndexForFilteredIndex:indexPath.row]==self.organizer.selectedCompareActivityIndex) {

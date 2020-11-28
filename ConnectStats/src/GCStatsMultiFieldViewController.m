@@ -314,7 +314,7 @@
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView aggregatedCell:(NSIndexPath *)indexPath{
-    GCCellGrid *cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid *cell = [GCCellGrid cellGrid:tableView];
 
     GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
     if( data ){
@@ -331,7 +331,7 @@
 #pragma mark - Field Summary Cells
 
 -(UITableViewCell*)tableView:(UITableView *)tableView fieldSummaryCell:(NSIndexPath *)indexPath{
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
     GCField * field =[self fieldsForSection:indexPath.section][indexPath.row];
 
     static NSDictionary * doGraph = nil;

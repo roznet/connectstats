@@ -93,7 +93,7 @@ typedef void(^refreshGCCellGridFunc)(GCCellGrid*cell);
 @property (nonatomic,assign) gcCellInset cellInset;
 @property (nonatomic,assign) CGFloat cellInsetSize;
 
-+(GCCellGrid*)gridCell:(UITableView*)tableView;
++(GCCellGrid*)gridCell:(UITableView*)tableView DEPRECATED_MSG_ATTRIBUTE("Use cellGrid");
 +(GCCellGrid*)cellGrid:(UITableView*)tableView;
 
 -(void)setupForRows:(NSUInteger)nRows andCols:(NSUInteger)nCols;

@@ -140,7 +140,7 @@ enum uiTestSection {
 
     // Configure the cell...
 
-    return cell ?: [GCCellGrid gridCell:tableView];
+    return cell ?: [GCCellGrid cellGrid:tableView];
 }
 
 #pragma mark - Table view delegate

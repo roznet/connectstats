@@ -132,7 +132,7 @@ typedef NS_ENUM(NSUInteger) {
     UITableViewCell * cell = nil;
     
     if( indexPath.section == GC_SECTION_STATUS){
-        GCCellGrid * grcell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * grcell = [GCCellGrid cellGrid:tableView];
         [grcell setupForRows:1 andCols:1];
         
         if( indexPath.row == GC_STATUS_FIELD){
@@ -144,7 +144,7 @@ typedef NS_ENUM(NSUInteger) {
     }else if( indexPath.section == GC_SECTION_GRAPHS){
         cell = [self tableView:tableView derivedCellForRowAtIndexPath:indexPath];
     }else if( indexPath.section == GC_SECTION_ACTIONS){
-        GCCellGrid * grcell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * grcell = [GCCellGrid cellGrid:tableView];
         [grcell setupForRows:2 andCols:1];
         
         if( indexPath.row == GC_ACTION_REBUILD){
@@ -156,7 +156,7 @@ typedef NS_ENUM(NSUInteger) {
         }
         cell = grcell;
     }else{
-        cell = [GCCellGrid gridCell:tableView];
+        cell = [GCCellGrid cellGrid:tableView];
         //don't crash return empty cell
     }
     

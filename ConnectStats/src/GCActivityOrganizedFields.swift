@@ -26,6 +26,7 @@
 
 
 import Foundation
+import RZUtilsSwift
 
 class GCActivityOrganizedFields : NSObject, NSSecureCoding {
     static var supportsSecureCoding: Bool = true
@@ -36,8 +37,14 @@ class GCActivityOrganizedFields : NSObject, NSSecureCoding {
     let kVersion = "version"
 
     
-    var groupedPrimaryFields : [ [GCField] ] = []
-    var groupedOtherFields : [ [GCField] ] = []
+    @objc var groupedPrimaryFields : [ [GCField] ] = []
+    @objc var groupedOtherFields : [ [GCField] ] = []
+    
+    var geometry : RZNumberWithUnitGeometry = RZNumberWithUnitGeometry()
+    
+    @objc override required init() {
+        super.init()
+    }
     
     required init?(coder: NSCoder) {
         guard let primary = coder.decodeObject(forKey: kPrimaryFields) as? [ [GCField]] else { return nil }
@@ -55,5 +62,17 @@ class GCActivityOrganizedFields : NSObject, NSSecureCoding {
         coder.encode(self.groupedOtherFields, forKey: kOtherFields)
     }
     
+    @objc func updateGeometry(for activity : GCActivity){
+        
+        self.geometry = RZNumberWithUnitGeometry()
+        
+        for fields in self.groupedPrimaryFields {
+            for field in fields {
+                self.geometry.adjust(for: activity.numberWithUnit(for: field), numberAttribute: GCViewConfig.attribute(rzAttribute.value),
+                                     unitAttribute: GCViewConfig.attribute(rzAttribute.unit))
+            }
+        }
+        
+    }
     
 }

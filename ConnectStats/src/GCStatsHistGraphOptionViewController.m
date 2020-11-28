@@ -75,7 +75,7 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPathI{
     NSIndexPath * indexPath = [self.remap remap:indexPathI];
 
-    GCCellGrid * gridCell = [GCCellGrid gridCell:tableView];
+    GCCellGrid * gridCell = [GCCellGrid cellGrid:tableView];
     if (GC_ROW_FIELD == indexPath.row) {
         [gridCell setupForRows:1 andCols:1];
         [gridCell labelForRow:0 andCol:0].text = [self.config.fieldConfig.activityField displayName];

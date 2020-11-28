@@ -247,7 +247,7 @@
         switch (indexPath.row) {
             case GC_SETTINGS_SKIN:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:1 andCols:2];
                 
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Theme",@"Profile Skin")
@@ -273,7 +273,7 @@
                 break;
             case GC_SETTINGS_UNITS:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:1 andCols:2];
 
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Units",@"Profile units")
@@ -292,7 +292,7 @@
             }
             case GC_SETTINGS_STRIDE:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:1 andCols:2];
 
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Stride Units",@"Profile units")
@@ -312,7 +312,7 @@
             }
             case GC_SETTINGS_FILTER:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:1 andCols:2];
 
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Filter bad values",@"Profile units")
@@ -329,7 +329,7 @@
             }
             case GC_SETTINGS_FIRSTDAY:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:1 andCols:2];
 
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"First Day of Week",@"Profile Week Start")
@@ -348,7 +348,7 @@
             }
             case GC_SETTINGS_PERIOD:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:1 andCols:2];
 
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Period for Stats",@"Profile Period")
@@ -379,7 +379,7 @@
 
             case GC_SETTINGS_LAPS:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:1 andCols:2];
                 NSString * value = nil;
                 if ([GCAppGlobal configGetBool:CONFIG_USE_MOVING_ELAPSED defaultValue:false]) {
@@ -397,7 +397,7 @@
         switch (indexPath.row) {
             case GC_SETTINGS_LANGUAGE:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:1 andCols:2];
                 NSString * msg = NSLocalizedString(@"Language", @"Settings");
                 NSArray * choices = [GCViewConfig languageSettingChoices];
@@ -425,7 +425,7 @@
             }
             case GC_SETTINGS_RELOAD:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:1 andCols:1];
                 NSString * msg = NSLocalizedString(@"Reload Activities", @"Settings");
                 [gridcell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:msg attribute:@selector(attributeBold16)];
@@ -434,7 +434,7 @@
             }
             case GC_SETTINGS_FONT_STYLE:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:1 andCols:2];
                 NSString * msg = NSLocalizedString(@"Font Style", @"Settings");
                 NSString * style = NSLocalizedString(@"Dynamic", @"Settings");
@@ -448,7 +448,7 @@
             }
             case GC_SETTINGS_MAP:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:1 andCols:2];
 
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Map",@"Profile map")
@@ -563,7 +563,7 @@
         switch (indexPath.row) {
             case GC_SETTINGS_SERVICES:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:2 andCols:1];
                 NSAttributedString * services = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Services and Accounts", @"Settings") attributes:[GCViewConfig attributeBold16]] autorelease];
 
@@ -591,7 +591,7 @@
             }
             case GC_SETTINGS_HEALTH:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:2 andCols:2];
 
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Health and Zones",@"Settings")
@@ -604,7 +604,7 @@
             }
             case GC_SETTINGS_PROFILE:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:2 andCols:2];
 
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Current Profile", @"Settings")
@@ -624,7 +624,7 @@
             }
             case GC_SETTINGS_BLOG:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:2 andCols:1];
                 
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Blog", @"Settings")
@@ -672,7 +672,7 @@
             }
             case  GC_SETTINGS_BUGREPORT:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:2 andCols:1];
 
                 RZLogStatus stat = RZLogCheckStatus();
@@ -708,7 +708,7 @@
             }
             case  GC_SETTINGS_HELP:
             {
-                gridcell = [GCCellGrid gridCell:tableView];
+                gridcell = [GCCellGrid cellGrid:tableView];
                 [gridcell setupForRows:2 andCols:2];
 
                 NSString * versionS = [NSString stringWithFormat:@"Version %@", [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"]];
@@ -733,13 +733,13 @@
 
     }else if (indexPath.section==GC_SECTION_LOG){
         if (indexPath.row==GC_SETTINGS_TRIGGER_ACTION) {
-            gridcell  = [GCCellGrid gridCell:tableView];
+            gridcell  = [GCCellGrid cellGrid:tableView];
             [gridcell setupForRows:1 andCols:1];
             [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                                          withString:NSLocalizedString( @"Debug Actions", @"SettingsView")];
             rv=gridcell;
         }else if (indexPath.row == GC_SETTINGS_SHOW_LOG){
-            gridcell  = [GCCellGrid gridCell:tableView];
+            gridcell  = [GCCellGrid cellGrid:tableView];
             [gridcell setupForRows:1 andCols:1];
             [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                                          withString:NSLocalizedString( @"Log", @"SettingsView")];
@@ -749,7 +749,7 @@
     
     rv.backgroundColor = [GCViewConfig defaultColor:gcSkinDefaultColorBackground];
     
-    return rv ?: [GCCellGrid gridCell:tableView];
+    return rv ?: [GCCellGrid cellGrid:tableView];
 }
 
 -(void)cellWasChanged:(id<GCEntryFieldProtocol>)cell{

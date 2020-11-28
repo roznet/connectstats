@@ -242,7 +242,8 @@ static gcFontStyle _fontStyle;
     }
     
     if( fontName ){
-        UIFont * rv = [UIFont fontWithName:fontName size:size];
+        RZFont * rv = [RZFont fontWithName:fontName size:size];
+#if TARGET_OS_IPHONE
         if (size == 12.) {
             rv = [RZReturnAutorelease([[UIFontMetrics alloc] initForTextStyle:UIFontTextStyleFootnote]) scaledFontForFont:rv];
         }else if(size==14.){
@@ -250,6 +251,7 @@ static gcFontStyle _fontStyle;
         }else if (size==16.){
             rv = [RZReturnAutorelease([[UIFontMetrics alloc] initForTextStyle:UIFontTextStyleBody]) scaledFontForFont:rv];
         }
+#endif
         return rv;
     }else{
         return [self systemFontOfSize:size];
@@ -259,7 +261,8 @@ static gcFontStyle _fontStyle;
 +(RZFont*)boldFontOfSize:(CGFloat)size{
     NSString * systemFontName = [self boldFontName];
     if( systemFontName ){
-        UIFont * rv = [UIFont fontWithName:systemFontName size:size];
+        RZFont * rv = [RZFont fontWithName:systemFontName size:size];
+#if TARGET_OS_IPHONE
         if (size == 12.) {
             rv = [RZReturnAutorelease([[UIFontMetrics alloc] initForTextStyle:UIFontTextStyleFootnote]) scaledFontForFont:rv];
         }else if(size==14.){
@@ -267,6 +270,7 @@ static gcFontStyle _fontStyle;
         }else if (size==16.){
             rv = [RZReturnAutorelease([[UIFontMetrics alloc] initForTextStyle:UIFontTextStyleBody]) scaledFontForFont:rv];
         }
+#endif
         return rv;
     }else{
         return [self systemFontOfSize:size];

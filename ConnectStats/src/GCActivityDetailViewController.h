@@ -30,7 +30,9 @@
 #import "GCSharingViewController.h"
 #import "GCActivityAutoLapChoices.h"
 #import "GCTrackFieldChoices.h"
+
 @class  GCActivityOrganizedFields;
+
 
 @interface GCActivityDetailViewController : UITableViewController<RZChildObject,GCSharingImageExporter,UIAlertViewDelegate,GCEntryFieldDelegate,GCCellSimpleGraphDelegate,UIGestureRecognizerDelegate>
 

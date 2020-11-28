@@ -25,7 +25,7 @@ extension CGSize {
         }
     }
 }
-public class RZNumberWithUnitGeometry {
+@objc public class RZNumberWithUnitGeometry : NSObject {
     
     var unitSize : CGSize = CGSize.zero
     var numberSize : CGSize = CGSize.zero
@@ -38,37 +38,78 @@ public class RZNumberWithUnitGeometry {
 
     var count : UInt = 0
     
-    public init() {
-        
+    @objc public override init() {
+        super.init()
     }
     
-    public func reset() {
+    @objc public func reset() {
         self.unitSize = CGSize.zero
         self.numberSize = CGSize.zero
         self.totalSize = CGSize.zero
         self.count = 0
     }
     
-    public func adjust(for numberWithUnit: GCNumberWithUnit,
+    @objc public func adjust(for numberWithUnit: GCNumberWithUnit,
                        numberAttribute : [NSAttributedString.Key:Any]? = nil,
-                       unitAttribute : [NSAttributedString.Key:Any]?){
+                       unitAttribute : [NSAttributedString.Key:Any]? = nil){
         
+        let unitAttribute = unitAttribute ?? self.defaultUnitAttribute
+        let numberAttribute = numberAttribute ?? self.defaultNumberAttribute
+
         let fmtNoUnit = numberWithUnit.formatDoubleNoUnits()
         let fmt  = numberWithUnit.formatDouble()
         let fmtUnit = numberWithUnit.unit.abbr
         
-        let numberSize = (fmtNoUnit as NSString).size(withAttributes: self.defaultNumberAttribute)
+        let numberSize = (fmtNoUnit as NSString).size(withAttributes: numberAttribute)
         self.numberSize.max(with: numberSize)
 
         if( fmt != fmtNoUnit ){
-            let unitSize   = (fmtUnit as NSString).size(withAttributes: self.defaultUnitAttribute)
+            let unitSize   = (fmtUnit as NSString).size(withAttributes: unitAttribute)
             self.unitSize.max(with: unitSize)
             self.totalSize.height += max(unitSize.height, numberSize.height)
         }else{
             self.totalSize.height += numberSize.height
         }
-        self.totalSize.width = self.unitSize.width+self.numberSize.width+self.defaultSpacing
+        self.totalSize.width = self.unitSize.width+self.numberSize.width+self.spacing(numberAttribute: numberAttribute)
         self.count += 1
+    }
+    
+    func spacing(numberAttribute : [NSAttributedString.Key:Any]? = nil) -> CGFloat {
+        let oneSize = (" " as NSString).size(withAttributes: numberAttribute ?? self.defaultNumberAttribute )
+        return max(oneSize.width, self.defaultSpacing)
+    }
+    
+    public func drawInRect(_ rect : CGRect,
+                           numberWithUnit : GCNumberWithUnit,
+                           numberAttribute : [NSAttributedString.Key:Any]? = nil,
+                           unitAttribute : [NSAttributedString.Key:Any]? = nil){
+        
+        let unitAttribute = unitAttribute ?? self.defaultUnitAttribute
+        let numberAttribute = numberAttribute ?? self.defaultNumberAttribute
+        
+        var numberPoint = rect.origin
+        var unitPoint = rect.origin
+        
+        let fmtNoUnit = numberWithUnit.formatDoubleNoUnits()
+        let fmt = numberWithUnit.formatDouble()
+        let fmtUnit = numberWithUnit.unit.abbr
+
+        let currentNumberSize = (fmtNoUnit as NSString).size(withAttributes: numberAttribute)
+        //let currentUnitSize = (fmtUnit as NSString).size(withAttributes: unitAttribute)
+        
+        //     |-----||------!
+        //       23.2 km
+        //        169 km
+        //      15:05 min/km
+        
+        unitPoint.x += numberSize.width + self.spacing(numberAttribute: numberAttribute)
+        numberPoint.x += (numberSize.width - currentNumberSize.width)
+        
+        (fmtNoUnit as NSString).draw(at: numberPoint, withAttributes: numberAttribute)
+        if( fmt != fmtNoUnit ){
+            (fmtUnit as NSString).draw(at: unitPoint, withAttributes: unitAttribute)
+        }
+
     }
     
     

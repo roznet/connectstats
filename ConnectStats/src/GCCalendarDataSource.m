@@ -519,7 +519,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
     cell.delegate = self;
     if (_tableDisplay==gcCalendarTableDisplayActivities) {
         if( indexPath.row < _selectedActivities.count ){

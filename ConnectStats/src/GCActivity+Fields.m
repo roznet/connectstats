@@ -25,7 +25,7 @@
 
 #import "GCActivity+Fields.h"
 #import "GCActivitySummaryValue.h"
-#import "GCActivityOrganizedFields.h"
+#import "ConnectStats-Swift.h"
 
 @implementation GCActivity (Fields)
 
@@ -309,6 +309,7 @@
         }
     }
     rv.groupedOtherFields = groupedOther;
+    [rv updateGeometryFor:self];
     return rv;
 }
 

@@ -30,21 +30,21 @@ import RZUtilsSwift
 
 class GCCellFieldValueView: UIView {
 
-    let field : GCField
+    let field : GCField?
     let numberWithUnit : GCNumberWithUnit
     let geometry : RZNumberWithUnitGeometry
     let primaryField : GCField?
     let icon : Bool
     
-    var valueAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.value)
+    var numberAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.value)
     var unitAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.unit)
     var fieldAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.field)
       
-    init(field : GCField,
-         numberWithUnit:GCNumberWithUnit,
-         geometry: RZNumberWithUnitGeometry,
-         primaryField: GCField? = nil,
-         icon: Bool = false) {
+    init( numberWithUnit:GCNumberWithUnit,
+          geometry: RZNumberWithUnitGeometry,
+          field : GCField? = nil,
+          primaryField: GCField? = nil,
+          icon: Bool = false) {
         self.field = field
         self.numberWithUnit = numberWithUnit
         self.geometry = geometry
@@ -83,14 +83,6 @@ class GCCellFieldValueView: UIView {
                  withAttributes:attr
         )*/
         
-        let fmtNoUnit = self.numberWithUnit.formatDoubleNoUnits()
-        let fmt = self.numberWithUnit.formatDouble()
-        let fmtUnit = self.numberWithUnit.unit.abbr
-        let fmtField = self.field.displayName(withPrimary: self.primaryField)
-        
-        let numberSize = (fmtNoUnit as NSString).size(withAttributes: self.valueAttribute)
-        let unitSize = (fmtUnit as NSString).size(withAttributes: self.unitAttribute)
-        let fieldSize = (fmtField as NSString?)?.size(withAttributes: self.fieldAttribute) ?? CGSize.zero
 
         // Drawing code
         //
@@ -102,29 +94,35 @@ class GCCellFieldValueView: UIView {
         //     !----------!----|-|-!
         //      icon|field  23.2 km
         //      icon|field  2:12:05
-            /*
-        unitPoint.x += numberWidth + numberUnitSpacingSize.width
-        if numberSize.width < numberWidth {
-            // less than number line up to the right
-            numberPoint.x += (numberWidth-numberSize.width)
-        }// else line up to the left, so keep x
-        // add icon
-        if self.icon{
-            if let icon = field.icon(){
-                let iconRect = CGRect(x: current.x, y: current.y, width: numberSize.height, height: numberSize.height)
-                let insetValue :CGFloat = 2.0
-                icon.withTintColor(self.iconColor).draw(in: iconRect.insetBy(dx: insetValue, dy: insetValue))
-            }
-            // shift all text to the right by size of the icon
-            numberPoint.x += numberSize.height
-            unitPoint.x += numberSize.height
-        }
-        (fmtNoUnit as NSString).draw(at: numberPoint, withAttributes: self.valueAttribute)
-        if( fmt != fmtNoUnit ){
-            (fmtUnit as NSString).draw(at: unitPoint, withAttributes: self.unitAttribute)
-        }
         
-        current.y += (numberSize.height + spacing)
- */
+        var numberRect = rect
+        var fieldRect = rect
+        // Align number to the right
+        numberRect.origin.x += (rect.size.width - self.geometry.totalSize.width)
+        numberRect.size.width -= (rect.size.width - self.geometry.totalSize.width)
+        fieldRect.size.width = (rect.size.width - self.geometry.totalSize.width)
+        
+        self.geometry.drawInRect(numberRect,
+                                 numberWithUnit: self.numberWithUnit,
+                                 numberAttribute: self.numberAttribute,
+                                 unitAttribute: self.unitAttribute)
+        
+        if self.icon {
+            if let field = self.field,
+               let icon = field.icon(){
+                let iconHeight = self.geometry.totalSize.height
+                let iconRect = CGRect(x: fieldRect.origin.x, y: fieldRect.origin.y, width: iconHeight, height: iconHeight)
+                fieldRect.origin.x += iconHeight
+                fieldRect.size.width -= iconHeight
+                icon.withTintColor(UIColor.white).draw(in: iconRect)
+            }
+        }
+        if let fmtField = self.field?.displayName(withPrimary: self.primaryField) {
+            (fmtField as NSString).draw(at: fieldRect.origin, withAttributes: self.fieldAttribute)
+            /*(fmtField as NSString).draw(with: fieldRect,
+                                        options: NSStringDrawingOptions(),
+                                        attributes: self.fieldAttribute,
+                                        context: nil)*/
+        }
     }
 }
