@@ -458,9 +458,12 @@ static void registerInCache(GCField*field){
 }
 
 -(NSString*)displayNameWithPrimary:(GCField*)primary{
+    if( primary == nil){
+        return self.displayName;
+    }
+    
     NSString * primaryDisplay = [primary displayName];
     NSString * display = [[self displayName] stringByReplacingOccurrencesOfString:primaryDisplay withString:@""];
-
     
     if( [primaryDisplay hasPrefix:@"Avg "] ){
         NSString * primaryBase = [primaryDisplay stringByReplacingOccurrencesOfString:@"Avg " withString:@""];

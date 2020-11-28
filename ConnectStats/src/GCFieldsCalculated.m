@@ -362,6 +362,44 @@ static NSArray * _calculatedFields = nil;
 }
 @end
 
+#pragma mark - efficiencyFactor
+
+@implementation GCFieldCalcEfficiencyFactor
+-(BOOL)validForActivity:(GCActivity*)act{
+    return true;
+}
+-(NSString*)fieldKey{
+    return CALC_EFFICIENCY_FACTOR;
+}
+-(NSString*)displayName{
+    return @"Efficiency";
+}
+
+-(NSArray<NSString*>*)inputFields{
+    return @[@"WeightedMeanHeartRate",@"WeightedMeanPower"];
+}
+-(NSArray*)inputFieldsTrackPoint{
+    return @[@(gcFieldFlagWeightedMeanHeartRate), @(gcFieldFlagPower)];
+}
+-(GCNumberWithUnit*)evaluateWithInputs:(NSArray<GCNumberWithUnit*> *)inputs{
+    if (![self ensureInputs:inputs]) {
+        return nil;
+    }
+
+    GCNumberWithUnit * hr  = inputs[0];
+    GCNumberWithUnit * pow = inputs[1];
+
+    if( hr.value == 0.){
+        return nil;
+    }
+    double val =  pow.value / hr.value;
+
+    return [GCNumberWithUnit numberWithUnitName:@"dimensionless" andValue:val];
+}
+-(NSString*)unitName{
+    return @"dimensionless";
+}
+@end
 #pragma mark - kiloJoules
 
 @implementation GCFieldCalcKiloJoules

@@ -29,10 +29,10 @@ public class RZNumberWithUnitGeometry {
     
     var unitSize : CGSize = CGSize.zero
     var numberSize : CGSize = CGSize.zero
-    var totalSize : CGSize = CGSize.zero
+    public var totalSize : CGSize = CGSize.zero
     
-    var numberAttribute : [NSAttributedString.Key:Any] = [:]
-    var unitAttribute : [NSAttributedString.Key:Any] = [:]
+    var defaultNumberAttribute : [NSAttributedString.Key:Any] = [:]
+    var defaultUnitAttribute : [NSAttributedString.Key:Any] = [:]
     
     var defaultSpacing : CGFloat = 0.0
 
@@ -49,17 +49,19 @@ public class RZNumberWithUnitGeometry {
         self.count = 0
     }
     
-    public func adjust(for numberWithUnit: GCNumberWithUnit){
+    public func adjust(for numberWithUnit: GCNumberWithUnit,
+                       numberAttribute : [NSAttributedString.Key:Any]? = nil,
+                       unitAttribute : [NSAttributedString.Key:Any]?){
         
         let fmtNoUnit = numberWithUnit.formatDoubleNoUnits()
         let fmt  = numberWithUnit.formatDouble()
         let fmtUnit = numberWithUnit.unit.abbr
         
-        let numberSize = (fmtNoUnit as NSString).size(withAttributes: self.numberAttribute)
+        let numberSize = (fmtNoUnit as NSString).size(withAttributes: self.defaultNumberAttribute)
         self.numberSize.max(with: numberSize)
 
         if( fmt != fmtNoUnit ){
-            let unitSize   = (fmtUnit as NSString).size(withAttributes: self.unitAttribute)
+            let unitSize   = (fmtUnit as NSString).size(withAttributes: self.defaultUnitAttribute)
             self.unitSize.max(with: unitSize)
             self.totalSize.height += max(unitSize.height, numberSize.height)
         }else{

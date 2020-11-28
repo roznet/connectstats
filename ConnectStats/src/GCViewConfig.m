@@ -220,11 +220,11 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 
 #pragma mark - Font Configuration
 
-+(nullable NSString*)systemFontName{
++(nullable NSString*)fontName{
     return [_current_skin() stringFor:gcSkinStringSystemFontName];
 }
 
-+(nullable NSString*)boldSystemFontName{
++(nullable NSString*)boldFontName{
     return [_current_skin() stringFor:gcSkinStringSystemFontName];
 }
 

@@ -178,7 +178,7 @@ static gcFontStyle _fontStyle;
 }
 
 +(CGFloat)sizeForNumberOfRows:(NSUInteger)rows{
-    CGSize size = [@"A" sizeWithAttributes:[self attribute16]];
+    CGSize size = [@"A" sizeWithAttributes:[self attribute:rzAttributeField]];
     CGFloat rv = size.height  * rows;
     return ceil( rv * 1.05 ); // 5% margin
 }

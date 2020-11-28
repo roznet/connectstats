@@ -1,6 +1,6 @@
 //  MIT License
 //
-//  Created on 20/11/2020 for ConnectStats
+//  Created on 26/11/2020 for ConnectStats
 //
 //  Copyright (c) 2020 Brice Rosenzweig
 //
@@ -26,16 +26,13 @@
 
 
 import Foundation
-import RZUtilsSwift
 
-extension GCCellGrid {
 
-    @objc func setupActivitySummary() {
-        let geometry = RZNumberWithUnitGeometry()
-        
-        let nu = GCNumberWithUnit(unit: GCUnit.meter(), andValue: 2.0)
-        
-        //geometry.adjust(for: nu)
-    }
+extension GCActivityDetailViewController {
     
+    @objc func tableView(_ tableView: UITableView, fieldCellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard var cell = GCCellGrid(tableView) else { return UITableViewCell(frame: CGRect.zero)}
+        
+        return cell
+    }
 }

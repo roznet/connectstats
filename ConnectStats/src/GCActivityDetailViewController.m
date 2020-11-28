@@ -72,8 +72,9 @@
 @property (nonatomic,retain) GCTrackStats * compareTrackStats;
 @property (nonatomic,assign) BOOL initialized;
 
-@property (nonatomic,retain) GCActivityOrganizedFields * organizedFields;
+@property (nonatomic,retain) GCActivityOrganizedFields * cachedOrganizedFields;
 @property (nonatomic,retain) NSArray<NSArray*>*organizedAttributedStrings;
+
 /**
  NSArray of either graph GCField or something else if no graph field @(0)
  */
@@ -103,7 +104,7 @@
     [_autolapChoice release];
     [_choices release];
 
-    [_organizedFields release];
+    [_cachedOrganizedFields release];
     [_organizedAttributedStrings release];
     [_organizedMatchingField release];
     [_organizer release];
@@ -112,6 +113,26 @@
 
     [super dealloc];
 }
+
+-(BOOL)isNewStyle{
+    return [GCViewConfig cellBandedFormat];
+}
+
+-(BOOL)isWide{
+    return self.tableView.frame.size.width > 600.0;
+}
+
+-(GCActivityOrganizedFields*)organizedFields{
+    if( ! self.cachedOrganizedFields ){
+        self.cachedOrganizedFields = [self.activity groupedFields];
+    }
+    return self.cachedOrganizedFields;
+}
+
+-(void)setOrganizedFields:(GCActivityOrganizedFields*)organizedFields{
+    self.organizedFields  = organizedFields;
+}
+#pragma mark - UIView
 
 - (void)viewDidLoad
 {
@@ -243,8 +264,16 @@
     }else if (section == GCVIEW_DETAIL_HEALTH_SECTION){
         return [[GCAppGlobal health] hasHealthData] ? 1 : 0;
     }
+    if( self.isNewStyle ){
+        if (!self.organizedFields) {
+            self.organizedFields = [self.activity groupedFields];
+        }
+        
+        return self.organizedFields.groupedPrimaryFields.count;
 
-    return [self displayPrimaryAttributedStrings].count;
+    }else{
+        return [self displayPrimaryAttributedStrings].count;
+    }
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView dayGraphCellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -361,7 +390,7 @@
     return cell;
 }
 
--(UITableViewCell*)tableView:(UITableView *)tableView fieldCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(UITableViewCell*)tableView:(UITableView *)tableView OldFieldCellForRowAtIndexPath:(NSIndexPath *)indexPath{
     GCCellGrid * cell = [GCCellGrid gridCell:tableView];
     
     if (!self.organizedFields) {
@@ -373,19 +402,20 @@
         NSArray<GCField*>*fields = self.organizedFields.groupedPrimaryFields[indexPath.row];
         [cell setupForRows:fields.count andCols:2];
         
-        [cell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[RZViewConfig attribute:rzAttributeField]
+        [cell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute:rzAttributeField]
                                                                                  withString:fields.firstObject.displayName];
         NSString * value = [[self.activity numberWithUnitForField:fields.firstObject] formatDouble];
-        [cell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[RZViewConfig attribute:rzAttributeValue]
+        [cell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute:rzAttributeValue]
                                                                                  withString:value];
         NSUInteger row = 1;
         for (GCField * field in fields) {
             if( field != fields.firstObject){
-                [cell labelForRow:row andCol:0].attributedText = [NSAttributedString attributedString:[RZViewConfig attribute:rzAttributeSecondaryField]
+                [cell labelForRow:row andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute:rzAttributeSecondaryField]
                                                                                          withString:[field displayNameWithPrimary:fields.firstObject]];
                 NSString * value = [[self.activity numberWithUnitForField:field] formatDouble];
-                [cell labelForRow:row andCol:1].attributedText = [NSAttributedString attributedString:[RZViewConfig attribute:rzAttributeSecondaryValue]
+                [cell labelForRow:row andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute:rzAttributeSecondaryValue]
                                                                                          withString:value];
+                [cell configForRow:row andCol:0].horizontalAlign = gcHorizontalAlignRight;
                 row++;
             }
         }
@@ -394,6 +424,9 @@
         if (indexPath.row < self.organizedMatchingField.count && [self.organizedMatchingField[indexPath.row] isKindOfClass:[GCField class]]) {
             graphIcon = true;
         }
+        
+        [GCViewConfig setupGradientForDetails:cell];
+        
         if(graphIcon){
             [cell setIconImage:[GCViewIcons cellIconFor:gcIconCellLineChart]];
         }else{
@@ -417,8 +450,7 @@
 
         rv = cell;
     }else if (indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION) {
-        BOOL newStyle = [GCViewConfig cellBandedFormat];
-        if( newStyle ){
+        if( self.isNewStyle ){
             rv = [self tableView:tableView fieldCellForRowAtIndexPath:indexPath];
         }else{
             GCCellGrid * cell = [GCCellGrid gridCell:tableView];

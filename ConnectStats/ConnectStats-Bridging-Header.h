@@ -29,3 +29,4 @@
 #import "GCTrackPoint+Swim.h"
 
 #import "GCStatsMultiFieldViewController.h"
+#import "GCActivityDetailViewController.h"

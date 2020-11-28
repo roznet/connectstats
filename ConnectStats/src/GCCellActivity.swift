@@ -27,16 +27,6 @@
 
 import UIKit
 
-extension UIStackView {
-    func removeAllArrangedSubviews() {
-        arrangedSubviews.forEach {
-            self.removeArrangedSubview($0)
-            NSLayoutConstraint.deactivate($0.constraints)
-            $0.removeFromSuperview()
-        }
-    }
-}
-
 class GCCellActivity: UITableViewCell {
     @IBOutlet var borderView: GCCellRoundedPatternView!
     @IBOutlet var leftBorderView: GCCellRoundedPatternView!

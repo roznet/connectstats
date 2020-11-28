@@ -30,9 +30,15 @@
 #import "GCSharingViewController.h"
 #import "GCActivityAutoLapChoices.h"
 #import "GCTrackFieldChoices.h"
+@class  GCActivityOrganizedFields;
 
 @interface GCActivityDetailViewController : UITableViewController<RZChildObject,GCSharingImageExporter,UIAlertViewDelegate,GCEntryFieldDelegate,GCCellSimpleGraphDelegate,UIGestureRecognizerDelegate>
 
+@property (nonatomic,retain) GCActivityOrganizedFields * organizedFields;
+
+@property (nonatomic,readonly) GCActivity * activity;
+@property (nonatomic,readonly) BOOL isNewStyle;
+@property (nonatomic,readonly) BOOL isWide;
 
 -(void)nextGraphField;
 -(GCActivity*)compareActivity;

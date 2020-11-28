@@ -97,6 +97,8 @@ class GCCellFieldValueColumnView: UIView {
         //     !-----!----||------!
         //      icon  23.2 km
         //      icon  2:12:05
+
+        
         
         let numberUnitSpacingSize = (" " as NSString).size(withAttributes: self.valueAttribute)
         

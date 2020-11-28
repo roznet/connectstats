@@ -1,6 +1,6 @@
 //  MIT License
 //
-//  Created on 20/11/2020 for ConnectStats
+//  Created on 26/11/2020 for ConnectStats
 //
 //  Copyright (c) 2020 Brice Rosenzweig
 //
@@ -26,16 +26,34 @@
 
 
 import Foundation
-import RZUtilsSwift
 
-extension GCCellGrid {
+class GCActivityOrganizedFields : NSObject, NSSecureCoding {
+    static var supportsSecureCoding: Bool = true
+    
+    
+    let kPrimaryFields = "primaryFields"
+    let kOtherFields = "otherFields"
+    let kVersion = "version"
 
-    @objc func setupActivitySummary() {
-        let geometry = RZNumberWithUnitGeometry()
+    
+    var groupedPrimaryFields : [ [GCField] ] = []
+    var groupedOtherFields : [ [GCField] ] = []
+    
+    required init?(coder: NSCoder) {
+        guard let primary = coder.decodeObject(forKey: kPrimaryFields) as? [ [GCField]] else { return nil }
+        guard let other = coder.decodeObject(forKey: kOtherFields) as? [[GCField]] else { return nil }
         
-        let nu = GCNumberWithUnit(unit: GCUnit.meter(), andValue: 2.0)
-        
-        //geometry.adjust(for: nu)
+        self.groupedPrimaryFields = primary
+        self.groupedOtherFields = other
+
+        super.init()
     }
+    
+    func encode(with coder: NSCoder) {
+        coder.encode(1, forKey: kVersion)
+        coder.encode(self.groupedPrimaryFields, forKey: kPrimaryFields)
+        coder.encode(self.groupedOtherFields, forKey: kOtherFields)
+    }
+    
     
 }

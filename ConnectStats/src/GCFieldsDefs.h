@@ -148,6 +148,7 @@ extern NSString * CALC_ALTITUDE_LOSS         ;
 extern NSString * CALC_NORMALIZED_POWER      ;
 extern NSString * CALC_NONZERO_POWER         ;
 extern NSString * CALC_METABOLIC_EFFICIENCY  ;
+extern NSString * CALC_EFFICIENCY_FACTOR     ;
 extern NSString * CALC_ENERGY                ;
 extern NSString * CALC_STRIDE_LENGTH         ;
 extern NSString * CALC_DEVELOPMENT           ;
