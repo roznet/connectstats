@@ -30,9 +30,9 @@ import RZUtilsSwift
 
 extension GCCellGrid {
 
-    @objc static func adjust(geometry : RZNumberWithUnitGeometry,
-                      dataHolder : GCHistoryAggregatedDataHolder,
-                      activityType : GCActivityType){
+    @objc static func adjustAggregated(dataHolder : GCHistoryAggregatedDataHolder,
+                                       activityType : GCActivityType,
+                                       geometry : RZNumberWithUnitGeometry ) {
         let fields = activityType.summaryFields()
         
         for field in fields {
@@ -44,7 +44,7 @@ extension GCCellGrid {
         }
     }
     
-    @objc func setup(with dataHolder : GCHistoryAggregatedDataHolder,
+    @objc func setupAggregated(dataHolder : GCHistoryAggregatedDataHolder,
                      index : Int,
                      multiFieldConfig : GCStatsMultiFieldConfig,
                      activityType : GCActivityType,
@@ -102,5 +102,41 @@ extension GCCellGrid {
         
     }
                      
-    
+    @objc func setupActivityDetail(fields : [GCField],
+                                   activity : GCActivity,
+                                   geometry : RZNumberWithUnitGeometry){
+        GCViewConfig.setupGradient(forDetails: self)
+        
+        
+        self.setup(forRows:UInt(fields.count), andCols:2)
+        if let field = fields.first?.displayName() {
+            let fieldFmt = NSAttributedString(string: field, attributes: GCViewConfig.attribute(rzAttribute.field) )
+            self.label(forRow: 0, andCol: 0)?.attributedText = fieldFmt
+        }
+        
+        var fieldAttr = GCViewConfig.attribute(rzAttribute.field) ?? [:]
+        var numberAttr = GCViewConfig.attribute(rzAttribute.value) ?? [:]
+        var unitAttr = GCViewConfig.attribute(rzAttribute.unit) ?? [:]
+        let primaryField = fields.first
+        var row : UInt = 0
+        
+        for field in fields {
+            if let numberWithUnit = activity.numberWithUnit(for: field) {
+                let cellView = GCCellFieldValueView(numberWithUnit: numberWithUnit,
+                                                    geometry: geometry,
+                                                    field: field,
+                                                    primaryField: primaryField,
+                                                    icon: false)
+                cellView.fieldAttribute = fieldAttr
+                cellView.numberAttribute = numberAttr
+                cellView.unitAttribute = unitAttr
+                self.setupView(cellView, forRow: row, andColumn: 1)
+            }
+            row += 1
+            fieldAttr = GCViewConfig.attribute(rzAttribute.secondaryField) ?? [:]
+            numberAttr = GCViewConfig.attribute(rzAttribute.secondaryValue) ?? [:]
+            unitAttr = GCViewConfig.attribute(rzAttribute.secondaryUnit) ?? [:]
+        }
+        
+    }
 }

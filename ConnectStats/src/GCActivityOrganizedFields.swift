@@ -40,7 +40,7 @@ class GCActivityOrganizedFields : NSObject, NSSecureCoding {
     @objc var groupedPrimaryFields : [ [GCField] ] = []
     @objc var groupedOtherFields : [ [GCField] ] = []
     
-    var geometry : RZNumberWithUnitGeometry = RZNumberWithUnitGeometry()
+    @objc var geometry : RZNumberWithUnitGeometry = RZNumberWithUnitGeometry()
     
     @objc override required init() {
         super.init()

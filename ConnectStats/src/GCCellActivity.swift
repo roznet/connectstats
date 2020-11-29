@@ -69,7 +69,7 @@ class GCCellActivity: UITableViewCell {
         self.borderView.setNeedsDisplay()
         self.leftBorderView.setNeedsDisplay()
         
-        if let icon = GCViewIcons.activityTypeDynamicIcon(for: activity.activityType){
+        if let icon = activity.icon(){
             self.iconView.image = icon
         }else{
             self.iconView.image = nil;

@@ -327,7 +327,12 @@
     GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
     if( data ){
         if( self.isNewStyle ){
-            [cell setupWith:data index:indexPath.row multiFieldConfig:self.multiFieldConfig activityType:[GCActivityType activityTypeForKey:self.displayActivityType] geometry:self.geometry wide:false];
+            [cell setupAggregatedWithDataHolder:data
+                                          index:indexPath.row
+                               multiFieldConfig:self.multiFieldConfig
+                                   activityType:[GCActivityType activityTypeForKey:self.displayActivityType]
+                                       geometry:self.geometry
+                                           wide:false];
         }else{
             [cell setupFromHistoryAggregatedData:data
                                            index:indexPath.row
@@ -769,7 +774,7 @@
     self.geometry = [RZNumberWithUnitGeometry geometry];
     GCActivityType * type = [GCActivityType activityTypeForKey:self.activityType];
     for (GCHistoryAggregatedDataHolder * holder in vals) {
-        [GCCellGrid adjustWithGeometry:self.geometry dataHolder:holder activityType:type];
+        [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:type geometry:self.geometry];
     }
     
     dispatch_async(dispatch_get_main_queue(), ^(){

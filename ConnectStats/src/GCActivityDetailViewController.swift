@@ -33,43 +33,11 @@ extension GCActivityDetailViewController {
     @objc func tableView(_ tableView: UITableView, fieldCellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell {
         guard let cell = GCCellGrid(tableView) else { return UITableViewCell(frame: CGRect.zero)}
         
-        GCViewConfig.setupGradient(forDetails: cell)
-        
         if let organizedFields = self.organizedFields {
         
             if indexPath.row < organizedFields.groupedPrimaryFields.count {
                 let fields = organizedFields.groupedPrimaryFields[ indexPath.row ]
-                
-                cell.setup(forRows:UInt(fields.count), andCols:2)
-                if let field = fields.first?.displayName() {
-                    let fieldFmt = NSAttributedString(string: field, attributes: GCViewConfig.attribute(rzAttribute.field) )
-                    cell.label(forRow: 0, andCol: 0)?.attributedText = fieldFmt
-                }
-                
-                var fieldAttr = GCViewConfig.attribute(rzAttribute.field) ?? [:]
-                var numberAttr = GCViewConfig.attribute(rzAttribute.value) ?? [:]
-                var unitAttr = GCViewConfig.attribute(rzAttribute.unit) ?? [:]
-                let primaryField = fields.first
-                var row : UInt = 0
-                
-                for field in fields {
-                    if let numberWithUnit = self.activity.numberWithUnit(for: field) {
-                        let cellView = GCCellFieldValueView(numberWithUnit: numberWithUnit,
-                                                            geometry: self.organizedFields.geometry,
-                                                            field: field,
-                                                            primaryField: primaryField,
-                                                            icon: false)
-                        cellView.fieldAttribute = fieldAttr
-                        cellView.numberAttribute = numberAttr
-                        cellView.unitAttribute = unitAttr
-                        cell.setupView(cellView, forRow: row, andColumn: 1)
-                    }
-                    row += 1
-                    fieldAttr = GCViewConfig.attribute(rzAttribute.secondaryField) ?? [:]
-                    numberAttr = GCViewConfig.attribute(rzAttribute.secondaryValue) ?? [:]
-                    unitAttr = GCViewConfig.attribute(rzAttribute.secondaryUnit) ?? [:]
-                }
-                
+                cell.setupActivityDetail(fields: fields, activity: self.activity, geometry: self.organizedFields.geometry)
             }
         
         }

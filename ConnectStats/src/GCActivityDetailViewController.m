@@ -550,7 +550,7 @@
 
     if (indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION) {
         if( self.isNewStyle && indexPath.row < self.organizedFields.groupedPrimaryFields.count ){
-            return [GCViewConfig sizeForNumberOfRows:[self.organizedFields.groupedPrimaryFields[indexPath.row] count]+1];
+            return [GCViewConfig sizeForNumberOfRows:[self.organizedFields.groupedPrimaryFields[indexPath.row] count]];
         }else{
             return [GCViewConfig sizeForNumberOfRows:3];
         }

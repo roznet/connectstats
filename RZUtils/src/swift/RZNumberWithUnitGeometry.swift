@@ -86,7 +86,8 @@ extension CGSize {
     public func drawInRect(_ rect : CGRect,
                            numberWithUnit : GCNumberWithUnit,
                            numberAttribute : [NSAttributedString.Key:Any]? = nil,
-                           unitAttribute : [NSAttributedString.Key:Any]? = nil){
+                           unitAttribute : [NSAttributedString.Key:Any]? = nil,
+                           addUnit : Bool = true){
         
         let unitAttribute = unitAttribute ?? self.defaultUnitAttribute
         let numberAttribute = numberAttribute ?? self.defaultNumberAttribute
@@ -113,7 +114,7 @@ extension CGSize {
             numberPoint.x += (totalSize.width - currentNumberSize.width - (unitSize.width/2.0));
         }
         (fmtNoUnit as NSString).draw(at: numberPoint, withAttributes: numberAttribute)
-        if( fmt != fmtNoUnit ){
+        if( fmt != fmtNoUnit && addUnit ){
             (fmtUnit as NSString).draw(at: unitPoint, withAttributes: unitAttribute)
         }
 

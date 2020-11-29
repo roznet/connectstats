@@ -11,6 +11,7 @@
 #import "GCAppGlobal.h"
 #import "GCActivity.h"
 #import "GCActivity+Import.h"
+#import "GCActivity+UI.h"
 
 #import "GCActivitiesOrganizer.h"
 //#import "GCAppProfiles.h"

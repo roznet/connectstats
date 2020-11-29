@@ -698,6 +698,7 @@
 		42959CD818D5F5F100C0B841 /* GCActivity+Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959CD718D5F5F100C0B841 /* GCActivity+Database.m */; };
 		42959CED18D8F91100C0B841 /* GCStravaActivityStreams.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959CEC18D8F91100C0B841 /* GCStravaActivityStreams.m */; };
 		42959CF018D9016200C0B841 /* GCStravaActivityStreamsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959CEF18D9016200C0B841 /* GCStravaActivityStreamsParser.m */; };
+		4295B13B2574192000728D1E /* test_activity_running_5881498219.db in Resources */ = {isa = PBXBuildFile; fileRef = 4295B13A2574192000728D1E /* test_activity_running_5881498219.db */; };
 		4297DA571D30F4BA0028E439 /* GCHealthZonesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4297DA561D30F4BA0028E439 /* GCHealthZonesViewController.swift */; };
 		429889A41D90371700A22571 /* GCAppDelegate+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 429889A31D90371700A22571 /* GCAppDelegate+Swift.m */; };
 		429912C217E4A0CB003CCCC6 /* GCMapAppleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 429912C117E4A0CB003CCCC6 /* GCMapAppleViewController.m */; };
@@ -2476,6 +2477,7 @@
 		42959CEC18D8F91100C0B841 /* GCStravaActivityStreams.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaActivityStreams.m; path = src/GCStravaActivityStreams.m; sourceTree = "<group>"; };
 		42959CEE18D9016200C0B841 /* GCStravaActivityStreamsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaActivityStreamsParser.h; path = src/GCStravaActivityStreamsParser.h; sourceTree = "<group>"; };
 		42959CEF18D9016200C0B841 /* GCStravaActivityStreamsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaActivityStreamsParser.m; path = src/GCStravaActivityStreamsParser.m; sourceTree = "<group>"; };
+		4295B13A2574192000728D1E /* test_activity_running_5881498219.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_5881498219.db; path = connectstatstestapp/samples/testactivities/test_activity_running_5881498219.db; sourceTree = SOURCE_ROOT; };
 		4297DA551D30F4BA0028E439 /* ConnectStats-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnectStats-Bridging-Header.h"; sourceTree = "<group>"; };
 		4297DA561D30F4BA0028E439 /* GCHealthZonesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCHealthZonesViewController.swift; path = src/GCHealthZonesViewController.swift; sourceTree = "<group>"; };
 		429889A21D90371700A22571 /* GCAppDelegate+Swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCAppDelegate+Swift.h"; path = "src/GCAppDelegate+Swift.h"; sourceTree = "<group>"; };
@@ -3484,6 +3486,7 @@
 		422AC6A11C1CC99E002DDA9C /* testactivities */ = {
 			isa = PBXGroup;
 			children = (
+				4295B13A2574192000728D1E /* test_activity_running_5881498219.db */,
 				42D5797D25603B5B004A540F /* activities_types_samples.db */,
 				42B5E3521BA5BA2C000FAE4E /* test_activity_running_828298988.db */,
 				42B5E3531BA5BA2C000FAE4E /* test_activity_running_830807000.db */,
@@ -6380,6 +6383,7 @@
 				42B5E5571BA5BA2D000FAE4E /* track_364956048.db in Resources */,
 				42B5E4FF1BA5BA2D000FAE4E /* track_289943601.db in Resources */,
 				428BAD011CB149C50041468A /* activityweather_1089803211.json in Resources */,
+				4295B13B2574192000728D1E /* test_activity_running_5881498219.db in Resources */,
 				42B5E5081BA5BA2D000FAE4E /* track_298179158.db in Resources */,
 				42B5E4911BA5BA2D000FAE4E /* sporttracks_track_5522409.json in Resources */,
 				420119B11F51BB180093B2CD /* babolat_session_8669.json in Resources */,

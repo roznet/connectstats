@@ -49,6 +49,11 @@
 #import "GCStatsDerivedHistory.h"
 #import "GCTestAppGlobal.h"
 #import "GCActivitiesOrganizer.h"
+#import "ConnectStats-Swift.h"
+#import "GCActivityDetailViewController.h"
+#import "GCActivity+Fields.h"
+
+@import RZUtilsSwift;
 
 @implementation GCTestUISamples
 
@@ -740,7 +745,7 @@
     return rv;
 }
 
--(NSArray*)sampleActivities{
+-(NSArray*)sampleActivitySummary{
     GCCellGrid * cell = nil;
 
     GCActivity *act=nil;
@@ -770,6 +775,62 @@
     [cell setupSummaryFromActivity:act rows:nrowsExtended width:320. status:gcViewActivityStatusCompare];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"Running Activity Compare Ext"]];
     
+    act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_swimming_439303647.db" ]];
+    cell = [GCCellGrid cellGrid:nil];
+    [cell setupSummaryFromActivity:act rows:nrows width:320. status:gcViewActivityStatusNone];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:@"Swim Activity Base"]];
+
+    cell = [GCCellGrid cellGrid:nil];
+    [cell setupSummaryFromActivity:act rows:nrowsExtended width:320. status:gcViewActivityStatusNone];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"Swim Activity Base Ext"]];
+
+    act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_cycling_940863203.db" ]];
+
+    cell = [GCCellGrid cellGrid:nil];
+    [cell setupSummaryFromActivity:act rows:nrows width:320. status:gcViewActivityStatusNone];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:@"Cycle Activity Base"]];
+
+    cell = [GCCellGrid cellGrid:nil];
+    [cell setupSummaryFromActivity:act rows:nrowsExtended width:320. status:gcViewActivityStatusNone];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"Cycle Activity Base Ext"]];
+
+    return activity;
+}
+
+-(NSArray*)sampleNewActivitySummary{
+    
+    NSString * name = @"activities_types_samples.db";
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:name]];
+    [db open];
+    GCActivitiesOrganizer * organizer = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db]);
+
+    NSMutableArray * rv = [NSMutableArray array];
+    
+    NSUInteger nrowsExtended = 4;
+    CGFloat heightExtended = [GCViewConfig sizeForNumberOfRows:nrowsExtended];
+
+    UINib * nib = [UINib nibWithNibName:@"GCCellActivity" bundle:[NSBundle mainBundle]];
+    
+    for (GCActivity * act in organizer.activities) {
+        GCCellActivity * cell = [nib instantiateWithOwner:self options:nil][0];
+        [cell setupFor:act];
+        [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"new cell"]];
+    }
+    [db close];
+    
+    return rv;
+}
+
+
+-(NSArray*)sampleActivityDetail{
+    GCCellGrid * cell = nil;
+
+    GCActivity *act=nil;
+
+    NSMutableArray * activity = [NSMutableArray array];
+
+    act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_837769405.db" ]];
+    
     cell = [GCCellGrid cellGrid:nil];
     [cell setupDetailHeader:act];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Detail"]];
@@ -783,13 +844,6 @@
     }
 
     act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_swimming_439303647.db" ]];
-    cell = [GCCellGrid cellGrid:nil];
-    [cell setupSummaryFromActivity:act rows:nrows width:320. status:gcViewActivityStatusNone];
-    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:@"Swim Activity Base"]];
-
-    cell = [GCCellGrid cellGrid:nil];
-    [cell setupSummaryFromActivity:act rows:nrowsExtended width:320. status:gcViewActivityStatusNone];
-    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"Swim Activity Base Ext"]];
 
     cell = [GCCellGrid cellGrid:nil];
     [cell setupDetailHeader:act];
@@ -806,14 +860,6 @@
     act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_cycling_940863203.db" ]];
 
     cell = [GCCellGrid cellGrid:nil];
-    [cell setupSummaryFromActivity:act rows:nrows width:320. status:gcViewActivityStatusNone];
-    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:@"Cycle Activity Base"]];
-
-    cell = [GCCellGrid cellGrid:nil];
-    [cell setupSummaryFromActivity:act rows:nrowsExtended width:320. status:gcViewActivityStatusNone];
-    [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"Cycle Activity Base Ext"]];
-
-    cell = [GCCellGrid cellGrid:nil];
     [cell setupDetailHeader:act];
     [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Detail"]];
     cell = [GCCellGrid cellGrid:nil];
@@ -826,6 +872,130 @@
     }
 
     return activity;
+}
+-(NSArray*)sampleNewActivityDetail{
+    GCCellGrid * cell = nil;
+    GCActivity *act=nil;
+    
+    
+    
+    NSMutableArray * activity = [NSMutableArray array];
+
+    act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_running_5881498219.db" ]];
+    GCActivityOrganizedFields * organizedFields = [act groupedFields];
+    
+    cell = [GCCellGrid cellGrid:nil];
+    [cell setupDetailHeader:act];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Detail"]];
+    NSUInteger indexes[] = {0, 1, 2, 4, 6, 8, 11};
+
+    for( NSUInteger i=0;i<sizeof(indexes)/sizeof(NSUInteger);i++){
+        cell = [GCCellGrid cellGrid:nil];
+        NSArray<GCField*>*fields = organizedFields.groupedPrimaryFields[indexes[i]];
+        CGFloat height = [GCViewConfig sizeForNumberOfRows:fields.count];
+        NSString * tag = [NSString stringWithFormat:@"%@ %@ %@ Detail New Style", act.activityId, act.activityType, fields.firstObject.key];
+        [cell setupActivityDetailWithFields:fields
+                                   activity:act
+                                   geometry:organizedFields.geometry];
+        [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:tag]];
+    }
+    /*
+    if ([act trackpointsReadyOrLoad] && [[act laps] count] > 0) {
+        cell = [GCCellGrid cellGrid:nil];
+        [cell setupForLap:0 andActivity:act width:320.];
+        [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Lap"]];
+    }
+
+    act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_swimming_439303647.db" ]];
+
+    cell = [GCCellGrid cellGrid:nil];
+    [cell setupDetailHeader:act];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Detail"]];
+    cell = [GCCellGrid cellGrid:nil];
+    [cell setupForField:@"WeightedMeanPace" andActivity:act width:320.];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Pace Field"]];
+    if ([act trackpointsReadyOrLoad] && [[act laps] count] > 0) {
+        cell = [GCCellGrid cellGrid:nil];
+        [cell setupForLap:0 andActivity:act width:320.];
+        [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Lap"]];
+    }
+
+    act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_cycling_940863203.db" ]];
+
+    cell = [GCCellGrid cellGrid:nil];
+    [cell setupDetailHeader:act];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Detail"]];
+    cell = [GCCellGrid cellGrid:nil];
+    [cell setupForField:@"WeightedMeanSpeed" andActivity:act width:320.];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Speed Field"]];
+    if ([act trackpointsReadyOrLoad] && [[act laps] count] > 0) {
+        cell = [GCCellGrid cellGrid:nil];
+        [cell setupForLap:0 andActivity:act width:320.];
+        [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Lap"]];
+    }
+*/
+    return activity;
+
+}
+
+
+-(NSArray*)sampleAggregatedStats{
+    static NSString *CellIdentifier = @"Cell";
+    GCCellGrid * cell = nil;
+
+    NSMutableArray * stats = [NSMutableArray array];
+
+    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:GC_TYPE_RUNNING];
+    [aggregatedStats setActivitiesFromOrganizer:[GCAppGlobal organizer]];
+    [aggregatedStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+
+    cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    GCStatsMultiFieldConfig * config = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
+    config.calendarConfig.calendarUnit= NSCalendarUnitWeekOfYear;
+    [cell setupFromHistoryAggregatedData:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config andActivityType:GCActivityType.running width:320.];
+    [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Weekly"]];
+
+    [aggregatedStats aggregate:NSCalendarUnitMonth referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    config.calendarConfig.calendarUnit = NSCalendarUnitMonth;
+    [cell setupFromHistoryAggregatedData:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config andActivityType:GCActivityType.running width:320.];
+    [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Monthly"]];
+    
+    return stats;
+}
+
+-(NSArray*)sampleNewAggregatedStats{
+    static NSString *CellIdentifier = @"Cell";
+    GCCellGrid * cell = nil;
+
+    NSMutableArray * stats = [NSMutableArray array];
+
+    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:GC_TYPE_RUNNING];
+    [aggregatedStats setActivitiesFromOrganizer:[GCAppGlobal organizer]];
+    [aggregatedStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+
+    GCStatsMultiFieldConfig * config = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
+    RZNumberWithUnitGeometry * geometry = RZReturnAutorelease([[RZNumberWithUnitGeometry alloc] init]);
+    
+    config.calendarConfig.calendarUnit= NSCalendarUnitWeekOfYear;
+    [GCCellGrid adjustAggregatedWithDataHolder:[aggregatedStats dataForIndex:0] activityType:GCActivityType.running geometry:geometry];
+    [GCCellGrid adjustAggregatedWithDataHolder:[aggregatedStats dataForIndex:1] activityType:GCActivityType.running geometry:geometry];
+    
+    cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    [cell setupAggregatedWithDataHolder:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config activityType:GCActivityType.running geometry:geometry wide:false];
+    [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Weekly [0] NewStyle"]];
+
+    cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    [cell setupAggregatedWithDataHolder:[aggregatedStats dataForIndex:1] index:1 multiFieldConfig:config activityType:GCActivityType.running geometry:geometry wide:false];
+    [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Weekly [1] NewStyle"]];
+
+    cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    config.calendarConfig.calendarUnit = NSCalendarUnitMonth;
+    [cell setupAggregatedWithDataHolder:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config activityType:GCActivityType.running geometry:geometry wide:false];
+    [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Month [0] NewStyle"]];
+
+    
+    return stats;
 }
 
 -(NSArray*)sampleMultiFieldsStats{
@@ -861,31 +1031,7 @@
     return rv;
 }
 
--(NSArray*)sampleStats{
-    static NSString *CellIdentifier = @"Cell";
-    GCCellGrid * cell = nil;
 
-    NSMutableArray * stats = [NSMutableArray array];
-
-    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:GC_TYPE_RUNNING];
-    [aggregatedStats setActivitiesFromOrganizer:[GCAppGlobal organizer]];
-    [aggregatedStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
-
-    cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    GCStatsMultiFieldConfig * config = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
-    config.calendarConfig.calendarUnit= NSCalendarUnitWeekOfYear;
-    
-    [cell setupFromHistoryAggregatedData:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config andActivityType:GC_TYPE_RUNNING width:320.];
-    [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Weekly"]];
-
-    [aggregatedStats aggregate:NSCalendarUnitMonth referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
-    cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    config.calendarConfig.calendarUnit = NSCalendarUnitMonth;
-    [cell setupFromHistoryAggregatedData:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config andActivityType:GC_TYPE_RUNNING width:320.];
-    [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Monthly"]];
-
-    return stats;
-}
 
 -(NSArray*)sampleIcons{
     NSMutableArray * icons = [NSMutableArray arrayWithCapacity:10];
@@ -912,42 +1058,25 @@
     return icons;
 }
 
--(NSArray*)sampleNew{
-    
-    NSString * name = @"activities_types_samples.db";
-    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:name]];
-    [db open];
-    GCActivitiesOrganizer * organizer = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db]);
-
-    NSMutableArray * rv = [NSMutableArray array];
-    
-    NSUInteger nrowsExtended = 4;
-    CGFloat heightExtended = [GCViewConfig sizeForNumberOfRows:nrowsExtended];
-
-    UINib * nib = [UINib nibWithNibName:@"GCCellActivity" bundle:[NSBundle mainBundle]];
-    
-    for (GCActivity * act in organizer.activities) {
-        GCCellActivity * cell = [nib instantiateWithOwner:self options:nil][0];
-        [cell setupFor:act];
-        [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"new cell"]];
-    }
-    [db close];
-    
-    return rv;
-}
-
 -(NSArray*)gridCellSamples{
     [GCTestAppGlobal setupSampleState:@"sample_activities.db"];
 
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:10];
 
-    [rv addObject:[self sampleNew]];
-    [rv addObject:[self sampleCells]];
-    [rv addObject:[self sampleDayActivities]];
+    [rv addObject:[self sampleNewActivitySummary]];
+    [rv addObject:[self sampleNewAggregatedStats]];
+    [rv addObject:[self sampleNewActivityDetail]];
+
+    [rv addObject:[self sampleActivitySummary]];
+    [rv addObject:[self sampleActivityDetail]];
+    
     [rv addObject:[self sampleMultiFieldsStats]];
-    [rv addObject:[self sampleActivities]];
-    [rv addObject:[self sampleStats]];
+    [rv addObject:[self sampleAggregatedStats]];
+
+    [rv addObject:[self sampleDayActivities]];
+    
     [rv addObject:[self sampleIcons]];
+    [rv addObject:[self sampleCells]];
 
     return rv;
 }

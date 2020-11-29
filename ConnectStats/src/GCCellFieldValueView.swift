@@ -102,10 +102,18 @@ class GCCellFieldValueView: UIView {
         numberRect.size.width -= (rect.size.width - self.geometry.totalSize.width)
         fieldRect.size.width = (rect.size.width - self.geometry.totalSize.width)
         
+        var addUnit = true;
+        
+        if let primaryField = primaryField, let field = self.field {
+            if field != primaryField && primaryField.unit() == field.unit() {
+                addUnit = false;
+            }
+        }
         self.geometry.drawInRect(numberRect,
                                  numberWithUnit: self.numberWithUnit,
                                  numberAttribute: self.numberAttribute,
-                                 unitAttribute: self.unitAttribute)
+                                 unitAttribute: self.unitAttribute,
+                                 addUnit: addUnit)
         
         if self.icon {
             if let field = self.field,
