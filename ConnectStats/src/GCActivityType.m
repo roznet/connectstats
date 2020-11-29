@@ -178,7 +178,7 @@ static GCActivityTypes * _activityTypesCache = nil;
     return rv;
 }
 
--(GCActivityType*)topSubRootType{
+-(GCActivityType*)primaryActivityType{
     if (self.isRootType) {
         return self;
     }
@@ -250,8 +250,12 @@ static GCActivityTypes * _activityTypesCache = nil;
     return ([self.key isEqualToString:GC_TYPE_SKI_BACK] || [self.key isEqualToString:GC_TYPE_SKI_DOWN] || [self.key isEqualToString:GC_TYPE_SKI_XC]);
 }
 
+-(BOOL)isElevationLossPreferred{
+    return [self.key isEqualToString:GC_TYPE_SKI_DOWN];
+}
+
 -(GCUnit*)preferredSpeedDisplayUnit{
-    GCActivityType * top = [self topSubRootType];
+    GCActivityType * top = [self primaryActivityType];
     
     if( [top.key isEqualToString:GC_TYPE_SWIMMING] ){
         return [[GCUnit min100m] unitForGlobalSystem];
@@ -328,4 +332,21 @@ static GCActivityTypes * _activityTypesCache = nil;
     return [[GCActivityType activityTypes] allTypesForParent:parentType];
 }
 
+-(nonnull NSArray<GCField*>*)summaryFields{
+    NSString * activityType = self.primaryActivityType.key;
+    
+    NSString * preferredElevationField = [self isElevationLossPreferred] ? @"LossElevation" : @"GainElevation";
+    NSArray<GCField*> * fields = @[
+        [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:activityType],
+        [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType],
+        
+        [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activityType],
+        [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:activityType],
+        [GCField fieldForFlag:gcFieldFlagPower andActivityType:activityType],
+        [GCField fieldForKey:preferredElevationField andActivityType:activityType],
+    ];
+    
+    return fields;
+}
 @end
+

@@ -81,6 +81,7 @@
     [super dealloc];
 }
 
+
 -(NSUInteger)count{
     return _aggregatedStats.count;
 }
@@ -176,6 +177,10 @@
     }
     self.foundFields = found;
     self.aggregatedStats = aggregatedStats;
+}
+
+- (NSUInteger)countByEnumeratingWithState:(nonnull NSFastEnumerationState *)state objects:(id  _Nullable * _Nonnull)buffer count:(NSUInteger)len {
+    return [self.aggregatedStats countByEnumeratingWithState:state objects:buffer count:len];
 }
 
 @end

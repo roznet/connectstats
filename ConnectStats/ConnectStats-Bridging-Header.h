@@ -30,3 +30,6 @@
 
 #import "GCStatsMultiFieldViewController.h"
 #import "GCActivityDetailViewController.h"
+
+#import "GCHistoryAggregatedDataHolder.h"
+#import "GCStatsMultiFieldConfig.h"

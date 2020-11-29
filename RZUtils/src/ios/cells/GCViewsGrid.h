@@ -62,6 +62,7 @@ NS_INLINE GCCellCoordinate GCCellCoordinateFromIndex( NSUInteger index, GCCellCo
 
 -(void)setupForRows:(NSUInteger)rowsCount andColumns:(NSUInteger)columnsCount;
 -(void)setupView:(UIView*)view forRow:(NSUInteger)row andColumn:(NSUInteger)col;
+-(void)resetForRow:(NSUInteger)row andColumn:(NSUInteger)col;
 
 -(void)resetToEmpty;
 

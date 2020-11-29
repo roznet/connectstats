@@ -228,4 +228,11 @@ const NSCalendarUnit kCalendarUnitNone = 0;
     return dateFormatter;
 }
 
+-(NSString*)formattedDate:(NSDate*)date{
+    BOOL rolling = self.periodType == gcPeriodRolling;
+    // if rolling use none that will just print the date
+    NSString * dateFmt = [date calendarUnitFormat:rolling ? kCalendarUnitNone : self.calendarUnit];
+    return dateFmt;
+}
+
 @end

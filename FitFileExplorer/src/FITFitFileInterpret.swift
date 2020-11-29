@@ -106,7 +106,7 @@ class FITFitFileInterpret: NSObject {
     }
     func fieldKey(fitMessageType: RZFitMessageType, fitField:String) -> GCField?{
         //let found = FITFitEnumMap.activityField(fromFitField: fitField, forActivityType: self.activityType.topSubRoot().key)
-        let key = self.fitFieldMap.field(messageType: fitMessageType, fitField: fitField, activityType: self.activityType.topSubRoot().key)
+        let key = self.fitFieldMap.field(messageType: fitMessageType, fitField: fitField, activityType: self.activityType.primary().key)
         
         return key
     }
@@ -162,8 +162,8 @@ class FITFitFileInterpret: NSObject {
         
         // Few special cases, if speed and not pace, add
         if self.activityType.isPacePreferred() {
-            if let paceField = GCField( for: gcFieldFlag.weightedMeanSpeed, andActivityType: self.activityType.topSubRoot().key),
-                let speedField = GCField( forKey: "WeightedMeanSpeed", andActivityType: self.activityType.topSubRoot().key),
+            if let paceField = GCField( for: gcFieldFlag.weightedMeanSpeed, andActivityType: self.activityType.primary().key),
+                let speedField = GCField( forKey: "WeightedMeanSpeed", andActivityType: self.activityType.primary().key),
                 let speed = rv[ speedField ]{
                 if rv[paceField] == nil {
                     let nu = speed.numberWithUnit.convert(to: paceField.unit())
@@ -390,7 +390,7 @@ class FITFitFileInterpret: NSObject {
         for (fitfield,stat) in stats {
             if fitfield.starts(with: "avg_") || fitfield.starts(with: "total_") || fitfield.starts(with: "max_") {
                 
-                if let field = FITFitEnumMap.activityField(fromFitField: fitfield, forActivityType: multisport.topSubRoot().key) {
+                if let field = FITFitEnumMap.activityField(fromFitField: fitfield, forActivityType: multisport.primary().key) {
                     var nu : GCNumberWithUnit?
                     if( fitfield.starts(with: "avg_")){
                         nu = stat.value(stats: FITFitValueStatistics.StatsType.avg, field: fitfield)

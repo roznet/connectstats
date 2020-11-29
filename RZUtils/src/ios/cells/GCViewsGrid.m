@@ -250,6 +250,12 @@
     }
 }
 
+-(void)resetForRow:(NSUInteger)row andColumn:(NSUInteger)col{
+    NSUInteger idx = GCCellIndexFromCoordinate(GCCellCoordinateMake(row, col), self.dimension);
+    self.geometry = nil;
+    [self.viewHolders[idx] resetToEmptyInView:self.parentView];
+
+}
 -(UILabel*)labelForRow:(NSUInteger)row andColumn:(NSUInteger)col{
     NSUInteger idx = GCCellIndexFromCoordinate(GCCellCoordinateMake(row, col), self.dimension);
     self.geometry = nil;

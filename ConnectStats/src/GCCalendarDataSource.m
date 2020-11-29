@@ -555,7 +555,7 @@
             [cell setupFromHistoryAggregatedData:holder
                                            index:indexPath.row
                                 multiFieldConfig:multiFieldConfig
-                                 andActivityType:GC_TYPE_ALL
+                                 andActivityType:GCActivityType.all
                                            width:tableView.frame.size.width];
         }else{
             [cell setupForRows:0 andCols:0];

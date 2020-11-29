@@ -42,6 +42,10 @@ extension CGSize {
         super.init()
     }
     
+    @objc public static func geometry() -> RZNumberWithUnitGeometry {
+        return RZNumberWithUnitGeometry()
+    }
+    
     @objc public func reset() {
         self.unitSize = CGSize.zero
         self.numberSize = CGSize.zero
@@ -102,9 +106,12 @@ extension CGSize {
         //        169 km
         //      15:05 min/km
         
-        unitPoint.x += numberSize.width + self.spacing(numberAttribute: numberAttribute)
-        numberPoint.x += (numberSize.width - currentNumberSize.width)
-        
+        if( fmt != fmtNoUnit ){
+            unitPoint.x += numberSize.width + self.spacing(numberAttribute: numberAttribute)
+            numberPoint.x += (numberSize.width - currentNumberSize.width)
+        }else{
+            numberPoint.x += (totalSize.width - currentNumberSize.width - (unitSize.width/2.0));
+        }
         (fmtNoUnit as NSString).draw(at: numberPoint, withAttributes: numberAttribute)
         if( fmt != fmtNoUnit ){
             (fmtUnit as NSString).draw(at: unitPoint, withAttributes: unitAttribute)

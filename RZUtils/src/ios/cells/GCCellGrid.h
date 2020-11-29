@@ -106,6 +106,7 @@ typedef void(^refreshGCCellGridFunc)(GCCellGrid*cell);
 -(void)setupBackgroundColors:(NSArray<UIColor*>*)colors;
 
 -(UILabel*)labelForRow:(NSUInteger)row andCol:(NSUInteger)col;
+-(void)resetForRow:(NSUInteger)row andCol:(NSUInteger)col;
 -(GCCellGridConfig*)configForRow:(NSUInteger)row andCol:(NSUInteger)col;
 -(void)setupView:(UIView*)view forRow:(NSUInteger)row andColumn:(NSUInteger)col;
 

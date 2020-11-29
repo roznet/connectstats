@@ -45,6 +45,7 @@
 #import "GCStatsDerivedHistory.h"
 #import "GCStatsDerivedHistoryViewController.h"
 #import "ConnectStats-Swift.h"
+@import RZUtilsSwift;
 
 @interface GCStatsMultiFieldViewController ()
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
@@ -54,6 +55,7 @@
 @property (nonatomic,retain) GCStatsDerivedAnalysisViewController * configViewController;
 @property (nonatomic,retain) GCStatsDerivedHistoryViewController * histAnalysisViewController;
 @property (nonatomic,retain) UIViewController * popoverViewController;
+@property (nonatomic,retain) RZNumberWithUnitGeometry * geometry;
 
 @end
 
@@ -87,7 +89,13 @@
     [_multiFieldConfig release];
     [_configViewController release];
     [_updateCallback release];
+    [_geometry release];
+    
     [super dealloc];
+}
+
+-(BOOL)isNewStyle{
+    return [GCViewConfig cellBandedFormat];
 }
 
 #pragma mark - UIViewController
@@ -318,11 +326,15 @@
 
     GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
     if( data ){
-        [cell setupFromHistoryAggregatedData:data
-                                       index:indexPath.row
+        if( self.isNewStyle ){
+            [cell setupWith:data index:indexPath.row multiFieldConfig:self.multiFieldConfig activityType:[GCActivityType activityTypeForKey:self.displayActivityType] geometry:self.geometry wide:false];
+        }else{
+            [cell setupFromHistoryAggregatedData:data
+                                           index:indexPath.row
                                 multiFieldConfig:self.multiFieldConfig
-                             andActivityType:self.displayActivityType
-                                       width:tableView.frame.size.width];
+                                 andActivityType:[GCActivityType activityTypeForKey:self.displayActivityType]
+                                           width:tableView.frame.size.width];
+        }
     }
     return cell;
 }
@@ -753,6 +765,13 @@
              cutOff:self.multiFieldConfig.calendarConfig.cutOff
          ignoreMode:ignoreMode];
     self.aggregatedStats = vals;
+    
+    self.geometry = [RZNumberWithUnitGeometry geometry];
+    GCActivityType * type = [GCActivityType activityTypeForKey:self.activityType];
+    for (GCHistoryAggregatedDataHolder * holder in vals) {
+        [GCCellGrid adjustWithGeometry:self.geometry dataHolder:holder activityType:type];
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self updateDone];
     });

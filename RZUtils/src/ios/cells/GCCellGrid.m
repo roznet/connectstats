@@ -302,6 +302,9 @@ NSString *const GCCellGridShouldHideMenu = @"GCCellGridShouldHideMenu";
     return [self.viewsGrid configForRow:row andColumn:col];
 }
 
+-(void)resetForRow:(NSUInteger)row andCol:(NSUInteger)col{
+    [self.viewsGrid resetForRow:row andColumn:col];
+}
 - (void)layoutSubviews {
     [super layoutSubviews];
 

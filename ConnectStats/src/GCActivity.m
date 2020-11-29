@@ -277,7 +277,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 -(BOOL)changeActivityType:(GCActivityType*)newActivityType{
     BOOL changed = false;
     if( newActivityType && ( !self.activityType || ![newActivityType isEqualToActivityType:self.activityTypeDetail] ) ){
-        NSString * newSubRoot = newActivityType.topSubRootType.key;
+        NSString * newSubRoot = newActivityType.primaryActivityType.key;
         changed = true;
         if( self.activityType && ![newSubRoot isEqualToString:self.activityType] ){
             self.activityType = newSubRoot;

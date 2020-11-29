@@ -548,9 +548,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 -(void)setupFromHistoryAggregatedData:(GCHistoryAggregatedDataHolder*)data
                                 index:(NSUInteger)idx
                      multiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig
-                      andActivityType:(NSString*)activityType
+                      andActivityType:(GCActivityType*)activityType
                                 width:(CGFloat)width{
-    NSCalendarUnit calUnit = multiFieldConfig.calendarConfig.calendarUnit;
     BOOL wide =false;
     if (width > kGC_WIDE_SIZE) {
         wide = true;
@@ -570,24 +569,15 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
     NSDictionary * dateAttributes = [GCViewConfig attributeBold14];
 
-    BOOL rolling = multiFieldConfig.calendarConfig.periodType == gcPeriodRolling;
     // if rolling use none that will just print the date
-    NSString * dateFmt = [data.date calendarUnitFormat:rolling ? kCalendarUnitNone : calUnit];
+    NSString * dateFmt = [multiFieldConfig.calendarConfig formattedDate:data.date];
     if (!dateFmt) {
         RZLog(RZLogError, @"Got no date: idx=%d data=%@ date=%@",(int)idx,data,[data date]);
         dateFmt = NSLocalizedString(@"ERROR", @"Date");
     }
     NSAttributedString * dateStr = [[[NSAttributedString alloc] initWithString:dateFmt attributes:dateAttributes] autorelease];
     
-    NSArray<GCField*> * fields = @[
-        [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:activityType],
-        [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType],
-        
-        [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activityType],
-        [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:activityType],
-        [GCField fieldForFlag:gcFieldFlagPower andActivityType:activityType],
-        [GCField fieldForKey:@"GainElevation" andActivityType:activityType],
-    ];
+    NSArray<GCField*> * fields = activityType.summaryFields;
     
     NSUInteger row = 0;
     NSUInteger col = 1;
@@ -598,18 +588,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     [self labelForRow:0 andCol:0].attributedText = dateStr;
     for (GCField * field in fields) {
         if( [data hasField:field] ){
-            gcAggregatedType type = gcAggregatedAvg;
-            if( field.canSum ){
-                type = gcAggregatedSum;
-            }
-            GCNumberWithUnit * nu = [data numberWithUnit:field statType:type];
-            if( field.fieldFlag == gcFieldFlagWeightedMeanSpeed){
-                // Special case for speed, override
-                GCNumberWithUnit * durationN =[data numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:activityType] statType:gcAggregatedSum];
-                GCNumberWithUnit * distanceN =[data numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType] statType:gcAggregatedSum];;
-                nu = [GCNumberWithUnit numberWithUnitName:@"mps" andValue:[distanceN convertToUnitName:@"meter"].value/durationN.value];
-                nu = [nu convertToUnit:field.unit];
-            }
+            GCNumberWithUnit * nu = [data preferredNumberWithUnit:field];
             if( nu.isValidValue && nu.value != 0.){
                 NSDictionary * attr = fieldidx < mainCount ? [GCViewConfig attributeBold14] : [GCViewConfig attribute14Gray];
                 NSAttributedString * at = [NSAttributedString attributedString:attr withString:nu.formatDouble];
