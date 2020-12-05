@@ -27,10 +27,10 @@
 
 import Foundation
 import RZUtils
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
 
-extension RZFitFieldValue {
+
+extension FitFieldValue {
     
     var numberWithUnit : GCNumberWithUnit? {
         get {
@@ -60,13 +60,13 @@ extension RZFitFieldValue {
         }else if let value = value {
             return "\(value)"
         }else{
-            return "RZFitField(Error)"
+            return "FitField(Error)"
         }
     }
     
-    func csvColumns( col : RZFitFieldKey ) -> [RZFitFieldKey] {
+    func csvColumns( col : FitFieldKey ) -> [FitFieldKey] {
         // size needs to be consistent with number of cols in csvValues
-        var line : [RZFitFieldKey] = []
+        var line : [FitFieldKey] = []
         
         if let nu = numberWithUnit {
             line.append("\(col)_\(nu.unit.key)")
@@ -80,7 +80,7 @@ extension RZFitFieldValue {
         return line
     }
     
-    func csvValues( ref : RZFitFieldValue? = nil) -> [String] {
+    func csvValues( ref : FitFieldValue? = nil) -> [String] {
         // size needs to be consistent with number of cols in csvColumns
         var rv : [String] = []
         

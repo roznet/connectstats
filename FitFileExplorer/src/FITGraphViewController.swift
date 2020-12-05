@@ -7,8 +7,8 @@
 //
 
 import Cocoa
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
+import FitFileParserTypes
 
 class FITGraphViewController: NSViewController {
 

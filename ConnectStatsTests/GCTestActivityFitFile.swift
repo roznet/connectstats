@@ -8,8 +8,8 @@
 
 import XCTest
 @testable import ConnectStats
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
+
 
 class GCTestActivityFitFile: XCTestCase {
     
@@ -33,7 +33,7 @@ class GCTestActivityFitFile: XCTestCase {
             let url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath("activity_\(activityId).fit", for: type(of: self)))
 
             if 
-                let fitFile = RZFitFile(file: url){
+                let fitFile = FitFile(file: url){
                 
                 let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: Date())
                 if let reload = GCGarminRequestActivityReload.test(forActivity: activityId, withFilesIn:RZFileOrganizer.bundleFilePath(nil, for: type(of: self)) ){
@@ -64,7 +64,7 @@ class GCTestActivityFitFile: XCTestCase {
                 let url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath("track_cs_\(activityId).fit", for: type(of: self)))
                 
                 if
-                    let fitFile = RZFitFile(file: url){
+                    let fitFile = FitFile(file: url){
                     let messages = fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION)
                     var activities : [GCActivity] = []
                     for message in messages {

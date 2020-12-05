@@ -8,13 +8,13 @@
 
 import Foundation
 import CoreLocation
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
+import FitFileParserTypes
 
 extension GCActivity {
 
     @objc convenience init?(withId activityId:String, fitFileData:Data, fitFilePath:String, startTime: Date?){
-        if let fit = RZFitFile(data: fitFileData, fileURL: URL(fileURLWithPath: fitFilePath)) {
+        if let fit = FitFile(data: fitFileData, fileURL: URL(fileURLWithPath: fitFilePath)) {
             self.init(withId: activityId, fitFile: fit, startTime: startTime)
         }else{
             return nil
@@ -22,14 +22,14 @@ extension GCActivity {
     }
 
     @objc convenience init?(withId activityId:String, fitFilePath:String, startTime: Date?){
-        if let fit = RZFitFile(file: URL(fileURLWithPath: fitFilePath)) {
+        if let fit = FitFile(file: URL(fileURLWithPath: fitFilePath)) {
             self.init(withId: activityId, fitFile: fit, startTime: startTime)
         }else{
             return nil
         }
     }
     
-    convenience init?(withId activityId:String, fitFile:RZFitFile, startTime: Date?){
+    convenience init?(withId activityId:String, fitFile:FitFile, startTime: Date?){
         self.init(id: activityId)
         let interp  = FITFitFileInterpret(fitFile: fitFile)
         

@@ -8,8 +8,8 @@
 
 import XCTest
 @testable import FitFileExplorer
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
+
 
 class FitFileExplorerTests: XCTestCase {
     
@@ -32,11 +32,11 @@ class FitFileExplorerTests: XCTestCase {
             
             
             if let fit = decode?.fitFile,
-                let fastfit = RZFitFile(file: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(filename, for: type(of:self)))) {
-                let origfit = RZFitFile(fitFile: fit)
+                let fastfit = FitFile(file: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(filename, for: type(of:self)))) {
+                let origfit = FitFile(fitFile: fit)
                 let fittypes = fit.allMessageTypes()
                 let fasttypes = fastfit.messageTypes
-                let rebuild = RZFitFile(fitFile: fit)
+                let rebuild = FitFile(fitFile: fit)
                 XCTAssertNotNil(fasttypes)
                 XCTAssertNotNil(fittypes)
                 XCTAssertNotNil(rebuild)
@@ -51,7 +51,7 @@ class FitFileExplorerTests: XCTestCase {
                     for mesgtype in fittypes {
                         
                         if( mesgtype != "unknown"){
-                            let fasttype = RZFitFile.messageType(forDescription: mesgtype) ?? FIT_MESG_NUM_INVALID
+                            let fasttype = FitFile.messageType(forDescription: mesgtype) ?? FIT_MESG_NUM_INVALID
                             XCTAssertTrue(fasttypes.contains(fasttype))
                         }
                     }
@@ -65,7 +65,7 @@ class FitFileExplorerTests: XCTestCase {
                             var diffs : Int = 0
                             for (offset,fields) in fastmessages.enumerated(){
                                 if let rawfitfields = fitmessages.field(for: UInt(offset)),
-                                    let fitfields = RZFitMessage( with: rawfitfields){
+                                    let fitfields = FitMessage( with: rawfitfields){
                                     let fastfields = fields.interpretedFields()
                                     let origfields = fitfields.interpretedFields()
                                     
@@ -113,7 +113,7 @@ class FitFileExplorerTests: XCTestCase {
             let filenames = [ "activity_1378220136.fit", "activity_1382772474.fit" ]
             
             for filename in filenames {
-                let fit = RZFitFile(file: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(filename, for: type(of:self))))
+                let fit = FitFile(file: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(filename, for: type(of:self))))
                 if let fit = fit {
                     let interpret = FITFitFileInterpret(fitFile: fit)
                     
@@ -153,7 +153,7 @@ class FitFileExplorerTests: XCTestCase {
         let filenames = [ "activity_1378220136.fit", "activity_1382772474.fit" ]
         
         for filename in filenames {
-            let fit = RZFitFile(file: URL(fileURLWithPath:  RZFileOrganizer.bundleFilePath(filename, for: type(of:self))))
+            let fit = FitFile(file: URL(fileURLWithPath:  RZFileOrganizer.bundleFilePath(filename, for: type(of:self))))
             
             if let fit = fit {
                 let interpret = FITFitFileInterpret(fitFile: fit)
@@ -244,7 +244,7 @@ class FitFileExplorerTests: XCTestCase {
         var done : Bool = false
         if let cppfit = decode?.fitFile,
             let cpprecords = cppfit["record"],
-            let fastfit = RZFitFile(file: URL(fileURLWithPath:  filepath))
+            let fastfit = FitFile(file: URL(fileURLWithPath:  filepath))
         {
             let fastrecords = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
             XCTAssertEqual(fastrecords.count, Int(cpprecords.count()))
@@ -279,7 +279,7 @@ class FitFileExplorerTests: XCTestCase {
         self.measure {
             for data in datas{
                 if let data = data {
-                    let fastfit = RZFitFile(data: data)
+                    let fastfit = FitFile(data: data)
                     let records = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
                     XCTAssertGreaterThan(records.count, 0)
                 }else{
@@ -288,7 +288,7 @@ class FitFileExplorerTests: XCTestCase {
             }
             
             if let one = datas.first, let data = one {
-                let fastfit = RZFitFile(data: data)
+                let fastfit = FitFile(data: data)
                 let records = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
                 let interp = records.map {
                     $0.interpretedFields()

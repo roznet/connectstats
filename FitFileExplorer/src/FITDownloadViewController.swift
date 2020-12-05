@@ -31,8 +31,9 @@ import RZUtilsOSX
 import GenericJSON
 import KeychainSwift
 import RZUtilsSwift
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
+import FitFileParserTypes
+
 
 extension Date {
     func formatAsRFC3339() -> String {
@@ -93,18 +94,18 @@ class FITDownloadViewController: NSViewController {
     }
     
     
-    func exportFitFilesAsCSV(messageType:RZFitMessageType){
+    func exportFitFilesAsCSV(messageType:FitMessageType){
         let todo = self.selectedActivities()
-        var files : [RZFitFile] = []
+        var files : [FitFile] = []
         for act in todo {
             if let url = act.fitFilePath {
-                if let file = RZFitFile(file: url){
+                if let file = FitFile(file: url){
                     files.append(file)
                 }
             }
         }
         
-        let csv = RZFitFile.csv(messageType: messageType, fitFiles: files)
+        let csv = FitFile.csv(messageType: messageType, fitFiles: files)
         let content = csv.joined(separator: "\n")
         
         let mesg = rzfit_mesg_num_string(input: messageType) ?? "mesg"

@@ -26,18 +26,19 @@
 
 
 import Foundation
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
+import FitFileParserTypes
 
-extension RZFitMessage {
+
+extension FitMessage {
     
     convenience init?(with: FITFitMessageFields) {
         if let msg : FIT_MESG_NUM = rzfit_string_to_mesg(mesg: with.messageType) {
-            var fields : [String:RZFitFieldValue] = [:]
+            var fields : [String:FitFieldValue] = [:]
             
             for one in with.allFieldNames() {
                 if let fvalue :FITFitFieldValue = with[one] {
-                    let rzfield = RZFitFieldValue(fieldValue: fvalue)
+                    let rzfield = FitFieldValue(fieldValue: fvalue)
                     fields[one] = rzfield
                 }
             }
@@ -48,8 +49,8 @@ extension RZFitMessage {
     }
     
     
-    func preferredOrderFieldKeys() -> [RZFitFieldKey] {
-        var rv : [RZFitFieldKey] = []
+    func preferredOrderFieldKeys() -> [FitFieldKey] {
+        var rv : [FitFieldKey] = []
         
         rv.append(contentsOf: self.fieldKeysWithTime())
         rv.append(contentsOf: self.fieldKeysWithCoordinate())
@@ -60,8 +61,8 @@ extension RZFitMessage {
         
     }
     
-    func fieldKeysWithCoordinate() -> [RZFitFieldKey] {
-        var rv : [RZFitFieldKey] = []
+    func fieldKeysWithCoordinate() -> [FitFieldKey] {
+        var rv : [FitFieldKey] = []
         let interp = self.interpretedFields()
         for (key,val) in interp {
             if val.coordinate != nil {
@@ -71,8 +72,8 @@ extension RZFitMessage {
         return rv
     }
     
-    func fieldKeysWithNumberWithUnit() -> [RZFitFieldKey] {
-        var rv : [RZFitFieldKey] = []
+    func fieldKeysWithNumberWithUnit() -> [FitFieldKey] {
+        var rv : [FitFieldKey] = []
         let interp = self.interpretedFields()
         for (key,val) in interp {
             if val.numberWithUnit != nil {
@@ -81,8 +82,8 @@ extension RZFitMessage {
         }
         return rv
     }
-    func fieldKeysWithValue() -> [RZFitFieldKey] {
-        var rv : [RZFitFieldKey] = []
+    func fieldKeysWithValue() -> [FitFieldKey] {
+        var rv : [FitFieldKey] = []
         let interp = self.interpretedFields()
         for (key,val) in interp {
             if val.value != nil {
@@ -92,8 +93,8 @@ extension RZFitMessage {
         return rv
     }
 
-    func fieldKeysWithTime() -> [RZFitFieldKey] {
-        var rv : [RZFitFieldKey] = []
+    func fieldKeysWithTime() -> [FitFieldKey] {
+        var rv : [FitFieldKey] = []
         let interp = self.interpretedFields()
         for (key,val) in interp {
             if val.time != nil {
@@ -103,8 +104,8 @@ extension RZFitMessage {
         return rv
     }
 
-    func fieldKeysWithName() -> [RZFitFieldKey] {
-        var rv : [RZFitFieldKey] = []
+    func fieldKeysWithName() -> [FitFieldKey] {
+        var rv : [FitFieldKey] = []
         let interp = self.interpretedFields()
         for (key,val) in interp {
             if val.name != nil {
@@ -114,7 +115,7 @@ extension RZFitMessage {
         return rv
     }
 
-    func numberWithUnit(field: RZFitFieldKey) -> GCNumberWithUnit? {
+    func numberWithUnit(field: FitFieldKey) -> GCNumberWithUnit? {
         let interp = self.interpretedFields()
         if let val = interp[field]?.numberWithUnit {
             return val
@@ -123,7 +124,7 @@ extension RZFitMessage {
     }
     
     
-    func name(field:RZFitFieldKey) -> String? {
+    func name(field:FitFieldKey) -> String? {
         let interp = self.interpretedFields()
         if let val = interp[field]?.name {
             return val
@@ -131,7 +132,7 @@ extension RZFitMessage {
         return nil
     }
     
-    func coordinate(field : RZFitFieldKey? = nil) -> CLLocationCoordinate2D? {
+    func coordinate(field : FitFieldKey? = nil) -> CLLocationCoordinate2D? {
         let interp = self.interpretedFields()
         var attempts = ["position"]
         
@@ -148,7 +149,7 @@ extension RZFitMessage {
     }
     
     
-    func time(field : RZFitFieldKey? = nil) -> Date? {
+    func time(field : FitFieldKey? = nil) -> Date? {
         let interp = self.interpretedFields()
 
         var attempts = ["timestamp", "start_time", "local_timestamp"]
@@ -163,7 +164,7 @@ extension RZFitMessage {
         return nil
     }
     
-    func has(dateField:RZFitFieldKey, after:Date, before:Date) -> Bool {
+    func has(dateField:FitFieldKey, after:Date, before:Date) -> Bool {
         let interp = self.interpretedFields()
         
         if let val = interp[dateField]?.time {

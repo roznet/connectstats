@@ -26,7 +26,7 @@
 
 #import "GCWebConnect.h"
 
-//#import "RZFitFile-Bridging-Header.h"
+//#import "FitFile-Bridging-Header.h"
 #import "GCUnit+FIT.h"
 #import "FITFitEnumMap.h"
 #import "GCWebUrl.h"

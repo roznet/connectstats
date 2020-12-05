@@ -7,8 +7,9 @@
 //
 
 import Foundation
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
+import FitFileParserTypes
+
 
 class FITSelectionContext {
     
@@ -20,7 +21,7 @@ class FITSelectionContext {
     // MARK: - FitFile
     
     
-    let fitFile : RZFitFile
+    let fitFile : FitFile
     lazy var interp : FITFitFileInterpret = FITFitFileInterpret(fitFile: self.fitFile)
     
     // MARK: - Configuration
@@ -43,7 +44,7 @@ class FITSelectionContext {
             return "Unknown Message Type"
         }
     }
-    var messageType: RZFitMessageType {
+    var messageType: FitMessageType {
         didSet{
             // If new message does not exist, do nothing
             // else update with some defaults
@@ -60,11 +61,11 @@ class FITSelectionContext {
         }
     }
     
-    var messages :[RZFitMessage]
+    var messages :[FitMessage]
 
-    var message :RZFitMessage? {
+    var message :FitMessage? {
         let useIdx = self.messageIndex < self.messages.count ? self.messageIndex : 0
-        var rv : RZFitMessage?
+        var rv : FitMessage?
         
         if useIdx < messages.count {
             rv = messages[useIdx]
@@ -85,13 +86,13 @@ class FITSelectionContext {
     
     // MARK: - Dependent/Stats messages
     
-    var preferredDependendMessageType : [RZFitMessageType] = [FIT_MESG_NUM_RECORD, FIT_MESG_NUM_LAP, FIT_MESG_NUM_SESSION]
-    var statsUsing : RZFitMessageType?
-    var statsFor : RZFitMessageType?
+    var preferredDependendMessageType : [FitMessageType] = [FIT_MESG_NUM_RECORD, FIT_MESG_NUM_LAP, FIT_MESG_NUM_SESSION]
+    var statsUsing : FitMessageType?
+    var statsFor : FitMessageType?
     
     /*
-    var dependentField :RZFitFieldKey? {
-        var rv : RZFitFieldKey? = nil
+    var dependentField :FitFieldKey? {
+        var rv : FitFieldKey? = nil
         if let dmessagetype = self.dependentMessageType,
             let fy = self.selectedYField{
             let dmessage = self.fitFile.messages(forMessageType: dmessagetype)
@@ -113,13 +114,13 @@ class FITSelectionContext {
     //MARK: - Field Selections
     
     /// Selected numbers fields in order, lastObject is latest
-    fileprivate var selectedNumberFields : [RZFitFieldKey] = []
+    fileprivate var selectedNumberFields : [FitFieldKey] = []
     /// Selected location fields in order, lastObject is latest
-    fileprivate var selectedLocationFields : [RZFitFieldKey] = []
+    fileprivate var selectedLocationFields : [FitFieldKey] = []
 
-    var selectedXField : RZFitFieldKey = "timestamp"
+    var selectedXField : FitFieldKey = "timestamp"
 
-    var selectedYField :RZFitFieldKey? {
+    var selectedYField :FitFieldKey? {
         get {
             return self.selectedNumberFields.last
         }
@@ -134,7 +135,7 @@ class FITSelectionContext {
         }
     }
 
-    var selectedY2Field :RZFitFieldKey? {
+    var selectedY2Field :FitFieldKey? {
         get {
             let cnt = self.selectedNumberFields.count
             return cnt > 1 ? self.selectedNumberFields[cnt-2] : nil
@@ -151,7 +152,7 @@ class FITSelectionContext {
         }
     }
     
-    var selectedLocationField :RZFitFieldKey?{
+    var selectedLocationField :FitFieldKey?{
         get {
             return self.selectedLocationFields.last
         }
@@ -170,7 +171,7 @@ class FITSelectionContext {
     // MARK: - Initialization and Queue management
     
 
-    init(fitFile:RZFitFile){
+    init(fitFile:FitFile){
         self.fitFile = fitFile;
         self.messageType = self.fitFile.preferredMessageType()
         self.messages = self.fitFile.messages(forMessageType: self.messageType)
@@ -209,7 +210,7 @@ class FITSelectionContext {
     }
 
     /// Update selection for index and record if number or location field selected
-    func selectMessageField(field:RZFitFieldKey, atIndex idx: Int){
+    func selectMessageField(field:FitFieldKey, atIndex idx: Int){
         let messages = self.messages
         
         let useIdx = idx < messages.count ? idx : 0
@@ -264,7 +265,7 @@ class FITSelectionContext {
     ///
     /// - Parameter fieldValue: value to display
     /// - Returns: string
-    func display( fieldValue : RZFitFieldValue) -> String {
+    func display( fieldValue : FitFieldValue) -> String {
         if let nu = fieldValue.numberWithUnit {
             for unit in [self.speedUnit, self.distanceUnit] {
                 if nu.unit.canConvert(to: unit) {
@@ -284,7 +285,7 @@ class FITSelectionContext {
         return nu.description;
     }
     
-    func displayField( fitMessageType: RZFitMessageType, fieldName : String ) -> NSAttributedString {
+    func displayField( fitMessageType: FitMessageType, fieldName : String ) -> NSAttributedString {
         var displayText = fieldName
         let paragraphStyle = NSMutableParagraphStyle()
         

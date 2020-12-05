@@ -26,11 +26,11 @@
 
 
 import Cocoa
-import RZFitFile
+import FitFileParser
 
 class FITDocument: NSDocument {
 
-    var fitFile : RZFitFile? = nil
+    var fitFile : FitFile? = nil
     
     /*
     override var windowNibName: String? {
@@ -66,16 +66,16 @@ class FITDocument: NSDocument {
         
         if let url = self.fileURL {
             
-            fitFile = RZFitFile(data: data, fileURL: url)
+            fitFile = FitFile(data: data, fileURL: url)
         }else{
-            fitFile = RZFitFile(data: data)
+            fitFile = FitFile(data: data)
         }
         
         
         /*    if let decode = FITFitFileDecode( data ){
                 decode.parse()
                 if let fit = decode.fitFile {
-                    fitFile = RZFitFile(fitFile: fit )
+                    fitFile = FitFile(fitFile: fit )
                 }
             }
         */

@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import RZFitFile
+import FitFileParser
 
 class FITDataViewController: NSViewController {
 
@@ -97,7 +97,7 @@ class FITDataViewController: NSViewController {
     @IBAction func updateStatsFor(_ sender: NSPopUpButton) {
         if
             let value = sender.selectedItem?.title,
-            let mesgnum = RZFitFile.messageType(forDescription: value),
+            let mesgnum = FitFile.messageType(forDescription: value),
             let ds = self.fitDataSource{
             ds.selectionContext.statsFor = mesgnum
             ds.updateStatistics()
@@ -107,7 +107,7 @@ class FITDataViewController: NSViewController {
     @IBAction func updateStatsUsing(_ sender: NSPopUpButton) {
         if
             let value = sender.selectedItem?.title,
-            let mesgnum = RZFitFile.messageType(forDescription: value),
+            let mesgnum = FitFile.messageType(forDescription: value),
             let dataSource = self.fitDataSource{
             dataSource.selectionContext.statsUsing = mesgnum
             dataSource.updateStatistics()

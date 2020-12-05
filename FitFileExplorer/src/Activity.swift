@@ -28,7 +28,7 @@
 import Foundation
 import GenericJSON
 import RZUtilsSwift
-import RZFitFile
+import FitFileParser
 
 typealias ActivityId = String
 
@@ -37,7 +37,8 @@ class Activity {
     let activityType : GCActivityType
     let time : Date
     var activityTypeAsString : String {
-        return self.activityType.topSubRoot().key
+        
+        return self.activityType.primary().key
     }
     private(set) var numbers : [String:GCNumberWithUnit]
     private(set) var labels  : [String:String]
@@ -184,23 +185,23 @@ class Activity {
         self.originalJson = [:]
     }
     
-    func allValues() -> [RZFitFieldKey:RZFitFieldValue] {
-        var rv : [RZFitFieldKey:RZFitFieldValue] = [:]
+    func allValues() -> [FitFieldKey:FitFieldValue] {
+        var rv : [FitFieldKey:FitFieldValue] = [:]
         
-        rv["activityId"] = RZFitFieldValue(withName: self.activityId)
-        rv["activityType"] = RZFitFieldValue(withName: self.activityTypeAsString)
-        rv["time"] = RZFitFieldValue(withTime: self.time)
+        rv["activityId"] = FitFieldValue(withName: self.activityId)
+        rv["activityType"] = FitFieldValue(withName: self.activityTypeAsString)
+        rv["time"] = FitFieldValue(withTime: self.time)
         
-        _ = self.labels.map { rv[$0.key] = RZFitFieldValue(withName: $0.value)}
-        _ = self.numbers.map { rv[$0.key] = RZFitFieldValue(withValue: $0.value.value, andUnit: $0.value.unit.key)}
-        _ = self.coordinates.map { rv[$0.key] = RZFitFieldValue(latitude: $0.value.latitude, longitude: $0.value.longitude) }
-        _ = self.dates.map { rv[$0.key] = RZFitFieldValue(withTime: $0.value )}
+        _ = self.labels.map { rv[$0.key] = FitFieldValue(withName: $0.value)}
+        _ = self.numbers.map { rv[$0.key] = FitFieldValue(withValue: $0.value.value, andUnit: $0.value.unit.key)}
+        _ = self.coordinates.map { rv[$0.key] = FitFieldValue(latitude: $0.value.latitude, longitude: $0.value.longitude) }
+        _ = self.dates.map { rv[$0.key] = FitFieldValue(withTime: $0.value )}
         
         return rv
     }
     
-    func allKeysOrdered() -> [RZFitFieldKey] {
-        var rv : [RZFitFieldKey] = ["activityId", "activityType", "time"]
+    func allKeysOrdered() -> [FitFieldKey] {
+        var rv : [FitFieldKey] = ["activityId", "activityType", "time"]
         
         _ = self.dates.map { rv.append( $0.key ) }
         _ = self.labels.map { rv.append( $0.key ) }

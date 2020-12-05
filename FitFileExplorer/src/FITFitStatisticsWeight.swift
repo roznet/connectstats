@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RZFitFile
+import FitFileParser
 
 extension CLLocation {
     convenience init?(withCoordinate:CLLocationCoordinate2D?){
@@ -36,7 +36,7 @@ struct FITFitStatisticsWeight {
         self.time = time
     }
     
-    init(from:RZFitMessage?, to:RZFitMessage?, withTimeField:String, withDistanceField:String) {
+    init(from:FitMessage?, to:FitMessage?, withTimeField:String, withDistanceField:String) {
         if let to = to, let from = from {
             self.count = 1
             

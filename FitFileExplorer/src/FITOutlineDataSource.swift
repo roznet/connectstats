@@ -7,8 +7,8 @@
 //
 
 import Cocoa
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
+import FitFileParserTypes
 
 class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelegate {
     
@@ -17,12 +17,12 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
     let selectionContext : FITSelectionContext
     let orderedMessageTypes : [FIT_MESG_NUM]
     
-    var fitFile: RZFitFile {
+    var fitFile: FitFile {
         return self.selectionContext.fitFile
     }
     
     
-    var selectedMessageType : RZFitMessageType {
+    var selectedMessageType : FitMessageType {
         return self.selectionContext.messageType
     }
     
@@ -60,7 +60,7 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
             cellView.textField?.stringValue = ""
             cellView.detailTextField.stringValue = ""
             
-            if let type = item as? RZFitMessageType,
+            if let type = item as? FitMessageType,
                 let text = self.fitFile.messageTypeDescription(messageType: type){
                 
                 cellView.textField?.stringValue = text

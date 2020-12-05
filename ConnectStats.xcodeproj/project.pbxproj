@@ -316,8 +316,6 @@
 		4235448516C4826600AB3E09 /* GCExportStrava.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235448416C4826600AB3E09 /* GCExportStrava.m */; };
 		4235DF9B16558F3C00DE316A /* GCSettingsCacheManagementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235DF9A16558F3C00DE316A /* GCSettingsCacheManagementViewController.m */; };
 		4235DF9E1655B61A00DE316A /* GCAppProfiles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235DF9D1655B61A00DE316A /* GCAppProfiles.m */; };
-		4236872D2275F7A3001210AA /* RZFitFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; };
-		4236872E2275F7A3001210AA /* RZFitFile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4237869E1972D582006CBD4D /* GCStatsMultiFieldConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */; };
 		4237D34724A741E000C55BB8 /* GCAppSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237D34624A741E000C55BB8 /* GCAppSceneDelegate.m */; };
 		4237D34824A741E000C55BB8 /* GCAppSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237D34624A741E000C55BB8 /* GCAppSceneDelegate.m */; };
@@ -397,8 +395,6 @@
 		4248ED9B1DCFFB5600254216 /* GCFieldCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 422B343C1CA7321200B345CD /* GCFieldCache.m */; };
 		4248ED9C1DCFFC6C00254216 /* GCFieldsCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42018E9518F1877E0089AB7A /* GCFieldsCategory.m */; };
 		4248ED9D1DCFFD2400254216 /* GCFieldsForCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4212088F1C6E860700E0470D /* GCFieldsForCategory.m */; };
-		4249686F221889E300776D68 /* RZFitFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; };
-		42496870221889E300776D68 /* RZFitFile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		424B562C1D3BDBBF00903A99 /* RZUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; };
 		424B562D1D3BDBBF00903A99 /* RZUtils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 423D5C281D27F1C20068D9CE /* RZUtils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		424B56311D3BDBBF00903A99 /* RZUtilsTouch.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -458,6 +454,10 @@
 		4262ADCF1DCC8DB100F089AA /* FITAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4262ADCE1DCC8DB100F089AA /* FITAppDelegate.swift */; };
 		42656CEA24CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42656CE824CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.swift */; };
 		42656CEB24CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42656CE924CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.xib */; };
+		4265FD11257BD6DD00D562DF /* FitFileParser in Frameworks */ = {isa = PBXBuildFile; productRef = 4265FD10257BD6DD00D562DF /* FitFileParser */; };
+		4265FD93257BDC4900D562DF /* FitFileParser in Frameworks */ = {isa = PBXBuildFile; productRef = 4265FD92257BDC4900D562DF /* FitFileParser */; };
+		4265FD99257BDC5500D562DF /* FitFileParser in Frameworks */ = {isa = PBXBuildFile; productRef = 4265FD98257BDC5500D562DF /* FitFileParser */; };
+		4265FD9B257BDC6200D562DF /* FitFileParser in Frameworks */ = {isa = PBXBuildFile; productRef = 4265FD9A257BDC6200D562DF /* FitFileParser */; };
 		426786DA16C6594F00899C8B /* GCSettingsServicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 426786D916C6594F00899C8B /* GCSettingsServicesViewController.m */; };
 		42684EF01B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42684EEF1B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m */; };
 		42684EF11B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42684EEF1B2CDE35001A90D2 /* GCHealthKitSourcesRequest.m */; };
@@ -595,8 +595,6 @@
 		4285C21B2427C5E5003C522E /* last_connectstats_single_544406.json in Resources */ = {isa = PBXBuildFile; fileRef = 4285C20F2427C5E5003C522E /* last_connectstats_single_544406.json */; };
 		4285C21C2427C5E5003C522E /* track_cs_544406.fit in Resources */ = {isa = PBXBuildFile; fileRef = 4285C21A2427C5E5003C522E /* track_cs_544406.fit */; };
 		4285F0E31719CB1800A1FAA8 /* GCSettingsFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4285F0E21719CB1800A1FAA8 /* GCSettingsFilterViewController.m */; };
-		4287C2E12221606B0055F584 /* RZFitFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; };
-		4287C2E22221606B0055F584 /* RZFitFile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4287DC101BDB88FE00C54A51 /* GCStatsMultiFieldConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */; };
 		42880C462381EEE00030C3C1 /* track_cs_5582.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42880C3A2381EEDF0030C3C1 /* track_cs_5582.fit */; };
 		42880C472381EEE00030C3C1 /* track_cs_5611.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42880C452381EEDF0030C3C1 /* track_cs_5611.fit */; };
@@ -1197,8 +1195,6 @@
 		42BDFE80242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
 		42BDFE81242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
 		42BDFE82242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
-		42BF1D3422510E63000DF572 /* RZFitFile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; };
-		42BF1D3522510E63000DF572 /* RZFitFile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 424968662218886C00776D68 /* RZFitFile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42BF1FEC1D3AC233004445C2 /* RZUtilsTouch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42BF1FE91D3AC233004445C2 /* RZUtilsTouch.framework */; };
 		42BF8D7924B505EB001E1C72 /* GCActivity+Assets.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D7824B505EB001E1C72 /* GCActivity+Assets.m */; };
 		42BF8D7A24B505EB001E1C72 /* GCActivity+Assets.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D7824B505EB001E1C72 /* GCActivity+Assets.m */; };
@@ -1512,13 +1508,6 @@
 			remoteGlobalIDString = 42382A6B1EABA4AC00252217;
 			remoteInfo = RZUtilsUniversal;
 		};
-		4236872F2275F7A3001210AA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 422C59302211E43C004AC730;
-			remoteInfo = RZFitFile;
-		};
 		423A983F228024BE00DEDAB9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */;
@@ -1553,48 +1542,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 4288E4EC1A33101F0079890C;
 			remoteInfo = RZUtilsOSXTests;
-		};
-		424968652218886C00776D68 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 422C59312211E43C004AC730;
-			remoteInfo = RZFitFile;
-		};
-		424968672218886C00776D68 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 422C59392211E43C004AC730;
-			remoteInfo = RZFitFileTests;
-		};
-		424968692218886C00776D68 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 422C59632211EC48004AC730;
-			remoteInfo = fitios;
-		};
-		4249686B2218886C00776D68 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4249682322187F7E00776D68;
-			remoteInfo = fitmacos;
-		};
-		4249686D2218886C00776D68 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 42584E5B21CBF57900B7E021;
-			remoteInfo = fitparse;
-		};
-		42496871221889E300776D68 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 422C59302211E43C004AC730;
-			remoteInfo = RZFitFile;
 		};
 		424B562E1D3BDBBF00903A99 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1680,13 +1627,6 @@
 			remoteGlobalIDString = 4253B4551CD49F7E00437E6A;
 			remoteInfo = FitFileExplorer;
 		};
-		4287C2E32221606B0055F584 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 422C59302211E43C004AC730;
-			remoteInfo = RZFitFile;
-		};
 		428BE87E20013DF600E14A61 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */;
@@ -1714,13 +1654,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 42382AA91EAC824900252217;
 			remoteInfo = RZUtilsHealthkit;
-		};
-		42BF1D3622510E63000DF572 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 422C59302211E43C004AC730;
-			remoteInfo = RZFitFile;
 		};
 		42BF1FE81D3AC233004445C2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1909,7 +1842,6 @@
 				42265B8420137EE100AF79B2 /* RZUtils.framework in Embed Frameworks */,
 				42265B8020137EE100AF79B2 /* RZExternalCpp.framework in Embed Frameworks */,
 				4226E3A8220978540025201B /* RZUtilsSwift.framework in Embed Frameworks */,
-				42496870221889E300776D68 /* RZFitFile.framework in Embed Frameworks */,
 				42265B8820137EE100AF79B2 /* RZUtilsUniversal.framework in Embed Frameworks */,
 				4251B5B8219F743400E15F9F /* RZExternalUniversal.framework in Embed Frameworks */,
 				42265B8C20137EE100AF79B2 /* RZUtilsOSX.framework in Embed Frameworks */,
@@ -1925,7 +1857,6 @@
 			files = (
 				425872CB1EACA0D6000D4115 /* RZUtilsSwift.framework in Embed Frameworks */,
 				4251B5C2219F7D2600E15F9F /* RZExternalUniversal.framework in Embed Frameworks */,
-				4287C2E22221606B0055F584 /* RZFitFile.framework in Embed Frameworks */,
 				42EBBEE11FFAB55E0009B385 /* RZExternal.framework in Embed Frameworks */,
 				42F3FBF91DD79D910042A9B1 /* RZUtilsUniversal.framework in Embed Frameworks */,
 				425872C71EACA0A4000D4115 /* RZUtilsHealthkit.framework in Embed Frameworks */,
@@ -1959,7 +1890,6 @@
 				422F521C1DFB567200DD5551 /* RZUtilsUniversal.framework in Embed Frameworks */,
 				42A3609E1EAF6392008EB4E3 /* RZUtilsHealthkit.framework in Embed Frameworks */,
 				42BFC2411DCF4EA200EAD40E /* RZUtilsTouch.framework in Embed Frameworks */,
-				4236872E2275F7A3001210AA /* RZFitFile.framework in Embed Frameworks */,
 				42BFC23D1DCF4EA200EAD40E /* RZUtils.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -1976,7 +1906,6 @@
 				42EAE40B200BB2E30017D65C /* RZUtilsTouch.framework in Embed Frameworks */,
 				422BFD4521E00D1900291D71 /* RZExternalUniversal.framework in Embed Frameworks */,
 				42EAE403200BB2E30017D65C /* RZUtilsUniversal.framework in Embed Frameworks */,
-				42BF1D3522510E63000DF572 /* RZFitFile.framework in Embed Frameworks */,
 				42EAE3EF200BB2E30017D65C /* RZExternalCpp.framework in Embed Frameworks */,
 				42EAE3FB200BB2E30017D65C /* RZUtils.framework in Embed Frameworks */,
 				42EAE407200BB2E30017D65C /* RZUtilsHealthkit.framework in Embed Frameworks */,
@@ -2211,7 +2140,6 @@
 		42461D221922D169001B03C7 /* GCStravaActivityLapsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaActivityLapsParser.m; path = src/GCStravaActivityLapsParser.m; sourceTree = "<group>"; };
 		4248DC891ED1E6ED00470DEB /* FITDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITDataViewController.swift; path = src/FITDataViewController.swift; sourceTree = "<group>"; };
 		4248ED991DCFF6E100254216 /* FitFileExplorer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "FitFileExplorer-Prefix.pch"; path = "src/FitFileExplorer-Prefix.pch"; sourceTree = "<group>"; };
-		4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "fit-sdk-swift.xcodeproj"; path = "fit-sdk-swift/fit-sdk-swift.xcodeproj"; sourceTree = "<group>"; };
 		424B7F2916CB049A000B38AD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		424B7F4616CFBE2F000B38AD /* GCSettingsHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsHelpViewController.h; path = src/GCSettingsHelpViewController.h; sourceTree = "<group>"; };
 		424B7F4716CFBE2F000B38AD /* GCSettingsHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSettingsHelpViewController.m; path = src/GCSettingsHelpViewController.m; sourceTree = "<group>"; };
@@ -3131,9 +3059,9 @@
 				422FAFB619A1DD6000D09773 /* CoreData.framework in Frameworks */,
 				422FAFB719A1DD6000D09773 /* SystemConfiguration.framework in Frameworks */,
 				42BFC23C1DCF4EA200EAD40E /* RZUtils.framework in Frameworks */,
-				4236872D2275F7A3001210AA /* RZFitFile.framework in Frameworks */,
 				42A3609D1EAF6392008EB4E3 /* RZUtilsHealthkit.framework in Frameworks */,
 				42BFC2401DCF4EA200EAD40E /* RZUtilsTouch.framework in Frameworks */,
+				4265FD9B257BDC6200D562DF /* FitFileParser in Frameworks */,
 				422FAFB819A1DD6000D09773 /* Security.framework in Frameworks */,
 				422FAFB919A1DD6000D09773 /* Accounts.framework in Frameworks */,
 				422FAFBA19A1DD6000D09773 /* AdSupport.framework in Frameworks */,
@@ -3159,8 +3087,8 @@
 			files = (
 				42A0099320012ECB00019CB3 /* RZExternalCpp.framework in Frameworks */,
 				420621F81D3AD48D0013A45E /* RZUtils.framework in Frameworks */,
-				4249686F221889E300776D68 /* RZFitFile.framework in Frameworks */,
 				4213AEB1201393CC0004B54B /* MapKit.framework in Frameworks */,
+				4265FD99257BDC5500D562DF /* FitFileParser in Frameworks */,
 				42F3FBFC1DD79DA90042A9B1 /* RZUtilsUniversal.framework in Frameworks */,
 				4226E3A7220978540025201B /* RZUtilsSwift.framework in Frameworks */,
 				424670FF1DCE0410003DDF7F /* RZUtilsOSX.framework in Frameworks */,
@@ -3195,10 +3123,10 @@
 				42AB66CF16DACF6B00C633BD /* CoreData.framework in Frameworks */,
 				42D037C3168AF55900789E7D /* SystemConfiguration.framework in Frameworks */,
 				424B7F2A16CB049A000B38AD /* Security.framework in Frameworks */,
-				4287C2E12221606B0055F584 /* RZFitFile.framework in Frameworks */,
 				42E18A3E16AC6B9100D4513B /* Accounts.framework in Frameworks */,
 				42E18A3C16AC6B4600D4513B /* AdSupport.framework in Frameworks */,
 				42E186C516A6151A00D4513B /* MessageUI.framework in Frameworks */,
+				4265FD11257BD6DD00D562DF /* FitFileParser in Frameworks */,
 				42EEAEE016A2BDDC0058965A /* Social.framework in Frameworks */,
 				42D037C1168AF48300789E7D /* CFNetwork.framework in Frameworks */,
 				423494451609276C00A770D6 /* MapKit.framework in Frameworks */,
@@ -3235,6 +3163,7 @@
 				42EAE3E6200BB2E30017D65C /* RZExternal.framework in Frameworks */,
 				42F97C00200B9DE6009905D2 /* RZUtilsHealthkit.framework in Frameworks */,
 				42EAE40A200BB2E30017D65C /* RZUtilsTouch.framework in Frameworks */,
+				4265FD93257BDC4900D562DF /* FitFileParser in Frameworks */,
 				422BFD4421E00D1900291D71 /* RZExternalUniversal.framework in Frameworks */,
 				428BE8832001409200E14A61 /* RZExternalCpp.framework in Frameworks */,
 				428BE88020013E0A00E14A61 /* RZUtilsTestInfra.framework in Frameworks */,
@@ -3242,7 +3171,6 @@
 				42EAE402200BB2E30017D65C /* RZUtilsUniversal.framework in Frameworks */,
 				42793B321F405941005FAF02 /* RZUtilsSwift.framework in Frameworks */,
 				42EAE3FA200BB2E30017D65C /* RZUtils.framework in Frameworks */,
-				42BF1D3422510E63000DF572 /* RZFitFile.framework in Frameworks */,
 				42B5E2FF1BA5B7BF000FAE4E /* libsqlite3.tbd in Frameworks */,
 				42B5E2D01BA5B589000FAE4E /* HealthKit.framework in Frameworks */,
 				08F9F970B9E97EE50D457C03 /* Pods_ConnectStatsTestApp.framework in Frameworks */,
@@ -3719,18 +3647,6 @@
 				42C1080C1B7DE8B000092315 /* GCApplicationContext.m */,
 			);
 			name = AppContext;
-			sourceTree = "<group>";
-		};
-		4249685E2218886C00776D68 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				424968662218886C00776D68 /* RZFitFile.framework */,
-				424968682218886C00776D68 /* RZFitFileTests.xctest */,
-				4249686A2218886C00776D68 /* fitios.app */,
-				4249686C2218886C00776D68 /* fitmacos.app */,
-				4249686E2218886C00776D68 /* fitparse */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		424C666C160BD02C005F45DD /* Icons */ = {
@@ -4289,7 +4205,6 @@
 		428FF6FE15F36888007A88FA = {
 			isa = PBXGroup;
 			children = (
-				4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */,
 				42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */,
 				423D5C201D27F1C20068D9CE /* RZUtils.xcodeproj */,
 				4245CD811B7DE351006B85B4 /* Common */,
@@ -5653,10 +5568,12 @@
 				42E45FF71F1B72F600CA1F39 /* PBXTargetDependency */,
 				426176262001432B008F87FA /* PBXTargetDependency */,
 				42F97BDE200B5344009905D2 /* PBXTargetDependency */,
-				423687302275F7A3001210AA /* PBXTargetDependency */,
 				423A9840228024BE00DEDAB9 /* PBXTargetDependency */,
 			);
 			name = HealthStats;
+			packageProductDependencies = (
+				4265FD9A257BDC6200D562DF /* FitFileParser */,
+			);
 			productName = GarminConnect;
 			productReference = 422FAFF119A1DD6000D09773 /* HealthStats.app */;
 			productType = "com.apple.product-type.application";
@@ -5681,9 +5598,11 @@
 				42265B8E20137EE100AF79B2 /* PBXTargetDependency */,
 				4251B5BA219F743400E15F9F /* PBXTargetDependency */,
 				4226E3AA220978540025201B /* PBXTargetDependency */,
-				42496872221889E300776D68 /* PBXTargetDependency */,
 			);
 			name = FitFileExplorer;
+			packageProductDependencies = (
+				4265FD98257BDC5500D562DF /* FitFileParser */,
+			);
 			productName = FitFileExplorer;
 			productReference = 4253B4561CD49F7E00437E6A /* FitFileExplorer.app */;
 			productType = "com.apple.product-type.application";
@@ -5730,9 +5649,11 @@
 				42EBBEE31FFAB55E0009B385 /* PBXTargetDependency */,
 				42A0099120012B9D00019CB3 /* PBXTargetDependency */,
 				4251B5C4219F7D2600E15F9F /* PBXTargetDependency */,
-				4287C2E42221606B0055F584 /* PBXTargetDependency */,
 			);
 			name = ConnectStats;
+			packageProductDependencies = (
+				4265FD10257BD6DD00D562DF /* FitFileParser */,
+			);
 			productName = GarminConnect;
 			productReference = 428FF70915F36888007A88FA /* ConnectStats.app */;
 			productType = "com.apple.product-type.application";
@@ -5781,9 +5702,11 @@
 				42EAE40D200BB2E30017D65C /* PBXTargetDependency */,
 				42EAE411200BB2E30017D65C /* PBXTargetDependency */,
 				422BFD4721E00D1900291D71 /* PBXTargetDependency */,
-				42BF1D3722510E63000DF572 /* PBXTargetDependency */,
 			);
 			name = ConnectStatsTestApp;
+			packageProductDependencies = (
+				4265FD92257BDC4900D562DF /* FitFileParser */,
+			);
 			productName = ConnectStatsTestApp;
 			productReference = 42B5E1B91BA5AEC9000FAE4E /* ConnectStatsTestApp.app */;
 			productType = "com.apple.product-type.application";
@@ -5933,13 +5856,12 @@
 				Base,
 			);
 			mainGroup = 428FF6FE15F36888007A88FA;
+			packageReferences = (
+				4265FD0F257BD6DD00D562DF /* XCRemoteSwiftPackageReference "FitFileParser" */,
+			);
 			productRefGroup = 428FF70A15F36888007A88FA /* Products */;
 			projectDirPath = "";
 			projectReferences = (
-				{
-					ProductGroup = 4249685E2218886C00776D68 /* Products */;
-					ProjectRef = 4249685D2218886C00776D68 /* fit-sdk-swift.xcodeproj */;
-				},
 				{
 					ProductGroup = 42EBBEDB1FFAB5400009B385 /* Products */;
 					ProjectRef = 42EBBEDA1FFAB5400009B385 /* RZExternal.xcodeproj */;
@@ -5990,41 +5912,6 @@
 			fileType = wrapper.cfbundle;
 			path = RZUtilsOSXTests.xctest;
 			remoteRef = 423D5C2D1D27F1C20068D9CE /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		424968662218886C00776D68 /* RZFitFile.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RZFitFile.framework;
-			remoteRef = 424968652218886C00776D68 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		424968682218886C00776D68 /* RZFitFileTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = RZFitFileTests.xctest;
-			remoteRef = 424968672218886C00776D68 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4249686A2218886C00776D68 /* fitios.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = fitios.app;
-			remoteRef = 424968692218886C00776D68 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4249686C2218886C00776D68 /* fitmacos.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = fitmacos.app;
-			remoteRef = 4249686B2218886C00776D68 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4249686E2218886C00776D68 /* fitparse */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = fitparse;
-			remoteRef = 4249686D2218886C00776D68 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		425872BF1EACA089000D4115 /* RZUtilsSwift.framework */ = {
@@ -7826,20 +7713,10 @@
 			name = RZUtilsUniversal;
 			targetProxy = 422F521D1DFB567200DD5551 /* PBXContainerItemProxy */;
 		};
-		423687302275F7A3001210AA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = RZFitFile;
-			targetProxy = 4236872F2275F7A3001210AA /* PBXContainerItemProxy */;
-		};
 		423A9840228024BE00DEDAB9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = RZExternalUniversal;
 			targetProxy = 423A983F228024BE00DEDAB9 /* PBXContainerItemProxy */;
-		};
-		42496872221889E300776D68 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = RZFitFile;
-			targetProxy = 42496871221889E300776D68 /* PBXContainerItemProxy */;
 		};
 		424B562F1D3BDBBF00903A99 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -7881,11 +7758,6 @@
 			target = 4253B4551CD49F7E00437E6A /* FitFileExplorer */;
 			targetProxy = 42769BD21DD2ABC9000390F1 /* PBXContainerItemProxy */;
 		};
-		4287C2E42221606B0055F584 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = RZFitFile;
-			targetProxy = 4287C2E32221606B0055F584 /* PBXContainerItemProxy */;
-		};
 		42A0099120012B9D00019CB3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = RZExternalCpp;
@@ -7895,11 +7767,6 @@
 			isa = PBXTargetDependency;
 			name = RZUtilsHealthkit;
 			targetProxy = 42A3609F1EAF6392008EB4E3 /* PBXContainerItemProxy */;
-		};
-		42BF1D3722510E63000DF572 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = RZFitFile;
-			targetProxy = 42BF1D3622510E63000DF572 /* PBXContainerItemProxy */;
 		};
 		42BFC23F1DCF4EA200EAD40E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -8078,7 +7945,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.healthstats";
 				PRODUCT_NAME = HealthStats;
 				PROVISIONING_PROFILE = "";
-				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/fit-sdk-swift/RZFitFile/src $(SRCROOT)/fit-sdk-swift/RZFitFile/sdk";
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStats/ConnectStats-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_VERSION = 5.0;
@@ -8126,7 +7993,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.healthstats";
 				PRODUCT_NAME = HealthStats;
 				PROVISIONING_PROFILE = "";
-				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/fit-sdk-swift/RZFitFile/src $(SRCROOT)/fit-sdk-swift/RZFitFile/sdk";
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ConnectStats/ConnectStats-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "ConnectStats-Swift.h";
 				SWIFT_VERSION = 5.0;
@@ -8874,6 +8741,40 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4265FD0F257BD6DD00D562DF /* XCRemoteSwiftPackageReference "FitFileParser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/roznet/FitFileParser.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4265FD10257BD6DD00D562DF /* FitFileParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4265FD0F257BD6DD00D562DF /* XCRemoteSwiftPackageReference "FitFileParser" */;
+			productName = FitFileParser;
+		};
+		4265FD92257BDC4900D562DF /* FitFileParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4265FD0F257BD6DD00D562DF /* XCRemoteSwiftPackageReference "FitFileParser" */;
+			productName = FitFileParser;
+		};
+		4265FD98257BDC5500D562DF /* FitFileParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4265FD0F257BD6DD00D562DF /* XCRemoteSwiftPackageReference "FitFileParser" */;
+			productName = FitFileParser;
+		};
+		4265FD9A257BDC6200D562DF /* FitFileParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4265FD0F257BD6DD00D562DF /* XCRemoteSwiftPackageReference "FitFileParser" */;
+			productName = FitFileParser;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 428FF70015F36888007A88FA /* Project object */;
 }

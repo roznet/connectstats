@@ -27,16 +27,17 @@
 
 import Foundation
 import RZUtilsSwift
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
+import FitFileParserTypes
 
-extension RZFitFile {
+
+extension FitFile {
     
     convenience init(fitFile file: FITFitFile){
-        var messages :[RZFitMessage] = []
+        var messages :[FitMessage] = []
         
         for one in file.allMessageFields() {
-            if let field = RZFitMessage(with: one) {
+            if let field = FitMessage(with: one) {
                 messages.append(field)
             }
         }
@@ -44,7 +45,7 @@ extension RZFitFile {
         self.init(messages: messages)
     }
     
-    func preferredMessageType() -> RZFitMessageType {
+    func preferredMessageType() -> FitMessageType {
         let preferred = [ FIT_MESG_NUM_SESSION, FIT_MESG_NUM_RECORD, FIT_MESG_NUM_FILE_ID]
         for one in preferred {
             if self.messageTypes.contains(one) {
@@ -54,7 +55,7 @@ extension RZFitFile {
         return FIT_MESG_NUM_FILE_ID
     }
     
-    func orderedMessageTypes() -> [RZFitMessageType] {
+    func orderedMessageTypes() -> [FitMessageType] {
         return self.messageTypes
         /*
         let count = self.countByMessageType()
@@ -68,16 +69,16 @@ extension RZFitFile {
         }*/
     }
     
-    private func orderKeysFromSample(samples : [RZFitFieldKey:Sample]) -> [RZFitFieldKey] {
-        let typeOrder = [  RZFitFieldValue.ValueType.time,
-                           RZFitFieldValue.ValueType.coordinate,
-                           RZFitFieldValue.ValueType.name,
-                           RZFitFieldValue.ValueType.valueUnit,
-                           RZFitFieldValue.ValueType.value,
-                           RZFitFieldValue.ValueType.invalid
+    private func orderKeysFromSample(samples : [FitFieldKey:Sample]) -> [FitFieldKey] {
+        let typeOrder = [  FitFieldValue.ValueType.time,
+                           FitFieldValue.ValueType.coordinate,
+                           FitFieldValue.ValueType.name,
+                           FitFieldValue.ValueType.valueUnit,
+                           FitFieldValue.ValueType.value,
+                           FitFieldValue.ValueType.invalid
         ]
         
-        var byType : [RZFitFieldValue.ValueType:[RZFitFieldKey]] = [:]
+        var byType : [FitFieldValue.ValueType:[FitFieldKey]] = [:]
         for type in typeOrder{
             byType[type] = []
         }
@@ -88,11 +89,11 @@ extension RZFitFile {
             if let val = samples[key] {
                 byType[val.one.type]?.append(key)
             }else{
-                byType[RZFitFieldValue.ValueType.invalid]?.append(key)
+                byType[FitFieldValue.ValueType.invalid]?.append(key)
             }
         }
         
-        var rv : [RZFitFieldKey] = []
+        var rv : [FitFieldKey] = []
         for type in typeOrder {
             if let keys = byType[type] {
                 let orderedKeys = keys.sorted {
@@ -109,14 +110,14 @@ extension RZFitFile {
         
     }
     
-    func orderedFieldKeys(messageType: RZFitMessageType) -> [RZFitFieldKey] {
+    func orderedFieldKeys(messageType: FitMessageType) -> [FitFieldKey] {
         let samples = self.sampleValues(messageType: messageType)
         return self.orderKeysFromSample(samples: samples)
     }
     
-    static func csv(messageType:RZFitMessageType, fitFiles:[RZFitFile]) -> [String] {
+    static func csv(messageType:FitMessageType, fitFiles:[FitFile]) -> [String] {
         var cols : [String] = ["filename"]
-        var sample : [RZFitFieldKey:Sample] = [:]
+        var sample : [FitFieldKey:Sample] = [:]
         var rv :[String] = []
         var line : [String] = ["filename"]
         for fitFile in fitFiles {
@@ -166,7 +167,7 @@ extension RZFitFile {
     }
     
     
-    func csv(messageType:RZFitMessageType) -> [String] {
+    func csv(messageType:FitMessageType) -> [String] {
         let sample = self.sampleValues(messageType: messageType)
         let cols = self.orderKeysFromSample(samples: sample)
         
