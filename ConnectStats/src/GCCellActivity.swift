@@ -31,7 +31,8 @@ class GCCellActivity: UITableViewCell {
     @IBOutlet var borderView: GCCellRoundedPatternView!
     @IBOutlet var leftBorderView: GCCellRoundedPatternView!
     @IBOutlet var iconView: UIImageView!
-
+    @IBOutlet var bottomLabel: UILabel!
+    
     @IBOutlet var leftFieldValues: GCCellFieldValueColumnView!
     @IBOutlet var rightFieldValues: GCCellFieldValueColumnView!
     
@@ -87,10 +88,10 @@ class GCCellActivity: UITableViewCell {
         self.leftFieldValues.valueAttribute = GCViewConfig.attribute(rzAttribute.value)
         self.leftFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.unit)
         self.leftFieldValues.displayIcons = false
-        self.leftFieldValues.defaultSpacing = 2.0
+        self.leftFieldValues.defaultSpacing = 1.0
         self.rightFieldValues.displayIcons = false
         self.rightFieldValues.iconColor = UIColor.darkGray
-        self.rightFieldValues.defaultSpacing = 2.0
+        self.rightFieldValues.defaultSpacing = 0.0
         
         let rightFields : [GCField] = [
             GCField(for: gcFieldFlag.weightedMeanSpeed, andActivityType: activity.activityType),
@@ -115,7 +116,7 @@ class GCCellActivity: UITableViewCell {
         self.time.text = useDate.timeShortFormat()
         self.year.text = String(useDate.calendarUnitFormat(NSCalendar.Unit.year).suffix(2))
         
-        
+        self.bottomLabel.attributedText = NSAttributedString(string: activity.displayName, attributes: GCViewConfig.attribute(rzAttribute.secondaryField))
     }
                
                

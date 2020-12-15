@@ -746,6 +746,7 @@
 }
 
 -(NSArray*)sampleActivitySummary{
+    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS13]];
     GCCellGrid * cell = nil;
 
     GCActivity *act=nil;
@@ -798,7 +799,7 @@
 }
 
 -(NSArray*)sampleNewActivitySummary{
-    
+    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS14]];
     NSString * name = @"activities_types_samples.db";
     FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:name]];
     [db open];
@@ -817,12 +818,14 @@
         [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"new cell"]];
     }
     [db close];
-    
+    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS13]];
     return rv;
 }
 
 
 -(NSArray*)sampleActivityDetail{
+    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS13]];
+
     GCCellGrid * cell = nil;
 
     GCActivity *act=nil;
@@ -874,6 +877,8 @@
     return activity;
 }
 -(NSArray*)sampleNewActivityDetail{
+    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS14]];
+
     GCCellGrid * cell = nil;
     GCActivity *act=nil;
     
@@ -934,12 +939,16 @@
         [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Lap"]];
     }
 */
+    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS13]];
+
     return activity;
 
 }
 
 
 -(NSArray*)sampleAggregatedStats{
+    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS13]];
+
     static NSString *CellIdentifier = @"Cell";
     GCCellGrid * cell = nil;
 
@@ -965,6 +974,8 @@
 }
 
 -(NSArray*)sampleNewAggregatedStats{
+    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS14]];
+
     static NSString *CellIdentifier = @"Cell";
     GCCellGrid * cell = nil;
 
@@ -994,7 +1005,8 @@
     [cell setupAggregatedWithDataHolder:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config activityType:GCActivityType.running geometry:geometry wide:false];
     [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Month [0] NewStyle"]];
 
-    
+    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS13]];
+
     return stats;
 }
 

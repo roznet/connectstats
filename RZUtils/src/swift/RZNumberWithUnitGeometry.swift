@@ -111,7 +111,9 @@ extension CGSize {
             unitPoint.x += numberSize.width + self.spacing(numberAttribute: numberAttribute)
             numberPoint.x += (numberSize.width - currentNumberSize.width)
         }else{
-            numberPoint.x += (totalSize.width - currentNumberSize.width - (unitSize.width/2.0));
+            numberPoint.x += (numberSize.width - currentNumberSize.width)
+            // Alternative align for no unit?
+            //numberPoint.x += (totalSize.width - currentNumberSize.width - (unitSize.width/2.0));
         }
         (fmtNoUnit as NSString).draw(at: numberPoint, withAttributes: numberAttribute)
         if( fmt != fmtNoUnit && addUnit ){
