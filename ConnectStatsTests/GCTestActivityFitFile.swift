@@ -9,6 +9,7 @@
 import XCTest
 @testable import ConnectStats
 import FitFileParser
+import FitFileParserTypes
 
 
 class GCTestActivityFitFile: XCTestCase {

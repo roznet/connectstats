@@ -62,15 +62,9 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         NSString* temp = [NSString stringWithFormat:NSLocalizedString(@"Temperature %@", @"Weather Cell"),
                           [weather weatherDisplayField:GC_WEATHER_TEMPERATURE]];
 
-        if (weather.newFormat ) {
             [self labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:temp attribute:@selector(attribute16)];
             [self labelForRow:0 andCol:1].attributedText = [GCViewConfig attributedString:[weather weatherDisplayField:GC_WEATHER_WIND] attribute:@selector(attribute16)];
             [self labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:weather.weatherTypeDesc?:@"" attribute:@selector(attribute14Gray)];
-        }else{
-            [self labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:temp attribute:@selector(attribute16)];
-            [self labelForRow:1 andCol:0].attributedText = [GCViewConfig attributedString:[weather weatherDisplayField:GC_WEATHER_WIND] attribute:@selector(attribute16)];
-
-        }
         UIImage * icon = [weather weatherIcon];     
         if (icon) {
             [self setIconImage:icon];

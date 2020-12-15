@@ -424,13 +424,11 @@
         self.windCompassView.enabled = false;
         if ([self.activity hasWeather] ) {
             GCWeather * weather = self.activity.weather;
-            if (weather.newFormat) {
-                self.windCompassView.enabled = false;
-                if (weather.windDirection && weather.windSpeed) {
-                    self.windCompassView.enabled = true;
-                    self.windCompassView.direction = (weather.windDirection).floatValue/180.*M_PI - M_PI/2.0;
-                    self.windCompassView.percent = MIN(1.0, [[weather.windSpeed convertToUnitName:@"kph"] value]/20.);
-                }
+            self.windCompassView.enabled = false;
+            if (weather.windDirection && weather.windSpeed) {
+                self.windCompassView.enabled = true;
+                self.windCompassView.direction = (weather.windDirection).floatValue/180.*M_PI - M_PI/2.0;
+                self.windCompassView.percent = MIN(1.0, [[weather.windSpeed convertToUnitName:@"kph"] value]/20.);
             }
         }
 

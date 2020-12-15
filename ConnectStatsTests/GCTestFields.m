@@ -128,7 +128,7 @@
             XCTAssertEqualObjects(sub.parentType, parent);
             XCTAssertTrue([sub isSameParentType:parent]);
             XCTAssertTrue([parent isSameParentType:sub]);
-            XCTAssertEqualObjects(sub.topSubRootType, parent);
+            XCTAssertEqualObjects(sub.primaryActivityType, parent);
             XCTAssertEqualObjects(sub.rootType, [GCActivityType all]);
             
             XCTAssertFalse([[GCActivityType day] isSameParentType:sub]);
