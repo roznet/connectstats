@@ -213,6 +213,8 @@ static gcFontStyle _fontStyle;
         case rzAttributeSecondaryValue:
         case rzAttributeSecondaryUnit:
             return [self colorForText:rzColorStyleSecondaryText];
+        case rzAttributeDescriptionField:
+            return [self colorForText:rzColorStyleHighlightedText];
     }
     return [self colorForText:rzColorStylePrimaryText];
 }
@@ -236,6 +238,7 @@ static gcFontStyle _fontStyle;
         case rzAttributeSecondaryField:
         case rzAttributeSecondaryValue:
         case rzAttributeSecondaryUnit:
+        case rzAttributeDescriptionField:
             fontName = [self fontName];
             size = 14.0;
             break;

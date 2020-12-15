@@ -116,7 +116,8 @@ class GCCellActivity: UITableViewCell {
         self.time.text = useDate.timeShortFormat()
         self.year.text = String(useDate.calendarUnitFormat(NSCalendar.Unit.year).suffix(2))
         
-        self.bottomLabel.attributedText = NSAttributedString(string: activity.displayName, attributes: GCViewConfig.attribute(rzAttribute.secondaryField))
+        self.bottomLabel.attributedText = NSAttributedString(string: activity.displayName,
+                                                             attributes: GCViewConfig.attribute(rzAttribute.descriptionField))
     }
                
                

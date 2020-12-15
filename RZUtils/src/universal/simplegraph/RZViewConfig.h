@@ -54,6 +54,7 @@ typedef NS_ENUM(NSUInteger, rzAttribute){
     rzAttributeSecondaryField,
     rzAttributeSecondaryValue,
     rzAttributeSecondaryUnit,
+    rzAttributeDescriptionField
 };
 
 @interface RZViewConfig : NSObject
