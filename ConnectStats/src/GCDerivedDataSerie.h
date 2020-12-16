@@ -25,7 +25,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GCFields.h"
-
+#import "sqlite3.h"
 @class GCActivity;
 @class GCField;
 @class GCDerivedDataSerie;

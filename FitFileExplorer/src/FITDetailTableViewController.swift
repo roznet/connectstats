@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import RZUtilsOSX
+import RZUtilsMacOS
 import RZUtilsSwift
 
 class FITDetailTableViewController: NSViewController {

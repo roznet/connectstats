@@ -28,8 +28,8 @@
 #import "GCDerivedOrganizer.h"
 #import "GCFieldCache.h"
 #import "GCAppGlobal.h"
-@import RZUtils;
-#import <RZUtilsSwift/RZUtilsSwift-Swift.h>
+@import RZUtilsCore;
+@import RZUtilsSwift;
 #import "GCTestsSamples.h"
 
 //@import RZUtilsSwift;

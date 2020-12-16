@@ -25,7 +25,7 @@
 
 
 
-#import <RZUtilsTouch/RZUtilsTouch.h>
+@import RZUtilsTouch;
 
 NS_ASSUME_NONNULL_BEGIN
 

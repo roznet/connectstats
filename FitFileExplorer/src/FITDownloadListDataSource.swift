@@ -26,7 +26,7 @@
 
 
 import Cocoa
-import RZUtils
+import RZUtilsCore
 
 class FITDownloadListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource {
 

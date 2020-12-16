@@ -29,7 +29,7 @@
 #import <HealthKit/HealthKit.h>
 #endif
 #include "GCTrackPoint.h"
-#include "RZUtilsHealthkit/RZUtilsHealthkit.h"
+@import RZUtilsTouch;
 
 double kGCTrackPointsMinimumSpeedMps = 0.3;
 

@@ -176,7 +176,7 @@ class ActivitiesOrganizer {
             total = Int(res.int(forColumn: "COUNT(*)"))
         }
         
-        if db.databasePath() == self.db?.databasePath() && total == self.repr.activityList.count {
+        if db.databasePath == self.db?.databasePath && total == self.repr.activityList.count {
             return
         }
 
@@ -201,7 +201,6 @@ class ActivitiesOrganizer {
                 }
                 
                 res.close()
-                res.setParentDB(nil)
             }
         }
         self.repr = newRep

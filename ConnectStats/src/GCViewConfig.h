@@ -29,7 +29,8 @@
 #import "GCFields.h"
 #import "GCAppConstants.h"
 #import "GCViewConfigSkin.h"
-#import <RZUtilsUniversal/RZUtilsUniversal.h>
+@import RZUtilsUniversal;
+@import RZUtilsTouch;
 
 typedef NS_ENUM(NSUInteger, gcViewChoice) {
     gcViewChoiceFields,

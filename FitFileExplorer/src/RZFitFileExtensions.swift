@@ -33,18 +33,6 @@ import FitFileParserTypes
 
 extension FitFile {
     
-    convenience init(fitFile file: FITFitFile){
-        var messages :[FitMessage] = []
-        
-        for one in file.allMessageFields() {
-            if let field = FitMessage(with: one) {
-                messages.append(field)
-            }
-        }
-        
-        self.init(messages: messages)
-    }
-    
     func preferredMessageType() -> FitMessageType {
         let preferred = [ FIT_MESG_NUM_SESSION, FIT_MESG_NUM_RECORD, FIT_MESG_NUM_FILE_ID]
         for one in preferred {

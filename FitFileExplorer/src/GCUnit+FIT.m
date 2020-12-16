@@ -24,7 +24,7 @@
 //  
 
 #import "GCUnit+FIT.h"
-#import "RZUtils/RZUtils.h"
+@import RZUtilsCore;
 
 @implementation GCUnit (FIT)
 

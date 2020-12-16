@@ -24,7 +24,7 @@
 //  
 
 #import "GCGarminSearchModernJsonParser.h"
-#import "RZUtils/RZUtils.h"
+@import RZUtilsCore;
 #import "GCActivity+Import.h"
 
 @implementation GCGarminSearchModernJsonParser

@@ -28,7 +28,7 @@
 #import "GCConnectStatsRequest.h"
 #import "GCAppGlobal.h"
 #import "GCWebUrl.h"
-@import RZUtils;
+@import RZUtilsCore;
 @import RZExternal;
 @import WebKit;
 

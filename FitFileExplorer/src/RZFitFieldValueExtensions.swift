@@ -26,7 +26,7 @@
 
 
 import Foundation
-import RZUtils
+import RZUtilsCore
 import FitFileParser
 
 
@@ -104,22 +104,6 @@ extension FitFieldValue {
             rv.append("")
         }
         return rv
-    }
-    
-    convenience init?(fieldValue : FITFitFieldValue) {
-        if let val = fieldValue.numberWithUnit {
-            self.init(withValue: val.value, andUnit: val.unit.key)
-        }else if let dat = fieldValue.dateValue {
-            self.init(withTime: dat)
-        }else if let v = fieldValue.enumValue {
-            self.init(withName: v)
-        }else if let l = fieldValue.locationValue {
-            self.init(latitude: l.coordinate.latitude, longitude: l.coordinate.longitude)
-        }else if let s = fieldValue.stringValue {
-            self.init(withName: s)
-        }else{
-            return nil
-        }
     }
     
 }

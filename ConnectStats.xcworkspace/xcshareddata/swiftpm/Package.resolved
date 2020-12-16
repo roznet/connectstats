@@ -5,9 +5,45 @@
         "package": "FitFileparser",
         "repositoryURL": "https://github.com/roznet/FitFileParser.git",
         "state": {
-          "branch": "main",
+          "branch": null,
           "revision": "97c017f952a62cef9bbeb13a8f5beb76c85bf3cc",
-          "version": null
+          "version": "1.0.3"
+        }
+      },
+      {
+        "package": "FMDB",
+        "repositoryURL": "https://github.com/ccgus/fmdb",
+        "state": {
+          "branch": null,
+          "revision": "61e51fde7f7aab6554f30ab061cc588b28a97d04",
+          "version": "2.7.7"
+        }
+      },
+      {
+        "package": "RZUtils",
+        "repositoryURL": "https://github.com/roznet/rzutils.git",
+        "state": {
+          "branch": null,
+          "revision": "5c647ddf4a6431765e066e3cd08f00564ba9bc93",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "RZUtilsMacOS",
+        "repositoryURL": "https://github.com/roznet/rzutils-macos",
+        "state": {
+          "branch": null,
+          "revision": "9b567821a8113338f75c9fb83da469d07eb5e233",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "RZUtilsTouch",
+        "repositoryURL": "https://github.com/roznet/rzutils-touch.git",
+        "state": {
+          "branch": null,
+          "revision": "e394ccbd48af37f6391fb47508a103749df34f32",
+          "version": "1.0.0"
         }
       }
     ]

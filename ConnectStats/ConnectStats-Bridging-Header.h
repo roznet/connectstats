@@ -2,8 +2,8 @@
 //  Use this file to import your target's public headers that you would like to expose to Swift.
 //
 
-#import <RZUtils/RZUtils.h>
-#import <RZUtilsTouch/RZUtilsTouch.h>
+@import RZUtilsCore;
+@import RZUtilsTouch;
 #import "GCHealthZone.h"
 #import "GCHealthZoneCalculator.h"
 #import "GCField.h"
@@ -19,10 +19,6 @@
 #import "GCDerivedOrganizer.h"
 
 #import "GCViewIcons.h"
-#import "FITFitFileDecode.h"
-#import "FITFitFile.h"
-#import "FITFitMessageFields.h"
-#import "FITFitFieldValue.h"
 #import "FITFitEnumMap.h"
 
 //#import "FitFile-Bridging-Header.h"

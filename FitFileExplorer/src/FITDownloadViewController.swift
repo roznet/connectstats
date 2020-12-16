@@ -26,8 +26,8 @@
 
 
 import Cocoa
-import RZUtils
-import RZUtilsOSX
+import RZUtilsCore
+import RZUtilsMacOS
 import GenericJSON
 import KeychainSwift
 import RZUtilsSwift
@@ -137,10 +137,10 @@ class FITDownloadViewController: NSViewController {
         
         let dbpath = RZFileOrganizer.writeableFilePath(self.databaseFileName())
         
-        if let db = FMDatabase(path: dbpath) {
-            db.open()
-            FITAppGlobal.shared.organizer.load(db: db)
-        }
+        let db = FMDatabase(path: dbpath) 
+        db.open()
+        FITAppGlobal.shared.organizer.load(db: db)
+        
         
         FITAppGlobal.downloadManager().startDownloadList()
     }
@@ -303,10 +303,9 @@ class FITDownloadViewController: NSViewController {
         
         if let dbpath = RZFileOrganizer.writeableFilePathIfExists(self.databaseFileName()) {
             FITAppGlobal.shared.worker.async {
-                if let db = FMDatabase(path: dbpath ) {
-                    db.open()
-                    FITAppGlobal.shared.organizer.load(db: db)
-                }
+                let db = FMDatabase(path: dbpath )
+                db.open()
+                FITAppGlobal.shared.organizer.load(db: db)
             }
         }
 

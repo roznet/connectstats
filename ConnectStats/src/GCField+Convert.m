@@ -26,7 +26,7 @@
 
 
 #import "GCField+Convert.h"
-@import RZUtils;
+@import RZUtilsCore;
 
 const NSUInteger kDefsConnectIQFieldKeyIndex = 0;
 const NSUInteger kDefsConnectIQUnitNameIndex = 1;

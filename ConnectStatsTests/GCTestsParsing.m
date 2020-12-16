@@ -7,7 +7,6 @@
 //
 
 #import "GCTestCase.h"
-#import "GCTrackPoint.h"
 #import "GCActivity+Database.h"
 #import "GCActivity+Import.h"
 #import "GCWeather.h"
@@ -24,7 +23,6 @@
 #import "GCHealthOrganizer.h"
 #import "GCWithingsBodyMeasures.h"
 #import "GCHealthZoneCalculator.h"
-#import "FITFitFileDecode.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCActivitiesOrganizerListRegister.h"
 #import "GCService.h"
@@ -296,13 +294,6 @@
         GCActivity * legacyAct = [self findActivityId:activityId in:parser.activities];
         GCActivity * searchModernAct = [self findActivityId:activityId in:modernParser.activities];
         GCActivity * stravaAct = [self findActivityId:activityId in:stravaListParser.activities];
-        
-        NSData * fitData = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", activityId] forClass:[self class]]];
-        
-        FITFitFileDecode * fitDecode = [FITFitFileDecode fitFileDecode:fitData];
-        [fitDecode parse];
-        
-        //[[GCActivity alloc] initWithId:activityId fitFile:fitDecode.fitFile];
         
         NSString * fn = [NSString stringWithFormat:@"activity_%@.json", activityId];
         NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn forClass:[self class]] options:0 error:nil];

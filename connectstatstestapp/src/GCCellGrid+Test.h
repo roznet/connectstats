@@ -23,6 +23,7 @@
 //  SOFTWARE.
 //  
 
+@import RZUtilsTouch;
 
 @interface GCCellGrid (Test)
 

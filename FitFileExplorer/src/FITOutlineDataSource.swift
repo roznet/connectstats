@@ -64,7 +64,8 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
                 let text = self.fitFile.messageTypeDescription(messageType: type){
                 
                 cellView.textField?.stringValue = text
-                if let count = self.fitFile.messagesByType[type]?.count {
+                let count = self.fitFile.messages(forMessageType: type).count
+                if count > 0 {
                     cellView.detailTextField.stringValue = "(\(count) items)"
                 }else{
                     cellView.detailTextField.stringValue = ""

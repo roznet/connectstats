@@ -31,23 +31,7 @@ import FitFileParserTypes
 
 
 extension FitMessage {
-    
-    convenience init?(with: FITFitMessageFields) {
-        if let msg : FIT_MESG_NUM = rzfit_string_to_mesg(mesg: with.messageType) {
-            var fields : [String:FitFieldValue] = [:]
-            
-            for one in with.allFieldNames() {
-                if let fvalue :FITFitFieldValue = with[one] {
-                    let rzfield = FitFieldValue(fieldValue: fvalue)
-                    fields[one] = rzfield
-                }
-            }
-            self.init(mesg_num: msg, withFitFields: fields)
-        }else{
-            return nil
-        }
-    }
-    
+        
     
     func preferredOrderFieldKeys() -> [FitFieldKey] {
         var rv : [FitFieldKey] = []

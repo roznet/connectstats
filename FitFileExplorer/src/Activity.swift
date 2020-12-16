@@ -27,7 +27,9 @@
 
 import Foundation
 import GenericJSON
+import RZUtilsCore
 import RZUtilsSwift
+import FMDB
 import FitFileParser
 
 typealias ActivityId = String
@@ -97,10 +99,13 @@ class Activity {
     
     init?(res:FMResultSet, units:[String:GCUnit]) {
         
-        if let all = res.resultDictionary() {
-            self.activityId = res.string(forColumn: "activityId")
-            self.activityType = GCActivityType(forKey: res.string(forColumn: "activityType"))
-            self.time = res.date(forColumn: "time")
+        if let all = res.resultDictionary,
+           let activityId = res.string(forColumn: "activityId"),
+           let activityTypeKey = res.string(forColumn: "activityType"),
+           let date = res.date(forColumn: "time"){
+            self.activityId = activityId
+            self.activityType = GCActivityType(forKey: activityTypeKey)
+            self.time = date
             self.originalJson = [:]
             
             var bld_numbers : [String:GCNumberWithUnit] = [:]
@@ -226,7 +231,7 @@ extension Activity {
     func executeQuery( db : FMDatabase, query:String, params:[AnyHashable:Any]) -> FMResultSet? {
         let res = db.executeQuery(query, withParameterDictionary: params)
         if( res == nil){
-            let msg = db.lastErrorMessage() ?? "Error without message"
+            let msg = db.lastErrorMessage()
             RZSLog.error("Query Failed with error \(msg), Query \(query)")
         }
         return res
@@ -236,7 +241,7 @@ extension Activity {
     func executeUpdate( db : FMDatabase, query:String, params:[AnyHashable:Any]) -> Bool {
         let rv = db.executeUpdate(query, withParameterDictionary: params)
         if( !rv ){
-            let msg = db.lastErrorMessage() ?? "Error without message"
+            let msg = db.lastErrorMessage()
             RZSLog.error("Update Failed with error \(msg), Statement \(query)")
         }
         return rv
@@ -258,13 +263,19 @@ extension Activity {
         var cols : [String:String] = [:]
         if let res : FMResultSet = db.getTableSchema(tableName) {
             while (res.next()) {
-                cols[ res.string(forColumn: "name") ] = res.string(forColumn: "type")
+                if let type = res.string(forColumn: "type"),
+                   let name = res.string(forColumn: "name"){
+                    cols[ name ] = type
+                }
             }
         }
         
         if let res = self.executeQuery(db: db, query: "SELECT * FROM \(fieldTableName)", params: [:]) {
             while( res.next()){
-                cols[ res.string(forColumn: "name")] = res.string(forColumn: "unit")
+                if let unit = res.string(forColumn: "unit"),
+                   let name = res.string(forColumn: "name"){
+                    cols[ name ] = unit
+                }
             }
         }
         

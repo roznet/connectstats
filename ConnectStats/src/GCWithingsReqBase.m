@@ -24,7 +24,7 @@
 //  
 
 #import "GCWithingsReqBase.h"
-@import RZUtils;
+@import RZUtilsCore;
 @import RZExternal;
 #import "GCAppGlobal.h"
 

@@ -12,8 +12,8 @@
 
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-    #import "RZUtils/RZUtils.h"
-    #import "RZUtilsUniversal/RZUtilsUniversal.h"
-    #import "RZUtilsTouch/RZUtilsTouch.h"
+@import RZUtilsCore;
+@import RZUtilsUniversal;
+@import RZUtilsTouch;
 
 #endif

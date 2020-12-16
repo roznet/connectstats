@@ -25,7 +25,7 @@
 
 
 
-#import <RZUtilsTestInfra/RZUtilsTestInfra.h>
+@import RZUtilsTestInfra;
 
 NS_ASSUME_NONNULL_BEGIN
 

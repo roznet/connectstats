@@ -25,7 +25,7 @@
 
 
 
-#import <RZUtilsTestInfra/RZUtilsTestInfra.h>
+@import RZUtilsTestInfra;
 
 @interface GCTestServiceStrava : RZUnitTest<RZChildObject>
 

@@ -26,7 +26,7 @@
 
 
 #import "GCGarminActivityInterpret.h"
-@import RZUtils;
+@import RZUtilsCore;
 #import "GCField.h"
 #import "GCActivitySummaryValue.h"
 #import "GCActivityType.h"
