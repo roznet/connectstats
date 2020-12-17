@@ -122,8 +122,6 @@
 		42B2659F1FF8314400E891A1 /* GTMNSString+HTML.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264241FF8314400E891A1 /* GTMNSString+HTML.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B265A01FF8314400E891A1 /* GTMDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264251FF8314400E891A1 /* GTMDefines.h */; };
 		42B265A11FF8314400E891A1 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264261FF8314400E891A1 /* GTMNSString+HTML.m */; };
-		42B265A21FF8314400E891A1 /* CHCSVParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264281FF8314400E891A1 /* CHCSVParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B265A31FF8314400E891A1 /* CHCSVParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264291FF8314400E891A1 /* CHCSVParser.m */; };
 		42B265A41FF8314400E891A1 /* OAuth1Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2642B1FF8314400E891A1 /* OAuth1Controller.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B265A51FF8314400E891A1 /* NSString+URLEncoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2642C1FF8314400E891A1 /* NSString+URLEncoding.h */; };
 		42B265A61FF8314400E891A1 /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 42B2642E1FF8314400E891A1 /* hmac.c */; };
@@ -243,8 +241,6 @@
 		42B264241FF8314400E891A1 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		42B264251FF8314400E891A1 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		42B264261FF8314400E891A1 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
-		42B264281FF8314400E891A1 /* CHCSVParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHCSVParser.h; sourceTree = "<group>"; };
-		42B264291FF8314400E891A1 /* CHCSVParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHCSVParser.m; sourceTree = "<group>"; };
 		42B2642B1FF8314400E891A1 /* OAuth1Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuth1Controller.h; sourceTree = "<group>"; };
 		42B2642C1FF8314400E891A1 /* NSString+URLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+URLEncoding.h"; sourceTree = "<group>"; };
 		42B2642E1FF8314400E891A1 /* hmac.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hmac.c; sourceTree = "<group>"; };
@@ -434,7 +430,6 @@
 				42B263F81FF8314400E891A1 /* appirater-master */,
 				42B264151FF8314400E891A1 /* ECSlidingViewController */,
 				42B264231FF8314400E891A1 /* gtm-toolbox */,
-				42B264271FF8314400E891A1 /* CHCSVParser */,
 				42B2642A1FF8314400E891A1 /* Simple-OAuth-FitBit */,
 				42B265241FF8314400E891A1 /* gtm-aouth2 */,
 				42B265301FF8314400E891A1 /* ObjectiveZip */,
@@ -523,15 +518,6 @@
 				42B264261FF8314400E891A1 /* GTMNSString+HTML.m */,
 			);
 			path = "gtm-toolbox";
-			sourceTree = "<group>";
-		};
-		42B264271FF8314400E891A1 /* CHCSVParser */ = {
-			isa = PBXGroup;
-			children = (
-				42B264281FF8314400E891A1 /* CHCSVParser.h */,
-				42B264291FF8314400E891A1 /* CHCSVParser.m */,
-			);
-			path = CHCSVParser;
 			sourceTree = "<group>";
 		};
 		42B2642A1FF8314400E891A1 /* Simple-OAuth-FitBit */ = {
@@ -767,7 +753,6 @@
 				42B265721FF8314400E891A1 /* KalGridView.h in Headers */,
 				42B265801FF8314400E891A1 /* KalLogic.h in Headers */,
 				42B263D41FF8309700E891A1 /* RZExternal.h in Headers */,
-				42B265A21FF8314400E891A1 /* CHCSVParser.h in Headers */,
 				42B2669B1FF8314500E891A1 /* GTMOAuth2Authentication.h in Headers */,
 				42B265A71FF8314400E891A1 /* Base64Transcoder.h in Headers */,
 				42B265771FF8314400E891A1 /* Kal.h in Headers */,
@@ -1054,7 +1039,6 @@
 				42B2669A1FF8314500E891A1 /* GTMOAuth2ViewControllerTouch.m in Sources */,
 				42B265961FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.m in Sources */,
 				42B2659C1FF8314400E891A1 /* ECSlidingSegue.m in Sources */,
-				42B265A31FF8314400E891A1 /* CHCSVParser.m in Sources */,
 				422626011FFA7C5F000DBD32 /* RZNavigationTitleView.m in Sources */,
 				42B265AE1FF8314400E891A1 /* NSString+URLEncoding.m in Sources */,
 				42B265AF1FF8314400E891A1 /* OAuth1Controller.m in Sources */,

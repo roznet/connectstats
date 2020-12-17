@@ -19,3 +19,5 @@
 
 #import "GCViewIcons.h"
 #import "GCActivity+UI.h"
+#import "GCSettingsBugReport.h"
+#import "GCActivitiesCacheManagement.h"

@@ -39,7 +39,6 @@
 #import "GCLap.h"
 #import "GCConnectStatsRequestSearch.h"
 #import "GCHistoryFieldSummaryStats.h"
-#import "GCActivity+ExportText.h"
 #import "GCActivity+TestBackwardCompat.h"
 #import "GCActivity+TrackTransform.h"
 #import "GCactivity+Series.h"

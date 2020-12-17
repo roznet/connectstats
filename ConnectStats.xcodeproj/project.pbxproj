@@ -1152,6 +1152,10 @@
 		42BD31ED258BAE2F004D5E0F /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD31EC258BAE2F004D5E0F /* ZIPFoundation */; };
 		42BD320D258BB9A2004D5E0F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD320C258BB9A2004D5E0F /* SwiftKeychainWrapper */; };
 		42BD322D258BBA8A004D5E0F /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD322C258BBA8A004D5E0F /* MBProgressHUD */; };
+		42BD3285258BC789004D5E0F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD3284258BC789004D5E0F /* SwiftKeychainWrapper */; };
+		42BD329D258BC856004D5E0F /* GCSettingsBugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BD319D258B51DF004D5E0F /* GCSettingsBugReport.swift */; };
+		42BD32A3258BC88B004D5E0F /* DeviceGuru in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD32A2258BC88B004D5E0F /* DeviceGuru */; };
+		42BD32A5258BC893004D5E0F /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD32A4258BC893004D5E0F /* ZIPFoundation */; };
 		42BDFE80242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
 		42BDFE81242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
 		42BDFE82242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
@@ -2792,10 +2796,13 @@
 				422DCC4D258A639F000DEE4B /* FitFileParser in Frameworks */,
 				422DCB7D258A278E000DEE4B /* RZUtilsUniversal in Frameworks */,
 				422BFD4421E00D1900291D71 /* RZExternalUniversal.framework in Frameworks */,
+				42BD3285258BC789004D5E0F /* SwiftKeychainWrapper in Frameworks */,
+				42BD32A5258BC893004D5E0F /* ZIPFoundation in Frameworks */,
 				422DCC20258A6325000DEE4B /* RZUtilsTouch in Frameworks */,
 				422DCB79258A278E000DEE4B /* RZUtilsCore in Frameworks */,
 				42EAE3EA200BB2E30017D65C /* RZExternalTestUtils.framework in Frameworks */,
 				42B5E2FF1BA5B7BF000FAE4E /* libsqlite3.tbd in Frameworks */,
+				42BD32A3258BC88B004D5E0F /* DeviceGuru in Frameworks */,
 				422DCC1E258A6325000DEE4B /* RZUtilsTestInfra in Frameworks */,
 				42B5E2D01BA5B589000FAE4E /* HealthKit.framework in Frameworks */,
 				08F9F970B9E97EE50D457C03 /* Pods_ConnectStatsTestApp.framework in Frameworks */,
@@ -5272,6 +5279,9 @@
 				422DCC1D258A6325000DEE4B /* RZUtilsTestInfra */,
 				422DCC1F258A6325000DEE4B /* RZUtilsTouch */,
 				422DCC4C258A639F000DEE4B /* FitFileParser */,
+				42BD3284258BC789004D5E0F /* SwiftKeychainWrapper */,
+				42BD32A2258BC88B004D5E0F /* DeviceGuru */,
+				42BD32A4258BC893004D5E0F /* ZIPFoundation */,
 			);
 			productName = ConnectStatsTestApp;
 			productReference = 42B5E1B91BA5AEC9000FAE4E /* ConnectStatsTestApp.app */;
@@ -6955,6 +6965,7 @@
 				42B5E2681BA5B216000FAE4E /* GCHealthKitSourcesRequest.m in Sources */,
 				426CC4731BAEB9920033978C /* GCAppActions.m in Sources */,
 				42B5E2691BA5B216000FAE4E /* GCHealthKitSamplesToPointsParser.m in Sources */,
+				42BD329D258BC856004D5E0F /* GCSettingsBugReport.swift in Sources */,
 				42B5E26A1BA5B216000FAE4E /* GCHealthKitWorkoutParser.m in Sources */,
 				42B5E26C1BA5B216000FAE4E /* GCHealthKitDayDetailParser.m in Sources */,
 				42B5E26D1BA5B216000FAE4E /* GCHealthKitRequest.m in Sources */,
@@ -8279,6 +8290,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 42BD322B258BBA8A004D5E0F /* XCRemoteSwiftPackageReference "MBProgressHUD" */;
 			productName = MBProgressHUD;
+		};
+		42BD3284258BC789004D5E0F /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42BD320B258BB9A2004D5E0F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		42BD32A2258BC88B004D5E0F /* DeviceGuru */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42BD31AC258B53C7004D5E0F /* XCRemoteSwiftPackageReference "DeviceGuru" */;
+			productName = DeviceGuru;
+		};
+		42BD32A4258BC893004D5E0F /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

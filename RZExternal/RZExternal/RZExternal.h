@@ -33,6 +33,5 @@ FOUNDATION_EXPORT const unsigned char RZExternalVersionString[];
 
 #import "RZExternal/Appirater.h"
 
-#import "RZExternal/CHCSVParser.h"
 #import "RZExternal/SmudgyWindow.h"
 

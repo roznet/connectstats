@@ -34,6 +34,7 @@
 #import "GCTestAppGlobal.h"
 
 @import RZExternal;
+@import CHCSVParser;
 
 @implementation GCTestStats
 
@@ -212,7 +213,7 @@
 -(void)checkGarminConsistency:(GCHistoryAggregatedActivityStats*)vals activityType:(NSString*)activityType calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig{
     if ([activityType isEqualToString:GC_TYPE_CYCLING] || [activityType isEqualToString:GC_TYPE_RUNNING]) {
         NSString * file = [NSString stringWithFormat:@"stats_%@_%@.csv",activityType,[calendarConfig.calendarUnitDescription lowercaseString]];
-        NSArray * gc=[NSArray arrayWithContentsOfCSVFile:[RZFileOrganizer bundleFilePath:file]];
+        NSArray * gc=[NSArray arrayWithContentsOfCSVURL:[NSURL fileURLWithPath:[RZFileOrganizer bundleFilePath:file]]];
         NSDateFormatter * formatter = [[[NSDateFormatter alloc] init] autorelease];
         if (calendarConfig.calendarUnit == NSCalendarUnitMonth) {
             [formatter setDateFormat:@"MMM yyyy"];
