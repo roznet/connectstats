@@ -35,7 +35,7 @@
 #import "GCWebConnect+Requests.h"
 #import "GCAppActions.h"
 #import "GCActivityType.h"
-@import RZExternal;
+@import Appirater;
 #import "GCActivity+CSSearch.h"
 #import "GCFieldCache.h"
 #import "GCAppDelegate+Swift.h"

@@ -31,7 +31,5 @@ FOUNDATION_EXPORT const unsigned char RZExternalVersionString[];
 #import "RZExternal/ECSlidingViewController.h"
 #import "RZExternal/UIViewController+ECSlidingViewController.h"
 
-#import "RZExternal/Appirater.h"
-
 #import "RZExternal/SmudgyWindow.h"
 

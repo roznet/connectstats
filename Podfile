@@ -5,12 +5,14 @@ target 'ConnectStats' do
   pod 'GoogleMaps'
   pod 'Flurry-iOS-SDK/FlurrySDK'
   pod 'GenericJSON'
+  pod 'Appirater'
 end
 target 'HealthStats' do
   use_frameworks!
   pod 'GoogleMaps'
   pod 'Flurry-iOS-SDK/FlurrySDK'
   pod 'GenericJSON'
+  pod 'Appirater'
 end
 target 'ConnectStatsTestApp' do
   use_frameworks!

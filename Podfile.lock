@@ -1,4 +1,5 @@
 PODS:
+  - Appirater (2.3.1)
   - CHCSVParser (2.1.0)
   - Flurry-iOS-SDK/FlurrySDK (11.1.0)
   - GenericJSON (2.0.1)
@@ -10,6 +11,7 @@ PODS:
   - KeychainSwift (19.0.0)
 
 DEPENDENCIES:
+  - Appirater
   - CHCSVParser
   - Flurry-iOS-SDK/FlurrySDK
   - GenericJSON
@@ -18,6 +20,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - Appirater
     - CHCSVParser
     - Flurry-iOS-SDK
     - GenericJSON
@@ -25,12 +28,13 @@ SPEC REPOS:
     - KeychainSwift
 
 SPEC CHECKSUMS:
+  Appirater: 44a4651f7912a17dc906b655f0c215d5bb768b84
   CHCSVParser: 3bcc7bdb72111a31222e95d57eacceefe4e537e8
   Flurry-iOS-SDK: 88c0399d6d276325dc9f74f6183c1070e6c3f21e
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
   GoogleMaps: 8c080862ff2748ece9929471b30feb56a6c5079d
   KeychainSwift: a06190cf933ad46b1e0abc3d77d29c06331715c7
 
-PODFILE CHECKSUM: 10ecb5b2c2147bb377baf9cf4206added067b82e
+PODFILE CHECKSUM: 0af6bc435949d99350013776bb965d6b9219569a
 
 COCOAPODS: 1.9.3
