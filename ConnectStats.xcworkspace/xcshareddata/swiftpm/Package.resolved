@@ -29,6 +29,15 @@
         }
       },
       {
+        "package": "MBProgressHUD",
+        "repositoryURL": "https://github.com/jdg/MBProgressHUD",
+        "state": {
+          "branch": null,
+          "revision": "bca42b801100b2b3a4eda0ba8dd33d858c780b0d",
+          "version": "1.2.0"
+        }
+      },
+      {
         "package": "RZUtils",
         "repositoryURL": "https://github.com/roznet/rzutils.git",
         "state": {
@@ -53,6 +62,15 @@
           "branch": null,
           "revision": "e394ccbd48af37f6391fb47508a103749df34f32",
           "version": "1.0.0"
+        }
+      },
+      {
+        "package": "SwiftKeychainWrapper",
+        "repositoryURL": "https://github.com/jrendel/SwiftKeychainWrapper",
+        "state": {
+          "branch": null,
+          "revision": "185a3165346a03767101c4f62e9a545a0fe0530f",
+          "version": "4.0.1"
         }
       },
       {

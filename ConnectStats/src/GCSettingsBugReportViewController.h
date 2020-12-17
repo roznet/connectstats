@@ -24,8 +24,8 @@
 //  
 
 #import <UIKit/UIKit.h>
-@import RZExternal;
 @import WebKit;
+@import MBProgressHUD;
 
 @interface GCSettingsBugReportViewController : UIViewController<WKNavigationDelegate>{
 }

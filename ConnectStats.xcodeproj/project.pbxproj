@@ -1150,6 +1150,8 @@
 		42BD319F258B51DF004D5E0F /* GCSettingsBugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BD319D258B51DF004D5E0F /* GCSettingsBugReport.swift */; };
 		42BD31AE258B53C7004D5E0F /* DeviceGuru in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD31AD258B53C7004D5E0F /* DeviceGuru */; };
 		42BD31ED258BAE2F004D5E0F /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD31EC258BAE2F004D5E0F /* ZIPFoundation */; };
+		42BD320D258BB9A2004D5E0F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD320C258BB9A2004D5E0F /* SwiftKeychainWrapper */; };
+		42BD322D258BBA8A004D5E0F /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD322C258BBA8A004D5E0F /* MBProgressHUD */; };
 		42BDFE80242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
 		42BDFE81242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
 		42BDFE82242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
@@ -2758,8 +2760,10 @@
 				42D037C1168AF48300789E7D /* CFNetwork.framework in Frameworks */,
 				423494451609276C00A770D6 /* MapKit.framework in Frameworks */,
 				423494431609275E00A770D6 /* CoreLocation.framework in Frameworks */,
+				42BD320D258BB9A2004D5E0F /* SwiftKeychainWrapper in Frameworks */,
 				428FF70E15F36888007A88FA /* UIKit.framework in Frameworks */,
 				428FF71015F36888007A88FA /* Foundation.framework in Frameworks */,
+				42BD322D258BBA8A004D5E0F /* MBProgressHUD in Frameworks */,
 				42DE53C019CF696E00009130 /* HealthKit.framework in Frameworks */,
 				428FF71215F36888007A88FA /* CoreGraphics.framework in Frameworks */,
 				4251B5C1219F7D2600E15F9F /* RZExternalUniversal.framework in Frameworks */,
@@ -5214,6 +5218,8 @@
 				422DCC17258A630E000DEE4B /* FitFileParser */,
 				42BD31AD258B53C7004D5E0F /* DeviceGuru */,
 				42BD31EC258BAE2F004D5E0F /* ZIPFoundation */,
+				42BD320C258BB9A2004D5E0F /* SwiftKeychainWrapper */,
+				42BD322C258BBA8A004D5E0F /* MBProgressHUD */,
 			);
 			productName = GarminConnect;
 			productReference = 428FF70915F36888007A88FA /* ConnectStats.app */;
@@ -5424,6 +5430,8 @@
 				422DCD72258A74DF000DEE4B /* XCRemoteSwiftPackageReference "rzutils-macos" */,
 				42BD31AC258B53C7004D5E0F /* XCRemoteSwiftPackageReference "DeviceGuru" */,
 				42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+				42BD320B258BB9A2004D5E0F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
+				42BD322B258BBA8A004D5E0F /* XCRemoteSwiftPackageReference "MBProgressHUD" */,
 			);
 			productRefGroup = 428FF70A15F36888007A88FA /* Products */;
 			projectDirPath = "";
@@ -8113,6 +8121,22 @@
 				kind = branch;
 			};
 		};
+		42BD320B258BB9A2004D5E0F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
+		42BD322B258BBA8A004D5E0F /* XCRemoteSwiftPackageReference "MBProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jdg/MBProgressHUD";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -8245,6 +8269,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
 			productName = ZIPFoundation;
+		};
+		42BD320C258BB9A2004D5E0F /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42BD320B258BB9A2004D5E0F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		42BD322C258BBA8A004D5E0F /* MBProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42BD322B258BBA8A004D5E0F /* XCRemoteSwiftPackageReference "MBProgressHUD" */;
+			productName = MBProgressHUD;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

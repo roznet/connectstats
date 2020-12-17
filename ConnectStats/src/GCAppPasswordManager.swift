@@ -8,6 +8,7 @@
 
 import UIKit
 import RZExternalUniversal
+import SwiftKeychainWrapper
 
 class GCAppPasswordManager : NSObject {
 

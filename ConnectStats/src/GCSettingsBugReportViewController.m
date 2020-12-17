@@ -24,7 +24,7 @@
 //  
 
 #import "GCSettingsBugReportViewController.h"
-@import RZExternal;
+@import MBProgressHUD;
 #import "GCActivitiesCacheManagement.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCAppGlobal.h"
@@ -84,8 +84,7 @@
 
     [self.view addSubview:contentView];
     self.hud =[MBProgressHUD showHUDAddedTo:contentView animated:YES];
-    self.hud.labelText = @"Preparing Report";
-
+    self.hud.label.text = @"Preparing Report";
 	[contentView release];
     
     dispatch_async([GCAppGlobal worker], ^(){
@@ -110,7 +109,7 @@
         if (self.task) {
             [self.task resume];
             dispatch_async(dispatch_get_main_queue(), ^(){
-                self.hud.labelText = @"Sending Report";
+                self.hud.label.text = @"Sending Report";
             });
         }
     });
@@ -133,7 +132,7 @@
             [GCAppGlobal saveSettings];
         }
 
-        [self.hud hide:YES];
+        [self.hud hideAnimated:YES];
         if (self.parent) {
             [(self.parent).tableView reloadData];
         }
