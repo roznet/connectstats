@@ -28,7 +28,6 @@
 #import "GCActivity.h"
 #import "GCMapGradientPathOverlayView.h"
 #import "GCFields.h"
-#import "GCSharingViewController.h"
 #import "GCMapLegendView.h"
 #import "GCMapLapInfoView.h"
 #import "GCMapImplementorProtocol.h"
@@ -46,7 +45,7 @@ typedef NS_ENUM(NSUInteger, gcMapImplementor) {
 
 typedef void(^gcMapViewControllerCompletion)(void);
 
-@interface GCMapViewController : UIViewController<RZChildObject,GCSharingImageExporter,GCMapDataSourceProtocol>
+@interface GCMapViewController : UIViewController<RZChildObject,GCMapDataSourceProtocol>
 
 @property (nonatomic,retain) GCActivity * activity;
 @property (nonatomic,retain) GCActivity * compareActivity;

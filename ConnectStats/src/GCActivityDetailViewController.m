@@ -35,10 +35,8 @@
 #import "GCSimpleGraphCachedDataSource+Templates.h"
 #import "Flurry.h"
 #import "GCActivitySwimLapViewController.h"
-#import "GCSharingViewController.h"
 #import <RZExternal/RZExternal.h>
 #import "GCActivityTrackGraphOptionsViewController.h"
-#import "GCActivity+ExportText.h"
 #import "GCWebConnect+Requests.h"
 #import "GCActivity+CSSearch.h"
 #import "GCActivity+Fields.h"

@@ -106,4 +106,5 @@ extern NSString *const kNotifyLocationRequestComplete;
 
 +(gcWebConnectStatsConfig)webConnectsStatsConfig;
 
++(void)versionSummary;
 @end

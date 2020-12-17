@@ -30,3 +30,5 @@
 
 #import "GCHistoryAggregatedDataHolder.h"
 #import "GCStatsMultiFieldConfig.h"
+#import "GCSettingsBugReport.h"
+#import "GCActivitiesCacheManagement.h"

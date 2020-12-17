@@ -27,14 +27,20 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * kBugFilename;
+extern NSString * kBugNoCommonId;
+
+
 @interface GCSettingsBugReport : NSObject
 @property (nonatomic,assign) BOOL includeErrorFiles;
 @property (nonatomic,assign) BOOL includeActivityFiles;
+@property (nonatomic,readonly) NSData * missingFieldsAsJson;
 
 +(GCSettingsBugReport*)bugReport;
 
 -(NSURLRequest*)urlResquestFor:(NSString*)aUrl;
 -(NSURLRequest*)urlRequest;
 -(void)cleanupAndReset;
+
 
 @end

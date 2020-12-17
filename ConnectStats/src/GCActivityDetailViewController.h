@@ -27,14 +27,13 @@
 #import "GCActivitiesOrganizer.h"
 #import "GCTrackStats.h"
 #import "GCCellMap.h"
-#import "GCSharingViewController.h"
 #import "GCActivityAutoLapChoices.h"
 #import "GCTrackFieldChoices.h"
 
 @class  GCActivityOrganizedFields;
 
 
-@interface GCActivityDetailViewController : UITableViewController<RZChildObject,GCSharingImageExporter,UIAlertViewDelegate,GCEntryFieldDelegate,GCCellSimpleGraphDelegate,UIGestureRecognizerDelegate>
+@interface GCActivityDetailViewController : UITableViewController<RZChildObject,UIAlertViewDelegate,GCEntryFieldDelegate,GCCellSimpleGraphDelegate,UIGestureRecognizerDelegate>
 
 @property (nonatomic,retain) GCActivityOrganizedFields * organizedFields;
 

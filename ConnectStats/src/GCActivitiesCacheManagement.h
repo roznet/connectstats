@@ -25,6 +25,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSUInteger, gcCacheFile){
     gcCacheFileActivityDb,
     gcCacheFileTennisDb,
@@ -64,9 +66,11 @@ typedef NS_ENUM(NSUInteger, gcCacheFile){
 
 -(void)analyze;
 
-+(NSArray*)errorFiles;
-+(NSArray*)crashFiles;
++(NSArray<NSString*>*)errorFiles;
++(NSArray<NSString*>*)crashFiles;
 -(void)cleanupFiles:(gcCacheFile)type;
 -(NSArray<GCActivitiesCacheFileInfo*>*)infos;
 -(NSArray<NSString*>*)fileNamesForType:(gcCacheFile)type;
 @end
+
+NS_ASSUME_NONNULL_END

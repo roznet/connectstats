@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "DeviceGuru",
+        "repositoryURL": "https://github.com/InderKumarRathore/DeviceGuru",
+        "state": {
+          "branch": "master",
+          "revision": "d51687ed10d28024c8d30155f0af722141043ade",
+          "version": null
+        }
+      },
+      {
         "package": "FitFileparser",
         "repositoryURL": "https://github.com/roznet/FitFileParser.git",
         "state": {
@@ -44,6 +53,15 @@
           "branch": null,
           "revision": "e394ccbd48af37f6391fb47508a103749df34f32",
           "version": "1.0.0"
+        }
+      },
+      {
+        "package": "ZIPFoundation",
+        "repositoryURL": "https://github.com/roznet/ZIPFoundation",
+        "state": {
+          "branch": "development",
+          "revision": "20102f58d4914a46aeb9b4614db540a679aa62aa",
+          "version": null
         }
       }
     ]

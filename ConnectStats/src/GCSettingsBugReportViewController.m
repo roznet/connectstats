@@ -79,9 +79,6 @@
 	WKWebView *contentView	= [[WKWebView alloc] initWithFrame: self.view.frame];
     contentView.navigationDelegate = self;
 
-    self.report = [GCSettingsBugReport bugReport];
-    self.report.includeErrorFiles = self.includeErrorFiles;
-    self.report.includeActivityFiles = self.includeActivityFiles;
     
     self.webView = contentView;
 
@@ -90,24 +87,33 @@
     self.hud.labelText = @"Preparing Report";
 
 	[contentView release];
-    self.urlRequest = self.report.urlRequest;
     
-    self.task = [[NSURLSession sharedSession] dataTaskWithRequest:self.urlRequest
-                                        completionHandler:^(NSData*data,NSURLResponse*response,NSError*error){
-        if (error) {
-            RZLog(RZLogError,@"Error loading bugreport %@",error);
-        }else{
-            NSString *encodingName = [response textEncodingName];
-            NSStringEncoding encodingType = encodingName ? CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName)) : NSUTF8StringEncoding;
-            NSString * html = RZReturnAutorelease([[NSString alloc] initWithData:data encoding:encodingType]);
+    dispatch_async([GCAppGlobal worker], ^(){
+        self.report = [GCSettingsBugReport bugReport];
+        self.report.includeErrorFiles = self.includeErrorFiles;
+        self.report.includeActivityFiles = self.includeActivityFiles;
+        self.urlRequest = self.report.urlRequest;
+        
+        self.task = [[NSURLSession sharedSession] dataTaskWithRequest:self.urlRequest
+                                            completionHandler:^(NSData*data,NSURLResponse*response,NSError*error){
+            if (error) {
+                RZLog(RZLogError,@"Error loading bugreport %@",error);
+            }else{
+                NSString *encodingName = [response textEncodingName];
+                NSStringEncoding encodingType = encodingName ? CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName)) : NSUTF8StringEncoding;
+                NSString * html = RZReturnAutorelease([[NSString alloc] initWithData:data encoding:encodingType]);
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self.webView loadHTMLString:html baseURL:self.urlRequest.URL];;
+                });
+            }
+        }];
+        if (self.task) {
+            [self.task resume];
             dispatch_async(dispatch_get_main_queue(), ^(){
-                [self.webView loadHTMLString:html baseURL:self.urlRequest.URL];;
+                self.hud.labelText = @"Sending Report";
             });
         }
-    }];
-    if (self.task) {
-        [self.task resume];
-    }
+    });
 }
 
 - (void)didReceiveMemoryWarning
