@@ -1156,6 +1156,11 @@
 		42BD329D258BC856004D5E0F /* GCSettingsBugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BD319D258B51DF004D5E0F /* GCSettingsBugReport.swift */; };
 		42BD32A3258BC88B004D5E0F /* DeviceGuru in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD32A2258BC88B004D5E0F /* DeviceGuru */; };
 		42BD32A5258BC893004D5E0F /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD32A4258BC893004D5E0F /* ZIPFoundation */; };
+		42BD33F2258CB2D7004D5E0F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD33F1258CB2D7004D5E0F /* SwiftKeychainWrapper */; };
+		42BD3417258CB69E004D5E0F /* DeviceGuru in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD3416258CB69E004D5E0F /* DeviceGuru */; };
+		42BD341D258CB6AE004D5E0F /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD341C258CB6AE004D5E0F /* ZIPFoundation */; };
+		42BD3423258CB6C8004D5E0F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD3422258CB6C8004D5E0F /* SwiftKeychainWrapper */; };
+		42BD3429258CB6E1004D5E0F /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD3428258CB6E1004D5E0F /* MBProgressHUD */; };
 		42BDFE80242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
 		42BDFE81242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
 		42BDFE82242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
@@ -2694,6 +2699,7 @@
 				422DCB81258A27AF000DEE4B /* RZUtilsSwift in Frameworks */,
 				422FAFB919A1DD6000D09773 /* Accounts.framework in Frameworks */,
 				422DCD45258A7266000DEE4B /* FitFileParser in Frameworks */,
+				42BD341D258CB6AE004D5E0F /* ZIPFoundation in Frameworks */,
 				422FAFBA19A1DD6000D09773 /* AdSupport.framework in Frameworks */,
 				422FAFBB19A1DD6000D09773 /* MessageUI.framework in Frameworks */,
 				422FAFBC19A1DD6000D09773 /* Social.framework in Frameworks */,
@@ -2701,7 +2707,10 @@
 				422FAFBE19A1DD6000D09773 /* MapKit.framework in Frameworks */,
 				422FAFBF19A1DD6000D09773 /* CoreLocation.framework in Frameworks */,
 				422FAFC119A1DD6000D09773 /* UIKit.framework in Frameworks */,
+				42BD3423258CB6C8004D5E0F /* SwiftKeychainWrapper in Frameworks */,
+				42BD3417258CB69E004D5E0F /* DeviceGuru in Frameworks */,
 				423A983D228024BE00DEDAB9 /* RZExternalUniversal.framework in Frameworks */,
+				42BD3429258CB6E1004D5E0F /* MBProgressHUD in Frameworks */,
 				42F97BDB200B5344009905D2 /* RZExternal.framework in Frameworks */,
 				422FAFC219A1DD6000D09773 /* Foundation.framework in Frameworks */,
 				42DE53C119CF69ED00009130 /* HealthKit.framework in Frameworks */,
@@ -2716,6 +2725,7 @@
 			files = (
 				4213AEB1201393CC0004B54B /* MapKit.framework in Frameworks */,
 				422DCC30258A6348000DEE4B /* RZUtilsSwift in Frameworks */,
+				42BD33F2258CB2D7004D5E0F /* SwiftKeychainWrapper in Frameworks */,
 				422DCC36258A6357000DEE4B /* FitFileParser in Frameworks */,
 				4251B5B7219F743400E15F9F /* RZExternalUniversal.framework in Frameworks */,
 				422DCC2E258A6348000DEE4B /* RZUtilsCore in Frameworks */,
@@ -5144,6 +5154,10 @@
 				422DCB82258A27AF000DEE4B /* RZUtilsUniversal */,
 				422DCC27258A633A000DEE4B /* RZUtilsTouch */,
 				422DCD44258A7266000DEE4B /* FitFileParser */,
+				42BD3416258CB69E004D5E0F /* DeviceGuru */,
+				42BD341C258CB6AE004D5E0F /* ZIPFoundation */,
+				42BD3422258CB6C8004D5E0F /* SwiftKeychainWrapper */,
+				42BD3428258CB6E1004D5E0F /* MBProgressHUD */,
 			);
 			productName = GarminConnect;
 			productReference = 422FAFF119A1DD6000D09773 /* HealthStats.app */;
@@ -5173,6 +5187,7 @@
 				422DCC33258A6350000DEE4B /* FMDB */,
 				422DCC35258A6357000DEE4B /* FitFileParser */,
 				422DCD73258A74DF000DEE4B /* RZUtilsMacOS */,
+				42BD33F1258CB2D7004D5E0F /* SwiftKeychainWrapper */,
 			);
 			productName = FitFileExplorer;
 			productReference = 4253B4561CD49F7E00437E6A /* FitFileExplorer.app */;
@@ -7628,7 +7643,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 6.6.1;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "-fcxx-modules";
+				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -7792,7 +7807,7 @@
 				);
 				MARKETING_VERSION = 5.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				OTHER_CFLAGS = "-fcxx-modules";
+				OTHER_CFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.connectstatstestapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -8305,6 +8320,31 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
 			productName = ZIPFoundation;
+		};
+		42BD33F1258CB2D7004D5E0F /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42BD320B258BB9A2004D5E0F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		42BD3416258CB69E004D5E0F /* DeviceGuru */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42BD31AC258B53C7004D5E0F /* XCRemoteSwiftPackageReference "DeviceGuru" */;
+			productName = DeviceGuru;
+		};
+		42BD341C258CB6AE004D5E0F /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+		42BD3422258CB6C8004D5E0F /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42BD320B258BB9A2004D5E0F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		42BD3428258CB6E1004D5E0F /* MBProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42BD322B258BBA8A004D5E0F /* XCRemoteSwiftPackageReference "MBProgressHUD" */;
+			productName = MBProgressHUD;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

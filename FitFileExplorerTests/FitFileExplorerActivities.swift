@@ -89,54 +89,52 @@ class FitFileExplorerActivities: XCTestCase {
         let organizer = ActivitiesOrganizer()
         var reachedEnd = false
         RZFileOrganizer.removeEditableFile("test_save_big.db")
-        if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("test_save_big.db")){
-            db.open()
-            organizer.db = db
-            
-            let rawfiles = RZFileOrganizer.writeableFiles(matching: { (s) -> Bool in s.hasPrefix("last_modern_search") } )
-
-            
-            let files = rawfiles.sorted {
-                if let l = Int($0.replacingOccurrences(of: "last_modern_search_", with: "").replacingOccurrences(of: ".json", with: "")),
-                    let r = Int($1.replacingOccurrences(of: "last_modern_search_", with: "").replacingOccurrences(of: ".json", with: "")) {
-                    return l < r
-                }else{
-                    return false
-                }
+        let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("test_save_big.db"))
+        db.open()
+        organizer.db = db
+        
+        let rawfiles = RZFileOrganizer.writeableFiles(matching: { (s) -> Bool in s.hasPrefix("last_modern_search") } )
+        
+        
+        let files = rawfiles.sorted {
+            if let l = Int($0.replacingOccurrences(of: "last_modern_search_", with: "").replacingOccurrences(of: ".json", with: "")),
+               let r = Int($1.replacingOccurrences(of: "last_modern_search_", with: "").replacingOccurrences(of: ".json", with: "")) {
+                return l < r
+            }else{
+                return false
             }
-            
-            var count = 0
-            var samplecount = 0
-            var samplechange = 0
-            var empty = 0
-            
-            for fn in files {
-                let url = URL( fileURLWithPath: RZFileOrganizer.writeableFilePath(fn) )
-                let res = organizer.load(url: url)
-                if res.updated == 0 {
-                    empty+=1
-                }
-                
-                count += 1
-                if samplecount != 0 && organizer.sample().numbers.count != samplecount {
-                    samplechange += 1
-                }
-                samplecount = organizer.sample().numbers.count
-            }
-            RZSLog.info("loaded \(count) files, samplecount: \(samplecount), samplechange: \(samplechange) empty: \(empty)")
-            
-            reachedEnd = true
         }
+        
+        var count = 0
+        var samplecount = 0
+        var samplechange = 0
+        var empty = 0
+        
+        for fn in files {
+            let url = URL( fileURLWithPath: RZFileOrganizer.writeableFilePath(fn) )
+            let res = organizer.load(url: url)
+            if res.updated == 0 {
+                empty+=1
+            }
+            
+            count += 1
+            if samplecount != 0 && organizer.sample().numbers.count != samplecount {
+                samplechange += 1
+            }
+            samplecount = organizer.sample().numbers.count
+        }
+        RZSLog.info("loaded \(count) files, samplecount: \(samplecount), samplechange: \(samplechange) empty: \(empty)")
+        
+        reachedEnd = true
         XCTAssertTrue(reachedEnd)
     }
     
     func testLoadBig() {
         if let fp = RZFileOrganizer.writeableFilePathIfExists("test_save_big.db") {
-            if let db = FMDatabase(path: fp){
-                db.open()
-                let organizer = ActivitiesOrganizer(db: db)
-                XCTAssertTrue(organizer.count > 1000)
-            }
+            let db = FMDatabase(path: fp)
+            db.open()
+            let organizer = ActivitiesOrganizer(db: db)
+            XCTAssertTrue(organizer.count > 1000)
         }
     }
     
@@ -211,54 +209,45 @@ class FitFileExplorerActivities: XCTestCase {
         RZFileOrganizer.removeEditableFile("test_activities.db")
         if let organizer = ActivitiesOrganizer(url: garmin_sample_url) {
             
-            if let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("test_activities.db")) {
-                db.open()
-
-                if db.tableExists("activities") {
-                    XCTAssertEqual(self.intForQuery(db: db, query: "SELECT COUNT(*) FROM activities"), 0)
-                }
-                
-                organizer.save(to: db)
-                organizer.db = db
-                
-                XCTAssertEqual(self.intForQuery(db: db, query: "SELECT COUNT(*) FROM activities"), organizer.activityList.count)
-
-                let reloaded = ActivitiesOrganizer(db: db)
-                XCTAssertEqual(reloaded.activityList.count, organizer.activityList.count)
-                
-                var count = 0
-                for activity in organizer.activityList {
-                    if let reloaded_activity = reloaded.activity(activityId: activity.activityId) {
-                        count+=1
-                        XCTAssertEqual(activity.time, reloaded_activity.time)
-                        XCTAssertEqual(activity.numbers.count, reloaded_activity.numbers.count)
-                    }
-                }
-                XCTAssertEqual(count, organizer.count)
-                
-                let garmin_sample_next = "last_modern_search_0.json"
-                let garmin_sample_next_url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(garmin_sample_next, for: type(of:self)))
-                
-                let startcount = organizer.count
-                let samplecount = organizer.sample().numbers.count
-                let res = organizer.load(url: garmin_sample_next_url)
-                XCTAssertEqual(organizer.count, startcount+res.updated)
-
-                let newsamplecount = organizer.sample().numbers.count
-                XCTAssertEqual(newsamplecount, samplecount)
-                
-                reachedEnd = true
+            let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("test_activities.db"))
+            db.open()
+            
+            if db.tableExists("activities") {
+                XCTAssertEqual(self.intForQuery(db: db, query: "SELECT COUNT(*) FROM activities"), 0)
             }
+            
+            organizer.save(to: db)
+            organizer.db = db
+            
+            XCTAssertEqual(self.intForQuery(db: db, query: "SELECT COUNT(*) FROM activities"), organizer.activityList.count)
+            
+            let reloaded = ActivitiesOrganizer(db: db)
+            XCTAssertEqual(reloaded.activityList.count, organizer.activityList.count)
+            
+            var count = 0
+            for activity in organizer.activityList {
+                if let reloaded_activity = reloaded.activity(activityId: activity.activityId) {
+                    count+=1
+                    XCTAssertEqual(activity.time, reloaded_activity.time)
+                    XCTAssertEqual(activity.numbers.count, reloaded_activity.numbers.count)
+                }
+            }
+            XCTAssertEqual(count, organizer.count)
+            
+            let garmin_sample_next = "last_modern_search_0.json"
+            let garmin_sample_next_url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(garmin_sample_next, for: type(of:self)))
+            
+            let startcount = organizer.count
+            let samplecount = organizer.sample().numbers.count
+            let res = organizer.load(url: garmin_sample_next_url)
+            XCTAssertEqual(organizer.count, startcount+res.updated)
+            
+            let newsamplecount = organizer.sample().numbers.count
+            XCTAssertEqual(newsamplecount, samplecount)
+            
+            reachedEnd = true
         }
         
         XCTAssertTrue(reachedEnd)
     }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }

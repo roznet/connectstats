@@ -84,7 +84,7 @@
 
     [self.view addSubview:contentView];
     self.hud =[MBProgressHUD showHUDAddedTo:contentView animated:YES];
-    self.hud.label.text = @"Preparing Report";
+    self.hud.label.text = NSLocalizedString( @"Preparing Report", @"Bug Report Progress");
 	[contentView release];
     
     dispatch_async([GCAppGlobal worker], ^(){
@@ -109,7 +109,7 @@
         if (self.task) {
             [self.task resume];
             dispatch_async(dispatch_get_main_queue(), ^(){
-                self.hud.label.text = @"Sending Report";
+                self.hud.label.text = NSLocalizedString( @"Sending Report", @"Bug Report Progress");
             });
         }
     });

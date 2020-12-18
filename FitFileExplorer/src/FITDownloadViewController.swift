@@ -29,7 +29,7 @@ import Cocoa
 import RZUtilsCore
 import RZUtilsMacOS
 import GenericJSON
-import KeychainSwift
+import SwiftKeychainWrapper
 import RZUtilsSwift
 import FitFileParser
 import FitFileParserTypes
@@ -51,7 +51,7 @@ extension GCField {
 
 class FITDownloadViewController: NSViewController {
     
-    let keychain = KeychainSwift()
+    let keychain = KeychainWrapper(serviceName: "net.ro-z.FitFileExplorer")
     
     @IBOutlet weak var userName: NSTextField!
     @IBOutlet weak var password: NSSecureTextField!
@@ -67,7 +67,8 @@ class FITDownloadViewController: NSViewController {
     // MARK: -
     
     func databaseFileName() -> String {
-        if let saved_username = keychain.get(FITAppGlobal.ConfigParameters.loginName.rawValue){
+        if let saved_username =
+            keychain.string(forKey: FITAppGlobal.ConfigParameters.loginName.rawValue){
         
             var invalidCharacters = CharacterSet(charactersIn: ":/")
            
@@ -279,14 +280,14 @@ class FITDownloadViewController: NSViewController {
                                                name: ActivitiesOrganizer.Notifications.listChange,
                                                object: nil)
 
-        if let saved_username = keychain.get(FITAppGlobal.ConfigParameters.loginName.rawValue){
+        if let saved_username = keychain.string(forKey: FITAppGlobal.ConfigParameters.loginName.rawValue){
             userName.stringValue = saved_username
             if let update = try? JSON( [FITAppGlobal.ConfigParameters.loginName.rawValue:saved_username]) {
                 FITAppGlobal.shared.updateSettings(json: update)
             }
         }
         
-        if let saved_password = keychain.get(FITAppGlobal.ConfigParameters.password.rawValue) {
+        if let saved_password = keychain.string(forKey: FITAppGlobal.ConfigParameters.password.rawValue) {
             password.stringValue = saved_password
             if let update = try? JSON( [FITAppGlobal.ConfigParameters.password.rawValue:saved_password]) {
                 FITAppGlobal.shared.updateSettings(json: update)
