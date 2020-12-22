@@ -8,7 +8,6 @@
 
 import Foundation
 import FitFileParser
-import FitFileParserTypes
 
 import GenericJSON
 
@@ -23,7 +22,7 @@ class FITFitFileInterpret: NSObject {
     
     public var activityType : GCActivityType {
         get {
-            let sportMsg = self.fitFile.messages(forMessageType: FIT_MESG_NUM_SPORT)
+            let sportMsg = self.fitFile.messages(forMessageType: FitMessageType.sport)
             if self.sessionIndex < sportMsg.count {
                 let first = sportMsg[sessionIndex]
                 if let sportKey = first.name(field: "sport"),
@@ -32,7 +31,7 @@ class FITFitFileInterpret: NSObject {
                 }
             }else{
                 // If no sport message see if the sport is in the session message
-                let sessionMsg = self.fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION )
+                let sessionMsg = self.fitFile.messages(forMessageType: FitMessageType.session )
                 if self.sessionIndex < sessionMsg.count {
                     let first = sessionMsg[sessionIndex]
                     if let sportKey = first.name(field: "sport"),
@@ -114,13 +113,13 @@ class FITFitFileInterpret: NSObject {
     
     func reportAlternates() {
         for (messageType,values) in self.alternates{
-            if let messageDescription = rzfit_mesg_num_string(input: messageType) {
-                for (field,keys) in values {
-                    if( keys.count > 1){
-                        print( "Alternates found for \(messageDescription): \(field) \(keys)")
-                    }
+            let messageDescription =  messageType.name()
+            for (field,keys) in values {
+                if( keys.count > 1){
+                    print( "Alternates found for \(messageDescription): \(field) \(keys)")
                 }
             }
+            
         }
     }
     /// Extract data from a fields message into GCField and numbers, 
@@ -275,7 +274,7 @@ class FITFitFileInterpret: NSObject {
             }
         }
         // Special case
-        if( messageType == FIT_MESG_NUM_LAP && fieldX == "start_time"){
+        if( messageType == FitMessageType.lap && fieldX == "start_time"){
             
             if let message = messages.last?.interpretedFields(),
                 let total_time = message["total_elapsed_time"],

@@ -32,7 +32,7 @@ import GenericJSON
 import SwiftKeychainWrapper
 import RZUtilsSwift
 import FitFileParser
-import FitFileParserTypes
+
 
 
 extension Date {
@@ -109,7 +109,7 @@ class FITDownloadViewController: NSViewController {
         let csv = FitFile.csv(messageType: messageType, fitFiles: files)
         let content = csv.joined(separator: "\n")
         
-        let mesg = rzfit_mesg_num_string(input: messageType) ?? "mesg"
+        let mesg =  messageType.name()
         
         self.askAndSave(content: content, candidate: "export_\(mesg)")
     }
@@ -191,15 +191,15 @@ class FITDownloadViewController: NSViewController {
     }
     
     @IBAction func exportFilesAsCSVSessions(_ sender: Any) {
-        self.exportFitFilesAsCSV(messageType: FIT_MESG_NUM_SESSION)
+        self.exportFitFilesAsCSV(messageType: FitMessageType.session)
     }
     
     @IBAction func exportFilesAsCSVLaps(_ sender: Any) {
-        self.exportFitFilesAsCSV(messageType: FIT_MESG_NUM_LAP)
+        self.exportFitFilesAsCSV(messageType: FitMessageType.lap)
     }
     
     @IBAction func exportFilesAsCSVRecords(_ sender: Any) {
-        self.exportFitFilesAsCSV(messageType: FIT_MESG_NUM_RECORD)
+        self.exportFitFilesAsCSV(messageType: FitMessageType.record)
     }
     
     @IBAction func exportList(_ sender: Any) {

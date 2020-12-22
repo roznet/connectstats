@@ -8,14 +8,14 @@
 
 import Cocoa
 import FitFileParser
-import FitFileParserTypes
+
 
 class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelegate {
     
     static let kFITNotificationOutlineSelectionChanged = Notification.Name( "kFITNotificationOutlineSelectionChanged" )
     
     let selectionContext : FITSelectionContext
-    let orderedMessageTypes : [FIT_MESG_NUM]
+    let orderedMessageTypes : [FitMessageType] 
     
     var fitFile: FitFile {
         return self.selectionContext.fitFile
@@ -51,7 +51,7 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
         if index < types.count {
             return types[index]
         }
-        return FIT_MESG_NUM_INVALID
+        return FitMessageType.invalid
     }
     
     func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {

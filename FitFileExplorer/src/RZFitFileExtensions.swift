@@ -28,19 +28,20 @@
 import Foundation
 import RZUtilsSwift
 import FitFileParser
-import FitFileParserTypes
+
 
 
 extension FitFile {
     
     func preferredMessageType() -> FitMessageType {
-        let preferred = [ FIT_MESG_NUM_SESSION, FIT_MESG_NUM_RECORD, FIT_MESG_NUM_FILE_ID]
+        let preferred = [ FitMessageType.session, FitMessageType.record, FitMessageType.file_id]
+        
         for one in preferred {
             if self.messageTypes.contains(one) {
                 return one
             }
         }
-        return FIT_MESG_NUM_FILE_ID
+        return FitMessageType.file_id
     }
     
     func orderedMessageTypes() -> [FitMessageType] {

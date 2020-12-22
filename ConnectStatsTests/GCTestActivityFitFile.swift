@@ -9,7 +9,6 @@
 import XCTest
 @testable import ConnectStats
 import FitFileParser
-import FitFileParserTypes
 
 
 class GCTestActivityFitFile: XCTestCase {
@@ -66,7 +65,7 @@ class GCTestActivityFitFile: XCTestCase {
             
             if
                 let fitFile = FitFile(file: url){
-                let messages = fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION)
+                let messages = fitFile.messages(forMessageType: FitMessageType.session)
                 var activities : [GCActivity] = []
                 for message in messages {
                     if let messageStart = message.interpretedField(key: "start_time")?.time,

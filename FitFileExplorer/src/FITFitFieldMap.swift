@@ -28,7 +28,6 @@
 import Foundation
 import GenericJSON
 import FitFileParser
-import FitFileParserTypes
 import RZUtilsSwift
 
 
@@ -60,13 +59,13 @@ class FITFitFieldMap: NSObject {
     
     func messageTypeKey( messageType: FitMessageType) -> String {
         switch (messageType){
-        case FIT_MESG_NUM_SESSION:
+        case FitMessageType.session:
             return "FIT_MESG_NUM_SESSION"
-        case FIT_MESG_NUM_LAP:
+        case FitMessageType.lap:
             return "FIT_MESG_NUM_LAP"
-        case FIT_MESG_NUM_RECORD:
+        case FitMessageType.record:
             return "FIT_MESG_NUM_RECORD"
-        case FIT_MESG_NUM_LENGTH:
+        case FitMessageType.length:
             return "FIT_MESG_NUM_LENGTH"
         default:
             return "FIT_MESG_NUM[\(messageType)]"

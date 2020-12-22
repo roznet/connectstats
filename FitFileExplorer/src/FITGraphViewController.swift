@@ -8,7 +8,7 @@
 
 import Cocoa
 import FitFileParser
-import FitFileParserTypes
+
 
 class FITGraphViewController: NSViewController {
 
@@ -71,7 +71,7 @@ class FITGraphViewController: NSViewController {
                     var type :gcGraphType =  gcGraphType.graphLine
                     if( !serie.isStrictlyIncreasingByX() ){
                         type = gcGraphType.scatterPlot
-                    }else if( selectionContext.messageType == FIT_MESG_NUM_LAP && selectionContext.selectedXField == "start_time"){
+                    }else if( selectionContext.messageType == FitMessageType.lap && selectionContext.selectedXField == "start_time"){
                         type = gcGraphType.graphStep
                     }
                     let dh = GCSimpleGraphDataHolder(useSerie, type: type, color: NSColor.blue, andUnit: serie.unit)

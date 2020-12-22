@@ -9,7 +9,6 @@
 import Foundation
 import CoreLocation
 import FitFileParser
-import FitFileParserTypes
 
 extension GCActivity {
 
@@ -33,7 +32,7 @@ extension GCActivity {
         self.init(id: activityId)
         let interp  = FITFitFileInterpret(fitFile: fitFile)
         
-        var messages = fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION)
+        var messages = fitFile.messages(forMessageType: FitMessageType.session)
 
         // First if more than one session isolate the session relevant for startTime
         var messageIndex = 0;
@@ -72,7 +71,7 @@ extension GCActivity {
             //self.activityType = type.key
             //self.activityTypeDetail = type
             
-            let stats = interp.summaryValueFromStatsForMessage(messageType: FIT_MESG_NUM_SESSION, interval: nil)
+            let stats = interp.summaryValueFromStatsForMessage(messageType: FitMessageType.session, interval: nil)
             
             self.mergeSummaryData(stats)
             
@@ -108,7 +107,7 @@ extension GCActivity {
             return nil;
         }
         
-        let events = fitFile.messages(forMessageType: FIT_MESG_NUM_EVENT)
+        let events = fitFile.messages(forMessageType: FitMessageType.event)
         var timers : [Date:gcTrackEventType] = [:];
         for event in events {
             if let time = event.time(field: "timestamp") {
@@ -125,7 +124,7 @@ extension GCActivity {
             }
         }
         
-        messages = fitFile.messages(forMessageType: FIT_MESG_NUM_RECORD)
+        messages = fitFile.messages(forMessageType: FitMessageType.record)
         
         var trackpoints : [GCTrackPoint] = []
         for item in messages{
@@ -154,7 +153,7 @@ extension GCActivity {
         
         var swim : Bool = false;
         
-        messages = fitFile.messages(forMessageType: FIT_MESG_NUM_LENGTH)
+        messages = fitFile.messages(forMessageType: FitMessageType.length)
         var swimpoints : [GCTrackPoint] = []
         if messages.count > 0 {
             swim = true
@@ -191,7 +190,7 @@ extension GCActivity {
         }
 
         
-        messages = fitFile.messages(forMessageType: FIT_MESG_NUM_LAP)
+        messages = fitFile.messages(forMessageType: FitMessageType.lap)
         var laps : [GCLap] = []
         var lapsSwim : [GCLap] = []
         

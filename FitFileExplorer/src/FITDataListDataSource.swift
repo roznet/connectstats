@@ -9,7 +9,7 @@
 import Cocoa
 import RZUtilsMacOS
 import FitFileParser
-import FitFileParserTypes
+
 
 
 /*
@@ -99,9 +99,10 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
             self.displayFields = samplesKeys
         }
         // record could be session to get value or record to do stats
-        let messageDefaultMap : [FitMessageType:FitMessageType] = [FIT_MESG_NUM_RECORD  :FIT_MESG_NUM_RECORD,
-                                                                       FIT_MESG_NUM_LAP     :FIT_MESG_NUM_RECORD,
-                                                                       FIT_MESG_NUM_SESSION :FIT_MESG_NUM_RECORD ]
+        let messageDefaultMap : [FitMessageType:FitMessageType] = [ FitMessageType.record : FitMessageType.record,
+                                                                    FitMessageType.lap    : FitMessageType.record,
+                                                                    FitMessageType.session: FitMessageType.record
+                                ]
         
         self.statsMessageType = messageDefaultMap[context.messageType]
         

@@ -27,7 +27,6 @@
 
 import Foundation
 import FitFileParser
-import FitFileParserTypes
 
 
 extension FitMessage {

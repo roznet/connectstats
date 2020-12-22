@@ -8,7 +8,6 @@
 
 import Foundation
 import FitFileParser
-import FitFileParserTypes
 
 
 class FITSelectionContext {
@@ -86,7 +85,7 @@ class FITSelectionContext {
     
     // MARK: - Dependent/Stats messages
     
-    var preferredDependendMessageType : [FitMessageType] = [FIT_MESG_NUM_RECORD, FIT_MESG_NUM_LAP, FIT_MESG_NUM_SESSION]
+    var preferredDependendMessageType : [FitMessageType] = [FitMessageType.record,FitMessageType.lap,FitMessageType.session]
     var statsUsing : FitMessageType?
     var statsFor : FitMessageType?
     
@@ -238,7 +237,7 @@ class FITSelectionContext {
     
     /// Setup fields if new message selected
     private func updateWithDefaultForCurrentMessageType(){
-        if self.messageType == FIT_MESG_NUM_LAP || self.messageType == FIT_MESG_NUM_SESSION {
+        if self.messageType == FitMessageType.lap || self.messageType == FitMessageType.session {
             self.statsFor = self.messageType
         }
         
