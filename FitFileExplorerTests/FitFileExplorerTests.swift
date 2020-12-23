@@ -9,7 +9,7 @@
 import XCTest
 @testable import FitFileExplorer
 import FitFileParser
-import FitFileParserTypes
+
 
 class FitFileExplorerTests: XCTestCase {
     
@@ -32,9 +32,9 @@ class FitFileExplorerTests: XCTestCase {
                 let fasttypes = fastfit.messageTypes
                 XCTAssertNotNil(fasttypes)
                 
-                let records = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
+                let records = fastfit.messages(forMessageType: FitMessageType.record)
                 if  records.count > 0 {
-                    let csv = fastfit.csv(messageType: FIT_MESG_NUM_RECORD)
+                    let csv = fastfit.csv(messageType: FitMessageType.record)
                     XCTAssertEqual(csv.count, records.count+1)
                     
                     var size : Int? = nil
@@ -204,7 +204,7 @@ class FitFileExplorerTests: XCTestCase {
             for data in datas{
                 if let data = data {
                     let fastfit = FitFile(data: data)
-                    let records = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
+                    let records = fastfit.messages(forMessageType: FitMessageType.record)
                     XCTAssertGreaterThan(records.count, 0)
                 }else{
                     XCTAssertTrue(false)
@@ -213,7 +213,7 @@ class FitFileExplorerTests: XCTestCase {
             
             if let one = datas.first, let data = one {
                 let fastfit = FitFile(data: data)
-                let records = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
+                let records = fastfit.messages(forMessageType: FitMessageType.record)
                 let interp = records.map {
                     $0.interpretedFields()
                 }
