@@ -461,6 +461,8 @@
 		426CC4731BAEB9920033978C /* GCAppActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 426CC4701BAEB9920033978C /* GCAppActions.m */; };
 		426CC4751BAEBD060033978C /* GCTestsActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 426CC4741BAEBD060033978C /* GCTestsActions.m */; };
 		426D11A6249B639B00BA38E1 /* GCTestWebAsync.m in Sources */ = {isa = PBXBuildFile; fileRef = 426D11A5249B639B00BA38E1 /* GCTestWebAsync.m */; };
+		426DA959259602F100413AEB /* FITDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426DA958259602F100413AEB /* FITDocumentController.swift */; };
+		426DA9602596200200413AEB /* FITAccessoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426DA95F2596200200413AEB /* FITAccessoryViewController.swift */; };
 		426DFE6919D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
 		426DFE6A19D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
 		426F42461DB247FB00937DD8 /* GCTestsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 426F42451DB247FB00937DD8 /* GCTestsHelper.m */; };
@@ -1865,6 +1867,8 @@
 		426CC4701BAEB9920033978C /* GCAppActions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCAppActions.m; path = src/GCAppActions.m; sourceTree = "<group>"; };
 		426CC4741BAEBD060033978C /* GCTestsActions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestsActions.m; sourceTree = "<group>"; };
 		426D11A5249B639B00BA38E1 /* GCTestWebAsync.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCTestWebAsync.m; sourceTree = "<group>"; };
+		426DA958259602F100413AEB /* FITDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITDocumentController.swift; path = src/FITDocumentController.swift; sourceTree = "<group>"; };
+		426DA95F2596200200413AEB /* FITAccessoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITAccessoryViewController.swift; path = src/FITAccessoryViewController.swift; sourceTree = "<group>"; };
 		426DFE6719D5FE130031EFF1 /* GCHealthKitActivityParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitActivityParser.h; path = src/GCHealthKitActivityParser.h; sourceTree = "<group>"; };
 		426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitActivityParser.m; path = src/GCHealthKitActivityParser.m; sourceTree = "<group>"; };
 		426EC771246831CC00666068 /* GCStatsDerivedAnalysisViewControllerConsts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedAnalysisViewControllerConsts.h; path = src/GCStatsDerivedAnalysisViewControllerConsts.h; sourceTree = "<group>"; };
@@ -3436,6 +3440,8 @@
 				423953A61CE71ED4009A3AC3 /* FITOutlineCellView.h */,
 				423953A71CE71ED4009A3AC3 /* FITOutlineCellView.m */,
 				424F1A7A21E20477009DD368 /* FITAppGlobal.swift */,
+				426DA958259602F100413AEB /* FITDocumentController.swift */,
+				426DA95F2596200200413AEB /* FITAccessoryViewController.swift */,
 			);
 			name = Application;
 			sourceTree = "<group>";
@@ -6561,6 +6567,7 @@
 				428DD4BA219A3BA2006DF5B5 /* GCGarminActivityInterpret.m in Sources */,
 				4202AE2E21A8A20800D8D696 /* FITGarminDownloadManager.swift in Sources */,
 				42BFC2301DCE2F7F00EAD40E /* FITOutlineViewController.swift in Sources */,
+				426DA9602596200200413AEB /* FITAccessoryViewController.swift in Sources */,
 				422DCC8E258A656B000DEE4B /* FITFitEnumMap.m in Sources */,
 				42F4E5121DE08D51001AB244 /* GCMapAnnotation.m in Sources */,
 				42DCEF851E181E3500F66AF1 /* FITFitValueStatistics.swift in Sources */,
@@ -6601,6 +6608,7 @@
 				4253B4831CDA857B00437E6A /* FITViewController.m in Sources */,
 				429DD652219E3E36004FD716 /* GCWebUrl.m in Sources */,
 				4253B4851CDA858F00437E6A /* main.m in Sources */,
+				426DA959259602F100413AEB /* FITDocumentController.swift in Sources */,
 				4248ED9B1DCFFB5600254216 /* GCFieldCache.m in Sources */,
 				42DCEF831E181CF700F66AF1 /* FITFitFieldsStatistics.swift in Sources */,
 				424F1A7B21E20477009DD368 /* FITAppGlobal.swift in Sources */,

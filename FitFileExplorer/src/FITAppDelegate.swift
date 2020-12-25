@@ -11,6 +11,10 @@ import Cocoa
 
 class FITAppDelegate : NSObject, NSApplicationDelegate {
     
+    // Trick to override default NSDocumentController as first instance of a
+    // DocumentController will become the default. create it as variable in app delegate
+    let documentController = FITDocumentController()
+    
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Force init of the shared global state
         _ = FITAppGlobal.shared

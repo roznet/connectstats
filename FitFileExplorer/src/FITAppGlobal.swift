@@ -27,6 +27,7 @@
 
 import Cocoa
 import GenericJSON
+import FitFileParser
 
 class FITAppGlobal {
     
@@ -43,6 +44,8 @@ class FITAppGlobal {
     let activityTypes : GCActivityTypes
     let downloadManager : FITGarminDownloadManager
     let organizer : ActivitiesOrganizer
+    
+    var parsingTypes : [URL:FitFile.ParsingType] = [:]
     
     private init() {
         settings = [:]
