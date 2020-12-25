@@ -8095,8 +8095,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/roznet/FitFileParser.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.3;
+				branch = main;
+				kind = branch;
 			};
 		};
 		422DCD72258A74DF000DEE4B /* XCRemoteSwiftPackageReference "rzutils-macos" */ = {

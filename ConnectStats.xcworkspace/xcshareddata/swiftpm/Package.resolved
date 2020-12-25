@@ -6,17 +6,17 @@
         "repositoryURL": "https://github.com/InderKumarRathore/DeviceGuru",
         "state": {
           "branch": "master",
-          "revision": "d51687ed10d28024c8d30155f0af722141043ade",
+          "revision": "127b1e74e48160ead451771fe2fdebe05debbd04",
           "version": null
         }
       },
       {
-        "package": "FitFileparser",
+        "package": "FitFileParser",
         "repositoryURL": "https://github.com/roznet/FitFileParser.git",
         "state": {
-          "branch": null,
-          "revision": "daf7afc3739b107276f433688188702173b9895f",
-          "version": "1.1.0"
+          "branch": "main",
+          "revision": "e0e13588fb2c209be5d0b14b578bd5e960557144",
+          "version": null
         }
       },
       {
