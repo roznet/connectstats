@@ -32,8 +32,6 @@
 #define NOTIFY_NEW      @"new"
 #define NOTIFY_CHANGE   @"change"
 
-@class GTMOAuth2Authentication;
-
 typedef NS_ENUM(NSUInteger, GCWebStatus) {
     GCWebStatusOK,
     GCWebStatusLoginFailed,
@@ -86,7 +84,6 @@ typedef NS_ENUM(NSUInteger, gcWebService) {
 -(BOOL)priorityRequest;
 -(BOOL)isSameAsRequest:(nullable id)req;
 -(void)preConnectionSetup;
--(nullable GTMOAuth2Authentication*)oauth2Authentication;
 -(nullable NSString*)activityId;
 -(nullable id<GCWebRequest>)remediationReq;
 -(nullable NSURLRequest*)preparedUrlRequest;

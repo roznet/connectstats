@@ -542,13 +542,6 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
     [req process:theString encoding:connection ? [connection receivedEncoding] : NSUTF8StringEncoding andDelegate:self ];
 }
 
--(GTMOAuth2Authentication*)oauth2Authentication{
-    if ([self.currentRequestObject respondsToSelector:@selector(oauth2Authentication)]) {
-        return [self.currentRequestObject oauth2Authentication];
-    }
-    return nil;
-}
-
 -(void)authorizeRequest:(nonnull NSMutableURLRequest *)request completionHandler:(void (^_Nonnull)(NSError * _Nullable error))handler{
     if( [self.currentRequestObject respondsToSelector:@selector(authorizeRequest:completionHandler:)]){
         [self.currentRequestObject authorizeRequest:request completionHandler:handler];
