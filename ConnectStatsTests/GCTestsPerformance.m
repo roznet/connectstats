@@ -171,7 +171,7 @@
         
         GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
         
-        GCActivitiesOrganizerListRegister * listregister =[GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:service isFirst:YES];
+        GCActivitiesOrganizerListRegister * listregister =[GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:parser.activities from:service isFirst:YES];
         [listregister addToOrganizer:organizer];
         
         [db close];

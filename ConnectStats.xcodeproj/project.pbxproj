@@ -41,6 +41,18 @@
 		4211C52D19AAF2D3000DEF87 /* GCHealthKitRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 421516BB19A47C450080CD4C /* GCHealthKitRequest.m */; };
 		4211C53119AAF2D3000DEF87 /* GCHealthKitBodyRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4211C52719A72447000DEF87 /* GCHealthKitBodyRequest.m */; };
 		4211C53419AB043A000DEF87 /* version.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4211C53319AB043A000DEF87 /* version.plist */; };
+		4211D45C259780B900967874 /* GCStravaRequestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D45B259780B900967874 /* GCStravaRequestBase.swift */; };
+		4211D45D259780B900967874 /* GCStravaRequestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D45B259780B900967874 /* GCStravaRequestBase.swift */; };
+		4211D45E259780B900967874 /* GCStravaRequestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D45B259780B900967874 /* GCStravaRequestBase.swift */; };
+		4211D4682597829200967874 /* GCStravaRequestActivityList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D4672597829200967874 /* GCStravaRequestActivityList.swift */; };
+		4211D4692597829200967874 /* GCStravaRequestActivityList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D4672597829200967874 /* GCStravaRequestActivityList.swift */; };
+		4211D46A2597829300967874 /* GCStravaRequestActivityList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D4672597829200967874 /* GCStravaRequestActivityList.swift */; };
+		4211D4712597832D00967874 /* OAuthSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4211D4702597832D00967874 /* OAuthSwift */; };
+		4211D48725979A6E00967874 /* GCAppSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D48625979A6E00967874 /* GCAppSceneDelegate.swift */; };
+		4211D48825979A6E00967874 /* GCAppSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D48625979A6E00967874 /* GCAppSceneDelegate.swift */; };
+		4211D48925979A6E00967874 /* GCAppSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D48625979A6E00967874 /* GCAppSceneDelegate.swift */; };
+		4211D4B82598B31800967874 /* GCAppSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237D34624A741E000C55BB8 /* GCAppSceneDelegate.m */; };
+		4211D4BE2598B33900967874 /* OAuthSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4211D4BD2598B33900967874 /* OAuthSwift */; };
 		421208901C6E860700E0470D /* GCFieldsForCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4212088F1C6E860700E0470D /* GCFieldsForCategory.m */; };
 		421208911C6E860700E0470D /* GCFieldsForCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4212088F1C6E860700E0470D /* GCFieldsForCategory.m */; };
 		4213AEB1201393CC0004B54B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4213AEB0201393CC0004B54B /* MapKit.framework */; };
@@ -1618,6 +1630,9 @@
 		4211C52619A72447000DEF87 /* GCHealthKitBodyRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitBodyRequest.h; path = src/GCHealthKitBodyRequest.h; sourceTree = "<group>"; };
 		4211C52719A72447000DEF87 /* GCHealthKitBodyRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitBodyRequest.m; path = src/GCHealthKitBodyRequest.m; sourceTree = "<group>"; };
 		4211C53319AB043A000DEF87 /* version.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = version.plist; path = HealthStats/version.plist; sourceTree = "<group>"; };
+		4211D45B259780B900967874 /* GCStravaRequestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCStravaRequestBase.swift; path = src/GCStravaRequestBase.swift; sourceTree = "<group>"; };
+		4211D4672597829200967874 /* GCStravaRequestActivityList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCStravaRequestActivityList.swift; path = src/GCStravaRequestActivityList.swift; sourceTree = "<group>"; };
+		4211D48625979A6E00967874 /* GCAppSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCAppSceneDelegate.swift; path = src/GCAppSceneDelegate.swift; sourceTree = "<group>"; };
 		4212088E1C6E860700E0470D /* GCFieldsForCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldsForCategory.h; path = src/GCFieldsForCategory.h; sourceTree = "<group>"; };
 		4212088F1C6E860700E0470D /* GCFieldsForCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldsForCategory.m; path = src/GCFieldsForCategory.m; sourceTree = "<group>"; };
 		4213AEB0201393CC0004B54B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/MapKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -2776,6 +2791,7 @@
 				428FF70E15F36888007A88FA /* UIKit.framework in Frameworks */,
 				428FF71015F36888007A88FA /* Foundation.framework in Frameworks */,
 				42BD322D258BBA8A004D5E0F /* MBProgressHUD in Frameworks */,
+				4211D4712597832D00967874 /* OAuthSwift in Frameworks */,
 				42DE53C019CF696E00009130 /* HealthKit.framework in Frameworks */,
 				428FF71215F36888007A88FA /* CoreGraphics.framework in Frameworks */,
 				4251B5C1219F7D2600E15F9F /* RZExternalUniversal.framework in Frameworks */,
@@ -2807,6 +2823,7 @@
 				42BD3285258BC789004D5E0F /* SwiftKeychainWrapper in Frameworks */,
 				42BD32A5258BC893004D5E0F /* ZIPFoundation in Frameworks */,
 				422DCC20258A6325000DEE4B /* RZUtilsTouch in Frameworks */,
+				4211D4BE2598B33900967874 /* OAuthSwift in Frameworks */,
 				422DCB79258A278E000DEE4B /* RZUtilsCore in Frameworks */,
 				42EAE3EA200BB2E30017D65C /* RZExternalTestUtils.framework in Frameworks */,
 				42B5E2FF1BA5B7BF000FAE4E /* libsqlite3.tbd in Frameworks */,
@@ -3297,6 +3314,8 @@
 				42CFBABA18D26EB400EA4C48 /* GCStravaActivityList.m */,
 				42959CEB18D8F91100C0B841 /* GCStravaActivityStreams.h */,
 				42959CEC18D8F91100C0B841 /* GCStravaActivityStreams.m */,
+				4211D45B259780B900967874 /* GCStravaRequestBase.swift */,
+				4211D4672597829200967874 /* GCStravaRequestActivityList.swift */,
 			);
 			name = Requests;
 			sourceTree = "<group>";
@@ -3969,6 +3988,8 @@
 				428FF79015FB40EC007A88FA /* GCAppDelegate.m */,
 				4237D34524A741E000C55BB8 /* GCAppSceneDelegate.h */,
 				4237D34624A741E000C55BB8 /* GCAppSceneDelegate.m */,
+				4211D48625979A6E00967874 /* GCAppSceneDelegate.swift */,
+				428F9EED244C505100666625 /* GCAppReferenceData.m */,
 				428FF79115FB40EC007A88FA /* GCAppGlobal.h */,
 				428FF79215FB40EC007A88FA /* GCAppGlobal.m */,
 				425466F1162B233300700093 /* GCAppConstants.h */,
@@ -3984,7 +4005,6 @@
 				42C3CF461DA15E6900C25709 /* GCAppGlobal.swift */,
 				424D08BF1DC5DA4E000B4620 /* GCAppPasswordManager.swift */,
 				428F9EEC244C505100666625 /* GCAppReferenceData.h */,
-				428F9EED244C505100666625 /* GCAppReferenceData.m */,
 			);
 			name = AppDelegate;
 			sourceTree = "<group>";
@@ -5236,6 +5256,7 @@
 				42BD31EC258BAE2F004D5E0F /* ZIPFoundation */,
 				42BD320C258BB9A2004D5E0F /* SwiftKeychainWrapper */,
 				42BD322C258BBA8A004D5E0F /* MBProgressHUD */,
+				4211D4702597832D00967874 /* OAuthSwift */,
 			);
 			productName = GarminConnect;
 			productReference = 428FF70915F36888007A88FA /* ConnectStats.app */;
@@ -5291,6 +5312,7 @@
 				42BD3284258BC789004D5E0F /* SwiftKeychainWrapper */,
 				42BD32A2258BC88B004D5E0F /* DeviceGuru */,
 				42BD32A4258BC893004D5E0F /* ZIPFoundation */,
+				4211D4BD2598B33900967874 /* OAuthSwift */,
 			);
 			productName = ConnectStatsTestApp;
 			productReference = 42B5E1B91BA5AEC9000FAE4E /* ConnectStatsTestApp.app */;
@@ -5431,6 +5453,7 @@
 				42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 				42BD320B258BB9A2004D5E0F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
 				42BD322B258BBA8A004D5E0F /* XCRemoteSwiftPackageReference "MBProgressHUD" */,
+				4211D46F2597832D00967874 /* XCRemoteSwiftPackageReference "OAuthSwift" */,
 			);
 			productRefGroup = 428FF70A15F36888007A88FA /* Products */;
 			projectDirPath = "";
@@ -6331,6 +6354,7 @@
 				422FAEB519A1DD6000D09773 /* main.m in Sources */,
 				422FAEB619A1DD6000D09773 /* GCAppDelegate.m in Sources */,
 				4257766623205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */,
+				4211D45E259780B900967874 /* GCStravaRequestBase.swift in Sources */,
 				42BF8D7B24B505EB001E1C72 /* GCActivity+Assets.m in Sources */,
 				42BFC2541DCF50DB00EAD40E /* GCFieldInfo.m in Sources */,
 				422FAEB819A1DD6000D09773 /* GCAppGlobal.m in Sources */,
@@ -6345,6 +6369,7 @@
 				42FC177E1E195DEA00F55302 /* FITFitValueStatistics.swift in Sources */,
 				42C2A80424B9A82600E76F60 /* GCStatsMultiFieldConfigViewController.m in Sources */,
 				42C5A1B322AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */,
+				4211D46A2597829300967874 /* GCStravaRequestActivityList.swift in Sources */,
 				4281AF5D22F732AD00BFE408 /* GCConnectStatsRequestLogin.m in Sources */,
 				422FAEBF19A1DD6000D09773 /* GCWebUrl.m in Sources */,
 				42BDFE82242F7789001BCDC8 /* GCActivity+Series.m in Sources */,
@@ -6396,6 +6421,7 @@
 				4239E4CC19ABDA65000E67A2 /* GCStatsOneFieldConfig.m in Sources */,
 				422777751C36C940002F1D64 /* GCField.m in Sources */,
 				421F39A91B79EF8900CA7200 /* GCActivityThumbnails.m in Sources */,
+				4211D48925979A6E00967874 /* GCAppSceneDelegate.swift in Sources */,
 				42C0589A21D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */,
 				42D223982567E6B3009BCACE /* GCCellGrid+Templates.swift in Sources */,
 				422FAEF919A1DD6000D09773 /* GCFields.m in Sources */,
@@ -6642,6 +6668,7 @@
 				422777741C36C940002F1D64 /* GCField.m in Sources */,
 				428FF79415FB40EC007A88FA /* GCAppGlobal.m in Sources */,
 				428FF79915FB4115007A88FA /* GCActivityListViewController.m in Sources */,
+				4211D45C259780B900967874 /* GCStravaRequestBase.swift in Sources */,
 				428FF79A15FB4115007A88FA /* GCTabBarController.m in Sources */,
 				428FF79F15FB412C007A88FA /* GCWebConnect.m in Sources */,
 				428FF7A015FB412C007A88FA /* GCWebUrl.m in Sources */,
@@ -6656,6 +6683,7 @@
 				42B0B96415FC9206008275FF /* GCActivity.m in Sources */,
 				4277C0BD23BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m in Sources */,
 				42B0B97415FE8037008275FF /* GCGarminSearchJsonParser.m in Sources */,
+				4211D4682597829200967874 /* GCStravaRequestActivityList.swift in Sources */,
 				42E04E4D2538C34B005FFD5E /* GCCellActivity.swift in Sources */,
 				426DFE6919D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */,
 				42A22DF919E87BF9004407B8 /* GCHealthSleepMeasure.m in Sources */,
@@ -6707,6 +6735,7 @@
 				42959CED18D8F91100C0B841 /* GCStravaActivityStreams.m in Sources */,
 				42A425B52556BF8500E4AFBE /* GCField+Icons.swift in Sources */,
 				42AAB087184D2A82004B4D15 /* GCActivityTypeListViewController.m in Sources */,
+				4211D48725979A6E00967874 /* GCAppSceneDelegate.swift in Sources */,
 				4201528E1624D5AC004F64EF /* GCMapGradientPathOverlayView.m in Sources */,
 				42D4CA882496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */,
 				42A95B1C16321320000B2082 /* GCLap.m in Sources */,
@@ -6901,6 +6930,7 @@
 				42BF8D7A24B505EB001E1C72 /* GCActivity+Assets.m in Sources */,
 				421A51531C82FB5D00671587 /* GCStatsHistGraphOptionViewController.m in Sources */,
 				42295E081EC6F4D900F4F7EE /* GCTestServiceGarmin.m in Sources */,
+				4211D45D259780B900967874 /* GCStravaRequestBase.swift in Sources */,
 				427DDCC01DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */,
 				42D4CA8524963F90003F3AB7 /* GCStatsDerivedHistoryViewController.m in Sources */,
 				42453BA61DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m in Sources */,
@@ -7021,6 +7051,7 @@
 				42F3FB341DD783550042A9B1 /* GCFieldsDefs.m in Sources */,
 				427F937B1BEDFF1A00C177F9 /* GCViewActivityTypeButton.m in Sources */,
 				42D5798F25603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */,
+				4211D4B82598B31800967874 /* GCAppSceneDelegate.m in Sources */,
 				42E1A74E24277FF9006C868A /* GCActivity+BestRolling.m in Sources */,
 				427F93771BEDFA6F00C177F9 /* GCStatsMultiFieldViewController.m in Sources */,
 				42D4CA6F248D5497003F3AB7 /* GCStatsDerivedHistory.m in Sources */,
@@ -7071,7 +7102,9 @@
 				426872482542122A00F04E83 /* GCTestAppGlobal.m in Sources */,
 				42CE39471CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */,
 				429F2097244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m in Sources */,
+				4211D4692597829200967874 /* GCStravaRequestActivityList.swift in Sources */,
 				42D223972567E6B3009BCACE /* GCCellGrid+Templates.swift in Sources */,
+				4211D48825979A6E00967874 /* GCAppSceneDelegate.swift in Sources */,
 				42B5E2251BA5AF9A000FAE4E /* GCTestParsing.m in Sources */,
 				42B5E2211BA5AF9A000FAE4E /* GCTestViewController.m in Sources */,
 				42B5E2231BA5AF9A000FAE4E /* GCTestIconsCell.m in Sources */,
@@ -7337,7 +7370,7 @@
 				CODE_SIGN_ENTITLEMENTS = FitFileExplorer/FitFileExplorer.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2.4.0;
+				CURRENT_PROJECT_VERSION = 3.0.0;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -7351,7 +7384,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 2.4;
+				MARKETING_VERSION = 3.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -7378,7 +7411,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.4.0;
+				CURRENT_PROJECT_VERSION = 3.0.0;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -7393,7 +7426,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 2.4;
+				MARKETING_VERSION = 3.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -8067,6 +8100,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4211D46F2597832D00967874 /* XCRemoteSwiftPackageReference "OAuthSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/OAuthSwift/OAuthSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.2;
+			};
+		};
 		422DCB6D258A2779000DEE4B /* XCRemoteSwiftPackageReference "rzutils" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/roznet/rzutils.git";
@@ -8142,6 +8183,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4211D4702597832D00967874 /* OAuthSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4211D46F2597832D00967874 /* XCRemoteSwiftPackageReference "OAuthSwift" */;
+			productName = OAuthSwift;
+		};
+		4211D4BD2598B33900967874 /* OAuthSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4211D46F2597832D00967874 /* XCRemoteSwiftPackageReference "OAuthSwift" */;
+			productName = OAuthSwift;
+		};
 		422DCB6E258A2779000DEE4B /* RZUtilsSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 422DCB6D258A2779000DEE4B /* XCRemoteSwiftPackageReference "rzutils" */;

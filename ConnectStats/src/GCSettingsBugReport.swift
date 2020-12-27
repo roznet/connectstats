@@ -66,15 +66,15 @@ extension GCSettingsBugReport {
                 }
             }
             if self.includeActivityFiles {
-                if let activity = GCAppGlobal.organizer()?.currentActivity() {
+                if let activity = GCAppGlobal.organizer().currentActivity() {
                     let adbURL = URL( fileURLWithPath: activity.trackDbFileName)
                     try archive?.addEntry(with: adbURL.lastPathComponent, relativeTo: adbURL.deletingLastPathComponent())
                 }
-                if let currentDatabasePath = GCAppGlobal.profile()?.currentDatabasePath() {
+                if let currentDatabasePath = GCAppGlobal.profile().currentDatabasePath() {
                     let dbURL = URL( fileURLWithPath:RZFileOrganizer.writeableFilePath(currentDatabasePath ))
                     try archive?.addEntry(with: "activities_bugreport.db", fileURL: dbURL)
                 }
-                if let currentDerivedPath = GCAppGlobal.profile()?.currentDerivedDatabasePath() {
+                if let currentDerivedPath = GCAppGlobal.profile().currentDerivedDatabasePath() {
                     let dbURL = URL( fileURLWithPath:RZFileOrganizer.writeableFilePath(currentDerivedPath ))
                     try archive?.addEntry(with: "derived_bugreport.db", fileURL: dbURL)
                 }

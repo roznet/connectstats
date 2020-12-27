@@ -73,11 +73,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 @implementation GCActivitiesOrganizer
 //@synthesize db,allActivities,currentActivityIndex,reverseGeocoder,focusedField;
 
-
--(GCActivitiesOrganizer*)init{
-    return [self initWithDb:nil andThread:nil];
+-(instancetype)init{
+    return [self initWithDb:[FMDatabase databaseWithPath:nil]];
 }
-
 -(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb{
     return [self initWithDb:aDb andThread:nil];
 }

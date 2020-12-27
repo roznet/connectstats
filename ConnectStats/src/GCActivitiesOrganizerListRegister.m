@@ -43,16 +43,19 @@ NSUInteger kDownloadTrackPointCount = 5;
 
 @implementation GCActivitiesOrganizerListRegister
 
-+(instancetype)listRegisterFor:(NSArray<GCActivity*>*)activities from:(GCService*)service isFirst:(BOOL)isFirst{
-    GCActivitiesOrganizerListRegister * rv = [[[GCActivitiesOrganizerListRegister alloc] init] autorelease];
-    if(rv){
-        rv.activities = activities;
-        rv.service = service;
-        rv.isFirst = isFirst;
-        rv.syncDeleteWithPreferred = [[GCAppGlobal profile] configGetBool:CONFIG_SYNC_WITH_PREFERRED defaultValue:true];
-        rv.loadTracks = isFirst?kDownloadTrackPointCount:0;
+-(instancetype)initFor:(NSArray<GCActivity*>*)activities from:(GCService*)service isFirst:(BOOL)isFirst{
+    self = [super init];
+    if( self ){
+        self.activities = activities;
+        self.service = service;
+        self.isFirst = isFirst;
+        self.syncDeleteWithPreferred = [[GCAppGlobal profile] configGetBool:CONFIG_SYNC_WITH_PREFERRED defaultValue:true];
+        self.loadTracks = isFirst?kDownloadTrackPointCount:0;
     }
-    return rv;
+    return self;
+}
++(instancetype)activitiesOrganizerListRegister:(NSArray<GCActivity*>*)activities from:(GCService*)service isFirst:(BOOL)isFirst{
+    return RZReturnAutorelease([[GCActivitiesOrganizerListRegister alloc] initFor:activities from:service isFirst:isFirst]);
 }
 
 -(void)dealloc{

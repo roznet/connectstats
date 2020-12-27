@@ -33,8 +33,11 @@
 #import "GCDerivedOrganizer.h"
 #import "GCWebUrl.h"
 
-extern NSString *const kNotifySettingsChange;
-extern NSString *const kNotifyLocationRequestComplete;
+NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *  const kNotifySettingsChange;
+extern NSString *  const kNotifyLocationRequestComplete;
+
 
 @class GCActivitiesOrganizer;
 @class GCAppDelegate;
@@ -81,7 +84,7 @@ extern NSString *const kNotifyLocationRequestComplete;
 +(void)setupFieldCache;
 
 +(void)startLocationRequest;
-+(CLLocation*)currentLocation;
++(nullable CLLocation*)currentLocation;
 
 +(UINavigationController*)currentNavigationController;
 
@@ -93,14 +96,14 @@ extern NSString *const kNotifyLocationRequestComplete;
 +(BOOL)connectStatsVersion;
 +(BOOL)healthStatsVersion;
 
-+(HKHealthStore*)healthKitStore;
++(nullable HKHealthStore*)healthKitStore;
 
 +(NSDictionary*)debugState;
 +(void)debugStateRecord:(NSDictionary*)dict;
 +(void)debugStateClear;
 
 +(void)setApplicationDelegate:(GCAppDelegate*)del;
-+(NSString*)simulatorUrl;
++(nullable NSString*)simulatorUrl;
 
 +(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;
 
@@ -108,3 +111,5 @@ extern NSString *const kNotifyLocationRequestComplete;
 
 +(void)versionSummary;
 @end
+
+NS_ASSUME_NONNULL_END

@@ -29,6 +29,8 @@
 #import "GCFieldsCalculated.h"
 #import "GCActivityTypes.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 extern NSString * kNotifyOrganizerLoadComplete;
 extern NSString * kNotifyOrganizerListChanged;
 extern NSString * kNotifyOrganizerReset;
@@ -43,19 +45,18 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 @property (nonatomic,retain) FMDatabase * db;
 /// set this with an array of activityId to delete and call deleteActivitiesInTrash
-@property (nonatomic,retain) NSArray<NSString*> * activitiesTrash;
+@property (nonatomic,retain,nullable) NSArray<NSString*> * activitiesTrash;
 
 @property (nonatomic,assign) BOOL hasCompareActivity;
 @property (nonatomic,assign) NSUInteger currentActivityIndex;
 @property (nonatomic,assign) NSUInteger selectedCompareActivityIndex;
-@property (nonatomic,retain) NSString * lastSearchString;
-@property (nonatomic,retain) NSString * filteredActivityType;
+@property (nonatomic,retain,nullable) NSString * lastSearchString;
+@property (nonatomic,retain,nullable) NSString * filteredActivityType;
 @property (nonatomic,retain) GCHealthOrganizer * health;
 @property (nonatomic,readonly) CLLocation * currentActivityLocation;
 
--(GCActivitiesOrganizer*)init;
 -(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb;
--(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(dispatch_queue_t)thread NS_DESIGNATED_INITIALIZER;
+-(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(nullable dispatch_queue_t)thread NS_DESIGNATED_INITIALIZER;
 -(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb NS_DESIGNATED_INITIALIZER;
 
 -(BOOL)registerActivity:(GCActivity*)act forActivityId:(NSString*)aId;
@@ -63,11 +64,11 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 -(void)registerActivityTypes:(NSDictionary*)aData;
 
--(void)registerActivity:(NSString*)aId withTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps;
--(void)registerActivity:(NSString *)aId withWeather:(GCWeather *)aData;
+-(void)registerActivity:(NSString*)aId withTrackpoints:(nullable NSArray*)aTrack andLaps:(nullable NSArray*)laps;
+-(void)registerActivity:(NSString*)aId withWeather:(nullable GCWeather *)aData;
 
 -(NSUInteger)countOfKnownDuplicates;
--(GCActivity*)findDuplicate:(GCActivity*)act;
+-(nullable GCActivity*)findDuplicate:(GCActivity*)act;
 -(BOOL)isKnownDuplicate:(GCActivity*)act;
 -(NSString*)hasKnownDuplicate:(GCActivity*)act;
 
@@ -79,12 +80,12 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 
 -(void)setActivities:(NSArray*)activities;
--(GCActivity*)activityForId:(NSString*)aId;
--(GCActivity*)activityForIndex:(NSUInteger)idx;
+-(nullable GCActivity*)activityForId:(NSString*)aId;
+-(nullable GCActivity*)activityForIndex:(NSUInteger)idx;
 -(NSArray<GCActivity*>*)activitiesFromDate:(NSDate*)aFrom to:(NSDate*)aTo;
--(GCActivity*)currentActivity;
--(GCActivity*)lastActivity;
--(GCActivity*)oldestActivity;
+-(nullable GCActivity*)currentActivity;
+-(nullable GCActivity*)lastActivity;
+-(nullable GCActivity*)oldestActivity;
 /**
  * Return summary of activities for each service.
  * @return dictionary with key GCService.displayName to { @"earliest", @"latest", @"count" }
@@ -141,7 +142,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
  @param  ignoreMode decide whether to apply on fitness or days activities
  @return NSDictionary with Keys for the values in fields (NSString or GCField) and GCStatsDataSerieWithUnit as value
  */
--(NSDictionary*)fieldsSeries:(NSArray*)fields matching:(GCActivityMatchBlock)match useFiltered:(BOOL)useFilter ignoreMode:(gcIgnoreMode)ignoreMode;
+-(NSDictionary*)fieldsSeries:(NSArray*)fields matching:(nullable GCActivityMatchBlock)match useFiltered:(BOOL)useFilter ignoreMode:(gcIgnoreMode)ignoreMode;
 -(GCStatsDataSerieFilter*)standardFilterForField:(GCField*)field;
 
 -(void)purgeCache;
@@ -161,5 +162,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 +(void)sanityCheckDb:(FMDatabase*)aDb;
 
--(void)notifyOnMainThread:(NSString*)stringOrNil;
+-(void)notifyOnMainThread:(nullable NSString*)stringOrNil;
 @end
+
+NS_ASSUME_NONNULL_END

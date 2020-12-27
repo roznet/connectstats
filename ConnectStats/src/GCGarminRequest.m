@@ -88,7 +88,6 @@
 }
 -(void)process{
     // ignore first output only to establish
-    [self setNextReq:nil];
     [self processDone];
 }
 

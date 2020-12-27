@@ -56,6 +56,7 @@
 
 #import "GCDerivedRequest.h"
 #import "GCHealthOrganizer.h"
+#import "ConnectStats-Swift.h"
 
 @implementation GCWebConnect (Requests)
 
@@ -116,7 +117,10 @@
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
         dispatch_async(dispatch_get_main_queue(), ^(){
             BOOL stravaReload = (reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava]);
-            [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:stravaReload]];
+            
+            GCStravaRequestActivityList * req = [[GCStravaRequestActivityList alloc] initWithNavigationController:[GCAppGlobal currentNavigationController] page:0 reloadAll:stravaReload];
+            [self addRequest:req];
+            //[self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:stravaReload]];
         });
     }
 

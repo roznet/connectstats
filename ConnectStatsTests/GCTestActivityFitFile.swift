@@ -51,7 +51,7 @@ class GCTestActivityFitFile: XCTestCase {
         
         RZFileOrganizer.removeEditableFile("multisport.db")
         
-         let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("multisport.db"))
+        let db = FMDatabase(path: RZFileOrganizer.writeableFilePath("multisport.db"))
         db.open()
         GCActivitiesOrganizer.ensureDbStructure(db)
         let organizer : GCActivitiesOrganizer = GCActivitiesOrganizer(testModeWithDb: db)
@@ -92,9 +92,9 @@ class GCTestActivityFitFile: XCTestCase {
                     if let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: nil){
                         activities.append(activity)
                         let service = GCService(gcService.connectStats)
-                        let serviceId = service?.activityId(fromServiceId: activityId)
-                        let downloaded = organizer.activity(forId: serviceId)
-                        XCTAssertNotNil(downloaded)
+                        if let serviceId = service?.activityId(fromServiceId: activityId) {
+                            XCTAssertNotNil(organizer.activity(forId: serviceId))
+                        }
                         // we don't check value as they don't tie out for multi sport, not
                         // sure how they get aggregated/summed in the garmin api...
                     }

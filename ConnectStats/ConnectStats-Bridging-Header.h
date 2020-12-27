@@ -32,3 +32,13 @@
 #import "GCStatsMultiFieldConfig.h"
 #import "GCSettingsBugReport.h"
 #import "GCActivitiesCacheManagement.h"
+
+#import "GCWebRequestStandard.h"
+#import "GCAppSceneDelegate.h"
+
+#import "GCStravaActivityListParser.h"
+#import "GCStravaActivityLapsParser.h"
+#import "GCStravaActivityStreamsParser.h"
+#import "GCActivitiesOrganizerListRegister.h"
+
+#import "GCService.h"

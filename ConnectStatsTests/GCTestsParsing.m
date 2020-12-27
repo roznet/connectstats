@@ -256,11 +256,11 @@
     GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_organizer_parse_reload.db"];
     GCService * serviceGarmin = [GCService service:gcServiceGarmin];
     
-    GCActivitiesOrganizerListRegister * listregisterGarmin =[GCActivitiesOrganizerListRegister listRegisterFor:modernParser.activities from:serviceGarmin isFirst:YES];
+    GCActivitiesOrganizerListRegister * listregisterGarmin =[GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:modernParser.activities from:serviceGarmin isFirst:YES];
     [listregisterGarmin addToOrganizer:organizer];
     
     GCService * serviceStrava = [GCService service:gcServiceStrava];
-    GCActivitiesOrganizerListRegister * listregisterStrava =[GCActivitiesOrganizerListRegister listRegisterFor:stravaListParser.activities from:serviceStrava isFirst:YES];
+    GCActivitiesOrganizerListRegister * listregisterStrava =[GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:stravaListParser.activities from:serviceStrava isFirst:YES];
     [listregisterStrava addToOrganizer:organizer];
     
     GCActivitiesOrganizer * reload = [[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db];
@@ -1134,23 +1134,23 @@
     GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_organizer_register.db"];
     GCService * service = [GCService service:gcServiceGarmin];
     
-    GCActivitiesOrganizerListRegister * listregister =[GCActivitiesOrganizerListRegister listRegisterFor:activitySubFirstHalf from:service isFirst:YES];
+    GCActivitiesOrganizerListRegister * listregister =[GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:activitySubFirstHalf from:service isFirst:YES];
     [listregister addToOrganizer:organizer];
     XCTAssertEqual(organizer.countOfActivities, 8);
     XCTAssertFalse(listregister.reachedExisting);
     
-    listregister =[GCActivitiesOrganizerListRegister listRegisterFor:activitySecondHalf from:service isFirst:NO];
+    listregister =[GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:activitySecondHalf from:service isFirst:NO];
     [listregister addToOrganizer:organizer];
     XCTAssertEqual(organizer.countOfActivities, 18);
     XCTAssertFalse(listregister.reachedExisting);
     
-    listregister =[GCActivitiesOrganizerListRegister listRegisterFor:activityFirstHalf from:service isFirst:NO];
+    listregister =[GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:activityFirstHalf from:service isFirst:NO];
     [listregister addToOrganizer:organizer];
     XCTAssertEqual(organizer.countOfActivities, 20);
     XCTAssertTrue(listregister.reachedExisting);
     
     NSArray * oneDeleted = [@[parser.activities[0]] arrayByAddingObjectsFromArray:activitySubFirstHalf];
-    listregister =[GCActivitiesOrganizerListRegister listRegisterFor:oneDeleted from:service isFirst:NO];
+    listregister =[GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:oneDeleted from:service isFirst:NO];
     [listregister addToOrganizer:organizer];
     XCTAssertEqual(organizer.countOfActivities, 19);
     XCTAssertTrue(listregister.reachedExisting);

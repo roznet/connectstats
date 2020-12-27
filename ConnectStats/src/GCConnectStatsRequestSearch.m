@@ -153,7 +153,7 @@ static const NSUInteger kActivityRequestCount = 20;
 
 -(void)addActivitiesFromParser:(GCConnectStatsSearchJsonParser*)parser
                    toOrganizer:(GCActivitiesOrganizer*)organizer{
-        GCActivitiesOrganizerListRegister * listRegister = [GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:[GCService service:gcServiceConnectStats] isFirst:(self.start==0)];
+        GCActivitiesOrganizerListRegister * listRegister = [GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:parser.activities from:[GCService service:gcServiceConnectStats] isFirst:(self.start==0)];
     [listRegister addToOrganizer:organizer];
 
     NSDate * newDate = parser.activities.lastObject.date;

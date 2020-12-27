@@ -176,7 +176,7 @@
 
 -(void)addActivitiesFromParser:(GCStravaActivityListParser*)parser
                    toOrganizer:(GCActivitiesOrganizer*)organizer{
-    GCActivitiesOrganizerListRegister * listRegister = [GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:[GCService service:gcServiceStrava] isFirst:self.page == 0];
+    GCActivitiesOrganizerListRegister * listRegister = [GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:parser.activities from:[GCService service:gcServiceStrava] isFirst:self.page == 0];
     [listRegister addToOrganizer:organizer];
     if (listRegister.childIds.count > 0) {
         RZLog( RZLogWarning, @"ChildIDs not supported for strava");

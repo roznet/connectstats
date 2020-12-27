@@ -46,6 +46,7 @@ static const NSUInteger kActivityRequestCount = 20;
 @property (nonatomic,assign) BOOL searchMore;
 
 @property (nonatomic,retain) NSDate * lastFoundDate;
+@property (nonatomic,retain) GCWebRequestStandard * nextReqCache;
 
 @end
 
@@ -87,6 +88,7 @@ static const NSUInteger kActivityRequestCount = 20;
 -(void)dealloc{
     [_childIds release];
     [_lastFoundDate release];
+    [_nextReqCache release];
 
     [super dealloc];
 }
@@ -147,7 +149,7 @@ static const NSUInteger kActivityRequestCount = 20;
 
 -(void)addActivitiesFromParser:(GCGarminSearchModernJsonParser*)parser
                    toOrganizer:(GCActivitiesOrganizer*)organizer{
-    GCActivitiesOrganizerListRegister * listRegister = [GCActivitiesOrganizerListRegister listRegisterFor:parser.activities from:[GCService service:gcServiceGarmin] isFirst:(self.start==0)];
+    GCActivitiesOrganizerListRegister * listRegister = [GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:parser.activities from:[GCService service:gcServiceGarmin] isFirst:(self.start==0)];
     [listRegister addToOrganizer:organizer];
     if (listRegister.childIds.count > 0) {
         self.childIds = self.childIds ? [self.childIds arrayByAddingObjectsFromArray:listRegister.childIds] : listRegister.childIds;
@@ -220,7 +222,7 @@ static const NSUInteger kActivityRequestCount = 20;
     if (self.status == GCWebStatusOK) {
         
         if ( self.searchMore ) {
-            self.nextReq = [[[GCGarminRequestModernSearch alloc] initNextWith:self] autorelease];
+            self.nextReqCache = [[[GCGarminRequestModernSearch alloc] initNextWith:self] autorelease];
             if( self.reloadAll ){
                 dispatch_async(dispatch_get_main_queue(), ^(){
                     [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin set:self.start];
@@ -236,10 +238,13 @@ static const NSUInteger kActivityRequestCount = 20;
             }
         }
         if (self.nextReq == nil && self.childIds.count > 0) {
-            self.nextReq = [[[GCGarminRequestActivityList alloc]  initWithIds:self.childIds andParentId:@"parent"] autorelease];
+            self.nextReqCache = [[[GCGarminRequestActivityList alloc]  initWithIds:self.childIds andParentId:@"parent"] autorelease];
         }
     }
     [self processDone];
 }
 
+-(GCWebRequestStandard*)nextReq{
+    return self.nextReqCache;
+}
 @end
