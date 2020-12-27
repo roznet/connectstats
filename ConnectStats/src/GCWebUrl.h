@@ -78,10 +78,6 @@ NSString * GCWebUploadURL( NSString*dir);
 NSString * GCWebStravaAuthentication(void);
 NSString * GCWebStravaUpload(void);
 
-NSString * GCWebWithingsOnce(void);
-NSString * GCWebWithingsUserList(NSString*email,NSString*hash);
-NSString * GCWebWithingsMeasure(NSString*uid,NSString*key);
-
 NSString * GCWebWeatherHtml(NSString*aId);
 
 NSString * GCWebActivityURLDetail( NSString * activityID);

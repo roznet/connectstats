@@ -53,7 +53,6 @@ typedef NS_ENUM(NSUInteger, gcWebService) {
     gcWebServiceNone, // typically for sign in/login
     gcWebServiceGarmin,
     gcWebServiceStrava,
-    gcWebServiceWithings,
     gcWebServiceHealthStore,
     gcWebServiceConnectStats,
     gcWebServiceEnd

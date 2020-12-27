@@ -27,7 +27,6 @@
 #define GC_SECTIONS_GARMIN          0
 #define GC_SECTIONS_STRAVA          1
 #define GC_SECTIONS_HEALTHKIT       2
-#define GC_SECTIONS_WITHINGS        3
 #define GC_SECTIONS_OPTIONS         4
 #define GC_SECTIONS_END             5
 
@@ -66,11 +65,4 @@
 #define GC_OPTIONS_DUPLICATE_LOAD       2
 #define GC_OPTIONS_FORCE_DOWNLOAD_OLD   3
 #define GC_OPTIONS_END                  4
-
-// for withings
-#define GC_WITHINGS_SERVICE_NAME 0
-#define GC_WITHINGS_AUTO         1
-#define GC_WITHINGS_STATUS       2
-#define GC_WITHINGS_RELOAD       3
-#define GC_WITHINGS_END          4
 

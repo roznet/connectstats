@@ -34,15 +34,14 @@
 #import "GCSettingsSourceTableViewController.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCHealthOrganizer.h"
-#import "GCStravaReqBase.h"
 #import "GCWebUrl.h"
 #import "GCDebugServiceKeys.h"
 #import "GCCellEntryText+GCViewConfig.h"
 #import "GCConnectStatsRequest.h"
-#import "GCWithingsReqBase.h"
 #import "GCSettingsHelpViewController.h"
 
 #import "GCSettingsServicesViewConstants.h"
+#import "ConnectStats-Swift.h"
 
 @interface GCSettingsServicesViewController ()
 @property (nonatomic,retain) RZTableIndexRemap * remap;
@@ -55,7 +54,6 @@
 @property (nonatomic,assign) BOOL showGarmin;
 @property (nonatomic,assign) BOOL showStrava;
 @property (nonatomic,assign) BOOL showBabolat;
-@property (nonatomic,assign) BOOL showWithings;
 @property (nonatomic,assign) BOOL showHealthKit;
 @property (nonatomic,assign) BOOL showConnectStats;
 
@@ -72,7 +70,6 @@
         self.showBabolat     = false;
         self.showGarmin      = false;
         self.showStrava      = false;
-        self.showWithings    = false;
         self.showHealthKit   = false;
         self.showConnectStats = false;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyCallBack:) name:kNotifySettingsChange object:nil];
@@ -157,12 +154,6 @@
                                                                 @( GC_HEALTHKIT_SOURCE     )]];
     }
         
-    // for withings
-    [self.remap addSection:GC_SECTIONS_WITHINGS withRows:@[
-                                                           @( GC_WITHINGS_SERVICE_NAME ),
-                                                           @( GC_WITHINGS_AUTO         ),
-                                                           @( GC_WITHINGS_STATUS       )]];
-
     [self.remap addSection:GC_SECTIONS_OPTIONS withRows:@[
         @( GC_OPTIONS_DOWNLOAD_DETAILS ),
         @( GC_OPTIONS_DUPLICATE_IMPORT ),
@@ -205,9 +196,7 @@
 {
     NSInteger nrows = [self.remap numberOfRowsInSection:sectionI];
     NSInteger section = [self.remap section:sectionI];
-    if (section == GC_SECTIONS_WITHINGS) {
-        return self.showWithings ? nrows : 1;
-    }else if (section == GC_SECTIONS_GARMIN){
+    if (section == GC_SECTIONS_GARMIN){
         return self.showGarmin ? nrows : 1;
     }else if (section == GC_SECTIONS_STRAVA){
         return self.showStrava ? nrows : 1;
@@ -314,66 +303,6 @@
     [gridCell labelForRow:1 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withString:subtitle];
 }
 
-- (UITableViewCell *)withingsTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell * rv = nil;
-    //GCCellEntryText * textcell = nil;
-    GCCellGrid * gridcell = nil;
-    GCCellEntrySwitch * switchcell = nil;
-
-    gcService service = gcServiceWithings;
-
-    if (indexPath.row ==GC_WITHINGS_SERVICE_NAME) {
-        gridcell =[self gridCell:tableView];
-        [gridcell setupForRows:2 andCols:1];
-
-        NSAttributedString * title = nil;
-        NSAttributedString * status = [[[NSAttributedString alloc] initWithString:[self statusForService:service]
-                                                                       attributes:[GCViewConfig attribute14Gray]] autorelease];
-
-        title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Withings", @"Service") attributes:[GCViewConfig attributeBold16]] autorelease];
-        [gridcell setIconImage:[UIImage imageNamed:@"withings"]];
-
-        [gridcell labelForRow:0 andCol:0].attributedText = title;
-        [gridcell labelForRow:1 andCol:0].attributedText = status;
-        gridcell.iconPosition = gcIconPositionRight;
-        [GCViewConfig setupGradientForDetails:gridcell];
-        rv = gridcell;
-    }else if(indexPath.row == GC_WITHINGS_AUTO){
-        switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                    withString:NSLocalizedString(@"Auto Refresh", @"Settings")];
-        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_WITHINGS_AUTO defaultValue:false];
-        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_WITHINGS_AUTO);
-        switchcell.entryFieldDelegate = self;
-        rv=switchcell;
-    }else if(indexPath.row == GC_WITHINGS_STATUS){
-        gridcell =[self gridCell:tableView];
-        [gridcell setupForRows:2 andCols:1];
-        [gridcell setIconImage:nil];
-        
-        NSAttributedString * title = nil;
-        NSAttributedString * sub   = nil;
-        
-        if ([[GCAppGlobal profile] serviceSuccess:gcServiceWithings]) {
-            title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Setup successful - Tap to Logout",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
-            NSArray<GCHealthMeasure*>*measures = [GCAppGlobal health].measures;
-            NSUInteger count = measures.count;
-            GCHealthMeasure * latest = measures.firstObject;
-            NSString * subm = [NSString stringWithFormat:NSLocalizedString(@"%lu measures, latest %@",@"Withings Status"), (unsigned long)count, [latest.date dateShortFormat]];
-            sub = [[[NSAttributedString alloc] initWithString:subm attributes:[GCViewConfig attribute14Gray]] autorelease];
-        }else{
-            title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Tap to login",@"Services") attributes:[GCViewConfig attributeBold16]] autorelease];
-            sub = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"No successful login yet",@"Services") attributes:[GCViewConfig attribute14Gray]] autorelease];
-        }
-        
-        [gridcell labelForRow:0 andCol:0].attributedText = title;
-        [gridcell labelForRow:1 andCol:0].attributedText = sub;
-        gridcell.iconPosition = gcIconPositionRight;
-        rv = gridcell;
-    }
-    // Configure the cell...
-    return rv;
-}
 - (UITableViewCell *)garminTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell * rv = nil;
     GCCellEntryText * textcell = nil;
@@ -774,9 +703,7 @@
 
     UITableViewCell * rv = nil;
     
-    if (indexPath.section == GC_SECTIONS_WITHINGS) {
-        rv = [self withingsTableView:tableView cellForRowAtIndexPath:indexPath];
-    }else if (indexPath.section == GC_SECTIONS_GARMIN){
+    if (indexPath.section == GC_SECTIONS_GARMIN){
         rv = [self garminTableView:tableView cellForRowAtIndexPath:indexPath];
     }else if (indexPath.section==GC_SECTIONS_STRAVA){
         rv = [self stravaTableView:tableView cellForRowAtIndexPath:indexPath];
@@ -861,10 +788,6 @@
             [GCAppGlobal saveSettings];
             break;
         }
-        case GC_IDENTIFIER(GC_SECTIONS_WITHINGS, GC_WITHINGS_AUTO):
-            [[GCAppGlobal profile] configToggleBool:CONFIG_WITHINGS_AUTO];
-            [GCAppGlobal saveSettings];
-            break;
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_ENABLE):
         {
             if( cell.on ){
@@ -1036,18 +959,14 @@
             self.showGarmin = ! self.showGarmin;
         }else if (indexPath.section==GC_SECTIONS_STRAVA){
             self.showStrava = ! self.showStrava;
-        }else if (indexPath.section==GC_SECTIONS_WITHINGS){
-            self.showWithings = ! self.showWithings;
         }else if (indexPath.section==GC_SECTIONS_HEALTHKIT){
             self.showHealthKit = ! self.showHealthKit;
         }
         [tableView reloadData];
     }
 
-    if (indexPath.section==GC_SECTIONS_WITHINGS&&indexPath.row==GC_WITHINGS_STATUS) {
-        [self toggleLoginLogout:gcServiceWithings reqClass:[GCWithingsReqBase class]];
-    }else if (indexPath.section==GC_SECTIONS_STRAVA&&indexPath.row==GC_STRAVA_LOGOUT){
-        [self toggleLoginLogout:gcServiceStrava reqClass:[GCStravaReqBase class]];
+    if (indexPath.section==GC_SECTIONS_STRAVA&&indexPath.row==GC_STRAVA_LOGOUT){
+        [self toggleLoginLogout:gcServiceStrava reqClass:[GCStravaRequestBase class]];
     }else if (indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_LOGOUT){
         if( ![self garminCredentialNeededAndMissing] ){
             [self toggleLoginLogout:gcServiceConnectStats reqClass:[GCConnectStatsRequest class]];
@@ -1114,7 +1033,7 @@
         
         [alert addCancelAction];
         [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Download All",@"Service View") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
-            gcService services[] = { gcServiceConnectStats,gcServiceGarmin,gcServiceStrava,gcServiceHealthKit,gcServiceWithings};
+            gcService services[] = { gcServiceConnectStats,gcServiceGarmin,gcServiceStrava,gcServiceHealthKit};
             size_t n = sizeof(services)/sizeof(gcService);
             BOOL atLeastOne = true;
             for (size_t i=0; i<n; i++) {

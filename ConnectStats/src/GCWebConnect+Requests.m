@@ -42,17 +42,12 @@
 #import "GCConnectStatsRequestLogin.h"
 #import "GCConnectStatsRequestWeather.h"
 
-#import "GCWithingsBodyMeasures.h"
-
 #import "GCHealthKitBodyRequest.h"
 #import "GCHealthKitActivityRequest.h"
 #import "GCHealthKitWorkoutsRequest.h"
 #import "GCHealthKitDailySummaryRequest.h"
 #import "GCHealthKitDayDetailRequest.h"
 #import "GCHealthKitSourcesRequest.h"
-
-#import "GCStravaActivityList.h"
-#import "GCStravaActivityStreams.h"
 
 #import "GCDerivedRequest.h"
 #import "GCHealthOrganizer.h"
@@ -120,13 +115,9 @@
             
             GCStravaRequestActivityList * req = [[GCStravaRequestActivityList alloc] initWithNavigationController:[GCAppGlobal currentNavigationController] page:0 reloadAll:stravaReload];
             [self addRequest:req];
-            //[self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:stravaReload]];
         });
     }
 
-    if ([[GCAppGlobal profile] configGetBool:CONFIG_WITHINGS_AUTO defaultValue:false]) {
-        [self withingsUpdate];
-    }
     if ([GCHealthKitRequest isSupported]) {
         if ([[GCAppGlobal profile] configGetBool:CONFIG_HEALTHKIT_ENABLE defaultValue:[GCAppGlobal healthStatsVersion]]) {
             if (![[GCAppGlobal profile] sourceIsSet]) {
@@ -165,19 +156,6 @@
     // other services are automatic
 }
 
-
-#pragma mark - withings
--(void)withingsUpdate{
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        NSInteger anchor = [[GCAppGlobal profile] serviceAnchor:gcServiceWithings];
-        if( anchor == 0 || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceWithings]){
-            [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
-        }else{
-            NSDate * anchorDate = [NSDate dateWithTimeIntervalSince1970:anchor];
-            [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:anchorDate with:[GCAppGlobal currentNavigationController]]];
-        }
-    });
-}
 #pragma mark - download track details
 
 -(void)garminDownloadActivityTrackPoints13:(GCActivity*)act{
@@ -299,7 +277,8 @@
 -(void)stravaDownloadActivityTrackPoints:(GCActivity*)act{
     dispatch_async(dispatch_get_main_queue(), ^(){
         if ([GCAppGlobal currentNavigationController] && [[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
-            [self addRequest:[GCStravaActivityStreams stravaActivityStream:[GCAppGlobal currentNavigationController] for:act]];
+            GCStravaRequestStreams * req = RZReturnAutorelease([[GCStravaRequestStreams alloc] initWithNavigationController:[GCAppGlobal currentNavigationController] activity:act]);
+            [self addRequest:req];
         }
     });
 }

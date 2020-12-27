@@ -84,9 +84,6 @@
 
 #define CONFIG_DUPLICATE_SKIP_ON_IMPORT_OBSOLETE @"config_duplicate_skip_on_import"
 
-#define CONFIG_WITHINGS_USERSLIST       @"config_withings_userlist"
-#define CONFIG_WITHINGS_USER            @"config_withings_user"
-#define CONFIG_WITHINGS_AUTO            @"config_withings_auto"
 #define CONFIG_CONNECTSTATS_ENABLE      @"config_connectstats_enable"
 #define CONFIG_CONNECTSTATS_USE         @"config_connectstats_use"
 #define CONFIG_CONNECTSTATS_FILLYEAR    @"config_connectstats_fillyear"
@@ -110,10 +107,6 @@
 
 #define CONFIG_GARMIN_FIT_DOWNLOAD      @"config_garmin_fit_download"
 #define CONFIG_GARMIN_FIT_MERGE         @"config_garmin_fit_merge"
-
-#define CONFIG_WITHINGS_TOKEN             @"config_withings_t"
-#define CONFIG_WITHINGS_TOKENSECRET       @"config_withings_s"
-#define CONFIG_WITHINGS_USERID            @"config_withings_u"
 
 #define CONFIG_ENABLE_DEBUG               @"config_enable_debug"
 #define CONFIG_ENABLE_DEBUG_ON            @"enabledebug1970"
@@ -139,7 +132,6 @@
 
 #define PROFILE_SERVICE_STRAVA       @"profile_service_strava"
 #define PROFILE_SERVICE_CONNECTSTATS @"profile_service_connectstats"
-#define PROFILE_SERVICE_WITHINGS     @"profile_service_withings"
 #define PROFILE_SERVICE_GARMIN       @"profile_service_garmin"
 #define PROFILE_SERVICE_SUCCESS      @"profile_service_success"
 #define PROFILE_SOURCES              @"profile_sources"
@@ -181,7 +173,7 @@ typedef NS_ENUM(NSUInteger, gcConnectStatsServiceUse){
 
 typedef NS_ENUM(NSUInteger, gcService) {
     gcServiceStrava,
-    gcServiceWithings,
+    //gcServiceWithings,
     gcServiceGarmin,
     gcServiceHealthKit,
     gcServiceConnectStats,

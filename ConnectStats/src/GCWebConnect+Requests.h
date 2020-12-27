@@ -42,9 +42,6 @@
 
 -(void)downloadMissingActivityDetails:(NSUInteger)n;
 
-// Withings
--(void)withingsUpdate;
-
 // Garmin
 -(void)garminDownloadActivityTrackPoints13:(GCActivity*)act;
 -(void)garminDownloadActivitySummary:(NSString*)aId;

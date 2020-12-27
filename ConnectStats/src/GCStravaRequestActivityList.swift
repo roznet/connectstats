@@ -107,4 +107,29 @@ import RZUtilsSwift
         return nil
     }
     
+    @discardableResult
+    @objc static func test(organizer: GCActivitiesOrganizer, path : String) -> GCActivitiesOrganizer{
+        return self.test(organizer: organizer, path: path, start: 0)
+    }
+    
+    @discardableResult
+    @objc static func test(organizer: GCActivitiesOrganizer, path : String, start : Int) -> GCActivitiesOrganizer{
+        let search = GCStravaRequestActivityList(navigationController: UINavigationController(), page: start, reloadAll: false)
+        
+        var isDirectory : ObjCBool = false
+        
+        if FileManager.default.fileExists(atPath:path, isDirectory: &isDirectory) {
+            var fileURL = URL(fileURLWithPath: path)
+            if isDirectory.boolValue {
+                fileURL.appendPathComponent(search.searchFileName(page: start))
+            }
+            if let data = try? Data(contentsOf: fileURL) {
+                if let parser = GCStravaActivityListParser(data) {
+                    search.addActivities(from: parser, to: organizer)
+                }
+            }
+        }
+        return organizer
+    }
+
 }

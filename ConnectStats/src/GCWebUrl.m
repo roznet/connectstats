@@ -25,12 +25,6 @@
 
 #import "GCWebUrl.h"
 
-// Withings:
-// Your OAuth key is :e555eef15ef1526431f5bd6c721e8023c7d0d84dcb8461cc67d83f45870
-// Your OAuth secret is :1cd7f11c1e6d48e040ec58cf58fee1f1d30492ddc70c46f60c7575978dd
-// https://oauth.withings.com/account/request_token
-// https://oauth.withings.com/account/authorize
-
 // Garmin
 //
 // Fit Files:
@@ -421,29 +415,5 @@ NSString * GCWebGoogleEarthURL( NSString*aId){
     //server = @"localhost/connectstats";
 #endif
     return [NSString stringWithFormat:@"%@/kml/%@.kmz",server,aId];
-}
-
-#pragma mark - Withings
-
-NSString * GCWebWithingsOnce(){
-    if (useSimulator) {
-        return [NSString stringWithFormat:@"%@/garminsimul/withings.php?which=once",simulatorURL];
-    }else{
-        return @"https://wbsapi.withings.net/once?action=get";
-    }
-}
-NSString * GCWebWithingsUserList(NSString*email,NSString*hash){
-    if (useSimulator) {
-        return [NSString stringWithFormat:@"%@/garminsimul/withings.php?which=userlist",simulatorURL];
-    }else{
-        return [NSString stringWithFormat:@"https://wbsapi.withings.net/account?action=getuserslist&email=%@&hash=%@",email,hash];
-    }
-}
-NSString * GCWebWithingsMeasure(NSString*uid,NSString*key){
-    if (useSimulator) {
-        return [NSString stringWithFormat:@"%@/garminsimul/withings.php?which=measure&uid=%@",simulatorURL,uid];
-    }else{
-        return [NSString stringWithFormat:@"https://wbsapi.withings.net/measure?action=getmeas&userid=%@&publickey=%@&category=1",uid,key];
-    }
 }
 

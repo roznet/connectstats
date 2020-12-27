@@ -196,8 +196,6 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 
 -(NSString*)webServiceDescription:(gcWebService)service{
     switch (service) {
-        case gcWebServiceWithings:
-            return @"Withings";
         case gcWebServiceStrava:
             return @"Strava";
         case gcWebServiceGarmin:

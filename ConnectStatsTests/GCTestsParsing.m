@@ -21,7 +21,6 @@
 #import "GCStravaActivityListParser.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCHealthOrganizer.h"
-#import "GCWithingsBodyMeasures.h"
 #import "GCHealthZoneCalculator.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCActivitiesOrganizerListRegister.h"
@@ -35,7 +34,6 @@
 #import "GCGarminRequestModernSearch.h"
 #import "GCConnectStatsRequestSearch.h"
 #import "GCConnectStatsRequestFitFile.h"
-#import "GCStravaActivityList.h"
 #import "GCLap.h"
 #import "GCConnectStatsRequestSearch.h"
 #import "GCHistoryFieldSummaryStats.h"
@@ -849,7 +847,6 @@
     
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
     
-    [GCWithingsBodyMeasures testForHealth:organizer.health withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] forId:@"188427"];
     GCField * hf = [GCHealthMeasure weight];
     
     NSDictionary * rv = [organizer fieldsSeries:@[ @"WeightedMeanHeartRate", @"WeightedMeanPace", hf] matching:nil useFiltered:NO ignoreMode:gcIgnoreModeActivityFocus];
@@ -1038,8 +1035,9 @@
     XCTAssertNotNil([organizer activityForId:bikeGarminId]);
 
     // then add strava
-    [GCStravaActivityList testForOrganizer:organizer withFilesInPath:bundlePath];
-    [GCStravaActivityList testForOrganizer:organizer_strava withFilesInPath:bundlePath];
+    [GCStravaRequestActivityList testWithOrganizer:organizer path:bundlePath];
+    [GCStravaRequestActivityList testWithOrganizer:organizer_strava path:bundlePath];
+    
     // added extra 10 from strava
     // Note that strava already eliminate time overlapping, so should
     // get 30
@@ -1069,8 +1067,8 @@
     // connectstats does not send overlapping activities, so should have 1 more
     XCTAssertEqual(organizer_cs.countOfActivities, organizer_garmin.countOfActivities+1);
 
-    [GCStravaActivityList testForOrganizer:organizer withFilesInPath:bundlePath start:1];
-    [GCStravaActivityList testForOrganizer:organizer_strava withFilesInPath:bundlePath start:1];
+    [GCStravaRequestActivityList testWithOrganizer:organizer path:bundlePath start:1];
+    [GCStravaRequestActivityList testWithOrganizer:organizer_strava path:bundlePath start:1];
     XCTAssertEqual(organizer_strava.countOfActivities, 60);
 
     NSUInteger beforeLastGarmin = organizer.countOfActivities;
@@ -1083,7 +1081,7 @@
     XCTAssertEqual(organizer.countOfActivities, beforeLastGarmin);
     
     NSUInteger beforeLastStrava = organizer_strava.countOfActivities;
-    [GCStravaActivityList testForOrganizer:organizer_strava withFilesInPath:bundlePath start:2];
+    [GCStravaRequestActivityList testWithOrganizer:organizer_strava path:bundlePath start:2];
     XCTAssertEqual(organizer_strava.countOfActivities, beforeLastStrava);
 
     // All the activities in garmin shuold be in final merged
@@ -1113,10 +1111,11 @@
     
     // Check that import again on reloaded organizer does not add duplicate
     [GCGarminRequestModernSearch testForOrganizer:reload withFilesInPath:bundlePath];
-    [GCStravaActivityList testForOrganizer:reload withFilesInPath:bundlePath];
+    
+    [GCStravaRequestActivityList testWithOrganizer:reload path:bundlePath];
     XCTAssertEqual(organizer.countOfActivities,reload.countOfActivities);
     [GCGarminRequestModernSearch testForOrganizer:reload withFilesInPath:bundlePath start:20];
-    [GCStravaActivityList testForOrganizer:reload withFilesInPath:bundlePath start:1];
+    [GCStravaRequestActivityList testWithOrganizer:reload path:bundlePath start:1];
     XCTAssertEqual(organizer.countOfActivities,reload.countOfActivities);
     
 }

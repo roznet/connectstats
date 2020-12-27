@@ -50,6 +50,9 @@ class GCStravaRequestBase: GCWebRequestStandard {
 
     }
     
+    @objc static func signout() {
+        print( "LOGOUT")
+    }
     struct Credential {
         static let serviceName = "strava"
     }

@@ -150,5 +150,9 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 +(NSString*)simulatorUrl{
     return [_sharedApplicationDelegate() simulatorUrl];
 }
++(gcWebConnectStatsConfig)webConnectsStatsConfig{
+    gcWebConnectStatsConfig config = [[self profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionConnectStatsApp];
+    return config;
+}
 
 @end

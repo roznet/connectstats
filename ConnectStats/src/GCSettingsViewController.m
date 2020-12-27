@@ -577,10 +577,6 @@
                 if (status.length>0) {
                     [statuses addObject:status];
                 }
-                status = [[GCService service:gcServiceWithings] statusDescription];
-                if (status.length>0) {
-                    [statuses addObject:status];
-                }
                 status = [statuses componentsJoinedByString:@", "];
 
                 NSAttributedString * other =[[[NSAttributedString alloc] initWithString:status attributes:[GCViewConfig attribute14Gray]] autorelease];

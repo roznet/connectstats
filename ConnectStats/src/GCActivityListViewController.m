@@ -127,7 +127,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
 -(NSArray<NSString*>*)reportServiceError{
     NSMutableArray * errorsString = [NSMutableArray arrayWithCapacity:gcWebServiceEnd];
-    gcWebService others[] = {gcWebServiceGarmin,gcWebServiceConnectStats,gcWebServiceStrava,gcWebServiceWithings};
+    gcWebService others[] = {gcWebServiceGarmin,gcWebServiceConnectStats,gcWebServiceStrava};
     
     BOOL messageOnly = true;
     
