@@ -26,7 +26,7 @@
 #import "GCCalendarDataSource.h"
 #import "GCAppGlobal.h"
 #import "GCViewConfig.h"
-#import <RZExternal/RZExternal.h>
+@import RZExternal;
 #import "GCCellGrid+Templates.h"
 #import "GCViewIcons.h"
 #import "GCHistoryAggregatedActivityStats.h"

@@ -30,9 +30,8 @@
 #import "GCGarminActivityLapsParser.h"
 #import "GCActivity.h"
 #import "GCActivitiesOrganizer.h"
-@import RZUtilsCore;
+@import RZUtils;
 @import RZExternal;
-@import RZExternalUniversal;
 #import "ConnectStats-Swift.h"
 #import "GCService.h"
 

@@ -24,7 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import <RZExternal/RZExternal.h>
+@import RZExternal;
 #import "GCViewActivityTypeButton.h"
 
 

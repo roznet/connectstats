@@ -26,7 +26,7 @@
 #import "GCTabBarController.h"
 #import "GCAppGlobal.h"
 #import "Flurry.h"
-#import <RZExternal/RZExternal.h>
+@import RZExternal;
 #import "GCViewIcons.h"
 #import "GCWebConnect+Requests.h"
 

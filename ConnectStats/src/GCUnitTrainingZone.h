@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //  
 
-@import RZUtilsCore;
+@import RZUtils;
 @class GCHealthZoneCalculator;
 
 @interface GCUnitTrainingZone : GCUnit

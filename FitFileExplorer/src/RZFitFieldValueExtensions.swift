@@ -26,7 +26,7 @@
 
 
 import Foundation
-import RZUtilsCore
+import RZUtils
 import FitFileParser
 
 

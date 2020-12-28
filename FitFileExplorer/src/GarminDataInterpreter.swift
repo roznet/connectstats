@@ -27,7 +27,7 @@
 
 import Foundation
 import GenericJSON
-import RZUtilsCore
+import RZUtils
 
 class GarminDataInterpreter {
     let json : [String:JSON]

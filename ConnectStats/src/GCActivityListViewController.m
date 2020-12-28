@@ -36,7 +36,7 @@
 #import "GCWebConnect+Requests.h"
 #import "GCCellHealthDayActivity.h"
 #import "GCActivityPreviewingViewController.h"
-#import <RZExternal/RZExternal.h>
+@import RZExternal;
 #import "GCActivity+Database.h"
 #import "ConnectStats-Swift.h"
 

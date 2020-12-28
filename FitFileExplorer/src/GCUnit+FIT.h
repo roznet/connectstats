@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //  
 
-@import RZUtilsCore;
+@import RZUtils;
 
 @interface GCUnit (FIT)
 

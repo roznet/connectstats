@@ -27,7 +27,6 @@
 #import "GCActivityListViewController.h"
 #import "GCActivityDetailViewController.h"
 #import "GCStatsMultiFieldViewController.h"
-#import <RZExternal/RZExternal.h>
 #import "GCSettingsViewController.h"
 #import "GCCalendarDataSource.h"
 #import "GCAppActionDelegate.h"

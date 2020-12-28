@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import RZUtilsCore
+import RZUtils
 import RZUtilsSwift
 
 class GCHealthZonesViewController: UIViewController, RZMultiSliderControlDelegate {

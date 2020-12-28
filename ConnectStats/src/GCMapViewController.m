@@ -28,7 +28,7 @@
 #import "GCAppGlobal.h"
 #import "GCMapAnnotation.h"
 #import "Flurry.h"
-#import <RZExternal/RZExternal.h>
+@import RZExternal;
 #import "GCViewConfig.h"
 #import "GCActivity+Calculated.h"
 #import "GCFields.h"

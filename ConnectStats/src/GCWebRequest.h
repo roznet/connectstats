@@ -24,7 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
-@import RZUtilsCore;
+@import RZUtils;
 
 #define NOTIFY_NEXT     @"next"
 #define NOTIFY_END      @"end"

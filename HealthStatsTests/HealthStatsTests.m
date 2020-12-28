@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import <HealthKit/HealthKit.h>
-@import RZUtilsCore;
+@import RZUtils;
 #import "GCHealthKitWorkoutParser.h"
 #import "GCHealthKitDailySummaryParser.h"
 #import "GCHealthKitDayDetailParser.h"

@@ -83,30 +83,39 @@
         }
       },
       {
+        "package": "RZExternal",
+        "repositoryURL": "https://github.com/roznet/rzexternal",
+        "state": {
+          "branch": "master",
+          "revision": "18fdf1337eddd27714b390b21636b47d343ac1c2",
+          "version": null
+        }
+      },
+      {
         "package": "RZUtils",
         "repositoryURL": "https://github.com/roznet/rzutils.git",
         "state": {
-          "branch": null,
-          "revision": "5c647ddf4a6431765e066e3cd08f00564ba9bc93",
-          "version": "1.0.0"
+          "branch": "master",
+          "revision": "f7b18bb8ada35d6c0724aede2a04ccc78dd094b6",
+          "version": null
         }
       },
       {
         "package": "RZUtilsMacOS",
         "repositoryURL": "https://github.com/roznet/rzutils-macos",
         "state": {
-          "branch": null,
+          "branch": "main",
           "revision": "9b567821a8113338f75c9fb83da469d07eb5e233",
-          "version": "1.0.0"
+          "version": null
         }
       },
       {
         "package": "RZUtilsTouch",
         "repositoryURL": "https://github.com/roznet/rzutils-touch.git",
         "state": {
-          "branch": null,
-          "revision": "e394ccbd48af37f6391fb47508a103749df34f32",
-          "version": "1.0.0"
+          "branch": "main",
+          "revision": "2de2c5ef78bd357d0db819f5e802e4ab7684823a",
+          "version": null
         }
       },
       {

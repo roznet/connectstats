@@ -26,7 +26,7 @@
 
 
 import Cocoa
-import RZUtilsCore
+import RZUtils
 import RZUtilsMacOS
 import GenericJSON
 import SwiftKeychainWrapper

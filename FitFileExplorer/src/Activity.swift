@@ -27,7 +27,7 @@
 
 import Foundation
 import GenericJSON
-import RZUtilsCore
+import RZUtils
 import RZUtilsSwift
 import FMDB
 import FitFileParser
