@@ -102,7 +102,7 @@ class GCStravaRequestBase: GCWebRequestStandard {
         self.retrieveCredential()
         self.stravaAuth.authorizeURLHandler = SafariURLHandler(viewController: self.navigationController,
                                                                oauthSwift: self.stravaAuth)
-        if self.stravaAuth.client.credential.oauthRefreshToken == "" {
+        if GCAppGlobal.profile().serviceSuccess(gcService.strava) == false {
             self.stravaAuth.authorize(withCallbackURL: "connectstats://ro-z.net/oauth/strava",
                                       scope: "activity:read_all,read_all",
                                       state: "prod" ) { result in
@@ -126,6 +126,8 @@ class GCStravaRequestBase: GCWebRequestStandard {
             self.stravaAuth.startAuthorizedRequest(url, method: .GET, parameters: [:] ) { result in
                 switch result {
                 case .success(let response):
+                    self.status = GCWebStatus.OK
+                    GCAppGlobal.profile().serviceSuccess(gcService.strava, set: true)
                     self.saveCredential()
                     self.process(data: response.data, response:response.response)
                 case .failure(let error):
@@ -141,6 +143,7 @@ class GCStravaRequestBase: GCWebRequestStandard {
                             if GCAppGlobal.profile().serviceSuccess(gcService.strava) {
                                 shouldTrySignin = true
                             }
+                            self.status = GCWebStatus.accessDenied
                             GCAppGlobal.profile().serviceSuccess(gcService.strava, set: false)
                             RZSLog.error("Got invalid token, trying signin \(underlyingError.code) \(body)")
                         }else{

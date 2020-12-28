@@ -166,65 +166,6 @@
     return fn;
 }
 
-+(BOOL)extractFitDataFromZip:(NSData*)theData intoFitFile:(NSString*)fn{
-    NSError * e = nil;
-    NSString * fp = [RZFileOrganizer writeableFilePath:fn];
-    NSString * zn = [fn stringByAppendingPathExtension:@"zip"];
-    NSString * zp = [RZFileOrganizer writeableFilePath:zn];
-    BOOL success = false;
-    if([theData writeToFile:zp options:NSDataWritingAtomic error:&e]){
-        OZZipFile * zipFile = [[OZZipFile alloc] initWithFileName:zp mode:OZZipFileModeUnzip error:&e];
-        if (!zipFile) {
-            RZLog(RZLogError, @"zip open fail %@", e);
-        }
-        NSArray * files = [zipFile listFileInZipInfosWithError:&e];
-        if (!files) {
-            RZLog(RZLogError, @"zip list fail %@", e);
-        }
-        OZFileInZipInfo * fitFile = nil;
-        for (OZFileInZipInfo * info in files) {
-            if ([info.name hasSuffix:@".fit"]) {
-                if (fitFile != nil) {
-                    RZLog( RZLogWarning, @"Multiple file in zip skipping %@, already has %@", info, fitFile);
-                }else{
-                    fitFile = info;
-                }
-            }
-        }
-        if (fitFile) {
-            if([zipFile locateFileInZip:fitFile.name error:&e] == OZLocateFileResultFound){
-                OZZipReadStream * rstream = [zipFile readCurrentFileInZipWithError:&e];
-                if (fitFile.length < NSUIntegerMax) {
-                    NSMutableData * data = [NSMutableData dataWithLength:(NSUInteger)fitFile.length];
-                    if(![rstream readDataWithBuffer:data error:&e]){
-                        RZLog(RZLogError, @"Failed to read %@", e);
-                    }
-                    if([data writeToFile:fp atomically:YES]){
-                        success = true;
-                    }else{
-                        RZLog(RZLogError, @"Failed to extract and save %@", fn);
-                    };
-                }else{
-                    RZLog(RZLogError, @"File too big to read (%@ bytes)", @(fitFile.length));
-                }
-                [rstream finishedReadingWithError:&e];
-            }else{
-                RZLog(RZLogError, @"zip locate %@ fail %@", fitFile.name, e);
-            }
-        }
-        [zipFile closeWithError:&e];
-        [zipFile release];
-        if (success) {
-            [RZFileOrganizer removeEditableFile:zn];
-        }
-        
-    }else{
-        RZLog(RZLogError, @"Failed to save %@. %@", fn, e.localizedDescription);
-    }
-    
-    return success;
-}
-
 -(void)process:(NSData *)theData andDelegate:(id<GCWebRequestDelegate>)adelegate{
     self.delegate = adelegate;
     if(self.track13Stage != gcTrack13RequestFit){
@@ -234,7 +175,8 @@
     }else{
         NSString * fn = [GCGarminActivityTrack13Request stageFilename:self.track13Stage forActivityId:self.activityId];
         if (fn) {
-            [GCGarminActivityTrack13Request extractFitDataFromZip:theData intoFitFile:fn];
+            [GCGarminActivityTrack13Request extractWithFitData:theData baseName:fn];
+            //[GCGarminActivityTrack13Request extractFitDataFromZip:theData intoFitFile:fn];
         }
         dispatch_async(dispatch_get_main_queue(), ^(){
             [self processNextOrDone];

@@ -456,6 +456,7 @@
 		4269E9E32598D3BA00DF469D /* GCStravaRequestStreams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4269E9E22598D3BA00DF469D /* GCStravaRequestStreams.swift */; };
 		4269E9E42598D3BA00DF469D /* GCStravaRequestStreams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4269E9E22598D3BA00DF469D /* GCStravaRequestStreams.swift */; };
 		4269E9E52598D3BA00DF469D /* GCStravaRequestStreams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4269E9E22598D3BA00DF469D /* GCStravaRequestStreams.swift */; };
+		4269EA222599D40900DF469D /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 4269EA212599D40900DF469D /* ZIPFoundation */; };
 		426A135E1C5CCEFA00D61098 /* GCActivitySettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 426A135D1C5CCEFA00D61098 /* GCActivitySettings.m */; };
 		426A135F1C5CCEFA00D61098 /* GCActivitySettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 426A135D1C5CCEFA00D61098 /* GCActivitySettings.m */; };
 		426A13601C5CCEFA00D61098 /* GCActivitySettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 426A135D1C5CCEFA00D61098 /* GCActivitySettings.m */; };
@@ -2712,6 +2713,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4213AEB1201393CC0004B54B /* MapKit.framework in Frameworks */,
+				4269EA222599D40900DF469D /* ZIPFoundation in Frameworks */,
 				422DCC30258A6348000DEE4B /* RZUtilsSwift in Frameworks */,
 				42BD33F2258CB2D7004D5E0F /* SwiftKeychainWrapper in Frameworks */,
 				422DCC36258A6357000DEE4B /* FitFileParser in Frameworks */,
@@ -5149,6 +5151,7 @@
 				422DCC35258A6357000DEE4B /* FitFileParser */,
 				422DCD73258A74DF000DEE4B /* RZUtilsMacOS */,
 				42BD33F1258CB2D7004D5E0F /* SwiftKeychainWrapper */,
+				4269EA212599D40900DF469D /* ZIPFoundation */,
 			);
 			productName = FitFileExplorer;
 			productReference = 4253B4561CD49F7E00437E6A /* FitFileExplorer.app */;
@@ -8246,6 +8249,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 422DCD72258A74DF000DEE4B /* XCRemoteSwiftPackageReference "rzutils-macos" */;
 			productName = RZUtilsMacOS;
+		};
+		4269EA212599D40900DF469D /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
 		};
 		42BD31AD258B53C7004D5E0F /* DeviceGuru */ = {
 			isa = XCSwiftPackageProductDependency;

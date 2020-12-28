@@ -30,31 +30,32 @@ import ZIPFoundation
 import RZUtilsSwift
 
 extension GCGarminActivityTrack13Request {
-    @objc static func extract(fitData : Data, baseName : String) {
+    @discardableResult
+    @objc static func extract(fitData : Data, baseName : String) -> Bool {
         guard let archive = Archive(data: fitData, accessMode: .read ) else {
             RZSLog.error("Failed to create zip archive from data")
-            return
+            return false
         }
         
         var fitFileEntry : Entry? = nil
         for item in archive {
             if item.path.hasSuffix(".fit"){
-                if item.path.hasSuffix("fit") {
-                    if fitFileEntry != nil {
-                        RZSLog.warning("Multiple fit files in archive")
-                    }
-                    fitFileEntry = item
+                if fitFileEntry != nil {
+                    RZSLog.warning("Multiple fit files in archive")
                 }
+                fitFileEntry = item
             }
         }
-        
+        var rv = false
         let fitFile = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(baseName) )
         if let fitFileEntry = fitFileEntry {
             do {
                 _ = try archive.extract(fitFileEntry, to: fitFile)
+                rv = true
             }catch{
                 RZSLog.error("Failed to extract fit file \(error)")
             }
         }
+        return rv
     }
 }

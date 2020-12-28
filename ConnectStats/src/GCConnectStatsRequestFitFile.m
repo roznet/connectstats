@@ -180,7 +180,8 @@
             if( delegate.lastStatusCode == 403){
                 self.status = GCWebStatusAccessDenied;
             }
-            if( self.status == GCWebStatusOK && ![GCGarminActivityTrack13Request extractFitDataFromZip:theData intoFitFile:fname] ){
+            
+            if( self.status == GCWebStatusOK && ![GCGarminActivityTrack13Request extractWithFitData:theData baseName:fname] ){
                 NSString * string = RZReturnAutorelease([[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding]);
                 if( [string hasPrefix:@"{\""] ){
                     if( [string rangeOfString:@"NotFoundException"].location != NSNotFound ){
