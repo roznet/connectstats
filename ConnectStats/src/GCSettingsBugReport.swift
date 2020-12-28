@@ -37,7 +37,6 @@ extension GCSettingsBugReport {
         let bugPath = RZFileOrganizer.writeableFilePath(kBugFilename)
         let bugPathURL = URL(fileURLWithPath: bugPath )
         
-        
         let archive = Archive(url: bugPathURL, accessMode: .create)
         do {
             if let data = RZLogFileContent().data(using: .utf8){

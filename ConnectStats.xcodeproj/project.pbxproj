@@ -53,6 +53,9 @@
 		4211D48925979A6E00967874 /* GCAppSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D48625979A6E00967874 /* GCAppSceneDelegate.swift */; };
 		4211D4B82598B31800967874 /* GCAppSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237D34624A741E000C55BB8 /* GCAppSceneDelegate.m */; };
 		4211D4BE2598B33900967874 /* OAuthSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4211D4BD2598B33900967874 /* OAuthSwift */; };
+		4211D4DB2598ED7D00967874 /* GCGarminActivityTrack13Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D4DA2598ED7D00967874 /* GCGarminActivityTrack13Request.swift */; };
+		4211D4DC2598ED7D00967874 /* GCGarminActivityTrack13Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D4DA2598ED7D00967874 /* GCGarminActivityTrack13Request.swift */; };
+		4211D4DD2598ED7D00967874 /* GCGarminActivityTrack13Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D4DA2598ED7D00967874 /* GCGarminActivityTrack13Request.swift */; };
 		421208901C6E860700E0470D /* GCFieldsForCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4212088F1C6E860700E0470D /* GCFieldsForCategory.m */; };
 		421208911C6E860700E0470D /* GCFieldsForCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4212088F1C6E860700E0470D /* GCFieldsForCategory.m */; };
 		4213AEB1201393CC0004B54B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4213AEB0201393CC0004B54B /* MapKit.framework */; };
@@ -1617,6 +1620,7 @@
 		4211D45B259780B900967874 /* GCStravaRequestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCStravaRequestBase.swift; path = src/GCStravaRequestBase.swift; sourceTree = "<group>"; };
 		4211D4672597829200967874 /* GCStravaRequestActivityList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCStravaRequestActivityList.swift; path = src/GCStravaRequestActivityList.swift; sourceTree = "<group>"; };
 		4211D48625979A6E00967874 /* GCAppSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCAppSceneDelegate.swift; path = src/GCAppSceneDelegate.swift; sourceTree = "<group>"; };
+		4211D4DA2598ED7D00967874 /* GCGarminActivityTrack13Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCGarminActivityTrack13Request.swift; path = src/GCGarminActivityTrack13Request.swift; sourceTree = "<group>"; };
 		4212088E1C6E860700E0470D /* GCFieldsForCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldsForCategory.h; path = src/GCFieldsForCategory.h; sourceTree = "<group>"; };
 		4212088F1C6E860700E0470D /* GCFieldsForCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldsForCategory.m; path = src/GCFieldsForCategory.m; sourceTree = "<group>"; };
 		4213AEB0201393CC0004B54B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/MapKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -3625,6 +3629,7 @@
 				4209E1991DA8E15700B80735 /* GCGarminRequestModernSearch.m */,
 				42200ED617F8270D0078B45A /* GCGarminActivityTrack13Request.h */,
 				42200ED717F8270D0078B45A /* GCGarminActivityTrack13Request.m */,
+				4211D4DA2598ED7D00967874 /* GCGarminActivityTrack13Request.swift */,
 				42DCA7CA1AF420E20050AAA9 /* GCGarminRequestActivityList.h */,
 				42DCA7CB1AF420E20050AAA9 /* GCGarminRequestActivityList.m */,
 				42E186CE16A620E800D4513B /* GCGarminRequestActivityReload.h */,
@@ -6470,6 +6475,7 @@
 				422FAF8219A1DD6000D09773 /* GCActivityCalculatedValue.m in Sources */,
 				422FAF8419A1DD6000D09773 /* GCMapGoogleViewController.m in Sources */,
 				422FAF8519A1DD6000D09773 /* GCHealthMeasure.m in Sources */,
+				4211D4DD2598ED7D00967874 /* GCGarminActivityTrack13Request.swift in Sources */,
 				422FAF8619A1DD6000D09773 /* GCHealthOrganizer.m in Sources */,
 				422FAF8719A1DD6000D09773 /* GCFieldsCalculated.m in Sources */,
 				422FAF8919A1DD6000D09773 /* GCActivityTrackGraphOptionsViewController.m in Sources */,
@@ -6779,6 +6785,7 @@
 				42C5A1B122AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */,
 				4285F0E31719CB1800A1FAA8 /* GCSettingsFilterViewController.m in Sources */,
 				42CDF8672413E05C003930A4 /* GCTrackPoint+Swim.m in Sources */,
+				4211D4DB2598ED7D00967874 /* GCGarminActivityTrack13Request.swift in Sources */,
 				421736A42066A07F00ACADC1 /* GCGarminRequestModernActivityTypes.m in Sources */,
 				426B0F0D1DA111AD0091A734 /* GCGarminSearchModernJsonParser.m in Sources */,
 				42C2A80324B9A82600E76F60 /* GCStatsMultiFieldConfigViewController.m in Sources */,
@@ -7034,6 +7041,7 @@
 				42B5E2251BA5AF9A000FAE4E /* GCTestParsing.m in Sources */,
 				42B5E2211BA5AF9A000FAE4E /* GCTestViewController.m in Sources */,
 				42B5E2231BA5AF9A000FAE4E /* GCTestIconsCell.m in Sources */,
+				4211D4DC2598ED7D00967874 /* GCGarminActivityTrack13Request.swift in Sources */,
 				42CC45CC200A67C0003EB805 /* GCSettingsBugReport.m in Sources */,
 				42B5E2191BA5AF9A000FAE4E /* GCAppGlobal.m in Sources */,
 				42B5E2171BA5AF9A000FAE4E /* GCTestCommunications.m in Sources */,

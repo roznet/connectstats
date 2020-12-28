@@ -42,3 +42,4 @@
 #import "GCActivitiesOrganizerListRegister.h"
 
 #import "GCService.h"
+#import "GCGarminActivityTrack13Request.h"
