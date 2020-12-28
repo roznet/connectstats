@@ -172,14 +172,6 @@
 
     [super viewWillAppear:animated];
 
-    if (self.slidingViewController) {
-        [self.view addGestureRecognizer:self.slidingViewController.panGesture];
-        (self.slidingViewController).anchorRightRevealAmount = self.view.frame.size.width*0.875;
-        //FIXME:
-        self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGesturePanning;
-        self.slidingViewController.panGesture.delegate = self;
-        //[self.slidingViewController setShouldAddPanGestureRecognizerToTopViewSnapshot:YES];
-    }
     self.tableView.tableHeaderView.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:self.activity];
 
 
@@ -187,15 +179,6 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    self.slidingViewController.panGesture.delegate = nil;
-}
-
--(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
-    // With the menu open, let any gesture pass.
-    if (self.slidingViewController.currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) return YES;
-    // With a closed Menu, only let the bordermost gestures pass.
-    return ([gestureRecognizer locationInView:gestureRecognizer.view].x < 40.);
-
 }
 
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
@@ -929,10 +912,7 @@
 
     if (self.trackStats && [self.activity hasTrackForField:field]) {
 
-        ECSlidingViewController * sliding = [[ECSlidingViewController alloc] initWithNibName:nil bundle:nil];
         GCActivityTrackGraphViewController * graphViewController = [[GCActivityTrackGraphViewController alloc] initWithNibName:nil bundle:nil];
-        GCActivityTrackGraphOptionsViewController * optionController = [[GCActivityTrackGraphOptionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        optionController.viewController = graphViewController;
         GCTrackStats * ts = [[[GCTrackStats alloc] init] autorelease];
         [ts updateConfigFrom:self.trackStats];
         [ts setupForField:field xField:nil andLField:nil];
@@ -940,20 +920,11 @@
         graphViewController.trackStats = ts;
         graphViewController.activity = self.activity;
         graphViewController.field = field;
-        sliding.topViewController = graphViewController;
-        sliding.underLeftViewController = [[[UINavigationController alloc] initWithRootViewController:optionController] autorelease];
-        [optionController.navigationController setNavigationBarHidden:YES];
 
-        [UIViewController setupEdgeExtendedLayout:sliding];
-        [UIViewController setupEdgeExtendedLayout:graphViewController];
-        [UIViewController setupEdgeExtendedLayout:sliding.underLeftViewController];
-
-        [self.navigationController pushViewController:sliding animated:YES];
+        [self.navigationController pushViewController:graphViewController animated:YES];
         [self.navigationController setNavigationBarHidden:NO animated:YES];
 
         [graphViewController release];
-        [sliding release];
-        [optionController release];
     }
 }
 

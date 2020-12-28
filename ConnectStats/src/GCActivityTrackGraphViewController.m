@@ -30,27 +30,21 @@
 #import "GCViewIcons.h"
 #import "GCTrackFieldChoices.h"
 #import "GCActivity+Series.h"
+#import "GCActivityTrackGraphOptionsViewController.h"
 
 @import RZExternal;
 
 @interface GCActivityTrackGraphViewController ()
 @property (nonatomic,retain) GCActivity * attachedActivity;
+@property (nonatomic,retain) UIViewController * popoverViewController;
 
 @end
 
 @implementation GCActivityTrackGraphViewController
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 -(void)dealloc{
     [_attachedActivity detach:self];
-
+    [_popoverViewController release];
     [_validOptions release];
     [_legendView release];
     [_otherTrackStats release];
@@ -64,17 +58,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.graphView = [[[GCSimpleGraphView alloc] initWithFrame:(self.view).frame] autorelease];
     self.legendView = [[[GCMapLegendView alloc] initWithFrame:CGRectZero] autorelease];
     self.rulerView = [[[GCSimpleGraphRulerView alloc] initWithFrame:self.view.frame] autorelease];
-    (self.rulerView).graphView = self.graphView;
+    self.rulerView.graphView = self.graphView;
     [self.view addSubview:self.graphView];
     [self.view addSubview:self.legendView];
     [self.view addSubview:self.rulerView];
     self.gestures = [[[GCSimpleGraphGestures alloc] init] autorelease];
     [self setupDataSource];
 }
-
 
 #pragma mark - Functionality
 
@@ -109,16 +103,36 @@
     }
 }
 
+-(void)done{
+    [self.popoverViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 -(void)showOptions{
-    if ((self.slidingViewController).currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) {
-        [self.slidingViewController resetTopViewAnimated:YES];
-    }else{
-        [self.slidingViewController anchorTopViewToRightAnimated:YES];
-    }
+    
+    GCActivityTrackGraphOptionsViewController * optionController = [[GCActivityTrackGraphOptionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    optionController.viewController = self;
+    UINavigationController * nav = [[[UINavigationController alloc] initWithRootViewController:optionController] autorelease];
+    //[optionController.navigationController setNavigationBarHidden:YES];
+    
+    optionController.navigationItem.rightBarButtonItem = RZReturnAutorelease([[UIBarButtonItem alloc]
+                                                                  initWithTitle:NSLocalizedString(@"Done", @"Cell Entry Button")
+                                                                  style:UIBarButtonItemStyleDone
+                                                                  target:self
+                                                                  action:@selector(done)]
+                                                                 );
+
+    nav.modalPresentationStyle = UIModalPresentationPopover;
+    self.popoverViewController = nav;
+    RZAutorelease([[UIPopoverPresentationController alloc] initWithPresentedViewController:nav
+                                                                  presentingViewController:self.presentingViewController]);
+    
+    [self presentViewController:nav animated:YES completion:nil];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    UINavigationItem * item = self.slidingViewController ? self.slidingViewController.navigationItem : self.navigationItem;
+
+    UINavigationItem * item = self.navigationItem;
 
     UIImage * img = [GCViewIcons navigationIconFor:gcIconNavGear];
     UIImage * img2= [GCViewIcons navigationIconFor:gcIconNavSliders];
@@ -137,18 +151,20 @@
     [rightButton2 release];
     [rightButton3 release];
 
-    [self setupFrames];
-    if (self.slidingViewController) {
-        (self.slidingViewController).anchorRightRevealAmount = self.view.frame.size.width*0.9;
-    }
+    
     [GCViewConfig setupViewController:self];
+    [self setupFrames];
     [super viewWillAppear:animated];
 }
 
 -(void)setupFrames{
     
-    self.graphView.frame = self.view.safeAreaLayoutGuide.layoutFrame;
-    self.graphView.drawRect = self.view.safeAreaLayoutGuide.layoutFrame;
+    self.view.frame = self.navigationController.view.safeAreaLayoutGuide.layoutFrame;
+    NSLog(@"%@", NSStringFromUIEdgeInsets(self.navigationController.view.safeAreaInsets));
+    self.graphView.frame = self.view.frame;
+    self.graphView.drawRect = self.view.frame;
+    NSLog(@"%@", NSStringFromCGRect(self.view.frame));
+    NSLog(@"%@", NSStringFromCGRect(self.graphView.frame));
 }
 
 -(void)publishEvent{
@@ -292,9 +308,6 @@
 }
 
 -(void)configureGraph{
-    if ((self.slidingViewController).currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) {
-        [self.slidingViewController resetTopViewAnimated:YES];
-    }
     if (!self.validOptions || (self.validOptions).count == 0) {
         [self buildOptions];
         self.currentOptionIndex = 0;
