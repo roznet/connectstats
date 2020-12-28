@@ -104,6 +104,8 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(UIColor*)colorForCalendarElement:(gcSkinCalendarElement)elem;
 +(UIColor*)colorForGraphElement:(gcSkinGraphColor)which;
 
++(UIColor*)colorForRoundedBorder;
+
 +(void)setupViewController:(UIViewController*)viewController;
 +(GCCellEntryListViewController*)standardEntryListViewController:(NSArray*)theChoices selected:(NSUInteger)achoice;
 +(void)setupGradient:(GCCellGrid*)aG ForActivity:(id)aAct;

@@ -59,7 +59,8 @@ typedef NS_ENUM(NSUInteger,gcSkinDefaultColor){
     gcSkinDefaultColorSecondaryText, // original = darkGray
     gcSkinDefaultColorTertiaryText, // original = lightGray
     gcSkinDefaultColorHighlightedText,  // Original = blue
-    gcSkinDefaultColorGroupedTable
+    gcSkinDefaultColorGroupedTable,
+    gcSkinDefaultColorRoundedBorder
 };
 
 typedef NS_ENUM(NSUInteger,gcSkinCalendarElement){

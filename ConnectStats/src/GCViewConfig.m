@@ -118,6 +118,10 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return nil;
 }
 
++(UIColor*)colorForRoundedBorder{
+    return [_current_skin() colorForKey:kgcSkinDefaultColors andSubkey:@(gcSkinDefaultColorRoundedBorder)];
+}
+
 +(UIColor*)backgroundForGroupedTable{
     return [_current_skin() colorForKey:kgcSkinDefaultColors
                               andSubkey:@(gcSkinDefaultColorGroupedTable)];
@@ -139,7 +143,11 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 
 // Used By Calendar
 +(UIColor*)cellBackgroundDarkerForActivity:(id)aAct{
-    return [_current_skin() colorForKey:kGCSkinKeyActivityCellDarkerBackgroundColor andActivity:aAct];
+    if( [self activityCellMultiColor]){
+        return [_current_skin() colorForKey:kGCSkinKeyActivityCellDarkerBackgroundColor andActivity:aAct];
+    }else{
+        return [_current_skin() colorForKey:kgcSkinDefaultColors andSubkey:@(gcSkinDefaultColorBackgroundSecondary)];
+    }
 }
 
 // Used for lists
@@ -153,8 +161,11 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 
 +(UIColor*)cellIconColorForActivity:(id)aAct{
     // Expansion to depend on act?
-    return [_current_skin() colorForKey:kGCSkinKeyActivityCellIconColor];
-
+    if( [self activityCellMultiColor]){
+        return [_current_skin() colorForKey:kGCSkinKeyActivityCellIconColor];
+    }else{
+        return [_current_skin() colorForKey:kGCSkinKeyActivityCellDarkerBackgroundColor andActivity:aAct];
+    }
 }
 
 

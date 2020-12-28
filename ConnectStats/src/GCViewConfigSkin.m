@@ -191,6 +191,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
                             @(gcSkinDefaultColorBackgroundEven):[UIColor colorWithHexValue:0xE7EDF5 andAlpha:1.f],
                             @(gcSkinDefaultColorBackgroundOdd):[UIColor colorWithHexValue:0xF6F3F1 andAlpha:1.f],
                             @(gcSkinDefaultColorBackgroundSecondary):[UIColor colorWithHexValue:0xF6F3F1 andAlpha:1.f],
+                            @(gcSkinDefaultColorRoundedBorder):[UIColor whiteColor]
                             
                             },
                     kGCSkinKeyGraphColor:
@@ -392,6 +393,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
                             @(gcSkinDefaultColorBackgroundEven):[UIColor colorWithHexValue:0x313233 andAlpha:1.f],
                             @(gcSkinDefaultColorBackgroundOdd):[UIColor colorWithHexValue:0x212223 andAlpha:1.f],
                             @(gcSkinDefaultColorBackgroundSecondary):[UIColor colorWithHexValue:0x212223 andAlpha:1.f],
+                            @(gcSkinDefaultColorRoundedBorder):[UIColor whiteColor],
                             },
                     kGCSkinKeyGraphColor:
                         @{
@@ -582,6 +584,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
                     @(gcSkinDefaultColorBackgroundEven):[UIColor secondarySystemBackgroundColor],
                     @(gcSkinDefaultColorBackgroundOdd):[UIColor tertiarySystemBackgroundColor],
                     @(gcSkinDefaultColorBackgroundSecondary):[UIColor secondarySystemBackgroundColor],
+                    @(gcSkinDefaultColorRoundedBorder):[UIColor whiteColor],
             },
             kGCSkinKeyGraphColor:
                 @{
@@ -773,6 +776,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
                     @(gcSkinDefaultColorBackgroundEven):[UIColor secondarySystemBackgroundColor],
                     @(gcSkinDefaultColorBackgroundOdd):[UIColor tertiarySystemBackgroundColor],
                     @(gcSkinDefaultColorBackgroundSecondary):[UIColor secondarySystemBackgroundColor],
+                    @(gcSkinDefaultColorRoundedBorder):[UIColor whiteColor],
             },
             kGCSkinKeyGraphColor:
                 @{

@@ -55,7 +55,7 @@ class GCCellActivity: UITableViewCell {
     
     
     @objc func setup(for activity : GCActivity){
-        self.backgroundColor = UIColor.black
+        self.backgroundColor = UIColor.systemBackground
         self.leftFieldValues.backgroundColor = UIColor.clear
         self.rightFieldValues.backgroundColor = UIColor.clear
         
@@ -66,6 +66,11 @@ class GCCellActivity: UITableViewCell {
         self.leftBorderView.insideColor = GCViewConfig.cellBackgroundLighter(forActivity: activity)
         self.borderView.borderColor = GCViewConfig.textColor(forActivity: activity)
         self.leftBorderView.borderColor = GCViewConfig.textColor(forActivity: activity)
+
+        self.borderView.borderColor = GCViewConfig.colorForRoundedBorder()
+        
+        self.leftBorderView.borderColor = GCViewConfig.colorForRoundedBorder()
+
         
         self.borderView.setNeedsDisplay()
         self.leftBorderView.setNeedsDisplay()
@@ -88,7 +93,7 @@ class GCCellActivity: UITableViewCell {
         self.leftFieldValues.valueAttribute = GCViewConfig.attribute(rzAttribute.value)
         self.leftFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.unit)
         self.leftFieldValues.displayIcons = false
-        self.leftFieldValues.defaultSpacing = 1.0
+        self.leftFieldValues.defaultSpacing = 10.0
         self.rightFieldValues.displayIcons = false
         self.rightFieldValues.iconColor = UIColor.darkGray
         self.rightFieldValues.defaultSpacing = 0.0

@@ -36,6 +36,7 @@ class GCCellFieldValueView: UIView {
     let primaryField : GCField?
     let icon : Bool
     
+    var displayField : Bool = true
     var numberAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.value)
     var unitAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.unit)
     var fieldAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.field)
@@ -103,7 +104,7 @@ class GCCellFieldValueView: UIView {
         fieldRect.size.width = (rect.size.width - self.geometry.totalSize.width)
         
         var addUnit = true;
-        
+                
         if let primaryField = primaryField, let field = self.field {
             if field != primaryField && primaryField.unit() == field.unit() {
                 addUnit = false;
@@ -125,12 +126,19 @@ class GCCellFieldValueView: UIView {
                 icon.withTintColor(UIColor.white).draw(in: iconRect)
             }
         }
-        if let fmtField = self.field?.displayName(withPrimary: self.primaryField) {
-            (fmtField as NSString).draw(at: fieldRect.origin, withAttributes: self.fieldAttribute)
-            /*(fmtField as NSString).draw(with: fieldRect,
-                                        options: NSStringDrawingOptions(),
-                                        attributes: self.fieldAttribute,
-                                        context: nil)*/
+        if self.displayField {
+            if let fmtField = self.field?.displayName(withPrimary: self.primaryField) {
+                let fieldSize = (fmtField as NSString).size(withAttributes: self.fieldAttribute)
+                if fieldSize.width > fieldRect.size.width {
+                    fieldRect.origin.x -= ( fieldSize.width - fieldRect.size.width)
+                }
+                
+                (fmtField as NSString).draw(at: fieldRect.origin, withAttributes: self.fieldAttribute)
+                /*(fmtField as NSString).draw(with: fieldRect,
+                 options: NSStringDrawingOptions(),
+                 attributes: self.fieldAttribute,
+                 context: nil)*/
+            }
         }
     }
 }

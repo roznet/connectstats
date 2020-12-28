@@ -59,40 +59,35 @@ extension FitFile {
     }
     
     private func orderKeysFromSample(samples : [FitFieldKey:Sample]) -> [FitFieldKey] {
-        let typeOrder = [  FitFieldValue.ValueType.time,
-                           FitFieldValue.ValueType.coordinate,
-                           FitFieldValue.ValueType.name,
-                           FitFieldValue.ValueType.valueUnit,
-                           FitFieldValue.ValueType.value,
-                           FitFieldValue.ValueType.invalid
+        var typeOrder : [ [String ] ] = [  [], //0 FitValue.time,
+                                           [], //1 FitValue.coordinate,
+                                           [], //2 FitValue.name,
+                                           [], //3 FitValue.valueUnit,
+                                           [], //4 FitValue.value,
+                                           [], //5 FitValue.invalid
         ]
         
-        var byType : [FitFieldValue.ValueType:[FitFieldKey]] = [:]
-        for type in typeOrder{
-            byType[type] = []
-        }
         
-        let all = Array(samples.keys)
-        
-        for key in all {
-            if let val = samples[key] {
-                byType[val.one.type]?.append(key)
-            }else{
-                byType[FitFieldValue.ValueType.invalid]?.append(key)
+        for (key,value) in samples {
+            switch value.one.fitValue {
+            case .time:
+                typeOrder[0].append(key)
+            case .coordinate:
+                typeOrder[1].append(key)
+            case .name:
+                typeOrder[2].append(key)
+            case .valueUnit:
+                typeOrder[3].append(key)
+            case .value:
+                typeOrder[4].append(key)
+            case .invalid:
+                typeOrder[5].append(key)
             }
         }
         
         var rv : [FitFieldKey] = []
         for type in typeOrder {
-            if let keys = byType[type] {
-                let orderedKeys = keys.sorted {
-                    if let l = samples[$0], let r = samples[$1] {
-                        return r.count < l.count
-                    }
-                    return false
-                }
-                rv.append(contentsOf: orderedKeys)
-            }
+            rv.append(contentsOf: type)
         }
         
         return rv

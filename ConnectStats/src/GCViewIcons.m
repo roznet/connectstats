@@ -173,12 +173,11 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,NSString*suffix,NSString*bundle
         imgView.layer.mask.masksToBounds = YES;
         imgView.layer.borderWidth = 0;
         imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [imgView setTintColor:[GCViewConfig cellIconColorForActivity:activityType]];
     }else{
         imgView.image = [imgView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        [imgView setTintColor:[GCViewConfig cellBackgroundDarkerForActivity:activityType]];
     }
-    
+    [imgView setTintColor:[GCViewConfig cellIconColorForActivity:activityType]];
+
     UIGraphicsBeginImageContextWithOptions(imgView.bounds.size, imgView.isOpaque, 0.0);
     [imgView.layer renderInContext:UIGraphicsGetCurrentContext()];
     
