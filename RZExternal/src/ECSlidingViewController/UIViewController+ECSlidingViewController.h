@@ -33,5 +33,5 @@
 /**
  The nearest ancestor in the view controller hierarchy that is a sliding view controller, or nil if the view controller is not a descendant of a sliding view controller's hierarchy.
  */
-- (ECSlidingViewController *)slidingViewController;
+- (ECSlidingViewController *)slidingViewController DEPRECATED_MSG_ATTRIBUTE("Don't use");
 @end

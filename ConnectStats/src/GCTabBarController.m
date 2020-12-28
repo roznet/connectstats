@@ -262,7 +262,7 @@
 
 - (void)navigationController:(UINavigationController *)navigationController
        didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    if (viewController == self.activityDetailViewController || viewController == self.activityDetailViewController.slidingViewController) {
+    if (viewController == self.activityDetailViewController) {
         [navigationController setNavigationBarHidden:YES animated:YES];
     }
 }

@@ -156,7 +156,7 @@
     [self.view addSubview:self.windCompassView];
     self.windCompassView.backgroundColor = [UIColor clearColor];
 
-    UINavigationItem * item = self.slidingViewController ? self.slidingViewController.navigationItem : self.navigationItem;
+    UINavigationItem * item = self.navigationItem;
 
     UIImage * img  = [GCViewIcons navigationIconFor:gcIconNavTags];
     UIImage * img2 = [GCViewIcons navigationIconFor:gcIconNavEye];
@@ -175,7 +175,6 @@
 
     }else{
         UIImage * img3 = [GCViewIcons navigationIconFor:gcIconNavMarker];
-        UIImage * img4 = [GCViewIcons navigationIconFor:gcIconNavAction];
 
         item.rightBarButtonItems = @[[[[UIBarButtonItem alloc] initWithImage:img style:UIBarButtonItemStylePlain target:self action:@selector(toggleField:)] autorelease],
 
@@ -183,7 +182,7 @@
 
                                       [[[UIBarButtonItem alloc] initWithImage:img3 style:UIBarButtonItemStylePlain target:self action:@selector(toggleShowLap:)] autorelease],
 
-                                      [[[UIBarButtonItem alloc] initWithImage:img4 style:UIBarButtonItemStylePlain target:self action:@selector(toggleSharing)] autorelease]];
+                                      ];
     }
 }
 
@@ -328,14 +327,6 @@
                                                                            course:direction
                                                                             speed:speed
                                                                         timestamp:min.time] autorelease]];
-    }
-}
-
--(void)toggleSharing{
-    if ((self.slidingViewController).currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) {
-        [self.slidingViewController resetTopViewAnimated:YES];
-    }else{
-        [self.slidingViewController anchorTopViewToRightAnimated:YES];
     }
 }
 

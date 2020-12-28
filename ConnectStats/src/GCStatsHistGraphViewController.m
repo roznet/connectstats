@@ -104,7 +104,7 @@
 }
 
 -(void)setupButtons{
-    UINavigationItem * item = self.slidingViewController ? self.slidingViewController.navigationItem : self.navigationItem;
+    UINavigationItem * item = self.navigationItem;
 
     UIImage * img2= [GCViewIcons navigationIconFor:gcIconNavSliders];
 
@@ -119,11 +119,12 @@
 
 }
 -(void)showOptions{
+    /*
     if ((self.slidingViewController).currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) {
         [self.slidingViewController resetTopViewAnimated:YES];
     }else{
         [self.slidingViewController anchorTopViewToRightAnimated:YES];
-    }
+    }*/
 }
 
 -(void)setupFrames{

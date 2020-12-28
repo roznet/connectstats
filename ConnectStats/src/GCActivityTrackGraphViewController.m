@@ -158,13 +158,14 @@
 }
 
 -(void)setupFrames{
-    
+/*
     self.view.frame = self.navigationController.view.safeAreaLayoutGuide.layoutFrame;
     NSLog(@"%@", NSStringFromUIEdgeInsets(self.navigationController.view.safeAreaInsets));
     self.graphView.frame = self.view.frame;
     self.graphView.drawRect = self.view.frame;
     NSLog(@"%@", NSStringFromCGRect(self.view.frame));
     NSLog(@"%@", NSStringFromCGRect(self.graphView.frame));
+ */
 }
 
 -(void)publishEvent{

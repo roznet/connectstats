@@ -920,7 +920,8 @@
         graphViewController.trackStats = ts;
         graphViewController.activity = self.activity;
         graphViewController.field = field;
-
+        [UIViewController setupEdgeExtendedLayout:graphViewController];
+        
         [self.navigationController pushViewController:graphViewController animated:YES];
         [self.navigationController setNavigationBarHidden:NO animated:YES];
 
