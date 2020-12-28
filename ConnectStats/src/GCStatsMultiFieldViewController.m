@@ -37,7 +37,6 @@
 #import "GCHistoryPerformanceAnalysis.h"
 #import "GCStatsMultiFieldViewControllerConsts.h"
 #import "GCFieldsForCategory.h"
-#import "GCStatsHistGraphViewController.h"
 #import "GCDerivedGroupedSeries.h"
 #import "GCDerivedOrganizer.h"
 #import "GCHealthOrganizer.h"

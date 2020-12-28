@@ -43,19 +43,6 @@
 		42B265891FF8314400E891A1 /* KalViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263F41FF8314400E891A1 /* KalViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B2658A1FF8314400E891A1 /* SmudgyWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B263F61FF8314400E891A1 /* SmudgyWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B2658B1FF8314400E891A1 /* SmudgyWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B263F71FF8314400E891A1 /* SmudgyWindow.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		42B265921FF8314400E891A1 /* UIViewController+ECSlidingViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264161FF8314400E891A1 /* UIViewController+ECSlidingViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B265931FF8314400E891A1 /* ECSlidingConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264171FF8314400E891A1 /* ECSlidingConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B265941FF8314400E891A1 /* ECSlidingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264181FF8314400E891A1 /* ECSlidingViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		42B265951FF8314400E891A1 /* ECSlidingSegue.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264191FF8314400E891A1 /* ECSlidingSegue.h */; };
-		42B265961FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2641A1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		42B265971FF8314400E891A1 /* ECSlidingAnimationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2641B1FF8314400E891A1 /* ECSlidingAnimationController.h */; };
-		42B265981FF8314400E891A1 /* ECSlidingInteractiveTransition.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2641C1FF8314400E891A1 /* ECSlidingInteractiveTransition.h */; };
-		42B265991FF8314400E891A1 /* ECSlidingViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2641D1FF8314400E891A1 /* ECSlidingViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42B2659A1FF8314400E891A1 /* UIViewController+ECSlidingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2641E1FF8314400E891A1 /* UIViewController+ECSlidingViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		42B2659B1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B2641F1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.h */; };
-		42B2659C1FF8314400E891A1 /* ECSlidingSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264201FF8314400E891A1 /* ECSlidingSegue.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		42B2659D1FF8314400E891A1 /* ECSlidingAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264211FF8314400E891A1 /* ECSlidingAnimationController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		42B2659E1FF8314400E891A1 /* ECSlidingInteractiveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264221FF8314400E891A1 /* ECSlidingInteractiveTransition.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		42B2659F1FF8314400E891A1 /* GTMNSString+HTML.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264241FF8314400E891A1 /* GTMNSString+HTML.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B265A01FF8314400E891A1 /* GTMDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 42B264251FF8314400E891A1 /* GTMDefines.h */; };
 		42B265A11FF8314400E891A1 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B264261FF8314400E891A1 /* GTMNSString+HTML.m */; };
@@ -135,19 +122,6 @@
 		42B263F41FF8314400E891A1 /* KalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KalViewController.h; sourceTree = "<group>"; };
 		42B263F61FF8314400E891A1 /* SmudgyWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmudgyWindow.h; sourceTree = "<group>"; };
 		42B263F71FF8314400E891A1 /* SmudgyWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmudgyWindow.m; sourceTree = "<group>"; };
-		42B264161FF8314400E891A1 /* UIViewController+ECSlidingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ECSlidingViewController.h"; sourceTree = "<group>"; };
-		42B264171FF8314400E891A1 /* ECSlidingConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECSlidingConstants.h; sourceTree = "<group>"; };
-		42B264181FF8314400E891A1 /* ECSlidingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECSlidingViewController.m; sourceTree = "<group>"; };
-		42B264191FF8314400E891A1 /* ECSlidingSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECSlidingSegue.h; sourceTree = "<group>"; };
-		42B2641A1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECPercentDrivenInteractiveTransition.m; sourceTree = "<group>"; };
-		42B2641B1FF8314400E891A1 /* ECSlidingAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECSlidingAnimationController.h; sourceTree = "<group>"; };
-		42B2641C1FF8314400E891A1 /* ECSlidingInteractiveTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECSlidingInteractiveTransition.h; sourceTree = "<group>"; };
-		42B2641D1FF8314400E891A1 /* ECSlidingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECSlidingViewController.h; sourceTree = "<group>"; };
-		42B2641E1FF8314400E891A1 /* UIViewController+ECSlidingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ECSlidingViewController.m"; sourceTree = "<group>"; };
-		42B2641F1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECPercentDrivenInteractiveTransition.h; sourceTree = "<group>"; };
-		42B264201FF8314400E891A1 /* ECSlidingSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECSlidingSegue.m; sourceTree = "<group>"; };
-		42B264211FF8314400E891A1 /* ECSlidingAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECSlidingAnimationController.m; sourceTree = "<group>"; };
-		42B264221FF8314400E891A1 /* ECSlidingInteractiveTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECSlidingInteractiveTransition.m; sourceTree = "<group>"; };
 		42B264241FF8314400E891A1 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		42B264251FF8314400E891A1 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		42B264261FF8314400E891A1 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
@@ -280,7 +254,6 @@
 			children = (
 				42B263DB1FF8314400E891A1 /* Kal */,
 				42B263F51FF8314400E891A1 /* SmudgeKit */,
-				42B264151FF8314400E891A1 /* ECSlidingViewController */,
 				42B264231FF8314400E891A1 /* gtm-toolbox */,
 				42B2642A1FF8314400E891A1 /* Simple-OAuth-FitBit */,
 				42B265241FF8314400E891A1 /* gtm-aouth2 */,
@@ -326,26 +299,6 @@
 				42B263F71FF8314400E891A1 /* SmudgyWindow.m */,
 			);
 			path = SmudgeKit;
-			sourceTree = "<group>";
-		};
-		42B264151FF8314400E891A1 /* ECSlidingViewController */ = {
-			isa = PBXGroup;
-			children = (
-				42B2641F1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.h */,
-				42B2641A1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.m */,
-				42B2641B1FF8314400E891A1 /* ECSlidingAnimationController.h */,
-				42B264211FF8314400E891A1 /* ECSlidingAnimationController.m */,
-				42B264171FF8314400E891A1 /* ECSlidingConstants.h */,
-				42B2641C1FF8314400E891A1 /* ECSlidingInteractiveTransition.h */,
-				42B264221FF8314400E891A1 /* ECSlidingInteractiveTransition.m */,
-				42B264191FF8314400E891A1 /* ECSlidingSegue.h */,
-				42B264201FF8314400E891A1 /* ECSlidingSegue.m */,
-				42B2641D1FF8314400E891A1 /* ECSlidingViewController.h */,
-				42B264181FF8314400E891A1 /* ECSlidingViewController.m */,
-				42B264161FF8314400E891A1 /* UIViewController+ECSlidingViewController.h */,
-				42B2641E1FF8314400E891A1 /* UIViewController+ECSlidingViewController.m */,
-			);
-			path = ECSlidingViewController;
 			sourceTree = "<group>";
 		};
 		42B264231FF8314400E891A1 /* gtm-toolbox */ = {
@@ -463,8 +416,6 @@
 			files = (
 				42B265761FF8314400E891A1 /* KalDate.h in Headers */,
 				42B2657F1FF8314400E891A1 /* UIViewAdditions.h in Headers */,
-				42B265991FF8314400E891A1 /* ECSlidingViewController.h in Headers */,
-				42B265951FF8314400E891A1 /* ECSlidingSegue.h in Headers */,
 				42B266921FF8314500E891A1 /* UIImage+Snapshot.h in Headers */,
 				42B265721FF8314400E891A1 /* KalGridView.h in Headers */,
 				42B265801FF8314400E891A1 /* KalLogic.h in Headers */,
@@ -472,16 +423,13 @@
 				42B2669B1FF8314500E891A1 /* GTMOAuth2Authentication.h in Headers */,
 				42B265A71FF8314400E891A1 /* Base64Transcoder.h in Headers */,
 				42B265771FF8314400E891A1 /* Kal.h in Headers */,
-				42B265981FF8314400E891A1 /* ECSlidingInteractiveTransition.h in Headers */,
 				42B2668D1FF8314400E891A1 /* UIImage+Diff.h in Headers */,
 				42B265891FF8314400E891A1 /* KalViewController.h in Headers */,
 				42B266911FF8314500E891A1 /* UIImage+Compare.h in Headers */,
 				42B265791FF8314400E891A1 /* NSDateAdditions.h in Headers */,
-				42B2659B1FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.h in Headers */,
 				42B265AB1FF8314400E891A1 /* sha1.h in Headers */,
 				42B265A01FF8314400E891A1 /* GTMDefines.h in Headers */,
 				42B2657C1FF8314400E891A1 /* KalPrivate.h in Headers */,
-				42B265921FF8314400E891A1 /* UIViewController+ECSlidingViewController.h in Headers */,
 				42B2658A1FF8314400E891A1 /* SmudgyWindow.h in Headers */,
 				422626031FFA7C68000DBD32 /* RZNavigationTitleView.h in Headers */,
 				42B2659F1FF8314400E891A1 /* GTMNSString+HTML.h in Headers */,
@@ -492,10 +440,8 @@
 				42B265711FF8314400E891A1 /* KalMonthView.h in Headers */,
 				42B265A91FF8314400E891A1 /* hmac.h in Headers */,
 				42B265A51FF8314400E891A1 /* NSString+URLEncoding.h in Headers */,
-				42B265971FF8314400E891A1 /* ECSlidingAnimationController.h in Headers */,
 				42B2669F1FF8314500E891A1 /* GTMOAuth2ViewControllerTouch.h in Headers */,
 				42B266971FF8314500E891A1 /* GTMOAuth2SignIn.h in Headers */,
-				42B265931FF8314400E891A1 /* ECSlidingConstants.h in Headers */,
 				42B266991FF8314500E891A1 /* GTMSessionFetcher.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -716,29 +662,23 @@
 				42B265831FF8314400E891A1 /* KalGridView.m in Sources */,
 				42B265851FF8314400E891A1 /* NSDateAdditions.m in Sources */,
 				42B2668E1FF8314500E891A1 /* UIImage+Snapshot.m in Sources */,
-				42B2659E1FF8314400E891A1 /* ECSlidingInteractiveTransition.m in Sources */,
 				42B2669D1FF8314500E891A1 /* GTMOAuth2SignIn.m in Sources */,
 				42B265871FF8314400E891A1 /* UIViewAdditions.m in Sources */,
 				42B2658B1FF8314400E891A1 /* SmudgyWindow.m in Sources */,
 				42B266901FF8314500E891A1 /* UIImage+Diff.m in Sources */,
-				42B265941FF8314400E891A1 /* ECSlidingViewController.m in Sources */,
 				42B265A81FF8314400E891A1 /* sha1.c in Sources */,
 				42B2669E1FF8314500E891A1 /* GTMSessionFetcher.m in Sources */,
 				42B2669A1FF8314500E891A1 /* GTMOAuth2ViewControllerTouch.m in Sources */,
-				42B265961FF8314400E891A1 /* ECPercentDrivenInteractiveTransition.m in Sources */,
-				42B2659C1FF8314400E891A1 /* ECSlidingSegue.m in Sources */,
 				422626011FFA7C5F000DBD32 /* RZNavigationTitleView.m in Sources */,
 				42B265AE1FF8314400E891A1 /* NSString+URLEncoding.m in Sources */,
 				42B265AF1FF8314400E891A1 /* OAuth1Controller.m in Sources */,
 				42B265861FF8314400E891A1 /* KalDate.m in Sources */,
-				42B2659A1FF8314400E891A1 /* UIViewController+ECSlidingViewController.m in Sources */,
 				42B265A11FF8314400E891A1 /* GTMNSString+HTML.m in Sources */,
 				42B265741FF8314400E891A1 /* KalDataSource.m in Sources */,
 				42B265AA1FF8314400E891A1 /* Base64Transcoder.c in Sources */,
 				42B266A11FF8314500E891A1 /* GTMOAuth2Authentication.m in Sources */,
 				42B265841FF8314400E891A1 /* KalMonthView.m in Sources */,
 				42B265A61FF8314400E891A1 /* hmac.c in Sources */,
-				42B2659D1FF8314400E891A1 /* ECSlidingAnimationController.m in Sources */,
 				42B2668F1FF8314500E891A1 /* UIImage+Compare.m in Sources */,
 				42B2657B1FF8314400E891A1 /* KalViewController.m in Sources */,
 				42B265751FF8314400E891A1 /* KalLogic.m in Sources */,

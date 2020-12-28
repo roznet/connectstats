@@ -28,8 +28,5 @@ FOUNDATION_EXPORT const unsigned char RZExternalVersionString[];
 #import "RZExternal/KalDate.h"
 #import "RZexternal/NSDateAdditions.h"
 
-#import "RZExternal/ECSlidingViewController.h"
-#import "RZExternal/UIViewController+ECSlidingViewController.h"
-
 #import "RZExternal/SmudgyWindow.h"
 

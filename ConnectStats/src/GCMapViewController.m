@@ -190,10 +190,6 @@
     [super viewWillAppear:animated];
     [self setupFrames:self.view.safeAreaLayoutGuide.layoutFrame];
     [self zoomInOnRoute];
-
-    if (self.slidingViewController) {
-        (self.slidingViewController).anchorRightRevealAmount = self.view.frame.size.width*0.9;
-    }
     
 }
 
