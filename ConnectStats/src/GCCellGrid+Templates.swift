@@ -134,7 +134,7 @@ extension GCCellGrid {
                 self.setupView(cellView, forRow: row, andColumn: 1)
                 if( row != 0){
                     self.label(forRow: row, andCol: 0)?.attributedText = NSAttributedString(string: field.displayName(withPrimary: primaryField), attributes: fieldAttr)
-                    self.config(forRow: row, andCol: 0)?.horizontalAlign = gcHorizontalAlign.right
+                    self.config(forRow: row, andCol: 0)?.horizontalAlign = gcHorizontalAlign.left
                 }
             }
             row += 1

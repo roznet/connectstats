@@ -71,20 +71,6 @@ class GCCellFieldValueView: UIView {
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
-        
-        /*
-        if let field = self.field,
-           let icon = field.icon(){
-            //print( "\(field) \(value.formatDouble()) \(value.formatDoubleNoUnits())")
-            let iconRect = CGRect(x: 0.0, y: 0.0, width: size.height, height: size.height)
-            icon.withTintColor(UIColor.white).draw(in: iconRect)
-        }
-        
-        str.draw(at: CGPoint(x:size.height,y:0.0),
-                 withAttributes:attr
-        )*/
-        
-
         // Drawing code
         //
         //     !----------!-----|-|-----!
@@ -134,10 +120,6 @@ class GCCellFieldValueView: UIView {
                 }
                 
                 (fmtField as NSString).draw(at: fieldRect.origin, withAttributes: self.fieldAttribute)
-                /*(fmtField as NSString).draw(with: fieldRect,
-                 options: NSStringDrawingOptions(),
-                 attributes: self.fieldAttribute,
-                 context: nil)*/
             }
         }
     }
