@@ -96,7 +96,7 @@
         "repositoryURL": "https://github.com/roznet/rzutils.git",
         "state": {
           "branch": "master",
-          "revision": "3da252e043c3d308882edd25e831f52725a26eae",
+          "revision": "fe152b4201be7db29963128d50f6f306a94dcb45",
           "version": null
         }
       },
@@ -114,7 +114,7 @@
         "repositoryURL": "https://github.com/roznet/rzutils-touch.git",
         "state": {
           "branch": "main",
-          "revision": "2de2c5ef78bd357d0db819f5e802e4ab7684823a",
+          "revision": "82f5b76990b6929c78cdf105237f78822b8c27b3",
           "version": null
         }
       },

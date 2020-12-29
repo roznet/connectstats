@@ -35,26 +35,23 @@ class GCStravaRequestBase: GCWebRequestStandard {
     let stravaAuth : OAuth2Swift
     let navigationController : UINavigationController
     
-    @objc init(navigationController:UINavigationController) {
-        self.navigationController = navigationController
-        self.stravaAuth = OAuth2Swift(consumerKey: GCAppGlobal.credentials(forService: Credential.serviceName,
-                                                                           andKey: "client_id"),
-                                      consumerSecret: GCAppGlobal.credentials(forService: Credential.serviceName,
-                                                                              andKey: "client_secret"),
-                               authorizeUrl: GCAppGlobal.credentials(forService: Credential.serviceName,
-                                                                     andKey: "authenticate_url"),
-                               accessTokenUrl: GCAppGlobal.credentials(forService: Credential.serviceName,
-                                                                       andKey: "access_token_url"),
-                               responseType: "code")
-        
-
-    }
-    
-    @objc static func signout() {
-        print( "LOGOUT")
-    }
     struct Credential {
         static let serviceName = "strava"
+    }
+
+    @objc init(navigationController:UINavigationController) {
+        self.navigationController = navigationController
+        self.stravaAuth = OAuth2Swift(consumerKey: GCAppGlobal.credentials(forService: Credential.serviceName, andKey: "client_id"),
+                                      consumerSecret: GCAppGlobal.credentials(forService: Credential.serviceName, andKey: "client_secret"),
+                                      authorizeUrl: GCAppGlobal.credentials(forService: Credential.serviceName, andKey: "authenticate_url"),
+                                      accessTokenUrl: GCAppGlobal.credentials(forService: Credential.serviceName, andKey: "access_token_url"),
+                                      responseType: "code")
+        self.stravaAuth.authorizeURLHandler = SafariURLHandler(viewController: self.navigationController, oauthSwift: self.stravaAuth)
+    }
+    
+    init(previous : GCStravaRequestBase){
+        self.navigationController = previous.navigationController
+        self.stravaAuth = previous.stravaAuth
     }
     
     override func url() -> String? {
@@ -64,21 +61,25 @@ class GCStravaRequestBase: GCWebRequestStandard {
     func stravaUrl() -> URL? {
         return nil
     }
+
+    @objc static func signout() {
+        GCAppGlobal.profile().serviceSuccess(gcService.strava, set: false)
+        self.clearCredential()
+    }
     
+    static func clearCredential() {
+        let profile = GCAppGlobal.profile()
+        profile.setLoginName("", for: gcService.strava)
+        profile.setPassword("", for: gcService.strava)
+    }
+
     func saveCredential() {
         if let jsonData = try? JSONEncoder().encode(self.stravaAuth.client.credential){
            let profile = GCAppGlobal.profile()
-            RZSLog.info("Saved Strava")
             profile.setLoginName(self.stravaAuth.client.credential.oauthToken, for: gcService.strava)
             profile.setPassword(String(data: jsonData, encoding: .utf8), for: gcService.strava)
             GCAppGlobal.saveSettings()
         }
-    }
-    
-    func clearCredential() {
-        let profile = GCAppGlobal.profile()
-        profile.setLoginName("", for: gcService.strava)
-        profile.setPassword("", for: gcService.strava)
     }
     
     @discardableResult
@@ -98,10 +99,8 @@ class GCStravaRequestBase: GCWebRequestStandard {
         return rv
     }
     
-    func signInToStrava() {
+    override func process() {
         self.retrieveCredential()
-        self.stravaAuth.authorizeURLHandler = SafariURLHandler(viewController: self.navigationController,
-                                                               oauthSwift: self.stravaAuth)
         if GCAppGlobal.profile().serviceSuccess(gcService.strava) == false {
             self.stravaAuth.authorize(withCallbackURL: "connectstats://ro-z.net/oauth/strava",
                                       scope: "activity:read_all,read_all",
@@ -123,42 +122,38 @@ class GCStravaRequestBase: GCWebRequestStandard {
     
     func makeRequest() {
         if let url = self.stravaUrl() {
-            self.stravaAuth.startAuthorizedRequest(url, method: .GET, parameters: [:] ) { result in
+            self.stravaAuth.client.get(url){ result in
                 switch result {
                 case .success(let response):
                     self.status = GCWebStatus.OK
                     GCAppGlobal.profile().serviceSuccess(gcService.strava, set: true)
-                    self.saveCredential()
-                    self.process(data: response.data, response:response.response)
+                    self.process(data: response.data)
                 case .failure(let error):
-                    var shouldTrySignin : Bool = false
-                    
                     switch error {
-                    case .requestError(let k, _):
-                        let underlyingError = (k as NSError)
-                        let code = underlyingError.code
-                        let body = underlyingError.userInfo["Response-Body"] ?? "No Body"
-                        if( code == 401){
-                            // If we had success before, try signin again
-                            if GCAppGlobal.profile().serviceSuccess(gcService.strava) {
-                                shouldTrySignin = true
+                    case .requestError(let underlyingError, _ /*request*/):
+                        let code = (underlyingError as NSError).code
+                        if code == 401 { // expired, renew
+                            RZSLog.info("Renewing Strava Token")
+                            self.stravaAuth.renewAccessToken(withRefreshToken: self.stravaAuth.client.credential.oauthRefreshToken) { result in
+                                switch result {
+                                case .success:
+                                    self.saveCredential()
+                                    self.makeRequest()
+                                case .failure(let underlyingError):
+                                    RZSLog.error("Failed to renew Strava Token \(underlyingError)")
+                                    self.status = GCWebStatus.accessDenied
+                                    self.processDone()
+                                }
                             }
+                        }
+                        else{
+                            RZSLog.error("Failed to renewing Strava Token \(error)")
                             self.status = GCWebStatus.accessDenied
-                            GCAppGlobal.profile().serviceSuccess(gcService.strava, set: false)
-                            RZSLog.error("Got invalid token, trying signin \(underlyingError.code) \(body)")
-                        }else{
-                            RZSLog.error("Failed to get response \(underlyingError.code) \(body)")
-                            
+                            self.processDone()
                         }
                     default:
-                        RZSLog.error("Failed to get response \(error.errorCode) \(error.errorUserInfo.keys)")
-                        self.status = GCWebStatus.accessDenied
-                    }
-                    if shouldTrySignin {
-                        self.signInToStrava()
-                    }else{
-                        GCAppGlobal.profile().serviceSuccess(gcService.strava, set: false)
-                        self.status = GCWebStatus.accessDenied
+                        RZSLog.error("Strava Request Failed \(error)")
+                        self.status = GCWebStatus.loginFailed
                         self.processDone()
                     }
                 }
@@ -166,11 +161,7 @@ class GCStravaRequestBase: GCWebRequestStandard {
         }
     }
     
-    override func process() {
-        self.signInToStrava()
-    }
-
-    func process(data : Data, response: HTTPURLResponse){
+    func process(data : Data){
         self.processDone()
     }
 }

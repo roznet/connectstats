@@ -41,11 +41,11 @@ import RZUtilsSwift
         super.init(navigationController: navigationController)
     }
     
-    @objc init( previous : GCStravaRequestActivityList){
+    init( previous : GCStravaRequestActivityList){
         self.page = previous.page+1
         self.reloadAll = previous.reloadAll
         self.lastFoundDate = previous.lastFoundDate
-        super.init(navigationController: previous.navigationController)
+        super.init(previous:previous)
     }
     
     override func stravaUrl() -> URL? {
@@ -56,7 +56,7 @@ import RZUtilsSwift
         return "last_strava_search_\(page).json"
     }
     
-    override func process(data : Data, response: HTTPURLResponse) {
+    override func process(data : Data) {
         try? data.write(to: URL(fileURLWithPath: self.searchFileName(page: self.page)))
         
         GCAppGlobal.worker().async {

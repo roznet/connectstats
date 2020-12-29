@@ -41,21 +41,19 @@ class GCStravaRequestStreams: GCStravaRequestBase {
     init(previous:GCStravaRequestStreams){
         self.activity = previous.activity
         self.points = previous.points
-        
-        super.init(navigationController: previous.navigationController)
+        super.init(previous:previous)
     }
     
     func stravaActivityId() -> String? {
         return GCService(gcService.strava)?.serviceId(fromActivityId: self.activity.activityId)
     }
-    
+
     override func stravaUrl() -> URL? {
         if let sid = self.stravaActivityId() {
             if points == nil {
                 return URL(string: "https://www.strava.com/api/v3/activities/\(sid)/streams/latlng,heartrate,time,altitude,cadence,watts,velocity_smooth" )
             }else{
                 return URL(string: "https://www.strava.com/api/v3/activities/\(sid)/laps" )
-                
             }
         }
         return nil
@@ -70,7 +68,7 @@ class GCStravaRequestStreams: GCStravaRequestBase {
         }
     }
     
-    override func process(data: Data, response: HTTPURLResponse) {
+    override func process(data: Data) {
         try? data.write(to: self.saveDataFileURL())
         
         GCAppGlobal.worker().async {
