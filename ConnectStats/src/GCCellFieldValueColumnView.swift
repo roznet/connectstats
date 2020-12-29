@@ -26,25 +26,31 @@
 
 
 import UIKit
+import RZUtilsSwift
 
 class GCCellFieldValueColumnView: UIView {
 
     var fields : [GCField] = []
     var numberWithUnits : [GCNumberWithUnit] = []
-    var valueAttribute : [NSAttributedString.Key:Any]? = nil
-    var unitAttribute : [NSAttributedString.Key:Any]? = nil
+    var valueAttribute : [NSAttributedString.Key:Any] = [:]
+    var unitAttribute : [NSAttributedString.Key:Any] = [:]
     var displayIcons = true;
-    var defaultSpacing :CGFloat = 0.0
+    var displayUnit = true;
+    var defaultVerticalSpacing :CGFloat = 5.0
+    var defaultHorizontalSpacing :CGFloat = 5.0
     var iconColor : UIColor = UIColor.white
     var distributeVertically = true
+    var geometry : RZNumberWithUnitGeometry = RZNumberWithUnitGeometry()
     
     func add(field:GCField, numberWithUnit:GCNumberWithUnit){
         fields.append(field)
         numberWithUnits.append(numberWithUnit)
+        self.geometry.adjust(for: numberWithUnit,numberAttribute: self.valueAttribute, unitAttribute: self.unitAttribute)
         self.setNeedsDisplay()
     }
     
     func clearFieldAndNumbers(){
+        self.geometry.reset()
         self.fields = []
         self.numberWithUnits = []
         self.setNeedsDisplay()
@@ -53,41 +59,20 @@ class GCCellFieldValueColumnView: UIView {
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
-        var unitWidth :CGFloat = 0.0
-        var numberWidth : CGFloat = 0.0
+        self.geometry.alignment = .center
+        var spacing = self.defaultVerticalSpacing
+        let totalHeight = self.geometry.accumulatedTotalSize.height
+        let oneHeight = self.geometry.totalSize.height
         
-        var height : CGFloat = 0.0;
-        
-        for numberWithUnit in numberWithUnits {
-            let fmtNoUnit = numberWithUnit.formatDoubleNoUnits()
-            let fmt  = numberWithUnit.formatDouble()
-            let fmtUnit = numberWithUnit.unit.abbr
-            
-            if( fmt != fmtNoUnit ){
-                let numberSize = (fmtNoUnit as NSString).size(withAttributes: self.valueAttribute)
-                let unitSize   = (fmtUnit as NSString).size(withAttributes: self.unitAttribute)
-                if( numberSize.width > numberWidth ){
-                    numberWidth = numberSize.width
-                }
-                if( unitSize.width > unitWidth){
-                    unitWidth = unitSize.width
-                }
-                height += max(unitSize.height, numberSize.height)
-            }else{
-                let numberSize = (fmtNoUnit as NSString).size(withAttributes: self.valueAttribute)
-                height += numberSize.height
-            }
-        }
-        
-        var spacing = self.defaultSpacing
-        
-        if( height < rect.size.height - (2.0 * self.defaultSpacing)) {
-            spacing = (rect.size.height - height - 2.0 * self.defaultSpacing) / CGFloat(self.numberWithUnits.count)
+        // does height fit allowing for top and bottom defaultSpacing?
+        if( totalHeight < rect.size.height - (2.0 * self.defaultVerticalSpacing)) {
+            spacing = (rect.size.height - totalHeight - 2.0 * self.defaultVerticalSpacing) / CGFloat(self.numberWithUnits.count)
         }
         if( distributeVertically == false){
-            spacing = self.defaultSpacing
+            spacing = min( self.defaultVerticalSpacing, spacing)
         }
-        var current = CGPoint(x: rect.origin.x + (rect.width-(numberWidth+unitWidth))/2.0, y: rect.origin.y + self.defaultSpacing)
+        
+        var current = CGPoint(x: rect.origin.x, y: rect.origin.y + self.defaultVerticalSpacing)
         //
         //     !-----!-----||------!
         //      icon   23.2 km
@@ -97,43 +82,29 @@ class GCCellFieldValueColumnView: UIView {
         //     !-----!----||------!
         //      icon  23.2 km
         //      icon  2:12:05
-
-        
-        
-        let numberUnitSpacingSize = (" " as NSString).size(withAttributes: self.valueAttribute)
         
         for (field,numberWithUnit) in zip(self.fields, self.numberWithUnits){
-            let fmtNoUnit = numberWithUnit.formatDoubleNoUnits()
-            let fmt = numberWithUnit.formatDouble()
-            let fmtUnit = numberWithUnit.unit.abbr
             
-            var numberPoint : CGPoint = current
-            var unitPoint : CGPoint = current
+            var currentRect = CGRect(origin: current, size: CGSize(width: rect.size.width, height: oneHeight) )
             
-            let numberSize = (fmtNoUnit as NSString).size(withAttributes: self.valueAttribute)
-
-            unitPoint.x += numberWidth + numberUnitSpacingSize.width
-            if numberSize.width < numberWidth {
-                // less than number line up to the right
-                numberPoint.x += (numberWidth-numberSize.width)
-            }// else line up to the left, so keep x
-            // add icon
-            if self.displayIcons{
+            if self.displayIcons {
                 if let icon = field.icon(){
-                    let iconRect = CGRect(x: current.x, y: current.y, width: numberSize.height, height: numberSize.height)
-                    let insetValue :CGFloat = 2.0
+                    let iconRect = CGRect(x: current.x, y: current.y, width: oneHeight, height: oneHeight)
+                    let insetValue : CGFloat = 2.0
                     icon.withTintColor(self.iconColor).draw(in: iconRect.insetBy(dx: insetValue, dy: insetValue))
                 }
                 // shift all text to the right by size of the icon
-                numberPoint.x += numberSize.height
-                unitPoint.x += numberSize.height
-            }
-            (fmtNoUnit as NSString).draw(at: numberPoint, withAttributes: self.valueAttribute)
-            if( fmt != fmtNoUnit ){
-                (fmtUnit as NSString).draw(at: unitPoint, withAttributes: self.unitAttribute)
+                currentRect.origin.x += oneHeight + self.defaultHorizontalSpacing
+                currentRect.size.width -= oneHeight + self.defaultHorizontalSpacing
             }
             
-            current.y += (numberSize.height + spacing)
+            self.geometry.drawInRect(currentRect,
+                                     numberWithUnit: numberWithUnit,
+                                     numberAttribute: self.valueAttribute,
+                                     unitAttribute: self.unitAttribute,
+                                     addUnit: self.displayUnit)
+            
+            current.y += (oneHeight + spacing)
         }
     }
     
