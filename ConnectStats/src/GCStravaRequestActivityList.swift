@@ -35,6 +35,8 @@ import RZUtilsSwift
     let reloadAll : Bool
     var lastFoundDate : Date = Date()
     
+    //MARK: - Initialisation
+    
     @objc init(navigationController:UINavigationController, page:Int, reloadAll : Bool) {
         self.page = page
         self.reloadAll = reloadAll
@@ -48,6 +50,25 @@ import RZUtilsSwift
         super.init(previous:previous)
     }
     
+    //MARK: - Information
+    
+    @objc func debugDescription() -> String {
+        var info = "first"
+        if self.page > 0 {
+            info = String(format: "%@[%@]", (self.lastFoundDate as NSDate).yyyymmdd(),self.page)
+        }
+        if self.reloadAll {
+            info.append("/all")
+        }
+        
+        return String(format: "<%@: %@ %@>", NSStringFromClass(type(of: self)),
+                      info, (self.urlDescription as NSString).truncateIfLongerThan(129, ellipsis: "..."))
+    }
+    override func description() -> String {
+        return String(format: NSLocalizedString("Downloading Strava History... %@", comment: "Strava Request"),
+                      (self.lastFoundDate as NSDate).dateFormatFromToday())
+    }
+    
     override func stravaUrl() -> URL? {
         return URL(string: "https://www.strava.com/api/v3/athlete/activities?page=\(self.page+1)")
     }
@@ -55,6 +76,8 @@ import RZUtilsSwift
     func searchFileName(page : Int) -> String {
         return "last_strava_search_\(page).json"
     }
+    
+    //MARK: - Processing
     
     override func process(data : Data) {
         try? data.write(to: URL(fileURLWithPath: self.searchFileName(page: self.page)))
@@ -106,6 +129,8 @@ import RZUtilsSwift
         }
         return nil
     }
+    
+    //MARK: - Testing functions
     
     @discardableResult
     @objc static func test(organizer: GCActivitiesOrganizer, path : String) -> GCActivitiesOrganizer{

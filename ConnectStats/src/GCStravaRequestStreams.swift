@@ -33,6 +33,8 @@ class GCStravaRequestStreams: GCStravaRequestBase {
     let activity : GCActivity
     var points : [GCTrackPoint]? = nil
     
+    //MARK: - Initialization
+    
     @objc init(navigationController:UINavigationController, activity : GCActivity) {
         self.activity = activity
         super.init(navigationController: navigationController)
@@ -43,6 +45,8 @@ class GCStravaRequestStreams: GCStravaRequestBase {
         self.points = previous.points
         super.init(previous:previous)
     }
+    
+    //MARK: - Information
     
     func stravaActivityId() -> String? {
         return GCService(gcService.strava)?.serviceId(fromActivityId: self.activity.activityId)
@@ -58,6 +62,20 @@ class GCStravaRequestStreams: GCStravaRequestBase {
         }
         return nil
     }
+    
+    override func description() -> String {
+        return String(format: NSLocalizedString("Downloading Strava Detail... %@", comment: "Strava Request"),
+                      (self.activity.date as NSDate).dateFormatFromToday())
+    }
+    
+    @objc func debugDescription() -> String {
+        let info = String(describing: self.activity)
+        
+        return String(format: "<%@: %@ %@>", NSStringFromClass(type(of: self)),
+                      info, (self.urlDescription as NSString).truncateIfLongerThan(129, ellipsis: "..."))
+    }
+
+    //MARK: - Processing
     
     func saveDataFileURL() -> URL {
         let sid : String = self.stravaActivityId() ?? self.activity.activityId

@@ -62,6 +62,16 @@ class GCStravaRequestBase: GCWebRequestStandard {
         return nil
     }
 
+    override var urlDescription: String! {
+        if let url = self.stravaUrl() {
+            return url.path
+        }else{
+            return "NoUrl"
+        }
+    }
+    
+    //MARK: - Credentials
+    
     @objc static func signout() {
         GCAppGlobal.profile().serviceSuccess(gcService.strava, set: false)
         self.clearCredential()
@@ -99,6 +109,8 @@ class GCStravaRequestBase: GCWebRequestStandard {
         return rv
     }
     
+    //MARK: - Request and Authentication
+    
     override func process() {
         self.retrieveCredential()
         if GCAppGlobal.profile().serviceSuccess(gcService.strava) == false {
@@ -128,8 +140,8 @@ class GCStravaRequestBase: GCWebRequestStandard {
                     self.status = GCWebStatus.OK
                     GCAppGlobal.profile().serviceSuccess(gcService.strava, set: true)
                     self.process(data: response.data)
-                case .failure(let error):
-                    switch error {
+                case .failure(let queryError):
+                    switch queryError {
                     case .requestError(let underlyingError, _ /*request*/):
                         let code = (underlyingError as NSError).code
                         if code == 401 { // expired, renew
@@ -139,27 +151,35 @@ class GCStravaRequestBase: GCWebRequestStandard {
                                 case .success:
                                     self.saveCredential()
                                     self.makeRequest()
-                                case .failure(let underlyingError):
-                                    RZSLog.error("Failed to renew Strava Token \(underlyingError)")
-                                    self.status = GCWebStatus.accessDenied
-                                    self.processDone()
+                                case .failure(let renewError):
+                                    self.requestError(error: renewError, message: "Failed to renew token")
                                 }
                             }
                         }
                         else{
-                            RZSLog.error("Failed to renewing Strava Token \(error)")
-                            self.status = GCWebStatus.accessDenied
-                            self.processDone()
+                            self.requestError(error: queryError, message: "Request failed")
                         }
                     default:
-                        RZSLog.error("Strava Request Failed \(error)")
-                        self.status = GCWebStatus.loginFailed
-                        self.processDone()
+                        self.requestError(error: queryError, message: "Request failed")
                     }
                 }
             }
         }
     }
+    
+    func requestError( error : OAuthSwiftError, message : String){
+        if let underlyingError = error.underlyingError {
+            let code = (underlyingError as NSError).code
+            let body = (underlyingError as NSError).userInfo["Response-Body"] ?? "No Body"
+            RZSLog.error("\(message) \(code) \(body)")
+        }else{
+            RZSLog.error("\(message) \(error)")
+        }
+        self.status = GCWebStatus.accessDenied
+        self.processDone()
+    }
+    
+    //MARK: - to override
     
     func process(data : Data){
         self.processDone()
