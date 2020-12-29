@@ -52,7 +52,7 @@
     }
     [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithName:@"Europe/London"]];
     [GCAppGlobal ensureCalculationCalendarTimeZone:[NSTimeZone defaultTimeZone]];
-    [GCUnit setGlobalSystem:GCUnitSystemMetric];
+    [GCUnit setGlobalSystem:gcUnitSystemMetric];
     self.fieldCache = [GCField fieldCache];
     [RZFileOrganizer removeEditableFile:@"field_cache.db"];
     FMDatabase * cacheDb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"field_cache.db"]];

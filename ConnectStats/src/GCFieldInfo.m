@@ -43,7 +43,7 @@
     GCFieldInfo * rv = RZReturnAutorelease([[GCFieldInfo alloc] init]);
     if (rv) {
         rv.displayName = aDisplayName;
-        rv.units = @{ @(GCUnitSystemMetric):[GCUnit unitForKey:aUom]
+        rv.units = @{ @(gcUnitSystemMetric):[GCUnit unitForKey:aUom]
         };
         rv.field = [GCField fieldForKey:field andActivityType:aType];
         rv.fieldKey = field;
@@ -115,10 +115,10 @@
     GCUnit * rv = self.units[@(system)];
     // if not specified, try the other and convert to global system
     if( rv == nil ){
-        rv = [self.units[@(GCUnitSystemDefault)] unitForGlobalSystem];
+        rv = [self.units[@(gcUnitSystemDefault)] unitForGlobalSystem];
     }
     if( rv == nil ){
-        rv = [self.units[@(GCUnitSystemMetric)] unitForGlobalSystem];
+        rv = [self.units[@(gcUnitSystemMetric)] unitForGlobalSystem];
         
     }
     return rv;

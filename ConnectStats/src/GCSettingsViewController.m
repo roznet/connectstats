@@ -279,7 +279,7 @@
                 NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Units",@"Profile units")
                                                                               attributes:[GCViewConfig attributeBold16]] autorelease];
                 NSArray * systems = [GCViewConfig unitSystemDescriptions];
-                NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_UNIT_SYSTEM defaultValue:GCUnitSystemDefault];
+                NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_UNIT_SYSTEM defaultValue:gcUnitSystemDefault];
                 NSString * value = selected < systems.count ? systems[selected] : systems[0];
                 NSAttributedString * current = [[[NSAttributedString alloc] initWithString:value
                                                                                 attributes:[GCViewConfig attribute16]] autorelease];
@@ -912,7 +912,7 @@
     }else if (section == GC_SECTION_PARAMS){
         if(indexPath.row == GC_SETTINGS_UNITS){
             NSArray * systems = [GCViewConfig unitSystemDescriptions];
-            NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_UNIT_SYSTEM defaultValue:GCUnitSystemDefault];
+            NSUInteger selected = [GCAppGlobal configGetInt:CONFIG_UNIT_SYSTEM defaultValue:gcUnitSystemDefault];
             GCCellEntryListViewController * choices = [GCViewConfig standardEntryListViewController:systems selected:selected];
             choices.entryFieldDelegate = self;
             choices.identifierInt = GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_UNITS);

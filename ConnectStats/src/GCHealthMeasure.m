@@ -225,7 +225,7 @@ GCField * fieldForHKQuantityType(HKQuantityType*type){
             GCField * field = [GCField fieldForKey:one[gcHealthDefsIndexFieldKey] andActivityType:GC_TYPE_ALL];
             NSString * displayName = one[gcHealthDefsIndexDisplay];
             GCUnit * unit = storeUnitForField(field);
-            NSDictionary * units = @{@(GCUnitSystemMetric):unit};
+            NSDictionary * units = @{@(gcUnitSystemMetric):unit};
             
             GCFieldInfo * info = [GCFieldInfo fieldInfoFor:field displayName:displayName andUnits:units];
             build[field] = info;
@@ -254,7 +254,7 @@ GCField * fieldForHKQuantityType(HKQuantityType*type){
 
 
 +(GCUnit*)storeUnit:(gcMeasureType)type{
-    return [[GCHealthMeasure fieldInfoFromMeasureType:type] unitForSystem:GCUnitSystemMetric];
+    return [[GCHealthMeasure fieldInfoFromMeasureType:type] unitForSystem:gcUnitSystemMetric];
 }
 
 +(GCUnit*)measureUnit:(gcMeasureType)type{

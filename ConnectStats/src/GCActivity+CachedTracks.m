@@ -397,14 +397,14 @@
     NSArray * defs = @[
         [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_VERTICAL_SPEED andActivityType:GC_TYPE_ALL]
                       displayName:NSLocalizedString(@"Vertical Speed", @"Calculated Field")
-                         andUnits:@{@(GCUnitSystemMetric):[GCUnit meterperhour]}],
+                         andUnits:@{@(gcUnitSystemMetric):[GCUnit meterperhour]}],
         
         [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_10SEC_SPEED andActivityType:GC_TYPE_RUNNING]
                       displayName:NSLocalizedString(@"10sec Pace", @"Calculated Field")
-                         andUnits:@{@(GCUnitSystemMetric):[GCUnit minperkm],@(GCUnitSystemImperial):[GCUnit minpermile]}],
+                         andUnits:@{@(gcUnitSystemMetric):[GCUnit minperkm],@(gcUnitSystemImperial):[GCUnit minpermile]}],
         [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_10SEC_SPEED andActivityType:GC_TYPE_ALL]
                       displayName:NSLocalizedString(@"10sec Speed", @"Calculated Field")
-                         andUnits:@{@(GCUnitSystemMetric):[GCUnit kph],@(GCUnitSystemImperial):[GCUnit mph]}],
+                         andUnits:@{@(gcUnitSystemMetric):[GCUnit kph],@(gcUnitSystemImperial):[GCUnit mph]}],
 
     ];
     NSMutableDictionary * rv = [NSMutableDictionary dictionary];
