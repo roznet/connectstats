@@ -808,7 +808,7 @@
     NSMutableArray * rv = [NSMutableArray array];
     
     NSUInteger nrowsExtended = 4;
-    CGFloat heightExtended = [GCViewConfig sizeForNumberOfRows:nrowsExtended];
+    CGFloat heightExtended = [GCViewConfig sizeForNumberOfRows:nrowsExtended] * 1.1;
 
     UINib * nib = [UINib nibWithNibName:@"GCCellActivity" bundle:[NSBundle mainBundle]];
     
@@ -1076,7 +1076,7 @@
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:10];
 
     [rv addObject:[self sampleNumberGeometry]];
-    /*
+    
     [rv addObject:[self sampleNewActivitySummary]];
     [rv addObject:[self sampleNewAggregatedStats]];
     [rv addObject:[self sampleNewActivityDetail]];
@@ -1091,7 +1091,6 @@
     
     [rv addObject:[self sampleIcons]];
     [rv addObject:[self sampleCells]];
-     */
     
     return rv;
 }

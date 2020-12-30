@@ -721,8 +721,8 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
         rv.defs = @{
             kGCSkinKeyStringValues:
                 @{
-                    @(gcSkinStringSystemFontName) : @"Avenir-Medium",
-                    @(gcSkinStringBoldSystemFontName) : @"Avenir-Heavy",
+                 /*   @(gcSkinStringSystemFontName) : @"Avenir-Medium",
+                    @(gcSkinStringBoldSystemFontName) : @"Avenir-Heavy", */
                 },
             kGCSkinKeyBoolValues:
                 @{

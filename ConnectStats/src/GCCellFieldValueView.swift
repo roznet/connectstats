@@ -30,13 +30,24 @@ import RZUtilsSwift
 
 class GCCellFieldValueView: UIView {
 
+    public enum DisplayIcon {
+        case hide
+        case left
+        case right
+    }
+    
+    public enum DisplayField {
+        case hide
+        case left
+        case right
+    }
     let field : GCField?
     let numberWithUnit : GCNumberWithUnit
     let geometry : RZNumberWithUnitGeometry
     let primaryField : GCField?
     
-    let displayIcon : Bool
-    var displayField : Bool = true
+    let displayIcon : DisplayIcon
+    var displayField : DisplayField = .left
     var iconColor = UIColor.darkGray
     var numberAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.value)
     var unitAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.unit)
@@ -46,7 +57,7 @@ class GCCellFieldValueView: UIView {
           geometry: RZNumberWithUnitGeometry,
           field : GCField? = nil,
           primaryField: GCField? = nil,
-          icon: Bool = false) {
+          icon: DisplayIcon = .hide) {
         self.field = field
         self.numberWithUnit = numberWithUnit
         self.geometry = geometry
@@ -61,7 +72,7 @@ class GCCellFieldValueView: UIView {
         self.numberWithUnit = GCNumberWithUnit()
         self.geometry = RZNumberWithUnitGeometry()
         self.primaryField = nil
-        self.displayIcon = false
+        self.displayIcon = .hide
         super.init(coder: coder)
     }
     
@@ -97,13 +108,13 @@ class GCCellFieldValueView: UIView {
                 addUnit = false;
             }
         }
-        let /*drawnRect*/_ = self.geometry.drawInRect(numberRect,
+        let drawnRect = self.geometry.drawInRect(numberRect,
                                                  numberWithUnit: self.numberWithUnit,
                                                  numberAttribute: self.numberAttribute,
                                                  unitAttribute: self.unitAttribute,
                                                  addUnit: addUnit)
         
-        if self.displayIcon {
+        if self.displayIcon != .hide {
             if let field = self.field,
                let icon = field.icon(){
                 let iconHeight = self.geometry.totalSize.height
@@ -115,17 +126,28 @@ class GCCellFieldValueView: UIView {
                 
                 fieldRect.origin.x += iconHeight
                 fieldRect.size.width -= iconHeight
+                if case DisplayIcon.right = self.displayIcon {
+                    iconRect.origin.x = drawnRect.origin.x - iconHeight
+                }
                 // don't display if overlap with number
-                icon.withTintColor(self.iconColor).draw(in: iconRect)
+                if drawnRect.origin.x > iconRect.maxX {
+                    icon.withTintColor(self.iconColor).draw(in: iconRect)
+                }
             }
         }
-        if self.displayField {
+        if self.displayField != .hide {
             if let fmtField = self.field?.displayName(withPrimary: self.primaryField) {
                 let fieldSize = (fmtField as NSString).size(withAttributes: self.fieldAttribute)
+                // If too big enlarge to the left
                 if fieldSize.width > fieldRect.size.width {
                     fieldRect.origin.x -= ( fieldSize.width - fieldRect.size.width)
+                    fieldRect.size.width = fieldSize.width
+                }else if case .right = self.displayField {
+                    fieldRect.origin.x += (fieldRect.size.width - fieldSize.width)
                 }
-                
+                /*let context = NSStringDrawingContext()
+                context.minimumScaleFactor = 0.7
+                (fmtField as NSString).draw(with: fieldRect, options: [], attributes: self.fieldAttribute, context: context)*/
                 (fmtField as NSString).draw(at: fieldRect.origin, withAttributes: self.fieldAttribute)
             }
         }

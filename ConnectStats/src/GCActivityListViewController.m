@@ -534,6 +534,10 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     CGFloat rv = [GCViewConfig sizeForNumberOfRows:self.extendedDisplay ? 4 : 3];
+    BOOL newStyle = [GCViewConfig cellBandedFormat];
+    if( newStyle ){
+        return [GCViewConfig sizeForNumberOfRows:4] * 1.1;
+    }
     
     GCActivity * act = [self activityForIndex:indexPath.row];
     if ([act.activityType isEqualToString:GC_TYPE_DAY]) {

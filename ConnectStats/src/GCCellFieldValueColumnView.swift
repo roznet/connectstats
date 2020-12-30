@@ -34,7 +34,7 @@ class GCCellFieldValueColumnView: UIView {
     var numberWithUnits : [GCNumberWithUnit] = []
     var valueAttribute : [NSAttributedString.Key:Any] = [:]
     var unitAttribute : [NSAttributedString.Key:Any] = [:]
-    var displayIcons = true;
+    var displayIcons : GCCellFieldValueView.DisplayIcon = .hide;
     var displayUnit = true;
     var defaultVerticalSpacing :CGFloat = 5.0
     var defaultHorizontalSpacing :CGFloat = 5.0
@@ -59,7 +59,6 @@ class GCCellFieldValueColumnView: UIView {
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
-        self.geometry.alignment = .center
         var spacing = self.defaultVerticalSpacing
         let totalHeight = self.geometry.accumulatedTotalSize.height
         let oneHeight = self.geometry.totalSize.height
@@ -86,24 +85,30 @@ class GCCellFieldValueColumnView: UIView {
         for (field,numberWithUnit) in zip(self.fields, self.numberWithUnits){
             
             var currentRect = CGRect(origin: current, size: CGSize(width: rect.size.width, height: oneHeight) )
-            
-            if self.displayIcons {
-                if let icon = field.icon(){
-                    let iconRect = CGRect(x: current.x, y: current.y, width: oneHeight, height: oneHeight)
-                    let insetValue : CGFloat = 2.0
-                    icon.withTintColor(self.iconColor).draw(in: iconRect.insetBy(dx: insetValue, dy: insetValue))
-                }
+            if self.displayIcons != .hide {
                 // shift all text to the right by size of the icon
                 currentRect.origin.x += oneHeight + self.defaultHorizontalSpacing
                 currentRect.size.width -= oneHeight + self.defaultHorizontalSpacing
             }
             
-            self.geometry.drawInRect(currentRect,
+            let drawnRect = self.geometry.drawInRect(currentRect,
                                      numberWithUnit: numberWithUnit,
                                      numberAttribute: self.valueAttribute,
                                      unitAttribute: self.unitAttribute,
                                      addUnit: self.displayUnit)
             
+            if self.displayIcons != .hide {
+                if let icon = field.icon(){
+                    var iconRect = CGRect(x: current.x, y: current.y, width: oneHeight, height: oneHeight)
+                    let insetValue : CGFloat = 2.0
+                    if case .right = self.displayIcons {
+                        iconRect.origin.x = drawnRect.origin.x - (oneHeight + self.defaultHorizontalSpacing);
+                    }
+                    
+                    icon.withTintColor(self.iconColor).draw(in: iconRect.insetBy(dx: insetValue, dy: insetValue))
+                }
+            }
+
             current.y += (oneHeight + spacing)
         }
     }

@@ -114,9 +114,9 @@ extension GCCellGrid {
             self.label(forRow: 0, andCol: 0)?.attributedText = fieldFmt
         }
         
-        let fieldAttr = GCViewConfig.attribute(rzAttribute.field)
-        let numberAttr = GCViewConfig.attribute(rzAttribute.value)
-        let unitAttr = GCViewConfig.attribute(rzAttribute.unit)
+        var fieldAttr = GCViewConfig.attribute(rzAttribute.field)
+        var numberAttr = GCViewConfig.attribute(rzAttribute.value)
+        var unitAttr = GCViewConfig.attribute(rzAttribute.unit)
         let primaryField = fields.first
         var row : UInt = 0
         
@@ -126,18 +126,23 @@ extension GCCellGrid {
                                                     geometry: geometry,
                                                     field: field,
                                                     primaryField: primaryField,
-                                                    icon: false)
+                                                    icon: .hide)
                 cellView.fieldAttribute = fieldAttr
                 cellView.numberAttribute = numberAttr
                 cellView.unitAttribute = unitAttr
-                cellView.displayField = false
+                cellView.displayField = .right
+                cellView.geometry.timeAlignment = .withNumber
                 self.setupView(cellView, forRow: row, andColumn: 1)
                 if( row != 0){
-                    self.label(forRow: row, andCol: 0)?.attributedText = NSAttributedString(string: field.displayName(withPrimary: primaryField), attributes: fieldAttr)
-                    self.config(forRow: row, andCol: 0)?.horizontalAlign = gcHorizontalAlign.left
+                    //self.label(forRow: row, andCol: 0)?.attributedText = NSAttributedString(string: field.displayName(withPrimary: primaryField), attributes: fieldAttr)
+                    self.config(forRow: row, andCol: 0)?.horizontalAlign = gcHorizontalAlign.right
                 }
             }
             row += 1
+            fieldAttr = GCViewConfig.attribute(rzAttribute.secondaryField)
+            numberAttr = GCViewConfig.attribute(rzAttribute.secondaryValue)
+            unitAttr = GCViewConfig.attribute(rzAttribute.secondaryUnit)
+
         }
         
     }

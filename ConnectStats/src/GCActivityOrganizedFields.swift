@@ -65,10 +65,13 @@ class GCActivityOrganizedFields : NSObject, NSSecureCoding {
     @objc func updateGeometry(for activity : GCActivity){
         
         self.geometry = RZNumberWithUnitGeometry()
-        
+        self.geometry.numberAlignment = .right
+        self.geometry.unitAlignment = .left
+        self.geometry.timeAlignment = .center
         for fields in self.groupedPrimaryFields {
             for field in fields {
-                self.geometry.adjust(for: activity.numberWithUnit(for: field), numberAttribute: GCViewConfig.attribute(rzAttribute.value),
+                self.geometry.adjust(for: activity.numberWithUnit(for: field),
+                                     numberAttribute: GCViewConfig.attribute(rzAttribute.value),
                                      unitAttribute: GCViewConfig.attribute(rzAttribute.unit))
             }
         }

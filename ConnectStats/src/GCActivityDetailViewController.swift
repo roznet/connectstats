@@ -38,6 +38,15 @@ extension GCActivityDetailViewController {
             if indexPath.row < organizedFields.groupedPrimaryFields.count {
                 let fields = organizedFields.groupedPrimaryFields[ indexPath.row ]
                 cell.setupActivityDetail(fields: fields, activity: self.activity, geometry: self.organizedFields.geometry)
+                if indexPath.row % 2 == 0 {
+                    if let color = GCViewConfig.defaultColor(gcSkinDefaultColor.backgroundEven) {
+                        cell.setupBackgroundColors([color])
+                    }
+                }else{
+                    if let color = GCViewConfig.defaultColor(gcSkinDefaultColor.backgroundOdd) {
+                        cell.setupBackgroundColors([color])
+                    }
+                }
             }
         
         }

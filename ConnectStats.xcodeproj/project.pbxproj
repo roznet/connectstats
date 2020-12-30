@@ -1741,7 +1741,6 @@
 		426872462542122A00F04E83 /* GCTestAppGlobal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestAppGlobal.h; path = connectstatstestapp/src/GCTestAppGlobal.h; sourceTree = SOURCE_ROOT; };
 		426872472542122A00F04E83 /* GCTestAppGlobal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestAppGlobal.m; path = connectstatstestapp/src/GCTestAppGlobal.m; sourceTree = SOURCE_ROOT; };
 		4269E9E22598D3BA00DF469D /* GCStravaRequestStreams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCStravaRequestStreams.swift; path = src/GCStravaRequestStreams.swift; sourceTree = "<group>"; };
-		4269EA6C259B521800DF469D /* rzutils */ = {isa = PBXFileReference; lastKnownFileType = folder; name = rzutils; path = ../rzutils; sourceTree = "<group>"; };
 		426A135C1C5CCEFA00D61098 /* GCActivitySettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivitySettings.h; path = src/GCActivitySettings.h; sourceTree = "<group>"; };
 		426A135D1C5CCEFA00D61098 /* GCActivitySettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivitySettings.m; path = src/GCActivitySettings.m; sourceTree = "<group>"; };
 		426A7F481C426A95000C5BCC /* GCTrackPointExtraIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTrackPointExtraIndex.h; path = src/GCTrackPointExtraIndex.h; sourceTree = "<group>"; };
@@ -3693,7 +3692,6 @@
 		428FF6FE15F36888007A88FA = {
 			isa = PBXGroup;
 			children = (
-				4269EA6C259B521800DF469D /* rzutils */,
 				4245CD811B7DE351006B85B4 /* Common */,
 				428FF71315F36888007A88FA /* ConnectStats */,
 				4253B4571CD49F7E00437E6A /* FitFileExplorer */,

@@ -30,6 +30,12 @@ import RZUtilsSwift
 
 extension GCTestUISamples {
     
+    typealias GeometryAlignment = (alignment : RZNumberWithUnitGeometry.Alignment,
+                                number : RZNumberWithUnitGeometry.NumberAlignment,
+                                unit : RZNumberWithUnitGeometry.UnitAlignment,
+                                time : RZNumberWithUnitGeometry.TimeAlignment,
+                                icon : GCCellFieldValueView.DisplayIcon )
+    
     @objc func sampleNumberGeometry() -> [GCTestUISampleCellHolder] {
         var rv : [GCTestUISampleCellHolder] = []
         
@@ -46,49 +52,62 @@ extension GCTestUISamples {
             GCField(for: gcFieldFlag.sumDistance, andActivityType: GC_TYPE_RUNNING),
             GCField(for: gcFieldFlag.sumDuration, andActivityType: GC_TYPE_RUNNING),
         ]
+        
+        var configIdx = 0
+        
+        let configs : [GeometryAlignment] = [
+            (alignment: .left, number: .decimalSeparator, unit: .right, time: .withNumber, icon: .hide),
+            (alignment: .left, number: .right, unit: .left, time: .center, icon: .left),
+            (alignment: .left, number: .decimalSeparator, unit: .left, time: .withUnit, icon: .right),
+
+            (alignment: .left, number: .decimalSeparator, unit: .trailingNumber, time: .center, icon: .left),
+            (alignment: .left, number: .right, unit: .left, time: .center, icon: .right),
+            (alignment: .left, number: .right, unit: .right, time: .center, icon: .left),
+        ]
+        
         let fieldAttr = GCViewConfig.attribute(rzAttribute.secondaryField)
         let numberAttr = GCViewConfig.attribute(rzAttribute.secondaryValue)
         let unitAttr = GCViewConfig.attribute(rzAttribute.secondaryUnit)
         
-        if let cell = GCCellGrid(nil) {
-            cell.setup(forRows: UInt(samples.count), andCols: 3)
-            for col : UInt in 0...2 {
-                var row : UInt = 0
-                let geometry = RZNumberWithUnitGeometry()
-                
-                if col == 0 {
-                    geometry.numberAlignment = .decimalSeparator
-                    geometry.unitAlignment = .right
-                    geometry.timeAlignment = .withNumber
-                }else if col == 1 {
-                    geometry.numberAlignment = .right
-                    geometry.unitAlignment = .trailingNumber
-                    geometry.timeAlignment = .center
-                }else if col == 2 {
-                    geometry.numberAlignment = .decimalSeparator
-                    geometry.unitAlignment = .right
-                    geometry.timeAlignment = .withUnit
+        for _ in 0...1 {
+            if let cell = GCCellGrid(nil) {
+                cell.setup(forRows: UInt(samples.count), andCols: 3)
+                for col : UInt in 0...2 {
+                    var row : UInt = 0
+                    let geometry = RZNumberWithUnitGeometry()
+                    let config = configs[configIdx]
+                    configIdx += 1
+                    geometry.alignment = config.alignment
+                    geometry.numberAlignment = config.number
+                    geometry.unitAlignment = config.unit
+                    geometry.timeAlignment = config.time
+                    let displayIcon = config.icon
+                    for nu in samples {
+                        geometry.adjust(for: nu, numberAttribute: numberAttr, unitAttribute: unitAttr)
+                    }
+                    for (field,nu) in zip(fields,samples) {
+                        let cellView = GCCellFieldValueView(numberWithUnit: nu,
+                                                            geometry: geometry,
+                                                            field: field,
+                                                            primaryField: nil,
+                                                            icon: displayIcon)
+                        cellView.fieldAttribute = fieldAttr
+                        cellView.numberAttribute = numberAttr
+                        cellView.unitAttribute = unitAttr
+                        cellView.displayField = false
+                        /*if col % 2 == 0 {
+                         cellView.backgroundColor = GCViewConfig.defaultColor(gcSkinDefaultColor.backgroundOdd)
+                         }else{
+                         cellView.backgroundColor = GCViewConfig.defaultColor(gcSkinDefaultColor.backgroundEven)
+                         }*/
+                        cell.setupView(cellView, forRow: row, andColumn: col)
+                        row += 1
+                        
+                    }
                 }
-                for nu in samples {
-                    geometry.adjust(for: nu, numberAttribute: numberAttr, unitAttribute: unitAttr)
-                }
-                for (field,nu) in zip(fields,samples) {
-                    let cellView = GCCellFieldValueView(numberWithUnit: nu,
-                                                        geometry: geometry,
-                                                        field: field,
-                                                        primaryField: nil,
-                                                        icon: true)
-                    cellView.fieldAttribute = fieldAttr
-                    cellView.numberAttribute = numberAttr
-                    cellView.unitAttribute = unitAttr
-                    cellView.displayField = false
-                    cell.setupView(cellView, forRow: row, andColumn: col)
-                    row += 1
-                    
-                }
+                let sample = GCTestUISampleCellHolder(for: cell, height: GCViewConfig.sizeForNumber(ofRows: UInt(samples.count)), andIdentifier: "Sample Geometry")
+                rv.append(sample)
             }
-            let sample = GCTestUISampleCellHolder(for: cell, height: GCViewConfig.sizeForNumber(ofRows: UInt(samples.count)), andIdentifier: "Sample Geometry")
-            rv.append(sample)
         }
         return rv
     }

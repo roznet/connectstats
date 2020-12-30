@@ -92,18 +92,21 @@ class GCCellActivity: UITableViewCell {
         
         self.leftFieldValues.valueAttribute = GCViewConfig.attribute(rzAttribute.value)
         self.leftFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.unit)
-        self.leftFieldValues.displayIcons = false
+        self.leftFieldValues.displayIcons = .hide
         self.leftFieldValues.defaultVerticalSpacing = 10.0
-        self.leftFieldValues.geometry.timeAlignment = .withUnit
+        self.leftFieldValues.geometry.timeAlignment = .center
+        self.leftFieldValues.geometry.alignment = .center
         self.leftFieldValues.distributeVertically = true;
         
-        self.rightFieldValues.geometry.unitAlignment = .trailingNumber
-        self.rightFieldValues.displayIcons = true
+        self.rightFieldValues.geometry.unitAlignment = .left
+        self.rightFieldValues.geometry.numberAlignment = .right
+        self.rightFieldValues.displayIcons = .left
         self.rightFieldValues.iconColor = UIColor.darkGray
-        self.rightFieldValues.defaultVerticalSpacing = 1.0
+        self.rightFieldValues.defaultVerticalSpacing = 2.0
         self.rightFieldValues.valueAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
         self.rightFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
         self.rightFieldValues.distributeVertically = false
+        
 
         let rightFields : [GCField] = [
             GCField(for: gcFieldFlag.weightedMeanSpeed, andActivityType: activity.activityType),

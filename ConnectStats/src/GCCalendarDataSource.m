@@ -35,6 +35,7 @@
 #import "GCActivity+Database.h"
 #import "GCStatsCalendarAggregationConfig.h"
 #import "GCStatsMultiFieldConfig.h"
+#import "ConnectStats-Swift.h"
 
 #define GC_SUMMARY_WEEKLY   0
 #define GC_SUMMARY_MONTHLY  1
@@ -501,6 +502,12 @@
 
 #pragma mark - Table view data source
 
+-(void)tableViewDidLoad:(UITableView *)tableView{
+    [tableView registerNib:[UINib nibWithNibName:@"GCCellActivity" bundle:[NSBundle mainBundle]]
+         forCellReuseIdentifier:@"GCCellActivity"];
+
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
@@ -523,8 +530,16 @@
     cell.delegate = self;
     if (_tableDisplay==gcCalendarTableDisplayActivities) {
         if( indexPath.row < _selectedActivities.count ){
-            GCActivity * activity = _selectedActivities[indexPath.row];
-            [cell setupSummaryFromActivity:activity rows:self.extendedDisplay ? 4 : 3 width:tableView.frame.size.width status:gcViewActivityStatusNone];
+            BOOL newStyle = [GCViewConfig cellBandedFormat];
+            if( newStyle ){
+                GCActivity * activity = _selectedActivities[indexPath.row];
+                GCCellActivity * cell = [tableView dequeueReusableCellWithIdentifier:@"GCCellActivity" forIndexPath:indexPath];
+                [cell setupFor:activity];
+                return cell;
+            }else{
+                GCActivity * activity = _selectedActivities[indexPath.row];
+                [cell setupSummaryFromActivity:activity rows:self.extendedDisplay ? 4 : 3 width:tableView.frame.size.width status:gcViewActivityStatusNone];
+            }
         }
     }else{
 
@@ -568,7 +583,11 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSUInteger rows = self.tableDisplay == gcCalendarTableDisplayActivities && self.extendedDisplay ? 4 : 3;
-        CGFloat rv = [GCViewConfig sizeForNumberOfRows:rows];
+    CGFloat rv = [GCViewConfig sizeForNumberOfRows:rows];
+    BOOL newStyle = [GCViewConfig cellBandedFormat];
+    if( newStyle ){
+        rv *= 1.1;
+    }
     return rv;
 }
 
