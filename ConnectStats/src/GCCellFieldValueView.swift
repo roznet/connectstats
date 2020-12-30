@@ -49,6 +49,7 @@ class GCCellFieldValueView: UIView {
     let displayIcon : DisplayIcon
     var displayField : DisplayField = .left
     var iconColor = UIColor.darkGray
+    var iconInset : CGFloat = 2.0
     var numberAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.value)
     var unitAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.unit)
     var fieldAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.field)
@@ -121,8 +122,8 @@ class GCCellFieldValueView: UIView {
                 var iconRect = CGRect(x: fieldRect.origin.x, y: fieldRect.origin.y, width: iconHeight, height: iconHeight)
                 //iconRect.origin.x = drawnRect.origin.x - iconHeight
                 
-                iconRect = iconRect.inset(by: UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0))
                 
+                iconRect = iconRect.inset(by: UIEdgeInsets(top: iconInset, left: iconInset, bottom: iconInset, right: iconInset))
                 
                 fieldRect.origin.x += iconHeight
                 fieldRect.size.width -= iconHeight

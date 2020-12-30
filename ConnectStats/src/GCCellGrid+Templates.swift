@@ -77,7 +77,10 @@ extension GCCellGrid {
                 if nu.isValidValue() && nu.value != 0.0 {
                     let cellView = GCCellFieldValueView(numberWithUnit: nu,
                                                         geometry: geometry,
-                                                        field: nil)
+                                                        field: field,
+                                                        icon: .right)
+                    cellView.displayField = .hide
+                    cellView.iconInset = 4.0
                     if fieldIdx < mainCount {
                         cellView.fieldAttribute = GCViewConfig.attribute(rzAttribute.field)
                         cellView.numberAttribute = GCViewConfig.attribute(rzAttribute.value)
