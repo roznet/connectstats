@@ -114,9 +114,9 @@ extension GCCellGrid {
             self.label(forRow: 0, andCol: 0)?.attributedText = fieldFmt
         }
         
-        var fieldAttr = GCViewConfig.attribute(rzAttribute.field) ?? [:]
-        var numberAttr = GCViewConfig.attribute(rzAttribute.value) ?? [:]
-        var unitAttr = GCViewConfig.attribute(rzAttribute.unit) ?? [:]
+        let fieldAttr = GCViewConfig.attribute(rzAttribute.field)
+        let numberAttr = GCViewConfig.attribute(rzAttribute.value)
+        let unitAttr = GCViewConfig.attribute(rzAttribute.unit)
         let primaryField = fields.first
         var row : UInt = 0
         
@@ -138,9 +138,6 @@ extension GCCellGrid {
                 }
             }
             row += 1
-            fieldAttr = GCViewConfig.attribute(rzAttribute.secondaryField) ?? [:]
-            numberAttr = GCViewConfig.attribute(rzAttribute.secondaryValue) ?? [:]
-            unitAttr = GCViewConfig.attribute(rzAttribute.secondaryUnit) ?? [:]
         }
         
     }

@@ -32,3 +32,5 @@
 
 #import "GCService.h"
 #import "GCGarminActivityTrack13Request.h"
+
+#import "GCTestUISamples.h"

@@ -474,6 +474,7 @@
 		427208651DE7A4A800924C90 /* FITFitFileInterpret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42769BC71DD2A81D000390F1 /* FITFitFileInterpret.swift */; };
 		42734B6916941D46003E2177 /* GCGarminActivityDetailJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42734B6816941D45003E2177 /* GCGarminActivityDetailJsonParser.m */; };
 		42734CE31695797A003E2177 /* GCActivitySummaryValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 42734CE21695797A003E2177 /* GCActivitySummaryValue.m */; };
+		4273875C259C7956003DA04E /* GCTestUISamples.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4273875B259C7956003DA04E /* GCTestUISamples.swift */; };
 		4273DB7321A1B80B00C09D68 /* FITDownloadListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4273DB7221A1B80B00C09D68 /* FITDownloadListDataSource.swift */; };
 		42753D6A16E402EE005C8281 /* GCActivityTrackOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 42753D6916E402EE005C8281 /* GCActivityTrackOptions.m */; };
 		42753D7016E6A881005C8281 /* GCMapLapInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42753D6F16E6A881005C8281 /* GCMapLapInfoView.m */; };
@@ -1770,6 +1771,7 @@
 		42734B6816941D45003E2177 /* GCGarminActivityDetailJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminActivityDetailJsonParser.m; path = src/GCGarminActivityDetailJsonParser.m; sourceTree = "<group>"; };
 		42734CE11695797A003E2177 /* GCActivitySummaryValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivitySummaryValue.h; path = src/GCActivitySummaryValue.h; sourceTree = "<group>"; };
 		42734CE21695797A003E2177 /* GCActivitySummaryValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivitySummaryValue.m; path = src/GCActivitySummaryValue.m; sourceTree = "<group>"; };
+		4273875B259C7956003DA04E /* GCTestUISamples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCTestUISamples.swift; path = connectstatstestapp/GCTestUISamples.swift; sourceTree = SOURCE_ROOT; };
 		4273DB7221A1B80B00C09D68 /* FITDownloadListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITDownloadListDataSource.swift; path = src/FITDownloadListDataSource.swift; sourceTree = "<group>"; };
 		42753D6816E402EE005C8281 /* GCActivityTrackOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCActivityTrackOptions.h; path = src/GCActivityTrackOptions.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		42753D6916E402EE005C8281 /* GCActivityTrackOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityTrackOptions.m; path = src/GCActivityTrackOptions.m; sourceTree = "<group>"; };
@@ -3578,6 +3580,7 @@
 			children = (
 				427F935A1BEAA05800C177F9 /* GCTestUISamples.h */,
 				427F935B1BEAA05800C177F9 /* GCTestUISamples.m */,
+				4273875B259C7956003DA04E /* GCTestUISamples.swift */,
 				42B5E2061BA5AF9A000FAE4E /* GCTestIconsCell.h */,
 				42B5E2071BA5AF9A000FAE4E /* GCTestIconsCell.m */,
 				42B5E2101BA5AF9A000FAE4E /* GCTestUICellsViewController.h */,
@@ -6799,6 +6802,7 @@
 				42B5E2AB1BA5B216000FAE4E /* GCFields.m in Sources */,
 				42B5E2AC1BA5B216000FAE4E /* GCFieldsCalculated.m in Sources */,
 				4269E9E42598D3BA00DF469D /* GCStravaRequestStreams.swift in Sources */,
+				4273875C259C7956003DA04E /* GCTestUISamples.swift in Sources */,
 				42B5E2AD1BA5B216000FAE4E /* GCFieldsCalculatedTrack.m in Sources */,
 				42B5E2AE1BA5B216000FAE4E /* GCFieldsCategory.m in Sources */,
 				42F3FB341DD783550042A9B1 /* GCFieldsDefs.m in Sources */,

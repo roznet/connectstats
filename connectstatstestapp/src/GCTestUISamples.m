@@ -1075,6 +1075,8 @@
 
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:10];
 
+    [rv addObject:[self sampleNumberGeometry]];
+    /*
     [rv addObject:[self sampleNewActivitySummary]];
     [rv addObject:[self sampleNewAggregatedStats]];
     [rv addObject:[self sampleNewActivityDetail]];
@@ -1089,7 +1091,8 @@
     
     [rv addObject:[self sampleIcons]];
     [rv addObject:[self sampleCells]];
-
+     */
+    
     return rv;
 }
 @end

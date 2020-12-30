@@ -34,9 +34,10 @@ class GCCellFieldValueView: UIView {
     let numberWithUnit : GCNumberWithUnit
     let geometry : RZNumberWithUnitGeometry
     let primaryField : GCField?
-    let icon : Bool
     
+    let displayIcon : Bool
     var displayField : Bool = true
+    var iconColor = UIColor.darkGray
     var numberAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.value)
     var unitAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.unit)
     var fieldAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.field)
@@ -50,7 +51,7 @@ class GCCellFieldValueView: UIView {
         self.numberWithUnit = numberWithUnit
         self.geometry = geometry
         self.primaryField = primaryField
-        self.icon = icon
+        self.displayIcon = icon
         super.init(frame: CGRect.zero)
         self.backgroundColor = UIColor.clear
     }
@@ -60,7 +61,7 @@ class GCCellFieldValueView: UIView {
         self.numberWithUnit = GCNumberWithUnit()
         self.geometry = RZNumberWithUnitGeometry()
         self.primaryField = nil
-        self.icon = false
+        self.displayIcon = false
         super.init(coder: coder)
     }
     
@@ -96,20 +97,26 @@ class GCCellFieldValueView: UIView {
                 addUnit = false;
             }
         }
-        self.geometry.drawInRect(numberRect,
-                                 numberWithUnit: self.numberWithUnit,
-                                 numberAttribute: self.numberAttribute,
-                                 unitAttribute: self.unitAttribute,
-                                 addUnit: addUnit)
+        let /*drawnRect*/_ = self.geometry.drawInRect(numberRect,
+                                                 numberWithUnit: self.numberWithUnit,
+                                                 numberAttribute: self.numberAttribute,
+                                                 unitAttribute: self.unitAttribute,
+                                                 addUnit: addUnit)
         
-        if self.icon {
+        if self.displayIcon {
             if let field = self.field,
                let icon = field.icon(){
                 let iconHeight = self.geometry.totalSize.height
-                let iconRect = CGRect(x: fieldRect.origin.x, y: fieldRect.origin.y, width: iconHeight, height: iconHeight)
+                var iconRect = CGRect(x: fieldRect.origin.x, y: fieldRect.origin.y, width: iconHeight, height: iconHeight)
+                //iconRect.origin.x = drawnRect.origin.x - iconHeight
+                
+                iconRect = iconRect.inset(by: UIEdgeInsets(top: 2.0, left: 2.0, bottom: 2.0, right: 2.0))
+                
+                
                 fieldRect.origin.x += iconHeight
                 fieldRect.size.width -= iconHeight
-                icon.withTintColor(UIColor.white).draw(in: iconRect)
+                // don't display if overlap with number
+                icon.withTintColor(self.iconColor).draw(in: iconRect)
             }
         }
         if self.displayField {
