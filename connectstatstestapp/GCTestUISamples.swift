@@ -94,7 +94,7 @@ extension GCTestUISamples {
                         cellView.fieldAttribute = fieldAttr
                         cellView.numberAttribute = numberAttr
                         cellView.unitAttribute = unitAttr
-                        cellView.displayField = false
+                        cellView.displayField = .hide
                         /*if col % 2 == 0 {
                          cellView.backgroundColor = GCViewConfig.defaultColor(gcSkinDefaultColor.backgroundOdd)
                          }else{
