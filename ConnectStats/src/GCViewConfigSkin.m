@@ -26,6 +26,7 @@
 #import "GCViewConfigSkin.h"
 #import "GCFields.h"
 #import "GCActivity.h"
+#import "GCAppGlobal.h"
 
 NSString * kGCSkinKeyActivityCellLighterBackgroundColor = @"ActivityCellLighterBackgroundColor";
 NSString * kGCSkinKeyActivityCellDarkerBackgroundColor = @"ActivityCellDarkerBackgroundColor";
@@ -1068,7 +1069,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
     }else if( [val isKindOfClass:[NSDictionary class] ]){
         NSDictionary * choices = (NSDictionary*)val;
         if( @available( iOS 13.0, *)){
-            if( [UITraitCollection currentTraitCollection].userInterfaceStyle == UIUserInterfaceStyleDark ){
+            if( [GCAppGlobal userInterfaceStyle] == UIUserInterfaceStyleDark ){
                 return [choices[@"dark"] boolValue];
             }
         }
@@ -1084,7 +1085,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
     if( [val isKindOfClass:[NSDictionary class]] ){
         NSDictionary * choices = (NSDictionary*)val;
         if( @available( iOS 13.0, *)){
-            if( [UITraitCollection currentTraitCollection].userInterfaceStyle == UIUserInterfaceStyleDark ){
+            if( [GCAppGlobal userInterfaceStyle] == UIUserInterfaceStyleDark ){
                 return choices[@"dark"];
             }
         }

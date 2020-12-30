@@ -336,4 +336,7 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     return config;
 }
 
++(UIUserInterfaceStyle)userInterfaceStyle{
+    return [UITraitCollection currentTraitCollection].userInterfaceStyle;
+}
 @end

@@ -110,6 +110,8 @@ extern NSString *  const kNotifyLocationRequestComplete;
 +(gcWebConnectStatsConfig)webConnectsStatsConfig;
 
 +(void)versionSummary;
+
++(UIUserInterfaceStyle)userInterfaceStyle;
 @end
 
 NS_ASSUME_NONNULL_END

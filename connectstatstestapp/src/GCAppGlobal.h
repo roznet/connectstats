@@ -67,4 +67,9 @@ extern NSString * kPreservedSettingsName;
 +(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;
 
 +(gcWebConnectStatsConfig)webConnectsStatsConfig;
+
++(UIUserInterfaceStyle)userInterfaceStyle;
+
+// Global override for forcing testing of dark/light mode
++(void)setUserInterfaceStyle:(UIUserInterfaceStyle)newStyle;
 @end

@@ -94,10 +94,17 @@ class GCCellActivity: UITableViewCell {
         self.leftFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.unit)
         self.leftFieldValues.displayIcons = false
         self.leftFieldValues.defaultVerticalSpacing = 10.0
+        self.leftFieldValues.geometry.timeAlignment = .withUnit
+        self.leftFieldValues.distributeVertically = true;
+        
+        self.rightFieldValues.geometry.unitAlignment = .trailingNumber
         self.rightFieldValues.displayIcons = true
         self.rightFieldValues.iconColor = UIColor.darkGray
-        self.rightFieldValues.defaultVerticalSpacing = 5.0
-        
+        self.rightFieldValues.defaultVerticalSpacing = 1.0
+        self.rightFieldValues.valueAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
+        self.rightFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
+        self.rightFieldValues.distributeVertically = false
+
         let rightFields : [GCField] = [
             GCField(for: gcFieldFlag.weightedMeanSpeed, andActivityType: activity.activityType),
             GCField(for: gcFieldFlag.weightedMeanHeartRate, andActivityType: activity.activityType),
@@ -111,10 +118,6 @@ class GCCellActivity: UITableViewCell {
                 }
             }
         }
-        self.rightFieldValues.valueAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
-        self.rightFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
-        self.leftFieldValues.distributeVertically = true;
-        self.rightFieldValues.distributeVertically = false
         let useDate = (activity.date as NSDate)
         self.today.text = useDate.dayFormat()
         self.date.text = useDate.calendarUnitFormat(NSCalendar.Unit.day)

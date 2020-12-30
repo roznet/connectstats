@@ -61,9 +61,22 @@
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
                                                                              action:@selector(refresh)] autorelease];
+    self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc]initWithTitle:NSLocalizedString(@"Dark/Light",nil)
+                                                                              style:UIBarButtonItemStylePlain
+                                                                             target:self
+                                                                             action:@selector(darkLight)] autorelease];
+
 }
 
-
+-(void)darkLight {
+    if( self.overrideUserInterfaceStyle == UIUserInterfaceStyleDark ){
+        self.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+    }else{
+        self.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
+    }
+    [GCAppGlobal setUserInterfaceStyle:self.overrideUserInterfaceStyle];
+    [self refresh];
+}
 -(void)refresh{
     dispatch_sync([GCAppGlobal worker],^(){
         [self buildSamples];
