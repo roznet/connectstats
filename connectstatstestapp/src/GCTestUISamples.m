@@ -799,7 +799,7 @@
 }
 
 -(NSArray*)sampleNewActivitySummary{
-    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS14]];
+    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinName2021]];
     NSString * name = @"activities_types_samples.db";
     FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:name]];
     [db open];
@@ -877,7 +877,7 @@
     return activity;
 }
 -(NSArray*)sampleNewActivityDetail{
-    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS14]];
+    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinName2021]];
 
     GCCellGrid * cell = nil;
     GCActivity *act=nil;
@@ -974,7 +974,7 @@
 }
 
 -(NSArray*)sampleNewAggregatedStats{
-    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS14]];
+    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinName2021]];
 
     static NSString *CellIdentifier = @"Cell";
     GCCellGrid * cell = nil;

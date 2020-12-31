@@ -109,7 +109,7 @@
 
 -(void)showOptions{
     
-    GCActivityTrackGraphOptionsViewController * optionController = [[GCActivityTrackGraphOptionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    GCActivityTrackGraphOptionsViewController * optionController = RZReturnAutorelease([[GCActivityTrackGraphOptionsViewController alloc] initWithStyle:UITableViewStyleGrouped]);
     optionController.viewController = self;
     UINavigationController * nav = [[[UINavigationController alloc] initWithRootViewController:optionController] autorelease];
     //[optionController.navigationController setNavigationBarHidden:YES];

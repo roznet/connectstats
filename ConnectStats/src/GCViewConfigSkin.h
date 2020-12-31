@@ -48,7 +48,7 @@ extern NSString * kGCSkinKeyCalendarColors;
 extern NSString * kgcSkinDefaultColors;
 extern NSString * kGCSkinNameOriginal;
 extern NSString * kGCSkinNameiOS13;
-extern NSString * kGCSkinNameiOS14;
+extern NSString * kGCSkinName2021;
 
 typedef NS_ENUM(NSUInteger,gcSkinDefaultColor){
     gcSkinDefaultColorBackground,

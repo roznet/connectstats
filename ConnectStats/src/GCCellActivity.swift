@@ -90,8 +90,8 @@ class GCCellActivity: UITableViewCell {
             self.leftFieldValues.add(field: distanceField, numberWithUnit: distance)
         }
         
-        self.leftFieldValues.valueAttribute = GCViewConfig.attribute(rzAttribute.value)
-        self.leftFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.unit)
+        self.leftFieldValues.valueAttribute = GCViewConfig.attribute(rzAttribute.title)
+        self.leftFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.title)
         self.leftFieldValues.displayIcons = .hide
         self.leftFieldValues.defaultVerticalSpacing = 10.0
         self.leftFieldValues.geometry.timeAlignment = .center

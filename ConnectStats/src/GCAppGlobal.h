@@ -90,7 +90,7 @@ extern NSString *  const kNotifyLocationRequestComplete;
 
 +(NSCalendar*)calculationCalendar;
 +(void)ensureCalculationCalendarTimeZone:(NSTimeZone*)tz;// Mostly used for testing
-+(NSDate*)referenceDate DEPRECATED_MSG_ATTRIBUTE("use calendar config");
++(nullable NSDate*)referenceDate DEPRECATED_MSG_ATTRIBUTE("use calendar config");
 +(NSInteger)currentYear;
 
 +(BOOL)connectStatsVersion;

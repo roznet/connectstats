@@ -54,7 +54,7 @@ NSString * kGCSkinNameOriginal = @"Original";
 NSString * kGCSkinNameDark     = @"Dark";
 NSString * kGCSkinNameDynamic  = @"Dynamic";
 NSString * kGCSkinNameiOS13 = @"Native iOS13";
-NSString * kGCSkinNameiOS14 = @"New iOS14";
+NSString * kGCSkinName2021 = @"2021";
 
 NS_INLINE NSArray * gcArrayForDefinitionValue(id input){
     if ([input isKindOfClass:[NSArray class]]) {
@@ -105,7 +105,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
         kGCSkinNameDark,
         kGCSkinNameDynamic,
         kGCSkinNameiOS13,
-        kGCSkinNameiOS14
+        kGCSkinName2021
     ];
 }
 +(GCViewConfigSkin*)skinForName:(NSString*)name{
@@ -121,7 +121,7 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
         return [self dynamicSkinFromLight:[self defaultSkin] andDark:[self darkSkin]];
     }else if( [name isEqualToString:kGCSkinNameiOS13]){
         return [self ios13Skin];
-    }else if( [name isEqualToString:kGCSkinNameiOS14]){
+    }else if( [name isEqualToString:kGCSkinName2021]){
         return [self ios14Skin];
     }else{
         return [self skinForThemeName:name];
@@ -721,8 +721,8 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
         rv.defs = @{
             kGCSkinKeyStringValues:
                 @{
-                 /*   @(gcSkinStringSystemFontName) : @"Avenir-Medium",
-                    @(gcSkinStringBoldSystemFontName) : @"Avenir-Heavy", */
+                    @(gcSkinStringSystemFontName) : @"Avenir-Medium",
+                    @(gcSkinStringBoldSystemFontName) : @"Avenir-Heavy", 
                 },
             kGCSkinKeyBoolValues:
                 @{

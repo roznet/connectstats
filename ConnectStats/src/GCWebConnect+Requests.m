@@ -113,7 +113,7 @@
         dispatch_async(dispatch_get_main_queue(), ^(){
             BOOL stravaReload = (reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava]);
             
-            GCStravaRequestActivityList * req = [[GCStravaRequestActivityList alloc] initWithNavigationController:[GCAppGlobal currentNavigationController] page:0 reloadAll:stravaReload];
+            GCStravaRequestActivityList * req = RZReturnAutorelease([[GCStravaRequestActivityList alloc] initWithNavigationController:[GCAppGlobal currentNavigationController] page:0 reloadAll:stravaReload]);
             [self addRequest:req];
         });
     }
