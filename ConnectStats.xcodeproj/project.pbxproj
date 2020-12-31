@@ -427,6 +427,7 @@
 		425ACBBA17C163EE00EB23A3 /* GCHealthZone.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBB917C163EE00EB23A3 /* GCHealthZone.m */; };
 		425ACBC017C1687F00EB23A3 /* GCGarminUserJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBBF17C1687F00EB23A3 /* GCGarminUserJsonParser.m */; };
 		425CF5A91813CEEC009279C0 /* GCTestsActivities.m in Sources */ = {isa = PBXBuildFile; fileRef = 425CF5A81813CEEC009279C0 /* GCTestsActivities.m */; };
+		425D249D259E08DC0003574F /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 425D249C259E08DC0003574F /* KeychainSwift */; };
 		42628A4023ACCFE900EC6673 /* fields.db in Resources */ = {isa = PBXBuildFile; fileRef = 42939CE423AAD79500D2403A /* fields.db */; };
 		42628A4B23ACCFEE00EC6673 /* fit_map.json in Resources */ = {isa = PBXBuildFile; fileRef = 42939CE523AAD79500D2403A /* fit_map.json */; };
 		42628A4C23ACCFF100EC6673 /* fit_developer.json in Resources */ = {isa = PBXBuildFile; fileRef = 42939CEC23AAD7A900D2403A /* fit_developer.json */; };
@@ -1151,7 +1152,6 @@
 		42BD329D258BC856004D5E0F /* GCSettingsBugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BD319D258B51DF004D5E0F /* GCSettingsBugReport.swift */; };
 		42BD32A3258BC88B004D5E0F /* DeviceGuru in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD32A2258BC88B004D5E0F /* DeviceGuru */; };
 		42BD32A5258BC893004D5E0F /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD32A4258BC893004D5E0F /* ZIPFoundation */; };
-		42BD33F2258CB2D7004D5E0F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD33F1258CB2D7004D5E0F /* SwiftKeychainWrapper */; };
 		42BD3417258CB69E004D5E0F /* DeviceGuru in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD3416258CB69E004D5E0F /* DeviceGuru */; };
 		42BD341D258CB6AE004D5E0F /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD341C258CB6AE004D5E0F /* ZIPFoundation */; };
 		42BD3423258CB6C8004D5E0F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD3422258CB6C8004D5E0F /* SwiftKeychainWrapper */; };
@@ -2600,9 +2600,9 @@
 				4213AEB1201393CC0004B54B /* MapKit.framework in Frameworks */,
 				4269EA222599D40900DF469D /* ZIPFoundation in Frameworks */,
 				422DCC30258A6348000DEE4B /* RZUtilsSwift in Frameworks */,
-				42BD33F2258CB2D7004D5E0F /* SwiftKeychainWrapper in Frameworks */,
 				422DCC36258A6357000DEE4B /* FitFileParser in Frameworks */,
 				422DCC34258A6350000DEE4B /* FMDB in Frameworks */,
+				425D249D259E08DC0003574F /* KeychainSwift in Frameworks */,
 				422DCC32258A6348000DEE4B /* RZUtilsUniversal in Frameworks */,
 				4211D578259A0BDA00967874 /* RZExternalUniversal in Frameworks */,
 				BF9120CBFA7E3BB8AEA21520 /* Pods_FitFileExplorer.framework in Frameworks */,
@@ -5012,9 +5012,9 @@
 				422DCC33258A6350000DEE4B /* FMDB */,
 				422DCC35258A6357000DEE4B /* FitFileParser */,
 				422DCD73258A74DF000DEE4B /* RZUtilsMacOS */,
-				42BD33F1258CB2D7004D5E0F /* SwiftKeychainWrapper */,
 				4269EA212599D40900DF469D /* ZIPFoundation */,
 				4211D577259A0BDA00967874 /* RZExternalUniversal */,
+				425D249C259E08DC0003574F /* KeychainSwift */,
 			);
 			productName = FitFileExplorer;
 			productReference = 4253B4561CD49F7E00437E6A /* FitFileExplorer.app */;
@@ -5264,6 +5264,7 @@
 				42BD322B258BBA8A004D5E0F /* XCRemoteSwiftPackageReference "MBProgressHUD" */,
 				4211D46F2597832D00967874 /* XCRemoteSwiftPackageReference "OAuthSwift" */,
 				4211D572259A0BDA00967874 /* XCRemoteSwiftPackageReference "rzexternal" */,
+				425D249B259E08DC0003574F /* XCRemoteSwiftPackageReference "keychain-swift" */,
 			);
 			productRefGroup = 428FF70A15F36888007A88FA /* Products */;
 			projectDirPath = "";
@@ -7872,6 +7873,14 @@
 				kind = branch;
 			};
 		};
+		425D249B259E08DC0003574F /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 19.0.0;
+			};
+		};
 		42BD31AC258B53C7004D5E0F /* XCRemoteSwiftPackageReference "DeviceGuru" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/InderKumarRathore/DeviceGuru";
@@ -8032,6 +8041,11 @@
 			package = 422DCD72258A74DF000DEE4B /* XCRemoteSwiftPackageReference "rzutils-macos" */;
 			productName = RZUtilsMacOS;
 		};
+		425D249C259E08DC0003574F /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 425D249B259E08DC0003574F /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
 		4269EA212599D40900DF469D /* ZIPFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
@@ -8086,11 +8100,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
 			productName = ZIPFoundation;
-		};
-		42BD33F1258CB2D7004D5E0F /* SwiftKeychainWrapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 42BD320B258BB9A2004D5E0F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
-			productName = SwiftKeychainWrapper;
 		};
 		42BD3416258CB69E004D5E0F /* DeviceGuru */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -28,12 +28,15 @@
 import Cocoa
 import GenericJSON
 import FitFileParser
+import RZUtilsSwift
+import KeychainSwift
+
 
 class FITAppGlobal {
     
     enum ConfigParameters : String {
-        case loginName = "loginName"
-        case password = "loginPassword"
+        case loginName = "net.ro-z.FitFileExplorer.loginName"
+        case password = "net.ro-z.FitFileExplorer.loginPassword"
     }
     
     static let shared = FITAppGlobal()
@@ -44,7 +47,7 @@ class FITAppGlobal {
     let activityTypes : GCActivityTypes
     let downloadManager : FITGarminDownloadManager
     let organizer : ActivitiesOrganizer
-    
+    let keychain : KeychainSwift
     var parsingTypes : [URL:FitFile.ParsingType] = [:]
     
     private init() {
@@ -56,6 +59,9 @@ class FITAppGlobal {
                 settings = read
             }
         }
+        //keychain = KeychainWrapper(serviceName: "net.ro-z.FitFileExplorer", accessGroup: "net.ro-z.FitFileExplorer.accessGroup")
+        keychain = KeychainSwift()
+        keychain.accessGroup = "net.ro-z.FitFileExplorer.KeychainGroup"
         web = GCWebConnect()
         worker = DispatchQueue.init(label: "net.ro-z.worker")
         activityTypes = GCActivityType.activityTypes()
@@ -75,16 +81,29 @@ class FITAppGlobal {
     
     
     static func currentLoginName() -> String {
-        if let name = self.shared.settings[ConfigParameters.loginName.rawValue]?.stringValue {
+        if let name = self.shared.keychain.get(ConfigParameters.loginName.rawValue){
+        //if let name = self.shared.keychain.string(forKey: ConfigParameters.loginName.rawValue) {
             return name
         }
         return "default"
     }
     static func currentPassword() -> String {
-        if let pwd = self.shared.settings[ConfigParameters.password.rawValue]?.stringValue {
+        if let pwd = self.shared.keychain.get(ConfigParameters.password.rawValue){
+        //if let pwd = self.shared.keychain.string(forKey: ConfigParameters.password.rawValue) {
             return pwd
         }
         return ""
+    }
+    static func setCurrentLoginName(_ name : String){
+        if !self.shared.keychain.set(name, forKey: ConfigParameters.loginName.rawValue) {
+            RZSLog.error( "failed to save username" )
+        }
+    }
+    
+    static func setCurrentPassword(_ name : String){
+        if !self.shared.keychain.set(name, forKey: ConfigParameters.password.rawValue) {
+            RZSLog.error("failed to save password")
+        }
     }
     
     static func web() -> GCWebConnect {

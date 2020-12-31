@@ -65,6 +65,15 @@
         }
       },
       {
+        "package": "KeychainSwift",
+        "repositoryURL": "https://github.com/evgenyneu/keychain-swift",
+        "state": {
+          "branch": null,
+          "revision": "96fb84f45a96630e7583903bd7e08cf095c7a7ef",
+          "version": "19.0.0"
+        }
+      },
+      {
         "package": "MBProgressHUD",
         "repositoryURL": "https://github.com/jdg/MBProgressHUD",
         "state": {
@@ -87,7 +96,7 @@
         "repositoryURL": "https://github.com/roznet/rzexternal",
         "state": {
           "branch": "master",
-          "revision": "18fdf1337eddd27714b390b21636b47d343ac1c2",
+          "revision": "5739045c1f6ebbbfec939bc64d233357c87273e3",
           "version": null
         }
       },
@@ -96,7 +105,7 @@
         "repositoryURL": "https://github.com/roznet/rzutils.git",
         "state": {
           "branch": "master",
-          "revision": "24cfa12c181d0306411875fa8bebc8fc90c14a7d",
+          "revision": "7e55daed78e2395f03b55a819ace1e757f4dcfdd",
           "version": null
         }
       },

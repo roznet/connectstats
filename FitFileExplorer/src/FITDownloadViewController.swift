@@ -29,11 +29,8 @@ import Cocoa
 import RZUtils
 import RZUtilsMacOS
 import GenericJSON
-import SwiftKeychainWrapper
 import RZUtilsSwift
 import FitFileParser
-
-
 
 extension Date {
     func formatAsRFC3339() -> String {
@@ -51,7 +48,6 @@ extension GCField {
 
 class FITDownloadViewController: NSViewController {
     
-    let keychain = KeychainWrapper(serviceName: "net.ro-z.FitFileExplorer")
     
     @IBOutlet weak var userName: NSTextField!
     @IBOutlet weak var password: NSSecureTextField!
@@ -67,21 +63,17 @@ class FITDownloadViewController: NSViewController {
     // MARK: -
     
     func databaseFileName() -> String {
-        if let saved_username =
-            keychain.string(forKey: FITAppGlobal.ConfigParameters.loginName.rawValue){
+        let saved_username = FITAppGlobal.currentLoginName()
         
-            var invalidCharacters = CharacterSet(charactersIn: ":/")
-           
-            invalidCharacters.formUnion(CharacterSet.newlines)
-            invalidCharacters.formUnion(CharacterSet.illegalCharacters)
-            invalidCharacters.formUnion(CharacterSet.controlCharacters)
-            
-            let filename = saved_username.components(separatedBy: invalidCharacters).joined(separator: "")
-            
-            return "activities_\(filename).db"
-        }else{
-            return "activities_default.db"
-        }
+        var invalidCharacters = CharacterSet(charactersIn: ":/")
+        
+        invalidCharacters.formUnion(CharacterSet.newlines)
+        invalidCharacters.formUnion(CharacterSet.illegalCharacters)
+        invalidCharacters.formUnion(CharacterSet.controlCharacters)
+        
+        let filename = saved_username.components(separatedBy: invalidCharacters).joined(separator: "")
+        
+        return "activities_\(filename).db"
     }
     
     func selectedActivities() -> [Activity] {
@@ -214,19 +206,12 @@ class FITDownloadViewController: NSViewController {
     
     @IBAction func editUserName(_ sender: Any) {
         let entered_username = userName.stringValue
-        if( !keychain.set(entered_username, forKey: FITAppGlobal.ConfigParameters.loginName.rawValue) ){
-            RZSLog.error( "failed to save username" )
-        }
-        FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.loginName.rawValue, stringVal: entered_username)
+        FITAppGlobal.setCurrentLoginName( entered_username )
     }
     
     @IBAction func editPassword(_ sender: Any) {
         let entered_password = password.stringValue
-        if !keychain.set(entered_password, forKey: FITAppGlobal.ConfigParameters.password.rawValue){
-            RZSLog.error("failed to save password")
-        }
-        
-        FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.password.rawValue, stringVal: entered_password)
+        FITAppGlobal.setCurrentPassword(entered_password)
     }
 
     // MARK: - notifications
@@ -279,20 +264,9 @@ class FITDownloadViewController: NSViewController {
                                                selector: #selector(organizerListChanged(notification:)),
                                                name: ActivitiesOrganizer.Notifications.listChange,
                                                object: nil)
-
-        if let saved_username = keychain.string(forKey: FITAppGlobal.ConfigParameters.loginName.rawValue){
-            userName.stringValue = saved_username
-            if let update = try? JSON( [FITAppGlobal.ConfigParameters.loginName.rawValue:saved_username]) {
-                FITAppGlobal.shared.updateSettings(json: update)
-            }
-        }
         
-        if let saved_password = keychain.string(forKey: FITAppGlobal.ConfigParameters.password.rawValue) {
-            password.stringValue = saved_password
-            if let update = try? JSON( [FITAppGlobal.ConfigParameters.password.rawValue:saved_password]) {
-                FITAppGlobal.shared.updateSettings(json: update)
-            }
-        }
+        userName.stringValue = FITAppGlobal.currentLoginName()
+        password.stringValue = FITAppGlobal.currentPassword()
         
 
         //FITAppGlobal.downloadManager().loadFromFile()
