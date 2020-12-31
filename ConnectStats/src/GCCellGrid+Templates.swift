@@ -186,8 +186,10 @@ extension GCCellGrid {
         self.setup(forRows: 2, andCols: 2)
         self.label(forRow: 0, andCol: 0)?.attributedText = NSAttributedString(string: mainFieldName ?? "Error",
                                                                               attributes: GCViewConfig.attribute(rzAttribute.field))
-        self.label(forRow: 1, andCol: 0)?.attributedText = NSAttributedString(string: count.description, attributes: GCViewConfig.attribute(rzAttribute.secondaryValue))
-        
+        self.label(forRow: 1, andCol: 0)?.attributedText = NSAttributedString(string: String(format: NSLocalizedString("Cnt %@", comment: "Summary Field Stats"), count),
+                                                                              attributes: GCViewConfig.attribute(rzAttribute.secondaryValue))
+
+        //let minimumSize = ("Maxxx" as NSString).size(withAttributes: GCViewConfig.attribute(.field))
         if let mainNumber = mainNumber {
             let cellView = GCCellFieldValueView(numberWithUnit: mainNumber,
                                                 geometry: geometry,
@@ -196,8 +198,10 @@ extension GCCellGrid {
                                                 icon: .hide)
             cellView.numberAttribute = GCViewConfig.attribute(.value)
             cellView.unitAttribute = GCViewConfig.attribute(.unit)
-            cellView.displayField = .left
-            cellView.geometry.numberAlignment = .left
+            cellView.displayField = .right
+            cellView.displayNumber = .right
+            //cellView.fieldMinimumSize = minimumSize
+            cellView.geometry.numberAlignment = .right
             cellView.geometry.unitAlignment = .trailingNumber
             cellView.geometry.timeAlignment = .withNumber
             self.setupView(cellView, forRow: 0, andColumn: 1)
@@ -212,13 +216,14 @@ extension GCCellGrid {
             cellView.fieldAttribute = GCViewConfig.attribute(.secondaryField)
             cellView.numberAttribute = GCViewConfig.attribute(.secondaryValue)
             cellView.unitAttribute = GCViewConfig.attribute(.secondaryUnit)
-            cellView.displayField = .left
-            cellView.geometry.numberAlignment = .left
+            cellView.displayField = .right
+            cellView.displayNumber = .right
+            //cellView.fieldMinimumSize = minimumSize
+            cellView.geometry.numberAlignment = .right
             cellView.geometry.unitAlignment = .trailingNumber
             cellView.geometry.timeAlignment = .withNumber
             self.setupView(cellView, forRow: 1, andColumn: 1)
         }
-
     }
     
 }
@@ -229,7 +234,7 @@ extension GCHistoryFieldDataHolder {
         if field.canSum() {
             rv.main = self.sum(withUnit: which)
             rv.extra  = self.average(withUnit: which)
-            rv.extraLabel = NSLocalizedString("Cnt", comment: "Summary Field Stats")
+            rv.extraLabel = NSLocalizedString("Avg", comment: "Summary Field Stats")
         }else if field.isWeightedAverage() {
             rv.main = self.weightedAverage(withUnit: which)
         }else {

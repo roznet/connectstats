@@ -364,8 +364,12 @@
 
     GCHistoryFieldDataHolder * data = [self.fieldStats dataForField:field];
     
-    //[cell setupForFieldDataHolder:data histStats:self.multiFieldConfig.historyStats andActivityType:self.activityType];
-    [cell setupFieldStatisticsWithDataHolder:data histStats:self.multiFieldConfig.historyStats geometry:self.geometry];
+    if( self.isNewStyle ){
+        [cell setupFieldStatisticsWithDataHolder:data histStats:self.multiFieldConfig.historyStats geometry:self.geometry];
+    }else{
+        [cell setupForFieldDataHolder:data histStats:self.multiFieldConfig.historyStats andActivityType:self.activityType];
+    }
+    CGSize iconSize = CGSizeMake( tableView.frame.size.width > 400. ? 128. : 64., 60.);
     if ([GCAppGlobal configGetBool:CONFIG_STATS_INLINE_GRAPHS defaultValue:true] && doGraph[field.key]) {
         GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:field];
         cache.maximizeGraph = true;
@@ -373,11 +377,13 @@
         GCSimpleGraphView * view = [[GCSimpleGraphView alloc] initWithFrame:CGRectZero];
         view.displayConfig = cache;
         view.dataSource = cache;
-        [cell setIconView:view withSize:CGSizeMake( tableView.frame.size.width > 400. ? 128. : 64., 60.)];
+        [cell setIconView:view withSize:iconSize];
         [view release];
     }else{
-        cell.iconView = nil;
-        cell.iconSize = CGSizeZero;
+        UIView * empty = RZReturnAutorelease([[UIView alloc] initWithFrame:CGRectZero]);
+        empty.backgroundColor = [UIColor clearColor];
+        cell.iconView = empty;
+        cell.iconSize = iconSize;
     }
 
     return cell;

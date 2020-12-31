@@ -41,6 +41,11 @@ class GCCellFieldValueView: UIView {
         case left
         case right
     }
+    
+    public enum DisplayNumber {
+        case left
+        case right
+    }
     let field : GCField?
     let numberWithUnit : GCNumberWithUnit
     let geometry : RZNumberWithUnitGeometry
@@ -50,6 +55,8 @@ class GCCellFieldValueView: UIView {
     
     var overrideFieldName : String?
     var displayField : DisplayField = .left
+    var displayNumber : DisplayNumber = .right
+    var fieldMinimumSize : CGSize = CGSize.zero
     var iconColor = UIColor.darkGray
     var iconInset : CGFloat = 2.0
     var numberAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.value)
@@ -99,11 +106,29 @@ class GCCellFieldValueView: UIView {
         
         var numberRect = rect
         var fieldRect = rect
-        // Align number to the right
-        numberRect.origin.x += (rect.size.width - self.geometry.totalSize.width)
-        numberRect.size.width -= (rect.size.width - self.geometry.totalSize.width)
-        fieldRect.size.width = (rect.size.width - self.geometry.totalSize.width)
         
+        var fieldSize = CGSize.zero
+        let fmtField = self.fieldDisplayName()
+        if let fmtField = fmtField, self.displayField != .hide {
+            fieldSize = (fmtField as NSString).size(withAttributes: self.fieldAttribute)
+        }
+        
+        // Align number to the right
+        switch self.displayNumber {
+        case .right:
+            numberRect.origin.x += (rect.size.width - self.geometry.totalSize.width)
+            numberRect.size.width -= (rect.size.width - self.geometry.totalSize.width)
+            fieldRect.size.width = (rect.size.width - self.geometry.totalSize.width)
+        case .left:
+            var shiftWidth = fieldSize.width
+            if fieldSize.width < self.fieldMinimumSize.width {
+                shiftWidth = self.fieldMinimumSize.width
+            }
+
+            numberRect.origin.x += shiftWidth
+            numberRect.size.width -= shiftWidth
+        }
+
         var addUnit = true;
                 
         if let primaryField = primaryField, let field = self.field {
@@ -139,14 +164,13 @@ class GCCellFieldValueView: UIView {
             }
         }
         if self.displayField != .hide {
-            if let fmtField = self.fieldDisplayName() {
-                let fieldSize = (fmtField as NSString).size(withAttributes: self.fieldAttribute)
-                // If too big enlarge to the left
-                if fieldSize.width > fieldRect.size.width {
+            if let fmtField = fmtField {
+                if case .right = self.displayField {
+                    fieldRect.origin.x = drawnRect.origin.x - fieldSize.width - (" " as NSString).size(withAttributes: self.fieldAttribute).width
+                }else if fieldSize.width > fieldRect.size.width {
+                    // If too big enlarge to the left
                     fieldRect.origin.x -= ( fieldSize.width - fieldRect.size.width)
                     fieldRect.size.width = fieldSize.width
-                }else if case .right = self.displayField {
-                    fieldRect.origin.x += (fieldRect.size.width - fieldSize.width)
                 }
                 /*let context = NSStringDrawingContext()
                 context.minimumScaleFactor = 0.7
