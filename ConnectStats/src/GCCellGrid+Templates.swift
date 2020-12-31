@@ -30,6 +30,8 @@ import RZUtilsSwift
 
 extension GCCellGrid {
 
+    //MARK: - Aggregated Monthly/Weekly Stats Cells
+    
     @objc static func adjustAggregated(dataHolder : GCHistoryAggregatedDataHolder,
                                        activityType : GCActivityType,
                                        geometry : RZNumberWithUnitGeometry ) {
@@ -78,7 +80,7 @@ extension GCCellGrid {
                     let cellView = GCCellFieldValueView(numberWithUnit: nu,
                                                         geometry: geometry,
                                                         field: field,
-                                                        icon: .right)
+                                                        icon: .left)
                     cellView.displayField = .hide
                     cellView.iconInset = 4.0
                     if fieldIdx < mainCount {
@@ -104,7 +106,9 @@ extension GCCellGrid {
         }
         
     }
-                     
+              
+    //MARK: - Detail Activity view
+    
     @objc func setupActivityDetail(fields : [GCField],
                                    activity : GCActivity,
                                    geometry : RZNumberWithUnitGeometry){
@@ -148,5 +152,97 @@ extension GCCellGrid {
 
         }
         
+    }
+    
+    //MARK: - Fields Statistics
+    
+    @objc static func adjustFieldStatistics(summaryStats : GCHistoryFieldSummaryStats,
+                                            histStats which: gcHistoryStats,
+                                       geometry : RZNumberWithUnitGeometry ) {
+        
+        for (_,dataHolder) in summaryStats.fieldData {
+            let info = dataHolder.relevantNumbers(histStats: which)
+            if let main = info.main {
+                geometry.adjust(for: main, numberAttribute: GCViewConfig.attribute(.value), unitAttribute: GCViewConfig.attribute(.unit))
+                geometry.adjust(for: main, numberAttribute: GCViewConfig.attribute(.secondaryValue), unitAttribute: GCViewConfig.attribute(.secondaryUnit))
+            }
+        }
+    }
+
+    
+    @objc func setupFieldStatistics(dataHolder : GCHistoryFieldDataHolder, histStats which: gcHistoryStats, geometry: RZNumberWithUnitGeometry){
+        let field = dataHolder.field
+
+        let mainFieldName = field.displayName()
+
+        
+        let info = dataHolder.relevantNumbers(histStats: which)
+        let count = dataHolder.count(withUnit: which)
+
+        let mainNumber : GCNumberWithUnit? = info.main
+        let extra : GCNumberWithUnit? = info.extra
+        let extraLabel : String? = info.extraLabel
+        
+        self.setup(forRows: 2, andCols: 2)
+        self.label(forRow: 0, andCol: 0)?.attributedText = NSAttributedString(string: mainFieldName ?? "Error",
+                                                                              attributes: GCViewConfig.attribute(rzAttribute.field))
+        self.label(forRow: 1, andCol: 0)?.attributedText = NSAttributedString(string: count.description, attributes: GCViewConfig.attribute(rzAttribute.secondaryValue))
+        
+        if let mainNumber = mainNumber {
+            let cellView = GCCellFieldValueView(numberWithUnit: mainNumber,
+                                                geometry: geometry,
+                                                field: nil,
+                                                primaryField: nil,
+                                                icon: .hide)
+            cellView.numberAttribute = GCViewConfig.attribute(.value)
+            cellView.unitAttribute = GCViewConfig.attribute(.unit)
+            cellView.displayField = .left
+            cellView.geometry.numberAlignment = .left
+            cellView.geometry.unitAlignment = .trailingNumber
+            cellView.geometry.timeAlignment = .withNumber
+            self.setupView(cellView, forRow: 0, andColumn: 1)
+        }
+        if let extra = extra {
+            let cellView = GCCellFieldValueView(numberWithUnit: extra,
+                                                geometry: geometry,
+                                                field: nil,
+                                                primaryField: nil,
+                                                icon: .hide)
+            cellView.overrideFieldName = extraLabel
+            cellView.fieldAttribute = GCViewConfig.attribute(.secondaryField)
+            cellView.numberAttribute = GCViewConfig.attribute(.secondaryValue)
+            cellView.unitAttribute = GCViewConfig.attribute(.secondaryUnit)
+            cellView.displayField = .left
+            cellView.geometry.numberAlignment = .left
+            cellView.geometry.unitAlignment = .trailingNumber
+            cellView.geometry.timeAlignment = .withNumber
+            self.setupView(cellView, forRow: 1, andColumn: 1)
+        }
+
+    }
+    
+}
+
+extension GCHistoryFieldDataHolder {
+    func relevantNumbers(histStats which: gcHistoryStats) -> (main: GCNumberWithUnit?, extra : GCNumberWithUnit?, extraLabel: String?) {
+        var rv : (main: GCNumberWithUnit?, extra : GCNumberWithUnit?, extraLabel: String?)
+        if field.canSum() {
+            rv.main = self.sum(withUnit: which)
+            rv.extra  = self.average(withUnit: which)
+            rv.extraLabel = NSLocalizedString("Cnt", comment: "Summary Field Stats")
+        }else if field.isWeightedAverage() {
+            rv.main = self.weightedAverage(withUnit: which)
+        }else {
+            rv.main = self.average(withUnit: which)
+            
+            if field.isMax() {
+                rv.extra = self.max(withUnit: which)
+                rv.extraLabel = NSLocalizedString("Max", comment: "Summary Field Stats")
+            }else{
+                rv.extra = self.average(withUnit: which)
+                rv.extraLabel = NSLocalizedString("Avg", comment: "Summary Field Stats")
+            }
+        }
+        return rv
     }
 }

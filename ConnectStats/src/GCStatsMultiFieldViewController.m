@@ -363,7 +363,9 @@
     }
 
     GCHistoryFieldDataHolder * data = [self.fieldStats dataForField:field];
-    [cell setupForFieldDataHolder:data histStats:self.multiFieldConfig.historyStats andActivityType:self.activityType];
+    
+    //[cell setupForFieldDataHolder:data histStats:self.multiFieldConfig.historyStats andActivityType:self.activityType];
+    [cell setupFieldStatisticsWithDataHolder:data histStats:self.multiFieldConfig.historyStats geometry:self.geometry];
     if ([GCAppGlobal configGetBool:CONFIG_STATS_INLINE_GRAPHS defaultValue:true] && doGraph[field.key]) {
         GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:field];
         cache.maximizeGraph = true;
@@ -711,6 +713,10 @@
     self.fieldOrder = [GCFields categorizeAndOrderFields:self.allFields];
     self.fieldStats = vals;
 
+    self.geometry = [RZNumberWithUnitGeometry geometry];
+    
+    [GCCellGrid adjustFieldStatisticsWithSummaryStats:self.fieldStats histStats:gcHistoryStatsAll geometry:self.geometry];
+    
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self updateDone];
     });

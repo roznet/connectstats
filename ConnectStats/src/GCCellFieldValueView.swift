@@ -47,6 +47,8 @@ class GCCellFieldValueView: UIView {
     let primaryField : GCField?
     
     let displayIcon : DisplayIcon
+    
+    var overrideFieldName : String?
     var displayField : DisplayField = .left
     var iconColor = UIColor.darkGray
     var iconInset : CGFloat = 2.0
@@ -137,7 +139,7 @@ class GCCellFieldValueView: UIView {
             }
         }
         if self.displayField != .hide {
-            if let fmtField = self.field?.displayName(withPrimary: self.primaryField) {
+            if let fmtField = self.fieldDisplayName() {
                 let fieldSize = (fmtField as NSString).size(withAttributes: self.fieldAttribute)
                 // If too big enlarge to the left
                 if fieldSize.width > fieldRect.size.width {
@@ -152,5 +154,12 @@ class GCCellFieldValueView: UIView {
                 (fmtField as NSString).draw(at: fieldRect.origin, withAttributes: self.fieldAttribute)
             }
         }
+    }
+    
+    func fieldDisplayName() -> String? {
+        if self.overrideFieldName != nil {
+            return self.overrideFieldName
+        }
+        return self.field?.displayName(withPrimary: self.primaryField)
     }
 }
