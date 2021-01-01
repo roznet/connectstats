@@ -254,7 +254,11 @@
             self.organizedFields = [self.activity groupedFields];
         }
         
-        return self.organizedFields.groupedPrimaryFields.count;
+        if( self.isWide ){
+            return self.organizedFields.groupedPrimaryFields.count/2;
+        }else{
+            return self.organizedFields.groupedPrimaryFields.count;
+        }
 
     }else{
         return [self displayPrimaryAttributedStrings].count;
@@ -530,8 +534,21 @@
     BOOL high = self.tableView.frame.size.height > 600.;
 
     if (indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION) {
-        if( self.isNewStyle && indexPath.row < self.organizedFields.groupedPrimaryFields.count ){
-            return [GCViewConfig sizeForNumberOfRows:[self.organizedFields.groupedPrimaryFields[indexPath.row] count]];
+        if( self.isNewStyle ){
+            if( self.isWide){
+                if( (indexPath.row / 2) < self.organizedFields.groupedPrimaryFields.count ){
+                    CGFloat rv = [GCViewConfig sizeForNumberOfRows:[self.organizedFields.groupedPrimaryFields[indexPath.row/2] count]];
+                    if( (indexPath.row / 2 + 1) < self.organizedFields.groupedPrimaryFields.count ){
+                        rv = MAX(rv, [GCViewConfig sizeForNumberOfRows:[self.organizedFields.groupedPrimaryFields[indexPath.row/2+1] count]]);
+                    }
+                    return rv;
+                }
+                //or else fall back
+            }else{
+                if( indexPath.row <  self.organizedFields.groupedPrimaryFields.count ){
+                    return [GCViewConfig sizeForNumberOfRows:[self.organizedFields.groupedPrimaryFields[indexPath.row] count]];
+                }
+            }
         }else{
             return [GCViewConfig sizeForNumberOfRows:3];
         }

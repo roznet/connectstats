@@ -34,10 +34,19 @@ extension GCActivityDetailViewController {
         guard let cell = GCCellGrid(tableView) else { return UITableViewCell(frame: CGRect.zero)}
         
         if let organizedFields = self.organizedFields {
-        
-            if indexPath.row < organizedFields.groupedPrimaryFields.count {
-                let fields = organizedFields.groupedPrimaryFields[ indexPath.row ]
-                cell.setupActivityDetail(fields: fields, activity: self.activity, geometry: self.organizedFields.geometry)
+            var fieldIndex = indexPath.row
+            let isWide = self.isWide
+            if isWide {
+                fieldIndex *= 2
+            }
+            
+            if fieldIndex < organizedFields.groupedPrimaryFields.count {
+                let fields = organizedFields.groupedPrimaryFields[ fieldIndex ]
+                var second : [GCField] = []
+                if isWide && fieldIndex + 1 < organizedFields.groupedPrimaryFields.count {
+                    second = organizedFields.groupedPrimaryFields[ fieldIndex + 1]
+                }
+                cell.setupActivityDetail(fields: fields, activity: self.activity, geometry: self.organizedFields.geometry, second: second)
                 if indexPath.row % 2 == 0 {
                     if let color = GCViewConfig.defaultColor(gcSkinDefaultColor.backgroundEven) {
                         cell.setupBackgroundColors([color])

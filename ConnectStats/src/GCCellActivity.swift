@@ -70,7 +70,6 @@ class GCCellActivity: UITableViewCell {
         self.borderView.borderColor = GCViewConfig.colorForRoundedBorder()
         
         self.leftBorderView.borderColor = GCViewConfig.colorForRoundedBorder()
-
         
         self.borderView.setNeedsDisplay()
         self.leftBorderView.setNeedsDisplay()
@@ -106,7 +105,6 @@ class GCCellActivity: UITableViewCell {
         self.rightFieldValues.valueAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
         self.rightFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
         self.rightFieldValues.distributeVertically = false
-        
 
         let rightFields : [GCField] = [
             GCField(for: gcFieldFlag.weightedMeanSpeed, andActivityType: activity.activityType),

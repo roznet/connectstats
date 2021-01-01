@@ -109,16 +109,13 @@ extension GCCellGrid {
               
     //MARK: - Detail Activity view
     
-    @objc func setupActivityDetail(fields : [GCField],
-                                   activity : GCActivity,
-                                   geometry : RZNumberWithUnitGeometry){
-        GCViewConfig.setupGradient(forDetails: self)
-        
-        
-        self.setup(forRows:UInt(fields.count), andCols:2)
+    func setupActivityDetailsColumn(fields : [GCField], activity : GCActivity, geometry : RZNumberWithUnitGeometry, column : UInt ){
         if let field = fields.first?.displayName() {
             let fieldFmt = NSAttributedString(string: field, attributes: GCViewConfig.attribute(rzAttribute.field) )
-            self.label(forRow: 0, andCol: 0)?.attributedText = fieldFmt
+            self.label(forRow: 0, andCol: column)?.attributedText = fieldFmt
+            if column != 0 {
+                self.config(forRow: 0, andCol: column)?.horizontalAlign = .right
+            }
         }
         
         var fieldAttr = GCViewConfig.attribute(rzAttribute.field)
@@ -139,19 +136,39 @@ extension GCCellGrid {
                 cellView.unitAttribute = unitAttr
                 cellView.displayField = .right
                 cellView.geometry.timeAlignment = .withNumber
-                self.setupView(cellView, forRow: row, andColumn: 1)
+                
                 if( row != 0){
-                    //self.label(forRow: row, andCol: 0)?.attributedText = NSAttributedString(string: field.displayName(withPrimary: primaryField), attributes: fieldAttr)
-                    self.config(forRow: row, andCol: 0)?.horizontalAlign = gcHorizontalAlign.right
+                    if field.displayName(withPrimary: primaryField) == field.displayName() {
+                        cellView.displayField = .hide
+                        self.label(forRow: row, andCol: column)?.attributedText = NSAttributedString(string: field.displayName(), attributes: fieldAttr)
+                    }
+                    if( column != 0){
+                        self.config(forRow: row, andCol: column)?.horizontalAlign = gcHorizontalAlign.right
+                    }
                 }
+                self.setupView(cellView, forRow: row, andColumn: column+1)
             }
             row += 1
             fieldAttr = GCViewConfig.attribute(rzAttribute.secondaryField)
             numberAttr = GCViewConfig.attribute(rzAttribute.secondaryValue)
             unitAttr = GCViewConfig.attribute(rzAttribute.secondaryUnit)
-
         }
+    }
+    
+    @objc func setupActivityDetail(fields : [GCField],
+                                   activity : GCActivity,
+                                   geometry : RZNumberWithUnitGeometry,
+                                   second : [GCField] = [] ){
+        GCViewConfig.setupGradient(forDetails: self)
         
+        let columns : UInt = second.count == 0 ? 2 : 4
+        
+        self.setup(forRows:UInt(max(fields.count,second.count)), andCols:columns)
+        
+        self.setupActivityDetailsColumn(fields: fields, activity: activity, geometry: geometry, column: 0)
+        if second.count > 0 {
+            self.setupActivityDetailsColumn(fields: second, activity: activity, geometry: geometry, column: 2)
+        }
     }
     
     //MARK: - Fields Statistics
