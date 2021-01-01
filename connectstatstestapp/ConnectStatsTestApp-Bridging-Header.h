@@ -34,3 +34,7 @@
 #import "GCGarminActivityTrack13Request.h"
 
 #import "GCTestUISamples.h"
+
+#import "GCHistoryFieldDataHolder.h"
+#import "GCHistoryFieldSummaryStats.h"
+

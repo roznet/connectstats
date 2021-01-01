@@ -901,7 +901,8 @@
         NSString * tag = [NSString stringWithFormat:@"%@ %@ %@ Detail New Style", act.activityId, act.activityType, fields.firstObject.key];
         [cell setupActivityDetailWithFields:fields
                                    activity:act
-                                   geometry:organizedFields.geometry];
+                                   geometry:organizedFields.geometry
+                                     second:@[]];
         [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:tag]];
     }
     /*

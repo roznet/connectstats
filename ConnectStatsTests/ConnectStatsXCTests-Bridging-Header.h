@@ -20,3 +20,5 @@
 #import "GCConnectStatsRequestSearch.h"
 #import "GCService.h"
 
+#import "GCHistoryFieldDataHolder.h"
+#import "GCHistoryFieldSummaryStats.h"
