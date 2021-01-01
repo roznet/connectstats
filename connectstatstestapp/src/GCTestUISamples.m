@@ -814,7 +814,6 @@
     
     for (GCActivity * act in organizer.activities) {
         GCCellActivity * cell = [nib instantiateWithOwner:self options:nil][0];
-        act.activityName = @"Bonjour Gilles";
         [cell setupFor:act];
         [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"new cell"]];
     }
