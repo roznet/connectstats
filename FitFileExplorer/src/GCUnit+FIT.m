@@ -51,7 +51,7 @@
                   @"s": @"second",
                   @"semicircles": @"semicircle",
                   @"strides": @"dimensionless",
-                  @"strides/min": @"spm",
+                  @"strides/min": @"stepsPerMinute",
                   @"strokes/lap": @"dimensionless",
                   @"swim": @"dimensionless",
                   @"tss": @"dimensionless",
@@ -59,6 +59,8 @@
                   @"watts": @"watt",
                   @"J":@"joule",
                   @"kg":@"kilogram",
+                  @"strokes/min":@"strokesPerMinute",
+                  @"strokes":@"dimensionless",
                   
                   // Stryd
                   @"Centimeters": @"centimeter",
