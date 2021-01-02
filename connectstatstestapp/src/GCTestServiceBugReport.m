@@ -59,7 +59,10 @@
     
     NSString * url = [NSString stringWithFormat:@"%@/prod/bugreport/new", [GCAppGlobal simulatorUrl]];
     
-    [self setRemoteDownload:[[[RZRemoteDownload alloc] initWithURLRequest:[report urlResquestFor:url] andDelegate:self] autorelease]];
+    dispatch_async([GCAppGlobal worker], ^(){
+        [self setRemoteDownload:[[[RZRemoteDownload alloc] initWithURLRequest:[report urlResquestFor:url] andDelegate:self] autorelease]];
+    });
+    
 }
 
 -(void)testBugReportEnd{

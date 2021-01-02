@@ -112,6 +112,8 @@ extern NSString *  const kNotifyLocationRequestComplete;
 +(void)versionSummary;
 
 +(UIUserInterfaceStyle)userInterfaceStyle;
+
++(NSString*)appURLScheme;
 @end
 
 NS_ASSUME_NONNULL_END

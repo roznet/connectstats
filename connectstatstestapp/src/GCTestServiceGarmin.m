@@ -48,18 +48,24 @@
     [self startSession:@"GC Garmin Connect Alt"];
     GCWebUseSimulator(FALSE, nil);
 
-    [GCTestAppGlobal setupEmptyState:kDbPathServiceGarmin withSettingsName:kPreservedSettingsName];
-    [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:YES];
-    [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:YES];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [GCTestAppGlobal setupEmptyState:kDbPathServiceGarmin withSettingsName:kPreservedSettingsName];
+        [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:YES];
+        [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:YES];
 
-    self.stage = gcTestServiceServiceCompareSearch;
+        self.stage = gcTestServiceServiceCompareSearch;
 
-    [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
-    /*dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-     [self timeOutCheck];
-     });*/
-    [[GCAppGlobal web] attach:self];
-    [[GCAppGlobal web] servicesSearchRecentActivities];
+        [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
+        /*dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+         [self timeOutCheck];
+         });*/
+        [[GCAppGlobal web] attach:self];
+        [GCAppGlobal web].validateNextSearch = ^(NSDate* lastFound,NSUInteger count){
+            BOOL rv = count < 100;
+            return rv;
+        };
+        [[GCAppGlobal web] servicesSearchRecentActivities];
+    });
 }
 
 -(void)testGarminConnectModernEnd{
@@ -68,6 +74,7 @@
     // and may call notify. Need to avoid notify while detach on different thread
     dispatch_async([GCAppGlobal worker], ^(){
         [[GCAppGlobal web] detach:self];
+        [GCAppGlobal web].validateNextSearch = nil;
     });
 
 
@@ -86,7 +93,11 @@
             
             RZ_ASSERT(kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities], @"Stage within activities count");
             if( kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities] ){
-                [[GCAppGlobal web] downloadMissingActivityDetails:kCompareDetailCount];
+                // we are in middle of notification don't offload starting download
+                dispatch_async([GCAppGlobal worker], ^(){
+                    [[GCAppGlobal web] downloadMissingActivityDetails:kCompareDetailCount];
+                });
+                
             }
         }else{
             [self testGarminConnectModernEnd];

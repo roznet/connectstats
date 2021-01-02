@@ -200,16 +200,16 @@
                 GCWebUseSimulator(false, nil);
             }
             //GCWebUseSimulator(true);
-            [self.requests removeAllObjects];
+            [self clearRequests];
             [self resetStatus];
-            [self.requests addObject:first];
-            [self.requests addObject:second];
+            [self addRequest:first];
+            [self addRequest:second];
             self.status = GCWebStatusOK;
         }else if (method == gcGarminLoginMethodDirect){
             [self clearCookies];
-            [self.requests removeAllObjects];
+            [self clearRequests];
             [self resetStatus];
-            [self.requests addObject:[GCGarminLoginSSORequest requestWithUser:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
+            [self addRequest:[GCGarminLoginSSORequest requestWithUser:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
                                                                        andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]
                                                                    validation:^(){
                 return [[GCAppGlobal profile] serviceEnabled:gcServiceGarmin];
@@ -245,9 +245,9 @@
             GCWebUseSimulator(false,nil);
         }
         //GCWebUseSimulator(true);
-        [self.requests removeAllObjects];
-        [self.requests addObject:first];
-        [self.requests addObject:second];
+        [self clearRequests];
+        [self addRequest:first];
+        [self addRequest:second];
         self.status = GCWebStatusOK;
     }
 }

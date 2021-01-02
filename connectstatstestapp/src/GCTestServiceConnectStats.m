@@ -62,6 +62,11 @@
      [self timeOutCheck];
      });*/
     [[GCAppGlobal web] attach:self];
+    [GCAppGlobal web].validateNextSearch = ^(NSDate* lastFound,NSUInteger count){
+        BOOL rv = count < 100;
+        return rv;
+    };
+
     [[GCAppGlobal web] servicesSearchRecentActivities];
 
 }
@@ -74,6 +79,7 @@
     // and may call notify. Need to avoid notify while detach on different thread
     dispatch_async([GCAppGlobal worker], ^(){
         [[GCAppGlobal web] detach:self];
+        [GCAppGlobal web].validateNextSearch = nil;
     });
     
     
@@ -93,7 +99,10 @@
         
             RZ_ASSERT(kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities], @"Stage within activities count");
             if( kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities] ){
-                [[GCAppGlobal web] downloadMissingActivityDetails:kCompareDetailCount];
+                dispatch_async([GCAppGlobal worker], ^(){
+                    [[GCAppGlobal web] downloadMissingActivityDetails:kCompareDetailCount];
+                });
+                
             }
         }else{
             [self tesConnectStatsServiceEnd];

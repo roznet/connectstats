@@ -72,4 +72,6 @@ extern NSString * kPreservedSettingsName;
 
 // Global override for forcing testing of dark/light mode
 +(void)setUserInterfaceStyle:(UIUserInterfaceStyle)newStyle;
++(NSString*)appURLScheme;
++(void)versionSummary;
 @end

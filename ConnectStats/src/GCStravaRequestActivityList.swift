@@ -119,6 +119,13 @@ import RZUtilsSwift
                     GCAppGlobal.saveSettings()
                 }
             }
+            
+            if let validate = GCAppGlobal.web().validateNextSearch {
+                if !validate(lastFoundDate,UInt(self.page)*30) {
+                    return nil
+                }
+            }
+            
             return GCStravaRequestActivityList(previous: self)
         }
         if self.reloadAll {

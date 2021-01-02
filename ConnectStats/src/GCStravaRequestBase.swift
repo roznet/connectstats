@@ -114,7 +114,8 @@ class GCStravaRequestBase: GCWebRequestStandard {
     override func process() {
         self.retrieveCredential()
         if GCAppGlobal.profile().serviceSuccess(gcService.strava) == false {
-            self.stravaAuth.authorize(withCallbackURL: "connectstats://ro-z.net/oauth/strava",
+            let urlscheme = GCAppGlobal.appURLScheme()
+            self.stravaAuth.authorize(withCallbackURL: "\(urlscheme)://ro-z.net/oauth/strava",
                                       scope: "activity:read_all,read_all",
                                       state: "prod" ) { result in
                 switch result {

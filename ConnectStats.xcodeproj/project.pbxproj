@@ -49,9 +49,7 @@
 		4211D46A2597829300967874 /* GCStravaRequestActivityList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D4672597829200967874 /* GCStravaRequestActivityList.swift */; };
 		4211D4712597832D00967874 /* OAuthSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4211D4702597832D00967874 /* OAuthSwift */; };
 		4211D48725979A6E00967874 /* GCAppSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D48625979A6E00967874 /* GCAppSceneDelegate.swift */; };
-		4211D48825979A6E00967874 /* GCAppSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D48625979A6E00967874 /* GCAppSceneDelegate.swift */; };
 		4211D48925979A6E00967874 /* GCAppSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D48625979A6E00967874 /* GCAppSceneDelegate.swift */; };
-		4211D4B82598B31800967874 /* GCAppSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237D34624A741E000C55BB8 /* GCAppSceneDelegate.m */; };
 		4211D4BE2598B33900967874 /* OAuthSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4211D4BD2598B33900967874 /* OAuthSwift */; };
 		4211D4DB2598ED7D00967874 /* GCGarminActivityTrack13Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D4DA2598ED7D00967874 /* GCGarminActivityTrack13Request.swift */; };
 		4211D4DC2598ED7D00967874 /* GCGarminActivityTrack13Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211D4DA2598ED7D00967874 /* GCGarminActivityTrack13Request.swift */; };
@@ -428,6 +426,7 @@
 		425ACBC017C1687F00EB23A3 /* GCGarminUserJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBBF17C1687F00EB23A3 /* GCGarminUserJsonParser.m */; };
 		425CF5A91813CEEC009279C0 /* GCTestsActivities.m in Sources */ = {isa = PBXBuildFile; fileRef = 425CF5A81813CEEC009279C0 /* GCTestsActivities.m */; };
 		425D249D259E08DC0003574F /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 425D249C259E08DC0003574F /* KeychainSwift */; };
+		425D251F25A0EC240003574F /* GCTestAppGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425D251E25A0EC240003574F /* GCTestAppGlobal.swift */; };
 		42628A4023ACCFE900EC6673 /* fields.db in Resources */ = {isa = PBXBuildFile; fileRef = 42939CE423AAD79500D2403A /* fields.db */; };
 		42628A4B23ACCFEE00EC6673 /* fit_map.json in Resources */ = {isa = PBXBuildFile; fileRef = 42939CE523AAD79500D2403A /* fit_map.json */; };
 		42628A4C23ACCFF100EC6673 /* fit_developer.json in Resources */ = {isa = PBXBuildFile; fileRef = 42939CEC23AAD7A900D2403A /* fit_developer.json */; };
@@ -1729,6 +1728,7 @@
 		425ACBBE17C1687E00EB23A3 /* GCGarminUserJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminUserJsonParser.h; path = src/GCGarminUserJsonParser.h; sourceTree = "<group>"; };
 		425ACBBF17C1687F00EB23A3 /* GCGarminUserJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminUserJsonParser.m; path = src/GCGarminUserJsonParser.m; sourceTree = "<group>"; };
 		425CF5A81813CEEC009279C0 /* GCTestsActivities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestsActivities.m; sourceTree = "<group>"; };
+		425D251E25A0EC240003574F /* GCTestAppGlobal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCTestAppGlobal.swift; path = connectstatstestapp/src/GCTestAppGlobal.swift; sourceTree = SOURCE_ROOT; };
 		4262ADCE1DCC8DB100F089AA /* FITAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITAppDelegate.swift; path = src/FITAppDelegate.swift; sourceTree = "<group>"; };
 		42656CE824CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCStatsMultiFieldConfigViewController.swift; path = src/GCStatsMultiFieldConfigViewController.swift; sourceTree = "<group>"; };
 		42656CE924CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCStatsMultiFieldConfigViewController.xib; path = src/GCStatsMultiFieldConfigViewController.xib; sourceTree = "<group>"; };
@@ -4306,6 +4306,7 @@
 				42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */,
 				426872462542122A00F04E83 /* GCTestAppGlobal.h */,
 				426872472542122A00F04E83 /* GCTestAppGlobal.m */,
+				425D251E25A0EC240003574F /* GCTestAppGlobal.swift */,
 			);
 			name = TestApp;
 			sourceTree = "<group>";
@@ -6807,7 +6808,6 @@
 				42F3FB341DD783550042A9B1 /* GCFieldsDefs.m in Sources */,
 				427F937B1BEDFF1A00C177F9 /* GCViewActivityTypeButton.m in Sources */,
 				42D5798F25603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */,
-				4211D4B82598B31800967874 /* GCAppSceneDelegate.m in Sources */,
 				42E1A74E24277FF9006C868A /* GCActivity+BestRolling.m in Sources */,
 				427F93771BEDFA6F00C177F9 /* GCStatsMultiFieldViewController.m in Sources */,
 				42D4CA6F248D5497003F3AB7 /* GCStatsDerivedHistory.m in Sources */,
@@ -6860,7 +6860,6 @@
 				429F2097244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m in Sources */,
 				4211D4692597829200967874 /* GCStravaRequestActivityList.swift in Sources */,
 				42D223972567E6B3009BCACE /* GCCellGrid+Templates.swift in Sources */,
-				4211D48825979A6E00967874 /* GCAppSceneDelegate.swift in Sources */,
 				42B5E2251BA5AF9A000FAE4E /* GCTestParsing.m in Sources */,
 				42B5E2211BA5AF9A000FAE4E /* GCTestViewController.m in Sources */,
 				42B5E2231BA5AF9A000FAE4E /* GCTestIconsCell.m in Sources */,
@@ -6879,6 +6878,7 @@
 				42B5E2221BA5AF9A000FAE4E /* GCCellGrid+Test.m in Sources */,
 				42E04E4E2538C34B005FFD5E /* GCCellActivity.swift in Sources */,
 				42B5E2181BA5AF9A000FAE4E /* GCTestUIGraphViewController.m in Sources */,
+				425D251F25A0EC240003574F /* GCTestAppGlobal.swift in Sources */,
 				42A89C201D627444007CF90D /* GCUnitTrainingZone.m in Sources */,
 				42B467BA1DC6A56200279DC8 /* GCAppPasswordManager.swift in Sources */,
 				42B5E21B1BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.m in Sources */,
@@ -7514,7 +7514,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStatsTestApp/ConnectStatsTestApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5.1.0.0;
+				CURRENT_PROJECT_VERSION = 7.0.0.0;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ConnectStatsTestApp/src/ConnectStatsTest-Prefix.pch";
@@ -7531,7 +7531,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.1;
+				MARKETING_VERSION = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.connectstatstestapp";
@@ -7560,7 +7560,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 5.1.0.0;
+				CURRENT_PROJECT_VERSION = 7.0.0.0;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -7577,7 +7577,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.1;
+				MARKETING_VERSION = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.connectstatstestapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";

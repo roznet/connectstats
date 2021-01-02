@@ -123,6 +123,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 
 
 @interface GCServiceStatusHolder : NSObject
+
 @property (nonatomic,assign) GCWebStatus status;
 @property (nonatomic,assign) BOOL loginSuccessful;
 @property (nonatomic,assign) BOOL secondTry;
@@ -155,7 +156,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 #pragma mark -
 
 @interface GCWebConnect ()
-
+@property (retain,nonatomic) NSMutableArray<id<GCWebRequest>> * requests;
 @property (nonatomic,assign) NSUInteger lastBandwidth;
 @property (nonatomic,retain) RZRemoteDownload * remoteDownload;
 @property (nonatomic,retain) id<GCWebRequest> currentRequestObject;
@@ -189,7 +190,9 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
     [_serviceStatus release];
     [_lastError release];
     [_worker release];
-
+    
+    [_validateNextSearch release];
+    
     [super dealloc];
 }
 #endif
@@ -282,6 +285,12 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 
 -(void)addRequest:(id<GCWebRequest>)req{
     [self addRequest:req priority:false];
+}
+
+-(void)clearRequests{
+    @synchronized (_requests) {
+        [self.requests removeAllObjects];
+    }
 }
 
 -(void)addRequest:(id<GCWebRequest>)req priority:(BOOL)isPriority{

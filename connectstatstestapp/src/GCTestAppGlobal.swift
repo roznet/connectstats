@@ -1,8 +1,8 @@
 //  MIT License
 //
-//  Created on 22/10/2020 for ConnectStatsTestApp
+//  Created on 02/01/2021 for ConnectStatsTestApp
 //
-//  Copyright (c) 2020 Brice Rosenzweig
+//  Copyright (c) 2021 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,20 +24,13 @@
 //
 
 
-@import Foundation;
 
-NS_ASSUME_NONNULL_BEGIN
+import Foundation
+import OAuthSwift
 
-@interface GCTestAppGlobal : NSObject
+extension GCTestAppGlobal {
+    @objc static func handle(url: URL){
+        OAuthSwift.handle(url: url)
+    }
+}
 
-+(void)setupEmptyState:(NSString*)name;
-+(void)setupEmptyState:(NSString*)name withSettingsName:(NSString*)settingName;
-+(void)setupEmptyStateWithDerivedForPrefix:(NSString*)name;
-+(void)setupSampleState:(NSString*)name config:(NSDictionary*)config;
-+(void)setupSampleState:(NSString*)name;
-+(void)reinitFromSampleState:(NSString*)name;
-+(void)cleanWritableFiles;
-+(void)handle:(NSURL*)url;
-@end
-
-NS_ASSUME_NONNULL_END

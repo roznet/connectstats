@@ -89,12 +89,12 @@ NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
 */
 -(NSArray*)allTestClassNames{
     return @[
-             NSStringFromClass([GCTestServiceConnectStats class]),
-             NSStringFromClass([GCTestServiceGarmin class]),
-             NSStringFromClass([GCTestServiceStrava class]),
-             NSStringFromClass([GCTestServiceBugReport class]),
-             NSStringFromClass([GCTestServiceCompare class]),
-             ];
+        NSStringFromClass([GCTestServiceGarmin class]),
+        NSStringFromClass([GCTestServiceConnectStats class]),
+        NSStringFromClass([GCTestServiceStrava class]),
+        NSStringFromClass([GCTestServiceBugReport class]),
+        NSStringFromClass([GCTestServiceCompare class]),
+    ];
 }
 
 -(NSArray*)additionalLeftNavigationButton{

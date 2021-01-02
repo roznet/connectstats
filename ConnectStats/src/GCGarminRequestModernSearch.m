@@ -245,6 +245,14 @@ static const NSUInteger kActivityRequestCount = 20;
 }
 
 -(GCWebRequestStandard*)nextReq{
+    if( self.nextReqCache ){
+        GCWebValidateNextSearch validate = [[GCAppGlobal web] validateNextSearch];
+        if( validate ){
+            if( !validate(self.lastFoundDate, self.start)){
+                return nil;
+            }
+        }
+    }
     return self.nextReqCache;
 }
 @end

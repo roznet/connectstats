@@ -167,4 +167,11 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 +(void)setUserInterfaceStyle:(UIUserInterfaceStyle)newStyle{
     _cacheUserInterfaceStyle = newStyle;
 }
+
++(NSString*)appURLScheme{
+    return @"connectstatstestapp";
+}
++(void)versionSummary{
+    RZLog(RZLogInfo,@"Version Summary would go here - this is a test version");
+}
 @end

@@ -339,4 +339,8 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 +(UIUserInterfaceStyle)userInterfaceStyle{
     return [UITraitCollection currentTraitCollection].userInterfaceStyle;
 }
+
++(NSString*)appURLScheme{
+    return @"connectstats";
+}
 @end

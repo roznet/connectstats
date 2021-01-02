@@ -23,7 +23,6 @@
 #import "GCActivitiesCacheManagement.h"
 
 #import "GCWebRequestStandard.h"
-#import "GCAppSceneDelegate.h"
 
 #import "GCStravaActivityListParser.h"
 #import "GCStravaActivityLapsParser.h"
@@ -37,4 +36,7 @@
 
 #import "GCHistoryFieldDataHolder.h"
 #import "GCHistoryFieldSummaryStats.h"
+
+#import "GCTestAppGlobal.h"
+
 
