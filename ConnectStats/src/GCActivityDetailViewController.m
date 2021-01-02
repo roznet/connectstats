@@ -535,6 +535,8 @@
 
     if (indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION) {
         if( self.isNewStyle ){
+            [GCViewConfig sizeForNumberOfRows:3];
+            /*
             if( self.isWide){
                 if( (indexPath.row / 2) < self.organizedFields.groupedPrimaryFields.count ){
                     CGFloat rv = [GCViewConfig sizeForNumberOfRows:[self.organizedFields.groupedPrimaryFields[indexPath.row/2] count]];
@@ -548,7 +550,7 @@
                 if( indexPath.row <  self.organizedFields.groupedPrimaryFields.count ){
                     return [GCViewConfig sizeForNumberOfRows:[self.organizedFields.groupedPrimaryFields[indexPath.row] count]];
                 }
-            }
+            }*/
         }else{
             return [GCViewConfig sizeForNumberOfRows:3];
         }
