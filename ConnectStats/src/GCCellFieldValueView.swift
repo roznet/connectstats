@@ -172,6 +172,8 @@ class GCCellFieldValueView: UIView {
                     fieldRect.origin.x -= ( fieldSize.width - fieldRect.size.width)
                     fieldRect.size.width = fieldSize.width
                 }
+                
+                fieldRect.origin.y += (rect.height - fieldSize.height) / 2.0
                 /*let context = NSStringDrawingContext()
                 context.minimumScaleFactor = 0.7
                 (fmtField as NSString).draw(with: fieldRect, options: [], attributes: self.fieldAttribute, context: context)*/
