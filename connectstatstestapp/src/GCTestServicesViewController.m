@@ -33,6 +33,7 @@
 #import "GCTestServiceBugReport.h"
 #import "GCTestServiceConnectStats.h"
 #import "GCTestServiceCompare.h"
+#import "GCTestServiceGarminBoth.h"
 
 NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
 
@@ -56,6 +57,10 @@ NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
                                                   usingBlock:^(NSNotification*n){
         [self saveSettings];
     }];
+    
+    self.runner.postRun = ^(RZUnitTest*test,NSDictionary*def){
+        [self postRunSettingAction:test];
+    };
     // Do any additional setup after loading the view.
 }
 
@@ -68,6 +73,14 @@ NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
     
     [super dealloc];
 }
+
+-(void)postRunSettingAction:(RZUnitTest*)test{
+    
+    if( [test respondsToSelector:@selector(garminSource)]){
+        [self syncSettings];
+    }
+}
+
 -(void)saveSettings{
     [self.profile saveToSettings:self.settings];
     [RZFileOrganizer saveDictionary:self.settings withName:kPreservedSettingsName];
@@ -99,6 +112,7 @@ NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
 */
 -(NSArray*)allTestClassNames{
     return @[
+        NSStringFromClass([GCTestServiceGarminBoth class]),
         NSStringFromClass([GCTestServiceGarmin class]),
         NSStringFromClass([GCTestServiceConnectStats class]),
         NSStringFromClass([GCTestServiceStrava class]),

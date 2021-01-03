@@ -384,7 +384,7 @@
 
     GCStatsDataSerieWithUnit * final = [GCStatsDataSerieWithUnit dataSerieWithUnit:[GCUnit unitForKey:@"mps"] andSerie:speedmps];
     final.xUnit = [GCUnit unitForKey:@"second"];
-    if ([self.activityType isEqualToString:GC_TYPE_RUNNING]) {
+    if ([GCFields pacePreferredForActivityType:self.activityType]) {
         [final convertToUnit:[GCUnit unitForKey:@"minperkm"]];
     }else{
         [final convertToUnit:[GCUnit unitForKey:@"kph"]];

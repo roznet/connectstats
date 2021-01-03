@@ -324,13 +324,13 @@
 
 -(void)addPaceIfNecessaryWithSummary:(NSMutableDictionary<GCField*,GCActivitySummaryValue*>*)newSummaryData{
     GCActivitySummaryValue * speed = newSummaryData[ [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:self.activityType]];
-    if (speed && ([self.activityType isEqualToString:GC_TYPE_RUNNING] || [self.activityType isEqualToString:GC_TYPE_SWIMMING])) {
+    if (speed && [GCFields pacePreferredForActivityType:self.activityType]) {
         GCField * field = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:self.activityType];
         GCNumberWithUnit * val = [[speed numberWithUnit] convertToUnit:field.unit];
         newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
     }
     GCActivitySummaryValue * movingSpeed = newSummaryData[ [GCField fieldForKey:@"WeightedMeanMovingSpeed" andActivityType:self.activityType] ];
-    if(movingSpeed && [self.activityType isEqualToString:GC_TYPE_RUNNING]){
+    if(movingSpeed && [GCFields pacePreferredForActivityType:self.activityType]){
         GCField * field = [GCField fieldForKey:@"WeightedMeanMovingSpeed" andActivityType:self.activityType];
 
         GCNumberWithUnit * val = [[movingSpeed numberWithUnit] convertToUnit:field.unit];

@@ -257,7 +257,7 @@
 }
 
 -(void)addPaceIfNecessaryWithSummary:(NSMutableDictionary<NSString*,GCNumberWithUnit*>*)newSummaryData{
-    if( ([self.activityTypeAsString isEqualToString:GC_TYPE_RUNNING] || [self.activityTypeAsString isEqualToString:GC_TYPE_SWIMMING]) ){
+    if( [GCFields pacePreferredForActivityType:self.activityTypeAsString] ){
         for( NSString * fieldkey in @[ @"WeightedMeanSpeed", @"WeightedMeanMovingSpeed" ] ){
             GCNumberWithUnit * speed = newSummaryData[ fieldkey ];
             if (speed ) {

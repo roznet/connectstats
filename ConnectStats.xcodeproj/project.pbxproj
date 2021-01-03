@@ -322,6 +322,7 @@
 		4239CD6C1C4B93AE0059B83D /* GCCalendarDataMarkerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4239CD6A1C4B93AE0059B83D /* GCCalendarDataMarkerInfo.m */; };
 		4239E4CC19ABDA65000E67A2 /* GCStatsOneFieldConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 425257F919AB905300993F61 /* GCStatsOneFieldConfig.m */; };
 		423B462F1CDFE03400743D79 /* GCUnit+FIT.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B462E1CDFE03400743D79 /* GCUnit+FIT.m */; };
+		423B638F25A226E000AB2A78 /* GCTestServiceGarminBoth.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B638E25A226E000AB2A78 /* GCTestServiceGarminBoth.m */; };
 		423D744E22F0DCFF00EE3E71 /* last_cs_search_1451.json in Resources */ = {isa = PBXBuildFile; fileRef = 423D744D22F0DCFF00EE3E71 /* last_cs_search_1451.json */; };
 		423D745022F5704C00EE3E71 /* last_cs_search_1525.json in Resources */ = {isa = PBXBuildFile; fileRef = 423D744F22F5704C00EE3E71 /* last_cs_search_1525.json */; };
 		423D746322F59D9A00EE3E71 /* FITFitFieldMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423D746222F59D9A00EE3E71 /* FITFitFieldMap.swift */; };
@@ -1632,6 +1633,9 @@
 		4239CD6A1C4B93AE0059B83D /* GCCalendarDataMarkerInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCCalendarDataMarkerInfo.m; path = src/GCCalendarDataMarkerInfo.m; sourceTree = "<group>"; };
 		423B462D1CDFE03400743D79 /* GCUnit+FIT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCUnit+FIT.h"; path = "src/GCUnit+FIT.h"; sourceTree = "<group>"; };
 		423B462E1CDFE03400743D79 /* GCUnit+FIT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCUnit+FIT.m"; path = "src/GCUnit+FIT.m"; sourceTree = "<group>"; };
+		423B638D25A226E000AB2A78 /* GCTestServiceGarminBoth.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceGarminBoth.h; path = connectstatstestapp/src/GCTestServiceGarminBoth.h; sourceTree = SOURCE_ROOT; };
+		423B638E25A226E000AB2A78 /* GCTestServiceGarminBoth.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceGarminBoth.m; path = connectstatstestapp/src/GCTestServiceGarminBoth.m; sourceTree = SOURCE_ROOT; };
+		423B639425A22A0500AB2A78 /* rzutils-touch */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "rzutils-touch"; path = "../rzutils-touch"; sourceTree = "<group>"; };
 		423D744D22F0DCFF00EE3E71 /* last_cs_search_1451.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_cs_search_1451.json; sourceTree = "<group>"; };
 		423D744F22F5704C00EE3E71 /* last_cs_search_1525.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_cs_search_1525.json; sourceTree = "<group>"; };
 		423D746222F59D9A00EE3E71 /* FITFitFieldMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITFitFieldMap.swift; path = src/FITFitFieldMap.swift; sourceTree = "<group>"; };
@@ -2920,6 +2924,8 @@
 				42CC45CF200A6E91003EB805 /* GCTestServiceBugReport.m */,
 				42B407FF22E38CFA005C61C4 /* GCTestServiceCompare.h */,
 				42B4080022E38CFA005C61C4 /* GCTestServiceCompare.m */,
+				423B638D25A226E000AB2A78 /* GCTestServiceGarminBoth.h */,
+				423B638E25A226E000AB2A78 /* GCTestServiceGarminBoth.m */,
 			);
 			name = TestServices;
 			sourceTree = "<group>";
@@ -3692,6 +3698,7 @@
 		428FF6FE15F36888007A88FA = {
 			isa = PBXGroup;
 			children = (
+				423B639425A22A0500AB2A78 /* rzutils-touch */,
 				4245CD811B7DE351006B85B4 /* Common */,
 				428FF71315F36888007A88FA /* ConnectStats */,
 				4253B4571CD49F7E00437E6A /* FitFileExplorer */,
@@ -6772,6 +6779,7 @@
 				42B5E2921BA5B216000FAE4E /* GCGarminActivityDetailJsonParser.m in Sources */,
 				429133EA24D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.m in Sources */,
 				421BD67924D6BED500F47190 /* GCStatsMultiFieldConfigViewController.swift in Sources */,
+				423B638F25A226E000AB2A78 /* GCTestServiceGarminBoth.m in Sources */,
 				42B5E2931BA5B216000FAE4E /* GCGarminActivitySummaryParser.m in Sources */,
 				42B5E2941BA5B216000FAE4E /* GCGarminUserJsonParser.m in Sources */,
 				4277C0BE23BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m in Sources */,

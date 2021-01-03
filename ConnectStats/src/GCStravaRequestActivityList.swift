@@ -55,7 +55,7 @@ import RZUtilsSwift
     @objc func debugDescription() -> String {
         var info = "first"
         if self.page > 0 {
-            info = String(format: "%@[%@]", (self.lastFoundDate as NSDate).yyyymmdd(),self.page)
+            info = String(format: "%@[\(self.page)]", (self.lastFoundDate as NSDate).yyyymmdd())
         }
         if self.reloadAll {
             info.append("/all")
@@ -111,6 +111,7 @@ import RZUtilsSwift
         if let newDate = parser.activities.last?.date {
             self.lastFoundDate = newDate
         }
+        self.searchMore = listRegister.shouldSearchForMore(with: 30, reloadAll: self.reloadAll)
     }
     
     @objc override var nextReq: GCWebRequestStandard? {

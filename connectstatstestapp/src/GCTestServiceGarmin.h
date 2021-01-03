@@ -24,7 +24,8 @@
 //  
 
 @import RZUtilsTestInfra;
+#import "GCTestServiceConnectStats.h"
 
-@interface GCTestServiceGarmin : RZUnitTest<RZChildObject>
+@interface GCTestServiceGarmin : GCTestServiceConnectStats
 
 @end

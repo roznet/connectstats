@@ -1,8 +1,8 @@
 //  MIT License
 //
-//  Created on 13/01/2018 for ConnectStatsTestApp
+//  Created on 03/01/2021 for ConnectStatsTestApp
 //
-//  Copyright (c) 2018 Brice Rosenzweig
+//  Copyright (c) 2021 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +25,12 @@
 
 
 
-#import "GCTestServiceStrava.h"
-#import "GCAppGlobal.h"
-#import "GCWebConnect+Requests.h"
-#import "GCWebUrl.h"
-#import "GCTestServiceCompare.h"
-#import "GCTestAppGlobal.h"
+#import "GCTestServiceConnectStats.h"
 
-@implementation GCTestServiceStrava
--(gcGarminDownloadSource)garminSource{
-    return gcGarminDownloadSourceEnd;
-}
+NS_ASSUME_NONNULL_BEGIN
+
+@interface GCTestServiceGarminBoth : GCTestServiceConnectStats
 
 @end
+
+NS_ASSUME_NONNULL_END

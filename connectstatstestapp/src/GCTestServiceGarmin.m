@@ -30,80 +30,10 @@
 #import "GCTestServiceCompare.h"
 #import "GCTestAppGlobal.h"
 
-@interface GCTestServiceGarmin ()
-@property (assign) gcTestStageServiceCompare stage;
-@end
-
 @implementation GCTestServiceGarmin
 
--(NSArray*)testDefinitions{
-    return @[ @{TK_SEL:NSStringFromSelector(@selector(testGarminConnectModern)),
-                TK_DESC:@"Try to login and download one list of activity modern",
-                TK_SESS:@"GC Garmin Connect Alt"},
-
-              ];
+-(gcGarminDownloadSource)garminSource{
+    return gcGarminDownloadSourceGarminWeb;
 }
 
--(void)testGarminConnectModern{
-    [self startSession:@"GC Garmin Connect Alt"];
-    GCWebUseSimulator(FALSE, nil);
-
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        [GCTestAppGlobal setupEmptyState:kDbPathServiceGarmin withSettingsName:kPreservedSettingsName];
-        [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:YES];
-        [[GCAppGlobal profile] configSet:CONFIG_GARMIN_USE_MODERN boolVal:YES];
-
-        self.stage = gcTestServiceServiceCompareSearch;
-
-        [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
-        /*dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-         [self timeOutCheck];
-         });*/
-        [[GCAppGlobal web] attach:self];
-        [GCAppGlobal web].validateNextSearch = ^(NSDate* lastFound,NSUInteger count){
-            BOOL rv = count < 100;
-            return rv;
-        };
-        [[GCAppGlobal web] servicesSearchRecentActivities];
-    });
-}
-
--(void)testGarminConnectModernEnd{
-    // Need to detach from worker thread as there
-    // maybe quite a few async processes from worker left taht are cleaning up
-    // and may call notify. Need to avoid notify while detach on different thread
-    dispatch_async([GCAppGlobal worker], ^(){
-        [[GCAppGlobal web] detach:self];
-        [GCAppGlobal web].validateNextSearch = nil;
-    });
-
-
-    [self endSession:@"GC Garmin Connect Alt"];
-}
-
--(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
-    if( [theParent respondsToSelector:@selector(currentDescription)]){
-        [self log:@"%@: %@", theInfo.stringInfo, [theParent currentDescription]];
-    }
-    RZ_ASSERT(![[theInfo stringInfo] isEqualToString:@"error"], @"Web request had no error");
-    if ([[theInfo stringInfo] isEqualToString:@"end"] || [[theInfo stringInfo] isEqualToString:@"error"]) {
-        self.stage += 1;
-        
-        if( self.stage == gcTestServiceServiceCompareDetails){
-            
-            RZ_ASSERT(kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities], @"Stage within activities count");
-            if( kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities] ){
-                // we are in middle of notification don't offload starting download
-                dispatch_async([GCAppGlobal worker], ^(){
-                    if( ![[GCAppGlobal web] downloadMissingActivityDetails:kCompareDetailCount]){
-                        [self testGarminConnectModernEnd];
-                    }
-                });
-                
-            }
-        }else{
-            [self testGarminConnectModernEnd];
-        }        
-    }
-}
 @end

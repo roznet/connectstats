@@ -23,10 +23,10 @@
 //  SOFTWARE.
 //
 
-
-
 @import RZUtilsTestInfra;
 
-@interface GCTestServiceStrava : RZUnitTest<RZChildObject>
+#import "GCTestServiceConnectStats.h"
+
+@interface GCTestServiceStrava : GCTestServiceConnectStats
 
 @end
