@@ -80,7 +80,9 @@ import RZUtilsSwift
     //MARK: - Processing
     
     override func process(data : Data) {
-        try? data.write(to: URL(fileURLWithPath: self.searchFileName(page: self.page)))
+        #if targetEnvironment(simulator)
+        try? data.write(to: URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(self.searchFileName(page: self.page))))
+        #endif
         
         GCAppGlobal.worker().async {
             if let parser = GCStravaActivityListParser(data) {

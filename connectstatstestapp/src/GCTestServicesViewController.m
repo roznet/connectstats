@@ -73,6 +73,16 @@ NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
     [RZFileOrganizer saveDictionary:self.settings withName:kPreservedSettingsName];
 }
 
+-(void)syncSettings{
+    [[GCAppGlobal profile] saveToSettings:self.settings];
+    [RZFileOrganizer saveDictionary:self.settings withName:kPreservedSettingsName];
+}
+
+-(void)resetSettings{
+    self.profile = [GCAppProfiles singleProfileWithValues:@{PROFILE_LOGIN_NAME:[self.profile currentLoginNameForService:gcServiceGarmin]}];
+    [self saveSettings];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -107,7 +117,7 @@ NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
 }
 
 -(void)showConfig:(id)button{
-    [self.navigationController pushViewController:[GCTestServiceConfigViewController configForProfile:self.profile] animated:YES];
+    [self.navigationController pushViewController:[GCTestServiceConfigViewController configForProfile:self.profile controller:self] animated:YES];
 }
 
 @end

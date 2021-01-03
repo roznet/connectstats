@@ -57,7 +57,8 @@
 
 #pragma mark - search activity list
 
--(void)downloadMissingActivityDetails:(NSUInteger)n{
+-(BOOL)downloadMissingActivityDetails:(NSUInteger)n{
+    BOOL rv = true;
     NSArray * activities = [[GCAppGlobal organizer] activities];
     NSUInteger i = 0;
     NSDate * mostRecent = nil;
@@ -86,8 +87,10 @@
     if( oldest != nil && mostRecent != nil){
         RZLog(RZLogInfo, @"Download %lu Missing Details from %@ to %@", (unsigned long)i+1, oldest.YYYYdashMMdashDD, mostRecent.YYYYdashMMdashDD);
     }else{
-        RZLog(RZLogInfo, @"Download Missing Details (none required out of %lu activities", (unsigned long)activities.count);
+        RZLog(RZLogInfo, @"Download Missing Details (none required out of %lu activities)", (unsigned long)activities.count);
+        rv = false;
     }
+    return rv;
 }
 
 -(void)servicesSearch:(BOOL)reloadAll{

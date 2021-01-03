@@ -27,19 +27,24 @@
 
 #import "GCTestServiceConfigViewController.h"
 #import "GCTestServicesViewController.h"
+#import "GCConnectStatsRequest.h"
+#import "ConnectStats-Swift.h"
+#import "GCTestServicesViewController.h"
 
 @interface GCTestServiceConfigViewController ()
 @property (retain, nonatomic) GCAppProfiles * profile;
 @property (retain, nonatomic) IBOutlet UITextField *garminUserName;
 @property (retain, nonatomic) IBOutlet UITextField *garminPassword;
+@property (weak, nonatomic) GCTestServicesViewController *serviceViewController;
 
 @end
 
 @implementation GCTestServiceConfigViewController
 
-+(GCTestServiceConfigViewController*)configForProfile:(GCAppProfiles*)profile{
++(GCTestServiceConfigViewController*)configForProfile:(GCAppProfiles*)profile controller:(GCTestServicesViewController *)vc{
     GCTestServiceConfigViewController * rv = RZReturnAutorelease([[GCTestServiceConfigViewController alloc]  initWithNibName:@"GCTestServiceConfig" bundle:nil]);
     rv.profile = profile;
+    rv.serviceViewController = vc;
     
     return rv;
 }
@@ -71,6 +76,21 @@
 }
 */
 
+- (IBAction)saveButton:(id)sender {
+    [self.serviceViewController syncSettings];
+}
+
+- (IBAction)logoutButton:(id)sender {
+    [GCConnectStatsRequest signout];
+    [GCStravaRequestBase signout];
+    
+    [self.serviceViewController syncSettings];
+}
+
+-(IBAction)clearButton:(id)sender{
+    [self.serviceViewController resetSettings];
+
+}
 
 -(void)recordChange:(UITextField*)textField{
     if( textField == self.garminUserName){
@@ -78,7 +98,7 @@
     }else if ( textField == self.garminPassword ){
         [self.profile setPassword:textField.text forService:gcServiceGarmin];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationProfileChanged object:nil];
+    [self.serviceViewController saveSettings];
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField{

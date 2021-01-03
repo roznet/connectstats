@@ -71,7 +71,6 @@ NSInteger kServiceNoAnchor = 0;
     return @{PROFILE_LOGIN_NAME:@"",
              PROFILE_NAME:@"Default",
              PROFILE_DBPATH:@"activities.db",
-             PROFILE_SERVICE_FULL_DONE:@(false)
     };
 }
 

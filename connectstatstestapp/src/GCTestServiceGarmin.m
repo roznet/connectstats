@@ -95,7 +95,9 @@
             if( kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities] ){
                 // we are in middle of notification don't offload starting download
                 dispatch_async([GCAppGlobal worker], ^(){
-                    [[GCAppGlobal web] downloadMissingActivityDetails:kCompareDetailCount];
+                    if( ![[GCAppGlobal web] downloadMissingActivityDetails:kCompareDetailCount]){
+                        [self testGarminConnectModernEnd];
+                    }
                 });
                 
             }

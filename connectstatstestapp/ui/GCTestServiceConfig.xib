@@ -53,23 +53,44 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vg2-sl-Cpd">
                     <rect key="frame" x="170.5" y="204" width="34" height="30"/>
                     <state key="normal" title="Save"/>
+                    <connections>
+                        <action selector="saveButton:" destination="-1" eventType="touchUpInside" id="bJu-xa-21r"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YxI-Lz-Fi4">
+                    <rect key="frame" x="163.5" y="271" width="48" height="30"/>
+                    <state key="normal" title="Logout"/>
+                    <connections>
+                        <action selector="logoutButton:" destination="-1" eventType="touchUpInside" id="nQF-bs-piJ"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fjx-uW-I44">
+                    <rect key="frame" x="169.5" y="342" width="36" height="30"/>
+                    <state key="normal" title="Clear"/>
+                    <connections>
+                        <action selector="clearButton:" destination="-1" eventType="touchUpInside" id="VTR-4o-7y4"/>
+                    </connections>
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="kWo-ro-MZp" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="1U3-oU-voW"/>
+                <constraint firstItem="YxI-Lz-Fi4" firstAttribute="top" secondItem="vg2-sl-Cpd" secondAttribute="bottom" constant="37" id="AAN-PU-9pI"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="8b4-sw-OAm" secondAttribute="trailing" constant="10" id="BQQ-yp-zVu"/>
+                <constraint firstItem="YxI-Lz-Fi4" firstAttribute="centerX" secondItem="vg2-sl-Cpd" secondAttribute="centerX" id="EbI-VS-yYP"/>
                 <constraint firstItem="8b4-sw-OAm" firstAttribute="top" secondItem="kWo-ro-MZp" secondAttribute="bottom" constant="10" id="Fad-Gj-fju"/>
                 <constraint firstItem="SK2-7r-3SB" firstAttribute="top" secondItem="cqK-QJ-gwO" secondAttribute="bottom" constant="10" id="IdH-7y-pBp"/>
                 <constraint firstItem="SK2-7r-3SB" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="Woe-6Y-8Hz"/>
                 <constraint firstItem="vg2-sl-Cpd" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="YNn-kC-X4w"/>
                 <constraint firstItem="8b4-sw-OAm" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="b4c-sy-P5s"/>
+                <constraint firstItem="fjx-uW-I44" firstAttribute="top" secondItem="YxI-Lz-Fi4" secondAttribute="bottom" constant="41" id="cDS-Qe-aj0"/>
                 <constraint firstItem="8b4-sw-OAm" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="fVJ-tl-bpw"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="SK2-7r-3SB" secondAttribute="trailing" constant="10" id="iZI-uI-lqe"/>
                 <constraint firstItem="SK2-7r-3SB" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="lpM-IG-fEh"/>
                 <constraint firstItem="cqK-QJ-gwO" firstAttribute="top" secondItem="8b4-sw-OAm" secondAttribute="bottom" constant="10" id="nmd-fW-xGA"/>
                 <constraint firstItem="vg2-sl-Cpd" firstAttribute="top" secondItem="SK2-7r-3SB" secondAttribute="bottom" constant="14" id="qZz-wo-oG1"/>
+                <constraint firstItem="fjx-uW-I44" firstAttribute="centerX" secondItem="YxI-Lz-Fi4" secondAttribute="centerX" id="sO0-j8-R7m"/>
                 <constraint firstItem="cqK-QJ-gwO" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="sTr-BS-TyH"/>
                 <constraint firstItem="kWo-ro-MZp" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="50" id="y9A-lM-g8U"/>
             </constraints>

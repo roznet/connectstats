@@ -77,17 +77,19 @@ class GCStravaRequestStreams: GCStravaRequestBase {
 
     //MARK: - Processing
     
-    func saveDataFileURL() -> URL {
+    func saveDataFileName() -> String {
         let sid : String = self.stravaActivityId() ?? self.activity.activityId
         if self.points == nil {
-            return URL( fileURLWithPath: "strava_stream_\(sid).json")
+            return "strava_stream_\(sid).json"
         }else{
-            return URL( fileURLWithPath:  "strava_laps_\(sid).json")
+            return "strava_laps_\(sid).json"
         }
     }
     
     override func process(data: Data) {
-        try? data.write(to: self.saveDataFileURL())
+        #if targetEnvironment(simulator)
+        try? data.write(to: URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(self.saveDataFileName())))
+        #endif
         
         GCAppGlobal.worker().async {
             if self.points == nil {

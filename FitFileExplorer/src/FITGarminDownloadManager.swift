@@ -90,20 +90,19 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
         if( self.loginSuccessful != true ){
             let login = FITAppGlobal.currentLoginName()
             let passd = FITAppGlobal.currentPassword()
-            
-            FITAppGlobal.web().addRequest(GCGarminLoginSSORequest(user: login, andPwd: passd, validation: nil))
+            FITAppGlobal.web().add(GCGarminLoginSSORequest(user: login, andPwd: passd, validation: nil))
         }
     }
     
     func startDownloadList(){
         garminInit()
-        FITAppGlobal.web().addRequest(GarminRequestActivityList(start: 0))
+        FITAppGlobal.web().add(GarminRequestActivityList(start: 0))
     }
     
     func startDownloadFitFiles(activities : [Activity] ){
         garminInit()
         for act in activities {
-            FITAppGlobal.web().addRequest(GarminRequestFitFile(activityId: act.activityId))
+            FITAppGlobal.web().add(GarminRequestFitFile(activityId: act.activityId))
         }
     }
     

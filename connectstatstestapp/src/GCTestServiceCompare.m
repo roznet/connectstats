@@ -156,7 +156,9 @@ NSString * kJsonKeyTypes = @"types";
     GCNumberWithUnit * nu_one = [one numberWithUnitForField:field];
     GCNumberWithUnit * nu_two = [two numberWithUnitForField:field];
     
-    RZ_ASSERT([[nu_one formatDouble] isEqualToString:[nu_two formatDouble]],  @"%@:%@ %@:%@ == %@:%@", field, one, nameOne, nu_one, nameTwo, nu_two );
+    if( ![[nu_one formatDouble] isEqualToString:[nu_two formatDouble]]){
+        RZLog(RZLogWarning,  @"DIFF %@:%@ %@:%@ != %@:%@", one, field, nameOne, nu_one, nameTwo, nu_two );
+    }
     //RZ_ASSERT([nu_one compare:nu_two withTolerance:1.e-5] == NSOrderedSame, @"%@:%@ %@ == %@", field, one, nu_one, nu_two );
     
 }
@@ -182,10 +184,14 @@ NSString * kJsonKeyTypes = @"types";
         }
         NSLog(@"Found %@:%@ = %@:%@", nameOne, activityOne, nameTwo, activityTwo);
         
-        if( /* DISABLES CODE */ (false) ){
+        if( /* DISABLES CODE */ (true) ){
             // Slight difference for a few instance, not exact match
             [self compareField:gcFieldFlagSumDuration forActivity:activityOne withName:nameOne and:activityTwo withName:nameTwo];
             [self compareField:gcFieldFlagSumDistance forActivity:activityOne withName:nameOne and:activityTwo withName:nameTwo];
+            
+            [self compareField:gcFieldFlagWeightedMeanSpeed forActivity:activityOne withName:nameOne and:activityTwo withName:nameTwo];
+            [self compareField:gcFieldFlagCadence forActivity:activityOne withName:nameOne and:activityTwo withName:nameTwo];
+
         }
     }
     return rv;

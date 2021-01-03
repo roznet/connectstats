@@ -29,4 +29,9 @@ extern NSString * kNotificationProfileChanged;
 
 @interface GCTestServicesViewController : RZTestViewController
 
+
+-(void)saveSettings;
+-(void)syncSettings;
+-(void)resetSettings;
+
 @end

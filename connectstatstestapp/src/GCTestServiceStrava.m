@@ -95,7 +95,9 @@
             RZ_ASSERT(kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities], @"Stage within activities count");
             if( kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities] ){
                 dispatch_async([GCAppGlobal worker], ^(){
-                    [[GCAppGlobal web] downloadMissingActivityDetails:kCompareDetailCount];
+                    if( ![[GCAppGlobal web] downloadMissingActivityDetails:kCompareDetailCount] ){
+                        [self testStravaEnd];
+                    }
                 });
             }
         }else{

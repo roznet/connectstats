@@ -176,8 +176,6 @@
                                  @"anaerobicTrainingEffect" : @1, // sample: 1.600000023841858
                                  @"athlete_count" : @1, // sample: 4
                                  @"autoCalcCalories" : @1, // sample: 0
-                                 @"averageBikingCadenceInRevPerMinute" : @1, // sample: 68
-                                 @"averageRunningCadenceInStepsPerMinute" : @1, // sample: 80
                                  @"averageStrokeDistance" : @1, // sample: 2.589999914169312
                                  @"comment_count" : @1, // sample: 0
                                  @"commute" : @1, // sample: 0
@@ -194,8 +192,6 @@
                                  @"lapIndex" : @1, // sample: 1
                                  @"lengthIndex" : @1, // sample: 1
                                  @"manual" : @1, // sample: 0
-                                 @"maxBikingCadenceInRevPerMinute" : @1, // sample: 91
-                                 @"maxRunningCadenceInStepsPerMinute" : @1, // sample: 120
                                  @"max_watts" : @1, // sample: 474
                                  @"numberOfActiveLengths" : @1, // sample: 120
                                  @"ownerId" : @1, // sample: 3020883
@@ -403,10 +399,10 @@
                             @"totalElevationLossInMeters":@[ @"LossElevation",        @"",                                    @"meter"],
 
                             @"averageBikeCadenceInRoundsPerMinute": @[  @"WeightedMeanBikeCadence", @(gcFieldFlagCadence), @"rpm" ],
-                            @"averageRunCadenceInStepsPerMinute": @[ @"WeightedMeanRunCadence", @(gcFieldFlagCadence), @"stepsPerMinute" ],
+                            @"averageRunCadenceInStepsPerMinute": @[ @"WeightedMeanRunCadence", @(gcFieldFlagCadence), @"doubleStepsPerMinute" ],
 
                             @"maxBikeCadenceInRoundsPerMinute": @[  @"MaxBikeCadence", @(gcFieldFlagCadence), @"rpm" ],
-                            @"maxRunCadenceInStepsPerMinute": @[ @"MaxRunCadence", @(gcFieldFlagCadence), @"stepsPerMinute" ],
+                            @"maxRunCadenceInStepsPerMinute": @[ @"MaxRunCadence", @(gcFieldFlagCadence), @"doubleStepsPerMinute" ],
 
                             
                             };
@@ -666,8 +662,8 @@
                  @"averageStrideLength": @[ @"WeightedMeanStrideLength", @"", @"centimeter"],
                  @"verticalOscillation": @[@"WeightedMeanVerticalOscillation", @"", @"centimeter"],
 
-                 @"averageRunCadence": @[ @"WeightedMeanRunCadence", @(gcFieldFlagCadence), @"doubleStepsPerMinute"],
-                 @"maxRunCadence":   @[ @"MaxRunCadence", @"", @"doubleStepsPerMinute"],
+                 @"averageRunningCadenceInStepsPerMinute": @[ @"WeightedMeanRunCadence", @(gcFieldFlagCadence), @"doubleStepsPerMinute"],
+                 @"maxRunningCadenceInStepsPerMinute":   @[ @"MaxRunCadence", @"", @"doubleStepsPerMinute"],
 
                  @"trainingEffect": @[ @"SumTrainingEffect", @"", @"te"],
                  @"aerobicTrainingEffect": @[ @"SumTrainingEffect", @"", @"te"],
@@ -675,8 +671,9 @@
                  @"lactateThresholdSpeed": 	@[ @"DirectLactateThresholdSpeed", @"", @"mps"],
 
                  /* CYCLE */
-                 @"averageBikeCadence": @[ @"WeightedMeanBikeCadence", @(gcFieldFlagCadence), @"rpm"],
-                 @"maxBikeCadence":   @[ @"MaxBikeCadence", @"", @"rpm"],
+                 
+                 @"averageBikingCadenceInRevPerMinute": @[ @"WeightedMeanBikeCadence", @(gcFieldFlagCadence), @"rpm"],
+                 @"maxBikingCadenceInRevPerMinute":   @[ @"MaxBikeCadence", @"", @"rpm"],
 
                  @"averagePower":       @[ @"WeightedMeanPower",    @(gcFieldFlagPower),                    @"watt"],
                  @"maxPower":       @[ @"MaxPower",    @"",                    @"watt"],
@@ -696,8 +693,8 @@
                  @"totalNumberOfStrokes": @[ @"SumStrokes", @"", @"dimensionless"],
 
                  /* SWIMMING */
-                 @"averageSwimCadence": @[ @"WeightedMeanSwimCadence", @"", @"strokesPerMinute"],
-                 @"maxSwimCadence" : @[ @"MaxSwimCadence", @"", @"strokesPerMinute"],
+                 @"averageSwimCadenceInStrokesPerMinute": @[ @"WeightedMeanSwimCadence", @"", @"strokesPerMinute"],
+                 @"maxSwimCadenceInStrokesPerMinute" : @[ @"MaxSwimCadence", @"", @"strokesPerMinute"],
                  @"totalNumberOfStrokes" : @[ @"SumStrokes", @"", @"dimensionless"],
                  @"averageStrokes": @[ @"WeightedMeanStrokes", @"", @"dimensionless"],
                  @"averageSWOLF" : @[ @"WeightedMeanSwolf", @"", @"dimensionless"],
