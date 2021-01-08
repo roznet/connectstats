@@ -1159,6 +1159,12 @@
 		42BDFE80242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
 		42BDFE81242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
 		42BDFE82242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
+		42BE679925A860E2002505A2 /* GCGarminLoginSSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BE679825A860E2002505A2 /* GCGarminLoginSSO.swift */; };
+		42BE679A25A860E2002505A2 /* GCGarminLoginSSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BE679825A860E2002505A2 /* GCGarminLoginSSO.swift */; };
+		42BE679B25A860E2002505A2 /* GCGarminLoginSSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BE679825A860E2002505A2 /* GCGarminLoginSSO.swift */; };
+		42BE67A925A86FCE002505A2 /* GCGarminLoginSSORequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BE67A825A86FCE002505A2 /* GCGarminLoginSSORequest.swift */; };
+		42BE67AA25A86FCE002505A2 /* GCGarminLoginSSORequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BE67A825A86FCE002505A2 /* GCGarminLoginSSORequest.swift */; };
+		42BE67AB25A86FCE002505A2 /* GCGarminLoginSSORequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BE67A825A86FCE002505A2 /* GCGarminLoginSSORequest.swift */; };
 		42BF8D7924B505EB001E1C72 /* GCActivity+Assets.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D7824B505EB001E1C72 /* GCActivity+Assets.m */; };
 		42BF8D7A24B505EB001E1C72 /* GCActivity+Assets.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D7824B505EB001E1C72 /* GCActivity+Assets.m */; };
 		42BF8D7B24B505EB001E1C72 /* GCActivity+Assets.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BF8D7824B505EB001E1C72 /* GCActivity+Assets.m */; };
@@ -1635,7 +1641,6 @@
 		423B462E1CDFE03400743D79 /* GCUnit+FIT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCUnit+FIT.m"; path = "src/GCUnit+FIT.m"; sourceTree = "<group>"; };
 		423B638D25A226E000AB2A78 /* GCTestServiceGarminBoth.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceGarminBoth.h; path = connectstatstestapp/src/GCTestServiceGarminBoth.h; sourceTree = SOURCE_ROOT; };
 		423B638E25A226E000AB2A78 /* GCTestServiceGarminBoth.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceGarminBoth.m; path = connectstatstestapp/src/GCTestServiceGarminBoth.m; sourceTree = SOURCE_ROOT; };
-		423B639425A22A0500AB2A78 /* rzutils-touch */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "rzutils-touch"; path = "../rzutils-touch"; sourceTree = "<group>"; };
 		423D744D22F0DCFF00EE3E71 /* last_cs_search_1451.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_cs_search_1451.json; sourceTree = "<group>"; };
 		423D744F22F5704C00EE3E71 /* last_cs_search_1525.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_cs_search_1525.json; sourceTree = "<group>"; };
 		423D746222F59D9A00EE3E71 /* FITFitFieldMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITFitFieldMap.swift; path = src/FITFitFieldMap.swift; sourceTree = "<group>"; };
@@ -2379,6 +2384,8 @@
 		42BD319D258B51DF004D5E0F /* GCSettingsBugReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCSettingsBugReport.swift; path = src/GCSettingsBugReport.swift; sourceTree = "<group>"; };
 		42BDFE7E242F7789001BCDC8 /* GCActivity+Series.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GCActivity+Series.h"; path = "src/GCActivity+Series.h"; sourceTree = "<group>"; };
 		42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "GCActivity+Series.m"; path = "src/GCActivity+Series.m"; sourceTree = "<group>"; };
+		42BE679825A860E2002505A2 /* GCGarminLoginSSO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCGarminLoginSSO.swift; path = src/GCGarminLoginSSO.swift; sourceTree = "<group>"; };
+		42BE67A825A86FCE002505A2 /* GCGarminLoginSSORequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCGarminLoginSSORequest.swift; path = src/GCGarminLoginSSORequest.swift; sourceTree = "<group>"; };
 		42BF8D7724B505EB001E1C72 /* GCActivity+Assets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GCActivity+Assets.h"; path = "src/GCActivity+Assets.h"; sourceTree = "<group>"; };
 		42BF8D7824B505EB001E1C72 /* GCActivity+Assets.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "GCActivity+Assets.m"; path = "src/GCActivity+Assets.m"; sourceTree = "<group>"; };
 		42BF8D8624B7708B001E1C72 /* GCWebImagesRequests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCWebImagesRequests.h; path = src/GCWebImagesRequests.h; sourceTree = "<group>"; };
@@ -3698,7 +3705,6 @@
 		428FF6FE15F36888007A88FA = {
 			isa = PBXGroup;
 			children = (
-				423B639425A22A0500AB2A78 /* rzutils-touch */,
 				4245CD811B7DE351006B85B4 /* Common */,
 				428FF71315F36888007A88FA /* ConnectStats */,
 				4253B4571CD49F7E00437E6A /* FitFileExplorer */,
@@ -4205,6 +4211,8 @@
 				42ACFE9418C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.m */,
 				42ACFE9618C099AB00BF27A5 /* GCGarminLoginSSORequest.h */,
 				42ACFE9718C099AB00BF27A5 /* GCGarminLoginSSORequest.m */,
+				42BE67A825A86FCE002505A2 /* GCGarminLoginSSORequest.swift */,
+				42BE679825A860E2002505A2 /* GCGarminLoginSSO.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -6267,6 +6275,7 @@
 				42BFC24E1DCF507600EAD40E /* GCActivitiesOrganizerListRegister.m in Sources */,
 				42BFC2591DCF512F00EAD40E /* GCDerivedGroupedSeries.m in Sources */,
 				4239CD6C1C4B93AE0059B83D /* GCCalendarDataMarkerInfo.m in Sources */,
+				42BE679B25A860E2002505A2 /* GCGarminLoginSSO.swift in Sources */,
 				42A7CCAA246E939300A1AE39 /* GCDerivedQueueElement.m in Sources */,
 				422FAF4019A1DD6000D09773 /* GCActivitySummaryValue.m in Sources */,
 				4277C0C023BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m in Sources */,
@@ -6295,6 +6304,7 @@
 				424208971BCC49E200F3DB12 /* GCActivityPreviewingViewController.m in Sources */,
 				42D4CA7F24951AF2003F3AB7 /* GCLagPeriod.m in Sources */,
 				42BFC2331DCF4DF900EAD40E /* GCAppGlobal.swift in Sources */,
+				42BE67AB25A86FCE002505A2 /* GCGarminLoginSSORequest.swift in Sources */,
 				422FAF7119A1DD6000D09773 /* GCSettingsBugReportViewController.m in Sources */,
 				422FAF7219A1DD6000D09773 /* GCGarminActivityTrack13Request.m in Sources */,
 				42684EF51B2DB4BC001A90D2 /* GCSettingsSourceTableViewController.m in Sources */,
@@ -6467,6 +6477,7 @@
 				42ACFE9518C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.m in Sources */,
 				42E1A75224278037006C868A /* GCCalculatedCachedTrackInfo.m in Sources */,
 				42A99B251B780D9900994917 /* GCWatchSessionManager.m in Sources */,
+				42BE679925A860E2002505A2 /* GCGarminLoginSSO.swift in Sources */,
 				42B955561819B36400BC7AF9 /* GCSettingsReloadViewController.m in Sources */,
 				42959CF018D9016200C0B841 /* GCStravaActivityStreamsParser.m in Sources */,
 				42D4CA8224952616003F3AB7 /* GCStatsDerivedHistoryViewController.m in Sources */,
@@ -6575,6 +6586,7 @@
 				42C1080D1B7DE8B000092315 /* GCApplicationContext.m in Sources */,
 				42453BA51DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m in Sources */,
 				421F39AD1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m in Sources */,
+				42BE67A925A86FCE002505A2 /* GCGarminLoginSSORequest.swift in Sources */,
 				42E186D016A620E900D4513B /* GCGarminRequestActivityReload.m in Sources */,
 				421A514C1C82FA6C00671587 /* GCActivity+Fields.m in Sources */,
 				42E186D316A6225400D4513B /* GCGarminActivitySummaryParser.m in Sources */,
@@ -6714,6 +6726,7 @@
 				42B5E30F1BA5B900000FAE4E /* GCViewConfig.m in Sources */,
 				42295E041EC6F38C00F4F7EE /* GCTestServicesViewController.m in Sources */,
 				427F935F1BEAA09E00C177F9 /* GCTestUISampleDataSourceHolder.m in Sources */,
+				42BE679A25A860E2002505A2 /* GCGarminLoginSSO.swift in Sources */,
 				42B5E3011BA5B8BD000FAE4E /* GCHealthKitDailySummaryParser.m in Sources */,
 				424208901BCAF71500F3DB12 /* GCActivity+UI.m in Sources */,
 				427F93671BEAAAA000C177F9 /* GCTestUISampleCellHolder.m in Sources */,
@@ -6776,6 +6789,7 @@
 				42B5E2901BA5B216000FAE4E /* GCGarminSearchJsonParser.m in Sources */,
 				427F93791BEDFF0400C177F9 /* GCStatsOneFieldViewController.m in Sources */,
 				4209E1921DA44EC800B80735 /* GCActivitiesOrganizerListRegister.m in Sources */,
+				42BE67AA25A86FCE002505A2 /* GCGarminLoginSSORequest.swift in Sources */,
 				42B5E2921BA5B216000FAE4E /* GCGarminActivityDetailJsonParser.m in Sources */,
 				429133EA24D95CC0004BBD11 /* GCHistoryAggregatedDataHolder.m in Sources */,
 				421BD67924D6BED500F47190 /* GCStatsMultiFieldConfigViewController.swift in Sources */,
@@ -7354,7 +7368,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 6.6.1.0;
+				CURRENT_PROJECT_VERSION = 7.0.0.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -7375,7 +7389,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 6.6.1;
+				MARKETING_VERSION = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = (
@@ -7407,7 +7421,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 6.6.1.0;
+				CURRENT_PROJECT_VERSION = 7.0.0.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = NO;
@@ -7429,7 +7443,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 6.6.1;
+				MARKETING_VERSION = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -7837,16 +7851,16 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/roznet/rzexternal";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
 			};
 		};
 		422DCB6D258A2779000DEE4B /* XCRemoteSwiftPackageReference "rzutils" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/roznet/rzutils.git";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
 			};
 		};
 		422DCB84258A27EF000DEE4B /* XCRemoteSwiftPackageReference "fmdb" */ = {
@@ -7861,24 +7875,24 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/roznet/rzutils-touch.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
 			};
 		};
 		422DCC16258A630E000DEE4B /* XCRemoteSwiftPackageReference "FitFileParser" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/roznet/FitFileParser.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
 			};
 		};
 		422DCD72258A74DF000DEE4B /* XCRemoteSwiftPackageReference "rzutils-macos" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/roznet/rzutils-macos";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
 			};
 		};
 		425D249B259E08DC0003574F /* XCRemoteSwiftPackageReference "keychain-swift" */ = {

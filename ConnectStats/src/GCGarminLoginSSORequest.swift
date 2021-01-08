@@ -26,3 +26,12 @@
 
 
 import Foundation
+
+extension GCGarminLoginSSORequest {
+    @objc func swiftLogin() {
+        self.ssoLogin = GCGarminLoginSSO(username: self.uname, password:self.pwd ){ status in
+            self.loginCompleted(status)
+        }
+        self.ssoLogin.start()
+    }
+}

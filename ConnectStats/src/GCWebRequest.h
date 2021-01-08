@@ -41,10 +41,11 @@ typedef NS_ENUM(NSUInteger, GCWebStatus) {
     GCWebStatusDeletedActivity,
     GCWebStatusConnectionError,
     GCWebStatusInternalLogicError,
-    GCWebStatusServiceInternalError,
+    GCWebStatusServiceLogicError,
     GCWebStatusRequireModern,
     GCWebStatusRequirePasswordRenew,
-    GCWebStatusCustomMessage
+    GCWebStatusCustomMessage,
+    GCWebStatusAccountLocked
 };
 
 typedef NS_ENUM(NSUInteger, gcWebService) {

@@ -28,18 +28,9 @@
 import Foundation
 import RZUtilsSwift
 
-@objc class GCGarminSSOLogin : NSObject {
-    @objc enum GarminSSOLoginStatus : Int {
-        case success
-        case internalError
-        case prestartError
-        case ssoError
-        case loginFailed
-        case accountLocked
-        case renewPassword
-    }
-
-    typealias ssoLoginCompletionHandler = (_ : GarminSSOLoginStatus) -> Void
+@objc class GCGarminLoginSSO : NSObject {
+    
+    typealias ssoLoginCompletionHandler = (_ : GCWebStatus) -> Void
 
     let testing = true
     
@@ -71,10 +62,49 @@ import RZUtilsSwift
         self.completion = handler
     }
     
-    func login() {
+    func start() {
         self.preStartStep()
     }
     
+    func executeStep(request : URLRequest?,
+                     completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void){
+        guard let request = request else {
+            self.completion(.internalLogicError)
+            return
+        }
+        
+        self.dataTask = URLSession.shared.dataTask(with: request) { data,response,error in
+            guard let response = (response as? HTTPURLResponse) else {
+                if let error = error {
+                    RZSLog.error("Request failed \(error)")
+                    self.completion(.connectionError)
+                }else{
+                    self.completion(.internalLogicError)
+                }
+                return
+            }
+
+            if response.statusCode == 200 {
+                completionHandler(data,response,error)
+            }else{
+                let url = self.dataTask?.currentRequest?.url?.absoluteString ?? "nourl"
+                RZSLog.error("Service Error \(response.statusCode) \(url)")
+                if response.statusCode == 500 || response.statusCode == 403 {
+                    self.completion(.accessDenied)
+                }else{
+                    self.completion(.serviceLogicError)
+                }
+            }
+        }
+
+        guard let task = self.dataTask else {
+            completion(.internalLogicError)
+            return
+        }
+        
+        task.resume()
+    }
+
     //MARK: - pre Start Step
     
     func preStartStepRequest() -> URLRequest? {
@@ -91,31 +121,9 @@ import RZUtilsSwift
         return getUrlRequest
     }
     func preStartStep(){
-        guard let request = self.preStartStepRequest() else {
-            self.completion(.internalError)
-            return
-        }
-        
-        self.dataTask = URLSession.shared.dataTask(with: request) { data,response,error in
-            guard let response = (response as? HTTPURLResponse) else {
-                self.completion(.internalError)
-                return
-            }
-            
-            guard response.statusCode == 200 else {
-                RZSLog.error("preStart Error \(response.statusCode)")
-                self.completion(.prestartError)
-                return
-            }
-            
+        self.executeStep(request: self.preStartStepRequest() ){ data,response,error in
             self.loginStep()
         }
-        guard let task = self.dataTask else {
-            completion(.internalError)
-            return
-        }
-        
-        task.resume()
     }
     
     //MARK: - login step
@@ -136,26 +144,13 @@ import RZUtilsSwift
 
         return postUrlRequest
     }
+
+
     
     func loginStep(){
-        guard let request = self.loginStepRequest() else {
-            self.completion(.internalError)
-            return
-        }
-        
-        self.dataTask = URLSession.shared.dataTask(with: request) { data,response,error in
-            guard let response = (response as? HTTPURLResponse) else {
-                self.completion(.internalError)
-                return
-            }
-            
-            guard response.statusCode == 200 else {
-                RZSLog.error("login Error \(response.statusCode)")
-                self.completion(.ssoError)
-                return
-            }
+        self.executeStep(request: self.loginStepRequest() ) { data,response,error in
             // check for specific error in the response
-            var status = GarminSSOLoginStatus.success
+            var status = GCWebStatus.OK
             if //let encoding = response.textEncodingName,
                let data = data,
                let responseText : String = String(data: data, encoding: .utf8) {
@@ -164,23 +159,18 @@ import RZUtilsSwift
                 }else if responseText.contains( ">sendEvent('ACCOUNT_LOCK')" ){
                     status = .accountLocked
                 }else if responseText.contains( "renewPassword"){
-                    status = .renewPassword
+                    status = .requirePasswordRenew
+                }else if responseText.contains("temporarily unavailable") {
+                    status = .tempUnavailable
                 }
             }
             
-            if status == .success {
+            if status == .OK {
                 self.cookieStep()
             }else{
                 self.completion(status)
             }
         }
-
-        guard let task = self.dataTask else {
-            completion(.internalError)
-            return
-        }
-        
-        task.resume()
     }
     
     //MARK: - cookie Step
@@ -197,33 +187,8 @@ import RZUtilsSwift
     }
     
     func cookieStep(){
-        guard let request = self.cookieStepRequest() else {
-            self.completion(.internalError)
-            return
+        self.executeStep(request: self.cookieStepRequest() ) { data,response,error in
+            self.completion(.OK)
         }
-        
-        self.dataTask = URLSession.shared.dataTask(with: request) { data,response,error in
-            guard let response = (response as? HTTPURLResponse) else {
-                self.completion(.internalError)
-                return
-            }
-            
-            guard response.statusCode == 200 else {
-                RZSLog.error("Garmin Access Error \(response.statusCode)")
-                self.completion(.ssoError)
-                return
-            }
-            
-            self.completion(.success)
-        }
-
-        guard let task = self.dataTask else {
-            completion(.internalError)
-            return
-        }
-        
-        task.resume()
     }
-
-    
 }

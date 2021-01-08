@@ -207,7 +207,7 @@
     GCActivity * act = [[GCActivity alloc] init];
     [act changeActivityType:[GCActivityType running]];
 
-    NSDictionary * d = @{ @"averageRunCadence": @180.0,
+    NSDictionary * d = @{ @"averageRunningCadenceInStepsPerMinute": @180.0,
                           @"duration": @"3.",
                           @"averageSpeed": @3.,
                           @"averagePower": @3000.0,

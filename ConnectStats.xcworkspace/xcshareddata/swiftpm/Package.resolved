@@ -41,9 +41,9 @@
         "package": "FitFileParser",
         "repositoryURL": "https://github.com/roznet/FitFileParser.git",
         "state": {
-          "branch": "main",
-          "revision": "7b57e7577cf4e543ccc4e5af0d2ec77669c60b8d",
-          "version": null
+          "branch": null,
+          "revision": "372e19eac4a1dbbb44d2aaafc07d3415a636fc98",
+          "version": "1.3.0"
         }
       },
       {
@@ -95,36 +95,36 @@
         "package": "RZExternal",
         "repositoryURL": "https://github.com/roznet/rzexternal",
         "state": {
-          "branch": "master",
+          "branch": null,
           "revision": "5739045c1f6ebbbfec939bc64d233357c87273e3",
-          "version": null
+          "version": "1.0.0"
         }
       },
       {
         "package": "RZUtils",
         "repositoryURL": "https://github.com/roznet/rzutils.git",
         "state": {
-          "branch": "master",
+          "branch": null,
           "revision": "95e57e6c3cf9f55a785d5dc8b72e6bd06f18dd64",
-          "version": null
+          "version": "1.0.1"
         }
       },
       {
         "package": "RZUtilsMacOS",
         "repositoryURL": "https://github.com/roznet/rzutils-macos",
         "state": {
-          "branch": "main",
+          "branch": null,
           "revision": "9b567821a8113338f75c9fb83da469d07eb5e233",
-          "version": null
+          "version": "1.0.0"
         }
       },
       {
         "package": "RZUtilsTouch",
         "repositoryURL": "https://github.com/roznet/rzutils-touch.git",
         "state": {
-          "branch": "main",
-          "revision": "82f5b76990b6929c78cdf105237f78822b8c27b3",
-          "version": null
+          "branch": null,
+          "revision": "8dfb8e43574e8340abfddf831583cbc5985017c1",
+          "version": "1.0.1"
         }
       },
       {
@@ -150,7 +150,7 @@
         "repositoryURL": "https://github.com/roznet/ZIPFoundation",
         "state": {
           "branch": "development",
-          "revision": "20102f58d4914a46aeb9b4614db540a679aa62aa",
+          "revision": "7b76af511c2b5dcc854b7195eaf24d2974249621",
           "version": null
         }
       }

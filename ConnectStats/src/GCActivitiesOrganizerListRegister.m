@@ -106,6 +106,10 @@ NSUInteger kDownloadTrackPointCount = 5;
             if( [organizer registerActivity:activity forActivityId:activity.activityId] ){
                 actuallyAdded += 1;
             }else{
+                // If it wasn't register it could be it was a duplicate
+                // But during the first check that wasn't known
+                // so check again to avoid doing track load later
+                knownDuplicate = [organizer isKnownDuplicate:activity];
                 skipped += 1;
             }
             if( self.loadTracks > 0 && ! knownDuplicate){

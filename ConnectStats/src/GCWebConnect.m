@@ -61,8 +61,8 @@ NSString * GCWebStatusDescription(GCWebStatus status){
         case GCWebStatusInternalLogicError:
             rv = NSLocalizedString(@"Internal Logic Error", @"GCWebStatus");
             break;
-        case GCWebStatusServiceInternalError:
-            rv = NSLocalizedString(@"Service Internal Error", @"GCWebStatus");
+        case GCWebStatusServiceLogicError:
+            rv = NSLocalizedString(@"Service Logic Error", @"GCWebStatus");
             break;
         case GCWebStatusRequireModern:
             rv = NSLocalizedString(@"Switch to Garmin Connect Modern required", @"GCWebStatus");
@@ -73,6 +73,10 @@ NSString * GCWebStatusDescription(GCWebStatus status){
         case GCWebStatusCustomMessage:
             rv = NSLocalizedString(@"Custom Message", @"GCWebStatus");
             break;
+        case GCWebStatusAccountLocked:
+            rv = NSLocalizedString(@"Account Locked", @"GCWebStatus");
+            break;
+
     }
     return rv;
 }
@@ -104,7 +108,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
         case GCWebStatusInternalLogicError:
             rv = @"InternalLogicError";
             break;
-        case GCWebStatusServiceInternalError:
+        case GCWebStatusServiceLogicError:
             rv = @"ServiceInternalError";
             break;
         case GCWebStatusRequireModern:
@@ -113,9 +117,11 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
         case GCWebStatusRequirePasswordRenew:
             rv = @"RequirePasswordRenew";
             break;
-            
         case GCWebStatusCustomMessage:
             rv = @"CustomMessage";
+            break;
+        case GCWebStatusAccountLocked:
+            rv = @"AccountLocked";
             break;
     }
     return rv;

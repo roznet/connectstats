@@ -41,6 +41,7 @@
 #import "GCActivity+TrackTransform.h"
 #import "GCactivity+Series.h"
 #import "GCHistoryFieldDataHolder.h"
+#import "GCConnectStatsSearchJsonParser.h"
 
 @interface GCTestsParsing : GCTestCase
 
@@ -273,172 +274,46 @@
 }
 
 -(void)testParseAndCompare{
-    
-    
-    NSData * searchLegacyInfo = [NSData  dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_search_modern.json"
+    NSData * searchConnectStatsInfo = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_connectstats_search_0.json"
                                                                                        forClass:[self class]]];
-    NSData * searchModernInfo = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"activities_list_modern.json"
+    NSData * searchModernInfo = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_modern_search_0.json"
                                                                                       forClass:[self class]]];
-    NSData * searchStravaInfo =[NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"strava_list.json"
+    NSData * searchStravaInfo =[NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_strava_search_0.json"
                                                                                      forClass:[self class]]];
     
-    GCGarminSearchJsonParser * parser=[[[GCGarminSearchJsonParser alloc] initWithData:searchLegacyInfo] autorelease];
+    GCConnectStatsSearchJsonParser * connectStatsParser= [[[GCConnectStatsSearchJsonParser alloc] initWithData:searchConnectStatsInfo] autorelease];
     GCGarminSearchModernJsonParser * modernParser = [[[GCGarminSearchModernJsonParser alloc] initWithData:searchModernInfo] autorelease];
     GCStravaActivityListParser * stravaListParser = [GCStravaActivityListParser activityListParser:searchStravaInfo];
     
-    for (NSString * activityId in @[@"1378220136",@"1382772474"]) {
+    NSUInteger commonConnectStats = 0;
+    NSUInteger commonStrava = 0;
+    for (GCActivity * garminAct in modernParser.activities) {
+        NSString * activityId = garminAct.activityId;
         
-        GCActivity * legacyAct = [self findActivityId:activityId in:parser.activities];
-        GCActivity * searchModernAct = [self findActivityId:activityId in:modernParser.activities];
         GCActivity * stravaAct = [self findActivityId:activityId in:stravaListParser.activities];
+        GCActivity * connectStatsAct = [self findActivityId:activityId in:connectStatsParser.activities];
         
-        NSString * fn = [NSString stringWithFormat:@"activity_%@.json", activityId];
-        NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:fn forClass:[self class]] options:0 error:nil];
+        NSDictionary * connectStatsTolerance = @{};
         
-        NSDictionary * json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        GCActivity * modernAct = [[[GCActivity alloc] initWithId:activityId andGarminData:json] autorelease];
-        
-        NSDictionary * legacyModernTolerance = @{@"MaxRunCadence":@(0.015),
-                                                 @"WeightedMeanRunCadence":@(0.015),
-                                                 @"SumTotalWork":@(0.01),
-                                                 @"MinPower": @"SKIP",
-                                                 
-                                                 // In legacy not in modern/cycling
-                                                 @"EndPowerTwentyMinutesTimerTime" : @"SKIP",
-                                                 @"BeginPowerTwentyMinutesTime" : @"SKIP",
-                                                 @"MinBikeCadence" : @"SKIP",
-                                                 @"MaxFractionalCadence" : @"SKIP",
-                                                 @"MinSpeed" : @"SKIP",
-                                                 @"MinHeartRate" : @"SKIP",
-                                                 @"EndPowerTwentyMinutesTime" : @"SKIP",
-                                                 @"BeginPowerTwentyMinutesTimerTime" : @"SKIP",
-                                                 @"WeightedMeanMovingPace" : @"SKIP",
-                                                 @"WeightedMeanPace" : @"SKIP",
-                                                 @"DirectVO2MaxCycling" : @"SKIP",
-                                                 @"WeightedMeanFractionalCadence" : @"SKIP",
-                                                 @"BeginPowerTwentyMinutesDistance" : @"SKIP",
-                                                 @"MaxPace" : @"SKIP",
-                                                 
-                                                 // In legacy not in modern/running
-                                                 @"DirectVO2Max" : @"SKIP",
-                                                 @"SumStep" : @"SKIP",
-                                                 @"WeightedMeanDoubleCadence" : @"SKIP",
-                                                 @"MinRunCadence" : @"SKIP",
-                                                 @"MaxDoubleCadence" : @"SKIP",
-                                                 
-                                                 
-                                                 };
-        
-        NSDictionary * modernSearchSkip = @{
-                                            // Running
-                                            @"DirectLactateThresholdHeartRate":@"SKIP",
-                                            @"DirectLactateThresholdSpeed":@"SKIP",
-                                            @"MaxAirTemperature":@"SKIP",
-                                            @"MaxElevation":@"SKIP",
-                                            @"MaxRunCadence":@"SKIP",
-                                            @"MinAirTemperature":@"SKIP",
-                                            @"MinElevation":@"SKIP",
-                                            @"SumElapsedDuration":@"SKIP",
-                                            @"SumMovingDuration":@"SKIP",
-                                            @"SumTrainingEffect":@"SKIP",
-                                            @"WeightedMeanAirTemperature":@"SKIP",
-                                            @"WeightedMeanGroundContactBalanceLeft":@"SKIP",
-                                            @"WeightedMeanGroundContactTime":@"SKIP",
-                                            @"WeightedMeanMovingSpeed":@"SKIP",
-                                            @"WeightedMeanRunCadence":@"SKIP",
-                                            @"WeightedMeanStrideLength":@"SKIP",
-                                            @"WeightedMeanVerticalOscillation":@"SKIP",
-                                            @"WeightedMeanVerticalRatio":@"SKIP",
-                                            @"WeightedMeanMovingPace":@"SKIP",
-                                            // Cycle
-                                            @"MaxBikeCadence":@"SKIP",
-                                            @"MaxPower":@"SKIP",
-                                            @"MaxPowerTwentyMinutes":@"SKIP",
-                                            @"MinPower":@"SKIP",
-                                            @"SumIntensityFactor":@"SKIP",
-                                            @"SumStrokes":@"SKIP",
-                                            @"SumTotalWork":@"SKIP",
-                                            @"SumTrainingStressScore":@"SKIP",
-                                            @"ThresholdPower":@"SKIP",
-                                            @"WeightedMeanBikeCadence":@"SKIP",
-                                            @"WeightedMeanLeftPedalSmoothness":@"SKIP",
-                                            @"WeightedMeanLeftTorqueEffectiveness":@"SKIP",
-                                            @"WeightedMeanNormalizedPower":@"SKIP",
-                                            @"WeightedMeanPower":@"SKIP",
-                                            
-                                            };
         
         NSDictionary * stravaModernTolerance = @{
-                                                 @"WeightedMeanRunCadence":@(0.015),
-                                                 @"SumDistance":@(0.005),
-                                                 @"WeightedMeanHeartRate":@(0.05),
-                                                 @"WeightedMeanPace":@(0.005),
-                                                 @"WeightedMeanSpeed":@(0.20),
-                                                 @"WeightedMeanAirTemperature":@(0.05),
-                                                 @"SumTotalWork":@(0.05),
-                                                 @"WeightedMeanPower":@(0.15),
-                                                 @"WeightedMeanBikeCadence":@(0.01),
-                                                 
-                                                 // Skip
-                                                 @"SumMovingDuration":@"SKIP",
-                                                 @"SumDuration":@"SKIP",
-                                                 @"MaxSpeed":@"SKIP",
-                                                 
-                                                 // Not available in Strava Cycling
-                                                 @"SumTrainingStressScore" : @"SKIP",
-                                                 @"SumIntensityFactor" : @"SKIP",
-                                                 @"SumElapsedDuration" : @"SKIP",
-                                                 @"MaxPower" : @"SKIP",
-                                                 @"SumEnergy" : @"SKIP",
-                                                 @"MaxElevation" : @"SKIP",
-                                                 @"WeightedMeanLeftPedalSmoothness" : @"SKIP",
-                                                 @"MaxPowerTwentyMinutes" : @"SKIP",
-                                                 @"LossElevation" : @"SKIP",
-                                                 @"WeightedMeanMovingSpeed" : @"SKIP",
-                                                 @"ThresholdPower" : @"SKIP",
-                                                 @"MaxAirTemperature" : @"SKIP",
-                                                 @"MinPower" : @"SKIP",
-                                                 @"MinAirTemperature" : @"SKIP",
-                                                 @"MinElevation" : @"SKIP",
-                                                 @"WeightedMeanNormalizedPower" : @"SKIP",
-                                                 @"WeightedMeanLeftTorqueEffectiveness" : @"SKIP",
-                                                 @"MaxBikeCadence" : @"SKIP",
-                                                 @"SumStrokes" : @"SKIP",
-                                                 
-                                                 // Not available in Strava Running
-                                                 @"MaxRunCadence":@"SKIP",
-                                                 @"WeightedMeanStrideLength" : @"SKIP",
-                                                 @"WeightedMeanMovingPace" : @"SKIP",
-                                                 @"WeightedMeanVerticalRatio" : @"SKIP",
-                                                 @"WeightedMeanVerticalOscillation" : @"SKIP",
-                                                 @"DirectLactateThresholdHeartRate" : @"SKIP",
-                                                 @"MaxRunCadence" : @"SKIP",
-                                                 @"DirectLactateThresholdSpeed" : @"SKIP",
-                                                 @"SumTrainingEffect" : @"SKIP",
-                                                 @"WeightedMeanGroundContactTime" : @"SKIP",
-                                                 @"WeightedMeanGroundContactBalanceLeft" : @"SKIP",
-                                                 
-                                                 };
+            // Reported by Strava but not garmin
+            @"WeightedMeanAirTemperature": @"SKIP",
+            @"SumTotalWork": @"SKIP",
+            @"WeightedMeanPower": @"SKIP"
+        };
         
-        [self compareActivitySummaryIn:legacyAct and:modernAct tolerance:legacyModernTolerance message:@"legacy==modern"];
-        [self compareActivitySummaryIn:modernAct and:searchModernAct tolerance:modernSearchSkip message:@"searchModern==modern"];
-        [self compareActivitySummaryIn:stravaAct and:modernAct tolerance:stravaModernTolerance message:@"strava==modern"];
-        
-        NSString * lapsFn = [NSString stringWithFormat:@"activitylaps_%@.json", activityId];
-        NSData * lapsData = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:lapsFn forClass:[self class]]];
-        
-        json = [NSJSONSerialization JSONObjectWithData:lapsData options:NSJSONReadingAllowFragments error:nil];
-        NSArray * lapsJson = json[@"lapDTOs"];
-        NSMutableArray * laps = [NSMutableArray array];
-        GCNumberWithUnit * dist = [GCNumberWithUnit numberWithUnitName:@"kilometer" andValue:0.];
-        for (NSDictionary * one in lapsJson) {
-            GCLap * lap = [[GCLap alloc] initWithDictionary:one forActivity:modernAct];
-            [laps addObject:lap];
-            dist = [dist addNumberWithUnit:[lap numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:modernAct.activityType] inActivity:modernAct] weight:1.];
-            [lap release];
+        if( connectStatsAct ){
+            [self compareActivitySummaryIn:connectStatsAct and:garminAct tolerance:connectStatsTolerance message:@"connectstats==garmin"];
+            commonConnectStats += 1;
         }
-        XCTAssertEqualObjects([modernAct numberWithUnitForField:[GCField fieldForKey:@"SumDistance" andActivityType:modernAct.activityType]], dist);
+        if( stravaAct ){
+            [self compareActivitySummaryIn:stravaAct and:garminAct tolerance:stravaModernTolerance message:@"strava==connectstats"];
+            commonStrava += 1;
+        }
     }
+    XCTAssertGreaterThan(commonStrava, 0);
+    XCTAssertGreaterThan(commonConnectStats, 0);
 }
 
 -(void)testParseTCX{
@@ -1197,6 +1072,9 @@
     
     NSMutableDictionary * missingFromTwo = [NSMutableDictionary dictionary];
     NSMutableDictionary * missingFromOne = [NSMutableDictionary dictionary];
+
+    NSMutableDictionary * equals = [NSMutableDictionary dictionary];
+    NSMutableDictionary * diffs = [NSMutableDictionary dictionary];
     
     for (GCField * field in oneDict) {
         // Skip corrected/uncorrected elevation
@@ -1208,6 +1086,17 @@
         GCActivitySummaryValue * twoValue = twoDict[field];
         
         if (twoValue) {
+            NSString * displayOne = oneValue.numberWithUnit.description;
+            NSString * displayTwo = oneValue.numberWithUnit.description;
+            
+            if( [displayTwo isEqualToString:displayOne]){
+                equals[field] = displayOne;
+            }else{
+                diffs[field] = displayOne;
+            }
+            
+            XCTAssertEqualObjects(displayOne, displayTwo, @"%@: %@ %@<>%@", msg, field, displayOne, displayTwo);
+            /*
             NSNumber * tolerance = tolerances[field.key];
             if ([tolerance isKindOfClass:[NSNumber class]]) {
                 // tolerance is % (0.01 -> 1%)
@@ -1218,6 +1107,7 @@
             }else{
                 XCTAssertEqualObjects(oneValue, twoValue, @"%@: %@", field, msg );
             }
+             */
         }else{
             if( ![tolerances[field.key] isKindOfClass:[NSString class]]){
                 missingFromTwo[field] = oneValue;
@@ -1225,19 +1115,19 @@
         }
     }
     
+    // We do not assert what is missing from one, as we should call in one
+    // for the service with the least fields.
+    /*
     for (GCField * field in twoDict) {
         if( !oneDict[field] && ![tolerances[field.key] isKindOfClass:[NSString class]]){
             missingFromOne[field] = twoDict[field];
         }
     }
-    if(missingFromOne.count > 0 || missingFromTwo.count > 0){
-        NSLog(@"OOPS");
-    }
-    XCTAssertEqual(missingFromOne.count, 0);
+    //XCTAssertEqual(missingFromOne.count, 0);
+     */
     XCTAssertEqual(missingFromTwo.count, 0);
+    XCTAssertGreaterThan(equals.count, 0);
 }
-
-
 
 -(NSDictionary*)compareStatsDictFor:(GCActivity*)act{
     GCTrackFieldChoices * choices = [GCTrackFieldChoices trackFieldChoicesWithActivity:act];
