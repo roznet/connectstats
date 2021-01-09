@@ -38,7 +38,7 @@ class GCStravaRequestBase: GCWebRequestStandard {
     struct Credential {
         static let serviceName = "strava"
     }
-
+    
     @objc init(navigationController:UINavigationController) {
         self.navigationController = navigationController
         self.stravaAuth = OAuth2Swift(consumerKey: GCAppGlobal.credentials(forService: Credential.serviceName, andKey: "client_id"),
@@ -54,6 +54,9 @@ class GCStravaRequestBase: GCWebRequestStandard {
         self.stravaAuth = previous.stravaAuth
     }
     
+    @objc override func service() -> gcWebService {
+        return gcWebService.strava
+    }
     override func url() -> String? {
         return nil
     }
@@ -75,6 +78,9 @@ class GCStravaRequestBase: GCWebRequestStandard {
     @objc static func signout() {
         GCAppGlobal.profile().serviceSuccess(gcService.strava, set: false)
         self.clearCredential()
+        DispatchQueue.main.async {
+            GCAppGlobal.saveSettings()
+        }
     }
     
     static func clearCredential() {
@@ -139,7 +145,12 @@ class GCStravaRequestBase: GCWebRequestStandard {
                 switch result {
                 case .success(let response):
                     self.status = GCWebStatus.OK
-                    GCAppGlobal.profile().serviceSuccess(gcService.strava, set: true)
+                    if( !GCAppGlobal.profile().serviceSuccess(gcService.strava)) {
+                        DispatchQueue.main.async {
+                            GCAppGlobal.profile().serviceSuccess(gcService.strava, set: true)
+                            GCAppGlobal.saveSettings()
+                        }
+                    }
                     self.process(data: response.data)
                 case .failure(let queryError):
                     switch queryError {
@@ -170,13 +181,22 @@ class GCStravaRequestBase: GCWebRequestStandard {
     
     func requestError( error : OAuthSwiftError, message : String){
         if let underlyingError = error.underlyingError {
+            self.lastError = (underlyingError as NSError)
             let code = (underlyingError as NSError).code
-            let body = (underlyingError as NSError).userInfo["Response-Body"] ?? "No Body"
-            RZSLog.error("\(message) \(code) \(body)")
+            if let body = (underlyingError as NSError).userInfo["Response-Body"] {
+                // strava responded
+                RZSLog.error("\(message) \(code) \(body)")
+                self.status = GCWebStatus.accessDenied
+                GCStravaRequestBase.signout()
+            }else{
+                // no response from strava
+                self.status = GCWebStatus.connectionError
+                RZSLog.error("\(message) \(code)")
+            }
         }else{
+            self.status = GCWebStatus.connectionError
             RZSLog.error("\(message) \(error)")
         }
-        self.status = GCWebStatus.accessDenied
         self.processDone()
     }
     

@@ -29,4 +29,5 @@
 @interface GCAppDelegate (Swift)
 
 -(void)handleFitFile;
+-(void)stravaSignout;
 @end

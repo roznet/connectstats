@@ -44,6 +44,7 @@ extern NSStringEncoding kRequestDebugFileEncoding;
 @property (nonatomic,assign) NSStringEncoding encoding;
 @property (nonatomic,assign) id<GCWebRequestDelegate> delegate;
 @property (nonatomic,readonly) NSString * urlDescription;
+@property (nonatomic,retain) NSError * lastError;
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 
 -(void)process;

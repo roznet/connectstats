@@ -36,7 +36,8 @@ NSStringEncoding kRequestDebugFileEncoding = NSUTF8StringEncoding;
 #if !__has_feature(objc_arc)
 -(void)dealloc{
     [_theString release];
-
+    [_lastError release];
+    
     [super dealloc];
 }
 #endif

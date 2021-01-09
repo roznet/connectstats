@@ -650,6 +650,13 @@ void checkVersion(){
         }
     }
     
+    if( [self isFirstTimeForFeature:@"STRAVA_NEW_OAUTH"]){
+        if( [[GCAppGlobal profile] serviceEnabled:gcServiceStrava] ){
+            RZLog(RZLogInfo, @"New strava oauth: signing out strava");
+            [self stravaSignout];
+        }
+    }
+    
     if( needToSaveSettings ){
         [self saveSettings];
     }

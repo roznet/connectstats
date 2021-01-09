@@ -49,5 +49,7 @@ BOOL kOpenTemporary = false;
 -(void)handleFitFileDone:(NSString*)aId{
     [self.actionDelegate focusOnActivityId:aId];
 }
-
+-(void)stravaSignout{
+    [GCStravaRequestBase signout];
+}
 @end
