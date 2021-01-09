@@ -90,7 +90,7 @@ class FITGarminDownloadManager: NSObject,RZChildObject {
         if( self.loginSuccessful != true ){
             let login = FITAppGlobal.currentLoginName()
             let passd = FITAppGlobal.currentPassword()
-            FITAppGlobal.web().add(GCGarminLoginSSORequest(user: login, andPwd: passd, validation: nil))
+            FITAppGlobal.web().add(GarminRequestLogin(username: login, password: passd))
         }
     }
     

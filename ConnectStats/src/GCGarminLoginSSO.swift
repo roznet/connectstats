@@ -38,7 +38,7 @@ import RZUtilsSwift
     let password : String
 
     var dataTask : URLSessionDataTask? = nil
-    let completion : ssoLoginCompletionHandler
+    var completion : ssoLoginCompletionHandler? = nil
 
     let getParams = [
         "service":"https://connect.garmin.com/modern",
@@ -69,7 +69,7 @@ import RZUtilsSwift
     func executeStep(request : URLRequest?,
                      completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void){
         guard let request = request else {
-            self.completion(.internalLogicError)
+            self.completion?(.internalLogicError)
             return
         }
         
@@ -77,9 +77,9 @@ import RZUtilsSwift
             guard let response = (response as? HTTPURLResponse) else {
                 if let error = error {
                     RZSLog.error("Request failed \(error)")
-                    self.completion(.connectionError)
+                    self.completion?(.connectionError)
                 }else{
-                    self.completion(.internalLogicError)
+                    self.completion?(.internalLogicError)
                 }
                 return
             }
@@ -90,15 +90,15 @@ import RZUtilsSwift
                 let url = self.dataTask?.currentRequest?.url?.absoluteString ?? "nourl"
                 RZSLog.error("Service Error \(response.statusCode) \(url)")
                 if response.statusCode == 500 || response.statusCode == 403 {
-                    self.completion(.accessDenied)
+                    self.completion?(.accessDenied)
                 }else{
-                    self.completion(.serviceLogicError)
+                    self.completion?(.serviceLogicError)
                 }
             }
         }
 
         guard let task = self.dataTask else {
-            completion(.internalLogicError)
+            self.completion?(.internalLogicError)
             return
         }
         
@@ -168,7 +168,7 @@ import RZUtilsSwift
             if status == .OK {
                 self.cookieStep()
             }else{
-                self.completion(status)
+                self.completion?(status)
             }
         }
     }
@@ -188,7 +188,7 @@ import RZUtilsSwift
     
     func cookieStep(){
         self.executeStep(request: self.cookieStepRequest() ) { data,response,error in
-            self.completion(.OK)
+            self.completion?(.OK)
         }
     }
 }

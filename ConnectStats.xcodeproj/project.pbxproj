@@ -674,7 +674,6 @@
 		429AFD1122B77EC7006343F0 /* GCConnectStatsRequestFitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 429AFD0D22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m */; };
 		429D752E1651AAB800232BED /* GCActivitiesCacheManagement.m in Sources */ = {isa = PBXBuildFile; fileRef = 429D752D1651AAB800232BED /* GCActivitiesCacheManagement.m */; };
 		429D75351651B14E00232BED /* GCGarminRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 429D75341651B14E00232BED /* GCGarminRequest.m */; };
-		429DD64F219E39FC004FD716 /* GCGarminLoginSSORequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ACFE9718C099AB00BF27A5 /* GCGarminLoginSSORequest.m */; };
 		429DD650219E3CE2004FD716 /* GCGarminRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 429D75341651B14E00232BED /* GCGarminRequest.m */; };
 		429DD651219E3E13004FD716 /* GCWebRequestStandard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4226B4281F65E2ED009E1104 /* GCWebRequestStandard.m */; };
 		429DD652219E3E36004FD716 /* GCWebUrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF79E15FB412C007A88FA /* GCWebUrl.m */; };
@@ -756,6 +755,8 @@
 		42A89C1F1D627444007CF90D /* GCUnitTrainingZone.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A89C1E1D627444007CF90D /* GCUnitTrainingZone.m */; };
 		42A89C201D627444007CF90D /* GCUnitTrainingZone.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A89C1E1D627444007CF90D /* GCUnitTrainingZone.m */; };
 		42A89C261D63B2D7007CF90D /* GCTestHealthZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A89C251D63B2D7007CF90D /* GCTestHealthZones.m */; };
+		42A93F9725A99CA00080A541 /* GCGarminLoginSSO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BE679825A860E2002505A2 /* GCGarminLoginSSO.swift */; };
+		42A93FA125A99CF90080A541 /* GarminRequestLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A93FA025A99CF90080A541 /* GarminRequestLogin.swift */; };
 		42A95B1C16321320000B2082 /* GCLap.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A95B1B16321320000B2082 /* GCLap.m */; };
 		42A95B3A1632DB4B000B2082 /* GCMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A95B391632DB4B000B2082 /* GCMapAnnotation.m */; };
 		42A95B3D1632FC24000B2082 /* GCMapLegendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A95B3C1632FC24000B2082 /* GCMapLegendView.m */; };
@@ -2035,6 +2036,7 @@
 		42A89C1D1D627444007CF90D /* GCUnitTrainingZone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCUnitTrainingZone.h; path = src/GCUnitTrainingZone.h; sourceTree = "<group>"; };
 		42A89C1E1D627444007CF90D /* GCUnitTrainingZone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCUnitTrainingZone.m; path = src/GCUnitTrainingZone.m; sourceTree = "<group>"; };
 		42A89C251D63B2D7007CF90D /* GCTestHealthZones.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestHealthZones.m; sourceTree = "<group>"; };
+		42A93FA025A99CF90080A541 /* GarminRequestLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GarminRequestLogin.swift; path = src/GarminRequestLogin.swift; sourceTree = "<group>"; };
 		42A95B1A16321320000B2082 /* GCLap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCLap.h; path = src/GCLap.h; sourceTree = "<group>"; };
 		42A95B1B16321320000B2082 /* GCLap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCLap.m; path = src/GCLap.m; sourceTree = "<group>"; };
 		42A95B381632DB4B000B2082 /* GCMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCMapAnnotation.h; path = src/GCMapAnnotation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -3683,6 +3685,7 @@
 				429190AB21E24DDD00E0B114 /* GarminRequest.swift */,
 				424053BA21E12B8E00375795 /* GarminRequestActivityList.swift */,
 				42ADFAF521F2834F007BC683 /* GarminRequestFitFile.swift */,
+				42A93FA025A99CF90080A541 /* GarminRequestLogin.swift */,
 			);
 			name = Garmin;
 			sourceTree = "<group>";
@@ -6369,6 +6372,7 @@
 				429190AA21E2431600E0B114 /* ActivityValue.swift in Sources */,
 				42C0589921D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */,
 				42C0589E21D0525200109D54 /* RZFitMessageExtensions.swift in Sources */,
+				42A93F9725A99CA00080A541 /* GCGarminLoginSSO.swift in Sources */,
 				423EF01921D2A044005C2605 /* RZFitFileExtensions.swift in Sources */,
 				42BFC2321DCE2FBC00EAD40E /* FITDetailTableViewController.swift in Sources */,
 				42ADFAF621F2834F007BC683 /* GarminRequestFitFile.swift in Sources */,
@@ -6395,7 +6399,6 @@
 				4248ED9A1DCFFB5200254216 /* GCFieldInfo.m in Sources */,
 				423D746522F59D9A00EE3E71 /* FITFitFieldMap.swift in Sources */,
 				422F284120557DD000187478 /* GCField+Convert.m in Sources */,
-				429DD64F219E39FC004FD716 /* GCGarminLoginSSORequest.m in Sources */,
 				423E8F6321DBE06900FB795B /* FITDetailListDataSource.swift in Sources */,
 				42F4E5131DE08D55001AB244 /* GCMapRouteLogicPointHolder.m in Sources */,
 				429190A621E2422100E0B114 /* ActivitiesOrganizer.swift in Sources */,
@@ -6403,6 +6406,7 @@
 				424053BB21E12B8E00375795 /* GarminRequestActivityList.swift in Sources */,
 				42D1D2001DEE66DB00F13D52 /* FITWindowController.swift in Sources */,
 				428DD4A1219A1D0A006DF5B5 /* GCWebConnect.m in Sources */,
+				42A93FA125A99CF90080A541 /* GarminRequestLogin.swift in Sources */,
 				4248ED981DCFF56A00254216 /* GCHealthMeasure.m in Sources */,
 				429190AC21E24DDD00E0B114 /* GarminRequest.swift in Sources */,
 				42A672C81DECC4EA00BE8E26 /* FITSelectionContext.swift in Sources */,

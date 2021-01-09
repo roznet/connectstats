@@ -98,6 +98,10 @@ class GarminRequestActivityList: GarminRequest {
     }
     
     @objc override var nextReq: GCWebRequestStandard? {
-        return GarminRequestActivityList(nextFrom: self)
+        if self.parseCount > 0 {
+            return GarminRequestActivityList(nextFrom: self)
+        }else{
+            return nil
+        }
     }
 }

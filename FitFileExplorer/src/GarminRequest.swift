@@ -35,8 +35,8 @@ class GarminRequest : GCWebRequestStandard {
         "HTTP Status 403 - " : GCWebStatus.accessDenied,
         "HTTP Status 404 - " : GCWebStatus.deletedActivity,
         "Garmin Connect is temporarily unavailable" : GCWebStatus.tempUnavailable,
-        "id=\"error\">Error 500" : GCWebStatus.serviceInternalError,
-        "HTTP Status 500 - " : GCWebStatus.serviceInternalError,
+        "id=\"error\">Error 500" : GCWebStatus.serviceLogicError,
+        "HTTP Status 500 - " : GCWebStatus.accessDenied,
         "\"error\":\"WebApplicationException\"" : GCWebStatus.accessDenied
 
     ]
@@ -60,7 +60,7 @@ class GarminRequest : GCWebRequestStandard {
             self.status = GCWebStatus.OK
             self.stage = gcRequestStage.download
             
-            return GCGarminLoginSSORequest(user: FITAppGlobal.currentLoginName(), andPwd: FITAppGlobal.currentPassword(), validation: nil)
+            return GarminRequestLogin(username: FITAppGlobal.currentLoginName(), password: FITAppGlobal.currentPassword())
         }
         
         return nil

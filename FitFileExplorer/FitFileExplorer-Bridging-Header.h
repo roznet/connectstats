@@ -16,10 +16,8 @@
 #import "GCMapAnnotation.h"
 #import "GCActivityTypes.h"
 #import "GCActivityType.h"
-//#import "FITGarminActivityListWrapper.h"
-//#import "FITGarminActivityWrapper.h"
-#import "GCGarminLoginSSORequest.h"
 #import "GCGarminActivityInterpret.h"
+#import "GCWebRequestStandard.h"
 
 #import "GCWebConnect.h"
 
