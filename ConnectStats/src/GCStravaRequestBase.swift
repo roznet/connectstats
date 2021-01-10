@@ -176,6 +176,10 @@ class GCStravaRequestBase: GCWebRequestStandard {
                     }
                 }
             }
+        }else{
+            self.status = GCWebStatus.internalLogicError
+            RZSLog.error("no strava url \(self)")
+            self.processDone()
         }
     }
     
