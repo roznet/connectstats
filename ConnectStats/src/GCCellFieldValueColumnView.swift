@@ -104,7 +104,6 @@ class GCCellFieldValueColumnView: UIView {
                     if case .right = self.displayIcons {
                         iconRect.origin.x = drawnRect.origin.x - (oneHeight + self.defaultHorizontalSpacing);
                     }
-                    
                     icon.withTintColor(self.iconColor).draw(in: iconRect.insetBy(dx: insetValue, dy: insetValue))
                 }
             }

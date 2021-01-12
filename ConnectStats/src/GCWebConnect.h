@@ -32,6 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef BOOL (^GCWebValidateNextSearch)( NSDate * _Nullable , NSUInteger );
 
+extern NSString * GCWebStatusDescription(GCWebStatus status);
+extern NSString * GCWebStatusShortDescription(GCWebStatus status);
+
 @interface GCWebConnect : RZParentObject<RZRemoteDownloadDelegate,GCWebRequestDelegate>
 @property (nonatomic,assign) GCWebStatus status;
 @property (nonatomic,assign) NSInteger lastStatusCode;
@@ -46,7 +49,7 @@ typedef BOOL (^GCWebValidateNextSearch)( NSDate * _Nullable , NSUInteger );
 -(nullable NSString*)currentUrl;
 
 -(void)next;
--(void)addRequest:(id<GCWebRequest>)req;
+-(void)addRequest:(NSObject<GCWebRequest>*)req;
 -(void)clearRequests;
 
 -(GCWebStatus)statusForService:(gcWebService)service;

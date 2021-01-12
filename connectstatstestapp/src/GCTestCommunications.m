@@ -106,10 +106,6 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     [self testUploadEnd];
 }
 
--(void)downloadArraySuccessful:(id)connection array:(NSArray*)theArray{
-    RZ_ASSERT(false, @"Upload failed");
-    [self testUploadEnd];
-}
 -(void)downloadStringSuccessful:(id)connection string:(NSString*)theString{
     NSError * e = nil;
     [theString writeToFile:[RZFileOrganizer writeableFilePath:@"upload.txt"] atomically:YES encoding:NSUTF8StringEncoding error:&e];

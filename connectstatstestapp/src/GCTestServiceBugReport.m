@@ -74,10 +74,6 @@
     [self testBugReportEnd];
 }
 
--(void)downloadArraySuccessful:(id)connection array:(NSArray*)theArray{
-    RZ_ASSERT(false, @"Upload failed");
-    [self testBugReportEnd];
-}
 -(void)downloadStringSuccessful:(id)connection string:(NSString*)theString{
     NSError * e = nil;
     NSString * htmlPath = [RZFileOrganizer writeableFilePath:@"bugreport.html"];

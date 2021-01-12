@@ -665,6 +665,9 @@
                  @"averageRunningCadenceInStepsPerMinute": @[ @"WeightedMeanRunCadence", @(gcFieldFlagCadence), @"doubleStepsPerMinute"],
                  @"maxRunningCadenceInStepsPerMinute":   @[ @"MaxRunCadence", @"", @"doubleStepsPerMinute"],
 
+                 @"averageRunCadence": @[ @"WeightedMeanRunCadence", @(gcFieldFlagCadence), @"doubleStepsPerMinute"],
+                 @"maxRunCadence":   @[ @"MaxRunCadence", @"", @"doubleStepsPerMinute"],
+                 
                  @"trainingEffect": @[ @"SumTrainingEffect", @"", @"te"],
                  @"aerobicTrainingEffect": @[ @"SumTrainingEffect", @"", @"te"],
                  @"lactateThresholdHeartRate": 	 @[ @"DirectLactateThresholdHeartRate", @"", @"bpm"],

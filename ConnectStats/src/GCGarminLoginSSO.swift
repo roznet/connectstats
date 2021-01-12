@@ -154,6 +154,7 @@ import RZUtilsSwift
             if //let encoding = response.textEncodingName,
                let data = data,
                let responseText : String = String(data: data, encoding: .utf8) {
+                
                 if responseText.contains(">sendEvent('FAIL')") {
                     status = .loginFailed
                 }else if responseText.contains( ">sendEvent('ACCOUNT_LOCK')" ){
@@ -162,6 +163,10 @@ import RZUtilsSwift
                     status = .requirePasswordRenew
                 }else if responseText.contains("temporarily unavailable") {
                     status = .tempUnavailable
+                }
+                if status != .OK {
+                    RZSLog.warning("Login step failed \(GCWebStatusShortDescription(status))")
+                    try? responseText.write(to: URL(fileURLWithPath: RZFileOrganizer.writeableFilePath("error_garmin_sso.html")), atomically: true, encoding: .utf8)
                 }
             }
             
@@ -188,6 +193,7 @@ import RZUtilsSwift
     
     func cookieStep(){
         self.executeStep(request: self.cookieStepRequest() ) { data,response,error in
+            try? data?.write(to: URL(fileURLWithPath: RZFileOrganizer.writeableFilePath("garmin_sso_final.html")))
             self.completion?(.OK)
         }
     }
