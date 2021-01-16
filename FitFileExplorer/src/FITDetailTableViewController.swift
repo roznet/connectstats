@@ -20,6 +20,13 @@ class FITDetailTableViewController: NSViewController {
     
     @IBOutlet weak var selectedFieldLabel: NSTextField!
     @IBOutlet weak var selectedFieldUnits: NSPopUpButton!
+    @IBAction func rowChanged(_ sender: Any) {
+        if let row = Int(self.messageIndexField.stringValue) {
+            self.detailTableView.scrollRowToVisible(row)
+            self.detailTableView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
+            print( "\(row)")
+        }
+    }
     
     @IBAction func exportCSV(_ sender: Any) {
         if let dataSource = self.detailTableView.dataSource as? FITDetailListDataSource {
@@ -55,8 +62,32 @@ class FITDetailTableViewController: NSViewController {
         
     }
     @objc func detailSelectionChanged( notification : Notification){
-        
+        if let source = notification.object as? FITDetailListDataSource {
+            self.sync(detailListDataSource: source)
+        }
     }
+    
+    func sync(detailListDataSource source: FITDetailListDataSource){
+        if let selectedField = source.selectedField {
+            self.selectedFieldLabel.stringValue = selectedField
+        }else{
+            self.selectedFieldLabel.stringValue = "No Field Selected"
+        }
+        if source.selectedRow == -1 {
+            self.messageIndexField.stringValue = ""
+        }else{
+            self.messageIndexField.stringValue = "\(source.selectedRow)"
+        }
+        
+        if source.selectionContext.messages.count > 0 {
+            self.totalMessagesLabel.stringValue = " out of \(source.selectionContext.messages.count)"
+        }else{
+            self.totalMessagesLabel.stringValue = ""
+        }
+        
+        self.messageTypeLabel.stringValue = source.selectionContext.messageTypeDescription
+    }
+    
     override func viewWillAppear() {
         super.viewWillAppear()
         NotificationCenter.default.addObserver(self, selector: #selector(detailSelectionChanged(notification:)), name: FITDetailListDataSource.kFITNotificationDetailSelectionChanged, object: nil)
@@ -109,5 +140,7 @@ class FITDetailTableViewController: NSViewController {
         self.detailTableView.delegate = dataSource
         self.detailTableView.rzTableViewDelegate = dataSource
         self.detailTableView.reloadData()
+        
+        self.sync(detailListDataSource: dataSource)
     }
 }
