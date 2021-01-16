@@ -9,8 +9,6 @@
 import Foundation
 import FitFileParser
 
-import GenericJSON
-
 class FITFitFileInterpret: NSObject {
 
     private let fitFile:FitFile

@@ -18,7 +18,7 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     
     var selectedColumn : Int = -1
     var selectedRow : Int = -1
-    var selectedField : FitFieldKey?
+    var selectedField : FitFieldKey? = nil
     var setupMode : Bool = false
     
     var fitFile : FitFile {
@@ -62,7 +62,6 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     }
     
     func numberOfRows(in tableView: NSTableView) -> Int {
-        
         if self.setupMode {
             return 0
         }
@@ -110,14 +109,13 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     }
     
     func userClicked(_ tableView: RZTableView, row: Int, column: Int) {
-    
         let changed : Bool = ( self.selectedColumn != column || self.selectedRow != row);
         
         if( changed ){
             self.selectedColumn = column
             self.selectedRow = row
             
-            var chosenField : FitFieldKey?
+            var chosenField : FitFieldKey? = nil
             
             if messages.count == 1 {
                 if let fields = self.messages.first?.interpretedFieldKeys() {
@@ -135,7 +133,6 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
             
             NotificationCenter.default.post(name: FITDetailListDataSource.kFITNotificationDetailSelectionChanged, object: self)
         }
-
     }
 
     

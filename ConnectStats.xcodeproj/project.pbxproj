@@ -2516,7 +2516,6 @@
 		42E226BA16599AB2008FFD68 /* GCWebReverseGeocode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWebReverseGeocode.h; path = src/GCWebReverseGeocode.h; sourceTree = "<group>"; };
 		42E226BB16599AB2008FFD68 /* GCWebReverseGeocode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWebReverseGeocode.m; path = src/GCWebReverseGeocode.m; sourceTree = "<group>"; };
 		42E4D330232E7158002F114C /* GCSettingsServicesViewConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCSettingsServicesViewConstants.h; path = src/GCSettingsServicesViewConstants.h; sourceTree = "<group>"; };
-		42E5ACC925ACC1BA00D91D5A /* rzutils */ = {isa = PBXFileReference; lastKnownFileType = folder; name = rzutils; path = ../rzutils; sourceTree = "<group>"; };
 		42EAA3A91EDBA6150081B130 /* GCAppProfiles+Swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCAppProfiles+Swift.h"; path = "src/GCAppProfiles+Swift.h"; sourceTree = "<group>"; };
 		42EAA3AA1EDBA6150081B130 /* GCAppProfiles+Swift.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCAppProfiles+Swift.m"; path = "src/GCAppProfiles+Swift.m"; sourceTree = "<group>"; };
 		42EB51A618AC33DB00B85FAB /* GCActivity+Import.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCActivity+Import.h"; path = "src/GCActivity+Import.h"; sourceTree = "<group>"; };
@@ -3709,7 +3708,6 @@
 		428FF6FE15F36888007A88FA = {
 			isa = PBXGroup;
 			children = (
-				42E5ACC925ACC1BA00D91D5A /* rzutils */,
 				4245CD811B7DE351006B85B4 /* Common */,
 				428FF71315F36888007A88FA /* ConnectStats */,
 				4253B4571CD49F7E00437E6A /* FitFileExplorer */,

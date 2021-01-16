@@ -47,10 +47,27 @@ extension FitFieldValue {
             return rv
         }
     }
+    
+    func coordinateToDMS(coord : CLLocationCoordinate2D) -> String {
+        let latitude = coord.latitude
+        let longitude = coord.longitude
+        
+        let latDegrees = abs(Int(latitude))
+        let latMinutes = abs(Int((latitude * 3600).truncatingRemainder(dividingBy: 3600) / 60))
+        let latSeconds = Double(abs((latitude * 3600).truncatingRemainder(dividingBy: 3600).truncatingRemainder(dividingBy: 60)))
 
+        let lonDegrees = abs(Int(longitude))
+        let lonMinutes = abs(Int((longitude * 3600).truncatingRemainder(dividingBy: 3600) / 60))
+        let lonSeconds = Double(abs((longitude * 3600).truncatingRemainder(dividingBy: 3600).truncatingRemainder(dividingBy: 60) ))
+
+        return String(format:"%d°%d'%05.2F%@ %d°%d'%05.2F%@",
+                      latDegrees, latMinutes, latSeconds, latitude >= 0 ? "N" : "S",
+                      lonDegrees, lonMinutes, lonSeconds, longitude >= 0 ? "E" : "W" )
+                
+    }
     func displayString() -> String {
         if let coordinate = coordinate {
-            return "(\(coordinate.latitude),\(coordinate.longitude))"
+            return self.coordinateToDMS(coord: coordinate)
         }else if let nu = self.numberWithUnit {
             return nu.formatDouble()
         }else if let name = name {

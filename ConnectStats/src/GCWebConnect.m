@@ -306,7 +306,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
     // dispatch on main queue this is where some notification/user update on ui may still
     // be processing
     dispatch_async(dispatch_get_main_queue(), ^(){
-        @synchronized (_requests) {
+        @synchronized (self.requests) {
             [self.doneRequests removeAllObjects];
         }
     });

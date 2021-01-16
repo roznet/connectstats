@@ -33,7 +33,12 @@ class FITSelectionContext {
     
     var queue : [FITSelectionContext] = []
     
+    enum DateTimeFormat {
+        case full, timeOnly, elapsed
+    }
     
+    var dateTimeFormat : DateTimeFormat = .elapsed
+    var dateStarted : Date? = nil
     // MARK: - Message Selection
     
     var messageTypeDescription : String {
@@ -72,8 +77,6 @@ class FITSelectionContext {
         return rv
     }
     
-
-    
     /// Last few selected Fields
     var messageIndex : Int = 0 {
         didSet {
@@ -84,34 +87,12 @@ class FITSelectionContext {
     }
     
     // MARK: - Dependent/Stats messages
-    
     var preferredDependendMessageType : [FitMessageType] = [FitMessageType.record,FitMessageType.lap,FitMessageType.session]
     var statsUsing : FitMessageType?
     var statsFor : FitMessageType?
     
-    /*
-    var dependentField :FitFieldKey? {
-        var rv : FitFieldKey? = nil
-        if let dmessagetype = self.dependentMessageType,
-            let fy = self.selectedYField{
-            let dmessage = self.fitFile.messages(forMessageType: dmessagetype)
-            // check first if yfield exist in dependent
-            if let first = dmessage.first {
-                if first.numberWithUnit(field: fy) != nil {
-                    rv = self.selectedYField
-                } else if let f = self.interp.mapFields(from: [fy], to: first.interpretedFieldKeys())[fy]{
-                    if f.count > 0 {
-                        rv = f[0]
-                    }
-                }
-            }
-        }
-        return rv
-    }*/
-    
 
     //MARK: - Field Selections
-    
     /// Selected numbers fields in order, lastObject is latest
     fileprivate var selectedNumberFields : [FitFieldKey] = []
     /// Selected location fields in order, lastObject is latest
@@ -168,7 +149,6 @@ class FITSelectionContext {
 
     
     // MARK: - Initialization and Queue management
-    
 
     init(fitFile:FitFile){
         self.fitFile = fitFile;
@@ -176,6 +156,11 @@ class FITSelectionContext {
         self.messages = self.fitFile.messages(forMessageType: self.messageType)
         self.statsFor = self.messageType
         updateDependent()
+        if let file_id = fitFile.messages(forMessageType: .file_id).first,
+           let started = file_id.time(field: "time_created") {
+            self.dateStarted = started
+            
+        }
     }
     
     init(withCopy other:FITSelectionContext){
@@ -265,12 +250,31 @@ class FITSelectionContext {
     /// - Parameter fieldValue: value to display
     /// - Returns: string
     func display( fieldValue : FitFieldValue) -> String {
-        if let nu = fieldValue.numberWithUnit {
-            for unit in [self.speedUnit, self.distanceUnit] {
-                if nu.unit.canConvert(to: unit) {
-                    return nu.convert(to: unit).description
+        switch ( fieldValue.fitValue ){
+        case .time(let date):
+            switch self.dateTimeFormat {
+            case .full:
+                return (date as NSDate).datetimeFormat()
+            case .timeOnly:
+                return (date as NSDate).timeShortFormat()
+            case .elapsed:
+                if let started = self.dateStarted {
+                    let elapsed = GCNumberWithUnit(name: "second", andValue: date.timeIntervalSince(started))
+                    return elapsed.description
+                }else{
+                    return (date as NSDate).timeShortFormat()
                 }
             }
+        case .valueUnit:
+            if let nu = fieldValue.numberWithUnit {
+                for unit in [self.speedUnit, self.distanceUnit] {
+                    if nu.unit.canConvert(to: unit) {
+                        return nu.convert(to: unit).description
+                    }
+                }
+            }
+        default:
+            return fieldValue.displayString()
         }
         return fieldValue.displayString()
     }

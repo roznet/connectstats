@@ -33,9 +33,6 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
         
         super.init()
     }
-    deinit {
-        
-    }
     
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
         return self.orderedMessageTypes.count
