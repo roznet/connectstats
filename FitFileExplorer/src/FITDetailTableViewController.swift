@@ -13,6 +13,13 @@ import RZUtilsSwift
 class FITDetailTableViewController: NSViewController {
 
     @IBOutlet weak var detailTableView: RZTableView!
+    @IBOutlet weak var messageTypeLabel: NSTextField!
+    
+    @IBOutlet weak var messageIndexField: NSTextField!
+    @IBOutlet weak var totalMessagesLabel: NSTextField!
+    
+    @IBOutlet weak var selectedFieldLabel: NSTextField!
+    @IBOutlet weak var selectedFieldUnits: NSPopUpButton!
     
     @IBAction func exportCSV(_ sender: Any) {
         if let dataSource = self.detailTableView.dataSource as? FITDetailListDataSource {
@@ -47,7 +54,18 @@ class FITDetailTableViewController: NSViewController {
         self.detailTableView.allowsColumnSelection = true;
         
     }
+    @objc func detailSelectionChanged( notification : Notification){
+        
+    }
+    override func viewWillAppear() {
+        super.viewWillAppear()
+        NotificationCenter.default.addObserver(self, selector: #selector(detailSelectionChanged(notification:)), name: FITDetailListDataSource.kFITNotificationDetailSelectionChanged, object: nil)
+    }
     
+    override func viewWillDisappear() {
+        super.viewWillDisappear()
+        NotificationCenter.default.removeObserver(self)
+    }
     func updateWith(dataSource : FITDetailListDataSource){
         let columns : [NSTableColumn] = self.detailTableView.tableColumns
         
