@@ -121,15 +121,17 @@ class GCStravaRequestBase: GCWebRequestStandard {
         self.retrieveCredential()
         if GCAppGlobal.profile().serviceSuccess(gcService.strava) == false {
             let urlscheme = GCAppGlobal.appURLScheme()
+            RZSLog.info("strava signin start")
             self.stravaAuth.authorize(withCallbackURL: "\(urlscheme)://ro-z.net/oauth/strava",
                                       scope: "activity:read_all,read_all",
                                       state: "prod" ) { result in
                 switch result {
                 case .success:
+                    RZSLog.info("strava signin success")
                     self.saveCredential()
                     self.makeRequest()
                 case .failure(let error):
-                    RZSLog.error("Failed to authorise \(error)")
+                    RZSLog.error("strava signin failed to authorise \(error)")
                     self.status = GCWebStatus.loginFailed
                     self.processDone()
                 }
@@ -140,6 +142,8 @@ class GCStravaRequestBase: GCWebRequestStandard {
     }
     
     func makeRequest() {
+        // Start with success
+        self.status = GCWebStatus.OK
         if let url = self.stravaUrl() {
             self.stravaAuth.client.get(url){ result in
                 switch result {
@@ -167,6 +171,9 @@ class GCStravaRequestBase: GCWebRequestStandard {
                                     self.requestError(error: renewError, message: "Failed to renew token")
                                 }
                             }
+                        }else if code == 404 {
+                            // Special handling as some request will elegantly handle missing resource
+                            self.processResourceNotFound()
                         }
                         else{
                             self.requestError(error: queryError, message: "Request failed")
@@ -207,6 +214,12 @@ class GCStravaRequestBase: GCWebRequestStandard {
     //MARK: - to override
     
     func process(data : Data){
+        self.processDone()
+    }
+    
+    func processResourceNotFound() {
+        self.status = GCWebStatus.deletedActivity
+        RZSLog.error("Resource Not Found \(self)")
         self.processDone()
     }
 }

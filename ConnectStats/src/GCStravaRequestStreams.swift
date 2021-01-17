@@ -100,6 +100,14 @@ class GCStravaRequestStreams: GCStravaRequestBase {
         }
     }
     
+    override func processResourceNotFound() {
+        // activity without point, ignore
+        RZSLog.info("No points for \(self.debugDescription)")
+        self.status = GCWebStatus.OK
+        self.points = nil
+        self.processDone()
+    }
+
     func parseStreams(data : Data){
         if let parser = GCStravaActivityStreamsParser(data) {
             self.points = parser.points
@@ -133,4 +141,6 @@ class GCStravaRequestStreams: GCStravaRequestBase {
         
         return nil
     }
+    
+
 }

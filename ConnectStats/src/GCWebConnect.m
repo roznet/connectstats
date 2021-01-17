@@ -337,12 +337,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 }
 
 -(NSString*)describeReq:(id<GCWebRequest>)req{
-    NSString * rv = nil;
-    if ([req respondsToSelector:@selector(activityId)]) {
-        rv = [NSString stringWithFormat:@"<%@:%@>",NSStringFromClass([req class]),req.activityId];
-    }else{
-        rv = [NSString stringWithFormat:@"<%@:%p>",NSStringFromClass([req class]),req];
-    }
+    NSString * rv = [req debugDescription];
     return rv ?: @"<NullReq>";
 }
 
@@ -563,7 +558,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
     if ([req respondsToSelector:@selector(process: andDelegate:)]) {
         [req process:data andDelegate:self];
     }else{
-        RZLog(RZLogWarning, @"Expected text but received data from %@ %@", [self describeReq:req], [req url]);
+        RZLog(RZLogWarning, @"Expected text but received data from %@", [self describeReq:req]);
         NSStringEncoding encoding = NSUTF8StringEncoding;
         NSString * theString = RZReturnAutorelease([[NSString alloc] initWithData:data encoding:encoding]);
 
