@@ -119,7 +119,7 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
     }
     
     @objc func selectionContextChanged(notification: Notification){
-        self.updateStatistics()
+        //statistics already updated upstream
     }
     
     func updateStatistics(){
@@ -143,7 +143,6 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
                 let possibleFields = Array(stats.keys)
                 self.statsFields = interp.mapFields(from: self.displayFields, to: possibleFields)
             }
-            
         }
     }
 

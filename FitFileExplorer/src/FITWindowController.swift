@@ -16,10 +16,38 @@ class FITWindowController: NSWindowController, NSToolbarDelegate {
     
     @IBOutlet weak var toolbar: NSToolbar!
     
-    @IBOutlet var speedUnitChoiceView: NSView!
-    @IBOutlet weak var speedUnitChoicePopup: NSPopUpButton!
+    @IBOutlet var unitSystemChoiceView: NSView!
+    @IBOutlet weak var unitSystemChoicePopup: NSPopUpButton!
     @IBOutlet var fieldDisplayChoiceView: NSView!
     @IBOutlet weak var fieldDisplayChoice: NSPopUpButton!
+    
+    let unitChoices = [ "Default", "Metric", "Imperial" ]
+    
+    var unitSystem : String {
+        get {
+            switch GCUnit.getGlobalSystem() {
+            case .imperial:
+                return unitChoices[2]
+            case .default:
+                return unitChoices[0]
+            case .metric:
+                return unitChoices[1]
+            default:
+                return unitChoices[0]
+            }
+        }
+        set {
+            if newValue == unitChoices[0] {
+                GCUnit.setGlobalSystem(.default)
+            }else if newValue == unitChoices[1] {
+                GCUnit.setGlobalSystem(.metric)
+            }else if newValue == unitChoices[2] {
+                GCUnit.setGlobalSystem(.imperial)
+            }else{
+                GCUnit.setGlobalSystem(.default)
+            }
+        }
+    }
     
     override func windowDidLoad() {
         super.windowDidLoad()
@@ -29,13 +57,10 @@ class FITWindowController: NSWindowController, NSToolbarDelegate {
         self.toolbar.autosavesConfiguration = true
         
         self.toolbar.displayMode = .iconOnly
-        
-        let speedUnits = GCUnit.mps().compatibleUnits()
-        self.speedUnitChoicePopup.removeAllItems()
-        self.speedUnitChoicePopup.addItems(withTitles: speedUnits.map {
-            $0.abbr
-        })
-        self.speedUnitChoicePopup.selectItem(withTitle: GCUnit.kph().abbr)
+        GCUnit.setGlobalSystem(gcUnitSystem.metric)
+        self.unitSystemChoicePopup.removeAllItems()
+        self.unitSystemChoicePopup.addItems(withTitles: self.unitChoices)
+        self.unitSystemChoicePopup.selectItem(withTitle: self.unitSystem )
         var choices = GCFieldCache.availableLanguagesNames()
         choices?.append("Raw Fields")
         self.fieldDisplayChoice.removeAllItems()
@@ -47,12 +72,9 @@ class FITWindowController: NSWindowController, NSToolbarDelegate {
     
     // MARK: - Tool bar button actions
     
-    @IBAction func changeSpeedUnit(_ sender: NSPopUpButton) {
-        let selected = GCUnit.mps().compatibleUnits().filter {
-            $0.abbr == sender.selectedItem?.title
-        }
-        if selected.count > 0{
-            self.splitViewController().selectionContext?.speedUnit = selected[0]
+    @IBAction func changeUnitSystem(_ sender: NSPopUpButton) {
+        if let selected = sender.selectedItem?.title {
+            self.unitSystem = selected
             self.splitViewController().settingsChanged(notification: Notification(name: FITWindowController.kNotificationToolBarSettingsChanged))
         }
     }
@@ -138,7 +160,7 @@ class FITWindowController: NSWindowController, NSToolbarDelegate {
          */
         if (itemIdentifier == kToolBarItemSpeedUnitChoiceIdentifier) {
             // 1) Font style toolbar item.
-            toolbarItem = customToolbarItem(itemForItemIdentifier: kToolBarItemSpeedUnitChoiceIdentifier.rawValue, label: "Speed Unit", paletteLabel:"Speed Unit", toolTip: "Select your preferred speed unit", target: self, itemContent: self.speedUnitChoiceView, action: nil, menu: nil)!
+            toolbarItem = customToolbarItem(itemForItemIdentifier: kToolBarItemSpeedUnitChoiceIdentifier.rawValue, label: "Speed Unit", paletteLabel:"Speed Unit", toolTip: "Select your preferred speed unit", target: self, itemContent: self.unitSystemChoiceView, action: nil, menu: nil)!
         }else if(itemIdentifier == kToolBarItemFieldDisplayChoiceIdentifier){
             toolbarItem = customToolbarItem(itemForItemIdentifier: kToolBarItemFieldDisplayChoiceIdentifier.rawValue, label: "Field Choice", paletteLabel:"Field Choice", toolTip: "Select your preferred Field Display", target: self, itemContent: self.fieldDisplayChoiceView, action: nil, menu: nil)!
             

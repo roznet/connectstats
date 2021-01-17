@@ -245,6 +245,9 @@ class FITSelectionContext {
     
     // MARK: - Display
     
+    
+    
+    
     /// Convert to relevant unit or just description
     ///
     /// - Parameter fieldValue: value to display
@@ -267,11 +270,7 @@ class FITSelectionContext {
             }
         case .valueUnit:
             if let nu = fieldValue.numberWithUnit {
-                for unit in [self.speedUnit, self.distanceUnit] {
-                    if nu.unit.canConvert(to: unit) {
-                        return nu.convert(to: unit).description
-                    }
-                }
+                return self.display(numberWithUnit: nu)
             }
         default:
             return fieldValue.displayString()
@@ -280,12 +279,16 @@ class FITSelectionContext {
     }
     
     func display( numberWithUnit nu: GCNumberWithUnit) -> String{
-        for unit in [self.speedUnit, self.distanceUnit] {
-            if nu.unit.canConvert(to: unit) {
-                return nu.convert(to: unit).description
+        if GCUnit.getGlobalSystem() != .default {
+            // for speed use better than mps
+            if nu.unit.canConvert(to: GCUnit.mps() ) {
+                return nu.convert(to: GCUnit.kph().forGlobalSystem()).description
+            }else{
+                return nu.convertToGlobalSystem().description
             }
+        }else{
+            return nu.description
         }
-        return nu.description;
     }
     
     func displayField( fitMessageType: FitMessageType, fieldName : String ) -> NSAttributedString {
