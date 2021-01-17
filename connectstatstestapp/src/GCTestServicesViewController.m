@@ -30,10 +30,10 @@
 
 #import "GCTestServiceGarmin.h"
 #import "GCTestServiceStrava.h"
-#import "GCTestServiceWithings.h"
 #import "GCTestServiceBugReport.h"
 #import "GCTestServiceConnectStats.h"
 #import "GCTestServiceCompare.h"
+#import "GCTestServiceGarminBoth.h"
 
 NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
 
@@ -57,6 +57,10 @@ NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
                                                   usingBlock:^(NSNotification*n){
         [self saveSettings];
     }];
+    
+    self.runner.postRun = ^(RZUnitTest*test,NSDictionary*def){
+        [self postRunSettingAction:test];
+    };
     // Do any additional setup after loading the view.
 }
 
@@ -69,9 +73,27 @@ NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
     
     [super dealloc];
 }
+
+-(void)postRunSettingAction:(RZUnitTest*)test{
+    
+    if( [test respondsToSelector:@selector(garminSource)]){
+        [self syncSettings];
+    }
+}
+
 -(void)saveSettings{
     [self.profile saveToSettings:self.settings];
     [RZFileOrganizer saveDictionary:self.settings withName:kPreservedSettingsName];
+}
+
+-(void)syncSettings{
+    [[GCAppGlobal profile] saveToSettings:self.settings];
+    [RZFileOrganizer saveDictionary:self.settings withName:kPreservedSettingsName];
+}
+
+-(void)resetSettings{
+    self.profile = [GCAppProfiles singleProfileWithValues:@{PROFILE_LOGIN_NAME:[self.profile currentLoginNameForService:gcServiceGarmin]}];
+    [self saveSettings];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -90,13 +112,13 @@ NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
 */
 -(NSArray*)allTestClassNames{
     return @[
-             NSStringFromClass([GCTestServiceConnectStats class]),
-             NSStringFromClass([GCTestServiceGarmin class]),
-             NSStringFromClass([GCTestServiceStrava class]),
-             NSStringFromClass([GCTestServiceBugReport class]),
-             NSStringFromClass([GCTestServiceWithings class]),
-             NSStringFromClass([GCTestServiceCompare class]),
-             ];
+        NSStringFromClass([GCTestServiceGarminBoth class]),
+        NSStringFromClass([GCTestServiceGarmin class]),
+        NSStringFromClass([GCTestServiceConnectStats class]),
+        NSStringFromClass([GCTestServiceStrava class]),
+        NSStringFromClass([GCTestServiceBugReport class]),
+        NSStringFromClass([GCTestServiceCompare class]),
+    ];
 }
 
 -(NSArray*)additionalLeftNavigationButton{
@@ -109,7 +131,7 @@ NSString * kNotificationProfileChanged = @"kNotificationProfileChanged";
 }
 
 -(void)showConfig:(id)button{
-    [self.navigationController pushViewController:[GCTestServiceConfigViewController configForProfile:self.profile] animated:YES];
+    [self.navigationController pushViewController:[GCTestServiceConfigViewController configForProfile:self.profile controller:self] animated:YES];
 }
 
 @end

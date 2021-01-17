@@ -26,8 +26,7 @@
 #import "GCTabBarController.h"
 #import "GCAppGlobal.h"
 #import "Flurry.h"
-#import <RZExternal/RZExternal.h>
-#import "GCSharingViewController.h"
+@import RZExternal;
 #import "GCViewIcons.h"
 #import "GCWebConnect+Requests.h"
 
@@ -263,7 +262,7 @@
 
 - (void)navigationController:(UINavigationController *)navigationController
        didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    if (viewController == self.activityDetailViewController || viewController == self.activityDetailViewController.slidingViewController) {
+    if (viewController == self.activityDetailViewController) {
         [navigationController setNavigationBarHidden:YES animated:YES];
     }
 }

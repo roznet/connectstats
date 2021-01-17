@@ -27,6 +27,7 @@
 
 #import "GCTestAppGlobal.h"
 #import "GCAppDelegate.h"
+#import "ConnectStats-Swift.h"
 
 static GCAppDelegate * _cacheApplicationDelegate = nil;
 
@@ -64,4 +65,7 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     [_sharedApplicationDelegate() cleanWritableFiles];
 }
 
++(void)handle:(NSURL*)url{
+    [self handleWithUrl:url];
+}
 @end

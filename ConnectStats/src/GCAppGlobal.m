@@ -251,6 +251,11 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     return [appDelegate credentialsForService:service andKey:key];
 }
 
++(void)versionSummary{
+    GCAppDelegate * appDelegate = _sharedApplicationDelegate();
+    return [appDelegate versionSummary];
+}
+
 +(NSDictionary*)debugState{
     if (!_debugState) {
         _debugState = @{};
@@ -331,4 +336,11 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     return config;
 }
 
++(UIUserInterfaceStyle)userInterfaceStyle{
+    return [UITraitCollection currentTraitCollection].userInterfaceStyle;
+}
+
++(NSString*)appURLScheme{
+    return @"connectstats";
+}
 @end

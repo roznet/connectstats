@@ -25,6 +25,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GCField.h"
+@import RZUtilsTouch;
 
 @interface GCCellEntryFieldChoiceViewController : UITableViewController<GCEntryFieldProtocol>
 

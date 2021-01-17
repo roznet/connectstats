@@ -7,9 +7,10 @@
 //
 
 import Cocoa
-import RZUtilsOSX
-import RZFitFile
-import RZFitFileTypes
+import RZUtilsMacOS
+import FitFileParser
+
+
 
 /*
  - Select Record or Lap or Session Field
@@ -48,26 +49,26 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
 
     let selectedRow : Int
     
-    var selectedField : RZFitFieldKey?
+    var selectedField : FitFieldKey?
     
-    var displayFields:[RZFitFieldKey]
+    var displayFields:[FitFieldKey]
     
-    var statsMessageType:RZFitMessageType?
-    var statsFields:[RZFitFieldKey:[RZFitFieldKey]]?
-    var statistics:[RZFitFieldKey:FITFitValueStatistics]?
+    var statsMessageType:FitMessageType?
+    var statsFields:[FitFieldKey:[FitFieldKey]]?
+    var statistics:[FitFieldKey:FITFitValueStatistics]?
     
-    var fitFile : RZFitFile {
+    var fitFile : FitFile {
         return self.selectionContext.fitFile
     }
-    var messages:[RZFitMessage] {
+    var messages:[FitMessage] {
         return self.selectionContext.messages
     }
-    var messageType :RZFitMessageType{
+    var messageType :FitMessageType{
         get {
             return self.selectionContext.messageType
         }
     }
-    var message : RZFitMessage {
+    var message : FitMessage {
         return self.selectionContext.messages[self.selectedRow]
     }
     
@@ -98,9 +99,10 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
             self.displayFields = samplesKeys
         }
         // record could be session to get value or record to do stats
-        let messageDefaultMap : [RZFitMessageType:RZFitMessageType] = [FIT_MESG_NUM_RECORD  :FIT_MESG_NUM_RECORD,
-                                                                       FIT_MESG_NUM_LAP     :FIT_MESG_NUM_RECORD,
-                                                                       FIT_MESG_NUM_SESSION :FIT_MESG_NUM_RECORD ]
+        let messageDefaultMap : [FitMessageType:FitMessageType] = [ FitMessageType.record : FitMessageType.record,
+                                                                    FitMessageType.lap    : FitMessageType.record,
+                                                                    FitMessageType.session: FitMessageType.record
+                                ]
         
         self.statsMessageType = messageDefaultMap[context.messageType]
         
@@ -117,7 +119,7 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
     }
     
     @objc func selectionContextChanged(notification: Notification){
-        self.updateStatistics()
+        //statistics already updated upstream
     }
     
     func updateStatistics(){
@@ -141,7 +143,6 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
                 let possibleFields = Array(stats.keys)
                 self.statsFields = interp.mapFields(from: self.displayFields, to: possibleFields)
             }
-            
         }
     }
 

@@ -182,7 +182,7 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
 
     // Configure the cell...
     if (indexPath.section >= GCVIEW_SECTION_DETAILS) {

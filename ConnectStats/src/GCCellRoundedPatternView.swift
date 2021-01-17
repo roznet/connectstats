@@ -29,10 +29,13 @@ import UIKit
 
 class GCCellRoundedPatternView: UIView {
 
-    var cornerRadii : CGFloat = 40.0;
-    var lineWidth : CGFloat = 5.0;
+    var cornerRadii : CGFloat = 15.0;
+    var lineWidth : CGFloat = 2.0;
     
-    override init(frame: CGRect) {
+    var borderColor : UIColor = UIColor.white
+    var insideColor : UIColor = UIColor.clear
+    
+/*    override init(frame: CGRect) {
         super.init(frame: frame)
         
         self.isOpaque = false
@@ -41,7 +44,7 @@ class GCCellRoundedPatternView: UIView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-    }
+    }*/
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
@@ -68,11 +71,10 @@ class GCCellRoundedPatternView: UIView {
                       controlPoint2: CGPoint( x: inrect.origin.x+inrect.width, y: inrect.origin.y + inrect.size.height ))
         path.addLine(to: CGPoint(x: inrect.origin.x,
                                  y: inrect.origin.y + inrect.height))
-        UIColor.yellow.setStroke()
+        self.borderColor.setStroke()
+        self.insideColor.setFill()
         path.lineWidth = lineWidth;
         path.stroke()
-
+        path.fill()
     }
-    
-
 }

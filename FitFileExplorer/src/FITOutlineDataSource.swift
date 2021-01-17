@@ -7,22 +7,22 @@
 //
 
 import Cocoa
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
+
 
 class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelegate {
     
     static let kFITNotificationOutlineSelectionChanged = Notification.Name( "kFITNotificationOutlineSelectionChanged" )
     
     let selectionContext : FITSelectionContext
-    let orderedMessageTypes : [FIT_MESG_NUM]
+    let orderedMessageTypes : [FitMessageType] 
     
-    var fitFile: RZFitFile {
+    var fitFile: FitFile {
         return self.selectionContext.fitFile
     }
     
     
-    var selectedMessageType : RZFitMessageType {
+    var selectedMessageType : FitMessageType {
         return self.selectionContext.messageType
     }
     
@@ -32,9 +32,6 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
         self.orderedMessageTypes = selectionContext.fitFile.orderedMessageTypes()
         
         super.init()
-    }
-    deinit {
-        
     }
     
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
@@ -51,7 +48,7 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
         if index < types.count {
             return types[index]
         }
-        return FIT_MESG_NUM_INVALID
+        return FitMessageType.invalid
     }
     
     func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
@@ -60,11 +57,12 @@ class FITOutlineDataSource: NSObject,NSOutlineViewDataSource,NSOutlineViewDelega
             cellView.textField?.stringValue = ""
             cellView.detailTextField.stringValue = ""
             
-            if let type = item as? RZFitMessageType,
+            if let type = item as? FitMessageType,
                 let text = self.fitFile.messageTypeDescription(messageType: type){
                 
                 cellView.textField?.stringValue = text
-                if let count = self.fitFile.messagesByType[type]?.count {
+                let count = self.fitFile.messages(forMessageType: type).count
+                if count > 0 {
                     cellView.detailTextField.stringValue = "(\(count) items)"
                 }else{
                     cellView.detailTextField.stringValue = ""

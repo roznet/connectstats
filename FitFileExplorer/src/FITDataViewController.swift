@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import RZFitFile
+import FitFileParser
 
 class FITDataViewController: NSViewController {
 
@@ -64,7 +64,7 @@ class FITDataViewController: NSViewController {
     func update(with source:FITDataListDataSource){
         NotificationCenter.default.removeObserver(self)
         self.fitDataSource = source
-        source.updateStatistics()
+        
         self.tableView.dataSource = source
         self.tableView.delegate = source
         self.tableView.reloadData()
@@ -74,6 +74,7 @@ class FITDataViewController: NSViewController {
                                                name: FITSelectionContext.kFITNotificationConfigurationChanged,
                                                object: source.selectionContext)
         self.updatePopup()
+        self.updateStatistics()
     }
     
     func updatePopup() {
@@ -91,27 +92,36 @@ class FITDataViewController: NSViewController {
     
     @objc func selectionContextChanged(notification: Notification){
         self.updatePopup()
+        self.updateStatistics()
     }
 
-    
+    func updateStatistics() {
+        if let ds = self.fitDataSource {
+            DispatchQueue.global(qos: .userInitiated).async {
+                // update stats in background then relad on main
+                ds.updateStatistics()
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
     @IBAction func updateStatsFor(_ sender: NSPopUpButton) {
         if
             let value = sender.selectedItem?.title,
-            let mesgnum = RZFitFile.messageType(forDescription: value),
+            let mesgnum = FitFile.messageType(forDescription: value),
             let ds = self.fitDataSource{
             ds.selectionContext.statsFor = mesgnum
-            ds.updateStatistics()
-            self.tableView.reloadData()
+            self.updateStatistics()
         }
     }
     @IBAction func updateStatsUsing(_ sender: NSPopUpButton) {
         if
             let value = sender.selectedItem?.title,
-            let mesgnum = RZFitFile.messageType(forDescription: value),
+            let mesgnum = FitFile.messageType(forDescription: value),
             let dataSource = self.fitDataSource{
             dataSource.selectionContext.statsUsing = mesgnum
-            dataSource.updateStatistics()
-            self.tableView.reloadData()
+            self.updateStatistics()
         }
     }
     

@@ -27,12 +27,10 @@
 
 import Cocoa
 import RZUtils
-import RZUtilsOSX
+import RZUtilsMacOS
 import GenericJSON
-import KeychainSwift
 import RZUtilsSwift
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
 
 extension Date {
     func formatAsRFC3339() -> String {
@@ -50,7 +48,6 @@ extension GCField {
 
 class FITDownloadViewController: NSViewController {
     
-    let keychain = KeychainSwift()
     
     @IBOutlet weak var userName: NSTextField!
     @IBOutlet weak var password: NSSecureTextField!
@@ -66,20 +63,17 @@ class FITDownloadViewController: NSViewController {
     // MARK: -
     
     func databaseFileName() -> String {
-        if let saved_username = keychain.get(FITAppGlobal.ConfigParameters.loginName.rawValue){
+        let saved_username = FITAppGlobal.currentLoginName()
         
-            var invalidCharacters = CharacterSet(charactersIn: ":/")
-           
-            invalidCharacters.formUnion(CharacterSet.newlines)
-            invalidCharacters.formUnion(CharacterSet.illegalCharacters)
-            invalidCharacters.formUnion(CharacterSet.controlCharacters)
-            
-            let filename = saved_username.components(separatedBy: invalidCharacters).joined(separator: "")
-            
-            return "activities_\(filename).db"
-        }else{
-            return "activities_default.db"
-        }
+        var invalidCharacters = CharacterSet(charactersIn: ":/")
+        
+        invalidCharacters.formUnion(CharacterSet.newlines)
+        invalidCharacters.formUnion(CharacterSet.illegalCharacters)
+        invalidCharacters.formUnion(CharacterSet.controlCharacters)
+        
+        let filename = saved_username.components(separatedBy: invalidCharacters).joined(separator: "")
+        
+        return "activities_\(filename).db"
     }
     
     func selectedActivities() -> [Activity] {
@@ -93,21 +87,21 @@ class FITDownloadViewController: NSViewController {
     }
     
     
-    func exportFitFilesAsCSV(messageType:RZFitMessageType){
+    func exportFitFilesAsCSV(messageType:FitMessageType){
         let todo = self.selectedActivities()
-        var files : [RZFitFile] = []
+        var files : [FitFile] = []
         for act in todo {
             if let url = act.fitFilePath {
-                if let file = RZFitFile(file: url){
+                if let file = FitFile(file: url){
                     files.append(file)
                 }
             }
         }
         
-        let csv = RZFitFile.csv(messageType: messageType, fitFiles: files)
+        let csv = FitFile.csv(messageType: messageType, fitFiles: files)
         let content = csv.joined(separator: "\n")
         
-        let mesg = rzfit_mesg_num_string(input: messageType) ?? "mesg"
+        let mesg =  messageType.name()
         
         self.askAndSave(content: content, candidate: "export_\(mesg)")
     }
@@ -136,10 +130,10 @@ class FITDownloadViewController: NSViewController {
         
         let dbpath = RZFileOrganizer.writeableFilePath(self.databaseFileName())
         
-        if let db = FMDatabase(path: dbpath) {
-            db.open()
-            FITAppGlobal.shared.organizer.load(db: db)
-        }
+        let db = FMDatabase(path: dbpath) 
+        db.open()
+        FITAppGlobal.shared.organizer.load(db: db)
+        
         
         FITAppGlobal.downloadManager().startDownloadList()
     }
@@ -189,15 +183,15 @@ class FITDownloadViewController: NSViewController {
     }
     
     @IBAction func exportFilesAsCSVSessions(_ sender: Any) {
-        self.exportFitFilesAsCSV(messageType: FIT_MESG_NUM_SESSION)
+        self.exportFitFilesAsCSV(messageType: FitMessageType.session)
     }
     
     @IBAction func exportFilesAsCSVLaps(_ sender: Any) {
-        self.exportFitFilesAsCSV(messageType: FIT_MESG_NUM_LAP)
+        self.exportFitFilesAsCSV(messageType: FitMessageType.lap)
     }
     
     @IBAction func exportFilesAsCSVRecords(_ sender: Any) {
-        self.exportFitFilesAsCSV(messageType: FIT_MESG_NUM_RECORD)
+        self.exportFitFilesAsCSV(messageType: FitMessageType.record)
     }
     
     @IBAction func exportList(_ sender: Any) {
@@ -212,19 +206,12 @@ class FITDownloadViewController: NSViewController {
     
     @IBAction func editUserName(_ sender: Any) {
         let entered_username = userName.stringValue
-        if( !keychain.set(entered_username, forKey: FITAppGlobal.ConfigParameters.loginName.rawValue) ){
-            RZSLog.error( "failed to save username" )
-        }
-        FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.loginName.rawValue, stringVal: entered_username)
+        FITAppGlobal.setCurrentLoginName( entered_username )
     }
     
     @IBAction func editPassword(_ sender: Any) {
         let entered_password = password.stringValue
-        if !keychain.set(entered_password, forKey: FITAppGlobal.ConfigParameters.password.rawValue){
-            RZSLog.error("failed to save password")
-        }
-        
-        FITAppGlobal.configSet(FITAppGlobal.ConfigParameters.password.rawValue, stringVal: entered_password)
+        FITAppGlobal.setCurrentPassword(entered_password)
     }
 
     // MARK: - notifications
@@ -277,20 +264,9 @@ class FITDownloadViewController: NSViewController {
                                                selector: #selector(organizerListChanged(notification:)),
                                                name: ActivitiesOrganizer.Notifications.listChange,
                                                object: nil)
-
-        if let saved_username = keychain.get(FITAppGlobal.ConfigParameters.loginName.rawValue){
-            userName.stringValue = saved_username
-            if let update = try? JSON( [FITAppGlobal.ConfigParameters.loginName.rawValue:saved_username]) {
-                FITAppGlobal.shared.updateSettings(json: update)
-            }
-        }
         
-        if let saved_password = keychain.get(FITAppGlobal.ConfigParameters.password.rawValue) {
-            password.stringValue = saved_password
-            if let update = try? JSON( [FITAppGlobal.ConfigParameters.password.rawValue:saved_password]) {
-                FITAppGlobal.shared.updateSettings(json: update)
-            }
-        }
+        userName.stringValue = FITAppGlobal.currentLoginName()
+        password.stringValue = FITAppGlobal.currentPassword()
         
 
         //FITAppGlobal.downloadManager().loadFromFile()
@@ -302,10 +278,9 @@ class FITDownloadViewController: NSViewController {
         
         if let dbpath = RZFileOrganizer.writeableFilePathIfExists(self.databaseFileName()) {
             FITAppGlobal.shared.worker.async {
-                if let db = FMDatabase(path: dbpath ) {
-                    db.open()
-                    FITAppGlobal.shared.organizer.load(db: db)
-                }
+                let db = FMDatabase(path: dbpath )
+                db.open()
+                FITAppGlobal.shared.organizer.load(db: db)
             }
         }
 

@@ -33,6 +33,8 @@ NSString * kPreservedSettingsName = @"test_services_settings.plist";
 
 static GCAppDelegate * _cacheApplicationDelegate = nil;
 
+static UIUserInterfaceStyle _cacheUserInterfaceStyle = UIUserInterfaceStyleUnspecified;
+
 NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     if( _cacheApplicationDelegate == nil){
         _cacheApplicationDelegate = (GCAppDelegate*)[UIApplication sharedApplication].delegate;
@@ -150,5 +152,26 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 +(NSString*)simulatorUrl{
     return [_sharedApplicationDelegate() simulatorUrl];
 }
++(gcWebConnectStatsConfig)webConnectsStatsConfig{
+    gcWebConnectStatsConfig config = [[self profile] configGetInt:CONFIG_CONNECTSTATS_CONFIG defaultValue:gcWebConnectStatsConfigProductionConnectStatsApp];
+    return config;
+}
 
++(UIUserInterfaceStyle)userInterfaceStyle{
+    if( _cacheUserInterfaceStyle == UIUserInterfaceStyleUnspecified ){
+        _cacheUserInterfaceStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
+    }
+    return _cacheUserInterfaceStyle;
+}
+
++(void)setUserInterfaceStyle:(UIUserInterfaceStyle)newStyle{
+    _cacheUserInterfaceStyle = newStyle;
+}
+
++(NSString*)appURLScheme{
+    return @"connectstatstestapp";
+}
++(void)versionSummary{
+    RZLog(RZLogInfo,@"Version Summary would go here - this is a test version");
+}
 @end

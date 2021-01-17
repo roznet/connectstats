@@ -93,7 +93,9 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
 }
 
 
--(void)process{
+-(void)process:(NSData *)theData andDelegate:(id<GCWebRequestDelegate>)delegate{
+    self.delegate = delegate;
+    
     if (![self isSignedIn]) {
         dispatch_async(dispatch_get_main_queue(), ^(){
             [self processNewStage];
@@ -105,7 +107,7 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
     }else{
 
         if( self.loginStage == GCConnectStatsRequestLoginStageValidateUser){
-            NSData * jsonData = [self.theString dataUsingEncoding:self.encoding];
+            NSData * jsonData = theData;
             NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
             if( [info isKindOfClass:[NSDictionary class]] && [info[@"cs_user_id"] respondsToSelector:@selector(integerValue)] && [info[@"cs_user_id"] integerValue] == self.userId){
                 RZLog(RZLogInfo, @"Validated user %@", info[@"cs_user_id"]);
@@ -114,7 +116,7 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
             }
         }else if (self.loginStage == GCConnectStatsRequestLoginStageAPICheck){
             if( self.theString != nil){
-                NSData * jsonData = [self.theString dataUsingEncoding:self.encoding];
+                NSData * jsonData = theData;
                 NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
                 if( [info isKindOfClass:[NSDictionary class]] && [info[@"status"] respondsToSelector:@selector(integerValue)] && [info[@"status"] integerValue] == 1){
                     RZLog(RZLogInfo, @"Api Check Success");

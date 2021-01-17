@@ -78,6 +78,7 @@
 -(NSString*)displayName;
 -(NSString*)displayNameAndUnits;
 -(NSString*)displayNameWithUnits:(GCUnit*)unit;
+-(NSString*)displayNameWithPrimary:(GCField*)primary;
 -(GCUnit*)unit;
 
 -(NSString*)category;

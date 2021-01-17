@@ -35,9 +35,9 @@ NSStringEncoding kRequestDebugFileEncoding = NSUTF8StringEncoding;
 
 #if !__has_feature(objc_arc)
 -(void)dealloc{
-    [_nextReq release];
     [_theString release];
-
+    [_lastError release];
+    
     [super dealloc];
 }
 #endif
@@ -124,4 +124,7 @@ NSStringEncoding kRequestDebugFileEncoding = NSUTF8StringEncoding;
     return self.status == GCWebStatusOK;
 }
 
+-(GCWebRequestStandard*)nextReq{
+    return nil;
+}
 @end

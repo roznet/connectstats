@@ -31,7 +31,7 @@
 
 
 
-@interface GCHistoryAggregatedActivityStats : NSObject
+@interface GCHistoryAggregatedActivityStats : NSObject<NSFastEnumeration>
 
 +(GCHistoryAggregatedActivityStats*)aggregatedActivitStatsForActivityType:(NSString*)activityType;
 

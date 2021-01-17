@@ -35,6 +35,7 @@
 #import "GCStatsDerivedHistoryViewController.h"
 #import "GCStatsDerivedAnalysisConfig.h"
 
+
 @class  GCFieldsForCategory;
 
 @interface GCStatsMultiFieldViewController : UITableViewController<RZChildObject,GCViewActivityTypeButtonDelegate,GCCellSimpleGraphDelegate,GCStatsMultiFieldConfigViewDelegate,GCStatsDerivedHistoryViewDelegate>
@@ -48,6 +49,7 @@
 @property (nonatomic,retain) GCStatsMultiFieldConfig * multiFieldConfig;
 @property (nonatomic,retain) GCStatsDerivedAnalysisConfig * derivedAnalysisConfig;
 @property (nonatomic,copy) void (^updateCallback)(void);
+@property (nonatomic,readonly) BOOL isNewStyle;
 
 -(void)setupForCurrentActivityType:(NSString*)aType filter:(BOOL)aFilter andViewChoice:(gcViewChoice)choice;
 -(void)setupForCurrentActivityType:(NSString*)aType andViewChoice:(gcViewChoice)choice;

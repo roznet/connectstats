@@ -31,7 +31,7 @@
 #import "GCService.h"
 #import "GCHealthKitRequest.h"
 #import "GCActivity+Fields.h"
-#import "RZUtilsHealthkit/RZUtilsHealthkit.h"
+@import RZUtilsTouch;
 #import "GCActivity+Database.h"
 
 @interface GCHealthKitActivityParser ()

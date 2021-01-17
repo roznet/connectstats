@@ -157,9 +157,6 @@ NSString * windDirectionToCompassPoint(double bearing){
 }
 
 @interface GCWeather ()
-@property (nonatomic,retain) NSMutableDictionary * weatherData;
-
-
 @end
 
 @implementation GCWeather
@@ -429,11 +426,7 @@ NSString * windDirectionToCompassPoint(double bearing){
 +(GCWeather*)weatherWithData:(NSDictionary*)dict{
     GCWeather * rv = [[[GCWeather alloc] init] autorelease];
     if (rv) {
-        if (dict[GC_WEATHER_ICON] != nil) {
-            rv.weatherData = [NSMutableDictionary dictionaryWithDictionary:dict];
-        }else{
-            [rv parseConnectStats:dict preferredProvider:@[ kGCWeatherProviderDarkSky, kGCWeatherProviderVisualCrossing, kGCWeatherProviderOpenWeatherMap]];
-        }
+        [rv parseConnectStats:dict preferredProvider:@[ kGCWeatherProviderDarkSky, kGCWeatherProviderVisualCrossing, kGCWeatherProviderOpenWeatherMap]];
     }
     return rv;
 }
@@ -456,7 +449,6 @@ NSString * windDirectionToCompassPoint(double bearing){
     [_windSpeed release];
     [_windDirectionCompassPoint release];
     [_weatherTypeDesc release];
-    [_weatherData release];
     [super dealloc];
 }
 +(GCWeather*)weatherWithResultSet:(FMResultSet*)res{
@@ -490,43 +482,25 @@ NSString * windDirectionToCompassPoint(double bearing){
 
 -(void)saveToDb:(FMDatabase*)db forActivityId:(NSString*)aId{
     if (aId) {
-        if ([self newFormat]) {
-            [db executeUpdate:@"DELETE FROM gc_activities_weather WHERE activityId = ?",aId];
-
-            RZEXECUTEUPDATE(db, @"INSERT OR REPLACE INTO gc_activities_weather_detail (activityId, weatherDate, weatherType, weatherTypeDesc, temperature, apparentTemperature, relativeHumidity, windDirection, windSpeed, windDirectionCompassPoint, weatherStationId, weatherStationName, latitude, longitude) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                            aId,
-                            self.weatherDate ? self.weatherDate : [NSNull null],
-                            @(self.weatherType),
-                            self.weatherTypeDesc,
-                            self.temperature ? [self.temperature number] : [NSNull null],
-                            self.apparentTemperature ? [self.apparentTemperature number] : [NSNull null],
-                            self.relativeHumidity ? [self.relativeHumidity number] : [NSNull null],
-                            self.windDirection ? self.windDirection : [NSNull null],
-                            self.windSpeed ? [self.windSpeed number] : [NSNull null],
-                            self.windDirectionCompassPoint ? self.windDirectionCompassPoint : [NSNull null],
-                            [NSNull null],
-                            [NSNull null],
-                            @(self.weatherStationLocation.latitude),
-                            @(self.weatherStationLocation.longitude)
-
-                            );
-
-        }else{
-            [db executeUpdate:@"DELETE FROM gc_activities_weather WHERE activityId = ?",aId];
-            [db beginTransaction];
-            for (NSString * key in self.weatherData) {
-                id val = (self.weatherData)[key];
-                if ([val isKindOfClass:[NSString class]]) {
-                    NSString * valstr = (NSString*)val;
-                    if (![db executeUpdate:@"INSERT INTO gc_activities_weather (activityId,weatherField,weatherValue) VALUES(?,?,?)", aId,key,valstr]){
-                        RZLog(RZLogError, @"db error %@", [db lastErrorMessage]);
-                    }
-                }
-            }
-            if (![db commit]) {
-                RZLog(RZLogError, @"db error %@", [db lastErrorMessage]);
-            }
-        }
+        
+        RZEXECUTEUPDATE(db, @"INSERT OR REPLACE INTO gc_activities_weather_detail (activityId, weatherDate, weatherType, weatherTypeDesc, temperature, apparentTemperature, relativeHumidity, windDirection, windSpeed, windDirectionCompassPoint, weatherStationId, weatherStationName, latitude, longitude) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                        aId,
+                        self.weatherDate ? self.weatherDate : [NSNull null],
+                        @(self.weatherType),
+                        self.weatherTypeDesc,
+                        self.temperature ? [self.temperature number] : [NSNull null],
+                        self.apparentTemperature ? [self.apparentTemperature number] : [NSNull null],
+                        self.relativeHumidity ? [self.relativeHumidity number] : [NSNull null],
+                        self.windDirection ? self.windDirection : [NSNull null],
+                        self.windSpeed ? [self.windSpeed number] : [NSNull null],
+                        self.windDirectionCompassPoint ? self.windDirectionCompassPoint : [NSNull null],
+                        [NSNull null],
+                        [NSNull null],
+                        @(self.weatherStationLocation.latitude),
+                        @(self.weatherStationLocation.longitude)
+                        
+                        );
+        
     }
 }
 
@@ -564,88 +538,50 @@ NSString * windDirectionToCompassPoint(double bearing){
     }
 }
 
--(BOOL)newFormat{
-    return self.weatherData == nil && self.weatherType != 0;
-}
-
 -(BOOL)valid{
-    if (self.weatherData == nil && self.weatherType != 0) {
-        return true; // new format
-    }
-    return self.weatherData && (self.weatherData)[GC_WEATHER_ICON];
+    return true;
 }
 
 -(NSString*)weatherDisplayField:(NSString*)key{
     NSString * val = nil;
-    if ([self newFormat]) {
-        gcUnitSystem system = [GCUnit getGlobalSystem];
-        if ([key isEqualToString:GC_WEATHER_TEMPERATURE]) {
-            val = [self.temperature convertToSystem:system].description;
-        }else if ([key isEqualToString:GC_WEATHER_WIND]){
-            if (self.windDirection == nil || [self.windDirectionCompassPoint isEqualToString:@"N/A"]) {
-                val = [NSString stringWithFormat:@"%@ wind", [[self.windSpeed convertToUnitName:@"kph"] convertToSystem:system]
-                       ];
-
-            }else{
-                val = [NSString stringWithFormat:@"%@ %@ wind", [[self.windSpeed convertToUnitName:@"kph"] convertToSystem:system], (self.windDirectionCompassPoint).uppercaseString
+    gcUnitSystem system = [GCUnit getGlobalSystem];
+    if ([key isEqualToString:GC_WEATHER_TEMPERATURE]) {
+        val = [self.temperature convertToSystem:system].description;
+    }else if ([key isEqualToString:GC_WEATHER_WIND]){
+        if (self.windDirection == nil || [self.windDirectionCompassPoint isEqualToString:@"N/A"]) {
+            val = [NSString stringWithFormat:@"%@ wind", [[self.windSpeed convertToUnitName:@"kph"] convertToSystem:system]
                    ];
-            }
-        }else if([key isEqualToString:GC_WEATHER_ICON]){
-            return self.weatherTypeDesc;
+            
+        }else{
+            val = [NSString stringWithFormat:@"%@ %@ wind", [[self.windSpeed convertToUnitName:@"kph"] convertToSystem:system], (self.windDirectionCompassPoint).uppercaseString
+                   ];
         }
-    }else{
-        val = self.weatherData[key];
+    }else if([key isEqualToString:GC_WEATHER_ICON]){
+        return self.weatherTypeDesc;
     }
     return val;
 }
 
 -(BOOL)weatherCompleteForDisplay{
-    if ([self newFormat]) {
-        return self.weatherType != 0;
-    }else{
-        return (self.weatherData)[GC_WEATHER_TEMPERATURE] &&
-        (self.weatherData)[GC_WEATHER_WIND] &&
-        (self.weatherData)[GC_WEATHER_ICON];
-    }
-
+    return self.weatherType != 0;
 }
 
 -(UIImage*)weatherIcon{
     buildCache();
     UIImage * rv = nil;
-    if ([self newFormat]) {
-        NSUInteger ntype = self.weatherType;
-        NSArray * defs = _weatherTypes[@(ntype)];
-        if (defs) {
-            rv = [UIImage imageNamed:defs[1]];
-        }else{
-            NSString * missing = [NSString stringWithFormat:@"%d(%@)", (int)self.weatherType, self.weatherTypeDesc];
-            RZLog(RZLogInfo, @"Missing weather icon type %@", missing);
-#ifdef GC_USE_FLURRY
-            [Flurry logEvent:@"missingWeatherIcon" withParameters:@{GC_WEATHER_ICON:missing}];
-#endif
-
-        }
-
+    NSUInteger ntype = self.weatherType;
+    NSArray * defs = _weatherTypes[@(ntype)];
+    if (defs) {
+        rv = [UIImage imageNamed:defs[1]];
     }else{
-        NSString * key = (self.weatherData)[GC_WEATHER_ICON];
-        if (key) {
-            rv = [UIImage imageNamed:key];
-            if (!rv) {
-                NSString * desc = _weatherIcons[key];
-                if (desc) {
-                    rv = [UIImage imageNamed:desc];
-                }
-            }
-        }
-        if (rv == nil) {
-            RZLog(RZLogInfo, @"Missing weather icon %@", key);
+        NSString * missing = [NSString stringWithFormat:@"%d(%@)", (int)self.weatherType, self.weatherTypeDesc];
+        RZLog(RZLogInfo, @"Missing weather icon type %@", missing);
 #ifdef GC_USE_FLURRY
-            [Flurry logEvent:@"missingWeatherIcon" withParameters:@{GC_WEATHER_ICON:key?:@"unknown"}];
+        [Flurry logEvent:@"missingWeatherIcon" withParameters:@{GC_WEATHER_ICON:missing}];
 #endif
-        }
-
+        
     }
+    
     return rv;
 }
 
@@ -665,19 +601,12 @@ NSString * windDirectionToCompassPoint(double bearing){
 }
 
 -(NSString*)description{
-    if (self.newFormat) {
-        return [NSString stringWithFormat:@"<GCWeather: %@ %@ Wind %@ %@>",
-                self.weatherTypeDesc,
-                self.temperature,
-                [self.windSpeed convertToUnitName:@"kph"],
-                 (self.windDirectionCompassPoint).uppercaseString
-                ];
-    }else{
-        return [NSString stringWithFormat:@"<GCWeather: %@ %@ %@>", self.weatherData[GC_WEATHER_INFO_ICON],
-                self.weatherData[GC_WEATHER_TEMPERATURE],
-                self.weatherData[GC_WEATHER_WIND]
-                ];
-    }
+    return [NSString stringWithFormat:@"<GCWeather: %@ %@ Wind %@ %@>",
+            self.weatherTypeDesc,
+            self.temperature,
+            [self.windSpeed convertToUnitName:@"kph"],
+            (self.windDirectionCompassPoint).uppercaseString
+            ];
 }
 
 -(GCNumberWithUnit*)weatherStationDistanceFromCoordinate:(CLLocationCoordinate2D)coord{
@@ -689,4 +618,5 @@ NSString * windDirectionToCompassPoint(double bearing){
 
     return rv;
 }
+
 @end

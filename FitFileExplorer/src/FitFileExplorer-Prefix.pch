@@ -15,7 +15,7 @@
 
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
-#import "RZUtils/RZUtils.h"
-#import "RZUtilsUniversal/RZUtilsUniversal.h"
-#import "RZUtilsOSX/RZUtilsOSX.h"
+@import RZUtils;
+@import RZUtilsUniversal;
+@import RZUtilsMacOS;
 #endif

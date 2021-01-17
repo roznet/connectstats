@@ -8,8 +8,8 @@
 
 import XCTest
 @testable import FitFileExplorer
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
+
 
 class FitFileExplorerTests: XCTestCase {
     
@@ -27,62 +27,14 @@ class FitFileExplorerTests: XCTestCase {
         let filenames = [ "activity_1378220136.fit", "activity_1382772474.fit" ]
         
         for filename in filenames {
-            let decode = FITFitFileDecode(forFile:RZFileOrganizer.bundleFilePath(filename, for: type(of:self)))
-            decode?.parse()
-            
-            
-            if let fit = decode?.fitFile,
-                let fastfit = RZFitFile(file: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(filename, for: type(of:self)))) {
-                let origfit = RZFitFile(fitFile: fit)
-                let fittypes = fit.allMessageTypes()
+            if
+                let fastfit = FitFile(file: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(filename, for: type(of:self)))) {
                 let fasttypes = fastfit.messageTypes
-                let rebuild = RZFitFile(fitFile: fit)
                 XCTAssertNotNil(fasttypes)
-                XCTAssertNotNil(fittypes)
-                XCTAssertNotNil(rebuild)
                 
-                XCTAssertGreaterThan(origfit.messages.count, 0)
-                
-                if let fittypes = fittypes {
-                    for mesgtype in fastfit.messageTypes{
-                        let strmesgtype = fastfit.messageTypeDescription(messageType: mesgtype) ?? "ERROR"
-                        XCTAssertTrue(fittypes.contains(strmesgtype))
-                    }
-                    for mesgtype in fittypes {
-                        
-                        if( mesgtype != "unknown"){
-                            let fasttype = RZFitFile.messageType(forDescription: mesgtype) ?? FIT_MESG_NUM_INVALID
-                            XCTAssertTrue(fasttypes.contains(fasttype))
-                        }
-                    }
-                }
-                
-                for type in fastfit.messageTypes {
-                    if let typeStr = fastfit.messageTypeDescription(messageType: type){
-                        let fastmessages = fastfit.messages(forMessageType: type)
-                        if let fitmessages = fit.message(forType: typeStr){
-                            XCTAssertEqual(Int(fitmessages.count()), fastmessages.count)
-                            var diffs : Int = 0
-                            for (offset,fields) in fastmessages.enumerated(){
-                                if let rawfitfields = fitmessages.field(for: UInt(offset)),
-                                    let fitfields = RZFitMessage( with: rawfitfields){
-                                    let fastfields = fields.interpretedFields()
-                                    let origfields = fitfields.interpretedFields()
-                                    
-                                    if( origfields.count != fastfields.count){
-                                        diffs+=1
-                                    }
-                                }
-                            }
-                            if( diffs > 0){
-                                print( "\(typeStr):\(diffs)")
-                            }
-                        }
-                    }
-                }
-                let records = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
+                let records = fastfit.messages(forMessageType: FitMessageType.record)
                 if  records.count > 0 {
-                    let csv = fastfit.csv(messageType: FIT_MESG_NUM_RECORD)
+                    let csv = fastfit.csv(messageType: FitMessageType.record)
                     XCTAssertEqual(csv.count, records.count+1)
                     
                     var size : Int? = nil
@@ -113,7 +65,7 @@ class FitFileExplorerTests: XCTestCase {
             let filenames = [ "activity_1378220136.fit", "activity_1382772474.fit" ]
             
             for filename in filenames {
-                let fit = RZFitFile(file: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(filename, for: type(of:self))))
+                let fit = FitFile(file: URL(fileURLWithPath: RZFileOrganizer.bundleFilePath(filename, for: type(of:self))))
                 if let fit = fit {
                     let interpret = FITFitFileInterpret(fitFile: fit)
                     
@@ -153,7 +105,7 @@ class FitFileExplorerTests: XCTestCase {
         let filenames = [ "activity_1378220136.fit", "activity_1382772474.fit" ]
         
         for filename in filenames {
-            let fit = RZFitFile(file: URL(fileURLWithPath:  RZFileOrganizer.bundleFilePath(filename, for: type(of:self))))
+            let fit = FitFile(file: URL(fileURLWithPath:  RZFileOrganizer.bundleFilePath(filename, for: type(of:self))))
             
             if let fit = fit {
                 let interpret = FITFitFileInterpret(fitFile: fit)
@@ -233,35 +185,7 @@ class FitFileExplorerTests: XCTestCase {
         }
     }
     */
-    
-    func testExamples() {
-        let filename = "DeveloperData.fit"
-        let filepath = RZFileOrganizer.bundleFilePath(filename, for: type(of:self))
-        
-        
-        let decode = FITFitFileDecode(forFile:filepath)
-        decode?.parse()
-        var done : Bool = false
-        if let cppfit = decode?.fitFile,
-            let cpprecords = cppfit["record"],
-            let fastfit = RZFitFile(file: URL(fileURLWithPath:  filepath))
-        {
-            let fastrecords = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
-            XCTAssertEqual(fastrecords.count, Int(cpprecords.count()))
-            if let fastfirst = fastrecords.first,
-                let cppfirst = cpprecords[0]{
-                let fastkeys = fastfirst.preferredOrderFieldKeys()
-                for one in cppfirst.allFieldNames(){
-                    if (one != "enhanced_speed") { // dont understand why enhanced_speed not showing up
-                        XCTAssertTrue( fastkeys.contains(one), "Missing \(one)" )
-                    }
-                }
-                done = true
-            }
-        }
-        XCTAssertTrue(done)
-    }
-    
+       
     func testPerformanceExample() {
         // This is an example of a performance test case.
         
@@ -279,8 +203,8 @@ class FitFileExplorerTests: XCTestCase {
         self.measure {
             for data in datas{
                 if let data = data {
-                    let fastfit = RZFitFile(data: data)
-                    let records = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
+                    let fastfit = FitFile(data: data)
+                    let records = fastfit.messages(forMessageType: FitMessageType.record)
                     XCTAssertGreaterThan(records.count, 0)
                 }else{
                     XCTAssertTrue(false)
@@ -288,8 +212,8 @@ class FitFileExplorerTests: XCTestCase {
             }
             
             if let one = datas.first, let data = one {
-                let fastfit = RZFitFile(data: data)
-                let records = fastfit.messages(forMessageType: FIT_MESG_NUM_RECORD)
+                let fastfit = FitFile(data: data)
+                let records = fastfit.messages(forMessageType: FitMessageType.record)
                 let interp = records.map {
                     $0.interpretedFields()
                 }

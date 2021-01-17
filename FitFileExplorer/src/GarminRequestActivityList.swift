@@ -89,12 +89,19 @@ class GarminRequestActivityList: GarminRequest {
             self.parseCount = FITAppGlobal.downloadManager().loadOneFile(filePath: path)
             if self.parseCount > 0 {
                 self.lastFoundDate = FITAppGlobal.shared.organizer.earliestDate()
-                self.nextReq = GarminRequestActivityList(nextFrom: self)
             }
         }else{
             RZSLog.error( "error in request \(self.status)")
         }
         
         self.processDone()
+    }
+    
+    @objc override var nextReq: GCWebRequestStandard? {
+        if self.parseCount > 0 {
+            return GarminRequestActivityList(nextFrom: self)
+        }else{
+            return nil
+        }
     }
 }

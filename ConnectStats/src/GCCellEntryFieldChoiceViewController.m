@@ -87,7 +87,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
     [cell setupForRows:1 andCols:1];
     NSArray * fields = [self fieldsForSection:indexPath.section];
     [cell labelForRow:0 andCol:0].text = [fields[indexPath.row] displayName];

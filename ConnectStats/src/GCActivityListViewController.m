@@ -36,8 +36,9 @@
 #import "GCWebConnect+Requests.h"
 #import "GCCellHealthDayActivity.h"
 #import "GCActivityPreviewingViewController.h"
-#import <RZExternal/RZExternal.h>
+@import RZExternal;
 #import "GCActivity+Database.h"
+#import "ConnectStats-Swift.h"
 
 #define GC_ALERT_CONFIRM_DELETED    1
 #define GC_ALERT_TRIAL              2
@@ -126,7 +127,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
 -(NSArray<NSString*>*)reportServiceError{
     NSMutableArray * errorsString = [NSMutableArray arrayWithCapacity:gcWebServiceEnd];
-    gcWebService others[] = {gcWebServiceGarmin,gcWebServiceConnectStats,gcWebServiceStrava,gcWebServiceWithings};
+    gcWebService others[] = {gcWebServiceGarmin,gcWebServiceConnectStats,gcWebServiceStrava};
     
     BOOL messageOnly = true;
     
@@ -239,6 +240,9 @@ const CGFloat kCellDaySpacing = 2.f;
     
     //self.tableView.backgroundColor = [GCViewConfig defaultBackgroundColor];
 
+    [self.tableView registerNib:[UINib nibWithNibName:@"GCCellActivity" bundle:[NSBundle mainBundle]]
+         forCellReuseIdentifier:@"GCCellActivity"];
+    
     self.navigationItem.titleView = self.titleLabel;
 
 	self.search = RZReturnAutorelease([[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 280.0f, 44.0f)]);
@@ -444,6 +448,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     GCActivity * act = [self activityForIndex:indexPath.row];
+    
     if (![act.activityType isEqualToString:GC_TYPE_DAY]) {
         return [self tableView:tableView activityCellForRowAtIndexPath:indexPath];
     }else{
@@ -460,7 +465,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView activityCellWithImagesForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
     cell.delegate = self;
     gcViewActivityStatus status = gcViewActivityStatusNone;
     if (self.organizer.hasCompareActivity && [self.organizer activityIndexForFilteredIndex:indexPath.row]==self.organizer.selectedCompareActivityIndex) {
@@ -478,18 +483,25 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView activityCellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
-    cell.delegate = self;
-    gcViewActivityStatus status = gcViewActivityStatusNone;
-    if (self.organizer.hasCompareActivity && [self.organizer activityIndexForFilteredIndex:indexPath.row]==self.organizer.selectedCompareActivityIndex) {
-        status = gcViewActivityStatusCompare;
+    BOOL newStyle = [GCViewConfig cellBandedFormat];
+    if( newStyle ){
+        GCCellActivity * cell = [self.tableView dequeueReusableCellWithIdentifier:@"GCCellActivity" forIndexPath:indexPath];
+        [cell setupFor:[self activityForIndex:indexPath.row]];
+        return cell;
+    }else{
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
+        cell.delegate = self;
+        gcViewActivityStatus status = gcViewActivityStatusNone;
+        if (self.organizer.hasCompareActivity && [self.organizer activityIndexForFilteredIndex:indexPath.row]==self.organizer.selectedCompareActivityIndex) {
+            status = gcViewActivityStatusCompare;
+        }
+        
+        [cell setupSummaryFromActivity:[self activityForIndex:indexPath.row] rows:self.extendedDisplay ? 4 : 3 width:tableView.frame.size.width status:status];
+        cell.cellInset = [self insetForRowAtIndexPath:indexPath];
+        cell.cellInsetSize = kCellDaySpacing;
+        
+        return cell;
     }
-    
-    [cell setupSummaryFromActivity:[self activityForIndex:indexPath.row] rows:self.extendedDisplay ? 4 : 3 width:tableView.frame.size.width status:status];
-    cell.cellInset = [self insetForRowAtIndexPath:indexPath];
-    cell.cellInsetSize = kCellDaySpacing;
-    
-	return cell;
 }
 
 -(gcCellInset)insetForRowAtIndexPath:(NSIndexPath*)indexPath{
@@ -522,6 +534,10 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     CGFloat rv = [GCViewConfig sizeForNumberOfRows:self.extendedDisplay ? 4 : 3];
+    BOOL newStyle = [GCViewConfig cellBandedFormat];
+    if( newStyle ){
+        return [GCViewConfig sizeForNumberOfRows:4] * 1.1;
+    }
     
     GCActivity * act = [self activityForIndex:indexPath.row];
     if ([act.activityType isEqualToString:GC_TYPE_DAY]) {

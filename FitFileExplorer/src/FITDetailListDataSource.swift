@@ -7,8 +7,8 @@
 //
 
 import Cocoa
-import RZUtilsOSX
-import RZFitFile
+import RZUtilsMacOS
+import FitFileParser
 
 class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource,RZTableViewDelegate {
 
@@ -18,22 +18,22 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     
     var selectedColumn : Int = -1
     var selectedRow : Int = -1
-    var selectedField : RZFitFieldKey?
+    var selectedField : FitFieldKey? = nil
     var setupMode : Bool = false
     
-    var fitFile : RZFitFile {
+    var fitFile : FitFile {
         return self.selectionContext.fitFile
     }
-    var messages:[RZFitMessage] {
+    var messages:[FitMessage] {
         return self.selectionContext.messages
     }
-    var messageType :RZFitMessageType{
+    var messageType :FitMessageType{
         get {
             return self.selectionContext.messageType
         }
     }
     
-    var orderedKeys : [RZFitFieldKey]
+    var orderedKeys : [FitFieldKey]
     
     init(context : FITSelectionContext) {
         self.selectionContext = context
@@ -62,7 +62,6 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     }
     
     func numberOfRows(in tableView: NSTableView) -> Int {
-        
         if self.setupMode {
             return 0
         }
@@ -110,14 +109,13 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     }
     
     func userClicked(_ tableView: RZTableView, row: Int, column: Int) {
-    
         let changed : Bool = ( self.selectedColumn != column || self.selectedRow != row);
         
         if( changed ){
             self.selectedColumn = column
             self.selectedRow = row
             
-            var chosenField : RZFitFieldKey?
+            var chosenField : FitFieldKey? = nil
             
             if messages.count == 1 {
                 if let fields = self.messages.first?.interpretedFieldKeys() {
@@ -135,7 +133,6 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
             
             NotificationCenter.default.post(name: FITDetailListDataSource.kFITNotificationDetailSelectionChanged, object: self)
         }
-
     }
 
     

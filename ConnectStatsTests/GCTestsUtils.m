@@ -169,9 +169,9 @@
         
         GCFormattedField * field = [GCFormattedField formattedField:[GCField fieldForKey:afield andActivityType:atype] forNumber:num forSize:12.];
 
-        [GCUnit setGlobalSystem:GCUnitSystemImperial];
+        [GCUnit setGlobalSystem:gcUnitSystemImperial];
         XCTAssertEqualObjects(field.attributedString.string, expectedImperial, @"Imperial %@", expectedImperial);
-        [GCUnit setGlobalSystem:GCUnitSystemMetric];
+        [GCUnit setGlobalSystem:gcUnitSystemMetric];
         XCTAssertEqualObjects(field.attributedString.string, expectedMetric, @"Metric %@", expectedImperial);
         
     }

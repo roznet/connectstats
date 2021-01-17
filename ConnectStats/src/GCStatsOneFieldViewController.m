@@ -91,9 +91,6 @@
 }
 
 -(void)setupForConfig:(GCStatsOneFieldConfig*)oneFieldConfig{
-    if ((self.slidingViewController).currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) {
-        [self.slidingViewController resetTopViewAnimated:YES];
-    }
 
     self.oneFieldConfig = oneFieldConfig;
 
@@ -119,9 +116,6 @@
 }
 
 -(void)setupForCurrentConfig{
-    if ((self.slidingViewController).currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) {
-        [self.slidingViewController resetTopViewAnimated:YES];
-    }
 
     if (self.oneFieldConfig.viewChoice != gcViewChoiceFields) {
         if ([_activityStats ready]) {
@@ -292,11 +286,11 @@
         }
     }else if(indexPath.section == GC_S_QUARTILES && _oneFieldConfig.viewChoice != gcViewChoiceFields){
         NSUInteger idx = [_summarizedHistory[STATS_AVG] count]-indexPath.row-1;
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         [cell setUpForSummarizedHistory:_summarizedHistory atIndex:idx forField:_oneFieldConfig.field calendarConfig:self.oneFieldConfig.calendarConfig];
         return cell;
     }else{
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         if (indexPath.section == GC_S_NAME) {
             [cell setupStatsHeaders:self.activityStats];
         }else if (indexPath.section == GC_S_AVERAGE){
@@ -324,23 +318,15 @@
                 viewController.scatterStats = _scatterStats;
                 viewController.fieldOrder = self.fieldOrder;
                 viewController.x_field = _scatterStats.config.x_activityField;
-                GCStatsGraphOptionViewController * optionsController = [[GCStatsGraphOptionViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                /*GCStatsGraphOptionViewController * optionsController = [[GCStatsGraphOptionViewController alloc] initWithStyle:UITableViewStyleGrouped];
                 optionsController.graphViewController = viewController;
-                ECSlidingViewController * slidingController = [[ECSlidingViewController alloc] initWithNibName:nil bundle:nil];
-                slidingController.topViewController = viewController;
-                slidingController.underLeftViewController = [[[UINavigationController alloc] initWithRootViewController:optionsController] autorelease];
-                [optionsController.navigationController setNavigationBarHidden:YES];
-
+                 */
                 if ([UIViewController useIOS7Layout]) {
-                    [UIViewController setupEdgeExtendedLayout:slidingController.underLeftViewController];
                     [UIViewController setupEdgeExtendedLayout:viewController];
-                    [UIViewController setupEdgeExtendedLayout:slidingController];
                 }
 
-                [self.navigationController pushViewController:slidingController animated:YES];
+                [self.navigationController pushViewController:viewController animated:YES];
                 [viewController release];
-                [slidingController release];
-                [optionsController release];
             }else if(indexPath.row==1){
                 self.oneFieldConfig.secondGraphChoice++;
                 if (self.oneFieldConfig.secondGraphChoice>=gcOneFieldSecondGraphEnd) {

@@ -138,8 +138,8 @@ NS_INLINE NSString * cacheActivityTypeKey(NSString*activityType){
     res = [db executeQuery:@"SELECT field,activity_type,metric,statute From gc_fields_uom"];
     
     NSDictionary * columnToUnitSystem = @{
-        @"statute" : @(GCUnitSystemImperial),
-        @"metric"  : @(GCUnitSystemMetric)
+        @"statute" : @(gcUnitSystemImperial),
+        @"metric"  : @(gcUnitSystemMetric)
     };
     
     while( [res next] ){
@@ -225,7 +225,7 @@ NS_INLINE NSString * cacheActivityTypeKey(NSString*activityType){
 #endif
     if( rv == nil){
         if( self.missing[field] == nil){
-            self.missing[field] = [GCFieldInfo fieldInfoFor:field displayName:field.key andUnits:@{@(GCUnitSystemMetric):[GCUnit dimensionless]}];
+            self.missing[field] = [GCFieldInfo fieldInfoFor:field displayName:field.key andUnits:@{@(gcUnitSystemMetric):[GCUnit dimensionless]}];
         }
     }
     return rv;
@@ -321,7 +321,7 @@ NS_INLINE NSString * cacheActivityTypeKey(NSString*activityType){
             if( [aName isEqualToString:field.key] ){
                 displayName = [GCField displayNameImpliedByFieldKey:field.key];
             }
-            GCFieldInfo * newInfo = [GCFieldInfo fieldInfoFor:field displayName:displayName andUnits:@{@(GCUnitSystemDefault):[GCUnit unitForKey:uom]}];
+            GCFieldInfo * newInfo = [GCFieldInfo fieldInfoFor:field displayName:displayName andUnits:@{@(gcUnitSystemDefault):[GCUnit unitForKey:uom]}];
             self.cache[field] = newInfo;
             self.missing[field] = newInfo;
         }

@@ -27,9 +27,10 @@
 #import "GCWebRequest.h"
 
 @class GCActivity;
+@class GCLap;
 
 @interface GCStravaActivityLapsParser : NSObject
-@property (nonatomic,retain) NSArray * laps;
+@property (nonatomic,retain) NSArray<GCLap*> * laps;
 @property (nonatomic,assign) GCWebStatus status;
 
 +(GCStravaActivityLapsParser*)activityLapsParser:(NSData*)input withPoints:(NSArray*)points inActivity:(GCActivity*)act;

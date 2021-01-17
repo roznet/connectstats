@@ -57,6 +57,13 @@
     return self;
 
 }
+-(gcAggregatedType)preferredAggregatedTypeForField:(GCField*)field{
+    if( field.canSum){
+        return gcAggregatedSum;
+    }else{
+        return gcAggregatedAvg;
+    }
+}
 
 -(void)setupForFields:(NSArray<GCField*>*)fields{
     self.fields = fields;
@@ -247,6 +254,21 @@
     }
     if (adate) {
         self.date = adate;
+    }
+}
+
+-(nullable GCNumberWithUnit*)preferredNumberWithUnit:(GCField*)field{
+    gcAggregatedType type = [self preferredAggregatedTypeForField:field];
+    
+    if( field.fieldFlag == gcFieldFlagWeightedMeanSpeed){
+        // Special case for speed, override
+        GCNumberWithUnit * durationN = [self numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:field.activityType] statType:gcAggregatedSum];
+        GCNumberWithUnit * distanceN = [self numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:field.activityType] statType:gcAggregatedSum];
+        GCNumberWithUnit * rv = [GCNumberWithUnit numberWithUnitName:@"mps" andValue:[distanceN convertToUnitName:@"meter"].value/durationN.value];
+        rv = [rv convertToUnit:field.unit];
+        return rv;
+    }else{
+        return [self numberWithUnit:field statType:type];
     }
 }
 

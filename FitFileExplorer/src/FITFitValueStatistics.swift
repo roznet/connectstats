@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RZFitFile
+import FitFileParser
 
 class FITFitValueStatistics: NSObject {
 
@@ -26,7 +26,7 @@ class FITFitValueStatistics: NSObject {
     var nonZeroSum :GCNumberWithUnit? = nil
     var nonZeroCount : UInt = 0
     
-    func value(stats: StatsType, field: RZFitFieldKey?) -> GCNumberWithUnit?{
+    func value(stats: StatsType, field: FitFieldKey?) -> GCNumberWithUnit?{
         
         switch stats {
         case StatsType.avg:
@@ -53,7 +53,7 @@ class FITFitValueStatistics: NSObject {
         }
     }
     
-    func preferredStatisticsForField(fieldKey : RZFitFieldKey) -> [StatsType] {
+    func preferredStatisticsForField(fieldKey : FitFieldKey) -> [StatsType] {
         if( fieldKey.hasPrefix("total")){
             return [StatsType.total,StatsType.count]
         }else if( fieldKey.hasPrefix("max") || fieldKey.hasPrefix("avg") || fieldKey.hasPrefix("min") || fieldKey.hasPrefix( "enhanced" )){
@@ -71,7 +71,7 @@ class FITFitValueStatistics: NSObject {
         return [StatsType.count]
     }
     
-    func add(fieldValue: RZFitFieldValue, weight : FITFitStatisticsWeight){
+    func add(fieldValue: FitFieldValue, weight : FITFitStatisticsWeight){
         if let nu = fieldValue.numberWithUnit {
             self.count += 1
             self.timeSeconds += weight.time

@@ -28,6 +28,7 @@
 
 @class GCFieldCache;
 @class GCActivityTypes;
+@class GCField;
 
 @interface GCActivityType : NSObject<NSCopying,NSSecureCoding>
 
@@ -64,7 +65,7 @@
 
  @return activity type
  */
--(nonnull GCActivityType*)topSubRootType;
+-(nonnull GCActivityType*)primaryActivityType;
 -(BOOL)isEqualToActivityType:(nonnull GCActivityType*)other;
 /**
  Will compare to activity type string
@@ -115,10 +116,14 @@
  */
 -(BOOL)isPacePreferred;
 -(BOOL)isSki;
+-(BOOL)isElevationLossPreferred;
 
 -(nonnull GCUnit*)preferredSpeedDisplayUnit;
 
 +(nonnull GCActivityTypes*)activityTypes;
 +(void)setActivityTypes:(nonnull GCActivityTypes*)a;
+
+/// List of relevant summary Fields
+-(nonnull NSArray<GCField*>*)summaryFields;
 
 @end

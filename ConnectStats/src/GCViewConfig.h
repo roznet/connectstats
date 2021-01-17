@@ -29,7 +29,8 @@
 #import "GCFields.h"
 #import "GCAppConstants.h"
 #import "GCViewConfigSkin.h"
-#import <RZUtilsUniversal/RZUtilsUniversal.h>
+@import RZUtilsUniversal;
+@import RZUtilsTouch;
 
 typedef NS_ENUM(NSUInteger, gcViewChoice) {
     gcViewChoiceFields,
@@ -76,7 +77,6 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(void)setSkin:(GCViewConfigSkin*)skin;
 
 
-
 // COLORS
 
 +(UIColor*)cellBackgroundDarkerForActivity:(id)aAct;
@@ -104,6 +104,8 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(UIColor*)colorForCalendarElement:(gcSkinCalendarElement)elem;
 +(UIColor*)colorForGraphElement:(gcSkinGraphColor)which;
 
++(UIColor*)colorForRoundedBorder;
+
 +(void)setupViewController:(UIViewController*)viewController;
 +(GCCellEntryListViewController*)standardEntryListViewController:(NSArray*)theChoices selected:(NSUInteger)achoice;
 +(void)setupGradient:(GCCellGrid*)aG ForActivity:(id)aAct;
@@ -114,6 +116,7 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(void)setupGradient:(GCCellGrid*)aG ForThreshold:(double)pct;
 
 +(BOOL)roundedActivityIcons;
++(BOOL)cellBandedFormat;
 
 // FIELDS
 

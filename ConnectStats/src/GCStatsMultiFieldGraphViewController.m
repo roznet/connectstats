@@ -88,12 +88,8 @@
 }
 
 -(void)showOptions{
-    if ((self.slidingViewController).currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) {
-        [self.slidingViewController resetTopViewAnimated:YES];
-    }else{
-        [self.slidingViewController anchorTopViewToRightAnimated:YES];
-    }
-
+    //FIXME: what to do?
+    NSLog(@"SHOULD NOT BE CALLED???");
 }
 
 -(void)nextConfig{
@@ -137,7 +133,7 @@
     self.graphView.dataSource = self.cache;
     self.graphView.displayConfig = self.cache;
     
-    UINavigationItem * item = self.slidingViewController ? self.slidingViewController.navigationItem : self.navigationItem;
+    UINavigationItem * item = self.navigationItem;
     
     UIBarButtonItem * rightButton = [[UIBarButtonItem alloc] initWithImage:[GCViewIcons navigationIconFor:gcIconNavGear] style:UIBarButtonItemStylePlain target:self action:@selector(nextConfig)];
     UIBarButtonItem * slide = [[UIBarButtonItem alloc] initWithImage:[GCViewIcons navigationIconFor:gcIconNavSliders] style:UIBarButtonItemStylePlain target:self action:@selector(showOptions)];
@@ -168,9 +164,6 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [self setupFrames];
-    if (self.slidingViewController) {
-        (self.slidingViewController).anchorRightRevealAmount = self.view.frame.size.width*0.9;
-    }
     
     [super viewWillAppear:animated];
 }

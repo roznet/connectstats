@@ -77,6 +77,10 @@
 
 @end
 
+@interface GCFieldCalcEfficiencyFactor : GCFieldsCalculated
+
+@end
+
 @interface GCFieldCalcKiloJoules : GCFieldsCalculated
 
 @end

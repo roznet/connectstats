@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //  
 
-#import <RZUtils/RZUtils.h>
+@import RZUtils;
 
 @interface GCUnit (FIT)
 

@@ -28,7 +28,6 @@
 #import "GCSettingsBugReport.h"
 #import "GCAppGlobal.h"
 @import RZExternal;
-@import RZExternalUniversal;
 #import "GCActivitiesCacheManagement.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCAppGlobal.h"
@@ -36,10 +35,14 @@
 #import "GCViewConfig.h"
 #import "GCAppDelegate.h"
 #import "GCFieldCache.h"
+#import "ConnectStats-Swift.h"
 
 NSString * kBugFilename = @"bugreport.zip";
 NSString * kBugNoCommonId = @"-1";
 
+@interface GCSettingsBugReport ()
+@property (nonatomic,assign) BOOL archiveSuccess;
+@end
 @implementation GCSettingsBugReport
 
 +(GCSettingsBugReport*)bugReport{
@@ -76,8 +79,7 @@ NSString * kBugNoCommonId = @"-1";
     if([[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:false]){
         RZLog(RZLogInfo, @"Enabled:  Strava Upload");
     }
-    GCAppDelegate * appDelegate = (GCAppDelegate*)[[UIApplication sharedApplication] delegate];
-    [appDelegate versionSummary];
+    [GCAppGlobal versionSummary];
 }
 
 -(void)checkDb{
@@ -97,122 +99,33 @@ NSString * kBugNoCommonId = @"-1";
 
 - (NSURLRequest*)urlResquestFor:(NSString*)aUrl;
 {
-    if ([GCAppGlobal worker]) {
-        dispatch_sync([GCAppGlobal worker],^(){
-            [self checkDb];
-        });
-        
-    }else{
-        // in multiple failure to start, no worker thread yet
-        [self checkDb];
-    }
-    
-    NSString * applicationName = [GCAppGlobal connectStatsVersion] ? @"ConnectStats" : @"HealthStats";
-    DeviceUtil * deviceUtil = RZReturnAutorelease([[DeviceUtil alloc] init]);
-    NSMutableDictionary * pData = [NSMutableDictionary dictionaryWithDictionary:@{
-                            @"systemName": [UIDevice currentDevice].systemName,
-                            @"applicationName": applicationName,
-                            @"systemVersion": [UIDevice currentDevice].systemVersion,
-                            @"platformString": [deviceUtil hardwareDescription] ?: [deviceUtil hardwareString],
-                            @"version": [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"],
-                            @"commonid": [GCAppGlobal configGetString:CONFIG_BUG_COMMON_ID defaultValue:kBugNoCommonId],
-                            }];
-    if (![[GCAppGlobal configGetString:CONFIG_BUG_COMMON_ID defaultValue:kBugNoCommonId] isEqualToString:kBugNoCommonId]) {
-        RZLog(RZLogInfo, @"Had previous bug report: id=%@", [GCAppGlobal configGetString:CONFIG_BUG_COMMON_ID defaultValue:kBugNoCommonId] );
-    }
-    NSString * log = RZLogFileContent();
+    [self checkDb];
     
     NSString * bugpath = [RZFileOrganizer writeableFilePath:kBugFilename];
     
+    self.archiveSuccess = [self createBugReportArchive];
+    
     NSError * err = nil;
-    
-    OZZipFile * zipFile= [[OZZipFile alloc] initWithFileName:bugpath mode:OZZipFileModeCreate error:&err];
-    
-    OZZipWriteStream *stream= [zipFile writeFileInZipWithName:@"bugreport.log" compressionLevel:OZZipCompressionLevelBest];
-    [stream writeData:[log dataUsingEncoding:NSUTF8StringEncoding]];
-    [stream finishedWriting];
-    
-    NSDictionary * dict = [self jsonifiedMissingFields];
-    if( dict.count > 0 ){
-        NSData * data = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingSortedKeys|NSJSONWritingPrettyPrinted error:nil];
-        if( data ){
-            OZZipWriteStream *crashstream= [zipFile writeFileInZipWithName:@"missing_fields.json" compressionLevel:OZZipCompressionLevelBest];
-            NSData * data = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingSortedKeys|NSJSONWritingPrettyPrinted error:nil];
-            [crashstream writeData:data];
-            [crashstream finishedWriting];
-        }
-    }
-    
-    if (self.includeErrorFiles) {
-        NSArray * errors = [GCActivitiesCacheManagement errorFiles];
-        for (NSString * file in errors) {
-            OZZipWriteStream *errorstream= [zipFile writeFileInZipWithName:file compressionLevel:OZZipCompressionLevelBest];
-            NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer writeableFilePath:file]];
-            [errorstream writeData:data];
-            [errorstream finishedWriting];
-        }
-    }
-    
-    if (self.includeActivityFiles) {
-        if ([[GCAppGlobal organizer] currentActivity]) {
-            NSString * aName = [NSString stringWithFormat:@"track_%@.db", [[GCAppGlobal organizer] currentActivity].activityId];
-            NSString * currActivity = [RZFileOrganizer writeableFilePathIfExists:aName];
-            if (currActivity) {
-                OZZipWriteStream *filestream = [zipFile writeFileInZipWithName:aName compressionLevel:OZZipCompressionLevelBest];
-                NSData * data = [NSData dataWithContentsOfFile:currActivity];
-                [filestream writeData:data];
-                [filestream finishedWriting];
-            }
-        }
-        
-        NSString * dbfile = [RZFileOrganizer writeableFilePathIfExists:[[GCAppGlobal profile] currentDatabasePath]];
-        if (dbfile) {
-            OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:@"activities_bugreport.db"
-                                                        compressionLevel:OZZipCompressionLevelBest];
-            NSData * data = [NSData dataWithContentsOfFile:dbfile];
-            [dbstream writeData:data];
-            [dbstream finishedWriting];
-        }
-        
-        NSString * derivedfile = [RZFileOrganizer writeableFilePathIfExists:[[GCAppGlobal profile] currentDerivedDatabasePath]];
-        if (derivedfile) {
-            OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:@"derived_bugreport.db"
-                                                        compressionLevel:OZZipCompressionLevelBest];
-            NSData * data = [NSData dataWithContentsOfFile:derivedfile];
-            [dbstream writeData:data];
-            [dbstream finishedWriting];
-        }
-    }
-    
-    NSString * settingsFile = [RZFileOrganizer writeableFilePathIfExists:@"settings.plist"];
-    if( settingsFile ){
-        OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:@"settings_bugreport.plist" compressionLevel:OZZipCompressionLevelBest];
-        NSData * data = [NSData dataWithContentsOfFile:settingsFile];
-        [dbstream writeData:data];
-        [dbstream finishedWriting];
-    }
-    
-    NSDictionary * jsonSettings = [[GCAppGlobal settings] dictionaryWithJSONTypesOnly];
-    NSData * jsonData = [NSJSONSerialization dataWithJSONObject:jsonSettings options:(NSJSONWritingPrettyPrinted|NSJSONWritingSortedKeys) error:&err];
-    if( jsonData ){
-        OZZipWriteStream *dbstream = [zipFile writeFileInZipWithName:@"settings_bugreport.json" compressionLevel:OZZipCompressionLevelBest];
-        [dbstream writeData:jsonData];
-        [dbstream finishedWriting];
-    }
-    
-    
-    [zipFile close];
-    [zipFile release];
-
     NSDictionary * attribute = [[NSFileManager defaultManager] attributesOfItemAtPath:bugpath error:&err];
-    pData[@"filesize"] = attribute[NSFileSize];
-    
+    NSDictionary<NSString*,NSString*>*extra = @{ @"filesize": [attribute[NSFileSize] description]  };
+    NSDictionary<NSString*,NSString*>*pData = [self createBugReportDictionaryWithExtra:extra];
+
     NSMutableURLRequest * urlRequest = [RZRemoteDownload urlRequestWithURL:aUrl
                                                                   postData:(NSDictionary*)pData
                                                                   fileName:@"bugreport.zip"
-                                                                  filePath:bugpath tmpPath:nil];
+                                                                  filePath:bugpath
+                                                                   tmpPath:nil];
 
     return urlRequest;
+}
+
+-(NSData*)missingFieldsAsJson{
+    NSData * data = nil;
+    NSDictionary * dict = [self jsonifiedMissingFields];
+    if( dict.count > 0 ){
+        data = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingSortedKeys|NSJSONWritingPrettyPrinted error:nil];
+    }
+    return data;
 }
 
 -(NSDictionary*)jsonifiedMissingFields{
@@ -250,6 +163,11 @@ NSString * kBugNoCommonId = @"-1";
             [RZFileOrganizer removeEditableFile:file];
         }
     }
-    RZLogReset();
+    if( self.archiveSuccess ){
+        RZLogReset();
+        RZLog(RZLogInfo,@"BugReport sent, log reset");
+    }else{
+        RZLog(RZLogInfo,@"BugReport not complete, keeping old log");
+    }
 }
 @end

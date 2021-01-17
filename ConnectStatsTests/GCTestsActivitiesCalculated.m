@@ -32,7 +32,6 @@
 #import "GCAppGlobal.h"
 #import "GCActivityTypes.h"
 #import "ConnectStats-Swift.h"
-#import "GCActivity+ExportText.h"
 #import "GCActivity+TestBackwardCompat.h"
 #import "GCActivity+TrackTransform.h"
 #import "GCCalculatedCachedTrackInfo.h"

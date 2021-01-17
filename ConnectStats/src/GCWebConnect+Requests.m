@@ -42,8 +42,6 @@
 #import "GCConnectStatsRequestLogin.h"
 #import "GCConnectStatsRequestWeather.h"
 
-#import "GCWithingsBodyMeasures.h"
-
 #import "GCHealthKitBodyRequest.h"
 #import "GCHealthKitActivityRequest.h"
 #import "GCHealthKitWorkoutsRequest.h"
@@ -51,17 +49,16 @@
 #import "GCHealthKitDayDetailRequest.h"
 #import "GCHealthKitSourcesRequest.h"
 
-#import "GCStravaActivityList.h"
-#import "GCStravaActivityStreams.h"
-
 #import "GCDerivedRequest.h"
 #import "GCHealthOrganizer.h"
+#import "ConnectStats-Swift.h"
 
 @implementation GCWebConnect (Requests)
 
 #pragma mark - search activity list
 
--(void)downloadMissingActivityDetails:(NSUInteger)n{
+-(BOOL)downloadMissingActivityDetails:(NSUInteger)n{
+    BOOL rv = true;
     NSArray * activities = [[GCAppGlobal organizer] activities];
     NSUInteger i = 0;
     NSDate * mostRecent = nil;
@@ -90,8 +87,10 @@
     if( oldest != nil && mostRecent != nil){
         RZLog(RZLogInfo, @"Download %lu Missing Details from %@ to %@", (unsigned long)i+1, oldest.YYYYdashMMdashDD, mostRecent.YYYYdashMMdashDD);
     }else{
-        RZLog(RZLogInfo, @"Download Missing Details (none required out of %lu activities", (unsigned long)activities.count);
+        RZLog(RZLogInfo, @"Download Missing Details (none required out of %lu activities)", (unsigned long)activities.count);
+        rv = false;
     }
+    return rv;
 }
 
 -(void)servicesSearch:(BOOL)reloadAll{
@@ -116,13 +115,12 @@
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
         dispatch_async(dispatch_get_main_queue(), ^(){
             BOOL stravaReload = (reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceStrava]);
-            [self addRequest:[GCStravaActivityList stravaActivityList:[GCAppGlobal currentNavigationController] start:0 andMode:stravaReload]];
+            
+            GCStravaRequestActivityList * req = RZReturnAutorelease([[GCStravaRequestActivityList alloc] initWithNavigationController:[GCAppGlobal currentNavigationController] page:0 reloadAll:stravaReload]);
+            [self addRequest:req];
         });
     }
 
-    if ([[GCAppGlobal profile] configGetBool:CONFIG_WITHINGS_AUTO defaultValue:false]) {
-        [self withingsUpdate];
-    }
     if ([GCHealthKitRequest isSupported]) {
         if ([[GCAppGlobal profile] configGetBool:CONFIG_HEALTHKIT_ENABLE defaultValue:[GCAppGlobal healthStatsVersion]]) {
             if (![[GCAppGlobal profile] sourceIsSet]) {
@@ -154,26 +152,13 @@
     [self servicesLogin];
 }
 -(void)servicesLogin{
-    if (![self didLoginSuccessfully:gcWebServiceGarmin]&& [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
+    if (![self didLoginSuccessfully:gcWebServiceGarmin] && [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
         [self garminLogin];
     }
     
     // other services are automatic
 }
 
-
-#pragma mark - withings
--(void)withingsUpdate{
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        NSInteger anchor = [[GCAppGlobal profile] serviceAnchor:gcServiceWithings];
-        if( anchor == 0 || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceWithings]){
-            [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:nil with:[GCAppGlobal currentNavigationController]]];
-        }else{
-            NSDate * anchorDate = [NSDate dateWithTimeIntervalSince1970:anchor];
-            [self addRequest:[GCWithingsBodyMeasures measuresSinceDate:anchorDate with:[GCAppGlobal currentNavigationController]]];
-        }
-    });
-}
 #pragma mark - download track details
 
 -(void)garminDownloadActivityTrackPoints13:(GCActivity*)act{
@@ -218,16 +203,16 @@
                 GCWebUseSimulator(false, nil);
             }
             //GCWebUseSimulator(true);
-            [self.requests removeAllObjects];
+            [self clearRequests];
             [self resetStatus];
-            [self.requests addObject:first];
-            [self.requests addObject:second];
+            [self addRequest:first];
+            [self addRequest:second];
             self.status = GCWebStatusOK;
         }else if (method == gcGarminLoginMethodDirect){
             [self clearCookies];
-            [self.requests removeAllObjects];
+            [self clearRequests];
             [self resetStatus];
-            [self.requests addObject:[GCGarminLoginSSORequest requestWithUser:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
+            [self addRequest:[GCGarminLoginSSORequest requestWithUser:[[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin]
                                                                        andPwd:[[GCAppGlobal profile] currentPasswordForService:gcServiceGarmin]
                                                                    validation:^(){
                 return [[GCAppGlobal profile] serviceEnabled:gcServiceGarmin];
@@ -263,9 +248,9 @@
             GCWebUseSimulator(false,nil);
         }
         //GCWebUseSimulator(true);
-        [self.requests removeAllObjects];
-        [self.requests addObject:first];
-        [self.requests addObject:second];
+        [self clearRequests];
+        [self addRequest:first];
+        [self addRequest:second];
         self.status = GCWebStatusOK;
     }
 }
@@ -295,7 +280,8 @@
 -(void)stravaDownloadActivityTrackPoints:(GCActivity*)act{
     dispatch_async(dispatch_get_main_queue(), ^(){
         if ([GCAppGlobal currentNavigationController] && [[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
-            [self addRequest:[GCStravaActivityStreams stravaActivityStream:[GCAppGlobal currentNavigationController] for:act]];
+            GCStravaRequestStreams * req = RZReturnAutorelease([[GCStravaRequestStreams alloc] initWithNavigationController:[GCAppGlobal currentNavigationController] activity:act]);
+            [self addRequest:req];
         }
     });
 }

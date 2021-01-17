@@ -373,7 +373,6 @@
                                          PROFILE_LOGIN_PWD:[testPassword mangledDataWithKey:MANGLE_KEY],
                                          PROFILE_NAME:@"Default",
                                          PROFILE_DBPATH:@"activities.db",
-                                         PROFILE_SERVICE_FULL_DONE:@(false),
                                          CONFIG_GARMIN_ENABLE:@(true)
                                          }]
                                      ]],

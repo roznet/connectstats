@@ -26,8 +26,8 @@
 
 
 import Cocoa
-import RZExternalUniversal
 import RZUtilsSwift
+import ZIPFoundation
 
 class GarminRequestFitFile: GarminRequest {
     
@@ -81,34 +81,26 @@ class GarminRequestFitFile: GarminRequest {
         var success = false
         
         let zipPath = RZFileOrganizer.writeableFilePath(self.fitZipFileName())
-        let zipFile = try OZZipFile(fileName: zipPath, mode: OZZipFileMode.unzip)
-        
-        let files = zipFile.listFileInZipInfos()
-        
-        var foundFitFile : OZFileInZipInfo? = nil
-        
-        for info in files {
-            if let info = info as? OZFileInZipInfo,
-                info.name.hasSuffix(".fit"){
-                foundFitFile = info
+        guard let archive = Archive(url: URL(fileURLWithPath: zipPath), accessMode: .read) else {
+            return success
+        }
+                
+        var fitFileEntry : Entry? = nil
+        for item in archive {
+            if item.path.hasSuffix(".fit"){
+                fitFileEntry = item
             }
         }
-        
-        if let foundFitFile = foundFitFile,
-            zipFile.locateFile(inZip: foundFitFile.name) {
-            let rstream = zipFile.readCurrentFileInZip()
-            //var data = Data(capacity: Int(foundFitFile.length))
-            let data = NSMutableData(length: Int(foundFitFile.length))
-            if let data = data,
-                rstream.readData(withBuffer: data) != 0 {
+                
+        if let fitFileEntry = fitFileEntry {
+            do {
                 let fitPath = RZFileOrganizer.writeableFilePath(self.fitFileName())
-                if( data.write(to: URL(fileURLWithPath: fitPath), atomically: true) ){
-                    success = true
-                }
+                _ = try archive.extract(fitFileEntry, to: URL(fileURLWithPath: fitPath))
+                success = true
+            }catch{
+                    
             }
         }
-        zipFile.close()
-        
         if success {
             RZFileOrganizer.removeEditableFile(self.fitZipFileName())
         }

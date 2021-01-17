@@ -71,7 +71,6 @@ NSInteger kServiceNoAnchor = 0;
     return @{PROFILE_LOGIN_NAME:@"",
              PROFILE_NAME:@"Default",
              PROFILE_DBPATH:@"activities.db",
-             PROFILE_SERVICE_FULL_DONE:@(false)
     };
 }
 
@@ -508,9 +507,6 @@ NSInteger kServiceNoAnchor = 0;
         case gcServiceStrava:
             sstr = PROFILE_SERVICE_STRAVA;
             break;
-        case gcServiceWithings:
-            sstr = PROFILE_SERVICE_WITHINGS;
-            break;
         case gcServiceGarmin:
             sstr = PROFILE_SERVICE_GARMIN;
             break;
@@ -563,9 +559,6 @@ NSInteger kServiceNoAnchor = 0;
         case gcServiceStrava:
             rv = [self configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO];
             break;
-        case gcServiceWithings:
-            rv = [self configGetBool:CONFIG_WITHINGS_AUTO defaultValue:NO];
-            break;
         case gcServiceHealthKit:
             rv = [self configGetBool:CONFIG_HEALTHKIT_ENABLE defaultValue:[GCAppGlobal healthStatsVersion]];
             break;
@@ -585,9 +578,6 @@ NSInteger kServiceNoAnchor = 0;
             break;
         case gcServiceStrava:
             [self configSet:CONFIG_STRAVA_ENABLE boolVal:set];
-            break;
-        case gcServiceWithings:
-            [self configSet:CONFIG_WITHINGS_AUTO boolVal:set];
             break;
         case gcServiceHealthKit:
             [self configSet:CONFIG_HEALTHKIT_ENABLE boolVal:set];

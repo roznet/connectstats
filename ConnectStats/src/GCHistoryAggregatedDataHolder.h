@@ -56,7 +56,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(BOOL)hasField:(GCField*)field;
 -(nullable GCNumberWithUnit*)numberWithUnit:(GCField*)field statType:(gcAggregatedType)tp;
+/**
+ * Will return preferred statistic for field.
+ *  Speed will be reconstructed from distance and duration for better accurary and consistency
+ */
+-(nullable GCNumberWithUnit*)preferredNumberWithUnit:(GCField*)field;
+-(gcAggregatedType)preferredAggregatedTypeForField:(GCField*)field;
+
 -(NSArray<GCField*>*)availableFields;
+
 
 @end
 

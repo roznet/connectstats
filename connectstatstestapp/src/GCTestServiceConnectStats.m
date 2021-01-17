@@ -31,42 +31,89 @@
 #import "GCWebUrl.h"
 #import "GCTestServiceCompare.h"
 #import "GCTestAppGlobal.h"
+#import "GCViewConfig.h"
 
 @interface GCTestServiceConnectStats ()
 
 @property (assign) gcTestStageServiceCompare stage;
-
+@property (readonly) BOOL strava;
+@property (readonly) BOOL garmin;
+@property (readonly) NSString*serviceDescription;
+@property (readonly) NSString*testServiceSessionName;
 @end
 
 @implementation GCTestServiceConnectStats
 
--(NSArray*)testDefinitions{
-    return @[ @{TK_SEL:NSStringFromSelector(@selector(testConnectStatsService)),
-                TK_DESC:@"Test for connectstats service",
-                TK_SESS:@"GC ConnectStats Service"},
-              
-              ];
+-(BOOL)strava{
+    return self.garminSource == gcGarminDownloadSourceEnd;
 }
 
--(void)testConnectStatsService{
-    [self startSession:@"GC ConnectStats Service"];
+-(BOOL)garmin{
+    return self.garminSource != gcGarminDownloadSourceEnd;
+}
+
+-(gcGarminDownloadSource)garminSource{
+    return gcGarminDownloadSourceConnectStats;
+}
+
+-(NSString*)serviceDescription{
+    switch (self.garminSource) {
+        case gcGarminDownloadSourceEnd:
+            return @"Stava";
+            break;
+        case gcGarminDownloadSourceConnectStats:
+            return @"ConnectStats";
+        case gcGarminDownloadSourceBoth:
+            return @"Garmin+ConnectStats";
+        case gcGarminDownloadSourceGarminWeb:
+            return @"GarminWeb";
+    }
+}
+
+-(NSString*)testServiceSessionName{
+    return [NSString stringWithFormat:@"GC Test Service %@", self.serviceDescription];
+}
+
+-(NSArray*)testDefinitions{
+    NSString * testDesc = [NSString stringWithFormat:@"Test for %@", self.serviceDescription];
+    return @[ @{ TK_SEL:NSStringFromSelector(@selector(testServiceStart)),
+                 TK_DESC:testDesc,
+                 TK_SESS:self.testServiceSessionName
+    } ];
+}
+
+-(void)testServiceStart{
+    [self startSession:self.testServiceSessionName];
     GCWebUseSimulator(FALSE, nil);
     
     self.stage = gcTestServiceServiceCompareSearch;
     
-    [GCTestAppGlobal setupEmptyState:kDbPathServiceConnectStats withSettingsName:kPreservedSettingsName];
-    [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_ENABLE boolVal:YES];
-    
-    [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
-    /*dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-     [self timeOutCheck];
-     });*/
-    [[GCAppGlobal web] attach:self];
-    [[GCAppGlobal web] servicesSearchRecentActivities];
+    dispatch_async( dispatch_get_main_queue(),^(){
+        [GCTestAppGlobal setupEmptyState:serviceTestDbPath(self.garminSource) withSettingsName:kPreservedSettingsName];
+        [GCViewConfig setGarminDownloadSource:self.garminSource];
+        if( self.strava){
+            [[GCAppGlobal profile] configSet:CONFIG_STRAVA_ENABLE boolVal:YES];
+        }else{
+            [[GCAppGlobal profile] configSet:CONFIG_STRAVA_ENABLE boolVal:NO];
+        }
+        
+        [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin set:kServiceNoAnchor];
+        [[GCAppGlobal profile] serviceAnchor:gcServiceConnectStats set:kServiceNoAnchor];
+        [[GCAppGlobal profile] serviceAnchor:gcServiceStrava set:kServiceNoAnchor];
+        
+        [self assessTestResult:@"Start with 0" result:[[GCAppGlobal organizer] countOfActivities] == 0 ];
+        [[GCAppGlobal web] attach:self];
+        [GCAppGlobal web].validateNextSearch = ^(NSDate* lastFound,NSUInteger count){
+            BOOL rv = count < 70;
+            RZLog(RZLogInfo, @"VALIDATE: %@ %@ activities downloaded %@", self.testServiceSessionName, @(count), rv ? @"Continue" : @"Stop");
+            return rv;
+        };
 
+        [[GCAppGlobal web] servicesSearchRecentActivities];
+    });
 }
 
--(void)tesConnectStatsServiceEnd{
+-(void)testServiceEnd{
     RZ_ASSERT([[GCAppGlobal organizer] countOfActivities] > 0, @"End with more than 0");
     
     // Need to detach from worker thread as there
@@ -74,29 +121,31 @@
     // and may call notify. Need to avoid notify while detach on different thread
     dispatch_async([GCAppGlobal worker], ^(){
         [[GCAppGlobal web] detach:self];
+        [GCAppGlobal web].validateNextSearch = nil;
     });
     
-    
-    [self endSession:@"GC ConnectStats Service"];
+    [self endSession:self.testServiceSessionName];
 }
 
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
-    
     if( [theParent respondsToSelector:@selector(currentDescription)]){
         [self log:@"%@: %@", theInfo.stringInfo, [theParent currentDescription]];
     }
-    RZ_ASSERT(![[theInfo stringInfo] isEqualToString:NOTIFY_ERROR], @"Web request had no error");
+    RZ_ASSERT(![[theInfo stringInfo] isEqualToString:NOTIFY_ERROR], @"Web request had no error %@", self.serviceDescription);
     if ([[theInfo stringInfo] isEqualToString:NOTIFY_END] || [[theInfo stringInfo] isEqualToString:NOTIFY_ERROR]) {
         self.stage += 1;
         
         if( self.stage == gcTestServiceServiceCompareDetails){
-        
             RZ_ASSERT(kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities], @"Stage within activities count");
             if( kCompareDetailCount < [[GCAppGlobal organizer] countOfActivities] ){
-                [[GCAppGlobal web] downloadMissingActivityDetails:kCompareDetailCount];
+                dispatch_async([GCAppGlobal worker], ^(){
+                    if( ! [[GCAppGlobal web] downloadMissingActivityDetails:kCompareDetailCount] ){
+                        [self testServiceEnd];
+                    }
+                });
             }
         }else{
-            [self tesConnectStatsServiceEnd];
+            [self testServiceEnd];
         }
     }
 }

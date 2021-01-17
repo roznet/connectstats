@@ -28,24 +28,33 @@
 
 #pragma mark -
 
+NS_ASSUME_NONNULL_BEGIN
+
+typedef BOOL (^GCWebValidateNextSearch)( NSDate * _Nullable , NSUInteger );
+
+extern NSString * GCWebStatusDescription(GCWebStatus status);
+extern NSString * GCWebStatusShortDescription(GCWebStatus status);
+
 @interface GCWebConnect : RZParentObject<RZRemoteDownloadDelegate,GCWebRequestDelegate>
-@property (retain,nonatomic) NSMutableArray * requests;
-@property (assign) GCWebStatus status;
+@property (nonatomic,assign) GCWebStatus status;
 @property (nonatomic,assign) NSInteger lastStatusCode;
-@property (nonatomic,retain) NSError * lastError;
-@property (nonatomic,retain) dispatch_queue_t worker;
+@property (nullable,nonatomic,retain) NSError * lastError;
+@property (nullable,nonatomic,retain) dispatch_queue_t worker;
+@property (nullable,copy) GCWebValidateNextSearch validateNextSearch;
 
 
--(NSString*)currentDescription;
--(NSString*)currentDebugDescription;
--(NSString*)currentUrl;
+
+-(nullable NSString*)currentDescription;
+-(nullable NSString*)currentDebugDescription;
+-(nullable NSString*)currentUrl;
 
 -(void)next;
--(void)addRequest:(id<GCWebRequest>)req;
+-(void)addRequest:(NSObject<GCWebRequest>*)req;
+-(void)clearRequests;
 
 -(GCWebStatus)statusForService:(gcWebService)service;
--(NSString*)statusDescriptionForService:(gcWebService)service;
--(NSString*)webServiceDescription:(gcWebService)service;
+-(nullable NSString*)statusDescriptionForService:(gcWebService)service;
+-(nullable NSString*)webServiceDescription:(gcWebService)service;
 -(BOOL)didLoginSuccessfully:(gcWebService)service;
 -(void)resetSuccessfulLogin;
 -(void)resetStatus;
@@ -55,3 +64,5 @@
 
 +(void)sanityCheck;
 @end
+
+NS_ASSUME_NONNULL_END

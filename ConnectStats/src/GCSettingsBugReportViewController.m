@@ -24,7 +24,7 @@
 //  
 
 #import "GCSettingsBugReportViewController.h"
-@import RZExternal;
+@import MBProgressHUD;
 #import "GCActivitiesCacheManagement.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCAppGlobal.h"
@@ -79,35 +79,40 @@
 	WKWebView *contentView	= [[WKWebView alloc] initWithFrame: self.view.frame];
     contentView.navigationDelegate = self;
 
-    self.report = [GCSettingsBugReport bugReport];
-    self.report.includeErrorFiles = self.includeErrorFiles;
-    self.report.includeActivityFiles = self.includeActivityFiles;
     
     self.webView = contentView;
 
     [self.view addSubview:contentView];
     self.hud =[MBProgressHUD showHUDAddedTo:contentView animated:YES];
-    self.hud.labelText = @"Preparing Report";
-
+    self.hud.label.text = NSLocalizedString( @"Preparing Report", @"Bug Report Progress");
 	[contentView release];
-    self.urlRequest = self.report.urlRequest;
     
-    self.task = [[NSURLSession sharedSession] dataTaskWithRequest:self.urlRequest
-                                        completionHandler:^(NSData*data,NSURLResponse*response,NSError*error){
-        if (error) {
-            RZLog(RZLogError,@"Error loading bugreport %@",error);
-        }else{
-            NSString *encodingName = [response textEncodingName];
-            NSStringEncoding encodingType = encodingName ? CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName)) : NSUTF8StringEncoding;
-            NSString * html = RZReturnAutorelease([[NSString alloc] initWithData:data encoding:encodingType]);
+    dispatch_async([GCAppGlobal worker], ^(){
+        self.report = [GCSettingsBugReport bugReport];
+        self.report.includeErrorFiles = self.includeErrorFiles;
+        self.report.includeActivityFiles = self.includeActivityFiles;
+        self.urlRequest = self.report.urlRequest;
+        
+        self.task = [[NSURLSession sharedSession] dataTaskWithRequest:self.urlRequest
+                                            completionHandler:^(NSData*data,NSURLResponse*response,NSError*error){
+            if (error) {
+                RZLog(RZLogError,@"Error loading bugreport %@",error);
+            }else{
+                NSString *encodingName = [response textEncodingName];
+                NSStringEncoding encodingType = encodingName ? CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName)) : NSUTF8StringEncoding;
+                NSString * html = RZReturnAutorelease([[NSString alloc] initWithData:data encoding:encodingType]);
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self.webView loadHTMLString:html baseURL:self.urlRequest.URL];;
+                });
+            }
+        }];
+        if (self.task) {
+            [self.task resume];
             dispatch_async(dispatch_get_main_queue(), ^(){
-                [self.webView loadHTMLString:html baseURL:self.urlRequest.URL];;
+                self.hud.label.text = NSLocalizedString( @"Sending Report", @"Bug Report Progress");
             });
         }
-    }];
-    if (self.task) {
-        [self.task resume];
-    }
+    });
 }
 
 - (void)didReceiveMemoryWarning
@@ -127,7 +132,7 @@
             [GCAppGlobal saveSettings];
         }
 
-        [self.hud hide:YES];
+        [self.hud hideAnimated:YES];
         if (self.parent) {
             [(self.parent).tableView reloadData];
         }

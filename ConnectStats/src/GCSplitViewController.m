@@ -25,7 +25,6 @@
 
 #import "GCSplitViewController.h"
 #import "GCAppGlobal.h"
-#import "GCSharingViewController.h"
 #import "GCWebConnect+Requests.h"
 @import RZExternal;
 

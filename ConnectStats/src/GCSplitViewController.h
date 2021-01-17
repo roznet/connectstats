@@ -26,7 +26,7 @@
 #import <UIKit/UIKit.h>
 #import "GCActivityDetailViewController.h"
 #import "GCActivityListViewController.h"
-#import <RZExternal/RZExternal.h>
+@import RZExternal;
 #import "GCStatsMultiFieldViewController.h"
 #import "GCCalendarDataSource.h"
 #import "GCSettingsViewController.h"

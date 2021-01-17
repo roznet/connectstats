@@ -29,8 +29,10 @@
 #import "GCFieldCache.h"
 #import "GCAppGlobal.h"
 @import RZUtils;
-#import <RZUtilsSwift/RZUtilsSwift-Swift.h>
+@import RZUtilsSwift;
+@import OAuthSwift;
 #import "GCTestsSamples.h"
+#import "GCTestAppGlobal.h"
 
 //@import RZUtilsSwift;
 
@@ -124,6 +126,14 @@
     [self.window makeKeyAndVisible];
 
     return YES;
+}
+
+-(BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options{
+    RZLog(RZLogInfo,@"url: %@", url.path);
+    BOOL rv = false;
+    // check if fit file
+    [GCTestAppGlobal handle:url];
+    return rv;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

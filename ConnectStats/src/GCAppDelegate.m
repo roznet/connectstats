@@ -35,7 +35,7 @@
 #import "GCWebConnect+Requests.h"
 #import "GCAppActions.h"
 #import "GCActivityType.h"
-@import RZExternal;
+@import Appirater;
 #import "GCActivity+CSSearch.h"
 #import "GCFieldCache.h"
 #import "GCAppDelegate+Swift.h"
@@ -647,6 +647,13 @@ void checkVersion(){
         }
         if( [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats]){
             [[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats set:YES];
+        }
+    }
+    
+    if( [self isFirstTimeForFeature:@"STRAVA_NEW_OAUTH"]){
+        if( [[GCAppGlobal profile] serviceEnabled:gcServiceStrava] ){
+            RZLog(RZLogInfo, @"New strava oauth: signing out strava");
+            [self stravaSignout];
         }
     }
     

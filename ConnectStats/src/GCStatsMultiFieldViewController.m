@@ -37,7 +37,6 @@
 #import "GCHistoryPerformanceAnalysis.h"
 #import "GCStatsMultiFieldViewControllerConsts.h"
 #import "GCFieldsForCategory.h"
-#import "GCStatsHistGraphViewController.h"
 #import "GCDerivedGroupedSeries.h"
 #import "GCDerivedOrganizer.h"
 #import "GCHealthOrganizer.h"
@@ -45,6 +44,7 @@
 #import "GCStatsDerivedHistory.h"
 #import "GCStatsDerivedHistoryViewController.h"
 #import "ConnectStats-Swift.h"
+@import RZUtilsSwift;
 
 @interface GCStatsMultiFieldViewController ()
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
@@ -54,6 +54,7 @@
 @property (nonatomic,retain) GCStatsDerivedAnalysisViewController * configViewController;
 @property (nonatomic,retain) GCStatsDerivedHistoryViewController * histAnalysisViewController;
 @property (nonatomic,retain) UIViewController * popoverViewController;
+@property (nonatomic,retain) RZNumberWithUnitGeometry * geometry;
 
 @end
 
@@ -87,7 +88,13 @@
     [_multiFieldConfig release];
     [_configViewController release];
     [_updateCallback release];
+    [_geometry release];
+    
     [super dealloc];
+}
+
+-(BOOL)isNewStyle{
+    return [GCViewConfig cellBandedFormat];
 }
 
 #pragma mark - UIViewController
@@ -314,15 +321,24 @@
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView aggregatedCell:(NSIndexPath *)indexPath{
-    GCCellGrid *cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid *cell = [GCCellGrid cellGrid:tableView];
 
     GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
     if( data ){
-        [cell setupFromHistoryAggregatedData:data
-                                       index:indexPath.row
+        if( self.isNewStyle ){
+            [cell setupAggregatedWithDataHolder:data
+                                          index:indexPath.row
+                               multiFieldConfig:self.multiFieldConfig
+                                   activityType:[GCActivityType activityTypeForKey:self.displayActivityType]
+                                       geometry:self.geometry
+                                           wide:false];
+        }else{
+            [cell setupFromHistoryAggregatedData:data
+                                           index:indexPath.row
                                 multiFieldConfig:self.multiFieldConfig
-                             andActivityType:self.displayActivityType
-                                       width:tableView.frame.size.width];
+                                 andActivityType:[GCActivityType activityTypeForKey:self.displayActivityType]
+                                           width:tableView.frame.size.width];
+        }
     }
     return cell;
 }
@@ -331,7 +347,7 @@
 #pragma mark - Field Summary Cells
 
 -(UITableViewCell*)tableView:(UITableView *)tableView fieldSummaryCell:(NSIndexPath *)indexPath{
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
     GCField * field =[self fieldsForSection:indexPath.section][indexPath.row];
 
     static NSDictionary * doGraph = nil;
@@ -347,7 +363,13 @@
     }
 
     GCHistoryFieldDataHolder * data = [self.fieldStats dataForField:field];
-    [cell setupForFieldDataHolder:data histStats:self.multiFieldConfig.historyStats andActivityType:self.activityType];
+    
+    if( self.isNewStyle ){
+        [cell setupFieldStatisticsWithDataHolder:data histStats:self.multiFieldConfig.historyStats geometry:self.geometry];
+    }else{
+        [cell setupForFieldDataHolder:data histStats:self.multiFieldConfig.historyStats andActivityType:self.activityType];
+    }
+    CGSize iconSize = CGSizeMake( tableView.frame.size.width > 400. ? 128. : 64., 60.);
     if ([GCAppGlobal configGetBool:CONFIG_STATS_INLINE_GRAPHS defaultValue:true] && doGraph[field.key]) {
         GCSimpleGraphCachedDataSource * cache = [self dataSourceForField:field];
         cache.maximizeGraph = true;
@@ -355,11 +377,13 @@
         GCSimpleGraphView * view = [[GCSimpleGraphView alloc] initWithFrame:CGRectZero];
         view.displayConfig = cache;
         view.dataSource = cache;
-        [cell setIconView:view withSize:CGSizeMake( tableView.frame.size.width > 400. ? 128. : 64., 60.)];
+        [cell setIconView:view withSize:iconSize];
         [view release];
     }else{
-        cell.iconView = nil;
-        cell.iconSize = CGSizeZero;
+        UIView * empty = RZReturnAutorelease([[UIView alloc] initWithFrame:CGRectZero]);
+        empty.backgroundColor = [UIColor clearColor];
+        cell.iconView = empty;
+        cell.iconSize = iconSize;
     }
 
     return cell;
@@ -695,6 +719,10 @@
     self.fieldOrder = [GCFields categorizeAndOrderFields:self.allFields];
     self.fieldStats = vals;
 
+    self.geometry = [RZNumberWithUnitGeometry geometry];
+    
+    [GCCellGrid adjustFieldStatisticsWithSummaryStats:self.fieldStats histStats:gcHistoryStatsAll geometry:self.geometry];
+    
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self updateDone];
     });
@@ -753,6 +781,13 @@
              cutOff:self.multiFieldConfig.calendarConfig.cutOff
          ignoreMode:ignoreMode];
     self.aggregatedStats = vals;
+    
+    self.geometry = [RZNumberWithUnitGeometry geometry];
+    GCActivityType * type = [GCActivityType activityTypeForKey:self.activityType];
+    for (GCHistoryAggregatedDataHolder * holder in vals) {
+        [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:type geometry:self.geometry];
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self updateDone];
     });

@@ -64,8 +64,8 @@
     }];
     
     for (GCField * field in allFields) {
-        GCUnit * metric = [[cache infoForField:field] unitForSystem:GCUnitSystemMetric];
-        GCUnit * imperial = [[cache infoForField:field] unitForSystem:GCUnitSystemImperial];
+        GCUnit * metric = [[cache infoForField:field] unitForSystem:gcUnitSystemMetric];
+        GCUnit * imperial = [[cache infoForField:field] unitForSystem:gcUnitSystemImperial];
         if( [field.key containsString:@"Elevation"] ){
             XCTAssertEqualObjects(metric.key, @"meterelevation", @"Metric %@ in meter", field);
             XCTAssertEqualObjects(imperial.key, @"footelevation", @"Imperial %@ in foot", field);
@@ -128,7 +128,7 @@
             XCTAssertEqualObjects(sub.parentType, parent);
             XCTAssertTrue([sub isSameParentType:parent]);
             XCTAssertTrue([parent isSameParentType:sub]);
-            XCTAssertEqualObjects(sub.topSubRootType, parent);
+            XCTAssertEqualObjects(sub.primaryActivityType, parent);
             XCTAssertEqualObjects(sub.rootType, [GCActivityType all]);
             
             XCTAssertFalse([[GCActivityType day] isSameParentType:sub]);

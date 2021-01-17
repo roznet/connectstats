@@ -62,6 +62,10 @@ extern const NSCalendarUnit kCalendarUnitNone;
 
 -(BOOL)isEqualToConfig:(GCStatsCalendarAggregationConfig*)other;
 
+/// Will format a date properly according to the unit/rolling setup
+/// @param date date to format
+-(NSString*)formattedDate:(NSDate*)date;
+
 @end
 
 NS_ASSUME_NONNULL_END

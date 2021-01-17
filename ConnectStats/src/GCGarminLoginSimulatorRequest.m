@@ -85,7 +85,6 @@
             [GCAppGlobal saveSettings];
         }
     }
-    [self setNextReq:nil];
     [self processDone];
 }
 

@@ -52,7 +52,7 @@
             }else if(res4.location != NSNotFound ){
                 self.status = GCWebStatusDeletedActivity;
             }else if(res5.location != NSNotFound){
-                self.status = GCWebStatusServiceInternalError;
+                self.status = GCWebStatusServiceLogicError;
             }
         }
     }
@@ -88,7 +88,6 @@
 }
 -(void)process{
     // ignore first output only to establish
-    [self setNextReq:nil];
     [self processDone];
 }
 

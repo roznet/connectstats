@@ -120,7 +120,7 @@
             }
             rv = indic;
     }else{
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         [cell setupForRows:2 andCols:1];
         if (indexPath.row == GC_ROW_FILL_WEATHER) {
             NSUInteger total = [[GCAppGlobal organizer] countOfActivities];

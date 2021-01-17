@@ -52,7 +52,7 @@
         NSString * foundType = typeData[@"typeKey"] ?: typeData[@"key"]; // activityType->key, activityTypeDTO->typeKey
         if([foundType isKindOfClass:[NSString class]]){
             rv.activityType = [activityTypes activityTypeForKey:foundType];
-            rv.activityTypeAsString = [rv.activityType topSubRootType].key;
+            rv.activityTypeAsString = [rv.activityType primaryActivityType].key;
         }
     }
 
@@ -257,7 +257,7 @@
 }
 
 -(void)addPaceIfNecessaryWithSummary:(NSMutableDictionary<NSString*,GCNumberWithUnit*>*)newSummaryData{
-    if( ([self.activityTypeAsString isEqualToString:GC_TYPE_RUNNING] || [self.activityTypeAsString isEqualToString:GC_TYPE_SWIMMING]) ){
+    if( [GCFields pacePreferredForActivityType:self.activityTypeAsString] ){
         for( NSString * fieldkey in @[ @"WeightedMeanSpeed", @"WeightedMeanMovingSpeed" ] ){
             GCNumberWithUnit * speed = newSummaryData[ fieldkey ];
             if (speed ) {

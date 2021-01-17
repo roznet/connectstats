@@ -327,7 +327,6 @@
     self.readQuantityIndex += 1;
 }
 //-(void)preConnectionSetup;
-//-(GTMOAuth2Authentication*)oauth2Authentication;
 //-(NSString*)activityId;
 //-(id<GCWebRequest>)remediationReq;
 -(void)processDone{

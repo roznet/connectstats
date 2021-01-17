@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
+
 
 class FITSelectionContext {
     
@@ -20,7 +20,7 @@ class FITSelectionContext {
     // MARK: - FitFile
     
     
-    let fitFile : RZFitFile
+    let fitFile : FitFile
     lazy var interp : FITFitFileInterpret = FITFitFileInterpret(fitFile: self.fitFile)
     
     // MARK: - Configuration
@@ -33,7 +33,12 @@ class FITSelectionContext {
     
     var queue : [FITSelectionContext] = []
     
+    enum DateTimeFormat {
+        case full, timeOnly, elapsed
+    }
     
+    var dateTimeFormat : DateTimeFormat = .elapsed
+    var dateStarted : Date? = nil
     // MARK: - Message Selection
     
     var messageTypeDescription : String {
@@ -43,7 +48,7 @@ class FITSelectionContext {
             return "Unknown Message Type"
         }
     }
-    var messageType: RZFitMessageType {
+    var messageType: FitMessageType {
         didSet{
             // If new message does not exist, do nothing
             // else update with some defaults
@@ -60,19 +65,17 @@ class FITSelectionContext {
         }
     }
     
-    var messages :[RZFitMessage]
+    var messages :[FitMessage]
 
-    var message :RZFitMessage? {
+    var message :FitMessage? {
         let useIdx = self.messageIndex < self.messages.count ? self.messageIndex : 0
-        var rv : RZFitMessage?
+        var rv : FitMessage?
         
         if useIdx < messages.count {
             rv = messages[useIdx]
         }
         return rv
     }
-    
-
     
     /// Last few selected Fields
     var messageIndex : Int = 0 {
@@ -84,42 +87,20 @@ class FITSelectionContext {
     }
     
     // MARK: - Dependent/Stats messages
-    
-    var preferredDependendMessageType : [RZFitMessageType] = [FIT_MESG_NUM_RECORD, FIT_MESG_NUM_LAP, FIT_MESG_NUM_SESSION]
-    var statsUsing : RZFitMessageType?
-    var statsFor : RZFitMessageType?
-    
-    /*
-    var dependentField :RZFitFieldKey? {
-        var rv : RZFitFieldKey? = nil
-        if let dmessagetype = self.dependentMessageType,
-            let fy = self.selectedYField{
-            let dmessage = self.fitFile.messages(forMessageType: dmessagetype)
-            // check first if yfield exist in dependent
-            if let first = dmessage.first {
-                if first.numberWithUnit(field: fy) != nil {
-                    rv = self.selectedYField
-                } else if let f = self.interp.mapFields(from: [fy], to: first.interpretedFieldKeys())[fy]{
-                    if f.count > 0 {
-                        rv = f[0]
-                    }
-                }
-            }
-        }
-        return rv
-    }*/
+    var preferredDependendMessageType : [FitMessageType] = [FitMessageType.record,FitMessageType.lap,FitMessageType.session]
+    var statsUsing : FitMessageType?
+    var statsFor : FitMessageType?
     
 
     //MARK: - Field Selections
-    
     /// Selected numbers fields in order, lastObject is latest
-    fileprivate var selectedNumberFields : [RZFitFieldKey] = []
+    fileprivate var selectedNumberFields : [FitFieldKey] = []
     /// Selected location fields in order, lastObject is latest
-    fileprivate var selectedLocationFields : [RZFitFieldKey] = []
+    fileprivate var selectedLocationFields : [FitFieldKey] = []
 
-    var selectedXField : RZFitFieldKey = "timestamp"
+    var selectedXField : FitFieldKey = "timestamp"
 
-    var selectedYField :RZFitFieldKey? {
+    var selectedYField :FitFieldKey? {
         get {
             return self.selectedNumberFields.last
         }
@@ -134,7 +115,7 @@ class FITSelectionContext {
         }
     }
 
-    var selectedY2Field :RZFitFieldKey? {
+    var selectedY2Field :FitFieldKey? {
         get {
             let cnt = self.selectedNumberFields.count
             return cnt > 1 ? self.selectedNumberFields[cnt-2] : nil
@@ -151,7 +132,7 @@ class FITSelectionContext {
         }
     }
     
-    var selectedLocationField :RZFitFieldKey?{
+    var selectedLocationField :FitFieldKey?{
         get {
             return self.selectedLocationFields.last
         }
@@ -168,14 +149,18 @@ class FITSelectionContext {
 
     
     // MARK: - Initialization and Queue management
-    
 
-    init(fitFile:RZFitFile){
+    init(fitFile:FitFile){
         self.fitFile = fitFile;
         self.messageType = self.fitFile.preferredMessageType()
         self.messages = self.fitFile.messages(forMessageType: self.messageType)
         self.statsFor = self.messageType
         updateDependent()
+        if let file_id = fitFile.messages(forMessageType: .file_id).first,
+           let started = file_id.time(field: "time_created") {
+            self.dateStarted = started
+            
+        }
     }
     
     init(withCopy other:FITSelectionContext){
@@ -209,7 +194,7 @@ class FITSelectionContext {
     }
 
     /// Update selection for index and record if number or location field selected
-    func selectMessageField(field:RZFitFieldKey, atIndex idx: Int){
+    func selectMessageField(field:FitFieldKey, atIndex idx: Int){
         let messages = self.messages
         
         let useIdx = idx < messages.count ? idx : 0
@@ -237,7 +222,7 @@ class FITSelectionContext {
     
     /// Setup fields if new message selected
     private func updateWithDefaultForCurrentMessageType(){
-        if self.messageType == FIT_MESG_NUM_LAP || self.messageType == FIT_MESG_NUM_SESSION {
+        if self.messageType == FitMessageType.lap || self.messageType == FitMessageType.session {
             self.statsFor = self.messageType
         }
         
@@ -260,31 +245,53 @@ class FITSelectionContext {
     
     // MARK: - Display
     
+    
+    
+    
     /// Convert to relevant unit or just description
     ///
     /// - Parameter fieldValue: value to display
     /// - Returns: string
-    func display( fieldValue : RZFitFieldValue) -> String {
-        if let nu = fieldValue.numberWithUnit {
-            for unit in [self.speedUnit, self.distanceUnit] {
-                if nu.unit.canConvert(to: unit) {
-                    return nu.convert(to: unit).description
+    func display( fieldValue : FitFieldValue) -> String {
+        switch ( fieldValue.fitValue ){
+        case .time(let date):
+            switch self.dateTimeFormat {
+            case .full:
+                return (date as NSDate).datetimeFormat()
+            case .timeOnly:
+                return (date as NSDate).timeShortFormat()
+            case .elapsed:
+                if let started = self.dateStarted {
+                    let elapsed = GCNumberWithUnit(name: "second", andValue: date.timeIntervalSince(started))
+                    return elapsed.description
+                }else{
+                    return (date as NSDate).timeShortFormat()
                 }
             }
+        case .valueUnit:
+            if let nu = fieldValue.numberWithUnit {
+                return self.display(numberWithUnit: nu)
+            }
+        default:
+            return fieldValue.displayString()
         }
         return fieldValue.displayString()
     }
     
     func display( numberWithUnit nu: GCNumberWithUnit) -> String{
-        for unit in [self.speedUnit, self.distanceUnit] {
-            if nu.unit.canConvert(to: unit) {
-                return nu.convert(to: unit).description
+        if GCUnit.getGlobalSystem() != .default {
+            // for speed use better than mps
+            if nu.unit.canConvert(to: GCUnit.mps() ) {
+                return nu.convert(to: GCUnit.kph().forGlobalSystem()).description
+            }else{
+                return nu.convertToGlobalSystem().description
             }
+        }else{
+            return nu.description
         }
-        return nu.description;
     }
     
-    func displayField( fitMessageType: RZFitMessageType, fieldName : String ) -> NSAttributedString {
+    func displayField( fitMessageType: FitMessageType, fieldName : String ) -> NSAttributedString {
         var displayText = fieldName
         let paragraphStyle = NSMutableParagraphStyle()
         

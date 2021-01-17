@@ -59,7 +59,10 @@
     
     NSString * url = [NSString stringWithFormat:@"%@/prod/bugreport/new", [GCAppGlobal simulatorUrl]];
     
-    [self setRemoteDownload:[[[RZRemoteDownload alloc] initWithURLRequest:[report urlResquestFor:url] andDelegate:self] autorelease]];
+    dispatch_async([GCAppGlobal worker], ^(){
+        [self setRemoteDownload:[[[RZRemoteDownload alloc] initWithURLRequest:[report urlResquestFor:url] andDelegate:self] autorelease]];
+    });
+    
 }
 
 -(void)testBugReportEnd{
@@ -71,10 +74,6 @@
     [self testBugReportEnd];
 }
 
--(void)downloadArraySuccessful:(id)connection array:(NSArray*)theArray{
-    RZ_ASSERT(false, @"Upload failed");
-    [self testBugReportEnd];
-}
 -(void)downloadStringSuccessful:(id)connection string:(NSString*)theString{
     NSError * e = nil;
     NSString * htmlPath = [RZFileOrganizer writeableFilePath:@"bugreport.html"];

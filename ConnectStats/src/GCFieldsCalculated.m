@@ -49,43 +49,43 @@ static NSArray * _calculatedFields = nil;
         NSArray * defs = @[
             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ALTITUDE_GAIN andActivityType:GC_TYPE_ALL]
                           displayName:NSLocalizedString( @"GPS Elevation Gain", @"Calculated Field")
-                             andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE], @(GCUnitSystemImperial):[GCUnit foot]}],
+                             andUnits:@{@(gcUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE], @(gcUnitSystemImperial):[GCUnit foot]}],
              [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ALTITUDE_LOSS andActivityType:GC_TYPE_ALL]
                            displayName:NSLocalizedString( @"GPS Elevation Loss", @"Calculated Field")
-                              andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE],@(GCUnitSystemImperial):[GCUnit foot]}],
+                              andUnits:@{@(gcUnitSystemMetric):[GCUnit unitForKey:STOREUNIT_ALTITUDE],@(gcUnitSystemImperial):[GCUnit foot]}],
              [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_NORMALIZED_POWER andActivityType:GC_TYPE_ALL]
                            displayName:NSLocalizedString( @"Normalized Power", @"Calculated Field")
-                              andUnits:@{@(GCUnitSystemMetric):[GCUnit watt]}],
+                              andUnits:@{@(gcUnitSystemMetric):[GCUnit watt]}],
             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_NONZERO_POWER andActivityType:GC_TYPE_ALL]
                           displayName:NSLocalizedString( @"Non Zero Avg Power", @"Calculated Field")
-                             andUnits:@{@(GCUnitSystemMetric):[GCUnit watt]}],
+                             andUnits:@{@(gcUnitSystemMetric):[GCUnit watt]}],
             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_VERTICAL_SPEED andActivityType:GC_TYPE_ALL]
                           displayName:NSLocalizedString( @"Vertical Speed", @"Calculated Field")
-                             andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:@"meterperhour"]}],
+                             andUnits:@{@(gcUnitSystemMetric):[GCUnit unitForKey:@"meterperhour"]}],
             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ELEVATION_GRADIENT andActivityType:GC_TYPE_ALL]
                           displayName:NSLocalizedString( @"Elevation Gradient", @"Calculated Field")
-                             andUnits:@{@(GCUnitSystemMetric):[GCUnit percent]}],
+                             andUnits:@{@(gcUnitSystemMetric):[GCUnit percent]}],
             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ELEVATION_GRADIENT andActivityType:GC_TYPE_ALL]
                           displayName:NSLocalizedString( @"Elevation Gradient", @"Calculated Field")
-                             andUnits:@{@(GCUnitSystemMetric):[GCUnit percent]}],
+                             andUnits:@{@(gcUnitSystemMetric):[GCUnit percent]}],
             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_ASCENT_SPEED andActivityType:GC_TYPE_ALL]
                           displayName:NSLocalizedString( @"Ascent Speed", @"Calculated Field")
-                             andUnits:@{@(GCUnitSystemMetric):[GCUnit meterperhour]}],
+                             andUnits:@{@(gcUnitSystemMetric):[GCUnit meterperhour]}],
             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_DESCENT_SPEED andActivityType:GC_TYPE_ALL]
                           displayName:NSLocalizedString( @"Descent Speed", @"Calculated Field")
-                             andUnits:@{@(GCUnitSystemMetric):[GCUnit meterperhour]}],
+                             andUnits:@{@(gcUnitSystemMetric):[GCUnit meterperhour]}],
             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_MAX_ASCENT_SPEED andActivityType:GC_TYPE_ALL]
                           displayName:NSLocalizedString( @"Max Ascent Speed", @"Calculated Field")
-                             andUnits:@{@(GCUnitSystemMetric):[GCUnit meterperhour]}],
+                             andUnits:@{@(gcUnitSystemMetric):[GCUnit meterperhour]}],
             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_MAX_DESCENT_SPEED andActivityType:GC_TYPE_ALL]
                           displayName:NSLocalizedString( @"Max Descent Speed", @"Calculated Field")
-                             andUnits:@{@(GCUnitSystemMetric):[GCUnit meterperhour]}],
+                             andUnits:@{@(gcUnitSystemMetric):[GCUnit meterperhour]}],
             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_10SEC_SPEED andActivityType:GC_TYPE_RUNNING]
                           displayName:NSLocalizedString( @"10sec Speed", @"Calculated Field")
-                             andUnits:@{@(GCUnitSystemMetric):[GCUnit minperkm]}],
+                             andUnits:@{@(gcUnitSystemMetric):[GCUnit minperkm]}],
             [GCFieldInfo fieldInfoFor:[GCField fieldForKey:CALC_10SEC_SPEED andActivityType:GC_TYPE_ALL]
                           displayName:NSLocalizedString( @"10sec Speed", @"Calculated Field")
-                             andUnits:@{@(GCUnitSystemMetric):[GCUnit kph]}],
+                             andUnits:@{@(gcUnitSystemMetric):[GCUnit kph]}],
 
         ];
         NSMutableDictionary * cache = [NSMutableDictionary dictionary];
@@ -96,7 +96,7 @@ static NSArray * _calculatedFields = nil;
             GCField * field = [GCField fieldForKey:calculated.fieldKey andActivityType:GC_TYPE_ALL];
             cache[field] = [GCFieldInfo fieldInfoFor:field
                                               displayName:calculated.displayName
-                                            andUnits:@{@(GCUnitSystemMetric):[GCUnit unitForKey:calculated.unitName]}];
+                                            andUnits:@{@(gcUnitSystemMetric):[GCUnit unitForKey:calculated.unitName]}];
             [field correspondingFieldForActivityType:GC_TYPE_RUNNING];
         }
         infoCache = [NSDictionary dictionaryWithDictionary:cache];
@@ -362,6 +362,44 @@ static NSArray * _calculatedFields = nil;
 }
 @end
 
+#pragma mark - efficiencyFactor
+
+@implementation GCFieldCalcEfficiencyFactor
+-(BOOL)validForActivity:(GCActivity*)act{
+    return true;
+}
+-(NSString*)fieldKey{
+    return CALC_EFFICIENCY_FACTOR;
+}
+-(NSString*)displayName{
+    return @"Efficiency";
+}
+
+-(NSArray<NSString*>*)inputFields{
+    return @[@"WeightedMeanHeartRate",@"WeightedMeanPower"];
+}
+-(NSArray*)inputFieldsTrackPoint{
+    return @[@(gcFieldFlagWeightedMeanHeartRate), @(gcFieldFlagPower)];
+}
+-(GCNumberWithUnit*)evaluateWithInputs:(NSArray<GCNumberWithUnit*> *)inputs{
+    if (![self ensureInputs:inputs]) {
+        return nil;
+    }
+
+    GCNumberWithUnit * hr  = inputs[0];
+    GCNumberWithUnit * pow = inputs[1];
+
+    if( hr.value == 0.){
+        return nil;
+    }
+    double val =  pow.value / hr.value;
+
+    return [GCNumberWithUnit numberWithUnitName:@"dimensionless" andValue:val];
+}
+-(NSString*)unitName{
+    return @"dimensionless";
+}
+@end
 #pragma mark - kiloJoules
 
 @implementation GCFieldCalcKiloJoules

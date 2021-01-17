@@ -69,7 +69,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
     [cell setupForRows:2 andCols:1];
     NSString * source = [[GCAppGlobal profile] sourceName:self.sources[indexPath.row]];
     BOOL current = false;

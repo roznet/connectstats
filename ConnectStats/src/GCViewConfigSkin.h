@@ -25,6 +25,7 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
 @class GCField;
 
 // Activity Cells
@@ -47,6 +48,7 @@ extern NSString * kGCSkinKeyCalendarColors;
 extern NSString * kgcSkinDefaultColors;
 extern NSString * kGCSkinNameOriginal;
 extern NSString * kGCSkinNameiOS13;
+extern NSString * kGCSkinName2021;
 
 typedef NS_ENUM(NSUInteger,gcSkinDefaultColor){
     gcSkinDefaultColorBackground,
@@ -57,7 +59,8 @@ typedef NS_ENUM(NSUInteger,gcSkinDefaultColor){
     gcSkinDefaultColorSecondaryText, // original = darkGray
     gcSkinDefaultColorTertiaryText, // original = lightGray
     gcSkinDefaultColorHighlightedText,  // Original = blue
-    gcSkinDefaultColorGroupedTable
+    gcSkinDefaultColorGroupedTable,
+    gcSkinDefaultColorRoundedBorder
 };
 
 typedef NS_ENUM(NSUInteger,gcSkinCalendarElement){
@@ -85,7 +88,13 @@ typedef NS_ENUM(NSUInteger,gcSkinGraphColor){
 
 typedef NS_ENUM(NSUInteger,gcSkinBool){
     gcSkinBoolRoundedActivityIcons,
-    gcSkinBoolActivityCellMultiColor
+    gcSkinBoolActivityCellMultiColor,
+    gcSkinBoolActivityCellBandedFormat
+};
+
+typedef NS_ENUM(NSUInteger,gcSkinString){
+    gcSkinStringSystemFontName,
+    gcSkinStringBoldSystemFontName
 };
 
 
@@ -98,16 +107,19 @@ typedef NS_ENUM(NSUInteger,gcSkinBool){
 +(GCViewConfigSkin*)darkSkin;
 
 +(NSArray<NSString*>*)availableSkinNames;
-+(GCViewConfigSkin*)skinForName:(NSString*)name;
++(nullable GCViewConfigSkin*)skinForName:(NSString*)name;
 
 -(NSArray*)colorArrayForKey:(NSString*)key;
--(NSArray*)colorArrayForKey:(NSString *)key andField:(GCField*)field;
+-(nullable NSArray*)colorArrayForKey:(NSString *)key andField:(GCField*)field;
 
--(UIColor*)colorForKey:(NSString*)key;
--(UIColor*)colorForKey:(NSString *)key andActivity:(id)aAct;
--(UIColor*)colorForKey:(NSString *)key andField:(GCField*)field;
--(UIColor*)colorForKey:(NSString *)key andSubkey:(id)subkey;
--(UIColor*)colorForKey:(NSString*)key andValue:(double)val;
+-(nullable UIColor*)colorForKey:(NSString*)key;
+-(nullable UIColor*)colorForKey:(NSString *)key andActivity:(id)aAct;
+-(nullable UIColor*)colorForKey:(NSString *)key andField:(GCField*)field;
+-(nullable UIColor*)colorForKey:(NSString *)key andSubkey:(id)subkey;
+-(nullable UIColor*)colorForKey:(NSString*)key andValue:(double)val;
 -(BOOL)boolFor:(gcSkinBool)which;
 
+-(nullable NSString*)stringFor:(gcSkinString)which;
+
 @end
+NS_ASSUME_NONNULL_END

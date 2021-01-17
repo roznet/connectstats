@@ -88,7 +88,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
     [cell setupForRows:1 andCols:1];
     if (indexPath.row== GC_ROW_MATURITY) {
         NSString * val = [(self.graphViewController).maturityButton  currentFromDateChoice];

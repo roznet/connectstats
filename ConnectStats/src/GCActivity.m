@@ -277,7 +277,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 -(BOOL)changeActivityType:(GCActivityType*)newActivityType{
     BOOL changed = false;
     if( newActivityType && ( !self.activityType || ![newActivityType isEqualToActivityType:self.activityTypeDetail] ) ){
-        NSString * newSubRoot = newActivityType.topSubRootType.key;
+        NSString * newSubRoot = newActivityType.primaryActivityType.key;
         changed = true;
         if( self.activityType && ![newSubRoot isEqualToString:self.activityType] ){
             self.activityType = newSubRoot;
@@ -331,7 +331,11 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             break;
         case gcFieldFlagWeightedMeanHeartRate:
             if( RZTestOption(self.flags, flag) ){
-                rv = [GCNumberWithUnit numberWithUnitName:STOREUNIT_HEARTRATE andValue:self.weightedMeanHeartRate];
+                if( self.weightedMeanHeartRate == 0){
+                    rv = nil;
+                }else{
+                    rv = [GCNumberWithUnit numberWithUnitName:STOREUNIT_HEARTRATE andValue:self.weightedMeanHeartRate];
+                }
             }else{
                 rv = nil;
             }

@@ -30,6 +30,7 @@
 #import "GCAppConstants.h"
 #import "GCHealthOrganizer.h"
 #import "GCDerivedOrganizer.h"
+#import "GCWebUrl.h"
 
 extern NSString *const kNotifySettingsChange;
 extern NSString * kPreservedSettingsName;
@@ -64,4 +65,13 @@ extern NSString * kPreservedSettingsName;
 +(void)setApplicationDelegate:(GCAppDelegate*)del;
 +(NSString*)simulatorUrl;
 +(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;
+
++(gcWebConnectStatsConfig)webConnectsStatsConfig;
+
++(UIUserInterfaceStyle)userInterfaceStyle;
+
+// Global override for forcing testing of dark/light mode
++(void)setUserInterfaceStyle:(UIUserInterfaceStyle)newStyle;
++(NSString*)appURLScheme;
++(void)versionSummary;
 @end

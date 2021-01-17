@@ -7,22 +7,20 @@
 //
 
 import Foundation
-import RZFitFile
-import RZFitFileTypes
-import GenericJSON
+import FitFileParser
 
 class FITFitFileInterpret: NSObject {
 
-    private let fitFile:RZFitFile
+    private let fitFile:FitFile
     
     private var sessionIndex = 0
     var preferDeveloperField = false
     
-    var alternates : [RZFitMessageType : [GCField:[RZFitFieldKey] ] ] = [:]
+    var alternates : [FitMessageType : [GCField:[FitFieldKey] ] ] = [:]
     
     public var activityType : GCActivityType {
         get {
-            let sportMsg = self.fitFile.messages(forMessageType: FIT_MESG_NUM_SPORT)
+            let sportMsg = self.fitFile.messages(forMessageType: FitMessageType.sport)
             if self.sessionIndex < sportMsg.count {
                 let first = sportMsg[sessionIndex]
                 if let sportKey = first.name(field: "sport"),
@@ -31,7 +29,7 @@ class FITFitFileInterpret: NSObject {
                 }
             }else{
                 // If no sport message see if the sport is in the session message
-                let sessionMsg = self.fitFile.messages(forMessageType: FIT_MESG_NUM_SESSION )
+                let sessionMsg = self.fitFile.messages(forMessageType: FitMessageType.session )
                 if self.sessionIndex < sessionMsg.count {
                     let first = sessionMsg[sessionIndex]
                     if let sportKey = first.name(field: "sport"),
@@ -47,7 +45,7 @@ class FITFitFileInterpret: NSObject {
         return FITFitFieldMap()
     }()
     
-    init(fitFile file:RZFitFile){
+    init(fitFile file:FitFile){
         fitFile = file
         super.init()
     }
@@ -56,7 +54,7 @@ class FITFitFileInterpret: NSObject {
         self.sessionIndex = sessionIndex
     }
     
-    func summaryValue(fitMessageType: RZFitMessageType, field:String, fitField : RZFitFieldValue) -> GCActivitySummaryValue? {
+    func summaryValue(fitMessageType: FitMessageType, field:String, fitField : FitFieldValue) -> GCActivitySummaryValue? {
         var rv : GCActivitySummaryValue?
         let key = field
         if let activityField = fieldKey(fitMessageType: fitMessageType, fitField: key),
@@ -79,7 +77,7 @@ class FITFitFileInterpret: NSObject {
         return rv;
     }
     
-    func strokeType( message : RZFitMessage ) -> gcSwimStrokeType? {
+    func strokeType( message : FitMessage ) -> gcSwimStrokeType? {
         if let stroke = message.interpretedFields()["swim_stroke"]?.name {
             switch stroke {
             case  "freestyle": return gcSwimStrokeType.free;
@@ -96,7 +94,7 @@ class FITFitFileInterpret: NSObject {
         return nil;
     }
     
-    func swimActive( message : RZFitMessage ) -> Bool {
+    func swimActive( message : FitMessage ) -> Bool {
         if let num_active = message.interpretedFields()["num_active_lengths"]?.valueUnit?.value {
             return num_active > 0
         }else if let length_type = message.interpretedFields()["length_type"]?.name {
@@ -104,22 +102,22 @@ class FITFitFileInterpret: NSObject {
         }
         return false
     }
-    func fieldKey(fitMessageType: RZFitMessageType, fitField:String) -> GCField?{
+    func fieldKey(fitMessageType: FitMessageType, fitField:String) -> GCField?{
         //let found = FITFitEnumMap.activityField(fromFitField: fitField, forActivityType: self.activityType.topSubRoot().key)
-        let key = self.fitFieldMap.field(messageType: fitMessageType, fitField: fitField, activityType: self.activityType.topSubRoot().key)
+        let key = self.fitFieldMap.field(messageType: fitMessageType, fitField: fitField, activityType: self.activityType.primary().key)
         
         return key
     }
     
     func reportAlternates() {
         for (messageType,values) in self.alternates{
-            if let messageDescription = rzfit_mesg_num_string(input: messageType) {
-                for (field,keys) in values {
-                    if( keys.count > 1){
-                        print( "Alternates found for \(messageDescription): \(field) \(keys)")
-                    }
+            let messageDescription =  messageType.name()
+            for (field,keys) in values {
+                if( keys.count > 1){
+                    print( "Alternates found for \(messageDescription): \(field) \(keys)")
                 }
             }
+            
         }
     }
     /// Extract data from a fields message into GCField and numbers, 
@@ -127,7 +125,7 @@ class FITFitFileInterpret: NSObject {
     ///
     /// - Parameter fitMessageFields: fields to convert
     /// - Returns: dictionary
-    func summaryValues(fitMessage:RZFitMessage) -> [GCField:GCActivitySummaryValue] {
+    func summaryValues(fitMessage:FitMessage) -> [GCField:GCActivitySummaryValue] {
         var rv :[GCField:GCActivitySummaryValue] = [:]
         if self.alternates[fitMessage.messageType] == nil{
             self.alternates[fitMessage.messageType] = [:]
@@ -162,8 +160,8 @@ class FITFitFileInterpret: NSObject {
         
         // Few special cases, if speed and not pace, add
         if self.activityType.isPacePreferred() {
-            if let paceField = GCField( for: gcFieldFlag.weightedMeanSpeed, andActivityType: self.activityType.topSubRoot().key),
-                let speedField = GCField( forKey: "WeightedMeanSpeed", andActivityType: self.activityType.topSubRoot().key),
+            if let paceField = GCField( for: gcFieldFlag.weightedMeanSpeed, andActivityType: self.activityType.primary().key),
+                let speedField = GCField( forKey: "WeightedMeanSpeed", andActivityType: self.activityType.primary().key),
                 let speed = rv[ speedField ]{
                 if rv[paceField] == nil {
                     let nu = speed.numberWithUnit.convert(to: paceField.unit())
@@ -179,7 +177,7 @@ class FITFitFileInterpret: NSObject {
     typealias GPSPoint = (time:Date, location:CLLocationCoordinate2D)
     typealias DataSerieColumns = (values:[String:[NumberPoint]], gps:[GPSPoint])
     
-    func columnDataSeries(messageType: RZFitMessageType) -> DataSerieColumns {
+    func columnDataSeries(messageType: FitMessageType) -> DataSerieColumns {
         var units : [String:GCUnit] = [:]
         var values : [String:[NumberPoint]] = [:]
         var times : [Date] = []
@@ -224,7 +222,7 @@ class FITFitFileInterpret: NSObject {
     ///   - fieldX: field for the x data
     ///   - fieldY: field for the y data
     /// - Returns: data serie or nil if missing field, message or wrong type
-    func statsDataSerie(messageType :RZFitMessageType, fieldX : String, fieldY :String) -> GCStatsDataSerieWithUnit? {
+    func statsDataSerie(messageType :FitMessageType, fieldX : String, fieldY :String) -> GCStatsDataSerieWithUnit? {
         let messages = self.fitFile.messages(forMessageType: messageType)
         var xy : [Double] = []
         
@@ -274,7 +272,7 @@ class FITFitFileInterpret: NSObject {
             }
         }
         // Special case
-        if( messageType == FIT_MESG_NUM_LAP && fieldX == "start_time"){
+        if( messageType == FitMessageType.lap && fieldX == "start_time"){
             
             if let message = messages.last?.interpretedFields(),
                 let total_time = message["total_elapsed_time"],
@@ -294,7 +292,7 @@ class FITFitFileInterpret: NSObject {
         return nil
     }
     
-    func coordinatePoints(messageType:RZFitMessageType,field:String) -> [CLLocationCoordinate2D]?{
+    func coordinatePoints(messageType:FitMessageType,field:String) -> [CLLocationCoordinate2D]?{
         var rv : [CLLocationCoordinate2D]?
         
         let messages = self.fitFile.messages(forMessageType: messageType)
@@ -358,8 +356,8 @@ class FITFitFileInterpret: NSObject {
         return rv
     }
     
-    func messageForTimestamp(messageType:RZFitMessageType, timestamp:Date) -> RZFitMessage?{
-        var rv : RZFitMessage? = nil
+    func messageForTimestamp(messageType:FitMessageType, timestamp:Date) -> FitMessage?{
+        var rv : FitMessage? = nil
         let messages = self.fitFile.messages(forMessageType: messageType)
         for msg in messages  {
             if let ts = msg.time() {
@@ -380,7 +378,7 @@ class FITFitFileInterpret: NSObject {
         return rv
     }
     
-    func summaryValueFromStatsForMessage(messageType:RZFitMessageType, interval : (from:Date,to:Date)?) -> [GCField:GCActivitySummaryValue] {
+    func summaryValueFromStatsForMessage(messageType:FitMessageType, interval : (from:Date,to:Date)?) -> [GCField:GCActivitySummaryValue] {
         let stats = self.statsForMessage(messageType: messageType, interval: interval)
         
         var rv : [GCField:GCActivitySummaryValue] = [:]
@@ -390,7 +388,7 @@ class FITFitFileInterpret: NSObject {
         for (fitfield,stat) in stats {
             if fitfield.starts(with: "avg_") || fitfield.starts(with: "total_") || fitfield.starts(with: "max_") {
                 
-                if let field = FITFitEnumMap.activityField(fromFitField: fitfield, forActivityType: multisport.topSubRoot().key) {
+                if let field = FITFitEnumMap.activityField(fromFitField: fitfield, forActivityType: multisport.primary().key) {
                     var nu : GCNumberWithUnit?
                     if( fitfield.starts(with: "avg_")){
                         nu = stat.value(stats: FITFitValueStatistics.StatsType.avg, field: fitfield)
@@ -410,10 +408,10 @@ class FITFitFileInterpret: NSObject {
         return rv
     }
     
-    func statsForMessage(messageType:RZFitMessageType, interval : (from:Date,to:Date)?) -> [String:FITFitValueStatistics]{
+    func statsForMessage(messageType:FitMessageType, interval : (from:Date,to:Date)?) -> [String:FITFitValueStatistics]{
         let stats = FITFitFieldsStatistics(interval:interval)
         var weights = FITFitStatisticsWeight(count: 0, distance: 0, time: 0)
-        var lastItem : RZFitMessage? = nil
+        var lastItem : FitMessage? = nil
         
         let messages = self.fitFile.messages(forMessageType: messageType)
         

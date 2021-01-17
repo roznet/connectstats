@@ -26,9 +26,16 @@
 #import "GCGarminRequest.h"
 
 typedef BOOL (^GCGarminLoginValidationFunc)(void);
+@class GCGarminLoginSSO;
 
 @interface GCGarminLoginSSORequest : GCGarminReqBase
+@property (nonatomic,retain) GCGarminLoginSSO * ssoLogin;
+@property (nonatomic,readonly) NSString * uname;
+@property (nonatomic,readonly) NSString * pwd;
+
 
 +(GCGarminLoginSSORequest*)requestWithUser:(NSString*)name andPwd:(NSString*)pwd validation:(GCGarminLoginValidationFunc)val;
+
+-(void)loginCompleted:(GCWebStatus)status;
 
 @end

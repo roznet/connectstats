@@ -8,7 +8,7 @@
 
 import Cocoa
 import MapKit
-import RZFitFile
+import FitFileParser
 
 class FITMapViewController: NSViewController,MKMapViewDelegate {
 
@@ -18,7 +18,7 @@ class FITMapViewController: NSViewController,MKMapViewDelegate {
     
     var gradientPath : GCMapGradientPathOverlay?
     
-    var fitFile : RZFitFile? {
+    var fitFile : FitFile? {
         return self.selectionContext?.fitFile
     }
 

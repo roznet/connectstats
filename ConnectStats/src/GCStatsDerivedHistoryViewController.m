@@ -98,7 +98,7 @@
         GCCellSimpleGraph * graphCell = [self.derivedHistAnalysis tableView:tableView derivedHistCellForRowAtIndexPath:indexPath with:[GCAppGlobal derived]];
         cell = graphCell;
     }else if (indexPath.section == GC_SECTION_OPTIONS){
-        GCCellGrid * gridCell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * gridCell = [GCCellGrid cellGrid:tableView];
         [gridCell setupForRows:1 andCols:2];
         if (indexPath.row == GC_OPTIONS_FIELD){
             [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Field", @"Derived Hist Analysis Options");
@@ -111,7 +111,7 @@
         }
         cell = gridCell;
     }else if (indexPath.section == GC_SECTION_PERIODS){
-        GCCellGrid * gridCell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * gridCell = [GCCellGrid cellGrid:tableView];
         [gridCell setupForRows:2 andCols:2];
         if( indexPath.row == GC_PERIODS_LAG){
             [gridCell labelForRow:0 andCol:0].text = NSLocalizedString(@"Period", @"Derived Hist Analysis Options");
@@ -137,7 +137,7 @@
         }
         cell = gridCell;
     }else if (indexPath.section == GC_SECTION_XS){
-        GCCellGrid * gridCell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * gridCell = [GCCellGrid cellGrid:tableView];
         [gridCell setupForRows:2 andCols:2];
         NSArray<GCNumberWithUnit*>*points = self.derivedHistAnalysis.pointsForGraphs;
         if( indexPath.row == GC_XS_SHORT){
@@ -149,7 +149,7 @@
         }
         cell = gridCell;
     }
-    return cell ?: [GCCellGrid gridCell:tableView];
+    return cell ?: [GCCellGrid cellGrid:tableView];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

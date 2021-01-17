@@ -35,18 +35,16 @@
 #import "GCSimpleGraphCachedDataSource+Templates.h"
 #import "Flurry.h"
 #import "GCActivitySwimLapViewController.h"
-#import "GCSharingViewController.h"
-#import <RZExternal/RZExternal.h>
+@import RZExternal;
 #import "GCActivityTrackGraphOptionsViewController.h"
-#import "GCActivity+ExportText.h"
 #import "GCWebConnect+Requests.h"
 #import "GCActivity+CSSearch.h"
-#import "GCActivityOrganizedFields.h"
 #import "GCActivity+Fields.h"
 #import "GCFormattedField.h"
 #import "GCHealthOrganizer.h"
 #import "ConnectStats-Swift.h"
 #import "GCActivity+Assets.h"
+#import "ConnectStats-Swift.h"
 
 #define GCVIEW_DETAIL_TITLE_SECTION     0
 #define GCVIEW_DETAIL_LOAD_SECTION      1
@@ -72,8 +70,9 @@
 @property (nonatomic,retain) GCTrackStats * compareTrackStats;
 @property (nonatomic,assign) BOOL initialized;
 
-@property (nonatomic,retain) GCActivityOrganizedFields * organizedFields;
+@property (nonatomic,retain) GCActivityOrganizedFields * cachedOrganizedFields;
 @property (nonatomic,retain) NSArray<NSArray*>*organizedAttributedStrings;
+
 /**
  NSArray of either graph GCField or something else if no graph field @(0)
  */
@@ -103,7 +102,7 @@
     [_autolapChoice release];
     [_choices release];
 
-    [_organizedFields release];
+    [_cachedOrganizedFields release];
     [_organizedAttributedStrings release];
     [_organizedMatchingField release];
     [_organizer release];
@@ -112,6 +111,30 @@
 
     [super dealloc];
 }
+
+-(BOOL)isNewStyle{
+    return [GCViewConfig cellBandedFormat];
+}
+
+-(BOOL)isWide{
+    return self.tableView.frame.size.width > 600.0;
+}
+
+-(BOOL)organizedFieldsReady{
+    return self.cachedOrganizedFields != nil;
+}
+
+-(GCActivityOrganizedFields*)organizedFields{
+    if( ! self.cachedOrganizedFields ){
+        self.cachedOrganizedFields = [self.activity groupedFields];
+    }
+    return self.cachedOrganizedFields;
+}
+
+-(void)setOrganizedFields:(GCActivityOrganizedFields*)organizedFields{
+    self.cachedOrganizedFields  = organizedFields;
+}
+#pragma mark - UIView
 
 - (void)viewDidLoad
 {
@@ -149,14 +172,6 @@
 
     [super viewWillAppear:animated];
 
-    if (self.slidingViewController) {
-        [self.view addGestureRecognizer:self.slidingViewController.panGesture];
-        (self.slidingViewController).anchorRightRevealAmount = self.view.frame.size.width*0.875;
-        //FIXME:
-        self.slidingViewController.topViewAnchoredGesture = ECSlidingViewControllerAnchoredGesturePanning;
-        self.slidingViewController.panGesture.delegate = self;
-        //[self.slidingViewController setShouldAddPanGestureRecognizerToTopViewSnapshot:YES];
-    }
     self.tableView.tableHeaderView.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:self.activity];
 
 
@@ -164,15 +179,6 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    self.slidingViewController.panGesture.delegate = nil;
-}
-
--(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
-    // With the menu open, let any gesture pass.
-    if (self.slidingViewController.currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) return YES;
-    // With a closed Menu, only let the bordermost gestures pass.
-    return ([gestureRecognizer locationInView:gestureRecognizer.view].x < 40.);
-
 }
 
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
@@ -243,8 +249,20 @@
     }else if (section == GCVIEW_DETAIL_HEALTH_SECTION){
         return [[GCAppGlobal health] hasHealthData] ? 1 : 0;
     }
+    if( self.isNewStyle ){
+        if (!self.organizedFields) {
+            self.organizedFields = [self.activity groupedFields];
+        }
+        
+        if( self.isWide ){
+            return self.organizedFields.groupedPrimaryFields.count/2;
+        }else{
+            return self.organizedFields.groupedPrimaryFields.count;
+        }
 
-    return [self displayPrimaryAttributedStrings].count;
+    }else{
+        return [self displayPrimaryAttributedStrings].count;
+    }
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView dayGraphCellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -361,31 +379,85 @@
     return cell;
 }
 
+-(UITableViewCell*)tableView:(UITableView *)tableView OldFieldCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
+    
+    if (!self.organizedFields) {
+        self.organizedFields = [self.activity groupedFields];
+    }
+    
+    if( indexPath.row < self.organizedFields.groupedPrimaryFields.count){
+        
+        NSArray<GCField*>*fields = self.organizedFields.groupedPrimaryFields[indexPath.row];
+        [cell setupForRows:fields.count andCols:2];
+        
+        [cell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute:rzAttributeField]
+                                                                                 withString:fields.firstObject.displayName];
+        NSString * value = [[self.activity numberWithUnitForField:fields.firstObject] formatDouble];
+        [cell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute:rzAttributeValue]
+                                                                                 withString:value];
+        NSUInteger row = 1;
+        for (GCField * field in fields) {
+            if( field != fields.firstObject){
+                [cell labelForRow:row andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute:rzAttributeSecondaryField]
+                                                                                         withString:[field displayNameWithPrimary:fields.firstObject]];
+                NSString * value = [[self.activity numberWithUnitForField:field] formatDouble];
+                [cell labelForRow:row andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute:rzAttributeSecondaryValue]
+                                                                                         withString:value];
+                [cell configForRow:row andCol:0].horizontalAlign = gcHorizontalAlignRight;
+                row++;
+            }
+        }
+        //[cell setupForField:field andActivity:act width:tableView.frame.size.width];
+        BOOL graphIcon = false;
+        if (indexPath.row < self.organizedMatchingField.count && [self.organizedMatchingField[indexPath.row] isKindOfClass:[GCField class]]) {
+            graphIcon = true;
+        }
+        
+        [GCViewConfig setupGradientForDetails:cell];
+        
+        if(graphIcon){
+            [cell setIconImage:[GCViewIcons cellIconFor:gcIconCellLineChart]];
+        }else{
+            [cell setIconImage:nil];
+            UIImage * icon = [GCViewIcons cellIconFor:gcIconCellLineChart];
+            CGSize size = icon.size;
+            UIView * view = [[[UIView alloc] initWithFrame:CGRectMake(0., 0., size.width, size.height)] autorelease];
+            view.backgroundColor = [UIColor clearColor];
+            [cell setIconView:view  withSize:size];
+        }
+    }
+    return cell;
+}
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell * rv = nil;
 
     if (indexPath.section == GCVIEW_DETAIL_TITLE_SECTION) {
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         [cell setupDetailHeader:self.activity];
 
         rv = cell;
     }else if (indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION) {
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
-
-        //GCActivity * act=self.activity;
-        NSArray<NSArray*>*primary = [self displayPrimaryAttributedStrings];
-        if( indexPath.row < primary.count){
-            NSArray<NSAttributedString*>* attrStrings = primary[indexPath.row];
-
-            //[cell setupForField:field andActivity:act width:tableView.frame.size.width];
-            BOOL graphIcon = false;
-            if (indexPath.row < self.organizedMatchingField.count && [self.organizedMatchingField[indexPath.row] isKindOfClass:[GCField class]]) {
-                graphIcon = true;
+        if( self.isNewStyle ){
+            rv = [self tableView:tableView fieldCellForRowAtIndexPath:indexPath];
+        }else{
+            GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
+            
+            //GCActivity * act=self.activity;
+            NSArray<NSArray*>*primary = [self displayPrimaryAttributedStrings];
+            if( indexPath.row < primary.count){
+                NSArray<NSAttributedString*>* attrStrings = primary[indexPath.row];
+                
+                //[cell setupForField:field andActivity:act width:tableView.frame.size.width];
+                BOOL graphIcon = false;
+                if (indexPath.row < self.organizedMatchingField.count && [self.organizedMatchingField[indexPath.row] isKindOfClass:[GCField class]]) {
+                    graphIcon = true;
+                }
+                [cell setupForAttributedStrings:attrStrings graphIcon:graphIcon width:tableView.frame.size.width];
             }
-            [cell setupForAttributedStrings:attrStrings graphIcon:graphIcon width:tableView.frame.size.width];
+            rv = cell;
         }
-        rv = cell;
     }else if(indexPath.section == GCVIEW_DETAIL_LOAD_SECTION){
         GCCellActivityIndicator *cell = [GCCellActivityIndicator activityIndicatorCell:tableView parent:[GCAppGlobal web]];
         if ([[GCAppGlobal web] isProcessing]) {
@@ -434,25 +506,25 @@
         rv = cell;
 
     }else if (indexPath.section == GCVIEW_DETAIL_EXTRA_SECTION){
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         GCActivity * act=self.activity;
         [cell setupForExtraSummary:act width:tableView.frame.size.width];
         rv = cell;
     }else if (indexPath.section == GCVIEW_DETAIL_WEATHER_SECTION){
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
 
         GCActivity * act=self.activity;
         [cell setupForWeather:act width:tableView.frame.size.width];
         rv = cell;
     }else if (indexPath.section == GCVIEW_DETAIL_HEALTH_SECTION){
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
 
         GCActivity * act=self.activity;
         GCHealthMeasure * meas=[[GCAppGlobal health] measureForDate:act.date andField:[GCHealthMeasure weight]];
         [cell setupForHealthMeasureSummary:meas];
         rv = cell;
     }else{
-        rv = [GCCellGrid gridCell:tableView];
+        rv = [GCCellGrid cellGrid:tableView];
     }
 	return rv;
 
@@ -462,7 +534,26 @@
     BOOL high = self.tableView.frame.size.height > 600.;
 
     if (indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION) {
-        return [GCViewConfig sizeForNumberOfRows:3];
+        if( self.isNewStyle ){
+            [GCViewConfig sizeForNumberOfRows:3];
+            /*
+            if( self.isWide){
+                if( (indexPath.row / 2) < self.organizedFields.groupedPrimaryFields.count ){
+                    CGFloat rv = [GCViewConfig sizeForNumberOfRows:[self.organizedFields.groupedPrimaryFields[indexPath.row/2] count]];
+                    if( (indexPath.row / 2 + 1) < self.organizedFields.groupedPrimaryFields.count ){
+                        rv = MAX(rv, [GCViewConfig sizeForNumberOfRows:[self.organizedFields.groupedPrimaryFields[indexPath.row/2+1] count]]);
+                    }
+                    return rv;
+                }
+                //or else fall back
+            }else{
+                if( indexPath.row <  self.organizedFields.groupedPrimaryFields.count ){
+                    return [GCViewConfig sizeForNumberOfRows:[self.organizedFields.groupedPrimaryFields[indexPath.row] count]];
+                }
+            }*/
+        }else{
+            return [GCViewConfig sizeForNumberOfRows:3];
+        }
     }else if(indexPath.section==GCVIEW_DETAIL_MAP_SECTION){
         return high ? 200. : 150.;
     }else if(indexPath.section==GCVIEW_DETAIL_LOAD_SECTION){
@@ -560,6 +651,7 @@
     return nil;
 }
 
+
 #pragma mark - Setup and call back
 
 -(NSArray<NSAttributedString*>*)attributedStringsForFieldInput:(NSArray<GCField*>*)input{
@@ -654,9 +746,7 @@
 }
 
 -(GCActivityOrganizedFields*)displayOrganizedFields{
-    if (!self.organizedFields) {
-        self.organizedFields = [self.activity groupedFields];
-
+    if (!self.organizedFieldsReady) {
         CGFloat tablewidth = self.tableView.frame.size.width;
         NSMutableArray * packed = [NSMutableArray array];
         NSMutableArray * fields = [NSMutableArray array];
@@ -684,7 +774,7 @@
             RZLog(RZLogWarning, @"Organized Arrays be equals size");
         }
     }
-    return _organizedFields;
+    return self.organizedFields;
 }
 
 -(NSArray<NSArray*>*)displayPrimaryAttributedStrings{
@@ -841,10 +931,7 @@
 
     if (self.trackStats && [self.activity hasTrackForField:field]) {
 
-        ECSlidingViewController * sliding = [[ECSlidingViewController alloc] initWithNibName:nil bundle:nil];
         GCActivityTrackGraphViewController * graphViewController = [[GCActivityTrackGraphViewController alloc] initWithNibName:nil bundle:nil];
-        GCActivityTrackGraphOptionsViewController * optionController = [[GCActivityTrackGraphOptionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        optionController.viewController = graphViewController;
         GCTrackStats * ts = [[[GCTrackStats alloc] init] autorelease];
         [ts updateConfigFrom:self.trackStats];
         [ts setupForField:field xField:nil andLField:nil];
@@ -852,20 +939,12 @@
         graphViewController.trackStats = ts;
         graphViewController.activity = self.activity;
         graphViewController.field = field;
-        sliding.topViewController = graphViewController;
-        sliding.underLeftViewController = [[[UINavigationController alloc] initWithRootViewController:optionController] autorelease];
-        [optionController.navigationController setNavigationBarHidden:YES];
-
-        [UIViewController setupEdgeExtendedLayout:sliding];
         [UIViewController setupEdgeExtendedLayout:graphViewController];
-        [UIViewController setupEdgeExtendedLayout:sliding.underLeftViewController];
-
-        [self.navigationController pushViewController:sliding animated:YES];
+        
+        [self.navigationController pushViewController:graphViewController animated:YES];
         [self.navigationController setNavigationBarHidden:NO animated:YES];
 
         [graphViewController release];
-        [sliding release];
-        [optionController release];
     }
 }
 

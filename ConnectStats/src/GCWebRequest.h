@@ -24,15 +24,13 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import <RZUtils/RZUtils.h>
+@import RZUtils;
 
 #define NOTIFY_NEXT     @"next"
 #define NOTIFY_END      @"end"
 #define NOTIFY_ERROR    @"error"
 #define NOTIFY_NEW      @"new"
 #define NOTIFY_CHANGE   @"change"
-
-@class GTMOAuth2Authentication;
 
 typedef NS_ENUM(NSUInteger, GCWebStatus) {
     GCWebStatusOK,
@@ -43,17 +41,17 @@ typedef NS_ENUM(NSUInteger, GCWebStatus) {
     GCWebStatusDeletedActivity,
     GCWebStatusConnectionError,
     GCWebStatusInternalLogicError,
-    GCWebStatusServiceInternalError,
+    GCWebStatusServiceLogicError,
     GCWebStatusRequireModern,
     GCWebStatusRequirePasswordRenew,
-    GCWebStatusCustomMessage
+    GCWebStatusCustomMessage,
+    GCWebStatusAccountLocked
 };
 
 typedef NS_ENUM(NSUInteger, gcWebService) {
     gcWebServiceNone, // typically for sign in/login
     gcWebServiceGarmin,
     gcWebServiceStrava,
-    gcWebServiceWithings,
     gcWebServiceHealthStore,
     gcWebServiceConnectStats,
     gcWebServiceEnd
@@ -87,7 +85,6 @@ typedef NS_ENUM(NSUInteger, gcWebService) {
 -(BOOL)priorityRequest;
 -(BOOL)isSameAsRequest:(nullable id)req;
 -(void)preConnectionSetup;
--(nullable GTMOAuth2Authentication*)oauth2Authentication;
 -(nullable NSString*)activityId;
 -(nullable id<GCWebRequest>)remediationReq;
 -(nullable NSURLRequest*)preparedUrlRequest;

@@ -1,0 +1,160 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "BrightFutures",
+        "repositoryURL": "https://github.com/Thomvis/BrightFutures.git",
+        "state": {
+          "branch": null,
+          "revision": "9279defa6bdc21501ce740266e5a14d0119ddc63",
+          "version": "8.0.1"
+        }
+      },
+      {
+        "package": "DeviceGuru",
+        "repositoryURL": "https://github.com/InderKumarRathore/DeviceGuru",
+        "state": {
+          "branch": "master",
+          "revision": "127b1e74e48160ead451771fe2fdebe05debbd04",
+          "version": null
+        }
+      },
+      {
+        "package": "Erik",
+        "repositoryURL": "https://github.com/phimage/Erik.git",
+        "state": {
+          "branch": null,
+          "revision": "109a130e9cdb00789a43a7a625293eeb12d22989",
+          "version": "5.1.0"
+        }
+      },
+      {
+        "package": "FileKit",
+        "repositoryURL": "https://github.com/nvzqz/FileKit.git",
+        "state": {
+          "branch": null,
+          "revision": "826d9161b184509f80d85c28cd612d630646de98",
+          "version": "6.0.0"
+        }
+      },
+      {
+        "package": "FitFileParser",
+        "repositoryURL": "https://github.com/roznet/FitFileParser.git",
+        "state": {
+          "branch": null,
+          "revision": "32f23bd15d16c78d3ca4acdf3a7b36de66e5339e",
+          "version": "1.4.0"
+        }
+      },
+      {
+        "package": "FMDB",
+        "repositoryURL": "https://github.com/ccgus/fmdb",
+        "state": {
+          "branch": null,
+          "revision": "61e51fde7f7aab6554f30ab061cc588b28a97d04",
+          "version": "2.7.7"
+        }
+      },
+      {
+        "package": "Kanna",
+        "repositoryURL": "https://github.com/tid-kijyun/Kanna.git",
+        "state": {
+          "branch": null,
+          "revision": "c657fb9f5827ef138068215c76ad0bb62bbc92da",
+          "version": "5.2.4"
+        }
+      },
+      {
+        "package": "KeychainSwift",
+        "repositoryURL": "https://github.com/evgenyneu/keychain-swift",
+        "state": {
+          "branch": null,
+          "revision": "96fb84f45a96630e7583903bd7e08cf095c7a7ef",
+          "version": "19.0.0"
+        }
+      },
+      {
+        "package": "MBProgressHUD",
+        "repositoryURL": "https://github.com/jdg/MBProgressHUD",
+        "state": {
+          "branch": null,
+          "revision": "bca42b801100b2b3a4eda0ba8dd33d858c780b0d",
+          "version": "1.2.0"
+        }
+      },
+      {
+        "package": "OAuthSwift",
+        "repositoryURL": "https://github.com/OAuthSwift/OAuthSwift.git",
+        "state": {
+          "branch": null,
+          "revision": "fde77955e6983fbfaabd491709d52b8a82fda4d0",
+          "version": "2.1.2"
+        }
+      },
+      {
+        "package": "RZExternal",
+        "repositoryURL": "https://github.com/roznet/rzexternal",
+        "state": {
+          "branch": null,
+          "revision": "5739045c1f6ebbbfec939bc64d233357c87273e3",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "RZUtils",
+        "repositoryURL": "https://github.com/roznet/rzutils.git",
+        "state": {
+          "branch": null,
+          "revision": "79e1a1e9483e853451bd297bd9c97a7e6a8a9a66",
+          "version": "1.0.3"
+        }
+      },
+      {
+        "package": "RZUtilsMacOS",
+        "repositoryURL": "https://github.com/roznet/rzutils-macos",
+        "state": {
+          "branch": null,
+          "revision": "9b567821a8113338f75c9fb83da469d07eb5e233",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "RZUtilsTouch",
+        "repositoryURL": "https://github.com/roznet/rzutils-touch.git",
+        "state": {
+          "branch": null,
+          "revision": "8dfb8e43574e8340abfddf831583cbc5985017c1",
+          "version": "1.0.1"
+        }
+      },
+      {
+        "package": "Swifter",
+        "repositoryURL": "https://github.com/httpswift/swifter.git",
+        "state": {
+          "branch": null,
+          "revision": "9483a5d459b45c3ffd059f7b55f9638e268632fd",
+          "version": "1.5.0"
+        }
+      },
+      {
+        "package": "SwiftKeychainWrapper",
+        "repositoryURL": "https://github.com/jrendel/SwiftKeychainWrapper",
+        "state": {
+          "branch": null,
+          "revision": "185a3165346a03767101c4f62e9a545a0fe0530f",
+          "version": "4.0.1"
+        }
+      },
+      {
+        "package": "ZIPFoundation",
+        "repositoryURL": "https://github.com/roznet/ZIPFoundation",
+        "state": {
+          "branch": "development",
+          "revision": "7b76af511c2b5dcc854b7195eaf24d2974249621",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

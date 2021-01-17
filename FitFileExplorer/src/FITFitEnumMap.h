@@ -29,15 +29,6 @@
 @interface FITFitEnumMap : NSObject
 
 /**
- Return definition for enums
-
- @param what name of the enum as NSString
- @param key Value in the enum
- @return NSString description for mapping key, or key as a string if not found
- */
-+(nonnull NSString*)defsFor:(nonnull NSString*)what andKey:(nonnull NSNumber*)key;
-
-/**
  activity Field or nil if not found. If activityType is not nil, will
  try to adapt to the activity type fields like cadence
  */

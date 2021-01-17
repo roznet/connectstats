@@ -34,6 +34,7 @@
 #import "GCTestAppGlobal.h"
 
 @import RZExternal;
+@import CHCSVParser;
 
 @implementation GCTestStats
 
@@ -212,7 +213,7 @@
 -(void)checkGarminConsistency:(GCHistoryAggregatedActivityStats*)vals activityType:(NSString*)activityType calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig{
     if ([activityType isEqualToString:GC_TYPE_CYCLING] || [activityType isEqualToString:GC_TYPE_RUNNING]) {
         NSString * file = [NSString stringWithFormat:@"stats_%@_%@.csv",activityType,[calendarConfig.calendarUnitDescription lowercaseString]];
-        NSArray * gc=[NSArray arrayWithContentsOfCSVFile:[RZFileOrganizer bundleFilePath:file]];
+        NSArray * gc=[NSArray arrayWithContentsOfCSVURL:[NSURL fileURLWithPath:[RZFileOrganizer bundleFilePath:file]] options:CHCSVParserOptionsTrimsWhitespace];
         NSDateFormatter * formatter = [[[NSDateFormatter alloc] init] autorelease];
         if (calendarConfig.calendarUnit == NSCalendarUnitMonth) {
             [formatter setDateFormat:@"MMM yyyy"];
@@ -229,7 +230,8 @@
                 GCHistoryAggregatedDataHolder * data = [vals dataForIndex:i-3];
 
                 double gc_count = [[line objectAtIndex:1] integerValue];
-                double gc_dist = [[[line objectAtIndex:2] stringByReplacingOccurrencesOfString:@"," withString:@""] doubleValue];
+                NSString * cleanNumber = [[line[2] stringByReplacingOccurrencesOfString:@"," withString:@""] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                double gc_dist = [cleanNumber doubleValue];
                 //double gc_hr   = [[line objectAtIndex:6] integerValue];
 
                 GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType];

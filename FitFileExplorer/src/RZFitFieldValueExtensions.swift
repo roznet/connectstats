@@ -27,10 +27,10 @@
 
 import Foundation
 import RZUtils
-import RZFitFile
-import RZFitFileTypes
+import FitFileParser
 
-extension RZFitFieldValue {
+
+extension FitFieldValue {
     
     var numberWithUnit : GCNumberWithUnit? {
         get {
@@ -47,10 +47,27 @@ extension RZFitFieldValue {
             return rv
         }
     }
+    
+    func coordinateToDMS(coord : CLLocationCoordinate2D) -> String {
+        let latitude = coord.latitude
+        let longitude = coord.longitude
+        
+        let latDegrees = abs(Int(latitude))
+        let latMinutes = abs(Int((latitude * 3600).truncatingRemainder(dividingBy: 3600) / 60))
+        let latSeconds = Double(abs((latitude * 3600).truncatingRemainder(dividingBy: 3600).truncatingRemainder(dividingBy: 60)))
 
+        let lonDegrees = abs(Int(longitude))
+        let lonMinutes = abs(Int((longitude * 3600).truncatingRemainder(dividingBy: 3600) / 60))
+        let lonSeconds = Double(abs((longitude * 3600).truncatingRemainder(dividingBy: 3600).truncatingRemainder(dividingBy: 60) ))
+
+        return String(format:"%d°%d'%05.2F%@ %d°%d'%05.2F%@",
+                      latDegrees, latMinutes, latSeconds, latitude >= 0 ? "N" : "S",
+                      lonDegrees, lonMinutes, lonSeconds, longitude >= 0 ? "E" : "W" )
+                
+    }
     func displayString() -> String {
         if let coordinate = coordinate {
-            return "(\(coordinate.latitude),\(coordinate.longitude))"
+            return self.coordinateToDMS(coord: coordinate)
         }else if let nu = self.numberWithUnit {
             return nu.formatDouble()
         }else if let name = name {
@@ -60,13 +77,13 @@ extension RZFitFieldValue {
         }else if let value = value {
             return "\(value)"
         }else{
-            return "RZFitField(Error)"
+            return "FitField(Error)"
         }
     }
     
-    func csvColumns( col : RZFitFieldKey ) -> [RZFitFieldKey] {
+    func csvColumns( col : FitFieldKey ) -> [FitFieldKey] {
         // size needs to be consistent with number of cols in csvValues
-        var line : [RZFitFieldKey] = []
+        var line : [FitFieldKey] = []
         
         if let nu = numberWithUnit {
             line.append("\(col)_\(nu.unit.key)")
@@ -80,7 +97,7 @@ extension RZFitFieldValue {
         return line
     }
     
-    func csvValues( ref : RZFitFieldValue? = nil) -> [String] {
+    func csvValues( ref : FitFieldValue? = nil) -> [String] {
         // size needs to be consistent with number of cols in csvColumns
         var rv : [String] = []
         
@@ -104,22 +121,6 @@ extension RZFitFieldValue {
             rv.append("")
         }
         return rv
-    }
-    
-    convenience init?(fieldValue : FITFitFieldValue) {
-        if let val = fieldValue.numberWithUnit {
-            self.init(withValue: val.value, andUnit: val.unit.key)
-        }else if let dat = fieldValue.dateValue {
-            self.init(withTime: dat)
-        }else if let v = fieldValue.enumValue {
-            self.init(withName: v)
-        }else if let l = fieldValue.locationValue {
-            self.init(latitude: l.coordinate.latitude, longitude: l.coordinate.longitude)
-        }else if let s = fieldValue.stringValue {
-            self.init(withName: s)
-        }else{
-            return nil
-        }
     }
     
 }

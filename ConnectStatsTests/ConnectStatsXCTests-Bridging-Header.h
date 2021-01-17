@@ -2,8 +2,8 @@
 //  Use this file to import your target's public headers that you would like to expose to Swift.
 //
 
-#import <RZUtils/RZUtils.h>
-#import <RZUtilsTouch/RZUtilsTouch.h>
+@import RZUtils;
+@import RZUtilsTouch;
 #import "GCHealthZone.h"
 #import "GCHealthZoneCalculator.h"
 #import "GCField.h"
@@ -19,3 +19,6 @@
 
 #import "GCConnectStatsRequestSearch.h"
 #import "GCService.h"
+
+#import "GCHistoryFieldDataHolder.h"
+#import "GCHistoryFieldSummaryStats.h"

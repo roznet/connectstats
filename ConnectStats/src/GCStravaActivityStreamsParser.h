@@ -25,9 +25,10 @@
 
 #import <Foundation/Foundation.h>
 #import "GCWebRequest.h"
+@class GCTrackPoint;
 
 @interface GCStravaActivityStreamsParser : NSObject
-@property (nonatomic,retain) NSArray * points;
+@property (nonatomic,retain) NSArray<GCTrackPoint*> * points;
 @property (nonatomic,assign) GCWebStatus status;
 
 +(GCStravaActivityStreamsParser*)activityStreamsParser:(NSData*)input;

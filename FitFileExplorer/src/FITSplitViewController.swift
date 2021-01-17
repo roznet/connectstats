@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import RZFitFile
+import FitFileParser
 
 class FITSplitViewController: NSSplitViewController {
 
@@ -21,7 +21,7 @@ class FITSplitViewController: NSSplitViewController {
         }
     }
 
-    var fitFile : RZFitFile? {
+    var fitFile : FitFile? {
         get {
             if let doc = self.representedObject as? FITDocument {
                 return doc.fitFile

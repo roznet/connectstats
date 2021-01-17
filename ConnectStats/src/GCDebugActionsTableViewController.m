@@ -83,7 +83,7 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+    GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
     [cell setupForRows:1 andCols:1];
     NSString * methodName =self.availableActions[indexPath.row];
 
@@ -167,6 +167,30 @@
     //db tableExists:@"gc_derived_activity_processed"
     [[GCAppGlobal derived] processSome];
 }
+
+-(void)actionBuildActivityTypeSamples{
+    GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
+    
+    NSMutableDictionary * found = [NSMutableDictionary dictionary];
+    
+    NSString * name = @"activities_types_samples.db";
+    [RZFileOrganizer removeEditableFile:name];
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:name]];
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    GCActivitiesOrganizer * newOrganizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    for (GCActivity * act in organizer.activities) {
+        if( found[act.activityTypeDetail] == nil ){
+            found[act.activityTypeDetail] = @1;
+            [newOrganizer registerActivity:act forActivityId:act.activityId];
+            RZLog(RZLogInfo, @"add %@", act);
+        }
+    }
+    NSLog(@"total: %@", @(newOrganizer.countOfActivities));
+    [newOrganizer release];
+}
+
+
 
 -(void)actionTestNetwork{
     BOOL wifi = [RZSystemInfo wifiAvailable];

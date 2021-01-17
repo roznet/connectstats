@@ -26,13 +26,22 @@
 
 
 #import "GCAppSceneDelegate.h"
-#import "GCTabBarController.h"
-#import "GCSplitViewController.h"
 #import "GCHealthViewController.h"
 #import "GCAppGlobal.h"
 #import "GCAppDelegate.h"
+#import "ConnectStats-Swift.h"
+
+#ifdef GC_TEST_APP
+@class GCTabBarController;
+@class GCSplitViewController;
+#else
+#import "GCTabBarController.h"
+#import "GCSplitViewController.h"
+#endif
+
 
 @interface GCAppSceneDelegate ()
+
 @property (nonatomic, retain) GCTabBarController * tabBarController;
 @property (nonatomic, retain) GCSplitViewController * splitViewController;
 
@@ -41,8 +50,10 @@
 @implementation GCAppSceneDelegate
 
 -(void)dealloc{
+#ifndef GC_TEST_APP
     [_splitViewController release];
     [_tabBarController release];
+#endif
     [_window release];
     
     [super dealloc];
@@ -61,7 +72,7 @@
         //DONT CHECK IN:
         //self.window = [[[SmudgyWindow alloc] initWithFrame:windowScene.coordinateSpace.bounds] autorelease];
         _window.windowScene = windowScene;
-
+#ifndef GC_TEST_APP
         if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
         {
             // The device is an iPad
@@ -74,7 +85,7 @@
             _tabBarController = [[GCTabBarController alloc] init];
             _window.rootViewController = _tabBarController;
         }
-
+#endif
         // first use, update, etc workflow
         [_window makeKeyAndVisible];
     }else{
@@ -125,12 +136,15 @@
 }
 
 -(void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts{
-    NSLog(@"CAlled %@", URLContexts);
+    NSLog(@"Called %@", URLContexts);
     GCAppDelegate * delegate = (GCAppDelegate*)[UIApplication sharedApplication].delegate;
     for (UIOpenURLContext * context in URLContexts) {
         if( [context.URL.path hasSuffix:@".fit"] ){
             [delegate application:[UIApplication sharedApplication] openURL:context.URL options:@{}];
             break;
+        }
+        if( [context.URL.path isEqualToString:@"/oauth/strava"]){
+            [self handleOAuth:context.URL];
         }
     }
 }

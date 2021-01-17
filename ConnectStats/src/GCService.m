@@ -29,7 +29,6 @@
 #define GC_SERVICE_GARMIN       @"__garmin__"
 #define GC_SERVICE_STRAVA       @"__strava__"
 #define GC_SERVICE_BABOLAT      @"__babolat__"
-#define GC_SERVICE_WITHINGS     @"__withings__"
 #define GC_SERVICE_SPORTTRACKS  @"__sporttracks__"
 #define GC_SERVICE_HEALTHKIT    @"__healthkit__"
 #define GC_SERVICE_FITBIT       @"__fitbit__"
@@ -64,8 +63,6 @@
             return @"garmin";
         case gcServiceStrava:
             return @"strava";
-        case gcServiceWithings:
-            return @"withings";
         case gcServiceHealthKit:
             return @"healthkit";
         case gcServiceConnectStats:
@@ -169,9 +166,6 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
             }else if ([aId hasPrefix:GC_SERVICE_STRAVA]) {
                 rv.service = gcServiceStrava;
                 rv.prefix = GC_SERVICE_STRAVA;
-            }else if ([aId hasPrefix:GC_SERVICE_WITHINGS]){
-                rv.service = gcServiceWithings;
-                rv.prefix = GC_SERVICE_WITHINGS;
             }else if([aId hasPrefix:GC_SERVICE_HEALTHKIT]){
                 rv.service = gcServiceHealthKit;
                 rv.prefix = GC_SERVICE_HEALTHKIT;
@@ -192,9 +186,6 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
                 break;
             case gcServiceStrava:
                 rv.prefix = GC_SERVICE_STRAVA;
-                break;
-            case gcServiceWithings:
-                rv.prefix = GC_SERVICE_WITHINGS;
                 break;
             case gcServiceHealthKit:
                 rv.prefix = GC_SERVICE_HEALTHKIT;
@@ -266,8 +257,6 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
             return @"Garmin";
         case gcServiceStrava:
             return @"Strava";
-        case gcServiceWithings:
-            return @"Withings";
         case gcServiceHealthKit:
             return @"HealthKit";
         case gcServiceConnectStats:
@@ -286,7 +275,6 @@ static GCPrivateServiceSyncCache * _activitiesSync = nil;
         gcServiceGarmin,
         gcServiceConnectStats,
         gcServiceStrava,
-        gcServiceWithings,
         gcServiceHealthKit,
     };
     

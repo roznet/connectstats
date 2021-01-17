@@ -25,6 +25,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface GCTestUISampleCellHolder : NSObject
 @property (nonatomic,retain) UITableViewCell * cell;
 @property (nonatomic,retain) NSString * identifier;
@@ -33,3 +35,5 @@
 +(GCTestUISampleCellHolder*)holderFor:(UITableViewCell*)cell andIdentifier:(NSString*)identifier;
 +(GCTestUISampleCellHolder*)holderFor:(UITableViewCell*)cell height:(CGFloat)height andIdentifier:(NSString*)identifier;
 @end
+
+NS_ASSUME_NONNULL_END

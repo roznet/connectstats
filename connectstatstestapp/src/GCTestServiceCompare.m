@@ -33,6 +33,20 @@
 NSString * kDbPathServiceConnectStats = @"activities_cs.db";
 NSString * kDbPathServiceStrava = @"activities_strava.db";
 NSString * kDbPathServiceGarmin = @"activities_gc_alt.db";
+
+NSString *  serviceTestDbPath(gcGarminDownloadSource source){
+    switch (source) {
+        case gcGarminDownloadSourceBoth:
+            return @"activity_gc_cs.db";
+        case gcGarminDownloadSourceGarminWeb:
+            return @"activity_gc_alt.db";
+        case gcGarminDownloadSourceConnectStats:
+            return @"activity_cs.db";
+        case gcGarminDownloadSourceEnd:
+            return @"activity_strava.db";
+    }
+}
+
 // Download 10 detail files
 NSUInteger kCompareDetailCount = 10;
 
@@ -69,9 +83,9 @@ NSString * kJsonKeyTypes = @"types";
                                                                        kJsonKeyDuplicates: [NSMutableDictionary dictionary]
                                                                        }];
     
-    NSString * fp_cs = [RZFileOrganizer writeableFilePathIfExists:kDbPathServiceConnectStats];
-    NSString * fp_strava = [RZFileOrganizer writeableFilePathIfExists:kDbPathServiceStrava];
-    NSString * fp_garmin = [RZFileOrganizer writeableFilePathIfExists:kDbPathServiceGarmin];
+    NSString * fp_cs = [RZFileOrganizer writeableFilePathIfExists:serviceTestDbPath(gcGarminDownloadSourceConnectStats)];
+    NSString * fp_strava = [RZFileOrganizer writeableFilePathIfExists:serviceTestDbPath(gcGarminDownloadSourceEnd)];
+    NSString * fp_garmin = [RZFileOrganizer writeableFilePathIfExists:serviceTestDbPath(gcGarminDownloadSourceGarminWeb)];
     
     FMDatabase * db_cs      = fp_cs ?       [FMDatabase databaseWithPath:fp_cs]     : nil;
     FMDatabase * db_strava  = fp_strava ?   [FMDatabase databaseWithPath:fp_strava] : nil;
@@ -156,7 +170,9 @@ NSString * kJsonKeyTypes = @"types";
     GCNumberWithUnit * nu_one = [one numberWithUnitForField:field];
     GCNumberWithUnit * nu_two = [two numberWithUnitForField:field];
     
-    RZ_ASSERT([[nu_one formatDouble] isEqualToString:[nu_two formatDouble]],  @"%@:%@ %@:%@ == %@:%@", field, one, nameOne, nu_one, nameTwo, nu_two );
+    if( ![[nu_one formatDouble] isEqualToString:[nu_two formatDouble]]){
+        RZLog(RZLogWarning,  @"DIFF %@:%@ %@:%@ != %@:%@", one, field, nameOne, nu_one, nameTwo, nu_two );
+    }
     //RZ_ASSERT([nu_one compare:nu_two withTolerance:1.e-5] == NSOrderedSame, @"%@:%@ %@ == %@", field, one, nu_one, nu_two );
     
 }
@@ -168,24 +184,29 @@ NSString * kJsonKeyTypes = @"types";
     for( NSUInteger idx = 0; idx < kCompareDetailCount; idx++){
         GCActivity * activityOne = [one activityForIndex:idx];
         GCActivity * activityTwo = [two findDuplicate:activityOne];
-        
-        [self recordSimpleSummary:activityOne];
-        [self recordSimpleSummary:activityTwo];
-        
-        [self recordType:activityOne];
-        [self recordType:activityTwo];
-        
         RZ_ASSERT(activityTwo != nil, @"Found %@:%@ in %@", nameOne, activityOne, nameTwo);
-        if( activityTwo ){
-            [self recordDuplicate:activityOne for:activityTwo];
-            [self recordDuplicate:activityTwo for:activityOne];
-        }
-        NSLog(@"Found %@:%@ = %@:%@", nameOne, activityOne, nameTwo, activityTwo);
-        
-        if( /* DISABLES CODE */ (false) ){
+
+        if( activityTwo != nil){
+            [self recordSimpleSummary:activityOne];
+            [self recordSimpleSummary:activityTwo];
+            
+            [self recordType:activityOne];
+            [self recordType:activityTwo];
+            
+            if( activityTwo ){
+                [self recordDuplicate:activityOne for:activityTwo];
+                [self recordDuplicate:activityTwo for:activityOne];
+            }
+            NSLog(@"Found %@:%@ = %@:%@", nameOne, activityOne, nameTwo, activityTwo);
+            
             // Slight difference for a few instance, not exact match
             [self compareField:gcFieldFlagSumDuration forActivity:activityOne withName:nameOne and:activityTwo withName:nameTwo];
             [self compareField:gcFieldFlagSumDistance forActivity:activityOne withName:nameOne and:activityTwo withName:nameTwo];
+            
+            [self compareField:gcFieldFlagWeightedMeanSpeed forActivity:activityOne withName:nameOne and:activityTwo withName:nameTwo];
+            [self compareField:gcFieldFlagCadence forActivity:activityOne withName:nameOne and:activityTwo withName:nameTwo];
+        }else{
+            [two findDuplicate:activityOne];
         }
     }
     return rv;

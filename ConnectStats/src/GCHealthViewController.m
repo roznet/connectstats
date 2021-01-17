@@ -127,12 +127,12 @@
 
     if (indexPath.section == GC_SECTION_REFRESH) {
         if(indexPath.row == GC_REFRESH_ZONES){
-            GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+            GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
             [cell setupForRows:1 andCols:1];
             [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Refresh Training Zone", @"Health View");
             rv = cell;
         }else{
-            GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+            GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
             [cell setupForRows:1 andCols:2];
             [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Preferred Source", @"Health View");
             NSString*preferred = [[GCAppGlobal profile] configGetString:CONFIG_ZONE_PREFERRED_SOURCE defaultValue:@"garmin"];
@@ -143,7 +143,7 @@
     }else if (indexPath.section>=GC_SECTION_END){
 
         NSArray<GCHealthZoneCalculator*>*calculators = [self calculatorsForSection:indexPath.section];
-        GCCellGrid * cell = [GCCellGrid gridCell:tableView];
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         [cell setupForRows:2 andCols:2];
 
         if( indexPath.row < calculators.count){
@@ -179,7 +179,7 @@
         rv = cell;
     }
 
-    return rv?:[GCCellGrid gridCell:tableView];
+    return rv?:[GCCellGrid cellGrid:tableView];
 }
 
 #pragma mark - Table view delegate

@@ -70,7 +70,6 @@ extern NSString * kGCWeatherProviderVisualCrossing;
 -(RZImage*)weatherIcon;
 -(NSString*)weatherDisplayField:(NSString*)key;
 -(BOOL)weatherCompleteForDisplay;
--(BOOL)newFormat;
 
 -(GCNumberWithUnit*)weatherStationDistanceFromCoordinate:(CLLocationCoordinate2D)coord;
 

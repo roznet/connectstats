@@ -40,10 +40,7 @@
 -(void)servicesResetLogin; // when profile switch
 -(void)servicesLogin; // add necessary login requests
 
--(void)downloadMissingActivityDetails:(NSUInteger)n;
-
-// Withings
--(void)withingsUpdate;
+-(BOOL)downloadMissingActivityDetails:(NSUInteger)n;
 
 // Garmin
 -(void)garminDownloadActivityTrackPoints13:(GCActivity*)act;

@@ -41,7 +41,7 @@
 -(void)setupFromHistoryAggregatedData:(GCHistoryAggregatedDataHolder*)data
                                 index:(NSUInteger)idx
                            multiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig
-                      andActivityType:(NSString*)activityType
+                      andActivityType:(GCActivityType*)activityType
                                 width:(CGFloat)width;
 
 -(void)setupForField:(NSString*)fieldKey

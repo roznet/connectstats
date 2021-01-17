@@ -27,9 +27,9 @@
 
 import Foundation
 import GenericJSON
-import RZFitFile
+import FitFileParser
 import RZUtilsSwift
-import RZFitFileTypes
+
 
 class FITFitFieldMap: NSObject {
     private let map : JSON?
@@ -57,15 +57,15 @@ class FITFitFieldMap: NSObject {
         }
     }
     
-    func messageTypeKey( messageType: RZFitMessageType) -> String {
+    func messageTypeKey( messageType: FitMessageType) -> String {
         switch (messageType){
-        case FIT_MESG_NUM_SESSION:
+        case FitMessageType.session:
             return "FIT_MESG_NUM_SESSION"
-        case FIT_MESG_NUM_LAP:
+        case FitMessageType.lap:
             return "FIT_MESG_NUM_LAP"
-        case FIT_MESG_NUM_RECORD:
+        case FitMessageType.record:
             return "FIT_MESG_NUM_RECORD"
-        case FIT_MESG_NUM_LENGTH:
+        case FitMessageType.length:
             return "FIT_MESG_NUM_LENGTH"
         default:
             return "FIT_MESG_NUM[\(messageType)]"
@@ -73,7 +73,7 @@ class FITFitFieldMap: NSObject {
 
     }
     
-    func field( messageType : RZFitMessageType, fitField: String, activityType:String) -> GCField?{
+    func field( messageType : FitMessageType, fitField: String, activityType:String) -> GCField?{
         // Default unchanged
         var rv :GCField?
         let key = self.messageTypeKey(messageType: messageType)

@@ -26,25 +26,12 @@
 
 
 import Cocoa
-import RZFitFile
+import FitFileParser
 
 class FITDocument: NSDocument {
 
-    var fitFile : RZFitFile? = nil
+    var fitFile : FitFile? = nil
     
-    /*
-    override var windowNibName: String? {
-        // Override returning the nib file name of the document
-        // If you need to use a subclass of NSWindowController or if your document supports multiple NSWindowControllers, you should remove this method and override -makeWindowControllers instead.
-        return "FITDocument"
-    }
-    */
-
-    /*override func windowControllerDidLoadNib(_ aController: NSWindowController) {
-        super.windowControllerDidLoadNib(aController)
-        // Add any code here that needs to be executed once the windowController has loaded the document's window.
-    }*/
-
     override func makeWindowControllers() {
         let sb = NSStoryboard(name: "Main", bundle: nil)
         if let wc = sb.instantiateController(withIdentifier:"FIT Document Window Controller") as? NSWindowController{
@@ -65,22 +52,14 @@ class FITDocument: NSDocument {
         // Alternatively, you could remove this method and override read(from:ofType:) instead.  If you do, you should also override isEntireFileLoaded to return false if the contents are lazily loaded.
         
         if let url = self.fileURL {
-            
-            fitFile = RZFitFile(data: data, fileURL: url)
-        }else{
-            fitFile = RZFitFile(data: data)
-        }
-        
-        
-        /*    if let decode = FITFitFileDecode( data ){
-                decode.parse()
-                if let fit = decode.fitFile {
-                    fitFile = RZFitFile(fitFile: fit )
-                }
+            var type : FitFile.ParsingType = .fast
+            if let option = FITAppGlobal.shared.parsingTypes[ url ]{
+                type = option
             }
-        */
-        
-
+            fitFile = FitFile(data: data, fileURL: url, parsingType: type)
+        }else{
+            fitFile = FitFile(data: data, parsingType:  .generic)
+        }
     }
 
     override class var autosavesInPlace: Bool {

@@ -33,8 +33,11 @@
 #import "GCDerivedOrganizer.h"
 #import "GCWebUrl.h"
 
-extern NSString *const kNotifySettingsChange;
-extern NSString *const kNotifyLocationRequestComplete;
+NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *  const kNotifySettingsChange;
+extern NSString *  const kNotifyLocationRequestComplete;
+
 
 @class GCActivitiesOrganizer;
 @class GCAppDelegate;
@@ -81,29 +84,36 @@ extern NSString *const kNotifyLocationRequestComplete;
 +(void)setupFieldCache;
 
 +(void)startLocationRequest;
-+(CLLocation*)currentLocation;
++(nullable CLLocation*)currentLocation;
 
 +(UINavigationController*)currentNavigationController;
 
 +(NSCalendar*)calculationCalendar;
 +(void)ensureCalculationCalendarTimeZone:(NSTimeZone*)tz;// Mostly used for testing
-+(NSDate*)referenceDate DEPRECATED_MSG_ATTRIBUTE("use calendar config");
++(nullable NSDate*)referenceDate DEPRECATED_MSG_ATTRIBUTE("use calendar config");
 +(NSInteger)currentYear;
 
 +(BOOL)connectStatsVersion;
 +(BOOL)healthStatsVersion;
 
-+(HKHealthStore*)healthKitStore;
++(nullable HKHealthStore*)healthKitStore;
 
 +(NSDictionary*)debugState;
 +(void)debugStateRecord:(NSDictionary*)dict;
 +(void)debugStateClear;
 
 +(void)setApplicationDelegate:(GCAppDelegate*)del;
-+(NSString*)simulatorUrl;
++(nullable NSString*)simulatorUrl;
 
 +(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;
 
 +(gcWebConnectStatsConfig)webConnectsStatsConfig;
 
++(void)versionSummary;
+
++(UIUserInterfaceStyle)userInterfaceStyle;
+
++(NSString*)appURLScheme;
 @end
+
+NS_ASSUME_NONNULL_END

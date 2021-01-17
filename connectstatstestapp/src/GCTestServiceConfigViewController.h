@@ -28,7 +28,9 @@
 #import <UIKit/UIKit.h>
 #import "GCAppProfiles.h"
 
+@class GCTestServicesViewController;
+
 @interface GCTestServiceConfigViewController : UIViewController<UITextFieldDelegate>
 
-+(GCTestServiceConfigViewController*)configForProfile:(GCAppProfiles*)profile;
++(GCTestServiceConfigViewController*)configForProfile:(GCAppProfiles*)profile controller:(GCTestServicesViewController*)vc;
 @end

@@ -25,13 +25,15 @@
 
 
 
-#import <RZUtilsTestInfra/RZUtilsTestInfra.h>
+@import RZUtilsTestInfra;
+#import "GCViewConfig.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString * kDbPathServiceConnectStats;
-extern NSString * kDbPathServiceStrava;
-extern NSString * kDbPathServiceGarmin;
+extern NSString *  serviceTestDbPath(gcGarminDownloadSource source);
+extern NSString * kDbPathServiceConnectStats DEPRECATED_MSG_ATTRIBUTE("Use func");
+extern NSString * kDbPathServiceStrava DEPRECATED_MSG_ATTRIBUTE("Use func");
+extern NSString * kDbPathServiceGarmin DEPRECATED_MSG_ATTRIBUTE("Use func");
 extern NSUInteger kCompareDetailCount;
 
 typedef NS_ENUM(NSUInteger, gcTestStageServiceCompare) {

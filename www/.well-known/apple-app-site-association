@@ -1,0 +1,15 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "M7QSSF3624.net.ro-z.connectstats",
+                "paths": [ "/app-ios/c/*"]
+            },
+			{
+                "appID": "M7QSSF3624.net.ro-z.healthstats",
+                "paths": [ "/app-ios/h/*"]
+            }
+        ]
+    }
+}

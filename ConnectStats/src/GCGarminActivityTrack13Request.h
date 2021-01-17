@@ -50,6 +50,4 @@ typedef NS_ENUM(NSUInteger, gcTrack13RequestStage){
 +(GCActivity*)testForActivity:(GCActivity*)act withFilesIn:(NSString*)path;
 +(GCActivity*)testForActivity:(GCActivity*)act withFilesIn:(NSString*)path mergeFit:(BOOL)mergeFit;
 
-+(BOOL)extractFitDataFromZip:(NSData*)theData intoFitFile:(NSString*)fn;
-
 @end

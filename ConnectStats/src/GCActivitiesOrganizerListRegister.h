@@ -29,18 +29,25 @@
 @class GCActivitiesOrganizer;
 @class GCService;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface GCActivitiesOrganizerListRegister : NSObject
 
 @property (nonatomic,readonly) NSUInteger reachedExisting;
-@property (nonatomic,readonly) NSArray<NSString*>*childIds;
+@property (nonatomic,readonly,nullable) NSArray<NSString*>*childIds;
 /**
  Create object to register list of activities
  isFirst should be true if first list provided, when multiple list to update the behavior to
  delete existing is different:
  */
-+(instancetype)listRegisterFor:(NSArray<GCActivity*>*)activities from:(GCService*)service isFirst:(BOOL)isFirst;
+-(instancetype)initFor:(NSArray<GCActivity*>*)activities from:(GCService*)service isFirst:(BOOL)isFirst;
+
++(instancetype)activitiesOrganizerListRegister:(NSArray<GCActivity*>*)activities from:(GCService*)service isFirst:(BOOL)isFirst;
+
 -(void)addToOrganizer:(GCActivitiesOrganizer*)organizer;
 
 -(BOOL)shouldSearchForMoreWith:(NSUInteger)requestCount reloadAll:(BOOL)mode;
 
 @end
+
+NS_ASSUME_NONNULL_END

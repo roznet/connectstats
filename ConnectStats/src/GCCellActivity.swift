@@ -28,11 +28,23 @@
 import UIKit
 
 class GCCellActivity: UITableViewCell {
-
+    @IBOutlet var borderView: GCCellRoundedPatternView!
+    @IBOutlet var leftBorderView: GCCellRoundedPatternView!
+    @IBOutlet var iconView: UIImageView!
+    @IBOutlet var bottomLabel: UILabel!
+    
+    @IBOutlet var leftFieldValues: GCCellFieldValueColumnView!
+    @IBOutlet var rightFieldValues: GCCellFieldValueColumnView!
+    
+    @IBOutlet var today: UILabel!
+    @IBOutlet var date: UILabel!
+    @IBOutlet var time: UILabel!
+    @IBOutlet var year: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.backgroundColor = UIColor.lightGray
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -41,4 +53,81 @@ class GCCellActivity: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    
+    @objc func setup(for activity : GCActivity){
+        self.backgroundColor = UIColor.systemBackground
+        self.leftFieldValues.backgroundColor = UIColor.clear
+        self.rightFieldValues.backgroundColor = UIColor.clear
+        
+        self.leftFieldValues.clearFieldAndNumbers()
+        self.rightFieldValues.clearFieldAndNumbers()
+        
+        self.borderView.insideColor = GCViewConfig.cellBackgroundDarker(forActivity: activity)
+        self.leftBorderView.insideColor = GCViewConfig.cellBackgroundLighter(forActivity: activity)
+        self.borderView.borderColor = GCViewConfig.textColor(forActivity: activity)
+        self.leftBorderView.borderColor = GCViewConfig.textColor(forActivity: activity)
+
+        self.borderView.borderColor = GCViewConfig.colorForRoundedBorder()
+        
+        self.leftBorderView.borderColor = GCViewConfig.colorForRoundedBorder()
+        
+        self.borderView.setNeedsDisplay()
+        self.leftBorderView.setNeedsDisplay()
+        
+        if let icon = activity.icon(){
+            self.iconView.image = icon
+        }else{
+            self.iconView.image = nil;
+        }
+        
+        if let durationField = GCField(for: gcFieldFlag.sumDuration, andActivityType: activity.activityType),
+           let duration = activity.numberWithUnit(for: durationField){
+            self.leftFieldValues.add(field: durationField, numberWithUnit: duration)
+        }
+        if let distanceField = GCField(for: gcFieldFlag.sumDistance, andActivityType: activity.activityType),
+           let distance = activity.numberWithUnit(for: distanceField ){
+            self.leftFieldValues.add(field: distanceField, numberWithUnit: distance)
+        }
+        
+        self.leftFieldValues.valueAttribute = GCViewConfig.attribute(rzAttribute.title)
+        self.leftFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.title)
+        self.leftFieldValues.displayIcons = .hide
+        self.leftFieldValues.defaultVerticalSpacing = 10.0
+        self.leftFieldValues.geometry.timeAlignment = .center
+        self.leftFieldValues.geometry.alignment = .center
+        self.leftFieldValues.distributeVertically = true;
+        
+        self.rightFieldValues.geometry.unitAlignment = .left
+        self.rightFieldValues.geometry.numberAlignment = .right
+        self.rightFieldValues.displayIcons = .left
+        self.rightFieldValues.iconColor = UIColor.darkGray
+        self.rightFieldValues.defaultVerticalSpacing = 2.0
+        self.rightFieldValues.valueAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
+        self.rightFieldValues.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
+        self.rightFieldValues.distributeVertically = false
+
+        let rightFields : [GCField] = [
+            GCField(for: gcFieldFlag.weightedMeanSpeed, andActivityType: activity.activityType),
+            GCField(for: gcFieldFlag.weightedMeanHeartRate, andActivityType: activity.activityType),
+            GCField(for: gcFieldFlag.power, andActivityType: activity.activityType),
+            GCField(for: gcFieldFlag.altitudeMeters, andActivityType: activity.activityType),
+        ]
+        for field in rightFields {
+            if let nu = activity.numberWithUnit(for: field) {
+                if nu.value != 0.0 {
+                    self.rightFieldValues.add(field: field, numberWithUnit: nu)
+                }
+            }
+        }
+        let useDate = (activity.date as NSDate)
+        self.today.text = useDate.dayFormat()
+        self.date.text = useDate.calendarUnitFormat(NSCalendar.Unit.day)
+        self.time.text = useDate.timeShortFormat()
+        self.year.text = String(useDate.calendarUnitFormat(NSCalendar.Unit.year).suffix(2))
+        
+        self.bottomLabel.attributedText = NSAttributedString(string: activity.displayName,
+                                                             attributes: GCViewConfig.attribute(rzAttribute.descriptionField))
+    }
+               
+               
 }

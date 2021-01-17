@@ -28,7 +28,7 @@
 #import "GCAppGlobal.h"
 #import "GCMapAnnotation.h"
 #import "Flurry.h"
-#import <RZExternal/RZExternal.h>
+@import RZExternal;
 #import "GCViewConfig.h"
 #import "GCActivity+Calculated.h"
 #import "GCFields.h"
@@ -156,7 +156,7 @@
     [self.view addSubview:self.windCompassView];
     self.windCompassView.backgroundColor = [UIColor clearColor];
 
-    UINavigationItem * item = self.slidingViewController ? self.slidingViewController.navigationItem : self.navigationItem;
+    UINavigationItem * item = self.navigationItem;
 
     UIImage * img  = [GCViewIcons navigationIconFor:gcIconNavTags];
     UIImage * img2 = [GCViewIcons navigationIconFor:gcIconNavEye];
@@ -175,7 +175,6 @@
 
     }else{
         UIImage * img3 = [GCViewIcons navigationIconFor:gcIconNavMarker];
-        UIImage * img4 = [GCViewIcons navigationIconFor:gcIconNavAction];
 
         item.rightBarButtonItems = @[[[[UIBarButtonItem alloc] initWithImage:img style:UIBarButtonItemStylePlain target:self action:@selector(toggleField:)] autorelease],
 
@@ -183,7 +182,7 @@
 
                                       [[[UIBarButtonItem alloc] initWithImage:img3 style:UIBarButtonItemStylePlain target:self action:@selector(toggleShowLap:)] autorelease],
 
-                                      [[[UIBarButtonItem alloc] initWithImage:img4 style:UIBarButtonItemStylePlain target:self action:@selector(toggleSharing)] autorelease]];
+                                      ];
     }
 }
 
@@ -191,10 +190,6 @@
     [super viewWillAppear:animated];
     [self setupFrames:self.view.safeAreaLayoutGuide.layoutFrame];
     [self zoomInOnRoute];
-
-    if (self.slidingViewController) {
-        (self.slidingViewController).anchorRightRevealAmount = self.view.frame.size.width*0.9;
-    }
     
 }
 
@@ -331,14 +326,6 @@
     }
 }
 
--(void)toggleSharing{
-    if ((self.slidingViewController).currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight) {
-        [self.slidingViewController resetTopViewAnimated:YES];
-    }else{
-        [self.slidingViewController anchorTopViewToRightAnimated:YES];
-    }
-}
-
 -(void)nextLap:(id)cb{
     if (self.lapIndex < self.activity.lapCount-1) {
         self.lapIndex++;
@@ -424,13 +411,11 @@
         self.windCompassView.enabled = false;
         if ([self.activity hasWeather] ) {
             GCWeather * weather = self.activity.weather;
-            if (weather.newFormat) {
-                self.windCompassView.enabled = false;
-                if (weather.windDirection && weather.windSpeed) {
-                    self.windCompassView.enabled = true;
-                    self.windCompassView.direction = (weather.windDirection).floatValue/180.*M_PI - M_PI/2.0;
-                    self.windCompassView.percent = MIN(1.0, [[weather.windSpeed convertToUnitName:@"kph"] value]/20.);
-                }
+            self.windCompassView.enabled = false;
+            if (weather.windDirection && weather.windSpeed) {
+                self.windCompassView.enabled = true;
+                self.windCompassView.direction = (weather.windDirection).floatValue/180.*M_PI - M_PI/2.0;
+                self.windCompassView.percent = MIN(1.0, [[weather.windSpeed convertToUnitName:@"kph"] value]/20.);
             }
         }
 
