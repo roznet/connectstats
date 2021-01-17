@@ -35,6 +35,18 @@ class FITSelectionContext {
     
     enum DateTimeFormat {
         case full, timeOnly, elapsed
+        
+        static let descriptions = [ "Date and Time", "Time Only", "Elapsed" ]
+        
+        init(description : String){
+            if description == DateTimeFormat.descriptions[2] {
+                self = .elapsed
+            }else if description == DateTimeFormat.descriptions[1] {
+                self = .timeOnly
+            }else {
+                self = .full
+            }
+        }
     }
     
     var dateTimeFormat : DateTimeFormat = .elapsed
@@ -246,7 +258,15 @@ class FITSelectionContext {
     // MARK: - Display
     
     
+    var unitOverrides : [FitFieldKey: GCUnit] = [:]
     
+    func recordUnitOverride(field : FitFieldKey, unitKey : String){
+        if DateTimeFormat.descriptions.contains(unitKey){
+            self.dateTimeFormat = DateTimeFormat(description: unitKey)
+        }else{
+            self.unitOverrides[field] = GCUnit(forKey: unitKey)
+        }
+    }
     
     /// Convert to relevant unit or just description
     ///

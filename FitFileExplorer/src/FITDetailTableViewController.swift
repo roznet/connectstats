@@ -24,10 +24,18 @@ class FITDetailTableViewController: NSViewController {
         if let row = Int(self.messageIndexField.stringValue) {
             self.detailTableView.scrollRowToVisible(row)
             self.detailTableView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
-            print( "\(row)")
         }
     }
     
+    @IBAction func unitChanged(_ sender: Any) {
+        let idx = selectedFieldUnits.indexOfSelectedItem
+        if let name = selectedFieldUnits.selectedItem?.title {
+            if let source = self.detailTableView.dataSource as? FITDe {
+                context.recordUnitOverride(field: self.selectedFieldLabel.stringValue, unitKey: name)
+            }
+        }
+        
+    }
     @IBAction func exportCSV(_ sender: Any) {
         if let dataSource = self.detailTableView.dataSource as? FITDetailListDataSource {
             let savePanel = NSSavePanel()
@@ -68,16 +76,31 @@ class FITDetailTableViewController: NSViewController {
     }
     
     func sync(detailListDataSource source: FITDetailListDataSource){
-        if let selectedField = source.selectedField {
-            self.selectedFieldLabel.stringValue = selectedField
-        }else{
-            self.selectedFieldLabel.stringValue = "No Field Selected"
-        }
         if source.selectedRow == -1 {
             self.messageIndexField.stringValue = ""
         }else{
             self.messageIndexField.stringValue = "\(source.selectedRow)"
         }
+
+        if let selectedField = source.selectedField {
+            self.selectedFieldLabel.stringValue = selectedField
+            var enable = false
+            if let first = source.messages.first {
+                if let nu = first.interpretedField(key: selectedField)?.numberWithUnit {
+                    enable = true
+                    selectedFieldUnits.removeAllItems()
+                    selectedFieldUnits.addItems(withTitles: nu.unit.compatibleUnits().map { $0.key })
+                }else if let _ = first.interpretedField(key: selectedField)?.time {
+                    enable = true
+                    selectedFieldUnits.removeAllItems()
+                    selectedFieldUnits.addItems(withTitles: [ "Date and Time", "Time only", "Elapsed" ])
+                }
+            }
+            selectedFieldUnits.isEnabled = enable
+        }else{
+            self.selectedFieldLabel.stringValue = "No Field Selected"
+        }
+
         
         if source.selectionContext.messages.count > 0 {
             self.totalMessagesLabel.stringValue = " out of \(source.selectionContext.messages.count)"
