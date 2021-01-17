@@ -1071,7 +1071,6 @@
     NSDictionary<GCField*,GCActivitySummaryValue*> * twoDict = two.summaryData;
     
     NSMutableDictionary * missingFromTwo = [NSMutableDictionary dictionary];
-    NSMutableDictionary * missingFromOne = [NSMutableDictionary dictionary];
 
     NSMutableDictionary * equals = [NSMutableDictionary dictionary];
     NSMutableDictionary * diffs = [NSMutableDictionary dictionary];
@@ -1096,18 +1095,6 @@
             }
             
             XCTAssertEqualObjects(displayOne, displayTwo, @"%@: %@ %@<>%@", msg, field, displayOne, displayTwo);
-            /*
-            NSNumber * tolerance = tolerances[field.key];
-            if ([tolerance isKindOfClass:[NSNumber class]]) {
-                // tolerance is % (0.01 -> 1%)
-                double useTolerance = oneValue.numberWithUnit.value * tolerance.doubleValue;
-                XCTAssertTrue([oneValue.numberWithUnit compare:twoValue.numberWithUnit withTolerance:useTolerance] == NSOrderedSame, @"%@: %@ %@<>%@ (within %@)", msg, field, oneValue.numberWithUnit, twoValue.numberWithUnit, tolerance);
-            }else if([tolerance isKindOfClass:[NSString class]]){
-                //SKIP
-            }else{
-                XCTAssertEqualObjects(oneValue, twoValue, @"%@: %@", field, msg );
-            }
-             */
         }else{
             if( ![tolerances[field.key] isKindOfClass:[NSString class]]){
                 missingFromTwo[field] = oneValue;
@@ -1117,14 +1104,6 @@
     
     // We do not assert what is missing from one, as we should call in one
     // for the service with the least fields.
-    /*
-    for (GCField * field in twoDict) {
-        if( !oneDict[field] && ![tolerances[field.key] isKindOfClass:[NSString class]]){
-            missingFromOne[field] = twoDict[field];
-        }
-    }
-    //XCTAssertEqual(missingFromOne.count, 0);
-     */
     XCTAssertEqual(missingFromTwo.count, 0);
     XCTAssertGreaterThan(equals.count, 0);
 }
