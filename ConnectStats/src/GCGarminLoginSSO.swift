@@ -89,7 +89,7 @@ import RZUtilsSwift
             }else{
                 let url = self.dataTask?.currentRequest?.url?.absoluteString ?? "nourl"
                 RZSLog.error("Service Error \(response.statusCode) \(url)")
-                if response.statusCode == 500 || response.statusCode == 403 {
+                if response.statusCode == 500 || response.statusCode == 403 || response.statusCode == 401{
                     self.completion?(.accessDenied)
                 }else{
                     self.completion?(.serviceLogicError)
