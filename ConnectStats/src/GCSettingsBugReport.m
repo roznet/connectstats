@@ -40,6 +40,9 @@
 NSString * kBugFilename = @"bugreport.zip";
 NSString * kBugNoCommonId = @"-1";
 
+@interface GCSettingsBugReport ()
+@property (nonatomic,assign) BOOL archiveSuccess;
+@end
 @implementation GCSettingsBugReport
 
 +(GCSettingsBugReport*)bugReport{
@@ -89,7 +92,7 @@ NSString * kBugNoCommonId = @"-1";
 -(NSURLRequest*)urlRequest{
     NSString * aURL = GCWebConnectStatsBugReport([GCAppGlobal webConnectsStatsConfig]);
 #if TARGET_IPHONE_SIMULATOR
-    aURL = @"https://localhost.ro-z.me/dev/bugreport/new?verbose=1";
+    //aURL = @"https://localhost.ro-z.me/dev/bugreport/new?verbose=1";
 #endif
     return [self urlResquestFor:aURL];
 }
@@ -100,7 +103,7 @@ NSString * kBugNoCommonId = @"-1";
     
     NSString * bugpath = [RZFileOrganizer writeableFilePath:kBugFilename];
     
-    [self createBugReportArchive];
+    self.archiveSuccess = [self createBugReportArchive];
     
     NSError * err = nil;
     NSDictionary * attribute = [[NSFileManager defaultManager] attributesOfItemAtPath:bugpath error:&err];
@@ -160,6 +163,11 @@ NSString * kBugNoCommonId = @"-1";
             [RZFileOrganizer removeEditableFile:file];
         }
     }
-    RZLogReset();
+    if( self.archiveSuccess ){
+        RZLogReset();
+        RZLog(RZLogInfo,@"BugReport sent, log reset");
+    }else{
+        RZLog(RZLogInfo,@"BugReport not complete, keeping old log");
+    }
 }
 @end

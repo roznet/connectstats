@@ -33,58 +33,95 @@ import RZUtilsSwift
 
 extension GCSettingsBugReport {
     
-    @objc func createBugReportArchive() {
+    @discardableResult
+    @objc func createBugReportArchive() -> Bool {
         let bugPath = RZFileOrganizer.writeableFilePath(kBugFilename)
         let bugPathURL = URL(fileURLWithPath: bugPath )
+        var archiveSucess = true
         
         let archive = Archive(url: bugPathURL, accessMode: .create)
-        do {
-            if let data = RZLogFileContent().data(using: .utf8){
+        
+        if let data = RZLogFileContent().data(using: .utf8){
+            do {
                 try archive?.addEntry(with: "bugreport.log",
                                       type: .file,
                                       uncompressedSize: UInt32(data.count),
                                       provider: { (position,size) -> Data in
                                         return data.subdata(in: position..<position+size)
                                       })
+            }catch{
+                RZSLog.error("bug archive error for log \(error)")
+                archiveSucess = false
             }
-            if let jsonMissingFields = self.missingFieldsAsJson {
+        }
+        if let jsonMissingFields = self.missingFieldsAsJson {
+            do {
                 try archive?.addEntry(with: "missing_fields.json",
                                       type: .file,
                                       uncompressedSize: UInt32(jsonMissingFields.count),
                                       provider: { (position,size) -> Data in
                                         return jsonMissingFields.subdata(in: position..<position+size)
                                       })
-
+            }catch{
+                RZSLog.error("bug archive error for missingJson \(error)")
+                archiveSucess = false
             }
-            if self.includeErrorFiles {
-                let errors = GCActivitiesCacheManagement.errorFiles()
+        }
+        if self.includeErrorFiles {
+            let errors = GCActivitiesCacheManagement.errorFiles()
+            do {
                 for filename in errors {
                     let pathUrl = URL(fileURLWithPath: filename)
-
+                    
                     try archive?.addEntry(with: pathUrl.lastPathComponent, relativeTo: pathUrl.deletingLastPathComponent())
                 }
+            }catch{
+                RZSLog.error("bug archive error for error files \(error)")
+                archiveSucess = false
             }
-            if self.includeActivityFiles {
-                if let activity = GCAppGlobal.organizer().currentActivity() {
-                    let adbURL = URL( fileURLWithPath: activity.trackDbFileName)
+        }
+        if self.includeActivityFiles {
+            if let activity = GCAppGlobal.organizer().currentActivity() {
+                let adbURL = URL( fileURLWithPath: activity.trackDbFileName)
+                do {
                     try archive?.addEntry(with: adbURL.lastPathComponent, relativeTo: adbURL.deletingLastPathComponent())
+                }catch{
+                    RZSLog.error("bug archive error for acivity \(activity) \(error)")
+                    archiveSucess = false
                 }
-                if let currentDatabasePath = GCAppGlobal.profile().currentDatabasePath() {
-                    let dbURL = URL( fileURLWithPath:RZFileOrganizer.writeableFilePath(currentDatabasePath ))
+            }
+            if let currentDatabasePath = GCAppGlobal.profile().currentDatabasePath() {
+                let dbURL = URL( fileURLWithPath:RZFileOrganizer.writeableFilePath(currentDatabasePath ))
+                do {
                     try archive?.addEntry(with: "activities_bugreport.db", fileURL: dbURL)
+                }catch{
+                    RZSLog.error("bug archive error for activity database \(error)")
+                    archiveSucess = false
                 }
-                if let currentDerivedPath = GCAppGlobal.profile().currentDerivedDatabasePath() {
-                    let dbURL = URL( fileURLWithPath:RZFileOrganizer.writeableFilePath(currentDerivedPath ))
+            }
+            if let currentDerivedPath = GCAppGlobal.profile().currentDerivedDatabasePath() {
+                let dbURL = URL( fileURLWithPath:RZFileOrganizer.writeableFilePath(currentDerivedPath ))
+                do {
                     try archive?.addEntry(with: "derived_bugreport.db", fileURL: dbURL)
+                }catch{
+                    RZSLog.error("bug archive error for derived \(error)")
+                    archiveSucess = false
                 }
             }
-            
-            if let settingsPath = RZFileOrganizer.writeableFilePathIfExists("settings.plist") {
-                let settingsURL = URL(fileURLWithPath: settingsPath )
+        }
+        
+        if let settingsPath = RZFileOrganizer.writeableFilePathIfExists("settings.plist") {
+            let settingsURL = URL(fileURLWithPath: settingsPath )
+            do {
                 try archive?.addEntry(with: "settings_bugreport.plist", fileURL: settingsURL)
+            }catch{
+                RZSLog.error("bug archive error for settings \(error)")
+                archiveSucess = false
             }
-            
-            if let jsonSettings = GCAppGlobal.settings().withJSONTypesOnly(){
+        }
+        
+        if let jsonSettings = GCAppGlobal.settings().withJSONTypesOnly(){
+            do {
                 let jsonData = try JSONSerialization.data(withJSONObject: jsonSettings,
                                                           options: [JSONSerialization.WritingOptions.prettyPrinted,JSONSerialization.WritingOptions.sortedKeys])
                 try archive?.addEntry(with: "settings_bugreport.json",
@@ -93,12 +130,13 @@ extension GCSettingsBugReport {
                                       provider: { (position,size) -> Data in
                                         return jsonData.subdata(in: position..<position+size)
                                       })
+            }catch{
+                RZSLog.error("bug archive error for json settings \(error)")
+                archiveSucess = false
             }
-
-        }catch{
-            RZSLog.error("Failed to create zip file \(bugPath)")
         }
         
+        return archiveSucess
     }
     
     @objc func createBugReportDictionary(extra : [String:String] ) -> [String:String] {
