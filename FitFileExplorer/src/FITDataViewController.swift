@@ -38,7 +38,16 @@ class FITDataViewController: NSViewController {
     @IBOutlet weak var statsUsing: NSPopUpButton!
     @IBOutlet weak var statsFor: NSPopUpButton!
     
-    var fitDataSource:FITDataListDataSource?
+    var dataListDataSource:FITDataListDataSource? {
+        didSet {
+            self.tableView.dataSource = dataListDataSource
+            self.tableView.delegate = dataListDataSource
+        }
+    }
+    
+    var selectionContext : FITSelectionContext? {
+        self.dataListDataSource?.selectionContext
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,39 +55,41 @@ class FITDataViewController: NSViewController {
     }
     
     override func viewWillAppear() {
-        
-        if let ds = self.fitDataSource {
+        if let selectionContext = self.dataListDataSource?.selectionContext {
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(selectionContextChanged(notification:)),
-                                                   name: FITSelectionContext.kFITNotificationConfigurationChanged,
-                                                   object: ds.selectionContext)
-
+                                                   name: FITSelectionContext.kFITNotificationMessageTypeChanged,
+                                                   object: selectionContext)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(selectionContextChanged(notification:)),
+                                                   name: FITSelectionContext.kFITNotificationFieldSelectionChanged,
+                                                   object: selectionContext)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(selectionContextChanged(notification:)),
+                                                   name: FITSelectionContext.kFITNotificationDisplayConfigChanged,
+                                                   object: selectionContext)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(selectionContextChanged(notification:)),
+                                                   name: FITWindowController.kNotificationToolBarSettingsChanged,
+                                                   object: nil)
         }
         self.updatePopup()
+        self.updateStatistics()
         super.viewWillAppear()
     }
+    
     override func viewWillDisappear() {
         super.viewWillDisappear()
         NotificationCenter.default.removeObserver(self)
     }
-    func update(with source:FITDataListDataSource){
-        NotificationCenter.default.removeObserver(self)
-        self.fitDataSource = source
+    
+    func setup(selectionContext : FITSelectionContext){
+        self.dataListDataSource = FITDataListDataSource(context: selectionContext)
         
-        self.tableView.dataSource = source
-        self.tableView.delegate = source
-        self.tableView.reloadData()
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(selectionContextChanged(notification:)),
-                                               name: FITSelectionContext.kFITNotificationConfigurationChanged,
-                                               object: source.selectionContext)
-        self.updatePopup()
-        self.updateStatistics()
     }
     
     func updatePopup() {
-        if let ds = self.fitDataSource{
+        if let ds = self.dataListDataSource{
             if let mt = ds.selectionContext.statsUsing,
                 let title = ds.selectionContext.fitFile.messageTypeDescription(messageType: mt){
                 self.statsUsing.selectItem(withTitle: title)
@@ -96,7 +107,7 @@ class FITDataViewController: NSViewController {
     }
 
     func updateStatistics() {
-        if let ds = self.fitDataSource {
+        if let ds = self.dataListDataSource {
             DispatchQueue.global(qos: .userInitiated).async {
                 // update stats in background then relad on main
                 ds.updateStatistics()
@@ -110,7 +121,7 @@ class FITDataViewController: NSViewController {
         if
             let value = sender.selectedItem?.title,
             let mesgnum = FitFile.messageType(forDescription: value),
-            let ds = self.fitDataSource{
+            let ds = self.dataListDataSource{
             ds.selectionContext.statsFor = mesgnum
             self.updateStatistics()
         }
@@ -119,7 +130,7 @@ class FITDataViewController: NSViewController {
         if
             let value = sender.selectedItem?.title,
             let mesgnum = FitFile.messageType(forDescription: value),
-            let dataSource = self.fitDataSource{
+            let dataSource = self.dataListDataSource{
             dataSource.selectionContext.statsUsing = mesgnum
             self.updateStatistics()
         }

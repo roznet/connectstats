@@ -9,22 +9,34 @@
 import Cocoa
 import RZUtilsMacOS
 import FitFileParser
+import RZUtilsSwift
 
 class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource,RZTableViewDelegate {
-
-    static let kFITNotificationDetailSelectionChanged = Notification.Name( "kFITNotificationDetailSelectionChanged" )
     
     let selectionContext : FITSelectionContext
+    var orderedKeys : [FitFieldKey] {
+        return self.selectionContext.orderedKeys
+    }
     
-    var selectedColumn : Int = -1
-    var selectedRow : Int = -1
-    var selectedField : FitFieldKey? = nil
     var setupMode : Bool = false
     
+    // Whether messages are in rows or columns
+    var messageInColumns : Bool {
+        return self.selectionContext.messages.count == 1
+    }
+
+    // MARK: - Indirection Convenience from Selection Context
+    
+    var selectedField : FitFieldKey? {
+        get {
+            return self.selectionContext.selectedField
+        }
+    }
+
     var fitFile : FitFile {
         return self.selectionContext.fitFile
     }
-    var messages:[FitMessage] {
+    var messages : [FitMessage] {
         return self.selectionContext.messages
     }
     var messageType :FitMessageType{
@@ -33,28 +45,18 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
         }
     }
     
-    var orderedKeys : [FitFieldKey]
-    
     init(context : FITSelectionContext) {
         self.selectionContext = context
-        self.orderedKeys = context.fitFile.orderedFieldKeys(messageType: context.messageType)
         super.init()
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(selectionContextChanged(notification:)),
-                                              name: FITSelectionContext.kFITNotificationConfigurationChanged,
-                                              object: self.selectionContext)
     }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
 
-    @objc func selectionContextChanged(notification: Notification) {
-        self.orderedKeys = self.selectionContext.fitFile.orderedFieldKeys(messageType: self.selectionContext.messageType)
-    }
     
     func requiredTableColumnsIdentifiers() -> [String] {
-        if( messages.count == 1){
+        if( self.messageInColumns){
             return [ "Field", "Value"]
         }else{
             return self.orderedKeys
@@ -65,7 +67,7 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
         if self.setupMode {
             return 0
         }
-        if( self.messages.count == 1){
+        if( self.messageInColumns){
             if let first = self.messages.first {
                 return first.interpretedFieldKeys().count
             }else{
@@ -80,7 +82,7 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
         let cellView =  tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("MessageCellView"), owner: self)
         if let cellView = cellView as? NSTableCellView {
             cellView.textField?.stringValue = ""
-            if( messages.count == 1){
+            if( self.messageInColumns ){
                 if let first = self.messages.first {
                     if( row < first.interpretedFieldKeys().count){
                         let identifier = first.interpretedFieldKeys()[row]
@@ -90,7 +92,7 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
                             
                         }else{
                             if let item = first.interpretedField(key: identifier){
-                                cellView.textField?.stringValue = self.selectionContext.display(fieldValue: item)
+                                cellView.textField?.stringValue = self.selectionContext.display(fieldValue: item, field: identifier)
                             }
                         }
                     }
@@ -98,9 +100,9 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
             }else{
                 if row < self.messages.count {
                     let message = self.messages[row]
-                    if let identifier = tableColumn?.identifier,
-                        let item = message.interpretedField(key:identifier.rawValue){
-                        cellView.textField?.stringValue = selectionContext.display(fieldValue: item)
+                    if let identifier = tableColumn?.identifier.rawValue,
+                        let item = message.interpretedField(key:identifier){
+                        cellView.textField?.stringValue = selectionContext.display(fieldValue: item, field: identifier)
                     }
                 }
             }
@@ -109,31 +111,21 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     }
     
     func userClicked(_ tableView: RZTableView, row: Int, column: Int) {
-        let changed : Bool = ( self.selectedColumn != column || self.selectedRow != row);
-        
-        if( changed ){
-            self.selectedColumn = column
-            self.selectedRow = row
-            
-            var chosenField : FitFieldKey? = nil
-            
-            if messages.count == 1 {
-                if let fields = self.messages.first?.interpretedFieldKeys() {
-                    if self.selectedRow != -1 && self.selectedRow < fields.count {
-                        chosenField = fields[self.selectedRow];
-                    }
-                }
-            }else{
-                if( self.selectedColumn != -1 && self.selectedColumn < tableView.tableColumns.count){
-                    chosenField = tableView.tableColumns[self.selectedColumn].identifier.rawValue
+        if self.messageInColumns {
+            let selectedMessageIndex = column < 1 ? 1 : column - 1
+            if let fields = self.messages[safe: selectedMessageIndex]?.interpretedFieldKeys() {
+                if row != -1 && row < fields.count {
+                    let chosenField = fields[row]
+                    self.selectionContext.selectMessageField(field: chosenField, atIndex: selectedMessageIndex)
                 }
             }
-            
-            self.selectedField = chosenField
-            
-            NotificationCenter.default.post(name: FITDetailListDataSource.kFITNotificationDetailSelectionChanged, object: self)
+        }else{
+            if( column != -1 && column < tableView.tableColumns.count){
+                if let chosenField = tableView.tableColumns[safe: column]?.identifier.rawValue {
+                    self.selectionContext.selectMessageField(field: chosenField, atIndex: row)
+                }
+            }
         }
     }
-
     
 }

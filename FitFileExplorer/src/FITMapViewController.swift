@@ -22,6 +22,10 @@ class FITMapViewController: NSViewController,MKMapViewDelegate {
         return self.selectionContext?.fitFile
     }
 
+    func setup(selectionContext : FITSelectionContext){
+        self.selectionContext = selectionContext
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
@@ -30,9 +34,27 @@ class FITMapViewController: NSViewController,MKMapViewDelegate {
     override func viewWillAppear() {
         super.viewWillAppear()
         self.mapView?.delegate = self
-        if let selectionContext = self.selectionContext{
-            self.updateWith(selectionContext: selectionContext)
+        self.update()
+
+        if let selectionContext = self.selectionContext {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(selectionContextChanged(notification:)),
+                                                   name: FITSelectionContext.kFITNotificationFieldSelectionChanged,
+                                                   object: selectionContext)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(selectionContextChanged(notification:)),
+                                                   name: FITSelectionContext.kFITNotificationMessageTypeChanged,
+                                                   object: selectionContext)
         }
+    }
+    
+    override func viewWillDisappear() {
+        NotificationCenter.default.removeObserver(self)
+        super.viewWillDisappear()
+    }
+    
+    @objc func selectionContextChanged(notification : Notification){
+        self.update()
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
@@ -54,9 +76,11 @@ class FITMapViewController: NSViewController,MKMapViewDelegate {
             return MKAnnotationView()
         }
     }
-    // Called from FITSPlitViewController.detailSelectionChanged upon notification of table change
-    func updateWith(selectionContext:FITSelectionContext){
-        self.selectionContext = selectionContext
+    
+    func update(){
+        guard let selectionContext = self.selectionContext else {
+            return
+        }
         
         if self.mapView != nil {
             self.mapView?.delegate = self

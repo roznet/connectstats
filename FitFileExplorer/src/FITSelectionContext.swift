@@ -11,32 +11,34 @@ import FitFileParser
 
 
 class FITSelectionContext {
+    static let kFITNotificationMessageTypeChanged = Notification.Name( "kFITNotificationMessageTypeChanged" )
+    static let kFITNotificationFieldSelectionChanged = Notification.Name( "kFITNotificationFieldSelectionChanged" )
+    static let kFITNotificationDisplayConfigChanged = Notification.Name( "kFITNotificationDisplayConfigChanged" )
     
-    
-    static let kFITNotificationConfigurationChanged = Notification.Name( "kFITNotificationConfigurationChanged" )
-    //static let kFITNotificationMessageChanged       = Notification.Name( "kFITNotificationMessageChanged" )
-    //static let kFITNotificationFieldChanged         = Notification.Name( "kFITNotificationFieldChanged" )
-
     // MARK: - FitFile
-    
     
     let fitFile : FitFile
     lazy var interp : FITFitFileInterpret = FITFitFileInterpret(fitFile: self.fitFile)
     
     // MARK: - Configuration
-    
-    var speedUnit : GCUnit = GCUnit.kph()
-    var distanceUnit : GCUnit = GCUnit.meter()
-    
     var enableY2 : Bool = false
     var prettyField : Bool = false;
-    
-    var queue : [FITSelectionContext] = []
     
     enum DateTimeFormat {
         case full, timeOnly, elapsed
         
         static let descriptions = [ "Date and Time", "Time Only", "Elapsed" ]
+        
+        var description : String {
+            switch self {
+            case .full:
+                return DateTimeFormat.descriptions[0]
+            case .timeOnly:
+                return DateTimeFormat.descriptions[1]
+            case .elapsed:
+                return DateTimeFormat.descriptions[2]
+            }
+        }
         
         init(description : String){
             if description == DateTimeFormat.descriptions[2] {
@@ -49,8 +51,6 @@ class FITSelectionContext {
         }
     }
     
-    var dateTimeFormat : DateTimeFormat = .elapsed
-    var dateStarted : Date? = nil
     // MARK: - Message Selection
     
     var messageTypeDescription : String {
@@ -70,47 +70,81 @@ class FITSelectionContext {
                 
                 if(messageType != oldValue){
                     self.messages = self.fitFile.messages(forMessageType: self.messageType)
+                    self.orderedKeys = self.fitFile.orderedFieldKeys(messageType: self.messageType)
                     self.updateWithDefaultForCurrentMessageType()
-                    self.notify()
+                    NotificationCenter.default.post(name: FITSelectionContext.kFITNotificationMessageTypeChanged, object: self)
                 }
             }
         }
     }
     
-    var messages :[FitMessage]
+    var orderedKeys : [FitFieldKey]
+    
+    var messages : [FitMessage]
 
-    var message :FitMessage? {
+    /// Current selected Message
+    var message : FitMessage? {
         let useIdx = self.messageIndex < self.messages.count ? self.messageIndex : 0
-        var rv : FitMessage?
-        
-        if useIdx < messages.count {
-            rv = messages[useIdx]
+        return self.messages[safe: useIdx]
+    }
+    
+    /// Current selected Message and first one as sample
+    var sampleMessage : FitMessage? {
+        if let message = self.message {
+            return message
+        }else{
+            if let message = self.messages.first {
+                return message
+            }
         }
-        return rv
+        return nil
     }
     
     /// Last few selected Fields
     var messageIndex : Int = 0 {
         didSet {
-            if messageIndex >= self.messages.count {
+            if messageIndex >= self.messages.count || messageIndex < 0 {
                 messageIndex = 0;
             }
         }
     }
     
+    func sampleNumberWithUnit(field : FitFieldKey) -> GCNumberWithUnit? {
+        if let sample = self.sampleMessage {
+            return sample.interpretedField(key: field)?.numberWithUnit
+        }
+        return nil
+    }
+    
+    func sampleTime(field : FitFieldKey) -> Date? {
+        if let sample = self.sampleMessage {
+            return sample.interpretedField(key: field)?.time
+        }
+        return nil
+    }
+
     // MARK: - Dependent/Stats messages
-    var preferredDependendMessageType : [FitMessageType] = [FitMessageType.record,FitMessageType.lap,FitMessageType.session]
+    
+    var preferredDependendMessageType : [FitMessageType] = [.record,.lap,.session]
     var statsUsing : FitMessageType?
     var statsFor : FitMessageType?
     
 
     //MARK: - Field Selections
+
+    /// Last selected Field
+    var selectedField : FitFieldKey? = nil
+
     /// Selected numbers fields in order, lastObject is latest
     fileprivate var selectedNumberFields : [FitFieldKey] = []
     /// Selected location fields in order, lastObject is latest
     fileprivate var selectedLocationFields : [FitFieldKey] = []
 
-    var selectedXField : FitFieldKey = "timestamp"
+    var selectedXField : FitFieldKey = "timestamp" {
+        didSet {
+            NotificationCenter.default.post(name: FITSelectionContext.kFITNotificationFieldSelectionChanged, object: self)
+        }
+    }
 
     var selectedYField :FitFieldKey? {
         get {
@@ -123,6 +157,7 @@ class FITSelectionContext {
                 }else{
                     self.selectedNumberFields.append(val)
                 }
+                NotificationCenter.default.post(name: FITSelectionContext.kFITNotificationFieldSelectionChanged, object: self)
             }
         }
     }
@@ -140,6 +175,7 @@ class FITSelectionContext {
                 }else if( cnt > 0){
                     self.selectedNumberFields.insert(val, at: 0)
                 }
+                NotificationCenter.default.post(name: FITSelectionContext.kFITNotificationFieldSelectionChanged, object: self)
             }
         }
     }
@@ -160,18 +196,18 @@ class FITSelectionContext {
     }
 
     
-    // MARK: - Initialization and Queue management
+    // MARK: - Initialization
 
     init(fitFile:FitFile){
         self.fitFile = fitFile;
         self.messageType = self.fitFile.preferredMessageType()
         self.messages = self.fitFile.messages(forMessageType: self.messageType)
         self.statsFor = self.messageType
+        self.orderedKeys = self.fitFile.orderedFieldKeys(messageType: self.messageType)
         updateDependent()
         if let file_id = fitFile.messages(forMessageType: .file_id).first,
            let started = file_id.time(field: "time_created") {
             self.dateStarted = started
-            
         }
     }
     
@@ -179,37 +215,37 @@ class FITSelectionContext {
         self.fitFile = other.fitFile
         self.messageType = other.messageType
         self.enableY2 = other.enableY2
-        self.distanceUnit = other.distanceUnit
-        self.speedUnit = other.speedUnit
         self.prettyField = other.prettyField
+        
+        self.selectedField = other.selectedField
         self.selectedXField = other.selectedXField
         self.selectedLocationFields = other.selectedLocationFields
         self.selectedNumberFields = other.selectedNumberFields
+        
         self.statsUsing = other.statsUsing
         self.statsFor = other.statsFor
+        
         self.preferredDependendMessageType = other.preferredDependendMessageType
         self.messages = other.messages
+        self.orderedKeys = other.orderedKeys
         
+        self.unitOverrides = other.unitOverrides
+        self.dateStarted = other.dateStarted
+        self.dateTimeFormat = other.dateTimeFormat
     }
-    
-    func push(){
-        if queue.count == 0 || queue.last != self{
-            let saved = FITSelectionContext(withCopy:self)
-            queue.append(saved)
-        }
-    }
-    
+        
     // MARK: - change selection
-    
-    func notify(){
-        NotificationCenter.default.post(name: FITSelectionContext.kFITNotificationConfigurationChanged, object: self)
-    }
 
     /// Update selection for index and record if number or location field selected
-    func selectMessageField(field:FitFieldKey, atIndex idx: Int){
-        let messages = self.messages
+    func selectMessageField(field : FitFieldKey, atIndex idx : Int){
+        guard field != self.selectedField else {
+            return
+        }
         
+        let messages = self.messages
         let useIdx = idx < messages.count ? idx : 0
+        
+        self.selectedField = field
         
         if useIdx < messages.count {
             self.messageIndex = useIdx
@@ -221,6 +257,8 @@ class FITSelectionContext {
                 }
             }
         }
+        
+        NotificationCenter.default.post(name: FITSelectionContext.kFITNotificationFieldSelectionChanged, object: self)
     }
     
     private func updateDependent(){
@@ -242,6 +280,10 @@ class FITSelectionContext {
         selectedNumberFields = []
         if let first = self.message?.fieldKeysWithNumberWithUnit().first{
             selectedNumberFields.append(first)
+            if let selectedField = self.selectedField,
+               self.sampleMessage?.interpretedField(key: selectedField) == nil{
+                self.selectedField = first
+            }
         }
         selectedLocationFields = []
         if let first = self.message?.fieldKeysWithCoordinate().first{
@@ -252,27 +294,62 @@ class FITSelectionContext {
         }else if( self.message?.time(field: selectedXField) == nil){
             selectedXField = "timestamp"
         }
+        
         self.updateDependent()
     }
     
-    // MARK: - Display
+    // MARK: - Unit Selection
     
-    
+    var dateTimeFormat : DateTimeFormat = .full
+    var dateStarted : Date? = nil
     var unitOverrides : [FitFieldKey: GCUnit] = [:]
     
-    func recordUnitOverride(field : FitFieldKey, unitKey : String){
-        if DateTimeFormat.descriptions.contains(unitKey){
-            self.dateTimeFormat = DateTimeFormat(description: unitKey)
-        }else{
-            self.unitOverrides[field] = GCUnit(forKey: unitKey)
-        }
+    func clearDisplayUnitOverrides() {
+        self.unitOverrides = [:]
     }
     
+    func displayUnitForField(field : FitFieldKey) -> GCUnit? {
+        if let nu = self.sampleNumberWithUnit(field: field) {
+            if let override = self.unitOverrides[field],
+               nu.unit.canConvert(to: override){
+                return override
+            }else{
+                if GCUnit.getGlobalSystem() != .default {
+                    // for speed use better than mps
+                    if nu.unit.canConvert(to: GCUnit.mps() ) {
+                        return GCUnit.kph().forGlobalSystem()
+                    }else{
+                        return nu.unit.forGlobalSystem()
+                    }
+                }
+            }
+        }
+        return nil
+    }
+
+    func availableDisplayUnitsForField(field : FitFieldKey ) -> [GCUnit] {
+        if let nu = self.sampleNumberWithUnit(field: field) {
+            return nu.unit.compatibleUnits()
+        }
+        return []
+    }
+
+    func setDisplayUnitOverride(field : FitFieldKey, unit : GCUnit){
+        if let nu = self.sampleNumberWithUnit(field: field) {
+            if nu.unit.canConvert(to: unit) {
+                self.unitOverrides[field] = unit
+                NotificationCenter.default.post(Notification.init(name: FITSelectionContext.kFITNotificationDisplayConfigChanged, object: self))
+            }
+        }
+    }
+
+    // MARK: - Display
+
     /// Convert to relevant unit or just description
     ///
     /// - Parameter fieldValue: value to display
     /// - Returns: string
-    func display( fieldValue : FitFieldValue) -> String {
+    func display( fieldValue: FitFieldValue, field: FitFieldKey?) -> String {
         switch ( fieldValue.fitValue ){
         case .time(let date):
             switch self.dateTimeFormat {
@@ -290,7 +367,7 @@ class FITSelectionContext {
             }
         case .valueUnit:
             if let nu = fieldValue.numberWithUnit {
-                return self.display(numberWithUnit: nu)
+                return self.display(numberWithUnit: nu, field: field)
             }
         default:
             return fieldValue.displayString()
@@ -298,17 +375,12 @@ class FITSelectionContext {
         return fieldValue.displayString()
     }
     
-    func display( numberWithUnit nu: GCNumberWithUnit) -> String{
-        if GCUnit.getGlobalSystem() != .default {
-            // for speed use better than mps
-            if nu.unit.canConvert(to: GCUnit.mps() ) {
-                return nu.convert(to: GCUnit.kph().forGlobalSystem()).description
-            }else{
-                return nu.convertToGlobalSystem().description
-            }
-        }else{
-            return nu.description
+    func display( numberWithUnit nu: GCNumberWithUnit, field : FitFieldKey?) -> String{
+        if let field = field,
+           let displayUnit : GCUnit = self.displayUnitForField(field: field) {
+            return nu.convert(to: displayUnit).description
         }
+        return nu.description
     }
     
     func displayField( fitMessageType: FitMessageType, fieldName : String ) -> NSAttributedString {

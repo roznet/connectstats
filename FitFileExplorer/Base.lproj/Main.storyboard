@@ -1304,8 +1304,8 @@
                             <stackView distribution="fillEqually" orientation="horizontal" alignment="centerY" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e1Q-xN-Irh" userLabel="Configuration Stack View">
                                 <rect key="frame" x="10" y="0.0" width="330" height="32"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dzG-2b-klx">
-                                        <rect key="frame" x="-2" y="8" width="82" height="16"/>
+                                    <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dzG-2b-klx">
+                                        <rect key="frame" x="-2" y="9" width="82" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Stats Using" id="coa-EI-Jn8">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1331,15 +1331,15 @@
                                             <action selector="updateStatsUsing:" target="PgC-hb-65G" id="fRG-hw-bye"/>
                                         </connections>
                                     </popUpButton>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6tC-tC-II5">
-                                        <rect key="frame" x="174" y="8" width="70" height="16"/>
+                                    <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6tC-tC-II5">
+                                        <rect key="frame" x="174" y="9" width="70" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="for" id="zqG-KM-uOh">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WSf-Uh-9Oz">
+                                    <popUpButton verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WSf-Uh-9Oz">
                                         <rect key="frame" x="249" y="2" width="85" height="25"/>
                                         <popUpButtonCell key="cell" type="push" title="activity" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="pM6-jm-zpN" id="aIJ-ux-uk6">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1361,6 +1361,9 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="1sg-jP-YD1"/>
+                                    <constraint firstItem="dzG-2b-klx" firstAttribute="firstBaseline" secondItem="v6U-Do-7Dd" secondAttribute="firstBaseline" id="5oL-xQ-yA3"/>
+                                    <constraint firstItem="6tC-tC-II5" firstAttribute="firstBaseline" secondItem="WSf-Uh-9Oz" secondAttribute="firstBaseline" id="7NF-vE-Orb"/>
+                                    <constraint firstItem="v6U-Do-7Dd" firstAttribute="firstBaseline" secondItem="6tC-tC-II5" secondAttribute="firstBaseline" id="xJI-Aa-LmH"/>
                                 </constraints>
                                 <visibilityPriorities>
                                     <integer value="1000"/>

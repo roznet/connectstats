@@ -61,7 +61,6 @@ class FITSelectionContextViewController: NSViewController {
             }else if identifier == "popup_y2_field" {
                 selectionContext.selectedY2Field = value;
             }
-            self.graphViewController?.updateDataSource(selectionContext: selectionContext)
         }
     }
     @IBAction func toggleField(_ sender: NSButton) {
@@ -70,11 +69,6 @@ class FITSelectionContextViewController: NSViewController {
             if identifier == "button_enable_y2" {
                 selectionContext.enableY2 = (sender.state == NSControl.StateValue.on)
             }
-            self.graphViewController?.updateDataSource(selectionContext: selectionContext)
-
         }
-
     }
-    
-    
 }

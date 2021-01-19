@@ -64,9 +64,9 @@ class GarminDataFieldDefinitions {
         "averageHR":                  ( "WeightedMeanHeartRate",                gcFieldFlag.weightedMeanHeartRate, "bpm"),
         "maxHR":                      ( "MaxHeartRate",                         gcFieldFlag.none,                  "bpm"),
         
-        "averageTemperature":         ( "WeightedMeanAirTemperature",           gcFieldFlag.none,                  "celcius"),
-        "maxTemperature":             ( "MaxAirTemperature",                    gcFieldFlag.none,                  "celcius"),
-        "minTemperature":             ( "MinAirTemperature",                    gcFieldFlag.none,                  "celcius"),
+        "averageTemperature":         ( "WeightedMeanAirTemperature",           gcFieldFlag.none,                  "celsius"),
+        "maxTemperature":             ( "MaxAirTemperature",                    gcFieldFlag.none,                  "celsius"),
+        "minTemperature":             ( "MinAirTemperature",                    gcFieldFlag.none,                  "celsius"),
         
         /* RUNNING */
         "groundContactTime":           ( "WeightedMeanGroundContactTime",        gcFieldFlag.none,                  "ms"),

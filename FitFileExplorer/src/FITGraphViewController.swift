@@ -25,7 +25,31 @@ class FITGraphViewController: NSViewController {
         // Do view setup here.
         self.graphView = GCSimpleGraphView(frame: self.graphCustomView.frame)
         self.graphCustomView.addSubview(self.graphView!)
+    }
+    
+    override func viewWillAppear() {
+        super.viewWillAppear()
         
+        self.updateGraphDataSource()
+        if let selectionContext = self.selectionContext {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(selectionContextChanged(notification:)),
+                                                   name: FITSelectionContext.kFITNotificationFieldSelectionChanged,
+                                                   object: selectionContext)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(selectionContextChanged(notification:)),
+                                                   name: FITSelectionContext.kFITNotificationMessageTypeChanged,
+                                                   object: selectionContext)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(selectionContextChanged(notification:)),
+                                                   name: FITSelectionContext.kFITNotificationDisplayConfigChanged,
+                                                   object: selectionContext)
+        }
+    }
+    
+    override func viewWillDisappear() {
+        NotificationCenter.default.removeObserver(self)
+        super.viewWillDisappear()
     }
     
     override func viewDidLayout() {
@@ -43,8 +67,13 @@ class FITGraphViewController: NSViewController {
         }
     }
     
-    // Called from FITSPlitViewController.detailSelectionChanged upon notification of table change
-    func updateDataSource( selectionContext :FITSelectionContext ){
+    @objc func selectionContextChanged(notification : Notification){
+        self.updateGraphDataSource()
+    }
+    func updateGraphDataSource( ){
+        guard let selectionContext = self.selectionContext else {
+            return
+        }
         
         if let svc = self.selectionContextViewController {
             svc.update(selectionContext: selectionContext)
@@ -61,9 +90,10 @@ class FITGraphViewController: NSViewController {
                 // Don't graph if less than 2 points, not meaningful
                 if serie.count() > 2 {
                     var useSerie = serie.serie
-                    if let selectionContext = self.selectionContext {
-                        if serie.unit.canConvert(to: selectionContext.speedUnit){
-                            serie.convert(to: selectionContext.speedUnit)
+                    if let selectionContext = self.selectionContext,
+                       let displayUnit = selectionContext.displayUnitForField(field: field){
+                        if serie.unit.canConvert(to: displayUnit){
+                            serie.convert(to: displayUnit)
                             useSerie = serie.serie
                         }
                     }
@@ -108,9 +138,10 @@ class FITGraphViewController: NSViewController {
                         if let selectedY2 = selectionContext.selectedY2Field, selectionContext.enableY2 {
                             if let serie2 = interp.statsDataSerie(messageType: selectionContext.messageType, fieldX: selectionContext.selectedXField, fieldY: selectedY2) {
                                 var useSerie2 = serie2.serie
-                                if let selectionContext = self.selectionContext {
-                                    if serie2.unit.canConvert(to: selectionContext.speedUnit){
-                                        serie2.convert(to: selectionContext.speedUnit)
+                                if let selectionContext = self.selectionContext,
+                                   let displayUnit = selectionContext.displayUnitForField(field: selectedY2){
+                                    if serie2.unit.canConvert(to: displayUnit){
+                                        serie2.convert(to: displayUnit)
                                         useSerie2 = serie2.serie
                                     }
                                 }
@@ -137,9 +168,8 @@ class FITGraphViewController: NSViewController {
         }
     }
     
-    func updateWith(selectionContext : FITSelectionContext){
+    func setup(selectionContext : FITSelectionContext){
         self.selectionContext = selectionContext
-        self.updateDataSource(selectionContext: selectionContext)
     }
     
 }

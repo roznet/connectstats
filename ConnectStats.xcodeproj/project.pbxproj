@@ -4100,10 +4100,10 @@
 				42BFC2281DCE2C1700EAD40E /* FITSplitViewController.swift */,
 				42BFC22F1DCE2F7F00EAD40E /* FITOutlineViewController.swift */,
 				42BFC2311DCE2FBC00EAD40E /* FITDetailTableViewController.swift */,
+				4248DC891ED1E6ED00470DEB /* FITDataViewController.swift */,
 				42F3FBFE1DD7A4D30042A9B1 /* FITGraphViewController.swift */,
 				42F4E5081DE08C26001AB244 /* FITMapViewController.swift */,
 				42AE24611DF2E556002B48D9 /* FITSelectionContextViewController.swift */,
-				4248DC891ED1E6ED00470DEB /* FITDataViewController.swift */,
 				428DD4B3219A3056006DF5B5 /* FITDownloadViewController.swift */,
 			);
 			name = UserInterface;
@@ -7864,7 +7864,7 @@
 			repositoryURL = "https://github.com/roznet/rzutils.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.3;
+				minimumVersion = 1.0.4;
 			};
 		};
 		422DCB84258A27EF000DEE4B /* XCRemoteSwiftPackageReference "fmdb" */ = {
