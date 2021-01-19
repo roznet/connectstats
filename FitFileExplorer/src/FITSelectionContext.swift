@@ -13,6 +13,7 @@ import FitFileParser
 class FITSelectionContext {
     static let kFITNotificationMessageTypeChanged = Notification.Name( "kFITNotificationMessageTypeChanged" )
     static let kFITNotificationFieldSelectionChanged = Notification.Name( "kFITNotificationFieldSelectionChanged" )
+    static let kFITNotificationMessageSelectionChanged = Notification.Name( "kFITNotificationMessageSelectionChanged" )
     static let kFITNotificationDisplayConfigChanged = Notification.Name( "kFITNotificationDisplayConfigChanged" )
     
     // MARK: - FitFile
@@ -238,17 +239,13 @@ class FITSelectionContext {
 
     /// Update selection for index and record if number or location field selected
     func selectMessageField(field : FitFieldKey, atIndex idx : Int){
-        guard field != self.selectedField else {
-            return
+        if idx != self.messageIndex && self.messages.indices.contains(idx) {
+            self.messageIndex = idx
+            NotificationCenter.default.post(name: FITSelectionContext.kFITNotificationMessageSelectionChanged, object: self)
         }
         
-        let messages = self.messages
-        let useIdx = idx < messages.count ? idx : 0
-        
-        self.selectedField = field
-        
-        if useIdx < messages.count {
-            self.messageIndex = useIdx
+        if field != self.selectedField {
+            self.selectedField = field
             if let message = self.message{
                 if message.numberWithUnit(field: field) != nil{
                     selectedNumberFields.append(field)
@@ -256,9 +253,8 @@ class FITSelectionContext {
                     selectedLocationFields.append(field)
                 }
             }
+            NotificationCenter.default.post(name: FITSelectionContext.kFITNotificationFieldSelectionChanged, object: self)
         }
-        
-        NotificationCenter.default.post(name: FITSelectionContext.kFITNotificationFieldSelectionChanged, object: self)
     }
     
     private func updateDependent(){

@@ -21,9 +21,7 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     var setupMode : Bool = false
     
     // Whether messages are in rows or columns
-    var messageInColumns : Bool {
-        return self.selectionContext.messages.count == 1
-    }
+    var messageInColumns : Bool = false
 
     // MARK: - Indirection Convenience from Selection Context
     
@@ -57,7 +55,15 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     
     func requiredTableColumnsIdentifiers() -> [String] {
         if( self.messageInColumns){
-            return [ "Field", "Value"]
+            if self.messages.count == 1 {
+                return [ "Field", "Value"]
+            }else{
+                var rv = [ "Field" ]
+                for i in 0..<self.messages.count {
+                    rv.append("message[\(i)]")
+                }
+                return rv
+            }
         }else{
             return self.orderedKeys
         }
@@ -68,11 +74,7 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
             return 0
         }
         if( self.messageInColumns){
-            if let first = self.messages.first {
-                return first.interpretedFieldKeys().count
-            }else{
-                return 0
-            }
+            return self.selectionContext.orderedKeys.count
         }else{
             return Int(messages.count)
         }
@@ -83,18 +85,17 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
         if let cellView = cellView as? NSTableCellView {
             cellView.textField?.stringValue = ""
             if( self.messageInColumns ){
-                if let first = self.messages.first {
-                    if( row < first.interpretedFieldKeys().count){
-                        let identifier = first.interpretedFieldKeys()[row]
-                        if tableColumn?.identifier == NSUserInterfaceItemIdentifier("Field") {
-                            let fieldDisplay = self.selectionContext.displayField(fitMessageType: first.messageType, fieldName: identifier)
-                            cellView.textField?.attributedStringValue = fieldDisplay
-                            
-                        }else{
-                            if let item = first.interpretedField(key: identifier){
-                                cellView.textField?.stringValue = self.selectionContext.display(fieldValue: item, field: identifier)
-                            }
-                        }
+                if let tableColumn = tableColumn{
+                    let selectionContext = self.selectionContext
+                    if tableColumn.identifier == NSUserInterfaceItemIdentifier("Field"),
+                       let identifier = selectionContext.orderedKeys[safe: row] {
+                        let fieldDisplay = selectionContext.displayField(fitMessageType: selectionContext.messageType, fieldName: identifier)
+                        cellView.textField?.attributedStringValue = fieldDisplay
+                    }else if let columnIndex = tableView.tableColumns.firstIndex(of: tableColumn),
+                             let message = self.messages[safe: columnIndex-1],
+                             let identifier = selectionContext.orderedKeys[safe: row],
+                             let value = message.interpretedField(key: identifier) {
+                        cellView.textField?.stringValue = selectionContext.display(fieldValue: value, field: identifier)
                     }
                 }
             }else{

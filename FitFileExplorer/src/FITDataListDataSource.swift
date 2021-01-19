@@ -72,7 +72,12 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
     
     init( context : FITSelectionContext) {
         self.selectionContext = context
-        
+        self.displayFields = []
+        super.init()
+    }
+    
+    func updateAfterMessageTypeChange() {
+        let context = self.selectionContext
         // Session style, where only one row.
         // Just select all fields that are related to selected field (max, avg, etc)
         let interp = context.interp
@@ -101,8 +106,6 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
                                 ]
         
         self.statsMessageType = messageDefaultMap[context.messageType]
-        
-        super.init()
     }
     
     func updateStatistics(){

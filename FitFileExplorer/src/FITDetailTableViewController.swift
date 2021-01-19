@@ -20,6 +20,7 @@ class FITDetailTableViewController: NSViewController {
     
     @IBOutlet weak var selectedFieldLabel: NSTextField!
     @IBOutlet weak var selectedFieldUnits: NSPopUpButton!
+    @IBOutlet weak var transportTable: NSButton!
     
     var detailListDataSource : FITDetailListDataSource? {
         return self.detailTableView.dataSource as? FITDetailListDataSource
@@ -98,6 +99,10 @@ class FITDetailTableViewController: NSViewController {
                                                name: FITSelectionContext.kFITNotificationFieldSelectionChanged,
                                                object: self.selectionContext)
         NotificationCenter.default.addObserver(self,
+                                               selector: #selector(detailSelectionChanged(notification:)),
+                                               name: FITSelectionContext.kFITNotificationMessageSelectionChanged,
+                                               object: self.selectionContext)
+        NotificationCenter.default.addObserver(self,
                                                selector: #selector(messageTypeSelectionChanged(notification:)),
                                                name: FITSelectionContext.kFITNotificationMessageTypeChanged,
                                                object: self.selectionContext)
@@ -124,6 +129,16 @@ class FITDetailTableViewController: NSViewController {
         }
     }
 
+    @IBAction func transposeChanged(_ sender: Any) {
+        if self.transportTable.state == .on {
+            self.detailListDataSource?.messageInColumns = true
+        }else{
+            self.detailListDataSource?.messageInColumns = false
+        }
+        self.rebuildColumns()
+        self.detailTableView.reloadData()
+    }
+    
     @IBAction func unitChanged(_ sender: Any) {
         //let idx = selectedFieldUnits.indexOfSelectedItem
         if let name = selectedFieldUnits.selectedItem?.title {
@@ -255,7 +270,7 @@ class FITDetailTableViewController: NSViewController {
         self.messageTypeLabel.stringValue = context.messageTypeDescription
     }
     
-    func updateAfterMessageTypeChange(){
+    func rebuildColumns() {
         guard let detailListDataSource = self.detailListDataSource else {
             return
         }
@@ -292,7 +307,24 @@ class FITDetailTableViewController: NSViewController {
             }
             idx += 1
         }
+    }
+    
+    func updateAfterMessageTypeChange(){
+        self.transportTable.isEnabled = false;
+        self.transportTable.state = .off
+        self.detailListDataSource?.messageInColumns = false
         
+        if let selectionContext = self.selectionContext {
+            if selectionContext.messages.count == 1 {
+                self.transportTable.state = .on
+                self.transportTable.isEnabled = true
+                self.detailListDataSource?.messageInColumns = true
+            }else if selectionContext.messages.count < 64 {
+                self.transportTable.state = .off
+                self.transportTable.isEnabled = true
+            }
+        }
+        self.rebuildColumns()
         self.detailTableView.reloadData()
         
         self.updateAfterFieldSelectionChanged()
