@@ -221,7 +221,7 @@ const NSUInteger kPreviousStatusMaxCount = 4;
     
     NSString * statusURL = @"https://connectstats.app/prod/api/status/app";
 #if TARGET_IPHONE_SIMULATOR
-    statusURL = @"https://localhost.ro-z.me/prod/api/status/app";
+    //statusURL = @"https://localhost.ro-z.me/prod/api/status/app";
 #endif
     
     self.messagesTask = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:statusURL] completionHandler:^(NSData * data, NSURLResponse*response, NSError * error ){

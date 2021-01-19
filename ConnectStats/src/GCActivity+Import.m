@@ -648,9 +648,9 @@
                  @"averageHR":           @[ @"WeightedMeanHeartRate",@(gcFieldFlagWeightedMeanHeartRate),    @"bpm"],
                  @"maxHR":               @[ @"MaxHeartRate",         @"",                                    @"bpm"],
 
-                 @"averageTemperature":        @[ @"WeightedMeanAirTemperature",@"",                               @"celcius"],
-                 @"maxTemperature":        @[ @"MaxAirTemperature",@"",                               @"celcius"],
-                 @"minTemperature":        @[ @"MinAirTemperature",@"",                               @"celcius"],
+                 @"averageTemperature":        @[ @"WeightedMeanAirTemperature",@"",                               @"celsius"],
+                 @"maxTemperature":        @[ @"MaxAirTemperature",@"",                               @"celsius"],
+                 @"minTemperature":        @[ @"MinAirTemperature",@"",                               @"celsius"],
 
                  /* RUNNING */
                  @"groundContactTime":   @[ @"WeightedMeanGroundContactTime", @"", @"ms"],
@@ -1038,7 +1038,7 @@
                             @"average_heartrate":   @[ @"WeightedMeanHeartRate",@(gcFieldFlagWeightedMeanHeartRate),    @"bpm"],
                             @"max_heartrate":       @[ @"MaxHeartRate",         @"",                                    @"bpm"],
                             @"calories":            @[ @"SumEnergy",            @"",                                    @"kilocalorie"],
-                            @"average_temp":        @[ @"WeightedMeanAirTemperature",@"",                               @"celcius"],
+                            @"average_temp":        @[ @"WeightedMeanAirTemperature",@"",                               @"celsius"],
 
                             //@"start_date":          @[ @"BeginTimeStamp",       @"",                                    @"time"],
                             //@"start_latlng":        @[ @[@"BeginLatitude",@"BeginLongitude"],@"vector", @"dd"],

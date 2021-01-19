@@ -75,7 +75,7 @@
             XCTAssertEqualObjects(imperial, [GCUnit minpermile], @"Imperial %@ in min/mi", field);
         }
         if( [field.key containsString:@"Temperature"] ){
-            XCTAssertEqualObjects(metric, [GCUnit celcius], @"Metric %@ in celcius", field);
+            XCTAssertEqualObjects(metric, [GCUnit celsius], @"Metric %@ in celsius", field);
             XCTAssertEqualObjects(imperial, [GCUnit fahrenheit], @"Imperial %@ in fahrenheit", field);
         }
     }

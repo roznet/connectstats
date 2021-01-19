@@ -354,7 +354,7 @@ void buildStatic(){
                  @"directGroundContactTime"            : @[ @"ms",              @(gcFieldFlagGroundContactTime)],
                  @"directVerticalOscillation"          : @[ @"centimeter",      @(gcFieldFlagVerticalOscillation)],
                  
-                 @"directAirTemperature"               : @[ @"celcius",         @"WeightedMeanAirTemperature"],
+                 @"directAirTemperature"               : @[ @"celsius",         @"WeightedMeanAirTemperature"],
                  @"directGroundContactBalanceLeft"     : @[ @"percent",         @"WeightedMeanGroundContactBalanceLeft"],
                  @"directVerticalRatio"                : @[ @"percent",         @"WeightedMeanVerticalRatio"],
 
