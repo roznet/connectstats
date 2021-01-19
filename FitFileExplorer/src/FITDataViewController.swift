@@ -57,7 +57,7 @@ class FITDataViewController: NSViewController {
     override func viewWillAppear() {
         if let selectionContext = self.dataListDataSource?.selectionContext {
             NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(messageTypeChanged(notification:)),
+                                                   selector: #selector(selectionContextChanged(notification:)),
                                                    name: FITSelectionContext.kFITNotificationMessageTypeChanged,
                                                    object: selectionContext)
             NotificationCenter.default.addObserver(self,
@@ -107,12 +107,8 @@ class FITDataViewController: NSViewController {
         }
     }
 
-    @objc func messageTypeChanged(notification : Notification){
-        self.dataListDataSource?.updateAfterMessageTypeChange()
-        self.updatePopup()
-        self.updateStatistics()
-    }
     @objc func selectionContextChanged(notification: Notification){
+        self.dataListDataSource?.updateAfterMessageTypeChange()
         self.updatePopup()
         self.updateStatistics()
     }

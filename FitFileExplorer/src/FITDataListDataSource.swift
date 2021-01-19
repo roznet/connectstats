@@ -78,13 +78,13 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
     
     func updateAfterMessageTypeChange() {
         let context = self.selectionContext
-        // Session style, where only one row.
-        // Just select all fields that are related to selected field (max, avg, etc)
         let interp = context.interp
         let samplesKeys = context.orderedKeys
         
-        if( context.messages.count == 1){
-            if let field = context.selectedYField {
+        // Session style, when fields are in columns.
+        // Just select all fields that are related to selected field (max, avg, etc)
+        if( context.messageInColumns ){
+            if let field = context.selectedField {
                 let mapped = interp.mapFields(from: [field], to:  samplesKeys)
         
                 if let found = mapped[field] {
@@ -96,7 +96,7 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
                 self.displayFields = [];
             }
         }else{
-            // lap/record stype: display all the field for the line
+            // lap/record style when message are in rows: display all the field for the line
             self.displayFields = samplesKeys
         }
         // record could be session to get value or record to do stats

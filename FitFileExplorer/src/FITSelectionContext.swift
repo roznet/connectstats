@@ -81,6 +81,8 @@ class FITSelectionContext {
     
     var orderedKeys : [FitFieldKey]
     
+    var messageInColumns : Bool = false
+    
     var messages : [FitMessage]
 
     /// Current selected Message
@@ -203,9 +205,9 @@ class FITSelectionContext {
         self.fitFile = fitFile;
         self.messageType = self.fitFile.preferredMessageType()
         self.messages = self.fitFile.messages(forMessageType: self.messageType)
-        self.statsFor = self.messageType
         self.orderedKeys = self.fitFile.orderedFieldKeys(messageType: self.messageType)
-        updateDependent()
+        self.statsFor = .session // default
+        updateWithDefaultForCurrentMessageType()
         if let file_id = fitFile.messages(forMessageType: .file_id).first,
            let started = file_id.time(field: "time_created") {
             self.dateStarted = started
@@ -271,7 +273,7 @@ class FITSelectionContext {
         if self.messageType == FitMessageType.lap || self.messageType == FitMessageType.session {
             self.statsFor = self.messageType
         }
-        
+
         messageIndex = 0
         selectedNumberFields = []
         if let first = self.message?.fieldKeysWithNumberWithUnit().first{

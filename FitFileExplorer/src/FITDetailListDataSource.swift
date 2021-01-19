@@ -21,7 +21,14 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     var setupMode : Bool = false
     
     // Whether messages are in rows or columns
-    var messageInColumns : Bool = false
+    var messageInColumns : Bool {
+        get {
+            self.selectionContext.messageInColumns
+        }
+        set {
+            self.selectionContext.messageInColumns = newValue
+        }
+    }
 
     // MARK: - Indirection Convenience from Selection Context
     
@@ -113,12 +120,10 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     
     func userClicked(_ tableView: RZTableView, row: Int, column: Int) {
         if self.messageInColumns {
-            let selectedMessageIndex = column < 1 ? 1 : column - 1
-            if let fields = self.messages[safe: selectedMessageIndex]?.interpretedFieldKeys() {
-                if row != -1 && row < fields.count {
-                    let chosenField = fields[row]
-                    self.selectionContext.selectMessageField(field: chosenField, atIndex: selectedMessageIndex)
-                }
+            let selectedMessageIndex = column < 1 ? 0 : column - 1
+            let fields = self.selectionContext.orderedKeys
+            if let chosenField = fields[safe: row] {
+                self.selectionContext.selectMessageField(field: chosenField, atIndex: selectedMessageIndex)
             }
         }else{
             if( column != -1 && column < tableView.tableColumns.count){
