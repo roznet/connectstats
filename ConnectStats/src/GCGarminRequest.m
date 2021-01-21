@@ -42,7 +42,7 @@
             if( code == 500 || code == 403 || code == 401){
             }else if (code == 404) {
                 self.status = GCWebStatusResourceNotFound;
-            }else{
+            }else if( code != 0 ){ // 0 is for offline / not from web
                 RZLog(RZLogWarning, @"Unexpected status code %@ %@", @(code), self.debugDescription)
                 self.status = GCWebStatusServiceLogicError;
             }

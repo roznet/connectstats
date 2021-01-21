@@ -303,6 +303,8 @@
         self.laps = @[];
         self.track13Stage = gcTrack13RequestEnd+1;
         self.status = GCWebStatusOK;
+        // register with empty trackpoints so it does not try to download again
+        [[GCAppGlobal organizer] registerActivity:self.activity.activityId withTrackpoints:self.trackpoints andLaps:self.laps];
         dispatch_async(dispatch_get_main_queue(), ^(){
             [self processDone];
         } );

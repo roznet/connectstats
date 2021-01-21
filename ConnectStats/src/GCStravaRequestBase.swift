@@ -176,7 +176,7 @@ class GCStravaRequestBase: GCWebRequestStandard {
                             self.processResourceNotFound()
                         }
                         else{
-                            self.requestError(error: queryError, message: "Request failed")
+                            self.requestError(error: queryError, message: "Request failed with unanticipated code \(code)")
                         }
                     default:
                         self.requestError(error: queryError, message: "Request failed")
@@ -196,17 +196,17 @@ class GCStravaRequestBase: GCWebRequestStandard {
             let code = (underlyingError as NSError).code
             if let body = (underlyingError as NSError).userInfo["Response-Body"] {
                 // strava responded
-                RZSLog.error("\(message) \(code) \(body)")
+                RZSLog.error("strava denied access, forcing re-authorization \(message) \(code) \(body)")
                 self.status = GCWebStatus.accessDenied
                 GCStravaRequestBase.signout()
             }else{
                 // no response from strava
                 self.status = GCWebStatus.connectionError
-                RZSLog.error("\(message) \(code)")
+                RZSLog.error("no response \(message) \(code)")
             }
         }else{
             self.status = GCWebStatus.connectionError
-            RZSLog.error("\(message) \(error)")
+            RZSLog.error("not an nserror \(message) \(error)")
         }
         self.processDone()
     }
