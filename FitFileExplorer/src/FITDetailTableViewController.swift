@@ -54,7 +54,7 @@ class FITDetailTableViewController: NSViewController {
         }
         
         if let selectedField = context.selectedField {
-            if  let unit = context.displayUnitForField(field: selectedField) {
+            if  let unit = context.displayUnit(field: selectedField) {
                 return unit.display
             }else if let _ = context.sampleTime(field: selectedField){
                 return context.dateTimeFormat.description
@@ -177,18 +177,14 @@ class FITDetailTableViewController: NSViewController {
     // MARK: - updates and sync
     
     @objc func messageTypeSelectionChanged( notification : Notification ){
-        if let context = notification.object as? FITSelectionContext {
-            if self.selectionContext == context {
-                self.updateAfterMessageTypeChange()
-            }
+        if let _ = notification.object as? FITSelectionContext {
+            self.updateAfterMessageTypeChange()
         }
     }
     
     @objc func detailSelectionChanged( notification : Notification){
-        if let context = notification.object as? FITSelectionContext {
-            if self.selectionContext == context {
-                self.updateAfterFieldSelectionChanged()
-            }
+        if let _ = notification.object as? FITSelectionContext {
+            self.updateAfterFieldSelectionChanged()
         }
     }
     

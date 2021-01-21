@@ -20,6 +20,9 @@ class FITGraphViewController: NSViewController {
     
     var selectionContext : FITSelectionContext?
     
+    var overlaySelectionContext : FITSelectionContext?
+    var overlayEnabled : Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
@@ -91,7 +94,7 @@ class FITGraphViewController: NSViewController {
                 if serie.count() > 2 {
                     var useSerie = serie.serie
                     if let selectionContext = self.selectionContext,
-                       let displayUnit = selectionContext.displayUnitForField(field: field){
+                       let displayUnit = selectionContext.displayUnit(field: field){
                         if serie.unit.canConvert(to: displayUnit){
                             serie.convert(to: displayUnit)
                             useSerie = serie.serie
@@ -139,7 +142,7 @@ class FITGraphViewController: NSViewController {
                             if let serie2 = interp.statsDataSerie(messageType: selectionContext.messageType, fieldX: selectionContext.selectedXField, fieldY: selectedY2) {
                                 var useSerie2 = serie2.serie
                                 if let selectionContext = self.selectionContext,
-                                   let displayUnit = selectionContext.displayUnitForField(field: selectedY2){
+                                   let displayUnit = selectionContext.displayUnit(field: selectedY2){
                                     if serie2.unit.canConvert(to: displayUnit){
                                         serie2.convert(to: displayUnit)
                                         useSerie2 = serie2.serie

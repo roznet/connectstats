@@ -29,25 +29,16 @@ import Foundation
 
 class GarminRequest : GCWebRequestStandard {
     
-    static let errors : [String:GCWebStatus] = [
-        "Invalid username/password combination." : GCWebStatus.accessDenied,
-        //"You are signed in as": GCWebStatus.
-        "HTTP Status 403 - " : GCWebStatus.accessDenied,
-        "HTTP Status 404 - " : GCWebStatus.deletedActivity,
-        "Garmin Connect is temporarily unavailable" : GCWebStatus.tempUnavailable,
-        "id=\"error\">Error 500" : GCWebStatus.serviceLogicError,
-        "HTTP Status 500 - " : GCWebStatus.accessDenied,
-        "\"error\":\"WebApplicationException\"" : GCWebStatus.accessDenied
-
-    ]
-    
-    
     override func checkNoErrors() -> Bool {
         if self.status == GCWebStatus.OK {
-            for (key,val) in GarminRequest.errors {
-                if  self.theString.contains(key) {
-                    self.status = val
-                    break
+            if let delegate = self.delegate {
+                let code = delegate.lastStatusCode()
+                if code == 403 || code == 500 || code == 401 {
+                    self.status = GCWebStatus.accessDenied
+                }else if code == 404 {
+                    self.status = GCWebStatus.resourceNotFound
+                }else{
+                    self.status = GCWebStatus.internalLogicError
                 }
             }
         }
