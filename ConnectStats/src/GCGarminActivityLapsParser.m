@@ -57,9 +57,8 @@
 
         if (json==nil) {
             self.laps = nil;
-            self.success = false;
+            self.status = GCWebStatusParsingFailed;
             RZLog(RZLogError, @"parsing failed %@", e);
-
         }else{
             NSArray * foundLaps = json[@"lapDTOs"];
             if ([foundLaps isKindOfClass:[NSArray class]]) {
@@ -111,7 +110,7 @@
                 self.laps = laps;
                 self.lapsSwim = lapsSwim.count > 0 ? lapsSwim : nil;
                 self.trackPointSwim = swimPoints.count > 0 ? swimPoints : nil;
-                self.success = true;
+                self.status = GCWebStatusOK;
             }
         }
     }

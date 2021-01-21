@@ -125,7 +125,7 @@
     if ([self checkNoErrors]) {
         NSData * data = [self.theString dataUsingEncoding:self.encoding];
         GCGarminActivitySummaryParser * parser = [[[GCGarminActivitySummaryParser alloc] initWithData:data] autorelease];
-        if (parser.success) {
+        if (parser.status == GCWebStatusOK) {
             self.stage = gcRequestStageSaving;
             dispatch_async(dispatch_get_main_queue(), ^(){
                 [self processNewStage];
@@ -143,7 +143,7 @@
             if(![self.theString writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:true encoding:self.encoding error:&e]){
                 RZLog(RZLogError, @"Failed to save %@. %@", fn, e.localizedDescription);
             }
-            self.status = GCWebStatusParsingFailed;
+            self.status = parser.status;
         }
     }
     dispatch_async(dispatch_get_main_queue(), ^(){

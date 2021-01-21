@@ -218,7 +218,7 @@ class GCStravaRequestBase: GCWebRequestStandard {
     }
     
     func processResourceNotFound() {
-        self.status = GCWebStatus.deletedActivity
+        self.status = GCWebStatus.resourceNotFound
         RZSLog.error("Resource Not Found \(self)")
         self.processDone()
     }

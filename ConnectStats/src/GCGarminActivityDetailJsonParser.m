@@ -45,27 +45,31 @@
         NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
 
         if (e) {
-            self.success = false;
+            self.status = GCWebStatusParsingFailed;
             RZLog(RZLogError, @"parsing failed %@", e);
-
         }else {
-            self.success = true;
+            self.status = GCWebStatusOK;
             if (json[@"metricDescriptors"]!=nil) {
                 self.trackPoints = [NSArray arrayWithArray:[self parseModernFormat:json]];
             }else{
-                NSArray * keys = json.allKeys;
-                if (keys && [keys isKindOfClass:[NSArray class]] && keys.count > 0) {
-                    if (json[@"error"]) {
-                        self.success = false;
-                        if ([json[@"error"] isEqualToString:@"WebApplicationException"]) {
-                            RZLog(RZLogInfo, @"WebException, need login");
-                            self.webError = true;
-                        }else{
-                            RZLog(RZLogError, @"Got json error %@", json[@"error"]);
-                        }
+                if ([json isKindOfClass:[NSDictionary class]] && json[@"error"] && json[@"message"] ) {
+                    self.status = GCWebStatusParsingFailed;
+                    if ([json[@"message"] containsString:@"HTTP 404"]){
+                        RZLog(RZLogInfo, @"Resource not found %@", json[@"message"]);
+                        self.status = GCWebStatusResourceNotFound;                        }
+                    if ([json[@"message"] containsString:@"HTTP 500"] ||
+                        [json[@"message"] containsString:@"HTTP 403"] ||
+                        [json[@"message"] containsString:@"HTTP 401"] ) {
+                        RZLog(RZLogError, @"Access Denied %@", json[@"message"] );
+                        self.status = GCWebStatusAccessDenied;
+                        RZLog(RZLogInfo, @"Access Denied Error %@", json[@"message"]);
                     }else{
-                        self.trackPoints = [NSArray arrayWithArray:[self parseClassicFormat:json[json.allKeys[0]]]];
+                        self.status = GCWebStatusServiceLogicError;
+                        RZLog(RZLogInfo, @"Unexpected Error %@", json[@"message"]);
                     }
+                }else{
+                    self.status = GCWebStatusServiceLogicError;
+                    RZLog(RZLogInfo, @"Unexpected non-json answer %@", RZReturnAutorelease([[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]));
                 }
             }
         }
@@ -82,40 +86,6 @@
 
 -(NSString*)activityType{
     return self.activity.activityType;
-}
--(NSArray*)parseClassicFormat:(NSDictionary*)data{
-    if (![data isKindOfClass:[NSDictionary class]]) {
-        RZLog(RZLogError, @"Expected NSDictionary got %@", NSStringFromClass([data class]));
-        self.success = false;
-        return nil;
-    }
-
-    NSArray * measurements = data[@"measurements"];
-    NSArray * metrics = data[@"metrics"];
-    if (metrics == nil || measurements == nil) {
-        RZLog(RZLogError, @"Unexpected shape for NSDictionary");
-        return nil;
-    }
-    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:metrics.count];
-    for (NSDictionary * one in metrics) {
-        NSArray * values = one[@"metrics"];
-
-        NSMutableDictionary * onemeasurement = [NSMutableDictionary dictionaryWithCapacity:values.count];
-
-
-        for (NSDictionary * defs in measurements) {
-            NSUInteger index = [defs[@"metricsIndex"] integerValue];
-            if (index < values.count) {
-                double measure = [values[index] doubleValue];
-                NSDictionary * d = @{@"display": defs[@"display"],
-                                    @"unit": defs[@"unit"],
-                                    @"value": @(measure)};
-                onemeasurement[defs[@"key"]] = d;
-            }
-        }
-        [rv addObject:onemeasurement];
-    }
-    return rv;
 }
 
 -(NSArray*)descriptorsWithDeveloperFields:(NSArray*)descriptors{

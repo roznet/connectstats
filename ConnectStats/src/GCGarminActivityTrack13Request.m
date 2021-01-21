@@ -225,7 +225,7 @@
         });
         GCGarminActivityLapsParser * parser = [[[GCGarminActivityLapsParser alloc] initWithData:[self.theString dataUsingEncoding:self.encoding]
                                                                                     forActivity:self.activity] autorelease];
-        if (parser.success) {
+        if (parser.status == GCWebStatusOK) {
             self.laps = parser.laps;
             self.trackpointsSwim = parser.trackPointSwim;
             self.lapsSwim = parser.lapsSwim;
@@ -283,26 +283,34 @@
         });
         NSData * data = [self.theString dataUsingEncoding:self.encoding];
         GCGarminActivityDetailJsonParser * parser = [[[GCGarminActivityDetailJsonParser alloc] initWithData:data forActivity:self.activity] autorelease];
-        if (parser.success) {
+        if (parser.status == GCWebStatusOK) {
             self.trackpoints = parser.trackPoints;
             self.laps = @[];
         }else{
-            if (parser.webError) {
-                self.status = GCWebStatusAccessDenied;
-            }else{
+            self.status = parser.status;
+            if( self.status != GCWebStatusAccessDenied && self.status != GCWebStatusResourceNotFound){
                 NSError * e = nil;
                 NSString * fn = [NSString stringWithFormat:@"error_activity_%@.json", self.activityId];
                 if(![self.theString writeToFile:[RZFileOrganizer writeableFilePath:fn] atomically:true encoding:self.encoding error:&e]){
                     RZLog(RZLogError, @"Failed to save %@. %@", fn, e.localizedDescription);
                 }
-                self.status = GCWebStatusParsingFailed;
             }
         }
     }
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        [self processNextOrDone];
-    });
-
+    // no resource, just skip and don't continue further
+    if( self.status == GCWebStatusResourceNotFound){
+        self.trackpoints = @[];
+        self.laps = @[];
+        self.track13Stage = gcTrack13RequestEnd+1;
+        self.status = GCWebStatusOK;
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processDone];
+        } );
+    }else {
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self processNextOrDone];
+        });
+    }
 }
 
 -(void)processMergeFitFile{
@@ -340,7 +348,7 @@
         GCGarminActivityDetailJsonParser * parserTracks = [[[GCGarminActivityDetailJsonParser alloc] initWithData:trackdata forActivity:act] autorelease];
         GCGarminActivityLapsParser * parserLaps = [[[GCGarminActivityLapsParser alloc] initWithData:lapsdata forActivity:act] autorelease];
 
-        if (parserLaps.success || parserTracks.success) {
+        if (parserLaps.status == GCWebStatusOK || parserTracks.status == GCWebStatusOK) {
             if(parserLaps.trackPointSwim || parserLaps.lapsSwim){
                 [act saveTrackpoints:(parserLaps.trackPointSwim ?: @[]) andLaps:(parserLaps.lapsSwim ?: @[]) ];
             }else{
