@@ -40,6 +40,7 @@
         if( self.delegate && self.delegate.lastStatusCode != 200 ){
             NSInteger code = self.delegate.lastStatusCode;
             if( code == 500 || code == 403 || code == 401){
+                self.status = GCWebStatusAccessDenied;
             }else if (code == 404) {
                 self.status = GCWebStatusResourceNotFound;
             }else if( code != 0 ){ // 0 is for offline / not from web

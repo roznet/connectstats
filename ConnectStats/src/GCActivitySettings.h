@@ -61,4 +61,9 @@
 -(BOOL)shouldAdjustToMatchLapAverageForField:(GCField*)field;
 -(void)disableFiltersAndAdjustments;
 
+/**
+ * Check if already report field, will only return true after first call
+ */
+-(BOOL)alreadyReported:(GCField*)field;
+
 @end

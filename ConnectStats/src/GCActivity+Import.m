@@ -163,112 +163,110 @@
             static NSDictionary * knownMissing = nil;
             if( knownMissing == nil){
                 knownMissing = @{
-                                 @"activityId" : @1, // sample: 2477200414
-                                 @"isMultiSportParent" : @1, // sample: 0
-                                 @"userProfileId" : @1, // sample: 3020883
-                                 @"endLongitude" : @1, // sample: -0.1953904610127211
-                                 @"startLongitude" : @1, // sample: -0.1958300918340683
-                                 @"endLatitude" : @1, // sample: 51.4716518484056
-                                 @"startLatitude" : @1, // sample: 51.47172099910676
-                                 @"maxVerticalSpeed" : @1, // sample: 0.6000003814697266
-
-                                 @"achievement_count" : @1, // sample: 0
-                                 @"anaerobicTrainingEffect" : @1, // sample: 1.600000023841858
-                                 @"athlete_count" : @1, // sample: 4
-                                 @"autoCalcCalories" : @1, // sample: 0
-                                 @"averageStrokeDistance" : @1, // sample: 2.589999914169312
-                                 @"comment_count" : @1, // sample: 0
-                                 @"commute" : @1, // sample: 0
-                                 @"device_watts" : @1, // sample: 1
-                                 @"elev_high" : @1, // sample: -12.6
-                                 @"elev_low" : @1, // sample: -27.2
-                                 @"favorite" : @1, // sample: 0
-                                 @"flagged" : @1, // sample: 0
-                                 @"hasVideo" : @1, // sample: 0
-                                 @"has_heartrate" : @1, // sample: 1
-                                 @"has_kudoed" : @1, // sample: 0
-                                 @"id" : @1, // sample: 730019974
-                                 @"kudos_count" : @1, // sample: 0
-                                 @"lapIndex" : @1, // sample: 1
-                                 @"lengthIndex" : @1, // sample: 1
-                                 @"manual" : @1, // sample: 0
-                                 @"max_watts" : @1, // sample: 474
-                                 @"numberOfActiveLengths" : @1, // sample: 120
-                                 @"ownerId" : @1, // sample: 3020883
-                                 @"parent" : @1, // sample: 0
-                                 @"photo_count" : @1, // sample: 0
-                                 @"poolLength" : @1, // sample: 33.33000183105469
-                                 @"pr" : @1, // sample: 0
-                                 @"private" : @1, // sample: 0
-                                 @"resource_state" : @1, // sample: 2
-                                 @"start_latitude" : @1, // sample: 51.52
-                                 @"start_longitude" : @1, // sample: -0.1
-                                 @"steps" : @1, // sample: 8342
-                                 @"suffer_score" : @1, // sample: 9
-                                 @"total_photo_count" : @1, // sample: 0
-                                 @"trainer" : @1, // sample: 0
-                                 @"upload_id" : @1, // sample: 804813097
-                                 @"userPro" : @1, // sample: 0
-                                 @"weighted_average_watts" : @1, // sample: 129
-                                 
-                                 // ConnectStats Data Processed outside
-                                 @"startTimeInSeconds" : @1, // sample: 1576060479
-                                 @"startingLatitudeInDegree": @51.47216607816517,
-                                 @"averagePaceInMinutesPerKilometer": @5.414771,
-                                 @"maxPaceInMinutesPerKilometer": @4.8676014,
-                                 @"startingLongitudeInDegree": @0.1960058603435755,
-                                 @"startTimeOffsetInSeconds": @0,
-                                 //@"maxRunCadenceInStepsPerMinute": @178,
-                                 //@"maxBikeCadenceInRoundsPerMinute": @96,
-                                 @"isParent":@0,
-                                 @"hasPolyline":@1,
-                                 @"lapcount":@1,
-
-                                 // New info in modern garmin data
-                                 @"lapCount" : @1, // sample: 5
-                                 @"beginTimestamp" : @1, // sample: 1576060479000
-                                 @"timeZoneId" : @1, // sample: 149
-                                 @"deviceId" : @1, // sample: 3305029741
-                                 @"activityTrainingLoad" : @1, // sample: 114.1391448974609
-                                 @"purposeful" : @1, // sample: 0
-                                 @"waterEstimated" : @1, // sample: 435
-                                 @"elevationCorrected" : @1, // sample: 0
-                                 @"minActivityLapDuration" : @1, // sample: 355.85400390625
-                                 @"atpActivity" : @1, // sample: 0
-                                 @"maxDoubleCadence" : @1, // sample: 174
-                                 @"sportTypeId" : @1, // sample: 1
-                                 @"minRespirationRate" : @1, // sample: 20.75
-                                 @"avgRespirationRate" : @1, // sample: 20.75
-                                 @"maxRespirationRate" : @1, // sample: 20.75
-                                 @"caloriesConsumed" : @1, // sample: 0
-                                 @"waterConsumed" : @1, // sample: 0
-                                 @"maxAvgPower_20" : @1, // sample: 391
-                                 @"maxAvgPower_600" : @1, // sample: 136
-                                 @"excludeFromPowerCurveReports" : @1, // sample: 0
-                                 @"maxAvgPower_300" : @1, // sample: 168
-                                 @"maxAvgPower_1" : @1, // sample: 529
-                                 @"maxAvgPower_10" : @1, // sample: 423
-                                 @"strokes" : @1, // sample: 1546
-                                 @"maxAvgPower_60" : @1, // sample: 283
-                                 @"maxAvgPower_30" : @1, // sample: 357
-                                 @"maxAvgPower_2" : @1, // sample: 517
-                                 @"maxAvgPower_1200" : @1, // sample: 119
-                                 @"maxAvgPower_5" : @1, // sample: 465
-                                 @"maxAvgPower_1800" : @1, // sample: 106
-                                 @"maxAvgPower_120" : @1, // sample: 245
-                                 @"avgGroundContactTime" : @1, // sample: 256.3999938964844
-                                 @"avgVerticalRatio" : @1, // sample: 7.46999979019165
-                                 @"avgVerticalOscillation" : @1, // sample: 9.030000305175781
-                                 @"avgGroundContactBalance" : @1, // sample: 49.84000015258789
-
-                                 @"pr_count" : @1, // sample: 0
-                                 @"display_hide_heartrate_option" : @1, // sample: 1
-                                 @"heartrate_opt_out" : @1, // sample: 0
-                                 @"utc_offset" : @1, // sample: 3600
-                                 @"from_accepted_tag" : @1, // sample: 0
-                                 @"workout_type" : @1, // sample: 0
-                                 
-                                 };
+                    @"activityId" : @1, // sample: 2477200414
+                    @"achievement_count" : @1, // sample: 0
+                    @"activityTrainingLoad" : @1, // sample: 114.1391448974609
+                    @"anaerobicTrainingEffect" : @1, // sample: 1.600000023841858
+                    @"athlete_count" : @1, // sample: 4
+                    @"atpActivity" : @1, // sample: 0
+                    @"autoCalcCalories" : @1, // sample: 0
+                    @"averagePaceInMinutesPerKilometer": @5.414771,
+                    @"averageStrokeDistance" : @1, // sample: 2.589999914169312
+                    @"avgGroundContactBalance" : @1, // sample: 49.84000015258789
+                    @"avgGroundContactTime" : @1, // sample: 256.3999938964844
+                    @"avgRespirationRate" : @1, // sample: 20.75
+                    @"avgVerticalOscillation" : @1, // sample: 9.030000305175781
+                    @"avgVerticalRatio" : @1, // sample: 7.46999979019165
+                    @"beginTimestamp" : @1, // sample: 1576060479000
+                    @"caloriesConsumed" : @1, // sample: 0
+                    @"comment_count" : @1, // sample: 0
+                    @"commute" : @1, // sample: 0
+                    @"deviceId" : @1, // sample: 3305029741
+                    @"device_watts" : @1, // sample: 1
+                    @"display_hide_heartrate_option" : @1, // sample: 1
+                    @"elev_high" : @1, // sample: -12.6
+                    @"elev_low" : @1, // sample: -27.2
+                    @"elevationCorrected" : @1, // sample: 0
+                    @"endLatitude" : @1, // sample: 51.4716518484056
+                    @"endLongitude" : @1, // sample: -0.1953904610127211
+                    @"excludeFromPowerCurveReports" : @1, // sample: 0
+                    @"favorite" : @1, // sample: 0
+                    @"flagged" : @1, // sample: 0
+                    @"from_accepted_tag" : @1, // sample: 0
+                    @"hasPolyline":@1,
+                    @"hasSplits" : @1, // sample: 0
+                    @"hasVideo" : @1, // sample: 0
+                    @"has_heartrate" : @1, // sample: 1
+                    @"has_kudoed" : @1, // sample: 0
+                    @"heartrate_opt_out" : @1, // sample: 0
+                    @"id" : @1, // sample: 730019974
+                    @"isMultiSportParent" : @1, // sample: 0
+                    @"isParent":@0,
+                    @"kudos_count" : @1, // sample: 0
+                    @"lactateThresholdBpm" : @1, // sample: 173
+                    @"lapCount" : @1, // sample: 5
+                    @"lapIndex" : @1, // sample: 1
+                    @"lapcount":@1,
+                    @"lengthIndex" : @1, // sample: 1
+                    @"manual" : @1, // sample: 0
+                    @"manualActivity" : @1, // sample: 0
+                    @"maxAvgPower_1" : @1, // sample: 529
+                    @"maxAvgPower_10" : @1, // sample: 423
+                    @"maxAvgPower_120" : @1, // sample: 245
+                    @"maxAvgPower_1200" : @1, // sample: 119
+                    @"maxAvgPower_1800" : @1, // sample: 106
+                    @"maxAvgPower_2" : @1, // sample: 517
+                    @"maxAvgPower_20" : @1, // sample: 391
+                    @"maxAvgPower_30" : @1, // sample: 357
+                    @"maxAvgPower_300" : @1, // sample: 168
+                    @"maxAvgPower_3600" : @1, // sample: 136
+                    @"maxAvgPower_5" : @1, // sample: 465
+                    @"maxAvgPower_60" : @1, // sample: 283
+                    @"maxAvgPower_600" : @1, // sample: 136
+                    @"maxAvgPower_7200" : @1, // sample: 128
+                    @"maxDoubleCadence" : @1, // sample: 174
+                    @"maxFtp" : @1, // sample: 213
+                    @"maxPaceInMinutesPerKilometer": @4.8676014,
+                    @"maxRespirationRate" : @1, // sample: 20.75
+                    @"maxVerticalSpeed" : @1, // sample: 0.6000003814697266
+                    @"max_watts" : @1, // sample: 474
+                    @"minActivityLapDuration" : @1, // sample: 355.85400390625
+                    @"minRespirationRate" : @1, // sample: 20.75
+                    @"numberOfActiveLengths" : @1, // sample: 120
+                    @"ownerId" : @1, // sample: 3020883
+                    @"parent" : @1, // sample: 0
+                    @"photo_count" : @1, // sample: 0
+                    @"poolLength" : @1, // sample: 33.33000183105469
+                    @"pr" : @1, // sample: 0
+                    @"pr_count" : @1, // sample: 0
+                    @"private" : @1, // sample: 0
+                    @"purposeful" : @1, // sample: 0
+                    @"resource_state" : @1, // sample: 2
+                    @"sportTypeId" : @1, // sample: 1
+                    @"startLatitude" : @1, // sample: 51.47172099910676
+                    @"startLongitude" : @1, // sample: -0.1958300918340683
+                    @"startTimeInSeconds" : @1, // sample: 1576060479
+                    @"startTimeOffsetInSeconds": @0,
+                    @"start_latitude" : @1, // sample: 51.52
+                    @"start_longitude" : @1, // sample: -0.1
+                    @"startingLatitudeInDegree": @51.47216607816517,
+                    @"startingLongitudeInDegree": @0.1960058603435755,
+                    @"steps" : @1, // sample: 8342
+                    @"strokes" : @1, // sample: 1546
+                    @"suffer_score" : @1, // sample: 9
+                    @"timeZoneId" : @1, // sample: 149
+                    @"total_photo_count" : @1, // sample: 0
+                    @"trainer" : @1, // sample: 0
+                    @"upload_id" : @1, // sample: 804813097
+                    @"userPro" : @1, // sample: 0
+                    @"userProfileId" : @1, // sample: 3020883
+                    @"utc_offset" : @1, // sample: 3600
+                    @"waterConsumed" : @1, // sample: 0
+                    @"waterEstimated" : @1, // sample: 435
+                    @"weighted_average_watts" : @1, // sample: 129
+                    @"workout_type" : @1, // sample: 0
+                    
+                };
                 [knownMissing retain];
             }
             

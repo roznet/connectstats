@@ -271,10 +271,11 @@
         NSUInteger count_filtered = count_total-count_serie;
 
         if ((double)count_filtered/count_total > 0.10) {
-            RZLog(RZLogInfo, @"%@ filtered %d out of %d", field,
-                  (int)count_filtered,(int)count_total);
+            if( ![self.settings alreadyReported:field] ){
+                RZLog(RZLogInfo, @"%@ %@ filtered %d out of %d", self, field,
+                      (int)count_filtered,(int)count_total);
+            }
         }
-
     }
     return serieWithUnit;
 }
