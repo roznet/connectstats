@@ -71,7 +71,7 @@
     XCTAssertEqualObjects(STOREUNIT_DISTANCE, [GCUnit kilometer].referenceUnitKey);
     XCTAssertEqualObjects(STOREUNIT_ALTITUDE, [GCUnit meter].referenceUnitKey);
     XCTAssertEqualObjects(STOREUNIT_ELAPSED, [GCUnit second].referenceUnitKey);
-    XCTAssertEqualObjects(STOREUNIT_TEMPERATURE, [GCUnit celcius].referenceUnitKey);
+    XCTAssertEqualObjects(STOREUNIT_TEMPERATURE, [GCUnit celsius].referenceUnitKey);
     XCTAssertEqualObjects(STOREUNIT_HEARTRATE, [GCUnit bpm].referenceUnitKey);
 }
 
@@ -100,7 +100,7 @@
                              @"kilojoule": [HKUnit jouleUnitWithMetricPrefix:HKMetricPrefixKilo],      // J
                              @"kilocalorie": [HKUnit kilocalorieUnit],    // kcal
                              
-                             @"celcius": [HKUnit degreeCelsiusUnit],          // degC
+                             @"celsius": [HKUnit degreeCelsiusUnit],          // degC
                              @"fahrenheit": [HKUnit degreeFahrenheitUnit],       // degF
                              
                              @"dimensionless": [HKUnit countUnit]      // count

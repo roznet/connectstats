@@ -24,13 +24,14 @@
 //  
 
 #import <Foundation/Foundation.h>
+#import "GCWebRequest.h"
 
 @class GCActivity;
 
 @interface GCGarminActivitySummaryParser : NSObject
 
 @property (nonatomic,readonly) GCActivity * activity;
-@property (nonatomic,readonly) BOOL success;
+@property (nonatomic,readonly) GCWebStatus status;
 
 -(GCGarminActivitySummaryParser*)init NS_DESIGNATED_INITIALIZER;
 -(GCGarminActivitySummaryParser*)initWithData:(NSData*)data NS_DESIGNATED_INITIALIZER;

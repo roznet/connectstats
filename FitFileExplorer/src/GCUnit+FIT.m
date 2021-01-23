@@ -37,7 +37,7 @@
                   @"bpm": @"bpm",
                   @"counts": @"dimensionless",
                   @"cycles": @"dimensionless",
-                  @"C":@"celcius",
+                  @"C":@"celsius",
                   @"g/d": @"dimensionless",
                   @"if": @"if",
                   @"kcal": @"kilocalorie",

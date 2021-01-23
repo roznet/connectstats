@@ -37,7 +37,7 @@
 @interface GCActivityTrackGraphViewController ()
 @property (nonatomic,retain) GCActivity * attachedActivity;
 @property (nonatomic,retain) UIViewController * popoverViewController;
-
+@property (nonatomic,retain) UIBarButtonItem * settingsButtonItem;
 @end
 
 @implementation GCActivityTrackGraphViewController
@@ -45,6 +45,7 @@
 -(void)dealloc{
     [_attachedActivity detach:self];
     [_popoverViewController release];
+    [_settingsButtonItem release];
     [_validOptions release];
     [_legendView release];
     [_otherTrackStats release];
@@ -125,7 +126,7 @@
     self.popoverViewController = nav;
     RZAutorelease([[UIPopoverPresentationController alloc] initWithPresentedViewController:nav
                                                                   presentingViewController:self.presentingViewController]);
-    
+    nav.popoverPresentationController.barButtonItem = self.settingsButtonItem;
     [self presentViewController:nav animated:YES completion:nil];
 
 }
@@ -146,6 +147,7 @@
     }else{
         item.rightBarButtonItems = @[rightButton,rightButton3,rightButton2];
     }
+    self.settingsButtonItem = rightButton2;
 
     [rightButton release];
     [rightButton2 release];

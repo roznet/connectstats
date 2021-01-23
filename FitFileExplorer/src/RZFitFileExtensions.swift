@@ -34,7 +34,7 @@ import FitFileParser
 extension FitFile {
     
     func preferredMessageType() -> FitMessageType {
-        let preferred = [ FitMessageType.session, FitMessageType.record, FitMessageType.file_id]
+        let preferred = [  FitMessageType.record, FitMessageType.session, FitMessageType.file_id]
         
         for one in preferred {
             if self.messageTypes.contains(one) {

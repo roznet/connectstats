@@ -25,14 +25,13 @@
 
 #import <Foundation/Foundation.h>
 #import "GCTrackPointExtraIndex.h"
-
+#import "GCWebRequest.h"
 @class GCActivity;
 @class GCTrackPoint;
 
 @interface GCGarminActivityDetailJsonParser : NSObject<GCTrackPointDelegate>
 
-@property (nonatomic,assign) BOOL success;
-@property (nonatomic,assign) BOOL webError;
+@property (nonatomic,assign) GCWebStatus status;
 @property (nonatomic,retain) NSArray<GCTrackPoint*> * trackPoints;
 @property (nonatomic,retain) NSDictionary<GCField*,GCTrackPointExtraIndex*>*cachedExtraTracksIndexes;
 @property (nonatomic,readonly) NSString * activityType;

@@ -743,8 +743,6 @@
                     _changedPwd  = false;
                     [cell resignFirstResponder];
                     [GCAppGlobal login];
-                }else{
-                    [[GCAppGlobal web] garminLogin];
                 }
             }
             [GCAppGlobal saveSettings];
@@ -766,8 +764,6 @@
                     _changedPwd  = false;
                     [cell resignFirstResponder];
                     [GCAppGlobal login];
-                }else{
-                    [[GCAppGlobal web] garminLogin];
                 }
             }
             [GCAppGlobal saveSettings];

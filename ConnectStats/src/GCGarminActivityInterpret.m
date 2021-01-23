@@ -112,9 +112,9 @@
                                       @"averageHR":           @[ @"WeightedMeanHeartRate",@(gcFieldFlagWeightedMeanHeartRate),    @"bpm"],
                                       @"maxHR":               @[ @"MaxHeartRate",         @"",                                    @"bpm"],
                                       
-                                      @"averageTemperature":        @[ @"WeightedMeanAirTemperature",@"",                               @"celcius"],
-                                      @"maxTemperature":        @[ @"MaxAirTemperature",@"",                               @"celcius"],
-                                      @"minTemperature":        @[ @"MinAirTemperature",@"",                               @"celcius"],
+                                      @"averageTemperature":        @[ @"WeightedMeanAirTemperature",@"",                               @"celsius"],
+                                      @"maxTemperature":        @[ @"MaxAirTemperature",@"",                               @"celsius"],
+                                      @"minTemperature":        @[ @"MinAirTemperature",@"",                               @"celsius"],
                                       
                                       /* RUNNING */
                                       @"groundContactTime":   @[ @"WeightedMeanGroundContactTime", @"", @"ms"],

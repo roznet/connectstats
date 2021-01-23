@@ -55,7 +55,7 @@
 @property (nonatomic,retain) GCStatsDerivedHistoryViewController * histAnalysisViewController;
 @property (nonatomic,retain) UIViewController * popoverViewController;
 @property (nonatomic,retain) RZNumberWithUnitGeometry * geometry;
-
+@property (nonatomic,retain) UIBarButtonItem * rightMostButtonItem;
 @end
 
 @implementation GCStatsMultiFieldViewController
@@ -84,6 +84,7 @@
     [_fieldOrder release];
     [_fieldStats release];
     [_fieldDataSeries release];
+    [_rightMostButtonItem release];
     [_allFields release];
     [_multiFieldConfig release];
     [_configViewController release];
@@ -596,7 +597,7 @@
     [button addGestureRecognizer:RZReturnAutorelease(([[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(configLongPress:)]))];
     
     UIBarButtonItem * rightMost = RZReturnAutorelease([[UIBarButtonItem alloc] initWithCustomView:button]);
-    
+    self.rightMostButtonItem = rightMost;
     UIBarButtonItem * cal = [self.multiFieldConfig buttonForTarget:self action:@selector(switchCalFilter)];
 
     self.navigationItem.rightBarButtonItems = cal ? @[rightMost,cal] : @[ rightMost];
@@ -652,7 +653,7 @@
         self.popoverViewController = controller;
         RZAutorelease([[UIPopoverPresentationController alloc] initWithPresentedViewController:controller
                                                                       presentingViewController:self.presentingViewController]);
-        
+        controller.popoverPresentationController.barButtonItem = self.rightMostButtonItem;
         [self presentViewController:controller animated:YES completion:nil];
     }
 

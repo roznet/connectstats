@@ -3198,7 +3198,7 @@
     {
       "activity_type": "all",
       "field": "MaxAirTemperature",
-      "metric": "celcius",
+      "metric": "celsius",
       "statute": "fahrenheit"
     },
     {
@@ -3330,7 +3330,7 @@
     {
       "activity_type": "all",
       "field": "MinAirTemperature",
-      "metric": "celcius",
+      "metric": "celsius",
       "statute": "fahrenheit"
     },
     {
@@ -3618,7 +3618,7 @@
     {
       "activity_type": "all",
       "field": "WeightedMeanAirTemperature",
-      "metric": "celcius",
+      "metric": "celsius",
       "statute": "fahrenheit"
     },
     {

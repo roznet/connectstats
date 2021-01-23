@@ -27,6 +27,10 @@
 #import "GCAppGlobal.h"
 #import "GCActivity.h"
 
+@interface GCActivitySettings ()
+@property (nonatomic,retain) NSMutableDictionary<GCField*,NSNumber*>*reported;
+@end
+
 @implementation GCActivitySettings
 
 +(GCActivitySettings*)defaultsFor:(GCActivity*)act{
@@ -39,10 +43,23 @@
 
 -(void)dealloc{
     [_serieFilters release];
+    [_reported release];
     [_worker release];
     [super dealloc];
 }
-
+-(BOOL)alreadyReported:(GCField*)field{
+    BOOL rv = false;
+    if( self.reported == nil){
+        self.reported = [NSMutableDictionary dictionaryWithObject:@1 forKey:field];
+    }else{
+        if( self.reported[field] != nil){
+            rv = true;
+        }else{
+            self.reported[field] = @1;
+        }
+    }
+    return rv;
+}
 -(void)disableFiltersAndAdjustments{
     self.serieFilters = [NSDictionary dictionary];
     self.adjustSeriesToMatchLapAverage = false;

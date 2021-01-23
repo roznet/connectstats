@@ -268,12 +268,12 @@ NSString * windDirectionToCompassPoint(double bearing){
 
     innumber = currently[@"temperature"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
-        self.temperature = [[GCNumberWithUnit numberWithUnitName:@"celcius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
+        self.temperature = [[GCNumberWithUnit numberWithUnitName:@"celsius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
     }
 
     innumber = currently[@"apparentTemperature"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
-        self.apparentTemperature = [[GCNumberWithUnit numberWithUnitName:@"celcius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
+        self.apparentTemperature = [[GCNumberWithUnit numberWithUnitName:@"celsius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
     }
 
     innumber = currently[@"windBearing"];
@@ -334,12 +334,12 @@ NSString * windDirectionToCompassPoint(double bearing){
 
     innumber = current[@"temp"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
-        self.temperature = [[GCNumberWithUnit numberWithUnitName:@"celcius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
+        self.temperature = [[GCNumberWithUnit numberWithUnitName:@"celsius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
     }
 
     innumber = current[@"feels_like"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
-        self.apparentTemperature = [[GCNumberWithUnit numberWithUnitName:@"celcius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
+        self.apparentTemperature = [[GCNumberWithUnit numberWithUnitName:@"celsius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
     }
 
     innumber = current[@"wind_deg"];
@@ -401,8 +401,8 @@ NSString * windDirectionToCompassPoint(double bearing){
 
     innumber = values[@"temp"];
     if (innumber && [innumber isKindOfClass:[NSNumber class]]) {
-        self.temperature = [[GCNumberWithUnit numberWithUnitName:@"celcius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
-        self.apparentTemperature = [[GCNumberWithUnit numberWithUnitName:@"celcius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
+        self.temperature = [[GCNumberWithUnit numberWithUnitName:@"celsius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
+        self.apparentTemperature = [[GCNumberWithUnit numberWithUnitName:@"celsius" andValue:innumber.doubleValue] convertToUnitName:STOREUNIT_TEMPERATURE];
     }
 
     innumber = values[@"wdir"];

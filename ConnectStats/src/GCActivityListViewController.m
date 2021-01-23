@@ -217,7 +217,7 @@ const CGFloat kCellDaySpacing = 2.f;
             self.loginTries = 0;
         }else if ([theInfo.stringInfo isEqualToString:NOTIFY_ERROR]) {
 
-            if ([GCAppGlobal web].status == GCWebStatusDeletedActivity) {
+            if ([GCAppGlobal web].status == GCWebStatusResourceNotFound) {
                 dispatch_async(dispatch_get_main_queue(), ^(){
                     [self deletedActivity];
                 });

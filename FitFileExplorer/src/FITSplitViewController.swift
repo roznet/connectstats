@@ -10,17 +10,8 @@ import Cocoa
 import FitFileParser
 
 class FITSplitViewController: NSSplitViewController {
-
-
     var selectionContext : FITSelectionContext?
-    var dataListDataSource : FITDataListDataSource?
-    var fieldsListDataSource : FITDetailListDataSource?
-    var outlineDataSource : FITOutlineDataSource? {
-        didSet {
-            self.outlineViewController()?.outlineDataSource = self.outlineDataSource
-        }
-    }
-
+    
     var fitFile : FitFile? {
         get {
             if let doc = self.representedObject as? FITDocument {
@@ -37,87 +28,18 @@ class FITSplitViewController: NSSplitViewController {
     
     override var representedObject: Any? {
         didSet {
-            if let file = self.fitFile {
+            if let file = (self.representedObject as? FITDocument)?.fitFile {
                 let context = FITSelectionContext(fitFile: file)
                 self.selectionContext = context
-                self.outlineDataSource = FITOutlineDataSource(selectionContext: context)
+                self.outlineViewController()?.setup(selectionContext: context)
+                self.detailTableViewController()?.setup(selectionContext: context)
+                self.graphViewController()?.setup(selectionContext: context)
+                self.mapViewController()?.setup(selectionContext: context)
+                self.dataViewController()?.setup(selectionContext: context)
             }
         }
     }
     
-    //MARK: - View Controller Delegate
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do view setup here.
-        
-        
-    }
-    
-    override func viewDidAppear() {
-        super.viewDidAppear()
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(outlineDataSourceSelectionChanged(notification:)),
-                                               name: FITOutlineDataSource.kFITNotificationOutlineSelectionChanged,
-                                               object: self.outlineDataSource)
-        
-    }
-    
-    override func viewDidDisappear() {
-        super.viewDidDisappear()
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-
-    //MARK: - Selection Changes
-    
-    func settingsChanged(notification : Notification){
-        if let ds = self.fieldsListDataSource {
-            self.detailTableViewController()?.updateWith(dataSource: ds)
-        }
-        self.detailSelectionChanged(notification: notification)
-    }
-    
-    /**
-     Notification call back from detail table
-     */
-    @objc func detailSelectionChanged(notification : Notification){
-        if //let fitFile = self.fitFile,
-            //let messageType = self.outlineDataSource?.selectedMessageType ?? fitFile.messageTypes.first {
-            let mef = self.fieldsListDataSource?.selectedField,
-            let idx = self.fieldsListDataSource?.selectedRow,
-            let selectionContext = self.selectionContext{
-            if idx >= 0 {
-                selectionContext.selectMessageField(field: mef, atIndex:idx)
-                self.graphViewController()?.updateWith(selectionContext: selectionContext)
-                self.mapViewController()?.updateWith(selectionContext: selectionContext)
-                self.dataListDataSource = FITDataListDataSource(selectedRow: idx, context: selectionContext)
-                self.dataViewController()?.update(with: self.dataListDataSource!)
-            }
-        }
-        
-    }
-    /**
-     Notification call back from the outline table
-     */
-    @objc func outlineDataSourceSelectionChanged(notification : Notification){
-        if self.fieldsListDataSource == nil {
-            self.fieldsListDataSource = FITDetailListDataSource(context: self.selectionContext!)
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(detailSelectionChanged(notification:)),
-                                                   name: FITDetailListDataSource.kFITNotificationDetailSelectionChanged,
-                                                   object: self.fieldsListDataSource)
-            
-            
-        }
-        if let ds = self.fieldsListDataSource {
-            self.detailTableViewController()?.updateWith(dataSource: ds)
-        }
-    }
-    
-    private func updateDependendWithSelectionContext(){
-        
-    }
     //MARK: - Access View Controllers
     func outlineViewController() -> FITOutlineViewController?{
         if self.splitViewItems.count > 0 {

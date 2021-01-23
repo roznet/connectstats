@@ -29,7 +29,7 @@
 @interface GCGarminActivitySummaryParser ()
 
 @property (nonatomic,retain) GCActivity * activity;
-@property (nonatomic,assign) BOOL success;
+@property (nonatomic,assign) GCWebStatus status;
 
 @end
 
@@ -53,15 +53,15 @@
 
         if (json==nil) {
             self.activity = nil;
-            self.success = false;
+            self.status = GCWebStatusParsingFailed;
             RZLog(RZLogError, @"parsing failed %@", e);
         }else if(json[@"error"]){
             self.activity = nil;
-            self.success = false;
-            RZLog(RZLogWarning, @"Error in reply %@", json[@"error"]);
+            self.status = GCWebStatusServiceLogicError;
+            RZLog(RZLogWarning, @"Error in reply %@ %@", json[@"error"], json[@"message"]);
         }else{
             self.activity = [[[GCActivity alloc] initWithId:nil andGarminData:json] autorelease];
-            self.success = true;
+            self.status = GCWebStatusOK;
         }
     }
     return self;

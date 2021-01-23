@@ -187,7 +187,9 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
     if( [[theInfo stringInfo] isEqualToString:NOTIFY_NEXT]){
         self.nReq++;
         NSString * desc = [theParent currentDebugDescription];
-        desc = [desc stringByReplacingOccurrencesOfString:[GCAppGlobal simulatorUrl] withString:@""];
+        if( [GCAppGlobal simulatorUrl]) {
+            desc = [desc stringByReplacingOccurrencesOfString:[GCAppGlobal simulatorUrl] withString:@""];
+        }
         [self.reqDescriptions addObject:desc];
     }
     RZ_ASSERT(![[theInfo stringInfo] isEqualToString:@"error"], @"Web request had no error");

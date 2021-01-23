@@ -24,6 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
+#import "GCWebRequest.h"
 
 @class GCLap;
 @class GCActivity;
@@ -34,7 +35,7 @@
 @property (nonatomic,readonly) NSArray<GCLap*> * laps;
 @property (nonatomic,readonly) NSArray<GCLap*> * lapsSwim;
 @property (nonatomic,readonly) NSArray<GCTrackPoint*> * trackPointSwim;
-@property (nonatomic,assign) BOOL success;
+@property (nonatomic,assign) GCWebStatus status;
 
 -(GCGarminActivityLapsParser*)initWithData:(NSData*)json forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
 

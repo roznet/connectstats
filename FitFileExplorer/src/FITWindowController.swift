@@ -21,7 +21,7 @@ class FITWindowController: NSWindowController, NSToolbarDelegate {
     @IBOutlet var fieldDisplayChoiceView: NSView!
     @IBOutlet weak var fieldDisplayChoice: NSPopUpButton!
     
-    let unitChoices = [ "Default", "Metric", "Imperial" ]
+    let unitChoices = [ "FIT Units", "Metric", "Imperial" ]
     
     var unitSystem : String {
         get {
@@ -62,12 +62,12 @@ class FITWindowController: NSWindowController, NSToolbarDelegate {
         self.unitSystemChoicePopup.addItems(withTitles: self.unitChoices)
         self.unitSystemChoicePopup.selectItem(withTitle: self.unitSystem )
         var choices = GCFieldCache.availableLanguagesNames()
-        choices?.append("Raw Fields")
+        choices?.append("FIT Fields")
         self.fieldDisplayChoice.removeAllItems()
         if let choices = choices {
             self.fieldDisplayChoice.addItems(withTitles: choices)
         }
-        self.fieldDisplayChoice.selectItem(withTitle: "Raw Fields")
+        self.fieldDisplayChoice.selectItem(withTitle: "FIT Fields")
     }
     
     // MARK: - Tool bar button actions
@@ -75,12 +75,12 @@ class FITWindowController: NSWindowController, NSToolbarDelegate {
     @IBAction func changeUnitSystem(_ sender: NSPopUpButton) {
         if let selected = sender.selectedItem?.title {
             self.unitSystem = selected
-            self.splitViewController().settingsChanged(notification: Notification(name: FITWindowController.kNotificationToolBarSettingsChanged))
+            NotificationCenter.default.post(name: FITWindowController.kNotificationToolBarSettingsChanged, object: self)
         }
     }
     @IBAction func changeFieldDisplay(_ sender: NSPopUpButton) {
         if let selectedTitle = sender.selectedItem?.title {
-            if selectedTitle == "Raw Fields" {
+            if selectedTitle == "FIT Fields" {
                 self.splitViewController().selectionContext?.prettyField = false
             }else{
                 self.splitViewController().selectionContext?.prettyField = true
@@ -91,13 +91,12 @@ class FITWindowController: NSWindowController, NSToolbarDelegate {
                     GCFields.setFieldCache(cache)
                 }
             }
-            self.splitViewController().settingsChanged(notification: Notification(name: FITWindowController.kNotificationToolBarSettingsChanged))
+            NotificationCenter.default.post(name: FITWindowController.kNotificationToolBarSettingsChanged, object: self)
         }
     }
     
     func splitViewController() -> FITSplitViewController {
-        let contentView = self.contentViewController as! FITSplitViewController
-        return contentView
+        return self.contentViewController as! FITSplitViewController
     }
     
     // MARK: - NSToolbarDelegate

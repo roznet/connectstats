@@ -55,7 +55,7 @@ NSString * GCWebStatusDescription(GCWebStatus status){
         case GCWebStatusTempUnavailable:
             rv = NSLocalizedString(@"Temporarily Unavailable", @"GCWebStatus");
             break;
-        case GCWebStatusDeletedActivity:
+        case GCWebStatusResourceNotFound:
             rv = NSLocalizedString(@"Activity was deleted", @"GCWebStatus");
             break;
         case GCWebStatusInternalLogicError:
@@ -102,7 +102,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
         case GCWebStatusTempUnavailable:
             rv = @"TempUnavailable";
             break;
-        case GCWebStatusDeletedActivity:
+        case GCWebStatusResourceNotFound:
             rv = @"DeletedActivity";
             break;
         case GCWebStatusInternalLogicError:
@@ -555,6 +555,9 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 
     id<GCWebRequest> req = self.currentRequestObject;
     self.lastStatusCode  = connection ? [connection responseCode] : 0;
+    if (connection && self.lastStatusCode != 200){
+        RZLog(RZLogInfo, @"Status %@ %@", @(self.lastStatusCode), [self describeReq:req]);
+    }
     if ([req respondsToSelector:@selector(process: andDelegate:)]) {
         [req process:data andDelegate:self];
     }else{
@@ -573,6 +576,9 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 
     id<GCWebRequest> req = self.currentRequestObject;
     self.lastStatusCode  = connection ? [connection responseCode] : 0;
+    if (connection && self.lastStatusCode != 200){
+        RZLog(RZLogInfo, @"Status %@ %@", @(self.lastStatusCode), [self describeReq:req]);
+    }
     [req process:theString encoding:connection ? [connection receivedEncoding] : NSUTF8StringEncoding andDelegate:self ];
 }
 

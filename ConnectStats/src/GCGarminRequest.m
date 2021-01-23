@@ -37,21 +37,14 @@
 
 -(BOOL)checkNoErrors{
     if (self.status == GCWebStatusOK) {
-        if (self.theString) {
-            NSRange res1 = [self.theString rangeOfString:GC_HTML_ACCESS_DENIED];
-            NSRange res2 = [self.theString rangeOfString:GC_HTML_TEMP_UNAVAILABLE];
-            NSRange res3 = [self.theString rangeOfString:GC_HTML_TEMP_MAINTENANCE];
-            NSRange res4 = [self.theString rangeOfString:GC_HTML_DELETED_ACTIVITY];
-            NSRange res5 = [self.theString rangeOfString:GC_HTML_INTERNAL_ERROR];
-            NSRange res6 = [self.theString rangeOfString:GC_HTML_WEBAPPEXCEPTION];
-            if (res1.location != NSNotFound || res6.location != NSNotFound) {
+        if( self.delegate && self.delegate.lastStatusCode != 200 ){
+            NSInteger code = self.delegate.lastStatusCode;
+            if( code == 500 || code == 403 || code == 401){
                 self.status = GCWebStatusAccessDenied;
-                [self.delegate requireLogin:gcWebServiceGarmin];
-            }else if(res2.location != NSNotFound || res3.location != NSNotFound){
-                self.status = GCWebStatusTempUnavailable;
-            }else if(res4.location != NSNotFound ){
-                self.status = GCWebStatusDeletedActivity;
-            }else if(res5.location != NSNotFound){
+            }else if (code == 404) {
+                self.status = GCWebStatusResourceNotFound;
+            }else if( code != 0 ){ // 0 is for offline / not from web
+                RZLog(RZLogWarning, @"Unexpected status code %@ %@", @(code), self.debugDescription)
                 self.status = GCWebStatusServiceLogicError;
             }
         }

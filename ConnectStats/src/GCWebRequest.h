@@ -38,7 +38,7 @@ typedef NS_ENUM(NSUInteger, GCWebStatus) {
     GCWebStatusParsingFailed,
     GCWebStatusAccessDenied,
     GCWebStatusTempUnavailable,
-    GCWebStatusDeletedActivity,
+    GCWebStatusResourceNotFound,
     GCWebStatusConnectionError,
     GCWebStatusInternalLogicError,
     GCWebStatusServiceLogicError,
