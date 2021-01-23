@@ -65,7 +65,6 @@
 
 -(NSString*)debugDescription{
     if (self.numberOfRequests > 1) {
-        NSUInteger pct = (100 * self.currentRequest) / self.numberOfRequests;
         return [NSString stringWithFormat:@"<%@: %@/%@>", NSStringFromClass([self class]), @(self.currentRequest), @(self.numberOfRequests)];
     }else{
         return [NSString stringWithFormat:@"<%@: %@>", NSStringFromClass([self class]), @(self.numberOfRequests)];
