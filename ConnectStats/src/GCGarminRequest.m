@@ -43,6 +43,8 @@
                 self.status = GCWebStatusAccessDenied;
             }else if (code == 404) {
                 self.status = GCWebStatusResourceNotFound;
+            }else if (code == 429 || code == 503){
+                self.status = GCWebStatusTempUnavailable;
             }else if( code != 0 ){ // 0 is for offline / not from web
                 RZLog(RZLogWarning, @"Unexpected status code %@ %@", @(code), self.debugDescription)
                 self.status = GCWebStatusServiceLogicError;
