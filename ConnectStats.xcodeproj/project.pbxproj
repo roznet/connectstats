@@ -797,6 +797,7 @@
 		42B4080122E38CFA005C61C4 /* GCTestServiceCompare.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B4080022E38CFA005C61C4 /* GCTestServiceCompare.m */; };
 		42B467BA1DC6A56200279DC8 /* GCAppPasswordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424D08BF1DC5DA4E000B4620 /* GCAppPasswordManager.swift */; };
 		42B467BB1DC6A74200279DC8 /* GCAppProfiles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235DF9D1655B61A00DE316A /* GCAppProfiles.m */; };
+		42B5833925BDE65C00F4B0A5 /* FITSelectionContext+Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5833825BDE65C00F4B0A5 /* FITSelectionContext+Graph.swift */; };
 		42B5E1C81BA5AEC9000FAE4E /* ConnectStatsTestApp.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E1C71BA5AEC9000FAE4E /* ConnectStatsTestApp.xcassets */; };
 		42B5E1CB1BA5AEC9000FAE4E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42B5E1C91BA5AEC9000FAE4E /* LaunchScreen.storyboard */; };
 		42B5E2161BA5AF9A000FAE4E /* GCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1F11BA5AF9A000FAE4E /* GCAppDelegate.m */; };
@@ -2089,6 +2090,7 @@
 		42B34A2D179C31D500688E9F /* GCViewActivityTypeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCViewActivityTypeButton.m; path = src/GCViewActivityTypeButton.m; sourceTree = "<group>"; };
 		42B407FF22E38CFA005C61C4 /* GCTestServiceCompare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceCompare.h; path = connectstatstestapp/src/GCTestServiceCompare.h; sourceTree = SOURCE_ROOT; };
 		42B4080022E38CFA005C61C4 /* GCTestServiceCompare.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceCompare.m; path = connectstatstestapp/src/GCTestServiceCompare.m; sourceTree = SOURCE_ROOT; };
+		42B5833825BDE65C00F4B0A5 /* FITSelectionContext+Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FITSelectionContext+Graph.swift"; path = "src/FITSelectionContext+Graph.swift"; sourceTree = "<group>"; };
 		42B5E1B91BA5AEC9000FAE4E /* ConnectStatsTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ConnectStatsTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42B5E1C71BA5AEC9000FAE4E /* ConnectStatsTestApp.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = ConnectStatsTestApp.xcassets; path = ../connectstatstestapp/ConnectStatsTestApp.xcassets; sourceTree = "<group>"; };
 		42B5E1CA1BA5AEC9000FAE4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -4872,6 +4874,7 @@
 			isa = PBXGroup;
 			children = (
 				42A672C71DECC4EA00BE8E26 /* FITSelectionContext.swift */,
+				42B5833825BDE65C00F4B0A5 /* FITSelectionContext+Graph.swift */,
 				42BFC2181DCCCB9400EAD40E /* FITOutlineDataSource.swift */,
 				423E8F5C21DBE06800FB795B /* FITDetailListDataSource.swift */,
 				42ECA0231ED7614300D1EEF9 /* FITDataListDataSource.swift */,
@@ -6389,6 +6392,7 @@
 				42F4E5121DE08D51001AB244 /* GCMapAnnotation.m in Sources */,
 				42DCEF851E181E3500F66AF1 /* FITFitValueStatistics.swift in Sources */,
 				423953A81CE71ED4009A3AC3 /* FITOutlineCellView.m in Sources */,
+				42B5833925BDE65C00F4B0A5 /* FITSelectionContext+Graph.swift in Sources */,
 				42769BDB1DD4950D000390F1 /* GCActivitySummaryValue.m in Sources */,
 				42ECA0241ED7614300D1EEF9 /* FITDataListDataSource.swift in Sources */,
 				42BF98381EE3175600F5E094 /* FITFitStatisticsWeight.swift in Sources */,
