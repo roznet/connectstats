@@ -1043,8 +1043,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         if (foundFirst) {
             if ([inIds indexOfObject:act.activityId] == NSNotFound &&
                 [altIds indexOfObject:act.activityId] == NSNotFound) {
-                if(act.parentId == nil || [inIds indexOfObject:act.parentId] == NSNotFound){
+                if(act.parentId == nil ){
                     [deleteCandidate  addObject:act.activityId];
+                }else{
+                    RZLog(RZLogInfo, @"%@ not found in service but has parent %@ so skip deleting", act, act.parentId);
                 }
             }
         }
