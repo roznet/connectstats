@@ -468,6 +468,7 @@
 		426DA9602596200200413AEB /* FITAccessoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426DA95F2596200200413AEB /* FITAccessoryViewController.swift */; };
 		426DFE6919D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
 		426DFE6A19D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
+		426E287E25BF3A5400A9DA6F /* GCTestLiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426E287D25BF3A5400A9DA6F /* GCTestLiveData.swift */; };
 		426F42461DB247FB00937DD8 /* GCTestsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 426F42451DB247FB00937DD8 /* GCTestsHelper.m */; };
 		427208621DE7A35300924C90 /* GCActivity+Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427208611DE7A35300924C90 /* GCActivity+Import.swift */; };
 		427208631DE7A35300924C90 /* GCActivity+Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427208611DE7A35300924C90 /* GCActivity+Import.swift */; };
@@ -1773,6 +1774,7 @@
 		426DA95F2596200200413AEB /* FITAccessoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITAccessoryViewController.swift; path = src/FITAccessoryViewController.swift; sourceTree = "<group>"; };
 		426DFE6719D5FE130031EFF1 /* GCHealthKitActivityParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitActivityParser.h; path = src/GCHealthKitActivityParser.h; sourceTree = "<group>"; };
 		426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitActivityParser.m; path = src/GCHealthKitActivityParser.m; sourceTree = "<group>"; };
+		426E287D25BF3A5400A9DA6F /* GCTestLiveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCTestLiveData.swift; sourceTree = "<group>"; };
 		426EC771246831CC00666068 /* GCStatsDerivedAnalysisViewControllerConsts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedAnalysisViewControllerConsts.h; path = src/GCStatsDerivedAnalysisViewControllerConsts.h; sourceTree = "<group>"; };
 		426F42441DB247FB00937DD8 /* GCTestsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCTestsHelper.h; sourceTree = "<group>"; };
 		426F42451DB247FB00937DD8 /* GCTestsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestsHelper.m; sourceTree = "<group>"; };
@@ -3816,6 +3818,7 @@
 				42C226172325AC0100F52A23 /* Common */,
 				42B088441C38894D00113306 /* GCTestFields.m */,
 				42FC177F1E196E4B00F55302 /* GCTestActivityFitFile.swift */,
+				426E287D25BF3A5400A9DA6F /* GCTestLiveData.swift */,
 				42A89C251D63B2D7007CF90D /* GCTestHealthZones.m */,
 				426CC4741BAEBD060033978C /* GCTestsActions.m */,
 				425CF5A81813CEEC009279C0 /* GCTestsActivities.m */,
@@ -6681,6 +6684,7 @@
 				421517CC2429607800FEE8D7 /* GCTestsActivitiesCalculated.m in Sources */,
 				425CF5A91813CEEC009279C0 /* GCTestsActivities.m in Sources */,
 				42D9081C20338582000BBE07 /* GCTestsPerformance.m in Sources */,
+				426E287E25BF3A5400A9DA6F /* GCTestLiveData.swift in Sources */,
 				42A89C261D63B2D7007CF90D /* GCTestHealthZones.m in Sources */,
 				426F42461DB247FB00937DD8 /* GCTestsHelper.m in Sources */,
 				42FC17801E196E4B00F55302 /* GCTestActivityFitFile.swift in Sources */,
