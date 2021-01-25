@@ -618,7 +618,7 @@
                 source = [[GCAppGlobal profile] sourceName:source];
             }
             [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                                         withString:source];
+                                                                                         withString:source?:@"Unknown Source"];
             [gridcell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attributeBold16]
                                                                                          withString: NSLocalizedString(@"Source", @"Other Service")];
             rv= gridcell;
