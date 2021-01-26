@@ -468,7 +468,11 @@
 		426DA9602596200200413AEB /* FITAccessoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426DA95F2596200200413AEB /* FITAccessoryViewController.swift */; };
 		426DFE6919D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
 		426DFE6A19D5FE130031EFF1 /* GCHealthKitActivityParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */; };
-		426E287E25BF3A5400A9DA6F /* GCTestLiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426E287D25BF3A5400A9DA6F /* GCTestLiveData.swift */; };
+		426E287E25BF3A5400A9DA6F /* GCTestServiceEdgeCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426E287D25BF3A5400A9DA6F /* GCTestServiceEdgeCases.swift */; };
+		426E288C25C00B6C00A9DA6F /* last_connectstats_search_zerodistance.json in Resources */ = {isa = PBXBuildFile; fileRef = 426E288825C00B6C00A9DA6F /* last_connectstats_search_zerodistance.json */; };
+		426E288D25C00B6C00A9DA6F /* last_connectstats_search_multisportsingle.json in Resources */ = {isa = PBXBuildFile; fileRef = 426E288925C00B6C00A9DA6F /* last_connectstats_search_multisportsingle.json */; };
+		426E288E25C00B6C00A9DA6F /* last_modern_search_multisportsingle.json in Resources */ = {isa = PBXBuildFile; fileRef = 426E288A25C00B6C00A9DA6F /* last_modern_search_multisportsingle.json */; };
+		426E288F25C00B6C00A9DA6F /* last_modern_search_zerodistance.json in Resources */ = {isa = PBXBuildFile; fileRef = 426E288B25C00B6C00A9DA6F /* last_modern_search_zerodistance.json */; };
 		426F42461DB247FB00937DD8 /* GCTestsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 426F42451DB247FB00937DD8 /* GCTestsHelper.m */; };
 		427208621DE7A35300924C90 /* GCActivity+Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427208611DE7A35300924C90 /* GCActivity+Import.swift */; };
 		427208631DE7A35300924C90 /* GCActivity+Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427208611DE7A35300924C90 /* GCActivity+Import.swift */; };
@@ -787,7 +791,7 @@
 		42ACFE9518C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ACFE9418C0931F00BF27A5 /* GCGarminLoginSimulatorRequest.m */; };
 		42ACFE9818C099AB00BF27A5 /* GCGarminLoginSSORequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42ACFE9718C099AB00BF27A5 /* GCGarminLoginSSORequest.m */; };
 		42ADFAF621F2834F007BC683 /* GarminRequestFitFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ADFAF521F2834F007BC683 /* GarminRequestFitFile.swift */; };
-		42AE24621DF2E556002B48D9 /* FITSelectionContextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AE24611DF2E556002B48D9 /* FITSelectionContextViewController.swift */; };
+		42AE24621DF2E556002B48D9 /* FITGraphConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AE24611DF2E556002B48D9 /* FITGraphConfigViewController.swift */; };
 		42B088451C38894D00113306 /* GCTestFields.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B088441C38894D00113306 /* GCTestFields.m */; };
 		42B0B96415FC9206008275FF /* GCActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B0B96315FC9206008275FF /* GCActivity.m */; };
 		42B0B97415FE8037008275FF /* GCGarminSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B0B97315FE8037008275FF /* GCGarminSearchJsonParser.m */; };
@@ -1774,7 +1778,11 @@
 		426DA95F2596200200413AEB /* FITAccessoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITAccessoryViewController.swift; path = src/FITAccessoryViewController.swift; sourceTree = "<group>"; };
 		426DFE6719D5FE130031EFF1 /* GCHealthKitActivityParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitActivityParser.h; path = src/GCHealthKitActivityParser.h; sourceTree = "<group>"; };
 		426DFE6819D5FE130031EFF1 /* GCHealthKitActivityParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitActivityParser.m; path = src/GCHealthKitActivityParser.m; sourceTree = "<group>"; };
-		426E287D25BF3A5400A9DA6F /* GCTestLiveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCTestLiveData.swift; sourceTree = "<group>"; };
+		426E287D25BF3A5400A9DA6F /* GCTestServiceEdgeCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCTestServiceEdgeCases.swift; sourceTree = "<group>"; };
+		426E288825C00B6C00A9DA6F /* last_connectstats_search_zerodistance.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_connectstats_search_zerodistance.json; sourceTree = "<group>"; };
+		426E288925C00B6C00A9DA6F /* last_connectstats_search_multisportsingle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_connectstats_search_multisportsingle.json; sourceTree = "<group>"; };
+		426E288A25C00B6C00A9DA6F /* last_modern_search_multisportsingle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_modern_search_multisportsingle.json; sourceTree = "<group>"; };
+		426E288B25C00B6C00A9DA6F /* last_modern_search_zerodistance.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_modern_search_zerodistance.json; sourceTree = "<group>"; };
 		426EC771246831CC00666068 /* GCStatsDerivedAnalysisViewControllerConsts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedAnalysisViewControllerConsts.h; path = src/GCStatsDerivedAnalysisViewControllerConsts.h; sourceTree = "<group>"; };
 		426F42441DB247FB00937DD8 /* GCTestsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCTestsHelper.h; sourceTree = "<group>"; };
 		426F42451DB247FB00937DD8 /* GCTestsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestsHelper.m; sourceTree = "<group>"; };
@@ -2080,7 +2088,7 @@
 		42ACFE9618C099AB00BF27A5 /* GCGarminLoginSSORequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminLoginSSORequest.h; path = src/GCGarminLoginSSORequest.h; sourceTree = "<group>"; };
 		42ACFE9718C099AB00BF27A5 /* GCGarminLoginSSORequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCGarminLoginSSORequest.m; path = src/GCGarminLoginSSORequest.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		42ADFAF521F2834F007BC683 /* GarminRequestFitFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GarminRequestFitFile.swift; path = src/GarminRequestFitFile.swift; sourceTree = "<group>"; };
-		42AE24611DF2E556002B48D9 /* FITSelectionContextViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITSelectionContextViewController.swift; path = src/FITSelectionContextViewController.swift; sourceTree = "<group>"; };
+		42AE24611DF2E556002B48D9 /* FITGraphConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITGraphConfigViewController.swift; path = src/FITGraphConfigViewController.swift; sourceTree = "<group>"; };
 		42B088441C38894D00113306 /* GCTestFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTestFields.m; sourceTree = "<group>"; };
 		42B0B96215FC9206008275FF /* GCActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivity.h; path = src/GCActivity.h; sourceTree = "<group>"; };
 		42B0B96315FC9206008275FF /* GCActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivity.m; path = src/GCActivity.m; sourceTree = "<group>"; };
@@ -3403,6 +3411,17 @@
 			name = Parser;
 			sourceTree = "<group>";
 		};
+		426E288725C00B6C00A9DA6F /* edgecases */ = {
+			isa = PBXGroup;
+			children = (
+				426E288825C00B6C00A9DA6F /* last_connectstats_search_zerodistance.json */,
+				426E288925C00B6C00A9DA6F /* last_connectstats_search_multisportsingle.json */,
+				426E288A25C00B6C00A9DA6F /* last_modern_search_multisportsingle.json */,
+				426E288B25C00B6C00A9DA6F /* last_modern_search_zerodistance.json */,
+			);
+			path = edgecases;
+			sourceTree = "<group>";
+		};
 		426F74D8162024A8007B3653 /* ActivityList */ = {
 			isa = PBXGroup;
 			children = (
@@ -3818,7 +3837,7 @@
 				42C226172325AC0100F52A23 /* Common */,
 				42B088441C38894D00113306 /* GCTestFields.m */,
 				42FC177F1E196E4B00F55302 /* GCTestActivityFitFile.swift */,
-				426E287D25BF3A5400A9DA6F /* GCTestLiveData.swift */,
+				426E287D25BF3A5400A9DA6F /* GCTestServiceEdgeCases.swift */,
 				42A89C251D63B2D7007CF90D /* GCTestHealthZones.m */,
 				426CC4741BAEBD060033978C /* GCTestsActions.m */,
 				425CF5A81813CEEC009279C0 /* GCTestsActivities.m */,
@@ -4107,8 +4126,8 @@
 				42BFC2311DCE2FBC00EAD40E /* FITDetailTableViewController.swift */,
 				4248DC891ED1E6ED00470DEB /* FITDataViewController.swift */,
 				42F3FBFE1DD7A4D30042A9B1 /* FITGraphViewController.swift */,
+				42AE24611DF2E556002B48D9 /* FITGraphConfigViewController.swift */,
 				42F4E5081DE08C26001AB244 /* FITMapViewController.swift */,
-				42AE24611DF2E556002B48D9 /* FITSelectionContextViewController.swift */,
 				428DD4B3219A3056006DF5B5 /* FITDownloadViewController.swift */,
 			);
 			name = UserInterface;
@@ -4666,6 +4685,7 @@
 		42C0113C1AB437C10059B6CF /* samples */ = {
 			isa = PBXGroup;
 			children = (
+				426E288725C00B6C00A9DA6F /* edgecases */,
 				42CC969B2484563B00FB72DF /* activity_derived */,
 				427B79D32465A11F005EDEAD /* last_connectstats_search_derived.json */,
 				427B79D22465A11F005EDEAD /* last_modern_search_derived.json */,
@@ -5455,6 +5475,7 @@
 				428BAD121CB14B650041468A /* activitytrack_1099599108.json in Resources */,
 				4277C0EE23BD133D00C1B1B9 /* activitylaps_234721416.json in Resources */,
 				42A5D8F723272C8300898FD5 /* activitylaps_4018408912.json in Resources */,
+				426E288D25C00B6C00A9DA6F /* last_connectstats_search_multisportsingle.json in Resources */,
 				42A5D91123272C8300898FD5 /* activity_4017099594.fit in Resources */,
 				42F6715D241CDA660031D224 /* activity_3988198230.json in Resources */,
 				428BAD0A1CB14B650041468A /* activity_1108368135.json in Resources */,
@@ -5470,10 +5491,12 @@
 				4253B4751CD4A53400437E6A /* activity_1083407258.json in Resources */,
 				42A5D9382328774700898FD5 /* activities_list_modern.json in Resources */,
 				422F283A20551AE100187478 /* activitytrack_2545022458.json in Resources */,
+				426E288C25C00B6C00A9DA6F /* last_connectstats_search_zerodistance.json in Resources */,
 				428BAD0D1CB14B650041468A /* activitylaps_1099599108.json in Resources */,
 				42A5D940232877D900898FD5 /* 1027746730.is.swimming in Resources */,
 				424FC00722EC9DFA00E2059A /* track_cs_1525.fit in Resources */,
 				42A5D944232877D900898FD5 /* activityweather_1027746730.json in Resources */,
+				426E288E25C00B6C00A9DA6F /* last_modern_search_multisportsingle.json in Resources */,
 				42E06D491B5EF4DC001BDA02 /* test_activity_running_837769405.db in Resources */,
 				42C4B0681DBB39E7000A1612 /* user_hr_zones.json in Resources */,
 				428E0DEE235CCC1C006F4BC5 /* weather_cs_4646.json in Resources */,
@@ -5539,6 +5562,7 @@
 				42A5D9322328774700898FD5 /* activityweather_1382772474.json in Resources */,
 				4277C0E423BD133D00C1B1B9 /* activity_234979239.fit in Resources */,
 				428FF73015F36888007A88FA /* InfoPlist.strings in Resources */,
+				426E288F25C00B6C00A9DA6F /* last_modern_search_zerodistance.json in Resources */,
 				423D745022F5704C00EE3E71 /* last_cs_search_1525.json in Resources */,
 				427C65CB1D46A4BB00F5DF70 /* strava_segments_0.json in Resources */,
 				42D8AEF81B1FB2CB00ADDD31 /* collected.plist in Resources */,
@@ -6427,7 +6451,7 @@
 				4248ED9D1DCFFD2400254216 /* GCFieldsForCategory.m in Sources */,
 				4248ED911DCFF55900254216 /* GCFields.m in Sources */,
 				42F4E5111DE08D4C001AB244 /* GCMapGradientPathOverlay.m in Sources */,
-				42AE24621DF2E556002B48D9 /* FITSelectionContextViewController.swift in Sources */,
+				42AE24621DF2E556002B48D9 /* FITGraphConfigViewController.swift in Sources */,
 				42F3FBFF1DD7A4D30042A9B1 /* FITGraphViewController.swift in Sources */,
 				4253B4831CDA857B00437E6A /* FITViewController.m in Sources */,
 				429DD652219E3E36004FD716 /* GCWebUrl.m in Sources */,
@@ -6684,7 +6708,7 @@
 				421517CC2429607800FEE8D7 /* GCTestsActivitiesCalculated.m in Sources */,
 				425CF5A91813CEEC009279C0 /* GCTestsActivities.m in Sources */,
 				42D9081C20338582000BBE07 /* GCTestsPerformance.m in Sources */,
-				426E287E25BF3A5400A9DA6F /* GCTestLiveData.swift in Sources */,
+				426E287E25BF3A5400A9DA6F /* GCTestServiceEdgeCases.swift in Sources */,
 				42A89C261D63B2D7007CF90D /* GCTestHealthZones.m in Sources */,
 				426F42461DB247FB00937DD8 /* GCTestsHelper.m in Sources */,
 				42FC17801E196E4B00F55302 /* GCTestActivityFitFile.swift in Sources */,

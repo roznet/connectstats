@@ -14,7 +14,7 @@ class FITGraphViewController: NSViewController {
 
     @IBOutlet weak var graphCustomView: NSView!
     
-    var selectionContextViewController : FITSelectionContextViewController?
+    var selectionContextViewController : FITGraphConfigViewController?
     
     var graphView : GCSimpleGraphView?
     
@@ -63,7 +63,7 @@ class FITGraphViewController: NSViewController {
     
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if segue.identifier == "embedGraphContext"{
-            if let scv = segue.destinationController as? FITSelectionContextViewController{
+            if let scv = segue.destinationController as? FITGraphConfigViewController{
                 self.selectionContextViewController = scv
                 self.selectionContextViewController?.graphViewController = self
             }
@@ -83,9 +83,24 @@ class FITGraphViewController: NSViewController {
         }
         
         if let svc = self.selectionContextViewController {
-            svc.update(selectionContext: selectionContext)
+            svc.update()
         }
         if let ds = selectionContext.graphDataSource() {
+            if let overlaySelectionContext = self.selectionContextViewController?.overlaySelectionContext {
+                if overlaySelectionContext.enableY2,
+                   let selectedField = overlaySelectionContext.selectedField,
+                   let (dh,_) = overlaySelectionContext.graphDataHolder(field: selectedField,
+                                                                    color: NSColor.systemBrown,
+                                                                    fillColor: NSColor.systemBrown.withAlphaComponent(0.5) ) {
+                    if dh.yUnit != ds.yUnit(0) {
+                        dh.axisForSerie = 1
+                    }else{
+                        dh.axisForSerie = 0
+                    }
+                    ds.add(dh)
+                }
+            }
+            
             self.graphView?.dataSource = ds
             self.graphView?.displayConfig = ds
             self.graphView?.needsDisplay = true
@@ -94,6 +109,10 @@ class FITGraphViewController: NSViewController {
     
     func setup(selectionContext : FITSelectionContext){
         self.selectionContext = selectionContext
+        if let svc = self.selectionContextViewController {
+            svc.setup(selectionContext: selectionContext)
+        }
+
     }
     
 }

@@ -1007,7 +1007,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     if (inIds.count < 1) {
         return nil;
     }
-    NSUInteger idx = 0;
     NSMutableArray * deleteCandidate = [NSMutableArray array];
 
     NSMutableArray * altIds = [NSMutableArray array];
@@ -1027,8 +1026,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     NSString * lastDup = self.duplicateActivityIds[last];
     NSString * firstDup = self.duplicateActivityIds[first];
     
-    for (idx=0; idx < _allActivities.count; idx++ ) {
-        GCActivity * act = _allActivities[idx];
+    for (GCActivity * act in self.allActivities) {
         // Don't look at day activities only fitness
         if( [act.activityType isEqualToString:GC_TYPE_DAY] ){
             continue;
@@ -1041,8 +1039,17 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             break;
         }
         if (foundFirst) {
-            if ([inIds indexOfObject:act.activityId] == NSNotFound &&
-                [altIds indexOfObject:act.activityId] == NSNotFound) {
+            NSString * activityId = act.activityId;
+            BOOL shouldDelete = [inIds indexOfObject:activityId] == NSNotFound && [altIds indexOfObject:activityId] == NSNotFound;
+            NSString * alternateActivityId = act.externalServiceActivityId;
+            if( alternateActivityId != nil){
+                if( shouldDelete && ([inIds indexOfObject:alternateActivityId] != NSNotFound || [altIds indexOfObject:alternateActivityId] != NSNotFound) ){
+                    RZLog(RZLogInfo,@"Found missing duplicate %@ of existing %@, skipping delete", activityId, alternateActivityId);
+                }
+                shouldDelete = shouldDelete && [inIds indexOfObject:alternateActivityId] == NSNotFound && [altIds indexOfObject:alternateActivityId] == NSNotFound;
+            }
+            
+            if (shouldDelete) {
                 if(act.parentId == nil ){
                     [deleteCandidate  addObject:act.activityId];
                 }else{
