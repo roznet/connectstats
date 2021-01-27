@@ -398,29 +398,37 @@ class FITSelectionContext {
         return nil
     }
 
+    func display(field:FitFieldKey, messageType: FitMessageType) -> String {
+        var displayText = field
+        
+        if self.prettyField {
+            if let field = self.interp.fieldKey(fitMessageType: messageType, fitField: field){
+                displayText = field.displayName()
+            }
+        }
+        return displayText
+    }
+    
     /// Display field name for message Type
     /// if pretty field enabled will display the display name or else the raw name in disabled color
-    func display( field : FitFieldKey, messageType: FitMessageType ) -> NSAttributedString {
-        var displayText = field
-        let paragraphStyle = NSMutableParagraphStyle()
+    func displayAttributed( field : FitFieldKey, messageType: FitMessageType ) -> NSAttributedString {
+        let displayText = self.display(field: field, messageType: messageType)
         
+        let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = NSLineBreakMode.byTruncatingMiddle
         
-        let disabledLabelColor = NSColor(named: "DisabledLabel") ?? NSColor.lightGray
-        let highlightLabelColor = NSColor(named: "HighlightedLabel") ?? NSColor.black
+        let disabledLabelColor = NSColor.disabledControlTextColor
+        let highlightLabelColor = NSColor.textColor
         
         var attr = [ NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
                      NSAttributedString.Key.foregroundColor:highlightLabelColor,
                      NSAttributedString.Key.paragraphStyle: paragraphStyle]
         
-        if self.prettyField {
-            if let field = self.interp.fieldKey(fitMessageType: messageType, fitField: field){
-                displayText = field.displayName()
-            }else{
-                attr = [NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
-                        NSAttributedString.Key.foregroundColor:disabledLabelColor,
-                        NSAttributedString.Key.paragraphStyle:paragraphStyle]
-            }
+        // Pretty field, but text didn't change
+        if self.prettyField && field == displayText {
+            attr = [NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
+                    NSAttributedString.Key.foregroundColor:disabledLabelColor,
+                    NSAttributedString.Key.paragraphStyle:paragraphStyle]
         }
         return NSAttributedString(attr, with: displayText)
     }

@@ -296,13 +296,16 @@ class FITDetailTableViewController: NSViewController {
                 let col = columns[idx];
                 col.title = identifier
                 col.identifier = NSUserInterfaceItemIdentifier(identifier)
+                col.width = self.detailListDataSource?.tableView(self.detailTableView, sizeToFitWidthOfColumn: idx) ?? 78.0
             }else{
                 let col = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(identifier))
                 col.title = identifier
                 self.detailTableView.addTableColumn(col)
+                col.width = self.detailListDataSource?.tableView(self.detailTableView, sizeToFitWidthOfColumn: idx) ?? 78.0
             }
             idx += 1
         }
+        
     }
     
     func updateAfterMessageTypeChange(){

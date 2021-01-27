@@ -35,7 +35,9 @@ extension FITSelectionContext {
             return nil
         }
         let ds = GCSimpleGraphCachedDataSource()
-        
+        ds.useBackgroundColor = NSColor.textBackgroundColor
+        ds.useForegroundColor = NSColor.textColor
+        ds.axisColor = NSColor.secondaryLabelColor
         if let (dh,xUnit) = self.graphDataHolder(field: yfield, color: NSColor.systemBlue, fillColor: NSColor.systemBlue.withAlphaComponent(0.2)) {
             ds.xUnit = xUnit
             ds.title = "\(self.messageTypeDescription): \(yfield)"

@@ -76,6 +76,45 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
         }
     }
     
+    func tableView(_ tableView: NSTableView, sizeToFitWidthOfColumn column: Int) -> CGFloat {
+        var width : CGFloat = 78.0
+        let attr = [ NSAttributedString.Key.font:NSFont.systemFont(ofSize: 13.0) ]
+        let margin : CGFloat = 8.0
+        
+        guard
+            let tableColumn = tableView.tableColumns[safe: column]
+        else{
+            return width
+        }
+        let selectionContext = self.selectionContext
+        
+        if( self.messageInColumns ){
+            if column == 0 {
+                for identifier in selectionContext.orderedKeys {
+                    let fieldDisplay = selectionContext.displayAttributed(field: identifier, messageType: selectionContext.messageType)
+                    width = max(width, fieldDisplay.size().width + margin)
+                }
+            }else {
+                if let message = selectionContext.messages[safe: column-1] {
+                    for identifier in selectionContext.orderedKeys {
+                        if let value = message.interpretedField(key: identifier) {
+                           let display = selectionContext.display(fieldValue: value, field: identifier)
+                            width = max(width,(display as NSString).size(withAttributes: attr).width + margin)
+                        }
+                    }
+                }
+            }
+        }else{
+            let identifier = tableColumn.identifier.rawValue
+            if let message = selectionContext.sampleMessage,
+               let item = message.interpretedField(key:identifier){
+                let display = selectionContext.display(fieldValue: item, field: identifier)
+                width = max(width,(display as NSString).size(withAttributes: attr).width + margin)
+            }
+        }
+        return width
+    }
+    
     func numberOfRows(in tableView: NSTableView) -> Int {
         if self.setupMode {
             return 0
@@ -88,30 +127,32 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let cellView =  tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("MessageCellView"), owner: self)
-        if let cellView = cellView as? NSTableCellView {
-            cellView.textField?.stringValue = ""
-            if( self.messageInColumns ){
-                if let tableColumn = tableColumn{
-                    let selectionContext = self.selectionContext
-                    if tableColumn.identifier == NSUserInterfaceItemIdentifier("Field"),
-                       let identifier = selectionContext.orderedKeys[safe: row] {
-                        let fieldDisplay = selectionContext.display(field: identifier, messageType: selectionContext.messageType)
-                        cellView.textField?.attributedStringValue = fieldDisplay
-                    }else if let columnIndex = tableView.tableColumns.firstIndex(of: tableColumn),
-                             let message = self.messages[safe: columnIndex-1],
-                             let identifier = selectionContext.orderedKeys[safe: row],
-                             let value = message.interpretedField(key: identifier) {
-                        cellView.textField?.stringValue = selectionContext.display(fieldValue: value, field: identifier)
-                    }
-                }
-            }else{
-                if row < self.messages.count {
-                    let message = self.messages[row]
-                    if let identifier = tableColumn?.identifier.rawValue,
-                        let item = message.interpretedField(key:identifier){
-                        cellView.textField?.stringValue = selectionContext.display(fieldValue: item, field: identifier)
-                    }
+        guard
+            let cellView =  tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("MessageCellView"), owner: self) as? NSTableCellView,
+            let tableColumn = tableColumn,
+            let columnIndex = tableView.tableColumns.firstIndex(of: tableColumn)
+        else {
+            return nil
+        }
+        cellView.textField?.stringValue = ""
+        
+        let identifier = tableColumn.identifier.rawValue
+        if( self.messageInColumns ){
+            let selectionContext = self.selectionContext
+            if identifier == "Field",
+               let field = selectionContext.orderedKeys[safe: row] {
+                let fieldDisplay = selectionContext.displayAttributed(field: field, messageType: selectionContext.messageType)
+                cellView.textField?.attributedStringValue = fieldDisplay
+            }else if let message = self.messages[safe: columnIndex-1],
+                     let field = selectionContext.orderedKeys[safe: row],
+                     let value = message.interpretedField(key: field) {
+                cellView.textField?.stringValue = selectionContext.display(fieldValue: value, field: field)
+            }
+        }else{
+            if row < self.messages.count {
+                let message = self.messages[row]
+                if let value = message.interpretedField(key:identifier){
+                    cellView.textField?.stringValue = selectionContext.display(fieldValue: value, field: identifier)
                 }
             }
         }

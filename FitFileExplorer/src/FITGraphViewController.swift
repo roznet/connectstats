@@ -90,8 +90,8 @@ class FITGraphViewController: NSViewController {
                 if overlaySelectionContext.enableY2,
                    let selectedField = overlaySelectionContext.selectedField,
                    let (dh,_) = overlaySelectionContext.graphDataHolder(field: selectedField,
-                                                                    color: NSColor.systemBrown,
-                                                                    fillColor: NSColor.systemBrown.withAlphaComponent(0.5) ) {
+                                                                    color: NSColor.systemRed,
+                                                                    fillColor: NSColor.systemRed.withAlphaComponent(0.2) ) {
                     if dh.yUnit != ds.yUnit(0) {
                         dh.axisForSerie = 1
                     }else{

@@ -141,45 +141,68 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
         return self.displayFields.count
     }
     
-    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let cellView =  tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DataCellView"), owner: self)
-        if let cellView = cellView as? NSTableCellView {
-            cellView.textField?.stringValue = ""
-            if( row < self.displayFields.count){
-                let identifier = self.displayFields[row]
-                if tableColumn?.identifier.rawValue == "field" {
-                    if let message = self.message {
-                        let fieldDisplay = self.selectionContext.display(field: identifier, messageType: message.messageType)
-                        cellView.textField?.attributedStringValue = fieldDisplay
-                    }
-                }else if(tableColumn?.identifier.rawValue == "value"){
-                    if let message = self.message,
-                       let item = message.interpretedField(key: identifier){
-                        cellView.textField?.stringValue = selectionContext.display(fieldValue: item, field: identifier)
-                    }
-                }else{
-                    if let message = self.message,
-                       let colidentifier = tableColumn?.identifier.rawValue,
-                       
-                       let item = message.interpretedField(key: identifier),
-                       let relatedFields = self.statsFields?[identifier],
-                       let stats = self.statistics {
-                        let stattype = FITFitValueStatistics.StatsType(rawValue: colidentifier) ?? FITFitValueStatistics.StatsType.avg
-                        
-                        if relatedFields.count > 0 && item.numberWithUnit != nil{
-                            if let stat = stats[ relatedFields[0]]{
-                                let preferred = stat.preferredStatisticsForField(fieldKey: identifier)
-                                if preferred.contains(stattype) {
-                                    if let val : GCNumberWithUnit = stat.value(stats: stattype, field: identifier){
-                                        cellView.textField?.stringValue = selectionContext.display(numberWithUnit: val, field: identifier)
-                                    }
-                                }
+    func stringValue( identifier: String, field : String) -> String {
+        if identifier == "field" {
+            if let message = self.message {
+                return self.selectionContext.display(field: field, messageType: message.messageType)
+            }
+        }else if(identifier == "value"){
+            if let message = self.message,
+               let item = message.interpretedField(key: field){
+                return selectionContext.display(fieldValue: item, field: field)
+            }
+        }else{
+            if let message = self.message,
+               let item = message.interpretedField(key: field),
+               let relatedFields = self.statsFields?[field],
+               let stats = self.statistics {
+                let stattype = FITFitValueStatistics.StatsType(rawValue: identifier) ?? FITFitValueStatistics.StatsType.avg
+                
+                if relatedFields.count > 0 && item.numberWithUnit != nil{
+                    if let stat = stats[ relatedFields[0]]{
+                        let preferred = stat.preferredStatisticsForField(fieldKey: field)
+                        if preferred.contains(stattype) {
+                            if let val : GCNumberWithUnit = stat.value(stats: stattype, field: field){
+                                return selectionContext.display(numberWithUnit: val, field: field)
                             }
                         }
                     }
                 }
             }
         }
+        return ""
+    }
+    
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        guard
+            let cellView =  tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DataCellView"), owner: self) as? NSTableCellView,
+            let field = self.displayFields[safe: row],
+            let identifier = tableColumn?.identifier.rawValue
+        else {
+            return nil
+        }
+        
+        let display = self.stringValue(identifier: identifier, field: field)
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineBreakMode = NSLineBreakMode.byTruncatingMiddle
+        
+        let disabledLabelColor = NSColor.disabledControlTextColor
+        let highlightLabelColor = NSColor.textColor
+        
+        var attr = [ NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
+                     NSAttributedString.Key.foregroundColor:highlightLabelColor,
+                     NSAttributedString.Key.paragraphStyle: paragraphStyle]
+        
+        // Pretty field, but text didn't change
+        if selectionContext.prettyField && field == display {
+            attr = [NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
+                    NSAttributedString.Key.foregroundColor:disabledLabelColor,
+                    NSAttributedString.Key.paragraphStyle:paragraphStyle]
+        }
+
+        cellView.textField?.attributedStringValue = NSAttributedString(attr, with: display)
+        
         return cellView
     }
     
