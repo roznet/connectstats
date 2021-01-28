@@ -78,7 +78,6 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
     
     func tableView(_ tableView: NSTableView, sizeToFitWidthOfColumn column: Int) -> CGFloat {
         var width : CGFloat = 78.0
-        let attr = [ NSAttributedString.Key.font:NSFont.systemFont(ofSize: 13.0) ]
         let margin : CGFloat = 8.0
         
         guard
@@ -91,7 +90,8 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
         if( self.messageInColumns ){
             if column == 0 {
                 for identifier in selectionContext.orderedKeys {
-                    let fieldDisplay = selectionContext.displayAttributed(field: identifier, messageType: selectionContext.messageType)
+                    let display = selectionContext.display(field: identifier, messageType: selectionContext.messageType)
+                    let fieldDisplay = selectionContext.attributedField(field: identifier, display: display)
                     width = max(width, fieldDisplay.size().width + margin)
                 }
             }else {
@@ -99,7 +99,8 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
                     for identifier in selectionContext.orderedKeys {
                         if let value = message.interpretedField(key: identifier) {
                            let display = selectionContext.display(fieldValue: value, field: identifier)
-                            width = max(width,(display as NSString).size(withAttributes: attr).width + margin)
+                            let valueDisplay = selectionContext.attributedValue(field: identifier, display: display)
+                            width = max(width,valueDisplay.size().width + margin)
                         }
                     }
                 }
@@ -109,7 +110,8 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
             if let message = selectionContext.sampleMessage,
                let item = message.interpretedField(key:identifier){
                 let display = selectionContext.display(fieldValue: item, field: identifier)
-                width = max(width,(display as NSString).size(withAttributes: attr).width + margin)
+                let valueDisplay = selectionContext.attributedValue(field: identifier, display: display)
+                width = max(width,valueDisplay.size().width + margin)
             }
         }
         return width
@@ -141,18 +143,23 @@ class FITDetailListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSourc
             let selectionContext = self.selectionContext
             if identifier == "Field",
                let field = selectionContext.orderedKeys[safe: row] {
-                let fieldDisplay = selectionContext.displayAttributed(field: field, messageType: selectionContext.messageType)
+                let display = selectionContext.display(field: field, messageType: selectionContext.messageType)
+                let fieldDisplay = selectionContext.attributedField(field: field, display: display)
                 cellView.textField?.attributedStringValue = fieldDisplay
             }else if let message = self.messages[safe: columnIndex-1],
                      let field = selectionContext.orderedKeys[safe: row],
                      let value = message.interpretedField(key: field) {
-                cellView.textField?.stringValue = selectionContext.display(fieldValue: value, field: field)
+                let display = selectionContext.display(fieldValue: value, field: field)
+                let valueDisplay = selectionContext.attributedValue(field: field, display: display)
+                cellView.textField?.attributedStringValue = valueDisplay
             }
         }else{
             if row < self.messages.count {
                 let message = self.messages[row]
                 if let value = message.interpretedField(key:identifier){
-                    cellView.textField?.stringValue = selectionContext.display(fieldValue: value, field: identifier)
+                    let display = selectionContext.display(fieldValue: value, field: identifier)
+                    let valueDisplay = selectionContext.attributedValue(field: identifier, display: display)
+                    cellView.textField?.attributedStringValue = valueDisplay
                 }
             }
         }

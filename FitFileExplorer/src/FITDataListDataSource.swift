@@ -172,7 +172,25 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
         }
         return ""
     }
-    
+
+    func tableView(_ tableView: NSTableView, sizeToFitWidthOfColumn column: Int) -> CGFloat {
+        var width : CGFloat = 78
+        let margin : CGFloat = 8.0
+        guard
+            let tableColumn = tableView.tableColumns[safe: column]
+        else {
+            return width
+        }
+        let identifier = tableColumn.identifier.rawValue
+
+        for field in self.displayFields {
+            let display = self.stringValue(identifier: identifier, field: field)
+            let attrDisplay = selectionContext.attributedField(field: field, display: display)
+            width = max(width, attrDisplay.size().width)
+        }
+        
+        return width + margin
+    }
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         guard
             let cellView =  tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("DataCellView"), owner: self) as? NSTableCellView,
@@ -184,24 +202,11 @@ class FITDataListDataSource: NSObject,NSTableViewDelegate,NSTableViewDataSource 
         
         let display = self.stringValue(identifier: identifier, field: field)
         
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineBreakMode = NSLineBreakMode.byTruncatingMiddle
-        
-        let disabledLabelColor = NSColor.disabledControlTextColor
-        let highlightLabelColor = NSColor.textColor
-        
-        var attr = [ NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
-                     NSAttributedString.Key.foregroundColor:highlightLabelColor,
-                     NSAttributedString.Key.paragraphStyle: paragraphStyle]
-        
-        // Pretty field, but text didn't change
-        if selectionContext.prettyField && field == display {
-            attr = [NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
-                    NSAttributedString.Key.foregroundColor:disabledLabelColor,
-                    NSAttributedString.Key.paragraphStyle:paragraphStyle]
+        if identifier == "field" {
+            cellView.textField?.attributedStringValue = selectionContext.attributedField(field: field, display: display)
+        }else{
+            cellView.textField?.attributedStringValue = selectionContext.attributedValue(field: field, display: display)
         }
-
-        cellView.textField?.attributedStringValue = NSAttributedString(attr, with: display)
         
         return cellView
     }

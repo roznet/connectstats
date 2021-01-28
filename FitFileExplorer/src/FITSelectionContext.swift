@@ -409,11 +409,20 @@ class FITSelectionContext {
         return displayText
     }
     
+    func attributedValue( field : FitFieldKey, display : String) -> NSAttributedString {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineBreakMode = NSLineBreakMode.byTruncatingMiddle
+        
+        let attr = [ NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
+                     NSAttributedString.Key.foregroundColor:NSColor.textColor,
+                     NSAttributedString.Key.paragraphStyle: paragraphStyle]
+
+        return NSAttributedString(attr, with: display)
+    }
+    
     /// Display field name for message Type
     /// if pretty field enabled will display the display name or else the raw name in disabled color
-    func displayAttributed( field : FitFieldKey, messageType: FitMessageType ) -> NSAttributedString {
-        let displayText = self.display(field: field, messageType: messageType)
-        
+    func attributedField( field : FitFieldKey, display : String ) -> NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = NSLineBreakMode.byTruncatingMiddle
         
@@ -425,12 +434,12 @@ class FITSelectionContext {
                      NSAttributedString.Key.paragraphStyle: paragraphStyle]
         
         // Pretty field, but text didn't change
-        if self.prettyField && field == displayText {
+        if self.prettyField && field == display {
             attr = [NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
                     NSAttributedString.Key.foregroundColor:disabledLabelColor,
                     NSAttributedString.Key.paragraphStyle:paragraphStyle]
         }
-        return NSAttributedString(attr, with: displayText)
+        return NSAttributedString(attr, with: display)
     }
     
     // MARK: - Extract Information about current selection
