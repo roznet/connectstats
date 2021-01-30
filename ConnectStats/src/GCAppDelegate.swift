@@ -33,7 +33,7 @@ extension GCAppDelegate {
         Armchair.appID(self.credentials(forService: "appstore", andKey: "connectstats"))
         Armchair.tracksNewVersions(false)
         Armchair.shouldPromptIfRated(false)
-        Armchair.daysUntilPrompt(15)
+        Armchair.daysUntilPrompt(20)
         Armchair.usesUntilPrompt(10)
     }
     
