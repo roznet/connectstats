@@ -160,16 +160,6 @@ const CGFloat kCellDaySpacing = 2.f;
             [errorsString addObject:[[[GCAppGlobal web] lastError] localizedDescription]];
         }
     }
-    // second loop because login resets status
-    for (size_t i=0; i<nServices; i++) {
-        gcWebService service = others[i];
-        GCWebStatus status= [[GCAppGlobal web] statusForService:service];
-        if (service == gcWebServiceGarmin) {
-            if (status == GCWebStatusAccessDenied || status == GCWebStatusLoginFailed) {
-                [[GCAppGlobal web] garminLogin];// will try again.
-            }
-        }
-    }
     
     // Tested by turning off internet
     NSString * leaderString = messageOnly ?  NSLocalizedString(@"Message", @"Error") : NSLocalizedString(@"Error updating", @"Error");

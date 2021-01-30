@@ -76,7 +76,9 @@ NSString * GCWebStatusDescription(GCWebStatus status){
         case GCWebStatusAccountLocked:
             rv = NSLocalizedString(@"Account Locked", @"GCWebStatus");
             break;
-
+        case GCWebStatusIncompleteCredential:
+            rv = NSLocalizedString(@"Incomplete Credential, Please enter your name and password", @"GCWebStatus");
+            break;
     }
     return rv;
 }
@@ -122,6 +124,9 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
             break;
         case GCWebStatusAccountLocked:
             rv = @"AccountLocked";
+            break;
+        case GCWebStatusIncompleteCredential:
+            rv = @"IncompleteCredential";
             break;
     }
     return rv;

@@ -95,7 +95,7 @@
         }
 
         if( [self shouldRun] && [self incomplete] ){
-            self.status = GCWebStatusLoginFailed;
+            self.status = GCWebStatusIncompleteCredential;
             RZLog(RZLogError,@"Trying to do garmin login but %@", [msg componentsJoinedByString:@" and "] );
         }else{
             RZLog(RZLogInfo,@"Trying to do garmin login but %@", [msg componentsJoinedByString:@" and "] );
