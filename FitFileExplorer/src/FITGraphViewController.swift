@@ -14,7 +14,7 @@ class FITGraphViewController: NSViewController {
 
     @IBOutlet weak var graphCustomView: NSView!
     
-    var selectionContextViewController : FITSelectionContextViewController?
+    var selectionContextViewController : FITGraphConfigViewController?
     
     var graphView : GCSimpleGraphView?
     
@@ -40,7 +40,7 @@ class FITGraphViewController: NSViewController {
                                                    name: FITSelectionContext.kFITNotificationFieldSelectionChanged,
                                                    object: selectionContext)
             NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(selectionContextChanged(notification:)),
+                                                   selector: #selector(messageTypeChanged(notification:)),
                                                    name: FITSelectionContext.kFITNotificationMessageTypeChanged,
                                                    object: selectionContext)
             NotificationCenter.default.addObserver(self,
@@ -63,11 +63,15 @@ class FITGraphViewController: NSViewController {
     
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if segue.identifier == "embedGraphContext"{
-            if let scv = segue.destinationController as? FITSelectionContextViewController{
+            if let scv = segue.destinationController as? FITGraphConfigViewController{
                 self.selectionContextViewController = scv
                 self.selectionContextViewController?.graphViewController = self
             }
         }
+    }
+    
+    @objc func messageTypeChanged(notification : Notification ){
+        self.updateGraphDataSource()
     }
     
     @objc func selectionContextChanged(notification : Notification){
@@ -79,100 +83,36 @@ class FITGraphViewController: NSViewController {
         }
         
         if let svc = self.selectionContextViewController {
-            svc.update(selectionContext: selectionContext)
+            svc.update()
         }
-        let interp = selectionContext.interp
-        if let field = selectionContext.selectedYField {
-            /*
-            if selectionContext.messageType == FIT_MESG_NUM_RECORD {
-                let equivalent = interp.mapFields(from: [field], to: selectionContext.fitFile.fieldKeys(messageType: FIT_MESG_NUM_LAP))
-                RZSLog.info("Equivalent \(field)=\(equivalent)")
-            }*/
-            let ds = GCSimpleGraphCachedDataSource()
-            if let serie = interp.statsDataSerie(messageType: selectionContext.messageType, fieldX: selectionContext.selectedXField, fieldY: field) {
-                // Don't graph if less than 2 points, not meaningful
-                if serie.count() > 2 {
-                    var useSerie = serie.serie
-                    if let selectionContext = self.selectionContext,
-                       let displayUnit = selectionContext.displayUnit(field: field){
-                        if serie.unit.canConvert(to: displayUnit){
-                            serie.convert(to: displayUnit)
-                            useSerie = serie.serie
-                        }
+        if let ds = selectionContext.graphDataSource() {
+            if let overlaySelectionContext = self.selectionContextViewController?.overlaySelectionContext {
+                if overlaySelectionContext.enableY2,
+                   let selectedField = overlaySelectionContext.selectedField,
+                   let (dh,_) = overlaySelectionContext.graphDataHolder(field: selectedField,
+                                                                    color: NSColor.systemRed,
+                                                                    fillColor: NSColor.systemRed.withAlphaComponent(0.2) ) {
+                    if dh.yUnit != ds.yUnit(0) {
+                        dh.axisForSerie = 1
+                    }else{
+                        dh.axisForSerie = 0
                     }
-                    
-                    var type :gcGraphType =  gcGraphType.graphLine
-                    if( !serie.isStrictlyIncreasingByX() ){
-                        type = gcGraphType.scatterPlot
-                    }else if( selectionContext.messageType == FitMessageType.lap && selectionContext.selectedXField == "start_time"){
-                        type = gcGraphType.graphStep
-                    }
-                    let dh = GCSimpleGraphDataHolder(useSerie, type: type, color: NSColor.blue, andUnit: serie.unit)
-                    ds.xUnit = serie.xUnit
-                    
-                    if( type == gcGraphType.scatterPlot){
-                        // instead of timestamp should be line field
-                        if let gradientSerie = interp.statsDataSerie(messageType: selectionContext.messageType, fieldX: "timestamp", fieldY: field) {
-                            dh?.gradientDataSerie = gradientSerie.serie
-                            if let gradientFunction = GCStatsScaledFunction(serie: gradientSerie.serie){
-                                gradientFunction.scale_x = true
-                                dh?.gradientFunction = gradientFunction
-                                dh?.gradientColors = GCViewGradientColors.gradientColorsRainbow16()
-                            }
-                        }
-                    }else if( type == gcGraphType.graphStep){
-                        dh?.color = NSColor(deviceRed: 0.0, green: 0.0, blue: 0.9, alpha: 0.5)
-                    }
-                    
-                    if let idx = self.selectionContext?.messageIndex,
-                        let useSerie = useSerie {
-                        let cnt = useSerie.count()
-                        if idx < cnt {
-                            dh?.highlightCurrent = true;
-                            dh?.currentPoint = NSPointToCGPoint(NSMakePoint(CGFloat(useSerie.dataPoint(at: UInt(idx)).x_data), CGFloat(useSerie.dataPoint(at: UInt(idx)).y_data)))
-                        }
-                    }
-                    
-                    dh?.fillColorForSerie = NSColor(deviceRed: 0.0, green: 0.0, blue: 0.8, alpha: 0.2)
-                    ds.title = "\(selectionContext.messageTypeDescription): \(field)"
                     ds.add(dh)
-                    
-                    if( type == gcGraphType.graphLine){
-                        if let selectedY2 = selectionContext.selectedY2Field, selectionContext.enableY2 {
-                            if let serie2 = interp.statsDataSerie(messageType: selectionContext.messageType, fieldX: selectionContext.selectedXField, fieldY: selectedY2) {
-                                var useSerie2 = serie2.serie
-                                if let selectionContext = self.selectionContext,
-                                   let displayUnit = selectionContext.displayUnit(field: selectedY2){
-                                    if serie2.unit.canConvert(to: displayUnit){
-                                        serie2.convert(to: displayUnit)
-                                        useSerie2 = serie2.serie
-                                    }
-                                }
-                                if( selectedY2 == field ){
-                                    if let raw = useSerie2 {
-                                        useSerie2 = raw.filledSerie(forUnit: 5.0)
-                                    }
-                                }
-                                
-                                let dh2 = GCSimpleGraphDataHolder(useSerie2, type: gcGraphType.graphLine, color: NSColor.red, andUnit: serie2.unit)
-                                if( !serie2.unit.canConvert(to: serie.unit)){
-                                    dh2?.axisForSerie = 1
-                                }
-                                dh2?.fillColorForSerie = NSColor(deviceRed: 0.5, green: 0.0, blue: 0.0, alpha: 0.2)
-                                ds.add(dh2)
-                            }
-                        }
-                    }
-                    self.graphView?.dataSource = ds
-                    self.graphView?.displayConfig = ds
-                    self.graphView?.needsDisplay = true
                 }
             }
+            
+            self.graphView?.dataSource = ds
+            self.graphView?.displayConfig = ds
+            self.graphView?.needsDisplay = true
         }
     }
     
     func setup(selectionContext : FITSelectionContext){
         self.selectionContext = selectionContext
+        if let svc = self.selectionContextViewController {
+            svc.setup(selectionContext: selectionContext)
+        }
+
     }
     
 }

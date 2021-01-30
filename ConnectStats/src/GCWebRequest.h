@@ -45,7 +45,8 @@ typedef NS_ENUM(NSUInteger, GCWebStatus) {
     GCWebStatusRequireModern,
     GCWebStatusRequirePasswordRenew,
     GCWebStatusCustomMessage,
-    GCWebStatusAccountLocked
+    GCWebStatusAccountLocked,
+    GCWebStatusIncompleteCredential
 };
 
 typedef NS_ENUM(NSUInteger, gcWebService) {

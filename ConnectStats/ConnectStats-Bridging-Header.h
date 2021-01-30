@@ -43,6 +43,7 @@
 
 #import "GCService.h"
 #import "GCGarminActivityTrack13Request.h"
+#import "GCGarminRequestModernSearch.h"
 
 #import "GCHistoryFieldDataHolder.h"
 #import "GCHistoryFieldSummaryStats.h"

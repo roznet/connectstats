@@ -1307,7 +1307,9 @@
                                    [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:self.activityType],
                                    [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:self.activityType],
         ]) {
-            if( [self setNumberWithUnit:[other numberWithUnitForField:field] forField:field] ){
+            GCNumberWithUnit * otherNu = [other numberWithUnitForField:field];
+            // Ignore zero values
+            if( otherNu.value != 0.0 && [self setNumberWithUnit:otherNu forField:field] ){
                 rv = true;
                 GCNumberWithUnit * save = [[self numberWithUnitForField:field] convertToUnit:[self storeUnitForField:field]];
                 FMDatabase * db = self.db;

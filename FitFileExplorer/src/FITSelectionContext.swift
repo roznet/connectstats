@@ -398,31 +398,48 @@ class FITSelectionContext {
         return nil
     }
 
-    /// Display field name for message Type
-    /// if pretty field enabled will display the display name or else the raw name in disabled color
-    func display( field : FitFieldKey, messageType: FitMessageType ) -> NSAttributedString {
+    func display(field:FitFieldKey, messageType: FitMessageType) -> String {
         var displayText = field
-        let paragraphStyle = NSMutableParagraphStyle()
         
+        if self.prettyField {
+            if let field = self.interp.fieldKey(fitMessageType: messageType, fitField: field){
+                displayText = field.displayName()
+            }
+        }
+        return displayText
+    }
+    
+    func attributedValue( field : FitFieldKey, display : String) -> NSAttributedString {
+        let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = NSLineBreakMode.byTruncatingMiddle
         
-        let disabledLabelColor = NSColor(named: "DisabledLabel") ?? NSColor.lightGray
-        let highlightLabelColor = NSColor(named: "HighlightedLabel") ?? NSColor.black
+        let attr = [ NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
+                     NSAttributedString.Key.foregroundColor:NSColor.textColor,
+                     NSAttributedString.Key.paragraphStyle: paragraphStyle]
+
+        return NSAttributedString(attr, with: display)
+    }
+    
+    /// Display field name for message Type
+    /// if pretty field enabled will display the display name or else the raw name in disabled color
+    func attributedField( field : FitFieldKey, display : String ) -> NSAttributedString {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineBreakMode = NSLineBreakMode.byTruncatingMiddle
+        
+        let disabledLabelColor = NSColor.disabledControlTextColor
+        let highlightLabelColor = NSColor.textColor
         
         var attr = [ NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
                      NSAttributedString.Key.foregroundColor:highlightLabelColor,
                      NSAttributedString.Key.paragraphStyle: paragraphStyle]
         
-        if self.prettyField {
-            if let field = self.interp.fieldKey(fitMessageType: messageType, fitField: field){
-                displayText = field.displayName()
-            }else{
-                attr = [NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
-                        NSAttributedString.Key.foregroundColor:disabledLabelColor,
-                        NSAttributedString.Key.paragraphStyle:paragraphStyle]
-            }
+        // Pretty field, but text didn't change
+        if self.prettyField && field == display {
+            attr = [NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
+                    NSAttributedString.Key.foregroundColor:disabledLabelColor,
+                    NSAttributedString.Key.paragraphStyle:paragraphStyle]
         }
-        return NSAttributedString(attr, with: displayText)
+        return NSAttributedString(attr, with: display)
     }
     
     // MARK: - Extract Information about current selection

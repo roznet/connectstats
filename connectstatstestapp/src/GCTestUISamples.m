@@ -180,8 +180,8 @@
     [rv addObject:sample];
     
     sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
-    GCStatsDataSerie * adjusted = [[GCStatsDataSerie alloc] init];
-    GCStatsDataSerie * negative = [[GCStatsDataSerie alloc] init];
+    GCStatsDataSerie * adjusted = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
+    GCStatsDataSerie * negative = RZReturnAutorelease([[GCStatsDataSerie alloc] init]);
     for (GCStatsDataPoint * point in data) {
         if( point.x_data == 4.0){
             [adjusted addDataPointNoValueWithX:point.x_data];

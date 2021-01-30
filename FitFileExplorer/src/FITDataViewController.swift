@@ -80,7 +80,7 @@ class FITDataViewController: NSViewController {
         self.dataListDataSource?.updateAfterMessageTypeChange()
         self.updatePopup()
         self.updateStatistics()
-        
+        self.adjustColumnWidths()
         super.viewWillAppear()
     }
     
@@ -107,10 +107,21 @@ class FITDataViewController: NSViewController {
         }
     }
 
+    func adjustColumnWidths() {
+        for (index,column) in self.tableView.tableColumns.enumerated() {
+            if let width = self.dataListDataSource?.tableView(self.tableView, sizeToFitWidthOfColumn: index) {
+                column.width = width
+            } else {
+                column.width = 78
+            }
+        }
+    }
+    
     @objc func selectionContextChanged(notification: Notification){
         self.dataListDataSource?.updateAfterMessageTypeChange()
         self.updatePopup()
         self.updateStatistics()
+        self.adjustColumnWidths()
     }
 
     func updateStatistics() {
