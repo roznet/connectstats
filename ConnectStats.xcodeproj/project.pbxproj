@@ -1347,6 +1347,9 @@
 		42E226B31658411D008FFD68 /* GCStatsMultiFieldGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E226B21658411D008FFD68 /* GCStatsMultiFieldGraphViewController.m */; };
 		42E226B9165842F9008FFD68 /* GCSimpleGraphCachedDataSource+Templates.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E226B8165842F9008FFD68 /* GCSimpleGraphCachedDataSource+Templates.m */; };
 		42E226BC16599AB3008FFD68 /* GCWebReverseGeocode.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E226BB16599AB2008FFD68 /* GCWebReverseGeocode.m */; };
+		42E53AE825C55879003AF0D1 /* GCAppConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E53AE725C55879003AF0D1 /* GCAppConstants.m */; };
+		42E53AE925C55879003AF0D1 /* GCAppConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E53AE725C55879003AF0D1 /* GCAppConstants.m */; };
+		42E53AEA25C55879003AF0D1 /* GCAppConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E53AE725C55879003AF0D1 /* GCAppConstants.m */; };
 		42E6C86A25583B75009EC126 /* Fields.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 422CCE801B7EA81500A4DAEB /* Fields.xcassets */; };
 		42E6C86F25583B7C009EC126 /* Weather.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 422CCE831B7EA8C100A4DAEB /* Weather.xcassets */; };
 		42E6C87425583B80009EC126 /* Navigation.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 422CCE861B7EAA3000A4DAEB /* Navigation.xcassets */; };
@@ -2528,6 +2531,7 @@
 		42E226BA16599AB2008FFD68 /* GCWebReverseGeocode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWebReverseGeocode.h; path = src/GCWebReverseGeocode.h; sourceTree = "<group>"; };
 		42E226BB16599AB2008FFD68 /* GCWebReverseGeocode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWebReverseGeocode.m; path = src/GCWebReverseGeocode.m; sourceTree = "<group>"; };
 		42E4D330232E7158002F114C /* GCSettingsServicesViewConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCSettingsServicesViewConstants.h; path = src/GCSettingsServicesViewConstants.h; sourceTree = "<group>"; };
+		42E53AE725C55879003AF0D1 /* GCAppConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCAppConstants.m; path = src/GCAppConstants.m; sourceTree = "<group>"; };
 		42EAA3A91EDBA6150081B130 /* GCAppProfiles+Swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCAppProfiles+Swift.h"; path = "src/GCAppProfiles+Swift.h"; sourceTree = "<group>"; };
 		42EAA3AA1EDBA6150081B130 /* GCAppProfiles+Swift.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCAppProfiles+Swift.m"; path = "src/GCAppProfiles+Swift.m"; sourceTree = "<group>"; };
 		42EB51A618AC33DB00B85FAB /* GCActivity+Import.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCActivity+Import.h"; path = "src/GCActivity+Import.h"; sourceTree = "<group>"; };
@@ -3880,6 +3884,7 @@
 				428FF79115FB40EC007A88FA /* GCAppGlobal.h */,
 				428FF79215FB40EC007A88FA /* GCAppGlobal.m */,
 				425466F1162B233300700093 /* GCAppConstants.h */,
+				42E53AE725C55879003AF0D1 /* GCAppConstants.m */,
 				4235DF9C1655B61A00DE316A /* GCAppProfiles.h */,
 				4235DF9D1655B61A00DE316A /* GCAppProfiles.m */,
 				426CC46E1BAEB5D40033978C /* GCAppActionDelegate.h */,
@@ -6374,6 +6379,7 @@
 				422FAF9719A1DD6000D09773 /* GCStravaActivityLapsParser.m in Sources */,
 				42A22E0119E8895D004407B8 /* GCHealthSleepBlock.m in Sources */,
 				422FAF9C19A1DD6000D09773 /* GCViewIcons.m in Sources */,
+				42E53AEA25C55879003AF0D1 /* GCAppConstants.m in Sources */,
 				422FAF9D19A1DD6000D09773 /* GCStatsGraphOptionViewController.m in Sources */,
 				42C1080E1B7DE8B000092315 /* GCApplicationContext.m in Sources */,
 				422FAF9F19A1DD6000D09773 /* GCActivity+UI.m in Sources */,
@@ -6545,6 +6551,7 @@
 				42BC539B161E37AE00576097 /* GCHistoryFieldSummaryStats.m in Sources */,
 				42B231D0253058680080D743 /* GCHistoryFieldDataHolder.m in Sources */,
 				42FD55B91B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */,
+				42E53AE825C55879003AF0D1 /* GCAppConstants.m in Sources */,
 				423D746322F59D9A00EE3E71 /* FITFitFieldMap.swift in Sources */,
 				42F0A4F31B60620200901CFF /* GCDerivedRequest.m in Sources */,
 				42BC539E161E3E2700576097 /* GCFields.m in Sources */,
@@ -6918,6 +6925,7 @@
 				429F2097244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m in Sources */,
 				4211D4692597829200967874 /* GCStravaRequestActivityList.swift in Sources */,
 				42D223972567E6B3009BCACE /* GCCellGrid+Templates.swift in Sources */,
+				42E53AE925C55879003AF0D1 /* GCAppConstants.m in Sources */,
 				42B5E2251BA5AF9A000FAE4E /* GCTestParsing.m in Sources */,
 				42B5E2211BA5AF9A000FAE4E /* GCTestViewController.m in Sources */,
 				42B5E2231BA5AF9A000FAE4E /* GCTestIconsCell.m in Sources */,

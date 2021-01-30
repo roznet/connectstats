@@ -791,7 +791,7 @@
             [GCAppGlobal saveSettings];
             break;
         case GC_IDENTIFIER(GC_SECTION_PARAMS, GC_SETTINGS_TO_DATE):
-            [[GCAppGlobal  profile] configSet:CONFIG_TODATE_LAST_ACTIVITY boolVal:cell.on];
+            [[GCAppGlobal profile] configSet:CONFIG_TODATE_LAST_ACTIVITY boolVal:cell.on];
             [GCAppGlobal saveSettings];
             break;
         case GC_IDENTIFIER(GC_SECTION_ADVANCED, GC_SETTINGS_MAP):

@@ -26,124 +26,125 @@
 #define GC_USE_FLURRY
 
 // Add new to [GCSettingsBugReportViewController configCheck]?
-#define CONFIG_REFRESH_STARTUP          @"config_refresh_startup"
-#define CONFIG_FILTER_BAD_VALUES        @"config_filter_bad_values"
-#define CONFIG_FILTER_ADJUST_FOR_LAP    @"config_filter_adjust_for_lap"
-#define CONFIG_FILTER_SPEED_BELOW       @"config_filter_speed_below"
-#define CONFIG_FILTER_BAD_ACCEL         @"config_filter_bad_accel"
-#define CONFIG_FILTER_POWER_ABOVE       @"config_filter_power_above"
-#define CONFIG_LAST_LATITUDE            @"location_last_latitude"
-#define CONFIG_LAST_LONGITUDE           @"location_last_longitude"
-#define CONFIG_LAST_LOC_TIME            @"location_last_timestamp"
-#define CONFIG_LAST_USED_VERSION        @"config_last_used_version"
-#define CONFIG_CURRENT_PROFILE          @"config_current_profile"
-#define CONFIG_PROFILES                 @"config_profiles"
-#define CONFIG_UNIT_SYSTEM              @"config_unit_system"
-#define CONFIG_STRIDE_STYLE             @"config_stride_style"
-#define CONFIG_FIRST_DAY_WEEK           @"config_first_day_week"
-#define CONFIG_SHARING_ADD_GE_LINK      @"config_sharing_add_ge_link"
-#define CONFIG_SHARING_ADD_GC_LINK      @"config_sharing_add_gc_link"
-#define CONFIG_SHARING_ADD_SNAPSHOT     @"config_sharing_add_snapshot"
-#define CONFIG_SHARING_ADD_CSV          @"config_sharing_add_csv"
-#define CONFIG_CONTINUE_ON_ERROR        @"config_continue_on_error"
-#define CONFIG_BUG_COMMON_ID            @"config_bug_common_id"
-#define CONFIG_USE_MOVING_ELAPSED       @"config_use_moving_elapsed"
-#define CONFIG_USE_MAP                  @"config_use_map"
-#define CONFIG_BUG_INCLUDE_DATA         @"config_bug_include_data_v2"
-#define CONFIG_USE_NEW_TRACK_API        @"config_use_new_track_api"
-#define CONFIG_FASTER_MAPS              @"config_faster_maps"
-#define CONFIG_CRITICAL_CALC_UNIT       @"config_critical_calc_unit_v2"
-#define CONFIG_REFERENCE_DATE           @"config_reference_date"
-#define CONFIG_PERIOD_TYPE              @"config_period_type"
-#define CONFIG_TODATE_LAST_ACTIVITY     @"config_period_todate_last_activity"
-#define CONFIG_STATS_INLINE_GRAPHS      @"config_stats_inline_graphs"
-#define CONFIG_MAPS_INLINE_GRADIENT     @"config_maps_inline_gradient"
-#define CONFIG_GRAPH_LAP_OVERLAY        @"config_graph_lap_overlay"
-#define CONFIG_STEPS_GOAL_DEFAULT       @"config_steps_goal_default"
-#define CONFIG_ENABLE_DERIVED           @"config_enable_derived"
-#define CONFIG_FONT_STYLE               @"config_font_style"
-#define CONFIG_SHOW_DOWNLOAD_ICON       @"config_show_download_icon"
-#define CONFIG_QUICK_FILTER             @"config_quick_filter"
-#define CONFIG_QUICK_FILTER_TYPE        @"config_quick_filter_type"
-#define CONFIG_MAIN_ACTIVITY_TYPE_ONLY  @"config_main_activity_type_only"
-#define CONFIG_POWER_CURVE_LOG_SCALE    @"config_power_curve_log_scale"
-#define CONFIG_LANGUAGE_SETTING         @"config_language_setting"
-#define CONFIG_ZONE_GRAPH_HORIZONTAL    @"config_zone_gaph_horizontal"
-#define CONFIG_ZONE_PREFERRED_SOURCE    @"config_zone_preferred_source"
-#define CONFIG_WIFI_DOWNLOAD_DETAILS    @"config_wifi_download_details"
-#define CONFIG_SKIN_NAME                @"config_skin_name"
-#define CONFIG_SHOW_PHOTOS              @"config_show_photos"
-#define CONFIG_VERSIONS_SEEN            @"config_versions_seen"
-#define CONFIG_FEATURES_SEEN            @"config_features_seen"
-#define CONFIG_CELL_EXTENDED_DISPLAY    @"config_cell_extended_display"
-#define CONFIG_LAST_REMOTE_STATUS_ID    @"config_last_remote_status_id"
-#define CONFIG_ENABLE_REMOTE_STATUS     @"config_enable_remote_status"
-#define CONFIG_DUPLICATE_CHECK_ON_IMPORT @"config_duplicate_check_on_import"
-#define CONFIG_DUPLICATE_CHECK_ON_LOAD   @"config_duplicate_check_on_load"
-#define CONFIG_ENABLE_SPEED_CALC_FIELDS  @"config_enable_speed_calc_fields"
+extern NSString * const  CONFIG_REFRESH_STARTUP;
+extern NSString * const  CONFIG_FILTER_BAD_VALUES;
+extern NSString * const  CONFIG_FILTER_ADJUST_FOR_LAP;
+extern NSString * const  CONFIG_FILTER_SPEED_BELOW;
+extern NSString * const  CONFIG_FILTER_BAD_ACCEL;
+extern NSString * const  CONFIG_FILTER_POWER_ABOVE;
+extern NSString * const  CONFIG_LAST_LATITUDE;
+extern NSString * const  CONFIG_LAST_LONGITUDE;
+extern NSString * const  CONFIG_LAST_LOC_TIME;
+extern NSString * const  CONFIG_LAST_USED_VERSION;
+extern NSString * const  CONFIG_CURRENT_PROFILE;
+extern NSString * const  CONFIG_PROFILES;
+extern NSString * const  CONFIG_UNIT_SYSTEM;
+extern NSString * const  CONFIG_STRIDE_STYLE;
+extern NSString * const  CONFIG_FIRST_DAY_WEEK;
+extern NSString * const  CONFIG_SHARING_ADD_GE_LINK;
+extern NSString * const  CONFIG_SHARING_ADD_GC_LINK;
+extern NSString * const  CONFIG_SHARING_ADD_SNAPSHOT;
+extern NSString * const  CONFIG_SHARING_ADD_CSV;
+extern NSString * const  CONFIG_CONTINUE_ON_ERROR;
+extern NSString * const  CONFIG_BUG_COMMON_ID;
+extern NSString * const  CONFIG_USE_MOVING_ELAPSED;
+extern NSString * const  CONFIG_USE_MAP;
+extern NSString * const  CONFIG_BUG_INCLUDE_DATA;
+extern NSString * const  CONFIG_USE_NEW_TRACK_API;
+extern NSString * const  CONFIG_FASTER_MAPS;
+extern NSString * const  CONFIG_CRITICAL_CALC_UNIT;
+extern NSString * const  CONFIG_REFERENCE_DATE;
+extern NSString * const  CONFIG_PERIOD_TYPE;
+extern NSString * const  CONFIG_TODATE_LAST_ACTIVITY;
+extern NSString * const  CONFIG_STATS_INLINE_GRAPHS;
+extern NSString * const  CONFIG_MAPS_INLINE_GRADIENT;
+extern NSString * const  CONFIG_GRAPH_LAP_OVERLAY;
+extern NSString * const  CONFIG_STEPS_GOAL_DEFAULT;
+extern NSString * const  CONFIG_ENABLE_DERIVED;
+extern NSString * const  CONFIG_FONT_STYLE;
+extern NSString * const  CONFIG_SHOW_DOWNLOAD_ICON;
+extern NSString * const  CONFIG_QUICK_FILTER;
+extern NSString * const  CONFIG_QUICK_FILTER_TYPE;
+extern NSString * const  CONFIG_MAIN_ACTIVITY_TYPE_ONLY;
+extern NSString * const  CONFIG_POWER_CURVE_LOG_SCALE;
+extern NSString * const  CONFIG_LANGUAGE_SETTING;
+extern NSString * const  CONFIG_ZONE_GRAPH_HORIZONTAL;
+extern NSString * const  CONFIG_ZONE_PREFERRED_SOURCE;
+extern NSString * const  CONFIG_WIFI_DOWNLOAD_DETAILS;
+extern NSString * const  CONFIG_SKIN_NAME;
+extern NSString * const  CONFIG_SHOW_PHOTOS;
+extern NSString * const  CONFIG_VERSIONS_SEEN;
+extern NSString * const  CONFIG_VERSIONS_USES;
+extern NSString * const  CONFIG_FEATURES_SEEN;
+extern NSString * const  CONFIG_CELL_EXTENDED_DISPLAY;
+extern NSString * const  CONFIG_LAST_REMOTE_STATUS_ID;
+extern NSString * const  CONFIG_ENABLE_REMOTE_STATUS;
+extern NSString * const  CONFIG_DUPLICATE_CHECK_ON_IMPORT;
+extern NSString * const  CONFIG_DUPLICATE_CHECK_ON_LOAD;
+extern NSString * const  CONFIG_ENABLE_SPEED_CALC_FIELDS;
 
-#define CONFIG_DUPLICATE_SKIP_ON_IMPORT_OBSOLETE @"config_duplicate_skip_on_import"
+extern NSString * const  CONFIG_DUPLICATE_SKIP_ON_IMPORT_OBSOLETE;
 
-#define CONFIG_CONNECTSTATS_ENABLE      @"config_connectstats_enable"
-#define CONFIG_CONNECTSTATS_USE         @"config_connectstats_use"
-#define CONFIG_CONNECTSTATS_FILLYEAR    @"config_connectstats_fillyear"
-#define CONFIG_CONNECTSTATS_CONFIG      @"config_connectstats_config"
-#define CONFIG_GARMIN_ENABLE            @"config_garmin_enable"
-#define CONFIG_GARMIN_LOGIN_METHOD      @"config_garmin_login_method"
-#define CONFIG_GARMIN_LAST_SOURCE       @"config_garmin_last_source"
-#define CONFIG_GARMIN_USE_MODERN        @"config_garmin_use_modern_v3"
-#define CONFIG_STRAVA_ENABLE            @"config_strava_enable"
-#define CONFIG_STRAVA_SEGMENTS          @"config_strava_segments"
-#define CONFIG_SHARING_STRAVA_AUTO      @"config_sharing_strava_auto"
-#define CONFIG_SHARING_STRAVA_PRIVATE   @"config_sharing_strava_private"
-#define CONFIG_HEALTHKIT_ENABLE         @"config_healthkit_enable"
-#define CONFIG_HEALTHKIT_WORKOUT        @"config_healthkit_workout"
-#define CONFIG_HEALTHKIT_DAILY          @"config_healthkit_daily"
-#define CONFIG_HEALTHKIT_SOURCE_CHECKED @"config_healthkit_source_checked"
+extern NSString * const  CONFIG_CONNECTSTATS_ENABLE;
+extern NSString * const  CONFIG_CONNECTSTATS_USE;
+extern NSString * const  CONFIG_CONNECTSTATS_FILLYEAR;
+extern NSString * const  CONFIG_CONNECTSTATS_CONFIG;
+extern NSString * const  CONFIG_GARMIN_ENABLE;
+extern NSString * const  CONFIG_GARMIN_LOGIN_METHOD;
+extern NSString * const  CONFIG_GARMIN_LAST_SOURCE;
+extern NSString * const  CONFIG_GARMIN_USE_MODERN;
+extern NSString * const  CONFIG_STRAVA_ENABLE;
+extern NSString * const  CONFIG_STRAVA_SEGMENTS;
+extern NSString * const  CONFIG_SHARING_STRAVA_AUTO;
+extern NSString * const  CONFIG_SHARING_STRAVA_PRIVATE;
+extern NSString * const  CONFIG_HEALTHKIT_ENABLE;
+extern NSString * const  CONFIG_HEALTHKIT_WORKOUT;
+extern NSString * const  CONFIG_HEALTHKIT_DAILY;
+extern NSString * const  CONFIG_HEALTHKIT_SOURCE_CHECKED;
 
-#define CONFIG_CONNECTSTATS_TOKEN       @"config_connectstats_token"
-#define CONFIG_CONNECTSTATS_TOKEN_ID    @"config_connectstats_token_id"
-#define CONFIG_CONNECTSTATS_USER_ID     @"config_connectstats_user_id"
+extern NSString * const  CONFIG_CONNECTSTATS_TOKEN;
+extern NSString * const  CONFIG_CONNECTSTATS_TOKEN_ID;
+extern NSString * const  CONFIG_CONNECTSTATS_USER_ID;
 
-#define CONFIG_GARMIN_FIT_DOWNLOAD      @"config_garmin_fit_download"
-#define CONFIG_GARMIN_FIT_MERGE         @"config_garmin_fit_merge"
+extern NSString * const  CONFIG_GARMIN_FIT_DOWNLOAD;
+extern NSString * const  CONFIG_GARMIN_FIT_MERGE;
 
-#define CONFIG_ENABLE_DEBUG               @"config_enable_debug"
-#define CONFIG_ENABLE_DEBUG_ON            @"enabledebug1970"
-#define CONFIG_ENABLE_DEBUG_OFF           @"disabled"
+extern NSString * const  CONFIG_ENABLE_DEBUG;
+extern NSString * const  CONFIG_ENABLE_DEBUG_ON;
+extern NSString * const  CONFIG_ENABLE_DEBUG_OFF;
 
-#define CONFIG_STATS_START_PAGE           @"config_stats_start_page"
-#define CONFIG_SYNC_WITH_PREFERRED        @"profile_sync_with_preferred"
+extern NSString * const  CONFIG_STATS_START_PAGE;
+extern NSString * const  CONFIG_SYNC_WITH_PREFERRED;
 
-#define CONFIG_FILTER_DISABLED_POWER    10000.
-#define CONFIG_CONNECTSTATS_NO_BACKFILL 0
+extern double  CONFIG_FILTER_DISABLED_POWER;//    10000.
 
 // Add new to [GCSettingsBugReportViewController configCheck]?
 
-#define PROFILE_LOGIN_NAME           @"profile_login_name"
-#define PROFILE_LOGIN_PWD            @"profile_login_pwd"
-#define PROFILE_DBPATH               @"profile_db_path"
-#define PROFILE_NAME                 @"profile_name"
-#define PROFILE_NAME_PWD_SUCCESS     @"config_name_pwd_success"
+extern NSString * const  PROFILE_LOGIN_NAME;
+extern NSString * const  PROFILE_LOGIN_PWD;
+extern NSString * const  PROFILE_DBPATH;
+extern NSString * const  PROFILE_NAME;
+extern NSString * const  PROFILE_NAME_PWD_SUCCESS;
 
-#define PROFILE_LAST_PAGE_OBSOLETE            @"config_last_page"
-#define PROFILE_LAST_TOTAL_PAGES_OBSOLETE     @"config_last_total_pages"
-#define PROFILE_FULL_DOWNLOAD_DONE_OBSOLETE   @"config_full_download_done"
+extern NSString * const  PROFILE_LAST_PAGE_OBSOLETE;
+extern NSString * const  PROFILE_LAST_TOTAL_PAGES_OBSOLETE;
+extern NSString * const  PROFILE_FULL_DOWNLOAD_DONE_OBSOLETE;
 
-#define PROFILE_SERVICE_STRAVA       @"profile_service_strava"
-#define PROFILE_SERVICE_CONNECTSTATS @"profile_service_connectstats"
-#define PROFILE_SERVICE_GARMIN       @"profile_service_garmin"
-#define PROFILE_SERVICE_SUCCESS      @"profile_service_success"
-#define PROFILE_SOURCES              @"profile_sources"
-#define PROFILE_CURRENT_SOURCE       @"profile_current_source"
+extern NSString * const  PROFILE_SERVICE_STRAVA;
+extern NSString * const  PROFILE_SERVICE_CONNECTSTATS;
+extern NSString * const  PROFILE_SERVICE_GARMIN;
+extern NSString * const  PROFILE_SERVICE_SUCCESS;
+extern NSString * const  PROFILE_SOURCES;
+extern NSString * const  PROFILE_CURRENT_SOURCE;
 
 // These get appended service name, thus trailing _
-#define PROFILE_SERVICE_LOGIN        @"profile_service_login_name_"
-#define PROFILE_SERVICE_PWD          @"profile_service_login_pwd_"
-#define PROFILE_SERVICE_SETUP        @"profile_service_setup_"
-#define PROFILE_LAST_KEYCHAIN_SAVE   @"profile_last_keychain_save_"
-#define PROFILE_SERVICE_FULL_DONE    @"profile_service_full_done_"
-#define PROFILE_SERVICE_LAST_ANCHOR  @"profile_service_last_anchor_"
+extern NSString * const  PROFILE_SERVICE_LOGIN;
+extern NSString * const  PROFILE_SERVICE_PWD;
+extern NSString * const  PROFILE_SERVICE_SETUP;
+extern NSString * const  PROFILE_LAST_KEYCHAIN_SAVE;
+extern NSString * const  PROFILE_SERVICE_FULL_DONE;
+extern NSString * const  PROFILE_SERVICE_LAST_ANCHOR;
+
 
 typedef NS_ENUM(NSUInteger, gcPeriodType) {
     gcPeriodCalendar,

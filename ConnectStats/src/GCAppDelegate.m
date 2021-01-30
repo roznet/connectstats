@@ -143,10 +143,12 @@ void checkVersion(){
 #endif
     if ([GCAppDelegate connectStatsVersion]) {
         [Appirater setAppId: [self credentialsForService:@"appstore" andKey:@"connectstats"]];
+        [Appirater setDaysUntilPrompt:15];
+        [Appirater setUsesUntilPrompt:5];
     }else if ([GCAppDelegate healthStatsVersion]){
         [Appirater setAppId:[self credentialsForService:@"appstore" andKey:@"healthstats"]];
     }
-
+    
     [GCMapGoogleViewController provideAPIKey:[self credentialsForService:@"googlemaps" andKey:@"api_key"]];
     BOOL ok = [self startInit];
     if (!ok) {
