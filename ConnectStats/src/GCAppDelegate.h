@@ -63,7 +63,7 @@
 +(BOOL)connectStatsVersion;
 +(BOOL)healthStatsVersion;
 
--(void)startSuccessful;
+
 
 -(void)startupRefreshIfNeeded;
 -(void)searchRecentActivities;
@@ -80,4 +80,6 @@
 -(NSString*)credentialsForService:(NSString*)service andKey:(NSString*)key;
 
 -(void)versionSummary;
+
+-(void)settingsUpdateCheckPostStart;
 @end

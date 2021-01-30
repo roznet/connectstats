@@ -35,7 +35,6 @@
 #import "GCWebConnect+Requests.h"
 #import "GCAppActions.h"
 #import "GCActivityType.h"
-@import Appirater;
 #import "GCActivity+CSSearch.h"
 #import "GCFieldCache.h"
 #import "GCAppDelegate+Swift.h"
@@ -44,7 +43,6 @@
 #import "GCConnectStatsStatus.h"
 #import "GCAppSceneDelegate.h"
 
-#define GC_STARTING_FILE @"starting.log"
 
 static BOOL connectStatsVersion = false;
 static BOOL checkedVersion = false;
@@ -141,14 +139,7 @@ void checkVersion(){
     }
     [Flurry startSession:applicationCode];
 #endif
-    if ([GCAppDelegate connectStatsVersion]) {
-        [Appirater setAppId: [self credentialsForService:@"appstore" andKey:@"connectstats"]];
-        [Appirater setDaysUntilPrompt:15];
-        [Appirater setUsesUntilPrompt:5];
-    }else if ([GCAppDelegate healthStatsVersion]){
-        [Appirater setAppId:[self credentialsForService:@"appstore" andKey:@"healthstats"]];
-    }
-    
+    [self handleAppRating];
     [GCMapGoogleViewController provideAPIKey:[self credentialsForService:@"googlemaps" andKey:@"api_key"]];
     BOOL ok = [self startInit];
     if (!ok) {
@@ -198,9 +189,6 @@ void checkVersion(){
     self.derived = [[[GCDerivedOrganizer alloc] initWithDb:nil andThread:self.worker] autorelease];
 
     [RZViewConfig setFontStyle:[GCAppGlobal configGetInt:CONFIG_FONT_STYLE defaultValue:gcFontStyleDynamicType]];
-
-    
-    [Appirater appLaunched:YES];
 
     [self updateShortCutKeys];
 
@@ -515,30 +503,6 @@ void checkVersion(){
     return [[self currentSceneDelegate] actionDelegate];
 }
 
--(BOOL)startInit{
-    NSString * filename = [RZFileOrganizer writeableFilePathIfExists:GC_STARTING_FILE];
-    NSUInteger attempts = 1;
-    NSError * e = nil;
-
-    if (filename) {
-
-        NSString * sofar = [NSString stringWithContentsOfFile:filename
-                                            encoding:NSUTF8StringEncoding error:&e];
-
-        if (sofar) {
-            attempts = MAX(1, [sofar integerValue]+1);
-        }else{
-            RZLog(RZLogError, @"Failed to read initfile %@", e.localizedDescription);
-        }
-    }
-
-    NSString * already = [NSString stringWithFormat:@"%lu",(unsigned long)attempts];
-    if(![already writeToFile:[RZFileOrganizer writeableFilePath:GC_STARTING_FILE] atomically:YES encoding:NSUTF8StringEncoding error:&e]){
-        RZLog(RZLogError, @"Failed to save startInit %@", e.localizedDescription);
-    }
-
-    return attempts < 3;
-}
 
 -(void)settingsUpdateCheckPostStart{
     BOOL needToSaveSettings = false;
@@ -728,17 +692,6 @@ void checkVersion(){
         [self searchRecentActivities];
     }
     self.needsStartupRefresh = false;
-}
-
--(void)startSuccessful{
-    static BOOL once = false;
-    if (!once) {
-        RZLog(RZLogInfo, @"Started");
-        [RZFileOrganizer removeEditableFile:GC_STARTING_FILE];
-        once = true;
-        
-        [self settingsUpdateCheckPostStart];
-    }
 }
 
 -(BOOL)multipleFailureStart{

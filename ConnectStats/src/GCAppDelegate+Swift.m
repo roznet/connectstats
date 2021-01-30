@@ -26,9 +26,15 @@
 #import "GCAppDelegate+Swift.h"
 #import "ConnectStats-Swift.h"
 
+#define GC_STARTING_FILE @"starting.log"
+
 BOOL kOpenTemporary = false;
 
 @implementation GCAppDelegate (Swift)
+
+-(void)handleAppRating{
+    [self initiateAppRating];
+}
 
 -(void)handleFitFile{
     NSData * fitData = [NSData dataWithContentsOfURL:self.urlToOpen];
@@ -52,4 +58,42 @@ BOOL kOpenTemporary = false;
 -(void)stravaSignout{
     [GCStravaRequestBase signout];
 }
+
+-(BOOL)startInit{
+    NSString * filename = [RZFileOrganizer writeableFilePathIfExists:GC_STARTING_FILE];
+    NSUInteger attempts = 1;
+    NSError * e = nil;
+
+    if (filename) {
+
+        NSString * sofar = [NSString stringWithContentsOfFile:filename
+                                            encoding:NSUTF8StringEncoding error:&e];
+
+        if (sofar) {
+            attempts = MAX(1, [sofar integerValue]+1);
+        }else{
+            RZLog(RZLogError, @"Failed to read initfile %@", e.localizedDescription);
+        }
+    }
+
+    NSString * already = [NSString stringWithFormat:@"%lu",(unsigned long)attempts];
+    if(![already writeToFile:[RZFileOrganizer writeableFilePath:GC_STARTING_FILE] atomically:YES encoding:NSUTF8StringEncoding error:&e]){
+        RZLog(RZLogError, @"Failed to save startInit %@", e.localizedDescription);
+    }
+
+    return attempts < 3;
+}
+
+-(void)startSuccessful{
+    static BOOL once = false;
+    if (!once) {
+        RZLog(RZLogInfo, @"Started");
+        [RZFileOrganizer removeEditableFile:GC_STARTING_FILE];
+        once = true;
+        
+        [self settingsUpdateCheckPostStart];
+        [self startSuccessfulSwift];
+    }
+}
+
 @end
