@@ -66,7 +66,7 @@ class GCCellActivity: UITableViewCell {
         self.leftBorderView.insideColor = GCViewConfig.cellBackgroundLighter(forActivity: activity)
         self.borderView.borderColor = GCViewConfig.textColor(forActivity: activity)
         self.leftBorderView.borderColor = GCViewConfig.textColor(forActivity: activity)
-
+        self.borderView.lineWidth = 1.0
         self.borderView.borderColor = GCViewConfig.colorForRoundedBorder()
         
         self.leftBorderView.borderColor = GCViewConfig.colorForRoundedBorder()

@@ -443,7 +443,6 @@
 		4269E9E32598D3BA00DF469D /* GCStravaRequestStreams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4269E9E22598D3BA00DF469D /* GCStravaRequestStreams.swift */; };
 		4269E9E42598D3BA00DF469D /* GCStravaRequestStreams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4269E9E22598D3BA00DF469D /* GCStravaRequestStreams.swift */; };
 		4269E9E52598D3BA00DF469D /* GCStravaRequestStreams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4269E9E22598D3BA00DF469D /* GCStravaRequestStreams.swift */; };
-		4269EA222599D40900DF469D /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 4269EA212599D40900DF469D /* ZIPFoundation */; };
 		426A135E1C5CCEFA00D61098 /* GCActivitySettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 426A135D1C5CCEFA00D61098 /* GCActivitySettings.m */; };
 		426A135F1C5CCEFA00D61098 /* GCActivitySettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 426A135D1C5CCEFA00D61098 /* GCActivitySettings.m */; };
 		426A13601C5CCEFA00D61098 /* GCActivitySettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 426A135D1C5CCEFA00D61098 /* GCActivitySettings.m */; };
@@ -1152,15 +1151,12 @@
 		42BD319E258B51DF004D5E0F /* GCSettingsBugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BD319D258B51DF004D5E0F /* GCSettingsBugReport.swift */; };
 		42BD319F258B51DF004D5E0F /* GCSettingsBugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BD319D258B51DF004D5E0F /* GCSettingsBugReport.swift */; };
 		42BD31AE258B53C7004D5E0F /* DeviceGuru in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD31AD258B53C7004D5E0F /* DeviceGuru */; };
-		42BD31ED258BAE2F004D5E0F /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD31EC258BAE2F004D5E0F /* ZIPFoundation */; };
 		42BD320D258BB9A2004D5E0F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD320C258BB9A2004D5E0F /* SwiftKeychainWrapper */; };
 		42BD322D258BBA8A004D5E0F /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD322C258BBA8A004D5E0F /* MBProgressHUD */; };
 		42BD3285258BC789004D5E0F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD3284258BC789004D5E0F /* SwiftKeychainWrapper */; };
 		42BD329D258BC856004D5E0F /* GCSettingsBugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BD319D258B51DF004D5E0F /* GCSettingsBugReport.swift */; };
 		42BD32A3258BC88B004D5E0F /* DeviceGuru in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD32A2258BC88B004D5E0F /* DeviceGuru */; };
-		42BD32A5258BC893004D5E0F /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD32A4258BC893004D5E0F /* ZIPFoundation */; };
 		42BD3417258CB69E004D5E0F /* DeviceGuru in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD3416258CB69E004D5E0F /* DeviceGuru */; };
-		42BD341D258CB6AE004D5E0F /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD341C258CB6AE004D5E0F /* ZIPFoundation */; };
 		42BD3423258CB6C8004D5E0F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD3422258CB6C8004D5E0F /* SwiftKeychainWrapper */; };
 		42BD3429258CB6E1004D5E0F /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD3428258CB6E1004D5E0F /* MBProgressHUD */; };
 		42BDFE80242F7789001BCDC8 /* GCActivity+Series.m in Sources */ = {isa = PBXBuildFile; fileRef = 42BDFE7F242F7789001BCDC8 /* GCActivity+Series.m */; };
@@ -1296,6 +1292,10 @@
 		42D90812203383DB000BBE07 /* GCTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D90811203383DB000BBE07 /* GCTestCase.m */; };
 		42D9081C20338582000BBE07 /* GCTestsPerformance.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9081B20338582000BBE07 /* GCTestsPerformance.m */; };
 		42D9081D2033874C000BBE07 /* activities_stats.db in Resources */ = {isa = PBXBuildFile; fileRef = 427F93081BEA9A5900C177F9 /* activities_stats.db */; };
+		42DB6CB725D56107003AC195 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42DB6CB625D56107003AC195 /* ZIPFoundation */; };
+		42DB6CBD25D5611D003AC195 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42DB6CBC25D5611D003AC195 /* ZIPFoundation */; };
+		42DB6CBF25D56129003AC195 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42DB6CBE25D56129003AC195 /* ZIPFoundation */; };
+		42DB6CD425D561A5003AC195 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42DB6CD325D561A5003AC195 /* ZIPFoundation */; };
 		42DC51551B2784B600B5C12F /* GCHealthKitDailySummaryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DC51541B2784B600B5C12F /* GCHealthKitDailySummaryParser.m */; };
 		42DC51581B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DC51571B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m */; };
 		42DC51591B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DC51571B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m */; };
@@ -2608,7 +2608,6 @@
 				422FAFB919A1DD6000D09773 /* Accounts.framework in Frameworks */,
 				422DCD45258A7266000DEE4B /* FitFileParser in Frameworks */,
 				42A95BDB259A158E00A52DB6 /* OAuthSwift in Frameworks */,
-				42BD341D258CB6AE004D5E0F /* ZIPFoundation in Frameworks */,
 				422FAFBA19A1DD6000D09773 /* AdSupport.framework in Frameworks */,
 				422FAFBB19A1DD6000D09773 /* MessageUI.framework in Frameworks */,
 				422FAFBC19A1DD6000D09773 /* Social.framework in Frameworks */,
@@ -2623,6 +2622,7 @@
 				42DE53C119CF69ED00009130 /* HealthKit.framework in Frameworks */,
 				422FAFC319A1DD6000D09773 /* CoreGraphics.framework in Frameworks */,
 				FA5B4E7AA31A2F2A7CA5ED72 /* Pods_HealthStats.framework in Frameworks */,
+				42DB6CBF25D56129003AC195 /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2631,7 +2631,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4213AEB1201393CC0004B54B /* MapKit.framework in Frameworks */,
-				4269EA222599D40900DF469D /* ZIPFoundation in Frameworks */,
 				422DCC30258A6348000DEE4B /* RZUtilsSwift in Frameworks */,
 				422DCC36258A6357000DEE4B /* FitFileParser in Frameworks */,
 				422DCC34258A6350000DEE4B /* FMDB in Frameworks */,
@@ -2640,6 +2639,7 @@
 				4211D578259A0BDA00967874 /* RZExternalUniversal in Frameworks */,
 				BF9120CBFA7E3BB8AEA21520 /* Pods_FitFileExplorer.framework in Frameworks */,
 				422DCD74258A74DF000DEE4B /* RZUtilsMacOS in Frameworks */,
+				42DB6CD425D561A5003AC195 /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2673,7 +2673,6 @@
 				42D037C3168AF55900789E7D /* SystemConfiguration.framework in Frameworks */,
 				424B7F2A16CB049A000B38AD /* Security.framework in Frameworks */,
 				42E18A3E16AC6B9100D4513B /* Accounts.framework in Frameworks */,
-				42BD31ED258BAE2F004D5E0F /* ZIPFoundation in Frameworks */,
 				422DCC18258A630E000DEE4B /* FitFileParser in Frameworks */,
 				42E18A3C16AC6B4600D4513B /* AdSupport.framework in Frameworks */,
 				42E186C516A6151A00D4513B /* MessageUI.framework in Frameworks */,
@@ -2689,6 +2688,7 @@
 				42DE53C019CF696E00009130 /* HealthKit.framework in Frameworks */,
 				428FF71215F36888007A88FA /* CoreGraphics.framework in Frameworks */,
 				047DA3A916F1EEF80E547820 /* Pods_ConnectStats.framework in Frameworks */,
+				42DB6CB725D56107003AC195 /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2712,7 +2712,6 @@
 				422DCB7D258A278E000DEE4B /* RZUtilsUniversal in Frameworks */,
 				4211D574259A0BDA00967874 /* RZExternalTestUtils in Frameworks */,
 				42BD3285258BC789004D5E0F /* SwiftKeychainWrapper in Frameworks */,
-				42BD32A5258BC893004D5E0F /* ZIPFoundation in Frameworks */,
 				422DCC20258A6325000DEE4B /* RZUtilsTouch in Frameworks */,
 				42A95C40259A18E400A52DB6 /* RZExternal in Frameworks */,
 				4211D4BE2598B33900967874 /* OAuthSwift in Frameworks */,
@@ -2721,6 +2720,7 @@
 				422DCC1E258A6325000DEE4B /* RZUtilsTestInfra in Frameworks */,
 				42B5E2D01BA5B589000FAE4E /* HealthKit.framework in Frameworks */,
 				08F9F970B9E97EE50D457C03 /* Pods_ConnectStatsTestApp.framework in Frameworks */,
+				42DB6CBD25D5611D003AC195 /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5035,11 +5035,11 @@
 				422DCC27258A633A000DEE4B /* RZUtilsTouch */,
 				422DCD44258A7266000DEE4B /* FitFileParser */,
 				42BD3416258CB69E004D5E0F /* DeviceGuru */,
-				42BD341C258CB6AE004D5E0F /* ZIPFoundation */,
 				42BD3422258CB6C8004D5E0F /* SwiftKeychainWrapper */,
 				42BD3428258CB6E1004D5E0F /* MBProgressHUD */,
 				42A95BDA259A158E00A52DB6 /* OAuthSwift */,
 				42A95C7E259A199A00A52DB6 /* RZExternal */,
+				42DB6CBE25D56129003AC195 /* ZIPFoundation */,
 			);
 			productName = GarminConnect;
 			productReference = 422FAFF119A1DD6000D09773 /* HealthStats.app */;
@@ -5067,9 +5067,9 @@
 				422DCC33258A6350000DEE4B /* FMDB */,
 				422DCC35258A6357000DEE4B /* FitFileParser */,
 				422DCD73258A74DF000DEE4B /* RZUtilsMacOS */,
-				4269EA212599D40900DF469D /* ZIPFoundation */,
 				4211D577259A0BDA00967874 /* RZExternalUniversal */,
 				425D249C259E08DC0003574F /* KeychainSwift */,
+				42DB6CD325D561A5003AC195 /* ZIPFoundation */,
 			);
 			productName = FitFileExplorer;
 			productReference = 4253B4561CD49F7E00437E6A /* FitFileExplorer.app */;
@@ -5118,11 +5118,11 @@
 				422DCC0C258A62EE000DEE4B /* RZUtilsTouch */,
 				422DCC17258A630E000DEE4B /* FitFileParser */,
 				42BD31AD258B53C7004D5E0F /* DeviceGuru */,
-				42BD31EC258BAE2F004D5E0F /* ZIPFoundation */,
 				42BD320C258BB9A2004D5E0F /* SwiftKeychainWrapper */,
 				42BD322C258BBA8A004D5E0F /* MBProgressHUD */,
 				4211D4702597832D00967874 /* OAuthSwift */,
 				4211D575259A0BDA00967874 /* RZExternal */,
+				42DB6CB625D56107003AC195 /* ZIPFoundation */,
 			);
 			productName = GarminConnect;
 			productReference = 428FF70915F36888007A88FA /* ConnectStats.app */;
@@ -5173,10 +5173,10 @@
 				422DCC4C258A639F000DEE4B /* FitFileParser */,
 				42BD3284258BC789004D5E0F /* SwiftKeychainWrapper */,
 				42BD32A2258BC88B004D5E0F /* DeviceGuru */,
-				42BD32A4258BC893004D5E0F /* ZIPFoundation */,
 				4211D4BD2598B33900967874 /* OAuthSwift */,
 				4211D573259A0BDA00967874 /* RZExternalTestUtils */,
 				42A95C3F259A18E400A52DB6 /* RZExternal */,
+				42DB6CBC25D5611D003AC195 /* ZIPFoundation */,
 			);
 			productName = ConnectStatsTestApp;
 			productReference = 42B5E1B91BA5AEC9000FAE4E /* ConnectStatsTestApp.app */;
@@ -5314,12 +5314,12 @@
 				422DCC16258A630E000DEE4B /* XCRemoteSwiftPackageReference "FitFileParser" */,
 				422DCD72258A74DF000DEE4B /* XCRemoteSwiftPackageReference "rzutils-macos" */,
 				42BD31AC258B53C7004D5E0F /* XCRemoteSwiftPackageReference "DeviceGuru" */,
-				42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 				42BD320B258BB9A2004D5E0F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
 				42BD322B258BBA8A004D5E0F /* XCRemoteSwiftPackageReference "MBProgressHUD" */,
 				4211D46F2597832D00967874 /* XCRemoteSwiftPackageReference "OAuthSwift" */,
 				4211D572259A0BDA00967874 /* XCRemoteSwiftPackageReference "rzexternal" */,
 				425D249B259E08DC0003574F /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				42DB6CB525D56107003AC195 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 			);
 			productRefGroup = 428FF70A15F36888007A88FA /* Products */;
 			projectDirPath = "";
@@ -7963,14 +7963,6 @@
 				kind = branch;
 			};
 		};
-		42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/roznet/ZIPFoundation";
-			requirement = {
-				branch = development;
-				kind = branch;
-			};
-		};
 		42BD320B258BB9A2004D5E0F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper";
@@ -7985,6 +7977,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.2.0;
+			};
+		};
+		42DB6CB525D56107003AC195 /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
+			requirement = {
+				branch = development;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -8120,11 +8120,6 @@
 			package = 425D249B259E08DC0003574F /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
 		};
-		4269EA212599D40900DF469D /* ZIPFoundation */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
-			productName = ZIPFoundation;
-		};
 		42A95BDA259A158E00A52DB6 /* OAuthSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4211D46F2597832D00967874 /* XCRemoteSwiftPackageReference "OAuthSwift" */;
@@ -8144,11 +8139,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 42BD31AC258B53C7004D5E0F /* XCRemoteSwiftPackageReference "DeviceGuru" */;
 			productName = DeviceGuru;
-		};
-		42BD31EC258BAE2F004D5E0F /* ZIPFoundation */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
-			productName = ZIPFoundation;
 		};
 		42BD320C258BB9A2004D5E0F /* SwiftKeychainWrapper */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -8170,20 +8160,10 @@
 			package = 42BD31AC258B53C7004D5E0F /* XCRemoteSwiftPackageReference "DeviceGuru" */;
 			productName = DeviceGuru;
 		};
-		42BD32A4258BC893004D5E0F /* ZIPFoundation */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
-			productName = ZIPFoundation;
-		};
 		42BD3416258CB69E004D5E0F /* DeviceGuru */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 42BD31AC258B53C7004D5E0F /* XCRemoteSwiftPackageReference "DeviceGuru" */;
 			productName = DeviceGuru;
-		};
-		42BD341C258CB6AE004D5E0F /* ZIPFoundation */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 42BD31EB258BAE2F004D5E0F /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
-			productName = ZIPFoundation;
 		};
 		42BD3422258CB6C8004D5E0F /* SwiftKeychainWrapper */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -8194,6 +8174,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 42BD322B258BBA8A004D5E0F /* XCRemoteSwiftPackageReference "MBProgressHUD" */;
 			productName = MBProgressHUD;
+		};
+		42DB6CB625D56107003AC195 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42DB6CB525D56107003AC195 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+		42DB6CBC25D5611D003AC195 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42DB6CB525D56107003AC195 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+		42DB6CBE25D56129003AC195 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42DB6CB525D56107003AC195 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+		42DB6CD325D561A5003AC195 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42DB6CB525D56107003AC195 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

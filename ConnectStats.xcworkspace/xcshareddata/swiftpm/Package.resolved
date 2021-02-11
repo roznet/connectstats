@@ -147,10 +147,10 @@
       },
       {
         "package": "ZIPFoundation",
-        "repositoryURL": "https://github.com/roznet/ZIPFoundation",
+        "repositoryURL": "https://github.com/weichsel/ZIPFoundation.git",
         "state": {
           "branch": "development",
-          "revision": "7b76af511c2b5dcc854b7195eaf24d2974249621",
+          "revision": "d1f0b3a1be627ede94bac9c36e35b6e51ff2670a",
           "version": null
         }
       }
