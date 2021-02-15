@@ -204,7 +204,17 @@
     [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
     XCTAssertGreaterThan(act.trackpoints.count, 1);
     GCActivityAutoLapChoices * choices = [[[GCActivityAutoLapChoices alloc] initWithActivity:act] autorelease];
+    
+    NSMutableDictionary * keep = [NSMutableDictionary dictionary];
+    // only test 1 of each kind of style
+    for (GCActivityAutoLapChoiceHolder * choice  in choices.choices) {
+        keep[ @(choice.style)] = choice;
+    }
+    
+    choices.choices = keep.allValues;
+    choices.selected = 0;
     NSUInteger n = choices.choices.count;
+    
     [self measureBlock:^{
         [act clearCalculatedLaps];
         for (NSUInteger i=0; i<n; i++) {

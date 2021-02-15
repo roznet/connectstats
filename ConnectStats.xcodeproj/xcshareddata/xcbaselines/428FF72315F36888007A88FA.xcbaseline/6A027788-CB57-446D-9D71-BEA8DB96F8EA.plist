@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>classNames</key>
+	<dict>
+		<key>GCTestsPerformance</key>
+		<dict>
+			<key>testPerformanceAggregatedStatistics</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.0078586</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>15 Feb 2021 at 08:30:32</string>
+				</dict>
+			</dict>
+			<key>testPerformanceLapsCalculations</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.65323</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>15 Feb 2021 at 08:30:32</string>
+				</dict>
+			</dict>
+			<key>testPerformanceOrganizerLoad</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.036953</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>15 Feb 2021 at 08:30:32</string>
+				</dict>
+			</dict>
+			<key>testPerformanceOrganizerRegister</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.063377</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>15 Feb 2021 at 08:30:32</string>
+				</dict>
+			</dict>
+			<key>testPerformanceOrganizerStatistics</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.057892</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>15 Feb 2021 at 08:30:32</string>
+				</dict>
+			</dict>
+			<key>testPerformanceParsingFit</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.44781</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>15 Feb 2021 at 08:30:32</string>
+				</dict>
+			</dict>
+			<key>testPerformanceParsingModern</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.087648</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>15 Feb 2021 at 08:30:32</string>
+				</dict>
+			</dict>
+			<key>testPerformanceTrackpoints</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.16225</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>15 Feb 2021 at 08:30:32</string>
+				</dict>
+			</dict>
+		</dict>
+	</dict>
+</dict>
+</plist>
