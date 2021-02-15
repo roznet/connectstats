@@ -32,7 +32,7 @@
 #define ZONE_CEILING @"ceiling"
 
 
-NSArray<NSString*>*sourceKeys(){
+NSArray<NSString*>*sourceKeys(void){
     static NSArray<NSString*>* rv = nil;
     if(rv == nil){
         rv = @[

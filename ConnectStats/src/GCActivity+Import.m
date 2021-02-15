@@ -696,7 +696,6 @@
                  /* SWIMMING */
                  @"averageSwimCadenceInStrokesPerMinute": @[ @"WeightedMeanSwimCadence", @"", @"strokesPerMinute"],
                  @"maxSwimCadenceInStrokesPerMinute" : @[ @"MaxSwimCadence", @"", @"strokesPerMinute"],
-                 @"totalNumberOfStrokes" : @[ @"SumStrokes", @"", @"dimensionless"],
                  @"averageStrokes": @[ @"WeightedMeanStrokes", @"", @"dimensionless"],
                  @"averageSWOLF" : @[ @"WeightedMeanSwolf", @"", @"dimensionless"],
                  //@"averageStrokeDistance" : @[ @""],

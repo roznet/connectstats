@@ -378,7 +378,8 @@ NSArray * _elementCache = nil;
     NSMutableString * s = [[[NSMutableString alloc]initWithCapacity:10] autorelease];
     for( size_t i = 0 ; i<5;i++){
         if (units[i] & calendarUnits) {
-            [s appendFormat:@"%@=%d,", NSStringFromSelector(selectors[i]), (int)[components performSelector:selectors[i]]];
+            NSInteger value = (NSInteger)[components performSelector:selectors[i]];
+            [s appendFormat:@"%@=%d,", NSStringFromSelector(selectors[i]), (int)value];
         }
     }
     return [NSString stringWithFormat:@"<GCSearchElementDate:%@>",s];

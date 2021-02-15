@@ -46,10 +46,6 @@
 
 @end
 
-void buildStatic(){
-    //_dbColumnNames = @[<#objects, ...#>]
-}
-
 @implementation GCTrackPoint
 
 -(instancetype)init{

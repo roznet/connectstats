@@ -71,7 +71,7 @@ typedef NS_ENUM(NSUInteger,gcHealthDefsIndex) {
     gcHealthDefsIndexDisplay=2,
     gcHealthDefsIndexStoreUnit=3
 };
-NSArray * measureDefs(){
+NSArray<NSArray*> * measureDefs(void){
     static NSArray * _cacheMeasureDefs  = nil;
     if( _cacheMeasureDefs == nil){
         _cacheMeasureDefs = @[

@@ -1719,6 +1719,7 @@
 		42523AB01D6B289300F6D6C6 /* test_activity_running_1266384539.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activity_running_1266384539.db; sourceTree = "<group>"; };
 		425257F819AB905300993F61 /* GCStatsOneFieldConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStatsOneFieldConfig.h; path = src/GCStatsOneFieldConfig.h; sourceTree = "<group>"; };
 		425257F919AB905300993F61 /* GCStatsOneFieldConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStatsOneFieldConfig.m; path = src/GCStatsOneFieldConfig.m; sourceTree = "<group>"; };
+		4252C13325D961E500C9BCD7 /* rzutils */ = {isa = PBXFileReference; lastKnownFileType = folder; name = rzutils; path = ../rzutils; sourceTree = "<group>"; };
 		4253B4561CD49F7E00437E6A /* FitFileExplorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitFileExplorer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4253B4641CD49F7E00437E6A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4253B4671CD49F7E00437E6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -3739,6 +3740,7 @@
 		428FF6FE15F36888007A88FA = {
 			isa = PBXGroup;
 			children = (
+				4252C13325D961E500C9BCD7 /* rzutils */,
 				4245CD811B7DE351006B85B4 /* Common */,
 				428FF71315F36888007A88FA /* ConnectStats */,
 				4253B4571CD49F7E00437E6A /* FitFileExplorer */,

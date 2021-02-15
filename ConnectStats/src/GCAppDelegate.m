@@ -53,7 +53,7 @@ NSString * kShortCutItemTypeLastActivity = @"net.ro-z.connectstats.shortcut.last
 NSString * kShortCutItemTypeRefreshList  = @"net.ro-z.connectstats.shortcut.refreshlist";
 NSString * kShortCutItemTypeCalendarList  = @"net.ro-z.connectstats.shortcut.calendar";
 
-void checkVersion(){
+void checkVersion(void){
 
     NSString * path = [RZFileOrganizer bundleFilePath:@"version.plist"];
     NSDictionary * dict = [NSDictionary dictionaryWithContentsOfFile:path];
