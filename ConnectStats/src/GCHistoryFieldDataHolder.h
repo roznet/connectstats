@@ -43,7 +43,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(nullable GCNumberWithUnit*)averageWithUnit:(gcHistoryStats)which;
 -(GCNumberWithUnit*)sumWithUnit:(gcHistoryStats)which;
--(GCNumberWithUnit*)weightWithUnit:(gcHistoryStats)which DEPRECATED_MSG_ATTRIBUTE("use sum or avg");
 -(GCNumberWithUnit*)countWithUnit:(gcHistoryStats)which;
 -(GCNumberWithUnit*)weightedSumWithUnit:(gcHistoryStats)which;
 -(nullable GCNumberWithUnit*)weightedAverageWithUnit:(gcHistoryStats)which;

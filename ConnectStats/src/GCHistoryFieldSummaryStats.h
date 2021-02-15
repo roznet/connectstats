@@ -49,8 +49,6 @@
 +(GCHistoryFieldSummaryStats*)fieldStatsWithHealthMeasures:(NSArray*)measures;
 -(void)addHealthMeasures:(NSArray<GCHealthMeasure*>*)measures referenceDate:(NSDate*)refOrNil;
 
--(GCHistoryFieldDataHolder*)dataForIndex:(NSUInteger)aIdx;
 -(GCHistoryFieldDataHolder*)dataForField:(GCField*)aField;
--(NSUInteger)countOfFieldData;
 
 @end
