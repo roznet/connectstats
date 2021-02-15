@@ -90,10 +90,6 @@
     return [GCNumberWithUnit numberWithUnitName:@"dimensionless" andValue:_count[which]];
 }
 
--(GCNumberWithUnit*)weightWithUnit:(gcHistoryStats)which{
-    return [GCNumberWithUnit numberWithUnitName:@"dimensionless" andValue:_timeweight[which]];
-
-}
 -(GCNumberWithUnit*)weightedSumWithUnit:(gcHistoryStats)which{
     switch (self.unit.sumWeightBy) {
         case GCUnitSumWeightByTime:

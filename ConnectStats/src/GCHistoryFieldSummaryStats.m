@@ -179,18 +179,6 @@
     self.fieldData = [NSDictionary dictionaryWithDictionary:healthFieldData];
 }
 
--(GCHistoryFieldDataHolder*)dataForIndex:(NSUInteger)aIdx{
-    GCHistoryFieldDataHolder * rv = nil;
-    if (aIdx < self.fieldData.count) {
-        GCField * field = [self.fieldData keysSortedByValueUsingSelector:@selector(compare:)][aIdx];
-        rv = self.fieldData[field];
-    }
-    return rv;
-}
--(NSUInteger)countOfFieldData{
-    return self.fieldData.count;
-}
-
 -(GCHistoryFieldDataHolder*)dataForField:(GCField*)aField{
     return self.fieldData[aField];
 }
