@@ -557,6 +557,9 @@
                 [recordEpsilon addObject:[NSString stringWithFormat:@" @\"%@\": @(%@)", field.key, @(diff.value)]];
             }
             XCTAssertNotNil(v_gc, @"Found field %@", field);
+            if( [aId isEqualToString:@"2477200414"] && [field.key hasSuffix:@"Cadence"]){
+                NSLog(@"%@ %@ %@", aId, v_gc, v_fit);
+            }
             if( v_gc ){
                 XCTAssertTrue([v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] == NSOrderedSame,
                               @"Key %@: %@ == %@ within %@", field, v_gc.numberWithUnit, v_fit.numberWithUnit, @(eps));

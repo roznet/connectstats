@@ -28,8 +28,26 @@
 #import "GCActivitiesOrganizer.h"
 #import "GCHistoryAggregatedDataHolder.h"
 
-
-
+//
+// aggregate by [ dynamic Date Buckets ] x [ fixed fields ]
+// aggregate by [ fixed buckets All, 1w, 1m, 1y ] x [ dynamic all fields ]
+// aggregate by [ dynamic activity type, fixed [ all, 1w, 1m ] ] x [ dynamic all fields ]
+// aggregate by [ dynamic cluster ] x [ all fields ]
+// aggregate by [ dynamic cluster, dynamic date buckets  ] x [ all fields ]
+//
+//   AggregatedDataHolder: fixed field or dynamic
+//        collect info: Activity Type? array of activities?
+//        diff over last: wow, mom, yoy
+//   GroupBy: [fixed or dynamic element]
+//        date bucket
+//        number range
+//        string(activity|other meta)/location/cluster
+//   Queries:
+//        indexed by date list of holders x [ fields ] (statistic list page)
+//        indexed by date series of number(field) : graphs
+//        indexed by field list of holder x [ bucket ] (field summary for 1w, 1m )
+//        indexed by field list of holder x [ buckets ] (field summary for wow, mom )
+//        indexed by cluster serie of date x field (graphs or total by location, cluster)
 
 @interface GCHistoryAggregatedActivityStats : NSObject<NSFastEnumeration>
 
