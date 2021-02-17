@@ -97,7 +97,7 @@
     GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
     
     [self measureBlock:^{
-        GCHistoryAggregatedActivityStats * stats = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:GC_TYPE_RUNNING];
+        GCHistoryAggregatedActivityStats * stats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_RUNNING];
         stats.activities = organizer.activities;
         [stats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     }];

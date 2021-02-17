@@ -118,6 +118,10 @@
 		422CCE8C1B7EAB7200A4DAEB /* Activities.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 422CCE891B7EAB7200A4DAEB /* Activities.xcassets */; };
 		422CCE8D1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 422CCE8A1B7EAB7200A4DAEB /* TabBar.xcassets */; };
 		422CCE8E1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 422CCE8A1B7EAB7200A4DAEB /* TabBar.xcassets */; };
+		422CE57225DBE87300723D4D /* GCHistoryStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422CE57125DBE87300723D4D /* GCHistoryStatistics.swift */; };
+		422CE57325DBE87300723D4D /* GCHistoryStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422CE57125DBE87300723D4D /* GCHistoryStatistics.swift */; };
+		422CE57425DBE87300723D4D /* GCHistoryStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422CE57125DBE87300723D4D /* GCHistoryStatistics.swift */; };
+		422CE58625DC1E1400723D4D /* GCTestAggregatedStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422CE58525DC1E1400723D4D /* GCTestAggregatedStats.swift */; };
 		422D900417A1AE2C00C131DC /* GCViewIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900317A1AE2C00C131DC /* GCViewIcons.m */; };
 		422D900717A276F100C131DC /* GCStatsGraphOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900617A276F100C131DC /* GCStatsGraphOptionViewController.m */; };
 		422DCB6F258A2779000DEE4B /* RZUtilsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 422DCB6E258A2779000DEE4B /* RZUtilsSwift */; };
@@ -1373,6 +1377,8 @@
 		422CCE861B7EAA3000A4DAEB /* Navigation.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Navigation.xcassets; path = ConnectStats/icons/Navigation.xcassets; sourceTree = "<group>"; };
 		422CCE891B7EAB7200A4DAEB /* Activities.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Activities.xcassets; path = ConnectStats/icons/Activities.xcassets; sourceTree = "<group>"; };
 		422CCE8A1B7EAB7200A4DAEB /* TabBar.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = TabBar.xcassets; path = ConnectStats/icons/TabBar.xcassets; sourceTree = "<group>"; };
+		422CE57125DBE87300723D4D /* GCHistoryStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCHistoryStatistics.swift; path = src/GCHistoryStatistics.swift; sourceTree = "<group>"; };
+		422CE58525DC1E1400723D4D /* GCTestAggregatedStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCTestAggregatedStats.swift; sourceTree = "<group>"; };
 		422D900217A1AE2C00C131DC /* GCViewIcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCViewIcons.h; path = src/GCViewIcons.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		422D900317A1AE2C00C131DC /* GCViewIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCViewIcons.m; path = src/GCViewIcons.m; sourceTree = "<group>"; };
 		422D900517A276F100C131DC /* GCStatsGraphOptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStatsGraphOptionViewController.h; path = src/GCStatsGraphOptionViewController.h; sourceTree = "<group>"; };
@@ -2512,6 +2518,14 @@
 			name = FieldCache;
 			sourceTree = "<group>";
 		};
+		422CE57025DBE81D00723D4D /* GroupByAggregation */ = {
+			isa = PBXGroup;
+			children = (
+				422CE57125DBE87300723D4D /* GCHistoryStatistics.swift */,
+			);
+			name = GroupByAggregation;
+			sourceTree = "<group>";
+		};
 		422D8FFF17A1AB1200C131DC /* Lists */ = {
 			isa = PBXGroup;
 			children = (
@@ -3358,6 +3372,7 @@
 				42B088441C38894D00113306 /* GCTestFields.m */,
 				42FC177F1E196E4B00F55302 /* GCTestActivityFitFile.swift */,
 				426E287D25BF3A5400A9DA6F /* GCTestServiceEdgeCases.swift */,
+				422CE58525DC1E1400723D4D /* GCTestAggregatedStats.swift */,
 				42A89C251D63B2D7007CF90D /* GCTestHealthZones.m */,
 				426CC4741BAEBD060033978C /* GCTestsActions.m */,
 				425CF5A81813CEEC009279C0 /* GCTestsActivities.m */,
@@ -3468,6 +3483,7 @@
 				429D752A1651AA9200232BED /* Organizer */,
 				42AA28891637F4C80054F84A /* Search */,
 				42A95B1E16329365000B2082 /* Laps */,
+				422CE57025DBE81D00723D4D /* GroupByAggregation */,
 				426F74DB1620299F007B3653 /* History */,
 				426F74DA1620295D007B3653 /* Tracks */,
 			);
@@ -5349,6 +5365,7 @@
 				422FAF2719A1DD6000D09773 /* GCWebReverseGeocode.m in Sources */,
 				42BFC24F1DCF508800EAD40E /* GCAppProfiles.m in Sources */,
 				422FAF2819A1DD6000D09773 /* GCSettingsProfilesViewController.m in Sources */,
+				422CE57425DBE87300723D4D /* GCHistoryStatistics.swift in Sources */,
 				42ABD30E241CE31F00D805DF /* GCConnectStatsStatus.m in Sources */,
 				42E1A759242784B3006C868A /* GCActivity+TrackTransform.m in Sources */,
 				422FAF2C19A1DD6000D09773 /* GCSplitViewController.m in Sources */,
@@ -5701,6 +5718,7 @@
 				426786DA16C6594F00899C8B /* GCSettingsServicesViewController.m in Sources */,
 				428F9EEE244C505100666625 /* GCAppReferenceData.m in Sources */,
 				424FBFF922EC328400E2059A /* GCDebugServiceKeys.m in Sources */,
+				422CE57225DBE87300723D4D /* GCHistoryStatistics.swift in Sources */,
 				42E04E5825398099005FFD5E /* GCCellRoundedPatternView.swift in Sources */,
 				42C072C21AE2FAE000E7E066 /* GCMapWindCompass.m in Sources */,
 				424B7F4816CFBE30000B38AD /* GCSettingsHelpViewController.m in Sources */,
@@ -5788,6 +5806,7 @@
 				42A31AF823A0F8A7006F5664 /* GCActivity+TestBackwardCompat.m in Sources */,
 				428FF73315F36888007A88FA /* GCTestsGeneral.m in Sources */,
 				42B9555318186D0C00BC7AF9 /* GCTestsUtils.m in Sources */,
+				422CE58625DC1E1400723D4D /* GCTestAggregatedStats.swift in Sources */,
 				42B088451C38894D00113306 /* GCTestFields.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5798,6 +5817,7 @@
 			files = (
 				42B5E5831BA5ECD2000FAE4E /* GCViewIcons.m in Sources */,
 				42B5E5811BA5ECCA000FAE4E /* GCFormattedField.m in Sources */,
+				422CE57325DBE87300723D4D /* GCHistoryStatistics.swift in Sources */,
 				42B5E5821BA5ECCA000FAE4E /* GCFormattedFieldText.m in Sources */,
 				42B5E5801BA5ECB1000FAE4E /* GCCellGrid+Templates.m in Sources */,
 				42B5E57C1BA5BB5B000FAE4E /* GCSimpleGraphCachedDataSource+Templates.m in Sources */,

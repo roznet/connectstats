@@ -81,7 +81,7 @@
             NSCalendarUnit calendarUnit = [vc intValue];
             GCStatsCalendarAggregationConfig * calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:calendarUnit];
             GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
-            GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:activityType];
+            GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:activityType];
             [vals setActivitiesFromOrganizer:organizer];
             
             [vals aggregate:calendarUnit referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
@@ -284,7 +284,7 @@
                                                                                    referenceDate:nil
                                                                                       ignoreMode:gcIgnoreModeActivityFocus];
 
-    GCHistoryAggregatedActivityStats * vals_agg = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:activityType];
+    GCHistoryAggregatedActivityStats * vals_agg = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:activityType];
     [vals_agg setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     [vals_agg aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 

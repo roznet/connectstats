@@ -49,18 +49,24 @@
 //        indexed by field list of holder x [ buckets ] (field summary for wow, mom )
 //        indexed by cluster serie of date x field (graphs or total by location, cluster)
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface GCHistoryAggregatedActivityStats : NSObject<NSFastEnumeration>
 
-+(GCHistoryAggregatedActivityStats*)aggregatedActivitStatsForActivityType:(NSString*)activityType;
++(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityType:(NSString*)activityType;
 
 @property (nonatomic,retain) NSArray<GCActivity*> * activities;
 @property (nonatomic,retain) NSString * activityType;
 @property (nonatomic,assign) BOOL useFilter;
 
--(void)aggregate:(NSCalendarUnit)aUnit referenceDate:(NSDate*)refOrNil ignoreMode:(gcIgnoreMode)ignoreMode;
--(void)aggregate:(NSCalendarUnit)aUnit referenceDate:(NSDate*)refOrNil cutOff:(NSDate*)cutOff ignoreMode:(gcIgnoreMode)ignoreMode;
+-(void)aggregate:(NSCalendarUnit)aUnit referenceDate:(nullable NSDate*)refOrNil ignoreMode:(gcIgnoreMode)ignoreMode;
+-(void)aggregate:(NSCalendarUnit)aUnit referenceDate:(nullable NSDate*)refOrNil cutOff:(nullable NSDate*)cutOff ignoreMode:(gcIgnoreMode)ignoreMode;
 -(NSUInteger)count;
 -(GCHistoryAggregatedDataHolder*)dataForIndex:(NSUInteger)idx;
 -(GCHistoryAggregatedDataHolder*)dataForDate:(NSDate*)date;
 -(void)setActivitiesFromOrganizer:(GCActivitiesOrganizer*)organizer;
+
++(NSArray<GCField*>*)defaultFieldsForActivityType:(NSString*)activityType;
 @end
+
+NS_ASSUME_NONNULL_END

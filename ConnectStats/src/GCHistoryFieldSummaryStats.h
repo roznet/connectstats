@@ -28,7 +28,7 @@
 
 @class GCHealthMeasure;
 @class GCHistoryFieldDataHolder;
-
+NS_ASSUME_NONNULL_BEGIN
 // Summary of all fields stats
 @interface GCHistoryFieldSummaryStats : NSObject
 
@@ -43,12 +43,14 @@
 @property (nonatomic,retain) NSArray<NSString*> * foundActivityTypes;
 
 +(GCHistoryFieldSummaryStats*)fieldStatsWithActivities:(NSArray<GCActivity*>*)activities
-                                              matching:(GCActivityMatchBlock)match
-                                         referenceDate:(NSDate*)refOrNil
+                                              matching:(nullable GCActivityMatchBlock)match
+                                         referenceDate:(nullable NSDate*)refOrNil
                                             ignoreMode:(gcIgnoreMode)ignoreMode;
 +(GCHistoryFieldSummaryStats*)fieldStatsWithHealthMeasures:(NSArray*)measures;
--(void)addHealthMeasures:(NSArray<GCHealthMeasure*>*)measures referenceDate:(NSDate*)refOrNil;
+-(void)addHealthMeasures:(NSArray<GCHealthMeasure*>*)measures referenceDate:(nullable NSDate*)refOrNil;
 
 -(GCHistoryFieldDataHolder*)dataForField:(GCField*)aField;
 
 @end
+
+NS_ASSUME_NONNULL_END

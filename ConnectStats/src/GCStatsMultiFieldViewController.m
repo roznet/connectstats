@@ -772,7 +772,7 @@
 
     [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
 
-    GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:self.activityType];
+    GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:self.activityType];
     vals.useFilter = self.useFilter;
     [vals setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     vals.activityType = self.activityType;

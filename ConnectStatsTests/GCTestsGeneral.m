@@ -268,7 +268,7 @@
     [e_sum sortByReverseDate];
     [e_max sortByReverseDate];
     
-    GCHistoryAggregatedActivityStats * stats = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:GC_TYPE_RUNNING];
+    GCHistoryAggregatedActivityStats * stats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_RUNNING];
     [stats setActivitiesFromOrganizer:organizer];
     [stats setActivityType:GC_TYPE_RUNNING];
     [stats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];

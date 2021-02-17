@@ -955,7 +955,7 @@
 
     NSMutableArray * stats = [NSMutableArray array];
 
-    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:GC_TYPE_RUNNING];
+    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_RUNNING];
     [aggregatedStats setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     [aggregatedStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
@@ -982,7 +982,7 @@
 
     NSMutableArray * stats = [NSMutableArray array];
 
-    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:GC_TYPE_RUNNING];
+    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_RUNNING];
     [aggregatedStats setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     [aggregatedStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
