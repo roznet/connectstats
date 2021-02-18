@@ -52,14 +52,28 @@
 import Foundation
 
 
+extension Array : Comparable where Element : Comparable {
+    public static func < (lhs : [Element], rhs : [Element]) -> Bool {
+        for (lhe, rhe) in zip(lhs, rhs) {
+            if lhe < rhe {
+                return true
+            }else if lhe > rhe {
+                return false
+            }
+        }
+        return lhs.count < rhs.count
+    }
+}
+
 class SummaryStatistics {
-    enum stat {
+    enum Stat {
         case sum
         case avg
         case cnt
         case max
         case min
-        case std
+        //case std
+        case wavg
     }
     
     var unit : GCUnit
@@ -123,11 +137,35 @@ class SummaryStatistics {
         self.timeweightsum += timeweight * val
         self.distweightsum += distweight * val
     }
+    
+    static private let mps = GCUnit.mps()
+    static private let dimensionless = GCUnit.dimensionless()
+    
+    func numberWithUnit(stats : Stat) -> GCNumberWithUnit {
+        switch stats {
+        case .avg:
+            return GCNumberWithUnit(unit: self.unit, andValue: self.avg)
+        case .max:
+            return GCNumberWithUnit(unit: self.unit, andValue: self.max)
+        case .min:
+            return GCNumberWithUnit(unit: self.unit, andValue: self.min)
+        case .cnt:
+            return GCNumberWithUnit(unit: SummaryStatistics.dimensionless, andValue: Double(self.cnt))
+        case .sum:
+            return GCNumberWithUnit(unit: self.unit, andValue: self.sum)
+        case .wavg:
+            if self.unit.canConvert(to: SummaryStatistics.mps) {
+                return GCNumberWithUnit(unit: SummaryStatistics.mps, andValue: self.distweightsum/self.timeweightsum).convert(to: self.unit)
+            }else{
+                return GCNumberWithUnit(unit: self.unit, andValue:self.timeweightsum/self.timeweight)
+            }
+        }
+    }
 }
 
 extension SummaryStatistics : CustomStringConvertible {
     var description: String {
-        return "Statistics(cnt: \(self.cnt), sum: \(self.sum), avg: \(self.avg), max: \(self.max))"
+        return "Statistics(\(self.unit.abbr) cnt: \(self.cnt), sum: \(self.sum), avg: \(self.avg), max: \(self.max))"
     }
 }
 
@@ -200,6 +238,8 @@ class IndexData {
 
             for field in fields {
                 if let nu = activity.numberWithUnit(for: field) {
+                    guard nu.value != 0.0 || field.isZeroValid else { continue }
+                    
                     if let stats = self.data[field] {
                         stats.add(numberWithUnit: nu, timeweight: duration, distweight: distance)
                     }else{
@@ -213,15 +253,37 @@ class IndexData {
 
 extension IndexData : CustomStringConvertible{
     var description : String {
-        return "IndexData(\(self.data))"
+        return "\(self.data)"
     }
     
 }
 
-enum IndexValue : Equatable,Hashable  {
+enum IndexValue : Equatable,Hashable,Comparable,CustomStringConvertible  {
     case dateBucket(DateBucket)
-    case label(String)
+    case string(String)
+    
+    var description: String {
+        switch self {
+        case .dateBucket(let bucket):
+            return "\(bucket)"
+        case .string(let string):
+            return string
+        }
+    }
+    
+    static func < (lhs: IndexValue, rhs: IndexValue) -> Bool {
+        switch (lhs,rhs) {
+        case (.dateBucket(let lhe), .dateBucket(let rhe)):
+            return lhe.interval.start < rhe.interval.start
+        case (.string(let lhe), .string(let rhe)):
+            return lhe < rhe
+        default:
+            return false
+        }
+    }
 }
+
+
 
 class Index  {
     let indexValues : [IndexValue]
@@ -245,11 +307,15 @@ extension Index : CustomStringConvertible {
     }
 }
 
-extension Index : Equatable,Hashable {
+extension Index : Equatable,Hashable,Comparable {
     static func ==(lhs:Index, rhs:Index) -> Bool {
         return lhs.indexValues == rhs.indexValues
     }
     
+    static func <(lhs:Index, rhs:Index) -> Bool {
+        return lhs.indexValues < rhs.indexValues
+    }
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(indexValues)
     }
@@ -310,6 +376,20 @@ extension Index : Equatable,Hashable {
                 }
             }
         }
+    }
+    
+    func index(sortedBy: (Index,Index) -> Bool) -> [Index] {
+        return [Index](self.groupedBy.keys).sorted(by: sortedBy)
+    }
+    
+    func data(sortedBy: (Index,Index) -> Bool) -> [(Index,IndexData)] {
+        var rv : [(Index,IndexData)] = []
+        for index in self.index(sortedBy: sortedBy){
+            if let data = self.groupedBy[index] {
+                rv.append((index,data))
+            }
+        }
+        return rv
     }
 }
 

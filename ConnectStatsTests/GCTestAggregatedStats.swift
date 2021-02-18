@@ -126,6 +126,23 @@ class GCTestAggregatedStats: XCTestCase {
         aggstats.aggregate()
         print( "\(aggstats) \(performance)")
         
+        for (index,data) in aggstats.data(sortedBy: >) {
+            guard let value = index.indexValues.first else { XCTAssertTrue(false); continue }
+            if case let .dateBucket(bucket) = value {
+                let old = stats.data(for: bucket.interval.start)
+                print( "\(old)")
+
+                for (k,v) in data.data {
+                    XCTAssertTrue(old.hasField(k))
+                    XCTAssertEqual(old.number(withUnit: k, statType: .cnt),v.numberWithUnit(stats: .cnt), "\(k) cnt")
+                    print( " \(k): \(v)")
+                }
+            }else{
+                XCTAssertTrue(false)
+            }
+            
+        }
+        
         performance.reset()
         let fieldsdata = GCHistoryFieldSummaryStats.fieldStats(withActivities: activities, matching: nil, referenceDate: nil, ignoreMode: gcIgnoreMode.activityFocus)
         print( "\(fieldsdata) \(performance)")
@@ -147,5 +164,17 @@ class GCTestAggregatedStats: XCTestCase {
             aggfieldstats.aggregate()
             print( "\(aggfieldstats) \(performance)")
         }
+        
+        let aggtypestats = HistoryAggregator(activities: activities, fields: GCHistoryAggregatedActivityStats.defaultFields(forActivityType: GC_TYPE_ALL)) {
+            act in
+            let bucket = DateBucket(date: act.date, unit: .month, calendar: calendar)
+            let rv = [IndexValue.string(act.activityType), IndexValue.dateBucket(bucket!)]
+            return Index(indexValues: rv )
+        }
+        performance.reset()
+        aggtypestats.aggregate()
+
+        print( "\(aggtypestats) \(performance)")
+        
     }
 }
