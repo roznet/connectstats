@@ -157,7 +157,7 @@
     BOOL hasField[fieldEnd];;
     for( size_t i=0;i<fieldEnd;i++){
         GCNumberWithUnit * nu = [act numberWithUnitForField:self.fields[i]];
-        if( self.fields[i].fieldFlag == gcFieldFlagPower && nu.value == 0.){
+        if( nu.value == 0. && (!self.fields[i].isZeroValid) ){
             // power of zero means didn't record
             nu = nil;
         }
@@ -231,6 +231,24 @@
                 _stats[f*gcAggregatedTypeEnd+gcAggregatedWvg] = (_stats[f*gcAggregatedTypeEnd+gcAggregatedWvg]*dur_w0+data[f]*dur_w1)/dur_tot;
             }
         }
+    }
+    GCField * speed = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType];
+    size_t f =0;
+    for( ; f < self.fields.count; f++){
+        if( [speed matchesField:self.fields[f]] ){
+            break;
+        }
+    }
+    if( f < self.fields.count){
+        NSLog(@"%@ %@ cnt:%@ sum:%@ avg:%@ max:%@",
+              act,
+              [act numberWithUnitForField:speed],
+              @(_stats[f*gcAggregatedTypeEnd+gcAggregatedCnt]),
+              @(_stats[f*gcAggregatedTypeEnd+gcAggregatedSum]),
+              @(_stats[f*gcAggregatedTypeEnd+gcAggregatedAvg]/_stats[f*gcAggregatedTypeEnd+gcAggregatedCnt]),
+              @(_stats[f*gcAggregatedTypeEnd+gcAggregatedMax])
+              
+              );
     }
 }
 

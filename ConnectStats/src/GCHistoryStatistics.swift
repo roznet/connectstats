@@ -103,8 +103,8 @@ class SummaryStatistics {
     var distweightavg : Double { return self.distweightsum / self.distweight }
     
     init(numberWithUnit : GCNumberWithUnit, timeweight : Double, distweight : Double) {
-        self.unit = numberWithUnit.unit
-        let val = numberWithUnit.value
+        self.unit = numberWithUnit.unit.reference ?? numberWithUnit.unit
+        let val =  self.unit.convert( numberWithUnit.value, from: numberWithUnit.unit )
         self.cnt = 1
         self.sum = val
         self.ssq = val * val
@@ -120,7 +120,7 @@ class SummaryStatistics {
     }
     
     func add(numberWithUnit : GCNumberWithUnit, timeweight : Double, distweight : Double){
-        let val = numberWithUnit.convert(to: self.unit).value
+        let val = (self.unit == numberWithUnit.unit) ? numberWithUnit.value : numberWithUnit.convert(to: self.unit).value
         guard val.isFinite else { return }
         
         self.cnt += 1
@@ -155,7 +155,7 @@ class SummaryStatistics {
             return GCNumberWithUnit(unit: self.unit, andValue: self.sum)
         case .wavg:
             if self.unit.canConvert(to: SummaryStatistics.mps) {
-                return GCNumberWithUnit(unit: SummaryStatistics.mps, andValue: self.distweightsum/self.timeweightsum).convert(to: self.unit)
+                return GCNumberWithUnit(unit: SummaryStatistics.mps, andValue: self.distweight/self.timeweight).convert(to: self.unit)
             }else{
                 return GCNumberWithUnit(unit: self.unit, andValue:self.timeweightsum/self.timeweight)
             }
@@ -236,6 +236,8 @@ class IndexData {
             let distance = activity.numberWithForField(inStoreUnit: GCField(for: .sumDistance, andActivityType: activity.activityType))?.value ?? 1.0
             let duration = activity.numberWithForField(inStoreUnit: GCField(for: .sumDuration, andActivityType: activity.activityType))?.value ?? 1.0
 
+            print( "\(distance) \(duration)")
+            
             for field in fields {
                 if let nu = activity.numberWithUnit(for: field) {
                     guard nu.value != 0.0 || field.isZeroValid else { continue }
@@ -244,6 +246,11 @@ class IndexData {
                         stats.add(numberWithUnit: nu, timeweight: duration, distweight: distance)
                     }else{
                         self.data[field] = SummaryStatistics(numberWithUnit: nu, timeweight: duration, distweight: distance)
+                    }
+                    if field.fieldFlag == gcFieldFlag.weightedMeanSpeed,
+                       let val = self.data[field]{
+                        
+                        print( "\(activity) \(field) \(nu) \(val)")
                     }
                 }
             }

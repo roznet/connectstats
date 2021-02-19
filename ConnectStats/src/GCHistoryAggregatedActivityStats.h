@@ -62,8 +62,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)aggregate:(NSCalendarUnit)aUnit referenceDate:(nullable NSDate*)refOrNil ignoreMode:(gcIgnoreMode)ignoreMode;
 -(void)aggregate:(NSCalendarUnit)aUnit referenceDate:(nullable NSDate*)refOrNil cutOff:(nullable NSDate*)cutOff ignoreMode:(gcIgnoreMode)ignoreMode;
 -(NSUInteger)count;
--(GCHistoryAggregatedDataHolder*)dataForIndex:(NSUInteger)idx;
--(GCHistoryAggregatedDataHolder*)dataForDate:(NSDate*)date;
+-(nullable GCHistoryAggregatedDataHolder*)dataForIndex:(NSUInteger)idx;
+-(nullable GCHistoryAggregatedDataHolder*)dataForDate:(NSDate*)date;
 -(void)setActivitiesFromOrganizer:(GCActivitiesOrganizer*)organizer;
 
 +(NSArray<GCField*>*)defaultFieldsForActivityType:(NSString*)activityType;
