@@ -150,7 +150,9 @@
 
         for (GCActivity * activity in serie) {
             thisdate = activity.date;
-
+            if( [activity.activityId isEqualToString:@"153769391"] ){
+                NSLog(@"");
+            }
             BOOL changedBucket = [bucketer bucket:thisdate];
             if (changedBucket) {
                 [dataHolder aggregateEnd:nil];

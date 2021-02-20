@@ -235,8 +235,6 @@ class IndexData {
             
             let distance = activity.numberWithForField(inStoreUnit: GCField(for: .sumDistance, andActivityType: activity.activityType))?.value ?? 1.0
             let duration = activity.numberWithForField(inStoreUnit: GCField(for: .sumDuration, andActivityType: activity.activityType))?.value ?? 1.0
-
-            print( "\(distance) \(duration)")
             
             for field in fields {
                 if let nu = activity.numberWithUnit(for: field) {
@@ -250,7 +248,7 @@ class IndexData {
                     if field.fieldFlag == gcFieldFlag.weightedMeanSpeed,
                        let val = self.data[field]{
                         
-                        print( "\(activity) \(field) \(nu) \(val)")
+                        print( "\(activity) \(field) \(nu) \(duration) \(val.timeweight)")
                     }
                 }
             }

@@ -67,8 +67,28 @@ extension SummaryStatistics {
             }
         }
     }
+    
+    func compare(field : GCField, summaryHolder : GCHistoryFieldDataHolder, stat : gcHistoryStats, message : String){
+        XCTAssertEqual(self.cnt, Int(summaryHolder.count(withUnit: stat).value))
+        XCTAssertTrue(self.numberWithUnit(stats: .sum).isAlmostEqual(to: summaryHolder.sum(withUnit: stat)))
+        XCTAssertTrue(self.numberWithUnit(stats: .max).isAlmostEqual(to: summaryHolder.max(withUnit: stat)))
+    }
 }
 
+extension DateBucket {
+    var historyStat : gcHistoryStats {
+        switch self.unit {
+        case .month:
+            return .month
+        case .weekOfYear:
+            return .week
+        case .year:
+            return .year
+        default:
+            return .all
+        }
+    }
+}
 extension GCNumberWithUnit {
     func isAlmostEqual(to other : GCNumberWithUnit) -> Bool {
         if self.unit == other.unit {
@@ -140,7 +160,7 @@ class GCTestAggregatedStats: XCTestCase {
     }
     
     
-    func activitiesForStatsTest(n : Int = Int.max, activityType : String = GC_TYPE_ALL) -> [GCActivity] {
+    func activitiesForStatsTest(n : Int = Int.max, activityType : String = GC_TYPE_ALL, focus : Bool = false) -> [GCActivity] {
         guard let db = GCTestsSamples.sampleActivityDatabase("activities_stats.db") else { XCTAssertTrue(false); return [] }
         let organizer = GCActivitiesOrganizer(testModeWithDb: db)
         
@@ -148,12 +168,29 @@ class GCTestAggregatedStats: XCTestCase {
         
         let activityType = GC_TYPE_RUNNING
         
-        //guard let first = all.first else { XCTAssertTrue( false ); return }
-        //let firstmonth = DateBucket(date: first, unit: .month, calendar: calendar)
+        var focusbucket : DateBucket? = nil
+        
+        if focus {
+            let datecomponents = DateComponents(calendar: Calendar.current, year: 2012, month: 2, day: 2)
+            guard let date = Calendar.current.date(from: datecomponents) else { XCTAssertTrue(false); return [] }
+            focusbucket = DateBucket(date: date, unit: .month, calendar: Calendar.current)
+        }
         
         var activities : [GCActivity] = []
         for activity in all {
-            if activity.activityType == activityType {
+            // Note activity with an invalid Infinite speed will be handled
+            // differently between new code and old code
+            //    new code: skip the activity for speed calculation as it is +inf, because the totaldistance/totalduration is kept with the speed stats.
+            //    old code: include activity duration in the final speed calculation of "total distance" / "total duration" because it uses the distance/duration stats
+            // example such activity: activity.activityId == "153769391"
+            if activity.summaryFieldValue(inStoreUnit: .weightedMeanSpeed).isInfinite {
+                continue
+            }
+            if let focusbucket = focusbucket {
+                guard focusbucket.contains(activity.date) else { continue }
+            }
+            
+            if activityType == GC_TYPE_ALL || activity.activityType == activityType {
                 activities.append(activity)
             }
             if n != Int.max && activities.count == n{
@@ -190,6 +227,18 @@ class GCTestAggregatedStats: XCTestCase {
                 return false
             }
             aggfieldstats.aggregate()
+            
+            for (index,data) in aggfieldstats.data(sortedBy: >) {
+                if case .dateBucket(let bucket) = index.indexValues.first {
+                    let stat = bucket.historyStat
+                    
+                    for (k,v) in data.data {
+                        let summary = fieldsdata.data(for: k)
+                        //v.compare(field: k, summaryHolder: summary, stat: stat, message: "")
+                    }
+
+                }
+            }
             print( "\(aggfieldstats) \(performance)")
         }
     }

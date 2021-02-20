@@ -232,7 +232,7 @@
             }
         }
     }
-    GCField * speed = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType];
+    GCField * speed = [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:act.activityType];
     size_t f =0;
     for( ; f < self.fields.count; f++){
         if( [speed matchesField:self.fields[f]] ){
@@ -240,9 +240,10 @@
         }
     }
     if( f < self.fields.count){
-        NSLog(@"%@ %@ cnt:%@ sum:%@ avg:%@ max:%@",
+        NSLog(@"%@ %@ %@ cnt:%@ sum:%@ avg:%@ max:%@",
               act,
               [act numberWithUnitForField:speed],
+              @([act numberWithUnitForField:speed].value),
               @(_stats[f*gcAggregatedTypeEnd+gcAggregatedCnt]),
               @(_stats[f*gcAggregatedTypeEnd+gcAggregatedSum]),
               @(_stats[f*gcAggregatedTypeEnd+gcAggregatedAvg]/_stats[f*gcAggregatedTypeEnd+gcAggregatedCnt]),
