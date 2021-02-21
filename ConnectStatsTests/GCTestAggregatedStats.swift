@@ -29,6 +29,30 @@ import XCTest
 @testable import ConnectStats
 import RZUtils
 
+
+extension GCNumberWithUnit {
+    func isAlmostEqual(to other : GCNumberWithUnit) -> Bool {
+        if self.unit == other.unit {
+            let scale = max(abs(value), abs(other.value), .leastNormalMagnitude)
+            let tolerance = Double.ulpOfOne.squareRoot()
+            return abs(value-other.value) < scale*tolerance
+        }else{
+            return self.isAlmostEqual(to: other.convert(to: self.unit))
+        }
+    }
+    
+    func assertEqual(to other : GCNumberWithUnit, message : String){
+        if self.unit == other.unit {
+            let scale = Swift.max(abs(value), abs(other.value), .leastNormalMagnitude)
+            let tolerance = Double.ulpOfOne.squareRoot()
+            XCTAssertEqual(value, other.value, accuracy: tolerance*scale, "unit: \(self.unit) \(message)")
+            
+        }else{
+            self.assertEqual(to: other.convert(to: self.unit), message:message)
+        }
+    }
+}
+
 extension SummaryStatistics {
     func compare(field : GCField, dataHolder: GCHistoryAggregatedDataHolder, message : String) {
         XCTAssertTrue(dataHolder.hasField(field), message)
@@ -43,7 +67,7 @@ extension SummaryStatistics {
                                    (SummaryStatistics.Stat.avg, gcAggregatedType.avg),
                                    (SummaryStatistics.Stat.wavg , gcAggregatedType.wvg)
         ] {
-            let newnu = self.numberWithUnit(stats: newstat).convert(to: unit)
+            guard let newnu = self.numberWithUnit(stats: newstat)?.convert(to: unit) else { XCTAssertTrue(false); continue }
             guard var oldnu = dataHolder.number(withUnit: field, statType: oldstat)?.convert(to: unit) else { XCTAssertTrue(false); continue }
 
             // Special case weighted value for speed in old comes from preferred number
@@ -55,12 +79,10 @@ extension SummaryStatistics {
                 continue
             }
             
-            let scale = Swift.max(abs(newnu.value), abs(oldnu.value), .leastNormalMagnitude)
-            let tolerance = Double.ulpOfOne.squareRoot()
-
-            XCTAssertEqual(newnu.value, oldnu.value, accuracy: scale*tolerance,"\(field) \(newstat) \(message)")
-            if( abs( newnu.value - oldnu.value ) > scale*tolerance){
-                let newnu2 = self.numberWithUnit(stats: newstat).convert(to: unit)
+            newnu.assertEqual(to: oldnu, message: "\(field) \(newstat) \(message)")
+        
+            if( !newnu.isAlmostEqual(to: oldnu) ){
+                guard let newnu2 = self.numberWithUnit(stats: newstat)?.convert(to: unit) else { XCTAssertTrue(false); continue }
                 guard let oldnu2 = dataHolder.number(withUnit: field, statType: oldstat)?.convert(to: unit) else { XCTAssertTrue(false); continue }
                 guard let speednu2 = dataHolder.preferredNumber(withUnit: field) else { XCTAssertTrue(false); return }
                 print( "\(newnu2) \(oldnu2) \(speednu2)")
@@ -69,9 +91,20 @@ extension SummaryStatistics {
     }
     
     func compare(field : GCField, summaryHolder : GCHistoryFieldDataHolder, stat : gcHistoryStats, message : String){
-        XCTAssertEqual(self.cnt, Int(summaryHolder.count(withUnit: stat).value))
-        XCTAssertTrue(self.numberWithUnit(stats: .sum).isAlmostEqual(to: summaryHolder.sum(withUnit: stat)))
-        XCTAssertTrue(self.numberWithUnit(stats: .max).isAlmostEqual(to: summaryHolder.max(withUnit: stat)))
+        let cnt = Int(summaryHolder.count(withUnit: stat).value)
+        XCTAssertEqual(self.cnt, cnt, "\(field) \(stat) \(message)")
+        if field.canSum {
+            guard let nu = self.numberWithUnit(stats: .sum) else { XCTAssertTrue(false); return }
+            let oldnu = summaryHolder.sum(withUnit: stat)
+            nu.assertEqual(to: oldnu, message: "\(field) \(stat) \(message)")
+        }else{
+            // build number manually with wavg other wise would speed would not match
+            guard let wavg = self.wavg else { XCTAssertTrue(false); return }
+            guard let oldnu = summaryHolder.weightedAverage(withUnit: stat) else { XCTAssertTrue(false); return }
+            let nu = GCNumberWithUnit(unit: self.unit, andValue: wavg)
+            nu.assertEqual(to: oldnu, message: "\(field) \(stat) \(message)")
+            
+        }
     }
 }
 
@@ -86,17 +119,6 @@ extension DateBucket {
             return .year
         default:
             return .all
-        }
-    }
-}
-extension GCNumberWithUnit {
-    func isAlmostEqual(to other : GCNumberWithUnit) -> Bool {
-        if self.unit == other.unit {
-            let scale = max(abs(value), abs(other.value), .leastNormalMagnitude)
-            let tolerance = Double.ulpOfOne.squareRoot()
-            return abs(value-other.value) < scale*tolerance
-        }else{
-            return self.isAlmostEqual(to: other.convert(to: self.unit))
         }
     }
 }
@@ -116,7 +138,7 @@ class GCTestAggregatedStats: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         
-        let calendar = Calendar.current
+        let calendar = GCAppGlobal.calculationCalendar()
         
         let referenceDateComponents = DateComponents(year: 2021, month: 2, day: 16 )
         guard let referenceDate = calendar.date(from: referenceDateComponents) else { XCTAssertTrue(false); return }
@@ -161,6 +183,7 @@ class GCTestAggregatedStats: XCTestCase {
     
     
     func activitiesForStatsTest(n : Int = Int.max, activityType : String = GC_TYPE_ALL, focus : Bool = false) -> [GCActivity] {
+        let calendar = GCAppGlobal.calculationCalendar()
         guard let db = GCTestsSamples.sampleActivityDatabase("activities_stats.db") else { XCTAssertTrue(false); return [] }
         let organizer = GCActivitiesOrganizer(testModeWithDb: db)
         
@@ -171,8 +194,8 @@ class GCTestAggregatedStats: XCTestCase {
         var focusbucket : DateBucket? = nil
         
         if focus {
-            let datecomponents = DateComponents(calendar: Calendar.current, year: 2012, month: 2, day: 2)
-            guard let date = Calendar.current.date(from: datecomponents) else { XCTAssertTrue(false); return [] }
+            let datecomponents = DateComponents(calendar: calendar, year: 2012, month: 2, day: 2)
+            guard let date = calendar.date(from: datecomponents) else { XCTAssertTrue(false); return [] }
             focusbucket = DateBucket(date: date, unit: .month, calendar: Calendar.current)
         }
         
@@ -212,7 +235,7 @@ class GCTestAggregatedStats: XCTestCase {
         let fieldsdata = GCHistoryFieldSummaryStats.fieldStats(withActivities: activities, matching: nil, referenceDate: nil, ignoreMode: gcIgnoreMode.activityFocus)
         print( "\(fieldsdata) \(performance)")
         
-        if let basedate = activities.last?.date {
+        if let basedate = activities.first?.date {
             let indexes : Set<Index> = [
                 Index(dateBucket: DateBucket(date: basedate, unit: .weekOfYear, calendar: calendar)!),
                 Index(dateBucket: DateBucket(date: basedate, unit: .month, calendar: calendar)!),
@@ -234,9 +257,10 @@ class GCTestAggregatedStats: XCTestCase {
                     
                     for (k,v) in data.data {
                         let summary = fieldsdata.data(for: k)
-                        //v.compare(field: k, summaryHolder: summary, stat: stat, message: "")
+                        v.compare(field: k, summaryHolder: summary, stat: stat, message: "\(bucket)")
                     }
-
+                }else{
+                    XCTAssertTrue(false)
                 }
             }
             print( "\(aggfieldstats) \(performance)")

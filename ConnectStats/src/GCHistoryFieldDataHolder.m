@@ -177,43 +177,33 @@
     [self addNumberWithUnit:num withTimeWeight:1.0 distWeight:1.0 for:gcHistoryStatsAll];
 }
 -(void)addNumberWithUnit:(GCNumberWithUnit*)num withTimeWeight:(double)tw distWeight:(double)dw for:(gcHistoryStats)which{
-    if ([num.unit isEqualToUnit:self.unit]) {
-        if (!isinf(num.value)) {
-            self.sum[which] += num.value;
-            self.max[which] = MAX(self.max[which], num.value);
-            self.min[which] = MIN(self.min[which], num.value);
-            self.timewsum[which] += num.value * tw;
-            self.distwsum[which] += num.value * dw;
-        }
-    }else{
-        [self convertToUnit:num.unit];
-        double val = [num convertToUnit:self.unit].value;
-        if (!isinf(val)) {
-            self.sum[which] += val;
-            self.max[which] = MAX(self.max[which], val);
-            self.min[which] = MIN(self.min[which], val);
-            self.timewsum[which] =  val * tw;
-            self.distwsum[which] =  val * dw;
-        }
+    if( self.unit == nil ){
+        self.unit = num.unit.referenceUnit ?: num.unit;
     }
+    GCNumberWithUnit * cnum = [num convertToUnit:self.unit];
+    
+    if (!isinf(cnum.value)) {
+        self.sum[which] += cnum.value;
+        self.max[which] = MAX(self.max[which], cnum.value);
+        self.min[which] = MIN(self.min[which], cnum.value);
+        self.timewsum[which] += cnum.value * tw;
+        self.distwsum[which] += cnum.value * dw;
+    }
+    
     self.count[which] +=1.;
     self.timeweight[which]+=tw;
     self.distweight[which]+=dw;
 }
 -(void)addSumWithUnit:(GCNumberWithUnit*)num andCount:(NSUInteger)count for:(gcHistoryStats)which{
-    if ([num.unit isEqualToUnit:self.unit]) {
-        self.sum[which] += num.value;
-        self.max[which] = MAX(self.max[which], num.value);
-        self.min[which] = MIN(self.min[which], num.value);
-    }else{
-        [self convertToUnit:num.unit];
-        double val = [num convertToUnit:self.unit].value;
-        self.sum[which] += val;
-        self.max[which] = MAX(self.max[which], val);
-        self.min[which] = MIN(self.min[which], val);
-
+    if( self.unit == nil ){
+        self.unit = num.unit.referenceUnit ?: num.unit;
     }
-    self.count[which] +=count;
+    GCNumberWithUnit * cnum = [num convertToUnit:self.unit];
+    
+    self.sum[which] += cnum.value;
+    self.max[which] = MAX(self.max[which], cnum.value);
+    self.min[which] = MIN(self.min[which], cnum.value);
+    self.count[which] += count;
 }
 
 @end

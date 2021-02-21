@@ -77,6 +77,10 @@
                     }
                     GCNumberWithUnit * nu = [act numberWithUnitForField:field];
                     if (nu) {
+                        if( nu.value == 0.0 && !field.isZeroValid){
+                            continue;
+                        }
+                        
                         // weight is either duration (everything) or dist (for pace = invlinear)
                         double timeweight = [act summaryFieldValueInStoreUnit:gcFieldFlagSumDuration];
                         double distweight = [act summaryFieldValueInStoreUnit:gcFieldFlagSumDistance];
@@ -90,6 +94,7 @@
                         [holderAll addNumberWithUnit:nu withTimeWeight:timeweight distWeight:distweight for:gcHistoryStatsAll];
 
                         if (weekBucket==nil) {
+                            
                             weekBucket = [GCStatsDateBuckets statsDateBucketFor:NSCalendarUnitWeekOfYear
                                                                   referenceDate:refOrNil
                                                                     andCalendar:[GCAppGlobal calculationCalendar]];

@@ -88,7 +88,8 @@ class SummaryStatistics {
         let cnt = Double( self.cnt )
         return ((cnt*self.ssq-self.sum*self.sum)/(cnt*(cnt-1))).squareRoot()
     }
-    var avg : Double {
+    var avg : Double? {
+        guard self.cnt != 0 else { return nil }
         let cnt = Double( self.cnt )
         return self.sum / cnt
     }
@@ -99,6 +100,20 @@ class SummaryStatistics {
     var timeweightsum : Double
     var distweightsum : Double
 
+    var wavg : Double? {
+        switch self.unit.sumWeightBy {
+        case .distance:
+            guard self.distweight != 0.0 else { return nil }
+            return self.distweightsum / self.distweight
+        case .time:
+            guard self.timeweight != 0.0 else { return nil }
+            return self.timeweightsum / self.timeweight
+        default: // cover case .count
+            guard self.cnt != 0 else { return nil }
+            return self.sum / Double( self.cnt)
+        }
+    }
+    
     var timeweightavg : Double { return self.timeweightsum / self.timeweight }
     var distweightavg : Double { return self.distweightsum / self.distweight }
     
@@ -141,10 +156,11 @@ class SummaryStatistics {
     static private let mps = GCUnit.mps()
     static private let dimensionless = GCUnit.dimensionless()
     
-    func numberWithUnit(stats : Stat) -> GCNumberWithUnit {
+    func numberWithUnit(stats : Stat) -> GCNumberWithUnit? {
         switch stats {
         case .avg:
-            return GCNumberWithUnit(unit: self.unit, andValue: self.avg)
+            guard let avg = self.avg else { return nil }
+            return GCNumberWithUnit(unit: self.unit, andValue: avg)
         case .max:
             return GCNumberWithUnit(unit: self.unit, andValue: self.max)
         case .min:
@@ -155,9 +171,11 @@ class SummaryStatistics {
             return GCNumberWithUnit(unit: self.unit, andValue: self.sum)
         case .wavg:
             if self.unit.canConvert(to: SummaryStatistics.mps) {
+                guard self.timeweight != 0.0 else { return nil }
                 return GCNumberWithUnit(unit: SummaryStatistics.mps, andValue: self.distweight/self.timeweight).convert(to: self.unit)
             }else{
-                return GCNumberWithUnit(unit: self.unit, andValue:self.timeweightsum/self.timeweight)
+                guard let wavg = self.wavg else { return nil }
+                return GCNumberWithUnit(unit: self.unit, andValue: wavg)
             }
         }
     }
@@ -165,7 +183,8 @@ class SummaryStatistics {
 
 extension SummaryStatistics : CustomStringConvertible {
     var description: String {
-        return "Statistics(\(self.unit.abbr) cnt: \(self.cnt), sum: \(self.sum), avg: \(self.avg), max: \(self.max))"
+        let avg = self.avg != nil ? "\(self.avg!)" : "nil"
+        return "Statistics(\(self.unit.abbr) cnt: \(self.cnt), sum: \(self.sum), avg: \(avg), max: \(self.max))"
     }
 }
 
@@ -244,11 +263,6 @@ class IndexData {
                         stats.add(numberWithUnit: nu, timeweight: duration, distweight: distance)
                     }else{
                         self.data[field] = SummaryStatistics(numberWithUnit: nu, timeweight: duration, distweight: distance)
-                    }
-                    if field.fieldFlag == gcFieldFlag.weightedMeanSpeed,
-                       let val = self.data[field]{
-                        
-                        print( "\(activity) \(field) \(nu) \(duration) \(val.timeweight)")
                     }
                 }
             }
