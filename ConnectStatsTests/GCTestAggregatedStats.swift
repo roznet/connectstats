@@ -80,13 +80,6 @@ extension SummaryStatistics {
             }
             
             newnu.assertEqual(to: oldnu, message: "\(field) \(newstat) \(message)")
-        
-            if( !newnu.isAlmostEqual(to: oldnu) ){
-                guard let newnu2 = self.numberWithUnit(stats: newstat)?.convert(to: unit) else { XCTAssertTrue(false); continue }
-                guard let oldnu2 = dataHolder.number(withUnit: field, statType: oldstat)?.convert(to: unit) else { XCTAssertTrue(false); continue }
-                guard let speednu2 = dataHolder.preferredNumber(withUnit: field) else { XCTAssertTrue(false); return }
-                print( "\(newnu2) \(oldnu2) \(speednu2)")
-            }
         }
     }
     
@@ -189,8 +182,6 @@ class GCTestAggregatedStats: XCTestCase {
         
         let all = organizer.activities()
         
-        let activityType = GC_TYPE_RUNNING
-        
         var focusbucket : DateBucket? = nil
         
         if focus {
@@ -233,7 +224,6 @@ class GCTestAggregatedStats: XCTestCase {
         performance.reset()
 
         let fieldsdata = GCHistoryFieldSummaryStats.fieldStats(withActivities: activities, matching: nil, referenceDate: nil, ignoreMode: gcIgnoreMode.activityFocus)
-        print( "\(fieldsdata) \(performance)")
         
         if let basedate = activities.first?.date {
             let indexes : Set<Index> = [
@@ -263,12 +253,11 @@ class GCTestAggregatedStats: XCTestCase {
                     XCTAssertTrue(false)
                 }
             }
-            print( "\(aggfieldstats) \(performance)")
         }
     }
     
     func testMultiLevelAggregatedStats() {
-        let activityType = GC_TYPE_RUNNING
+        let activityType = GC_TYPE_ALL
         let calendar = GCAppGlobal.calculationCalendar()
         let activities = self.activitiesForStatsTest(n:10,activityType: activityType)
         let performance = RZPerformance()
@@ -282,7 +271,40 @@ class GCTestAggregatedStats: XCTestCase {
         }
         aggtypestats.aggregate()
 
-        print( "\(aggtypestats) \(performance)")
+        let statsrun = GCHistoryAggregatedActivityStats(forActivityType: GC_TYPE_RUNNING)
+        statsrun.activities = activities
+        statsrun.aggregate(.month, referenceDate: nil, ignoreMode: gcIgnoreMode.activityFocus)
+
+        let statscycle = GCHistoryAggregatedActivityStats(forActivityType: GC_TYPE_CYCLING)
+        statscycle.activities = activities
+        statscycle.aggregate(.month, referenceDate: nil, ignoreMode: gcIgnoreMode.activityFocus)
+
+        for (index,data) in aggtypestats.data(sortedBy: <){
+            XCTAssertTrue(index.indexValues.count == 2)
+            
+            let atypevalue = index.indexValues[0]
+            let bucketvalue = index.indexValues[1]
+            
+            if case let .dateBucket(indexBucket) = bucketvalue,
+               case let .string(indexActivityType) = atypevalue {
+                guard indexActivityType == GC_TYPE_CYCLING || indexActivityType == GC_TYPE_RUNNING else { continue }
+                let stats = GC_TYPE_RUNNING == indexActivityType ? statsrun : statscycle
+                print( "\(indexBucket) \(indexActivityType) \(data)" )
+                print( "\(stats)")
+                
+                guard let old = stats.data(for: indexBucket.interval.start) else { XCTAssertTrue(false); continue }
+                var done = 0
+                for (k,v) in data.data {
+                    let field = k.correspondingField(forActivityType: indexActivityType)
+                    if let field = field, old.hasField(field) && field.unit() != nil {
+                        done += 1
+                        v.compare(field: field, dataHolder: old, message: "\(indexBucket) monthly aggregate")
+                    }
+                }
+                XCTAssertGreaterThan(done, 0, "Found some valid tests")
+
+            }
+        }
     }
     
     func testAggregatedStats() {
@@ -296,9 +318,7 @@ class GCTestAggregatedStats: XCTestCase {
         stats.activities = activities
         
         stats.aggregate(.month, referenceDate: nil, ignoreMode: gcIgnoreMode.activityFocus)
-        
-        print( "\(stats) \(performance)")
-                
+                        
         let aggstats = HistoryAggregator(activities: activities, fields: GCHistoryAggregatedActivityStats.defaultFields(forActivityType: activityType)) {
             act in
             let bucket = DateBucket(date: act.date, unit: .month, calendar: calendar)
@@ -307,7 +327,6 @@ class GCTestAggregatedStats: XCTestCase {
         }
         performance.reset()
         aggstats.aggregate()
-        print( "\(aggstats) \(performance)")
         
         for (index,data) in aggstats.data(sortedBy: >) {
             guard let value = index.indexValues.first else { XCTAssertTrue(false); continue }

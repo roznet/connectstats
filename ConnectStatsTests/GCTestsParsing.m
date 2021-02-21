@@ -789,7 +789,7 @@
     GCNumberWithUnit * unskip_nu = [[unskip_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] weightedSumWithUnit:gcHistoryStatsAll];
 
     
-    XCTAssertEqualWithAccuracy(start_nu.value, skip_nu.value+dist.value, 1.e-7);
+    XCTAssertEqualWithAccuracy(start_nu.value, [skip_nu addNumberWithUnit:dist weight:1.0].value, 1.e-7);
     XCTAssertEqualWithAccuracy(reload_nu.value, skip_nu.value, 1.e-7);
     XCTAssertEqualWithAccuracy(start_nu.value, unskip_nu.value, 1.e-7);
 
