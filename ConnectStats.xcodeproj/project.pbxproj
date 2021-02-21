@@ -382,6 +382,10 @@
 		4248ED9D1DCFFD2400254216 /* GCFieldsForCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4212088F1C6E860700E0470D /* GCFieldsForCategory.m */; };
 		424B7F2A16CB049A000B38AD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424B7F2916CB049A000B38AD /* Security.framework */; };
 		424B7F4816CFBE30000B38AD /* GCSettingsHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424B7F4716CFBE2F000B38AD /* GCSettingsHelpViewController.m */; };
+		424BDAB925E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424BDAB825E2DA7C00EC7DBE /* GCActivity+Location.swift */; };
+		424BDABA25E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424BDAB825E2DA7C00EC7DBE /* GCActivity+Location.swift */; };
+		424BDABB25E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424BDAB825E2DA7C00EC7DBE /* GCActivity+Location.swift */; };
+		424BDAD425E2E25400EC7DBE /* RZExternalUniversal in Frameworks */ = {isa = PBXBuildFile; productRef = 424BDAD325E2E25400EC7DBE /* RZExternalUniversal */; };
 		424D08C01DC5DA4E000B4620 /* GCAppPasswordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424D08BF1DC5DA4E000B4620 /* GCAppPasswordManager.swift */; };
 		424F1A7B21E20477009DD368 /* FITAppGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424F1A7A21E20477009DD368 /* FITAppGlobal.swift */; };
 		424F92D61B1072FD0075C5F1 /* GCDebugActionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422637A41AFF6C5F005461E3 /* GCDebugActionsTableViewController.m */; };
@@ -1478,6 +1482,7 @@
 		424B7F2916CB049A000B38AD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		424B7F4616CFBE2F000B38AD /* GCSettingsHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsHelpViewController.h; path = src/GCSettingsHelpViewController.h; sourceTree = "<group>"; };
 		424B7F4716CFBE2F000B38AD /* GCSettingsHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSettingsHelpViewController.m; path = src/GCSettingsHelpViewController.m; sourceTree = "<group>"; };
+		424BDAB825E2DA7C00EC7DBE /* GCActivity+Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "GCActivity+Location.swift"; path = "src/GCActivity+Location.swift"; sourceTree = "<group>"; };
 		424D08BF1DC5DA4E000B4620 /* GCAppPasswordManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCAppPasswordManager.swift; path = src/GCAppPasswordManager.swift; sourceTree = "<group>"; };
 		424F1A7A21E20477009DD368 /* FITAppGlobal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITAppGlobal.swift; path = src/FITAppGlobal.swift; sourceTree = "<group>"; };
 		424F9DB817C35BDD001C73B1 /* GCHealthZoneCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthZoneCalculator.h; path = src/GCHealthZoneCalculator.h; sourceTree = "<group>"; };
@@ -2224,6 +2229,7 @@
 				42200E9D17EEF0EC0078B45A /* StoreKit.framework in Frameworks */,
 				42DD59E117E60B6E00227A36 /* libc++.dylib in Frameworks */,
 				422DCB6F258A2779000DEE4B /* RZUtilsSwift in Frameworks */,
+				424BDAD425E2E25400EC7DBE /* RZExternalUniversal in Frameworks */,
 				42AB66D316DACF8A00C633BD /* CoreText.framework in Frameworks */,
 				4211D576259A0BDA00967874 /* RZExternal in Frameworks */,
 				42A66BDB160D0A0800DA29A5 /* QuartzCore.framework in Frameworks */,
@@ -3032,6 +3038,7 @@
 				42EB51A718AC33DB00B85FAB /* GCActivity+Import.m */,
 				421A514A1C82FA6C00671587 /* GCActivity+Fields.h */,
 				421A514B1C82FA6C00671587 /* GCActivity+Fields.m */,
+				424BDAB825E2DA7C00EC7DBE /* GCActivity+Location.swift */,
 				42959CD618D5F5F100C0B841 /* GCActivity+Database.h */,
 				42959CD718D5F5F100C0B841 /* GCActivity+Database.m */,
 				427208611DE7A35300924C90 /* GCActivity+Import.swift */,
@@ -4409,6 +4416,7 @@
 				4211D4702597832D00967874 /* OAuthSwift */,
 				4211D575259A0BDA00967874 /* RZExternal */,
 				42DB6CB625D56107003AC195 /* ZIPFoundation */,
+				424BDAD325E2E25400EC7DBE /* RZExternalUniversal */,
 			);
 			productName = GarminConnect;
 			productReference = 428FF70915F36888007A88FA /* ConnectStats.app */;
@@ -5316,6 +5324,7 @@
 				422FAEF519A1DD6000D09773 /* GCDerivedDataSerie.m in Sources */,
 				423F9FCA19AD2ACA0057DB5A /* GCStatsHistGraphConfig.m in Sources */,
 				42F0A4F41B60620200901CFF /* GCDerivedRequest.m in Sources */,
+				424BDABB25E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */,
 				42E04E5A25398099005FFD5E /* GCCellRoundedPatternView.swift in Sources */,
 				422FAEF819A1DD6000D09773 /* GCHistoryFieldSummaryStats.m in Sources */,
 				4239E4CC19ABDA65000E67A2 /* GCStatsOneFieldConfig.m in Sources */,
@@ -5649,6 +5658,7 @@
 				42AA288F1637F6AB0054F84A /* GCActivitySearchElement.m in Sources */,
 				422549571EE7361F004F4AE5 /* FITFitStatisticsWeight.swift in Sources */,
 				422C70AE1642B677003779E0 /* GCHistoryAggregatedActivityStats.m in Sources */,
+				424BDAB925E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */,
 				421A514F1C82FA9400671587 /* GCCalendarDataDateMarkers.m in Sources */,
 				42453BAA1DD8B5940073ACCA /* GCMapGradientPathOverlay.m in Sources */,
 				42684EF41B2DB2A6001A90D2 /* GCSettingsSourceTableViewController.m in Sources */,
@@ -5974,6 +5984,7 @@
 				42B5E2C01BA5B216000FAE4E /* GCActivityTypes.m in Sources */,
 				42B5E2C11BA5B216000FAE4E /* GCActivitiesOrganizer.m in Sources */,
 				4209E19B1DA8E15700B80735 /* GCGarminRequestModernSearch.m in Sources */,
+				424BDABA25E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */,
 				422CC8761E6ACA1700195414 /* GCUnit+FIT.m in Sources */,
 				421A51511C82FB1000671587 /* GCActivity+Fields.m in Sources */,
 				42B5E2C21BA5B216000FAE4E /* GCActivitiesCacheManagement.m in Sources */,
@@ -6974,7 +6985,7 @@
 			repositoryURL = "https://github.com/roznet/rzexternal";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 1.0.1;
 			};
 		};
 		422DCB6D258A2779000DEE4B /* XCRemoteSwiftPackageReference "rzutils" */ = {
@@ -7184,6 +7195,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 422DCD72258A74DF000DEE4B /* XCRemoteSwiftPackageReference "rzutils-macos" */;
 			productName = RZUtilsMacOS;
+		};
+		424BDAD325E2E25400EC7DBE /* RZExternalUniversal */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4211D572259A0BDA00967874 /* XCRemoteSwiftPackageReference "rzexternal" */;
+			productName = RZExternalUniversal;
 		};
 		425D249C259E08DC0003574F /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;

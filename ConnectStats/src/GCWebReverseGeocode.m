@@ -26,6 +26,7 @@
 #import "GCWebReverseGeocode.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCAppGlobal.h"
+@import RZExternalUniversal;
 
 @interface GCWebReverseGeocode ()
 @property (nonatomic,assign)    NSUInteger countOfSuccessfulRequest;
@@ -131,6 +132,21 @@
     }
 }
 
++(NSString*)countryISOFromCoordinate:(CLLocationCoordinate2D)coord{
+    static RZShapeFile * worldShapeFile = nil;
+    if( worldShapeFile == nil){
+        worldShapeFile = [RZShapeFile shapeFileWithBase:[RZFileOrganizer bundleFilePath:@"TM_WORLD_BORDERS-0.2"]];
+        RZRetain(worldShapeFile);
+    }
+    
+    NSIndexSet * closest_set = [worldShapeFile indexSetForShapeContainingOrClosest:coord];
+    NSArray * closest_found = [[worldShapeFile allShapes] objectsAtIndexes:closest_set];
+    if( closest_found.count > 0){
+        return closest_found[0][@"ISO2"];
+    }
+    
+    return @"Unknown";
+}
 
 
 @end

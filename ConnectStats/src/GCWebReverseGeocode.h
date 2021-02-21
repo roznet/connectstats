@@ -51,4 +51,6 @@
 -(void)start;
 -(void)next;
 
++(NSString*)countryISOFromCoordinate:(CLLocationCoordinate2D)coord;
+
 @end

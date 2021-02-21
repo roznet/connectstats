@@ -1407,15 +1407,17 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
                     }else if ([one isKindOfClass:[NSNumber class]]){
                         field = [GCField fieldForFlag:(gcFieldFlag)[one integerValue] andActivityType:act.activityType];
                     }
-                    nu = [act numberWithUnitForField:field];
-                    if (nu) {
-                        nu = [nu convertToGlobalSystem];
-                        GCStatsDataSerieWithUnit * serie = rv[one];
-                        if (serie == nil) {
-                            serie = [GCStatsDataSerieWithUnit dataSerieWithUnit:nu.unit];
-                            rv[one] = serie;
+                    if( field ){
+                        nu = [act numberWithUnitForField:field];
+                        if (nu) {
+                            nu = [nu convertToGlobalSystem];
+                            GCStatsDataSerieWithUnit * serie = rv[one];
+                            if (serie == nil) {
+                                serie = [GCStatsDataSerieWithUnit dataSerieWithUnit:nu.unit];
+                                rv[one] = serie;
+                            }
+                            [serie addNumberWithUnit:nu forDate:act.date];
                         }
-                        [serie addNumberWithUnit:nu forDate:act.date];
                     }
                 }
             }

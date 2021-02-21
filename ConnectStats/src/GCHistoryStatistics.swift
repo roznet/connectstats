@@ -250,20 +250,19 @@ class IndexData {
     }
 
     func update(activity : GCActivity){
-        if let fields = self.fields ?? activity.allFields() {
-            
-            let distance = activity.numberWithForField(inStoreUnit: GCField(for: .sumDistance, andActivityType: activity.activityType))?.value ?? 1.0
-            let duration = activity.numberWithForField(inStoreUnit: GCField(for: .sumDuration, andActivityType: activity.activityType))?.value ?? 1.0
-            
-            for field in fields {
-                if let nu = activity.numberWithUnit(for: field) {
-                    guard nu.value != 0.0 || field.isZeroValid else { continue }
-                    
-                    if let stats = self.data[field] {
-                        stats.add(numberWithUnit: nu, timeweight: duration, distweight: distance)
-                    }else{
-                        self.data[field] = SummaryStatistics(numberWithUnit: nu, timeweight: duration, distweight: distance)
-                    }
+        let fields = self.fields ?? activity.allFields()
+        
+        let distance = activity.numberWithUnitForField(inStoreUnit: GCField(for: .sumDistance, andActivityType: activity.activityType))?.value ?? 1.0
+        let duration = activity.numberWithUnitForField(inStoreUnit: GCField(for: .sumDuration, andActivityType: activity.activityType))?.value ?? 1.0
+        
+        for field in fields {
+            if let nu = activity.numberWithUnit(for: field) {
+                guard nu.value != 0.0 || field.isZeroValid else { continue }
+                
+                if let stats = self.data[field] {
+                    stats.add(numberWithUnit: nu, timeweight: duration, distweight: distance)
+                }else{
+                    self.data[field] = SummaryStatistics(numberWithUnit: nu, timeweight: duration, distweight: distance)
                 }
             }
         }

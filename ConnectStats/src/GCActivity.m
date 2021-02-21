@@ -437,7 +437,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return rv;
 }
 
--(GCNumberWithUnit*)numberWithForFieldInStoreUnit:(GCField *)field{
+-(GCNumberWithUnit*)numberWithUnitForFieldInStoreUnit:(GCField *)field{
     switch (field.fieldFlag) {
         case gcFieldFlagWeightedMeanSpeed:
             return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_SPEED]];

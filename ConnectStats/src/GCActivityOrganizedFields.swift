@@ -70,7 +70,8 @@ class GCActivityOrganizedFields : NSObject, NSSecureCoding {
         self.geometry.timeAlignment = .center
         for fields in self.groupedPrimaryFields {
             for field in fields {
-                self.geometry.adjust(for: activity.numberWithUnit(for: field),
+                guard let nu = activity.numberWithUnit(for: field) else { continue }
+                self.geometry.adjust(for: nu,
                                      numberAttribute: GCViewConfig.attribute(rzAttribute.value),
                                      unitAttribute: GCViewConfig.attribute(rzAttribute.unit))
             }
