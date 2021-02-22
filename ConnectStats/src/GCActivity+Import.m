@@ -1441,38 +1441,40 @@
     
     GCTrackPoint * point = nil;
     for (GCTrackPoint * next in trackpoints) {
-        if (point) {
-            NSTimeInterval elapsed = [next timeIntervalSince:point];
-            totalElapsed += elapsed;
-            totalDistance += [next distanceMetersFrom:point];
-            for (GCField * field in fields) {
-
-                GCNumberWithUnit * num = [point numberWithUnitForField:field inActivity:self];
-                if( num ){
-                    GCNumberWithUnit * current = results[field];
+        @autoreleasepool {
+            if (point) {
+                NSTimeInterval elapsed = [next timeIntervalSince:point];
+                totalElapsed += elapsed;
+                totalDistance += [next distanceMetersFrom:point];
+                for (GCField * field in fields) {
                     
-                    if (!current) {
-                        current = num;
-                    }else{
-                        current.value *= (totalElapsed-elapsed)/totalElapsed;
-                        current = [current addNumberWithUnit:num weight:elapsed/totalElapsed];
-                    }
-                    if( current ){
-                        results[field] = current;
-                        if( field.isWeightedAverage){
-                            for (GCField * secondary in @[ field.correspondingMaxField, field.correspondingMinField ]) {
-                                GCNumberWithUnit * secondaryCurrent = results[secondary];
-                                if( ! secondaryCurrent ){
-                                    secondaryCurrent = num;
-                                }else{
-                                    if( secondary.isMax ){
-                                        secondaryCurrent = [secondaryCurrent maxNumberWithUnit:num];
-                                    }else if ( secondary.isMin ){
-                                        secondaryCurrent = [secondaryCurrent nonZeroMinNumberWithUnit:num];
+                    GCNumberWithUnit * num = [point numberWithUnitForField:field inActivity:self];
+                    if( num ){
+                        GCNumberWithUnit * current = results[field];
+                        
+                        if (!current) {
+                            current = num;
+                        }else{
+                            current.value *= (totalElapsed-elapsed)/totalElapsed;
+                            current = [current addNumberWithUnit:num weight:elapsed/totalElapsed];
+                        }
+                        if( current ){
+                            results[field] = current;
+                            if( field.isWeightedAverage){
+                                for (GCField * secondary in @[ field.correspondingMaxField, field.correspondingMinField ]) {
+                                    GCNumberWithUnit * secondaryCurrent = results[secondary];
+                                    if( ! secondaryCurrent ){
+                                        secondaryCurrent = num;
+                                    }else{
+                                        if( secondary.isMax ){
+                                            secondaryCurrent = [secondaryCurrent maxNumberWithUnit:num];
+                                        }else if ( secondary.isMin ){
+                                            secondaryCurrent = [secondaryCurrent nonZeroMinNumberWithUnit:num];
+                                        }
                                     }
-                                }
-                                if (secondaryCurrent) {
-                                    results[secondary] = secondaryCurrent;
+                                    if (secondaryCurrent) {
+                                        results[secondary] = secondaryCurrent;
+                                    }
                                 }
                             }
                         }

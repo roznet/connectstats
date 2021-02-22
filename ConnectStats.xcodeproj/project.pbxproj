@@ -1026,6 +1026,7 @@
 		42C5A1B222AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C5A1B022AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m */; };
 		42C5A1B322AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C5A1B022AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m */; };
 		42C92FDF170FB73F0037602F /* GCActivityAutoLapChoices.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */; };
+		42CBD0A325E415150024BD28 /* RZExternalUniversal in Frameworks */ = {isa = PBXBuildFile; productRef = 42CBD0A225E415150024BD28 /* RZExternalUniversal */; };
 		42CC45B5200A2288003EB805 /* GCTestServiceConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */; };
 		42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */; };
 		42CC45BF200A57EE003EB805 /* GCTestServiceStrava.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45BE200A57EE003EB805 /* GCTestServiceStrava.m */; };
@@ -2290,6 +2291,7 @@
 				4211D4BE2598B33900967874 /* OAuthSwift in Frameworks */,
 				42B5E2FF1BA5B7BF000FAE4E /* libsqlite3.tbd in Frameworks */,
 				42BD32A3258BC88B004D5E0F /* DeviceGuru in Frameworks */,
+				42CBD0A325E415150024BD28 /* RZExternalUniversal in Frameworks */,
 				422DCC1E258A6325000DEE4B /* RZUtilsTestInfra in Frameworks */,
 				42B5E2D01BA5B589000FAE4E /* HealthKit.framework in Frameworks */,
 				08F9F970B9E97EE50D457C03 /* Pods_ConnectStatsTestApp.framework in Frameworks */,
@@ -4471,6 +4473,7 @@
 				4211D573259A0BDA00967874 /* RZExternalTestUtils */,
 				42A95C3F259A18E400A52DB6 /* RZExternal */,
 				42DB6CBC25D5611D003AC195 /* ZIPFoundation */,
+				42CBD0A225E415150024BD28 /* RZExternalUniversal */,
 			);
 			productName = ConnectStatsTestApp;
 			productReference = 42B5E1B91BA5AEC9000FAE4E /* ConnectStatsTestApp.app */;
@@ -6501,7 +6504,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 6.7.4.1;
+				CURRENT_PROJECT_VERSION = 6.8.0.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6522,7 +6525,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 6.7.4;
+				MARKETING_VERSION = 6.8;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = (
@@ -6554,7 +6557,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 6.7.4.1;
+				CURRENT_PROJECT_VERSION = 6.8.0.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = NO;
@@ -6576,7 +6579,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 6.7.4;
+				MARKETING_VERSION = 6.8;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -7017,7 +7020,7 @@
 			repositoryURL = "https://github.com/roznet/FitFileParser.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.4.0;
+				minimumVersion = 1.4.2;
 			};
 		};
 		422DCD72258A74DF000DEE4B /* XCRemoteSwiftPackageReference "rzutils-macos" */ = {
@@ -7260,6 +7263,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 42BD322B258BBA8A004D5E0F /* XCRemoteSwiftPackageReference "MBProgressHUD" */;
 			productName = MBProgressHUD;
+		};
+		42CBD0A225E415150024BD28 /* RZExternalUniversal */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4211D572259A0BDA00967874 /* XCRemoteSwiftPackageReference "rzexternal" */;
+			productName = RZExternalUniversal;
 		};
 		42DB6CB625D56107003AC195 /* ZIPFoundation */ = {
 			isa = XCSwiftPackageProductDependency;

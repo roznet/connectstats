@@ -371,10 +371,17 @@ void checkVersion(void){
     self.urlToOpen = url;
     // check if fit file
     if ([url.path hasSuffix:@".fit"]) {
-        dispatch_async(self.worker,^(){
-            [self handleFitFile];
-        });
-
+        NSError * error = nil;
+        [url startAccessingSecurityScopedResource];
+        NSData * fitData = [NSData dataWithContentsOfURL:self.urlToOpen options:0 error:&error];
+        [url stopAccessingSecurityScopedResource];
+        if( fitData ){
+            dispatch_async(self.worker,^(){
+                [self handleFitFile:fitData];
+            });
+        }else {
+            RZLog(RZLogError, @"Failed to read %@, error %@", url, error);
+        }
         rv = true;
     }
     return rv;

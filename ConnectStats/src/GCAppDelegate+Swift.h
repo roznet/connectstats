@@ -28,7 +28,7 @@
 // Isolate swift setups
 @interface GCAppDelegate (Swift)
 
--(void)handleFitFile;
+-(void)handleFitFile:(NSData*)data;
 -(void)handleAppRating;
 -(void)stravaSignout;
 -(BOOL)startInit;

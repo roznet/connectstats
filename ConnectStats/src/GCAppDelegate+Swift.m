@@ -36,20 +36,23 @@ BOOL kOpenTemporary = false;
     [self initiateAppRating];
 }
 
--(void)handleFitFile{
-    NSData * fitData = [NSData dataWithContentsOfURL:self.urlToOpen];
-    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:[self.urlToOpen.path lastPathComponent] fitFileData:fitData fitFilePath:self.urlToOpen.path startTime:[NSDate date]]);
-
-    if( kOpenTemporary ){
-        [self.organizer registerTemporaryActivity:fitAct forActivityId:fitAct.activityId];
+-(void)handleFitFile:(NSData*)fitData{
+    if( fitData.length  > 12){// minimum size for fit file include headers
+        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:[self.urlToOpen.path lastPathComponent] fitFileData:fitData fitFilePath:self.urlToOpen.path startTime:[NSDate date]]);
+        RZLog(RZLogInfo, @"Opened temp fit %@", [RZMemory formatMemoryInUse]);
+        if( kOpenTemporary ){
+            [self.organizer registerTemporaryActivity:fitAct forActivityId:fitAct.activityId];
+        }else{
+            
+            [self.organizer registerActivity:fitAct forActivityId:fitAct.activityId];
+            [self.organizer registerActivity:fitAct.activityId withTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self handleFitFileDone:fitAct.activityId];
+        });
     }else{
-    
-        [self.organizer registerActivity:fitAct forActivityId:fitAct.activityId];
-        [self.organizer registerActivity:fitAct.activityId withTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
+        RZLog(RZLogWarning, @"Handling fit file with no data")
     }
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        [self handleFitFileDone:fitAct.activityId];
-    });
 }
 
 -(void)handleFitFileDone:(NSString*)aId{

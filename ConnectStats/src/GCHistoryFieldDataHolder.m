@@ -130,7 +130,11 @@
     }
 }
 -(GCNumberWithUnit*)numberWithUnitForValue:(double)val{
-    GCNumberWithUnit * rv = [GCNumberWithUnit numberWithUnit:self.unit andValue:val];
+    GCUnit * unit = self.field.unit;
+    if( unit == nil && self.unit != nil ){
+        unit = self.unit;
+    }
+    GCNumberWithUnit * rv = [[GCNumberWithUnit numberWithUnit:self.unit andValue:val] convertToUnit:unit];
     rv = [rv convertToGlobalSystem];
     return rv;
 }

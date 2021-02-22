@@ -69,7 +69,7 @@ extension GCTestUISamples {
         let numberAttr = GCViewConfig.attribute(rzAttribute.secondaryValue)
         let unitAttr = GCViewConfig.attribute(rzAttribute.secondaryUnit)
         
-        for _ in 0...1 {
+        for i in 0...1 {
             if let cell = GCCellGrid(nil) {
                 cell.setup(forRows: UInt(samples.count), andCols: 3)
                 for col : UInt in 0...2 {
@@ -105,7 +105,7 @@ extension GCTestUISamples {
                         
                     }
                 }
-                let sample = GCTestUISampleCellHolder(for: cell, height: GCViewConfig.sizeForNumber(ofRows: UInt(samples.count)), andIdentifier: "Sample Geometry")
+                let sample = GCTestUISampleCellHolder(for: cell, height: GCViewConfig.sizeForNumber(ofRows: UInt(samples.count)), andIdentifier: "Sample Geometry \(i)")
                 rv.append(sample)
             }
         }
