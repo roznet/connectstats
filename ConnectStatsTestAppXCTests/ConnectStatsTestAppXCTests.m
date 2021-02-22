@@ -27,6 +27,7 @@
 #import <XCTest/XCTest.h>
 @import RZUtilsTestInfra;
 #import "GCTestBasics.h"
+#import "GCTestAppGlobal.h"
 
 NSString * kExpectationAllDone = @"RZUnitRunner All Done";
 
@@ -57,6 +58,9 @@ NSString * kExpectationAllDone = @"RZUnitRunner All Done";
 }
 
 -(void)rzRunnerExecute{
+    
+    [GCTestAppGlobal prepareForTestOnMainThread];
+    
     self.expectation = [self expectationWithDescription:kExpectationAllDone];
     
     [self.runner run];

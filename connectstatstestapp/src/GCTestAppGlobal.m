@@ -40,6 +40,10 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 
 @implementation GCTestAppGlobal 
 
++(void)prepareForTestOnMainThread{
+    [GCAppGlobal organizer];
+    _sharedApplicationDelegate();
+}
 +(void)setupEmptyState:(NSString*)name withSettingsName:(NSString*)settingName{
     [_sharedApplicationDelegate() setupEmptyState:(NSString*)name withSettingsName:settingName];
 }

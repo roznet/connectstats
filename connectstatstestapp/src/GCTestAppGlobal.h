@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(void)reinitFromSampleState:(NSString*)name;
 +(void)cleanWritableFiles;
 +(void)handle:(NSURL*)url;
++(void)prepareForTestOnMainThread;
 @end
 
 NS_ASSUME_NONNULL_END
