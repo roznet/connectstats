@@ -1027,6 +1027,18 @@
 		42C5A1B322AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C5A1B022AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m */; };
 		42C92FDF170FB73F0037602F /* GCActivityAutoLapChoices.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */; };
 		42CBD0A325E415150024BD28 /* RZExternalUniversal in Frameworks */ = {isa = PBXBuildFile; productRef = 42CBD0A225E415150024BD28 /* RZExternalUniversal */; };
+		42CBD0C325E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.dbf in Resources */ = {isa = PBXBuildFile; fileRef = 42CBD0BF25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.dbf */; };
+		42CBD0C425E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.dbf in Resources */ = {isa = PBXBuildFile; fileRef = 42CBD0BF25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.dbf */; };
+		42CBD0C525E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.dbf in Resources */ = {isa = PBXBuildFile; fileRef = 42CBD0BF25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.dbf */; };
+		42CBD0C625E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shp in Resources */ = {isa = PBXBuildFile; fileRef = 42CBD0C025E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shp */; };
+		42CBD0C725E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shp in Resources */ = {isa = PBXBuildFile; fileRef = 42CBD0C025E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shp */; };
+		42CBD0C825E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shp in Resources */ = {isa = PBXBuildFile; fileRef = 42CBD0C025E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shp */; };
+		42CBD0C925E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.prj in Resources */ = {isa = PBXBuildFile; fileRef = 42CBD0C125E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.prj */; };
+		42CBD0CA25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.prj in Resources */ = {isa = PBXBuildFile; fileRef = 42CBD0C125E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.prj */; };
+		42CBD0CB25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.prj in Resources */ = {isa = PBXBuildFile; fileRef = 42CBD0C125E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.prj */; };
+		42CBD0CC25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shx in Resources */ = {isa = PBXBuildFile; fileRef = 42CBD0C225E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shx */; };
+		42CBD0CD25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shx in Resources */ = {isa = PBXBuildFile; fileRef = 42CBD0C225E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shx */; };
+		42CBD0CE25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shx in Resources */ = {isa = PBXBuildFile; fileRef = 42CBD0C225E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shx */; };
 		42CC45B5200A2288003EB805 /* GCTestServiceConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */; };
 		42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */; };
 		42CC45BF200A57EE003EB805 /* GCTestServiceStrava.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CC45BE200A57EE003EB805 /* GCTestServiceStrava.m */; };
@@ -2010,6 +2022,10 @@
 		42C5A1B022AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCConnectStatsSearchJsonParser.m; path = src/GCConnectStatsSearchJsonParser.m; sourceTree = "<group>"; };
 		42C92FDD170FB73F0037602F /* GCActivityAutoLapChoices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCActivityAutoLapChoices.h; path = src/GCActivityAutoLapChoices.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityAutoLapChoices.m; path = src/GCActivityAutoLapChoices.m; sourceTree = "<group>"; };
+		42CBD0BF25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.dbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "TM_WORLD_BORDERS-0.2.dbf"; path = "shapefiles/TM_WORLD_BORDERS-0.2.dbf"; sourceTree = "<group>"; };
+		42CBD0C025E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shp */ = {isa = PBXFileReference; lastKnownFileType = file; name = "TM_WORLD_BORDERS-0.2.shp"; path = "shapefiles/TM_WORLD_BORDERS-0.2.shp"; sourceTree = "<group>"; };
+		42CBD0C125E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.prj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "TM_WORLD_BORDERS-0.2.prj"; path = "shapefiles/TM_WORLD_BORDERS-0.2.prj"; sourceTree = "<group>"; };
+		42CBD0C225E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shx */ = {isa = PBXFileReference; lastKnownFileType = file; name = "TM_WORLD_BORDERS-0.2.shx"; path = "shapefiles/TM_WORLD_BORDERS-0.2.shx"; sourceTree = "<group>"; };
 		42CC45B4200A2288003EB805 /* GCTestServiceConfig.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCTestServiceConfig.xib; path = connectstatstestapp/ui/GCTestServiceConfig.xib; sourceTree = SOURCE_ROOT; };
 		42CC45B6200A24C5003EB805 /* GCTestServiceConfigViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCTestServiceConfigViewController.h; path = connectstatstestapp/src/GCTestServiceConfigViewController.h; sourceTree = SOURCE_ROOT; };
 		42CC45B7200A24C5003EB805 /* GCTestServiceConfigViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceConfigViewController.m; path = connectstatstestapp/src/GCTestServiceConfigViewController.m; sourceTree = SOURCE_ROOT; };
@@ -3360,6 +3376,10 @@
 		428FF71415F36888007A88FA /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				42CBD0BF25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.dbf */,
+				42CBD0C125E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.prj */,
+				42CBD0C025E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shp */,
+				42CBD0C225E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shx */,
 				42939CEC23AAD7A900D2403A /* fit_developer.json */,
 				42939CE423AAD79500D2403A /* fields.db */,
 				42939CE523AAD79500D2403A /* fit_map.json */,
@@ -4641,6 +4661,8 @@
 			files = (
 				42939CE823AAD79600D2403A /* fields.db in Resources */,
 				422FAFC719A1DD6000D09773 /* InfoPlist.strings in Resources */,
+				42CBD0CB25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.prj in Resources */,
+				42CBD0C825E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shp in Resources */,
 				422FAFCD19A1DD6000D09773 /* Localizable.strings in Resources */,
 				422CCE7F1B7EA7A600A4DAEB /* Services.xcassets in Resources */,
 				42939CEB23AAD79600D2403A /* fit_map.json in Resources */,
@@ -4651,9 +4673,11 @@
 				422CCE8C1B7EAB7200A4DAEB /* Activities.xcassets in Resources */,
 				42939CEF23AAD7A900D2403A /* fit_developer.json in Resources */,
 				422CCE881B7EAA3000A4DAEB /* Navigation.xcassets in Resources */,
+				42CBD0CE25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shx in Resources */,
 				42F4E4DA1B56EDC00009F2BA /* HealthStatsLaunchScreen.xib in Resources */,
 				4211C53419AB043A000DEF87 /* version.plist in Resources */,
 				422CCE821B7EA81500A4DAEB /* Fields.xcassets in Resources */,
+				42CBD0C525E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.dbf in Resources */,
 				422CCE851B7EA8C100A4DAEB /* Weather.xcassets in Resources */,
 				429184C4231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */,
 				42BAB8D4231C07E700639928 /* credentials.json in Resources */,
@@ -4713,8 +4737,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				422CCE8D1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */,
+				42CBD0C625E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shp in Resources */,
 				428FF71815F36888007A88FA /* InfoPlist.strings in Resources */,
+				42CBD0C925E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.prj in Resources */,
 				427CF8D222ABD6BC00894253 /* credentials.json in Resources */,
+				42CBD0CC25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shx in Resources */,
+				42CBD0C325E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.dbf in Resources */,
 				422CCE7C1B7E9B6300A4DAEB /* Cells.xcassets in Resources */,
 				42939CED23AAD7A900D2403A /* fit_developer.json in Resources */,
 				42939CE623AAD79600D2403A /* fields.db in Resources */,
@@ -4907,6 +4935,7 @@
 				428BAD031CB149C50041468A /* activityweather_1108367966.json in Resources */,
 				422A24F6247325FB00D6C2FB /* activity_424479793.json in Resources */,
 				42E6C86F25583B7C009EC126 /* Weather.xcassets in Resources */,
+				42CBD0C725E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shp in Resources */,
 				428BAD021CB149C50041468A /* activityweather_1099599108.json in Resources */,
 				426B95A11C4A49FF00426CD2 /* activitytrack_1008868846.json in Resources */,
 				42B5E4851BA5BA2D000FAE4E /* strava_list_2.json in Resources */,
@@ -4944,10 +4973,12 @@
 				4255AFAD2484F3AD000849E2 /* derived_testderived.db in Resources */,
 				42B5E4761BA5BA2D000FAE4E /* test_activity_running_828298988.db in Resources */,
 				42B5E49F1BA5BA2D000FAE4E /* strava_stream_121576193.json in Resources */,
+				42CBD0CD25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shx in Resources */,
 				427F934E1BEA9A5900C177F9 /* laps_regr.plist in Resources */,
 				42B5E4A51BA5BA2D000FAE4E /* strava_stream_141871826.json in Resources */,
 				427F933D1BEA9A5900C177F9 /* activity_400587208.html in Resources */,
 				42C3116E2472D10A004DF872 /* activity_217470507.fit in Resources */,
+				42CBD0CA25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.prj in Resources */,
 				42C3118824731877004DF872 /* activitytrack_1027746730.json in Resources */,
 				42B5E4821BA5BA2D000FAE4E /* last_search_20.json in Resources */,
 				427F93711BEC069F00C177F9 /* test_activity_swimming_439303647.db in Resources */,
@@ -4969,6 +5000,7 @@
 				428BACF51CB149C50041468A /* activity_1108368135.json in Resources */,
 				42B5E49C1BA5BA2D000FAE4E /* strava_laps_140735927.json in Resources */,
 				428BACF61CB149C50041468A /* activity_924421177.json in Resources */,
+				42CBD0C425E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.dbf in Resources */,
 				428BACFB1CB149C50041468A /* activitylaps_924421177.json in Resources */,
 				428BACF41CB149C50041468A /* activity_1108367966.json in Resources */,
 				42B5E4A21BA5BA2D000FAE4E /* strava_stream_122027318.json in Resources */,
@@ -7020,7 +7052,7 @@
 			repositoryURL = "https://github.com/roznet/FitFileParser.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.4.2;
+				minimumVersion = 1.4.3;
 			};
 		};
 		422DCD72258A74DF000DEE4B /* XCRemoteSwiftPackageReference "rzutils-macos" */ = {

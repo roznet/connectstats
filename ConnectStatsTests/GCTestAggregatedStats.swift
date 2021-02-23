@@ -240,7 +240,6 @@ class GCTestAggregatedStats: XCTestCase {
                 return false
             }
             aggfieldstats.aggregate()
-            
             for (index,data) in aggfieldstats.data(sortedBy: >) {
                 if case .dateBucket(let bucket) = index.indexValues.first {
                     let stat = bucket.historyStat
@@ -251,6 +250,63 @@ class GCTestAggregatedStats: XCTestCase {
                     }
                 }else{
                     XCTAssertTrue(false)
+                }
+            }
+        }
+    }
+    
+    func testStatsBycountry(){
+        let activityType = GC_TYPE_RUNNING
+        let calendar = GCAppGlobal.calculationCalendar()
+        let activities = self.activitiesForStatsTest(n:Int.max,activityType: activityType)
+        let performance = RZPerformance()
+        performance.reset()
+
+        let aggtypestats = HistoryAggregator(activities: activities, fields: GCHistoryAggregatedActivityStats.defaultFields(forActivityType: activityType)) {
+            act in
+            let bucket = DateBucket(date: act.date, unit: .year, calendar: calendar)
+            let rv = [ IndexValue.dateBucket(bucket!), IndexValue.string(act.country)]
+            return Index(indexValues: rv )
+        }
+        aggtypestats.aggregate()
+
+        var stats : [String:GCHistoryAggregatedActivityStats] = [:]
+        
+        for country in ["GB", "US", "FR"]{
+            var activitiescountry : [GCActivity] = []
+            
+            for activity in activities {
+                if activity.country == country {
+                    activitiescountry.append(activity)
+                }
+            }
+            let statscountry = GCHistoryAggregatedActivityStats(forActivityType: GC_TYPE_RUNNING)
+            statscountry.activities = activitiescountry
+            statscountry.aggregate(.year, referenceDate: nil, ignoreMode: gcIgnoreMode.activityFocus)
+            
+            stats[country] = statscountry
+        }
+        
+        for (index,data) in aggtypestats.data(sortedBy: <){
+            XCTAssertTrue(index.indexValues.count == 2)
+            
+            let countryvalue = index.indexValues[1]
+            let bucketvalue = index.indexValues[0]
+            
+            if case let .dateBucket(indexBucket) = bucketvalue,
+               case let .string(country) = countryvalue {
+                if country == "GB" || country == "US" || stats[country] != nil {
+                    guard let statscountry = stats[country] else { XCTAssertTrue(false); continue }
+                    guard let old = statscountry.data(for: indexBucket.interval.start) else { XCTAssertTrue(false); continue }
+                    var done = 0
+                    for (k,v) in data.data {
+                        let field = k
+                        if old.hasField(field) && field.unit() != nil {
+                            done += 1
+                            v.compare(field: field, dataHolder: old, message: "\(country) \(indexBucket) year aggregate")
+                        }
+                    }
+                    XCTAssertGreaterThan(done, 0, "Found some valid tests")
                 }
             }
         }
@@ -289,8 +345,6 @@ class GCTestAggregatedStats: XCTestCase {
                case let .string(indexActivityType) = atypevalue {
                 guard indexActivityType == GC_TYPE_CYCLING || indexActivityType == GC_TYPE_RUNNING else { continue }
                 let stats = GC_TYPE_RUNNING == indexActivityType ? statsrun : statscycle
-                print( "\(indexBucket) \(indexActivityType) \(data)" )
-                print( "\(stats)")
                 
                 guard let old = stats.data(for: indexBucket.interval.start) else { XCTAssertTrue(false); continue }
                 var done = 0

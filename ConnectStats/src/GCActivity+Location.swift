@@ -37,12 +37,10 @@ extension GCActivity {
             let gps = self.beginCoordinate
             
             if( CLLocationCoordinate2DIsValid(gps) ){
-                
+                return GCWebReverseGeocode.countryISO(from: gps)
             }
-            
-            
         }
-        return "Unknown"
+        return "XX"
     }
     
 }

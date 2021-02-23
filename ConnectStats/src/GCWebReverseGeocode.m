@@ -145,7 +145,7 @@
         return closest_found[0][@"ISO2"];
     }
     
-    return @"Unknown";
+    return @"XX";
 }
 
 
