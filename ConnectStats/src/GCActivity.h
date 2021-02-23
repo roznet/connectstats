@@ -295,11 +295,11 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  Format a numberWithUnit similar to how field which would be formatted.
  It will convert to displayUnit which may be different than generic field
  */
--(NSString*)formatNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)which;
+-(NSString*)formatNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)which DEPRECATED_MSG_ATTRIBUTE("format numberWithUnit directly");
 /**
  Return value for field formatted as number with unit
  */
--(NSString*)formattedValue:(GCField*)field;
+-(NSString*)formattedValue:(GCField*)field DEPRECATED_MSG_ATTRIBUTE("format numberWithUnit directly");
 
 -(BOOL)hasField:(GCField*)field;
 -(BOOL)isEqualToActivity:(GCActivity*)other;
