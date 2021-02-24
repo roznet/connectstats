@@ -35,14 +35,14 @@
 @implementation GCGarminReqBase
 
 +(BOOL)killSwitchTriggered{
-    return true;
+    return false;
 }
 
 -(BOOL)checkNoErrors{
     if (self.status == GCWebStatusOK) {
         if( self.delegate && self.delegate.lastStatusCode != 200 ){
             NSInteger code = self.delegate.lastStatusCode;
-            if( code == 500 || code == 403 || code == 401){
+            if( code == 500 || code == 403 || code == 401 || code == 402){
                 self.status = GCWebStatusAccessDenied;
             }else if (code == 404) {
                 self.status = GCWebStatusResourceNotFound;
@@ -55,6 +55,12 @@
         }
     }
     return self.status == GCWebStatusOK;
+}
+
+-(RemoteDownloadPrepareUrl)prepareUrlFunc{
+    return ^(NSMutableURLRequest * req){
+        [req setValue:@"NT" forHTTPHeaderField:@"nk"];
+    };
 }
 -(id<GCWebRequest>)remediationReq{
     if (self.status==GCWebStatusAccessDenied) {

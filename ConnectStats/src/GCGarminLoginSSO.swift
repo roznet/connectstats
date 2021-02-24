@@ -118,6 +118,7 @@ import RZUtilsSwift
         
         var getUrlRequest = URLRequest(url: getUrl)
         getUrlRequest.setValue("https://connectstats.app", forHTTPHeaderField: "Referer")
+        getUrlRequest.setValue("NT", forHTTPHeaderField: "nk")
         return getUrlRequest
     }
     func preStartStep(){
@@ -141,6 +142,7 @@ import RZUtilsSwift
         postUrlRequest.httpMethod = "POST"
         postUrlRequest.httpBody = RZWebEncodeDictionary(self.postParams).data(using: .utf8)
         postUrlRequest.setValue("https://sso.garmin.com", forHTTPHeaderField: "origin")
+        postUrlRequest.setValue("NT", forHTTPHeaderField: "nk")
 
         return postUrlRequest
     }
