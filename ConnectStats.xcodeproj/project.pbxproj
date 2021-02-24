@@ -7099,8 +7099,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
 			requirement = {
-				branch = development;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.12;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
