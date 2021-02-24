@@ -49,7 +49,7 @@
 
 @implementation GCHistoryAggregatedActivityStats
 
-+(GCHistoryAggregatedActivityStats*)aggregatedActivitStatsForActivityType:(NSString*)activityType{
++(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityType:(NSString*)activityType{
     GCHistoryAggregatedActivityStats * rv = [[[GCHistoryAggregatedActivityStats alloc] init] autorelease];
     if( rv ){
         rv.fields = [GCHistoryAggregatedActivityStats defaultFieldsForActivityType:activityType];
@@ -150,7 +150,6 @@
 
         for (GCActivity * activity in serie) {
             thisdate = activity.date;
-
             BOOL changedBucket = [bucketer bucket:thisdate];
             if (changedBucket) {
                 [dataHolder aggregateEnd:nil];

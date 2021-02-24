@@ -34,6 +34,9 @@
 
 @implementation GCGarminReqBase
 
++(BOOL)killSwitchTriggered{
+    return true;
+}
 
 -(BOOL)checkNoErrors{
     if (self.status == GCWebStatusOK) {

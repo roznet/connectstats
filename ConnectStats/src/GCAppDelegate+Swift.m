@@ -26,24 +26,33 @@
 #import "GCAppDelegate+Swift.h"
 #import "ConnectStats-Swift.h"
 
+#define GC_STARTING_FILE @"starting.log"
+
 BOOL kOpenTemporary = false;
 
 @implementation GCAppDelegate (Swift)
 
--(void)handleFitFile{
-    NSData * fitData = [NSData dataWithContentsOfURL:self.urlToOpen];
-    GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:[self.urlToOpen.path lastPathComponent] fitFileData:fitData fitFilePath:self.urlToOpen.path startTime:[NSDate date]]);
+-(void)handleAppRating{
+    [self initiateAppRating];
+}
 
-    if( kOpenTemporary ){
-        [self.organizer registerTemporaryActivity:fitAct forActivityId:fitAct.activityId];
+-(void)handleFitFile:(NSData*)fitData{
+    if( fitData.length  > 12){// minimum size for fit file include headers
+        GCActivity * fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:[self.urlToOpen.path lastPathComponent] fitFileData:fitData fitFilePath:self.urlToOpen.path startTime:[NSDate date]]);
+        RZLog(RZLogInfo, @"Opened temp fit %@", [RZMemory formatMemoryInUse]);
+        if( kOpenTemporary ){
+            [self.organizer registerTemporaryActivity:fitAct forActivityId:fitAct.activityId];
+        }else{
+            
+            [self.organizer registerActivity:fitAct forActivityId:fitAct.activityId];
+            [self.organizer registerActivity:fitAct.activityId withTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self handleFitFileDone:fitAct.activityId];
+        });
     }else{
-    
-        [self.organizer registerActivity:fitAct forActivityId:fitAct.activityId];
-        [self.organizer registerActivity:fitAct.activityId withTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
+        RZLog(RZLogWarning, @"Handling fit file with no data")
     }
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        [self handleFitFileDone:fitAct.activityId];
-    });
 }
 
 -(void)handleFitFileDone:(NSString*)aId{
@@ -52,4 +61,42 @@ BOOL kOpenTemporary = false;
 -(void)stravaSignout{
     [GCStravaRequestBase signout];
 }
+
+-(BOOL)startInit{
+    NSString * filename = [RZFileOrganizer writeableFilePathIfExists:GC_STARTING_FILE];
+    NSUInteger attempts = 1;
+    NSError * e = nil;
+
+    if (filename) {
+
+        NSString * sofar = [NSString stringWithContentsOfFile:filename
+                                            encoding:NSUTF8StringEncoding error:&e];
+
+        if (sofar) {
+            attempts = MAX(1, [sofar integerValue]+1);
+        }else{
+            RZLog(RZLogError, @"Failed to read initfile %@", e.localizedDescription);
+        }
+    }
+
+    NSString * already = [NSString stringWithFormat:@"%lu",(unsigned long)attempts];
+    if(![already writeToFile:[RZFileOrganizer writeableFilePath:GC_STARTING_FILE] atomically:YES encoding:NSUTF8StringEncoding error:&e]){
+        RZLog(RZLogError, @"Failed to save startInit %@", e.localizedDescription);
+    }
+
+    return attempts < 3;
+}
+
+-(void)startSuccessful{
+    static BOOL once = false;
+    if (!once) {
+        RZLog(RZLogInfo, @"Started");
+        [RZFileOrganizer removeEditableFile:GC_STARTING_FILE];
+        once = true;
+        
+        [self settingsUpdateCheckPostStart];
+        [self startSuccessfulSwift];
+    }
+}
+
 @end

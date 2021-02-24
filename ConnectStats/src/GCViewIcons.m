@@ -30,7 +30,7 @@ static NSArray * _navDefs = nil;
 static NSArray * _tabDefs = nil;
 static NSArray * _cellDefs = nil;
 
-NSArray*cellIconDefs(){
+NSArray*cellIconDefs(void){
     if (!_cellDefs) {
         _cellDefs = @[
                       @[ @"910-graph" ],  //    gcIconCellLineChart,
@@ -45,7 +45,7 @@ NSArray*cellIconDefs(){
     return _cellDefs;
 }
 
-NSArray*tabBarIconDefs(){
+NSArray*tabBarIconDefs(void){
     if (!_tabDefs) {
         _tabDefs = @[
                      @[ @"851-calendar"],
@@ -61,7 +61,7 @@ NSArray*tabBarIconDefs(){
     return _tabDefs;
 }
 
-NSArray*navigationIconDefs(){
+NSArray*navigationIconDefs(void){
     if (!_navDefs) {
         _navDefs = @[
                      @[@"789-map-location"],       //gcIconNavMarker showLap in map views

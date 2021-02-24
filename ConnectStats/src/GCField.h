@@ -51,14 +51,15 @@
 /// @param other field to compare
 -(BOOL)matchesField:(GCField*)other;
 
--(BOOL)isNoisy;
--(BOOL)canSum;
--(BOOL)validForGraph;
--(BOOL)isWeightedAverage;
--(BOOL)isMax;
--(BOOL)isMin;
--(BOOL)isSpeedOrPace;
--(BOOL)isZeroValid;
+@property (nonatomic,readonly) BOOL isNoisy;
+@property (nonatomic,readonly) BOOL canSum;
+@property (nonatomic,readonly) BOOL validForGraph;
+@property (nonatomic,readonly) BOOL isWeightedAverage;
+@property (nonatomic,readonly) BOOL isMax;
+@property (nonatomic,readonly) BOOL isMin;
+@property (nonatomic,readonly) BOOL isSpeedOrPace;
+@property (nonatomic,readonly) BOOL isZeroValid;
+
 -(BOOL)isValidForActivityType:(NSString*)activityType;
 
 /**

@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/roznet/FitFileParser.git",
         "state": {
           "branch": null,
-          "revision": "32f23bd15d16c78d3ca4acdf3a7b36de66e5339e",
-          "version": "1.4.0"
+          "revision": "f880f4f5a9ed1dbf347964847c0e9c6eb3f60518",
+          "version": "1.4.3"
         }
       },
       {
@@ -96,8 +96,8 @@
         "repositoryURL": "https://github.com/roznet/rzexternal",
         "state": {
           "branch": null,
-          "revision": "5739045c1f6ebbbfec939bc64d233357c87273e3",
-          "version": "1.0.0"
+          "revision": "0508fcb2d0e16326f149e263ef4d573b32ace205",
+          "version": "1.0.1"
         }
       },
       {
@@ -105,8 +105,8 @@
         "repositoryURL": "https://github.com/roznet/rzutils.git",
         "state": {
           "branch": null,
-          "revision": "95f541968037fd9c930780003eec078db531093c",
-          "version": "1.0.5"
+          "revision": "82c0cf0a6fa0494b10992b67aa8df670281e3fcc",
+          "version": "1.0.6"
         }
       },
       {
@@ -147,11 +147,11 @@
       },
       {
         "package": "ZIPFoundation",
-        "repositoryURL": "https://github.com/roznet/ZIPFoundation",
+        "repositoryURL": "https://github.com/weichsel/ZIPFoundation.git",
         "state": {
-          "branch": "development",
-          "revision": "7b76af511c2b5dcc854b7195eaf24d2974249621",
-          "version": null
+          "branch": null,
+          "revision": "cf10bbff6ac3b873e97b36b9784c79866a051a8e",
+          "version": "0.9.12"
         }
       }
     ]

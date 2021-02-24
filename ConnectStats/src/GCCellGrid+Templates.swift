@@ -248,16 +248,16 @@ extension GCCellGrid {
 extension GCHistoryFieldDataHolder {
     func relevantNumbers(histStats which: gcHistoryStats) -> (main: GCNumberWithUnit?, extra : GCNumberWithUnit?, extraLabel: String?) {
         var rv : (main: GCNumberWithUnit?, extra : GCNumberWithUnit?, extraLabel: String?)
-        if field.canSum() {
+        if field.canSum {
             rv.main = self.sum(withUnit: which)
             rv.extra  = self.average(withUnit: which)
             rv.extraLabel = NSLocalizedString("Avg", comment: "Summary Field Stats")
-        }else if field.isWeightedAverage() {
+        }else if field.isWeightedAverage {
             rv.main = self.weightedAverage(withUnit: which)
         }else {
             rv.main = self.average(withUnit: which)
             
-            if field.isMax() {
+            if field.isMax {
                 rv.extra = self.max(withUnit: which)
                 rv.extraLabel = NSLocalizedString("Max", comment: "Summary Field Stats")
             }else{

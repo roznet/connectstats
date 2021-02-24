@@ -437,7 +437,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return rv;
 }
 
--(GCNumberWithUnit*)numberWithForFieldInStoreUnit:(GCField *)field{
+-(GCNumberWithUnit*)numberWithUnitForFieldInStoreUnit:(GCField *)field{
     switch (field.fieldFlag) {
         case gcFieldFlagWeightedMeanSpeed:
             return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_SPEED]];
@@ -843,52 +843,54 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     BOOL firstDone = false;
     
     for (id data in aTrack) {
-        GCTrackPoint * npoint = nil;
-        GCTrackPoint * point = nil;
-        if(!firstDone){
-            self.cachedExtraTracksIndexes = nil;
-        }
-        
-        if ([data isKindOfClass:[GCTrackPoint class]]) {
-            point = data;
-            if (point.time==nil) {
-                point.time = [self.date dateByAddingTimeInterval:point.elapsed];
-                if (point.time==nil) {
-                    countBadLaps++;
-                    continue;
-                }
+        @autoreleasepool {
+            GCTrackPoint * npoint = nil;
+            GCTrackPoint * point = nil;
+            if(!firstDone){
+                self.cachedExtraTracksIndexes = nil;
             }
-            [point recordExtraIn:self];
-        }else if ([data isKindOfClass:[NSDictionary class]]){
-            // If parsing from dict, reset extra indexes to rebuild
-            // with fields we get in dict
-            npoint = [[GCTrackPoint alloc] initWithDictionary:data forActivity:self];
-            point = npoint;
-        }
-        if (lastTrack) {
-            //[lastTrack updateWithNextPoint:point];
-        }
-        lastTrack = point;
-        [point updateElapsedIfNecessaryIn:self];
-        if (first && nLaps > 0) {
-            GCLap * this = _lapsCache[0];
-            this.longitudeDegrees = point.longitudeDegrees;
-            this.latitudeDegrees = point.latitudeDegrees;
-        }
-        if (nextLap && [point.time compare:nextLap.time] == NSOrderedDescending) {
-            nextLap.longitudeDegrees = point.longitudeDegrees;
-            nextLap.latitudeDegrees = point.latitudeDegrees;
             
-            lapIdx++;
-            nextLap = lapIdx + 1 < nLaps ? _lapsCache[lapIdx+1] : nil;
+            if ([data isKindOfClass:[GCTrackPoint class]]) {
+                point = data;
+                if (point.time==nil) {
+                    point.time = [self.date dateByAddingTimeInterval:point.elapsed];
+                    if (point.time==nil) {
+                        countBadLaps++;
+                        continue;
+                    }
+                }
+                [point recordExtraIn:self];
+            }else if ([data isKindOfClass:[NSDictionary class]]){
+                // If parsing from dict, reset extra indexes to rebuild
+                // with fields we get in dict
+                npoint = [[GCTrackPoint alloc] initWithDictionary:data forActivity:self];
+                point = npoint;
+            }
+            if (lastTrack) {
+                //[lastTrack updateWithNextPoint:point];
+            }
+            lastTrack = point;
+            [point updateElapsedIfNecessaryIn:self];
+            if (first && nLaps > 0) {
+                GCLap * this = _lapsCache[0];
+                this.longitudeDegrees = point.longitudeDegrees;
+                this.latitudeDegrees = point.latitudeDegrees;
+            }
+            if (nextLap && [point.time compare:nextLap.time] == NSOrderedDescending) {
+                nextLap.longitudeDegrees = point.longitudeDegrees;
+                nextLap.latitudeDegrees = point.latitudeDegrees;
+                
+                lapIdx++;
+                nextLap = lapIdx + 1 < nLaps ? _lapsCache[lapIdx+1] : nil;
+            }
+            point.lapIndex = lapIdx;
+            if (point) {
+                [trackData addObject:point];
+                self.trackFlags |= point.trackFlags;
+            }
+            [npoint release];
+            firstDone = true;
         }
-        point.lapIndex = lapIdx;
-        if (point) {
-            [trackData addObject:point];
-            self.trackFlags |= point.trackFlags;
-        }
-        [npoint release];
-        firstDone = true;
     }
     
     if( self.trackFlags != startTrackpointFlag){

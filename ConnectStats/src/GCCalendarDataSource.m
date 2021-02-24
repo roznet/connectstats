@@ -205,8 +205,8 @@
         [self.maxInfo maxMarkerInfo:info.infoTotals];
     }
 
-    self.weeklyStats = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:GC_TYPE_ALL];
-    self.monthlyStats =[GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:GC_TYPE_ALL];
+    self.weeklyStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_ALL];
+    self.monthlyStats =[GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_ALL];
     ;
     self.weeklyStats.activityType = GC_TYPE_ALL;
     self.monthlyStats.activityType = GC_TYPE_ALL;

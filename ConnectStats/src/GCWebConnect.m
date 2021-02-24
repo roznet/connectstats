@@ -446,7 +446,6 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
             }
         }
     }
-
 }
 
 -(void)next{
@@ -456,6 +455,10 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
             self.currentRequestObject = _requests[0];
             [_requests removeObjectAtIndex:0];
             // Add to holder so they stay in memory until all done for async notifications
+            if( self.doneRequests.count > 5){
+                // Remove first so the done Request never grows too big
+                [self.doneRequests removeObjectAtIndex:0];
+            }
             [self.doneRequests addObject:self.currentRequestObject];
         }
         id<GCWebRequest> req = self.currentRequestObject;

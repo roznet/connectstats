@@ -13,4 +13,7 @@ public extension GCAppGlobal{
         return GCAppGlobal.worker();
     }
     
+    static func handleAppRating() {
+        
+    }
 }

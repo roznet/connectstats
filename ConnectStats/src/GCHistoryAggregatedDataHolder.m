@@ -157,7 +157,7 @@
     BOOL hasField[fieldEnd];;
     for( size_t i=0;i<fieldEnd;i++){
         GCNumberWithUnit * nu = [act numberWithUnitForField:self.fields[i]];
-        if( self.fields[i].fieldFlag == gcFieldFlagPower && nu.value == 0.){
+        if( nu.value == 0. && (!self.fields[i].isZeroValid) ){
             // power of zero means didn't record
             nu = nil;
         }

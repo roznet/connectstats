@@ -8,6 +8,7 @@
 
 import Foundation
 import Cocoa
+import Armchair
 
 class FITAppDelegate : NSObject, NSApplicationDelegate {
     
@@ -18,6 +19,9 @@ class FITAppDelegate : NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Force init of the shared global state
         _ = FITAppGlobal.shared
+        Armchair.appID("1244431640")
+        Armchair.usesUntilPrompt(10)
+        Armchair.daysUntilPrompt(5)
     }
     
     func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool {

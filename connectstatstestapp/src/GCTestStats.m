@@ -58,7 +58,6 @@
     [GCTestAppGlobal setupSampleState:@"activities_stats.db" config:@{CONFIG_DUPLICATE_CHECK_ON_LOAD:@(false)}];
 
     [self checkSelfConsistency];
-    [self checkHistoryConsistency];
 
     [[GCAppGlobal profile] configSet:CONFIG_DUPLICATE_CHECK_ON_LOAD boolVal:true];
 	[self endSession:@"GC Stats"];
@@ -81,7 +80,7 @@
             NSCalendarUnit calendarUnit = [vc intValue];
             GCStatsCalendarAggregationConfig * calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:calendarUnit];
             GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
-            GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:activityType];
+            GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:activityType];
             [vals setActivitiesFromOrganizer:organizer];
             
             [vals aggregate:calendarUnit referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
@@ -155,60 +154,6 @@
 }
 
 
--(void)checkHistoryConsistency{
-
-    for (NSString * activityType in @[GC_TYPE_ALL,GC_TYPE_CYCLING,GC_TYPE_RUNNING]) {
-        GCHistoryFieldSummaryStats * vals_db = [self fieldStatsWithDb:[GCAppGlobal db] andActivityType:activityType];
-
-        GCActivityMatchBlock filter = nil;
-        if (![activityType isEqualToString:GC_TYPE_ALL]) {
-            filter = ^(GCActivity*act){
-                return [[act activityType] isEqualToString:activityType];
-            };
-        }
-
-        GCHistoryFieldSummaryStats * vals_mem = [GCHistoryFieldSummaryStats fieldStatsWithActivities:[[GCAppGlobal organizer] activities]
-                                                                                            matching:filter
-                                                                                       referenceDate:nil
-                                                                                          ignoreMode:gcIgnoreModeActivityFocus];
-        for (GCField * field in vals_db.fieldData) {
-            if (![field isCalculatedField]) {
-                GCHistoryFieldDataHolder * data_mem = vals_mem.fieldData[field];
-                GCHistoryFieldDataHolder * data_db  = vals_db.fieldData[field];
-
-                GCNumberWithUnit * sum_mem = [data_mem sumWithUnit:gcHistoryStatsAll];
-                GCNumberWithUnit * sum_db  = [data_db sumWithUnit:gcHistoryStatsAll];
-
-                double tolerance = 1.e-7;
-
-                if (sum_db.unit.betterIsMin != sum_mem.unit.betterIsMin) {
-                    // If inverted unit, converted sum won't match but average should (min/km vs km/h typically)
-                    sum_mem = [data_mem weightedSumWithUnit:gcHistoryStatsAll];
-                    sum_db = [data_db weightedSumWithUnit:gcHistoryStatsAll];
-                    // This case somehow does not match well, but pace is exact
-                    // so hopefully it's a numerical issue
-                    if ([field.key isEqualToString:@"WeightedMeanSpeed"]) {
-                        tolerance = 2.e-2;
-                    }
-                }
-
-                RZ_ASSERT(data_db!=nil, @"%@ found", field);
-
-                BOOL match_val = [sum_mem compare:sum_db withTolerance:tolerance]==NSOrderedSame;
-                if (!match_val) {
-                    [sum_mem compare:sum_db withTolerance:tolerance];
-                }
-
-                BOOL match_cnt = fabs([data_mem count:gcHistoryStatsAll] - [data_db count:gcHistoryStatsAll])<1.e-7;
-                if (!match_cnt) {
-                    match_cnt = fabs([data_mem count:gcHistoryStatsAll] - [data_db count:gcHistoryStatsAll])<1.e-7;
-                }
-                RZ_ASSERT(match_val, @"%@ sum match $@ != %@", field, sum_mem, sum_db);
-                RZ_ASSERT(match_cnt, @"%@ cnt match %@ != %@", field, @([data_mem count:gcHistoryStatsAll]), @([data_db count:gcHistoryStatsAll]));
-            }
-        }
-    }
-}
 
 -(void)checkGarminConsistency:(GCHistoryAggregatedActivityStats*)vals activityType:(NSString*)activityType calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig{
     if ([activityType isEqualToString:GC_TYPE_CYCLING] || [activityType isEqualToString:GC_TYPE_RUNNING]) {
@@ -284,7 +229,7 @@
                                                                                    referenceDate:nil
                                                                                       ignoreMode:gcIgnoreModeActivityFocus];
 
-    GCHistoryAggregatedActivityStats * vals_agg = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:activityType];
+    GCHistoryAggregatedActivityStats * vals_agg = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:activityType];
     [vals_agg setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     [vals_agg aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 

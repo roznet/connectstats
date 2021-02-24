@@ -44,6 +44,8 @@
 @class GCCalculatedCachedTrackInfo;
 @class GCCalculatedCachedTrackKey;
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef BOOL (^GCActivityMatchBlock)(GCActivity*act);
 
 #define GC_ALL_LAPS -1
@@ -95,7 +97,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 /**
     All implementation detail should be hidden in GCActivity+CachedTracked.h
  */
-@property (nonatomic,retain) NSDictionary<GCField*,GCCalculatedCachedTrackInfo*> * cachedCalculatedTracks;
+@property (nullable,nonatomic,retain) NSDictionary<GCField*,GCCalculatedCachedTrackInfo*> * cachedCalculatedTracks;
 
 
 @property (nonatomic,readonly) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("use GCActivityType.");
@@ -117,7 +119,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 @property (nonatomic,assign) gcDownloadMethod downloadMethod;
 
 @property (nonatomic,retain) NSString * calculatedLapName;
-@property (nonatomic,retain) GCWeather * weather;
+@property (nullable,nonatomic,retain) GCWeather * weather;
 
 @property (nonatomic,retain) FMDatabase * db;
 @property (nonatomic,retain) FMDatabase * trackdb;
@@ -143,26 +145,26 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  can return nil, but asking for this will trigger attempt to load from db
  or download from web if applicable
  */
-@property (nonatomic,retain) NSArray<GCTrackPoint*> * trackpoints;
+@property (nullable,nonatomic,retain) NSArray<GCTrackPoint*> * trackpoints;
 
 /**
  @brief For multi-sport activities, the parent activityId
  */
-@property (nonatomic,retain) NSString * parentId;
+@property (nullable,nonatomic,retain) NSString * parentId;
 
 /**
  @brief For multi-sport activities, Arrays of child activityIds
  */
-@property (nonatomic,retain) NSArray<NSString*> * childIds;
+@property (nullable,nonatomic,retain) NSArray<NSString*> * childIds;
 /**
  @brief To maintain an activityId in an external system. For example an activity from ConnectStats Service should have a activityID on the garmin service
  */
-@property (nonatomic,retain) NSString*externalServiceActivityId;
+@property (nullable,nonatomic,retain) NSString*externalServiceActivityId;
 
 /**
  Avoid to use directly, should be used via GCActivity+Assets functions
  */
-@property (nonatomic,retain) NSDictionary * assetsInfo;
+@property (nullable,nonatomic,retain) NSDictionary * assetsInfo;
 
 /**
  @brief Display name, if none, will use location.
@@ -181,8 +183,8 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(GCActivity*)initWithId:(NSString*)aId NS_DESIGNATED_INITIALIZER;
 -(GCActivity*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
 
--(BOOL)updateWithTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints andLaps:(NSArray<GCLap*>*)laps;
--(BOOL)saveTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps;
+-(BOOL)updateWithTrackpoints:(NSArray<GCTrackPoint*>*)trackpoints andLaps:(nullable NSArray<GCLap*>*)laps;
+-(BOOL)saveTrackpoints:(NSArray<GCTrackPoint*>*)aTrack andLaps:(nullable NSArray<GCLap*>*)laps;
 
 /// Logic to change activity type
 /// @param newActivityType if nil will do nothing
@@ -234,7 +236,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  Return the next Field which has a track serie.
  If one is nil or not a valid field, the first available field will be returned
  */
--(GCField*)nextAvailableTrackField:(GCField*)one;
+-(nullable GCField*)nextAvailableTrackField:(nullable GCField*)one;
 
 /**
  Return list of available fields with Track Points. Will include calculated tracks
@@ -267,7 +269,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 /**
  return numberWithUnit for field. This is the main access function for values
  */
--(GCNumberWithUnit*)numberWithUnitForField:(GCField*)field;
+-(nullable GCNumberWithUnit*)numberWithUnitForField:(GCField*)field;
 /**
  @brief Set number for field
  @return true if changed or new, false if unchanged
@@ -282,12 +284,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 -(double)summaryFieldValueInStoreUnit:(gcFieldFlag)fieldFlag;
 -(void)setSummaryField:(gcFieldFlag)fieldFlag inStoreUnitValue:(double)value;
--(GCNumberWithUnit*)numberWithForFieldInStoreUnit:(GCField *)field;
-
-/**
- Format a value with unit similar to a given field
- */
--(NSString*)formatValue:(double)aval forField:(GCField*)which DEPRECATED_MSG_ATTRIBUTE("use numberWithUnitForField");
+-(nullable GCNumberWithUnit*)numberWithUnitForFieldInStoreUnit:(GCField *)field;
 
 /**
  Format a value with unit similar to a given field, unit name not displayed
@@ -298,11 +295,11 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  Format a numberWithUnit similar to how field which would be formatted.
  It will convert to displayUnit which may be different than generic field
  */
--(NSString*)formatNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)which;
+-(NSString*)formatNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)which DEPRECATED_MSG_ATTRIBUTE("format numberWithUnit directly");
 /**
  Return value for field formatted as number with unit
  */
--(NSString*)formattedValue:(GCField*)field;
+-(NSString*)formattedValue:(GCField*)field DEPRECATED_MSG_ATTRIBUTE("format numberWithUnit directly");
 
 -(BOOL)hasField:(GCField*)field;
 -(BOOL)isEqualToActivity:(GCActivity*)other;
@@ -312,7 +309,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  */
 -(NSArray<GCField*>*)allFields;
 
--(GCActivityMetaValue*)metaValueForField:(NSString*)field;
+-(nullable GCActivityMetaValue*)metaValueForField:(NSString*)field;
 /**
  @brief method to update the dictionary of meta data
  */
@@ -330,9 +327,9 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 #pragma mark - Laps
 
--(NSArray<GCLap*>*)laps;
+-(nullable NSArray<GCLap*>*)laps;
 -(NSUInteger)lapCount;
--(GCLap*)lapNumber:(NSUInteger)idx;
+-(nullable GCLap*)lapNumber:(NSUInteger)idx;
 -(void)registerLaps:(NSArray<GCLap*>*)laps forName:(NSString*)name;
 -(BOOL)useLaps:(NSString*)name;
 -(void)clearCalculatedLaps;
@@ -355,3 +352,5 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(BOOL)isSkiActivity;
 
 @end
+
+NS_ASSUME_NONNULL_END

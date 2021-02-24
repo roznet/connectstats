@@ -1319,7 +1319,7 @@
                                 <rect key="frame" x="10" y="0.0" width="330" height="32"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dzG-2b-klx">
-                                        <rect key="frame" x="-2" y="9" width="82" height="16"/>
+                                        <rect key="frame" x="-2" y="9" width="74" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Stats Using" id="coa-EI-Jn8">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1327,7 +1327,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <popUpButton verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v6U-Do-7Dd">
-                                        <rect key="frame" x="85" y="2" width="85" height="25"/>
+                                        <rect key="frame" x="77" y="2" width="85" height="25"/>
                                         <popUpButtonCell key="cell" type="push" title="record" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="lad-7J-B4X" id="lMY-M9-4FS">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu"/>
@@ -1346,7 +1346,7 @@
                                         </connections>
                                     </popUpButton>
                                     <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6tC-tC-II5">
-                                        <rect key="frame" x="174" y="9" width="70" height="16"/>
+                                        <rect key="frame" x="166" y="9" width="78" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="for" id="zqG-KM-uOh">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1484,11 +1484,11 @@
             <objects>
                 <viewController title="Download Controller" id="1qV-F5-QB0" customClass="FITDownloadViewController" customModule="FitFileExplorer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" misplaced="YES" id="pHj-sO-UMX">
-                        <rect key="frame" x="0.0" y="0.0" width="845" height="448"/>
+                        <rect key="frame" x="0.0" y="0.0" width="845" height="162"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oAz-t0-vVq">
-                                <rect key="frame" x="18" y="318" width="200" height="16"/>
+                            <textField horizontalHuggingPriority="751" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oAz-t0-vVq">
+                                <rect key="frame" x="18" y="136" width="200" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Download From Garmin Account" id="nNl-iP-ppF">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1496,7 +1496,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oKi-sf-doD">
-                                <rect key="frame" x="224" y="315" width="210" height="21"/>
+                                <rect key="frame" x="224" y="133" width="210" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="206" id="Cz8-06-I2P"/>
                                 </constraints>
@@ -1509,8 +1509,8 @@
                                     </connections>
                                 </textFieldCell>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w6Q-hM-j5d">
-                                <rect key="frame" x="444" y="318" width="89" height="16"/>
+                            <textField horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w6Q-hM-j5d">
+                                <rect key="frame" x="444" y="136" width="89" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="and Password" id="Gi0-5q-63d">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1518,7 +1518,7 @@
                                 </textFieldCell>
                             </textField>
                             <secureTextField verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wHO-cn-gNk">
-                                <rect key="frame" x="535" y="315" width="210" height="21"/>
+                                <rect key="frame" x="535" y="133" width="210" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="207" id="zhp-Aj-t1h"/>
                                 </constraints>
@@ -1534,8 +1534,8 @@
                                     <action selector="editPassword:" target="1qV-F5-QB0" id="cmf-Ca-0TI"/>
                                 </connections>
                             </secureTextField>
-                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s7j-K9-z0k">
-                                <rect key="frame" x="759" y="308" width="87" height="32"/>
+                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s7j-K9-z0k">
+                                <rect key="frame" x="759" y="126" width="87" height="32"/>
                                 <buttonCell key="cell" type="push" title="Refresh" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SHD-Yw-FMt">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1545,13 +1545,13 @@
                                 </connections>
                             </button>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q8I-cB-Gbz">
-                                <rect key="frame" x="0.0" y="25" width="845" height="269"/>
+                                <rect key="frame" x="0.0" y="25" width="845" height="87"/>
                                 <clipView key="contentView" id="1DT-nq-YEJ">
-                                    <rect key="frame" x="1" y="1" width="843" height="267"/>
+                                    <rect key="frame" x="1" y="1" width="843" height="85"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="RdK-NY-FSq" viewBased="YES" id="edZ-56-Dt3">
-                                            <rect key="frame" x="0.0" y="0.0" width="843" height="242"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="843" height="60"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>

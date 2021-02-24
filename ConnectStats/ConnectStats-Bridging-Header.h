@@ -17,6 +17,8 @@
 //#import "GCAppProfiles.h"
 #import "GCHealthOrganizer.h"
 #import "GCDerivedOrganizer.h"
+#import "GCAppDelegate.h"
+#import "GCWebReverseGeocode.h"
 
 #import "GCViewIcons.h"
 #import "FITFitEnumMap.h"

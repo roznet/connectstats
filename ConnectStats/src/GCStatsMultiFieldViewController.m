@@ -351,6 +351,11 @@
     GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
     GCField * field =[self fieldsForSection:indexPath.section][indexPath.row];
 
+    if( field == nil ){
+        [cell setupForRows:1 andCols:1];
+        [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Empty",@"fieldSummaryCell");
+        return cell;
+    }
     static NSDictionary * doGraph = nil;
     if (doGraph==nil) {
         doGraph = @{@"SumDistance":             @1,
@@ -772,7 +777,7 @@
 
     [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
 
-    GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:self.activityType];
+    GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:self.activityType];
     vals.useFilter = self.useFilter;
     [vals setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     vals.activityType = self.activityType;

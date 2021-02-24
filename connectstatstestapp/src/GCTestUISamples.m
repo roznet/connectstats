@@ -815,7 +815,8 @@
     for (GCActivity * act in organizer.activities) {
         GCCellActivity * cell = [nib instantiateWithOwner:self options:nil][0];
         [cell setupFor:act];
-        [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:@"new cell"]];
+        NSString * identifier = [NSString stringWithFormat:@"new cell for %@", act.activityId];
+        [rv addObject:[GCTestUISampleCellHolder holderFor:cell height:heightExtended andIdentifier:identifier]];
     }
     [db close];
     [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS13]];
@@ -891,7 +892,7 @@
     
     cell = [GCCellGrid cellGrid:nil];
     [cell setupDetailHeader:act];
-    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Detail"]];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Detail New Style"]];
     NSUInteger indexes[] = {0, 1, 2, 4, 6, 8, 11};
 
     for( NSUInteger i=0;i<sizeof(indexes)/sizeof(NSUInteger);i++){
@@ -905,41 +906,41 @@
                                      second:@[]];
         [activity addObject:[GCTestUISampleCellHolder holderFor:cell height:height andIdentifier:tag]];
     }
-    /*
+    
     if ([act trackpointsReadyOrLoad] && [[act laps] count] > 0) {
         cell = [GCCellGrid cellGrid:nil];
         [cell setupForLap:0 andActivity:act width:320.];
-        [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Lap"]];
+        [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Activity Lap  New Style"]];
     }
 
     act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_swimming_439303647.db" ]];
 
     cell = [GCCellGrid cellGrid:nil];
     [cell setupDetailHeader:act];
-    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Detail"]];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Detail New Style"]];
     cell = [GCCellGrid cellGrid:nil];
     [cell setupForField:@"WeightedMeanPace" andActivity:act width:320.];
-    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Pace Field"]];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Pace Field New Style"]];
     if ([act trackpointsReadyOrLoad] && [[act laps] count] > 0) {
         cell = [GCCellGrid cellGrid:nil];
         [cell setupForLap:0 andActivity:act width:320.];
-        [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Lap"]];
+        [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Swim Activity Lap New Style"]];
     }
 
     act =[GCActivity fullLoadFromDbPath:[GCTestsSamples sampleActivityDatabasePath:@"test_activity_cycling_940863203.db" ]];
 
     cell = [GCCellGrid cellGrid:nil];
     [cell setupDetailHeader:act];
-    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Detail"]];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Detail New Style"]];
     cell = [GCCellGrid cellGrid:nil];
     [cell setupForField:@"WeightedMeanSpeed" andActivity:act width:320.];
-    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Speed Field"]];
+    [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Speed Field New Style"]];
     if ([act trackpointsReadyOrLoad] && [[act laps] count] > 0) {
         cell = [GCCellGrid cellGrid:nil];
         [cell setupForLap:0 andActivity:act width:320.];
-        [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Lap"]];
+        [activity addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Cycle Activity Lap New Style"]];
     }
-*/
+
     [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS13]];
 
     return activity;
@@ -955,7 +956,7 @@
 
     NSMutableArray * stats = [NSMutableArray array];
 
-    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:GC_TYPE_RUNNING];
+    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_RUNNING];
     [aggregatedStats setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     [aggregatedStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
@@ -982,7 +983,7 @@
 
     NSMutableArray * stats = [NSMutableArray array];
 
-    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivitStatsForActivityType:GC_TYPE_RUNNING];
+    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_RUNNING];
     [aggregatedStats setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     [aggregatedStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
@@ -1093,6 +1094,24 @@
     [rv addObject:[self sampleIcons]];
     [rv addObject:[self sampleCells]];
     
+    [self validateHolders:rv];
+    
     return rv;
+}
+
+-(void)validateHolders:(NSArray*)rv{
+    NSMutableSet<NSString*>*existing = [NSMutableSet set];
+    for (NSObject * one in [rv arrayFlattened]) {
+        if( [one isKindOfClass:[GCTestUISampleCellHolder class]] ){
+            NSString * key = [(GCTestUISampleCellHolder*)one identifier];
+            if( [existing containsObject:key] ){
+                NSLog(@"Duplicate identifier in cell Samples! %@", key);
+            }
+            [existing addObject:key];
+        }else{
+            NSLog(@"Invalid type for holder! %@", one);
+
+        }
+    }
 }
 @end

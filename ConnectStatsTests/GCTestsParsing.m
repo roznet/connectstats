@@ -557,6 +557,9 @@
                 [recordEpsilon addObject:[NSString stringWithFormat:@" @\"%@\": @(%@)", field.key, @(diff.value)]];
             }
             XCTAssertNotNil(v_gc, @"Found field %@", field);
+            if( [aId isEqualToString:@"2477200414"] && [field.key hasSuffix:@"Cadence"]){
+                NSLog(@"%@ %@ %@", aId, v_gc, v_fit);
+            }
             if( v_gc ){
                 XCTAssertTrue([v_gc.numberWithUnit compare:v_fit.numberWithUnit withTolerance:eps] == NSOrderedSame,
                               @"Key %@: %@ == %@ within %@", field, v_gc.numberWithUnit, v_fit.numberWithUnit, @(eps));
@@ -786,7 +789,7 @@
     GCNumberWithUnit * unskip_nu = [[unskip_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] weightedSumWithUnit:gcHistoryStatsAll];
 
     
-    XCTAssertEqualWithAccuracy(start_nu.value, skip_nu.value+dist.value, 1.e-7);
+    XCTAssertEqualWithAccuracy(start_nu.value, [skip_nu addNumberWithUnit:dist weight:1.0].value, 1.e-7);
     XCTAssertEqualWithAccuracy(reload_nu.value, skip_nu.value, 1.e-7);
     XCTAssertEqualWithAccuracy(start_nu.value, unskip_nu.value, 1.e-7);
 

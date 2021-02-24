@@ -60,9 +60,9 @@ class FITFitValueStatistics: NSObject {
             return [StatsType.avg,StatsType.count,StatsType.max,StatsType.min]
         }else{
             if let field = FITFitEnumMap.activityField(fromFitField: fieldKey, forActivityType: nil){
-                if field.isWeightedAverage() || field.isMax() || field.isMin() || field.validForGraph(){
+                if field.isWeightedAverage || field.isMax || field.isMin || field.validForGraph{
                     return [StatsType.avg,StatsType.count,StatsType.max,StatsType.min]
-                }else if field.canSum() {
+                }else if field.canSum {
                     return [StatsType.total,StatsType.count]
                 }
             }

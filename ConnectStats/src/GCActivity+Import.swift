@@ -39,7 +39,7 @@ extension GCActivity {
         
         var sessionStart : Date?
         var sessionEnd   : Date?
-        
+
         var pool_length : Double = 0.0
         
         // If multiple session messsages and start time given, pick the matching session
@@ -52,6 +52,7 @@ extension GCActivity {
                         break;
                     }
                 }
+                message.purgeCache()
                 messageIndex+=1;
             }
         }
@@ -106,7 +107,7 @@ extension GCActivity {
             // no session message
             return nil;
         }
-        
+
         let events = fitFile.messages(forMessageType: FitMessageType.event)
         var timers : [Date:gcTrackEventType] = [:];
         for event in events {
@@ -122,8 +123,9 @@ extension GCActivity {
 
                 timers[time] = eventtype
             }
+            event.purgeCache()
         }
-        
+
         messages = fitFile.messages(forMessageType: FitMessageType.record)
         
         var trackpoints : [GCTrackPoint] = []
@@ -131,26 +133,30 @@ extension GCActivity {
             if  let timestamp = item.time(field: "timestamp") {
                 if let checkStart = sessionStart, let checkEnd = sessionEnd {
                     if timestamp < checkStart || timestamp > checkEnd {
-                        continue;
+                        continue
                     }
                 }
-                let values = interp.summaryValues(fitMessage: item)
-                var coord = CLLocationCoordinate2DMake(0, 0)
-                
-                if let icoord = item.coordinate(field: "position") {
-                    coord = icoord
-                }
-                if let point = GCTrackPoint(coordinate2D: coord, at: timestamp, for: values, in: self) {
-                    if let timer = timers[timestamp] {
-                        point.recordTrackEventType(timer, in: self)
+                autoreleasepool {
+                    let values = interp.summaryValues(fitMessage: item)
+                    var coord = CLLocationCoordinate2DMake(0, 0)
+                    
+                    if let icoord = item.coordinate(field: "position") {
+                        coord = icoord
                     }
-
-                    trackpoints.append(point)
-                    self.trackFlags |= point.trackFlags
+                    if let point = GCTrackPoint(coordinate2D: coord, at: timestamp, for: values, in: self) {
+                        if let timer = timers[timestamp] {
+                            point.recordTrackEventType(timer, in: self)
+                        }
+                        
+                        trackpoints.append(point)
+                        self.trackFlags |= point.trackFlags
+                    }
+                    item.purgeCache()
                 }
             }
         }
         
+
         var swim : Bool = false;
         
         messages = fitFile.messages(forMessageType: FitMessageType.length)
@@ -186,10 +192,10 @@ extension GCActivity {
                         swimpoints.append(pointswim)
                     }
                 }
+                item.purgeCache()
             }
         }
 
-        
         messages = fitFile.messages(forMessageType: FitMessageType.lap)
         var laps : [GCLap] = []
         var lapsSwim : [GCLap] = []
@@ -201,27 +207,29 @@ extension GCActivity {
                         continue;
                     }
                 }
-
-                let values = interp.summaryValues(fitMessage: item)
-                
-                if swim {
-                    let stroke = interp.strokeType(message: item) ?? gcSwimStrokeType.mixed
-                    let active = interp.swimActive(message: item)
-                    if let lap = GCLap(at: timestamp, stroke: stroke, active: active, with: values, in: self){
-                        lapsSwim.append(lap)
+                autoreleasepool {
+                    let values = interp.summaryValues(fitMessage: item)
+                    
+                    if swim {
+                        let stroke = interp.strokeType(message: item) ?? gcSwimStrokeType.mixed
+                        let active = interp.swimActive(message: item)
+                        if let lap = GCLap(at: timestamp, stroke: stroke, active: active, with: values, in: self){
+                            lapsSwim.append(lap)
+                        }
+                    }else{
+                        let start = item.coordinate(field: "start_position") ?? CLLocationCoordinate2DMake(0, 0)
+                        if let lap = GCLap(summaryValues: values, starting: timestamp, at: start, for: self) {
+                            laps.append(lap)
+                        }
                     }
-                }else{
-                    let start = item.coordinate(field: "start_position") ?? CLLocationCoordinate2DMake(0, 0)
-                    if let lap = GCLap(summaryValues: values, starting: timestamp, at: start, for: self) {
-                        laps.append(lap)
-                    }
+                    item.purgeCache()
                 }
             }
         }
         #if targetEnvironment(simulator)
         interp.reportAlternates()
         #endif
-        
+
         // Don't save to db
         if swim {
             self.garminSwimAlgorithm = true

@@ -39,6 +39,7 @@
 #import "ConnectStats-Swift.h"
 #import "GCGarminSearchJsonParser.h"
 #import "GCTestsSamples.h"
+#import "GCHistoryAggregatedActivityStats.h"
 
 
 @interface GCTestsPerformance : GCTestCase
@@ -87,6 +88,22 @@
     [organizer release];
     [db close];
     
+
+}
+
+-(void)testPerformanceAggregatedStatistics{
+    FMDatabase * db = [GCTestsSamples sampleActivityDatabase:@"activities_stats.db"];
+    
+    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    
+    [self measureBlock:^{
+        GCHistoryAggregatedActivityStats * stats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_RUNNING];
+        stats.activities = organizer.activities;
+        [stats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    }];
+
+    [organizer release];
+    [db close];
 
 }
 
@@ -187,7 +204,17 @@
     [GCGarminActivityTrack13Request testForActivity:act withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
     XCTAssertGreaterThan(act.trackpoints.count, 1);
     GCActivityAutoLapChoices * choices = [[[GCActivityAutoLapChoices alloc] initWithActivity:act] autorelease];
+    
+    NSMutableDictionary * keep = [NSMutableDictionary dictionary];
+    // only test 1 of each kind of style
+    for (GCActivityAutoLapChoiceHolder * choice  in choices.choices) {
+        keep[ @(choice.style)] = choice;
+    }
+    
+    choices.choices = keep.allValues;
+    choices.selected = 0;
     NSUInteger n = choices.choices.count;
+    
     [self measureBlock:^{
         [act clearCalculatedLaps];
         for (NSUInteger i=0; i<n; i++) {

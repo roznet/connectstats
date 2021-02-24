@@ -1,5 +1,5 @@
 PODS:
-  - Appirater (2.3.1)
+  - Armchair (0.3.7)
   - CHCSVParser (2.1.0)
   - Flurry-iOS-SDK/FlurrySDK (11.1.0)
   - GenericJSON (2.0.1)
@@ -10,7 +10,7 @@ PODS:
     - GoogleMaps/Base
 
 DEPENDENCIES:
-  - Appirater
+  - Armchair (>= 0.3)
   - CHCSVParser
   - Flurry-iOS-SDK/FlurrySDK
   - GenericJSON
@@ -18,19 +18,19 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
-    - Appirater
+    - Armchair
     - CHCSVParser
     - Flurry-iOS-SDK
     - GenericJSON
     - GoogleMaps
 
 SPEC CHECKSUMS:
-  Appirater: 44a4651f7912a17dc906b655f0c215d5bb768b84
+  Armchair: ea2da13f78515da627bd63d9540bd58a50e71562
   CHCSVParser: 3bcc7bdb72111a31222e95d57eacceefe4e537e8
   Flurry-iOS-SDK: 88c0399d6d276325dc9f74f6183c1070e6c3f21e
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
   GoogleMaps: 8c080862ff2748ece9929471b30feb56a6c5079d
 
-PODFILE CHECKSUM: beaa41b3678d78d100ac99a08d115c029b7a4a05
+PODFILE CHECKSUM: e6a6d1deaba1a4d0ba8113bf27fbbaf0167cb307
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1

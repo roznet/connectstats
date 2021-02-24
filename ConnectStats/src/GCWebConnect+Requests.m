@@ -104,12 +104,16 @@
     }
     
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            BOOL garminStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin];
-            NSInteger aStart = garminStatsReload ? [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin] : 0;
-            [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
-            [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:garminStatsReload] autorelease]];
-        });
+        if( [GCGarminReqBase killSwitchTriggered] ){
+            RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+        }else{
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                BOOL garminStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin];
+                NSInteger aStart = garminStatsReload ? [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin] : 0;
+                //[self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
+                [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:garminStatsReload] autorelease]];
+            });
+        }
     }
 
     if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]) {
@@ -153,7 +157,11 @@
 }
 -(void)servicesLogin{
     if (![self didLoginSuccessfully:gcWebServiceGarmin] && [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
-        [self garminLogin];
+        if( [GCGarminReqBase killSwitchTriggered] ){
+            RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+        }else{
+            [self garminLogin];
+        }
     }
     
     // other services are automatic
@@ -165,12 +173,20 @@
     // If the service for garmin was successfull, download anyway.
     // it's possible it's the detail of an old activities, downloaded before the service was turned off.
     if( [[GCAppGlobal profile] serviceSuccess:gcServiceGarmin] || [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
+        if( [GCGarminReqBase killSwitchTriggered] ){
+            RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+            return;
+        }
         [self addRequest:[GCGarminActivityTrack13Request requestWithActivity:act]];
     }
 }
 
 -(void)garminDownloadActivitySummary:(NSString*)aId{
     if(  [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
+        if( [GCGarminReqBase killSwitchTriggered] ){
+            RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+            return;
+        }
         [self addRequest:[[[GCGarminRequestActivityReload alloc] initWithId:aId] autorelease]];
     }
 }
@@ -182,6 +198,11 @@
 
 -(void)garminLogin{
     if (!self.isProcessing && [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
+        if( [GCGarminReqBase killSwitchTriggered] ){
+            RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+            return;
+        }
+
         gcGarminLoginMethod method = (gcGarminLoginMethod)[[GCAppGlobal profile] configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
 
         NSString * username = [[GCAppGlobal profile] currentLoginNameForService:gcServiceGarmin];

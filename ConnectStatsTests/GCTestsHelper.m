@@ -11,6 +11,7 @@
 #import "GCAppGlobal.h"
 #import "GCFields.h"
 #import "GCFieldCache.h"
+#import "GCAppDelegate+Swift.h"
 
 @interface GCTestsHelper ()
 @property (nonatomic,retain) NSMutableDictionary * savedSettings;
