@@ -44,6 +44,8 @@
 
 //-(instancetype)init NS_DESIGNATED_INITIALIZER;
 
++(BOOL)killSwitchTriggered;
+
 @end
 
 
