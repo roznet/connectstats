@@ -30,6 +30,7 @@
 #import "GCAppGlobal.h"
 #import "GCAppDelegate.h"
 #import "ConnectStats-Swift.h"
+#import "GCActivity+CSSearch.h"
 
 #ifdef GC_TEST_APP
 @class GCTabBarController;
@@ -39,6 +40,9 @@
 #import "GCSplitViewController.h"
 #endif
 
+NS_INLINE GCAppDelegate * _appDelegate(void) {
+    return (GCAppDelegate*)[UIApplication sharedApplication].delegate;
+}
 
 @interface GCAppSceneDelegate ()
 
@@ -136,11 +140,11 @@
 }
 
 -(void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts{
-    NSLog(@"Called %@", URLContexts);
-    GCAppDelegate * delegate = (GCAppDelegate*)[UIApplication sharedApplication].delegate;
+    RZLog(RZLogInfo, @"Context %@", URLContexts);
+    GCAppDelegate * delegate = _appDelegate();
     for (UIOpenURLContext * context in URLContexts) {
         if( [context.URL.path hasSuffix:@".fit"] ){
-            [delegate application:[UIApplication sharedApplication] openURL:context.URL options:@{}];
+            [delegate handleOpenURL:context.URL];
             break;
         }
         if( [context.URL.path isEqualToString:@"/oauth/strava"]){
@@ -148,4 +152,12 @@
         }
     }
 }
+
+-(void)scene:(UIScene *)scene continueUserActivity:(NSUserActivity *)userActivity{
+    RZLog(RZLogInfo, @"Scene user activity %@", userActivity);
+    GCAppDelegate * delegate = _appDelegate();
+    [delegate handleUserActivity:userActivity];
+}
+
+
 @end

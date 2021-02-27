@@ -2542,12 +2542,12 @@
 			name = FieldCache;
 			sourceTree = "<group>";
 		};
-		422CE57025DBE81D00723D4D /* GroupByAggregation */ = {
+		422CE57025DBE81D00723D4D /* Statistics */ = {
 			isa = PBXGroup;
 			children = (
 				422CE57125DBE87300723D4D /* GCHistoryStatistics.swift */,
 			);
-			name = GroupByAggregation;
+			name = Statistics;
 			sourceTree = "<group>";
 		};
 		422D8FFF17A1AB1200C131DC /* Lists */ = {
@@ -2694,6 +2694,16 @@
 				423E8F8221DCE5F300FB795B /* Settings.csv */,
 			);
 			path = examples;
+			sourceTree = "<group>";
+		};
+		4240A8B925EA987500E01784 /* StatisticsAndAnalysis */ = {
+			isa = PBXGroup;
+			children = (
+				42AB681416E007E700C633BD /* SingleActivity */,
+				426F74DB1620299F007B3653 /* ActivityHistory */,
+				422CE57025DBE81D00723D4D /* Statistics */,
+			);
+			name = StatisticsAndAnalysis;
 			sourceTree = "<group>";
 		};
 		424340FA1B7415C7001E22BB /* SpotLightSearch */ = {
@@ -3023,7 +3033,7 @@
 			name = Tracks;
 			sourceTree = "<group>";
 		};
-		426F74DB1620299F007B3653 /* History */ = {
+		426F74DB1620299F007B3653 /* ActivityHistory */ = {
 			isa = PBXGroup;
 			children = (
 				423493FC160477F200A770D6 /* GCHistoryFieldDataSerie.h */,
@@ -3041,7 +3051,7 @@
 				42D4CA7B24951AF2003F3AB7 /* GCLagPeriod.h */,
 				42D4CA7C24951AF2003F3AB7 /* GCLagPeriod.m */,
 			);
-			name = History;
+			name = ActivityHistory;
 			sourceTree = "<group>";
 		};
 		42734CE016957939003E2177 /* Activity */ = {
@@ -3084,12 +3094,12 @@
 		4277C0B923B91A5800C1B1B9 /* TrackAndLaps */ = {
 			isa = PBXGroup;
 			children = (
+				42E1A75024278037006C868A /* GCCalculatedCachedTrackInfo.h */,
+				42E1A75124278037006C868A /* GCCalculatedCachedTrackInfo.m */,
 				42804DE916D5215D009E4EEF /* GCActivity+Calculated.h */,
 				42804DEA16D5215D009E4EEF /* GCActivity+Calculated.m */,
 				423209341868D8F600C8F305 /* GCActivity+CachedTracks.h */,
 				423209351868D8F600C8F305 /* GCActivity+CachedTracks.m */,
-				42E1A75024278037006C868A /* GCCalculatedCachedTrackInfo.h */,
-				42E1A75124278037006C868A /* GCCalculatedCachedTrackInfo.m */,
 				42E1A74B24277FF9006C868A /* GCActivity+BestRolling.h */,
 				42E1A74C24277FF9006C868A /* GCActivity+BestRolling.m */,
 				42E1A755242784B3006C868A /* GCActivity+TrackTransform.h */,
@@ -3365,6 +3375,7 @@
 				42AB680916DD5C5C00C633BD /* HealthData */,
 				428FF74515F39D97007A88FA /* Communications */,
 				428FF78415FB39D6007A88FA /* Activities */,
+				4240A8B925EA987500E01784 /* StatisticsAndAnalysis */,
 				428FF73D15F37440007A88FA /* UserInterface */,
 				42A99B221B780D5300994917 /* WatchSession */,
 				428FF73C15F37425007A88FA /* AppDelegate */,
@@ -3506,14 +3517,11 @@
 				42959CD218D5ECAD00C0B841 /* Services */,
 				42959CD118D5C5C400C0B841 /* Weather */,
 				42959CD018D5C59D00C0B841 /* Fields */,
-				42AB681416E007E700C633BD /* Calculated */,
 				42734CE016957939003E2177 /* Activity */,
 				42446769184B73E8009F807E /* ActivityTypes */,
 				429D752A1651AA9200232BED /* Organizer */,
 				42AA28891637F4C80054F84A /* Search */,
 				42A95B1E16329365000B2082 /* Laps */,
-				422CE57025DBE81D00723D4D /* GroupByAggregation */,
-				426F74DB1620299F007B3653 /* History */,
 				426F74DA1620295D007B3653 /* Tracks */,
 			);
 			name = Activities;
@@ -3763,13 +3771,13 @@
 			name = HealthData;
 			sourceTree = "<group>";
 		};
-		42AB681416E007E700C633BD /* Calculated */ = {
+		42AB681416E007E700C633BD /* SingleActivity */ = {
 			isa = PBXGroup;
 			children = (
 				4277C0BA23B91A9000C1B1B9 /* Fields */,
 				4277C0B923B91A5800C1B1B9 /* TrackAndLaps */,
 			);
-			name = Calculated;
+			name = SingleActivity;
 			sourceTree = "<group>";
 		};
 		42AB682216E3EC5D00C633BD /* Laps */ = {

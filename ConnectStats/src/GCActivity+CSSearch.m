@@ -28,7 +28,7 @@
 @import CoreSpotlight;
 #import "GCActivity+Fields.h"
 
-NSString * kNSUserActivityTypeViewOne = @"net.ro-z.viewOne";
+NSString * kNSUserActivityTypeViewOne = @"app.connectstats.viewOne";
 NSString * kNSUserActivityUserInfoActivityIdKey = @"activityId";
 
 @implementation GCActivity (CSSearch)

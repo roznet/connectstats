@@ -72,9 +72,6 @@ NSString * GCWebActivityTypesModern(void);
 NSString * GCWebUserData(void);
 NSString * GCWebGarminHeartRate(void);
 
-NSString * GCWebGoogleEarthURL( NSString*aId);
-NSString * GCWebUploadURL( NSString*dir);
-
 NSString * GCWebStravaAuthentication(void);
 NSString * GCWebStravaUpload(void);
 
