@@ -30,6 +30,8 @@ import RZUtilsSwift
 
 @objc class GCStravaRequestActivityList: GCStravaRequestBase {
     
+    static let per_page : UInt = 20
+    
     let page : Int
     var searchMore : Bool = false
     let reloadAll : Bool
@@ -70,7 +72,10 @@ import RZUtilsSwift
     }
     
     override func stravaUrl() -> URL? {
-        return URL(string: "https://www.strava.com/api/v3/athlete/activities?page=\(self.page+1)")
+        // Strava api is a bit slow, so when downloading history first time ask more
+        // at a time, but in usual mode, minimize bandwith and only ask for 20
+        let per_page = self.reloadAll ? GCStravaRequestActivityList.per_page * 6 : GCStravaRequestActivityList.per_page
+        return URL(string: "https://www.strava.com/api/v3/athlete/activities?page=\(self.page+1)&per_page=\(per_page)")
     }
 
     func searchFileName(page : Int) -> String {
@@ -80,6 +85,7 @@ import RZUtilsSwift
     //MARK: - Processing
     
     override func process(data : Data) {
+        RZSLog.info("Start process data")
         #if targetEnvironment(simulator)
         try? data.write(to: URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(self.searchFileName(page: self.page))))
         #endif
@@ -111,7 +117,7 @@ import RZUtilsSwift
         if let newDate = parser.activities.last?.date {
             self.lastFoundDate = newDate
         }
-        self.searchMore = listRegister.shouldSearchForMore(with: 30, reloadAll: self.reloadAll)
+        self.searchMore = listRegister.shouldSearchForMore(with: GCStravaRequestActivityList.per_page, reloadAll: self.reloadAll)
     }
     
     @objc override var nextReq: GCWebRequestStandard? {
@@ -124,7 +130,7 @@ import RZUtilsSwift
             }
             
             if let validate = GCAppGlobal.web().validateNextSearch {
-                if !validate(lastFoundDate,UInt(self.page)*30) {
+                if !validate(lastFoundDate,UInt(self.page)*GCStravaRequestActivityList.per_page) {
                     return nil
                 }
             }

@@ -52,7 +52,7 @@ class FitFileExplorerTests: XCTestCase {
         }
     }
        
-    func testPerformanceExample() {
+    func testPerformanceParseFiles() {
         // This is an example of a performance test case.
         
         //let filenames = [ "activity_1378220136.fit", "activity_1382772474.fit", "activity_2477200414.fit", "activity_2944936628.fit" ]
