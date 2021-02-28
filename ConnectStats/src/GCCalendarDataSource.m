@@ -224,11 +224,11 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
         [self.maxInfo maxMarkerInfo:info.infoTotals];
     }
 
-    self.weeklyStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_ALL];
-    self.monthlyStats =[GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_ALL];
+    self.weeklyStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:self.activityType];
+    self.monthlyStats =[GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:self.activityType];
     
-    self.weeklyStats.activityType = GC_TYPE_ALL;
-    self.monthlyStats.activityType = GC_TYPE_ALL;
+    self.weeklyStats.activityType = self.activityType;
+    self.monthlyStats.activityType = self.activityType;
     self.weeklyStats.activities = self.activities;
     self.monthlyStats.activities = self.activities;
     // reference date nil as always for gcPeriodCalendar
@@ -237,11 +237,12 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
 
     self.geometry = [RZNumberWithUnitGeometry geometry];
     
+    GCActivityType * type = [GCActivityType activityTypeForKey:self.activityType];
     for (GCHistoryAggregatedDataHolder * holder in self.weeklyStats) {
-        [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:GCActivityType.all geometry:self.geometry];
+        [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:type geometry:self.geometry];
     }
     for (GCHistoryAggregatedDataHolder * holder in self.monthlyStats) {
-        [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:GCActivityType.all geometry:self.geometry];
+        [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:type geometry:self.geometry];
     }
 
     return rv;
@@ -570,8 +571,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
     cell.delegate = self;
     if (_tableDisplay==gcCalendarTableDisplayActivities) {
         if( indexPath.row < _selectedActivities.count ){
-            BOOL newStyle = [GCViewConfig cellBandedFormat];
-            if( newStyle ){
+            if( self.isNewStyle ){
                 GCActivity * activity = _selectedActivities[indexPath.row];
                 GCCellActivity * cell = [tableView dequeueReusableCellWithIdentifier:@"GCCellActivity" forIndexPath:indexPath];
                 [cell setupFor:activity];
@@ -605,7 +605,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
             holder = [self.weeklyStats dataForDate:bucket];
             calUnit = NSCalendarUnitWeekOfYear;
         }
-
+        
         if( indexPath.section == GC_SECTION_COMPARISON){
             NSCalendarUnit calendarUnit = indexPath.row == GC_SUMMARY_MONTHLY ? NSCalendarUnitMonth : NSCalendarUnitWeekOfYear;
             comparisonBucket = [bucket dateByAddingGregorianComponents:[NSDateComponents dateComponentsForCalendarUnit:calendarUnit withValue:-1]];
@@ -617,7 +617,13 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
             if( self.comparisonMetric == gcComparisonMetricValue ){
                 holder = comparisonHolder;
                 comparisonHolder = nil;
+            }else{
+                // If no data in the comparison bucket, display empty
+                if( comparisonHolder == nil){
+                    holder = nil;
+                }
             }
+            
         }
         
         if (holder) {
@@ -629,7 +635,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
                 [cell setupAggregatedWithDataHolder:holder
                                               index:indexPath.row
                                    multiFieldConfig:multiFieldConfig
-                                       activityType:GCActivityType.all
+                                       activityType:[GCActivityType activityTypeForKey:self.activityType]
                                            geometry:self.geometry
                                                wide:false
                                    comparisonHolder:comparisonHolder
@@ -643,12 +649,30 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
                                                width:tableView.frame.size.width];
             }
         }else{
-            [cell setupForRows:0 andCols:0];
+            [cell setupForRows:1 andCols:1];
+            [cell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:@"No Data"];
         }
     }
     return cell;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 0.0;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 20.0;
+}
+
+-(UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+}
+
+-(UIView*)tableView:(UITableView*)tableView viewForFooterInSection:(NSInteger)section
+{
+    return [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+}
 #pragma mark - Table view delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
