@@ -74,6 +74,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
 
 @property (nonatomic,assign) BOOL primaryActivityTypesOnly;
 @property (nonatomic,assign) gcComparisonMetric comparisonMetric;
+@property (nonatomic,assign) BOOL comparisonAsColumn;
 
 //Just for convenience
 @property (nonatomic,weak) GCActivitiesOrganizer * organizer;
@@ -93,6 +94,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
         self.listActivityTypes = @[ GC_TYPE_ALL];
         self.primaryActivityTypesOnly = false;//[GCAppGlobal configGetBool:CONFIG_MAIN_ACTIVITY_TYPE_ONLY defaultValue:true];
         self.comparisonMetric = gcComparisonMetricPercent;
+        self.comparisonAsColumn = true;
     }
     return self;
 }
@@ -561,7 +563,11 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
     if (_tableDisplay==gcCalendarTableDisplayActivities) {
         return _selectedActivities.count;
     }else{
-        return GC_SUMMARY_END;
+        if( self.comparisonAsColumn){
+            return 1;
+        }else{
+            return GC_SECTION_END;
+        }
     }
 }
 
@@ -606,7 +612,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
             calUnit = NSCalendarUnitWeekOfYear;
         }
         
-        if( indexPath.row == GC_SUMMARY_COMPARISON){
+        if( indexPath.row == GC_SUMMARY_COMPARISON || self.comparisonAsColumn){
             NSCalendarUnit calendarUnit = indexPath.section == GC_SECTION_MONTHLY ? NSCalendarUnitMonth : NSCalendarUnitWeekOfYear;
             comparisonBucket = [bucket dateByAddingGregorianComponents:[NSDateComponents dateComponentsForCalendarUnit:calendarUnit withValue:-1]];
             if (indexPath.section == GC_SECTION_MONTHLY) {
@@ -632,14 +638,23 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
             multiFieldConfig.comparisonMetric = self.comparisonMetric;
             
             if( self.isNewStyle ){
-                [cell setupAggregatedWithDataHolder:holder
-                                              index:indexPath.row
-                                   multiFieldConfig:multiFieldConfig
-                                       activityType:[GCActivityType activityTypeForKey:self.activityType]
-                                           geometry:self.geometry
-                                               wide:false
-                                   comparisonHolder:comparisonHolder
-                 ];
+                if( self.comparisonAsColumn ){
+                    [cell setupAggregatedComparisonWithDataHolder:holder
+                                                 comparisonHolder:comparisonHolder
+                                                            index:indexPath.row
+                                                 multiFieldConfig:multiFieldConfig
+                                                     activityType:[GCActivityType activityTypeForKey:self.activityType]
+                                                         geometry:self.geometry wide:false];
+                }else{
+                    [cell setupAggregatedWithDataHolder:holder
+                                                  index:indexPath.row
+                                       multiFieldConfig:multiFieldConfig
+                                           activityType:[GCActivityType activityTypeForKey:self.activityType]
+                                               geometry:self.geometry
+                                                   wide:false
+                                       comparisonHolder:comparisonHolder
+                     ];
+                }
             }else{
                 // Always aggregated with ALL type, when activityTYpe is set the activities themselves are filtered
                 [cell setupFromHistoryAggregatedData:holder
@@ -677,11 +692,16 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSUInteger rows = self.tableDisplay == gcCalendarTableDisplayActivities && self.extendedDisplay ? 4 : 3;
+    if( self.tableDisplay == gcCalendarTableDisplaySummary && self.comparisonAsColumn){
+        rows = [GCActivityType.all summaryFields].count;
+    }
+    
     CGFloat rv = [GCViewConfig sizeForNumberOfRows:rows];
-    BOOL newStyle = [GCViewConfig cellBandedFormat];
-    if( newStyle ){
+    
+    if( self.isNewStyle && ! self.comparisonAsColumn){
         rv *= 1.1;
     }
+    
     return rv;
 }
 

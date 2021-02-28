@@ -66,6 +66,8 @@ class GCCellFieldValueView: UIView {
     var unitAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.unit)
     var fieldAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.field)
       
+    var iconOverride : UIImage? = nil
+    
     init( numberWithUnit:GCNumberWithUnit,
           geometry: RZNumberWithUnitGeometry,
           field : GCField? = nil,
@@ -148,7 +150,7 @@ class GCCellFieldValueView: UIView {
         
         if self.displayIcon != .hide {
             if let field = self.field,
-               let icon = field.icon(){
+               let icon = self.iconOverride ?? field.icon(){
                 let iconHeight = self.geometry.totalSize.height
                 var iconRect = CGRect(x: fieldRect.origin.x, y: fieldRect.origin.y, width: iconHeight, height: iconHeight)
                 //iconRect.origin.x = drawnRect.origin.x - iconHeight

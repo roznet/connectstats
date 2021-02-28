@@ -144,7 +144,113 @@ extension GCCellGrid {
         }
         
     }
-              
+
+    
+    @objc func setupAggregatedComparison(dataHolder : GCHistoryAggregatedDataHolder,
+                                         comparisonHolder: GCHistoryAggregatedDataHolder,
+                                         index : Int,
+                                         multiFieldConfig : GCStatsMultiFieldConfig,
+                                         activityType : GCActivityType,
+                                         geometry : RZNumberWithUnitGeometry,
+                                         wide :Bool = false
+    ){
+        let fields = activityType.summaryFields()
+        
+        let colCount : UInt = wide ? 5 : 3
+        let rowCount : UInt = wide ? 2 : UInt(fields.count)
+
+        self.setup(forRows: rowCount, andCols:colCount)
+        if( index % 2 == 0){
+            GCViewConfig.setupGradient(forCellsEven: self)
+        }else{
+            GCViewConfig.setupGradient(forCellsOdd: self)
+        }
+        
+        if let date = dataHolder.date {
+            let dateFmt = multiFieldConfig.calendarConfig.formattedDate(date)
+            let dateAttributed = NSAttributedString(string: dateFmt, attributes: GCViewConfig.attribute(rzAttribute.field))
+            self.label(forRow: 0, andCol: 0)?.attributedText = dateAttributed
+        }
+        
+        if let comparisonDate = comparisonHolder.date {
+            let comparisonDateFmt = multiFieldConfig.calendarConfig.formattedDate(comparisonDate)
+            let comparisonDateAttributed = NSAttributedString(string: comparisonDateFmt, attributes: GCViewConfig.attribute(rzAttribute.secondaryField))
+            
+            let title = multiFieldConfig.calendarConfig.calendarUnit == .month ? "ΔM-1" : "ΔW-1"
+            
+            self.label(forRow: 1, andCol: 0)?.attributedText = NSAttributedString(string:title , attributes: GCViewConfig.attribute(rzAttribute.secondaryField))
+            self.label(forRow: 2, andCol: 0)?.attributedText = comparisonDateAttributed
+        }
+        
+        var row : UInt = 0
+        let mainCount : UInt = 2
+        var fieldIdx : UInt = 0
+        
+        for field in fields {
+            if let nu = dataHolder.preferredNumber(withUnit: field){
+                if nu.isValidValue() && nu.value != 0.0 {
+                    if var comparisonNu = comparisonHolder.preferredNumber(withUnit: field){
+                        if comparisonNu.unit == nu.unit {
+                            switch multiFieldConfig.comparisonMetric {
+                            case .percent:
+                                comparisonNu = GCNumberWithUnit(name: "percent", andValue:  (nu.value/comparisonNu.value - 1.0) * 100.0 )
+                            case .valueDifference:
+                                comparisonNu = GCNumberWithUnit(unit: nu.unit, andValue:  nu.value-comparisonNu.value )
+                            default:
+                                comparisonNu = GCNumberWithUnit(unit: nu.unit, andValue:  nu.value-comparisonNu.value )
+                            }
+                        }
+                        
+                        let comparisonCellView = GCCellFieldValueView(numberWithUnit: comparisonNu,
+                                                                      geometry: geometry,
+                                                                      field: field,
+                                                                      icon: .hide)
+                        comparisonCellView.sign = .natural
+                        comparisonCellView.displayField = .hide
+                        comparisonCellView.iconInset = 4.0
+                        comparisonCellView.fieldAttribute = GCViewConfig.attribute(rzAttribute.secondaryField)
+                        comparisonCellView.numberAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
+                        comparisonCellView.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
+                        
+                        if comparisonNu.value > 0 {
+                            comparisonCellView.numberAttribute[ NSAttributedString.Key.foregroundColor] = UIColor.systemGreen
+                        }else{
+                            comparisonCellView.numberAttribute[ NSAttributedString.Key.foregroundColor] = UIColor.systemRed
+                        }
+                        
+                        self.setupView(comparisonCellView, forRow: row, andColumn: 2)
+                    }
+                    
+                    let cellView = GCCellFieldValueView(numberWithUnit: nu,
+                                                        geometry: geometry,
+                                                        field: field,
+                                                        icon: .left)
+                    cellView.sign = .natural
+                    cellView.displayField = .hide
+                    cellView.iconInset = 4.0
+                    if fieldIdx < mainCount {
+                        cellView.fieldAttribute = GCViewConfig.attribute(rzAttribute.field)
+                        cellView.numberAttribute = GCViewConfig.attribute(rzAttribute.value)
+                        cellView.unitAttribute = GCViewConfig.attribute(rzAttribute.unit)
+                    }else{
+                        cellView.fieldAttribute = GCViewConfig.attribute(rzAttribute.secondaryField)
+                        cellView.numberAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
+                        cellView.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
+                    }
+                    
+                    
+                    self.setupView(cellView, forRow: row, andColumn: 1)
+                }else{
+                    self.reset(forRow: row, andCol: 2)
+                }
+            }
+            row += 1
+            fieldIdx += 1
+        }
+        
+    }
+
+    
     //MARK: - Detail Activity view
     
     func setupActivityDetailsColumn(fields : [GCField], activity : GCActivity, geometry : RZNumberWithUnitGeometry, column : UInt ){
