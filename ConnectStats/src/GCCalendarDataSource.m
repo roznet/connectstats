@@ -37,6 +37,8 @@
 #import "GCStatsMultiFieldConfig.h"
 #import "ConnectStats-Swift.h"
 
+@import RZUtilsSwift;
+
 #define GC_SUMMARY_WEEKLY   0
 #define GC_SUMMARY_MONTHLY  1
 #define GC_SUMMARY_END      2
@@ -55,6 +57,7 @@
 
 @property (nonatomic,retain) GCHistoryAggregatedActivityStats * monthlyStats;
 @property (nonatomic,retain) GCHistoryAggregatedActivityStats * weeklyStats;
+@property (nonatomic,retain) RZNumberWithUnitGeometry * geometry;
 
 @property (nonatomic,retain) NSDate * currentDate;
 
@@ -67,6 +70,8 @@
 //Just for convenience
 @property (nonatomic,weak) GCActivitiesOrganizer * organizer;
 @property (nonatomic,weak) GCActivity *activityForAction;
+
+@property (nonatomic,readonly) BOOL isNewStyle;
 @end
 
 @implementation GCCalendarDataSource
@@ -94,6 +99,8 @@
     [_selectedActivities release];
     [_dateMarkerCache release];
     [_currentDate release];
+    [_geometry release];
+    
     [super dealloc];
 }
 
@@ -207,7 +214,7 @@
 
     self.weeklyStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_ALL];
     self.monthlyStats =[GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_ALL];
-    ;
+    
     self.weeklyStats.activityType = GC_TYPE_ALL;
     self.monthlyStats.activityType = GC_TYPE_ALL;
     self.weeklyStats.activities = self.activities;
@@ -215,6 +222,14 @@
     // reference date nil as always for gcPeriodCalendar
     [self.weeklyStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:ignoreMode];
     [self.monthlyStats aggregate:NSCalendarUnitMonth referenceDate:nil ignoreMode:ignoreMode];
+
+    self.geometry = [RZNumberWithUnitGeometry geometry];
+    for (GCHistoryAggregatedDataHolder * holder in self.weeklyStats) {
+        [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:GCActivityType.all geometry:self.geometry];
+    }
+    for (GCHistoryAggregatedDataHolder * holder in self.monthlyStats) {
+        [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:GCActivityType.all geometry:self.geometry];
+    }
 
     return rv;
 }
@@ -502,6 +517,10 @@
 
 #pragma mark - Table view data source
 
+-(BOOL)isNewStyle{
+    return [GCViewConfig cellBandedFormat];
+}
+
 -(void)tableViewDidLoad:(UITableView *)tableView{
     [tableView registerNib:[UINib nibWithNibName:@"GCCellActivity" bundle:[NSBundle mainBundle]]
          forCellReuseIdentifier:@"GCCellActivity"];
@@ -566,12 +585,21 @@
             GCStatsMultiFieldConfig * multiFieldConfig = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
             multiFieldConfig.calendarConfig.calendarUnit = calUnit;
             
-            // Always aggregated with ALL type, when activityTYpe is set the activities themselves are filtered
-            [cell setupFromHistoryAggregatedData:holder
-                                           index:indexPath.row
-                                multiFieldConfig:multiFieldConfig
-                                 andActivityType:GCActivityType.all
-                                           width:tableView.frame.size.width];
+            if( self.isNewStyle ){
+                [cell setupAggregatedWithDataHolder:holder
+                                              index:indexPath.row
+                                   multiFieldConfig:multiFieldConfig
+                                       activityType:GCActivityType.all
+                                           geometry:self.geometry
+                                               wide:false];
+            }else{
+                // Always aggregated with ALL type, when activityTYpe is set the activities themselves are filtered
+                [cell setupFromHistoryAggregatedData:holder
+                                               index:indexPath.row
+                                    multiFieldConfig:multiFieldConfig
+                                     andActivityType:GCActivityType.all
+                                               width:tableView.frame.size.width];
+            }
         }else{
             [cell setupForRows:0 andCols:0];
         }
