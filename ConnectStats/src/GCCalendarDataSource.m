@@ -47,7 +47,9 @@
 #define GC_SECTION_COMPARISON   1
 #define GC_SECTION_END          2
 
-#define GC_IS_PERCENT(x) (x == gcCalendarDisplayDistancePercent || x == gcCalendarDisplayDurationPercent)
+NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
+    return (x == gcCalendarDisplayDistancePercent || x == gcCalendarDisplayDurationPercent);
+}
 
 @interface GCCalendarDataSource ()
 
@@ -346,7 +348,7 @@
 
 - (BOOL)drawBackgroundInRect:(CGRect)rect forDate:(NSDate*)adate selected:(BOOL)asel{
     GCCalendarDataDateMarkers * markers = _dateMarkerCache[adate];
-    if (markers && GC_IS_PERCENT(_display)) {
+    if (markers && calendarDisplayIsPercent(_display)) {
 
         GCActivity * dummy = [[GCActivity alloc] init];
         
@@ -461,7 +463,7 @@
             }
 
             [dummy release];
-        }else if( !GC_IS_PERCENT(_display) ){
+        }else if( !calendarDisplayIsPercent(_display) ){
 
 
             GCCalendarDataMarkerInfo * info = markers.infoTotals;
