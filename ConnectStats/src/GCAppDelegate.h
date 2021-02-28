@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSURL * urlToOpen;
 @property (nonatomic, retain) GCConnectStatsStatus * remoteStatus;
 // Will be either the currnet location from the phone or the location of the current activity
-@property (nonatomic, readonly) CLLocation * currentLocation;
+@property (nullable,nonatomic,readonly) CLLocation * currentLocation;
 
 -(void)saveSettings;
 -(void)addOrSelectProfile:(NSString*)pName;
