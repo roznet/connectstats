@@ -51,7 +51,9 @@ extension GCCellGrid {
                      multiFieldConfig : GCStatsMultiFieldConfig,
                      activityType : GCActivityType,
                      geometry : RZNumberWithUnitGeometry,
-                     wide :Bool = false){
+                     wide :Bool = false,
+                     comparisonHolder: GCHistoryAggregatedDataHolder? = nil
+                     ){
         let colCount : UInt = wide ? 5 : 3
         let rowCount : UInt = wide ? 2 : 3
 
@@ -67,6 +69,14 @@ extension GCCellGrid {
             let dateAttributed = NSAttributedString(string: dateFmt, attributes: GCViewConfig.attribute(rzAttribute.field))
             self.label(forRow: 0, andCol: 0)?.attributedText = dateAttributed
         }
+        if let comparisonHolder = comparisonHolder,
+           let comparisonDate = comparisonHolder.date {
+            let dateFmt = multiFieldConfig.calendarConfig.formattedDate(comparisonDate)
+            let compFmt = String(format: "vs %@", dateFmt)
+            let dateAttributed = NSAttributedString(string: compFmt, attributes: GCViewConfig.attribute(rzAttribute.secondaryField))
+            self.label(forRow: 01, andCol: 0)?.attributedText = dateAttributed
+
+        }
         
         let fields = activityType.summaryFields()
         var row : UInt = 0
@@ -75,8 +85,15 @@ extension GCCellGrid {
         var fieldIdx : UInt = 0
         
         for field in fields {
-            if let nu = dataHolder.preferredNumber(withUnit: field){
+            if var nu = dataHolder.preferredNumber(withUnit: field){
                 if nu.isValidValue() && nu.value != 0.0 {
+                    if let comparisonHolder = comparisonHolder,
+                       let comparisonNu  = comparisonHolder.preferredNumber(withUnit: field){
+                        if comparisonNu.unit == nu.unit {
+                            nu = GCNumberWithUnit(name: "percent", andValue:  (nu.value/comparisonNu.value - 1.0) * 100.0 )
+                        }
+                    }
+                    
                     let cellView = GCCellFieldValueView(numberWithUnit: nu,
                                                         geometry: geometry,
                                                         field: field,

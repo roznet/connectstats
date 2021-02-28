@@ -43,6 +43,10 @@
 #define GC_SUMMARY_MONTHLY  1
 #define GC_SUMMARY_END      2
 
+#define GC_SECTION_STATS        0
+#define GC_SECTION_COMPARISON   1
+#define GC_SECTION_END          2
+
 #define GC_IS_PERCENT(x) (x == gcCalendarDisplayDistancePercent || x == gcCalendarDisplayDurationPercent)
 
 @interface GCCalendarDataSource ()
@@ -159,8 +163,11 @@
 }
 
 - (NSArray *)markedDatesFrom:(NSDate *)fromDate to:(NSDate *)toDate{
-    self.activities = [[GCAppGlobal organizer] activitiesFromDate:fromDate to:toDate];
-
+    // start one month back, so we can do MoM and WoW comparisons
+    NSDate * startDate = [fromDate dateByAddingGregorianComponents:[NSDateComponents dateComponentsForCalendarUnit:NSCalendarUnitMonth withValue:-1]];
+    
+    self.activities = [[GCAppGlobal organizer] activitiesFromDate:startDate to:toDate];
+    
     NSMutableDictionary * allTypes = [NSMutableDictionary dictionary];
     if ([self.activityType isEqualToString:GC_TYPE_ALL]) {
         for (GCActivity*act in self.activities) {
@@ -530,7 +537,15 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    if( self.tableDisplay == gcCalendarTableDisplayActivities){
+        return 1;
+    }else{
+        if( self.isNewStyle ){
+            return GC_SECTION_END;
+        }else{
+            return 1;
+        }
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -563,6 +578,7 @@
     }else{
 
         NSDate * bucket = nil;
+        NSDate * comparisonBucket = nil;
 
         if (_selectedActivities.count) {
             GCActivity * activity = _selectedActivities[0];
@@ -570,7 +586,10 @@
         }else{
             bucket = self.currentDate;
         }
+        
         GCHistoryAggregatedDataHolder * holder = nil;
+        GCHistoryAggregatedDataHolder * comparisonHolder = nil;
+        
         NSCalendarUnit calUnit = NSCalendarUnitWeekOfYear;
 
         if (indexPath.row == GC_SUMMARY_MONTHLY) {
@@ -580,8 +599,18 @@
             holder = [self.weeklyStats dataForDate:bucket];
             calUnit = NSCalendarUnitWeekOfYear;
         }
+
+        if( indexPath.section == GC_SECTION_COMPARISON){
+            NSCalendarUnit calendarUnit = indexPath.row == GC_SUMMARY_MONTHLY ? NSCalendarUnitMonth : NSCalendarUnitWeekOfYear;
+            comparisonBucket = [bucket dateByAddingGregorianComponents:[NSDateComponents dateComponentsForCalendarUnit:calendarUnit withValue:-1]];
+            if (indexPath.row == GC_SUMMARY_MONTHLY) {
+                comparisonHolder = [self.monthlyStats dataForDate:comparisonBucket];
+            }else if (indexPath.row==GC_SUMMARY_WEEKLY){
+                comparisonHolder = [self.weeklyStats dataForDate:comparisonBucket];
+            }
+        }
+        
         if (holder) {
-            
             GCStatsMultiFieldConfig * multiFieldConfig = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
             multiFieldConfig.calendarConfig.calendarUnit = calUnit;
             
@@ -591,7 +620,9 @@
                                    multiFieldConfig:multiFieldConfig
                                        activityType:GCActivityType.all
                                            geometry:self.geometry
-                                               wide:false];
+                                               wide:false
+                                   comparisonHolder:comparisonHolder
+                 ];
             }else{
                 // Always aggregated with ALL type, when activityTYpe is set the activities themselves are filtered
                 [cell setupFromHistoryAggregatedData:holder

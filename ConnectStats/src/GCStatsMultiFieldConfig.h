@@ -33,6 +33,11 @@
 @class GCDerivedDataSerie;
 @class GCDerivedGroupedSeries;
 
+typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
+    gcComparisonMetricPercent,
+    gcComparisonMetricValue
+};
+
 @interface GCStatsMultiFieldConfig : NSObject
 
 @property (nonatomic,retain) NSString * activityType;
@@ -51,6 +56,8 @@
 
 @property (nonatomic,assign) gcGraphChoice graphChoice;
 @property (nonatomic,retain) NSString * graphChoiceKey;
+
+@property (nonatomic,assign) gcComparisonMetric comparisonMetric;
 
 /**
  *  HistoryStats displayed can be current month, week, year or all -> quick filter on thumbnail graphs

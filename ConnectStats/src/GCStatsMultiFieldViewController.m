@@ -332,7 +332,8 @@
                                multiFieldConfig:self.multiFieldConfig
                                    activityType:[GCActivityType activityTypeForKey:self.displayActivityType]
                                        geometry:self.geometry
-                                           wide:false];
+                                           wide:false
+                               comparisonHolder:nil];
         }else{
             [cell setupFromHistoryAggregatedData:data
                                            index:indexPath.row
