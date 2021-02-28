@@ -713,7 +713,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
             [GCAppGlobal focusOnActivityId:[_selectedActivities[indexPath.row] activityId]];
         }
     }else{
-        if( indexPath.row == GC_SUMMARY_VALUE){
+        if( indexPath.row == GC_SUMMARY_VALUE && !self.comparisonAsColumn){
             NSDate * bucket = nil;
             
             if (_selectedActivities.count) {
@@ -731,7 +731,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
             }
             NSString * filter = [GCViewConfig filterFor:calendarConfig date:bucket andActivityType:GC_TYPE_ALL];
             [GCAppGlobal focusOnListWithFilter:filter];
-        }else if( indexPath.row == GC_SUMMARY_COMPARISON ){
+        }else if( indexPath.row == GC_SUMMARY_COMPARISON || self.comparisonAsColumn){
             switch( self.comparisonMetric ){
                 case gcComparisonMetricPercent:
                     self.comparisonMetric = gcComparisonMetricValueDifference;
