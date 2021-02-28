@@ -46,12 +46,15 @@ class GCCellFieldValueView: UIView {
         case left
         case right
     }
+    
     let field : GCField?
     let numberWithUnit : GCNumberWithUnit
     let geometry : RZNumberWithUnitGeometry
     let primaryField : GCField?
     
     let displayIcon : DisplayIcon
+    
+    var sign : RZNumberWithUnitGeometry.DisplaySign = .natural
     
     var overrideFieldName : String?
     var displayField : DisplayField = .left
@@ -140,7 +143,8 @@ class GCCellFieldValueView: UIView {
                                                  numberWithUnit: self.numberWithUnit,
                                                  numberAttribute: self.numberAttribute,
                                                  unitAttribute: self.unitAttribute,
-                                                 addUnit: addUnit)
+                                                 addUnit: addUnit,
+                                                 sign: self.sign)
         
         if self.displayIcon != .hide {
             if let field = self.field,

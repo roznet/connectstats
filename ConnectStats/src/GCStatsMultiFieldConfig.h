@@ -35,6 +35,7 @@
 
 typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
     gcComparisonMetricPercent,
+    gcComparisonMetricValueDifference,
     gcComparisonMetricValue
 };
 

@@ -64,18 +64,21 @@ extension GCCellGrid {
             GCViewConfig.setupGradient(forCellsOdd: self)
         }
         
+        var sign : RZNumberWithUnitGeometry.DisplaySign = .natural
+        
         if let date = dataHolder.date {
             let dateFmt = multiFieldConfig.calendarConfig.formattedDate(date)
             let dateAttributed = NSAttributedString(string: dateFmt, attributes: GCViewConfig.attribute(rzAttribute.field))
             self.label(forRow: 0, andCol: 0)?.attributedText = dateAttributed
         }
+        
         if let comparisonHolder = comparisonHolder,
            let comparisonDate = comparisonHolder.date {
             let dateFmt = multiFieldConfig.calendarConfig.formattedDate(comparisonDate)
             let compFmt = String(format: "vs %@", dateFmt)
             let dateAttributed = NSAttributedString(string: compFmt, attributes: GCViewConfig.attribute(rzAttribute.secondaryField))
             self.label(forRow: 01, andCol: 0)?.attributedText = dateAttributed
-
+            sign = .always
         }
         
         let fields = activityType.summaryFields()
@@ -90,7 +93,14 @@ extension GCCellGrid {
                     if let comparisonHolder = comparisonHolder,
                        let comparisonNu  = comparisonHolder.preferredNumber(withUnit: field){
                         if comparisonNu.unit == nu.unit {
-                            nu = GCNumberWithUnit(name: "percent", andValue:  (nu.value/comparisonNu.value - 1.0) * 100.0 )
+                            switch multiFieldConfig.comparisonMetric {
+                            case .percent:
+                                nu = GCNumberWithUnit(name: "percent", andValue:  (nu.value/comparisonNu.value - 1.0) * 100.0 )
+                            case .valueDifference:
+                                nu = GCNumberWithUnit(unit: nu.unit, andValue:  nu.value-comparisonNu.value )
+                            default:
+                                nu = GCNumberWithUnit(unit: nu.unit, andValue:  nu.value-comparisonNu.value )
+                            }
                         }
                     }
                     
@@ -98,6 +108,7 @@ extension GCCellGrid {
                                                         geometry: geometry,
                                                         field: field,
                                                         icon: .left)
+                    cellView.sign = sign
                     cellView.displayField = .hide
                     cellView.iconInset = 4.0
                     if fieldIdx < mainCount {

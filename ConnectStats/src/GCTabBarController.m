@@ -247,7 +247,7 @@
 }
 -(void)focusOnListWithFilter:(NSString*)aFilter{
     [self.activityListViewController setupFilterForString:aFilter];
-    //[self setSelectedIndex:0];
+    [self setSelectedIndex:0];
 }
 -(void)focusOnActivityList{
     self.selectedIndex = 0;
