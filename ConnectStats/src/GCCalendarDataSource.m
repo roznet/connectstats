@@ -39,12 +39,12 @@
 
 @import RZUtilsSwift;
 
-#define GC_SUMMARY_WEEKLY   0
-#define GC_SUMMARY_MONTHLY  1
-#define GC_SUMMARY_END      2
+#define GC_SUMMARY_VALUE        0
+#define GC_SUMMARY_COMPARISON   1
+#define GC_SUMMARY_END          2
 
-#define GC_SECTION_STATS        0
-#define GC_SECTION_COMPARISON   1
+#define GC_SECTION_WEEKLY       0
+#define GC_SECTION_MONTHLY      1
 #define GC_SECTION_END          2
 
 NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
@@ -598,20 +598,20 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
         
         NSCalendarUnit calUnit = NSCalendarUnitWeekOfYear;
 
-        if (indexPath.row == GC_SUMMARY_MONTHLY) {
+        if (indexPath.section == GC_SECTION_MONTHLY) {
             holder = [self.monthlyStats dataForDate:bucket];
             calUnit = NSCalendarUnitMonth;
-        }else if (indexPath.row==GC_SUMMARY_WEEKLY){
+        }else if (indexPath.section==GC_SECTION_WEEKLY){
             holder = [self.weeklyStats dataForDate:bucket];
             calUnit = NSCalendarUnitWeekOfYear;
         }
         
-        if( indexPath.section == GC_SECTION_COMPARISON){
-            NSCalendarUnit calendarUnit = indexPath.row == GC_SUMMARY_MONTHLY ? NSCalendarUnitMonth : NSCalendarUnitWeekOfYear;
+        if( indexPath.row == GC_SUMMARY_COMPARISON){
+            NSCalendarUnit calendarUnit = indexPath.section == GC_SECTION_MONTHLY ? NSCalendarUnitMonth : NSCalendarUnitWeekOfYear;
             comparisonBucket = [bucket dateByAddingGregorianComponents:[NSDateComponents dateComponentsForCalendarUnit:calendarUnit withValue:-1]];
-            if (indexPath.row == GC_SUMMARY_MONTHLY) {
+            if (indexPath.section == GC_SECTION_MONTHLY) {
                 comparisonHolder = [self.monthlyStats dataForDate:comparisonBucket];
-            }else if (indexPath.row==GC_SUMMARY_WEEKLY){
+            }else if (indexPath.section==GC_SECTION_WEEKLY){
                 comparisonHolder = [self.weeklyStats dataForDate:comparisonBucket];
             }
             if( self.comparisonMetric == gcComparisonMetricValue ){
@@ -693,7 +693,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
             [GCAppGlobal focusOnActivityId:[_selectedActivities[indexPath.row] activityId]];
         }
     }else{
-        if( indexPath.section == GC_SECTION_STATS){
+        if( indexPath.row == GC_SUMMARY_VALUE){
             NSDate * bucket = nil;
             
             if (_selectedActivities.count) {
@@ -704,14 +704,14 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
             }
             GCStatsCalendarAggregationConfig * calendarConfig = nil;
             
-            if (indexPath.row == GC_SUMMARY_MONTHLY) {
+            if (indexPath.section == GC_SECTION_MONTHLY) {
                 calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth];
             }else{
                 calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitWeekOfYear];
             }
             NSString * filter = [GCViewConfig filterFor:calendarConfig date:bucket andActivityType:GC_TYPE_ALL];
             [GCAppGlobal focusOnListWithFilter:filter];
-        }else if( indexPath.section == GC_SECTION_COMPARISON ){
+        }else if( indexPath.row == GC_SUMMARY_COMPARISON ){
             switch( self.comparisonMetric ){
                 case gcComparisonMetricPercent:
                     self.comparisonMetric = gcComparisonMetricValueDifference;

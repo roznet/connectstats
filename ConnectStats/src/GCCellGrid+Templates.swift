@@ -75,9 +75,10 @@ extension GCCellGrid {
         if let comparisonHolder = comparisonHolder,
            let comparisonDate = comparisonHolder.date {
             let dateFmt = multiFieldConfig.calendarConfig.formattedDate(comparisonDate)
-            let compFmt = String(format: "vs %@", dateFmt)
-            let dateAttributed = NSAttributedString(string: compFmt, attributes: GCViewConfig.attribute(rzAttribute.secondaryField))
-            self.label(forRow: 01, andCol: 0)?.attributedText = dateAttributed
+            let dateAttributed = NSAttributedString(string: dateFmt, attributes: GCViewConfig.attribute(rzAttribute.secondaryField))
+            let title = multiFieldConfig.calendarConfig.calendarUnit == .month ? "ΔM-1" : "ΔW-1"
+            self.label(forRow: 0, andCol: 0)?.attributedText = NSAttributedString(string:title , attributes: GCViewConfig.attribute(rzAttribute.field))
+            self.label(forRow: 1, andCol: 0)?.attributedText = dateAttributed
             sign = .always
         }
         
@@ -120,6 +121,15 @@ extension GCCellGrid {
                         cellView.numberAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
                         cellView.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
                     }
+                    
+                    if comparisonHolder != nil {
+                        if nu.value > 0 {
+                            cellView.numberAttribute[ NSAttributedString.Key.foregroundColor] = UIColor.systemGreen
+                        }else{
+                            cellView.numberAttribute[ NSAttributedString.Key.foregroundColor] = UIColor.systemRed
+                        }
+                    }
+                    
                     self.setupView(cellView, forRow: row, andColumn: col)
                 }else{
                     self.reset(forRow: row, andCol: col)
