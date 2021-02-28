@@ -205,7 +205,7 @@ extension GCCellGrid {
                                                                       geometry: geometry,
                                                                       field: field,
                                                                       icon: .hide)
-                        comparisonCellView.sign = .natural
+                        comparisonCellView.sign = .always
                         comparisonCellView.displayField = .hide
                         comparisonCellView.iconInset = 4.0
                         comparisonCellView.fieldAttribute = GCViewConfig.attribute(rzAttribute.secondaryField)
