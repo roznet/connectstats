@@ -147,7 +147,7 @@ extension GCCellGrid {
 
     
     @objc func setupAggregatedComparison(dataHolder : GCHistoryAggregatedDataHolder,
-                                         comparisonHolder: GCHistoryAggregatedDataHolder,
+                                         comparisonHolder: GCHistoryAggregatedDataHolder?,
                                          index : Int,
                                          multiFieldConfig : GCStatsMultiFieldConfig,
                                          activityType : GCActivityType,
@@ -172,7 +172,7 @@ extension GCCellGrid {
             self.label(forRow: 0, andCol: 0)?.attributedText = dateAttributed
         }
         
-        if let comparisonDate = comparisonHolder.date {
+        if let comparisonDate = comparisonHolder?.date {
             let comparisonDateFmt = multiFieldConfig.calendarConfig.formattedDate(comparisonDate)
             let comparisonDateAttributed = NSAttributedString(string: comparisonDateFmt, attributes: GCViewConfig.attribute(rzAttribute.secondaryField))
             
@@ -189,7 +189,7 @@ extension GCCellGrid {
         for field in fields {
             if let nu = dataHolder.preferredNumber(withUnit: field){
                 if nu.isValidValue() && nu.value != 0.0 {
-                    if var comparisonNu = comparisonHolder.preferredNumber(withUnit: field){
+                    if var comparisonNu = comparisonHolder?.preferredNumber(withUnit: field){
                         if comparisonNu.unit == nu.unit {
                             switch multiFieldConfig.comparisonMetric {
                             case .percent:

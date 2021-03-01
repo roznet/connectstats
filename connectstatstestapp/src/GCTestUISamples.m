@@ -995,16 +995,16 @@
     [GCCellGrid adjustAggregatedWithDataHolder:[aggregatedStats dataForIndex:1] activityType:GCActivityType.running geometry:geometry];
     
     cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    [cell setupAggregatedWithDataHolder:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config activityType:GCActivityType.running geometry:geometry wide:false];
+    [cell setupAggregatedWithDataHolder:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config activityType:GCActivityType.running geometry:geometry wide:false comparisonHolder:nil];
     [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Weekly [0] NewStyle"]];
 
     cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    [cell setupAggregatedWithDataHolder:[aggregatedStats dataForIndex:1] index:1 multiFieldConfig:config activityType:GCActivityType.running geometry:geometry wide:false];
+    [cell setupAggregatedWithDataHolder:[aggregatedStats dataForIndex:1] index:1 multiFieldConfig:config activityType:GCActivityType.running geometry:geometry wide:false comparisonHolder:nil];
     [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Weekly [1] NewStyle"]];
 
     cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     config.calendarConfig.calendarUnit = NSCalendarUnitMonth;
-    [cell setupAggregatedWithDataHolder:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config activityType:GCActivityType.running geometry:geometry wide:false];
+    [cell setupAggregatedWithDataHolder:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config activityType:GCActivityType.running geometry:geometry wide:false comparisonHolder:nil];
     [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Month [0] NewStyle"]];
 
     [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS13]];

@@ -644,7 +644,8 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
                                                             index:indexPath.row
                                                  multiFieldConfig:multiFieldConfig
                                                      activityType:[GCActivityType activityTypeForKey:self.activityType]
-                                                         geometry:self.geometry wide:false];
+                                                         geometry:self.geometry
+                                                             wide:false];
                 }else{
                     [cell setupAggregatedWithDataHolder:holder
                                                   index:indexPath.row
