@@ -61,8 +61,9 @@
 
 #pragma mark - Helpers
 
--(GCActivity*)buildActivityWithTrackpoints:(NSArray*)defs{
+-(GCActivity*)buildActivityWithTrackpoints:(NSArray*)defs activityType:(GCActivityType*)aType{
     GCActivity * act= [[[GCActivity alloc] init] autorelease];
+    [act changeActivityType:aType];
     NSMutableArray * tracks = [NSMutableArray arrayWithCapacity:100];
 
     double dist = 0.;
@@ -79,11 +80,12 @@
             GCTrackPoint * point = [[GCTrackPoint alloc] init];
             dist += speed*elapsed;
             point.distanceMeters = dist;
+            point.elapsed = elapsed;
             point.time = time;
             point.speed = speed;
             point.heartRateBpm = hr;
             point.lapIndex = lapIndex;
-            point.trackFlags = gcFieldFlagWeightedMeanHeartRate|gcFieldFlagWeightedMeanSpeed;
+            point.trackFlags = gcFieldFlagWeightedMeanHeartRate|gcFieldFlagWeightedMeanSpeed|gcFieldFlagSumDistance|gcFieldFlagSumDuration;
             
             [tracks addObject:point];
             [point release];
@@ -499,7 +501,8 @@
                            @{@"speed" : @10.,  @"n" : @10, @"hr" : @120., @"elapsed" : @1. },
                            ];
     
-    GCActivity * act= [self buildActivityWithTrackpoints:samples];
+    GCActivity * act= [self buildActivityWithTrackpoints:samples activityType:GCActivityType.running];
+    
     NSArray * laps = [act calculatedLapFor:40. match:[act matchTimeBlock] inLap:GC_ALL_LAPS];
     XCTAssertEqual([laps count], (NSUInteger)2, @"matching time");
     laps = [act calculatedLapFor:20. match:[act matchTimeBlock] inLap:GC_ALL_LAPS];
@@ -525,7 +528,7 @@
                            @{@"speed" : @10.,  @"n" : @10, @"hr" : @120., @"elapsed" : @1. },
                            ];
     
-    GCActivity * act= [self buildActivityWithTrackpoints:samples];
+    GCActivity * act= [self buildActivityWithTrackpoints:samples activityType:GCActivityType.running];
     
     GCActivityMatchLapBlock m = [act matchDistanceBlockEqual];
     GCActivityCompareLapBlock c = [act compareSpeedBlock];
@@ -534,21 +537,21 @@
         NSArray * rv = [act calculatedRollingLapFor:dist match:m compare:c];
         GCLap * first = rv[1];
         GCLap * second = rv[2];
-        GCTrackPoint * firstP = nil;
-        GCTrackPoint * secondP = nil;
+        GCTrackPoint * firstStartPoint = nil;
+        GCTrackPoint * firstEndPoint = nil;
         NSUInteger i =0;
         for (i=0; i<[[act trackpoints] count]; i++) {
             GCTrackPoint * p = [[act trackpoints] objectAtIndex:i];
             if ([[p time] isEqualToDate:[first time]]) {
-                firstP = p;
+                firstStartPoint = p;
             }
             if ([[p time] isEqualToDate:[second time]]) {
-                secondP = p;
+                firstEndPoint = p;
             }
             
         }
         XCTAssertEqualWithAccuracy(dist, first.distanceMeters, first.speed, @"match dist %.f", dist);
-        XCTAssertEqualWithAccuracy(secondP.distanceMeters-firstP.distanceMeters, first.distanceMeters, second.speed*1.1, @"match dist %.f", dist);
+        XCTAssertEqualWithAccuracy(firstEndPoint.distanceMeters-firstStartPoint.distanceMeters, first.distanceMeters, second.speed*1.1, @"match dist %.f", dist);
         
     };
     
@@ -570,7 +573,7 @@
                            @{@"speed" : @2.7, @"n" : @20, @"hr" : @140., @"elapsed" : @2. },
                            ];
     
-    GCActivity * act= [self buildActivityWithTrackpoints:samples];
+    GCActivity * act= [self buildActivityWithTrackpoints:samples activityType:GCActivityType.running];
 
     GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:GC_TYPE_RUNNING];
     GCStatsDataSerieWithUnit * v_bestroll = [act calculatedSerieForField:field.correspondingBestRollingField thread:nil];

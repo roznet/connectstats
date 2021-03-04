@@ -33,12 +33,18 @@ typedef BOOL (^GCActivityCompareLapBlock)(GCLap*current,GCLap*candidate);
 
 @interface GCActivity (Calculated)
 
--(NSArray*)calculatedRollingLapFor:(double)val match:(GCActivityMatchLapBlock)matchG compare:(GCActivityCompareLapBlock)compare;
--(NSArray*)calculatedLapFor:(double)val match:(GCActivityMatchLapBlock)matchL inLap:(NSUInteger)idx;
--(NSArray*)calculateSkiLaps;
--(NSArray*)compoundLapForZoneCalculator:(GCHealthZoneCalculator*)zoneCalc;
--(NSArray*)compoundLapForIndexSerie:(GCStatsDataSerieWithUnit*)serieu desc:(NSString*)desc;
--(NSArray*)accumulatedLaps;
+/// Look for the last lap that matches the MatchlapBlock and that return true to for the compare function
+/// For example, if match is a fix distance and compare returns true if a specific value like speed is higher
+/// it will find the lap of that distance that achieved the highest speed
+/// @param val Value to pass to the match function
+/// @param matchG match function to indicate the lap is valid
+/// @param compare function to indicate if the latest lap is preferred to the last one
+-(NSArray<GCLap*>*)calculatedRollingLapFor:(double)val match:(GCActivityMatchLapBlock)matchG compare:(GCActivityCompareLapBlock)compare;
+-(NSArray<GCLap*>*)calculatedLapFor:(double)val match:(GCActivityMatchLapBlock)matchL inLap:(NSUInteger)idx;
+-(NSArray<GCLap*>*)calculateSkiLaps;
+-(NSArray<GCLap*>*)compoundLapForZoneCalculator:(GCHealthZoneCalculator*)zoneCalc;
+-(NSArray<GCLap*>*)compoundLapForIndexSerie:(GCStatsDataSerieWithUnit*)serieu desc:(NSString*)desc;
+-(NSArray<GCLap*>*)accumulatedLaps;
 
 -(GCActivityCompareLapBlock)compareSpeedBlock;
 -(GCActivityMatchLapBlock)matchDistanceBlockEqual;
