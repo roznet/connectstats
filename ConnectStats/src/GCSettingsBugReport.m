@@ -47,6 +47,12 @@ NSString * kBugNoCommonId = @"-1";
 
 @implementation GCSettingsBugReport
 
+-(void)dealloc{
+    [_statusTask release];
+    
+    [super dealloc];
+}
+
 +(GCSettingsBugReport*)bugReport{
     return [[[GCSettingsBugReport alloc] init] autorelease];
 }
@@ -102,7 +108,7 @@ NSString * kBugNoCommonId = @"-1";
 -(void)prepareRequest:(void(^)(NSURLRequest * request))cb{
     NSString * aURL = GCWebConnectStatsBugReport([GCAppGlobal webConnectsStatsConfig]);
 #if TARGET_IPHONE_SIMULATOR
-    aURL = @"https://localhost.ro-z.me/dev/bugreport/status";
+    //aURL = @"https://localhost.ro-z.me/dev/bugreport/status";
 #endif
     
     NSDictionary<NSString*,NSString*>*pData = [self createBugReportDictionaryWithExtra:@{}];

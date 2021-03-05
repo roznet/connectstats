@@ -224,7 +224,7 @@ double kGCTrackPointsMinimumSpeedMps = 0.3;
                 if (! hasSpeed) {
                     double mps = point.distanceMeters/point.elapsed; // in m/s
                     if (mps > kGCTrackPointsMinimumSpeedMps) {
-                        GCNumberWithUnit * speed = [GCNumberWithUnit numberWithUnit:mpsUnit andValue:mps];
+                        GCNumberWithUnit * speed = [[GCNumberWithUnit alloc] initWithUnit:mpsUnit andValue:mps];
                         [point setNumberWithUnit:speed forField:speedField inActivity:nil];
                         self.trackFlags |= gcFieldFlagWeightedMeanSpeed;
                         RZRelease(speed);
@@ -232,7 +232,7 @@ double kGCTrackPointsMinimumSpeedMps = 0.3;
                 }
             }
             if (hasSteps) {
-                GCNumberWithUnit * cadence = [GCNumberWithUnit numberWithUnit:cadenceUnit andValue:point.cadence/point.elapsed * 60.];
+                GCNumberWithUnit * cadence = [[GCNumberWithUnit alloc] initWithUnit:cadenceUnit andValue:point.cadence/point.elapsed * 60.];
                 [point setNumberWithUnit:cadence forField:cadenceField inActivity:nil];
                 self.trackFlags |= gcFieldFlagCadence;
                 RZRelease(cadence);
