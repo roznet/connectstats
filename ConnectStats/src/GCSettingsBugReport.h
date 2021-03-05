@@ -39,7 +39,10 @@ extern NSString * kBugNoCommonId;
 +(GCSettingsBugReport*)bugReport;
 
 -(NSURLRequest*)urlResquestFor:(NSString*)aUrl;
--(NSURLRequest*)urlRequest;
+
+-(void)prepareRequest:(void(^)(NSURLRequest * request))cb;
+
+//-(NSURLRequest*)urlRequest;
 -(void)cleanupAndReset;
 
 

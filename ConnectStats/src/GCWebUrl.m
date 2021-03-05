@@ -161,6 +161,18 @@ NSString * GCWebConnectStatsBugReport( gcWebConnectStatsConfig config ){
     }
 }
 
+NSString * GCWebConnectStatsBugReportStatus( gcWebConnectStatsConfig config ){
+    switch (config) {
+        case gcWebConnectStatsConfigProductionRozNet:
+            return [NSString stringWithFormat:@"https://connectstats.app/prod/bugreport/status"];
+        default:
+        {
+            NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
+            return [NSString stringWithFormat:@"%@/bugreport/status",url];
+        }
+    }
+}
+
 NSString * GCWebConnectStatsApiCheck(gcWebConnectStatsConfig config){
     NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
     
