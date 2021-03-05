@@ -101,7 +101,7 @@
     return act;
 }
 
--(GCActivitySummaryValue*)sumVal:(NSString*)k val:(double)val uom:(NSString*)uom{
+-(GCActivitySummaryValue*)sumVal:(GCField*)k val:(double)val uom:(NSString*)uom{
     GCActivitySummaryValue * rv = [[[GCActivitySummaryValue alloc] init] autorelease];
     rv.numberWithUnit = [GCNumberWithUnit numberWithUnitName:uom andValue:val];
     rv.field = k;
@@ -120,10 +120,11 @@
     [act setFlags:gcFieldFlagSumDistance+gcFieldFlagSumDuration+gcFieldFlagWeightedMeanHeartRate+gcFieldFlagWeightedMeanSpeed];
     [act changeActivityType:[GCActivityType running]];
     
-    [act setSummaryDataFromKeyDict:@{     @"SumDuration" :           [self sumVal:@"SumDuration"             val:act.sumDurationCompat             uom:@"second" ],
-                             @"SumDistance" :           [self sumVal:@"SumDistance"             val:act.sumDistanceCompat            uom:@"meter" ],
-                             @"WeightedMeanHeartRate":  [self sumVal:@"WeightedMeanHeartRate"   val:act.weightedMeanHeartRateCompat   uom:@"bpm"  ],
-                             }];
+    [act setSummaryDataFromKeyDict:@{
+        @"SumDuration" :           [self sumVal:[self fldFor:@"SumDuration" act:act]            val:act.sumDurationCompat             uom:@"second" ],
+        @"SumDistance" :           [self sumVal:[self fldFor:@"SumDistance" act:act]            val:act.sumDistanceCompat             uom:@"meter" ],
+        @"WeightedMeanHeartRate":  [self sumVal:[self fldFor:@"WeightedMeanHeartRate" act:act]  val:act.weightedMeanHeartRateCompat   uom:@"bpm"  ],
+    }];
     
     [tmp addObject:act];
     [act release];
@@ -138,10 +139,11 @@
     [act setFlags:gcFieldFlagSumDistance+gcFieldFlagSumDuration+gcFieldFlagWeightedMeanHeartRate+gcFieldFlagWeightedMeanSpeed];
     [act changeActivityType:[GCActivityType cycling]];
     
-    [act setSummaryDataFromKeyDict:@{     @"SumDuration" :           [self sumVal:@"SumDuration"             val:act.sumDurationCompat             uom:@"second" ],
-                             @"SumDistance" :           [self sumVal:@"SumDistance"             val:act.sumDistanceCompat             uom:@"meter" ],
-                             @"WeightedMeanHeartRate":  [self sumVal:@"WeightedMeanHeartRate"   val:act.weightedMeanHeartRateCompat   uom:@"bpm"  ],
-                             }];
+    [act setSummaryDataFromKeyDict:@{
+        @"SumDuration" :           [self sumVal:[self fldFor:@"SumDuration" act:act]            val:act.sumDurationCompat             uom:@"second" ],
+        @"SumDistance" :           [self sumVal:[self fldFor:@"SumDistance" act:act]            val:act.sumDistanceCompat             uom:@"meter" ],
+        @"WeightedMeanHeartRate":  [self sumVal:[self fldFor:@"WeightedMeanHeartRate" act:act]  val:act.weightedMeanHeartRateCompat   uom:@"bpm"  ],
+    }];
 
     [tmp addObject:act];
     [act release];
@@ -162,11 +164,11 @@
     [act changeActivityType:[GCActivityType cycling]];
     
     [act updateSummaryData:@{
-                           [self fldFor:@"SumDuration" act:act] :              [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
-                           [self fldFor:@"WeightedMeanPower" act:act]:         [self sumVal:@"WeightedMeanPower"       val:3000    uom:@"watt" ],
-                           [self fldFor:@"WeightedMeanSpeed" act:act]:         [self sumVal:@"WeightedMeanSpeed"       val:10.8    uom:@"kph" ],
-                           [self fldFor:@"WeightedMeanRunCadence" act:act]:    [self sumVal:@"WeightedMeanRunCadence"  val:90      uom:@"stepsPerMinute" ]
-                           }
+        [self fldFor:@"SumDuration" act:act] :              [self sumVal:[self fldFor:@"SumDuration" act:act]             val:3       uom:@"second" ],
+        [self fldFor:@"WeightedMeanPower" act:act]:         [self sumVal:[self fldFor:@"WeightedMeanPower" act:act]       val:3000    uom:@"watt" ],
+        [self fldFor:@"WeightedMeanSpeed" act:act]:         [self sumVal:[self fldFor:@"WeightedMeanSpeed" act:act]       val:10.8    uom:@"kph" ],
+        [self fldFor:@"WeightedMeanRunCadence" act:act]:    [self sumVal:[self fldFor:@"WeightedMeanRunCadence" act:act]  val:90      uom:@"stepsPerMinute" ]
+    }
      ];
     GCFieldCalcKiloJoules * kj = [[GCFieldCalcKiloJoules alloc] init];
     GCFieldCalcStrideLength * sl = [[GCFieldCalcStrideLength alloc] init];
@@ -181,10 +183,10 @@
     
     [act changeActivityType:[GCActivityType running]];
     [act updateSummaryData:@{
-                          [self fldFor:@"SumDuration" act:act] :              [self sumVal:@"SumDuration"             val:3       uom:@"second" ],
-                          [self fldFor:@"WeightedMeanSpeed" act:act]:         [self sumVal:@"WeightedMeanSpeed"       val:10.8    uom:@"kph" ],
-                          [self fldFor:@"WeightedMeanRunCadence" act:act]:    [self sumVal:@"WeightedMeanRunCadence"  val:90      uom:@"stepsPerMinute" ]
-                          }
+        [self fldFor:@"SumDuration" act:act] :              [self sumVal:[self fldFor:@"SumDuration" act:act]              val:3       uom:@"second" ],
+        [self fldFor:@"WeightedMeanSpeed" act:act]:         [self sumVal:[self fldFor:@"WeightedMeanSpeed" act:act]       val:10.8    uom:@"kph" ],
+        [self fldFor:@"WeightedMeanRunCadence" act:act]:    [self sumVal:[self fldFor:@"WeightedMeanRunCadence" act:act]  val:90      uom:@"stepsPerMinute" ]
+    }
      ];
     
     rv = [sl evaluateForActivity:act];
@@ -644,14 +646,14 @@
         [act setFlags:gcFieldFlagSumDistance+gcFieldFlagSumDuration+gcFieldFlagWeightedMeanHeartRate+gcFieldFlagWeightedMeanSpeed];
         [act changeActivityType:[GCActivityType running]];
         
-        [act setSummaryDataFromKeyDict: @{     @"SumDuration" :           [self sumVal:@"SumDuration"             val:act.sumDurationCompat             uom:@"second" ],
-                                 @"SumDistance" :           [self sumVal:@"SumDistance"             val:act.sumDistanceCompat             uom:@"meter" ],
-                                 @"WeightedMeanHeartRate":  [self sumVal:@"WeightedMeanHeartRate"   val:act.weightedMeanHeartRateCompat   uom:@"bpm"  ],
-                                 }];
+        [act setSummaryDataFromKeyDict: @{
+            @"SumDuration" :           [self sumVal:[self fldFor:@"SumDuration" act:act]            val:act.sumDurationCompat             uom:@"second" ],
+            @"SumDistance" :           [self sumVal:[self fldFor:@"SumDistance"  act:act]            val:act.sumDistanceCompat             uom:@"meter" ],
+            @"WeightedMeanHeartRate":  [self sumVal:[self fldFor:@"WeightedMeanHeartRate"  act:act]  val:act.weightedMeanHeartRateCompat   uom:@"bpm"  ],
+        }];
         
         [activities addObject:act];
         [act release];
-
     }
     
     GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] init] autorelease];
@@ -796,7 +798,8 @@
         [act setSumDistanceCompat:[[sample objectAtIndex:2] doubleValue]];
         [act setFlags:gcFieldFlagSumDistance];
         [act setLocation:sample[6]];
-        [act updateSummaryData:@{[self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:@"WeightedMeanSpeed" val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
+        [act updateSummaryData:@{
+            [self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:[self fldFor:@"WeightedMeanSpeed" act:act] val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
         [activities addObject:act];
     }
     [organizer setActivities:activities];
@@ -854,7 +857,10 @@
         [act setDate:[NSDate dateForRFC3339DateTimeString:[sample objectAtIndex:1]]];
         [act setSumDistanceCompat:[[sample objectAtIndex:2] doubleValue]];
         [act setFlags:gcFieldFlagSumDistance];
-        [act updateSummaryData:@{[self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:@"WeightedMeanSpeed" val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
+        [act updateSummaryData:@{
+            [self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:[self fldFor:@"WeightedMeanSpeed" act:act] val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]
+            
+        }];
         [activities addObject:act];
     }
     [organizer setActivities:activities];
@@ -872,8 +878,8 @@
     for (NSUInteger idx=0; idx<[[organizer activities] count]; idx++) {
         GCActivity * act = [organizer activityForIndex:idx];
         [act mergeSummaryData:@{
-                              [self fldFor:@"SumDuration" act:act] :               [self sumVal:@"SumDuration"             val:(idx+1)       uom:@"second" ],
-                              [self fldFor:@"WeightedMeanPower" act:act] :         [self sumVal:@"WeightedMeanPower"       val:(idx+1)*1000    uom:@"watt" ],
+            [self fldFor:@"SumDuration" act:act] :               [self sumVal:[self fldFor:@"SumDuration" act:act]            val:(idx+1)       uom:@"second" ],
+            [self fldFor:@"WeightedMeanPower" act:act] :         [self sumVal:[self fldFor:@"WeightedMeanPower" act:act]      val:(idx+1)*1000    uom:@"watt" ],
          }
          ];
         [GCFieldsCalculated addCalculatedFields:act];

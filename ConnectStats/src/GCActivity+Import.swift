@@ -182,7 +182,7 @@ extension GCActivity {
                     }
                     if let distField = distField {
                         values[ distField ] =
-                            GCActivitySummaryValue(forField: distField.key, value: GCNumberWithUnit(GCUnit.meter(), andValue: distanceInMeters))
+                            GCActivitySummaryValue(for: distField, value: GCNumberWithUnit(GCUnit.meter(), andValue: distanceInMeters))
                     }
                     if let pointswim = GCTrackPoint(at: timestamp,
                                                         stroke:stroke,

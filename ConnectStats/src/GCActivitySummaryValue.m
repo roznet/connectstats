@@ -80,16 +80,16 @@
 
 -(void)setNumberWithUnit:(GCNumberWithUnit *)nu{
     self.value = nu.value;
-    if ([self.field isEqualToString:@"SumTrainingEffect"]) {
+    if ([self.field.key isEqualToString:@"SumTrainingEffect"]) {
         self.uom = @"te";
-    }else if([self.field isEqualToString:@"SumIntensityFactor"]){
+    }else if([self.field.key isEqualToString:@"SumIntensityFactor"]){
         self.uom = @"if";
     }else{
         self.uom = nu.unit.key;
     }
 }
 
-+(GCActivitySummaryValue*)activitySummaryValueForField:(NSString*)afield value:(GCNumberWithUnit*)nu{
++(GCActivitySummaryValue*)activitySummaryValueForField:(GCField*)afield value:(GCNumberWithUnit*)nu{
     GCActivitySummaryValue * rv = RZReturnAutorelease([[self alloc] init]);
     if (rv) {
         rv.field = afield;
@@ -100,7 +100,7 @@
 
 }
 
-+(GCActivitySummaryValue*)activitySummaryValueForDict:(NSDictionary*)aDict andField:(NSString *)afield{
++(GCActivitySummaryValue*)activitySummaryValueForDict:(NSDictionary*)aDict andField:(GCField*)afield{
     GCActivitySummaryValue * rv = RZReturnAutorelease([[GCActivitySummaryValue alloc] init]);
     if (rv) {
         rv.field = afield;
@@ -113,13 +113,13 @@
 
     return rv;
 }
-+(GCActivitySummaryValue*)activitySummaryValueForResultSet:(FMResultSet*)res{
++(GCActivitySummaryValue*)activitySummaryValueForResultSet:(FMResultSet*)res activityType:(NSString*)activityType{
     GCActivitySummaryValue * rv = RZReturnAutorelease([[GCActivitySummaryValue alloc] init]);
     if (rv) {
-        rv.field = [res stringForColumn:@"field"];
+        rv.field = [GCField fieldForKey:[res stringForColumn:@"field"] andActivityType:activityType];
         rv.value = [res doubleForColumn:@"value"];
         rv.uom = [res stringForColumn:@"uom"];
-        if ([rv.field isEqualToString:@"SumIntensityFactor"]) {
+        if ([rv.field.key isEqualToString:@"SumIntensityFactor"]) {
             rv.uom = @"if";
         }
     }
@@ -150,13 +150,13 @@
     NSString * query = [NSString stringWithFormat:@"INSERT INTO gc_activities_values (%@) VALUES(%@)",
                         @"activityId,field,value,uom",
                         @"?,?,?,?"];
-    if(![db executeUpdate:query,activityId,self.field,valNum,self.uom]){
+    if(![db executeUpdate:query,activityId,self.field.key,valNum,self.uom]){
         RZLog(RZLogError, @"DB error %@",[db lastErrorMessage]);
     }
 }
 
--(NSString*)formattedFieldName:(NSString*)aType{
-    return [GCField fieldForKey:self.field andActivityType:aType].displayName;
+-(NSString*)formattedFieldName{
+    return self.field.displayName;
 }
 
 -(NSString*)formattedValue{
@@ -181,7 +181,7 @@
 
 -(BOOL)isEqualToValue:(GCActivitySummaryValue*)other{
     if( [other isKindOfClass:[GCActivitySummaryValue class]]){
-        return [self.numberWithUnit isEqualToNumberWithUnit:other.numberWithUnit] && [self.field isEqualToString:other.field];
+        return [self.numberWithUnit isEqualToNumberWithUnit:other.numberWithUnit] && [self.field isEqualToField:other.field];
     }
     return false;
 }

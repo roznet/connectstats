@@ -315,8 +315,8 @@
     if (displayuom && ![displayuom isEqualToString:uom]) {
         nu = [nu convertToUnitName:displayuom];
     }
-    GCActivitySummaryValue * sumVal = [GCActivitySummaryValue activitySummaryValueForField:fieldkey value:nu];
-    [GCFields registerMissingField:[GCField fieldForKey:fieldkey andActivityType:self.activityType] displayName:display andUnitName:displayuom];
+    GCActivitySummaryValue * sumVal = [GCActivitySummaryValue activitySummaryValueForField:field value:nu];
+    [GCFields registerMissingField:field displayName:display andUnitName:displayuom];
     return sumVal;
 }
 
@@ -325,14 +325,14 @@
     if (speed && [GCFields pacePreferredForActivityType:self.activityType]) {
         GCField * field = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:self.activityType];
         GCNumberWithUnit * val = [[speed numberWithUnit] convertToUnit:field.unit];
-        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
+        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field value:val];
     }
     GCActivitySummaryValue * movingSpeed = newSummaryData[ [GCField fieldForKey:@"WeightedMeanMovingSpeed" andActivityType:self.activityType] ];
     if(movingSpeed && [GCFields pacePreferredForActivityType:self.activityType]){
         GCField * field = [GCField fieldForKey:@"WeightedMeanMovingSpeed" andActivityType:self.activityType];
 
         GCNumberWithUnit * val = [[movingSpeed numberWithUnit] convertToUnit:field.unit];
-        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
+        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field value:val];
     }
 }
 
@@ -532,7 +532,7 @@
                 NSNumber * val = one[@"value"];
                 if( fieldkey && unitname){
                     GCField * field = [GCField fieldForKey:fieldkey andActivityType:self.activityType];
-                    GCActivitySummaryValue * value = [GCActivitySummaryValue activitySummaryValueForField:fieldkey value:[GCNumberWithUnit numberWithUnitName:unitname andValue:val.doubleValue]];
+                    GCActivitySummaryValue * value = [GCActivitySummaryValue activitySummaryValueForField:field value:[GCNumberWithUnit numberWithUnitName:unitname andValue:val.doubleValue]];
                     data[ field ] = value;
                 }
             }
@@ -835,22 +835,22 @@
     }
 
     NSMutableDictionary *summaryDataTmp = [NSMutableDictionary dictionaryWithCapacity:summary.count];
-    for (NSString * field in summary) {
-        if (![GCFields skipField:field]) {
-            NSDictionary * info = summary[field];
+    for (NSString * fieldKey in summary) {
+        if (![GCFields skipField:fieldKey]) {
+            NSDictionary * info = summary[fieldKey];
             NSString * thisuom =info[@"uom"];
-            if ([field isEqualToString:@"SumTrainingEffect"]) {
+            if ([fieldKey isEqualToString:@"SumTrainingEffect"]) {
                 thisuom = @"te";
-            }else if([field isEqualToString:@"SumIntensityFactor"]){
+            }else if([fieldKey isEqualToString:@"SumIntensityFactor"]){
                 thisuom = @"if";
-            }else if([field hasSuffix:@"HeartRate"]){
+            }else if([fieldKey hasSuffix:@"HeartRate"]){
                 if (info[@"bpm"]) {
                     info = info[@"bpm"];
                 }
             }
-
-            [GCFields registerMissingField:[GCField fieldForKey:field andActivityType:self.activityType] displayName:info[@"fieldDisplayName"] andUnitName:thisuom];
-            summaryDataTmp[field] = [GCActivitySummaryValue activitySummaryValueForDict:info andField:(NSString*)field];
+            GCField * field = [GCField fieldForKey:fieldKey andActivityType:self.activityType];
+            [GCFields registerMissingField:field displayName:info[@"fieldDisplayName"] andUnitName:thisuom];
+            summaryDataTmp[fieldKey] = [GCActivitySummaryValue activitySummaryValueForDict:info andField:field];
         }
     }
     [self setSummaryDataFromKeyDict:summaryDataTmp];

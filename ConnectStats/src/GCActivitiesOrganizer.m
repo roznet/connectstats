@@ -320,6 +320,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     //restart, clear info dictionary
     [self buildInfoDictionary];
 
+    NSMutableDictionary<NSString*,NSString*>*activityIdToActivityType = [NSMutableDictionary dictionary];
+    
     while ([res next]) {
         count++;
         // if in background notify to display quick preview when many activities
@@ -335,13 +337,14 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             lastLocation = true;
         }
         [self recordActivityType:act];
+        activityIdToActivityType[act.activityId] = act.activityType;
         [m_activities addObject:act];
         [act release];
     }
     [res close];
     self.allActivities = [NSArray arrayWithArray:m_activities];
 
-    [self addSummaryFields:nil];
+    [self addSummaryFields:activityIdToActivityType];
     [self addWeather];
     [self clearFilter];
 
@@ -1272,26 +1275,31 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 }
 
--(void)addSummaryFields:(NSArray*)f{
+-(void)addSummaryFields:(NSDictionary<NSString*,NSString*>*)idToType{
     NSString * query = @"SELECT * FROM gc_activities_values ORDER BY activityId DESC";
     NSMutableDictionary * data = [NSMutableDictionary dictionaryWithCapacity:self.allActivities.count];
     NSMutableDictionary * meta = [NSMutableDictionary dictionaryWithCapacity:self.allActivities.count];
+    
     NSString * currentId = nil;
+    NSString * activityType = nil;
+    
     GCActivitySummaryValue * currentValue = nil;
     GCActivityMetaValue * metaValue = nil;
 
-    NSMutableDictionary<NSString*,GCActivitySummaryValue*> * currentSummary = nil;
+    NSMutableDictionary<GCField*,GCActivitySummaryValue*> * currentSummary = nil;
     NSMutableDictionary<NSString*,GCActivityMetaValue*> * currentMeta = nil;
 
     FMResultSet * res = [self.db executeQuery:query];
     while ([res next]) {
-        if (![currentId isEqualToString:[res stringForColumn:@"activityId"]]) {
-            currentId = [res stringForColumn:@"activityId"];
+        NSString * rowActivityId = [res stringForColumn:@"activityId"];
+        if (![currentId isEqualToString:rowActivityId]) {
+            currentId = rowActivityId;
             currentSummary = [NSMutableDictionary dictionaryWithCapacity:20];
             data[currentId] = currentSummary;
+            activityType = idToType[currentId];
         }
-        currentValue = [GCActivitySummaryValue activitySummaryValueForResultSet:res];
-        currentSummary[ [res stringForColumn:@"field"] ] = currentValue;
+        currentValue = [GCActivitySummaryValue activitySummaryValueForResultSet:res activityType:activityType];
+        currentSummary[ currentValue.field ] = currentValue;
     }
     BOOL spuriousActivityCleanupRequired = false;
     query = @"SELECT * FROM gc_activities_meta ORDER BY activityId DESC";
@@ -1327,7 +1335,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     for (GCActivity * one in self.allActivities) {
         currentSummary = data[one.activityId];
         if (currentSummary) {
-            [one setSummaryDataFromKeyDict:currentSummary];
+            [one updateSummaryData:currentSummary];
         }
         currentMeta = meta[one.activityId];
         if (currentMeta) {

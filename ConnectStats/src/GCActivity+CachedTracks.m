@@ -344,16 +344,23 @@
 
     NSDictionary * stats = [final.serie summaryStatistics];
     NSMutableDictionary * newFields = [NSMutableDictionary dictionary];
-    NSDictionary * fields = @{
-                              CALC_VERTICAL_SPEED: [GCActivityCalculatedValue calculatedValue:CALC_VERTICAL_SPEED value:[stats[STATS_AVG] doubleValue] unit:final.unit],
-                              CALC_ASCENT_SPEED: [GCActivityCalculatedValue calculatedValue:CALC_ASCENT_SPEED value:[stats[STATS_AVGPOS] doubleValue] unit:final.unit],
-                              CALC_DESCENT_SPEED: [GCActivityCalculatedValue calculatedValue:CALC_DESCENT_SPEED value:[stats[STATS_AVGNEG] doubleValue] unit:final.unit],
-                              CALC_MAX_ASCENT_SPEED: [GCActivityCalculatedValue calculatedValue:CALC_MAX_ASCENT_SPEED value:[stats[STATS_MAX] doubleValue] unit:final.unit],
-                              CALC_MAX_DESCENT_SPEED: [GCActivityCalculatedValue calculatedValue:CALC_MAX_DESCENT_SPEED value:[stats[STATS_MIN] doubleValue] unit:final.unit],
+    
+    
+    
+    NSDictionary<NSString*,NSString*> * fields = @{
+                              CALC_VERTICAL_SPEED:    STATS_AVG,
+                              CALC_ASCENT_SPEED:      STATS_AVGPOS,
+                              CALC_DESCENT_SPEED:     STATS_AVGNEG,
+                              CALC_MAX_ASCENT_SPEED:  STATS_MAX,
+                              CALC_MAX_DESCENT_SPEED: STATS_MIN,
                               };
 
     for (NSString * key in fields) {
-        newFields[ [GCField fieldForKey:key andActivityType:self.activityType] ] = fields[key];
+        GCField * field = [GCField fieldForKey:key andActivityType:self.activityType];
+        NSString * stat = fields[key];
+        double doubleValue = [stats[stat] doubleValue];
+        GCActivityCalculatedValue * value = [GCActivityCalculatedValue calculatedValue:field value:doubleValue unit:final.unit];
+        newFields[ field ] = value;
     }
     [self addEntriesToCalculatedFields:newFields];
 

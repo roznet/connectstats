@@ -27,7 +27,7 @@
 
 @implementation GCActivityCalculatedValue
 
-+(GCActivityCalculatedValue*)calculatedValue:(NSString*)field value:(double)val unit:(GCUnit*)unit{
++(GCActivityCalculatedValue*)calculatedValue:(GCField*)field value:(double)val unit:(GCUnit*)unit{
     GCActivityCalculatedValue * rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
     if (rv) {
         rv.numberWithUnit = [GCNumberWithUnit numberWithUnit:unit andValue:val];
@@ -35,7 +35,7 @@
     }
     return rv;
 }
-+(GCActivityCalculatedValue*)calculatedValue:(NSString*)field value:(GCNumberWithUnit*)nu{
++(GCActivityCalculatedValue*)calculatedValue:(GCField*)field value:(GCNumberWithUnit*)nu{
     GCActivityCalculatedValue * rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
     if (rv) {
         rv.numberWithUnit = nu;

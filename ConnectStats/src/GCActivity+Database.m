@@ -195,12 +195,13 @@
 
 -(void)loadSummaryDataFrom:(FMDatabase*)db{
     FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_activities_values WHERE activityId = ?",self.activityId];
-    NSMutableDictionary<NSString*,GCActivitySummaryValue*> * val =[NSMutableDictionary dictionaryWithCapacity:20];
+    NSMutableDictionary<GCField*,GCActivitySummaryValue*> * vals =[NSMutableDictionary dictionaryWithCapacity:20];
     while ([res next]) {
-        val[[res stringForColumn:@"field"]] = [GCActivitySummaryValue activitySummaryValueForResultSet:res];
+        GCActivitySummaryValue * val = [GCActivitySummaryValue activitySummaryValueForResultSet:res activityType:self.activityType];
+        vals[ val.field ] = val;
     }
 
-    [self setSummaryDataFromKeyDict:val];
+    [self updateSummaryData:vals];
 
     NSMutableDictionary<NSString*,GCActivityMetaValue*>* mval = [NSMutableDictionary dictionaryWithCapacity:5];
     res = [db executeQuery:@"SELECT * FROM gc_activities_meta WHERE activityId = ?", self.activityId];

@@ -71,7 +71,7 @@ class FITFitFileInterpret: NSObject {
             if nu.unit == GCUnit.mps(){
                 nu = nu.convert(to: GCUnit.kph().forGlobalSystem() )
             }
-            rv = GCActivitySummaryValue(forField: activityField.key, value: nu)
+            rv = GCActivitySummaryValue(for: activityField, value: nu)
         }
         
         return rv;
@@ -165,7 +165,7 @@ class FITFitFileInterpret: NSObject {
                 let speed = rv[ speedField ]{
                 if rv[paceField] == nil {
                     let nu = speed.numberWithUnit.convert(to: paceField.unit())
-                    rv[paceField] = GCActivitySummaryValue(forField: paceField.key, value: nu)
+                    rv[paceField] = GCActivitySummaryValue(for: paceField, value: nu)
                 }
             }
         }
@@ -399,7 +399,7 @@ class FITFitFileInterpret: NSObject {
                     }
                     
                     if let nu = nu {
-                        rv[field] = GCActivitySummaryValue(forField: field.key, value: nu)
+                        rv[field] = GCActivitySummaryValue(for: field, value: nu)
                     }
                 }
             }
