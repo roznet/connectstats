@@ -24,18 +24,27 @@
 //  
 
 #import "GCStravaActivityStreamsParser.h"
+#import "GCActivity.h"
 #import "GCTrackPoint.h"
 
+@interface GCStravaActivityStreamsParser ()
+@property (nonatomic,retain) GCActivity * activity;
+
+@end
+
 @implementation GCStravaActivityStreamsParser
-+(GCStravaActivityStreamsParser*)activityStreamsParser:(NSData *)input{
+
++(GCStravaActivityStreamsParser*)activityStreamsParser:(NSData *)input inActivity:(GCActivity*)act{
     GCStravaActivityStreamsParser * rv = [[[GCStravaActivityStreamsParser alloc] init] autorelease];
     if (rv) {
+        rv.activity = act;
         [rv parse:input];
     }
     return rv;
 }
 
 -(void)dealloc{
+    [_activity release];
     [_points release];
     [super dealloc];
 }
@@ -60,6 +69,15 @@
         self.status = GCWebStatusOK;
         NSUInteger n = [json[0][@"data"] count];
         NSMutableArray * trackpoints = [NSMutableArray arrayWithCapacity:n];
+        
+        NSDictionary * defs = @{ @"heartrate" : @[ [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:self.activity.activityType], GCUnit.bpm ],
+                                 @"distance" : @[ [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activity.activityType], GCUnit.meter ],
+                                 @"velocity_smooth" : @[ [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:self.activity.activityType], GCUnit.mps ],
+                                 @"altitude" : @[ [GCField fieldForFlag:gcFieldFlagAltitudeMeters andActivityType:self.activity.activityType], GCUnit.meter ],
+                                 @"cadence" : @[ [GCField fieldForFlag:gcFieldFlagCadence andActivityType:self.activity.activityType], GCUnit.stepsPerMinute ],
+                                 @"watts" : @[ [GCField fieldForFlag:gcFieldFlagPower andActivityType:self.activity.activityType], GCUnit.watt ],
+        };
+        
         for (NSUInteger i=0; i<n; i++) {
             GCTrackPoint * trackpoint = [[GCTrackPoint alloc] init];
             for (NSUInteger k=0; k<json.count; k++) {
@@ -69,24 +87,15 @@
                     NSNumber * val = o;
                     if ([type isEqualToString:@"time"]) {
                         trackpoint.elapsed = val.doubleValue;
-                    }else if ([type isEqualToString:@"heartrate"]){
-                        trackpoint.heartRateBpm=val.doubleValue;
-                        trackpoint.trackFlags |= gcFieldFlagWeightedMeanHeartRate;
-                    }else if ([type isEqualToString:@"distance"]){
-                        trackpoint.distanceMeters=val.doubleValue;
-                        trackpoint.trackFlags |= gcFieldFlagSumDistance;
-                    }else if ([type isEqualToString:@"velocity_smooth"]){
-                        trackpoint.speed = val.doubleValue;
-                        trackpoint.trackFlags |= gcFieldFlagWeightedMeanSpeed;
-                    }else if ([type isEqualToString:@"altitude"]){
-                        trackpoint.altitude = val.doubleValue;
-                        trackpoint.trackFlags |= gcFieldFlagAltitudeMeters;
-                    }else if ([type isEqualToString:@"cadence"]){
-                        trackpoint.cadence = val.doubleValue;
-                        trackpoint.trackFlags |= gcFieldFlagCadence;
-                    }else if ([type isEqualToString:@"watts"]){
-                        trackpoint.power = val.doubleValue;
-                        trackpoint.trackFlags |= gcFieldFlagPower;
+                    }else{
+                        NSArray * def = defs[type];
+                        if( def ){
+                            GCField * field= def[0];
+                            GCUnit * unit = def[1];
+                            GCNumberWithUnit * nu = [[GCNumberWithUnit alloc] initWithUnit:unit andValue:val.doubleValue];
+                            [trackpoint setNumberWithUnit:nu forField:field inActivity:self.activity];
+                            RZRelease(nu);
+                        }
                     }
                 }else if ([o isKindOfClass:[NSArray class]]){
                     NSArray * ar = o;

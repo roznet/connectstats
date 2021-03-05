@@ -205,6 +205,12 @@ double kGCTrackPointsMinimumSpeedMps = 0.3;
     }
 
     GCTrackPoint * point = nil;
+    GCUnit * mpsUnit = GCUnit.mps;
+    GCField * speedField = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:self.activityType];
+    
+    GCUnit * cadenceUnit = GCUnit.stepsPerMinute;
+    GCField * cadenceField = [GCField fieldForFlag:gcFieldFlagCadence andActivityType:self.activityType];
+    
     for (GCTrackPoint * next in self.points) {
         if (point) {
             BOOL hasDistance =(point.trackFlags & gcFieldFlagSumDistance) == gcFieldFlagSumDistance;
@@ -218,14 +224,18 @@ double kGCTrackPointsMinimumSpeedMps = 0.3;
                 if (! hasSpeed) {
                     double mps = point.distanceMeters/point.elapsed; // in m/s
                     if (mps > kGCTrackPointsMinimumSpeedMps) {
-                        point.speed = mps;
-                        point.trackFlags |= gcFieldFlagWeightedMeanSpeed;
+                        GCNumberWithUnit * speed = [GCNumberWithUnit numberWithUnit:mpsUnit andValue:mps];
+                        [point setNumberWithUnit:speed forField:speedField inActivity:nil];
                         self.trackFlags |= gcFieldFlagWeightedMeanSpeed;
+                        RZRelease(speed);
                     }
                 }
             }
             if (hasSteps) {
-                point.cadence = point.cadence/point.elapsed * 60.;
+                GCNumberWithUnit * cadence = [GCNumberWithUnit numberWithUnit:cadenceUnit andValue:point.cadence/point.elapsed * 60.];
+                [point setNumberWithUnit:cadence forField:cadenceField inActivity:nil];
+                self.trackFlags |= gcFieldFlagCadence;
+                RZRelease(cadence);
             }
         }
         point = next;

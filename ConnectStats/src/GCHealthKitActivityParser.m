@@ -125,7 +125,9 @@
             
             for (GCTrackPoint * point in points) {
                 if (point.elapsed>0) {
-                    point.speed = point.distanceMeters/point.elapsed;
+                    [point setNumberWithUnit:[GCNumberWithUnit numberWithUnitName:@"mps" andValue:point.distanceMeters/point.elapsed]
+                                    forField:[GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activity.activityType]
+                                  inActivity:activity];
                 }
                 sumDistance +=point.distanceMeters;
                 sumDuration +=point.elapsed;

@@ -109,7 +109,7 @@ class GCStravaRequestStreams: GCStravaRequestBase {
     }
 
     func parseStreams(data : Data){
-        if let parser = GCStravaActivityStreamsParser(data) {
+        if let parser = GCStravaActivityStreamsParser(data, in: self.activity) {
             self.points = parser.points
             self.status = parser.status
         }else{

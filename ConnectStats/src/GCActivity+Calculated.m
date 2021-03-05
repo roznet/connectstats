@@ -376,7 +376,7 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
                         [candidateLap accumulateFrom:prevPoint to:currPoint inActivity:self];
                     }else{
                         // same type but had temporarily switched, put back
-                        [candidateLap accumulateLap:nextLap  inActivity:self];
+                        [candidateLap accumulate:nextLap  inActivity:self];
                         nextLap=nil;
                     }
                 }else{
@@ -404,7 +404,7 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
     }
     if (candidateLap.elapsed > 1) {
         if (nextLap) {
-            [candidateLap accumulateLap:nextLap  inActivity:self];
+            [candidateLap accumulate:nextLap  inActivity:self];
         }
         if (candidateLap) {
             [rv addObject:candidateLap];

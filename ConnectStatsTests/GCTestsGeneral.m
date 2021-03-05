@@ -82,10 +82,15 @@
             point.distanceMeters = dist;
             point.elapsed = elapsed;
             point.time = time;
-            point.speed = speed;
-            point.heartRateBpm = hr;
+            
+            [point setNumberWithUnit:[GCNumberWithUnit numberWithUnitName:@"mps" andValue:speed]
+                            forField:[GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType]
+                          inActivity:act];
+            [point setNumberWithUnit:[GCNumberWithUnit numberWithUnitName:@"bpm" andValue:hr]
+                            forField:[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:act.activityType]
+                          inActivity:act];
             point.lapIndex = lapIndex;
-            point.trackFlags = gcFieldFlagWeightedMeanHeartRate|gcFieldFlagWeightedMeanSpeed|gcFieldFlagSumDistance|gcFieldFlagSumDuration;
+            point.trackFlags |= gcFieldFlagSumDistance|gcFieldFlagSumDuration;
             
             [tracks addObject:point];
             [point release];
