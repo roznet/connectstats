@@ -26,8 +26,11 @@
 #import "GCMapGradientPathOverlay.h"
 #import "GCMapRouteLogicPointHolder.h"
 
+@interface GCMapGradientPathOverlay ()
+@property (nonatomic,assign) CLLocationCoordinate2D coordinate;
+@end
+
 @implementation GCMapGradientPathOverlay
-@synthesize coordinate;
 
 
 #if !__has_feature(objc_arc)
