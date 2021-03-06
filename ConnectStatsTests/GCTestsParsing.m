@@ -61,28 +61,21 @@
 
 #pragma mark - Parse Single Activities
 
-- (void)testParsingModern {
-    NSString * file = [RZFileOrganizer bundleFilePath:@"activitytrack_718039360.json" forClass:[self class]];
-    
-    NSData * data = [NSData dataWithContentsOfFile:file];
-    GCActivity * act = [[GCActivity alloc] init];
-    [act changeActivityType:[GCActivityType running]];
-
-    GCGarminActivityDetailJsonParser * parser = [[GCGarminActivityDetailJsonParser alloc] initWithData:data forActivity:act];
-    XCTAssertEqual(parser.trackPoints.count, 575);
-    gcFieldFlag trackFlags = gcFieldFlagNone;
-    
-
-    for (GCTrackPoint * point in parser.trackPoints) {
-        trackFlags |= point.trackFlags;
-    }
-    XCTAssertTrue( (trackFlags & gcFieldFlagWeightedMeanSpeed) == gcFieldFlagWeightedMeanSpeed);
-}
-
 
 -(void)testActivityParsingModern{
     // Add test for
-    NSArray * activityIds = @[ @"1089803211", @"1108367966", @"1108368135", @"924421177"];;
+    NSArray * activityIds = @[
+        @"217470507", // in samples/tcx: swimming, fit, json modern, tcx
+        @"234721416", // in samples/tcx: cycling london commute 10k 2012, fit, json modern, tcx
+        @"234979239", // in samples/tcx: running london commute 10k 2012, fit, json modern, tcx
+        
+        @"2477200414", // in activity_merge_fit: running, battersea, 2018, running power, fit, json modern, activitydb
+        
+        @"3988198230", // in flying: flying, modern json, contained in last_modern_search_flying.json
+        
+        @"1083407258", // in fit_files: cross country skiing 2016, modern json, fit
+        @"2545022458", // in fit_files: running, 2018, running pwer from garmin, fit
+    ];
     
     RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
     manager.recordMode = [GCTestCase recordModeGlobal];
@@ -999,10 +992,10 @@
 }
 
 -(void)testOrganizerRegister{
-    NSData * searchLegacyInfo = [NSData  dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_search_modern.json"
+    NSData * searchLegacyInfo = [NSData  dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_modern_search_0.json"
                                                                                        forClass:[self class]]];
     
-    GCGarminSearchJsonParser * parser=[[[GCGarminSearchJsonParser alloc] initWithData:searchLegacyInfo] autorelease];
+    GCGarminSearchModernJsonParser * parser=[[[GCGarminSearchModernJsonParser alloc] initWithData:searchLegacyInfo] autorelease];
     
     NSArray<GCActivity*>* activityFirstHalf = [parser.activities subarrayWithRange:NSMakeRange(0, 10)];
     NSArray<GCActivity*>* activitySubFirstHalf = [parser.activities subarrayWithRange:NSMakeRange(2, 8)];
@@ -1013,23 +1006,23 @@
     
     GCActivitiesOrganizerListRegister * listregister =[GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:activitySubFirstHalf from:service isFirst:YES];
     [listregister addToOrganizer:organizer];
-    XCTAssertEqual(organizer.countOfActivities, 8);
+    XCTAssertEqual(organizer.countOfActivities+organizer.countOfKnownDuplicates, 8);
     XCTAssertFalse(listregister.reachedExisting);
     
     listregister =[GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:activitySecondHalf from:service isFirst:NO];
     [listregister addToOrganizer:organizer];
-    XCTAssertEqual(organizer.countOfActivities, 18);
+    XCTAssertEqual(organizer.countOfActivities+organizer.countOfKnownDuplicates, 18);
     XCTAssertFalse(listregister.reachedExisting);
     
     listregister =[GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:activityFirstHalf from:service isFirst:NO];
     [listregister addToOrganizer:organizer];
-    XCTAssertEqual(organizer.countOfActivities, 20);
+    XCTAssertEqual(organizer.countOfActivities+organizer.countOfKnownDuplicates, 20);
     XCTAssertTrue(listregister.reachedExisting);
     
     NSArray * oneDeleted = [@[parser.activities[0]] arrayByAddingObjectsFromArray:activitySubFirstHalf];
     listregister =[GCActivitiesOrganizerListRegister activitiesOrganizerListRegister:oneDeleted from:service isFirst:NO];
     [listregister addToOrganizer:organizer];
-    XCTAssertEqual(organizer.countOfActivities, 19);
+    XCTAssertEqual(organizer.countOfActivities+organizer.countOfKnownDuplicates, 19);
     XCTAssertTrue(listregister.reachedExisting);
     
     GCActivitiesOrganizer * reloaded = [[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db];

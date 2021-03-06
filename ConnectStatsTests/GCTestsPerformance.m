@@ -37,7 +37,7 @@
 #import "GCActivitiesOrganizerListRegister.h"
 #import "GCActivityAutoLapChoices.h"
 #import "ConnectStats-Swift.h"
-#import "GCGarminSearchJsonParser.h"
+#import "GCGarminSearchModernJsonParser.h"
 #import "GCTestsSamples.h"
 #import "GCHistoryAggregatedActivityStats.h"
 
@@ -173,13 +173,13 @@
 }
 
 -(void)testPerformanceOrganizerRegister{
-    NSData * searchLegacyInfo = [NSData  dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_search_modern.json"
+    NSData * searchLegacyInfo = [NSData  dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_modern_search_0.json"
                                                                                        forClass:[self class]]];
     GCService * service = [GCService service:gcServiceGarmin];
     NSString * dbn = [RZFileOrganizer writeableFilePath:@"test_organizer_register_perf.db"];
     
     [self measureBlock:^{
-        GCGarminSearchJsonParser * parser=[[GCGarminSearchJsonParser alloc] initWithData:searchLegacyInfo] ;
+        GCGarminSearchModernJsonParser * parser=[[GCGarminSearchModernJsonParser alloc] initWithData:searchLegacyInfo] ;
         
         [RZFileOrganizer removeEditableFile:@"test_organizer_register_perf.db"];
         FMDatabase * db = [FMDatabase databaseWithPath:dbn];
