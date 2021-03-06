@@ -47,6 +47,7 @@ extension GCGarminActivityTrack13Request {
             }
         }
         var rv = false
+        RZFileOrganizer.removeEditableFile(baseName)
         let fitFile = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(baseName) )
         if let fitFileEntry = fitFileEntry {
             do {

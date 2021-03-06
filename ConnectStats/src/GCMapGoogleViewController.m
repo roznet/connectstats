@@ -38,19 +38,9 @@
 
 @implementation GCMapGoogleViewController
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-        self.gradientColors = [GCViewGradientColors gradientColorsRainbow16];
-    }
-    return self;
-}
 #if !__has_feature(objc_arc)
 -(void)dealloc{
     [_mapView release];
-    [_gradientColors release];
     [_bounds release];
     [super dealloc];
 }
@@ -75,13 +65,6 @@
     // Dispose of any resources that can be recreated.
 }
 
--(NSUInteger)numberOfColors{
-    return (self.gradientColors).numberOfColors;
-}
-
--(GCField*)gradientField{
-    return self.mapDataSource.gradientField;
-}
 
 -(GCActivity*)activity{
     return self.mapDataSource.activity;
@@ -127,11 +110,9 @@
      polyline.map = mapView_;
      */
 
-    GCMapRouteLogic * logic = [GCMapRouteLogic routeLogicFor:self.mapDataSource.activity field:self.mapDataSource.gradientField andColors:self.gradientColors];
-    logic.maxPoints = 2000U;
+    GCMapRouteLogic * logic = self.mapDataSource.routeLogic;
 
     [self.mapView clear];
-    [logic calculate];
     GMSMutablePath * path = [GMSMutablePath path];
     UIColor * color = nil;
     for (GCMapRouteLogicPointHolder * point in logic.points) {

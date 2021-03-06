@@ -542,5 +542,8 @@
 
 }
 
+-(void)testCalculatedLaps{
+    
+}
 
 @end

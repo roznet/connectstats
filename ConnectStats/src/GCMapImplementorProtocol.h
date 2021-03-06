@@ -23,13 +23,14 @@
 //  SOFTWARE.
 //  
 
-#import <Foundation/Foundation.h>
+@import Foundation;
+@import CoreLocation;
 #import "GCFields.h"
-#import <CoreLocation/CoreLocation.h>
 
 @class GCViewGradientColors;
 @class GCActivity;
 @class GCField;
+@class GCMapRouteLogic;
 
 typedef NS_ENUM(NSUInteger, gcLapDisplay){
     gcLapDisplayNone,
@@ -40,9 +41,6 @@ typedef NS_ENUM(NSUInteger, gcLapDisplay){
 };
 
 @protocol GCMapImplementorProtocol
-
--(NSUInteger)numberOfColors;
--(GCViewGradientColors*)gradientColors;
 
 +(NSUInteger)numberOfMapType;
 -(void)toggleMapType:(NSUInteger)mapType;
@@ -60,15 +58,15 @@ typedef NS_ENUM(NSUInteger, gcLapDisplay){
 
 -(GCActivity*)activity;
 -(GCActivity*)compareActivity;
--(GCField*)gradientField;
 -(void)loadAnnotations;
 -(NSArray*)annotations;
--(gcLapDisplay)showLaps;
--(NSUInteger)lapIndex;
 -(void)setupLegendViewWithThresholds:(NSArray*)thresholds;
 -(BOOL)enableTap;
 -(void)tapPoint:(CLLocationCoordinate2D)coord;
-
+-(BOOL)hasGradient;
 -(void)finishedRendering:(BOOL)fullyRendered;
+
+-(GCMapRouteLogic*)routeLogic;
+-(GCMapRouteLogic*)compareLogic;
 
 @end

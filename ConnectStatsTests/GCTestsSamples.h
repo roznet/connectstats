@@ -22,6 +22,7 @@
 +(FMDatabase*)createEmptyActivityDatabase:(NSString*)dbname;
 +(GCActivitiesOrganizer*)createEmptyOrganizer:(NSString*)dbname;
 
+
 +(void)ensureSampleDbStructure;
 
 @end

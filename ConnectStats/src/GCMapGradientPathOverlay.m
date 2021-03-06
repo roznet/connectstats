@@ -29,32 +29,14 @@
 @implementation GCMapGradientPathOverlay
 @synthesize coordinate;
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        self.gradientColors = [GCViewGradientColors gradientColorsRainbow16];
-
-    }
-    return self;
-}
 
 #if !__has_feature(objc_arc)
 - (void)dealloc
 {
-    [_gradientColors release];
     [_points release];
     [super dealloc];
 }
 #endif
-
--(NSUInteger)numberOfColors{
-    return _gradientColors.numberOfColors;
-}
-
--(NSArray<RZColor*>*)colors{
-    return _gradientColors.colors;
-}
 
 -(MKMapRect)calculateBoundingMapRect{
     BOOL started = false;

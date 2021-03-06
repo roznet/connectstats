@@ -28,7 +28,6 @@
 
 @interface GCMapGoogleViewController : UIViewController<GCMapImplementorProtocol>
 @property (nonatomic,assign) NSObject<GCMapDataSourceProtocol> * mapDataSource;
-@property (nonatomic,retain) GCViewGradientColors * gradientColors;
 
 +(NSUInteger)numberOfMapType;
 +(void)provideAPIKey:(NSString*)key;

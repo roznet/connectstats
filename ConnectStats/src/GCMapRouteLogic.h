@@ -44,12 +44,13 @@
 @property (nonatomic,assign) NSUInteger lapIndex;
 @property (nonatomic,assign) NSUInteger maxPoints;
 @property (nonatomic,assign) BOOL lapsRectOnFullRoute;
+@property (nonatomic,readonly) BOOL isCalculating;
 
 //Outputs
-@property (nonatomic,retain) NSArray * points;
+@property (nonatomic,retain) NSArray<GCMapRouteLogicPointHolder*> * points;
 @property (nonatomic,assign) CLLocationCoordinate2D northEastPoint;
 @property (nonatomic,assign) CLLocationCoordinate2D southWestPoint;
-@property (nonatomic,retain) NSArray * thresholds;
+@property (nonatomic,retain) NSArray<NSNumber*> * thresholds;
 
 +(GCMapRouteLogic*)routeLogicFor:(GCActivity*)act field:(GCField*)f andColors:(GCViewGradientColors*)col;
 +(GCMapRouteLogic*)routeLogicFor:(GCActivity*)act field:(GCField*)f colors:(GCViewGradientColors*)col andLap:(NSUInteger)l;

@@ -30,6 +30,9 @@
 #import "GCActivity+Series.h"
 
 #pragma mark
+@interface GCMapRouteLogic ()
+@property (nonatomic,assign) BOOL isCalculating;
+@end
 
 @implementation GCMapRouteLogic
 
@@ -80,6 +83,7 @@
 }
 
 -(void)calculate{
+    self.isCalculating = true;
     CLLocationCoordinate2D northEastPoint = CLLocationCoordinate2DMake(0., 0.);
 	CLLocationCoordinate2D southWestPoint = CLLocationCoordinate2DMake(0., 0.);
 
@@ -246,6 +250,7 @@
         free(samples);
         free(thresholds);
     }
+    self.isCalculating = false;
 }
 
 -(CLLocationCoordinate2D)centerPoint{
