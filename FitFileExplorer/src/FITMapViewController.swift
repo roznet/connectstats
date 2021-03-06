@@ -101,7 +101,6 @@ class FITMapViewController: NSViewController,MKMapViewDelegate {
                     let overlay = GCMapGradientPathOverlay()
                     overlay.points = holders
                     overlay.calculateBoundingMapRect()
-                    overlay.gradientColors = GCViewGradientColors(single: NSColor.blue)
                     self.mapView?.addOverlay(overlay)
                     
                     self.mapView?.setVisibleMapRect(overlay.boundingMapRect, animated: true)

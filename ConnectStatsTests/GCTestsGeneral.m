@@ -7,7 +7,6 @@
 //  $Id$
 
 #import "GCTestCase.h"
-#import "GCGarminSearchJsonParser.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCActivitySearch.h"
 #import "GCHistoryAggregatedActivityStats.h"

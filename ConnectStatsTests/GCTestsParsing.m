@@ -13,7 +13,6 @@
 #import "GCAppGlobal.h"
 #import "GCGarminActivityDetailJsonParser.h"
 #import "GCGarminRequestActivityReload.h"
-#import "GCGarminSearchJsonParser.h"
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminSearchModernJsonParser.h"
 #import "GCGarminActivityLapsParser.h"
