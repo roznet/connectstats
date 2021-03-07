@@ -1003,10 +1003,25 @@
     [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Weekly [1] NewStyle"]];
 
     cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    config.comparisonMetric = gcComparisonMetricValueDifference;
+    [cell setupAggregatedComparisonWithDataHolder:[aggregatedStats dataForIndex:0]
+                                 comparisonHolder:[aggregatedStats dataForIndex:1]
+                                            index:0
+                                 multiFieldConfig:config
+                                     activityType:GCActivityType.running
+                                         geometry:geometry
+                                             wide:false];
+    [stats addObject:[GCTestUISampleCellHolder holderFor:cell
+                                                  height:[GCViewConfig sizeForNumberOfRows:[GCActivityType.all summaryFields].count]
+                                           andIdentifier:@"Running Stats Month Compare NewStyle"]];
+
+    cell = [[[GCCellGrid alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     config.calendarConfig.calendarUnit = NSCalendarUnitMonth;
     [cell setupAggregatedWithDataHolder:[aggregatedStats dataForIndex:0] index:0 multiFieldConfig:config activityType:GCActivityType.running geometry:geometry wide:false comparisonHolder:nil];
     [stats addObject:[GCTestUISampleCellHolder holderFor:cell andIdentifier:@"Running Stats Month [0] NewStyle"]];
 
+    
+    
     [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinNameiOS13]];
 
     return stats;
@@ -1075,8 +1090,9 @@
 -(NSArray*)gridCellSamples{
     [GCTestAppGlobal setupSampleState:@"sample_activities.db"];
 
-    NSMutableArray * rv = [NSMutableArray arrayWithCapacity:10];
+    NSMutableArray * rv = [NSMutableArray array];
 
+    
     [rv addObject:[self sampleNumberGeometry]];
     
     [rv addObject:[self sampleNewActivitySummary]];
