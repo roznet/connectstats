@@ -190,14 +190,17 @@ extension GCCellGrid {
             if let nu = dataHolder.preferredNumber(withUnit: field){
                 if nu.isValidValue() && nu.value != 0.0 {
                     if var comparisonNu = comparisonHolder?.preferredNumber(withUnit: field){
+                        var showPositive : Bool = true
                         if comparisonNu.unit == nu.unit {
                             switch multiFieldConfig.comparisonMetric {
                             case .percent:
                                 comparisonNu = GCNumberWithUnit(name: "percent", andValue:  (nu.value/comparisonNu.value - 1.0) * 100.0 )
+                                showPositive = comparisonNu.value > 0
                             case .valueDifference:
                                 comparisonNu = GCNumberWithUnit(unit: nu.unit, andValue:  nu.value-comparisonNu.value )
+                                showPositive = nu.unit.betterIsMin() ? comparisonNu.value < 0 : comparisonNu.value > 0
                             default:
-                                comparisonNu = GCNumberWithUnit(unit: nu.unit, andValue:  nu.value-comparisonNu.value )
+                                showPositive = nu.unit.betterIsMin() ? (nu.value < comparisonNu.value) : (nu.value > comparisonNu.value )
                             }
                         }
                         
@@ -205,14 +208,14 @@ extension GCCellGrid {
                                                                       geometry: geometry,
                                                                       field: field,
                                                                       icon: .hide)
-                        comparisonCellView.sign = .always
+                        comparisonCellView.sign = multiFieldConfig.comparisonMetric != .value ? .always : .natural
                         comparisonCellView.displayField = .hide
                         comparisonCellView.iconInset = 4.0
                         comparisonCellView.fieldAttribute = GCViewConfig.attribute(rzAttribute.secondaryField)
                         comparisonCellView.numberAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
                         comparisonCellView.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
                         
-                        if comparisonNu.value > 0 {
+                        if showPositive {
                             comparisonCellView.numberAttribute[ NSAttributedString.Key.foregroundColor] = UIColor.systemGreen
                         }else{
                             comparisonCellView.numberAttribute[ NSAttributedString.Key.foregroundColor] = UIColor.systemRed

@@ -95,6 +95,9 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
         self.primaryActivityTypesOnly = false;//[GCAppGlobal configGetBool:CONFIG_MAIN_ACTIVITY_TYPE_ONLY defaultValue:true];
         self.comparisonMetric = gcComparisonMetricPercent;
         self.comparisonAsColumn = true;
+        if( [GCViewConfig cellBandedFormat] ){
+            _tableDisplay = gcCalendarTableDisplaySummary;
+        }
     }
     return self;
 }
@@ -620,16 +623,10 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
             }else if (indexPath.section==GC_SECTION_WEEKLY){
                 comparisonHolder = [self.weeklyStats dataForDate:comparisonBucket];
             }
-            if( self.comparisonMetric == gcComparisonMetricValue ){
-                holder = comparisonHolder;
-                comparisonHolder = nil;
-            }else{
-                // If no data in the comparison bucket, display empty
-                if( comparisonHolder == nil){
-                    holder = nil;
-                }
+            // If no data in the comparison bucket, display empty
+            if( comparisonHolder == nil){
+                holder = nil;
             }
-            
         }
         
         if (holder) {
