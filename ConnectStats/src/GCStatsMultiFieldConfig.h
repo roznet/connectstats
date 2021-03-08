@@ -34,6 +34,7 @@
 @class GCDerivedGroupedSeries;
 
 typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
+    gcComparisonMetricNone,
     gcComparisonMetricPercent,
     gcComparisonMetricValueDifference,
     gcComparisonMetricValue
@@ -59,6 +60,7 @@ typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
 @property (nonatomic,retain) NSString * graphChoiceKey;
 
 @property (nonatomic,assign) gcComparisonMetric comparisonMetric;
+@property (nonatomic,retain) NSString * comparisonMetricKey;
 
 /**
  *  HistoryStats displayed can be current month, week, year or all -> quick filter on thumbnail graphs

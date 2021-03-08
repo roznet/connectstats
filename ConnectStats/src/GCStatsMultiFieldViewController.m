@@ -178,10 +178,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell * rv =nil;
-    if (self.viewChoice == gcViewChoiceFields) {
-        rv = [self tableView:tableView fieldSummaryCell:indexPath];
-    }else if (self.viewChoice == gcViewChoiceSummary){
+    if (self.viewChoice == gcViewChoiceSummary){
         rv = [self tableView:tableView summaryCellForRowAtIndexPath:indexPath];
+    }else if (self.viewChoice == gcViewChoiceFields) {
+        rv = [self tableView:tableView fieldSummaryCell:indexPath];
     }else{
         if (indexPath.section == 0) {
             rv = [self tableView:tableView graphCell:indexPath];
@@ -191,6 +191,32 @@
     }
 
     return rv;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (self.viewChoice == gcViewChoiceSummary) {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            return 230.;
+        }else{
+            return 200.;
+        }
+    }else if( self.viewChoice == gcViewChoiceFields){
+        return [GCViewConfig sizeForNumberOfRows:3];
+    }else if( self.viewChoice == gcViewChoiceCalendar){
+        if (indexPath.section == GC_SECTION_GRAPH ) {
+            return 200.;
+        }else{
+            if( self.multiFieldConfig.comparisonMetric == gcComparisonMetricNone){
+                //GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
+                CGFloat height = [GCViewConfig sizeForNumberOfRows:3];
+                return height;
+            }else{
+                CGFloat height = [GCViewConfig sizeForNumberOfRows:6];
+                return height;
+            }
+        }
+    }
+    return 58.;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -221,6 +247,7 @@
 
 
 #pragma mark - Table view delegate
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -277,27 +304,6 @@
     }
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (self.viewChoice == gcViewChoiceSummary) {
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-            return 230.;
-        }else{
-            return 200.;
-        }
-    }else if( self.viewChoice == gcViewChoiceFields){
-        return [GCViewConfig sizeForNumberOfRows:3];
-    }else if( self.viewChoice == gcViewChoiceCalendar){
-        if (indexPath.section == GC_SECTION_GRAPH ) {
-            return 200.;
-        }else{
-            //GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
-            CGFloat height = [GCViewConfig sizeForNumberOfRows:3];
-            return height;
-;
-        }
-    }
-    return 58.;
-}
 
 #pragma mark - Historical Statistics Cells
 
@@ -327,13 +333,24 @@
     GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
     if( data ){
         if( self.isNewStyle ){
-            [cell setupAggregatedWithDataHolder:data
-                                          index:indexPath.row
-                               multiFieldConfig:self.multiFieldConfig
-                                   activityType:[GCActivityType activityTypeForKey:self.displayActivityType]
-                                       geometry:self.geometry
-                                           wide:false
-                               comparisonHolder:nil];
+            if( self.multiFieldConfig.comparisonMetric == gcComparisonMetricNone){
+                [cell setupAggregatedWithDataHolder:data
+                                              index:indexPath.row
+                                   multiFieldConfig:self.multiFieldConfig
+                                       activityType:[GCActivityType activityTypeForKey:self.displayActivityType]
+                                           geometry:self.geometry
+                                               wide:false
+                                   comparisonHolder:nil];
+            }else{
+                GCHistoryAggregatedDataHolder * comp = [self.aggregatedStats dataForIndex:indexPath.row+1];
+                [cell setupAggregatedComparisonWithDataHolder:data
+                                             comparisonHolder:comp
+                                                        index:indexPath.row
+                                             multiFieldConfig:self.multiFieldConfig
+                                                 activityType:[GCActivityType activityTypeForKey:self.displayActivityType]
+                                                     geometry:self.geometry
+                                                         wide:false];
+            }
         }else{
             [cell setupFromHistoryAggregatedData:data
                                            index:indexPath.row

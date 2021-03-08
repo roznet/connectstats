@@ -67,12 +67,14 @@
             rv.useFilter = other.useFilter;
             rv.viewConfig = other.viewConfig;
             rv.graphChoice = other.graphChoice;
+            rv.comparisonMetric = other.comparisonMetric;
             rv.calendarConfig = [GCStatsCalendarAggregationConfig configFrom:other.calendarConfig];
             rv.summaryCumulativeFieldFlag = other.summaryCumulativeFieldFlag;
         }else{
             rv.viewConfig = gcStatsViewConfigUnused;
             rv.viewChoice = gcViewChoiceSummary;
             rv.graphChoice = gcGraphChoiceBarGraph;
+            rv.comparisonMetric = gcComparisonMetricNone;
             rv.calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:kCalendarUnitNone];
             rv.summaryCumulativeFieldFlag = gcFieldFlagSumDistance;
         }
@@ -87,13 +89,14 @@
     return [GCViewConfig viewChoiceDesc:self.viewChoice calendarConfig:self.calendarConfig];
 }
 -(NSString*)description{
-    return [NSString stringWithFormat:@"<%@: %@ view:%@ calUnit:%@ config:%@ period:%@ gr:%@>", NSStringFromClass([self class]),
+    return [NSString stringWithFormat:@"<%@: %@ view:%@ calUnit:%@ config:%@ period:%@ gr:%@ comp:%@>", NSStringFromClass([self class]),
             self.activityType,
             self.viewChoiceKey,
             self.calendarConfig.calendarUnitKey,
             self.viewConfigKey,
             self.calendarConfig.periodTypeKey,
-            self.graphChoiceKey
+            self.graphChoiceKey,
+            self.comparisonMetricKey
             ];
 }
 
@@ -108,7 +111,7 @@
 -(BOOL)isEqualToConfig:(GCStatsMultiFieldConfig*)other{
     return [self.activityType isEqualToString:other.activityType] && self.viewChoice==other.viewChoice &&
     self.useFilter == other.useFilter && self.viewConfig==other.viewConfig && self.historyStats==other.historyStats &&
-    self.graphChoice == other.graphChoice &&
+    self.graphChoice == other.graphChoice && self.comparisonMetric == other.comparisonMetric &&
     [self.calendarConfig isEqualToConfig:other.calendarConfig];
 }
 
@@ -170,6 +173,32 @@
     self.viewConfig = gcStatsViewConfigUnused;
 }
 
+-(NSString*)comparisonMetricKey{
+    switch( self.comparisonMetric ){
+        case gcComparisonMetricValue:
+            return @"value";
+        case gcComparisonMetricPercent:
+            return @"percent";
+        case gcComparisonMetricValueDifference:
+            return @"valuediff";
+        case gcComparisonMetricNone:
+        default:
+            return @"none";
+    }
+}
+
+-(void)setComparisonMetricKey:(NSString*)comparisonKey{
+    if( [comparisonKey isEqualToString:@"value"]){
+        self.comparisonMetric = gcComparisonMetricValue;
+    }else if( [comparisonKey isEqualToString:@"percent"]){
+        self.comparisonMetric = gcComparisonMetricPercent;
+    }else if( [comparisonKey isEqualToString:@"valuediff"]){
+        self.comparisonMetric = gcComparisonMetricValueDifference;
+    }else{
+        self.comparisonMetric = gcComparisonMetricNone;
+    }
+}
+
 -(NSString*)graphChoiceKey{
     return self.graphChoice == gcGraphChoiceCumulative ? @"cum" : @"bar";
 }
@@ -221,6 +250,66 @@
 }
 
 -(BOOL)nextViewConfig{
+    if( [GCViewConfig cellBandedFormat]){
+        return [self nextViewConfigNewStyle];
+    }else{
+        return [self nextViewConfigOldStyle];
+    }
+}
+
+-(BOOL)nextViewConfigNewStyle{
+    BOOL rv = false;
+    
+    switch (self.viewChoice ){
+        case gcViewChoiceSummary:
+        {
+            // no config for summary;
+            self.viewConfig = gcStatsViewConfigAll;
+            rv = true;
+            break;
+        }
+        case gcViewChoiceFields:
+        {
+            // View all Fields, then rotate between view week or month
+            // if comes as anything but end, next is end nd use calendarUnit
+            // (if was switch to all then next is End/CalUnit)
+            self.viewConfig = gcStatsViewConfigUnused;
+            if( [self.calendarConfig nextCalendarUnit] ){
+                rv = true;
+            }
+            break;
+        }
+        case gcViewChoiceCalendar:
+        {   // View monthly, weekly or yearly aggregated stats
+            // :          all,  last3m, last6m, last1y, todate
+            // viewConfig last1y
+            // periodType cal,             todate
+            // metrics    none, val, pct,  none, val, pct
+            
+            gcStatsViewConfig start = gcStatsViewConfigLast1Y;
+            NSCalendarUnit calUnit = self.calendarConfig.calendarUnit;
+            if (calUnit == NSCalendarUnitWeekOfYear) {
+                start = gcStatsViewConfigLast6M;
+            }else if(calUnit == NSCalendarUnitMonth){
+                start = gcStatsViewConfigLast1Y;
+            }
+            
+            self.comparisonMetric++;
+            if( self.comparisonMetric == gcComparisonMetricValue){
+                self.comparisonMetric = gcComparisonMetricNone;
+                if( self.calendarConfig.periodType == gcPeriodToDate ){
+                    self.calendarConfig.periodType = gcPeriodCalendar;
+                    rv = true;
+                }
+            }
+            
+            break;
+        }
+    }
+
+    return rv;
+}
+-(BOOL)nextViewConfigOldStyle{
     BOOL rv = false;
     
     switch (self.viewChoice ){
