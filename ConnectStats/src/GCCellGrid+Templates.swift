@@ -176,8 +176,12 @@ extension GCCellGrid {
             let comparisonDateFmt = multiFieldConfig.calendarConfig.formattedDate(comparisonDate)
             let comparisonDateAttributed = NSAttributedString(string: comparisonDateFmt, attributes: GCViewConfig.attribute(rzAttribute.secondaryField))
             
-            let title = multiFieldConfig.calendarConfig.calendarUnit == .month ? "ΔM-1" : "ΔW-1"
-            
+            var title = "ΔM-1"
+            if multiFieldConfig.calendarConfig.calendarUnit == .weekOfYear {
+                title = "ΔW-1"
+            }else if multiFieldConfig.calendarConfig.calendarUnit == .year {
+                title = "ΔY-1"
+            }
             self.label(forRow: 1, andCol: 0)?.attributedText = NSAttributedString(string:title , attributes: GCViewConfig.attribute(rzAttribute.secondaryField))
             self.label(forRow: 2, andCol: 0)?.attributedText = comparisonDateAttributed
         }
@@ -204,24 +208,30 @@ extension GCCellGrid {
                             }
                         }
                         
-                        let comparisonCellView = GCCellFieldValueView(numberWithUnit: comparisonNu,
-                                                                      geometry: geometry,
-                                                                      field: field,
-                                                                      icon: .hide)
-                        comparisonCellView.sign = multiFieldConfig.comparisonMetric != .value ? .always : .natural
-                        comparisonCellView.displayField = .hide
-                        comparisonCellView.iconInset = 4.0
-                        comparisonCellView.fieldAttribute = GCViewConfig.attribute(rzAttribute.secondaryField)
-                        comparisonCellView.numberAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
-                        comparisonCellView.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
-                        
-                        if showPositive {
-                            comparisonCellView.numberAttribute[ NSAttributedString.Key.foregroundColor] = UIColor.systemGreen
-                        }else{
-                            comparisonCellView.numberAttribute[ NSAttributedString.Key.foregroundColor] = UIColor.systemRed
+                        if comparisonNu.value.isFinite {
+                            let comparisonCellView = GCCellFieldValueView(numberWithUnit: comparisonNu,
+                                                                          geometry: geometry,
+                                                                          field: field,
+                                                                          icon: .hide)
+                            if multiFieldConfig.comparisonMetric != .value {
+                                comparisonCellView.sign = RZNumberWithUnitGeometry.DisplaySign.always
+                            }else {
+                                comparisonCellView.sign = RZNumberWithUnitGeometry.DisplaySign.natural
+                            }
+                            comparisonCellView.displayField = .hide
+                            comparisonCellView.iconInset = 4.0
+                            comparisonCellView.fieldAttribute = GCViewConfig.attribute(rzAttribute.secondaryField)
+                            comparisonCellView.numberAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
+                            comparisonCellView.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
+                            
+                            if showPositive {
+                                comparisonCellView.numberAttribute[ NSAttributedString.Key.foregroundColor] = UIColor.systemGreen
+                            }else{
+                                comparisonCellView.numberAttribute[ NSAttributedString.Key.foregroundColor] = UIColor.systemRed
+                            }
+                            
+                            self.setupView(comparisonCellView, forRow: row, andColumn: 2)
                         }
-                        
-                        self.setupView(comparisonCellView, forRow: row, andColumn: 2)
                     }
                     
                     let cellView = GCCellFieldValueView(numberWithUnit: nu,

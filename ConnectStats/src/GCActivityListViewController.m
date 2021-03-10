@@ -224,8 +224,6 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (void)viewDidLoad
 {
-    RZLogTrace(@"");
-
     [super viewDidLoad];
     
     //self.tableView.backgroundColor = [GCViewConfig defaultBackgroundColor];
@@ -303,8 +301,6 @@ const CGFloat kCellDaySpacing = 2.f;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    RZLogTrace(@"");
-
     [super viewDidAppear:animated];
 
     [GCAppGlobal startupRefreshIfNeeded];

@@ -76,11 +76,14 @@ typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
 -(GCStatsMultiFieldConfig*)sameFieldListConfig;
 
 -(BOOL)isEqualToConfig:(GCStatsMultiFieldConfig*)other;
+-(BOOL)requiresAggregateRebuild:(GCStatsMultiFieldConfig*)other;
 
+-(NSString*)diffDescription:(GCStatsMultiFieldConfig*)other;
 
 -(GCSimpleGraphCachedDataSource*)dataSourceForFieldDataSerie:(GCHistoryFieldDataSerie*)fieldDataSerie;
 
--(UIBarButtonItem*)buttonForTarget:(id)target action:(SEL)sel;
+-(UIBarButtonItem*)viewChoiceButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel;
+-(UIBarButtonItem*)viewConfigButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel;
 
 /// Iterate through the different configuration for the current view
 /// depending on the view will iterate though historyStats filter or calChoice.

@@ -100,6 +100,33 @@
             ];
 }
 
+-(NSString*)diffDescription:(GCStatsMultiFieldConfig*)other{
+    NSMutableArray * diff = [NSMutableArray array];
+    NSDictionary * defs = @{
+        @"type": @"activityType",
+        @"view": @"viewChoiceKey",
+        @"calUnit": @"calendarConfig.calendarUnitKey",
+        @"config": @"viewConfigKey",
+        @"period": @"calendarConfig.periodTypeKey",
+        @"gr": @"graphChoiceKey",
+        @"comp": @"comparisonMetricKey"
+    };
+    
+    for (NSString * key in defs) {
+        NSString * path = defs[key];
+        NSString * value = [self valueForKeyPath:path];
+        NSString * otherValue = [other valueForKeyPath:path];
+        if( ! [value isEqualToString:otherValue] ){
+            [diff addObject:[NSString stringWithFormat:@"%@:%@>%@", key, value,otherValue]];
+        }
+    }
+    if( diff.count > 0){
+        return [NSString stringWithFormat:@"(%@: %@)", NSStringFromClass([self class]), [diff componentsJoinedByString:@" "]];
+    }else{
+        return [NSString stringWithFormat:@"(%@: nodiff )", NSStringFromClass([self class])];
+    }
+}
+
 -(BOOL)isEqual:(GCStatsMultiFieldConfig*)object{
     if( [object isKindOfClass:[GCStatsMultiFieldConfig class]]){
         return [self isEqualToConfig:object];
@@ -109,10 +136,27 @@
 }
 
 -(BOOL)isEqualToConfig:(GCStatsMultiFieldConfig*)other{
-    return [self.activityType isEqualToString:other.activityType] && self.viewChoice==other.viewChoice &&
-    self.useFilter == other.useFilter && self.viewConfig==other.viewConfig && self.historyStats==other.historyStats &&
-    self.graphChoice == other.graphChoice && self.comparisonMetric == other.comparisonMetric &&
-    [self.calendarConfig isEqualToConfig:other.calendarConfig];
+    return(
+           [self.activityType isEqualToString:other.activityType] &&
+           self.viewChoice==other.viewChoice &&
+           self.useFilter == other.useFilter &&
+           self.viewConfig==other.viewConfig &&
+           self.historyStats==other.historyStats &&
+           self.graphChoice == other.graphChoice &&
+           self.comparisonMetric == other.comparisonMetric &&
+           [self.calendarConfig isEqualToConfig:other.calendarConfig]
+           );
+}
+
+-(BOOL)requiresAggregateRebuild:(GCStatsMultiFieldConfig*)other{
+    return !(
+             [self.activityType isEqualToString:other.activityType] &&
+             self.viewChoice==other.viewChoice &&
+             self.useFilter == other.useFilter &&
+             self.viewConfig==other.viewConfig &&
+             [self.calendarConfig isEqualToConfig:other.calendarConfig]
+             );
+
 }
 
 -(gcHistoryStats)historyStats{
@@ -216,7 +260,7 @@
         case gcViewChoiceFields:
         {
             self.viewChoice = gcViewChoiceCalendar;
-            self.viewConfig = gcStatsViewConfigLast6M;
+            self.viewConfig = gcStatsViewConfigLast1Y;
             self.calendarConfig.calendarUnit = NSCalendarUnitWeekOfYear;
             self.calendarConfig.periodType = gcPeriodCalendar;
             self.graphChoice = gcGraphChoiceBarGraph;
@@ -231,8 +275,10 @@
                 self.calendarConfig.calendarUnit = kCalendarUnitNone;
             }
             if( self.calendarConfig.calendarUnit == NSCalendarUnitYear){
-                self.graphChoice = gcGraphChoiceCumulative;
+                self.viewConfig = gcStatsViewConfigAll;
+                self.graphChoice = gcGraphChoiceBarGraph;
             }else{
+                self.viewConfig = gcStatsViewConfigLast1Y;
                 self.graphChoice = gcGraphChoiceBarGraph;
             }
             break;
@@ -285,21 +331,32 @@
             // viewConfig last1y
             // periodType cal,             todate
             // metrics    none, val, pct,  none, val, pct
-            
-            gcStatsViewConfig start = gcStatsViewConfigLast1Y;
+            // graph W|M  bar,  cum, cum,  bar,  cum, cum
+
+            self.viewConfig = gcStatsViewConfigLast1Y;
             NSCalendarUnit calUnit = self.calendarConfig.calendarUnit;
             if (calUnit == NSCalendarUnitWeekOfYear) {
-                start = gcStatsViewConfigLast6M;
+                self.viewConfig = gcStatsViewConfigLast1Y;
             }else if(calUnit == NSCalendarUnitMonth){
-                start = gcStatsViewConfigLast1Y;
+                self.viewConfig = gcStatsViewConfigLast1Y;
+            }else if(calUnit == NSCalendarUnitYear){
+                self.viewConfig = gcStatsViewConfigAll;
             }
             
             self.comparisonMetric++;
+            if( self.comparisonMetric == gcComparisonMetricValueDifference || self.comparisonMetric == gcComparisonMetricPercent ){
+                self.graphChoice = gcGraphChoiceCumulative;
+            }else{
+                self.graphChoice = gcGraphChoiceBarGraph;
+            }
+            
             if( self.comparisonMetric == gcComparisonMetricValue){
                 self.comparisonMetric = gcComparisonMetricNone;
                 if( self.calendarConfig.periodType == gcPeriodToDate ){
                     self.calendarConfig.periodType = gcPeriodCalendar;
                     rv = true;
+                }else if( self.calendarConfig.periodType == gcPeriodCalendar){
+                    self.calendarConfig.periodType = gcPeriodToDate;
                 }
             }
             
@@ -373,24 +430,37 @@
 }
 
 #pragma mark - Setups
-
-
--(UIBarButtonItem*)buttonForTarget:(id)target action:(SEL)sel{
-    [self setupButtonInfo];
-    UIBarButtonItem * cal = nil;
-
-    if (self.filterButtonImage) {
-        cal = [[[UIBarButtonItem alloc] initWithImage:self.filterButtonImage
-                                                style:UIBarButtonItemStylePlain
-                                               target:target
-                                               action:sel] autorelease];
-    }else if (self.filterButtonTitle){
-        cal = [[[UIBarButtonItem alloc] initWithTitle:self.filterButtonTitle
-                                                style:UIBarButtonItemStylePlain
-                                               target:target
-                                               action:sel] autorelease];
+-(UIBarButtonItem*)viewChoiceButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel{
+    NSString * title = self.viewDescription;
+    
+    UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
+    [button setTitle:title forState:UIControlStateNormal];
+    [button addGestureRecognizer:RZReturnAutorelease([[UITapGestureRecognizer alloc] initWithTarget:target action:sel])];
+    if(longPressSel){
+        [button addGestureRecognizer:RZReturnAutorelease(([[UILongPressGestureRecognizer alloc] initWithTarget:target action:longPressSel]))];
     }
-    return cal;
+    
+    UIBarButtonItem * rv = RZReturnAutorelease([[UIBarButtonItem alloc] initWithCustomView:button]);
+
+    return rv;
+}
+
+-(UIBarButtonItem*)viewConfigButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel{
+    [self setupButtonInfo];
+
+    UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
+    
+    if (self.filterButtonImage) {
+        [button setImage:self.filterButtonImage forState:UIControlStateNormal];
+    }else if (self.filterButtonTitle){
+        [button setTitle:self.filterButtonTitle forState:UIControlStateNormal];
+    }
+    [button addGestureRecognizer:RZReturnAutorelease([[UITapGestureRecognizer alloc] initWithTarget:target action:sel])];
+    if(longPressSel){
+        [button addGestureRecognizer:RZReturnAutorelease(([[UILongPressGestureRecognizer alloc] initWithTarget:target action:longPressSel]))];
+    }
+    UIBarButtonItem * rv = RZReturnAutorelease([[UIBarButtonItem alloc] initWithCustomView:button]);
+    return rv;
 }
 
 -(void)setupButtonInfo{

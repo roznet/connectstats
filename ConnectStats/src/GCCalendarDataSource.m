@@ -711,7 +711,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
             [GCAppGlobal focusOnActivityId:[_selectedActivities[indexPath.row] activityId]];
         }
     }else{
-        if( indexPath.row == GC_SUMMARY_VALUE && !self.comparisonAsColumn){
+        if( indexPath.row == GC_SUMMARY_VALUE && ! self.comparisonAsColumn ){
             NSDate * bucket = nil;
             
             if (_selectedActivities.count) {
@@ -739,6 +739,9 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
                     break;
                 case gcComparisonMetricValue:
                     self.comparisonMetric = gcComparisonMetricPercent;
+                    break;
+                case gcComparisonMetricNone:
+                    self.comparisonMetric = gcComparisonMetricNone;
                     break;
 
             }

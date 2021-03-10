@@ -102,7 +102,6 @@
 
 - (void)viewDidLoad
 {
-    RZLogTrace(@"");
     [super viewDidLoad];
 
     self.navigationItem.hidesBackButton = YES;
@@ -114,8 +113,6 @@
 
 // If summary stat is the first view to appear
 -(void)viewDidAppear:(BOOL)animated{
-    RZLogTrace(@"");
-
     [super viewDidAppear:animated];
 
     [GCAppGlobal startupRefreshIfNeeded];
@@ -529,7 +526,6 @@
 #pragma mark - Events
 
 -(void)notifyCallBack:(NSNotification*)notification{
-    RZLogTrace(@"Clear all and reload");
     [self clearFieldDataSeries];
     
     dispatch_async(dispatch_get_main_queue(), ^(){
@@ -546,8 +542,6 @@
     BOOL skipSetup = [theParent isKindOfClass:[GCHistoryFieldDataSerie class]];
 
     if (!ignoreNotify) {
-        RZLogTrace(@"");
-
         if (!skipSetup) {
             [self setupForCurrentActivityAndViewChoice:self.viewChoice];
         }
@@ -612,18 +606,11 @@
 }
 
 -(void)setupBarButtonItem{
-    NSString * title = self.multiFieldConfig.viewDescription;
-    
-    UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button setTitle:title forState:UIControlStateNormal];
-    [button addGestureRecognizer:RZReturnAutorelease([[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleViewChoice)])];
-    [button addGestureRecognizer:RZReturnAutorelease(([[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(configLongPress:)]))];
-    
-    UIBarButtonItem * rightMost = RZReturnAutorelease([[UIBarButtonItem alloc] initWithCustomView:button]);
-    self.rightMostButtonItem = rightMost;
-    UIBarButtonItem * cal = [self.multiFieldConfig buttonForTarget:self action:@selector(switchCalFilter)];
-
-    self.navigationItem.rightBarButtonItems = cal ? @[rightMost,cal] : @[ rightMost];
+    self.rightMostButtonItem = [self.multiFieldConfig viewChoiceButtonForTarget:self action:@selector(toggleViewChoice) longPress:@selector(configLongPress:)];
+    UIBarButtonItem * cal = [self.multiFieldConfig viewConfigButtonForTarget:self action:@selector(switchCalFilter) longPress:@selector(configLongPress:)];
+    if( self.rightMostButtonItem ){
+        self.navigationItem.rightBarButtonItems = cal ? @[self.rightMostButtonItem,cal] : @[ self.rightMostButtonItem ];
+    }
 
     if (self.useFilter) {
         (self.navigationController.navigationBar.topItem).title = [GCAppGlobal organizer].lastSearchString;
@@ -863,8 +850,10 @@
 }
 
 -(void)setupForFieldListConfig:(GCStatsMultiFieldConfig*)nConfig{
-    if (![self.multiFieldConfig isEqualToConfig:nConfig]) {
-        RZLog(RZLogInfo, @"setup from %@ to %@", self.multiFieldConfig, nConfig);
+    if (self.multiFieldConfig == nil || [self.multiFieldConfig requiresAggregateRebuild:nConfig]) {
+        if( self.multiFieldConfig != nil && nConfig != nil){
+            RZLog(RZLogInfo, @"change %@", [self.multiFieldConfig diffDescription:nConfig]);
+        }
         self.multiFieldConfig = nConfig;
         [self clearFieldDataSeries];
         if( self.derivedAnalysisConfig== nil){
@@ -890,6 +879,10 @@
 #ifdef GC_USE_FLURRY
         [self publishEvent];
 #endif
+    }else if( ! [self.multiFieldConfig isEqualToConfig:nConfig] ){
+        self.multiFieldConfig = nConfig;
+        [self.tableView reloadData];
+        
     }
 }
 

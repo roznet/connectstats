@@ -138,7 +138,6 @@
 
 - (void)viewDidLoad
 {
-    RZLogTrace(@"");
     [super viewDidLoad];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -168,13 +167,9 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    RZLogTrace(@"");
-
     [super viewWillAppear:animated];
 
     self.tableView.tableHeaderView.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:self.activity];
-
-
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
