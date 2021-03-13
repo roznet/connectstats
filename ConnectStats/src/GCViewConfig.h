@@ -116,7 +116,7 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(void)setupGradient:(GCCellGrid*)aG ForThreshold:(double)pct;
 
 +(BOOL)roundedActivityIcons;
-+(BOOL)cellBandedFormat;
++(BOOL)is2021Style;
 
 // FIELDS
 

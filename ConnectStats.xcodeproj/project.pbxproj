@@ -559,6 +559,9 @@
 		4281AF5C22F732A900BFE408 /* GCConnectStatsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B85886229DB6D9009E309A /* GCConnectStatsRequest.m */; };
 		4281AF5D22F732AD00BFE408 /* GCConnectStatsRequestLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B8588A229DB716009E309A /* GCConnectStatsRequestLogin.m */; };
 		4281AF5E22F732B000BFE408 /* GCConnectStatsRequestSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B85891229DBD55009E309A /* GCConnectStatsRequestSearch.m */; };
+		42827B6B25FCA8E9003E676A /* Calendar.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42827B6A25FCA8E9003E676A /* Calendar.xcassets */; };
+		42827B6C25FCA8E9003E676A /* Calendar.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42827B6A25FCA8E9003E676A /* Calendar.xcassets */; };
+		42827B6D25FCA8E9003E676A /* Calendar.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42827B6A25FCA8E9003E676A /* Calendar.xcassets */; };
 		4282B6D91DC4B2E60062C313 /* test_activity_cycling_1404395287.db in Resources */ = {isa = PBXBuildFile; fileRef = 4282B6D11DC4B2220062C313 /* test_activity_cycling_1404395287.db */; };
 		42843EE624AD20C400E60609 /* GCStatsCalendarAggregationConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42843EE524AD20C400E60609 /* GCStatsCalendarAggregationConfig.m */; };
 		42843EE724AD20C400E60609 /* GCStatsCalendarAggregationConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42843EE524AD20C400E60609 /* GCStatsCalendarAggregationConfig.m */; };
@@ -1623,6 +1626,7 @@
 		42804DEA16D5215D009E4EEF /* GCActivity+Calculated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "GCActivity+Calculated.m"; path = "src/GCActivity+Calculated.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4280C7CF2364FC7C00223709 /* GCConnectStatsRequestWeather.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCConnectStatsRequestWeather.h; path = src/GCConnectStatsRequestWeather.h; sourceTree = "<group>"; };
 		4280C7D02364FC7C00223709 /* GCConnectStatsRequestWeather.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCConnectStatsRequestWeather.m; path = src/GCConnectStatsRequestWeather.m; sourceTree = "<group>"; };
+		42827B6A25FCA8E9003E676A /* Calendar.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Calendar.xcassets; path = ConnectStats/icons/Calendar.xcassets; sourceTree = "<group>"; };
 		4282B6CA1DC479060062C313 /* FitFileExplorer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FitFileExplorer-Bridging-Header.h"; sourceTree = "<group>"; };
 		4282B6D11DC4B2220062C313 /* test_activity_cycling_1404395287.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activity_cycling_1404395287.db; sourceTree = "<group>"; };
 		42843EE424AD20C400E60609 /* GCStatsCalendarAggregationConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsCalendarAggregationConfig.h; path = src/GCStatsCalendarAggregationConfig.h; sourceTree = "<group>"; };
@@ -2690,6 +2694,7 @@
 				42EE4565176BCB81003338AF /* Media.xcassets */,
 				428C70351A4AF52500243DC0 /* ConnectStatsLaunchScreen.xib */,
 				42F4E4D91B56EDC00009F2BA /* HealthStatsLaunchScreen.xib */,
+				42827B6A25FCA8E9003E676A /* Calendar.xcassets */,
 			);
 			name = Icons;
 			path = ..;
@@ -4565,6 +4570,7 @@
 				42939CEB23AAD79600D2403A /* fit_map.json in Resources */,
 				422CCE8E1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */,
 				422FAFD219A1DD6000D09773 /* Media.xcassets in Resources */,
+				42827B6D25FCA8E9003E676A /* Calendar.xcassets in Resources */,
 				4245DC821BE80D0400D5B68E /* Cells.xcassets in Resources */,
 				42E04E522538C34B005FFD5E /* GCCellActivity.xib in Resources */,
 				422CCE8C1B7EAB7200A4DAEB /* Activities.xcassets in Resources */,
@@ -4648,6 +4654,7 @@
 				423F9FBF19ACCBD60057DB5A /* Media.xcassets in Resources */,
 				42656CEB24CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.xib in Resources */,
 				42560711169A112E008E9DC3 /* version.plist in Resources */,
+				42827B6B25FCA8E9003E676A /* Calendar.xcassets in Resources */,
 				42939CE923AAD79600D2403A /* fit_map.json in Resources */,
 				422CCE8B1B7EAB7200A4DAEB /* Activities.xcassets in Resources */,
 				422CCE7E1B7EA7A600A4DAEB /* Services.xcassets in Resources */,
@@ -4809,6 +4816,7 @@
 				422A24F6247325FB00D6C2FB /* activity_424479793.json in Resources */,
 				42E6C86F25583B7C009EC126 /* Weather.xcassets in Resources */,
 				42CBD0C725E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shp in Resources */,
+				42827B6C25FCA8E9003E676A /* Calendar.xcassets in Resources */,
 				426B95A11C4A49FF00426CD2 /* activitytrack_1008868846.json in Resources */,
 				42B5E4851BA5BA2D000FAE4E /* strava_list_2.json in Resources */,
 				42C3118624731877004DF872 /* activity_1027746730.json in Resources */,

@@ -95,7 +95,7 @@
 }
 
 -(BOOL)isNewStyle{
-    return [GCViewConfig cellBandedFormat];
+    return [GCViewConfig is2021Style];
 }
 
 #pragma mark - UIViewController

@@ -113,7 +113,7 @@
 }
 
 -(BOOL)isNewStyle{
-    return [GCViewConfig cellBandedFormat];
+    return [GCViewConfig is2021Style];
 }
 
 -(BOOL)isWide{

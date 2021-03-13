@@ -95,7 +95,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
         self.primaryActivityTypesOnly = false;//[GCAppGlobal configGetBool:CONFIG_MAIN_ACTIVITY_TYPE_ONLY defaultValue:true];
         self.comparisonMetric = gcComparisonMetricPercent;
         self.comparisonAsColumn = true;
-        if( [GCViewConfig cellBandedFormat] ){
+        if( [GCViewConfig is2021Style] ){
             _tableDisplay = gcCalendarTableDisplaySummary;
         }
     }
@@ -537,7 +537,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
 #pragma mark - Table view data source
 
 -(BOOL)isNewStyle{
-    return [GCViewConfig cellBandedFormat];
+    return [GCViewConfig is2021Style];
 }
 
 -(void)tableViewDidLoad:(UITableView *)tableView{

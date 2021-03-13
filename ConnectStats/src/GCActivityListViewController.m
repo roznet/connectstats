@@ -469,7 +469,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView activityCellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BOOL newStyle = [GCViewConfig cellBandedFormat];
+    BOOL newStyle = [GCViewConfig is2021Style];
     if( newStyle ){
         GCCellActivity * cell = [self.tableView dequeueReusableCellWithIdentifier:@"GCCellActivity" forIndexPath:indexPath];
         [cell setupFor:[self activityForIndex:indexPath.row]];
@@ -520,7 +520,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     CGFloat rv = [GCViewConfig sizeForNumberOfRows:self.extendedDisplay ? 4 : 3];
-    BOOL newStyle = [GCViewConfig cellBandedFormat];
+    BOOL newStyle = [GCViewConfig is2021Style];
     if( newStyle ){
         return [GCViewConfig sizeForNumberOfRows:4] * 1.1;
     }

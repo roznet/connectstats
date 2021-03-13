@@ -246,7 +246,7 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return [_current_skin() boolFor:gcSkinBoolRoundedActivityIcons];
 }
 
-+(BOOL)cellBandedFormat{
++(BOOL)is2021Style{
     return [_current_skin() boolFor:gcSkinBoolActivityCellBandedFormat];
 }
 +(BOOL)activityCellMultiColor{

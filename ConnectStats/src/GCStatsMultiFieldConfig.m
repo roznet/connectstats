@@ -296,7 +296,7 @@
 }
 
 -(BOOL)nextViewConfig{
-    if( [GCViewConfig cellBandedFormat]){
+    if( [GCViewConfig is2021Style]){
         return [self nextViewConfigNewStyle];
     }else{
         return [self nextViewConfigOldStyle];
@@ -452,6 +452,7 @@
     
     if (self.filterButtonImage) {
         [button setImage:self.filterButtonImage forState:UIControlStateNormal];
+        button.imageView.contentMode = UIViewContentModeScaleAspectFit;
     }else if (self.filterButtonTitle){
         [button setTitle:self.filterButtonTitle forState:UIControlStateNormal];
     }
@@ -484,25 +485,41 @@
     }else if (self.viewChoice==gcViewChoiceSummary){
         image = nil;
     }else{
-        if( self.calendarConfig.periodType == gcPeriodToDate){
-            image = nil;
-        }else{
-            switch (self.viewConfig) {
-                case gcStatsViewConfigLast3M:
-                    image = [GCViewIcons navigationIconFor:gcIconNavQuarterly];
-                    break;
-                case gcStatsViewConfigLast6M:
-                    image = [GCViewIcons navigationIconFor:gcIconNavSemiAnnually];
-                    break;
-                case gcStatsViewConfigLast1Y:
-                    image = [GCViewIcons navigationIconFor:gcIconNavYearly];
-                    break;
-                case gcStatsViewConfigAll:
-                case gcStatsViewConfigUnused:
-                    image = nil;//[GCViewIcons navigationIconFor:gcIconNavAggregated];
-                    break;
-                    
+        if( [GCViewConfig is2021Style]){
+            NSMutableArray * iconNameComponent = [NSMutableArray array];
+            // monthly, weekly, yearly
+            [iconNameComponent addObject:self.calendarConfig.calendarUnitKey];
+            // todate, calendar, rolling
+            [iconNameComponent addObject:self.calendarConfig.periodTypeKey];
+            if( self.comparisonMetric != gcComparisonMetricNone){
+                [iconNameComponent addObject:@"compare"];
             }
+            image = [UIImage imageNamed:[iconNameComponent componentsJoinedByString:@"-"]];
+            if( image == nil){
+                RZLog(RZLogInfo,@"Missing icon %@", [iconNameComponent componentsJoinedByString:@"-"] );
+            }
+        }else{
+            if( self.calendarConfig.periodType == gcPeriodToDate){
+                image = nil;
+            }else{
+                switch (self.viewConfig) {
+                    case gcStatsViewConfigLast3M:
+                        image = [GCViewIcons navigationIconFor:gcIconNavQuarterly];
+                        break;
+                    case gcStatsViewConfigLast6M:
+                        image = [GCViewIcons navigationIconFor:gcIconNavSemiAnnually];
+                        break;
+                    case gcStatsViewConfigLast1Y:
+                        image = [GCViewIcons navigationIconFor:gcIconNavYearly];
+                        break;
+                    case gcStatsViewConfigAll:
+                    case gcStatsViewConfigUnused:
+                        image = nil;//[GCViewIcons navigationIconFor:gcIconNavAggregated];
+                        break;
+                        
+                }
+            }
+            
         }
     }
     NSString * calTitle = NSLocalizedString(@"All", @"Button Calendar");
