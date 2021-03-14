@@ -142,6 +142,9 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 }
 
 // Used By Calendar
++(UIColor*)calendarColorForActivity:(id)aAct{
+    return [_current_skin() colorForKey:kGCSkinKeyActivityCellDarkerBackgroundColor andActivity:aAct];
+}
 +(UIColor*)cellBackgroundDarkerForActivity:(id)aAct{
     if( [self activityCellMultiColor]){
         return [_current_skin() colorForKey:kGCSkinKeyActivityCellDarkerBackgroundColor andActivity:aAct];

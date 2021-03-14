@@ -522,20 +522,21 @@ const CGFloat kCellDaySpacing = 2.f;
     CGFloat rv = [GCViewConfig sizeForNumberOfRows:self.extendedDisplay ? 4 : 3];
     BOOL newStyle = [GCViewConfig is2021Style];
     if( newStyle ){
-        return [GCViewConfig sizeForNumberOfRows:4] * 1.1;
-    }
-    
-    GCActivity * act = [self activityForIndex:indexPath.row];
-    if ([act.activityType isEqualToString:GC_TYPE_DAY]) {
-        rv = kGCCellActivityDefaultHeight;
+        rv = [GCViewConfig sizeForNumberOfRows:4] * 1.1;
     }else{
-        if( self.showImages ){
-            rv = 150.;
+        
+        GCActivity * act = [self activityForIndex:indexPath.row];
+        if ([act.activityType isEqualToString:GC_TYPE_DAY]) {
+            rv = kGCCellActivityDefaultHeight;
+        }else{
+            if( self.showImages ){
+                rv = 150.;
+            }
         }
-    }
-
-    if ([self insetForRowAtIndexPath:indexPath]) {
-        rv += kCellDaySpacing;
+        
+        if ([self insetForRowAtIndexPath:indexPath]) {
+            rv += kCellDaySpacing;
+        }
     }
     return  rv;
 }

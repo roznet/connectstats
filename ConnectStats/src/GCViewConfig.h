@@ -81,6 +81,7 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 
 +(UIColor*)cellBackgroundDarkerForActivity:(id)aAct;
 +(UIColor*)cellBackgroundLighterForActivity:(id)aAct;
++(UIColor*)calendarColorForActivity:(id)aAct;
 +(UIColor*)cellIconColorForActivity:(id)aAct;
 
 +(UIColor*)colorForSwimStrokeType:(gcSwimStrokeType)strokeType;
