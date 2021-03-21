@@ -241,6 +241,12 @@
     [self.choices next];
     [self.tableView reloadData];
 }
+
+-(void)swipeRight:(GCCellSimpleGraph *)cell{
+    [self.choices previous];
+    [self.tableView reloadData];
+}
+
 -(void)showMap{
     GCMapViewController *detailViewController = [[GCMapViewController alloc] initWithNibName:nil bundle:nil];
     // ...
