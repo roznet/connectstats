@@ -80,6 +80,7 @@
                                            NSStringFromSelector(@selector(sample13_compareStats)),
                                            NSStringFromSelector(@selector(sample14_SimpleGradientFillPlot)),
                                            NSStringFromSelector(@selector(sample15_HistDerivedGraphs)),
+                                           NSStringFromSelector(@selector(sample16_categorical)),
 
 
                                            ];
@@ -662,6 +663,39 @@
 
     return rv;
 }
+
+-(NSArray<GCSimpleGraphCachedDataSource*>*)sample16_categorical{
+    
+    NSMutableArray<GCSimpleGraphCachedDataSource*>*rv = [NSMutableArray array];
+    
+    GCStatsDataSerie * data = [[GCStatsDataSerie alloc] init];
+    GCStatsDataSerie * data2 = [[GCStatsDataSerie alloc] init];
+    [data addDataPointForCategory:GC_TYPE_RUNNING value:10.0];
+    [data addDataPointForCategory:GC_TYPE_CYCLING value:30.0];
+    [data addDataPointForCategory:GC_TYPE_HIKING value:5.0];
+    
+    GCSimpleGraphCachedDataSource * sample = [[[GCSimpleGraphCachedDataSource alloc] init] autorelease];
+    GCSimpleGraphDataHolder * h = [GCSimpleGraphDataHolder dataHolder:data
+                                                                 type:gcGraphLine
+                                                                color:[UIColor blackColor]
+                                                              andUnit:[GCUnit unitForKey:@"mps"]];
+    GCSimpleGraphDataHolder * h2 = [GCSimpleGraphDataHolder dataHolder:data2
+                                                                  type:gcGraphLine
+                                                                 color:[UIColor blueColor]
+                                                               andUnit:[GCUnit unitForKey:@"mps"]];
+    
+    [sample setSeries:[NSMutableArray arrayWithObjects:h, h2, nil]];
+    [sample setXUnit:[GCUnit unitForKey:@"second"]];
+    [sample setTitle:@"Sample 1 [0]"];
+    [data release];
+    [data2 release];
+
+    [rv addObject:sample];
+    
+    return rv;
+
+}
+
 #pragma mark - Cells Samples
 
 -(NSArray*)sampleCells{
