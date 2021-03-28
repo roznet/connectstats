@@ -42,8 +42,16 @@ NSString * kBugNoCommonId = @"-1";
 
 @interface GCSettingsBugReport ()
 @property (nonatomic,assign) BOOL archiveSuccess;
+@property (nonatomic,retain) NSURLSessionDataTask * statusTask;
 @end
+
 @implementation GCSettingsBugReport
+
+-(void)dealloc{
+    [_statusTask release];
+    
+    [super dealloc];
+}
 
 +(GCSettingsBugReport*)bugReport{
     return [[[GCSettingsBugReport alloc] init] autorelease];
@@ -95,6 +103,45 @@ NSString * kBugNoCommonId = @"-1";
     //aURL = @"https://localhost.ro-z.me/dev/bugreport/new?verbose=1";
 #endif
     return [self urlResquestFor:aURL];
+}
+
+-(void)prepareRequest:(void(^)(NSURLRequest * request))cb{
+    NSString * aURL = GCWebConnectStatsBugReport([GCAppGlobal webConnectsStatsConfig]);
+#if TARGET_IPHONE_SIMULATOR
+    //aURL = @"https://localhost.ro-z.me/dev/bugreport/status";
+#endif
+    
+    NSDictionary<NSString*,NSString*>*pData = [self createBugReportDictionaryWithExtra:@{}];
+    NSURL * statusURL = [NSURL URLWithString:RZWebEncodeURLwGet(aURL, pData)];
+    
+    self.statusTask = [[NSURLSession sharedSession] dataTaskWithURL:statusURL completionHandler:^(NSData * data, NSURLResponse*response, NSError * error ){
+        BOOL canIncludeActivityFiles = false;
+        if( error == nil){
+            if( [response isKindOfClass:[NSHTTPURLResponse class]]){
+                NSHTTPURLResponse * httpResponse = (NSHTTPURLResponse*)response;
+                if( httpResponse.statusCode == 200){
+                    NSError * jsonError = nil;
+                    NSDictionary * status = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
+                    if( [status isKindOfClass:[NSDictionary class]] && [status[@"status"] respondsToSelector:@selector(integerValue)] ){
+                        if( [status[@"status"] integerValue] == 1){
+                            canIncludeActivityFiles = true;
+                        }
+                    }
+                }
+            }else{
+                RZLog(RZLogError, @"Invalid Response %@", response);
+            }
+        }else{
+            RZLog(RZLogError, @"Status check error %@", error);
+        }
+        if( ! canIncludeActivityFiles ){
+            RZLog(RZLogInfo, @"Bugreport without valid status, disabling activityFiles include");
+            self.includeActivityFiles = false;
+        }
+        cb([self urlRequest]);
+    }];
+    
+    [self.statusTask resume];
 }
 
 - (NSURLRequest*)urlResquestFor:(NSString*)aUrl;
@@ -169,5 +216,8 @@ NSString * kBugNoCommonId = @"-1";
     }else{
         RZLog(RZLogInfo,@"BugReport not complete, keeping old log");
     }
+}
+
++(void)checkBugReportEnabled:(void (^)(BOOL))cb{
 }
 @end

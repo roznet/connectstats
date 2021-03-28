@@ -84,7 +84,7 @@
 
 -(void)reloadLog{
     NSString * html = [NSString stringWithFormat:@"<pre>%@</pre>", RZLogFileContent()];
-    [self.webView loadHTMLString:html baseURL:[NSURL URLWithString:@"https://www.ro-z.net/connectstats"]];
+    [self.webView loadHTMLString:html baseURL:[NSURL URLWithString:@"https://ro-z.net/connectstats"]];
 
 }
 -(void)viewWillAppear:(BOOL)animated{

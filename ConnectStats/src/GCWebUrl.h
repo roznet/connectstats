@@ -59,6 +59,7 @@ NSString * GCWebConnectStatsApiCheck(gcWebConnectStatsConfig config);
 NSString * GCWebConnectStatsRegisterUser( gcWebConnectStatsConfig config, NSString * accessToken, NSString * accessTokenSecret);
 
 NSString * GCWebConnectStatsBugReport( gcWebConnectStatsConfig config );
+NSString * GCWebConnectStatsBugReportStatus( gcWebConnectStatsConfig config );
 
 NSString * GCWebSearchURL( NSUInteger start );
 NSString * GCWebModernSearchURL( NSUInteger start, NSUInteger requestCount );
@@ -71,9 +72,6 @@ NSString * GCWebActivityTypes(void);
 NSString * GCWebActivityTypesModern(void);
 NSString * GCWebUserData(void);
 NSString * GCWebGarminHeartRate(void);
-
-NSString * GCWebGoogleEarthURL( NSString*aId);
-NSString * GCWebUploadURL( NSString*dir);
 
 NSString * GCWebStravaAuthentication(void);
 NSString * GCWebStravaUpload(void);

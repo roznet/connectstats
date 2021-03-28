@@ -30,8 +30,6 @@
 
 @interface GCLap : GCTrackPoint
 
-@property (nonatomic,assign) BOOL useMovingElapsed;
-@property (nonatomic,assign) double movingElapsed;
 @property (nonatomic,retain) NSString*label;
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
@@ -46,13 +44,5 @@
 
 -(void)saveToDb:(FMDatabase*)trackdb;
 
--(void)accumulateLap:(GCLap*)other inActivity:(GCActivity*)act;
--(void)accumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to inActivity:(GCActivity*)act;
--(void)decumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to inActivity:(GCActivity*)act;
--(void)interpolate:(double)delta within:(GCLap*)diff inActivity:(GCActivity*)act;
-
--(void)difference:(GCTrackPoint*)from minus:(GCTrackPoint*)to inActivity:(GCActivity*)act;
-
--(void)augmentElapsed:(NSDate*)start inActivity:(GCActivity*)act;
 
 @end

@@ -39,14 +39,14 @@
     return (self.laps).lastObject;
 }
 
--(void)accumulateLap:(GCLap*)other  inActivity:(GCActivity*)act{
-    [super accumulateLap:other inActivity:act];
+-(void)accumulate:(GCLap*)other  inActivity:(GCActivity*)act{
+    [super accumulate:other inActivity:act];
     if (!self.laps) {
         self.laps = @[];
     }
     GCLap * last = (self.laps).lastObject;
     if (last) {
-        [last accumulateLap:other  inActivity:act];
+        [last accumulate:other  inActivity:act];
     }
 }
 -(void)accumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to  inActivity:(GCActivity*)act{

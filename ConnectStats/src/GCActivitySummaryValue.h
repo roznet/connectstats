@@ -24,22 +24,23 @@
 //  
 
 #import <Foundation/Foundation.h>
+@class GCField;
 
 @interface GCActivitySummaryValue : NSObject<NSSecureCoding>
 
-@property (nonatomic,retain) NSString * field;
+@property (nonatomic,retain) GCField * field;
 @property (nonatomic,retain) GCNumberWithUnit * numberWithUnit;
 
-@property (nonatomic,readonly) double value;
-@property (nonatomic,readonly) NSString * uom;
+@property (nonatomic,readonly) double value ;//DEPRECATED_MSG_ATTRIBUTE("Use numberwithunit");
+@property (nonatomic,readonly) NSString * uom ;//DEPRECATED_MSG_ATTRIBUTE("Use numberwithunit");
 
-+(GCActivitySummaryValue*)activitySummaryValueForField:(NSString*)afield value:(GCNumberWithUnit*)nu;
-+(GCActivitySummaryValue*)activitySummaryValueForResultSet:(FMResultSet*)res;
-+(GCActivitySummaryValue*)activitySummaryValueForDict:(NSDictionary*)aDict andField:(NSString*)afield;
++(GCActivitySummaryValue*)activitySummaryValueForField:(GCField*)afield value:(GCNumberWithUnit*)nu;// DEPRECATED_MSG_ATTRIBUTE("Use GCField");
++(GCActivitySummaryValue*)activitySummaryValueForResultSet:(FMResultSet*)res activityType:(NSString*)activityType;
++(GCActivitySummaryValue*)activitySummaryValueForDict:(NSDictionary*)aDict andField:(GCField*)afield;// DEPRECATED_MSG_ATTRIBUTE("Use GCField");
 -(void)saveToDb:(FMDatabase*)db forActivityId:(NSString*)activityId;
 -(void)updateDb:(FMDatabase*)db forActivityId:(NSString*)activityId;
 
--(NSString*)formattedFieldName:(NSString*)aType;
+-(NSString*)formattedFieldName;
 -(NSString*)formattedValue;
 -(NSString*)formattedValueNoUnits;
 

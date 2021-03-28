@@ -162,4 +162,38 @@
     }
 }
 
+-(NSArray<NSString*>*)activityIdSamples{
+    //Deleted @"1089803211", @"1108367966", @"1108368135", @"924421177"
+
+    
+    
+    NSArray<NSString*>*samples = @[
+        // Garmin
+        
+        @"217470507", // in samples/tcx: swimming, fit, json modern, tcx
+        @"234721416", // in samples/tcx: cycling london commute 10k 2012, fit, json modern, tcx
+        @"234979239", // in samples/tcx: running london commute 10k 2012, fit, json modern, tcx
+        
+        @"2477200414", // in activity_merge_fit: running, battersea, 2018, running power, fit, json modern, activitydb
+        
+        @"3988198230", // in flying: flying, modern json, contained in last_modern_search_flying.json
+        
+        @"1083407258", // in fit_files: cross country skiing 2016, modern json, fit
+        @"2545022458", // in fit_files: running, 2018, running pwer from garmin, fit
+        
+        // ConnectStats
+        
+        @"857090", // in activity_derived: running, battersea 2020, running power, fit
+        @"834323", // in activity_derived: running, southpark laps 2020, running power, fit
+        @"777501", // in activity_derived: running, southpark laps 2020, running power, fit
+        @"728599", // in activity_derived: running, southpark laps 2020, running power, fit
+        @"1451", // in fit_files: multi_sport triathlon, 2018, fit
+        @"1525", // in fit_files: swimming, 2019, fit
+        @"544406", // in fit_files: running river 2020, running power, fit
+        
+    ];
+    
+    return samples;
+}
+
 @end

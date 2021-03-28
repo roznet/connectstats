@@ -88,9 +88,9 @@ void GCWebUseSimulator( BOOL abool, NSString * url){
     if( url == nil){
 #if TARGET_IPHONE_SIMULATOR
         simulatorURL = @"https://localhost";
-        //simulatorURL = @"https://www.ro-z.net";
+        //simulatorURL = @"https://connectstats.app";
 #else
-        simulatorURL = @"https://www.ro-z.net";
+        simulatorURL = @"https://connectstats.app";
 #endif
     }else{
         simulatorURL = url;
@@ -157,6 +157,18 @@ NSString * GCWebConnectStatsBugReport( gcWebConnectStatsConfig config ){
         {
             NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
             return [NSString stringWithFormat:@"%@/bugreport/new",url];
+        }
+    }
+}
+
+NSString * GCWebConnectStatsBugReportStatus( gcWebConnectStatsConfig config ){
+    switch (config) {
+        case gcWebConnectStatsConfigProductionRozNet:
+            return [NSString stringWithFormat:@"https://connectstats.app/prod/bugreport/status"];
+        default:
+        {
+            NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
+            return [NSString stringWithFormat:@"%@/bugreport/status",url];
         }
     }
 }
@@ -380,15 +392,6 @@ NSString * GCWebLogoutURL(){
     return @"https://connect.garmin.com/reports?actionMethod=page%2Fhome%2Freports.xhtml%3Aidentity.logout";
 }
 
-NSString * GCWebUploadURL( NSString*dir){
-    NSString * server = @"www.ro-z.net";
-#if TARGET_IPHONE_SIMULATOR
-    //server = @"localhost";
-#endif
-    return [NSString stringWithFormat:@"https://%@/connectstats/upload.php?dir=%@",server,dir];
-}
-
-
 NSString * GCWebRenameActivity(NSString*aId){
     return [NSString stringWithFormat:@"https://connect.garmin.com/modern/proxy/activity-service/activity/%@",aId];
 }
@@ -409,11 +412,4 @@ NSString * GCWebStravaUpload(){
     return @"https://www.strava.com/api/v3/uploads";
 }
 
-NSString * GCWebGoogleEarthURL( NSString*aId){
-    NSString * server = @"connectstats.ro-z.net";
-#if TARGET_IPHONE_SIMULATOR
-    //server = @"localhost/connectstats";
-#endif
-    return [NSString stringWithFormat:@"%@/kml/%@.kmz",server,aId];
-}
 

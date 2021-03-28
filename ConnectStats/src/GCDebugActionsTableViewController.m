@@ -230,7 +230,7 @@
     NSString * action = @"actionFocusOnStatsSummary";
     action = @"actionFocusOnStatsSummary/viewChoice/yearly/activityType/cycling/calChoice/toDate";
     //action = @"actionFocusOnActivity";
-    NSURL * url = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.ro-z.net/app-ios/c/%@", action]];
+    NSURL * url = [NSURL URLWithString:[NSString stringWithFormat:@"https://connectstats.app/app-ios/c/%@", action]];
     GCAppActions * appAction = [GCAppActions appActions];
 
     [appAction execute:url];

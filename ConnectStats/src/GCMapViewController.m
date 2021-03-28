@@ -23,23 +23,24 @@
 //  SOFTWARE.
 //  
 
+@import RZExternal;
 #import "GCMapViewController.h"
 #import "GCTrackPoint.h"
 #import "GCAppGlobal.h"
 #import "GCMapAnnotation.h"
 #import "Flurry.h"
-@import RZExternal;
 #import "GCViewConfig.h"
 #import "GCActivity+Calculated.h"
 #import "GCFields.h"
 #import "GCViewIcons.h"
 #import "GCMapAppleViewController.h"
 #import "GCMapGoogleViewController.h"
-
+#import "GCMapRouteLogic.h"
 
 @interface GCMapViewController ()
 // Use to get snapshot
 @property (nonatomic,retain) UIWindow * tempWindow;
+@property (nonatomic,retain) GCViewGradientColors * gradientColors;
 @end
 
 @implementation GCMapViewController
@@ -53,6 +54,7 @@
         self.legendView = [[[GCMapLegendView alloc] initWithFrame:CGRectZero] autorelease];
         self.lapInfoView = [[[GCMapLapInfoView alloc] initWithFrame:CGRectZero] autorelease];
         self.windCompassView = [[[GCMapWindCompass alloc] initWithFrame:CGRectZero] autorelease];
+        self.gradientColors = [GCViewGradientColors gradientColorsRainbow16];
 
     }
     return self;
@@ -148,6 +150,7 @@
         self.implementorType = gcMapImplementorApple;
     }
 
+    [self calculateLogicIfNecessary];
     [self setupOverlayAndAnnotations];
     [self updateInfoViews];
 
@@ -259,20 +262,6 @@
 }
 
 
--(void)forceRedisplay{
-    [self setupOverlayAndAnnotations];
-
-    [self updateInfoViews];
-
-    [self.implementor forceRedisplay];
-    [self.implementor zoomInOnRoute];
-}
-
--(void)refreshOverlayAndInfo{
-    [self setupOverlayAndAnnotations];
-
-    [self updateInfoViews];
-}
 -(CGRect)adjustedViewFrame{
     CGRect maprect = self.view.frame;
     return maprect;
@@ -398,7 +387,59 @@
     [self refreshOverlayAndInfo];
 }
 
+
+
 #pragma mark - Overlay and Annotations
+
+-(void)forceRedisplay{
+    [self calculateLogicIfNecessary];
+    [self setupOverlayAndAnnotations];
+
+    [self updateInfoViews];
+
+    [self.implementor forceRedisplay];
+    [self.implementor zoomInOnRoute];
+}
+
+-(void)refreshOverlayAndInfo{
+    [self setupOverlayAndAnnotations];
+
+    [self updateInfoViews];
+}
+
+-(void)setupOverlayAndAnnotations{
+    [self loadAnnotations];
+    [self.implementor setupOverlayAndAnnotations];
+}
+
+-(void)clearAllOverlayAndAnnotations{
+    if( [self.implementor respondsToSelector:@selector(clearAllOverlayAndAnnotations)]){
+        [self.implementor clearAllOverlayAndAnnotations];
+    }
+}
+
+-(BOOL)hasGradient{
+    return self.gradientField || self.compareActivity != nil;
+}
+
+-(void)calculateLogicIfNecessary{
+    if( self.routeLogic == nil || !self.routeLogic.isCalculating){
+        GCActivity * progressComparedTo = self.compareActivity;
+        if( progressComparedTo){
+            self.routeLogic = [GCMapRouteLogic routeLogicFor:self.activity comparedTo:progressComparedTo andColors:self.gradientColors];
+        }else{
+            self.routeLogic = [GCMapRouteLogic routeLogicFor:self.activity field:self.gradientField andColors:self.gradientColors];
+        }
+        self.routeLogic.showLaps = self.showLaps;
+        self.routeLogic.lapIndex = self.lapIndex;
+
+        [self.routeLogic calculate];
+    }
+}
+
+-(void)zoomInOnRoute{
+    [self.implementor zoomInOnRoute];
+}
 
 -(void)updateInfoViews{
     if (!self.disableInfoViews) {
@@ -500,8 +541,8 @@
     //FIX
     self.legendView.field = self.gradientField;
     self.legendView.invertedColors = [self.activity displayUnitForField:self.gradientField].betterIsMin;
-    (self.legendView).gradientColors = [self.implementor gradientColors];
-    NSUInteger n = [self.implementor numberOfColors];
+    (self.legendView).gradientColors = self.gradientColors;
+    NSUInteger n = self.gradientColors.numberOfColors;
     if (n-1<thresholds.count) {
         self.legendView.min = [thresholds[1] doubleValue];
         self.legendView.mid = [thresholds[n/2] doubleValue];
@@ -509,20 +550,6 @@
     }
 }
 
--(void)setupOverlayAndAnnotations{
-    [self loadAnnotations];
-    [self.implementor setupOverlayAndAnnotations];
-}
-
--(void)clearAllOverlayAndAnnotations{
-    if( [self.implementor respondsToSelector:@selector(clearAllOverlayAndAnnotations)]){
-        [self.implementor clearAllOverlayAndAnnotations];
-    }
-}
-
--(void)zoomInOnRoute{
-    [self.implementor zoomInOnRoute];
-}
 
 #pragma mark - others
 

@@ -33,6 +33,13 @@
 @class GCDerivedDataSerie;
 @class GCDerivedGroupedSeries;
 
+typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
+    gcComparisonMetricNone,
+    gcComparisonMetricPercent,
+    gcComparisonMetricValueDifference,
+    gcComparisonMetricValue
+};
+
 @interface GCStatsMultiFieldConfig : NSObject
 
 @property (nonatomic,retain) NSString * activityType;
@@ -52,6 +59,9 @@
 @property (nonatomic,assign) gcGraphChoice graphChoice;
 @property (nonatomic,retain) NSString * graphChoiceKey;
 
+@property (nonatomic,assign) gcComparisonMetric comparisonMetric;
+@property (nonatomic,retain) NSString * comparisonMetricKey;
+
 /**
  *  HistoryStats displayed can be current month, week, year or all -> quick filter on thumbnail graphs
  */
@@ -66,11 +76,14 @@
 -(GCStatsMultiFieldConfig*)sameFieldListConfig;
 
 -(BOOL)isEqualToConfig:(GCStatsMultiFieldConfig*)other;
+-(BOOL)requiresAggregateRebuild:(GCStatsMultiFieldConfig*)other;
 
+-(NSString*)diffDescription:(GCStatsMultiFieldConfig*)other;
 
 -(GCSimpleGraphCachedDataSource*)dataSourceForFieldDataSerie:(GCHistoryFieldDataSerie*)fieldDataSerie;
 
--(UIBarButtonItem*)buttonForTarget:(id)target action:(SEL)sel;
+-(UIBarButtonItem*)viewChoiceButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel;
+-(UIBarButtonItem*)viewConfigButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel;
 
 /// Iterate through the different configuration for the current view
 /// depending on the view will iterate though historyStats filter or calChoice.

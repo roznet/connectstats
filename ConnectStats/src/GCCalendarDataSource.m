@@ -37,11 +37,19 @@
 #import "GCStatsMultiFieldConfig.h"
 #import "ConnectStats-Swift.h"
 
-#define GC_SUMMARY_WEEKLY   0
-#define GC_SUMMARY_MONTHLY  1
-#define GC_SUMMARY_END      2
+@import RZUtilsSwift;
 
-#define GC_IS_PERCENT(x) (x == gcCalendarDisplayDistancePercent || x == gcCalendarDisplayDurationPercent)
+#define GC_SUMMARY_VALUE        0
+#define GC_SUMMARY_COMPARISON   1
+#define GC_SUMMARY_END          2
+
+#define GC_SECTION_WEEKLY       0
+#define GC_SECTION_MONTHLY      1
+#define GC_SECTION_END          2
+
+NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
+    return (x == gcCalendarDisplayDistancePercent || x == gcCalendarDisplayDurationPercent);
+}
 
 @interface GCCalendarDataSource ()
 
@@ -55,6 +63,8 @@
 
 @property (nonatomic,retain) GCHistoryAggregatedActivityStats * monthlyStats;
 @property (nonatomic,retain) GCHistoryAggregatedActivityStats * weeklyStats;
+@property (nonatomic,retain) RZNumberWithUnitGeometry * geometry;
+@property (nonatomic,retain) RZNumberWithUnitGeometry * comparisonGeometry;
 
 @property (nonatomic,retain) NSDate * currentDate;
 
@@ -63,10 +73,13 @@
 @property (nonatomic,retain) NSArray * listActivityTypes;
 
 @property (nonatomic,assign) BOOL primaryActivityTypesOnly;
+@property (nonatomic,assign) gcComparisonMetric comparisonMetric;
 
 //Just for convenience
 @property (nonatomic,weak) GCActivitiesOrganizer * organizer;
 @property (nonatomic,weak) GCActivity *activityForAction;
+
+@property (nonatomic,readonly) BOOL isNewStyle;
 @end
 
 @implementation GCCalendarDataSource
@@ -79,6 +92,10 @@
         self.activityTypeButton = [GCViewActivityTypeButton activityTypeButtonForDelegate:self];
         self.listActivityTypes = @[ GC_TYPE_ALL];
         self.primaryActivityTypesOnly = false;//[GCAppGlobal configGetBool:CONFIG_MAIN_ACTIVITY_TYPE_ONLY defaultValue:true];
+        self.comparisonMetric = gcComparisonMetricPercent;
+        if( [GCViewConfig is2021Style] ){
+            _tableDisplay = gcCalendarTableDisplaySummary;
+        }
     }
     return self;
 }
@@ -94,6 +111,8 @@
     [_selectedActivities release];
     [_dateMarkerCache release];
     [_currentDate release];
+    [_geometry release];
+    
     [super dealloc];
 }
 
@@ -152,8 +171,11 @@
 }
 
 - (NSArray *)markedDatesFrom:(NSDate *)fromDate to:(NSDate *)toDate{
-    self.activities = [[GCAppGlobal organizer] activitiesFromDate:fromDate to:toDate];
-
+    // start one month back, so we can do MoM and WoW comparisons
+    NSDate * startDate = [fromDate dateByAddingGregorianComponents:[NSDateComponents dateComponentsForCalendarUnit:NSCalendarUnitMonth withValue:-1]];
+    
+    self.activities = [[GCAppGlobal organizer] activitiesFromDate:startDate to:toDate];
+    
     NSMutableDictionary * allTypes = [NSMutableDictionary dictionary];
     if ([self.activityType isEqualToString:GC_TYPE_ALL]) {
         for (GCActivity*act in self.activities) {
@@ -205,16 +227,26 @@
         [self.maxInfo maxMarkerInfo:info.infoTotals];
     }
 
-    self.weeklyStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_ALL];
-    self.monthlyStats =[GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_ALL];
-    ;
-    self.weeklyStats.activityType = GC_TYPE_ALL;
-    self.monthlyStats.activityType = GC_TYPE_ALL;
+    self.weeklyStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:self.activityType];
+    self.monthlyStats =[GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:self.activityType];
+    
+    self.weeklyStats.activityType = self.activityType;
+    self.monthlyStats.activityType = self.activityType;
     self.weeklyStats.activities = self.activities;
     self.monthlyStats.activities = self.activities;
     // reference date nil as always for gcPeriodCalendar
     [self.weeklyStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:ignoreMode];
     [self.monthlyStats aggregate:NSCalendarUnitMonth referenceDate:nil ignoreMode:ignoreMode];
+
+    self.geometry = [RZNumberWithUnitGeometry geometry];
+    
+    GCActivityType * type = [GCActivityType activityTypeForKey:self.activityType];
+    for (GCHistoryAggregatedDataHolder * holder in self.weeklyStats) {
+        [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:type geometry:self.geometry];
+    }
+    for (GCHistoryAggregatedDataHolder * holder in self.monthlyStats) {
+        [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:type geometry:self.geometry];
+    }
 
     return rv;
 }
@@ -320,7 +352,7 @@
 
 - (BOOL)drawBackgroundInRect:(CGRect)rect forDate:(NSDate*)adate selected:(BOOL)asel{
     GCCalendarDataDateMarkers * markers = _dateMarkerCache[adate];
-    if (markers && GC_IS_PERCENT(_display)) {
+    if (markers && calendarDisplayIsPercent(_display)) {
 
         GCActivity * dummy = [[GCActivity alloc] init];
         
@@ -382,8 +414,10 @@
         maxValue = _display == gcCalendarDisplayDistancePercent ? _maxInfo.sumDistance.value : _maxInfo.sumDuration.value;
         for (NSString * type in markers.orderedActivityTypes) {
             [dummy changeActivityType:[GCActivityType activityTypeForKey:type]];
-            [[GCViewConfig cellBackgroundDarkerForActivity:dummy] setStroke];
-            [[GCViewConfig cellBackgroundLighterForActivity:dummy] setFill];
+            UIColor * col = [[GCViewConfig calendarColorForActivity:dummy] colorWithAlphaComponent:0.5];
+            
+            [col setStroke];
+            [col setFill];
             
             GCCalendarDataMarkerInfo * info = [markers inforForType:type];
             drawArc( _display == gcCalendarDisplayDistancePercent ? info.sumDistance.value : info.sumDuration.value);
@@ -426,7 +460,7 @@
                 for (size_t i = 0; i < info.count; i++) {
                     current.origin.x = x_base + markerIdx * actPointSize;
                     if (markerIdx < total) {
-                        CGContextSetFillColorWithColor(ctx, [GCViewConfig cellBackgroundDarkerForActivity:dummy].CGColor);
+                        CGContextSetFillColorWithColor(ctx, [GCViewConfig calendarColorForActivity:dummy].CGColor);
                         CGContextFillRect(ctx, current);
                         CGContextStrokeRect(ctx, current);
                     }
@@ -435,7 +469,7 @@
             }
 
             [dummy release];
-        }else if( !GC_IS_PERCENT(_display) ){
+        }else if( !calendarDisplayIsPercent(_display) ){
 
 
             GCCalendarDataMarkerInfo * info = markers.infoTotals;
@@ -502,6 +536,10 @@
 
 #pragma mark - Table view data source
 
+-(BOOL)isNewStyle{
+    return [GCViewConfig is2021Style];
+}
+
 -(void)tableViewDidLoad:(UITableView *)tableView{
     [tableView registerNib:[UINib nibWithNibName:@"GCCellActivity" bundle:[NSBundle mainBundle]]
          forCellReuseIdentifier:@"GCCellActivity"];
@@ -511,7 +549,15 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    if( self.tableDisplay == gcCalendarTableDisplayActivities){
+        return 1;
+    }else{
+        if( self.isNewStyle ){
+            return GC_SECTION_END;
+        }else{
+            return 1;
+        }
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -520,7 +566,7 @@
     if (_tableDisplay==gcCalendarTableDisplayActivities) {
         return _selectedActivities.count;
     }else{
-        return GC_SUMMARY_END;
+        return 1;
     }
 }
 
@@ -530,8 +576,7 @@
     cell.delegate = self;
     if (_tableDisplay==gcCalendarTableDisplayActivities) {
         if( indexPath.row < _selectedActivities.count ){
-            BOOL newStyle = [GCViewConfig cellBandedFormat];
-            if( newStyle ){
+            if( self.isNewStyle ){
                 GCActivity * activity = _selectedActivities[indexPath.row];
                 GCCellActivity * cell = [tableView dequeueReusableCellWithIdentifier:@"GCCellActivity" forIndexPath:indexPath];
                 [cell setupFor:activity];
@@ -544,6 +589,7 @@
     }else{
 
         NSDate * bucket = nil;
+        NSDate * comparisonBucket = nil;
 
         if (_selectedActivities.count) {
             GCActivity * activity = _selectedActivities[0];
@@ -551,42 +597,97 @@
         }else{
             bucket = self.currentDate;
         }
+        
         GCHistoryAggregatedDataHolder * holder = nil;
+        GCHistoryAggregatedDataHolder * comparisonHolder = nil;
+        
         NSCalendarUnit calUnit = NSCalendarUnitWeekOfYear;
 
-        if (indexPath.row == GC_SUMMARY_MONTHLY) {
+        if (indexPath.section == GC_SECTION_MONTHLY) {
             holder = [self.monthlyStats dataForDate:bucket];
             calUnit = NSCalendarUnitMonth;
-        }else if (indexPath.row==GC_SUMMARY_WEEKLY){
+        }else if (indexPath.section==GC_SECTION_WEEKLY){
             holder = [self.weeklyStats dataForDate:bucket];
             calUnit = NSCalendarUnitWeekOfYear;
         }
+        
+        if( self.isNewStyle ){
+            NSCalendarUnit calendarUnit = indexPath.section == GC_SECTION_MONTHLY ? NSCalendarUnitMonth : NSCalendarUnitWeekOfYear;
+            comparisonBucket = [bucket dateByAddingGregorianComponents:[NSDateComponents dateComponentsForCalendarUnit:calendarUnit withValue:-1]];
+            if (indexPath.section == GC_SECTION_MONTHLY) {
+                comparisonHolder = [self.monthlyStats dataForDate:comparisonBucket];
+            }else if (indexPath.section==GC_SECTION_WEEKLY){
+                comparisonHolder = [self.weeklyStats dataForDate:comparisonBucket];
+            }
+            // If no data in the comparison bucket, display empty
+            if( comparisonHolder == nil){
+                holder = nil;
+            }
+        }
         if (holder) {
-            
             GCStatsMultiFieldConfig * multiFieldConfig = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
             multiFieldConfig.calendarConfig.calendarUnit = calUnit;
+            multiFieldConfig.comparisonMetric = self.comparisonMetric;
             
-            // Always aggregated with ALL type, when activityTYpe is set the activities themselves are filtered
-            [cell setupFromHistoryAggregatedData:holder
-                                           index:indexPath.row
-                                multiFieldConfig:multiFieldConfig
-                                 andActivityType:GCActivityType.all
-                                           width:tableView.frame.size.width];
+            if( self.isNewStyle ){
+                [cell setupAggregatedComparisonWithDataHolder:holder
+                                             comparisonHolder:comparisonHolder
+                                                        index:indexPath.row
+                                             multiFieldConfig:multiFieldConfig
+                                                 activityType:[GCActivityType activityTypeForKey:self.activityType]
+                                                     geometry:self.geometry
+                                                         wide:false];
+            }else{
+                // Always aggregated with ALL type, when activityTYpe is set the activities themselves are filtered
+                [cell setupFromHistoryAggregatedData:holder
+                                               index:indexPath.row
+                                    multiFieldConfig:multiFieldConfig
+                                     andActivityType:GCActivityType.all
+                                               width:tableView.frame.size.width];
+            }
         }else{
-            [cell setupForRows:0 andCols:0];
+            [cell setupForRows:1 andCols:1];
+            [cell labelForRow:0 andCol:0].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute14Gray] withFormat:@"No Data"];
         }
     }
     return cell;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 0.0;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 20.0;
+}
+
+-(UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+}
+
+-(UIView*)tableView:(UITableView*)tableView viewForFooterInSection:(NSInteger)section
+{
+    return [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+}
 #pragma mark - Table view delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSUInteger rows = self.tableDisplay == gcCalendarTableDisplayActivities && self.extendedDisplay ? 4 : 3;
-    CGFloat rv = [GCViewConfig sizeForNumberOfRows:rows];
-    BOOL newStyle = [GCViewConfig cellBandedFormat];
-    if( newStyle ){
-        rv *= 1.1;
+    CGFloat rv = 58;
+    if( [GCViewConfig is2021Style]){
+        NSUInteger rows = 4;
+        if( self.tableDisplay == gcCalendarTableDisplaySummary){
+            rows = [GCActivityType.all summaryFields].count;
+        }
+        
+        rv = [GCViewConfig sizeForNumberOfRows:rows];
+        
+        if( self.tableDisplay == gcCalendarTableDisplayActivities){
+            rv *= 1.1;
+        }
+    }else{
+        NSUInteger rows = self.tableDisplay == gcCalendarTableDisplayActivities && self.extendedDisplay ? 4 : 3;
+        rv = [GCViewConfig sizeForNumberOfRows:rows];
     }
     return rv;
 }
@@ -599,23 +700,42 @@
             [GCAppGlobal focusOnActivityId:[_selectedActivities[indexPath.row] activityId]];
         }
     }else{
-        NSDate * bucket = nil;
+        if( !self.isNewStyle ){
+            NSDate * bucket = nil;
+            
+            if (_selectedActivities.count) {
+                GCActivity * activity = _selectedActivities[0];
+                bucket = activity.date;
+            }else{
+                bucket = self.currentDate;
+            }
+            GCStatsCalendarAggregationConfig * calendarConfig = nil;
+            
+            if (indexPath.section == GC_SECTION_MONTHLY) {
+                calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth];
+            }else{
+                calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitWeekOfYear];
+            }
+            NSString * filter = [GCViewConfig filterFor:calendarConfig date:bucket andActivityType:GC_TYPE_ALL];
+            [GCAppGlobal focusOnListWithFilter:filter];
+        }else{
+            switch( self.comparisonMetric ){
+                case gcComparisonMetricPercent:
+                    self.comparisonMetric = gcComparisonMetricValueDifference;
+                    break;
+                case gcComparisonMetricValueDifference:
+                    self.comparisonMetric = gcComparisonMetricValue;
+                    break;
+                case gcComparisonMetricValue:
+                    self.comparisonMetric = gcComparisonMetricPercent;
+                    break;
+                case gcComparisonMetricNone:
+                    self.comparisonMetric = gcComparisonMetricNone;
+                    break;
 
-        if (_selectedActivities.count) {
-            GCActivity * activity = _selectedActivities[0];
-            bucket = activity.date;
-        }else{
-            bucket = self.currentDate;
+            }
+            [tableView reloadData];
         }
-        GCStatsCalendarAggregationConfig * calendarConfig = nil;
-        
-        if (indexPath.row == GC_SUMMARY_MONTHLY) {
-            calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth];
-        }else{
-            calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitWeekOfYear];
-        }
-        NSString * filter = [GCViewConfig filterFor:calendarConfig date:bucket andActivityType:GC_TYPE_ALL];
-        [GCAppGlobal focusOnListWithFilter:filter];
     }
 }
 

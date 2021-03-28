@@ -39,6 +39,8 @@
 @class GCSegmentOrganizer;
 @class GCConnectStatsStatus;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface GCAppDelegate : UIResponder <UIApplicationDelegate,CLLocationManagerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
@@ -52,10 +54,10 @@
 @property (nonatomic, retain) GCDerivedOrganizer * derived;
 @property (nonatomic, retain) GCWatchSessionManager * watch;
 @property (nonatomic, retain) GCSegmentOrganizer * segments;
-@property (nonatomic, retain) NSURL * urlToOpen;
+@property (nullable, nonatomic, retain) NSURL * urlToOpen;
 @property (nonatomic, retain) GCConnectStatsStatus * remoteStatus;
 // Will be either the currnet location from the phone or the location of the current activity
-@property (nonatomic, readonly) CLLocation * currentLocation;
+@property (nullable,nonatomic,readonly) CLLocation * currentLocation;
 
 -(void)saveSettings;
 -(void)addOrSelectProfile:(NSString*)pName;
@@ -63,15 +65,17 @@
 +(BOOL)connectStatsVersion;
 +(BOOL)healthStatsVersion;
 
-
-
 -(void)startupRefreshIfNeeded;
 -(void)searchRecentActivities;
 
 -(NSObject<GCAppActionDelegate>*)actionDelegate;
 -(NSArray<NSDictionary*>*)recentRemoteMessages;
 -(void)recentRemoteMessagesReceived;
+
 -(BOOL)handleUniveralLink:(NSURL *) url;
+-(BOOL)handleUserActivity:(NSUserActivity*)userActivity;
+-(BOOL)handleOpenURL:(NSURL*)url;
+
 -(void)setupFieldCache;
 
 -(void)startLocationRequest;
@@ -83,3 +87,5 @@
 
 -(void)settingsUpdateCheckPostStart;
 @end
+
+NS_ASSUME_NONNULL_END

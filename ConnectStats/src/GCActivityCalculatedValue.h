@@ -27,6 +27,6 @@
 
 @interface GCActivityCalculatedValue : GCActivitySummaryValue
 
-+(GCActivityCalculatedValue*)calculatedValue:(NSString*)field value:(double)val unit:(GCUnit*)unit;
-+(GCActivityCalculatedValue*)calculatedValue:(NSString*)field value:(GCNumberWithUnit*)nu;
++(GCActivityCalculatedValue*)calculatedValue:(GCField*)field value:(double)val unit:(GCUnit*)unit;
++(GCActivityCalculatedValue*)calculatedValue:(GCField*)field value:(GCNumberWithUnit*)nu;
 @end

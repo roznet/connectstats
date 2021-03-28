@@ -224,8 +224,6 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (void)viewDidLoad
 {
-    RZLogTrace(@"");
-
     [super viewDidLoad];
     
     //self.tableView.backgroundColor = [GCViewConfig defaultBackgroundColor];
@@ -303,8 +301,6 @@ const CGFloat kCellDaySpacing = 2.f;
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    RZLogTrace(@"");
-
     [super viewDidAppear:animated];
 
     [GCAppGlobal startupRefreshIfNeeded];
@@ -473,7 +469,7 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView activityCellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BOOL newStyle = [GCViewConfig cellBandedFormat];
+    BOOL newStyle = [GCViewConfig is2021Style];
     if( newStyle ){
         GCCellActivity * cell = [self.tableView dequeueReusableCellWithIdentifier:@"GCCellActivity" forIndexPath:indexPath];
         [cell setupFor:[self activityForIndex:indexPath.row]];
@@ -524,22 +520,23 @@ const CGFloat kCellDaySpacing = 2.f;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     CGFloat rv = [GCViewConfig sizeForNumberOfRows:self.extendedDisplay ? 4 : 3];
-    BOOL newStyle = [GCViewConfig cellBandedFormat];
+    BOOL newStyle = [GCViewConfig is2021Style];
     if( newStyle ){
-        return [GCViewConfig sizeForNumberOfRows:4] * 1.1;
-    }
-    
-    GCActivity * act = [self activityForIndex:indexPath.row];
-    if ([act.activityType isEqualToString:GC_TYPE_DAY]) {
-        rv = kGCCellActivityDefaultHeight;
+        rv = [GCViewConfig sizeForNumberOfRows:4] * 1.1;
     }else{
-        if( self.showImages ){
-            rv = 150.;
+        
+        GCActivity * act = [self activityForIndex:indexPath.row];
+        if ([act.activityType isEqualToString:GC_TYPE_DAY]) {
+            rv = kGCCellActivityDefaultHeight;
+        }else{
+            if( self.showImages ){
+                rv = 150.;
+            }
         }
-    }
-
-    if ([self insetForRowAtIndexPath:indexPath]) {
-        rv += kCellDaySpacing;
+        
+        if ([self insetForRowAtIndexPath:indexPath]) {
+            rv += kCellDaySpacing;
+        }
     }
     return  rv;
 }

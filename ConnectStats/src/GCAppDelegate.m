@@ -265,6 +265,12 @@ void checkVersion(void){
 #pragma mark - User Activities
 
 -(BOOL)application:(nonnull UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * __nullable))restorationHandler{
+    return [self handleUserActivity:userActivity];
+}
+
+#pragma mark - Handle Standard operations
+
+-(BOOL)handleUserActivity:(nonnull NSUserActivity*)userActivity{
     BOOL rv = false;
 
     if( [userActivity.activityType isEqualToString:kNSUserActivityTypeViewOne]){
@@ -285,6 +291,7 @@ void checkVersion(void){
         RZLog(RZLogWarning, @"Unknown Activity: %@", userActivity.activityType);
     }
     return rv;
+
 }
 
 -(BOOL)handleUniveralLink:(NSURL *) url{
@@ -295,6 +302,30 @@ void checkVersion(void){
     rv = [self.actions execute:url];
     return rv;
 }
+
+-(BOOL)handleOpenURL:(NSURL*)url{
+    RZLog(RZLogInfo,@"url: %@", url.path);
+    BOOL rv = false;
+    self.urlToOpen = url;
+    // check if fit file
+    if ([url.path hasSuffix:@".fit"]) {
+        NSError * error = nil;
+        [url startAccessingSecurityScopedResource];
+        NSData * fitData = [NSData dataWithContentsOfURL:self.urlToOpen options:0 error:&error];
+        [url stopAccessingSecurityScopedResource];
+        if( fitData ){
+            dispatch_async(self.worker,^(){
+                [self handleFitFile:fitData];
+            });
+        }else {
+            RZLog(RZLogError, @"Failed to read %@, error %@", url, error);
+        }
+        rv = true;
+    }
+    return rv;
+
+}
+
 
 #pragma mark ShortCutKey
 
@@ -366,25 +397,7 @@ void checkVersion(void){
 #pragma mark Open Url
 
 -(BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options{
-    RZLog(RZLogInfo,@"url: %@", url.path);
-    BOOL rv = false;
-    self.urlToOpen = url;
-    // check if fit file
-    if ([url.path hasSuffix:@".fit"]) {
-        NSError * error = nil;
-        [url startAccessingSecurityScopedResource];
-        NSData * fitData = [NSData dataWithContentsOfURL:self.urlToOpen options:0 error:&error];
-        [url stopAccessingSecurityScopedResource];
-        if( fitData ){
-            dispatch_async(self.worker,^(){
-                [self handleFitFile:fitData];
-            });
-        }else {
-            RZLog(RZLogError, @"Failed to read %@, error %@", url, error);
-        }
-        rv = true;
-    }
-    return rv;
+    return [self handleOpenURL:url];
 }
 
 

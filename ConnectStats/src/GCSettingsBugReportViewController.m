@@ -91,27 +91,34 @@
         self.report = [GCSettingsBugReport bugReport];
         self.report.includeErrorFiles = self.includeErrorFiles;
         self.report.includeActivityFiles = self.includeActivityFiles;
-        self.urlRequest = self.report.urlRequest;
-        
-        self.task = [[NSURLSession sharedSession] dataTaskWithRequest:self.urlRequest
-                                            completionHandler:^(NSData*data,NSURLResponse*response,NSError*error){
-            if (error) {
-                RZLog(RZLogError,@"Error loading bugreport %@",error);
-            }else{
-                NSString *encodingName = [response textEncodingName];
-                NSStringEncoding encodingType = encodingName ? CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName)) : NSUTF8StringEncoding;
-                NSString * html = RZReturnAutorelease([[NSString alloc] initWithData:data encoding:encodingType]);
+        [self.report prepareRequest:^(NSURLRequest * request){
+            if( request == nil){
+                [self.webView loadHTMLString:@"Bug Report Disabled" baseURL:self.urlRequest.URL];
+                return;
+            }
+            
+            self.urlRequest = request;
+            
+            self.task = [[NSURLSession sharedSession] dataTaskWithRequest:self.urlRequest
+                                                        completionHandler:^(NSData*data,NSURLResponse*response,NSError*error){
+                if (error) {
+                    RZLog(RZLogError,@"Error loading bugreport %@",error);
+                }else{
+                    NSString *encodingName = [response textEncodingName];
+                    NSStringEncoding encodingType = encodingName ? CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName)) : NSUTF8StringEncoding;
+                    NSString * html = RZReturnAutorelease([[NSString alloc] initWithData:data encoding:encodingType]);
+                    dispatch_async(dispatch_get_main_queue(), ^(){
+                        [self.webView loadHTMLString:html baseURL:self.urlRequest.URL];;
+                    });
+                }
+            }];
+            if (self.task) {
+                [self.task resume];
                 dispatch_async(dispatch_get_main_queue(), ^(){
-                    [self.webView loadHTMLString:html baseURL:self.urlRequest.URL];;
+                    self.hud.label.text = NSLocalizedString( @"Sending Report", @"Bug Report Progress");
                 });
             }
         }];
-        if (self.task) {
-            [self.task resume];
-            dispatch_async(dispatch_get_main_queue(), ^(){
-                self.hud.label.text = NSLocalizedString( @"Sending Report", @"Bug Report Progress");
-            });
-        }
     });
 }
 

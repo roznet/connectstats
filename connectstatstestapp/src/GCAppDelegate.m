@@ -307,14 +307,14 @@
 -(void)checkSimulatorUrl{
     NSArray<NSString*> * tries = @[@"https://localhost.ro-z.me/connectstats/check.php",
                                    @"https://roznet.ro-z.me/connectstats/check.php",
-                                   @"https://ro-z.net/connectstats/check.php"];
+                                   @"https://connectstats.app/connectstats/check.php"];
 
     self.findValid = RZReturnAutorelease([[RZSRemoteURLFindValid alloc] initWithUrls:tries]);
     [self.findValid search:^(NSString*found){
         NSDictionary<NSString*,NSString*> * map = @{
                                                     @"https://localhost.ro-z.me/connectstats/check.php" : @"https://localhost.ro-z.me",
                                                     @"https://roznet.ro-z.me/connectstats/check.php" : @"https://roznet.ro-z.me",
-                                                    @"https://ro-z.net/connectstats/check.php" : @"https://ro-z.net"
+                                                    @"https://connectstats.app/connectstats/check.php" : @"https://connectstats.app"
 
                                                     };
 

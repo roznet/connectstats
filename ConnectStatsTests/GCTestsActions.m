@@ -47,7 +47,7 @@
     
     NSString * prefix = @"/app-ios/c/";
     
-    actions = [RZAction actionFromUrl:[NSURL URLWithString:@"http://www.ro-z.net/app-ios/c/focusOnActivity/id123"] withPrefix:prefix];
+    actions = [RZAction actionFromUrl:[NSURL URLWithString:@"http://connectstats.app/app-ios/c/focusOnActivity/id123"] withPrefix:prefix];
     
     
     [self resetRecord];
@@ -56,10 +56,10 @@
     XCTAssertEqualObjects(self.argument, @"id123");
     XCTAssertEqualObjects(self.method, @"focusOnActivity:");
     
-    actions = [RZAction actionFromUrl:[NSURL URLWithString:@"https://www.ro-z.net/app-ios/c/focusOnActivity/activityId/id123/view/Graph"] withPrefix:prefix];
+    actions = [RZAction actionFromUrl:[NSURL URLWithString:@"https://connectstats.app/app-ios/c/focusOnActivity/activityId/id123/view/Graph"] withPrefix:prefix];
     [self resetRecord];
-    XCTAssertTrue([actions validateHost:@"ro-z.net"]);
-    XCTAssertFalse([actions validateHost:@"ro-z.com"]);
+    XCTAssertTrue([actions validateHost:@"connectstats.app"]);
+    XCTAssertFalse([actions validateHost:@"ro-z.net"]);
     success = [actions executeOn:self];
     
     XCTAssertTrue(success);
@@ -72,7 +72,7 @@
 
     }
 
-    actions = [RZAction actionFromUrl:[NSURL URLWithString:@"https://www.ro-z.net/app-ios/c/focusOnList"] withPrefix:prefix];
+    actions = [RZAction actionFromUrl:[NSURL URLWithString:@"https://connectstats.app/app-ios/c/focusOnList"] withPrefix:prefix];
     [self resetRecord];
     success=[actions executeOn:self];
     XCTAssertTrue(success);
@@ -85,7 +85,7 @@
     XCTAssertTrue(success);
     XCTAssertEqualObjects(self.method, @"focusOnActivity:");
 
-    actions = [RZAction actionFromUrl:[NSURL URLWithString:@"https://www.ro-z.net/app-ios/c/focusOnList"] withPrefix:@"/appios/"];
+    actions = [RZAction actionFromUrl:[NSURL URLWithString:@"https://connectstats.app/app-ios/c/focusOnList"] withPrefix:@"/appios/"];
     XCTAssertNil(actions);
 }
 

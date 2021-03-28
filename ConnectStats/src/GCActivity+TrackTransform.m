@@ -94,8 +94,11 @@
     NSTimeInterval runningElapsed = 0.0;
     
     double mps = 0.0;
+    GCUnit * mpsUnit = GCUnit.mps;
+    GCField * speedField = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:self.activityType];
     
     BOOL started = false;
+    
     
     for (GCTrackPoint * current_point in points) {
         CLLocationDistance thisDistance = 0.0;
@@ -139,9 +142,11 @@
         }
         if( last_point){
             GCTrackPoint * newPoint = [[GCTrackPoint alloc] initWithTrackPoint:last_point];
-            newPoint.speed = mps;
+            GCNumberWithUnit * speed = [[GCNumberWithUnit alloc] initWithUnit:mpsUnit andValue:mps];
+            [newPoint setNumberWithUnit:speed forField:speedField inActivity:self];
             [rv addObject:newPoint];
             [newPoint release];
+            [speed release];
         }
         last_point = current_point;
     }

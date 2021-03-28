@@ -34,6 +34,7 @@
 #import "GCViewConfig.h"
 #import "GCMapWindCompass.h"
 
+@class GCMapRouteLogic;
 @class GCMapAppleViewController;
 @class GCMapGoogleViewController;
 
@@ -58,6 +59,8 @@ typedef void(^gcMapViewControllerCompletion)(void);
 @property (nonatomic,assign) NSUInteger movingAverage;
 @property (nonatomic,retain) GCMapLapInfoView *lapInfoView;
 @property (nonatomic,copy) gcMapViewControllerCompletion completionHandler;
+@property (nonatomic,retain) GCMapRouteLogic * routeLogic;
+@property (nonatomic,retain) GCMapRouteLogic * compareLogic;
 
 @property (nonatomic,retain) GCMapAppleViewController * appleImplementor;
 @property (nonatomic,retain) GCMapGoogleViewController * googleImplementor;

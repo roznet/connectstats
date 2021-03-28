@@ -32,10 +32,6 @@
 
 @property (nonatomic,retain) NSArray<GCMapRouteLogicPointHolder*> * points;
 @property (nonatomic,assign) MKMapRect boundingMapRect;
-@property (nonatomic,retain) GCViewGradientColors * gradientColors;
-
--(NSUInteger)numberOfColors;
--(NSArray<RZColor*> *)colors;
 
 -(MKMapRect)calculateBoundingMapRect;
 

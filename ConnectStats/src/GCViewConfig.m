@@ -142,6 +142,9 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
 }
 
 // Used By Calendar
++(UIColor*)calendarColorForActivity:(id)aAct{
+    return [_current_skin() colorForKey:kGCSkinKeyActivityCellDarkerBackgroundColor andActivity:aAct];
+}
 +(UIColor*)cellBackgroundDarkerForActivity:(id)aAct{
     if( [self activityCellMultiColor]){
         return [_current_skin() colorForKey:kGCSkinKeyActivityCellDarkerBackgroundColor andActivity:aAct];
@@ -246,7 +249,7 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return [_current_skin() boolFor:gcSkinBoolRoundedActivityIcons];
 }
 
-+(BOOL)cellBandedFormat{
++(BOOL)is2021Style{
     return [_current_skin() boolFor:gcSkinBoolActivityCellBandedFormat];
 }
 +(BOOL)activityCellMultiColor{

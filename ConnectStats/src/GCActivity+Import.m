@@ -55,13 +55,7 @@
 -(GCActivity*)initWithId:(NSString*)aId andGarminData:(NSDictionary*)aData{
     self = [self initWithId:aId];
     if (self) {
-        if(aData[@"activitySummary"]){
-            [self parseGarminJson:aData];
-        }else if(aData[@"activity"]){
-            [self parseGarminJson:aData[@"activity"]];
-        }else{
-            [self parseModernGarminJson:aData];
-        }
+        [self parseModernGarminJson:aData];
         self.settings = [GCActivitySettings defaultsFor:self];
     }
     return self;
@@ -315,8 +309,8 @@
     if (displayuom && ![displayuom isEqualToString:uom]) {
         nu = [nu convertToUnitName:displayuom];
     }
-    GCActivitySummaryValue * sumVal = [GCActivitySummaryValue activitySummaryValueForField:fieldkey value:nu];
-    [GCFields registerMissingField:[GCField fieldForKey:fieldkey andActivityType:self.activityType] displayName:display andUnitName:displayuom];
+    GCActivitySummaryValue * sumVal = [GCActivitySummaryValue activitySummaryValueForField:field value:nu];
+    [GCFields registerMissingField:field displayName:display andUnitName:displayuom];
     return sumVal;
 }
 
@@ -325,14 +319,14 @@
     if (speed && [GCFields pacePreferredForActivityType:self.activityType]) {
         GCField * field = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:self.activityType];
         GCNumberWithUnit * val = [[speed numberWithUnit] convertToUnit:field.unit];
-        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
+        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field value:val];
     }
     GCActivitySummaryValue * movingSpeed = newSummaryData[ [GCField fieldForKey:@"WeightedMeanMovingSpeed" andActivityType:self.activityType] ];
     if(movingSpeed && [GCFields pacePreferredForActivityType:self.activityType]){
         GCField * field = [GCField fieldForKey:@"WeightedMeanMovingSpeed" andActivityType:self.activityType];
 
         GCNumberWithUnit * val = [[movingSpeed numberWithUnit] convertToUnit:field.unit];
-        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field.key value:val];
+        newSummaryData[field] = [GCActivitySummaryValue activitySummaryValueForField:field value:val];
     }
 }
 
@@ -532,7 +526,7 @@
                 NSNumber * val = one[@"value"];
                 if( fieldkey && unitname){
                     GCField * field = [GCField fieldForKey:fieldkey andActivityType:self.activityType];
-                    GCActivitySummaryValue * value = [GCActivitySummaryValue activitySummaryValueForField:fieldkey value:[GCNumberWithUnit numberWithUnitName:unitname andValue:val.doubleValue]];
+                    GCActivitySummaryValue * value = [GCActivitySummaryValue activitySummaryValueForField:field value:[GCNumberWithUnit numberWithUnitName:unitname andValue:val.doubleValue]];
                     data[ field ] = value;
                 }
             }
@@ -768,138 +762,6 @@
     }
 }
 
--(void)parseGarminJson:(NSDictionary*)aData{
-    NSMutableDictionary * summary= aData[@"activitySummary"];
-
-
-    NSDictionary * atypeDict = aData[@"activityType"];
-    
-    [self changeActivityType:[GCActivityType activityTypeForKey:atypeDict[@"key"]]];
-    if( ! [self.activityType isEqualToString:atypeDict[@"parent"][@"key"]] ){
-        RZLog(RZLogWarning, @"Inconsistent types %@/%@ (vs %@)", atypeDict[@"key"], atypeDict[@"parent"][@"key"], self.activityType);
-    }
-    self.activityName = aData[@"activityName"];
-    self.date = [NSDate dateForRFC3339DateTimeString:summary[@"BeginTimestamp"][@"value"]];
-    if ([self.activityType isEqualToString:GC_TYPE_MULTISPORT]) {
-        // Hack so the multisport always a bit before the first activity
-        self.date = [self.date dateByAddingTimeInterval:-0.0001];
-    }
-    self.location = @"";
-
-    NSNumber *aId = aData[@"activityId"];
-    if( [aId isKindOfClass:[NSNumber class]]){
-        self.activityId = [aId stringValue];
-    }else{
-        NSString * aIdS = aData[@"activityId"];
-        if( [aIdS isKindOfClass:[NSString class]]){
-            self.activityId = aIdS;
-        }
-    }
-
-
-    NSDictionary * dist = summary[@"SumDistance"];
-    NSDictionary * dura = summary[@"SumDuration"];
-    NSDictionary * hrat = summary[@"WeightedMeanHeartRate"];
-    if (hrat[@"bpm"]) {
-        hrat=hrat[@"bpm"];
-    }
-    NSDictionary * spee = summary[ [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:self.activityType] ];
-
-    [self setSummaryField:gcFieldFlagSumDistance with:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:[dura[@"value"] doubleValue]]];
-    [self setSummaryField:gcFieldFlagWeightedMeanHeartRate with:[GCNumberWithUnit numberWithUnit:GCUnit.bpm andValue:[hrat[@"value"] doubleValue]]];
-
-    GCUnit * speeU = self.speedDisplayUnit;
-    [self setSummaryField:gcFieldFlagWeightedMeanSpeed with:[GCNumberWithUnit numberWithUnit:speeU andValue:[spee[@"value"] doubleValue]]];
-
-    GCUnit * distU = self.distanceDisplayUnit;
-    [self setSummaryField:gcFieldFlagSumDistance with:[GCNumberWithUnit numberWithUnit:distU andValue:[dist[@"value"] doubleValue]]];
-
-    self.flags  = dist == nil ? 0 : gcFieldFlagSumDistance;
-    self.flags |= dura == nil ? 0 : gcFieldFlagSumDuration;
-    self.flags |= hrat == nil ? 0 : gcFieldFlagWeightedMeanHeartRate;
-    self.flags |= spee == nil ? 0 : gcFieldFlagWeightedMeanSpeed;
-
-    if (summary[@"WeightedMeanBikeCadence"]||
-        summary[@"WeightedMeanRunCadence"]||
-        summary[@"WeightedMeanSwimCadence"]) {
-        self.flags |= gcFieldFlagCadence;
-    }
-
-    // Start with trackFlags is flags, as it's the best guest
-    // Later if tracks are downloaded it will be updated from the actual tracks.
-    self.trackFlags = self.flags;
-
-    if (summary[@"BeginLatitude"]) {
-        self.beginCoordinate = CLLocationCoordinate2DMake([summary[@"BeginLatitude"][@"value"] doubleValue],
-                                                     [summary[@"BeginLongitude"][@"value"] doubleValue]);
-    }
-
-    NSMutableDictionary *summaryDataTmp = [NSMutableDictionary dictionaryWithCapacity:summary.count];
-    for (NSString * field in summary) {
-        if (![GCFields skipField:field]) {
-            NSDictionary * info = summary[field];
-            NSString * thisuom =info[@"uom"];
-            if ([field isEqualToString:@"SumTrainingEffect"]) {
-                thisuom = @"te";
-            }else if([field isEqualToString:@"SumIntensityFactor"]){
-                thisuom = @"if";
-            }else if([field hasSuffix:@"HeartRate"]){
-                if (info[@"bpm"]) {
-                    info = info[@"bpm"];
-                }
-            }
-
-            [GCFields registerMissingField:[GCField fieldForKey:field andActivityType:self.activityType] displayName:info[@"fieldDisplayName"] andUnitName:thisuom];
-            summaryDataTmp[field] = [GCActivitySummaryValue activitySummaryValueForDict:info andField:(NSString*)field];
-        }
-    }
-    [self setSummaryDataFromKeyDict:summaryDataTmp];
-
-    NSMutableDictionary * newMetaData = [NSMutableDictionary dictionary];
-
-    for (NSString * field in @[@"username",@"activityDescription"]) {
-        NSString * info = aData[field];
-        if (info) {
-            newMetaData[field] = [GCActivityMetaValue activityMetaValueForDisplay:info andField:field];
-        }
-    }
-
-    NSNumber * parentId = aData[@"parentId"];
-    if (parentId && [parentId isKindOfClass:[NSNumber class]] && parentId.intValue != 0) {
-        self.parentId = parentId.stringValue;
-    }
-
-    NSArray * childIds = aData[@"childIds"];
-    if (childIds && [childIds isKindOfClass:[NSArray class]] && childIds.count > 0) {
-        self.childIds = childIds;
-    }
-
-
-    self.downloadMethod = gcDownloadMethod13;
-    for (NSString * field in @[@"device",@"activityType",@"eventType"]) {
-        NSDictionary * info = aData[field];
-        if (info) {
-            GCActivityMetaValue * val = [GCActivityMetaValue activityValueForDict:info andField:field];
-            newMetaData[field] = val;
-        }
-    }
-    for (NSString * field in @[@"garminSwimAlgorithm",@"ispr",@"favorite"]) {
-        NSNumber * info = aData[field];
-        if (info) {
-            newMetaData[field] = [GCActivityMetaValue activityMetaValueForDisplay:info.stringValue andField:field];
-            if ([field isEqualToString:@"garminSwimAlgorithm"]) {
-                self.garminSwimAlgorithm = info.boolValue;
-                if (self.garminSwimAlgorithm) {
-                    self.downloadMethod = gcDownloadMethodSwim;
-                }
-            }
-        }
-    }
-    [self addEntriesToMetaData:newMetaData];
-
-    [GCFieldsCalculated addCalculatedFields:self];
-}
-
 #pragma mark - Other Services
 
 -(void)parseHealthKitWorkout:(HKWorkout*)workout withSamples:(NSArray*)samples{
@@ -1090,12 +952,6 @@
 }
 
 #pragma mark - Update from other activity or part of activity
-
--(void)updateWithGarminData:(NSDictionary*)data{
-
-    [self parseGarminJson:data];
-
-}
 
 -(BOOL)updateTrackpointsFromActivity:(GCActivity*)other newOnly:(BOOL)newOnly verbose:(BOOL)verbose{
     BOOL rv = false;

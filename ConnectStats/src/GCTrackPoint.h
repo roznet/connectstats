@@ -52,17 +52,19 @@
 @property (nonatomic,assign) double distanceMeters;
 
 // Hard Coded Fields
-@property (nonatomic,assign) double heartRateBpm;
-@property (nonatomic,assign) double speed;
-@property (nonatomic,assign) double cadence;
-@property (nonatomic,assign) double altitude;
-@property (nonatomic,assign) double power;
-@property (nonatomic,assign) double verticalOscillation;
-@property (nonatomic,assign) double groundContactTime;
-@property (nonatomic,assign) double steps;
+@property (nonatomic,readonly) double heartRateBpm;
+@property (nonatomic,readonly) double speed ;
+@property (nonatomic,readonly) double cadence;
+@property (nonatomic,readonly) double altitude;
+@property (nonatomic,readonly) double power;
+@property (nonatomic,readonly) double verticalOscillation;
+@property (nonatomic,readonly) double groundContactTime;
+@property (nonatomic,readonly) double steps;
 
 @property (nonatomic,readonly) gcTrackEventType trackEventType;
 @property (nonatomic,readonly) NSString * trackEventTypeDescription;
+
+@property (nonatomic,assign) BOOL useMovingElapsed;
 
 /**
  @brief Index in the laps
@@ -132,6 +134,16 @@
 -(NSSet<GCField*>*)csvFieldsInActivity:(GCActivity*)act;
 -(NSArray<NSString*>*)csvLabelsForFields:(NSArray<GCField*>*)fields InActivity:(GCActivity*)act;
 -(NSArray<NSString*>*)csvValuesForFields:(NSArray<GCField*>*)fields InActivity:(GCActivity*)act;
+
+
+-(void)accumulate:(GCTrackPoint*)other inActivity:(GCActivity*)act;
+-(void)accumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to inActivity:(GCActivity*)act;
+-(void)decumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to inActivity:(GCActivity*)act;
+-(void)interpolate:(double)delta within:(GCTrackPoint*)diff inActivity:(GCActivity*)act;
+
+-(void)difference:(GCTrackPoint*)from minus:(GCTrackPoint*)to inActivity:(GCActivity*)act;
+
+-(void)augmentElapsed:(NSDate*)start inActivity:(GCActivity*)act;
 
 
 @end

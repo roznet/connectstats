@@ -37,6 +37,19 @@
 @property (nonatomic,retain) NSMutableDictionary<GCField*,GCNumberWithUnit*> * calculatedStorage;
 @property (nonatomic,retain) NSMutableDictionary<GCField*,GCNumberWithUnit*> * extraStorage;
 
+@property (nonatomic,assign) double heartRateBpm;
+@property (nonatomic,assign) double speed ;
+@property (nonatomic,assign) double cadence;
+@property (nonatomic,assign) double altitude;
+@property (nonatomic,assign) double power;
+@property (nonatomic,assign) double verticalOscillation;
+@property (nonatomic,assign) double groundContactTime;
+@property (nonatomic,assign) double steps;
+
+
+@property (nonatomic,assign) double movingElapsed;
+
+
 -(BOOL)hasField:(GCField*)afield;
 -(double)valueForField:(gcFieldFlag)aField;
 -(void)setValue:(GCNumberWithUnit*)nu forField:(gcFieldFlag)aField;
@@ -1055,5 +1068,157 @@
     }
     return true;
 }
+
+#pragma mark - Accumulations
+
+#define degreesToRadians(x) (M_PI * x / 180.0)
+#define radiandsToDegrees(x) (x * 180.0 / M_PI)
+
+-(void)difference:(GCTrackPoint*)to minus:(GCTrackPoint*)from inActivity:(GCActivity*)act{
+    self.elapsed = [to.time timeIntervalSinceDate:from.time];
+    if ([to validCoordinate] && [from validCoordinate]) {
+        self.distanceMeters = [to distanceMetersFrom:from];
+        
+        //FIXME: not sure where BEARING Is used?
+        /*
+         CLLocationCoordinate2D fromLoc = [from coordinate2D];
+         CLLocationCoordinate2D toLoc   = [to   coordinate2D];
+         float fLat = degreesToRadians(fromLoc.latitude);
+         float fLng = degreesToRadians(fromLoc.longitude);
+         float tLat = degreesToRadians(toLoc.latitude);
+         float tLng = degreesToRadians(toLoc.longitude);
+
+        float degree = radiandsToDegrees(atan2(sin(tLng-fLng)*cos(tLat), cos(fLat)*sin(tLat)-sin(fLat)*cos(tLat)*cos(tLng-fLng)));
+        float bearing = 0;
+        if (degree >= 0) {
+            bearing = degree;
+        } else {
+            bearing = 360+degree;
+        }
+
+        self.extraStorage[ [GCField fieldForKey:GC_BEARING_FIELD andActivityType:nil] = [GCNumberWithUnit numberWithUnitName:@"dd" andValue:bearing];
+         */
+    }else{
+        self.distanceMeters = to.distanceMeters-from.distanceMeters;
+    }
+    self.speed = to.speed - from.speed;
+    self.altitude=to.altitude-from.altitude;
+}
+
+-(void)interpolate:(double)delta within:(GCLap*)diff inActivity:(GCActivity*)act{
+    self.distanceMeters += delta*diff.distanceMeters;
+    self.elapsed += delta*diff.elapsed;
+    self.speed = self.distanceMeters/self.elapsed;
+    if (self.useMovingElapsed) {
+        NSTimeInterval movingElapsed = self.movingElapsed;
+        self.speed = self.distanceMeters/movingElapsed;
+    }
+}
+
+-(void)accumulate:(GCTrackPoint*)other inActivity:(GCActivity*)act{
+    NSTimeInterval newelapsed = self.elapsed+other.elapsed;
+    [self accumulateFieldsFrom:other thisWeight:(self.elapsed/newelapsed) otherWeight:(other.elapsed/newelapsed) inActivity:act];
+    self.distanceMeters += other.distanceMeters;
+    self.speed = self.distanceMeters / newelapsed;
+    self.elapsed = newelapsed;
+
+}
+
+-(void)accumulateFieldsFrom:(GCTrackPoint*)other thisWeight:(double)w0 otherWeight:(double)w1 inActivity:(GCActivity*)act{
+    // Get fields available in other and add them
+    NSArray<GCField*>*fields = [other availableFieldsInActivity:act];
+    
+    for (GCField * field in fields) {
+        GCNumberWithUnit * num = [self numberWithUnitForField:field inActivity:act];
+        GCNumberWithUnit * onum = [other numberWithUnitForField:field inActivity:act];
+        
+        if( num == nil){
+            // we don't have the field, start with existing
+            [self setNumberWithUnit:onum forField:field inActivity:act];
+        }else{
+            
+            if( field.canSum ){
+                [self setNumberWithUnit:[num addNumberWithUnit:onum thisWeight:1.0 otherWeight:1.0] forField:field inActivity:act];
+            }else if( field.isWeightedAverage ){
+                [self setNumberWithUnit:[num addNumberWithUnit:onum thisWeight:w0 otherWeight:w1] forField:field inActivity:act];
+            }else if (field.isMax){
+                [self setNumberWithUnit:[num maxNumberWithUnit:onum] forField:field inActivity:act];
+            }else if (field.isMin){
+                [self setNumberWithUnit:[num nonZeroMinNumberWithUnit:onum] forField:field inActivity:act];
+            }// don't touch rest
+        }
+    }
+}
+
+-(void)accumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to inActivity:(GCActivity*)act{
+    NSTimeInterval dt = [to timeIntervalSince:from];
+
+    NSTimeInterval movingElapsed = self.movingElapsed;
+    NSTimeInterval newMovingElapsed = movingElapsed+dt;
+    NSTimeInterval newelapsed = dt+self.elapsed;
+
+    double dist = 0.;
+    if ([to validCoordinate] && [from validCoordinate]) {
+        dist = [to distanceMetersFrom:from];
+    }else if( to.distanceMeters!=0. && from.distanceMeters!=0.){
+        dist = to.distanceMeters-from.distanceMeters;
+    }
+
+    double deviceDist = to.distanceMeters-from.distanceMeters;
+
+    if (fabs(newelapsed) > 1e-4 ) {
+        if (self.useMovingElapsed) {
+            //if (to.distanceMeters-from.distanceMeters>1.e-2) {
+            if (dt<10. || deviceDist > 1.) {
+                [self accumulateFieldsFrom:from thisWeight:(movingElapsed/newMovingElapsed) otherWeight:(dt/newMovingElapsed) inActivity:act];
+                self.distanceMeters += dist;
+                self.speed = self.distanceMeters / newMovingElapsed;
+                self.movingElapsed = newMovingElapsed;
+            }else{
+                RZLog(RZLogInfo,@"skip: dt=%.1f dist=%.1f", dt, dist);
+            }
+        }else{
+            [self accumulateFieldsFrom:from thisWeight:(self.elapsed/newelapsed) otherWeight:(dt/newelapsed) inActivity:act];
+            self.distanceMeters += dist;
+            self.speed = self.distanceMeters / newelapsed;
+        }
+    }
+
+    self.elapsed = newelapsed;
+
+}
+
+-(void)decumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to inActivity:(GCActivity*)act{
+    NSTimeInterval dt = [to timeIntervalSince:from];
+
+    NSTimeInterval newelapsed = self.elapsed-dt;
+    if (fabs(newelapsed) > 1e-4 ) {
+        [self accumulateFieldsFrom:from thisWeight:1.0 otherWeight:-1.0*(dt/self.elapsed)*(self.elapsed/newelapsed) inActivity:act];
+        if ([to validCoordinate] && [from validCoordinate]) {
+            self.distanceMeters -= [to distanceMetersFrom:from];
+        }else{
+            self.distanceMeters -= to.distanceMeters-from.distanceMeters;
+        }
+
+        self.speed = self.distanceMeters / newelapsed;
+    }else{
+
+
+    }
+    self.time = to.time;
+    self.latitudeDegrees = to.latitudeDegrees;
+    self.longitudeDegrees = to.longitudeDegrees;
+    self.elapsed = newelapsed;
+}
+
+-(void)augmentElapsed:(NSDate*)start inActivity:(GCActivity*)act{
+    GCField * totalElapsed = [GCField fieldForKey:@"TotalTimeSeconds" andActivityType:act.activityType];
+    [self setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:self.elapsed] forField:totalElapsed inActivity:act];
+    if (start) {
+        GCField * timeStart = [GCField fieldForKey:@"TotalTimeSinceStart" andActivityType:act.activityType];
+        [self setNumberWithUnit:[GCNumberWithUnit numberWithUnit:GCUnit.second andValue:[self.time timeIntervalSinceDate:start]] forField:timeStart inActivity:act];
+    }
+}
+
 
 @end

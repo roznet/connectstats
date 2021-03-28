@@ -125,7 +125,9 @@
             
             for (GCTrackPoint * point in points) {
                 if (point.elapsed>0) {
-                    point.speed = point.distanceMeters/point.elapsed;
+                    [point setNumberWithUnit:[GCNumberWithUnit numberWithUnitName:@"mps" andValue:point.distanceMeters/point.elapsed]
+                                    forField:[GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activity.activityType]
+                                  inActivity:activity];
                 }
                 sumDistance +=point.distanceMeters;
                 sumDuration +=point.elapsed;
@@ -146,12 +148,16 @@
             activity.downloadMethod = gcDownloadMethodHealthKit;
             activity.location = @"";
             [activity setSummaryDataFromKeyDict:@{
-                                     @"SumDistance":[GCActivitySummaryValue activitySummaryValueForField:@"SumDistance" value:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDistance]],
-                                     @"SumDuration":[GCActivitySummaryValue activitySummaryValueForField:@"SumDuration" value:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDuration]],
-                                     @"SumStep":[GCActivitySummaryValue activitySummaryValueForField:@"SumStep" value:[GCNumberWithUnit numberWithUnitName:@"step" andValue:sumSteps]],
-                                     @"SumFloorClimbed":[GCActivitySummaryValue activitySummaryValueForField:@"SumFloorClimbed" value:[GCNumberWithUnit numberWithUnitName:@"step" andValue:sumFloors]],
-
-                                     }];
+                @"SumDistance":[GCActivitySummaryValue activitySummaryValueForField:[GCField fieldForKey:@"SumDistance" andActivityType:GC_TYPE_DAY]
+                                                                              value:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDistance]],
+                @"SumDuration":[GCActivitySummaryValue activitySummaryValueForField:[GCField fieldForKey:@"SumDuration" andActivityType:GC_TYPE_DAY]
+                                                                              value:[activity numberWithUnitForFieldFlag:gcFieldFlagSumDuration]],
+                @"SumStep":[GCActivitySummaryValue activitySummaryValueForField:[GCField fieldForKey:@"SumStep" andActivityType:GC_TYPE_DAY]
+                                                                          value:[GCNumberWithUnit numberWithUnitName:@"step" andValue:sumSteps]],
+                @"SumFloorClimbed":[GCActivitySummaryValue activitySummaryValueForField:[GCField fieldForKey:@"SumFloorClimbed" andActivityType:GC_TYPE_DAY]
+                                                                                  value:[GCNumberWithUnit numberWithUnitName:@"step" andValue:sumFloors]],
+                
+            }];
             [activity updateMetaData:[NSMutableDictionary dictionary]];
             if (self.organizer) {
                 [self.organizer registerActivity:activity forActivityId:activity.activityId];

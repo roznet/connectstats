@@ -268,7 +268,7 @@ static NSArray * _calculatedFields = nil;
         if (val) {
             rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
             rv.numberWithUnit = val;
-            rv.field = [self fieldInActivity:act].key;
+            rv.field = [self fieldInActivity:act];
         }
     }
     return rv;
@@ -291,7 +291,7 @@ static NSArray * _calculatedFields = nil;
         GCNumberWithUnit * val = [self evaluateWithInputs:inputs];
         rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
         rv.numberWithUnit = val;
-        rv.field = [self fieldKey];
+        rv.field = [GCField fieldForKey:[self fieldKey] andActivityType:act.activityType];
     }
     return rv;
 

@@ -96,8 +96,8 @@
         "repositoryURL": "https://github.com/roznet/rzexternal",
         "state": {
           "branch": null,
-          "revision": "0508fcb2d0e16326f149e263ef4d573b32ace205",
-          "version": "1.0.1"
+          "revision": "13707fe878e88d0dec93bb2b654bca8cadd271bf",
+          "version": "1.0.2"
         }
       },
       {
@@ -105,8 +105,8 @@
         "repositoryURL": "https://github.com/roznet/rzutils.git",
         "state": {
           "branch": null,
-          "revision": "82c0cf0a6fa0494b10992b67aa8df670281e3fcc",
-          "version": "1.0.6"
+          "revision": "c7fbebb8047c87991aea9b68626a0f70d51c3373",
+          "version": "1.0.11"
         }
       },
       {

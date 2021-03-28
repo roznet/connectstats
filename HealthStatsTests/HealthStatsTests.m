@@ -104,13 +104,6 @@
     NSLog(@"do");
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
-}
-
 -(void)testProfileSource{
     NSString * s_apple1 = @"com.apple.1";
     NSString * s_apple2 = @"com.apple.2";

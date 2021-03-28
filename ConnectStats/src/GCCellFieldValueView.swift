@@ -46,12 +46,15 @@ class GCCellFieldValueView: UIView {
         case left
         case right
     }
+    
     let field : GCField?
     let numberWithUnit : GCNumberWithUnit
     let geometry : RZNumberWithUnitGeometry
     let primaryField : GCField?
     
     let displayIcon : DisplayIcon
+    
+    var sign : RZNumberWithUnitGeometry.DisplaySign = .natural
     
     var overrideFieldName : String?
     var displayField : DisplayField = .left
@@ -63,6 +66,8 @@ class GCCellFieldValueView: UIView {
     var unitAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.unit)
     var fieldAttribute : [NSAttributedString.Key:Any] = GCViewConfig.attribute(rzAttribute.field)
       
+    var iconOverride : UIImage? = nil
+    
     init( numberWithUnit:GCNumberWithUnit,
           geometry: RZNumberWithUnitGeometry,
           field : GCField? = nil,
@@ -140,11 +145,12 @@ class GCCellFieldValueView: UIView {
                                                  numberWithUnit: self.numberWithUnit,
                                                  numberAttribute: self.numberAttribute,
                                                  unitAttribute: self.unitAttribute,
-                                                 addUnit: addUnit)
+                                                 addUnit: addUnit,
+                                                 sign: self.sign)
         
         if self.displayIcon != .hide {
             if let field = self.field,
-               let icon = field.icon(){
+               let icon = self.iconOverride ?? field.icon(){
                 let iconHeight = self.geometry.totalSize.height
                 var iconRect = CGRect(x: fieldRect.origin.x, y: fieldRect.origin.y, width: iconHeight, height: iconHeight)
                 //iconRect.origin.x = drawnRect.origin.x - iconHeight

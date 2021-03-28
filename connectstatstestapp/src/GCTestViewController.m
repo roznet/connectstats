@@ -30,7 +30,6 @@
 #import "GCTestStats.h"
 #import "GCTestTracks.h"
 #import "GCTestBasics.h"
-#import "GCTestParsing.h"
 #import "GCTestDerived.h"
 #import "GCTestUIUnitTest.h"
 
@@ -40,7 +39,6 @@
     return @[
              NSStringFromClass([GCTestUIUnitTest class]),
              NSStringFromClass([GCTestDerived class]),
-             NSStringFromClass([GCTestParsing class]),
              NSStringFromClass([GCTestStats class]),
              NSStringFromClass([GCTestBasics class]),
 

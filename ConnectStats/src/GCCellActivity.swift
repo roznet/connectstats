@@ -121,7 +121,9 @@ class GCCellActivity: UITableViewCell {
         }
         let useDate = (activity.date as NSDate)
         self.today.text = useDate.dayFormat()
-        self.date.text = useDate.calendarUnitFormat(NSCalendar.Unit.day)
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("dMMM")
+        self.date.text = formatter.string(from: activity.date)
         self.time.text = useDate.timeShortFormat()
         self.year.text = String(useDate.calendarUnitFormat(NSCalendar.Unit.year).suffix(2))
         

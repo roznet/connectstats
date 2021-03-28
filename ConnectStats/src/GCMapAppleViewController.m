@@ -75,17 +75,6 @@ typedef NS_ENUM(NSUInteger,gcMapViewType) {
 -(GCActivity*)activity{
     return [self.mapDataSource activity];
 }
--(GCField*)gradientField{
-    return [self.mapDataSource gradientField];
-}
-
--(NSUInteger)numberOfColors{
-    return (self.gradientColors).numberOfColors;
-}
-
--(GCViewGradientColors*)gradientColors{
-    return (self.gradientRoute).gradientColors;
-}
 
 - (void)viewDidLoad
 {
@@ -143,7 +132,7 @@ typedef NS_ENUM(NSUInteger,gcMapViewType) {
 -(void)setupOverlayAndAnnotations{
     self.freezeMapAnnotations = true;
 
-    if (self.gradientField || [self.mapDataSource compareActivity]) {
+    if (self.mapDataSource.hasGradient) {
         [self loadRouteForGradient];
     }else{
         [self loadRoute];
@@ -267,13 +256,7 @@ typedef NS_ENUM(NSUInteger,gcMapViewType) {
 
     self.gradientRoute = [[[GCMapGradientPathOverlay alloc] init] autorelease];
 
-    GCActivity * progressComparedTo = [self.mapDataSource compareActivity];
-
-    GCMapRouteLogic * logic = progressComparedTo ? [GCMapRouteLogic routeLogicFor:self.activity comparedTo:progressComparedTo andColors:self.gradientColors] : [GCMapRouteLogic routeLogicFor:self.activity field:self.gradientField andColors:self.gradientColors];
-    logic.showLaps = [self.mapDataSource showLaps];
-    logic.lapIndex = [self.mapDataSource lapIndex];
-
-    [logic calculate];
+    GCMapRouteLogic * logic = self.mapDataSource.routeLogic;
 
     if ([logic countOfPoints] == 0 ) {
         self.routeLine= nil;
@@ -288,24 +271,42 @@ typedef NS_ENUM(NSUInteger,gcMapViewType) {
         [self.mapDataSource setupLegendViewWithThresholds:logic.thresholds];
     }
 
-    GCActivity * compareActivity = [[GCAppGlobal organizer] compareActivity];
-    if (!progressComparedTo && compareActivity) {
-        self.compareGradientRoute = [[[GCMapGradientPathOverlay alloc] init] autorelease];
-        GCMapRouteLogic * compareLogic = [GCMapRouteLogic routeLogicFor:compareActivity field:self.gradientField andColors:[self.gradientColors gradientAsBackground]];
-        compareLogic.showLaps = [self.mapDataSource showLaps];
-        compareLogic.lapIndex = [self.mapDataSource lapIndex];
-
-        [compareLogic calculate];
-
+    GCMapRouteLogic * compareLogic = self.mapDataSource.compareLogic;
+    if( compareLogic){
         self.routeRect = MKMapRectUnion(self.routeRect, compareLogic.routeMapRect);
-
-        if ([compareLogic countOfPoints] == 0) {
+        if (compareLogic.countOfPoints == 0) {
             self.compareGradientRoute = nil;
         }else{
-            (self.compareGradientRoute).points = compareLogic.points;
+            self.compareGradientRoute.points = compareLogic.points;
             self.compareGradientRoute.boundingMapRect = self.routeRect;
         }
     }
+}
+
+// creates the route (MKPolyline) overlay
+-(void)loadRoute{
+    [self clearAllRoutes];
+    GCMapRouteLogic * logic = self.mapDataSource.routeLogic;
+
+    if ([logic countOfPoints] == 0 ) {
+        self.routeLine= nil;
+        self.gradientRoute=nil;
+
+    }else{
+        self.routeMultiLines = [NSMutableArray arrayWithCapacity:5];
+        self.routeLine = [self routeLineForPoints:logic.points withMulti:self.routeMultiLines];
+        if (self.routeMultiLines.count==0) {
+            self.routeMultiLines = nil;
+        }
+        self.routeRect = logic.routeMapRect;
+
+        GCMapRouteLogic * compareLogic = self.mapDataSource.compareLogic;
+        if (compareLogic) {
+            self.routeRect = MKMapRectUnion(self.routeRect, compareLogic.routeMapRect);
+            self.compareRouteLine = [self routeLineForPoints:compareLogic.points withMulti:nil];
+        }
+    }
+
 }
 
 -(MKPolyline*)routeLineForPoints:(NSArray*)points withMulti:(NSMutableArray*)multi{
@@ -331,45 +332,6 @@ typedef NS_ENUM(NSUInteger,gcMapViewType) {
     return rv;
 }
 
-// creates the route (MKPolyline) overlay
--(void)loadRoute{
-    [self clearAllRoutes];
-    GCMapRouteLogic * logic = [GCMapRouteLogic routeLogicFor:self.activity field:self.gradientField andColors:self.gradientColors];
-    logic.showLaps = [self.mapDataSource showLaps];
-    logic.lapIndex = [self.mapDataSource lapIndex];
-    logic.lapsRectOnFullRoute = true; // no gradient keep zoom on full route.
-
-    [logic calculate];
-
-    if ([logic countOfPoints] == 0 ) {
-        self.routeLine= nil;
-        self.gradientRoute=nil;
-
-    }else{
-        self.routeMultiLines = [NSMutableArray arrayWithCapacity:5];
-        self.routeLine = [self routeLineForPoints:logic.points withMulti:self.routeMultiLines];
-        if (self.routeMultiLines.count==0) {
-            self.routeMultiLines = nil;
-        }
-        self.routeRect = logic.routeMapRect;
-
-        GCActivity * compareActivity = [[GCAppGlobal organizer] compareActivity];
-        if (compareActivity) {
-            GCMapRouteLogic * compareLogic = [GCMapRouteLogic routeLogicFor:compareActivity field:self.gradientField andColors:[self.gradientColors gradientAsBackground]];
-            compareLogic.showLaps = [self.mapDataSource showLaps];
-            compareLogic.lapIndex = [self.mapDataSource lapIndex];
-            compareLogic.lapsRectOnFullRoute = true;
-
-            [compareLogic calculate];
-
-            self.routeRect = MKMapRectUnion(self.routeRect, compareLogic.routeMapRect);
-
-            self.compareRouteLine = [self routeLineForPoints:compareLogic.points withMulti:nil];
-        }
-
-    }
-
-}
 
 #pragma mark MKMapViewDelegate
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(nonnull id<MKOverlay>)overlay
