@@ -28,125 +28,16 @@
 #import "GCHealthZoneCalculator.h"
 #import "GCActivity+CachedTracks.h"
 #import "GCAppGlobal.h"
-#import "Flurry.h"
 #import "GCActivity+Fields.h"
+#import "GCActivityAutoLapChoiceHolder.h"
 
-@interface GCActivityAutoLapChoiceHolder ()
-@property (nonatomic,retain) NSString * lapDescription;
+@interface GCActivityAutoLapChoices ()
+@property (nonatomic,retain) NSArray<GCActivityAutoLapChoiceHolder*> * choices;
+@property (nonatomic,retain) GCActivity * activity;
+@property (nonatomic,assign) NSUInteger selected;
+
 
 @end
-
-@implementation GCActivityAutoLapChoiceHolder
-
-+(GCActivityAutoLapChoiceHolder*)choiceForZoneCalculator:(GCHealthZoneCalculator*)zoneCalc andLabel:(NSString*)label{
-    GCActivityAutoLapChoiceHolder * rv = [[[GCActivityAutoLapChoiceHolder alloc] init] autorelease];
-    if (rv) {
-        rv.key = [GCHealthZoneCalculator keyForField:zoneCalc.field andSource:zoneCalc.source];
-        rv.lapDescription = label;
-        rv.style = gcAutoLapStyleZone;
-        rv.zoneCalc = zoneCalc;
-    }
-    return rv;
-}
-
-+(GCActivityAutoLapChoiceHolder*)choiceForIndexSerie:(GCStatsDataSerieWithUnit*)serie andLabel:(NSString*)label{
-    GCActivityAutoLapChoiceHolder * rv = [[[GCActivityAutoLapChoiceHolder alloc] init] autorelease];
-    if (rv) {
-        rv.key = label;
-        rv.lapDescription = [NSString stringWithFormat:NSLocalizedString(@"Best Rolling %@", @"Autolap Choice"), label];
-        rv.style = gcAutoLapStyleIndexSerie;
-        rv.indexSerie = serie;
-    }
-    return rv;
-
-}
-+(GCActivityAutoLapChoiceHolder*)choiceHolder:(GCActivityMatchLapBlock)match value:(double)value andLabel:(NSString*)label{
-    GCActivityAutoLapChoiceHolder * rv = [[[GCActivityAutoLapChoiceHolder alloc] init] autorelease];
-    if (rv) {
-        rv.key = label;
-        rv.value = value;
-        rv.match = match;
-        rv.compare = nil;
-        rv.lapDescription = label;
-        rv.style = gcAutoLapStyleMatching;
-    }
-    return rv;
-
-}
-
-+(GCActivityAutoLapChoiceHolder*)choiceHolderAccumulatedWithLabel:(NSString*)label{
-    GCActivityAutoLapChoiceHolder * rv = [[[GCActivityAutoLapChoiceHolder alloc] init] autorelease];
-    if (rv) {
-        rv.key = label;
-        rv.lapDescription = NSLocalizedString(@"Accumulated", @"Laps Description");
-        rv.style = gcAutoLapStyleAccumulated;
-    }
-    return rv;
-
-}
-+(GCActivityAutoLapChoiceHolder*)choiceHolder:(GCActivityMatchLapBlock)match compare:(GCActivityCompareLapBlock)comp value:(double)value andLabel:(NSString*)label{
-    GCActivityAutoLapChoiceHolder * rv = [[[GCActivityAutoLapChoiceHolder alloc] init] autorelease];
-    if (rv) {
-        rv.key = label;
-        rv.value = value;
-        rv.match = match;
-        rv.compare = comp;
-        rv.lapDescription = label;
-        rv.style = gcAutoLapStyleRolling;
-    }
-    return rv;
-}
-
-+(GCActivityAutoLapChoiceHolder*)choiceHolderSki{
-    GCActivityAutoLapChoiceHolder * rv = [[[GCActivityAutoLapChoiceHolder alloc] init] autorelease];
-    if (rv) {
-        rv.key = @"skilaps";
-        rv.lapDescription = NSLocalizedString(@"Ski Laps", @"Autolap Choice");
-        rv.style = gcAutoLapStyleSki;
-    }
-    return rv;
-
-}
-
--(void)dealloc{
-    [_key release];
-    [_lapDescription release];
-    [_zoneCalc release];
-    [_indexSerie release];
-
-    [super dealloc];
-}
-
--(NSArray*)laps:(GCActivity*)activity{
-    NSArray * rv = nil;
-    switch (self.style) {
-        case gcAutoLapStyleMatching:
-            rv = [activity calculatedLapFor:self.value match:self.match inLap:GC_ALL_LAPS];
-            break;
-        case gcAutoLapStyleRolling:
-            rv = [activity calculatedRollingLapFor:self.value match:self.match compare:self.compare];
-            break;
-        case gcAutoLapStyleSki:
-            rv = [activity calculateSkiLaps];
-            break;
-        case gcAutoLapStyleZone:
-            rv = [activity compoundLapForZoneCalculator:self.zoneCalc];
-            break;
-        case gcAutoLapStyleIndexSerie:
-            rv = [activity compoundLapForIndexSerie:self.indexSerie desc:self.key];
-            break;
-        case gcAutoLapStyleAccumulated:
-            rv = [activity accumulatedLaps];
-            break;
-    }
-    return rv;
-}
-
--(BOOL)shouldAlwaysRecalculate{
-    return self.style == gcAutoLapStyleAccumulated;
-}
-@end
-
 
 @implementation GCActivityAutoLapChoices
 -(instancetype)init{
@@ -191,7 +82,7 @@
                             [GCNumberWithUnit numberWithUnit:store andValue:[small convertDouble:100.  toUnit:store]],
                             ];
         NSMutableArray * choices = [NSMutableArray arrayWithCapacity:5];
-        GCActivityAutoLapChoiceHolder * recorded = [GCActivityAutoLapChoiceHolder choiceHolder:nil value:0. andLabel:GC_LAPS_RECORDED];
+        GCActivityAutoLapChoiceHolder * recorded = [GCActivityAutoLapChoiceHolder choiceHolderWithLabel:GC_LAPS_RECORDED];
         recorded.lapDescription = [GCActivityAutoLapChoices defaultDescriptionText];
         [choices addObject:recorded];
         [choices addObject:[GCActivityAutoLapChoiceHolder choiceHolderAccumulatedWithLabel:GC_LAPS_ACCUMULATED]];
@@ -304,9 +195,6 @@
             NSMutableArray * laps = [NSMutableArray arrayWithArray:[holder laps:self.activity]];
             [self.activity registerLaps:laps forName:holder.key];
             [self.activity useLaps:holder.key];
-            if (holder.lapDescription) {
-                [Flurry logEvent:EVENT_AUTO_LAP withParameters:@{@"description":holder.lapDescription}];
-            }
         }
         self.selected = idx;
     }

@@ -159,6 +159,9 @@
 		422F284020557DD000187478 /* GCField+Convert.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F283E20557DD000187478 /* GCField+Convert.m */; };
 		422F284120557DD000187478 /* GCField+Convert.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F283E20557DD000187478 /* GCField+Convert.m */; };
 		422F284220557DD000187478 /* GCField+Convert.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F283E20557DD000187478 /* GCField+Convert.m */; };
+		422F3BB126173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F3BB026173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m */; };
+		422F3BB226173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F3BB026173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m */; };
+		422F3BB326173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F3BB026173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m */; };
 		422F52101DFB51E800DD5551 /* GCUnit+FIT.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B462E1CDFE03400743D79 /* GCUnit+FIT.m */; };
 		422F52191DFB51F700DD5551 /* GCField+FitFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42769BC51DD1D225000390F1 /* GCField+FitFile.swift */; };
 		422F521A1DFB51F700DD5551 /* FITFitFileInterpret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42769BC71DD2A81D000390F1 /* FITFitFileInterpret.swift */; };
@@ -1365,6 +1368,8 @@
 		422F283720551AE100187478 /* activityweather_2545022458.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activityweather_2545022458.json; sourceTree = "<group>"; };
 		422F283D20557DD000187478 /* GCField+Convert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GCField+Convert.h"; path = "src/GCField+Convert.h"; sourceTree = "<group>"; };
 		422F283E20557DD000187478 /* GCField+Convert.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "GCField+Convert.m"; path = "src/GCField+Convert.m"; sourceTree = "<group>"; };
+		422F3BAF26173F2100BE3417 /* GCActivityAutoLapChoiceHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCActivityAutoLapChoiceHolder.h; path = src/GCActivityAutoLapChoiceHolder.h; sourceTree = "<group>"; };
+		422F3BB026173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCActivityAutoLapChoiceHolder.m; path = src/GCActivityAutoLapChoiceHolder.m; sourceTree = "<group>"; };
 		422FAFF119A1DD6000D09773 /* HealthStats.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthStats.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		422FAFF219A1DD6100D09773 /* HealthStats-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HealthStats-Info.plist"; sourceTree = SOURCE_ROOT; };
 		42306C331F5C5FC400FC7CCB /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -3687,6 +3692,8 @@
 				42E2269E1657DA07008FFD68 /* GCActivityLapViewController.m */,
 				42C92FDD170FB73F0037602F /* GCActivityAutoLapChoices.h */,
 				42C92FDE170FB73F0037602F /* GCActivityAutoLapChoices.m */,
+				422F3BAF26173F2100BE3417 /* GCActivityAutoLapChoiceHolder.h */,
+				422F3BB026173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m */,
 			);
 			name = Laps;
 			sourceTree = "<group>";
@@ -5202,6 +5209,7 @@
 				42DC51591B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m in Sources */,
 				42FD55BA1B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */,
 				422F521A1DFB51F700DD5551 /* FITFitFileInterpret.swift in Sources */,
+				422F3BB326173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m in Sources */,
 				422FAED819A1DD6000D09773 /* GCMapViewController.m in Sources */,
 				422FAED919A1DD6000D09773 /* GCTrackPoint.m in Sources */,
 				422FAEDA19A1DD6000D09773 /* GCViewConfig.m in Sources */,
@@ -5555,6 +5563,7 @@
 				42AA288F1637F6AB0054F84A /* GCActivitySearchElement.m in Sources */,
 				422549571EE7361F004F4AE5 /* FITFitStatisticsWeight.swift in Sources */,
 				422C70AE1642B677003779E0 /* GCHistoryAggregatedActivityStats.m in Sources */,
+				422F3BB126173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m in Sources */,
 				424BDAB925E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */,
 				421A514F1C82FA9400671587 /* GCCalendarDataDateMarkers.m in Sources */,
 				42453BAA1DD8B5940073ACCA /* GCMapGradientPathOverlay.m in Sources */,
@@ -5932,6 +5941,7 @@
 				42A89C201D627444007CF90D /* GCUnitTrainingZone.m in Sources */,
 				42B467BA1DC6A56200279DC8 /* GCAppPasswordManager.swift in Sources */,
 				42B5E21B1BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.m in Sources */,
+				422F3BB226173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m in Sources */,
 				42B5E21E1BA5AF9A000FAE4E /* GCTestStats.m in Sources */,
 				42B5E2201BA5AF9A000FAE4E /* GCTestUICellsViewController.m in Sources */,
 				42B5E2161BA5AF9A000FAE4E /* GCAppDelegate.m in Sources */,

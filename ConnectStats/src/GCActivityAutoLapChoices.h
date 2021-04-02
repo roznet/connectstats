@@ -25,50 +25,22 @@
 
 #import <Foundation/Foundation.h>
 #import "GCActivity+Calculated.h"
-
-typedef NS_ENUM(NSUInteger, gcAutoLapStyle) {
-    gcAutoLapStyleMatching,
-    gcAutoLapStyleRolling,
-    gcAutoLapStyleSki,
-    gcAutoLapStyleZone,
-    gcAutoLapStyleIndexSerie,
-    gcAutoLapStyleAccumulated
-};
-@class GCHealthZoneCalculator;
-
-@interface GCActivityAutoLapChoiceHolder : NSObject
-@property (nonatomic,assign) GCActivityMatchLapBlock match;
-@property (nonatomic,assign) GCActivityCompareLapBlock compare;
-@property (nonatomic,assign) double value;
-@property (nonatomic,retain) NSString * key;
-@property (nonatomic,assign) gcAutoLapStyle style;
-@property (nonatomic,retain) GCHealthZoneCalculator*zoneCalc;
-@property (nonatomic,retain) GCStatsDataSerieWithUnit * indexSerie;
-
-+(GCActivityAutoLapChoiceHolder*)choiceHolder:(GCActivityMatchLapBlock)match value:(double)value andLabel:(NSString*)label;
-+(GCActivityAutoLapChoiceHolder*)choiceHolder:(GCActivityMatchLapBlock)match compare:(GCActivityCompareLapBlock)comp value:(double)value andLabel:(NSString*)label;
-+(GCActivityAutoLapChoiceHolder*)choiceHolderSki;
-+(GCActivityAutoLapChoiceHolder*)choiceForZoneCalculator:(GCHealthZoneCalculator*)zoneCalc andLabel:(NSString*)label;
-+(GCActivityAutoLapChoiceHolder*)choiceForIndexSerie:(GCStatsDataSerieWithUnit*)serie andLabel:(NSString*)label;
-
--(NSArray*)laps:(GCActivity*)activity;
--(BOOL)shouldAlwaysRecalculate;
-@end
+#import "GCActivityAutoLapChoiceHolder.h"
 
 @interface GCActivityAutoLapChoices : NSObject
-@property (nonatomic,retain) NSArray * choices;
-@property (nonatomic,retain) GCActivity * activity;
-@property (nonatomic,assign) NSUInteger selected;
+
+@property (nonatomic,readonly) NSArray<NSString*> * choicesDescriptions;
+@property (nonatomic,readonly) NSUInteger selected;
+@property (nonatomic,readonly) GCActivityAutoLapChoiceHolder * currentHolder;
+@property (nonatomic,readonly) NSAttributedString * currentDetailledDescription;
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 -(GCActivityAutoLapChoices*)initWithActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
 -(void)changeSelectedTo:(NSUInteger)idx;
 -(void)changeActivity:(GCActivity*)act;
 
--(NSAttributedString*)currentDetailledDescription;
--(GCActivityAutoLapChoiceHolder*)currentHolder;
 +(NSAttributedString*)defaultDescription;
 +(NSAttributedString*)currentDescription:(GCActivity*)activity;
 
--(NSArray*)choicesDescriptions;
+
 @end
