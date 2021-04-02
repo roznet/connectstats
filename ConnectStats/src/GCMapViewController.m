@@ -384,7 +384,7 @@
 
 -(void)toggleField:(id)cb{
     self.gradientField = [self.activity nextAvailableTrackField:self.gradientField];
-    [self refreshOverlayAndInfo];
+    [self forceRedisplay];
 }
 
 
