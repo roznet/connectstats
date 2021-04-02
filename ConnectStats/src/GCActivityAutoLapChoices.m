@@ -230,4 +230,14 @@
     }
     return rv;
 }
+
+-(NSUInteger)count{
+    return self.choices.count;
+}
+-(GCActivityAutoLapChoiceHolder*)objectAtIndexedSubscript:(NSUInteger)idx{
+    return self.choices[idx];
+}
+-(NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id  _Nullable [])buffer count:(NSUInteger)len{
+    return [self.choices countByEnumeratingWithState:state objects:buffer count:len];
+}
 @end

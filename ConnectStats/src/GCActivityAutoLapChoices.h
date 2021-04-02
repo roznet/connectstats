@@ -27,17 +27,20 @@
 #import "GCActivity+CalculatedLaps.h"
 #import "GCActivityAutoLapChoiceHolder.h"
 
-@interface GCActivityAutoLapChoices : NSObject
+@interface GCActivityAutoLapChoices : NSObject<NSFastEnumeration>
 
 @property (nonatomic,readonly) NSArray<NSString*> * choicesDescriptions;
 @property (nonatomic,readonly) NSUInteger selected;
 @property (nonatomic,readonly) GCActivityAutoLapChoiceHolder * currentHolder;
 @property (nonatomic,readonly) NSAttributedString * currentDetailledDescription;
+@property (nonatomic,readonly) NSUInteger count;
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 -(GCActivityAutoLapChoices*)initWithActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
 -(void)changeSelectedTo:(NSUInteger)idx;
 -(void)changeActivity:(GCActivity*)act;
+
+-(GCActivityAutoLapChoiceHolder*)objectAtIndexedSubscript:(NSUInteger)idx;
 
 +(NSAttributedString*)defaultDescription;
 +(NSAttributedString*)currentDescription:(GCActivity*)activity;

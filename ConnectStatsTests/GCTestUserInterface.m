@@ -182,7 +182,6 @@
     NSString * aId = @"2477200414";
     NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
     GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFilePath:fn startTime:[NSDate date]];
-    NSLog(@"%@", fitAct);
     
     XCTestExpectation * expectation = RZReturnAutorelease([[XCTestExpectation alloc] initWithDescription:@"Map Snapshot"]);
     
