@@ -26,7 +26,7 @@
 
 
 #import "GCActivity+Series.h"
-#import "GCActivity+CachedTracks.h"
+#import "GCActivity+CalculatedTracks.h"
 
 @implementation GCActivity (Series)
 

@@ -15,7 +15,7 @@
 #import "GCTestCase.h"
 #import "GCConnectStatsRequestSearch.h"
 #import "GCConnectStatsRequestFitFile.h"
-#import "GCActivity+CachedTracks.h"
+#import "GCActivity+CalculatedTracks.h"
 
 @interface GCTestsDerived : GCTestCase
 

@@ -26,7 +26,7 @@
 #import "GCDerivedDataSerie.h"
 #import "GCActivity.h"
 #import "GCAppGlobal.h"
-#import "GCActivity+CachedTracks.h"
+#import "GCActivity+CalculatedTracks.h"
 
 #define kGCVersion          @"version"
 #define kGCDerivedType      @"derivedType"

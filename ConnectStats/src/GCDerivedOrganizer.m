@@ -25,7 +25,7 @@
 
 #import "GCDerivedOrganizer.h"
 #import "GCAppGlobal.h"
-#import "GCActivity+CachedTracks.h"
+#import "GCActivity+CalculatedTracks.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCDerivedGroupedSeries.h"
 #import "GCAppProfiles.h"

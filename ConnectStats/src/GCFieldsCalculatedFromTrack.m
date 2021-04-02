@@ -23,14 +23,14 @@
 //  SOFTWARE.
 //  
 
-#import "GCFieldsCalculatedTrack.h"
+#import "GCFieldsCalculatedFromTrack.h"
 #import "GCActivity.h"
 #import "GCTrackPoint.h"
 #import "GCLap.h"
 #import "GCActivityCalculatedValue.h"
 
 
-@implementation GCFieldsCalculatedTrack
+@implementation GCFieldsCalculatedFromTrack
 
 -(void)setupActivity:(GCActivity *)act{
 
@@ -52,7 +52,7 @@
     if( act.trackpoints && act.laps){
         
         
-        NSMutableArray<GCFieldsCalculatedTrack*> * fields =[NSMutableArray array];
+        NSMutableArray<GCFieldsCalculatedFromTrack*> * fields =[NSMutableArray array];
   
         if( !act.garminSwimAlgorithm ){
             [fields addObject:[[[GCFieldsCalculatedTrackElevation alloc] init] autorelease] ];
@@ -66,11 +66,11 @@
         GCLap * totalActivityLap = [[[GCLap alloc] init] autorelease];
 
         for (GCLap * lap in act.laps) {
-            for (GCFieldsCalculatedTrack * field in fields) {
+            for (GCFieldsCalculatedFromTrack * field in fields) {
                 [field setupLap:lap inActivity:act];
             }
         }
-        for (GCFieldsCalculatedTrack * field in fields) {
+        for (GCFieldsCalculatedFromTrack * field in fields) {
             [field setupLap:totalActivityLap inActivity:act];
         }
 
@@ -79,7 +79,7 @@
         for (GCTrackPoint * point in act.trackpoints) {
             if (!started) {
                 started = true;
-                for (GCFieldsCalculatedTrack * field in fields) {
+                for (GCFieldsCalculatedFromTrack * field in fields) {
                     [field startWithPoint:point];
                 }
             }else{
@@ -88,7 +88,7 @@
                     if( lapMissingPower && (lap.trackFlags & gcFieldFlagPower) == gcFieldFlagPower){
                         lapMissingPower = false;
                     }
-                    for (GCFieldsCalculatedTrack * field in fields) {
+                    for (GCFieldsCalculatedFromTrack * field in fields) {
                         [field newPoint:point forLaps:@[lap,totalActivityLap] inActivity:act];
                     }
 

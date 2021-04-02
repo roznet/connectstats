@@ -207,18 +207,14 @@
     
     NSMutableDictionary * keep = [NSMutableDictionary dictionary];
     // only test 1 of each kind of style
-    for (GCActivityAutoLapChoiceHolder * choice  in choices.choices) {
+    for (GCActivityAutoLapChoiceHolder * choice  in choices) {
         keep[ @(choice.style)] = choice;
     }
-    
-    choices.choices = keep.allValues;
-    choices.selected = 0;
-    NSUInteger n = choices.choices.count;
-    
+        
     [self measureBlock:^{
         [act clearCalculatedLaps];
-        for (NSUInteger i=0; i<n; i++) {
-            [choices changeSelectedTo:i];
+        for (GCActivityAutoLapChoiceHolder * choice in keep.allValues) {
+            [choice laps:act];
         }
     }];
 

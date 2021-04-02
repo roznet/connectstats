@@ -39,7 +39,7 @@
 #import "GCFieldCache.h"
 #import "GCAppDelegate+Swift.h"
 #import "GCWeather.h"
-#import "GCActivity+CachedTracks.h"
+#import "GCActivity+CalculatedTracks.h"
 #import "GCConnectStatsStatus.h"
 #import "GCAppSceneDelegate.h"
 

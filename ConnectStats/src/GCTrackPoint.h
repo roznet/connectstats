@@ -77,6 +77,12 @@
 @property (nonatomic,readonly) NSDictionary<GCField*,GCNumberWithUnit*>*calculated;
 @property (nonatomic,readonly) NSDictionary<GCField*,GCNumberWithUnit*>*extra;
 
+@property (nonatomic,readonly) NSString * displayLabel;
+@property (nonatomic,readonly) BOOL validCoordinate;
+@property (nonatomic,readonly) CLLocationCoordinate2D coordinate2D;
+@property (nonatomic,readonly) CLLocation * location;
+
+
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithDictionary:(NSDictionary*)aDict forActivity:(GCActivity*)act NS_DESIGNATED_INITIALIZER;
 -(GCTrackPoint*)initWithResultSet:(FMResultSet*)res NS_DESIGNATED_INITIALIZER;
@@ -100,11 +106,6 @@
 -(void)recordTrackEventType:(gcTrackEventType)trackEventType inActivity:(GCActivity*)act;
 
 -(NSString*)fullDescriptionInActivity:(GCActivity*)act;
--(NSString*)displayLabel;
-
--(BOOL)validCoordinate;
--(CLLocationCoordinate2D)coordinate2D;
--(CLLocation*)location;
 -(CLLocationDistance)distanceMetersFrom:(GCTrackPoint*)other;
 -(NSTimeInterval)timeIntervalSince:(GCTrackPoint*)other;
 -(NSComparisonResult)compareTime:(GCTrackPoint*)other;

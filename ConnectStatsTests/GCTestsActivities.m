@@ -9,7 +9,7 @@
 #import "GCTestCase.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCActivitiesCacheManagement.h"
-#import "GCActivity+Calculated.h"
+#import "GCActivity+CalculatedLaps.h"
 #import "GCAppGlobal.h"
 #import <HealthKit/HealthKit.h>
 #import "GCHealthKitActivityParser.h"
@@ -19,7 +19,7 @@
 #import "GCFieldsForCategory.h"
 #import "GCTrackFieldChoiceHolder.h"
 #import "GCGarminUserJsonParser.h"
-#import "GCActivity+CachedTracks.h"
+#import "GCActivity+CalculatedTracks.h"
 #import "GCTestsHelper.h"
 #import "GCTestsSamples.h"
 #import "GCActivity+Series.h"

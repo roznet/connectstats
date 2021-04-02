@@ -39,7 +39,7 @@
 #import "GCActivity+Database.h"
 #import "GCWebConnect+Requests.h"
 #import "GCService.h"
-#import "GCActivity+CachedTracks.h"
+#import "GCActivity+CalculatedTracks.h"
 #import "GCTrackPointExtraIndex.h"
 #import "GCActivity+Fields.h"
 #import "GCActivitiesOrganizer.h"

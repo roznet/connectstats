@@ -27,7 +27,7 @@
 #import "GCAppGlobal.h"
 #import "GCGarminActivityDetailJsonParser.h"
 #import "GCGarminActivitySummaryParser.h"
-#import "GCActivity+Calculated.h"
+#import "GCActivity+CalculatedLaps.h"
 #import "GCGarminUserJsonParser.h"
 #import "GCHealthOrganizer.h"
 #import "GCHealthZoneCalculator.h"
