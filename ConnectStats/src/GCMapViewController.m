@@ -30,7 +30,7 @@
 #import "GCMapAnnotation.h"
 #import "Flurry.h"
 #import "GCViewConfig.h"
-#import "GCActivity+Calculated.h"
+#import "GCActivity+CalculatedLaps.h"
 #import "GCFields.h"
 #import "GCViewIcons.h"
 #import "GCMapAppleViewController.h"

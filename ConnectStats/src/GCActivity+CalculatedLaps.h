@@ -31,7 +31,7 @@
 typedef NSComparisonResult (^GCActivityMatchLapBlock)(GCLap * candidate,GCLap * diff,double value,BOOL interp);
 typedef BOOL (^GCActivityCompareLapBlock)(GCLap*current,GCLap*candidate);
 
-@interface GCActivity (Calculated)
+@interface GCActivity (CalculatedLaps)
 
 /// Look for the last lap that matches the MatchlapBlock and that return true to for the compare function
 /// For example, if match is a fix distance and compare returns true if a specific value like speed is higher

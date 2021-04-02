@@ -28,7 +28,7 @@
 #import "GCActivityAutoLapChoiceHolder.h"
 #import "GCViewConfig.h"
 #import "GCHealthZoneCalculator.h"
-#import "GCActivity+CachedTracks.h"
+#import "GCActivity+CalculatedTracks.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+Fields.h"
 

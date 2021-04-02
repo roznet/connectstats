@@ -24,7 +24,7 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import "GCActivity+Calculated.h"
+#import "GCActivity+CalculatedLaps.h"
 #import "GCActivityAutoLapChoiceHolder.h"
 
 @interface GCActivityAutoLapChoices : NSObject

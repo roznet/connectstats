@@ -23,10 +23,10 @@
 //  SOFTWARE.
 //  
 
-#import "GCActivity+Calculated.h"
+#import "GCActivity+CalculatedLaps.h"
 #import "GCAppGlobal.h"
 #import "GCHealthZoneCalculator.h"
-#import "GCActivity+CachedTracks.h"
+#import "GCActivity+CalculatedTracks.h"
 #import "GCLapCompound.h"
 
 typedef  NS_ENUM(NSUInteger, gcSkiLapType){
@@ -36,7 +36,7 @@ typedef  NS_ENUM(NSUInteger, gcSkiLapType){
     gcSkiLapStationary
 };
 
-@implementation GCActivity (Calculated)
+@implementation GCActivity (CalculatedLaps)
 
 -(NSArray*)calculatedLapsMatching:(double)val with:(GCActivityMatchLapBlock)match{
     NSMutableArray * array = [NSMutableArray array];

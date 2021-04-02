@@ -26,7 +26,7 @@
 #import "GCTestDerived.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+Database.h"
-#import "GCActivity+CachedTracks.h"
+#import "GCActivity+CalculatedTracks.h"
 #import "GCWebConnect+Requests.h"
 #import "GCTestsSamples.h"
 #import "GCTestAppGlobal.h"

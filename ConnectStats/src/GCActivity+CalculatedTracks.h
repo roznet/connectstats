@@ -1,6 +1,6 @@
 //  MIT Licence
 //
-//  Created on 24/06/2013.
+//  Created on 23/12/2013.
 //
 //  Copyright (c) 2013 Brice Rosenzweig.
 //
@@ -23,33 +23,36 @@
 //  SOFTWARE.
 //  
 
-#import <Foundation/Foundation.h>
+#import "GCActivity.h"
+#import "GCCalculatedCachedTrackInfo.h"
 
-@class GCLap;
-@class GCTrackPoint;
-@class GCActivity;
+NS_ASSUME_NONNULL_BEGIN
+@class GCFieldInfo;
 
-@interface GCFieldsCalculatedTrack : NSObject
-+(void)addCalculatedFieldsToTrackPointsAndLaps:(GCActivity *)act;
+@interface GCActivity (CalculatedTracks)
 
--(void)setupActivity:(GCActivity*)act;
--(void)setupLap:(GCLap*)lap inActivity:(GCActivity*)acts;
--(void)startWithPoint:(GCTrackPoint *)point;
--(void)newPoint:(GCTrackPoint*)point forLaps:(NSArray<GCLap*>*)lap inActivity:(GCActivity*)act;
+-(NSArray<GCField*>*)availableCalculatedFields;
+-(BOOL)hasCalculatedSerieForField:(nonnull GCField*)field;
+
+/**
+ * Return serie if already calculated
+ */
+//-(GCStatsDataSerieWithUnit*)calculatedSerieForField:(GCField*)field;
+/**
+ * return serie if already calculated or start the calculation if not
+ * if calculation is start a notification will be sent when done
+ */
+-(nullable GCStatsDataSerieWithUnit*)calculatedSerieForField:(nonnull GCField*)field thread:(nullable dispatch_queue_t)thread;
+/**
+ * return standardized serie for a best rolling field, if not calculation will start the calculation
+ */
+-(nullable GCStatsDataSerieWithUnit*)standardizedBestRollingTrack:(nonnull GCField*)field thread:(nullable dispatch_queue_t)thread;
+
+-(void)addStandardCalculatedTracks:(nullable dispatch_queue_t)threadOrNil;
++(nullable GCStatsDataSerieWithUnit*)standardSerieSampleForXUnit:(nonnull GCUnit*)xUnit;
+
++(NSDictionary<GCField*,GCFieldInfo*>*)fieldInfoForCalculatedTrackFields;
 
 @end
+NS_ASSUME_NONNULL_END
 
-@interface GCFieldsCalculatedTrackElevation : GCFieldsCalculatedTrack
-@property (nonatomic,assign) double altitude;
-
-@end
-
-@interface GCFieldsCalculatedTrackNormalizedPower : GCFieldsCalculatedTrack
-
-@property (nonatomic,assign) NSUInteger movingAverage;
-
-@end
-
-@interface GCFieldsCalculatedTrackEstimatedPower : GCFieldsCalculatedTrack
-
-@end

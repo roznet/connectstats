@@ -26,7 +26,7 @@
 
 
 #import <Foundation/Foundation.h>
-#import "GCActivity+Calculated.h"
+#import "GCActivity+CalculatedLaps.h"
 
 typedef NS_ENUM(NSUInteger, gcAutoLapStyle) {
     gcAutoLapStyleMatching,

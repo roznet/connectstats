@@ -32,6 +32,7 @@
 @class GCField;
 @class GCFieldInfo;
 
+/// Fields Calculated from other fields
 @interface GCFieldsCalculated : NSObject
 
 +(NSArray<GCFieldsCalculated*>*)calculatedFields;

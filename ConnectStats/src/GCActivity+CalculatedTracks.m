@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //  
 
-#import "GCActivity+CachedTracks.h"
+#import "GCActivity+CalculatedTracks.h"
 #import "GCFields.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+Fields.h"
@@ -31,7 +31,7 @@
 #import "GCActivity+Series.h"
 #import "GCFieldInfo.h"
 
-@implementation GCActivity (CachedTracks)
+@implementation GCActivity (CalculatedTracks)
 
 #pragma mark - Calculation Process
 

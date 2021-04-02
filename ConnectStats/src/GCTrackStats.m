@@ -26,7 +26,7 @@
 #import "GCTrackStats.h"
 #import "GCHealthZoneCalculator.h"
 #import "GCTrackPoint.h"
-#import "GCActivity+CachedTracks.h"
+#import "GCActivity+CalculatedTracks.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+Series.h"
 

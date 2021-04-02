@@ -28,7 +28,7 @@
 #import "GCActivity.h"
 #import "GCTrackStats.h"
 #import "GCAppGlobal.h"
-#import "GCActivity+CachedTracks.h"
+#import "GCActivity+CalculatedTracks.h"
 
 
 @implementation GCTrackFieldChoices

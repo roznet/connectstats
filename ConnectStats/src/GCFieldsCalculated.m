@@ -25,8 +25,8 @@
 
 #import "GCFieldsCalculated.h"
 #import "GCActivity.h"
-#import "GCActivity+CachedTracks.h"
-#import "GCFieldsCalculatedTrack.h"
+#import "GCActivity+CalculatedTracks.h"
+#import "GCFieldsCalculatedFromTrack.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+Fields.h"
 #import "GCFieldInfo.h"
@@ -134,7 +134,7 @@ static NSArray * _calculatedFields = nil;
 }
 
 +(void)addCalculatedFieldsToLaps:(NSArray*)laps forActivity:(GCActivity*)act{
-    [GCFieldsCalculatedTrack addCalculatedFieldsToTrackPointsAndLaps:act];
+    [GCFieldsCalculatedFromTrack addCalculatedFieldsToTrackPointsAndLaps:act];
     NSArray * calcFields = [GCFieldsCalculated calculatedFields];
     for (GCTrackPoint * point in laps) {
         for (GCFieldsCalculated * one in calcFields) {
