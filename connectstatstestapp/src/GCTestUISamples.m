@@ -80,7 +80,7 @@
                                            NSStringFromSelector(@selector(sample13_compareStats)),
                                            NSStringFromSelector(@selector(sample14_SimpleGradientFillPlot)),
                                            NSStringFromSelector(@selector(sample15_HistDerivedGraphs)),
-                                           NSStringFromSelector(@selector(sample16_categorical)),
+                                           //NSStringFromSelector(@selector(sample16_categorical)),
 
 
                                            ];
@@ -667,7 +667,7 @@
 -(NSArray<GCSimpleGraphCachedDataSource*>*)sample16_categorical{
     
     NSMutableArray<GCSimpleGraphCachedDataSource*>*rv = [NSMutableArray array];
-    
+    /*
     GCStatsDataSerie * data = [[GCStatsDataSerie alloc] init];
     GCStatsDataSerie * data2 = [[GCStatsDataSerie alloc] init];
     [data addDataPointForCategory:GC_TYPE_RUNNING value:10.0];
@@ -691,7 +691,7 @@
     [data2 release];
 
     [rv addObject:sample];
-    
+    */
     return rv;
 
 }

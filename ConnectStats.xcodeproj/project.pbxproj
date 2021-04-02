@@ -1448,7 +1448,6 @@
 		42453BA91DD8B5940073ACCA /* GCMapGradientPathOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCMapGradientPathOverlay.m; path = src/GCMapGradientPathOverlay.m; sourceTree = "<group>"; };
 		42461D211922D169001B03C7 /* GCStravaActivityLapsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaActivityLapsParser.h; path = src/GCStravaActivityLapsParser.h; sourceTree = "<group>"; };
 		42461D221922D169001B03C7 /* GCStravaActivityLapsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaActivityLapsParser.m; path = src/GCStravaActivityLapsParser.m; sourceTree = "<group>"; };
-		42487A7926077E6700809F94 /* rzutils */ = {isa = PBXFileReference; lastKnownFileType = folder; name = rzutils; path = ../rzutils; sourceTree = "<group>"; };
 		4248DC891ED1E6ED00470DEB /* FITDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITDataViewController.swift; path = src/FITDataViewController.swift; sourceTree = "<group>"; };
 		4248ED991DCFF6E100254216 /* FitFileExplorer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "FitFileExplorer-Prefix.pch"; path = "src/FitFileExplorer-Prefix.pch"; sourceTree = "<group>"; };
 		424B7F2916CB049A000B38AD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -3199,7 +3198,6 @@
 		428FF6FE15F36888007A88FA = {
 			isa = PBXGroup;
 			children = (
-				42487A7926077E6700809F94 /* rzutils */,
 				4245CD811B7DE351006B85B4 /* Common */,
 				428FF71315F36888007A88FA /* ConnectStats */,
 				4253B4571CD49F7E00437E6A /* FitFileExplorer */,
@@ -6890,7 +6888,7 @@
 			repositoryURL = "https://github.com/roznet/rzutils.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.11;
+				minimumVersion = 1.0.12;
 			};
 		};
 		422DCB84258A27EF000DEE4B /* XCRemoteSwiftPackageReference "fmdb" */ = {
