@@ -1078,26 +1078,6 @@
     self.elapsed = [to.time timeIntervalSinceDate:from.time];
     if ([to validCoordinate] && [from validCoordinate]) {
         self.distanceMeters = [to distanceMetersFrom:from];
-        
-        //FIXME: not sure where BEARING Is used?
-        /*
-         CLLocationCoordinate2D fromLoc = [from coordinate2D];
-         CLLocationCoordinate2D toLoc   = [to   coordinate2D];
-         float fLat = degreesToRadians(fromLoc.latitude);
-         float fLng = degreesToRadians(fromLoc.longitude);
-         float tLat = degreesToRadians(toLoc.latitude);
-         float tLng = degreesToRadians(toLoc.longitude);
-
-        float degree = radiandsToDegrees(atan2(sin(tLng-fLng)*cos(tLat), cos(fLat)*sin(tLat)-sin(fLat)*cos(tLat)*cos(tLng-fLng)));
-        float bearing = 0;
-        if (degree >= 0) {
-            bearing = degree;
-        } else {
-            bearing = 360+degree;
-        }
-
-        self.extraStorage[ [GCField fieldForKey:GC_BEARING_FIELD andActivityType:nil] = [GCNumberWithUnit numberWithUnitName:@"dd" andValue:bearing];
-         */
     }else{
         self.distanceMeters = to.distanceMeters-from.distanceMeters;
     }
@@ -1116,12 +1096,7 @@
 }
 
 -(void)accumulate:(GCTrackPoint*)other inActivity:(GCActivity*)act{
-    NSTimeInterval newelapsed = self.elapsed+other.elapsed;
-    [self accumulateFieldsFrom:other thisWeight:(self.elapsed/newelapsed) otherWeight:(other.elapsed/newelapsed) inActivity:act];
-    self.distanceMeters += other.distanceMeters;
-    self.speed = self.distanceMeters / newelapsed;
-    self.elapsed = newelapsed;
-
+    [self accumulateFrom:self to:other inActivity:act];
 }
 
 -(void)accumulateFieldsFrom:(GCTrackPoint*)other thisWeight:(double)w0 otherWeight:(double)w1 inActivity:(GCActivity*)act{
@@ -1166,6 +1141,22 @@
 
     double deviceDist = to.distanceMeters-from.distanceMeters;
 
+    //    elapsed
+    //    selfval
+    //   |-------|
+    //           |------------|
+    //                 dt
+    //              fromval
+    //   |--------------------|
+    //    newelapsed
+    //
+    //   | self.start
+    //           | from.start
+    //                        | to.start
+    //
+    //   val ( elapsed/newelapsed) + otherval (otherelapsed/newelapsed)
+
+    
     if (fabs(newelapsed) > 1e-4 ) {
         if (self.useMovingElapsed) {
             //if (to.distanceMeters-from.distanceMeters>1.e-2) {
@@ -1189,11 +1180,27 @@
 }
 
 -(void)decumulateFrom:(GCTrackPoint*)from to:(GCTrackPoint*)to inActivity:(GCActivity*)act{
-    NSTimeInterval dt = [to timeIntervalSince:from];
 
+    //   |----------------------------------------------------|
+    //    initialelapsed
+    //    selfval
+    //   |------------|
+    //         dt
+    //    fromval
+    //                |---------|
+    //                 toelapsed
+    //                 toval
+    //                |---------------------------------------|
+    //                 newelapsed
+    //                 newval
+    //
+    //   selfval = newval * newelapsed/initialelapsed + fromval * dt / initialelasped
+    //   newval = selfval * initialelapsed/newelapsed - fromval * dt / newelapsed
+    
+    NSTimeInterval dt = [to timeIntervalSince:from];
     NSTimeInterval newelapsed = self.elapsed-dt;
     if (fabs(newelapsed) > 1e-4 ) {
-        [self accumulateFieldsFrom:from thisWeight:1.0 otherWeight:-1.0*(dt/self.elapsed)*(self.elapsed/newelapsed) inActivity:act];
+        [self accumulateFieldsFrom:from thisWeight:self.elapsed/newelapsed otherWeight:-1.0*(dt/newelapsed) inActivity:act];
         if ([to validCoordinate] && [from validCoordinate]) {
             self.distanceMeters -= [to distanceMetersFrom:from];
         }else{
@@ -1201,10 +1208,8 @@
         }
 
         self.speed = self.distanceMeters / newelapsed;
-    }else{
-
-
     }
+    
     self.time = to.time;
     self.latitudeDegrees = to.latitudeDegrees;
     self.longitudeDegrees = to.longitudeDegrees;
