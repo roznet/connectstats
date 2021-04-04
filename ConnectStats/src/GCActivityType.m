@@ -76,6 +76,9 @@ static GCActivityTypes * _activityTypesCache = nil;
         rv.key = key;
         rv.typeId = typeId;
         rv.parentType = parent;
+        if( ![rv.key isKindOfClass:[NSString class]]){
+            NSLog(@"What???");
+        }
 
     }
     return rv;

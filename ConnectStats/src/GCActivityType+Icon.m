@@ -1,8 +1,8 @@
-//  MIT Licence
+//  MIT License
 //
-//  Created on 21/07/2013.
+//  Created on 04/04/2021 for ConnectStats
 //
-//  Copyright (c) 2013 Brice Rosenzweig.
+//  Copyright (c) 2021 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
-//  
+//
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-//  
+//
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,33 +21,28 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
-//  
+//
 
-#import <Foundation/Foundation.h>
-@class GCActivityType;
 
-NS_ASSUME_NONNULL_BEGIN
 
-@protocol GCViewActivityTypeButtonDelegate <NSObject>
+#import "GCActivityType+Icon.h"
+#import "GCViewIcons.h"
 
--(BOOL)useFilter;
--(GCActivityType*)activityTypeDetail;
--(void)setupForCurrentActivityTypeDetail:(GCActivityType*)aType andFilter:(BOOL)aFilter;
-@optional
--(NSArray<GCActivityType*>*)listActivityTypes;
--(BOOL)useColoredIcons;
--(BOOL)ignoreFilter;
-@end
+@implementation GCActivityType (Icon)
 
-@interface GCViewActivityTypeButton : NSObject<UITableViewDataSource,UITableViewDelegate>
-
-@property (nonatomic,retain) UIBarButtonItem * activityTypeButtonItem;
-@property (nonatomic,retain) NSObject<GCViewActivityTypeButtonDelegate> * delegate;
-
-+(GCViewActivityTypeButton*)activityTypeButtonForDelegate:(NSObject<GCViewActivityTypeButtonDelegate>*)del;
-
--(BOOL)setupBarButtonItem:(nullable UIViewController*)presentingViewController;
+-(UIImage*)icon{
+    UIImage * rv = [GCViewIcons activityTypeBWIconFor:self.key];
+    if( ! rv ){
+        rv = [self.parentType icon];
+    }
+    return rv;
+}
+-(UIImage*)coloredIcon{
+    UIImage * rv = [GCViewIcons activityTypeColoredIconFor:self.key];
+    if( ! rv ){
+        rv = [self.parentType coloredIcon];
+    }
+    return rv;
+}
 
 @end
-
-NS_ASSUME_NONNULL_END

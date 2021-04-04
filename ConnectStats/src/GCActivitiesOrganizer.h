@@ -105,7 +105,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
  */
 -(nullable GCActivity*)compareActivity;
 -(void)setCurrentActivityId:(NSString*)aId;
--(NSArray<NSString*>*)listActivityTypes;
+-(NSArray<GCActivityType*>*)listActivityTypes;
 -(nullable NSString*)lastGarminLoginUsername;
 
 /**

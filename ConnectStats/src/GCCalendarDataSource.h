@@ -62,6 +62,8 @@ typedef NS_ENUM(NSUInteger, gcCalendarTableDisplay) {
 @property (nonatomic,assign) gcCalendarTableDisplay tableDisplay;
 @property (nonatomic,readonly) BOOL extendedDisplay;
 
+@property (nonatomic,weak) UIViewController * presentingViewController;
+
 -(void)toggleDisplay;
 -(void)toggleTableDisplay;
 

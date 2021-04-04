@@ -28,10 +28,11 @@
 #import "GCViewConfig.h"
 #import "GCAppGlobal.h"
 #import "GCViewIcons.h"
-
+#import "GCActivityType.h"
+#import "GCActivityType+Icon.h"
 
 @interface GCViewActivityTypeButton ()
-@property (nonatomic,retain) NSArray * activityTypeList;
+@property (nonatomic,retain) NSArray<GCActivityType*> * activityTypeList;
 @property (nonatomic,retain) UILabel * labelView;
 @property (nonatomic,retain) UIImageView * imageView;
 @property (nonatomic,retain) UIViewController * presentingViewController;
@@ -63,7 +64,7 @@
     [super dealloc];
 }
 
--(NSArray<NSString*>*)listActivityTypes{
+-(NSArray<GCActivityType*>*)listActivityTypes{
     NSArray * types = nil;
     if ([self.delegate respondsToSelector:@selector(listActivityTypes)]) {
         types = [self.delegate listActivityTypes];
@@ -73,27 +74,27 @@
     return types;
 }
 
--(NSString*)buttonTitleFor:(NSString*)activityType{
+-(NSString*)buttonTitleFor:(GCActivityType*)activityType{
     NSString * rv = nil;
     BOOL filter = [self.delegate useFilter];
     
-    if ([activityType isEqualToString:GC_TYPE_ALL]) {
+    if ([activityType.key isEqualToString:GC_TYPE_ALL]) {
         if (filter) {
             rv = NSLocalizedString( @"Search", @"Activity Type Button");
         }else{
             rv = NSLocalizedString(@"All", @"Activity Type Button");
         }
     }else{
-        rv = [GCActivityType activityTypeForKey:activityType].displayName;
+        rv = activityType.displayName;
     }
     return rv;
 }
 
--(UIImage*)imageFor:(NSString*)activityType{
-    UIImage * img = [GCViewIcons activityTypeBWIconFor:activityType];
+-(UIImage*)imageFor:(GCActivityType*)activityType{
+    UIImage * img = activityType.icon;
     if (img == nil) {
         if ([self.delegate respondsToSelector:@selector(useColoredIcons)] && [self.delegate useColoredIcons]) {
-            img = [GCViewIcons activityTypeColoredIconFor:activityType];
+            img = activityType.coloredIcon;
         }
     }
     return img;
@@ -115,15 +116,15 @@
 }
 
 -(void)shortPress:(UIGestureRecognizer*)gesture{
-    NSArray * types = nil;
+    NSArray<GCActivityType*> * types = nil;
     if ([self.delegate respondsToSelector:@selector(listActivityTypes)]) {
         types = [self.delegate listActivityTypes];
     }else{
         types = [[GCAppGlobal organizer] listActivityTypes];
     }
 
-    NSString * atype = nil;
-    NSString * activityType = [self.delegate activityType];
+    GCActivityType * atype = nil;
+    GCActivityType * activityType = [self.delegate activityTypeDetail];
 
     // useFilter will be toggled when activityType = true and filter is on
     // This allows to have a Search type in the case a filter is on.
@@ -134,10 +135,10 @@
 
     NSUInteger idx = [types indexOfObject:activityType];
     if (idx==NSNotFound) {
-        idx = [types indexOfObject:GC_TYPE_ALL];
+        idx = [types indexOfObject:GCActivityType.all];
     }
     if(!ignoreFilter && ([activityType isEqualToString:GC_TYPE_ALL] && currentFilter == false && [[GCAppGlobal organizer] hasFilter])){
-        atype = GC_TYPE_ALL;
+        atype = GCActivityType.all;
         currentFilter = true;
     }else{
         if (idx < types.count-1) {
@@ -148,7 +149,7 @@
         atype = types[idx];
         currentFilter = false;
     }
-    [self.delegate setupForCurrentActivityType:atype andFilter:currentFilter];
+    [self.delegate setupForCurrentActivityTypeDetail:atype andFilter:currentFilter];
 }
 
 -(BOOL)setupBarButtonItem:(nullable UIViewController*)presentingViewController{
@@ -156,7 +157,7 @@
     
     self.presentingViewController = presentingViewController;
     
-    NSString * activityType = [self.delegate activityType];
+    GCActivityType * activityType = [self.delegate activityTypeDetail];
     if( activityType ){
         
         NSString * buttonTitle = [self buttonTitleFor:activityType];
@@ -208,14 +209,14 @@
     GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
     [cell setupForRows:1 andCols:1];
     
-    NSArray * types = self.listActivityTypes;
+    NSArray<GCActivityType*> * types = self.listActivityTypes;
 
     if( indexPath.row < types.count ){
-        NSString * activityType = types[indexPath.row];
-        UIImage * img = [GCViewIcons activityTypeBWIconFor:activityType];
+        GCActivityType * activityType = types[indexPath.row];
+        UIImage * img = activityType.icon;
         if (img == nil) {
             if ([self.delegate respondsToSelector:@selector(useColoredIcons)] && [self.delegate useColoredIcons]) {
-                img = [GCViewIcons activityTypeColoredIconFor:activityType];
+                img = activityType.coloredIcon;
             }
         }
         if( img ){
@@ -225,7 +226,7 @@
             [cell setIconImage:nil];
         }
         
-        [cell labelForRow:0 andCol:0].text = [GCActivityType activityTypeForKey:activityType].displayName;
+        [cell labelForRow:0 andCol:0].text = activityType.displayName;
     }else{
         [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Index Error",@"Activity Type Button");
     }
@@ -243,10 +244,10 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSArray<NSString*>*types = self.listActivityTypes;
-    NSString * type = indexPath.row < types.count ? types[indexPath.row] : types.firstObject;
+    NSArray<GCActivityType*>*types = self.listActivityTypes;
+    GCActivityType * type = indexPath.row < types.count ? types[indexPath.row] : types.firstObject;
     
-    [self.delegate setupForCurrentActivityType:type andFilter:false];
+    [self.delegate setupForCurrentActivityTypeDetail:type andFilter:false];
     [self.popoverViewController dismissViewControllerAnimated:TRUE completion:nil];
 }
 

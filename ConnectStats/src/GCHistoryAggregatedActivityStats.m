@@ -50,15 +50,19 @@
 @implementation GCHistoryAggregatedActivityStats
 
 +(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityType:(NSString*)activityType{
+    return [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityTypeDetail:[GCActivityType activityTypeForKey:activityType]];
+}
++(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityTypeDetail:(GCActivityType*)activityType{
     GCHistoryAggregatedActivityStats * rv = [[[GCHistoryAggregatedActivityStats alloc] init] autorelease];
     if( rv ){
-        rv.fields = [GCHistoryAggregatedActivityStats defaultFieldsForActivityType:activityType];
-        rv.activityType = activityType;
+        rv.fields = [GCHistoryAggregatedActivityStats defaultFieldsForActivityTypeDetail:activityType];
+        rv.activityTypeDetail = activityType;
     }
     return rv;
 }
 
-+(NSArray<GCField*>*)defaultFieldsForActivityType:(NSString*)activityType{
++(NSArray<GCField*>*)defaultFieldsForActivityTypeDetail:(GCActivityType*)activityTypeDetail{
+    NSString * activityType = activityTypeDetail.primaryActivityType.key;
     return @[
         [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activityType],
         [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:activityType],
@@ -74,14 +78,19 @@
 -(void)dealloc{
     [_activities release];
     [_aggregatedStats release];
-    [_activityType release];
+    [_activityTypeDetail release];
     [_refOrNil release];
     [_fields release];
     [_foundFields release];
     [super dealloc];
 }
 
-
+-(NSString*)activityType{
+    return self.activityTypeDetail.primaryActivityType.key;
+}
+-(void)setActivityType:(NSString*)activityType{
+    self.activityTypeDetail = [GCActivityType activityTypeForKey:activityType];
+}
 -(NSUInteger)count{
     return _aggregatedStats.count;
 }
@@ -121,11 +130,11 @@
     NSArray<GCActivity*> * useActivities = self.activities;
 
     NSMutableArray<GCActivity*> * serie = [NSMutableArray arrayWithCapacity:useActivities.count];
-    if ([_activityType isEqualToString:GC_TYPE_ALL]) {
+    if ([self.activityTypeDetail isEqualToActivityType:GCActivityType.all]) {
         [serie addObjectsFromArray:useActivities];
     }else{
         for (GCActivity * act in useActivities) {
-            if ([act.activityType isEqualToString:_activityType]) {
+            if ([act.activityTypeDetail isEqualToActivityType:self.activityTypeDetail]) {
                 [serie insertObject:act atIndex:0];
             }
         }

@@ -42,7 +42,8 @@ typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
 
 @interface GCStatsMultiFieldConfig : NSObject
 
-@property (nonatomic,retain) NSString * activityType;
+@property (nonatomic,retain) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("Use Type Detail");
+@property (nonatomic,retain) GCActivityType * activityTypeDetail;
 /**
  *  ViewChoice, decide what you display: all, monthly, weekly, yearly, summary
  */

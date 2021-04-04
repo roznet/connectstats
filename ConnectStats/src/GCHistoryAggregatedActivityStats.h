@@ -54,9 +54,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GCHistoryAggregatedActivityStats : NSObject<NSFastEnumeration>
 
 +(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityType:(NSString*)activityType;
++(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityTypeDetail:(GCActivityType*)activityType;
 
 @property (nonatomic,retain) NSArray<GCActivity*> * activities;
-@property (nonatomic,retain) NSString * activityType;
+@property (nonatomic,assign) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("Use Detail");
+@property (nonatomic,retain) GCActivityType * activityTypeDetail;
 @property (nonatomic,assign) BOOL useFilter;
 
 -(void)aggregate:(NSCalendarUnit)aUnit referenceDate:(nullable NSDate*)refOrNil ignoreMode:(gcIgnoreMode)ignoreMode;
@@ -66,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable GCHistoryAggregatedDataHolder*)dataForDate:(NSDate*)date;
 -(void)setActivitiesFromOrganizer:(GCActivitiesOrganizer*)organizer;
 
-+(NSArray<GCField*>*)defaultFieldsForActivityType:(NSString*)activityType;
++(NSArray<GCField*>*)defaultFieldsForActivityTypeDetail:(GCActivityType*)activityType;
 @end
 
 NS_ASSUME_NONNULL_END

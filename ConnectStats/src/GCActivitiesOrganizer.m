@@ -145,10 +145,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 /** @brief record activity type currently in the list of activities
  */
 -(void)recordActivityType:(GCActivity*)act{
-    NSString * type = act.activityType;
-    if( [type isEqualToString:GC_TYPE_OTHER] ){
-        type = act.activityTypeDetail.key;
-    }
+    GCActivityType * type = act.activityTypeDetail;
     
     if (!self.info) {
         [self buildInfoDictionary];
@@ -178,11 +175,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
 /** @brief ActivityTypes currently in the list of activities
  */
--(NSArray*)listActivityTypes{
+-(NSArray<GCActivityType*>*)listActivityTypes{
     NSMutableArray * rv = [NSMutableArray array];
     NSDictionary * infos = self.info[INFO_ACTIVITY_TYPES];
     if (infos) {
-        for (NSString * type in infos) {
+        for (GCActivityType * type in infos) {
             NSDictionary * info = infos[type];
             NSNumber * count = info[INFO_ACTIVITY_TYPE_COUNT];
             NSDate * latest = info[INFO_ACTIVITY_TYPE_LATEST];
@@ -195,9 +192,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             }
         }
     }
-    [rv sortUsingComparator:^(NSString * s1, NSString * s2){
-        GCActivityType * t1 = [GCActivityType activityTypeForKey:s1];
-        GCActivityType * t2 = [GCActivityType activityTypeForKey:s2];
+    [rv sortUsingComparator:^(GCActivityType * t1, GCActivityType * t2){
         
         if( t1.sortOrder < t2.sortOrder ){
             return NSOrderedAscending;
@@ -208,7 +203,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         }
     }];
     // Add ALL at the end
-    [rv addObject:GC_TYPE_ALL];
+    [rv addObject:GCActivityType.all];
     return rv;
 }
 

@@ -730,6 +730,9 @@
 		42A95C7F259A199A00A52DB6 /* RZExternal in Frameworks */ = {isa = PBXBuildFile; productRef = 42A95C7E259A199A00A52DB6 /* RZExternal */; };
 		42A99B251B780D9900994917 /* GCWatchSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A99B241B780D9900994917 /* GCWatchSessionManager.m */; };
 		42A99B261B780D9900994917 /* GCWatchSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A99B241B780D9900994917 /* GCWatchSessionManager.m */; };
+		42A9F549261A031000669119 /* GCActivityType+Icon.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A9F548261A031000669119 /* GCActivityType+Icon.m */; };
+		42A9F54A261A031000669119 /* GCActivityType+Icon.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A9F548261A031000669119 /* GCActivityType+Icon.m */; };
+		42A9F54B261A031000669119 /* GCActivityType+Icon.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A9F548261A031000669119 /* GCActivityType+Icon.m */; };
 		42AA288C1637F56F0054F84A /* GCActivitySearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA288B1637F56F0054F84A /* GCActivitySearch.m */; };
 		42AA288F1637F6AB0054F84A /* GCActivitySearchElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AA288E1637F6AB0054F84A /* GCActivitySearchElement.m */; };
 		42AAB087184D2A82004B4D15 /* GCActivityTypeListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42AAB086184D2A82004B4D15 /* GCActivityTypeListViewController.m */; };
@@ -1798,6 +1801,8 @@
 		42A95B3C1632FC24000B2082 /* GCMapLegendView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCMapLegendView.m; path = src/GCMapLegendView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		42A99B231B780D9900994917 /* GCWatchSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWatchSessionManager.h; path = src/GCWatchSessionManager.h; sourceTree = "<group>"; };
 		42A99B241B780D9900994917 /* GCWatchSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWatchSessionManager.m; path = src/GCWatchSessionManager.m; sourceTree = "<group>"; };
+		42A9F547261A031000669119 /* GCActivityType+Icon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GCActivityType+Icon.h"; path = "src/GCActivityType+Icon.h"; sourceTree = "<group>"; };
+		42A9F548261A031000669119 /* GCActivityType+Icon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "GCActivityType+Icon.m"; path = "src/GCActivityType+Icon.m"; sourceTree = "<group>"; };
 		42AA288A1637F56F0054F84A /* GCActivitySearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivitySearch.h; path = src/GCActivitySearch.h; sourceTree = "<group>"; };
 		42AA288B1637F56F0054F84A /* GCActivitySearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivitySearch.m; path = src/GCActivitySearch.m; sourceTree = "<group>"; };
 		42AA288D1637F6AB0054F84A /* GCActivitySearchElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivitySearchElement.h; path = src/GCActivitySearchElement.h; sourceTree = "<group>"; };
@@ -3591,6 +3596,8 @@
 				421F39AB1B7A117300CA7200 /* GCTrackFieldChoiceHolder.h */,
 				421F39AC1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m */,
 				42A425B42556BF8500E4AFBE /* GCField+Icons.swift */,
+				42A9F547261A031000669119 /* GCActivityType+Icon.h */,
+				42A9F548261A031000669119 /* GCActivityType+Icon.m */,
 			);
 			name = Config;
 			sourceTree = "<group>";
@@ -5191,6 +5198,7 @@
 				42E1A75424278037006C868A /* GCCalculatedCachedTrackInfo.m in Sources */,
 				423EF01A21D2A044005C2605 /* RZFitFileExtensions.swift in Sources */,
 				422FAEC619A1DD6000D09773 /* GCActivitiesOrganizer.m in Sources */,
+				42A9F54B261A031000669119 /* GCActivityType+Icon.m in Sources */,
 				42EA5BE62066EB0700F4617B /* GCGarminRequestModernActivityTypes.m in Sources */,
 				422FAEC719A1DD6000D09773 /* GCActivity.m in Sources */,
 				422FAECB19A1DD6000D09773 /* GCGarminLoginSimulatorRequest.m in Sources */,
@@ -5682,6 +5690,7 @@
 				424340FD1B741652001E22BB /* GCActivity+CSSearch.m in Sources */,
 				42D4CA7D24951AF2003F3AB7 /* GCLagPeriod.m in Sources */,
 				422637A51AFF6C5F005461E3 /* GCDebugActionsTableViewController.m in Sources */,
+				42A9F549261A031000669119 /* GCActivityType+Icon.m in Sources */,
 				422D900417A1AE2C00C131DC /* GCViewIcons.m in Sources */,
 				422D900717A276F100C131DC /* GCStatsGraphOptionViewController.m in Sources */,
 				42DE53BD19CF438500009130 /* GCHealthKitActivityRequest.m in Sources */,
@@ -5840,6 +5849,7 @@
 				42D4CA892496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */,
 				422F284020557DD000187478 /* GCField+Convert.m in Sources */,
 				422CC8831E6ACA1700195414 /* FITFitValueStatistics.swift in Sources */,
+				42A9F54A261A031000669119 /* GCActivityType+Icon.m in Sources */,
 				422DCC8D258A656B000DEE4B /* FITFitEnumMap.m in Sources */,
 				42453BAB1DD8B5940073ACCA /* GCMapGradientPathOverlay.m in Sources */,
 				42B5E29B1BA5B216000FAE4E /* GCGarminActivityTrack13Request.m in Sources */,

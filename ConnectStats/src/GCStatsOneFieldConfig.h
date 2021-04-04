@@ -47,7 +47,9 @@ typedef NS_ENUM(NSUInteger, gcOneFieldSecondGraph) {
 @property (nonatomic,retain) GCField * field;
 @property (nonatomic,retain) GCField * x_field;
 
-@property (nonatomic,retain) NSString * activityType;
+@property (nonatomic,retain) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("Use ActivityType Detail");
+@property (nonatomic,retain) GCActivityType * activityTypeDetail;
+
 @property (nonatomic,assign) gcOneFieldSecondGraph secondGraphChoice;
 
 @property (nonatomic,assign) gcViewChoice viewChoice;

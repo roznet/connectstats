@@ -53,7 +53,7 @@
 -(void)dealloc{
     [_filterButtonImage release];
     [_filterButtonTitle release];
-    [_activityType release];
+    [_activityTypeDetail release];
     [_calendarConfig release];
     [super dealloc];
 }
@@ -127,6 +127,13 @@
     }
 }
 
+-(NSString*)activityType{
+    return self.activityTypeDetail.primaryActivityType.key;
+}
+-(void)setActivityType:(NSString*)atype{
+    self.activityTypeDetail = [GCActivityType activityTypeForKey:atype];
+}
+
 -(BOOL)isEqual:(GCStatsMultiFieldConfig*)object{
     if( [object isKindOfClass:[GCStatsMultiFieldConfig class]]){
         return [self isEqualToConfig:object];
@@ -137,7 +144,7 @@
 
 -(BOOL)isEqualToConfig:(GCStatsMultiFieldConfig*)other{
     return(
-           [self.activityType isEqualToString:other.activityType] &&
+           [self.activityTypeDetail isEqualToActivityType:other.activityTypeDetail] &&
            self.viewChoice==other.viewChoice &&
            self.useFilter == other.useFilter &&
            self.viewConfig==other.viewConfig &&
@@ -150,7 +157,7 @@
 
 -(BOOL)requiresAggregateRebuild:(GCStatsMultiFieldConfig*)other{
     return !(
-             [self.activityType isEqualToString:other.activityType] &&
+             [self.activityTypeDetail isEqualToActivityType:other.activityTypeDetail] &&
              self.viewChoice==other.viewChoice &&
              self.useFilter == other.useFilter &&
              self.viewConfig==other.viewConfig &&

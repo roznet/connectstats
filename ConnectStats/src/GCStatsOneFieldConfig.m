@@ -36,7 +36,7 @@
         rv.calendarConfig = multiFieldConfig.calendarConfig;
         rv.useFilter = multiFieldConfig.useFilter;
         rv.viewChoice = gcViewChoiceFields;
-        rv.activityType = multiFieldConfig.activityType;
+        rv.activityTypeDetail = multiFieldConfig.activityTypeDetail;
         rv.useFilter = multiFieldConfig.useFilter;
         rv.field = field;
         rv.x_field = xfield;
@@ -44,7 +44,7 @@
     return rv;
 }
 -(void)dealloc{
-    [_activityType release];
+    [_activityTypeDetail release];
     [_x_field release];
     [_field release];
     [_calendarConfig release];
@@ -53,6 +53,14 @@
 }
 -(NSString *)viewDescription{
     return [GCViewConfig viewChoiceDesc:self.viewChoice calendarConfig:self.calendarConfig];
+}
+
+-(NSString*)activityType{
+    return self.activityTypeDetail.primaryActivityType.key;
+}
+
+-(void)setActivityType:(NSString *)activityType{
+    self.activityTypeDetail = [GCActivityType activityTypeForKey:activityType];
 }
 
 -(BOOL)isEqualToConfig:(GCStatsOneFieldConfig*)other{

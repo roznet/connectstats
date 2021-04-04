@@ -98,6 +98,10 @@
     return [GCViewConfig is2021Style];
 }
 
+-(NSString*)activityType{
+    return self.activityTypeDetail.primaryActivityType.key;
+}
+
 #pragma mark - UIViewController
 
 - (void)viewDidLoad
@@ -579,8 +583,8 @@
     return self.multiFieldConfig.viewChoice;
 }
 
--(NSString*)activityType{
-    return self.multiFieldConfig.activityType;
+-(GCActivityType*)activityTypeDetail{
+    return self.multiFieldConfig.activityTypeDetail;
 }
 
 -(NSString*)displayActivityType{
@@ -782,10 +786,10 @@
 
     [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
 
-    GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:self.activityType];
+    GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityTypeDetail:self.activityTypeDetail];
     vals.useFilter = self.useFilter;
     [vals setActivitiesFromOrganizer:[GCAppGlobal organizer]];
-    vals.activityType = self.activityType;
+    //vals.activityType = self.activityType;
     gcIgnoreMode ignoreMode = [self.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
     [vals aggregate:self.multiFieldConfig.calendarConfig.calendarUnit
       referenceDate:self.multiFieldConfig.calendarConfig.referenceDate
@@ -794,7 +798,7 @@
     self.aggregatedStats = vals;
     
     self.geometry = [RZNumberWithUnitGeometry geometry];
-    GCActivityType * type = [GCActivityType activityTypeForKey:self.activityType];
+    GCActivityType * type = self.activityTypeDetail;
     for (GCHistoryAggregatedDataHolder * holder in vals) {
         [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:type geometry:self.geometry];
     }
@@ -817,9 +821,9 @@
     [self setupForFieldListConfig:nconfig];
 }
 
--(void)setupForCurrentActivityType:(NSString*)aType andFilter:(BOOL)aFilter{
+-(void)setupForCurrentActivityTypeDetail:(GCActivityType*)aType andFilter:(BOOL)aFilter{
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
-    nconfig.activityType = aType;
+    nconfig.activityTypeDetail = aType;
     nconfig.useFilter = aFilter;
     [self setupForFieldListConfig:nconfig];
 }
