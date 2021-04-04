@@ -51,9 +51,9 @@
 
  @return array of types that are parent of other types
  */
--(NSArray<GCActivityType*>*)allParentTypes;
--(NSArray<NSString*>*)allTypesKeys;
--(NSArray<GCActivityType*>*)allTypesForParent:(GCActivityType*)parentType;
+-(NSArray<GCActivityType*>*)allPrimaryTypes;
+-(NSArray<NSString*>*)allTypesKeys DEPRECATED_MSG_ATTRIBUTE("Use allTypes");
+-(NSArray<GCActivityType*>*)allTypesWithSamePrimaryTypeAs:(GCActivityType*)parentType;
 
 /**
  Add missing types from structures downloaded from garmin

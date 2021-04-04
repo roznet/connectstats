@@ -256,13 +256,13 @@ class GCTestAggregatedStats: XCTestCase {
     }
     
     func testStatsBycountry(){
-        let activityType = GC_TYPE_RUNNING
+        let activityType = GCActivityType.running()
         let calendar = GCAppGlobal.calculationCalendar()
-        let activities = self.activitiesForStatsTest(n:Int.max,activityType: activityType)
+        let activities = self.activitiesForStatsTest(n:Int.max,activityType: activityType.key)
         let performance = RZPerformance()
         performance.reset()
 
-        let aggtypestats = HistoryAggregator(activities: activities, fields: GCHistoryAggregatedActivityStats.defaultFields(forActivityType: activityType)) {
+        let aggtypestats = HistoryAggregator(activities: activities, fields: GCHistoryAggregatedActivityStats.defaultFields(forActivityTypeDetail: activityType)) {
             act in
             let bucket = DateBucket(date: act.date, unit: .year, calendar: calendar)
             let rv = [ IndexValue.dateBucket(bucket!), IndexValue.string(act.country)]
@@ -313,13 +313,13 @@ class GCTestAggregatedStats: XCTestCase {
     }
     
     func testMultiLevelAggregatedStats() {
-        let activityType = GC_TYPE_ALL
+        let activityType = GCActivityType.all()
         let calendar = GCAppGlobal.calculationCalendar()
-        let activities = self.activitiesForStatsTest(n:10,activityType: activityType)
+        let activities = self.activitiesForStatsTest(n:10,activityType: activityType.key)
         let performance = RZPerformance()
         performance.reset()
 
-        let aggtypestats = HistoryAggregator(activities: activities, fields: GCHistoryAggregatedActivityStats.defaultFields(forActivityType: activityType)) {
+        let aggtypestats = HistoryAggregator(activities: activities, fields: GCHistoryAggregatedActivityStats.defaultFields(forActivityTypeDetail: activityType)) {
             act in
             let bucket = DateBucket(date: act.date, unit: .month, calendar: calendar)
             let rv = [IndexValue.string(act.activityType), IndexValue.dateBucket(bucket!)]
@@ -362,18 +362,18 @@ class GCTestAggregatedStats: XCTestCase {
     }
     
     func testAggregatedStats() {
-        let activityType = GC_TYPE_RUNNING
+        let activityType = GCActivityType.running()
         let calendar = GCAppGlobal.calculationCalendar()
-        let activities = self.activitiesForStatsTest(n:Int.max,activityType: activityType)
+        let activities = self.activitiesForStatsTest(n:Int.max,activityType: activityType.key)
 
         let performance = RZPerformance()
         performance.reset()
-        let stats = GCHistoryAggregatedActivityStats(forActivityType: activityType)
+        let stats = GCHistoryAggregatedActivityStats(forActivityTypeDetail: activityType)
         stats.activities = activities
         
         stats.aggregate(.month, referenceDate: nil, ignoreMode: gcIgnoreMode.activityFocus)
                         
-        let aggstats = HistoryAggregator(activities: activities, fields: GCHistoryAggregatedActivityStats.defaultFields(forActivityType: activityType)) {
+        let aggstats = HistoryAggregator(activities: activities, fields: GCHistoryAggregatedActivityStats.defaultFields(forActivityTypeDetail: activityType)) {
             act in
             let bucket = DateBucket(date: act.date, unit: .month, calendar: calendar)
             let rv = IndexValue.dateBucket(bucket!)
@@ -386,7 +386,7 @@ class GCTestAggregatedStats: XCTestCase {
             guard let value = index.indexValues.first else { XCTAssertTrue(false); continue }
             if case let .dateBucket(bucket) = value {
                 guard let old = stats.data(for: bucket.interval.start) else { XCTAssertTrue(false); continue }
-                if let speed = GCField(for: .weightedMeanSpeed, andActivityType: activityType) {
+                if let speed = GCField(for: .weightedMeanSpeed, andActivityType: activityType.primary().key) {
                     data.data[speed]?.compare(field: speed, dataHolder: old, message: "\(bucket) monthly aggregate")
                 }
                 

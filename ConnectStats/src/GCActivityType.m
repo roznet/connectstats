@@ -197,7 +197,7 @@ static GCActivityTypes * _activityTypesCache = nil;
     return [self.rootType isEqualToActivityType:other.rootType];
 }
 
--(BOOL)isSameParentType:(GCActivityType*)other{
+-(BOOL)hasSamePrimaryType:(GCActivityType*)other{
     if (self.isRootType || other.isRootType) {
         return [self isSameRootType:other];
     }
@@ -328,11 +328,11 @@ static GCActivityTypes * _activityTypesCache = nil;
 +(nonnull NSArray<GCActivityType*>*)allTypes{
     return [[GCActivityType activityTypes] allTypes];
 }
-+(nonnull NSArray<GCActivityType*>*)allParentTypes{
-    return [[GCActivityType activityTypes] allParentTypes];
++(nonnull NSArray<GCActivityType*>*)allPrimaryTypes{
+    return [[GCActivityType activityTypes] allPrimaryTypes];
 }
-+(nonnull NSArray<GCActivityType*>*)allTypesForParent:(nonnull GCActivityType*)parentType{
-    return [[GCActivityType activityTypes] allTypesForParent:parentType];
++(nonnull NSArray<GCActivityType*>*)allTypesWithSamePrimaryTypeAs:(nonnull GCActivityType*)parentType{
+    return [[GCActivityType activityTypes] allTypesWithSamePrimaryTypeAs:parentType];
 }
 
 -(nonnull NSArray<GCField*>*)summaryFields{

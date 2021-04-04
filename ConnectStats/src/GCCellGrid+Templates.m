@@ -413,7 +413,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     //activity.activityTypeDetail.isPacePreferred)
     
 
-    if ([activity.activityTypeDetail isEqualToString:GC_TYPE_SKI_DOWN]) {
+    if ([activity.activityTypeDetail isElevationLossPreferred]) {
         [fields addObject:[GCField fieldForKey:@"LossElevation" andActivityType:activity.activityType]];
     }else{
         [fields addObject:[GCField fieldForFlag:gcFieldFlagAltitudeMeters andActivityType:activity.activityType]];
@@ -876,7 +876,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         }
     }else if (isSki){
         GCNumberWithUnit * elev = nil;
-        if ([activity.activityTypeDetail isEqualToString:GC_TYPE_SKI_DOWN]) {
+        if ([activity.activityTypeDetail isElevationLossPreferred]) {
             elev = [lap numberWithUnitForField:[GCField fieldForKey:@"LossElevation" andActivityType:activity.activityType] inActivity:activity];
             if (elev == nil) {
                 elev = [lap numberWithUnitForField:[GCField fieldForKey:@"LossCorrectedElevation" andActivityType:activity.activityType] inActivity:activity];

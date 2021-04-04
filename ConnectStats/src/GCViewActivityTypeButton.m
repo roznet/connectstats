@@ -137,7 +137,7 @@
     if (idx==NSNotFound) {
         idx = [types indexOfObject:GCActivityType.all];
     }
-    if(!ignoreFilter && ([activityType isEqualToString:GC_TYPE_ALL] && currentFilter == false && [[GCAppGlobal organizer] hasFilter])){
+    if(!ignoreFilter && ([activityType isEqualToActivityType:GCActivityType.all] && currentFilter == false && [[GCAppGlobal organizer] hasFilter])){
         atype = GCActivityType.all;
         currentFilter = true;
     }else{
