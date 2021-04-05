@@ -102,6 +102,10 @@ extern NSString * const  CONFIG_HEALTHKIT_WORKOUT;
 extern NSString * const  CONFIG_HEALTHKIT_DAILY;
 extern NSString * const  CONFIG_HEALTHKIT_SOURCE_CHECKED;
 
+extern NSString * const  CONFIG_NOTIFICATION_ENABLED;
+extern NSString * const  CONFIG_NOTIFICATION_PUSH_TYPE;
+extern NSString * const  CONFIG_NOTIFICATION_DEVICE_TOKEN;
+
 extern NSString * const  CONFIG_CONNECTSTATS_TOKEN;
 extern NSString * const  CONFIG_CONNECTSTATS_TOKEN_ID;
 extern NSString * const  CONFIG_CONNECTSTATS_USER_ID;
@@ -195,6 +199,11 @@ typedef NS_ENUM(NSUInteger, gcHistoryStats) {
     gcHistoryStatsEnd
 };
 
+typedef NS_ENUM(NSUInteger, gcNotificationPushType){
+    gcNotificationPushTypeNone,
+    gcNotificationPushTypeBackgroundOnly,
+    gcNotificationPushTypeAll
+};
 
 typedef BOOL(^gcServiceSourceValidator)(NSString*sourceidentifier);
 

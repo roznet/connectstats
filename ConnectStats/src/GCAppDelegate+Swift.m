@@ -25,6 +25,7 @@
 
 #import "GCAppDelegate+Swift.h"
 #import "ConnectStats-Swift.h"
+@import UserNotifications;
 
 #define GC_STARTING_FILE @"starting.log"
 
@@ -34,6 +35,74 @@ BOOL kOpenTemporary = false;
 
 -(void)handleAppRating{
     [self initiateAppRating];
+}
+
+-(void)registerForPushNotifications{
+    [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_ENABLED boolVal:true];
+    
+    if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats] && [[GCAppGlobal profile] configGetBool:CONFIG_NOTIFICATION_ENABLED defaultValue:false]) {
+        RZLog(RZLogInfo, @"connectstats enabled requesting notification");
+        [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:UNAuthorizationOptionAlert completionHandler:^(BOOL granted, NSError*error){
+            if( granted ){
+                [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings*setting){
+                    if( setting.authorizationStatus == UNAuthorizationStatusAuthorized ){
+                        dispatch_async(dispatch_get_main_queue(), ^(){
+                            RZLog(RZLogInfo, @"Push Notification Granted, registering");
+                            [[UIApplication sharedApplication] registerForRemoteNotifications];
+                        });
+                    }else{
+                        RZLog(RZLogInfo, @"Push Notification Not Authorized");
+                        if( [[GCAppGlobal profile] configGetBool:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone] != gcNotificationPushTypeNone){
+                            // Status changed from what was recorded, save it
+                            dispatch_async(dispatch_get_main_queue(), ^(){
+                                [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_PUSH_TYPE boolVal:gcNotificationPushTypeNone];
+                                [GCAppGlobal saveSettings];
+                            });
+                        }
+                    }
+                }];
+            }else{
+                RZLog(RZLogInfo, @"Not granted %@", error);
+                if( [[GCAppGlobal profile] configGetBool:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone] != gcNotificationPushTypeNone){
+                    // Status changed from what was recorded, save it
+                    dispatch_async(dispatch_get_main_queue(), ^(){
+                        [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_PUSH_TYPE boolVal:gcNotificationPushTypeNone];
+                        [GCAppGlobal saveSettings];
+                    });
+                }
+            }
+        }];
+    }
+}
+
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
+    RZLog(RZLogInfo,@"remote notification %@", userInfo);
+    completionHandler(UIBackgroundFetchResultNewData);
+}
+
+
+-(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    const uint8_t * data = deviceToken.bytes;
+    
+    NSMutableString * token = [NSMutableString string];
+    for (NSUInteger i=0; i<deviceToken.length; i++) {
+        [token appendFormat:@"%02hhX", data[i]];
+    }
+    NSString * existingToken = [[GCAppGlobal profile] configGetString:CONFIG_NOTIFICATION_DEVICE_TOKEN defaultValue:@""];
+    if( ![token isEqualToString:existingToken] ){
+        RZLog(RZLogInfo,@"remote notification registered with new token: %@", token);
+        [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_DEVICE_TOKEN stringVal:token];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [GCAppGlobal saveSettings];
+        });
+        
+    }else{
+        RZLog(RZLogInfo,@"remote notification registered with same token: %@", token);
+    }
+}
+
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
+    NSLog(@"Failed to register %@", error);
 }
 
 -(void)handleFitFile:(NSData*)fitData{

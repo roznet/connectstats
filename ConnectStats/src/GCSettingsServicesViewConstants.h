@@ -40,7 +40,8 @@
 #define GC_CONNECTSTATS_LOGOUT      7
 #define GC_CONNECTSTATS_DEBUGKEY    8
 #define GC_CONNECTSTATS_HELP    9
-#define GC_GARMIN_END           10
+#define GC_CONNECTSTATS_NOTIFICATIONS 10
+#define GC_GARMIN_END           11
 
 #define GC_STRAVA_NAME      0
 #define GC_STRAVA_ENABLE    1

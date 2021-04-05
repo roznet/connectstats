@@ -90,7 +90,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
         [[GCAppGlobal organizer] attach:self];
         self.activityTypeDetail = GCActivityType.all;
         self.activityTypeButton = [GCViewActivityTypeButton activityTypeButtonForDelegate:self];
-        self.listActivityTypes = @[ GC_TYPE_ALL];
+        self.listActivityTypes = @[ GCActivityType.all];
         self.primaryActivityTypesOnly = false;//[GCAppGlobal configGetBool:CONFIG_MAIN_ACTIVITY_TYPE_ONLY defaultValue:true];
         self.comparisonMetric = gcComparisonMetricPercent;
         if( [GCViewConfig is2021Style] ){

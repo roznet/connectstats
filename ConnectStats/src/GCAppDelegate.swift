@@ -27,6 +27,7 @@
 
 import Foundation
 import Armchair
+import RZUtilsSwift
 
 extension GCAppDelegate {
     @objc func initiateAppRating() {
@@ -40,4 +41,5 @@ extension GCAppDelegate {
     @objc func startSuccessfulSwift() {
         Armchair.showPromptIfNecessary()
     }
+    
 }

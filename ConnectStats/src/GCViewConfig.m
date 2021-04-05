@@ -711,6 +711,19 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     return rv;
 }
 
++(NSArray*)validChoicesForConnectStatsNotificationType{
+    static NSArray * rv = nil;
+    if( rv==nil){
+        rv = @[
+            NSLocalizedString(@"Disabled", @"Notifications"),
+            NSLocalizedString(@"Background Only", @"Notifications"),
+            NSLocalizedString(@"New Activities", @"Notifications"),
+        ];
+        [rv retain];
+    }
+    return rv;
+}
+
 +(NSArray*)validChoicesForConnectStatsConfig{
     static NSArray * rv = nil;
     

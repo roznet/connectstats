@@ -210,8 +210,10 @@ void checkVersion(void){
         }else{
             RZLog(RZLogInfo, @"Launch Invalid UserActivity %@", dict);
         }
+    }else if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]){
+        RZLog(RZLogInfo, @"Remote Notification %@", launchOptions);
     }
-    
+    [self registerForPushNotifications];
     [self remoteStatusCheck];
     return YES;
 }

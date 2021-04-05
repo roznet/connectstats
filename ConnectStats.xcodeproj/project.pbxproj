@@ -2553,6 +2553,13 @@
 			name = Buttons;
 			sourceTree = "<group>";
 		};
+		423050E1261A2E7D004195BB /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Notifications;
+			sourceTree = "<group>";
+		};
 		4233EAE5166B89A300185978 /* Garmin */ = {
 			isa = PBXGroup;
 			children = (
@@ -3398,6 +3405,7 @@
 		428FF74515F39D97007A88FA /* Communications */ = {
 			isa = PBXGroup;
 			children = (
+				423050E1261A2E7D004195BB /* Notifications */,
 				42F0A4F01B60616500901CFF /* Derived */,
 				421516B919A47C0B0080CD4C /* HealthKit */,
 				4235448616C5BC6900AB3E09 /* Strava */,

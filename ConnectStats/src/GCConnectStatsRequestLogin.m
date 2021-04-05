@@ -77,6 +77,9 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
                 NSString * path = GCWebConnectStatsValidateUser([GCAppGlobal webConnectsStatsConfig]);
                 NSDictionary *parameters = @{
                                              @"token_id" : @(self.tokenId),
+                                             @"notification_device_token": [[GCAppGlobal profile] configGetString:CONFIG_NOTIFICATION_DEVICE_TOKEN defaultValue:@""],
+                                             @"notification_enabled" : @([[GCAppGlobal profile] configGetBool:CONFIG_NOTIFICATION_ENABLED defaultValue:false]),
+                                             @"notification_push_type" : @([[GCAppGlobal profile] configGetBool:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:false]),
                                              };
                 
                 return [self preparedUrlRequest:path params:parameters];
@@ -147,6 +150,11 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
         }
     }
 }
+
+-(BOOL)priorityRequest{
+    return true;
+}
+
 
 -(id<GCWebRequest>)nextReq{
     // later check logic to see if reach existing.

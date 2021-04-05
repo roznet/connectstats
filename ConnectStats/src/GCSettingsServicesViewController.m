@@ -118,6 +118,7 @@
     }
     if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats]){
         [dynamic addObjectsFromArray:@[
+            @( GC_CONNECTSTATS_NOTIFICATIONS ),
             @( GC_CONNECTSTATS_LOGOUT ),
         ] ];
     }
@@ -418,6 +419,24 @@
                                                                        attributes:[GCViewConfig attribute14Gray]] autorelease];
         [gridcell labelForRow:1 andCol:0].attributedText = sample;
         [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
+        rv = gridcell;
+    }else if( indexPath.row == GC_CONNECTSTATS_NOTIFICATIONS){
+        gridcell = [GCCellGrid cellGrid:tableView];
+        [gridcell setupForRows:2 andCols:2];
+        
+        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Notifications",@"Services")
+                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
+        
+        [gridcell labelForRow:0 andCol:0].attributedText = title;
+        gcNotificationPushType type = [[GCAppGlobal profile] configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone];
+        NSArray<NSString*> * types = [GCViewConfig validChoicesForConnectStatsNotificationType];
+        if (type < types.count) {
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:types[type]];
+        }else{
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:NSLocalizedString(@"Unknown",@"Notification")];
+        }
         rv = gridcell;
 
     }else if( indexPath.row == GC_CONNECTSTATS_DEBUGKEY){
@@ -784,6 +803,16 @@
             [GCAppGlobal saveSettings];
             break;
         }
+        case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_NOTIFICATIONS):
+        {
+            if( cell.selected < [GCViewConfig validChoicesForConnectStatsNotificationType].count){
+                [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_PUSH_TYPE intVal:cell.selected];
+                NSString * choice = [GCViewConfig validChoicesForConnectStatsNotificationType][cell.selected];
+                RZLog(RZLogInfo, @"ConnectStats: Changed Notification to %@ : %@", @(cell.selected), choice);
+                [GCAppGlobal saveSettings];
+            }
+            break;
+        }
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_ENABLE):
         {
             if( cell.on ){
@@ -985,6 +1014,12 @@
         list.entryFieldDelegate = self;
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_USE);
         [self.navigationController pushViewController:list animated:YES];
+    }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_NOTIFICATIONS){
+        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsNotificationType] selected:[[GCAppGlobal profile] configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone]];
+        list.entryFieldDelegate = self;
+        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_NOTIFICATIONS);
+        [self.navigationController pushViewController:list animated:YES];
+
     }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_CONFIG){
         GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsConfig] selected:[GCAppGlobal webConnectsStatsConfig]];
         
