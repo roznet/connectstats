@@ -864,9 +864,12 @@
     }
     [organizer setActivities:activities];
     
-    NSDictionary * rv = [organizer fieldsSeries:@[@"WeightedMeanSpeed",@(gcFieldFlagSumDistance)] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
-    GCStatsDataSerieWithUnit * speed = [rv objectForKey:@"WeightedMeanSpeed"];
-    GCStatsDataSerieWithUnit * dist  = [rv objectForKey:@(gcFieldFlagSumDistance)];
+    GCField * speedField = [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:GC_TYPE_ALL];
+    GCField * distField  = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_ALL];
+    
+    NSDictionary * rv = [organizer fieldsSeries:@[speedField,distField] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
+    GCStatsDataSerieWithUnit * speed = [rv objectForKey:speedField];
+    GCStatsDataSerieWithUnit * dist  = [rv objectForKey:distField];
     
     GCUnit * km = [GCUnit unitForKey:@"kilometer"];
     GCUnit * kph = [GCUnit unitForKey:@"kph"];
@@ -885,9 +888,9 @@
     }
     
     
-    
-    rv = [organizer fieldsSeries:@[CALC_ENERGY] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
-    GCStatsDataSerieWithUnit * engy = [rv objectForKey:CALC_ENERGY];
+    GCField * energyField = [GCField fieldForKey:CALC_ENERGY andActivityType:GC_TYPE_ALL];
+    rv = [organizer fieldsSeries:@[ energyField ] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
+    GCStatsDataSerieWithUnit * engy = [rv objectForKey:energyField];
     
     XCTAssertTrue([[engy unit] isEqualToUnit:[GCUnit unitForKey:@"kilojoule"]], @"Calc Val worked");
     XCTAssertTrue([engy.serie count] == [[organizer activities] count], @"point for each");
@@ -903,7 +906,7 @@
     dataserie.organizer = organizer;
     void (^test)(NSString * type, NSDate * from, NSUInteger e_n) = ^(NSString * type, NSDate * from, NSUInteger e_n){
         dataserie.config.fromDate = from;
-        dataserie.config.activityType = type;
+        dataserie.config.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:type]);
         
         [dataserie loadFromOrganizer];
         XCTAssertEqual([[dataserie history] count], e_n, @"%@/%@ expected = %d", type,from,(int)e_n);

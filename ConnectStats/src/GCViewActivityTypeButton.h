@@ -25,6 +25,7 @@
 
 #import <Foundation/Foundation.h>
 @class GCActivityType;
+@class GCActivityTypeSelection;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(BOOL)useFilter;
 -(GCActivityType*)activityTypeDetail;
--(void)setupForCurrentActivityTypeDetail:(GCActivityType*)aType andFilter:(BOOL)aFilter;
+-(void)setupForCurrentActivityTypeSelection:(GCActivityTypeSelection*)selection andFilter:(BOOL)aFilter;
 @optional
 -(NSArray<GCActivityType*>*)listActivityTypes;
 -(BOOL)useColoredIcons;

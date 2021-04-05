@@ -133,8 +133,8 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
 -(BOOL)ignoreFilter{
     return true;
 }
--(void)setupForCurrentActivityTypeDetail:(GCActivityType *)aType andFilter:(BOOL)aFilter{
-    self.activityTypeDetail = aType;
+-(void)setupForCurrentActivityTypeSelection:(GCActivityTypeSelection *)selection andFilter:(BOOL)aFilter{
+    self.activityTypeDetail = selection.activityTypeDetail;
     [self.activityTypeButton setupBarButtonItem:self.presentingViewController];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:KalDataSourceChangedNotification  object:self];

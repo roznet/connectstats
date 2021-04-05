@@ -386,7 +386,7 @@ class GCTestAggregatedStats: XCTestCase {
             guard let value = index.indexValues.first else { XCTAssertTrue(false); continue }
             if case let .dateBucket(bucket) = value {
                 guard let old = stats.data(for: bucket.interval.start) else { XCTAssertTrue(false); continue }
-                if let speed = GCField(for: .weightedMeanSpeed, andActivityType: activityType.primary().key) {
+                if let speed = GCField(for: .weightedMeanSpeed, andActivityTypeDetail: activityType) {
                     data.data[speed]?.compare(field: speed, dataHolder: old, message: "\(bucket) monthly aggregate")
                 }
                 

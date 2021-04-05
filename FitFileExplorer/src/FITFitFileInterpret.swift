@@ -160,8 +160,8 @@ class FITFitFileInterpret: NSObject {
         
         // Few special cases, if speed and not pace, add
         if self.activityType.isPacePreferred() {
-            if let paceField = GCField( for: gcFieldFlag.weightedMeanSpeed, andActivityType: self.activityType.primary().key),
-                let speedField = GCField( forKey: "WeightedMeanSpeed", andActivityType: self.activityType.primary().key),
+            if let paceField = GCField( for: gcFieldFlag.weightedMeanSpeed, andActivityTypeDetail: self.activityType),
+                let speedField = GCField( forKey: "WeightedMeanSpeed", andActivityTypeDetail: self.activityType),
                 let speed = rv[ speedField ]{
                 if rv[paceField] == nil {
                     let nu = speed.numberWithUnit.convert(to: paceField.unit())

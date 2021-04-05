@@ -142,7 +142,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
  @param  ignoreMode decide whether to apply on fitness or days activities
  @return NSDictionary with Keys for the values in fields (NSString or GCField) and GCStatsDataSerieWithUnit as value
  */
--(NSDictionary*)fieldsSeries:(NSArray*)fields matching:(nullable GCActivityMatchBlock)match useFiltered:(BOOL)useFilter ignoreMode:(gcIgnoreMode)ignoreMode;
+-(NSDictionary<GCField*,GCStatsDataSerieWithUnit*>*)fieldsSeries:(NSArray<GCField*>*)fields matching:(nullable GCActivityMatchBlock)match useFiltered:(BOOL)useFilter ignoreMode:(gcIgnoreMode)ignoreMode;// DEPRECATED_MSG_ATTRIBUTE( "Use modern");
 -(nullable GCStatsDataSerieFilter*)standardFilterForField:(GCField*)field;
 
 -(void)purgeCache;

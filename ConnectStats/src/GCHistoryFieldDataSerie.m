@@ -165,22 +165,22 @@
     if (self.organizer==nil) {
         self.organizer = [GCAppGlobal organizer];
     }
-    NSMutableArray * fields = [NSMutableArray arrayWithObject:self.config.activityField];
+    NSMutableArray<GCField*> * fields = [NSMutableArray arrayWithObject:self.config.activityField];
     if (self.config.x_activityField) {
         [fields addObject:self.config.x_activityField];
     }
     GCActivityMatchBlock filter = nil;
-    BOOL checkActivityType = ![self.config.activityType isEqualToString:GC_TYPE_ALL];
-    gcIgnoreMode ignoreMode = [self.config.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
+    GCActivityMatchBlock typeMatchBlock = self.config.activityTypeMatchBlock;
+    BOOL checkActivityType = (typeMatchBlock != nil);
+    gcIgnoreMode ignoreMode = self.config.activityTypeDetail.ignoreMode;
     GCField * activityField = self.config.activityField;
-    NSString * activityType = self.config.activityType;
     GCField * x_activityField = self.config.x_activityField;
 
     NSDate * fromDate = self.config.fromDate;
 
     if (checkActivityType || fromDate!=nil) {
         filter = ^(GCActivity*act){
-            BOOL keep = !checkActivityType || [act.activityType isEqualToString:activityType];
+            BOOL keep = checkActivityType ? typeMatchBlock(act) : true;
             if (fromDate) {
                 keep = keep && ([fromDate compare:act.date] == NSOrderedAscending);
             }
@@ -268,7 +268,7 @@
 }
 
 -(NSString*)description{
-    return [NSString stringWithFormat:@"%@ %@ %d points", self.config.activityType, self.config.activityField, (int)[_history count]];
+    return [NSString stringWithFormat:@"<%@: %@ %d points>", NSStringFromClass([self class]), self.config, (int)[_history count]];
 }
 
 -(NSString*)formattedValue:(double)aVal{

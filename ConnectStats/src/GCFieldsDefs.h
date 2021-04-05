@@ -59,6 +59,11 @@ typedef NS_OPTIONS(NSUInteger, gcTrackEventType) {
     gcTrackEventTypeStopAll = 4
 };
 
+typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
+    gcIgnoreModeActivityFocus,
+    gcIgnoreModeDayFocus
+};
+
 /*
 fit_example.h:#define FIT_EVENT_TYPE_INVALID                                                   FIT_ENUM_INVALID
 fit_example.h:#define FIT_EVENT_TYPE_START                                                     ((FIT_EVENT_TYPE)0)

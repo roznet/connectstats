@@ -27,6 +27,7 @@
 #import "GCFieldsCategory.h"
 #import "GCHealthMeasure.h"
 #import "GCFieldCache.h"
+#import "GCActivityType.h"
 
 #define GC_TYPE_NULL @"<NULL>"
 
@@ -172,6 +173,14 @@ static void registerInCache(GCField*field){
     return nil;
 }
 
++(GCField*)fieldForKey:(NSString*)field andActivityTypeDetail:(GCActivityType*)activityType{
+    return [GCField fieldForKey:field andActivityType:activityType.primaryActivityType.key];
+}
++(GCField*)fieldForFlag:(gcFieldFlag)fieldFlag andActivityTypeDetail:(GCActivityType *)activityType{
+    return [GCField fieldForFlag:fieldFlag andActivityType:activityType.primaryActivityType.key];
+
+}
+
 +(GCField*)fieldForKey:(NSString*)field andActivityType:(NSString*)activityType{
     if (field == nil) {
         return nil;
@@ -191,6 +200,25 @@ static void registerInCache(GCField*field){
 
     return rv;
 }
+
++(GCField*)fieldForFlag:(gcFieldFlag)fieldFlag andActivityType:(NSString *)activityType{
+    if (fieldFlag == gcFieldFlagNone) {
+        return nil;
+    }
+    GCField * rv = _cache[@(fieldFlag)][activityType?:GC_TYPE_NULL];
+
+    if (!rv) {
+        rv = RZReturnAutorelease([[GCField alloc] init]);
+        if (rv) {
+            rv.fieldFlag = fieldFlag;
+            rv.activityType = activityType;
+            rv.key = [GCFields activityFieldFromTrackField:fieldFlag andActivityType:activityType];
+            registerInCache(rv);
+        }
+    }
+    return rv;
+}
+
 
 //NEWTRACKFIELD EDIT HERE
 -(gcFieldFlag)derivedFieldFlag{
@@ -248,23 +276,6 @@ static void registerInCache(GCField*field){
     return rv;
 }
 
-+(GCField*)fieldForFlag:(gcFieldFlag)fieldFlag andActivityType:(NSString *)activityType{
-    if (fieldFlag == gcFieldFlagNone) {
-        return nil;
-    }
-    GCField * rv = _cache[@(fieldFlag)][activityType?:GC_TYPE_NULL];
-
-    if (!rv) {
-        rv = RZReturnAutorelease([[GCField alloc] init]);
-        if (rv) {
-            rv.fieldFlag = fieldFlag;
-            rv.activityType = activityType;
-            rv.key = [GCFields activityFieldFromTrackField:fieldFlag andActivityType:activityType];
-            registerInCache(rv);
-        }
-    }
-    return rv;
-}
 
 #if !__has_feature(objc_arc)
 -(void)dealloc{

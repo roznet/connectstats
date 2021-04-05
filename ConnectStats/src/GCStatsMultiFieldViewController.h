@@ -53,8 +53,7 @@
 
 -(void)setupForCurrentActivityType:(NSString*)aType filter:(BOOL)aFilter andViewChoice:(gcViewChoice)choice;
 -(void)setupForCurrentActivityType:(NSString*)aType andViewChoice:(gcViewChoice)choice;
--(void)setupForCurrentActivityTypeDetail:(GCActivityType*)aType andFilter:(BOOL)aFilter;
--(void)setupForCurrentActivityAndViewChoice:(gcViewChoice)choice;
+//-(void)setupForCurrentActivityAndViewChoice:(gcViewChoice)choice;
 -(void)setupForFieldListConfig:(GCStatsMultiFieldConfig*)nConfig;
 
 -(void)setupBarButtonItem;

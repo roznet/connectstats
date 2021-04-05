@@ -351,6 +351,9 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             if( val == nil && [field.activityType isEqualToString:GC_TYPE_ALL]){
                 GCField * typedField = [field correspondingFieldForActivityType:self.activityType];
                 val = self.summaryData[ typedField ];
+                if( !val ){
+                    val = self.calculatedFields[ typedField ];
+                }
             }
             rv = val.numberWithUnit;
         }

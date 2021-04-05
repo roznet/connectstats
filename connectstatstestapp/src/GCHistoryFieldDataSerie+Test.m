@@ -39,11 +39,11 @@
         NSString * col = [field.key substringFromIndex:[GC_HEALTH_PREFIX length]];
         query = @"select measureDate as BeginTimeStamp, measureValue as value,'kilogram' as uom from gc_health_measures where measureType=? order by measureDate DESC;";
         res = [self.db executeQuery:query,col];
-    }else if ([self.config.activityType isEqualToString:GC_TYPE_ALL]) {
+    }else if ([self.config.activityTypeDetail isEqualToActivityType:GCActivityType.all]) {
         query = @"SELECT v.*, activityType, BeginTimestamp FROM gc_activities_values v, gc_activities a WHERE a.activityId=v.activityId AND v.field=? ORDER BY BeginTimestamp DESC";
         res = [self.db executeQuery:query,field.key];
     }else{
-        res = [self.db executeQuery:query,field.key, self.config.activityType];
+        res = [self.db executeQuery:query,field.key, self.config.activityTypeDetail.primaryActivityType.key];
     }
 
     while ([res next]) {

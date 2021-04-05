@@ -210,8 +210,8 @@ static GCActivityTypes * _activityTypesCache = nil;
         return true;
     }
 
-    // same parent. Already know won't be root type as covered by first if
-    if( self.parentType.typeId == other.parentType.typeId){
+    // full logic check
+    if( self.primaryActivityType.typeId == other.primaryActivityType.typeId){
         return true;
     }
 
@@ -240,6 +240,10 @@ static GCActivityTypes * _activityTypesCache = nil;
 }
 
 #pragma mark - Properties
+
+-(gcIgnoreMode)ignoreMode{
+    return [self.key isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
+}
 
 -(BOOL)isPacePreferred{
     if( [GCFields pacePreferredForActivityType:self.key]){

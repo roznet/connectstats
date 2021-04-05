@@ -117,6 +117,10 @@
 -(BOOL)isPacePreferred;
 -(BOOL)isSki;
 -(BOOL)isElevationLossPreferred;
+/**
+ ignore mode to match given type, typically day or activity for everything else
+ */
+-(gcIgnoreMode)ignoreMode;
 
 -(nonnull GCUnit*)preferredSpeedDisplayUnit;
 

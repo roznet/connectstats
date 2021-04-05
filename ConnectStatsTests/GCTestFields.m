@@ -120,10 +120,17 @@
     
     
     NSArray * allParents = [GCActivityType allPrimaryTypes];
+    gcFieldFlag distanceFlag = gcFieldFlagSumDistance;
+    gcFieldFlag speedFlag = gcFieldFlagWeightedMeanSpeed;
+    
     for (GCActivityType * parent in allParents) {
         XCTAssertNotEqualObjects(parent, [GCActivityType all]);
-        NSArray * subs = [GCActivityType allTypesWithSamePrimaryTypeAs:parent];
+        NSArray<GCActivityType*> * subs = [GCActivityType allTypesWithSamePrimaryTypeAs:parent];
         XCTAssertTrue([parent hasSamePrimaryType:[GCActivityType all]]);
+        GCField * distanceField = [GCField fieldForFlag:distanceFlag andActivityTypeDetail:parent];
+        GCField * speedField = [GCField fieldForFlag:speedFlag andActivityTypeDetail:parent];
+        XCTAssertEqualObjects(distanceField, [GCField fieldForFlag:distanceFlag andActivityType:parent.key]);
+        XCTAssertEqualObjects(speedField, [GCField fieldForFlag:speedFlag andActivityType:parent.key]);
         for (GCActivityType * sub in subs) {
             XCTAssertEqualObjects(sub.parentType, parent);
             XCTAssertTrue([sub hasSamePrimaryType:parent]);
@@ -133,6 +140,9 @@
             
             XCTAssertFalse([[GCActivityType day] hasSamePrimaryType:sub]);
             XCTAssertFalse([[GCActivityType day] hasSamePrimaryType:parent]);
+            
+            XCTAssertEqualObjects(distanceField, [GCField fieldForFlag:distanceFlag andActivityTypeDetail:sub]);
+            XCTAssertEqualObjects(speedField, [GCField fieldForFlag:speedFlag andActivityTypeDetail:sub]);
         }
     }
     XCTAssertFalse([[GCActivityType day] hasSamePrimaryType:[GCActivityType all]]);

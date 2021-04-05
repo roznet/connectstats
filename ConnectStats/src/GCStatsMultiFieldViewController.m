@@ -821,9 +821,9 @@
     [self setupForFieldListConfig:nconfig];
 }
 
--(void)setupForCurrentActivityTypeDetail:(GCActivityType*)aType andFilter:(BOOL)aFilter{
+-(void)setupForCurrentActivityTypeSelection:(GCActivityTypeSelection*)selection andFilter:(BOOL)aFilter{
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
-    nconfig.activityTypeDetail = aType;
+    nconfig.activityTypeDetail = selection.activityTypeDetail;
     nconfig.useFilter = aFilter;
     [self setupForFieldListConfig:nconfig];
 }

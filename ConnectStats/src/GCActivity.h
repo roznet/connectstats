@@ -74,11 +74,6 @@ typedef NS_ENUM(NSUInteger, gcDownloadMethod) {
     gcDownloadMethodConnectStats= 11
 };
 
-typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
-    gcIgnoreModeActivityFocus,
-    gcIgnoreModeDayFocus
-};
-
 @interface GCActivity : RZParentObject<RZChildObject,GCTrackPointDelegate>{
     // Private Flags
     BOOL _summaryDataLoading;

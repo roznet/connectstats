@@ -30,6 +30,7 @@
 #import "GCViewIcons.h"
 #import "GCActivityType.h"
 #import "GCActivityType+Icon.h"
+#import "ConnectStats-Swift.h"
 
 @interface GCViewActivityTypeButton ()
 @property (nonatomic,retain) NSArray<GCActivityType*> * activityTypeList;
@@ -149,7 +150,10 @@
         atype = types[idx];
         currentFilter = false;
     }
-    [self.delegate setupForCurrentActivityTypeDetail:atype andFilter:currentFilter];
+
+    GCActivityTypeSelection * selection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityTypeDetail:atype matchPrimaryType:false]);
+    
+    [self.delegate setupForCurrentActivityTypeSelection:selection andFilter:currentFilter];
 }
 
 -(BOOL)setupBarButtonItem:(nullable UIViewController*)presentingViewController{
@@ -247,7 +251,11 @@
     NSArray<GCActivityType*>*types = self.listActivityTypes;
     GCActivityType * type = indexPath.row < types.count ? types[indexPath.row] : types.firstObject;
     
-    [self.delegate setupForCurrentActivityTypeDetail:type andFilter:false];
+    GCActivityTypeSelection * selection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityTypeDetail:type matchPrimaryType:false]);
+    
+    [self.delegate setupForCurrentActivityTypeSelection:selection andFilter:false];
+
+
     [self.popoverViewController dismissViewControllerAnimated:TRUE completion:nil];
 }
 

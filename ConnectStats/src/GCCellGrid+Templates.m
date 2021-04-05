@@ -746,7 +746,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 -(void)setupStatsHeaders:(GCHistoryFieldDataSerie *)activityStats{
     [self setupForRows:2 andCols:1];
     
-    GCFormattedFieldText * title = [GCFormattedFieldText formattedFieldText:[GCActivityType activityTypeForKey:activityStats.config.activityType].displayName
+    GCFormattedFieldText * title = [GCFormattedFieldText formattedFieldText:activityStats.config.activityTypeDetail.displayName
                                                                       value:activityStats.fieldDisplayName
                                                                     forSize:16.];
 
@@ -761,7 +761,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     [self labelForRow:1 andCol:0].attributedText = [sub attributedString];
     GCActivity * dummy = [[GCActivity alloc] init];
 
-    [dummy changeActivityType:[GCActivityType activityTypeForKey:activityStats.config.activityType]];
+    [dummy changeActivityType:activityStats.config.activityTypeDetail];
     [GCViewConfig setupGradient:self ForActivity:dummy];
     [dummy release];
 }

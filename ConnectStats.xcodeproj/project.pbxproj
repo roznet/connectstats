@@ -13,6 +13,9 @@
 		4201528E1624D5AC004F64EF /* GCMapGradientPathOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4201528D1624D5AC004F64EF /* GCMapGradientPathOverlayView.m */; };
 		42018E9618F1877E0089AB7A /* GCFieldsCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42018E9518F1877E0089AB7A /* GCFieldsCategory.m */; };
 		42018EA018F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42018E9F18F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m */; };
+		4202638B261B6C27005D36A2 /* GCActivityTypeSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4202638A261B6C27005D36A2 /* GCActivityTypeSelection.swift */; };
+		4202638C261B6C27005D36A2 /* GCActivityTypeSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4202638A261B6C27005D36A2 /* GCActivityTypeSelection.swift */; };
+		4202638D261B6C27005D36A2 /* GCActivityTypeSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4202638A261B6C27005D36A2 /* GCActivityTypeSelection.swift */; };
 		4202AE2E21A8A20800D8D696 /* FITGarminDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4202AE2121A72D9600D8D696 /* FITGarminDownloadManager.swift */; };
 		42091CFF1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42091CFE1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m */; };
 		42091D001B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42091CFE1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m */; };
@@ -1263,6 +1266,7 @@
 		42018E9518F1877E0089AB7A /* GCFieldsCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldsCategory.m; path = src/GCFieldsCategory.m; sourceTree = "<group>"; };
 		42018E9E18F32E2F0089AB7A /* GCTableHeaderFieldsCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTableHeaderFieldsCategory.h; path = src/GCTableHeaderFieldsCategory.h; sourceTree = "<group>"; };
 		42018E9F18F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTableHeaderFieldsCategory.m; path = src/GCTableHeaderFieldsCategory.m; sourceTree = "<group>"; };
+		4202638A261B6C27005D36A2 /* GCActivityTypeSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCActivityTypeSelection.swift; path = src/GCActivityTypeSelection.swift; sourceTree = "<group>"; };
 		4202AE2121A72D9600D8D696 /* FITGarminDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITGarminDownloadManager.swift; path = src/FITGarminDownloadManager.swift; sourceTree = "<group>"; };
 		42091CFD1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitDailySummaryRequest.h; path = src/GCHealthKitDailySummaryRequest.h; sourceTree = "<group>"; };
 		42091CFE1B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitDailySummaryRequest.m; path = src/GCHealthKitDailySummaryRequest.m; sourceTree = "<group>"; };
@@ -2675,6 +2679,7 @@
 				4244676B184B7550009F807E /* GCActivityType.m */,
 				4244676D184B756F009F807E /* GCActivityTypes.h */,
 				4244676E184B756F009F807E /* GCActivityTypes.m */,
+				4202638A261B6C27005D36A2 /* GCActivityTypeSelection.swift */,
 			);
 			name = ActivityTypes;
 			sourceTree = "<group>";
@@ -5246,6 +5251,7 @@
 				422FAEF519A1DD6000D09773 /* GCDerivedDataSerie.m in Sources */,
 				423F9FCA19AD2ACA0057DB5A /* GCStatsHistGraphConfig.m in Sources */,
 				42F0A4F41B60620200901CFF /* GCDerivedRequest.m in Sources */,
+				4202638D261B6C27005D36A2 /* GCActivityTypeSelection.swift in Sources */,
 				424BDABB25E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */,
 				42E04E5A25398099005FFD5E /* GCCellRoundedPatternView.swift in Sources */,
 				422FAEF819A1DD6000D09773 /* GCHistoryFieldSummaryStats.m in Sources */,
@@ -5656,6 +5662,7 @@
 				424B7F4816CFBE30000B38AD /* GCSettingsHelpViewController.m in Sources */,
 				426CC4711BAEB9920033978C /* GCAppActions.m in Sources */,
 				42804DEB16D5215D009E4EEF /* GCActivity+CalculatedLaps.m in Sources */,
+				4202638B261B6C27005D36A2 /* GCActivityTypeSelection.swift in Sources */,
 				42CE39461CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */,
 				4255765F16D8C8D10080F8CE /* GCActivityMetaValue.m in Sources */,
 				4255766316D8CA850080F8CE /* GCActivityCalculatedValue.m in Sources */,
@@ -5911,6 +5918,7 @@
 				422CC8761E6ACA1700195414 /* GCUnit+FIT.m in Sources */,
 				421A51511C82FB1000671587 /* GCActivity+Fields.m in Sources */,
 				42B5E2C21BA5B216000FAE4E /* GCActivitiesCacheManagement.m in Sources */,
+				4202638C261B6C27005D36A2 /* GCActivityTypeSelection.swift in Sources */,
 				42B5E2C31BA5B216000FAE4E /* GCActivitySearch.m in Sources */,
 				427F93761BED59D900C177F9 /* GCViewConfigSkin.m in Sources */,
 				42B5E2C41BA5B216000FAE4E /* GCActivitySearchElement.m in Sources */,

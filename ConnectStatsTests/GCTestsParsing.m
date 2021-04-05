@@ -719,7 +719,10 @@
     
     GCField * hf = [GCHealthMeasure weight];
     
-    NSDictionary * rv = [organizer fieldsSeries:@[ @"WeightedMeanHeartRate", @"WeightedMeanPace", hf] matching:nil useFiltered:NO ignoreMode:gcIgnoreModeActivityFocus];
+    GCField * hrField = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_ALL];
+    GCField * paceField = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_ALL];
+    
+    NSDictionary * rv = [organizer fieldsSeries:@[ hrField, paceField, hf] matching:nil useFiltered:NO ignoreMode:gcIgnoreModeActivityFocus];
     
     RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
     manager.recordMode = [GCTestCase recordModeGlobal];
@@ -730,7 +733,7 @@
     
     NSDictionary * expected = [manager retrieveReferenceObject:rv forClasses:classes selector:_cmd identifier:@"timeSeries" error:&error];
     XCTAssertEqual(expected.count, rv.count);
-    for (id key in expected) {
+    for (GCField * key in expected) {
         GCStatsDataSerieWithUnit * exp_serie = expected[key];
         GCStatsDataSerieWithUnit * got_serie = rv[key];
         XCTAssertNotNil(got_serie, @"key %@", key);
@@ -755,7 +758,9 @@
     
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
     
-    [organizer fieldsSeries:@[@"SumDistance"] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
+    GCField * distField = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_ALL];
+    
+    [organizer fieldsSeries:@[distField] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
     
     GCActivity * first = [organizer activityForIndex:0];
     NSString * activityType = first.activityType;

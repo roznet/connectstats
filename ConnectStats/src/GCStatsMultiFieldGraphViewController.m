@@ -71,11 +71,9 @@
 
 -(void)publishEvent{
     GCField * x  = self.historyFieldConfig.x_activityField;
-    NSString * t = self.historyFieldConfig.activityType;
     GCField * f  = self.historyFieldConfig.activityField;
 
     NSDictionary * params= @{@"XField": x ?: @"None",
-                            @"ActivityType": t ?: @"None",
                             @"Field": f ?: @"None"};
     [Flurry logEvent:EVENT_GRAPH_HISTORY withParameters:params];
 }

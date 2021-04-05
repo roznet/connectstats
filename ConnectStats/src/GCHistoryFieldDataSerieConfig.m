@@ -24,6 +24,12 @@
 //  
 
 #import "GCHistoryFieldDataSerieConfig.h"
+#import "ConnectStats-Swift.h"
+
+@interface GCHistoryFieldDataSerieConfig ()
+
+
+@end
 
 @implementation GCHistoryFieldDataSerieConfig
 
@@ -32,7 +38,7 @@
     GCHistoryFieldDataSerieConfig * rv = [[[GCHistoryFieldDataSerieConfig alloc] init] autorelease];
     if (rv) {
         rv.activityField = aField;
-        rv.activityType = aField.activityType;
+        rv.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:aField.activityType]);
         rv.x_activityField = xField;
         rv.fromDate = nil;
         rv.useFilter = false;
@@ -46,7 +52,7 @@
     if (rv) {
         rv.activityField = yField;
         rv.x_activityField = xField;
-        rv.activityType = yField.activityType;
+        rv.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:yField.activityType]);
         rv.fromDate = fromD;
         rv.useFilter = false;
 
@@ -59,7 +65,7 @@
     GCHistoryFieldDataSerieConfig * rv = [[[GCHistoryFieldDataSerieConfig alloc] init] autorelease];
     if (rv) {
         rv.activityField = yField;
-        rv.activityType = yField.activityType;
+        rv.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:yField.activityType]);
         rv.x_activityField = xField;
         rv.fromDate = fromD;
         rv.useFilter = useFilter;
@@ -72,7 +78,7 @@
     GCHistoryFieldDataSerieConfig * rv = [[[GCHistoryFieldDataSerieConfig alloc] init] autorelease];
     if (rv) {
         rv.activityField = aField;
-        rv.activityType = aField.activityType;
+        rv.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:aField.activityType]);
         rv.x_activityField = nil;
         rv.fromDate = nil;
         rv.useFilter = filter;
@@ -85,7 +91,7 @@
     GCHistoryFieldDataSerieConfig * rv = [[[GCHistoryFieldDataSerieConfig alloc] init] autorelease];
     if (rv) {
         rv.activityField = aField;
-        rv.activityType = aField.activityType;
+        rv.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:aField.activityType]);
         rv.x_activityField = nil;
         rv.fromDate = date;
         rv.useFilter = filter;
@@ -97,7 +103,7 @@
     GCHistoryFieldDataSerieConfig * rv = [[[GCHistoryFieldDataSerieConfig alloc] init] autorelease];
     if (rv) {
         rv.activityField = yField;
-        rv.activityType = yField.activityType;
+        rv.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:yField.activityType]);
         rv.x_activityField = xField;
         rv.fromDate = nil;
         rv.useFilter = filter;
@@ -114,7 +120,7 @@
         rv.fromDate = other.fromDate;
         rv.useFilter = other.useFilter;
         rv.cutOff = other.cutOff;
-        rv.activityType = other.activityType;
+        rv.activityTypeSelection = other.activityTypeSelection;
         rv.cutOffUnit = other.cutOffUnit;
         rv.healthLookbackUnit = other.healthLookbackUnit;
     }
@@ -125,7 +131,7 @@
             RZNilOrEqualToField(self.x_activityField, other.x_activityField) &&
             RZNilOrEqualToDate(self.fromDate, other.fromDate) &&
             RZNilOrEqualToDate(self.cutOff, other.cutOff) &&
-            RZNilOrEqualToString(self.activityType, other.activityType) &&
+            [self.activityTypeSelection isEqual:other.activityTypeSelection] &&
             self.useFilter == other.useFilter &&
             self.cutOffUnit == other.cutOffUnit &&
             self.healthLookbackUnit == other.healthLookbackUnit);
@@ -135,8 +141,14 @@
     [_activityField release];
     [_x_activityField release];
     [_fromDate release];
-    [_activityType release];
+    [_activityTypeSelection release];
     [super dealloc];
+}
+-(GCActivityType*)activityTypeDetail{
+    return self.activityTypeSelection.activityTypeDetail;
+}
+-(GCActivityMatchBlock)activityTypeMatchBlock{
+    return [self.activityTypeSelection selectMatchBlock];
 }
 
 -(BOOL)isXY{

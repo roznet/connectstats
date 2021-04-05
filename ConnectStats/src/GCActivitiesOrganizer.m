@@ -1376,7 +1376,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     return filter;
 }
 
--(NSDictionary*)fieldsSeries:(NSArray*)fields
+-(NSDictionary<GCField*,GCStatsDataSerieWithUnit*>*)fieldsSeries:(NSArray<GCField*>*)fields
                     matching:(GCActivityMatchBlock)match
                  useFiltered:(BOOL)useFilter
                   ignoreMode:(gcIgnoreMode)ignoreMode{
@@ -1394,33 +1394,19 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 
     if (actfields.count) {
-        NSArray * useActivities = useFilter ? [self filteredActivities] : self.allActivities;
+        NSArray<GCActivity*> * useActivities = useFilter ? [self filteredActivities] : self.allActivities;
         for (GCActivity * act in useActivities) {
             if (![act ignoreForStats:ignoreMode] && (match==nil || match(act))) {
-                for (id one in actfields) {
-                    GCNumberWithUnit * nu = nil;
-                    GCField * field = nil;
-                    if ([one isKindOfClass:[GCField class]]){
-                        field = one;
-                        if( [field.activityType isEqualToString:GC_TYPE_ALL]){
-                            field = [field correspondingFieldForActivityType:act.activityType];
+                for (GCField * field in actfields) {
+                    GCNumberWithUnit * nu = [act numberWithUnitForField:field];
+                    if (nu) {
+                        nu = [nu convertToGlobalSystem];
+                        GCStatsDataSerieWithUnit * serie = rv[field];
+                        if (serie == nil) {
+                            serie = [GCStatsDataSerieWithUnit dataSerieWithUnit:nu.unit];
+                            rv[field] = serie;
                         }
-                    }else if ([one isKindOfClass:[NSString class]]) {
-                        field = [GCField fieldForKey:one andActivityType:act.activityType];
-                    }else if ([one isKindOfClass:[NSNumber class]]){
-                        field = [GCField fieldForFlag:(gcFieldFlag)[one integerValue] andActivityType:act.activityType];
-                    }
-                    if( field ){
-                        nu = [act numberWithUnitForField:field];
-                        if (nu) {
-                            nu = [nu convertToGlobalSystem];
-                            GCStatsDataSerieWithUnit * serie = rv[one];
-                            if (serie == nil) {
-                                serie = [GCStatsDataSerieWithUnit dataSerieWithUnit:nu.unit];
-                                rv[one] = serie;
-                            }
-                            [serie addNumberWithUnit:nu forDate:act.date];
-                        }
+                        [serie addNumberWithUnit:nu forDate:act.date];
                     }
                 }
             }
