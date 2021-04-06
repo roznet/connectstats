@@ -278,7 +278,7 @@
     
     GCHistoryAggregatedActivityStats * stats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_RUNNING];
     [stats setActivitiesFromOrganizer:organizer];
-    [stats setActivityType:GC_TYPE_RUNNING];
+    [stats setActivityTypeSelection:RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_RUNNING])];
     [stats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     XCTAssertEqual([e_avg count], [stats count], @"Count");
     
@@ -323,7 +323,7 @@
         XCTAssertEqualWithAccuracy([[holder numberWithUnit:f statType:gcAggregatedMax] convertToUnit:GCUnit.mps].value, [e_max dataPointAtIndex:i].y_data*x, 1e-6, @"Same max");
     }
     
-    [stats setActivityType:GC_TYPE_ALL];
+    [stats setActivityTypeSelection:RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_ALL])];
     [stats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
     GCHistoryFieldSummaryStats * sumStats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities matching:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
@@ -339,7 +339,7 @@
                                1.e-7, @"Count equals");
     
     // Check Cutoff aggregate
-    [stats setActivityType:GC_TYPE_RUNNING];
+     [stats setActivityTypeSelection:RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_RUNNING])];
     NSDate * cutoff = [organizer.activities.lastObject date];
     [stats aggregate:NSCalendarUnitMonth referenceDate:nil cutOff:cutoff ignoreMode:gcIgnoreModeActivityFocus];
     

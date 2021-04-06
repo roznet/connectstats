@@ -137,7 +137,7 @@
 
 -(void)testStatsConfig{
     GCStatsMultiFieldConfig * config = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
-    config.activityType = GC_TYPE_RUNNING;
+    config.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_RUNNING]);
     NSMutableArray * configs = [NSMutableArray array];
     BOOL hasMoreView = true;
     while( hasMoreView ){
