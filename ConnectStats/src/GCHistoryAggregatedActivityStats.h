@@ -49,16 +49,20 @@
 //        indexed by field list of holder x [ buckets ] (field summary for wow, mom )
 //        indexed by cluster serie of date x field (graphs or total by location, cluster)
 
+@class GCActivityTypeSelection;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface GCHistoryAggregatedActivityStats : NSObject<NSFastEnumeration>
 
 +(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityType:(NSString*)activityType;
 +(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityTypeDetail:(GCActivityType*)activityType;
++(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityTypeSelection:(GCActivityTypeSelection*)activityType;
 
 @property (nonatomic,retain) NSArray<GCActivity*> * activities;
-@property (nonatomic,assign) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("Use Detail");
-@property (nonatomic,retain) GCActivityType * activityTypeDetail;
+@property (nonatomic,readonly) NSString * activityType; //DEPRECATED_MSG_ATTRIBUTE("Use Detail");
+@property (nonatomic,readonly) GCActivityType * activityTypeDetail; //DEPRECATED_MSG_ATTRIBUTE( "Use Selection")
+@property (nonatomic,retain) GCActivityTypeSelection * activityTypeSelection;
 @property (nonatomic,assign) BOOL useFilter;
 
 -(void)aggregate:(NSCalendarUnit)aUnit referenceDate:(nullable NSDate*)refOrNil ignoreMode:(gcIgnoreMode)ignoreMode;

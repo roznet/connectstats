@@ -53,10 +53,14 @@
     return [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityTypeDetail:[GCActivityType activityTypeForKey:activityType]];
 }
 +(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityTypeDetail:(GCActivityType*)activityType{
+    return [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityTypeSelection:RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityTypeDetail:activityType matchPrimaryType:true])];
+}
+
++(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityTypeSelection:(GCActivityTypeSelection*)selection{
     GCHistoryAggregatedActivityStats * rv = [[[GCHistoryAggregatedActivityStats alloc] init] autorelease];
     if( rv ){
-        rv.fields = [GCHistoryAggregatedActivityStats defaultFieldsForActivityTypeDetail:activityType];
-        rv.activityTypeDetail = activityType;
+        rv.fields = [GCHistoryAggregatedActivityStats defaultFieldsForActivityTypeDetail:selection.activityTypeDetail];
+        rv.activityTypeSelection = selection;
     }
     return rv;
 }
@@ -87,9 +91,6 @@
 
 -(NSString*)activityType{
     return self.activityTypeDetail.primaryActivityType.key;
-}
--(void)setActivityType:(NSString*)activityType{
-    self.activityTypeDetail = [GCActivityType activityTypeForKey:activityType];
 }
 -(NSUInteger)count{
     return _aggregatedStats.count;
@@ -127,19 +128,9 @@
     
     NSMutableSet<GCField*> * found = [NSMutableSet set];
 
-    NSArray<GCActivity*> * useActivities = self.activities;
-
-    NSMutableArray<GCActivity*> * serie = [NSMutableArray arrayWithCapacity:useActivities.count];
-    if ([self.activityTypeDetail isEqualToActivityType:GCActivityType.all]) {
-        [serie addObjectsFromArray:useActivities];
-    }else{
-        for (GCActivity * act in useActivities) {
-            if ([act.activityTypeDetail isEqualToActivityType:self.activityTypeDetail]) {
-                [serie insertObject:act atIndex:0];
-            }
-        }
-    }
-    [serie sortUsingComparator:^(id obj1, id obj2){
+    NSArray<GCActivity*> * serie = [self.activityTypeSelection selectedWithActivities:self.activities];
+    
+    serie = [serie sortedArrayUsingComparator:^(id obj1, id obj2){
         return [[obj1 date] compare:[obj2 date]];
     }];
 

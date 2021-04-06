@@ -165,9 +165,36 @@ static GCActivityTypes * _activityTypesCache = nil;
     return [self.key isEqualToString:activityTypeString];
 }
 
+
+
 -(NSInteger)sortOrder{
     // for now, typeid happens to be not too bad
     return self.typeId;
+}
+
+-(NSComparisonResult)compare:(GCActivityType*)other{
+    if( [other isKindOfClass:[self class]]){
+        NSInteger thisPrimarySortOrder = self.primaryActivityType.sortOrder;
+        NSInteger otherPrimarySortOrder = other.primaryActivityType.sortOrder;
+
+        if( thisPrimarySortOrder == otherPrimarySortOrder ){
+            NSInteger thisSortOrder = self.sortOrder;
+            NSInteger otherSortOrder = other.sortOrder;
+            if( thisSortOrder == otherSortOrder){
+                return NSOrderedSame;
+            }else if( thisSortOrder < otherSortOrder){
+                return NSOrderedAscending;
+            }else{
+                return NSOrderedDescending;
+            }
+        }else if( thisPrimarySortOrder < otherPrimarySortOrder){
+            return NSOrderedAscending;
+        }else{
+            return NSOrderedDescending;
+        }
+    }else{
+        return NSOrderedAscending;
+    }
 }
 
 -(GCActivityType*)rootType{

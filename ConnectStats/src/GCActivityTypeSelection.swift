@@ -28,13 +28,18 @@
 import Foundation
 
 class GCActivityTypeSelection : NSObject {
-    @objc let activityTypeDetail : GCActivityType
+    @objc var activityTypeDetail : GCActivityType
     /// if true, will match on primary type only, else on the detail type
-    private let matchPrimaryType : Bool
+    @objc var matchPrimaryType : Bool
     
     @objc init(activityTypeDetail : GCActivityType, matchPrimaryType : Bool){
         self.activityTypeDetail = activityTypeDetail
         self.matchPrimaryType = matchPrimaryType
+    }
+    
+    @objc init(selection : GCActivityTypeSelection){
+        self.activityTypeDetail = selection.activityTypeDetail
+        self.matchPrimaryType = selection.matchPrimaryType
     }
     
     @objc init(activityType: String){
@@ -59,6 +64,20 @@ class GCActivityTypeSelection : NSObject {
         }
     }
  
+    @objc func activityTypeList(in activities : [GCActivity] ) -> [GCActivityType] {
+        var found : Set<GCActivityType> = [ GCActivityType.all() ]
+        if self.matchPrimaryType {
+            for activity in activities {
+                found.insert(activity.activityTypeDetail.primary())
+            }
+        }else{
+            for activity in activities {
+                found.insert(activity.activityTypeDetail)
+            }
+        }
+        return Array(found)
+    }
+    
     @objc override func isEqual(_ object: Any?) -> Bool {
         guard let selection = object as? GCActivityTypeSelection else { return false }
         
@@ -67,5 +86,11 @@ class GCActivityTypeSelection : NSObject {
     
     @objc func isEqualToSelection(_ object: GCActivityTypeSelection) -> Bool {
         return self.activityTypeDetail.isEqual(to: object.activityTypeDetail) && self.matchPrimaryType == object.matchPrimaryType
+    }
+}
+extension GCActivityTypeSelection  {
+    override var description: String {
+        let primaryText = self.matchPrimaryType ? "Primary" : "All"
+        return "GCActivityTypeSelection(\(self.activityTypeDetail),\(primaryText))"
     }
 }

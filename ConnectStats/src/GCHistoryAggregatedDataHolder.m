@@ -308,7 +308,7 @@
 
 -(BOOL)hasField:(GCField *)field{
     for (GCField * one in self.fields) {
-        if( [field isEqualToField:one] ){
+        if( [field matchesField:one] ){
             return true;
         }
     }

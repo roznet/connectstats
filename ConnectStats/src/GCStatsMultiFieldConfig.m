@@ -29,6 +29,7 @@
 #import "GCSimpleGraphCachedDataSource+Templates.h"
 #import "GCDerivedGroupedSeries.h"
 #import "GCAppGlobal.h"
+#import "ConnectStats-Swift.h"
 
 @interface GCStatsMultiFieldConfig ()
 @property (nonatomic,retain) NSString * filterButtonTitle;
@@ -46,6 +47,8 @@
         self.viewConfig = gcStatsViewConfigAll;
         self.viewChoice = gcViewChoiceSummary;
         self.calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitWeekOfYear];
+        self.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityTypeDetail:GCActivityType.all matchPrimaryType:true]);
+
     }
     return self;
 }
@@ -53,7 +56,7 @@
 -(void)dealloc{
     [_filterButtonImage release];
     [_filterButtonTitle release];
-    [_activityTypeDetail release];
+    [_activityTypeSelection release];
     [_calendarConfig release];
     [super dealloc];
 }
@@ -62,7 +65,7 @@
     GCStatsMultiFieldConfig * rv = [[[GCStatsMultiFieldConfig alloc] init] autorelease];
     if (rv) {
         if (other!=nil) {
-            rv.activityType = other.activityType;
+            rv.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithSelection:other.activityTypeSelection]);
             rv.viewChoice = other.viewChoice;
             rv.useFilter = other.useFilter;
             rv.viewConfig = other.viewConfig;
@@ -77,6 +80,8 @@
             rv.comparisonMetric = gcComparisonMetricNone;
             rv.calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:kCalendarUnitNone];
             rv.summaryCumulativeFieldFlag = gcFieldFlagSumDistance;
+            rv.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityTypeDetail:[[[GCAppGlobal organizer] currentActivity] activityTypeDetail]
+                                                                                                      matchPrimaryType:true]);
         }
     }
     return rv;
@@ -88,6 +93,14 @@
 -(NSString *)viewDescription{
     return [GCViewConfig viewChoiceDesc:self.viewChoice calendarConfig:self.calendarConfig];
 }
+-(GCActivityType*)activityTypeDetail {
+    return self.activityTypeSelection.activityTypeDetail;
+}
+
+-(void)setActivityTypeDetails:(GCActivityType *)activityType{
+    self.activityTypeSelection.activityTypeDetail = activityType;
+}
+
 -(NSString*)description{
     return [NSString stringWithFormat:@"<%@: %@ view:%@ calUnit:%@ config:%@ period:%@ gr:%@ comp:%@>", NSStringFromClass([self class]),
             self.activityType,
@@ -130,9 +143,6 @@
 -(NSString*)activityType{
     return self.activityTypeDetail.primaryActivityType.key;
 }
--(void)setActivityType:(NSString*)atype{
-    self.activityTypeDetail = [GCActivityType activityTypeForKey:atype];
-}
 
 -(BOOL)isEqual:(GCStatsMultiFieldConfig*)object{
     if( [object isKindOfClass:[GCStatsMultiFieldConfig class]]){
@@ -144,7 +154,7 @@
 
 -(BOOL)isEqualToConfig:(GCStatsMultiFieldConfig*)other{
     return(
-           [self.activityTypeDetail isEqualToActivityType:other.activityTypeDetail] &&
+           [self.activityTypeSelection isEqualToSelection:other.activityTypeSelection] &&
            self.viewChoice==other.viewChoice &&
            self.useFilter == other.useFilter &&
            self.viewConfig==other.viewConfig &&
@@ -157,7 +167,7 @@
 
 -(BOOL)requiresAggregateRebuild:(GCStatsMultiFieldConfig*)other{
     return !(
-             [self.activityTypeDetail isEqualToActivityType:other.activityTypeDetail] &&
+             [self.activityTypeSelection isEqualToSelection:other.activityTypeSelection] &&
              self.viewChoice==other.viewChoice &&
              self.useFilter == other.useFilter &&
              self.viewConfig==other.viewConfig &&

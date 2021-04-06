@@ -56,6 +56,7 @@
 @property (nonatomic,retain) UIViewController * popoverViewController;
 @property (nonatomic,retain) RZNumberWithUnitGeometry * geometry;
 @property (nonatomic,retain) UIBarButtonItem * rightMostButtonItem;
+@property (nonatomic,assign) BOOL matchPrimaryType;
 @end
 
 @implementation GCStatsMultiFieldViewController
@@ -586,6 +587,9 @@
 -(GCActivityType*)activityTypeDetail{
     return self.multiFieldConfig.activityTypeDetail;
 }
+-(GCActivityTypeSelection*)activityTypeSelection{
+    return self.multiFieldConfig.activityTypeSelection;
+}
 
 -(NSString*)displayActivityType{
     if (self.multiFieldConfig.useFilter) {
@@ -810,27 +814,28 @@
 
 -(void)setupForCurrentActivityAndViewChoice:(gcViewChoice)choice{
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
-    nconfig.activityType = [[GCAppGlobal organizer] currentActivity].activityType;
+    nconfig.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:[[GCAppGlobal organizer] currentActivity].activityType]);
     nconfig.viewChoice = choice;
     [self setupForFieldListConfig:nconfig];
 }
+
 -(void)setupForCurrentActivityType:(NSString*)aType andViewChoice:(gcViewChoice)choice{
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
-    nconfig.activityType = aType;
+    nconfig.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:aType]);
     nconfig.viewChoice = choice;
     [self setupForFieldListConfig:nconfig];
 }
 
 -(void)setupForCurrentActivityTypeSelection:(GCActivityTypeSelection*)selection andFilter:(BOOL)aFilter{
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
-    nconfig.activityTypeDetail = selection.activityTypeDetail;
+    nconfig.activityTypeSelection = selection;
     nconfig.useFilter = aFilter;
     [self setupForFieldListConfig:nconfig];
 }
 
 -(void)setupForCurrentActivityType:(NSString*)aType filter:(BOOL)aFilter andViewChoice:(gcViewChoice)choice{
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
-    nconfig.activityType = aType;
+    nconfig.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:aType]);
     nconfig.useFilter = aFilter;
     nconfig.viewChoice = choice;
     [self setupForFieldListConfig:nconfig];

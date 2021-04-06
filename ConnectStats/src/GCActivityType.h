@@ -81,6 +81,7 @@
 -(BOOL)hasSamePrimaryType:(nonnull GCActivityType*)other;
 
 -(NSInteger)sortOrder;
+-(NSComparisonResult)compare:(nonnull GCActivityType*)other;
 
 // Access Convenience
 +(nonnull GCActivityType*)running;
