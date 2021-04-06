@@ -1165,6 +1165,8 @@
 		42FC98DA261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FC98D7261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.swift */; };
 		42FC98DB261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42FC98D8261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.xib */; };
 		42FC98DC261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42FC98D8261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.xib */; };
+		42FC98F4261CFC0000ACF6E1 /* GCActivityTypeSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FC98D7261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.swift */; };
+		42FC98F5261CFC0000ACF6E1 /* GCActivityTypeSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42FC98D8261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.xib */; };
 		42FD55B91B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellHealthDayActivity.m */; };
 		42FD55BA1B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellHealthDayActivity.m */; };
 		42FFF6A7232EDAE1008714D5 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 42FFF6A6232EDAE1008714D5 /* user.json */; };
@@ -4899,6 +4901,7 @@
 				42939CEE23AAD7A900D2403A /* fit_developer.json in Resources */,
 				42B5E4811BA5BA2D000FAE4E /* last_search_0.json in Resources */,
 				427F93301BEA9A5900C177F9 /* activities_large.db in Resources */,
+				42FC98F5261CFC0000ACF6E1 /* GCActivityTypeSelectionViewController.xib in Resources */,
 				424208911BCAF9D800F3DB12 /* Activities.xcassets in Resources */,
 				427F93561BEA9A5900C177F9 /* stats_running_weekly.csv in Resources */,
 				42B5E49C1BA5BA2D000FAE4E /* strava_laps_140735927.json in Resources */,
@@ -5777,6 +5780,7 @@
 				42BF8D7A24B505EB001E1C72 /* GCActivity+Assets.m in Sources */,
 				42295E081EC6F4D900F4F7EE /* GCTestServiceGarmin.m in Sources */,
 				4211D45D259780B900967874 /* GCStravaRequestBase.swift in Sources */,
+				42FC98F4261CFC0000ACF6E1 /* GCActivityTypeSelectionViewController.swift in Sources */,
 				427DDCC01DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */,
 				42D4CA8524963F90003F3AB7 /* GCStatsDerivedHistoryViewController.m in Sources */,
 				42453BA61DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m in Sources */,
