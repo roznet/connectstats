@@ -43,7 +43,6 @@ extern NSString *  const kNotifyLocationRequestComplete;
 @class GCAppDelegate;
 @class GCActivity;
 @class HKHealthStore;
-@class GCSegmentOrganizer;
 @class GCAppProfiles;
 @class GCHealthOrganizer;
 @class GCDerivedOrganizer;
@@ -60,7 +59,6 @@ extern NSString *  const kNotifyLocationRequestComplete;
 +(dispatch_queue_t)worker;
 +(GCAppProfiles*)profile;
 +(GCDerivedOrganizer*)derived;
-+(GCSegmentOrganizer*)segments;
 
 +(NSArray<NSDictionary*>*)recentRemoteMessages;
 +(void)recentRemoteMessagesReceived;

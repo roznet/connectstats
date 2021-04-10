@@ -76,7 +76,12 @@ BOOL kOpenTemporary = false;
 }
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
-    RZLog(RZLogInfo,@"remote notification %@", userInfo);
+    if( userInfo[@"activity_id"] != nil){
+        RZLog(RZLogInfo,@"remote notification for activity %@",userInfo[@"activity_id"]);
+    }else{
+        RZLog(RZLogInfo,@"remote notification %@", userInfo);
+    }
+    application.applicationIconBadgeNumber = 1;
     completionHandler(UIBackgroundFetchResultNewData);
 }
 
@@ -165,6 +170,7 @@ BOOL kOpenTemporary = false;
         
         [self settingsUpdateCheckPostStart];
         [self startSuccessfulSwift];
+        //[UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
 }
 

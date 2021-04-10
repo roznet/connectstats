@@ -1167,6 +1167,12 @@
 		42FC98DC261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42FC98D8261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.xib */; };
 		42FC98F4261CFC0000ACF6E1 /* GCActivityTypeSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FC98D7261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.swift */; };
 		42FC98F5261CFC0000ACF6E1 /* GCActivityTypeSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42FC98D8261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.xib */; };
+		42FC992826218EE200ACF6E1 /* GCTooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FC992726218EE200ACF6E1 /* GCTooltipView.swift */; };
+		42FC992926218EE200ACF6E1 /* GCTooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FC992726218EE200ACF6E1 /* GCTooltipView.swift */; };
+		42FC992A26218EE200ACF6E1 /* GCTooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42FC992726218EE200ACF6E1 /* GCTooltipView.swift */; };
+		42FC993C262193CA00ACF6E1 /* GCTooltipView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42FC993B262193CA00ACF6E1 /* GCTooltipView.xib */; };
+		42FC993D262193CA00ACF6E1 /* GCTooltipView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42FC993B262193CA00ACF6E1 /* GCTooltipView.xib */; };
+		42FC993E262193CA00ACF6E1 /* GCTooltipView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42FC993B262193CA00ACF6E1 /* GCTooltipView.xib */; };
 		42FD55B91B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellHealthDayActivity.m */; };
 		42FD55BA1B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellHealthDayActivity.m */; };
 		42FFF6A7232EDAE1008714D5 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 42FFF6A6232EDAE1008714D5 /* user.json */; };
@@ -2108,6 +2114,8 @@
 		42FC177F1E196E4B00F55302 /* GCTestActivityFitFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCTestActivityFitFile.swift; sourceTree = "<group>"; };
 		42FC98D7261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCActivityTypeSelectionViewController.swift; path = src/GCActivityTypeSelectionViewController.swift; sourceTree = "<group>"; };
 		42FC98D8261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCActivityTypeSelectionViewController.xib; path = src/GCActivityTypeSelectionViewController.xib; sourceTree = "<group>"; };
+		42FC992726218EE200ACF6E1 /* GCTooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCTooltipView.swift; path = src/GCTooltipView.swift; sourceTree = "<group>"; };
+		42FC993B262193CA00ACF6E1 /* GCTooltipView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCTooltipView.xib; path = src/GCTooltipView.xib; sourceTree = "<group>"; };
 		42FD55B71B90A39F0070B3B4 /* GCCellHealthDayActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCCellHealthDayActivity.h; path = src/GCCellHealthDayActivity.h; sourceTree = "<group>"; };
 		42FD55B81B90A39F0070B3B4 /* GCCellHealthDayActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCCellHealthDayActivity.m; path = src/GCCellHealthDayActivity.m; sourceTree = "<group>"; };
 		42FFF6A6232EDAE1008714D5 /* user.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = user.json; path = connectstatstestapp/samples/InitialSamples/user.json; sourceTree = SOURCE_ROOT; };
@@ -3400,6 +3408,7 @@
 		428FF73D15F37440007A88FA /* UserInterface */ = {
 			isa = PBXGroup;
 			children = (
+				42FC991626218DAA00ACF6E1 /* ToolTips */,
 				424340FA1B7415C7001E22BB /* SpotLightSearch */,
 				42A66BCD160CFF7F00DA29A5 /* Cells */,
 				42A95B361632DB20000B2082 /* Maps */,
@@ -4225,6 +4234,15 @@
 			path = ConnectStatsTestAppXCTests;
 			sourceTree = "<group>";
 		};
+		42FC991626218DAA00ACF6E1 /* ToolTips */ = {
+			isa = PBXGroup;
+			children = (
+				42FC992726218EE200ACF6E1 /* GCTooltipView.swift */,
+				42FC993B262193CA00ACF6E1 /* GCTooltipView.xib */,
+			);
+			name = ToolTips;
+			sourceTree = "<group>";
+		};
 		42FD55B61B90A37A0070B3B4 /* Specialized */ = {
 			isa = PBXGroup;
 			children = (
@@ -4613,6 +4631,7 @@
 				4211C53419AB043A000DEF87 /* version.plist in Resources */,
 				422CCE821B7EA81500A4DAEB /* Fields.xcassets in Resources */,
 				42CBD0C525E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.dbf in Resources */,
+				42FC993E262193CA00ACF6E1 /* GCTooltipView.xib in Resources */,
 				422CCE851B7EA8C100A4DAEB /* Weather.xcassets in Resources */,
 				429184C4231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */,
 				42BAB8D4231C07E700639928 /* credentials.json in Resources */,
@@ -4677,6 +4696,7 @@
 				428FF71815F36888007A88FA /* InfoPlist.strings in Resources */,
 				42CBD0C925E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.prj in Resources */,
 				427CF8D222ABD6BC00894253 /* credentials.json in Resources */,
+				42FC993C262193CA00ACF6E1 /* GCTooltipView.xib in Resources */,
 				42CBD0CC25E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shx in Resources */,
 				42CBD0C325E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.dbf in Resources */,
 				422CCE7C1B7E9B6300A4DAEB /* Cells.xcassets in Resources */,
@@ -4844,6 +4864,7 @@
 			files = (
 				4295B13B2574192000728D1E /* test_activity_running_5881498219.db in Resources */,
 				42B5E49D1BA5BA2D000FAE4E /* strava_laps_141871826.json in Resources */,
+				42FC993D262193CA00ACF6E1 /* GCTooltipView.xib in Resources */,
 				42B5E4881BA5BA2D000FAE4E /* strava_list_5.json in Resources */,
 				42B5E4771BA5BA2D000FAE4E /* test_activity_running_830807000.db in Resources */,
 				422A24F6247325FB00D6C2FB /* activity_424479793.json in Resources */,
@@ -5359,6 +5380,7 @@
 				424208971BCC49E200F3DB12 /* GCActivityPreviewingViewController.m in Sources */,
 				42D4CA7F24951AF2003F3AB7 /* GCLagPeriod.m in Sources */,
 				42FC98DA261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.swift in Sources */,
+				42FC992A26218EE200ACF6E1 /* GCTooltipView.swift in Sources */,
 				42BFC2331DCF4DF900EAD40E /* GCAppGlobal.swift in Sources */,
 				42BE67AB25A86FCE002505A2 /* GCGarminLoginSSORequest.swift in Sources */,
 				422FAF7119A1DD6000D09773 /* GCSettingsBugReportViewController.m in Sources */,
@@ -5643,6 +5665,7 @@
 				4209E1911DA44EC800B80735 /* GCActivitiesOrganizerListRegister.m in Sources */,
 				424D08C01DC5DA4E000B4620 /* GCAppPasswordManager.swift in Sources */,
 				4244676C184B7550009F807E /* GCActivityType.m in Sources */,
+				42FC992826218EE200ACF6E1 /* GCTooltipView.swift in Sources */,
 				426B0F101DA119060091A734 /* GCUnit+FIT.m in Sources */,
 				423209361868D8F600C8F305 /* GCActivity+CalculatedTracks.m in Sources */,
 				42FC17751E195DE300F55302 /* FITFitFieldsStatistics.swift in Sources */,
@@ -5781,6 +5804,7 @@
 				42295E081EC6F4D900F4F7EE /* GCTestServiceGarmin.m in Sources */,
 				4211D45D259780B900967874 /* GCStravaRequestBase.swift in Sources */,
 				42FC98F4261CFC0000ACF6E1 /* GCActivityTypeSelectionViewController.swift in Sources */,
+				42FC992926218EE200ACF6E1 /* GCTooltipView.swift in Sources */,
 				427DDCC01DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */,
 				42D4CA8524963F90003F3AB7 /* GCStatsDerivedHistoryViewController.m in Sources */,
 				42453BA61DD8B4E30073ACCA /* GCMapRouteLogicPointHolder.m in Sources */,
@@ -6948,7 +6972,7 @@
 			repositoryURL = "https://github.com/roznet/rzutils-touch.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.1;
+				minimumVersion = 1.0.2;
 			};
 		};
 		422DCC16258A630E000DEE4B /* XCRemoteSwiftPackageReference "FitFileParser" */ = {

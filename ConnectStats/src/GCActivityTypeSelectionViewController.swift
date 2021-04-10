@@ -26,6 +26,7 @@
 
 
 import UIKit
+import RZUtilsTouchSwift
 
 class GCActivityTypeSelectionViewController: UIViewController {
 
@@ -58,6 +59,12 @@ class GCActivityTypeSelectionViewController: UIViewController {
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        
+    }
+    
 
     /*
     // MARK: - Navigation

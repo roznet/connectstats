@@ -105,7 +105,6 @@ void checkVersion(void){
     [_urlToOpen release];
     [_actions release];
     [_health release];
-    [_segments release];
     [_credentials release];
     [_remoteStatus release];
     [_locationManager release];

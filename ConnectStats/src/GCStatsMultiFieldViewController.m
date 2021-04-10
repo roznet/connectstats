@@ -45,6 +45,8 @@
 #import "GCStatsDerivedHistoryViewController.h"
 #import "ConnectStats-Swift.h"
 @import RZUtilsSwift;
+@import RZUtilsTouch;
+@import RZUtilsTouchSwift;
 
 @interface GCStatsMultiFieldViewController ()
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
@@ -121,6 +123,15 @@
     [super viewDidAppear:animated];
 
     [GCAppGlobal startupRefreshIfNeeded];
+    /*
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(){
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+        
+        [self.tableView addTooltipAt:indexPath within:self.tabBarController.view];
+        self.tableView.scrollEnabled = false;
+        //[self addTooltipInfoWithView:self.tableView];
+    });*/
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{

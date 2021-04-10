@@ -36,7 +36,6 @@
 #import "GCAppActionDelegate.h"
 #import "GCActivityTypes.h"
 
-@class GCSegmentOrganizer;
 @class GCConnectStatsStatus;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -53,7 +52,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) GCHealthOrganizer * health;
 @property (nonatomic, retain) GCDerivedOrganizer * derived;
 @property (nonatomic, retain) GCWatchSessionManager * watch;
-@property (nonatomic, retain) GCSegmentOrganizer * segments;
 @property (nullable, nonatomic, retain) NSURL * urlToOpen;
 @property (nonatomic, retain) GCConnectStatsStatus * remoteStatus;
 // Will be either the currnet location from the phone or the location of the current activity

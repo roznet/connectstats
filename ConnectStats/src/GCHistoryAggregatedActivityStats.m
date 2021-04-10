@@ -86,6 +86,8 @@
     [_refOrNil release];
     [_fields release];
     [_foundFields release];
+    [_activityTypeSelection release];
+    
     [super dealloc];
 }
 
