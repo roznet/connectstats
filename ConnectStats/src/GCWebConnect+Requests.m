@@ -93,6 +93,20 @@
     return rv;
 }
 
+-(BOOL)servicesBackgroundUpdate{
+    BOOL rv = false;
+    if( [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] &&
+       [[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats] &&
+       [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] ){
+        // Run on main queue as it accesses a navigation Controller
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:false andNavigationController:[GCAppGlobal currentNavigationController]]];
+        });
+        rv = true;
+    }
+
+    return rv;
+}
 -(void)servicesSearch:(BOOL)reloadAll{
     if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
         // Run on main queue as it accesses a navigation Controller

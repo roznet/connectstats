@@ -37,6 +37,9 @@
 /// Search all activities for all services
 -(void)servicesSearchAllActivities;
 
+/// Start background upgrade, return true if started, false if nothing was possible/required
+-(BOOL)servicesBackgroundUpdate;
+
 -(void)servicesResetLogin; // when profile switch
 -(void)servicesLogin; // add necessary login requests
 

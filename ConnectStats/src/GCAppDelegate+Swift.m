@@ -25,6 +25,8 @@
 
 #import "GCAppDelegate+Swift.h"
 #import "ConnectStats-Swift.h"
+#import "GCWebConnect+Requests.h"
+
 @import UserNotifications;
 
 #define GC_STARTING_FILE @"starting.log"
@@ -81,8 +83,23 @@ BOOL kOpenTemporary = false;
     }else{
         RZLog(RZLogInfo,@"remote notification %@", userInfo);
     }
-    application.applicationIconBadgeNumber = 1;
-    completionHandler(UIBackgroundFetchResultNewData);
+    //application.applicationIconBadgeNumber = 1;
+    
+    self.web.notificationHandler = ^(gcWebNotification notification){
+        if( notification == gcWebNotificationError){
+            self.web.notificationHandler = nil;
+            completionHandler(UIBackgroundFetchResultFailed);
+        }
+        if( notification == gcWebNotificationEnd){
+            self.web.notificationHandler = nil;
+            completionHandler(UIBackgroundFetchResultNewData);
+        }
+    };
+    
+    if( ! [self.web servicesBackgroundUpdate]){
+        self.web.notificationHandler = nil;
+        completionHandler(UIBackgroundFetchResultNoData);
+    }
 }
 
 

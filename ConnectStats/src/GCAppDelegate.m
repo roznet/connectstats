@@ -216,6 +216,7 @@ void checkVersion(void){
     }
     [self registerForPushNotifications];
     [self remoteStatusCheck];
+        
     return YES;
 }
 

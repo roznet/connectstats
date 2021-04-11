@@ -30,7 +30,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger,gcWebNotification){
+    gcWebNotificationEnd,
+    gcWebNotificationError,
+    gcWebNotificationNext,
+    gcWebNotificationChange
+};
+
 typedef BOOL (^GCWebValidateNextSearch)( NSDate * _Nullable , NSUInteger );
+typedef void (^GCWebNotificationHandler)( gcWebNotification);
 
 extern NSString * GCWebStatusDescription(GCWebStatus status);
 extern NSString * GCWebStatusShortDescription(GCWebStatus status);
@@ -41,6 +49,7 @@ extern NSString * GCWebStatusShortDescription(GCWebStatus status);
 @property (nullable,nonatomic,retain) NSError * lastError;
 @property (nullable,nonatomic,retain) dispatch_queue_t worker;
 @property (nullable,copy) GCWebValidateNextSearch validateNextSearch;
+@property (nullable,copy) GCWebNotificationHandler notificationHandler;
 
 
 
