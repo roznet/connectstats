@@ -145,6 +145,10 @@
     dispatch_async([GCAppGlobal worker], ^(){
         [[GCAppGlobal organizer] ensureDetailsLoaded];
     });
+    
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal derived] ensureDetailsLoaded];
+    });
 }
 - (void)didReceiveMemoryWarning
 {

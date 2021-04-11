@@ -85,6 +85,8 @@
         self.oauthToken = nil;
         self.userId = 0;
         self.tokenId = 0;
+    }else{
+        RZLog(RZLogInfo,@"token there");
     }
 }
 

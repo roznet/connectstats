@@ -42,6 +42,12 @@ typedef void (^GCDerivedDidCompleteBestMatchingSeriesBlock)(NSArray<GCDerivedDat
 -(GCDerivedOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(dispatch_queue_t)thread;
 -(GCDerivedOrganizer*)initForTestModeWithDb:(FMDatabase*)aDb thread:(dispatch_queue_t)thread andFilePrefix:(NSString*)filePrefix;
 
+/**
+ * call this function when details should be loaded
+ * typically when the ui is ready, it can be called multiple time
+ * @return true if details already loaded, false if this actually triggered the load
+ */
+-(BOOL)ensureDetailsLoaded;
 -(FMDatabase*)deriveddb;
 
 /// Return time serie of best rolling series for field for all the calculated dates

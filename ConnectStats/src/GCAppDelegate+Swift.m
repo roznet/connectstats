@@ -100,6 +100,8 @@ BOOL kOpenTemporary = false;
         self.web.notificationHandler = nil;
         completionHandler(UIBackgroundFetchResultNoData);
     }
+    // Don't keep startup file
+    [RZFileOrganizer removeEditableFile:GC_STARTING_FILE];
 }
 
 

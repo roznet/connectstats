@@ -45,6 +45,14 @@
 
 -(GCHealthOrganizer*)initForTest NS_DESIGNATED_INITIALIZER;
 
+/**
+ * call this function when details should be loaded
+ * typically when the ui is ready, it can be called multiple time
+ * @return true if details already loaded, false if this actually triggered the load
+ */
+-(BOOL)ensureDetailsLoaded;
+
+
 +(void)ensureDbStructure:(FMDatabase*)db;
 
 -(BOOL)addHealthMeasure:(GCHealthMeasure*)one;

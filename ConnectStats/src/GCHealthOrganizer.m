@@ -33,7 +33,7 @@
 
 @interface GCHealthOrganizer ()
 
-
+@property (nonatomic,assign) BOOL loadDetailsCompleted;
 @end
 
 @implementation GCHealthOrganizer
@@ -63,13 +63,6 @@
     if (self) {
         self.db = db;
         self.worker = thread;
-        if( thread ){
-            dispatch_async(thread,^(){
-                [self loadFromDb];
-            });
-        }else{
-            [self loadFromDb];
-        }
     }
     return self;
 }
@@ -85,6 +78,25 @@
     }
     return self;
 }
+
+-(BOOL)ensureDetailsLoaded{
+    @synchronized (self) {
+        if( self.loadDetailsCompleted ){
+            return true;
+        }
+    }
+    if( self.worker ){
+        dispatch_async(self.worker,^(){
+            [self loadFromDb];
+        });
+        return false;
+    }else{
+        [self loadFromDb];
+    }
+    return true;
+    
+}
+
 -(void)updateForNewProfile{
     self.db = [GCAppGlobal db];
     if (self.worker) {
@@ -103,6 +115,7 @@
     }
 }
 -(void)loadFromDb{
+    RZPerformance * perf = [RZPerformance start];
     if( self.db == nil){
         NSMutableDictionary * dict = [NSMutableDictionary dictionary];
         [self addDefaultZoneCalculatorTo:dict];
@@ -131,7 +144,6 @@
             }
         }
     }
-    RZLog(RZLogInfo,@"Loaded %lu health measures (%@ types)", (unsigned long)n, @(summary.count));
     self.measures = [NSArray arrayWithArray:meas];
     
     NSMutableDictionary * zon = [NSMutableDictionary dictionaryWithCapacity:5];
@@ -168,6 +180,10 @@
     }
     self.sleepBlocks = [blocks sortedArrayUsingSelector:@selector(compare:)];
 
+    RZLog(RZLogInfo,@"Loaded %lu health measures (%@ types) %@", (unsigned long)n, @(summary.count), perf);
+    @synchronized (self) {
+        self.loadDetailsCompleted = true;
+    }
 }
 
 -(BOOL)hasHealthData{

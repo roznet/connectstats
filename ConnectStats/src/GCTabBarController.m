@@ -193,10 +193,19 @@
 -(void)viewDidAppear:(BOOL)animated{
 
     [super viewDidAppear:animated];
+    
     dispatch_async([GCAppGlobal worker], ^(){
         [[GCAppGlobal organizer] ensureDetailsLoaded];
     });
     
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal derived] ensureDetailsLoaded];
+    });
+
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal health] ensureDetailsLoaded];
+    });
+
     [GCAppGlobal startSuccessful];
 
 }

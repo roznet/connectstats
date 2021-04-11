@@ -217,6 +217,11 @@ void checkVersion(void){
     [self registerForPushNotifications];
     [self remoteStatusCheck];
         
+    /* FOR TESTING
+    [self application:application didReceiveRemoteNotification:@{} fetchCompletionHandler:^(UIBackgroundFetchResult res){
+        RZLog(RZLogInfo, @"completed with %@", @(res));
+    }];
+     */
     return YES;
 }
 
