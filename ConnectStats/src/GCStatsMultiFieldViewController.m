@@ -142,6 +142,9 @@
         RZLog(RZLogInfo, @"Initial start page %@", self.multiFieldConfig);
     }
     self.started = true;
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal organizer] ensureDetailsLoaded];
+    });
 }
 - (void)didReceiveMemoryWarning
 {

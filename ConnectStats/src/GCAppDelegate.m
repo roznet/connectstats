@@ -129,7 +129,9 @@ void checkVersion(void){
           [RZSystemInfo systemDescription]);
 
     RZSimNeedle();
-    
+    if( launchOptions.count > 0){
+        RZLog(RZLogInfo,@"launchOptions: %@", launchOptions);
+    }
     [self credentialsForService:@"flurry" andKey:@"connectstats"];
 #if !TARGET_IPHONE_SIMULATOR
 	NSString *applicationCode = [GCAppDelegate connectStatsVersion] ? [self credentialsForService:@"flurry" andKey:@"connectstats"] : [self credentialsForService:@"flurry" andKey:@"healthstats"];

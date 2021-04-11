@@ -76,6 +76,8 @@
 
 -(void)start{
     nextForGeocoding = 0;
+    RZLog(RZLogInfo, @"Starting geocoding");
+
     [self next];
 }
 

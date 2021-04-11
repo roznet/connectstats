@@ -44,6 +44,7 @@ NSString * INFO_ACTIVITY_TYPE_COUNT = @"activity_type_count";
 NSString * INFO_ACTIVITY_TYPE_LATEST = @"activity_type_latest";
 
 NSString * kNotifyOrganizerLoadComplete = @"kNotifyOrganizerLoadComplete";
+NSString * kNotifyOrganizerLoadSummaryComplete = @"kNotifyOrganizerLoadSummaryComplete";
 NSString * kNotifyOrganizerListChanged = @"kNotifyOrganizerListChanged";
 NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
@@ -63,7 +64,13 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 @property (nonatomic,assign) BOOL testMode;
 @property (nonatomic,retain) dispatch_queue_t worker;
 
+// Cache information about the load process
 @property (nonatomic,assign) BOOL loadCompleted;
+@property (nonatomic,assign) BOOL loadSummaryCompleted;
+@property (nonatomic,assign) BOOL loadDetailsCompleted;
+@property (nonatomic,assign) BOOL loadDetailsNeeded;
+@property (nonatomic,retain) NSDate * loadStartTime;
+@property (nonatomic,retain) NSMutableDictionary<NSString*,NSString*>*activityIdToActivityType;
 
 @property (nonatomic,retain) GCHealthOrganizer * storedHealth;
 
@@ -271,23 +278,18 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
 #pragma mark - load and update
 
--(void)loadSegments{
-
-}
-
--(void)loadFromDb{
-    if (!_db) {
-        if (!self.info) {
-            [self buildInfoDictionary];
+-(void)loadSummaryFromDb {
+    @synchronized (self) {
+        // load startime means we are currently running
+        // and if already loaded don't do it
+        if( self.loadStartTime != nil || self.loadSummaryCompleted){
+            return;
         }
-        self.allActivities = @[];
-
-        return;
+        self.loadStartTime = [NSDate date];
     }
-    self.loadCompleted = false;
-     NSDate * timing_start = [NSDate date];
+    
     unsigned mem_start = [RZMemory memoryInUse];
-
+    
     NSMutableDictionary * duplicates = [NSMutableDictionary dictionary];
     FMResultSet * res = nil;
     if ([_db tableExists:@"gc_duplicate_activities"]) {
@@ -315,7 +317,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     //restart, clear info dictionary
     [self buildInfoDictionary];
 
-    NSMutableDictionary<NSString*,NSString*>*activityIdToActivityType = [NSMutableDictionary dictionary];
+    self.activityIdToActivityType = [NSMutableDictionary dictionary];
     
     while ([res next]) {
         count++;
@@ -332,29 +334,55 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             lastLocation = true;
         }
         [self recordActivityType:act];
-        activityIdToActivityType[act.activityId] = act.activityType;
+        self.activityIdToActivityType[act.activityId] = act.activityType;
         [m_activities addObject:act];
         [act release];
     }
     [res close];
     self.allActivities = [NSArray arrayWithArray:m_activities];
-
-    [self addSummaryFields:activityIdToActivityType];
-    [self addWeather];
-    [self clearFilter];
-
-    self.worker = nil;
-    self.loadCompleted = true;
-
+    
     if (!self.testMode) {
-
-        RZLog(RZLogInfo, @"Loaded %d activities [%.1f sec %@]",(int)[_allActivities count], [[NSDate date] timeIntervalSinceDate:timing_start],
+        RZLog(RZLogInfo, @"Loaded summary %d activities [%.1f sec %@]",(int)[_allActivities count], [[NSDate date] timeIntervalSinceDate:self.loadStartTime],
               [RZMemory formatMemoryInUseChangeSince:mem_start]);
         NSDictionary * summary = [self serviceSummary];
         for (NSString * serviceName in summary) {
             NSDictionary *serviceSummary = summary[serviceName];
             RZLog( RZLogInfo, @"%@: %@ activities [From: %@ to %@]", serviceName, serviceSummary[@"count"], serviceSummary[@"earliest"], serviceSummary[@"latest"]);
         }
+        [self notifyOnMainThread:nil];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyOrganizerLoadSummaryComplete object:nil];
+        });
+    }
+    
+    [self lookForAndRemoveAllDuplicates];
+    
+    @synchronized (self) {
+        self.loadSummaryCompleted = true;
+        self.loadStartTime = nil;
+    }
+}
+
+-(void)loadDetailsFromDb{
+    @synchronized (self) {
+        // something already running or summary not finished, no point
+        if( !self.loadSummaryCompleted || self.loadStartTime != nil){
+            return;
+        }
+        if( self.loadDetailsCompleted){
+            return;
+        }
+        self.loadStartTime = [NSDate date];
+    }
+     unsigned mem_start = [RZMemory memoryInUse];
+    [self addSummaryFields];
+    [self addWeather];
+    [self clearFilter];
+
+    if (!self.testMode) {
+        RZLog(RZLogInfo, @"Loaded details %d activities [%.1f sec %@]",(int)[_allActivities count], [[NSDate date] timeIntervalSinceDate:self.loadStartTime],
+              [RZMemory formatMemoryInUseChangeSince:mem_start]);
+
         [_reverseGeocoder start];
         [self notifyOnMainThread:nil];
         dispatch_async(dispatch_get_main_queue(), ^(){
@@ -362,8 +390,57 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             [self publishEvent];
         });
     }
-    [self lookForAndRemoveAllDuplicates];
+    @synchronized (self){
+        self.worker = nil;
+        self.loadDetailsCompleted = true;
+        self.loadCompleted = true;
+
+        self.loadStartTime = nil;
+    }
+}
+
+-(BOOL)ensureDetailsLoaded{
+    @synchronized (self) {
+        self.loadDetailsNeeded = true;
+        if( self.loadDetailsCompleted){
+            // nothing to do
+            return true;
+        }
+    }
+    if( self.worker){
+        dispatch_async(self.worker, ^(){
+            [self loadDetailsFromDb];
+        });
+    }else{
+        [self loadDetailsFromDb];
+    }
     
+    return false;
+}
+
+-(void)loadFromDb{
+    if (!_db) {
+        if (!self.info) {
+            [self buildInfoDictionary];
+        }
+        self.allActivities = @[];
+
+        return;
+    }
+    // Load process will have several stages:
+    //   - always load summary first
+    //   - when ui starts: load the details
+    
+    self.loadCompleted = false;
+    self.loadDetailsCompleted = false;
+    self.loadSummaryCompleted = false;
+
+    [self loadSummaryFromDb];
+    // If test mode load details, otherwise wait for signal it's needed
+    // Typically from the ui
+    if( self.testMode || self.loadDetailsNeeded){
+        [self loadDetailsFromDb];
+    }
 }
 
 
@@ -1270,7 +1347,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 }
 
--(void)addSummaryFields:(NSDictionary<NSString*,NSString*>*)idToType{
+-(void)addSummaryFields{
     NSString * query = @"SELECT * FROM gc_activities_values ORDER BY activityId DESC";
     NSMutableDictionary * data = [NSMutableDictionary dictionaryWithCapacity:self.allActivities.count];
     NSMutableDictionary * meta = [NSMutableDictionary dictionaryWithCapacity:self.allActivities.count];
@@ -1291,7 +1368,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             currentId = rowActivityId;
             currentSummary = [NSMutableDictionary dictionaryWithCapacity:20];
             data[currentId] = currentSummary;
-            activityType = idToType[currentId];
+            activityType = self.activityIdToActivityType[currentId];
         }
         currentValue = [GCActivitySummaryValue activitySummaryValueForResultSet:res activityType:activityType];
         currentSummary[ currentValue.field ] = currentValue;

@@ -273,6 +273,10 @@ const CGFloat kCellDaySpacing = 2.f;
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [GCViewConfig setupViewController:self];
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal organizer] ensureDetailsLoaded];
+    });
+
 }
 -(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection{
     [super traitCollectionDidChange:previousTraitCollection];
