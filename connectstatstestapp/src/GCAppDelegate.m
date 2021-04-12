@@ -272,10 +272,10 @@
     [[self profile] serviceEnabled:gcServiceStrava set:false];
     [[self profile] configSet:PROFILE_DBPATH stringVal:name];
 
-    [self setOrganizer:[[[GCActivitiesOrganizer alloc] initWithDb:_db] autorelease]];
+    [self setOrganizer:[[[GCActivitiesOrganizer alloc] initTestModeWithDb:_db] autorelease]];
     [self setWeb:[[[GCWebConnect alloc] init] autorelease]];
     self.web.worker = self.worker;
-    [self setHealth:[[[GCHealthOrganizer alloc] initWithDb:_db andThread:self.worker] autorelease]];
+    [self setHealth:[[[GCHealthOrganizer alloc] initForTestModeWithDb:_db andThread:self.worker] autorelease]];
 }
 
 -(void)reinitFromSampleState:(NSString*)name{

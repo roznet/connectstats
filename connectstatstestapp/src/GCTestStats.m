@@ -241,7 +241,9 @@
         //nu_agg is always same
         GCNumberWithUnit* nu_agg = [data_agg numberWithUnit:field statType:gcAggregatedSum];
         GCNumberWithUnit* nu_sum = [data_sum sumWithUnit:gcHistoryStatsWeek];
-
+        if( nu_sum ==nil){
+            NSLog(@"NULL");
+        }
         [self assessTrue: [nu_agg compare:nu_sum withTolerance:1.e-7]==NSOrderedSame msg:@"%@ sum match %@ == %@", field, nu_sum,nu_agg];
 
         nu_agg = [data_agg numberWithUnit:field statType:gcAggregatedAvg];
