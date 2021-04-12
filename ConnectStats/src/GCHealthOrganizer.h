@@ -40,10 +40,11 @@
 @property (nonatomic,retain) dispatch_queue_t worker;
 @property (nonatomic,assign) gcHealthZoneSource preferredSource;
 
--(instancetype)init NS_DESIGNATED_INITIALIZER;
+-(instancetype)init;
 -(GCHealthOrganizer*)initWithDb:(FMDatabase*)db andThread:(dispatch_queue_t)thread NS_DESIGNATED_INITIALIZER;
 
--(GCHealthOrganizer*)initForTest NS_DESIGNATED_INITIALIZER;
+-(GCHealthOrganizer*)initForTestModeWithDb:(FMDatabase*)db andThread:(dispatch_queue_t)thread;
+
 
 /**
  * call this function when details should be loaded

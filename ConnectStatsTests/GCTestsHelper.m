@@ -46,7 +46,7 @@
     app.settings = [NSMutableDictionary dictionary];
     app.profiles = [GCAppProfiles profilesFromSettings:app.settings];
     self.rememberHealth = app.health;
-    app.health = RZReturnAutorelease([[GCHealthOrganizer alloc] initForTest]);
+    app.health = RZReturnAutorelease([[GCHealthOrganizer alloc] initForTestModeWithDb:nil andThread:nil]);
     
     if( self.rememberTimeZone == nil){
         self.rememberTimeZone = [NSTimeZone defaultTimeZone];

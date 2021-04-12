@@ -39,7 +39,7 @@
 @implementation GCHealthOrganizer
 
 -(instancetype)init{
-    return [super init];
+    return [self initWithDb:nil andThread:nil];
 }
 
 -(void)dealloc{
@@ -67,16 +67,10 @@
     return self;
 }
 
--(GCHealthOrganizer*)initForTest{
-    self = [super init];
-    if (self) {
-        self.db = nil;
-        self.worker = nil;
-        NSMutableDictionary * dict = [NSMutableDictionary dictionary];
-        [self addDefaultZoneCalculatorTo:dict];
-        self.zones = dict;
-    }
-    return self;
+-(GCHealthOrganizer*)initForTestModeWithDb:(FMDatabase*)db andThread:(dispatch_queue_t)thread{
+    GCHealthOrganizer * rv = [self initWithDb:db andThread:thread];
+    [self ensureDetailsLoaded];
+    return rv;
 }
 
 -(BOOL)ensureDetailsLoaded{
