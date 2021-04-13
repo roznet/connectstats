@@ -122,7 +122,18 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
 
+    RZLog(RZLogInfo, @"display stats");
+    
     [GCAppGlobal startupRefreshIfNeeded];
+    
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal organizer] ensureDetailsLoaded];
+    });
+    
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal derived] ensureDetailsLoaded];
+    });
+
     /*
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(){
         NSIndexPath * indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
@@ -142,13 +153,6 @@
         RZLog(RZLogInfo, @"Initial start page %@", self.multiFieldConfig);
     }
     self.started = true;
-    dispatch_async([GCAppGlobal worker], ^(){
-        [[GCAppGlobal organizer] ensureDetailsLoaded];
-    });
-    
-    dispatch_async([GCAppGlobal worker], ^(){
-        [[GCAppGlobal derived] ensureDetailsLoaded];
-    });
 }
 - (void)didReceiveMemoryWarning
 {

@@ -36,6 +36,16 @@ BOOL kOpenTemporary = false;
 @implementation GCAppDelegate (Swift)
 
 -(void)handleAppRating{
+#if DEBUG
+    if( [self isDebuggerAttached] ) {
+        RZLog(RZLogInfo,@"debugger is attached");
+        NSLog(@"Debugger ATTACHED");
+    }else{
+        RZLog(RZLogInfo,@"no debugger");
+    }
+#endif
+
+    
     [self initiateAppRating];
 }
 
@@ -44,7 +54,7 @@ BOOL kOpenTemporary = false;
     
     if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats] && [[GCAppGlobal profile] configGetBool:CONFIG_NOTIFICATION_ENABLED defaultValue:false]) {
         RZLog(RZLogInfo, @"connectstats enabled requesting notification");
-        [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:UNAuthorizationOptionAlert completionHandler:^(BOOL granted, NSError*error){
+        [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionAlert+UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError*error){
             if( granted ){
                 [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings*setting){
                     if( setting.authorizationStatus == UNAuthorizationStatusAuthorized ){
@@ -83,16 +93,28 @@ BOOL kOpenTemporary = false;
     }else{
         RZLog(RZLogInfo,@"remote notification %@", userInfo);
     }
-    //application.applicationIconBadgeNumber = 1;
+    application.applicationIconBadgeNumber = 1;
+    RZPerformance * notificationPerf = [RZPerformance start];
     
     self.web.notificationHandler = ^(gcWebNotification notification){
-        if( notification == gcWebNotificationError){
-            self.web.notificationHandler = nil;
-            completionHandler(UIBackgroundFetchResultFailed);
-        }
-        if( notification == gcWebNotificationEnd){
-            self.web.notificationHandler = nil;
-            completionHandler(UIBackgroundFetchResultNewData);
+        switch( notification ){
+            case gcWebNotificationEnd:
+            {
+                RZLog(RZLogInfo,@"didReceivedRemoteNotification web updated completed successfully %@", notificationPerf);
+                self.web.notificationHandler = nil;
+                completionHandler(UIBackgroundFetchResultNewData);
+                break;
+            }
+            case gcWebNotificationError:
+            {
+                RZLog(RZLogInfo,@"didReceivedRemoteNotification web updated completed with error %@", notificationPerf);
+                self.web.notificationHandler = nil;
+                completionHandler(UIBackgroundFetchResultFailed);
+                break;
+            }
+            default:
+                RZLog(RZLogInfo,@"didReceivedRemoteNotification web still going");
+                break;
         }
     };
     
@@ -100,8 +122,6 @@ BOOL kOpenTemporary = false;
         self.web.notificationHandler = nil;
         completionHandler(UIBackgroundFetchResultNoData);
     }
-    // Don't keep startup file
-    [RZFileOrganizer removeEditableFile:GC_STARTING_FILE];
 }
 
 

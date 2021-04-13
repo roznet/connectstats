@@ -17,6 +17,11 @@ class FITAppDelegate : NSObject, NSApplicationDelegate {
     let documentController = FITDocumentController()
     
     func applicationDidFinishLaunching(_ notification: Notification) {
+        #if DEBUG
+        if RZSystemInfo.isDebuggerAttached() {
+            RZLogSetOutputToConsole(true);
+        }
+        #endif
         // Force init of the shared global state
         _ = FITAppGlobal.shared
         Armchair.appID("1244431640")

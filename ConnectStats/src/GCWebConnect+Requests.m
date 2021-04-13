@@ -100,7 +100,7 @@
        [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] ){
         // Run on main queue as it accesses a navigation Controller
         dispatch_async(dispatch_get_main_queue(), ^(){
-            [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:false andNavigationController:[GCAppGlobal currentNavigationController]]];
+            [self addRequest:RZReturnAutorelease([[GCConnectStatsRequestBackgroundFetch alloc] init])];
         });
         rv = true;
     }

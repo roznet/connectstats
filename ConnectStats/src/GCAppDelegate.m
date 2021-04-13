@@ -122,13 +122,15 @@ void checkVersion(void){
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    RZLogDebuggerOutput();
 
     RZLog(RZLogInfo, @"=========== %@ %@ ==== %@ ===============",
           [[NSBundle mainBundle] infoDictionary][@"CFBundleExecutable"],
           [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"],
           [RZSystemInfo systemDescription]);
-
+    
     RZSimNeedle();
+    
     if( launchOptions.count > 0){
         RZLog(RZLogInfo,@"launchOptions: %@", launchOptions);
     }
@@ -217,6 +219,7 @@ void checkVersion(void){
     [self registerForPushNotifications];
     [self remoteStatusCheck];
         
+    
     /* FOR TESTING
     [self application:application didReceiveRemoteNotification:@{} fetchCompletionHandler:^(UIBackgroundFetchResult res){
         RZLog(RZLogInfo, @"completed with %@", @(res));

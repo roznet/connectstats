@@ -646,6 +646,9 @@
 		429DD651219E3E13004FD716 /* GCWebRequestStandard.m in Sources */ = {isa = PBXBuildFile; fileRef = 4226B4281F65E2ED009E1104 /* GCWebRequestStandard.m */; };
 		429DD652219E3E36004FD716 /* GCWebUrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 428FF79E15FB412C007A88FA /* GCWebUrl.m */; };
 		429E879717C4A10300B44A3A /* GCTrackFieldChoices.m in Sources */ = {isa = PBXBuildFile; fileRef = 429E879617C4A10300B44A3A /* GCTrackFieldChoices.m */; };
+		429E9A7D2625B11A0002820E /* GCConnectStatsRequestBackgroundFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429E9A7C2625B11A0002820E /* GCConnectStatsRequestBackgroundFetch.swift */; };
+		429E9A7E2625B11A0002820E /* GCConnectStatsRequestBackgroundFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429E9A7C2625B11A0002820E /* GCConnectStatsRequestBackgroundFetch.swift */; };
+		429E9A7F2625B11A0002820E /* GCConnectStatsRequestBackgroundFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429E9A7C2625B11A0002820E /* GCConnectStatsRequestBackgroundFetch.swift */; };
 		429F2096244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 429F2095244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m */; };
 		429F2097244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 429F2095244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m */; };
 		429F2098244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 429F2095244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m */; };
@@ -1734,6 +1737,7 @@
 		429D75341651B14E00232BED /* GCGarminRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequest.m; path = src/GCGarminRequest.m; sourceTree = "<group>"; };
 		429E879517C4A10300B44A3A /* GCTrackFieldChoices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTrackFieldChoices.h; path = src/GCTrackFieldChoices.h; sourceTree = "<group>"; };
 		429E879617C4A10300B44A3A /* GCTrackFieldChoices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTrackFieldChoices.m; path = src/GCTrackFieldChoices.m; sourceTree = "<group>"; };
+		429E9A7C2625B11A0002820E /* GCConnectStatsRequestBackgroundFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCConnectStatsRequestBackgroundFetch.swift; path = src/GCConnectStatsRequestBackgroundFetch.swift; sourceTree = "<group>"; };
 		429F2094244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedAnalysisViewController.h; path = src/GCStatsDerivedAnalysisViewController.h; sourceTree = "<group>"; };
 		429F2095244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCStatsDerivedAnalysisViewController.m; path = src/GCStatsDerivedAnalysisViewController.m; sourceTree = "<group>"; };
 		42A22DF719E87BF9004407B8 /* GCHealthSleepMeasure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthSleepMeasure.h; path = src/GCHealthSleepMeasure.h; sourceTree = "<group>"; };
@@ -4045,6 +4049,7 @@
 				429AFD0D22B77EC7006343F0 /* GCConnectStatsRequestFitFile.m */,
 				4280C7CF2364FC7C00223709 /* GCConnectStatsRequestWeather.h */,
 				4280C7D02364FC7C00223709 /* GCConnectStatsRequestWeather.m */,
+				429E9A7C2625B11A0002820E /* GCConnectStatsRequestBackgroundFetch.swift */,
 			);
 			name = Requests;
 			sourceTree = "<group>";
@@ -5406,6 +5411,7 @@
 				422FAF9019A1DD6000D09773 /* GCActivityAutoLapChoices.m in Sources */,
 				422F52101DFB51E800DD5551 /* GCUnit+FIT.m in Sources */,
 				422FAF9119A1DD6000D09773 /* GCSettingsFilterViewController.m in Sources */,
+				429E9A7F2625B11A0002820E /* GCConnectStatsRequestBackgroundFetch.swift in Sources */,
 				42DC515A1B27879600B5C12F /* GCHealthKitDailySummaryParser.m in Sources */,
 				422FAF9219A1DD6000D09773 /* GCFieldsCalculatedFromTrack.m in Sources */,
 				422FAF9319A1DD6000D09773 /* GCStravaActivityListParser.m in Sources */,
@@ -5715,6 +5721,7 @@
 				4269E9E32598D3BA00DF469D /* GCStravaRequestStreams.swift in Sources */,
 				422DCC8C258A656A000DEE4B /* FITFitEnumMap.m in Sources */,
 				42C5A1B122AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */,
+				429E9A7D2625B11A0002820E /* GCConnectStatsRequestBackgroundFetch.swift in Sources */,
 				4285F0E31719CB1800A1FAA8 /* GCSettingsFilterViewController.m in Sources */,
 				42CDF8672413E05C003930A4 /* GCTrackPoint+Swim.m in Sources */,
 				4211D4DB2598ED7D00967874 /* GCGarminActivityTrack13Request.swift in Sources */,
@@ -5868,6 +5875,7 @@
 				42EA5BDE2066EB0200F4617B /* GCGarminRequestModernActivityTypes.m in Sources */,
 				42A7CCA9246E939300A1AE39 /* GCDerivedQueueElement.m in Sources */,
 				423D746422F59D9A00EE3E71 /* FITFitFieldMap.swift in Sources */,
+				429E9A7E2625B11A0002820E /* GCConnectStatsRequestBackgroundFetch.swift in Sources */,
 				423EF01821D2A044005C2605 /* RZFitFileExtensions.swift in Sources */,
 				427F93801BEDFF7000C177F9 /* GCTableHeaderFieldsCategory.m in Sources */,
 				422CC8821E6ACA1700195414 /* FITFitFieldsStatistics.swift in Sources */,
@@ -6221,9 +6229,11 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 3.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.FitFileExplorer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "FitFileExplorer/FitFileExplorer-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -6956,7 +6966,7 @@
 			repositoryURL = "https://github.com/roznet/rzutils.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.12;
+				minimumVersion = 1.0.13;
 			};
 		};
 		422DCB84258A27EF000DEE4B /* XCRemoteSwiftPackageReference "fmdb" */ = {

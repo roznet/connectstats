@@ -113,6 +113,20 @@ NS_INLINE GCAppDelegate * _appDelegate(void) {
     // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
     RZLog(RZLogInfo,@"scene active");
     
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal organizer] ensureDetailsLoaded];
+    });
+    
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal derived] ensureDetailsLoaded];
+    });
+
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal health] ensureDetailsLoaded];
+    });
+    
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
 }
 
 

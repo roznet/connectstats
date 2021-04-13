@@ -73,6 +73,14 @@
     return self;
 }
 
+-(NSString*)description{
+    return [NSString stringWithFormat:@"<%@: %@ %@ activities>",
+            NSStringFromClass([self class]),
+            self.success ? @"success" : @"failed",
+            @(self.activities.count)
+            ];
+}
+
 -(void)dealloc{
     [_activities release];
     [super dealloc];
