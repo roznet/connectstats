@@ -36,15 +36,6 @@ BOOL kOpenTemporary = false;
 @implementation GCAppDelegate (Swift)
 
 -(void)handleAppRating{
-#if DEBUG
-    if( [self isDebuggerAttached] ) {
-        RZLog(RZLogInfo,@"debugger is attached");
-        NSLog(@"Debugger ATTACHED");
-    }else{
-        RZLog(RZLogInfo,@"no debugger");
-    }
-#endif
-
     
     [self initiateAppRating];
 }

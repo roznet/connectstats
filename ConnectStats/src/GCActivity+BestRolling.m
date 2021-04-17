@@ -252,7 +252,8 @@
     
     info.processedPointsCount = serie.serie.count;
     gcStatsSelection select = gcStatsMax;
-    if ([serie.unit isKindOfClass:[GCUnitInverseLinear class]]) {
+    
+    if (serie.unit.betterIsMin) {
         select = gcStatsMin;
     }
 
