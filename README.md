@@ -8,23 +8,27 @@ This project contains several related applications to analyse fitness data:
 
 ConnectStats relies on a server with the implementation [here](https://github.com/roznet/connectstats_server)
 
-### ![Icon](https://github.com/roznet/connectstats/raw/master/ConnectStats/Media.xcassets/HealthStatsAppIcon.appiconset/Icon76.png) HealthStats
-
-[HealthStats](https://itunes.apple.com/us/app/healthstats/id912378669?ls=1&mt=8&ign-msr=https%3A%2F%2Fitunesconnect.apple.com%2FWebObjects%2FiTunesConnect.woa%2Fra%2Fng%2Fapp%2F912378669) is a variation of ConnectStats to display activities and data extracted from apple Health. Some information can be found [here](https://ro-z.net/blog/healthstats/)
 
 ### ![Icon](https://github.com/roznet/connectstats/raw/master/FitFileExplorer/Assets.xcassets/FitExplorerIcon76.imageset/FITFileExplorerIcons76.png)  FitFileExplorer
 
-[FitFileExplorer](https://itunes.apple.com/us/app/fit-file-explorer/id1244431640?ls=1&mt=12) is a [mac os utility](https://ro-z.net/blog/fitfileexplorer/) to view Fit File content
+In addition to ConnectStats this project contains the companion app [FitFileExplorer](https://itunes.apple.com/us/app/fit-file-explorer/id1244431640?ls=1&mt=12).
+
+[FitFileExplorer](https://itunes.apple.com/us/app/fit-file-explorer/id1244431640?ls=1&mt=12) is a [mac os utility](https://ro-z.net/blog/fitfileexplorer/) to view Fit File content. 
 
 
-## To compile
+### Additional component
 
-	1. setup pod with `pod install`
-	2. open ConnectStats.xcworkspace
-	
+A few component of ConnectStats have been made available as open source packages:
 
-## Development
+- [FitFileParser](https://github.com/roznet/FitFileParser) is the implementation of the generic [Fit File](https://developer.garmin.com/fit) parsing library in swift.
+- [RZUtils](https://github.com/roznet/rzutils) contains the implementation of the statistics and graphs used by the app.
 
-This project contains tests both as XCTest unit tests and as a separate app `ConnectStatsTestApp`.
+### To build and run the app locally
+
+- run `pod install`
+- copy and edit with your own keys the file `credentials.sample.json` as `credentials.json`. Note that if you do not provide any keys you will only be able to use the Garmin Service from the web site and not Strava or ConnectStats server.
+- open `ConnectStats.xcworkspace`
+
+
 
 
