@@ -79,7 +79,7 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
                                              @"token_id" : @(self.tokenId),
                                              @"notification_device_token": [[GCAppGlobal profile] configGetString:CONFIG_NOTIFICATION_DEVICE_TOKEN defaultValue:@""],
                                              @"notification_enabled" : @([[GCAppGlobal profile] configGetBool:CONFIG_NOTIFICATION_ENABLED defaultValue:false]),
-                                             @"notification_push_type" : @([[GCAppGlobal profile] configGetBool:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:false]),
+                                             @"notification_push_type" : @([[GCAppGlobal profile] configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone]),
                                              };
                 
                 return [self preparedUrlRequest:path params:parameters];

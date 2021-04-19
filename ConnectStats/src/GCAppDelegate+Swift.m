@@ -55,10 +55,10 @@ BOOL kOpenTemporary = false;
                         });
                     }else{
                         RZLog(RZLogInfo, @"Push Notification Not Authorized");
-                        if( [[GCAppGlobal profile] configGetBool:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone] != gcNotificationPushTypeNone){
+                        if( [[GCAppGlobal profile] configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone] != gcNotificationPushTypeNone){
                             // Status changed from what was recorded, save it
                             dispatch_async(dispatch_get_main_queue(), ^(){
-                                [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_PUSH_TYPE boolVal:gcNotificationPushTypeNone];
+                                [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_PUSH_TYPE intVal:gcNotificationPushTypeNone];
                                 [GCAppGlobal saveSettings];
                             });
                         }
@@ -66,10 +66,10 @@ BOOL kOpenTemporary = false;
                 }];
             }else{
                 RZLog(RZLogInfo, @"Not granted %@", error);
-                if( [[GCAppGlobal profile] configGetBool:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone] != gcNotificationPushTypeNone){
+                if( [[GCAppGlobal profile] configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone] != gcNotificationPushTypeNone){
                     // Status changed from what was recorded, save it
                     dispatch_async(dispatch_get_main_queue(), ^(){
-                        [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_PUSH_TYPE boolVal:gcNotificationPushTypeNone];
+                        [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_PUSH_TYPE intVal:gcNotificationPushTypeNone];
                         [GCAppGlobal saveSettings];
                     });
                 }
