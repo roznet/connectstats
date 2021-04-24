@@ -24,6 +24,7 @@
 //  
 
 #import "GCActivityCalculatedValue.h"
+#import "GCField.h"
 
 @implementation GCActivityCalculatedValue
 
@@ -52,6 +53,25 @@
     if(![db executeUpdate:query,activityId,self.field,@(valNum.value),valNum.unit.key]){
         RZLog(RZLogError, @"DB error %@",[db lastErrorMessage]);
     }
+}
+
+-(BOOL)isEqual:(id)object{
+    if( [object isKindOfClass:[self class]]){
+        return [self isEqualToValue:object];
+    }else{
+        return false;
+    }
+}
+
+-(NSUInteger)hash{
+    return self.field.hash + self.uom.hash + self.numberWithUnit.hash;
+}
+
+-(BOOL)isEqualToValue:(GCActivityCalculatedValue*)other{
+    if( [other isKindOfClass:[GCActivityCalculatedValue class]]){
+        return [self.numberWithUnit isEqualToNumberWithUnit:other.numberWithUnit] && [self.field isEqualToField:other.field];
+    }
+    return false;
 }
 
 @end

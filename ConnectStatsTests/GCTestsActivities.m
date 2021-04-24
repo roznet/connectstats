@@ -417,7 +417,7 @@
     FMDatabase * db = [FMDatabase databaseWithPath:fp];
     [db open];
     [GCHealthOrganizer ensureDbStructure:db];
-    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initForTestModeWithDb:db andThread:nil] autorelease];
+    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initTestModeWithDb:db andThread:nil] autorelease];
     
     NSString * theString = [NSString stringWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"user.json" forClass:[self class]] encoding:NSUTF8StringEncoding error:&error];
     XCTAssertNotNil(theString, @"Could read file without error %@", error);

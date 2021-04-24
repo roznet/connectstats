@@ -57,6 +57,10 @@ class GCConnectStatsRequestBackgroundFetch: GCConnectStatsRequest {
         return nil
     }
     
+    func searchFileName(page : Int) -> String {
+        return "last_connectstats_search_\(page).json"
+    }
+
     @objc override func process() {
         guard let data = self.theString.data(using: .utf8)
         else {
@@ -76,21 +80,50 @@ class GCConnectStatsRequestBackgroundFetch: GCConnectStatsRequest {
         GCAppGlobal.worker().async {
             let parser = GCConnectStatsSearchJsonParser(data: data)
             RZSLog.info("finished parsing \(parser)")
-            if parser.success,
-               let activities = parser.activities{
-                let register = GCActivitiesOrganizerListRegister(activities,
-                                                                 from: GCService(.connectStats), isFirst: self.start == 0)
-                register.add(to: GCAppGlobal.organizer())
-                self.searchMore = register.shouldSearchForMore(with: Self.kActivityRequestCount, reloadAll: false)
-                RZSLog.info("finished adding ")
+            if parser.success{
+                self.addActivities(from: parser, to: GCAppGlobal.organizer())
             }
             self.processDone()
         }
     }
+    
+    func addActivities(from parser : GCConnectStatsSearchJsonParser, to organizer: GCActivitiesOrganizer){
+        let listRegister = GCActivitiesOrganizerListRegister(for: parser.activities, from:GCService(gcService.connectStats), isFirst: self.start == 0)
+        listRegister.updateNewOnly = true;
+        listRegister.add(to: organizer)
+        if listRegister.childIds != nil {
+            RZSLog.warning("ChildIDs not supported for strava")
+        }
+        self.searchMore = listRegister.shouldSearchForMore(with: Self.kActivityRequestCount, reloadAll: false)
+    }
+
+    
     @objc override var nextReq: GCWebRequestStandard? {
         if self.searchMore {
             return GCConnectStatsRequestBackgroundFetch(nextWith: self)
         }
         return nil
     }
+    
+    @discardableResult
+    @objc static func test(organizer: GCActivitiesOrganizer, path : String) -> GCActivitiesOrganizer{
+        let search = GCConnectStatsRequestBackgroundFetch()
+        
+        var isDirectory : ObjCBool = false
+        
+        if FileManager.default.fileExists(atPath:path, isDirectory: &isDirectory) {
+            var fileURL = URL(fileURLWithPath: path)
+            if isDirectory.boolValue {
+                fileURL.appendPathComponent(search.searchFileName(page: 0))
+            }
+            if let data = try? Data(contentsOf: fileURL) {
+                let parser = GCConnectStatsSearchJsonParser(data: data)
+                if parser.success {
+                    search.addActivities(from: parser, to: organizer)
+                }
+            }
+        }
+        return organizer
+    }
+
 }

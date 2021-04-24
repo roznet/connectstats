@@ -205,6 +205,24 @@ typedef NS_ENUM(NSUInteger, gcNotificationPushType){
     gcNotificationPushTypeAll
 };
 
+typedef struct {
+    unsigned search : 1;
+    unsigned tracks : 1;
+    unsigned reserved : 2;
+} __gcServiceSingleStatus;
+
+typedef struct {
+    __gcServiceSingleStatus connectstats;
+    __gcServiceSingleStatus garmin;
+    __gcServiceSingleStatus strava;
+    __gcServiceSingleStatus reserved1;
+} __gcServiceStatusFlags;
+
+typedef union {
+    unsigned long long flags;
+    __gcServiceStatusFlags status;
+}gcServicesStatusFlags;
+
 typedef BOOL(^gcServiceSourceValidator)(NSString*sourceidentifier);
 
 

@@ -43,7 +43,7 @@
 -(instancetype)init;
 -(GCHealthOrganizer*)initWithDb:(FMDatabase*)db andThread:(dispatch_queue_t)thread NS_DESIGNATED_INITIALIZER;
 
--(GCHealthOrganizer*)initForTestModeWithDb:(FMDatabase*)db andThread:(dispatch_queue_t)thread;
+-(GCHealthOrganizer*)initTestModeWithDb:(FMDatabase*)db andThread:(dispatch_queue_t)thread;
 
 
 /**

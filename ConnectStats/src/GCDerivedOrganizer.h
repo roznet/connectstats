@@ -40,7 +40,7 @@ typedef void (^GCDerivedDidCompleteBestMatchingSeriesBlock)(NSArray<GCDerivedDat
 @property (nonatomic,assign) BOOL pauseCalculation;
 
 -(GCDerivedOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(dispatch_queue_t)thread;
--(GCDerivedOrganizer*)initForTestModeWithDb:(FMDatabase*)aDb thread:(dispatch_queue_t)thread andFilePrefix:(NSString*)filePrefix;
+-(GCDerivedOrganizer*)initTestModeWithDb:(FMDatabase*)aDb thread:(dispatch_queue_t)thread andFilePrefix:(NSString*)filePrefix;
 
 /**
  * call this function when details should be loaded

@@ -626,7 +626,7 @@
     FMDatabase * deriveddb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"derived_testderived.db"]];
     [deriveddb open];
 
-    GCDerivedOrganizer * derived = RZReturnAutorelease([[GCDerivedOrganizer alloc] initForTestModeWithDb:deriveddb thread:nil andFilePrefix:@"testderived"]);
+    GCDerivedOrganizer * derived = RZReturnAutorelease([[GCDerivedOrganizer alloc] initTestModeWithDb:deriveddb thread:nil andFilePrefix:@"testderived"]);
     GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
     GCStatsSerieOfSerieWithUnits * serieOfSeries = [derived timeserieOfSeriesFor:field inActivities:organizer.activities];
     

@@ -149,7 +149,7 @@ BOOL kOpenTemporary = false;
         }else{
             
             [self.organizer registerActivity:fitAct forActivityId:fitAct.activityId];
-            [self.organizer registerActivity:fitAct.activityId withTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
+            [self.organizer registerActivity:fitAct withTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
         }
         dispatch_async(dispatch_get_main_queue(), ^(){
             [self handleFitFileDone:fitAct.activityId];

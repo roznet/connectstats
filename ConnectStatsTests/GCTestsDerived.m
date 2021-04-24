@@ -338,7 +338,7 @@
 
     // Tet Reload
     
-    GCDerivedOrganizer * reload = [[GCDerivedOrganizer alloc] initForTestModeWithDb:derived.deriveddb thread:nil andFilePrefix:derived_name];
+    GCDerivedOrganizer * reload = [[GCDerivedOrganizer alloc] initTestModeWithDb:derived.deriveddb thread:nil andFilePrefix:derived_name];
 
     GCDerivedDataSerie * reload_serie = [reload derivedDataSerie:gcDerivedTypeBestRolling
                                                       field:field
@@ -411,7 +411,7 @@
     FMDatabase * deriveddb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"derived_testderived.db"]];
     [deriveddb open];
 
-    GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initForTestModeWithDb:deriveddb thread:nil andFilePrefix:@"testderived"];
+    GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initTestModeWithDb:deriveddb thread:nil andFilePrefix:@"testderived"];
     GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
     GCStatsSerieOfSerieWithUnits * serieOfSeries = [derived timeserieOfSeriesFor:field inActivities:organizer.activities];
         

@@ -71,7 +71,7 @@
     [GCActivitiesOrganizer ensureDbStructure:db];
     [GCHealthOrganizer ensureDbStructure:db];
     GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
-    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
+    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initTestModeWithDb:db andThread:nil] autorelease];
     organizer.health = health;
 
     return organizer;
@@ -85,7 +85,7 @@
     [GCDerivedOrganizer ensureDbStructure:deriveddb];
     
     [[GCAppGlobal profile] configSet:CONFIG_ENABLE_DERIVED boolVal:false];
-    GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initForTestModeWithDb:deriveddb thread:nil andFilePrefix:name];
+    GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initTestModeWithDb:deriveddb thread:nil andFilePrefix:name];
     return derived;
 }
 

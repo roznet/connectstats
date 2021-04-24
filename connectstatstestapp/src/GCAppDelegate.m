@@ -239,7 +239,7 @@
     for (NSString * file in derivedFiles) {
         [RZFileOrganizer removeEditableFile:file];
     }
-    GCDerivedOrganizer * derived = RZReturnAutorelease([[GCDerivedOrganizer alloc] initForTestModeWithDb:nil thread:self.worker andFilePrefix:prefix]);
+    GCDerivedOrganizer * derived = RZReturnAutorelease([[GCDerivedOrganizer alloc] initTestModeWithDb:nil thread:self.worker andFilePrefix:prefix]);
     self.derived = derived;
 }
 
@@ -275,7 +275,7 @@
     [self setOrganizer:[[[GCActivitiesOrganizer alloc] initTestModeWithDb:_db] autorelease]];
     [self setWeb:[[[GCWebConnect alloc] init] autorelease]];
     self.web.worker = self.worker;
-    [self setHealth:[[[GCHealthOrganizer alloc] initForTestModeWithDb:_db andThread:self.worker] autorelease]];
+    [self setHealth:[[[GCHealthOrganizer alloc] initTestModeWithDb:_db andThread:self.worker] autorelease]];
 }
 
 -(void)reinitFromSampleState:(NSString*)name{

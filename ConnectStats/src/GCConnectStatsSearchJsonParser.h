@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GCConnectStatsSearchJsonParser : NSObject
 
 @property (nonatomic,assign) BOOL success;
-@property (nonatomic,retain,nullable) NSArray<GCActivity*> * activities;
+@property (nonatomic,retain) NSArray<GCActivity*> * activities;
 @property (nonatomic,readonly) NSUInteger parsedCount;
 
 -(instancetype)initWithData:(NSData*)theData;

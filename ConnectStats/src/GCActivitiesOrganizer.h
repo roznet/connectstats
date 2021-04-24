@@ -57,7 +57,15 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 -(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb;
 -(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(nullable dispatch_queue_t)thread NS_DESIGNATED_INITIALIZER;
--(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb NS_DESIGNATED_INITIALIZER;
+/**
+ * testmode will trigger load of database including all details on current thread in synchronous method and disable all notificaitons
+ */
+-(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb;
+/**
+ * testmode will trigger load of database on current thread in synchronous method and disable all notificaitons,
+ *  if loadDetails is false will only load summary else will load everything
+ */
+-(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails NS_DESIGNATED_INITIALIZER;
 
 /**
  * call this function when details should be loaded
@@ -68,11 +76,10 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 -(BOOL)registerActivity:(GCActivity*)act forActivityId:(NSString*)aId;
 -(void)registerTemporaryActivity:(GCActivity*)act forActivityId:(NSString*)aId;
+-(void)registerActivity:(GCActivity*)act withTrackpoints:(nullable NSArray<GCTrackPoint*>*)aTrack andLaps:(nullable NSArray<GCLap*>*)laps;
+-(void)registerActivity:(GCActivity*)act withWeather:(nullable GCWeather *)aData;
 
 -(void)registerActivityTypes:(NSDictionary*)aData;
-
--(void)registerActivity:(NSString*)aId withTrackpoints:(nullable NSArray*)aTrack andLaps:(nullable NSArray*)laps;
--(void)registerActivity:(NSString*)aId withWeather:(nullable GCWeather *)aData;
 
 -(NSUInteger)countOfKnownDuplicates;
 -(nullable GCActivity*)findDuplicate:(GCActivity*)act;

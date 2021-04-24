@@ -39,14 +39,13 @@
         NSMutableDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
         
         if (json==nil) {
-            self.activities = nil;
+            self.activities = @[];
             self.success = false;
             RZLog(RZLogError, @"parsing failed %@", e);
         }else{
-            
             NSArray * activityList = json[@"activityList"];
+            NSMutableArray * found = [NSMutableArray array];
             if ([activityList isKindOfClass:[NSArray class]]) {
-                NSMutableArray * found = [NSMutableArray arrayWithCapacity:activityList.count];
                 for (NSDictionary * one in activityList) {
                     if ([one isKindOfClass:[NSDictionary class]]) {
                         if( one[@"cs_activity_id"] ){
@@ -64,11 +63,10 @@
                         }
                     }
                 }
-                self.activities = found;
                 self.success = true;
             }
+            self.activities = found;
         }
-        
     }
     return self;
 }

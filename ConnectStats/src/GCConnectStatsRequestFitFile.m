@@ -254,7 +254,9 @@
     
     if( [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]){
         NSString * fp = isDirectory ? [path stringByAppendingPathComponent:[req fitFileName]] : path;
-
+        if( ! [[NSFileManager defaultManager] fileExistsAtPath:fp]) {
+            return nil;
+        }
         [req processParse:fp];
     }
     return req.activity;

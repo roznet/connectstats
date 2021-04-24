@@ -1039,9 +1039,7 @@
                         if (!newMetaData) {
                             newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
                         }
-                        if( verbose ){
-                            RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.display, otherVal.display);
-                        }
+                        [self.settings.updateRecord recordFor:self changedMeta:thisVal to:otherVal];
                         [newMetaData setValue:otherVal forKey:field];
                         FMDatabase * db = self.db;
                         if( db ){
@@ -1061,9 +1059,8 @@
                         if( !newMetaData){
                             newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
                         }
-                        if( verbose ){
-                            RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.display);
-                        }
+                        [self.settings.updateRecord recordFor:self newMeta:otherVal];
+
                         [newMetaData setValue:otherVal forKey:field];
                         FMDatabase * db = self.db;
                         if( db ){
@@ -1095,9 +1092,7 @@
                     if (!newSummaryData) {
                         newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                     }
-                    if( verbose ){
-                        RZLog(RZLogInfo, @"%@ Changed  %@ = %@ (prev %@)", self, field,  otherVal.numberWithUnit, thisVal.numberWithUnit);
-                    }
+                    [self.settings.updateRecord recordFor:self changedValue:thisVal to:otherVal];
                     newSummaryData[field] = otherVal;
                     
                     FMDatabase * db = self.db;
@@ -1118,18 +1113,7 @@
                 if (!newSummaryData) {
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                 }
-                
-                if( verbose ){
-                    if( thisVal.value == 0.0 && otherVal.value != 0.0){
-                        static NSUInteger _prevZero = 0;
-                        if( _prevZero < 5 || _prevZero % 25 == 0){
-                            RZLog(RZLogInfo, @"[#%@] %@ New Data %@ = %@ (prev 0)", @(_prevZero), self, field, otherVal.numberWithUnit);
-                        }
-                        _prevZero++;
-                    }else{
-                        RZLog(RZLogInfo, @"%@ New Data %@ = %@", self, field, otherVal.numberWithUnit);
-                    }
-                }
+                [self.settings.updateRecord recordFor:self newValue:otherVal];
                 newSummaryData[field] = otherVal;
                 
                 FMDatabase * db = self.db;
@@ -1193,9 +1177,7 @@
     if( ! newOnly){
         GCActivityType * aType = other.activityTypeDetail;
         if (![aType isEqualToActivityType:self.activityTypeDetail]) {
-            if( verbose ){
-                RZLog(RZLogInfo, @"change activity type %@ -> %@", self.activityTypeDetail,aType);
-            }
+            [self.settings.updateRecord recordFor:self changedAttribute:@"activityType" from:self.activityTypeDetail.description to:aType.description];
             rv = true;
             [self changeActivityType:aType];
             FMDatabase * db = self.db;
@@ -1208,9 +1190,7 @@
     NSString * aName = other.activityName;
     if( ! newOnly || connectstatsFromGarmin){
         if (aName.length > 0 && ![aName isEqualToString:self.activityName]) {
-            if( verbose ){
-                RZLog(RZLogInfo, @"change activity name %@ -> %@", self.activityName, aName);
-            }
+            [self.settings.updateRecord recordFor:self changedAttribute:@"activityName" from:self.activityName to:aName];
             rv = true;
             self.activityName = aName;
             FMDatabase * db = self.db;

@@ -26,6 +26,7 @@
 #import "GCActivitySettings.h"
 #import "GCAppGlobal.h"
 #import "GCActivity.h"
+#import "ConnectStats-Swift.h"
 
 @interface GCActivitySettings ()
 @property (nonatomic,retain) NSMutableDictionary<GCField*,NSNumber*>*reported;
@@ -74,7 +75,7 @@
     self.adjustSeriesToMatchLapAverage = [GCAppGlobal configGetBool:CONFIG_FILTER_ADJUST_FOR_LAP defaultValue:false];
     
     self.worker = [GCAppGlobal worker];
-    
+    self.updateRecord = RZReturnAutorelease([[GCActivityUpdateRecordTracker alloc] init]);
     if( act.garminSwimAlgorithm ){
         self.treatGapAsNoValueInSeries = false;
         self.gapTimeInterval = 0.;

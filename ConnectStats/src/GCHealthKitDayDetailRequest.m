@@ -156,7 +156,8 @@
     parser.sourceValidator = [[GCAppGlobal profile] currentSourceValidator];
     [parser parse:^(NSArray*points){
         if (points) {
-            [[GCAppGlobal organizer] registerActivity:aId withTrackpoints:points andLaps:nil];
+            GCActivity * act = [[GCAppGlobal organizer] activityForId:aId];
+            [[GCAppGlobal organizer] registerActivity:act withTrackpoints:points andLaps:nil];
         }
     }];
     dispatch_async(dispatch_get_main_queue(), ^(){

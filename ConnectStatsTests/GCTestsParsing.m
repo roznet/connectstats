@@ -995,6 +995,75 @@
     
 }
 
+-(void)testOrganizerBackgroundRegister{
+    NSString * bundlePath = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
+
+    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_register_background.db"];
+
+    [GCConnectStatsRequestSearch testForOrganizer:organizer withFilesInPath:bundlePath];
+    
+    NSMutableDictionary * save_cs = [NSMutableDictionary dictionary];
+    // First do the motion of the workflow of update:
+    //   1. connectstats search activity
+    //   2. update from fit file
+    //   3. update garmin connect summaries
+
+    for (GCActivity * one in organizer.activities) {
+        save_cs[one.activityId] = one.summaryData;
+    }
+    
+    NSMutableDictionary * save_fit = [NSMutableDictionary dictionary];
+    for (GCActivity * one in organizer.activities) {
+        NSDictionary * before = save_cs[one.activityId];
+        GCActivity * fit = [GCConnectStatsRequestFitFile testForActivity:one  withFilesIn:bundlePath];
+        if( fit ) {
+            NSLog(@"%@: cs %@ -> fit %@", one.activityId, @(before.count), @(one.summaryData.count));
+            save_fit[one.activityId] = one.summaryData;
+        }
+    }
+    
+    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath];
+    
+    NSMutableDictionary * save_gar = [NSMutableDictionary dictionary];
+    for (NSString * activityId in save_fit) {
+        NSDictionary * before = save_fit[activityId];
+        GCActivity * after  = [organizer activityForId:activityId];
+        NSLog(@"%@: fit %@ -> gar %@", activityId, @(before.count), @(after.summaryData.count));
+        save_gar[activityId] = after.summaryData;
+    }
+
+    // Now do a workflow of background update:
+    //   1. load without details
+    //   2. update new only from connectstats + fit file
+    //   3. load details for the rest when UI starts
+
+    GCActivitiesOrganizer * organizer_light = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db loadDetails:false]);
+    for (NSString * activityId in save_fit) {
+        NSDictionary * before = save_gar[activityId];
+        GCActivity * after  = [organizer_light activityForId:activityId];
+        NSLog(@"%@: gar %@ -> light %@", activityId, @(before.count), @(after.summaryData.count));
+    }
+
+    [organizer_light ensureDetailsLoaded];
+    for (NSString * activityId in save_fit) {
+        NSDictionary * before = save_gar[activityId];
+        GCActivity * after  = [organizer_light activityForId:activityId];
+        NSLog(@"%@: gar %@ -> detail %@", activityId, @(before.count), @(after.summaryData.count));
+        //[self compareActivitySummaryDictIn:before and:after.summaryData tolerance:@{} message:@"gar -> detail"];
+    }
+
+    // Finally reload everything fully as if new UI start
+    
+    GCActivitiesOrganizer * organizer_final = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db loadDetails:true]);
+    for (NSString * activityId in save_fit) {
+        NSDictionary * before = save_gar[activityId];
+        GCActivity * after  = [organizer_final activityForId:activityId];
+        NSLog(@"%@: gar %@ -> reload %@", activityId, @(before.count), @(after.summaryData.count));
+        //[self compareActivitySummaryDictIn:before and:after.summaryData tolerance:@{} message:@"gar -> detail"];
+    }
+
+}
+
 -(void)testOrganizerRegister{
     NSData * searchLegacyInfo = [NSData  dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_modern_search_0.json"
                                                                                        forClass:[self class]]];
@@ -1069,6 +1138,10 @@
 -(void)compareActivitySummaryIn:(GCActivity*)one and:(GCActivity*)two tolerance:(NSDictionary<NSString*,id>*)tolerances message:(NSString*)msg{
     NSDictionary<GCField*,GCActivitySummaryValue*> * oneDict = one.summaryData;
     NSDictionary<GCField*,GCActivitySummaryValue*> * twoDict = two.summaryData;
+    [self compareActivitySummaryDictIn:oneDict and:twoDict tolerance:tolerances message:msg];
+}
+
+-(void)compareActivitySummaryDictIn:(NSDictionary<GCField*,GCActivitySummaryValue*>*)oneDict and:(NSDictionary<GCField*,GCActivitySummaryValue*>*)twoDict tolerance:(NSDictionary<NSString*,id>*)tolerances message:(NSString*)msg{
     
     NSMutableDictionary * missingFromTwo = [NSMutableDictionary dictionary];
 

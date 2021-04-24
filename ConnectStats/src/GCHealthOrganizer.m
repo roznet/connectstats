@@ -67,7 +67,7 @@
     return self;
 }
 
--(GCHealthOrganizer*)initForTestModeWithDb:(FMDatabase*)db andThread:(dispatch_queue_t)thread{
+-(GCHealthOrganizer*)initTestModeWithDb:(FMDatabase*)db andThread:(dispatch_queue_t)thread{
     GCHealthOrganizer * rv = [self initWithDb:db andThread:thread];
     [self ensureDetailsLoaded];
     return rv;

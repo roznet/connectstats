@@ -122,6 +122,10 @@ typedef NS_ENUM(NSUInteger, gcDownloadMethod) {
 @property (nonatomic,retain) GCActivitySettings * settings;
 
 @property (nonatomic,readonly) BOOL pendingUpdate;
+/**
+ * flag to indicate the activity has unsaved Changes
+ */
+@property (nonatomic,assign) BOOL hasUnsavedChanges;
 
 #pragma mark - Readonly
 
@@ -280,21 +284,6 @@ typedef NS_ENUM(NSUInteger, gcDownloadMethod) {
 -(double)summaryFieldValueInStoreUnit:(gcFieldFlag)fieldFlag;
 -(void)setSummaryField:(gcFieldFlag)fieldFlag inStoreUnitValue:(double)value;
 -(nullable GCNumberWithUnit*)numberWithUnitForFieldInStoreUnit:(GCField *)field;
-
-/**
- Format a value with unit similar to a given field, unit name not displayed
- */
--(NSString*)formatValueNoUnits:(double)aval forField:(GCField*)which;
-
-/**
- Format a numberWithUnit similar to how field which would be formatted.
- It will convert to displayUnit which may be different than generic field
- */
--(NSString*)formatNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)which DEPRECATED_MSG_ATTRIBUTE("format numberWithUnit directly");
-/**
- Return value for field formatted as number with unit
- */
--(NSString*)formattedValue:(GCField*)field DEPRECATED_MSG_ATTRIBUTE("format numberWithUnit directly");
 
 -(BOOL)hasField:(GCField*)field;
 -(BOOL)isEqualToActivity:(GCActivity*)other;

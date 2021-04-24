@@ -25,8 +25,12 @@
 
 #import <Foundation/Foundation.h>
 #import "GCField.h"
+#import "GCActivityUpdateRecordProtocol.h"
 
 @class GCActivity;
+@class GCActivitiesOrganizer;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface GCActivitySettings : NSObject
 
@@ -55,7 +59,11 @@
 /**
  * dispatch queue to use for background calculation, nil to do everything synchronously
  */
-@property (nonatomic,retain) dispatch_queue_t worker;
+@property (nonatomic,retain,nullable) dispatch_queue_t worker;
+
+@property (nonatomic,weak,nullable) GCActivitiesOrganizer * organizer;
+
+@property (nonatomic,retain,nullable) NSObject<GCActivityUpdateRecordProtocol>* updateRecord;
 
 -(void)setupWithGlobalConfig:(GCActivity*)act;
 -(BOOL)shouldAdjustToMatchLapAverageForField:(GCField*)field;
@@ -66,4 +74,7 @@
  */
 -(BOOL)alreadyReported:(GCField*)field;
 
+
 @end
+
+NS_ASSUME_NONNULL_END
