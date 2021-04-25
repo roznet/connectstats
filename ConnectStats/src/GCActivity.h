@@ -34,6 +34,7 @@
 #import "GCActivityTypes.h"
 #import "GCActivityType.h"
 #import "GCTrackPointExtraIndex.h"
+#import "GCAppConstants.h"
 
 @class GCLapSwim;
 @class GCTrackPointSwim;
@@ -77,8 +78,6 @@ typedef NS_ENUM(NSUInteger, gcDownloadMethod) {
 @interface GCActivity : RZParentObject<RZChildObject,GCTrackPointDelegate>{
     // Private Flags
     BOOL _summaryDataLoading;
-    BOOL _downloadRequested;
-    BOOL _skipAlwaysFlag;
 }
 
 @property (nonatomic,retain) NSString * activityId;
@@ -139,6 +138,7 @@ typedef NS_ENUM(NSUInteger, gcDownloadMethod) {
 
 @property (nonatomic,readonly) GCUnit * speedDisplayUnit;
 @property (nonatomic,readonly) GCUnit * distanceDisplayUnit;
+
 /**
  Array of trackpoints. Note it maybe lazy loaded so
  can return nil, but asking for this will trigger attempt to load from db
@@ -175,6 +175,9 @@ typedef NS_ENUM(NSUInteger, gcDownloadMethod) {
  @brief Disable an activity for all stats
  */
 @property (nonatomic,assign) BOOL skipAlways;
+
+@property (nonatomic,assign) NSUInteger serviceStatus;
+@property (nonatomic,readonly) NSString*serviceStatusDescription;
 
 #pragma mark - Methods
 
@@ -302,6 +305,9 @@ typedef NS_ENUM(NSUInteger, gcDownloadMethod) {
  @brief method to update the dictionary of summary data
  */
 -(void)updateSummaryData:(NSDictionary<GCField*,GCActivitySummaryValue*>*)summary;
+
+-(BOOL)isCompleted:(gcServicePhase)phase for:(gcService)service;
+-(BOOL)markCompleted:(gcServicePhase)phase for:(gcService)service;
 
 /**
  @brief Add a dictionary of metavalue entries

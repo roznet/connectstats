@@ -486,9 +486,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         return rv;
     }
 
-    //gcServicesStatusFlags flags;
-    //NSLog(@"%@ %@", @(sizeof(flags)), @(sizeof(flags.flags)));
-    NSLog( @"%@", aId);
     GCActivity * existing = [self activityForId:aId];
 
     if (existing) {
@@ -501,6 +498,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             [self notifyOnMainThread:aId];
         }
     }else{
+        // checkif duplicate will also update and save if necessary the duplicate with new information from activty
         if ([self checkIfActivityIsDuplicate:act]) {
             return rv;
         }
@@ -572,8 +570,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
                 self.duplicateActivityIds[act.activityId] = other.activityId;
                 [self.db executeUpdate:@"INSERT INTO gc_duplicate_activities (activityId,duplicateActivityId) VALUES (?,?)", act.activityId, other.activityId];
                 
-                gcDuplicate reason = [other testForDuplicate:act];
-                // This is
                 if( reason == gcDuplicateNotMatching){
                     reason = [act testForDuplicate:other];
                     if( reason != gcDuplicateNotMatching ){

@@ -46,6 +46,7 @@
     self = [self initWithId:aId];
     if (self) {
         self.activityId = aId;
+        self.serviceStatus = 1;
         [self parseConnectStatsJson:aData];
         self.settings = [GCActivitySettings defaultsFor:self];
     }
@@ -56,6 +57,7 @@
     self = [self initWithId:aId];
     if (self) {
         [self parseModernGarminJson:aData];
+        self.serviceStatus = 1 << 4;
         self.settings = [GCActivitySettings defaultsFor:self];
     }
     return self;
@@ -66,6 +68,7 @@
     self = [self initWithId:aId];
     if (self) {
         self.activityId = aId;
+        self.serviceStatus = 1 << 8;
         [self parseStravaJson:aData];
         self.settings = [GCActivitySettings defaultsFor:self];
     }
@@ -1083,9 +1086,10 @@
             for (GCField * field in self.summaryData) {
                 GCActivitySummaryValue * thisVal = self.summaryData[field];
                 GCActivitySummaryValue * otherVal = other.summaryData[field];
+
                 // Only change if formatted value changes, to avoid issue with just low precision diffs
                 if (otherVal && (! [otherVal isEqualToValue:thisVal]) && (![otherVal.formattedValue isEqualToString:thisVal.formattedValue])) {
-                    if( thisVal.value != 0.0 && otherVal.value == 0.0){
+                    if( !field.isZeroValid && otherVal.value == 0.0){
                         // Don't put back to 0.0 value that were picked up
                         continue;
                     }
@@ -1108,7 +1112,7 @@
         for (GCField * field in other.summaryData) {
             GCActivitySummaryValue * thisVal = self.summaryData[field];
             GCActivitySummaryValue * otherVal = other.summaryData[field];
-            // Update if missing or if new value is 0.0
+            // Update if missing or if old value is 0.0
             if ((thisVal==nil && otherVal.value != 0.0 ) || ( thisVal.value == 0.0 && otherVal.value != 0.0) ) {
                 if (!newSummaryData) {
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
@@ -1174,6 +1178,10 @@
     // Special Case were some field should always be imported (like name event etc)
     BOOL connectstatsFromGarmin = self.service.service == gcServiceConnectStats && other.service.service == gcServiceGarmin;
     
+    if( [self markCompleted:gcServicePhaseSummary for:other.service.service] ){
+        RZLog(RZLogInfo, @"%@: Already completed %@/summary", self, other.service);
+    }
+
     if( ! newOnly){
         GCActivityType * aType = other.activityTypeDetail;
         if (![aType isEqualToActivityType:self.activityTypeDetail]) {
@@ -1199,6 +1207,7 @@
             [db commit];
         }
     }
+    
     if( [self updateSummaryDataFromActivity:other newOnly:newOnly verbose:verbose] ){
         rv = true;
     }
@@ -1330,6 +1339,9 @@
     
     for (GCField *field in results) {
         GCNumberWithUnit * num = results[field];
+        if( num.value == 0.0 && !field.isZeroValid){
+            continue;
+        }
         GCActivitySummaryValue * val = [self buildSummaryValue:field.key uom:num.unit.key fieldFlag:field.fieldFlag andValue:num.value];
         newSum[field] = val;
     }

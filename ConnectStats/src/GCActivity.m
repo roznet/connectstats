@@ -57,7 +57,10 @@ NSString * GC_TRACKPOINTS_MATCHED = @"__TrackPointsMatched__";
 NSString * kGCActivityNotifyDownloadDone = @"kGCActivityNotifyDownloadDone";
 NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady";
 
-@interface GCActivity ()
+@interface GCActivity (){
+    BOOL _downloadRequested;
+    BOOL _skipAlwaysFlag;
+}
 
 @property (nonatomic,retain) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("use GCActivityType.");
 @property (nonatomic,retain) GCActivityType * activityTypeDetail;// DEPRECATED_MSG_ATTRIBUTE("use detail of GCActivityType.");
@@ -76,11 +79,11 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 @property (nonatomic,retain) NSDictionary<GCField*,GCActivityCalculatedValue*> * calculatedFields;
 @property (nonatomic,retain) NSDictionary<GCField*,GCTrackPointExtraIndex*> * cachedExtraTracksIndexes;
 
-
 @property (nonatomic,assign) double sumDistance;
 @property (nonatomic,assign) double sumDuration;
 @property (nonatomic,assign) double weightedMeanHeartRate;
 @property (nonatomic,assign) double weightedMeanSpeed;
+
 
 @end
 
@@ -588,6 +591,71 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         return _location;
     }
     return _activityName ?:@"";
+}
+
+-(BOOL)isCompleted:(gcServicePhase)phase for:(gcService)serv{
+    NSUInteger flag = (phase == gcServicePhaseSummary) ? 0b01 : 0b10;
+    switch( serv ){
+        case gcServiceGarmin:
+            flag <<= 4;
+            break;
+        case gcServiceStrava:
+            flag <<= 8;
+            break;
+        default:
+            break;
+    }
+    return (self.serviceStatus & flag) == flag;
+}
+
+-(NSString*)serviceStatusDescription{
+    NSMutableArray * info = [NSMutableArray array];
+    
+    NSArray<NSString*> * names = @[ @"connectstats", @"garmin", @"strava"];
+    for(size_t i=0;i<3;i++){
+        NSUInteger flag  = self.serviceStatus >> (i*4);
+        if( (flag & 0b11) != 0){
+            NSMutableArray * one = [[NSMutableArray alloc] init];;
+            
+            if( (flag & 0b01) == 0b01){
+                [one addObject:@"S"];
+            }
+            if( (flag & 0b10) == 0b10){
+                [one addObject:@"T"];
+            }
+            
+            [info addObject:[NSString stringWithFormat:@"%@(%@)", names[i], [one componentsJoinedByString:@","]]];
+            RZRelease(one);
+        }
+    }
+    return [info componentsJoinedByString:@" "];
+}
+
+-(BOOL)markCompleted:(gcServicePhase)phase for:(gcService)serv{
+    NSUInteger flag = (phase == gcServicePhaseSummary) ? 0b01 : 0b10;
+    switch( serv ){
+        case gcServiceGarmin:
+            flag <<= 4;
+            break;
+        case gcServiceStrava:
+            flag <<= 8;
+            break;
+        default:
+            break;
+    }
+    BOOL rv = (self.serviceStatus & flag) == flag;
+    if( ! rv){
+        self.hasUnsavedChanges = true;
+    }
+    self.serviceStatus |= flag;
+    return rv;
+}
+
+-(void)clearAllCompleted{
+    if( self.serviceStatus != 0){
+        self.hasUnsavedChanges = true;
+    }
+    self.serviceStatus = 0;
 }
 
 #pragma mark - GCField Access methods

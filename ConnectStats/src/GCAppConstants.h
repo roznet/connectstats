@@ -205,11 +205,16 @@ typedef NS_ENUM(NSUInteger, gcNotificationPushType){
     gcNotificationPushTypeAll
 };
 
+typedef NS_ENUM(NSUInteger, gcServicePhase){
+    gcServicePhaseSummary,
+    gcServicePhaseTrack,
+};
+
 typedef struct {
-    unsigned search : 1;
-    unsigned tracks : 1;
+    unsigned summary : 1;
+    unsigned track : 1;
     unsigned reserved : 2;
-} __gcServiceSingleStatus;
+} __attribute__((packed)) __gcServiceSingleStatus;
 
 typedef struct {
     __gcServiceSingleStatus connectstats;

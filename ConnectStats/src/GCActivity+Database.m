@@ -80,6 +80,7 @@
         self.trackFlags = tmp;
     }
     self.downloadMethod = [res intForColumn:@"downloadMethod"];
+    self.serviceStatus = [res longForColumn:@"serviceStatus"];
 
     self.beginCoordinate = CLLocationCoordinate2DMake([res doubleForColumn:@"BeginLatitude"], [res doubleForColumn:@"BeginLongitude"]);
 }
@@ -151,11 +152,12 @@
                         @(self.flags),
                         @(self.garminSwimAlgorithm),
                         @(self.downloadMethod),
-                        @(self.trackFlags)
+                        @(self.trackFlags),
+                        @(self.serviceStatus)
                         ];
 
     [db setShouldCacheStatements:YES];
-    NSString * sql = @"INSERT INTO gc_activities (activityId,activityType,activityTypeDetail,BeginTimestamp,SumDistance,SumDuration,WeightedMeanHeartRate,activityName, BeginLongitude,BeginLatitude,WeightedMeanSpeed,Location,Flags,garminSwimAlgorithm,downloadMethod,trackFlags) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    NSString * sql = @"INSERT INTO gc_activities (activityId,activityType,activityTypeDetail,BeginTimestamp,SumDistance,SumDuration,WeightedMeanHeartRate,activityName, BeginLongitude,BeginLatitude,WeightedMeanSpeed,Location,Flags,garminSwimAlgorithm,downloadMethod,trackFlags,serviceStatus) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     [db executeUpdate:sql withArgumentsInArray:dbrow];
     if ([db hadError]) {
         RZLog(RZLogError, @"db update %@", [db lastErrorMessage]);
@@ -369,6 +371,13 @@
     if( max_version < 12){
         [GCActivity upgradeDatababaseForActivityTypeDetails:db];
         RZEXECUTEUPDATE(db, @"INSERT INTO gc_version (version) VALUES(12)");
+    }
+    if( max_version < 13){
+        if (![db columnExists:@"serviceStatus" inTableWithName:@"gc_activities"]) {
+            [db executeUpdate:@"ALTER TABLE gc_activities ADD COLUMN serviceStatus INTEGER DEFAULT 0"];
+        }
+
+        RZEXECUTEUPDATE(db, @"INSERT INTO gc_version (version) VALUES(13)");
     }
 }
 

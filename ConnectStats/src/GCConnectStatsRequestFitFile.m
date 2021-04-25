@@ -234,6 +234,10 @@
             if( self.activity == nil){
                 self.activity = fitAct;
             }else{
+                if( [self.activity markCompleted:gcServicePhaseTrack for:gcServiceConnectStats] ){
+                    RZLog(RZLogInfo,@"%@: Already completed connectstats/track", self.activity)
+                }
+                
                 [self.activity updateSummaryDataFromActivity:fitAct];
                 [self.activity updateTrackpointsFromActivity:fitAct];
                 [self.activity saveTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];

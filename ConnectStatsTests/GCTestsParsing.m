@@ -995,7 +995,7 @@
     
 }
 
--(void)testOrganizerBackgroundRegister{
+-(void)testOrganizerBackgroundRegister{    
     NSString * bundlePath = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
 
     GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_register_background.db"];
@@ -1012,26 +1012,46 @@
         save_cs[one.activityId] = one.summaryData;
     }
     
+    NSLog(@"%@", [[organizer activityForId:@"__connectstats__5567"] numberWithUnitForField:[GCField fieldForKey:@"GainElevation" andActivityType:GC_TYPE_RUNNING]]);
+
     NSMutableDictionary * save_fit = [NSMutableDictionary dictionary];
     for (GCActivity * one in organizer.activities) {
         NSDictionary * before = save_cs[one.activityId];
         GCActivity * fit = [GCConnectStatsRequestFitFile testForActivity:one  withFilesIn:bundlePath];
         if( fit ) {
-            NSLog(@"%@: cs %@ -> fit %@", one.activityId, @(before.count), @(one.summaryData.count));
+            XCTAssertGreaterThan(one.summaryData.count, before.count,@"%@ after fit load has more information", one);
             save_fit[one.activityId] = one.summaryData;
         }
+        for (GCField *key in one.summaryData) {
+            if( before[key] == nil){
+                NSLog(@"updated fit %@ = %@", key, one.summaryData[key]);
+            }
+        }
     }
-    
+    NSLog(@"%@", [[organizer activityForId:@"__connectstats__5567"] numberWithUnitForField:[GCField fieldForKey:@"GainElevation" andActivityType:GC_TYPE_RUNNING]]);
+
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath];
     
     NSMutableDictionary * save_gar = [NSMutableDictionary dictionary];
     for (NSString * activityId in save_fit) {
         NSDictionary * before = save_fit[activityId];
         GCActivity * after  = [organizer activityForId:activityId];
-        NSLog(@"%@: fit %@ -> gar %@", activityId, @(before.count), @(after.summaryData.count));
+        XCTAssertNotNil(after);
+        XCTAssertGreaterThan(after.summaryData.count,before.count,@"%@ after garmin has more information", after);
         save_gar[activityId] = after.summaryData;
+        for (GCField *key in before) {
+            // we didn't loose anything
+            XCTAssertNotNil(after.summaryData[key], @"%@ has %@", activityId, key);
+        }
+
+        for (GCField *key in after.summaryData) {
+            if( before[key] == nil){
+                NSLog(@"updated gar %@ = %@", key, after.summaryData[key]);
+            }
+        }
     }
 
+    
     // Now do a workflow of background update:
     //   1. load without details
     //   2. update new only from connectstats + fit file
@@ -1039,28 +1059,64 @@
 
     GCActivitiesOrganizer * organizer_light = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db loadDetails:false]);
     for (NSString * activityId in save_fit) {
-        NSDictionary * before = save_gar[activityId];
         GCActivity * after  = [organizer_light activityForId:activityId];
-        NSLog(@"%@: gar %@ -> light %@", activityId, @(before.count), @(after.summaryData.count));
+        XCTAssertNotNil(after);
+        XCTAssertEqual(after.summaryData.count,0,@"%@ summary loaded no details", after);
     }
 
     [organizer_light ensureDetailsLoaded];
+    NSLog(@"%@", [[organizer_light activityForId:@"__connectstats__5567"] numberWithUnitForField:[GCField fieldForKey:@"GainElevation" andActivityType:GC_TYPE_RUNNING]]);
+
+    
     for (NSString * activityId in save_fit) {
         NSDictionary * before = save_gar[activityId];
         GCActivity * after  = [organizer_light activityForId:activityId];
-        NSLog(@"%@: gar %@ -> detail %@", activityId, @(before.count), @(after.summaryData.count));
-        //[self compareActivitySummaryDictIn:before and:after.summaryData tolerance:@{} message:@"gar -> detail"];
+        XCTAssertEqual(after.summaryData.count,before.count, @"%@ after split reload has all information", after);
+        for (GCField *key in before) {
+            if( after.summaryData[key] == nil){
+                NSLog(@"missing %@ = %@", key, before[key]);
+            }
+        }
     }
 
-    // Finally reload everything fully as if new UI start
+    // now delete one fit activity, to make sure background reload will bring it back
+    NSString * deletedActivityId = save_fit.allKeys.firstObject;
+    [organizer_light deleteActivityId:deletedActivityId];
+    // reload it
+    organizer_light = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db loadDetails:false]);
+    for (NSString * activityId in save_fit) {
+        if( [activityId isEqualToString:deletedActivityId]){
+            XCTAssertNil([organizer_light activityForId:activityId]);
+        }else{
+            GCActivity * after  = [organizer_light activityForId:activityId];
+            XCTAssertEqual(after.summaryData.count,0,@"%@ summary loaded no details", after);
+        }
+    }
     
+    // Do the background refresh, without details loaded, to simulate background refresh
+    [GCConnectStatsRequestBackgroundFetch testWithOrganizer:organizer_light path:bundlePath];
+    // then load details, simulate when the UI starts
+    [organizer_light ensureDetailsLoaded];
+    for (NSString * activityId in save_fit) {
+        GCActivity * after  = [organizer_light activityForId:activityId];
+        XCTAssertNotNil(after);
+        NSDictionary * before = nil;
+        if( [activityId isEqualToString:deletedActivityId]){
+            before = save_cs[activityId];
+        }else{
+            before = save_gar[activityId];
+        }
+        XCTAssertEqual(after.summaryData.count,before.count, @"%@ after split reload has all information", after);
+    }
+
+    // do full reload of activity and make sure we get back same as we started
     GCActivitiesOrganizer * organizer_final = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db loadDetails:true]);
     for (NSString * activityId in save_fit) {
         NSDictionary * before = save_gar[activityId];
         GCActivity * after  = [organizer_final activityForId:activityId];
-        NSLog(@"%@: gar %@ -> reload %@", activityId, @(before.count), @(after.summaryData.count));
-        //[self compareActivitySummaryDictIn:before and:after.summaryData tolerance:@{} message:@"gar -> detail"];
+        XCTAssertEqual(after.summaryData.count,before.count, @"%@ after full reload has all information", after);
     }
+
 
 }
 
