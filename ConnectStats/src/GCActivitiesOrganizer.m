@@ -122,6 +122,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     return self;
 }
 -(void)dealloc{
+    for (GCActivity * act in _allActivities) {
+        act.settings.organizer = nil;
+    }
+    
     _reverseGeocoder.organizer = nil;
     _reverseGeocoder.delegate=nil;
     _reverseGeocoder.geocoder=nil;

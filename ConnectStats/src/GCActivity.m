@@ -809,7 +809,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if (self.useDb != nil) {
         return self.useDb;
     }
-    return [GCAppGlobal db];
+    return self.settings.organizer.db;
 }
 -(void)setDb:(FMDatabase*)adb{
     self.useDb = adb;
@@ -1055,9 +1055,11 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         [self saveToDb:self.db];
     
         if ([[GCAppGlobal profile] configGetBool:CONFIG_ENABLE_DERIVED defaultValue:[GCAppGlobal connectStatsVersion]]) {
-            dispatch_async([GCAppGlobal worker],^(){
-                [[GCAppGlobal derived] processActivities:@[self]];
-            });
+            if( self.settings.worker ){
+                dispatch_async(self.settings.worker,^(){
+                    [[GCAppGlobal derived] processActivities:@[self]];
+                });
+            }
         }
     }
     return rv;

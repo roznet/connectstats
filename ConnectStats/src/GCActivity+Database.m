@@ -120,14 +120,6 @@
         return;
     }
     
-    NSUInteger before = [db intForQuery:@"SELECT count(*) FROM gc_activities_values WHERE activityId = ?", self.activityId];
-    
-    if( before > self.summaryData.count){
-        NSLog(@"%@ We had more before %@ > %@", self.activityId, @(before), @(self.summaryData.count));
-    }else{
-        NSLog(@"%@ saving more %@ < %@", self.activityId, @(before), @(self.summaryData.count));
-    }
-    
     [self setDb:db];
     [db beginTransaction];
     if( [db intForQuery:@"SELECT count(*) FROM gc_activities WHERE activityId = ?", self.activityId] > 0 ){

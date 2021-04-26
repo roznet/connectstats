@@ -39,5 +39,6 @@
 
 #import "GCTestAppGlobal.h"
 #import "GCGarminLoginSSORequest.h"
-
+#import "GCConnectStatsRequest.h"
+#import "GCConnectStatsSearchJsonParser.h"
 
