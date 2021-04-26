@@ -253,7 +253,9 @@
 
 
 -(void)testAggregateActivities{
-    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] init];
+
+    GCActivitiesOrganizer * organizer = [self createTemporaryInMemoryOrganizer];
+    
     NSDictionary * sample  = [GCTestsSamples aggregateSample];
     NSDictionary * expected =[GCTestsSamples aggregateExpected];
     // Create one running/one cycling with distance = val, time = val *2, etc
@@ -377,9 +379,6 @@
         }
         XCTAssertTrue(found, @"found %@ in History Field Data Serie", date);
     }
-    
-    
-    [organizer release];
 }
 
 -(void)atestTrackFieldChoiceOrder{
@@ -655,7 +654,7 @@
         [act release];
     }
     
-    GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] init] autorelease];
+    GCActivitiesOrganizer * organizer = [self createTemporaryInMemoryOrganizer];
     organizer.activities = activities;
     
     GCHistoryPerformanceAnalysis * perfAnalysis = [[[GCHistoryPerformanceAnalysis alloc] init] autorelease];
@@ -750,7 +749,7 @@
 #pragma mark - GCActivitiesOrganizer
 
 -(void)testOrganizer{
-    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] init];
+    GCActivitiesOrganizer * organizer = [self createTemporaryInMemoryOrganizer];
     NSArray * initial = [NSArray arrayWithObjects:@"a", @"b", @"c", @"d",@"e", nil];
     NSMutableArray * a1 = [NSMutableArray arrayWithCapacity:[initial count]];
     for (NSString * aId in initial) {
@@ -783,7 +782,7 @@
 
 
 -(void)testOrganizerSearchAndFilter{
-    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] init];
+    GCActivitiesOrganizer * organizer = [self createTemporaryInMemoryOrganizer];
     NSArray * samples  = @[ @[ GC_TYPE_CYCLING, @"2012-09-13T18:48:16.000Z", @1, @"meter",     @5.2,  @"minperkm", @"aa"],
                             @[ GC_TYPE_CYCLING, @"2012-09-14T18:48:16.000Z", @1, @"kilometer", @1,    @"kph", @"bb"],
                             @[ GC_TYPE_RUNNING, @"2012-09-15T18:48:16.000Z", @1, @"kilometer", @1,    @"kph",  @"aa"],
@@ -844,7 +843,7 @@
 }
 
 -(void)testOrganizerTimeSeries{
-    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] init];
+    GCActivitiesOrganizer * organizer = [self createTemporaryInMemoryOrganizer];
     NSArray * samples  = @[ @[ GC_TYPE_CYCLING, @"2012-09-13T18:48:16.000Z", @1, @"meter",     @5.2,  @"minperkm"],
                             @[ GC_TYPE_CYCLING, @"2012-09-14T18:48:16.000Z", @1, @"kilometer", @1,    @"kph"],
                             @[ GC_TYPE_RUNNING, @"2012-09-15T18:48:16.000Z", @1, @"kilometer", @1,    @"kph"]
@@ -918,8 +917,7 @@
     test( GC_TYPE_RUNNING,limit,1);
     test( GC_TYPE_HIKING,nil,0);
     test( GC_TYPE_HIKING,limit,0);
-    
-    [organizer release];
+
 }
 
 

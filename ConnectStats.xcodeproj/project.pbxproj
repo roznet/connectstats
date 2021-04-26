@@ -524,8 +524,8 @@
 		427DDCC01DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */; };
 		427DDCC81DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCC71DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m */; };
 		427DDCC91DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 427DDCC71DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m */; };
-		427F93301BEA9A5900C177F9 /* activities_large.db in Resources */ = {isa = PBXBuildFile; fileRef = 427F93071BEA9A5900C177F9 /* activities_large.db */; };
-		427F93311BEA9A5900C177F9 /* activities_stats.db in Resources */ = {isa = PBXBuildFile; fileRef = 427F93081BEA9A5900C177F9 /* activities_stats.db */; };
+		427F93301BEA9A5900C177F9 /* test_activities_large.db in Resources */ = {isa = PBXBuildFile; fileRef = 427F93071BEA9A5900C177F9 /* test_activities_large.db */; };
+		427F93311BEA9A5900C177F9 /* test_activities_stats.db in Resources */ = {isa = PBXBuildFile; fileRef = 427F93081BEA9A5900C177F9 /* test_activities_stats.db */; };
 		427F933D1BEA9A5900C177F9 /* activity_400587208.html in Resources */ = {isa = PBXBuildFile; fileRef = 427F93141BEA9A5900C177F9 /* activity_400587208.html */; };
 		427F934C1BEA9A5900C177F9 /* cycling.png in Resources */ = {isa = PBXBuildFile; fileRef = 427F93231BEA9A5900C177F9 /* cycling.png */; };
 		427F934E1BEA9A5900C177F9 /* laps_regr.plist in Resources */ = {isa = PBXBuildFile; fileRef = 427F93251BEA9A5900C177F9 /* laps_regr.plist */; };
@@ -629,6 +629,14 @@
 		42939CED23AAD7A900D2403A /* fit_developer.json in Resources */ = {isa = PBXBuildFile; fileRef = 42939CEC23AAD7A900D2403A /* fit_developer.json */; };
 		42939CEE23AAD7A900D2403A /* fit_developer.json in Resources */ = {isa = PBXBuildFile; fileRef = 42939CEC23AAD7A900D2403A /* fit_developer.json */; };
 		42939CEF23AAD7A900D2403A /* fit_developer.json in Resources */ = {isa = PBXBuildFile; fileRef = 42939CEC23AAD7A900D2403A /* fit_developer.json */; };
+		4294B86F2636E6BB00C92802 /* GCTestsStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 4294B86E2636E6BB00C92802 /* GCTestsStats.m */; };
+		4294B8782636EFAB00C92802 /* test_activities_large.db in Resources */ = {isa = PBXBuildFile; fileRef = 427F93071BEA9A5900C177F9 /* test_activities_large.db */; };
+		4294B89D2636F90F00C92802 /* stats_cycling_weekly.csv in Resources */ = {isa = PBXBuildFile; fileRef = 427F932A1BEA9A5900C177F9 /* stats_cycling_weekly.csv */; };
+		4294B89E2636F90F00C92802 /* stats_running_yearly.csv in Resources */ = {isa = PBXBuildFile; fileRef = 427F932E1BEA9A5900C177F9 /* stats_running_yearly.csv */; };
+		4294B89F2636F90F00C92802 /* stats_running_weekly.csv in Resources */ = {isa = PBXBuildFile; fileRef = 427F932D1BEA9A5900C177F9 /* stats_running_weekly.csv */; };
+		4294B8A02636F90F00C92802 /* stats_cycling_yearly.csv in Resources */ = {isa = PBXBuildFile; fileRef = 427F932B1BEA9A5900C177F9 /* stats_cycling_yearly.csv */; };
+		4294B8A12636F90F00C92802 /* stats_running_monthly.csv in Resources */ = {isa = PBXBuildFile; fileRef = 427F932C1BEA9A5900C177F9 /* stats_running_monthly.csv */; };
+		4294B8A22636F90F00C92802 /* stats_cycling_monthly.csv in Resources */ = {isa = PBXBuildFile; fileRef = 427F93291BEA9A5900C177F9 /* stats_cycling_monthly.csv */; };
 		42959CCD18D4920900C0B841 /* GCStravaActivityListParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959CCC18D4920900C0B841 /* GCStravaActivityListParser.m */; };
 		42959CD518D5ECC500C0B841 /* GCService.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959CD418D5ECC500C0B841 /* GCService.m */; };
 		42959CD818D5F5F100C0B841 /* GCActivity+Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 42959CD718D5F5F100C0B841 /* GCActivity+Database.m */; };
@@ -778,10 +786,7 @@
 		42B5E2181BA5AF9A000FAE4E /* GCTestUIGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1F41BA5AF9A000FAE4E /* GCTestUIGraphViewController.m */; };
 		42B5E2191BA5AF9A000FAE4E /* GCAppGlobal.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1F61BA5AF9A000FAE4E /* GCAppGlobal.m */; };
 		42B5E21B1BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1F81BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.m */; };
-		42B5E21C1BA5AF9A000FAE4E /* GCTestBasics.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1F91BA5AF9A000FAE4E /* GCTestBasics.m */; };
 		42B5E21D1BA5AF9A000FAE4E /* GCTestDerived.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1FB1BA5AF9A000FAE4E /* GCTestDerived.m */; };
-		42B5E21E1BA5AF9A000FAE4E /* GCTestStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1FC1BA5AF9A000FAE4E /* GCTestStats.m */; };
-		42B5E21F1BA5AF9A000FAE4E /* GCTestTracks.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1FD1BA5AF9A000FAE4E /* GCTestTracks.m */; };
 		42B5E2201BA5AF9A000FAE4E /* GCTestUICellsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1FE1BA5AF9A000FAE4E /* GCTestUICellsViewController.m */; };
 		42B5E2211BA5AF9A000FAE4E /* GCTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E1FF1BA5AF9A000FAE4E /* GCTestViewController.m */; };
 		42B5E2221BA5AF9A000FAE4E /* GCCellGrid+Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B5E2011BA5AF9A000FAE4E /* GCCellGrid+Test.m */; };
@@ -1061,7 +1066,7 @@
 		42D8CB6B1616D20B00C0521B /* GCStatsOneFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D8CB6A1616D20B00C0521B /* GCStatsOneFieldViewController.m */; };
 		42D90812203383DB000BBE07 /* GCTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D90811203383DB000BBE07 /* GCTestCase.m */; };
 		42D9081C20338582000BBE07 /* GCTestsPerformance.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D9081B20338582000BBE07 /* GCTestsPerformance.m */; };
-		42D9081D2033874C000BBE07 /* activities_stats.db in Resources */ = {isa = PBXBuildFile; fileRef = 427F93081BEA9A5900C177F9 /* activities_stats.db */; };
+		42D9081D2033874C000BBE07 /* test_activities_stats.db in Resources */ = {isa = PBXBuildFile; fileRef = 427F93081BEA9A5900C177F9 /* test_activities_stats.db */; };
 		42DB6CB725D56107003AC195 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42DB6CB625D56107003AC195 /* ZIPFoundation */; };
 		42DB6CBD25D5611D003AC195 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42DB6CBC25D5611D003AC195 /* ZIPFoundation */; };
 		42DB6CBF25D56129003AC195 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 42DB6CBE25D56129003AC195 /* ZIPFoundation */; };
@@ -1183,6 +1188,7 @@
 		42FD55BA1B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellHealthDayActivity.m */; };
 		42FFF6A7232EDAE1008714D5 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 42FFF6A6232EDAE1008714D5 /* user.json */; };
 		42FFF6A8232EDAE1008714D5 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 42FFF6A6232EDAE1008714D5 /* user.json */; };
+		92B62512F5F055339B3DBB44 /* Pods_ConnectStats_ConnectStatsXCTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AF16D3B0A2CADB1BC0DB581 /* Pods_ConnectStats_ConnectStatsXCTests.framework */; };
 		BF9120CBFA7E3BB8AEA21520 /* Pods_FitFileExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4291909821E226FF00E0B114 /* Pods_FitFileExplorer.framework */; };
 		FA5B4E7AA31A2F2A7CA5ED72 /* Pods_HealthStats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A8193CBDBE4DB491C7633CA /* Pods_HealthStats.framework */; };
 /* End PBXBuildFile section */
@@ -1273,6 +1279,7 @@
 
 /* Begin PBXFileReference section */
 		2363D1E580BD0C9920BCB763 /* Pods_ConnectStatsTestApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ConnectStatsTestApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		26648864493045C8F4EADDCA /* Pods-ConnectStats-ConnectStatsXCTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStats-ConnectStatsXCTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStats-ConnectStatsXCTests/Pods-ConnectStats-ConnectStatsXCTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3665CA8D2236812ED0C4EBE1 /* libPods-tennisstats.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tennisstats.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		420063F818C238530031395F /* GCWebConnect+Requests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCWebConnect+Requests.h"; path = "src/GCWebConnect+Requests.h"; sourceTree = "<group>"; };
 		420063F918C238530031395F /* GCWebConnect+Requests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCWebConnect+Requests.m"; path = "src/GCWebConnect+Requests.m"; sourceTree = "<group>"; };
@@ -1624,8 +1631,8 @@
 		427DDCBE1DB3D02B007745A7 /* GCGarminRequestHeartRateZones.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequestHeartRateZones.m; path = src/GCGarminRequestHeartRateZones.m; sourceTree = "<group>"; };
 		427DDCC61DB3D54B007745A7 /* GCGarminHeartRateZoneParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCGarminHeartRateZoneParser.h; path = src/GCGarminHeartRateZoneParser.h; sourceTree = "<group>"; };
 		427DDCC71DB3D54B007745A7 /* GCGarminHeartRateZoneParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminHeartRateZoneParser.m; path = src/GCGarminHeartRateZoneParser.m; sourceTree = "<group>"; };
-		427F93071BEA9A5900C177F9 /* activities_large.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = activities_large.db; sourceTree = "<group>"; };
-		427F93081BEA9A5900C177F9 /* activities_stats.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = activities_stats.db; sourceTree = "<group>"; };
+		427F93071BEA9A5900C177F9 /* test_activities_large.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activities_large.db; sourceTree = "<group>"; };
+		427F93081BEA9A5900C177F9 /* test_activities_stats.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activities_stats.db; sourceTree = "<group>"; };
 		427F93141BEA9A5900C177F9 /* activity_400587208.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = activity_400587208.html; sourceTree = "<group>"; };
 		427F93231BEA9A5900C177F9 /* cycling.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cycling.png; sourceTree = "<group>"; };
 		427F93251BEA9A5900C177F9 /* laps_regr.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = laps_regr.plist; sourceTree = "<group>"; };
@@ -1716,6 +1723,7 @@
 		42939CE423AAD79500D2403A /* fields.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = fields.db; path = sqlite/out/fields.db; sourceTree = "<group>"; };
 		42939CE523AAD79500D2403A /* fit_map.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = fit_map.json; path = sqlite/out/fit_map.json; sourceTree = "<group>"; };
 		42939CEC23AAD7A900D2403A /* fit_developer.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = fit_developer.json; path = sqlite/edit/fit_developer.json; sourceTree = "<group>"; };
+		4294B86E2636E6BB00C92802 /* GCTestsStats.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCTestsStats.m; sourceTree = "<group>"; };
 		42959CCB18D4920900C0B841 /* GCStravaActivityListParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStravaActivityListParser.h; path = src/GCStravaActivityListParser.h; sourceTree = "<group>"; };
 		42959CCC18D4920900C0B841 /* GCStravaActivityListParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaActivityListParser.m; path = src/GCStravaActivityListParser.m; sourceTree = "<group>"; };
 		42959CD318D5ECC500C0B841 /* GCService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCService.h; path = src/GCService.h; sourceTree = "<group>"; };
@@ -1878,22 +1886,16 @@
 		42B5E1F51BA5AF9A000FAE4E /* GCAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCAppDelegate.h; path = src/GCAppDelegate.h; sourceTree = "<group>"; };
 		42B5E1F61BA5AF9A000FAE4E /* GCAppGlobal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCAppGlobal.m; path = src/GCAppGlobal.m; sourceTree = "<group>"; };
 		42B5E1F81BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCHistoryFieldDataSerie+Test.m"; path = "src/GCHistoryFieldDataSerie+Test.m"; sourceTree = "<group>"; };
-		42B5E1F91BA5AF9A000FAE4E /* GCTestBasics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestBasics.m; path = src/GCTestBasics.m; sourceTree = "<group>"; };
 		42B5E1FA1BA5AF9A000FAE4E /* GCTestDerived.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestDerived.h; path = src/GCTestDerived.h; sourceTree = "<group>"; };
 		42B5E1FB1BA5AF9A000FAE4E /* GCTestDerived.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestDerived.m; path = src/GCTestDerived.m; sourceTree = "<group>"; };
-		42B5E1FC1BA5AF9A000FAE4E /* GCTestStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestStats.m; path = src/GCTestStats.m; sourceTree = "<group>"; };
-		42B5E1FD1BA5AF9A000FAE4E /* GCTestTracks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestTracks.m; path = src/GCTestTracks.m; sourceTree = "<group>"; };
 		42B5E1FE1BA5AF9A000FAE4E /* GCTestUICellsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestUICellsViewController.m; path = src/GCTestUICellsViewController.m; sourceTree = "<group>"; };
 		42B5E1FF1BA5AF9A000FAE4E /* GCTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestViewController.m; path = src/GCTestViewController.m; sourceTree = "<group>"; };
 		42B5E2001BA5AF9A000FAE4E /* GCCellGrid+Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCCellGrid+Test.h"; path = "src/GCCellGrid+Test.h"; sourceTree = "<group>"; };
 		42B5E2011BA5AF9A000FAE4E /* GCCellGrid+Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCCellGrid+Test.m"; path = "src/GCCellGrid+Test.m"; sourceTree = "<group>"; };
 		42B5E2031BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCHistoryFieldDataSerie+Test.h"; path = "src/GCHistoryFieldDataSerie+Test.h"; sourceTree = "<group>"; };
-		42B5E2041BA5AF9A000FAE4E /* GCTestBasics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestBasics.h; path = src/GCTestBasics.h; sourceTree = "<group>"; };
 		42B5E2051BA5AF9A000FAE4E /* GCTestCommunications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestCommunications.h; path = src/GCTestCommunications.h; sourceTree = "<group>"; };
 		42B5E2061BA5AF9A000FAE4E /* GCTestIconsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestIconsCell.h; path = src/GCTestIconsCell.h; sourceTree = "<group>"; };
 		42B5E2071BA5AF9A000FAE4E /* GCTestIconsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestIconsCell.m; path = src/GCTestIconsCell.m; sourceTree = "<group>"; };
-		42B5E20C1BA5AF9A000FAE4E /* GCTestStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestStats.h; path = src/GCTestStats.h; sourceTree = "<group>"; };
-		42B5E20F1BA5AF9A000FAE4E /* GCTestTracks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestTracks.h; path = src/GCTestTracks.h; sourceTree = "<group>"; };
 		42B5E2101BA5AF9A000FAE4E /* GCTestUICellsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestUICellsViewController.h; path = src/GCTestUICellsViewController.h; sourceTree = "<group>"; };
 		42B5E2111BA5AF9A000FAE4E /* GCTestUIGraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestUIGraphViewController.h; path = src/GCTestUIGraphViewController.h; sourceTree = "<group>"; };
 		42B5E2121BA5AF9A000FAE4E /* GCTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestViewController.h; path = src/GCTestViewController.h; sourceTree = "<group>"; };
@@ -2129,6 +2131,10 @@
 		42FD55B81B90A39F0070B3B4 /* GCCellHealthDayActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCCellHealthDayActivity.m; path = src/GCCellHealthDayActivity.m; sourceTree = "<group>"; };
 		42FFF6A6232EDAE1008714D5 /* user.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = user.json; path = connectstatstestapp/samples/InitialSamples/user.json; sourceTree = SOURCE_ROOT; };
 		5A27E308E28B0C345991A8A8 /* Pods_FitFileExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FitFileExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5AF16D3B0A2CADB1BC0DB581 /* Pods_ConnectStats_ConnectStatsXCTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ConnectStats_ConnectStatsXCTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C5AB89BEF17CEA462B96687 /* Pods-ConnectStatsXCTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStatsXCTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStatsXCTests/Pods-ConnectStatsXCTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5DD0D8823C4B64B0B64A85E3 /* Pods-ConnectStats-ConnectStatsXCTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStats-ConnectStatsXCTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStats-ConnectStatsXCTests/Pods-ConnectStats-ConnectStatsXCTests.release.xcconfig"; sourceTree = "<group>"; };
+		5F6E36F5C6647979F417842B /* Pods-ConnectStatsXCTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStatsXCTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStatsXCTests/Pods-ConnectStatsXCTests.release.xcconfig"; sourceTree = "<group>"; };
 		722F58FE2B9F9EF1C1D899FD /* Pods-ConnectStatsTestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStatsTestApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		7511076C6F489225E4DB97A3 /* Pods-ConnectStats.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStats.release.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStats/Pods-ConnectStats.release.xcconfig"; sourceTree = "<group>"; };
 		7A8193CBDBE4DB491C7633CA /* Pods_HealthStats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HealthStats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2258,6 +2264,7 @@
 				42DE53C219CF6E8800009130 /* HealthKit.framework in Frameworks */,
 				428FF72715F36888007A88FA /* UIKit.framework in Frameworks */,
 				428FF72815F36888007A88FA /* Foundation.framework in Frameworks */,
+				92B62512F5F055339B3DBB44 /* Pods_ConnectStats_ConnectStatsXCTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3155,8 +3162,8 @@
 			children = (
 				42FFF6A6232EDAE1008714D5 /* user.json */,
 				427F936B1BEC02FE00C177F9 /* csv */,
-				427F93071BEA9A5900C177F9 /* activities_large.db */,
-				427F93081BEA9A5900C177F9 /* activities_stats.db */,
+				427F93071BEA9A5900C177F9 /* test_activities_large.db */,
+				427F93081BEA9A5900C177F9 /* test_activities_stats.db */,
 				427F93141BEA9A5900C177F9 /* activity_400587208.html */,
 				427F93231BEA9A5900C177F9 /* cycling.png */,
 				427F93251BEA9A5900C177F9 /* laps_regr.plist */,
@@ -3306,6 +3313,7 @@
 				F2186DA283B31B12A499CF52 /* Pods_ConnectStats.framework */,
 				2363D1E580BD0C9920BCB763 /* Pods_ConnectStatsTestApp.framework */,
 				7A8193CBDBE4DB491C7633CA /* Pods_HealthStats.framework */,
+				5AF16D3B0A2CADB1BC0DB581 /* Pods_ConnectStats_ConnectStatsXCTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3365,6 +3373,7 @@
 				4227C5AB1C0B1310003F0660 /* GCTestsGrid.m */,
 				42C0113F1AB438050059B6CF /* GCTestsParsing.m */,
 				42D9081B20338582000BBE07 /* GCTestsPerformance.m */,
+				4294B86E2636E6BB00C92802 /* GCTestsStats.m */,
 				42B9555218186D0C00BC7AF9 /* GCTestsUtils.m */,
 				426D11A5249B639B00BA38E1 /* GCTestWebAsync.m */,
 				429184AD2319B0ED00FD6525 /* GCTestUserInterface.m */,
@@ -3839,16 +3848,10 @@
 				42B5E1F81BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.m */,
 				42B5E1FA1BA5AF9A000FAE4E /* GCTestDerived.h */,
 				42B5E1FB1BA5AF9A000FAE4E /* GCTestDerived.m */,
-				42B5E20C1BA5AF9A000FAE4E /* GCTestStats.h */,
-				42B5E1FC1BA5AF9A000FAE4E /* GCTestStats.m */,
 				42B5E2001BA5AF9A000FAE4E /* GCCellGrid+Test.h */,
 				42B5E2011BA5AF9A000FAE4E /* GCCellGrid+Test.m */,
-				42B5E2041BA5AF9A000FAE4E /* GCTestBasics.h */,
-				42B5E1F91BA5AF9A000FAE4E /* GCTestBasics.m */,
 				42B5E2051BA5AF9A000FAE4E /* GCTestCommunications.h */,
 				42B5E1F31BA5AF9A000FAE4E /* GCTestCommunications.m */,
-				42B5E20F1BA5AF9A000FAE4E /* GCTestTracks.h */,
-				42B5E1FD1BA5AF9A000FAE4E /* GCTestTracks.m */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -4282,6 +4285,10 @@
 				EBDC45B331B669A42DAFAD9B /* Pods-ConnectStatsTestApp.release.xcconfig */,
 				97DCBA7AF2BA9F9B933FCC48 /* Pods-FitFileExplorer.debug.xcconfig */,
 				A01B1CDDA1437D95D99453C1 /* Pods-FitFileExplorer.release.xcconfig */,
+				5C5AB89BEF17CEA462B96687 /* Pods-ConnectStatsXCTests.debug.xcconfig */,
+				5F6E36F5C6647979F417842B /* Pods-ConnectStatsXCTests.release.xcconfig */,
+				26648864493045C8F4EADDCA /* Pods-ConnectStats-ConnectStatsXCTests.debug.xcconfig */,
+				5DD0D8823C4B64B0B64A85E3 /* Pods-ConnectStats-ConnectStatsXCTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -4411,9 +4418,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 428FF73915F36888007A88FA /* Build configuration list for PBXNativeTarget "ConnectStatsXCTests" */;
 			buildPhases = (
+				C045FE1F2EF25509DE2E899E /* [CP] Check Pods Manifest.lock */,
 				428FF71F15F36888007A88FA /* Sources */,
 				428FF72015F36888007A88FA /* Frameworks */,
 				428FF72115F36888007A88FA /* Resources */,
+				2A1EFF153691A7307E826B86 /* [CP] Embed Pods Frameworks */,
+				A8256C86F9E9367E7FE279E7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -4749,6 +4759,7 @@
 				422F283820551AE100187478 /* activity_2545022458.json in Resources */,
 				42A5D914232873D800898FD5 /* last_search_modern.json in Resources */,
 				42A5D90323272C8300898FD5 /* track_cs_5567.fit in Resources */,
+				4294B8A12636F90F00C92802 /* stats_running_monthly.csv in Resources */,
 				42A5D90A23272C8300898FD5 /* activityweather_4018408912.json in Resources */,
 				424FC00822EC9DFA00E2059A /* track_cs_1451.fit in Resources */,
 				42A5D90023272C8300898FD5 /* last_connectstats_search_60.json in Resources */,
@@ -4757,10 +4768,11 @@
 				4277C0EC23BD133D00C1B1B9 /* activity_234721416.json in Resources */,
 				42A5D90523272C8300898FD5 /* last_connectstats_search_40.json in Resources */,
 				42A5D9302328774700898FD5 /* activity_1382772474.json in Resources */,
+				4294B8A02636F90F00C92802 /* stats_cycling_yearly.csv in Resources */,
 				42A5D93A2328774700898FD5 /* activity_1378220136.fit in Resources */,
 				42A5D90923272C8300898FD5 /* activitytrack_4017099594.json in Resources */,
 				42F6715C241CDA660031D224 /* activitylaps_3988198230.json in Resources */,
-				42D9081D2033874C000BBE07 /* activities_stats.db in Resources */,
+				42D9081D2033874C000BBE07 /* test_activities_stats.db in Resources */,
 				42A5D90F23272C8300898FD5 /* track_cs_5572.fit in Resources */,
 				42A5D90623272C8300898FD5 /* activity_4018408912.json in Resources */,
 				427B79D82465A11F005EDEAD /* last_modern_search_derived.json in Resources */,
@@ -4772,6 +4784,7 @@
 				42880C472381EEE00030C3C1 /* track_cs_5611.fit in Resources */,
 				4277C0EE23BD133D00C1B1B9 /* activitylaps_234721416.json in Resources */,
 				42A5D8F723272C8300898FD5 /* activitylaps_4018408912.json in Resources */,
+				4294B8A22636F90F00C92802 /* stats_cycling_monthly.csv in Resources */,
 				426E288D25C00B6C00A9DA6F /* last_connectstats_search_multisportsingle.json in Resources */,
 				42A5D91123272C8300898FD5 /* activity_4017099594.fit in Resources */,
 				42F6715D241CDA660031D224 /* activity_3988198230.json in Resources */,
@@ -4789,6 +4802,7 @@
 				426E288C25C00B6C00A9DA6F /* last_connectstats_search_zerodistance.json in Resources */,
 				42A5D940232877D900898FD5 /* 1027746730.is.swimming in Resources */,
 				424FC00722EC9DFA00E2059A /* track_cs_1525.fit in Resources */,
+				4294B8782636EFAB00C92802 /* test_activities_large.db in Resources */,
 				42A5D944232877D900898FD5 /* activityweather_1027746730.json in Resources */,
 				426E288E25C00B6C00A9DA6F /* last_modern_search_multisportsingle.json in Resources */,
 				42E06D491B5EF4DC001BDA02 /* test_activity_running_837769405.db in Resources */,
@@ -4839,10 +4853,12 @@
 				427F936E1BEC069F00C177F9 /* test_activity_cycling_940863203.db in Resources */,
 				4253B4761CD4A53400437E6A /* activitylaps_1083407258.json in Resources */,
 				42A5D91023272C8300898FD5 /* strava_stream_2674169797.json in Resources */,
+				4294B89F2636F90F00C92802 /* stats_running_weekly.csv in Resources */,
 				42A5D9332328774700898FD5 /* activitytrack_1382772474.json in Resources */,
 				42A5D943232877D900898FD5 /* activity_1027746730.json in Resources */,
 				4253B4781CD4A53400437E6A /* activityweather_1083407258.json in Resources */,
 				42A5D9322328774700898FD5 /* activityweather_1382772474.json in Resources */,
+				4294B89D2636F90F00C92802 /* stats_cycling_weekly.csv in Resources */,
 				4277C0E423BD133D00C1B1B9 /* activity_234979239.fit in Resources */,
 				428FF73015F36888007A88FA /* InfoPlist.strings in Resources */,
 				426E288F25C00B6C00A9DA6F /* last_modern_search_zerodistance.json in Resources */,
@@ -4855,6 +4871,7 @@
 				42A5D8FF23272C8300898FD5 /* activity_4018408912.fit in Resources */,
 				4253B4791CD4A53400437E6A /* track_1083407258.db in Resources */,
 				42E06D4B1B5EFFC4001BDA02 /* test_activity_day___healthkit__20150622.db in Resources */,
+				4294B89E2636F90F00C92802 /* stats_running_yearly.csv in Resources */,
 				422F283920551AE100187478 /* activitylaps_2545022458.json in Resources */,
 				4277C0ED23BD133D00C1B1B9 /* activitytrack_217470507.json in Resources */,
 				42F6715B241CDA660031D224 /* activitytrack_3988198230.json in Resources */,
@@ -4904,7 +4921,7 @@
 				427F93541BEA9A5900C177F9 /* stats_cycling_yearly.csv in Resources */,
 				422AC6A71C1CC9AF002DDA9C /* test_activity_day___healthkit__Default_20151109.db in Resources */,
 				42B5E49B1BA5BA2D000FAE4E /* strava_laps_140735593.json in Resources */,
-				427F93311BEA9A5900C177F9 /* activities_stats.db in Resources */,
+				427F93311BEA9A5900C177F9 /* test_activities_stats.db in Resources */,
 				42E6C87425583B80009EC126 /* Navigation.xcassets in Resources */,
 				427F93571BEA9A5900C177F9 /* stats_running_yearly.csv in Resources */,
 				42B5E4841BA5BA2D000FAE4E /* strava_list_1.json in Resources */,
@@ -4933,7 +4950,7 @@
 				427F934C1BEA9A5900C177F9 /* cycling.png in Resources */,
 				42939CEE23AAD7A900D2403A /* fit_developer.json in Resources */,
 				42B5E4811BA5BA2D000FAE4E /* last_search_0.json in Resources */,
-				427F93301BEA9A5900C177F9 /* activities_large.db in Resources */,
+				427F93301BEA9A5900C177F9 /* test_activities_large.db in Resources */,
 				42FC98F5261CFC0000ACF6E1 /* GCActivityTypeSelectionViewController.xib in Resources */,
 				424208911BCAF9D800F3DB12 /* Activities.xcassets in Resources */,
 				427F93561BEA9A5900C177F9 /* stats_running_weekly.csv in Resources */,
@@ -5013,6 +5030,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2A1EFF153691A7307E826B86 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats-ConnectStatsXCTests/Pods-ConnectStats-ConnectStatsXCTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats-ConnectStatsXCTests/Pods-ConnectStats-ConnectStatsXCTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ConnectStats-ConnectStatsXCTests/Pods-ConnectStats-ConnectStatsXCTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		3FC44B97C0482AE32C2538D2 /* [CP] Check Pods Manifest.lock */ = {
@@ -5135,6 +5169,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ConnectStats/Pods-ConnectStats-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A8256C86F9E9367E7FE279E7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats-ConnectStatsXCTests/Pods-ConnectStats-ConnectStatsXCTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConnectStats-ConnectStatsXCTests/Pods-ConnectStats-ConnectStatsXCTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ConnectStats-ConnectStatsXCTests/Pods-ConnectStats-ConnectStatsXCTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C045FE1F2EF25509DE2E899E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ConnectStats-ConnectStatsXCTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CA7BA052D74F944BBEA800F2 /* [CP] Embed Pods Frameworks */ = {
@@ -5787,6 +5860,7 @@
 				426D11A6249B639B00BA38E1 /* GCTestWebAsync.m in Sources */,
 				42096753189CF33500D32CA7 /* GCTestsDerived.m in Sources */,
 				429184AE2319B0ED00FD6525 /* GCTestUserInterface.m in Sources */,
+				4294B86F2636E6BB00C92802 /* GCTestsStats.m in Sources */,
 				42D90812203383DB000BBE07 /* GCTestCase.m in Sources */,
 				4227C5AC1C0B1310003F0660 /* GCTestsGrid.m in Sources */,
 				42A31AF823A0F8A7006F5664 /* GCActivity+TestBackwardCompat.m in Sources */,
@@ -6003,13 +6077,11 @@
 				42B5E2191BA5AF9A000FAE4E /* GCAppGlobal.m in Sources */,
 				42B5E2171BA5AF9A000FAE4E /* GCTestCommunications.m in Sources */,
 				42B231D1253058680080D743 /* GCHistoryFieldDataHolder.m in Sources */,
-				42B5E21F1BA5AF9A000FAE4E /* GCTestTracks.m in Sources */,
 				422B34421CA7322600B345CD /* GCFieldInfo.m in Sources */,
 				421A51541C82FB7100671587 /* GCCellEntryFieldChoiceViewController.m in Sources */,
 				42C038CF24CCACB7003FB689 /* GCTestUISamples.m in Sources */,
 				42B5E21D1BA5AF9A000FAE4E /* GCTestDerived.m in Sources */,
 				42B5E2271BA5AF9A000FAE4E /* main.m in Sources */,
-				42B5E21C1BA5AF9A000FAE4E /* GCTestBasics.m in Sources */,
 				42B5E2221BA5AF9A000FAE4E /* GCCellGrid+Test.m in Sources */,
 				42E04E4E2538C34B005FFD5E /* GCCellActivity.swift in Sources */,
 				42B5E2181BA5AF9A000FAE4E /* GCTestUIGraphViewController.m in Sources */,
@@ -6018,7 +6090,6 @@
 				42B467BA1DC6A56200279DC8 /* GCAppPasswordManager.swift in Sources */,
 				42B5E21B1BA5AF9A000FAE4E /* GCHistoryFieldDataSerie+Test.m in Sources */,
 				422F3BB226173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m in Sources */,
-				42B5E21E1BA5AF9A000FAE4E /* GCTestStats.m in Sources */,
 				42B5E2201BA5AF9A000FAE4E /* GCTestUICellsViewController.m in Sources */,
 				42B5E2161BA5AF9A000FAE4E /* GCAppDelegate.m in Sources */,
 				42C038D124CCAD21003FB689 /* GCMapRouteLogic.m in Sources */,
@@ -6580,6 +6651,7 @@
 		};
 		428FF73A15F36888007A88FA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 26648864493045C8F4EADDCA /* Pods-ConnectStats-ConnectStatsXCTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ConnectStats.app/ConnectStats";
 				CLANG_ENABLE_MODULES = YES;
@@ -6587,10 +6659,13 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ConnectStats/ConnectStats-Prefix.pch";
-				HEADER_SEARCH_PATHS = $CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources;
+				HEADER_SEARCH_PATHS = (
+					$CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources,
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "ConnectStatsTests/ConnectStatsTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6610,6 +6685,7 @@
 		};
 		428FF73B15F36888007A88FA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DD0D8823C4B64B0B64A85E3 /* Pods-ConnectStats-ConnectStatsXCTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ConnectStats.app/ConnectStats";
 				CLANG_ENABLE_MODULES = YES;
@@ -6617,10 +6693,13 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ConnectStats/ConnectStats-Prefix.pch";
-				HEADER_SEARCH_PATHS = $CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources;
+				HEADER_SEARCH_PATHS = (
+					$CONFIGURATION_TEMP_DIR/ConnectStats.build/DerivedSources,
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "ConnectStatsTests/ConnectStatsTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

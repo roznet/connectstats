@@ -177,7 +177,7 @@ class GCTestAggregatedStats: XCTestCase {
     
     func activitiesForStatsTest(n : Int = Int.max, activityType : String = GC_TYPE_ALL, focus : Bool = false) -> [GCActivity] {
         let calendar = GCAppGlobal.calculationCalendar()
-        guard let db = GCTestsSamples.sampleActivityDatabase("activities_stats.db") else { XCTAssertTrue(false); return [] }
+        guard let db = GCTestsSamples.sampleActivityDatabase("test_activities_stats.db") else { XCTAssertTrue(false); return [] }
         let organizer = GCActivitiesOrganizer(testModeWithDb: db)
         
         let all = organizer.activities()

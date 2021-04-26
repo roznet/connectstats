@@ -97,7 +97,6 @@ NSString * const CONFIG_GARMIN_LAST_SOURCE       = @"config_garmin_last_source";
 NSString * const CONFIG_GARMIN_USE_MODERN        = @"config_garmin_use_modern_v3";
 NSString * const CONFIG_STRAVA_ENABLE            = @"config_strava_enable";
 NSString * const CONFIG_STRAVA_SEGMENTS          = @"config_strava_segments";
-NSString * const CONFIG_SHARING_STRAVA_AUTO      = @"config_sharing_strava_auto";
 NSString * const CONFIG_SHARING_STRAVA_PRIVATE   = @"config_sharing_strava_private";
 NSString * const CONFIG_HEALTHKIT_ENABLE         = @"config_healthkit_enable";
 NSString * const CONFIG_HEALTHKIT_WORKOUT        = @"config_healthkit_workout";

@@ -89,4 +89,29 @@
     return derived;
 }
 
+-(GCActivitiesOrganizer*)createTemporaryInMemoryOrganizer{
+    FMDatabase * memDb = [FMDatabase databaseWithPath:nil];
+    [memDb open];
+    [GCActivitiesOrganizer ensureDbStructure:memDb];
+
+    GCActivitiesOrganizer * rv = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:memDb]);
+    return rv;
+}
+
+-(GCActivitiesOrganizer*)setupSampleState:(NSString*)name{
+    [RZFileOrganizer createEditableCopyOfFile:name forClass:[self class]];
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:name]];
+    
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    GCActivitiesOrganizer * rv = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db]);
+    
+    return rv;
+}
+
+
+-(void)setupForTest:(GCActivity*)act{
+    act.settings.worker = nil;
+}
+
 @end

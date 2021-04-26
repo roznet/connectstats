@@ -84,9 +84,6 @@ NSString * kBugNoCommonId = @"-1";
             RZLog(RZLogInfo, @"Enabled:  %@", [serviceObj statusDescription] );
         }
     }
-    if([[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:false]){
-        RZLog(RZLogInfo, @"Enabled:  Strava Upload");
-    }
     [GCAppGlobal versionSummary];
 }
 

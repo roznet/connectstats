@@ -115,7 +115,7 @@ typedef NS_ENUM(NSUInteger, gcDownloadMethod) {
 @property (nonatomic,retain) NSString * calculatedLapName;
 @property (nullable,nonatomic,retain) GCWeather * weather;
 
-@property (nonatomic,retain) FMDatabase * db;
+@property (nonatomic,retain,nullable) FMDatabase * db;
 @property (nonatomic,retain) FMDatabase * trackdb;
 
 @property (nonatomic,retain) GCActivitySettings * settings;

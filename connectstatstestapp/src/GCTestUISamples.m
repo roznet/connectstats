@@ -449,6 +449,7 @@
     
     NSDictionary * json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     GCActivity * activity = [[[GCActivity alloc] initWithId:activityId andGarminData:json] autorelease];
+    activity.settings.worker = nil;
     [GCGarminActivityTrack13Request testForActivity:activity withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:false];
 
     GCSimpleGraphCachedDataSource * one = nil;
@@ -622,6 +623,7 @@
     
     FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"activities_testderived.db"]];
     [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
     GCActivitiesOrganizer * organizer = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db]);
     FMDatabase * deriveddb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"derived_testderived.db"]];
     [deriveddb open];
@@ -837,6 +839,7 @@
     NSString * name = @"activities_types_samples.db";
     FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:name]];
     [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
     GCActivitiesOrganizer * organizer = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db]);
 
     NSMutableArray * rv = [NSMutableArray array];

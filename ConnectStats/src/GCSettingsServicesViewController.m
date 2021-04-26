@@ -129,22 +129,10 @@
     [self.remap addSection:GC_SECTIONS_GARMIN withRows:dynamic];
     
     
-    if( [[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:NO] == YES){
-        // OBSOLETE: Only showed if AUTO was on before, should not be used anymore
-        [self.remap addSection:GC_SECTIONS_STRAVA withRows:@[
-                                                             @( GC_STRAVA_NAME      ),
-                                                             @( GC_STRAVA_ENABLE    ),
-                                                             @( GC_STRAVA_AUTO      ),
-                                                             @( GC_STRAVA_LOGOUT    ) ]];
-        // OBSOLETE: Only showed if AUTO was on before, should not be used anymore
-    }else{
-        [self.remap addSection:GC_SECTIONS_STRAVA withRows:@[
-                                                             @( GC_STRAVA_NAME      ),
-                                                             @( GC_STRAVA_ENABLE    ),
-                                                             //@( GC_STRAVA_SEGMENTS   ),
-                                                             @( GC_STRAVA_LOGOUT    ) ]];
-        
-    }
+    [self.remap addSection:GC_SECTIONS_STRAVA withRows:@[
+        @( GC_STRAVA_NAME      ),
+        @( GC_STRAVA_ENABLE    ),
+        @( GC_STRAVA_LOGOUT    ) ]];
     
     if ([GCAppGlobal healthKitStore]) {
         [self.remap addSection:GC_SECTIONS_HEALTHKIT withRows:@[
@@ -522,14 +510,6 @@
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
 
-    }else if (indexPath.row == GC_STRAVA_AUTO) {
-        switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                    withString:NSLocalizedString(@"Upload Activities",@"Other Service")];
-        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:false];
-        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_STRAVA_AUTO);
-        switchcell.entryFieldDelegate = self;
-        rv=switchcell;
     }else if (indexPath.row == GC_STRAVA_PRIVATE){
         switchcell = [GCCellEntrySwitch switchCell:tableView];
         switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
@@ -840,13 +820,6 @@
             break;
         }
 
-        case GC_IDENTIFIER(GC_SECTIONS_STRAVA, GC_STRAVA_AUTO):
-            [[GCAppGlobal profile] configToggleBool:CONFIG_SHARING_STRAVA_AUTO];
-            if ([[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:NO]==YES) {
-                [[GCAppGlobal profile] configSet:CONFIG_STRAVA_ENABLE boolVal:NO];
-            }
-            [GCAppGlobal saveSettings];
-            break;
         case GC_IDENTIFIER(GC_SECTIONS_STRAVA, GC_STRAVA_PRIVATE):
             [[GCAppGlobal profile] configToggleBool:CONFIG_SHARING_STRAVA_PRIVATE];
             [GCAppGlobal saveSettings];
@@ -855,7 +828,6 @@
             [[GCAppGlobal profile] configToggleBool:CONFIG_STRAVA_ENABLE];
             if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]==YES) {
                 RZLog(RZLogInfo,@"Strava: Enabled");
-                [[GCAppGlobal profile] configSet:CONFIG_SHARING_STRAVA_AUTO boolVal:NO];
             }else{
                 RZLog(RZLogInfo,@"Strava: Disabled");
             }

@@ -133,6 +133,7 @@
     GCActivity * modernAct = [[[GCActivity alloc] initWithId:activityId andGarminData:json] autorelease];
     modernAct.db = db;
     modernAct.trackdb = db;
+    modernAct.settings.worker = nil;
     
     [GCGarminActivityTrack13Request testForActivity:modernAct withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:false];
     [modernAct saveToDb:db];
@@ -322,10 +323,12 @@
         GCActivity * act_tcx = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         act_tcx.activityId = activityId_tcx;
         act_tcx.db = act_tcx.trackdb;
+        act_tcx.settings.worker = nil;
         [GCActivity ensureDbStructure:act_tcx.db];
         GCActivity * act_fit = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         act_fit.activityId = activityId_fit;
         act_fit.db = act_fit.trackdb;
+        act_fit.settings.worker = nil;
         [GCActivity ensureDbStructure:act_fit.db];
         NSString * tcx = [NSString stringWithFormat:@"activity_%@.tcx", activityId];
         NSString * fit = [NSString stringWithFormat:@"activity_%@.fit", activityId];
@@ -1016,6 +1019,7 @@
 
     NSMutableDictionary * save_fit = [NSMutableDictionary dictionary];
     for (GCActivity * one in organizer.activities) {
+        one.settings.worker = nil;
         NSDictionary * before = save_cs[one.activityId];
         GCActivity * fit = [GCConnectStatsRequestFitFile testForActivity:one  withFilesIn:bundlePath];
         if( fit ) {
@@ -1109,12 +1113,23 @@
         XCTAssertEqual(after.summaryData.count,before.count, @"%@ after split reload has all information", after);
     }
 
+    // Now reload fit for deleted activity
+    GCActivity * newAct = [organizer_light activityForId:deletedActivityId];
+    GCActivity * fit = [GCConnectStatsRequestFitFile testForActivity:newAct  withFilesIn:bundlePath];
+    XCTAssertNotNil(fit);
+    
     // do full reload of activity and make sure we get back same as we started
     GCActivitiesOrganizer * organizer_final = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db loadDetails:true]);
     for (NSString * activityId in save_fit) {
-        NSDictionary * before = save_gar[activityId];
+        NSDictionary * before = nil;
         GCActivity * after  = [organizer_final activityForId:activityId];
+        if( [activityId isEqualToString:deletedActivityId]){
+            before = save_fit[activityId];
+        }else{
+            before = save_gar[activityId];
+        }
         XCTAssertEqual(after.summaryData.count,before.count, @"%@ after full reload has all information", after);
+        
     }
 
 

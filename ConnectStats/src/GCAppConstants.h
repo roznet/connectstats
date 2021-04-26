@@ -95,7 +95,6 @@ extern NSString * const  CONFIG_GARMIN_LAST_SOURCE;
 extern NSString * const  CONFIG_GARMIN_USE_MODERN;
 extern NSString * const  CONFIG_STRAVA_ENABLE;
 extern NSString * const  CONFIG_STRAVA_SEGMENTS;
-extern NSString * const  CONFIG_SHARING_STRAVA_AUTO;
 extern NSString * const  CONFIG_SHARING_STRAVA_PRIVATE;
 extern NSString * const  CONFIG_HEALTHKIT_ENABLE;
 extern NSString * const  CONFIG_HEALTHKIT_WORKOUT;

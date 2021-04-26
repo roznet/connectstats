@@ -114,7 +114,6 @@
             }
             if( cache[field] == nil){
                 cache[field] = @1;
-                RZLog(RZLogInfo, @"Skipping 0 for %@ %@", field, new.numberWithUnit);
             }
 #endif
         }

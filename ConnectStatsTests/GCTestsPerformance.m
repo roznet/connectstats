@@ -73,7 +73,7 @@
 }
 
 -(void)testPerformanceOrganizerStatistics{
-    FMDatabase * db = [GCTestsSamples sampleActivityDatabase:@"activities_stats.db"];
+    FMDatabase * db = [GCTestsSamples sampleActivityDatabase:@"test_activities_stats.db"];
     
     GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
     
@@ -92,7 +92,7 @@
 }
 
 -(void)testPerformanceAggregatedStatistics{
-    FMDatabase * db = [GCTestsSamples sampleActivityDatabase:@"activities_stats.db"];
+    FMDatabase * db = [GCTestsSamples sampleActivityDatabase:@"test_activities_stats.db"];
     
     GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
     

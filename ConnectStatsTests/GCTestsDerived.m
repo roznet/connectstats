@@ -109,7 +109,6 @@
     [RZFileOrganizer removeEditableFile:@"derived_test_time_series.db"];
     FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"derived_test_time_series.db"]];
     [db open];
-    RZLog(RZLogInfo, @"db: %@", db.databasePath);
     
     GCStatsDatabase * statsDb = [GCStatsDatabase database:db table:@"gc_derived_time_serie_second"];
     NSMutableDictionary * done = [NSMutableDictionary dictionary];
@@ -371,9 +370,9 @@
     NSArray<NSString*>*activityIds = @[   @"857090", @"834323", @"777501", @"728599" ];
     GCField * field = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_RUNNING];
 
-    NSString * db_name = @"test_activities_derived_rebuild.db";
+    NSString * db_name = @"test_activities_derived_historical.db";
     GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:db_name];
-    GCDerivedOrganizer * derived = [self createEmptyDerived:@"test_derived_rebuild"];
+    GCDerivedOrganizer * derived = [self createEmptyDerived:@"test_derived_historical"];
     
     [self setupDerived:organizer derived:derived field:field activities:activityIds];
     // Now test against historical Series
@@ -407,6 +406,7 @@
     
     FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"activities_testderived.db"]];
     [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
     GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
     FMDatabase * deriveddb = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:@"derived_testderived.db"]];
     [deriveddb open];

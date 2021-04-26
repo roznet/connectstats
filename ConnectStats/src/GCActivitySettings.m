@@ -46,6 +46,8 @@
     [_serieFilters release];
     [_reported release];
     [_worker release];
+    [_updateRecord release];
+    
     [super dealloc];
 }
 -(BOOL)alreadyReported:(GCField*)field{

@@ -138,6 +138,7 @@
 -(void)testStatsConfig{
     GCStatsMultiFieldConfig * config = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
     config.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_RUNNING]);
+    
     NSMutableArray * configs = [NSMutableArray array];
     BOOL hasMoreView = true;
     while( hasMoreView ){
@@ -154,7 +155,10 @@
             hasMoreView = false;
         }
     }
-    
+    // reinit to first one
+    config = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
+    config.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_RUNNING]);
+
     BOOL first = true;
     // we looped and came back to first
     for (GCStatsMultiFieldConfig * check in configs) {

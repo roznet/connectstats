@@ -1015,6 +1015,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
     
     if([self updateSummaryFromTrackpoints:self.trackpointsCache missingOnly:TRUE]){
+        if( self.db ){
+            RZLog(RZLogInfo, @"%@ had new summary from trackpoint, saving to db", self);
+            [self saveToDb:self.db];
+        }
         rv = true;
     }
     
@@ -1039,21 +1043,23 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     // save main activities if needed
     if( rv ){
         
-        if (![db executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){
-            RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
-        }
         if ([trackdb tableExists:@"gc_activities"]) {
             if (![trackdb executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){
                 RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
             }
         }
-        if (![db executeUpdate:@"UPDATE gc_activities SET BeginLatitude = ?, BeginLongitude = ? WHERE activityId=?",
-              @(self.beginCoordinate.latitude), @(self.beginCoordinate.longitude), _activityId]){
-            RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
+        if( db ){
+            if (![db executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){
+                RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
+            }
+            if (![db executeUpdate:@"UPDATE gc_activities SET BeginLatitude = ?, BeginLongitude = ? WHERE activityId=?",
+                  @(self.beginCoordinate.latitude), @(self.beginCoordinate.longitude), _activityId]){
+                RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
+            }
+            
+            [self saveToDb:self.db];
         }
-
-        [self saveToDb:self.db];
-    
+        
         if ([[GCAppGlobal profile] configGetBool:CONFIG_ENABLE_DERIVED defaultValue:[GCAppGlobal connectStatsVersion]]) {
             if( self.settings.worker ){
                 dispatch_async(self.settings.worker,^(){
@@ -1374,13 +1380,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
             }
             // attempt to download weather at same time
-            if (_downloadMethod == gcDownloadMethod13|| _downloadMethod == gcDownloadMethodModern) {
-                // DISABLE STRAVA UPLOAD
-                if ([[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:false]) {
-                    [[GCAppGlobal profile] configSet:CONFIG_SHARING_STRAVA_AUTO boolVal:false];
-                    [GCAppGlobal saveSettings];
-                }
-            }
             if(_downloadMethod == gcDownloadMethodConnectStats){
                 if (![self hasWeather]) {
                     [[GCAppGlobal web] connectStatsDownloadWeather:self];
