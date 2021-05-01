@@ -937,6 +937,15 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         self.lastSearchString = nil;
     }
 }
+-(void)filterMatching:(nullable GCActivityMatchBlock)matching{
+    if( matching){
+        self.filteredIndices = [self activityIndexesMatching:matching];
+        self.lastSearchString = nil;
+    }else{
+        self.filteredIndices = nil;
+        self.lastSearchString = nil;
+    }
+}
 -(void)clearFilter{
     self.filteredIndices = nil;
     self.lastSearchString = nil;
@@ -1025,7 +1034,34 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
 }
 
--(NSArray*)activityIndexesMatchingString:(NSString*)str{
+-(NSArray<NSNumber*>*)activityIndexesMatching:(GCActivityMatchBlock)block{
+    if( block == nil){
+        return nil;
+    }
+    NSUInteger n = [self countOfActivities];
+    NSMutableArray * filteredIndexes=[NSMutableArray arrayWithCapacity:n];
+
+    NSString * commonActivityType = nil;
+
+    for (NSUInteger i=0; i<n; i++) {
+        GCActivity * act = _allActivities[i];
+        if (block(act)) {
+            if (commonActivityType == nil) {
+                commonActivityType = act.activityType;
+            }else{
+                if (![commonActivityType isEqualToString:act.activityType]) {
+                    commonActivityType = GC_TYPE_ALL;
+                }
+            }
+
+            [filteredIndexes addObject:@(i)];
+        }
+    }
+    self.filteredActivityType = commonActivityType;
+    return filteredIndexes;
+}
+
+-(NSArray<NSNumber*>*)activityIndexesMatchingString:(NSString*)str{
     if (str == nil || [str isEqualToString:@""]) {
         return nil;
     }

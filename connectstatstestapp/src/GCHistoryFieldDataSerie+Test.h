@@ -28,5 +28,5 @@
 typedef BOOL(^GCHistoryTestFilterBlock)(NSDate * date);
 
 @interface GCHistoryFieldDataSerie (Test)
--(void)loadFromDb:(GCHistoryTestFilterBlock)filter;
+-(void)loadFromDb:(FMDatabase*)db filter:(GCHistoryTestFilterBlock)filter;
 @end

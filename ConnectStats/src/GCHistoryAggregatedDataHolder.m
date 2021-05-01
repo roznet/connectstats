@@ -260,7 +260,7 @@
 -(nullable GCNumberWithUnit*)preferredNumberWithUnit:(GCField*)field{
     gcAggregatedType type = [self preferredAggregatedTypeForField:field];
     
-    if( field.fieldFlag == gcFieldFlagWeightedMeanSpeed){
+    if( [field.unit.referenceUnitKey isEqualToString:@"mps"] ){
         // Special case for speed, override
         GCNumberWithUnit * durationN = [self numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:field.activityType] statType:gcAggregatedSum];
         GCNumberWithUnit * distanceN = [self numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:field.activityType] statType:gcAggregatedSum];
@@ -313,5 +313,9 @@
         }
     }
     return false;
+}
+
+-(BOOL)isAfter:(NSDate*)after{
+    return [after compare:self.date] != NSOrderedAscending;
 }
 @end

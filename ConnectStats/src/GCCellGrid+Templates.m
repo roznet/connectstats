@@ -26,7 +26,7 @@
 #import "GCCellGrid+Templates.h"
 #import "GCFormattedField.h"
 #import "GCViewConfig.h"
-#import "GCHistoryAggregatedActivityStats.h"
+#import "GCHistoryAggregatedStats.h"
 #import "GCHistoryFieldSummaryStats.h"
 #import "GCFormattedFieldText.h"
 #import "GCHealthMeasure.h"
@@ -38,7 +38,7 @@
 #import "GCActivity+Fields.h"
 #import "GCStatsMultiFieldConfig.h"
 #import "GCStatsCalendarAggregationConfig.h"
-#import "GCHistoryFieldDataHolder.h"
+#import "GCHistoryFieldSummaryDataHolder.h"
 
 const CGFloat kGC_WIDE_SIZE = 420.0f;
 
@@ -610,7 +610,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 
 #pragma mark - Field Statistics
 
--(void)setupForFieldDataHolder:(GCHistoryFieldDataHolder*)data histStats:(gcHistoryStats)which andActivityType:(NSString *)aType{
+-(void)setupForFieldDataHolder:(GCHistoryFieldSummaryDataHolder*)data histStats:(gcHistoryStats)which andActivityType:(NSString *)aType{
 
     //gcHistoryStats which = gcHistoryStatsAll;
 
@@ -747,8 +747,8 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
     [self setupForRows:2 andCols:1];
     
     GCFormattedFieldText * title = [GCFormattedFieldText formattedFieldText:activityStats.config.activityTypeDetail.displayName
-                                                                      value:activityStats.fieldDisplayName
-                                                                    forSize:16.];
+                                                                      value:activityStats.field.displayName
+                                                                    forSize:16.0];
 
     NSString * countText= [NSString stringWithFormat:NSLocalizedString(@"%lu items",@"Stats Cell"),(unsigned long)[activityStats count]];
     GCFormattedFieldText * sub = [GCFormattedFieldText formattedFieldText:@"Count"
@@ -769,7 +769,7 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
 -(void)setupStatsAverageStdDev:(GCStatsDataSerie*)average for:(GCHistoryFieldDataSerie*)activityStats{
     [self setupForRows:2 andCols:1];
 
-    NSString * avgText = [NSString stringWithFormat:NSLocalizedString(@"Average of %@", @"Stats Cell"), activityStats.fieldDisplayName];
+    NSString * avgText = [NSString stringWithFormat:NSLocalizedString(@"Average of %@", @"Stats Cell"), activityStats.field.displayName];
     GCFormattedFieldText * avg = [GCFormattedFieldText formattedFieldText:avgText
                                                                     value:[activityStats formattedValue:[average dataPointAtIndex:0].y_data]
                                                                   forSize:16.];
@@ -794,14 +794,14 @@ const CGFloat kGC_WIDE_SIZE = 420.0f;
         NSString * rightLabel = nil;
         NSUInteger top, left, right;
         if (row == 0) {
-            label = [NSString stringWithFormat:NSLocalizedString(@"Max %@",@"Stats Cell"), activityStats.fieldDisplayName];
+            label = [NSString stringWithFormat:NSLocalizedString(@"Max %@",@"Stats Cell"), activityStats.field.displayName];
             leftLabel = NSLocalizedString(@"Top 25%", @"Stats Cell");
             rightLabel = NSLocalizedString(@"Top 50%", @"Stats Cell");
             top = 4;
             left = 3;
             right = 2;
         }else{
-            label = [NSString stringWithFormat:NSLocalizedString(@"Min %@",@"Stats Cell"), activityStats.fieldDisplayName];
+            label = [NSString stringWithFormat:NSLocalizedString(@"Min %@",@"Stats Cell"), activityStats.field.displayName];
             leftLabel = NSLocalizedString(@"Bottom 25%", @"Stats Cell");
             rightLabel = NSLocalizedString(@"Bottom 50%", @"Stats Cell");
             top = 0;

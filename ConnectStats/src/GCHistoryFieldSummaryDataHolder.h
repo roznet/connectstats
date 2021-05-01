@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //
 // For each field, sum/avg queried from db
-@interface GCHistoryFieldDataHolder : NSObject
+@interface GCHistoryFieldSummaryDataHolder : NSObject
 
 @property (nonatomic,retain) GCField * field;
 @property (nonatomic,readonly) NSString * displayField;

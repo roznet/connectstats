@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //  
 
-#import "GCHistoryAggregatedActivityStats.h"
+#import "GCHistoryAggregatedStats.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+Fields.h"
 
@@ -33,7 +33,7 @@
 // select strftime( '%c', Time/60/60/24+2440587.5 ) as Timestamp, distanceMeter from gc_activities  WHERE activityType = 'Running' GROUP BY Week order by BeginTimeStamp desc limit 10
 
 
-@interface GCHistoryAggregatedActivityStats ()
+@interface GCHistoryAggregatedStats ()
 
 @property (nonatomic,retain) NSArray<GCHistoryAggregatedDataHolder*> * aggregatedStats;
 @property (nonatomic,retain) NSDate * refOrNil;
@@ -47,19 +47,19 @@
 @end
 
 
-@implementation GCHistoryAggregatedActivityStats
+@implementation GCHistoryAggregatedStats
 
-+(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityType:(NSString*)activityType{
-    return [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityTypeDetail:[GCActivityType activityTypeForKey:activityType]];
++(GCHistoryAggregatedStats*)aggregatedStatsForActivityType:(NSString*)activityType{
+    return [GCHistoryAggregatedStats aggregatedStatsForActivityTypeDetail:[GCActivityType activityTypeForKey:activityType]];
 }
-+(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityTypeDetail:(GCActivityType*)activityType{
-    return [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityTypeSelection:RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityTypeDetail:activityType matchPrimaryType:true])];
++(GCHistoryAggregatedStats*)aggregatedStatsForActivityTypeDetail:(GCActivityType*)activityType{
+    return [GCHistoryAggregatedStats aggregatedStatsForActivityTypeSelection:RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityTypeDetail:activityType matchPrimaryType:true])];
 }
 
-+(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityTypeSelection:(GCActivityTypeSelection*)selection{
-    GCHistoryAggregatedActivityStats * rv = [[[GCHistoryAggregatedActivityStats alloc] init] autorelease];
++(GCHistoryAggregatedStats*)aggregatedStatsForActivityTypeSelection:(GCActivityTypeSelection*)selection{
+    GCHistoryAggregatedStats * rv = [[[GCHistoryAggregatedStats alloc] init] autorelease];
     if( rv ){
-        rv.fields = [GCHistoryAggregatedActivityStats defaultFieldsForActivityTypeDetail:selection.activityTypeDetail];
+        rv.fields = [GCHistoryAggregatedStats defaultFieldsForActivityTypeDetail:selection.activityTypeDetail];
         rv.activityTypeSelection = selection;
     }
     return rv;
@@ -101,8 +101,41 @@
     return idx < _aggregatedStats.count ? _aggregatedStats[idx] : nil;
 }
 
+-(NSDate*)lastDate{
+    return self.aggregatedStats.lastObject.date;
+}
+
 -(void)setActivitiesFromOrganizer:(GCActivitiesOrganizer*)organizer{
     self.activities = self.useFilter ? [organizer filteredActivities] : [organizer activities];
+}
+
+-(void)setActivities:(NSArray<GCActivity*>*)activities andFields:(NSArray<GCField*>*)fields{
+    self.activities = activities;
+    
+    BOOL missingDuration = true;
+    BOOL missingDistance = true;
+    
+    for (GCField * field in fields) {
+        if( field.fieldFlag == gcFieldFlagSumDuration){
+            missingDuration = false;
+        }
+        if( field.fieldFlag == gcFieldFlagSumDistance){
+            missingDistance = false;
+        }
+    }
+    
+    if( missingDistance || missingDuration ){
+        NSMutableArray * required = [NSMutableArray arrayWithArray:fields];
+        if( missingDistance ){
+            [required addObject:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
+        }
+        if( missingDuration ){
+            [required addObject:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityType]];
+        }
+        self.fields = required;
+    }else{
+        self.fields = fields;
+    }
 }
 
 -(GCHistoryAggregatedDataHolder*)dataForDate:(NSDate *)date{

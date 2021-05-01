@@ -26,7 +26,7 @@
 #import <UIKit/UIKit.h>
 #import "GCHistoryFieldSummaryStats.h"
 #import "GCViewConfig.h"
-#import "GCHistoryAggregatedActivityStats.h"
+#import "GCHistoryAggregatedStats.h"
 #import "GCHistoryFieldDataSerie.h"
 #import "GCViewActivityTypeButton.h"
 #import "GCStatsMultiFieldConfig.h"
@@ -41,7 +41,7 @@
 @interface GCStatsMultiFieldViewController : UITableViewController<RZChildObject,GCViewActivityTypeButtonDelegate,GCCellSimpleGraphDelegate,GCStatsMultiFieldConfigViewDelegate,GCStatsDerivedHistoryViewDelegate>
 
 @property (nonatomic,retain) GCHistoryFieldSummaryStats * fieldStats;
-@property (nonatomic,retain) GCHistoryAggregatedActivityStats * aggregatedStats;
+@property (nonatomic,retain) GCHistoryAggregatedStats * aggregatedStats;
 @property (nonatomic,retain) NSArray<GCFieldsForCategory*> * fieldOrder;
 @property (nonatomic,retain) NSArray<GCField*> * allFields;
 @property (nonatomic,retain) NSDictionary<GCField*,GCHistoryFieldDataSerie*> * fieldDataSeries;

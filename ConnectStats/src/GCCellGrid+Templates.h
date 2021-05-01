@@ -48,7 +48,7 @@
          andActivity:(GCActivity *)activity
                width:(CGFloat)width;
 
--(void)setupForFieldDataHolder:(GCHistoryFieldDataHolder*)data
+-(void)setupForFieldDataHolder:(GCHistoryFieldSummaryDataHolder*)data
                      histStats:(gcHistoryStats)which
                andActivityType:(NSString*)aType;
 

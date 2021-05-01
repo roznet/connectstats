@@ -410,7 +410,7 @@
         [doGraph retain];
     }
 
-    GCHistoryFieldDataHolder * data = [self.fieldStats dataForField:field];
+    GCHistoryFieldSummaryDataHolder * data = [self.fieldStats dataForField:field];
     
     if( self.isNewStyle ){
         [cell setupFieldStatisticsWithDataHolder:data histStats:self.multiFieldConfig.historyStats geometry:self.geometry];
@@ -721,16 +721,11 @@
 #pragma mark - Setup data
 
 -(void)setupFieldStats{
-    GCActivityMatchBlock filter = nil;
-    if (![self.activityType isEqualToString:GC_TYPE_ALL]) {
-        filter = ^(GCActivity*act){
-            return [act.activityType isEqualToString:self.activityType];
-        };
-    }
+    
     gcIgnoreMode ignoreMode = [self.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
     NSArray * useActivities = self.useFilter ? [[GCAppGlobal organizer] filteredActivities] : [[GCAppGlobal organizer] activities];
     GCHistoryFieldSummaryStats * vals = [GCHistoryFieldSummaryStats fieldStatsWithActivities:useActivities
-                                                                                    matching:filter
+                                                                                    activityTypeSelection:self.multiFieldConfig.activityTypeSelection
                                                                                referenceDate:self.multiFieldConfig.calendarConfig.referenceDate
                                                                                   ignoreMode:ignoreMode
                                          ];
@@ -775,7 +770,7 @@
     for (GCField * field in self.allFields) {
         GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithFilter:self.useFilter field:field];
         GCHistoryFieldDataSerie * stats = [[GCHistoryFieldDataSerie alloc] initFromConfig:config];
-        [stats loadFromOrganizer];
+        [stats loadFromOrganizer:[GCAppGlobal organizer]];
         newSeries[field] = stats;
         [stats release];
     }
@@ -787,13 +782,14 @@
     GCHistoryFieldDataSerie * stats = self.fieldDataSeries[field];
     if (!stats) {
         if (field) {
-            NSMutableDictionary * newSeries = self.fieldDataSeries?[NSMutableDictionary dictionaryWithDictionary:self.fieldDataSeries]:[NSMutableDictionary dictionary];
-
-            GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithFilter:self.useFilter field:field];
-            stats = [[[GCHistoryFieldDataSerie alloc] initAndLoadFromConfig:config withThread:[GCAppGlobal worker]] autorelease];
-            [stats attach:self];
-            newSeries[field] = stats;
-            self.fieldDataSeries = [NSDictionary dictionaryWithDictionary:newSeries];
+            dispatch_async([GCAppGlobal worker], ^(){
+                NSMutableDictionary * newSeries = self.fieldDataSeries?[NSMutableDictionary dictionaryWithDictionary:self.fieldDataSeries]:[NSMutableDictionary dictionary];
+                GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithFilter:self.useFilter field:field];
+                GCHistoryFieldDataSerie * one = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:config andOrganizer:[GCAppGlobal organizer]];
+                newSeries[field] = one;
+                self.fieldDataSeries = [NSDictionary dictionaryWithDictionary:newSeries];
+                [self notifyCallBack:self info:nil];
+            });
         }
     }
 
@@ -801,18 +797,12 @@
 }
 
 -(void)clearFieldDataSeries{
-    for (GCField * field in self.fieldDataSeries) {
-        GCHistoryFieldDataSerie * one = self.fieldDataSeries[field];
-        [one detach:self];
-    }
     self.fieldDataSeries = nil;
 }
 
 -(void)setupAggregatedStats{
 
-    [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
-
-    GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityTypeDetail:self.activityTypeDetail];
+    GCHistoryAggregatedStats * vals = [GCHistoryAggregatedStats aggregatedStatsForActivityTypeDetail:self.activityTypeDetail];
     vals.useFilter = self.useFilter;
     [vals setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     //vals.activityType = self.activityType;

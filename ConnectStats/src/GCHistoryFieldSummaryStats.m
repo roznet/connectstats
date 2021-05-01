@@ -28,7 +28,7 @@
 #import "GCHealthMeasure.h"
 #import "GCAppGlobal.h"
 #import "GCActivity+Fields.h"
-#import "GCHistoryFieldDataHolder.h"
+#import "GCHistoryFieldSummaryDataHolder.h"
 
 
 
@@ -42,7 +42,7 @@
 }
 
 +(GCHistoryFieldSummaryStats*)fieldStatsWithActivities:(NSArray<GCActivity*>*)activities
-                                              matching:(GCActivityMatchBlock)match
+                                 activityTypeSelection:(nullable GCActivityTypeSelection*)typeSelection
                                          referenceDate:(NSDate*)refOrNil
                                             ignoreMode:(gcIgnoreMode)ignoreMode{
     GCHistoryFieldSummaryStats * rv = [[[GCHistoryFieldSummaryStats alloc] init] autorelease];
@@ -50,28 +50,31 @@
     if (rv) {
         // First collect by indexing on Keys/NSStirng for speed
         // Then after cleanup by adding the type
-        NSMutableDictionary<GCField*,GCHistoryFieldDataHolder*> * fieldKeyData = [NSMutableDictionary dictionary];
+        NSMutableDictionary<GCField*,GCHistoryFieldSummaryDataHolder*> * fieldKeyData = [NSMutableDictionary dictionary];
 
         GCStatsDateBuckets * weekBucket = nil;
         GCStatsDateBuckets * monthBucket= nil;
         GCStatsDateBuckets * yearBucket = nil;
         NSMutableDictionary * activityTypes = [NSMutableDictionary dictionary];
-        for (GCActivity * act in activities) {
-            if (![act ignoreForStats:ignoreMode] && ( match == nil || match(act) ) ) {
+        
+        NSArray<GCActivity*>*useActivities = typeSelection ? [typeSelection selectedWithActivities:activities] : activities;
+        
+        for (GCActivity * act in useActivities) {
+            if (![act ignoreForStats:ignoreMode]) {
                 activityTypes[act.activityType] = act.activityType;
                 NSArray<GCField*> * fields = [act allFields];
                 for (GCField * field in fields) {
                     //
-                    GCHistoryFieldDataHolder * holder = fieldKeyData[field];
+                    GCHistoryFieldSummaryDataHolder * holder = fieldKeyData[field];
                     if (!holder) {
-                        holder = [[[GCHistoryFieldDataHolder alloc] init] autorelease];
+                        holder = [[[GCHistoryFieldSummaryDataHolder alloc] init] autorelease];
                         holder.field = field;
                         fieldKeyData[field] = holder;
                     }
                     GCField * fieldAll = [field correspondingFieldTypeAll];
-                    GCHistoryFieldDataHolder * holderAll = fieldKeyData[fieldAll];
+                    GCHistoryFieldSummaryDataHolder * holderAll = fieldKeyData[fieldAll];
                     if(!holderAll){
-                        holderAll = RZReturnAutorelease([[GCHistoryFieldDataHolder alloc] init]);
+                        holderAll = RZReturnAutorelease([[GCHistoryFieldSummaryDataHolder alloc] init]);
                         holderAll.field = fieldAll;
                         fieldKeyData[fieldAll] = holderAll;
                     }
@@ -154,9 +157,9 @@
         }
         GCField * field = measure.field;
 
-        GCHistoryFieldDataHolder * holder = healthFieldData[field];
+        GCHistoryFieldSummaryDataHolder * holder = healthFieldData[field];
         if (!holder) {
-            holder = [[[GCHistoryFieldDataHolder alloc] init] autorelease];
+            holder = [[[GCHistoryFieldSummaryDataHolder alloc] init] autorelease];
             holder.field = field;
 
             healthFieldData[field] = holder;
@@ -184,7 +187,7 @@
     self.fieldData = [NSDictionary dictionaryWithDictionary:healthFieldData];
 }
 
--(GCHistoryFieldDataHolder*)dataForField:(GCField*)aField{
+-(GCHistoryFieldSummaryDataHolder*)dataForField:(GCField*)aField{
     return self.fieldData[aField];
 }
 

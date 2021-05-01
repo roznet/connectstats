@@ -133,6 +133,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 -(BOOL)isQuickFilterApplicable;
 -(void)filterForSearchString:(nullable NSString*)str;
+-(void)filterMatching:(nullable GCActivityMatchBlock)matching;
 // Force refresh if something changed, for example location
 -(void)filterForLastSearchString;
 -(void)filterForQuickFilter;

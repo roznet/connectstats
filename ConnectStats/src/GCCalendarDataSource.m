@@ -29,7 +29,7 @@
 @import RZExternal;
 #import "GCCellGrid+Templates.h"
 #import "GCViewIcons.h"
-#import "GCHistoryAggregatedActivityStats.h"
+#import "GCHistoryAggregatedStats.h"
 #import "GCCalendarDataDateMarkers.h"
 #import "GCActivity+UI.h"
 #import "GCActivity+Database.h"
@@ -65,8 +65,8 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
 @property (nonatomic,retain) NSMutableDictionary * dateMarkerCache;
 @property (nonatomic,retain) GCCalendarDataMarkerInfo * maxInfo;
 
-@property (nonatomic,retain) GCHistoryAggregatedActivityStats * monthlyStats;
-@property (nonatomic,retain) GCHistoryAggregatedActivityStats * weeklyStats;
+@property (nonatomic,retain) GCHistoryAggregatedStats * monthlyStats;
+@property (nonatomic,retain) GCHistoryAggregatedStats * weeklyStats;
 @property (nonatomic,retain) RZNumberWithUnitGeometry * geometry;
 @property (nonatomic,retain) RZNumberWithUnitGeometry * comparisonGeometry;
 
@@ -235,8 +235,8 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
 
     RZLog(RZLogInfo,@"calendar aggregate from %@ to %@ for %@ (%@ activities)", startDate.YYYYdashMMdashDD, toDate.YYYYdashMMdashDD, self.activityTypeSelection, @(self.activities.count));
     
-    self.weeklyStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityTypeSelection:self.activityTypeSelection];
-    self.monthlyStats =[GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityTypeSelection:self.activityTypeSelection];
+    self.weeklyStats = [GCHistoryAggregatedStats aggregatedStatsForActivityTypeSelection:self.activityTypeSelection];
+    self.monthlyStats =[GCHistoryAggregatedStats aggregatedStatsForActivityTypeSelection:self.activityTypeSelection];
     
     self.weeklyStats.activities = self.activities;
     self.monthlyStats.activities = self.activities;

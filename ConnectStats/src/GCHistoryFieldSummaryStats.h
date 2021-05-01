@@ -27,7 +27,9 @@
 #import "GCActivity.h"
 
 @class GCHealthMeasure;
-@class GCHistoryFieldDataHolder;
+@class GCHistoryFieldSummaryDataHolder;
+@class GCActivityTypeSelection;
+
 NS_ASSUME_NONNULL_BEGIN
 // Summary of all fields stats
 @interface GCHistoryFieldSummaryStats : NSObject
@@ -36,20 +38,20 @@ NS_ASSUME_NONNULL_BEGIN
  Summary Stats for fields in activities, all, last month, last week
  Keys will be each fields broken down the activityTypes and total in GC_TYPE_ALL
  */
-@property (nonatomic,retain) NSDictionary<GCField*,GCHistoryFieldDataHolder*> * fieldData;
+@property (nonatomic,retain) NSDictionary<GCField*,GCHistoryFieldSummaryDataHolder*> * fieldData;
 /**
  Array of all types found while processing activities
  */
 @property (nonatomic,retain) NSArray<NSString*> * foundActivityTypes;
 
 +(GCHistoryFieldSummaryStats*)fieldStatsWithActivities:(NSArray<GCActivity*>*)activities
-                                              matching:(nullable GCActivityMatchBlock)match
+                                              activityTypeSelection:(nullable GCActivityTypeSelection*)typeSelection
                                          referenceDate:(nullable NSDate*)refOrNil
                                             ignoreMode:(gcIgnoreMode)ignoreMode;
 +(GCHistoryFieldSummaryStats*)fieldStatsWithHealthMeasures:(NSArray*)measures;
 -(void)addHealthMeasures:(NSArray<GCHealthMeasure*>*)measures referenceDate:(nullable NSDate*)refOrNil;
 
--(GCHistoryFieldDataHolder*)dataForField:(GCField*)aField;
+-(GCHistoryFieldSummaryDataHolder*)dataForField:(GCField*)aField;
 
 @end
 

@@ -27,28 +27,25 @@
 #import "GCHistoryFieldDataSerieConfig.h"
 
 @class GCActivitiesOrganizer;
-@class GCHistoryFieldDataSerieConfig;
 // Full StatsDataSerie for a field (or two: x)
 
 
-@interface GCHistoryFieldDataSerie : RZParentObject<GCSimpleGraphDataSource,RZChildObject>
+@interface GCHistoryFieldDataSerie : NSObject<GCSimpleGraphDataSource>
 
-@property (nonatomic,retain) GCStatsDataSerieWithUnit * history;
-@property (nonatomic,retain) GCStatsDataSerieWithUnit * gradientSerie;
-@property (nonatomic,retain) GCStatsScaledFunction * gradientFunction;
+@property (nonatomic,readonly) GCStatsDataSerieWithUnit * history;
+@property (nonatomic,readonly) GCStatsDataSerieWithUnit * gradientSerie;
+@property (nonatomic,readonly) GCStatsScaledFunction * gradientFunction;
 
 @property (nonatomic,retain) GCHistoryFieldDataSerieConfig * config;
 
-@property (nonatomic,readonly) NSString * fieldDisplayName;
-@property (nonatomic,readonly) NSString * uom;
-@property (nonatomic,readonly) NSString * x_fieldDisplayName;
-@property (nonatomic,readonly) NSString * x_uom;
+@property (nonatomic,readonly) GCField * field;
+@property (nonatomic,readonly) GCField * x_field;
 
 // Exposed for testing purpose only
-@property (nonatomic,retain) GCActivitiesOrganizer * organizer;
+/*@property (nonatomic,retain) GCActivitiesOrganizer * organizer;
 @property (nonatomic,retain) FMDatabase * db;
 @property (nonatomic,assign) BOOL dataLock;
-
+*/
 
 +(GCHistoryFieldDataSerie*)historyFieldDataSerieFrom:(GCHistoryFieldDataSerie*)other;
 /**
@@ -56,7 +53,10 @@
  @param config Config for loading
  @param worker NSThread or nil
  */
--(GCHistoryFieldDataSerie*)initAndLoadFromConfig:(GCHistoryFieldDataSerieConfig*)config withThread:(dispatch_queue_t)worker NS_DESIGNATED_INITIALIZER;
+-(GCHistoryFieldDataSerie*)initAndLoadFromConfig:(GCHistoryFieldDataSerieConfig*)config withThread:(dispatch_queue_t)worker NS_DESIGNATED_INITIALIZER DEPRECATED_MSG_ATTRIBUTE("Use load from organizer");
+
++(GCHistoryFieldDataSerie*)historyFieldDataSerieLoadedFromConfig:(GCHistoryFieldDataSerieConfig*)config andOrganizer:(GCActivitiesOrganizer*)organizer;
+
 /**
  Init with Config. Will not trigger any load.
  */
@@ -67,7 +67,10 @@
  @param config Config for loading
  @param worker NSThread or nil
  */
--(void)setupAndLoadForConfig:(GCHistoryFieldDataSerieConfig*)config withThread:(dispatch_queue_t)worker;
+-(void)setupAndLoadForConfig:(GCHistoryFieldDataSerieConfig*)config withThread:(dispatch_queue_t)worker DEPRECATED_MSG_ATTRIBUTE("Use load from organizer");
+
+-(void)setupAndLoadForConfig:(GCHistoryFieldDataSerieConfig*)config andOrganizer:(GCActivitiesOrganizer*)organizer;
+
 
 /**
  @brief return a serie where all the point after cutoff w.r.t to the unit are excluded, this allows to do MTD, YTD, etc
@@ -85,8 +88,8 @@
 -(NSDate*)lastDate;
 
 // Exposed for testing purpose only
--(void)loadFromOrganizer;
-
+-(void)loadFromOrganizer DEPRECATED_MSG_ATTRIBUTE("Use load from activities");
+-(void)loadFromOrganizer:(GCActivitiesOrganizer*)organizer;
 
 
 @end

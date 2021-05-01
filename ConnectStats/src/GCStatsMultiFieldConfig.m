@@ -446,7 +446,49 @@
     return rv;
 }
 
+-(NSDate*)selectAfterDateFrom:(NSDate*)lastDate{
+    NSDate * afterDate = nil;
+    NSString * compstr = nil;
+    if (self.viewChoice == gcViewChoiceFields ||self.viewChoice == gcViewChoiceSummary) {
+        switch (self.historyStats) {
+            case gcHistoryStatsMonth:
+                compstr = @"-1Y";
+                break;
+            case gcHistoryStatsWeek:
+                compstr = @"-3M";
+                break;
+            case gcHistoryStatsYear:
+                compstr = @"-5Y";
+                break;
+            case gcHistoryStatsAll:
+            case gcHistoryStatsEnd:
+                compstr = nil;
+                break;
+        }
+    }else{
+        switch (self.viewConfig) {
+            case gcStatsViewConfigLast1Y:
+                compstr = @"-1Y";
+                break;
+            case gcStatsViewConfigLast3M:
+                compstr = @"-3M";
+                break;
+            case gcStatsViewConfigLast6M:
+                compstr = @"-6M";
+                break;
+            case gcStatsViewConfigAll:
+            case gcStatsViewConfigUnused:
+                break;
+        }
+    }
+    if (compstr) {
+        afterDate = [lastDate dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:compstr]];
+    }
+    return afterDate;
+}
+
 #pragma mark - Setups
+
 -(UIBarButtonItem*)viewChoiceButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel{
     NSString * title = self.viewDescription;
     
@@ -564,30 +606,24 @@
     gcGraphChoice choice = self.graphChoice;
 
     NSDate * afterdate = nil;
-    NSString * compstr = nil;
     NSCalendarUnit calunit = NSCalendarUnitWeekOfYear;
     if (self.viewChoice == gcViewChoiceFields ||self.viewChoice == gcViewChoiceSummary) {
         switch (self.historyStats) {
             case gcHistoryStatsMonth:
-                compstr = @"-1Y";
                 calunit = NSCalendarUnitMonth;
                 break;
             case gcHistoryStatsWeek:
-                compstr = @"-3M";
                 calunit = NSCalendarUnitWeekOfYear;
                 break;
             case gcHistoryStatsYear:
-                compstr = @"-5Y";
                 calunit = NSCalendarUnitYear;
                 break;
             case gcHistoryStatsAll:
             case gcHistoryStatsEnd:
-                compstr = nil;
                 calunit = NSCalendarUnitYear;
                 if ([field canSum]){
                     choice = gcGraphChoiceCumulative;
                 }else{
-                    compstr = @"-1Y";
                     choice = gcGraphChoiceBarGraph;
                     calunit = NSCalendarUnitMonth;
                 }
@@ -595,25 +631,8 @@
         }
     }else{
         calunit = self.calendarConfig.calendarUnit;
-        switch (self.viewConfig) {
-            case gcStatsViewConfigLast1Y:
-                compstr = @"-1Y";
-                break;
-            case gcStatsViewConfigLast3M:
-                compstr = @"-3M";
-                break;
-            case gcStatsViewConfigLast6M:
-                compstr = @"-6M";
-                break;
-            case gcStatsViewConfigAll:
-            case gcStatsViewConfigUnused:
-                break;
-        }
     }
-
-    if (compstr) {
-        afterdate = [[fieldDataSerie lastDate] dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:compstr]];
-    }
+    afterdate = [self selectAfterDateFrom:fieldDataSerie.lastDate];
 
     cache = [GCSimpleGraphCachedDataSource historyView:fieldDataSerie
                                         calendarConfig:[self.calendarConfig equivalentConfigFor:calunit]

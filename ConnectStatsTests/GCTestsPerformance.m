@@ -39,7 +39,7 @@
 #import "ConnectStats-Swift.h"
 #import "GCGarminSearchModernJsonParser.h"
 #import "GCTestsSamples.h"
-#import "GCHistoryAggregatedActivityStats.h"
+#import "GCHistoryAggregatedStats.h"
 
 
 @interface GCTestsPerformance : GCTestCase
@@ -79,7 +79,7 @@
     
     [self measureBlock:^{
         [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities
-                                                    matching:nil
+                                       activityTypeSelection:nil
                                                referenceDate:nil
                                                   ignoreMode:gcIgnoreModeActivityFocus];
     }];
@@ -97,7 +97,7 @@
     GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
     
     [self measureBlock:^{
-        GCHistoryAggregatedActivityStats * stats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_RUNNING];
+        GCHistoryAggregatedStats * stats = [GCHistoryAggregatedStats aggregatedStatsForActivityType:GC_TYPE_RUNNING];
         stats.activities = organizer.activities;
         [stats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     }];

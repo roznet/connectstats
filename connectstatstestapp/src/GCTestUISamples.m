@@ -33,7 +33,7 @@
 #import "GCTrackStats.h"
 #import "GCCellGrid+Test.h"
 #import "GCCellGrid+Templates.h"
-#import "GCHistoryAggregatedActivityStats.h"
+#import "GCHistoryAggregatedStats.h"
 #import "GCTestIconsCell.h"
 #import "GCTestUISampleCellHolder.h"
 #import "GCActivity+Database.h"
@@ -286,7 +286,7 @@
                                                                                      xField:pacefield ];
     GCHistoryFieldDataSerie * history = [[[GCHistoryFieldDataSerie alloc] initFromConfig:config] autorelease];
 
-    [history setupAndLoadForConfig:config withThread:nil];
+    [history setupAndLoadForConfig:config andOrganizer:[GCAppGlobal organizer]];
 
     GCStatsDataSerie * gradientSerie = [[history gradientSerie] serie];
     GCStatsScaledFunction * gradientFunction = [GCStatsScaledFunction scaledFunctionWithSerie:gradientSerie];
@@ -361,8 +361,7 @@
     GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithField:distfield xField:nil];
     GCHistoryFieldDataSerie * history = [[[GCHistoryFieldDataSerie alloc] initFromConfig:config] autorelease];
 
-    [history setDb:[GCAppGlobal db]];
-    [history loadFromDb:nil];
+    [history setupAndLoadForConfig:config andOrganizer:[GCAppGlobal organizer]];
     
     GCSimpleGraphCachedDataSource * sample = [GCSimpleGraphCachedDataSource historyView:history
                                                                            calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitYear]
@@ -374,28 +373,77 @@
 -(NSArray<GCSimpleGraphCachedDataSource*>*)sample8_historyBarGraphCoarse{
 
     GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING];
+    GCStatsCalendarAggregationConfig * calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth];
+    
+    GCStatsMultiFieldConfig * multiFieldConfig = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
+    multiFieldConfig.viewChoice = gcViewChoiceCalendar;
+    multiFieldConfig.calendarConfig.calendarUnit = NSCalendarUnitMonth;
+    
+
+    GCField * distance = [GCField fieldForKey:@"SumDistance" andActivityType:GC_TYPE_RUNNING];
+    GCField * speed = [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:GC_TYPE_RUNNING];
+    GCField * pace = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_RUNNING];
+    GCField * duration = [GCField fieldForKey:@"SumDuration" andActivityType:GC_TYPE_RUNNING];
+    
+    GCHistoryAggregatedStats * aggregated = [GCHistoryAggregatedStats aggregatedStatsForActivityType:GC_TYPE_RUNNING];
+    [aggregated setActivities:[[GCAppGlobal organizer] activities] andFields:@[ distance, speed, pace, duration ] ];
+    [aggregated aggregate:NSCalendarUnitMonth referenceDate:calendarConfig.referenceDate ignoreMode:gcIgnoreModeActivityFocus];
+    
+    GCSimpleGraphCachedDataSource * sample_agg = [GCSimpleGraphCachedDataSource aggregatedView:aggregated field:distance multiFieldConfig:multiFieldConfig after:nil];
 
     GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithField:distfield xField:nil];
     GCHistoryFieldDataSerie * history = [[[GCHistoryFieldDataSerie alloc] initFromConfig:config] autorelease];
-
-    [history setDb:[GCAppGlobal db]];
-    [history loadFromDb:nil];
+    [history setupAndLoadForConfig:config andOrganizer:[GCAppGlobal organizer]];
 
     GCSimpleGraphCachedDataSource * sample = [GCSimpleGraphCachedDataSource historyView:history
-                                                                           calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth]
+                                                                           calendarConfig:calendarConfig
                                                                             graphChoice:gcGraphChoiceBarGraph after:nil];
+    
 
-    [history loadFromDb:^(NSDate * date){
-        BOOL rv = [date compare:[NSDate dateForRFC3339DateTimeString:@"2011-12-01T00:00:00.000Z"]] == NSOrderedAscending ||
-        [date compare:[NSDate dateForRFC3339DateTimeString:@"2012-02-01T00:00:00.000Z"]] == NSOrderedDescending;
-        return rv;
-        
-    }] ;
+    // remove 2 months in the middle
+    [[GCAppGlobal organizer] filterMatching:^(GCActivity*act){
+            NSDate * date = act.date;
+            BOOL rv = [date compare:[NSDate dateForRFC3339DateTimeString:@"2011-12-01T00:00:00.000Z"]] == NSOrderedAscending ||
+            [date compare:[NSDate dateForRFC3339DateTimeString:@"2012-02-01T00:00:00.000Z"]] == NSOrderedDescending;
+            return rv;
+            
+    }];
+    config.useFilter = true;
+    [history loadFromOrganizer:[GCAppGlobal organizer]];
+    
     GCSimpleGraphCachedDataSource * sample2 = [GCSimpleGraphCachedDataSource historyView:history
-                                                                           calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth]
+                                                                           calendarConfig:calendarConfig
+                                                                            graphChoice:gcGraphChoiceBarGraph after:nil];
+    aggregated.activities = [[GCAppGlobal organizer] filteredActivities];
+    [aggregated aggregate:NSCalendarUnitMonth referenceDate:calendarConfig.referenceDate ignoreMode:gcIgnoreModeActivityFocus];
+    
+    GCSimpleGraphCachedDataSource * sample_agg2 = [GCSimpleGraphCachedDataSource aggregatedView:aggregated field:[GCField fieldForKey:@"SumDistance" andActivityType:GC_TYPE_RUNNING] multiFieldConfig:multiFieldConfig after:nil];
+
+    [[GCAppGlobal organizer] clearFilter];
+
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"activities_bad_aggregated_pace.db"]];
+    [db open];
+    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    
+    [aggregated setActivities:organizer.activities andFields:@[ distance, speed, pace, duration ] ];
+    [aggregated aggregate:NSCalendarUnitMonth referenceDate:calendarConfig.referenceDate ignoreMode:gcIgnoreModeActivityFocus];
+    GCSimpleGraphCachedDataSource * sample_agg_speed = [GCSimpleGraphCachedDataSource aggregatedView:aggregated field:speed multiFieldConfig:multiFieldConfig after:nil];
+    GCSimpleGraphCachedDataSource * sample_agg_pace = [GCSimpleGraphCachedDataSource aggregatedView:aggregated field:pace multiFieldConfig:multiFieldConfig after:nil];
+
+    history.config.activityField = speed;
+    [history setupAndLoadForConfig:config andOrganizer:organizer];
+    GCSimpleGraphCachedDataSource * sample_speed = [GCSimpleGraphCachedDataSource historyView:history
+                                                                           calendarConfig:calendarConfig
                                                                             graphChoice:gcGraphChoiceBarGraph after:nil];
 
-    return @[ sample, sample2 ];
+    history.config.activityField = pace;
+    [history setupAndLoadForConfig:config andOrganizer:organizer];
+    GCSimpleGraphCachedDataSource * sample_pace = [GCSimpleGraphCachedDataSource historyView:history
+                                                                           calendarConfig:calendarConfig
+                                                                            graphChoice:gcGraphChoiceBarGraph after:nil];
+
+
+    return @[ sample, sample2, sample_agg, sample_agg2, sample_speed, sample_pace, sample_agg_speed, sample_agg_pace];
 }
 
 -(NSArray<GCSimpleGraphCachedDataSource*>*)sample9_trackFieldMultipleLineGraphs{
@@ -487,8 +535,7 @@
     GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithField:distfield  xField:durfield];
     GCHistoryFieldDataSerie * history = [[[GCHistoryFieldDataSerie alloc] initFromConfig:config] autorelease];
 
-    [history setDb:[GCAppGlobal db]];
-    [history loadFromDb:nil];
+    [history setupAndLoadForConfig:config andOrganizer:[GCAppGlobal organizer]];
 
     GCSimpleGraphCachedDataSource * sample = [GCSimpleGraphCachedDataSource historyView:history
                                                                            calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitYear]
@@ -993,7 +1040,7 @@
 
     NSMutableArray * stats = [NSMutableArray array];
 
-    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_RUNNING];
+    GCHistoryAggregatedStats * aggregatedStats = [GCHistoryAggregatedStats aggregatedStatsForActivityType:GC_TYPE_RUNNING];
     [aggregatedStats setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     [aggregatedStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
@@ -1020,7 +1067,7 @@
 
     NSMutableArray * stats = [NSMutableArray array];
 
-    GCHistoryAggregatedActivityStats * aggregatedStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_RUNNING];
+    GCHistoryAggregatedStats * aggregatedStats = [GCHistoryAggregatedStats aggregatedStatsForActivityType:GC_TYPE_RUNNING];
     [aggregatedStats setActivitiesFromOrganizer:[GCAppGlobal organizer]];
     [aggregatedStats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 

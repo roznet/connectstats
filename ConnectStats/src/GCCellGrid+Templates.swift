@@ -344,7 +344,7 @@ extension GCCellGrid {
     }
 
     
-    @objc func setupFieldStatistics(dataHolder : GCHistoryFieldDataHolder, histStats which: gcHistoryStats, geometry: RZNumberWithUnitGeometry){
+    @objc func setupFieldStatistics(dataHolder : GCHistoryFieldSummaryDataHolder, histStats which: gcHistoryStats, geometry: RZNumberWithUnitGeometry){
         let field = dataHolder.field
 
         let mainFieldName = field.displayName()
@@ -402,7 +402,7 @@ extension GCCellGrid {
     
 }
 
-extension GCHistoryFieldDataHolder {
+extension GCHistoryFieldSummaryDataHolder {
     func relevantNumbers(histStats which: gcHistoryStats) -> (main: GCNumberWithUnit?, extra : GCNumberWithUnit?, extraLabel: String?) {
         var rv : (main: GCNumberWithUnit?, extra : GCNumberWithUnit?, extraLabel: String?)
         if field.canSum {

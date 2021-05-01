@@ -34,7 +34,7 @@
 
 #import "GCTestUISamples.h"
 
-#import "GCHistoryFieldDataHolder.h"
+#import "GCHistoryFieldSummaryDataHolder.h"
 #import "GCHistoryFieldSummaryStats.h"
 
 #import "GCTestAppGlobal.h"

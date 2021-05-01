@@ -29,13 +29,15 @@
 #import "GCStatsOneFieldConfig.h"
 
 @class GCHistoryPerformanceAnalysis;
+@class GCHistoryAggregatedStats;
 
 @interface GCStatsOneFieldViewController : UITableViewController<RZChildObject>
 
 @property (nonatomic,retain) GCHistoryFieldDataSerie * activityStats;
 @property (nonatomic,retain) GCHistoryFieldDataSerie * scatterStats;
+@property (nonatomic,retain) GCHistoryAggregatedStats * aggregatedStats;
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
-@property (nonatomic,retain) NSDictionary * summarizedHistory;
+@property (nonatomic,retain) NSDictionary * summarizedHistory DEPRECATED_MSG_ATTRIBUTE("Use aggregatedStats");
 @property (nonatomic,retain) GCStatsDataSerie * average;
 @property (nonatomic,retain) GCStatsDataSerie * quartiles;
 @property (nonatomic,retain) GCStatsOneFieldConfig * oneFieldConfig;

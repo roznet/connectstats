@@ -54,7 +54,7 @@ typedef NS_ENUM(NSUInteger, gcCalendarTableDisplay) {
     gcCalendarTableDisplayEnd
 };
 
-@class GCHistoryAggregatedActivityStats;
+@class GCHistoryAggregatedStats;
 
 @interface GCCalendarDataSource : NSObject<KalDataSource,GCCellGridDelegate,UITableViewDelegate,GCViewActivityTypeButtonDelegate,RZChildObject>
 

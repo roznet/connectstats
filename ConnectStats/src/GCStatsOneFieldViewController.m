@@ -38,6 +38,8 @@
 #import "GCHistoryPerformanceAnalysis.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCStatsCalendarAggregationConfig.h"
+#import "GCHistoryAggregatedStats.h"
+#import "GCStatsMultiFieldConfig.h"
 
 #define GC_S_NAME 0
 #define GC_S_GRAPH 1
@@ -50,6 +52,8 @@
 }
 @property (nonatomic,assign) BOOL activityStatsLock;
 @property (nonatomic,assign) BOOL scatterStatsLock;
+
+@property (nonatomic,readonly) GCStatsMultiFieldConfig * multiFieldConfig;
 
 
 @end
@@ -67,9 +71,6 @@
 }
 
 -(void)dealloc{
-    [_activityStats detach:self];
-    [_scatterStats detach:self];
-
     [_activityStats release];
     [_summarizedHistory release];
     [_average release];
@@ -82,71 +83,52 @@
     
     [super dealloc];
 }
-
--(void)publishEvent{
-    NSDictionary * params = @{@"Type": _oneFieldConfig.activityType ?: @"Unknown",
-                             @"Field": _oneFieldConfig.field ?: @"None",
-                             @"XField": _oneFieldConfig.x_field ?: @"None"};
-    [Flurry logEvent:EVENT_STATISTICS withParameters:params];
+-(GCStatsMultiFieldConfig*)multiFieldConfig{
+    return self.oneFieldConfig.multiFieldConfig;
 }
-
 -(void)setupForConfig:(GCStatsOneFieldConfig*)oneFieldConfig{
 
     self.oneFieldConfig = oneFieldConfig;
 
-    self.activityStatsLock = true;
+    [self clearAll];
+    
+    dispatch_async([GCAppGlobal worker], ^(){
+        [self calculate];
+        [self notifyCallBack:self info:nil];
+    });
+}
 
-    GCHistoryFieldDataSerie * stats = [[GCHistoryFieldDataSerie alloc] initAndLoadFromConfig:[_oneFieldConfig historyConfig] withThread:[GCAppGlobal worker]];
-    [_activityStats detach:self];
-    [stats attach:self];
+-(void)clearAll{
+    self.activityStats = nil;
+    self.scatterStats = nil;
+    //self.summarizedHistory = nil;
+    self.aggregatedStats = nil;
+    self.quartiles = nil;
+    self.average = nil;
+}
+
+-(void)calculate{
+    GCHistoryFieldDataSerie * stats = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:self.oneFieldConfig.historyConfig andOrganizer:[GCAppGlobal organizer]];
     self.activityStats = stats;
-    [stats release];
-
-    if (_oneFieldConfig.x_field) {
-        self.scatterStatsLock = true;
-        GCHistoryFieldDataSerie * xystats = [[GCHistoryFieldDataSerie alloc] initAndLoadFromConfig:[_oneFieldConfig historyConfigXY] withThread:[GCAppGlobal worker]];
-        [xystats attach:self];
-        [_scatterStats detach:self];
-        self.scatterStats = xystats;
-        [xystats release];
+    if (self.oneFieldConfig.x_field) {
+            GCHistoryFieldDataSerie * xystats = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:self.oneFieldConfig.historyConfigXY andOrganizer:[GCAppGlobal organizer]];
+            self.scatterStats = xystats;
     }
-
-    [self setupForCurrentConfig];
-
-}
-
--(void)setupForCurrentConfig{
-
-    if (self.oneFieldConfig.viewChoice != gcViewChoiceFields) {
-        if ([_activityStats ready]) {
-            GCStatsCalendarAggregationConfig * calendarConfig = self.oneFieldConfig.calendarConfig;
-            self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
-                                                                                   referenceDate:calendarConfig.referenceDate
-                                                                                     andCalendar:calendarConfig.calendar];
-        }else{
-            [self setSummarizedHistory:nil];
-        }
-    }
-}
--(void)notifyCallBack:(id)theParent info:(RZDependencyInfo*)theInfo{
-
-    if (theParent == _activityStats) {
-        self.activityStatsLock = false;
-    }
-    if (theParent == _scatterStats) {
-        self.scatterStatsLock = false;
-    }
-
-    if (_oneFieldConfig.viewChoice != gcViewChoiceFields) {
-        if (_summarizedHistory == nil && [_activityStats ready]) {
-            GCStatsCalendarAggregationConfig * calendarConfig = self.oneFieldConfig.calendarConfig;
-            self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
-                                                                                   referenceDate:calendarConfig.referenceDate
-                                                                                     andCalendar:calendarConfig.calendar];
-        }
-    }
+    GCStatsCalendarAggregationConfig * calendarConfig = self.oneFieldConfig.calendarConfig;
+    /*self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
+                                                                           referenceDate:calendarConfig.referenceDate
+                                                                             andCalendar:calendarConfig.calendar];
+    */
+    self.aggregatedStats = [GCHistoryAggregatedStats aggregatedStatsForActivityTypeSelection:self.multiFieldConfig.activityTypeSelection];
+    [self.aggregatedStats aggregate:calendarConfig.calendarUnit
+                      referenceDate:calendarConfig.referenceDate
+                             cutOff:calendarConfig.cutOff
+                         ignoreMode:self.multiFieldConfig.activityTypeDetail.ignoreMode];
+    
     self.quartiles = [_activityStats.history.serie quantiles:4];
     self.average = [_activityStats.history.serie standardDeviation];
+}
+-(void)notifyCallBack:(id)theParent info:(RZDependencyInfo*)theInfo{
 
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self.tableView reloadData];
@@ -155,13 +137,13 @@
 
 -(void)changeXField:(GCField*)xField{
     if (![xField isEqualToField:_oneFieldConfig.x_field]) {
-        self.oneFieldConfig.x_field = xField;
-        self.scatterStatsLock = true;
-        GCHistoryFieldDataSerie * xystats = [[GCHistoryFieldDataSerie alloc] initAndLoadFromConfig:_oneFieldConfig.historyConfigXY withThread:[GCAppGlobal worker]];
-        [_scatterStats detach:self];
-        [xystats attach:self];
-        self.scatterStats = xystats;
-        [xystats release];
+        dispatch_async([GCAppGlobal worker], ^(){
+            if (self.oneFieldConfig.x_field) {
+                    GCHistoryFieldDataSerie * xystats = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:self.oneFieldConfig.historyConfigXY andOrganizer:[GCAppGlobal organizer]];
+                    self.scatterStats = xystats;
+            }
+            [self notifyCallBack:self info:nil];
+        });
     }
 }
 
@@ -190,7 +172,14 @@
 -(void)toggleViewChoice{
     [self.oneFieldConfig nextView];
     
-    [self setupForCurrentConfig];
+    [self clearAll];
+    dispatch_async([GCAppGlobal worker], ^(){
+        [self calculate];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self.tableView reloadData];
+        });
+    });
+    
     self.navigationItem.rightBarButtonItem.title = self.oneFieldConfig.viewDescription;
 
     [self.tableView reloadData];

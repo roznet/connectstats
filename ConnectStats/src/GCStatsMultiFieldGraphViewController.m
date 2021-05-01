@@ -57,7 +57,6 @@
 }
 -(void)dealloc{
     [_cache release];
-    [_scatterStats detach:self];
     [_scatterStats release];
     [_gestures release];
     [_legendView release];
@@ -110,11 +109,13 @@
 
 -(void)configureGraph{
     if (self.x_field) {
-        [_scatterStats attach:self];
-
-        GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithField:self.historyFieldConfig.activityField xField:self.x_field  filter:false fromDate:[self.maturityButton currentFromDate]];
-        //[scatterStats setupForField:self.config.activityField xField:self.x_field type:self.config.activityType fromDate:[self.maturityButton currentFromDate]];
-        [self.scatterStats setupAndLoadForConfig:config withThread:[GCAppGlobal worker]];
+        dispatch_async([GCAppGlobal worker], ^(){
+            GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithField:self.historyFieldConfig.activityField xField:self.x_field  filter:false fromDate:[self.maturityButton currentFromDate]];
+            [self.scatterStats setupAndLoadForConfig:config andOrganizer:[GCAppGlobal organizer]];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self notifyCallBack:self.scatterStats info:nil];
+            });
+        });
     }
 }
 

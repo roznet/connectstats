@@ -97,5 +97,5 @@ typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
 -(BOOL)nextView;
 
 -(void)nextSummaryCumulativeField;
-
+-(NSDate*)selectAfterDateFrom:(NSDate*)lastDate;
 @end

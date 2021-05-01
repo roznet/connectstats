@@ -9,7 +9,7 @@
 #import "GCTestCase.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCActivitySearch.h"
-#import "GCHistoryAggregatedActivityStats.h"
+#import "GCHistoryAggregatedStats.h"
 #import "GCAppProfiles.h"
 #import "GCActivity+CalculatedLaps.h"
 #import "GCFieldsCalculated.h"
@@ -33,7 +33,7 @@
 #import "GCActivity+TestBackwardCompat.h"
 #import "GCStatsCalendarAggregationConfig.h"
 #import "GCActivity.h"
-#import "GCHistoryFieldDataHolder.h"
+#import "GCHistoryFieldSummaryDataHolder.h"
 
 @interface GCTestsGeneral : GCTestCase
 @end
@@ -278,7 +278,7 @@
     [e_sum sortByReverseDate];
     [e_max sortByReverseDate];
     
-    GCHistoryAggregatedActivityStats * stats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_RUNNING];
+    GCHistoryAggregatedStats * stats = [GCHistoryAggregatedStats aggregatedStatsForActivityType:GC_TYPE_RUNNING];
     [stats setActivitiesFromOrganizer:organizer];
     [stats setActivityTypeSelection:RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_RUNNING])];
     [stats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
@@ -328,7 +328,7 @@
     [stats setActivityTypeSelection:RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_ALL])];
     [stats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
-    GCHistoryFieldSummaryStats * sumStats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities matching:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCHistoryFieldSummaryStats * sumStats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCHistoryAggregatedDataHolder * holder = [stats dataForIndex:0];
     
     GCField * hrfield =[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_ALL];
@@ -354,8 +354,7 @@
     GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING];
     GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithFilter:false field:distfield];
     GCHistoryFieldDataSerie * dataserie = [[GCHistoryFieldDataSerie alloc] initFromConfig:config];
-    dataserie.organizer = organizer;
-    [dataserie loadFromOrganizer];
+    [dataserie loadFromOrganizer:organizer];
     GCHistoryFieldDataSerie * withcutoff = [dataserie serieWithCutOff:cutoff inCalendarUnit:NSCalendarUnitMonth withReferenceDate:nil];
     NSDictionary * dict = [withcutoff.history.serie aggregatedStatsByCalendarUnit:NSCalendarUnitMonth
                                                                     referenceDate:nil
@@ -902,12 +901,12 @@
     GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithFilter:false field:durfield];
     GCHistoryFieldDataSerie * dataserie = [[GCHistoryFieldDataSerie alloc] initFromConfig:config];
     NSDate * limit = [NSDate dateForRFC3339DateTimeString:@"2012-09-14T00:10:16.000Z"];
-    dataserie.organizer = organizer;
+    
     void (^test)(NSString * type, NSDate * from, NSUInteger e_n) = ^(NSString * type, NSDate * from, NSUInteger e_n){
         dataserie.config.fromDate = from;
         dataserie.config.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:type]);
         
-        [dataserie loadFromOrganizer];
+        [dataserie loadFromOrganizer:organizer];
         XCTAssertEqual([[dataserie history] count], e_n, @"%@/%@ expected = %d", type,from,(int)e_n);
     };
     test( GC_TYPE_ALL,nil,3);
@@ -938,55 +937,6 @@
         XCTAssertNotNil(img, @"Image for i=%d exists", (int)i);
     }
     
-}
-
--(void)testTimeAxisGeometry{
-    GCHistoryFieldDataSerie * dataserie = [[[GCHistoryFieldDataSerie alloc] init] autorelease];
-    GCStatsDataSerie * serie = [[[GCStatsDataSerie alloc] init] autorelease];
-    NSDictionary * sample  = [GCTestsSamples aggregateSample];
-
-    for (NSString * datestr in sample) {
-        NSNumber * val = [sample objectForKey:datestr];
-        [serie addDataPointWithDate:[NSDate dateForRFC3339DateTimeString:datestr] andValue:[val doubleValue]];
-    }
-    [serie sortByDate];
-
-    dataserie.history = [GCStatsDataSerieWithUnit dataSerieWithUnit:[GCUnit unitForKey:@"dimensionless"] andSerie:serie];
-    NSDate * first = [serie[0] date];
-    
-    GCSimpleGraphCachedDataSource * dataSource = [GCSimpleGraphCachedDataSource historyView:dataserie
-                                                                               calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth]
-                                                                                graphChoice:gcGraphChoiceBarGraph
-                                                  after:nil];
-    
-    GCSimpleGraphGeometry * geometry = [[[GCSimpleGraphGeometry alloc] init] autorelease];
-    [geometry setDrawRect:CGRectMake(0., 0., 320., 405.)];
-    [geometry setZoomPercentage:CGPointMake(0., 0.)];
-    [geometry setOffsetPercentage:CGPointMake(0., 0.)];
-    [geometry setDataSource:dataSource];
-    [geometry setAxisIndex:0];
-    [geometry setSerieIndex:0];
-    [geometry calculate];
-    [geometry calculateAxisKnobRect:gcGraphStep andAttribute:@{NSFontAttributeName:[GCViewConfig systemFontOfSize:12.]}];
-    NSCalendar * cal = [GCAppGlobal calculationCalendar];
-    NSDate * start = nil;
-
-    NSTimeInterval extends;
-    NSDateComponents * comp = [[[NSDateComponents alloc] init] autorelease];
-    comp.month = 1;
-    
-    for (GCAxisKnob*point in geometry.xAxisKnobs) {
-        // Check all days are first of month
-        [cal rangeOfUnit:NSCalendarUnitMonth startDate:&start interval:&extends forDate:first];
-        NSDate * knobDate = [NSDate dateWithTimeIntervalSinceReferenceDate:point.value];
-        //XCTAssertEqualObjects(start, knobDate, @"Axis match");
-        if (knobDate) {//FIXME: to avoid unused
-
-        }
-        first = [cal dateByAddingComponents:comp toDate:first options:0];
-    }
-     
-
 }
 
 -(void)testFieldValidChoices{

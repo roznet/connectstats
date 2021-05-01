@@ -148,7 +148,7 @@
         
         self.activityStats.config.fromDate = [self.maturityButton currentFromDate];
         self.activityStats.config.x_activityField = self.oneFieldConfig.x_field;
-        [self.activityStats loadFromOrganizer];
+        [self.activityStats loadFromOrganizer:[GCAppGlobal organizer]];
         ds = [GCSimpleGraphCachedDataSource historyView:self.activityStats
                                          calendarConfig:self.oneFieldConfig.calendarConfig
                                             graphChoice:self.graphChoice
