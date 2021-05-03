@@ -316,6 +316,24 @@
 }
 
 -(BOOL)isAfter:(NSDate*)after{
-    return [after compare:self.date] != NSOrderedAscending;
+    return [after compare:self.date] != NSOrderedDescending;
+}
+
+-(NSString*)describe:(gcAggregatedType)type{
+    switch (type) {
+        case gcAggregatedAvg:
+            return NSLocalizedString(@"Avg", "gcAggregatedType");
+        case gcAggregatedCnt:
+            return NSLocalizedString(@"Cnt", "gcAggregatedType");
+        case gcAggregatedSum:
+            return NSLocalizedString(@"Sum", "gcAggregatedType");
+        case gcAggregatedMax:
+            return NSLocalizedString(@"Max", "gcAggregatedType");
+        case gcAggregatedMin:
+            return NSLocalizedString(@"Min", "gcAggregatedType");
+        default:
+            return NSLocalizedString(@"", "gcAggregatedType");
+            break;
+    }
 }
 @end

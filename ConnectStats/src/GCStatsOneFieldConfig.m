@@ -34,7 +34,7 @@
 +(GCStatsOneFieldConfig*)configFromMultiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig forY:(GCField*)field andX:(GCField*)xfield{
     GCStatsOneFieldConfig * rv  = [[[GCStatsOneFieldConfig alloc] init] autorelease];
     if(rv){
-        rv.multiFieldConfig = multiFieldConfig;
+        rv.multiFieldConfig = [GCStatsMultiFieldConfig   fieldListConfigFrom:multiFieldConfig];
         rv.field = field;
         rv.x_field = xfield;
     }
@@ -47,13 +47,28 @@
     
     [super dealloc];
 }
+-(NSArray<GCField*>*)fieldsForAggregation{
+    NSArray<GCField*> * base = nil;;
+    if( self.x_field == nil){
+        base = @[ self.field, [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType], [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityType]];
+    }else{
+        base = @[ self.field, self.x_field, [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType], [GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:self.activityType]];
+    }
+    return [base arrayByAddingObjectsFromArray:self.field.relatedFields];
+}
 
+-(GCStatsCalendarAggregationConfig *)calendarConfig{
+    return self.multiFieldConfig.calendarConfig;
+}
 -(NSString *)viewDescription{
     return self.multiFieldConfig.viewDescription;
 }
 
 -(NSString*)activityType{
     return self.multiFieldConfig.activityType;
+}
+-(GCActivityType*)activityTypeDetail{
+    return self.multiFieldConfig.activityTypeDetail;
 }
 
 -(BOOL)isEqualToConfig:(GCStatsOneFieldConfig*)other{
@@ -62,7 +77,8 @@
     [self.multiFieldConfig isEqualToConfig:other.multiFieldConfig];
 }
 -(bool)nextView{
-   return [self.multiFieldConfig nextView];
+    BOOL done = [self.calendarConfig nextCalendarUnit];
+    return done;
 }
 
 -(GCHistoryFieldDataSerieConfig*)historyConfig{
@@ -72,4 +88,6 @@
     return [GCHistoryFieldDataSerieConfig configWithField:self.field xField:self.x_field filter:self.multiFieldConfig.useFilter fromDate:nil];
 
 }
+
+
 @end

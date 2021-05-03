@@ -66,6 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSArray<GCField*>*)availableFields;
 -(BOOL)isAfter:(NSDate*)after;
 
+-(NSString*)describe:(gcAggregatedType)type;
 @end
 
 

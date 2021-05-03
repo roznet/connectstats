@@ -59,8 +59,9 @@ typedef NS_ENUM(NSUInteger, gcOneFieldSecondGraph) {
 @property (nonatomic,readonly) NSString * viewDescription;
 
 @property (nonatomic,readonly) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("Use ActivityType Detail");
-//@property (nonatomic,readonly) GCActivityType * activityTypeDetail;
+@property (nonatomic,readonly) GCActivityType * activityTypeDetail;
 //@property (nonatomic,readonly) BOOL useFilter;
+@property (nonatomic,readonly) NSArray<GCField*>*fieldsForAggregation;
 
 +(GCStatsOneFieldConfig*)configFromMultiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig forY:(GCField*)field andX:(GCField*)xfield;
 

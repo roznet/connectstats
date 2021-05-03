@@ -42,6 +42,7 @@
 @property (nonatomic,retain) GCStatsDataSerie * quartiles;
 @property (nonatomic,retain) GCStatsOneFieldConfig * oneFieldConfig;
 @property (nonatomic,retain) NSArray<GCFieldsForCategory*> * fieldOrder;
+@property (nonatomic,readonly) BOOL isNewStyle;
 
 -(void)setupForConfig:(GCStatsOneFieldConfig*)oneFieldConfig;
 //-(void)setupForViewChoice:(gcViewChoice)choice;

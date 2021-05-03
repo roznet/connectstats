@@ -440,10 +440,10 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     GCField * nextX = nil;
 
     GCField * avoid2 = nil;
-    if( avoid && [avoid.key isEqualToString:@"WeightedMeanSpeed"] ){
-        avoid2 = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:avoid.activityType];
-    }else if ( avoid && [avoid.key isEqualToString:@"WeightedMeanPace"]){
-        avoid2 = [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:avoid.activityType];
+    if( avoid && [avoid.key hasSuffix:@"Speed"] ){
+        avoid2 = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:avoid.activityType];
+    }else if ( avoid && [avoid.key hasSuffix:@"Pace"]){
+        avoid2 = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:avoid.activityType];
     }
 
     while (nextX==nil && n<choices.count) {
