@@ -423,7 +423,7 @@
 
     FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer bundleFilePath:@"activities_bad_aggregated_pace.db"]];
     [db open];
-    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
+    GCActivitiesOrganizer * organizer = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db]);
     
     [aggregated setActivities:organizer.activities andFields:@[ distance, speed, pace, duration ] ];
     [aggregated aggregate:NSCalendarUnitMonth referenceDate:calendarConfig.referenceDate ignoreMode:gcIgnoreModeActivityFocus];

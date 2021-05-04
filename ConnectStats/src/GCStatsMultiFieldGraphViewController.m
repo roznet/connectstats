@@ -64,7 +64,8 @@
     [_rulerView release];
     [_maturityButton release];
     [_fieldOrder release];
-
+    [_x_field release];
+    
     [super dealloc];
 }
 

@@ -81,7 +81,8 @@
     [_average release];
     [_quartiles release];
     [_scatterStats release];
-
+    [_aggregatedStats release];
+    
     [_oneFieldConfig release];
     [_performanceAnalysis release];
     [_fieldOrder release];
