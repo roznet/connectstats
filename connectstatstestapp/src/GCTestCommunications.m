@@ -244,8 +244,14 @@ typedef NS_ENUM(NSUInteger, gcTestInstance){
 
 -(void)validateReqForBatch:(NSString*)name{
     NSArray * expected = [self.manager retrieveReferenceObject:self.reqDescriptions forClasses:self.classes selector:_cmd identifier:name error:nil];
+    NSString * expectedFilePath = [RZFileOrganizer writeableFilePath:[NSString stringWithFormat:@"req_exp_%@.txt", name]];
+    NSString * receivedFilePath = [RZFileOrganizer writeableFilePath:[NSString stringWithFormat:@"req_rec_%@.txt", name]];
     RZ_ASSERT([expected isEqualToArray:self.reqDescriptions], @"Have Expected Reqs %@", name);
     if( ! [expected isEqualToArray:self.reqDescriptions] ){
+        [[expected componentsJoinedByString:@"\n"] writeToFile:expectedFilePath atomically:true encoding:NSUTF8StringEncoding error:nil];
+        [[self.reqDescriptions componentsJoinedByString:@"\n"] writeToFile:receivedFilePath atomically:true encoding:NSUTF8StringEncoding error:nil];
+        NSString * ksdiffCmd = [NSString stringWithFormat:@"ksdiff --partial-changeset \"%@\" \"%@\"\n", expectedFilePath, receivedFilePath];
+        NSLog(@"ksdiff cmd: %@", ksdiffCmd);
         NSLog(@"Count %@ %@", @(self.reqDescriptions.count), @(expected.count) );
         for( NSUInteger i=0;i<MIN(self.reqDescriptions.count,expected.count);i++){
             if( ![self.reqDescriptions[i] isEqualToString:expected[i]] ){

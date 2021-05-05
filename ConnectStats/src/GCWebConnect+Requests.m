@@ -124,7 +124,7 @@
             dispatch_async(dispatch_get_main_queue(), ^(){
                 BOOL garminStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin];
                 NSInteger aStart = garminStatsReload ? [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin] : 0;
-                //[self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
+                [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
                 [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:garminStatsReload] autorelease]];
             });
         }
