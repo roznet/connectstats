@@ -568,6 +568,9 @@
     BOOL ignoreNotify = ([theParent isKindOfClass:[GCActivitiesOrganizer class]] && theInfo.stringInfo != nil);
     BOOL skipSetup = [theParent isKindOfClass:[GCHistoryFieldDataSerie class]];
 
+    if( theParent == self){
+        skipSetup = true;
+    }
     if (!ignoreNotify) {
         if (!skipSetup) {
             [self setupForCurrentActivityAndViewChoice:self.viewChoice];
