@@ -416,7 +416,7 @@
                                                                       attributes:[GCViewConfig attributeBold16]] autorelease];
         
         [gridcell labelForRow:0 andCol:0].attributedText = title;
-        gcNotificationPushType type = [[GCAppGlobal profile] configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone];
+        gcNotificationPushType type = [GCAppGlobal profile].pushNotificationType;
         NSArray<NSString*> * types = [GCViewConfig validChoicesForConnectStatsNotificationType];
         if (type < types.count) {
             [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]

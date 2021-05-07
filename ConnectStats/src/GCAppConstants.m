@@ -107,7 +107,7 @@ NSString * const CONFIG_CONNECTSTATS_TOKEN       = @"config_connectstats_token";
 NSString * const CONFIG_CONNECTSTATS_TOKEN_ID    = @"config_connectstats_token_id";
 NSString * const CONFIG_CONNECTSTATS_USER_ID     = @"config_connectstats_user_id";
 
-NSString * const  CONFIG_NOTIFICATION_ENABLED      = @"config_notification_enabled_dev";
+//NSString * const  CONFIG_NOTIFICATION_ENABLED      = @"config_notification_enabled_dev";
 NSString * const  CONFIG_NOTIFICATION_PUSH_TYPE    = @"config_notification_push_type";
 NSString * const  CONFIG_NOTIFICATION_DEVICE_TOKEN = @"config_notification_devicetoken";
 

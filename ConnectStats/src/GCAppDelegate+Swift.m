@@ -41,9 +41,7 @@ BOOL kOpenTemporary = false;
 }
 
 -(void)registerForPushNotifications{
-    [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_ENABLED boolVal:true];
-    
-    if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats] && [[GCAppGlobal profile] configGetBool:CONFIG_NOTIFICATION_ENABLED defaultValue:false]) {
+    if( [GCAppGlobal profile].pushNotificationEnabled) {
         RZLog(RZLogInfo, @"connectstats enabled requesting notification");
         [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionAlert+UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError*error){
             if( granted ){
@@ -55,10 +53,10 @@ BOOL kOpenTemporary = false;
                         });
                     }else{
                         RZLog(RZLogInfo, @"Push Notification Not Authorized");
-                        if( [[GCAppGlobal profile] configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone] != gcNotificationPushTypeNone){
+                        if( [GCAppGlobal profile].pushNotificationType != gcNotificationPushTypeNone){
                             // Status changed from what was recorded, save it
                             dispatch_async(dispatch_get_main_queue(), ^(){
-                                [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_PUSH_TYPE intVal:gcNotificationPushTypeNone];
+                                [GCAppGlobal profile].pushNotificationType = gcNotificationPushTypeNone;
                                 [GCAppGlobal saveSettings];
                             });
                         }
@@ -66,10 +64,10 @@ BOOL kOpenTemporary = false;
                 }];
             }else{
                 RZLog(RZLogInfo, @"Not granted %@", error);
-                if( [[GCAppGlobal profile] configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone] != gcNotificationPushTypeNone){
+                if( [GCAppGlobal profile].pushNotificationType != gcNotificationPushTypeNone){
                     // Status changed from what was recorded, save it
                     dispatch_async(dispatch_get_main_queue(), ^(){
-                        [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_PUSH_TYPE intVal:gcNotificationPushTypeNone];
+                        [GCAppGlobal profile].pushNotificationType = gcNotificationPushTypeNone;
                         [GCAppGlobal saveSettings];
                     });
                 }
@@ -137,7 +135,7 @@ BOOL kOpenTemporary = false;
 }
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
-    NSLog(@"Failed to register %@", error);
+    RZLog(RZLogError,@"Failed to register %@", error);
 }
 
 -(void)handleFitFile:(NSData*)fitData{

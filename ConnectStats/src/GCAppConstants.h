@@ -101,7 +101,7 @@ extern NSString * const  CONFIG_HEALTHKIT_WORKOUT;
 extern NSString * const  CONFIG_HEALTHKIT_DAILY;
 extern NSString * const  CONFIG_HEALTHKIT_SOURCE_CHECKED;
 
-extern NSString * const  CONFIG_NOTIFICATION_ENABLED;
+//extern NSString * const  CONFIG_NOTIFICATION_ENABLED;
 extern NSString * const  CONFIG_NOTIFICATION_PUSH_TYPE;
 extern NSString * const  CONFIG_NOTIFICATION_DEVICE_TOKEN;
 

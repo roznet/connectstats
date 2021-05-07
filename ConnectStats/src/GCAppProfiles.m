@@ -236,6 +236,19 @@ NSInteger kServiceNoAnchor = 0;
     return nil;
 }
 
+#pragma mark - push notification
+
+-(BOOL)pushNotificationEnabled{
+    return self.pushNotificationType != gcNotificationPushTypeNone && [self serviceEnabled:gcServiceConnectStats];
+}
+-(gcNotificationPushType)pushNotificationType{
+    return [self configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone];
+}
+
+-(void)setPushNotificationType:(gcNotificationPushType)pushNotificationType{
+    [self configSet:CONFIG_NOTIFICATION_PUSH_TYPE intVal:pushNotificationType];
+}
+
 #pragma mark - Index Access;
 
 -(NSString*)profileNameForIdx:(NSUInteger)idx{

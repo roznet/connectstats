@@ -78,7 +78,7 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
                 NSDictionary *parameters = @{
                                              @"token_id" : @(self.tokenId),
                                              @"notification_device_token": [[GCAppGlobal profile] configGetString:CONFIG_NOTIFICATION_DEVICE_TOKEN defaultValue:@""],
-                                             @"notification_enabled" : @([[GCAppGlobal profile] configGetBool:CONFIG_NOTIFICATION_ENABLED defaultValue:false]),
+                                             @"notification_enabled" : @([[GCAppGlobal profile] configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone]!=gcNotificationPushTypeNone),
                                              @"notification_push_type" : @([[GCAppGlobal profile] configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone]),
                                              };
                 
