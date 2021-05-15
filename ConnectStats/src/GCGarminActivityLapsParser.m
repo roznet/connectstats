@@ -90,9 +90,6 @@
                                     [swimPoints addObject:swim];
                                     [swim release];
                                     
-                                    if( last && [last.time compare:swim.time] != NSOrderedAscending){
-                                        NSLog(@"Why?");
-                                    }
                                     last = swim;
                                 }
                             }

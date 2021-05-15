@@ -575,6 +575,9 @@
 		4285C21B2427C5E5003C522E /* last_connectstats_single_544406.json in Resources */ = {isa = PBXBuildFile; fileRef = 4285C20F2427C5E5003C522E /* last_connectstats_single_544406.json */; };
 		4285C21C2427C5E5003C522E /* track_cs_544406.fit in Resources */ = {isa = PBXBuildFile; fileRef = 4285C21A2427C5E5003C522E /* track_cs_544406.fit */; };
 		4285F0E31719CB1800A1FAA8 /* GCSettingsFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4285F0E21719CB1800A1FAA8 /* GCSettingsFilterViewController.m */; };
+		42863D62264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42863D61264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift */; };
+		42863D63264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42863D61264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift */; };
+		42863D64264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42863D61264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift */; };
 		4287DC101BDB88FE00C54A51 /* GCStatsMultiFieldConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */; };
 		42880C462381EEE00030C3C1 /* track_cs_5582.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42880C3A2381EEDF0030C3C1 /* track_cs_5582.fit */; };
 		42880C472381EEE00030C3C1 /* track_cs_5611.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42880C452381EEDF0030C3C1 /* track_cs_5611.fit */; };
@@ -1672,6 +1675,7 @@
 		4285C21A2427C5E5003C522E /* track_cs_544406.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = track_cs_544406.fit; sourceTree = "<group>"; };
 		4285F0E11719CB1800A1FAA8 /* GCSettingsFilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsFilterViewController.h; path = src/GCSettingsFilterViewController.h; sourceTree = "<group>"; };
 		4285F0E21719CB1800A1FAA8 /* GCSettingsFilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCSettingsFilterViewController.m; path = src/GCSettingsFilterViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		42863D61264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCConnectStatsRequestRegisterNotifications.swift; path = src/GCConnectStatsRequestRegisterNotifications.swift; sourceTree = "<group>"; };
 		42880C3A2381EEDF0030C3C1 /* track_cs_5582.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = track_cs_5582.fit; sourceTree = "<group>"; };
 		42880C452381EEDF0030C3C1 /* track_cs_5611.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = track_cs_5611.fit; sourceTree = "<group>"; };
 		428C70351A4AF52500243DC0 /* ConnectStatsLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ConnectStatsLaunchScreen.xib; path = ConnectStats/icons/ConnectStatsLaunchScreen.xib; sourceTree = "<group>"; };
@@ -4064,6 +4068,7 @@
 				4280C7CF2364FC7C00223709 /* GCConnectStatsRequestWeather.h */,
 				4280C7D02364FC7C00223709 /* GCConnectStatsRequestWeather.m */,
 				429E9A7C2625B11A0002820E /* GCConnectStatsRequestBackgroundFetch.swift */,
+				42863D61264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift */,
 			);
 			name = Requests;
 			sourceTree = "<group>";
@@ -5480,6 +5485,7 @@
 				42684EF51B2DB4BC001A90D2 /* GCSettingsSourceTableViewController.m in Sources */,
 				422FAF7619A1DD6000D09773 /* GCStatsOneFieldGraphViewController.m in Sources */,
 				422FAF7819A1DD6000D09773 /* GCSettingsServicesViewController.m in Sources */,
+				42863D64264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift in Sources */,
 				4281AF5E22F732B000BFE408 /* GCConnectStatsRequestSearch.m in Sources */,
 				427208641DE7A35300924C90 /* GCActivity+Import.swift in Sources */,
 				422FAF7F19A1DD6000D09773 /* GCSettingsHelpViewController.m in Sources */,
@@ -5685,6 +5691,7 @@
 				42BC539B161E37AE00576097 /* GCHistoryFieldSummaryStats.m in Sources */,
 				42B231D0253058680080D743 /* GCHistoryFieldSummaryDataHolder.m in Sources */,
 				42FD55B91B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */,
+				42863D62264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift in Sources */,
 				42E53AE825C55879003AF0D1 /* GCAppConstants.m in Sources */,
 				423D746322F59D9A00EE3E71 /* FITFitFieldMap.swift in Sources */,
 				42F0A4F31B60620200901CFF /* GCDerivedRequest.m in Sources */,
@@ -5939,6 +5946,7 @@
 				42B5E25C1BA5B216000FAE4E /* GCDerivedRequest.m in Sources */,
 				4287DC101BDB88FE00C54A51 /* GCStatsMultiFieldConfig.m in Sources */,
 				42C5A1B222AC5D5D00D0F6EE /* GCConnectStatsSearchJsonParser.m in Sources */,
+				42863D63264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift in Sources */,
 				422B343E1CA7321200B345CD /* GCFieldCache.m in Sources */,
 				42CC45B8200A24C5003EB805 /* GCTestServiceConfigViewController.m in Sources */,
 				421208911C6E860700E0470D /* GCFieldsForCategory.m in Sources */,
@@ -6561,7 +6569,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 6.8.1.0;
+				CURRENT_PROJECT_VERSION = 7.0.0.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6582,7 +6590,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 6.8.1;
+				MARKETING_VERSION = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = (
@@ -6614,7 +6622,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 6.8.1.0;
+				CURRENT_PROJECT_VERSION = 7.0.0.0;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = NO;
@@ -6636,7 +6644,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 6.8.1;
+				MARKETING_VERSION = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

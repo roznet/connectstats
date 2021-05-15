@@ -95,6 +95,6 @@ typedef void (^GCDerivedDidCompleteBestMatchingSeriesBlock)(NSArray<GCDerivedDat
 
 // Debug utils
 -(void)forceReprocessActivity:(NSString*)aId;
-
+-(NSUInteger)cleanAllEmpty;
 
 @end

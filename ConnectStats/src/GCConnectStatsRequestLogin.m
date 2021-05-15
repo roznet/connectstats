@@ -28,6 +28,7 @@
 #import "GCConnectStatsRequestLogin.h"
 #import "GCWebUrl.h"
 #import "GCAppGlobal.h"
+#import "ConnectStats-Swift.h"
 
 typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
     GCConnectStatsRequestLoginStageAPICheck,
@@ -78,8 +79,8 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
                 NSDictionary *parameters = @{
                                              @"token_id" : @(self.tokenId),
                                              @"notification_device_token": [[GCAppGlobal profile] configGetString:CONFIG_NOTIFICATION_DEVICE_TOKEN defaultValue:@""],
-                                             @"notification_enabled" : @([[GCAppGlobal profile] configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone]!=gcNotificationPushTypeNone),
-                                             @"notification_push_type" : @([[GCAppGlobal profile] configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone]),
+                                             @"notification_enabled" : @([GCAppGlobal profile].pushNotificationEnabled),
+                                             @"notification_push_type" : @([GCAppGlobal profile].pushNotificationType),
                                              };
                 
                 return [self preparedUrlRequest:path params:parameters];
@@ -142,6 +143,7 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
                 NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
                 if( [info isKindOfClass:[NSDictionary class]] && [info[@"cs_user_id"] respondsToSelector:@selector(integerValue)] && [info[@"cs_user_id"] integerValue] == self.userId){
                     RZLog(RZLogInfo, @"Validated user %@", info[@"cs_user_id"]);
+                    [GCConnectStatsRequestRegisterNotifications register];
                 }else{
                     RZLog(RZLogWarning, @"Invalid user %@ != %@", info[@"cs_user_id"], @(self.userId));
                 }

@@ -191,6 +191,11 @@ NSString * GCWebConnectStatsSearch(gcWebConnectStatsConfig config){
         return [NSString stringWithFormat:@"%@/api/connectstats/search",url];
     }
 }
+NSString * GCWebConnectStatsRegisterNotification(gcWebConnectStatsConfig config){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
+    
+    return [NSString stringWithFormat:@"%@/api/notification/register",url];
+}
 
 NSString * GCWebConnectStatsFitFile(gcWebConnectStatsConfig config){
     NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);

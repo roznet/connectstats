@@ -215,6 +215,8 @@ static BOOL kDerivedEnabled = true;
         }
     }
     self.loadDetailsCompleted = true;
+    
+    //[self cleanAllEmpty];
 }
 
 -(void)loadHistoricalFileSeries{
@@ -1004,6 +1006,22 @@ static BOOL kDerivedEnabled = true;
     }else{
         [self loadFromDb];
     }
+}
+
+-(NSUInteger)cleanAllEmpty{
+    RZPerformance * perf = [RZPerformance start];
+    NSUInteger count = 0;
+    
+    for (NSString * key in self.derivedSeries) {
+        if( [self.derivedSeries[key] removeFromDbIfEmpty:self.db] ){
+            count += 1;
+            if( count < 5){
+                RZLog(RZLogInfo, @"removing empty %@", self.derivedSeries[key]);
+            }
+        }
+    }
+    RZLog(RZLogInfo, @"Removed %@ empty series %@", @(count), perf);
+    return count;
 }
 
 @end

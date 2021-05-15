@@ -41,39 +41,7 @@ BOOL kOpenTemporary = false;
 }
 
 -(void)registerForPushNotifications{
-    if( [GCAppGlobal profile].pushNotificationEnabled) {
-        RZLog(RZLogInfo, @"connectstats enabled requesting notification");
-        [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionAlert+UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError*error){
-            if( granted ){
-                [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings*setting){
-                    if( setting.authorizationStatus == UNAuthorizationStatusAuthorized ){
-                        dispatch_async(dispatch_get_main_queue(), ^(){
-                            RZLog(RZLogInfo, @"Push Notification Granted, registering");
-                            [[UIApplication sharedApplication] registerForRemoteNotifications];
-                        });
-                    }else{
-                        RZLog(RZLogInfo, @"Push Notification Not Authorized");
-                        if( [GCAppGlobal profile].pushNotificationType != gcNotificationPushTypeNone){
-                            // Status changed from what was recorded, save it
-                            dispatch_async(dispatch_get_main_queue(), ^(){
-                                [GCAppGlobal profile].pushNotificationType = gcNotificationPushTypeNone;
-                                [GCAppGlobal saveSettings];
-                            });
-                        }
-                    }
-                }];
-            }else{
-                RZLog(RZLogInfo, @"Not granted %@", error);
-                if( [GCAppGlobal profile].pushNotificationType != gcNotificationPushTypeNone){
-                    // Status changed from what was recorded, save it
-                    dispatch_async(dispatch_get_main_queue(), ^(){
-                        [GCAppGlobal profile].pushNotificationType = gcNotificationPushTypeNone;
-                        [GCAppGlobal saveSettings];
-                    });
-                }
-            }
-        }];
-    }
+    [GCConnectStatsRequestRegisterNotifications register];
 }
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
