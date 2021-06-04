@@ -28,17 +28,20 @@
 import UIKit
 import RZUtilsSwift
 
-class GCConnectStatsRequestBackgroundFetch: GCConnectStatsRequest {
+class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
     static let kActivityRequestCount : UInt = 20
     private var searchMore : Bool = false
     private let start : UInt
+    // by default try to download up to 5 tracks/activities
+    var loadTracks = 5
+    var addedActivities : [GCActivity] = []
     
     override init() {
         self.start = 0
         super.init()
     }
     
-    init(nextWith current: GCConnectStatsRequestBackgroundFetch) {
+    init(nextWith current: GCConnectStatsRequestBackgroundSearch) {
         self.start = current.start + Self.kActivityRequestCount
         super.init(nextWith: current)
         
@@ -90,24 +93,36 @@ class GCConnectStatsRequestBackgroundFetch: GCConnectStatsRequest {
     func addActivities(from parser : GCConnectStatsSearchJsonParser, to organizer: GCActivitiesOrganizer){
         let listRegister = GCActivitiesOrganizerListRegister(for: parser.activities, from:GCService(gcService.connectStats), isFirst: self.start == 0)
         listRegister.updateNewOnly = true;
+        // don't use the normal download track, we'll use dedicated background load
+        listRegister.loadTracks = 0;
         listRegister.add(to: organizer)
         if listRegister.childIds != nil {
             RZSLog.warning("ChildIDs not supported for strava")
         }
+        if let addedActivities = listRegister.addedActivities {
+            self.addedActivities.append(contentsOf: addedActivities)
+            RZSLog.info("Found new activities, background downloading trackpoints for \(addedActivities.count) activities")
+            for act in addedActivities {
+                if self.loadTracks > 0 {
+                    let req = GCConnectStatsRequestBackgroundFitFile(activity: act)
+                    GCAppGlobal.web().add(req)
+                    self.loadTracks -= 1
+                }
+            }
+        }
         self.searchMore = listRegister.shouldSearchForMore(with: Self.kActivityRequestCount, reloadAll: false)
     }
-
     
     @objc override var nextReq: GCWebRequestStandard? {
         if self.searchMore {
-            return GCConnectStatsRequestBackgroundFetch(nextWith: self)
+            return GCConnectStatsRequestBackgroundSearch(nextWith: self)
         }
         return nil
     }
     
     @discardableResult
     @objc static func test(organizer: GCActivitiesOrganizer, path : String) -> GCActivitiesOrganizer{
-        let search = GCConnectStatsRequestBackgroundFetch()
+        let search = GCConnectStatsRequestBackgroundSearch()
         
         var isDirectory : ObjCBool = false
         
@@ -119,7 +134,13 @@ class GCConnectStatsRequestBackgroundFetch: GCConnectStatsRequest {
             if let data = try? Data(contentsOf: fileURL) {
                 let parser = GCConnectStatsSearchJsonParser(data: data)
                 if parser.success {
+                    search.loadTracks = 0
                     search.addActivities(from: parser, to: organizer)
+                }
+                if isDirectory.boolValue && search.addedActivities.count > 0 {
+                    for act in search.addedActivities {
+                        GCConnectStatsRequestBackgroundFitFile.test(activity: act, path: path)
+                    }
                 }
             }
         }

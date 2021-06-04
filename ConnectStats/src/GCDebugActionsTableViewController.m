@@ -168,35 +168,10 @@
     [[GCAppGlobal derived] processSome];
 }
 
--(void)actionBuildActivityTypeSamples{
-    GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
-    
-    NSMutableDictionary * found = [NSMutableDictionary dictionary];
-    
-    NSString * name = @"activities_types_samples.db";
-    [RZFileOrganizer removeEditableFile:name];
-    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:name]];
-    [db open];
-    [GCActivitiesOrganizer ensureDbStructure:db];
-    GCActivitiesOrganizer * newOrganizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
-    for (GCActivity * act in organizer.activities) {
-        if( found[act.activityTypeDetail] == nil ){
-            found[act.activityTypeDetail] = @1;
-            [newOrganizer registerActivity:act forActivityId:act.activityId];
-            RZLog(RZLogInfo, @"add %@", act);
-        }
-    }
-    NSLog(@"total: %@", @(newOrganizer.countOfActivities));
-    [newOrganizer release];
-}
-
-
-
--(void)actionTestNetwork{
-    BOOL wifi = [RZSystemInfo wifiAvailable];
-    BOOL network = [RZSystemInfo networkAvailable];
-
-    RZLog(RZLogInfo,@"Network: %@ Wifi: %@", network ? @"Yes" : @"No", wifi?@"Yes": @"No");
+-(void)actionCleanPowerSpecialPapain{
+    [RZFileOrganizer writeableFilesMatching:^(NSString * fn){
+        return (BOOL)false;
+    }];
 }
 
 -(void)actionSaveCurrentActivity{

@@ -35,10 +35,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,readonly) NSUInteger reachedExisting;
 @property (nonatomic,readonly,nullable) NSArray<NSString*>*childIds;
+/// populated with new activities discovered during processing
+@property (nonatomic,readonly,nullable) NSArray<GCActivity*>*addedActivities;
 /**
  * For background mode, will only update new activities
  */
 @property (nonatomic,assign) BOOL updateNewOnly;
+
+/**
+ * Update with the maximum number of tracks to download for new activities, set to 0 in background mode to manually handle new activities
+ */
+@property (nonatomic,assign) NSUInteger loadTracks;
 
 /**
  Create object to register list of activities

@@ -57,20 +57,20 @@ BOOL kOpenTemporary = false;
         switch( notification ){
             case gcWebNotificationEnd:
             {
-                RZLog(RZLogInfo,@"didReceivedRemoteNotification web updated completed successfully %@", notificationPerf);
+                RZLog(RZLogInfo,@"web update completed successfully %@", notificationPerf);
                 self.web.notificationHandler = nil;
                 completionHandler(UIBackgroundFetchResultNewData);
                 break;
             }
             case gcWebNotificationError:
             {
-                RZLog(RZLogInfo,@"didReceivedRemoteNotification web updated completed with error %@", notificationPerf);
+                RZLog(RZLogInfo,@"web update completed with error %@", notificationPerf);
                 self.web.notificationHandler = nil;
                 completionHandler(UIBackgroundFetchResultFailed);
                 break;
             }
             default:
-                RZLog(RZLogInfo,@"didReceivedRemoteNotification web still going");
+                RZLog(RZLogInfo,@"still going %@", self.web.currentDebugDescription);
                 break;
         }
     };

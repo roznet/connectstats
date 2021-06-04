@@ -54,3 +54,4 @@
 #import "GCGarminLoginSSORequest.h"
 #import "GCConnectStatsRequest.h"
 #import "GCConnectStatsSearchJsonParser.h"
+#import "GCConnectStatsRequestFitFile.h"

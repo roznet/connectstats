@@ -32,6 +32,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GCConnectStatsRequestFitFile : GCConnectStatsRequest
 
+@property (nonatomic,readonly) NSString * fitFileName;
+@property (nonatomic,readonly) GCActivity * activity;
+
+-(instancetype)initWithActivity:(GCActivity*)act;
+
 +(GCConnectStatsRequestFitFile*)requestWithActivity:(GCActivity*)act andNavigationController:(nullable UINavigationController*)nav;
 
 
@@ -40,6 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param path path where the file is located using standard naming convention or explicit filename 
 +(nullable GCActivity*)testForActivity:(nullable GCActivity*)act withFilesIn:(NSString*)path;
 
+/// Parse filename, to be used by derived class only
+-(void)processParse:(NSString*)fileName;
 @end
 
 NS_ASSUME_NONNULL_END

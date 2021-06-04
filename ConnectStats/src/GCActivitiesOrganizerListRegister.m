@@ -37,7 +37,7 @@ NSUInteger kDownloadTrackPointCount = 5;
 @property (nonatomic,retain) GCService * service;
 @property (nonatomic,assign) BOOL isFirst;
 @property (nonatomic,assign) BOOL syncDeleteWithPreferred;
-@property (nonatomic,assign) NSUInteger loadTracks;
+@property (nonatomic,retain) NSArray<GCActivity*>*addedActivities;
 
 @end
 
@@ -62,12 +62,17 @@ NSUInteger kDownloadTrackPointCount = 5;
     [_activities release];
     [_childIds release];
     [_service release];
+    [_addedActivities release];
 
     [super dealloc];
 }
 -(void)addToOrganizer:(GCActivitiesOrganizer*)organizer{
     NSMutableArray * existingInService = [NSMutableArray array];
 
+    NSMutableArray * newActivities = nil;
+    // reset record of new activities;
+    self.addedActivities = nil;
+    
     // Find childIds not in organizer yet
     NSMutableDictionary * childIds = [NSMutableDictionary dictionary];
 
@@ -105,6 +110,11 @@ NSUInteger kDownloadTrackPointCount = 5;
             }
             if( !self.updateNewOnly || !foundInOrganizer){
                 if( [organizer registerActivity:activity forActivityId:activity.activityId] ){
+                    if( newActivities == nil){
+                        newActivities = [NSMutableArray array];
+                        self.addedActivities = newActivities;
+                    }
+                    [newActivities addObject:activity];
                     actuallyAdded += 1;
                 }else{
                     // If it wasn't register it could be it was a duplicate

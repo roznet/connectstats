@@ -44,6 +44,14 @@
 
 @implementation GCConnectStatsRequestFitFile
 
+-(instancetype)initWithActivity:(GCActivity*)act{
+    self = [super init];
+    if( self ){
+        self.activity = act;
+    }
+    return self;
+}
+
 +(GCConnectStatsRequestFitFile*)requestWithActivity:(GCActivity*)act andNavigationController:(UINavigationController*)nav{
     GCConnectStatsRequestFitFile * rv = RZReturnAutorelease([[GCConnectStatsRequestFitFile alloc] init]);
     if( rv ){
@@ -72,8 +80,7 @@
 }
 #endif
 
--(id<GCWebRequest>)nextReq{
-    
+-(id<GCWebRequest>)nextReq{    
     if( self.navigationController ){
         return RZReturnAutorelease([[GCConnectStatsRequestFitFile alloc] initNextWith:self]);
     }
@@ -81,7 +88,6 @@
         if( self.shouldCheckForAlternativeWhenEmpty && [self validAlternativeService]){
             self.tryAlternativeService = true;
             return [GCGarminActivityTrack13Request requestWithActivity:self.activity];
-            //return RZReturnAutorelease([[GCConnectStatsRequestFitFile alloc] initNextWith:self]);
         }
         return nil;
     }

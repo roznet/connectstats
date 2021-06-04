@@ -185,6 +185,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         info = @{ INFO_ACTIVITY_TYPE_COUNT: @(cur.integerValue+1), INFO_ACTIVITY_TYPE_LATEST : latest };
     }
     self.info[INFO_ACTIVITY_TYPES][type] = info;
+    
+    self.activityIdToActivityType[act.activityId] = act.activityType;
 }
 
 /** @brief Record All Available Activities Types, not just the one the currently list contains
@@ -347,7 +349,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             lastLocation = true;
         }
         [self recordActivityType:act];
-        self.activityIdToActivityType[act.activityId] = act.activityType;
+        
         [m_activities addObject:act];
         [act release];
     }
@@ -1264,16 +1266,16 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     
     act.settings.organizer = nil;
     
-    [_db beginTransaction];
     if (idx<_allActivities.count) {
+        [_db beginTransaction];
         RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities WHERE activityId=?", activityId);
         RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_values WHERE activityId=?", activityId);
         RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_meta WHERE activityId=?", activityId);
         RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE activityId=?",activityId);
         RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE duplicateActivityId=?",activityId);
-        [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",activityId]];
+        [_db commit];
+        [act clearTrackdb];
     }
-    [_db commit];
     [self deleteDuplicateForActivities:@[ activityId ]];
     
     _currentActivityIndex = 0;

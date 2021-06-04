@@ -1001,67 +1001,88 @@
 -(void)testOrganizerBackgroundRegister{    
     NSString * bundlePath = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
 
-    GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_register_background.db"];
-
-    [GCConnectStatsRequestSearch testForOrganizer:organizer withFilesInPath:bundlePath];
-    
     NSMutableDictionary * save_cs = [NSMutableDictionary dictionary];
-    // First do the motion of the workflow of update:
-    //   1. connectstats search activity
-    //   2. update from fit file
-    //   3. update garmin connect summaries
-
-    for (GCActivity * one in organizer.activities) {
-        save_cs[one.activityId] = one.summaryData;
-    }
-    
-    NSLog(@"%@", [[organizer activityForId:@"__connectstats__5567"] numberWithUnitForField:[GCField fieldForKey:@"GainElevation" andActivityType:GC_TYPE_RUNNING]]);
-
     NSMutableDictionary * save_fit = [NSMutableDictionary dictionary];
-    for (GCActivity * one in organizer.activities) {
-        one.settings.worker = nil;
-        NSDictionary * before = save_cs[one.activityId];
-        GCActivity * fit = [GCConnectStatsRequestFitFile testForActivity:one  withFilesIn:bundlePath];
-        if( fit ) {
-            XCTAssertGreaterThan(one.summaryData.count, before.count,@"%@ after fit load has more information", one);
-            save_fit[one.activityId] = one.summaryData;
-        }
-        for (GCField *key in one.summaryData) {
-            if( before[key] == nil){
-                NSLog(@"updated fit %@ = %@", key, one.summaryData[key]);
-            }
-        }
-    }
-    NSLog(@"%@", [[organizer activityForId:@"__connectstats__5567"] numberWithUnitForField:[GCField fieldForKey:@"GainElevation" andActivityType:GC_TYPE_RUNNING]]);
-
-    [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath];
-    
     NSMutableDictionary * save_gar = [NSMutableDictionary dictionary];
-    for (NSString * activityId in save_fit) {
-        NSDictionary * before = save_fit[activityId];
-        GCActivity * after  = [organizer activityForId:activityId];
-        XCTAssertNotNil(after);
-        XCTAssertGreaterThan(after.summaryData.count,before.count,@"%@ after garmin has more information", after);
-        save_gar[activityId] = after.summaryData;
-        for (GCField *key in before) {
-            // we didn't loose anything
-            XCTAssertNotNil(after.summaryData[key], @"%@ has %@", activityId, key);
-        }
 
-        for (GCField *key in after.summaryData) {
-            if( before[key] == nil){
-                NSLog(@"updated gar %@ = %@", key, after.summaryData[key]);
+    GCNumberWithUnit * exampleFieldValue = nil;
+    GCField * exampleDetailField = [GCField fieldForKey:@"GainElevation" andActivityType:GC_TYPE_RUNNING];
+    NSString * exampleActivityId = @"__connectstats__5567";
+
+    FMDatabase * db = nil;
+
+    @autoreleasepool {
+        GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_register_background.db"];
+        db = organizer.db;
+        
+        [GCConnectStatsRequestSearch testForOrganizer:organizer withFilesInPath:bundlePath];
+        
+        // First do the motion of the workflow of update:
+        //   1. connectstats search activity
+        //   2. update from fit file
+        //   3. update garmin connect summaries
+
+        for (GCActivity * one in organizer.activities) {
+            save_cs[one.activityId] = one.summaryData;
+        }
+        
+        XCTAssertNil([[organizer activityForId:exampleActivityId] numberWithUnitForField:exampleDetailField], @"From the initial download, detail field is missing" );
+
+        for (GCActivity * one in organizer.activities) {
+            one.settings.worker = nil;
+            NSDictionary * before = save_cs[one.activityId];
+            GCActivity * fit = [GCConnectStatsRequestFitFile testForActivity:one  withFilesIn:bundlePath];
+            if( fit ) {
+                XCTAssertGreaterThan(one.summaryData.count, before.count,@"%@ after fit load has more information", one);
+                save_fit[one.activityId] = one.summaryData;
+            }
+            NSMutableSet<GCField*>*updated = [NSMutableSet set];
+            
+            for (GCField *key in one.summaryData) {
+                if( before[key] == nil){
+                    [updated addObject:key];
+                }
+            }
+            if( updated.count > 0){
+                RZLog(RZLogInfo, @"%@: updated fit with %@ fields", one, @(updated.count));
             }
         }
-    }
+        exampleFieldValue = [[[organizer activityForId:exampleActivityId] numberWithUnitForField:exampleDetailField] retain];
+        XCTAssertNotNil(exampleFieldValue, @"After detail download, detail field is n ot missing" );
+        [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath];
+        
+        for (NSString * activityId in save_fit) {
+            NSDictionary * before = save_fit[activityId];
+            GCActivity * after  = [organizer activityForId:activityId];
+            XCTAssertNotNil(after);
+            XCTAssertGreaterThan(after.summaryData.count,before.count,@"%@ after garmin has more information", after);
+            save_gar[activityId] = after.summaryData;
+            for (GCField *key in before) {
+                // we didn't loose anything
+                XCTAssertNotNil(after.summaryData[key], @"%@ has %@", activityId, key);
+            }
 
+            NSMutableSet<GCField*>*updated = [NSMutableSet set];
+            for (GCField *key in after.summaryData) {
+                if( before[key] == nil){
+                    [updated addObject:key];
+                }
+            }
+            if( updated.count > 0){
+                RZLog(RZLogInfo, @"%@: updated gar with %@ fields", activityId, @(updated.count));
+            }
+        }
+        
+        // Remove all details and close db for activities
+        [organizer purgeCache];
+    } // End autoreleast pool
     
     // Now do a workflow of background update:
     //   1. load without details
     //   2. update new only from connectstats + fit file
     //   3. load details for the rest when UI starts
 
-    GCActivitiesOrganizer * organizer_light = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db loadDetails:false]);
+    GCActivitiesOrganizer * organizer_light = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db loadDetails:false]);
     for (NSString * activityId in save_fit) {
         GCActivity * after  = [organizer_light activityForId:activityId];
         XCTAssertNotNil(after);
@@ -1069,8 +1090,7 @@
     }
 
     [organizer_light ensureDetailsLoaded];
-    NSLog(@"%@", [[organizer_light activityForId:@"__connectstats__5567"] numberWithUnitForField:[GCField fieldForKey:@"GainElevation" andActivityType:GC_TYPE_RUNNING]]);
-
+    XCTAssertEqualObjects(exampleFieldValue, [[organizer_light activityForId:exampleActivityId] numberWithUnitForField:exampleDetailField], @"After detail download example field still correct");
     
     for (NSString * activityId in save_fit) {
         NSDictionary * before = save_gar[activityId];
@@ -1087,7 +1107,7 @@
     NSString * deletedActivityId = save_fit.allKeys.firstObject;
     [organizer_light deleteActivityId:deletedActivityId];
     // reload it
-    organizer_light = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db loadDetails:false]);
+    organizer_light = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db loadDetails:false]);
     for (NSString * activityId in save_fit) {
         if( [activityId isEqualToString:deletedActivityId]){
             XCTAssertNil([organizer_light activityForId:activityId]);
@@ -1096,30 +1116,40 @@
             XCTAssertEqual(after.summaryData.count,0,@"%@ summary loaded no details", after);
         }
     }
-    
     // Do the background refresh, without details loaded, to simulate background refresh
-    [GCConnectStatsRequestBackgroundFetch testWithOrganizer:organizer_light path:bundlePath];
-    // then load details, simulate when the UI starts
+    [GCConnectStatsRequestBackgroundSearch testWithOrganizer:organizer_light path:bundlePath];
+    
+    // Right now activity was reconstructed from fit
+    GCActivity * current = [organizer_light activityForId:deletedActivityId];
+    NSDictionary * before = nil;
+    
+    XCTAssertNotNil(current);
+    before = save_fit[deletedActivityId];
+    XCTAssertEqual(current.summaryData.count,before.count, @"In memory reconstruction match original");
+    
+    // then load details, simulate when the UI starts, this will
+    // trigger an update from the database of what was saved from the background update, need
+    // to make sure still consistent
     [organizer_light ensureDetailsLoaded];
     for (NSString * activityId in save_fit) {
         GCActivity * after  = [organizer_light activityForId:activityId];
         XCTAssertNotNil(after);
-        NSDictionary * before = nil;
+        
         if( [activityId isEqualToString:deletedActivityId]){
-            before = save_cs[activityId];
+            before = save_fit[activityId];
         }else{
             before = save_gar[activityId];
         }
         XCTAssertEqual(after.summaryData.count,before.count, @"%@ after split reload has all information", after);
     }
 
-    // Now reload fit for deleted activity
+    // Now reload fit for deleted activity in background
     GCActivity * newAct = [organizer_light activityForId:deletedActivityId];
-    GCActivity * fit = [GCConnectStatsRequestFitFile testForActivity:newAct  withFilesIn:bundlePath];
+    GCActivity * fit = [GCConnectStatsRequestBackgroundFitFile testForActivity:newAct  withFilesIn:bundlePath];
     XCTAssertNotNil(fit);
     
     // do full reload of activity and make sure we get back same as we started
-    GCActivitiesOrganizer * organizer_final = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db loadDetails:true]);
+    GCActivitiesOrganizer * organizer_final = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db loadDetails:true]);
     for (NSString * activityId in save_fit) {
         NSDictionary * before = nil;
         GCActivity * after  = [organizer_final activityForId:activityId];
@@ -1129,10 +1159,9 @@
             before = save_gar[activityId];
         }
         XCTAssertEqual(after.summaryData.count,before.count, @"%@ after full reload has all information", after);
-        
     }
-
-
+    
+    [exampleFieldValue release];
 }
 
 -(void)testOrganizerRegister{

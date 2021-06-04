@@ -200,7 +200,6 @@ typedef NS_ENUM(NSUInteger, gcHistoryStats) {
 
 typedef NS_ENUM(NSUInteger, gcNotificationPushType){
     gcNotificationPushTypeNone,
-    gcNotificationPushTypeBackgroundOnly,
     gcNotificationPushTypeAll
 };
 

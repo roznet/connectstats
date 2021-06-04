@@ -67,7 +67,17 @@ NS_INLINE GCAppDelegate * _appDelegate(void) {
     // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
     // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
     // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-    RZLog(RZLogInfo,@"scene connect");
+    NSMutableArray<NSString*>*options = [NSMutableArray array];
+    if( connectionOptions.notificationResponse){
+        [options addObject:connectionOptions.notificationResponse.description];
+    }
+    if( connectionOptions.URLContexts.count>0){
+        [options addObject:connectionOptions.URLContexts.description];
+    }
+    if( connectionOptions.userActivities.count > 0){
+        [options addObject:connectionOptions.userActivities.description];
+    }
+    RZLog(RZLogInfo,@"scene connect %@", [options componentsJoinedByString:@" "]);
     
     if( [scene isKindOfClass:[UIWindowScene class]]){
         UIWindowScene * windowScene = (UIWindowScene*)scene;

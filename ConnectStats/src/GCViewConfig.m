@@ -716,7 +716,6 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     if( rv==nil){
         rv = @[
             NSLocalizedString(@"Disabled", @"Notifications"),
-            NSLocalizedString(@"Background Only", @"Notifications"),
             NSLocalizedString(@"New Activities", @"Notifications"),
         ];
         [rv retain];
