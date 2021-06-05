@@ -786,7 +786,7 @@
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_NOTIFICATIONS):
         {
             if( cell.selected < [GCViewConfig validChoicesForConnectStatsNotificationType].count){
-                [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_PUSH_TYPE intVal:cell.selected];
+                [[GCAppGlobal profile] setPushNotificationType:cell.selected];
                 NSString * choice = [GCViewConfig validChoicesForConnectStatsNotificationType][cell.selected];
                 RZLog(RZLogInfo, @"ConnectStats: Changed Notification to %@ : %@", @(cell.selected), choice);
                 [GCAppGlobal saveSettings];
@@ -987,7 +987,7 @@
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_USE);
         [self.navigationController pushViewController:list animated:YES];
     }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_NOTIFICATIONS){
-        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsNotificationType] selected:[[GCAppGlobal profile] configGetInt:CONFIG_NOTIFICATION_PUSH_TYPE defaultValue:gcNotificationPushTypeNone]];
+        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsNotificationType] selected:[[GCAppGlobal profile] pushNotificationType]];
         list.entryFieldDelegate = self;
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_NOTIFICATIONS);
         [self.navigationController pushViewController:list animated:YES];
