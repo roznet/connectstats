@@ -34,12 +34,13 @@ class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
         
     @objc override func preparedUrlRequest() -> URLRequest? {
         if self.isSignedIn(),
-           let path = GCWebConnectStatsSearch(GCAppGlobal.webConnectsStatsConfig()){
+           let path = GCWebConnectStatsRegisterNotification(GCAppGlobal.webConnectsStatsConfig()){
+            let type : UInt = GCAppGlobal.profile().pushNotificationType.rawValue
             let params : [AnyHashable: Any] = [
                 "token_id": self.tokenId,
                 "notification_device_token": GCAppGlobal.profile().configGet(CONFIG_NOTIFICATION_DEVICE_TOKEN, defaultValue: "") ?? "",
                 "notification_enabled" :  GCAppGlobal.profile().pushNotificationEnabled,
-                "notification_push_type" : GCAppGlobal.profile().pushNotificationType,
+                "notification_push_type" : type,
             ]
             return self.preparedUrlRequest(path, params: params)
         }
@@ -84,15 +85,21 @@ class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
     }
     
     struct NotificationConfirmation : Codable {
-        var cs_user_id : Int? = nil
-        var device_token : String? = nil
-        var push_type : Int? = nil
-        var enabled : Bool
+        var cs_user_id : Int
+        var device_token : String
+        var push_type : Int
+        var enabled : Int
     
     }
     
     @objc override func process() {
-        guard let data = self.theString.data(using: .utf8)
+        guard let str = self.theString else{
+            // before logged in, just didn't actually talk to server, success trivially
+            self.processDone()
+            return
+        }
+        
+        guard let data = str.data(using: .utf8)
         else {
             RZSLog.info("invalid data skipping background update")
             self.processDone()
@@ -105,10 +112,11 @@ class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
             self.processDone()
             return
         }
-        if let confirmation = try? JSONDecoder().decode(NotificationConfirmation.self, from: data) {
-            RZSLog.info("Notification confirmed \(confirmation)")
-        }else{
-            RZSLog.info("Notification not confirmed \(String(describing: self.theString))")
+        do {
+            let confirmation = try JSONDecoder().decode(NotificationConfirmation.self, from: data)
+            RZSLog.info("Notification confirmed push_type=\(confirmation.push_type) for device=\(confirmation.device_token)")
+        }catch{
+            RZSLog.info("Notification not confirmed \(String(describing: self.theString)) \(error)")
         }
         
         self.processDone()

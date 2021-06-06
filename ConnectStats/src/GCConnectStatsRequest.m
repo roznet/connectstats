@@ -260,7 +260,10 @@
             dispatch_async(dispatch_get_main_queue(), ^(){
                 [GCAppGlobal saveSettings];
             });
-            
+            if( [GCAppGlobal profile].pushNotificationEnabled){
+                // if first time/new login and notification enabled, register
+                [GCConnectStatsRequestRegisterNotifications register];
+            }
             dispatch_async([GCAppGlobal worker], ^(){
                 [self signInConnectStatsStep];
             });

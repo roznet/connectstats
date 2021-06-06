@@ -196,7 +196,7 @@ NSString * GCWebConnectStatsSearch(gcWebConnectStatsConfig config){
 NSString * GCWebConnectStatsRegisterNotification(gcWebConnectStatsConfig config){
     NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
     
-    return [NSString stringWithFormat:@"%@/api/notification/register",url];
+    return [NSString stringWithFormat:@"%@/api/notifications/register",url];
 }
 
 NSString * GCWebConnectStatsFitFile(gcWebConnectStatsConfig config){

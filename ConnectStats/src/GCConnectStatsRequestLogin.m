@@ -76,11 +76,12 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
             case GCConnectStatsRequestLoginStageValidateUser:
             {
                 NSString * path = GCWebConnectStatsValidateUser([GCAppGlobal webConnectsStatsConfig]);
+                NSUInteger type = [GCAppGlobal profile].pushNotificationType;
                 NSDictionary *parameters = @{
                                              @"token_id" : @(self.tokenId),
                                              @"notification_device_token": [[GCAppGlobal profile] configGetString:CONFIG_NOTIFICATION_DEVICE_TOKEN defaultValue:@""],
                                              @"notification_enabled" : @([GCAppGlobal profile].pushNotificationEnabled),
-                                             @"notification_push_type" : @([GCAppGlobal profile].pushNotificationType),
+                                             @"notification_push_type" : @( type ),
                                              };
                 
                 return [self preparedUrlRequest:path params:parameters];

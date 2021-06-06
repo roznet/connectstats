@@ -790,6 +790,9 @@
                 NSString * choice = [GCViewConfig validChoicesForConnectStatsNotificationType][cell.selected];
                 RZLog(RZLogInfo, @"ConnectStats: Changed Notification to %@ : %@", @(cell.selected), choice);
                 [GCAppGlobal saveSettings];
+                if( [GCAppGlobal profile].pushNotificationEnabled){
+                    [GCConnectStatsRequestRegisterNotifications register];
+                }
             }
             break;
         }
