@@ -36,6 +36,7 @@ class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
         #if GC_USE_SANDBOX_APN
         // if using sandbox, skip registration in prod as can't use prod apn from debug build
         if( GCAppGlobal.webConnectsStatsConfig() == gcWebConnectStatsConfig.productionConnectStatsApp){
+            RZSLog.info("Disabling notification register because DEBUG build")
             return nil
         }
         #endif
