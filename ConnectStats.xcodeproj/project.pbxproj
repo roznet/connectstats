@@ -6589,6 +6589,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"GC_USE_HEALTHKIT=1",
+					"GC_USE_SANDBOX_APN=1",
 				);
 				GCC_WARN_PEDANTIC = NO;
 				GCC_WARN_SHADOW = NO;
@@ -6605,6 +6606,7 @@
 					"$(inherited)",
 					"-ObjC",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D GC_USE_SANDBOX_APN";
 				PRODUCT_BUNDLE_IDENTIFIER = "net.ro-z.connectstats";
 				PRODUCT_NAME = ConnectStats;
 				PROVISIONING_PROFILE = "";

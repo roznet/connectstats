@@ -195,7 +195,12 @@ NSString * GCWebConnectStatsSearch(gcWebConnectStatsConfig config){
 }
 NSString * GCWebConnectStatsRegisterNotification(gcWebConnectStatsConfig config){
     NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
-    
+#if GC_USE_SANDBOX_APN
+    // Debug build should register with dev server for notification
+    if( ! useSimulator && config == gcWebConnectStatsConfigProductionConnectStatsApp){
+        url = GCWebConnectStatsPrefixForConfig(gcWebConnectStatsConfigRemoteDevTesting);
+    }
+#endif
     return [NSString stringWithFormat:@"%@/api/notifications/register",url];
 }
 

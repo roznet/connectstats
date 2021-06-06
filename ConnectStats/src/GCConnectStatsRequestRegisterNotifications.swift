@@ -33,6 +33,13 @@ import RZUtilsSwift
 class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
         
     @objc override func preparedUrlRequest() -> URLRequest? {
+        #if GC_USE_SANDBOX_APN
+        // if using sandbox, skip registration in prod as can't use prod apn from debug build
+        if( GCAppGlobal.webConnectsStatsConfig() == gcWebConnectStatsConfig.productionConnectStatsApp){
+            return nil
+        }
+        #endif
+        
         if self.isSignedIn(),
            let path = GCWebConnectStatsRegisterNotification(GCAppGlobal.webConnectsStatsConfig()){
             let type : UInt = GCAppGlobal.profile().pushNotificationType.rawValue
