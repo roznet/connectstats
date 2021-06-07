@@ -169,9 +169,28 @@
 }
 
 -(void)actionCleanPowerSpecialPapain{
-    [RZFileOrganizer writeableFilesMatching:^(NSString * fn){
+    NSArray<NSString*>*power = [RZFileOrganizer writeableFilesMatching:^(NSString * fn){
+        if( [fn hasSuffix:@".data"]){
+            if( [fn rangeOfString:@"running-power"].location != NSNotFound){
+                return (BOOL)true;
+            }
+            if( [fn rangeOfString:@"cycling-power"].location != NSNotFound){
+                return (BOOL)true;
+            }
+        }
         return (BOOL)false;
     }];
+    for (NSString * bad in power) {
+        [RZFileOrganizer removeEditableFile:bad];
+    }
+    
+    FMDatabase * db =[GCAppGlobal derived].deriveddb;
+    BOOL success = [db executeUpdate:@"DELETE FROM gc_derived_series WHERE fieldFlag = 64"];
+    if( ! success){
+        NSLog(@"error %@", db.lastErrorMessage);
+    }
+    NSUInteger c = [[GCAppGlobal derived] cleanAllEmpty];
+    NSLog(@"Cleaned %@", @(c));
 }
 
 -(void)actionSaveCurrentActivity{

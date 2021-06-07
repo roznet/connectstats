@@ -215,8 +215,6 @@ static BOOL kDerivedEnabled = true;
         }
     }
     self.loadDetailsCompleted = true;
-    
-    //[self cleanAllEmpty];
 }
 
 -(void)loadHistoricalFileSeries{
@@ -1021,6 +1019,9 @@ static BOOL kDerivedEnabled = true;
         }
     }
     RZLog(RZLogInfo, @"Removed %@ empty series %@", @(count), perf);
+    // Reload
+    [self loadFromDb];
+    
     return count;
 }
 

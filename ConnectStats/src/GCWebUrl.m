@@ -127,8 +127,6 @@ NSString * GCWebConnectStatsPrefixForConfig(gcWebConnectStatsConfig config){
         case gcWebConnectStatsConfigProductionConnectStatsApp:
             return @"https://connectstats.app/prod";
         case gcWebConnectStatsConfigLocalProdTesting:
-            //return @"https://server.ro-z.me/prod";
-#pragma message "don't use in production"
             return @"https://brice-imac.ro-z.me/prod";
         case gcWebConnectStatsConfigLocalDevTesting:
             return @"https://localhost.ro-z.me/dev";
